@@ -210,9 +210,9 @@ extra writers, so the old claim cannot come back silently.
 **What SURVIVES from this section, unchanged and re-run:** the operation census
 itself. 23 located call sites carry an operation word, every one an immediate;
 the operations requested are exactly `{0, 3, 4, 5, 10, 11}`; operations 6 and 7
-are requested by nothing; veneer 0xFE3004 / thunk `T_F42D24` has no caller in
+are requested by nothing; veneer 0xFE3004 / thunk `T_Fdc_Request_Thunk_Entry` has no caller in
 either image; 8 absolute `call`/`jp` to 0xFE66C7, of which 2 are the veneers
-0xFE3032 and 0xFE308D themselves; veneer 0xFE3018 (thunk `T_F42D38`) has 17 call
+0xFE3032 and 0xFE308D themselves; veneer 0xFE3018 (thunk `T_Fdc_Request_SaveRegs_Entry`) has 17 call
 sites. All of that is still `python3 notes/prom_a_fdc_operation_census.py`,
 9 checks, 0 failures.
 

@@ -56,7 +56,7 @@ padding**, and the runs were found by scanning rather than assumed:
 | run | bytes | what it bounds |
 |---|---:|---|
 | `0xFA9E72-0xFA9FFF` | 398 | start of the 0xFAA000 module |
-| `0xFAD485-0xFAD800` incl. | 892 | its end. ★ the LAST of those `0x0E` bytes, `0xFAD800`, is itself directory slot `T_F40850` — a published routine that is one `ret`. This module's span therefore stops at `0xFAD800`, leaving that byte to the next one, and the `.fill` here is 890 (its first byte belongs to the data block before it) |
+| `0xFAD485-0xFAD800` incl. | 892 | its end. ★ the LAST of those `0x0E` bytes, `0xFAD800`, is itself directory slot `T_Evt2030_RunList` — a published routine that is one `ret`. This module's span therefore stops at `0xFAD800`, leaving that byte to the next one, and the `.fill` here is 890 (its first byte belongs to the data block before it) |
 | `0xFC52F8-0xFC53FF` | 264 | start of the 0xFC5400 module |
 | `0xFC6844-0xFC6FFF` | 1980 | its end |
 

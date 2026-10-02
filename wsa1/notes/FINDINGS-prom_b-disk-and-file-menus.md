@@ -93,8 +93,8 @@ walked from `start` land exactly on `end`.
 ### A fourth and fifth shape, found while doing this and left open
 
 `prom_a 0xFF7668`, `0xFF7623`, `0xFF763F` and `0xFF7656` take **one** pointer on
-the stack and jump straight into a single interpreter-B *handler* — `T_F41800`
-→ `0xF31BA1` (op 00), `T_F41820`/`T_F4181C` → `0xF31B57` (ops 03/08),
+the stack and jump straight into a single interpreter-B *handler* — `T_DLB_Handler_Decimal`
+→ `0xF31BA1` (op 00), `T_DLB_Handler_Array8_2`/`T_DLB_Handler_Array8` → `0xF31B57` (ops 03/08),
 `T_F417F8` → `0xF31B21` (op 02). Together with `T_F42E08`/`T_F42E0C` they give
 **25 single-record entry points into this module**, and they are what run the
 orphan records that sit between the framed spans. Each such record's header
@@ -200,12 +200,12 @@ prom_a 0xFF42CD   pushes 0x00F580B0 / 0x00F58014, calls 0xFF75D3.
                   A routine start: the byte before it is 0x0E = ret.
    ^  NOTHING CALLS IT.  Zero `call` and zero `calr` sites in any of the three
       images; none of the 654 slots of prom_a's dispatch matrix holds it.
-prom_b T_F42264 = `jp 0xFF42CD`, and it is the ONLY place in 1.5 MiB where the
+prom_b T_Paint_DiskMenu = `jp 0xFF42CD`, and it is the ONLY place in 1.5 MiB where the
       address 0xFF42CD is spelled at all.
    ^
 prom_a 0xF86EC1 — 256 words of 4 bytes.  175 are prom_b directory slots; the
       other 81 all hold 0x00F872C1, which is the byte immediately after the
-      table.  ENTRY 96 IS T_F42264.
+      table.  ENTRY 96 IS T_Paint_DiskMenu.
    ^
    ⚠ WHAT INDEXES THAT TABLE IS NOT ESTABLISHED.  It is in prom_a, inside an
    `.incbin`, and this lane may not edit prom_a.

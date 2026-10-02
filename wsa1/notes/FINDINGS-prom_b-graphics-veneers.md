@@ -166,7 +166,7 @@ that width. Which record reads it is not traced.
 * **`(0x27A2)`, `(0x27A4)`, `(0x27F5)`** — read here, written nowhere here.
 * **`0xF0191A`, `0xF01938`, `0xF01956`, `0xF01974`** — the four pointers inside
   the `0xF02F9A` rows.
-* **`T_F4181C`** — called with `XIY = 0xF02FF7` after `UiPaint_Ordinals`'
+* **`T_DLB_Handler_Array8`** — called with `XIY = 0xF02FF7` after `UiPaint_Ordinals`'
   last paint.
 * The two pointer tables and their four ordinal rows are still `.incbin`; only
   `0xF02FD9` was converted here.

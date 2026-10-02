@@ -48,7 +48,7 @@ unconverted extent of their targets. Its top run was
 |---|---:|---:|---|
 | `T_F42F40-T_F42F6C` | 12 | 13,084 | 0xF0F018-0xF12334 |
 
-and `T_F434A0-T_F434A4` (2 slots, 0xF11C30 / 0xF1220B) points into the same
+and `T_DspParam_WriteByNumber-T_DspParam_ReadByNumber` (2 slots, 0xF11C30 / 0xF1220B) points into the same
 span. The block's low end is not a guess either: `0xF0EA9F` is the target of
 `calr 0xf0ea9f` at `0xF0EA97`, an instruction **already in the .s** — the
 field-blink engine's last routine calls straight into it.
@@ -446,7 +446,7 @@ unconverted prom_b targets, headed by
 ```
 
 The round claims exactly two runs — `T_F42F40-T_F42F6C` (12 slots) and
-`T_F434A0-T_F434A4` (2) — and
+`T_DspParam_WriteByNumber-T_DspParam_ReadByNumber` (2) — and
 
     python3 notes/prom_b_round5_frontier_delta.py
 

@@ -1155,7 +1155,7 @@ def structure():
     H(0xFA835E,
       "MidiIn_ReqListRebuild_Msg13_16 -- ask for a part-list rebuild",
       "",
-      "Called from: prom_b directory slot T_F43350 (`jp 0xFA835E`).",
+      "Called from: prom_b directory slot T_MidiIn_ReqListRebuild_Msg13_16 (`jp 0xFA835E`).",
       "Evidence: sets bit 1 of (0x1978) when (0x20B8) is 0x13..0x16 and (0x20BA)",
       "         is non-zero.  Bit 1 is the bit MidiIn_ServicePartLists tests.")
 

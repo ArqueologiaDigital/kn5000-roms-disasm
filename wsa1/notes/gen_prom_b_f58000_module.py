@@ -73,7 +73,7 @@ GAPS = [
   "one interpreter-B op-08 record, run ON ITS OWN by five one-push call sites: "
   "prom_a 0xFF4A55, 0xFF4A9E, 0xFF4D39, 0xFF4FBB, 0xFF5A7F, each "
   "`lda XBC,0xf5843f / push XBC / call 0xFF7623`, and 0xFF7623 sets (0x2540)=1 "
-  "and jumps to thunk T_F41820 -> 0xF31B57, interpreter B's op-03/08 handler."),
+  "and jumps to thunk T_DLB_Handler_Array8_2 -> 0xF31B57, interpreter B's op-03/08 handler."),
  # --- gap after 0xF5844A-0xF58454 -------------------------------------------
  (0xF58455, "rows", (8, 43), "DLTab_F58455",
   "43 rows x 8 bytes, 0xF58455-0xF585AC.  Named by the records at 0xF583E5 "
@@ -147,7 +147,7 @@ GAPS = [
   "0xFF76D1 copies before appending a 4-character extension."),
  (0xF59150, "recs", (0xF59166, "B"), None,
   "two interpreter-B records, each run ON ITS OWN: 0xF59150 from prom_a "
-  "0xFF68AF, 0xFF69A7, 0xFF6AEF, 0xFF6EF9 (`call 0xFF763F` -> T_F4181C -> "
+  "0xFF68AF, 0xFF69A7, 0xFF6AEF, 0xFF6EF9 (`call 0xFF763F` -> T_DLB_Handler_Array8 -> "
   "0xF31B57) and 0xF5915B from 0xFF697A, 0xFF6A86 (`call 0xFF7623`).  Both "
   "point at the table below."),
  (0xF59166, "rows", (8, 8), "DLTab_F59166",
@@ -208,7 +208,7 @@ GAPS = [
   "two interpreter-B op-00 records (decimal readout, 10 bytes each).  ★ Both "
   "are run ON THEIR OWN and the sites say by WHICH handler: 0xF5993E from "
   "prom_a 0xFF5DBA, 0xFF624D, 0xFF6325 and 0xF59948 from 0xFF50AC, 0xFF5376, "
-  "0xFF541F, all `push / call 0xFF7668`, and 0xFF7668 jumps to thunk T_F41800 "
+  "0xFF541F, all `push / call 0xFF7668`, and 0xFF7668 jumps to thunk T_DLB_Handler_Decimal "
   "-> 0xF31BA1, which IS interpreter B's op-00 handler."),
  # --- gap after 0xF59952-0xF5995B -------------------------------------------
  (0xF5995C, "recs", (0xF59966, "A"), None,

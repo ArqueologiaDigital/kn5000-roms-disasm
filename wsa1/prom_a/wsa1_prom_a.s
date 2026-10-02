@@ -1249,26 +1249,26 @@
 	.set T_F407FC,                                0x00F407FC
 	.set T_F40804,                                0x00F40804
 	.set T_F40808,                                0x00F40808
-	.set T_F4080C,                                0x00F4080C
+	.set T_MidiIn_ControlRecord_Dispatch,                                0x00F4080C
 	.set T_F40810,                                0x00F40810
 	.set T_F40840,                                0x00F40840
-	.set T_F40850,                                0x00F40850
-	.set T_F40854,                                0x00F40854
-	.set T_F40858,                                0x00F40858
-	.set T_F40864,                                0x00F40864
-	.set T_F40868,                                0x00F40868
-	.set T_F4086C,                                0x00F4086C
-	.set T_F40870,                                0x00F40870
-	.set T_F40874,                                0x00F40874
-	.set T_F40878,                                0x00F40878
-	.set T_F4087C,                                0x00F4087C
-	.set T_F40880,                                0x00F40880
-	.set T_F40884,                                0x00F40884
-	.set T_F40888,                                0x00F40888
-	.set T_F4088C,                                0x00F4088C
+	.set T_Evt2030_RunList,                                0x00F40850
+	.set T_ParamApply_ByModeOfParam80,                                0x00F40854
+	.set T_ParamApply_MaskedWriteAndPublish,                                0x00F40858
+	.set T_ParamShadow_SetPitchBend,                                0x00F40864
+	.set T_ParamShadow_SetModulation1,                                0x00F40868
+	.set T_ParamShadow_SetExpression,                                0x00F4086C
+	.set T_ParamApply_StorePairAndDerive,                                0x00F40870
+	.set T_ParamShadow_SetField3,                                0x00F40874
+	.set T_ParamApply_WriteStagedAndPublish,                                0x00F40878
+	.set T_ParamApply_PublishStagedAndPostSeven,                                0x00F4087C
+	.set T_ParamApply_PublishStagedPairBCDE,                                0x00F40880
+	.set T_ParamApply_PublishStagedPair,                                0x00F40884
+	.set T_ParamApply_WriteStagedAndPublish_Copy,                                0x00F40888
+	.set T_ParamApply_PublishStagedPair_Copy,                                0x00F4088C
 	.set T_F40894,                                0x00F40894
-	.set T_F40898,                                0x00F40898
-	.set T_F4089C,                                0x00F4089C
+	.set T_ParamShadow_FlushAll,                                0x00F40898
+	.set T_ParamApply_OneHotOfSix,                                0x00F4089C
 	.set T_F408E0,                                0x00F408E0
 	.set T_F408E4,                                0x00F408E4
 	.set T_F408E8,                                0x00F408E8
@@ -1318,7 +1318,7 @@
 	.set T_F40DF0,                                0x00F40DF0
 	.set T_F40E00,                                0x00F40E00
 	.set T_RingPutBlock_EntryThunks,              0x00F40ED0
-	.set T_F40ED4,                                0x00F40ED4
+	.set T_Link_SendBlockIn32ByteChunks,                                0x00F40ED4
 	.set T_Link_ServiceTask,                      0x00F40ED8
 	.set T_INT0_LinkByte,                         0x00F40EDC
 	.set T_INTT2_Reti,                            0x00F40EE0
@@ -1341,7 +1341,7 @@
 	.set T_Queue2E00_AppendRegs,                  0x00F40F3C
 	.set T_List2030_AppendRegs,                   0x00F40F40
 	.set T_PanelTimers_Step,                      0x00F40F44
-	.set T_F40F4C,                                0x00F40F4C
+	.set T_PanelState_CheckRequestAllowed_2,                                0x00F40F4C
 	.set T_UiEventList_Publish,                   0x00F40F50
 	.set T_UiEventList_RunPassA,                  0x00F40F5C
 	.set T_UiEventList_RunPassB,                  0x00F40F60
@@ -1377,38 +1377,38 @@
 	.set T_F41054,                                0x00F41054
 	.set T_F4105C,                                0x00F4105C
 	.set T_F41060,                                0x00F41060
-	.set T_F41070,                                0x00F41070
-	.set T_F41074,                                0x00F41074
-	.set T_F41078,                                0x00F41078
-	.set T_F4107C,                                0x00F4107C
-	.set T_F41080,                                0x00F41080
-	.set T_F41084,                                0x00F41084
-	.set T_F41088,                                0x00F41088
-	.set T_F4108C,                                0x00F4108C
-	.set T_F41090,                                0x00F41090
-	.set T_F41094,                                0x00F41094
-	.set T_F41098,                                0x00F41098
-	.set T_F4109C,                                0x00F4109C
-	.set T_F410A0,                                0x00F410A0
-	.set T_F410A4,                                0x00F410A4
-	.set T_F410A8,                                0x00F410A8
-	.set T_F410AC,                                0x00F410AC
-	.set T_F410B0,                                0x00F410B0
-	.set T_F410B4,                                0x00F410B4
-	.set T_F410B8,                                0x00F410B8
-	.set T_F410BC,                                0x00F410BC
-	.set T_F410C0,                                0x00F410C0
-	.set T_F410C4,                                0x00F410C4
-	.set T_F410C8,                                0x00F410C8
-	.set T_F410CC,                                0x00F410CC
-	.set T_F410D0,                                0x00F410D0
-	.set T_F410D4,                                0x00F410D4
-	.set T_F410D8,                                0x00F410D8
-	.set T_F410DC,                                0x00F410DC
-	.set T_F410E0,                                0x00F410E0
-	.set T_F410E4,                                0x00F410E4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13,                                0x00F41070
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13,                                0x00F41074
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13,                                0x00F41078
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13,                                0x00F4107C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13,                                0x00F41080
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13,                                0x00F41084
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13,                                0x00F41088
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13,                                0x00F4108C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13,                                0x00F41090
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13,                                0x00F41094
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13,                                0x00F41098
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13,                                0x00F4109C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13,                                0x00F410A0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13,                                0x00F410A4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13,                                0x00F410A8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13,                                0x00F410AC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13,                                0x00F410B0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13,                                0x00F410B4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13,                                0x00F410B8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13,                                0x00F410BC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13,                                0x00F410C0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13,                                0x00F410C4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13,                                0x00F410C8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13,                                0x00F410CC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13,                                0x00F410D0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13,                                0x00F410D4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13,                                0x00F410D8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13,                                0x00F410DC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13,                                0x00F410E0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13,                                0x00F410E4
 	.set T_F410E8,                                0x00F410E8
-	.set T_F410EC,                                0x00F410EC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13,                                0x00F410EC
 	.set T_F410F0,                                0x00F410F0
 	.set T_F410F4,                                0x00F410F4
 	.set T_F410F8,                                0x00F410F8
@@ -1429,18 +1429,18 @@
 	.set T_F41134,                                0x00F41134
 	.set T_F41138,                                0x00F41138
 	.set T_F4113C,                                0x00F4113C
-	.set T_F41140,                                0x00F41140
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6,                                0x00F41140
 	.set T_F41144,                                0x00F41144
-	.set T_F41148,                                0x00F41148
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2,                                0x00F41148
 	.set T_F4114C,                                0x00F4114C
 	.set T_F41150,                                0x00F41150
-	.set T_F41154,                                0x00F41154
-	.set T_F41158,                                0x00F41158
-	.set T_F4115C,                                0x00F4115C
-	.set T_F41160,                                0x00F41160
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14,                                0x00F41154
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13,                                0x00F41158
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7,                                0x00F4115C
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4,                                0x00F41160
 	.set T_F41164,                                0x00F41164
 	.set T_F41168,                                0x00F41168
-	.set T_F4116C,                                0x00F4116C
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19,                                0x00F4116C
 	.set T_F41170,                                0x00F41170
 	.set T_F41174,                                0x00F41174
 	.set T_F41178,                                0x00F41178
@@ -1463,7 +1463,7 @@
 	.set T_F411E8,                                0x00F411E8
 	.set T_F411EC,                                0x00F411EC
 	.set T_Link_SendCommandE4,                    0x00F41230
-	.set T_F41234,                                0x00F41234
+	.set T_Link_SendCommand3_WaitTicks,                                0x00F41234
 	.set T_Link_SendCommand5_WaitDone,            0x00F41238
 	.set T_Link_WaitBlockDone,                    0x00F4123C
 	.set T_Link_SendCommandE7,                    0x00F41240
@@ -1499,11 +1499,11 @@
 	.set T_F41510,                                0x00F41510
 	.set T_F41520,                                0x00F41520
 	.set T_F41530,                                0x00F41530
-	.set T_F41540,                                0x00F41540
-	.set T_F41550,                                0x00F41550
-	.set T_F41560,                                0x00F41560
-	.set T_F41570,                                0x00F41570
-	.set T_F41580,                                0x00F41580
+	.set T_InstallPainter_SoundGroupMenu_Entry,                                0x00F41540
+	.set T_InstallPainter_GroupSoundDisplayHold_Entry,                                0x00F41550
+	.set T_InstallPainter_CombinationGroupMenu_Entry,                                0x00F41560
+	.set T_InstallPainter_CombinationGroupMenu_Entry_5,                                0x00F41570
+	.set T_InstallPainter_GroupCombiDisplayHold_Entry,                                0x00F41580
 	.set T_F41590,                                0x00F41590
 	.set T_F415A0,                                0x00F415A0
 	.set T_F415A4,                                0x00F415A4
@@ -1527,10 +1527,10 @@
 	.set T_F416B0,                                0x00F416B0
 	.set T_F416C0,                                0x00F416C0
 	.set T_F41700,                                0x00F41700
-	.set T_F41710,                                0x00F41710
-	.set T_F41720,                                0x00F41720
-	.set T_F41730,                                0x00F41730
-	.set T_F41734,                                0x00F41734
+	.set T_Paint_SysexBulkDump_Entry,                                0x00F41710
+	.set T_Paint_GeneralMidiMode_Entry,                                0x00F41720
+	.set T_Paint_Sending_Entry,                                0x00F41730
+	.set T_Paint_SystemExclusivePleaseWait_Entry,                                0x00F41734
 	.set T_Paint_MidiTotalMode,                   0x00F4173C
 	.set T_Paint_MidiInputOutputFilter,           0x00F4174C
 	.set T_Paint_MidiOutProgramChange,            0x00F4175C
@@ -1539,12 +1539,12 @@
 	.set T_DisplayListB_Run,                      0x00F417F4
 	.set T_DLB_Handler_StringTable,               0x00F417F8
 	.set T_DLB_Handler_StringTable2,              0x00F417FC
-	.set T_F41800,                                0x00F41800
-	.set T_F41804,                                0x00F41804
-	.set T_F4180C,                                0x00F4180C
+	.set T_DLB_Handler_Decimal,                                0x00F41800
+	.set T_DLB_Handler_Decimal_2,                                0x00F41804
+	.set T_DLB_Handler_Decimal2Words,                                0x00F4180C
 	.set T_DLB_Handler_DecimalSigned2Words,       0x00F41814
-	.set T_F4181C,                                0x00F4181C
-	.set T_F41820,                                0x00F41820
+	.set T_DLB_Handler_Array8,                                0x00F4181C
+	.set T_DLB_Handler_Array8_2,                                0x00F41820
 	.set T_DLB_Handler_Array6,                    0x00F41824
 	.set T_DLHandler_IX_Text,                     0x00F4182C
 	.set T_DrawValueGlyph_24x24,                  0x00F41834
@@ -1565,12 +1565,12 @@
 	.set T_F41938,                                0x00F41938
 	.set T_F41948,                                0x00F41948
 	.set T_F41958,                                0x00F41958
-	.set T_F41968,                                0x00F41968
+	.set T_Screen_ReMapEdit_Enter,                                0x00F41968
 	.set T_F41978,                                0x00F41978
 	.set T_F41988,                                0x00F41988
 	.set T_F41998,                                0x00F41998
 	.set T_F419A8,                                0x00F419A8
-	.set T_F419B8,                                0x00F419B8
+	.set T_Screen_DrumsMapNaming_Enter,                                0x00F419B8
 	.set T_F41A00,                                0x00F41A00
 	.set T_F41A08,                                0x00F41A08
 	.set T_F41A18,                                0x00F41A18
@@ -1581,7 +1581,7 @@
 	.set T_F41A68,                                0x00F41A68
 	.set T_F41A78,                                0x00F41A78
 	.set T_F41A88,                                0x00F41A88
-	.set T_F41A98,                                0x00F41A98
+	.set T_Screen_CombinationNaming_Enter,                                0x00F41A98
 	.set T_F41AF0,                                0x00F41AF0
 	.set T_F41AF4,                                0x00F41AF4
 	.set T_Value_ToAsciiDigits3,                  0x00F41B00
@@ -1666,11 +1666,11 @@
 	.set T_F41F6C,                                0x00F41F6C
 	.set T_F41F7C,                                0x00F41F7C
 	.set T_F41F8C,                                0x00F41F8C
-	.set T_F41F9C,                                0x00F41F9C
-	.set T_F41FAC,                                0x00F41FAC
-	.set T_F41FBC,                                0x00F41FBC
-	.set T_F41FCC,                                0x00F41FCC
-	.set T_F41FDC,                                0x00F41FDC
+	.set T_ToneEditPage_A3_PositionParameter,                                0x00F41F9C
+	.set T_ToneEditPage_A4_PositionMovement,                                0x00F41FAC
+	.set T_ToneEditPage_A5_FittingMutingTuning,                                0x00F41FBC
+	.set T_ToneEditPage_A6_TouchDepth,                                0x00F41FCC
+	.set T_ToneEditPage_A7_ResoModeKeyFollow,                                0x00F41FDC
 	.set T_F41FEC,                                0x00F41FEC
 	.set T_F41FFC,                                0x00F41FFC
 	.set T_F4200C,                                0x00F4200C
@@ -1702,7 +1702,7 @@
 	.set T_F42250,                                0x00F42250
 	.set T_F42254,                                0x00F42254
 	.set T_F4225C,                                0x00F4225C
-	.set T_F42264,                                0x00F42264
+	.set T_Paint_DiskMenu,                                0x00F42264
 	.set T_Paint_MidiFileDirectPlay,              0x00F42274
 	.set T_F42320,                                0x00F42320
 	.set T_F42330,                                0x00F42330
@@ -1712,47 +1712,47 @@
 	.set T_F42370,                                0x00F42370
 	.set T_Ring608A0A_DrainAll,                   0x00F42380
 	.set T_Paint_DiskL0adFile,                    0x00F423A0
-	.set T_F423B0,                                0x00F423B0
-	.set T_F423C0,                                0x00F423C0
+	.set T_PageDispatch_DiskSaveFile,                                0x00F423B0
+	.set T_PageDispatch_MidiFileSave,                                0x00F423C0
 	.set T_Paint_FloppyDiskFormatSelectType,      0x00F423D0
-	.set T_F423E0,                                0x00F423E0
+	.set T_PageDispatch_L0adSingleS0und,                                0x00F423E0
 	.set T_Paint_FloppyDiskFormatAreYouSure,      0x00F423F0
 	.set T_Paint_MidiFileL0ad,                    0x00F42400
 	.set T_F42418,                                0x00F42418
-	.set T_F4241C,                                0x00F4241C
+	.set T_PageDispatch_L0adSingleC0mbination,                                0x00F4241C
 	.set T_F42470,                                0x00F42470
 	.set T_F42474,                                0x00F42474
-	.set T_F42478,                                0x00F42478
-	.set T_F4247C,                                0x00F4247C
-	.set T_F42480,                                0x00F42480
-	.set T_F42484,                                0x00F42484
-	.set T_F42488,                                0x00F42488
-	.set T_F4248C,                                0x00F4248C
-	.set T_F42490,                                0x00F42490
-	.set T_F42494,                                0x00F42494
-	.set T_F42498,                                0x00F42498
-	.set T_F4249C,                                0x00F4249C
-	.set T_F424A0,                                0x00F424A0
-	.set T_F424A4,                                0x00F424A4
-	.set T_F424A8,                                0x00F424A8
-	.set T_F424AC,                                0x00F424AC
-	.set T_F424B0,                                0x00F424B0
-	.set T_F424B4,                                0x00F424B4
-	.set T_F424B8,                                0x00F424B8
-	.set T_F424BC,                                0x00F424BC
-	.set T_F424C0,                                0x00F424C0
-	.set T_F424C4,                                0x00F424C4
-	.set T_F424C8,                                0x00F424C8
-	.set T_F424CC,                                0x00F424CC
-	.set T_F424D0,                                0x00F424D0
-	.set T_F424D4,                                0x00F424D4
-	.set T_F424D8,                                0x00F424D8
-	.set T_F424DC,                                0x00F424DC
-	.set T_F424E0,                                0x00F424E0
-	.set T_F424E4,                                0x00F424E4
-	.set T_F424E8,                                0x00F424E8
-	.set T_F424EC,                                0x00F424EC
-	.set T_F424F0,                                0x00F424F0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26,                                0x00F42478
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26,                                0x00F4247C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26,                                0x00F42480
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26,                                0x00F42484
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26,                                0x00F42488
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26,                                0x00F4248C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26,                                0x00F42490
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26,                                0x00F42494
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26,                                0x00F42498
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26,                                0x00F4249C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26,                                0x00F424A0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26,                                0x00F424A4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26,                                0x00F424A8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26,                                0x00F424AC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26,                                0x00F424B0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26,                                0x00F424B4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26,                                0x00F424B8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26,                                0x00F424BC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26,                                0x00F424C0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26,                                0x00F424C4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26,                                0x00F424C8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26,                                0x00F424CC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26,                                0x00F424D0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26,                                0x00F424D4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26,                                0x00F424D8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26,                                0x00F424DC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26,                                0x00F424E0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26,                                0x00F424E4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26,                                0x00F424E8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26,                                0x00F424EC
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17,                                0x00F424F0
 	.set T_F424F4,                                0x00F424F4
 	.set T_F424F8,                                0x00F424F8
 	.set T_F424FC,                                0x00F424FC
@@ -1803,8 +1803,8 @@
 	.set T_F42660,                                0x00F42660
 	.set T_F42664,                                0x00F42664
 	.set T_F42670,                                0x00F42670
-	.set T_F42680,                                0x00F42680
-	.set T_F42690,                                0x00F42690
+	.set T_Screen_SoundGroupNaming_Enter,                                0x00F42680
+	.set T_Screen_CombinationGroupNaming_Enter,                                0x00F42690
 	.set T_F426A0,                                0x00F426A0
 	.set T_F426B0,                                0x00F426B0
 	.set T_F42708,                                0x00F42708
@@ -1885,7 +1885,7 @@
 	.set T_F42C24,                                0x00F42C24
 	.set T_F42C28,                                0x00F42C28
 	.set T_F42C2C,                                0x00F42C2C
-	.set T_F42C74,                                0x00F42C74
+	.set T_PanelCode_ToSlotAndFlags,                                0x00F42C74
 	.set T_F42C78,                                0x00F42C78
 	.set T_F42C7C,                                0x00F42C7C
 	.set T_Queue2C00_Append4,                     0x00F42C80
@@ -1900,23 +1900,23 @@
 	.set T_IndexedParam_SetFieldFromAsciiEntry,   0x00F42CA8
 	.set T_INT5_Dev7B_Receive_Alias,              0x00F42D28
 	.set T_INTTC0_uDMA0Done_Alias,                0x00F42D30
-	.set T_F42D34,                                0x00F42D34
-	.set T_F42D38,                                0x00F42D38
+	.set T_Disk_CommandDispatch_SaveRegs_Entry,                                0x00F42D34
+	.set T_Fdc_Request_SaveRegs_Entry,                                0x00F42D38
 	.set T_Kernel_InitRam,                        0x00F42D60
 	.set T_INTT3_KernelTick,                      0x00F42D64
 	.set T_IRQ_Epilogue,                          0x00F42D68
 	.set T_Kernel_StartTask,                      0x00F42D6C
 	.set T_Kernel_SemaSignal,                     0x00F42D88
 	.set T_Kernel_SemaWait,                       0x00F42D90
-	.set T_F42DA8,                                0x00F42DA8
+	.set T_Kernel_KillTask,                                0x00F42DA8
 	.set T_Kernel_StartTask_StackArg,             0x00F42DAC
-	.set T_F42DB0,                                0x00F42DB0
+	.set T_Kernel_ExitTask_2,                                0x00F42DB0
 	.set T_Kernel_SemaSignal_StackArg,            0x00F42DC0
 	.set T_Kernel_SemaWait_StackArg,              0x00F42DC4
-	.set T_F42DC8,                                0x00F42DC8
+	.set T_MsgQueue_Send_StackArg,                                0x00F42DC8
 	.set T_MsgQueue_ReceiveBlocking,              0x00F42DCC
 	.set T_Kernel_SemaTryWait,                    0x00F42DD8
-	.set T_F42DDC,                                0x00F42DDC
+	.set T_MsgQueue_Receive_NoBlock,                                0x00F42DDC
 	.set T_DSP_ChannelRegs_Write8,                0x00F42DE0
 	.set T_DisplayList_Run_Stack,                 0x00F42E00
 	.set T_DisplayListB_Run_Stack,                0x00F42E04
@@ -1994,8 +1994,8 @@
 	.set T_AsciiDigits3_ToValue,                  0x00F432F0
 	.set T_AsciiField_ToSignedValue,              0x00F432F4
 	.set T_AsciiField_Clear,                      0x00F432F8
-	.set T_F43330,                                0x00F43330
-	.set T_F43350,                                0x00F43350
+	.set T_UiText_CopyLabel13_To_22F0,                                0x00F43330
+	.set T_MidiIn_ReqListRebuild_Msg13_16,                                0x00F43350
 	.set T_MidiIn_ReqRebuild_Msg03_0A,            0x00F43354
 	.set T_MidiIn_PumpPortB,                      0x00F43358
 	.set T_F43380,                                0x00F43380
@@ -2011,15 +2011,15 @@
 	.set T_F43418,                                0x00F43418
 	.set T_F4341C,                                0x00F4341C
 	.set T_F43420,                                0x00F43420
-	.set T_F43430,                                0x00F43430
+	.set T_DiskFile_CheckSignature,                                0x00F43430
 	.set T_F43440,                                0x00F43440
 	.set T_F43444,                                0x00F43444
 	.set T_F4344C,                                0x00F4344C
 	.set T_F43450,                                0x00F43450
 	.set T_F43454,                                0x00F43454
 	.set T_Disk_FormatSelectedMedia,              0x00F43460
-	.set T_F434A0,                                0x00F434A0
-	.set T_F434A4,                                0x00F434A4
+	.set T_DspParam_WriteByNumber,                                0x00F434A0
+	.set T_DspParam_ReadByNumber,                                0x00F434A4
 	.set T_F434C0,                                0x00F434C0
 	.set T_F434D4,                                0x00F434D4
 	.set T_F434E0,                                0x00F434E0
@@ -2266,7 +2266,7 @@ sub_F8001A:
 	ld XIX,Data_F39559                                   ; F80027  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F8002C  1d f0 17 f4
 	ld XIY,0x00f3b3a7                                    ; F80030  45 a7 b3 f3 00
-	call T_F4181C                                        ; F80035  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F80035  1d 1c 18 f4
 	ret                                                  ; F80039  0e
 	bit 0x07,W                                           ; F8003A  c8 33 07
 	jr z, .LF80058                                       ; F8003D  66 19
@@ -2886,7 +2886,7 @@ sub_F80549:
 	ld XIX,Data_F39559                                   ; F80556  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F8055B  1d f0 17 f4
 	ld XIY,0x00f3b05a                                    ; F8055F  45 5a b0 f3 00
-	call T_F4181C                                        ; F80564  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F80564  1d 1c 18 f4
 	ret                                                  ; F80568  0e
 	bit 0x07,W                                           ; F80569  c8 33 07
 	jr z, .LF8057E                                       ; F8056C  66 10
@@ -3263,7 +3263,7 @@ sub_F80891:
 	ld XIX,Data_F39559                                   ; F8089E  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F808A3  1d f0 17 f4
 	ld XIY,0x00f3bd4d                                    ; F808A7  45 4d bd f3 00
-	call T_F4181C                                        ; F808AC  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F808AC  1d 1c 18 f4
 	ret                                                  ; F808B0  0e
 	bit 0x07,W                                           ; F808B1  c8 33 07
 	jr nz, .LF808C6                                      ; F808B4  6e 10
@@ -3651,7 +3651,7 @@ sub_F80BEE:
 	call T_DisplayList_Run                               ; F80C00  1d f0 17 f4
 sub_F80C04:
 	ld XIY,0x00f3bf3d                                    ; F80C04  45 3d bf f3 00
-	call T_F4181C                                        ; F80C09  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F80C09  1d 1c 18 f4
 	ret                                                  ; F80C0D  0e
 	bit 0x07,W                                           ; F80C0E  c8 33 07
 	jr nz, .LF80C23                                      ; F80C11  6e 10
@@ -3940,10 +3940,10 @@ Paint_S0ngSelectName:
 	ld (0x2540:16), 0x01                                 ; F80E75  f1 40 25 00 01
 	ld XIY,DL_F3C351                                     ; F80E7A  45 51 c3 f3 00
 	ld XIX,0x00f3c35c                                    ; F80E7F  44 5c c3 f3 00
-	call T_F4181C                                        ; F80E84  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F80E84  1d 1c 18 f4
 	ld XIY,0x00f3c35c                                    ; F80E88  45 5c c3 f3 00
 	ld XIX,DL_F3C367                                     ; F80E8D  44 67 c3 f3 00
-	call T_F4181C                                        ; F80E92  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F80E92  1d 1c 18 f4
 	call 0xf7e2e7                                        ; F80E96  1d e7 e2 f7
 	ret                                                  ; F80E9A  0e
 ; sub_F80E9B -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -4088,7 +4088,7 @@ Paint_StepRecordPartSelect:
 	dec 1,A                                              ; F80FAD  c9 69
 	ld (0x12f6:16), a                                   ; F80FAF  f1 f6 12 41
 	ld XIY,Data_F3A0D9                                   ; F80FB3  45 d9 a0 f3 00
-	call T_F4181C                                        ; F80FB8  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F80FB8  1d 1c 18 f4
 .LF80FBC:
 	calr 0xd328                                          ; F80FBC  1e 28 d3
 	ret                                                  ; F80FBF  0e
@@ -4507,9 +4507,9 @@ sub_F81350:
 	ld a, (0x0dc1:16)                                   ; F813A4  c1 c1 0d 21
 	ld (0x1305:16), a                                   ; F813A8  f1 05 13 41
 	ld XIY,0x00f3c7d8                                    ; F813AC  45 d8 c7 f3 00
-	call T_F41820                                        ; F813B1  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F813B1  1d 20 18 f4
 	ld XIY,DL_F3C7AD                                     ; F813B5  45 ad c7 f3 00
-	call T_F4181C                                        ; F813BA  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F813BA  1d 1c 18 f4
 	ret                                                  ; F813BE  0e
 sub_F813BF:
 	ld (0x2540:16), 0x00                                 ; F813BF  f1 40 25 00 00
@@ -4526,9 +4526,9 @@ sub_F813BF:
 sub_F813E7:
 	ld (0x2540:16), 0x01                                 ; F813E7  f1 40 25 00 01
 	ld XIY,0x00f3c7b8                                    ; F813EC  45 b8 c7 f3 00
-	call T_F41820                                        ; F813F1  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F813F1  1d 20 18 f4
 	ld XIY,0x00f3c78c                                    ; F813F5  45 8c c7 f3 00
-	call T_F4181C                                        ; F813FA  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F813FA  1d 1c 18 f4
 	ret                                                  ; F813FE  0e
 ; sub_F813FF -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -4552,14 +4552,14 @@ sub_F813FF:
 	ld XIX,DL_F3C7CD                                     ; F81409  44 cd c7 f3 00
 	call T_DisplayList_Run                               ; F8140E  1d f0 17 f4
 	ld XIY,0x00f3c797                                    ; F81412  45 97 c7 f3 00
-	call T_F4181C                                        ; F81417  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F81417  1d 1c 18 f4
 	ret                                                  ; F8141B  0e
 sub_F8141C:
 	ld (0x2540:16), 0x01                                 ; F8141C  f1 40 25 00 01
 	ld XIY,DL_F3C7CD                                     ; F81421  45 cd c7 f3 00
-	call T_F41820                                        ; F81426  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F81426  1d 20 18 f4
 	ld XIY,0x00f3c7a2                                    ; F8142A  45 a2 c7 f3 00
-	call T_F4181C                                        ; F8142F  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F8142F  1d 1c 18 f4
 	ret                                                  ; F81433  0e
 ; sub_F81434 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -4706,10 +4706,10 @@ sub_F81512:
 	ld (0x2540:16), 0x01                                 ; F81552  f1 40 25 00 01
 	ld XIY,DL_F3C351                                     ; F81557  45 51 c3 f3 00
 	ld XIX,0x00f3c35c                                    ; F8155C  44 5c c3 f3 00
-	call T_F4181C                                        ; F81561  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F81561  1d 1c 18 f4
 	ld XIY,0x00f3c35c                                    ; F81565  45 5c c3 f3 00
 	ld XIX,DL_F3C367                                     ; F8156A  44 67 c3 f3 00
-	call T_F4181C                                        ; F8156F  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F8156F  1d 1c 18 f4
 	ret                                                  ; F81573  0e
 ; sub_F81574 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -4748,17 +4748,17 @@ sub_F81574:
 	ld (0x2540:16), 0x01                                 ; F815B4  f1 40 25 00 01
 	ld XIY,DL_F3C351                                     ; F815B9  45 51 c3 f3 00
 	ld XIX,0x00f3c35c                                    ; F815BE  44 5c c3 f3 00
-	call T_F4181C                                        ; F815C3  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F815C3  1d 1c 18 f4
 	ld XIY,0x00f3c35c                                    ; F815C7  45 5c c3 f3 00
 	ld XIX,DL_F3C367                                     ; F815CC  44 67 c3 f3 00
-	call T_F4181C                                        ; F815D1  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F815D1  1d 1c 18 f4
 	ret                                                  ; F815D5  0e
 sub_F815D6:
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F815D6  c1 75 20 3e 09
 	ldw (0x209b:16), 0x0605                              ; F815DB  f1 9b 20 02 05 06
 	ld (0x2540:16), 0x01                                 ; F815E1  f1 40 25 00 01
 	ld XIY,0x00f3c372                                    ; F815E6  45 72 c3 f3 00
-	call T_F41820                                        ; F815EB  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F815EB  1d 20 18 f4
 	ld w, 0x81:opc                                          ; F815EF  20 81
 	call sub_F816DA                                      ; F815F1  1d da 16 f8
 	ld a, (0x21f9:16)                                   ; F815F5  c1 f9 21 21
@@ -4768,14 +4768,14 @@ sub_F815D6:
 	ld (0x2540:16), 0x01                                 ; F81606  f1 40 25 00 01
 	ld XIY,0x00f3c35c                                    ; F8160B  45 5c c3 f3 00
 	ld XIX,DL_F3C367                                     ; F81610  44 67 c3 f3 00
-	call T_F4181C                                        ; F81615  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F81615  1d 1c 18 f4
 	ret                                                  ; F81619  0e
 sub_F8161A:
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F8161A  c1 75 20 3e 09
 	ldw (0x209b:16), 0x0605                              ; F8161F  f1 9b 20 02 05 06
 	ld (0x2540:16), 0x01                                 ; F81625  f1 40 25 00 01
 	ld XIY,0x00f3c372                                    ; F8162A  45 72 c3 f3 00
-	call T_F41820                                        ; F8162F  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F8162F  1d 20 18 f4
 	ld w, 0x01:opc                                          ; F81633  20 01
 	call sub_F816DA                                      ; F81635  1d da 16 f8
 	ld a, (0x21f9:16)                                   ; F81639  c1 f9 21 21
@@ -4785,7 +4785,7 @@ sub_F8161A:
 	ld (0x2540:16), 0x01                                 ; F8164A  f1 40 25 00 01
 	ld XIY,0x00f3c35c                                    ; F8164F  45 5c c3 f3 00
 	ld XIX,DL_F3C367                                     ; F81654  44 67 c3 f3 00
-	call T_F4181C                                        ; F81659  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F81659  1d 1c 18 f4
 	ret                                                  ; F8165D  0e
 ; ---------------------------------------------------------------------
 ; SongName_Draw6Chars -- draw the six-character name buffer at 0x6034CA
@@ -5368,7 +5368,7 @@ sub_F81AB5:
 	ld (0x12fd:16), a                                   ; F81B61  f1 fd 12 41
 	ld XIY,0x00f3d380                                    ; F81B65  45 80 d3 f3 00
 	push XHL                                             ; F81B6A  3b
-	call T_F41800                                        ; F81B6B  1d 00 18 f4
+	call T_DLB_Handler_Decimal                                        ; F81B6B  1d 00 18 f4
 	pop XHL                                              ; F81B6F  5b
 .LF81B70:
 	push XHL                                             ; F81B70  3b
@@ -5434,7 +5434,7 @@ Paint_StepRecordTrackClrMeas:
 	ld a, (0x0e5c:16)                                   ; F81BEE  c1 5c 0e 21
 	ld (0x12fd:16), a                                   ; F81BF2  f1 fd 12 41
 	ld XIY,0x00f3d380                                    ; F81BF6  45 80 d3 f3 00
-	call T_F41800                                        ; F81BFB  1d 00 18 f4
+	call T_DLB_Handler_Decimal                                        ; F81BFB  1d 00 18 f4
 	ld a, (0x0e63:16)                                   ; F81BFF  c1 63 0e 21
 	ld (0x12fc:16), a                                   ; F81C03  f1 fc 12 41
 	ld XIY,0x00f3c967                                    ; F81C07  45 67 c9 f3 00
@@ -5498,7 +5498,7 @@ Paint_StepRecordTrackClrMeas:
 	ld wa, (0x0f5e:16)                                 ; F81CC7  d1 5e 0f 20
 	ld (0x12f6:16), wa                                  ; F81CCB  f1 f6 12 50
 	ld XIY,0x00f3d353                                    ; F81CCF  45 53 d3 f3 00
-	call T_F41804                                        ; F81CD4  1d 04 18 f4
+	call T_DLB_Handler_Decimal_2                                        ; F81CD4  1d 04 18 f4
 .LF81CD8:
 	m_cp_mi16 MW16, 0x0f60, 0x0000                       ; F81CD8  d1 60 0f 3f 00 00
 	jr z, .LF81D0A                                       ; F81CDE  66 2a
@@ -5513,7 +5513,7 @@ Paint_StepRecordTrackClrMeas:
 	ld wa, (0x0f60:16)                                 ; F81CF9  d1 60 0f 20
 	ld (0x12f8:16), wa                                  ; F81CFD  f1 f8 12 50
 	ld XIY,0x00f3d35d                                    ; F81D01  45 5d d3 f3 00
-	call T_F41804                                        ; F81D06  1d 04 18 f4
+	call T_DLB_Handler_Decimal_2                                        ; F81D06  1d 04 18 f4
 .LF81D0A:
 	m_cp_mi16 MW16, 0x0f62, 0x0000                       ; F81D0A  d1 62 0f 3f 00 00
 	jr z, .LF81D3C                                       ; F81D10  66 2a
@@ -5528,7 +5528,7 @@ Paint_StepRecordTrackClrMeas:
 	ld wa, (0x0f62:16)                                 ; F81D2B  d1 62 0f 20
 	ld (0x12fa:16), wa                                  ; F81D2F  f1 fa 12 50
 	ld XIY,0x00f3d367                                    ; F81D33  45 67 d3 f3 00
-	call T_F41804                                        ; F81D38  1d 04 18 f4
+	call T_DLB_Handler_Decimal_2                                        ; F81D38  1d 04 18 f4
 .LF81D3C:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81D3C  c0 c6 3c fe
 	ret                                                  ; F81D40  0e
@@ -5690,7 +5690,7 @@ sub_F81E79:   ; entry: named by 1 `ld` operand, first at 0xF81E42
 	ld (0x1300:16), a                                   ; F81EA9  f1 00 13 41
 	popw wa                                              ; F81EAD  48
 	ld XIY,Data_F3DAA2                                   ; F81EAE  45 a2 da f3 00
-	call T_F4181C                                        ; F81EB3  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F81EB3  1d 1c 18 f4
 	jr .LF81EEE                                          ; F81EB7  68 35
 .LF81EB9:
 	cp a, 0x01:i3                                          ; F81EB9  c9 d9
@@ -5701,7 +5701,7 @@ sub_F81E79:   ; entry: named by 1 `ld` operand, first at 0xF81E42
 	ld a, (0x12a7:16)                                   ; F81EC4  c1 a7 12 21
 	ld (0x12fe:16), a                                   ; F81EC8  f1 fe 12 41
 	ld XIY,Data_F3DAED                                   ; F81ECC  45 ed da f3 00
-	call T_F4181C                                        ; F81ED1  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F81ED1  1d 1c 18 f4
 	jr .LF81EEE                                          ; F81ED5  68 17
 .LF81ED7:
 	cp a, 0x02:i3                                          ; F81ED7  c9 da
@@ -5711,7 +5711,7 @@ sub_F81E79:   ; entry: named by 1 `ld` operand, first at 0xF81E42
 	ld (0x1303:16), a                                   ; F81EE0  f1 03 13 41
 	popw wa                                              ; F81EE4  48
 	ld XIY,Data_F3DA77                                   ; F81EE5  45 77 da f3 00
-	call T_F4181C                                        ; F81EEA  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F81EEA  1d 1c 18 f4
 .LF81EEE:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81EEE  c0 c6 3c fe
 	ret                                                  ; F81EF2  0e
@@ -5795,7 +5795,7 @@ sub_F82028:
 	ld XWA,Data_F82000                                   ; F8202C  40 00 20 f8 00
 	push XWA                                             ; F82031  38
 	pushw 0x01                                           ; F82032  0b 01 00
-	call T_F42DC8                                        ; F82035  1d c8 2d f4
+	call T_MsgQueue_Send_StackArg                                        ; F82035  1d c8 2d f4
 	inc 6,XSP                                            ; F82039  ef 66
 .LF8203B:
 	call T_F40674                                        ; F8203B  1d 74 06 f4
@@ -12897,9 +12897,9 @@ List2030_AppendRegs:   ; entry: calr from 0xF8625A, 0xF868D7, prom_b directory s
 ; ---------------------------------------------------------------------
 ; PanelState_CheckRequestAllowed -- veto the pending home jump on two screens
 ;
-; Called from: thunk slots T_F40F48 AND T_F40F4C (both `jp 0x00F86AE9`);
-;          T_F40F4C has 2 proven call sites (prom_a 0xFE01F1, 0xFE70AB) and
-;          T_F40F48 none.  Also `calr` from PanelTask_StepAndCheckRequest 0xF8601F
+; Called from: thunk slots T_PanelState_CheckRequestAllowed AND T_PanelState_CheckRequestAllowed_2 (both `jp 0x00F86AE9`);
+;          T_PanelState_CheckRequestAllowed_2 has 2 proven call sites (prom_a 0xFE01F1, 0xFE70AB) and
+;          T_PanelState_CheckRequestAllowed none.  Also `calr` from PanelTask_StepAndCheckRequest 0xF8601F
 ;          and PanelTask_Step 0xF86066.
 ; Body:    bit 6 of (0x2071) and bit 4 of (0x2075) both set, with (0x207C)
 ;          either 0x01 or 0xDA -> `and (0x2071),0xBF`, i.e. drop the home
@@ -12914,7 +12914,7 @@ List2030_AppendRegs:   ; entry: calr from 0xF8625A, 0xF868D7, prom_b directory s
 ;          and PanelScreen_ApplyRequestForced tests at 0xF863AC.  That is a
 ;          third independent witness for the (0x2070)/(0x2071) pairing.
 ; ---------------------------------------------------------------------
-PanelState_CheckRequestAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b directory slot T_F40F48, prom_b directory slot T_F40F4C
+PanelState_CheckRequestAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b directory slot T_PanelState_CheckRequestAllowed, prom_b directory slot T_PanelState_CheckRequestAllowed_2
 	m_bit 6, MD16, 0x2071                         ; F86AE9  f1 71 20 ce   bit 6,(0x2071)
 	jr z, .LF86B08                                ; F86AED  66 19
 	m_bit 4, MD16, 0x2075                         ; F86AEF  f1 75 20 cc   bit 4,(0x2075)
@@ -13496,11 +13496,11 @@ PanelScreen_VtableTable_ViewB:
 	.long T_F41A68                              ; F87025  [57]   -> 0xF41A68
 	.long T_F41A78                              ; F87029  [58]   -> 0xF41A78
 	.long T_F41A88                              ; F8702D  [59]   -> 0xF41A88
-	.long T_F41A98                              ; F87031  [60]   -> 0xF41A98
+	.long T_Screen_CombinationNaming_Enter                              ; F87031  [60]   -> 0xF41A98
 	.long PanelScreen_NullVtable                ; F87035  [61]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F87039  [62]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F8703D  [63]   -> PanelScreen_NullVtable
-	.long T_F42264                              ; F87041  [64]   -> 0xF42264
+	.long T_Paint_DiskMenu                              ; F87041  [64]   -> 0xF42264
 	.long PanelScreen_NullVtable                ; F87045  [65]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F87049  [66]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F8704D  [67]   -> PanelScreen_NullVtable
@@ -13512,23 +13512,23 @@ PanelScreen_VtableTable_ViewB:
 	.long T_Paint_MidiFileL0ad                  ; F87065  [73]   -> 0xF42400
 	.long PanelScreen_NullVtable                ; F87069  [74]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F8706D  [75]   -> PanelScreen_NullVtable
-	.long T_F423B0                              ; F87071  [76]   -> 0xF423B0
+	.long T_PageDispatch_DiskSaveFile                              ; F87071  [76]   -> 0xF423B0
 	.long PanelScreen_NullVtable                ; F87075  [77]   -> PanelScreen_NullVtable
-	.long T_F423C0                              ; F87079  [78]   -> 0xF423C0
+	.long T_PageDispatch_MidiFileSave                              ; F87079  [78]   -> 0xF423C0
 	.long PanelScreen_NullVtable                ; F8707D  [79]   -> PanelScreen_NullVtable
 	.long T_Paint_FloppyDiskFormatSelectType    ; F87081  [80]   -> 0xF423D0
 	.long T_Paint_FloppyDiskFormatAreYouSure    ; F87085  [81]   -> 0xF423F0
 	.long PanelScreen_NullVtable                ; F87089  [82]   -> PanelScreen_NullVtable
-	.long T_F4241C                              ; F8708D  [83]   -> 0xF4241C
-	.long T_F423E0                              ; F87091  [84]   -> 0xF423E0
+	.long T_PageDispatch_L0adSingleC0mbination                              ; F8708D  [83]   -> 0xF4241C
+	.long T_PageDispatch_L0adSingleS0und                              ; F87091  [84]   -> 0xF423E0
 	.long 0x00F406CC                            ; F87095  [85]   -> 0xF406CC
 	.long 0x00F406DC                            ; F87099  [86]   -> 0xF406DC
 	.long PanelScreen_NullVtable                ; F8709D  [87]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F870A1  [88]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F870A5  [89]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F870A9  [90]   -> PanelScreen_NullVtable
-	.long T_F42680                              ; F870AD  [91]   -> 0xF42680
-	.long T_F42690                              ; F870B1  [92]   -> 0xF42690
+	.long T_Screen_SoundGroupNaming_Enter                              ; F870AD  [91]   -> 0xF42680
+	.long T_Screen_CombinationGroupNaming_Enter                              ; F870B1  [92]   -> 0xF42690
 	.long T_F434C0                              ; F870B5  [93]   -> 0xF434C0
 	.long T_F426A0                              ; F870B9  [94]   -> 0xF426A0
 	.long T_F426B0                              ; F870BD  [95]   -> 0xF426B0
@@ -13539,12 +13539,12 @@ PanelScreen_VtableTable_ViewB:
 	.long T_F41938                              ; F870D1  [100]   -> 0xF41938
 	.long T_F41948                              ; F870D5  [101]   -> 0xF41948
 	.long T_F419A8                              ; F870D9  [102]   -> 0xF419A8
-	.long T_F419B8                              ; F870DD  [103]   -> 0xF419B8
+	.long T_Screen_DrumsMapNaming_Enter                              ; F870DD  [103]   -> 0xF419B8
 	.long PanelScreen_NullVtable                ; F870E1  [104]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F870E5  [105]   -> PanelScreen_NullVtable
 	.long T_F42670                              ; F870E9  [106]   -> 0xF42670
 	.long T_F41958                              ; F870ED  [107]   -> 0xF41958
-	.long T_F41968                              ; F870F1  [108]   -> 0xF41968
+	.long T_Screen_ReMapEdit_Enter                              ; F870F1  [108]   -> 0xF41968
 	.long T_F41978                              ; F870F5  [109]   -> 0xF41978
 	.long T_F41988                              ; F870F9  [110]   -> 0xF41988
 	.long PanelScreen_NullVtable                ; F870FD  [111]   -> PanelScreen_NullVtable
@@ -13557,8 +13557,8 @@ PanelScreen_VtableTable_ViewB:
 	.long T_F416B0                              ; F87119  [118]   -> 0xF416B0
 	.long PanelScreen_NullVtable                ; F8711D  [119]   -> PanelScreen_NullVtable
 	.long T_F41700                              ; F87121  [120]   -> 0xF41700
-	.long T_F41710                              ; F87125  [121]   -> 0xF41710
-	.long T_F41720                              ; F87129  [122]   -> 0xF41720
+	.long T_Paint_SysexBulkDump_Entry                              ; F87125  [121]   -> 0xF41710
+	.long T_Paint_GeneralMidiMode_Entry                              ; F87129  [122]   -> 0xF41720
 	.long T_F416A0                              ; F8712D  [123]   -> 0xF416A0
 	.long T_F416C0                              ; F87131  [124]   -> 0xF416C0
 	.long T_Paint_MidiTotalMode                 ; F87135  [125]   -> 0xF4173C
@@ -13596,13 +13596,13 @@ PanelScreen_VtableTable_ViewB:
 	.long T_F42350                              ; F871B5  [157]   -> 0xF42350
 	.long T_F42360                              ; F871B9  [158]   -> 0xF42360
 	.long T_F42370                              ; F871BD  [159]   -> 0xF42370
-	.long T_F41540                              ; F871C1  [160]   -> 0xF41540
-	.long T_F41550                              ; F871C5  [161]   -> 0xF41550
-	.long T_F41560                              ; F871C9  [162]   -> 0xF41560
+	.long T_InstallPainter_SoundGroupMenu_Entry                              ; F871C1  [160]   -> 0xF41540
+	.long T_InstallPainter_GroupSoundDisplayHold_Entry                              ; F871C5  [161]   -> 0xF41550
+	.long T_InstallPainter_CombinationGroupMenu_Entry                              ; F871C9  [162]   -> 0xF41560
 	.long T_F42E44                              ; F871CD  [163]   -> 0xF42E44
 	.long PanelScreen_NullVtable                ; F871D1  [164]   -> PanelScreen_NullVtable
-	.long T_F41570                              ; F871D5  [165]   -> 0xF41570
-	.long T_F41580                              ; F871D9  [166]   -> 0xF41580
+	.long T_InstallPainter_CombinationGroupMenu_Entry_5                              ; F871D5  [165]   -> 0xF41570
+	.long T_InstallPainter_GroupCombiDisplayHold_Entry                              ; F871D9  [166]   -> 0xF41580
 	.long T_F41590                              ; F871DD  [167]   -> 0xF41590
 	.long PanelScreen_NullVtable                ; F871E1  [168]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F871E5  [169]   -> PanelScreen_NullVtable
@@ -13631,11 +13631,11 @@ PanelScreen_VtableTable_ViewB:
 	.long T_F41F6C                              ; F87241  [192]   -> 0xF41F6C
 	.long T_F41F7C                              ; F87245  [193]   -> 0xF41F7C
 	.long T_F41F8C                              ; F87249  [194]   -> 0xF41F8C
-	.long T_F41F9C                              ; F8724D  [195]   -> 0xF41F9C
-	.long T_F41FAC                              ; F87251  [196]   -> 0xF41FAC
-	.long T_F41FBC                              ; F87255  [197]   -> 0xF41FBC
-	.long T_F41FCC                              ; F87259  [198]   -> 0xF41FCC
-	.long T_F41FDC                              ; F8725D  [199]   -> 0xF41FDC
+	.long T_ToneEditPage_A3_PositionParameter                              ; F8724D  [195]   -> 0xF41F9C
+	.long T_ToneEditPage_A4_PositionMovement                              ; F87251  [196]   -> 0xF41FAC
+	.long T_ToneEditPage_A5_FittingMutingTuning                              ; F87255  [197]   -> 0xF41FBC
+	.long T_ToneEditPage_A6_TouchDepth                              ; F87259  [198]   -> 0xF41FCC
+	.long T_ToneEditPage_A7_ResoModeKeyFollow                              ; F8725D  [199]   -> 0xF41FDC
 	.long T_F41FEC                              ; F87261  [200]   -> 0xF41FEC
 	.long PanelScreen_NullVtable                ; F87265  [201]   -> PanelScreen_NullVtable
 	.long T_F42320                              ; F87269  [202]   -> 0xF42320
@@ -14593,7 +14593,7 @@ UiEventClass_ListTable_B:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class00:
-	.long T_F41070                              ; F88192  [0]   -> 0xF41070
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13                              ; F88192  [0]   -> 0xF41070
 	.long T_F415A8                              ; F88196  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8819A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8819E  [3]   -> 0xF415B0
@@ -14618,7 +14618,7 @@ UiListB_Class00:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class01:
-	.long T_F41074                              ; F881BE  [0]   -> 0xF41074
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13                              ; F881BE  [0]   -> 0xF41074
 	.long T_F415A8                              ; F881C2  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F881C6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F881CA  [3]   -> 0xF415B0
@@ -14641,7 +14641,7 @@ UiListB_Class01:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class02:
-	.long T_F41078                              ; F881E2  [0]   -> 0xF41078
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13                              ; F881E2  [0]   -> 0xF41078
 	.long T_F415A8                              ; F881E6  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F881EA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F881EE  [3]   -> 0xF415B0
@@ -14664,7 +14664,7 @@ UiListB_Class02:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class03:
-	.long T_F4107C                              ; F88206  [0]   -> 0xF4107C
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13                              ; F88206  [0]   -> 0xF4107C
 	.long T_F415A8                              ; F8820A  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8820E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88212  [3]   -> 0xF415B0
@@ -14687,7 +14687,7 @@ UiListB_Class03:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class04:
-	.long T_F41080                              ; F8822A  [0]   -> 0xF41080
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13                              ; F8822A  [0]   -> 0xF41080
 	.long T_F415A8                              ; F8822E  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88232  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88236  [3]   -> 0xF415B0
@@ -14710,7 +14710,7 @@ UiListB_Class04:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class05:
-	.long T_F41084                              ; F8824E  [0]   -> 0xF41084
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13                              ; F8824E  [0]   -> 0xF41084
 	.long T_F415A8                              ; F88252  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88256  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8825A  [3]   -> 0xF415B0
@@ -14733,7 +14733,7 @@ UiListB_Class05:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class06:
-	.long T_F41088                              ; F88272  [0]   -> 0xF41088
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13                              ; F88272  [0]   -> 0xF41088
 	.long T_F415A8                              ; F88276  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8827A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8827E  [3]   -> 0xF415B0
@@ -14756,7 +14756,7 @@ UiListB_Class06:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class07:
-	.long T_F4108C                              ; F88296  [0]   -> 0xF4108C
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13                              ; F88296  [0]   -> 0xF4108C
 	.long T_F415A8                              ; F8829A  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8829E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882A2  [3]   -> 0xF415B0
@@ -14779,7 +14779,7 @@ UiListB_Class07:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class08:
-	.long T_F41090                              ; F882BA  [0]   -> 0xF41090
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13                              ; F882BA  [0]   -> 0xF41090
 	.long T_F415A8                              ; F882BE  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F882C2  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882C6  [3]   -> 0xF415B0
@@ -14802,7 +14802,7 @@ UiListB_Class08:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class09:
-	.long T_F41094                              ; F882DE  [0]   -> 0xF41094
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13                              ; F882DE  [0]   -> 0xF41094
 	.long T_F415A8                              ; F882E2  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F882E6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882EA  [3]   -> 0xF415B0
@@ -14825,7 +14825,7 @@ UiListB_Class09:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0A:
-	.long T_F41098                              ; F88302  [0]   -> 0xF41098
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13                              ; F88302  [0]   -> 0xF41098
 	.long T_F415A8                              ; F88306  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8830A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8830E  [3]   -> 0xF415B0
@@ -14848,7 +14848,7 @@ UiListB_Class0A:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0B:
-	.long T_F4109C                              ; F88326  [0]   -> 0xF4109C
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13                              ; F88326  [0]   -> 0xF4109C
 	.long T_F415A8                              ; F8832A  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8832E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88332  [3]   -> 0xF415B0
@@ -14871,7 +14871,7 @@ UiListB_Class0B:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0C:
-	.long T_F410A0                              ; F8834A  [0]   -> 0xF410A0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13                              ; F8834A  [0]   -> 0xF410A0
 	.long T_F415A8                              ; F8834E  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88352  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88356  [3]   -> 0xF415B0
@@ -14894,7 +14894,7 @@ UiListB_Class0C:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0D:
-	.long T_F410A4                              ; F8836E  [0]   -> 0xF410A4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13                              ; F8836E  [0]   -> 0xF410A4
 	.long T_F415A8                              ; F88372  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88376  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8837A  [3]   -> 0xF415B0
@@ -14917,7 +14917,7 @@ UiListB_Class0D:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0E:
-	.long T_F410A8                              ; F88392  [0]   -> 0xF410A8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13                              ; F88392  [0]   -> 0xF410A8
 	.long T_F415A8                              ; F88396  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8839A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8839E  [3]   -> 0xF415B0
@@ -14940,7 +14940,7 @@ UiListB_Class0E:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class0F:
-	.long T_F410AC                              ; F883B6  [0]   -> 0xF410AC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13                              ; F883B6  [0]   -> 0xF410AC
 	.long T_F415A8                              ; F883BA  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F883BE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F883C2  [3]   -> 0xF415B0
@@ -14963,7 +14963,7 @@ UiListB_Class0F:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class10:
-	.long T_F410B0                              ; F883DA  [0]   -> 0xF410B0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13                              ; F883DA  [0]   -> 0xF410B0
 	.long T_F415A8                              ; F883DE  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F883E2  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F883E6  [3]   -> 0xF415B0
@@ -14986,7 +14986,7 @@ UiListB_Class10:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class11:
-	.long T_F410B4                              ; F883FE  [0]   -> 0xF410B4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13                              ; F883FE  [0]   -> 0xF410B4
 	.long T_F415A8                              ; F88402  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88406  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8840A  [3]   -> 0xF415B0
@@ -15009,7 +15009,7 @@ UiListB_Class11:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class12:
-	.long T_F410B8                              ; F88422  [0]   -> 0xF410B8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13                              ; F88422  [0]   -> 0xF410B8
 	.long T_F415A8                              ; F88426  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8842A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8842E  [3]   -> 0xF415B0
@@ -15032,7 +15032,7 @@ UiListB_Class12:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class13:
-	.long T_F410BC                              ; F88446  [0]   -> 0xF410BC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13                              ; F88446  [0]   -> 0xF410BC
 	.long T_F415A8                              ; F8844A  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8844E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88452  [3]   -> 0xF415B0
@@ -15055,7 +15055,7 @@ UiListB_Class13:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class14:
-	.long T_F410C0                              ; F8846A  [0]   -> 0xF410C0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13                              ; F8846A  [0]   -> 0xF410C0
 	.long T_F415A8                              ; F8846E  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88472  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88476  [3]   -> 0xF415B0
@@ -15078,7 +15078,7 @@ UiListB_Class14:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class15:
-	.long T_F410C4                              ; F8848E  [0]   -> 0xF410C4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13                              ; F8848E  [0]   -> 0xF410C4
 	.long T_F415A8                              ; F88492  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88496  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8849A  [3]   -> 0xF415B0
@@ -15101,7 +15101,7 @@ UiListB_Class15:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class16:
-	.long T_F410C8                              ; F884B2  [0]   -> 0xF410C8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13                              ; F884B2  [0]   -> 0xF410C8
 	.long T_F415A8                              ; F884B6  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F884BA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F884BE  [3]   -> 0xF415B0
@@ -15124,7 +15124,7 @@ UiListB_Class16:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class17:
-	.long T_F410CC                              ; F884D6  [0]   -> 0xF410CC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13                              ; F884D6  [0]   -> 0xF410CC
 	.long T_F415A8                              ; F884DA  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F884DE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F884E2  [3]   -> 0xF415B0
@@ -15147,7 +15147,7 @@ UiListB_Class17:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class18:
-	.long T_F410D0                              ; F884FA  [0]   -> 0xF410D0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13                              ; F884FA  [0]   -> 0xF410D0
 	.long T_F415A8                              ; F884FE  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88502  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88506  [3]   -> 0xF415B0
@@ -15170,7 +15170,7 @@ UiListB_Class18:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class19:
-	.long T_F410D4                              ; F8851E  [0]   -> 0xF410D4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13                              ; F8851E  [0]   -> 0xF410D4
 	.long T_F415A8                              ; F88522  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88526  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8852A  [3]   -> 0xF415B0
@@ -15193,7 +15193,7 @@ UiListB_Class19:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1A:
-	.long T_F410D8                              ; F88542  [0]   -> 0xF410D8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13                              ; F88542  [0]   -> 0xF410D8
 	.long T_F415A8                              ; F88546  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8854A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8854E  [3]   -> 0xF415B0
@@ -15216,7 +15216,7 @@ UiListB_Class1A:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1B:
-	.long T_F410DC                              ; F88566  [0]   -> 0xF410DC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13                              ; F88566  [0]   -> 0xF410DC
 	.long T_F415A8                              ; F8856A  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F8856E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88572  [3]   -> 0xF415B0
@@ -15239,7 +15239,7 @@ UiListB_Class1B:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1C:
-	.long T_F410E0                              ; F8858A  [0]   -> 0xF410E0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13                              ; F8858A  [0]   -> 0xF410E0
 	.long T_F415A8                              ; F8858E  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F88592  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88596  [3]   -> 0xF415B0
@@ -15262,7 +15262,7 @@ UiListB_Class1C:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1D:
-	.long T_F410E4                              ; F885AE  [0]   -> 0xF410E4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13                              ; F885AE  [0]   -> 0xF410E4
 	.long T_F415A8                              ; F885B2  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F885B6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F885BA  [3]   -> 0xF415B0
@@ -15308,7 +15308,7 @@ UiListB_Class1E:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class1F:
-	.long T_F410EC                              ; F885F6  [0]   -> 0xF410EC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13                              ; F885F6  [0]   -> 0xF410EC
 	.long T_F415A8                              ; F885FA  [1]   -> 0xF415A8
 	.long T_F4067C                              ; F885FE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88602  [3]   -> 0xF415B0
@@ -15336,7 +15336,7 @@ UiListB_Class20:
 	.long T_F40698                              ; F88622  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88626  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8862A  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8862E  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8862E  [5]   -> 0xF43350
 	.long T_F40810                              ; F88632  [6]   -> 0xF40810
 	.long T_F42E54                              ; F88636  [7]   -> 0xF42E54
 	.long T_F42F54                              ; F8863A  [8]   -> 0xF42F54
@@ -15361,7 +15361,7 @@ UiListB_Class21:
 	.long T_F40698                              ; F8864E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88652  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88656  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8865A  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8865A  [5]   -> 0xF43350
 	.long T_F40810                              ; F8865E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88662  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88666  [8]   end of list
@@ -15379,12 +15379,12 @@ UiListB_Class21:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class22:
-	.long T_F42478                              ; F8866A  [0]   -> 0xF42478
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26                              ; F8866A  [0]   -> 0xF42478
 	.long T_F415A0                              ; F8866E  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88672  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88676  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8867A  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8867E  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8867E  [5]   -> 0xF43350
 	.long T_F40810                              ; F88682  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88686  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8868A  [8]   end of list
@@ -15402,12 +15402,12 @@ UiListB_Class22:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class23:
-	.long T_F4247C                              ; F8868E  [0]   -> 0xF4247C
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26                              ; F8868E  [0]   -> 0xF4247C
 	.long T_F415A0                              ; F88692  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88696  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8869A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8869E  [4]   -> 0xF411C4
-	.long T_F43350                              ; F886A2  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886A2  [5]   -> 0xF43350
 	.long T_F40810                              ; F886A6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886AA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886AE  [8]   end of list
@@ -15425,12 +15425,12 @@ UiListB_Class23:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class24:
-	.long T_F42480                              ; F886B2  [0]   -> 0xF42480
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26                              ; F886B2  [0]   -> 0xF42480
 	.long T_F415A0                              ; F886B6  [1]   -> 0xF415A0
 	.long T_F40698                              ; F886BA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F886BE  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F886C2  [4]   -> 0xF411C4
-	.long T_F43350                              ; F886C6  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886C6  [5]   -> 0xF43350
 	.long T_F40810                              ; F886CA  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886CE  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886D2  [8]   end of list
@@ -15448,12 +15448,12 @@ UiListB_Class24:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class25:
-	.long T_F42484                              ; F886D6  [0]   -> 0xF42484
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26                              ; F886D6  [0]   -> 0xF42484
 	.long T_F415A0                              ; F886DA  [1]   -> 0xF415A0
 	.long T_F40698                              ; F886DE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F886E2  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F886E6  [4]   -> 0xF411C4
-	.long T_F43350                              ; F886EA  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886EA  [5]   -> 0xF43350
 	.long T_F40810                              ; F886EE  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886F2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886F6  [8]   end of list
@@ -15471,12 +15471,12 @@ UiListB_Class25:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class26:
-	.long T_F42488                              ; F886FA  [0]   -> 0xF42488
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26                              ; F886FA  [0]   -> 0xF42488
 	.long T_F415A0                              ; F886FE  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88702  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88706  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8870A  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8870E  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8870E  [5]   -> 0xF43350
 	.long T_F40810                              ; F88712  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88716  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8871A  [8]   end of list
@@ -15494,12 +15494,12 @@ UiListB_Class26:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class27:
-	.long T_F4248C                              ; F8871E  [0]   -> 0xF4248C
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26                              ; F8871E  [0]   -> 0xF4248C
 	.long T_F415A0                              ; F88722  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88726  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8872A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8872E  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88732  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88732  [5]   -> 0xF43350
 	.long T_F40810                              ; F88736  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8873A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8873E  [8]   end of list
@@ -15517,12 +15517,12 @@ UiListB_Class27:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class28:
-	.long T_F42490                              ; F88742  [0]   -> 0xF42490
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26                              ; F88742  [0]   -> 0xF42490
 	.long T_F415A0                              ; F88746  [1]   -> 0xF415A0
 	.long T_F40698                              ; F8874A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8874E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88752  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88756  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88756  [5]   -> 0xF43350
 	.long T_F40810                              ; F8875A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8875E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88762  [8]   end of list
@@ -15540,12 +15540,12 @@ UiListB_Class28:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class29:
-	.long T_F42494                              ; F88766  [0]   -> 0xF42494
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26                              ; F88766  [0]   -> 0xF42494
 	.long T_F415A0                              ; F8876A  [1]   -> 0xF415A0
 	.long T_F40698                              ; F8876E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88772  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88776  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8877A  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8877A  [5]   -> 0xF43350
 	.long T_F40810                              ; F8877E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88782  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88786  [8]   end of list
@@ -15563,12 +15563,12 @@ UiListB_Class29:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2A:
-	.long T_F42498                              ; F8878A  [0]   -> 0xF42498
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26                              ; F8878A  [0]   -> 0xF42498
 	.long T_F415A0                              ; F8878E  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88792  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88796  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8879A  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8879E  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8879E  [5]   -> 0xF43350
 	.long T_F40810                              ; F887A2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887A6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887AA  [8]   end of list
@@ -15586,12 +15586,12 @@ UiListB_Class2A:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2B:
-	.long T_F4249C                              ; F887AE  [0]   -> 0xF4249C
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26                              ; F887AE  [0]   -> 0xF4249C
 	.long T_F415A0                              ; F887B2  [1]   -> 0xF415A0
 	.long T_F40698                              ; F887B6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F887BA  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F887BE  [4]   -> 0xF411C4
-	.long T_F43350                              ; F887C2  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887C2  [5]   -> 0xF43350
 	.long T_F40810                              ; F887C6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887CA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887CE  [8]   end of list
@@ -15609,12 +15609,12 @@ UiListB_Class2B:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2C:
-	.long T_F424A0                              ; F887D2  [0]   -> 0xF424A0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26                              ; F887D2  [0]   -> 0xF424A0
 	.long T_F415A0                              ; F887D6  [1]   -> 0xF415A0
 	.long T_F40698                              ; F887DA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F887DE  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F887E2  [4]   -> 0xF411C4
-	.long T_F43350                              ; F887E6  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887E6  [5]   -> 0xF43350
 	.long T_F40810                              ; F887EA  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887EE  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887F2  [8]   end of list
@@ -15632,12 +15632,12 @@ UiListB_Class2C:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2D:
-	.long T_F424A4                              ; F887F6  [0]   -> 0xF424A4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26                              ; F887F6  [0]   -> 0xF424A4
 	.long T_F415A0                              ; F887FA  [1]   -> 0xF415A0
 	.long T_F40698                              ; F887FE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88802  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88806  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8880A  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8880A  [5]   -> 0xF43350
 	.long T_F40810                              ; F8880E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88812  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88816  [8]   end of list
@@ -15655,12 +15655,12 @@ UiListB_Class2D:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2E:
-	.long T_F424A8                              ; F8881A  [0]   -> 0xF424A8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26                              ; F8881A  [0]   -> 0xF424A8
 	.long T_F415A0                              ; F8881E  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88822  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88826  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8882A  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8882E  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8882E  [5]   -> 0xF43350
 	.long T_F40810                              ; F88832  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88836  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8883A  [8]   end of list
@@ -15678,12 +15678,12 @@ UiListB_Class2E:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class2F:
-	.long T_F424AC                              ; F8883E  [0]   -> 0xF424AC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26                              ; F8883E  [0]   -> 0xF424AC
 	.long T_F415A0                              ; F88842  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88846  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8884A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8884E  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88852  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88852  [5]   -> 0xF43350
 	.long T_F40810                              ; F88856  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8885A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8885E  [8]   end of list
@@ -15701,12 +15701,12 @@ UiListB_Class2F:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class30:
-	.long T_F424B0                              ; F88862  [0]   -> 0xF424B0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26                              ; F88862  [0]   -> 0xF424B0
 	.long T_F415A0                              ; F88866  [1]   -> 0xF415A0
 	.long T_F40698                              ; F8886A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8886E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88872  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88876  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88876  [5]   -> 0xF43350
 	.long T_F40810                              ; F8887A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8887E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88882  [8]   end of list
@@ -15724,12 +15724,12 @@ UiListB_Class30:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class31:
-	.long T_F424B4                              ; F88886  [0]   -> 0xF424B4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26                              ; F88886  [0]   -> 0xF424B4
 	.long T_F415A0                              ; F8888A  [1]   -> 0xF415A0
 	.long T_F40698                              ; F8888E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88892  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88896  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8889A  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8889A  [5]   -> 0xF43350
 	.long T_F40810                              ; F8889E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888A2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888A6  [8]   end of list
@@ -15747,12 +15747,12 @@ UiListB_Class31:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class32:
-	.long T_F424B8                              ; F888AA  [0]   -> 0xF424B8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26                              ; F888AA  [0]   -> 0xF424B8
 	.long T_F415A0                              ; F888AE  [1]   -> 0xF415A0
 	.long T_F40698                              ; F888B2  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888B6  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F888BA  [4]   -> 0xF411C4
-	.long T_F43350                              ; F888BE  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888BE  [5]   -> 0xF43350
 	.long T_F40810                              ; F888C2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888C6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888CA  [8]   end of list
@@ -15770,12 +15770,12 @@ UiListB_Class32:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class33:
-	.long T_F424BC                              ; F888CE  [0]   -> 0xF424BC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26                              ; F888CE  [0]   -> 0xF424BC
 	.long T_F415A0                              ; F888D2  [1]   -> 0xF415A0
 	.long T_F40698                              ; F888D6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888DA  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F888DE  [4]   -> 0xF411C4
-	.long T_F43350                              ; F888E2  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888E2  [5]   -> 0xF43350
 	.long T_F40810                              ; F888E6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888EA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888EE  [8]   end of list
@@ -15793,12 +15793,12 @@ UiListB_Class33:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class34:
-	.long T_F424C0                              ; F888F2  [0]   -> 0xF424C0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26                              ; F888F2  [0]   -> 0xF424C0
 	.long T_F415A0                              ; F888F6  [1]   -> 0xF415A0
 	.long T_F40698                              ; F888FA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888FE  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88902  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88906  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88906  [5]   -> 0xF43350
 	.long T_F40810                              ; F8890A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8890E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88912  [8]   end of list
@@ -15816,12 +15816,12 @@ UiListB_Class34:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class35:
-	.long T_F424C4                              ; F88916  [0]   -> 0xF424C4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26                              ; F88916  [0]   -> 0xF424C4
 	.long T_F415A0                              ; F8891A  [1]   -> 0xF415A0
 	.long T_F40698                              ; F8891E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88922  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88926  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8892A  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8892A  [5]   -> 0xF43350
 	.long T_F40810                              ; F8892E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88932  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88936  [8]   end of list
@@ -15839,12 +15839,12 @@ UiListB_Class35:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class36:
-	.long T_F424C8                              ; F8893A  [0]   -> 0xF424C8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26                              ; F8893A  [0]   -> 0xF424C8
 	.long T_F415A0                              ; F8893E  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88942  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88946  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8894A  [4]   -> 0xF411C4
-	.long T_F43350                              ; F8894E  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8894E  [5]   -> 0xF43350
 	.long T_F40810                              ; F88952  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88956  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8895A  [8]   end of list
@@ -15862,12 +15862,12 @@ UiListB_Class36:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class37:
-	.long T_F424CC                              ; F8895E  [0]   -> 0xF424CC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26                              ; F8895E  [0]   -> 0xF424CC
 	.long T_F415A0                              ; F88962  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88966  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8896A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8896E  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88972  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88972  [5]   -> 0xF43350
 	.long T_F40810                              ; F88976  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8897A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8897E  [8]   end of list
@@ -15885,12 +15885,12 @@ UiListB_Class37:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class38:
-	.long T_F424D0                              ; F88982  [0]   -> 0xF424D0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26                              ; F88982  [0]   -> 0xF424D0
 	.long T_F415A0                              ; F88986  [1]   -> 0xF415A0
 	.long T_F40698                              ; F8898A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8898E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88992  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88996  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88996  [5]   -> 0xF43350
 	.long T_F40810                              ; F8899A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8899E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889A2  [8]   end of list
@@ -15908,12 +15908,12 @@ UiListB_Class38:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class39:
-	.long T_F424D4                              ; F889A6  [0]   -> 0xF424D4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26                              ; F889A6  [0]   -> 0xF424D4
 	.long T_F415A0                              ; F889AA  [1]   -> 0xF415A0
 	.long T_F40698                              ; F889AE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889B2  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F889B6  [4]   -> 0xF411C4
-	.long T_F43350                              ; F889BA  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889BA  [5]   -> 0xF43350
 	.long T_F40810                              ; F889BE  [6]   -> 0xF40810
 	.long T_F434F4                              ; F889C2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889C6  [8]   end of list
@@ -15931,12 +15931,12 @@ UiListB_Class39:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3A:
-	.long T_F424D8                              ; F889CA  [0]   -> 0xF424D8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26                              ; F889CA  [0]   -> 0xF424D8
 	.long T_F415A0                              ; F889CE  [1]   -> 0xF415A0
 	.long T_F40698                              ; F889D2  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889D6  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F889DA  [4]   -> 0xF411C4
-	.long T_F43350                              ; F889DE  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889DE  [5]   -> 0xF43350
 	.long T_F40810                              ; F889E2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F889E6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889EA  [8]   end of list
@@ -15954,12 +15954,12 @@ UiListB_Class3A:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3B:
-	.long T_F424DC                              ; F889EE  [0]   -> 0xF424DC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26                              ; F889EE  [0]   -> 0xF424DC
 	.long T_F415A0                              ; F889F2  [1]   -> 0xF415A0
 	.long T_F40698                              ; F889F6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889FA  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F889FE  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88A02  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A02  [5]   -> 0xF43350
 	.long T_F40810                              ; F88A06  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A0A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A0E  [8]   end of list
@@ -15977,12 +15977,12 @@ UiListB_Class3B:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3C:
-	.long T_F424E0                              ; F88A12  [0]   -> 0xF424E0
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26                              ; F88A12  [0]   -> 0xF424E0
 	.long T_F415A0                              ; F88A16  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88A1A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A1E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A22  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88A26  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A26  [5]   -> 0xF43350
 	.long T_F40810                              ; F88A2A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A2E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A32  [8]   end of list
@@ -16000,12 +16000,12 @@ UiListB_Class3C:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3D:
-	.long T_F424E4                              ; F88A36  [0]   -> 0xF424E4
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26                              ; F88A36  [0]   -> 0xF424E4
 	.long T_F415A0                              ; F88A3A  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88A3E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A42  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A46  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88A4A  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A4A  [5]   -> 0xF43350
 	.long T_F40810                              ; F88A4E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A52  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A56  [8]   end of list
@@ -16023,12 +16023,12 @@ UiListB_Class3D:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3E:
-	.long T_F424E8                              ; F88A5A  [0]   -> 0xF424E8
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26                              ; F88A5A  [0]   -> 0xF424E8
 	.long T_F415A0                              ; F88A5E  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88A62  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A66  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A6A  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88A6E  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A6E  [5]   -> 0xF43350
 	.long T_F40810                              ; F88A72  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A76  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A7A  [8]   end of list
@@ -16046,12 +16046,12 @@ UiListB_Class3E:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class3F:
-	.long T_F424EC                              ; F88A7E  [0]   -> 0xF424EC
+	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26                              ; F88A7E  [0]   -> 0xF424EC
 	.long T_F415A0                              ; F88A82  [1]   -> 0xF415A0
 	.long T_F40698                              ; F88A86  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A8A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A8E  [4]   -> 0xF411C4
-	.long T_F43350                              ; F88A92  [5]   -> 0xF43350
+	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A92  [5]   -> 0xF43350
 	.long T_F40810                              ; F88A96  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A9A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A9E  [8]   end of list
@@ -16432,7 +16432,7 @@ UiListB_Class78:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class79:
-	.long T_F41140                              ; F88B86  [0]   -> 0xF41140
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6                              ; F88B86  [0]   -> 0xF41140
 	.long T_F415B0                              ; F88B8A  [1]   -> 0xF415B0
 	.long T_F411E8                              ; F88B8E  [2]   -> 0xF411E8
 	.long T_F42F54                              ; F88B92  [3]   -> 0xF42F54
@@ -16468,7 +16468,7 @@ UiListB_Class7A:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class80:
-	.long T_F41148                              ; F88BA6  [0]   -> 0xF41148
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2                              ; F88BA6  [0]   -> 0xF41148
 	.long T_F40688                              ; F88BAA  [1]   -> 0xF40688
 	.long T_F411D4                              ; F88BAE  [2]   -> 0xF411D4
 	.long T_F4079C                              ; F88BB2  [3]   -> 0xF4079C
@@ -16524,7 +16524,7 @@ UiListB_Class90:
 ; ---------------------------------------------------------------------
 UiListB_Class91:
 	.long T_F408F4                              ; F88BDA  [0]   -> 0xF408F4
-	.long T_F41154                              ; F88BDE  [1]   -> 0xF41154
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14                              ; F88BDE  [1]   -> 0xF41154
 	.long T_F411D8                              ; F88BE2  [2]   -> 0xF411D8
 	.long T_F42828                              ; F88BE6  [3]   -> 0xF42828
 	.long T_F415A4                              ; F88BEA  [4]   -> 0xF415A4
@@ -16543,7 +16543,7 @@ UiListB_Class91:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class92:
-	.long T_F41158                              ; F88BF2  [0]   -> 0xF41158
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13                              ; F88BF2  [0]   -> 0xF41158
 	.long 0xFFFFFFFF                            ; F88BF6  [1]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16559,7 +16559,7 @@ UiListB_Class92:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class93:
-	.long T_F4115C                              ; F88BFA  [0]   -> 0xF4115C
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7                              ; F88BFA  [0]   -> 0xF4115C
 	.long T_F411DC                              ; F88BFE  [1]   -> 0xF411DC
 	.long 0xFFFFFFFF                            ; F88C02  [2]   end of list
 
@@ -16576,7 +16576,7 @@ UiListB_Class93:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class98:
-	.long T_F41160                              ; F88C06  [0]   -> 0xF41160
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4                              ; F88C06  [0]   -> 0xF41160
 	.long T_F40694                              ; F88C0A  [1]   -> 0xF40694
 	.long T_F411D0                              ; F88C0E  [2]   -> 0xF411D0
 	.long T_F415A8                              ; F88C12  [3]   -> 0xF415A8
@@ -16627,7 +16627,7 @@ UiListB_Class9A:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassA8:
-	.long T_F4116C                              ; F88C2A  [0]   -> 0xF4116C
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19                              ; F88C2A  [0]   -> 0xF4116C
 	.long T_F415A8                              ; F88C2E  [1]   -> 0xF415A8
 	.long T_F4068C                              ; F88C32  [2]   -> 0xF4068C
 	.long T_F411E0                              ; F88C36  [3]   -> 0xF411E0
@@ -16714,7 +16714,7 @@ UiListB_ClassAE:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB0:
-	.long T_F424F0                              ; F88C6E  [0]   -> 0xF424F0
+	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17                              ; F88C6E  [0]   -> 0xF424F0
 	.long 0xFFFFFFFF                            ; F88C72  [1]   end of list
 
 ; ---------------------------------------------------------------------
@@ -23466,7 +23466,7 @@ CallbackQueue_ResetAndRestartTask2:
 	ld a, 0x02:opc                                          ; F8DA8C  21 02
 	call T_Kernel_SemaWait                               ; F8DA8E  1d 90 2d f4
 	ld a, 0x02:opc                                          ; F8DA92  21 02
-	call T_F42DA8                                        ; F8DA94  1d a8 2d f4
+	call T_Kernel_KillTask                                        ; F8DA94  1d a8 2d f4
 	ld a, 0x04:opc                                          ; F8DA98  21 04
 	call T_Kernel_SemaSignal                             ; F8DA9A  1d 88 2d f4
 	ld a, 0x02:opc                                          ; F8DA9E  21 02
@@ -23804,7 +23804,7 @@ Link_Init_DmaAndTimer:
 ;           chunk size is the five-bit length field
 ;           Link_SendCountedBlock's own header derives (`(count - 1)` in
 ;           bits 4..0), and 0x20 is the largest count that fits it.
-;           prom_b publishes it as T_F40ED4 with 46 references
+;           prom_b publishes it as T_Link_SendBlockIn32ByteChunks with 46 references
 ; Unknown:  what the selector at (XIZ+0x08) means to the far side -- the
 ;           same gap Link_SendCountedBlock's header states
 ; Was `sub_F8E02C`, named by notes/prom_a_census_round8.py (bucket round 10).
@@ -31562,7 +31562,7 @@ sub_F90A42:   ; entry: named by 1 `ld` operand, first at 0xF909BC
 	ld A,(XIY+0x03)                                      ; F90AA8  8d 03 21
 	ld (0x2640:16), a                                   ; F90AAB  f1 40 26 41
 	ld XIY,0x00f2841b                                    ; F90AAF  45 1b 84 f2 00
-	call T_F4180C                                        ; F90AB4  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F90AB4  1d 0c 18 f4
 	pop XIY                                              ; F90AB8  5d
 .LF90AB9:
 	m_bit 1, MD16, 0x2676                                ; F90AB9  f1 76 26 c9
@@ -31580,7 +31580,7 @@ sub_F90A42:   ; entry: named by 1 `ld` operand, first at 0xF909BC
 	ld A,(XIY+0x05)                                      ; F90AD8  8d 05 21
 	ld (0x2642:16), a                                   ; F90ADB  f1 42 26 41
 	ld XIY,0x00f28438                                    ; F90ADF  45 38 84 f2 00
-	call T_F4180C                                        ; F90AE4  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F90AE4  1d 0c 18 f4
 	pop XIY                                              ; F90AE8  5d
 .LF90AE9:
 	m_bit 3, MD16, 0x2676                                ; F90AE9  f1 76 26 cb
@@ -31589,7 +31589,7 @@ sub_F90A42:   ; entry: named by 1 `ld` operand, first at 0xF909BC
 	ld A,(XIY+0x07)                                      ; F90AF0  8d 07 21
 	ld (0x2643:16), a                                   ; F90AF3  f1 43 26 41
 	ld XIY,0x00f28444                                    ; F90AF7  45 44 84 f2 00
-	call T_F4180C                                        ; F90AFC  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F90AFC  1d 0c 18 f4
 sub_F90A42__F90B00:
 	pop XIY                                              ; F90B00  5d
 .LF90B01:
@@ -31962,7 +31962,7 @@ sub_F90EDD:
 	ld A,(XIY+0x05)                                      ; F90EE9  8d 05 21
 	ld (0x2642:16), a                                   ; F90EEC  f1 42 26 41
 	ld XIY,0x00f28479                                    ; F90EF0  45 79 84 f2 00
-	call T_F4180C                                        ; F90EF5  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F90EF5  1d 0c 18 f4
 	pop XIY                                              ; F90EF9  5d
 .LF90EFA:
 	m_bit 3, MD16, 0x2676                                ; F90EFA  f1 76 26 cb
@@ -31971,7 +31971,7 @@ sub_F90EDD:
 	ld A,(XIY+0x07)                                      ; F90F01  8d 07 21
 	ld (0x2643:16), a                                   ; F90F04  f1 43 26 41
 	ld XIY,0x00f28485                                    ; F90F08  45 85 84 f2 00
-	call T_F4180C                                        ; F90F0D  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F90F0D  1d 0c 18 f4
 	pop XIY                                              ; F90F11  5d
 .LF90F12:
 	m_bit 4, MD16, 0x2676                                ; F90F12  f1 76 26 cc
@@ -32098,13 +32098,13 @@ sub_F90F9F:
 	call T_F41038                                        ; F9101A  1d 38 10 f4
 	push XIY                                             ; F9101E  3d
 	ld A,(XIY)                                           ; F9101F  85 21
-	call T_F43330                                        ; F91021  1d 30 33 f4
+	call T_UiText_CopyLabel13_To_22F0                                        ; F91021  1d 30 33 f4
 	ld XIY,DL_F288D1                                     ; F91025  45 d1 88 f2 00
 	ld XIX,DL_F288E0                                     ; F9102A  44 e0 88 f2 00
 	call T_DisplayListB_Run                              ; F9102F  1d f4 17 f4
 	pop XIY                                              ; F91033  5d
 	ld A,(XIY+0x01)                                      ; F91034  8d 01 21
-	call T_F43330                                        ; F91037  1d 30 33 f4
+	call T_UiText_CopyLabel13_To_22F0                                        ; F91037  1d 30 33 f4
 	ld XIY,DL_F288E0                                     ; F9103B  45 e0 88 f2 00
 	ld XIX,DL_F288EF                                     ; F91040  44 ef 88 f2 00
 	call T_DisplayListB_Run                              ; F91045  1d f4 17 f4
@@ -32137,13 +32137,13 @@ sub_F90F9F:
 	call T_F41038                                        ; F9109B  1d 38 10 f4
 	push XIY                                             ; F9109F  3d
 	ld A,(XIY)                                           ; F910A0  85 21
-	call T_F43330                                        ; F910A2  1d 30 33 f4
+	call T_UiText_CopyLabel13_To_22F0                                        ; F910A2  1d 30 33 f4
 	ld XIY,DL_F288EF                                     ; F910A6  45 ef 88 f2 00
 	ld XIX,DL_F288FE                                     ; F910AB  44 fe 88 f2 00
 	call T_DisplayListB_Run                              ; F910B0  1d f4 17 f4
 	pop XIY                                              ; F910B4  5d
 	ld A,(XIY+0x01)                                      ; F910B5  8d 01 21
-	call T_F43330                                        ; F910B8  1d 30 33 f4
+	call T_UiText_CopyLabel13_To_22F0                                        ; F910B8  1d 30 33 f4
 	ld XIY,DL_F288FE                                     ; F910BC  45 fe 88 f2 00
 	ld XIX,DL_F2890D                                     ; F910C1  44 0d 89 f2 00
 	call T_DisplayListB_Run                              ; F910C6  1d f4 17 f4
@@ -32172,13 +32172,13 @@ sub_F90F9F:
 	call T_F41038                                        ; F9110F  1d 38 10 f4
 	push XIY                                             ; F91113  3d
 	ld A,(XIY)                                           ; F91114  85 21
-	call T_F43330                                        ; F91116  1d 30 33 f4
+	call T_UiText_CopyLabel13_To_22F0                                        ; F91116  1d 30 33 f4
 	ld XIY,DL_F2890D                                     ; F9111A  45 0d 89 f2 00
 	ld XIX,DL_F2891C                                     ; F9111F  44 1c 89 f2 00
 	call T_DisplayListB_Run                              ; F91124  1d f4 17 f4
 	pop XIY                                              ; F91128  5d
 	ld A,(XIY+0x01)                                      ; F91129  8d 01 21
-	call T_F43330                                        ; F9112C  1d 30 33 f4
+	call T_UiText_CopyLabel13_To_22F0                                        ; F9112C  1d 30 33 f4
 	ld XIY,DL_F2891C                                     ; F91130  45 1c 89 f2 00
 	ld XIX,DL_F2892B                                     ; F91135  44 2b 89 f2 00
 	call T_DisplayListB_Run                              ; F9113A  1d f4 17 f4
@@ -33428,7 +33428,7 @@ sub_F91CF2:   ; entry: named by 2 `ld` operands, first at 0xF91683
 	ld A,(XIY+0x03)                                      ; F91D55  8d 03 21
 	ld (0x2640:16), a                                   ; F91D58  f1 40 26 41
 	ld XIY,0x00f2844f                                    ; F91D5C  45 4f 84 f2 00
-	call T_F4180C                                        ; F91D61  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F91D61  1d 0c 18 f4
 	pop XIY                                              ; F91D65  5d
 .LF91D66:
 	m_bit 1, MD16, 0x2676                                ; F91D66  f1 76 26 c9
@@ -33446,7 +33446,7 @@ sub_F91CF2:   ; entry: named by 2 `ld` operands, first at 0xF91683
 	ld A,(XIY+0x05)                                      ; F91D85  8d 05 21
 	ld (0x2642:16), a                                   ; F91D88  f1 42 26 41
 	ld XIY,0x00f28479                                    ; F91D8C  45 79 84 f2 00
-	call T_F4180C                                        ; F91D91  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F91D91  1d 0c 18 f4
 	pop XIY                                              ; F91D95  5d
 .LF91D96:
 	m_bit 3, MD16, 0x2676                                ; F91D96  f1 76 26 cb
@@ -33455,7 +33455,7 @@ sub_F91CF2:   ; entry: named by 2 `ld` operands, first at 0xF91683
 	ld A,(XIY+0x07)                                      ; F91D9D  8d 07 21
 	ld (0x2643:16), a                                   ; F91DA0  f1 43 26 41
 	ld XIY,0x00f28485                                    ; F91DA4  45 85 84 f2 00
-	call T_F4180C                                        ; F91DA9  1d 0c 18 f4
+	call T_DLB_Handler_Decimal2Words                                        ; F91DA9  1d 0c 18 f4
 	pop XIY                                              ; F91DAD  5d
 .LF91DAE:
 	m_bit 4, MD16, 0x2676                                ; F91DAE  f1 76 26 cc
@@ -34306,9 +34306,9 @@ sub_F9262D:
 	call T_DLB_Handler_StringTable2                      ; F92641  1d fc 17 f4
 	ld (0x2540:16), 0x01                                 ; F92645  f1 40 25 00 01
 	ld XIY,0x00f2970f                                    ; F9264A  45 0f 97 f2 00
-	call T_F41820                                        ; F9264F  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F9264F  1d 20 18 f4
 	ld XIY,0x00f2971a                                    ; F92653  45 1a 97 f2 00
-	call T_F4181C                                        ; F92658  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F92658  1d 1c 18 f4
 	ld a, (0x2250:16)                                   ; F9265C  c1 50 22 21
 	ld (0x267e:16), a                                   ; F92660  f1 7e 26 41
 .LF92664:
@@ -34615,9 +34615,9 @@ sub_F928AE:   ; entry: named by 1 `ld` operand, first at 0xF927ED
 	ld (0x2675:16), a                                   ; F928BA  f1 75 26 41
 	ld (0x2540:16), 0x01                                 ; F928BE  f1 40 25 00 01
 	ld XIY,0x00f2b42f                                    ; F928C3  45 2f b4 f2 00
-	call T_F41820                                        ; F928C8  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F928C8  1d 20 18 f4
 	ld XIY,0x00f2b43a                                    ; F928CC  45 3a b4 f2 00
-	call T_F4181C                                        ; F928D1  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F928D1  1d 1c 18 f4
 	ld c, 0x07:opc                                          ; F928D5  23 07
 	ld a, 0x0c:opc                                          ; F928D7  21 0c
 	swi 7                                                ; F928D9  ff
@@ -34728,7 +34728,7 @@ sub_F929DB:
 	call T_DisplayList_Run                               ; F929FD  1d f0 17 f4
 	ld (0x2540:16), 0x00                                 ; F92A01  f1 40 25 00 00
 	ld XIY,0x00f2bb0d                                    ; F92A06  45 0d bb f2 00
-	call T_F4181C                                        ; F92A0B  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F92A0B  1d 1c 18 f4
 	ret                                                  ; F92A0F  0e
 sub_F92A10:
 	ld (0x2540:16), 0x00                                 ; F92A10  f1 40 25 00 00
@@ -34740,7 +34740,7 @@ sub_F92A10:
 	ld XIX,0x00f2bb0d                                    ; F92A2D  44 0d bb f2 00
 	call T_DisplayList_Run                               ; F92A32  1d f0 17 f4
 	ld XIY,0x00f2bb0d                                    ; F92A36  45 0d bb f2 00
-	call T_F4181C                                        ; F92A3B  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F92A3B  1d 1c 18 f4
 	ret                                                  ; F92A3F  0e
 ; sub_F92A40 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -35910,7 +35910,7 @@ sub_F93398:
 	jr nz, .LF933DF                                      ; F933CE  6e 0f
 	ld (0x2671:16), l                                   ; F933D0  f1 71 26 47
 	ld XIY,0x00f2b4c5                                    ; F933D4  45 c5 b4 f2 00
-	call T_F4181C                                        ; F933D9  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F933D9  1d 1c 18 f4
 	jr .LF9343E                                          ; F933DD  68 5f
 .LF933DF:
 	xor W,W                                              ; F933DF  c8 d0
@@ -35948,7 +35948,7 @@ sub_F93398:
 .LF9342F:
 	ld (0x2671:16), c                                   ; F9342F  f1 71 26 43
 	ld XIY,0x00f2b4c5                                    ; F93433  45 c5 b4 f2 00
-	call T_F4181C                                        ; F93438  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F93438  1d 1c 18 f4
 	popw bc                                              ; F9343C  49
 	popw hl                                              ; F9343D  4b
 .LF9343E:
@@ -36376,9 +36376,9 @@ sub_F936DA:   ; entry: named by 1 `ld` operand, first at 0xF9361E
 	ld (0x2675:16), a                                   ; F936E6  f1 75 26 41
 	ld (0x2540:16), 0x01                                 ; F936EA  f1 40 25 00 01
 	ld XIY,0x00f2b42f                                    ; F936EF  45 2f b4 f2 00
-	call T_F41820                                        ; F936F4  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; F936F4  1d 20 18 f4
 	ld XIY,0x00f2b43a                                    ; F936F8  45 3a b4 f2 00
-	call T_F4181C                                        ; F936FD  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F936FD  1d 1c 18 f4
 	ld c, 0x07:opc                                          ; F93701  23 07
 	ld a, 0x0c:opc                                          ; F93703  21 0c
 	swi 7                                                ; F93705  ff
@@ -37239,7 +37239,7 @@ sub_F93E28:
 	jr nz, .LF93E6F                                      ; F93E5E  6e 0f
 	ld (0x2671:16), l                                   ; F93E60  f1 71 26 47
 	ld XIY,0x00f2b4c5                                    ; F93E64  45 c5 b4 f2 00
-	call T_F4181C                                        ; F93E69  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F93E69  1d 1c 18 f4
 	jr .LF93ECE                                          ; F93E6D  68 5f
 .LF93E6F:
 	xor W,W                                              ; F93E6F  c8 d0
@@ -37277,7 +37277,7 @@ sub_F93E28:
 .LF93EBF:
 	ld (0x2671:16), c                                   ; F93EBF  f1 71 26 43
 	ld XIY,0x00f2b4c5                                    ; F93EC3  45 c5 b4 f2 00
-	call T_F4181C                                        ; F93EC8  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F93EC8  1d 1c 18 f4
 	popw bc                                              ; F93ECC  49
 	popw hl                                              ; F93ECD  4b
 .LF93ECE:
@@ -40321,7 +40321,7 @@ sub_F95C2D__F95C83:
 ;          event code, for the screen object at prom_b 0xF400F0
 ;          (Paint_SineWaveCheckMode / ScreenLeave_ / ScreenButton_).
 ; Read by: ScreenButton_SineWaveCheckMode (0xF95891, the object's +8
-;          BUTTON slot T_F400F8): `cp (XIZ+8),0x001F / jr ugt` -- COUNT 32 --
+;          BUTTON slot T_ScreenButton_SineWaveCheckMode): `cp (XIZ+8),0x001F / jr ugt` -- COUNT 32 --
 ;          then `ldw BC,4 / mul BC,(XIZ+8) / add XBC,<this> / ld XBC,(XBC)`
 ;          and a call with H = bit 7 of (XIZ+0x0A).  Codes as
 ;          PanelButton_Route produces them (see Dispatch_FF3D39's legend).
@@ -45494,7 +45494,7 @@ Paint_SysexBulkDump:
 .LF99A3D:
 	call T_DisplayList_Run                               ; F99A3D  1d f0 17 f4
 	ld XIY,0x00f0d9a4                                    ; F99A41  45 a4 d9 f0 00
-	call T_F4181C                                        ; F99A46  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F99A46  1d 1c 18 f4
 	calr LCD_ScreenRedraw_End                                      ; F99A4A  1e b1 ff
 	ret                                                  ; F99A4D  0e
 sub_F99A4E:
@@ -45530,7 +45530,7 @@ sub_F99A66:   ; entry: named by 1 `.long` operand, first at 0xF99890
 	call T_DLB_Handler_Array6                            ; F99A7C  1d 24 18 f4
 	ld (0x2720:16), 0x00                                 ; F99A80  f1 20 27 00 00
 	ld XIY,0x00f0d9a4                                    ; F99A85  45 a4 d9 f0 00
-	call T_F4181C                                        ; F99A8A  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F99A8A  1d 1c 18 f4
 .LF99A8E:
 	ret                                                  ; F99A8E  0e
 sub_F99A8F:   ; entry: named by 1 `.long` operand, first at 0xF99894
@@ -45554,7 +45554,7 @@ sub_F99A8F:   ; entry: named by 1 `.long` operand, first at 0xF99894
 	call T_DLB_Handler_Array6                            ; F99AD0  1d 24 18 f4
 	ld (0x2720:16), 0x01                                 ; F99AD4  f1 20 27 00 01
 	ld XIY,0x00f0d9a4                                    ; F99AD9  45 a4 d9 f0 00
-	call T_F4181C                                        ; F99ADE  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F99ADE  1d 1c 18 f4
 .LF99AE2:
 	ret                                                  ; F99AE2  0e
 sub_F99A8F__F99AE3:
@@ -45576,7 +45576,7 @@ sub_F99A8F__F99AEB:
 	call T_DLB_Handler_Array6                            ; F99B01  1d 24 18 f4
 	ld (0x2720:16), 0x02                                 ; F99B05  f1 20 27 00 02
 	ld XIY,0x00f0d9a4                                    ; F99B0A  45 a4 d9 f0 00
-	call T_F4181C                                        ; F99B0F  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F99B0F  1d 1c 18 f4
 .LF99B13:
 	ret                                                  ; F99B13  0e
 sub_F99B14:   ; entry: named by 1 `.long` operand, first at 0xF9989C
@@ -45589,7 +45589,7 @@ sub_F99B14:   ; entry: named by 1 `.long` operand, first at 0xF9989C
 	call T_DLB_Handler_Array6                            ; F99B2A  1d 24 18 f4
 	ld (0x2720:16), 0x03                                 ; F99B2E  f1 20 27 00 03
 	ld XIY,0x00f0d9a4                                    ; F99B33  45 a4 d9 f0 00
-	call T_F4181C                                        ; F99B38  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F99B38  1d 1c 18 f4
 .LF99B3C:
 	ret                                                  ; F99B3C  0e
 sub_F99B3D:   ; entry: named by 1 `.long` operand, first at 0xF998A0
@@ -45604,7 +45604,7 @@ sub_F99B3D:   ; entry: named by 1 `.long` operand, first at 0xF998A0
 	call T_DLB_Handler_Array6                            ; F99B59  1d 24 18 f4
 	ld (0x2720:16), 0x04                                 ; F99B5D  f1 20 27 00 04
 	ld XIY,0x00f0d9a4                                    ; F99B62  45 a4 d9 f0 00
-	call T_F4181C                                        ; F99B67  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; F99B67  1d 1c 18 f4
 .LF99B6B:
 	ret                                                  ; F99B6B  0e
 ScreenButtonRow_SysexBulkDump_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF998A4
@@ -49352,7 +49352,7 @@ Screen_ReMapEdit_Button:
 	link XIZ,0x0000                                      ; F9C0C2  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9C0C6  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9C0C9  9e 08 04
-	call T_F42C74                                        ; F9C0CC  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9C0CC  1d 74 2c f4
 	mul A,0x04                                           ; F9C0D0  c9 08 04
 	extz XWA                                             ; F9C0D3  e8 12
 	add XWA,HandlerTable23_FA1690                        ; F9C0D5  e8 c8 90 16 fa 00
@@ -50322,7 +50322,7 @@ sub_F9CA0D:
 	link XIZ,0x0000                                      ; F9CA0D  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9CA11  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9CA14  9e 08 04
-	call T_F42C74                                        ; F9CA17  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9CA17  1d 74 2c f4
 	mul A,0x04                                           ; F9CA1B  c9 08 04
 	extz XWA                                             ; F9CA1E  e8 12
 	add XWA,HandlerTable23_FA1712                        ; F9CA20  e8 c8 12 17 fa 00
@@ -50508,7 +50508,7 @@ Screen_SoundGroupNaming_Leave:
 ;                            address; a 32-entry SoundGroupNaming table would
 ;                            run 31 bytes INTO CombinationGroupNaming's, while
 ;                            23 ends 5 bytes short of it. The bound is real, in
-;                            prom_b sub_F55019 (via T_F42C74): it rejects a raw
+;                            prom_b sub_F55019 (via T_PanelCode_ToSlotAndFlags): it rejects a raw
 ;                            index above 0x1F, then remaps 0x11..0x19 to 0..8
 ;                            and 0x1A..0x1F to 17..22, so what reaches
 ;                            `mul A,0x04` is 0..22 = 23 slots. The count 32 was
@@ -50546,7 +50546,7 @@ Screen_SoundGroupNaming_Button:
 	link XIZ,0x0000                                      ; F9CB53  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9CB57  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9CB5A  9e 08 04
-	call T_F42C74                                        ; F9CB5D  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9CB5D  1d 74 2c f4
 	mul A,0x04                                           ; F9CB61  c9 08 04
 	extz XWA                                             ; F9CB64  e8 12
 	add XWA,HandlerTable23_FA176E                        ; F9CB66  e8 c8 6e 17 fa 00
@@ -51177,7 +51177,7 @@ Screen_CombinationGroupNaming_Button:
 	link XIZ,0x0000                                      ; F9CFBB  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9CFBF  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9CFC2  9e 08 04
-	call T_F42C74                                        ; F9CFC5  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9CFC5  1d 74 2c f4
 	mul A,0x04                                           ; F9CFC9  c9 08 04
 	extz XWA                                             ; F9CFCC  e8 12
 	add XWA,HandlerTable23_FA17CF                        ; F9CFCE  e8 c8 cf 17 fa 00
@@ -51735,7 +51735,7 @@ sub_F9D404:
 	jr nz, .LF9D42F                                      ; F9D40D  6e 20
 	m_push MWD+r6, 0x0a                                  ; F9D40F  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9D412  9e 08 04
-	call T_F42C74                                        ; F9D415  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9D415  1d 74 2c f4
 	mul A,0x04                                           ; F9D419  c9 08 04
 	extz XWA                                             ; F9D41C  e8 12
 	add XWA,HandlerTable23_FA182F                        ; F9D41E  e8 c8 2f 18 fa 00
@@ -52975,7 +52975,7 @@ sub_F9DFCC:
 	link XIZ,0x0000                                      ; F9DFCC  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9DFD0  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9DFD3  9e 08 04
-	call T_F42C74                                        ; F9DFD6  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9DFD6  1d 74 2c f4
 	mul A,0x04                                           ; F9DFDA  c9 08 04
 	extz XWA                                             ; F9DFDD  e8 12
 	add XWA,HandlerTable23_FA1892                        ; F9DFDF  e8 c8 92 18 fa 00
@@ -54273,7 +54273,7 @@ sub_F9EBEE:
 	link XIZ,0x0000                                      ; F9EBEE  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EBF2  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9EBF5  9e 08 04
-	call T_F42C74                                        ; F9EBF8  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9EBF8  1d 74 2c f4
 	mul A,0x04                                           ; F9EBFC  c9 08 04
 	extz XWA                                             ; F9EBFF  e8 12
 	add XWA,HandlerTable23_FA18EE                        ; F9EC01  e8 c8 ee 18 fa 00
@@ -54460,7 +54460,7 @@ sub_F9EDA2:
 	link XIZ,0x0000                                      ; F9EDA2  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EDA6  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9EDA9  9e 08 04
-	call T_F42C74                                        ; F9EDAC  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9EDAC  1d 74 2c f4
 	mul A,0x04                                           ; F9EDB0  c9 08 04
 	extz XWA                                             ; F9EDB3  e8 12
 	add XWA,HandlerTable23_FA194A                        ; F9EDB5  e8 c8 4a 19 fa 00
@@ -54588,7 +54588,7 @@ sub_F9EEE0:
 	link XIZ,0x0000                                      ; F9EEE0  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EEE4  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9EEE7  9e 08 04
-	call T_F42C74                                        ; F9EEEA  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9EEEA  1d 74 2c f4
 	mul A,0x04                                           ; F9EEEE  c9 08 04
 	extz XWA                                             ; F9EEF1  e8 12
 	add XWA,HandlerTable23_FA19A6                        ; F9EEF3  e8 c8 a6 19 fa 00
@@ -54786,7 +54786,7 @@ Screen_DrumsMapNaming_Button:
 	jr nz, .LF9F031                                      ; F9F00F  6e 20
 	m_push MWD+r6, 0x0a                                  ; F9F011  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9F014  9e 08 04
-	call T_F42C74                                        ; F9F017  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9F017  1d 74 2c f4
 	mul A,0x04                                           ; F9F01B  c9 08 04
 	extz XWA                                             ; F9F01E  e8 12
 	add XWA,HandlerTable23_FA1A02                        ; F9F020  e8 c8 02 1a fa 00
@@ -56074,7 +56074,7 @@ sub_F9FAC1:
 	push XIX                                             ; F9FAC5  3c
 	ld XIX,(XIZ+0x0e)                                    ; F9FAC6  ae 0e 24
 	push XIX                                             ; F9FAC9  3c
-	call T_F41234                                        ; F9FACA  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; F9FACA  1d 34 12 f4
 	push XIX                                             ; F9FACE  3c
 	m_push MWD+r6, 0x0c                                  ; F9FACF  9e 0c 04
 	ld XBC,(XIZ+0x08)                                    ; F9FAD2  ae 08 21
@@ -56134,7 +56134,7 @@ sub_F9FB18:
 	push XIX                                             ; F9FB66  3c
 	pushw 0x06                                           ; F9FB67  0b 06 00
 	pushw 0x00                                           ; F9FB6A  0b 00 00
-	call T_F40ED4                                        ; F9FB6D  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; F9FB6D  1d d4 0e f4
 	ld (0x2806:16), 0x01                                 ; F9FB71  f1 06 28 00 01
 	inc 8,XSP                                            ; F9FB76  ef 60
 	pop XIX                                              ; F9FB78  5c
@@ -56164,7 +56164,7 @@ sub_F9FB7A:
 	push XIX                                             ; F9FBCA  3c
 	pushw 0x06                                           ; F9FBCB  0b 06 00
 	pushw 0x00                                           ; F9FBCE  0b 00 00
-	call T_F40ED4                                        ; F9FBD1  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; F9FBD1  1d d4 0e f4
 	ld (0x2806:16), 0x01                                 ; F9FBD5  f1 06 28 00 01
 	inc 8,XSP                                            ; F9FBDA  ef 60
 	pop XIX                                              ; F9FBDC  5c
@@ -56230,7 +56230,7 @@ sub_F9FBDE:
 	push XBC                                             ; F9FC94  39
 	pushw 0x06                                           ; F9FC95  0b 06 00
 	pushw 0x00                                           ; F9FC98  0b 00 00
-	call T_F40ED4                                        ; F9FC9B  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; F9FC9B  1d d4 0e f4
 	inc 8,XSP                                            ; F9FC9F  ef 60
 	jrl .LF9FDAB                                         ; F9FCA1  78 07 01
 .LF9FCA4:
@@ -56475,7 +56475,7 @@ sub_F9FF00:
 	link XIZ,0x0000                                      ; F9FF00  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9FF04  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9FF07  9e 08 04
-	call T_F42C74                                        ; F9FF0A  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; F9FF0A  1d 74 2c f4
 	mul A,0x04                                           ; F9FF0E  c9 08 04
 	extz XWA                                             ; F9FF11  e8 12
 	add XWA,HandlerTable23_FA1B94                        ; F9FF13  e8 c8 94 1b fa 00
@@ -56686,7 +56686,7 @@ sub_FA00EA:
 	link XIZ,0x0000                                      ; FA00EA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA00EE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA00F1  9e 08 04
-	call T_F42C74                                        ; FA00F4  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FA00F4  1d 74 2c f4
 	mul A,0x04                                           ; FA00F8  c9 08 04
 	extz XWA                                             ; FA00FB  e8 12
 	add XWA,HandlerTable23_FA1BF0                        ; FA00FD  e8 c8 f0 1b fa 00
@@ -57379,7 +57379,7 @@ sub_FA07A2:
 	m_push MWD+r6, 0x08                                  ; FA07A9  9e 08 04
 	m_cp_mi8 MB8, 0xc4, 0x01                             ; FA07AC  c0 c4 3f 01
 	jr nz, .LFA07CD                                      ; FA07B0  6e 1b
-	call T_F42C74                                        ; FA07B2  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FA07B2  1d 74 2c f4
 	mul A,0x04                                           ; FA07B6  c9 08 04
 	extz XWA                                             ; FA07B9  e8 12
 	add XWA,HandlerTable23_FA1CAB                        ; FA07BB  e8 c8 ab 1c fa 00
@@ -57390,7 +57390,7 @@ sub_FA07A2:
 .LFA07CB:
 	jr .LFA07E6                                          ; FA07CB  68 19
 .LFA07CD:
-	call T_F42C74                                        ; FA07CD  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FA07CD  1d 74 2c f4
 	mul A,0x04                                           ; FA07D1  c9 08 04
 	extz XWA                                             ; FA07D4  e8 12
 	add XWA,HandlerTable23_FA1D10                        ; FA07D6  e8 c8 10 1d fa 00
@@ -58095,43 +58095,43 @@ sub_FA0E51:
 	ld (XIX),0xb2                                        ; FA0E68  b4 00 b2
 	ld (XIX+0x02),0x00                                   ; FA0E6B  bc 02 00 00
 	push XIX                                             ; FA0E6F  3c
-	call T_F4080C                                        ; FA0E70  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0E70  1d 0c 08 f4
 	ld (XIX),0xbc                                        ; FA0E74  b4 00 bc
 	ld (XIX+0x02),0x00                                   ; FA0E77  bc 02 00 00
 	push XIX                                             ; FA0E7B  3c
-	call T_F4080C                                        ; FA0E7C  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0E7C  1d 0c 08 f4
 	ld (XIX),0xbd                                        ; FA0E80  b4 00 bd
 	ld (XIX+0x02),0x00                                   ; FA0E83  bc 02 00 00
 	push XIX                                             ; FA0E87  3c
-	call T_F4080C                                        ; FA0E88  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0E88  1d 0c 08 f4
 	ld (XIX),0xb3                                        ; FA0E8C  b4 00 b3
 	ld (XIX+0x02),0x7f                                   ; FA0E8F  bc 02 00 7f
 	push XIX                                             ; FA0E93  3c
-	call T_F4080C                                        ; FA0E94  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0E94  1d 0c 08 f4
 	ld (XIX),0xb5                                        ; FA0E98  b4 00 b5
 	ld (XIX+0x02),0x00                                   ; FA0E9B  bc 02 00 00
 	push XIX                                             ; FA0E9F  3c
-	call T_F4080C                                        ; FA0EA0  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0EA0  1d 0c 08 f4
 	ld (XIX),0xb8                                        ; FA0EA4  b4 00 b8
 	ld (XIX+0x02),0x40                                   ; FA0EA7  bc 02 00 40
 	push XIX                                             ; FA0EAB  3c
-	call T_F4080C                                        ; FA0EAC  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0EAC  1d 0c 08 f4
 	ld (XIX),0xb9                                        ; FA0EB0  b4 00 b9
 	ld (XIX+0x02),0x40                                   ; FA0EB3  bc 02 00 40
 	push XIX                                             ; FA0EB7  3c
-	call T_F4080C                                        ; FA0EB8  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0EB8  1d 0c 08 f4
 	ld (XIX),0xba                                        ; FA0EBC  b4 00 ba
 	ld (XIX+0x02),0x40                                   ; FA0EBF  bc 02 00 40
 	push XIX                                             ; FA0EC3  3c
-	call T_F4080C                                        ; FA0EC4  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0EC4  1d 0c 08 f4
 	ld (XIX),0xbb                                        ; FA0EC8  b4 00 bb
 	ld (XIX+0x02),0x40                                   ; FA0ECB  bc 02 00 40
 	push XIX                                             ; FA0ECF  3c
-	call T_F4080C                                        ; FA0ED0  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0ED0  1d 0c 08 f4
 	ld (XIX),0xb4                                        ; FA0ED4  b4 00 b4
 	ld (XIX+0x02),0x00                                   ; FA0ED7  bc 02 00 00
 	push XIX                                             ; FA0EDB  3c
-	call T_F4080C                                        ; FA0EDC  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                        ; FA0EDC  1d 0c 08 f4
 	add XSP,0x00000028                                   ; FA0EE0  ef c8 28 00 00 00
 .LFA0EE6:
 	pop XIX                                              ; FA0EE6  5c
@@ -58141,7 +58141,7 @@ sub_FA0EEA:
 	link XIZ,0x0000                                      ; FA0EEA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA0EEE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA0EF1  9e 08 04
-	call T_F42C74                                        ; FA0EF4  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FA0EF4  1d 74 2c f4
 	mul A,0x04                                           ; FA0EF8  c9 08 04
 	extz XWA                                             ; FA0EFB  e8 12
 	add XWA,HandlerTable23_FA1D6C                        ; FA0EFD  e8 c8 6c 1d fa 00
@@ -58585,7 +58585,7 @@ sub_FA12DD:
 	link XIZ,0x0000                                      ; FA12DD  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA12E1  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA12E4  9e 08 04
-	call T_F42C74                                        ; FA12E7  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FA12E7  1d 74 2c f4
 	mul A,0x04                                           ; FA12EB  c9 08 04
 	extz XWA                                             ; FA12EE  e8 12
 	add XWA,HandlerTable23_FA1DED                        ; FA12F0  e8 c8 ed 1d fa 00
@@ -65550,7 +65550,7 @@ MIDI_SendBankAndProgram:   ; entry: prom_b directory slot T_MIDI_SendBankAndProg
 	push XBC                                      ; FA5BE1  39
 	pushw de                                      ; FA5BE2  2a   push DE
 	pushw 0x02                                    ; FA5BE3  0b 02 00   push 0x0002
-	call T_F40ED4                                 ; FA5BE6  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                 ; FA5BE6  1d d4 0e f4
 	ld (0x091f:16), 0x00                          ; FA5BEA  f1 1f 09 00 00   ld (0x091f),0x00
 	inc 8,XSP                                     ; FA5BEF  ef 60
 .LFA5BF1:
@@ -65580,7 +65580,7 @@ MIDI_SendStart_PortB:
 	push XBC                                      ; FA5C02  39
 	pushw 0x01                                    ; FA5C03  0b 01 00   push 0x0001
 	pushw 0x02                                    ; FA5C06  0b 02 00   push 0x0002
-	call T_F40ED4                                 ; FA5C09  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                 ; FA5C09  1d d4 0e f4
 	inc 8,XSP                                     ; FA5C0D  ef 60
 	unlk XIZ                                      ; FA5C0F  ee 0d
 	ret                                           ; FA5C11  0e
@@ -65624,7 +65624,7 @@ MIDI_PostSendWork_PortB:   ; entry: prom_b directory slot T_MIDI_PostSendWork_Po
 	push XBC                                      ; FA5C43  39
 	pushw de                                      ; FA5C44  2a   push DE
 	pushw 0x02                                    ; FA5C45  0b 02 00   push 0x0002
-	call T_F40ED4                                 ; FA5C48  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                 ; FA5C48  1d d4 0e f4
 	inc 8,XSP                                     ; FA5C4C  ef 60
 	pop SR                                        ; FA5C4E  03
 	popw de                                       ; FA5C4F  4a   pop DE
@@ -65680,7 +65680,7 @@ MIDI_SendAllNotesOff_AllChannels:   ; entry: prom_b directory slot T_MIDI_SendAl
 	push XIX                                      ; FA5C97  3c
 	pushw 0x05                                    ; FA5C98  0b 05 00   push 0x0005
 	pushw 0x02                                    ; FA5C9B  0b 02 00   push 0x0002
-	call T_F40ED4                                 ; FA5C9E  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                 ; FA5C9E  1d d4 0e f4
 	inc 1,H                                       ; FA5CA2  ce 61
 	inc 8,XSP                                     ; FA5CA4  ef 60
 	cp H,0x0f                                     ; FA5CA6  ce cf 0f
@@ -65789,7 +65789,7 @@ MidiIn_PumpPortA:   ; entry: prom_b directory slot T_MidiIn_PumpPortA (T_F40744)
 	call (xiz)                                    ; FA604F  b6 e8   call T,XIZ
 	jr .LFA6023                                   ; FA6051  68 d0
 .LFA6053:
-	call T_F40898                                 ; FA6053  1d 98 08 f4
+	call T_ParamShadow_FlushAll                                 ; FA6053  1d 98 08 f4
 	ld XIX,0x00002c00                             ; FA6057  44 00 2c 00 00
 	ld hl, (0x60f000:24)                         ; FA605C  d2 00 f0 60 23   ld HL,(0x60f000)
 	mx_ld_mi8 MXD, ra_IX, ra_HL, 0xff             ; FA6061  f3 07 f0 ec 00 ff   ld (XIX+HL),0xff
@@ -65884,7 +65884,7 @@ MidiIn_PumpPortB:   ; entry: prom_b directory slot T_MidiIn_PumpPortB (T_F43358)
 	call (xiz)                                    ; FA60F9  b6 e8   call T,XIZ
 	jr .LFA60CD                                   ; FA60FB  68 d0
 .LFA60FD:
-	call T_F40898                                 ; FA60FD  1d 98 08 f4
+	call T_ParamShadow_FlushAll                                 ; FA60FD  1d 98 08 f4
 	ld XIX,0x00002c00                             ; FA6101  44 00 2c 00 00
 	ld hl, (0x60f000:24)                         ; FA6106  d2 00 f0 60 23   ld HL,(0x60f000)
 	mx_ld_mi8 MXD, ra_IX, ra_HL, 0xff             ; FA610B  f3 07 f0 ec 00 ff   ld (XIX+HL),0xff
@@ -66266,7 +66266,7 @@ MidiIn_CC20_BankSelLSB:   ; entry: MidiIn_ControllerHandlerTable[25]
 	ld (0x1954:16), a                            ; FA63D8  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA63DC  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA63E0  f1 52 19 52   ld (0x1952),DE
-	call T_F40870                                 ; FA63E4  1d 70 08 f4
+	call T_ParamApply_StorePairAndDerive                                 ; FA63E4  1d 70 08 f4
 .LFA63E8:
 	ret                                           ; FA63E8  0e
 
@@ -66317,7 +66317,7 @@ MidiIn_CC00_BankSelMSB:   ; entry: MidiIn_ControllerHandlerTable[24]
 	ld (0x1954:16), a                            ; FA6448  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA644C  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6450  f1 52 19 52   ld (0x1952),DE
-	call T_F40870                                 ; FA6454  1d 70 08 f4
+	call T_ParamApply_StorePairAndDerive                                 ; FA6454  1d 70 08 f4
 .LFA6458:
 	ret                                           ; FA6458  0e
 
@@ -66418,11 +66418,11 @@ MidiIn_CC40_Hold:   ; entry: MidiIn_ControllerHandlerTable[0]
 .LFA64D2:
 	ld XIX,0x00001950                             ; FA64D2  44 50 19 00 00
 	push XIX                                      ; FA64D7  3c
-	call T_F4080C                                 ; FA64D8  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA64D8  1d 0c 08 f4
 	inc 4,XSP                                     ; FA64DC  ef 64
 	jr .LFA64E4                                   ; FA64DE  68 04
 .LFA64E0:
-	call T_F40884                                 ; FA64E0  1d 84 08 f4
+	call T_ParamApply_PublishStagedPair                                 ; FA64E0  1d 84 08 f4
 .LFA64E4:
 	ret                                           ; FA64E4  0e
 
@@ -66455,7 +66455,7 @@ sub_FA64E5:   ; entry: MidiIn_ControllerHandlerTable[8]
 	ld (0x1954:16), a                            ; FA6515  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6519  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA651D  f1 52 19 52   ld (0x1952),DE
-	call T_F40884                                 ; FA6521  1d 84 08 f4
+	call T_ParamApply_PublishStagedPair                                 ; FA6521  1d 84 08 f4
 .LFA6525:
 	ret                                           ; FA6525  0e
 
@@ -66488,7 +66488,7 @@ sub_FA6526:   ; entry: MidiIn_ControllerHandlerTable[9]
 	ld (0x1954:16), a                            ; FA6556  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA655A  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA655E  f1 52 19 52   ld (0x1952),DE
-	call T_F40884                                 ; FA6562  1d 84 08 f4
+	call T_ParamApply_PublishStagedPair                                 ; FA6562  1d 84 08 f4
 .LFA6566:
 	ret                                           ; FA6566  0e
 
@@ -66547,11 +66547,11 @@ MidiIn_CC01_Modulation:   ; entry: MidiIn_ControllerHandlerTable[1]
 .LFA65DE:
 	ld XIX,0x00001950                             ; FA65DE  44 50 19 00 00
 	push XIX                                      ; FA65E3  3c
-	call T_F4080C                                 ; FA65E4  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA65E4  1d 0c 08 f4
 	inc 4,XSP                                     ; FA65E8  ef 64
 	jr .LFA65F0                                   ; FA65EA  68 04
 .LFA65EC:
-	call T_F40868                                 ; FA65EC  1d 68 08 f4
+	call T_ParamShadow_SetModulation1                                 ; FA65EC  1d 68 08 f4
 .LFA65F0:
 	ret                                           ; FA65F0  0e
 
@@ -66595,7 +66595,7 @@ MidiIn_CC07_Volume:   ; entry: MidiIn_ControllerHandlerTable[2]
 	ld (0x1954:16), a                            ; FA663F  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6643  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6647  f1 52 19 52   ld (0x1952),DE
-	call T_F40874                                 ; FA664B  1d 74 08 f4
+	call T_ParamShadow_SetField3                                 ; FA664B  1d 74 08 f4
 .LFA664F:
 	ret                                           ; FA664F  0e
 
@@ -66654,11 +66654,11 @@ MidiIn_CC0B_Expression:   ; entry: MidiIn_ControllerHandlerTable[3]
 .LFA66C7:
 	ld XIX,0x00001950                             ; FA66C7  44 50 19 00 00
 	push XIX                                      ; FA66CC  3c
-	call T_F4080C                                 ; FA66CD  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA66CD  1d 0c 08 f4
 	inc 4,XSP                                     ; FA66D1  ef 64
 	jr .LFA66D9                                   ; FA66D3  68 04
 .LFA66D5:
-	call T_F4086C                                 ; FA66D5  1d 6c 08 f4
+	call T_ParamShadow_SetExpression                                 ; FA66D5  1d 6c 08 f4
 .LFA66D9:
 	ret                                           ; FA66D9  0e
 
@@ -66693,7 +66693,7 @@ MidiIn_CC0A_Pan:   ; entry: MidiIn_ControllerHandlerTable[4]
 	ld (0x1954:16), a                            ; FA670A  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA670E  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6712  f1 52 19 52   ld (0x1952),DE
-	call T_F40888                                 ; FA6716  1d 88 08 f4
+	call T_ParamApply_WriteStagedAndPublish_Copy                                 ; FA6716  1d 88 08 f4
 .LFA671A:
 	ret                                           ; FA671A  0e
 
@@ -66728,7 +66728,7 @@ MidiIn_CC5D_Effect3Depth:   ; entry: MidiIn_ControllerHandlerTable[5]
 	ld (0x1954:16), a                            ; FA674B  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA674F  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6753  f1 52 19 52   ld (0x1952),DE
-	call T_F40888                                 ; FA6757  1d 88 08 f4
+	call T_ParamApply_WriteStagedAndPublish_Copy                                 ; FA6757  1d 88 08 f4
 .LFA675B:
 	ret                                           ; FA675B  0e
 
@@ -66763,7 +66763,7 @@ MidiIn_CC5E_Effect4Depth:   ; entry: MidiIn_ControllerHandlerTable[6]
 	ld (0x1954:16), a                            ; FA678C  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6790  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6794  f1 52 19 52   ld (0x1952),DE
-	call T_F40888                                 ; FA6798  1d 88 08 f4
+	call T_ParamApply_WriteStagedAndPublish_Copy                                 ; FA6798  1d 88 08 f4
 .LFA679C:
 	ret                                           ; FA679C  0e
 
@@ -66800,7 +66800,7 @@ MidiIn_CC5B_Effect1Depth:   ; entry: MidiIn_ControllerHandlerTable[7]
 	ld (0x1952:16), de                           ; FA67D5  f1 52 19 52   ld (0x1952),DE
 	cp C,0x60                                     ; FA67D9  cb cf 60
 	jr z, .LFA67E4                                ; FA67DC  66 06
-	call T_F40888                                 ; FA67DE  1d 88 08 f4
+	call T_ParamApply_WriteStagedAndPublish_Copy                                 ; FA67DE  1d 88 08 f4
 	jr .LFA67E7                                   ; FA67E2  68 03
 .LFA67E4:
 	calr .LFA6D27                                 ; FA67E4  1e 40 05
@@ -66876,11 +66876,11 @@ MidiIn_CC02_Modulation2:   ; entry: MidiIn_ControllerHandlerTable[10]
 .LFA685F:
 	ld XIX,0x00001950                             ; FA685F  44 50 19 00 00
 	push XIX                                      ; FA6864  3c
-	call T_F4080C                                 ; FA6865  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA6865  1d 0c 08 f4
 	inc 4,XSP                                     ; FA6869  ef 64
 	jr .LFA6871                                   ; FA686B  68 04
 .LFA686D:
-	call T_F4088C                                 ; FA686D  1d 8c 08 f4
+	call T_ParamApply_PublishStagedPair_Copy                                 ; FA686D  1d 8c 08 f4
 .LFA6871:
 	ret                                           ; FA6871  0e
 
@@ -66953,11 +66953,11 @@ MidiIn_CC04_CtrlPedal:   ; entry: MidiIn_ControllerHandlerTable[11]
 .LFA68E9:
 	ld XIX,0x00001950                             ; FA68E9  44 50 19 00 00
 	push XIX                                      ; FA68EE  3c
-	call T_F4080C                                 ; FA68EF  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA68EF  1d 0c 08 f4
 	inc 4,XSP                                     ; FA68F3  ef 64
 	jr .LFA68FB                                   ; FA68F5  68 04
 .LFA68F7:
-	call T_F4088C                                 ; FA68F7  1d 8c 08 f4
+	call T_ParamApply_PublishStagedPair_Copy                                 ; FA68F7  1d 8c 08 f4
 .LFA68FB:
 	ret                                           ; FA68FB  0e
 
@@ -67030,11 +67030,11 @@ MidiIn_CC10_RTCreatX:   ; entry: MidiIn_ControllerHandlerTable[12]
 .LFA6973:
 	ld XIX,0x00001950                             ; FA6973  44 50 19 00 00
 	push XIX                                      ; FA6978  3c
-	call T_F4080C                                 ; FA6979  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA6979  1d 0c 08 f4
 	inc 4,XSP                                     ; FA697D  ef 64
 	jr .LFA6985                                   ; FA697F  68 04
 .LFA6981:
-	call T_F4088C                                 ; FA6981  1d 8c 08 f4
+	call T_ParamApply_PublishStagedPair_Copy                                 ; FA6981  1d 8c 08 f4
 .LFA6985:
 	ret                                           ; FA6985  0e
 
@@ -67107,11 +67107,11 @@ MidiIn_CC11_RTCreatY:   ; entry: MidiIn_ControllerHandlerTable[13]
 .LFA69FD:
 	ld XIX,0x00001950                             ; FA69FD  44 50 19 00 00
 	push XIX                                      ; FA6A02  3c
-	call T_F4080C                                 ; FA6A03  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA6A03  1d 0c 08 f4
 	inc 4,XSP                                     ; FA6A07  ef 64
 	jr .LFA6A0F                                   ; FA6A09  68 04
 .LFA6A0B:
-	call T_F4088C                                 ; FA6A0B  1d 8c 08 f4
+	call T_ParamApply_PublishStagedPair_Copy                                 ; FA6A0B  1d 8c 08 f4
 .LFA6A0F:
 	ret                                           ; FA6A0F  0e
 
@@ -67184,11 +67184,11 @@ MidiIn_CC12_RTCtrlX:   ; entry: MidiIn_ControllerHandlerTable[14]
 .LFA6A87:
 	ld XIX,0x00001950                             ; FA6A87  44 50 19 00 00
 	push XIX                                      ; FA6A8C  3c
-	call T_F4080C                                 ; FA6A8D  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA6A8D  1d 0c 08 f4
 	inc 4,XSP                                     ; FA6A91  ef 64
 	jr .LFA6A99                                   ; FA6A93  68 04
 .LFA6A95:
-	call T_F4088C                                 ; FA6A95  1d 8c 08 f4
+	call T_ParamApply_PublishStagedPair_Copy                                 ; FA6A95  1d 8c 08 f4
 .LFA6A99:
 	ret                                           ; FA6A99  0e
 
@@ -67261,11 +67261,11 @@ MidiIn_CC13_RTCtrlY:   ; entry: MidiIn_ControllerHandlerTable[15]
 .LFA6B11:
 	ld XIX,0x00001950                             ; FA6B11  44 50 19 00 00
 	push XIX                                      ; FA6B16  3c
-	call T_F4080C                                 ; FA6B17  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA6B17  1d 0c 08 f4
 	inc 4,XSP                                     ; FA6B1B  ef 64
 	jr .LFA6B23                                   ; FA6B1D  68 04
 .LFA6B1F:
-	call T_F4088C                                 ; FA6B1F  1d 8c 08 f4
+	call T_ParamApply_PublishStagedPair_Copy                                 ; FA6B1F  1d 8c 08 f4
 .LFA6B23:
 	ret                                           ; FA6B23  0e
 
@@ -67300,7 +67300,7 @@ MidiIn_CC51_General6:   ; entry: MidiIn_ControllerHandlerTable[18]
 	ld (0x1954:16), a                            ; FA6B54  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6B58  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6B5C  f1 52 19 52   ld (0x1952),DE
-	call T_F4089C                                 ; FA6B60  1d 9c 08 f4
+	call T_ParamApply_OneHotOfSix                                 ; FA6B60  1d 9c 08 f4
 .LFA6B64:
 	ret                                           ; FA6B64  0e
 
@@ -67364,7 +67364,7 @@ MidiIn_CC06_DataEntMSB:   ; entry: MidiIn_ControllerHandlerTable[32]
 	ld (0x1954:16), a                            ; FA6BE4  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6BE8  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6BEC  f1 52 19 52   ld (0x1952),DE
-	call T_F40878                                 ; FA6BF0  1d 78 08 f4
+	call T_ParamApply_WriteStagedAndPublish                                 ; FA6BF0  1d 78 08 f4
 .LFA6BF4:
 	ret                                           ; FA6BF4  0e
 
@@ -67407,7 +67407,7 @@ MidiIn_CC26_DataEntLSB:   ; entry: MidiIn_ControllerHandlerTable[33]
 	ld (0x1954:16), a                            ; FA6C4A  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6C4E  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6C52  f1 52 19 52   ld (0x1952),DE
-	call T_F40878                                 ; FA6C56  1d 78 08 f4
+	call T_ParamApply_WriteStagedAndPublish                                 ; FA6C56  1d 78 08 f4
 .LFA6C5A:
 	ret                                           ; FA6C5A  0e
 
@@ -67491,7 +67491,7 @@ MidiIn_CC79_ResetAllCtrl:   ; entry: MidiIn_ControllerHandlerTable[40]
 	ld (0x1954:16), a                            ; FA6CE0  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6CE4  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6CE8  f1 52 19 52   ld (0x1952),DE
-	call T_F4087C                                 ; FA6CEC  1d 7c 08 f4
+	call T_ParamApply_PublishStagedAndPostSeven                                 ; FA6CEC  1d 7c 08 f4
 .LFA6CF0:
 	ret                                           ; FA6CF0  0e
 
@@ -67522,7 +67522,7 @@ MidiIn_CC78_AllSoundOff:   ; entry: MidiIn_ControllerHandlerTable[41]
 	ld (0x1954:16), a                            ; FA6D16  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6D1A  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6D1E  f1 52 19 52   ld (0x1952),DE
-	call T_F40880                                 ; FA6D22  1d 80 08 f4
+	call T_ParamApply_PublishStagedPairBCDE                                 ; FA6D22  1d 80 08 f4
 .LFA6D26:
 	ret                                           ; FA6D26  0e
 .LFA6D27:
@@ -67546,14 +67546,14 @@ sub_FA6D27:   ; entry: call from 0xFA67E4
 	ld E,D                                        ; FA6D36  cc 8d
 .LFA6D38:
 	ld (0x1952:16), de                           ; FA6D38  f1 52 19 52   ld (0x1952),DE
-	call T_F40858                                 ; FA6D3C  1d 58 08 f4
+	call T_ParamApply_MaskedWriteAndPublish                                 ; FA6D3C  1d 58 08 f4
 	ret                                           ; FA6D40  0e
 	ld E,A                                        ; FA6D41  c9 8d
 	ld a, (0x1943:16)                            ; FA6D43  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6D47  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6D4B  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6D4F  f1 52 19 52   ld (0x1952),DE
-	call T_F40888                                 ; FA6D53  1d 88 08 f4
+	call T_ParamApply_WriteStagedAndPublish_Copy                                 ; FA6D53  1d 88 08 f4
 	ret                                           ; FA6D57  0e
 
 ; ---------------------------------------------------------------------
@@ -67611,7 +67611,7 @@ MidiIn_ProgramChange:   ; entry: MidiIn_ChannelStatusTable[4]
 	ld (0x1954:16), a                            ; FA6DD2  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6DD6  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6DDA  f1 52 19 52   ld (0x1952),DE
-	call T_F40854                                 ; FA6DDE  1d 54 08 f4
+	call T_ParamApply_ByModeOfParam80                                 ; FA6DDE  1d 54 08 f4
 .LFA6DE2:
 	ret                                           ; FA6DE2  0e
 
@@ -67664,11 +67664,11 @@ MidiIn_PitchBend:   ; entry: MidiIn_ChannelStatusTable[6]
 .LFA6E57:
 	ld XIX,0x00001950                             ; FA6E57  44 50 19 00 00
 	push XIX                                      ; FA6E5C  3c
-	call T_F4080C                                 ; FA6E5D  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA6E5D  1d 0c 08 f4
 	inc 4,XSP                                     ; FA6E61  ef 64
 	jr .LFA6E69                                   ; FA6E63  68 04
 .LFA6E65:
-	call T_F40864                                 ; FA6E65  1d 64 08 f4
+	call T_ParamShadow_SetPitchBend                                 ; FA6E65  1d 64 08 f4
 .LFA6E69:
 	ret                                           ; FA6E69  0e
 
@@ -67721,11 +67721,11 @@ MidiIn_ChannelPressure:   ; entry: MidiIn_ChannelStatusTable[5]
 .LFA6EDC:
 	ld XIX,0x00001950                             ; FA6EDC  44 50 19 00 00
 	push XIX                                      ; FA6EE1  3c
-	call T_F4080C                                 ; FA6EE2  1d 0c 08 f4
+	call T_MidiIn_ControlRecord_Dispatch                                 ; FA6EE2  1d 0c 08 f4
 	inc 4,XSP                                     ; FA6EE6  ef 64
 	jr .LFA6EEE                                   ; FA6EE8  68 04
 .LFA6EEA:
-	call T_F4088C                                 ; FA6EEA  1d 8c 08 f4
+	call T_ParamApply_PublishStagedPair_Copy                                 ; FA6EEA  1d 8c 08 f4
 .LFA6EEE:
 	ret                                           ; FA6EEE  0e
 
@@ -71237,11 +71237,11 @@ MidiOut_PartFlagsTable:
 ; ---------------------------------------------------------------------
 ; MidiIn_ReqListRebuild_Msg13_16 -- ask for a part-list rebuild
 ;
-; Called from: prom_b directory slot T_F43350 (`jp 0xFA835E`).
+; Called from: prom_b directory slot T_MidiIn_ReqListRebuild_Msg13_16 (`jp 0xFA835E`).
 ; Evidence: sets bit 1 of (0x1978) when (0x20B8) is 0x13..0x16 and (0x20BA)
 ;          is non-zero.  Bit 1 is the bit MidiIn_ServicePartLists tests.
 ; ---------------------------------------------------------------------
-MidiIn_ReqListRebuild_Msg13_16:   ; entry: prom_b directory slot T_F43350
+MidiIn_ReqListRebuild_Msg13_16:   ; entry: prom_b directory slot T_MidiIn_ReqListRebuild_Msg13_16
 	ld a, (0x20b8:16)                            ; FA835E  c1 b8 20 21   ld A,(0x20b8)
 	cp A,0x13                                     ; FA8362  c9 cf 13
 	jr c, .LFA8377                                ; FA8365  67 10
@@ -73324,7 +73324,7 @@ MidiOut_PartRecordPtrs_CC51General6:
 ;   * 0xFA9E72-0xFA9FFF is 398 bytes of 0x0E (RET) padding and 0xFAD485-0xFAD800
 ;     INCLUSIVE is 892 more.  A module in this image sits between two such runs
 ;     (the same shape as 0xF84000 and 0xFE0000).  ★ The LAST of those 0x0E
-;     bytes, 0xFAD800, is itself a published directory target (T_F40850) -- a
+;     bytes, 0xFAD800, is itself a published directory target (T_Evt2030_RunList) -- a
 ;     routine that is one `ret`.  This span therefore stops AT 0xFAD800 and
 ;     leaves that byte to the next module, which is why the `.fill` below is
 ;     890 and not 892: its first byte is inside the data block before it and
@@ -76244,7 +76244,7 @@ sub_FAB7F9:
 	push XIZ                                             ; FAB804  3e
 	call T_F41F30                                        ; FAB805  1d 30 1f f4
 	call T_F41F34                                        ; FAB809  1d 34 1f f4
-	call T_F40850                                        ; FAB80D  1d 50 08 f4
+	call T_Evt2030_RunList                                        ; FAB80D  1d 50 08 f4
 	call T_F40900                                        ; FAB811  1d 00 09 f4
 	pop XIZ                                              ; FAB815  5e
 	pop XIX                                              ; FAB816  5c
@@ -77077,7 +77077,7 @@ sub_FABEF4:
 ;           through 0xFABF32 `sub BC,0x00b2` and 0xFABF36 `cp BC,0x000b`
 ;           into JumpTable_FABF4A, which this listing already documents
 ;           as twelve entries with first case 0xB2. prom_b publishes it
-;           as T_F4080C with 21 references, and ELEVEN of its
+;           as T_MidiIn_ControlRecord_Dispatch with 21 references, and ELEVEN of its
 ;           content-named callers are MIDI controller handlers --
 ;           MidiIn_CC01, CC02, CC04, CC0B, CC10, CC11, CC12, CC13, CC40,
 ;           MidiIn_ChannelPressure and MidiIn_PitchBend -- which is what
@@ -79142,7 +79142,7 @@ DuplicateTail_FAD3EB:
 ; ParamApply_MaskedWriteAndPublish -- apply {C,B,E,D} to the parameter
 ;                           record and publish the change
 ;
-; Called from: prom_b directory slot T_F40858.  ⚠ This address had NO
+; Called from: prom_b directory slot T_ParamApply_MaskedWriteAndPublish.  ⚠ This address had NO
 ;          LABEL before this pass; the emitter that converted the span
 ;          labels only what its own descent reaches, and a `jp` in prom_b
 ;          is invisible to it.
@@ -79167,7 +79167,7 @@ ParamApply_MaskedWriteAndPublish:
 ; ParamShadow_SetField3 -- remember a value for field 3 of parameter C,
 ;                           to be published later by ParamShadow_FlushAll
 ;
-; Called from: prom_b directory slot T_F40874.
+; Called from: prom_b directory slot T_ParamShadow_SetField3.
 ; Body:    when BC == 0x00B0 (C = 0xB0, B = 0), write E to (0x24F1) and
 ;          go out immediately through T_F407EC; otherwise, when C <= 0x1F,
 ;          store E with bit 7 forced into the 32-byte array at 0x60F610,
@@ -79203,7 +79203,7 @@ ParamShadow_SetField3:
 ;                           number 0xB3) for index B, to be published
 ;                           later by ParamShadow_FlushAll
 ;
-; Called from: prom_b directory slot T_F4086C.
+; Called from: prom_b directory slot T_ParamShadow_SetExpression.
 ; Body:    when C == 0xB0, store E with bit 7 forced into the single byte
 ;          at 0x60F650; otherwise, when B <= 0x1F, into the 32-byte array
 ;          at 0x60F590 indexed by B.  Bit 7 is the pending flag.
@@ -79243,7 +79243,7 @@ ParamShadow_SetExpression:
 ; ParamShadow_SetPitchBend -- remember a PITCH BEND value AND its mask
 ;                           (parameter number 0xB1) for index B
 ;
-; Called from: prom_b directory slot T_F40864.
+; Called from: prom_b directory slot T_ParamShadow_SetPitchBend.
 ; Body:    when B <= 0x1F, store the 16-bit DE -- with bit 7 of E forced --
 ;          at 0x60F5D0 + 2*B.  This is the ONLY 16-bit shadow of the four,
 ;          and on the flush the high byte becomes the record's mask.
@@ -79294,7 +79294,7 @@ ParamShadow_SetPitchBend:
 ; ParamShadow_SetModulation1 -- remember a MODULATION 1 value (parameter
 ;                           number 0xB2) for index B
 ;
-; Called from: prom_b directory slot T_F40868.
+; Called from: prom_b directory slot T_ParamShadow_SetModulation1.
 ; Body:    when B <= 0x1F, store E with bit 7 forced into the 32-byte
 ;          array at 0x60F5B0 indexed by B.
 ; Evidence: `cp B,0x1f` at 0xFAD88A, `ld XIX,0x0060f5b0` at 0xFAD892.
@@ -79322,7 +79322,7 @@ ParamShadow_SetModulation1:
 ; ParamApply_WriteStagedAndPublish -- take {C,B,E,D} from the 0x1950
 ;                           staging cells, apply it and publish it
 ;
-; Called from: prom_b directory slot T_F40878.
+; Called from: prom_b directory slot T_ParamApply_WriteStagedAndPublish.
 ; Body:    `ld (0x60f01e),0xff`, BC = (0x1950), DE = (0x1952), then
 ;          T_ParamRecord_WriteFieldAndStage (T_F407D4) (ParamRecord_WriteFieldAndStage) and T_Queue2C00_PublishStagedIfPending (T_F407B4).
 ; Evidence: the six instructions at 0xFAD8A1-0xFAD8B3.
@@ -79345,7 +79345,7 @@ ParamApply_WriteStagedAndPublish:
 ;                           publish record and publish, with NO record
 ;                           write
 ;
-; Called from: prom_b directory slot T_F40884.
+; Called from: prom_b directory slot T_ParamApply_PublishStagedPair.
 ; Body:    `ld (0x60f01e),0xff`; (0x60F080) = (0x1950); (0x60F082) =
 ;          (0x1952); T_Queue2C00_PublishStagedIfPending (T_F407B4).  Nothing reads ParamNumber_RecordPtrs on
 ;          this path, so a parameter number with no record can use it.
@@ -79366,7 +79366,7 @@ ParamApply_PublishStagedPair:
 ; ParamApply_PublishStagedPair_Copy -- a second copy, published as its own
 ;                           directory slot
 ;
-; Called from: prom_b directory slot T_F4088C.
+; Called from: prom_b directory slot T_ParamApply_PublishStagedPair_Copy.
 ; ★ BORROWED NAME, WITH THE DIFF: 0xFAD8BC and 0xFAD8DD are 29 bytes with
 ;          ZERO differing -- byte for byte the same routine, `ret`
 ;          included.  Check C2 recomputes both numbers.  (At 33 bytes the
@@ -79388,7 +79388,7 @@ ParamApply_PublishStagedPair_Copy:
 ; ParamApply_PublishStagedAndPostSeven -- publish the staged pair, then
 ;                           post seven fixed records for the same index
 ;
-; Called from: prom_b directory slot T_F4087C.
+; Called from: prom_b directory slot T_ParamApply_PublishStagedAndPostSeven.
 ; Body:    the ParamApply_PublishStagedPair sequence, then seven
 ;          Queue2E00_AppendRegs (T_Queue2E00_AppendRegs (T_F40F3C)) calls with E = 0xB1, 0xB4,
 ;          0xB2, 0xB3, 0xB5, 0xB6, 0xB7 in that order, D = (0x1951) each
@@ -79450,7 +79450,7 @@ ParamApply_PublishStagedAndPostSeven:
 ; ParamApply_PublishStagedPairBCDE -- the same publish, staged through
 ;                           BC/DE instead of WA
 ;
-; Called from: prom_b directory slot T_F40880.
+; Called from: prom_b directory slot T_ParamApply_PublishStagedPairBCDE.
 ; Body:    BC = (0x1950); DE = (0x1952); `ld (0x60f01e),0xff`;
 ;          (0x60F080) = BC; (0x60F082) = DE; T_Queue2C00_PublishStagedIfPending (T_F407B4).  Same effect as
 ;          ParamApply_PublishStagedPair, different register file and a
@@ -79472,7 +79472,7 @@ ParamApply_PublishStagedPairBCDE:
 ; ---------------------------------------------------------------------
 ; ParamApply_WriteStagedAndPublish_Copy -- a second copy of 0xFAD8A1
 ;
-; Called from: prom_b directory slot T_F40888.
+; Called from: prom_b directory slot T_ParamApply_WriteStagedAndPublish_Copy.
 ; ★ BORROWED NAME, WITH THE DIFF: 0xFAD8A1 and 0xFAD9B0 are 23 bytes with
 ;          ZERO differing.  Check C2 recomputes both numbers.
 ; ---------------------------------------------------------------------
@@ -79489,7 +79489,7 @@ ParamApply_WriteStagedAndPublish_Copy:
 ; ParamApply_OneHotOfSix -- apply a value whose low six bits are an
 ;                           ORDINAL, as a one-hot bit in the next field
 ;
-; Called from: prom_b directory slot T_F4089C.
+; Called from: prom_b directory slot T_ParamApply_OneHotOfSix.
 ; Body:    A = (0x1952) & 0x3F; return when A >= 6.  Then write bit 6 of
 ;          the value, INVERTED, into field B under the staged mask, and
 ;          publish.  Then reload BC = (0x1950), advance B by 1 -- or by 2
@@ -79562,7 +79562,7 @@ OrdinalToBitMask6:
 ; ParamShadow_FlushAll -- publish every shadow entry whose bit 7 is set,
 ;                           then clear the bit
 ;
-; Called from: prom_b directory slot T_F40898.
+; Called from: prom_b directory slot T_ParamShadow_FlushAll.
 ; Body:    five sweeps, starting immediately with `ld XIY,0x0060f590`:
 ;            0x60F590[0..0x1F]  as parameter 0xB3, mask 0x7F
 ;            0x60F650           as parameter 0xB0 index 1, mask 0x7F,
@@ -79684,7 +79684,7 @@ ParamShadow_FlushAll:
 ; Evt2030_RunList -- walk the 0x2030 event list and dispatch every record
 ;                           through Evt2030_ClassHandlers
 ;
-; Called from: prom_b directory slot T_F40850.
+; Called from: prom_b directory slot T_Evt2030_RunList.
 ; Body:    return when bit 0 of (0x0922) is set and bit 1 is clear;
 ;          otherwise (0x60F08C) = 0 and loop: A = byte +0 of the record at
 ;          0x2030 + (0x60F08C); stop at 0xFF; skip when A > 0xBF; else
@@ -80481,7 +80481,7 @@ Evt2030_ClassBD_Fwd:   ; entry: pointer-table entry
 ; ParamReset_SixParamsForIndex -- post six fixed parameter records for one
 ;                           index, through ParamChange_Notify
 ;
-; Called from: prom_b directory slot T_F40890.  No call/jump line in any
+; Called from: prom_b directory slot T_ParamReset_SixParamsForIndex.  No call/jump line in any
 ;          of the four transcriptions names that slot, so nothing recorded
 ;          calls it; stated as a searched negative.
 ; Inputs:  A = the index, W = a source byte.
@@ -80548,7 +80548,7 @@ ParamReset_SixParamsForIndex:
 ; Called from: prom_b directory slot T_F40894.
 ; ★ IT KEEPS A sub_XXXXXX NAME ON PURPOSE.  It is a published entry point
 ;          and so it needs a label -- before this pass the twenty slots of
-;          T_F40850-T_F4089C pointed at twenty addresses with no label at
+;          T_Evt2030_RunList-T_ParamApply_OneHotOfSix pointed at twenty addresses with no label at
 ;          all -- but its whole body is one call to T_F40FD0, which is
 ;          prom_a 0xFC10DD, and that routine is `sub_FC10DD`.  A veneer
 ;          can be named no better than its target, so this one is not
@@ -80589,7 +80589,7 @@ Dev7F_WriteAllFourSlots:
 ; ParamApply_ByModeOfParam80 -- apply the staged record through one of
 ;                           four arms chosen by (0x7F32) & 3
 ;
-; Called from: prom_b directory slot T_F40854.
+; Called from: prom_b directory slot T_ParamApply_ByModeOfParam80.
 ; Body:    `ld (0x60f01e),0xff`.  When C != 0x98 the routine jumps to
 ;          0xFAE032, which dispatches on (0x7F32) & 3 through the table at
 ;          0xFAE04D.  When C == 0x98 it first requires (0x7F02) & 0xF0 to
@@ -80985,7 +80985,7 @@ sub_FAE189:   ; entry: pointer-table entry
 ; ParamApply_StorePairAndDerive -- store the staged value in a 16-bit
 ;                           table, then derive a byte from it by mode
 ;
-; Called from: prom_b directory slot T_F40870.
+; Called from: prom_b directory slot T_ParamApply_StorePairAndDerive.
 ; Body:    BC = (0x1950), DE = (0x1952); XIX = 0x60F530, XIZ = 0x60F570,
 ;          HL = 2*C -- or, when C == 0x98, XIX = 0x60F652, XIZ = 0x60F654,
 ;          HL = 0.  Store E at (XIX+HL) when E != 0xFF, otherwise D at
@@ -82483,7 +82483,7 @@ sub_FAEFB3:   ; entry: pointer-table entry
 	ld (0x1950:16), wa
 	ldw wa, 0x7f00
 	ld (0x1952:16), wa
-	call T_F4087C
+	call T_ParamApply_PublishStagedAndPostSeven
 	ld a, (0x60f309:24)
 	ld (0x60f01e:24), a
 .LFAEFDD:
@@ -85989,7 +85989,7 @@ sub_FB28BE:
 	jr nz, .LFB2A67                                      ; FB2A39  6e 2c
 	ld XIX,0x00e80000                                    ; FB2A3B  44 00 00 e8 00
 	push XIX                                             ; FB2A40  3c
-	call T_F41234                                        ; FB2A41  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FB2A41  1d 34 12 f4
 	lda xbc, (0x60fd08:24)                               ; FB2A45  f2 08 fd 60 31
 	push XBC                                             ; FB2A4A  39
 	call sub_FB751A                                      ; FB2A4B  1d 1a 75 fb
@@ -86161,7 +86161,7 @@ sub_FB28BE:
 	jr nz, .LFB2C21                                      ; FB2BF3  6e 2c
 	ld XIX,0x00ec0000                                    ; FB2BF5  44 00 00 ec 00
 	push XIX                                             ; FB2BFA  3c
-	call T_F41234                                        ; FB2BFB  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FB2BFB  1d 34 12 f4
 	lda xbc, (0x60fd08:24)                               ; FB2BFF  f2 08 fd 60 31
 	push XBC                                             ; FB2C04  39
 	call sub_FB758A                                      ; FB2C05  1d 8a 75 fb
@@ -86541,7 +86541,7 @@ sub_FB2F35:
 	jr nc, .LFB2F86                                      ; FB2F74  6f 10
 	ld XBC,(XIX+0x04)                                    ; FB2F76  ac 04 21
 	push XBC                                             ; FB2F79  39
-	call T_F41234                                        ; FB2F7A  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FB2F7A  1d 34 12 f4
 	ld (XIX+0x0a),0x00                                   ; FB2F7E  bc 0a 00 00
 	incm8 0x01, (xix+0x0b)                               ; FB2F82  8c 0b 61
 	pop XIY                                              ; FB2F85  5d
@@ -86808,7 +86808,7 @@ sub_FB31CC:
 	push XBC                                             ; FB31E8  39
 	pushw 0x06                                           ; FB31E9  0b 06 00
 	pushw 0x00                                           ; FB31EC  0b 00 00
-	call T_F40ED4                                        ; FB31EF  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FB31EF  1d d4 0e f4
 	calr sub_FB31BF                                      ; FB31F3  1e c9 ff
 	m_res 6, MD24, 0x60fd41                              ; FB31F6  f2 41 fd 60 b6
 	inc 8,XSP                                            ; FB31FB  ef 60
@@ -86909,7 +86909,7 @@ sub_FB328D:
 	jr nc, .LFB32DE                                      ; FB32CC  6f 10
 	ld XBC,(XIX+0x04)                                    ; FB32CE  ac 04 21
 	push XBC                                             ; FB32D1  39
-	call T_F41234                                        ; FB32D2  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FB32D2  1d 34 12 f4
 	ld (XIX+0x0a),0x00                                   ; FB32D6  bc 0a 00 00
 	incm8 0x01, (xix+0x0b)                               ; FB32DA  8c 0b 61
 	pop XIY                                              ; FB32DD  5d
@@ -87808,7 +87808,7 @@ sub_FB3ACA:
 	ld C,H                                               ; FB3AF8  ce 8b
 	extz BC                                              ; FB3AFA  d9 12
 	pushw bc                                             ; FB3AFC  29
-	call T_F434A0                                        ; FB3AFD  1d a0 34 f4
+	call T_DspParam_WriteByNumber                                        ; FB3AFD  1d a0 34 f4
 	pop XIY                                              ; FB3B01  5d
 .LFB3B02:
 	popw hl                                              ; FB3B02  4b
@@ -89488,7 +89488,7 @@ sub_FB49AF:
 	ld C,H                                               ; FB4A3C  ce 8b
 	extz BC                                              ; FB4A3E  d9 12
 	pushw bc                                             ; FB4A40  29
-	call T_F434A4                                        ; FB4A41  1d a4 34 f4
+	call T_DspParam_ReadByNumber                                        ; FB4A41  1d a4 34 f4
 	ld XBC,(XIZ+0x08)                                    ; FB4A45  ae 08 21
 	push XBC                                             ; FB4A48  39
 	calr sub_FB5066                                      ; FB4A49  1e 1a 06
@@ -90367,7 +90367,7 @@ sub_FB5197:
 	add XBC,XWA                                          ; FB529C  e8 81
 	ld (xiz-12), xbc                                     ; FB529E  be f4 61
 	push XBC                                             ; FB52A1  39
-	call T_F41234                                        ; FB52A2  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FB52A2  1d 34 12 f4
 	ld xbc, (xiz-12)                                     ; FB52A6  ae f4 21
 	push XBC                                             ; FB52A9  39
 	pushw 0x02c0                                         ; FB52AA  0b c0 02
@@ -95234,7 +95234,7 @@ sub_FB7E6C:
 sub_FB7E7C:
 	push XIX                                             ; FB7E7C  3c
 	push XIZ                                             ; FB7E7D  3e
-	call T_F41730                                        ; FB7E7E  1d 30 17 f4
+	call T_Paint_Sending_Entry                                        ; FB7E7E  1d 30 17 f4
 	pop XIZ                                              ; FB7E82  5e
 	pop XIX                                              ; FB7E83  5c
 	pop XHL                                              ; FB7E84  5b
@@ -95245,7 +95245,7 @@ sub_FB7E7C:
 	push XHL                                             ; FB7E89  3b
 	push XIX                                             ; FB7E8A  3c
 	push XIZ                                             ; FB7E8B  3e
-	call T_F41734                                        ; FB7E8C  1d 34 17 f4
+	call T_Paint_SystemExclusivePleaseWait_Entry                                        ; FB7E8C  1d 34 17 f4
 	pop XIZ                                              ; FB7E90  5e
 	pop XIX                                              ; FB7E91  5c
 	pop XHL                                              ; FB7E92  5b
@@ -100744,7 +100744,7 @@ sub_FBCB82:
 	link XIZ,0x0000                                      ; FBCB82  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBCB86  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCB89  9e 08 04
-	call T_F42C74                                        ; FBCB8C  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBCB8C  1d 74 2c f4
 	mul A,0x04                                           ; FBCB90  c9 08 04
 	extz XWA                                             ; FBCB93  e8 12
 	add XWA,PtrTable_F1AEB5                              ; FBCB95  e8 c8 b5 ae f1 00
@@ -101146,7 +101146,7 @@ sub_FBCF3C:
 .LFBCF5A:
 	m_push MWD+r6, 0x0a                                  ; FBCF5A  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCF5D  9e 08 04
-	call T_F42C74                                        ; FBCF60  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBCF60  1d 74 2c f4
 	mul A,0x04                                           ; FBCF64  c9 08 04
 	extz XWA                                             ; FBCF67  e8 12
 	add XWA,PtrTable_F1AF11                              ; FBCF69  e8 c8 11 af f1 00
@@ -102661,7 +102661,7 @@ sub_FBDD91:
 .LFBDDAF:
 	m_push MWD+r6, 0x0a                                  ; FBDDAF  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBDDB2  9e 08 04
-	call T_F42C74                                        ; FBDDB5  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBDDB5  1d 74 2c f4
 	mul A,0x04                                           ; FBDDB9  c9 08 04
 	extz XWA                                             ; FBDDBC  e8 12
 	add XWA,PtrTable_F1AFD5                              ; FBDDBE  e8 c8 d5 af f1 00
@@ -104774,7 +104774,7 @@ Screen_CombinationNaming_Button:
 .LFBEF8D:
 	m_push MWD+r6, 0x0a                                  ; FBEF8D  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBEF90  9e 08 04
-	call T_F42C74                                        ; FBEF93  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBEF93  1d 74 2c f4
 	mul A,0x04                                           ; FBEF97  c9 08 04
 	extz XWA                                             ; FBEF9A  e8 12
 	add XWA,PtrTable_F1B14B                              ; FBEF9C  e8 c8 4b b1 f1 00
@@ -104873,7 +104873,7 @@ sub_FBF03A:
 	add XBC,XWA                                          ; FBF076  e8 81
 	ld (xiz-8), xbc                                      ; FBF078  be f8 61
 	push XBC                                             ; FBF07B  39
-	call T_F41234                                        ; FBF07C  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FBF07C  1d 34 12 f4
 	ld xbc, (xiz-8)                                      ; FBF080  ae f8 21
 	push XBC                                             ; FBF083  39
 	pushw 0x02c0                                         ; FBF084  0b c0 02
@@ -105312,7 +105312,7 @@ sub_FBF453:
 .LFBF471:
 	m_push MWD+r6, 0x0a                                  ; FBF471  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBF474  9e 08 04
-	call T_F42C74                                        ; FBF477  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBF477  1d 74 2c f4
 	mul A,0x04                                           ; FBF47B  c9 08 04
 	extz XWA                                             ; FBF47E  e8 12
 	add XWA,PtrTable_F1B239                              ; FBF480  e8 c8 39 b2 f1 00
@@ -105997,7 +105997,7 @@ sub_FBFAF2:
 .LFBFB10:
 	m_push MWD+r6, 0x0a                                  ; FBFB10  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBFB13  9e 08 04
-	call T_F42C74                                        ; FBFB16  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBFB16  1d 74 2c f4
 	mul A,0x04                                           ; FBFB1A  c9 08 04
 	extz XWA                                             ; FBFB1D  e8 12
 	add XWA,PtrTable_F1B295                              ; FBFB1F  e8 c8 95 b2 f1 00
@@ -106316,7 +106316,7 @@ sub_FBFDF7:
 sub_FBFDFB:
 	m_push MWD+r6, 0x0a                                  ; FBFDFB  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBFDFE  9e 08 04
-	call T_F42C74                                        ; FBFE01  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBFE01  1d 74 2c f4
 	mul A,0x04                                           ; FBFE05  c9 08 04
 	extz XWA                                             ; FBFE08  e8 12
 	add XWA,PtrTable_F1B2F1                              ; FBFE0A  e8 c8 f1 b2 f1 00
@@ -106417,7 +106417,7 @@ sub_FBFEDA:
 	link XIZ,0x0000                                      ; FBFEDA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBFEDE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBFEE1  9e 08 04
-	call T_F42C74                                        ; FBFEE4  1d 74 2c f4
+	call T_PanelCode_ToSlotAndFlags                                        ; FBFEE4  1d 74 2c f4
 	mul A,0x04                                           ; FBFEE8  c9 08 04
 	extz XWA                                             ; FBFEEB  e8 12
 	add XWA,PtrTable_F1B34D                              ; FBFEED  e8 c8 4d b3 f1 00
@@ -106551,7 +106551,7 @@ sub_FBFFA6:
 ; CHOSEN by notes/prom_a_call_graph.py --modules: T_F40FC8-T_F41060 (39 slots,
 ; reference upper bound 94) is prom_a's second-ranked unconverted module and all
 ; 39 of its targets land here.  Two more whole modules land here as well --
-; T_F41070-T_F411A0 (77 slots) and T_F42470-T_F42524 (46 slots) -- so the span
+; T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13-T_Msg0716_DispatchIndex_26 (77 slots) and T_F42470-T_F42524 (46 slots) -- so the span
 ; carries 165 of the directory's prom_a slots and 164 distinct targets, more
 ; than any other 12 KiB of the image.
 ;
@@ -106599,11 +106599,11 @@ sub_FBFFA6:
 ;   3. EVERY HANDLER POSTS TO CPU 2.  The handlers build a short byte message at
 ;      RAM 0x0716 and call one of two senders:
 ;
-;        0xFC1A1E  ld XIX,0x716; push XIX, BC, 0x0000; T_F40ED4
-;        0xFC1B09  push XIX (the CALLER's), BC, 0x0001; T_F40ED4
+;        0xFC1A1E  ld XIX,0x716; push XIX, BC, 0x0000; T_Link_SendBlockIn32ByteChunks
+;        0xFC1B09  push XIX (the CALLER's), BC, 0x0001; T_Link_SendBlockIn32ByteChunks
 ;
 ;      Their fifteen shared bytes differ at exactly ONE offset, the pushed word.
-;      T_F40ED4 is prom_a 0xF8E02C, in the converted 0x7C0000 link
+;      T_Link_SendBlockIn32ByteChunks is prom_a 0xF8E02C, in the converted 0x7C0000 link
 ;      block-transfer layer.  That routine takes (stream, length, pointer),
 ;      chops the buffer into 0x20-byte packets and writes one header byte
 ;      `(stream << 5) | (n - 1)` to the link port -- `sll c,0x05` at 0xF8E0A7,
@@ -109627,7 +109627,7 @@ Msg0716_Post:
 	push XIX                                             ; FC1A24  3c
 	pushw bc                                             ; FC1A25  29
 	pushw 0x00                                           ; FC1A26  0b 00 00
-	call T_F40ED4                                        ; FC1A29  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1A29  1d d4 0e f4
 	add XSP,0x00000008                                   ; FC1A2D  ef c8 08 00 00 00
 	pop XIX                                              ; FC1A33  5c
 	ret                                                  ; FC1A34  0e
@@ -109741,7 +109741,7 @@ Msg0716_PostFromXIX_Stream1:
 	push XIX                                             ; FC1B09  3c
 	pushw bc                                             ; FC1B0A  29
 	pushw 0x01                                           ; FC1B0B  0b 01 00
-	call T_F40ED4                                        ; FC1B0E  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1B0E  1d d4 0e f4
 	add XSP,0x00000008                                   ; FC1B12  ef c8 08 00 00 00
 	ret                                                  ; FC1B18  0e
 ; ---------------------------------------------------------------------
@@ -109795,7 +109795,7 @@ sub_FC1B66:
 	ldw wa, 0x03                                         ; FC1B68  30 03 00
 	pushw wa                                             ; FC1B6B  28
 sub_FC1B6C:
-	call T_F40ED4                                        ; FC1B6C  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1B6C  1d d4 0e f4
 	add XSP,0x00000008                                   ; FC1B70  ef c8 08 00 00 00
 	ret                                                  ; FC1B76  0e
 	ld w, (0x60a000:24)                                 ; FC1B77  c2 00 a0 60 20
@@ -109857,7 +109857,7 @@ sub_FC1BB9:
 	push XIY                                             ; FC1BCE  3d
 	pushw 0x06                                           ; FC1BCF  0b 06 00
 	pushw 0x00                                           ; FC1BD2  0b 00 00
-	call T_F40ED4                                        ; FC1BD5  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1BD5  1d d4 0e f4
 	inc 8,XSP                                            ; FC1BD9  ef 60
 	ret                                                  ; FC1BDB  0e
 sub_FC1BDC:
@@ -110036,7 +110036,7 @@ sub_FC1CFB:
 	push XIY                                             ; FC1D12  3d
 	pushw 0x06                                           ; FC1D13  0b 06 00
 	pushw 0x00                                           ; FC1D16  0b 00 00
-	call T_F40ED4                                        ; FC1D19  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1D19  1d d4 0e f4
 	inc 8,XSP                                            ; FC1D1D  ef 60
 	popw bc                                              ; FC1D1F  49
 	popw de                                              ; FC1D20  4a
@@ -110074,7 +110074,7 @@ sub_FC1D49:
 	push XIY                                             ; FC1D60  3d
 	pushw 0x06                                           ; FC1D61  0b 06 00
 	pushw 0x00                                           ; FC1D64  0b 00 00
-	call T_F40ED4                                        ; FC1D67  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1D67  1d d4 0e f4
 	inc 8,XSP                                            ; FC1D6B  ef 60
 	popw bc                                              ; FC1D6D  49
 	popw de                                              ; FC1D6E  4a
@@ -110314,7 +110314,7 @@ sub_FC1F4B:
 	push XIY                                             ; FC1F61  3d
 	pushw 0x06                                           ; FC1F62  0b 06 00
 	pushw 0x00                                           ; FC1F65  0b 00 00
-	call T_F40ED4                                        ; FC1F68  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1F68  1d d4 0e f4
 sub_FC1F6C:
 	inc 8,XSP                                            ; FC1F6C  ef 60
 	popw bc                                              ; FC1F6E  49
@@ -110332,7 +110332,7 @@ sub_FC1F71:
 	push XIY                                             ; FC1F87  3d
 	pushw 0x06                                           ; FC1F88  0b 06 00
 	pushw 0x00                                           ; FC1F8B  0b 00 00
-	call T_F40ED4                                        ; FC1F8E  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC1F8E  1d d4 0e f4
 	inc 8,XSP                                            ; FC1F92  ef 60
 	popw bc                                              ; FC1F94  49
 	popw de                                              ; FC1F95  4a
@@ -110393,7 +110393,7 @@ sub_FC1FE7:
 	push XIY                                             ; FC1FFD  3d
 	pushw 0x06                                           ; FC1FFE  0b 06 00
 	pushw 0x00                                           ; FC2001  0b 00 00
-	call T_F40ED4                                        ; FC2004  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC2004  1d d4 0e f4
 	inc 8,XSP                                            ; FC2008  ef 60
 	popw bc                                              ; FC200A  49
 	popw de                                              ; FC200B  4a
@@ -110410,7 +110410,7 @@ sub_FC200D:
 	push XIY                                             ; FC2023  3d
 	pushw 0x06                                           ; FC2024  0b 06 00
 	pushw 0x00                                           ; FC2027  0b 00 00
-	call T_F40ED4                                        ; FC202A  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC202A  1d d4 0e f4
 	inc 8,XSP                                            ; FC202E  ef 60
 	popw bc                                              ; FC2030  49
 	popw de                                              ; FC2031  4a
@@ -114852,7 +114852,7 @@ MixedTables_FC6626:
 ;   T_Ring60153C_PutBlock (T_F41E1C)           Ring60153C_PutBlock                 3
 ;   T_Ring601850_Get (T_F41E5C)           Ring601850_Get                      2
 ;   T_MIDI_PostSendWork (T_F40724)           MIDI_PostSendWork (prom_a 0xFA590F)  3
-;   T_F40ED4           prom_a 0xF8E02C, the 0x7C0000 link block sender  10
+;   T_Link_SendBlockIn32ByteChunks           prom_a 0xF8E02C, the 0x7C0000 link block sender  10
 ;   T_Queue2E00_AppendRegs (T_F40F3C)           prom_a 0xF86AA3, still `.incbin`     1
 ;
 ;   Seven distinct ring instances, three of them scanned (non-consuming reads)
@@ -116627,7 +116627,7 @@ sub_FC8FD7:
 	push XBC                                             ; FC9005  39
 	pushw 0x04                                           ; FC9006  0b 04 00
 	pushw 0x00                                           ; FC9009  0b 00 00
-	call T_F40ED4                                        ; FC900C  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FC900C  1d d4 0e f4
 	inc 8,XSP                                            ; FC9010  ef 60
 	pop XIX                                              ; FC9012  5c
 	unlk XIZ                                             ; FC9013  ee 0d
@@ -119173,7 +119173,7 @@ sub_FCA7C1:
 	push XBC                                             ; FCA801  39
 	pushw 0x04                                           ; FCA802  0b 04 00
 	pushw 0x00                                           ; FCA805  0b 00 00
-	call T_F40ED4                                        ; FCA808  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCA808  1d d4 0e f4
 	lda xix, (0x602000:24)                               ; FCA80C  f2 00 20 60 34
 	ld (XIZ+0x0a),0x80                                   ; FCA811  be 0a 00 80
 	jr .LFCA86B                                          ; FCA815  68 54
@@ -119205,7 +119205,7 @@ sub_FCA7C1:
 	push XBC                                             ; FCA856  39
 	pushw 0x04                                           ; FCA857  0b 04 00
 	pushw 0x00                                           ; FCA85A  0b 00 00
-	call T_F40ED4                                        ; FCA85D  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCA85D  1d d4 0e f4
 	lda xix, (0x602000:24)                               ; FCA861  f2 00 20 60 34
 	ld e, 0xff:opc                                          ; FCA866  25 ff
 	ld (XIZ+0x0a),E                                      ; FCA868  be 0a 45
@@ -119242,7 +119242,7 @@ sub_FCA7C1:
 	push XBC                                             ; FCA8BA  39
 	pushw 0x04                                           ; FCA8BB  0b 04 00
 	pushw 0x00                                           ; FCA8BE  0b 00 00
-	call T_F40ED4                                        ; FCA8C1  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCA8C1  1d d4 0e f4
 	inc 8,XSP                                            ; FCA8C5  ef 60
 	ld a, 0x80:opc                                          ; FCA8C7  21 80
 	jr .LFCA8CE                                          ; FCA8C9  68 03
@@ -119342,7 +119342,7 @@ sub_FCA8D4:
 	push XBC                                             ; FCA9B4  39
 	pushw 0x04                                           ; FCA9B5  0b 04 00
 	pushw 0x00                                           ; FCA9B8  0b 00 00
-	call T_F40ED4                                        ; FCA9BB  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCA9BB  1d d4 0e f4
 	extz XIX                                             ; FCA9BF  ec 12
 	ld BC,(XIX+0x0d)                                     ; FCA9C1  9c 0d 21
 	extz XBC                                             ; FCA9C4  e9 12
@@ -119390,7 +119390,7 @@ sub_FCA8D4:
 	push XBC                                             ; FCAA32  39
 	pushw 0x08                                           ; FCAA33  0b 08 00
 	pushw 0x00                                           ; FCAA36  0b 00 00
-	call T_F40ED4                                        ; FCAA39  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCAA39  1d d4 0e f4
 	ld C,(XHL+0x05)                                      ; FCAA3D  8b 05 23
 	inc 8,XSP                                            ; FCAA40  ef 60
 	ld A,C                                               ; FCAA42  cb 89
@@ -119417,7 +119417,7 @@ sub_FCA8D4:
 	push XBC                                             ; FCAA7E  39
 	pushw 0x08                                           ; FCAA7F  0b 08 00
 	pushw 0x00                                           ; FCAA82  0b 00 00
-	call T_F40ED4                                        ; FCAA85  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCAA85  1d d4 0e f4
 	inc 8,XSP                                            ; FCAA89  ef 60
 	ld a, 0x80:opc                                          ; FCAA8B  21 80
 	jr .LFCAA92                                          ; FCAA8D  68 03
@@ -120372,7 +120372,7 @@ sub_FCB2F0:
 	push XBC                                             ; FCB36D  39
 	pushw 0x04                                           ; FCB36E  0b 04 00
 	pushw 0x00                                           ; FCB371  0b 00 00
-	call T_F40ED4                                        ; FCB374  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCB374  1d d4 0e f4
 	ldw hl, 0x00                                         ; FCB378  33 00 00
 	ld XIX,0x00000000                                    ; FCB37B  44 00 00 00 00
 	inc 8,XSP                                            ; FCB380  ef 60
@@ -121775,7 +121775,7 @@ sub_FCC573:
 	sll iy, 0x02                                         ; FCC81A  dd ee 02
 	pushw iy                                             ; FCC81D  2d
 	pushw 0x00                                           ; FCC81E  0b 00 00
-	call T_F40ED4                                        ; FCC821  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCC821  1d d4 0e f4
 	m_ld_mi16 MDD+r6, 0xfa, 0x0000                       ; FCC825  be fa 02 00 00
 	inc 8,XSP                                            ; FCC82A  ef 60
 .LFCC82C:
@@ -121802,7 +121802,7 @@ sub_FCC573:
 	push XBC                                             ; FCC86C  39
 	pushw 0x04                                           ; FCC86D  0b 04 00
 	pushw 0x00                                           ; FCC870  0b 00 00
-	call T_F40ED4                                        ; FCC873  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FCC873  1d d4 0e f4
 	inc 8,XSP                                            ; FCC877  ef 60
 .LFCC879:
 	pop XIX                                              ; FCC879  5c
@@ -134757,7 +134757,7 @@ sub_FD6132:
 	push XBC                                             ; FD6159  39
 	pushw 0x06                                           ; FD615A  0b 06 00
 	pushw 0x00                                           ; FD615D  0b 00 00
-	call T_F40ED4                                        ; FD6160  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FD6160  1d d4 0e f4
 	inc 8,XSP                                            ; FD6164  ef 60
 	popw hl                                              ; FD6166  4b
 	unlk XIZ                                             ; FD6167  ee 0d
@@ -153797,7 +153797,7 @@ sub_FDFEC2:
 ;         resynchronises within a couple of instructions.  What pins 0xFE0000 is
 ;         the `jp` veneer block at 0xFE0000-0xFE0017, not the decode.
 ;   * 367 `ret` instructions, 76 distinct absolute call targets of which 72 leave
-;     the span.  The busiest is directory slot T_F42D34, called 23 times, whose
+;     the span.  The busiest is directory slot T_Disk_CommandDispatch_SaveRegs_Entry, called 23 times, whose
 ;     target 0xFE3014 is inside this same span -- so the module calls its own
 ;     published entries through the directory rather than directly.
 ;
@@ -154259,7 +154259,7 @@ sub_FE01D3:
 	push XHL                                             ; FE01EE  3b
 	push XIX                                             ; FE01EF  3c
 	push XIZ                                             ; FE01F0  3e
-	call T_F40F4C                                        ; FE01F1  1d 4c 0f f4
+	call T_PanelState_CheckRequestAllowed_2                                        ; FE01F1  1d 4c 0f f4
 	pop XIZ                                              ; FE01F5  5e
 	pop XIX                                              ; FE01F6  5c
 	pop XHL                                              ; FE01F7  5b
@@ -154379,12 +154379,12 @@ sub_FE0280:
 	ld XBC,(XIZ+0x08)                                    ; FE0287  ae 08 21
 	push XBC                                             ; FE028A  39
 	pushw 0x1a                                           ; FE028B  0b 1a 00
-	call T_F42D34                                        ; FE028E  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE028E  1d 34 2d f4
 	pushw 0x00                                           ; FE0292  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE0295  f2 8e 17 00 31
 	push XBC                                             ; FE029A  39
 	pushw 0x83                                           ; FE029B  0b 83 00
-	call T_F42D34                                        ; FE029E  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE029E  1d 34 2d f4
 	extz WA                                              ; FE02A2  d8 12
 	inc 8,XSP                                            ; FE02A4  ef 60
 	inc 8,XSP                                            ; FE02A6  ef 60
@@ -154410,14 +154410,14 @@ sub_FE02AB:
 	ld xbc, (0x17b3:24)                                 ; FE02E5  e2 b3 17 00 21
 	push XBC                                             ; FE02EA  39
 	pushw 0x02                                           ; FE02EB  0b 02 00
-	call T_F42DC8                                        ; FE02EE  1d c8 2d f4
+	call T_MsgQueue_Send_StackArg                                        ; FE02EE  1d c8 2d f4
 	ld XIX,0x00605300                                    ; FE02F2  44 00 53 60 00
 	ld (0x17b3:24), xix                                 ; FE02F7  f2 b3 17 00 64
 	m_ld_mi16 MDD+r4, 0x02, 0x0000                       ; FE02FC  bc 02 02 00 00
 	ld xbc, (0x17b3:24)                                 ; FE0301  e2 b3 17 00 21
 	push XBC                                             ; FE0306  39
 	pushw 0x02                                           ; FE0307  0b 02 00
-	call T_F42DC8                                        ; FE030A  1d c8 2d f4
+	call T_MsgQueue_Send_StackArg                                        ; FE030A  1d c8 2d f4
 	ldw hl, 0x00                                         ; FE030E  33 00 00
 	inc 8,XSP                                            ; FE0311  ef 60
 	inc 4,XSP                                            ; FE0313  ef 64
@@ -154445,7 +154445,7 @@ sub_FE02AB:
 	m_ld_mi16 MDD+r4, 0x02, 0xfffe                       ; FE0343  bc 02 02 fe ff
 	push XIX                                             ; FE0348  3c
 	pushw 0x03                                           ; FE0349  0b 03 00
-	call T_F42DC8                                        ; FE034C  1d c8 2d f4
+	call T_MsgQueue_Send_StackArg                                        ; FE034C  1d c8 2d f4
 	inc 6,XSP                                            ; FE0350  ef 66
 	jr .LFE0382                                              ; FE0352  68 2e
 .LFE0354:
@@ -154460,13 +154460,13 @@ sub_FE02AB:
 	m_ld_mi16 MDD+r4, 0x02, 0x0000                       ; FE036D  bc 02 02 00 00
 	push XIX                                             ; FE0372  3c
 	pushw 0x03                                           ; FE0373  0b 03 00
-	call T_F42DC8                                        ; FE0376  1d c8 2d f4
+	call T_MsgQueue_Send_StackArg                                        ; FE0376  1d c8 2d f4
 	add HL,0x0400                                        ; FE037A  db c8 00 04
 	inc 6,XSP                                            ; FE037E  ef 66
 	jr .LFE0315                                              ; FE0380  68 93
 .LFE0382:
 	ld (0x17b7:24), 0x00                               ; FE0382  f2 b7 17 00 00 00
-	call T_F42DB0                                        ; FE0388  1d b0 2d f4
+	call T_Kernel_ExitTask_2                                        ; FE0388  1d b0 2d f4
 	pop XIX                                              ; FE038C  5c
 	popw hl                                              ; FE038D  4b
 	unlk XIZ                                             ; FE038E  ee 0d
@@ -154523,7 +154523,7 @@ sub_FE0391:
 	ld XBC,(XIX)                                         ; FE041F  a4 21
 	push XBC                                             ; FE0421  39
 	pushw 0x02                                           ; FE0422  0b 02 00
-	call T_F42DC8                                        ; FE0425  1d c8 2d f4
+	call T_MsgQueue_Send_StackArg                                        ; FE0425  1d c8 2d f4
 	inc 6,XSP                                            ; FE0429  ef 66
 .LFE042B:
 	ld WA,HL                                             ; FE042B  db 88
@@ -154538,7 +154538,7 @@ sub_FE0435:
 	link XIZ,0xfffc                                      ; FE0435  ee 0c fc ff
 	push XHL                                             ; FE0439  3b
 	push XIX                                             ; FE043A  3c
-	lda xix, (T_F42DDC:24)                               ; FE043B  f2 dc 2d f4 34
+	lda xix, (T_MsgQueue_Receive_NoBlock:24)                               ; FE043B  f2 dc 2d f4 34
 .LFE0440:
 	pushw 0x02                                           ; FE0440  0b 02 00
 	lda xiy, (.LFE044B:24)                               ; FE0443  f2 4b 04 fe 35
@@ -154555,7 +154555,7 @@ sub_FE0435:
 	ld xbc, (0x1706:24)                                 ; FE045F  e2 06 17 00 21
 	push XBC                                             ; FE0464  39
 	pushw 0x02                                           ; FE0465  0b 02 00
-	call T_F42DC8                                        ; FE0468  1d c8 2d f4
+	call T_MsgQueue_Send_StackArg                                        ; FE0468  1d c8 2d f4
 	inc 6,XSP                                            ; FE046C  ef 66
 .LFE046E:
 	m_cp_mi8 MB24, 0x0017b7, 0x00                        ; FE046E  c2 b7 17 00 3f 00
@@ -154609,7 +154609,7 @@ sub_FE04BE:
 	lda xbc, (0x178e:24)                                 ; FE04EA  f2 8e 17 00 31
 	push XBC                                             ; FE04EF  39
 	pushw 0x0f                                           ; FE04F0  0b 0f 00
-	call T_F42D34                                        ; FE04F3  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE04F3  1d 34 2d f4
 	inc 8,XSP                                            ; FE04F7  ef 60
 	cp a, 0x00:i3                                          ; FE04F9  c9 d8
 	jr z, .LFE0508                                           ; FE04FB  66 0b
@@ -154892,7 +154892,7 @@ sub_FE070C:
 ; the register-preserving request entry Fdc_Request_SaveRegs_Entry.
 ; Evidence: 0xFE075B writes 0x000B to block offset +0; op 11 = SENSE DRIVE
 ;           STATUS (disk-format §4 census; Fdc_Op11_SenseDriveStatus is the
-;           in-core handler).  0xFE077E `call 0xf42d38` (T_F42D38 ->
+;           in-core handler).  0xFE077E `call 0xf42d38` (T_Fdc_Request_SaveRegs_Entry ->
 ;           Fdc_Request_SaveRegs).  Reached by 5 calr sites.
 ;           notes/prom_a_disk_cmd_layer_checks.py.
 ; Was sub_FE0755.
@@ -154909,7 +154909,7 @@ Disk_RequestSenseDriveStatus:
 	sub XBC,XBC                                          ; FE0778  e9 a1
 	ld (XIX+0x0c),XBC                                    ; FE077A  bc 0c 61
 	push XIX                                             ; FE077D  3c
-	call T_F42D38                                        ; FE077E  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE077E  1d 38 2d f4
 	pop XIY                                              ; FE0782  5d
 	pop XIX                                              ; FE0783  5c
 	ret                                                  ; FE0784  0e
@@ -155439,7 +155439,7 @@ sub_FE0BF5:
 	push XBC                                             ; FE0BFA  39
 	pushw 0x06                                           ; FE0BFB  0b 06 00
 	pushw 0x00                                           ; FE0BFE  0b 00 00
-	call T_F40ED4                                        ; FE0C01  1d d4 0e f4
+	call T_Link_SendBlockIn32ByteChunks                                        ; FE0C01  1d d4 0e f4
 	inc 8,XSP                                            ; FE0C05  ef 60
 	ret                                                  ; FE0C07  0e
 sub_FE0C08:
@@ -155461,7 +155461,7 @@ sub_FE0C08:
 	ld XBC,(XIX)                                         ; FE0C37  a4 21
 	push XBC                                             ; FE0C39  39
 	pushw 0x1a                                           ; FE0C3A  0b 1a 00
-	call T_F42D34                                        ; FE0C3D  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE0C3D  1d 34 2d f4
 	inc 8,XSP                                            ; FE0C41  ef 60
 	pop XIX                                              ; FE0C43  5c
 	ret                                                  ; FE0C44  0e
@@ -155478,7 +155478,7 @@ sub_FE0C45:
 	lda xbc, (0x178e:24)                                 ; FE0C61  f2 8e 17 00 31
 	push XBC                                             ; FE0C66  39
 	pushw 0x13                                           ; FE0C67  0b 13 00
-	call T_F42D34                                        ; FE0C6A  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE0C6A  1d 34 2d f4
 	inc 8,XSP                                            ; FE0C6E  ef 60
 	ld a, 0x06:opc                                          ; FE0C70  21 06
 .LFE0C72:
@@ -155635,7 +155635,7 @@ sub_FE0CB9:
 	pushw 0x00                                           ; FE0E4C  0b 00 00
 	push XIX                                             ; FE0E4F  3c
 	pushw 0x1a                                           ; FE0E50  0b 1a 00
-	call T_F42D34                                        ; FE0E53  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE0E53  1d 34 2d f4
 	calr sub_FE19FF                                          ; FE0E57  1e a5 0b
 	ld H,A                                               ; FE0E5A  c9 8e
 	ld (0x1735:24), a                                   ; FE0E5C  f2 35 17 00 41
@@ -156037,7 +156037,7 @@ sub_FE1218:
 	lda xbc, (0x60a080:24)                               ; FE128A  f2 80 a0 60 31
 	push XBC                                             ; FE128F  39
 	pushw 0x1a                                           ; FE1290  0b 1a 00
-	call T_F42D34                                        ; FE1293  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1293  1d 34 2d f4
 	calr sub_FE19FF                                          ; FE1297  1e 65 07
 	inc 8,XSP                                            ; FE129A  ef 60
 	cp a, 0x00:i3                                          ; FE129C  c9 d8
@@ -156821,7 +156821,7 @@ sub_FE192D:
 	ld XWA,0x000000d0                                    ; FE1948  40 d0 00 00 00
 	push XWA                                             ; FE194D  38
 	pushw 0x00                                           ; FE194E  0b 00 00
-	call T_F42D34                                        ; FE1951  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1951  1d 34 2d f4
 	ld H,A                                               ; FE1955  c9 8e
 	ld (0x1735:24), a                                   ; FE1957  f2 35 17 00 41
 	inc 8,XSP                                            ; FE195C  ef 60
@@ -156838,7 +156838,7 @@ sub_FE1962:
 	ld XWA,0x000000af                                    ; FE197D  40 af 00 00 00
 	push XWA                                             ; FE1982  38
 	pushw 0x00                                           ; FE1983  0b 00 00
-	call T_F42D34                                        ; FE1986  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1986  1d 34 2d f4
 	ld H,A                                               ; FE198A  c9 8e
 	ld (0x1735:24), a                                   ; FE198C  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1991  ef 60
@@ -156870,7 +156870,7 @@ sub_FE1962:
 	ld XWA,0x000000cf                                    ; FE19DC  40 cf 00 00 00
 	push XWA                                             ; FE19E1  38
 	pushw 0x00                                           ; FE19E2  0b 00 00
-	call T_F42D34                                        ; FE19E5  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE19E5  1d 34 2d f4
 	ld (0x1735:24), a                                   ; FE19E9  f2 35 17 00 41
 	lda xiy, (.LFE19F6:24)                               ; FE19EE  f2 f6 19 fe 35
 	push XIY                                             ; FE19F3  3d
@@ -156889,7 +156889,7 @@ sub_FE19FF:
 	lda xbc, (0x178e:24)                                 ; FE1A14  f2 8e 17 00 31
 	push XBC                                             ; FE1A19  39
 	pushw 0x11                                           ; FE1A1A  0b 11 00
-	call T_F42D34                                        ; FE1A1D  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1A1D  1d 34 2d f4
 	ld H,A                                               ; FE1A21  c9 8e
 	ld (0x1735:24), a                                   ; FE1A23  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1A28  ef 60
@@ -156904,7 +156904,7 @@ sub_FE1A2E:
 	lda xbc, (0x178e:24)                                 ; FE1A40  f2 8e 17 00 31
 	push XBC                                             ; FE1A45  39
 	pushw 0x12                                           ; FE1A46  0b 12 00
-	call T_F42D34                                        ; FE1A49  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1A49  1d 34 2d f4
 	ld H,A                                               ; FE1A4D  c9 8e
 	ld (0x1735:24), a                                   ; FE1A4F  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1A54  ef 60
@@ -156920,7 +156920,7 @@ sub_FE1A5A:
 	lda xbc, (0x178e:24)                                 ; FE1A6F  f2 8e 17 00 31
 	push XBC                                             ; FE1A74  39
 	pushw 0x0f                                           ; FE1A75  0b 0f 00
-	call T_F42D34                                        ; FE1A78  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1A78  1d 34 2d f4
 	ld H,A                                               ; FE1A7C  c9 8e
 	ld (0x1735:24), a                                   ; FE1A7E  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1A83  ef 60
@@ -156935,7 +156935,7 @@ sub_FE1A89:
 	lda xbc, (0x178e:24)                                 ; FE1A9B  f2 8e 17 00 31
 	push XBC                                             ; FE1AA0  39
 	pushw 0x83                                           ; FE1AA1  0b 83 00
-	call T_F42D34                                        ; FE1AA4  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1AA4  1d 34 2d f4
 	ld H,A                                               ; FE1AA8  c9 8e
 	ld (0x1735:24), a                                   ; FE1AAA  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1AAF  ef 60
@@ -156950,7 +156950,7 @@ sub_FE1AB5:
 	sub XBC,XBC                                          ; FE1AC7  e9 a1
 	push XBC                                             ; FE1AC9  39
 	pushw 0x80                                           ; FE1ACA  0b 80 00
-	call T_F42D34                                        ; FE1ACD  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1ACD  1d 34 2d f4
 	ld HL,WA                                             ; FE1AD1  d8 8b
 	ld (0x1739:24), wa                                  ; FE1AD3  f2 39 17 00 50
 	inc 8,XSP                                            ; FE1AD8  ef 60
@@ -156967,7 +156967,7 @@ sub_FE1AF3:
 	lda xbc, (0x178e:24)                                 ; FE1AF3  f2 8e 17 00 31
 	push XBC                                             ; FE1AF8  39
 	pushw 0x16                                           ; FE1AF9  0b 16 00
-	call T_F42D34                                        ; FE1AFC  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1AFC  1d 34 2d f4
 	ld H,A                                               ; FE1B00  c9 8e
 	ld (0x1735:24), a                                   ; FE1B02  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1B07  ef 60
@@ -156982,7 +156982,7 @@ sub_FE1B0D:
 	lda xbc, (0x178e:24)                                 ; FE1B1F  f2 8e 17 00 31
 	push XBC                                             ; FE1B24  39
 	pushw 0x84                                           ; FE1B25  0b 84 00
-	call T_F42D34                                        ; FE1B28  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1B28  1d 34 2d f4
 	ld H,A                                               ; FE1B2C  c9 8e
 	ld (0x1735:24), a                                   ; FE1B2E  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1B33  ef 60
@@ -156997,7 +156997,7 @@ sub_FE1B39:
 	lda xbc, (0x178e:24)                                 ; FE1B4B  f2 8e 17 00 31
 	push XBC                                             ; FE1B50  39
 	pushw 0x10                                           ; FE1B51  0b 10 00
-	call T_F42D34                                        ; FE1B54  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1B54  1d 34 2d f4
 	ld H,A                                               ; FE1B58  c9 8e
 	ld (0x1735:24), a                                   ; FE1B5A  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1B5F  ef 60
@@ -157013,7 +157013,7 @@ sub_FE1B65:
 	lda xbc, (0x178e:24)                                 ; FE1B7A  f2 8e 17 00 31
 	push XBC                                             ; FE1B7F  39
 	pushw 0x13                                           ; FE1B80  0b 13 00
-	call T_F42D34                                        ; FE1B83  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1B83  1d 34 2d f4
 	ld H,A                                               ; FE1B87  c9 8e
 	ld (0x1735:24), a                                   ; FE1B89  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1B8E  ef 60
@@ -157027,7 +157027,7 @@ sub_FE1B65:
 	lda xbc, (0x178e:24)                                 ; FE1BA6  f2 8e 17 00 31
 	push XBC                                             ; FE1BAB  39
 	pushw 0x85                                           ; FE1BAC  0b 85 00
-	call T_F42D34                                        ; FE1BAF  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1BAF  1d 34 2d f4
 	ld H,A                                               ; FE1BB3  c9 8e
 	ld (0x1735:24), a                                   ; FE1BB5  f2 35 17 00 41
 	inc 8,XSP                                            ; FE1BBA  ef 60
@@ -157737,7 +157737,7 @@ sub_FE20E1:
 	ld (xiz-8), bc                                       ; FE20F6  be f8 51
 	ld XWA,(XIZ+0x0a)                                    ; FE20F9  ae 0a 20
 	push XWA                                             ; FE20FC  38
-	call T_F41234                                        ; FE20FD  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FE20FD  1d 34 12 f4
 	ld XBC,(XIZ+0x0a)                                    ; FE2101  ae 0a 21
 	ld (xiz-12), xbc                                     ; FE2104  be f4 61
 	m_ld_mi16 MDD+r6, 0xfc, 0x0001                       ; FE2107  be fc 02 01 00
@@ -157818,7 +157818,7 @@ sub_FE20E1:
 	ld XWA,XIX                                           ; FE21CE  ec 88
 	add XWA,0x00010000                                   ; FE21D0  e8 c8 00 00 01 00
 	push XWA                                             ; FE21D6  38
-	call T_F41234                                        ; FE21D7  1d 34 12 f4
+	call T_Link_SendCommand3_WaitTicks                                        ; FE21D7  1d 34 12 f4
 	ld xbc, (xiz-16)                                     ; FE21DB  ae f0 21
 	add XBC,0x00010000                                   ; FE21DE  e9 c8 00 00 01 00
 	ld (xiz-12), xbc                                     ; FE21E4  be f4 61
@@ -157949,7 +157949,7 @@ sub_FE22EF:
 	pushw 0x00                                           ; FE2314  0b 00 00
 	push XIX                                             ; FE2317  3c
 	pushw 0x1a                                           ; FE2318  0b 1a 00
-	call T_F42D34                                        ; FE231B  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE231B  1d 34 2d f4
 	calr sub_FE0B43                                          ; FE231F  1e 21 e8
 	ld H,A                                               ; FE2322  c9 8e
 	inc 8,XSP                                            ; FE2324  ef 60
@@ -158821,7 +158821,7 @@ sub_FE2AA9:
 	ld xwa, (xiz-26)                                     ; FE2B32  ae e6 20
 	push XWA                                             ; FE2B35  38
 	pushw 0x1a                                           ; FE2B36  0b 1a 00
-	call T_F42D34                                        ; FE2B39  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE2B39  1d 34 2d f4
 	m_set 1, MD16, 0x21e7                                ; FE2B3D  f1 e7 21 b9
 	calr sub_FE0A99                                          ; FE2B41  1e 55 df
 	ld H,A                                               ; FE2B44  c9 8e
@@ -158900,7 +158900,7 @@ sub_FE2AA9:
 	ld xwa, (xiz-26)                                     ; FE2C13  ae e6 20
 	push XWA                                             ; FE2C16  38
 	pushw 0x1a                                           ; FE2C17  0b 1a 00
-	call T_F42D34                                        ; FE2C1A  1d 34 2d f4
+	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE2C1A  1d 34 2d f4
 	m_set 1, MD16, 0x21e7                                ; FE2C1E  f1 e7 21 b9
 	calr sub_FE0A99                                          ; FE2C22  1e 74 de
 	ld H,A                                               ; FE2C25  c9 8e
@@ -159378,11 +159378,11 @@ Disk_CommandDispatch_Thunk_Entry:
 	jp Disk_CommandDispatch_Thunk                                        ; FE3000  1b 20 30 fe
 
 ; ---------------------------------------------------------------------
-; Fdc_Request_Thunk_Entry -- published jp slot (prom_b thunk T_F42D24) into
+; Fdc_Request_Thunk_Entry -- published jp slot (prom_b thunk T_Fdc_Request_Thunk_Entry) into
 ;                            Fdc_Request_Thunk
 ;
 ; Slot 1 of the entry table at 0xFE3000 (4-byte stride).
-; Evidence: 0xFE3004 `jp Fdc_Request_Thunk` (0xFE3032).  T_F42D24 has no caller
+; Evidence: 0xFE3004 `jp Fdc_Request_Thunk` (0xFE3032).  T_Fdc_Request_Thunk_Entry has no caller
 ;           in either image (disk-format §4).
 ; Was sub_FE3004.
 ; ---------------------------------------------------------------------
@@ -159430,9 +159430,9 @@ INTTC0_uDMA0Done_Alias:
 
 ; ---------------------------------------------------------------------
 ; Disk_CommandDispatch_SaveRegs_Entry -- published jp slot (prom_b thunk
-;                        T_F42D34) into Disk_CommandDispatch_SaveRegs
+;                        T_Disk_CommandDispatch_SaveRegs_Entry) into Disk_CommandDispatch_SaveRegs
 ;
-; Evidence: 0xFE3014 `jp Disk_CommandDispatch_SaveRegs` (0xFE3042).  T_F42D34 =
+; Evidence: 0xFE3014 `jp Disk_CommandDispatch_SaveRegs` (0xFE3042).  T_Disk_CommandDispatch_SaveRegs_Entry =
 ;           23 call sites, the busiest slot into the module (portb §2).
 ; Was sub_FE3014.
 ; ---------------------------------------------------------------------
@@ -159440,10 +159440,10 @@ Disk_CommandDispatch_SaveRegs_Entry:
 	jp Disk_CommandDispatch_SaveRegs                                        ; FE3014  1b 42 30 fe
 
 ; ---------------------------------------------------------------------
-; Fdc_Request_SaveRegs_Entry -- published jp slot (prom_b thunk T_F42D38) into
+; Fdc_Request_SaveRegs_Entry -- published jp slot (prom_b thunk T_Fdc_Request_SaveRegs_Entry) into
 ;                               Fdc_Request_SaveRegs
 ;
-; Evidence: 0xFE3018 `jp Fdc_Request_SaveRegs` (0xFE308D).  T_F42D38 = 17 call
+; Evidence: 0xFE3018 `jp Fdc_Request_SaveRegs` (0xFE308D).  T_Fdc_Request_SaveRegs_Entry = 17 call
 ;           sites (disk-format §4).
 ; Was sub_FE3018.
 ; ---------------------------------------------------------------------
@@ -159476,7 +159476,7 @@ Disk_CommandDispatch_Thunk:
 ;
 ; Pushes the request-block pointer and calls Fdc_Request (0xFE66C7); does NOT
 ; save the caller's registers (unlike Fdc_Request_SaveRegs).  Reached through
-; Fdc_Request_Thunk_Entry (prom_b thunk T_F42D24, which has no caller in either
+; Fdc_Request_Thunk_Entry (prom_b thunk T_Fdc_Request_Thunk_Entry, which has no caller in either
 ; image -- disk-format §4).
 ; Evidence: 0xFE3034 `call Fdc_Request`.
 ; Was sub_FE3032.
@@ -159497,7 +159497,7 @@ Fdc_Request_Thunk:
 ; Saves XIX/XIY/XBC/XDE/XHL to the scratch block at 0x605D70, calls
 ; Disk_CommandDispatch (0xFE426E), and restores them.  Register-preserving
 ; public entry to the command dispatcher; reached through
-; Disk_CommandDispatch_SaveRegs_Entry (prom_b thunk T_F42D34, 23 call sites).
+; Disk_CommandDispatch_SaveRegs_Entry (prom_b thunk T_Disk_CommandDispatch_SaveRegs_Entry, 23 call sites).
 ; Evidence: 0xFE3042-0xFE305A store the five registers to 0x605D70-0x605D80;
 ;           0xFE3067 `jp Disk_CommandDispatch`; 0xFE306D-0xFE3087 reload them.
 ; Was sub_FE3042.
@@ -159531,7 +159531,7 @@ sub_FE306B:   ; entry: named by 1 `ld` operand, first at 0xFE3061
 ; Saves XIX/XIY/XBC/XDE/XHL to the scratch block at 0x605D84, calls Fdc_Request
 ; (0xFE66C7), and restores them.  Register-preserving public entry to the FDC
 ; operation core; reached through Fdc_Request_SaveRegs_Entry (prom_b thunk
-; T_F42D38, 17 call sites).
+; T_Fdc_Request_SaveRegs_Entry, 17 call sites).
 ; Evidence: 0xFE308D-0xFE30A5 store the five registers to 0x605D84-0x605D94;
 ;           0xFE30B2 `jp Fdc_Request` (0xFE66C7); 0xFE30B8-0xFE30D2 reload them.
 ; Was sub_FE308D.
@@ -161228,7 +161228,7 @@ sub_FE423E:
 
 ; ---------------------------------------------------------------------
 ; Disk_CommandDispatch -- the disk module's COMMAND dispatcher (published as
-;                         prom_b thunk T_F42D34)
+;                         prom_b thunk T_Disk_CommandDispatch_SaveRegs_Entry)
 ;
 ; Reads a command code from (XSP+0x04) and routes it through a word-offset jump
 ; table (offsets at 0xFE6DFE, base 0xFE42B4) to one of ~19 handlers, each of
@@ -161238,7 +161238,7 @@ sub_FE423E:
 ;           `mx_jp_cc` is the TLCS-900 word-offset dispatch idiom; the command
 ;           is range-checked before indexing.  Entered via
 ;           Disk_CommandDispatch_SaveRegs (0xFE3042) and _Thunk (0xFE3020);
-;           T_F42D34 has 23 call sites
+;           T_Disk_CommandDispatch_SaveRegs_Entry has 23 call sites
 ;           (notes/FINDINGS-prom_a-portb-and-blockdev-entry.md §2).
 ; NOT established: the semantics of the individual command handlers -- they stay
 ;           sub_XXXXXX.  Naming the dispatcher does not name what it dispatches.
@@ -167752,7 +167752,7 @@ sub_FE707A:
 	push XHL                                             ; FE70A8  3b
 	push XIX                                             ; FE70A9  3c
 	push XIZ                                             ; FE70AA  3e
-	call T_F40F4C                                        ; FE70AB  1d 4c 0f f4
+	call T_PanelState_CheckRequestAllowed_2                                        ; FE70AB  1d 4c 0f f4
 	pop XIZ                                              ; FE70AF  5e
 	pop XIX                                              ; FE70B0  5c
 	pop XHL                                              ; FE70B1  5b
@@ -168016,7 +168016,7 @@ Disk_Format720K:
 	ld (0x17cc:24), xbc                                 ; FE7250  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE7255  f2 c0 17 00 31
 	push XBC                                             ; FE725A  39
-	call T_F42D38                                        ; FE725B  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE725B  1d 38 2d f4
 	ld H,A                                               ; FE725F  c9 8e
 	pop XIY                                              ; FE7261  5d
 	cp a, 0x00:i3                                          ; FE7262  c9 d8
@@ -168031,7 +168031,7 @@ Disk_Format720K:
 	ld (0x17cc:24), xbc                                 ; FE7293  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE7298  f2 c0 17 00 31
 	push XBC                                             ; FE729D  39
-	call T_F42D38                                        ; FE729E  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE729E  1d 38 2d f4
 	ld H,A                                               ; FE72A2  c9 8e
 	pop XIY                                              ; FE72A4  5d
 	cp a, 0x00:i3                                          ; FE72A5  c9 d8
@@ -168046,7 +168046,7 @@ Disk_Format720K:
 	ld (0x17cc:24), xbc                                 ; FE72D9  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE72DE  f2 c0 17 00 31
 	push XBC                                             ; FE72E3  39
-	call T_F42D38                                        ; FE72E4  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE72E4  1d 38 2d f4
 	ld H,A                                               ; FE72E8  c9 8e
 	pop XIY                                              ; FE72EA  5d
 	cp a, 0x00:i3                                          ; FE72EB  c9 d8
@@ -168062,7 +168062,7 @@ Disk_Format720K:
 	ld (0x17cc:24), xbc                                 ; FE7321  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE7326  f2 c0 17 00 31
 	push XBC                                             ; FE732B  39
-	call T_F42D38                                        ; FE732C  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE732C  1d 38 2d f4
 	ld H,A                                               ; FE7330  c9 8e
 	pop XIY                                              ; FE7332  5d
 	cp a, 0x00:i3                                          ; FE7333  c9 d8
@@ -168076,7 +168076,7 @@ Disk_Format720K:
 	ld (0x17cc:24), xix                                 ; FE7362  f2 cc 17 00 64
 	lda xbc, (0x17c0:24)                                 ; FE7367  f2 c0 17 00 31
 	push XBC                                             ; FE736C  39
-	call T_F42D38                                        ; FE736D  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE736D  1d 38 2d f4
 	ld H,A                                               ; FE7371  c9 8e
 	pop XIY                                              ; FE7373  5d
 	cp a, 0x00:i3                                          ; FE7374  c9 d8
@@ -168092,7 +168092,7 @@ Disk_Format720K:
 	ld (0x17cc:24), xbc                                 ; FE73AA  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE73AF  f2 c0 17 00 31
 	push XBC                                             ; FE73B4  39
-	call T_F42D38                                        ; FE73B5  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE73B5  1d 38 2d f4
 	ld H,A                                               ; FE73B9  c9 8e
 	pop XIY                                              ; FE73BB  5d
 	cp a, 0x00:i3                                          ; FE73BC  c9 d8
@@ -168106,7 +168106,7 @@ Disk_Format720K:
 	ld (0x17cc:24), xix                                 ; FE73EA  f2 cc 17 00 64
 	lda xbc, (0x17c0:24)                                 ; FE73EF  f2 c0 17 00 31
 	push XBC                                             ; FE73F4  39
-	call T_F42D38                                        ; FE73F5  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE73F5  1d 38 2d f4
 	pop XIY                                              ; FE73F9  5d
 	jr .LFE73FE                                              ; FE73FA  68 02
 .LFE73FC:
@@ -168163,7 +168163,7 @@ Disk_Format1440K:
 	sub XBC,XBC                                          ; FE7429  e9 a1
 	ld (XIX+0x0c),XBC                                    ; FE742B  bc 0c 61
 	push XIX                                             ; FE742E  3c
-	call T_F42D38                                        ; FE742F  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE742F  1d 38 2d f4
 	ld H,A                                               ; FE7433  c9 8e
 	pop XIY                                              ; FE7435  5d
 	cp a, 0x00:i3                                          ; FE7436  c9 d8
@@ -168177,7 +168177,7 @@ Disk_Format1440K:
 	sub XBC,XBC                                          ; FE7458  e9 a1
 	ld (XIX+0x0c),XBC                                    ; FE745A  bc 0c 61
 	push XIX                                             ; FE745D  3c
-	call T_F42D38                                        ; FE745E  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE745E  1d 38 2d f4
 	ld H,A                                               ; FE7462  c9 8e
 	pop XIY                                              ; FE7464  5d
 	cp a, 0x00:i3                                          ; FE7465  c9 d8
@@ -168191,7 +168191,7 @@ Disk_Format1440K:
 	lda xbc, (0x60a080:24)                               ; FE7487  f2 80 a0 60 31
 	ld (XIX+0x0c),XBC                                    ; FE748C  bc 0c 61
 	push XIX                                             ; FE748F  3c
-	call T_F42D38                                        ; FE7490  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE7490  1d 38 2d f4
 	ld H,A                                               ; FE7494  c9 8e
 	pop XIY                                              ; FE7496  5d
 	cp a, 0x00:i3                                          ; FE7497  c9 d8
@@ -168205,7 +168205,7 @@ Disk_Format1440K:
 	lda xbc, (0x60a280:24)                               ; FE74B9  f2 80 a2 60 31
 	ld (XIX+0x0c),XBC                                    ; FE74BE  bc 0c 61
 	push XIX                                             ; FE74C1  3c
-	call T_F42D38                                        ; FE74C2  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE74C2  1d 38 2d f4
 	ld H,A                                               ; FE74C6  c9 8e
 	pop XIY                                              ; FE74C8  5d
 	cp a, 0x00:i3                                          ; FE74C9  c9 d8
@@ -168219,7 +168219,7 @@ Disk_Format1440K:
 	lda xbc, (0x60a480:24)                               ; FE74EB  f2 80 a4 60 31
 	ld (XIX+0x0c),XBC                                    ; FE74F0  bc 0c 61
 	push XIX                                             ; FE74F3  3c
-	call T_F42D38                                        ; FE74F4  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE74F4  1d 38 2d f4
 	ld H,A                                               ; FE74F8  c9 8e
 	pop XIY                                              ; FE74FA  5d
 	cp a, 0x00:i3                                          ; FE74FB  c9 d8
@@ -168233,7 +168233,7 @@ Disk_Format1440K:
 	lda xbc, (0x60a280:24)                               ; FE751D  f2 80 a2 60 31
 	ld (XIX+0x0c),XBC                                    ; FE7522  bc 0c 61
 	push XIX                                             ; FE7525  3c
-	call T_F42D38                                        ; FE7526  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE7526  1d 38 2d f4
 	ld H,A                                               ; FE752A  c9 8e
 	pop XIY                                              ; FE752C  5d
 	cp a, 0x00:i3                                          ; FE752D  c9 d8
@@ -168247,7 +168247,7 @@ Disk_Format1440K:
 	lda xbc, (0x60a480:24)                               ; FE754F  f2 80 a4 60 31
 	ld (XIX+0x0c),XBC                                    ; FE7554  bc 0c 61
 	push XIX                                             ; FE7557  3c
-	call T_F42D38                                        ; FE7558  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE7558  1d 38 2d f4
 	ld H,A                                               ; FE755C  c9 8e
 	pop XIY                                              ; FE755E  5d
 	cp a, 0x00:i3                                          ; FE755F  c9 d8
@@ -168262,7 +168262,7 @@ Disk_Format1440K:
 	ld (xiz-4), xbc                                      ; FE7586  be fc 61
 	ld (XIX+0x0c),XBC                                    ; FE7589  bc 0c 61
 	push XIX                                             ; FE758C  3c
-	call T_F42D38                                        ; FE758D  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE758D  1d 38 2d f4
 	ld H,A                                               ; FE7591  c9 8e
 	pop XIY                                              ; FE7593  5d
 	cp a, 0x00:i3                                          ; FE7594  c9 d8
@@ -168276,7 +168276,7 @@ Disk_Format1440K:
 	ld xbc, (xiz-4)                                      ; FE75B5  ae fc 21
 	ld (XIX+0x0c),XBC                                    ; FE75B8  bc 0c 61
 	push XIX                                             ; FE75BB  3c
-	call T_F42D38                                        ; FE75BC  1d 38 2d f4
+	call T_Fdc_Request_SaveRegs_Entry                                        ; FE75BC  1d 38 2d f4
 	pop XIY                                              ; FE75C0  5d
 	jr .LFE75C5                                              ; FE75C1  68 02
 .LFE75C3:
@@ -168915,11 +168915,11 @@ sub_FE8066:
 ;          own (EXIT), [10]-[1F] all one target.
 ;
 ; ⚠ WHY THAT IS NOT ENOUGH. The reader is published as prom_b thunk slot
-;          T_F402B4 and NOTHING in either image names that slot
+;          T_ScreenButton_Sequencer and NOTHING in either image names that slot
 ;          (notes/prom_a_xref.py), so no caller establishes what HL holds. A
 ;          shape that fits is a coincidence until a caller says otherwise,
 ;          and the handlers here are deliberately left `sub_XXXXXX` for that
-;          reason. The shortest path to closing it is a caller of T_F402B4.
+;          reason. The shortest path to closing it is a caller of T_ScreenButton_Sequencer.
 ; ---------------------------------------------------------------------
 ; ---------------------------------------------------------------------
 ; ScreenDispatch_FE8077 -- 32 pointers to routines in this module
@@ -189316,7 +189316,7 @@ sub_FF7623:
 	push XDE                                             ; FF7628  3a
 	ld (0x2540:16), 0x01                                 ; FF7629  f1 40 25 00 01
 	ld XIY,(XIZ+0x08)                                    ; FF762E  ae 08 25
-	call T_F41820                                        ; FF7631  1d 20 18 f4
+	call T_DLB_Handler_Array8_2                                        ; FF7631  1d 20 18 f4
 	ld (0x2540:16), 0x00                                 ; FF7635  f1 40 25 00 00
 	pop XDE                                              ; FF763A  5a
 	pop XHL                                              ; FF763B  5b
@@ -189330,7 +189330,7 @@ sub_FF763F:
 	push XHL                                             ; FF7643  3b
 	push XDE                                             ; FF7644  3a
 	ld XIY,(XIZ+0x08)                                    ; FF7645  ae 08 25
-	call T_F4181C                                        ; FF7648  1d 1c 18 f4
+	call T_DLB_Handler_Array8                                        ; FF7648  1d 1c 18 f4
 	ld (0x2540:16), 0x00                                 ; FF764C  f1 40 25 00 00
 	pop XDE                                              ; FF7651  5a
 	pop XHL                                              ; FF7652  5b
@@ -189371,7 +189371,7 @@ DLB_Handler_StringTable_Veneer:
 ; Evidence: 0xFF766E `stdi8 (0x2540), 0x00` -- the layer select this
 ;           module writes before every draw -- then 0xFF7673 `ld
 ;           XIY,(XIZ+0x08)` and 0xFF7676 `call 0xF41800` = prom_b slot
-;           T_F41800, whose `jp` target 0xF31BA1 carries the label
+;           T_DLB_Handler_Decimal, whose `jp` target 0xF31BA1 carries the label
 ;           DLB_Handler_Decimal. Ten call sites, the first at 0xFF4BC1.
 ;           DERIVATIVE, and the (0x2540) store is the one thing it adds
 ; Unknown:  as above
@@ -189385,7 +189385,7 @@ DLB_Handler_Decimal_Veneer:
 	push XDE                                             ; FF766D  3a
 	ld (0x2540:16), 0x00                                 ; FF766E  f1 40 25 00 00
 	ld XIY,(XIZ+0x08)                                    ; FF7673  ae 08 25
-	call T_F41800                                        ; FF7676  1d 00 18 f4
+	call T_DLB_Handler_Decimal                                        ; FF7676  1d 00 18 f4
 	pop XDE                                              ; FF767A  5a
 	pop XHL                                              ; FF767B  5b
 	pop XIX                                              ; FF767C  5c
@@ -189622,7 +189622,7 @@ sub_FF77E3:
 	ld a, (0x2720:16)                                   ; FF77FD  c1 20 27 21
 	ldw bc, 0x04                                         ; FF7801  31 04 00
 	call sub_FF7826                                      ; FF7804  1d 26 78 ff
-	call T_F43430                                        ; FF7808  1d 30 34 f4
+	call T_DiskFile_CheckSignature                                        ; FF7808  1d 30 34 f4
 	ld XIX,0x000021c8                                    ; FF780C  44 c8 21 00 00
 	m_popw MDD+r4, 0x06                                  ; FF7811  bc 06 06
 	m_popw MDD+r4, 0x04                                  ; FF7814  bc 04 06

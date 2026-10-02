@@ -539,7 +539,7 @@ assert DRM_LOCAL == (82, 151)
 # where a write finally lands
 assert b(0xF43470, 4) == bytes([0x1B, 0x6A, 0x61, 0xFD]), "T_F43470 -> 0xFD616A"
 assert b(0xF43478, 4) == bytes([0x1B, 0x04, 0x67, 0xFD]), "T_F43478 -> 0xFD6704"
-assert b(0xF434A0, 4) == bytes([0x1B, 0x30, 0x1C, 0xF1]), "T_F434A0 -> prom_b 0xF11C30"
+assert b(0xF434A0, 4) == bytes([0x1B, 0x30, 0x1C, 0xF1]), "T_DspParam_WriteByNumber -> prom_b 0xF11C30"
 # and prom_c's own arithmetic on the same image, which no byte of prom_b knows
 assert c(0xFB459E, 6) == bytes([0xE8, 0xC8, 0xA1, 0x04, 0x00, 0x00])
 C_OFFSET = le(c(0xFB45A0, 4))
@@ -557,7 +557,7 @@ for thr, sel in reversed(MEL_LADDER[:4]):
           % (thr, thr + 42, (sel >> 4) - 1, sel, thr))
 print("     ⚠ offsets %d..%d never reach the sound engine; prom_b answers them"
       % MEL_LOCAL)
-print("        itself through T_F434A0")
+print("        itself through T_DspParam_WriteByNumber")
 print("  drum, base 0x%06X, %d bytes" % (DRM_ADDR, DRM_LEN))
 print("     0    .. %3d   kit common      (selector 03, parameter = offset)" % (DRM_COMMON - 1))
 print("     %d + %d*n + 0   .. +63    entry common      (selector 00)"

@@ -152,7 +152,7 @@ chunk>=32  whole-run rule 0/1084 (0.0%)   with <=8-byte trim  35/1084 (3.2%)
 | `wave7_a4_constants.py` | **"Are the constant tables at `0xF8671A` and `0xF8679A` really powers of two?"** — checks the LAST entry too (`0x80000000`, and `1<<17..1<<24`) |
 | `wave7_a4_directories.py` | **"Do the claimed directory areas match the min/max of their own entries?"** — for each, whether `entry[0]` equals the area start and the furthest list end equals area end + 1 |
 | `wave7_a4_dir_c.py` | **"Is directory C real, or is it pointing into `0xFF` fill?"** — dumps the raw bytes under the claimed entries |
-| `wave7_a4_thunk_tails.py` | **"Do the per-id lists really start at `T_F41070 + 4*id`?"** — ★ **32 ids start there but only 31 match through the tail**, a first-vs-last discrepancy of exactly the kind this project keeps being caught by |
+| `wave7_a4_thunk_tails.py` | **"Do the per-id lists really start at `T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13 + 4*id`?"** — ★ **32 ids start there but only 31 match through the tail**, a first-vs-last discrepancy of exactly the kind this project keeps being caught by |
 
 ---
 

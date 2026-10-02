@@ -2949,7 +2949,7 @@ sub_F00AA5:
 	push	xiy	; F00ACF  push XIY
 	pushw	4	; F00AD0  push 0x0004
 	pushw	0	; F00AD3  push 0x0000
-	call	T_F40ED4	; F00AD6  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F00AD6  call 0xf40ed4
 	inc	8, xsp	; F00ADA  inc 0,XSP
 sub_F00AA5_Return:
 	ret	; F00ADC  ret
@@ -2962,7 +2962,7 @@ sub_F00ADD:
 	push	xiy	; F00AF1  push XIY
 	pushw	4	; F00AF2  push 0x0004
 	pushw	0	; F00AF5  push 0x0000
-	call	T_F40ED4	; F00AF8  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F00AF8  call 0xf40ed4
 	inc	8, xsp	; F00AFC  inc 0,XSP
 	ret	; F00AFE  ret
 	ld	(6311953:24), 0	; F00AFF  ld (0x605011),0x00
@@ -7265,10 +7265,10 @@ DL_F02FED:
 ; HOW THIS RECORD IS RUN.  0xF5BB93-0xF5BBA9 in UiPaint_Ordinals is
 ;     ld XIY,0x00F02FED / ld XIX,0x00F02FF7 / call 0xF417F0  <- interpreter A
 ;     ld XIY,0x00F02FF7 / call 0xF4181C                      <- THIS record
-; and T_F4181C is `jp 0xF31B57`, a jump straight into the op-0x03 handler,
+; and T_DLB_Handler_Array8 is `jp 0xF31B57`, a jump straight into the op-0x03 handler,
 ; so the record is handed to its handler with no opcode dispatch at all.
 ; That also answers what UiPaint_Ordinals' own header records as open:
-; "what thunk T_F4181C does with 0xF02FF7 after the last paint".
+; "what thunk T_DLB_Handler_Array8 does with 0xF02FF7 after the last paint".
 ; ------------------------------------------------------------------
 DL_F02FF7:		; renamed from Data_F02FF7 -- nothing referenced that label
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
@@ -26953,7 +26953,7 @@ Blink_CmdArm_Ret:
 
 ; ==============================================================================
 ; 0xF0EA9F-0xF13D33 -- THE BLOCK THE FRONTIER'S TOP RUN POINTS INTO
-;   T_F42F40-T_F42F6C (12 slots) and T_F434A0-T_F434A4 (2), converted as one
+;   T_F42F40-T_F42F6C (12 slots) and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (2), converted as one
 ;   contiguous span of 21141 bytes
 ; ==============================================================================
 ;
@@ -26962,7 +26962,7 @@ Blink_CmdArm_Ret:
 ;
 ;   T_F42F40-T_F42F6C  12 slots  extent 13,084  targets 0xF0F018-0xF12334
 ;
-; and T_F434A0-T_F434A4 (0xF11C30, 0xF1220B) points into the same span.  The
+; and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (0xF11C30, 0xF1220B) points into the same span.  The
 ; block starts where the already-converted field-blink engine's last routine
 ; ends: 0xF0EA9F is the target of `calr 0xf0ea9f` at 0xF0EA97, which is a PROVEN
 ; call site -- an instruction in this very file, not a byte-window hit.
@@ -28022,7 +28022,7 @@ sub_F0F174_Join:
 ; sub_F0F17C
 ; Called from: T_F42F50 (x3)
 ; Touches: (0x2076)
-; Calls:   T_F42C74 sub_F1245A
+; Calls:   T_PanelCode_ToSlotAndFlags sub_F1245A
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF0F17C is an instruction boundary of this
@@ -28037,7 +28037,7 @@ sub_F0F17C:		; <- T_F42F50
 	lda	xix, (10129:16)	; F0F181  lda XIX,0x2791
 	m_push MWD+r6, 0x0a	; F0F185  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F0F188  pushw (XIZ+0x08)
-	call	T_F42C74	; F0F18B  call 0xf42c74
+	call	T_PanelCode_ToSlotAndFlags	; F0F18B  call 0xf42c74
 	mul	a, 4	; F0F18F  mul A,0x04
 	extz	xwa	; F0F192  extz XWA
 	add	xwa, DispatchTable_F135FD	; F0F194  add XWA,0x00f135fd
@@ -33653,7 +33653,7 @@ sub_F112DD:
 ; sub_F112ED
 ; Called from: in-module: 0xF0F775
 ; Touches: (0x2076) (0x2250)
-; Calls:   T_F40ED4
+; Calls:   T_Link_SendBlockIn32ByteChunks
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF112ED is an instruction boundary of this
@@ -33679,7 +33679,7 @@ sub_F112ED:
 	push	xix	; F11318  push XIX
 	pushw	6	; F11319  push 0x0006
 	pushw	0	; F1131C  push 0x0000
-	call	T_F40ED4	; F1131F  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F1131F  call 0xf40ed4
 	inc	8, xsp	; F11323  inc 0,XSP
 sub_F112ED_Skip:
 	pop	xix	; F11325  pop XIX
@@ -33690,7 +33690,7 @@ sub_F112ED_Skip:
 ; sub_F11329
 ; Called from: in-module: 0xF0F782 0xF0F81A 0xF0FDC8 0xF1016E
 ; Touches: (0x2076) (0x2250)
-; Calls:   T_F40ED4
+; Calls:   T_Link_SendBlockIn32ByteChunks
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF11329 is an instruction boundary of this
@@ -33716,7 +33716,7 @@ sub_F11329:
 	push	xix	; F11354  push XIX
 	pushw	6	; F11355  push 0x0006
 	pushw	0	; F11358  push 0x0000
-	call	T_F40ED4	; F1135B  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F1135B  call 0xf40ed4
 	inc	8, xsp	; F1135F  inc 0,XSP
 sub_F11329_Skip:
 	pop	xix	; F11361  pop XIX
@@ -33725,7 +33725,7 @@ sub_F11329_Skip:
 
 ; --------------------------------------------------------------------------
 ; DspEffect_SetAlgorithm
-; Called from: T_F42F60 (x0); in-module: 0xF105AC 0xF11DCD
+; Called from: T_DspEffect_SetAlgorithm (x0); in-module: 0xF105AC 0xF11DCD
 ; Touches: nothing with an absolute address
 ; Calls:   T_IndexedTable_GetPtr T_Queue2E00_Append4
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
@@ -33749,7 +33749,7 @@ sub_F11329_Skip:
 ;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
 ;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-DspEffect_SetAlgorithm:		; <- T_F42F60
+DspEffect_SetAlgorithm:		; <- T_DspEffect_SetAlgorithm
 	link XIZ,0xfff2	; F11365  link XIZ,0xfff2
 	pushw	hl	; F11369  push HL
 	pushw	de	; F1136A  push DE
@@ -34976,7 +34976,7 @@ sub_F11C10:
 
 ; --------------------------------------------------------------------------
 ; DspParam_WriteByNumber
-; Called from: T_F434A0 (x2)
+; Called from: T_DspParam_WriteByNumber (x2)
 ; Touches: (0x279A) (0x279B)
 ; Calls:   T_IndexedTable_GetPtr DspEffect_SetAlgorithm T_IndexedTable_GetByte T_Queue2E00_Append4 sub_F1156B
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
@@ -34994,12 +34994,12 @@ sub_F11C10:
 ;          and the value stored under the mask -- for n = 1/24/47, the
 ;          algorithm, only if EffectAlgoToPos_BlockNN offers it, and then
 ;          through DspEffect_SetAlgorithm.  Reached from prom_a 0xFB3AFD via
-;          T_F434A0 with n from IndexMap_F4FA9B + 1 (0xF4FA9C).
+;          T_DspParam_WriteByNumber with n from IndexMap_F4FA9B + 1 (0xF4FA9C).
 ; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
 ;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
 ;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-DspParam_WriteByNumber:		; <- T_F434A0
+DspParam_WriteByNumber:		; <- T_DspParam_WriteByNumber
 	link XIZ,0xffa4	; F11C30  link XIZ,0xffa4
 	pushw	hl	; F11C34  push HL
 	pushw	de	; F11C35  push DE
@@ -35611,7 +35611,7 @@ sub_F1195A_Join12:
 
 ; --------------------------------------------------------------------------
 ; DspParam_ReadByNumber
-; Called from: T_F434A4 (x2)
+; Called from: T_DspParam_ReadByNumber (x2)
 ; Touches: nothing with an absolute address
 ; Calls:   T_IndexedTable_GetByte
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
@@ -35627,13 +35627,13 @@ sub_F1195A_Join12:
 ;          IndexedTable_GetByte(entry, byte) AND mask to the destination; an
 ;          absent record gives 0, except n = 70, which is built from entry 6
 ;          byte 0 and the low nibbles of entry 32 bytes 3 and 4.  Reached from
-;          prom_a 0xFB4A41 via T_F434A4 (count 1) with n from IndexMap_F4FA9B
+;          prom_a 0xFB4A41 via T_DspParam_ReadByNumber (count 1) with n from IndexMap_F4FA9B
 ;          + 1 (0xF4FA9C).
 ; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
 ;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
 ;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-DspParam_ReadByNumber:		; <- T_F434A4
+DspParam_ReadByNumber:		; <- T_DspParam_ReadByNumber
 	link XIZ,0xfffe	; F1220B  link XIZ,0xfffe
 	pushw	hl	; F1220F  push HL
 	pushw	de	; F12210  push DE
@@ -35777,7 +35777,7 @@ sub_F1195A_Epilogue:
 ; sub_F12334
 ; Called from: T_F42F6C (x1)
 ; Touches: nothing with an absolute address
-; Calls:   T_F42C74
+; Calls:   T_PanelCode_ToSlotAndFlags
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF12334 is an instruction boundary of this
@@ -35790,7 +35790,7 @@ sub_F12334:		; <- T_F42F6C
 	link XIZ,0x0000	; F12334  link XIZ,0x0000
 	m_push MWD+r6, 0x0a	; F12338  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F1233B  pushw (XIZ+0x08)
-	call	T_F42C74	; F1233E  call 0xf42c74
+	call	T_PanelCode_ToSlotAndFlags	; F1233E  call 0xf42c74
 	mul	a, 4	; F12342  mul A,0x04
 	extz	xwa	; F12345  extz XWA
 	add	xwa, DispatchTable_F1394F	; F12347  add XWA,0x00f1394f
@@ -35986,7 +35986,7 @@ sub_F123F4:
 ; sub_F1245A
 ; Called from: in-module: 0xF0F1B3
 ; Touches: nothing with an absolute address
-; Calls:   T_F42E6C T_IndexedTable_GetByte T_F40ED4
+; Calls:   T_F42E6C T_IndexedTable_GetByte T_Link_SendBlockIn32ByteChunks
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -36020,7 +36020,7 @@ sub_F1245A_Join:
 	push	xix	; F12493  push XIX
 	pushw	6	; F12494  push 0x0006
 	pushw	0	; F12497  push 0x0000
-	call	T_F40ED4	; F1249A  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F1249A  call 0xf40ed4
 	inc	8, xsp	; F1249E  inc 0,XSP
 	inc	4, xsp	; F124A0  inc 4,XSP
 	pop	xix	; F124A2  pop XIX
@@ -37702,7 +37702,7 @@ EffectPage_BlockIndex:
 ;              0x00F0xxxx-0x00F7xxxx address; that word is at 0xF13659.
 ;              Entry 22, the last, is 0x00F42C70.
 ;              ★ AND SOMETHING BOUNDS THE INDEX, round 11: the dispatcher
-;              calls PanelCode_ToSlotAndFlags (0xF55019) through T_F42C74
+;              calls PanelCode_ToSlotAndFlags (0xF55019) through T_PanelCode_ToSlotAndFlags
 ;              before `mul A,4`, and that routine rejects a raw index above
 ;              0x1F (`cp HL,0x001f` at 0xF55026) and folds what is left --
 ;              0x11..0x19 lose 0x11, 0x1A..0x1F lose 9 -- so the index space
@@ -37948,8 +37948,8 @@ EffectDefaultParams:
 ;     +0  IndexedTable entry (0xFF = no such parameter)
 ;     +1  byte offset in that entry's object
 ;     +2  mask
-; Read by: DspParam_WriteByNumber = DspParam_WriteByNumber (0xF11C30, thunk T_F434A0) and
-;   DspParam_ReadByNumber = DspParam_ReadByNumber (0xF1220B, thunk T_F434A4), both with
+; Read by: DspParam_WriteByNumber = DspParam_WriteByNumber (0xF11C30, thunk T_DspParam_WriteByNumber) and
+;   DspParam_ReadByNumber = DspParam_ReadByNumber (0xF1220B, thunk T_DspParam_ReadByNumber), both with
 ;   `ldw bc,3 / mul XBC,(XIZ+8) / add XIX,this`; the writer refuses n > 0x48.
 ;   prom_a calls the two thunks at 0xFB3AFD and 0xFB4A41 with n taken from
 ;   IndexMap_F4FA9B + 1 (0xF4FA9C) -- the dense index that map gives the
@@ -38055,7 +38055,7 @@ EffectParamNumberMap:
 ;              0x00F0xxxx-0x00F7xxxx address; that word is at 0xF139AB.
 ;              Entry 22, the last, is 0x00F42C70.
 ;              ★ AND SOMETHING BOUNDS THE INDEX, round 11: the dispatcher
-;              calls PanelCode_ToSlotAndFlags (0xF55019) through T_F42C74
+;              calls PanelCode_ToSlotAndFlags (0xF55019) through T_PanelCode_ToSlotAndFlags
 ;              before `mul A,4`, and that routine rejects a raw index above
 ;              0x1F (`cp HL,0x001f` at 0xF55026) and folds what is left --
 ;              0x11..0x19 lose 0x11, 0x1A..0x1F lose 9 -- so the index space
@@ -44162,7 +44162,7 @@ DLB_Records_F174E1:
 ; 1756, record 484, record_array 912, unknown 28.  The span holds NO CODE --
 ; exactly thirteen in-span addresses are the target of a transfer anywhere in
 ; the four `.s` files and all thirteen are `jp` slots of one STALE thunk run
-; (T_F42FD0-T_F43000, every slot with zero references, eleven of them landing
+; (T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8, every slot with zero references, eleven of them landing
 ; INSIDE a record).  So no decode is run here; the boundaries come from proven
 ; operands, display-list call sites, `ldir` copy lengths and record framing
 ; walks.  notes/prom_b_f17559_layout.py.
@@ -73712,7 +73712,7 @@ sub_F36CED_Join2:
 ; sub_F36E21
 ; Called from: T_F41250 (x1); far site 0xF41250
 ; Touches: nothing with an absolute address
-; Calls:   sub_F36938 sub_F36A06 T_F43474 sub_F36C5D T_F434A4 sub_F37E1C
+; Calls:   sub_F36938 sub_F36A06 T_F43474 sub_F36C5D T_DspParam_ReadByNumber sub_F37E1C
 ;          sub_F36CED T_F4348C T_F43488 T_F4347C
 ; Evidence: thunk slot T_F41250 holds `jp 0x00F36E21`, and 0xF36E21 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -73789,7 +73789,7 @@ sub_F36CED_Join3:
 	pushw	bc	; F36EEE  push BC
 	ld	bc, (2948:24)	; F36EEF  ld BC,(0x000b84)
 	pushw	bc	; F36EF4  push BC
-	call	T_F434A4	; F36EF5  call 0xf434a4
+	call	T_DspParam_ReadByNumber	; F36EF5  call 0xf434a4
 	calr	sub_F37E1C	; F36EF9  calr 0xf37e1c
 	inc	8, xsp	; F36EFC  inc 0,XSP
 	jrl	sub_F36CED_Join5	; F36EFE  jrl T,0xf36f87
@@ -75172,7 +75172,7 @@ sub_F379A3:
 ; Touches: nothing with an absolute address
 ; Calls:   Pack3x7BitFields_Bytes9To11 Pack3x7BitFields_Bytes6To8
 ;          ClampParamValueById_From541 T_F43470 ClampParamValueById_From408
-;          Divide32_Unsigned_Quotient T_F43488 T_F434A0 T_F43478
+;          Divide32_Unsigned_Quotient T_F43488 T_DspParam_WriteByNumber T_F43478
 ; Evidence: thunk slot T_F41258 holds `jp 0x00F379AB`, and 0xF379AB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -75469,7 +75469,7 @@ sub_F379AB_Skip16:
 	sub	xbc, 83	; F37CE5  sub XBC,0x00000053
 	pushw	bc	; F37CEB  push BC
 sub_F379AB_Join2:
-	call	T_F434A0	; F37CEC  call 0xf434a0
+	call	T_DspParam_WriteByNumber	; F37CEC  call 0xf434a0
 	pop	xiy	; F37CF0  pop XIY
 	jr	sub_F379AB_Join5	; F37CF1  jr T,0xf37d0b
 sub_F379AB_Skip17:
@@ -75902,7 +75902,7 @@ Divide32_Unsigned_Remainder_Skip2:
 ; sub_F38843
 ; Called from: T_F42664 (x1); far site 0xF42664
 ; Touches: (0x21E7) (0x2250) (0x7EE2) (0x7EE3) (0x7F05) (0x7FC0)  |  0x603422
-; Calls:   T_F4025C sub_F38A79 sub_F38B8E T_F40258 T_Queue2C00_DrainPassB T_F40F4C T_F407A4
+; Calls:   T_F4025C sub_F38A79 sub_F38B8E T_F40258 T_Queue2C00_DrainPassB T_PanelState_CheckRequestAllowed_2 T_F407A4
 ;          T_F407A0 T_UiEventList_Publish sub_F389A2
 ; Evidence: thunk slot T_F42664 holds `jp 0x00F38843`, and 0xF38843 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -76032,7 +76032,7 @@ Divide32_Unsigned_Remainder_Skip4:
 	push	xhl	; F3894C  push XHL
 	push	xix	; F3894D  push XIX
 	push	xiz	; F3894E  push XIZ
-	call	T_F40F4C	; F3894F  call 0xf40f4c
+	call	T_PanelState_CheckRequestAllowed_2	; F3894F  call 0xf40f4c
 	pop	xiz	; F38953  pop XIZ
 	pop	xix	; F38954  pop XIX
 	pop	xhl	; F38955  pop XHL
@@ -76864,7 +76864,7 @@ DL_F39551:
 ; Data_F39559 -- 393 bytes, EMITTED AS DATA (not promoted to code).
 ; ⚠ CORRECTED 2026-09-02 (lane promB4): this header said 398 bytes.
 ;   The last 5 bytes were the head of the interpreter-B record at 0xF396E2,
-;   which prom_b 0xF7E966 loads into XIY before calling T_F4181C.  The
+;   which prom_b 0xF7E966 loads into XIY before calling T_DLB_Handler_Array8.  The
 ;   string table here is 32 entries of 7 bytes ending exactly at 0xF396E2.
 ; Reached from: 0x00F39559 appears as a 32-bit word at 0xF7E2F3 0xF7F008
 ;               0xF7F338 0xF7F676 0xF7F9AA +1 more; converted code at 0xF7E2F2
@@ -76918,7 +76918,7 @@ Data_F39559:
 ; ⚠ THE 398-BYTE EXTENT OF Data_F39559 ABOVE OVERSHOT BY 5 BYTES, and its
 ;   own header said so: "the extent is the reachability walk's, not the
 ;   object's".  0xF396E2 is a record start -- prom_b 0xF7E966 does
-;   `ld XIY,0x00F396E2` then calls T_F4181C (`jp 0xF31B57`, the
+;   `ld XIY,0x00F396E2` then calls T_DLB_Handler_Array8 (`jp 0xF31B57`, the
 ;   interpreter-B op-03 handler).  The string table above it is 32 entries
 ;   of 7 bytes, "PART 1 " .. "PART 32", ending exactly at 0xF396E2.
 ;   Data_F39559 is therefore 393 bytes, not 398.
@@ -78644,7 +78644,7 @@ Data_F3A433:
 ; 30-byte `.incbin` that followed it.
 ;
 ; THE START IS NAMED BY CODE: prom_b 0xF7E775 does
-; `ld XIY,0x00f3a43e` / `call 0xf41820`, and T_F41820 is `jp 0xF31B57`,
+; `ld XIY,0x00f3a43e` / `call 0xf41820`, and T_DLB_Handler_Array8_2 is `jp 0xF31B57`,
 ; the opcode-03/08 handler -- the record is handed to its handler
 ; directly, with no interpreter loop to mis-frame it.  Its neighbour
 ; Data_F3A433 goes to the same handler from 0xF7E77E.
@@ -85570,7 +85570,7 @@ DL_F3DA6F:
 ;
 ; All three records are named from prom_a, which calls the interpreter-B
 ; op-03 handler directly: 0xF81E93, 0xF81EE3 -> 0xF3DA77; 0xF81EAE ->
-; 0xF3DAA2; 0xF81ECC -> 0xF3DAED, each followed by `call T_F4181C`
+; 0xF3DAA2; 0xF81ECC -> 0xF3DAED, each followed by `call T_DLB_Handler_Array8`
 ; (`jp 0xF31B57`).  The first record's own mask/shift (0x0C >> 2) + 1 = 4
 ; equals its array's extent exactly -- the one place in this lane where
 ; the index bound and the measured size agree.
@@ -87474,26 +87474,26 @@ T_SWI7_ServiceCall_Dispatch:	jp SWI7_ServiceCall_Dispatch  ; F400A4 (was T_F400A
 ; Evidence: slot 0xF400D0 is `jp 0xF95734`; prom_a 0xF95734 carries the label
 ;           Paint_GateArrayCheck (graded CONTENT).  DERIVATIVE name.
 T_Paint_GateArrayCheck:	jp Paint_GateArrayCheck  ; F400D0 (was T_F400D0) -> prom_a 0x15734
-T_F400D4:	jp ScreenLeave_GateArrayCheck  ; -> prom_a 0x15765
-T_F400D8:	jp ScreenButton_GateArrayCheck  ; -> prom_a 0x15766
+T_ScreenLeave_GateArrayCheck:	jp ScreenLeave_GateArrayCheck  ; -> prom_a 0x15765
+T_ScreenButton_GateArrayCheck:	jp ScreenButton_GateArrayCheck  ; -> prom_a 0x15766
 T_F400DC:	jp T_F400DC_Nop  ; -> prom_a 0x15767
 ; Evidence: slot 0xF400E0 is `jp 0xF95768`; prom_a 0xF95768 carries the label
 ;           Paint_PanelCpuCheck (graded CONTENT).  DERIVATIVE name.
 T_Paint_PanelCpuCheck:	jp Paint_PanelCpuCheck  ; F400E0 (was T_F400E0) -> prom_a 0x15768
-T_F400E4:	jp ScreenLeave_PanelCpuCheck  ; -> prom_a 0x15795
-T_F400E8:	jp ScreenButton_PanelCpuCheck  ; -> prom_a 0x15796
+T_ScreenLeave_PanelCpuCheck:	jp ScreenLeave_PanelCpuCheck  ; -> prom_a 0x15795
+T_ScreenButton_PanelCpuCheck:	jp ScreenButton_PanelCpuCheck  ; -> prom_a 0x15796
 T_F400EC:	jp T_F400EC_Nop  ; -> prom_a 0x15797
 ; Evidence: slot 0xF400F0 is `jp 0xF95798`; prom_a 0xF95798 carries the label
 ;           Paint_SineWaveCheckMode (graded CONTENT).  DERIVATIVE name.
 T_Paint_SineWaveCheckMode:	jp Paint_SineWaveCheckMode  ; F400F0 (was T_F400F0) -> prom_a 0x15798
-T_F400F4:	jp ScreenLeave_SineWaveCheckMode  ; -> prom_a 0x15890
-T_F400F8:	jp ScreenButton_SineWaveCheckMode  ; -> prom_a 0x15891
+T_ScreenLeave_SineWaveCheckMode:	jp ScreenLeave_SineWaveCheckMode  ; -> prom_a 0x15890
+T_ScreenButton_SineWaveCheckMode:	jp ScreenButton_SineWaveCheckMode  ; -> prom_a 0x15891
 T_F400FC:	jp T_F400FC_Nop  ; -> prom_a 0x1598F
 ; Evidence: slot 0xF40100 is `jp 0xF95990`; prom_a 0xF95990 carries the label
 ;           Paint_PanelSwLedCheck (graded CONTENT).  DERIVATIVE name.
 T_Paint_PanelSwLedCheck:	jp Paint_PanelSwLedCheck  ; F40100 (was T_F40100) -> prom_a 0x15990
-T_F40104:	jp ScreenLeave_PanelSwLedCheck  ; -> prom_a 0x159BD
-T_F40108:	jp ScreenButton_PanelSwLedCheck  ; -> prom_a 0x159BE
+T_ScreenLeave_PanelSwLedCheck:	jp ScreenLeave_PanelSwLedCheck  ; -> prom_a 0x159BD
+T_ScreenButton_PanelSwLedCheck:	jp ScreenButton_PanelSwLedCheck  ; -> prom_a 0x159BE
 T_F4010C:	jp T_F4010C_Nop  ; -> prom_a 0x159BF
 T_F40110:	jp T_F40110_Nop  ; -> prom_a 0x159C0
 T_F40114:	jp T_F40114_Nop  ; -> prom_a 0x159C1
@@ -87557,15 +87557,15 @@ T_F402A8:	jp sub_FE8116  ; -> prom_a 0x68116
 ; Evidence: slot 0xF402AC is `jp 0xFE812C`; prom_a 0xFE812C carries the label
 ;           Paint_Sequencer, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Paint_Sequencer:	jp Paint_Sequencer  ; F402AC (was T_F402AC) -> prom_a 0x6812C
-T_F402B0:	jp ScreenLeave_Sequencer  ; -> prom_a 0x68165
-T_F402B4:	jp ScreenButton_Sequencer  ; -> prom_a 0x68060
+T_ScreenLeave_Sequencer:	jp ScreenLeave_Sequencer  ; -> prom_a 0x68165
+T_ScreenButton_Sequencer:	jp ScreenButton_Sequencer  ; -> prom_a 0x68060
 T_F402B8:	jp T_F402B8_Nop  ; -> prom_a 0x6805F
 ; Evidence: slot 0xF402BC is `jp 0xFE836F`; prom_a 0xFE836F carries the label
 ;           ShowScreen_NoteEditPartSelect (graded CONTENT).  DERIVATIVE name.
 T_ShowScreen_NoteEditPartSelect:	jp ShowScreen_NoteEditPartSelect  ; F402BC (was T_F402BC) -> prom_a 0x6836F
-T_F402C0:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
+T_ScreenLeave_NoteEditPartSelect:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
 T_F402C4:	jp sub_FE8565  ; -> prom_a 0x68565
-T_F402C8:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
+T_ScreenLeave_NoteEditPartSelect_2:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
 T_F402CC:	jp sub_FE88AA  ; -> prom_a 0x688AA
 T_F402D0:	jp sub_FE8C3A  ; -> prom_a 0x68C3A
 T_F402D4:	jp sub_FE9A33  ; -> prom_a 0x69A33
@@ -87573,13 +87573,13 @@ T_F402D8:	jp T_F402D8_Nop  ; -> prom_a 0x68CB3
 ; Evidence: slot 0xF402DC is `jp 0xFE83A3`; prom_a 0xFE83A3 carries the label
 ;           ShowScreen_DrumEditPartSelect (graded CONTENT).  DERIVATIVE name.
 T_ShowScreen_DrumEditPartSelect:	jp ShowScreen_DrumEditPartSelect  ; F402DC (was T_F402DC) -> prom_a 0x683A3
-T_F402E0:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
+T_ScreenLeave_DrumEditPartSelect:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402E4:	jp sub_FE8565  ; -> prom_a 0x68565
-T_F402E8:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
+T_ScreenLeave_DrumEditPartSelect_2:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402EC:	jp sub_FE8868  ; -> prom_a 0x68868
 T_F402F0:	jp sub_FE8C1F  ; -> prom_a 0x68C1F
 T_F402F4:	jp sub_FE9B8D  ; -> prom_a 0x69B8D
-T_F402F8:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
+T_ScreenLeave_DrumEditPartSelect_3:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402FC:	jp sub_FE82D7  ; -> prom_a 0x682D7
 T_F40300:	jp sub_FE833F  ; -> prom_a 0x6833F   x2
 T_F40304:	jp sub_FE8026  ; -> prom_a 0x68026   x2
@@ -87723,31 +87723,31 @@ T_F407FC:	jp sub_FAA45C  ; -> prom_a 0x2A45C   x1
 T_F40800:	jp sub_FAA47E  ; -> prom_a 0x2A47E
 T_F40804:	jp sub_FAB779  ; -> prom_a 0x2B779   x3
 T_F40808:	jp sub_FAB728  ; -> prom_a 0x2B728   x3
-T_F4080C:	jp MidiIn_ControlRecord_Dispatch  ; -> prom_a 0x2BEFB   x21
+T_MidiIn_ControlRecord_Dispatch:	jp MidiIn_ControlRecord_Dispatch  ; -> prom_a 0x2BEFB   x21
 T_F40810:	jp sub_FAC786  ; -> prom_a 0x2C786
 	.fill 0x2C, 1, 0x0E  ; 0xF40814: 44 x ret
 T_F40840:	jp 0xFB1800  ; -> prom_a 0x31800   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40844: 12 x ret
-T_F40850:	jp Evt2030_RunList  ; -> prom_a 0x2DB2C   x1
-T_F40854:	jp ParamApply_ByModeOfParam80  ; -> prom_a 0x2DF1E   x1
-T_F40858:	jp ParamApply_MaskedWriteAndPublish  ; -> prom_a 0x2D80A   x1
+T_Evt2030_RunList:	jp Evt2030_RunList  ; -> prom_a 0x2DB2C   x1
+T_ParamApply_ByModeOfParam80:	jp ParamApply_ByModeOfParam80  ; -> prom_a 0x2DF1E   x1
+T_ParamApply_MaskedWriteAndPublish:	jp ParamApply_MaskedWriteAndPublish  ; -> prom_a 0x2D80A   x1
 T_F4085C:	jp 0xFAD805  ; -> prom_a 0x2D805
 T_F40860:	jp 0xFAD800  ; -> prom_a 0x2D800
-T_F40864:	jp ParamShadow_SetPitchBend  ; -> prom_a 0x2D870   x1
-T_F40868:	jp ParamShadow_SetModulation1  ; -> prom_a 0x2D88A   x1
-T_F4086C:	jp ParamShadow_SetExpression  ; -> prom_a 0x2D84A   x1
-T_F40870:	jp ParamApply_StorePairAndDerive  ; -> prom_a 0x2E223   x2
-T_F40874:	jp ParamShadow_SetField3  ; -> prom_a 0x2D81D   x2
-T_F40878:	jp ParamApply_WriteStagedAndPublish  ; -> prom_a 0x2D8A1   x2
-T_F4087C:	jp ParamApply_PublishStagedAndPostSeven  ; -> prom_a 0x2D8FE   x2
-T_F40880:	jp ParamApply_PublishStagedPairBCDE  ; -> prom_a 0x2D98F   x1
-T_F40884:	jp ParamApply_PublishStagedPair  ; -> prom_a 0x2D8BC   x3
-T_F40888:	jp ParamApply_WriteStagedAndPublish_Copy  ; -> prom_a 0x2D9B0   x5
-T_F4088C:	jp ParamApply_PublishStagedPair_Copy  ; -> prom_a 0x2D8DD   x7
-T_F40890:	jp ParamReset_SixParamsForIndex  ; -> prom_a 0x2DE8D
+T_ParamShadow_SetPitchBend:	jp ParamShadow_SetPitchBend  ; -> prom_a 0x2D870   x1
+T_ParamShadow_SetModulation1:	jp ParamShadow_SetModulation1  ; -> prom_a 0x2D88A   x1
+T_ParamShadow_SetExpression:	jp ParamShadow_SetExpression  ; -> prom_a 0x2D84A   x1
+T_ParamApply_StorePairAndDerive:	jp ParamApply_StorePairAndDerive  ; -> prom_a 0x2E223   x2
+T_ParamShadow_SetField3:	jp ParamShadow_SetField3  ; -> prom_a 0x2D81D   x2
+T_ParamApply_WriteStagedAndPublish:	jp ParamApply_WriteStagedAndPublish  ; -> prom_a 0x2D8A1   x2
+T_ParamApply_PublishStagedAndPostSeven:	jp ParamApply_PublishStagedAndPostSeven  ; -> prom_a 0x2D8FE   x2
+T_ParamApply_PublishStagedPairBCDE:	jp ParamApply_PublishStagedPairBCDE  ; -> prom_a 0x2D98F   x1
+T_ParamApply_PublishStagedPair:	jp ParamApply_PublishStagedPair  ; -> prom_a 0x2D8BC   x3
+T_ParamApply_WriteStagedAndPublish_Copy:	jp ParamApply_WriteStagedAndPublish_Copy  ; -> prom_a 0x2D9B0   x5
+T_ParamApply_PublishStagedPair_Copy:	jp ParamApply_PublishStagedPair_Copy  ; -> prom_a 0x2D8DD   x7
+T_ParamReset_SixParamsForIndex:	jp ParamReset_SixParamsForIndex  ; -> prom_a 0x2DE8D
 T_F40894:	jp sub_FADF08  ; -> prom_a 0x2DF08   x1
-T_F40898:	jp ParamShadow_FlushAll  ; -> prom_a 0x2DA26   x3
-T_F4089C:	jp ParamApply_OneHotOfSix  ; -> prom_a 0x2D9CB   x1
+T_ParamShadow_FlushAll:	jp ParamShadow_FlushAll  ; -> prom_a 0x2DA26   x3
+T_ParamApply_OneHotOfSix:	jp ParamApply_OneHotOfSix  ; -> prom_a 0x2D9CB   x1
 	.fill 0x40, 1, 0x0E  ; 0xF408A0: 64 x ret
 T_F408E0:	.long sub_FB2000	; ptr -> 0xFB2000 (prom_a 0x32000)
 T_F408E4:	jp sub_FB2049  ; -> prom_a 0x32049   x1
@@ -87975,7 +87975,7 @@ T_F40E18:	jp sub_F56525  ; -> prom_b 0x56525   x2
 ; Evidence: slot 0xF40ED0 is `ptr 0xF57C00`; prom_b 0xF57C00 carries the label
 ;           RingPutBlock_EntryThunks (graded CONTENT).  DERIVATIVE name.
 T_RingPutBlock_EntryThunks:	.long RingPutBlock_EntryThunks	; F40ED0 (was T_F40ED0) ptr -> 0xF57C00 (prom_b 0x57C00)
-T_F40ED4:	jp Link_SendBlockIn32ByteChunks  ; -> prom_a 0x0E02C   x46
+T_Link_SendBlockIn32ByteChunks:	jp Link_SendBlockIn32ByteChunks  ; -> prom_a 0x0E02C   x46
 ; Evidence: slot 0xF40ED8 is `jp 0xF8E5F6`; prom_a 0xF8E5F6 carries the label
 ;           Link_ServiceTask, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Link_ServiceTask:	jp Link_ServiceTask  ; F40ED8 (was T_F40ED8) -> prom_a 0x0E5F6   x1
@@ -88042,8 +88042,8 @@ T_List2030_AppendRegs:	jp List2030_AppendRegs  ; F40F40 (was T_F40F40) -> prom_a
 ; Evidence: slot 0xF40F44 is `jp 0xF86903`; prom_a 0xF86903 carries the label
 ;           PanelTimers_Step, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_PanelTimers_Step:	jp PanelTimers_Step  ; F40F44 (was T_F40F44) -> prom_a 0x06903   x1
-T_F40F48:	jp PanelState_CheckRequestAllowed  ; -> prom_a 0x06AE9
-T_F40F4C:	jp PanelState_CheckRequestAllowed  ; -> prom_a 0x06AE9   x3
+T_PanelState_CheckRequestAllowed:	jp PanelState_CheckRequestAllowed  ; -> prom_a 0x06AE9
+T_PanelState_CheckRequestAllowed_2:	jp PanelState_CheckRequestAllowed  ; -> prom_a 0x06AE9   x3
 ; Evidence: slot 0xF40F50 is `jp 0xF860A6`; prom_a 0xF860A6 carries the label
 ;           UiEventList_Publish, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_UiEventList_Publish:	jp UiEventList_Publish  ; F40F50 (was T_F40F50) -> prom_a 0x060A6   x7
@@ -88145,38 +88145,38 @@ T_F41058:	jp sub_FC1116  ; -> prom_a 0x41116
 T_F4105C:	jp sub_FC182F  ; -> prom_a 0x4182F   x1
 T_F41060:	jp sub_FC020F  ; -> prom_a 0x4020F   x1
 	.fill 0xC, 1, 0x0E  ; 0xF41064: 12 x ret
-T_F41070:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13  ; -> prom_a 0x40250
-T_F41074:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13  ; -> prom_a 0x40260
-T_F41078:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13  ; -> prom_a 0x40270
-T_F4107C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13  ; -> prom_a 0x40280
-T_F41080:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13  ; -> prom_a 0x40290
-T_F41084:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13  ; -> prom_a 0x402A0
-T_F41088:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13  ; -> prom_a 0x402B0
-T_F4108C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13  ; -> prom_a 0x402C0
-T_F41090:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13  ; -> prom_a 0x402D0
-T_F41094:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13  ; -> prom_a 0x402E0
-T_F41098:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13  ; -> prom_a 0x402F0
-T_F4109C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13  ; -> prom_a 0x40300
-T_F410A0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13  ; -> prom_a 0x40310
-T_F410A4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13  ; -> prom_a 0x40320
-T_F410A8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13  ; -> prom_a 0x40330
-T_F410AC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13  ; -> prom_a 0x40340
-T_F410B0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13  ; -> prom_a 0x40350
-T_F410B4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13  ; -> prom_a 0x40360
-T_F410B8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13  ; -> prom_a 0x40370
-T_F410BC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13  ; -> prom_a 0x40380
-T_F410C0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13  ; -> prom_a 0x40390
-T_F410C4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13  ; -> prom_a 0x403A0
-T_F410C8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13  ; -> prom_a 0x403B0
-T_F410CC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13  ; -> prom_a 0x403C0
-T_F410D0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13  ; -> prom_a 0x403D0
-T_F410D4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13  ; -> prom_a 0x403E0
-T_F410D8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13  ; -> prom_a 0x403F0
-T_F410DC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13  ; -> prom_a 0x40400
-T_F410E0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13  ; -> prom_a 0x40410
-T_F410E4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13  ; -> prom_a 0x40420
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13  ; -> prom_a 0x40250
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13  ; -> prom_a 0x40260
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13  ; -> prom_a 0x40270
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13  ; -> prom_a 0x40280
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13  ; -> prom_a 0x40290
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13  ; -> prom_a 0x402A0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13  ; -> prom_a 0x402B0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13  ; -> prom_a 0x402C0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13  ; -> prom_a 0x402D0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13  ; -> prom_a 0x402E0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13  ; -> prom_a 0x402F0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13  ; -> prom_a 0x40300
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13  ; -> prom_a 0x40310
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13  ; -> prom_a 0x40320
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13  ; -> prom_a 0x40330
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13  ; -> prom_a 0x40340
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13  ; -> prom_a 0x40350
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13  ; -> prom_a 0x40360
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13  ; -> prom_a 0x40370
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13  ; -> prom_a 0x40380
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13  ; -> prom_a 0x40390
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13  ; -> prom_a 0x403A0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13  ; -> prom_a 0x403B0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13  ; -> prom_a 0x403C0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13  ; -> prom_a 0x403D0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13  ; -> prom_a 0x403E0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13  ; -> prom_a 0x403F0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13  ; -> prom_a 0x40400
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13  ; -> prom_a 0x40410
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13  ; -> prom_a 0x40420
 T_F410E8:	jp sub_FC0430  ; -> prom_a 0x40430
-T_F410EC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13  ; -> prom_a 0x40440
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13  ; -> prom_a 0x40440
 T_F410F0:	jp T_F410F0_Nop  ; -> prom_a 0x40651
 T_F410F4:	jp T_F410F4_Nop  ; -> prom_a 0x40653
 T_F410F8:	jp T_F410F8_Nop  ; -> prom_a 0x40654
@@ -88197,31 +88197,31 @@ T_F41130:	jp T_F41130_Nop  ; -> prom_a 0x40682
 T_F41134:	jp T_F41134_Nop  ; -> prom_a 0x40683
 T_F41138:	jp T_F41138_Nop  ; -> prom_a 0x40684
 T_F4113C:	jp T_F4113C_Nop  ; -> prom_a 0x40685
-T_F41140:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6  ; -> prom_a 0x40686
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6  ; -> prom_a 0x40686
 T_F41144:	jp T_F41144_Nop  ; -> prom_a 0x40691
-T_F41148:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2  ; -> prom_a 0x40692
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2  ; -> prom_a 0x40692
 T_F4114C:	jp T_F4114C_Nop  ; -> prom_a 0x4069D
 T_F41150:	jp T_F41150_Nop  ; -> prom_a 0x4069E
-T_F41154:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14  ; -> prom_a 0x4069F
-T_F41158:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13  ; -> prom_a 0x406AA
-T_F4115C:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7  ; -> prom_a 0x406B5
-T_F41160:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4  ; -> prom_a 0x406C0
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14  ; -> prom_a 0x4069F
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13  ; -> prom_a 0x406AA
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7  ; -> prom_a 0x406B5
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4  ; -> prom_a 0x406C0
 T_F41164:	jp T_F41164_Nop  ; -> prom_a 0x406CB
 T_F41168:	jp sub_FC06CC  ; -> prom_a 0x406CC
-T_F4116C:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19  ; -> prom_a 0x406D0
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19  ; -> prom_a 0x406D0
 T_F41170:	jp T_F41170_Nop  ; -> prom_a 0x406DB
 T_F41174:	jp T_F41174_Nop  ; -> prom_a 0x406DC
 T_F41178:	jp T_F41178_Nop  ; -> prom_a 0x406DD
 T_F4117C:	jp T_F4117C_Nop  ; -> prom_a 0x406DE
 T_F41180:	jp sub_FC06DF  ; -> prom_a 0x406DF
 T_F41184:	jp 0xFC0427  ; -> prom_a 0x40427
-T_F41188:	jp Msg0716_DispatchIndex_Entry  ; -> prom_a 0x4043C
+T_Msg0716_DispatchIndex_Entry:	jp Msg0716_DispatchIndex_Entry  ; -> prom_a 0x4043C
 T_F4118C:	jp 0xFC043D  ; -> prom_a 0x4043D
 T_F41190:	jp 0xFC0452  ; -> prom_a 0x40452
 T_F41194:	jp 0xFC0453  ; -> prom_a 0x40453
 T_F41198:	jp 0xFC0454  ; -> prom_a 0x40454
-T_F4119C:	jp Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40455
-T_F411A0:	jp Msg0716_DispatchIndex_26  ; -> prom_a 0x4046A
+T_Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40455
+T_Msg0716_DispatchIndex_26:	jp Msg0716_DispatchIndex_26  ; -> prom_a 0x4046A
 	.fill 0xC, 1, 0x0E  ; 0xF411A4: 12 x ret
 T_F411B0:	.long sub_FC5400	; ptr -> 0xFC5400 (prom_a 0x45400)
 T_F411B4:	jp sub_FC546A  ; -> prom_a 0x4546A
@@ -88243,7 +88243,7 @@ T_F411EC:	jp sub_FC5566  ; -> prom_a 0x45566   x7
 ; Evidence: slot 0xF41230 is `jp 0xF8E320`; prom_a 0xF8E320 carries the label
 ;           Link_SendCommandE4 (graded CONTENT).  DERIVATIVE name.
 T_Link_SendCommandE4:	jp Link_SendCommandE4  ; F41230 (was T_F41230) -> prom_a 0x0E320   x10
-T_F41234:	jp Link_SendCommand3_WaitTicks  ; -> prom_a 0x0E1FE   x10
+T_Link_SendCommand3_WaitTicks:	jp Link_SendCommand3_WaitTicks  ; -> prom_a 0x0E1FE   x10
 ; Evidence: slot 0xF41238 is `jp 0xF8E222`; prom_a 0xF8E222 carries the label
 ;           Link_SendCommand5_WaitDone (graded CONTENT).  DERIVATIVE name.
 T_Link_SendCommand5_WaitDone:	jp Link_SendCommand5_WaitDone  ; F41238 (was T_F41238) -> prom_a 0x0E222   x7
@@ -88308,25 +88308,25 @@ T_F41530:	jp sub_F914D9  ; -> prom_a 0x114D9
 T_F41534:	jp sub_F914DD  ; -> prom_a 0x114DD
 T_F41538:	jp sub_F914E1  ; -> prom_a 0x114E1
 T_F4153C:	jp sub_F914F7  ; -> prom_a 0x114F7
-T_F41540:	jp InstallPainter_SoundGroupMenu_Entry  ; -> prom_a 0x12710
-T_F41544:	jp ScreenLeave_SoundGroupMenu  ; -> prom_a 0x12714
-T_F41548:	jp ScreenButton_SoundGroupMenu  ; -> prom_a 0x12718
+T_InstallPainter_SoundGroupMenu_Entry:	jp InstallPainter_SoundGroupMenu_Entry  ; -> prom_a 0x12710
+T_ScreenLeave_SoundGroupMenu:	jp ScreenLeave_SoundGroupMenu  ; -> prom_a 0x12714
+T_ScreenButton_SoundGroupMenu:	jp ScreenButton_SoundGroupMenu  ; -> prom_a 0x12718
 T_F4154C:	jp sub_F92722  ; -> prom_a 0x12722
-T_F41550:	jp InstallPainter_GroupSoundDisplayHold_Entry  ; -> prom_a 0x12C50
-T_F41554:	jp ScreenLeave_GroupSoundDisplayHold  ; -> prom_a 0x12C54
-T_F41558:	jp ScreenButton_GroupSoundDisplayHold  ; -> prom_a 0x12C58
+T_InstallPainter_GroupSoundDisplayHold_Entry:	jp InstallPainter_GroupSoundDisplayHold_Entry  ; -> prom_a 0x12C50
+T_ScreenLeave_GroupSoundDisplayHold:	jp ScreenLeave_GroupSoundDisplayHold  ; -> prom_a 0x12C54
+T_ScreenButton_GroupSoundDisplayHold:	jp ScreenButton_GroupSoundDisplayHold  ; -> prom_a 0x12C58
 T_F4155C:	jp sub_F92C62  ; -> prom_a 0x12C62
-T_F41560:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
-T_F41564:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
-T_F41568:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
-T_F4156C:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
-T_F41570:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
-T_F41574:	jp ScreenLeave_CombinationGroupMenu  ; -> prom_a 0x13545
-T_F41578:	jp ScreenButton_CombinationGroupMenu  ; -> prom_a 0x13549
+T_InstallPainter_CombinationGroupMenu_Entry:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
+T_InstallPainter_CombinationGroupMenu_Entry_2:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
+T_InstallPainter_CombinationGroupMenu_Entry_3:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
+T_InstallPainter_CombinationGroupMenu_Entry_4:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
+T_InstallPainter_CombinationGroupMenu_Entry_5:	jp InstallPainter_CombinationGroupMenu_Entry  ; -> prom_a 0x13541
+T_ScreenLeave_CombinationGroupMenu:	jp ScreenLeave_CombinationGroupMenu  ; -> prom_a 0x13545
+T_ScreenButton_CombinationGroupMenu:	jp ScreenButton_CombinationGroupMenu  ; -> prom_a 0x13549
 T_F4157C:	jp sub_F93553  ; -> prom_a 0x13553
-T_F41580:	jp InstallPainter_GroupCombiDisplayHold_Entry  ; -> prom_a 0x13823
-T_F41584:	jp ScreenLeave_GroupCombiDisplayHold  ; -> prom_a 0x13827
-T_F41588:	jp ScreenButton_GroupCombiDisplayHold  ; -> prom_a 0x1382B
+T_InstallPainter_GroupCombiDisplayHold_Entry:	jp InstallPainter_GroupCombiDisplayHold_Entry  ; -> prom_a 0x13823
+T_ScreenLeave_GroupCombiDisplayHold:	jp ScreenLeave_GroupCombiDisplayHold  ; -> prom_a 0x13827
+T_ScreenButton_GroupCombiDisplayHold:	jp ScreenButton_GroupCombiDisplayHold  ; -> prom_a 0x1382B
 T_F4158C:	jp sub_F93835  ; -> prom_a 0x13835
 T_F41590:	jp sub_F93F4E  ; -> prom_a 0x13F4E
 T_F41594:	jp sub_F93F4E  ; -> prom_a 0x13F4E
@@ -88373,8 +88373,8 @@ T_F4168C:	jp T_F41680_Nop  ; -> prom_a 0x19826
 ; Evidence: slot 0xF41690 is `jp 0xF9A6C0`; prom_a 0xF9A6C0 carries the label
 ;           Paint_MidiRealtimeMessages (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiRealtimeMessages:	jp Paint_MidiRealtimeMessages  ; F41690 (was T_F41690) -> prom_a 0x1A6C0
-T_F41694:	jp ScreenLeave_MidiRealtimeMessages  ; -> prom_a 0x1A754
-T_F41698:	jp ScreenButton_MidiRealtimeMessages  ; -> prom_a 0x1A756
+T_ScreenLeave_MidiRealtimeMessages:	jp ScreenLeave_MidiRealtimeMessages  ; -> prom_a 0x1A754
+T_ScreenButton_MidiRealtimeMessages:	jp ScreenButton_MidiRealtimeMessages  ; -> prom_a 0x1A756
 T_F4169C:	jp T_F4169C_Nop  ; -> prom_a 0x1A755
 T_F416A0:	jp T_F416A0_Nop  ; -> prom_a 0x19827
 T_F416A4:	jp T_F416A0_Nop  ; -> prom_a 0x19827
@@ -88404,34 +88404,34 @@ T_F41700:	jp T_F41700_Nop  ; -> prom_a 0x19824
 T_F41704:	jp T_F41700_Nop  ; -> prom_a 0x19824
 T_F41708:	jp T_F41700_Nop  ; -> prom_a 0x19824
 T_F4170C:	jp T_F41700_Nop  ; -> prom_a 0x19824
-T_F41710:	jp Paint_SysexBulkDump_Entry  ; -> prom_a 0x1982D
-T_F41714:	jp ScreenLeave_SysexBulkDump_Entry  ; -> prom_a 0x19831
-T_F41718:	jp ScreenButton_SysexBulkDump_Entry  ; -> prom_a 0x19835
+T_Paint_SysexBulkDump_Entry:	jp Paint_SysexBulkDump_Entry  ; -> prom_a 0x1982D
+T_ScreenLeave_SysexBulkDump_Entry:	jp ScreenLeave_SysexBulkDump_Entry  ; -> prom_a 0x19831
+T_ScreenButton_SysexBulkDump_Entry:	jp ScreenButton_SysexBulkDump_Entry  ; -> prom_a 0x19835
 T_F4171C:	jp T_F4171C_Nop  ; -> prom_a 0x19843
-T_F41720:	jp Paint_GeneralMidiMode_Entry  ; -> prom_a 0x19844
-T_F41724:	jp ScreenLeave_GeneralMidiMode_Entry  ; -> prom_a 0x19848
-T_F41728:	jp ScreenButton_GeneralMidiMode_Entry  ; -> prom_a 0x1984C
+T_Paint_GeneralMidiMode_Entry:	jp Paint_GeneralMidiMode_Entry  ; -> prom_a 0x19844
+T_ScreenLeave_GeneralMidiMode_Entry:	jp ScreenLeave_GeneralMidiMode_Entry  ; -> prom_a 0x19848
+T_ScreenButton_GeneralMidiMode_Entry:	jp ScreenButton_GeneralMidiMode_Entry  ; -> prom_a 0x1984C
 T_F4172C:	jp T_F4172C_Nop  ; -> prom_a 0x1985A
-T_F41730:	jp Paint_Sending_Entry  ; -> prom_a 0x1985B   x1
-T_F41734:	jp Paint_SystemExclusivePleaseWait_Entry  ; -> prom_a 0x1985F   x1
+T_Paint_Sending_Entry:	jp Paint_Sending_Entry  ; -> prom_a 0x1985B   x1
+T_Paint_SystemExclusivePleaseWait_Entry:	jp Paint_SystemExclusivePleaseWait_Entry  ; -> prom_a 0x1985F   x1
 T_F41738:	jp T_F41738_Nop  ; -> prom_a 0x19863
 ; Evidence: slot 0xF4173C is `jp 0xF9A1A8`; prom_a 0xF9A1A8 carries the label
 ;           Paint_MidiTotalMode (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiTotalMode:	jp Paint_MidiTotalMode  ; F4173C (was T_F4173C) -> prom_a 0x1A1A8
-T_F41740:	jp ScreenLeave_MidiTotalMode  ; -> prom_a 0x1A26D
-T_F41744:	jp ScreenButton_MidiTotalMode  ; -> prom_a 0x1A26F
+T_ScreenLeave_MidiTotalMode:	jp ScreenLeave_MidiTotalMode  ; -> prom_a 0x1A26D
+T_ScreenButton_MidiTotalMode:	jp ScreenButton_MidiTotalMode  ; -> prom_a 0x1A26F
 T_F41748:	jp T_F41748_Nop  ; -> prom_a 0x1A26E
 ; Evidence: slot 0xF4174C is `jp 0xF9A998`; prom_a 0xF9A998 carries the label
 ;           Paint_MidiInputOutputFilter (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiInputOutputFilter:	jp Paint_MidiInputOutputFilter  ; F4174C (was T_F4174C) -> prom_a 0x1A998
-T_F41750:	jp ScreenLeave_MidiInputOutputFilter  ; -> prom_a 0x1AA4F
-T_F41754:	jp ScreenButton_MidiInputOutputFilter  ; -> prom_a 0x1AA51
+T_ScreenLeave_MidiInputOutputFilter:	jp ScreenLeave_MidiInputOutputFilter  ; -> prom_a 0x1AA4F
+T_ScreenButton_MidiInputOutputFilter:	jp ScreenButton_MidiInputOutputFilter  ; -> prom_a 0x1AA51
 T_F41758:	jp T_F41758_Nop  ; -> prom_a 0x1AA50
 ; Evidence: slot 0xF4175C is `jp 0xF9AF61`; prom_a 0xF9AF61 carries the label
 ;           Paint_MidiOutProgramChange (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiOutProgramChange:	jp Paint_MidiOutProgramChange  ; F4175C (was T_F4175C) -> prom_a 0x1AF61
-T_F41760:	jp ScreenLeave_MidiOutProgramChange  ; -> prom_a 0x1B05E
-T_F41764:	jp ScreenButton_MidiOutProgramChange  ; -> prom_a 0x1B060
+T_ScreenLeave_MidiOutProgramChange:	jp ScreenLeave_MidiOutProgramChange  ; -> prom_a 0x1B05E
+T_ScreenButton_MidiOutProgramChange:	jp ScreenButton_MidiOutProgramChange  ; -> prom_a 0x1B060
 T_F41768:	jp T_F41768_Nop  ; -> prom_a 0x1B05F
 T_F4176C:	.long 0x00F99800	; ptr -> 0xF99800 (prom_a 0x19800)
 	.fill 0x80, 1, 0x0E  ; 0xF41770: 128 x ret
@@ -88449,21 +88449,21 @@ T_DLB_Handler_StringTable:	jp DLB_Handler_StringTable  ; F417F8 (was T_F417F8) -
 ; Evidence: slot 0xF417FC is `jp 0xF31B39`; prom_b 0xF31B39 carries the label
 ;           DLB_Handler_StringTable2, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DLB_Handler_StringTable2:	jp DLB_Handler_StringTable2  ; F417FC (was T_F417FC) -> prom_b 0x31B39   x16
-T_F41800:	jp DLB_Handler_Decimal  ; -> prom_b 0x31BA1   x3
-T_F41804:	jp DLB_Handler_Decimal  ; -> prom_b 0x31BA1   x3
+T_DLB_Handler_Decimal:	jp DLB_Handler_Decimal  ; -> prom_b 0x31BA1   x3
+T_DLB_Handler_Decimal_2:	jp DLB_Handler_Decimal  ; -> prom_b 0x31BA1   x3
 ; Evidence: slot 0xF41808 is `jp 0xF31BD7`; prom_b 0xF31BD7 carries the label
 ;           DLB_Handler_DecimalSigned, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DLB_Handler_DecimalSigned:	jp DLB_Handler_DecimalSigned  ; F41808 (was T_F41808) -> prom_b 0x31BD7
-T_F4180C:	jp DLB_Handler_Decimal2Words  ; -> prom_b 0x31C14   x8
-T_F41810:	jp DLB_Handler_Decimal2Words  ; -> prom_b 0x31C14
+T_DLB_Handler_Decimal2Words:	jp DLB_Handler_Decimal2Words  ; -> prom_b 0x31C14   x8
+T_DLB_Handler_Decimal2Words_2:	jp DLB_Handler_Decimal2Words  ; -> prom_b 0x31C14
 ; Evidence: slot 0xF41814 is `jp 0xF31C56`; prom_b 0xF31C56 carries the label
 ;           DLB_Handler_DecimalSigned2Words, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DLB_Handler_DecimalSigned2Words:	jp DLB_Handler_DecimalSigned2Words  ; F41814 (was T_F41814) -> prom_b 0x31C56   x1
 ; Evidence: slot 0xF41818 is `jp 0xF31C9E`; prom_b 0xF31C9E carries the label
 ;           DLB_Handler_CentredSpan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DLB_Handler_CentredSpan:	jp DLB_Handler_CentredSpan  ; F41818 (was T_F41818) -> prom_b 0x31C9E
-T_F4181C:	jp DLB_Handler_Array8  ; -> prom_b 0x31B57   x53
-T_F41820:	jp DLB_Handler_Array8  ; -> prom_b 0x31B57   x15
+T_DLB_Handler_Array8:	jp DLB_Handler_Array8  ; -> prom_b 0x31B57   x53
+T_DLB_Handler_Array8_2:	jp DLB_Handler_Array8  ; -> prom_b 0x31B57   x15
 ; Evidence: slot 0xF41824 is `jp 0xF31B86`; prom_b 0xF31B86 carries the label
 ;           DLB_Handler_Array6, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DLB_Handler_Array6:	jp DLB_Handler_Array6  ; F41824 (was T_F41824) -> prom_b 0x31B86   x7
@@ -88495,7 +88495,7 @@ T_F4186C:	jp sub_FBC56F  ; -> prom_a 0x3C56F
 T_F41870:	jp sub_FBC573  ; -> prom_a 0x3C573
 T_F41874:	jp T_F41874_Nop  ; -> prom_a 0x3C584
 T_F41878:	jp sub_FBC5BD  ; -> prom_a 0x3C5BD
-T_F4187C:	jp Var2075_ClrBit7_Entry  ; -> prom_a 0x3C5C1
+T_Var2075_ClrBit7_Entry:	jp Var2075_ClrBit7_Entry  ; -> prom_a 0x3C5C1
 T_F41880:	jp sub_FBC5C5  ; -> prom_a 0x3C5C5
 T_F41884:	jp T_F41884_Nop  ; -> prom_a 0x3C5D6
 T_F41888:	jp sub_FBCDEC  ; -> prom_a 0x3CDEC
@@ -88542,9 +88542,9 @@ T_F41958:	jp sub_F9EF6C  ; -> prom_a 0x1EF6C
 T_F4195C:	jp T_F4195C_Nop  ; -> prom_a 0x1EF71
 T_F41960:	jp sub_F9EF72  ; -> prom_a 0x1EF72
 T_F41964:	jp T_F41964_Nop  ; -> prom_a 0x1EF84
-T_F41968:	jp Screen_ReMapEdit_Enter  ; -> prom_a 0x1C087
-T_F4196C:	jp Screen_ReMapEdit_Leave  ; -> prom_a 0x1C0C1
-T_F41970:	jp Screen_ReMapEdit_Button  ; -> prom_a 0x1C0C2
+T_Screen_ReMapEdit_Enter:	jp Screen_ReMapEdit_Enter  ; -> prom_a 0x1C087
+T_Screen_ReMapEdit_Leave:	jp Screen_ReMapEdit_Leave  ; -> prom_a 0x1C0C1
+T_Screen_ReMapEdit_Button:	jp Screen_ReMapEdit_Button  ; -> prom_a 0x1C0C2
 T_F41974:	jp T_F41974_Nop  ; -> prom_a 0x1C0E9
 T_F41978:	jp sub_F9C9F4  ; -> prom_a 0x1C9F4
 T_F4197C:	jp T_F4197C_Nop  ; -> prom_a 0x1CA0C
@@ -88562,9 +88562,9 @@ T_F419A8:	jp sub_FA007B  ; -> prom_a 0x2007B
 T_F419AC:	jp T_F419AC_Nop  ; -> prom_a 0x20080
 T_F419B0:	jp sub_FA0081  ; -> prom_a 0x20081
 T_F419B4:	jp T_F419B4_Nop  ; -> prom_a 0x20093
-T_F419B8:	jp Screen_DrumsMapNaming_Enter  ; -> prom_a 0x1EF85
-T_F419BC:	jp Screen_DrumsMapNaming_Leave  ; -> prom_a 0x1EFF6
-T_F419C0:	jp Screen_DrumsMapNaming_Button  ; -> prom_a 0x1F006
+T_Screen_DrumsMapNaming_Enter:	jp Screen_DrumsMapNaming_Enter  ; -> prom_a 0x1EF85
+T_Screen_DrumsMapNaming_Leave:	jp Screen_DrumsMapNaming_Leave  ; -> prom_a 0x1EFF6
+T_Screen_DrumsMapNaming_Button:	jp Screen_DrumsMapNaming_Button  ; -> prom_a 0x1F006
 T_F419C4:	jp T_F419C4_Nop  ; -> prom_a 0x1F034
 	.fill 0x38, 1, 0x0E  ; 0xF419C8: 56 x ret
 T_F41A00:	jp sub_FBECC3  ; -> prom_a 0x3ECC3
@@ -88605,9 +88605,9 @@ T_F41A88:	jp T_F41A88_Nop  ; -> prom_a 0x3C5B9
 T_F41A8C:	jp T_F41A8C_Nop  ; -> prom_a 0x3C5BA
 T_F41A90:	jp T_F41A90_Nop  ; -> prom_a 0x3C5BB
 T_F41A94:	jp T_F41A94_Nop  ; -> prom_a 0x3C5BC
-T_F41A98:	jp Screen_CombinationNaming_Enter  ; -> prom_a 0x3EF1C
-T_F41A9C:	jp Screen_CombinationNaming_Leave  ; -> prom_a 0x3EF75
-T_F41AA0:	jp Screen_CombinationNaming_Button  ; -> prom_a 0x3EF76
+T_Screen_CombinationNaming_Enter:	jp Screen_CombinationNaming_Enter  ; -> prom_a 0x3EF1C
+T_Screen_CombinationNaming_Leave:	jp Screen_CombinationNaming_Leave  ; -> prom_a 0x3EF75
+T_Screen_CombinationNaming_Button:	jp Screen_CombinationNaming_Button  ; -> prom_a 0x3EF76
 T_F41AA4:	jp T_F41AA4_Nop  ; -> prom_a 0x3EFB0
 	.fill 0x48, 1, 0x0E  ; 0xF41AA8: 72 x ret
 T_F41AF0:	jp sub_F8BCAF  ; -> prom_a 0x0BCAF   x35
@@ -89058,7 +89058,7 @@ T_F41F64:	jp sub_FCFDA7  ; -> prom_a 0x4FDA7
 T_F41F68:	jp T_F41F68_Nop  ; -> prom_a 0x5E15F
 T_F41F6C:	jp sub_FDD437  ; -> prom_a 0x5D437
 T_F41F70:	jp sub_FDE332  ; -> prom_a 0x5E332
-T_F41F74:	jp ToneEditPage_A0_KeyDispatch  ; -> prom_a 0x53DA7
+T_ToneEditPage_A0_KeyDispatch:	jp ToneEditPage_A0_KeyDispatch  ; -> prom_a 0x53DA7
 T_F41F78:	jp T_F41F78_Nop  ; -> prom_a 0x5E33F
 T_F41F7C:	jp T_F41F7C_Nop  ; -> prom_a 0x5D7F7
 T_F41F80:	jp sub_FDE340  ; -> prom_a 0x5E340
@@ -89068,29 +89068,29 @@ T_F41F8C:	jp T_F41F8C_Nop  ; -> prom_a 0x5D7F8
 T_F41F90:	jp sub_FDE34E  ; -> prom_a 0x5E34E
 T_F41F94:	jp T_F41F94_Nop  ; -> prom_a 0x53DF9
 T_F41F98:	jp T_F41F98_Nop  ; -> prom_a 0x5E35B
-T_F41F9C:	jp ToneEditPage_A3_PositionParameter  ; -> prom_a 0x5D7F9
-T_F41FA0:	jp ToneEditPage_A3_Leave  ; -> prom_a 0x5E35C
-T_F41FA4:	jp ToneEditPage_A3_KeyDispatch  ; -> prom_a 0x53DFA
+T_ToneEditPage_A3_PositionParameter:	jp ToneEditPage_A3_PositionParameter  ; -> prom_a 0x5D7F9
+T_ToneEditPage_A3_Leave:	jp ToneEditPage_A3_Leave  ; -> prom_a 0x5E35C
+T_ToneEditPage_A3_KeyDispatch:	jp ToneEditPage_A3_KeyDispatch  ; -> prom_a 0x53DFA
 T_F41FA8:	jp T_F41FA8_Nop  ; -> prom_a 0x5E369
-T_F41FAC:	jp ToneEditPage_A4_PositionMovement  ; -> prom_a 0x5D958
-T_F41FB0:	jp ToneEditPage_A4_Leave  ; -> prom_a 0x5E36A
-T_F41FB4:	jp ToneEditPage_A4_KeyDispatch  ; -> prom_a 0x53E4B
+T_ToneEditPage_A4_PositionMovement:	jp ToneEditPage_A4_PositionMovement  ; -> prom_a 0x5D958
+T_ToneEditPage_A4_Leave:	jp ToneEditPage_A4_Leave  ; -> prom_a 0x5E36A
+T_ToneEditPage_A4_KeyDispatch:	jp ToneEditPage_A4_KeyDispatch  ; -> prom_a 0x53E4B
 T_F41FB8:	jp T_F41FB8_Nop  ; -> prom_a 0x5E377
-T_F41FBC:	jp ToneEditPage_A5_FittingMutingTuning  ; -> prom_a 0x5DA1C
-T_F41FC0:	jp ToneEditPage_A5_Leave  ; -> prom_a 0x5E378
-T_F41FC4:	jp ToneEditPage_A5_KeyDispatch  ; -> prom_a 0x53E9C
+T_ToneEditPage_A5_FittingMutingTuning:	jp ToneEditPage_A5_FittingMutingTuning  ; -> prom_a 0x5DA1C
+T_ToneEditPage_A5_Leave:	jp ToneEditPage_A5_Leave  ; -> prom_a 0x5E378
+T_ToneEditPage_A5_KeyDispatch:	jp ToneEditPage_A5_KeyDispatch  ; -> prom_a 0x53E9C
 T_F41FC8:	jp T_F41FC8_Nop  ; -> prom_a 0x5E385
-T_F41FCC:	jp ToneEditPage_A6_TouchDepth  ; -> prom_a 0x5DC3A
-T_F41FD0:	jp ToneEditPage_A6_Leave  ; -> prom_a 0x5E386
-T_F41FD4:	jp ToneEditPage_A6_KeyDispatch  ; -> prom_a 0x53EED
+T_ToneEditPage_A6_TouchDepth:	jp ToneEditPage_A6_TouchDepth  ; -> prom_a 0x5DC3A
+T_ToneEditPage_A6_Leave:	jp ToneEditPage_A6_Leave  ; -> prom_a 0x5E386
+T_ToneEditPage_A6_KeyDispatch:	jp ToneEditPage_A6_KeyDispatch  ; -> prom_a 0x53EED
 T_F41FD8:	jp T_F41FD8_Nop  ; -> prom_a 0x5E393
-T_F41FDC:	jp ToneEditPage_A7_ResoModeKeyFollow  ; -> prom_a 0x5DDAA
-T_F41FE0:	jp ToneEditPage_A7_Leave  ; -> prom_a 0x5E394
-T_F41FE4:	jp ToneEditPage_A7_KeyDispatch  ; -> prom_a 0x53F3E
+T_ToneEditPage_A7_ResoModeKeyFollow:	jp ToneEditPage_A7_ResoModeKeyFollow  ; -> prom_a 0x5DDAA
+T_ToneEditPage_A7_Leave:	jp ToneEditPage_A7_Leave  ; -> prom_a 0x5E394
+T_ToneEditPage_A7_KeyDispatch:	jp ToneEditPage_A7_KeyDispatch  ; -> prom_a 0x53F3E
 T_F41FE8:	jp T_F41FE8_Nop  ; -> prom_a 0x5E3A1
 T_F41FEC:	jp sub_FDDF36  ; -> prom_a 0x5DF36
 T_F41FF0:	jp sub_FDE3A2  ; -> prom_a 0x5E3A2
-T_F41FF4:	jp ToneEditPage_A8_KeyDispatch  ; -> prom_a 0x53F8F
+T_ToneEditPage_A8_KeyDispatch:	jp ToneEditPage_A8_KeyDispatch  ; -> prom_a 0x53F8F
 T_F41FF8:	jp T_F41FF8_Nop  ; -> prom_a 0x5E3AF
 T_F41FFC:	jp sub_FDB22F  ; -> prom_a 0x5B22F
 T_F42000:	jp sub_FDE160  ; -> prom_a 0x5E160
@@ -89206,15 +89206,15 @@ T_F42254:	jp sub_FF42B7  ; -> prom_a 0x742B7
 T_F42258:	jp sub_FF42C0  ; -> prom_a 0x742C0
 T_F4225C:	jp sub_FF42C5  ; -> prom_a 0x742C5
 T_F42260:	jp sub_FF42C9  ; -> prom_a 0x742C9
-T_F42264:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
-T_F42268:	jp ScreenLeave_DiskMenu  ; -> prom_a 0x7431B
-T_F4226C:	jp PanelButtonDispatch_DiskMenu  ; -> prom_a 0x7431C
+T_Paint_DiskMenu:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
+T_ScreenLeave_DiskMenu:	jp ScreenLeave_DiskMenu  ; -> prom_a 0x7431B
+T_PanelButtonDispatch_DiskMenu:	jp PanelButtonDispatch_DiskMenu  ; -> prom_a 0x7431C
 T_F42270:	jp T_F42270_Nop  ; -> prom_a 0x74407
 ; Evidence: slot 0xF42274 is `jp 0xFF4408`; prom_a 0xFF4408 carries the label
 ;           Paint_MidiFileDirectPlay (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiFileDirectPlay:	jp Paint_MidiFileDirectPlay  ; F42274 (was T_F42274) -> prom_a 0x74408
-T_F42278:	jp ScreenLeave_MidiFileDirectPlay  ; -> prom_a 0x7457C
-T_F4227C:	jp PanelButtonDispatch_MidiFileDirectPlay  ; -> prom_a 0x74596
+T_ScreenLeave_MidiFileDirectPlay:	jp ScreenLeave_MidiFileDirectPlay  ; -> prom_a 0x7457C
+T_PanelButtonDispatch_MidiFileDirectPlay:	jp PanelButtonDispatch_MidiFileDirectPlay  ; -> prom_a 0x74596
 T_F42280:	jp T_F42280_Nop  ; -> prom_a 0x7475B
 	.fill 0x9C, 1, 0x0E  ; 0xF42284: 156 x ret
 T_F42320:	jp sub_FDD272  ; -> prom_a 0x5D272
@@ -89248,80 +89248,80 @@ T_Ring608A0A_DrainAll:	jp Ring608A0A_DrainAll  ; F42380 (was T_F42380) -> prom_a
 ; Evidence: slot 0xF423A0 is `jp 0xFF4786`; prom_a 0xFF4786 carries the label
 ;           Paint_DiskL0adFile (graded CONTENT).  DERIVATIVE name.
 T_Paint_DiskL0adFile:	jp Paint_DiskL0adFile  ; F423A0 (was T_F423A0) -> prom_a 0x74786
-T_F423A4:	jp ScreenLeave_DiskL0adFile  ; -> prom_a 0x74986
-T_F423A8:	jp PanelButtonDispatch_DiskL0adFile  ; -> prom_a 0x74995
+T_ScreenLeave_DiskL0adFile:	jp ScreenLeave_DiskL0adFile  ; -> prom_a 0x74986
+T_PanelButtonDispatch_DiskL0adFile:	jp PanelButtonDispatch_DiskL0adFile  ; -> prom_a 0x74995
 T_F423AC:	jp T_F423AC_Nop  ; -> prom_a 0x74FF9
-T_F423B0:	jp PageDispatch_DiskSaveFile  ; -> prom_a 0x7548A
-T_F423B4:	jp ScreenLeave_DiskSaveFile  ; -> prom_a 0x7571F
-T_F423B8:	jp PanelButtonDispatch_DiskSaveFile  ; -> prom_a 0x7572E
+T_PageDispatch_DiskSaveFile:	jp PageDispatch_DiskSaveFile  ; -> prom_a 0x7548A
+T_ScreenLeave_DiskSaveFile:	jp ScreenLeave_DiskSaveFile  ; -> prom_a 0x7571F
+T_PanelButtonDispatch_DiskSaveFile:	jp PanelButtonDispatch_DiskSaveFile  ; -> prom_a 0x7572E
 T_F423BC:	jp T_F423BC_Nop  ; -> prom_a 0x75C3D
-T_F423C0:	jp PageDispatch_MidiFileSave  ; -> prom_a 0x75C3E
-T_F423C4:	jp ScreenLeave_MidiFileSave  ; -> prom_a 0x75EAE
-T_F423C8:	jp PanelButtonDispatch_MidiFileSave  ; -> prom_a 0x75ED1
+T_PageDispatch_MidiFileSave:	jp PageDispatch_MidiFileSave  ; -> prom_a 0x75C3E
+T_ScreenLeave_MidiFileSave:	jp ScreenLeave_MidiFileSave  ; -> prom_a 0x75EAE
+T_PanelButtonDispatch_MidiFileSave:	jp PanelButtonDispatch_MidiFileSave  ; -> prom_a 0x75ED1
 T_F423CC:	jp T_F423CC_Nop  ; -> prom_a 0x76511
 ; Evidence: slot 0xF423D0 is `jp 0xFF6512`; prom_a 0xFF6512 carries the label
 ;           Paint_FloppyDiskFormatSelectType (graded CONTENT).  DERIVATIVE name.
 T_Paint_FloppyDiskFormatSelectType:	jp Paint_FloppyDiskFormatSelectType  ; F423D0 (was T_F423D0) -> prom_a 0x76512
-T_F423D4:	jp ScreenLeave_FloppyDiskFormatSelectType  ; -> prom_a 0x7654F
-T_F423D8:	jp PanelButtonDispatch_FloppyDiskFormatSelectType  ; -> prom_a 0x76550
+T_ScreenLeave_FloppyDiskFormatSelectType:	jp ScreenLeave_FloppyDiskFormatSelectType  ; -> prom_a 0x7654F
+T_PanelButtonDispatch_FloppyDiskFormatSelectType:	jp PanelButtonDispatch_FloppyDiskFormatSelectType  ; -> prom_a 0x76550
 T_F423DC:	jp T_F423DC_Nop  ; -> prom_a 0x76612
-T_F423E0:	jp PageDispatch_L0adSingleS0und  ; -> prom_a 0x7672D
-T_F423E4:	jp ScreenLeave_L0adSingleS0und  ; -> prom_a 0x768CA
-T_F423E8:	jp PanelButtonDispatch_L0adSingleS0und  ; -> prom_a 0x768D8
+T_PageDispatch_L0adSingleS0und:	jp PageDispatch_L0adSingleS0und  ; -> prom_a 0x7672D
+T_ScreenLeave_L0adSingleS0und:	jp ScreenLeave_L0adSingleS0und  ; -> prom_a 0x768CA
+T_PanelButtonDispatch_L0adSingleS0und:	jp PanelButtonDispatch_L0adSingleS0und  ; -> prom_a 0x768D8
 T_F423EC:	jp T_F423EC_Nop  ; -> prom_a 0x76DB6
 ; Evidence: slot 0xF423F0 is `jp 0xFF6613`; prom_a 0xFF6613 carries the label
 ;           Paint_FloppyDiskFormatAreYouSure (graded CONTENT).  DERIVATIVE name.
 T_Paint_FloppyDiskFormatAreYouSure:	jp Paint_FloppyDiskFormatAreYouSure  ; F423F0 (was T_F423F0) -> prom_a 0x76613
-T_F423F4:	jp ScreenLeave_FloppyDiskFormatAreYouSure  ; -> prom_a 0x766A9
-T_F423F8:	jp PanelButtonDispatch_FloppyDiskFormatAreYouSure  ; -> prom_a 0x766AA
+T_ScreenLeave_FloppyDiskFormatAreYouSure:	jp ScreenLeave_FloppyDiskFormatAreYouSure  ; -> prom_a 0x766A9
+T_PanelButtonDispatch_FloppyDiskFormatAreYouSure:	jp PanelButtonDispatch_FloppyDiskFormatAreYouSure  ; -> prom_a 0x766AA
 T_F423FC:	jp T_F423FC_Nop  ; -> prom_a 0x7672C
 ; Evidence: slot 0xF42400 is `jp 0xFF4FFA`; prom_a 0xFF4FFA carries the label
 ;           Paint_MidiFileL0ad (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiFileL0ad:	jp Paint_MidiFileL0ad  ; F42400 (was T_F42400) -> prom_a 0x74FFA
-T_F42404:	jp ScreenLeave_MidiFileL0ad  ; -> prom_a 0x7520C
-T_F42408:	jp PanelButtonDispatch_MidiFileL0ad  ; -> prom_a 0x7522F
+T_ScreenLeave_MidiFileL0ad:	jp ScreenLeave_MidiFileL0ad  ; -> prom_a 0x7520C
+T_PanelButtonDispatch_MidiFileL0ad:	jp PanelButtonDispatch_MidiFileL0ad  ; -> prom_a 0x7522F
 T_F4240C:	jp T_F4240C_Nop  ; -> prom_a 0x75489
 T_F42410:	jp sub_FF70B6  ; -> prom_a 0x770B6   x1
 T_F42414:	jp sub_FF70D8  ; -> prom_a 0x770D8   x1
 T_F42418:	jp sub_FF48F0  ; -> prom_a 0x748F0   x1
-T_F4241C:	jp PageDispatch_L0adSingleC0mbination  ; -> prom_a 0x76DB7
-T_F42420:	jp ScreenLeave_L0adSingleC0mbination  ; -> prom_a 0x76F13
-T_F42424:	jp PanelButtonDispatch_L0adSingleC0mbination  ; -> prom_a 0x76F21
+T_PageDispatch_L0adSingleC0mbination:	jp PageDispatch_L0adSingleC0mbination  ; -> prom_a 0x76DB7
+T_ScreenLeave_L0adSingleC0mbination:	jp ScreenLeave_L0adSingleC0mbination  ; -> prom_a 0x76F13
+T_PanelButtonDispatch_L0adSingleC0mbination:	jp PanelButtonDispatch_L0adSingleC0mbination  ; -> prom_a 0x76F21
 T_F42428:	jp T_F42428_Nop  ; -> prom_a 0x77083
 	.fill 0x44, 1, 0x0E  ; 0xF4242C: 68 x ret
 T_F42470:	jp sub_FC0450  ; -> prom_a 0x40450
 T_F42474:	jp sub_FC0460  ; -> prom_a 0x40460
-T_F42478:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40470
-T_F4247C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40480
-T_F42480:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40490
-T_F42484:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404A0
-T_F42488:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404B0
-T_F4248C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404C0
-T_F42490:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404D0
-T_F42494:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404E0
-T_F42498:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404F0
-T_F4249C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40500
-T_F424A0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40510
-T_F424A4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40520
-T_F424A8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40530
-T_F424AC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40540
-T_F424B0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40551
-T_F424B4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40561
-T_F424B8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40571
-T_F424BC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40581
-T_F424C0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40591
-T_F424C4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405A1
-T_F424C8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405B1
-T_F424CC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405C1
-T_F424D0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405D1
-T_F424D4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405E1
-T_F424D8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405F1
-T_F424DC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40601
-T_F424E0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40611
-T_F424E4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40621
-T_F424E8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40631
-T_F424EC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40641
-T_F424F0:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17  ; -> prom_a 0x406F4
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40470
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40480
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40490
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404A0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404B0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404C0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404D0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404E0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404F0
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40500
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40510
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40520
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40530
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40540
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40551
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40561
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40571
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40581
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40591
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405A1
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405B1
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405C1
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405D1
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405E1
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405F1
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40601
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40611
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40621
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40631
+T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40641
+T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17  ; -> prom_a 0x406F4
 T_F424F4:	jp sub_FC06FF  ; -> prom_a 0x406FF
 T_F424F8:	jp sub_FC0724  ; -> prom_a 0x40724
 T_F424FC:	jp sub_FC0749  ; -> prom_a 0x40749
@@ -89368,7 +89368,7 @@ T_F425E0:	jp sub_FE1CAB  ; -> prom_a 0x61CAB
 T_F425E4:	jp sub_FE1CAF  ; -> prom_a 0x61CAF   x5
 T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
 T_F425EC:	jp sub_FE1CC0  ; -> prom_a 0x61CC0
-T_F425F0:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
+T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
 T_F425F4:	jp sub_FE1CC8  ; -> prom_a 0x61CC8   x1
 T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
 T_F425FC:	jp sub_FE1CD0  ; -> prom_a 0x61CD0
@@ -89394,13 +89394,13 @@ T_F42670:	jp sub_FA129D  ; -> prom_a 0x2129D
 T_F42674:	jp sub_FA12CE  ; -> prom_a 0x212CE
 T_F42678:	jp sub_FA12DD  ; -> prom_a 0x212DD
 T_F4267C:	jp T_F4267C_Nop  ; -> prom_a 0x21304
-T_F42680:	jp Screen_SoundGroupNaming_Enter  ; -> prom_a 0x1CB00
-T_F42684:	jp Screen_SoundGroupNaming_Leave  ; -> prom_a 0x1CB52
-T_F42688:	jp Screen_SoundGroupNaming_Button  ; -> prom_a 0x1CB53
+T_Screen_SoundGroupNaming_Enter:	jp Screen_SoundGroupNaming_Enter  ; -> prom_a 0x1CB00
+T_Screen_SoundGroupNaming_Leave:	jp Screen_SoundGroupNaming_Leave  ; -> prom_a 0x1CB52
+T_Screen_SoundGroupNaming_Button:	jp Screen_SoundGroupNaming_Button  ; -> prom_a 0x1CB53
 T_F4268C:	jp T_F4268C_Nop  ; -> prom_a 0x1CB7A
-T_F42690:	jp Screen_CombinationGroupNaming_Enter  ; -> prom_a 0x1CF68
-T_F42694:	jp Screen_CombinationGroupNaming_Leave  ; -> prom_a 0x1CFBA
-T_F42698:	jp Screen_CombinationGroupNaming_Button  ; -> prom_a 0x1CFBB
+T_Screen_CombinationGroupNaming_Enter:	jp Screen_CombinationGroupNaming_Enter  ; -> prom_a 0x1CF68
+T_Screen_CombinationGroupNaming_Leave:	jp Screen_CombinationGroupNaming_Leave  ; -> prom_a 0x1CFBA
+T_Screen_CombinationGroupNaming_Button:	jp Screen_CombinationGroupNaming_Button  ; -> prom_a 0x1CFBB
 T_F4269C:	jp T_F4269C_Nop  ; -> prom_a 0x1CFE2
 T_F426A0:	jp sub_F9D3BA  ; -> prom_a 0x1D3BA
 T_F426A4:	jp sub_F9D3F4  ; -> prom_a 0x1D3F4
@@ -89483,7 +89483,7 @@ T_F427E8:	jp sub_F62C0C  ; -> prom_b 0x62C0C   x3
 T_F427EC:	jp sub_F62C10  ; -> prom_b 0x62C10   x4
 T_F427F0:	jp sub_F62C14  ; -> prom_b 0x62C14   x3
 T_F427F4:	jp sub_F62C18  ; -> prom_b 0x62C18   x3
-T_F427F8:	jp BStore_OpenChain_Call  ; -> prom_b 0x62C1C   x4
+T_BStore_OpenChain_Call:	jp BStore_OpenChain_Call  ; -> prom_b 0x62C1C   x4
 T_F427FC:	jp sub_F62C20  ; -> prom_b 0x62C20   x6
 ; Evidence: slot 0xF42800 is `jp 0xF62C00`; prom_b 0xF62C00 carries the label
 ;           BStore_Veneers, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -89491,11 +89491,11 @@ T_BStore_Veneers:	jp BStore_Veneers  ; F42800 (was T_F42800) -> prom_b 0x62C00  
 T_F42804:	jp sub_F6418E  ; -> prom_b 0x6418E   x1
 T_F42808:	jp sub_F6487D  ; -> prom_b 0x6487D   x1
 T_F4280C:	jp sub_F63C06  ; -> prom_b 0x63C06   x1
-T_F42810:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12  ; -> prom_b 0x633FF   x1
-T_F42814:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24  ; -> prom_b 0x63408   x1
-T_F42818:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36  ; -> prom_b 0x63411   x1
-T_F4281C:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48  ; -> prom_b 0x6341A   x1
-T_F42820:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60  ; -> prom_b 0x63423   x1
+T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12  ; -> prom_b 0x633FF   x1
+T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24  ; -> prom_b 0x63408   x1
+T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36  ; -> prom_b 0x63411   x1
+T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48  ; -> prom_b 0x6341A   x1
+T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60  ; -> prom_b 0x63423   x1
 T_F42824:	jp sub_F64A7A  ; -> prom_b 0x64A7A   x1
 T_F42828:	jp sub_F62C05  ; -> prom_b 0x62C05
 T_F4282C:	jp sub_F64B1B  ; -> prom_b 0x64B1B   x1
@@ -89704,7 +89704,7 @@ T_F42C70:	jp Stub_Ret_F55018  ; -> prom_b 0x55018   never CALLED, but the 4 byte
 				; prom_a and 17 in prom_b, and the run at 0x216B4
 				; is 6 (notes/prom_b_default_slot_census.py).
 				; Which tables these are has not been traced.
-T_F42C74:	jp PanelCode_ToSlotAndFlags  ; -> prom_b 0x55019   x28
+T_PanelCode_ToSlotAndFlags:	jp PanelCode_ToSlotAndFlags  ; -> prom_b 0x55019   x28
 T_F42C78:	jp sub_F550A6  ; -> prom_b 0x550A6   x77
 T_F42C7C:	jp sub_F5517B  ; -> prom_b 0x5517B   x8
 ; Evidence: slot 0xF42C80 is `jp 0xF55231`; prom_b 0xF55231 carries the label
@@ -89735,17 +89735,17 @@ T_F42CA4:	jp sub_F551E7  ; -> prom_b 0x551E7
 ;           IndexedParam_SetFieldFromAsciiEntry (graded CONTENT).  DERIVATIVE name.
 T_IndexedParam_SetFieldFromAsciiEntry:	jp IndexedParam_SetFieldFromAsciiEntry  ; F42CA8 (was T_F42CA8) -> prom_b 0x5553F   x15
 	.fill 0x74, 1, 0x0E  ; 0xF42CAC: 116 x ret
-T_F42D20:	jp Disk_CommandDispatch_Thunk_Entry  ; -> prom_a 0x63000
-T_F42D24:	jp Fdc_Request_Thunk_Entry  ; -> prom_a 0x63004
+T_Disk_CommandDispatch_Thunk_Entry:	jp Disk_CommandDispatch_Thunk_Entry  ; -> prom_a 0x63000
+T_Fdc_Request_Thunk_Entry:	jp Fdc_Request_Thunk_Entry  ; -> prom_a 0x63004
 ; Evidence: slot 0xF42D28 is `jp 0xFE3008`; prom_a 0xFE3008 carries the label
 ;           INT5_Dev7B_Receive_Alias (graded CONTENT).  DERIVATIVE name.
 T_INT5_Dev7B_Receive_Alias:	jp INT5_Dev7B_Receive_Alias  ; F42D28 (was T_F42D28) -> prom_a 0x63008
-T_F42D2C:	jp Fdc_ServiceDataByte_Isr_Entry  ; -> prom_a 0x6300C
+T_Fdc_ServiceDataByte_Isr_Entry:	jp Fdc_ServiceDataByte_Isr_Entry  ; -> prom_a 0x6300C
 ; Evidence: slot 0xF42D30 is `jp 0xFE3010`; prom_a 0xFE3010 carries the label
 ;           INTTC0_uDMA0Done_Alias (graded CONTENT).  DERIVATIVE name.
 T_INTTC0_uDMA0Done_Alias:	jp INTTC0_uDMA0Done_Alias  ; F42D30 (was T_F42D30) -> prom_a 0x63010
-T_F42D34:	jp Disk_CommandDispatch_SaveRegs_Entry  ; -> prom_a 0x63014   x23
-T_F42D38:	jp Fdc_Request_SaveRegs_Entry  ; -> prom_a 0x63018   x17
+T_Disk_CommandDispatch_SaveRegs_Entry:	jp Disk_CommandDispatch_SaveRegs_Entry  ; -> prom_a 0x63014   x23
+T_Fdc_Request_SaveRegs_Entry:	jp Fdc_Request_SaveRegs_Entry  ; -> prom_a 0x63018   x17
 	.fill 0x24, 1, 0x0E  ; 0xF42D3C: 36 x ret
 ; Evidence: slot 0xF42D60 is `jp 0xF85606`; prom_a 0xF85606 carries the label
 ;           Kernel_InitRam, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -89761,14 +89761,14 @@ T_IRQ_Epilogue:	jp IRQ_Epilogue  ; F42D68 (was T_F42D68) -> prom_a 0x057B7   x2
 ; Evidence: slot 0xF42D6C is `jp 0xF857D9`; prom_a 0xF857D9 carries the label
 ;           Kernel_StartTask, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_StartTask:	jp Kernel_StartTask  ; F42D6C (was T_F42D6C) -> prom_a 0x057D9   x2
-T_F42D70:	jp Kernel_ExitTask  ; -> prom_a 0x0584A
+T_Kernel_ExitTask:	jp Kernel_ExitTask  ; -> prom_a 0x0584A
 ; Evidence: slot 0xF42D74 is `jp 0xF85877`; prom_a 0xF85877 carries the label
 ;           Kernel_YieldRotate, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_YieldRotate:	jp Kernel_YieldRotate  ; F42D74 (was T_F42D74) -> prom_a 0x05877
 ; Evidence: slot 0xF42D78 is `jp 0xF858C0`; prom_a 0xF858C0 carries the label
 ;           Kernel_RotateQueue, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_RotateQueue:	jp Kernel_RotateQueue  ; F42D78 (was T_F42D78) -> prom_a 0x058C0
-T_F42D7C:	jp Kernel_BlockSelf  ; -> prom_a 0x05904
+T_Kernel_BlockSelf:	jp Kernel_BlockSelf  ; -> prom_a 0x05904
 ; Evidence: slot 0xF42D80 is `jp 0xF8592D`; prom_a 0xF8592D carries the label
 ;           Kernel_ReadyTask, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_ReadyTask:	jp Kernel_ReadyTask  ; F42D80 (was T_F42D80) -> prom_a 0x0592D
@@ -89787,20 +89787,20 @@ T_Kernel_SemaSignal_NoDispatch:	jp Kernel_SemaSignal_NoDispatch  ; F42D8C (was T
 ; Evidence: slot 0xF42D90 is `jp 0xF85A96`; prom_a 0xF85A96 carries the label
 ;           Kernel_SemaWait, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_SemaWait:	jp Kernel_SemaWait  ; F42D90 (was T_F42D90) -> prom_a 0x05A96   x9
-T_F42D94:	jp MsgQueue_Send  ; -> prom_a 0x05B1F
-T_F42D98:	jp MsgQueue_Send_NoDispatch  ; -> prom_a 0x05BD4
-T_F42D9C:	jp MsgQueue_ReceiveBlocking  ; -> prom_a 0x05C8C
-T_F42DA0:	jp Kernel_SetTaskLevel  ; -> prom_a 0x05DA8
-T_F42DA4:	jp Kernel_SetTaskLevel_NoDispatch  ; -> prom_a 0x05E02
-T_F42DA8:	jp Kernel_KillTask  ; -> prom_a 0x05E5E   x1
+T_MsgQueue_Send:	jp MsgQueue_Send  ; -> prom_a 0x05B1F
+T_MsgQueue_Send_NoDispatch:	jp MsgQueue_Send_NoDispatch  ; -> prom_a 0x05BD4
+T_MsgQueue_ReceiveBlocking_2:	jp MsgQueue_ReceiveBlocking  ; -> prom_a 0x05C8C
+T_Kernel_SetTaskLevel:	jp Kernel_SetTaskLevel  ; -> prom_a 0x05DA8
+T_Kernel_SetTaskLevel_NoDispatch:	jp Kernel_SetTaskLevel_NoDispatch  ; -> prom_a 0x05E02
+T_Kernel_KillTask:	jp Kernel_KillTask  ; -> prom_a 0x05E5E   x1
 ; Evidence: slot 0xF42DAC is `jp 0xF857D6`; prom_a 0xF857D6 carries the label
 ;           Kernel_StartTask_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_StartTask_StackArg:	jp Kernel_StartTask_StackArg  ; F42DAC (was T_F42DAC) -> prom_a 0x057D6   x1
-T_F42DB0:	jp Kernel_ExitTask  ; -> prom_a 0x0584A   x1
+T_Kernel_ExitTask_2:	jp Kernel_ExitTask  ; -> prom_a 0x0584A   x1
 ; Evidence: slot 0xF42DB4 is `jp 0xF85874`; prom_a 0xF85874 carries the label
 ;           Kernel_YieldRotate_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_YieldRotate_StackArg:	jp Kernel_YieldRotate_StackArg  ; F42DB4 (was T_F42DB4) -> prom_a 0x05874
-T_F42DB8:	jp Kernel_BlockSelf  ; -> prom_a 0x05904
+T_Kernel_BlockSelf_2:	jp Kernel_BlockSelf  ; -> prom_a 0x05904
 ; Evidence: slot 0xF42DBC is `jp 0xF8592A`; prom_a 0xF8592A carries the label
 ;           Kernel_ReadyTask_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_ReadyTask_StackArg:	jp Kernel_ReadyTask_StackArg  ; F42DBC (was T_F42DBC) -> prom_a 0x0592A
@@ -89812,16 +89812,16 @@ T_Kernel_SemaSignal_StackArg:	jp Kernel_SemaSignal_StackArg  ; F42DC0 (was T_F42
 ; Evidence: slot 0xF42DC4 is `jp 0xF85A93`; prom_a 0xF85A93 carries the label
 ;           Kernel_SemaWait_StackArg, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_SemaWait_StackArg:	jp Kernel_SemaWait_StackArg  ; F42DC4 (was T_F42DC4) -> prom_a 0x05A93   x1
-T_F42DC8:	jp MsgQueue_Send_StackArg  ; -> prom_a 0x05B0D   x7
+T_MsgQueue_Send_StackArg:	jp MsgQueue_Send_StackArg  ; -> prom_a 0x05B0D   x7
 ; Evidence: slot 0xF42DCC is `jp 0xF85C89`; prom_a 0xF85C89 carries the label
 ;           MsgQueue_ReceiveBlocking, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MsgQueue_ReceiveBlocking:	jp MsgQueue_ReceiveBlocking_StackArg  ; F42DCC (was T_F42DCC) -> prom_a 0x05C89   x2
-T_F42DD0:	jp Kernel_SetTaskLevel_StackArg  ; -> prom_a 0x05DA2
-T_F42DD4:	jp Kernel_KillTask_StackArg  ; -> prom_a 0x05E5B
+T_Kernel_SetTaskLevel_StackArg:	jp Kernel_SetTaskLevel_StackArg  ; -> prom_a 0x05DA2
+T_Kernel_KillTask_StackArg:	jp Kernel_KillTask_StackArg  ; -> prom_a 0x05E5B
 ; Evidence: slot 0xF42DD8 is `jp 0xF85AEF`; prom_a 0xF85AEF carries the label
 ;           Kernel_SemaTryWait, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Kernel_SemaTryWait:	jp Kernel_SemaTryWait  ; F42DD8 (was T_F42DD8) -> prom_a 0x05AEF   x1
-T_F42DDC:	jp MsgQueue_Receive_NoBlock  ; -> prom_a 0x05D1C
+T_MsgQueue_Receive_NoBlock:	jp MsgQueue_Receive_NoBlock  ; -> prom_a 0x05D1C
 ; Evidence: slot 0xF42DE0 is `jp 0xF85F59`; prom_a 0xF85F59 carries the label
 ;           DSP_ChannelRegs_Write8, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DSP_ChannelRegs_Write8:	jp DSP_ChannelRegs_Write8  ; F42DE0 (was T_F42DE0) -> prom_a 0x05F59   x1
@@ -89922,7 +89922,7 @@ T_F42F50:	jp sub_F0F17C  ; -> prom_b 0x0F17C   x3
 T_F42F54:	jp sub_F0F061  ; -> prom_b 0x0F061
 T_F42F58:	jp sub_F114DA  ; -> prom_b 0x114DA   x8
 T_F42F5C:	jp sub_F1156B  ; -> prom_b 0x1156B   x4
-T_F42F60:	jp DspEffect_SetAlgorithm  ; -> prom_b 0x11365
+T_DspEffect_SetAlgorithm:	jp DspEffect_SetAlgorithm  ; -> prom_b 0x11365
 T_F42F64:	jp sub_F11556  ; -> prom_b 0x11556
 T_F42F68:	jp sub_F122C5  ; -> prom_b 0x122C5   x1
 T_F42F6C:	jp sub_F12334  ; -> prom_b 0x12334   x1
@@ -89940,7 +89940,7 @@ T_F42FA4:	jp sub_F0BEBF  ; -> prom_b 0x0BEBF   x6
 T_F42FA8:	jp sub_F0BF04  ; -> prom_b 0x0BF04   x4
 T_F42FAC:	jp sub_FDA252  ; -> prom_a 0x5A252   x2
 	.fill 0x20, 1, 0x0E  ; 0xF42FB0: 32 x ret
-; ⚠ T_F42FD0-T_F43000 -- THIRTEEN STALE DIRECTORY SLOTS (header added
+; ⚠ T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 -- THIRTEEN STALE DIRECTORY SLOTS (header added
 ;   2026-09-25, lane promb).  All thirteen are `jp` into 0xF19C18-0xF1A0C7,
 ;   which holds DISPLAY LISTS, not code (the module banner at 0xF17559 already
 ;   says so: "exactly thirteen in-span addresses are the target of a transfer
@@ -89961,14 +89961,14 @@ T_F42FD4:	jp DL_CombinationNaming_F19BE5 + 0x34  ; -> prom_b 0x19C19
 T_F42FD8:	jp DL_Configure_F19C39 + 0x5B  ; -> prom_b 0x19C94
 T_F42FDC:	jp DL_Configure_F19C39 + 0x116  ; -> prom_b 0x19D4F
 T_F42FE0:	jp DL_Configure_F19D5C + 0x58  ; -> prom_b 0x19DB4
-T_F42FE4:	jp DL_Inter + 0x27  ; -> prom_b 0x19E01
+T_DL_Inter:	jp DL_Inter + 0x27  ; -> prom_b 0x19E01
 T_F42FE8:	jp DL_Inter__F19E4F  ; -> prom_b 0x19E4F
 T_F42FEC:	jp DL_Inter__F19EA4  ; -> prom_b 0x19EA4
-T_F42FF0:	jp DL_Inter + 0xE5  ; -> prom_b 0x19EBF
-T_F42FF4:	jp DL_KeyLayer + 0x8  ; -> prom_b 0x19EDE
-T_F42FF8:	jp DL_VelocityLayer + 0x62  ; -> prom_b 0x19FEB
+T_DL_Inter_2:	jp DL_Inter + 0xE5  ; -> prom_b 0x19EBF
+T_DL_KeyLayer:	jp DL_KeyLayer + 0x8  ; -> prom_b 0x19EDE
+T_DL_VelocityLayer:	jp DL_VelocityLayer + 0x62  ; -> prom_b 0x19FEB
 T_F42FFC:	jp RecordArray_F1A037 + 0x78  ; -> prom_b 0x1A0AF
-T_F43000:	jp DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 + 0x8  ; -> prom_b 0x1A0C7
+T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8:	jp DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 + 0x8  ; -> prom_b 0x1A0C7
 	.fill 0x1C, 1, 0x0E  ; 0xF43004: 28 x ret
 T_F43020:	jp sub_FE7950  ; -> prom_a 0x67950   x1
 T_F43024:	jp sub_FE7927  ; -> prom_a 0x67927   x1
@@ -90267,9 +90267,9 @@ T_AsciiField_ToSignedValue:	jp AsciiField_ToSignedValue  ; F432F4 (was T_F432F4)
 ;           AsciiField_Clear, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_AsciiField_Clear:	jp AsciiField_Clear  ; F432F8 (was T_F432F8) -> prom_a 0x0BC78   x2
 	.fill 0x34, 1, 0x0E  ; 0xF432FC: 52 x ret
-T_F43330:	jp UiText_CopyLabel13_To_22F0  ; -> prom_b 0x5B800   x8
+T_UiText_CopyLabel13_To_22F0:	jp UiText_CopyLabel13_To_22F0  ; -> prom_b 0x5B800   x8
 	.fill 0x1C, 1, 0x0E  ; 0xF43334: 28 x ret
-T_F43350:	jp MidiIn_ReqListRebuild_Msg13_16  ; -> prom_a 0x2835E
+T_MidiIn_ReqListRebuild_Msg13_16:	jp MidiIn_ReqListRebuild_Msg13_16  ; -> prom_a 0x2835E
 ; Evidence: slot 0xF43354 is `jp 0xFA8378`; prom_a 0xFA8378 carries the label
 ;           MidiIn_ReqRebuild_Msg03_0A, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MidiIn_ReqRebuild_Msg03_0A:	jp MidiIn_ReqRebuild_Msg03_0A  ; F43354 (was T_F43354) -> prom_a 0x28378
@@ -90301,7 +90301,7 @@ T_F43418:	jp sub_F9F457  ; -> prom_a 0x1F457   x1
 T_F4341C:	jp sub_F9FBDE  ; -> prom_a 0x1FBDE   x1
 T_F43420:	jp sub_FA0054  ; -> prom_a 0x20054   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43424: 12 x ret
-T_F43430:	jp DiskFile_CheckSignature  ; -> prom_b 0x48C1A   x1
+T_DiskFile_CheckSignature:	jp DiskFile_CheckSignature  ; -> prom_b 0x48C1A   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43434: 12 x ret
 T_F43440:	jp sub_FAAE2A  ; -> prom_a 0x2AE2A   x2
 T_F43444:	jp sub_FAAF91  ; -> prom_a 0x2AF91   x2
@@ -90323,8 +90323,8 @@ T_F43484:	jp sub_FDA911  ; -> prom_a 0x5A911   x1
 T_F43488:	jp sub_FD665C  ; -> prom_a 0x5665C   x2
 T_F4348C:	jp sub_FD6513  ; -> prom_a 0x56513   x1
 	.fill 0x10, 1, 0x0E  ; 0xF43490: 16 x ret
-T_F434A0:	jp DspParam_WriteByNumber  ; -> prom_b 0x11C30   x2
-T_F434A4:	jp DspParam_ReadByNumber  ; -> prom_b 0x1220B   x2
+T_DspParam_WriteByNumber:	jp DspParam_WriteByNumber  ; -> prom_b 0x11C30   x2
+T_DspParam_ReadByNumber:	jp DspParam_ReadByNumber  ; -> prom_b 0x1220B   x2
 	.fill 0x18, 1, 0x0E  ; 0xF434A8: 24 x ret
 T_F434C0:	jp sub_F9EEAB  ; -> prom_a 0x1EEAB
 T_F434C4:	jp T_F434C4_Nop  ; -> prom_a 0x1EEDF
@@ -95218,7 +95218,7 @@ WorkspaceDefaults:
 ;   0xF48C00  Table_WsaSoundRamS0Wsa1 -- 'WSA SOUND RAM S0', then 'WSA1', then six bytes.
 ;             The routine at the very next address copies the first sixteen to a
 ;             stack frame with `ldirw` and the next four with `ld XBC,(...)`.
-;             The island's END is 0xF48C1A, the target of thunk slot T_F43430, so
+;             The island's END is 0xF48C1A, the target of thunk slot T_DiskFile_CheckSignature, so
 ;             it is pinned by an entry point the hardware uses, not by a reading.
 ;
 ;   0xF4C000  DL_F4C000 -- 81 UI display-list records.  Their own length bytes
@@ -97408,7 +97408,7 @@ sub_F487A7:		; <- T_F40B74
 ;          (`lda` computes the address, so no 32-bit reference to it exists
 ;          anywhere in prom_a or prom_b -- direct_refs() returns 0.)
 ; Entry count: 26 bytes, and the END is not a reading: 0xF48C1A is the
-;              target of thunk slot T_F43430, so the byte after this island
+;              target of thunk slot T_DiskFile_CheckSignature, so the byte after this island
 ;              is an entry point the hardware itself uses (the slot name is
 ;              read out of the thunk table, not typed).  The START is the
 ;              first byte after the 0x0E padding run that closes the module
@@ -97439,12 +97439,12 @@ Table_WsaSoundRamS0Wsa1:
 
 ; --------------------------------------------------------------------------
 ; DiskFile_CheckSignature -- 0xF48C1A
-; Called from: T_F43430 (x1)
+; Called from: T_DiskFile_CheckSignature (x1)
 ; Touches: (0x207C) (0x2229) (0x2736) (0x2737) (0x2738) (0x2880)  |
 ;          0x000400 0xE80000 0xEC0000
-; Calls:   T_F41600 sub_F49033 sub_F48F19 T_F41234 T_Link_SendCommandE4 T_Link_SendCommand5_WaitDone
+; Calls:   T_F41600 sub_F49033 sub_F48F19 T_Link_SendCommand3_WaitTicks T_Link_SendCommandE4 T_Link_SendCommand5_WaitDone
 ;          sub_F48F75 sub_F48F9F sub_F48FD8 T_IndexedTable_GetPtr T_F43454
-; Evidence: thunk slot T_F43430 holds `jp 0x00F48C1A`, and 0xF48C1A is an
+; Evidence: thunk slot T_DiskFile_CheckSignature holds `jp 0x00F48C1A`, and 0xF48C1A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -97469,7 +97469,7 @@ Table_WsaSoundRamS0Wsa1:
 ; Unknown: which of the two file kinds is which, and what screen 0x54 is.  The
 ;          name claims that a signature is compared and nothing more.
 ; --------------------------------------------------------------------------
-DiskFile_CheckSignature:		; <- T_F43430
+DiskFile_CheckSignature:		; <- T_DiskFile_CheckSignature
 	link XIZ,0xffa0	; F48C1A  link XIZ,0xffa0
 	pushw	hl	; F48C1E  push HL
 	pushw	de	; F48C1F  push DE
@@ -97577,7 +97577,7 @@ DiskFile_CheckSignature_Skip5:
 	ld	xbc, (xbc-88)	; F48D09  ld XBC,(XBC+0xa8)
 	ld	(xiz-24), xbc	; F48D0C  ld (XIZ+0xe8),XBC
 	push	xbc	; F48D0F  push XBC
-	call	T_F41234	; F48D10  call 0xf41234
+	call	T_Link_SendCommand3_WaitTicks	; F48D10  call 0xf41234
 	pop	xiy	; F48D14  pop XIY
 DiskFile_CheckSignature_Join3:
 	ld	xbc, (xiz-42)	; F48D15  ld XBC,(XIZ+0xd6)
@@ -97853,7 +97853,7 @@ sub_F48F19_Join:
 ; sub_F48F75
 ; Called from: in-module: 0xF48E4A
 ; Touches: nothing with an absolute address
-; Calls:   T_F425A8 T_F40ED4
+; Calls:   T_F425A8 T_Link_SendBlockIn32ByteChunks
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48F75 is an instruction boundary.
 ;           The name IS the address.
@@ -97876,7 +97876,7 @@ sub_F48F75:
 	push	xbc	; F48F91  push XBC
 	pushw	6	; F48F92  push 0x0006
 	pushw	0	; F48F95  push 0x0000
-	call	T_F40ED4	; F48F98  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F48F98  call 0xf40ed4
 	inc	8, xsp	; F48F9C  inc 0,XSP
 	ret	; F48F9E  ret
 
@@ -103050,7 +103050,7 @@ DLB_CreatorSelectController_Names:
 ;           instruction boundaries of this transcription.
 ; ⚠ ANSWERED round 11, and the old text -- "nothing decoded here gives its
 ;          bound" -- is struck.  The PANEL BUTTON CODE indexes it, through
-;          PanelCode_ToSlotAndFlags (0xF55019, thunk T_F42C74), which the
+;          PanelCode_ToSlotAndFlags (0xF55019, thunk T_PanelCode_ToSlotAndFlags), which the
 ;          reader calls before `mul A,4`: it rejects a raw index above 0x1F
 ;          and folds 0x11..0x19 onto 0..8 and 0x1A..0x1F onto 17..22, so the
 ;          index space is 0..22.  ★ And the sparseness has a cause: the five
@@ -103237,7 +103237,7 @@ sub_F4C4B0:		; <- T_F434E4
 ; sub_F4C4B5
 ; Called from: T_F434E8 (x0)
 ; Touches: nothing with an absolute address
-; Calls:   T_F42C74
+; Calls:   T_PanelCode_ToSlotAndFlags
 ; Evidence: thunk slot T_F434E8 holds `jp 0x00F4C4B5`, and 0xF4C4B5 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -103249,7 +103249,7 @@ sub_F4C4B5:		; <- T_F434E8
 	link XIZ,0x0000	; F4C4B5  link XIZ,0x0000
 	m_push MWD+r6, 0x0a	; F4C4B9  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F4C4BC  pushw (XIZ+0x08)
-	call	T_F42C74	; F4C4BF  call 0xf42c74
+	call	T_PanelCode_ToSlotAndFlags	; F4C4BF  call 0xf42c74
 	mul	a, 4	; F4C4C3  mul A,0x04
 	extz	xwa	; F4C4C6  extz XWA
 	add	xwa, DispatchTable_F4C38D	; F4C4C8  add XWA,0x00f4c38d
@@ -103523,7 +103523,7 @@ sub_F4C684_Skip3:
 ; sub_F4C6E0
 ; Called from: in-module: 0xF4C6B9
 ; Touches: (0x2641) (0x2642)  |  0x0022F0 0x002940 0x002950
-; Calls:   T_F41038 T_F43330
+; Calls:   T_F41038 T_UiText_CopyLabel13_To_22F0
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4C6E0 is an instruction boundary.
 ;           The name IS the address.
@@ -103545,14 +103545,14 @@ sub_F4C6E0:
 	call	T_F41038	; F4C6FE  call 0xf41038
 	ld	a, (xiy)	; F4C702  ld A,(XIY)
 	push	xiy	; F4C704  push XIY
-	call	T_F43330	; F4C705  call 0xf43330
+	call	T_UiText_CopyLabel13_To_22F0	; F4C705  call 0xf43330
 	ld	xiy, 8944	; F4C709  ld XIY,0x000022f0
 	ld	xix, 10560	; F4C70E  ld XIX,0x00002940
 	ldw	bc, 7	; F4C713  ld BC,0x0007
 	ldirw	; F4C716  ldirw
 	pop	xiy	; F4C718  pop XIY
 	ld	a, (xiy+1)	; F4C719  ld A,(XIY+0x01)
-	call	T_F43330	; F4C71C  call 0xf43330
+	call	T_UiText_CopyLabel13_To_22F0	; F4C71C  call 0xf43330
 	ld	xiy, 8944	; F4C720  ld XIY,0x000022f0
 	ld	xix, 10576	; F4C725  ld XIX,0x00002950
 	ldw	bc, 7	; F4C72A  ld BC,0x0007
@@ -104717,7 +104717,7 @@ sub_F4D238_Return:
 ; Touches: (0x0C55) (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C70)
 ;          (0x0D1C) (0x0D1D) (0x0D4A) +11 more  |  0x003460 0x003482
 ;          0x0034EE 0x003510 0x003532 0x60347E +4 more
-; Calls:   sub_F4D89D T_F427FC T_F427E8 T_BStore_AppendBytes_Veneer T_F427F8 T_F427F0 T_F427F4
+; Calls:   sub_F4D89D T_F427FC T_F427E8 T_BStore_AppendBytes_Veneer T_BStore_OpenChain_Call T_F427F0 T_F427F4
 ;          sub_F4D758
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4D346 is an instruction boundary.
@@ -104950,7 +104950,7 @@ sub_F4D346_Join4:
 	pop	xwa	; F4D5C8  pop XWA
 	ld	(3402:16), 0	; F4D5C9  ld (0x0d4a),0x00
 	ld	(3357:16), w	; F4D5CE  ld (0x0d1d),W
-	call	T_F427F8	; F4D5D2  call 0xf427f8
+	call	T_BStore_OpenChain_Call	; F4D5D2  call 0xf427f8
 	ld	xhl, (4718:16)	; F4D5D6  ld XHL,(0x126e)
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F4D5DA  cp (0x0d4a),0x00
 	jr	nz, sub_F4D346_Return2	; F4D5DF  jr NZ,0xf4d650
@@ -105059,7 +105059,7 @@ sub_F4D651_Join2:
 ; sub_F4D690
 ; Called from: T_F40C5C (x7)
 ; Touches: (0x0C90) (0x0D1C) (0x0D1D) (0x0D4A) (0x126E)
-; Calls:   T_F427FC T_F427F8 T_F427F0 sub_F4D651 T_F427F4
+; Calls:   T_F427FC T_BStore_OpenChain_Call T_F427F0 sub_F4D651 T_F427F4
 ; Evidence: thunk slot T_F40C5C holds `jp 0x00F4D690`, and 0xF4D690 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -105085,7 +105085,7 @@ sub_F4D690:		; <- T_F40C5C
 	pop	xde	; F4D6A8  pop XDE
 	pop	xbc	; F4D6A9  pop XBC
 	pop	xwa	; F4D6AA  pop XWA
-	call	T_F427F8	; F4D6AB  call 0xf427f8
+	call	T_BStore_OpenChain_Call	; F4D6AB  call 0xf427f8
 	ld	xhl, (4718:16)	; F4D6AF  ld XHL,(0x126e)
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F4D6B3  cp (0x0d4a),0x00
 	jr	nz, sub_F4D651_Return	; F4D6B8  jr NZ,0xf4d6f5
@@ -107723,8 +107723,8 @@ Pointer_F4FA76:
 ;   a SYSEX MESSAGE BYTE: both readers first call prom_a sub_FB62D3 for field 11
 ;   of the decode result at (0x60FCD8), the byte SysExDecodeTree_Root's walk
 ;   matched at level 6 -- the parameter byte of `.. gg pp` -- and the dense index
-;   is an EFFECT PARAMETER NUMBER: 0xFB3AFD hands it to T_F434A0 =
-;   DspParam_WriteByNumber and 0xFB4A41 to T_F434A4 = DspParam_ReadByNumber, which
+;   is an EFFECT PARAMETER NUMBER: 0xFB3AFD hands it to T_DspParam_WriteByNumber =
+;   DspParam_WriteByNumber and 0xFB4A41 to T_DspParam_ReadByNumber = DspParam_ReadByNumber, which
 ;   look it up in EffectParamNumberMap.  So byte 0x20+i is the i-th addressable
 ;   byte of DSP effect block 97 (i < 23), 0x40+i of block 98 and 0x60+i of block
 ;   99 (i < 22, block 99 having no byte 21).  Checked by
@@ -109813,7 +109813,7 @@ DrawbarScreen_Dispatch:		; <- T_DrawbarScreen_Dispatch
 	link XIZ,0x0000	; F5302A  link XIZ,0x0000
 	m_push MWD+r6, 0x0a	; F5302E  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F53031  pushw (XIZ+0x08)
-	call	T_F42C74	; F53034  call 0xf42c74
+	call	T_PanelCode_ToSlotAndFlags	; F53034  call 0xf42c74
 	mul	a, 4	; F53038  mul A,0x04
 	extz	xwa	; F5303B  extz XWA
 	add	xwa, PanelButtonTable_DrawbarScreen	; F5303D  add XWA,0x00f54248
@@ -109939,7 +109939,7 @@ sub_F53052_Skip7:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 8 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110005,7 +110005,7 @@ LcdKeyRow1_DrawbarScreen_Epilogue:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 9 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110072,7 +110072,7 @@ LcdKeyRow2_DrawbarScreen_Epilogue:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 11 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110137,7 +110137,7 @@ LcdKeyRow4_DrawbarScreen_Epilogue:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 12 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110546,7 +110546,7 @@ sub_F533DC_Skip2:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 0 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110629,7 +110629,7 @@ sub_F533DC_Epilogue:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 1 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110712,7 +110712,7 @@ sub_F533DC_Epilogue2:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 2 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110798,7 +110798,7 @@ sub_F533DC_Epilogue3:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 3 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110884,7 +110884,7 @@ sub_F533DC_Epilogue4:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 4 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -110965,7 +110965,7 @@ sub_F533DC_Epilogue5:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 5 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -111049,7 +111049,7 @@ sub_F533DC_Epilogue6:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 6 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -111130,7 +111130,7 @@ sub_F533DC_Epilogue7:
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
 ;           DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags (prom_b
-;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           0xF55019) through thunk T_PanelCode_ToSlotAndFlags and then `mul A,0x04 / add
 ;           XWA,0x00f54248` at 0xF5303D, so the index is the REMAPPED SLOT and
 ;           this is slot 7 of the 23.
 ; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
@@ -112573,26 +112573,26 @@ sub_F54051:
 	push	xix	; F54072  push XIX
 	pushw	6	; F54073  push 0x0006
 	pushw	0	; F54076  push 0x0000
-	call	T_F40ED4	; F54079  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F54079  call 0xf40ed4
 	ld	(xix+2), 130	; F5407D  ld (XIX+0x02),0x82
 	ld	(xix+3), 2	; F54081  ld (XIX+0x03),0x02
 	push	xix	; F54085  push XIX
 	pushw	6	; F54086  push 0x0006
 	pushw	0	; F54089  push 0x0000
-	call	T_F40ED4	; F5408C  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F5408C  call 0xf40ed4
 	ld	(xix), 131	; F54090  ld (XIX),0x83
 	ld	(xix+2), 2	; F54093  ld (XIX+0x02),0x02
 	ld	(xix+3), 2	; F54097  ld (XIX+0x03),0x02
 	push	xix	; F5409B  push XIX
 	pushw	6	; F5409C  push 0x0006
 	pushw	0	; F5409F  push 0x0000
-	call	T_F40ED4	; F540A2  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F540A2  call 0xf40ed4
 	ld	(xix+2), 130	; F540A6  ld (XIX+0x02),0x82
 	ld	(xix+3), 2	; F540AA  ld (XIX+0x03),0x02
 	push	xix	; F540AE  push XIX
 	pushw	6	; F540AF  push 0x0006
 	pushw	0	; F540B2  push 0x0000
-	call	T_F40ED4	; F540B5  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F540B5  call 0xf40ed4
 	add	xsp, 32	; F540B9  add XSP,0x00000020
 	pop	xix	; F540BF  pop XIX
 	unlk XIZ	; F540C0  unlk XIZ
@@ -112620,7 +112620,7 @@ sub_F540C3:
 	push	xix	; F540E2  push XIX
 	pushw	6	; F540E3  push 0x0006
 	pushw	0	; F540E6  push 0x0000
-	call	T_F40ED4	; F540E9  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F540E9  call 0xf40ed4
 	inc	8, xsp	; F540ED  inc 0,XSP
 	pop	xix	; F540EF  pop XIX
 	unlk XIZ	; F540F0  unlk XIZ
@@ -112652,7 +112652,7 @@ sub_F540F3:
 	push	xix	; F54115  push XIX
 	pushw	4	; F54116  push 0x0004
 	pushw	0	; F54119  push 0x0000
-	call	T_F40ED4	; F5411C  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F5411C  call 0xf40ed4
 	ld	(xix), 136	; F54120  ld (XIX),0x88
 	ld	(xix+1), l	; F54123  ld (XIX+0x01),L
 	ld	(xix+3), 0	; F54126  ld (XIX+0x03),0x00
@@ -112667,7 +112667,7 @@ sub_F540F3_Loop:
 	push	xix	; F5413D  push XIX
 	pushw	6	; F5413E  push 0x0006
 	pushw	0	; F54141  push 0x0000
-	call	T_F40ED4	; F54144  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F54144  call 0xf40ed4
 	sub	xbc, xbc	; F54148  sub XBC,XBC
 	inc	1, xbc	; F5414A  inc 1,XBC
 	add	(xiz-4), xbc	; F5414C  add (XIZ+0xfc),XBC
@@ -112684,7 +112684,7 @@ sub_F540F3_Loop2:
 	push	xix	; F54165  push XIX
 	pushw	6	; F54166  push 0x0006
 	pushw	0	; F54169  push 0x0000
-	call	T_F40ED4	; F5416C  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F5416C  call 0xf40ed4
 	sub	xbc, xbc	; F54170  sub XBC,XBC
 	inc	1, xbc	; F54172  inc 1,XBC
 	add	(xiz-4), xbc	; F54174  add (XIZ+0xfc),XBC
@@ -112732,7 +112732,7 @@ sub_F5418E_Loop:
 	push	xix	; F541BD  push XIX
 	pushw	6	; F541BE  push 0x0006
 	pushw	0	; F541C1  push 0x0000
-	call	T_F40ED4	; F541C4  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F541C4  call 0xf40ed4
 	sub	xbc, xbc	; F541C8  sub XBC,XBC
 	inc	1, xbc	; F541CA  inc 1,XBC
 	add	(xiz-4), xbc	; F541CC  add (XIZ+0xfc),XBC
@@ -112750,7 +112750,7 @@ sub_F5418E_Loop:
 	push	xix	; F541EC  push XIX
 	pushw	6	; F541ED  push 0x0006
 	pushw	0	; F541F0  push 0x0000
-	call	T_F40ED4	; F541F3  call 0xf40ed4
+	call	T_Link_SendBlockIn32ByteChunks	; F541F3  call 0xf40ed4
 	inc	8, xsp	; F541F7  inc 0,XSP
 	pop	xix	; F541F9  pop XIX
 	popw	hl	; F541FA  pop HL
@@ -113782,7 +113782,7 @@ Stub_Ret_F55018:
 
 ; ---------------------------------------------------------------------
 ; PanelCode_ToSlotAndFlags -- normalise a selector index and rebuild the flag byte (0x28B0)
-; Called from: thunk T_F42C74 (0xF42C74), which four screen-module
+; Called from: thunk T_PanelCode_ToSlotAndFlags (0xF42C74), which four screen-module
 ;              dispatchers call before `mul A,4 / add XWA,<their table>`:
 ;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), sub_F4C4B5 and
 ;              DrawbarScreen_Dispatch (0xF5303D).  prom_a's Screen_*_Button
@@ -116362,8 +116362,8 @@ sub_F55D90_Join:
 ; Called from: in-module: 0xF55E1C
 ; Touches: (0x12F6) (0x2540) (0x3552) (0x3627) (0x36CE) (0x3755) (0x3756)  |
 ;          0xF3437F 0xF3438E 0xF343A2 0xF343AC 0xF34C9A 0xF34CA2 +18 more
-; Calls:   T_DisplayList_Run Nop_Ret_F55C2E T_F4181C T_DLB_Handler_Array6
-;          sub_F55C2F CyclePlayEditScreen_StageValues T_DisplayListB_Run T_F41820 sub_F55C3D CyclePlayScreen_StageValues
+; Calls:   T_DisplayList_Run Nop_Ret_F55C2E T_DLB_Handler_Array8 T_DLB_Handler_Array6
+;          sub_F55C2F CyclePlayEditScreen_StageValues T_DisplayListB_Run T_DLB_Handler_Array8_2 sub_F55C3D CyclePlayScreen_StageValues
 ;          CycleRecordScreen_StageValues sub_F55C44 +1 more
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF55E20 is an instruction boundary.
@@ -116397,7 +116397,7 @@ sub_F55E20_Loop:
 	m_rd_ld_rrx RWX, 0x3C, r3	; F55E55  ld HL,RHL3
 	jr	z, sub_F55E20_Skip2	; F55E58  jr Z,0xf55e65
 	ld	xiy, Data_F34C6E + 0x34	; F55E5A  ld XIY,0x00f34ca2
-	call	T_F4181C	; F55E5F  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F55E5F  call 0xf4181c
 	jr	sub_F55E20_Join	; F55E63  jr T,0xf55e6e
 sub_F55E20_Skip2:
 	ld	xiy, Data_F34C6E + 0x3F	; F55E65  ld XIY,0x00f34cad
@@ -116429,11 +116429,11 @@ sub_F55E8F:
 	ld	a, (14166:16)	; F55EAE  ld A,(0x3756)
 	ld	(4854:16), a	; F55EB2  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x38	; F55EB6  ld XIY,0x00f3502a
-	call	T_F41820	; F55EBB  call 0xf41820
+	call	T_DLB_Handler_Array8_2	; F55EBB  call 0xf41820
 	ld	a, (13863:16)	; F55EBF  ld A,(0x3627)
 	ld	(4854:16), a	; F55EC3  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F55EC7  ld XIY,0x00f3501f
-	call	T_F4181C	; F55ECC  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F55ECC  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55ED0  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55ED4  calr 0xf55c3d
 	ret	; F55ED7  ret
@@ -116454,11 +116454,11 @@ sub_F55EEA:
 	ld	a, (14166:16)	; F55F09  ld A,(0x3756)
 	ld	(4854:16), a	; F55F0D  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x38	; F55F11  ld XIY,0x00f3502a
-	call	T_F41820	; F55F16  call 0xf41820
+	call	T_DLB_Handler_Array8_2	; F55F16  call 0xf41820
 	ld	a, (13863:16)	; F55F1A  ld A,(0x3627)
 	ld	(4854:16), a	; F55F1E  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F55F22  ld XIY,0x00f3501f
-	call	T_F4181C	; F55F27  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F55F27  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F2B  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55F2F  calr 0xf55c3d
 	ret	; F55F32  ret
@@ -116483,11 +116483,11 @@ sub_F55F45:
 	ld	a, (14165:16)	; F55F75  ld A,(0x3755)
 	ld	(4854:16), a	; F55F79  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x38	; F55F7D  ld XIY,0x00f3502a
-	call	T_F41820	; F55F82  call 0xf41820
+	call	T_DLB_Handler_Array8_2	; F55F82  call 0xf41820
 	ld	a, (14030:16)	; F55F86  ld A,(0x36ce)
 	ld	(4854:16), a	; F55F8A  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F55F8E  ld XIY,0x00f3501f
-	call	T_F4181C	; F55F93  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F55F93  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F97  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55F9B  calr 0xf55c3d
 	ret	; F55F9E  ret
@@ -118136,7 +118136,7 @@ Nop_Ret_F568AA:
 ; Called from: in-module: 0xF56767
 ; Touches: (0x12F6) (0x2095) (0x2540) (0x3628) (0x36CE) (0x3755)  |  0xF3501F
 ;          0xF3502A
-; Calls:   T_Blink_Stop T_F41820 T_F4181C
+; Calls:   T_Blink_Stop T_DLB_Handler_Array8_2 T_DLB_Handler_Array8
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF568AB is an instruction boundary.
 ; Shape:   saves the current (0x36CE) to (0x3755) and writes 0x00 into it,
@@ -118159,11 +118159,11 @@ Select36CE_F568AB_Return:
 	ret	; F568C8  ret
 	ld	(9536:16), 1	; F568C9  ld (0x2540),0x01
 	ld	xiy, DL_F34FF2 + 0x38	; F568CE  ld XIY,0x00f3502a
-	call	T_F41820	; F568D3  call 0xf41820
+	call	T_DLB_Handler_Array8_2	; F568D3  call 0xf41820
 	ld	a, (14030:16)	; F568D7  ld A,(0x36ce)
 	ld	(4854:16), a	; F568DB  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F568DF  ld XIY,0x00f3501f
-	call	T_F4181C	; F568E4  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F568E4  call 0xf4181c
 	ret	; F568E8  ret
 
 ; --------------------------------------------------------------------------
@@ -119403,7 +119403,7 @@ Nop_Ret_F56FD5:
 ; Called from: in-module: 0xF56EC2
 ; Touches: (0x12F6) (0x2095) (0x2540) (0x3627) (0x3628) (0x3756)  |  0xF3501F
 ;          0xF3502A
-; Calls:   T_Blink_Stop T_F41820 T_F4181C
+; Calls:   T_Blink_Stop T_DLB_Handler_Array8_2 T_DLB_Handler_Array8
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56FD6 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -119421,11 +119421,11 @@ sub_F56FD6_Return:
 	ret	; F56FF3  ret
 	ld	(9536:16), 1	; F56FF4  ld (0x2540),0x01
 	ld	xiy, DL_F34FF2 + 0x38	; F56FF9  ld XIY,0x00f3502a
-	call	T_F41820	; F56FFE  call 0xf41820
+	call	T_DLB_Handler_Array8_2	; F56FFE  call 0xf41820
 	ld	a, (13863:16)	; F57002  ld A,(0x3627)
 	ld	(4854:16), a	; F57006  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F5700A  ld XIY,0x00f3501f
-	call	T_F4181C	; F5700F  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F5700F  call 0xf4181c
 	ret	; F57013  ret
 
 ; --------------------------------------------------------------------------
@@ -121716,7 +121716,7 @@ DLTab_F5841F:
 ;   Evidence: one interpreter-B op-08 record, run ON ITS OWN by five
 ;    one-push call sites: prom_a 0xFF4A55, 0xFF4A9E, 0xFF4D39, 0xFF4FBB,
 ;    0xFF5A7F, each `lda XBC,0xf5843f / push XBC / call 0xFF7623`, and
-;    0xFF7623 sets (0x2540)=1 and jumps to thunk T_F41820 -> 0xF31B57,
+;    0xFF7623 sets (0x2540)=1 and jumps to thunk T_DLB_Handler_Array8_2 -> 0xF31B57,
 ;    interpreter B's op-03/08 handler.
 ; --------------------------------------------------------------------------
 DL_F5843F:
@@ -123131,7 +123131,7 @@ DLText_F59128:
 ; 0xF59150-0xF59165 -- 2 display-list record(s), 22 bytes -- interpreter B
 ;   Evidence: two interpreter-B records, each run ON ITS OWN: 0xF59150
 ;    from prom_a 0xFF68AF, 0xFF69A7, 0xFF6AEF, 0xFF6EF9 (`call 0xFF763F`
-;    -> T_F4181C -> 0xF31B57) and 0xF5915B from 0xFF697A, 0xFF6A86 (`call
+;    -> T_DLB_Handler_Array8 -> 0xF31B57) and 0xF5915B from 0xFF697A, 0xFF6A86 (`call
 ;    0xFF7623`). Both point at the table below.
 ; --------------------------------------------------------------------------
 DL_F59150:
@@ -124002,7 +124002,7 @@ DL_F59915:
 ;    each). ★ Both are run ON THEIR OWN and the sites say by WHICH
 ;    handler: 0xF5993E from prom_a 0xFF5DBA, 0xFF624D, 0xFF6325 and
 ;    0xF59948 from 0xFF50AC, 0xFF5376, 0xFF541F, all `push / call
-;    0xFF7668`, and 0xFF7668 jumps to thunk T_F41800 -> 0xF31BA1, which IS
+;    0xFF7668`, and 0xFF7668 jumps to thunk T_DLB_Handler_Decimal -> 0xF31BA1, which IS
 ;    interpreter B's op-00 handler.
 ; --------------------------------------------------------------------------
 DL_F5993E:
@@ -126327,7 +126327,7 @@ sub_F5B436:
 ; first 16-bit argument, (XIZ+0x0A) the second, and so on.
 ;
 ; The four, and their opcode-anchored reference upper bounds:
-;   0xF5B800  T_F43330  x8   copy a 13-byte label into the RAM text buffer
+;   0xF5B800  T_UiText_CopyLabel13_To_22F0  x8   copy a 13-byte label into the RAM text buffer
 ;   0xF5B81C  T_F41EEC  x1   push two records onto the list at 0x2030
 ;   0xF5B84C  T_Gfx_DrawLine_Solid  x23  SWI7 service 0x00 -- draw a solid line
 ;   0xF5B881  T_Gfx_DrawLine_Dashed  x9   SWI7 service 0x15 -- draw a dashed line
@@ -126335,7 +126335,7 @@ sub_F5B436:
 ; prom_a+prom_b, not instruction-anchored call counts.  They rank; they do not
 ; prove.  That is the same caveat notes/prom_b_call_graph.py states.  What IS
 ; exact: the four counts total 41, of which 39 are in prom_a and 2 in prom_b
-; (both prom_b ones are on T_F43330), and the two line wrappers account for 32
+; (both prom_b ones are on T_UiText_CopyLabel13_To_22F0), and the two line wrappers account for 32
 ; of the 41 on their own.  Emitted by `python3 notes/prom_b_f5b800_checks.py`.
 ;
 ; ★ THIS BLOCK ANSWERS AN OPEN QUESTION RECORDED IN prom_a.
@@ -126353,7 +126353,7 @@ sub_F5B436:
 ; ---------------------------------------------------------------------
 ; UiText_CopyLabel13_To_22F0 -- copy one 13-byte label into the RAM text buffer
 ;
-; Called from: thunk slot T_F43330; 8 opcode-anchored references, 6 in prom_a
+; Called from: thunk slot T_UiText_CopyLabel13_To_22F0; 8 opcode-anchored references, 6 in prom_a
 ;          and 2 in prom_b.  UPPER BOUND, not a call count.
 ; Inputs:  A = label index.  Only bits 0-5 are used.
 ; Outputs: 13 bytes at 0x000022F0 overwritten; XIY, XIX, BC clobbered.
@@ -126381,7 +126381,7 @@ sub_F5B436:
 ; Unknown: who chooses the index, and whether the two other widths at 0x22F0
 ;          (w2 and w16) mean the buffer is shared or the index is coarse.
 ; ---------------------------------------------------------------------
-UiText_CopyLabel13_To_22F0:		; <- T_F43330
+UiText_CopyLabel13_To_22F0:		; <- T_UiText_CopyLabel13_To_22F0
 	extz	xwa	; F5B800  extz XWA
 	extz	wa	; F5B802  extz WA
 	and	a, 63	; F5B804  and A,0x3f
@@ -126921,7 +126921,7 @@ UiPaint_Solo_Join:
 ;        BC = C * 4;  XIY = table[BC];  BC += 4;  XIX = table[BC]
 ;        DisplayList_Run(XIY, XIX)
 ;   3. (0x2540) = 1, DisplayList_Run(0xF02FED, 0xF02FF7), then a second call
-;      through thunk T_F4181C with XIY = 0xF02FF7.
+;      through thunk T_DLB_Handler_Array8 with XIY = 0xF02FF7.
 ; Evidence for the bit tested: `ld W,(0x27A4)` / `ld A,C` / `sla 0x01,A` /
 ;          `dec 1,A` / `srl A,W` at 0xF5BB3A-0xF5BB45.  In MAME's model
 ;          `{ M_SRL, O_A, O_R }` (../mame/src/devices/cpu/tlcs900/dasm900.cpp:843)
@@ -126954,7 +126954,7 @@ UiPaint_Solo_Join:
 ;   `03 0C` records carrying a 32-bit POINTER each (0xF0191A, 0xF01938,
 ;   0xF01956, 0xF01974) -- a different, indirect form of the same row.
 ; Unknown: what (0x27F5) and (0x27A4) mean; what the 0xF019xx targets are; and
-;          what thunk T_F4181C does with 0xF02FF7 after the last paint.
+;          what thunk T_DLB_Handler_Array8 does with 0xF02FF7 after the last paint.
 ; ---------------------------------------------------------------------
 UiPaint_Ordinals:		; <- T_UiPaint_Ordinals
 	push	xwa	; F5BB00  push XWA
@@ -127012,7 +127012,7 @@ UiPaint_Ordinals_Join2:
 	ld	xix, DL_F02FF7	; F5BB98  ld XIX,0x00f02ff7
 	call	T_DisplayList_Run	; F5BB9D  call 0xf417f0
 	ld	xiy, DL_F02FF7	; F5BBA1  ld XIY,0x00f02ff7
-	call	T_F4181C	; F5BBA6  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F5BBA6  call 0xf4181c
 	pop	xiz	; F5BBAA  pop XIZ
 	pop	xiy	; F5BBAB  pop XIY
 	pop	xix	; F5BBAC  pop XIX
@@ -130340,7 +130340,7 @@ RoundMap_Table:
 ; Touches: (0x0C73) (0x0C77) (0x0C8A) (0x0C8E) (0x0C90) (0x0D0A) (0x0D14)
 ;          (0x0D1C) (0x0D4A) (0x0E04) +7 more
 ; Calls:   T_F427A0 T_F42774 T_BStore_CursorAdvance sub_F5DDB2 sub_F5E0BD sub_F5E01D
-;          T_F427A8 T_F42810 T_F40A1C
+;          T_F427A8 T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12 T_F40A1C
 ; Evidence: the label is here because it is the target of `jr T,0xF5DBD0` at
 ;           0xF5DBB2, the jump that steps over the 28 bytes of
 ;           RoundMap_Table; the address is an instruction boundary of this
@@ -130534,7 +130534,7 @@ sub_F5DBD0_Skip14:
 sub_F5DBD0_Return:
 	ret	; F5DDA8  ret
 sub_F5DBD0_Join6:
-	call	T_F42810	; F5DDA9  call 0xf42810
+	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12	; F5DDA9  call 0xf42810
 	call	T_F40A1C	; F5DDAD  call 0xf40a1c
 	ret	; F5DDB1  ret
 
@@ -132114,7 +132114,7 @@ sub_F5EC0E:		; <- T_F42710
 ; Touches: (0x0C70) (0x0C71) (0x0C73) (0x0C75) (0x0C77) (0x0C83) (0x0C8A)
 ;          (0x0C8E) (0x0C8F) (0x0CA2) +8 more  |  0x603422
 ; Calls:   T_BStore_LoadGeometry T_F42790 sub_F5EE9A sub_F5EE95 T_F432C4 sub_F5F02C
-;          T_F427D4 T_F42814 T_F40A1C
+;          T_F427D4 T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24 T_F40A1C
 ; Evidence: thunk slot T_F426F4 holds `jp 0x00F5EC12`, and 0xF5EC12 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -132336,7 +132336,7 @@ sub_F5EBD4_Skip17:
 	ld	a, (3352:16)	; F5EE5A  ld A,(0x0d18)
 	ld	(3402:16), a	; F5EE5E  ld (0x0d4a),A
 sub_F5EBD4_Join6:
-	call	T_F42814	; F5EE62  call 0xf42814
+	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24	; F5EE62  call 0xf42814
 	call	T_F40A1C	; F5EE66  call 0xf40a1c
 	m_and_mi8 MB16, 0x0d45, 0xfc	; F5EE6A  and (0x0d45),0xfc
 	m_and_mi8 MB16, 0x0d46, 0xfa	; F5EE6F  and (0x0d46),0xfa
@@ -132676,7 +132676,7 @@ sub_F5F02C_Return:
 ; Touches: (0x0C70) (0x0C71) (0x0C73) (0x0C75) (0x0C77) (0x0C83) (0x0C8A)
 ;          (0x0C8E) (0x0C8F) (0x0CA2) +8 more  |  0x603422
 ; Calls:   T_BStore_LoadGeometry T_F42790 sub_F5F476 sub_F5EE95 T_F432C8 sub_F5FB04
-;          T_F427D8 T_F42818 T_F40A1C
+;          T_F427D8 T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36 T_F40A1C
 ; Evidence: thunk slot T_F426F8 holds `jp 0x00F5F221`, and 0xF5F221 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -132897,7 +132897,7 @@ sub_F5F02C_Skip18:
 	ld	a, (3352:16)	; F5F465  ld A,(0x0d18)
 	ld	(3402:16), a	; F5F469  ld (0x0d4a),A
 sub_F5F02C_Join7:
-	call	T_F42818	; F5F46D  call 0xf42818
+	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36	; F5F46D  call 0xf42818
 	call	T_F40A1C	; F5F471  call 0xf40a1c
 	ret	; F5F475  ret
 
@@ -134119,7 +134119,7 @@ sub_F5FB04_Skip43:
 	call	sub_F603E9	; F60258  call 0xf603e9
 	jr	sub_F5FB04_Join12	; F6025C  jr T,0xf60201
 sub_F5FB04_Join14:
-	call	T_F4281C	; F6025E  call 0xf4281c
+	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48	; F6025E  call 0xf4281c
 	call	T_F40A1C	; F60262  call 0xf40a1c
 	ret	; F60266  ret
 
@@ -134669,7 +134669,7 @@ sub_F60548_Skip8:
 ; Called from: in-module: 0xF60629 0xF6065D
 ; Touches: (0x0C73) (0x0C77) (0x0C7A) (0x0C7B) (0x0C8E) (0x0C90) (0x0D1C)
 ;          (0x0D4A) (0x126E)
-; Calls:   T_F427A0 T_F42774 T_BStore_CursorAdvance T_F427A8 T_F42820 T_F40A1C
+; Calls:   T_F427A0 T_F42774 T_BStore_CursorAdvance T_F427A8 T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60 T_F40A1C
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF6068D is an instruction boundary.
 ;           The name IS the address.
@@ -134784,7 +134784,7 @@ sub_F6068D_Join6:
 sub_F6068D_Return:
 	ret	; F60790  ret
 sub_F6068D_Join7:
-	call	T_F42820	; F60791  call 0xf42820
+	call	T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60	; F60791  call 0xf42820
 	call	T_F40A1C	; F60795  call 0xf40a1c
 	ret	; F60799  ret
 
@@ -137926,7 +137926,7 @@ sub_F62C14:		; <- T_F427F0
 sub_F62C18:		; <- T_F427F4
 	calr	sub_F63749	; F62C18  calr 0xf63749
 	ret	; F62C1B  ret
-BStore_OpenChain_Call:		; <- T_F427F8
+BStore_OpenChain_Call:		; <- T_BStore_OpenChain_Call
 	calr	BStore_OpenChain	; F62C1C  calr 0xf638bb
 	ret	; F62C1F  ret
 sub_F62C20:		; <- T_F427FC
@@ -138729,23 +138729,23 @@ sub_F633F5:		; <- T_F42788
 	ld	xhl, (4718:16)	; F633F5  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F633F9  ld A,(XHL+IX)
 	ret	; F633FE  ret
-BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12:		; <- T_F42810
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12:		; <- T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12
 	ld	xiy, BStore_ErrorStatusTable + 0xC	; F633FF  ld XIY,0x00f6344d
 	calr	BStore_ErrorToStatusByte_Sub	; F63404  calr 0xf63431
 	ret	; F63407  ret
-BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24:		; <- T_F42814
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24:		; <- T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24
 	ld	xiy, BStore_ErrorStatusTable + 0x18	; F63408  ld XIY,0x00f63459
 	calr	BStore_ErrorToStatusByte_Sub	; F6340D  calr 0xf63431
 	ret	; F63410  ret
-BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36:		; <- T_F42818
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36:		; <- T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36
 	ld	xiy, BStore_ErrorStatusTable + 0x24	; F63411  ld XIY,0x00f63465
 	calr	BStore_ErrorToStatusByte_Sub	; F63416  calr 0xf63431
 	ret	; F63419  ret
-BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48:		; <- T_F4281C
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48:		; <- T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48
 	ld	xiy, BStore_ErrorStatusTable + 0x30	; F6341A  ld XIY,0x00f63471
 	calr	BStore_ErrorToStatusByte_Sub	; F6341F  calr 0xf63431
 	ret	; F63422  ret
-BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60:		; <- T_F42820
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60:		; <- T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60
 	ld	xiy, BStore_ErrorStatusTable + 0x3C	; F63423  ld XIY,0x00f6347d
 	calr	BStore_ErrorToStatusByte_Sub	; F63428  calr 0xf63431
 	ret	; F6342B  ret
@@ -142920,7 +142920,7 @@ sub_F66123:
 ; sub_F6614E
 ; Called from: T_F42BD0 (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x22D0) (0x34BB) (0x34D0)
-; Calls:   sub_F66201 T_F425F0 T_F42E94 T_F42E98 T_F42414 T_F411B8
+; Calls:   sub_F66201 T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_F411B8
 ; Evidence: thunk slot T_F42BD0 holds `jp 0x00F6614E`, and 0xF6614E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -142932,7 +142932,7 @@ sub_F6614E:		; <- T_F42BD0
 	m_cp_mi8 MB16, 0x207a, 0x13	; F6614E  cp (0x207a),0x13
 	jr	z, sub_F66123_Return	; F66153  jr Z,0xf66190
 	call	sub_F66201	; F66155  call 0xf66201
-	call	T_F425F0	; F66159  call 0xf425f0
+	call	T_Disk_PortA3_Release_Entry	; F66159  call 0xf425f0
 	m_and_mi8 MB16, 0x34d0, 0xfb	; F6615D  and (0x34d0),0xfb
 	ld	(8912:16), 0	; F66162  ld (0x22d0),0x00
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F66167  and (0x34bb),0xfb
@@ -146046,8 +146046,8 @@ sub_F67E69:
 	ld	b, 3:opc	; F67EB3  ld B,0x03
 	ld	e, (4113:16)	; F67EB5  ld E,(0x1011)
 	ld	d, 127:opc	; F67EB9  ld D,0x7f
-	call	T_F40874	; F67EBB  call 0xf40874
-	call	T_F40898	; F67EBF  call 0xf40898
+	call	T_ParamShadow_SetField3	; F67EBB  call 0xf40874
+	call	T_ParamShadow_FlushAll	; F67EBF  call 0xf40898
 	call	T_F41F14	; F67EC3  call 0xf41f14
 	ret	; F67EC7  ret
 
@@ -171182,7 +171182,7 @@ sub_F729D9_Loop:
 ; Called from: in-module: 0xF729CC 0xF729F8 0xF72A1D
 ; Touches: (0x0C70) (0x0C71) (0x0C72) (0x0C8A) (0x0C8B) (0x0CA2) (0x0CB6)
 ;          (0x0CF8) (0x0CFA) (0x0CFE) +7 more  |  0x603500 0x60A000 0x60A100
-; Calls:   T_F427FC T_F427F8 T_F40A04 sub_F72EBA sub_F72F0A sub_F72E86
+; Calls:   T_F427FC T_BStore_OpenChain_Call T_F40A04 sub_F72EBA sub_F72F0A sub_F72E86
 ;          T_F42884 sub_F72CBC sub_F72C74 sub_F72BB3 sub_F72BC7 sub_F72BBD
 ;          +2 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -171221,7 +171221,7 @@ sub_F72A2B_Skip2:
 	ld	(3402:16), 0	; F72A6E  ld (0x0d4a),0x00
 	m_and_mi8 MB16, 0x0c8a, 0xbf	; F72A73  and (0x0c8a),0xbf
 	ld	a, (3184:16)	; F72A78  ld A,(0x0c70)
-	call	T_F427F8	; F72A7C  call 0xf427f8
+	call	T_BStore_OpenChain_Call	; F72A7C  call 0xf427f8
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F72A80  cp (0x0d4a),0x00
 	jr	z, sub_F72A2B_Skip3	; F72A85  jr Z,0xf72a8a
 	jrl	sub_F72A2B_Return	; F72A87  jrl T,0xf72bb2
@@ -171229,7 +171229,7 @@ sub_F72A2B_Skip3:
 	ld	wa, (13404:16)	; F72A8A  ld WA,(0x345c)
 	ld	(3320:16), wa	; F72A8E  ld (0x0cf8),WA
 	ld	a, (3185:16)	; F72A92  ld A,(0x0c71)
-	call	T_F427F8	; F72A96  call 0xf427f8
+	call	T_BStore_OpenChain_Call	; F72A96  call 0xf427f8
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F72A9A  cp (0x0d4a),0x00
 	jrl	nz, sub_F72A2B_Return	; F72A9F  jrl NZ,0xf72bb2
 	ld	wa, (13404:16)	; F72AA2  ld WA,(0x345c)
@@ -192025,7 +192025,7 @@ sub_F7E39F_Loop:
 	m_rd_ld_rrx RWX, 0x3C, r3	; F7E3D0  ld HL,RHL3
 	jr	z, sub_F7E39F_Skip2	; F7E3D3  jr Z,0xf7e3e0
 	ld	xiy, Data_F3A0D9	; F7E3D5  ld XIY,0x00f3a0d9
-	call	T_F4181C	; F7E3DA  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7E3DA  call 0xf4181c
 	jr	sub_F7E39F_Join	; F7E3DE  jr T,0xf7e3e9
 sub_F7E39F_Skip2:
 	ld	xiy, Data_F3A0E4	; F7E3E0  ld XIY,0x00f3a0e4
@@ -193527,9 +193527,9 @@ ScreenNull_TrackAssignPresets_Nop:
 sub_F7E770:
 	ld	(9536:16), 1	; F7E770  ld (0x2540),0x01
 	ld	xiy, DL_F3A43E	; F7E775  ld XIY,0x00f3a43e
-	call	T_F41820	; F7E77A  call 0xf41820
+	call	T_DLB_Handler_Array8_2	; F7E77A  call 0xf41820
 	ld	xiy, Data_F3A433	; F7E77E  ld XIY,0x00f3a433
-	call	T_F4181C	; F7E783  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7E783  call 0xf4181c
 	ret	; F7E787  ret
 
 ; Evidence: reached from call from prom_b 0xF7E578; call from prom_b
@@ -193732,7 +193732,7 @@ sub_F7E919:
 	ld	a, (3079:16)	; F7E92F  ld A,(0x0c07)
 	ld	(4858:16), a	; F7E933  ld (0x12fa),A
 	ld	xiy, Data_F3B7CD	; F7E937  ld XIY,0x00f3b7cd
-	call	T_F4181C	; F7E93C  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7E93C  call 0xf4181c
 	ret	; F7E940  ret
 
 ; Evidence: reached from calr from prom_b 0xF7E7A7, and from nothing else
@@ -193750,7 +193750,7 @@ sub_F7E941:
 sub_F7E941_Skip:
 	ld	(9792:16), a	; F7E963  ld (0x2640),A
 	ld	xiy, Data_F396E2	; F7E967  ld XIY,0x00f396e2
-	call	T_F4181C	; F7E96C  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7E96C  call 0xf4181c
 	ret	; F7E970  ret
 
 ; Evidence: screen 0xF43040's Enter method body; that screen's Enter draws
@@ -195695,7 +195695,7 @@ sub_F7EEEF:
 	ld	(9536:16), 1	; F7EEEF  ld (0x2540),0x01
 	call	sub_F7E2ED	; F7EEF4  call 0xf7e2ed
 	ld	xiy, DL_F3A561 + 0x1E	; F7EEF8  ld XIY,0x00f3a57f
-	call	T_F4181C	; F7EEFD  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7EEFD  call 0xf4181c
 	ret	; F7EF01  ret
 
 ; ---------------------------------------------------------------------
@@ -196029,7 +196029,7 @@ sub_F7EFFA:
 	ld	xix, Data_F39559	; F7F007  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F00C  call 0xf417f0
 	ld	xiy, DL_LastMeasure + 0x23	; F7F010  ld XIY,0x00f3a6ce
-	call	T_F4181C	; F7F015  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7F015  call 0xf4181c
 	ret	; F7F019  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F05D; calr from prom_b
@@ -196862,7 +196862,7 @@ sub_F7F32A:
 	ld	xix, Data_F39559	; F7F337  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F33C  call 0xf417f0
 	ld	xiy, DL_F3A9DA + 0x32	; F7F340  ld XIY,0x00f3aa0c
-	call	T_F4181C	; F7F345  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7F345  call 0xf4181c
 	ret	; F7F349  ret
 
 ; ---------------------------------------------------------------------
@@ -197664,7 +197664,7 @@ sub_F7F668:
 	ld	xix, Data_F39559	; F7F675  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F67A  call 0xf417f0
 	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x47	; F7F67E  ld XIY,0x00f3ad37
-	call	T_F4181C	; F7F683  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7F683  call 0xf4181c
 	ret	; F7F687  ret
 
 ; ---------------------------------------------------------------------
@@ -198422,7 +198422,7 @@ sub_F7F99C:
 	ld	xix, Data_F39559	; F7F9A9  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F9AE  call 0xf417f0
 	ld	xiy, DL_F3AB3B + 0x2E	; F7F9B2  ld XIY,0x00f3ab69
-	call	T_F4181C	; F7F9B7  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7F9B7  call 0xf4181c
 	ret	; F7F9BB  ret
 
 ; ---------------------------------------------------------------------
@@ -199193,7 +199193,7 @@ sub_F7FCE6:
 	ld	xix, Data_F39559	; F7FCF3  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7FCF8  call 0xf417f0
 	ld	xiy, DL_F3B1E3 + 0x2E	; F7FCFC  ld XIY,0x00f3b211
-	call	T_F4181C	; F7FD01  call 0xf4181c
+	call	T_DLB_Handler_Array8	; F7FD01  call 0xf4181c
 	ret	; F7FD05  ret
 
 ; ---------------------------------------------------------------------

@@ -269,10 +269,10 @@ def render_span1(b, htb):
     out.append("; HOW THIS RECORD IS RUN.  0xF5BB93-0xF5BBA9 in UiPaint_Ordinals is\n"
                ";     ld XIY,0x00F02FED / ld XIX,0x00F02FF7 / call 0xF417F0  <- interpreter A\n"
                ";     ld XIY,0x00F02FF7 / call 0xF4181C                      <- THIS record\n"
-               "; and T_F4181C is `jp 0xF31B57`, a jump straight into the op-0x03 handler,\n"
+               "; and T_DLB_Handler_Array8 is `jp 0xF31B57`, a jump straight into the op-0x03 handler,\n"
                "; so the record is handed to its handler with no opcode dispatch at all.\n"
                "; That also answers what UiPaint_Ordinals' own header records as open:\n"
-               "; \"what thunk T_F4181C does with 0xF02FF7 after the last paint\".\n")
+               "; \"what thunk T_DLB_Handler_Array8 does with 0xF02FF7 after the last paint\".\n")
     out.append("; ------------------------------------------------------------------\n")
     out.append("DL_F02FF7:\t\t; renamed from Data_F02FF7 -- nothing referenced that label\n")
     out += V2.render_b(b, REC1, op, ln, htb)

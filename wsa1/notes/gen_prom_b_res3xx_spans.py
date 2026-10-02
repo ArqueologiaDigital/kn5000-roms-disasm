@@ -74,7 +74,7 @@ SPAN 3  0xF34350 +17  ->  0xF3434C-0xF34360, 1 opcode-02 record + its table
 
 SPAN 4  0xF3A443 +30  ->  0xF3A43E-0xF3A460, 1 opcode-08 record + its table
     prom_b 0xF7E775 does `ld XIY,0x00f3a43e` / `call 0xf41820`, and
-    T_F41820 is `jp 0xF31B57` -- the opcode-03/08 handler. Its neighbour
+    T_DLB_Handler_Array8_2 is `jp 0xF31B57` -- the opcode-03/08 handler. Its neighbour
     0xF3A433 is handed to the same handler from 0xF7E77E. Both carry
     `.long 0x00F3A449`; the handler's entries are 8 bytes; the far end is
     DL_F3A461 (`ld XIY,0x00f3a461`, 7 sites), so the table is exactly 3
@@ -335,7 +335,7 @@ def block4(d):
            "; 30-byte `.incbin` that followed it.",
            ";",
            "; THE START IS NAMED BY CODE: prom_b 0xF7E775 does",
-           "; `ld XIY,0x00f3a43e` / `call 0xf41820`, and T_F41820 is `jp 0xF31B57`,",
+           "; `ld XIY,0x00f3a43e` / `call 0xf41820`, and T_DLB_Handler_Array8_2 is `jp 0xF31B57`,",
            "; the opcode-03/08 handler -- the record is handed to its handler",
            "; directly, with no interpreter loop to mis-frame it.  Its neighbour",
            "; Data_F3A433 goes to the same handler from 0xF7E77E.",

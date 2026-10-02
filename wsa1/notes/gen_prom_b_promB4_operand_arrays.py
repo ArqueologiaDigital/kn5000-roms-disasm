@@ -34,16 +34,16 @@ EXTERNAL CONFIRMATION (the part that is not self-referential)
   prom_a and prom_b both call the interpreter-B handlers DIRECTLY, with the
   record address in XIY, through the thunks
 
-      T_F4181C: jp 0xF31B57      (op 03 / op 08 -- 8-byte entries)
-      T_F41820: jp 0xF31B57
+      T_DLB_Handler_Array8: jp 0xF31B57      (op 03 / op 08 -- 8-byte entries)
+      T_DLB_Handler_Array8_2: jp 0xF31B57
       T_F41824: jp 0xF31B86      (op 04 -- 6-byte entries)
 
   and those call sites name three of the record starts this script asserts:
 
-      prom_b 0xF7E966  ld XIY,0x00F396E2 ; call T_F4181C   -> span 1's record
-      prom_a 0xF81E93  ld XIY,0x00F3DA77 ; call T_F4181C   -> span 4 record 1
-      prom_a 0xF81EAE  ld XIY,0x00F3DAA2 ; call T_F4181C   -> span 4 record 2
-      prom_a 0xF81ECC  ld XIY,0x00F3DAED ; call T_F4181C   -> span 4 record 3
+      prom_b 0xF7E966  ld XIY,0x00F396E2 ; call T_DLB_Handler_Array8   -> span 1's record
+      prom_a 0xF81E93  ld XIY,0x00F3DA77 ; call T_DLB_Handler_Array8   -> span 4 record 1
+      prom_a 0xF81EAE  ld XIY,0x00F3DAA2 ; call T_DLB_Handler_Array8   -> span 4 record 2
+      prom_a 0xF81ECC  ld XIY,0x00F3DAED ; call T_DLB_Handler_Array8   -> span 4 record 3
 
   0xF396E2 is the important one: the tree currently swallows its first five
   bytes into the 398-byte `Data_F39559` string blob, whose own header warns
@@ -365,7 +365,7 @@ def edits(b):
         "\xe2\x9a\xa0 THE 398-BYTE EXTENT OF Data_F39559 ABOVE OVERSHOT BY 5 BYTES, and its",
         "  own header said so: \"the extent is the reachability walk's, not the",
         "  object's\".  0xF396E2 is a record start -- prom_b 0xF7E966 does",
-        "  `ld XIY,0x00F396E2` then calls T_F4181C (`jp 0xF31B57`, the",
+        "  `ld XIY,0x00F396E2` then calls T_DLB_Handler_Array8 (`jp 0xF31B57`, the",
         "  interpreter-B op-03 handler).  The string table above it is 32 entries",
         "  of 7 bytes, \"PART 1 \" .. \"PART 32\", ending exactly at 0xF396E2.",
         "  Data_F39559 is therefore 393 bytes, not 398.",
@@ -411,7 +411,7 @@ def edits(b):
     new = hdr("span4", 0xF3DA77, 0xF3DC00, SPANS[3]["anchor"], extra=[
         "All three records are named from prom_a, which calls the interpreter-B",
         "op-03 handler directly: 0xF81E93, 0xF81EE3 -> 0xF3DA77; 0xF81EAE ->",
-        "0xF3DAA2; 0xF81ECC -> 0xF3DAED, each followed by `call T_F4181C`",
+        "0xF3DAA2; 0xF81ECC -> 0xF3DAED, each followed by `call T_DLB_Handler_Array8`",
         "(`jp 0xF31B57`).  The first record's own mask/shift (0x0C >> 2) + 1 = 4",
         "equals its array's extent exactly -- the one place in this lane where",
         "the index bound and the measured size agree.",
@@ -484,7 +484,7 @@ COVER_NOTE = (
 HEADER_FIXES = [
     ("F39559", 398, 393,
      "The last 5 bytes were the head of the interpreter-B record at 0xF396E2, "
-     "which prom_b 0xF7E966 loads into XIY before calling T_F4181C.  The "
+     "which prom_b 0xF7E966 loads into XIY before calling T_DLB_Handler_Array8.  The "
      "string table here is 32 entries of 7 bytes ending exactly at 0xF396E2."),
     ("F3A0E4", 5, 11,
      "This object was the first 5 bytes of an 11-byte interpreter-B op-04 "

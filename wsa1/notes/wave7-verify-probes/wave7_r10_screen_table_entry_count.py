@@ -6,7 +6,7 @@ QUESTION IT ANSWERS
      Are they?"  They are not.  They hold 23.
 
 WHY IT MATTERS BEYOND THE COUNT
-    The bound lives in prom_b sub_F55019 (reached via T_F42C74), which rejects a
+    The bound lives in prom_b sub_F55019 (reached via T_PanelCode_ToSlotAndFlags), which rejects a
     raw index above 0x1F and then REMAPS it -- 0x11..0x19 become 0..8, and
     0x1A..0x1F become 17..22 -- so what reaches `mul A,0x04` is 0..22, which is
     23 slots.  That remapper is a LAYER-2 result in its own right: the per-screen

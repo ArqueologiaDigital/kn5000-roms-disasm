@@ -53,9 +53,9 @@ mechanism, checkable line by line.
 | `Fdc_Request_Thunk` | sub_FE3032 | push block ptr, call `Fdc_Request` (no reg save) |
 | `Disk_CommandDispatch_SaveRegs` | sub_FE3042 | save regs to 0x605D70, call `Disk_CommandDispatch`, restore |
 | `Disk_CommandDispatch_Thunk` | sub_FE3020 | push args, call `Disk_CommandDispatch` |
-| `Fdc_Request_SaveRegs_Entry` | sub_FE3018 | published jp slot (T_F42D38, 17 sites) |
-| `Fdc_Request_Thunk_Entry` | sub_FE3004 | published jp slot (T_F42D24, 0 callers) |
-| `Disk_CommandDispatch_SaveRegs_Entry` | sub_FE3014 | published jp slot (T_F42D34, **23 sites**) |
+| `Fdc_Request_SaveRegs_Entry` | sub_FE3018 | published jp slot (T_Fdc_Request_SaveRegs_Entry, 17 sites) |
+| `Fdc_Request_Thunk_Entry` | sub_FE3004 | published jp slot (T_Fdc_Request_Thunk_Entry, 0 callers) |
+| `Disk_CommandDispatch_SaveRegs_Entry` | sub_FE3014 | published jp slot (T_Disk_CommandDispatch_SaveRegs_Entry, **23 sites**) |
 | `Disk_CommandDispatch_Thunk_Entry` | sub_FE3000 | published jp slot |
 
 ### The second command core
@@ -64,7 +64,7 @@ mechanism, checkable line by line.
 dispatcher, distinct from `Fdc_Request`: it reads a command code from
 `(XSP+0x04)` and routes it through a word-offset jump table (offsets at
 0xFE6DFE, base 0xFE42B4) to ~19 handlers. It is the busiest published entry into
-the module (T_F42D34, 23 call sites). ⚠ **The individual handlers are NOT named**
+the module (T_Disk_CommandDispatch_SaveRegs_Entry, 23 call sites). ⚠ **The individual handlers are NOT named**
 — see the refusal below.
 
 ### The FDC-request builders

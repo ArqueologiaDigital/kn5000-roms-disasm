@@ -191,7 +191,7 @@ assert [s for _, s in ELEMENT] == [4, 3, 2, 1]
 assert le(b(0xF37B9D + 1, 3)) == 0xF43470, "the melodic setter moved"
 assert b(0xF43470, 4) == bytes([0x1B, 0x6A, 0x61, 0xFD]), "T_F43470 -> prom_a 0xFD616A"
 
-# Inside the common block, one span is served by prom_b itself (thunk T_F434A0)
+# Inside the common block, one span is served by prom_b itself (thunk T_DspParam_WriteByNumber)
 # and never leaves the panel processor; everything else goes out to CPU 2.
 for site in (0xF37B1D, 0xF37B25, 0xF37B6A, 0xF37B72):
     assert b(site, 2) == bytes([0xEC, 0xCF]), "no `cp XIX,imm32` at %06X" % site
@@ -203,7 +203,7 @@ for site, bias in ((0xF37B3C, 70), (0xF37B60, 69)):
 MEL_LOCAL_N = MEL_LOCAL[1] - MEL_LOCAL[0] + 1
 assert MEL_LOCAL_N == 69, "%d locally served parameters" % MEL_LOCAL_N
 assert le(b(0xF37CEC + 1, 3)) == 0xF434A0, "the locally served setter moved"
-assert b(0xF434A0, 4) == bytes([0x1B, 0x30, 0x1C, 0xF1]), "T_F434A0 -> prom_b 0xF11C30"
+assert b(0xF434A0, 4) == bytes([0x1B, 0x30, 0x1C, 0xF1]), "T_DspParam_WriteByNumber -> prom_b 0xF11C30"
 
 # --------------------------------------------------------- DRUM region layout
 assert b(0xF37BDF, 6) == bytes([0xEC, 0xCF, 0x98, 0x01, 0x00, 0x00])   # cp XIX,408

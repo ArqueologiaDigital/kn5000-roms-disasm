@@ -253,7 +253,7 @@ Next targets, as the wave-6 lanes left them:
   the sequencer/UI module. Deferred because ~15 string constants sit **inside the instruction
   stream** (`SEQUENCER`, `NOTE EDIT`, `DRUM EDIT`, an 838-byte effect-name table at `0xFF047F`);
   their bounds must be pinned first or the linear decode desynchronises. **That bounding is the
-  next pass's first job.** After that `prom_a_module_frontier.py` ranks `T_F43350` (`0xFA60C2`,
+  next pass's first job.** After that `prom_a_module_frontier.py` ranks `T_MidiIn_ReqListRebuild_Msg13_16` (`0xFA60C2`,
   8,886 B) first.
 * **prom_b** — top span is now `0xF067A6-0xF0D79B` (28,662 B); `prom_b_module_frontier.py`'s top
   thunk run is `T_F42E40` (4,624 B).

@@ -1017,9 +1017,9 @@ narrow operand rule could not see the disclosure; the phrasing was fixed rather
 than the rule widened.
 
 ⚠ It also typed one thunk-slot number, `T_F40B54`, for the slot that targets
-0xF48C1A. The real slot is **T_F43430**; T_F40B54 targets 0xF483B2. The header
+0xF48C1A. The real slot is **T_DiskFile_CheckSignature**; T_F40B54 targets 0xF483B2. The header
 now reads the slot out of `thunks()`, and a `checks()` row asserts the slot set
-of 0xF48C1A is exactly {T_F43430}. The lesson is the same one this tree keeps
+of 0xF48C1A is exactly {T_DiskFile_CheckSignature}. The lesson is the same one this tree keeps
 relearning: **a name typed next to an address is not evidence, even when the
 address is right.**
 
@@ -1369,7 +1369,7 @@ ending on a boundary established independently of the span.
 
 Three record starts are confirmed from OUTSIDE prom_b's own data: prom_b
 `0xF7E966` and prom_a `0xF81E93`/`0xF81EAE`/`0xF81ECC` load them into XIY and
-call `T_F4181C` (`jp 0xF31B57`) directly. That is what overturned the 398-byte
+call `T_DLB_Handler_Array8` (`jp 0xF31B57`) directly. That is what overturned the 398-byte
 extent of `Data_F39559` — it had swallowed the first 5 bytes of the record at
 `0xF396E2`.
 
@@ -1412,7 +1412,7 @@ comes from outside the span, and `--selftest` asserts it against the ROM:
 
 * `0xF3434C`, `0xF3A43E` and `0xF3A433` are loaded into XIY by converted code
   and handed **straight to one handler** — `T_F417F8` → `0xF31B21` and
-  `T_F41820`/`T_F4181C` → `0xF31B57` — with no interpreter loop that could
+  `T_DLB_Handler_Array8_2`/`T_DLB_Handler_Array8` → `0xF31B57` — with no interpreter loop that could
   mis-frame them.
 * `0xF329FA` is entries 1 and 2 of the LE32 pointer array at `0xF32A36`, which
   `0xF09AE1` indexes and runs through `T_F41830` → `0xF31AEC`
@@ -1555,7 +1555,7 @@ record is `03 0B` → `HTBL_B[3]` = `0xF31B57`, which does `sla 0x03,HL` before
 selected entry go to `(0x2530)`, `(0x2532)`, `(0x2534)`, `(0x2536)` = X0, Y0,
 X1, Y1, so X is the constant pair and Y the stepping one: five 26×13 extents 37
 rows apart, in the same x range `DL_F02FED` (op `0x1B` = `LCD_Svc_1B_EraseRect`)
-clears over the whole y range just before it. `T_F4181C` is `jp 0xF31B57`, so
+clears over the whole y range just before it. `T_DLB_Handler_Array8` is `jp 0xF31B57`, so
 `ld XIY,0x00F02FF7 / call 0xF4181C` at `0xF5BBA1` hands the record straight to
 its handler — which answers what `UiPaint_Ordinals`' own header records as open.
 

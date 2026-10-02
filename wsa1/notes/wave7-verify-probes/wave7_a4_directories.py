@@ -32,13 +32,13 @@ for name,d,area_lo,area_hi in (("A",0xF87681,0xF87982,0xF87B71),
         P("    last :",nonempty[-1][0],nonempty[-1][1])
         ids=[i for i,_ in nonempty]
         P("    ids min..max:",min(ids),max(ids),"contiguous:",ids==list(range(min(ids),max(ids)+1)))
-        # claim: ids 0..32 each get per-id handler T_F41070+4*id followed by common tail
+        # claim: ids 0..32 each get per-id handler T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13+4*id followed by common tail
         tail=['0xf415a8','0xf4067c','0xf415b0','0xf40754','0xf418c8','0xf411c0','0xf40810']
         okc=0; badc=[]
         for i,l in nonempty:
             if l[0]==hex(0xF41070+4*i) and l[1:]==tail: okc+=1
             else: badc.append((i,l))
-        P("    lists == [T_F41070+4*id]+common tail:",okc,"exceptions:",len(badc))
+        P("    lists == [T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13+4*id]+common tail:",okc,"exceptions:",len(badc))
         for x in badc[:6]: P("      ",x)
 # fallback lists
 for base in (0xF87E81,0xF88E91,0xF89671):

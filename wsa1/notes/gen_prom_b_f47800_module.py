@@ -38,13 +38,13 @@ WHERE THE BOUNDARIES COME FROM
       * the first byte of a maximal run of 0x0E, with the run's purity re-read on
         every emit (the `fill` rows);
       * a thunk target -- 0xF48C1A ends the 0xF48C00 data island and is the
-        target of thunk slot T_F43430, which is as hard a pin as this tree has.
+        target of thunk slot T_DiskFile_CheckSignature, which is as hard a pin as this tree has.
         ⚠ The slot NAME is computed by thunks() wherever it is printed: the
         first draft of this file typed "T_F40B54" here and in the Table_F48C00
         header, and T_F40B54's target is 0xF483B2.  The Table_F48C00 header now
         reads the slot out of thunks(); the one remaining typed occurrence, in
         the block BANNER, is pinned by a checks() row that asserts the slot set
-        of 0xF48C1A is exactly {T_F43430};
+        of 0xF48C1A is exactly {T_DiskFile_CheckSignature};
       * an address that a decoded instruction of this transcription names.
     checks() re-derives all of them from the ROM.
 
@@ -795,8 +795,8 @@ def checks(verbose=True):
       text_at(0xF48C24), "lda XIY,0xf48c00")
     c("  and `ld XBC,(0xf48c10)` at 0xF48C2E takes the next four",
       text_at(0xF48C2E), "ld XBC,(0xf48c10)")
-    c("  and 0xF48C1A, the byte after it, is thunk slot T_F43430's target",
-      sorted("T_%06X" % x for x in th.get(0xF48C1A, [])), ["T_F43430"])
+    c("  and 0xF48C1A, the byte after it, is thunk slot T_DiskFile_CheckSignature's target",
+      sorted("T_%06X" % x for x in th.get(0xF48C1A, [])), ["T_DiskFile_CheckSignature"])
     for a in (0xF4B7AD, 0xF4E5DC):
         c("IdentityMap_%06X is 0..31" % a, list(at(a, 32)), list(range(32)))
         rd = direct_refs(a)
@@ -936,7 +936,7 @@ BANNER = """
 ;   0xF48C00  Table_F48C00 -- 'WSA SOUND RAM S0', then 'WSA1', then six bytes.
 ;             The routine at the very next address copies the first sixteen to a
 ;             stack frame with `ldirw` and the next four with `ld XBC,(...)`.
-;             The island's END is 0xF48C1A, the target of thunk slot T_F43430, so
+;             The island's END is 0xF48C1A, the target of thunk slot T_DiskFile_CheckSignature, so
 ;             it is pinned by an entry point the hardware uses, not by a reading.
 ;
 ;   0xF4C000  DL_F4C000 -- 81 UI display-list records.  Their own length bytes

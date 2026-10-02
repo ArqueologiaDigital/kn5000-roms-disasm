@@ -61,7 +61,7 @@ measurement that says so.
 
 **64 slots** of prom_b's 0xF4xxxx thunk directory target prom_a's block-device
 half (0xFE0000-0xFE7FFF). The two that name the 0xFE3000 disk module are
-`T_F42D34` -> 0xFE3014 (23 call sites) and `T_F42D38` -> 0xFE3018 (17). **Every
+`T_Disk_CommandDispatch_SaveRegs_Entry` -> 0xFE3014 (23 call sites) and `T_Fdc_Request_SaveRegs_Entry` -> 0xFE3018 (17). **Every
 one of those 40 call sites is inside 0xFE0000-0xFE7FFF itself** — the disk module
 has no caller outside prom_a's own block-device half at all.
 
@@ -81,7 +81,7 @@ are the UI's way in:
 | `T_F425CC` | 0xFE1C80 | 1 |
 | `T_F425E4` | 0xFE1CAF | 4 |
 | `T_F425E8` | 0xFE1CB3 | 3 |
-| `T_F425F0` | 0xFE1CC4 | 1: 0xF66159 |
+| `T_Disk_PortA3_Release_Entry` | 0xFE1CC4 | 1: 0xF66159 |
 | `T_F42600` | 0xFE1CD4 | 2 |
 | `T_F42604` | 0xFE1CD8 | 8 |
 | `T_F43024` | 0xFE7927 | 1: 0xF44AA3 |

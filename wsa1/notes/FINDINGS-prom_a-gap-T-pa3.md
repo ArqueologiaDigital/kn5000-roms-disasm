@@ -110,10 +110,10 @@ a per-operation line has:
 `sub_FE08BD` to `Fdc_Request` (0xFE66C7):
 
 ```
-sub_FE08BD -> sub_FE1962 -> T_F42D34 -> 0xFE3042 (Disk_CommandDispatch_SaveRegs) -> Disk_CommandDispatch (sub_FE426E) -> sub_FE370A -> Fdc_Request
+sub_FE08BD -> sub_FE1962 -> T_Disk_CommandDispatch_SaveRegs_Entry -> 0xFE3042 (Disk_CommandDispatch_SaveRegs) -> Disk_CommandDispatch (sub_FE426E) -> sub_FE370A -> Fdc_Request
 ```
 
-`sub_FE1962` is one of **23** call sites of directory slot `T_F42D34`, all in
+`sub_FE1962` is one of **23** call sites of directory slot `T_Disk_CommandDispatch_SaveRegs_Entry`, all in
 this module; the slot's target 0xFE3042 marshals five long registers into
 0x605D70-0x605D80 and tail-jumps into the request layer. So the module that
 drives PA bit 3 is the module that issues disk requests, and it drives the pin

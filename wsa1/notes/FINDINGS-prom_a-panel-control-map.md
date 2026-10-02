@@ -245,7 +245,7 @@ the gap closed.
 Its shape is exactly what this map predicts of a screen — `[00]-[07]` all one
 target, `[08]-[0C]` five distinct, `[0D]/[0E]` one, `[0F]` its own, `[10]-[1F]`
 all one. **That is not enough.** Its reader is published as prom_b thunk slot
-`T_F402B4` and nothing in either image names that slot, so no caller establishes
+`T_ScreenButton_Sequencer` and nothing in either image names that slot, so no caller establishes
 what HL holds. A shape that fits is a coincidence until a caller says otherwise;
 the handlers there are left `sub_XXXXXX` and the note says why.
 

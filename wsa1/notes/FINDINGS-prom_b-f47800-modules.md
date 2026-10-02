@@ -89,11 +89,11 @@ nothing beyond the bytes. Reads like the title and format magic of a saved-data
 header; nothing decoded here follows the frame to a device, so the guess stays
 out of the name.
 
-⚠ The island's END is 0xF48C1A, which is the target of thunk slot **T_F43430** —
+⚠ The island's END is 0xF48C1A, which is the target of thunk slot **T_DiskFile_CheckSignature** —
 an entry point the hardware uses, not a reading. *The first draft of the
 generator typed `T_F40B54` here; T_F40B54's target is 0xF483B2. The header now
 reads the slot out of the thunk table, and a `checks()` row asserts the slot set
-of 0xF48C1A is exactly {T_F43430}.*
+of 0xF48C1A is exactly {T_DiskFile_CheckSignature}.*
 
 **`IdentityMap_F4B7AD` and `IdentityMap_F4E5DC`** — 32 bytes each, entry k = k.
 Each has exactly one reader, `ld XIX,imm32`. prom_b now has **three** identity

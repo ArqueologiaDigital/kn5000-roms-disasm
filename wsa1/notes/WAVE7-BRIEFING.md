@@ -109,10 +109,10 @@ Output at resume, truncated to the spans a wave would plausibly pick:
 === prom_a: 13 .incbin spans, 106,585 bytes still unconverted ===
     0xFAD800-0xFB2000  file 0x2D800     18,432 bytes
         <- T_F41F10-T_F41F3C     12 slots,  12 unconverted, extent   3216,   17 refs
-        <- T_F40850-T_F4089C     20 slots,  20 unconverted, extent   2595,   35 refs
+        <- T_Evt2030_RunList-T_ParamApply_OneHotOfSix     20 slots,  20 unconverted, extent   2595,   35 refs
         <- T_F40840-T_F40840      1 slots,   1 unconverted, extent      0,    1 refs
     0xFA5AEB-0xFAA000  file 0x25AEB     17,685 bytes
-        <- T_F43350-T_F43358      3 slots,   3 unconverted, extent   8886,    1 refs
+        <- T_MidiIn_ReqListRebuild_Msg13_16-T_F43358      3 slots,   3 unconverted, extent   8886,    1 refs
         <- T_F40744-T_F40760      8 slots,   8 unconverted, extent   7668,   16 refs
         <- T_F40714-T_F40734      9 slots,   3 unconverted, extent    245,    7 refs
     0xFA1404-0xFA5400  file 0x21404     16,380 bytes
@@ -146,7 +146,7 @@ Output at resume, truncated to the spans a wave would plausibly pick:
         <- T_F41250-T_F41264      6 slots,   6 unconverted, extent   4091,    8 refs
         <- T_F42660-T_F42664      2 slots,   2 unconverted, extent     67,    2 refs
     0xF17559-0xF1B400  file 0x17559     16,039 bytes
-        <- T_F42FD0-T_F43000     13 slots,  13 unconverted, extent   1199,    0 refs
+        <- T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8     13 slots,  13 unconverted, extent   1199,    0 refs
     0xF5553F-0xF57D1E  file 0x5553F     10,207 bytes
         <- T_F40D90-T_F40E18     35 slots,  35 unconverted, extent   3365,    8 refs
         <- T_F42C70-T_F42CA8     15 slots,   3 unconverted, extent    427,   33 refs

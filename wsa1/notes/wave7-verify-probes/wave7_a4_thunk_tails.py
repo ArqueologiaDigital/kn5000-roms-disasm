@@ -17,10 +17,10 @@ for i,p in enumerate(e):
     if l: ne.append(i)
     if l and l[0]==0xF41070+4*i and l[1:]==tail: match.append(i)
 print("non-empty ids count:",len(ne))
-print("ids matching [T_F41070+4*id]+tail exactly:",len(match), match)
+print("ids matching [T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13+4*id]+tail exactly:",len(match), match)
 print("id 0 list:",[hex(x) for x in walk(e[0])])
 print("id 31 list:",[hex(x) for x in walk(e[31])])
 print("id 32 list:",[hex(x) for x in walk(e[32])])
 # which ids have first entry == 0xF41070+4*id
 f=[i for i in ne if walk(e[i])[0]==0xF41070+4*i]
-print("ids whose FIRST entry is T_F41070+4*id:",len(f), f)
+print("ids whose FIRST entry is T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13+4*id:",len(f), f)

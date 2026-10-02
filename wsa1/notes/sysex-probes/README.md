@@ -620,7 +620,7 @@ ceiling); refusal answer `F0 50 29 7E F7`.
    1 — silently. Restoring a region takes one message per byte.
 3. **73 offsets of the melodic region and 70 of the drum region never reach the
    sound engine**; they are answered by the panel processor through thunk
-   `T_F434A0`, and they are the same 69 parameters the `byte 7 = 11` wildcard
+   `T_DspParam_WriteByNumber`, and they are the same 69 parameters the `byte 7 = 11` wildcard
    record of the parameter area reaches (`sysex_param_space.py` trap 2).
 
 ## `sysex_model_variant.py` — signal being read

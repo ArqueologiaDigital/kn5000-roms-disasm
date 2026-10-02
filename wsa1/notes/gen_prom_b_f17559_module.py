@@ -920,7 +920,7 @@ def banner():
     out += bw("; ", "16,039 bytes in %d objects: %s.  The span holds NO CODE -- "
               "exactly thirteen in-span addresses are the target of a transfer "
               "anywhere in the four `.s` files and all thirteen are `jp` slots "
-              "of one STALE thunk run (T_F42FD0-T_F43000, every slot with zero "
+              "of one STALE thunk run (T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8, every slot with zero "
               "references, eleven of them landing INSIDE a record).  So no "
               "decode is run here; the boundaries come from proven operands, "
               "display-list call sites, `ldir` copy lengths and record framing "
