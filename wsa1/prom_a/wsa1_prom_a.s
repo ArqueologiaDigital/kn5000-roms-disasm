@@ -124233,8 +124233,8 @@ ModuleTables_FCF044:
 ; KeyboardX_SemitoneOffset -- 12 bytes: the x offset, in pixels, of each
 ; semitone C..B within one octave of a drawn keyboard: C 0, C# 2, D 4, D# 6,
 ; E 8, F 12, F# 14, G 16, G# 18, A 20, A# 22, B 24 (white keys 4 apart).
-; Read by: sub_FD9414 at 0xFD9450 (the one add of 0x00FCF048 in prom_a or
-;          prom_b).  sub_FD9414(note, &x)
+; Read by: KeyboardX_ForNote at 0xFD9450 (the one add of 0x00FCF048 in prom_a or
+;          prom_b).  KeyboardX_ForNote(note, &x)
 ;          clamps note to 20..108, then x = 28*((note-12)/12)
 ;          + this[(note-12)%12] - 18: 28 = 7 white keys x 4 px per octave.
 ;          COUNT 12 = the `div C,0x0C` remainder range.
@@ -130665,7 +130665,7 @@ sub_FD2D5F:
 	call Arr27A6_Set                                      ; FD2DCC  1d 65 6c fd
 	pushw 0x00                                           ; FD2DD0  0b 00 00
 	pushw 0x00                                           ; FD2DD3  0b 00 00
-	call sub_FD946B                                      ; FD2DD6  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD2DD6  1d 6b 94 fd
 	inc 8,XSP                                            ; FD2DDA  ef 60
 	inc 6,XSP                                            ; FD2DDC  ef 66
 .LFD2DDE:
@@ -130716,7 +130716,7 @@ sub_FD2DEA:
 	call T_Dispatch_Code80                               ; FD2E47  1d d4 1e f4
 	pushw 0x00                                           ; FD2E4B  0b 00 00
 	pushw 0x00                                           ; FD2E4E  0b 00 00
-	call sub_FD946B                                      ; FD2E51  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD2E51  1d 6b 94 fd
 	add XSP,0x0000001c                                   ; FD2E55  ef c8 1c 00 00 00
 .LFD2E5B:
 	pushw 0x04                                           ; FD2E5B  0b 04 00
@@ -130782,7 +130782,7 @@ sub_FD2E66:
 	call T_Dispatch_Code80                               ; FD2EE8  1d d4 1e f4
 	pushw 0x00                                           ; FD2EEC  0b 00 00
 	pushw 0x00                                           ; FD2EEF  0b 00 00
-	call sub_FD946B                                      ; FD2EF2  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD2EF2  1d 6b 94 fd
 	add XSP,0x0000001c                                   ; FD2EF6  ef c8 1c 00 00 00
 .LFD2EFC:
 	pushw 0x05                                           ; FD2EFC  0b 05 00
@@ -130832,7 +130832,7 @@ sub_FD2F08:
 	call T_Dispatch_Code80                               ; FD2F65  1d d4 1e f4
 	pushw 0x00                                           ; FD2F69  0b 00 00
 	pushw 0x00                                           ; FD2F6C  0b 00 00
-	call sub_FD946B                                      ; FD2F6F  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD2F6F  1d 6b 94 fd
 	add XSP,0x0000001c                                   ; FD2F73  ef c8 1c 00 00 00
 .LFD2F79:
 	pushw 0x06                                           ; FD2F79  0b 06 00
@@ -131742,7 +131742,7 @@ sub_FD3729:
 	call Arr27A6_Set                                      ; FD378C  1d 65 6c fd
 	pushw 0x00                                           ; FD3790  0b 00 00
 	pushw 0x02                                           ; FD3793  0b 02 00
-	call sub_FD946B                                      ; FD3796  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD3796  1d 6b 94 fd
 	lda xbc, (xiz-4)                                     ; FD379A  be fc 31
 	push XBC                                             ; FD379D  39
 	pushw 0x09                                           ; FD379E  0b 09 00
@@ -131805,7 +131805,7 @@ sub_FD37D3:
 	call Arr27A6_Set                                      ; FD3836  1d 65 6c fd
 	pushw 0x00                                           ; FD383A  0b 00 00
 	pushw 0x02                                           ; FD383D  0b 02 00
-	call sub_FD946B                                      ; FD3840  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD3840  1d 6b 94 fd
 	lda xbc, (xiz-4)                                     ; FD3844  be fc 31
 	push XBC                                             ; FD3847  39
 	pushw 0x09                                           ; FD3848  0b 09 00
@@ -131868,7 +131868,7 @@ sub_FD387D:
 	call Arr27A6_Set                                      ; FD38E0  1d 65 6c fd
 	pushw 0x00                                           ; FD38E4  0b 00 00
 	pushw 0x02                                           ; FD38E7  0b 02 00
-	call sub_FD946B                                      ; FD38EA  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD38EA  1d 6b 94 fd
 	lda xbc, (xiz-4)                                     ; FD38EE  be fc 31
 	push XBC                                             ; FD38F1  39
 	pushw 0x09                                           ; FD38F2  0b 09 00
@@ -131933,7 +131933,7 @@ sub_FD3955:
 	call T_Dispatch_Code80                               ; FD3984  1d d4 1e f4
 	pushw 0x00                                           ; FD3988  0b 00 00
 	pushw 0x02                                           ; FD398B  0b 02 00
-	call sub_FD946B                                      ; FD398E  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD398E  1d 6b 94 fd
 	add XSP,0x0000001c                                   ; FD3992  ef c8 1c 00 00 00
 .LFD3998:
 	pushw 0x04                                           ; FD3998  0b 04 00
@@ -131999,7 +131999,7 @@ sub_FD39A3:
 	call T_Dispatch_Code80                               ; FD3A25  1d d4 1e f4
 	pushw 0x00                                           ; FD3A29  0b 00 00
 	pushw 0x02                                           ; FD3A2C  0b 02 00
-	call sub_FD946B                                      ; FD3A2F  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD3A2F  1d 6b 94 fd
 	add XSP,0x0000001c                                   ; FD3A33  ef c8 1c 00 00 00
 .LFD3A39:
 	pushw 0x05                                           ; FD3A39  0b 05 00
@@ -132050,7 +132050,7 @@ sub_FD3A45:
 	call T_Dispatch_Code80                               ; FD3AA2  1d d4 1e f4
 	pushw 0x00                                           ; FD3AA6  0b 00 00
 	pushw 0x02                                           ; FD3AA9  0b 02 00
-	call sub_FD946B                                      ; FD3AAC  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FD3AAC  1d 6b 94 fd
 	add XSP,0x0000001c                                   ; FD3AB0  ef c8 1c 00 00 00
 .LFD3AB6:
 	pushw 0x06                                           ; FD3AB6  0b 06 00
@@ -134837,7 +134837,7 @@ ToneEditPage_A5_Op11:
 	cp (XIZ+0x08),0x00                                   ; FD5097  8e 08 3f 00
 	jr nz, .LFD50A6                                      ; FD509B  6e 09
 	pushw 0x00                                           ; FD509D  0b 00 00
-	calr sub_FD50C0                                      ; FD50A0  1e 1d 00
+	calr ModelingPage_SetField0RepaintPage1of3                                      ; FD50A0  1e 1d 00
 	popw bc                                              ; FD50A3  49
 	jr .LFD50BD                                          ; FD50A4  68 17
 .LFD50A6:
@@ -134853,7 +134853,9 @@ ToneEditPage_A5_Op11:
 .LFD50BD:
 	unlk XIZ                                             ; FD50BD  ee 0d
 	ret                                                  ; FD50BF  0e
-sub_FD50C0:
+; ModelingPage_SetField0RepaintPage1of3(v): unless ModelingPage_Fields[0] == v and [15] == 1: [15] = 1, [0] = v,
+;   T_Dispatch_Code80(0xC5, 0) -- code 0xC5 reaches page 0xA5, MODELING PAGE1/3 (FINDINGS-l7a1429-editor-pages.md 2c).
+ModelingPage_SetField0RepaintPage1of3:
 	link XIZ,0xfffc                                      ; FD50C0  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD50C4  be fe 31
 	push XBC                                             ; FD50C7  39
@@ -134893,7 +134895,7 @@ ToneEditPage_A5_Op12:
 	cp (XIZ+0x08),0x00                                   ; FD5118  8e 08 3f 00
 	jr nz, .LFD5127                                      ; FD511C  6e 09
 	pushw 0x01                                           ; FD511E  0b 01 00
-	calr sub_FD50C0                                      ; FD5121  1e 9c ff
+	calr ModelingPage_SetField0RepaintPage1of3                                      ; FD5121  1e 9c ff
 	popw bc                                              ; FD5124  49
 	jr .LFD513E                                          ; FD5125  68 17
 .LFD5127:
@@ -135411,7 +135413,7 @@ ToneEditPage_A6_Op11:
 	cp (XIZ+0x08),0x00                                   ; FD54E9  8e 08 3f 00
 	jr nz, .LFD54F8                                      ; FD54ED  6e 09
 	pushw 0x00                                           ; FD54EF  0b 00 00
-	calr sub_FD50C0                                      ; FD54F2  1e cb fb
+	calr ModelingPage_SetField0RepaintPage1of3                                      ; FD54F2  1e cb fb
 	popw bc                                              ; FD54F5  49
 	jr .LFD550F                                          ; FD54F6  68 17
 .LFD54F8:
@@ -135433,7 +135435,7 @@ ToneEditPage_A6_Op12:
 	cp (XIZ+0x08),0x00                                   ; FD5516  8e 08 3f 00
 	jr nz, .LFD5525                                      ; FD551A  6e 09
 	pushw 0x01                                           ; FD551C  0b 01 00
-	calr sub_FD50C0                                      ; FD551F  1e 9e fb
+	calr ModelingPage_SetField0RepaintPage1of3                                      ; FD551F  1e 9e fb
 	popw bc                                              ; FD5522  49
 	jr .LFD553C                                          ; FD5523  68 17
 .LFD5525:
@@ -136359,7 +136361,7 @@ ToneEditPage_A7_Op11:
 	cp (XIZ+0x08),0x00                                   ; FD5BDD  8e 08 3f 00
 	jr nz, .LFD5BEC                                      ; FD5BE1  6e 09
 	pushw 0x00                                           ; FD5BE3  0b 00 00
-	calr sub_FD50C0                                      ; FD5BE6  1e d7 f4
+	calr ModelingPage_SetField0RepaintPage1of3                                      ; FD5BE6  1e d7 f4
 	popw bc                                              ; FD5BE9  49
 	jr .LFD5C03                                          ; FD5BEA  68 17
 .LFD5BEC:
@@ -136381,7 +136383,7 @@ ToneEditPage_A7_Op12:
 	cp (XIZ+0x08),0x00                                   ; FD5C0A  8e 08 3f 00
 	jr nz, .LFD5C19                                      ; FD5C0E  6e 09
 	pushw 0x01                                           ; FD5C10  0b 01 00
-	calr sub_FD50C0                                      ; FD5C13  1e aa f4
+	calr ModelingPage_SetField0RepaintPage1of3                                      ; FD5C13  1e aa f4
 	popw bc                                              ; FD5C16  49
 	jr .LFD5C30                                          ; FD5C17  68 17
 .LFD5C19:
@@ -141599,7 +141601,7 @@ sub_FD84F8:
 	calr Arr27A6_Set                                          ; FD8559  1e 09 e7
 	pushw 0x01                                           ; FD855C  0b 01 00
 	pushw 0x02                                           ; FD855F  0b 02 00
-	calr sub_FD946B                                      ; FD8562  1e 06 0f
+	calr EditPage_DrawKeyboardGraph                                      ; FD8562  1e 06 0f
 	lda xbc, (xiz-4)                                     ; FD8565  be fc 31
 	push XBC                                             ; FD8568  39
 	pushw 0x09                                           ; FD8569  0b 09 00
@@ -141664,7 +141666,7 @@ sub_FD859B:
 	calr Arr27A6_Set                                          ; FD85FC  1e 66 e6
 	pushw 0x01                                           ; FD85FF  0b 01 00
 	pushw 0x02                                           ; FD8602  0b 02 00
-	calr sub_FD946B                                      ; FD8605  1e 63 0e
+	calr EditPage_DrawKeyboardGraph                                      ; FD8605  1e 63 0e
 	lda xbc, (xiz-4)                                     ; FD8608  be fc 31
 	push XBC                                             ; FD860B  39
 	pushw 0x09                                           ; FD860C  0b 09 00
@@ -141729,7 +141731,7 @@ sub_FD869C:
 	calr Arr27A6_Set                                          ; FD869F  1e c3 e5
 	pushw 0x01                                           ; FD86A2  0b 01 00
 	pushw 0x02                                           ; FD86A5  0b 02 00
-	calr sub_FD946B                                      ; FD86A8  1e c0 0d
+	calr EditPage_DrawKeyboardGraph                                      ; FD86A8  1e c0 0d
 	lda xbc, (xiz-4)                                     ; FD86AB  be fc 31
 	push XBC                                             ; FD86AE  39
 	pushw 0x09                                           ; FD86AF  0b 09 00
@@ -141785,7 +141787,7 @@ sub_FD86E1:
 	call T_Dispatch_Code80                               ; FD872A  1d d4 1e f4
 	pushw 0x01                                           ; FD872E  0b 01 00
 	pushw 0x02                                           ; FD8731  0b 02 00
-	calr sub_FD946B                                      ; FD8734  1e 34 0d
+	calr EditPage_DrawKeyboardGraph                                      ; FD8734  1e 34 0d
 	add XSP,0x0000001c                                   ; FD8737  ef c8 1c 00 00 00
 .LFD873D:
 	pushw 0x05                                           ; FD873D  0b 05 00
@@ -143219,7 +143221,8 @@ sub_FD9400:
 	ld WA,BC                                             ; FD940F  d9 88
 	unlk XIZ                                             ; FD9411  ee 0d
 	ret                                                  ; FD9413  0e
-sub_FD9414:
+; KeyboardX_ForNote(note, &x): note clamped to 20..108; x = 28 * ((note - 12) / 12) + KeyboardX_SemitoneOffset[(note - 12) % 12] - 18.
+KeyboardX_ForNote:
 	link XIZ,0x0000                                      ; FD9414  ee 0c 00 00
 	pushw hl                                             ; FD9418  2b
 	pushw de                                             ; FD9419  2a
@@ -143261,7 +143264,9 @@ sub_FD9414:
 	popw hl                                              ; FD9467  4b
 	unlk XIZ                                             ; FD9468  ee 0d
 	ret                                                  ; FD946A  0e
-sub_FD946B:
+; EditPage_DrawKeyboardGraph(index, mode): erase (0x30,0x49)-(0xFE,0x79); place ModelingPage_Fields[10] and [index] (mode 1),
+;   or [index..index+2], on the keyboard x axis (KeyboardX_ForNote); a solid baseline at y 0x61 and dashed verticals at those x.
+EditPage_DrawKeyboardGraph:
 	link XIZ,0xffe6                                      ; FD946B  ee 0c e6 ff
 	pushw hl                                             ; FD946F  2b
 	pushw de                                             ; FD9470  2a
@@ -143290,7 +143295,7 @@ sub_FD946B:
 	ld wa, (xiz-8)                                       ; FD94AC  9e f8 20
 	extz WA                                              ; FD94AF  d8 12
 	pushw wa                                             ; FD94B1  28
-	calr sub_FD9414                                      ; FD94B2  1e 5f ff
+	calr KeyboardX_ForNote                                      ; FD94B2  1e 5f ff
 	m_add_mi16 MWD+r6, 0xf6, 0x0030                      ; FD94B5  9e f6 38 30 00
 	ldw ix, 0x30                                         ; FD94BA  34 30 00
 	ld (xiz-12), ix                                      ; FD94BD  be f4 54
@@ -143326,19 +143331,19 @@ sub_FD946B:
 	ld wa, (xiz-8)                                       ; FD9506  9e f8 20
 	extz WA                                              ; FD9509  d8 12
 	pushw wa                                             ; FD950B  28
-	calr sub_FD9414                                      ; FD950C  1e 05 ff
+	calr KeyboardX_ForNote                                      ; FD950C  1e 05 ff
 	lda xbc, (xiz-12)                                    ; FD950F  be f4 31
 	push XBC                                             ; FD9512  39
 	ld wa, (xiz-20)                                      ; FD9513  9e ec 20
 	extz WA                                              ; FD9516  d8 12
 	pushw wa                                             ; FD9518  28
-	calr sub_FD9414                                      ; FD9519  1e f8 fe
+	calr KeyboardX_ForNote                                      ; FD9519  1e f8 fe
 	lda xbc, (xiz-14)                                    ; FD951C  be f2 31
 	push XBC                                             ; FD951F  39
 	ld wa, (xiz-22)                                      ; FD9520  9e ea 20
 	extz WA                                              ; FD9523  d8 12
 	pushw wa                                             ; FD9525  28
-	calr sub_FD9414                                      ; FD9526  1e eb fe
+	calr KeyboardX_ForNote                                      ; FD9526  1e eb fe
 	m_add_mi16 MWD+r6, 0xf6, 0x0030                      ; FD9529  9e f6 38 30 00
 	m_add_mi16 MWD+r6, 0xf4, 0x0030                      ; FD952E  9e f4 38 30 00
 	m_add_mi16 MWD+r6, 0xf2, 0x0030                      ; FD9533  9e f2 38 30 00
@@ -143591,25 +143596,25 @@ sub_FD96DE:
 	ld wa, (xiz-4)                                       ; FD9772  9e fc 20
 	extz WA                                              ; FD9775  d8 12
 	pushw wa                                             ; FD9777  28
-	calr sub_FD9414                                      ; FD9778  1e 99 fc
+	calr KeyboardX_ForNote                                      ; FD9778  1e 99 fc
 	lda xbc, (xiz-12)                                    ; FD977B  be f4 31
 	push XBC                                             ; FD977E  39
 	ld wa, (xiz-2)                                       ; FD977F  9e fe 20
 	extz WA                                              ; FD9782  d8 12
 	pushw wa                                             ; FD9784  28
-	calr sub_FD9414                                      ; FD9785  1e 8c fc
+	calr KeyboardX_ForNote                                      ; FD9785  1e 8c fc
 	lda xbc, (xiz-14)                                    ; FD9788  be f2 31
 	push XBC                                             ; FD978B  39
 	ld wa, (xiz-6)                                       ; FD978C  9e fa 20
 	extz WA                                              ; FD978F  d8 12
 	pushw wa                                             ; FD9791  28
-	calr sub_FD9414                                      ; FD9792  1e 7f fc
+	calr KeyboardX_ForNote                                      ; FD9792  1e 7f fc
 	lda xbc, (xiz-16)                                    ; FD9795  be f0 31
 	push XBC                                             ; FD9798  39
 	ld wa, (xiz-8)                                       ; FD9799  9e f8 20
 	extz WA                                              ; FD979C  d8 12
 	pushw wa                                             ; FD979E  28
-	calr sub_FD9414                                      ; FD979F  1e 72 fc
+	calr KeyboardX_ForNote                                      ; FD979F  1e 72 fc
 	add XSP,0x00000018                                   ; FD97A2  ef c8 18 00 00 00
 	jrl .LFD981F                                         ; FD97A8  78 74 00
 .LFD97AB:
@@ -147395,7 +147400,7 @@ sub_FDB4B0:
 	call T_Dispatch_Code80_Bracketed                     ; FDB4F6  1d d0 1e f4
 	pushw 0x01                                           ; FDB4FA  0b 01 00
 	pushw 0x02                                           ; FDB4FD  0b 02 00
-	call sub_FD946B                                      ; FDB500  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FDB500  1d 6b 94 fd
 	pushw 0x01                                           ; FDB504  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDB507  1d e0 69 fd
 	pushw 0x00                                           ; FDB50B  0b 00 00
@@ -147895,7 +147900,7 @@ ScreenCode8C_Handler:
 	call Arr27A6_Set                                      ; FDB978  1d 65 6c fd
 	pushw 0x00                                           ; FDB97C  0b 00 00
 	pushw 0x00                                           ; FDB97F  0b 00 00
-	call sub_FD946B                                      ; FDB982  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FDB982  1d 6b 94 fd
 	pushw 0x01                                           ; FDB986  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDB989  1d e0 69 fd
 	pushw 0x00                                           ; FDB98D  0b 00 00
@@ -148124,7 +148129,7 @@ ScreenCode8E_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDBB90  1d d0 1e f4
 	pushw 0x00                                           ; FDBB94  0b 00 00
 	pushw 0x02                                           ; FDBB97  0b 02 00
-	call sub_FD946B                                      ; FDBB9A  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FDBB9A  1d 6b 94 fd
 	pushw 0x01                                           ; FDBB9E  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDBBA1  1d e0 69 fd
 	pushw 0x00                                           ; FDBBA5  0b 00 00
@@ -149000,7 +149005,7 @@ ScreenCode96_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDC3D2  1d d0 1e f4
 	pushw 0x00                                           ; FDC3D6  0b 00 00
 	pushw 0x00                                           ; FDC3D9  0b 00 00
-	call sub_FD946B                                      ; FDC3DC  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FDC3DC  1d 6b 94 fd
 	pushw 0x01                                           ; FDC3E0  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC3E3  1d e0 69 fd
 	pushw 0x00                                           ; FDC3E7  0b 00 00
@@ -149170,7 +149175,7 @@ ScreenCode98_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDC56F  1d d0 1e f4
 	pushw 0x01                                           ; FDC573  0b 01 00
 	pushw 0x02                                           ; FDC576  0b 02 00
-	call sub_FD946B                                      ; FDC579  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                      ; FDC579  1d 6b 94 fd
 	pushw 0x01                                           ; FDC57D  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC580  1d e0 69 fd
 	pushw 0x00                                           ; FDC584  0b 00 00
@@ -155095,7 +155100,7 @@ sub_FDF77F:
 	call Arr27A6_Set                                 ; FDF7EC  1d 65 6c fd
 	pushw 0x00                                    ; FDF7F0  0b 00 00
 	pushw 0x00                                    ; FDF7F3  0b 00 00
-	call sub_FD946B                                 ; FDF7F6  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                 ; FDF7F6  1d 6b 94 fd
 	inc 8,XSP                                     ; FDF7FA  ef 60
 	inc 6,XSP                                     ; FDF7FC  ef 66
 .LFDF7FE:
@@ -155146,7 +155151,7 @@ sub_FDF80A:
 	call T_Dispatch_Code80                        ; FDF867  1d d4 1e f4
 	pushw 0x00                                    ; FDF86B  0b 00 00
 	pushw 0x00                                    ; FDF86E  0b 00 00
-	call sub_FD946B                                 ; FDF871  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                 ; FDF871  1d 6b 94 fd
 	add XSP,0x0000001c                            ; FDF875  ef c8 1c 00 00 00
 .LFDF87B:
 	pushw 0x04                                    ; FDF87B  0b 04 00
@@ -155212,7 +155217,7 @@ sub_FDF886:
 	call T_Dispatch_Code80                        ; FDF908  1d d4 1e f4
 	pushw 0x00                                    ; FDF90C  0b 00 00
 	pushw 0x00                                    ; FDF90F  0b 00 00
-	call sub_FD946B                                 ; FDF912  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                 ; FDF912  1d 6b 94 fd
 	add XSP,0x0000001c                            ; FDF916  ef c8 1c 00 00 00
 .LFDF91C:
 	pushw 0x05                                    ; FDF91C  0b 05 00
@@ -155262,7 +155267,7 @@ sub_FDF928:
 	call T_Dispatch_Code80                        ; FDF985  1d d4 1e f4
 	pushw 0x00                                    ; FDF989  0b 00 00
 	pushw 0x00                                    ; FDF98C  0b 00 00
-	call sub_FD946B                                 ; FDF98F  1d 6b 94 fd
+	call EditPage_DrawKeyboardGraph                                 ; FDF98F  1d 6b 94 fd
 	add XSP,0x0000001c                            ; FDF993  ef c8 1c 00 00 00
 .LFDF999:
 	pushw 0x06                                    ; FDF999  0b 06 00

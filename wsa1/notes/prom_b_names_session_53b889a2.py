@@ -509,4 +509,7 @@ RENAMES = [
     ("sub_FE9F23", "EditCursor_BeatsInMeasure"),
     ("sub_FEAAB6", "EditCursor_MeasurePlus10"),
     ("sub_FEAAE0", "EditCursor_MeasureMinus10"),
+    ("sub_FD9414", "KeyboardX_ForNote"),
+    ("sub_FD946B", "EditPage_DrawKeyboardGraph"),
+    ("sub_FD50C0", "ModelingPage_SetField0RepaintPage1of3"),
 ]
