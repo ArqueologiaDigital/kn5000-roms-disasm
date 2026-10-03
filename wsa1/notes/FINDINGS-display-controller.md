@@ -247,6 +247,12 @@ All of it is CS1 static RAM, all 16-bit unless said otherwise:
 | `(0x255C) (0x255E) (0x2560) (0x2562)` | the four coordinates saved across a shadowed box | services `0x0A`, `0x22` |
 | `(0xC6)` bit 0 | "the panel is dark, do not poll BUSY" | service `0x0C` |
 
+**Named in the source (2026-10-03).** Every row but `(0xC6)` is now a symbol in
+`wsa1/include/wsa1_ram.inc` (`LCD_X0` .. `LCD_SavedY1`; `(0x2558)`, AP's high byte, is
+`LCD_BytesPerLine_Hi`), and the 1,296 memory operands and m_* macro address arguments of prom_a
+and prom_b that spelled them by number now use the names -- `scripts/tools/name_wsa1_ram.py`,
+whose NAMES table generates the include. `(0xC6)` stays a number: only its bit 0 is established.
+
 ## ★ The layer count no longer rests on the table alone
 
 **2026-08-25.** The third open item below used to read *"Nothing yet writes

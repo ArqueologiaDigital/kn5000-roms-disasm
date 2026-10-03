@@ -21,7 +21,7 @@ PROMS = a b c d
 # passed on a stale build.  It was caught by a six-byte failure that survived the
 # fix -- the fix had never been assembled.
 KERNEL_SRC = kernel/kernel.s kernel/kernel_maincpu.inc kernel/kernel_subcpu.inc
-COMMON_INC = include/tmp95c061_sfr.inc include/tlcs900_mem_ops.inc
+COMMON_INC = include/tmp95c061_sfr.inc include/tlcs900_mem_ops.inc include/wsa1_ram.inc
 
 # The DSP channel-register driver is ONE source too, included by prom_a at
 # 0xF85F0F and by prom_c at 0xF98000 -- 234 bytes each, the same arrangement
