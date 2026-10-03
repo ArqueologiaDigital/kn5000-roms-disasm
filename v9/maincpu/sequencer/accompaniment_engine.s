@@ -15000,12 +15000,9 @@ AccPatch_WriteRhythmParam_Done:
 	ret
 
 AccPatch_RhythmParamDefaults:
-	normal
-	nop
-	push	sr
-	ld	xwa, 0x40040003
-	halt
-	jrl	nc, 6
+	; (number, value) pairs the loop above reads and writes with RhythmBuf_WriteByte.  Was decoded
+	; as `normal / nop / push sr / ld xwa, 0x40040003 / halt / jrl nc, 6`.
+	.byte	1, 0, 2, 64, 3, 0, 4, 64, 5, 127, 6, 0
 
 AccPatch_FetchVolumeForChannel:
 	push xwa
@@ -24675,7 +24672,7 @@ DrumSlot_HandlerTable:
 	.long DrumSlot_Handler_Type1
 	.long DrumSlot_Handler_Type1
 DrumSlot_Handler_Type0:
-	calr	5
+	calr	DrumSlot_OffsetCalc_Simple
 	ret
 DrumSlot_Handler_Type1:
 	; --- Wrapper: calr to F64DC4, ret (4 bytes) ---
