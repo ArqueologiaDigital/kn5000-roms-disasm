@@ -78680,7 +78680,7 @@ ParamMsg_B1_PitchBend:   ; entry: named by 1 `.long` operand, first at 0xFACBAE
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD3B  c1 36 7f 23
 	and C,0x20                                           ; FABD3F  cb cc 20
 	jr nz, .LFABD4E                                      ; FABD42  6e 0a
-	ld xbc, (0x60f280:24)                               ; FABD44  e2 80 f2 60 21
+	ld xbc, (ParamMsg_PartMask_PitchBend:24)                               ; FABD44  e2 80 f2 60 21
 	push XBC                                             ; FABD49  39
 	calr Queue2C00_FanOutToPartMask_Publish                                      ; FABD4A  1e 22 01
 	pop XIY                                              ; FABD4D  5d
@@ -78690,7 +78690,7 @@ ParamMsg_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xF
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD4F  c1 36 7f 23
 	and C,0x20                                           ; FABD53  cb cc 20
 	jr nz, .LFABD62                                      ; FABD56  6e 0a
-	ld xbc, (0x60f284:24)                               ; FABD58  e2 84 f2 60 21
+	ld xbc, (ParamMsg_PartMask_Modulation:24)                               ; FABD58  e2 84 f2 60 21
 	push XBC                                             ; FABD5D  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABD5E  1e ca 00
 	pop XIY                                              ; FABD61  5d
@@ -78700,7 +78700,7 @@ ParamMsg_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0x
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD63  c1 36 7f 23
 	and C,0x20                                           ; FABD67  cb cc 20
 	jr nz, .LFABD76                                      ; FABD6A  6e 0a
-	ld xbc, (0x60f288:24)                               ; FABD6C  e2 88 f2 60 21
+	ld xbc, (ParamMsg_PartMask_Modulation2:24)                               ; FABD6C  e2 88 f2 60 21
 	push XBC                                             ; FABD71  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABD72  1e b6 00
 	pop XIY                                              ; FABD75  5d
@@ -78710,7 +78710,7 @@ ParamMsg_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xF
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD77  c1 36 7f 23
 	and C,0x20                                           ; FABD7B  cb cc 20
 	jr nz, .LFABD8A                                      ; FABD7E  6e 0a
-	ld xbc, (0x60f28c:24)                               ; FABD80  e2 8c f2 60 21
+	ld xbc, (ParamMsg_PartMask_ChannelPressure:24)                               ; FABD80  e2 8c f2 60 21
 	push XBC                                             ; FABD85  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABD86  1e a2 00
 	pop XIY                                              ; FABD89  5d
@@ -78720,7 +78720,7 @@ ParamMsg_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFA
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD8B  c1 36 7f 23
 	and C,0x20                                           ; FABD8F  cb cc 20
 	jr nz, .LFABD9E                                      ; FABD92  6e 0a
-	ld xbc, (0x60f290:24)                               ; FABD94  e2 90 f2 60 21
+	ld xbc, (ParamMsg_PartMask_CtrlPedal:24)                               ; FABD94  e2 90 f2 60 21
 	push XBC                                             ; FABD99  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABD9A  1e 8e 00
 	pop XIY                                              ; FABD9D  5d
@@ -78730,7 +78730,7 @@ ParamMsg_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFACBBE
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD9F  c1 36 7f 23
 	and C,0x20                                           ; FABDA3  cb cc 20
 	jr nz, .LFABDBC                                      ; FABDA6  6e 14
-	ld xbc, (0x60f294:24)                               ; FABDA8  e2 94 f2 60 21
+	ld xbc, (ParamMsg_PartMask_Hold:24)                               ; FABDA8  e2 94 f2 60 21
 	push XBC                                             ; FABDAD  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABDAE  1e 7a 00
 	ld c, (0x60f089:24)                                 ; FABDB1  c2 89 f0 60 23
@@ -78742,7 +78742,7 @@ ParamMsg_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFAC
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDBD  c1 36 7f 23
 	and C,0x20                                           ; FABDC1  cb cc 20
 	jr nz, .LFABDD0                                      ; FABDC4  6e 0a
-	ld xbc, (0x60f298:24)                               ; FABDC6  e2 98 f2 60 21
+	ld xbc, (ParamMsg_PartMask_RTCreatX:24)                               ; FABDC6  e2 98 f2 60 21
 	push XBC                                             ; FABDCB  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABDCC  1e 5c 00
 	pop XIY                                              ; FABDCF  5d
@@ -78752,7 +78752,7 @@ ParamMsg_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFAC
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDD1  c1 36 7f 23
 	and C,0x20                                           ; FABDD5  cb cc 20
 	jr nz, .LFABDE4                                      ; FABDD8  6e 0a
-	ld xbc, (0x60f29c:24)                               ; FABDDA  e2 9c f2 60 21
+	ld xbc, (ParamMsg_PartMask_RTCreatY:24)                               ; FABDDA  e2 9c f2 60 21
 	push XBC                                             ; FABDDF  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABDE0  1e 48 00
 	pop XIY                                              ; FABDE3  5d
@@ -78762,7 +78762,7 @@ ParamMsg_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFACB
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDE5  c1 36 7f 23
 	and C,0x20                                           ; FABDE9  cb cc 20
 	jr nz, .LFABDF8                                      ; FABDEC  6e 0a
-	ld xbc, (0x60f2a0:24)                               ; FABDEE  e2 a0 f2 60 21
+	ld xbc, (ParamMsg_PartMask_RTCtrlX:24)                               ; FABDEE  e2 a0 f2 60 21
 	push XBC                                             ; FABDF3  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABDF4  1e 34 00
 	pop XIY                                              ; FABDF7  5d
@@ -78772,7 +78772,7 @@ ParamMsg_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFACB
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDF9  c1 36 7f 23
 	and C,0x20                                           ; FABDFD  cb cc 20
 	jr nz, .LFABE0C                                      ; FABE00  6e 0a
-	ld xbc, (0x60f2a4:24)                               ; FABE02  e2 a4 f2 60 21
+	ld xbc, (ParamMsg_PartMask_RTCtrlY:24)                               ; FABE02  e2 a4 f2 60 21
 	push XBC                                             ; FABE07  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABE08  1e 20 00
 	pop XIY                                              ; FABE0B  5d
@@ -78782,7 +78782,7 @@ ParamMsg_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, first at 0xF
 	ld c, (MidiCfg_SingleChannel:16)                                   ; FABE0D  c1 36 7f 23
 	and C,0x20                                           ; FABE11  cb cc 20
 	jr nz, .LFABE2A                                      ; FABE14  6e 14
-	ld xbc, (0x60f2a8:24)                               ; FABE16  e2 a8 f2 60 21
+	ld xbc, (ParamMsg_PartMask_Expression:24)                               ; FABE16  e2 a8 f2 60 21
 	push XBC                                             ; FABE1B  39
 	calr Queue2C00_FanOutToPartMask                                      ; FABE1C  1e 0c 00
 	ld c, (0x60f089:24)                                 ; FABE1F  c2 89 f0 60 23
@@ -78942,7 +78942,7 @@ MidiIn_ControlRecord_Dispatch:
 	ld H,(XBC)                                           ; FABF04  81 26
 	cp H,0xb1                                            ; FABF06  ce cf b1
 	jr nz, .LFABF2C                                      ; FABF09  6e 21
-	ld xix, (0x60f280:24)                               ; FABF0B  e2 80 f2 60 24
+	ld xix, (ParamMsg_PartMask_PitchBend:24)                               ; FABF0B  e2 80 f2 60 24
 	ld (0x60f080:24), h                                 ; FABF10  f2 80 f0 60 46
 	ld A,(XBC+0x02)                                      ; FABF15  89 02 21
 	ld (0x60f089:24), a                                 ; FABF18  f2 89 f0 60 41
@@ -78996,34 +78996,34 @@ MidiIn_ControlRecordHandlers:
 	.long MidiIn_CtrlRec_BC_CC02_Modulation2                                 ; FABF72  [ 10]
 	.long MidiIn_CtrlRec_BD_CC04_CtrlPedal                                 ; FABF76  [ 11]
 MidiIn_CtrlRec_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xFABF4A
-	ld xix, (0x60f284:24)                               ; FABF7A  e2 84 f2 60 24
+	ld xix, (ParamMsg_PartMask_Modulation:24)                               ; FABF7A  e2 84 f2 60 24
 	jr .LFABFBE                                          ; FABF7F  68 3d
 MidiIn_CtrlRec_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0xFABF72
-	ld xix, (0x60f288:24)                               ; FABF81  e2 88 f2 60 24
+	ld xix, (ParamMsg_PartMask_Modulation2:24)                               ; FABF81  e2 88 f2 60 24
 	jr .LFABFBE                                          ; FABF86  68 36
 MidiIn_CtrlRec_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFABF62
-	ld xix, (0x60f298:24)                               ; FABF88  e2 98 f2 60 24
+	ld xix, (ParamMsg_PartMask_RTCreatX:24)                               ; FABF88  e2 98 f2 60 24
 	jr .LFABFBE                                          ; FABF8D  68 2f
 MidiIn_CtrlRec_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFABF66
-	ld xix, (0x60f29c:24)                               ; FABF8F  e2 9c f2 60 24
+	ld xix, (ParamMsg_PartMask_RTCreatY:24)                               ; FABF8F  e2 9c f2 60 24
 	jr .LFABFBE                                          ; FABF94  68 28
 MidiIn_CtrlRec_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFABF6A
-	ld xix, (0x60f2a0:24)                               ; FABF96  e2 a0 f2 60 24
+	ld xix, (ParamMsg_PartMask_RTCtrlX:24)                               ; FABF96  e2 a0 f2 60 24
 	jr .LFABFBE                                          ; FABF9B  68 21
 MidiIn_CtrlRec_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFABF6E
-	ld xix, (0x60f2a4:24)                               ; FABF9D  e2 a4 f2 60 24
+	ld xix, (ParamMsg_PartMask_RTCtrlY:24)                               ; FABF9D  e2 a4 f2 60 24
 	jr .LFABFBE                                          ; FABFA2  68 1a
 MidiIn_CtrlRec_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xFABF52
-	ld xix, (0x60f28c:24)                               ; FABFA4  e2 8c f2 60 24
+	ld xix, (ParamMsg_PartMask_ChannelPressure:24)                               ; FABFA4  e2 8c f2 60 24
 	jr .LFABFBE                                          ; FABFA9  68 13
 MidiIn_CtrlRec_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFABF76
-	ld xix, (0x60f290:24)                               ; FABFAB  e2 90 f2 60 24
+	ld xix, (ParamMsg_PartMask_CtrlPedal:24)                               ; FABFAB  e2 90 f2 60 24
 	jr .LFABFBE                                          ; FABFB0  68 0c
 MidiIn_CtrlRec_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFABF56
-	ld xix, (0x60f294:24)                               ; FABFB2  e2 94 f2 60 24
+	ld xix, (ParamMsg_PartMask_Hold:24)                               ; FABFB2  e2 94 f2 60 24
 	jr .LFABFBE                                          ; FABFB7  68 05
 MidiIn_CtrlRec_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, first at 0xFABF4E
-	ld xix, (0x60f2a8:24)                               ; FABFB9  e2 a8 f2 60 24
+	ld xix, (ParamMsg_PartMask_Expression:24)                               ; FABFB9  e2 a8 f2 60 24
 .LFABFBE:
 	ld XBC,(XIZ+0x08)                                    ; FABFBE  ae 08 21
 	ld A,(XBC)                                           ; FABFC1  81 21
@@ -79186,11 +79186,11 @@ ParamMsg_ComputePartMasks:
 	link XIZ,0xfff4                                      ; FAC0FA  ee 0c f4 ff
 	pushw hl                                             ; FAC0FE  2b
 	push XIX                                             ; FAC0FF  3c
-	lda xix, (0x60f280:24)                               ; FAC100  f2 80 f2 60 34
-	lda xbc, (0x60f2ac:24)                               ; FAC105  f2 ac f2 60 31
+	lda xix, (ParamMsg_PartMask_PitchBend:24)                               ; FAC100  f2 80 f2 60 34
+	lda xbc, (ParamMsg_PartMaskPrev_PitchBend:24)                               ; FAC105  f2 ac f2 60 31
 	ld (xiz-4), xbc                                      ; FAC10A  be fc 61
 .LFAC10D:
-	lda xbc, (0x60f2a8:24)                               ; FAC10D  f2 a8 f2 60 31
+	lda xbc, (ParamMsg_PartMask_Expression:24)                               ; FAC10D  f2 a8 f2 60 31
 	ld (xiz-12), xbc                                     ; FAC112  be f4 61
 	ld XWA,XIX                                           ; FAC115  ec 88
 	cp XWA,XBC                                           ; FAC117  e9 f0
@@ -79234,7 +79234,7 @@ ParamMsg_ComputePartMasks:
 	lda xbc, (BitMask32_Table:24)                        ; FAC176  f2 0a d2 fa 31
 	add XBC,XIX                                          ; FAC17B  ec 81
 	ld XWA,(XBC)                                         ; FAC17D  a1 20
-	or	(0x60f280:24), xwa                   ; FAC17F  e2 80 f2 60 e8
+	or	(ParamMsg_PartMask_PitchBend:24), xwa                   ; FAC17F  e2 80 f2 60 e8
 .LFAC184:
 	ld xbc, (xiz-4)                                      ; FAC184  ae fc 21
 	ld A,(XBC+0x0c)                                      ; FAC187  89 0c 21
@@ -79243,7 +79243,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC18F  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC194  ec 80
 	ld XIY,(XWA)                                         ; FAC196  a0 25
-	or (0x60f284),xiy                                    ; FAC198  e2 84 f2 60 ed   or (0x60f284),XIY
+	or (ParamMsg_PartMask_Modulation),xiy                                    ; FAC198  e2 84 f2 60 ed   or (0x60f284),XIY
 .LFAC19D:
 	ld xbc, (xiz-4)                                      ; FAC19D  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC1A0  89 0e 21
@@ -79252,7 +79252,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC1A8  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1AD  ec 80
 	ld XIY,(XWA)                                         ; FAC1AF  a0 25
-	or (0x60f288),xiy                                    ; FAC1B1  e2 88 f2 60 ed   or (0x60f288),XIY
+	or (ParamMsg_PartMask_Modulation2),xiy                                    ; FAC1B1  e2 88 f2 60 ed   or (0x60f288),XIY
 .LFAC1B6:
 	ld xbc, (xiz-4)                                      ; FAC1B6  ae fc 21
 	ld A,(XBC+0x0b)                                      ; FAC1B9  89 0b 21
@@ -79261,7 +79261,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC1C1  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1C6  ec 80
 	ld XIY,(XWA)                                         ; FAC1C8  a0 25
-	or (0x60f28c),xiy                                    ; FAC1CA  e2 8c f2 60 ed   or (0x60f28c),XIY
+	or (ParamMsg_PartMask_ChannelPressure),xiy                                    ; FAC1CA  e2 8c f2 60 ed   or (0x60f28c),XIY
 .LFAC1CF:
 	ld xbc, (xiz-4)                                      ; FAC1CF  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC1D2  89 0e 21
@@ -79270,7 +79270,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC1DA  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1DF  ec 80
 	ld XIY,(XWA)                                         ; FAC1E1  a0 25
-	or (0x60f290),xiy                                    ; FAC1E3  e2 90 f2 60 ed   or (0x60f290),XIY
+	or (ParamMsg_PartMask_CtrlPedal),xiy                                    ; FAC1E3  e2 90 f2 60 ed   or (0x60f290),XIY
 .LFAC1E8:
 	ld xbc, (xiz-4)                                      ; FAC1E8  ae fc 21
 	ld A,(XBC+0x0c)                                      ; FAC1EB  89 0c 21
@@ -79279,7 +79279,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC1F3  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1F8  ec 80
 	ld XIY,(XWA)                                         ; FAC1FA  a0 25
-	or (0x60f294),xiy                                    ; FAC1FC  e2 94 f2 60 ed   or (0x60f294),XIY
+	or (ParamMsg_PartMask_Hold),xiy                                    ; FAC1FC  e2 94 f2 60 ed   or (0x60f294),XIY
 .LFAC201:
 	ld xbc, (xiz-4)                                      ; FAC201  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC204  89 0e 21
@@ -79288,7 +79288,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC20C  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC211  ec 80
 	ld XIY,(XWA)                                         ; FAC213  a0 25
-	or (0x60f298),xiy                                    ; FAC215  e2 98 f2 60 ed   or (0x60f298),XIY
+	or (ParamMsg_PartMask_RTCreatX),xiy                                    ; FAC215  e2 98 f2 60 ed   or (0x60f298),XIY
 .LFAC21A:
 	ld xbc, (xiz-4)                                      ; FAC21A  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC21D  89 0e 21
@@ -79297,7 +79297,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC225  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC22A  ec 80
 	ld XIY,(XWA)                                         ; FAC22C  a0 25
-	or (0x60f29c),xiy                                    ; FAC22E  e2 9c f2 60 ed   or (0x60f29c),XIY
+	or (ParamMsg_PartMask_RTCreatY),xiy                                    ; FAC22E  e2 9c f2 60 ed   or (0x60f29c),XIY
 .LFAC233:
 	ld xbc, (xiz-4)                                      ; FAC233  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC236  89 0e 21
@@ -79306,7 +79306,7 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC23E  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC243  ec 80
 	ld XIY,(XWA)                                         ; FAC245  a0 25
-	or (0x60f2a0),xiy                                    ; FAC247  e2 a0 f2 60 ed   or (0x60f2a0),XIY
+	or (ParamMsg_PartMask_RTCtrlX),xiy                                    ; FAC247  e2 a0 f2 60 ed   or (0x60f2a0),XIY
 .LFAC24C:
 	ld xbc, (xiz-4)                                      ; FAC24C  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC24F  89 0e 21
@@ -79315,12 +79315,12 @@ ParamMsg_ComputePartMasks:
 	lda xwa, (BitMask32_Table:24)                        ; FAC257  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC25C  ec 80
 	ld XIY,(XWA)                                         ; FAC25E  a0 25
-	or (0x60f2a4),xiy                                    ; FAC260  e2 a4 f2 60 ed   or (0x60f2a4),XIY
+	or (ParamMsg_PartMask_RTCtrlY),xiy                                    ; FAC260  e2 a4 f2 60 ed   or (0x60f2a4),XIY
 .LFAC265:
 	lda xbc, (BitMask32_Table:24)                        ; FAC265  f2 0a d2 fa 31
 	add XBC,XIX                                          ; FAC26A  ec 81
 	ld XWA,(XBC)                                         ; FAC26C  a1 20
-	or	(0x60f2a8:24), xwa                   ; FAC26E  e2 a8 f2 60 e8
+	or	(ParamMsg_PartMask_Expression:24), xwa                   ; FAC26E  e2 a8 f2 60 e8
 .LFAC273:
 	inc 4,XIX                                            ; FAC273  ec 64
 	inc 1,H                                              ; FAC275  ce 61
@@ -79542,8 +79542,8 @@ JumpTable_FAC3BF:
 ; Evidence: lost = (new ^ old) & old over (0x60F280)/(0x60F2AC) at 0xFAC3F3-0xFAC3FF, posted with value 0x00 / mask 0x40 (LE 0x4000, the centre MidiOut_ChangeRecord_PitchBend also uses) through Queue2E00_FanOutToPartMask; gained = (old ^ new) & new at 0xFAC414-0xFAC41E, value from the cooked cell at (XIZ+0x0A) split into LSB/MSB, clamped to 0x7F/0x7F at 0xFAC445.
 ; (0x60F280) is ParamMsg_B1_PitchBend's part-mask cell.
 ParamMsg_ResyncParts_B1_PitchBend:   ; entry: named by 1 `.long` operand, first at 0xFAC3BF
-	ld xix, (0x60f280:24)                               ; FAC3F3  e2 80 f2 60 24
-	ld xbc, (0x60f2ac:24)                               ; FAC3F8  e2 ac f2 60 21
+	ld xix, (ParamMsg_PartMask_PitchBend:24)                               ; FAC3F3  e2 80 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_PitchBend:24)                               ; FAC3F8  e2 ac f2 60 21
 	xor XIX,XBC                                          ; FAC3FD  e9 d4
 	and XIX,XBC                                          ; FAC3FF  e9 c4
 	jr z, .LFAC414                                       ; FAC401  66 11
@@ -79553,9 +79553,9 @@ ParamMsg_ResyncParts_B1_PitchBend:   ; entry: named by 1 `.long` operand, first 
 	calr Queue2E00_FanOutToPartMask                                          ; FAC410  1e a1 fa
 	pop XIY                                              ; FAC413  5d
 .LFAC414:
-	ld xbc, (0x60f2ac:24)                               ; FAC414  e2 ac f2 60 21
-	m_xor_rm ML24, 0x60f280, r1                          ; FAC419  e2 80 f2 60 d1
-	m_and_rm ML24, 0x60f280, r1                          ; FAC41E  e2 80 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_PitchBend:24)                               ; FAC414  e2 ac f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_PitchBend, r1                          ; FAC419  e2 80 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_PitchBend, r1                          ; FAC41E  e2 80 f2 60 c1
 	jrl z, .LFAC780                                      ; FAC423  76 5a 03
 	ld XBC,(XIZ+0x0a)                                    ; FAC426  ae 0a 21
 	ld H,(XBC)                                           ; FAC429  81 26
@@ -79586,16 +79586,16 @@ ParamMsg_ResyncParts_B1_PitchBend:   ; entry: named by 1 `.long` operand, first 
 	res 0x07,B                                           ; FAC46F  ca 30 07
 	ld (0x60f08a:24), b                                 ; FAC472  f2 8a f0 60 42
 .LFAC477:
-	ld xbc, (0x60f2ac:24)                               ; FAC477  e2 ac f2 60 21
-	m_xor_rm ML24, 0x60f280, r1                          ; FAC47C  e2 80 f2 60 d1
-	m_and_rm ML24, 0x60f280, r1                          ; FAC481  e2 80 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_PitchBend:24)                               ; FAC477  e2 ac f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_PitchBend, r1                          ; FAC47C  e2 80 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_PitchBend, r1                          ; FAC481  e2 80 f2 60 c1
 	push XBC                                             ; FAC486  39
 	jrl .LFAC77C                                         ; FAC487  78 f2 02
 ; ParamMsg_ResyncParts_B2_CC01_Modulation -- JumpTable_FAC3BF[1] (number 0xB2): post 0 to parts that lost 0xB2 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F284)/(0x60F2B0) at 0xFAC48A-0xFAC4B5, reset value 0x00 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F284) is ParamMsg_B2_CC01_Modulation's cell.
 ParamMsg_ResyncParts_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xFAC3C3
-	ld xix, (0x60f284:24)                               ; FAC48A  e2 84 f2 60 24
-	ld xbc, (0x60f2b0:24)                               ; FAC48F  e2 b0 f2 60 21
+	ld xix, (ParamMsg_PartMask_Modulation:24)                               ; FAC48A  e2 84 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_Modulation:24)                               ; FAC48F  e2 b0 f2 60 21
 	xor XIX,XBC                                          ; FAC494  e9 d4
 	and XIX,XBC                                          ; FAC496  e9 c4
 	jr z, .LFAC4AB                                       ; FAC498  66 11
@@ -79605,9 +79605,9 @@ ParamMsg_ResyncParts_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, 
 	calr Queue2E00_FanOutToPartMask                                          ; FAC4A7  1e 0a fa
 	pop XIY                                              ; FAC4AA  5d
 .LFAC4AB:
-	ld xbc, (0x60f2b0:24)                               ; FAC4AB  e2 b0 f2 60 21
-	m_xor_rm ML24, 0x60f284, r1                          ; FAC4B0  e2 84 f2 60 d1
-	m_and_rm ML24, 0x60f284, r1                          ; FAC4B5  e2 84 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_Modulation:24)                               ; FAC4AB  e2 b0 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_Modulation, r1                          ; FAC4B0  e2 84 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_Modulation, r1                          ; FAC4B5  e2 84 f2 60 c1
 	ld XIX,XBC                                           ; FAC4BA  e9 8c
 	jrl z, .LFAC780                                      ; FAC4BC  76 c1 02
 	ld XWA,(XIZ+0x0a)                                    ; FAC4BF  ae 0a 20
@@ -79620,8 +79620,8 @@ ParamMsg_ResyncParts_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, 
 ; ParamMsg_ResyncParts_BC_CC02_Modulation2 -- JumpTable_FAC3BF[11] (number 0xBC): post 0x40 to parts that lost 0xBC and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F288)/(0x60F2B4) at 0xFAC4D6-0xFAC501, reset value 0x40 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F288) is ParamMsg_BC_CC02_Modulation2's cell.
 ParamMsg_ResyncParts_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0xFAC3EB
-	ld xix, (0x60f288:24)                               ; FAC4D6  e2 88 f2 60 24
-	ld xbc, (0x60f2b4:24)                               ; FAC4DB  e2 b4 f2 60 21
+	ld xix, (ParamMsg_PartMask_Modulation2:24)                               ; FAC4D6  e2 88 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_Modulation2:24)                               ; FAC4DB  e2 b4 f2 60 21
 	xor XIX,XBC                                          ; FAC4E0  e9 d4
 	and XIX,XBC                                          ; FAC4E2  e9 c4
 	jr z, .LFAC4F7                                       ; FAC4E4  66 11
@@ -79631,9 +79631,9 @@ ParamMsg_ResyncParts_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand,
 	calr Queue2E00_FanOutToPartMask                                          ; FAC4F3  1e be f9
 	pop XIY                                              ; FAC4F6  5d
 .LFAC4F7:
-	ld xbc, (0x60f2b4:24)                               ; FAC4F7  e2 b4 f2 60 21
-	m_xor_rm ML24, 0x60f288, r1                          ; FAC4FC  e2 88 f2 60 d1
-	m_and_rm ML24, 0x60f288, r1                          ; FAC501  e2 88 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_Modulation2:24)                               ; FAC4F7  e2 b4 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_Modulation2, r1                          ; FAC4FC  e2 88 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_Modulation2, r1                          ; FAC501  e2 88 f2 60 c1
 	ld XIX,XBC                                           ; FAC506  e9 8c
 	jrl z, .LFAC780                                      ; FAC508  76 75 02
 	ld XWA,(XIZ+0x0a)                                    ; FAC50B  ae 0a 20
@@ -79646,8 +79646,8 @@ ParamMsg_ResyncParts_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand,
 ; ParamMsg_ResyncParts_B8_CC10_RTCreatX -- JumpTable_FAC3BF[7] (number 0xB8): post 0x40 to parts that lost 0xB8 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F298)/(0x60F2C4) at 0xFAC522-0xFAC54D, reset 0x40 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F298) is ParamMsg_B8_CC10_RTCreatX's cell.
 ParamMsg_ResyncParts_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFAC3DB
-	ld xix, (0x60f298:24)                               ; FAC522  e2 98 f2 60 24
-	ld xbc, (0x60f2c4:24)                               ; FAC527  e2 c4 f2 60 21
+	ld xix, (ParamMsg_PartMask_RTCreatX:24)                               ; FAC522  e2 98 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_RTCreatX:24)                               ; FAC527  e2 c4 f2 60 21
 	xor XIX,XBC                                          ; FAC52C  e9 d4
 	and XIX,XBC                                          ; FAC52E  e9 c4
 	jr z, .LFAC543                                       ; FAC530  66 11
@@ -79657,9 +79657,9 @@ ParamMsg_ResyncParts_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, fi
 	calr Queue2E00_FanOutToPartMask                                          ; FAC53F  1e 72 f9
 	pop XIY                                              ; FAC542  5d
 .LFAC543:
-	ld xbc, (0x60f2c4:24)                               ; FAC543  e2 c4 f2 60 21
-	m_xor_rm ML24, 0x60f298, r1                          ; FAC548  e2 98 f2 60 d1
-	m_and_rm ML24, 0x60f298, r1                          ; FAC54D  e2 98 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_RTCreatX:24)                               ; FAC543  e2 c4 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_RTCreatX, r1                          ; FAC548  e2 98 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_RTCreatX, r1                          ; FAC54D  e2 98 f2 60 c1
 	ld XIX,XBC                                           ; FAC552  e9 8c
 	jrl z, .LFAC780                                      ; FAC554  76 29 02
 	ld XWA,(XIZ+0x0a)                                    ; FAC557  ae 0a 20
@@ -79672,8 +79672,8 @@ ParamMsg_ResyncParts_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, fi
 ; ParamMsg_ResyncParts_B9_CC11_RTCreatY -- JumpTable_FAC3BF[8] (number 0xB9): post 0x40 to parts that lost 0xB9 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F29C)/(0x60F2C8) at 0xFAC56E-0xFAC599, reset 0x40 mask 0x7F; (0x60F29C) is ParamMsg_B9_CC11_RTCreatY's cell.
 ParamMsg_ResyncParts_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFAC3DF
-	ld xix, (0x60f29c:24)                               ; FAC56E  e2 9c f2 60 24
-	ld xbc, (0x60f2c8:24)                               ; FAC573  e2 c8 f2 60 21
+	ld xix, (ParamMsg_PartMask_RTCreatY:24)                               ; FAC56E  e2 9c f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_RTCreatY:24)                               ; FAC573  e2 c8 f2 60 21
 	xor XIX,XBC                                          ; FAC578  e9 d4
 	and XIX,XBC                                          ; FAC57A  e9 c4
 	jr z, .LFAC58F                                       ; FAC57C  66 11
@@ -79683,9 +79683,9 @@ ParamMsg_ResyncParts_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, fi
 	calr Queue2E00_FanOutToPartMask                                          ; FAC58B  1e 26 f9
 	pop XIY                                              ; FAC58E  5d
 .LFAC58F:
-	ld xbc, (0x60f2c8:24)                               ; FAC58F  e2 c8 f2 60 21
-	m_xor_rm ML24, 0x60f29c, r1                          ; FAC594  e2 9c f2 60 d1
-	m_and_rm ML24, 0x60f29c, r1                          ; FAC599  e2 9c f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_RTCreatY:24)                               ; FAC58F  e2 c8 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_RTCreatY, r1                          ; FAC594  e2 9c f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_RTCreatY, r1                          ; FAC599  e2 9c f2 60 c1
 	ld XIX,XBC                                           ; FAC59E  e9 8c
 	jrl z, .LFAC780                                      ; FAC5A0  76 dd 01
 	ld XWA,(XIZ+0x0a)                                    ; FAC5A3  ae 0a 20
@@ -79698,8 +79698,8 @@ ParamMsg_ResyncParts_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, fi
 ; ParamMsg_ResyncParts_BA_CC12_RTCtrlX -- JumpTable_FAC3BF[9] (number 0xBA): post 0x40 to parts that lost 0xBA and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F2A0)/(0x60F2CC) at 0xFAC5BA-0xFAC5E5, reset 0x40 mask 0x7F; (0x60F2A0) is ParamMsg_BA_CC12_RTCtrlX's cell.
 ParamMsg_ResyncParts_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFAC3E3
-	ld xix, (0x60f2a0:24)                               ; FAC5BA  e2 a0 f2 60 24
-	ld xbc, (0x60f2cc:24)                               ; FAC5BF  e2 cc f2 60 21
+	ld xix, (ParamMsg_PartMask_RTCtrlX:24)                               ; FAC5BA  e2 a0 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_RTCtrlX:24)                               ; FAC5BF  e2 cc f2 60 21
 	xor XIX,XBC                                          ; FAC5C4  e9 d4
 	and XIX,XBC                                          ; FAC5C6  e9 c4
 	jr z, .LFAC5DB                                       ; FAC5C8  66 11
@@ -79709,9 +79709,9 @@ ParamMsg_ResyncParts_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, fir
 	calr Queue2E00_FanOutToPartMask                                          ; FAC5D7  1e da f8
 	pop XIY                                              ; FAC5DA  5d
 .LFAC5DB:
-	ld xbc, (0x60f2cc:24)                               ; FAC5DB  e2 cc f2 60 21
-	m_xor_rm ML24, 0x60f2a0, r1                          ; FAC5E0  e2 a0 f2 60 d1
-	m_and_rm ML24, 0x60f2a0, r1                          ; FAC5E5  e2 a0 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_RTCtrlX:24)                               ; FAC5DB  e2 cc f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_RTCtrlX, r1                          ; FAC5E0  e2 a0 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_RTCtrlX, r1                          ; FAC5E5  e2 a0 f2 60 c1
 	ld XIX,XBC                                           ; FAC5EA  e9 8c
 	jrl z, .LFAC780                                      ; FAC5EC  76 91 01
 	ld XWA,(XIZ+0x0a)                                    ; FAC5EF  ae 0a 20
@@ -79724,8 +79724,8 @@ ParamMsg_ResyncParts_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, fir
 ; ParamMsg_ResyncParts_BB_CC13_RTCtrlY -- JumpTable_FAC3BF[10] (number 0xBB): post 0x40 to parts that lost 0xBB and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F2A4)/(0x60F2D0) at 0xFAC606-0xFAC631, reset 0x40 mask 0x7F; (0x60F2A4) is ParamMsg_BB_CC13_RTCtrlY's cell.
 ParamMsg_ResyncParts_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFAC3E7
-	ld xix, (0x60f2a4:24)                               ; FAC606  e2 a4 f2 60 24
-	ld xbc, (0x60f2d0:24)                               ; FAC60B  e2 d0 f2 60 21
+	ld xix, (ParamMsg_PartMask_RTCtrlY:24)                               ; FAC606  e2 a4 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_RTCtrlY:24)                               ; FAC60B  e2 d0 f2 60 21
 	xor XIX,XBC                                          ; FAC610  e9 d4
 	and XIX,XBC                                          ; FAC612  e9 c4
 	jr z, .LFAC627                                       ; FAC614  66 11
@@ -79735,9 +79735,9 @@ ParamMsg_ResyncParts_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, fir
 	calr Queue2E00_FanOutToPartMask                                          ; FAC623  1e 8e f8
 	pop XIY                                              ; FAC626  5d
 .LFAC627:
-	ld xbc, (0x60f2d0:24)                               ; FAC627  e2 d0 f2 60 21
-	m_xor_rm ML24, 0x60f2a4, r1                          ; FAC62C  e2 a4 f2 60 d1
-	m_and_rm ML24, 0x60f2a4, r1                          ; FAC631  e2 a4 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_RTCtrlY:24)                               ; FAC627  e2 d0 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_RTCtrlY, r1                          ; FAC62C  e2 a4 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_RTCtrlY, r1                          ; FAC631  e2 a4 f2 60 c1
 	ld XIX,XBC                                           ; FAC636  e9 8c
 	jrl z, .LFAC780                                      ; FAC638  76 45 01
 	ld XWA,(XIZ+0x0a)                                    ; FAC63B  ae 0a 20
@@ -79750,8 +79750,8 @@ ParamMsg_ResyncParts_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, fir
 ; ParamMsg_ResyncParts_B4_ChannelPressure -- JumpTable_FAC3BF[3] (number 0xB4): post 0 to parts that lost 0xB4 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F28C)/(0x60F2B8) at 0xFAC652-0xFAC67D, reset 0x00 mask 0x7F; (0x60F28C) is ParamMsg_B4_ChannelPressure's cell.
 ParamMsg_ResyncParts_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xFAC3CB
-	ld xix, (0x60f28c:24)                               ; FAC652  e2 8c f2 60 24
-	ld xbc, (0x60f2b8:24)                               ; FAC657  e2 b8 f2 60 21
+	ld xix, (ParamMsg_PartMask_ChannelPressure:24)                               ; FAC652  e2 8c f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_ChannelPressure:24)                               ; FAC657  e2 b8 f2 60 21
 	xor XIX,XBC                                          ; FAC65C  e9 d4
 	and XIX,XBC                                          ; FAC65E  e9 c4
 	jr z, .LFAC673                                       ; FAC660  66 11
@@ -79761,9 +79761,9 @@ ParamMsg_ResyncParts_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, 
 	calr Queue2E00_FanOutToPartMask                                          ; FAC66F  1e 42 f8
 	pop XIY                                              ; FAC672  5d
 .LFAC673:
-	ld xbc, (0x60f2b8:24)                               ; FAC673  e2 b8 f2 60 21
-	m_xor_rm ML24, 0x60f28c, r1                          ; FAC678  e2 8c f2 60 d1
-	m_and_rm ML24, 0x60f28c, r1                          ; FAC67D  e2 8c f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_ChannelPressure:24)                               ; FAC673  e2 b8 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_ChannelPressure, r1                          ; FAC678  e2 8c f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_ChannelPressure, r1                          ; FAC67D  e2 8c f2 60 c1
 	ld XIX,XBC                                           ; FAC682  e9 8c
 	jrl z, .LFAC780                                      ; FAC684  76 f9 00
 	ld XWA,(XIZ+0x0a)                                    ; FAC687  ae 0a 20
@@ -79776,8 +79776,8 @@ ParamMsg_ResyncParts_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, 
 ; ParamMsg_ResyncParts_BD_CC04_CtrlPedal -- JumpTable_FAC3BF[12] (number 0xBD): post 0 to parts that lost 0xBD and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F290)/(0x60F2BC) at 0xFAC69E-0xFAC6C9, reset 0x00 mask 0x7F; (0x60F290) is ParamMsg_BD_CC04_CtrlPedal's cell.
 ParamMsg_ResyncParts_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFAC3EF
-	ld xix, (0x60f290:24)                               ; FAC69E  e2 90 f2 60 24
-	ld xbc, (0x60f2bc:24)                               ; FAC6A3  e2 bc f2 60 21
+	ld xix, (ParamMsg_PartMask_CtrlPedal:24)                               ; FAC69E  e2 90 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_CtrlPedal:24)                               ; FAC6A3  e2 bc f2 60 21
 	xor XIX,XBC                                          ; FAC6A8  e9 d4
 	and XIX,XBC                                          ; FAC6AA  e9 c4
 	jr z, .LFAC6BF                                       ; FAC6AC  66 11
@@ -79787,9 +79787,9 @@ ParamMsg_ResyncParts_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, f
 	calr Queue2E00_FanOutToPartMask                                          ; FAC6BB  1e f6 f7
 	pop XIY                                              ; FAC6BE  5d
 .LFAC6BF:
-	ld xbc, (0x60f2bc:24)                               ; FAC6BF  e2 bc f2 60 21
-	m_xor_rm ML24, 0x60f290, r1                          ; FAC6C4  e2 90 f2 60 d1
-	m_and_rm ML24, 0x60f290, r1                          ; FAC6C9  e2 90 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_CtrlPedal:24)                               ; FAC6BF  e2 bc f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_CtrlPedal, r1                          ; FAC6C4  e2 90 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_CtrlPedal, r1                          ; FAC6C9  e2 90 f2 60 c1
 	ld XIX,XBC                                           ; FAC6CE  e9 8c
 	jrl z, .LFAC780                                      ; FAC6D0  76 ad 00
 	ld XWA,(XIZ+0x0a)                                    ; FAC6D3  ae 0a 20
@@ -79802,8 +79802,8 @@ ParamMsg_ResyncParts_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, f
 ; ParamMsg_ResyncParts_B5_CC40_Hold -- JumpTable_FAC3BF[4] (number 0xB5): post 0 to parts that lost 0xB5 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F294)/(0x60F2C0) at 0xFAC6EA-0xFAC715, reset 0x00 mask 0x7F; (0x60F294) is ParamMsg_B5_CC40_Hold's cell.
 ParamMsg_ResyncParts_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFAC3CF
-	ld xix, (0x60f294:24)                               ; FAC6EA  e2 94 f2 60 24
-	ld xbc, (0x60f2c0:24)                               ; FAC6EF  e2 c0 f2 60 21
+	ld xix, (ParamMsg_PartMask_Hold:24)                               ; FAC6EA  e2 94 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_Hold:24)                               ; FAC6EF  e2 c0 f2 60 21
 	xor XIX,XBC                                          ; FAC6F4  e9 d4
 	and XIX,XBC                                          ; FAC6F6  e9 c4
 	jr z, .LFAC70B                                       ; FAC6F8  66 11
@@ -79813,9 +79813,9 @@ ParamMsg_ResyncParts_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first 
 	calr Queue2E00_FanOutToPartMask                                          ; FAC707  1e aa f7
 	pop XIY                                              ; FAC70A  5d
 .LFAC70B:
-	ld xbc, (0x60f2c0:24)                               ; FAC70B  e2 c0 f2 60 21
-	m_xor_rm ML24, 0x60f294, r1                          ; FAC710  e2 94 f2 60 d1
-	m_and_rm ML24, 0x60f294, r1                          ; FAC715  e2 94 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_Hold:24)                               ; FAC70B  e2 c0 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_Hold, r1                          ; FAC710  e2 94 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_Hold, r1                          ; FAC715  e2 94 f2 60 c1
 	ld XIX,XBC                                           ; FAC71A  e9 8c
 	jr z, .LFAC780                                       ; FAC71C  66 62
 	ld XWA,(XIZ+0x0a)                                    ; FAC71E  ae 0a 20
@@ -79828,8 +79828,8 @@ ParamMsg_ResyncParts_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first 
 ; ParamMsg_ResyncParts_B3_CC0B_Expression -- JumpTable_FAC3BF[2] (number 0xB3): post 0x7F to parts that lost 0xB3 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
 ; Evidence: lost/gained from (0x60F2A8)/(0x60F2D4) at 0xFAC734-0xFAC75F, reset value 0x7F mask 0x7F (`ld H,0x7f` at 0xFAC744); (0x60F2A8) is ParamMsg_B3_CC0B_Expression's cell.  The label sub_FAC74B sits inside this arm.
 ParamMsg_ResyncParts_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, first at 0xFAC3C7
-	ld xix, (0x60f2a8:24)                               ; FAC734  e2 a8 f2 60 24
-	ld xbc, (0x60f2d4:24)                               ; FAC739  e2 d4 f2 60 21
+	ld xix, (ParamMsg_PartMask_Expression:24)                               ; FAC734  e2 a8 f2 60 24
+	ld xbc, (ParamMsg_PartMaskPrev_Expression:24)                               ; FAC739  e2 d4 f2 60 21
 	xor XIX,XBC                                          ; FAC73E  e9 d4
 	and XIX,XBC                                          ; FAC740  e9 c4
 	jr z, .LFAC755                                       ; FAC742  66 11
@@ -79841,9 +79841,9 @@ sub_FAC74B:
 	calr Queue2E00_FanOutToPartMask                                          ; FAC751  1e 60 f7
 	pop XIY                                              ; FAC754  5d
 .LFAC755:
-	ld xbc, (0x60f2d4:24)                               ; FAC755  e2 d4 f2 60 21
-	m_xor_rm ML24, 0x60f2a8, r1                          ; FAC75A  e2 a8 f2 60 d1
-	m_and_rm ML24, 0x60f2a8, r1                          ; FAC75F  e2 a8 f2 60 c1
+	ld xbc, (ParamMsg_PartMaskPrev_Expression:24)                               ; FAC755  e2 d4 f2 60 21
+	m_xor_rm ML24, ParamMsg_PartMask_Expression, r1                          ; FAC75A  e2 a8 f2 60 d1
+	m_and_rm ML24, ParamMsg_PartMask_Expression, r1                          ; FAC75F  e2 a8 f2 60 c1
 	ld XIX,XBC                                           ; FAC764  e9 8c
 	jr z, .LFAC780                                       ; FAC766  66 18
 	ld XWA,(XIZ+0x0a)                                    ; FAC768  ae 0a 20
@@ -81091,7 +81091,7 @@ ParamShadow_SetField3:
 	cp C,0x1f
 	jr ugt, .LFAD845
 	set 0x07,E
-	ld XIX,0x0060f610
+	ld XIX,SeqEvt_VolumeShadow
 	mx8_st_mr8 MXD, ra_IX, rb_C, r5
 	jr .LFAD845
 .LFAD837:
@@ -81137,7 +81137,7 @@ ParamShadow_SetExpression:
 	cp B,0x1f
 	jr ugt, .LFAD86B
 	set 0x07,E
-	ld XIX,0x0060f590
+	ld XIX,SeqEvt_ExpressionShadow
 	mx8_st_mr8 MXD, ra_IX, rb_B, r5
 .LFAD86B:
 	ret
@@ -81188,7 +81188,7 @@ ParamShadow_SetPitchBend:
 	cp B,0x1f
 	jr ugt, .LFAD86B
 	set 0x07,E
-	ld XIX,0x0060f5d0
+	ld XIX,SeqEvt_PitchBendShadow
 	sll b, 0x01
 	mx8_st_mr16 MXD, ra_IX, rb_B, r2
 	ret
@@ -81217,7 +81217,7 @@ ParamShadow_SetModulation1:
 	cp B,0x1f
 	jr ugt, .LFAD86B
 	set 0x07,E
-	ld XIX,0x0060f5b0
+	ld XIX,SeqEvt_ModulationShadow
 	mx8_st_mr8 MXD, ra_IX, rb_B, r5
 	ret
 	calr Dev7F_WriteAllFourSlots
@@ -81496,11 +81496,11 @@ OrdinalToBitMask6:
 ;          0x60F5D0, 0x60F610 or 0x60F650.
 ; ---------------------------------------------------------------------
 ParamShadow_FlushAll:
-	ld XIY,0x0060f590
+	ld XIY,SeqEvt_ExpressionShadow
 	ld w, 0xb3:opc
 	calr .LFADA44
 	calr .LFADA7F
-	ld XIY,0x0060f5b0
+	ld XIY,SeqEvt_ModulationShadow
 	ld w, 0xb2:opc
 	calr .LFADA44
 	calr .LFADABA
@@ -81543,7 +81543,7 @@ ParamShadow_FlushAll:
 .LFADAB9:
 	ret
 .LFADABA:
-	ld XIY,0x0060f5d0
+	ld XIY,SeqEvt_PitchBendShadow
 	xor HL,HL
 	xor BC,BC
 .LFADAC3:
@@ -81564,7 +81564,7 @@ ParamShadow_FlushAll:
 	jr ule, .LFADAC3
 	ret
 .LFADAF5:
-	ld XIY,0x0060f610
+	ld XIY,SeqEvt_VolumeShadow
 	xor HL,HL
 .LFADAFC:
 	mx_ld_rm MXB, ra_IY, ra_HL, r1
@@ -84017,7 +84017,7 @@ SeqEvt_ShadowPartVolume:   ; entry: pointer-table entry
 	ld l, (0x60f31d:24)
 	ld XIX,0x00603422
 	set 0x07,E
-	ld XIX,0x0060f610
+	ld XIX,SeqEvt_VolumeShadow
 	mx_st_mr8 MXD, ra_IX, ra_HL, r5
 	ret
 ; SeqEvt_PostPartVolume -- post a deferred part volume for sequencer slot (0x60F31D): {part, 3, E, 0x7F} written into the part record and published when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20
@@ -84255,7 +84255,7 @@ SeqEvt_ApplyCtrlEvent_JumpTable_FAF16C:
 SeqEvt_ShadowChanPressure:   ; entry: pointer-table entry
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x0060f630
+	ld XIX,SeqEvt_PressureShadow
 	ld a, (0x60f30a:24)
 	set 0x07,A
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1
@@ -84298,7 +84298,7 @@ SeqEvt_PostChanPressure:
 SeqEvt_ShadowModulation:   ; entry: pointer-table entry
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x0060f5b0
+	ld XIX,SeqEvt_ModulationShadow
 	ld a, (0x60f30a:24)
 	set 0x07,A
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1
@@ -84342,7 +84342,7 @@ SeqEvt_ShadowPitchBend:   ; entry: pointer-table entry
 	extz HL
 	ld l, (0x60f31d:24)
 	sll l, 0x01
-	ld XIX,0x0060f5d0
+	ld XIX,SeqEvt_PitchBendShadow
 	ld wa, (0x60f30a:24)
 	and WA,0x7f7f
 	set 0x07,A
@@ -84390,7 +84390,7 @@ SeqEvt_ShadowExpression:   ; entry: pointer-table entry
 	m_bit 7, MD16, 0x34d1
 	jr nz, .LFAF352
 	set 0x07,E
-	ld XIX,0x0060f590
+	ld XIX,SeqEvt_ExpressionShadow
 	mx_st_mr8 MXD, ra_IX, ra_HL, r5
 	ret
 .LFAF352:
@@ -84546,7 +84546,7 @@ sub_FAF453:   ; entry: pointer-table entry
 ; Evidence: five `ldw BC,0x11` sweeps with `bit 7,(XIY) / res 7,(XIY)` at 0xFAF491-0xFAF55C, each setting (0x60F31D) to the slot index before the call.
 ; Called from: the playback entry 0xFAED76 (directory T_F41F10) and the slot-reset routine 0xFAEC8A (T_F41F18).
 SeqEvt_FlushShadows:
-	ld XIY,0x0060f630
+	ld XIY,SeqEvt_PressureShadow
 	ldw bc, 0x11
 .LFAF499:
 	bit 7,(XIY)
@@ -84554,7 +84554,7 @@ SeqEvt_FlushShadows:
 	res 7,(XIY)
 	ld E,(XIY)
 	ld XHL,XIY
-	sub XHL,0x0060f630
+	sub XHL,SeqEvt_PressureShadow
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY
@@ -84564,7 +84564,7 @@ SeqEvt_FlushShadows:
 .LFAF4B5:
 	inc 1,XIY
 	djnz16 bc, .LFAF499
-	ld XIY,0x0060f5b0
+	ld XIY,SeqEvt_ModulationShadow
 	ldw bc, 0x11
 .LFAF4C2:
 	bit 7,(XIY)
@@ -84572,7 +84572,7 @@ SeqEvt_FlushShadows:
 	res 7,(XIY)
 	ld E,(XIY)
 	ld XHL,XIY
-	sub XHL,0x0060f5b0
+	sub XHL,SeqEvt_ModulationShadow
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY
@@ -84582,7 +84582,7 @@ SeqEvt_FlushShadows:
 .LFAF4DE:
 	inc 1,XIY
 	djnz16 bc, .LFAF4C2
-	ld XIY,0x0060f5d0
+	ld XIY,SeqEvt_PitchBendShadow
 	ldw bc, 0x11
 .LFAF4EB:
 	bit 7,(XIY)
@@ -84590,7 +84590,7 @@ SeqEvt_FlushShadows:
 	res 7,(XIY)
 	ld DE,(XIY)
 	ld XHL,XIY
-	sub XHL,0x0060f5d0
+	sub XHL,SeqEvt_PitchBendShadow
 	srl l, 0x01
 	ld (0x60f31d:24), l
 	pushw bc
@@ -84601,7 +84601,7 @@ SeqEvt_FlushShadows:
 .LFAF50A:
 	inc 2,XIY
 	djnz16 bc, .LFAF4EB
-	ld XIY,0x0060f590
+	ld XIY,SeqEvt_ExpressionShadow
 	ldw bc, 0x11
 .LFAF517:
 	bit 7,(XIY)
@@ -84609,7 +84609,7 @@ SeqEvt_FlushShadows:
 	res 7,(XIY)
 	ld E,(XIY)
 	ld XHL,XIY
-	sub XHL,0x0060f590
+	sub XHL,SeqEvt_ExpressionShadow
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY
@@ -84619,7 +84619,7 @@ SeqEvt_FlushShadows:
 .LFAF533:
 	inc 1,XIY
 	djnz16 bc, .LFAF517
-	ld XIY,0x0060f610
+	ld XIY,SeqEvt_VolumeShadow
 	ldw bc, 0x11
 .LFAF540:
 	bit 7,(XIY)
@@ -84627,7 +84627,7 @@ SeqEvt_FlushShadows:
 	res 7,(XIY)
 	ld E,(XIY)
 	ld HL,IY
-	sub XHL,0x0060f610
+	sub XHL,SeqEvt_VolumeShadow
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY

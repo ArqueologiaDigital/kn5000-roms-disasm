@@ -356,6 +356,35 @@ GROUPS = [
         0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
         0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-part-masks-and-event-shadows.md", "1. The part masks; 2. The sequencer-event shadows", {
+        0x60F280: ("ParamMsg_PartMask_PitchBend", "parts receiving B1 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2AC: ("ParamMsg_PartMaskPrev_PitchBend", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F284: ("ParamMsg_PartMask_Modulation", "parts receiving B2 CC01 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2B0: ("ParamMsg_PartMaskPrev_Modulation", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F288: ("ParamMsg_PartMask_Modulation2", "parts receiving BC CC02 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2B4: ("ParamMsg_PartMaskPrev_Modulation2", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F28C: ("ParamMsg_PartMask_ChannelPressure", "parts receiving B4 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2B8: ("ParamMsg_PartMaskPrev_ChannelPressure", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F290: ("ParamMsg_PartMask_CtrlPedal", "parts receiving BD CC04 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2BC: ("ParamMsg_PartMaskPrev_CtrlPedal", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F294: ("ParamMsg_PartMask_Hold", "parts receiving B5 CC40 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2C0: ("ParamMsg_PartMaskPrev_Hold", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F298: ("ParamMsg_PartMask_RTCreatX", "parts receiving B8 CC10 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2C4: ("ParamMsg_PartMaskPrev_RTCreatX", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F29C: ("ParamMsg_PartMask_RTCreatY", "parts receiving B9 CC11 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2C8: ("ParamMsg_PartMaskPrev_RTCreatY", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F2A0: ("ParamMsg_PartMask_RTCtrlX", "parts receiving BA CC12 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2CC: ("ParamMsg_PartMaskPrev_RTCtrlX", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F2A4: ("ParamMsg_PartMask_RTCtrlY", "parts receiving BB CC13 (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2D0: ("ParamMsg_PartMaskPrev_RTCtrlY", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F2A8: ("ParamMsg_PartMask_Expression", "parts receiving B3 CC0B (32-bit)", "ParamMsg_ComputePartMasks, ParamMsg_ResyncParts_*"),
+        0x60F2D4: ("ParamMsg_PartMaskPrev_Expression", "the same mask before the last ComputePartMasks", "ParamMsg_ResyncParts_*"),
+        0x60F630: ("SeqEvt_PressureShadow", "per event slot: channel pressure, flushed as 0xB4; bit 7 = pending", "SeqEvt_ShadowChanPressure / _PostChanPressure"),
+        0x60F5B0: ("SeqEvt_ModulationShadow", "per event slot: modulation, flushed as 0xB2; bit 7 = pending", "SeqEvt_ShadowModulation / _PostModulation"),
+        0x60F5D0: ("SeqEvt_PitchBendShadow", "per event slot: pitch bend, 16-bit per slot, flushed as 0xB1; bit 7 = pending", "SeqEvt_ShadowPitchBend / _PostPitchBend"),
+        0x60F590: ("SeqEvt_ExpressionShadow", "per event slot: expression, flushed as 0xB3; bit 7 = pending", "SeqEvt_ShadowExpression"),
+        0x60F610: ("SeqEvt_VolumeShadow", "per event slot: part volume, flushed as {part,3}; bit 7 = pending", "SeqEvt_ShadowPartVolume / _PostPartVolume"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
@@ -397,7 +426,37 @@ def inc_text():
     return "\n".join(out) + "\n"
 
 
+def _write(path, data):
+    # encode before opening, and replace atomically: `open(p, "wb").write(x.encode())` truncates
+    # the file first and leaves it empty if the encode raises (it emptied wsa1_prom_a.s 2026-10-03)
+    tmp = path + ".tmp-name_wsa1_ram"
+    with open(tmp, "wb") as fh:
+        fh.write(data)
+    os.replace(tmp, path)
+
+
+def clashes():
+    """Names in GROUPS that some source already defines as a label, .set or .equ.  The assembler
+    takes the duplicate without an error: 2026-10-03 the RAM name SeqEvt_ShadowModulation (0x60F5B0)
+    replaced the code label of the same name in a 4-entry jump table, 36 bytes off in prom_a."""
+    defined = {}
+    for f in SOURCES:
+        p = f if os.path.isabs(f) else os.path.join(REPO, f)
+        for k, l in enumerate(open(p, "rb").read().decode("latin-1").split("\n")):
+            m = re.match(r'^([A-Za-z_.$][\w.$]*):', l) or \
+                re.match(r'^\s*\.(?:set|equ)\s+([A-Za-z_.$][\w.$]*)\s*,', l)
+            if m:
+                defined.setdefault(m.group(1), "%s:%d" % (os.path.relpath(p, REPO), k + 1))
+    return sorted((n.split("+")[0], defined[n.split("+")[0]]) for n, _, _ in NAMES.values()
+                  if n.split("+")[0] in defined)
+
+
 def main():
+    clash = clashes()
+    if clash:
+        for n, where in clash:
+            print("name already defined in the source: %s (%s)" % (n, where))
+        return 2
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--check", action="store_true",
@@ -488,12 +547,12 @@ def main():
                     not any('"include/wsa1_ram.inc"' in x for x in L):
                 k = next(j for j, x in enumerate(L) if '.include "include/tlcs900_mem_ops.inc"' in x)
                 L.insert(k + 1, '\t.include "include/wsa1_ram.inc"')
-            open(p, "wb").write("\n".join(L).encode("latin-1"))
+            _write(p, "\n".join(L).encode("latin-1"))
         print("%-45s %4d operands" % (os.path.relpath(p, REPO), n))
         total += n
     print("%d operands%s" % (total, "" if a.apply else " (dry run)"))
     if a.apply:
-        open(os.path.join(REPO, INC), "w").write(inc_text())
+        _write(os.path.join(REPO, INC), inc_text().encode("latin-1"))
     return 0
 
 
