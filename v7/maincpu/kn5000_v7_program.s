@@ -2048,7 +2048,7 @@ Voice_FactoryPresetData_Code_Loop:
 Voice_FactoryPresetData_Code_Skip2:
 	cp	(xsp+24), 1
 	jrl	ugt, Voice_FactoryPresetData_Code_Join2
-	ld	l, (257962:24)
+	ld	l, (COLORBLIT_MODE_ACTIVE:24)
 	ld	xwa, (xsp+34)
 	ld	wa, (xwa)
 	exts	xwa
@@ -2177,8 +2177,8 @@ DrawText_LayoutAndRender_Variant1_Helper:
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
 	jr	z, Voice_FactoryPresetData_Code_Skip9
-	ld	a, (257960:24)
-	ld	(257962:24), a
+	ld	a, (COLORBLIT_MODE:24)
+	ld	(COLORBLIT_MODE_ACTIVE:24), a
 	cpw	(197710:24), 0
 	jr	z, Voice_FactoryPresetData_Code_Epilogue
 	ld	xwa, xiz
@@ -2197,7 +2197,7 @@ Voice_FactoryPresetData_Code_Skip9:
 	ldirw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ld	c, (257960:24)
+	ld	c, (COLORBLIT_MODE:24)
 	ld	(xwa+14), c
 	calr	DrawRing_Post
 Voice_FactoryPresetData_Code_Epilogue:
@@ -2209,7 +2209,7 @@ Voice_FactoryPresetData_Code:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	ld	(257962:24), c
+	ld	(COLORBLIT_MODE_ACTIVE:24), c
 	cpw	(197710:24), 0
 	ret	z
 	ld	bc, de
@@ -2323,8 +2323,8 @@ DrawText_QueueOrDirect:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp hl, 0:i3
 	jr z, DrawText_QueueDeferred
-	ld a, (0x03efa8:24)
-	ld (0x03efaa:24), a
+	ld a, (COLORBLIT_MODE:24)
+	ld (COLORBLIT_MODE_ACTIVE:24), a
 	cpw (197710:24), 0
 	jrl z, DrawText_PopAndReturn
 	ld xwa, (xsp + 28)
@@ -2374,7 +2374,7 @@ DrawText_QueueDeferred:
 	ld	(xiz + 24), wa
 	ld	wa, (xsp + 24)
 	ld	(xiz + 26), wa
-	ld	a, (0x03efa8:24)
+	ld	a, (COLORBLIT_MODE:24)
 	ld	(xiz + 28), a
 	ld	xwa, xiz
 	calr	DrawRing_Post
@@ -2391,7 +2391,7 @@ DrawText_PopAndReturn_Code:
 	ld ix, (xiz + 24)
 	ld de, (xiz + 26)
 	ld a, (xiz + 28)
-	ld (0x03efaa:24), a
+	ld (COLORBLIT_MODE_ACTIVE:24), a
 	cpw (197710:24), 0
 	jr z, DrawText_DeferredFreeAndReturn
 	push xiy
@@ -2669,7 +2669,7 @@ TextRender_ScanLineLoop:
 	ldw (xsp + 24), 0x8
 
 TextRender_SelectDrawMode:
-	ld a, (0x03efaa:24)
+	ld a, (COLORBLIT_MODE_ACTIVE:24)
 	cp a, 2:i3
 	jrl z, TextRender_XorMode_Init
 	cp a, 1:i3

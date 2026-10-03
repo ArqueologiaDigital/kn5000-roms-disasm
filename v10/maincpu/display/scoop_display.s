@@ -705,7 +705,7 @@ Display_InitParamLoader1:
 	ld a, 0x0c:opc
 	ld a, 0x10:opc
 	call Display_DeferOrDrawWall
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ret
 Display_InitParamLoader2:
 	; --- Param loader 2: C=7, A=0x0c, call FB155F ---
@@ -16440,14 +16440,14 @@ Display_RedrawStatusBar:
 	jrl nz, Scoop_Return
 	cp (ACTIVE_TITLE:16), 138
 	jrl nz, Scoop_Return
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	call UIRender_LoadTwoDescriptors
 	ld l, (3567:16)
 	xor h, h
 	cp l, 0x12
 	jr nz, Scoop_SetupDisplayTables
 	call Display_DeferOrDrawWall
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	ld xiy, StyleUI_ParamBlock_AltD
 	ld xix, StyleUI_ParamBlock_AltE
 	call UIRender_TwoTableGeneral
@@ -16605,7 +16605,7 @@ Scoop_FrameData:
 	.byte	0x00
 
 Scoop_InitDisplayFull:
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	calr Scoop_DrawFrameLines
 	ld xiy, StyleUI_ParamBlock_AltE
 	ld xix, StyleUI_ParamBlockPtrTable
@@ -16626,7 +16626,7 @@ Scoop_InitDisplayFull:
 Display_RedrawMainContent:
 	cp (ACTIVE_TITLE:16), 138
 	jr nz, Scoop_RedrawMainContent_End
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	ld xiy, Display_RedrawMainContent_Data
 	call Scoop_CurveUpdate_Direct
 
@@ -16636,7 +16636,7 @@ Scoop_RedrawMainContent_End:
 Display_RedrawFooter:
 	cp (ACTIVE_TITLE:16), 138
 	jr nz, Scoop_RedrawFooter_End
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	ld a, (3922:16)
 	ld (4497:16), a
 	ld (4498:16), a
@@ -16663,7 +16663,7 @@ Scoop_RedrawFooter_End:
 Display_RedrawTitleBar:
 	cp (ACTIVE_TITLE:16), 138
 	jrl nz, Scoop_TitleBar_End
-	ld (0x03efa8:24), 0x02
+	ld (COLORBLIT_MODE:24), 0x02
 	calr Scoop_DrawGridLines
 	calr Scoop_TitleBar_SelectPartRange
 	cpw (3660:16), 0
@@ -16781,7 +16781,7 @@ Display_RedrawSelection:
 	jp Scoop_Selection_End
 
 Scoop_Selection_RedrawActive:
-	ld (0x03efa8:24), 0x01
+	ld (COLORBLIT_MODE:24), 0x01
 	ld a, (3429:16)
 	cp a, 0:i3
 	jr nz, Scoop_Selection_CheckMode1
@@ -16878,7 +16878,7 @@ Scoop_SidePanel_NextPart:
 	jr Scoop_SidePanel_DrawPartLoop
 
 Scoop_SidePanel_DrawValues:
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	ld a, (3666:16)
 	cp (3660:16), 0
 	jr nz, Scoop_SidePanel_StoreAndDraw
@@ -16905,7 +16905,7 @@ Scoop_SidePanel_DrawOneSlot:
 	pushw bc
 	ld xiy, Scoop_SidePanel_DrawOneSlot_Data
 	ld bc, 4:i3
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	ld xwa, 0x11d4
 	ld (xwa), 0x6
 	ld (xwa + 1), 0x8
@@ -16944,7 +16944,7 @@ Display_RedrawAltContent:
 	cp a, 0:i3
 	jr z, Scoop_AltContent_ClearRegions
 	add xix, xwa
-	ld (0x03efa8:24), 0x02
+	ld (COLORBLIT_MODE:24), 0x02
 	ld xiy, Display_RedrawAltContent_Str_END
 	ld bc, 3:i3
 	xor hl, hl
@@ -16970,7 +16970,7 @@ Scoop_AltContent_End:
 	ret
 
 Scoop_AltContent_ClearOneRegion:
-	ld (0x03efa8:24), 0x02
+	ld (COLORBLIT_MODE:24), 0x02
 	ldw bc, 0x20
 	ldw hl, 0xa
 	ld (4586:16), 14
@@ -16985,13 +16985,13 @@ Scoop_AltContent_ClearOneRegion:
 Display_RedrawButtonLabels:
 	cp (ACTIVE_TITLE:16), 138
 	jr nz, Scoop_ButtonLabels_End
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	call Scoop_ButtonLabels_CopySlotData
 	ld xiy, Display_RedrawButtonLabels_Data_4
 	ld xix, Display_RedrawButtonLabels_Data_5
 	call GraphicsRender_TwoTable
 	call Scoop_ButtonLabels_SetupPartButtons
-	ld (0x03efa8:24), 0x02
+	ld (COLORBLIT_MODE:24), 0x02
 	ld xiy, Scoop_FooterShowPartValue_Data
 	ld xix, Display_RedrawButtonLabels_Data
 	call GraphicsRender_TwoTable

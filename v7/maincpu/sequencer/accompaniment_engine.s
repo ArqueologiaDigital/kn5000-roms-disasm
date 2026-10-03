@@ -32537,7 +32537,7 @@ AccDraw_Secondary_Skip2:
 	ret
 AccScreen_DataBlock_Code:
 	calr	AccScreen_DrawWall
-	ld	(257960:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, AccScreen_DataBlock_Data_2
 	ld	xix, AccScreen_DataBlock_Data_3
 	calr	AccAudio_DataBlock1
@@ -32547,11 +32547,11 @@ AccScreen_DataBlock_Code:
 	ret
 AccScreen_DataBlock_Code2:
 	calr	AccDraw_Secondary_Helper10
-	ld	(257960:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, AccScreen_DataBlock_Data_6
 	calr	AccDraw_Secondary_Helper6
 	calr	AccDraw_Secondary_Helper17
-	ld	(257960:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	calr	AccScreen_SelectorToWidgetIndex
 	ldmm8	14623, 13370
 	ldmm8	14624, 13990
@@ -32562,7 +32562,7 @@ AccScreen_DataBlock_Code2:
 	ld	xiy, AccScreen_DataBlock_Data_4
 	ld	xix, AccScreen_DataBlock_Data_5
 	calr	AccGraphics_RenderStart
-	ld	(257960:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ldmm8	14623, 13942
 	ld	xiy, AccScreen_DataBlock_Data_7
 	calr	AccDraw_Secondary
@@ -32789,7 +32789,7 @@ AccDraw_Secondary_Return2:
 	inc	4, xsp
 	ret
 AccScreen_DataBlock_Code4:
-	ld	(257960:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	calr	AccScreen_BeatDataBlock
 	ret
 	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
@@ -32800,7 +32800,7 @@ AccScreen_DataBlock_Code4:
 	inc	4, xsp
 	ret
 AccScreen_DataBlock_Code5:
-	ld	(257960:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	calr	AccScreen_BeatDataBlock
 	ret
 	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
@@ -32814,7 +32814,7 @@ AccScreen_DataBlock_Code5:
 AccDraw_Secondary_Return3:
 	ret
 AccScreen_DataBlock_Code6:
-	ld	(257960:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ldmm8	14623, 13946
 	ld	xiy, AccDraw_Secondary_Entry_Data
 	calr	AccDraw_Secondary
@@ -32866,7 +32866,7 @@ AccDraw_Secondary_Return8:
 	ret
 	ret
 AccDraw_Secondary_Helper10:
-	ld	(257960:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	cp	(13942:16), 4
 	jr	nz, AccDraw_Secondary_Skip3
 	ld	xiy, AccScreen_DataBlock_Data_3
@@ -33067,7 +33067,7 @@ AccDraw_Secondary_Skip6:
 	ld	(14621:16), a
 	ret
 AccDraw_Secondary_Helper18:
-	ld	(257960:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(13942:16), 4
 	jr	z, AccDraw_Secondary_Skip7
 	calr	AccScreen_DrawMeasureDetail
@@ -33136,7 +33136,7 @@ AccScreen_DrawInit_StackWrap:
 	ret
 
 AccScreen_DrawInit_Body:
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	calr AccScreen_DrawTempoDisplay
 	ret
 
@@ -33148,7 +33148,7 @@ AccScreen_UpdateBeat_StackWrap:
 	ret
 
 AccScreen_UpdateBeat_Body:
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	calr AccScreen_UpdateBeatDisplay
 	ret
 
@@ -33160,7 +33160,7 @@ AccScreen_DrawMeasure_StackWrap:
 	ret
 
 AccScreen_DrawMeasure_Body:
-	ld (0x03efa8:24), 0x00
+	ld (COLORBLIT_MODE:24), 0x00
 	calr AccScreen_DrawMeasureDetail
 	ret
 
@@ -33229,7 +33229,7 @@ AccScreen_UIDataBlock:
 ; |.#.!.._.......7!|
 ; |...f....g..ah...|
 ; |9@.#.4-.....STEP|
-	ld	(0x3efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 AccScreen_DrawWall:
 	ld	c, 0:opc
 	ld	a, 12:opc

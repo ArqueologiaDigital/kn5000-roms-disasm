@@ -1057,15 +1057,15 @@ SeGfx_StaticOp05_FromBuf_Helper:
 	ld	(xbc+4), de
 	ld	wa, (xwa+8)
 	ld	(xbc+6), wa
-	ld	a, (0x03efa8:24)
+	ld	a, (COLORBLIT_MODE:24)
 	ldfr_berp	a, 251
-	ld	(0x3efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
 	calr	ColorBlit
 	ldto_berp	a, 251
-	ld	(0x3efa8:24), a
+	ld	(COLORBLIT_MODE:24), a
 	pop	qiz
 	inc	8, xsp
 	ret
@@ -1780,13 +1780,13 @@ ColorBlit_PalSave_SkipShift:
 	ld (xwa + 4), bc
 	ld bc, (xde + 6)
 	ld (xwa + 6), bc
-	ld c, (0x03efa8:24)
+	ld c, (COLORBLIT_MODE:24)
 	ldfr_berp C, 0xfb
-	ld (0x03efa8:24), 0x01
+	ld (COLORBLIT_MODE:24), 0x01
 	ld bc, (0x03efa4:24)
 	calr ColorBlit
 	ldto_berp A, 0xfb
-	ld (0x03efa8:24), a
+	ld (COLORBLIT_MODE:24), a
 	popw_erp 0xfa
 	inc 8, xsp
 	ret

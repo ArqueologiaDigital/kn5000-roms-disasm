@@ -7681,7 +7681,7 @@ SeGfx_DrawBoundRecord:
 	ret
 SeGfx_StaticOp00_FromBuf:
 	; --- Wrapper function 4: set flag, push, ld xwa=imm, call, pop, ret ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
 	call SeGfx_StaticOp00_FromBuf_Helper
@@ -7689,7 +7689,7 @@ SeGfx_StaticOp00_FromBuf:
 	ret
 SeGfx_StaticOp02_FromBuf:
 	; --- Wrapper function 5: same pattern ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
 	call SeGfx_StaticOp02_FromBuf_Helper
@@ -7697,7 +7697,7 @@ SeGfx_StaticOp02_FromBuf:
 	ret
 SeGfx_StaticOp03_BlitAtCell:
 	; --- Wrapper function 6: set flag + store 4 regs, call ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld	(1740:16), xiy
 	ld	(1744:16), ix
@@ -7709,7 +7709,7 @@ SeGfx_StaticOp03_BlitAtCell:
 	ret
 SeGfx_StaticOp05_FromBuf:
 	; --- Wrapper function 7: same as 4/5 pattern ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
 	call SeGfx_StaticOp05_FromBuf_Helper
@@ -7731,7 +7731,7 @@ SeGfx_StaticOp07_Text:
 	ret
 SeGfx_StaticOp09_FromBuf:
 	; --- Wrapper function 10: set flag, push, ld xwa=imm, call, pop, ret ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
 	call SeGfx_StaticOp09_FromBuf_Helper
@@ -7746,7 +7746,7 @@ SeGfx_StaticOp0E:
 	ret
 SeGfx_StaticOp15_FromBuf:
 	; --- Wrapper function 12: set flag, push, ld xwa=imm, call, pop, ret ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
 	call SeGfx_StaticOp15_FromBuf_Helper
@@ -7754,7 +7754,7 @@ SeGfx_StaticOp15_FromBuf:
 	ret
 SeGfx_StaticOp1B_FromBuf:
 	; --- Wrapper function 13: set flag, push, ld xwa=imm, call, pop, ret ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
 	call ColorBlit_ByteData
@@ -7814,7 +7814,7 @@ SeMenu_NameEditor_End_Skip:
 	and	w, 127
 	or	w, a
 	ld	(1632:16), w
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x4C6D
 	call	SeGfx_DrawBoundRecord
 SeMenu_NameEditor_End_Code_Return:
@@ -7894,7 +7894,7 @@ SeMenu_DisplayPartValue_Data_Code_Skip4:
 	inc	2, wa
 	ld	(1746:16), wa
 SeMenu_DisplayPartValue_Data_Code_Join2:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeGfx_StaticOp09_FromBuf
 	pop	xiy
 	pop	xix
@@ -7921,7 +7921,7 @@ SeMenu_ApplyPartEdit_AltStore_Helper:
 	ld	(1744:16), wa
 	ld	wa, (xiz+14)
 	ld	(1746:16), wa
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeGfx_StaticOp00_FromBuf
 	pop	xiy
 	pop	xix
@@ -7948,7 +7948,7 @@ SeMenu_ApplyPartEdit_AltStore_Helper2:
 	ld	(1744:16), wa
 	ld	wa, (xiz+14)
 	ld	(1746:16), wa
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeGfx_StaticOp15_FromBuf
 	pop	xiy
 	pop	xix
@@ -8138,7 +8138,7 @@ SeMenu_BitShiftMask_Helper:
 	push	xix
 	push	xiy
 	push	xiz
-	ld	(0x3efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x0833
 	ld	xix, SeScreenData_0x085A
 	call	SeGfx_DrawStaticList
@@ -8148,7 +8148,7 @@ SeMenu_BitShiftMask_Helper:
 	ld	xix, SeScreenData_0x0864
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join4
 SeMenu_ShowConfirmDialog_Data_Code_Skip6:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x0864
 	ld	xix, SeScreenData_0x086E
 SeMenu_ShowConfirmDialog_Data_Code_Join4:
@@ -8171,14 +8171,14 @@ SeMenu_PresetManager_SaveApply_Helper:
 	push	xiz
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x06DB
 	ld	xix, SeScreenData_0x06DB + 10
 	call	SeGfx_DrawStaticList
 	ld	c, 2:opc
 	jr	SeMenu_PresetManager_SaveApply_Helper_Join
 SeMenu_ShowConfirmDialog_Data_Code_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x06DB
 	ld	xix, SeBitmap_Picture40x40
 	call	SeGfx_DrawStaticList
@@ -8212,7 +8212,7 @@ SeMenu_PresetManager_SaveApply_Helper_Skip:
 	pop	c
 SeMenu_PresetManager_SaveApply_Helper_Join2:
 	djnz8	c, -84
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x086E
 	ld	xix, SeScreenData_0x0878
 	call	SeGfx_DrawStaticList
@@ -8243,7 +8243,7 @@ SeMenu_ApplyPartEdit_AltStore_Helper3:
 	ld	(1744:16), wa
 	ld	wa, (xiz+14)
 	ld	(1746:16), wa
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeGfx_StaticOp1B_FromBuf
 	pop	xiy
 	pop	xix
@@ -8254,7 +8254,7 @@ SeMenu_ApplyPartEdit_AltStore_Helper3:
 	pop	xiz
 	ret
 SeMenu_CompareAndApply_Apply_Helper:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	c, 7:opc
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
@@ -8418,13 +8418,13 @@ SeMenu_ShowConfirmDialog_Code:
 SeMenu_ShowConfirmDialog_Sub:
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Sub_Skip
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_ShowConfirmDialog_Sub_Data_2
 	ld	xix, SeMenu_ShowConfirmDialog_Sub_Data_3
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_ShowConfirmDialog_Sub_Join
 SeMenu_ShowConfirmDialog_Sub_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x1140
 	ld	xix, SeMenu_ShowConfirmDialog_Sub_Data_2
 	call	SeGfx_DrawStaticList
@@ -8555,7 +8555,7 @@ SeMenu_WaveformSelect_Process:
 	ret
 
 SeMenu_WaveformSelect_Apply:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiz, SeScreenData_0x46B4
 	xor	xwa, xwa
 	ld	a, (0x0340e4:24)
@@ -8574,7 +8574,7 @@ SeMenu_WaveformSelect_Data:
 	call	SeMenu_WaveformSelect_Apply
 	jr	SeMenu_WaveformSelect_Data_Return
 SeMenu_WaveformSelect_Data_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(1710:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip2
 	ld	xiy, SeScreenData_0x0562
@@ -8591,15 +8591,15 @@ SeMenu_WaveformSelect_Data_Skip2:
 	ld	xix, SeScreenData_0x54EB
 	call	SeGfx_DrawBoundList
 	call	SeMenu_WaveformSelect_Apply_Helper2
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x53EC
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 SeMenu_WaveformSelect_Data_Return:
 	ret
 SeMenu_WaveformSelect_Apply_Helper:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x661:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip3
 	ld	xiy, SeScreenData_0x0685
@@ -8613,7 +8613,7 @@ SeMenu_WaveformSelect_Data_Skip3:
 SeMenu_WaveformSelect_Data_Return2:
 	ret
 SeMenu_WaveformSelect_Apply_Helper2:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	a, 13:opc
 SeMenu_WaveformSelect_Data_Loop:
 	push_a
@@ -8633,7 +8633,7 @@ SeMenu_WaveformSelect_Apply_Helper3:
 	cp	d, 0:i3
 	jr	z, SeMenu_WaveformSelect_Data_Return3
 	ld	xiy, SeScreenData_0x5525
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_WaveformSelect_Data_Return3:
 	ret
@@ -8655,21 +8655,21 @@ SeMenu_PresetManager_Init_Skip:
 	jrl	z, SeMenu_PresetManager_Init_Code_Skip
 	cp	a, 13
 	jrl	c, SeMenu_PresetManager_Init_Code_Skip2
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x54BE
 	ld	xix, SeScreenData_0x54E0
 	call	SeGfx_DrawBoundList
 	call	SeMenu_WaveformSelect_Apply_Helper2
 	jrl	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip2:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x551B
 	ld	xix, SeScreenData_0x5525
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 	ld	xiy, SeScreenData_0x5525
 	call	SeMenu_WaveformSelect_Apply_Helper5
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x53EC
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeGfx_DrawStaticList
@@ -8684,26 +8684,26 @@ SeMenu_PresetManager_Init_Skip4:
 	call	SeMenu_WaveformSelect_Apply_Helper4
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip5:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, DrumDetailEdit_Entry_02
 	ld	xix, DrumDetailEdit_Entry_03
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Code_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, DrumDetailEdit_Entry_06
 	ld	xix, DrumDetailEdit_Entry_07
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Code_Skip2:
 	ld	xiy, SeScreenData_0x5525
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_PresetManager_Init_Code_Return:
 	ret
 SeMenu_PresetManager_Load:
 	; --- Wrapper 1: conditional XIY/XIX setup + call (28 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(1710:16), 1
 	jr nz, SeMenu_PresetManager_End
 	ld xiy, SeScreenData_0x5569
@@ -8713,7 +8713,7 @@ SeMenu_PresetManager_End:
 	ret
 SeMenu_PresetManager_Save:
 	; --- Wrapper 2: XIY/XIX setup + 2 calls (25 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x0558
 	ld xix, SeScreenData_0x0562
 	call SeGfx_DrawStaticList
@@ -8729,7 +8729,7 @@ SeMenu_PresetManager_SaveApply:
 	call	SeGfx_DrawStaticList
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper2
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x1DCB
 	ld	xix, SeScreenData_0x1ECE
 	call	SeGfx_DrawBoundList
@@ -8754,7 +8754,7 @@ SeMenu_PresetManager_Data_Skip:
 SeMenu_PresetManager_Data_Join:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x1F75
 	ld	xix, SeScreenData_0x1F80
 	call	SeGfx_DrawBoundList
@@ -8764,14 +8764,14 @@ SeMenu_PresetManager_Data_Join:
 SeMenu_PresetBrowser_Init_Helper:
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_PresetManager_Data_Skip2
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x0B7E
 	ld	xix, SeScreenData_0x0B7E + 10
 	call	SeGfx_DrawStaticList
 	ld	c, 2:opc
 	jr	SeMenu_PresetBrowser_Init_Helper_Join
 SeMenu_PresetManager_Data_Skip2:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x0B7E
 	ld	xix, SeScreenData_0x0B92
 	call	SeGfx_DrawStaticList
@@ -8807,7 +8807,7 @@ SeMenu_PresetBrowser_Init_Helper_Join2:
 	djnz8	c, -84
 	ret
 SeMenu_PresetManager_SaveApply_Helper2:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_PresetManager_SaveApply_Helper2_Skip
 	ld	c, 2:opc
@@ -8845,7 +8845,7 @@ SeMenu_PresetManager_SaveApply_Helper2_Join2:
 	djnz8	c, -84
 	ret
 SeMenu_WaveformSelect_Apply_Helper4:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	c, 2:opc
 	ld	w, (1630:16)
 	ld	a, c
@@ -8877,23 +8877,23 @@ SeMenu_WaveformSelect_Apply_Helper4_Join:
 	djnz8	c, -84
 	ret
 SeMenu_PresetManager_SaveApply_Helper3:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x09AA
 	ld	xix, SeScreenData_0x09D5
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_PresetManager_SaveApply_Helper4:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x09D5
 	ld	xix, SeScreenData_0x09DA
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_FxEdit_Init_Helper:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x08D7
 	ld	xix, SeScreenData_0x09AA
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ret
 SeMenu_PresetBrowser_Init:
 	; --- Main: call sub, setup XIY/XIX, call F0EC00, 3 more calls (51 bytes) ---
@@ -8903,7 +8903,7 @@ SeMenu_PresetBrowser_Init:
 	call SeGfx_DrawStaticList
 	call SeMenu_BitShiftMask_Helper
 	call SeMenu_PresetBrowser_Init_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, TuningSys_Param_01
 	ld xix, SeScreenData_0x26B9
 	call SeGfx_DrawBoundList
@@ -8911,14 +8911,14 @@ SeMenu_PresetBrowser_Init:
 	ret
 SeMenu_PresetBrowser_Navigate:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x0D5E
 	ld xix, SeScreenData_0x0E0E
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_PresetBrowser_Select:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x0E0E
 	ld xix, SeScreenData_0x0E13
 	call SeGfx_DrawStaticList
@@ -8936,13 +8936,13 @@ SeMenu_PresetBrowser_Select_Sub:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetBrowser_Select_Helper2
 	call	SeMenu_PresetBrowser_Select_Helper3
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x287D
 	ld	xix, SeScreenData_0x28CE
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_PresetBrowser_Select_Helper:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	c, 4:opc
 	ld	w, (1630:16)
 	ld	a, c
@@ -8974,18 +8974,18 @@ SeMenu_PresetBrowser_Select_Helper_Join:
 	djnz8	c, -84
 	ret
 SeMenu_PresetBrowser_Select_Helper2:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x296E
 	ld	xix, SeScreenData_0x2978
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x29BE
 	ld	xix, SeScreenData_0x29C8
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x29C8
 	ld	xix, SeScreenData_0x29D2
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x29C8
 	ld	xix, SeScreenData_0x29D2
 	call	SeGfx_DrawStaticList
@@ -9013,7 +9013,7 @@ SeMenu_PresetBrowser_Data_Loop:
 	pop	xiy
 	pop	c
 	pop	w
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	push	c
 	push	xiy
 	ld	xiz, SeScreenData_0x2B02
@@ -9052,7 +9052,7 @@ SeMenu_PresetBrowser_Data_Loop:
 	popw	de
 	pop	xiy
 	pop	c
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	push	c
 	push	xiy
 	ld	xiz, SeMenu_PresetBrowser_Select_Sub_Data_2 + 36
@@ -9088,13 +9088,13 @@ SeMenu_CompareAndApply_Match:
 	call SeMenu_ShowConfirmDialog_Sub
 	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Apply
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x238F
 	ld xix, SeScreenData_0x241A
 	call SeGfx_DrawBoundList
 	jr t, SeMenu_CompareAndApply_End
 SeMenu_CompareAndApply_Apply:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x57A4
 	ld xix, SeScreenData_0x57DB
 	call SeGfx_DrawBoundList
@@ -9103,7 +9103,7 @@ SeMenu_CompareAndApply_End:
 	ret
 SeMenu_CompareAndApply_Data:
 	; --- Init helper: language-conditional XIX setup (35 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x1089
 	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Data2
@@ -9116,7 +9116,7 @@ SeMenu_CompareAndApply_Data3:
 	ret
 SeMenu_CompareAndApply_Data4:
 	; --- Tail helper: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x113B
 	ld xix, SeScreenData_0x1140
 	call SeGfx_DrawStaticList
@@ -9129,11 +9129,11 @@ SeMenu_CompareAndApply_Data5:
 	.set	SeMenu_CompareAndApply_Data6, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
 	call	SeMenu_CompareAndApply_Data
 	call	SeMenu_PresetManager_Save
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x1452
 	ld	xix, SeScreenData_0x1466
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x137D
 	ld	xix, SeScreenData_0x1452
 	call	SeGfx_DrawStaticList
@@ -9142,7 +9142,7 @@ SeMenu_CompareAndApply_Apply_Sub:
 	ldw	(1734:16), 56
 	ldw	(1736:16), 139
 	call	SeMenu_CompareAndApply_Apply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x2480
 	ld	xix, SeScreenData_0x24B8
 	call	SeGfx_DrawBoundList
@@ -9155,7 +9155,7 @@ SeMenu_Utility_CopyBlock:
 	ld	xix, SeScreenData_0x1523
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x1AEB
 	ld	xix, SeScreenData_0x1AEB + 10
 	call	SeGfx_DrawStaticList
@@ -9170,7 +9170,7 @@ SeMenu_Utility_CopyBlock_Skip:
 SeMenu_Utility_CopyBlock_Join:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_CopyBlock_Skip2
 	ld	xiy, SeScreenData_0x24C8
@@ -9186,14 +9186,14 @@ SeMenu_Utility_CopyBlock_Join2:
 	call	SeMenu_CompareAndApply_Data4
 	ret
 SeMenu_Utility_CopyBlock_Helper:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	a, (1632:16)
 	and	a, 32
 	jr	z, SeMenu_Utility_CopyBlock_Skip3
 	ld	xiy, SeScreenData_0x5873
 	ld	xix, SeScreenData_0x5887
 	call	SeGfx_DrawBoundList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x1AEB
 	ld	xix, SeScreenData_0x1B01
 	call	SeGfx_DrawStaticList
@@ -9202,7 +9202,7 @@ SeMenu_Utility_CopyBlock_Skip3:
 	ld	xiy, SeScreenData_0x5887
 	ld	xix, EffectParamEdit_Entry_01
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x1B01
 	ld	xix, SeScreenData_0x1B0B
 	call	SeGfx_DrawStaticList
@@ -9213,7 +9213,7 @@ SeMenu_Utility_FillBlock:
 	ld	xiy, SeScreenData_0x1523
 	ld	xix, SeScreenData_0x166E
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x166E
 	ld	xix, SeScreenData_0x1682
 	call	SeGfx_DrawStaticList
@@ -9223,7 +9223,7 @@ SeMenu_Utility_FillBlock:
 	call	SeMenu_CompareAndApply_Apply_Helper
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x252A
 	ld	xix, SeScreenData_0x259F
 	call	SeGfx_DrawBoundList
@@ -9245,7 +9245,7 @@ SeMenu_Utility_CompareBlock_Loop:
 	call SeMenu_BitShiftMask_Helper
 	call SeMenu_PresetManager_SaveApply_Helper
 	call SeMenu_Utility_FormatNumber_End
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x2160
 	ld xix, SeScreenData_0x21C0
 	call SeGfx_DrawBoundList
@@ -9260,7 +9260,7 @@ SeMenu_Utility_CompareBlock_End:
 	ret
 SeMenu_Utility_SearchByte:
 	; --- Init: language-conditional XIX selection (35 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(1710:16), 1
 	jr z, SeMenu_Utility_SearchByte_End
 	ld xix, SeScreenData_0x173B
@@ -9273,7 +9273,7 @@ SeMenu_Utility_FormatNumber:
 	ret
 SeMenu_Utility_FormatNumber_Loop:
 	; --- Tail: clear flag, XIY/XIX, call F0EC00 (21 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x173B
 	ld xix, SeScreenData_0x1740
 	call SeGfx_DrawStaticList
@@ -9282,7 +9282,7 @@ SeMenu_Utility_FormatNumber_End:
 	; --- Data setup: load A, store, set flag=2, language-conditional XIX (58 bytes) ---
 	ld	a, (CURRENT_TITLE:16)
 	ld	(1656:16), a
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld xiy, SeMenu_Utility_FormatNumber_Data_2
 	cp	(1710:16), 1
 	jr z, SeMenu_Utility_FormatNumber_Data
@@ -9292,7 +9292,7 @@ SeMenu_Utility_FormatNumber_Data:
 	ld xix, SeMenu_Utility_FormatNumber_Data_2 + 24
 SeMenu_Utility_FormatSigned:
 	call SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x212D
 	call SeGfx_DrawBoundRecord
 	ret
@@ -9313,7 +9313,7 @@ SeMenu_Utility_FormatSigned_Data_Skip:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
 	call	SeMenu_Utility_FormatNumber_End
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x2160
 	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
@@ -9334,7 +9334,7 @@ SeMenu_Utility_FormatPercent_Skip:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
 	call	SeMenu_Utility_FormatNumber_End
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x221C
 	ld	xix, SeScreenData_0x224F
 	call	SeGfx_DrawBoundList
@@ -9355,7 +9355,7 @@ SeMenu_Utility_FormatPercent_Data_Skip:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
 	call	SeMenu_Utility_FormatNumber_End
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x221C
 	ld	xix, SeScreenData_0x224F
 	call	SeGfx_DrawBoundList
@@ -9373,7 +9373,7 @@ SeMenu_Utility_FormatHex_Skip:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
 	call	SeMenu_Utility_FormatNumber_End
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x225F
 	ld	xix, SeScreenData_0x22B0
 	call	SeGfx_DrawBoundList
@@ -9403,13 +9403,13 @@ SeMenu_Utility_FormatHex_Sub:
 	ld	xix, SeScreenData_0x1C2D
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x1AE1
 	ld	xix, SeScreenData_0x1AEB + 10
 	call	SeGfx_DrawStaticList
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x22C8
 	ld	xix, SeScreenData_0x233D
 	call	SeGfx_DrawBoundList
@@ -9490,20 +9490,20 @@ SeMenu_NameEdit_Dispatch:
 	call SeMenu_NameEdit_CheckBit7
 	jr t, SeMenu_NameEdit_Return
 SeMenu_NameEdit_SetupPath:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld xiy, SeScreenData_0x5999
 	ld xix, SeScreenData_0x59A3
 	call SeGfx_DrawStaticList
 	ld a, 0x00:opc
 SeMenu_NameEdit_DefaultPath:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, EffectParam_Edit_Table
 	call SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_NameEdit_Return:
 	ret
 SeMenu_NameEdit_CheckBit7:
 	; --- Helper: conditional XIY based on bit 7 of (0x066a) (32 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	a, (1642:16)
 	and a, 0x80
 	jr nz, SeMenu_NameEdit_Bit7Set
@@ -9535,7 +9535,7 @@ SeMenu_PatchEdit_DataBlock_Skip:
 SeMenu_PatchEdit_DataBlock_Skip2:
 	ld	xiy, SeScreenData_0x4D89
 SeMenu_PatchEdit_DataBlock_Join:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_PatchEdit_DataBlock_Return:
 	ret
@@ -9555,11 +9555,11 @@ SeMenu_PatchEdit_Dispatch:
 	ld xiz, xiy
 	ld xiy, (xiz)
 	ld xix, (xiz+4)
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call SeGfx_DrawBoundList
 	jr t, SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_SetupPath:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld xiy, SeScreenData_0x1F43
 	ld xix, SeScreenData_0x1F4D
 	call SeGfx_DrawStaticList
@@ -9570,7 +9570,7 @@ SeMenu_PatchEdit_CallHelper:
 	jr t, SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_DefaultPath:
 	ld xiy, SeScreenData_0x1EF7
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_PatchEdit_Return:
 	ret
@@ -9583,7 +9583,7 @@ SeMenu_BankEdit_Dispatch:
 	call SeMenu_BankEdit_LoopHelper
 	jr t, SeMenu_BankEdit_Return
 SeMenu_BankEdit_SetupPath:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld xiy, SeScreenData_0x20FB
 	ld xix, SeScreenData_0x2105
 	call SeGfx_DrawStaticList
@@ -9593,7 +9593,7 @@ SeMenu_BankEdit_Return:
 	ret
 SeMenu_BankEdit_LoopHelper:
 	; --- Loop over 3 entries: indexed XIY/XIX pointer table lookups ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeMenu_BankEdit_LoopHelper_Data_2
 	ld xix, SeMenu_BankEdit_LoopHelper_Data_3
 	call SeGfx_DrawStaticList
@@ -9652,26 +9652,26 @@ SeMenu_DrumKit_Dispatch:
 	jr	z, SeMenu_DrumKit_Dispatch_Skip2
 	cp	a, 16
 	jr	nz, SeMenu_DrumKit_Dispatch_Join
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_DrumKit_Dispatch_Data
 	ld	xix, SeMenu_DrumKit_Dispatch_Data_2
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_DrumKit_Dispatch_Return
 SeMenu_DrumKit_Dispatch_Skip:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x2829
 	ld	xix, SeScreenData_0x2833
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 	jr	SeMenu_DrumKit_Dispatch_Join
 SeMenu_DrumKit_Dispatch_Skip2:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x2833
 	ld	xix, SeScreenData_0x283D
 	call	SeGfx_DrawStaticList
 	ld	a, 13:opc
 SeMenu_DrumKit_Dispatch_Join:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x283D
 	call	SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_DrumKit_Dispatch_Return:
@@ -9687,20 +9687,20 @@ Data_UnknownBlock:
 	jr	nc, Data_UnknownBlock_Skip9
 	jr	Data_UnknownBlock_Join2
 Data_UnknownBlock_Skip8:
-	ld	(0x3efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x2964
 	ld	xix, SeScreenData_0x296E
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetBrowser_Select_Helper3
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x28AA
 	ld	xix, SeScreenData_0x28C3
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip2:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x287D
 	ld	xix, SeScreenData_0x2896
 	call	SeGfx_DrawBoundList
@@ -9709,13 +9709,13 @@ Data_UnknownBlock_Skip9:
 	call	SeMenu_PresetBrowser_Select_Helper2
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Join2:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x290C
 	call	SeMenu_WaveformSelect_Apply_Helper5
 Data_UnknownBlock_Return:
 	ret
 SeMenu_PresetBrowser_Select_Helper3:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x29B4
 	ld	xix, SeScreenData_0x29BE
 	call	SeGfx_DrawStaticList
@@ -9748,19 +9748,19 @@ Data_UnknownBlock_Skip11:
 	call	SeMenu_ShowConfirmDialog_Sub
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip12
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x244E
 	ld	xix, SeScreenData_0x2458
 	jr	Data_UnknownBlock_Join4
 Data_UnknownBlock_Skip12:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x57EF
 	ld	xix, SeScreenData_0x57F9
 Data_UnknownBlock_Join4:
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 Data_UnknownBlock_Join5:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip13
 	ld	xiy, SeScreenData_0x241A
@@ -9771,7 +9771,7 @@ Data_UnknownBlock_Join6:
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_DataBlock_02:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x24B8
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
@@ -9783,7 +9783,7 @@ SeMenu_DataBlock_03:
 Data_UnknownBlock_Skip14:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip15
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x5853
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	call	SeMenu_Utility_CopyBlock_Helper
@@ -9791,25 +9791,25 @@ Data_UnknownBlock_Skip14:
 Data_UnknownBlock_Skip15:
 	ld	xiy, SeScreenData_0x5853
 Data_UnknownBlock_Join7:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 Data_UnknownBlock_Return5:
 	ret
 SeMenu_DataBlock_04:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x25B7
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_DataBlock_05:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip3
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_DataBlock_05_Data
 	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return2
 Data_UnknownBlock_Skip3:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x21C0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 Data_UnknownBlock_Return2:
@@ -9817,47 +9817,47 @@ Data_UnknownBlock_Return2:
 SeMenu_DataBlock_06:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip4
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_DataBlock_05_Data
 	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return3
 Data_UnknownBlock_Skip4:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x21C0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 Data_UnknownBlock_Return3:
 	ret
 SeMenu_DataBlock_07:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_DataBlock_08:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_DataBlock_09:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x22B0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_DataBlock_10:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip5
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x234F
 	ld	xix, SeScreenData_0x2363
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 Data_UnknownBlock_Skip5:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x2363
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_DataBlock_11:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x2B12
 	ld	xix, SeScreenData_0x2C0A
 	call	SeGfx_DrawStaticList
@@ -9921,14 +9921,14 @@ Data_UnknownBlock_Skip7:
 	call	SeGfx_StaticOp07_Text
 	ret
 SeMenu_DataBlock_12:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip16
 	ld	xiy, SeScreenData_0x2C35
 	ld	xix, SeScreenData_0x2C57
 	call	SeGfx_DrawStaticList
 Data_UnknownBlock_Skip16:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x2C57
 	ld	xix, SeScreenData_0x2E3A
 	call	SeGfx_DrawStaticList
@@ -9982,11 +9982,11 @@ SeMenu_DataBlock_14:
 	cp	a, 2:i3
 	jr	z, Data_UnknownBlock_Skip22
 Data_UnknownBlock_Skip18:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x2EB6
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x662:16), 13
 	jr	z, Data_UnknownBlock_Skip19
 	cp	(0x662:16), 2
@@ -10006,7 +10006,7 @@ Data_UnknownBlock_Join10:
 	call	SeMenu_DataBlock_12_Helper
 	jr	Data_UnknownBlock_Return4
 Data_UnknownBlock_Skip21:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x2EAC
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
@@ -10015,11 +10015,11 @@ Data_UnknownBlock_Skip21:
 	call	SeMenu_DataBlock_12_Helper
 	jr	Data_UnknownBlock_Return4
 Data_UnknownBlock_Skip22:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x2EAC
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x662:16), 13
 	jr	z, Data_UnknownBlock_Skip23
 	cp	(0x662:16), 2
@@ -10072,7 +10072,7 @@ SeMenu_PresetInit_Main:
 	call SeGfx_DrawStaticList
 	call SeMenu_BitShiftMask_Helper
 	call SeMenu_PresetBrowser_Init_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x38E1
 	ld xix, SeMenu_PresetInit_Main_Data
 	call SeGfx_DrawBoundList
@@ -10102,7 +10102,7 @@ SeMenu_PresetInit_TableLookup1:
 	and d, 0x80
 	jr z, SeMenu_PresetInit_Lookup1Return
 	ld xiy, SeScreenData_0x3A3A
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_PresetInit_Lookup1Return:
 	ret
@@ -10128,7 +10128,7 @@ SeMenu_PresetInit_TableLookup2:
 	cp	d, 0:i3
 	jr z, SeMenu_PresetInit_Lookup2Return
 	ld xiy, SeScreenData_0x39BE
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_PresetInit_Lookup2Return:
 	ret
@@ -10136,11 +10136,11 @@ SeMenu_PresetInit_Lookup2Return:
 
 SeMenu_FxEdit_Init:
 	call	SeMenu_FxEdit_Init_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x34F3
 	ld	xix, SeMenu_FxEdit_Init_Data_2
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x34E9
 	ld	xix, SeScreenData_0x34F3
 	call	SeGfx_DrawStaticList
@@ -10149,24 +10149,24 @@ SeMenu_FxEdit_Init:
 	call	SeMenu_CompareAndApply_Apply_Helper
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3AB0
 	ld	xix, SeScreenData_0x3AF7
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_FxEdit_DataBlock1:
 	call	SeMenu_FxEdit_Init_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_FxEdit_Init_Data_2
 	ld	xix, SeScreenData_0x3633
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x34E9
 	ld	xix, SeScreenData_0x34F3
 	call	SeGfx_DrawStaticList
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3B3D
 	ld	xix, SeScreenData_0x3B70
 	call	SeGfx_DrawBoundList
@@ -10190,11 +10190,11 @@ SeMenu_FxEdit_DataBlock4:
 	ld	xiy, SeScreenData_0x137D
 	ld	xix, SeScreenData_0x137D + 180
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x1452
 	ld	xix, SeScreenData_0x1466
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3633
 	ld	xix, SeScreenData_0x3660
 	call	SeGfx_DrawStaticList
@@ -10208,7 +10208,7 @@ SeMenu_FilterEdit_Init_Sub:
 	ld	xiy, SeScreenData_0x1C7A
 	ld	xix, SeScreenData_0x1DB7
 	call	SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 2
+	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x1DB7
 	ld	xix, SeScreenData_0x1DCB
 	call	SeGfx_DrawStaticList
@@ -10218,7 +10218,7 @@ SeMenu_FilterEdit_Init_Sub:
 	call	SeMenu_CompareAndApply_Apply_Helper
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3B84
 	ld	xix, SeScreenData_0x3BDB
 	call	SeGfx_DrawBoundList
@@ -10241,59 +10241,59 @@ SeMenu_FilterEdit_Dispatch:
 	jr	z, SeMenu_FilterEdit_Dispatch_Skip
 	cp	a, 11
 	jr	c, SeMenu_FilterEdit_Dispatch_Skip3
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_FilterEdit_Dispatch_Data_2
 	ld	xix, SeMenu_FilterEdit_Dispatch_Data_3
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop2
 	jr	SeMenu_FilterEdit_Dispatch_Return
 SeMenu_FilterEdit_Dispatch_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x38E1
 	ld	xix, SeMenu_FilterEdit_Dispatch_Data
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop1
 	jr	SeMenu_FilterEdit_Dispatch_Return
 SeMenu_FilterEdit_Dispatch_Skip2:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x3A7E
 	ld	xix, SeScreenData_0x3A88
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 SeMenu_FilterEdit_Dispatch_Skip3:
 	ld	xiy, SeScreenData_0x39BE
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	call	SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_FilterEdit_Dispatch_Return:
 	ret
 SeMenu_FilterEdit_AltDispatch:
 	cp	a, 0:i3
 	jr	nz, SeMenu_FilterEdit_AltDispatch_Skip
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x3B0B
 	ld	xix, SeScreenData_0x3B15
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 SeMenu_FilterEdit_AltDispatch_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3AF7
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_FilterEdit_DataBlock3:
 	cp	a, 0:i3
 	jr	nz, SeMenu_FilterEdit_DataBlock3_Skip
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld	xiy, SeScreenData_0x3B0B
 	ld	xix, SeScreenData_0x3B15
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 SeMenu_FilterEdit_DataBlock3_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3B70
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
 SeMenu_FilterEdit_DataBlock4:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3BDB
 	call	SeMenu_WaveformSelect_Apply_Helper5
 	ret
@@ -10301,14 +10301,14 @@ SeMenu_FilterEdit_DataBlock5:
 	call	SeMenu_EqEdit_SetupHelper1
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_FilterEdit_DataBlock5_Skip
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3C37
 	ld	xix, SeScreenData_0x3D17
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
 	jr	SeMenu_FilterEdit_DataBlock5_Join2
 SeMenu_FilterEdit_DataBlock5_Skip:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x3C37
 	ld	xix, SeScreenData_0x3C37 + 175
 	call	SeGfx_DrawStaticList
@@ -10320,7 +10320,7 @@ SeMenu_FilterEdit_DataBlock5_Skip:
 SeMenu_FilterEdit_DataBlock5_Join2:
 	ld	xiy, SeScreenData_0x3DD3
 SeMenu_FilterEdit_DataBlock5_Join:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xix, SeScreenData_0x3E60
 	call	SeGfx_DrawBoundList
 	call	SeMenu_EqEdit_SetupHelper2
@@ -10329,11 +10329,11 @@ SeMenu_EqEdit_Init:
 	; --- Main: call helpers, setup XIY/XIX pairs, call F0EC00/F0EC0D (53 bytes) ---
 	call SeMenu_EqEdit_SetupHelper1
 	call SeMenu_PresetManager_Save
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x3D36
 	ld xix, SeScreenData_0x3DD3
 	call SeGfx_DrawStaticList
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x4222
 	ld xix, SeScreenData_0x4240
 	call SeGfx_DrawBoundList
@@ -10341,14 +10341,14 @@ SeMenu_EqEdit_Init:
 	ret
 SeMenu_EqEdit_SetupHelper1:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x3C03
 	ld xix, SeScreenData_0x3C32
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_EqEdit_SetupHelper2:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x3C32
 	ld xix, SeScreenData_0x3C37
 	call SeGfx_DrawStaticList
@@ -10363,7 +10363,7 @@ SeMenu_EqEdit_Dispatch:
 	jr z, SeMenu_EqEdit_SetConstA
 	cp a, 0x0c
 	jr nz, SeMenu_EqEdit_DefaultPath
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	cp	(1710:16), 1
 	jr z, SeMenu_EqEdit_DrawTable
 	ld xiy, SeScreenData_0x3DD3
@@ -10375,7 +10375,7 @@ SeMenu_EqEdit_DrawTable:
 	call SeGfx_DrawBoundList
 	jr t, SeMenu_EqEdit_Return
 SeMenu_EqEdit_SetupPath:
-	ld	(0x03efa8:24), 1
+	ld	(COLORBLIT_MODE:24), 1
 	ld xiy, SeScreenData_0x41CC
 	ld xix, SeScreenData_0x41EA
 	call SeGfx_DrawStaticList
@@ -10384,7 +10384,7 @@ SeMenu_EqEdit_SetupPath:
 SeMenu_EqEdit_SetConstA:
 	ld a, 0x07:opc
 SeMenu_EqEdit_DefaultPath:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x3E60
 	call SeMenu_WaveformSelect_Apply_Helper5
 SeMenu_EqEdit_Return:
@@ -10392,7 +10392,7 @@ SeMenu_EqEdit_Return:
 
 
 SeMenu_EqEdit_DrawInit:
-	ld	(0x03efa8:24), 0
+	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x4222
 	ld	xix, SeScreenData_0x4240
 	call	SeGfx_DrawBoundList
