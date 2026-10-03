@@ -133,3 +133,23 @@ a trap:
 
 The macro is not a style preference; the native spelling silently picks the
 wrong encoding. This is exactly the class of error the byte gate exists for.
+
+## 7. What the orphaned routines are (2026-10-04)
+
+Most of them are the live SOUND EDIT **PITCH** screens' key handlers, from an older build.
+`notes/prom_b_f00c4d_oldcopy_names.py` decodes both sides from the ROM bytes. For 48 of the
+55 routines, every instruction equals that of a named routine at 0xF0A000+, operands
+included, except the targets of jr / jrl / jp / call / calr / djnz. N2 above explains those
+targets: they land on the older build's prom_a. 46 of the 48 lie at one constant distance,
+live = old + 0x9420. That distance picks the right partner where several live handlers are
+identical (the LFO page's soft keys). The two at the start of the module were paired as the
+only named routine in 0xF0A000-0xF0AFFF with an identical body. They are named
+`OldCopy_<live name>`, the tree's existing spelling for an older build's copy (0xF6F000):
+`OldCopy_LcdKeyRow1_SoundEditPitchTune` and so on, over the PITCH TUNE, ENVELOPE 1/2 and LFO
+pages. Refused, and still `sub_`: the four dispatch stubs 0xF00CA2-0xF00D65 (they read other
+tables), 0xF00E15 (one operand differs from SoftKeyCol3_SoundEditPitchTune), 0xF00EEF and
+0xF01200.
+
+So this module is not foreign code. It is the PITCH editor as an earlier firmware had it,
+left in the image when the live copy moved to 0xF0A000. The four 18-slot tables at
+0xF002AC-0xF003CB are that build's PITCH pages' button tables.

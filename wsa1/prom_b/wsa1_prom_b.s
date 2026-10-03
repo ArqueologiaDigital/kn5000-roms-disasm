@@ -2529,38 +2529,38 @@ sub_F002F4_Return:
 ; --------------------------------------------------------------------------
 PtrTable_F00340:
 	.long sub_F01200	; F00340  [  0]
-	.long sub_F0125F	; F00344  [  1]
-	.long sub_F01274	; F00348  [  2]
-	.long sub_F01289	; F0034C  [  3]
+	.long OldCopy_SoftKeyCol3_SoundEditPitchEnvelope2	; F00344  [  1]
+	.long OldCopy_SoftKeyCol4_SoundEditPitchEnvelope2	; F00348  [  2]
+	.long OldCopy_SoftKeyCol5_SoundEditPitchEnvelope2	; F0034C  [  3]
 	.long 0x00FDB10E	; F00350  [  4]  absent (sentinel)
-	.long sub_F0129E	; F00354  [  5]
-	.long sub_F012B3	; F00358  [  6]
-	.long sub_F012C8	; F0035C  [  7]
-	.long sub_F012D9	; F00360  [  8]
-	.long sub_F01305	; F00364  [  9]
-	.long sub_F01331	; F00368  [ 10]
-	.long sub_F01355	; F0036C  [ 11]
+	.long OldCopy_SoftKeyCol7_SoundEditPitchEnvelope2	; F00354  [  5]
+	.long OldCopy_SoftKeyCol8_SoundEditPitchEnvelope2	; F00358  [  6]
+	.long OldCopy_LcdKeyRow1_SoundEditPitchEnvelope2	; F0035C  [  7]
+	.long OldCopy_LcdKeyRow2_SoundEditPitchEnvelope2	; F00360  [  8]
+	.long OldCopy_LcdKeyRow3_SoundEditPitchEnvelope2	; F00364  [  9]
+	.long OldCopy_LcdKeyRow4_SoundEditPitchEnvelope2	; F00368  [ 10]
+	.long OldCopy_LcdKeyRow5_SoundEditPitchEnvelope2	; F0036C  [ 11]
 	.long 0x00FDB10E	; F00370  [ 12]  absent (sentinel)
 	.long 0x00FDB10E	; F00374  [ 13]  absent (sentinel)
-	.long sub_F01391	; F00378  [ 14]
-	.long sub_F01379	; F0037C  [ 15]
+	.long OldCopy_ExitKey_SoundEditPitchEnvelope2	; F00378  [ 14]
+	.long OldCopy_PageKey_SoundEditPitchEnvelope2	; F0037C  [ 15]
 	.long 0x00000000	; F00380  [ 16]  empty
 	.long 0x00FDB10E	; F00384  [ 17]  absent (sentinel)
-	.long sub_F013B1	; F00388  [ 18]
-	.long sub_F013C6	; F0038C  [ 19]
-	.long sub_F013DB	; F00390  [ 20]
-	.long sub_F013F0	; F00394  [ 21]
-	.long sub_F01405	; F00398  [ 22]
-	.long sub_F0141A	; F0039C  [ 23]
-	.long sub_F0142F	; F003A0  [ 24]
-	.long sub_F01444	; F003A4  [ 25]
-	.long sub_F01462	; F003A8  [ 26]
-	.long sub_F01486	; F003AC  [ 27]
-	.long sub_F0149E	; F003B0  [ 28]
-	.long sub_F014B6	; F003B4  [ 29]
+	.long OldCopy_SoftKeyCol2_SoundEditPitchLfo	; F00388  [ 18]
+	.long OldCopy_SoftKeyCol3_SoundEditPitchLfo	; F0038C  [ 19]
+	.long OldCopy_SoftKeyCol4_SoundEditPitchLfo	; F00390  [ 20]
+	.long OldCopy_SoftKeyCol5_SoundEditPitchLfo	; F00394  [ 21]
+	.long OldCopy_SoftKeyCol6_SoundEditPitchLfo	; F00398  [ 22]
+	.long OldCopy_SoftKeyCol7_SoundEditPitchLfo	; F0039C  [ 23]
+	.long OldCopy_SoftKeyCol8_SoundEditPitchLfo	; F003A0  [ 24]
+	.long OldCopy_LcdKeyRow1_SoundEditPitchLfo	; F003A4  [ 25]
+	.long OldCopy_LcdKeyRow2_SoundEditPitchLfo	; F003A8  [ 26]
+	.long OldCopy_LcdKeyRow3_SoundEditPitchLfo	; F003AC  [ 27]
+	.long OldCopy_LcdKeyRow4_SoundEditPitchLfo	; F003B0  [ 28]
+	.long OldCopy_LcdKeyRow5_SoundEditPitchLfo	; F003B4  [ 29]
 	.long 0x00FDB10E	; F003B8  [ 30]  absent (sentinel)
 	.long 0x00FDB10E	; F003BC  [ 31]  absent (sentinel)
-	.long sub_F014CE	; F003C0  [ 32]
+	.long OldCopy_ExitKey_SoundEditPitchLfo	; F003C0  [ 32]
 	.long 0x00FDB10E	; F003C4  [ 33]  absent (sentinel)
 	.long 0x00000000	; F003C8  [ 34]  empty
 
@@ -3504,7 +3504,10 @@ sub_F00D65_Resume:
 sub_F00D65_Skip:
 	unlk XIZ	; F00DA3  unlk XIZ
 	ret	; F00DA5  ret
-sub_F00DA6:
+; OldCopy_SoftKeyCol2_SoundEditPitchTune: the older build's copy of SoftKeyCol2_SoundEditPitchTune (0xF0A162 = this + 0x93BC), equal to it in all 45
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol2_SoundEditPitchTune:
 	link XIZ,0xfff2	; F00DA6  link XIZ,0xfff2
 	pushw	hl	; F00DAA  push HL
 	pushw	de	; F00DAB  push DE
@@ -3596,7 +3599,10 @@ sub_F00E15:
 	popw	hl	; F00E80  pop HL
 	unlk XIZ	; F00E81  unlk XIZ
 	ret	; F00E83  ret
-sub_F00E84:
+; OldCopy_SoftKeyCol4_SoundEditPitchTune: the older build's copy of SoftKeyCol4_SoundEditPitchTune (0xF0A240 = this + 0x93BC), equal to it in all 43
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol4_SoundEditPitchTune:
 	link XIZ,0xfff2	; F00E84  link XIZ,0xfff2
 	pushw	hl	; F00E88  push HL
 	pushw	de	; F00E89  push DE
@@ -3698,7 +3704,10 @@ sub_F00EEF_Join:
 	popw	hl	; F00F7D  pop HL
 	unlk XIZ	; F00F7E  unlk XIZ
 	ret	; F00F80  ret
-sub_F00F81:
+; OldCopy_LcdKeyRow1_SoundEditPitchTune: the older build's copy of LcdKeyRow1_SoundEditPitchTune (0xF0A3A1 = this + 0x9420), equal to it in all 11
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow1_SoundEditPitchTune:
 	link XIZ,0x0000	; F00F81  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00F85  cp (XIZ+0x08),0x00
 	jr	nz, sub_F00F81_Skip	; F00F89  jr NZ,0xf00f98
@@ -3712,7 +3721,10 @@ sub_F00F81_Skip:
 sub_F00F81_Join:
 	unlk XIZ	; F00F9C  unlk XIZ
 	ret	; F00F9E  ret
-sub_F00F9F:
+; OldCopy_LcdKeyRow2_SoundEditPitchTune: the older build's copy of LcdKeyRow2_SoundEditPitchTune (0xF0A3BF = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow2_SoundEditPitchTune:
 	link XIZ,0x0000	; F00F9F  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00FA3  cp (XIZ+0x08),0x00
 	jr	z, sub_F00F9F_Skip	; F00FA7  jr Z,0xf00fb8
@@ -3724,7 +3736,10 @@ sub_F00F9F:
 sub_F00F9F_Skip:
 	unlk XIZ	; F00FB8  unlk XIZ
 	ret	; F00FBA  ret
-sub_F00FBB:
+; OldCopy_LcdKeyRow3_SoundEditPitchTune: the older build's copy of LcdKeyRow3_SoundEditPitchTune (0xF0A3DB = this + 0x9420), equal to it in all 15
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow3_SoundEditPitchTune:
 	link XIZ,0x0000	; F00FBB  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00FBF  cp (XIZ+0x08),0x00
 	jr	nz, sub_F00FBB_Skip	; F00FC3  jr NZ,0xf00fd2
@@ -3742,7 +3757,10 @@ sub_F00FBB_Skip:
 sub_F00FBB_Skip2:
 	unlk XIZ	; F00FE1  unlk XIZ
 	ret	; F00FE3  ret
-sub_F00FE4:
+; OldCopy_LcdKeyRow4_SoundEditPitchTune: the older build's copy of LcdKeyRow4_SoundEditPitchTune (0xF0A404 = this + 0x9420), equal to it in all 28
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow4_SoundEditPitchTune:
 	link XIZ,0xfffe	; F00FE4  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F00FE8  cp (XIZ+0x08),0x00
 	jr	nz, sub_F00FE4_Skip	; F00FEC  jr NZ,0xf0101f
@@ -3773,7 +3791,10 @@ sub_F00FE4_Skip:
 sub_F00FE4_Join:
 	unlk XIZ	; F0102E  unlk XIZ
 	ret	; F01030  ret
-sub_F01031:
+; OldCopy_LcdKeyRow5_SoundEditPitchTune: the older build's copy of LcdKeyRow5_SoundEditPitchTune (0xF0A451 = this + 0x9420), equal to it in all 28
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow5_SoundEditPitchTune:
 	link XIZ,0xfffe	; F01031  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01035  cp (XIZ+0x08),0x00
 	jr	nz, sub_F01031_Skip	; F01039  jr NZ,0xf0106c
@@ -3804,7 +3825,10 @@ sub_F01031_Skip:
 sub_F01031_Join:
 	unlk XIZ	; F0107B  unlk XIZ
 	ret	; F0107D  ret
-sub_F0107E:
+; OldCopy_ExitKey_SoundEditPitchTune: the older build's copy of ExitKey_SoundEditPitchTune (0xF0A49E = this + 0x9420), equal to it in all 11
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_ExitKey_SoundEditPitchTune:
 	link XIZ,0x0000	; F0107E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01082  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0107E_Skip	; F01086  jr NZ,0xf0109b
@@ -3817,7 +3841,10 @@ sub_F0107E:
 sub_F0107E_Skip:
 	unlk XIZ	; F0109B  unlk XIZ
 	ret	; F0109D  ret
-sub_F0109E:
+; OldCopy_SoftKeyCol1_SoundEditPitchEnvelope1: the older build's copy of SoftKeyCol1_SoundEditPitchEnvelope1 (0xF0A4BE = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol1_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0109E  link XIZ,0x0000
 	pushw	0	; F010A2  push 0x0000
 	pushw	9	; F010A5  push 0x0009
@@ -3828,7 +3855,10 @@ sub_F0109E:
 	inc	6, xsp	; F010B2  inc 6,XSP
 	unlk XIZ	; F010B4  unlk XIZ
 	ret	; F010B6  ret
-sub_F010B7:
+; OldCopy_SoftKeyCol2_SoundEditPitchEnvelope1: the older build's copy of SoftKeyCol2_SoundEditPitchEnvelope1 (0xF0A4D7 = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol2_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F010B7  link XIZ,0x0000
 	pushw	0	; F010BB  push 0x0000
 	pushw	10	; F010BE  push 0x000a
@@ -3839,7 +3869,10 @@ sub_F010B7:
 	inc	6, xsp	; F010CB  inc 6,XSP
 	unlk XIZ	; F010CD  unlk XIZ
 	ret	; F010CF  ret
-sub_F010D0:
+; OldCopy_SoftKeyCol3_SoundEditPitchEnvelope1: the older build's copy of SoftKeyCol3_SoundEditPitchEnvelope1 (0xF0A4F0 = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol3_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F010D0  link XIZ,0x0000
 	pushw	11	; F010D4  push 0x000b
 	pushw	8	; F010D7  push 0x0008
@@ -3850,7 +3883,10 @@ sub_F010D0:
 	inc	6, xsp	; F010E4  inc 6,XSP
 	unlk XIZ	; F010E6  unlk XIZ
 	ret	; F010E8  ret
-sub_F010E9:
+; OldCopy_SoftKeyCol4_SoundEditPitchEnvelope1: the older build's copy of SoftKeyCol4_SoundEditPitchEnvelope1 (0xF0A509 = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol4_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F010E9  link XIZ,0x0000
 	pushw	0	; F010ED  push 0x0000
 	pushw	12	; F010F0  push 0x000c
@@ -3861,7 +3897,10 @@ sub_F010E9:
 	inc	6, xsp	; F010FD  inc 6,XSP
 	unlk XIZ	; F010FF  unlk XIZ
 	ret	; F01101  ret
-sub_F01102:
+; OldCopy_SoftKeyCol5_SoundEditPitchEnvelope1: the older build's copy of SoftKeyCol5_SoundEditPitchEnvelope1 (0xF0A522 = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol5_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F01102  link XIZ,0x0000
 	pushw	13	; F01106  push 0x000d
 	pushw	16	; F01109  push 0x0010
@@ -3872,7 +3911,10 @@ sub_F01102:
 	inc	6, xsp	; F01116  inc 6,XSP
 	unlk XIZ	; F01118  unlk XIZ
 	ret	; F0111A  ret
-sub_F0111B:
+; OldCopy_SoftKeyCol6_SoundEditPitchEnvelope1: the older build's copy of SoftKeyCol6_SoundEditPitchEnvelope1 (0xF0A53B = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol6_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0111B  link XIZ,0x0000
 	pushw	0	; F0111F  push 0x0000
 	pushw	14	; F01122  push 0x000e
@@ -3883,7 +3925,10 @@ sub_F0111B:
 	inc	6, xsp	; F0112F  inc 6,XSP
 	unlk XIZ	; F01131  unlk XIZ
 	ret	; F01133  ret
-sub_F01134:
+; OldCopy_SoftKeyCol7_SoundEditPitchEnvelope1: the older build's copy of SoftKeyCol7_SoundEditPitchEnvelope1 (0xF0A554 = this + 0x9420), equal to it in all 10
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol7_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F01134  link XIZ,0x0000
 	pushw	15	; F01138  push 0x000f
 	pushw	7	; F0113B  push 0x0007
@@ -3894,7 +3939,10 @@ sub_F01134:
 	inc	6, xsp	; F01148  inc 6,XSP
 	unlk XIZ	; F0114A  unlk XIZ
 	ret	; F0114C  ret
-sub_F0114D:
+; OldCopy_LcdKeyRow1_SoundEditPitchEnvelope1: the older build's copy of LcdKeyRow1_SoundEditPitchEnvelope1 (0xF0A56D = this + 0x9420), equal to it in all 6
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow1_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0114D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01151  cp (XIZ+0x08),0x00
 	jr	z, sub_F0114D_Skip	; F01155  jr Z,0xf0115b
@@ -3902,7 +3950,10 @@ sub_F0114D:
 sub_F0114D_Skip:
 	unlk XIZ	; F0115B  unlk XIZ
 	ret	; F0115D  ret
-sub_F0115E:
+; OldCopy_LcdKeyRow2_SoundEditPitchEnvelope1: the older build's copy of LcdKeyRow2_SoundEditPitchEnvelope1 (0xF0A57E = this + 0x9420), equal to it in all 17
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow2_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0115E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01162  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0115E_Skip	; F01166  jr NZ,0xf01170
@@ -3923,7 +3974,10 @@ sub_F0115E_Join:
 sub_F0115E_Skip2:
 	unlk XIZ	; F01187  unlk XIZ
 	ret	; F01189  ret
-sub_F0118A:
+; OldCopy_LcdKeyRow3_SoundEditPitchEnvelope1: the older build's copy of LcdKeyRow3_SoundEditPitchEnvelope1 (0xF0A5AA = this + 0x9420), equal to it in all 17
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow3_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0118A  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0118E  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0118A_Skip	; F01192  jr NZ,0xf0119c
@@ -3944,7 +3998,10 @@ sub_F0118A_Join:
 sub_F0118A_Skip2:
 	unlk XIZ	; F011B3  unlk XIZ
 	ret	; F011B5  ret
-sub_F011B6:
+; OldCopy_LcdKeyRow4_SoundEditPitchEnvelope1: the older build's copy of LcdKeyRow4_SoundEditPitchEnvelope1 (0xF0A5D6 = this + 0x9420), equal to it in all 18
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow4_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F011B6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F011BA  cp (XIZ+0x08),0x00
 	jr	nz, sub_F011B6_Skip	; F011BE  jr NZ,0xf011ca
@@ -3965,7 +4022,10 @@ sub_F011B6_Skip:
 sub_F011B6_Join:
 	unlk XIZ	; F011E1  unlk XIZ
 	ret	; F011E3  ret
-sub_F011E4:
+; OldCopy_LcdKeyRow5_SoundEditPitchEnvelope1: the older build's copy of LcdKeyRow5_SoundEditPitchEnvelope1 (0xF0A604 = this + 0x9420), equal to it in all 18
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow5_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F011E4  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F011E8  cp (XIZ+0x08),0x00
 	jr	nz, sub_F011E4_Skip	; F011EC  jr NZ,0xf011f8
@@ -3987,7 +4047,10 @@ sub_F01200:
 sub_F01200_Join:
 	unlk XIZ	; F0120F  unlk XIZ
 	ret	; F01211  ret
-sub_F01212:
+; OldCopy_PageKey_SoundEditPitchEnvelope1: the older build's copy of PageKey_SoundEditPitchEnvelope1 (0xF0A632 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_PageKey_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F01212  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01216  cp (XIZ+0x08),0x00
 	jr	nz, sub_F01200_Skip	; F0121A  jr NZ,0xf01227
@@ -3998,7 +4061,10 @@ sub_F01212:
 sub_F01200_Skip:
 	unlk XIZ	; F01227  unlk XIZ
 	ret	; F01229  ret
-sub_F0122A:
+; OldCopy_ExitKey_SoundEditPitchEnvelope1: the older build's copy of ExitKey_SoundEditPitchEnvelope1 (0xF0A64A = this + 0x9420), equal to it in all 11
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_ExitKey_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0122A  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0122E  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0122A_Skip	; F01232  jr NZ,0xf01247
@@ -4011,7 +4077,10 @@ sub_F0122A:
 sub_F0122A_Skip:
 	unlk XIZ	; F01247  unlk XIZ
 	ret	; F01249  ret
-sub_F0124A:
+; OldCopy_SoftKeyCol2_SoundEditPitchEnvelope2: the older build's copy of SoftKeyCol2_SoundEditPitchEnvelope2 (0xF0A66A = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol2_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0124A  link XIZ,0x0000
 	pushw	20	; F0124E  push 0x0014
 	ld	bc, (xiz+8)	; F01251  ld BC,(XIZ+0x08)
@@ -4021,7 +4090,10 @@ sub_F0124A:
 	pop	xbc	; F0125B  pop XBC
 	unlk XIZ	; F0125C  unlk XIZ
 	ret	; F0125E  ret
-sub_F0125F:
+; OldCopy_SoftKeyCol3_SoundEditPitchEnvelope2: the older build's copy of SoftKeyCol3_SoundEditPitchEnvelope2 (0xF0A67F = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol3_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0125F  link XIZ,0x0000
 	pushw	21	; F01263  push 0x0015
 	ld	bc, (xiz+8)	; F01266  ld BC,(XIZ+0x08)
@@ -4031,7 +4103,10 @@ sub_F0125F:
 	pop	xbc	; F01270  pop XBC
 	unlk XIZ	; F01271  unlk XIZ
 	ret	; F01273  ret
-sub_F01274:
+; OldCopy_SoftKeyCol4_SoundEditPitchEnvelope2: the older build's copy of SoftKeyCol4_SoundEditPitchEnvelope2 (0xF0A694 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol4_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F01274  link XIZ,0x0000
 	pushw	22	; F01278  push 0x0016
 	ld	bc, (xiz+8)	; F0127B  ld BC,(XIZ+0x08)
@@ -4041,7 +4116,10 @@ sub_F01274:
 	pop	xbc	; F01285  pop XBC
 	unlk XIZ	; F01286  unlk XIZ
 	ret	; F01288  ret
-sub_F01289:
+; OldCopy_SoftKeyCol5_SoundEditPitchEnvelope2: the older build's copy of SoftKeyCol5_SoundEditPitchEnvelope2 (0xF0A6A9 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol5_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F01289  link XIZ,0x0000
 	pushw	19	; F0128D  push 0x0013
 	ld	bc, (xiz+8)	; F01290  ld BC,(XIZ+0x08)
@@ -4051,7 +4129,10 @@ sub_F01289:
 	pop	xbc	; F0129A  pop XBC
 	unlk XIZ	; F0129B  unlk XIZ
 	ret	; F0129D  ret
-sub_F0129E:
+; OldCopy_SoftKeyCol7_SoundEditPitchEnvelope2: the older build's copy of SoftKeyCol7_SoundEditPitchEnvelope2 (0xF0A6BE = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol7_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0129E  link XIZ,0x0000
 	pushw	17	; F012A2  push 0x0011
 	ld	bc, (xiz+8)	; F012A5  ld BC,(XIZ+0x08)
@@ -4061,7 +4142,10 @@ sub_F0129E:
 	pop	xbc	; F012AF  pop XBC
 	unlk XIZ	; F012B0  unlk XIZ
 	ret	; F012B2  ret
-sub_F012B3:
+; OldCopy_SoftKeyCol8_SoundEditPitchEnvelope2: the older build's copy of SoftKeyCol8_SoundEditPitchEnvelope2 (0xF0A6D3 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol8_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F012B3  link XIZ,0x0000
 	pushw	18	; F012B7  push 0x0012
 	ld	bc, (xiz+8)	; F012BA  ld BC,(XIZ+0x08)
@@ -4071,7 +4155,10 @@ sub_F012B3:
 	pop	xbc	; F012C4  pop XBC
 	unlk XIZ	; F012C5  unlk XIZ
 	ret	; F012C7  ret
-sub_F012C8:
+; OldCopy_LcdKeyRow1_SoundEditPitchEnvelope2: the older build's copy of LcdKeyRow1_SoundEditPitchEnvelope2 (0xF0A6E8 = this + 0x9420), equal to it in all 6
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow1_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F012C8  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F012CC  cp (XIZ+0x08),0x00
 	jr	z, sub_F012C8_Skip	; F012D0  jr Z,0xf012d6
@@ -4079,7 +4166,10 @@ sub_F012C8:
 sub_F012C8_Skip:
 	unlk XIZ	; F012D6  unlk XIZ
 	ret	; F012D8  ret
-sub_F012D9:
+; OldCopy_LcdKeyRow2_SoundEditPitchEnvelope2: the older build's copy of LcdKeyRow2_SoundEditPitchEnvelope2 (0xF0A6F9 = this + 0x9420), equal to it in all 17
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow2_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F012D9  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F012DD  cp (XIZ+0x08),0x00
 	jr	nz, sub_F012D9_Skip	; F012E1  jr NZ,0xf012eb
@@ -4100,7 +4190,10 @@ sub_F012D9_Join:
 sub_F012D9_Skip2:
 	unlk XIZ	; F01302  unlk XIZ
 	ret	; F01304  ret
-sub_F01305:
+; OldCopy_LcdKeyRow3_SoundEditPitchEnvelope2: the older build's copy of LcdKeyRow3_SoundEditPitchEnvelope2 (0xF0A725 = this + 0x9420), equal to it in all 17
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow3_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F01305  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01309  cp (XIZ+0x08),0x00
 	jr	nz, sub_F01305_Skip	; F0130D  jr NZ,0xf01317
@@ -4121,7 +4214,10 @@ sub_F01305_Join:
 sub_F01305_Skip2:
 	unlk XIZ	; F0132E  unlk XIZ
 	ret	; F01330  ret
-sub_F01331:
+; OldCopy_LcdKeyRow4_SoundEditPitchEnvelope2: the older build's copy of LcdKeyRow4_SoundEditPitchEnvelope2 (0xF0A751 = this + 0x9420), equal to it in all 14
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow4_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F01331  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01335  cp (XIZ+0x08),0x00
 	jr	z, sub_F01331_Skip	; F01339  jr Z,0xf01352
@@ -4137,7 +4233,10 @@ sub_F01331:
 sub_F01331_Skip:
 	unlk XIZ	; F01352  unlk XIZ
 	ret	; F01354  ret
-sub_F01355:
+; OldCopy_LcdKeyRow5_SoundEditPitchEnvelope2: the older build's copy of LcdKeyRow5_SoundEditPitchEnvelope2 (0xF0A775 = this + 0x9420), equal to it in all 14
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow5_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F01355  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01359  cp (XIZ+0x08),0x00
 	jr	z, sub_F01355_Skip	; F0135D  jr Z,0xf01376
@@ -4153,7 +4252,10 @@ sub_F01355:
 sub_F01355_Skip:
 	unlk XIZ	; F01376  unlk XIZ
 	ret	; F01378  ret
-sub_F01379:
+; OldCopy_PageKey_SoundEditPitchEnvelope2: the older build's copy of PageKey_SoundEditPitchEnvelope2 (0xF0A799 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_PageKey_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F01379  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0137D  cp (XIZ+0x08),0x00
 	jr	z, sub_F01379_Skip	; F01381  jr Z,0xf0138e
@@ -4164,7 +4266,10 @@ sub_F01379:
 sub_F01379_Skip:
 	unlk XIZ	; F0138E  unlk XIZ
 	ret	; F01390  ret
-sub_F01391:
+; OldCopy_ExitKey_SoundEditPitchEnvelope2: the older build's copy of ExitKey_SoundEditPitchEnvelope2 (0xF0A7B1 = this + 0x9420), equal to it in all 11
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_ExitKey_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F01391  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01395  cp (XIZ+0x08),0x00
 	jr	nz, sub_F01391_Skip	; F01399  jr NZ,0xf013ae
@@ -4177,7 +4282,10 @@ sub_F01391:
 sub_F01391_Skip:
 	unlk XIZ	; F013AE  unlk XIZ
 	ret	; F013B0  ret
-sub_F013B1:
+; OldCopy_SoftKeyCol2_SoundEditPitchLfo: the older build's copy of SoftKeyCol2_SoundEditPitchLfo (0xF0A7D1 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol2_SoundEditPitchLfo:
 	link XIZ,0x0000	; F013B1  link XIZ,0x0000
 	pushw	1	; F013B5  push 0x0001
 	ld	bc, (xiz+8)	; F013B8  ld BC,(XIZ+0x08)
@@ -4187,7 +4295,10 @@ sub_F013B1:
 	pop	xbc	; F013C2  pop XBC
 	unlk XIZ	; F013C3  unlk XIZ
 	ret	; F013C5  ret
-sub_F013C6:
+; OldCopy_SoftKeyCol3_SoundEditPitchLfo: the older build's copy of SoftKeyCol3_SoundEditPitchLfo (0xF0A7E6 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol3_SoundEditPitchLfo:
 	link XIZ,0x0000	; F013C6  link XIZ,0x0000
 	pushw	1	; F013CA  push 0x0001
 	ld	bc, (xiz+8)	; F013CD  ld BC,(XIZ+0x08)
@@ -4197,7 +4308,10 @@ sub_F013C6:
 	pop	xbc	; F013D7  pop XBC
 	unlk XIZ	; F013D8  unlk XIZ
 	ret	; F013DA  ret
-sub_F013DB:
+; OldCopy_SoftKeyCol4_SoundEditPitchLfo: the older build's copy of SoftKeyCol4_SoundEditPitchLfo (0xF0A7FB = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol4_SoundEditPitchLfo:
 	link XIZ,0x0000	; F013DB  link XIZ,0x0000
 	pushw	1	; F013DF  push 0x0001
 	ld	bc, (xiz+8)	; F013E2  ld BC,(XIZ+0x08)
@@ -4207,7 +4321,10 @@ sub_F013DB:
 	pop	xbc	; F013EC  pop XBC
 	unlk XIZ	; F013ED  unlk XIZ
 	ret	; F013EF  ret
-sub_F013F0:
+; OldCopy_SoftKeyCol5_SoundEditPitchLfo: the older build's copy of SoftKeyCol5_SoundEditPitchLfo (0xF0A810 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol5_SoundEditPitchLfo:
 	link XIZ,0x0000	; F013F0  link XIZ,0x0000
 	pushw	1	; F013F4  push 0x0001
 	ld	bc, (xiz+8)	; F013F7  ld BC,(XIZ+0x08)
@@ -4217,7 +4334,10 @@ sub_F013F0:
 	pop	xbc	; F01401  pop XBC
 	unlk XIZ	; F01402  unlk XIZ
 	ret	; F01404  ret
-sub_F01405:
+; OldCopy_SoftKeyCol6_SoundEditPitchLfo: the older build's copy of SoftKeyCol6_SoundEditPitchLfo (0xF0A825 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol6_SoundEditPitchLfo:
 	link XIZ,0x0000	; F01405  link XIZ,0x0000
 	pushw	1	; F01409  push 0x0001
 	ld	bc, (xiz+8)	; F0140C  ld BC,(XIZ+0x08)
@@ -4227,7 +4347,10 @@ sub_F01405:
 	pop	xbc	; F01416  pop XBC
 	unlk XIZ	; F01417  unlk XIZ
 	ret	; F01419  ret
-sub_F0141A:
+; OldCopy_SoftKeyCol7_SoundEditPitchLfo: the older build's copy of SoftKeyCol7_SoundEditPitchLfo (0xF0A83A = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol7_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0141A  link XIZ,0x0000
 	pushw	1	; F0141E  push 0x0001
 	ld	bc, (xiz+8)	; F01421  ld BC,(XIZ+0x08)
@@ -4237,7 +4360,10 @@ sub_F0141A:
 	pop	xbc	; F0142B  pop XBC
 	unlk XIZ	; F0142C  unlk XIZ
 	ret	; F0142E  ret
-sub_F0142F:
+; OldCopy_SoftKeyCol8_SoundEditPitchLfo: the older build's copy of SoftKeyCol8_SoundEditPitchLfo (0xF0A84F = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_SoftKeyCol8_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0142F  link XIZ,0x0000
 	pushw	1	; F01433  push 0x0001
 	ld	bc, (xiz+8)	; F01436  ld BC,(XIZ+0x08)
@@ -4247,7 +4373,10 @@ sub_F0142F:
 	pop	xbc	; F01440  pop XBC
 	unlk XIZ	; F01441  unlk XIZ
 	ret	; F01443  ret
-sub_F01444:
+; OldCopy_LcdKeyRow1_SoundEditPitchLfo: the older build's copy of LcdKeyRow1_SoundEditPitchLfo (0xF0A864 = this + 0x9420), equal to it in all 11
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow1_SoundEditPitchLfo:
 	link XIZ,0x0000	; F01444  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01448  cp (XIZ+0x08),0x00
 	jr	nz, sub_F01444_Skip	; F0144C  jr NZ,0xf0145b
@@ -4261,7 +4390,10 @@ sub_F01444_Skip:
 sub_F01444_Join:
 	unlk XIZ	; F0145F  unlk XIZ
 	ret	; F01461  ret
-sub_F01462:
+; OldCopy_LcdKeyRow2_SoundEditPitchLfo: the older build's copy of LcdKeyRow2_SoundEditPitchLfo (0xF0A882 = this + 0x9420), equal to it in all 13
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow2_SoundEditPitchLfo:
 	link XIZ,0x0000	; F01462  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F01466  cp (XIZ+0x08),0x00
 	jr	nz, sub_F01462_Skip	; F0146A  jr NZ,0xf01478
@@ -4277,7 +4409,10 @@ sub_F01462_Skip2:
 	pop	xiy	; F01482  pop XIY
 	unlk XIZ	; F01483  unlk XIZ
 	ret	; F01485  ret
-sub_F01486:
+; OldCopy_LcdKeyRow3_SoundEditPitchLfo: the older build's copy of LcdKeyRow3_SoundEditPitchLfo (0xF0A8A6 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow3_SoundEditPitchLfo:
 	link XIZ,0x0000	; F01486  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0148A  cp (XIZ+0x08),0x00
 	jr	z, sub_F01486_Skip	; F0148E  jr Z,0xf0149b
@@ -4288,7 +4423,10 @@ sub_F01486:
 sub_F01486_Skip:
 	unlk XIZ	; F0149B  unlk XIZ
 	ret	; F0149D  ret
-sub_F0149E:
+; OldCopy_LcdKeyRow4_SoundEditPitchLfo: the older build's copy of LcdKeyRow4_SoundEditPitchLfo (0xF0A8BE = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow4_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0149E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F014A2  cp (XIZ+0x08),0x00
 	jr	z, sub_F0149E_Skip	; F014A6  jr Z,0xf014b3
@@ -4299,7 +4437,10 @@ sub_F0149E:
 sub_F0149E_Skip:
 	unlk XIZ	; F014B3  unlk XIZ
 	ret	; F014B5  ret
-sub_F014B6:
+; OldCopy_LcdKeyRow5_SoundEditPitchLfo: the older build's copy of LcdKeyRow5_SoundEditPitchLfo (0xF0A8D6 = this + 0x9420), equal to it in all 9
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_LcdKeyRow5_SoundEditPitchLfo:
 	link XIZ,0x0000	; F014B6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F014BA  cp (XIZ+0x08),0x00
 	jr	z, sub_F014B6_Skip	; F014BE  jr Z,0xf014cb
@@ -4310,7 +4451,10 @@ sub_F014B6:
 sub_F014B6_Skip:
 	unlk XIZ	; F014CB  unlk XIZ
 	ret	; F014CD  ret
-sub_F014CE:
+; OldCopy_ExitKey_SoundEditPitchLfo: the older build's copy of ExitKey_SoundEditPitchLfo (0xF0A8EE = this + 0x9420), equal to it in all 11
+;   instructions but the targets of its branches and calls, which land on that older build's prom_a
+;   (FINDINGS-prom_b-f00c4d-orphan-cluster.md N2; notes/prom_b_f00c4d_oldcopy_names.py).
+OldCopy_ExitKey_SoundEditPitchLfo:
 	link XIZ,0x0000	; F014CE  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F014D2  cp (XIZ+0x08),0x00
 	jr	nz, sub_F014CE_Skip	; F014D6  jr NZ,0xf014eb
