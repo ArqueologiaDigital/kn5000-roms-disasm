@@ -385,6 +385,21 @@ RENAMES = {
     "sub_FF759C": "UI_StatusCode_Is0or2or4",
     "sub_FF7525": "Var2728_Is2or3",
     "sub_FF753B": "Var7FD6_IsBitClear",
+    "sub_F99F1A": "Var2134_SetBit1",
+    "sub_F99F1F": "Var2134_SetBit1_2",
+    "sub_FBFDF0": "Var277E_Set02",
+    "sub_FE2EF2": "Var220D_SetW4157",
+    "sub_FE2FB9": "Var2216_SetW145C",
+    "sub_FE2FC0": "Var2216_SetW145A",
+    "sub_FF42C0": "Var2134_SetBit1_3",
+    "sub_F009A8": "Var20D4_ClearBitsC0",
+    "sub_F45FAE": "Var20A9_SetBits01",
+    "sub_F45FC4": "Var34D1_SetBits20",
+    "sub_F4C4B0": "UI_RequestBits_ClearBit7",
+    "sub_F4EC25": "Var34BB_ClearBits04",
+    "sub_F7F1C2": "Var2820_Set2B",
+    "sub_F7F4EE": "Var2820_Set2B_2",
+    "sub_F7F85A": "Var2820_Set2B_3",
 }
 
 

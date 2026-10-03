@@ -630,8 +630,8 @@
 	.set	T_F41738_Nop, 0xF99863
 	.set	PanelMode_MidiEnter, 0xF99F04
 	.set	PanelMode_MidiLeave, 0xF99F15
-	.set	sub_F99F1A, 0xF99F1A
-	.set	sub_F99F1F, 0xF99F1F
+	.set	Var2134_SetBit1, 0xF99F1A
+	.set	Var2134_SetBit1_2, 0xF99F1F
 	.set	Paint_MidiMenu, 0xF99F24
 	.set	T_F41654_Nop, 0xF99F5C
 	.set	T_F4165C_Nop, 0xF99F5D
@@ -1509,7 +1509,7 @@
 	.set	sub_FE9A33, 0xFE9A33
 	.set	sub_FE9B8D, 0xFE9B8D
 	.set	sub_FF42B7, 0xFF42B7
-	.set	sub_FF42C0, 0xFF42C0
+	.set	Var2134_SetBit1_3, 0xFF42C0
 	.set	sub_FF42C5, 0xFF42C5
 	.set	sub_FF42C9, 0xFF42C9
 	.set	Paint_DiskMenu, 0xFF42CD
@@ -2696,7 +2696,7 @@ sub_F00800:
 	jr	z, sub_F00800_Skip	; F00819  jr Z,0xf00822
 	cp	a, 0:i3	; F0081B  cp A,0
 	jr	nz, sub_F00800_Skip	; F0081D  jr NZ,0xf00822
-	calr	sub_F009A8	; F0081F  calr 0xf009a8
+	calr	Var20D4_ClearBitsC0	; F0081F  calr 0xf009a8
 sub_F00800_Skip:
 	bit	2, (0x96:8)	; F00822  bit 2,(0x96)
 	jr	z, sub_F00800_Skip2	; F00825  jr Z,0xf0082a
@@ -2767,7 +2767,7 @@ sub_F00895_Skip2:
 	calr	sub_F00984	; F008CE  calr 0xf00984
 	jr	sub_F00895_Join	; F008D1  jr T,0xf008d8
 sub_F00895_Skip3:
-	calr	sub_F009A8	; F008D3  calr 0xf009a8
+	calr	Var20D4_ClearBitsC0	; F008D3  calr 0xf009a8
 	jr	sub_F00895_Join	; F008D6  jr T,0xf008d8
 sub_F00895_Join:
 	m_cp_rm MW24, 0x60501e, 1	; F008D8  cp BC,(0x60501e)
@@ -2779,7 +2779,7 @@ sub_F00895_Skip4:
 	jr	z, sub_F00895_Join2	; F008E9  jr Z,0xf008f3
 	cp	e, 32	; F008EB  cp E,0x20
 	jr	c, sub_F00895_Join2	; F008EE  jr C,0xf008f3
-	calr	sub_F009A8	; F008F0  calr 0xf009a8
+	calr	Var20D4_ClearBitsC0	; F008F0  calr 0xf009a8
 sub_F00895_Join2:
 	ld	(6311964:24), wa	; F008F3  ld (0x60501c),WA
 	ld	(6311966:24), bc	; F008F8  ld (0x60501e),BC
@@ -2864,7 +2864,8 @@ sub_F00995_Skip:
 	m_and_mi8 MB16, PanelLed_Shadow+4, 0x7f	; F009A2  and (0x20d4),0x7f
 sub_F00995_Return:
 	ret	; F009A7  ret
-sub_F009A8:
+; Var20D4_ClearBitsC0: m_and_mi8 MB16, PanelLed_Shadow+4, 0x3f (single-cell template; the cell's meaning is not established unless it is named)
+Var20D4_ClearBitsC0:
 	m_and_mi8 MB16, PanelLed_Shadow+4, 0x3f	; F009A8  and (0x20d4),0x3f
 	ret	; F009AD  ret
 sub_F009AE:
@@ -87853,7 +87854,7 @@ T_F409F8:	jp sub_F454A6  ; -> prom_b 0x454A6   x2
 T_F409FC:	jp T_F414B0  ; -> prom_b 0x414B0   x1
 T_F40A00:	jp T_F40C70  ; -> prom_b 0x40C70   x3
 T_F40A04:	jp T_F40C74  ; -> prom_b 0x40C74   x8
-T_F40A08:	jp sub_F45FC4  ; -> prom_b 0x45FC4   x2
+T_F40A08:	jp Var34D1_SetBits20  ; -> prom_b 0x45FC4   x2
 T_F40A0C:	jp sub_F45524  ; -> prom_b 0x45524   x1
 T_F40A10:	jp sub_F45975  ; -> prom_b 0x45975   x2
 T_F40A14:	jp sub_F45B0A  ; -> prom_b 0x45B0A   x8
@@ -87875,7 +87876,7 @@ T_F40A48:	jp sub_F44036  ; -> prom_b 0x44036
 T_F40A4C:	jp sub_F450B2  ; -> prom_b 0x450B2
 T_F40A50:	jp sub_F454B3  ; -> prom_b 0x454B3
 T_F40A54:	jp sub_F46015  ; -> prom_b 0x46015
-T_F40A58:	jp sub_F45FAE  ; -> prom_b 0x45FAE
+T_F40A58:	jp Var20A9_SetBits01  ; -> prom_b 0x45FAE
 T_F40A5C:	jp sub_F45FB4  ; -> prom_b 0x45FB4   x3
 T_F40A60:	jp sub_F4402A  ; -> prom_b 0x4402A   x1
 T_F40A64:	jp sub_F44030  ; -> prom_b 0x44030
@@ -87970,7 +87971,7 @@ T_F40CC8:	jp sub_F4E592  ; -> prom_b 0x4E592   x1
 T_F40CCC:	jp sub_F4E30F  ; -> prom_b 0x4E30F   x2
 	.fill 0x10, 1, 0x0E  ; 0xF40CD0: 16 x ret
 T_F40CE0:	jp sub_F4EC00  ; -> prom_b 0x4EC00
-T_F40CE4:	jp sub_F4EC25  ; -> prom_b 0x4EC25
+T_F40CE4:	jp Var34BB_ClearBits04  ; -> prom_b 0x4EC25
 T_F40CE8:	jp sub_F4EC2B  ; -> prom_b 0x4EC2B   x1
 T_F40CEC:	jp sub_F4EC56  ; -> prom_b 0x4EC56   x2
 T_F40CF0:	jp sub_F4EC8A  ; -> prom_b 0x4EC8A   x1
@@ -88412,8 +88413,8 @@ T_F41610:	jp T_F41610_Nop  ; -> prom_a 0x19097
 	.fill 0x2C, 1, 0x0E  ; 0xF41614: 44 x ret
 T_PanelMode_MidiEnter:	jp PanelMode_MidiEnter  ; -> prom_a 0x19F04
 T_PanelMode_MidiLeave:	jp PanelMode_MidiLeave  ; -> prom_a 0x19F15
-T_F41648:	jp sub_F99F1A  ; -> prom_a 0x19F1A
-T_F4164C:	jp sub_F99F1F  ; -> prom_a 0x19F1F
+T_F41648:	jp Var2134_SetBit1  ; -> prom_a 0x19F1A
+T_F4164C:	jp Var2134_SetBit1_2  ; -> prom_a 0x19F1F
 T_Paint_MidiMenu:	jp Paint_MidiMenu  ; -> prom_a 0x19F24
 T_F41654:	jp T_F41654_Nop  ; -> prom_a 0x19F5C
 T_ScreenButton_MidiMenu:	jp ScreenButton_MidiMenu  ; -> prom_a 0x19F5E
@@ -89263,7 +89264,7 @@ T_F421A8:	jp T_F421A8_Nop  ; -> prom_a 0x5E24D
 	.fill 0xA4, 1, 0x0E  ; 0xF421AC: 164 x ret
 T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
 T_F42254:	jp sub_FF42B7  ; -> prom_a 0x742B7
-T_F42258:	jp sub_FF42C0  ; -> prom_a 0x742C0
+T_F42258:	jp Var2134_SetBit1_3  ; -> prom_a 0x742C0
 T_F4225C:	jp sub_FF42C5  ; -> prom_a 0x742C5
 T_F42260:	jp sub_FF42C9  ; -> prom_a 0x742C9
 T_Paint_DiskMenu:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
@@ -90394,7 +90395,7 @@ T_SoundCopy_ReadExtGroupDrumFlag:	jp SoundCopy_ReadExtGroupDrumFlag  ; -> prom_a
 T_F434D4:	jp sub_FA0D10  ; -> prom_a 0x20D10   x1
 	.fill 0x8, 1, 0x0E  ; 0xF434D8: 8 x ret
 T_F434E0:	jp sub_F4C46A  ; -> prom_b 0x4C46A
-T_F434E4:	jp sub_F4C4B0  ; -> prom_b 0x4C4B0
+T_F434E4:	jp UI_RequestBits_ClearBit7  ; -> prom_b 0x4C4B0
 T_F434E8:	jp sub_F4C4B5  ; -> prom_b 0x4C4B5
 T_F434EC:	jp T_F434EC_Nop  ; -> prom_b 0x4C4DC
 T_F434F0:	jp sub_F4C3F2  ; -> prom_b 0x4C3F2
@@ -90510,7 +90511,7 @@ sub_F4401E:		; <- T_F40A7C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44021:		; <- T_F40A80
-	jrl	sub_F45FC4	; F44021  jrl T,0xf45fc4
+	jrl	Var34D1_SetBits20	; F44021  jrl T,0xf45fc4
 
 ; --------------------------------------------------------------------------
 ; sub_F44024
@@ -91963,7 +91964,7 @@ sub_F44A3B_Return:
 ; sub_F44ADA
 ; Called from: in-module: 0xF44A23
 ; Touches: (0x34D9) (0x3614)
-; Calls:   sub_F45FAE sub_F45761
+; Calls:   Var20A9_SetBits01 sub_F45761
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44ADA is an instruction boundary.
 ;           The name IS the address.
@@ -91971,7 +91972,7 @@ sub_F44A3B_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44ADA:
-	calr	sub_F45FAE	; F44ADA  calr 0xf45fae
+	calr	Var20A9_SetBits01	; F44ADA  calr 0xf45fae
 	m_or_mi8 MB16, 0x3614, 0x01	; F44ADD  or (0x3614),0x01
 	calr	sub_F45761	; F44AE2  calr 0xf45761
 	m_bit 1, MD16, 0x34d9	; F44AE5  bit 1,(0x34d9)
@@ -93655,7 +93656,7 @@ sub_F456EC:		; <- T_F40A24
 ; sub_F456F0
 ; Called from: in-module: 0xF456EC
 ; Touches: (0x3000) (0x3004) (0x34D4) (0x3614) (0x7F32)  |  0x000000
-; Calls:   T_SeqBufRing_IsEmpty sub_F45761 sub_F45FAE T_F409B4 sub_F458EA
+; Calls:   T_SeqBufRing_IsEmpty sub_F45761 Var20A9_SetBits01 T_F409B4 sub_F458EA
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF456F0 is an instruction boundary.
 ;           The name IS the address.
@@ -93686,7 +93687,7 @@ sub_F456F0_Skip:
 	ld	xwa, (12292:16)	; F45734  ld XWA,(0x3004)
 	cp	xwa, 0	; F45738  cp XWA,0x00000000
 	jr	z, sub_F456F0_Return	; F4573E  jr Z,0xf45760
-	calr	sub_F45FAE	; F45740  calr 0xf45fae
+	calr	Var20A9_SetBits01	; F45740  calr 0xf45fae
 	m_or_mi8 MB16, 0x3614, 0x01	; F45743  or (0x3614),0x01
 	ei	6	; F45748  ei 0x06
 	ldw	(145:8), 0:io	; F4574A  ld (0x91),0x0000
@@ -93782,7 +93783,7 @@ sub_F45761_Return:
 ; Called from: in-module: 0xF457DA
 ; Touches: (0x20A9) (0x3000) (0x3004) (0x3006) (0x349F) (0x34D1) (0x3608)  |
 ;          0x00340C 0x00342E 0x603500
-; Calls:   T_F40BE4 T_F40C88 T_F40C84 T_F411B8 T_F40BC8 sub_F45FC4
+; Calls:   T_F40BE4 T_F40C88 T_F40C84 T_F411B8 T_F40BC8 Var34D1_SetBits20
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45812 is an instruction boundary.
 ;           The name IS the address.
@@ -93865,7 +93866,7 @@ sub_F45812_Skip3:
 	ld	(12292:16), xwa	; F458D0  ld (0x3004),XWA
 	call	T_F411B8	; F458D4  call 0xf411b8
 	call	T_F40BC8	; F458D8  call 0xf40bc8
-	calr	sub_F45FC4	; F458DC  calr 0xf45fc4
+	calr	Var34D1_SetBits20	; F458DC  calr 0xf45fc4
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F458DF  and (0x20a9),0xfe
 	m_or_mi8 MB16, 0x34d1, 0x10	; F458E4  or (0x34d1),0x10
 sub_F45812_Return:
@@ -94974,7 +94975,7 @@ sub_F45F4B_Skip3:
 	ret	; F45FAD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45FAE
+; Var20A9_SetBits01
 ; Called from: T_F40A58 (x0); in-module: 0xF44ADA 0xF45740
 ; Touches: (0x20A9)
 ; Evidence: thunk slot T_F40A58 holds `jp 0x00F45FAE`, and 0xF45FAE is an
@@ -94984,7 +94985,8 @@ sub_F45F4B_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45FAE:		; <- T_F40A58
+; Var20A9_SetBits01: m_or_mi8 MB16, 0x20a9, 0x01 (single-cell template; the cell's meaning is not established unless it is named)
+Var20A9_SetBits01:		; <- T_F40A58
 	m_or_mi8 MB16, 0x20a9, 0x01	; F45FAE  or (0x20a9),0x01
 	ret	; F45FB3  ret
 
@@ -95006,7 +95008,7 @@ sub_F45FB4:		; <- T_F40A5C
 	ret	; F45FC3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45FC4
+; Var34D1_SetBits20
 ; Called from: T_F40A08 (x2); in-module: 0xF458DC
 ; Touches: (0x34D1)
 ; Evidence: thunk slot T_F40A08 holds `jp 0x00F45FC4`, and 0xF45FC4 is an
@@ -95016,7 +95018,8 @@ sub_F45FB4:		; <- T_F40A5C
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45FC4:		; <- T_F40A08
+; Var34D1_SetBits20: m_or_mi8 MB16, 0x34d1, 0x20 (single-cell template; the cell's meaning is not established unless it is named)
+Var34D1_SetBits20:		; <- T_F40A08
 	m_or_mi8 MB16, 0x34d1, 0x20	; F45FC4  or (0x34d1),0x20
 	ret	; F45FC9  ret
 
@@ -103283,7 +103286,7 @@ sub_F4C46A_Skip2:
 	ret	; F4C4AF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4C4B0
+; UI_RequestBits_ClearBit7
 ; Called from: T_F434E4 (x0)
 ; Touches: (0x2075)
 ; Evidence: thunk slot T_F434E4 holds `jp 0x00F4C4B0`, and 0xF4C4B0 is an
@@ -103293,7 +103296,8 @@ sub_F4C46A_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4C4B0:		; <- T_F434E4
+; UI_RequestBits_ClearBit7: m_res 7, MD16, UI_RequestBits (single-cell template; the cell's meaning is not established unless it is named)
+UI_RequestBits_ClearBit7:		; <- T_F434E4
 	m_res 7, MD16, UI_RequestBits	; F4C4B0  res 7,(0x2075)
 	ret	; F4C4B4  ret
 
@@ -106515,7 +106519,7 @@ sub_F4EC00_Return:
 	ret	; F4EC24  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4EC25
+; Var34BB_ClearBits04
 ; Called from: T_F40CE4 (x0)
 ; Touches: (0x34BB)
 ; Evidence: thunk slot T_F40CE4 holds `jp 0x00F4EC25`, and 0xF4EC25 is an
@@ -106525,7 +106529,8 @@ sub_F4EC00_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4EC25:		; <- T_F40CE4
+; Var34BB_ClearBits04: m_and_mi8 MB16, 0x34bb, 0xfb (single-cell template; the cell's meaning is not established unless it is named)
+Var34BB_ClearBits04:		; <- T_F40CE4
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F4EC25  and (0x34bb),0xfb
 	ret	; F4EC2A  ret
 
@@ -196693,7 +196698,7 @@ sub_F7F114_Skip2:
 	calr	sub_F7F144	; F7F12E  calr 0xf7f144
 	jr	sub_F7F114_Join	; F7F131  jr T,0xf7f136
 sub_F7F114_Skip3:
-	calr	sub_F7F1C2	; F7F133  calr 0xf7f1c2
+	calr	Var2820_Set2B	; F7F133  calr 0xf7f1c2
 sub_F7F114_Join:
 	calr	sub_F7F1C8	; F7F136  calr 0xf7f1c8
 	ret	; F7F139  ret
@@ -196754,7 +196759,8 @@ sub_F7F144_Return:
 
 ; Evidence: reached from calr from prom_b 0xF7F133, and from nothing else
 ;           the scans see.
-sub_F7F1C2:
+; Var2820_Set2B: ld (10272:16), 43 (single-cell template; the cell's meaning is not established unless it is named)
+Var2820_Set2B:
 	ld	(10272:16), 43	; F7F1C2  ld (0x2820),0x2b
 	ret	; F7F1C7  ret
 
@@ -197579,7 +197585,7 @@ sub_F7F440_Skip2:
 	calr	sub_F7F470	; F7F45A  calr 0xf7f470
 	jr	sub_F7F440_Join	; F7F45D  jr T,0xf7f462
 sub_F7F440_Skip3:
-	calr	sub_F7F4EE	; F7F45F  calr 0xf7f4ee
+	calr	Var2820_Set2B_2	; F7F45F  calr 0xf7f4ee
 sub_F7F440_Join:
 	calr	sub_F7F4F4	; F7F462  calr 0xf7f4f4
 	ret	; F7F465  ret
@@ -197640,7 +197646,8 @@ sub_F7F470_Return:
 
 ; Evidence: reached from calr from prom_b 0xF7F45F, and from nothing else
 ;           the scans see.
-sub_F7F4EE:
+; Var2820_Set2B_2: ld (10272:16), 43 (single-cell template; the cell's meaning is not established unless it is named)
+Var2820_Set2B_2:
 	ld	(10272:16), 43	; F7F4EE  ld (0x2820),0x2b
 	ret	; F7F4F3  ret
 
@@ -198396,7 +198403,7 @@ sub_F7F7AC_Skip2:
 	calr	sub_F7F7DC	; F7F7C6  calr 0xf7f7dc
 	jr	sub_F7F7AC_Join	; F7F7C9  jr T,0xf7f7ce
 sub_F7F7AC_Skip3:
-	calr	sub_F7F85A	; F7F7CB  calr 0xf7f85a
+	calr	Var2820_Set2B_3	; F7F7CB  calr 0xf7f85a
 sub_F7F7AC_Join:
 	calr	sub_F7F860	; F7F7CE  calr 0xf7f860
 	ret	; F7F7D1  ret
@@ -198457,7 +198464,8 @@ sub_F7F7DC_Return:
 
 ; Evidence: reached from calr from prom_b 0xF7F7CB, and from nothing else
 ;           the scans see.
-sub_F7F85A:
+; Var2820_Set2B_3: ld (10272:16), 43 (single-cell template; the cell's meaning is not established unless it is named)
+Var2820_Set2B_3:
 	ld	(10272:16), 43	; F7F85A  ld (0x2820),0x2b
 	ret	; F7F85F  ret
 

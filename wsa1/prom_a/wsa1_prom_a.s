@@ -47330,10 +47330,12 @@ PanelMode_MidiEnter:
 PanelMode_MidiLeave:
 	m_set 1, MD16, 0x2134                                ; F99F15  f1 34 21 b9
 	ret                                                  ; F99F19  0e
-sub_F99F1A:
+; Var2134_SetBit1: m_set 1, MD16, 0x2134 (single-cell template; the cell's meaning is not established unless it is named)
+Var2134_SetBit1:
 	m_set 1, MD16, 0x2134                                ; F99F1A  f1 34 21 b9
 	ret                                                  ; F99F1E  0e
-sub_F99F1F:
+; Var2134_SetBit1_2: m_set 1, MD16, 0x2134 (single-cell template; the cell's meaning is not established unless it is named)
+Var2134_SetBit1_2:
 	m_set 1, MD16, 0x2134                                ; F99F1F  f1 34 21 b9
 	ret                                                  ; F99F23  0e
 ; Paint_MidiMenu -- ENTER method of screen 0x70, the MIDI menu: paints its index of MIDI sub-screens
@@ -107834,7 +107836,8 @@ sub_FBFDD4:
 .LFBFDE7:
 	m_set 6, MD16, UI_Request_Hi                                ; FBFDE7  f1 71 20 be
 	ld (UI_Request:16), 0xb7                                 ; FBFDEB  f1 70 20 00 b7
-sub_FBFDF0:
+; Var277E_Set02: ld (0x277e:16), 0x02; popw hl (single-cell template; the cell's meaning is not established unless it is named)
+Var277E_Set02:
 	ld (0x277e:16), 0x02                                 ; FBFDF0  f1 7e 27 00 02
 .LFBFDF5:
 	popw hl                                              ; FBFDF5  4b
@@ -156405,7 +156408,7 @@ sub_FE066C:
 .LFE06AB:
 	pushw 0x0b                                           ; FE06AB  0b 0b 00
 	calr StatusMsg_ShowByIndex                                          ; FE06AE  1e 87 11
-	calr sub_FE2FB9                                          ; FE06B1  1e 05 29
+	calr Var2216_SetW145C                                          ; FE06B1  1e 05 29
 	calr sub_FE06EA                                            ; FE06B4  1e 33 00
 	calr sub_FE2531                                          ; FE06B7  1e 77 1e
 	ld H,A                                               ; FE06BA  c9 8e
@@ -157116,7 +157119,7 @@ sub_FE0CB9:
 	pushw hl                                             ; FE0CBD  2b
 	pushw de                                             ; FE0CBE  2a
 	push XIX                                             ; FE0CBF  3c
-	calr sub_FE2FC0                                          ; FE0CC0  1e fd 22
+	calr Var2216_SetW145A                                          ; FE0CC0  1e fd 22
 	ldw (0x170f:24), 0x00                               ; FE0CC3  f2 0f 17 00 02 00 00
 .LFE0CCA:
 	ld bc, (0x170f:24)                                  ; FE0CCA  d2 0f 17 00 21
@@ -157591,7 +157594,7 @@ sub_FE1218:
 	pushw hl                                             ; FE121C  2b
 	pushw de                                             ; FE121D  2a
 	push XIX                                             ; FE121E  3c
-	calr sub_FE2FC0                                          ; FE121F  1e 9e 1d
+	calr Var2216_SetW145A                                          ; FE121F  1e 9e 1d
 	ldw de, 0x00                                         ; FE1222  32 00 00
 	ld h, 0x64:opc                                          ; FE1225  26 64
 .LFE1227:
@@ -158811,7 +158814,7 @@ sub_FE1CD0:
 	calr sub_FE0870                                          ; FE1CD0  1e 9d eb
 	ret                                                  ; FE1CD3  0e
 sub_FE1CD4:
-	calr sub_FE2FB9                                          ; FE1CD4  1e e2 12
+	calr Var2216_SetW145C                                          ; FE1CD4  1e e2 12
 	ret                                                  ; FE1CD7  0e
 sub_FE1CD8:
 	calr sub_FE2F93                                          ; FE1CD8  1e b8 12
@@ -158909,7 +158912,7 @@ sub_FE1D52:
 	push XIX                                             ; FE1D53  3c
 	lda xix, (0x2725:16)                                ; FE1D54  f1 25 27 34
 	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE1D58  1e 05 e3
-	calr sub_FE2FB9                                          ; FE1D5B  1e 5b 12
+	calr Var2216_SetW145C                                          ; FE1D5B  1e 5b 12
 	ld C,(XIX)                                           ; FE1D5E  84 23
 	cp c, 0x00:i3                                          ; FE1D60  cb d8
 	jr nz, .LFE1DB5                                          ; FE1D62  6e 51
@@ -159785,7 +159788,7 @@ sub_FE2531:
 	calr SysPartMidi_ResetBlock1Default                                          ; FE2537  1e 75 09
 	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE253A  1e 23 db
 	calr sub_FE2699                                          ; FE253D  1e 59 01
-	calr sub_FE2FB9                                          ; FE2540  1e 76 0a
+	calr Var2216_SetW145C                                          ; FE2540  1e 76 0a
 	ld C,(XIX)                                           ; FE2543  84 23
 	cp c, 0x00:i3                                          ; FE2545  cb d8
 	jr nz, .LFE2598                                          ; FE2547  6e 4f
@@ -159992,7 +159995,7 @@ sub_FE26E2:
 	pushw de                                             ; FE26E3  2a
 	push XIX                                             ; FE26E4  3c
 	lda xix, (Disk_FileName:16)                                ; FE26E5  f1 c8 21 34
-	calr sub_FE2EF2                                          ; FE26E9  1e 06 08
+	calr Var220D_SetW4157                                          ; FE26E9  1e 06 08
 	calr sub_FE2DBC                                          ; FE26EC  1e cd 06
 	ld c, (0x760a:16)                                   ; FE26EF  c1 0a 76 23
 	extz BC                                              ; FE26F3  d9 12
@@ -160812,7 +160815,8 @@ SysPartMidi_ResetBlock1Default:
 	pop XIX                                              ; FE2EEF  5c
 	pop XHL                                              ; FE2EF0  5b
 	ret                                                  ; FE2EF1  0e
-sub_FE2EF2:
+; Var220D_SetW4157: ldw (0x220d:16), 0x4157 (single-cell template; the cell's meaning is not established unless it is named)
+Var220D_SetW4157:
 	ldw (0x220d:16), 0x4157                              ; FE2EF2  f1 0d 22 02 57 41
 	ret                                                  ; FE2EF8  0e
 sub_FE2EF9:
@@ -160851,7 +160855,7 @@ sub_FE2F39:
 	res	2, (PB:8)                                   ; FE2F43  f0 1f b2
 	pushw 0x05                                           ; FE2F46  0b 05 00
 	calr Delay_Ticks                                          ; FE2F49  1e d5 e4
-	calr sub_FE2EF2                                          ; FE2F4C  1e a3 ff
+	calr Var220D_SetW4157                                          ; FE2F4C  1e a3 ff
 	ld h, 0x00:opc                                          ; FE2F4F  26 00
 	pop XIY                                              ; FE2F51  5d
 .LFE2F52:
@@ -160906,10 +160910,12 @@ sub_FE2F93:
 	inc 4,XSP                                            ; FE2FB5  ef 64
 	pop XIX                                              ; FE2FB7  5c
 	ret                                                  ; FE2FB8  0e
-sub_FE2FB9:
+; Var2216_SetW145C: ldw (0x2216:16), 0x145c (single-cell template; the cell's meaning is not established unless it is named)
+Var2216_SetW145C:
 	ldw (0x2216:16), 0x145c                              ; FE2FB9  f1 16 22 02 5c 14
 	ret                                                  ; FE2FBF  0e
-sub_FE2FC0:
+; Var2216_SetW145A: ldw (0x2216:16), 0x145a (single-cell template; the cell's meaning is not established unless it is named)
+Var2216_SetW145A:
 	ldw (0x2216:16), 0x145a                              ; FE2FC0  f1 16 22 02 5a 14
 	ret                                                  ; FE2FC6  0e
 sub_FE0527_Nop:
@@ -183133,14 +183139,15 @@ sub_FF42B7:
 	m_set 1, MD16, 0x2134                                ; FF42B7  f1 34 21 b9
 	call T_SoundGroup_ReloadSelection                                        ; FF42BB  1d c8 15 f4
 	ret                                                  ; FF42BF  0e
-sub_FF42C0:
+; Var2134_SetBit1_3: m_set 1, MD16, 0x2134 (single-cell template; the cell's meaning is not established unless it is named)
+Var2134_SetBit1_3:
 	m_set 1, MD16, 0x2134                                ; FF42C0  f1 34 21 b9
 	ret                                                  ; FF42C4  0e
 sub_FF42C5:
 	calr sub_FF42B7                                      ; FF42C5  1e ef ff
 	ret                                                  ; FF42C8  0e
 sub_FF42C9:
-	calr sub_FF42C0                                      ; FF42C9  1e f4 ff
+	calr Var2134_SetBit1_3                                      ; FF42C9  1e f4 ff
 	ret                                                  ; FF42CC  0e
 ; ---------------------------------------------------------------------
 ; Paint_DiskMenu -- the ENTER method (painter) of the screen object at
