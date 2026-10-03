@@ -164298,7 +164298,7 @@ OldCopy_SongStore_LoadSongHeaderToDisplay:
 	ret	; F6F087  ret
 OldCopy_sub_F7AA88:
 	ret	; F6F088  ret
-OldCopy_sub_F7AA89:
+OldCopy_SongClear_SoftKeyCol4:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F089  cp (0x207e),0x01
 	jr	z, OldCopy_F7AAAE	; F6F08E  jr Z,0xf6f0ae
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F090  or (0x2075),0x09
@@ -164312,7 +164312,7 @@ OldCopy_sub_F7AA89:
 	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F0AA  call 0xf6f05e
 OldCopy_F7AAAE:
 	ret	; F6F0AE  ret
-OldCopy_sub_F7AAAF:
+OldCopy_SongClear_SoftKeyCol3:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F0AF  cp (0x207e),0x01
 	jr	z, OldCopy_F7AADC	; F6F0B4  jr Z,0xf6f0dc
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F0B6  or (0x2075),0x09
@@ -164332,14 +164332,14 @@ OldCopy_F7AACE:
 	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F0D8  call 0xf6f05e
 OldCopy_F7AADC:
 	ret	; F6F0DC  ret
-OldCopy_sub_F7AADD:
+OldCopy_SongClear_LcdKeyRow5:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F0DD  cp (0x207e),0x01
 	jr	nz, OldCopy_F7AAEF	; F6F0E2  jr NZ,0xf6f0ef
 	ld	(UI_ScreenStage:16), 0	; F6F0E4  ld (0x207e),0x00
 	ldw	(UI_Request:16), 32794	; F6F0E9  ld (0x2070),0x801a
 OldCopy_F7AAEF:
 	ret	; F6F0EF  ret
-OldCopy_sub_F7AAF0:
+OldCopy_SongClear_LcdKeyRow4:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F6F0F0  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F0F5  cp (0x207e),0x01
 	jr	z, OldCopy_F7AB08	; F6F0FA  jr Z,0xf6f108
@@ -164459,7 +164459,7 @@ OldCopy_sub_F7AB9C:
 	m_or_mi16 MW16, 0x212e, 0x0100	; F6F1B2  or (0x212e),0x0100
 OldCopy_F7ABB8:
 	ret	; F6F1B8  ret
-OldCopy_sub_F7ABB9:
+OldCopy_TrackClear_OnLeave:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1c	; F6F1B9  cp (0x207a),0x1c
 	jr	z, OldCopy_F7ABDB	; F6F1BE  jr Z,0xf6f1db
 	ld	wa, (3654:16)	; F6F1C0  ld WA,(0x0e46)
@@ -164484,7 +164484,7 @@ OldCopy_F7ABEA:
 	m_or_mi16 MW16, 0x212e, 0x0100	; F6F200  or (0x212e),0x0100
 OldCopy_F7AC06:
 	ret	; F6F206  ret
-OldCopy_sub_F7AC07:
+OldCopy_TrackClear_LcdKeyRow2:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F6F207  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F20C  cp (0x207e),0x01
 	jr	z, OldCopy_F7AC1E	; F6F211  jr Z,0xf6f21e
@@ -164538,7 +164538,7 @@ OldCopy_sub_F7AC9D:
 	calr	sub_F7AFD8 - 0xBA00	; F6F29D  calr 0xf6f5d8
 	ld	(3514:16), 1	; F6F2A0  ld (0x0dba),0x01
 	ret	; F6F2A5  ret
-OldCopy_sub_F7ACA6:
+OldCopy_TrackMerge_OnLeave:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1f	; F6F2A6  cp (0x207a),0x1f
 	jr	z, OldCopy_F7ACC4	; F6F2AB  jr Z,0xf6f2c4
 	ld	xwa, (12304:16)	; F6F2AD  ld XWA,(0x3010)
@@ -164580,7 +164580,7 @@ OldCopy_F7AD09:
 	calr	OldCopy_sub_F7ADDC	; F6F310  calr 0xf6f3dc
 OldCopy_F7AD13:
 	ret	; F6F313  ret
-OldCopy_sub_F7AD14:
+OldCopy_TrackMerge_StageZero_SoftKeyCol5:
 	ld	(3150:16), w	; F6F314  ld (0x0c4e),W
 	and	w, 128	; F6F318  and W,0x80
 	ld	(3151:16), w	; F6F31B  ld (0x0c4f),W

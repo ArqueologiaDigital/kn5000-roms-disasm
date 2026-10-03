@@ -2097,6 +2097,14 @@ RENAMES = {
     "sub_F0149E": "OldCopy_LcdKeyRow4_SoundEditPitchLfo",
     "sub_F014B6": "OldCopy_LcdKeyRow5_SoundEditPitchLfo",
     "sub_F014CE": "OldCopy_ExitKey_SoundEditPitchLfo",
+    "OldCopy_sub_F7AA89": "OldCopy_SongClear_SoftKeyCol4",
+    "OldCopy_sub_F7AAAF": "OldCopy_SongClear_SoftKeyCol3",
+    "OldCopy_sub_F7AADD": "OldCopy_SongClear_LcdKeyRow5",
+    "OldCopy_sub_F7AAF0": "OldCopy_SongClear_LcdKeyRow4",
+    "OldCopy_sub_F7ABB9": "OldCopy_TrackClear_OnLeave",
+    "OldCopy_sub_F7AC07": "OldCopy_TrackClear_LcdKeyRow2",
+    "OldCopy_sub_F7ACA6": "OldCopy_TrackMerge_OnLeave",
+    "OldCopy_sub_F7AD14": "OldCopy_TrackMerge_StageZero_SoftKeyCol5",
 }
 
 
