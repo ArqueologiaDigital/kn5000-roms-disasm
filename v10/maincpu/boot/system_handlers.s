@@ -6089,7 +6089,7 @@ INTTC0_HANDLER_Skip3:
 	ei	0
 	bit	1, (PZ:8)
 	jr	nz, INTTC0_HANDLER_Skip2
-	.byte	0xd8, 0x2f, 0x40	; ldc WA,unknown
+	ldc_16_cr	wa, 0x40	; WA := control register 0x40 (which register 0x40 is, is not established)
 	cp	(0xe362:16), wa
 	jr	nz, INTTC0_HANDLER_Skip
 	incw	1, (0xe360:16)

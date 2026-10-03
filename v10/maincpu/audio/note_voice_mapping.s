@@ -16915,10 +16915,10 @@ Chord_EvalAltNoteBuffer:
 VoiceSlot_CheckAndApply_LoadReg_Entry:
 	bit	6, (0xcede:24)
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Skip
-	.byte	0xd7, 0x3e, 0x9a	; ld QHL3,DE
+	ldfr_werp	de, 0x3e	; ld QHL3,DE: bank-3 register QHL <- DE
 	ldw_d16	de, (0xc596)
 	and	de, 8
-	.byte	0xd7, 0x3e, 0x8a	; ld DE,QHL3
+	ldto_werp	de, 0x3e	; ld DE,QHL3
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Skip2
 	jr	VoiceSlot_CheckAndApply_LoadReg_Join
 VoiceSlot_CheckAndApply_LoadReg_Skip:

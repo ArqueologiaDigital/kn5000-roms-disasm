@@ -6048,7 +6048,7 @@ INTTC0_HANDLER_Skip3:
 	bit	1, (PZ:8)
 	jr	nz, INTTC0_HANDLER_Skip2
 ; v10 does not spell this byte either
-	.byte	0xd8, 0x2f, 0x40	; ldc WA,unknown
+	ldc_16_cr	wa, 0x40	; WA := control register 0x40 (which register 0x40 is, is not established)
 	cp	(0xe2c6:16), wa
 	jr	nz, INTTC0_HANDLER_Skip
 	incw	1, (58052:16)
