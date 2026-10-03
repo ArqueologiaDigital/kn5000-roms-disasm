@@ -130,6 +130,12 @@ TABLES = [
      "; ENTRY COUNT 32 is the reader's bound `cp HL,0x001F`.\n"
      "; Evidence: all 32 values are inside this module, the lowest 0xFE8621 and\n"
      ";          the highest 0xFE8772.\n" + H),
+    (0xFE85FF, 0xFE8621, "byte", "EditPartSelect_PartBitMask", H +
+     "; EditPartSelect_PartBitMask -- 17 little-endian words, 1 << p for p = 0..15, then 0x0001\n"
+     "; Read by: EditPartSelect_OpenEditor (0xFE8778 `ld XIX,0x00FE85FF`, `sll bc,1`, a word load)\n"
+     ";          with the part number its SoftKeyCol<n>_EditPartSelect caller passes.\n"
+     "; Added 2026-10-03: this generator used to DECODE it (`normal`, `push SR`, `max` ...);\n"
+     ";          the source writes it as .short.\n" + H),
     (0xFE87B8, 0xFE87DD, "byte", "IndexMap_FE87B8", H +
      "; IndexMap_FE87B8 -- 37 bytes: 0x00..0x1F, then five 0x00\n"
      "; Read by: 0xFE8811 `ld XIX,0x00FE87B8` then `ld A,(XIX+IY)` (0xFE8816),\n"

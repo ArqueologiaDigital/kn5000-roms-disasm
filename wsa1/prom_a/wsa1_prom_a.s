@@ -173093,7 +173093,7 @@ ScreenButton_EditPartSelect:
 ; ---------------------------------------------------------------------
 
 EditPartSelect_ButtonTable:
-	.long sub_FE85FC__FE8621                                 ; FE857C  [  0]
+	.long SoftKeyCol1_EditPartSelect                                 ; FE857C  [  0]
 	.long SoftKeyCol2_EditPartSelect                                 ; FE8580  [  1]
 	.long SoftKeyCol3_EditPartSelect                                 ; FE8584  [  2]
 	.long SoftKeyCol4_EditPartSelect                                 ; FE8588  [  3]
@@ -173110,7 +173110,7 @@ EditPartSelect_ButtonTable:
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85B4  [ 14]
 	.long ExitKey_EditPartSelect                                 ; FE85B8  [ 15]
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85BC  [ 16]
-	.long sub_FE85FC__FE8621                                 ; FE85C0  [ 17]
+	.long SoftKeyCol1_EditPartSelect                                 ; FE85C0  [ 17]
 	.long SoftKeyCol2_EditPartSelect                                 ; FE85C4  [ 18]
 	.long SoftKeyCol3_EditPartSelect                                 ; FE85C8  [ 19]
 	.long SoftKeyCol4_EditPartSelect                                 ; FE85CC  [ 20]
@@ -173125,49 +173125,42 @@ EditPartSelect_ButtonTable:
 	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F0  [ 29]
 	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F4  [ 30]
 	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F8  [ 31]
-sub_FE85FC:
+; EditPartSelect_PartRefused_Always0(part): `xor A,A / ret` -- every SoftKeyCol<n>_EditPartSelect asks it before EditPartSelect_OpenEditor and
+;   opens the editor only on A == 0, so in this build no part is ever refused.
+EditPartSelect_PartRefused_Always0:
 	xor A,A                                              ; FE85FC  c9 d1
 	ret                                                  ; FE85FE  0e
-sub_FE85FC__FE85FF:
-	normal                                               ; FE85FF  01
-	nop                                                  ; FE8600  00
-	push SR                                              ; FE8601  02
-	nop                                                  ; FE8602  00
-	max                                                  ; FE8603  04
-	nop                                                  ; FE8604  00
-	ld (0x00:8), 0x10:io                                      ; FE8605  08 00 10
-	nop                                                  ; FE8608  00
-	ld w, 0x00:opc                                          ; FE8609  20 00
-	ld XWA,0x00008000                                    ; FE860B  40 00 80 00 00
-	normal                                               ; FE8610  01
-	nop                                                  ; FE8611  00
-	push SR                                              ; FE8612  02
-	nop                                                  ; FE8613  00
-	max                                                  ; FE8614  04
-	nop                                                  ; FE8615  00
-	ld (0x00:8), 0x10:io                                      ; FE8616  08 00 10
-	nop                                                  ; FE8619  00
-	ld w, 0x00:opc                                          ; FE861A  20 00
-	ld XWA,0x00018000                                    ; FE861C  40 00 80 01 00
-sub_FE85FC__FE8621:
+; ---------------------------------------------------------------------
+; 17 little-endian words, 1 << p for p = 0..15 and then 0x0001 again.  EditPartSelect_OpenEditor
+; indexes it by the part number its SoftKeyCol<n>_EditPartSelect caller passes (`sll bc,1`, word
+; load) and keeps the word as that part's bit.  It was decoded as instructions (`normal`, `push SR`,
+; `max` ...) until 2026-10-03; the bytes are unchanged.
+; ---------------------------------------------------------------------
+EditPartSelect_PartBitMask:
+	.short 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080  ; FE85FF  [ 0]
+	.short 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000  ; FE860F  [ 8]
+	.short 0x0001                                                          ; FE861F  [16]
+; SoftKeyCol1_EditPartSelect: the 1st of the eight soft keys under the LCD; EditPartSelect_ButtonTable slots 0x00, 0x11.  Slot -> control:
+;   wave7_panel_names_round11.CONTROL.
+SoftKeyCol1_EditPartSelect:
 	bit 0x07,W                                           ; FE8621  c8 33 07
 	jr nz, .LFE8638                                      ; FE8624  6e 12
 	ldw bc, 0x00                                         ; FE8626  31 00 00
 	pushw bc                                             ; FE8629  29
-	calr sub_FE85FC                                      ; FE862A  1e cf ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE862A  1e cf ff
 	popw bc                                              ; FE862D  49
 	cp a, 0x00:i3                                          ; FE862E  c9 d8
 	jr nz, .LFE8648                                      ; FE8630  6e 16
-	call sub_FE8773                                      ; FE8632  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE8632  1d 73 87 fe
 	jr .LFE8648                                          ; FE8636  68 10
 .LFE8638:
 	ldw bc, 0x08                                         ; FE8638  31 08 00
 	pushw bc                                             ; FE863B  29
-	calr sub_FE85FC                                      ; FE863C  1e bd ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE863C  1e bd ff
 	popw bc                                              ; FE863F  49
 	cp a, 0x00:i3                                          ; FE8640  c9 d8
 	jr nz, .LFE8648                                      ; FE8642  6e 04
-	call sub_FE8773                                      ; FE8644  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE8644  1d 73 87 fe
 .LFE8648:
 	ret                                                  ; FE8648  0e
 ; SoftKeyCol2_EditPartSelect: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x01; EditPartSelect_ButtonTable slot 0x12.  Slot -> control: wave7_panel_names_round11.CONTROL.
@@ -173176,20 +173169,20 @@ SoftKeyCol2_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	jr nz, .LFE8660                                      ; FE864C  6e 12
 	ldw bc, 0x01                                         ; FE864E  31 01 00
 	pushw bc                                             ; FE8651  29
-	calr sub_FE85FC                                      ; FE8652  1e a7 ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE8652  1e a7 ff
 	popw bc                                              ; FE8655  49
 	cp a, 0x00:i3                                          ; FE8656  c9 d8
 	jr nz, .LFE8670                                      ; FE8658  6e 16
-	call sub_FE8773                                      ; FE865A  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE865A  1d 73 87 fe
 	jr .LFE8670                                          ; FE865E  68 10
 .LFE8660:
 	ldw bc, 0x09                                         ; FE8660  31 09 00
 	pushw bc                                             ; FE8663  29
-	calr sub_FE85FC                                      ; FE8664  1e 95 ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE8664  1e 95 ff
 	popw bc                                              ; FE8667  49
 	cp a, 0x00:i3                                          ; FE8668  c9 d8
 	jr nz, .LFE8670                                      ; FE866A  6e 04
-	call sub_FE8773                                      ; FE866C  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE866C  1d 73 87 fe
 .LFE8670:
 	ret                                                  ; FE8670  0e
 ; SoftKeyCol3_EditPartSelect: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x02; EditPartSelect_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
@@ -173198,20 +173191,20 @@ SoftKeyCol3_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	jr nz, .LFE8688                                      ; FE8674  6e 12
 	ldw bc, 0x02                                         ; FE8676  31 02 00
 	pushw bc                                             ; FE8679  29
-	calr sub_FE85FC                                      ; FE867A  1e 7f ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE867A  1e 7f ff
 	popw bc                                              ; FE867D  49
 	cp a, 0x00:i3                                          ; FE867E  c9 d8
 	jr nz, .LFE8698                                      ; FE8680  6e 16
-	call sub_FE8773                                      ; FE8682  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE8682  1d 73 87 fe
 	jr .LFE8698                                          ; FE8686  68 10
 .LFE8688:
 	ldw bc, 0x0a                                         ; FE8688  31 0a 00
 	pushw bc                                             ; FE868B  29
-	calr sub_FE85FC                                      ; FE868C  1e 6d ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE868C  1e 6d ff
 	popw bc                                              ; FE868F  49
 	cp a, 0x00:i3                                          ; FE8690  c9 d8
 	jr nz, .LFE8698                                      ; FE8692  6e 04
-	call sub_FE8773                                      ; FE8694  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE8694  1d 73 87 fe
 .LFE8698:
 	ret                                                  ; FE8698  0e
 ; SoftKeyCol4_EditPartSelect: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x03; EditPartSelect_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
@@ -173220,20 +173213,20 @@ SoftKeyCol4_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	jr nz, .LFE86B0                                      ; FE869C  6e 12
 	ldw bc, 0x03                                         ; FE869E  31 03 00
 	pushw bc                                             ; FE86A1  29
-	calr sub_FE85FC                                      ; FE86A2  1e 57 ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE86A2  1e 57 ff
 	popw bc                                              ; FE86A5  49
 	cp a, 0x00:i3                                          ; FE86A6  c9 d8
 	jr nz, .LFE86C0                                      ; FE86A8  6e 16
-	call sub_FE8773                                      ; FE86AA  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE86AA  1d 73 87 fe
 	jr .LFE86C0                                          ; FE86AE  68 10
 .LFE86B0:
 	ldw bc, 0x0b                                         ; FE86B0  31 0b 00
 	pushw bc                                             ; FE86B3  29
-	calr sub_FE85FC                                      ; FE86B4  1e 45 ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE86B4  1e 45 ff
 	popw bc                                              ; FE86B7  49
 	cp a, 0x00:i3                                          ; FE86B8  c9 d8
 	jr nz, .LFE86C0                                      ; FE86BA  6e 04
-	call sub_FE8773                                      ; FE86BC  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE86BC  1d 73 87 fe
 .LFE86C0:
 	ret                                                  ; FE86C0  0e
 ; SoftKeyCol5_EditPartSelect: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x04; EditPartSelect_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
@@ -173242,20 +173235,20 @@ SoftKeyCol5_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	jr nz, .LFE86D8                                      ; FE86C4  6e 12
 	ldw bc, 0x04                                         ; FE86C6  31 04 00
 	pushw bc                                             ; FE86C9  29
-	calr sub_FE85FC                                      ; FE86CA  1e 2f ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE86CA  1e 2f ff
 	popw bc                                              ; FE86CD  49
 	cp a, 0x00:i3                                          ; FE86CE  c9 d8
 	jr nz, .LFE86E8                                      ; FE86D0  6e 16
-	call sub_FE8773                                      ; FE86D2  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE86D2  1d 73 87 fe
 	jr .LFE86E8                                          ; FE86D6  68 10
 .LFE86D8:
 	ldw bc, 0x0c                                         ; FE86D8  31 0c 00
 	pushw bc                                             ; FE86DB  29
-	calr sub_FE85FC                                      ; FE86DC  1e 1d ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE86DC  1e 1d ff
 	popw bc                                              ; FE86DF  49
 	cp a, 0x00:i3                                          ; FE86E0  c9 d8
 	jr nz, .LFE86E8                                      ; FE86E2  6e 04
-	call sub_FE8773                                      ; FE86E4  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE86E4  1d 73 87 fe
 .LFE86E8:
 	ret                                                  ; FE86E8  0e
 ; SoftKeyCol6_EditPartSelect: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x05; EditPartSelect_ButtonTable slot 0x16.  Slot -> control: wave7_panel_names_round11.CONTROL.
@@ -173264,20 +173257,20 @@ SoftKeyCol6_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	jr nz, .LFE8700                                      ; FE86EC  6e 12
 	ldw bc, 0x05                                         ; FE86EE  31 05 00
 	pushw bc                                             ; FE86F1  29
-	calr sub_FE85FC                                      ; FE86F2  1e 07 ff
+	calr EditPartSelect_PartRefused_Always0                                      ; FE86F2  1e 07 ff
 	popw bc                                              ; FE86F5  49
 	cp a, 0x00:i3                                          ; FE86F6  c9 d8
 	jr nz, .LFE8710                                      ; FE86F8  6e 16
-	call sub_FE8773                                      ; FE86FA  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE86FA  1d 73 87 fe
 	jr T,.LFE8710                                        ; FE86FE  68 10
 .LFE8700:
 	ldw bc, 0x0d                                         ; FE8700  31 0d 00
 	pushw bc                                             ; FE8703  29
-	calr sub_FE85FC                                      ; FE8704  1e f5 fe
+	calr EditPartSelect_PartRefused_Always0                                      ; FE8704  1e f5 fe
 	popw bc                                              ; FE8707  49
 	cp a, 0x00:i3                                          ; FE8708  c9 d8
 	jr nz, .LFE8710                                      ; FE870A  6e 04
-	call sub_FE8773                                      ; FE870C  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE870C  1d 73 87 fe
 .LFE8710:
 	ret                                                  ; FE8710  0e
 ; SoftKeyCol7_EditPartSelect: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x06; EditPartSelect_ButtonTable slot 0x17.  Slot -> control: wave7_panel_names_round11.CONTROL.
@@ -173286,20 +173279,20 @@ SoftKeyCol7_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	jr nz, .LFE8728                                      ; FE8714  6e 12
 	ldw bc, 0x06                                         ; FE8716  31 06 00
 	pushw bc                                             ; FE8719  29
-	calr sub_FE85FC                                      ; FE871A  1e df fe
+	calr EditPartSelect_PartRefused_Always0                                      ; FE871A  1e df fe
 	popw bc                                              ; FE871D  49
 	cp a, 0x00:i3                                          ; FE871E  c9 d8
 	jr nz, .LFE8738                                      ; FE8720  6e 16
-	call sub_FE8773                                      ; FE8722  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE8722  1d 73 87 fe
 	jr .LFE8738                                          ; FE8726  68 10
 .LFE8728:
 	ldw bc, 0x0e                                         ; FE8728  31 0e 00
 	pushw bc                                             ; FE872B  29
-	calr sub_FE85FC                                      ; FE872C  1e cd fe
+	calr EditPartSelect_PartRefused_Always0                                      ; FE872C  1e cd fe
 	popw bc                                              ; FE872F  49
 	cp a, 0x00:i3                                          ; FE8730  c9 d8
 	jr nz, .LFE8738                                      ; FE8732  6e 04
-	call sub_FE8773                                      ; FE8734  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE8734  1d 73 87 fe
 .LFE8738:
 	ret                                                  ; FE8738  0e
 ; SoftKeyCol8_EditPartSelect: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x07; EditPartSelect_ButtonTable slot 0x18.  Slot -> control: wave7_panel_names_round11.CONTROL.
@@ -173308,20 +173301,20 @@ SoftKeyCol8_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	jr nz, .LFE8750                                      ; FE873C  6e 12
 	ldw bc, 0x07                                         ; FE873E  31 07 00
 	pushw bc                                             ; FE8741  29
-	calr sub_FE85FC                                      ; FE8742  1e b7 fe
+	calr EditPartSelect_PartRefused_Always0                                      ; FE8742  1e b7 fe
 	popw bc                                              ; FE8745  49
 	cp a, 0x00:i3                                          ; FE8746  c9 d8
 	jr nz, .LFE8760                                      ; FE8748  6e 16
-	call sub_FE8773                                      ; FE874A  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE874A  1d 73 87 fe
 	jr .LFE8760                                          ; FE874E  68 10
 .LFE8750:
 	ldw bc, 0x0f                                         ; FE8750  31 0f 00
 	pushw bc                                             ; FE8753  29
-	calr sub_FE85FC                                      ; FE8754  1e a5 fe
+	calr EditPartSelect_PartRefused_Always0                                      ; FE8754  1e a5 fe
 	popw bc                                              ; FE8757  49
 	cp a, 0x00:i3                                          ; FE8758  c9 d8
 	jr nz, .LFE8760                                      ; FE875A  6e 04
-	call sub_FE8773                                      ; FE875C  1d 73 87 fe
+	call EditPartSelect_OpenEditor                                      ; FE875C  1d 73 87 fe
 .LFE8760:
 	ret                                                  ; FE8760  0e
 ScreenDispatch_FE857C_Nop8:   ; entry: named by 8 `.long` operands, first at 0xFE859C
@@ -173337,9 +173330,12 @@ ExitKey_EditPartSelect:   ; entry: named by 1 `.long` operand, first at 0xFE85B8
 	ret                                                  ; FE8771  0e
 ScreenDispatch_FE857C_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE85E0
 	ret                                                  ; FE8772  0e
-sub_FE8773:
+; EditPartSelect_OpenEditor(BC = part 1..16): (0x601F00) = part, (0x601F01) = the long for that part from the word table
+;   after EditPartSelect_PartRefused_Always0; UI_Request = 0x8028 (DRUM EDIT, screen 0x28) when EditScreen_Mode bit 0 is set, else 0x8025
+;   (NOTE EDIT, screen 0x25); then sub_FE87DD.
+EditPartSelect_OpenEditor:
 	ld (0x601f00:24), bc                                ; FE8773  f2 00 1f 60 51
-	ld XIX,sub_FE85FC__FE85FF                                    ; FE8778  44 ff 85 fe 00
+	ld XIX,EditPartSelect_PartBitMask                                    ; FE8778  44 ff 85 fe 00
 	sll bc, 0x01                                         ; FE877D  d9 ee 01
 	xor XWA,XWA                                          ; FE8780  e8 d0
 	mx_ld_rm MXW, ra_IX, ra_BC, r0                       ; FE8782  d3 07 f0 e4 20

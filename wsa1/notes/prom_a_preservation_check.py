@@ -1236,6 +1236,10 @@ RENAMES = {
     "sub_F923D4": "C0mbinati0nM0de_Button24",
     "sub_F913FB": "LcdKeyRow1_SoundMode",
     "sub_F91407": "LcdKeyRow4_SoundModeOrC0mbinati0nM0de",
+    "sub_FE85FC": "EditPartSelect_PartRefused_Always0",
+    "sub_FE8773": "EditPartSelect_OpenEditor",
+    "sub_FE85FC__FE85FF": "EditPartSelect_PartBitMask",
+    "sub_FE85FC__FE8621": "SoftKeyCol1_EditPartSelect",
 }
 
 
