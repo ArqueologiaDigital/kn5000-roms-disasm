@@ -7,7 +7,6 @@
 	.set Demo_StyleRhythmData_0x57C, Demo_StyleRhythmData + 1404
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096
 	.set SeBitmap_EnvCurve5_0x4B0, SeBitmap_EnvCurve5 + 1200
-	.set TaskSched_ScreenGroupTable_0x46, TaskSched_ScreenGroupTable + 70
 	.set TimeSig_DisplayStrings_0x227, TimeSig_DisplayStrings + 551
 	.set TimeSig_DisplayStrings_0x8E2, TimeSig_DisplayStrings + 2274
 	.set TuningSystem_Handler_Table_0x117D, TuningSystem_Handler_Table + 4477

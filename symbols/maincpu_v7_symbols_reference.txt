@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,320
-#   semantic names ........... 50,402 (98.2%)
-#   positional names ......... 918
+#   symbols .................. 51,321
+#   semantic names ........... 50,404 (98.2%)
+#   positional names ......... 917
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -15658,12 +15658,11 @@ AudioMix_WriteGroupRegs8 00EF185C
 Copy_DE_words_from_XBC_to_XWA 00EF18AD
 Fill_memory_at_XWA_with_DE_words_of_BC_value 00EF18B6
 Checksum_ComputeComplement 00EF18BD
-Checksum_ComputeComplement_Code 00EF18C1
 Checksum_AccumulateLoop 00EF18C3
 TaskSched_ScreenGroupTable 00EF18CD
-TaskSched_InitTimerSlots_Data 00EF1909
-TaskSched_ScreenGroupTable_0x46 00EF1913
-TaskSched_ScreenGroupTable_End 00EF191F
+TaskSched_ExtQueueByteInit 00EF1909
+TaskSched_ExtQueue2ByteInit 00EF1913
+ScreenGroup3_IdleSpin 00EF191F
 INTT3_PriorityAdjust 00EF1921
 INTT3_PriorityAdjust_Active 00EF192E
 INTT3_HANDLER 00EF193B
@@ -29479,6 +29478,7 @@ SndTable_ByteBlock_ReadOps_Code_Skip 00F52967
 SndTable_ByteBlock_ReadOps_Skip 00F52978
 SndTable_ByteBlock_ReadOps_Code_Entry 00F5297C
 SndTable_ByteBlock_ReadOps_Skip2 00F5298A
+ScreenGroup2_Entry 00F5298E
 SndTable_ByteBlock_ReadOps_Loop 00F529E6
 SndTable_ByteBlock_ReadOps_Skip3 00F52A06
 SndTable_ByteBlock_ReadOps_Skip4 00F52A25
@@ -41972,6 +41972,7 @@ KillApTimer_CheckNextEntry_Done 00FA9EC9
 ApTimer_KillApTimer_CheckNextEntry 00FA9EDC
 KillApTimer_CheckNextEntry_Return 00FA9EE5
 KillApTimer_CheckNextEntry_Epilogue 00FA9EE7
+DrawTask_Entry 00FA9EED
 DrawTask_EventLoop 00FA9EEE
 DrawTask_FuncDispatch 00FA9F04
 DrawTask_DequeueLoop 00FA9F26

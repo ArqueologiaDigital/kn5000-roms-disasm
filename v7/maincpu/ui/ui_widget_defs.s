@@ -19292,6 +19292,7 @@ KillApTimer_CheckNextEntry_Epilogue:
 	pop xiz
 	inc 4, xsp
 	retd 0x8
+DrawTask_Entry:
 	push xiz
 
 DrawTask_EventLoop:

@@ -10071,6 +10071,7 @@ SndTable_ByteBlock_ReadOps_Code_Entry:
 SndTable_ByteBlock_ReadOps_Skip2:
 	ldw	hl, 0xffff
 	ret
+ScreenGroup2_Entry:
 	dec	2, xsp
 	push	xiz
 	ld	(0x2357e:24), 1

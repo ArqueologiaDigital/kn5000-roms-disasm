@@ -1937,7 +1937,6 @@ Fill_memory_at_XWA_with_DE_words_of_BC_value:
 Checksum_ComputeComplement:
 	xor xhl, xhl
 	extz xbc
-Checksum_ComputeComplement_Code:
 	add xbc, xwa
 
 Checksum_AccumulateLoop:
@@ -1947,24 +1946,32 @@ Checksum_AccumulateLoop:
 	cpl hl
 	ret
 
+; TaskSched_ScreenGroupTable -- the five screen groups (tasks) Show_ScreenGroup starts, numbered from 1 (it adds
+;          A*12 to the table address minus 12).  Each record: the entry point, the initial stack top (it builds
+;          the first frame 0x22 below it), the initial SR word stored in that frame, the priority byte, 0.
 TaskSched_ScreenGroupTable:
-; (was .incbin "includes/romslices/v7_transplant_TaskSched_ScreenGroupTable.bin")
-	.long	Boot_InitPeripherals
-	.byte	0x34, 0xdc, 0x01, 0x00, 0x00, 0x88, 0x03, 0x00
-	.byte	0x8e, 0x29, 0xf5, 0x00, 0x36, 0xe4, 0x01, 0x00
-	.byte	0x00, 0x88, 0x03, 0x00
-	.long	TaskSched_ScreenGroupTable_End
-	.byte	0xb8, 0xe4, 0x01, 0x00, 0x00, 0x88, 0x01, 0x00
-	.byte	0x5f, 0x7c, 0xf9, 0x00, 0x30, 0xc0, 0x01, 0x00
-	.byte	0x00, 0x88, 0x03, 0x00, 0xed, 0x9e, 0xfa, 0x00
-	.byte	0x32, 0xd0, 0x01, 0x00, 0x00, 0x88, 0x03, 0x00
-TaskSched_InitTimerSlots_Data:
-	.byte	0x01, 0x01, 0x01, 0x01
-	.fill	8, 1, 0x01
-	.fill	8, 1, 0x01
-	.byte	0x01, 0x01
-TaskSched_ScreenGroupTable_End:
-	jr	-2
+	.long	Boot_InitPeripherals, 0x0001dc34	; group 1
+	.short	0x8800
+	.byte	3, 0
+	.long	ScreenGroup2_Entry, 0x0001e436	; group 2
+	.short	0x8800
+	.byte	3, 0
+	.long	ScreenGroup3_IdleSpin, 0x0001e4b8	; group 3
+	.short	0x8800
+	.byte	1, 0
+	.long	MainTitle_TeardownAndLoop, 0x0001c030	; group 4
+	.short	0x8800
+	.byte	3, 0
+	.long	DrawTask_Entry, 0x0001d032	; group 5
+	.short	0x8800
+	.byte	3, 0
+; one byte per queue, all 1: TaskSched_Init copies these 10 next to the 10 queue heads at RAM 0x4D1 (to 0x4F9),
+; and the next 12 next to the 12 at 0x503 (to 0x533)
+TaskSched_ExtQueueByteInit:	.byte	1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+TaskSched_ExtQueue2ByteInit:	.byte	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+; group 3's entry: spins forever (priority 1)
+ScreenGroup3_IdleSpin:
+	jr	ScreenGroup3_IdleSpin
 
 INTT3_PriorityAdjust:
 	bit 0, (1158:16)
@@ -2028,7 +2035,7 @@ TaskSched_InitTimerSlots:
 	ld (xix + 4), xwa
 	add ix, 0x8
 	djnz8 b, TaskSched_InitTimerSlots
-	ld xhl, TaskSched_InitTimerSlots_Data
+	ld xhl, TaskSched_ExtQueueByteInit
 	ldw de, 0x4f9
 	extz xde
 	ldw bc, 0xa
@@ -2042,7 +2049,7 @@ TaskSched_InitExtQueues:
 	ld (xhl+), IX
 	ld (xhl+), IX
 	djnz8 b, TaskSched_InitExtQueues
-	ld xhl, TaskSched_ScreenGroupTable_0x46
+	ld xhl, TaskSched_ExtQueue2ByteInit
 	ldw de, 0x533
 	extz xde
 	ldw bc, 0xc
@@ -2281,7 +2288,7 @@ Show_ScreenGroup:
 	ld l, 0xc:opc
 	mul hl, a
 	extz xhl
-	add xhl, Checksum_ComputeComplement_Code
+	add xhl, TaskSched_ScreenGroupTable - 12	; groups are numbered from 1
 	ld c, 0xc:opc
 	mul bc, a
 	add bc, 0x47d

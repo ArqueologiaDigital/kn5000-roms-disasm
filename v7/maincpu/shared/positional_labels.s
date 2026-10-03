@@ -12,7 +12,6 @@
 	.set Scoop_SoundEditorData_0x127C, Scoop_SoundEditorData + 4732
 	.set Scoop_SoundEditorData_0xEB, Scoop_SoundEditorData + 235
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096
-	.set TaskSched_ScreenGroupTable_0x46, TaskSched_ScreenGroupTable + 70
 	.set TimeSig_DisplayStrings_0x227, TimeSig_DisplayStrings + 551
 	.set TuningSystem_Handler_Table_0x117D, TuningSystem_Handler_Table + 4477
 	.set TuningSystem_Handler_Table_0x1E8B, TuningSystem_Handler_Table + 7819
