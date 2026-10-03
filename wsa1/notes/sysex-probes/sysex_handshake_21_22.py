@@ -321,7 +321,7 @@ assert le32(T_IRQ + 4 * PARAM_REQ) == le32(T_FG + 4 * PARAM_REQ) == 0x00FB42AB
 # its handler never compares the panel-mode byte -- no site in SCREEN79 lies
 # in it, and it dispatches straight on parse-record field 1.
 assert a(0xFB42AB, 3) == bytes([0x0B, 0x01, 0x00]), "pushw field 1"
-assert a(0xFB42C7, 6) == bytes([0xE8, 0xC8, 0xD1, 0x42, 0xFB, 0x00]), "JumpTable_FB42D1"
+assert a(0xFB42C7, 6) == bytes([0xE8, 0xC8, 0xD1, 0x42, 0xFB, 0x00]), "SysExParam_Request_GroupTable"
 # EXHAUSTIVE over the WHOLE 2B/2C parameter engine, 0xFB3483..0xFB5122 -- the
 # span from the first non-session handler to the dump-request arms:
 assert not any(0xFB3483 <= s < 0xFB5122 for s in SCREEN79), "a screen gate in the 2B/2C engine"

@@ -88665,7 +88665,7 @@ sub_FB346B:
 	inc 2,XSP                                            ; FB34C7  ef 62
 .LFB34C9:
 	ret                                                  ; FB34C9  0e
-	calr sub_FB34F1                                      ; FB34CA  1e 24 00
+	calr SysExParam_Set_DispatchGroup                                      ; FB34CA  1e 24 00
 	m_cp_mi16 MW24, 0x60f000, 0x0000                     ; FB34CD  d2 00 f0 60 3f 00 00
 	jr z, .LFB34F0                                       ; FB34D4  66 1a
 	push XDE                                             ; FB34D6  3a
@@ -88682,7 +88682,9 @@ sub_FB346B:
 	pop XDE                                              ; FB34EF  5a
 .LFB34F0:
 	ret                                                  ; FB34F0  0e
-sub_FB34F1:
+; SysExParam_Set_DispatchGroup: command 0x18 (F0 50 2C, a parameter WRITE): group = parse field 1, 1..7, through SysExParam_Set_GroupTable.
+;   Groups by address byte 7 (sysex-probes/sysex_param_space.py): 1 = 00/01, 2 = 08, 3 = 10/11, 4 = none, 5 and 6 = the part blocks 20.., 7 = 60.
+SysExParam_Set_DispatchGroup:
 	pushw 0x01                                           ; FB34F1  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB34F4  e2 d8 fc 60 21
 	push XBC                                             ; FB34F9  39
@@ -88694,12 +88696,12 @@ sub_FB34F1:
 	cp wa, 0x06:i3                                         ; FB3506  d8 de
 	jr ugt, .LFB3554                                         ; FB3508  6b 4a
 	sll wa, 0x02                                         ; FB350A  d8 ee 02
-	add XWA,JumpTable_FB3517                             ; FB350D  e8 c8 17 35 fb 00
+	add XWA,SysExParam_Set_GroupTable                             ; FB350D  e8 c8 17 35 fb 00
 	ld XWA,(XWA)                                         ; FB3513  a0 20
 	jp (xwa)                                             ; FB3515  b0 d8
 
 ; ---------------------------------------------------------------------
-; JumpTable_FB3517 -- 7 LE32 code addresses, an INLINE jump table
+; SysExParam_Set_GroupTable -- 7 LE32 code addresses, an INLINE jump table
 ;
 ; Read by: ONE site, `add XWA,0x00FB3517 / ld XWA,(XWA) / jp (XWA)` at
 ;          0xFB350D-0xFB3515.
@@ -88713,37 +88715,38 @@ sub_FB34F1:
 ; Unknown:  what the arms DO.  A jump table names its targets, not its
 ;          operations.
 ; ---------------------------------------------------------------------
-JumpTable_FB3517:
-	.long sub_FB3533                                 ; FB3517  [  0]
-	.long sub_FB3538                                 ; FB351B  [  1]
-	.long sub_FB353D                                 ; FB351F  [  2]
+SysExParam_Set_GroupTable:
+	.long SysExParam_Set_Group1                                 ; FB3517  [  0]
+	.long SysExParam_Set_Group2                                 ; FB351B  [  1]
+	.long SysExParam_Set_Group3                                 ; FB351F  [  2]
 	.long sub_FB3542                                 ; FB3523  [  3]
-	.long sub_FB3547                                 ; FB3527  [  4]
-	.long sub_FB354C                                 ; FB352B  [  5]
-	.long sub_FB3551                                 ; FB352F  [  6]
-sub_FB3533:   ; entry: named by 1 `.long` operand, first at 0xFB3517
-	calr sub_FB3555                                      ; FB3533  1e 1f 00
+	.long SysExParam_Set_Group5                                 ; FB3527  [  4]
+	.long SysExParam_Set_Group6                                 ; FB352B  [  5]
+	.long SysExParam_Set_Group7                                 ; FB352F  [  6]
+SysExParam_Set_Group1:   ; entry: named by 1 `.long` operand, first at 0xFB3517
+	calr SysExParam_Set_Area00_01                                      ; FB3533  1e 1f 00
 	jr .LFB3554                                          ; FB3536  68 1c
-sub_FB3538:   ; entry: named by 1 `.long` operand, first at 0xFB351B
-	calr sub_FB35A9                                      ; FB3538  1e 6e 00
+SysExParam_Set_Group2:   ; entry: named by 1 `.long` operand, first at 0xFB351B
+	calr SysExParam_Set_Area08                                      ; FB3538  1e 6e 00
 	jr .LFB3554                                          ; FB353B  68 17
-sub_FB353D:   ; entry: named by 1 `.long` operand, first at 0xFB351F
-	calr sub_FB35FC                                      ; FB353D  1e bc 00
+SysExParam_Set_Group3:   ; entry: named by 1 `.long` operand, first at 0xFB351F
+	calr SysExParam_Set_Area10_11                                      ; FB353D  1e bc 00
 	jr .LFB3554                                          ; FB3540  68 12
 sub_FB3542:   ; entry: named by 1 `.long` operand, first at 0xFB3523
 	calr sub_FB3542_Nop                                      ; FB3542  1e 0b 01
 	jr .LFB3554                                          ; FB3545  68 0d
-sub_FB3547:   ; entry: named by 1 `.long` operand, first at 0xFB3527
-	calr sub_FB3651                                      ; FB3547  1e 07 01
+SysExParam_Set_Group5:   ; entry: named by 1 `.long` operand, first at 0xFB3527
+	calr SysExParam_Set_PartGroup5                                      ; FB3547  1e 07 01
 	jr .LFB3554                                          ; FB354A  68 08
-sub_FB354C:   ; entry: named by 1 `.long` operand, first at 0xFB352B
-	calr sub_FB36A5                                      ; FB354C  1e 56 01
+SysExParam_Set_Group6:   ; entry: named by 1 `.long` operand, first at 0xFB352B
+	calr SysExParam_Set_PartGroup6                                      ; FB354C  1e 56 01
 	jr .LFB3554                                          ; FB354F  68 03
-sub_FB3551:   ; entry: named by 1 `.long` operand, first at 0xFB352F
-	calr sub_FB36F9                                      ; FB3551  1e a5 01
+SysExParam_Set_Group7:   ; entry: named by 1 `.long` operand, first at 0xFB352F
+	calr SysExParam_Set_Area60                                      ; FB3551  1e a5 01
 .LFB3554:
 	ret                                                  ; FB3554  0e
-sub_FB3555:
+; SysExParam_Set_Area00_01: index = field 2 < 0x17; desc = PtrTable_F51E8E[index]; if SysExParam_CheckConditions(desc) passes, call desc->+0x14.
+SysExParam_Set_Area00_01:
 	link XIZ,0xfffc                                      ; FB3555  ee 0c fc ff
 	pushw hl                                             ; FB3559  2b
 	push XIX                                             ; FB355A  3c
@@ -88761,7 +88764,7 @@ sub_FB3555:
 	add XWA,PtrTable_F51E8E                              ; FB3578  e8 c8 8e 1e f5 00
 	ld XBC,(XWA)                                         ; FB357E  a0 21
 	push XBC                                             ; FB3580  39
-	calr sub_FB5066                                          ; FB3581  1e e2 1a
+	calr SysExParam_CheckConditions                                          ; FB3581  1e e2 1a
 	pop XIY                                              ; FB3584  5d
 	cp WA,0xffff                                         ; FB3585  d8 cf ff ff
 	jr z, .LFB35A4                                       ; FB3589  66 19
@@ -88781,7 +88784,8 @@ sub_FB3555:
 	popw hl                                              ; FB35A5  4b
 	unlk XIZ                                             ; FB35A6  ee 0d
 	ret                                                  ; FB35A8  0e
-sub_FB35A9:
+; SysExParam_Set_Area08: as SysExParam_Set_Area00_01 over PtrTable_F51F46, index < 5.
+SysExParam_Set_Area08:
 	link XIZ,0xfffc                                      ; FB35A9  ee 0c fc ff
 	pushw hl                                             ; FB35AD  2b
 	push XIX                                             ; FB35AE  3c
@@ -88799,7 +88803,7 @@ sub_FB35A9:
 	add XWA,PtrTable_F51F46                              ; FB35CB  e8 c8 46 1f f5 00
 	ld XBC,(XWA)                                         ; FB35D1  a0 21
 	push XBC                                             ; FB35D3  39
-	calr sub_FB5066                                          ; FB35D4  1e 8f 1a
+	calr SysExParam_CheckConditions                                          ; FB35D4  1e 8f 1a
 	pop XIY                                              ; FB35D7  5d
 	cp WA,0xffff                                         ; FB35D8  d8 cf ff ff
 	jr z, .LFB35F7                                       ; FB35DC  66 19
@@ -88819,7 +88823,8 @@ sub_FB35A9:
 	popw hl                                              ; FB35F8  4b
 	unlk XIZ                                             ; FB35F9  ee 0d
 	ret                                                  ; FB35FB  0e
-sub_FB35FC:
+; SysExParam_Set_Area10_11: as SysExParam_Set_Area00_01 over PtrTable_F51F5E, index < 0x19.
+SysExParam_Set_Area10_11:
 	link XIZ,0xfffc                                      ; FB35FC  ee 0c fc ff
 	pushw hl                                             ; FB3600  2b
 	push XIX                                             ; FB3601  3c
@@ -88837,7 +88842,7 @@ sub_FB35FC:
 	add XWA,PtrTable_F51F5E                              ; FB361F  e8 c8 5e 1f f5 00
 	ld XBC,(XWA)                                         ; FB3625  a0 21
 	push XBC                                             ; FB3627  39
-	calr sub_FB5066                                          ; FB3628  1e 3b 1a
+	calr SysExParam_CheckConditions                                          ; FB3628  1e 3b 1a
 	pop XIY                                              ; FB362B  5d
 	cp WA,0xffff                                         ; FB362C  d8 cf ff ff
 	jr z, .LFB364B                                       ; FB3630  66 19
@@ -88859,7 +88864,8 @@ sub_FB35FC:
 	ret                                                  ; FB364F  0e
 sub_FB3542_Nop:
 	ret                                                  ; FB3650  0e
-sub_FB3651:
+; SysExParam_Set_PartGroup5: as SysExParam_Set_Area00_01 over PtrTable_F52026, index < 0x13 (18 of a part block's 57 parameters).
+SysExParam_Set_PartGroup5:
 	link XIZ,0xfffc                                      ; FB3651  ee 0c fc ff
 	pushw hl                                             ; FB3655  2b
 	push XIX                                             ; FB3656  3c
@@ -88877,7 +88883,7 @@ sub_FB3651:
 	add XWA,PtrTable_F52026                              ; FB3674  e8 c8 26 20 f5 00
 	ld XBC,(XWA)                                         ; FB367A  a0 21
 	push XBC                                             ; FB367C  39
-	calr sub_FB5066                                          ; FB367D  1e e6 19
+	calr SysExParam_CheckConditions                                          ; FB367D  1e e6 19
 	pop XIY                                              ; FB3680  5d
 	cp WA,0xffff                                         ; FB3681  d8 cf ff ff
 	jr z, .LFB36A0                                       ; FB3685  66 19
@@ -88897,7 +88903,8 @@ sub_FB3651:
 	popw hl                                              ; FB36A1  4b
 	unlk XIZ                                             ; FB36A2  ee 0d
 	ret                                                  ; FB36A4  0e
-sub_FB36A5:
+; SysExParam_Set_PartGroup6: as SysExParam_Set_Area00_01 over PtrTable_F520BE, index < 0x28 (the other 39).
+SysExParam_Set_PartGroup6:
 	link XIZ,0xfffc                                      ; FB36A5  ee 0c fc ff
 	pushw hl                                             ; FB36A9  2b
 	push XIX                                             ; FB36AA  3c
@@ -88915,7 +88922,7 @@ sub_FB36A5:
 	add XWA,PtrTable_F520BE                              ; FB36C8  e8 c8 be 20 f5 00
 	ld XBC,(XWA)                                         ; FB36CE  a0 21
 	push XBC                                             ; FB36D0  39
-	calr sub_FB5066                                          ; FB36D1  1e 92 19
+	calr SysExParam_CheckConditions                                          ; FB36D1  1e 92 19
 	pop XIY                                              ; FB36D4  5d
 	cp WA,0xffff                                         ; FB36D5  d8 cf ff ff
 	jr z, .LFB36F4                                       ; FB36D9  66 19
@@ -88935,7 +88942,8 @@ sub_FB36A5:
 	popw hl                                              ; FB36F5  4b
 	unlk XIZ                                             ; FB36F6  ee 0d
 	ret                                                  ; FB36F8  0e
-sub_FB36F9:
+; SysExParam_Set_Area60: as SysExParam_Set_Area00_01 over PtrTable_F521FE, index < 2.
+SysExParam_Set_Area60:
 	link XIZ,0xfffc                                      ; FB36F9  ee 0c fc ff
 	pushw hl                                             ; FB36FD  2b
 	push XIX                                             ; FB36FE  3c
@@ -88953,7 +88961,7 @@ sub_FB36F9:
 	add XWA,PtrTable_F521FE                              ; FB371B  e8 c8 fe 21 f5 00
 	ld XBC,(XWA)                                         ; FB3721  a0 21
 	push XBC                                             ; FB3723  39
-	calr sub_FB5066                                          ; FB3724  1e 3f 19
+	calr SysExParam_CheckConditions                                          ; FB3724  1e 3f 19
 	pop XIY                                              ; FB3727  5d
 	cp WA,0xffff                                         ; FB3728  d8 cf ff ff
 	jr z, .LFB3747                                       ; FB372C  66 19
@@ -90219,18 +90227,18 @@ sub_FB3C34:
 	cp wa, 0x06:i3                                         ; FB42C0  d8 de
 	jr ugt, .LFB430E                                         ; FB42C2  6b 4a
 	sll wa, 0x02                                         ; FB42C4  d8 ee 02
-	add XWA,JumpTable_FB42D1                             ; FB42C7  e8 c8 d1 42 fb 00
+	add XWA,SysExParam_Request_GroupTable                             ; FB42C7  e8 c8 d1 42 fb 00
 	ld XWA,(XWA)                                         ; FB42CD  a0 20
 	jp (xwa)                                             ; FB42CF  b0 d8
 
 ; ---------------------------------------------------------------------
-; JumpTable_FB42D1 -- 7 LE32 code addresses, an INLINE jump table
+; SysExParam_Request_GroupTable -- 7 LE32 code addresses, an INLINE jump table
 ;
 ; Read by: ONE site, `add XWA,0x00FB42D1 / ld XWA,(XWA) / jp (XWA)` at
 ;          0xFB42C7-0xFB42CF.
 ; ENTRY COUNT 7: `dec 1,WA / cps wa,0x06 / jr ugt` at 0xFB42BE.  ★ LAST-ENTRY
 ;          TEST: entry 6 is 0x00FB430B and 0xFB42D1 + 7*4 = 0xFB42ED = entry 0's
-;          target.  ⚠ This dispatcher and JumpTable_FB3517's have the SAME shape
+;          target.  ⚠ This dispatcher and SysExParam_Set_GroupTable's have the SAME shape
 ;          and the same bound; nothing here says the two are copies.
 ; Evidence: the base is named by exactly one instruction, the `add Xrr,imm32`
 ;          quoted above, and the ENTRY COUNT is the ROM's own bound on the
@@ -90239,37 +90247,39 @@ sub_FB3C34:
 ; Unknown:  what the arms DO.  A jump table names its targets, not its
 ;          operations.
 ; ---------------------------------------------------------------------
-JumpTable_FB42D1:
-	.long sub_FB42ED                                 ; FB42D1  [  0]
-	.long sub_FB42F2                                 ; FB42D5  [  1]
-	.long sub_FB42F7                                 ; FB42D9  [  2]
+SysExParam_Request_GroupTable:
+	.long SysExParam_Request_Group1                                 ; FB42D1  [  0]
+	.long SysExParam_Request_Group2                                 ; FB42D5  [  1]
+	.long SysExParam_Request_Group3                                 ; FB42D9  [  2]
 	.long sub_FB42FC                                 ; FB42DD  [  3]
-	.long sub_FB4301                                 ; FB42E1  [  4]
-	.long sub_FB4306                                 ; FB42E5  [  5]
-	.long sub_FB430B                                 ; FB42E9  [  6]
-sub_FB42ED:   ; entry: named by 1 `.long` operand, first at 0xFB42D1
-	calr sub_FB430F                                      ; FB42ED  1e 1f 00
+	.long SysExParam_Request_Group5                                 ; FB42E1  [  4]
+	.long SysExParam_Request_Group6                                 ; FB42E5  [  5]
+	.long SysExParam_Request_Group7                                 ; FB42E9  [  6]
+SysExParam_Request_Group1:   ; entry: named by 1 `.long` operand, first at 0xFB42D1
+	calr SysExParam_Request_Area00_01                                      ; FB42ED  1e 1f 00
 	jr .LFB430E                                          ; FB42F0  68 1c
-sub_FB42F2:   ; entry: named by 1 `.long` operand, first at 0xFB42D5
-	calr sub_FB4363                                      ; FB42F2  1e 6e 00
+SysExParam_Request_Group2:   ; entry: named by 1 `.long` operand, first at 0xFB42D5
+	calr SysExParam_Request_Area08                                      ; FB42F2  1e 6e 00
 	jr .LFB430E                                          ; FB42F5  68 17
-sub_FB42F7:   ; entry: named by 1 `.long` operand, first at 0xFB42D9
-	calr sub_FB43B6                                      ; FB42F7  1e bc 00
+SysExParam_Request_Group3:   ; entry: named by 1 `.long` operand, first at 0xFB42D9
+	calr SysExParam_Request_Area10_11                                      ; FB42F7  1e bc 00
 	jr .LFB430E                                          ; FB42FA  68 12
 sub_FB42FC:   ; entry: named by 1 `.long` operand, first at 0xFB42DD
 	calr sub_FB42FC_Nop                                      ; FB42FC  1e 0b 01
 	jr .LFB430E                                          ; FB42FF  68 0d
-sub_FB4301:   ; entry: named by 1 `.long` operand, first at 0xFB42E1
-	calr sub_FB440B                                      ; FB4301  1e 07 01
+SysExParam_Request_Group5:   ; entry: named by 1 `.long` operand, first at 0xFB42E1
+	calr SysExParam_Request_PartGroup5                                      ; FB4301  1e 07 01
 	jr .LFB430E                                          ; FB4304  68 08
-sub_FB4306:   ; entry: named by 1 `.long` operand, first at 0xFB42E5
-	calr sub_FB445F                                      ; FB4306  1e 56 01
+SysExParam_Request_Group6:   ; entry: named by 1 `.long` operand, first at 0xFB42E5
+	calr SysExParam_Request_PartGroup6                                      ; FB4306  1e 56 01
 	jr .LFB430E                                          ; FB4309  68 03
-sub_FB430B:   ; entry: named by 1 `.long` operand, first at 0xFB42E9
-	calr sub_FB44B3                                      ; FB430B  1e a5 01
+SysExParam_Request_Group7:   ; entry: named by 1 `.long` operand, first at 0xFB42E9
+	calr SysExParam_Request_Area60                                      ; FB430B  1e a5 01
 .LFB430E:
 	ret                                                  ; FB430E  0e
-sub_FB430F:
+; SysExParam_Request_Area00_01: command 0x1A (F0 50 2B, a parameter REQUEST): desc = PtrTable_F51EEA[field 2 < 0x17];
+;   if SysExParam_CheckConditions(desc) passes, call desc->+0x18.
+SysExParam_Request_Area00_01:
 	link XIZ,0xfffc                                      ; FB430F  ee 0c fc ff
 	pushw hl                                             ; FB4313  2b
 	push XIX                                             ; FB4314  3c
@@ -90287,7 +90297,7 @@ sub_FB430F:
 	add XWA,PtrTable_F51EEA                              ; FB4332  e8 c8 ea 1e f5 00
 	ld XBC,(XWA)                                         ; FB4338  a0 21
 	push XBC                                             ; FB433A  39
-	calr sub_FB5066                                      ; FB433B  1e 28 0d
+	calr SysExParam_CheckConditions                                      ; FB433B  1e 28 0d
 	pop XIY                                              ; FB433E  5d
 	cp WA,0xffff                                         ; FB433F  d8 cf ff ff
 	jr z, .LFB435E                                       ; FB4343  66 19
@@ -90307,7 +90317,8 @@ sub_FB430F:
 	popw hl                                              ; FB435F  4b
 	unlk XIZ                                             ; FB4360  ee 0d
 	ret                                                  ; FB4362  0e
-sub_FB4363:
+; SysExParam_Request_Area08: as SysExParam_Request_Area00_01 over Pointer_F51F5A, index < 1 (only the placeholder: area 08 cannot be requested).
+SysExParam_Request_Area08:
 	link XIZ,0xfffc                                      ; FB4363  ee 0c fc ff
 	pushw hl                                             ; FB4367  2b
 	push XIX                                             ; FB4368  3c
@@ -90326,7 +90337,7 @@ sub_FB4383:
 	add XWA,Pointer_F51F5A                               ; FB4385  e8 c8 5a 1f f5 00
 	ld XBC,(XWA)                                         ; FB438B  a0 21
 	push XBC                                             ; FB438D  39
-	calr sub_FB5066                                      ; FB438E  1e d5 0c
+	calr SysExParam_CheckConditions                                      ; FB438E  1e d5 0c
 	pop XIY                                              ; FB4391  5d
 	cp WA,0xffff                                         ; FB4392  d8 cf ff ff
 	jr z, .LFB43B1                                       ; FB4396  66 19
@@ -90346,7 +90357,8 @@ sub_FB4383:
 	popw hl                                              ; FB43B2  4b
 	unlk XIZ                                             ; FB43B3  ee 0d
 	ret                                                  ; FB43B5  0e
-sub_FB43B6:
+; SysExParam_Request_Area10_11: as SysExParam_Request_Area00_01 over PtrTable_F51FC2, index < 0x19.
+SysExParam_Request_Area10_11:
 	link XIZ,0xfffc                                      ; FB43B6  ee 0c fc ff
 	pushw hl                                             ; FB43BA  2b
 	push XIX                                             ; FB43BB  3c
@@ -90364,7 +90376,7 @@ sub_FB43B6:
 	add XWA,PtrTable_F51FC2                              ; FB43D9  e8 c8 c2 1f f5 00
 	ld XBC,(XWA)                                         ; FB43DF  a0 21
 	push XBC                                             ; FB43E1  39
-	calr sub_FB5066                                      ; FB43E2  1e 81 0c
+	calr SysExParam_CheckConditions                                      ; FB43E2  1e 81 0c
 	pop XIY                                              ; FB43E5  5d
 	cp WA,0xffff                                         ; FB43E6  d8 cf ff ff
 	jr z, .LFB4405                                       ; FB43EA  66 19
@@ -90386,7 +90398,8 @@ sub_FB43B6:
 	ret                                                  ; FB4409  0e
 sub_FB42FC_Nop:
 	ret                                                  ; FB440A  0e
-sub_FB440B:
+; SysExParam_Request_PartGroup5: as SysExParam_Request_Area00_01 over PtrTable_F52072, index < 0x13.
+SysExParam_Request_PartGroup5:
 	link XIZ,0xfffc                                      ; FB440B  ee 0c fc ff
 	pushw hl                                             ; FB440F  2b
 	push XIX                                             ; FB4410  3c
@@ -90404,7 +90417,7 @@ sub_FB440B:
 	add XWA,PtrTable_F52072                              ; FB442E  e8 c8 72 20 f5 00
 	ld XBC,(XWA)                                         ; FB4434  a0 21
 	push XBC                                             ; FB4436  39
-	calr sub_FB5066                                      ; FB4437  1e 2c 0c
+	calr SysExParam_CheckConditions                                      ; FB4437  1e 2c 0c
 	pop XIY                                              ; FB443A  5d
 	cp WA,0xffff                                         ; FB443B  d8 cf ff ff
 	jr z, .LFB445A                                       ; FB443F  66 19
@@ -90424,7 +90437,8 @@ sub_FB440B:
 	popw hl                                              ; FB445B  4b
 	unlk XIZ                                             ; FB445C  ee 0d
 	ret                                                  ; FB445E  0e
-sub_FB445F:
+; SysExParam_Request_PartGroup6: as SysExParam_Request_Area00_01 over PtrTable_F5215E, index < 0x28.
+SysExParam_Request_PartGroup6:
 	link XIZ,0xfffc                                      ; FB445F  ee 0c fc ff
 	pushw hl                                             ; FB4463  2b
 	push XIX                                             ; FB4464  3c
@@ -90442,7 +90456,7 @@ sub_FB445F:
 	add XWA,PtrTable_F5215E                              ; FB4482  e8 c8 5e 21 f5 00
 	ld XBC,(XWA)                                         ; FB4488  a0 21
 	push XBC                                             ; FB448A  39
-	calr sub_FB5066                                      ; FB448B  1e d8 0b
+	calr SysExParam_CheckConditions                                      ; FB448B  1e d8 0b
 	pop XIY                                              ; FB448E  5d
 	cp WA,0xffff                                         ; FB448F  d8 cf ff ff
 	jr z, .LFB44AE                                       ; FB4493  66 19
@@ -90462,7 +90476,8 @@ sub_FB445F:
 	popw hl                                              ; FB44AF  4b
 	unlk XIZ                                             ; FB44B0  ee 0d
 	ret                                                  ; FB44B2  0e
-sub_FB44B3:
+; SysExParam_Request_Area60: as SysExParam_Request_Area00_01 over PtrTable_F52206, index < 2.
+SysExParam_Request_Area60:
 	link XIZ,0xfffc                                      ; FB44B3  ee 0c fc ff
 	pushw hl                                             ; FB44B7  2b
 	push XIX                                             ; FB44B8  3c
@@ -90480,7 +90495,7 @@ sub_FB44B3:
 	add XWA,PtrTable_F52206                              ; FB44D5  e8 c8 06 22 f5 00
 	ld XBC,(XWA)                                         ; FB44DB  a0 21
 	push XBC                                             ; FB44DD  39
-	calr sub_FB5066                                      ; FB44DE  1e 85 0b
+	calr SysExParam_CheckConditions                                      ; FB44DE  1e 85 0b
 	pop XIY                                              ; FB44E1  5d
 	cp WA,0xffff                                         ; FB44E2  d8 cf ff ff
 	jr z, .LFB4501                                       ; FB44E6  66 19
@@ -90759,7 +90774,7 @@ sub_FB44B3:
 	cp a, 0x05:i3                                          ; FB4772  c9 dd
 	jrl nc, .LFB4844                                     ; FB4774  7f cd 00
 	push XBC                                             ; FB4777  39
-	calr sub_FB5066                                      ; FB4778  1e eb 08
+	calr SysExParam_CheckConditions                                      ; FB4778  1e eb 08
 	pop XIY                                              ; FB477B  5d
 	cp WA,0xffff                                         ; FB477C  d8 cf ff ff
 	jrl z, .LFB4844                                      ; FB4780  76 c1 00
@@ -90854,7 +90869,7 @@ sub_FB44B3:
 	pop XIX                                              ; FB4862  5c
 	ld XBC,(XIZ+0x08)                                    ; FB4863  ae 08 21
 	push XBC                                             ; FB4866  39
-	calr sub_FB5066                                      ; FB4867  1e fc 07
+	calr SysExParam_CheckConditions                                      ; FB4867  1e fc 07
 	pop XIY                                              ; FB486A  5d
 	cp WA,0xffff                                         ; FB486B  d8 cf ff ff
 	jrl z, .LFB4968                                      ; FB486F  76 f6 00
@@ -91048,7 +91063,7 @@ sub_FB49AF:
 	call T_DspParam_ReadByNumber                                        ; FB4A41  1d a4 34 f4
 	ld XBC,(XIZ+0x08)                                    ; FB4A45  ae 08 21
 	push XBC                                             ; FB4A48  39
-	calr sub_FB5066                                      ; FB4A49  1e 1a 06
+	calr SysExParam_CheckConditions                                      ; FB4A49  1e 1a 06
 	inc 8,XSP                                            ; FB4A4C  ef 60
 	inc 4,XSP                                            ; FB4A4E  ef 64
 	cp WA,0xffff                                         ; FB4A50  d8 cf ff ff
@@ -91401,7 +91416,7 @@ sub_FB4D62:
 	pop XIX                                              ; FB4D79  5c
 	ld XBC,(XIX+0x04)                                    ; FB4D7A  ac 04 21
 	push XBC                                             ; FB4D7D  39
-	calr sub_FB5066                                      ; FB4D7E  1e e5 02
+	calr SysExParam_CheckConditions                                      ; FB4D7E  1e e5 02
 	pop XIY                                              ; FB4D81  5d
 	cp WA,0xffff                                         ; FB4D82  d8 cf ff ff
 	jrl z, .LFB4E1B                                      ; FB4D86  76 92 00
@@ -91474,7 +91489,7 @@ sub_FB4E20:
 	pop XIX                                              ; FB4E38  5c
 	ld XBC,(XIX+0x04)                                    ; FB4E39  ac 04 21
 	push XBC                                             ; FB4E3C  39
-	calr sub_FB5066                                      ; FB4E3D  1e 26 02
+	calr SysExParam_CheckConditions                                      ; FB4E3D  1e 26 02
 	pop XIY                                              ; FB4E40  5d
 	cp WA,0xffff                                         ; FB4E41  d8 cf ff ff
 	jrl z, .LFB4ECE                                      ; FB4E45  76 86 00
@@ -91544,7 +91559,7 @@ sub_FB4ED4:
 	ld XBC,(XIZ+0x08)                                    ; FB4EEC  ae 08 21
 	ld XWA,(XBC+0x04)                                    ; FB4EEF  a9 04 20
 	push XWA                                             ; FB4EF2  38
-	calr sub_FB5066                                      ; FB4EF3  1e 70 01
+	calr SysExParam_CheckConditions                                      ; FB4EF3  1e 70 01
 	pop XIY                                              ; FB4EF6  5d
 	cp WA,0xffff                                         ; FB4EF7  d8 cf ff ff
 	jrl z, .LFB4F87                                      ; FB4EFB  76 89 00
@@ -91620,7 +91635,7 @@ sub_FB4F8F:
 	pop XIX                                              ; FB4FA6  5c
 	ld XBC,(XIX+0x04)                                    ; FB4FA7  ac 04 21
 	push XBC                                             ; FB4FAA  39
-	calr sub_FB5066                                      ; FB4FAB  1e b8 00
+	calr SysExParam_CheckConditions                                      ; FB4FAB  1e b8 00
 	pop XIY                                              ; FB4FAE  5d
 	cp WA,0xffff                                         ; FB4FAF  d8 cf ff ff
 	jrl z, .LFB5061                                      ; FB4FB3  76 ab 00
@@ -91689,7 +91704,9 @@ sub_FB4F8F:
 	popw hl                                              ; FB5062  4b
 	unlk XIZ                                             ; FB5063  ee 0d
 	ret                                                  ; FB5065  0e
-sub_FB5066:
+; SysExParam_CheckConditions(desc): desc+0x0C and desc+0x0D each select a 6-byte {ptr32, mask, value} condition (prom_b 0xF51E34,
+;   0xF51E46; 0 = none); WA = 0 when (*ptr & mask) == value for both, else 0xFFFF.
+SysExParam_CheckConditions:
 	link XIZ,0xfffc                                      ; FB5066  ee 0c fc ff
 	pushw hl                                             ; FB506A  2b
 	push XIX                                             ; FB506B  3c
@@ -92008,7 +92025,7 @@ sub_FB536D:
 	ld XBC,(XIZ+0x08)                                    ; FB5385  ae 08 21
 	ld XWA,(XBC+0x04)                                    ; FB5388  a9 04 20
 	push XWA                                             ; FB538B  38
-	calr sub_FB5066                                      ; FB538C  1e d7 fc
+	calr SysExParam_CheckConditions                                      ; FB538C  1e d7 fc
 	pop XIY                                              ; FB538F  5d
 	cp WA,0xffff                                         ; FB5390  d8 cf ff ff
 	jrl z, .LFB5420                                      ; FB5394  76 89 00
@@ -92074,7 +92091,7 @@ sub_FB5425:
 	ld XBC,(XIZ+0x08)                                    ; FB5439  ae 08 21
 	ld XWA,(XBC+0x04)                                    ; FB543C  a9 04 20
 	push XWA                                             ; FB543F  38
-	calr sub_FB5066                                      ; FB5440  1e 23 fc
+	calr SysExParam_CheckConditions                                      ; FB5440  1e 23 fc
 	pop XIY                                              ; FB5443  5d
 	cp WA,0xffff                                         ; FB5444  d8 cf ff ff
 	jrl z, .LFB5567                                      ; FB5448  76 1c 01
