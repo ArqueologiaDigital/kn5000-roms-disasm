@@ -30974,7 +30974,7 @@ sub_F0FD2F_Join:
 ; Touches: (0x2075) (0x2076) (0x209B) (0x209C) (0x2540) (0x2640) (0x2790)
 ;          (0x2791) (0x2797) (0x2799)
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_F42E10 T_DisplayListB_RunOne_Stack T_DisplayListB_Run_Stack
-;          sub_F11296 sub_F11200 sub_F0FD2F EqGraph_Draw T_F42E14
+;          DspEffect_LoadEqGain DspEffect_LoadEqFc sub_F0FD2F EqGraph_Draw T_F42E14
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF0FD5F is an instruction boundary of this
@@ -31156,23 +31156,23 @@ EffectEditor_PaintJob4:
 	ld	(LCD_CurrentLayer:16), 0	; F0FEE3  ld (0x2540),0x00
 	ld	(xiz-4), xix	; F0FEE8  ld (XIZ+0xfc),XIX
 	pushw	19	; F0FEEB  push 0x0013
-	calr	sub_F11296	; F0FEEE  calr 0xf11296
+	calr	DspEffect_LoadEqGain	; F0FEEE  calr 0xf11296
 	ld	xbc, (xiz-4)	; F0FEF1  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)	; F0FEF4  ld A,(XBC)
 	extz	xix	; F0FEF6  extz XIX
 	ld	(xix+3), a	; F0FEF8  ld (XIX+0x03),A
 	pushw	17	; F0FEFB  push 0x0011
-	calr	sub_F11296	; F0FEFE  calr 0xf11296
+	calr	DspEffect_LoadEqGain	; F0FEFE  calr 0xf11296
 	ld	xbc, (xiz-4)	; F0FF01  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)	; F0FF04  ld A,(XBC)
 	ld	(xix+2), a	; F0FF06  ld (XIX+0x02),A
 	pushw	19	; F0FF09  push 0x0013
-	calr	sub_F11200	; F0FF0C  calr 0xf11200
+	calr	DspEffect_LoadEqFc	; F0FF0C  calr 0xf11200
 	ld	xbc, (xiz-4)	; F0FF0F  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)	; F0FF12  ld A,(XBC)
 	ld	(xix+1), a	; F0FF14  ld (XIX+0x01),A
 	pushw	17	; F0FF17  push 0x0011
-	calr	sub_F11200	; F0FF1A  calr 0xf11200
+	calr	DspEffect_LoadEqFc	; F0FF1A  calr 0xf11200
 	lda	xbc, (DL_F1469B:24)	; F0FF1D  lda XBC,0xf1469b
 	push	xbc	; F0FF22  push XBC
 	lda	xwa, (DL_F1465F:24)	; F0FF23  lda XWA,0xf1465f
@@ -33658,7 +33658,7 @@ DspEffect_PaintParamEditor_Loop:
 	m_mul MBD+r6, 0xf5, 3	; F110E2  mul BC,(XIZ+0xf5)
 	extz	xbc	; F110E5  extz XBC
 	ld	(xiz-23), xbc	; F110E7  ld (XIZ+0xe9),XBC
-	add	xbc, ScreenTable_F13264	; F110EA  add XBC,0x00f13264
+	add	xbc, DspEffect_LoadValueTable	; F110EA  add XBC,0x00f13264
 	ld	xbc, (xbc)	; F110F0  ld XBC,(XBC)
 	lda	xiy, (DspEffect_PaintParamEditor_Resume:24)	; F110F2  lda XIY,0xf110fa
 	push	xiy	; F110F7  push XIY
@@ -33714,7 +33714,7 @@ DspEffect_PaintParamEditor_Join:
 	ret	; F11170  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11171
+; DspEffect_LoadByte
 ; Called from: in-module: 0xF112E6
 ; Touches: (0x2640) (0x2797)
 ; Calls:   T_IndexedTable_GetByte
@@ -33728,7 +33728,9 @@ DspEffect_PaintParamEditor_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11171:
+; DspEffect_LoadByte(offset): UI_DrawScratch = IndexedTable_GetByte(Effect_BlockIndex + 97, offset) -- DspEffect_LoadValueTable's
+;   entry for most one-byte value types (the rows DspEffect_StepU8 steps); DspEffect_PaintParamEditor calls it before drawing the value.
+DspEffect_LoadByte:
 	link XIZ,0x0000	; F11171  link XIZ,0x0000
 	push	0	; F11175  push 0x00
 	m_push MBD+r6, 0x08	; F11177  push (XIZ+0x08)
@@ -33743,7 +33745,7 @@ sub_F11171:
 	ret	; F11190  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11191
+; DspEffect_LoadByteBias36
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2640) (0x2797)
@@ -33758,7 +33760,8 @@ sub_F11171:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11191:
+; DspEffect_LoadByteBias36(offset): as DspEffect_LoadByte, plus 36 (value type 0x0C, a DspEffect_StepS8 row).
+DspEffect_LoadByteBias36:
 	link XIZ,0x0000	; F11191  link XIZ,0x0000
 	push	0	; F11195  push 0x00
 	m_push MBD+r6, 0x08	; F11197  push (XIZ+0x08)
@@ -33774,7 +33777,7 @@ sub_F11191:
 	ret	; F111B3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F111B4
+; DspEffect_LoadWord
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2797)
@@ -33789,7 +33792,8 @@ sub_F11191:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F111B4:
+; DspEffect_LoadWord(offset): the two bytes at offset, offset+1 of the effect block, as a word (the DspEffect_StepU16 rows).
+DspEffect_LoadWord:
 	link XIZ,0xfffa	; F111B4  link XIZ,0xfffa
 	push	xix	; F111B8  push XIX
 	lda	xix, (xiz-2)	; F111B9  lda XIX,XIZ+0xfe
@@ -33822,7 +33826,7 @@ sub_F111B4:
 	ret	; F111FF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11200
+; DspEffect_LoadEqFc
 ; Called from: in-module: 0xF0FF0C 0xF0FF1A 0xF1242A 0xF12438
 ; Touches: (0x2640) (0x2797)
 ; Calls:   T_IndexedTable_GetByte
@@ -33836,7 +33840,8 @@ sub_F111B4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11200:
+; DspEffect_LoadEqFc(offset): bits 6-10 of the effect block word at offset (value types 2, 3, the DspEffect_StepEqFc rows).
+DspEffect_LoadEqFc:
 	link XIZ,0xfffe	; F11200  link XIZ,0xfffe
 	push	xix	; F11204  push XIX
 	lda	xix, (xiz-2)	; F11205  lda XIX,XIZ+0xfe
@@ -33868,7 +33873,7 @@ sub_F11200:
 	ret	; F1124A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1124B
+; DspEffect_LoadEqQ
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2640) (0x2797)
@@ -33883,7 +33888,8 @@ sub_F11200:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1124B:
+; DspEffect_LoadEqQ(offset): bits 11-15 of the effect block word at offset (value type 4, the DspEffect_StepEqQ row).
+DspEffect_LoadEqQ:
 	link XIZ,0xfffe	; F1124B  link XIZ,0xfffe
 	push	xix	; F1124F  push XIX
 	lda	xix, (xiz-2)	; F11250  lda XIX,XIZ+0xfe
@@ -33915,7 +33921,7 @@ sub_F1124B:
 	ret	; F11295  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11296
+; DspEffect_LoadEqGain
 ; Called from: in-module: 0xF0FEEE 0xF0FEFE 0xF1240C 0xF1241C
 ; Touches: (0x2640) (0x2797)
 ; Calls:   T_IndexedTable_GetByte
@@ -33929,7 +33935,8 @@ sub_F1124B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11296:
+; DspEffect_LoadEqGain(offset): bits 0-5 of the effect block word at offset (value type 5, the DspEffect_StepEqGain row).
+DspEffect_LoadEqGain:
 	link XIZ,0xfffe	; F11296  link XIZ,0xfffe
 	push	xix	; F1129A  push XIX
 	lda	xix, (xiz-2)	; F1129B  lda XIX,XIZ+0xfe
@@ -33960,11 +33967,11 @@ sub_F11296:
 	ret	; F112DC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F112DD
+; DspEffect_LoadSlowFast
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F11171
+; Calls:   DspEffect_LoadByte
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -33975,11 +33982,12 @@ sub_F11296:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F112DD:
+; DspEffect_LoadSlowFast(offset): DspEffect_LoadByte (value type 0x0B, the DspEffect_StepSlowFast row).
+DspEffect_LoadSlowFast:
 	link XIZ,0x0000	; F112DD  link XIZ,0x0000
 	push	0	; F112E1  push 0x00
 	m_push MBD+r6, 0x08	; F112E3  push (XIZ+0x08)
-	calr	sub_F11171	; F112E6  calr 0xf11171
+	calr	DspEffect_LoadByte	; F112E6  calr 0xf11171
 	popw	bc	; F112E9  pop BC
 	unlk XIZ	; F112EA  unlk XIZ
 	ret	; F112EC  ret
@@ -36242,7 +36250,7 @@ sub_F12398:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2540) (0x2799)
-; Calls:   sub_F103AB T_F42E10 T_DisplayList_Run_Stack sub_F11296 sub_F11200 T_DisplayListB_Run_Stack
+; Calls:   sub_F103AB T_F42E10 T_DisplayList_Run_Stack DspEffect_LoadEqGain DspEffect_LoadEqFc T_DisplayListB_Run_Stack
 ;          EqGraph_Draw T_F42E14
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
@@ -36287,23 +36295,23 @@ sub_F123F4:
 	ld	(LCD_CurrentLayer:16), 0	; F12401  ld (0x2540),0x00
 	ld	(xiz-4), xix	; F12406  ld (XIZ+0xfc),XIX
 	pushw	3	; F12409  push 0x0003
-	calr	sub_F11296	; F1240C  calr 0xf11296
+	calr	DspEffect_LoadEqGain	; F1240C  calr 0xf11296
 	ld	xbc, (xiz-4)	; F1240F  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)	; F12412  ld A,(XBC)
 	extz	xix	; F12414  extz XIX
 	ld	(xix+3), a	; F12416  ld (XIX+0x03),A
 	pushw	1	; F12419  push 0x0001
-	calr	sub_F11296	; F1241C  calr 0xf11296
+	calr	DspEffect_LoadEqGain	; F1241C  calr 0xf11296
 	ld	xbc, (xiz-4)	; F1241F  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)	; F12422  ld A,(XBC)
 	ld	(xix+2), a	; F12424  ld (XIX+0x02),A
 	pushw	3	; F12427  push 0x0003
-	calr	sub_F11200	; F1242A  calr 0xf11200
+	calr	DspEffect_LoadEqFc	; F1242A  calr 0xf11200
 	ld	xbc, (xiz-4)	; F1242D  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)	; F12430  ld A,(XBC)
 	ld	(xix+1), a	; F12432  ld (XIX+0x01),A
 	pushw	1	; F12435  push 0x0001
-	calr	sub_F11200	; F12438  calr 0xf11200
+	calr	DspEffect_LoadEqFc	; F12438  calr 0xf11200
 	lda	xbc, (DL_F1469B:24)	; F1243B  lda XBC,0xf1469b
 	push	xbc	; F12440  push XBC
 	lda	xwa, (DL_F1465F:24)	; F12441  lda XWA,0xf1465f
@@ -36426,7 +36434,7 @@ EqGraph_DisplayListTemplate:
 ;     +1  type   value type 0x01-0x1E: DspEffect_PaintParamEditor (0xF11057)
 ;                stores it to (0x2640) to pick the units string
 ;                (DLTable_HzHzHzHzHzSSSSMsMsMs via DLB_Records_F157A8) and
-;                indexes ScreenTable_F13264 / ScreenDisplayLists_F132E4 with
+;                indexes DspEffect_LoadValueTable / ScreenDisplayLists_F132E4 with
 ;                4*type; DspEffect_StepCursorValue (0xF1069A) indexes ScreenTable_F131E4 with
 ;                it (the editor).
 ;     +2  slot   the parameter's slot, 1-based; a 16-bit parameter takes two
@@ -37399,7 +37407,7 @@ EffectDesc_PeqOverdrDelay:
 ;    describes 0xF10FF1 only.  Per parameter p (group 4p):
 ;      byte 1  the parameter's VALUE TYPE, 0x01-0x1E: stored to (0x2640) to
 ;              select its units string (DLTable_HzHzHzHzHzSSSSMsMsMs row, via
-;              DLB_Records_F157A8), and times 4 it indexes ScreenTable_F13264
+;              DLB_Records_F157A8), and times 4 it indexes DspEffect_LoadValueTable
 ;              (the value painter), ScreenDisplayLists_F132E4 (the value list)
 ;              and, in DspEffect_StepCursorValue, ScreenTable_F131E4 (the editor).  LFO SPEED
 ;              is type 0x06 ("Hz"), the delay times 0x14-0x1C ("ms"), REVERB
@@ -37616,7 +37624,7 @@ EffectValueRanges:
 ;                       indexed by one screen-row number, not one table of 128.
 ;
 ;   0xF131E4  ScreenTable_F131E4        32 code pointers   read at 0xF10700
-;   0xF13264  ScreenTable_F13264        32 code pointers   read at 0xF110EA
+;   0xF13264  DspEffect_LoadValueTable        32 code pointers   read at 0xF110EA
 ;   0xF132E4  ScreenDisplayLists_F132E4 32 DATA pointers   read at 0xF110FA
 ;   0xF13364  ScreenTable_F13364        32 code pointers   read at 0xF1172A
 ;
@@ -37682,38 +37690,38 @@ ScreenTable_F131E4:
 	.long	T_F42C70	; F13260  [31] -> 0xF42C70
 
 ; --- array 1 of 4: 32 code pointers, read at 0xF110EA ---
-ScreenTable_F13264:
+DspEffect_LoadValueTable:
 	.long	T_F42C70	; F13264  [32] -> 0xF42C70
-	.long	sub_F11171	; F13268  [33] -> sub_F11171
-	.long	sub_F11200	; F1326C  [34] -> sub_F11200
-	.long	sub_F11200	; F13270  [35] -> sub_F11200
-	.long	sub_F1124B	; F13274  [36] -> sub_F1124B
-	.long	sub_F11296	; F13278  [37] -> sub_F11296
-	.long	sub_F11171	; F1327C  [38] -> sub_F11171
-	.long	sub_F11171	; F13280  [39] -> sub_F11171
-	.long	sub_F11171	; F13284  [40] -> sub_F11171
-	.long	sub_F11171	; F13288  [41] -> sub_F11171
-	.long	sub_F11171	; F1328C  [42] -> sub_F11171
-	.long	sub_F112DD	; F13290  [43] -> sub_F112DD
-	.long	sub_F11191	; F13294  [44] -> sub_F11191
-	.long	sub_F11171	; F13298  [45] -> sub_F11171
-	.long	sub_F11171	; F1329C  [46] -> sub_F11171
-	.long	sub_F11171	; F132A0  [47] -> sub_F11171
-	.long	sub_F11171	; F132A4  [48] -> sub_F11171
-	.long	sub_F11171	; F132A8  [49] -> sub_F11171
-	.long	sub_F11171	; F132AC  [50] -> sub_F11171
-	.long	sub_F11171	; F132B0  [51] -> sub_F11171
-	.long	sub_F111B4	; F132B4  [52] -> sub_F111B4
-	.long	sub_F111B4	; F132B8  [53] -> sub_F111B4
-	.long	sub_F111B4	; F132BC  [54] -> sub_F111B4
-	.long	sub_F11171	; F132C0  [55] -> sub_F11171
-	.long	sub_F111B4	; F132C4  [56] -> sub_F111B4
-	.long	sub_F11171	; F132C8  [57] -> sub_F11171
-	.long	sub_F111B4	; F132CC  [58] -> sub_F111B4
-	.long	sub_F111B4	; F132D0  [59] -> sub_F111B4
-	.long	sub_F111B4	; F132D4  [60] -> sub_F111B4
-	.long	sub_F11171	; F132D8  [61] -> sub_F11171
-	.long	sub_F11171	; F132DC  [62] -> sub_F11171
+	.long	DspEffect_LoadByte	; F13268  [33] -> DspEffect_LoadByte
+	.long	DspEffect_LoadEqFc	; F1326C  [34] -> DspEffect_LoadEqFc
+	.long	DspEffect_LoadEqFc	; F13270  [35] -> DspEffect_LoadEqFc
+	.long	DspEffect_LoadEqQ	; F13274  [36] -> DspEffect_LoadEqQ
+	.long	DspEffect_LoadEqGain	; F13278  [37] -> DspEffect_LoadEqGain
+	.long	DspEffect_LoadByte	; F1327C  [38] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F13280  [39] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F13284  [40] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F13288  [41] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F1328C  [42] -> DspEffect_LoadByte
+	.long	DspEffect_LoadSlowFast	; F13290  [43] -> DspEffect_LoadSlowFast
+	.long	DspEffect_LoadByteBias36	; F13294  [44] -> DspEffect_LoadByteBias36
+	.long	DspEffect_LoadByte	; F13298  [45] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F1329C  [46] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F132A0  [47] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F132A4  [48] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F132A8  [49] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F132AC  [50] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F132B0  [51] -> DspEffect_LoadByte
+	.long	DspEffect_LoadWord	; F132B4  [52] -> DspEffect_LoadWord
+	.long	DspEffect_LoadWord	; F132B8  [53] -> DspEffect_LoadWord
+	.long	DspEffect_LoadWord	; F132BC  [54] -> DspEffect_LoadWord
+	.long	DspEffect_LoadByte	; F132C0  [55] -> DspEffect_LoadByte
+	.long	DspEffect_LoadWord	; F132C4  [56] -> DspEffect_LoadWord
+	.long	DspEffect_LoadByte	; F132C8  [57] -> DspEffect_LoadByte
+	.long	DspEffect_LoadWord	; F132CC  [58] -> DspEffect_LoadWord
+	.long	DspEffect_LoadWord	; F132D0  [59] -> DspEffect_LoadWord
+	.long	DspEffect_LoadWord	; F132D4  [60] -> DspEffect_LoadWord
+	.long	DspEffect_LoadByte	; F132D8  [61] -> DspEffect_LoadByte
+	.long	DspEffect_LoadByte	; F132DC  [62] -> DspEffect_LoadByte
 	.long	T_F42C70	; F132E0  [63] -> 0xF42C70
 
 ; --- array 2 of 4: 32 DISPLAY-LIST pointers, read at 0xF110FA and handed to

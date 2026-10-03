@@ -915,6 +915,14 @@ RENAMES = {
     "sub_F6A1BB": "SoftKeyCol6_Screen0ESub17",
     "sub_F6A1B4": "SoftKeyCol7_Screen0ESub17",
     "sub_F68F5B": "LcdKeyRow2_Screen0ESub17",
+    "ScreenTable_F13264": "DspEffect_LoadValueTable",
+    "sub_F11171": "DspEffect_LoadByte",
+    "sub_F11191": "DspEffect_LoadByteBias36",
+    "sub_F111B4": "DspEffect_LoadWord",
+    "sub_F11200": "DspEffect_LoadEqFc",
+    "sub_F1124B": "DspEffect_LoadEqQ",
+    "sub_F112DD": "DspEffect_LoadSlowFast",
+    "sub_F11296": "DspEffect_LoadEqGain",
 }
 
 
