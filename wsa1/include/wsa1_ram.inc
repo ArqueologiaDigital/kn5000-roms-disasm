@@ -333,5 +333,9 @@
 	.equ SeqEvt_VolumeShadow,			0x60f610	; per event slot: part volume, flushed as {part,3}; bit 7 = pending -- SeqEvt_ShadowPartVolume / _PostPartVolume
 	.equ SeqEvt_PressureShadow,			0x60f630	; per event slot: channel pressure, flushed as 0xB4; bit 7 = pending -- SeqEvt_ShadowChanPressure / _PostChanPressure
 
+; ---- wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md -- "1. UI_ScreenStage; 2. UI_ScreenFlags"
+	.equ UI_ScreenStage,				0x207e	; the page of the current screen; job screens: 0 = parameters, 1 = "Are You Sure ?" -- 25 cp 0 / jr nz with the question on the non-zero side; 14 two-press execute keys
+	.equ UI_ScreenFlags,				0x2095	; bit 4 = repaint in place, bit 0 = request allowed past the lock, bit 1 = keep (0x20A2) -- PanelState_Sync2095, PanelState_CheckRequestAllowed, PanelScreen_ApplyRequest
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,				0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

@@ -385,6 +385,10 @@ GROUPS = [
         0x60F590: ("SeqEvt_ExpressionShadow", "per event slot: expression, flushed as 0xB3; bit 7 = pending", "SeqEvt_ShadowExpression"),
         0x60F610: ("SeqEvt_VolumeShadow", "per event slot: part volume, flushed as {part,3}; bit 7 = pending", "SeqEvt_ShadowPartVolume / _PostPartVolume"),
     }),
+    ("wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md", "1. UI_ScreenStage; 2. UI_ScreenFlags", {
+        0x207E: ("UI_ScreenStage", "the page of the current screen; job screens: 0 = parameters, 1 = \"Are You Sure ?\"", "25 cp 0 / jr nz with the question on the non-zero side; 14 two-press execute keys"),
+        0x2095: ("UI_ScreenFlags", "bit 4 = repaint in place, bit 0 = request allowed past the lock, bit 1 = keep (0x20A2)", "PanelState_Sync2095, PanelState_CheckRequestAllowed, PanelScreen_ApplyRequest"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),

@@ -27892,7 +27892,7 @@ sub_F0F0E6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F0FF:
-	m_set 4, MD16, 0x2095	; F0F0FF  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F0F0FF  set 4,(0x2095)
 sub_F0F0FF_Epilogue:
 	popw	hl	; F0F103  pop HL
 	ret	; F0F104  ret
@@ -30047,7 +30047,7 @@ sub_F0F788:
 	ld	(PanelDial_UpButton:16), 2	; F0F7A2  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F0F788_Skip:
 	m_set 0, MD16, UI_RequestBits	; F0F7A7  set 0,(0x2075)
-	ld	c, (8341:16)	; F0F7AB  ld C,(0x2095)
+	ld	c, (UI_ScreenFlags:16)	; F0F7AB  ld C,(0x2095)
 	and	c, 16	; F0F7AF  and C,0x10
 	jr	nz, sub_F0F788_Skip3	; F0F7B2  jr NZ,0xf0f7fa
 	ld	c, (10129:16)	; F0F7B4  ld C,(0x2791)
@@ -31075,14 +31075,14 @@ sub_F1008E_Skip:
 	cp	(Effect_Algorithm:16), a	; F100DB  cp (0x2796),A
 	jr	z, sub_F1008E_Skip2	; F100DF  jr Z,0xf100ff
 	ld	(Effect_Algorithm:16), a	; F100E1  ld (0x2796),A
-	m_res 4, MD16, 0x2095	; F100E5  res 4,(0x2095)
+	m_res 4, MD16, UI_ScreenFlags	; F100E5  res 4,(0x2095)
 	ld	(10130:16), 0	; F100E9  ld (0x2792),0x00
 	ld	(10131:16), 1	; F100EE  ld (0x2793),0x01
 	m_cp_mi8 MB16, 0x2794, 0x08	; F100F3  cp (0x2794),0x08
 	jr	z, sub_F1008E_Skip2	; F100F8  jr Z,0xf100ff
 	ld	(10132:16), 0	; F100FA  ld (0x2794),0x00
 sub_F1008E_Skip2:
-	ld	c, (8341:16)	; F100FF  ld C,(0x2095)
+	ld	c, (UI_ScreenFlags:16)	; F100FF  ld C,(0x2095)
 	and	c, 16	; F10103  and C,0x10
 	jr	nz, sub_F1008E_Skip4	; F10106  jr NZ,0xf1014e
 	ld	c, (10129:16)	; F10108  ld C,(0x2791)
@@ -31859,7 +31859,7 @@ DspEffect_MoveCursor_Skip7:
 	ld	(xix), 8	; F1068A  ld (XIX),0x08
 DspEffect_MoveCursor_Join:
 	m_set 3, MD16, UI_RequestBits	; F1068D  set 3,(0x2075)
-	m_set 4, MD16, 0x2095	; F10691  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F10691  set 4,(0x2095)
 DspEffect_MoveCursor_Skip8:
 	pop	xix	; F10695  pop XIX
 	popw	hl	; F10696  pop HL
@@ -91283,7 +91283,7 @@ sub_F44516_Skip4:
 	m_bit 0, MD16, 0x34d9	; F445AC  bit 0,(0x34d9)
 	jr	z, sub_F44516_Skip5	; F445B0  jr Z,0xf445bc
 	m_and_mi8 MB16, 0x34d9, 0xfe	; F445B2  and (0x34d9),0xfe
-	m_or_mi8 MB16, 0x2095, 0x10	; F445B7  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F445B7  or (0x2095),0x10
 sub_F44516_Skip5:
 	calr	sub_F44623	; F445BC  calr 0xf44623
 	calr	sub_F44809	; F445BF  calr 0xf44809
@@ -91581,14 +91581,14 @@ sub_F44809:
 	m_cp_mr MW16, 0x3552, 0	; F44845  cp (0x3552),WA
 	jr	le, sub_F44809_Skip2	; F44849  jr LE,0xf44875
 	ld	(13650:16), wa	; F4484B  ld (0x3552),WA
-	m_or_mi8 MB16, 0x2095, 0x10	; F4484F  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F4484F  or (0x2095),0x10
 	m_set 7, MD16, 0x0c05	; F44854  set 7,(0x0c05)
 	call	sub_F4403C	; F44858  call 0xf4403c
 	jr	sub_F44809_Return	; F4485C  jr T,0xf448a2
 sub_F44809_Skip:
 	ld	wa, (13858:16)	; F4485E  ld WA,(0x3622)
 	ld	(13650:16), wa	; F44862  ld (0x3552),WA
-	m_or_mi8 MB16, 0x2095, 0x10	; F44866  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F44866  or (0x2095),0x10
 	m_set 7, MD16, 0x0c05	; F4486B  set 7,(0x0c05)
 	call	sub_F4403C	; F4486F  call 0xf4403c
 	jr	sub_F44809_Return	; F44873  jr T,0xf448a2
@@ -95045,7 +95045,7 @@ sub_F45FE5_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F46015:		; <- T_F40A54
-	m_or_mi8 MB16, 0x2095, 0x10	; F46015  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F46015  or (0x2095),0x10
 	ret	; F4601A  ret
 	ld	(UI_Request:16), 1	; F4601B  ld (0x2070),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x02	; F46020  or (0x2071),0x02
@@ -97008,7 +97008,7 @@ sub_F48463_Skip:
 	ld	wa, (13858:16)	; F48478  ld WA,(0x3622)
 sub_F48463_Join:
 	ld	(13650:16), wa	; F4847C  ld (0x3552),WA
-	m_or_mi8 MB16, 0x2095, 0x10	; F48480  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F48480  or (0x2095),0x10
 	calr	sub_F486D9	; F48485  calr 0xf486d9
 	ld	xwa, (6304798:24)	; F48488  ld XWA,(0x60341e)
 	push	xwa	; F4848D  push XWA
@@ -103200,7 +103200,7 @@ sub_F4C42E_Skip2:
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x19	; F4C45D  cp (0x20b8),0x19
 	jr	nz, sub_F4C42E_Epilogue	; F4C462  jr NZ,0xf4c468
 sub_F4C42E_Join:
-	m_set 4, MD16, 0x2095	; F4C464  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F4C464  set 4,(0x2095)
 sub_F4C42E_Epilogue:
 	popw	hl	; F4C468  pop HL
 	ret	; F4C469  ret
@@ -103223,7 +103223,7 @@ sub_F4C46A:		; <- T_F434E0
 	jr	z, sub_F4C46A_Skip	; F4C472  jr Z,0xf4c479
 	ld	(10352:16), 0	; F4C474  ld (0x2870),0x00
 sub_F4C46A_Skip:
-	ld	c, (8341:16)	; F4C479  ld C,(0x2095)
+	ld	c, (UI_ScreenFlags:16)	; F4C479  ld C,(0x2095)
 	and	c, 16	; F4C47D  and C,0x10
 	jr	nz, sub_F4C46A_Skip2	; F4C480  jr NZ,0xf4c499
 	call	T_CallbackQueue_ResetAndRestartTask2	; F4C482  call 0xf42e80
@@ -106191,7 +106191,7 @@ sub_F4E4C8:
 	ld	(3675:16), a	; F4E4E6  ld (0x0e5b),A
 	inc	1, e	; F4E4EA  inc 1,E
 	ld	(3676:16), e	; F4E4EC  ld (0x0e5c),E
-	m_or_mi8 MB16, 0x2095, 0x10	; F4E4F0  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F4E4F0  or (0x2095),0x10
 sub_F4E4C8_Return:
 	ret	; F4E4F5  ret
 
@@ -106207,7 +106207,7 @@ sub_F4E4C8_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4E4F6:
-	m_cp_mi8 MB16, 0x207e, 0x01	; F4E4F6  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F4E4F6  cp (0x207e),0x01
 	jr	z, sub_F4E4F6_Return	; F4E4FB  jr Z,0xf4e50a
 	ld	a, (UI_ScreenLatch:16)	; F4E4FD  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenId, 1	; F4E501  cp A,(0x207c)
@@ -106232,7 +106232,7 @@ sub_F4E50B:
 	ld	xix, BitWeight_F4E5FC	; F4E510  ld XIX,0x00f4e5fc
 	mx_ld_rm MXW, ra_IX, ra_HL, 3	; F4E515  ld HL,(XIX+HL)
 	m_xor_mr MW16, 0x0dbe, 3	; F4E51A  xor (0x0dbe),HL
-	m_or_mi8 MB16, 0x2095, 0x10	; F4E51E  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F4E51E  or (0x2095),0x10
 	ret	; F4E523  ret
 
 ; --------------------------------------------------------------------------
@@ -106318,7 +106318,7 @@ sub_F4E545_Return:
 sub_F4E56F:		; <- T_F40CC4
 	m_cp_mi8 MB16, 0x3602, 0x0f	; F4E56F  cp (0x3602),0x0f
 	jr	ugt, sub_F4E545_Return2	; F4E574  jr UGT,0xf4e590
-	m_cp_mi8 MB16, 0x207e, 0x01	; F4E576  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F4E576  cp (0x207e),0x01
 	jr	z, sub_F4E545_Return2	; F4E57B  jr Z,0xf4e590
 	ld	a, (UI_ScreenLatch:16)	; F4E57D  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenId, 1	; F4E581  cp A,(0x207c)
@@ -106756,7 +106756,7 @@ sub_F4ED10_Skip5:
 	ldw	wa, 99	; F4EDB9  ld WA,0x0063
 sub_F4ED84_Skip:
 	ld	(3080:16), wa	; F4EDBC  ld (0x0c08),WA
-	m_or_mi8 MB16, 0x2095, 0x10	; F4EDC0  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F4EDC0  or (0x2095),0x10
 sub_F4ED10_Return2:
 	ret	; F4EDC5  ret
 
@@ -106994,7 +106994,7 @@ sub_F4EEF3_Return:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x09	; F4EF22  cp (0x207a),0x09
 	jr	nz, sub_F4EEF3_Return2	; F4EF27  jr NZ,0xf4ef2e
 sub_F4EEF3_Skip:
-	m_or_mi8 MB16, 0x2095, 0x10	; F4EF29  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F4EF29  or (0x2095),0x10
 sub_F4EEF3_Return2:
 	ret	; F4EF2E  ret
 
@@ -109915,7 +109915,7 @@ sub_F53052_Skip3:
 	jr	z, sub_F53052_Skip4	; F530B3  jr Z,0xf530c9
 	m_cp_mi8 MB16, 0x289d, 0x00	; F530B5  cp (0x289d),0x00
 	jr	z, sub_F53052_Skip4	; F530BA  jr Z,0xf530c9
-	ld	c, (8341:16)	; F530BC  ld C,(0x2095)
+	ld	c, (UI_ScreenFlags:16)	; F530BC  ld C,(0x2095)
 	and	c, 16	; F530C0  and C,0x10
 	jr	nz, sub_F53052_Skip4	; F530C3  jr NZ,0xf530c9
 	call	T_CallbackQueue_ResetAndRestartTask2	; F530C5  call 0xf42e80
@@ -109929,7 +109929,7 @@ sub_F53052_Skip5:
 	ld	(PanelDial_DownButton:16), 12	; F530DA  ld (0x209b),0x0c  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 11	; F530DF  ld (0x209c),0x0b  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F53052_Join2:
-	ld	c, (8341:16)	; F530E4  ld C,(0x2095)
+	ld	c, (UI_ScreenFlags:16)	; F530E4  ld C,(0x2095)
 	and	c, 16	; F530E8  and C,0x10
 	jr	nz, sub_F53052_Skip7	; F530EB  jr NZ,0xf53121
 	ld	c, (UI_ScreenId:16)	; F530ED  ld C,(0x207c)
@@ -110322,7 +110322,7 @@ sub_F5323E_Join:
 	push	0	; F53254  push 0x00
 	m_push MB16, 0x289c	; F53256  push (0x289c)
 	calr	sub_F5418E	; F5325A  calr 0xf5418e
-	m_set 4, MD16, 0x2095	; F5325D  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F5325D  set 4,(0x2095)
 	popw	bc	; F53261  pop BC
 	pop	xix	; F53262  pop XIX
 	ret	; F53263  ret
@@ -110371,7 +110371,7 @@ sub_F5323E_Join2:
 	push	0	; F532AF  push 0x00
 	m_push MB16, 0x289c	; F532B1  push (0x289c)
 	calr	sub_F5418E	; F532B5  calr 0xf5418e
-	m_set 4, MD16, 0x2095	; F532B8  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F532B8  set 4,(0x2095)
 	popw	bc	; F532BC  pop BC
 sub_F5323E_Epilogue:
 	pop	xix	; F532BD  pop XIX
@@ -110423,7 +110423,7 @@ sub_F5323E_Join3:
 	push	0	; F53310  push 0x00
 	m_push MB16, 0x289c	; F53312  push (0x289c)
 	calr	sub_F5418E	; F53316  calr 0xf5418e
-	m_set 4, MD16, 0x2095	; F53319  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F53319  set 4,(0x2095)
 	popw	bc	; F5331D  pop BC
 sub_F5323E_Epilogue2:
 	pop	xix	; F5331E  pop XIX
@@ -110475,7 +110475,7 @@ sub_F5323E_Join4:
 	push	0	; F53371  push 0x00
 	m_push MB16, 0x289c	; F53373  push (0x289c)
 	calr	sub_F5418E	; F53377  calr 0xf5418e
-	m_set 4, MD16, 0x2095	; F5337A  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F5337A  set 4,(0x2095)
 	popw	bc	; F5337E  pop BC
 sub_F5323E_Epilogue3:
 	pop	xix	; F5337F  pop XIX
@@ -110525,7 +110525,7 @@ sub_F5323E_Join5:
 	push	0	; F533CC  push 0x00
 	m_push MB16, 0x289c	; F533CE  push (0x289c)
 	calr	sub_F5418E	; F533D2  calr 0xf5418e
-	m_set 4, MD16, 0x2095	; F533D5  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F533D5  set 4,(0x2095)
 	popw	bc	; F533D9  pop BC
 sub_F5323E_Epilogue4:
 	pop	xix	; F533DA  pop XIX
@@ -112577,7 +112577,7 @@ Drawbar9_1ft_Update_Skip11:
 	m_stcf 5, MD16, 0x2896	; F54040  stcf 5,(0x2896)
 	m_cp_mi8 MB16, UI_ScreenId, 0xa3	; F54044  cp (0x207c),0xa3
 	jr	nz, Drawbar9_1ft_Update_Epilogue	; F54049  jr NZ,0xf5404f
-	m_set 4, MD16, 0x2095	; F5404B  set 4,(0x2095)
+	m_set 4, MD16, UI_ScreenFlags	; F5404B  set 4,(0x2095)
 Drawbar9_1ft_Update_Epilogue:
 	pop	xix	; F5404F  pop XIX
 	ret	; F54050  ret
@@ -116628,7 +116628,7 @@ sub_F56058:
 	ld	a, (UI_ScreenId:16)	; F56062  ld A,(0x207c)
 	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56066  cp A,(0x207d)
 	jr	nz, sub_F56058_Skip3	; F5606A  jr NZ,0xf560a1
-	m_bit 4, MD16, 0x2095	; F5606C  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F5606C  bit 4,(0x2095)
 	jrl	nz, sub_F56058_Join	; F56070  jrl NZ,0xf56112
 sub_F56058_Skip:
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x08	; F56073  cp (0x207b),0x08
@@ -117744,7 +117744,7 @@ sub_F5664A:
 	ld	a, (UI_ScreenId:16)	; F56654  ld A,(0x207c)
 	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56658  cp A,(0x207d)
 	jr	nz, sub_F5664A_Skip3	; F5665C  jr NZ,0xf5668f
-	m_bit 4, MD16, 0x2095	; F5665E  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F5665E  bit 4,(0x2095)
 	jr	nz, sub_F5664A_Skip6	; F56662  jr NZ,0xf566c6
 sub_F5664A_Skip:
 	bit	2, (0x96:8)	; F56664  bit 2,(0x96)
@@ -117883,7 +117883,7 @@ sub_F5670C_Skip2:
 	call	T_Blink_Stop	; F5673E  call 0xf42e24
 	call	T_F40CFC	; F56742  call 0xf40cfc
 	call	T_F42704	; F56746  call 0xf42704
-	m_or_mi8 MB16, 0x2095, 0x10	; F5674A  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F5674A  or (0x2095),0x10
 	jr	sub_F5670C_Return2	; F5674F  jr T,0xf56751
 sub_F5670C_Return2:
 	ret	; F56751  ret
@@ -117982,7 +117982,7 @@ sub_F5679B:
 	jr	sub_F5670C_Return5	; F567AD  jr T,0xf567c7
 sub_F5670C_Skip7:
 	call	T_Blink_Stop	; F567AF  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F567B3  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F567B3  or (0x2095),0x10
 	bit	2, (0x96:8)	; F567B8  bit 2,(0x96)
 	jr	nz, sub_F5670C_Skip8	; F567BB  jr NZ,0xf567c3
 	m_bit 2, MD16, 0x34d9	; F567BD  bit 2,(0x34d9)
@@ -118186,7 +118186,7 @@ Select36CE_F568AB:
 	ld	(14165:16), a	; F568B6  ld (0x3755),A
 	ld	(14030:16), 0	; F568BA  ld (0x36ce),0x00
 	call	T_Blink_Stop	; F568BF  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F568C3  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F568C3  or (0x2095),0x10
 Select36CE_F568AB_Return:
 	ret	; F568C8  ret
 	ld	(LCD_CurrentLayer:16), 1	; F568C9  ld (0x2540),0x01
@@ -118220,7 +118220,7 @@ Select36CE_F568E9:
 	ld	(14165:16), a	; F568F4  ld (0x3755),A
 	ld	(14030:16), 1	; F568F8  ld (0x36ce),0x01
 	call	T_Blink_Stop	; F568FD  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F56901  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F56901  or (0x2095),0x10
 Select36CE_F568E9_Return:
 	ret	; F56906  ret
 
@@ -118246,7 +118246,7 @@ Select36CE_F56907:
 	ld	(14165:16), a	; F56912  ld (0x3755),A
 	ld	(14030:16), 2	; F56916  ld (0x36ce),0x02
 	call	T_Blink_Stop	; F5691B  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F5691F  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F5691F  or (0x2095),0x10
 Select36CE_F56907_Return:
 	ret	; F56924  ret
 
@@ -118708,7 +118708,7 @@ sub_F56B95:
 	ld	a, (UI_ScreenId:16)	; F56B9F  ld A,(0x207c)
 	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56BA3  cp A,(0x207d)
 	jr	nz, sub_F56B95_Skip3	; F56BA7  jr NZ,0xf56bec
-	m_bit 4, MD16, 0x2095	; F56BA9  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F56BA9  bit 4,(0x2095)
 	jr	nz, sub_F56B95_Skip5	; F56BAD  jr NZ,0xf56c1e
 sub_F56B95_Skip:
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x14	; F56BAF  cp (0x207b),0x14
@@ -119069,7 +119069,7 @@ sub_F56DF1:
 	ld	a, (UI_ScreenId:16)	; F56DFB  ld A,(0x207c)
 	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56DFF  cp A,(0x207d)
 	jr	nz, sub_F56DF1_Skip4	; F56E03  jr NZ,0xf56e3e
-	m_bit 4, MD16, 0x2095	; F56E05  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F56E05  bit 4,(0x2095)
 	jr	nz, sub_F56DF1_Skip5	; F56E09  jr NZ,0xf56e50
 sub_F56DF1_Skip:
 	bit	2, (0x96:8)	; F56E0B  bit 2,(0x96)
@@ -119448,7 +119448,7 @@ sub_F56FD6:
 	ld	(14166:16), a	; F56FE1  ld (0x3756),A
 	ld	(13863:16), 0	; F56FE5  ld (0x3627),0x00
 	call	T_Blink_Stop	; F56FEA  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F56FEE  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F56FEE  or (0x2095),0x10
 sub_F56FD6_Return:
 	ret	; F56FF3  ret
 	ld	(LCD_CurrentLayer:16), 1	; F56FF4  ld (0x2540),0x01
@@ -119477,7 +119477,7 @@ sub_F57014:
 	ld	(14166:16), a	; F5701F  ld (0x3756),A
 	ld	(13863:16), 1	; F57023  ld (0x3627),0x01
 	call	T_Blink_Stop	; F57028  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F5702C  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F5702C  or (0x2095),0x10
 sub_F57014_Return:
 	ret	; F57031  ret
 
@@ -119498,7 +119498,7 @@ sub_F57032:
 	ld	(14166:16), a	; F5703D  ld (0x3756),A
 	ld	(13863:16), 2	; F57041  ld (0x3627),0x02
 	call	T_Blink_Stop	; F57046  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F5704A  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F5704A  or (0x2095),0x10
 sub_F57032_Return:
 	ret	; F5704F  ret
 
@@ -119917,7 +119917,7 @@ sub_F57286:
 	ld	a, (UI_ScreenId:16)	; F57290  ld A,(0x207c)
 	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F57294  cp A,(0x207d)
 	jr	nz, sub_F57286_Skip5	; F57298  jr NZ,0xf572e9
-	m_bit 4, MD16, 0x2095	; F5729A  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F5729A  bit 4,(0x2095)
 	jr	nz, sub_F57286_Skip6	; F5729E  jr NZ,0xf572fb
 sub_F57286_Skip:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F572A0  call 0xf42e80
@@ -120203,7 +120203,7 @@ sub_F5739C:
 	ld	(14166:16), a	; F573A7  ld (0x3756),A
 	ld	(13863:16), 3	; F573AB  ld (0x3627),0x03
 	call	T_Blink_Stop	; F573B0  call 0xf42e24
-	m_or_mi8 MB16, 0x2095, 0x10	; F573B4  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F573B4  or (0x2095),0x10
 sub_F5739C_Return:
 	ret	; F573B9  ret
 
@@ -142603,7 +142603,7 @@ sub_F65E98_Skip:
 	pop	xde	; F65EB6  pop XDE
 	m_cp_rm MB16, 0x0c06, 1	; F65EB7  cp A,(0x0c06)
 	jr	nz, sub_F65E98_Return	; F65EBB  jr NZ,0xf65ec5
-	ld	(8318:16), 0	; F65EBD  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F65EBD  ld (0x207e),0x00
 	jrl	sub_F65E98_Return	; F65EC2  jrl T,0xf65ec5
 sub_F65E98_Return:
 	ret	; F65EC5  ret
@@ -142634,7 +142634,7 @@ sub_F65E98_Skip2:
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65F0E  ld A,(XDE+IY)
 	pop	xde	; F65F13  pop XDE
 	ld	(3085:16), a	; F65F14  ld (0x0c0d),A
-	ld	(8318:16), 1	; F65F18  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F65F18  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F65F1D  or (0x2071),0x10
 	ret	; F65F22  ret
 sub_F65E98_Join:
@@ -142651,7 +142651,7 @@ sub_F65E98_Join:
 	ld	(3203:16), a	; F65F4A  ld (0x0c83),A
 	call	T_BStore_Veneers	; F65F4E  call 0xf42800
 	call	T_F411B8	; F65F52  call 0xf411b8
-	ld	(8318:16), 0	; F65F56  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F65F56  ld (0x207e),0x00
 	ret	; F65F5B  ret
 ; --------------------------------------------------------------------------
 ; MaskTable_F65F5C -- 0xF65F5C-0xF65F7B, 32 bytes, every one 0xFF.
@@ -142800,7 +142800,7 @@ sub_F66020_Skip:
 	ld	xde, 6304802	; F6606B  ld XDE,0x00603422
 	mx_st_mr8 MXD, ra_DE, ra_IY, 1	; F66070  ld (XDE+IY),A
 	pop	xde	; F66075  pop XDE
-	ld	(8318:16), 0	; F66076  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F66076  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F6607B  or (0x2071),0x10
 	ret	; F66080  ret
 
@@ -142822,7 +142822,7 @@ sub_F66081:		; <- T_F42BC0
 	ret	; F6608B  ret
 sub_F66081_Skip:
 	ld	(3520:16), 0	; F6608C  ld (0x0dc0),0x00
-	ld	(8318:16), 0	; F66091  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F66091  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F66096  or (0x2071),0x10
 	ret	; F6609B  ret
 
@@ -143712,7 +143712,7 @@ sub_F66598:		; <- T_F42BF0
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x09	; F665A6  cp (0x207a),0x09
 	jr	nz, sub_F662F7_Return10	; F665AB  jr NZ,0xf665b2
 sub_F662F7_Skip19:
-	m_or_mi8 MB16, 0x2095, 0x10	; F665AD  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F665AD  or (0x2095),0x10
 sub_F662F7_Return10:
 	ret	; F665B2  ret
 
@@ -163157,7 +163157,7 @@ OldCopy_sub_F7AA02:
 	jr	OldCopy_F7AA1F	; F6F002  jr T,0xf6f01f
 OldCopy_F7AA04:
 	call	T_F409F8	; F6F004  call 0xf409f8
-	ld	(8318:16), 0	; F6F008  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F6F008  ld (0x207e),0x00
 	ldw	(8542:16), 0	; F6F00D  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F6F013  or (0x212e),0x0100
 	m_or_mi8 MB16, 0x34bb, 0x04	; F6F019  or (0x34bb),0x04
@@ -163220,7 +163220,7 @@ OldCopy_SongStore_LoadSongHeaderToDisplay:
 OldCopy_sub_F7AA88:
 	ret	; F6F088  ret
 OldCopy_sub_F7AA89:
-	m_cp_mi8 MB16, 0x207e, 0x01	; F6F089  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F089  cp (0x207e),0x01
 	jr	z, OldCopy_F7AAAE	; F6F08E  jr Z,0xf6f0ae
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F090  or (0x2075),0x09
 	ld	a, (3586:16)	; F6F095  ld A,(0x0e02)
@@ -163234,7 +163234,7 @@ OldCopy_sub_F7AA89:
 OldCopy_F7AAAE:
 	ret	; F6F0AE  ret
 OldCopy_sub_F7AAAF:
-	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0AF  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F0AF  cp (0x207e),0x01
 	jr	z, OldCopy_F7AADC	; F6F0B4  jr Z,0xf6f0dc
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F0B6  or (0x2075),0x09
 	ld	a, (3586:16)	; F6F0BB  ld A,(0x0e02)
@@ -163254,17 +163254,17 @@ OldCopy_F7AACE:
 OldCopy_F7AADC:
 	ret	; F6F0DC  ret
 OldCopy_sub_F7AADD:
-	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0DD  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F0DD  cp (0x207e),0x01
 	jr	nz, OldCopy_F7AAEF	; F6F0E2  jr NZ,0xf6f0ef
-	ld	(8318:16), 0	; F6F0E4  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F6F0E4  ld (0x207e),0x00
 	ldw	(UI_Request:16), 32794	; F6F0E9  ld (0x2070),0x801a
 OldCopy_F7AAEF:
 	ret	; F6F0EF  ret
 OldCopy_sub_F7AAF0:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F6F0F0  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0F5  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F0F5  cp (0x207e),0x01
 	jr	z, OldCopy_F7AB08	; F6F0FA  jr Z,0xf6f108
-	ld	(8318:16), 1	; F6F0FC  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F6F0FC  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F6F101  or (0x2071),0x10
 	jr	OldCopy_F7AB3E	; F6F106  jr T,0xf6f13e
 OldCopy_F7AB08:
@@ -163279,7 +163279,7 @@ OldCopy_F7AB08:
 	ld	(12304:16), xwa	; F6F126  ld (0x3010),XWA
 	ld	(13836:16), xwa	; F6F12A  ld (0x360c),XWA
 OldCopy_F7AB2E:
-	ld	(8318:16), 0	; F6F12E  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F6F12E  ld (0x207e),0x00
 	ld	(UI_StatusCode:16), 35	; F6F133  ld (0x2880),0x23
 	ldw	(UI_Request:16), 16555	; F6F138  ld (0x2070),0x40ab
 OldCopy_F7AB3E:
@@ -163394,11 +163394,11 @@ OldCopy_F7ABDB:
 	ret	; F6F1DB  ret
 OldCopy_sub_F7ABDC:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F6F1DC  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F6F1E1  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F1E1  cp (0x207e),0x01
 	jr	z, OldCopy_F7ABEA	; F6F1E6  jr Z,0xf6f1ea
 	jr	OldCopy_F7AC06	; F6F1E8  jr T,0xf6f206
 OldCopy_F7ABEA:
-	ld	(8318:16), 0	; F6F1EA  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F6F1EA  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F6F1EF  or (0x2071),0x10
 	ldw	(3518:16), 0	; F6F1F4  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F6F1FA  ld (0x215e),0x0000
@@ -163407,15 +163407,15 @@ OldCopy_F7AC06:
 	ret	; F6F206  ret
 OldCopy_sub_F7AC07:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F6F207  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F6F20C  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F20C  cp (0x207e),0x01
 	jr	z, OldCopy_F7AC1E	; F6F211  jr Z,0xf6f21e
-	ld	(8318:16), 1	; F6F213  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F6F213  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F6F218  or (0x2071),0x10
 	ret	; F6F21D  ret
 OldCopy_F7AC1E:
 	m_cp_mi16 MW16, 0x0dbe, 0x0000	; F6F21E  cp (0x0dbe),0x0000
 	jr	nz, OldCopy_F7AC32	; F6F224  jr NZ,0xf6f232
-	ld	(8318:16), 0	; F6F226  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F6F226  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F6F22B  or (0x2071),0x10
 	jr	OldCopy_F7AC9C	; F6F230  jr T,0xf6f29c
 OldCopy_F7AC32:
@@ -163450,7 +163450,7 @@ OldCopy_F7AC5D:
 	ldw	(3518:16), 0	; F6F27A  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F6F280  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F6F286  or (0x212e),0x0100
-	ld	(8318:16), 0	; F6F28C  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F6F28C  ld (0x207e),0x00
 	ld	(UI_StatusCode:16), 35	; F6F291  ld (0x2880),0x23
 	ldw	(UI_Request:16), 16555	; F6F296  ld (0x2070),0x40ab
 OldCopy_F7AC9C:
@@ -163596,7 +163596,7 @@ OldCopy_sub_F7ADDC:
 	ld	(4856:16), a	; F6F3F0  ld (0x12f8),A
 	ret	; F6F3F4  ret
 OldCopy_sub_F7ADF5:
-	m_cp_mi8 MB16, 0x207e, 0x01	; F6F3F5  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F3F5  cp (0x207e),0x01
 	jr	nz, sub_F7ADDC_Return - 0xBA00	; F6F3FA  jr NZ,0xf6f40b
 	.byte	0xC1, 0x75, 0x20, 0x3C	; F6F3FC  the first 4 of the 5 bytes of `and (0x2075),0xf6` (live 0xF7ADFC); this build's sub_F6F400 begins at 0xF6F400
 
@@ -183339,7 +183339,7 @@ sub_F7AA02:		; <- T_F428B4
 	jr	BStore_AppendBytes_Join4	; F7AA02  jr T,0xf7aa1f
 BStore_AppendBytes_Join3:
 	call	T_F409F8	; F7AA04  call 0xf409f8
-	ld	(8318:16), 0	; F7AA08  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AA08  ld (0x207e),0x00
 	ldw	(8542:16), 0	; F7AA0D  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F7AA13  or (0x212e),0x0100
 	m_or_mi8 MB16, 0x34bb, 0x04	; F7AA19  or (0x34bb),0x04
@@ -183443,7 +183443,7 @@ T_F428BC_Nop:		; <- T_F428BC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AA89:		; <- T_F428C0
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7AA89  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AA89  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Return	; F7AA8E  jr Z,0xf7aaae
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AA90  or (0x2075),0x09
 	ld	a, (3586:16)	; F7AA95  ld A,(0x0e02)
@@ -183470,7 +183470,7 @@ SongStore_LoadSongHeaderToDisplay_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AAAF:		; <- T_F428C4
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7AAAF  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AAAF  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Return2	; F7AAB4  jr Z,0xf7aadc
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AAB6  or (0x2075),0x09
 	ld	a, (3586:16)	; F7AABB  ld A,(0x0e02)
@@ -183502,9 +183502,9 @@ SongStore_LoadSongHeaderToDisplay_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AADD:		; <- T_F428C8
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7AADD  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AADD  cp (0x207e),0x01
 	jr	nz, SongStore_LoadSongHeaderToDisplay_Return3	; F7AAE2  jr NZ,0xf7aaef
-	ld	(8318:16), 0	; F7AAE4  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AAE4  ld (0x207e),0x00
 	ldw	(UI_Request:16), 32794	; F7AAE9  ld (0x2070),0x801a
 SongStore_LoadSongHeaderToDisplay_Return3:
 	ret	; F7AAEF  ret
@@ -183524,9 +183524,9 @@ SongStore_LoadSongHeaderToDisplay_Return3:
 ; --------------------------------------------------------------------------
 sub_F7AAF0:		; <- T_F428CC
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AAF0  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7AAF5  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AAF5  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Skip2	; F7AAFA  jr Z,0xf7ab08
-	ld	(8318:16), 1	; F7AAFC  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7AAFC  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AB01  or (0x2071),0x10
 	jr	SongStore_LoadSongHeaderToDisplay_Return4	; F7AB06  jr T,0xf7ab3e
 SongStore_LoadSongHeaderToDisplay_Skip2:
@@ -183541,7 +183541,7 @@ SongStore_LoadSongHeaderToDisplay_Skip2:
 	ld	(12304:16), xwa	; F7AB26  ld (0x3010),XWA
 	ld	(13836:16), xwa	; F7AB2A  ld (0x360c),XWA
 SongStore_LoadSongHeaderToDisplay_Skip3:
-	ld	(8318:16), 0	; F7AB2E  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AB2E  ld (0x207e),0x00
 	ld	(UI_StatusCode:16), 35	; F7AB33  ld (0x2880),0x23
 	ldw	(UI_Request:16), 16555	; F7AB38  ld (0x2070),0x40ab
 SongStore_LoadSongHeaderToDisplay_Return4:
@@ -183659,11 +183659,11 @@ sub_F7AB3F_Return3:
 ; --------------------------------------------------------------------------
 sub_F7ABDC:		; <- T_F428D8
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7ABDC  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7ABE1  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7ABE1  cp (0x207e),0x01
 	jr	z, sub_F7AB3F_Skip2	; F7ABE6  jr Z,0xf7abea
 	jr	sub_F7AB3F_Return4	; F7ABE8  jr T,0xf7ac06
 sub_F7AB3F_Skip2:
-	ld	(8318:16), 0	; F7ABEA  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7ABEA  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7ABEF  or (0x2071),0x10
 	ldw	(3518:16), 0	; F7ABF4  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F7ABFA  ld (0x215e),0x0000
@@ -183686,15 +183686,15 @@ sub_F7AB3F_Return4:
 ; --------------------------------------------------------------------------
 sub_F7AC07:		; <- T_F428DC
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AC07  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7AC0C  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AC0C  cp (0x207e),0x01
 	jr	z, sub_F7AB3F_Skip3	; F7AC11  jr Z,0xf7ac1e
-	ld	(8318:16), 1	; F7AC13  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7AC13  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AC18  or (0x2071),0x10
 	ret	; F7AC1D  ret
 sub_F7AB3F_Skip3:
 	m_cp_mi16 MW16, 0x0dbe, 0x0000	; F7AC1E  cp (0x0dbe),0x0000
 	jr	nz, sub_F7AB3F_Skip4	; F7AC24  jr NZ,0xf7ac32
-	ld	(8318:16), 0	; F7AC26  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AC26  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AC2B  or (0x2071),0x10
 	jr	sub_F7AB3F_Return5	; F7AC30  jr T,0xf7ac9c
 sub_F7AB3F_Skip4:
@@ -183729,7 +183729,7 @@ sub_F7AB3F_Skip5:
 	ldw	(3518:16), 0	; F7AC7A  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F7AC80  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F7AC86  or (0x212e),0x0100
-	ld	(8318:16), 0	; F7AC8C  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AC8C  ld (0x207e),0x00
 	ld	(UI_StatusCode:16), 35	; F7AC91  ld (0x2880),0x23
 	ldw	(UI_Request:16), 16555	; F7AC96  ld (0x2070),0x40ab
 sub_F7AB3F_Return5:
@@ -184009,10 +184009,10 @@ sub_F7ADDC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7ADF5:		; <- T_F42954
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7ADF5  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7ADF5  cp (0x207e),0x01
 	jr	nz, sub_F7ADDC_Return	; F7ADFA  jr NZ,0xf7ae0b
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7ADFC  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7AE01  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AE01  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AE06  or (0x2071),0x10
 sub_F7ADDC_Return:
 	ret	; F7AE0B  ret
@@ -184032,9 +184032,9 @@ sub_F7ADDC_Return:
 ; --------------------------------------------------------------------------
 sub_F7AE0C:		; <- T_F42958
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AE0C  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7AE11  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AE11  cp (0x207e),0x01
 	jr	z, sub_F7ADDC_Skip	; F7AE16  jr Z,0xf7ae25
-	ld	(8318:16), 1	; F7AE18  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7AE18  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AE1D  or (0x2071),0x10
 	jrl	sub_F7ADDC_Return2	; F7AE22  jrl T,0xf7af59
 sub_F7ADDC_Skip:
@@ -184050,7 +184050,7 @@ sub_F7ADDC_Skip:
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7AE4B  cp (0x2880),0xff
 	jrl	z, sub_F7ADDC_Skip8	; F7AE50  jrl Z,0xf7af4f
 	ldw	(UI_Request:16), 16555	; F7AE53  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7AE59  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AE59  ld (0x207e),0x00
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7AE5E  cp (0x2880),0x23
 	jrl	nz, sub_F7ADDC_Return2	; F7AE63  jrl NZ,0xf7af59
 	ld	c, (3184:16)	; F7AE66  ld C,(0x0c70)
@@ -184138,7 +184138,7 @@ sub_F7ADDC_Entry3:
 	m_or_mr ML16, 0x360c, 0	; F7AF49  or (0x360c),XWA
 	jr	sub_F7ADDC_Return2	; F7AF4D  jr T,0xf7af59
 sub_F7ADDC_Skip8:
-	ld	(8318:16), 0	; F7AF4F  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7AF4F  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7AF54  or (0x2071),0x10
 sub_F7ADDC_Return2:
 	ret	; F7AF59  ret
@@ -184315,7 +184315,7 @@ sub_F7B035:		; <- T_F4296C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B045:		; <- T_F42970
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7B045  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B045  cp (0x207e),0x01
 	jr	nz, sub_F7AFD8_Skip	; F7B04A  jr NZ,0xf7b04e
 	jr	sub_F7B07A	; F7B04C  jr T,0xf7b07a
 sub_F7AFD8_Skip:
@@ -184350,7 +184350,7 @@ sub_F7AFD8_Return2:
 ; --------------------------------------------------------------------------
 sub_F7B07A:		; <- T_F4297C
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B07A  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7B07F  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B07F  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B084  or (0x2071),0x10
 	jr	sub_F7AFD8_Return2	; F7B089  jr T,0xf7b079
 
@@ -184491,9 +184491,9 @@ sub_F7B128_Skip:
 ; --------------------------------------------------------------------------
 sub_F7B162:		; <- T_F42978
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B162  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7B167  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B167  cp (0x207e),0x01
 	jr	z, sub_F7B128_Skip2	; F7B16C  jr Z,0xf7b17a
-	ld	(8318:16), 1	; F7B16E  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7B16E  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B173  or (0x2071),0x10
 	jr	sub_F7B128_Return	; F7B178  jr T,0xf7b1d0
 sub_F7B128_Skip2:
@@ -184516,10 +184516,10 @@ sub_F7B128_Skip3:
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7B1B2  cp (0x2880),0xff
 	jr	z, sub_F7B128_Skip4	; F7B1B7  jr Z,0xf7b1c6
 	ldw	(UI_Request:16), 16555	; F7B1B9  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7B1BF  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B1BF  ld (0x207e),0x00
 	jr	sub_F7B128_Return	; F7B1C4  jr T,0xf7b1d0
 sub_F7B128_Skip4:
-	ld	(8318:16), 0	; F7B1C6  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B1C6  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B1CB  or (0x2071),0x10
 sub_F7B128_Return:
 	ret	; F7B1D0  ret
@@ -184677,7 +184677,7 @@ sub_F7B271:		; <- T_F42994
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B27C:		; <- T_F42998
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7B27C  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B27C  cp (0x207e),0x01
 	jr	nz, sub_F7B1D1_Skip	; F7B281  jr NZ,0xf7b285
 	jr	sub_F7B2BD	; F7B283  jr T,0xf7b2bd
 sub_F7B1D1_Skip:
@@ -184717,7 +184717,7 @@ sub_F7B1D1_Return3:
 ; --------------------------------------------------------------------------
 sub_F7B2BD:		; <- T_F429A4
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B2BD  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7B2C2  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B2C2  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B2C7  or (0x2071),0x10
 	jr	sub_F7B1D1_Return3	; F7B2CC  jr T,0xf7b2bc
 
@@ -184896,9 +184896,9 @@ sub_F7B3B1_Join:
 ; --------------------------------------------------------------------------
 sub_F7B3E0:		; <- T_F429A0
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B3E0  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7B3E5  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B3E5  cp (0x207e),0x01
 	jr	z, sub_F7B3B1_Skip3	; F7B3EA  jr Z,0xf7b3f8
-	ld	(8318:16), 1	; F7B3EC  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7B3EC  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B3F1  or (0x2071),0x10
 	jr	sub_F7B3B1_Return	; F7B3F6  jr T,0xf7b456
 sub_F7B3B1_Skip3:
@@ -184923,10 +184923,10 @@ sub_F7B3B1_Skip4:
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7B438  cp (0x2880),0xff
 	jr	z, sub_F7B3B1_Skip5	; F7B43D  jr Z,0xf7b44c
 	ldw	(UI_Request:16), 16555	; F7B43F  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7B445  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B445  ld (0x207e),0x00
 	jr	sub_F7B3B1_Return	; F7B44A  jr T,0xf7b456
 sub_F7B3B1_Skip5:
-	ld	(8318:16), 0	; F7B44C  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B44C  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B451  or (0x2071),0x10
 sub_F7B3B1_Return:
 	ret	; F7B456  ret
@@ -185171,7 +185171,7 @@ sub_F7B457_Return3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B58C:		; <- T_F429CC
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7B58C  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B58C  cp (0x207e),0x01
 	jr	nz, sub_F7B457_Skip6	; F7B591  jr NZ,0xf7b595
 	jr	sub_F7B457_Join	; F7B593  jr T,0xf7b5e4
 sub_F7B457_Skip6:
@@ -185208,7 +185208,7 @@ sub_F7B457_Return4:
 	ret	; F7B5E3  ret
 sub_F7B457_Join:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B5E4  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7B5E9  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B5E9  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B5EE  or (0x2071),0x10
 	jr	sub_F7B457_Return4	; F7B5F3  jr T,0xf7b5e3
 
@@ -185413,7 +185413,7 @@ sub_F7B74C:
 ; --------------------------------------------------------------------------
 sub_F7B761:		; <- T_F429D0
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B761  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7B766  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B766  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B76B  or (0x2071),0x10
 	ret	; F7B770  ret
 
@@ -185432,9 +185432,9 @@ sub_F7B761:		; <- T_F429D0
 ; --------------------------------------------------------------------------
 sub_F7B771:		; <- T_F429D4
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B771  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7B776  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B776  cp (0x207e),0x01
 	jr	z, sub_F7B74C_Skip	; F7B77B  jr Z,0xf7b78a
-	ld	(8318:16), 1	; F7B77D  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7B77D  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B782  or (0x2071),0x10
 	jrl	sub_F7B74C_Return	; F7B787  jrl T,0xf7b851
 sub_F7B74C_Skip:
@@ -185467,7 +185467,7 @@ sub_F7B74C_Skip2:
 	jr	z, sub_F7B74C_Skip7	; F7B7EC  jr Z,0xf7b847
 sub_F7B74C_Skip3:
 	ldw	(UI_Request:16), 16555	; F7B7EE  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7B7F4  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B7F4  ld (0x207e),0x00
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7B7F9  cp (0x2880),0x23
 	jr	nz, sub_F7B74C_Return	; F7B7FE  jr NZ,0xf7b851
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F7B800  cp (0x0c70),0x7f
@@ -185499,7 +185499,7 @@ sub_F7B74C_Entry:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F7B842  ld DE,QHL3
 	jr	sub_F7B74C_Return	; F7B845  jr T,0xf7b851
 sub_F7B74C_Skip7:
-	ld	(8318:16), 0	; F7B847  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7B847  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B84C  or (0x2071),0x10
 sub_F7B74C_Return:
 	ret	; F7B851  ret
@@ -185755,7 +185755,7 @@ sub_F7B852_Return3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B9AB:		; <- T_F429FC
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7B9AB  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B9AB  cp (0x207e),0x01
 	jr	nz, sub_F7B852_Skip7	; F7B9B0  jr NZ,0xf7b9b4
 	jr	sub_F7B852_Join	; F7B9B2  jr T,0xf7ba05
 sub_F7B852_Skip7:
@@ -185793,7 +185793,7 @@ sub_F7B852_Return4:
 	ret	; F7BA04  ret
 sub_F7B852_Join:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BA05  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7BA0A  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7BA0A  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BA0F  or (0x2071),0x10
 	jr	sub_F7B852_Return4	; F7BA14  jr T,0xf7ba04
 
@@ -185998,7 +185998,7 @@ sub_F7BB6D:
 ; --------------------------------------------------------------------------
 sub_F7BB82:		; <- T_F42A00
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BB82  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7BB87  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7BB87  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BB8C  or (0x2071),0x10
 	ret	; F7BB91  ret
 
@@ -186017,9 +186017,9 @@ sub_F7BB82:		; <- T_F42A00
 ; --------------------------------------------------------------------------
 sub_F7BB92:		; <- T_F42A04
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BB92  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7BB97  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BB97  cp (0x207e),0x01
 	jr	z, sub_F7BB6D_Skip	; F7BB9C  jr Z,0xf7bbab
-	ld	(8318:16), 1	; F7BB9E  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7BB9E  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BBA3  or (0x2071),0x10
 	jrl	sub_F7BB6D_Return	; F7BBA8  jrl T,0xf7bc72
 sub_F7BB6D_Skip:
@@ -186052,7 +186052,7 @@ sub_F7BB6D_Skip2:
 	jr	z, sub_F7BB6D_Skip7	; F7BC0D  jr Z,0xf7bc68
 sub_F7BB6D_Skip3:
 	ldw	(UI_Request:16), 16555	; F7BC0F  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7BC15  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7BC15  ld (0x207e),0x00
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7BC1A  cp (0x2880),0x23
 	jr	nz, sub_F7BB6D_Return	; F7BC1F  jr NZ,0xf7bc72
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F7BC21  cp (0x0c70),0x7f
@@ -186084,7 +186084,7 @@ sub_F7BB6D_Entry:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F7BC63  ld DE,QHL3
 	jr	sub_F7BB6D_Return	; F7BC66  jr T,0xf7bc72
 sub_F7BB6D_Skip7:
-	ld	(8318:16), 0	; F7BC68  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7BC68  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BC6D  or (0x2071),0x10
 sub_F7BB6D_Return:
 	ret	; F7BC72  ret
@@ -186266,7 +186266,7 @@ sub_F7BD6A:		; <- T_F428F4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BD7F:		; <- T_F428F8
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7BD7F  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BD7F  cp (0x207e),0x01
 	jr	nz, sub_F7BC73_Skip2	; F7BD84  jr NZ,0xf7bd88
 	jr	sub_F7BDC0	; F7BD86  jr T,0xf7bdc0
 sub_F7BC73_Skip2:
@@ -186308,7 +186308,7 @@ sub_F7BC73_Return3:
 sub_F7BDC0:		; <- T_F42904
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BDC0  and (0x2075),0xf6
 	calr	sub_F7BF74	; F7BDC5  calr 0xf7bf74
-	ld	(8318:16), 0	; F7BDC8  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7BDC8  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BDCD  or (0x2071),0x10
 	jr	sub_F7BC73_Return3	; F7BDD2  jr T,0xf7bdbf
 
@@ -186491,9 +186491,9 @@ sub_F7BEB3_Return:
 ; --------------------------------------------------------------------------
 sub_F7BEF4:		; <- T_F42900
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BEF4  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7BEF9  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BEF9  cp (0x207e),0x01
 	jr	z, sub_F7BEB3_Skip3	; F7BEFE  jr Z,0xf7bf0c
-	ld	(8318:16), 1	; F7BF00  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7BF00  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BF05  or (0x2071),0x10
 	jr	sub_F7BEB3_Return2	; F7BF0A  jr T,0xf7bf73
 sub_F7BEB3_Skip3:
@@ -186521,10 +186521,10 @@ sub_F7BEB3_Join2:
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7BF55  cp (0x2880),0xff
 	jr	z, sub_F7BEB3_Skip5	; F7BF5A  jr Z,0xf7bf69
 	ldw	(UI_Request:16), 16555	; F7BF5C  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7BF62  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7BF62  ld (0x207e),0x00
 	jr	sub_F7BEB3_Return2	; F7BF67  jr T,0xf7bf73
 sub_F7BEB3_Skip5:
-	ld	(8318:16), 0	; F7BF69  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7BF69  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BF6E  or (0x2071),0x10
 sub_F7BEB3_Return2:
 	ret	; F7BF73  ret
@@ -186739,7 +186739,7 @@ sub_F7C0E6:		; <- T_F4291C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C0F1:		; <- T_F42928
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7C0F1  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C0F1  cp (0x207e),0x01
 	jr	nz, sub_F7BF74_Skip4	; F7C0F6  jr NZ,0xf7c0fa
 	jr	sub_F7C13E	; F7C0F8  jr T,0xf7c13e
 sub_F7BF74_Skip4:
@@ -186802,7 +186802,7 @@ sub_F7C13E:		; <- T_F42934
 	ld	(6304890:24), wa	; F7C163  ld (0x60347a),WA
 	ld	a, (6304892:24)	; F7C168  ld A,(0x60347c)
 	ld	(3127:16), a	; F7C16D  ld (0x0c37),A
-	ld	(8318:16), 0	; F7C171  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C171  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C176  or (0x2071),0x10
 	jr	sub_F7BF74_Return4	; F7C17B  jr T,0xf7c13d
 
@@ -187125,9 +187125,9 @@ sub_F7C31B:		; <- T_F42924
 ; --------------------------------------------------------------------------
 sub_F7C326:		; <- T_F42930
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C326  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7C32B  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C32B  cp (0x207e),0x01
 	jr	z, sub_F7C326_Skip	; F7C330  jr Z,0xf7c33f
-	ld	(8318:16), 1	; F7C332  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7C332  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C337  or (0x2071),0x10
 	jrl	sub_F7C326_Return	; F7C33C  jrl T,0xf7c3b1
 sub_F7C326_Skip:
@@ -187158,11 +187158,11 @@ sub_F7C326_Join:
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7C393  cp (0x2880),0xff
 	jr	z, sub_F7C326_Skip3	; F7C398  jr Z,0xf7c3a7
 	ldw	(UI_Request:16), 16555	; F7C39A  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7C3A0  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C3A0  ld (0x207e),0x00
 	jr	sub_F7C326_Return	; F7C3A5  jr T,0xf7c3b1
 sub_F7C326_Skip3:
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C3A7  or (0x2071),0x10
-	ld	(8318:16), 0	; F7C3AC  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C3AC  ld (0x207e),0x00
 sub_F7C326_Return:
 	ret	; F7C3B1  ret
 
@@ -187473,7 +187473,7 @@ sub_F7C440_Return6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C555:		; <- T_F42A30
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7C555  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7C555  cp (0x207e),0x00
 	jrl	nz, sub_F7C440_Skip2	; F7C55A  jrl NZ,0xf7c5b0
 	ld	(3636:16), 0	; F7C55D  ld (0x0e34),0x00
 	m_cp_mi8 MB16, S0ngC0py_FromTrack, 0x12	; F7C562  cp (0x0e0e),0x12
@@ -187499,13 +187499,13 @@ sub_F7C555:		; <- T_F42A30
 	dec	1, c	; F7C59D  dec 1,C
 	mx_ld_rm MXB, ra_HL, ra_BC, 1	; F7C59F  ld A,(XHL+BC)
 sub_F7C440_Skip:
-	ld	(8318:16), 1	; F7C5A4  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7C5A4  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C5A9  or (0x2071),0x10
 	jr	sub_F7C440_Return7	; F7C5AE  jr T,0xf7c5bf
 sub_F7C440_Skip2:
 	call	T_F4271C	; F7C5B0  call 0xf4271c
 	ldw	(UI_Request:16), 16555	; F7C5B4  ld (0x2070),0x40ab
-	ld	(8318:16), 0	; F7C5BA  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C5BA  ld (0x207e),0x00
 sub_F7C440_Return7:
 	ret	; F7C5BF  ret
 
@@ -187521,7 +187521,7 @@ sub_F7C440_Return7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C5C0:		; <- T_F42A34
-	ld	(8318:16), 0	; F7C5C0  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C5C0  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C5C5  or (0x2071),0x10
 	ret	; F7C5CA  ret
 
@@ -188010,9 +188010,9 @@ sub_F7C7BC_Join:
 ; --------------------------------------------------------------------------
 sub_F7C7F0:		; <- T_F42A58
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C7F0  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7C7F5  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C7F5  cp (0x207e),0x01
 	jr	z, sub_F7C7F0_Skip	; F7C7FA  jr Z,0xf7c808
-	ld	(8318:16), 1	; F7C7FC  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7C7FC  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C801  or (0x2071),0x10
 	jr	sub_F7C7F0_Return	; F7C806  jr T,0xf7c842
 sub_F7C7F0_Skip:
@@ -188025,11 +188025,11 @@ sub_F7C7F0_Skip:
 	call	T_F42714	; F7C820  call 0xf42714
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7C824  cp (0x2880),0xff
 	jr	z, sub_F7C7F0_Skip2	; F7C829  jr Z,0xf7c838
-	ld	(8318:16), 0	; F7C82B  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C82B  ld (0x207e),0x00
 	ldw	(UI_Request:16), 16555	; F7C830  ld (0x2070),0x40ab
 	jr	sub_F7C7F0_Return	; F7C836  jr T,0xf7c842
 sub_F7C7F0_Skip2:
-	ld	(8318:16), 0	; F7C838  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C838  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C83D  or (0x2071),0x10
 sub_F7C7F0_Return:
 	ret	; F7C842  ret
@@ -188047,7 +188047,7 @@ sub_F7C7F0_Return:
 ; --------------------------------------------------------------------------
 sub_F7C843:		; <- T_F42A5C
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C843  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7C848  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7C848  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C84D  or (0x2071),0x10
 	ret	; F7C852  ret
 
@@ -188502,9 +188502,9 @@ sub_F7CA48:
 ; --------------------------------------------------------------------------
 sub_F7CA6F:		; <- T_F42AAC
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7CA6F  and (0x2075),0xf6
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7CA74  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7CA74  cp (0x207e),0x01
 	jr	z, sub_F7CA6F_Skip	; F7CA79  jr Z,0xf7ca87
-	ld	(8318:16), 1	; F7CA7B  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7CA7B  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CA80  or (0x2071),0x10
 	jr	sub_F7CA6F_Return	; F7CA85  jr T,0xf7cac1
 sub_F7CA6F_Skip:
@@ -188517,11 +188517,11 @@ sub_F7CA6F_Skip:
 	call	T_F42718	; F7CA9F  call 0xf42718
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7CAA3  cp (0x2880),0xff
 	jr	z, sub_F7CA6F_Skip2	; F7CAA8  jr Z,0xf7cab7
-	ld	(8318:16), 0	; F7CAAA  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7CAAA  ld (0x207e),0x00
 	ldw	(UI_Request:16), 16555	; F7CAAF  ld (0x2070),0x40ab
 	jr	sub_F7CA6F_Return	; F7CAB5  jr T,0xf7cac1
 sub_F7CA6F_Skip2:
-	ld	(8318:16), 0	; F7CAB7  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7CAB7  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CABC  or (0x2071),0x10
 sub_F7CA6F_Return:
 	ret	; F7CAC1  ret
@@ -188539,7 +188539,7 @@ sub_F7CA6F_Return:
 ; --------------------------------------------------------------------------
 sub_F7CAC2:		; <- T_F42AB0
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7CAC2  and (0x2075),0xf6
-	ld	(8318:16), 0	; F7CAC7  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7CAC7  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CACC  or (0x2071),0x10
 	ret	; F7CAD1  ret
 
@@ -188920,9 +188920,9 @@ sub_F7CC54_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CC7C:		; <- T_F42A80
-	m_cp_mi8 MB16, 0x207e, 0x01	; F7CC7C  cp (0x207e),0x01
+	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7CC7C  cp (0x207e),0x01
 	jr	z, sub_F7CC7C_Skip	; F7CC81  jr Z,0xf7cc8f
-	ld	(8318:16), 1	; F7CC83  ld (0x207e),0x01
+	ld	(UI_ScreenStage:16), 1	; F7CC83  ld (0x207e),0x01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CC88  or (0x2071),0x10
 	jr	sub_F7CC7C_Return	; F7CC8D  jr T,0xf7ccc9
 sub_F7CC7C_Skip:
@@ -188933,10 +188933,10 @@ sub_F7CC7C_Skip:
 	ld	wa, (3590:16)	; F7CC9F  ld WA,(0x0e06)
 	ld	(3191:16), wa	; F7CCA3  ld (0x0c77),WA
 	call	T_F42720	; F7CCA7  call 0xf42720
-	ld	(8318:16), 0	; F7CCAB  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7CCAB  ld (0x207e),0x00
 	m_cp_mi8 MB16, UI_StatusCode, 0xff	; F7CCB0  cp (0x2880),0xff
 	jr	nz, sub_F7CC7C_Skip2	; F7CCB5  jr NZ,0xf7ccc3
-	ld	(8318:16), 0	; F7CCB7  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7CCB7  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CCBC  or (0x2071),0x10
 	jr	sub_F7CC7C_Return	; F7CCC1  jr T,0xf7ccc9
 sub_F7CC7C_Skip2:
@@ -188956,7 +188956,7 @@ sub_F7CC7C_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CCCA:		; <- T_F42A84
-	ld	(8318:16), 0	; F7CCCA  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7CCCA  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CCCF  or (0x2071),0x10
 	ret	; F7CCD4  ret
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7CCD5  and (0x2075),0xf6
@@ -189479,7 +189479,7 @@ ScreenLeave_TrackClear:
 ;           its body loads the 32-word button tables at 0xF7D458 / 0xF7D4D8 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_TrackClear:
 	ld	xix, ButtonTable_TrackClear_207EZero	; F7D06A  ld XIX,0x00f7d458
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D06F  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D06F  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip3	; F7D074  jr Z,0xf7d07b
 	ld	xix, ButtonTable_TrackClear_207ENonZero	; F7D076  ld XIX,0x00f7d4d8
 sub_F7CE04_Skip3:
@@ -189529,7 +189529,7 @@ ScreenLeave_TrackAssign:
 ;           its body loads the 32-word button tables at 0xF7D558 / 0xF7D5D8 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_TrackAssign:
 	ld	xix, ButtonTable_TrackAssign_207EZero	; F7D08C  ld XIX,0x00f7d558
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D091  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D091  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip4	; F7D096  jr Z,0xf7d09d
 	ld	xix, ButtonTable_TrackAssign_207ENonZero	; F7D098  ld XIX,0x00f7d5d8
 sub_F7CE04_Skip4:
@@ -189624,7 +189624,7 @@ ScreenLeave_TrackMerge:
 ;           its body loads the 32-word button tables at 0xF7D6D8 / 0xF7D758 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_TrackMerge:
 	ld	xix, ButtonTable_TrackMerge_207EZero	; F7D0C6  ld XIX,0x00f7d6d8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D0CB  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D0CB  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip5	; F7D0D0  jr Z,0xf7d0d7
 	ld	xix, ButtonTable_TrackMerge_207ENonZero	; F7D0D2  ld XIX,0x00f7d758
 sub_F7CE04_Skip5:
@@ -189673,7 +189673,7 @@ ScreenLeave_MeasureDelete:
 ;           its body loads the 32-word button tables at 0xF7D7D8 / 0xF7D858 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureDelete:
 	ld	xix, ButtonTable_MeasureDelete_207EZero	; F7D0E7  ld XIX,0x00f7d7d8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D0EC  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D0EC  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip6	; F7D0F1  jr Z,0xf7d0f8
 	ld	xix, ButtonTable_MeasureDelete_207ENonZero	; F7D0F3  ld XIX,0x00f7d858
 sub_F7CE04_Skip6:
@@ -189722,7 +189722,7 @@ ScreenLeave_MeasureErase:
 ;           its body loads the 32-word button tables at 0xF7D8D8 / 0xF7D958 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureErase:
 	ld	xix, ButtonTable_MeasureErase_207EZero	; F7D108  ld XIX,0x00f7d8d8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D10D  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D10D  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip7	; F7D112  jr Z,0xf7d119
 	ld	xix, ButtonTable_MeasureErase_207ENonZero	; F7D114  ld XIX,0x00f7d958
 sub_F7CE04_Skip7:
@@ -189810,7 +189810,7 @@ ScreenLeave_Quantize:
 ;           its body loads the 32-word button tables at 0xF7D9D8 / 0xF7DA58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_Quantize:
 	ld	xix, ButtonTable_Quantize_207EZero	; F7D139  ld XIX,0x00f7d9d8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D13E  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D13E  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip8	; F7D143  jr Z,0xf7d14a
 	ld	xix, ButtonTable_Quantize_207ENonZero	; F7D145  ld XIX,0x00f7da58
 sub_F7CE04_Skip8:
@@ -189859,7 +189859,7 @@ ScreenLeave_Vel0cityChange:
 ;           its body loads the 32-word button tables at 0xF7DAD8 / 0xF7DB58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_Vel0cityChange:
 	ld	xix, ButtonTable_Vel0cityChange_207EZero	; F7D15A  ld XIX,0x00f7dad8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D15F  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D15F  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip9	; F7D164  jr Z,0xf7d16b
 	ld	xix, ButtonTable_Vel0cityChange_207ENonZero	; F7D166  ld XIX,0x00f7db58
 sub_F7CE04_Skip9:
@@ -189908,7 +189908,7 @@ ScreenLeave_Transp0se:
 ;           its body loads the 32-word button tables at 0xF7DBD8 / 0xF7DC58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_Transp0se:
 	ld	xix, ButtonTable_Transp0se_207EZero	; F7D17B  ld XIX,0x00f7dbd8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D180  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D180  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip10	; F7D185  jr Z,0xf7d18c
 	ld	xix, ButtonTable_Transp0se_207ENonZero	; F7D187  ld XIX,0x00f7dc58
 sub_F7CE04_Skip10:
@@ -190015,7 +190015,7 @@ ScreenLeave_AdvanceDelay:
 ;           its body loads the 32-word button tables at 0xF7DCD8 / 0xF7DD58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_AdvanceDelay:
 	ld	xix, ButtonTable_AdvanceDelay_207EZero	; F7D1DF  ld XIX,0x00f7dcd8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D1E4  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D1E4  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip13	; F7D1E9  jr Z,0xf7d1f0
 	ld	xix, ButtonTable_AdvanceDelay_207ENonZero	; F7D1EB  ld XIX,0x00f7dd58
 sub_F7CE04_Skip13:
@@ -190064,7 +190064,7 @@ ScreenLeave_S0ngC0py:
 ;           its body loads the 32-word button tables at 0xF7DDD8 / 0xF7DE58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_S0ngC0py:
 	ld	xix, ButtonTable_S0ngC0py_207EZero	; F7D200  ld XIX,0x00f7ddd8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D205  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D205  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip14	; F7D20A  jr Z,0xf7d211
 	ld	xix, ButtonTable_S0ngC0py_207ENonZero	; F7D20C  ld XIX,0x00f7de58
 sub_F7CE04_Skip14:
@@ -190113,7 +190113,7 @@ ScreenLeave_N0teChange:
 ;           its body loads the 32-word button tables at 0xF7DED8 / 0xF7DF58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_N0teChange:
 	ld	xix, ButtonTable_N0teChange_207EZero	; F7D221  ld XIX,0x00f7ded8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D226  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D226  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip15	; F7D22B  jr Z,0xf7d232
 	ld	xix, ButtonTable_N0teChange_207ENonZero	; F7D22D  ld XIX,0x00f7df58
 sub_F7CE04_Skip15:
@@ -190162,7 +190162,7 @@ ScreenLeave_MeasureC0py:
 ;           its body loads the 32-word button tables at 0xF7DFD8 / 0xF7E058 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureC0py:
 	ld	xix, ButtonTable_MeasureC0py_207EZero	; F7D242  ld XIX,0x00f7dfd8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D247  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D247  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip16	; F7D24C  jr Z,0xf7d253
 	ld	xix, ButtonTable_MeasureC0py_207ENonZero	; F7D24E  ld XIX,0x00f7e058
 sub_F7CE04_Skip16:
@@ -190211,7 +190211,7 @@ ScreenLeave_MeasureInsert:
 ;           its body loads the 32-word button tables at 0xF7E0D8 / 0xF7E158 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureInsert:
 	ld	xix, ButtonTable_MeasureInsert_207EZero	; F7D263  ld XIX,0x00f7e0d8
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7D268  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D268  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip17	; F7D26D  jr Z,0xf7d274
 	ld	xix, ButtonTable_MeasureInsert_207ENonZero	; F7D26F  ld XIX,0x00f7e158
 sub_F7CE04_Skip17:
@@ -192156,18 +192156,18 @@ Paint_TrackAssign:
 	ld	(3075:16), 0	; F7E44A  ld (0x0c03),0x00
 Paint_TrackAssign_Skip:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7E44F  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7E453  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7E453  cp (0x207e),0x00
 	jr	nz, Paint_TrackAssign_Skip2	; F7E458  jr NZ,0xf7e47b
 	call	T_F42BE4	; F7E45A  call 0xf42be4
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7E45E  or (0x2075),0x01
 	ldw	(PanelDial_DownButton:16), 35208	; F7E463  ld (0x209b),0x8988  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7E469  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7E46F  ld (0x266a),0xffff
-	m_bit 4, MD16, 0x2095	; F7E475  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F7E475  bit 4,(0x2095)
 	jr	nz, Paint_TrackAssign_Skip3	; F7E479  jr NZ,0xf7e4a1
 Paint_TrackAssign_Skip2:
 	calr	LCD_ScreenRedraw_Begin	; F7E47B  calr 0xf7e2d9
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7E47E  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7E47E  cp (0x207e),0x00
 	jr	nz, Paint_TrackAssign_Skip4	; F7E483  jr NZ,0xf7e4ac
 	ld	xiy, DL_F3B3DA	; F7E485  ld XIY,0x00f3b3da
 	ld	xix, DL_F3B5A9	; F7E48A  ld XIX,0x00f3b5a9
@@ -192219,7 +192219,7 @@ Paint_TrackAssign_Return:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_TrackAssign:
-	ld	(8318:16), 0	; F7E4F9  ld (0x207e),0x00
+	ld	(UI_ScreenStage:16), 0	; F7E4F9  ld (0x207e),0x00
 	m_and_mi8 MB16, 0x0dc0, 0xfe	; F7E4FE  and (0x0dc0),0xfe
 	call	T_F42BE8	; F7E503  call 0xf42be8
 	ret	; F7E507  ret
@@ -192810,7 +192810,7 @@ Paint_TrackAssignPresets:
 	jr	z, Paint_TrackAssignPresets_Skip	; F7E60D  jr Z,0xf7e60f
 Paint_TrackAssignPresets_Skip:
 	call	T_F42BF8	; F7E60F  call 0xf42bf8
-	m_bit 4, MD16, 0x2095	; F7E613  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F7E613  bit 4,(0x2095)
 	jr	nz, Paint_TrackAssignPresets_Skip2	; F7E617  jr NZ,0xf7e62b
 	call	LCD_ScreenRedraw_Begin	; F7E619  call 0xf7e2d9
 	ld	xiy, DL_TrackAssignPresetsTechnicsSetUp1116	; F7E61D  ld XIY,0x00f3a2bf
@@ -192957,7 +192957,7 @@ SoftKeyCol2_TrackAssignPresets:
 	jr	ScreenLeaveBody_TrackAssignPresets_Join	; F7E694  jr T,0xf7e696
 ScreenLeaveBody_TrackAssignPresets_Join:
 	call	T_F42C10	; F7E696  call 0xf42c10
-	m_or_mi8 MB16, 0x2095, 0x10	; F7E69A  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7E69A  or (0x2095),0x10
 	ret	; F7E69F  ret
 
 ; ---------------------------------------------------------------------
@@ -193008,7 +193008,7 @@ SoftKeyCol3_TrackAssignPresets:
 	jr	ScreenLeaveBody_TrackAssignPresets_Join2	; F7E6A5  jr T,0xf7e6a7
 ScreenLeaveBody_TrackAssignPresets_Join2:
 	call	T_F42C0C	; F7E6A7  call 0xf42c0c
-	m_or_mi8 MB16, 0x2095, 0x10	; F7E6AB  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7E6AB  or (0x2095),0x10
 	ret	; F7E6B0  ret
 
 ; ---------------------------------------------------------------------
@@ -194485,10 +194485,10 @@ Paint_SongClear:
 	call	T_F428B8	; F7EAD4  call 0xf428b8
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7EAD8  cp (0x2880),0x23
 	jrl	z, Paint_SongClear_Join	; F7EADD  jrl Z,0xf7ebcf
-	m_bit 4, MD16, 0x2095	; F7EAE0  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F7EAE0  bit 4,(0x2095)
 	jr	nz, Paint_SongClear_Skip	; F7EAE4  jr NZ,0xf7eb16
 	calr	LCD_ScreenRedraw_Begin	; F7EAE6  calr 0xf7e2d9
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EAE9  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EAE9  cp (0x207e),0x00
 	jrl	nz, Paint_SongClear_Skip4	; F7EAEE  jrl NZ,0xf7eb7a
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EAF1  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 770	; F7EAF6  ld (0x209b),0x0302  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
@@ -194526,7 +194526,7 @@ Paint_SongClear_Skip3:
 	call	T_DisplayListB_Run	; F7EB74  call 0xf417f4
 	jr	Paint_SongClear_Join	; F7EB78  jr T,0xf7ebcf
 Paint_SongClear_Skip4:
-	m_bit 4, MD16, 0x2095	; F7EB7A  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F7EB7A  bit 4,(0x2095)
 	jr	nz, Paint_SongClear_Skip5	; F7EB7E  jr NZ,0xf7eb8e
 	ld	xiy, DL_SongClearKbSongAttenti0n	; F7EB80  ld XIY,0x00f39a7d
 	ld	xix, DL_F39BF8	; F7EB85  ld XIX,0x00f39bf8
@@ -194619,7 +194619,7 @@ ButtonTable_SongClear_Nop0:
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
 SoftKeyCol3_SongClear:
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EBDE  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EBDE  cp (0x207e),0x00
 	jr	nz, SoftKeyCol3_SongClear_Return	; F7EBE3  jr NZ,0xf7ec0f
 	call	T_F428C4	; F7EBE5  call 0xf428c4
 	ld	a, (3586:16)	; F7EBE9  ld A,(0x0e02)
@@ -194632,7 +194632,7 @@ SoftKeyCol3_SongClear:
 	ld	a, (3633:16)	; F7EC02  ld A,(0x0e31)
 	ld	(4861:16), a	; F7EC06  ld (0x12fd),A
 SoftKeyCol3_SongClear_Skip:
-	m_or_mi8 MB16, 0x2095, 0x10	; F7EC0A  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7EC0A  or (0x2095),0x10
 SoftKeyCol3_SongClear_Return:
 	ret	; F7EC0F  ret
 
@@ -194683,7 +194683,7 @@ SoftKeyCol3_SongClear_Return:
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
 SoftKeyCol4_SongClear:
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EC10  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EC10  cp (0x207e),0x00
 	jr	nz, SoftKeyCol4_SongClear_Return	; F7EC15  jr NZ,0xf7ec41
 	call	T_F428C0	; F7EC17  call 0xf428c0
 	ld	a, (3586:16)	; F7EC1B  ld A,(0x0e02)
@@ -194696,7 +194696,7 @@ SoftKeyCol4_SongClear:
 	ld	a, (3633:16)	; F7EC34  ld A,(0x0e31)
 	ld	(4861:16), a	; F7EC38  ld (0x12fd),A
 SoftKeyCol4_SongClear_Skip:
-	m_or_mi8 MB16, 0x2095, 0x10	; F7EC3C  or (0x2095),0x10
+	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7EC3C  or (0x2095),0x10
 SoftKeyCol4_SongClear_Return:
 	ret	; F7EC41  ret
 ButtonTable_SongClear_Nop4:
@@ -194838,9 +194838,9 @@ ScreenNull_SongClear_Nop:
 ; ---------------------------------------------------------------------
 Paint_TrackClear:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7EC71  call 0xf42e80
-	m_bit 4, MD16, 0x2095	; F7EC75  bit 4,(0x2095)
+	m_bit 4, MD16, UI_ScreenFlags	; F7EC75  bit 4,(0x2095)
 	jr	nz, Paint_TrackClear_Skip	; F7EC79  jr NZ,0xf7ecb3
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EC7B  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EC7B  cp (0x207e),0x00
 	jr	nz, Paint_TrackClear_Skip2	; F7EC80  jr NZ,0xf7ecbf
 	call	T_F428D0	; F7EC82  call 0xf428d0
 	calr	LCD_ScreenRedraw_Begin	; F7EC86  calr 0xf7e2d9
@@ -195563,7 +195563,7 @@ ButtonTable_TrackClear_207ENonZero_Nop16:
 ; ---------------------------------------------------------------------
 Paint_TrackMerge:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7EE08  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EE0C  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EE0C  cp (0x207e),0x00
 	jr	nz, Paint_TrackMerge_Skip	; F7EE11  jr NZ,0xf7ee36
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EE13  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 1156	; F7EE18  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
@@ -195578,7 +195578,7 @@ Paint_TrackMerge_Skip:
 	ld	xiy, DL_TrackMergeOkTrackTrackTrack	; F7EE3E  ld XIY,0x00f3a47f
 	ld	xix, DL_Track	; F7EE43  ld XIX,0x00f3a526
 	call	T_DisplayList_Run	; F7EE48  call 0xf417f0
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EE4C  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EE4C  cp (0x207e),0x00
 	jr	nz, Paint_TrackMerge_Skip2	; F7EE51  jr NZ,0xf7ee63
 	ld	xiy, DL_Track	; F7EE53  ld XIY,0x00f3a526
 	ld	xix, DL_F3A561	; F7EE58  ld XIX,0x00f3a561
@@ -196035,7 +196035,7 @@ ButtonTable_TrackMerge_207ENonZero_Nop16:
 ; ---------------------------------------------------------------------
 Paint_MeasureDelete:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7EF7C  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EF80  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EF80  cp (0x207e),0x00
 	jr	nz, Paint_MeasureDelete_Skip	; F7EF85  jr NZ,0xf7efa2
 	call	T_F4295C	; F7EF87  call 0xf4295c
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EF8B  or (0x2075),0x09
@@ -196047,7 +196047,7 @@ Paint_MeasureDelete_Skip:
 	ld	xiy, DL_MeasureDeleteTrackFirstMeasure	; F7EFA5  ld XIY,0x00f3a5e9
 	ld	xix, DL_F3A66E	; F7EFAA  ld XIX,0x00f3a66e
 	call	T_DisplayList_Run	; F7EFAF  call 0xf417f0
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7EFB3  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EFB3  cp (0x207e),0x00
 	jr	nz, Paint_MeasureDelete_Skip2	; F7EFB8  jr NZ,0xf7efcc
 	ld	xiy, DL_F3A66E	; F7EFBA  ld XIY,0x00f3a66e
 	ld	xix, DL_LastMeasure	; F7EFBF  ld XIX,0x00f3a6ab
@@ -196730,7 +196730,7 @@ sub_F7F245:
 ; ---------------------------------------------------------------------
 Paint_MeasureErase:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7F254  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7F258  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F258  cp (0x207e),0x00
 	jr	nz, Paint_MeasureErase_Skip	; F7F25D  jr NZ,0xf7f27a
 	call	T_F42980	; F7F25F  call 0xf42980
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7F263  or (0x2075),0x09
@@ -196743,7 +196743,7 @@ Paint_MeasureErase_Skip:
 	ld	xiy, DL_MeasureEraseTrackFirstMeasure	; F7F282  ld XIY,0x00f3a8f5
 	ld	xix, DL_F3A99D	; F7F287  ld XIX,0x00f3a99d
 	call	T_DisplayList_Run	; F7F28C  call 0xf417f0
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7F290  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F290  cp (0x207e),0x00
 	jr	nz, Paint_MeasureErase_Skip2	; F7F295  jr NZ,0xf7f2a7
 	ld	xiy, DL_F3A99D	; F7F297  ld XIY,0x00f3a99d
 	ld	xix, DL_F3A9DA	; F7F29C  ld XIX,0x00f3a9da
@@ -197525,7 +197525,7 @@ sub_F7F574_Return:
 ; ---------------------------------------------------------------------
 Paint_Quantize:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7F582  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7F586  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F586  cp (0x207e),0x00
 	jr	nz, Paint_Quantize_Skip	; F7F58B  jr NZ,0xf7f5a8
 	call	T_F42908	; F7F58D  call 0xf42908
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7F591  or (0x2075),0x01
@@ -197538,7 +197538,7 @@ Paint_Quantize_Skip:
 	ld	xiy, DL_QuantizeTrackStrengthFirstMeasure	; F7F5B0  ld XIY,0x00f3abdb
 	ld	xix, DL_F3ACB3	; F7F5B5  ld XIX,0x00f3acb3
 	call	T_DisplayList_Run	; F7F5BA  call 0xf417f0
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7F5BE  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F5BE  cp (0x207e),0x00
 	jr	nz, Paint_Quantize_Skip2	; F7F5C3  jr NZ,0xf7f5d5
 	ld	xiy, DL_F3ACB3	; F7F5C5  ld XIY,0x00f3acb3
 	ld	xix, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F5CA  ld XIX,0x00f3acf0
@@ -198276,7 +198276,7 @@ BlinkArgPtrs_F7F88D:
 ; ---------------------------------------------------------------------
 Paint_Vel0cityChange:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7F8A9  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7F8AD  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F8AD  cp (0x207e),0x00
 	jr	nz, Paint_Vel0cityChange_Skip	; F7F8B2  jr NZ,0xf7f8cf
 	call	T_F428E0	; F7F8B4  call 0xf428e0
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7F8B8  or (0x2075),0x01
@@ -198286,7 +198286,7 @@ Paint_Vel0cityChange:
 Paint_Vel0cityChange_Skip:
 	calr	LCD_ScreenRedraw_Begin	; F7F8CF  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7F8D2  ld (0x2540),0x00
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7F8D7  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F8D7  cp (0x207e),0x00
 	jr	nz, Paint_Vel0cityChange_Skip2	; F7F8DC  jr NZ,0xf7f8ee
 	ld	xiy, DL_Vel0cityChangeTrackFirstMeasure	; F7F8DE  ld XIY,0x00f3aa54
 	ld	xix, DL_F3AB3B	; F7F8E3  ld XIX,0x00f3ab3b
@@ -199050,7 +199050,7 @@ BlinkArgPtrs_F7FBE4:
 ; ---------------------------------------------------------------------
 Paint_Transp0se:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7FBF8  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7FBFC  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7FBFC  cp (0x207e),0x00
 	jr	nz, Paint_Transp0se_Join	; F7FC01  jr NZ,0xf7fc36
 	call	T_F42A38	; F7FC03  call 0xf42a38
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7FC07  or (0x2075),0x01
@@ -199071,7 +199071,7 @@ Paint_Transp0se_Skip:
 Paint_Transp0se_Join:
 	calr	LCD_ScreenRedraw_Begin	; F7FC36  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7FC39  ld (0x2540),0x00
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7FC3E  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7FC3E  cp (0x207e),0x00
 	jr	nz, Paint_Transp0se_Skip2	; F7FC43  jr NZ,0xf7fc55
 	ld	xiy, DL_Transp0seTrackFirstMeasure	; F7FC45  ld XIY,0x00f3b102
 	ld	xix, DL_F3B1E3	; F7FC4A  ld XIX,0x00f3b1e3
@@ -199814,7 +199814,7 @@ BlinkArgPtrs_F7FF13:
 ; ---------------------------------------------------------------------
 Paint_AdvanceDelay:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7FF27  call 0xf42e80
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7FF2B  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7FF2B  cp (0x207e),0x00
 	jr	nz, Paint_AdvanceDelay_Join	; F7FF30  jr NZ,0xf7ff65
 	call	T_F42A60	; F7FF32  call 0xf42a60
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7FF36  or (0x2075),0x01
@@ -199838,7 +199838,7 @@ Paint_AdvanceDelay_Join:
 	ld	xiy, DL_AdvanceDelayTrackFirstMeasure	; F7FF6D  ld XIY,0x00f3b294
 	ld	xix, DL_F3B33C	; F7FF72  ld XIX,0x00f3b33c
 	call	T_DisplayList_Run	; F7FF77  call 0xf417f0
-	m_cp_mi8 MB16, 0x207e, 0x00	; F7FF7B  cp (0x207e),0x00
+	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7FF7B  cp (0x207e),0x00
 	jr	nz, Paint_AdvanceDelay_Skip2	; F7FF80  jr NZ,0xf7ff92
 	ld	xiy, DL_F3B33C	; F7FF82  ld XIY,0x00f3b33c
 	ld	xix, DL_F3B379	; F7FF87  ld XIX,0x00f3b379

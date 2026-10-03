@@ -116,11 +116,11 @@ enumerate, what the index in `HL` is". Two of the three are now answered, by
   independently from the same screens' text, and the derived title is a prefix of
   all seven and exact on six (check R8/R8b).
 
-⚠ **Still not established:** what `(0x207E)` and `(0x0C10)` MEAN — which of a
-screen's two button maps each picks, and when. The same `(0x207E)` also picks
-between two *title* display lists inside several Enter methods, so it is a
-per-screen variant selector of some kind, and that is as far as the evidence
-goes. Four of the 25 screens have no titled list and keep `sub_XXXXXX`
+⚠ **Still not established:** what `(0x0C10)` MEANS — which of a screen's two
+button maps it picks, and when. **`(0x207E)` is answered (2026-10-03):** it is
+`UI_ScreenStage`, the page of the current screen. On the job screens 0 is the
+parameter page and 1 the "Are You Sure ?" page, which a first press of the execute
+key opens -- see `FINDINGS-prom_ab-screen-stage-and-flags.md`. Four of the 25 screens have no titled list and keep `sub_XXXXXX`
 (0xF43040, 0xF43048, 0xF43160, 0xF431D0).
 
 ## And a fourth thing that is not a dispatch layer
