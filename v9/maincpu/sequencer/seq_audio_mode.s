@@ -1483,7 +1483,7 @@ Rhythm_DispatchNoteFromFC5A:
 RhythmROM_CheckValid:
 	ld c, 0x0:opc
 	ld xwa, 0xffffffff
-	cp xwa, (0x3277:16)
+	cp xwa, (RHYTHM_ROM_BASE:16)
 	jr z, RhythmROM_InvalidIncrement
 	jr RhythmROM_CheckDone
 
@@ -1612,7 +1612,7 @@ AccentData_Part5_Done:
 
 RhythmROM_ValidateHeader:
 	xor xwa, xwa
-	ld (0x3277:16), xwa
+	ld (RHYTHM_ROM_BASE:16), xwa
 	ld xix, 0x400000
 	ld xwa, (xix)
 	cp xwa, 0x5040100
@@ -1627,7 +1627,7 @@ RhythmROM_ValidateHeader:
 
 AccChord_CheckFailed:
 	ld xwa, 0xffffffff
-	ld (0x3277:16), xwa
+	ld (RHYTHM_ROM_BASE:16), xwa
 
 RhythmROM_HeaderValid:
 	ret

@@ -2694,7 +2694,7 @@ typedef struct __attribute__((packed)) {
      * non-zero pair forms hi:lo = a multiple of 0x800 below 0x70000; zero
      * pairs mark unused (bank, program) slots. It locates data in the Rhythm
      * Data ROM (0x400000, technics-docs memory-map.md): VoiceAssign_Process_Return
-     * computes xix = 0x400000 + (the long at RAM 0x3277) + ((hi & 0xFF) << 16 | lo).
+     * computes xix = 0x400000 + RHYTHM_ROM_BASE (RAM 0x3277 in v10/v9, 0x31db in v7) + ((hi & 0xFF) << 16 | lo).
      * --------------------------------------------------------------------- */
     uint16_t RhythmROM_BankProgramLocators[8][128][2];
     /* ---------------------------------------------------------------------

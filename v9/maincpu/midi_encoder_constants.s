@@ -89,3 +89,9 @@
 	; (EQU->inline label) ENCODER_HANDLER_TABLE = 0xeda0bc
 
 ; End of MIDI/Encoder constants
+
+; Rhythm Data ROM (IC14, at 0x400000) status/base, 32-bit: RhythmROM_ValidateHeader stores 0
+; when the ROM starts with its 12-byte signature (00 01 04 05 83 00 01 04 05 83 00 01) and
+; 0xffffffff when not (RhythmROM_CheckValid tests that); the rhythm readers add it to
+; 0x400000 + a RhythmROM_BankProgramLocators offset.
+.equ RHYTHM_ROM_BASE, 0x3277

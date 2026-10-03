@@ -5038,7 +5038,7 @@ AccVoice_TableLookup_Compute:
 	sll	xhl, 2
 	add	xhl, AccVoice_OffsetTable
 	ld	xhl, (xhl)
-	add	xhl, (12763:16)
+	add	xhl, (RHYTHM_ROM_BASE:16)
 	ret
 AccVoice_OffsetTable:
 	.byte 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x41, 0x00
@@ -21769,7 +21769,7 @@ RhythmROM_CalcPatternAddr:
 	and	xwa, 65280
 	sla	xwa, 8
 	ld	xix, 4194304
-	add	xix, (12763:16)
+	add	xix, (RHYTHM_ROM_BASE:16)
 	add	xix, xwa
 	ret
 RhythmROM_PatternDisp_Return:
@@ -27128,7 +27128,7 @@ VoiceAssign_Process_Return:
 	and	xwa, 65280
 	sll	xwa, 8
 	ld	xix, 4194304
-	add	xix, (0x31db:16)
+	add	xix, (RHYTHM_ROM_BASE:16)
 	add	xix, xwa
 	add	xix, xde
 	jr	VoiceAssign_StoreFinal
@@ -27305,7 +27305,7 @@ MIDIChan_DispatchTable:
 
 	ld xiy, 0x400000
 
-	add xix, (12763:16)
+	add xix, (RHYTHM_ROM_BASE:16)
 
 	add xiy, xwa
 
