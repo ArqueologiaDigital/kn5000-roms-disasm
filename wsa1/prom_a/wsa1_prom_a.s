@@ -1139,890 +1139,890 @@
 	.set Rec_F3FD10,                              0x00F3FD10
 	.set Rec_F3FD28,                              0x00F3FD28
 	.set Rec_F3FD38,                              0x00F3FD38
-	.set T_F40000,                                0x00F40000
-	.set T_Dev7F_WriteSlot8_Slot0,                0x00F40004
-	.set T_Dev7F_WriteSlot8_Slot1,                0x00F40008
-	.set T_Dev7F_WriteSlot8_Slot2,                0x00F4000C
-	.set T_Dev7F_WriteSlot8_Slot3,                0x00F40010
-	.set T_Queue2C00_DrainPassAB,                 0x00F40018
-	.set T_F40024,                                0x00F40024
-	.set T_Queue2C00_DrainPassB,                  0x00F40038
-	.set T_LCD_EntryThunks,                       0x00F400A0
-	.set T_SWI7_ServiceCall_Dispatch,             0x00F400A4
-	.set T_Paint_GateArrayCheck,                  0x00F400D0
-	.set T_Paint_PanelCpuCheck,                   0x00F400E0
-	.set T_Paint_SineWaveCheckMode,               0x00F400F0
-	.set T_Paint_PanelSwLedCheck,                 0x00F40100
-	.set T_F40110,                                0x00F40110
-	.set T_F40130,                                0x00F40130
-	.set T_F40140,                                0x00F40140
-	.set T_F40144,                                0x00F40144
-	.set T_F40148,                                0x00F40148
-	.set T_F4014C,                                0x00F4014C
-	.set T_F401D0,                                0x00F401D0
-	.set T_F401D4,                                0x00F401D4
-	.set T_F401D8,                                0x00F401D8
-	.set T_F401DC,                                0x00F401DC
-	.set T_F401E8,                                0x00F401E8
-	.set T_F401EC,                                0x00F401EC
-	.set T_F40210,                                0x00F40210
-	.set T_F40214,                                0x00F40214
-	.set T_F4021C,                                0x00F4021C
-	.set T_F40220,                                0x00F40220
-	.set T_F40224,                                0x00F40224
-	.set T_F40228,                                0x00F40228
-	.set T_F40240,                                0x00F40240
-	.set T_F40244,                                0x00F40244
-	.set T_F40248,                                0x00F40248
-	.set T_F4024C,                                0x00F4024C
-	.set T_F40254,                                0x00F40254
-	.set T_F40290,                                0x00F40290
-	.set T_F402A0,                                0x00F402A0
-	.set T_F402A4,                                0x00F402A4
-	.set T_Paint_Sequencer,                       0x00F402AC
-	.set T_ShowScreen_NoteEditPartSelect,         0x00F402BC
-	.set T_F402CC,                                0x00F402CC
-	.set T_ShowScreen_DrumEditPartSelect,         0x00F402DC
-	.set T_F402EC,                                0x00F402EC
-	.set T_F40304,                                0x00F40304
-	.set T_F40308,                                0x00F40308
-	.set T_F4030C,                                0x00F4030C
-	.set T_Ctrl_Normalise,                        0x00F405F0
-	.set T_F40610,                                0x00F40610
-	.set T_F40614,                                0x00F40614
-	.set T_F40630,                                0x00F40630
-	.set T_F40634,                                0x00F40634
-	.set T_F40660,                                0x00F40660
-	.set T_F40664,                                0x00F40664
-	.set T_F40668,                                0x00F40668
-	.set T_F40670,                                0x00F40670
-	.set T_F40674,                                0x00F40674
-	.set T_F40678,                                0x00F40678
-	.set T_F4067C,                                0x00F4067C
-	.set T_F40680,                                0x00F40680
-	.set T_F40684,                                0x00F40684
-	.set T_F40688,                                0x00F40688
-	.set T_F4068C,                                0x00F4068C
-	.set T_F40690,                                0x00F40690
-	.set T_F40694,                                0x00F40694
-	.set T_F40698,                                0x00F40698
-	.set T_F4069C,                                0x00F4069C
-	.set T_F406A0,                                0x00F406A0
-	.set T_MIDI_EntryThunks,                      0x00F40710
-	.set T_MIDI_RX_Byte,                          0x00F40714
-	.set T_MIDI_TX_Ready,                         0x00F40718
-	.set T_F40720,                                0x00F40720
-	.set T_MIDI_PostSendWork,                     0x00F40724
-	.set T_MIDI_DrainQueue,                       0x00F40728
-	.set T_MIDI_SendBankAndProgram,               0x00F4072C
-	.set T_MIDI_PostSendWork_PortB,               0x00F40730
-	.set T_MIDI_SendAllNotesOff_AllChannels,      0x00F40734
-	.set T_MidiIn_EntryThunks,                    0x00F40740
-	.set T_MidiIn_PumpPortA,                      0x00F40744
-	.set T_MidiOut_ParamChanged,                  0x00F40748
-	.set T_MidiIn_ReqRouteRebuild_Msg0D,          0x00F40754
-	.set T_MidiIn_ServiceDeferred,                0x00F40758
-	.set T_F4075C,                                0x00F4075C
-	.set T_F40760,                                0x00F40760
-	.set T_F40770,                                0x00F40770
-	.set T_F40774,                                0x00F40774
-	.set T_F4077C,                                0x00F4077C
-	.set T_F40780,                                0x00F40780
-	.set T_F4078C,                                0x00F4078C
-	.set T_F40790,                                0x00F40790
-	.set T_F40794,                                0x00F40794
-	.set T_F40798,                                0x00F40798
-	.set T_F4079C,                                0x00F4079C
-	.set T_F407A0,                                0x00F407A0
-	.set T_F407A4,                                0x00F407A4
-	.set T_F407AC,                                0x00F407AC
-	.set T_F407B0,                                0x00F407B0
-	.set T_Queue2C00_PublishStagedIfPending,      0x00F407B4
-	.set T_Queue2C00_PublishStagedDrainPassB,     0x00F407B8
-	.set T_ParamChange_NotifyClearSource,         0x00F407CC
-	.set T_ParamChange_Notify,                    0x00F407D0
-	.set T_ParamRecord_WriteFieldAndStage,        0x00F407D4
-	.set T_ParamRecord_WriteFieldAndStage_Copy,   0x00F407D8
-	.set T_F407E8,                                0x00F407E8
-	.set T_F407EC,                                0x00F407EC
-	.set T_F407F4,                                0x00F407F4
-	.set T_F407FC,                                0x00F407FC
-	.set T_F40804,                                0x00F40804
-	.set T_F40808,                                0x00F40808
-	.set T_MidiIn_ControlRecord_Dispatch,                                0x00F4080C
-	.set T_F40810,                                0x00F40810
-	.set T_F40840,                                0x00F40840
-	.set T_Evt2030_RunList,                                0x00F40850
-	.set T_ParamApply_ByModeOfParam80,                                0x00F40854
-	.set T_ParamApply_MaskedWriteAndPublish,                                0x00F40858
-	.set T_ParamShadow_SetPitchBend,                                0x00F40864
-	.set T_ParamShadow_SetModulation1,                                0x00F40868
-	.set T_ParamShadow_SetExpression,                                0x00F4086C
-	.set T_ParamApply_StorePairAndDerive,                                0x00F40870
-	.set T_ParamShadow_SetField3,                                0x00F40874
-	.set T_ParamApply_WriteStagedAndPublish,                                0x00F40878
-	.set T_ParamApply_PublishStagedAndPostSeven,                                0x00F4087C
-	.set T_ParamApply_PublishStagedPairBCDE,                                0x00F40880
-	.set T_ParamApply_PublishStagedPair,                                0x00F40884
-	.set T_ParamApply_WriteStagedAndPublish_Copy,                                0x00F40888
-	.set T_ParamApply_PublishStagedPair_Copy,                                0x00F4088C
-	.set T_F40894,                                0x00F40894
-	.set T_ParamShadow_FlushAll,                                0x00F40898
-	.set T_ParamApply_OneHotOfSix,                                0x00F4089C
-	.set T_F408E0,                                0x00F408E0
-	.set T_F408E4,                                0x00F408E4
-	.set T_F408E8,                                0x00F408E8
-	.set T_F408EC,                                0x00F408EC
-	.set T_F408F0,                                0x00F408F0
-	.set T_F408F4,                                0x00F408F4
-	.set T_F40900,                                0x00F40900
-	.set T_F40904,                                0x00F40904
-	.set T_F40950,                                0x00F40950
-	.set T_F40954,                                0x00F40954
-	.set T_F40958,                                0x00F40958
-	.set T_F4095C,                                0x00F4095C
-	.set T_F409A0,                                0x00F409A0
-	.set T_F409A4,                                0x00F409A4
-	.set T_F409AC,                                0x00F409AC
-	.set T_F409C0,                                0x00F409C0
-	.set T_F409C4,                                0x00F409C4
-	.set T_F409C8,                                0x00F409C8
-	.set T_F409CC,                                0x00F409CC
-	.set T_F409E0,                                0x00F409E0
-	.set T_F409E4,                                0x00F409E4
-	.set T_F409EC,                                0x00F409EC
-	.set T_F409F0,                                0x00F409F0
-	.set T_F409FC,                                0x00F409FC
-	.set T_F40A00,                                0x00F40A00
-	.set T_F40A08,                                0x00F40A08
-	.set T_F40A0C,                                0x00F40A0C
-	.set T_F40A10,                                0x00F40A10
-	.set T_F40A14,                                0x00F40A14
-	.set T_F40A18,                                0x00F40A18
-	.set T_F40A24,                                0x00F40A24
-	.set T_F40A28,                                0x00F40A28
-	.set T_F40A3C,                                0x00F40A3C
-	.set T_F40A70,                                0x00F40A70
-	.set T_F40AC8,                                0x00F40AC8
-	.set T_F40C5C,                                0x00F40C5C
-	.set T_F40C60,                                0x00F40C60
-	.set T_F40C88,                                0x00F40C88
-	.set T_F40CBC,                                0x00F40CBC
-	.set T_F40D90,                                0x00F40D90
-	.set T_F40D98,                                0x00F40D98
-	.set T_F40DA0,                                0x00F40DA0
-	.set T_F40DB0,                                0x00F40DB0
-	.set T_F40DC0,                                0x00F40DC0
-	.set T_F40DD0,                                0x00F40DD0
-	.set T_F40DE0,                                0x00F40DE0
-	.set T_F40DF0,                                0x00F40DF0
-	.set T_F40E00,                                0x00F40E00
-	.set T_RingPutBlock_EntryThunks,              0x00F40ED0
-	.set T_Link_SendBlockIn32ByteChunks,                                0x00F40ED4
-	.set T_Link_ServiceTask,                      0x00F40ED8
-	.set T_INT0_LinkByte,                         0x00F40EDC
-	.set T_INTT2_Reti,                            0x00F40EE0
-	.set T_INTTC2_uDMA2Done,                      0x00F40EE4
-	.set T_INTTC3_LinkDmaDone,                    0x00F40EE8
-	.set T_Link_SendCommandE1,                    0x00F40EEC
-	.set T_Link_SendCommandE2,                    0x00F40EF0
-	.set T_SC1_Vtable,                            0x00F40F00
-	.set T_SC1_Service,                           0x00F40F04
-	.set T_SC1_TxFlush,                           0x00F40F08
-	.set T_INT6_SC1_PeerRequest,                  0x00F40F0C
-	.set T_INTRX1_SC1_Dispatch,                   0x00F40F10
-	.set T_INTTX1_SC1_Dispatch,                   0x00F40F14
-	.set T_SC1_Entry_F40F18_Ret,                  0x00F40F18
-	.set T_F40F1C,                                0x00F40F1C
-	.set T_F40F20,                                0x00F40F20
-	.set T_PanelTask_EntryVectors,                0x00F40F30
-	.set T_PanelTask_Step,                        0x00F40F34
-	.set T_Queue2C00_AppendRegs,                  0x00F40F38
-	.set T_Queue2E00_AppendRegs,                  0x00F40F3C
-	.set T_List2030_AppendRegs,                   0x00F40F40
-	.set T_PanelTimers_Step,                      0x00F40F44
-	.set T_PanelState_CheckRequestAllowed_2,                                0x00F40F4C
-	.set T_UiEventList_Publish,                   0x00F40F50
-	.set T_UiEventList_RunPassA,                  0x00F40F5C
-	.set T_UiEventList_RunPassB,                  0x00F40F60
-	.set T_UiEventList_RunPassC,                  0x00F40F64
-	.set T_PanelHold_Tick,                        0x00F40F74
-	.set T_F40FB0,                                0x00F40FB0
-	.set T_F40FB4,                                0x00F40FB4
-	.set T_F40FD0,                                0x00F40FD0
-	.set T_F40FDC,                                0x00F40FDC
-	.set T_F40FEC,                                0x00F40FEC
-	.set T_F40FF0,                                0x00F40FF0
-	.set T_F40FF4,                                0x00F40FF4
-	.set T_F40FFC,                                0x00F40FFC
-	.set T_F41000,                                0x00F41000
-	.set T_F41004,                                0x00F41004
-	.set T_F41008,                                0x00F41008
-	.set T_F4100C,                                0x00F4100C
-	.set T_F41010,                                0x00F41010
-	.set T_F41018,                                0x00F41018
-	.set T_SoundGroup_MaxMemberIndex_Get,         0x00F4101C
-	.set T_F41024,                                0x00F41024
-	.set T_F41028,                                0x00F41028
-	.set T_F4102C,                                0x00F4102C
-	.set T_F41030,                                0x00F41030
-	.set T_SoundGroup_MaxMemberIndex_GetToneCopy, 0x00F41034
-	.set T_F41038,                                0x00F41038
-	.set T_F4103C,                                0x00F4103C
-	.set T_F41040,                                0x00F41040
-	.set T_F41044,                                0x00F41044
-	.set T_F41048,                                0x00F41048
-	.set T_F4104C,                                0x00F4104C
-	.set T_F41050,                                0x00F41050
-	.set T_F41054,                                0x00F41054
-	.set T_F4105C,                                0x00F4105C
-	.set T_F41060,                                0x00F41060
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13,                                0x00F41070
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13,                                0x00F41074
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13,                                0x00F41078
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13,                                0x00F4107C
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13,                                0x00F41080
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13,                                0x00F41084
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13,                                0x00F41088
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13,                                0x00F4108C
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13,                                0x00F41090
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13,                                0x00F41094
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13,                                0x00F41098
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13,                                0x00F4109C
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13,                                0x00F410A0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13,                                0x00F410A4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13,                                0x00F410A8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13,                                0x00F410AC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13,                                0x00F410B0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13,                                0x00F410B4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13,                                0x00F410B8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13,                                0x00F410BC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13,                                0x00F410C0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13,                                0x00F410C4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13,                                0x00F410C8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13,                                0x00F410CC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13,                                0x00F410D0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13,                                0x00F410D4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13,                                0x00F410D8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13,                                0x00F410DC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13,                                0x00F410E0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13,                                0x00F410E4
-	.set T_F410E8,                                0x00F410E8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13,                                0x00F410EC
-	.set T_F410F0,                                0x00F410F0
-	.set T_F410F4,                                0x00F410F4
-	.set T_F410F8,                                0x00F410F8
-	.set T_F410FC,                                0x00F410FC
-	.set T_F41100,                                0x00F41100
-	.set T_F41104,                                0x00F41104
-	.set T_F41108,                                0x00F41108
-	.set T_F4110C,                                0x00F4110C
-	.set T_F41110,                                0x00F41110
-	.set T_F41114,                                0x00F41114
-	.set T_F41118,                                0x00F41118
-	.set T_F4111C,                                0x00F4111C
-	.set T_F41120,                                0x00F41120
-	.set T_F41124,                                0x00F41124
-	.set T_F41128,                                0x00F41128
-	.set T_F4112C,                                0x00F4112C
-	.set T_F41130,                                0x00F41130
-	.set T_F41134,                                0x00F41134
-	.set T_F41138,                                0x00F41138
-	.set T_F4113C,                                0x00F4113C
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6,                                0x00F41140
-	.set T_F41144,                                0x00F41144
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2,                                0x00F41148
-	.set T_F4114C,                                0x00F4114C
-	.set T_F41150,                                0x00F41150
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14,                                0x00F41154
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13,                                0x00F41158
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7,                                0x00F4115C
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4,                                0x00F41160
-	.set T_F41164,                                0x00F41164
-	.set T_F41168,                                0x00F41168
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19,                                0x00F4116C
-	.set T_F41170,                                0x00F41170
-	.set T_F41174,                                0x00F41174
-	.set T_F41178,                                0x00F41178
-	.set T_F4117C,                                0x00F4117C
-	.set T_F41180,                                0x00F41180
-	.set T_F411B0,                                0x00F411B0
-	.set T_F411B4,                                0x00F411B4
-	.set T_F411B8,                                0x00F411B8
-	.set T_F411BC,                                0x00F411BC
-	.set T_F411C0,                                0x00F411C0
-	.set T_F411C4,                                0x00F411C4
-	.set T_F411C8,                                0x00F411C8
-	.set T_F411CC,                                0x00F411CC
-	.set T_F411D0,                                0x00F411D0
-	.set T_F411D4,                                0x00F411D4
-	.set T_F411D8,                                0x00F411D8
-	.set T_F411DC,                                0x00F411DC
-	.set T_F411E0,                                0x00F411E0
-	.set T_F411E4,                                0x00F411E4
-	.set T_F411E8,                                0x00F411E8
-	.set T_F411EC,                                0x00F411EC
-	.set T_Link_SendCommandE4,                    0x00F41230
-	.set T_Link_SendCommand3_WaitTicks,                                0x00F41234
-	.set T_Link_SendCommand5_WaitDone,            0x00F41238
-	.set T_Link_WaitBlockDone,                    0x00F4123C
-	.set T_Link_SendCommandE7,                    0x00F41240
-	.set T_F41250,                                0x00F41250
-	.set T_F41254,                                0x00F41254
-	.set T_F41258,                                0x00F41258
-	.set T_F4125C,                                0x00F4125C
-	.set T_F41260,                                0x00F41260
-	.set T_F41264,                                0x00F41264
-	.set T_F413B0,                                0x00F413B0
-	.set T_F413B4,                                0x00F413B4
-	.set T_F413B8,                                0x00F413B8
-	.set T_F413BC,                                0x00F413BC
-	.set T_F413C0,                                0x00F413C0
-	.set T_F413C4,                                0x00F413C4
-	.set T_F413C8,                                0x00F413C8
-	.set T_F413CC,                                0x00F413CC
-	.set T_Ram3800_InitDataImage,                 0x00F413D0
-	.set T_F413D4,                                0x00F413D4
-	.set T_F413DC,                                0x00F413DC
-	.set T_F413E0,                                0x00F413E0
-	.set T_F413F8,                                0x00F413F8
-	.set T_F413FC,                                0x00F413FC
-	.set T_F41400,                                0x00F41400
-	.set T_F414B0,                                0x00F414B0
-	.set T_F414B4,                                0x00F414B4
-	.set T_F414B8,                                0x00F414B8
-	.set T_F414BC,                                0x00F414BC
-	.set T_F414C0,                                0x00F414C0
-	.set T_F414C4,                                0x00F414C4
-	.set T_F41500,                                0x00F41500
-	.set T_F41508,                                0x00F41508
-	.set T_F41510,                                0x00F41510
-	.set T_F41520,                                0x00F41520
-	.set T_F41530,                                0x00F41530
-	.set T_InstallPainter_SoundGroupMenu_Entry,                                0x00F41540
-	.set T_InstallPainter_GroupSoundDisplayHold_Entry,                                0x00F41550
-	.set T_InstallPainter_CombinationGroupMenu_Entry,                                0x00F41560
-	.set T_InstallPainter_CombinationGroupMenu_Entry_5,                                0x00F41570
-	.set T_InstallPainter_GroupCombiDisplayHold_Entry,                                0x00F41580
-	.set T_F41590,                                0x00F41590
-	.set T_F415A0,                                0x00F415A0
-	.set T_F415A4,                                0x00F415A4
-	.set T_F415A8,                                0x00F415A8
-	.set T_F415AC,                                0x00F415AC
-	.set T_F415B0,                                0x00F415B0
-	.set T_F415B4,                                0x00F415B4
-	.set T_F415B8,                                0x00F415B8
-	.set T_F415C0,                                0x00F415C0
-	.set T_F415C4,                                0x00F415C4
-	.set T_F415C8,                                0x00F415C8
-	.set T_F41600,                                0x00F41600
-	.set T_F41604,                                0x00F41604
-	.set T_F41640,                                0x00F41640
-	.set T_F41650,                                0x00F41650
-	.set T_F41660,                                0x00F41660
-	.set T_F41670,                                0x00F41670
-	.set T_F41680,                                0x00F41680
-	.set T_Paint_MidiRealtimeMessages,            0x00F41690
-	.set T_F416A0,                                0x00F416A0
-	.set T_F416B0,                                0x00F416B0
-	.set T_F416C0,                                0x00F416C0
-	.set T_F41700,                                0x00F41700
-	.set T_Paint_SysexBulkDump_Entry,                                0x00F41710
-	.set T_Paint_GeneralMidiMode_Entry,                                0x00F41720
-	.set T_Paint_Sending_Entry,                                0x00F41730
-	.set T_Paint_SystemExclusivePleaseWait_Entry,                                0x00F41734
-	.set T_Paint_MidiTotalMode,                   0x00F4173C
-	.set T_Paint_MidiInputOutputFilter,           0x00F4174C
-	.set T_Paint_MidiOutProgramChange,            0x00F4175C
-	.set T_F4176C,                                0x00F4176C
-	.set T_DisplayList_Run,                       0x00F417F0
-	.set T_DisplayListB_Run,                      0x00F417F4
-	.set T_DLB_Handler_StringTable,               0x00F417F8
-	.set T_DLB_Handler_StringTable2,              0x00F417FC
-	.set T_DLB_Handler_Decimal,                                0x00F41800
-	.set T_DLB_Handler_Decimal_2,                                0x00F41804
-	.set T_DLB_Handler_Decimal2Words,                                0x00F4180C
-	.set T_DLB_Handler_DecimalSigned2Words,       0x00F41814
-	.set T_DLB_Handler_Array8,                                0x00F4181C
-	.set T_DLB_Handler_Array8_2,                                0x00F41820
-	.set T_DLB_Handler_Array6,                    0x00F41824
-	.set T_DLHandler_IX_Text,                     0x00F4182C
-	.set T_DrawValueGlyph_24x24,                  0x00F41834
-	.set T_F41840,                                0x00F41840
-	.set T_F41848,                                0x00F41848
-	.set T_F41858,                                0x00F41858
-	.set T_F41868,                                0x00F41868
-	.set T_F41878,                                0x00F41878
-	.set T_F41888,                                0x00F41888
-	.set T_F41898,                                0x00F41898
-	.set T_F418A8,                                0x00F418A8
-	.set T_F418B8,                                0x00F418B8
-	.set T_F418C8,                                0x00F418C8
-	.set T_F418CC,                                0x00F418CC
-	.set T_F41910,                                0x00F41910
-	.set T_F41918,                                0x00F41918
-	.set T_F41928,                                0x00F41928
-	.set T_F41938,                                0x00F41938
-	.set T_F41948,                                0x00F41948
-	.set T_F41958,                                0x00F41958
-	.set T_Screen_ReMapEdit_Enter,                                0x00F41968
-	.set T_F41978,                                0x00F41978
-	.set T_F41988,                                0x00F41988
-	.set T_F41998,                                0x00F41998
-	.set T_F419A8,                                0x00F419A8
-	.set T_Screen_DrumsMapNaming_Enter,                                0x00F419B8
-	.set T_F41A00,                                0x00F41A00
-	.set T_F41A08,                                0x00F41A08
-	.set T_F41A18,                                0x00F41A18
-	.set T_F41A28,                                0x00F41A28
-	.set T_F41A38,                                0x00F41A38
-	.set T_F41A48,                                0x00F41A48
-	.set T_F41A58,                                0x00F41A58
-	.set T_F41A68,                                0x00F41A68
-	.set T_F41A78,                                0x00F41A78
-	.set T_F41A88,                                0x00F41A88
-	.set T_Screen_CombinationNaming_Enter,                                0x00F41A98
-	.set T_F41AF0,                                0x00F41AF0
-	.set T_F41AF4,                                0x00F41AF4
-	.set T_Value_ToAsciiDigits3,                  0x00F41B00
-	.set T_F41B04,                                0x00F41B04
-	.set T_F41B08,                                0x00F41B08
-	.set T_F41B0C,                                0x00F41B0C
-	.set T_F41B10,                                0x00F41B10
-	.set T_F41B14,                                0x00F41B14
-	.set T_F41B18,                                0x00F41B18
-	.set T_F41B30,                                0x00F41B30
-	.set T_AnalogScan_All,                        0x00F41B34
-	.set T_Ring608A0A_Get,                        0x00F41CD0
-	.set T_Ring608A0A_IsEmpty,                    0x00F41CDC
-	.set T_Ring608A0A_Init,                       0x00F41CE0
-	.set T_Ring60480A_Get,                        0x00F41CF4
-	.set T_Ring60480A_Init,                       0x00F41D04
-	.set T_Ring60195A_Get,                        0x00F41D18
-	.set T_Ring60195A_IsEmpty,                    0x00F41D24
-	.set T_Ring60195A_Init,                       0x00F41D28
-	.set T_Ring601B64_Init,                       0x00F41D4C
-	.set T_Ring60080A_Put,                        0x00F41D64
-	.set T_Ring60080A_Init,                       0x00F41D70
-	.set T_Ring60080A_ScanRewind,                 0x00F41D74
-	.set T_Ring60080A_Scan,                       0x00F41D78
-	.set T_Ring600A14_Get,                        0x00F41D84
-	.set T_Ring600A14_PutBlock,                   0x00F41D8C
-	.set T_Ring600A14_IsEmpty,                    0x00F41D90
-	.set T_Ring600A14_Init,                       0x00F41D94
-	.set T_Ring600C1E_Put,                        0x00F41DAC
-	.set T_Ring600C1E_PutBlock,                   0x00F41DB0
-	.set T_Ring600C1E_IsEmpty,                    0x00F41DB4
-	.set T_Ring600C1E_Init,                       0x00F41DB8
-	.set T_Ring600C1E_ScanRewind,                 0x00F41DBC
-	.set T_Ring600C1E_Scan,                       0x00F41DC0
-	.set T_Ring601028_PutBlock,                   0x00F41DD4
-	.set T_Ring601028_IsEmpty,                    0x00F41DD8
-	.set T_Ring601028_Init,                       0x00F41DDC
-	.set T_Ring601028_ScanRewind,                 0x00F41DE0
-	.set T_Ring601028_Scan,                       0x00F41DE4
-	.set T_Ring601432_Get,                        0x00F41DF0
-	.set T_Ring601432_Put,                        0x00F41DF4
-	.set T_Ring601432_PutBlock,                   0x00F41DF8
-	.set T_Ring601432_IsEmpty,                    0x00F41DFC
-	.set T_Ring601432_Init,                       0x00F41E00
-	.set T_Ring60153C_Get,                        0x00F41E14
-	.set T_Ring60153C_PutBlock,                   0x00F41E1C
-	.set T_Ring60153C_Init,                       0x00F41E24
-	.set T_Ring601646_Get,                        0x00F41E38
-	.set T_Ring601646_Put,                        0x00F41E3C
-	.set T_Ring601646_PutBlock,                   0x00F41E40
-	.set T_Ring601646_Init,                       0x00F41E48
-	.set T_Ring601850_Get,                        0x00F41E5C
-	.set T_Ring601850_PutBlock,                   0x00F41E64
-	.set T_Ring601850_IsEmpty,                    0x00F41E68
-	.set T_Ring601850_Init,                       0x00F41E6C
-	.set T_Ring60000C_Get,                        0x00F41E80
-	.set T_Ring60000C_IsEmpty,                    0x00F41E8C
-	.set T_Ring60000C_Init,                       0x00F41E90
-	.set T_Ring601C6E_Get,                        0x00F41EA4
-	.set T_Ring601C6E_Put,                        0x00F41EA8
-	.set T_Ring601C6E_PutBlock,                   0x00F41EAC
-	.set T_Ring601C6E_IsEmpty,                    0x00F41EB0
-	.set T_Ring601C6E_Init,                       0x00F41EB4
-	.set T_Dispatch_Code80_Bracketed,             0x00F41ED0
-	.set T_Dispatch_Code80,                       0x00F41ED4
-	.set T_UiPaint_Solo,                          0x00F41ED8
-	.set T_Gfx_EraseRect,                         0x00F41EE0
-	.set T_Gfx_DrawLine_Solid,                    0x00F41EE4
-	.set T_Gfx_DrawLine_Dashed,                   0x00F41EE8
-	.set T_F41EEC,                                0x00F41EEC
-	.set T_F41EF8,                                0x00F41EF8
-	.set T_F41EFC,                                0x00F41EFC
-	.set T_F41F00,                                0x00F41F00
-	.set T_F41F04,                                0x00F41F04
-	.set T_F41F10,                                0x00F41F10
-	.set T_F41F14,                                0x00F41F14
-	.set T_F41F18,                                0x00F41F18
-	.set T_F41F30,                                0x00F41F30
-	.set T_F41F34,                                0x00F41F34
-	.set T_F41F54,                                0x00F41F54
-	.set T_F41F5C,                                0x00F41F5C
-	.set T_F41F6C,                                0x00F41F6C
-	.set T_F41F7C,                                0x00F41F7C
-	.set T_F41F8C,                                0x00F41F8C
-	.set T_ToneEditPage_A3_PositionParameter,                                0x00F41F9C
-	.set T_ToneEditPage_A4_PositionMovement,                                0x00F41FAC
-	.set T_ToneEditPage_A5_FittingMutingTuning,                                0x00F41FBC
-	.set T_ToneEditPage_A6_TouchDepth,                                0x00F41FCC
-	.set T_ToneEditPage_A7_ResoModeKeyFollow,                                0x00F41FDC
-	.set T_F41FEC,                                0x00F41FEC
-	.set T_F41FFC,                                0x00F41FFC
-	.set T_F4200C,                                0x00F4200C
-	.set T_F4201C,                                0x00F4201C
-	.set T_F4202C,                                0x00F4202C
-	.set T_F4203C,                                0x00F4203C
-	.set T_F4204C,                                0x00F4204C
-	.set T_F4205C,                                0x00F4205C
-	.set T_F4206C,                                0x00F4206C
-	.set T_F4207C,                                0x00F4207C
-	.set T_F4208C,                                0x00F4208C
-	.set T_F4209C,                                0x00F4209C
-	.set T_F420AC,                                0x00F420AC
-	.set T_F420BC,                                0x00F420BC
-	.set T_F420CC,                                0x00F420CC
-	.set T_F420DC,                                0x00F420DC
-	.set T_F420EC,                                0x00F420EC
-	.set T_F420FC,                                0x00F420FC
-	.set T_F4210C,                                0x00F4210C
-	.set T_F4211C,                                0x00F4211C
-	.set T_F4212C,                                0x00F4212C
-	.set T_F4213C,                                0x00F4213C
-	.set T_F4214C,                                0x00F4214C
-	.set T_F4215C,                                0x00F4215C
-	.set T_F4216C,                                0x00F4216C
-	.set T_F4217C,                                0x00F4217C
-	.set T_F4218C,                                0x00F4218C
-	.set T_F4219C,                                0x00F4219C
-	.set T_F42250,                                0x00F42250
-	.set T_F42254,                                0x00F42254
-	.set T_F4225C,                                0x00F4225C
-	.set T_Paint_DiskMenu,                                0x00F42264
-	.set T_Paint_MidiFileDirectPlay,              0x00F42274
-	.set T_F42320,                                0x00F42320
-	.set T_F42330,                                0x00F42330
-	.set T_F42340,                                0x00F42340
-	.set T_F42350,                                0x00F42350
-	.set T_F42360,                                0x00F42360
-	.set T_F42370,                                0x00F42370
-	.set T_Ring608A0A_DrainAll,                   0x00F42380
-	.set T_Paint_DiskL0adFile,                    0x00F423A0
-	.set T_PageDispatch_DiskSaveFile,                                0x00F423B0
-	.set T_PageDispatch_MidiFileSave,                                0x00F423C0
-	.set T_Paint_FloppyDiskFormatSelectType,      0x00F423D0
-	.set T_PageDispatch_L0adSingleS0und,                                0x00F423E0
-	.set T_Paint_FloppyDiskFormatAreYouSure,      0x00F423F0
-	.set T_Paint_MidiFileL0ad,                    0x00F42400
-	.set T_F42418,                                0x00F42418
-	.set T_PageDispatch_L0adSingleC0mbination,                                0x00F4241C
-	.set T_F42470,                                0x00F42470
-	.set T_F42474,                                0x00F42474
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26,                                0x00F42478
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26,                                0x00F4247C
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26,                                0x00F42480
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26,                                0x00F42484
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26,                                0x00F42488
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26,                                0x00F4248C
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26,                                0x00F42490
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26,                                0x00F42494
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26,                                0x00F42498
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26,                                0x00F4249C
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26,                                0x00F424A0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26,                                0x00F424A4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26,                                0x00F424A8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26,                                0x00F424AC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26,                                0x00F424B0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26,                                0x00F424B4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26,                                0x00F424B8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26,                                0x00F424BC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26,                                0x00F424C0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26,                                0x00F424C4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26,                                0x00F424C8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26,                                0x00F424CC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26,                                0x00F424D0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26,                                0x00F424D4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26,                                0x00F424D8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26,                                0x00F424DC
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26,                                0x00F424E0
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26,                                0x00F424E4
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26,                                0x00F424E8
-	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26,                                0x00F424EC
-	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17,                                0x00F424F0
-	.set T_F424F4,                                0x00F424F4
-	.set T_F424F8,                                0x00F424F8
-	.set T_F424FC,                                0x00F424FC
-	.set T_F42500,                                0x00F42500
-	.set T_F42504,                                0x00F42504
-	.set T_F42508,                                0x00F42508
-	.set T_F4250C,                                0x00F4250C
-	.set T_F42510,                                0x00F42510
-	.set T_F42514,                                0x00F42514
-	.set T_F42518,                                0x00F42518
-	.set T_F4251C,                                0x00F4251C
-	.set T_F42520,                                0x00F42520
-	.set T_F42524,                                0x00F42524
-	.set T_F42570,                                0x00F42570
-	.set T_F42574,                                0x00F42574
-	.set T_F42578,                                0x00F42578
-	.set T_F42580,                                0x00F42580
-	.set T_F42584,                                0x00F42584
-	.set T_Disk_PortA3_Release_Call_Call,                                0x00F42590
-	.set T_F42594,                                0x00F42594
-	.set T_F425A8,                                0x00F425A8
-	.set T_F425AC,                                0x00F425AC
-	.set T_F425B0,                                0x00F425B0
-	.set T_F425B4,                                0x00F425B4
-	.set T_F425B8,                                0x00F425B8
-	.set T_F425C4,                                0x00F425C4
-	.set T_F425C8,                                0x00F425C8
-	.set T_F425CC,                                0x00F425CC
-	.set T_F425D0,                                0x00F425D0
-	.set T_F425D4,                                0x00F425D4
-	.set T_F425D8,                                0x00F425D8
-	.set T_F425DC,                                0x00F425DC
-	.set T_F425E4,                                0x00F425E4
-	.set T_F425E8,                                0x00F425E8
-	.set T_F425F4,                                0x00F425F4
-	.set T_F425F8,                                0x00F425F8
-	.set T_F42608,                                0x00F42608
-	.set T_F4260C,                                0x00F4260C
-	.set T_F42610,                                0x00F42610
-	.set T_F42614,                                0x00F42614
-	.set T_F42618,                                0x00F42618
-	.set T_F4261C,                                0x00F4261C
-	.set T_F42620,                                0x00F42620
-	.set T_F42624,                                0x00F42624
-	.set T_F42628,                                0x00F42628
-	.set T_F4262C,                                0x00F4262C
-	.set T_F42634,                                0x00F42634
-	.set T_F42660,                                0x00F42660
-	.set T_F42664,                                0x00F42664
-	.set T_F42670,                                0x00F42670
-	.set T_Screen_SoundGroupNaming_Enter,                                0x00F42680
-	.set T_Screen_CombinationGroupNaming_Enter,                                0x00F42690
-	.set T_F426A0,                                0x00F426A0
-	.set T_F426B0,                                0x00F426B0
-	.set T_F42708,                                0x00F42708
-	.set T_F42828,                                0x00F42828
-	.set T_F4282C,                                0x00F4282C
-	.set T_BStore_AppendBytes_Veneer,             0x00F42894
-	.set T_F429A8,                                0x00F429A8
-	.set T_F429AC,                                0x00F429AC
-	.set T_F429B0,                                0x00F429B0
-	.set T_F429B4,                                0x00F429B4
-	.set T_F429B8,                                0x00F429B8
-	.set T_F429BC,                                0x00F429BC
-	.set T_F429C0,                                0x00F429C0
-	.set T_F429C4,                                0x00F429C4
-	.set T_F429C8,                                0x00F429C8
-	.set T_F429CC,                                0x00F429CC
-	.set T_F429D0,                                0x00F429D0
-	.set T_F429D4,                                0x00F429D4
-	.set T_F429D8,                                0x00F429D8
-	.set T_F429DC,                                0x00F429DC
-	.set T_F429E0,                                0x00F429E0
-	.set T_F429E4,                                0x00F429E4
-	.set T_F429E8,                                0x00F429E8
-	.set T_F429EC,                                0x00F429EC
-	.set T_F429F0,                                0x00F429F0
-	.set T_F429F4,                                0x00F429F4
-	.set T_F429F8,                                0x00F429F8
-	.set T_F429FC,                                0x00F429FC
-	.set T_F42A00,                                0x00F42A00
-	.set T_F42A04,                                0x00F42A04
-	.set T_F42A08,                                0x00F42A08
-	.set T_F42A10,                                0x00F42A10
-	.set T_F42A14,                                0x00F42A14
-	.set T_F42A18,                                0x00F42A18
-	.set T_F42A1C,                                0x00F42A1C
-	.set T_F42A20,                                0x00F42A20
-	.set T_F42A24,                                0x00F42A24
-	.set T_F42A28,                                0x00F42A28
-	.set T_F42A2C,                                0x00F42A2C
-	.set T_F42A30,                                0x00F42A30
-	.set T_F42A34,                                0x00F42A34
-	.set T_F42A68,                                0x00F42A68
-	.set T_F42A6C,                                0x00F42A6C
-	.set T_F42A70,                                0x00F42A70
-	.set T_F42A74,                                0x00F42A74
-	.set T_F42A78,                                0x00F42A78
-	.set T_F42A7C,                                0x00F42A7C
-	.set T_F42A80,                                0x00F42A80
-	.set T_F42A84,                                0x00F42A84
-	.set T_F42A88,                                0x00F42A88
-	.set T_F42A8C,                                0x00F42A8C
-	.set T_F42A90,                                0x00F42A90
-	.set T_F42A94,                                0x00F42A94
-	.set T_F42A98,                                0x00F42A98
-	.set T_F42A9C,                                0x00F42A9C
-	.set T_F42AA0,                                0x00F42AA0
-	.set T_F42AA4,                                0x00F42AA4
-	.set T_F42AA8,                                0x00F42AA8
-	.set T_F42AAC,                                0x00F42AAC
-	.set T_F42AB0,                                0x00F42AB0
-	.set T_F42B70,                                0x00F42B70
-	.set T_F42B7C,                                0x00F42B7C
-	.set T_F42B80,                                0x00F42B80
-	.set T_F42B84,                                0x00F42B84
-	.set T_F42B88,                                0x00F42B88
-	.set T_F42B9C,                                0x00F42B9C
-	.set T_F42BB4,                                0x00F42BB4
-	.set T_F42BB8,                                0x00F42BB8
-	.set T_F42BBC,                                0x00F42BBC
-	.set T_F42BC4,                                0x00F42BC4
-	.set T_F42BC8,                                0x00F42BC8
-	.set T_F42BCC,                                0x00F42BCC
-	.set T_F42BD0,                                0x00F42BD0
-	.set T_F42BD4,                                0x00F42BD4
-	.set T_F42BD8,                                0x00F42BD8
-	.set T_F42C18,                                0x00F42C18
-	.set T_F42C1C,                                0x00F42C1C
-	.set T_F42C24,                                0x00F42C24
-	.set T_F42C28,                                0x00F42C28
-	.set T_F42C2C,                                0x00F42C2C
-	.set T_PanelCode_ToSlotAndFlags,                                0x00F42C74
-	.set T_F42C78,                                0x00F42C78
-	.set T_Queue2C00_Append4,                     0x00F42C80
-	.set T_Queue2E00_Append4,                     0x00F42C84
-	.set T_List2030_Append4,                      0x00F42C88
-	.set T_IndexedTable_GetPtr,                   0x00F42C8C
-	.set T_IndexedTable_GetByte,                  0x00F42C90
-	.set T_IndexedParam_AdjustField,              0x00F42C94
-	.set T_IndexedParam_SetBit,                   0x00F42C98
-	.set T_F42C9C,                                0x00F42C9C
-	.set T_F42CA0,                                0x00F42CA0
-	.set T_IndexedParam_SetFieldFromAsciiEntry,   0x00F42CA8
-	.set T_INT5_Dev7B_Receive_Alias,              0x00F42D28
-	.set T_INTTC0_uDMA0Done_Alias,                0x00F42D30
-	.set T_Disk_CommandDispatch_SaveRegs_Entry,                                0x00F42D34
-	.set T_Fdc_Request_SaveRegs_Entry,                                0x00F42D38
-	.set T_Kernel_InitRam,                        0x00F42D60
-	.set T_INTT3_KernelTick,                      0x00F42D64
-	.set T_IRQ_Epilogue,                          0x00F42D68
-	.set T_Kernel_StartTask,                      0x00F42D6C
-	.set T_Kernel_SemaSignal,                     0x00F42D88
-	.set T_Kernel_SemaWait,                       0x00F42D90
-	.set T_Kernel_KillTask,                                0x00F42DA8
-	.set T_Kernel_StartTask_StackArg,             0x00F42DAC
-	.set T_Kernel_ExitTask_2,                                0x00F42DB0
-	.set T_Kernel_SemaSignal_StackArg,            0x00F42DC0
-	.set T_Kernel_SemaWait_StackArg,              0x00F42DC4
-	.set T_MsgQueue_Send_StackArg,                                0x00F42DC8
-	.set T_MsgQueue_ReceiveBlocking,              0x00F42DCC
-	.set T_Kernel_SemaTryWait,                    0x00F42DD8
-	.set T_MsgQueue_Receive_NoBlock,                                0x00F42DDC
-	.set T_DSP_ChannelRegs_Write8,                0x00F42DE0
-	.set T_DisplayList_Run_Stack,                 0x00F42E00
-	.set T_DisplayListB_Run_Stack,                0x00F42E04
-	.set T_DisplayList_RunOne_Stack,              0x00F42E08
-	.set T_DisplayListB_RunOne_Stack,             0x00F42E0C
-	.set T_F42E10,                                0x00F42E10
-	.set T_F42E14,                                0x00F42E14
-	.set T_F42E18,                                0x00F42E18
-	.set T_Blink_Command,                         0x00F42E20
-	.set T_Blink_Stop,                            0x00F42E24
-	.set T_Blink_SetEnable,                       0x00F42E28
-	.set T_Blink_Tick,                            0x00F42E2C
-	.set T_Blink_GetState,                        0x00F42E30
-	.set T_F42E44,                                0x00F42E44
-	.set T_F42E54,                                0x00F42E54
-	.set T_F42E60,                                0x00F42E60
-	.set T_F42E64,                                0x00F42E64
-	.set T_F42E68,                                0x00F42E68
-	.set T_F42E6C,                                0x00F42E6C
-	.set T_CallbackQueue_Post,                    0x00F42E84
-	.set T_F42E90,                                0x00F42E90
-	.set T_F42EC0,                                0x00F42EC0
-	.set T_F42EC4,                                0x00F42EC4
-	.set T_F42ED0,                                0x00F42ED0
-	.set T_F42EDC,                                0x00F42EDC
-	.set T_F42F00,                                0x00F42F00
-	.set T_F42F04,                                0x00F42F04
-	.set T_F42F4C,                                0x00F42F4C
-	.set T_F42F50,                                0x00F42F50
-	.set T_F42F54,                                0x00F42F54
-	.set T_F42F58,                                0x00F42F58
-	.set T_F42F5C,                                0x00F42F5C
-	.set T_F42F68,                                0x00F42F68
-	.set T_F42F6C,                                0x00F42F6C
-	.set T_F42F80,                                0x00F42F80
-	.set T_F42F84,                                0x00F42F84
-	.set T_F42F88,                                0x00F42F88
-	.set T_F42F8C,                                0x00F42F8C
-	.set T_F42F90,                                0x00F42F90
-	.set T_F42F94,                                0x00F42F94
-	.set T_F42F98,                                0x00F42F98
-	.set T_F42F9C,                                0x00F42F9C
-	.set T_F42FA0,                                0x00F42FA0
-	.set T_F42FA4,                                0x00F42FA4
-	.set T_F42FA8,                                0x00F42FA8
-	.set T_F42FAC,                                0x00F42FAC
-	.set T_F43020,                                0x00F43020
-	.set T_F43028,                                0x00F43028
-	.set T_F43040,                                0x00F43040
-	.set T_F43048,                                0x00F43048
-	.set T_ScreenEnter_Edit,                      0x00F43050
-	.set T_ScreenEnter_SongClear,                 0x00F43060
-	.set T_ScreenEnter_TrackClear,                0x00F43070
-	.set T_ScreenEnter_Vel0cityChange,            0x00F43080
-	.set T_ScreenEnter_Quantize,                  0x00F43090
-	.set T_ScreenEnter_TrackMerge,                0x00F430A0
-	.set T_ScreenEnter_MeasureErase,              0x00F430B0
-	.set T_ScreenEnter_MeasureC0py,               0x00F430C0
-	.set T_ScreenEnter_MeasureInsert,             0x00F430D0
-	.set T_ScreenEnter_MeasureDelete,             0x00F430E0
-	.set T_ScreenEnter_S0ngC0py,                  0x00F430F0
-	.set T_ScreenEnter_Transp0se,                 0x00F43100
-	.set T_ScreenEnter_AdvanceDelay,              0x00F43110
-	.set T_ScreenEnter_N0teChange,                0x00F43120
-	.set T_ScreenEnter_PanelWrite,                0x00F43130
-	.set T_ScreenEnter_TrackAssign,               0x00F43140
-	.set T_ScreenEnter_SequencerMedley,           0x00F43150
-	.set T_F43160,                                0x00F43160
-	.set T_ScreenEnter_StepRecordPartSelect,      0x00F43170
-	.set T_ScreenEnter_AfterT0uchSetting,         0x00F43180
-	.set T_ScreenEnter_TrackAssignPresets,        0x00F43190
-	.set T_ScreenEnter_S0ngSelectName,            0x00F431A0
-	.set T_F431D0,                                0x00F431D0
-	.set T_AsciiDigits3_ToValue,                  0x00F432F0
-	.set T_AsciiField_ToSignedValue,              0x00F432F4
-	.set T_AsciiField_Clear,                      0x00F432F8
-	.set T_UiText_CopyLabel13_To_22F0,                                0x00F43330
-	.set T_MidiIn_ReqListRebuild_Msg13_16,                                0x00F43350
-	.set T_MidiIn_ReqRebuild_Msg03_0A,            0x00F43354
-	.set T_MidiIn_PumpPortB,                      0x00F43358
-	.set T_F43380,                                0x00F43380
-	.set T_F43384,                                0x00F43384
-	.set T_F433D0,                                0x00F433D0
-	.set T_F433E0,                                0x00F433E0
-	.set T_F43400,                                0x00F43400
-	.set T_F43404,                                0x00F43404
-	.set T_F43408,                                0x00F43408
-	.set T_F4340C,                                0x00F4340C
-	.set T_F43410,                                0x00F43410
-	.set T_F43414,                                0x00F43414
-	.set T_F43418,                                0x00F43418
-	.set T_F4341C,                                0x00F4341C
-	.set T_F43420,                                0x00F43420
-	.set T_DiskFile_CheckSignature,                                0x00F43430
-	.set T_F43440,                                0x00F43440
-	.set T_F43444,                                0x00F43444
-	.set T_F4344C,                                0x00F4344C
-	.set T_F43450,                                0x00F43450
-	.set T_F43454,                                0x00F43454
-	.set T_Disk_FormatSelectedMedia,              0x00F43460
-	.set T_DspParam_WriteByNumber,                                0x00F434A0
-	.set T_DspParam_ReadByNumber,                                0x00F434A4
-	.set T_F434C0,                                0x00F434C0
-	.set T_F434D4,                                0x00F434D4
-	.set T_F434E0,                                0x00F434E0
-	.set T_F434F0,                                0x00F434F0
-	.set T_F434F4,                                0x00F434F4
+	.set T_F40000,                                                                      0x00F40000
+	.set T_Dev7F_WriteSlot8_Slot0,                                                      0x00F40004
+	.set T_Dev7F_WriteSlot8_Slot1,                                                      0x00F40008
+	.set T_Dev7F_WriteSlot8_Slot2,                                                      0x00F4000C
+	.set T_Dev7F_WriteSlot8_Slot3,                                                      0x00F40010
+	.set T_Queue2C00_DrainPassAB,                                                       0x00F40018
+	.set T_SeqBuf_FlushStaged,                                                          0x00F40024
+	.set T_Queue2C00_DrainPassB,                                                        0x00F40038
+	.set T_LCD_EntryThunks,                                                             0x00F400A0
+	.set T_SWI7_ServiceCall_Dispatch,                                                   0x00F400A4
+	.set T_Paint_GateArrayCheck,                                                        0x00F400D0
+	.set T_Paint_PanelCpuCheck,                                                         0x00F400E0
+	.set T_Paint_SineWaveCheckMode,                                                     0x00F400F0
+	.set T_Paint_PanelSwLedCheck,                                                       0x00F40100
+	.set T_F40110,                                                                      0x00F40110
+	.set T_ScreenEnter_DebugMonitor,                                                    0x00F40130
+	.set T_F40140,                                                                      0x00F40140
+	.set T_CheckingDevice_RunSelfTest,                                                  0x00F40144
+	.set T_TestMode_SelectFromPowerOnKeys,                                              0x00F40148
+	.set T_TestMode_Tick,                                                               0x00F4014C
+	.set T_F401D0,                                                                      0x00F401D0
+	.set T_F401D4,                                                                      0x00F401D4
+	.set T_ParamImage_SnapshotAll,                                                      0x00F401D8
+	.set T_ParamImage_QueueDiffAll,                                                     0x00F401DC
+	.set T_F401E8,                                                                      0x00F401E8
+	.set T_F401EC,                                                                      0x00F401EC
+	.set T_F40210,                                                                      0x00F40210
+	.set T_ParamImage_SanitizeAll_Entry,                                                0x00F40214
+	.set T_ParamImage_SanitizeAllAndHook_Entry,                                         0x00F4021C
+	.set T_ParamImage_ApplyAndMaskTable_Entry,                                          0x00F40220
+	.set T_ParamImage_WriteRecordHeaders_Entry,                                         0x00F40224
+	.set T_ParamImageAlt_SanitizeCombination_Entry,                                     0x00F40228
+	.set T_F40240,                                                                      0x00F40240
+	.set T_Combination_RecallOnSelect,                                                  0x00F40244
+	.set T_ParamImage_QueueDiffCombination,                                             0x00F40248
+	.set T_ParamImage_SnapshotCombination_Entry,                                        0x00F4024C
+	.set T_Combination_Recall,                                                          0x00F40254
+	.set T_PanelScreen_RequestRedrawIfFieldQueued,                                      0x00F40290
+	.set T_F402A0,                                                                      0x00F402A0
+	.set T_F402A4,                                                                      0x00F402A4
+	.set T_Paint_Sequencer,                                                             0x00F402AC
+	.set T_ShowScreen_NoteEditPartSelect,                                               0x00F402BC
+	.set T_F402CC,                                                                      0x00F402CC
+	.set T_ShowScreen_DrumEditPartSelect,                                               0x00F402DC
+	.set T_F402EC,                                                                      0x00F402EC
+	.set T_F40304,                                                                      0x00F40304
+	.set T_F40308,                                                                      0x00F40308
+	.set T_F4030C,                                                                      0x00F4030C
+	.set T_Ctrl_Normalise,                                                              0x00F405F0
+	.set T_F40610,                                                                      0x00F40610
+	.set T_PanelWire_Service,                                                           0x00F40614
+	.set T_F40630,                                                                      0x00F40630
+	.set T_PanelEvent_Service,                                                          0x00F40634
+	.set T_F40660,                                                                      0x00F40660
+	.set T_PanelLed_ProcessRequests,                                                    0x00F40664
+	.set T_PanelLed_Refresh,                                                            0x00F40668
+	.set T_PanelLed_SendByteUnconditional,                                              0x00F40670
+	.set T_PanelLed_FlashTransportBeat,                                                 0x00F40674
+	.set T_PanelLed_SendByte,                                                           0x00F40678
+	.set T_PanelLed_OnPartEvent,                                                        0x00F4067C
+	.set T_PanelLed_OnClass90Event,                                                     0x00F40680
+	.set T_F40684,                                                                      0x00F40684
+	.set T_F40688,                                                                      0x00F40688
+	.set T_PanelLed_OnClassA8Event,                                                     0x00F4068C
+	.set T_F40690,                                                                      0x00F40690
+	.set T_PanelLed_OnClass98Event,                                                     0x00F40694
+	.set T_PanelLed_OnClass20Event,                                                     0x00F40698
+	.set T_PanelLed_OnCtrlParamEvent,                                                   0x00F4069C
+	.set T_PanelLed_ToggleActivityLed,                                                  0x00F406A0
+	.set T_MIDI_EntryThunks,                                                            0x00F40710
+	.set T_MIDI_RX_Byte,                                                                0x00F40714
+	.set T_MIDI_TX_Ready,                                                               0x00F40718
+	.set T_F40720,                                                                      0x00F40720
+	.set T_MIDI_PostSendWork,                                                           0x00F40724
+	.set T_MIDI_DrainQueue,                                                             0x00F40728
+	.set T_MIDI_SendBankAndProgram,                                                     0x00F4072C
+	.set T_MIDI_PostSendWork_PortB,                                                     0x00F40730
+	.set T_MIDI_SendAllNotesOff_AllChannels,                                            0x00F40734
+	.set T_MidiIn_EntryThunks,                                                          0x00F40740
+	.set T_MidiIn_PumpPortA,                                                            0x00F40744
+	.set T_MidiOut_ParamChanged,                                                        0x00F40748
+	.set T_MidiIn_ReqRouteRebuild_Msg0D,                                                0x00F40754
+	.set T_MidiIn_ServiceDeferred,                                                      0x00F40758
+	.set T_F4075C,                                                                      0x00F4075C
+	.set T_F40760,                                                                      0x00F40760
+	.set T_F40770,                                                                      0x00F40770
+	.set T_F40774,                                                                      0x00F40774
+	.set T_F4077C,                                                                      0x00F4077C
+	.set T_F40780,                                                                      0x00F40780
+	.set T_F4078C,                                                                      0x00F4078C
+	.set T_F40790,                                                                      0x00F40790
+	.set T_F40794,                                                                      0x00F40794
+	.set T_ParamMsg_RefreshPartMasks,                                                   0x00F40798
+	.set T_F4079C,                                                                      0x00F4079C
+	.set T_F407A0,                                                                      0x00F407A0
+	.set T_F407A4,                                                                      0x00F407A4
+	.set T_F407AC,                                                                      0x00F407AC
+	.set T_F407B0,                                                                      0x00F407B0
+	.set T_Queue2C00_PublishStagedIfPending,                                            0x00F407B4
+	.set T_Queue2C00_PublishStagedDrainPassB,                                           0x00F407B8
+	.set T_ParamChange_NotifyClearSource,                                               0x00F407CC
+	.set T_ParamChange_Notify,                                                          0x00F407D0
+	.set T_ParamRecord_WriteFieldAndStage,                                              0x00F407D4
+	.set T_ParamRecord_WriteFieldAndStage_Copy,                                         0x00F407D8
+	.set T_F407E8,                                                                      0x00F407E8
+	.set T_F407EC,                                                                      0x00F407EC
+	.set T_F407F4,                                                                      0x00F407F4
+	.set T_F407FC,                                                                      0x00F407FC
+	.set T_F40804,                                                                      0x00F40804
+	.set T_F40808,                                                                      0x00F40808
+	.set T_MidiIn_ControlRecord_Dispatch,                                               0x00F4080C
+	.set T_ParamMsg_RefreshMasksOnCtrlFieldChange,                                      0x00F40810
+	.set T_F40840,                                                                      0x00F40840
+	.set T_Evt2030_RunList,                                                             0x00F40850
+	.set T_ParamApply_ByModeOfParam80,                                                  0x00F40854
+	.set T_ParamApply_MaskedWriteAndPublish,                                            0x00F40858
+	.set T_ParamShadow_SetPitchBend,                                                    0x00F40864
+	.set T_ParamShadow_SetModulation1,                                                  0x00F40868
+	.set T_ParamShadow_SetExpression,                                                   0x00F4086C
+	.set T_ParamApply_StorePairAndDerive,                                               0x00F40870
+	.set T_ParamShadow_SetField3,                                                       0x00F40874
+	.set T_ParamApply_WriteStagedAndPublish,                                            0x00F40878
+	.set T_ParamApply_PublishStagedAndPostSeven,                                        0x00F4087C
+	.set T_ParamApply_PublishStagedPairBCDE,                                            0x00F40880
+	.set T_ParamApply_PublishStagedPair,                                                0x00F40884
+	.set T_ParamApply_WriteStagedAndPublish_Copy,                                       0x00F40888
+	.set T_ParamApply_PublishStagedPair_Copy,                                           0x00F4088C
+	.set T_F40894,                                                                      0x00F40894
+	.set T_ParamShadow_FlushAll,                                                        0x00F40898
+	.set T_ParamApply_OneHotOfSix,                                                      0x00F4089C
+	.set T_F408E0,                                                                      0x00F408E0
+	.set T_SysExDump_RunSendJob,                                                        0x00F408E4
+	.set T_F408E8,                                                                      0x00F408E8
+	.set T_F408EC,                                                                      0x00F408EC
+	.set T_F408F0,                                                                      0x00F408F0
+	.set T_F408F4,                                                                      0x00F408F4
+	.set T_F40900,                                                                      0x00F40900
+	.set T_F40904,                                                                      0x00F40904
+	.set T_F40950,                                                                      0x00F40950
+	.set T_F40954,                                                                      0x00F40954
+	.set T_F40958,                                                                      0x00F40958
+	.set T_F4095C,                                                                      0x00F4095C
+	.set T_F409A0,                                                                      0x00F409A0
+	.set T_F409A4,                                                                      0x00F409A4
+	.set T_F409AC,                                                                      0x00F409AC
+	.set T_F409C0,                                                                      0x00F409C0
+	.set T_F409C4,                                                                      0x00F409C4
+	.set T_F409C8,                                                                      0x00F409C8
+	.set T_F409CC,                                                                      0x00F409CC
+	.set T_F409E0,                                                                      0x00F409E0
+	.set T_F409E4,                                                                      0x00F409E4
+	.set T_F409EC,                                                                      0x00F409EC
+	.set T_F409F0,                                                                      0x00F409F0
+	.set T_F409FC,                                                                      0x00F409FC
+	.set T_F40A00,                                                                      0x00F40A00
+	.set T_F40A08,                                                                      0x00F40A08
+	.set T_F40A0C,                                                                      0x00F40A0C
+	.set T_F40A10,                                                                      0x00F40A10
+	.set T_F40A14,                                                                      0x00F40A14
+	.set T_F40A18,                                                                      0x00F40A18
+	.set T_F40A24,                                                                      0x00F40A24
+	.set T_F40A28,                                                                      0x00F40A28
+	.set T_F40A3C,                                                                      0x00F40A3C
+	.set T_F40A70,                                                                      0x00F40A70
+	.set T_F40AC8,                                                                      0x00F40AC8
+	.set T_F40C5C,                                                                      0x00F40C5C
+	.set T_F40C60,                                                                      0x00F40C60
+	.set T_F40C88,                                                                      0x00F40C88
+	.set T_F40CBC,                                                                      0x00F40CBC
+	.set T_F40D90,                                                                      0x00F40D90
+	.set T_F40D98,                                                                      0x00F40D98
+	.set T_F40DA0,                                                                      0x00F40DA0
+	.set T_F40DB0,                                                                      0x00F40DB0
+	.set T_F40DC0,                                                                      0x00F40DC0
+	.set T_F40DD0,                                                                      0x00F40DD0
+	.set T_F40DE0,                                                                      0x00F40DE0
+	.set T_F40DF0,                                                                      0x00F40DF0
+	.set T_F40E00,                                                                      0x00F40E00
+	.set T_RingPutBlock_EntryThunks,                                                    0x00F40ED0
+	.set T_Link_SendBlockIn32ByteChunks,                                                0x00F40ED4
+	.set T_Link_ServiceTask,                                                            0x00F40ED8
+	.set T_INT0_LinkByte,                                                               0x00F40EDC
+	.set T_INTT2_Reti,                                                                  0x00F40EE0
+	.set T_INTTC2_uDMA2Done,                                                            0x00F40EE4
+	.set T_INTTC3_LinkDmaDone,                                                          0x00F40EE8
+	.set T_Link_SendCommandE1,                                                          0x00F40EEC
+	.set T_Link_SendCommandE2,                                                          0x00F40EF0
+	.set T_SC1_Vtable,                                                                  0x00F40F00
+	.set T_SC1_Service,                                                                 0x00F40F04
+	.set T_SC1_TxFlush,                                                                 0x00F40F08
+	.set T_INT6_SC1_PeerRequest,                                                        0x00F40F0C
+	.set T_INTRX1_SC1_Dispatch,                                                         0x00F40F10
+	.set T_INTTX1_SC1_Dispatch,                                                         0x00F40F14
+	.set T_SC1_Entry_F40F18_Ret,                                                        0x00F40F18
+	.set T_F40F1C,                                                                      0x00F40F1C
+	.set T_F40F20,                                                                      0x00F40F20
+	.set T_PanelTask_EntryVectors,                                                      0x00F40F30
+	.set T_PanelTask_Step,                                                              0x00F40F34
+	.set T_Queue2C00_AppendRegs,                                                        0x00F40F38
+	.set T_Queue2E00_AppendRegs,                                                        0x00F40F3C
+	.set T_List2030_AppendRegs,                                                         0x00F40F40
+	.set T_PanelTimers_Step,                                                            0x00F40F44
+	.set T_PanelState_CheckRequestAllowed_2,                                            0x00F40F4C
+	.set T_UiEventList_Publish,                                                         0x00F40F50
+	.set T_UiEventList_RunPassA,                                                        0x00F40F5C
+	.set T_UiEventList_RunPassB,                                                        0x00F40F60
+	.set T_UiEventList_RunPassC,                                                        0x00F40F64
+	.set T_PanelHold_Tick,                                                              0x00F40F74
+	.set T_F40FB0,                                                                      0x00F40FB0
+	.set T_F40FB4,                                                                      0x00F40FB4
+	.set T_F40FD0,                                                                      0x00F40FD0
+	.set T_F40FDC,                                                                      0x00F40FDC
+	.set T_F40FEC,                                                                      0x00F40FEC
+	.set T_F40FF0,                                                                      0x00F40FF0
+	.set T_F40FF4,                                                                      0x00F40FF4
+	.set T_F40FFC,                                                                      0x00F40FFC
+	.set T_F41000,                                                                      0x00F41000
+	.set T_F41004,                                                                      0x00F41004
+	.set T_F41008,                                                                      0x00F41008
+	.set T_F4100C,                                                                      0x00F4100C
+	.set T_F41010,                                                                      0x00F41010
+	.set T_F41018,                                                                      0x00F41018
+	.set T_SoundGroup_MaxMemberIndex_Get,                                               0x00F4101C
+	.set T_F41024,                                                                      0x00F41024
+	.set T_F41028,                                                                      0x00F41028
+	.set T_F4102C,                                                                      0x00F4102C
+	.set T_F41030,                                                                      0x00F41030
+	.set T_SoundGroup_MaxMemberIndex_GetToneCopy,                                       0x00F41034
+	.set T_F41038,                                                                      0x00F41038
+	.set T_F4103C,                                                                      0x00F4103C
+	.set T_F41040,                                                                      0x00F41040
+	.set T_F41044,                                                                      0x00F41044
+	.set T_F41048,                                                                      0x00F41048
+	.set T_F4104C,                                                                      0x00F4104C
+	.set T_F41050,                                                                      0x00F41050
+	.set T_F41054,                                                                      0x00F41054
+	.set T_F4105C,                                                                      0x00F4105C
+	.set T_F41060,                                                                      0x00F41060
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13,        0x00F41070
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13,      0x00F41074
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13,     0x00F41078
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13,     0x00F4107C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13,     0x00F41080
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13,     0x00F41084
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13,     0x00F41088
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13,     0x00F4108C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13,     0x00F41090
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13,     0x00F41094
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13,     0x00F41098
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13,     0x00F4109C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13,     0x00F410A0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13,    0x00F410A4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13,    0x00F410A8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13,    0x00F410AC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13,    0x00F410B0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13,    0x00F410B4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13,    0x00F410B8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13,    0x00F410BC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13,    0x00F410C0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13,    0x00F410C4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13,    0x00F410C8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13,    0x00F410CC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13,    0x00F410D0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13,    0x00F410D4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13,    0x00F410D8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13,    0x00F410DC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13,    0x00F410E0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13,    0x00F410E4
+	.set T_F410E8,                                                                      0x00F410E8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13,    0x00F410EC
+	.set T_F410F0,                                                                      0x00F410F0
+	.set T_F410F4,                                                                      0x00F410F4
+	.set T_F410F8,                                                                      0x00F410F8
+	.set T_F410FC,                                                                      0x00F410FC
+	.set T_F41100,                                                                      0x00F41100
+	.set T_F41104,                                                                      0x00F41104
+	.set T_F41108,                                                                      0x00F41108
+	.set T_F4110C,                                                                      0x00F4110C
+	.set T_F41110,                                                                      0x00F41110
+	.set T_F41114,                                                                      0x00F41114
+	.set T_F41118,                                                                      0x00F41118
+	.set T_F4111C,                                                                      0x00F4111C
+	.set T_F41120,                                                                      0x00F41120
+	.set T_F41124,                                                                      0x00F41124
+	.set T_F41128,                                                                      0x00F41128
+	.set T_F4112C,                                                                      0x00F4112C
+	.set T_F41130,                                                                      0x00F41130
+	.set T_F41134,                                                                      0x00F41134
+	.set T_F41138,                                                                      0x00F41138
+	.set T_F4113C,                                                                      0x00F4113C
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6,                      0x00F41140
+	.set T_F41144,                                                                      0x00F41144
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2,                      0x00F41148
+	.set T_F4114C,                                                                      0x00F4114C
+	.set T_F41150,                                                                      0x00F41150
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14,                     0x00F41154
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13,                     0x00F41158
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7,                      0x00F4115C
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4,                      0x00F41160
+	.set T_F41164,                                                                      0x00F41164
+	.set T_F41168,                                                                      0x00F41168
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19,                     0x00F4116C
+	.set T_F41170,                                                                      0x00F41170
+	.set T_F41174,                                                                      0x00F41174
+	.set T_F41178,                                                                      0x00F41178
+	.set T_F4117C,                                                                      0x00F4117C
+	.set T_F41180,                                                                      0x00F41180
+	.set T_F411B0,                                                                      0x00F411B0
+	.set T_F411B4,                                                                      0x00F411B4
+	.set T_F411B8,                                                                      0x00F411B8
+	.set T_F411BC,                                                                      0x00F411BC
+	.set T_F411C0,                                                                      0x00F411C0
+	.set T_F411C4,                                                                      0x00F411C4
+	.set T_F411C8,                                                                      0x00F411C8
+	.set T_F411CC,                                                                      0x00F411CC
+	.set T_F411D0,                                                                      0x00F411D0
+	.set T_F411D4,                                                                      0x00F411D4
+	.set T_F411D8,                                                                      0x00F411D8
+	.set T_F411DC,                                                                      0x00F411DC
+	.set T_F411E0,                                                                      0x00F411E0
+	.set T_F411E4,                                                                      0x00F411E4
+	.set T_F411E8,                                                                      0x00F411E8
+	.set T_F411EC,                                                                      0x00F411EC
+	.set T_Link_SendCommandE4,                                                          0x00F41230
+	.set T_Link_SendCommand3_WaitTicks,                                                 0x00F41234
+	.set T_Link_SendCommand5_WaitDone,                                                  0x00F41238
+	.set T_Link_WaitBlockDone,                                                          0x00F4123C
+	.set T_Link_SendCommandE7,                                                          0x00F41240
+	.set T_F41250,                                                                      0x00F41250
+	.set T_F41254,                                                                      0x00F41254
+	.set T_F41258,                                                                      0x00F41258
+	.set T_F4125C,                                                                      0x00F4125C
+	.set T_F41260,                                                                      0x00F41260
+	.set T_F41264,                                                                      0x00F41264
+	.set T_F413B0,                                                                      0x00F413B0
+	.set T_F413B4,                                                                      0x00F413B4
+	.set T_F413B8,                                                                      0x00F413B8
+	.set T_F413BC,                                                                      0x00F413BC
+	.set T_F413C0,                                                                      0x00F413C0
+	.set T_F413C4,                                                                      0x00F413C4
+	.set T_F413C8,                                                                      0x00F413C8
+	.set T_F413CC,                                                                      0x00F413CC
+	.set T_Ram3800_InitDataImage,                                                       0x00F413D0
+	.set T_F413D4,                                                                      0x00F413D4
+	.set T_F413DC,                                                                      0x00F413DC
+	.set T_F413E0,                                                                      0x00F413E0
+	.set T_F413F8,                                                                      0x00F413F8
+	.set T_F413FC,                                                                      0x00F413FC
+	.set T_F41400,                                                                      0x00F41400
+	.set T_F414B0,                                                                      0x00F414B0
+	.set T_F414B4,                                                                      0x00F414B4
+	.set T_F414B8,                                                                      0x00F414B8
+	.set T_F414BC,                                                                      0x00F414BC
+	.set T_F414C0,                                                                      0x00F414C0
+	.set T_F414C4,                                                                      0x00F414C4
+	.set T_F41500,                                                                      0x00F41500
+	.set T_ModeEnter_Combination,                                                       0x00F41508
+	.set T_ScreenEnter_PowerOnSplash,                                                   0x00F41510
+	.set T_InstallPainter_SoundMode_Entry,                                              0x00F41520
+	.set T_InstallPainter_C0mbinati0nM0de_Entry,                                        0x00F41530
+	.set T_InstallPainter_SoundGroupMenu_Entry,                                         0x00F41540
+	.set T_InstallPainter_GroupSoundDisplayHold_Entry,                                  0x00F41550
+	.set T_InstallPainter_CombinationGroupMenu_Entry,                                   0x00F41560
+	.set T_InstallPainter_CombinationGroupMenu_Entry_5,                                 0x00F41570
+	.set T_InstallPainter_GroupCombiDisplayHold_Entry,                                  0x00F41580
+	.set T_F41590,                                                                      0x00F41590
+	.set T_UiEvent_MarkRedrawFromClass20Block,                                          0x00F415A0
+	.set T_F415A4,                                                                      0x00F415A4
+	.set T_UiEvent_SyncSoundSelection,                                                  0x00F415A8
+	.set T_UiEventClassA8_ShowGroupScreen,                                              0x00F415AC
+	.set T_F415B0,                                                                      0x00F415B0
+	.set T_LCD_BlitValueBar,                                                            0x00F415B4
+	.set T_UiEventClass7A_QueueDialValueRedraw,                                         0x00F415B8
+	.set T_Mode_SwitchToCombination,                                                    0x00F415C0
+	.set T_Mode_SwitchToSound,                                                          0x00F415C4
+	.set T_SoundGroup_ReloadSelection,                                                  0x00F415C8
+	.set T_MessageScreen_Paint,                                                         0x00F41600
+	.set T_InstallPainter_MessageScreen,                                                0x00F41604
+	.set T_PanelMode_MidiEnter,                                                         0x00F41640
+	.set T_Paint_MidiMenu,                                                              0x00F41650
+	.set T_F41660,                                                                      0x00F41660
+	.set T_F41670,                                                                      0x00F41670
+	.set T_F41680,                                                                      0x00F41680
+	.set T_Paint_MidiRealtimeMessages,                                                  0x00F41690
+	.set T_F416A0,                                                                      0x00F416A0
+	.set T_F416B0,                                                                      0x00F416B0
+	.set T_F416C0,                                                                      0x00F416C0
+	.set T_F41700,                                                                      0x00F41700
+	.set T_Paint_SysexBulkDump_Entry,                                                   0x00F41710
+	.set T_Paint_GeneralMidiMode_Entry,                                                 0x00F41720
+	.set T_Paint_Sending_Entry,                                                         0x00F41730
+	.set T_Paint_SystemExclusivePleaseWait_Entry,                                       0x00F41734
+	.set T_Paint_MidiTotalMode,                                                         0x00F4173C
+	.set T_Paint_MidiInputOutputFilter,                                                 0x00F4174C
+	.set T_Paint_MidiOutProgramChange,                                                  0x00F4175C
+	.set T_F4176C,                                                                      0x00F4176C
+	.set T_DisplayList_Run,                                                             0x00F417F0
+	.set T_DisplayListB_Run,                                                            0x00F417F4
+	.set T_DLB_Handler_StringTable,                                                     0x00F417F8
+	.set T_DLB_Handler_StringTable2,                                                    0x00F417FC
+	.set T_DLB_Handler_Decimal,                                                         0x00F41800
+	.set T_DLB_Handler_Decimal_2,                                                       0x00F41804
+	.set T_DLB_Handler_Decimal2Words,                                                   0x00F4180C
+	.set T_DLB_Handler_DecimalSigned2Words,                                             0x00F41814
+	.set T_DLB_Handler_Array8,                                                          0x00F4181C
+	.set T_DLB_Handler_Array8_2,                                                        0x00F41820
+	.set T_DLB_Handler_Array6,                                                          0x00F41824
+	.set T_DLHandler_IX_Text,                                                           0x00F4182C
+	.set T_DrawValueGlyph_24x24,                                                        0x00F41834
+	.set T_F41840,                                                                      0x00F41840
+	.set T_F41848,                                                                      0x00F41848
+	.set T_F41858,                                                                      0x00F41858
+	.set T_F41868,                                                                      0x00F41868
+	.set T_F41878,                                                                      0x00F41878
+	.set T_F41888,                                                                      0x00F41888
+	.set T_F41898,                                                                      0x00F41898
+	.set T_F418A8,                                                                      0x00F418A8
+	.set T_F418B8,                                                                      0x00F418B8
+	.set T_F418C8,                                                                      0x00F418C8
+	.set T_F418CC,                                                                      0x00F418CC
+	.set T_PanelMode_System_Enter,                                                      0x00F41910
+	.set T_Screen_System_Enter,                                                         0x00F41918
+	.set T_Screen_TuneScale_Enter,                                                      0x00F41928
+	.set T_F41938,                                                                      0x00F41938
+	.set T_F41948,                                                                      0x00F41948
+	.set T_Screen_MainOutEqualizer_Enter,                                               0x00F41958
+	.set T_Screen_ReMapEdit_Enter,                                                      0x00F41968
+	.set T_Screen_SoundCombinationManager_Enter,                                        0x00F41978
+	.set T_Screen_MemoryProtect_Enter,                                                  0x00F41988
+	.set T_Screen_DataLoadFilter_Enter,                                                 0x00F41998
+	.set T_Screen_DspEffect_Enter,                                                      0x00F419A8
+	.set T_Screen_DrumsMapNaming_Enter,                                                 0x00F419B8
+	.set T_F41A00,                                                                      0x00F41A00
+	.set T_F41A08,                                                                      0x00F41A08
+	.set T_F41A18,                                                                      0x00F41A18
+	.set T_F41A28,                                                                      0x00F41A28
+	.set T_F41A38,                                                                      0x00F41A38
+	.set T_F41A48,                                                                      0x00F41A48
+	.set T_F41A58,                                                                      0x00F41A58
+	.set T_F41A68,                                                                      0x00F41A68
+	.set T_F41A78,                                                                      0x00F41A78
+	.set T_F41A88,                                                                      0x00F41A88
+	.set T_Screen_CombinationNaming_Enter,                                              0x00F41A98
+	.set T_Value_ToAsciiDigits3_RightJustified,                                         0x00F41AF0
+	.set T_Value_ToAsciiDigits3_LeftJustified,                                          0x00F41AF4
+	.set T_Value_ToAsciiDigits3,                                                        0x00F41B00
+	.set T_Value_ApplyNibbleDeltaClamped,                                               0x00F41B04
+	.set T_PanelButton_CallTableEntry,                                                  0x00F41B08
+	.set T_PanelButton_CallPageTableEntry,                                              0x00F41B0C
+	.set T_FixedEventList_AppendStackArgs,                                              0x00F41B10
+	.set T_EventQueue_AppendStackArgs,                                                  0x00F41B14
+	.set T_PendingEventQueue_AppendStackArgs,                                           0x00F41B18
+	.set T_F41B30,                                                                      0x00F41B30
+	.set T_AnalogScan_All,                                                              0x00F41B34
+	.set T_Ring608A0A_Get,                                                              0x00F41CD0
+	.set T_Ring608A0A_IsEmpty,                                                          0x00F41CDC
+	.set T_Ring608A0A_Init,                                                             0x00F41CE0
+	.set T_Ring60480A_Get,                                                              0x00F41CF4
+	.set T_Ring60480A_Init,                                                             0x00F41D04
+	.set T_Ring60195A_Get,                                                              0x00F41D18
+	.set T_Ring60195A_IsEmpty,                                                          0x00F41D24
+	.set T_Ring60195A_Init,                                                             0x00F41D28
+	.set T_Ring601B64_Init,                                                             0x00F41D4C
+	.set T_Ring60080A_Put,                                                              0x00F41D64
+	.set T_Ring60080A_Init,                                                             0x00F41D70
+	.set T_Ring60080A_ScanRewind,                                                       0x00F41D74
+	.set T_Ring60080A_Scan,                                                             0x00F41D78
+	.set T_Ring600A14_Get,                                                              0x00F41D84
+	.set T_Ring600A14_PutBlock,                                                         0x00F41D8C
+	.set T_Ring600A14_IsEmpty,                                                          0x00F41D90
+	.set T_Ring600A14_Init,                                                             0x00F41D94
+	.set T_Ring600C1E_Put,                                                              0x00F41DAC
+	.set T_Ring600C1E_PutBlock,                                                         0x00F41DB0
+	.set T_Ring600C1E_IsEmpty,                                                          0x00F41DB4
+	.set T_Ring600C1E_Init,                                                             0x00F41DB8
+	.set T_Ring600C1E_ScanRewind,                                                       0x00F41DBC
+	.set T_Ring600C1E_Scan,                                                             0x00F41DC0
+	.set T_Ring601028_PutBlock,                                                         0x00F41DD4
+	.set T_Ring601028_IsEmpty,                                                          0x00F41DD8
+	.set T_Ring601028_Init,                                                             0x00F41DDC
+	.set T_Ring601028_ScanRewind,                                                       0x00F41DE0
+	.set T_Ring601028_Scan,                                                             0x00F41DE4
+	.set T_Ring601432_Get,                                                              0x00F41DF0
+	.set T_Ring601432_Put,                                                              0x00F41DF4
+	.set T_Ring601432_PutBlock,                                                         0x00F41DF8
+	.set T_Ring601432_IsEmpty,                                                          0x00F41DFC
+	.set T_Ring601432_Init,                                                             0x00F41E00
+	.set T_Ring60153C_Get,                                                              0x00F41E14
+	.set T_Ring60153C_PutBlock,                                                         0x00F41E1C
+	.set T_Ring60153C_Init,                                                             0x00F41E24
+	.set T_Ring601646_Get,                                                              0x00F41E38
+	.set T_Ring601646_Put,                                                              0x00F41E3C
+	.set T_Ring601646_PutBlock,                                                         0x00F41E40
+	.set T_Ring601646_Init,                                                             0x00F41E48
+	.set T_Ring601850_Get,                                                              0x00F41E5C
+	.set T_Ring601850_PutBlock,                                                         0x00F41E64
+	.set T_Ring601850_IsEmpty,                                                          0x00F41E68
+	.set T_Ring601850_Init,                                                             0x00F41E6C
+	.set T_Ring60000C_Get,                                                              0x00F41E80
+	.set T_Ring60000C_IsEmpty,                                                          0x00F41E8C
+	.set T_Ring60000C_Init,                                                             0x00F41E90
+	.set T_Ring601C6E_Get,                                                              0x00F41EA4
+	.set T_Ring601C6E_Put,                                                              0x00F41EA8
+	.set T_Ring601C6E_PutBlock,                                                         0x00F41EAC
+	.set T_Ring601C6E_IsEmpty,                                                          0x00F41EB0
+	.set T_Ring601C6E_Init,                                                             0x00F41EB4
+	.set T_Dispatch_Code80_Bracketed,                                                   0x00F41ED0
+	.set T_Dispatch_Code80,                                                             0x00F41ED4
+	.set T_UiPaint_Solo,                                                                0x00F41ED8
+	.set T_Gfx_EraseRect,                                                               0x00F41EE0
+	.set T_Gfx_DrawLine_Solid,                                                          0x00F41EE4
+	.set T_Gfx_DrawLine_Dashed,                                                         0x00F41EE8
+	.set T_F41EEC,                                                                      0x00F41EEC
+	.set T_F41EF8,                                                                      0x00F41EF8
+	.set T_F41EFC,                                                                      0x00F41EFC
+	.set T_F41F00,                                                                      0x00F41F00
+	.set T_F41F04,                                                                      0x00F41F04
+	.set T_F41F10,                                                                      0x00F41F10
+	.set T_F41F14,                                                                      0x00F41F14
+	.set T_F41F18,                                                                      0x00F41F18
+	.set T_F41F30,                                                                      0x00F41F30
+	.set T_F41F34,                                                                      0x00F41F34
+	.set T_F41F54,                                                                      0x00F41F54
+	.set T_F41F5C,                                                                      0x00F41F5C
+	.set T_F41F6C,                                                                      0x00F41F6C
+	.set T_F41F7C,                                                                      0x00F41F7C
+	.set T_F41F8C,                                                                      0x00F41F8C
+	.set T_ToneEditPage_A3_PositionParameter,                                           0x00F41F9C
+	.set T_ToneEditPage_A4_PositionMovement,                                            0x00F41FAC
+	.set T_ToneEditPage_A5_FittingMutingTuning,                                         0x00F41FBC
+	.set T_ToneEditPage_A6_TouchDepth,                                                  0x00F41FCC
+	.set T_ToneEditPage_A7_ResoModeKeyFollow,                                           0x00F41FDC
+	.set T_F41FEC,                                                                      0x00F41FEC
+	.set T_F41FFC,                                                                      0x00F41FFC
+	.set T_F4200C,                                                                      0x00F4200C
+	.set T_F4201C,                                                                      0x00F4201C
+	.set T_F4202C,                                                                      0x00F4202C
+	.set T_F4203C,                                                                      0x00F4203C
+	.set T_F4204C,                                                                      0x00F4204C
+	.set T_F4205C,                                                                      0x00F4205C
+	.set T_F4206C,                                                                      0x00F4206C
+	.set T_F4207C,                                                                      0x00F4207C
+	.set T_F4208C,                                                                      0x00F4208C
+	.set T_F4209C,                                                                      0x00F4209C
+	.set T_F420AC,                                                                      0x00F420AC
+	.set T_F420BC,                                                                      0x00F420BC
+	.set T_F420CC,                                                                      0x00F420CC
+	.set T_F420DC,                                                                      0x00F420DC
+	.set T_F420EC,                                                                      0x00F420EC
+	.set T_F420FC,                                                                      0x00F420FC
+	.set T_F4210C,                                                                      0x00F4210C
+	.set T_F4211C,                                                                      0x00F4211C
+	.set T_F4212C,                                                                      0x00F4212C
+	.set T_F4213C,                                                                      0x00F4213C
+	.set T_F4214C,                                                                      0x00F4214C
+	.set T_F4215C,                                                                      0x00F4215C
+	.set T_F4216C,                                                                      0x00F4216C
+	.set T_F4217C,                                                                      0x00F4217C
+	.set T_F4218C,                                                                      0x00F4218C
+	.set T_F4219C,                                                                      0x00F4219C
+	.set T_F42250,                                                                      0x00F42250
+	.set T_F42254,                                                                      0x00F42254
+	.set T_F4225C,                                                                      0x00F4225C
+	.set T_Paint_DiskMenu,                                                              0x00F42264
+	.set T_Paint_MidiFileDirectPlay,                                                    0x00F42274
+	.set T_F42320,                                                                      0x00F42320
+	.set T_F42330,                                                                      0x00F42330
+	.set T_F42340,                                                                      0x00F42340
+	.set T_F42350,                                                                      0x00F42350
+	.set T_F42360,                                                                      0x00F42360
+	.set T_F42370,                                                                      0x00F42370
+	.set T_Ring608A0A_DrainAll,                                                         0x00F42380
+	.set T_Paint_DiskL0adFile,                                                          0x00F423A0
+	.set T_PageDispatch_DiskSaveFile,                                                   0x00F423B0
+	.set T_PageDispatch_MidiFileSave,                                                   0x00F423C0
+	.set T_Paint_FloppyDiskFormatSelectType,                                            0x00F423D0
+	.set T_PageDispatch_L0adSingleS0und,                                                0x00F423E0
+	.set T_Paint_FloppyDiskFormatAreYouSure,                                            0x00F423F0
+	.set T_Paint_MidiFileL0ad,                                                          0x00F42400
+	.set T_F42418,                                                                      0x00F42418
+	.set T_PageDispatch_L0adSingleC0mbination,                                          0x00F4241C
+	.set T_F42470,                                                                      0x00F42470
+	.set T_F42474,                                                                      0x00F42474
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26,  0x00F42478
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26,  0x00F4247C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26,  0x00F42480
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26,  0x00F42484
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26,  0x00F42488
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26,  0x00F4248C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26,  0x00F42490
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26,  0x00F42494
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26,  0x00F42498
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26,  0x00F4249C
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26,  0x00F424A0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26, 0x00F424A4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26, 0x00F424A8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26, 0x00F424AC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26, 0x00F424B0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26, 0x00F424B4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26, 0x00F424B8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26, 0x00F424BC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26, 0x00F424C0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26, 0x00F424C4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26, 0x00F424C8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26, 0x00F424CC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26, 0x00F424D0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26, 0x00F424D4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26, 0x00F424D8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26, 0x00F424DC
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26, 0x00F424E0
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26, 0x00F424E4
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26, 0x00F424E8
+	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26, 0x00F424EC
+	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17,                     0x00F424F0
+	.set T_F424F4,                                                                      0x00F424F4
+	.set T_F424F8,                                                                      0x00F424F8
+	.set T_F424FC,                                                                      0x00F424FC
+	.set T_F42500,                                                                      0x00F42500
+	.set T_F42504,                                                                      0x00F42504
+	.set T_F42508,                                                                      0x00F42508
+	.set T_F4250C,                                                                      0x00F4250C
+	.set T_F42510,                                                                      0x00F42510
+	.set T_F42514,                                                                      0x00F42514
+	.set T_F42518,                                                                      0x00F42518
+	.set T_F4251C,                                                                      0x00F4251C
+	.set T_F42520,                                                                      0x00F42520
+	.set T_F42524,                                                                      0x00F42524
+	.set T_F42570,                                                                      0x00F42570
+	.set T_F42574,                                                                      0x00F42574
+	.set T_F42578,                                                                      0x00F42578
+	.set T_F42580,                                                                      0x00F42580
+	.set T_F42584,                                                                      0x00F42584
+	.set T_Disk_PortA3_Release_Call_Call,                                               0x00F42590
+	.set T_F42594,                                                                      0x00F42594
+	.set T_F425A8,                                                                      0x00F425A8
+	.set T_F425AC,                                                                      0x00F425AC
+	.set T_F425B0,                                                                      0x00F425B0
+	.set T_F425B4,                                                                      0x00F425B4
+	.set T_F425B8,                                                                      0x00F425B8
+	.set T_F425C4,                                                                      0x00F425C4
+	.set T_F425C8,                                                                      0x00F425C8
+	.set T_F425CC,                                                                      0x00F425CC
+	.set T_F425D0,                                                                      0x00F425D0
+	.set T_F425D4,                                                                      0x00F425D4
+	.set T_F425D8,                                                                      0x00F425D8
+	.set T_F425DC,                                                                      0x00F425DC
+	.set T_F425E4,                                                                      0x00F425E4
+	.set T_F425E8,                                                                      0x00F425E8
+	.set T_F425F4,                                                                      0x00F425F4
+	.set T_F425F8,                                                                      0x00F425F8
+	.set T_F42608,                                                                      0x00F42608
+	.set T_F4260C,                                                                      0x00F4260C
+	.set T_F42610,                                                                      0x00F42610
+	.set T_F42614,                                                                      0x00F42614
+	.set T_F42618,                                                                      0x00F42618
+	.set T_F4261C,                                                                      0x00F4261C
+	.set T_F42620,                                                                      0x00F42620
+	.set T_F42624,                                                                      0x00F42624
+	.set T_F42628,                                                                      0x00F42628
+	.set T_F4262C,                                                                      0x00F4262C
+	.set T_F42634,                                                                      0x00F42634
+	.set T_F42660,                                                                      0x00F42660
+	.set T_F42664,                                                                      0x00F42664
+	.set T_F42670,                                                                      0x00F42670
+	.set T_Screen_SoundGroupNaming_Enter,                                               0x00F42680
+	.set T_Screen_CombinationGroupNaming_Enter,                                         0x00F42690
+	.set T_Screen_SoundCopy_Enter,                                                      0x00F426A0
+	.set T_Screen_CombinationCopy_Enter,                                                0x00F426B0
+	.set T_F42708,                                                                      0x00F42708
+	.set T_F42828,                                                                      0x00F42828
+	.set T_F4282C,                                                                      0x00F4282C
+	.set T_BStore_AppendBytes_Veneer,                                                   0x00F42894
+	.set T_F429A8,                                                                      0x00F429A8
+	.set T_F429AC,                                                                      0x00F429AC
+	.set T_F429B0,                                                                      0x00F429B0
+	.set T_F429B4,                                                                      0x00F429B4
+	.set T_F429B8,                                                                      0x00F429B8
+	.set T_F429BC,                                                                      0x00F429BC
+	.set T_F429C0,                                                                      0x00F429C0
+	.set T_F429C4,                                                                      0x00F429C4
+	.set T_F429C8,                                                                      0x00F429C8
+	.set T_F429CC,                                                                      0x00F429CC
+	.set T_F429D0,                                                                      0x00F429D0
+	.set T_F429D4,                                                                      0x00F429D4
+	.set T_F429D8,                                                                      0x00F429D8
+	.set T_F429DC,                                                                      0x00F429DC
+	.set T_F429E0,                                                                      0x00F429E0
+	.set T_F429E4,                                                                      0x00F429E4
+	.set T_F429E8,                                                                      0x00F429E8
+	.set T_F429EC,                                                                      0x00F429EC
+	.set T_F429F0,                                                                      0x00F429F0
+	.set T_F429F4,                                                                      0x00F429F4
+	.set T_F429F8,                                                                      0x00F429F8
+	.set T_F429FC,                                                                      0x00F429FC
+	.set T_F42A00,                                                                      0x00F42A00
+	.set T_F42A04,                                                                      0x00F42A04
+	.set T_F42A08,                                                                      0x00F42A08
+	.set T_F42A10,                                                                      0x00F42A10
+	.set T_F42A14,                                                                      0x00F42A14
+	.set T_F42A18,                                                                      0x00F42A18
+	.set T_F42A1C,                                                                      0x00F42A1C
+	.set T_F42A20,                                                                      0x00F42A20
+	.set T_F42A24,                                                                      0x00F42A24
+	.set T_F42A28,                                                                      0x00F42A28
+	.set T_F42A2C,                                                                      0x00F42A2C
+	.set T_F42A30,                                                                      0x00F42A30
+	.set T_F42A34,                                                                      0x00F42A34
+	.set T_F42A68,                                                                      0x00F42A68
+	.set T_F42A6C,                                                                      0x00F42A6C
+	.set T_F42A70,                                                                      0x00F42A70
+	.set T_F42A74,                                                                      0x00F42A74
+	.set T_F42A78,                                                                      0x00F42A78
+	.set T_F42A7C,                                                                      0x00F42A7C
+	.set T_F42A80,                                                                      0x00F42A80
+	.set T_F42A84,                                                                      0x00F42A84
+	.set T_F42A88,                                                                      0x00F42A88
+	.set T_F42A8C,                                                                      0x00F42A8C
+	.set T_F42A90,                                                                      0x00F42A90
+	.set T_F42A94,                                                                      0x00F42A94
+	.set T_F42A98,                                                                      0x00F42A98
+	.set T_F42A9C,                                                                      0x00F42A9C
+	.set T_F42AA0,                                                                      0x00F42AA0
+	.set T_F42AA4,                                                                      0x00F42AA4
+	.set T_F42AA8,                                                                      0x00F42AA8
+	.set T_F42AAC,                                                                      0x00F42AAC
+	.set T_F42AB0,                                                                      0x00F42AB0
+	.set T_F42B70,                                                                      0x00F42B70
+	.set T_F42B7C,                                                                      0x00F42B7C
+	.set T_F42B80,                                                                      0x00F42B80
+	.set T_F42B84,                                                                      0x00F42B84
+	.set T_F42B88,                                                                      0x00F42B88
+	.set T_F42B9C,                                                                      0x00F42B9C
+	.set T_F42BB4,                                                                      0x00F42BB4
+	.set T_F42BB8,                                                                      0x00F42BB8
+	.set T_F42BBC,                                                                      0x00F42BBC
+	.set T_F42BC4,                                                                      0x00F42BC4
+	.set T_F42BC8,                                                                      0x00F42BC8
+	.set T_F42BCC,                                                                      0x00F42BCC
+	.set T_F42BD0,                                                                      0x00F42BD0
+	.set T_F42BD4,                                                                      0x00F42BD4
+	.set T_F42BD8,                                                                      0x00F42BD8
+	.set T_F42C18,                                                                      0x00F42C18
+	.set T_F42C1C,                                                                      0x00F42C1C
+	.set T_F42C24,                                                                      0x00F42C24
+	.set T_F42C28,                                                                      0x00F42C28
+	.set T_F42C2C,                                                                      0x00F42C2C
+	.set T_PanelCode_ToSlotAndFlags,                                                    0x00F42C74
+	.set T_F42C78,                                                                      0x00F42C78
+	.set T_Queue2C00_Append4,                                                           0x00F42C80
+	.set T_Queue2E00_Append4,                                                           0x00F42C84
+	.set T_List2030_Append4,                                                            0x00F42C88
+	.set T_IndexedTable_GetPtr,                                                         0x00F42C8C
+	.set T_IndexedTable_GetByte,                                                        0x00F42C90
+	.set T_IndexedParam_AdjustField,                                                    0x00F42C94
+	.set T_IndexedParam_SetBit,                                                         0x00F42C98
+	.set T_F42C9C,                                                                      0x00F42C9C
+	.set T_F42CA0,                                                                      0x00F42CA0
+	.set T_IndexedParam_SetFieldFromAsciiEntry,                                         0x00F42CA8
+	.set T_INT5_Dev7B_Receive_Alias,                                                    0x00F42D28
+	.set T_INTTC0_uDMA0Done_Alias,                                                      0x00F42D30
+	.set T_Disk_CommandDispatch_SaveRegs_Entry,                                         0x00F42D34
+	.set T_Fdc_Request_SaveRegs_Entry,                                                  0x00F42D38
+	.set T_Kernel_InitRam,                                                              0x00F42D60
+	.set T_INTT3_KernelTick,                                                            0x00F42D64
+	.set T_IRQ_Epilogue,                                                                0x00F42D68
+	.set T_Kernel_StartTask,                                                            0x00F42D6C
+	.set T_Kernel_SemaSignal,                                                           0x00F42D88
+	.set T_Kernel_SemaWait,                                                             0x00F42D90
+	.set T_Kernel_KillTask,                                                             0x00F42DA8
+	.set T_Kernel_StartTask_StackArg,                                                   0x00F42DAC
+	.set T_Kernel_ExitTask_2,                                                           0x00F42DB0
+	.set T_Kernel_SemaSignal_StackArg,                                                  0x00F42DC0
+	.set T_Kernel_SemaWait_StackArg,                                                    0x00F42DC4
+	.set T_MsgQueue_Send_StackArg,                                                      0x00F42DC8
+	.set T_MsgQueue_ReceiveBlocking,                                                    0x00F42DCC
+	.set T_Kernel_SemaTryWait,                                                          0x00F42DD8
+	.set T_MsgQueue_Receive_NoBlock,                                                    0x00F42DDC
+	.set T_DSP_ChannelRegs_Write8,                                                      0x00F42DE0
+	.set T_DisplayList_Run_Stack,                                                       0x00F42E00
+	.set T_DisplayListB_Run_Stack,                                                      0x00F42E04
+	.set T_DisplayList_RunOne_Stack,                                                    0x00F42E08
+	.set T_DisplayListB_RunOne_Stack,                                                   0x00F42E0C
+	.set T_F42E10,                                                                      0x00F42E10
+	.set T_F42E14,                                                                      0x00F42E14
+	.set T_F42E18,                                                                      0x00F42E18
+	.set T_Blink_Command,                                                               0x00F42E20
+	.set T_Blink_Stop,                                                                  0x00F42E24
+	.set T_Blink_SetEnable,                                                             0x00F42E28
+	.set T_Blink_Tick,                                                                  0x00F42E2C
+	.set T_Blink_GetState,                                                              0x00F42E30
+	.set T_F42E44,                                                                      0x00F42E44
+	.set T_F42E54,                                                                      0x00F42E54
+	.set T_F42E60,                                                                      0x00F42E60
+	.set T_F42E64,                                                                      0x00F42E64
+	.set T_F42E68,                                                                      0x00F42E68
+	.set T_F42E6C,                                                                      0x00F42E6C
+	.set T_CallbackQueue_Post,                                                          0x00F42E84
+	.set T_F42E90,                                                                      0x00F42E90
+	.set T_F42EC0,                                                                      0x00F42EC0
+	.set T_F42EC4,                                                                      0x00F42EC4
+	.set T_F42ED0,                                                                      0x00F42ED0
+	.set T_F42EDC,                                                                      0x00F42EDC
+	.set T_F42F00,                                                                      0x00F42F00
+	.set T_F42F04,                                                                      0x00F42F04
+	.set T_F42F4C,                                                                      0x00F42F4C
+	.set T_F42F50,                                                                      0x00F42F50
+	.set T_F42F54,                                                                      0x00F42F54
+	.set T_F42F58,                                                                      0x00F42F58
+	.set T_F42F5C,                                                                      0x00F42F5C
+	.set T_F42F68,                                                                      0x00F42F68
+	.set T_F42F6C,                                                                      0x00F42F6C
+	.set T_F42F80,                                                                      0x00F42F80
+	.set T_F42F84,                                                                      0x00F42F84
+	.set T_F42F88,                                                                      0x00F42F88
+	.set T_F42F8C,                                                                      0x00F42F8C
+	.set T_F42F90,                                                                      0x00F42F90
+	.set T_F42F94,                                                                      0x00F42F94
+	.set T_F42F98,                                                                      0x00F42F98
+	.set T_F42F9C,                                                                      0x00F42F9C
+	.set T_F42FA0,                                                                      0x00F42FA0
+	.set T_F42FA4,                                                                      0x00F42FA4
+	.set T_F42FA8,                                                                      0x00F42FA8
+	.set T_F42FAC,                                                                      0x00F42FAC
+	.set T_F43020,                                                                      0x00F43020
+	.set T_F43028,                                                                      0x00F43028
+	.set T_F43040,                                                                      0x00F43040
+	.set T_F43048,                                                                      0x00F43048
+	.set T_ScreenEnter_Edit,                                                            0x00F43050
+	.set T_ScreenEnter_SongClear,                                                       0x00F43060
+	.set T_ScreenEnter_TrackClear,                                                      0x00F43070
+	.set T_ScreenEnter_Vel0cityChange,                                                  0x00F43080
+	.set T_ScreenEnter_Quantize,                                                        0x00F43090
+	.set T_ScreenEnter_TrackMerge,                                                      0x00F430A0
+	.set T_ScreenEnter_MeasureErase,                                                    0x00F430B0
+	.set T_ScreenEnter_MeasureC0py,                                                     0x00F430C0
+	.set T_ScreenEnter_MeasureInsert,                                                   0x00F430D0
+	.set T_ScreenEnter_MeasureDelete,                                                   0x00F430E0
+	.set T_ScreenEnter_S0ngC0py,                                                        0x00F430F0
+	.set T_ScreenEnter_Transp0se,                                                       0x00F43100
+	.set T_ScreenEnter_AdvanceDelay,                                                    0x00F43110
+	.set T_ScreenEnter_N0teChange,                                                      0x00F43120
+	.set T_ScreenEnter_PanelWrite,                                                      0x00F43130
+	.set T_ScreenEnter_TrackAssign,                                                     0x00F43140
+	.set T_ScreenEnter_SequencerMedley,                                                 0x00F43150
+	.set T_F43160,                                                                      0x00F43160
+	.set T_ScreenEnter_StepRecordPartSelect,                                            0x00F43170
+	.set T_ScreenEnter_AfterT0uchSetting,                                               0x00F43180
+	.set T_ScreenEnter_TrackAssignPresets,                                              0x00F43190
+	.set T_ScreenEnter_S0ngSelectName,                                                  0x00F431A0
+	.set T_F431D0,                                                                      0x00F431D0
+	.set T_AsciiDigits3_ToValue,                                                        0x00F432F0
+	.set T_AsciiField_ToSignedValue,                                                    0x00F432F4
+	.set T_AsciiField_Clear,                                                            0x00F432F8
+	.set T_UiText_CopyLabel13_To_22F0,                                                  0x00F43330
+	.set T_MidiIn_ReqListRebuild_Msg13_16,                                              0x00F43350
+	.set T_MidiIn_ReqRebuild_Msg03_0A,                                                  0x00F43354
+	.set T_MidiIn_PumpPortB,                                                            0x00F43358
+	.set T_F43380,                                                                      0x00F43380
+	.set T_F43384,                                                                      0x00F43384
+	.set T_F433D0,                                                                      0x00F433D0
+	.set T_F433E0,                                                                      0x00F433E0
+	.set T_SoundName_CopyToBuffer,                                                      0x00F43400
+	.set T_SoundGroupName_CopyToBuffer,                                                 0x00F43404
+	.set T_SoundGroup_MaxMemberIndex_ByStack,                                           0x00F43408
+	.set T_CombiName_CopyToBuffer,                                                      0x00F4340C
+	.set T_CombiGroupName_CopyToBuffer,                                                 0x00F43410
+	.set T_CombiGroup_MaxMemberIndex_ByStack,                                           0x00F43414
+	.set T_DrumsMap_RefreshSoundColumn,                                                 0x00F43418
+	.set T_SoundCopy_HandleReceivedSound,                                               0x00F4341C
+	.set T_TuneScale_KeyScalingCodeToIndex,                                             0x00F43420
+	.set T_DiskFile_CheckSignature,                                                     0x00F43430
+	.set T_F43440,                                                                      0x00F43440
+	.set T_F43444,                                                                      0x00F43444
+	.set T_ParamRecord_SetPartsField18Bit0,                                             0x00F4344C
+	.set T_F43450,                                                                      0x00F43450
+	.set T_Queue2E00_PostParam98Fields,                                                 0x00F43454
+	.set T_Disk_FormatSelectedMedia,                                                    0x00F43460
+	.set T_DspParam_WriteByNumber,                                                      0x00F434A0
+	.set T_DspParam_ReadByNumber,                                                       0x00F434A4
+	.set T_Screen_SoundMute_Enter,                                                      0x00F434C0
+	.set T_F434D4,                                                                      0x00F434D4
+	.set T_F434E0,                                                                      0x00F434E0
+	.set T_F434F0,                                                                      0x00F434F0
+	.set T_F434F4,                                                                      0x00F434F4
 	.set sub_F4F000,                              0x00F4F000
 	.set DrawValueGlyph_Veneer,                   0x00F4F017
 	.set sub_F4F02E,                              0x00F4F02E
@@ -5595,12 +5595,12 @@ MainTask_Loop:
 	call T_MsgQueue_Send_StackArg                                        ; F82035  1d c8 2d f4
 	inc 6,XSP                                            ; F82039  ef 66
 .LF8203B:
-	call T_F40674                                        ; F8203B  1d 74 06 f4
+	call T_PanelLed_FlashTransportBeat                                        ; F8203B  1d 74 06 f4
 	tset_dd8 0x00, 0x98                                  ; F8203F  f0 98 a8
 	jr nz, .LF82050                                      ; F82042  6e 0c
 	call T_AnalogScan_All                                ; F82044  1d 34 1b f4
 	call T_SC1_Service                                   ; F82048  1d 04 0f f4
-	call T_F40614                                        ; F8204C  1d 14 06 f4
+	call T_PanelWire_Service                                        ; F8204C  1d 14 06 f4
 .LF82050:
 	m_cp_mi8 MB8, 0xc2, 0x00                             ; F82050  c0 c2 3f 00
 	jr nz, .LF82059                                      ; F82054  6e 03
@@ -5636,7 +5636,7 @@ MainTask_Loop:
 .LF820A0:
 	tset_dd8 0x01, 0x88                                  ; F820A0  f0 88 a9
 	jr nz, .LF820A9                                      ; F820A3  6e 04
-	call T_F40668                                        ; F820A5  1d 68 06 f4
+	call T_PanelLed_Refresh                                        ; F820A5  1d 68 06 f4
 .LF820A9:
 	ei 0x00                                              ; F820A9  06 00
 	tset_dd8 0x02, 0x88                                  ; F820AB  f0 88 aa
@@ -5669,7 +5669,7 @@ MainTask_Loop:
 	call T_F413B8                                        ; F820EB  1d b8 13 f4
 .LF820EF:
 	ei 0x00                                              ; F820EF  06 00
-	call T_F40634                                        ; F820F1  1d 34 06 f4
+	call T_PanelEvent_Service                                        ; F820F1  1d 34 06 f4
 	m_cp_mi8 MB16, 0x2e00, 0xff                          ; F820F5  c1 00 2e 3f ff
 	jr z, .LF82100                                       ; F820FA  66 04
 	call T_UiEventList_Publish                           ; F820FC  1d 50 0f f4
@@ -5705,9 +5705,9 @@ MainTask_Loop:
 	tset_dd8 0x04, 0x88                                  ; F8214B  f0 88 ac
 	jr nz, .LF82160                                      ; F8214E  6e 10
 	call T_F42EDC                                        ; F82150  1d dc 2e f4
-	call T_F40664                                        ; F82154  1d 64 06 f4
+	call T_PanelLed_ProcessRequests                                        ; F82154  1d 64 06 f4
 	call T_SC1_TxFlush                                   ; F82158  1d 08 0f f4
-	call T_F4014C                                        ; F8215C  1d 4c 01 f4
+	call T_TestMode_Tick                                        ; F8215C  1d 4c 01 f4
 .LF82160:
 	tset_dd8 0x05, 0x88                                  ; F82160  f0 88 ad
 	jr nz, .LF82175                                      ; F82163  6e 10
@@ -5718,7 +5718,7 @@ MainTask_Loop:
 .LF82175:
 	tset_dd8 0x06, 0x88                                  ; F82175  f0 88 ae
 	jr nz, .LF82182                                      ; F82178  6e 08
-	call T_F40664                                        ; F8217A  1d 64 06 f4
+	call T_PanelLed_ProcessRequests                                        ; F8217A  1d 64 06 f4
 	call T_SC1_TxFlush                                   ; F8217E  1d 08 0f f4
 .LF82182:
 	tset_dd8 0x07, 0x88                                  ; F82182  f0 88 af
@@ -6198,7 +6198,7 @@ TimedEvents_IsNotYetDue:
 	cp W,0x30                                            ; F82553  c8 cf 30
 	ret                                                  ; F82556  0e
 ; SeqBuf_FlushStaged -- copy the bytes staged at 0xAE into the sequencer event ring and leave staging mode
-; Evidence: with `ei 6`, for HL=0..(0xAC)-1: E=(0xAE+HL), SeqBuf_PutByte; then res 0,(0xAA) and (0xAC)=0.  SeqBuf_AppendMarker's bit-0-of-(0xAA) path writes to 0xAE+(0xAC).  prom_b directory slot T_F40024, called from 0xFAE9C7 and 0xFCAD6E.
+; Evidence: with `ei 6`, for HL=0..(0xAC)-1: E=(0xAE+HL), SeqBuf_PutByte; then res 0,(0xAA) and (0xAC)=0.  SeqBuf_AppendMarker's bit-0-of-(0xAA) path writes to 0xAE+(0xAC).  prom_b directory slot T_SeqBuf_FlushStaged, called from 0xFAE9C7 and 0xFCAD6E.
 SeqBuf_FlushStaged:
 	push XIX                                             ; F82557  3c
 	pushw hl                                             ; F82558  2b
@@ -6357,17 +6357,17 @@ T_F4001C_Nop:
 Data_F82000_Nop:
 	ret                                                  ; F8262F  0e
 ; ModuleInit_Phase0Veneer -- directory-callable `calr ModuleInit_RunPhase0 / ret`
-; Evidence: prom_b slot T_F4002C is `jp ModuleInit_Phase0Veneer`.
+; Evidence: prom_b slot T_ModuleInit_Phase0Veneer is `jp ModuleInit_Phase0Veneer`.
 ModuleInit_Phase0Veneer:
 	calr ModuleInit_RunPhase0                                          ; F82630  1e ff 01
 	ret                                                  ; F82633  0e
 ; ModuleInit_Phase1Veneer -- directory-callable `calr ModuleInit_RunPhase1 / ret`
-; Evidence: prom_b slot T_F40030 is `jp ModuleInit_Phase1Veneer`.
+; Evidence: prom_b slot T_ModuleInit_Phase1Veneer is `jp ModuleInit_Phase1Veneer`.
 ModuleInit_Phase1Veneer:
 	calr ModuleInit_RunPhase1                                          ; F82634  1e ff 01
 	ret                                                  ; F82637  0e
 ; ModuleInit_Phase2Veneer -- directory-callable `calr ModuleInit_RunPhase2 / ret`
-; Evidence: prom_b slot T_F40034 is `jp ModuleInit_Phase2Veneer`; called from prom_a 0xFB3DC0.  The `call T_F413B8 / ret` at 0xF8263C after it is unlabelled.
+; Evidence: prom_b slot T_ModuleInit_Phase2Veneer is `jp ModuleInit_Phase2Veneer`; called from prom_a 0xFB3DC0.  The `call T_F413B8 / ret` at 0xF8263C after it is unlabelled.
 ModuleInit_Phase2Veneer:
 	calr ModuleInit_RunPhase2                                          ; F82638  1e ff 01
 	ret                                                  ; F8263B  0e
@@ -6741,12 +6741,12 @@ RESET__clear_dram_hi:
 ; Routines whose meaning is not established are `sub_XXXXXX` on purpose.
 ; ==============================================================================
 ; MainTask_Entry -- entry of CPU 1's first kernel task: power-on initialisation, then MainTask_Loop
-; Evidence: EntryPoint_Records[0] is {0x00F4005C, 0x0060E800, 0x8800, 3} and slot T_F4005C is `jp MainTask_Entry` (prom_c's record 0 is MAIN).  Body: INTET10=0x30, INTE45=0x40, INTET54=0x03; T_F40144; PowerFail_VerifySavedBlocks; Variant_SetFromPB0; ModuleInit_RunPhase0; ExtBoard_Identify; ModuleInit_RunPhaseByChecksums; ModuleInit_RunPhase3; Irq_InitLevelsTC23; waits for (0x80)>=0x384; the three power-on chords; Kernel_StartTask(2); `jp MainTask_Loop`.
+; Evidence: EntryPoint_Records[0] is {0x00F4005C, 0x0060E800, 0x8800, 3} and slot T_MainTask_Entry is `jp MainTask_Entry` (prom_c's record 0 is MAIN).  Body: INTET10=0x30, INTE45=0x40, INTET54=0x03; T_CheckingDevice_RunSelfTest; PowerFail_VerifySavedBlocks; Variant_SetFromPB0; ModuleInit_RunPhase0; ExtBoard_Identify; ModuleInit_RunPhaseByChecksums; ModuleInit_RunPhase3; Irq_InitLevelsTC23; waits for (0x80)>=0x384; the three power-on chords; Kernel_StartTask(2); `jp MainTask_Loop`.
 MainTask_Entry:
 	ld (0x73:8), 0x30:io                                      ; F827C8  08 73 30
 	ld (0x71:8), 0x40:io                                      ; F827CB  08 71 40
 	ld (0x75:8), 0x03:io                                      ; F827CE  08 75 03
-	call T_F40144                                        ; F827D1  1d 44 01 f4
+	call T_CheckingDevice_RunSelfTest                                        ; F827D1  1d 44 01 f4
 	calr PowerFail_VerifySavedBlocks                                          ; F827D5  1e a8 04
 	calr Variant_SetFromPB0                              ; F827D8  1e a7 00
 	ei 0x00                                              ; F827DB  06 00
@@ -6760,7 +6760,7 @@ MainTask_Entry:
 	calr ModuleInit_RunPhaseByChecksums                                          ; F827F0  1e b8 04
 	ei 0x00                                              ; F827F3  06 00
 	calr ExtBoard_Identify                               ; F827F5  1e 97 00
-	call T_F40148                                        ; F827F8  1d 48 01 f4
+	call T_TestMode_SelectFromPowerOnKeys                                        ; F827F8  1d 48 01 f4
 	calr ModuleInit_RunPhase3                                      ; F827FC  1e 3f 00
 	calr Irq_InitLevelsTC23                                      ; F827FF  1e 6e 00
 	ei 0x00                                              ; F82802  06 00
@@ -7043,7 +7043,7 @@ PowerOnChord_ShowRevisionLeds:
 .LF829A5:
 	ret                                                  ; F829A5  0e
 ; RomRevisions_ShowOnLeds -- send the two ROM revision nibbles to two panel LED wires
-; Evidence: A = LedNibblePatterns_F829F4[(0xFFFFF8)&0x0F] (prom_a's own tag) -> T_F40678 with W=0, then [(0x2648)&0x0F] (the tag read from remote 0xFFFFF0) -> W=1; on variant 2 ((0xC4)!=1) A is `srl 4` first; ends with T_SC1_TxFlush.
+; Evidence: A = LedNibblePatterns_F829F4[(0xFFFFF8)&0x0F] (prom_a's own tag) -> T_PanelLed_SendByte with W=0, then [(0x2648)&0x0F] (the tag read from remote 0xFFFFF0) -> W=1; on variant 2 ((0xC4)!=1) A is `srl 4` first; ends with T_SC1_TxFlush.
 RomRevisions_ShowOnLeds:
 	ld c, (BUILD_TAG+8:24)                                 ; F829A6  c2 f8 ff ff 23
 	and C,0x0f                                           ; F829AB  cb cc 0f
@@ -7057,7 +7057,7 @@ RomRevisions_ShowOnLeds:
 .LF829C5:
 	ld w, 0x00:opc                                          ; F829C5  20 00
 .LF829C7:
-	call T_F40678                                        ; F829C7  1d 78 06 f4
+	call T_PanelLed_SendByte                                        ; F829C7  1d 78 06 f4
 	ld c, (0x2648:16)                                   ; F829CB  c1 48 26 23
 	and C,0x0f                                           ; F829CF  cb cc 0f
 	ld XIY,LedNibblePatterns_F829F4                      ; F829D2  45 f4 29 f8 00
@@ -7070,7 +7070,7 @@ RomRevisions_ShowOnLeds:
 .LF829E9:
 	ld w, 0x01:opc                                          ; F829E9  20 01
 .LF829EB:
-	call T_F40678                                        ; F829EB  1d 78 06 f4
+	call T_PanelLed_SendByte                                        ; F829EB  1d 78 06 f4
 	call T_SC1_TxFlush                                   ; F829EF  1d 08 0f f4
 	ret                                                  ; F829F3  0e
 ; ---------------------------------------------------------------------
@@ -13222,7 +13222,7 @@ PanelMode_ToScreenIdMap:
 PanelScreen_VtableTable:
 	.long PanelScreen_NullVtable                ; F86EC1  [0]   -> PanelScreen_NullVtable
 	.long T_F41500                              ; F86EC5  [1]   -> 0xF41500
-	.long T_F41508                              ; F86EC9  [2]   -> 0xF41508
+	.long T_ModeEnter_Combination                              ; F86EC9  [2]   -> 0xF41508
 	.long T_F402A4                              ; F86ECD  [3]   -> 0xF402A4
 	.long PanelScreen_NullVtable                ; F86ED1  [4]   -> PanelScreen_NullVtable
 	.long T_F40D98                              ; F86ED5  [5]   -> 0xF40D98
@@ -13230,7 +13230,7 @@ PanelScreen_VtableTable:
 	.long T_F43040                              ; F86EDD  [7]   -> 0xF43040
 	.long T_F40D90                              ; F86EE1  [8]   -> 0xF40D90
 	.long T_F41840                              ; F86EE5  [9]   -> 0xF41840
-	.long T_F41910                              ; F86EE9  [10]   -> 0xF41910
+	.long T_PanelMode_System_Enter                              ; F86EE9  [10]   -> 0xF41910
 	.long PanelScreen_NullVtable                ; F86EED  [11]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F86EF1  [12]   -> PanelScreen_NullVtable
 	.long 0x00F406C4                            ; F86EF5  [13]   -> 0xF406C4
@@ -13238,7 +13238,7 @@ PanelScreen_VtableTable:
 	.long PanelScreen_NullVtable                ; F86EFD  [15]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F86F01  [16]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F86F05  [17]   -> PanelScreen_NullVtable
-	.long T_F41640                              ; F86F09  [18]   -> 0xF41640
+	.long T_PanelMode_MidiEnter                              ; F86F09  [18]   -> 0xF41640
 	.long PanelScreen_NullVtable                ; F86F0D  [19]   -> PanelScreen_NullVtable
 	.long T_F42254                              ; F86F11  [20]   -> 0xF42254
 	.long T_F4225C                              ; F86F15  [21]   -> 0xF4225C
@@ -13268,8 +13268,8 @@ PanelScreen_VtableTable:
 ; ---------------------------------------------------------------------
 PanelScreen_VtableTable_ViewB:
 	.long PanelScreen_NullVtable                ; F86F41  [0]   -> PanelScreen_NullVtable
-	.long T_F41520                              ; F86F45  [1]   -> 0xF41520
-	.long T_F41530                              ; F86F49  [2]   -> 0xF41530
+	.long T_InstallPainter_SoundMode_Entry                              ; F86F45  [1]   -> 0xF41520
+	.long T_InstallPainter_C0mbinati0nM0de_Entry                              ; F86F49  [2]   -> 0xF41530
 	.long PanelScreen_NullVtable                ; F86F4D  [3]   -> PanelScreen_NullVtable
 	.long T_Paint_Sequencer                     ; F86F51  [4]   -> 0xF402AC
 	.long PanelScreen_NullVtable                ; F86F55  [5]   -> PanelScreen_NullVtable
@@ -13360,26 +13360,26 @@ PanelScreen_VtableTable_ViewB:
 	.long PanelScreen_NullVtable                ; F870A9  [90]   -> PanelScreen_NullVtable
 	.long T_Screen_SoundGroupNaming_Enter                              ; F870AD  [91]   -> 0xF42680
 	.long T_Screen_CombinationGroupNaming_Enter                              ; F870B1  [92]   -> 0xF42690
-	.long T_F434C0                              ; F870B5  [93]   -> 0xF434C0
-	.long T_F426A0                              ; F870B9  [94]   -> 0xF426A0
-	.long T_F426B0                              ; F870BD  [95]   -> 0xF426B0
-	.long T_F41918                              ; F870C1  [96]   -> 0xF41918
-	.long T_F41998                              ; F870C5  [97]   -> 0xF41998
-	.long T_F41928                              ; F870C9  [98]   -> 0xF41928
+	.long T_Screen_SoundMute_Enter                              ; F870B5  [93]   -> 0xF434C0
+	.long T_Screen_SoundCopy_Enter                              ; F870B9  [94]   -> 0xF426A0
+	.long T_Screen_CombinationCopy_Enter                              ; F870BD  [95]   -> 0xF426B0
+	.long T_Screen_System_Enter                              ; F870C1  [96]   -> 0xF41918
+	.long T_Screen_DataLoadFilter_Enter                              ; F870C5  [97]   -> 0xF41998
+	.long T_Screen_TuneScale_Enter                              ; F870C9  [98]   -> 0xF41928
 	.long PanelScreen_NullVtable                ; F870CD  [99]   -> PanelScreen_NullVtable
 	.long T_F41938                              ; F870D1  [100]   -> 0xF41938
 	.long T_F41948                              ; F870D5  [101]   -> 0xF41948
-	.long T_F419A8                              ; F870D9  [102]   -> 0xF419A8
+	.long T_Screen_DspEffect_Enter                              ; F870D9  [102]   -> 0xF419A8
 	.long T_Screen_DrumsMapNaming_Enter                              ; F870DD  [103]   -> 0xF419B8
 	.long PanelScreen_NullVtable                ; F870E1  [104]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F870E5  [105]   -> PanelScreen_NullVtable
 	.long T_F42670                              ; F870E9  [106]   -> 0xF42670
-	.long T_F41958                              ; F870ED  [107]   -> 0xF41958
+	.long T_Screen_MainOutEqualizer_Enter                              ; F870ED  [107]   -> 0xF41958
 	.long T_Screen_ReMapEdit_Enter                              ; F870F1  [108]   -> 0xF41968
-	.long T_F41978                              ; F870F5  [109]   -> 0xF41978
-	.long T_F41988                              ; F870F9  [110]   -> 0xF41988
+	.long T_Screen_SoundCombinationManager_Enter                              ; F870F5  [109]   -> 0xF41978
+	.long T_Screen_MemoryProtect_Enter                              ; F870F9  [110]   -> 0xF41988
 	.long PanelScreen_NullVtable                ; F870FD  [111]   -> PanelScreen_NullVtable
-	.long T_F41650                              ; F87101  [112]   -> 0xF41650
+	.long T_Paint_MidiMenu                              ; F87101  [112]   -> 0xF41650
 	.long T_F41660                              ; F87105  [113]   -> 0xF41660
 	.long T_F41680                              ; F87109  [114]   -> 0xF41680
 	.long T_F41670                              ; F8710D  [115]   -> 0xF41670
@@ -13437,8 +13437,8 @@ PanelScreen_VtableTable_ViewB:
 	.long T_F41590                              ; F871DD  [167]   -> 0xF41590
 	.long PanelScreen_NullVtable                ; F871E1  [168]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F871E5  [169]   -> PanelScreen_NullVtable
-	.long T_F41510                              ; F871E9  [170]   -> 0xF41510
-	.long T_F41604                              ; F871ED  [171]   -> 0xF41604
+	.long T_ScreenEnter_PowerOnSplash                              ; F871E9  [170]   -> 0xF41510
+	.long T_InstallPainter_MessageScreen                              ; F871ED  [171]   -> 0xF41604
 	.long PanelScreen_NullVtable                ; F871F1  [172]   -> PanelScreen_NullVtable
 	.long T_F434E0                              ; F871F5  [173]   -> 0xF434E0
 	.long PanelScreen_NullVtable                ; F871F9  [174]   -> PanelScreen_NullVtable
@@ -13488,7 +13488,7 @@ PanelScreen_VtableTable_ViewB:
 	.long T_Paint_SineWaveCheckMode             ; F872A9  [218]   -> 0xF400F0
 	.long T_Paint_PanelSwLedCheck               ; F872AD  [219]   -> 0xF40100
 	.long T_F40110                              ; F872B1  [220]   -> 0xF40110
-	.long T_F40130                              ; F872B5  [221]   -> 0xF40130
+	.long T_ScreenEnter_DebugMonitor                              ; F872B5  [221]   -> 0xF40130
 	.long PanelScreen_NullVtable                ; F872B9  [222]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F872BD  [223]   -> PanelScreen_NullVtable
 
@@ -14072,7 +14072,7 @@ UiListA_Class93:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListA_Class98:
-	.long T_F40244                              ; F87B12  [0]   -> 0xF40244
+	.long T_Combination_RecallOnSelect                              ; F87B12  [0]   -> 0xF40244
 	.long 0xFFFFFFFF                            ; F87B16  [1]   end of list
 ; Evidence: UiEventClass_ListTable_A[0x99], the LE32 at 0xF878E5, holds 0xF87B1A.  GENERATED name.
 UiListA_Class99:
@@ -14425,14 +14425,14 @@ UiEventClass_ListTable_B:
 ; ---------------------------------------------------------------------
 UiListB_Class00:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13                              ; F88192  [0]   -> 0xF41070
-	.long T_F415A8                              ; F88196  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8819A  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88196  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8819A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8819E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881A2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F881A6  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F881AA  [6]   -> 0xF411C0
 	.long T_F42E54                              ; F881AE  [7]   -> 0xF42E54
-	.long T_F40810                              ; F881B2  [8]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881B2  [8]   -> 0xF40810
 	.long T_F42F54                              ; F881B6  [9]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F881BA  [10]   end of list
 
@@ -14450,13 +14450,13 @@ UiListB_Class00:
 ; ---------------------------------------------------------------------
 UiListB_Class01:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13                              ; F881BE  [0]   -> 0xF41074
-	.long T_F415A8                              ; F881C2  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F881C6  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F881C2  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F881C6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F881CA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881CE  [4]   -> 0xF40754
 	.long T_F418C8                              ; F881D2  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F881D6  [6]   -> 0xF411C0
-	.long T_F40810                              ; F881DA  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881DA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F881DE  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14473,13 +14473,13 @@ UiListB_Class01:
 ; ---------------------------------------------------------------------
 UiListB_Class02:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13                              ; F881E2  [0]   -> 0xF41078
-	.long T_F415A8                              ; F881E6  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F881EA  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F881E6  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F881EA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F881EE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881F2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F881F6  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F881FA  [6]   -> 0xF411C0
-	.long T_F40810                              ; F881FE  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881FE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88202  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14496,13 +14496,13 @@ UiListB_Class02:
 ; ---------------------------------------------------------------------
 UiListB_Class03:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13                              ; F88206  [0]   -> 0xF4107C
-	.long T_F415A8                              ; F8820A  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8820E  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8820A  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8820E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88212  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88216  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8821A  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8821E  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88222  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88222  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88226  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14519,13 +14519,13 @@ UiListB_Class03:
 ; ---------------------------------------------------------------------
 UiListB_Class04:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13                              ; F8822A  [0]   -> 0xF41080
-	.long T_F415A8                              ; F8822E  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88232  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8822E  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88232  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88236  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8823A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8823E  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88242  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88246  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88246  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8824A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14542,13 +14542,13 @@ UiListB_Class04:
 ; ---------------------------------------------------------------------
 UiListB_Class05:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13                              ; F8824E  [0]   -> 0xF41084
-	.long T_F415A8                              ; F88252  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88256  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88252  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88256  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8825A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8825E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88262  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88266  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8826A  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8826A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8826E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14565,13 +14565,13 @@ UiListB_Class05:
 ; ---------------------------------------------------------------------
 UiListB_Class06:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13                              ; F88272  [0]   -> 0xF41088
-	.long T_F415A8                              ; F88276  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8827A  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88276  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8827A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8827E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88282  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88286  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8828A  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8828E  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8828E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88292  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14588,13 +14588,13 @@ UiListB_Class06:
 ; ---------------------------------------------------------------------
 UiListB_Class07:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13                              ; F88296  [0]   -> 0xF4108C
-	.long T_F415A8                              ; F8829A  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8829E  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8829A  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8829E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882A2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882A6  [4]   -> 0xF40754
 	.long T_F418C8                              ; F882AA  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F882AE  [6]   -> 0xF411C0
-	.long T_F40810                              ; F882B2  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882B2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882B6  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14611,13 +14611,13 @@ UiListB_Class07:
 ; ---------------------------------------------------------------------
 UiListB_Class08:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13                              ; F882BA  [0]   -> 0xF41090
-	.long T_F415A8                              ; F882BE  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F882C2  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F882BE  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F882C2  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882C6  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882CA  [4]   -> 0xF40754
 	.long T_F418C8                              ; F882CE  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F882D2  [6]   -> 0xF411C0
-	.long T_F40810                              ; F882D6  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882D6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882DA  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14634,13 +14634,13 @@ UiListB_Class08:
 ; ---------------------------------------------------------------------
 UiListB_Class09:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13                              ; F882DE  [0]   -> 0xF41094
-	.long T_F415A8                              ; F882E2  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F882E6  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F882E2  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F882E6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882EA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882EE  [4]   -> 0xF40754
 	.long T_F418C8                              ; F882F2  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F882F6  [6]   -> 0xF411C0
-	.long T_F40810                              ; F882FA  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882FA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882FE  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14657,13 +14657,13 @@ UiListB_Class09:
 ; ---------------------------------------------------------------------
 UiListB_Class0A:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13                              ; F88302  [0]   -> 0xF41098
-	.long T_F415A8                              ; F88306  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8830A  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88306  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8830A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8830E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88312  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88316  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8831A  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8831E  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8831E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88322  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14680,13 +14680,13 @@ UiListB_Class0A:
 ; ---------------------------------------------------------------------
 UiListB_Class0B:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13                              ; F88326  [0]   -> 0xF4109C
-	.long T_F415A8                              ; F8832A  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8832E  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8832A  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8832E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88332  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88336  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8833A  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8833E  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88342  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88342  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88346  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14703,13 +14703,13 @@ UiListB_Class0B:
 ; ---------------------------------------------------------------------
 UiListB_Class0C:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13                              ; F8834A  [0]   -> 0xF410A0
-	.long T_F415A8                              ; F8834E  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88352  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8834E  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88352  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88356  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8835A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8835E  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88362  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88366  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88366  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8836A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14726,13 +14726,13 @@ UiListB_Class0C:
 ; ---------------------------------------------------------------------
 UiListB_Class0D:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13                              ; F8836E  [0]   -> 0xF410A4
-	.long T_F415A8                              ; F88372  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88376  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88372  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88376  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8837A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8837E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88382  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88386  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8838A  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8838A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8838E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14749,13 +14749,13 @@ UiListB_Class0D:
 ; ---------------------------------------------------------------------
 UiListB_Class0E:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13                              ; F88392  [0]   -> 0xF410A8
-	.long T_F415A8                              ; F88396  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8839A  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88396  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8839A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8839E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883A2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F883A6  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F883AA  [6]   -> 0xF411C0
-	.long T_F40810                              ; F883AE  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883AE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883B2  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14772,13 +14772,13 @@ UiListB_Class0E:
 ; ---------------------------------------------------------------------
 UiListB_Class0F:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13                              ; F883B6  [0]   -> 0xF410AC
-	.long T_F415A8                              ; F883BA  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F883BE  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F883BA  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F883BE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F883C2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883C6  [4]   -> 0xF40754
 	.long T_F418C8                              ; F883CA  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F883CE  [6]   -> 0xF411C0
-	.long T_F40810                              ; F883D2  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883D2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883D6  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14795,13 +14795,13 @@ UiListB_Class0F:
 ; ---------------------------------------------------------------------
 UiListB_Class10:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13                              ; F883DA  [0]   -> 0xF410B0
-	.long T_F415A8                              ; F883DE  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F883E2  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F883DE  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F883E2  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F883E6  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883EA  [4]   -> 0xF40754
 	.long T_F418C8                              ; F883EE  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F883F2  [6]   -> 0xF411C0
-	.long T_F40810                              ; F883F6  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883F6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883FA  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14818,13 +14818,13 @@ UiListB_Class10:
 ; ---------------------------------------------------------------------
 UiListB_Class11:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13                              ; F883FE  [0]   -> 0xF410B4
-	.long T_F415A8                              ; F88402  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88406  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88402  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88406  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8840A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8840E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88412  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88416  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8841A  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8841A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8841E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14841,13 +14841,13 @@ UiListB_Class11:
 ; ---------------------------------------------------------------------
 UiListB_Class12:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13                              ; F88422  [0]   -> 0xF410B8
-	.long T_F415A8                              ; F88426  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8842A  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88426  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8842A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8842E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88432  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88436  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8843A  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8843E  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8843E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88442  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14864,13 +14864,13 @@ UiListB_Class12:
 ; ---------------------------------------------------------------------
 UiListB_Class13:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13                              ; F88446  [0]   -> 0xF410BC
-	.long T_F415A8                              ; F8844A  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8844E  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8844A  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8844E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88452  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88456  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8845A  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8845E  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88462  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88462  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88466  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14887,13 +14887,13 @@ UiListB_Class13:
 ; ---------------------------------------------------------------------
 UiListB_Class14:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13                              ; F8846A  [0]   -> 0xF410C0
-	.long T_F415A8                              ; F8846E  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88472  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8846E  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88472  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88476  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8847A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8847E  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88482  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88486  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88486  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8848A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14910,13 +14910,13 @@ UiListB_Class14:
 ; ---------------------------------------------------------------------
 UiListB_Class15:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13                              ; F8848E  [0]   -> 0xF410C4
-	.long T_F415A8                              ; F88492  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88496  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88492  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88496  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8849A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8849E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F884A2  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F884A6  [6]   -> 0xF411C0
-	.long T_F40810                              ; F884AA  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884AA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884AE  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14933,13 +14933,13 @@ UiListB_Class15:
 ; ---------------------------------------------------------------------
 UiListB_Class16:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13                              ; F884B2  [0]   -> 0xF410C8
-	.long T_F415A8                              ; F884B6  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F884BA  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F884B6  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F884BA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F884BE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F884C2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F884C6  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F884CA  [6]   -> 0xF411C0
-	.long T_F40810                              ; F884CE  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884CE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884D2  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14956,13 +14956,13 @@ UiListB_Class16:
 ; ---------------------------------------------------------------------
 UiListB_Class17:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13                              ; F884D6  [0]   -> 0xF410CC
-	.long T_F415A8                              ; F884DA  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F884DE  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F884DA  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F884DE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F884E2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F884E6  [4]   -> 0xF40754
 	.long T_F418C8                              ; F884EA  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F884EE  [6]   -> 0xF411C0
-	.long T_F40810                              ; F884F2  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884F2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884F6  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -14979,13 +14979,13 @@ UiListB_Class17:
 ; ---------------------------------------------------------------------
 UiListB_Class18:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13                              ; F884FA  [0]   -> 0xF410D0
-	.long T_F415A8                              ; F884FE  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88502  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F884FE  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88502  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88506  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8850A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8850E  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88512  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88516  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88516  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8851A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15002,13 +15002,13 @@ UiListB_Class18:
 ; ---------------------------------------------------------------------
 UiListB_Class19:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13                              ; F8851E  [0]   -> 0xF410D4
-	.long T_F415A8                              ; F88522  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88526  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88522  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88526  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8852A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8852E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88532  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F88536  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8853A  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8853A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8853E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15025,13 +15025,13 @@ UiListB_Class19:
 ; ---------------------------------------------------------------------
 UiListB_Class1A:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13                              ; F88542  [0]   -> 0xF410D8
-	.long T_F415A8                              ; F88546  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8854A  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F88546  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8854A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8854E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88552  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88556  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8855A  [6]   -> 0xF411C0
-	.long T_F40810                              ; F8855E  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8855E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88562  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15048,13 +15048,13 @@ UiListB_Class1A:
 ; ---------------------------------------------------------------------
 UiListB_Class1B:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13                              ; F88566  [0]   -> 0xF410DC
-	.long T_F415A8                              ; F8856A  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F8856E  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8856A  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F8856E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88572  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88576  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8857A  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8857E  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88582  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88582  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88586  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15071,13 +15071,13 @@ UiListB_Class1B:
 ; ---------------------------------------------------------------------
 UiListB_Class1C:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13                              ; F8858A  [0]   -> 0xF410E0
-	.long T_F415A8                              ; F8858E  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F88592  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F8858E  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F88592  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88596  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8859A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8859E  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F885A2  [6]   -> 0xF411C0
-	.long T_F40810                              ; F885A6  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885A6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885AA  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15094,13 +15094,13 @@ UiListB_Class1C:
 ; ---------------------------------------------------------------------
 UiListB_Class1D:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13                              ; F885AE  [0]   -> 0xF410E4
-	.long T_F415A8                              ; F885B2  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F885B6  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F885B2  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F885B6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F885BA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F885BE  [4]   -> 0xF40754
 	.long T_F418C8                              ; F885C2  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F885C6  [6]   -> 0xF411C0
-	.long T_F40810                              ; F885CA  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885CA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885CE  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15117,13 +15117,13 @@ UiListB_Class1D:
 ; ---------------------------------------------------------------------
 UiListB_Class1E:
 	.long T_F410E8                              ; F885D2  [0]   -> 0xF410E8
-	.long T_F415A8                              ; F885D6  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F885DA  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F885D6  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F885DA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F885DE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F885E2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F885E6  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F885EA  [6]   -> 0xF411C0
-	.long T_F40810                              ; F885EE  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885EE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885F2  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15140,13 +15140,13 @@ UiListB_Class1E:
 ; ---------------------------------------------------------------------
 UiListB_Class1F:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13                              ; F885F6  [0]   -> 0xF410EC
-	.long T_F415A8                              ; F885FA  [1]   -> 0xF415A8
-	.long T_F4067C                              ; F885FE  [2]   -> 0xF4067C
+	.long T_UiEvent_SyncSoundSelection                              ; F885FA  [1]   -> 0xF415A8
+	.long T_PanelLed_OnPartEvent                              ; F885FE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88602  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88606  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8860A  [5]   -> 0xF418C8
 	.long T_F411C0                              ; F8860E  [6]   -> 0xF411C0
-	.long T_F40810                              ; F88612  [7]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88612  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88616  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15163,12 +15163,12 @@ UiListB_Class1F:
 ; ---------------------------------------------------------------------
 UiListB_Class20:
 	.long T_F42470                              ; F8861A  [0]   -> 0xF42470
-	.long T_F415A0                              ; F8861E  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88622  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8861E  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88622  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88626  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8862A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8862E  [5]   -> 0xF43350
-	.long T_F40810                              ; F88632  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88632  [6]   -> 0xF40810
 	.long T_F42E54                              ; F88636  [7]   -> 0xF42E54
 	.long T_F42F54                              ; F8863A  [8]   -> 0xF42F54
 	.long T_F434F4                              ; F8863E  [9]   -> 0xF434F4
@@ -15188,12 +15188,12 @@ UiListB_Class20:
 ; ---------------------------------------------------------------------
 UiListB_Class21:
 	.long T_F42474                              ; F88646  [0]   -> 0xF42474
-	.long T_F415A0                              ; F8864A  [1]   -> 0xF415A0
-	.long T_F40698                              ; F8864E  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8864A  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F8864E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88652  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88656  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8865A  [5]   -> 0xF43350
-	.long T_F40810                              ; F8865E  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8865E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88662  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88666  [8]   end of list
 
@@ -15211,12 +15211,12 @@ UiListB_Class21:
 ; ---------------------------------------------------------------------
 UiListB_Class22:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26                              ; F8866A  [0]   -> 0xF42478
-	.long T_F415A0                              ; F8866E  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88672  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8866E  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88672  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88676  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8867A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8867E  [5]   -> 0xF43350
-	.long T_F40810                              ; F88682  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88682  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88686  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8868A  [8]   end of list
 
@@ -15234,12 +15234,12 @@ UiListB_Class22:
 ; ---------------------------------------------------------------------
 UiListB_Class23:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26                              ; F8868E  [0]   -> 0xF4247C
-	.long T_F415A0                              ; F88692  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88696  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88692  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88696  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8869A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8869E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886A2  [5]   -> 0xF43350
-	.long T_F40810                              ; F886A6  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886A6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886AA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886AE  [8]   end of list
 
@@ -15257,12 +15257,12 @@ UiListB_Class23:
 ; ---------------------------------------------------------------------
 UiListB_Class24:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26                              ; F886B2  [0]   -> 0xF42480
-	.long T_F415A0                              ; F886B6  [1]   -> 0xF415A0
-	.long T_F40698                              ; F886BA  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886B6  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F886BA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F886BE  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F886C2  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886C6  [5]   -> 0xF43350
-	.long T_F40810                              ; F886CA  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886CA  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886CE  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886D2  [8]   end of list
 
@@ -15280,12 +15280,12 @@ UiListB_Class24:
 ; ---------------------------------------------------------------------
 UiListB_Class25:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26                              ; F886D6  [0]   -> 0xF42484
-	.long T_F415A0                              ; F886DA  [1]   -> 0xF415A0
-	.long T_F40698                              ; F886DE  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886DA  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F886DE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F886E2  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F886E6  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886EA  [5]   -> 0xF43350
-	.long T_F40810                              ; F886EE  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886EE  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886F2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886F6  [8]   end of list
 
@@ -15303,12 +15303,12 @@ UiListB_Class25:
 ; ---------------------------------------------------------------------
 UiListB_Class26:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26                              ; F886FA  [0]   -> 0xF42488
-	.long T_F415A0                              ; F886FE  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88702  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886FE  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88702  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88706  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8870A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8870E  [5]   -> 0xF43350
-	.long T_F40810                              ; F88712  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88712  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88716  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8871A  [8]   end of list
 
@@ -15326,12 +15326,12 @@ UiListB_Class26:
 ; ---------------------------------------------------------------------
 UiListB_Class27:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26                              ; F8871E  [0]   -> 0xF4248C
-	.long T_F415A0                              ; F88722  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88726  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88722  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88726  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8872A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8872E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88732  [5]   -> 0xF43350
-	.long T_F40810                              ; F88736  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88736  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8873A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8873E  [8]   end of list
 
@@ -15349,12 +15349,12 @@ UiListB_Class27:
 ; ---------------------------------------------------------------------
 UiListB_Class28:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26                              ; F88742  [0]   -> 0xF42490
-	.long T_F415A0                              ; F88746  [1]   -> 0xF415A0
-	.long T_F40698                              ; F8874A  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88746  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F8874A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8874E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88752  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88756  [5]   -> 0xF43350
-	.long T_F40810                              ; F8875A  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8875A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8875E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88762  [8]   end of list
 
@@ -15372,12 +15372,12 @@ UiListB_Class28:
 ; ---------------------------------------------------------------------
 UiListB_Class29:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26                              ; F88766  [0]   -> 0xF42494
-	.long T_F415A0                              ; F8876A  [1]   -> 0xF415A0
-	.long T_F40698                              ; F8876E  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8876A  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F8876E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88772  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88776  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8877A  [5]   -> 0xF43350
-	.long T_F40810                              ; F8877E  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8877E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88782  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88786  [8]   end of list
 
@@ -15395,12 +15395,12 @@ UiListB_Class29:
 ; ---------------------------------------------------------------------
 UiListB_Class2A:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26                              ; F8878A  [0]   -> 0xF42498
-	.long T_F415A0                              ; F8878E  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88792  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8878E  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88792  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88796  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8879A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8879E  [5]   -> 0xF43350
-	.long T_F40810                              ; F887A2  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887A2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887A6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887AA  [8]   end of list
 
@@ -15418,12 +15418,12 @@ UiListB_Class2A:
 ; ---------------------------------------------------------------------
 UiListB_Class2B:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26                              ; F887AE  [0]   -> 0xF4249C
-	.long T_F415A0                              ; F887B2  [1]   -> 0xF415A0
-	.long T_F40698                              ; F887B6  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887B2  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F887B6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F887BA  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F887BE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887C2  [5]   -> 0xF43350
-	.long T_F40810                              ; F887C6  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887C6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887CA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887CE  [8]   end of list
 
@@ -15441,12 +15441,12 @@ UiListB_Class2B:
 ; ---------------------------------------------------------------------
 UiListB_Class2C:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26                              ; F887D2  [0]   -> 0xF424A0
-	.long T_F415A0                              ; F887D6  [1]   -> 0xF415A0
-	.long T_F40698                              ; F887DA  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887D6  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F887DA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F887DE  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F887E2  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887E6  [5]   -> 0xF43350
-	.long T_F40810                              ; F887EA  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887EA  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887EE  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887F2  [8]   end of list
 
@@ -15464,12 +15464,12 @@ UiListB_Class2C:
 ; ---------------------------------------------------------------------
 UiListB_Class2D:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26                              ; F887F6  [0]   -> 0xF424A4
-	.long T_F415A0                              ; F887FA  [1]   -> 0xF415A0
-	.long T_F40698                              ; F887FE  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887FA  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F887FE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88802  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88806  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8880A  [5]   -> 0xF43350
-	.long T_F40810                              ; F8880E  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8880E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88812  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88816  [8]   end of list
 
@@ -15487,12 +15487,12 @@ UiListB_Class2D:
 ; ---------------------------------------------------------------------
 UiListB_Class2E:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26                              ; F8881A  [0]   -> 0xF424A8
-	.long T_F415A0                              ; F8881E  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88822  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8881E  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88822  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88826  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8882A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8882E  [5]   -> 0xF43350
-	.long T_F40810                              ; F88832  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88832  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88836  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8883A  [8]   end of list
 
@@ -15510,12 +15510,12 @@ UiListB_Class2E:
 ; ---------------------------------------------------------------------
 UiListB_Class2F:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26                              ; F8883E  [0]   -> 0xF424AC
-	.long T_F415A0                              ; F88842  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88846  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88842  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88846  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8884A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8884E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88852  [5]   -> 0xF43350
-	.long T_F40810                              ; F88856  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88856  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8885A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8885E  [8]   end of list
 
@@ -15533,12 +15533,12 @@ UiListB_Class2F:
 ; ---------------------------------------------------------------------
 UiListB_Class30:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26                              ; F88862  [0]   -> 0xF424B0
-	.long T_F415A0                              ; F88866  [1]   -> 0xF415A0
-	.long T_F40698                              ; F8886A  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88866  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F8886A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8886E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88872  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88876  [5]   -> 0xF43350
-	.long T_F40810                              ; F8887A  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8887A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8887E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88882  [8]   end of list
 
@@ -15556,12 +15556,12 @@ UiListB_Class30:
 ; ---------------------------------------------------------------------
 UiListB_Class31:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26                              ; F88886  [0]   -> 0xF424B4
-	.long T_F415A0                              ; F8888A  [1]   -> 0xF415A0
-	.long T_F40698                              ; F8888E  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8888A  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F8888E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88892  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88896  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8889A  [5]   -> 0xF43350
-	.long T_F40810                              ; F8889E  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8889E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888A2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888A6  [8]   end of list
 
@@ -15579,12 +15579,12 @@ UiListB_Class31:
 ; ---------------------------------------------------------------------
 UiListB_Class32:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26                              ; F888AA  [0]   -> 0xF424B8
-	.long T_F415A0                              ; F888AE  [1]   -> 0xF415A0
-	.long T_F40698                              ; F888B2  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888AE  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F888B2  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888B6  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F888BA  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888BE  [5]   -> 0xF43350
-	.long T_F40810                              ; F888C2  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F888C2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888C6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888CA  [8]   end of list
 
@@ -15602,12 +15602,12 @@ UiListB_Class32:
 ; ---------------------------------------------------------------------
 UiListB_Class33:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26                              ; F888CE  [0]   -> 0xF424BC
-	.long T_F415A0                              ; F888D2  [1]   -> 0xF415A0
-	.long T_F40698                              ; F888D6  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888D2  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F888D6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888DA  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F888DE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888E2  [5]   -> 0xF43350
-	.long T_F40810                              ; F888E6  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F888E6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888EA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888EE  [8]   end of list
 
@@ -15625,12 +15625,12 @@ UiListB_Class33:
 ; ---------------------------------------------------------------------
 UiListB_Class34:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26                              ; F888F2  [0]   -> 0xF424C0
-	.long T_F415A0                              ; F888F6  [1]   -> 0xF415A0
-	.long T_F40698                              ; F888FA  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888F6  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F888FA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888FE  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88902  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88906  [5]   -> 0xF43350
-	.long T_F40810                              ; F8890A  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8890A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8890E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88912  [8]   end of list
 
@@ -15648,12 +15648,12 @@ UiListB_Class34:
 ; ---------------------------------------------------------------------
 UiListB_Class35:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26                              ; F88916  [0]   -> 0xF424C4
-	.long T_F415A0                              ; F8891A  [1]   -> 0xF415A0
-	.long T_F40698                              ; F8891E  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8891A  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F8891E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88922  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88926  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8892A  [5]   -> 0xF43350
-	.long T_F40810                              ; F8892E  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8892E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88932  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88936  [8]   end of list
 
@@ -15671,12 +15671,12 @@ UiListB_Class35:
 ; ---------------------------------------------------------------------
 UiListB_Class36:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26                              ; F8893A  [0]   -> 0xF424C8
-	.long T_F415A0                              ; F8893E  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88942  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8893E  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88942  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88946  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8894A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8894E  [5]   -> 0xF43350
-	.long T_F40810                              ; F88952  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88952  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88956  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8895A  [8]   end of list
 
@@ -15694,12 +15694,12 @@ UiListB_Class36:
 ; ---------------------------------------------------------------------
 UiListB_Class37:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26                              ; F8895E  [0]   -> 0xF424CC
-	.long T_F415A0                              ; F88962  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88966  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88962  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88966  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8896A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F8896E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88972  [5]   -> 0xF43350
-	.long T_F40810                              ; F88976  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88976  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8897A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8897E  [8]   end of list
 
@@ -15717,12 +15717,12 @@ UiListB_Class37:
 ; ---------------------------------------------------------------------
 UiListB_Class38:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26                              ; F88982  [0]   -> 0xF424D0
-	.long T_F415A0                              ; F88986  [1]   -> 0xF415A0
-	.long T_F40698                              ; F8898A  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88986  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F8898A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8898E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88992  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88996  [5]   -> 0xF43350
-	.long T_F40810                              ; F8899A  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8899A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8899E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889A2  [8]   end of list
 
@@ -15740,12 +15740,12 @@ UiListB_Class38:
 ; ---------------------------------------------------------------------
 UiListB_Class39:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26                              ; F889A6  [0]   -> 0xF424D4
-	.long T_F415A0                              ; F889AA  [1]   -> 0xF415A0
-	.long T_F40698                              ; F889AE  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889AA  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F889AE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889B2  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F889B6  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889BA  [5]   -> 0xF43350
-	.long T_F40810                              ; F889BE  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F889BE  [6]   -> 0xF40810
 	.long T_F434F4                              ; F889C2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889C6  [8]   end of list
 
@@ -15763,12 +15763,12 @@ UiListB_Class39:
 ; ---------------------------------------------------------------------
 UiListB_Class3A:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26                              ; F889CA  [0]   -> 0xF424D8
-	.long T_F415A0                              ; F889CE  [1]   -> 0xF415A0
-	.long T_F40698                              ; F889D2  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889CE  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F889D2  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889D6  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F889DA  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889DE  [5]   -> 0xF43350
-	.long T_F40810                              ; F889E2  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F889E2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F889E6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889EA  [8]   end of list
 
@@ -15786,12 +15786,12 @@ UiListB_Class3A:
 ; ---------------------------------------------------------------------
 UiListB_Class3B:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26                              ; F889EE  [0]   -> 0xF424DC
-	.long T_F415A0                              ; F889F2  [1]   -> 0xF415A0
-	.long T_F40698                              ; F889F6  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889F2  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F889F6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889FA  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F889FE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A02  [5]   -> 0xF43350
-	.long T_F40810                              ; F88A06  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A06  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A0A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A0E  [8]   end of list
 
@@ -15809,12 +15809,12 @@ UiListB_Class3B:
 ; ---------------------------------------------------------------------
 UiListB_Class3C:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26                              ; F88A12  [0]   -> 0xF424E0
-	.long T_F415A0                              ; F88A16  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88A1A  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A16  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88A1A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A1E  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A22  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A26  [5]   -> 0xF43350
-	.long T_F40810                              ; F88A2A  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A2A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A2E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A32  [8]   end of list
 
@@ -15832,12 +15832,12 @@ UiListB_Class3C:
 ; ---------------------------------------------------------------------
 UiListB_Class3D:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26                              ; F88A36  [0]   -> 0xF424E4
-	.long T_F415A0                              ; F88A3A  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88A3E  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A3A  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88A3E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A42  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A46  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A4A  [5]   -> 0xF43350
-	.long T_F40810                              ; F88A4E  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A4E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A52  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A56  [8]   end of list
 
@@ -15855,12 +15855,12 @@ UiListB_Class3D:
 ; ---------------------------------------------------------------------
 UiListB_Class3E:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26                              ; F88A5A  [0]   -> 0xF424E8
-	.long T_F415A0                              ; F88A5E  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88A62  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A5E  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88A62  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A66  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A6A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A6E  [5]   -> 0xF43350
-	.long T_F40810                              ; F88A72  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A72  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A76  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A7A  [8]   end of list
 
@@ -15878,12 +15878,12 @@ UiListB_Class3E:
 ; ---------------------------------------------------------------------
 UiListB_Class3F:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26                              ; F88A7E  [0]   -> 0xF424EC
-	.long T_F415A0                              ; F88A82  [1]   -> 0xF415A0
-	.long T_F40698                              ; F88A86  [2]   -> 0xF40698
+	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A82  [1]   -> 0xF415A0
+	.long T_PanelLed_OnClass20Event                              ; F88A86  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A8A  [3]   -> 0xF418C8
 	.long T_F411C4                              ; F88A8E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A92  [5]   -> 0xF43350
-	.long T_F40810                              ; F88A96  [6]   -> 0xF40810
+	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A96  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A9A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A9E  [8]   end of list
 
@@ -15901,7 +15901,7 @@ UiListB_Class3F:
 ; ---------------------------------------------------------------------
 UiListB_Class40:
 	.long T_F410F0                              ; F88AA2  [0]   -> 0xF410F0
-	.long T_F4067C                              ; F88AA6  [1]   -> 0xF4067C
+	.long T_PanelLed_OnPartEvent                              ; F88AA6  [1]   -> 0xF4067C
 	.long 0xFFFFFFFF                            ; F88AAA  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16283,7 +16283,7 @@ UiListB_Class79:
 ; ---------------------------------------------------------------------
 UiListB_Class7A:
 	.long T_F41144                              ; F88B9A  [0]   -> 0xF41144
-	.long T_F415B8                              ; F88B9E  [1]   -> 0xF415B8
+	.long T_UiEventClass7A_QueueDialValueRedraw                              ; F88B9E  [1]   -> 0xF415B8
 	.long 0xFFFFFFFF                            ; F88BA2  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16336,9 +16336,9 @@ UiListB_Class81:
 ; ---------------------------------------------------------------------
 UiListB_Class90:
 	.long T_F41150                              ; F88BC6  [0]   -> 0xF41150
-	.long T_F40680                              ; F88BCA  [1]   -> 0xF40680
+	.long T_PanelLed_OnClass90Event                              ; F88BCA  [1]   -> 0xF40680
 	.long T_F411C8                              ; F88BCE  [2]   -> 0xF411C8
-	.long T_F415A8                              ; F88BD2  [3]   -> 0xF415A8
+	.long T_UiEvent_SyncSoundSelection                              ; F88BD2  [3]   -> 0xF415A8
 	.long 0xFFFFFFFF                            ; F88BD6  [4]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16408,9 +16408,9 @@ UiListB_Class93:
 ; ---------------------------------------------------------------------
 UiListB_Class98:
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4                              ; F88C06  [0]   -> 0xF41160
-	.long T_F40694                              ; F88C0A  [1]   -> 0xF40694
+	.long T_PanelLed_OnClass98Event                              ; F88C0A  [1]   -> 0xF40694
 	.long T_F411D0                              ; F88C0E  [2]   -> 0xF411D0
-	.long T_F415A8                              ; F88C12  [3]   -> 0xF415A8
+	.long T_UiEvent_SyncSoundSelection                              ; F88C12  [3]   -> 0xF415A8
 	.long 0xFFFFFFFF                            ; F88C16  [4]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16459,8 +16459,8 @@ UiListB_Class9A:
 ; ---------------------------------------------------------------------
 UiListB_ClassA8:
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19                              ; F88C2A  [0]   -> 0xF4116C
-	.long T_F415A8                              ; F88C2E  [1]   -> 0xF415A8
-	.long T_F4068C                              ; F88C32  [2]   -> 0xF4068C
+	.long T_UiEvent_SyncSoundSelection                              ; F88C2E  [1]   -> 0xF415A8
+	.long T_PanelLed_OnClassA8Event                              ; F88C32  [2]   -> 0xF4068C
 	.long T_F411E0                              ; F88C36  [3]   -> 0xF411E0
 	.long T_F409A0                              ; F88C3A  [4]   -> 0xF409A0
 	.long T_F40CBC                              ; F88C3E  [5]   -> 0xF40CBC
@@ -16578,7 +16578,7 @@ UiListB_ClassB1:
 ; ---------------------------------------------------------------------
 UiListB_ClassB2:
 	.long T_F424F8                              ; F88C7E  [0]   -> 0xF424F8
-	.long T_F4069C                              ; F88C82  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88C82  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88C86  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16595,7 +16595,7 @@ UiListB_ClassB2:
 ; ---------------------------------------------------------------------
 UiListB_ClassB3:
 	.long T_F424FC                              ; F88C8A  [0]   -> 0xF424FC
-	.long T_F4069C                              ; F88C8E  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88C8E  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88C92  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16612,7 +16612,7 @@ UiListB_ClassB3:
 ; ---------------------------------------------------------------------
 UiListB_ClassB4:
 	.long T_F42500                              ; F88C96  [0]   -> 0xF42500
-	.long T_F4069C                              ; F88C9A  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88C9A  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88C9E  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16629,7 +16629,7 @@ UiListB_ClassB4:
 ; ---------------------------------------------------------------------
 UiListB_ClassB5:
 	.long T_F42504                              ; F88CA2  [0]   -> 0xF42504
-	.long T_F4069C                              ; F88CA6  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88CA6  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88CAA  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16678,7 +16678,7 @@ UiListB_ClassB7:
 ; ---------------------------------------------------------------------
 UiListB_ClassB8:
 	.long T_F42510                              ; F88CBE  [0]   -> 0xF42510
-	.long T_F4069C                              ; F88CC2  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88CC2  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88CC6  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16695,7 +16695,7 @@ UiListB_ClassB8:
 ; ---------------------------------------------------------------------
 UiListB_ClassB9:
 	.long T_F42514                              ; F88CCA  [0]   -> 0xF42514
-	.long T_F4069C                              ; F88CCE  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88CCE  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88CD2  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16712,7 +16712,7 @@ UiListB_ClassB9:
 ; ---------------------------------------------------------------------
 UiListB_ClassBA:
 	.long T_F42518                              ; F88CD6  [0]   -> 0xF42518
-	.long T_F4069C                              ; F88CDA  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88CDA  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88CDE  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16729,7 +16729,7 @@ UiListB_ClassBA:
 ; ---------------------------------------------------------------------
 UiListB_ClassBB:
 	.long T_F4251C                              ; F88CE2  [0]   -> 0xF4251C
-	.long T_F4069C                              ; F88CE6  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88CE6  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88CEA  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16746,7 +16746,7 @@ UiListB_ClassBB:
 ; ---------------------------------------------------------------------
 UiListB_ClassBC:
 	.long T_F42520                              ; F88CEE  [0]   -> 0xF42520
-	.long T_F4069C                              ; F88CF2  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88CF2  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88CF6  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16763,7 +16763,7 @@ UiListB_ClassBC:
 ; ---------------------------------------------------------------------
 UiListB_ClassBD:
 	.long T_F42524                              ; F88CFA  [0]   -> 0xF42524
-	.long T_F4069C                              ; F88CFE  [1]   -> 0xF4069C
+	.long T_PanelLed_OnCtrlParamEvent                              ; F88CFE  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88D02  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16804,7 +16804,7 @@ UiListB_Shared:
 UiEventPassB_TailList:
 	.long T_F40FB4                              ; F88E91  [0]   -> 0xF40FB4
 	.long T_F411B4                              ; F88E95  [1]   -> 0xF411B4
-	.long T_F40290                              ; F88E99  [2]   -> 0xF40290
+	.long T_PanelScreen_RequestRedrawIfFieldQueued                              ; F88E99  [2]   -> 0xF40290
 	.long T_MidiIn_ServiceDeferred              ; F88E9D  [3]   -> 0xF40758
 	.long T_F42E60                              ; F88EA1  [4]   -> 0xF42E60
 	.long T_F418CC                              ; F88EA5  [5]   -> 0xF418CC
@@ -17364,7 +17364,7 @@ UiListC_Class9A:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListC_ClassA8:
-	.long T_F415AC                              ; F8935A  [0]   -> 0xF415AC
+	.long T_UiEventClassA8_ShowGroupScreen                              ; F8935A  [0]   -> 0xF415AC
 	.long 0xFFFFFFFF                            ; F8935E  [1]   end of list
 
 ; ---------------------------------------------------------------------
@@ -18282,7 +18282,7 @@ PanelWire_EntryThunks_Join:
 	ld (0x219a:16), 0x00                                 ; F8A01D  f1 9a 21 00 00
 	ret                                                  ; F8A022  0e
 ; PanelWire_Service -- the panel wire module's per-loop entry
-; Evidence: prom_b slot T_F40614 is `jp PanelWire_Service`; MainTask_Loop calls it at 0xF8204C beside T_AnalogScan_All and T_SC1_Service; body `calr PanelWire_ThrottledPoll / ret`.
+; Evidence: prom_b slot T_PanelWire_Service is `jp PanelWire_Service`; MainTask_Loop calls it at 0xF8204C beside T_AnalogScan_All and T_SC1_Service; body `calr PanelWire_ThrottledPoll / ret`.
 PanelWire_Service:
 	calr PanelWire_ThrottledPoll                                      ; F8A023  1e 02 00
 	ret                                                  ; F8A026  0e
@@ -19347,7 +19347,7 @@ sub_F8A6F3_Join:
 	call T_AsciiField_Clear                              ; F8A818  1d f8 32 f4
 	ret                                                  ; F8A81C  0e
 ; PanelEvent_Service -- expand the panel group queue into UI events, then post-process the event list
-; Evidence: prom_b slot T_F40634 is `jp PanelEvent_Service`, called from MainTask_Loop 0xF820F1; body `calr PanelGroupQueue_ExpandToEvents / calr PanelEvents_StampCurrentPart / ret` (PanelEvents_StampCurrentPart walks the 0x2030 list, class 0x20 -> Var2250_AcceptList check, class 0 -> PanelEvent_StampPartIntoClass00).
+; Evidence: prom_b slot T_PanelEvent_Service is `jp PanelEvent_Service`, called from MainTask_Loop 0xF820F1; body `calr PanelGroupQueue_ExpandToEvents / calr PanelEvents_StampCurrentPart / ret` (PanelEvents_StampCurrentPart walks the 0x2030 list, class 0x20 -> Var2250_AcceptList check, class 0 -> PanelEvent_StampPartIntoClass00).
 PanelEvent_Service:
 	calr PanelGroupQueue_ExpandToEvents                                            ; F8A81D  1e 04 00
 	calr PanelEvents_StampCurrentPart                                          ; F8A820  1e a1 0a
@@ -21847,7 +21847,7 @@ PanelGroupActionListPool:
 ; ==============================================================================
 ;
 ; Chosen because notes/prom_a_call_graph.py --modules ranks its two directory
-; modules -- T_F41AF0-T_F41B18 (11 slots, reference upper bound 146) and
+; modules -- T_Value_ToAsciiDigits3_RightJustified-T_PendingEventQueue_AppendStackArgs (11 slots, reference upper bound 146) and
 ; T_AsciiDigits3_ToValue (T_F432F0)-T_AsciiField_Clear (T_F432F8) (3 slots, 27) -- fourth and fifteenth in prom_a, and they
 ; both land here.  0xF8BC00, 0xF8BC04 and 0xF8BC08 are three `calr`-and-return
 ; veneers onto routines at the top of the module, the shape the linker gives a
@@ -21871,19 +21871,19 @@ PanelGroupActionListPool:
 ;
 ; Routines whose name is not established are `sub_XXXXXX` on purpose.
 ; FixedEventList_AppendStackArgs -- C-callable List2030_AppendRegs: append 4 stack bytes to the list at 0x2030
-; Evidence: prom_b directory slot T_F41B10 (`jp 0xF8BC00`, 3 refs); `calr 0x02ce` resolves to 0xF8BED1
+; Evidence: prom_b directory slot T_FixedEventList_AppendStackArgs (`jp 0xF8BC00`, 3 refs); `calr 0x02ce` resolves to 0xF8BED1
 ;   (FixedEventList_AppendStackArgs_Body).  The veneer's own return address is what makes the body's (XIZ+0x0C..0x12)
 ;   offsets land on the caller's four 16-bit pushes.
 FixedEventList_AppendStackArgs:
 	calr FixedEventList_AppendStackArgs_Body                                          ; F8BC00  1e ce 02
 	ret                                                  ; F8BC03  0e
 ; EventQueue_AppendStackArgs -- C-callable Queue2C00_AppendRegs (4 stack words -> the 0x2C00 event queue)
-; Evidence: prom_b directory slot T_F41B14 (12 refs); `calr EventQueue_AppendStackArgs_Body` at 0xF8BC04.
+; Evidence: prom_b directory slot T_EventQueue_AppendStackArgs (12 refs); `calr EventQueue_AppendStackArgs_Body` at 0xF8BC04.
 EventQueue_AppendStackArgs:
 	calr EventQueue_AppendStackArgs_Body                                          ; F8BC04  1e e5 02
 	ret                                                  ; F8BC07  0e
 ; PendingEventQueue_AppendStackArgs -- C-callable Queue2E00_AppendRegs (4 stack words -> the pending list 0x2E00)
-; Evidence: prom_b directory slot T_F41B18 (34 refs); `calr PendingEventQueue_AppendStackArgs_Body` at 0xF8BC08.
+; Evidence: prom_b directory slot T_PendingEventQueue_AppendStackArgs (34 refs); `calr PendingEventQueue_AppendStackArgs_Body` at 0xF8BC08.
 PendingEventQueue_AppendStackArgs:
 	calr PendingEventQueue_AppendStackArgs_Body                                          ; F8BC08  1e fc 02
 	ret                                                  ; F8BC0B  0e
@@ -22006,8 +22006,8 @@ Value_ToAsciiDigits3_LeftJustified:
 	ret                                                  ; F8BCAE  0e
 ; Value_ToAsciiDigits3_RightJustified -- WA -> three ASCII cells at 0x2661, leading zeros blanked
 ; Evidence: `calr Value_ToAsciiDigits3`; (0x2665) bit 1 clear (no hundreds) -> (0x2661) = ' '; bit 0 also clear (no
-;   tens) -> (0x2662) = ' '.  So 5 -> "  5", 50 -> " 50".  Published as T_F41AF0, 35 refs; prom_b's display-list op
-;   0x00 handler 0xF31BA1 is annotated "decimal readout, unsigned (0xF8BCAF via T_F41AF0)".
+;   tens) -> (0x2662) = ' '.  So 5 -> "  5", 50 -> " 50".  Published as T_Value_ToAsciiDigits3_RightJustified, 35 refs; prom_b's display-list op
+;   0x00 handler 0xF31BA1 is annotated "decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)".
 Value_ToAsciiDigits3_RightJustified:
 	calr Value_ToAsciiDigits3                            ; F8BCAF  1e 25 00
 	m_bit 1, MD16, 0x2665                                ; F8BCB2  f1 65 26 c9
@@ -22019,8 +22019,8 @@ Value_ToAsciiDigits3_RightJustified:
 .LF8BCC8:
 	ret                                                  ; F8BCC8  0e
 ; Value_ToSignedAsciiDigits3_RightJustified -- (WA - DE) -> sign cell 0x2660 + right-justified digits 0x2661-0x2663
-; Evidence: `calr Value_OffsetToSignAndMagnitude / calr Value_ToAsciiDigits3_RightJustified`.  Published as T_F41AF8
-;   (7 refs); prom_b's op-05 handler 0xF31BD7 is annotated "decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer
+; Evidence: `calr Value_OffsetToSignAndMagnitude / calr Value_ToAsciiDigits3_RightJustified`.  Published as T_Value_ToSignedAsciiDigits3_RightJustified
+;   (7 refs); prom_b's op-05 handler 0xF31BD7 is annotated "decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer
 ;   0x2660".
 Value_ToSignedAsciiDigits3_RightJustified:
 	calr Value_OffsetToSignAndMagnitude                                      ; F8BCC9  1e 75 00
@@ -22038,7 +22038,7 @@ Value_ToSignedAsciiDigits3_LeftJustified:
 ;
 ; Called from: `calr` from the four routines above it at 0xF8BC8A, 0xF8BCAF,
 ;          0xF8BCC9 and 0xF8BCD0, which are the blanking variants; two of those
-;          are directory slots T_F41AF4 and T_F41AF0.
+;          are directory slots T_Value_ToAsciiDigits3_LeftJustified and T_F41AF0.
 ; Inputs:  WA = the value.
 ; Outputs: (0x2661..0x2663) ASCII; (0x2665) bits 0-1 record which digits were
 ;          produced; C is preserved.
@@ -22120,7 +22120,7 @@ Value_OffsetToSignAndMagnitude:
 ; Value_ApplyNibbleDeltaClamped -- A += signed 4-bit step encoded in W, clamped to C..B
 ; Evidence: index (W&0x0F)|((W&0x80)>>3) into SignedNibbleDelta_Table (0xF8BD80), `add A,L`; a sign-bit flip clamps
 ;   (positive overflow -> B, negative underflow -> 0), then `cp A,C` raises to C and `cp A,B` lowers to B. Published
-;   T_F41B04 (9 refs); e.g. SoftKeyCol4_Eff1_Step passes A = field, B = 0x7F, C = 0, W = key flag + step.
+;   T_Value_ApplyNibbleDeltaClamped (9 refs); e.g. SoftKeyCol4_Eff1_Step passes A = field, B = 0x7F, C = 0, W = key flag + step.
 Value_ApplyNibbleDeltaClamped:
 	ld L,W                                               ; F8BD73  c8 8f
 	and L,0x0f                                           ; F8BD75  cf cc 0f
@@ -22166,7 +22166,7 @@ Value_ApplyNibbleDeltaClamped:
 ; ENTRY COUNT, and how it is established: the index arithmetic above cannot
 ;          produce 32 or more, and the byte at 0xF8BDA5 + 32 = 0xF8BDC5 is the
 ;          first byte of the next routine -- which is not an inference from the
-;          decode but a published entry, directory slot T_F41B08 (32 references).
+;          decode but a published entry, directory slot T_PanelButton_CallTableEntry (32 references).
 ;          Both ends of the table are therefore pinned by something other than
 ;          the table.  ★ LAST-ENTRY TEST: entry 31 is 0xF1 = -15, the largest
 ;          negative magnitude the 4-bit field can hold, and entry 30 is 0xF2.
@@ -22181,7 +22181,7 @@ SignedNibbleDelta_Table:
 ; PanelButton_CallTableEntry -- call entry HL of a screen's 32-entry button-handler table (XIX)
 ; Evidence: `cp HL,0x001f / jr ugt` (0xF8BDC5), `ld XIX,(XIX+4*L) / call (xix)` (0xF8BDF0); first XDE = 1<<L
 ;   (IndexToBitMask32_Copy) is tested against (0x2666) or, when W bit 7 is set, (0x266A); no hit -> and (0x2075),0xfe.
-;   Callers are Button methods (e.g. ScreenButton_SoundMode) via T_F41B08; HL/W are the code and pair flag
+;   Callers are Button methods (e.g. ScreenButton_SoundMode) via T_PanelButton_CallTableEntry; HL/W are the code and pair flag
 ;   PanelButton_Route passes.
 PanelButton_CallTableEntry:
 	cp HL,0x001f                                         ; F8BDC5  db cf 1f 00
@@ -22207,7 +22207,7 @@ PanelButton_CallTableEntry:
 	ret                                                  ; F8BDF7  0e
 ; PanelButton_CallPageTableEntry -- PanelButton_CallTableEntry on row E of consecutive 32-entry tables
 ; Evidence: the same bound and enable-mask test as PanelButton_CallTableEntry, then `xor XDE,XDE / pop E / sla 7,DE /
-;   add XIX,XDE` (0xF8BE1D-0xF8BE2C) selects row E (128 bytes per row) before `call (xix)`.  T_F41B0C callers:
+;   add XIX,XDE` (0xF8BE1D-0xF8BE2C) selects row E (128 bytes per row) before `call (xix)`.  T_PanelButton_CallPageTableEntry callers:
 ;   ScreenButton_SysexBulkDump_Entry and ScreenButton_GeneralMidiMode_Entry with E = (0x2740), the page.
 PanelButton_CallPageTableEntry:
 	cp HL,0x001f                                         ; F8BDF8  db cf 1f 00
@@ -22348,7 +22348,7 @@ PendingEventQueue_AppendStackArgs_Body:
 ; PanelLed_PhaseVector -- the LED module's boot phase vector: phase 0 initialises, phases 1-5 are bare ret
 ; Evidence: ModuleInitDirectory_F82641[5] = T_F40660, whose word is `.long PanelLed_PhaseVector`; the walker calls vector +
 ;   phase (0,4,8,0xC,0x10).  Slot 0 `jp 0xF8C018` stores 5 into (0x2143)-(0x2147) (no other reader found in
-;   prom_a/prom_b); slots 1-5 are `ret`.  The module's other directory slots T_F40664-T_F406A0 are the PanelLed_*
+;   prom_a/prom_b); slots 1-5 are `ret`.  The module's other directory slots T_PanelLed_ProcessRequests-T_PanelLed_ToggleActivityLed are the PanelLed_*
 ;   routines below.
 PanelLed_PhaseVector:
 	jp .LF8C018                                   ; F8C000  1b 18 c0 f8
@@ -22380,7 +22380,7 @@ PanelLed_PhaseVector:
 	ld (0x2145:16), 0x05                          ; F8C02C  f1 45 21 00 05
 	ret                                           ; F8C031  0e
 ; PanelLed_OnPartEvent -- pass-B event handler (classes 0x00-0x1F, 0x40): refresh the LEDs a part's sound change affects
-; Evidence: T_F4067C (`jp 0xF8C032`) sits in UiListB_Class00..1F and UiListB_Class40.  Code (0x20B8) == 0 ->
+; Evidence: T_PanelLed_OnPartEvent (`jp 0xF8C032`) sits in UiListB_Class00..1F and UiListB_Class40.  Code (0x20B8) == 0 ->
 ;   PanelLed_ClearCtrlOffsetLeds; CmdList_F8C046 then ORs 0x0044 into (0x2116) for code 0 (.LF8C16D record walk), i.e.
 ;   requests PanelLed_ShowSoundSelect (id 0x0004) and PanelLed_ShowBank (id 0x0040).  [part][0] is the record
 ;   MidiIn_ProgramChange_ParamTable posts.
@@ -22405,7 +22405,7 @@ CmdList_F8C046:
 	.byte 0x00, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C046  record 0
 	.byte 0xff  ; F8C04D  terminator
 ; PanelLed_OnClass20Event -- pass-B handler (classes 0x20-0x3F): request the six-way-select LEDs on codes 0x18-0x1A
-; Evidence: T_F40698 is in UiListB_Class20..3F; CmdList_F8C05B holds keys 0x18/0x19/0x1A -> (0x213A) |= 0x0080, the id
+; Evidence: T_PanelLed_OnClass20Event is in UiListB_Class20..3F; CmdList_F8C05B holds keys 0x18/0x19/0x1A -> (0x213A) |= 0x0080, the id
 ;   DispatchTable_F8C2B2 maps to PanelLed_ShowSixWaySelect.  Codes 0x19/0x1A come from v1 group 0x08's [0x20,0x19]
 ;   events (sub_F8AA24 may make it 0x1A; PanelEvent_StampPartIntoClass20 adds the part), 0x18 from sub_F91407.
 PanelLed_OnClass20Event:   ; entry: prom_b routine directory
@@ -22427,7 +22427,7 @@ CmdList_F8C05B:
 	.byte 0x1a, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C069  record 2
 	.byte 0xff  ; F8C070  terminator
 ; PanelLed_OnClass90Event -- pass-B handler (class 0x90): code 0x10 resets and re-requests the part LEDs
-; Evidence: T_F40680 is in UiListB_Class90; code (0x20B8) == 0x10 -> PanelLed_ClearCtrlOffsetLeds (0xF8C07A), then
+; Evidence: T_PanelLed_OnClass90Event is in UiListB_Class90; code (0x20B8) == 0x10 -> PanelLed_ClearCtrlOffsetLeds (0xF8C07A), then
 ;   CmdList_F8C086 ORs 0x0080 into (0x213A) and 0x0044 into (0x2116) for code 0x10.
 ; Unknown: what class 0x90 code 0x10 announces.
 PanelLed_OnClass90Event:   ; entry: prom_b routine directory
@@ -22456,7 +22456,7 @@ T_F40684_Nop:   ; entry: prom_b routine directory
 T_F40688_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F8C096  0e
 ; PanelLed_OnClassA8Event -- pass-B handler (class 0xA8): BANK and sound-select events request the sound/bank LEDs
-; Evidence: T_F4068C is in UiListB_ClassA8; CmdList_F8C0A4 keys 0x08 and 0x07 -> (0x2116) |= 0x0044.  A8/07 is the
+; Evidence: T_PanelLed_OnClassA8Event is in UiListB_ClassA8; CmdList_F8C0A4 keys 0x08 and 0x07 -> (0x2116) |= 0x0044.  A8/07 is the
 ;   BANK event (PanelAction_BankButton/_BankRemap), A8/08 the v1 sound-select event
 ;   (PanelAction_SoundSelectOrKeypad_V1).
 PanelLed_OnClassA8Event:   ; entry: prom_b routine directory
@@ -22479,7 +22479,7 @@ CmdList_F8C0A4:
 T_F40690_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F8C0B3  0e
 ; PanelLed_OnClass98Event -- pass-B handler (class 0x98): mode-switch events request the sound/bank LEDs
-; Evidence: T_F40694 is in UiListB_Class98; CmdList_F8C0C1 keys 0x00 and 0x01 -> (0x2116) |= 0x0044.  Event 98/00 is
+; Evidence: T_PanelLed_OnClass98Event is in UiListB_Class98; CmdList_F8C0C1 keys 0x00 and 0x01 -> (0x2116) |= 0x0044.  Event 98/00 is
 ;   posted by Mode_SwitchToSound/Mode_SwitchToCombination with the new (0x7F02) mode nibble; 98/01 by the
 ;   combination-mode path of PanelAction_SelectNextSound/_SelectPrevSound.
 PanelLed_OnClass98Event:   ; entry: prom_b routine directory
@@ -22500,7 +22500,7 @@ CmdList_F8C0C1:
 	.byte 0x01, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0C8  record 1
 	.byte 0xff  ; F8C0CF  terminator
 ; PanelLed_OnCtrlParamEvent -- pass-B handler (controller classes): track the two assignable controllers' values
-; Evidence: T_F4069C is in UiListB_ClassB2-B5 and B8-BD.  With (0x20BA) != 0, the class (0x20BB) is compared with the
+; Evidence: T_PanelLed_OnCtrlParamEvent is in UiListB_ClassB2-B5 and B8-BD.  With (0x20BA) != 0, the class (0x20BB) is compared with the
 ;   parameter number of the assignment byte at (0x7F27) and (0x7F28) (.LF8C111 = the PanelCtrl_AssignToParamNumber
 ;   map); a match stores the value (0x20B9) to (0x216C)/(0x216D) and ORs 0x0100/0x0800 into (0x213A), the ids of
 ;   PanelLed_ShowCtrl1Offset/_ShowCtrl2Offset.
@@ -22599,7 +22599,7 @@ PanelLed_OnCtrlParamEvent:   ; entry: prom_b routine directory
 ; PanelLed_ProcessRequests -- run the LED update routines whose request bits are pending
 ; Evidence: for each of the six words (0x2116),(0x2122),(0x2128),(0x212E),(0x2134),(0x213A): `and` a fixed mask, `and`
 ;   ~((w+2)|(w+4)), and if non-zero `calr PanelLed_DispatchRequestBits` with its DispatchTable_F8C2B2 sub-list, then
-;   clear it.  Called through T_F40664 from the main loop (0xF82154, 0xF8217A), each followed by T_SC1_TxFlush.
+;   clear it.  Called through T_PanelLed_ProcessRequests from the main loop (0xF82154, 0xF8217A), each followed by T_SC1_TxFlush.
 PanelLed_ProcessRequests:   ; entry: prom_b routine directory
 	andw	(0x2116:16), 0x0e7f                  ; F8C18B  d1 16 21 3c 7f 0e
 	ld wa, (0x2118:16)                                 ; F8C191  d1 18 21 20
@@ -22727,7 +22727,7 @@ PanelLed_RequestIfBlinkEnableChanged:   ; entry: reachable-run entry
 .LF8C337:
 	ret                                                  ; F8C337  0e
 ; PanelLed_Refresh -- periodic LED pass: check the blink LED, then send every LED byte that changed
-; Evidence: called via T_F40668 from the main loop (0xF820A5, tick bit 1 of (0x88)).  calr
+; Evidence: called via T_PanelLed_Refresh from the main loop (0xF820A5, tick bit 1 of (0x88)).  calr
 ;   PanelLed_RequestIfBlinkEnableChanged; ands the six second words (0x2118..0x213C) with the same masks as
 ;   PanelLed_ProcessRequests (the dispatch it then runs uses 0xF8C428, which is an immediate 0xFFFF terminator);
 ;   .LF8C3E4 toggles (0x20D6) bit 3 when (0x216F) bit 0 is set (not on v1); finally calr PanelLed_SendChangedBytes.
@@ -22791,7 +22791,7 @@ PanelLed_Refresh:   ; entry: prom_b routine directory
 ; PanelLed_ToggleActivityLed -- flip LED byte 6 bit 3 and send it immediately (not on variant 1)
 ; Evidence: `cp (0xC4),0x01 / jr z,ret`; (0x2170) counter; `xor (0x20D6),0x08`, (0x20F6) = (0x20D6) so
 ;   PanelLed_SendChangedBytes will not resend it, W = 6 and `calr .LF8C84A`, then T_SC1_TxFlush.  Published as
-;   T_F406A0; callers sub_FA5935 (called inside the foreground MIDI consumer 0xFA5942-0xFA5AEA before a MIDI message
+;   T_PanelLed_ToggleActivityLed; callers sub_FA5935 (called inside the foreground MIDI consumer 0xFA5942-0xFA5AEA before a MIDI message
 ;   is built) and sub_FB7AFE.  ⚠ sub_FA5935's header guesses "buffer initialiser"; this is what it really calls.
 PanelLed_ToggleActivityLed:   ; entry: prom_b routine directory
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; F8C3FB  c0 c4 3f 01
@@ -23224,12 +23224,12 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 ; PanelLed_SendByte -- send LED byte W (pattern A) to the panel, except while screen 0xDB is current
 ; Evidence: `calr .LF8C84A`: `cp (0x207A),0xdb / jr z,ret`, W = PanelLedWireMap_Variant1/2[W] (by (0xC4)), then
 ;   .LF8C86A stores W,A into the ring at 0x2BA0 (T_SC1_TxFlush while it is full).  Screen 0xDB is PanelSwLedCheck
-;   (FINDINGS-prom_a-panel-control-map.md 3c).  T_F40678 callers: sub_F829A6 (LedNibblePatterns_F829F4).
+;   (FINDINGS-prom_a-panel-control-map.md 3c).  T_PanelLed_SendByte callers: sub_F829A6 (LedNibblePatterns_F829F4).
 PanelLed_SendByte:   ; entry: prom_b routine directory
 	calr .LF8C84A                                        ; F8C842  1e 05 00
 	ret                                                  ; F8C845  0e
 ; PanelLed_SendByteUnconditional -- PanelLed_SendByte without the screen-0xDB (switch/LED check) gate
-; Evidence: `calr .LF8C851` enters past the `cp (0x207A),0xdb` test.  T_F40670's callers are TestMode_SendStagedLed and the test
+; Evidence: `calr .LF8C851` enters past the `cp (0x207A),0xdb` test.  T_PanelLed_SendByteUnconditional's callers are TestMode_SendStagedLed and the test
 ;   mode's TestMode_PanelSwitchesToLeds, which drive the LEDs while that check screen is current.
 PanelLed_SendByteUnconditional:   ; entry: prom_b routine directory
 	calr .LF8C851                                        ; F8C846  1e 08 00
@@ -23292,7 +23292,7 @@ PanelLedWireMap_Variant2:
 T_F4066C_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F8C8C2  0e
 ; PanelLed_FlashTransportBeat -- flash LED byte 4 bits 6/7 on each beat of transport A (variant 1 only)
-; Evidence: called first in every main-loop pass (0xF8203B via T_F40674).  With (0x3552) = 0x8001/0x8002, bit 5 of
+; Evidence: called first in every main-loop pass (0xF8203B via T_PanelLed_FlashTransportBeat).  With (0x3552) = 0x8001/0x8002, bit 5 of
 ;   (0x212A)|(0x212C) clear, (0x94) bit 2 (transport A running) and (0x8B) & 0x60 = 0 (tick < 32 of 96): (0x225A) |=
 ;   2, A = SelfPtrTable_F8C930[(0x605000)][(0x8C) & 7] (beats per bar, beat -- INTTR4_SequencerTick's names), into
 ;   bits 6-7 of (0x20D4); otherwise the bits are cleared once.  ⚠ The table's "Read by: NOT ESTABLISHED" is wrong:
@@ -31825,9 +31825,9 @@ sub_F90B8E:
 T_F41504_Nop:
 	ret                                                  ; F90C12  0e
 ; ModeEnter_Combination -- ENTER method of mode 2 (combination mode)
-; Evidence: PanelScreen_VtableTable entry 2 -> T_F41508 (`jp 0xF90C13`, +4 T_F4150C = ModeLeave_Combination). `or
+; Evidence: PanelScreen_VtableTable entry 2 -> T_ModeEnter_Combination (`jp 0xF90C13`, +4 T_F4150C = ModeLeave_Combination). `or
 ;   (0x2134),0x0002` requests PanelLed_ShowModeMenu (id 0x0002), then `calr Mode_SwitchToCombination` and SoundGroup_LoadSelectionFromGlobal.
-;   (T_F41508 is also the +8 slot of mode 1's object, which view A never calls.)
+;   (T_ModeEnter_Combination is also the +8 slot of mode 1's object, which view A never calls.)
 ModeEnter_Combination:
 	orw	(0x2134:16), 0x0002                  ; F90C13  d1 34 21 3e 02 00
 	calr Mode_SwitchToCombination                                            ; F90C19  1e 05 00
@@ -31837,9 +31837,9 @@ T_F4150C_Nop:
 	ret                                                  ; F90C20  0e
 ; Mode_SwitchToCombination -- switch the part block from sound-mode to combination-mode contents
 ; Evidence: no-op when (0x7F02) & 0xF0 is already 0x10; else (0x7F02) = (0x7F02)&0x0F | 0x10, Queue2C00 record
-;   {0x98,0x00,0x10,0xF0}, `ldirw` 0x160 words 0x7620 -> 0x7000 (save), T_F4024C, 0x7300 -> 0x7620 (load), T_F40248,
+;   {0x98,0x00,0x10,0xF0}, `ldirw` 0x160 words 0x7620 -> 0x7000 (save), T_ParamImage_SnapshotCombination_Entry, 0x7300 -> 0x7620 (load), T_ParamImage_QueueDiffCombination,
 ;   T_Queue2C00_DrainPassB.  0x10 is the nibble PanelState_Init maps to mode 2, whose screen draws "C0MBINATI0N M0DE".
-;   Published T_F415C0 (2 refs) and called by ModeEnter_Combination.
+;   Published T_Mode_SwitchToCombination (2 refs) and called by ModeEnter_Combination.
 Mode_SwitchToCombination:
 	ld a, (0x7f02:16)                                   ; F90C21  c1 02 7f 21
 	and A,0xf0                                           ; F90C25  c9 cc f0
@@ -31856,19 +31856,19 @@ Mode_SwitchToCombination:
 	ld XIX,0x00007000                                    ; F90C48  44 00 70 00 00
 	ld XBC,0x00000160                                    ; F90C4D  41 60 01 00 00
 	ldirw                                                ; F90C52  95 11
-	call T_F4024C                                        ; F90C54  1d 4c 02 f4
+	call T_ParamImage_SnapshotCombination_Entry                                        ; F90C54  1d 4c 02 f4
 	ld XIY,0x00007300                                    ; F90C58  45 00 73 00 00
 	ld XIX,0x00007620                                    ; F90C5D  44 20 76 00 00
 	ld XBC,0x00000160                                    ; F90C62  41 60 01 00 00
 	ldirw                                                ; F90C67  95 11
-	call T_F40248                                        ; F90C69  1d 48 02 f4
+	call T_ParamImage_QueueDiffCombination                                        ; F90C69  1d 48 02 f4
 	call T_Queue2C00_DrainPassB                          ; F90C6D  1d 38 00 f4
 .LF90C71:
 	ret                                                  ; F90C71  0e
 ; Mode_SwitchToSound -- switch the part block back to sound-mode contents
 ; Evidence: the mirror of Mode_SwitchToCombination: no-op when (0x7F02) & 0xF0 == 0; else nibble 0x00, Queue2C00
-;   record {0x98,0x00,0x00,0xF0}, 0x7620 -> 0x7300 (save), T_F4024C, 0x7000 -> 0x7620 (load), T_F40248, pass-B drain.
-;   Called by mode 1's Enter at 0xF90C00 (`calr` at 0xF90C0B) and published T_F415C4 (4 refs).
+;   record {0x98,0x00,0x00,0xF0}, 0x7620 -> 0x7300 (save), T_ParamImage_SnapshotCombination_Entry, 0x7000 -> 0x7620 (load), T_ParamImage_QueueDiffCombination, pass-B drain.
+;   Called by mode 1's Enter at 0xF90C00 (`calr` at 0xF90C0B) and published T_Mode_SwitchToSound (4 refs).
 Mode_SwitchToSound:
 	ld a, (0x7f02:16)                                   ; F90C72  c1 02 7f 21
 	and A,0xf0                                           ; F90C76  c9 cc f0
@@ -31885,41 +31885,41 @@ Mode_SwitchToSound:
 	ld XIX,0x00007300                                    ; F90C98  44 00 73 00 00
 	ld XBC,0x00000160                                    ; F90C9D  41 60 01 00 00
 	ldirw                                                ; F90CA2  95 11
-	call T_F4024C                                        ; F90CA4  1d 4c 02 f4
+	call T_ParamImage_SnapshotCombination_Entry                                        ; F90CA4  1d 4c 02 f4
 	ld XIY,0x00007000                                    ; F90CA8  45 00 70 00 00
 	ld XIX,0x00007620                                    ; F90CAD  44 20 76 00 00
 	ld XBC,0x00000160                                    ; F90CB2  41 60 01 00 00
 	ldirw                                                ; F90CB7  95 11
-	call T_F40248                                        ; F90CB9  1d 48 02 f4
+	call T_ParamImage_QueueDiffCombination                                        ; F90CB9  1d 48 02 f4
 	call T_Queue2C00_DrainPassB                          ; F90CBD  1d 38 00 f4
 .LF90CC1:
 	ret                                                  ; F90CC1  0e
 ; InstallPainter_SoundMode_Entry -- ENTER method of screen 1, a pure wrapper for InstallPainter_SoundMode
-; Evidence: PanelScreen_VtableTable_ViewB entry 1 (SCREEN ID 0x01) -> T_F41520 `jp 0xF90CC2`; the body is `calr
+; Evidence: PanelScreen_VtableTable_ViewB entry 1 (SCREEN ID 0x01) -> T_InstallPainter_SoundMode_Entry `jp 0xF90CC2`; the body is `calr
 ;   InstallPainter_SoundMode / ret`.
 InstallPainter_SoundMode_Entry:
 	calr InstallPainter_SoundMode                                            ; F90CC2  1e 93 00
 	ret                                                  ; F90CC5  0e
 ; ScreenLeave_SoundMode -- LEAVE method of screen 1 (SOUND MODE): give the dial back to value editing
-; Evidence: T_F41520+4 = T_F41524 `jp 0xF90CC6`; body `calr PanelDial_UnbindFromButtons / ret`.
+; Evidence: T_InstallPainter_SoundMode_Entry+4 = T_ScreenLeave_SoundMode `jp 0xF90CC6`; body `calr PanelDial_UnbindFromButtons / ret`.
 ScreenLeave_SoundMode:
 	calr PanelDial_UnbindFromButtons                                          ; F90CC6  1e 17 05
 	ret                                                  ; F90CC9  0e
 ; ScreenButton_SoundMode -- BUTTON method of screen 1 (SOUND MODE): dispatch the code through its 32-entry table
-; Evidence: T_F41528 `jp 0xF90CCA`; `ld XIX,DisplayListPtrs_F90CD8 / call T_F41B08` (PanelButton_CallTableEntry), as
+; Evidence: T_ScreenButton_SoundMode `jp 0xF90CCA`; `ld XIX,DisplayListPtrs_F90CD8 / call T_PanelButton_CallTableEntry` (PanelButton_CallTableEntry), as
 ;   that table's header already records.
 ScreenButton_SoundMode:
 	ld XIX,DisplayListPtrs_F90CD8                        ; F90CCA  44 d8 0c f9 00
-	call T_F41B08                                        ; F90CCF  1d 08 1b f4
+	call T_PanelButton_CallTableEntry                                        ; F90CCF  1d 08 1b f4
 	ret                                                  ; F90CD3  0e
 sub_F90CD4:
 	calr sub_F914AE                                          ; F90CD4  1e d7 07
 	ret                                                  ; F90CD7  0e
 ; ---------------------------------------------------------------------
 ; DisplayListPtrs_F90CD8 -- 32 LE32 pointers
-; Read by: ONE site, 0xF90CCA `ld XIX,0x00F90CD8 / call T_F41B08`.
+; Read by: ONE site, 0xF90CCA `ld XIX,0x00F90CD8 / call T_PanelButton_CallTableEntry`.
 ; ENTRY COUNT 32 comes from the CALLEE'S bound, the same way the seven
-;          tables of the 0xF92C62 module get theirs: T_F41B08 resolves to
+;          tables of the 0xF92C62 module get theirs: T_PanelButton_CallTableEntry resolves to
 ;          prom_a 0xF8BDC5, whose first instruction is
 ;          `cp HL,0x001F / jr ugt` -- index 0x1F is the last one it lets
 ;          through.  The shape run measured by notes/prom_a_ptr_tables.py
@@ -31928,7 +31928,7 @@ sub_F90CD4:
 ;          BUTTON method of PanelScreen_VtableTable entry 0x21 (prom_b
 ;          slot 0xF41528); PanelButton_Route calls it with the code in HL
 ;          and at (XIZ+8), and it indexes this table with it:
-;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          `ld XIX,<this> / call T_PanelButton_CallTableEntry`, and T_PanelButton_CallTableEntry = 0xF8BDC5 calls
 ;          (this + 4*L) after `cp HL,0x001F`.
 ;          Dispatch_FF3D39's CONTROL LEGEND names each code.
 ;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
@@ -32535,7 +32535,7 @@ SoftKeyCol4_Eff1_Join:
 	jr nz, .LF912E4                                      ; F912C5  6e 1d
 	ld L,A                                               ; F912C7  c9 8f
 	pushw hl                                             ; F912C9  2b
-	call T_F41B04                                        ; F912CA  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F912CA  1d 04 1b f4
 	popw hl                                              ; F912CE  4b
 	cp A,L                                               ; F912CF  cf f1
 	jr z, .LF912E7                                       ; F912D1  66 14
@@ -32617,7 +32617,7 @@ SoftKeyCol6_Rev_Join:
 	jr nz, .LF91397                                      ; F91378  6e 1d
 	ld L,A                                               ; F9137A  c9 8f
 	pushw hl                                             ; F9137C  2b
-	call T_F41B04                                        ; F9137D  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F9137D  1d 04 1b f4
 	popw hl                                              ; F91381  4b
 	cp A,L                                               ; F91382  cf f1
 	jr z, .LF9139A                                       ; F91384  66 14
@@ -32665,7 +32665,7 @@ SoftKeyCol8_Midi_Join:
 	ld L,A                                               ; F913DD  c9 8f
 	push W                                               ; F913DF  c8 04
 	pushw hl                                             ; F913E1  2b
-	call T_F41B04                                        ; F913E2  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F913E2  1d 04 1b f4
 	popw hl                                              ; F913E6  4b
 	pop W                                                ; F913E7  c8 05
 	cp A,L                                               ; F913E9  cf f1
@@ -32837,19 +32837,19 @@ sub_F914AF:
 .LF914D8:
 	ret                                                  ; F914D8  0e
 ; InstallPainter_C0mbinati0nM0de_Entry -- ENTER method of screen 2, a pure wrapper for InstallPainter_C0mbinati0nM0de
-; Evidence: PanelScreen_VtableTable_ViewB entry 2 (SCREEN ID 0x02) -> T_F41530 `jp 0xF914D9`; the body is `calr
+; Evidence: PanelScreen_VtableTable_ViewB entry 2 (SCREEN ID 0x02) -> T_InstallPainter_C0mbinati0nM0de_Entry `jp 0xF914D9`; the body is `calr
 ;   InstallPainter_C0mbinati0nM0de / ret`.
 InstallPainter_C0mbinati0nM0de_Entry:
 	calr InstallPainter_C0mbinati0nM0de                                          ; F914D9  1e 1f 01
 	ret                                                  ; F914DC  0e
 ; ScreenLeave_C0mbinati0nM0de -- LEAVE method of screen 2 (COMBINATION MODE)
-; Evidence: T_F41530+4 = T_F41534 `jp 0xF914DD`; body `calr ScreenLeaveBody_C0mbinati0nM0de / ret`.
+; Evidence: T_InstallPainter_C0mbinati0nM0de_Entry+4 = T_ScreenLeave_C0mbinati0nM0de `jp 0xF914DD`; body `calr ScreenLeaveBody_C0mbinati0nM0de / ret`.
 ScreenLeave_C0mbinati0nM0de:
 	calr ScreenLeaveBody_C0mbinati0nM0de                                          ; F914DD  1e 5c 09
 	ret                                                  ; F914E0  0e
 ; ScreenButton_C0mbinati0nM0de -- BUTTON method of screen 2: dispatch through the current page's 32-entry table
-; Evidence: T_F41538 `jp 0xF914E1`; `ld XIX,DisplayListPtrs_F914FB / cp (0x2687),0 / jr z` else
-;   DisplayListPtrs_F9157B, then T_F41B08 (PanelButton_CallTableEntry).  (0x2687) == 0 is page 1
+; Evidence: T_ScreenButton_C0mbinati0nM0de `jp 0xF914E1`; `ld XIX,DisplayListPtrs_F914FB / cp (0x2687),0 / jr z` else
+;   DisplayListPtrs_F9157B, then T_PanelButton_CallTableEntry (PanelButton_CallTableEntry).  (0x2687) == 0 is page 1
 ;   (InstallPainter_C0mbinati0nM0de posts the "PAGE1/2" painter then); ⚠ the two tables' headers name the arms the
 ;   other way round.
 ScreenButton_C0mbinati0nM0de:
@@ -32858,7 +32858,7 @@ ScreenButton_C0mbinati0nM0de:
 	jr z, .LF914F2                                       ; F914EB  66 05
 	ld XIX,DisplayListPtrs_F9157B                        ; F914ED  44 7b 15 f9 00
 .LF914F2:
-	call T_F41B08                                        ; F914F2  1d 08 1b f4
+	call T_PanelButton_CallTableEntry                                        ; F914F2  1d 08 1b f4
 	ret                                                  ; F914F6  0e
 sub_F914F7:
 	calr sub_F923EB                                          ; F914F7  1e f1 0e
@@ -32866,7 +32866,7 @@ sub_F914F7:
 ; ---------------------------------------------------------------------
 ; DisplayListPtrs_F914FB -- 32 LE32 pointers, the (0x2687) != 0 arm
 ; Read by: 0xF914E1 `ld XIX,0x00F914FB`, then `cp (0x2687),0x00 / jr z,
-;          <load the other table> / call T_F41B08`.  So this table is the
+;          <load the other table> / call T_PanelButton_CallTableEntry`.  So this table is the
 ;          arm taken when (0x2687) is NON-zero and 0xF9157B is the zero
 ;          arm -- one byte of state picks between two 32-entry tables.
 ; ENTRY COUNT 32 is the callee's bound (0xF8BDC5 `cp HL,0x001F`), and it
@@ -33906,7 +33906,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	swi 7                                                ; F91E3A  ff
 	ret                                                  ; F91E3B  0e
 ; ScreenLeaveBody_C0mbinati0nM0de -- the whole body of the COMBINATION MODE screen's Leave method: switches SOLO off
-; Evidence: called only by sub_F914DD, the +4 slot of screen object T_F41530 (PanelScreen_VtableTable_ViewB entry 2, screen id 2), whose +0 Enter sub_F914D9 -> sub_F915FB installs the "C0MBINATI0N M0DE" painters.
+; Evidence: called only by sub_F914DD, the +4 slot of screen object T_InstallPainter_C0mbinati0nM0de_Entry (PanelScreen_VtableTable_ViewB entry 2, screen id 2), whose +0 Enter sub_F914D9 -> sub_F915FB installs the "C0MBINATI0N M0DE" painters.
 ; Body: `and (0x267D),0xFE`, then push 0 / call T_F411EC (sub_FC5566 clears bit 5 of (0x602498)) -- the same pair LcdKeyRow1_C0mbinati0nM0de_Page2 uses for its SOLO-off arm.
 ScreenLeaveBody_C0mbinati0nM0de:
 	m_and_mi8 MB16, 0x267d, 0xfe                         ; F91E3C  c1 7d 26 3c fe
@@ -33916,8 +33916,8 @@ ScreenLeaveBody_C0mbinati0nM0de:
 	inc 1,XSP                                            ; F91E48  ef 61
 	ret                                                  ; F91E4A  0e
 ; SoftKeyCol1_C0mbinati0nM0de_Page2 -- SOFT KEY column 1 on COMBINATION MODE page 2: select part 1, or step its value if it is already selected
-; Evidence: slot [0] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 0 is SOFT KEY col 1 (notes/FINDINGS-prom_a-panel-control-map.md).
-; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart1.
+; Evidence: slot [0] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_PanelButton_CallTableEntry when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 0 is SOFT KEY col 1 (notes/FINDINGS-prom_a-panel-control-map.md).
+; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_Value_ApplyNibbleDeltaClamped reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart1.
 SoftKeyCol1_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF9157B
 	inc 1,W                                              ; F91E4B  c8 61
 	m_bit 2, MD16, UI_RequestBits                                ; F91E4D  f1 75 20 ca
@@ -33953,8 +33953,8 @@ SoftKeyCol1_C0mbinati0nM0de_Page2_Join:
 .LF91EA8:
 	ret                                                  ; F91EA8  0e
 ; SoftKeyCol2_C0mbinati0nM0de_Page2 -- SOFT KEY column 2 on COMBINATION MODE page 2: select part 2, or step its value if it is already selected
-; Evidence: slot [1] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 1 is SOFT KEY col 2 (notes/FINDINGS-prom_a-panel-control-map.md).
-; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart2.
+; Evidence: slot [1] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_PanelButton_CallTableEntry when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 1 is SOFT KEY col 2 (notes/FINDINGS-prom_a-panel-control-map.md).
+; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_Value_ApplyNibbleDeltaClamped reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart2.
 SoftKeyCol2_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF9157F
 	inc 1,W                                              ; F91EA9  c8 61
 	m_bit 2, MD16, UI_RequestBits                                ; F91EAB  f1 75 20 ca
@@ -33990,8 +33990,8 @@ SoftKeyCol2_C0mbinati0nM0de_Page2_Join:
 .LF91F06:
 	ret                                                  ; F91F06  0e
 ; SoftKeyCol3_C0mbinati0nM0de_Page2 -- SOFT KEY column 3 on COMBINATION MODE page 2: select part 3, or step its value if it is already selected
-; Evidence: slot [2] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 2 is SOFT KEY col 3 (notes/FINDINGS-prom_a-panel-control-map.md).
-; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart3.
+; Evidence: slot [2] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_PanelButton_CallTableEntry when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 2 is SOFT KEY col 3 (notes/FINDINGS-prom_a-panel-control-map.md).
+; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_Value_ApplyNibbleDeltaClamped reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart3.
 SoftKeyCol3_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF91583
 	inc 1,W                                              ; F91F07  c8 61
 	m_bit 2, MD16, UI_RequestBits                                ; F91F09  f1 75 20 ca
@@ -34027,8 +34027,8 @@ SoftKeyCol3_C0mbinati0nM0de_Page2_Join:
 .LF91F64:
 	ret                                                  ; F91F64  0e
 ; SoftKeyCol4_C0mbinati0nM0de_Page2 -- SOFT KEY column 4 on COMBINATION MODE page 2: select part 4, or step its value if it is already selected
-; Evidence: slot [3] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 3 is SOFT KEY col 4 (notes/FINDINGS-prom_a-panel-control-map.md).
-; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart4.
+; Evidence: slot [3] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_PanelButton_CallTableEntry when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 3 is SOFT KEY col 4 (notes/FINDINGS-prom_a-panel-control-map.md).
+; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_Value_ApplyNibbleDeltaClamped reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart4.
 SoftKeyCol4_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF91587
 	or W,0x01                                            ; F91F65  c8 ce 01
 	m_bit 2, MD16, UI_RequestBits                                ; F91F68  f1 75 20 ca
@@ -34064,8 +34064,8 @@ SoftKeyCol4_C0mbinati0nM0de_Page2_Join:
 .LF91FC3:
 	ret                                                  ; F91FC3  0e
 ; SoftKeyCol5_C0mbinati0nM0de_Page2 -- SOFT KEY column 5 on COMBINATION MODE page 2: select part 5, or step its value if it is already selected
-; Evidence: slot [4] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 4 is SOFT KEY col 5 (notes/FINDINGS-prom_a-panel-control-map.md).
-; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart5.
+; Evidence: slot [4] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_PanelButton_CallTableEntry when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 4 is SOFT KEY col 5 (notes/FINDINGS-prom_a-panel-control-map.md).
+; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_Value_ApplyNibbleDeltaClamped reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart5.
 SoftKeyCol5_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF9158B
 	or W,0x01                                            ; F91FC4  c8 ce 01
 	m_bit 2, MD16, UI_RequestBits                                ; F91FC7  f1 75 20 ca
@@ -34101,8 +34101,8 @@ SoftKeyCol5_C0mbinati0nM0de_Page2_Join:
 .LF92022:
 	ret                                                  ; F92022  0e
 ; SoftKeyCol6_C0mbinati0nM0de_Page2 -- SOFT KEY column 6 on COMBINATION MODE page 2: select part 6, or step its value if it is already selected
-; Evidence: slot [5] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 5 is SOFT KEY col 6 (notes/FINDINGS-prom_a-panel-control-map.md).
-; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart6.
+; Evidence: slot [5] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_PanelButton_CallTableEntry when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 5 is SOFT KEY col 6 (notes/FINDINGS-prom_a-panel-control-map.md).
+; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_Value_ApplyNibbleDeltaClamped reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart6.
 SoftKeyCol6_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF9158F
 	or W,0x01                                            ; F92023  c8 ce 01
 	m_bit 2, MD16, UI_RequestBits                                ; F92026  f1 75 20 ca
@@ -34138,8 +34138,8 @@ SoftKeyCol6_C0mbinati0nM0de_Page2_Join:
 .LF92081:
 	ret                                                  ; F92081  0e
 ; SoftKeyCol7_C0mbinati0nM0de_Page2 -- SOFT KEY column 7 on COMBINATION MODE page 2: select part 7, or step its value if it is already selected
-; Evidence: slot [6] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 6 is SOFT KEY col 7 (notes/FINDINGS-prom_a-panel-control-map.md).
-; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart7.
+; Evidence: slot [6] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_PanelButton_CallTableEntry when (0x2687) != 0 -- page 2, painted by sub_F916AA ("PAGE2/2", columns PT1..PT8). Code 6 is SOFT KEY col 7 (notes/FINDINGS-prom_a-panel-control-map.md).
+; Body: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_Value_ApplyNibbleDeltaClamped reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart7.
 SoftKeyCol7_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF91593
 	or W,0x01                                            ; F92082  c8 ce 01
 	m_bit 2, MD16, UI_RequestBits                                ; F92085  f1 75 20 ca
@@ -34176,7 +34176,7 @@ SoftKeyCol7_C0mbinati0nM0de_Page2_Join:
 	ret                                                  ; F920E0  0e
 ; SoftKeyCol8_C0mbinati0nM0de -- SOFT KEY column 8 on both COMBINATION MODE pages: PART down/up on page 1, select part 8 on page 2
 ; Evidence: slot [7] of DisplayListPtrs_F914FB (used when (0x2687) == 0, page 1) and of DisplayListPtrs_F9157B ((0x2687) != 0, page 2); code 7 = SOFT KEY col 8.
-; Body: `or W,0x01` (+2 more when (0x2075) bit 2 is set) -- the step for T_F41B04 -- then falls into C0mbinati0nM0de_SelectOrEditPart8OrStepPart.
+; Body: `or W,0x01` (+2 more when (0x2075) bit 2 is set) -- the step for T_Value_ApplyNibbleDeltaClamped -- then falls into C0mbinati0nM0de_SelectOrEditPart8OrStepPart.
 SoftKeyCol8_C0mbinati0nM0de:   ; entry: named by 2 `.long` operands, first at 0xF91517
 	or W,0x01                                            ; F920E1  c8 ce 01
 	m_bit 2, MD16, UI_RequestBits                                ; F920E4  f1 75 20 ca
@@ -34217,7 +34217,7 @@ SoftKeyCol8_C0mbinati0nM0de_Join:
 .LF9214B:
 	ret                                                  ; F9214B  0e
 ; C0mbinati0nM0de_StepSelectedPart -- COMBINATION MODE page 1 PART down/up: steps the selected part (0x2250) by the key's signed step, clamped to 0..7, and repaints page 1
-; Evidence: A = (0x2250), B = 7, C = 0, call T_F41B04 (sub_F8BD73: A + SignedNibbleDelta_Table[W], clamped to [C,B]). If changed: (0x2250) = A, T_Queue2E00_AppendRegs {E=0x90, D=0x10, A, W=0xFF}, T_F411BC,
+; Evidence: A = (0x2250), B = 7, C = 0, call T_Value_ApplyNibbleDeltaClamped (sub_F8BD73: A + SignedNibbleDelta_Table[W], clamped to [C,B]). If changed: (0x2250) = A, T_Queue2E00_AppendRegs {E=0x90, D=0x10, A, W=0xFF}, T_F411BC,
 ; (0x2676) |= 0xFF and (0x2677) |= 0x07 (every page-1 field dirty), T_CallbackQueue_ResetAndRestartTask2, post C0mbinati0nM0de_RepaintPage1Fields.
 ; Called only by C0mbinati0nM0de_SelectOrEditPart8OrStepPart when (0x2687) == 0; page 1's lists carry the caption "PART".
 C0mbinati0nM0de_StepSelectedPart:
@@ -34228,7 +34228,7 @@ C0mbinati0nM0de_StepSelectedPart:
 	ld c, 0x00:opc                                          ; F9215D  23 00
 	ld L,A                                               ; F9215F  c9 8f
 	pushw hl                                             ; F92161  2b
-	call T_F41B04                                        ; F92162  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F92162  1d 04 1b f4
 	popw hl                                              ; F92166  4b
 	cp A,L                                               ; F92167  cf f1
 	jr z, .LF9219D                                       ; F92169  66 32
@@ -34811,7 +34811,7 @@ C0mbinati0nM0de_SetPartInt:
 .LF92692:
 	ret                                                  ; F92692  0e
 ; C0mbinati0nM0de_StepPartPan -- steps record +0x08 (pan) of the part in XIY by the key's step, clamped to 0..127, and posts the new value
-; Evidence: A = (XIY+0x08), B = 0x7F, C = 0, D = 0x08, H = 0x7F, calr Value_StepAndPostIfChanged (T_F41B04; if the value changed, T_List2030_AppendRegs {E=caller's part, D=8, A=new, W=0x7F}) -- the record byte itself is not written here.
+; Evidence: A = (XIY+0x08), B = 0x7F, C = 0, D = 0x08, H = 0x7F, calr Value_StepAndPostIfChanged (T_Value_ApplyNibbleDeltaClamped; if the value changed, T_List2030_AppendRegs {E=caller's part, D=8, A=new, W=0x7F}) -- the record byte itself is not written here.
 ; Callers: C0mbinati0nM0de_EditSelectedRow (PAN row) and sub_F91275 (soft-key column 3, under "PAN", when (0x207C) != 1). C0mbinati0nM0de_DrawPart1Pan..8Pan draw this byte.
 C0mbinati0nM0de_StepPartPan:
 	ld A,(XIY+0x08)                                      ; F92693  8d 08 21
@@ -34822,7 +34822,7 @@ C0mbinati0nM0de_StepPartPan:
 	calr Value_StepAndPostIfChanged                                          ; F9269E  1e c0 1e
 	ret                                                  ; F926A1  0e
 ; SoundMode_StepPan -- SOUND MODE soft-key column 3 ("PAN"): steps (0x0711) by the key's step, clamped to 0..127, and posts it
-; Evidence: called only by sub_F91275 when (0x207C) == 1 -- screen id 1, whose painter runs DL_F27C00 ("SOUND MODE", columns OCT LVL PAN EFF1 EFF2 REV INT MIDI). T_F41B04 with B = 0x7F, C = 0; if changed, (0x0711) = A and T_Queue2E00_AppendRegs {E=0xA8, D=0x13, A, W=0x7F}.
+; Evidence: called only by sub_F91275 when (0x207C) == 1 -- screen id 1, whose painter runs DL_F27C00 ("SOUND MODE", columns OCT LVL PAN EFF1 EFF2 REV INT MIDI). T_Value_ApplyNibbleDeltaClamped with B = 0x7F, C = 0; if changed, (0x0711) = A and T_Queue2E00_AppendRegs {E=0xA8, D=0x13, A, W=0x7F}.
 ; sub_F90E4B draws (0x0711) at 0xF90ED0 through the same pan string-table record (0xF28468) as the combination PAN column, and sub_FC14DF resets it to 0x40 with the same {0xA8,0x13} event.
 SoundMode_StepPan:
 	ld a, (0x0711:16)                                   ; F926A2  c1 11 07 21
@@ -34831,7 +34831,7 @@ SoundMode_StepPan:
 	ld L,A                                               ; F926AA  c9 8f
 	push W                                               ; F926AC  c8 04
 	pushw hl                                             ; F926AE  2b
-	call T_F41B04                                        ; F926AF  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F926AF  1d 04 1b f4
 	popw hl                                              ; F926B3  4b
 	pop W                                                ; F926B4  c8 05
 	cp A,L                                               ; F926B6  cf f1
@@ -34844,7 +34844,7 @@ SoundMode_StepPan:
 .LF926C8:
 	ret                                                  ; F926C8  0e
 ; C0mbinati0nM0de_StepPartVol -- steps record +0x03 (volume) of the part in XIY by the key's step, clamped to 0..127, and posts the new value
-; Evidence: A = (XIY+0x03), B = 0x7F, C = 0, D = 3, H = 0x7F; a step magnitude of 7 is raised to 10 (`cp L,0x07 / inc 3,W` at 0xF926D9); calr Value_StepAndPostIfChanged (T_F41B04, then T_List2030_AppendRegs {E=part, D=3, A=new, W=0x7F} if changed).
+; Evidence: A = (XIY+0x03), B = 0x7F, C = 0, D = 3, H = 0x7F; a step magnitude of 7 is raised to 10 (`cp L,0x07 / inc 3,W` at 0xF926D9); calr Value_StepAndPostIfChanged (T_Value_ApplyNibbleDeltaClamped, then T_List2030_AppendRegs {E=part, D=3, A=new, W=0x7F} if changed).
 ; Callers: C0mbinati0nM0de_EditSelectedRow (VOL row) and sub_F91247 (soft-key column 2, under "VOL", when (0x207C) != 1). C0mbinati0nM0de_DrawPart1Vol..8Vol draw this byte.
 C0mbinati0nM0de_StepPartVol:
 	ld A,(XIY+0x03)                                      ; F926C9  8d 03 21
@@ -34861,7 +34861,7 @@ C0mbinati0nM0de_StepPartVol:
 	calr Value_StepAndPostIfChanged                                          ; F926DF  1e 7f 1e
 	ret                                                  ; F926E2  0e
 ; SoundMode_StepLvl -- SOUND MODE soft-key column 2 ("LVL"): steps (0x0710) by the key's step within -30..+30 and posts it
-; Evidence: called only by sub_F91247 when (0x207C) == 1 (SOUND MODE; DL_F27C00's second column caption is "LVL"). A = (0x0710) + 0x1E, T_F41B04 with B = 0x3C, C = 0; if changed, (0x0710) = A - 0x1E and T_Queue2E00_AppendRegs {E=0xA8, D=0x12, A, W=0x7F}.
+; Evidence: called only by sub_F91247 when (0x207C) == 1 (SOUND MODE; DL_F27C00's second column caption is "LVL"). A = (0x0710) + 0x1E, T_Value_ApplyNibbleDeltaClamped with B = 0x3C, C = 0; if changed, (0x0710) = A - 0x1E and T_Queue2E00_AppendRegs {E=0xA8, D=0x12, A, W=0x7F}.
 ; 0xF90EB4 draws (0x0710) + 0x1E through T_DLB_Handler_DecimalSigned2Words, and sub_FC14C6 resets it to 0 with the same {0xA8,0x12} event.
 SoundMode_StepLvl:
 	ld a, (0x0710:16)                                   ; F926E3  c1 10 07 21
@@ -34871,7 +34871,7 @@ SoundMode_StepLvl:
 	ld L,A                                               ; F926EE  c9 8f
 	push W                                               ; F926F0  c8 04
 	pushw hl                                             ; F926F2  2b
-	call T_F41B04                                        ; F926F3  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F926F3  1d 04 1b f4
 	popw hl                                              ; F926F7  4b
 	pop W                                                ; F926F8  c8 05
 	cp A,L                                               ; F926FA  cf f1
@@ -34938,14 +34938,14 @@ ScreenLeave_SoundGroupMenu:
 ; ---------------------------------------------------------------------
 ScreenButton_SoundGroupMenu:
 	ld XIX,DisplayListPtrs_F92726                        ; F92718  44 26 27 f9 00
-	call T_F41B08                                        ; F9271D  1d 08 1b f4
+	call T_PanelButton_CallTableEntry                                        ; F9271D  1d 08 1b f4
 	ret                                                  ; F92721  0e
 sub_F92722:
 	calr sub_F92C4F                                          ; F92722  1e 2a 05
 	ret                                                  ; F92725  0e
 ; ---------------------------------------------------------------------
 ; DisplayListPtrs_F92726 -- 32 LE32 pointers
-; Read by: ONE site, 0xF92718 `ld XIX,0x00F92726 / call T_F41B08`.
+; Read by: ONE site, 0xF92718 `ld XIX,0x00F92726 / call T_PanelButton_CallTableEntry`.
 ; ENTRY COUNT 32 is the callee's bound (0xF8BDC5 `cp HL,0x001F`).
 ; ---------------------------------------------------------------------
 
@@ -35562,7 +35562,7 @@ ScreenLeave_GroupSoundDisplayHold:
 ; ---------------------------------------------------------------------
 ScreenButton_GroupSoundDisplayHold:
 	ld XIX,ScreenButtonHandlers_GroupSoundDisplayHold                        ; F92C58  44 66 2c f9 00
-	call T_F41B08                                        ; F92C5D  1d 08 1b f4
+	call T_PanelButton_CallTableEntry                                        ; F92C5D  1d 08 1b f4
 	ret                                                  ; F92C61  0e
 ; ==============================================================================
 ; 0xF92C62-0xF96017 -- more UI screen code, and SEVEN more pointer tables
@@ -35579,7 +35579,7 @@ ScreenButton_GroupSoundDisplayHold:
 ; prom_b directory target, so the decode's START is pinned by the directory.
 ;
 ; The seven tables are found the same way, by notes/prom_a_ptr_tables.py, and
-; four of the seven are 32-entry tables handed to T_F41B08 -> prom_a 0xF8BDC5,
+; four of the seven are 32-entry tables handed to T_PanelButton_CallTableEntry -> prom_a 0xF8BDC5,
 ; whose first instruction is `cp HL,0x001F / jr ugt`.  So their count comes from
 ; the CALLEE's bound, not from the run length -- and the two agree in all four.
 ; ==============================================================================
@@ -35589,8 +35589,8 @@ sub_F92C62:
 ; ---------------------------------------------------------------------
 ; ScreenButtonHandlers_GroupSoundDisplayHold -- 32 LE32 pointers
 ;
-; Read by: ONE site, 0xF92C58 `ld XIX,0x00F92C66 / call T_F41B08`.
-; ENTRY COUNT 32: T_F41B08 resolves to prom_a 0xF8BDC5, whose first instruction
+; Read by: ONE site, 0xF92C58 `ld XIX,0x00F92C66 / call T_PanelButton_CallTableEntry`.
+; ENTRY COUNT 32: T_PanelButton_CallTableEntry resolves to prom_a 0xF8BDC5, whose first instruction
 ;          is `cp HL,0x001F / jr ugt` -- 0x1F is the last index it lets through.
 ;          ★ LAST-ENTRY TEST: 0xF92C66 + 32*4 = 0xF92CE6, the word there is
 ;          0x2673F10E (not pointer-shaped), and 0xF92CE6 is where the decode
@@ -35601,7 +35601,7 @@ sub_F92C62:
 ;          BUTTON method of PanelScreen_VtableTable entry 0xC1 (prom_b
 ;          slot 0xF41558); PanelButton_Route calls it with the code in HL
 ;          and at (XIZ+8), and it indexes this table with it:
-;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          `ld XIX,<this> / call T_PanelButton_CallTableEntry`, and T_PanelButton_CallTableEntry = 0xF8BDC5 calls
 ;          (this + 4*L) after `cp HL,0x001F`.
 ;          Dispatch_FF3D39's CONTROL LEGEND names each code.
 ;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
@@ -36178,14 +36178,14 @@ DisplayHold_ShowTypedGroupDigits:   ; entry: named by 2 `ld` operands, first at 
 sub_F92C62_Nop:
 	ret                                                  ; F93123  0e
 ; DisplayHold_ShowGroupNumber -- draws the selected group's number, (0x2169)+1, as two characters after "GROUP:" -- blinking on panel variant 2
-; Evidence: A = (0x2169) + 1, T_F41AF4 (sub_F8BC8A: Value_ToAsciiDigits3, left-justified into (0x2661)); (0xC4) != 2: layer 1, DL_F2BA64..DL_Ext1 through interpreter B (site 0xF93145, the only display-list site, as the earlier header said); (0xC4) == 2: layer 0, T_Blink_Command with DL_F2BA64.
+; Evidence: A = (0x2169) + 1, T_Value_ToAsciiDigits3_LeftJustified (sub_F8BC8A: Value_ToAsciiDigits3, left-justified into (0x2661)); (0xC4) != 2: layer 1, DL_F2BA64..DL_Ext1 through interpreter B (site 0xF93145, the only display-list site, as the earlier header said); (0xC4) == 2: layer 0, T_Blink_Command with DL_F2BA64.
 ; DL_F2BA64 draws 2 characters of (0x2661) at IX 0x0166 (x 0x130, y 8), right of "GROUP:" at (0x10D,0x0A) in both DISPLAY HOLD screens' lists.
 ; Callers: GroupSoundDisplayHold_RepaintFields, GroupCombiDisplayHold_PaintGroupAndNames; posted by GroupSoundDisplayHold_PickSound, GroupSoundDisplayHold_SelectMemberLastPage, GroupCombiDisplayHold_SelectMemberAtRow, GroupCombiDisplayHold_SelectMemberLastPage.
 DisplayHold_ShowGroupNumber:
 	ld a, (0x2169:16)                                   ; F93124  c1 69 21 21
 	inc 1,A                                              ; F93128  c9 61
 	extz WA                                              ; F9312A  d8 12
-	call T_F41AF4                                        ; F9312C  1d f4 1a f4
+	call T_Value_ToAsciiDigits3_LeftJustified                                        ; F9312C  1d f4 1a f4
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F93130  c0 c4 3f 02
 	jr z, .LF9314B                                       ; F93134  66 15
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F93136  f1 40 25 00 01
@@ -36757,7 +36757,7 @@ ScreenLeave_CombinationGroupMenu:
 ; ---------------------------------------------------------------------
 ScreenButton_CombinationGroupMenu:
 	ld XIX,ScreenButtonHandlers_CombinationGroupMenu                        ; F93549  44 57 35 f9 00
-	call T_F41B08                                        ; F9354E  1d 08 1b f4
+	call T_PanelButton_CallTableEntry                                        ; F9354E  1d 08 1b f4
 	ret                                                  ; F93552  0e
 sub_F93553:
 	calr sub_F93822                                          ; F93553  1e cc 02
@@ -36765,14 +36765,14 @@ sub_F93553:
 ; ---------------------------------------------------------------------
 ; ScreenButtonHandlers_CombinationGroupMenu -- 32 LE32 pointers, same shape as ScreenButtonHandlers_GroupSoundDisplayHold
 ;
-; Read by: 0xF93549 `ld XIX,0x00F93557 / call T_F41B08`.
-; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF935D7,
+; Read by: 0xF93549 `ld XIX,0x00F93557 / call T_PanelButton_CallTableEntry`.
+; ENTRY COUNT 32 from T_PanelButton_CallTableEntry's own `cp HL,0x001F`.  ★ base + 128 = 0xF935D7,
 ;          where the word is 0x013EC6C0 -- not pointer-shaped.
 ; Selector: the panel BUTTON CODE.  ScreenButton_CombinationGroupMenu (0xF93549) is the +8
 ;          BUTTON method of PanelScreen_VtableTable entry 0xC5 (prom_b
 ;          slot 0xF41578); PanelButton_Route calls it with the code in HL
 ;          and at (XIZ+8), and it indexes this table with it:
-;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          `ld XIX,<this> / call T_PanelButton_CallTableEntry`, and T_PanelButton_CallTableEntry = 0xF8BDC5 calls
 ;          (this + 4*L) after `cp HL,0x001F`.
 ;          Dispatch_FF3D39's CONTROL LEGEND names each code.
 ;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
@@ -37164,7 +37164,7 @@ ScreenLeave_GroupCombiDisplayHold:
 ; ---------------------------------------------------------------------
 ScreenButton_GroupCombiDisplayHold:
 	ld XIX,ScreenButtonHandlers_GroupCombiDisplayHold                        ; F9382B  44 39 38 f9 00
-	call T_F41B08                                        ; F93830  1d 08 1b f4
+	call T_PanelButton_CallTableEntry                                        ; F93830  1d 08 1b f4
 	ret                                                  ; F93834  0e
 sub_F93835:
 	calr sub_F93CB8                                          ; F93835  1e 80 04
@@ -37172,14 +37172,14 @@ sub_F93835:
 ; ---------------------------------------------------------------------
 ; ScreenButtonHandlers_GroupCombiDisplayHold -- 32 LE32 pointers, same shape
 ;
-; Read by: 0xF9382B `ld XIX,0x00F93839 / call T_F41B08`.
-; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF938B9,
+; Read by: 0xF9382B `ld XIX,0x00F93839 / call T_PanelButton_CallTableEntry`.
+; ENTRY COUNT 32 from T_PanelButton_CallTableEntry's own `cp HL,0x001F`.  ★ base + 128 = 0xF938B9,
 ;          where the word is 0xCE2673F1 -- not pointer-shaped.
 ; Selector: the panel BUTTON CODE.  ScreenButton_GroupCombiDisplayHold (0xF9382B) is the +8
 ;          BUTTON method of PanelScreen_VtableTable entry 0xC6 (prom_b
 ;          slot 0xF41588); PanelButton_Route calls it with the code in HL
 ;          and at (XIZ+8), and it indexes this table with it:
-;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          `ld XIX,<this> / call T_PanelButton_CallTableEntry`, and T_PanelButton_CallTableEntry = 0xF8BDC5 calls
 ;          (this + 4*L) after `cp HL,0x001F`.
 ;          Dispatch_FF3D39's CONTROL LEGEND names each code.
 ;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
@@ -38097,7 +38097,7 @@ UiEvent_MarkRedrawFromPartClass:
 .LF93FF1:
 	ret                                                  ; F93FF1  0e
 ; UiEvent_MarkRedrawFromClass20Block -- the same redraw marking for event classes 0x20-0x3F: codes 0x18/0x19/0x1A set (0x2677) bits 0/1/2
-; Evidence: prom_b slot T_F415A0 is an entry of UiListB_Class20..UiListB_Class3F and of no other list; screen gate as UiEvent_MarkRedrawFromPartClass
+; Evidence: prom_b slot T_UiEvent_MarkRedrawFromClass20Block is an entry of UiListB_Class20..UiListB_Class3F and of no other list; screen gate as UiEvent_MarkRedrawFromPartClass
 ; ((0x207C) == 0x01, or 0x02 with (0x2687) == 0); then (0x2095) |= 0x10.  What the bits of (0x2677) select is not established.
 UiEvent_MarkRedrawFromClass20Block:
 	ld a, (UI_ScreenId:16)                                   ; F93FF2  c1 7c 20 21
@@ -38169,22 +38169,22 @@ UiEvent_MarkPartRedrawBits:
 	ret                                                  ; F94076  0e
 	ret                                                  ; F94077  0e
 ; ScreenEnter_PowerOnSplash -- the +0 ENTER method of screen 0xAA, the screen PanelState_Init requests at power-on
-; Evidence: PanelScreen_VtableTable_ViewB[0xAA] = T_F41510, whose +0 slot is `jp 0xF94078`; PanelState_Init stores 0x40AA to (0x2070) (screen id 0xAA
+; Evidence: PanelScreen_VtableTable_ViewB[0xAA] = T_ScreenEnter_PowerOnSplash, whose +0 slot is `jp 0xF94078`; PanelState_Init stores 0x40AA to (0x2070) (screen id 0xAA
 ; + request flag 0x40).  Body: `calr Paint_PowerOnSplash_Entry / ret`.
 ScreenEnter_PowerOnSplash:
 	calr Paint_PowerOnSplash_Entry                                            ; F94078  1e 93 00
 	ret                                                  ; F9407B  0e
 ; ScreenLeave_PowerOnSplash -- the +4 LEAVE method of screen 0xAA
-; Evidence: T_F41514 (`jp 0xF9407C`) is the +4 slot of the object PanelScreen_VtableTable_ViewB[0xAA] names; body `calr ScreenLeaveBody_PowerOnSplash / ret`.
+; Evidence: T_ScreenLeave_PowerOnSplash (`jp 0xF9407C`) is the +4 slot of the object PanelScreen_VtableTable_ViewB[0xAA] names; body `calr ScreenLeaveBody_PowerOnSplash / ret`.
 ScreenLeave_PowerOnSplash:
 	calr ScreenLeave_PowerOnSplash_Nop                                          ; F9407C  1e e2 01
 	ret                                                  ; F9407F  0e
 ; ScreenButton_PowerOnSplash -- the +8 BUTTON method of screen 0xAA
-; Evidence: T_F41518 (`jp 0xF94080`) is the +8 slot; body `ld XIX,DisplayListPtrs_F9408E / call T_F41B08`.  That table's only live entry is [0x0F]
+; Evidence: T_ScreenButton_PowerOnSplash (`jp 0xF94080`) is the +8 slot; body `ld XIX,DisplayListPtrs_F9408E / call T_PanelButton_CallTableEntry`.  That table's only live entry is [0x0F]
 ; (EXIT) = 0xF94262, which requests screen 0x01, or 0x02 when (0x7F02) & 0xF0 != 0, with flags 0x02 -- so EXIT skips the splash.
 ScreenButton_PowerOnSplash:
 	ld XIX,DisplayListPtrs_F9408E                        ; F94080  44 8e 40 f9 00
-	call T_F41B08                                        ; F94085  1d 08 1b f4
+	call T_PanelButton_CallTableEntry                                        ; F94085  1d 08 1b f4
 	ret                                                  ; F94089  0e
 sub_F9408A:
 	calr sub_F9427C                                          ; F9408A  1e ef 01
@@ -38192,14 +38192,14 @@ sub_F9408A:
 ; ---------------------------------------------------------------------
 ; DisplayListPtrs_F9408E -- 32 LE32 pointers, same shape
 ;
-; Read by: 0xF94080 `ld XIX,0x00F9408E / call T_F41B08`.
-; ENTRY COUNT 32 from T_F41B08's own `cp HL,0x001F`.  ★ base + 128 = 0xF9410E,
+; Read by: 0xF94080 `ld XIX,0x00F9408E / call T_PanelButton_CallTableEntry`.
+; ENTRY COUNT 32 from T_PanelButton_CallTableEntry's own `cp HL,0x001F`.  ★ base + 128 = 0xF9410E,
 ;          where the word is 0x0E00011E -- not pointer-shaped.
 ; Selector: the panel BUTTON CODE.  ScreenButton_PowerOnSplash (0xF94080) is the +8
 ;          BUTTON method of PanelScreen_VtableTable entry 0xCA (prom_b
 ;          slot 0xF41518); PanelButton_Route calls it with the code in HL
 ;          and at (XIZ+8), and it indexes this table with it:
-;          `ld XIX,<this> / call T_F41B08`, and T_F41B08 = 0xF8BDC5 calls
+;          `ld XIX,<this> / call T_PanelButton_CallTableEntry`, and T_PanelButton_CallTableEntry = 0xF8BDC5 calls
 ;          (this + 4*L) after `cp HL,0x001F`.
 ;          Dispatch_FF3D39's CONTROL LEGEND names each code.
 ;          (notes/proma-2026-09-25/gen_button_selectors.py, B1-B3)
@@ -38432,7 +38432,7 @@ sub_F94261__F94262:
 sub_F9427C:
 	ret                                                  ; F9427C  0e
 ; UiEvent_SyncSoundSelection -- keep the group/member/bank cells (0x2169)/(0x216B)/(0x216A) in step with part, bank and group events
-; Evidence: prom_b slot T_F415A8, an entry of UiListB_Class00..1F, UiListB_Class90, UiListB_Class98, UiListB_ClassA8; XIY = the record.  Class 0xA8 code 0x07
+; Evidence: prom_b slot T_UiEvent_SyncSoundSelection, an entry of UiListB_Class00..1F, UiListB_Class90, UiListB_Class98, UiListB_ClassA8; XIY = the record.  Class 0xA8 code 0x07
 ; (BANK, FINDINGS-prom_a-panel-control-map.md 1): SoundGroup_ReloadSelection, then if (0x20BA) & 0x3F: (0x216A) = (0x20B9) & 0x3F and, when it changed,
 ; (0x2169) = 0.  Class 0xA8 code 0x08: (0x2169) = (0x20B9) & 0x0F.  Class 0x90 code 0x10, class 0x98 code 1/0, and a part class <= 0x1F equal to (0x2250)
 ; with code 0: SoundGroup_ReloadSelection.
@@ -38510,7 +38510,7 @@ UiEvent_SyncSoundSelection:
 	ret                                                  ; F94339  0e
 ; SoundGroup_ReloadSelection -- reload (0x2169)/(0x216B)/(0x216A) from the current part's record or from the global cells
 ; Evidence: SoundGroup_LoadSelectionFromPart when (0x7F02) & 0xF0 == 0, or mode (0x2078) in {3,4,5,6,7,8,9,0x16}, or (0x207A) == 0xB7; otherwise
-; SoundGroup_LoadSelectionFromGlobal.  Published as T_F415C8 (prom_b 0xF56B62, prom_a 0xF99F0C, 0xF9FED9) and called four times by UiEvent_SyncSoundSelection.
+; SoundGroup_LoadSelectionFromGlobal.  Published as T_SoundGroup_ReloadSelection (prom_b 0xF56B62, prom_a 0xF99F0C, 0xF9FED9) and called four times by UiEvent_SyncSoundSelection.
 SoundGroup_ReloadSelection:
 	ld a, (0x7f02:16)                                   ; F9433A  c1 02 7f 21
 	and A,0xf0                                           ; F9433E  c9 cc f0
@@ -38587,7 +38587,7 @@ SoundGroup_LoadSelectionFromGlobal:
 .LF943ED:
 	ret                                                  ; F943ED  0e
 ; UiEventClassA8_ShowGroupScreen -- on a BANK (0xA8/0x07) or group (0xA8/0x08) event, open or redraw the group display-hold screen
-; Evidence: prom_b slot T_F415AC, the only entry of UiListC_ClassA8.  Mode (0x2078) 1 or 2 (else UiEventClassA8_ShowGroupScreenOtherMode).  Code 0x08: screen
+; Evidence: prom_b slot T_UiEventClassA8_ShowGroupScreen, the only entry of UiListC_ClassA8.  Mode (0x2078) 1 or 2 (else UiEventClassA8_ShowGroupScreenOtherMode).  Code 0x08: screen
 ; 0x01 or 0xA0 (SoundGroupMenu) -> request 0xA1 (GroupSoundDisplayHold); 0x02 or 0xA5 -> 0xA6 (GroupCombiDisplayHold); 0xA1/0xA6 -> (0x2095) |= 0x10;
 ; 0xA3 -> 0xA1 with (0x2075) |= 0x80.  Code 0x07: 0x01 -> 0xA1, 0x02 -> 0xA6, 0xA1/0xA6 -> redraw, 0xA0/0xA5 -> (0x2071) |= 0x10.
 UiEventClassA8_ShowGroupScreen:
@@ -38748,13 +38748,13 @@ PartRecord_GetSecondHalfPtr:
 	mx_ld_rm MXL, ra_IY, ra_HL, r5                       ; F9455B  e3 07 f4 ec 25
 	ret                                                  ; F94560  0e
 ; Value_StepAndPostIfChanged -- step A by the encoded delta in W within [C, B]; if it changed, post {E, D, A, H} to the 0x2030 list
-; Evidence: L = A, T_F41B04 (sub_F8BD73: A + SignedNibbleDelta_Table[(W&0x0F)|((W&0x80)>>3)], clamped to C..B), `cp A,L / jr z`, then W = H and
+; Evidence: L = A, T_Value_ApplyNibbleDeltaClamped (sub_F8BD73: A + SignedNibbleDelta_Table[(W&0x0F)|((W&0x80)>>3)], clamped to C..B), `cp A,L / jr z`, then W = H and
 ; T_List2030_AppendRegs.  Callers: sub_F912A3, sub_F91356, sub_F92693, sub_F926C9.
 Value_StepAndPostIfChanged:
 	ld L,A                                               ; F94561  c9 8f
 	push W                                               ; F94563  c8 04
 	pushw hl                                             ; F94565  2b
-	call T_F41B04                                        ; F94566  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F94566  1d 04 1b f4
 	popw hl                                              ; F9456A  4b
 	pop W                                                ; F9456B  c8 05
 	cp A,L                                               ; F9456D  cf f1
@@ -38782,7 +38782,7 @@ BitMask_LowestSetBitOrdinal_SaveC:
 ; LCD_BlitValueBar -- draw a 0..127 value as one of 17 bar frames at IX (current layer)
 ; Evidence: index = 0 for A = 0, else A/8 + 1 (so 1..127 -> frames 1..16); XIY = prom_b pointer table 0xF29BC6[index] (17 records of 0xE6 bytes, frame 0 blank,
 ; frame 16 full -- prom_b's note); SWI7 0x03 (LCD_Svc_03_BlitColumns) with BC = 5 columns, HL = 0x2E rows, 5 x 46 = 0xE6 exactly.  IX = the caller's.
-; Callers: sub_F91BAE..sub_F91C64 (8), and T_F415B4 (prom_b 0xF4F00E, prom_a 0xF9C00E).
+; Callers: sub_F91BAE..sub_F91C64 (8), and T_LCD_BlitValueBar (prom_b 0xF4F00E, prom_a 0xF9C00E).
 LCD_BlitValueBar:
 	xor W,W                                              ; F9458C  c8 d0
 	cp a, 0x00:i3                                          ; F9458E  c9 d8
@@ -38844,7 +38844,7 @@ Value_StepWordClamped__F945E4:
 	swi 2                                                ; F945F2  fa
 	swi 1                                                ; F945F3  f9
 ; UiEventClass7A_QueueDialValueRedraw -- on a class-0x7A event with code 0 or 1, queue the redraw of the dial value
-; Evidence: prom_b slot T_F415B8, entry [1] of UiListB_Class7A; class 0x7A is what PanelDial_PostClass7A posts for (0x7EE2).  (0x20B8) == 0 -> `jr z`
+; Evidence: prom_b slot T_UiEventClass7A_QueueDialValueRedraw, entry [1] of UiListB_Class7A; class 0x7A is what PanelDial_PostClass7A posts for (0x7EE2).  (0x20B8) == 0 -> `jr z`
 ; to PanelDial_QueueValueRedraw_Entry; == 1 falls into it; anything else returns.
 UiEventClass7A_QueueDialValueRedraw:
 	ld a, (UiEvent_Byte1:16)                                   ; F945F4  c1 b8 20 21
@@ -38853,7 +38853,7 @@ UiEventClass7A_QueueDialValueRedraw:
 	cp a, 0x01:i3                                          ; F945FC  c9 d9
 	jr NZ,.LF94603                                       ; F945FE  6e 03
 ; PanelDial_QueueValueRedraw_Entry -- a PURE WRAPPER for PanelDial_QueueValueRedraw (`calr 0xF94604 / ret`)
-; Evidence: published as T_F415BC (called from prom_b 0xF55CAE and 0xF55D5F) and reached from UiEventClass7A_QueueDialValueRedraw.
+; Evidence: published as T_PanelDial_QueueValueRedraw_Entry (called from prom_b 0xF55CAE and 0xF55D5F) and reached from UiEventClass7A_QueueDialValueRedraw.
 PanelDial_QueueValueRedraw_Entry:
 	calr PanelDial_QueueValueRedraw                                      ; F94600  1e 01 00
 .LF94603:
@@ -38873,7 +38873,7 @@ PanelDial_QueueValueRedraw:
 .LF9461B:
 	ret                                                  ; F9461B  0e
 ; PanelDial_DrawValueDigits -- draw the dial value (0x7EE2) as three 16x16 digits on screen 0x06 or 0x12
-; Evidence: A = (0x7EE2), W = (0x7EE3) & 1 (the 9-bit value PanelDial_ApplyStep steps), T_F41AF0 = sub_F8BCAF (Value_ToAsciiDigits3 into 0x2661..0x2663,
+; Evidence: A = (0x7EE2), W = (0x7EE3) & 1 (the 9-bit value PanelDial_ApplyStep steps), T_Value_ToAsciiDigits3_RightJustified = sub_F8BCAF (Value_ToAsciiDigits3 into 0x2661..0x2663,
 ; leading digits blanked); IX = 0x1281 on screen 0x06, 0x1079 on 0x12, else nothing; layer 0, "---" when (0x7F32) bit 2; SWI7 0x08
 ; (LCD_Svc_08_DrawText16x16) of BC = 3 characters from 0x2661.  Queued by PanelDial_QueueValueRedraw.
 PanelDial_DrawValueDigits:   ; entry: named by 1 `ld` operand, first at 0xF94609
@@ -38881,7 +38881,7 @@ PanelDial_DrawValueDigits:   ; entry: named by 1 `ld` operand, first at 0xF94609
 	m_ld_rm MBD+r5, 0x00, r1                             ; F94621  8d 00 21
 	ld W,(XIY+0x01)                                      ; F94624  8d 01 20
 	and W,0x01                                           ; F94627  c8 cc 01
-	call T_F41AF0                                        ; F9462A  1d f0 1a f4
+	call T_Value_ToAsciiDigits3_RightJustified                                        ; F9462A  1d f0 1a f4
 	ld a, (UI_ScreenId:16)                                   ; F9462E  c1 7c 20 21
 	cp a, 0x06:i3                                          ; F94632  c9 de
 	jr nz, .LF9463D                                      ; F94634  6e 07
@@ -39220,7 +39220,7 @@ LCD_PrintLine40_AdvanceRow:
 	pop XIZ                                              ; F94D9B  5e
 	ret                                                  ; F94D9C  0e
 ; DebugMonitor_StepHexDigit -- step the hex digit at 0x60A000 by the encoded delta at 0x60A001, clamped to 0..0x0F
-; Evidence: A = (0x60A000), W = (0x60A001), B = 0x0F, C = 0, T_F41B04 (sub_F8BD73: A + SignedNibbleDelta_Table[...], clamped to C..B), A back to 0x60A000.
+; Evidence: A = (0x60A000), W = (0x60A001), B = 0x0F, C = 0, T_Value_ApplyNibbleDeltaClamped (sub_F8BD73: A + SignedNibbleDelta_Table[...], clamped to C..B), A back to 0x60A000.
 ; Callers: the six SoftKeyColN_DebugMonitor handlers, which load W = 0x81 (-1) or 0x01 (+1).
 DebugMonitor_StepHexDigit:
 	push XIZ                                             ; F94D9D  3e
@@ -39231,7 +39231,7 @@ DebugMonitor_StepHexDigit:
 	ld w, (0x60a001:24)                                 ; F94DA6  c2 01 a0 60 20
 	ld b, 0x0f:opc                                          ; F94DAB  22 0f
 	ld c, 0x00:opc                                          ; F94DAD  23 00
-	call T_F41B04                                        ; F94DAF  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; F94DAF  1d 04 1b f4
 	ld (0x60a000:24), a                                 ; F94DB3  f2 00 a0 60 41
 	pop XDE                                              ; F94DB8  5a
 	pop XHL                                              ; F94DB9  5b
@@ -39297,7 +39297,7 @@ PanelCpuCheck_ReadStatus:
 	pop XIZ                                              ; F94E08  5e
 	ret                                                  ; F94E09  0e
 ; TestMode_SendStagedLed -- send the LED byte staged at 0x60A000 for the LED group staged at 0x60A001 to the panel
-; Evidence: `ld WA,(0x60A000)` then T_F40670 -> sub_F8C846, which TestMode_PanelSwitchesToLeds's header records as queueing (PanelLedWireMap[W], A)
+; Evidence: `ld WA,(0x60A000)` then T_PanelLed_SendByteUnconditional -> sub_F8C846, which TestMode_PanelSwitchesToLeds's header records as queueing (PanelLedWireMap[W], A)
 ; to the panel.  Callers: PanelSwLedCheck_AllLedsOn, PanelSwLedCheck_AllLedsOff.
 TestMode_SendStagedLed:
 	push XIZ                                             ; F94E0A  3e
@@ -39305,7 +39305,7 @@ TestMode_SendStagedLed:
 	push XHL                                             ; F94E0C  3b
 	push XDE                                             ; F94E0D  3a
 	ld wa, (0x60a000:24)                                ; F94E0E  d2 00 a0 60 20
-	call T_F40670                                        ; F94E13  1d 70 06 f4
+	call T_PanelLed_SendByteUnconditional                                        ; F94E13  1d 70 06 f4
 	pop XDE                                              ; F94E17  5a
 	pop XHL                                              ; F94E18  5b
 	pop XIX                                              ; F94E19  5c
@@ -39320,7 +39320,7 @@ TestMode_SendStagedLed:
 ; the byte at +8 is incremented per byte taken): W = the wire's group
 ; through TestMode_PanelWireGroupMap_Variant1/2 (by the strap (0xC4)), skip if
 ; 0x20; WA = TestMode_SwitchLedCodes_*[W][BitMask_LowestSetBitOrdinal(mask)-1];
-; call T_F40670 (-> PanelLed_SendByteUnconditional, which queues (PanelLedWireMap[W], A) to the
+; call T_PanelLed_SendByteUnconditional (-> PanelLed_SendByteUnconditional, which queues (PanelLedWireMap[W], A) to the
 ; panel).  Stops when +6 reaches +4, and stores the index back at +6.
 ; Evidence: the instructions below, 0xF94E20-0xF94ED7; the table layouts are
 ; checked by notes/proma-2026-09-25/gen_panel_test_tables.py.
@@ -39394,7 +39394,7 @@ TestMode_PanelSwitchesToLeds_Loop:
 	jr nz, .LF94EBD                                          ; F94EB9  6e 02
 	xor A,A                                              ; F94EBB  c9 d1
 .LF94EBD:
-	call T_F40670                                        ; F94EBD  1d 70 06 f4
+	call T_PanelLed_SendByteUnconditional                                        ; F94EBD  1d 70 06 f4
 	popw ix                                              ; F94EC1  4c
 	pop XIZ                                              ; F94EC2  5e
 .LF94EC3:
@@ -39417,7 +39417,7 @@ TestMode_PanelSwitchesToLeds_Loop:
 ; (0xF94E35-0xF94E3E), W = map[L] (0xF94E42 / 0xF94E4D by the strap (0xC4)),
 ; skips W == 0x20, then reads the word at rows + 16*W + 2*(A-1) with A =
 ; BitMask_LowestSetBitOrdinal(mask), 1 + the index of the mask's lowest set bit (0xF94E88-
-; 0xF94EB5), and passes it in WA to T_F40670 -> PanelLed_SendByteUnconditional (0xF94EBD), which
+; 0xF94EB5), and passes it in WA to T_PanelLed_SendByteUnconditional -> PanelLed_SendByteUnconditional (0xF94EBD), which
 ; queues (PanelLedWireMap[W], A) to the panel: the switch pressed lights one
 ; LED.  The maps use PanelWireGroupMap_Variant1/2's index function and 0x20
 ; convention, restricted to the button wires 0xC0-0xCA; the row counts are
@@ -39513,7 +39513,7 @@ Delay_SpinNestedLoops:
 	djnz16 bc, -11                                       ; F95133  d9 1c f5
 	ret                                                  ; F95136  0e
 ; CheckingDevice_RunSelfTest -- the service CHECKING DEVICE power-on test: RAM check then ROM check, each reported as four LED flashes
-; Evidence: prom_b slot T_F40144, called once from boot at 0xF827D1.  `ld C,(P5) / and C,0x10` -- returns when P5 bit 4 reads 1 (device switch off);
+; Evidence: prom_b slot T_CheckingDevice_RunSelfTest, called once from boot at 0xF827D1.  `ld C,(P5) / and C,0x10` -- returns when P5 bit 4 reads 1 (device switch off);
 ; else CheckingDevice_RamTest, CheckingDevice_FlashLedNibble(result), Delay_SpinNestedLoopsShort, CheckingDevice_RomIdTest, CheckingDevice_FlashLedNibble(result):
 ; the manual's "first 4 flashes RAM, latter 4 ROM" (notes/WSA1-EMULATION-DISASM-GAPS.md gap L, FINDINGS-prom_a-ui-screen-blocks.md 5).
 CheckingDevice_RunSelfTest:
@@ -39740,7 +39740,7 @@ CheckingDevice_RomIdTest:
 	unlk XIZ                                             ; F952F9  ee 0d
 	ret                                                  ; F952FB  0e
 ; TestMode_SelectFromPowerOnKeys -- at boot, pick a service test screen from the keys held at power-on, by panel variant
-; Evidence: prom_b slot T_F40148, called once from boot at 0xF827F8 (after ExtBoard_Identify); `cp (0xC4),0x02` -> TestMode_SelectFromPowerOnKeys_Variant2
+; Evidence: prom_b slot T_TestMode_SelectFromPowerOnKeys, called once from boot at 0xF827F8 (after ExtBoard_Identify); `cp (0xC4),0x02` -> TestMode_SelectFromPowerOnKeys_Variant2
 ; (variant 2 = SX-WSA1R, Variant_SetFromPB0 header) else TestMode_SelectFromPowerOnKeys_Variant1.
 TestMode_SelectFromPowerOnKeys:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F952FC  c0 c4 3f 02
@@ -39902,7 +39902,7 @@ BitMask_PopCountByte:
 	unlk XIZ                                             ; F95441  ee 0d
 	ret                                                  ; F95443  0e
 ; TestMode_Tick -- the periodic service-mode step: sine-wave switch poll, the DEBUG MONITOR chord, and the per-tick work of screens 0xDD and 0xDC
-; Evidence: prom_b slot T_F4014C, called from the main loop at 0xF8215C after `tset 4,(0x88)`.  Variant 2: SineWaveCheck_PollIfCurrent.  If (0x208C) has bits 0,
+; Evidence: prom_b slot T_TestMode_Tick, called from the main loop at 0xF8215C after `tset 4,(0x88)`.  Variant 2: SineWaveCheck_PollIfCurrent.  If (0x208C) has bits 0,
 ; 3 and 7 (codes 0x00/0x03/0x07 = SOFT KEY columns 1, 4, 8, entered into (0x208C) when (0x20B9) == 3, PanelButton_Accept) -> (0x2070) = 0xDD, (0x2071) bit 6.
 ; On screen 0xDD every 4th tick ((0x284E)) sets (0x2095) bit 4; on 0xDC calls TestMode_DisplayCycleTick.
 TestMode_Tick:
@@ -40493,17 +40493,17 @@ Paint_SineWaveCheckMode:
 	pushw 0x00                                           ; F957C9  0b 00 00
 	pushw 0x05                                           ; F957CC  0b 05 00
 	pushw 0x00                                           ; F957CF  0b 00 00
-	call T_F41B18                                        ; F957D2  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F957D2  1d 18 1b f4
 	pushw 0x7f                                           ; F957D6  0b 7f 00
 	pushw 0x00                                           ; F957D9  0b 00 00
 	pushw 0x06                                           ; F957DC  0b 06 00
 	pushw 0x00                                           ; F957DF  0b 00 00
-	call T_F41B18                                        ; F957E2  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F957E2  1d 18 1b f4
 	pushw 0x7f                                           ; F957E6  0b 7f 00
 	pushw 0x00                                           ; F957E9  0b 00 00
 	pushw 0x07                                           ; F957EC  0b 07 00
 	pushw 0x00                                           ; F957EF  0b 00 00
-	call T_F41B18                                        ; F957F2  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F957F2  1d 18 1b f4
 	add XSP,0x00000018                                   ; F957F6  ef c8 18 00 00 00
 .LF957FC:
 	calr sub_F9565A                                          ; F957FC  1e 5b fe
@@ -40628,8 +40628,8 @@ ScreenButton_SineWaveCheckMode:
 	ret                                                  ; F958C8  0e
 ; SoftKeyCol4_SineWaveCheckMode -- SOFT KEY column 4 on SINE WAVE CHECK MODE: set part record 0's byte +5 (0x76A7) to 0x7F (upper key) or 0 (lower)
 ; Evidence: ScreenButtonHandlers_SineWaveCheckMode [0x03] and [0x14]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x03 = SOFT KEY column 4; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
-; (XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A7) != 0 -> T_F41B10(0, 5, 0x00, 0x7F); == 0 and (0x76A7) != 0x7F -> T_F41B10(0, 5, 0x7F, 0x7F).
-; (0x76A7) = 0x76A2 + 5, part record 0 (PartRecord_GetPtr's array).  What T_F41B10 (sub_F8BC00) does with it is not established.
+; (XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A7) != 0 -> T_FixedEventList_AppendStackArgs(0, 5, 0x00, 0x7F); == 0 and (0x76A7) != 0x7F -> T_FixedEventList_AppendStackArgs(0, 5, 0x7F, 0x7F).
+; (0x76A7) = 0x76A2 + 5, part record 0 (PartRecord_GetPtr's array).  What T_FixedEventList_AppendStackArgs (sub_F8BC00) does with it is not established.
 SoftKeyCol4_SineWaveCheckMode:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F958C9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F958CD  8e 08 3f 00
@@ -40649,15 +40649,15 @@ SoftKeyCol4_SineWaveCheckMode:   ; entry: screen button-handler table
 .LF958F2:
 	pushw 0x05                                           ; F958F2  0b 05 00
 	pushw 0x00                                           ; F958F5  0b 00 00
-	call T_F41B10                                        ; F958F8  1d 10 1b f4
+	call T_FixedEventList_AppendStackArgs                                        ; F958F8  1d 10 1b f4
 	inc 8,XSP                                            ; F958FC  ef 60
 .LF958FE:
 	unlk XIZ                                             ; F958FE  ee 0d
 	ret                                                  ; F95900  0e
 ; SoftKeyCol5_SineWaveCheckMode -- SOFT KEY column 5 on SINE WAVE CHECK MODE: set part record 0's byte +6 (0x76A8) to 0x7F (upper key) or 0 (lower)
 ; Evidence: ScreenButtonHandlers_SineWaveCheckMode [0x04] and [0x15]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x04 = SOFT KEY column 5; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
-; (XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A8) != 0 -> T_F41B10(0, 6, 0x00, 0x7F); == 0 and (0x76A8) != 0x7F -> T_F41B10(0, 6, 0x7F, 0x7F).
-; (0x76A8) = 0x76A2 + 6, part record 0 (PartRecord_GetPtr's array).  What T_F41B10 (sub_F8BC00) does with it is not established.
+; (XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A8) != 0 -> T_FixedEventList_AppendStackArgs(0, 6, 0x00, 0x7F); == 0 and (0x76A8) != 0x7F -> T_FixedEventList_AppendStackArgs(0, 6, 0x7F, 0x7F).
+; (0x76A8) = 0x76A2 + 6, part record 0 (PartRecord_GetPtr's array).  What T_FixedEventList_AppendStackArgs (sub_F8BC00) does with it is not established.
 SoftKeyCol5_SineWaveCheckMode:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F95901  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F95905  8e 08 3f 00
@@ -40677,15 +40677,15 @@ SoftKeyCol5_SineWaveCheckMode:   ; entry: screen button-handler table
 .LF9592A:
 	pushw 0x06                                           ; F9592A  0b 06 00
 	pushw 0x00                                           ; F9592D  0b 00 00
-	call T_F41B10                                        ; F95930  1d 10 1b f4
+	call T_FixedEventList_AppendStackArgs                                        ; F95930  1d 10 1b f4
 	inc 8,XSP                                            ; F95934  ef 60
 .LF95936:
 	unlk XIZ                                             ; F95936  ee 0d
 	ret                                                  ; F95938  0e
 ; SoftKeyCol6_SineWaveCheckMode -- SOFT KEY column 6 on SINE WAVE CHECK MODE: set part record 0's byte +7 (0x76A9) to 0x7F (upper key) or 0 (lower)
 ; Evidence: ScreenButtonHandlers_SineWaveCheckMode [0x05] and [0x16]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x05 = SOFT KEY column 6; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
-; (XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A9) != 0 -> T_F41B10(0, 7, 0x00, 0x7F); == 0 and (0x76A9) != 0x7F -> T_F41B10(0, 7, 0x7F, 0x7F).
-; (0x76A9) = 0x76A2 + 7, part record 0 (PartRecord_GetPtr's array).  What T_F41B10 (sub_F8BC00) does with it is not established.
+; (XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A9) != 0 -> T_FixedEventList_AppendStackArgs(0, 7, 0x00, 0x7F); == 0 and (0x76A9) != 0x7F -> T_FixedEventList_AppendStackArgs(0, 7, 0x7F, 0x7F).
+; (0x76A9) = 0x76A2 + 7, part record 0 (PartRecord_GetPtr's array).  What T_FixedEventList_AppendStackArgs (sub_F8BC00) does with it is not established.
 SoftKeyCol6_SineWaveCheckMode:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F95939  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F9593D  8e 08 3f 00
@@ -40705,7 +40705,7 @@ SoftKeyCol6_SineWaveCheckMode:   ; entry: screen button-handler table
 .LF95962:
 	pushw 0x07                                           ; F95962  0b 07 00
 	pushw 0x00                                           ; F95965  0b 00 00
-	call T_F41B10                                        ; F95968  1d 10 1b f4
+	call T_FixedEventList_AppendStackArgs                                        ; F95968  1d 10 1b f4
 	inc 8,XSP                                            ; F9596C  ef 60
 .LF9596E:
 	unlk XIZ                                             ; F9596E  ee 0d
@@ -40841,7 +40841,7 @@ T_F40128_Nop:
 T_F4012C_Nop:
 	ret                                                  ; F959C7  0e
 ; ScreenEnter_DebugMonitor -- the +0 ENTER method of screen 0xDD, the DEBUG MONITOR
-; Evidence: PanelScreen_VtableTable_ViewB[0xDD] = T_F40130 (`jp 0xF959C8`).  Unless (0x2095) bit 4 (redraw): LCD_BlankThenSetPanel2Layer, (0x2075) bit 7;
+; Evidence: PanelScreen_VtableTable_ViewB[0xDD] = T_ScreenEnter_DebugMonitor (`jp 0xF959C8`).  Unless (0x2095) bit 4 (redraw): LCD_BlankThenSetPanel2Layer, (0x2075) bit 7;
 ; then DebugMonitor_PrintDumpPage, which calls Print_DebugMonitor (ROM line " --- DEBUG MONITOR BY (c)masa,toshi --- ") and DebugMonitor_PrintHexDump; then
 ; LCD_ShowLayers1And2_StackFrame.  TestMode_Tick requests 0xDD on the SOFT KEY 1+4+8 chord.
 ScreenEnter_DebugMonitor:
@@ -40858,7 +40858,7 @@ ScreenEnter_DebugMonitor__F959D1:
 T_F40134_Nop:
 	ret                                                  ; F959E1  0e
 ; ScreenButton_DebugMonitor -- the +8 BUTTON method of screen 0xDD: dispatch ScreenObjF40130_ButtonHandlers by button code
-; Evidence: T_F40138 (`jp 0xF959E2`); `cp (XIZ+8),0x001F / jr ugt`, H = 1 when bit 7 of (XIZ+0x0A) is set, then calls ScreenObjF40130_ButtonHandlers[(XIZ+8)]
+; Evidence: T_ScreenButton_DebugMonitor (`jp 0xF959E2`); `cp (XIZ+8),0x001F / jr ugt`, H = 1 when bit 7 of (XIZ+0x0A) is set, then calls ScreenObjF40130_ButtonHandlers[(XIZ+8)]
 ; with H on the stack -- ScreenButton_SineWaveCheckMode's reader shape, instruction for instruction.
 ScreenButton_DebugMonitor:
 	link XIZ,0x0000                                      ; F959E2  ee 0c 00 00
@@ -41122,7 +41122,7 @@ ScreenButtonHandlers_SineWaveCheckMode_Nop0:   ; entry: screen button-handler ta
 ; Evidence: XIX = 0xF94C8F (unlabelled: prints 40 spaces via LCD_PrintLine40_AdvanceRow) is entered three
 ; times by `lda xiy,<ret> / push XIY / jp (xix)`; between them `call Print_DebugMonitor` (0xF95C46) and `call
 ; sub_F94CBB` (0xF95C52: 16 x sub_F94CDE, address + 8 hex bytes, (0x284A) += 8). Zeroes (0x2540), (0x284F).
-; Callers: sub_F959C8 (T_F40130 screen ENTER) and the six digit editors sub_F95A1A..sub_F95BCA.
+; Callers: sub_F959C8 (T_ScreenEnter_DebugMonitor screen ENTER) and the six digit editors sub_F95A1A..sub_F95BCA.
 DebugMonitor_PrintDumpPage:
 	push XIX                                             ; F95C2D  3c
 	lda xix, (0xf94c8f:24)                               ; F95C2E  f2 8f 4c f9 34
@@ -41242,7 +41242,7 @@ ScreenButtonHandlers_SineWaveCheckMode:
 ; ScreenObjF40130_ButtonHandlers -- 32 LE32 handlers, one per panel event
 ;          code, for the screen object at prom_b 0xF40130 (+0 ScreenEnter_DebugMonitor,
 ;          +4 T_F40134_Nop, +8 ScreenButton_DebugMonitor).
-; Read by: ScreenButton_DebugMonitor (0xF959E2, slot T_F40138), the same five instructions
+; Read by: ScreenButton_DebugMonitor (0xF959E2, slot T_ScreenButton_DebugMonitor), the same five instructions
 ;          as ScreenButton_SineWaveCheckMode with this base at 0xF95A05.
 ;          19 slots are the default 0xF95C2C.
 ; (checks K1, K2)
@@ -41438,7 +41438,7 @@ T_F401D4_Nop:   ; entry: prom_b routine directory
 ; whole 0x960-byte parameter image at 0x7620 to the snapshot at 0x608000
 ; Evidence: `calr .LF96024`: (0x78B3) long -> (0x2181), (0x7F4A) -> (0x2189), (0x7F4C) -> (0x218A), then
 ; `ld XIY,0x7620 / ld XIX,0x608000 / ld XBC,0x4B0 / ldirw` (0xF9603C-0xF9604B) -- 0x960 bytes, exactly the
-; 80 records ParamImage_WriteRecordHeaders lays out at 0x7620-0x7F7F. prom_b slot T_F401D8 (slot 1 of the
+; 80 records ParamImage_WriteRecordHeaders lays out at 0x7620-0x7F7F. prom_b slot T_ParamImage_SnapshotAll (slot 1 of the
 ; 0xF96000 group); the 0xFB1800 PatchList module calls it before its PatchList_Apply* edits.
 ParamImage_SnapshotAll:   ; entry: prom_b routine directory
 	calr .LF96024                                        ; F96019  1e 08 00
@@ -41448,7 +41448,7 @@ ParamImage_SnapshotAll:   ; entry: prom_b routine directory
 ; Evidence: .LF9604E restores (0x7F4A)/(0x7F4C)/(0x78B3); .LF9606D queues record 0x91 byte 3 (0x7F4D) first
 ; (Queue2C00_AppendRegs E=0x91 D=3); .LF9608F walks the {tag,len,payload} records to +0x95E appending {tag,
 ; offset, new, new^old} at 0x2C00+(0x60F000), part tags 0x00-0x1F to ParamImage_QueuePartFieldChange, drain at
-; cursor 0x1F1, 0xFF end. prom_b T_F401DC; callers 0xFB3140, 0xFE00A1 and the 0xFB1800 PatchList module.
+; cursor 0x1F1, 0xFF end. prom_b T_ParamImage_QueueDiffAll; callers 0xFB3140, 0xFE00A1 and the 0xFB1800 PatchList module.
 ParamImage_QueueDiffAll:   ; entry: prom_b routine directory
 	calr .LF9604E                                        ; F9601D  1e 2e 00
 	ret                                                  ; F96020  0e
@@ -41703,7 +41703,7 @@ T_F401E4_Nop:   ; entry: prom_b routine directory
 	nop                                                  ; F96415  00
 	nop                                                  ; F96416  00
 	nop                                                  ; F96417  00
-; ParamImage_SanitizeAll_Entry -- prom_b directory slot T_F40214 (slot 0 of the 0xF96400 group):
+; ParamImage_SanitizeAll_Entry -- prom_b directory slot T_ParamImage_SanitizeAll_Entry (slot 0 of the 0xF96400 group):
 ; `call ParamImage_SanitizeAll / ret`
 ; Evidence: `call 0xf96432` at 0xF96418; callers 0xFB59B1 and the 0xFB1800 PatchList module.
 ParamImage_SanitizeAll_Entry:   ; entry: prom_b routine directory
@@ -41711,26 +41711,26 @@ ParamImage_SanitizeAll_Entry:   ; entry: prom_b routine directory
 	ret                                                  ; F9641C  0e
 T_F40218_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F9641D  0e
-; ParamImage_SanitizeAllAndHook_Entry -- prom_b directory slot T_F4021C (slot 2 of the 0xF96400 group):
+; ParamImage_SanitizeAllAndHook_Entry -- prom_b directory slot T_ParamImage_SanitizeAllAndHook_Entry (slot 2 of the 0xF96400 group):
 ; `call ParamImage_SanitizeAllAndHook / ret`
-; Evidence: callers 0xFAA89C, 0xFAA8F9, 0xFAAA99, 0xFB3126 (each followed by T_F401D4, with T_F40224 just
+; Evidence: callers 0xFAA89C, 0xFAA8F9, 0xFAAA99, 0xFB3126 (each followed by T_F401D4, with T_ParamImage_WriteRecordHeaders_Entry just
 ; before or after) and the veneer 0xFE0087.
 ParamImage_SanitizeAllAndHook_Entry:   ; entry: prom_b routine directory
 	call ParamImage_SanitizeAllAndHook                                        ; F9641E  1d 6a 64 f9
 	ret                                                  ; F96422  0e
-; ParamImage_ApplyAndMaskTable_Entry -- prom_b directory slot T_F40220 (slot 3 of the 0xF96400 group):
+; ParamImage_ApplyAndMaskTable_Entry -- prom_b directory slot T_ParamImage_ApplyAndMaskTable_Entry (slot 3 of the 0xF96400 group):
 ; `call ParamImage_ApplyAndMaskTable / ret`
-; Evidence: callers 0xFAA898 and 0xFAA8F5, each the first of T_F40220 / T_F4021C / T_F401D4 / T_F40224.
+; Evidence: callers 0xFAA898 and 0xFAA8F5, each the first of T_ParamImage_ApplyAndMaskTable_Entry / T_ParamImage_SanitizeAllAndHook_Entry / T_F401D4 / T_F40224.
 ParamImage_ApplyAndMaskTable_Entry:   ; entry: prom_b routine directory
 	call ParamImage_ApplyAndMaskTable                                        ; F96423  1d 65 6c f9
 	ret                                                  ; F96427  0e
-; ParamImage_WriteRecordHeaders_Entry -- prom_b directory slot T_F40224 (slot 4 of the 0xF96400 group):
+; ParamImage_WriteRecordHeaders_Entry -- prom_b directory slot T_ParamImage_WriteRecordHeaders_Entry (slot 4 of the 0xF96400 group):
 ; `call ParamImage_WriteRecordHeaders / ret`
 ; Evidence: callers 0xFAA8A4, 0xFAA901, 0xFAAAA1, 0xFB3122, 0xFB5976, 0xFB59AD, 0xFB77BA, 0xFE0064.
 ParamImage_WriteRecordHeaders_Entry:   ; entry: prom_b routine directory
 	call ParamImage_WriteRecordHeaders                                        ; F96428  1d 8a 6c f9
 	ret                                                  ; F9642C  0e
-; ParamImageAlt_SanitizeCombination_Entry -- prom_b directory slot T_F40228 (slot 5 of the 0xF96400 group):
+; ParamImageAlt_SanitizeCombination_Entry -- prom_b directory slot T_ParamImageAlt_SanitizeCombination_Entry (slot 5 of the 0xF96400 group):
 ; `call ParamImageAlt_SanitizeCombination / ret`
 ; Evidence: callers 0xFB320D and 0xFE0154.
 ParamImageAlt_SanitizeCombination_Entry:   ; entry: prom_b routine directory
@@ -43011,7 +43011,7 @@ MidiOut_PostPartReverbSend:
 	ret                                                  ; F97592  0e
 ; Combination_RecallOnSelect -- pass-A event handler for record class 0x98: when the queued change is field
 ; 1 of record 0x98 -- (0x7F03), the combination number Combination_Recall loads -- run Combination_Recall
-; Evidence: UiListA_Class98[0] holds T_F40244 = `jp 0xF97593`; `cp (0x20B8),0x01 / jr nz` (0xF97593), and
+; Evidence: UiListA_Class98[0] holds T_Combination_RecallOnSelect = `jp 0xF97593`; `cp (0x20B8),0x01 / jr nz` (0xF97593), and
 ; UiEventList_Run puts the record's byte +1 (the field offset) in (0x20B8). Record 0x98's header is at
 ; 0x7F00 (RamInitTable_F96CA6 entry 74), so its field 1 is 0x7F03.
 Combination_RecallOnSelect:   ; entry: prom_b routine directory
@@ -43022,7 +43022,7 @@ Combination_RecallOnSelect:   ; entry: prom_b routine directory
 	ret                                                  ; F9759D  0e
 .LF9759E:
 ; Combination_Recall -- load combination (0x7F03) from CPU 2 into the parameter image, copy back what the
-; hold flags keep, then queue and post the changes (prom_b T_F40254, caller 0xFB5342)
+; hold flags keep, then queue and post the changes (prom_b T_Combination_Recall, caller 0xFB5342)
 ; Evidence: ParamImage_SnapshotCombination; Combination_ReadFromCpu2(index (0x7F03), source (0x7F04));
 ; .LF97FC2/.LF982F6 copy effect/part fields back from 0x608000 when the low/high nibble of (0x7EE4) is 0, and
 ; .LF9766F per bits 0-4 of (0x7F07); .LF975C8 complements the snapshot's PROGRAM CHANGE byte of parts 1-8 so
@@ -44926,7 +44926,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ret                                                  ; F98926  0e
 .LF98927:
 ; Combination_ReadFromCpu2 -- remote-read one 0x2C0-byte combination record from CPU 2 into the parameter
-; image at 0x7620 (prom_b T_F40250, no caller found; Combination_Recall calls it at 0xF975B0)
+; image at 0x7620 (prom_b T_Combination_ReadFromCpu2, no caller found; Combination_Recall calls it at 0xF975B0)
 ; In: (XIZ+8) word = index; (XIZ+0x0A) = source: 0 or 0x10 -> 0xF80300 + 0x2C0*index (prom_c's factory
 ; preset bank), 8 -> 0xEC0300 + 0x2C0*index (CPU 2 flash, the user bank); other values read nothing.
 ; Evidence: `mul WA,0x02C0` and the bases at 0xF98939/0xF98955; (remote, 0x2C0, 0x7620) to
@@ -44973,16 +44973,16 @@ Combination_ReadFromCpu2:   ; entry: prom_b routine directory
 	popw hl                                              ; F98980  4b
 	unlk XIZ                                             ; F98981  ee 0d
 	ret                                                  ; F98983  0e
-; ParamImage_SnapshotCombination_Entry -- prom_b directory slot T_F4024C: `call
+; ParamImage_SnapshotCombination_Entry -- prom_b directory slot T_ParamImage_SnapshotCombination_Entry: `call
 ; ParamImage_SnapshotCombination / ret`
 ; Evidence: callers 0xF90C54, 0xF90CA4, 0xFBEDE0, 0xFBFC5E, 0xFE6F66; at 0xF90C54 it runs just before a new
-; combination is ldirw'd into 0x7620, and T_F40248 (ParamImage_QueueDiffCombination) follows at 0xF90C69.
+; combination is ldirw'd into 0x7620, and T_ParamImage_QueueDiffCombination (ParamImage_QueueDiffCombination) follows at 0xF90C69.
 ParamImage_SnapshotCombination_Entry:   ; entry: prom_b routine directory
 	call ParamImage_SnapshotCombination                                        ; F98984  1d 25 74 f9
 	ret                                                  ; F98988  0e
-; ParamImage_SnapshotCombinationAndParts_Entry -- prom_b directory slot T_F4025C: `call
+; ParamImage_SnapshotCombinationAndParts_Entry -- prom_b directory slot T_ParamImage_SnapshotCombinationAndParts_Entry: `call
 ; ParamImage_SnapshotCombinationAndParts / ret`
-; Evidence: one caller, prom_b 0xF38857; the same prom_b routine calls T_F40258
+; Evidence: one caller, prom_b 0xF38857; the same prom_b routine calls T_ParamImage_QueueDiffCombinationAndParts
 ; (ParamImage_QueueDiffCombinationAndParts) at 0xF38937.
 ParamImage_SnapshotCombinationAndParts_Entry:   ; entry: prom_b routine directory
 	call ParamImage_SnapshotCombinationAndParts                                        ; F98989  1d 36 74 f9
@@ -44993,7 +44993,7 @@ ParamImage_SnapshotCombinationAndParts_Entry:   ; entry: prom_b routine director
 ; Evidence: walks {tag,len,payload} records while HL < 0x78DE-0x7620 (0xF989A7-0xF989B3); each differing
 ; byte appends {tag, offset, new, new^old} at 0x2C00+(0x60F000) (0xF98A32-0xF98AAA); tags <= 0x1F go to
 ; .LF98C44, which queues offsets 0/1 as the {.,1,.,0x7F}/{.,0,.,0xFF} pair; at cursor >= 0x1F4 it drains via
-; Queue2C00_DrainPassB_SaveRegs. prom_b T_F40248 (0xF90C69, 0xF90CB9, 0xFBEE75, 0xFBFCD5, 0xFE01E4).
+; Queue2C00_DrainPassB_SaveRegs. prom_b T_ParamImage_QueueDiffCombination (0xF90C69, 0xF90CB9, 0xFBEE75, 0xFBFCD5, 0xFE01E4).
 ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 	link XIZ,0xffea                                      ; F9898E  ee 0c ea ff
 	push XHL                                             ; F98992  3b
@@ -45123,7 +45123,7 @@ ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 ; every byte of the image's first 0x8DE bytes that differs from the snapshot onto the 0x2C00 event list
 ; Evidence: `ld (0x78b3..0x78b6),c` from (0x2181..0x2184) at 0xF98AE5-0xF98B01; loop bound 0x7EFE-0x7620 at
 ; 0xF98B1A; the same append / .LF98C44 / Queue2C00_DrainPassB_SaveRegs (0xF98B76) / 0xFF-terminate sequence
-; as ParamImage_QueueDiffCombination. prom_b T_F40258, one caller (prom_b 0xF38937).
+; as ParamImage_QueueDiffCombination. prom_b T_ParamImage_QueueDiffCombinationAndParts, one caller (prom_b 0xF38937).
 ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	link XIZ,0xfff0                                      ; F98ADE  ee 0c f0 ff
 	pushw hl                                             ; F98AE2  2b
@@ -45713,8 +45713,8 @@ LCD_ShowAllLayers_StackFrame:   ; entry: branch/call in converted code
 ;
 ; Converted 2026-08-25 (wave 5 round 3).  The frontier tool
 ; (notes/prom_a_module_frontier.py) ranked five of its runs in the top twelve --
-; T_F41910-T_F419C4 (46 slots), T_F42670-T_F426BC (20), T_F434C0-T_F434D4 (6),
-; T_F41640-T_F41768 (75) and T_F43400-T_F43420 (9) -- and they all land here.
+; T_PanelMode_System_Enter-T_F419C4 (46 slots), T_F42670-T_F426BC (20), T_Screen_SoundMute_Enter-T_F434D4 (6),
+; T_PanelMode_MidiEnter-T_F41768 (75) and T_SoundName_CopyToBuffer-T_TuneScale_KeyScalingCodeToIndex (9) -- and they all land here.
 ; 132 prom_b directory slots point into it, and ALL 132 land on an instruction
 ; boundary of one linear decode from 0xF99021 (which is itself a directory
 ; target, so the START of the decode is pinned by the directory and not by the
@@ -45748,7 +45748,7 @@ LCD_ShowAllLayers_StackFrame:   ; entry: branch/call in converted code
 ; ==============================================================================
 ; InstallPainter_MessageScreen -- ENTER method of the message screen (screen id 0xAB): post MessageScreen_Paint
 ; on the callback queue, then signal semaphore 1
-; Evidence: PanelScreen_VtableTable_ViewB [171] (0xF871ED) -> object 0xF41604, whose +0 slot T_F41604 is
+; Evidence: PanelScreen_VtableTable_ViewB [171] (0xF871ED) -> object 0xF41604, whose +0 slot T_InstallPainter_MessageScreen is
 ; `jp 0xF99021`. Body: T_CallbackQueue_ResetAndRestartTask2; (0x209A) = 0xFF unless message (0x2880) is
 ; 0x23 or 0x2C; `lda xbc,MessageScreen_Paint` + T_CallbackQueue_Post; then T_Kernel_SemaSignal_StackArg(1).
 ; (0x209A) is the one-shot hold preload PanelState_TakePendingHoldTime moves into (0x2073).
@@ -45771,7 +45771,7 @@ T_F41608_Nop:
 	ret                                                  ; F9904C  0e
 ; ScreenButton_MessageScreen -- BUTTON method of the message screen (screen id 0xAB): dispatch the panel
 ; code (XIZ+8) <= 0x1F through MessageScreen_ArgHandlers, with H = bit 7 of (XIZ+0x0A)
-; Evidence: object 0xF41604's +8 slot T_F4160C = `jp 0xF9904D`; +8 is what PanelButton_Route (0xF8621E)
+; Evidence: object 0xF41604's +8 slot T_ScreenButton_MessageScreen = `jp 0xF9904D`; +8 is what PanelButton_Route (0xF8621E)
 ; calls with the code and its argument. Same shape as ScreenButton_SineWaveCheckMode: `cp (XIZ+8),0x1F /
 ; jr ugt`, `mul BC,(XIZ+8)`, push-return + `jp (xbc)` -- so MessageScreen_ArgHandlers is indexed by the code.
 ScreenButton_MessageScreen:
@@ -45817,7 +45817,7 @@ T_F41610_Nop:
 	ret                                                  ; F99097  0e
 ; MessageScreen_Paint -- draw message (0x2880) (< 0x40) from MessageScreen_ListPairs; for message 0x1A also
 ; copy (0x0C12) to (0x2881) and draw MessageScreen_ListPairsB's list
-; Evidence: posted by InstallPainter_MessageScreen and called through prom_b T_F41600 (13 sites);
+; Evidence: posted by InstallPainter_MessageScreen and called through prom_b T_MessageScreen_Paint (13 sites);
 ; `cp C,0x40 / jrl nc` (0xF990A3); pair = MessageScreen_PairTableByLanguage[(0x7FC1)] + id*8 to
 ; T_DisplayList_Run_Stack; id 0x1A: MessageScreen_ListPairsB + 8*(0x7FC1) to T_DisplayListB_Run_Stack.
 ; Brackets the drawing with LCD_BlankThenSetPanel3Layer / LCD_ShowAllLayers_StackFrame.
@@ -46055,13 +46055,13 @@ MessageScreen_ListPairsB:
 
 ; ---------------------------------------------------------------------
 ; MessageScreen_ArgHandlers -- 32 LE32 handler addresses.
-; Read by: ScreenButton_MessageScreen (0xF9904D, prom_b directory slot T_F4160C):
+; Read by: ScreenButton_MessageScreen (0xF9904D, prom_b directory slot T_ScreenButton_MessageScreen):
 ;          `cp (XIZ+8),0x001F / jr ugt` -- COUNT 32 -- then `ldw BC,4 /
 ;          mul BC,(XIZ+8) / add XBC,<this> / ld XBC,(XBC)` and a call with
 ;          H = bit 7 of the second argument (XIZ+0x0A) pushed.
 ;          31 slots are MessageScreen_ArgIgnore (one `ret`); slot 15 is
 ;          ExitKey_MessageScreen, which sets (0x209A) = 1 when H is 0.  (checks Q3, Q4)
-; ⚠ What the argument numbers (who calls T_F4160C, with what) is not
+; ⚠ What the argument numbers (who calls T_ScreenButton_MessageScreen, with what) is not
 ;          established here.
 ; ---------------------------------------------------------------------
 MessageScreen_ArgHandlers:
@@ -46120,7 +46120,7 @@ MessageScreen_PairTableByLanguage:
 
 ; PanelScreen_RequestRedrawIfFieldQueued -- set bit 4 of (0x2095) when a 0x2C00 record with a non-zero
 ; changed-bits byte names a {tag, offset} the current screen lists in ScreenFieldListPtrs
-; Evidence: UiEventPassB_TailList[2] = T_F40290 = `jp 0xF99400`; runs only with bit 1 of (0x97) set and bit 3
+; Evidence: UiEventPassB_TailList[2] = T_PanelScreen_RequestRedrawIfFieldQueued = `jp 0xF99400`; runs only with bit 1 of (0x97) set and bit 3
 ; of (0x2673) clear; XHL = ScreenFieldListPtrs[(0x207C)]; each record's first word (skipped if +3 == 0) is
 ; compared with the list's words up to 0xFFFF; a match does `or (0x2095),0x10`; always `and (0x2673),0xD7`.
 ; Bit 4 of (0x2095) -> (0x2072) via PanelState_Sync2095, which PanelScreen_RunRedraw turns into a re-Enter.
@@ -46279,7 +46279,7 @@ ScreenLeave_SysexBulkDump_Entry:
 ScreenButton_SysexBulkDump_Entry:
 	ld XIX,ScreenButtonRow_SysexBulkDump                        ; F99835  44 70 98 f9 00
 	ld e, (0x2740:16)                                   ; F9983A  c1 40 27 25
-	call T_F41B0C                                        ; F9983E  1d 0c 1b f4
+	call T_PanelButton_CallPageTableEntry                                        ; F9983E  1d 0c 1b f4
 	ret                                                  ; F99842  0e
 T_F4171C_Nop:
 	ret                                                  ; F99843  0e
@@ -46346,7 +46346,7 @@ ScreenLeave_GeneralMidiMode_Entry:
 ScreenButton_GeneralMidiMode_Entry:
 	ld XIX,ScreenButtonRow_GeneralMidi_Page0                   ; F9984C  44 f0 98 f9 00
 	ld e, (0x2740:16)                                   ; F99851  c1 40 27 25
-	call T_F41B0C                                        ; F99855  1d 0c 1b f4
+	call T_PanelButton_CallPageTableEntry                                        ; F99855  1d 0c 1b f4
 	ret                                                  ; F99859  0e
 T_F4172C_Nop:
 	ret                                                  ; F9985A  0e
@@ -46399,12 +46399,12 @@ ExitKey_SysexGeneralMidiShared:
 ;          not display lists: every entry is an instruction start, check W5).
 ;
 ; Read by: TWO located sites, both the same three instructions --
-;          0xF99835 `ld XIX,0x00F99870 / ld E,(0x2740) / call T_F41B0C` and
-;          0xF9984C `ld XIX,0x00F998F0 / ld E,(0x2740) / call T_F41B0C`.
+;          0xF99835 `ld XIX,0x00F99870 / ld E,(0x2740) / call T_PanelButton_CallPageTableEntry` and
+;          0xF9984C `ld XIX,0x00F998F0 / ld E,(0x2740) / call T_PanelButton_CallPageTableEntry`.
 ;          0xF99970, the third 32-entry block, has no located reader.
-; ENTRY COUNT 32 per table, and it is NOT a guess: T_F41B0C resolves to prom_a
+; ENTRY COUNT 32 per table, and it is NOT a guess: T_PanelButton_CallPageTableEntry resolves to prom_a
 ;          0xF8BDF8, whose FIRST instruction is `cp HL,0x001F / jr ugt` -- 0x1F
-;          is the last index it lets through, so 32 entries.  (T_F41B08 ->
+;          is the last index it lets through, so 32 entries.  (T_PanelButton_CallTableEntry ->
 ;          0xF8BDC5 opens with the same two instructions.)  3 x 32 = 96 is
 ;          exactly the run notes/prom_a_ptr_tables.py measures, 0xF99870-0xF999EF.
 ;          ★ LAST-ENTRY TEST: the word at 0xF999F0 is 0x0C210023, not
@@ -46640,7 +46640,7 @@ LcdKeyRow1_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF998
 	ret                                                  ; F99A8E  0e
 ; LcdKeyRow2_SysexBulkDump -- LCD row 2: right key (bit 7 of W clear) = SEND; left key selects item 1, SOUND
 ; Evidence: ScreenButtonRow_SysexBulkDump[9]. SEND: `and (0x2075),0x6F`; (0x60F802) = byte [(0x2720) & 7] of
-; the table at 0xF99AE3 (00 03 05 04 02 00 00 00) | 0x80; T_F408E4 (prom_a 0xFB2049), T_F40F1C
+; the table at 0xF99AE3 (00 03 05 04 02 00 00 00) | 0x80; T_SysExDump_RunSendJob (prom_a 0xFB2049), T_F40F1C
 ; (SC1_Entry_F40F1C). ' SEND' is at LCD 0x0BB1, the right end of row 2. Select: as row 1 with k = 1.
 LcdKeyRow2_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF99894
 	bit 0x07,W                                           ; F99A8F  c8 33 07
@@ -46652,7 +46652,7 @@ LcdKeyRow2_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF998
 	mx8_ld_rm MXB, ra_IY, rb_A, r1                       ; F99AA5  c3 03 f4 e0 21
 	ld (0x60f802:24), a                                 ; F99AAA  f2 02 f8 60 41
 	m_or_mi8 MB24, 0x60f802, 0x80                        ; F99AAF  c2 02 f8 60 3e 80
-	call T_F408E4                                        ; F99AB5  1d e4 08 f4
+	call T_SysExDump_RunSendJob                                        ; F99AB5  1d e4 08 f4
 	call T_F40F1C                                        ; F99AB9  1d 1c 0f f4
 	jr .LF99AE2                                          ; F99ABD  68 23
 .LF99ABF:
@@ -47309,11 +47309,11 @@ ScreenButtonRow_GeneralMidi_YesNo_Nop30:   ; entry: named by 1 `.long` operand, 
 	ret                                                  ; F99F02  0e
 ScreenButtonRow_GeneralMidi_YesNo_Nop31:   ; entry: named by 1 `.long` operand, first at 0xF999EC
 	ret                                                  ; F99F03  0e
-; PanelMode_MidiEnter -- Enter method of panel MODE 0x12 (MIDI): flag the mode change and run T_F415C8
+; PanelMode_MidiEnter -- Enter method of panel MODE 0x12 (MIDI): flag the mode change and run T_SoundGroup_ReloadSelection
 ; Evidence: view-A entry 18 of PanelScreen_VtableTable (0xF86F09) -> object 0xF41640, +0 `jp 0xF99F04`, called by
 ;   PanelScreen_CallEnter_A with the mode (0x2078).  PanelMode_ToScreenIdMap[0x12] = 0x70, Paint_MidiMenu's screen,
 ;   and MidiSubmenu_ExitToMidiMenu requests mode 0x12.  Body: `set 1,(0x2134)` (the bit PanelState_ClearOnChange
-;   sets on a mode change), then T_F415C8 (sub_F9433A), XDE/XHL/XIX/XIZ kept -- the shape of mode 0x0A's Enter,
+;   sets on a mode change), then T_SoundGroup_ReloadSelection (sub_F9433A), XDE/XHL/XIX/XIZ kept -- the shape of mode 0x0A's Enter,
 ;   0xF9FED1.
 PanelMode_MidiEnter:
 	m_set 1, MD16, 0x2134                                ; F99F04  f1 34 21 b9
@@ -47321,14 +47321,14 @@ PanelMode_MidiEnter:
 	push XHL                                             ; F99F09  3b
 	push XIX                                             ; F99F0A  3c
 	push XIZ                                             ; F99F0B  3e
-	call T_F415C8                                        ; F99F0C  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; F99F0C  1d c8 15 f4
 	pop XIZ                                              ; F99F10  5e
 	pop XIX                                              ; F99F11  5c
 	pop XHL                                              ; F99F12  5b
 	pop XDE                                              ; F99F13  5a
 	ret                                                  ; F99F14  0e
 ; PanelMode_MidiLeave -- Leave method of panel MODE 0x12 (MIDI): only `set 1,(0x2134)`
-; Evidence: object 0xF41640's +4 slot T_F41644 is `jp 0xF99F15`; PanelScreen_CallLeave_A calls +4 with the mode that
+; Evidence: object 0xF41640's +4 slot T_PanelMode_MidiLeave is `jp 0xF99F15`; PanelScreen_CallLeave_A calls +4 with the mode that
 ;   stopped being current.  Same body as mode 0x0A's Leave at 0xF9FEE2.
 PanelMode_MidiLeave:
 	m_set 1, MD16, 0x2134                                ; F99F15  f1 34 21 b9
@@ -47372,7 +47372,7 @@ T_F4165C_Nop:
 	ret                                                  ; F99F5D  0e
 ; ScreenButton_MidiMenu -- BUTTON method of screen 0x70 (the MIDI menu): dispatch the panel code via
 ;   JumpTable_F99F96
-; Evidence: object 0xF41650's +8 slot T_F41658 is `jp 0xF99F5E` (PanelButton_Route calls +8).  H = 1 when bit 7 of
+; Evidence: object 0xF41650's +8 slot T_ScreenButton_MidiMenu is `jp 0xF99F5E` (PanelButton_Route calls +8).  H = 1 when bit 7 of
 ;   the forwarded flag (XIZ+0x0A) is set (pair position 0, the left-hand LCD key) and is handed to the arm.
 ; Live codes: 0x08-0x0B -> LcdKeyRow1..4_MidiMenu, 0x0F -> ExitKey_MidiMenu; the other 27 -> IgnoredKeys_MidiMenu.
 ScreenButton_MidiMenu:
@@ -48194,7 +48194,7 @@ MidiTotalMode_PaintSingleChProgChange:
 	inc 8,XSP                                            ; F9A4F6  ef 60
 	ret                                                  ; F9A4F8  0e
 ; MidiTotalMode_EditInputMode -- change the MIDI INPUT MODE setting; if it changed, post it and repaint
-; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=3, A = new bits (D =
+; Evidence: on change, T_PendingEventQueue_AppendStackArgs (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=3, A = new bits (D =
 ;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintInputMode.
 ; Field: (0x7F35) bits 0-3, stepped 0..2 (MULTI/SINGLE/OMNI).
 MidiTotalMode_EditInputMode:
@@ -48223,7 +48223,7 @@ MidiTotalMode_EditInputMode:
 	push H                                               ; F9A52E  ce 04
 	pushw 0x03                                           ; F9A530  0b 03 00
 	pushw 0x80                                           ; F9A533  0b 80 00
-	call T_F41B18                                        ; F9A536  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A536  1d 18 1b f4
 	calr Draw_MultiSingleOmni                                      ; F9A53A  1e db fe
 	inc 8,XSP                                            ; F9A53D  ef 60
 .LF9A53F:
@@ -48232,7 +48232,7 @@ MidiTotalMode_EditInputMode:
 	unlk XIZ                                             ; F9A541  ee 0d
 	ret                                                  ; F9A543  0e
 ; MidiTotalMode_EditOutputMode -- change the MIDI OUTPUT MODE setting; if it changed, post it and repaint
-; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0xF0, D=3, A = new bits (D =
+; Evidence: on change, T_PendingEventQueue_AppendStackArgs (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0xF0, D=3, A = new bits (D =
 ;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintOutputMode.
 ; Field: (0x7F35) bits 4-7, stepped 0..1 (MULTI/SINGLE).
 MidiTotalMode_EditOutputMode:
@@ -48265,7 +48265,7 @@ MidiTotalMode_EditOutputMode:
 	push H                                               ; F9A584  ce 04
 	pushw 0x03                                           ; F9A586  0b 03 00
 	pushw 0x80                                           ; F9A589  0b 80 00
-	call T_F41B18                                        ; F9A58C  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A58C  1d 18 1b f4
 	calr Draw_MultiSingle                                      ; F9A590  1e a8 fe
 	inc 8,XSP                                            ; F9A593  ef 60
 .LF9A595:
@@ -48274,7 +48274,7 @@ MidiTotalMode_EditOutputMode:
 	unlk XIZ                                             ; F9A597  ee 0d
 	ret                                                  ; F9A599  0e
 ; MidiTotalMode_EditSingleChannel -- change the SINGLE CHANNEL setting; if it changed, post it and repaint
-; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=4, A = new bits (D =
+; Evidence: on change, T_PendingEventQueue_AppendStackArgs (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=4, A = new bits (D =
 ;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintSingleChannel.
 ; Field: (0x7F36) bits 0-3, stepped 0..15.
 MidiTotalMode_EditSingleChannel:
@@ -48303,7 +48303,7 @@ MidiTotalMode_EditSingleChannel:
 	push H                                               ; F9A5CF  ce 04
 	pushw 0x04                                           ; F9A5D1  0b 04 00
 	pushw 0x80                                           ; F9A5D4  0b 80 00
-	call T_F41B18                                        ; F9A5D7  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A5D7  1d 18 1b f4
 	calr MidiTotalMode_PaintSingleChannel                                      ; F9A5DB  1e 83 fe
 	inc 8,XSP                                            ; F9A5DE  ef 60
 .LF9A5E0:
@@ -48312,7 +48312,7 @@ MidiTotalMode_EditSingleChannel:
 	unlk XIZ                                             ; F9A5E2  ee 0d
 	ret                                                  ; F9A5E4  0e
 ; MidiTotalMode_EditLocalTotal -- change the LOCAL TOTAL setting; if it changed, post it and repaint
-; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x20, D=4, A = new bits (D =
+; Evidence: on change, T_PendingEventQueue_AppendStackArgs (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x20, D=4, A = new bits (D =
 ;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintLocalTotal.
 ; Field: (0x7F36) bit 5: (XIZ+8)==0 clears it ("ON"), otherwise sets it ("OFF").
 MidiTotalMode_EditLocalTotal:
@@ -48341,7 +48341,7 @@ MidiTotalMode_EditLocalTotal:
 	push H                                               ; F9A617  ce 04
 	pushw 0x04                                           ; F9A619  0b 04 00
 	pushw 0x80                                           ; F9A61C  0b 80 00
-	call T_F41B18                                        ; F9A61F  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A61F  1d 18 1b f4
 	calr MidiTotalMode_PaintLocalTotal                                      ; F9A623  1e 5e fe
 	inc 8,XSP                                            ; F9A626  ef 60
 .LF9A628:
@@ -48350,7 +48350,7 @@ MidiTotalMode_EditLocalTotal:
 	unlk XIZ                                             ; F9A62A  ee 0d
 	ret                                                  ; F9A62C  0e
 ; MidiTotalMode_EditProgChangeMode -- change the PROG CHANGE MODE setting; if it changed, post it and repaint
-; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x03, D=0, A = new bits (D =
+; Evidence: on change, T_PendingEventQueue_AppendStackArgs (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x03, D=0, A = new bits (D =
 ;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintProgChangeMode.
 ; Field: (0x7F32) bits 0-1, stepped 0..1 (NORMAL/TECH; REMAP is not reachable here).
 MidiTotalMode_EditProgChangeMode:
@@ -48379,7 +48379,7 @@ MidiTotalMode_EditProgChangeMode:
 	push H                                               ; F9A662  ce 04
 	pushw 0x00                                           ; F9A664  0b 00 00
 	pushw 0x80                                           ; F9A667  0b 80 00
-	call T_F41B18                                        ; F9A66A  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A66A  1d 18 1b f4
 	calr Draw_NormalTechRemap                                      ; F9A66E  1e 3f fe
 	inc 8,XSP                                            ; F9A671  ef 60
 .LF9A673:
@@ -48389,7 +48389,7 @@ MidiTotalMode_EditProgChangeMode:
 	ret                                                  ; F9A677  0e
 ; MidiTotalMode_EditSingleChProgChange -- change the SINGLE CH PROG CHANGE setting; if it changed, post it and
 ;   repaint
-; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x08, D=0, A = new bits (D =
+; Evidence: on change, T_PendingEventQueue_AppendStackArgs (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x08, D=0, A = new bits (D =
 ;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintSingleChProgChange.
 ; Field: (0x7F32) bit 3: (XIZ+8)==0 sets it (COMBI), otherwise clears it (SOUND).
 MidiTotalMode_EditSingleChProgChange:
@@ -48418,7 +48418,7 @@ MidiTotalMode_EditSingleChProgChange:
 	push H                                               ; F9A6AA  ce 04
 	pushw 0x00                                           ; F9A6AC  0b 00 00
 	pushw 0x80                                           ; F9A6AF  0b 80 00
-	call T_F41B18                                        ; F9A6B2  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A6B2  1d 18 1b f4
 	calr MidiTotalMode_PaintSingleChProgChange                                      ; F9A6B6  1e 1a fe
 	inc 8,XSP                                            ; F9A6B9  ef 60
 .LF9A6BB:
@@ -48712,7 +48712,7 @@ Draw_RealtimeCommandsClock:
 	pushw 0x04                                           ; F9A861  0b 04 00
 	pushw 0x02                                           ; F9A864  0b 02 00
 	pushw 0x80                                           ; F9A867  0b 80 00
-	call T_F41B18                                        ; F9A86A  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A86A  1d 18 1b f4
 	jr .LF9A88E                                          ; F9A86E  68 1e
 .LF9A870:
 	ld C,(XIX)                                           ; F9A870  84 23
@@ -48723,7 +48723,7 @@ Draw_RealtimeCommandsClock:
 	pushw 0x04                                           ; F9A87D  0b 04 00
 	pushw 0x00                                           ; F9A880  0b 00 00
 	pushw 0x80                                           ; F9A883  0b 80 00
-	call T_F41B18                                        ; F9A886  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A886  1d 18 1b f4
 	call T_F40794                                        ; F9A88A  1d 94 07 f4
 .LF9A88E:
 	inc 8,XSP                                            ; F9A88E  ef 60
@@ -48772,7 +48772,7 @@ Draw_RealtimeCommandsClock_2:
 	pushw Draw_RealtimeCommandsClock_2_Data_2@hi16                                           ; F9A90A  0b fb 00
 	pushw Draw_RealtimeCommandsClock_2_Data_2@lo16                                           ; F9A90D  0b 02 00
 	pushw 0x80                                           ; F9A910  0b 80 00
-	call T_F41B18                                        ; F9A913  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A913  1d 18 1b f4
 	jr .LF9A937                                          ; F9A917  68 1e
 .LF9A919:
 	ld C,(XIX)                                           ; F9A919  84 23
@@ -48783,7 +48783,7 @@ Draw_RealtimeCommandsClock_2:
 	pushw Draw_RealtimeCommandsClock_2_Data@hi16                                           ; F9A926  0b fb 00
 	pushw Draw_RealtimeCommandsClock_2_Data@lo16                                           ; F9A929  0b 00 00
 	pushw 0x80                                           ; F9A92C  0b 80 00
-	call T_F41B18                                        ; F9A92F  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9A92F  1d 18 1b f4
 	call T_F40794                                        ; F9A933  1d 94 07 f4
 .LF9A937:
 	inc 8,XSP                                            ; F9A937  ef 60
@@ -49344,7 +49344,7 @@ MidiInputOutputFilter_PaintExclusive:
 	ret                                                  ; F9AD20  0e
 ; MidiInputOutputFilter_EditProgramChange -- set (key arg 0) or clear (0x7F39) bit 4, the PR0GRAM CHANGE filter;
 ;   post and repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x10, D=7, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x10, D=7, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintProgramChange.  Reached through
 ;   JumpTable_F9AB84[0].
 MidiInputOutputFilter_EditProgramChange:
@@ -49374,7 +49374,7 @@ MidiInputOutputFilter_EditProgramChange:
 	push H                                               ; F9AD54  ce 04
 	pushw 0x07                                           ; F9AD56  0b 07 00
 	pushw 0x80                                           ; F9AD59  0b 80 00
-	call T_F41B18                                        ; F9AD5C  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9AD5C  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintProgramChange                                      ; F9AD60  1e 8c fe
 	inc 8,XSP                                            ; F9AD63  ef 60
 .LF9AD65:
@@ -49383,7 +49383,7 @@ MidiInputOutputFilter_EditProgramChange:
 	ret                                                  ; F9AD68  0e
 ; MidiInputOutputFilter_EditBankSelect -- set (key arg 0) or clear (0x7F3A) bit 7, the BANK SELECT filter; post and
 ;   repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x80, D=8, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x80, D=8, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintBankSelect.  Reached through JumpTable_F9AB84[1].
 MidiInputOutputFilter_EditBankSelect:
 	link XIZ,0x0000                                      ; F9AD69  ee 0c 00 00
@@ -49413,7 +49413,7 @@ sub_F9AD8C:
 	push H                                               ; F9AD9C  ce 04
 	pushw 0x08                                           ; F9AD9E  0b 08 00
 	pushw 0x80                                           ; F9ADA1  0b 80 00
-	call T_F41B18                                        ; F9ADA4  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9ADA4  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintBankSelect                                      ; F9ADA8  1e 6a fe
 	inc 8,XSP                                            ; F9ADAB  ef 60
 .LF9ADAD:
@@ -49422,7 +49422,7 @@ sub_F9AD8C:
 	ret                                                  ; F9ADB0  0e
 ; MidiInputOutputFilter_EditPitchBend -- set (key arg 0) or clear (0x7F39) bit 6, the PITCH BEND filter; post and
 ;   repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x40, D=7, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x40, D=7, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintPitchBend.  Reached through JumpTable_F9AB84[2].
 MidiInputOutputFilter_EditPitchBend:
 	link XIZ,0x0000                                      ; F9ADB1  ee 0c 00 00
@@ -49451,7 +49451,7 @@ MidiInputOutputFilter_EditPitchBend:
 	push H                                               ; F9ADE4  ce 04
 	pushw 0x07                                           ; F9ADE6  0b 07 00
 	pushw 0x80                                           ; F9ADE9  0b 80 00
-	call T_F41B18                                        ; F9ADEC  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9ADEC  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintPitchBend                                      ; F9ADF0  1e 48 fe
 	inc 8,XSP                                            ; F9ADF3  ef 60
 .LF9ADF5:
@@ -49460,7 +49460,7 @@ MidiInputOutputFilter_EditPitchBend:
 	ret                                                  ; F9ADF8  0e
 ; MidiInputOutputFilter_EditControlChange -- set (key arg 0) or clear (0x7F39) bit 3, the C0NTR0L CHANGE filter;
 ;   post and repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x08, D=7, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x08, D=7, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintControlChange.  Reached through
 ;   JumpTable_F9AB84[3].
 MidiInputOutputFilter_EditControlChange:
@@ -49490,7 +49490,7 @@ MidiInputOutputFilter_EditControlChange:
 	push H                                               ; F9AE2C  ce 04
 	pushw 0x07                                           ; F9AE2E  0b 07 00
 	pushw 0x80                                           ; F9AE31  0b 80 00
-	call T_F41B18                                        ; F9AE34  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9AE34  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintControlChange                                      ; F9AE38  1e 26 fe
 	inc 8,XSP                                            ; F9AE3B  ef 60
 .LF9AE3D:
@@ -49499,7 +49499,7 @@ MidiInputOutputFilter_EditControlChange:
 	ret                                                  ; F9AE40  0e
 ; MidiInputOutputFilter_EditResetAllCtrl -- set (key arg 0) or clear (0x7F3B) bit 0, the RESET ALL CTRL filter; post
 ;   and repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x01, D=9, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x01, D=9, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintResetAllCtrl.  Reached through
 ;   JumpTable_F9AB84[4].
 MidiInputOutputFilter_EditResetAllCtrl:
@@ -49529,7 +49529,7 @@ MidiInputOutputFilter_EditResetAllCtrl:
 	push H                                               ; F9AE74  ce 04
 	pushw 0x09                                           ; F9AE76  0b 09 00
 	pushw 0x80                                           ; F9AE79  0b 80 00
-	call T_F41B18                                        ; F9AE7C  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9AE7C  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintResetAllCtrl                                      ; F9AE80  1e 04 fe
 	inc 8,XSP                                            ; F9AE83  ef 60
 .LF9AE85:
@@ -49538,7 +49538,7 @@ MidiInputOutputFilter_EditResetAllCtrl:
 	ret                                                  ; F9AE88  0e
 ; MidiInputOutputFilter_EditChannelPressure -- set (key arg 0) or clear (0x7F39) bit 5, the CHANNEL PRESSURE filter;
 ;   post and repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x20, D=7, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x20, D=7, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintChannelPressure.  Reached through
 ;   JumpTable_F9AB84[5]. ⚠ the posted A is read from (0x7F3B) & 0x20 (`ld H,(0x7f3b)` at 0xF9AEB0) while the edit
 ;   and D=7 name 0x7F39.
@@ -49569,7 +49569,7 @@ MidiInputOutputFilter_EditChannelPressure:
 	push H                                               ; F9AEBC  ce 04
 	pushw 0x07                                           ; F9AEBE  0b 07 00
 	pushw 0x80                                           ; F9AEC1  0b 80 00
-	call T_F41B18                                        ; F9AEC4  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9AEC4  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintChannelPressure                                      ; F9AEC8  1e df fd
 	inc 8,XSP                                            ; F9AECB  ef 60
 .LF9AECD:
@@ -49578,7 +49578,7 @@ MidiInputOutputFilter_EditChannelPressure:
 	ret                                                  ; F9AED0  0e
 ; MidiInputOutputFilter_EditSongSelect -- set (key arg 0) or clear (0x7F33) bit 3, the S0NG SELECT filter; post and
 ;   repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x08, D=1, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x08, D=1, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintSongSelect.  Reached through JumpTable_F9AB84[6].
 MidiInputOutputFilter_EditSongSelect:
 	link XIZ,0x0000                                      ; F9AED1  ee 0c 00 00
@@ -49607,7 +49607,7 @@ MidiInputOutputFilter_EditSongSelect:
 	push H                                               ; F9AF04  ce 04
 	pushw 0x01                                           ; F9AF06  0b 01 00
 	pushw 0x80                                           ; F9AF09  0b 80 00
-	call T_F41B18                                        ; F9AF0C  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9AF0C  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintSongSelect                                      ; F9AF10  1e bd fd
 	inc 8,XSP                                            ; F9AF13  ef 60
 .LF9AF15:
@@ -49616,7 +49616,7 @@ MidiInputOutputFilter_EditSongSelect:
 	ret                                                  ; F9AF18  0e
 ; MidiInputOutputFilter_EditExclusive -- set (key arg 0) or clear (0x7F38) bits 0-3, the EXCLUSIVE filter; post and
 ;   repaint if it changed
-; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x0F, D=6, A =
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_PendingEventQueue_AppendStackArgs posts {E=0x80, W=0x0F, D=6, A =
 ;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintExclusive.  Reached through JumpTable_F9AB84[7].
 ;   The mask is the whole low nibble: all four bits are set or cleared together.
 MidiInputOutputFilter_EditExclusive:
@@ -49646,7 +49646,7 @@ MidiInputOutputFilter_EditExclusive:
 	push H                                               ; F9AF4C  ce 04
 	pushw 0x06                                           ; F9AF4E  0b 06 00
 	pushw 0x80                                           ; F9AF51  0b 80 00
-	call T_F41B18                                        ; F9AF54  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; F9AF54  1d 18 1b f4
 	calr MidiInputOutputFilter_PaintExclusive                                      ; F9AF58  1e 9b fd
 	inc 8,XSP                                            ; F9AF5B  ef 60
 .LF9AF5D:
@@ -50669,7 +50669,7 @@ MidiOutProgramChange_EnableBlinkForItem__F9B6A5:
 	ld IX,(XIZ+0x08)                                     ; F9C006  9e 08 24
 	extz XIX                                             ; F9C009  ec 12
 	ld A,(XIZ+0x0a)                                      ; F9C00B  8e 0a 21
-	call T_F415B4                                        ; F9C00E  1d b4 15 f4
+	call T_LCD_BlitValueBar                                        ; F9C00E  1d b4 15 f4
 	pop XDE                                              ; F9C012  5a
 	pop XHL                                              ; F9C013  5b
 	pop XIX                                              ; F9C014  5c
@@ -51831,7 +51831,7 @@ ReMapEdit_AssignSourceToReMap:
 	unlk XIZ                                             ; F9C9F1  ee 0d
 	ret                                                  ; F9C9F3  0e
 ; Screen_SoundCombinationManager_Enter -- Enter (+0) method of screen 0x6D: restarts task 2's callback queue and posts the painter of the SOUND/COMBINATION MANAGER menu
-; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; prom_b T_F41978/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
+; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_Screen_SoundCombinationManager_Enter; prom_b T_Screen_SoundCombinationManager_Enter/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
 ; Evidence: posts .LF9CAE0 (T_CallbackQueue_Post + T_Kernel_SemaSignal_StackArg 1), which runs DisplayList_FA353B-FA3678 on layer 2: title 'SOUND/COMBINATION MANAGER', items SOUND GROUP NAMING / DATA LOAD FILTER / COMBI.GROUP NAMING / MEMORY PROTECT / SOUND COPY / SOUND MUTE / COMBINATION COPY.
 ; Screen id 0x6D is what Screen_System's row-3 right key requests (0xF9FF95).
 Screen_SoundCombinationManager_Enter:
@@ -51846,7 +51846,7 @@ Screen_SoundCombinationManager_Enter:
 T_F4197C_Nop:
 	ret                                                  ; F9CA0C  0e
 ; Screen_SoundCombinationManager_Button -- Button (+8) method: maps the panel code to a slot (T_F42C74 = PanelCode_ToSlotAndFlags) and jumps through HandlerTable23_FA1712
-; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; prom_b T_F41978/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
+; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_Screen_SoundCombinationManager_Enter; prom_b T_Screen_SoundCombinationManager_Enter/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
 ; Slots 9-12 (LCD-row pairs 2-5) request screens 0x5B/0x61, 0x5C/0x6E, 0x5E/0x5D, 0x5F (left/right labels of DisplayList_FA353B); slot 15 (EXIT) requests 0x60 (SYSTEM).
 Screen_SoundCombinationManager_Button:
 	link XIZ,0x0000                                      ; F9CA0D  ee 0c 00 00
@@ -52334,7 +52334,7 @@ sub_F9CC9F:
 	jr .LF9CD83                                          ; F9CD63  68 1e
 .LF9CD65:
 	ld (UI_StatusCode:16), 0x25                                 ; F9CD65  f1 80 28 00 25
-	call T_F41600                                        ; F9CD6A  1d 00 16 f4
+	call T_MessageScreen_Paint                                        ; F9CD6A  1d 00 16 f4
 	calr SoundGroupNaming_StoreGroupName                                      ; F9CD6E  1e 52 01
 	ld (0x2694:16), 0x00                                 ; F9CD71  f1 94 26 00 00
 	ld (UI_StatusCode:16), 0x23                                 ; F9CD76  f1 80 28 00 23
@@ -52982,7 +52982,7 @@ CombinationGroupNaming_AdjustGroup:
 	jr .LF9D1EB                                          ; F9D1CB  68 1e
 .LF9D1CD:
 	ld (UI_StatusCode:16), 0x25                                 ; F9D1CD  f1 80 28 00 25
-	call T_F41600                                        ; F9D1D2  1d 00 16 f4
+	call T_MessageScreen_Paint                                        ; F9D1D2  1d 00 16 f4
 	calr CombinationGroupNaming_StoreGroupName                                      ; F9D1D6  1e 52 01
 	ld (0x2697:16), 0x00                                 ; F9D1D9  f1 97 26 00 00
 	ld (UI_StatusCode:16), 0x23                                 ; F9D1DE  f1 80 28 00 23
@@ -53252,7 +53252,7 @@ CombinationGroupNaming_StoreGroupName:
 	unlk XIZ                                             ; F9D3B7  ee 0d
 	ret                                                  ; F9D3B9  0e
 ; Screen_SoundCopy_Enter -- Enter (+0) method of screen 0x5E, SOUND COPY: on a new entry selects SINGLE mode ((0x269A)=1), then paints (unless only a field refresh is pending) and loads/draws the fields
-; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432.
+; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_Screen_SoundCopy_Enter; prom_b T_Screen_SoundCopy_Enter/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432.
 ; Evidence: calls Paint_SoundCopy (whose lists all carry the title 'SOUND COPY' or its error page), SoundCopy_LoadNameBuffers and SoundCopy_DrawFields; id 0x5E is what SOUND/COMBINATION MANAGER's 'SOUND COPY' key requests (0xF9CA99).
 Screen_SoundCopy_Enter:
 	ld c, (0x207a:16)                                   ; F9D3BA  c1 7a 20 23
@@ -53292,7 +53292,7 @@ Screen_SoundCopy_Enter:
 ; ---------------------------------------------------------------------
 
 ; Screen_SoundCopy_Leave -- Leave (+4) method of SOUND COPY: if (0x207A) != (0x207B) it clears (0x2806), the link-request-outstanding flag SoundCopy_Request*Sound* set
-; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432 -- the vtable walk the old header asked for.
+; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_Screen_SoundCopy_Enter; prom_b T_Screen_SoundCopy_Enter/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432 -- the vtable walk the old header asked for.
 ; Evidence: ALL 16 bytes of 0xF9D3F4-0xF9D403 equal Screen_DrumsMapNaming_Leave at 0xF9EFF6 (0 differ); the shared shape is explained by both screens setting (0x2806)=1 while a CPU-2 transfer is pending (SoundCopy_RequestGroupSounds 0xF9FBD5, Screen_DrumsMapNaming_Enter 0xF9EFCE).
 ; Body: if (0x207A) == (0x207B), return; else clear (0x2806).
 Screen_SoundCopy_Leave:
@@ -53303,7 +53303,7 @@ Screen_SoundCopy_Leave:
 .LF9D403:
 	ret                                                  ; F9D403  0e
 ; Screen_SoundCopy_Button -- Button (+8) method of SOUND COPY: ignores every button while (0x2806) is set, otherwise dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA182F
-; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432; `cp (0x2806),0x00 / jr NZ` at 0xF9D408.
+; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_Screen_SoundCopy_Enter; prom_b T_Screen_SoundCopy_Enter/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432; `cp (0x2806),0x00 / jr NZ` at 0xF9D408.
 ; Slots: 0-7 soft keys (bank/group/sound edits), 8 OK / GROUP-SINGLE, 10 YES (-> SoundCopy_Execute), 11 NO, 15 EXIT (-> screen 0x6D).
 Screen_SoundCopy_Button:
 	link XIZ,0x0000                                      ; F9D404  ee 0c 00 00
@@ -53817,7 +53817,7 @@ SoundCopy_AdjustDestBank:
 	jr .LF9D8DD                                          ; F9D8CF  68 0c
 .LF9D8D1:
 	ld (UI_StatusCode:16), 0x25                                 ; F9D8D1  f1 80 28 00 25
-	call T_F41600                                        ; F9D8D6  1d 00 16 f4
+	call T_MessageScreen_Paint                                        ; F9D8D6  1d 00 16 f4
 	calr SoundCopy_Execute                                          ; F9D8DA  1e 8f 04
 .LF9D8DD:
 	ret                                                  ; F9D8DD  0e
@@ -54574,7 +54574,7 @@ SoundCopy_Execute:
 	unlk XIZ                                             ; F9DF8E  ee 0d
 	ret                                                  ; F9DF90  0e
 ; Screen_CombinationCopy_Enter -- Enter (+0) method of screen 0x5F, COMBINATION COPY: on a new entry selects SINGLE mode ((0x269A)=1), then paints and loads/draws the fields
-; Evidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_F426B0; prom_b T_F426B0/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3.
+; Evidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_Screen_CombinationCopy_Enter; prom_b T_Screen_CombinationCopy_Enter/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3.
 ; Evidence: calls Paint_CombinationCopy, CombinationCopy_LoadNameBuffers, CombinationCopy_DrawFields; id 0x5F is what SOUND/COMBINATION MANAGER's 'COMBINATION COPY' key requests (0xF9CAB7).
 Screen_CombinationCopy_Enter:
 	ld c, (0x207a:16)                                   ; F9DF91  c1 7a 20 23
@@ -54598,7 +54598,7 @@ Screen_CombinationCopy_Enter:
 T_F426B4_Nop:
 	ret                                                  ; F9DFCB  0e
 ; Screen_CombinationCopy_Button -- Button (+8) method of COMBINATION COPY: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1892
-; Evidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_F426B0; prom_b T_F426B0/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3; unlike Screen_SoundCopy_Button it has no (0x2806) guard.
+; Evidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_Screen_CombinationCopy_Enter; prom_b T_Screen_CombinationCopy_Enter/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3; unlike Screen_SoundCopy_Button it has no (0x2806) guard.
 Screen_CombinationCopy_Button:
 	link XIZ,0x0000                                      ; F9DFCC  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9DFD0  9e 0a 04
@@ -55109,7 +55109,7 @@ CombinationCopy_AdjustDestBank:
 	jr .LF9E4B2                                          ; F9E493  68 1d
 .LF9E495:
 	ld (UI_StatusCode:16), 0x25                                 ; F9E495  f1 80 28 00 25
-	call T_F41600                                        ; F9E49A  1d 00 16 f4
+	call T_MessageScreen_Paint                                        ; F9E49A  1d 00 16 f4
 	calr CombinationCopy_Execute                                      ; F9E49E  1e 88 04
 	and (XIX),0xfd                                       ; F9E4A1  84 3c fd
 	ld (UI_StatusCode:16), 0x23                                 ; F9E4A4  f1 80 28 00 23
@@ -55853,7 +55853,7 @@ CombinationCopy_Execute:
 	unlk XIZ                                             ; F9EB72  ee 0d
 	ret                                                  ; F9EB74  0e
 ; Screen_DataLoadFilter_Enter -- Enter (+0) method of screen 0x61, DATA LOAD FILTER: resets the item cursor (0x26A5) on a new entry and posts the painter, value and cursor callbacks
-; Evidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_F41998; prom_b T_F41998/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15.
+; Evidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_Screen_DataLoadFilter_Enter; prom_b T_Screen_DataLoadFilter_Enter/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15.
 ; Evidence: posts .LF9ECE0 (DisplayList_FA427B-FA43C9: 'DATA LOAD FILTER', 'EFFECT & OUTPUT :', 'R.T.CREATOR 1_6 :', 'OCTAVE', 'MIDI SETTING', 'KEY&VEL LAYER', 'MAIN OUT EQ', 'KEY SCALING'), .LF9ED00 (values) and .LF9ED18 (cursor); id 0x61 = MANAGER's 'DATA LOAD FILTER' key (0xF9CA54).
 Screen_DataLoadFilter_Enter:
 	push XIX                                             ; F9EB75  3c
@@ -55903,7 +55903,7 @@ Screen_DataLoadFilter_Enter:
 T_F4199C_Nop:
 	ret                                                  ; F9EBED  0e
 ; Screen_DataLoadFilter_Button -- Button (+8) method of DATA LOAD FILTER: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA18EE
-; Evidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_F41998; prom_b T_F41998/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15; slots 0-3 move the item cursor (0xF9EC16), slots 4-7 adjust the item through JumpTable_F9EC58 (0xF9EC3F), slot 15 EXIT requests 0x6D.
+; Evidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_Screen_DataLoadFilter_Enter; prom_b T_Screen_DataLoadFilter_Enter/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15; slots 0-3 move the item cursor (0xF9EC16), slots 4-7 adjust the item through JumpTable_F9EC58 (0xF9EC3F), slot 15 EXIT requests 0x6D.
 Screen_DataLoadFilter_Button:
 	link XIZ,0x0000                                      ; F9EBEE  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EBF2  9e 0a 04
@@ -56061,7 +56061,7 @@ DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0x
 	inc 8,XSP                                            ; F9ED31  ef 60
 	ret                                                  ; F9ED33  0e
 ; Screen_MemoryProtect_Enter -- Enter (+0) method of screen 0x6E, MEMORY PROTECT: resets the cursor (0x26A6) on a new entry and posts the painter, value and cursor callbacks
-; Evidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_F41988; prom_b T_F41988/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9.
+; Evidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_Screen_MemoryProtect_Enter; prom_b T_Screen_MemoryProtect_Enter/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9.
 ; Evidence: posts .LF9EE57 (DisplayList_FA44E8-FA458F: 'MEMORY PROTECT', 'SOUND :', 'COMBINATION :'), .LF9EE77 (records FA458F/FA459E: (0x7FD6) bits 0/1 as OFF/ON) and .LF9EE8F (cursor on (0x26A6)); id 0x6E = MANAGER's 'MEMORY PROTECT' key (0xF9CA7B).
 ; Note: sub_F9ED44 (the `ld (0x26a6),0` after `jr z` at 0xF9ED42) is a label inside this routine, not a separate entry.
 Screen_MemoryProtect_Enter:
@@ -56111,7 +56111,7 @@ sub_F9ED44:
 T_F4198C_Nop:
 	ret                                                  ; F9EDA1  0e
 ; Screen_MemoryProtect_Button -- Button (+8) method of MEMORY PROTECT: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA194A
-; Evidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_F41988; prom_b T_F41988/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9; slots 0-3 move the cursor (0xF9EDCA, T_F42C7C on (0x26A6)), slots 4-7 set/clear (0x7FD6) bit 0 or 1 (0xF9EDF3), slot 15 EXIT requests 0x6D.
+; Evidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_Screen_MemoryProtect_Enter; prom_b T_Screen_MemoryProtect_Enter/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9; slots 0-3 move the cursor (0xF9EDCA, T_F42C7C on (0x26A6)), slots 4-7 set/clear (0x7FD6) bit 0 or 1 (0xF9EDF3), slot 15 EXIT requests 0x6D.
 Screen_MemoryProtect_Button:
 	link XIZ,0x0000                                      ; F9EDA2  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EDA6  9e 0a 04
@@ -56220,7 +56220,7 @@ T_F41994_Nop:
 	inc 8,XSP                                            ; F9EEA8  ef 60
 	ret                                                  ; F9EEAA  0e
 ; Screen_SoundMute_Enter -- Enter (+0) method of screen 0x5D, SOUND MUTE: posts the painter (unless only a refresh is pending) and the ON/OFF value callback
-; Evidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_F434C0; prom_b T_F434C0/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07.
+; Evidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_Screen_SoundMute_Enter; prom_b T_Screen_SoundMute_Enter/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07.
 ; Evidence: .LF9EF3B runs DisplayList_FA45D2-FA46B4 ('SOUND MUTE', 'If you want held notes to continue ... Please turn off Sound Mute.', 'SOUND MUTE :'); .LF9EF5B runs record FA46B4 ((0x7F0B) bit 0 as 'ON '/'OFF'); id 0x5D = MANAGER's 'SOUND MUTE' key (0xF9CAA2).
 Screen_SoundMute_Enter:
 	ld c, (0x2095:16)                                   ; F9EEAB  c1 95 20 23
@@ -56244,7 +56244,7 @@ Screen_SoundMute_Enter:
 T_F434C4_Nop:
 	ret                                                  ; F9EEDF  0e
 ; Screen_SoundMute_Button -- Button (+8) method of SOUND MUTE: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA19A6
-; Evidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_F434C0; prom_b T_F434C0/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07; slots 2-5 -> 0xF9EF08 (IndexedParam_SetBit(0x98, Descriptor3_FA1B57) = (0x7F0B) bit 0), slot 15 EXIT requests 0x6D.
+; Evidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_Screen_SoundMute_Enter; prom_b T_Screen_SoundMute_Enter/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07; slots 2-5 -> 0xF9EF08 (IndexedParam_SetBit(0x98, Descriptor3_FA1B57) = (0x7F0B) bit 0), slot 15 EXIT requests 0x6D.
 Screen_SoundMute_Button:
 	link XIZ,0x0000                                      ; F9EEE0  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EEE4  9e 0a 04
@@ -56301,7 +56301,7 @@ T_F434CC_Nop:
 	pop XBC                                              ; F9EF6A  59
 	ret                                                  ; F9EF6B  0e
 ; Screen_MainOutEqualizer_Enter -- Enter (+0) method of screen 0x6B, MAIN OUT EQUALIZER: forwards to the prom_b screen code (T_F42F68 -> sub_F122C5)
-; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_F41958; prom_b T_F41958/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84.
+; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_Screen_MainOutEqualizer_Enter; prom_b T_Screen_MainOutEqualizer_Enter/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84.
 ; Evidence: sub_F122C5 posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D ('MAIN OUT EQUALIZER'); id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
 Screen_MainOutEqualizer_Enter:
 	call T_F42F68                                        ; F9EF6C  1d 68 2f f4
@@ -56309,7 +56309,7 @@ Screen_MainOutEqualizer_Enter:
 T_F4195C_Nop:
 	ret                                                  ; F9EF71  0e
 ; Screen_MainOutEqualizer_Button -- Button (+8) method of MAIN OUT EQUALIZER: re-pushes the two button arguments and calls prom_b sub_F12334 (T_F42F6C), which maps them with T_F42C74 and dispatches through DispatchTable_F1394F
-; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_F41958; prom_b T_F41958/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
+; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_Screen_MainOutEqualizer_Enter; prom_b T_Screen_MainOutEqualizer_Enter/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
 Screen_MainOutEqualizer_Button:
 	link XIZ,0x0000                                      ; F9EF72  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EF76  9e 0a 04
@@ -57048,7 +57048,7 @@ DrumsMap_DrawFields:
 	pop XIX                                              ; F9F455  5c
 	ret                                                  ; F9F456  0e
 ; DrumsMap_RefreshSoundColumn -- external hook: redraws the DRUMS MAP SOUND column, but only while screen 0x67 is current and in its edit state
-; Evidence: `cp (0x207C),0x67` (the current screen id) and `cp (0x2700),0x00`, then DrumsMap_DrawSoundColumn; its only caller is prom_a 0xFDA329 through T_F43418, in the routine starting at sub_FDA252 that Screen_DrumsMapNaming_Enter calls through T_F42FAC (0xF9EFCA) before setting (0x2806)=1.
+; Evidence: `cp (0x207C),0x67` (the current screen id) and `cp (0x2700),0x00`, then DrumsMap_DrawSoundColumn; its only caller is prom_a 0xFDA329 through T_DrumsMap_RefreshSoundColumn, in the routine starting at sub_FDA252 that Screen_DrumsMapNaming_Enter calls through T_F42FAC (0xF9EFCA) before setting (0x2806)=1.
 DrumsMap_RefreshSoundColumn:
 	m_cp_mi8 MB16, UI_ScreenId, 0x67                          ; F9F457  c1 7c 20 3f 67
 	jr nz, .LF9F468                                      ; F9F45C  6e 0a
@@ -57898,7 +57898,7 @@ SoundCopy_RequestGroupSounds:
 	pop XIX                                              ; F9FBDC  5c
 	ret                                                  ; F9FBDD  0e
 ; SoundCopy_HandleReceivedSound -- called when a requested sound block has arrived; finishes or continues the SOUND COPY from a ROM/EXT source
-; Evidence: sole caller prom_a 0xFD2073 (T_F4341C), right after a T_Ring608A0A_Get receive loop reaches its count; acts only when `cp (0x207C),0x5E` (SOUND COPY current).
+; Evidence: sole caller prom_a 0xFD2073 (T_SoundCopy_HandleReceivedSound), right after a T_Ring608A0A_Get receive loop reaches its count; acts only when `cp (0x207C),0x5E` (SOUND COPY current).
 ; Evidence: GROUP: while (0x2901) < 7 shifts 0x60A800.. up by 0x2C9 and requests member 7-(0x2901); then writes the group name (SoundGroupName_CopyToBuffer -> 0x60A7F0) and 0x1648 data bytes with Link_WriteRemoteBlock; SINGLE: writes 0x2C9 bytes.
 ; Evidence: then SoundCopy_RefreshPartsUsingSound, `res 1,(0x269A)`, (0x2880)=0x23, (0x2070)=0xAB, (0x2806)=0 -- the same epilogue as SoundCopy_Execute's USER path.
 SoundCopy_HandleReceivedSound:
@@ -58158,8 +58158,8 @@ SoundCopy_RefreshPartsUsingSound:
 	popw hl                                              ; F9FE84  4b
 	unlk XIZ                                             ; F9FE85  ee 0d
 	ret                                                  ; F9FE87  0e
-; CombinationCopy_RefreshIfCurrentCombi -- after a combination was overwritten, re-triggers T_F43454 if the copied slot is the combination currently selected
-; Evidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_F40804 (sub_FAB779) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_F43454` (prom_a Queue2E00_PostParam98Fields).
+; CombinationCopy_RefreshIfCurrentCombi -- after a combination was overwritten, re-triggers T_Queue2E00_PostParam98Fields if the copied slot is the combination currently selected
+; Evidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_F40804 (sub_FAB779) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_Queue2E00_PostParam98Fields` (prom_a Queue2E00_PostParam98Fields).
 ; In: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from CombinationCopy_Execute.
 CombinationCopy_RefreshIfCurrentCombi:
 	link XIZ,0x0000                                      ; F9FE88  ee 0c 00 00
@@ -58182,33 +58182,33 @@ CombinationCopy_RefreshIfCurrentCombi:
 	ld c, (0x7f04:16)                                   ; F9FEC0  c1 04 7f 23
 	cp C,H                                               ; F9FEC4  ce f3
 	jr nz, .LF9FECC                                      ; F9FEC6  6e 04
-	call T_F43454                                        ; F9FEC8  1d 54 34 f4
+	call T_Queue2E00_PostParam98Fields                                        ; F9FEC8  1d 54 34 f4
 .LF9FECC:
 	pop XIX                                              ; F9FECC  5c
 	popw hl                                              ; F9FECD  4b
 	unlk XIZ                                             ; F9FECE  ee 0d
 	ret                                                  ; F9FED0  0e
-; PanelMode_System_Enter -- Enter (+0) method of panel mode 10, whose screen is SYSTEM: sets bit 1 of (0x2134) and calls T_F415C8 (prom_a SoundGroup_ReloadSelection)
-; Evidence: PanelScreen_VtableTable entry [10] (0xF86EE9, view A, read by PanelScreen_CallEnter_A) holds T_F41910 -> 0xF9FED1; PanelMode_ToScreenIdMap[10] = 0x60, the id of Screen_System (title 'SYSTEM').
+; PanelMode_System_Enter -- Enter (+0) method of panel mode 10, whose screen is SYSTEM: sets bit 1 of (0x2134) and calls T_SoundGroup_ReloadSelection (prom_a SoundGroup_ReloadSelection)
+; Evidence: PanelScreen_VtableTable entry [10] (0xF86EE9, view A, read by PanelScreen_CallEnter_A) holds T_PanelMode_System_Enter -> 0xF9FED1; PanelMode_ToScreenIdMap[10] = 0x60, the id of Screen_System (title 'SYSTEM').
 PanelMode_System_Enter:
 	m_set 1, MD16, 0x2134                                ; F9FED1  f1 34 21 b9
 	push XDE                                             ; F9FED5  3a
 	push XHL                                             ; F9FED6  3b
 	push XIX                                             ; F9FED7  3c
 	push XIZ                                             ; F9FED8  3e
-	call T_F415C8                                        ; F9FED9  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; F9FED9  1d c8 15 f4
 	pop XIZ                                              ; F9FEDD  5e
 	pop XIX                                              ; F9FEDE  5c
 	pop XHL                                              ; F9FEDF  5b
 	pop XDE                                              ; F9FEE0  5a
 	ret                                                  ; F9FEE1  0e
 ; PanelMode_System_Leave -- Leave (+4) method of panel mode 10 (SYSTEM): sets bit 1 of (0x2134)
-; Evidence: PanelScreen_VtableTable entry [10] = T_F41910, whose +4 slot T_F41914 jp 0xF9FEE2 (read by PanelScreen_CallLeave_A); PanelMode_ToScreenIdMap[10] = 0x60 (SYSTEM).
+; Evidence: PanelScreen_VtableTable entry [10] = T_PanelMode_System_Enter, whose +4 slot T_PanelMode_System_Leave jp 0xF9FEE2 (read by PanelScreen_CallLeave_A); PanelMode_ToScreenIdMap[10] = 0x60 (SYSTEM).
 PanelMode_System_Leave:
 	m_set 1, MD16, 0x2134                                ; F9FEE2  f1 34 21 b9
 	ret                                                  ; F9FEE6  0e
 ; Screen_System_Enter -- Enter (+0) method of screen 0x60, the SYSTEM menu: restarts task 2's queue and posts its painter
-; Evidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_F41918; prom_b T_F41918/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.
+; Evidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_Screen_System_Enter; prom_b T_Screen_System_Enter/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.
 ; Evidence: .LFA0020 runs DisplayList_FA1F21-FA204B (or FA1F2E-FA2070 when (0xC4) = 1): title 'SYSTEM', 'TUNE & SCALE', 'INITIAL', 'C0NTR0LLER ASSIGN', 'RE-MAP EDIT', 'S0UND/C0MBI MANAGER', 'MIXER', 'DRUMS MAP', 'MAIN OUT EQUALIZER', 'DSP EFFECT'; 0x60 is the EXIT target of all its sub-screens.
 Screen_System_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9FEE7  1d 80 2e f4
@@ -58222,7 +58222,7 @@ Screen_System_Enter:
 T_F4191C_Nop:
 	ret                                                  ; F9FEFF  0e
 ; Screen_System_Button -- Button (+8) method of the SYSTEM menu: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1B94
-; Evidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_F41918; prom_b T_F41918/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.
+; Evidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_Screen_System_Enter; prom_b T_Screen_System_Enter/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.
 ; Slots 8-12 (LCD-row pairs, left/right) request 0x62 TUNE & SCALE / 0x6A, 0x65 / 0x6C RE-MAP EDIT, 0x64 / 0x6D SOUND/COMBI MANAGER, 0xB7 / 0x67 DRUMS MAP, 0x66 DSP EFFECT / 0x6B MAIN OUT EQUALIZER; slot 15 (EXIT) requests 0x01.
 Screen_System_Button:
 	link XIZ,0x0000                                      ; F9FF00  ee 0c 00 00
@@ -58393,7 +58393,7 @@ TuneScale_KeyScalingCodeToIndex:
 	unlk XIZ                                             ; FA0078  ee 0d
 	ret                                                  ; FA007A  0e
 ; Screen_DspEffect_Enter -- Enter (+0) method of screen 0x66, DSP EFFECT: forwards to the prom_b screen code (T_F42F4C -> sub_F0F105)
-; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_F419A8; prom_b T_F419A8/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093.
+; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_Screen_DspEffect_Enter; prom_b T_Screen_DspEffect_Enter/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093.
 ; Evidence: id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5); the 'DSP EFFECT' + 'SYSTEM' title record at prom_b 0xF13D8F is run by the same prom_b module (0xF0F857, 0xF0FE05).
 Screen_DspEffect_Enter:
 	call T_F42F4C                                        ; FA007B  1d 4c 2f f4
@@ -58401,7 +58401,7 @@ Screen_DspEffect_Enter:
 T_F419AC_Nop:
 	ret                                                  ; FA0080  0e
 ; Screen_DspEffect_Button -- Button (+8) method of DSP EFFECT: re-pushes the two button arguments and calls prom_b sub_F0F17C (T_F42F50), which maps them with T_F42C74 and dispatches through DispatchTable_F135FD
-; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_F419A8; prom_b T_F419A8/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5).
+; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_Screen_DspEffect_Enter; prom_b T_Screen_DspEffect_Enter/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5).
 Screen_DspEffect_Button:
 	link XIZ,0x0000                                      ; FA0081  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA0085  9e 0a 04
@@ -58413,7 +58413,7 @@ Screen_DspEffect_Button:
 T_F419B4_Nop:
 	ret                                                  ; FA0093  0e
 ; Screen_TuneScale_Enter -- Enter (+0) method of screen 0x62, TUNE & SCALE: on a new entry sets the item cursor (0x2690)=0x10, posts the painter, loads the fields and posts the value callback
-; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_F41928; prom_b T_F41928/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111.
+; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_Screen_TuneScale_Enter; prom_b T_Screen_TuneScale_Enter/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111.
 ; Evidence: .LFA04F2 runs DisplayList_FA2070-FA21BF ('TUNE & SCALE','MASTER TUNE','KEY TRANSPOSE','KEY SCALING MODE','TOTAL KEY SCALING','KEY SCALING SHIFT','[KEY:  ]') and FA2315-FA244B; then TuneScale_LoadFields and .LFA05DE; id 0x62 = SYSTEM row-1 left key (0xF9FF3E).
 Screen_TuneScale_Enter:
 	ld c, (0x207a:16)                                   ; FA0094  c1 7a 20 23
@@ -58446,7 +58446,7 @@ Screen_TuneScale_Enter:
 T_F4192C_Nop:
 	ret                                                  ; FA00E9  0e
 ; Screen_TuneScale_Button -- Button (+8) method of TUNE & SCALE: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1BF0
-; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_F41928; prom_b T_F41928/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111; slots 1-7 -> TuneScale_AdjustUserKey key pairs, 8/9 -> TuneScale_MoveItemCursor, 10/11 -> TuneScale_AdjustSelectedItem, 0 toggles the [KEY:] row, 15 EXIT -> 0x60.
+; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_Screen_TuneScale_Enter; prom_b T_Screen_TuneScale_Enter/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111; slots 1-7 -> TuneScale_AdjustUserKey key pairs, 8/9 -> TuneScale_MoveItemCursor, 10/11 -> TuneScale_AdjustSelectedItem, 0 toggles the [KEY:] row, 15 EXIT -> 0x60.
 Screen_TuneScale_Button:
 	link XIZ,0x0000                                      ; FA00EA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA00EE  9e 0a 04
@@ -60573,7 +60573,7 @@ JumpTable_FA146F:
 	.long sub_FA14BC                                 ; FA1483  [  5]
 	.long sub_FA14C2                                 ; FA1487  [  6]
 sub_FA148B:   ; entry: jump-table target (JumpTable_FA146F[0])
-	call T_F40034                                        ; FA148B  1d 34 00 f4
+	call T_ModuleInit_Phase2Veneer                                        ; FA148B  1d 34 00 f4
 	call T_F40A00                                        ; FA148F  1d 00 0a f4
 	call T_F43450                                        ; FA1493  1d 50 34 f4
 	jr .LFA14A7                                       ; FA1497  68 0e
@@ -60583,7 +60583,7 @@ sub_FA1499:   ; entry: named by 1 `.long` operand, first at 0xFA1473
 	jr sub_FA14C2_Join                                     ; FA149D  68 27
 ; entry: jump-table target (JumpTable_FA146F[2])
 sub_FA149F:   ; entry: named by 1 `.long` operand, first at 0xFA1477
-	call T_F415C4                                        ; FA149F  1d c4 15 f4
+	call T_Mode_SwitchToSound                                        ; FA149F  1d c4 15 f4
 	call T_F43444                                        ; FA14A3  1d 44 34 f4
 .LFA14A7:
 	calr sub_FA0DCC                                      ; FA14A7  1e 22 f9
@@ -66788,7 +66788,7 @@ sub_FA5935:
 	push XHL                                      ; FA5936  3b
 	push XIX                                      ; FA5937  3c
 	push XIZ                                      ; FA5938  3e
-	call T_F406A0                                 ; FA5939  1d a0 06 f4
+	call T_PanelLed_ToggleActivityLed                                 ; FA5939  1d a0 06 f4
 	pop XIZ                                       ; FA593D  5e
 	pop XIX                                       ; FA593E  5c
 	pop XHL                                       ; FA593F  5b
@@ -66963,7 +66963,7 @@ MIDI_Fg_RealTime__post:
 	pushw bc                                      ; FA59E3  29
 	pushw 0x10                                    ; FA59E4  0b 10 00
 	pushw 0xa8                                    ; FA59E7  0b a8 00
-	call T_F41B18                                 ; FA59EA  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                 ; FA59EA  1d 18 1b f4
 	inc 8,XSP                                     ; FA59EE  ef 60
 	jr MIDI_Fg_RealTime__ret                      ; FA59F0  68 03
 MIDI_Fg_RealTime__reset:
@@ -75105,9 +75105,9 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; =====================================================================
 ; 0xFAA000-0xFAD7FF -- the 0x60F0xx MESSAGE MODULE
 ;
-; Chosen by notes/prom_a_call_graph.py --modules: T_F4078C-T_F40810 was the
+; Chosen by notes/prom_a_call_graph.py --modules: T_F4078C-T_ParamMsg_RefreshMasksOnCtrlFieldChange was the
 ; highest-ranked UNCONVERTED prom_a directory module (x171 over 34 slots,
-; targets 0xFAA418-0xFAC786), and T_F43440-T_F43454 (x11) and T_F40774-T_F40784
+; targets 0xFAA418-0xFAC786), and T_F43440-T_Queue2E00_PostParam98Fields (x11) and T_F40774-T_F40784
 ; (x7) publish into the same span, so converting it whole retires three modules.
 ;
 ; MODULE EXTENT, and how it was established -- not by address arithmetic:
@@ -76351,10 +76351,10 @@ sub_FAA882:
 	push XHL                                             ; FAA895  3b
 	push XIX                                             ; FAA896  3c
 	push XIZ                                             ; FAA897  3e
-	call T_F40220                                        ; FAA898  1d 20 02 f4
-	call T_F4021C                                        ; FAA89C  1d 1c 02 f4
+	call T_ParamImage_ApplyAndMaskTable_Entry                                        ; FAA898  1d 20 02 f4
+	call T_ParamImage_SanitizeAllAndHook_Entry                                        ; FAA89C  1d 1c 02 f4
 	call T_F401D4                                        ; FAA8A0  1d d4 01 f4
-	call T_F40224                                        ; FAA8A4  1d 24 02 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FAA8A4  1d 24 02 f4
 	pop XIZ                                              ; FAA8A8  5e
 	pop XIX                                              ; FAA8A9  5c
 	pop XHL                                              ; FAA8AA  5b
@@ -76372,7 +76372,7 @@ sub_FAA882:
 	pushw bc                                             ; FAA8C2  29
 	pushw 0x01                                           ; FAA8C3  0b 01 00
 	pushw hl                                             ; FAA8C6  2b
-	call T_F41B18                                        ; FAA8C7  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAA8C7  1d 18 1b f4
 	inc 8,XSP                                            ; FAA8CB  ef 60
 	pushw 0xff                                           ; FAA8CD  0b ff 00
 	pushw hl                                             ; FAA8D0  2b
@@ -76382,7 +76382,7 @@ sub_FAA882:
 	pushw bc                                             ; FAA8D7  29
 	pushw 0x00                                           ; FAA8D8  0b 00 00
 	pushw hl                                             ; FAA8DB  2b
-	call T_F41B18                                        ; FAA8DC  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAA8DC  1d 18 1b f4
 	ld H,L                                               ; FAA8E0  cf 8e
 	inc 1,H                                              ; FAA8E2  ce 61
 	inc 8,XSP                                            ; FAA8E4  ef 60
@@ -76399,10 +76399,10 @@ sub_FAA8F0:
 	push XHL                                             ; FAA8F2  3b
 	push XIX                                             ; FAA8F3  3c
 	push XIZ                                             ; FAA8F4  3e
-	call T_F40220                                        ; FAA8F5  1d 20 02 f4
-	call T_F4021C                                        ; FAA8F9  1d 1c 02 f4
+	call T_ParamImage_ApplyAndMaskTable_Entry                                        ; FAA8F5  1d 20 02 f4
+	call T_ParamImage_SanitizeAllAndHook_Entry                                        ; FAA8F9  1d 1c 02 f4
 	call T_F401D4                                        ; FAA8FD  1d d4 01 f4
-	call T_F40224                                        ; FAA901  1d 24 02 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FAA901  1d 24 02 f4
 	pop XIZ                                              ; FAA905  5e
 	pop XIX                                              ; FAA906  5c
 	pop XHL                                              ; FAA907  5b
@@ -76421,7 +76421,7 @@ sub_FAA8F0:
 	pushw bc                                             ; FAA924  29
 	pushw 0x01                                           ; FAA925  0b 01 00
 	pushw hl                                             ; FAA928  2b
-	call T_F41B18                                        ; FAA929  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAA929  1d 18 1b f4
 	inc 8,XSP                                            ; FAA92D  ef 60
 	pushw 0xff                                           ; FAA92F  0b ff 00
 	pushw hl                                             ; FAA932  2b
@@ -76431,7 +76431,7 @@ sub_FAA8F0:
 	pushw bc                                             ; FAA939  29
 	pushw 0x00                                           ; FAA93A  0b 00 00
 	pushw hl                                             ; FAA93D  2b
-	call T_F41B18                                        ; FAA93E  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAA93E  1d 18 1b f4
 	ld H,L                                               ; FAA942  cf 8e
 	inc 1,H                                              ; FAA944  ce 61
 	inc 8,XSP                                            ; FAA946  ef 60
@@ -76587,9 +76587,9 @@ sub_FAAA8F:
 	push XHL                                             ; FAAA96  3b
 	push XIX                                             ; FAAA97  3c
 	push XIZ                                             ; FAAA98  3e
-	call T_F4021C                                        ; FAAA99  1d 1c 02 f4
+	call T_ParamImage_SanitizeAllAndHook_Entry                                        ; FAAA99  1d 1c 02 f4
 	call T_F401D4                                        ; FAAA9D  1d d4 01 f4
-	call T_F40224                                        ; FAAAA1  1d 24 02 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FAAAA1  1d 24 02 f4
 	pop XIZ                                              ; FAAAA5  5e
 	pop XIX                                              ; FAAAA6  5c
 	pop XHL                                              ; FAAAA7  5b
@@ -77101,13 +77101,13 @@ sub_FAAEE3:
 	pushw bc                                             ; FAAF6A  29
 	pushw 0x01                                           ; FAAF6B  0b 01 00
 	pushw 0x00                                           ; FAAF6E  0b 00 00
-	call T_F41B18                                        ; FAAF71  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAAF71  1d 18 1b f4
 	pushw 0xff                                           ; FAAF75  0b ff 00
 	ld c, (0x76a2:16)                                   ; FAAF78  c1 a2 76 23
 	pushw bc                                             ; FAAF7C  29
 	pushw 0x00                                           ; FAAF7D  0b 00 00
 	pushw 0x00                                           ; FAAF80  0b 00 00
-	call T_F41B18                                        ; FAAF83  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAAF83  1d 18 1b f4
 	inc 8,XSP                                            ; FAAF87  ef 60
 	inc 8,XSP                                            ; FAAF89  ef 60
 	pop XIX                                              ; FAAF8B  5c
@@ -78866,7 +78866,7 @@ Queue2C00_FanOutToPartMask_Publish:
 	unlk XIZ                                             ; FABEB1  ee 0d
 	ret                                                  ; FABEB3  0e
 ; Queue2E00_FanOutToPartMask -- Queue2C00_FanOutToPartMask's twin for the PENDING queue 0x2E00: for each set bit H of the 32-bit mask at (XIZ+8), append {(0x60F080), H, (0x60F089), (0x60F08A)}
-; Evidence: the same H=0..0x1F / `srl 1,XIY` loop as Queue2C00_FanOutToPartMask (0xFABEBD-0xFABEF4); the append is `call T_F41B18` at 0xFABEE2, i.e. prom_b `jp sub_F8BC08` -> `calr sub_F8BF07`, which loads E/D/A/W from (XIZ+0x0C/0x0E/0x10/0x12) and calls T_Queue2E00_AppendRegs.
+; Evidence: the same H=0..0x1F / `srl 1,XIY` loop as Queue2C00_FanOutToPartMask (0xFABEBD-0xFABEF4); the append is `call T_PendingEventQueue_AppendStackArgs` at 0xFABEE2, i.e. prom_b `jp sub_F8BC08` -> `calr sub_F8BF07`, which loads E/D/A/W from (XIZ+0x0C/0x0E/0x10/0x12) and calls T_Queue2E00_AppendRegs.
 ; Called from: the eleven ParamMsg_ResyncParts_* arms of JumpTable_FAC3BF.
 Queue2E00_FanOutToPartMask:
 	link XIZ,0x0000                                      ; FABEB4  ee 0c 00 00
@@ -78886,7 +78886,7 @@ Queue2E00_FanOutToPartMask:
 	push H                                               ; FABED9  ce 04
 	push 0x00                                            ; FABEDB  09 00
 	m_push MB24, 0x60f080                                ; FABEDD  c2 80 f0 60 04
-	call T_F41B18                                        ; FABEE2  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FABEE2  1d 18 1b f4
 	inc 8,XSP                                            ; FABEE6  ef 60
 .LFABEE8:
 	inc 1,H                                              ; FABEE8  ce 61
@@ -79043,7 +79043,7 @@ MidiIn_ControlRecordHandlers_Code_Skip:
 	ret                                                  ; FABFE1  0e
 ; ParamMsg_RefreshPartMasks -- recompute the eleven per-controller part masks and make MIDI out / MIDI in catch up
 ; Evidence: `or (0x60f0c6),1` at 0xFABFE8, calr ParamMsg_ComputePartMasks, `and (XIX),0xfe`, then `call T_F40760` at 0xFABFF5 -- prom_a sub_FA7E0C, the MidiOut 'send everything again' entry that ends in MidiIn_RebuildPartLists.
-; Called from: prom_b directory slot T_F40798 (call at 0xFC6198) and ParamMsg_RefreshMasksOnCtrlFieldChange (0xFAC7BF).
+; Called from: prom_b directory slot T_ParamMsg_RefreshPartMasks (call at 0xFC6198) and ParamMsg_RefreshMasksOnCtrlFieldChange (0xFAC7BF).
 ParamMsg_RefreshPartMasks:
 	push XIX                                             ; FABFE2  3c
 	lda xix, (0x60f0c6:24)                               ; FABFE3  f2 c6 f0 60 34
@@ -79063,7 +79063,7 @@ ParamMsg_RefreshPartMasks:
 	ret                                                  ; FABFFE  0e
 ; ParamMsg_ResendTwoAssignedCtrls -- re-dispatch the current values of cooked control slots (0x2503) and (0x2504) as control records for the controllers assigned in (0x7F27) and (0x7F28)
 ; Evidence: the 4-byte local record is initialised from Gap_FAC8E6 (`ld XBC,(0xfac8e6)` at 0xFAC007, bytes {0,0,0,0x7F}); byte 0 := ParamMsg_NumberForController((0x7F27)), byte 2 := (0x2503) & 0x7F, then MidiIn_ControlRecord_Dispatch (0xFAC024); again with (0x7F28)/(0x2504) at 0xFAC027-0xFAC03C.
-; MidiOut's sub_FA7E37 pairs the same two cells with the same two assignment bytes.  Called from: prom_b directory slot T_F43448; no converted caller found.
+; MidiOut's sub_FA7E37 pairs the same two cells with the same two assignment bytes.  Called from: prom_b directory slot T_ParamMsg_ResendTwoAssignedCtrls; no converted caller found.
 ParamMsg_ResendTwoAssignedCtrls:
 	link XIZ,0xfffc                                      ; FABFFF  ee 0c fc ff
 	push XIX                                             ; FAC003  3c
@@ -79863,7 +79863,7 @@ sub_FAC74B:
 	ret                                                  ; FAC785  0e
 ; ParamMsg_RefreshMasksOnCtrlFieldChange -- UiEventList handler: run ParamMsg_RefreshPartMasks when the posted change touches a part-record field that ParamMsg_ComputePartMasks reads
 ; Evidence: L = (0x20BB) (record byte 0, the number) and H = (0x20B8) (byte 1, the class), per the UiEventList payload layout; numbers 0x00-0x1F need class 0x0D and bit 5 of the mask (0x20BA), numbers 0x20-0x3F need class 0x0B..0x0E and a non-zero mask (0xFAC787-0xFAC7BD) -- the same bits ParamMsg_ComputePartMasks tests.
-; Called from: directory slot T_F40810, named in the handler lists at 0xF881B2, 0xF881DA, 0xF881FE, 0xF88222, 0xF88246, 0xF8826A.
+; Called from: directory slot T_ParamMsg_RefreshMasksOnCtrlFieldChange, named in the handler lists at 0xF881B2, 0xF881DA, 0xF881FE, 0xF88222, 0xF88246, 0xF8826A.
 ParamMsg_RefreshMasksOnCtrlFieldChange:
 	pushw hl                                             ; FAC786  2b
 	ld l, (UiEvent_Class:16)                                   ; FAC787  c1 bb 20 27
@@ -79894,7 +79894,7 @@ ParamMsg_RefreshMasksOnCtrlFieldChange:
 	ret                                                  ; FAC7C3  0e
 ; ParamRecord_SetPartsField18Bit0 -- set bit 0 of byte 0x18 of every second-half part record (numbers 0x20-0x3F) to bit 0 of the stack argument, queuing each to 0x2C00
 ; Evidence: loop L = 0x20..0x3F at 0xFAC7CA-0xFAC808: XIX = ParamNumber_GetRecordPtr(L) + 0x18, `and (XIX),0xfe / or C,H`, stage {L,0x18,(XIX),0x01}, Queue2C00_AppendStagedIfPending.  Same field and mask as List2030_Field18_SetAllParts.
-; Called from: directory slot T_F4344C (three PanelOpTable_FCF773 handlers, 0xFD06EE, 0xFD074A, 0xFD07AF).
+; Called from: directory slot T_ParamRecord_SetPartsField18Bit0 (three PanelOpTable_FCF773 handlers, 0xFD06EE, 0xFD074A, 0xFD07AF).
 ParamRecord_SetPartsField18Bit0:
 	link XIZ,0x0000                                      ; FAC7C4  ee 0c 00 00
 	pushw hl                                             ; FAC7C8  2b
@@ -79926,8 +79926,8 @@ ParamRecord_SetPartsField18Bit0:
 	unlk XIZ                                             ; FAC80C  ee 0d
 	ret                                                  ; FAC80E  0e
 ; Queue2E00_PostParam98Fields -- if bit 4 of parameter 0x98's record byte (0x7F02) is set, append {0x98,2,(0x7F04),0x3F} and {0x98,1,(0x7F03),0x7F} to the pending queue 0x2E00
-; Evidence: `and C,0x10` on (0x7F02) at 0xFAC816; two `call T_F41B18` (the Queue2E00 stack veneer) at 0xFAC82A and 0xFAC83B.  Evt2030_Param98Tech_Notify reads the same two bytes with the same masks.
-; Called from: directory slot T_F43454 (0xF9FEC8, 0xFE20D4, prom_b 0xF48F09).
+; Evidence: `and C,0x10` on (0x7F02) at 0xFAC816; two `call T_PendingEventQueue_AppendStackArgs` (the Queue2E00 stack veneer) at 0xFAC82A and 0xFAC83B.  Evt2030_Param98Tech_Notify reads the same two bytes with the same masks.
+; Called from: directory slot T_Queue2E00_PostParam98Fields (0xF9FEC8, 0xFE20D4, prom_b 0xF48F09).
 Queue2E00_PostParam98Fields:
 	push XIX                                             ; FAC80F  3c
 	lda xix, (0x7f02:16)                                ; FAC810  f1 02 7f 34
@@ -79940,13 +79940,13 @@ Queue2E00_PostParam98Fields:
 	pushw bc                                             ; FAC823  29
 	pushw 0x02                                           ; FAC824  0b 02 00
 	pushw 0x98                                           ; FAC827  0b 98 00
-	call T_F41B18                                        ; FAC82A  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAC82A  1d 18 1b f4
 	pushw 0x7f                                           ; FAC82E  0b 7f 00
 	ld C,(XIX+0x01)                                      ; FAC831  8c 01 23
 	pushw bc                                             ; FAC834  29
 	pushw 0x01                                           ; FAC835  0b 01 00
 	pushw 0x98                                           ; FAC838  0b 98 00
-	call T_F41B18                                        ; FAC83B  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FAC83B  1d 18 1b f4
 	inc 8,XSP                                            ; FAC83F  ef 60
 	inc 8,XSP                                            ; FAC841  ef 60
 .LFAC843:
@@ -83484,7 +83484,7 @@ sub_FAE829_Nop5:   ; entry: pointer-table entry
 	jr ule, .LFAE972
 	jr .LFAE94D
 .LFAE9C7:
-	call T_F40024
+	call T_SeqBuf_FlushStaged
 	res_dd8 0x00, 0xaa
 .LFAE9CE:
 	ret
@@ -85737,7 +85737,7 @@ KeyValueList_B32:
 	push XHL
 	push XIX
 	push XIZ
-	call T_F401D8
+	call T_ParamImage_SnapshotAll
 	pop XIZ
 	pop XIX
 	pop XHL
@@ -85768,7 +85768,7 @@ KeyValueList_B32:
 	push XHL
 	push XIX
 	push XIZ
-	call T_F401DC
+	call T_ParamImage_QueueDiffAll
 	call T_Queue2C00_DrainPassAB
 	call T_UiEventList_Publish
 	call T_Queue2C00_DrainPassAB
@@ -85977,7 +85977,7 @@ PatchList_ApplyRecordBytes2B:
 	push XHL
 	push XIX
 	push XIZ
-	call T_F40214
+	call T_ParamImage_SanitizeAll_Entry
 	pop XIZ
 	pop XIX
 	pop XHL
@@ -86261,7 +86261,7 @@ PatchList_RecordBytes2B_Ptr:
 ; routine, and everything else is deliberately unnamed.
 ;
 ; WHY THIS SPAN.  `python3 notes/prom_a_module_frontier.py` ranks the thunk RUN
-; T_F408E4-T_F40910 third in prom_a by contiguous unconverted extent (12 slots,
+; T_SysExDump_RunSendJob-T_F40910 third in prom_a by contiguous unconverted extent (12 slots,
 ; 23,200 bytes, reference upper bound 10), and that run's targets are all in
 ; 0xFB2022-0xFB7AC2.  ★ And it is where emulation gap D lives: the caller the
 ; gaps file names, `0xFB24D3`, is inside it.
@@ -86432,7 +86432,7 @@ sub_FB203C:
 	push XHL                                             ; FB203D  3b
 	push XIX                                             ; FB203E  3c
 	push XIZ                                             ; FB203F  3e
-	call T_F415C8                                        ; FB2040  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; FB2040  1d c8 15 f4
 	pop XIZ                                              ; FB2044  5e
 	pop XIX                                              ; FB2045  5c
 	pop XHL                                              ; FB2046  5b
@@ -86440,7 +86440,7 @@ sub_FB203C:
 	ret                                                  ; FB2048  0e
 ; SysExDump_RunSendJob -- run the pending SysEx bulk-dump transmit job: when bit 7 of (0x60F802) is set, prepare, send the category selected by (0x60F802) & 7, close the dump and report the status
 ; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, Ring600C1E_InitIfPanelMode79, sub_FB7B0B, sub_FB2323 (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then sub_FB27AD (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.
-; Run by: prom_b T_F408E4 after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
+; Run by: prom_b T_SysExDump_RunSendJob after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
 SysExDump_RunSendJob:
 	ld c, (0x60f802:24)                                 ; FB2049  c2 02 f8 60 23
 	and C,0x80                                           ; FB204E  cb cc 80
@@ -88243,8 +88243,8 @@ sub_FB311E:
 	push XHL                                             ; FB311F  3b
 	push XIX                                             ; FB3120  3c
 	push XIZ                                             ; FB3121  3e
-	call T_F40224                                        ; FB3122  1d 24 02 f4
-	call T_F4021C                                        ; FB3126  1d 1c 02 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FB3122  1d 24 02 f4
+	call T_ParamImage_SanitizeAllAndHook_Entry                                        ; FB3126  1d 1c 02 f4
 	call T_F401D4                                        ; FB312A  1d d4 01 f4
 	call T_F407A4                                        ; FB312E  1d a4 07 f4
 	m_or_mi8 MB16, Disk_Flags, 0x18                          ; FB3132  c1 e7 21 3e 18
@@ -88258,7 +88258,7 @@ sub_FB313C:
 	push XHL                                             ; FB313D  3b
 	push XIX                                             ; FB313E  3c
 	push XIZ                                             ; FB313F  3e
-	call T_F401DC                                        ; FB3140  1d dc 01 f4
+	call T_ParamImage_QueueDiffAll                                        ; FB3140  1d dc 01 f4
 	pop XIZ                                              ; FB3144  5e
 	pop XIX                                              ; FB3145  5c
 	pop XHL                                              ; FB3146  5b
@@ -88362,7 +88362,7 @@ sub_FB3202:
 	push XHL                                             ; FB320A  3b
 	push XIX                                             ; FB320B  3c
 	push XIZ                                             ; FB320C  3e
-	call T_F40228                                        ; FB320D  1d 28 02 f4
+	call T_ParamImageAlt_SanitizeCombination_Entry                                        ; FB320D  1d 28 02 f4
 	call T_F401D4                                        ; FB3211  1d d4 01 f4
 	call T_F414B8                                        ; FB3215  1d b8 14 f4
 	pop XIZ                                              ; FB3219  5e
@@ -89635,7 +89635,7 @@ sub_FB3C34:
 	push XHL                                             ; FB3DBD  3b
 	push XIX                                             ; FB3DBE  3c
 	push XIZ                                             ; FB3DBF  3e
-	call T_F40034                                        ; FB3DC0  1d 34 00 f4
+	call T_ModuleInit_Phase2Veneer                                        ; FB3DC0  1d 34 00 f4
 	call T_F40A00                                        ; FB3DC4  1d 00 0a f4
 	pop XIZ                                              ; FB3DC8  5e
 	pop XIX                                              ; FB3DC9  5c
@@ -89870,7 +89870,7 @@ sub_FB3C34:
 	ld C,(XIX+0x06)                                      ; FB3F8C  8c 06 23
 	extz BC                                              ; FB3F8F  d9 12
 	pushw bc                                             ; FB3F91  29
-	call T_F41B14                                        ; FB3F92  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB3F92  1d 14 1b f4
 	inc 8,XSP                                            ; FB3F96  ef 60
 .LFB3F98:
 	pop XIX                                              ; FB3F98  5c
@@ -90031,7 +90031,7 @@ sub_FB3C34:
 	ld C,(XIX+0x06)                                      ; FB4133  8c 06 23
 	extz BC                                              ; FB4136  d9 12
 	pushw bc                                             ; FB4138  29
-	call T_F41B14                                        ; FB4139  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB4139  1d 14 1b f4
 	inc 8,XSP                                            ; FB413D  ef 60
 .LFB413F:
 	pop XIX                                              ; FB413F  5c
@@ -91845,7 +91845,7 @@ sub_FB5197:
 	pushw bc                                             ; FB51FD  29
 	pushw 0x03                                           ; FB51FE  0b 03 00
 	pushw 0x91                                           ; FB5201  0b 91 00
-	call T_F41B18                                        ; FB5204  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FB5204  1d 18 1b f4
 	inc 8,XSP                                            ; FB5208  ef 60
 	popw hl                                              ; FB520A  4b
 	ret                                                  ; FB520B  0e
@@ -91866,7 +91866,7 @@ sub_FB5197:
 	pushw bc                                             ; FB5231  29
 	pushw 0x03                                           ; FB5232  0b 03 00
 	pushw 0x91                                           ; FB5235  0b 91 00
-	call T_F41B18                                        ; FB5238  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FB5238  1d 18 1b f4
 	inc 8,XSP                                            ; FB523C  ef 60
 .LFB523E:
 	pop XIX                                              ; FB523E  5c
@@ -91956,7 +91956,7 @@ sub_FB5197:
 	push XHL                                             ; FB533F  3b
 	push XIX                                             ; FB5340  3c
 	push XIZ                                             ; FB5341  3e
-	call T_F40254                                        ; FB5342  1d 54 02 f4
+	call T_Combination_Recall                                        ; FB5342  1d 54 02 f4
 	call T_Queue2C00_DrainPassB                          ; FB5346  1d 38 00 f4
 	pop XIZ                                              ; FB534A  5e
 	pop XIX                                              ; FB534B  5c
@@ -92475,7 +92475,7 @@ sub_FB585E:
 	push XHL                                             ; FB5869  3b
 	push XIX                                             ; FB586A  3c
 	push XIZ                                             ; FB586B  3e
-	call T_F401D8                                        ; FB586C  1d d8 01 f4
+	call T_ParamImage_SnapshotAll                                        ; FB586C  1d d8 01 f4
 	pop XIZ                                              ; FB5870  5e
 	pop XIX                                              ; FB5871  5c
 	pop XHL                                              ; FB5872  5b
@@ -92593,8 +92593,8 @@ sub_FB5972:
 	push XHL                                             ; FB5973  3b
 	push XIX                                             ; FB5974  3c
 	push XIZ                                             ; FB5975  3e
-	call T_F40224                                        ; FB5976  1d 24 02 f4
-	call T_F401D8                                        ; FB597A  1d d8 01 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FB5976  1d 24 02 f4
+	call T_ParamImage_SnapshotAll                                        ; FB597A  1d d8 01 f4
 	pop XIZ                                              ; FB597E  5e
 	pop XIX                                              ; FB597F  5c
 	pop XHL                                              ; FB5980  5b
@@ -92618,8 +92618,8 @@ sub_FB5972:
 	push XHL                                             ; FB59AA  3b
 	push XIX                                             ; FB59AB  3c
 	push XIZ                                             ; FB59AC  3e
-	call T_F40224                                        ; FB59AD  1d 24 02 f4
-	call T_F40214                                        ; FB59B1  1d 14 02 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FB59AD  1d 24 02 f4
+	call T_ParamImage_SanitizeAll_Entry                                        ; FB59B1  1d 14 02 f4
 	call T_F401EC                                        ; FB59B5  1d ec 01 f4
 	call T_F407A4                                        ; FB59B9  1d a4 07 f4
 	m_or_mi8 MB16, Disk_Flags, 0x18                          ; FB59BD  c1 e7 21 3e 18
@@ -96040,8 +96040,8 @@ sub_FB77B6:
 	push XHL                                             ; FB77B7  3b
 	push XIX                                             ; FB77B8  3c
 	push XIZ                                             ; FB77B9  3e
-	call T_F40224                                        ; FB77BA  1d 24 02 f4
-	call T_F401D8                                        ; FB77BE  1d d8 01 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FB77BA  1d 24 02 f4
+	call T_ParamImage_SnapshotAll                                        ; FB77BE  1d d8 01 f4
 	pop XIZ                                              ; FB77C2  5e
 	pop XIX                                              ; FB77C3  5c
 	pop XHL                                              ; FB77C4  5b
@@ -96196,7 +96196,7 @@ sub_FB7890:
 	ld C,(XIX)                                           ; FB7902  84 23
 	extz BC                                              ; FB7904  d9 12
 	pushw bc                                             ; FB7906  29
-	call T_F41B14                                        ; FB7907  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB7907  1d 14 1b f4
 	inc 8,XSP                                            ; FB790B  ef 60
 	jr .LFB7914                                          ; FB790D  68 05
 .LFB790F:
@@ -96282,7 +96282,7 @@ sub_FB791C:
 	ld C,(XIX)                                           ; FB79BA  84 23
 	extz BC                                              ; FB79BC  d9 12
 	pushw bc                                             ; FB79BE  29
-	call T_F41B14                                        ; FB79BF  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB79BF  1d 14 1b f4
 	ld BC,(XIX+0x04)                                     ; FB79C3  9c 04 21
 	srl bc, 0x08                                         ; FB79C6  d9 ef 08
 	extz BC                                              ; FB79C9  d9 12
@@ -96303,7 +96303,7 @@ sub_FB791C:
 	ld C,(XIX)                                           ; FB79E6  84 23
 	extz BC                                              ; FB79E8  d9 12
 	pushw bc                                             ; FB79EA  29
-	call T_F41B14                                        ; FB79EB  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB79EB  1d 14 1b f4
 	inc 8,XSP                                            ; FB79EF  ef 60
 	inc 8,XSP                                            ; FB79F1  ef 60
 	jr .LFB79FA                                          ; FB79F3  68 05
@@ -96428,7 +96428,7 @@ sub_FB7AE4:
 	push XHL                                             ; FB7AE5  3b
 	push XIX                                             ; FB7AE6  3c
 	push XIZ                                             ; FB7AE7  3e
-	call T_F415C0                                        ; FB7AE8  1d c0 15 f4
+	call T_Mode_SwitchToCombination                                        ; FB7AE8  1d c0 15 f4
 	pop XIZ                                              ; FB7AEC  5e
 	pop XIX                                              ; FB7AED  5c
 	pop XHL                                              ; FB7AEE  5b
@@ -96439,7 +96439,7 @@ sub_FB7AF1:
 	push XHL                                             ; FB7AF2  3b
 	push XIX                                             ; FB7AF3  3c
 	push XIZ                                             ; FB7AF4  3e
-	call T_F415C4                                        ; FB7AF5  1d c4 15 f4
+	call T_Mode_SwitchToSound                                        ; FB7AF5  1d c4 15 f4
 	pop XIZ                                              ; FB7AF9  5e
 	pop XIX                                              ; FB7AFA  5c
 	pop XHL                                              ; FB7AFB  5b
@@ -96450,7 +96450,7 @@ sub_FB7AFE:
 	push XHL                                             ; FB7AFF  3b
 	push XIX                                             ; FB7B00  3c
 	push XIZ                                             ; FB7B01  3e
-	call T_F406A0                                        ; FB7B02  1d a0 06 f4
+	call T_PanelLed_ToggleActivityLed                                        ; FB7B02  1d a0 06 f4
 	pop XIZ                                              ; FB7B06  5e
 	pop XIX                                              ; FB7B07  5c
 	pop XHL                                              ; FB7B08  5b
@@ -96798,7 +96798,7 @@ sub_FB7E9B:
 	push XHL                                             ; FB7E9C  3b
 	push XIX                                             ; FB7E9D  3c
 	push XIZ                                             ; FB7E9E  3e
-	call T_F41600                                        ; FB7E9F  1d 00 16 f4
+	call T_MessageScreen_Paint                                        ; FB7E9F  1d 00 16 f4
 	pop XIZ                                              ; FB7EA3  5e
 	pop XIX                                              ; FB7EA4  5c
 	pop XHL                                              ; FB7EA5  5b
@@ -98861,7 +98861,7 @@ sub_FB9BA4:
 	ld C,D                                               ; FB9C15  cc 8b
 	extz BC                                              ; FB9C17  d9 12
 	pushw bc                                             ; FB9C19  29
-	call T_F41B14                                        ; FB9C1A  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB9C1A  1d 14 1b f4
 	ld hl, (xiz-99)                                      ; FB9C1E  9e 9d 23
 	inc 4,HL                                             ; FB9C21  db 64
 	inc 1,D                                              ; FB9C23  cc 61
@@ -98876,7 +98876,7 @@ sub_FB9BA4:
 	pushw 0x04                                           ; FB9C3D  0b 04 00
 	pushw 0x03                                           ; FB9C40  0b 03 00
 	pushw 0x91                                           ; FB9C43  0b 91 00
-	call T_F41B14                                        ; FB9C46  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB9C46  1d 14 1b f4
 	inc 8,XSP                                            ; FB9C4A  ef 60
 	pop XIX                                              ; FB9C4C  5c
 	popw de                                              ; FB9C4D  4a
@@ -98932,7 +98932,7 @@ sub_FB9C52:
 	ld C,D                                               ; FB9CC3  cc 8b
 	extz BC                                              ; FB9CC5  d9 12
 	pushw bc                                             ; FB9CC7  29
-	call T_F41B14                                        ; FB9CC8  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB9CC8  1d 14 1b f4
 	ld hl, (xiz-99)                                      ; FB9CCC  9e 9d 23
 	inc 4,HL                                             ; FB9CCF  db 64
 	inc 1,D                                              ; FB9CD1  cc 61
@@ -98952,7 +98952,7 @@ sub_FB9C52:
 	pushw bc                                             ; FB9CF4  29
 	pushw 0x03                                           ; FB9CF5  0b 03 00
 	pushw 0x91                                           ; FB9CF8  0b 91 00
-	call T_F41B14                                        ; FB9CFB  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB9CFB  1d 14 1b f4
 	inc 8,XSP                                            ; FB9CFF  ef 60
 	pop XIX                                              ; FB9D01  5c
 	popw de                                              ; FB9D02  4a
@@ -98970,7 +98970,7 @@ sub_FB9D07:
 	pushw 0x04                                           ; FB9D1C  0b 04 00
 	pushw 0x03                                           ; FB9D1F  0b 03 00
 	pushw 0x91                                           ; FB9D22  0b 91 00
-	call T_F41B14                                        ; FB9D25  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB9D25  1d 14 1b f4
 	inc 8,XSP                                            ; FB9D29  ef 60
 .LFB9D2B:
 	ret                                                  ; FB9D2B  0e
@@ -99025,7 +99025,7 @@ sub_FB9D88:
 	pushw 0x00                                           ; FB9D90  0b 00 00
 	pushw 0x03                                           ; FB9D93  0b 03 00
 	pushw 0x80                                           ; FB9D96  0b 80 00
-	call T_F41B14                                        ; FB9D99  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FB9D99  1d 14 1b f4
 	inc 8,XSP                                            ; FB9D9D  ef 60
 	ret                                                  ; FB9D9F  0e
 sub_FB9DA0:
@@ -102240,7 +102240,7 @@ sub_FBCB06:
 	push XHL                                             ; FBCB24  3b
 	push XIX                                             ; FBCB25  3c
 	push XIZ                                             ; FBCB26  3e
-	call T_F415C8                                        ; FBCB27  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; FBCB27  1d c8 15 f4
 	pop XIZ                                              ; FBCB2B  5e
 	pop XIX                                              ; FBCB2C  5c
 	pop XHL                                              ; FBCB2D  5b
@@ -103810,7 +103810,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	push XIX                                             ; FBD9F7  3c
 	push XIZ                                             ; FBD9F8  3e
 	ld wa, (0x2658:16)                                 ; FBD9F9  d1 58 26 20
-	call T_F41AF0                                        ; FBD9FD  1d f0 1a f4
+	call T_Value_ToAsciiDigits3_RightJustified                                        ; FBD9FD  1d f0 1a f4
 	pop XIZ                                              ; FBDA01  5e
 	pop XIX                                              ; FBDA02  5c
 	pop XHL                                              ; FBDA03  5b
@@ -103822,7 +103822,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	push XIX                                             ; FBDA09  3c
 	push XIZ                                             ; FBDA0A  3e
 	ld wa, (0x2656:16)                                 ; FBDA0B  d1 56 26 20
-	call T_F41AF0                                        ; FBDA0F  1d f0 1a f4
+	call T_Value_ToAsciiDigits3_RightJustified                                        ; FBDA0F  1d f0 1a f4
 	pop XIZ                                              ; FBDA13  5e
 	pop XIX                                              ; FBDA14  5c
 	pop XHL                                              ; FBDA15  5b
@@ -104022,7 +104022,7 @@ sub_FBDB95:
 	push XHL                                             ; FBDBE1  3b
 	push XIX                                             ; FBDBE2  3c
 	push XIZ                                             ; FBDBE3  3e
-	call T_F415C8                                        ; FBDBE4  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; FBDBE4  1d c8 15 f4
 	pop XIZ                                              ; FBDBE8  5e
 	pop XIX                                              ; FBDBE9  5c
 	pop XHL                                              ; FBDBEA  5b
@@ -104168,7 +104168,7 @@ sub_FBDD11:
 	push XHL                                             ; FBDD72  3b
 	push XIX                                             ; FBDD73  3c
 	push XIZ                                             ; FBDD74  3e
-	call T_F415C8                                        ; FBDD75  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; FBDD75  1d c8 15 f4
 	pop XIZ                                              ; FBDD79  5e
 	pop XIX                                              ; FBDD7A  5c
 	pop XHL                                              ; FBDD7B  5b
@@ -105932,8 +105932,8 @@ sub_FBECC3:
 	push XHL                                             ; FBECC5  3b
 	push XIX                                             ; FBECC6  3c
 	push XIZ                                             ; FBECC7  3e
-	call T_F415C0                                        ; FBECC8  1d c0 15 f4
-	call T_F415C8                                        ; FBECCC  1d c8 15 f4
+	call T_Mode_SwitchToCombination                                        ; FBECC8  1d c0 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; FBECCC  1d c8 15 f4
 	pop XIZ                                              ; FBECD0  5e
 	pop XIX                                              ; FBECD1  5c
 	pop XHL                                              ; FBECD2  5b
@@ -106045,7 +106045,7 @@ sub_FBEDD5:
 	push XHL                                             ; FBEDDD  3b
 	push XIX                                             ; FBEDDE  3c
 	push XIZ                                             ; FBEDDF  3e
-	call T_F4024C                                        ; FBEDE0  1d 4c 02 f4
+	call T_ParamImage_SnapshotCombination_Entry                                        ; FBEDE0  1d 4c 02 f4
 	pop XIZ                                              ; FBEDE4  5e
 	pop XIX                                              ; FBEDE5  5c
 	pop XHL                                              ; FBEDE6  5b
@@ -106111,7 +106111,7 @@ sub_FBEDD5:
 	push XHL                                             ; FBEE72  3b
 	push XIX                                             ; FBEE73  3c
 	push XIZ                                             ; FBEE74  3e
-	call T_F40248                                        ; FBEE75  1d 48 02 f4
+	call T_ParamImage_QueueDiffCombination                                        ; FBEE75  1d 48 02 f4
 	pop XIZ                                              ; FBEE79  5e
 	pop XIX                                              ; FBEE7A  5c
 	pop XHL                                              ; FBEE7B  5b
@@ -106394,7 +106394,7 @@ sub_FBF03A:
 	push XHL                                             ; FBF04A  3b
 	push XIX                                             ; FBF04B  3c
 	push XIZ                                             ; FBF04C  3e
-	call T_F41600                                        ; FBF04D  1d 00 16 f4
+	call T_MessageScreen_Paint                                        ; FBF04D  1d 00 16 f4
 	pop XIZ                                              ; FBF051  5e
 	pop XIX                                              ; FBF052  5c
 	pop XHL                                              ; FBF053  5b
@@ -107682,7 +107682,7 @@ sub_FBFC32:
 	push XHL                                             ; FBFC5B  3b
 	push XIX                                             ; FBFC5C  3c
 	push XIZ                                             ; FBFC5D  3e
-	call T_F4024C                                        ; FBFC5E  1d 4c 02 f4
+	call T_ParamImage_SnapshotCombination_Entry                                        ; FBFC5E  1d 4c 02 f4
 	pop XIZ                                              ; FBFC62  5e
 	pop XIX                                              ; FBFC63  5c
 	pop XHL                                              ; FBFC64  5b
@@ -107735,7 +107735,7 @@ sub_FBFC32:
 	push XHL                                             ; FBFCD2  3b
 	push XIX                                             ; FBFCD3  3c
 	push XIZ                                             ; FBFCD4  3e
-	call T_F40248                                        ; FBFCD5  1d 48 02 f4
+	call T_ParamImage_QueueDiffCombination                                        ; FBFCD5  1d 48 02 f4
 	pop XIZ                                              ; FBFCD9  5e
 	pop XIX                                              ; FBFCDA  5c
 	pop XHL                                              ; FBFCDB  5b
@@ -109686,7 +109686,7 @@ ScaleTuning_PostAllTwelveSemitones:
 	ld a, (0x78a2:16)                                   ; FC0D73  c1 a2 78 21
 .LFC0D77:
 	pushw wa                                             ; FC0D77  28
-	call T_F43420                                        ; FC0D78  1d 20 34 f4
+	call T_TuneScale_KeyScalingCodeToIndex                                        ; FC0D78  1d 20 34 f4
 	inc 2,XSP                                            ; FC0D7C  ef 62
 	ld w, 0x0c:opc                                          ; FC0D7E  20 0c
 	mul wa, w                                          ; FC0D80  c8 41
@@ -115839,7 +115839,7 @@ sub_FC6153:
 	push XHL                                             ; FC6195  3b
 	push XIX                                             ; FC6196  3c
 	push XIZ                                             ; FC6197  3e
-	call T_F40798                                        ; FC6198  1d 98 07 f4
+	call T_ParamMsg_RefreshPartMasks                                        ; FC6198  1d 98 07 f4
 	pop XIZ                                              ; FC619C  5e
 	pop XIX                                              ; FC619D  5c
 	pop XHL                                              ; FC619E  5b
@@ -121266,7 +121266,7 @@ sub_FCACAA:
 	add XIX,0x00000009                                   ; FCAD65  ec c8 09 00 00 00
 	jrl .LFCACCB                                         ; FCAD6B  78 5d ff
 .LFCAD6E:
-	call T_F40024                                        ; FCAD6E  1d 24 00 f4
+	call T_SeqBuf_FlushStaged                                        ; FCAD6E  1d 24 00 f4
 	call sub_FC80AC                                      ; FCAD72  1d ac 80 fc
 	pop XIX                                              ; FCAD76  5c
 	popw de                                              ; FCAD77  4a
@@ -125607,7 +125607,7 @@ sub_FD06AF:
 	ld C,H                                               ; FD06E9  ce 8b
 	extz BC                                              ; FD06EB  d9 12
 	pushw bc                                             ; FD06ED  29
-	call T_F4344C                                        ; FD06EE  1d 4c 34 f4
+	call T_ParamRecord_SetPartsField18Bit0                                        ; FD06EE  1d 4c 34 f4
 	pushw 0x01                                           ; FD06F2  0b 01 00
 	pushw 0xcd                                           ; FD06F5  0b cd 00
 	call PanelScreen_PostRequest                                      ; FD06F8  1d 8b 60 fd
@@ -125649,7 +125649,7 @@ sub_FD070B:
 	ld C,H                                               ; FD0745  ce 8b
 	extz BC                                              ; FD0747  d9 12
 	pushw bc                                             ; FD0749  29
-	call T_F4344C                                        ; FD074A  1d 4c 34 f4
+	call T_ParamRecord_SetPartsField18Bit0                                        ; FD074A  1d 4c 34 f4
 	pushw 0x01                                           ; FD074E  0b 01 00
 	pushw 0xcd                                           ; FD0751  0b cd 00
 	call PanelScreen_PostRequest                                      ; FD0754  1d 8b 60 fd
@@ -125699,7 +125699,7 @@ sub_FD0767:
 	ld C,H                                               ; FD07AA  ce 8b
 	extz BC                                              ; FD07AC  d9 12
 	pushw bc                                             ; FD07AE  29
-	call T_F4344C                                        ; FD07AF  1d 4c 34 f4
+	call T_ParamRecord_SetPartsField18Bit0                                        ; FD07AF  1d 4c 34 f4
 	lda xbc, (xiz-4)                                     ; FD07B3  be fc 31
 	push XBC                                             ; FD07B6  39
 	ld A,D                                               ; FD07B7  cc 89
@@ -128464,7 +128464,7 @@ sub_FD2014:
 	call Var280C_SetW                                      ; FD2068  1d 90 a8 fd
 	pushw 0x00                                           ; FD206C  0b 00 00
 	call Var2810_Set                                      ; FD206F  1d cc a8 fd
-	call T_F4341C                                        ; FD2073  1d 1c 34 f4
+	call T_SoundCopy_HandleReceivedSound                                        ; FD2073  1d 1c 34 f4
 	jrl .LFD246B                                         ; FD2077  78 f1 03
 .LFD207A:
 	lda xbc, (xiz-2)                                     ; FD207A  be fe 31
@@ -144254,7 +144254,7 @@ sub_FDA282:
 	pop XIY                                              ; FDA326  5d
 	jr .LFDA32D                                          ; FDA327  68 04
 .LFDA329:
-	call T_F43418                                        ; FDA329  1d 18 34 f4
+	call T_DrumsMap_RefreshSoundColumn                                        ; FDA329  1d 18 34 f4
 .LFDA32D:
 	pop XIX                                              ; FDA32D  5c
 	unlk XIZ                                             ; FDA32E  ee 0d
@@ -145727,7 +145727,7 @@ sub_FDAC6B:
 	call sub_FD67C9                                      ; FDAC84  1d c9 67 fd
 	pushw 0x00                                           ; FDAC88  0b 00 00
 	call Var2806_Set                                      ; FDAC8B  1d d2 a4 fd
-	call T_F415C4                                        ; FDAC8F  1d c4 15 f4
+	call T_Mode_SwitchToSound                                        ; FDAC8F  1d c4 15 f4
 	pushw 0x00                                           ; FDAC93  0b 00 00
 	call Var27F6_Set                                      ; FDAC96  1d ac a0 fd
 	pushw 0x00                                           ; FDAC9A  0b 00 00
@@ -147582,7 +147582,7 @@ sub_FDBBD6:
 	pushw bc                                             ; FDBE28  29
 	pushw de                                             ; FDBE29  2a
 	pushw 0x20                                           ; FDBE2A  0b 20 00
-	call T_F41B14                                        ; FDBE2D  1d 14 1b f4
+	call T_EventQueue_AppendStackArgs                                        ; FDBE2D  1d 14 1b f4
 	pushw 0x00                                           ; FDBE31  0b 00 00
 	call Var2811_Set                                      ; FDBE34  1d e3 ab fd
 	add XSP,0x00000014                                   ; FDBE38  ef c8 14 00 00 00
@@ -155432,7 +155432,7 @@ sub_FE0060:
 	push XHL                                             ; FE0061  3b
 	push XIX                                             ; FE0062  3c
 	push XIZ                                             ; FE0063  3e
-	call T_F40224                                        ; FE0064  1d 24 02 f4
+	call T_ParamImage_WriteRecordHeaders_Entry                                        ; FE0064  1d 24 02 f4
 	pop XIZ                                              ; FE0068  5e
 	pop XIX                                              ; FE0069  5c
 	pop XHL                                              ; FE006A  5b
@@ -155443,7 +155443,7 @@ sub_FE006D:
 	push XHL                                             ; FE006E  3b
 	push XIX                                             ; FE006F  3c
 	push XIZ                                             ; FE0070  3e
-	call T_F401D8                                        ; FE0071  1d d8 01 f4
+	call T_ParamImage_SnapshotAll                                        ; FE0071  1d d8 01 f4
 	pop XIZ                                              ; FE0075  5e
 	pop XIX                                              ; FE0076  5c
 	pop XHL                                              ; FE0077  5b
@@ -155463,7 +155463,7 @@ sub_FE0083:
 	push XHL                                             ; FE0084  3b
 	push XIX                                             ; FE0085  3c
 	push XIZ                                             ; FE0086  3e
-	call T_F4021C                                        ; FE0087  1d 1c 02 f4
+	call T_ParamImage_SanitizeAllAndHook_Entry                                        ; FE0087  1d 1c 02 f4
 	pop XIZ                                              ; FE008B  5e
 	pop XIX                                              ; FE008C  5c
 	pop XHL                                              ; FE008D  5b
@@ -155485,7 +155485,7 @@ sub_FE009D:
 	push XHL                                             ; FE009E  3b
 	push XIX                                             ; FE009F  3c
 	push XIZ                                             ; FE00A0  3e
-	call T_F401DC                                        ; FE00A1  1d dc 01 f4
+	call T_ParamImage_QueueDiffAll                                        ; FE00A1  1d dc 01 f4
 	pop XIZ                                              ; FE00A5  5e
 	pop XIX                                              ; FE00A6  5c
 	pop XHL                                              ; FE00A7  5b
@@ -155666,7 +155666,7 @@ sub_FE0150:
 	push XHL                                             ; FE0151  3b
 	push XIX                                             ; FE0152  3c
 	push XIZ                                             ; FE0153  3e
-	call T_F40228                                        ; FE0154  1d 28 02 f4
+	call T_ParamImageAlt_SanitizeCombination_Entry                                        ; FE0154  1d 28 02 f4
 	pop XIZ                                              ; FE0158  5e
 	pop XIX                                              ; FE0159  5c
 	pop XHL                                              ; FE015A  5b
@@ -155788,7 +155788,7 @@ sub_FE01D3:
 	push XHL                                             ; FE01E1  3b
 	push XIX                                             ; FE01E2  3c
 	push XIZ                                             ; FE01E3  3e
-	call T_F40248                                        ; FE01E4  1d 48 02 f4
+	call T_ParamImage_QueueDiffCombination                                        ; FE01E4  1d 48 02 f4
 	pop XIZ                                              ; FE01E8  5e
 	pop XIX                                              ; FE01E9  5c
 	pop XHL                                              ; FE01EA  5b
@@ -155809,7 +155809,7 @@ sub_FE01FA:
 	push XHL                                             ; FE01FB  3b
 	push XIX                                             ; FE01FC  3c
 	push XIZ                                             ; FE01FD  3e
-	call T_F41600                                        ; FE01FE  1d 00 16 f4
+	call T_MessageScreen_Paint                                        ; FE01FE  1d 00 16 f4
 	pop XIZ                                              ; FE0202  5e
 	pop XIX                                              ; FE0203  5c
 	pop XHL                                              ; FE0204  5b
@@ -159255,7 +159255,7 @@ sub_FE2092:
 	pushw 0x58                                           ; FE20CC  0b 58 00
 	calr sub_FE20E1                                            ; FE20CF  1e 0f 00
 	ld H,A                                               ; FE20D2  c9 8e
-	call T_F43454                                        ; FE20D4  1d 54 34 f4
+	call T_Queue2E00_PostParam98Fields                                        ; FE20D4  1d 54 34 f4
 	inc 8,XSP                                            ; FE20D8  ef 60
 	inc 2,XSP                                            ; FE20DA  ef 62
 .LFE20DC:
@@ -169121,7 +169121,7 @@ sub_FE6E84:
 	push XHL                                             ; FE6F63  3b
 	push XIX                                             ; FE6F64  3c
 	push XIZ                                             ; FE6F65  3e
-	call T_F4024C                                        ; FE6F66  1d 4c 02 f4
+	call T_ParamImage_SnapshotCombination_Entry                                        ; FE6F66  1d 4c 02 f4
 	pop XIZ                                              ; FE6F6A  5e
 	pop XIX                                              ; FE6F6B  5c
 	pop XHL                                              ; FE6F6C  5b
@@ -170547,7 +170547,7 @@ LCD_ScreenRedraw_End_Copy:
 	swi 7                                                ; FE8109  ff
 	ret                                                  ; FE810A  0e
 sub_FE810B:
-	call T_F415C8                                        ; FE810B  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; FE810B  1d c8 15 f4
 	orw	(0x2134:16), 0x0002                  ; FE810F  d1 34 21 3e 02 00
 	ret                                                  ; FE8115  0e
 sub_FE8116:
@@ -180594,7 +180594,7 @@ sub_FF0C33:
 	xor XWA,XWA                                          ; FF0C3B  e8 d0
 	ld wa, (0x26b0:16)                                 ; FF0C3D  d1 b0 26 20
 	div WA,0x03e8                                        ; FF0C41  d8 0a e8 03
-	call T_F41AF0                                        ; FF0C45  1d f0 1a f4
+	call T_Value_ToAsciiDigits3_RightJustified                                        ; FF0C45  1d f0 1a f4
 	ld XIY,Value_AsciiDigits+2                                    ; FF0C49  45 63 26 00 00
 	ldw hl, 0x00                                         ; FF0C4E  33 00 00
 	ldw bc, 0x01                                         ; FF0C51  31 01 00
@@ -180616,7 +180616,7 @@ sub_FF0C33:
 	ret                                                  ; FF0C80  0e
 .LFF0C81:
 	ld wa, (0x26b0:16)                                 ; FF0C81  d1 b0 26 20
-	call T_F41AF0                                        ; FF0C85  1d f0 1a f4
+	call T_Value_ToAsciiDigits3_RightJustified                                        ; FF0C85  1d f0 1a f4
 	ld XIY,Value_AsciiDigits                                    ; FF0C89  45 61 26 00 00
 	ldw hl, 0x00                                         ; FF0C8E  33 00 00
 	ldw bc, 0x03                                         ; FF0C91  31 03 00
@@ -180630,7 +180630,7 @@ sub_FF0C9B:
 	xor XWA,XWA                                          ; FF0CA3  e8 d0
 	ld wa, (0x26b0:16)                                 ; FF0CA5  d1 b0 26 20
 	div WA,0x03e8                                        ; FF0CA9  d8 0a e8 03
-	call T_F41AF0                                        ; FF0CAD  1d f0 1a f4
+	call T_Value_ToAsciiDigits3_RightJustified                                        ; FF0CAD  1d f0 1a f4
 	ld XIY,Value_AsciiDigits+1                                    ; FF0CB1  45 62 26 00 00
 	ldw hl, 0x00                                         ; FF0CB6  33 00 00
 	ldw bc, 0x02                                         ; FF0CB9  31 02 00
@@ -180652,7 +180652,7 @@ sub_FF0C9B:
 	ret                                                  ; FF0CE8  0e
 .LFF0CE9:
 	ld wa, (0x26b0:16)                                 ; FF0CE9  d1 b0 26 20
-	call T_F41AF0                                        ; FF0CED  1d f0 1a f4
+	call T_Value_ToAsciiDigits3_RightJustified                                        ; FF0CED  1d f0 1a f4
 	ld XIY,Value_AsciiDigits                                    ; FF0CF1  45 61 26 00 00
 	ldw hl, 0x00                                         ; FF0CF6  33 00 00
 	ldw bc, 0x03                                         ; FF0CF9  31 03 00
@@ -183110,7 +183110,7 @@ CallbackQueue_ResetAndRestartTask2_Call:
 	ret                                                  ; FF42B6  0e
 sub_FF42B7:
 	m_set 1, MD16, 0x2134                                ; FF42B7  f1 34 21 b9
-	call T_F415C8                                        ; FF42BB  1d c8 15 f4
+	call T_SoundGroup_ReloadSelection                                        ; FF42BB  1d c8 15 f4
 	ret                                                  ; FF42BF  0e
 sub_FF42C0:
 	m_set 1, MD16, 0x2134                                ; FF42C0  f1 34 21 b9
@@ -188939,7 +188939,7 @@ sub_FF674D:   ; entry: named by 1 `.long` operand, first at 0xFF4041
 	pushw bc                                             ; FF6799  29
 	push 0x00                                            ; FF679A  09 00
 	m_push MB16, 0x2737                                  ; FF679C  c1 37 27 04
-	call T_F43408                                        ; FF67A0  1d 08 34 f4
+	call T_SoundGroup_MaxMemberIndex_ByStack                                        ; FF67A0  1d 08 34 f4
 	ld H,A                                               ; FF67A4  c9 8e
 	pop XIY                                              ; FF67A6  5d
 	m_cp_rm MB16, 0x2738, r1                             ; FF67A7  c1 38 27 f1
@@ -189522,7 +189522,7 @@ sub_FF6C24:   ; entry: named by 2 `.long` operands, first at 0xFF4059
 	pushw bc                                             ; FF6C7D  29
 	push 0x00                                            ; FF6C7E  09 00
 	m_push MB16, 0x2737                                  ; FF6C80  c1 37 27 04
-	call T_F43408                                        ; FF6C84  1d 08 34 f4
+	call T_SoundGroup_MaxMemberIndex_ByStack                                        ; FF6C84  1d 08 34 f4
 	ld H,A                                               ; FF6C88  c9 8e
 	inc 8,XSP                                            ; FF6C8A  ef 60
 	m_cp_rm MB16, 0x2738, r1                             ; FF6C8C  c1 38 27 f1
@@ -189586,7 +189586,7 @@ sub_FF6CF0:   ; entry: named by 4 `.long` operands, first at 0xFF4061
 	pushw bc                                             ; FF6D0A  29
 	push 0x00                                            ; FF6D0B  09 00
 	m_push MB16, 0x2737                                  ; FF6D0D  c1 37 27 04
-	call T_F43408                                        ; FF6D11  1d 08 34 f4
+	call T_SoundGroup_MaxMemberIndex_ByStack                                        ; FF6D11  1d 08 34 f4
 	ld H,A                                               ; FF6D15  c9 8e
 	pop XIY                                              ; FF6D17  5d
 	cp A,0xff                                            ; FF6D18  c9 cf ff
@@ -189990,7 +189990,7 @@ sub_FF6FC0:   ; entry: named by 4 `.long` operands, first at 0xFF4169
 	pushw bc                                             ; FF6FDA  29
 	push 0x00                                            ; FF6FDB  09 00
 	m_push MB16, 0x2737                                  ; FF6FDD  c1 37 27 04
-	call T_F43414                                        ; FF6FE1  1d 14 34 f4
+	call T_CombiGroup_MaxMemberIndex_ByStack                                        ; FF6FE1  1d 14 34 f4
 	ld H,A                                               ; FF6FE5  c9 8e
 	pop XIY                                              ; FF6FE7  5d
 	cp A,0xff                                            ; FF6FE8  c9 cf ff
@@ -190177,7 +190177,7 @@ sub_FF70D8:
 	ld A,(XBC)                                           ; FF710F  81 21
 	extz WA                                              ; FF7111  d8 12
 	pushw wa                                             ; FF7113  28
-	call T_F41B18                                        ; FF7114  1d 18 1b f4
+	call T_PendingEventQueue_AppendStackArgs                                        ; FF7114  1d 18 1b f4
 	inc 8,XSP                                            ; FF7118  ef 60
 .LFF711A:
 	inc 4,XIX                                            ; FF711A  ec 64
@@ -190239,7 +190239,7 @@ sub_FF7153:
 	ld WA,(XWA)                                          ; FF7174  90 20
 	pushw wa                                             ; FF7176  28
 	pushw 0x00                                           ; FF7177  0b 00 00
-	call T_F43404                                        ; FF717A  1d 04 34 f4
+	call T_SoundGroupName_CopyToBuffer                                        ; FF717A  1d 04 34 f4
 	pushw 0x06                                           ; FF717E  0b 06 00
 	pushw 0x10                                           ; FF7181  0b 10 00
 	pushw 0x0d36                                         ; FF7184  0b 36 0d
@@ -190282,7 +190282,7 @@ sub_FF7153:
 	extz WA                                              ; FF71E7  d8 12
 	add WA,DE                                            ; FF71E9  da 80
 	pushw wa                                             ; FF71EB  28
-	call T_F43404                                        ; FF71EC  1d 04 34 f4
+	call T_SoundGroupName_CopyToBuffer                                        ; FF71EC  1d 04 34 f4
 	pushw 0x06                                           ; FF71F0  0b 06 00
 	pushw 0x10                                           ; FF71F3  0b 10 00
 	ld (xiz-2), ix                                       ; FF71F6  be fe 54
@@ -190314,7 +190314,7 @@ sub_FF7224:
 	pushw wa                                             ; FF7239  28
 	push 0x00                                            ; FF723A  09 00
 	m_push MB16, 0x2737                                  ; FF723C  c1 37 27 04
-	call T_F43404                                        ; FF7240  1d 04 34 f4
+	call T_SoundGroupName_CopyToBuffer                                        ; FF7240  1d 04 34 f4
 	pushw 0x06                                           ; FF7244  0b 06 00
 	pushw 0x10                                           ; FF7247  0b 10 00
 	pushw 0x0c1e                                         ; FF724A  0b 1e 0c
@@ -190334,7 +190334,7 @@ sub_FF725D:
 	pushw wa                                             ; FF7272  28
 	push 0x00                                            ; FF7273  09 00
 	m_push MB16, 0x2737                                  ; FF7275  c1 37 27 04
-	call T_F43410                                        ; FF7279  1d 10 34 f4
+	call T_CombiGroupName_CopyToBuffer                                        ; FF7279  1d 10 34 f4
 	pushw 0x06                                           ; FF727D  0b 06 00
 	pushw 0x10                                           ; FF7280  0b 10 00
 	pushw 0x0c1e                                         ; FF7283  0b 1e 0c
@@ -190376,7 +190376,7 @@ sub_FF7296:
 	pushw bc                                             ; FF72AD  29
 	push 0x00                                            ; FF72AE  09 00
 	m_push MB16, 0x2737                                  ; FF72B0  c1 37 27 04
-	call T_F43408                                        ; FF72B4  1d 08 34 f4
+	call T_SoundGroup_MaxMemberIndex_ByStack                                        ; FF72B4  1d 08 34 f4
 	extz WA                                              ; FF72B8  d8 12
 	ld (xiz-2), wa                                       ; FF72BA  be fe 50
 	pop XIY                                              ; FF72BD  5d
@@ -190407,7 +190407,7 @@ sub_FF7296:
 	pushw wa                                             ; FF72FA  28
 	push 0x00                                            ; FF72FB  09 00
 	m_push MB16, 0x2737                                  ; FF72FD  c1 37 27 04
-	call T_F43400                                        ; FF7301  1d 00 34 f4
+	call T_SoundName_CopyToBuffer                                        ; FF7301  1d 00 34 f4
 	inc 8,XSP                                            ; FF7305  ef 60
 	inc 2,XSP                                            ; FF7307  ef 62
 	pushw 0x06                                           ; FF7309  0b 06 00
@@ -190451,7 +190451,7 @@ sub_FF7333:
 	extz WA                                              ; FF735C  d8 12
 	add WA,IX                                            ; FF735E  dc 80
 	pushw wa                                             ; FF7360  28
-	call T_F43410                                        ; FF7361  1d 10 34 f4
+	call T_CombiGroupName_CopyToBuffer                                        ; FF7361  1d 10 34 f4
 	pushw 0x06                                           ; FF7365  0b 06 00
 	pushw 0x10                                           ; FF7368  0b 10 00
 	ld (xiz-2), de                                       ; FF736B  be fe 52
@@ -190501,7 +190501,7 @@ sub_FF7399:
 	pushw bc                                             ; FF73B0  29
 	push 0x00                                            ; FF73B1  09 00
 	m_push MB16, 0x2737                                  ; FF73B3  c1 37 27 04
-	call T_F43414                                        ; FF73B7  1d 14 34 f4
+	call T_CombiGroup_MaxMemberIndex_ByStack                                        ; FF73B7  1d 14 34 f4
 	extz WA                                              ; FF73BB  d8 12
 	ld (xiz-2), wa                                       ; FF73BD  be fe 50
 	pop XIY                                              ; FF73C0  5d
@@ -190532,7 +190532,7 @@ sub_FF7399:
 	pushw wa                                             ; FF73FD  28
 	push 0x00                                            ; FF73FE  09 00
 	m_push MB16, 0x2737                                  ; FF7400  c1 37 27 04
-	call T_F4340C                                        ; FF7404  1d 0c 34 f4
+	call T_CombiName_CopyToBuffer                                        ; FF7404  1d 0c 34 f4
 	inc 8,XSP                                            ; FF7408  ef 60
 	inc 2,XSP                                            ; FF740A  ef 62
 	pushw 0x06                                           ; FF740C  0b 06 00
@@ -191090,7 +191090,7 @@ sub_FF7743:
 	ld b, 0x13:opc                                          ; FF775F  22 13
 	ld c, 0x00:opc                                          ; FF7761  23 00
 	pushw hl                                             ; FF7763  2b
-	call T_F41B04                                        ; FF7764  1d 04 1b f4
+	call T_Value_ApplyNibbleDeltaClamped                                        ; FF7764  1d 04 1b f4
 	popw hl                                              ; FF7768  4b
 	cp A,L                                               ; FF7769  cf f1
 	jr z, .LFF7771                                       ; FF776B  66 04
@@ -191409,7 +191409,7 @@ sub_FF79DB:
 	push XIY                                             ; FF79DD  3d
 	push XHL                                             ; FF79DE  3b
 	push XDE                                             ; FF79DF  3a
-	call T_F415C4                                        ; FF79E0  1d c4 15 f4
+	call T_Mode_SwitchToSound                                        ; FF79E0  1d c4 15 f4
 	pop XDE                                              ; FF79E4  5a
 	pop XHL                                              ; FF79E5  5b
 	pop XIY                                              ; FF79E6  5d

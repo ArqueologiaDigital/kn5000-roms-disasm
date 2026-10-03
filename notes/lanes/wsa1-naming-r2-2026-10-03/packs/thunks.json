@@ -1,0 +1,648 @@
+{
+ "name": "wsa1-promote-thunks",
+ "files": [
+  "wsa1/prom_b/wsa1_prom_b.s"
+ ],
+ "also": [
+  "wsa1/dsp/dsp_channel_regs.s",
+  "wsa1/dsp/dsp_channel_regs_maincpu.inc",
+  "wsa1/dsp/dsp_channel_regs_subcpu.inc",
+  "wsa1/include/tlcs900_mem_ops.inc",
+  "wsa1/include/tmp95c061_sfr.inc",
+  "wsa1/include/wsa1_ram.inc",
+  "wsa1/kernel/kernel.s",
+  "wsa1/kernel/kernel_maincpu.inc",
+  "wsa1/kernel/kernel_subcpu.inc",
+  "wsa1/maincpu/shared/indexed_table.s",
+  "wsa1/maincpu/shared/lcd_screen_redraw.s",
+  "wsa1/prom_a/prom_a.ld",
+  "wsa1/prom_a/wsa1_prom_a.s",
+  "wsa1/prom_b/prom_b.ld",
+  "wsa1/prom_c/boot/boot_and_main.s",
+  "wsa1/prom_c/boot/reset_and_vectors.s",
+  "wsa1/prom_c/boot/scheduler_intt1.s",
+  "wsa1/prom_c/data_tables/preset_bank.s",
+  "wsa1/prom_c/data_tables/tail_data_zone.s",
+  "wsa1/prom_c/data_tables/touch_eq_mixer.s",
+  "wsa1/prom_c/data_tables/voice_dsp_tables.s",
+  "wsa1/prom_c/devices/dev10c_dev104_drivers.s",
+  "wsa1/prom_c/devices/dev10c_reg_writers.s",
+  "wsa1/prom_c/field_accessors.s",
+  "wsa1/prom_c/keyscan/keyboard_scanner.s",
+  "wsa1/prom_c/keyscan/touch_to_velocity.s",
+  "wsa1/prom_c/link/link_interrupts.s",
+  "wsa1/prom_c/link/link_key_events.s",
+  "wsa1/prom_c/link/link_service.s",
+  "wsa1/prom_c/mathlib/mathlib.s",
+  "wsa1/prom_c/midi/midi_controllers.s",
+  "wsa1/prom_c/midi/midi_serial_port.s",
+  "wsa1/prom_c/p7/p7_module.s",
+  "wsa1/prom_c/p7/p7_stream_pool.s",
+  "wsa1/prom_c/prom_c.ld",
+  "wsa1/prom_c/storage/eeprom.s",
+  "wsa1/prom_c/storage/flash.s",
+  "wsa1/prom_c/tone_db/tone_db_module.s",
+  "wsa1/prom_c/voice/note_engine.s",
+  "wsa1/prom_c/voice/voice_leaf_helpers.s",
+  "wsa1/prom_c/voice/voice_parameters.s",
+  "wsa1/prom_c/wsa1_prom_c.s",
+  "wsa1/prom_d/prom_d.ld",
+  "wsa1/prom_d/tone_database_aux.s",
+  "wsa1/prom_d/tone_database_directory.s",
+  "wsa1/prom_d/tone_database_records.s",
+  "wsa1/prom_d/wsa1_prom_d.s"
+ ],
+ "renames": [
+  {
+   "old": "T_F40014",
+   "new": "T_MainTask_Loop",
+   "evidence": "prom_b slot T_F40014 is `jp MainTask_Loop`"
+  },
+  {
+   "old": "T_F40024",
+   "new": "T_SeqBuf_FlushStaged",
+   "evidence": "prom_b slot T_F40024 is `jp SeqBuf_FlushStaged`"
+  },
+  {
+   "old": "T_F4002C",
+   "new": "T_ModuleInit_Phase0Veneer",
+   "evidence": "prom_b slot T_F4002C is `jp ModuleInit_Phase0Veneer`"
+  },
+  {
+   "old": "T_F40030",
+   "new": "T_ModuleInit_Phase1Veneer",
+   "evidence": "prom_b slot T_F40030 is `jp ModuleInit_Phase1Veneer`"
+  },
+  {
+   "old": "T_F40034",
+   "new": "T_ModuleInit_Phase2Veneer",
+   "evidence": "prom_b slot T_F40034 is `jp ModuleInit_Phase2Veneer`"
+  },
+  {
+   "old": "T_F4003C",
+   "new": "T_TimedEvents_DrainDue",
+   "evidence": "prom_b slot T_F4003C is `jp TimedEvents_DrainDue`"
+  },
+  {
+   "old": "T_F4005C",
+   "new": "T_MainTask_Entry",
+   "evidence": "prom_b slot T_F4005C is `jp MainTask_Entry`"
+  },
+  {
+   "old": "T_F40130",
+   "new": "T_ScreenEnter_DebugMonitor",
+   "evidence": "prom_b slot T_F40130 is `jp ScreenEnter_DebugMonitor`"
+  },
+  {
+   "old": "T_F40138",
+   "new": "T_ScreenButton_DebugMonitor",
+   "evidence": "prom_b slot T_F40138 is `jp ScreenButton_DebugMonitor`"
+  },
+  {
+   "old": "T_F40144",
+   "new": "T_CheckingDevice_RunSelfTest",
+   "evidence": "prom_b slot T_F40144 is `jp CheckingDevice_RunSelfTest`"
+  },
+  {
+   "old": "T_F40148",
+   "new": "T_TestMode_SelectFromPowerOnKeys",
+   "evidence": "prom_b slot T_F40148 is `jp TestMode_SelectFromPowerOnKeys`"
+  },
+  {
+   "old": "T_F4014C",
+   "new": "T_TestMode_Tick",
+   "evidence": "prom_b slot T_F4014C is `jp TestMode_Tick`"
+  },
+  {
+   "old": "T_F40158",
+   "new": "T_PanelCpuCheck_FlashStatusOnLed",
+   "evidence": "prom_b slot T_F40158 is `jp PanelCpuCheck_FlashStatusOnLed`"
+  },
+  {
+   "old": "T_F40168",
+   "new": "T_PanelSwLedCheck_Step",
+   "evidence": "prom_b slot T_F40168 is `jp PanelSwLedCheck_Step`"
+  },
+  {
+   "old": "T_F401D8",
+   "new": "T_ParamImage_SnapshotAll",
+   "evidence": "prom_b slot T_F401D8 is `jp ParamImage_SnapshotAll`"
+  },
+  {
+   "old": "T_F401DC",
+   "new": "T_ParamImage_QueueDiffAll",
+   "evidence": "prom_b slot T_F401DC is `jp ParamImage_QueueDiffAll`"
+  },
+  {
+   "old": "T_F40214",
+   "new": "T_ParamImage_SanitizeAll_Entry",
+   "evidence": "prom_b slot T_F40214 is `jp ParamImage_SanitizeAll_Entry`"
+  },
+  {
+   "old": "T_F4021C",
+   "new": "T_ParamImage_SanitizeAllAndHook_Entry",
+   "evidence": "prom_b slot T_F4021C is `jp ParamImage_SanitizeAllAndHook_Entry`"
+  },
+  {
+   "old": "T_F40220",
+   "new": "T_ParamImage_ApplyAndMaskTable_Entry",
+   "evidence": "prom_b slot T_F40220 is `jp ParamImage_ApplyAndMaskTable_Entry`"
+  },
+  {
+   "old": "T_F40224",
+   "new": "T_ParamImage_WriteRecordHeaders_Entry",
+   "evidence": "prom_b slot T_F40224 is `jp ParamImage_WriteRecordHeaders_Entry`"
+  },
+  {
+   "old": "T_F40228",
+   "new": "T_ParamImageAlt_SanitizeCombination_Entry",
+   "evidence": "prom_b slot T_F40228 is `jp ParamImageAlt_SanitizeCombination_Entry`"
+  },
+  {
+   "old": "T_F40244",
+   "new": "T_Combination_RecallOnSelect",
+   "evidence": "prom_b slot T_F40244 is `jp Combination_RecallOnSelect`"
+  },
+  {
+   "old": "T_F40248",
+   "new": "T_ParamImage_QueueDiffCombination",
+   "evidence": "prom_b slot T_F40248 is `jp ParamImage_QueueDiffCombination`"
+  },
+  {
+   "old": "T_F4024C",
+   "new": "T_ParamImage_SnapshotCombination_Entry",
+   "evidence": "prom_b slot T_F4024C is `jp ParamImage_SnapshotCombination_Entry`"
+  },
+  {
+   "old": "T_F40250",
+   "new": "T_Combination_ReadFromCpu2",
+   "evidence": "prom_b slot T_F40250 is `jp Combination_ReadFromCpu2`"
+  },
+  {
+   "old": "T_F40254",
+   "new": "T_Combination_Recall",
+   "evidence": "prom_b slot T_F40254 is `jp Combination_Recall`"
+  },
+  {
+   "old": "T_F40258",
+   "new": "T_ParamImage_QueueDiffCombinationAndParts",
+   "evidence": "prom_b slot T_F40258 is `jp ParamImage_QueueDiffCombinationAndParts`"
+  },
+  {
+   "old": "T_F4025C",
+   "new": "T_ParamImage_SnapshotCombinationAndParts_Entry",
+   "evidence": "prom_b slot T_F4025C is `jp ParamImage_SnapshotCombinationAndParts_Entry`"
+  },
+  {
+   "old": "T_F40290",
+   "new": "T_PanelScreen_RequestRedrawIfFieldQueued",
+   "evidence": "prom_b slot T_F40290 is `jp PanelScreen_RequestRedrawIfFieldQueued`"
+  },
+  {
+   "old": "T_F40614",
+   "new": "T_PanelWire_Service",
+   "evidence": "prom_b slot T_F40614 is `jp PanelWire_Service`"
+  },
+  {
+   "old": "T_F40634",
+   "new": "T_PanelEvent_Service",
+   "evidence": "prom_b slot T_F40634 is `jp PanelEvent_Service`"
+  },
+  {
+   "old": "T_F40664",
+   "new": "T_PanelLed_ProcessRequests",
+   "evidence": "prom_b slot T_F40664 is `jp PanelLed_ProcessRequests`"
+  },
+  {
+   "old": "T_F40668",
+   "new": "T_PanelLed_Refresh",
+   "evidence": "prom_b slot T_F40668 is `jp PanelLed_Refresh`"
+  },
+  {
+   "old": "T_F40670",
+   "new": "T_PanelLed_SendByteUnconditional",
+   "evidence": "prom_b slot T_F40670 is `jp PanelLed_SendByteUnconditional`"
+  },
+  {
+   "old": "T_F40674",
+   "new": "T_PanelLed_FlashTransportBeat",
+   "evidence": "prom_b slot T_F40674 is `jp PanelLed_FlashTransportBeat`"
+  },
+  {
+   "old": "T_F40678",
+   "new": "T_PanelLed_SendByte",
+   "evidence": "prom_b slot T_F40678 is `jp PanelLed_SendByte`"
+  },
+  {
+   "old": "T_F4067C",
+   "new": "T_PanelLed_OnPartEvent",
+   "evidence": "prom_b slot T_F4067C is `jp PanelLed_OnPartEvent`"
+  },
+  {
+   "old": "T_F40680",
+   "new": "T_PanelLed_OnClass90Event",
+   "evidence": "prom_b slot T_F40680 is `jp PanelLed_OnClass90Event`"
+  },
+  {
+   "old": "T_F4068C",
+   "new": "T_PanelLed_OnClassA8Event",
+   "evidence": "prom_b slot T_F4068C is `jp PanelLed_OnClassA8Event`"
+  },
+  {
+   "old": "T_F40694",
+   "new": "T_PanelLed_OnClass98Event",
+   "evidence": "prom_b slot T_F40694 is `jp PanelLed_OnClass98Event`"
+  },
+  {
+   "old": "T_F40698",
+   "new": "T_PanelLed_OnClass20Event",
+   "evidence": "prom_b slot T_F40698 is `jp PanelLed_OnClass20Event`"
+  },
+  {
+   "old": "T_F4069C",
+   "new": "T_PanelLed_OnCtrlParamEvent",
+   "evidence": "prom_b slot T_F4069C is `jp PanelLed_OnCtrlParamEvent`"
+  },
+  {
+   "old": "T_F406A0",
+   "new": "T_PanelLed_ToggleActivityLed",
+   "evidence": "prom_b slot T_F406A0 is `jp PanelLed_ToggleActivityLed`"
+  },
+  {
+   "old": "T_F40798",
+   "new": "T_ParamMsg_RefreshPartMasks",
+   "evidence": "prom_b slot T_F40798 is `jp ParamMsg_RefreshPartMasks`"
+  },
+  {
+   "old": "T_F40810",
+   "new": "T_ParamMsg_RefreshMasksOnCtrlFieldChange",
+   "evidence": "prom_b slot T_F40810 is `jp ParamMsg_RefreshMasksOnCtrlFieldChange`"
+  },
+  {
+   "old": "T_F408E4",
+   "new": "T_SysExDump_RunSendJob",
+   "evidence": "prom_b slot T_F408E4 is `jp SysExDump_RunSendJob`"
+  },
+  {
+   "old": "T_F41508",
+   "new": "T_ModeEnter_Combination",
+   "evidence": "prom_b slot T_F41508 is `jp ModeEnter_Combination`"
+  },
+  {
+   "old": "T_F41510",
+   "new": "T_ScreenEnter_PowerOnSplash",
+   "evidence": "prom_b slot T_F41510 is `jp ScreenEnter_PowerOnSplash`"
+  },
+  {
+   "old": "T_F41514",
+   "new": "T_ScreenLeave_PowerOnSplash",
+   "evidence": "prom_b slot T_F41514 is `jp ScreenLeave_PowerOnSplash`"
+  },
+  {
+   "old": "T_F41518",
+   "new": "T_ScreenButton_PowerOnSplash",
+   "evidence": "prom_b slot T_F41518 is `jp ScreenButton_PowerOnSplash`"
+  },
+  {
+   "old": "T_F41520",
+   "new": "T_InstallPainter_SoundMode_Entry",
+   "evidence": "prom_b slot T_F41520 is `jp InstallPainter_SoundMode_Entry`"
+  },
+  {
+   "old": "T_F41524",
+   "new": "T_ScreenLeave_SoundMode",
+   "evidence": "prom_b slot T_F41524 is `jp ScreenLeave_SoundMode`"
+  },
+  {
+   "old": "T_F41528",
+   "new": "T_ScreenButton_SoundMode",
+   "evidence": "prom_b slot T_F41528 is `jp ScreenButton_SoundMode`"
+  },
+  {
+   "old": "T_F41530",
+   "new": "T_InstallPainter_C0mbinati0nM0de_Entry",
+   "evidence": "prom_b slot T_F41530 is `jp InstallPainter_C0mbinati0nM0de_Entry`"
+  },
+  {
+   "old": "T_F41534",
+   "new": "T_ScreenLeave_C0mbinati0nM0de",
+   "evidence": "prom_b slot T_F41534 is `jp ScreenLeave_C0mbinati0nM0de`"
+  },
+  {
+   "old": "T_F41538",
+   "new": "T_ScreenButton_C0mbinati0nM0de",
+   "evidence": "prom_b slot T_F41538 is `jp ScreenButton_C0mbinati0nM0de`"
+  },
+  {
+   "old": "T_F415A0",
+   "new": "T_UiEvent_MarkRedrawFromClass20Block",
+   "evidence": "prom_b slot T_F415A0 is `jp UiEvent_MarkRedrawFromClass20Block`"
+  },
+  {
+   "old": "T_F415A8",
+   "new": "T_UiEvent_SyncSoundSelection",
+   "evidence": "prom_b slot T_F415A8 is `jp UiEvent_SyncSoundSelection`"
+  },
+  {
+   "old": "T_F415AC",
+   "new": "T_UiEventClassA8_ShowGroupScreen",
+   "evidence": "prom_b slot T_F415AC is `jp UiEventClassA8_ShowGroupScreen`"
+  },
+  {
+   "old": "T_F415B4",
+   "new": "T_LCD_BlitValueBar",
+   "evidence": "prom_b slot T_F415B4 is `jp LCD_BlitValueBar`"
+  },
+  {
+   "old": "T_F415B8",
+   "new": "T_UiEventClass7A_QueueDialValueRedraw",
+   "evidence": "prom_b slot T_F415B8 is `jp UiEventClass7A_QueueDialValueRedraw`"
+  },
+  {
+   "old": "T_F415BC",
+   "new": "T_PanelDial_QueueValueRedraw_Entry",
+   "evidence": "prom_b slot T_F415BC is `jp PanelDial_QueueValueRedraw_Entry`"
+  },
+  {
+   "old": "T_F415C0",
+   "new": "T_Mode_SwitchToCombination",
+   "evidence": "prom_b slot T_F415C0 is `jp Mode_SwitchToCombination`"
+  },
+  {
+   "old": "T_F415C4",
+   "new": "T_Mode_SwitchToSound",
+   "evidence": "prom_b slot T_F415C4 is `jp Mode_SwitchToSound`"
+  },
+  {
+   "old": "T_F415C8",
+   "new": "T_SoundGroup_ReloadSelection",
+   "evidence": "prom_b slot T_F415C8 is `jp SoundGroup_ReloadSelection`"
+  },
+  {
+   "old": "T_F41600",
+   "new": "T_MessageScreen_Paint",
+   "evidence": "prom_b slot T_F41600 is `jp MessageScreen_Paint`"
+  },
+  {
+   "old": "T_F41604",
+   "new": "T_InstallPainter_MessageScreen",
+   "evidence": "prom_b slot T_F41604 is `jp InstallPainter_MessageScreen`"
+  },
+  {
+   "old": "T_F4160C",
+   "new": "T_ScreenButton_MessageScreen",
+   "evidence": "prom_b slot T_F4160C is `jp ScreenButton_MessageScreen`"
+  },
+  {
+   "old": "T_F41640",
+   "new": "T_PanelMode_MidiEnter",
+   "evidence": "prom_b slot T_F41640 is `jp PanelMode_MidiEnter`"
+  },
+  {
+   "old": "T_F41644",
+   "new": "T_PanelMode_MidiLeave",
+   "evidence": "prom_b slot T_F41644 is `jp PanelMode_MidiLeave`"
+  },
+  {
+   "old": "T_F41650",
+   "new": "T_Paint_MidiMenu",
+   "evidence": "prom_b slot T_F41650 is `jp Paint_MidiMenu`"
+  },
+  {
+   "old": "T_F41658",
+   "new": "T_ScreenButton_MidiMenu",
+   "evidence": "prom_b slot T_F41658 is `jp ScreenButton_MidiMenu`"
+  },
+  {
+   "old": "T_F41910",
+   "new": "T_PanelMode_System_Enter",
+   "evidence": "prom_b slot T_F41910 is `jp PanelMode_System_Enter`"
+  },
+  {
+   "old": "T_F41914",
+   "new": "T_PanelMode_System_Leave",
+   "evidence": "prom_b slot T_F41914 is `jp PanelMode_System_Leave`"
+  },
+  {
+   "old": "T_F41918",
+   "new": "T_Screen_System_Enter",
+   "evidence": "prom_b slot T_F41918 is `jp Screen_System_Enter`"
+  },
+  {
+   "old": "T_F41920",
+   "new": "T_Screen_System_Button",
+   "evidence": "prom_b slot T_F41920 is `jp Screen_System_Button`"
+  },
+  {
+   "old": "T_F41928",
+   "new": "T_Screen_TuneScale_Enter",
+   "evidence": "prom_b slot T_F41928 is `jp Screen_TuneScale_Enter`"
+  },
+  {
+   "old": "T_F41930",
+   "new": "T_Screen_TuneScale_Button",
+   "evidence": "prom_b slot T_F41930 is `jp Screen_TuneScale_Button`"
+  },
+  {
+   "old": "T_F41958",
+   "new": "T_Screen_MainOutEqualizer_Enter",
+   "evidence": "prom_b slot T_F41958 is `jp Screen_MainOutEqualizer_Enter`"
+  },
+  {
+   "old": "T_F41960",
+   "new": "T_Screen_MainOutEqualizer_Button",
+   "evidence": "prom_b slot T_F41960 is `jp Screen_MainOutEqualizer_Button`"
+  },
+  {
+   "old": "T_F41978",
+   "new": "T_Screen_SoundCombinationManager_Enter",
+   "evidence": "prom_b slot T_F41978 is `jp Screen_SoundCombinationManager_Enter`"
+  },
+  {
+   "old": "T_F41980",
+   "new": "T_Screen_SoundCombinationManager_Button",
+   "evidence": "prom_b slot T_F41980 is `jp Screen_SoundCombinationManager_Button`"
+  },
+  {
+   "old": "T_F41988",
+   "new": "T_Screen_MemoryProtect_Enter",
+   "evidence": "prom_b slot T_F41988 is `jp Screen_MemoryProtect_Enter`"
+  },
+  {
+   "old": "T_F41990",
+   "new": "T_Screen_MemoryProtect_Button",
+   "evidence": "prom_b slot T_F41990 is `jp Screen_MemoryProtect_Button`"
+  },
+  {
+   "old": "T_F41998",
+   "new": "T_Screen_DataLoadFilter_Enter",
+   "evidence": "prom_b slot T_F41998 is `jp Screen_DataLoadFilter_Enter`"
+  },
+  {
+   "old": "T_F419A0",
+   "new": "T_Screen_DataLoadFilter_Button",
+   "evidence": "prom_b slot T_F419A0 is `jp Screen_DataLoadFilter_Button`"
+  },
+  {
+   "old": "T_F419A8",
+   "new": "T_Screen_DspEffect_Enter",
+   "evidence": "prom_b slot T_F419A8 is `jp Screen_DspEffect_Enter`"
+  },
+  {
+   "old": "T_F419B0",
+   "new": "T_Screen_DspEffect_Button",
+   "evidence": "prom_b slot T_F419B0 is `jp Screen_DspEffect_Button`"
+  },
+  {
+   "old": "T_F41AF0",
+   "new": "T_Value_ToAsciiDigits3_RightJustified",
+   "evidence": "prom_b slot T_F41AF0 is `jp Value_ToAsciiDigits3_RightJustified`"
+  },
+  {
+   "old": "T_F41AF4",
+   "new": "T_Value_ToAsciiDigits3_LeftJustified",
+   "evidence": "prom_b slot T_F41AF4 is `jp Value_ToAsciiDigits3_LeftJustified`"
+  },
+  {
+   "old": "T_F41AF8",
+   "new": "T_Value_ToSignedAsciiDigits3_RightJustified",
+   "evidence": "prom_b slot T_F41AF8 is `jp Value_ToSignedAsciiDigits3_RightJustified`"
+  },
+  {
+   "old": "T_F41AFC",
+   "new": "T_Value_ToSignedAsciiDigits3_LeftJustified",
+   "evidence": "prom_b slot T_F41AFC is `jp Value_ToSignedAsciiDigits3_LeftJustified`"
+  },
+  {
+   "old": "T_F41B04",
+   "new": "T_Value_ApplyNibbleDeltaClamped",
+   "evidence": "prom_b slot T_F41B04 is `jp Value_ApplyNibbleDeltaClamped`"
+  },
+  {
+   "old": "T_F41B08",
+   "new": "T_PanelButton_CallTableEntry",
+   "evidence": "prom_b slot T_F41B08 is `jp PanelButton_CallTableEntry`"
+  },
+  {
+   "old": "T_F41B0C",
+   "new": "T_PanelButton_CallPageTableEntry",
+   "evidence": "prom_b slot T_F41B0C is `jp PanelButton_CallPageTableEntry`"
+  },
+  {
+   "old": "T_F41B10",
+   "new": "T_FixedEventList_AppendStackArgs",
+   "evidence": "prom_b slot T_F41B10 is `jp FixedEventList_AppendStackArgs`"
+  },
+  {
+   "old": "T_F41B14",
+   "new": "T_EventQueue_AppendStackArgs",
+   "evidence": "prom_b slot T_F41B14 is `jp EventQueue_AppendStackArgs`"
+  },
+  {
+   "old": "T_F41B18",
+   "new": "T_PendingEventQueue_AppendStackArgs",
+   "evidence": "prom_b slot T_F41B18 is `jp PendingEventQueue_AppendStackArgs`"
+  },
+  {
+   "old": "T_F426A0",
+   "new": "T_Screen_SoundCopy_Enter",
+   "evidence": "prom_b slot T_F426A0 is `jp Screen_SoundCopy_Enter`"
+  },
+  {
+   "old": "T_F426A4",
+   "new": "T_Screen_SoundCopy_Leave",
+   "evidence": "prom_b slot T_F426A4 is `jp Screen_SoundCopy_Leave`"
+  },
+  {
+   "old": "T_F426A8",
+   "new": "T_Screen_SoundCopy_Button",
+   "evidence": "prom_b slot T_F426A8 is `jp Screen_SoundCopy_Button`"
+  },
+  {
+   "old": "T_F426B0",
+   "new": "T_Screen_CombinationCopy_Enter",
+   "evidence": "prom_b slot T_F426B0 is `jp Screen_CombinationCopy_Enter`"
+  },
+  {
+   "old": "T_F426B8",
+   "new": "T_Screen_CombinationCopy_Button",
+   "evidence": "prom_b slot T_F426B8 is `jp Screen_CombinationCopy_Button`"
+  },
+  {
+   "old": "T_F43400",
+   "new": "T_SoundName_CopyToBuffer",
+   "evidence": "prom_b slot T_F43400 is `jp SoundName_CopyToBuffer`"
+  },
+  {
+   "old": "T_F43404",
+   "new": "T_SoundGroupName_CopyToBuffer",
+   "evidence": "prom_b slot T_F43404 is `jp SoundGroupName_CopyToBuffer`"
+  },
+  {
+   "old": "T_F43408",
+   "new": "T_SoundGroup_MaxMemberIndex_ByStack",
+   "evidence": "prom_b slot T_F43408 is `jp SoundGroup_MaxMemberIndex_ByStack`"
+  },
+  {
+   "old": "T_F4340C",
+   "new": "T_CombiName_CopyToBuffer",
+   "evidence": "prom_b slot T_F4340C is `jp CombiName_CopyToBuffer`"
+  },
+  {
+   "old": "T_F43410",
+   "new": "T_CombiGroupName_CopyToBuffer",
+   "evidence": "prom_b slot T_F43410 is `jp CombiGroupName_CopyToBuffer`"
+  },
+  {
+   "old": "T_F43414",
+   "new": "T_CombiGroup_MaxMemberIndex_ByStack",
+   "evidence": "prom_b slot T_F43414 is `jp CombiGroup_MaxMemberIndex_ByStack`"
+  },
+  {
+   "old": "T_F43418",
+   "new": "T_DrumsMap_RefreshSoundColumn",
+   "evidence": "prom_b slot T_F43418 is `jp DrumsMap_RefreshSoundColumn`"
+  },
+  {
+   "old": "T_F4341C",
+   "new": "T_SoundCopy_HandleReceivedSound",
+   "evidence": "prom_b slot T_F4341C is `jp SoundCopy_HandleReceivedSound`"
+  },
+  {
+   "old": "T_F43420",
+   "new": "T_TuneScale_KeyScalingCodeToIndex",
+   "evidence": "prom_b slot T_F43420 is `jp TuneScale_KeyScalingCodeToIndex`"
+  },
+  {
+   "old": "T_F43448",
+   "new": "T_ParamMsg_ResendTwoAssignedCtrls",
+   "evidence": "prom_b slot T_F43448 is `jp ParamMsg_ResendTwoAssignedCtrls`"
+  },
+  {
+   "old": "T_F4344C",
+   "new": "T_ParamRecord_SetPartsField18Bit0",
+   "evidence": "prom_b slot T_F4344C is `jp ParamRecord_SetPartsField18Bit0`"
+  },
+  {
+   "old": "T_F43454",
+   "new": "T_Queue2E00_PostParam98Fields",
+   "evidence": "prom_b slot T_F43454 is `jp Queue2E00_PostParam98Fields`"
+  },
+  {
+   "old": "T_F434C0",
+   "new": "T_Screen_SoundMute_Enter",
+   "evidence": "prom_b slot T_F434C0 is `jp Screen_SoundMute_Enter`"
+  },
+  {
+   "old": "T_F434C8",
+   "new": "T_Screen_SoundMute_Button",
+   "evidence": "prom_b slot T_F434C8 is `jp Screen_SoundMute_Button`"
+  },
+  {
+   "old": "T_F434D0",
+   "new": "T_SoundCopy_ReadExtGroupDrumFlag",
+   "evidence": "prom_b slot T_F434D0 is `jp SoundCopy_ReadExtGroupDrumFlag`"
+  }
+ ],
+ "headers": []
+}

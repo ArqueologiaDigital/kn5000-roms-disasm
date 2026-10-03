@@ -62,7 +62,7 @@ SECTIONS {
  * A `.set` constant would be folded into the 16-bit displacement and rejected; a symbol
  * defined here is relocated by ld.lld instead (scripts/tools/link_prom_a_to_prom_b.py,
  * 2026-10-03).  Cross-ref: wsa1/prom_b/wsa1_prom_b.s. */
-T_F40034 = 0xF40034;
+T_ModuleInit_Phase2Veneer = 0xF40034;
 T_F42C7C = 0xF42C7C;
 T_CallbackQueue_ResetAndRestartTask2 = 0xF42E80;
 sub_F7E39F_Nop = 0xF7E2D8;
