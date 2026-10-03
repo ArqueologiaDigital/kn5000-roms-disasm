@@ -24077,7 +24077,7 @@ DL_F0CA89:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F0CB9F	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -24386,7 +24386,7 @@ DL_RealtimeCommandsClock:
 ; ------------------------------------------------------------------
 DL_F0CCAF:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -24397,7 +24397,7 @@ DL_F0CCAF:
 ; ------------------------------------------------------------------
 DL_F0CCBA:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -24640,7 +24640,7 @@ DL_F0CE5F:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F0CE7B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -24892,7 +24892,7 @@ DL_F0D04B:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLBoxes_F0D061	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -25455,7 +25455,7 @@ DLTable_F0D4D2:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F0D530	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -121693,7 +121693,7 @@ DL_ToS0ngNumber:
 	.ascii "TO S0NG NUMBER  :"
 DL_F583E5:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -121753,7 +121753,7 @@ DLTab_F5841F:
 ; --------------------------------------------------------------------------
 DL_F5843F:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2720	; +0x02 source variable, 16-bit address
+	.short UI_ScreenItem	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function

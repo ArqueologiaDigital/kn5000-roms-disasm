@@ -266,6 +266,14 @@ GROUPS = [
         0x270E: ("CombinationCopy_DestGroupRow", "GROUP page: cursor row of the destination list", "CombinationCopy_DrawDestGroupCursor"),
         0x270F: ("CombinationCopy_DestListTop", "GROUP page: first group of the destination list", "CombinationCopy_DrawDestGroupList"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-system-menu-screen-state.md", "2. The MIDI and disk screens", {
+        0x2720: ("UI_ScreenItem", "the item the current screen's cursor is on (MIDI, sysex, disk screens); GENERAL MIDI: bit 2 its pending ON / OFF", "MidiTotalMode_StepItem and 38 more"),
+        0x2746: ("MidiOutPgm_Channel", "MIDI OUT PROGRAM CHANGE: MIDI channel 0..0x1F", "MidiOutProgramChange_EditMidiCh"),
+        0x2747: ("MidiOutPgm_Program", "the program, 0..0x7F", "MidiOutProgramChange_EditProgram"),
+        0x2748: ("MidiOutPgm_BankMsb", "bank select MSB", "MidiOutProgramChange_EditBankMsb"),
+        0x2749: ("MidiOutPgm_BankLsb", "bank select LSB", "MidiOutProgramChange_EditBankLsb"),
+        0x274A: ("MidiOutPgm_BankSelect", "word MSB*128+LSB, 0xFFFF = OFF", "MidiOutProgramChange_ResetState / _EditBankLsb"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),

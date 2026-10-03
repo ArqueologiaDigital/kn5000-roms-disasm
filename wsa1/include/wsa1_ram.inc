@@ -218,5 +218,13 @@
 	.equ CombinationCopy_DestGroupRow,	0x270e	; GROUP page: cursor row of the destination list -- CombinationCopy_DrawDestGroupCursor
 	.equ CombinationCopy_DestListTop,	0x270f	; GROUP page: first group of the destination list -- CombinationCopy_DrawDestGroupList
 
+; ---- wsa1/notes/FINDINGS-prom_a-system-menu-screen-state.md -- "2. The MIDI and disk screens"
+	.equ UI_ScreenItem,			0x2720	; the item the current screen's cursor is on (MIDI, sysex, disk screens); GENERAL MIDI: bit 2 its pending ON / OFF -- MidiTotalMode_StepItem and 38 more
+	.equ MidiOutPgm_Channel,		0x2746	; MIDI OUT PROGRAM CHANGE: MIDI channel 0..0x1F -- MidiOutProgramChange_EditMidiCh
+	.equ MidiOutPgm_Program,		0x2747	; the program, 0..0x7F -- MidiOutProgramChange_EditProgram
+	.equ MidiOutPgm_BankMsb,		0x2748	; bank select MSB -- MidiOutProgramChange_EditBankMsb
+	.equ MidiOutPgm_BankLsb,		0x2749	; bank select LSB -- MidiOutProgramChange_EditBankLsb
+	.equ MidiOutPgm_BankSelect,		0x274a	; word MSB*128+LSB, 0xFFFF = OFF -- MidiOutProgramChange_ResetState / _EditBankLsb
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24
