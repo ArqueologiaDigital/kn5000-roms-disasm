@@ -39603,13 +39603,13 @@ CheckingDevice_RamTest:
 .LF951E8:
 	ld IX,DE                                             ; F951E8  da 8c
 	extz XIX                                             ; F951EA  ec 12
-	lda xbc, (DebugMonitor_PrintDumpPage__F95C83:24)                               ; F951EC  f2 83 5c f9 31
+	lda xbc, (CheckingDevice_RamTestRecords:24)                               ; F951EC  f2 83 5c f9 31
 	add XBC,XIX                                          ; F951F1  ec 81
 	ld XWA,(XBC)                                         ; F951F3  a1 20
 	ld (xiz-12), xwa                                     ; F951F5  be f4 60
 	ld XBC,XIX                                           ; F951F8  ec 89
 	inc 4,XBC                                            ; F951FA  e9 64
-	add XBC,DebugMonitor_PrintDumpPage__F95C83                                   ; F951FC  e9 c8 83 5c f9 00
+	add XBC,CheckingDevice_RamTestRecords                                   ; F951FC  e9 c8 83 5c f9 00
 	ld XBC,(XBC)                                         ; F95202  a1 21
 	srl xbc, 0x01                                        ; F95204  e9 ef 01
 	ld (xiz-8), xbc                                      ; F95207  be f8 61
@@ -39625,7 +39625,7 @@ CheckingDevice_RamTest:
 	ld A,(XBC)                                           ; F9521F  81 21
 	cp A,0x5a                                            ; F95221  c9 cf 5a
 	jr z, .LF95233                                           ; F95224  66 0d
-	lda xwa, (DebugMonitor_PrintDumpPage__F95C83:24)                               ; F95226  f2 83 5c f9 30
+	lda xwa, (CheckingDevice_RamTestRecords:24)                               ; F95226  f2 83 5c f9 30
 	m_add_rm MLD+r6, 0xfc, r0                            ; F9522B  ae fc 80
 	ld C,(XWA)                                           ; F9522E  80 23
 	or (xiz-13), c                                       ; F95230  8e f3 eb
@@ -39642,7 +39642,7 @@ CheckingDevice_RamTest:
 	ld A,(XBC)                                           ; F9524A  81 21
 	cp A,0xa5                                            ; F9524C  c9 cf a5
 	jr z, .LF9525E                                           ; F9524F  66 0d
-	lda xwa, (DebugMonitor_PrintDumpPage__F95C83:24)                               ; F95251  f2 83 5c f9 30
+	lda xwa, (CheckingDevice_RamTestRecords:24)                               ; F95251  f2 83 5c f9 30
 	m_add_rm MLD+r6, 0xfc, r0                            ; F95256  ae fc 80
 	ld C,(XWA)                                           ; F95259  80 23
 	or (xiz-13), c                                       ; F9525B  8e f3 eb
@@ -39682,18 +39682,18 @@ CheckingDevice_RomIdTest:
 	ld BC,DE                                             ; F95299  da 89
 	extz XBC                                             ; F9529B  e9 12
 	ld (xiz-10), xbc                                     ; F9529D  be f6 61
-	add XBC,DebugMonitor_PrintDumpPage_Data_F95C7A                                   ; F952A0  e9 c8 7a 5c f9 00
+	add XBC,CheckingDevice_RomIdRecord                                   ; F952A0  e9 c8 7a 5c f9 00
 	ld XBC,(XBC)                                         ; F952A6  a1 21
 	ld (xiz-6), xbc                                      ; F952A8  be fa 61
 	ld l, 0x00:opc                                          ; F952AB  27 00
 	ld xwa, (xiz-10)                                     ; F952AD  ae f6 20
 	inc 8,XWA                                            ; F952B0  e8 60
-	add XWA,DebugMonitor_PrintDumpPage_Data_F95C7A                                   ; F952B2  e8 c8 7a 5c f9 00
+	add XWA,CheckingDevice_RomIdRecord                                   ; F952B2  e8 c8 7a 5c f9 00
 	ld H,(XWA)                                           ; F952B8  80 26
 	ld xix, (xiz-10)                                     ; F952BA  ae f6 24
 	inc 4,XIX                                            ; F952BD  ec 64
 .LF952BF:
-	lda xbc, (DebugMonitor_PrintDumpPage_Data_F95C7A:24)                               ; F952BF  f2 7a 5c f9 31
+	lda xbc, (CheckingDevice_RomIdRecord:24)                               ; F952BF  f2 7a 5c f9 31
 	add XBC,XIX                                          ; F952C4  ec 81
 	ld A,(XBC)                                           ; F952C6  81 21
 	ld (xiz-13), a                                       ; F952C8  be f3 41
@@ -40082,7 +40082,7 @@ TestMode_DisplayCycleTick:
 	ld C,(XIX)                                           ; F95614  84 23
 	extz BC                                              ; F95616  d9 12
 	extz XBC                                             ; F95618  e9 12
-	add XBC,DebugMonitor_PrintDumpPage__F95C60                                   ; F9561A  e9 c8 60 5c f9 00
+	add XBC,TestMode_DisplayCycleScreenIds                                   ; F9561A  e9 c8 60 5c f9 00
 	ld A,(XBC)                                           ; F95620  81 21
 	ld (UI_Request:16), a                                   ; F95622  f1 70 20 41
 	ld (UI_Request_Hi:16), 0x40                                 ; F95626  f1 71 20 00 40
@@ -40179,7 +40179,7 @@ PanelSwLedCheck_AllLedsOn:
 .LF956BA:
 	ld IX,HL                                             ; F956BA  db 8c
 	extz XIX                                             ; F956BC  ec 12
-	lda xbc, (0xf95c68:24)                               ; F956BE  f2 68 5c f9 31
+	lda xbc, (PanelSwLedCheck_LedGroups:24)                               ; F956BE  f2 68 5c f9 31
 	add XBC,XIX                                          ; F956C3  ec 81
 	ld DE,(XBC)                                          ; F956C5  91 22
 	cp DE,0xffff                                         ; F956C7  da cf ff ff
@@ -40188,7 +40188,7 @@ PanelSwLedCheck_AllLedsOn:
 	ld BC,DE                                             ; F956D0  da 89
 	srl bc, 0x08                                         ; F956D2  d9 ef 08
 	ld (0x60a001:24), c                                 ; F956D5  f2 01 a0 60 43
-	lda xbc, (0xf95c68:24)                               ; F956DA  f2 68 5c f9 31
+	lda xbc, (PanelSwLedCheck_LedGroups:24)                               ; F956DA  f2 68 5c f9 31
 	add XBC,XIX                                          ; F956DF  ec 81
 	ld A,(XBC)                                           ; F956E1  81 21
 	ld (0x60a000:24), a                                 ; F956E3  f2 00 a0 60 41
@@ -40212,7 +40212,7 @@ PanelSwLedCheck_AllLedsOff:
 .LF956FF:
 	ld BC,HL                                             ; F956FF  db 89
 	extz XBC                                             ; F95701  e9 12
-	add XBC,0x00f95c68                                   ; F95703  e9 c8 68 5c f9 00
+	add XBC,PanelSwLedCheck_LedGroups                                   ; F95703  e9 c8 68 5c f9 00
 	ld DE,(XBC)                                          ; F95709  91 22
 	cp DE,0xffff                                         ; F9570B  da cf ff ff
 	jr z, .LF9572D                                           ; F9570F  66 1c
@@ -41134,51 +41134,23 @@ DebugMonitor_PrintDumpPage__F95C52:
 DebugMonitor_PrintDumpPage__F95C5E:
 	pop XIX                                              ; F95C5E  5c
 	ret                                                  ; F95C5F  0e
-DebugMonitor_PrintDumpPage__F95C60:
-	normal                                               ; F95C60  01
-	normal                                               ; F95C61  01
-	sub XBC,(XWA)                                        ; F95C62  a0 a1
-	ld XBC,0xff060271                                    ; F95C64  41 71 02 06 ff
-	nop                                                  ; F95C69  00
-	swi 7                                                ; F95C6A  ff
-	normal                                               ; F95C6B  01
-	swi 7                                                ; F95C6C  ff
-	push SR                                              ; F95C6D  02
-	swi 7                                                ; F95C6E  ff
-	pop SR                                               ; F95C6F  03
-	swi 7                                                ; F95C70  ff
-	max                                                  ; F95C71  04
-	pop SR                                               ; F95C72  03
-	halt                                                 ; F95C73  05
-	retd 0x0206                                          ; F95C74  0f 06 02
-	reti                                                 ; F95C77  07
-	swi 7                                                ; F95C78  ff
-	swi 7                                                ; F95C79  ff
-DebugMonitor_PrintDumpPage_Data_F95C7A:
-	.byte 0xf0, 0xff, 0xff                               ; F95C7A  f0 ff ff
-	nop                                                  ; F95C7D  00
-	jrl c, 0x6173                                        ; F95C7E  77 73 61
-	jr lt, .LF95C84                                          ; F95C81  61 01
-DebugMonitor_PrintDumpPage__F95C83:
-	nop                                                  ; F95C83  00
-.LF95C84:
-	normal                                               ; F95C84  01
-	nop                                                  ; F95C85  00
-	nop                                                  ; F95C86  00
-	nop                                                  ; F95C87  00
-	normal                                               ; F95C88  01
-	nop                                                  ; F95C89  00
-	nop                                                  ; F95C8A  00
-	normal                                               ; F95C8B  01
-	nop                                                  ; F95C8C  00
-	nop                                                  ; F95C8D  00
-	jr f, .LF95C90                                           ; F95C8E  60 00
-.LF95C90:
-	nop                                                  ; F95C90  00
-	rcf                                                  ; F95C91  10
-	nop                                                  ; F95C92  00
-	nop                                                  ; F95C93  00
-	push SR                                              ; F95C94  02
+; Four small tables the test-mode routines index -- data, not code (they were decoded as `normal`,
+; `swi 7`, `retd` ...).  Extents are the readers' strides and counts:
+; TestMode_DisplayCycleScreenIds -- 8 screen ids; TestMode_DisplayCycleTick (`cp B,8`) posts entry B
+;          as UI_Request with UI_Request_Hi = 0x40
+TestMode_DisplayCycleScreenIds:	.byte	0x01, 0x01, 0xa0, 0xa1, 0x41, 0x71, 0x02, 0x06	; F95C60
+; PanelSwLedCheck_LedGroups -- the LED group bytes PanelSwLedCheck_AllLedsOn / _AllLedsOff walk
+PanelSwLedCheck_LedGroups:	.byte	0xff, 0x00, 0xff, 0x01, 0xff, 0x02, 0xff, 0x03, 0xff, 0x04, 0x03, 0x05, 0x0f, 0x06, 0x02, 0x07, 0xff, 0xff	; F95C68
+; CheckingDevice_RomIdRecord -- one 9-byte {address, expected LE32, failure bit} record for
+;          CheckingDevice_RomIdTest: the build tag must start "wsaa"
+CheckingDevice_RomIdRecord:	.long	BUILD_TAG	; F95C7A
+	.ascii	"wsaa"	; F95C7E
+	.byte	0x01	; F95C82
+; CheckingDevice_RamTestRecords -- two 9-byte {start, length, failure bit} records for CheckingDevice_RamTest
+CheckingDevice_RamTestRecords:	.long	0x00000100, 0x00000100	; F95C83
+	.byte	0x01	; F95C8B
+	.long	0x00600000, 0x00001000	; F95C8C
+	.byte	0x02	; F95C94
 ; ---------------------------------------------------------------------
 ; ScreenButtonHandlers_SineWaveCheckMode -- 32 LE32 handlers, one per panel
 ;          event code, for the screen object at prom_b 0xF400F0
