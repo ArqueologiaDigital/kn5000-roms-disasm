@@ -3379,4 +3379,6 @@ SubCPU_Send_Payload_Data:	.byte	0xff
 	.set EffectParamEdit_Entry_08, SeScreenData_0x58E6
 	.set HdaeRom_DispatchOffsetTable, Subsys_HandlerTable01 + 540
 	.set HdaeRom_AltDispatchOffsetTable, Subsys_HandlerTable01 + 552
-	.set NakaData_RomEnd, 0xffffff
+; NakaData_RomEnd -- the top of the 24-bit address space.  IvCatchEvent-style dispatch takes a value at or below
+;          it as a pointer and a value above it as an event code (`cp xwa,NakaData_RomEnd / jr ule` in ui_widget_defs.s).
+	.equ NakaData_RomEnd, 0xffffff
