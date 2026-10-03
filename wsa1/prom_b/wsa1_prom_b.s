@@ -173914,7 +173914,7 @@ sub_F735F7_Join:
 ; Called from: in-module: 0xF73642
 ; Touches: (0x10CA) (0x1239) (0x124D) (0x1258) (0x125B) (0x345C) (0x345E)
 ;          (0x7F4D)  |  0x603500
-; Calls:   sub_F74E71 sub_F73827 sub_F73818 sub_F74E86
+; Calls:   sub_F74E71 sub_F73827 sub_F73818 SmfWrite_AdvanceSongCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF73664 is an instruction boundary of this
@@ -174007,7 +174007,7 @@ sub_F73664_Skip10:
 	calr	sub_F73818	; F73724  calr 0xf73818
 	m_push MW16, BStore_CursorBlock	; F73727  pushw (0x345c)
 	m_push MW16, BStore_CursorOffset	; F7372B  pushw (0x345e)
-	calr	sub_F74E86	; F7372F  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F7372F  calr 0xf74e86
 	calr	sub_F74E71	; F73732  calr 0xf74e71
 	m_popw MD16, BStore_CursorOffset	; F73735  popw (0x345e)
 	m_popw MD16, BStore_CursorBlock	; F73739  popw (0x345c)
@@ -174020,7 +174020,7 @@ sub_F73664_Skip11:
 	calr	sub_F73818	; F7374C  calr 0xf73818
 	m_push MW16, BStore_CursorBlock	; F7374F  pushw (0x345c)
 	m_push MW16, BStore_CursorOffset	; F73753  pushw (0x345e)
-	calr	sub_F74E86	; F73757  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F73757  calr 0xf74e86
 	calr	sub_F74E71	; F7375A  calr 0xf74e71
 	m_popw MD16, BStore_CursorOffset	; F7375D  popw (0x345e)
 	m_popw MD16, BStore_CursorBlock	; F73761  popw (0x345c)
@@ -174051,7 +174051,7 @@ sub_F73664_Skip11:
 	jr	sub_F73664_Join4	; F737A3  jr T,0xf737bd
 sub_F73664_Skip12:
 	push	xhl	; F737A5  push XHL
-	calr	sub_F74E86	; F737A6  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F737A6  calr 0xf74e86
 	calr	sub_F74E71	; F737A9  calr 0xf74e71
 	pop	xhl	; F737AC  pop XHL
 	ld	c, (4298:16)	; F737AD  ld C,(0x10ca)
@@ -174078,7 +174078,7 @@ sub_F73664_Loop:
 sub_F73664_Join5:
 	calr	sub_F73827	; F737D9  calr 0xf73827
 sub_F73664_Loop2:
-	calr	sub_F74E86	; F737DC  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F737DC  calr 0xf74e86
 	calr	sub_F74E71	; F737DF  calr 0xf74e71
 	bit	7, a	; F737E2  bit 0x07,A
 	jr	z, sub_F73664_Loop2	; F737E5  jr Z,0xf737dc
@@ -174121,7 +174121,7 @@ ByteMap_F737F7:
 ; sub_F73818
 ; Called from: in-module: 0xF73724 0xF7374C
 ; Touches: nothing with an absolute address
-; Calls:   sub_F74E86 sub_F74E71
+; Calls:   SmfWrite_AdvanceSongCursor sub_F74E71
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF73818 is an instruction boundary of this
@@ -174133,7 +174133,7 @@ ByteMap_F737F7:
 sub_F73818:
 	ldw	bc, 2	; F73818  ld BC,0x0002
 	pushw	bc	; F7381B  push BC
-	calr	sub_F74E86	; F7381C  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F7381C  calr 0xf74e86
 	popw	bc	; F7381F  pop BC
 	djnz16	bc, -8	; F73820  djnz BC,0xf7381b
 	calr	sub_F74E71	; F73823  calr 0xf74e71
@@ -174203,8 +174203,8 @@ Data_F73844:
 ; Touches: (0x0C70) (0x107E) (0x1080) (0x1082) (0x1084) (0x1086) (0x1088)
 ;          (0x10C4) (0x10C6) (0x1193) +39 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A480 0x60A700
-; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_F42600 T_F42604 sub_F7492F
-;          T_F425CC sub_F7491F T_F425B0 sub_F735F7 sub_F72918 sub_F74EAE +20
+; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_F42600 T_F42604 SmfWrite_SaveFileName
+;          T_F425CC SmfWrite_RestoreFileName T_F425B0 sub_F735F7 sub_F72918 SmfWrite_ClearPendingNoteOffs +20
 ;          more
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
@@ -174298,7 +174298,7 @@ Smf_WriteFile_Join:
 	push	xix	; F73911  push XIX
 	push	xiy	; F73912  push XIY
 	push	xbc	; F73913  push XBC
-	calr	sub_F7492F	; F73914  calr 0xf7492f
+	calr	SmfWrite_SaveFileName	; F73914  calr 0xf7492f
 	pop	xbc	; F73917  pop XBC
 	pop	xiy	; F73918  pop XIY
 	pop	xix	; F73919  pop XIX
@@ -174312,7 +174312,7 @@ Smf_WriteFile_Join:
 	call	T_F425CC	; F73933  call 0xf425cc
 	popw	hl	; F73937  pop HL
 	ld	(8745:16), l	; F73938  ld (0x2229),L
-	calr	sub_F7491F	; F7393C  calr 0xf7491f
+	calr	SmfWrite_RestoreFileName	; F7393C  calr 0xf7491f
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7393F  cp (0x2880),0x23
 	jrl	nz, Smf_WriteFile_Join9	; F73944  jrl NZ,0xf74790
 	ld	a, (10020:16)	; F73947  ld A,(0x2724)
@@ -174351,10 +174351,10 @@ Smf_WriteFile_Skip7:
 	call	T_F42604	; F739BB  call 0xf42604
 	call	sub_F735F7	; F739BF  call 0xf735f7
 	call	sub_F72918	; F739C3  call 0xf72918
-	calr	sub_F74EAE	; F739C7  calr 0xf74eae
+	calr	SmfWrite_ClearPendingNoteOffs	; F739C7  calr 0xf74eae
 	call	T_F42604	; F739CA  call 0xf42604
-	calr	sub_F75685	; F739CE  calr 0xf75685
-	calr	sub_F74EAE	; F739D1  calr 0xf74eae
+	calr	SmfSize_Pass	; F739CE  calr 0xf75685
+	calr	SmfWrite_ClearPendingNoteOffs	; F739D1  calr 0xf74eae
 	xor	wa, wa	; F739D4  xor WA,WA
 	ld	(SmfOut_WindowsFlushed:16), wa	; F739D6  ld (0x126c),WA
 	ld	(4529:16), a	; F739DA  ld (0x11b1),A
@@ -174429,7 +174429,7 @@ Smf_WriteFile_Loop3:
 	xor	c, c	; F73AB6  xor C,C
 	or	hl, bc	; F73AB8  or HL,BC
 	popw	bc	; F73ABA  pop BC
-	calr	sub_F749A2	; F73ABB  calr 0xf749a2
+	calr	SmfWrite_StageTempoFromBpm	; F73ABB  calr 0xf749a2
 	calr	sub_F749C5	; F73ABE  calr 0xf749c5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73AC1  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73AC6  jrl NZ,0xf747dc
@@ -174453,7 +174453,7 @@ Smf_WriteFile_Skip10:
 	pushw	bc	; F73AFB  push BC
 	push	xiy	; F73AFC  push XIY
 	push	xix	; F73AFD  push XIX
-	calr	sub_F74B3A	; F73AFE  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F73AFE  calr 0xf74b3a
 	pop	xix	; F73B01  pop XIX
 	pop	xiy	; F73B02  pop XIY
 	popw	bc	; F73B03  pop BC
@@ -174544,7 +174544,7 @@ Smf_WriteFile_Join2:
 	pushw	wa	; F73BF5  push WA
 	pushw	bc	; F73BF6  push BC
 	pushw	de	; F73BF7  push DE
-	call	sub_F74AC5	; F73BF8  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F73BF8  call 0xf74ac5
 	popw	de	; F73BFC  pop DE
 	popw	bc	; F73BFD  pop BC
 	popw	wa	; F73BFE  pop WA
@@ -174554,7 +174554,7 @@ Smf_WriteFile_Join2:
 	ld	l, (6352916:24)	; F73C09  ld L,(0x60f014)
 	pushw	bc	; F73C0E  push BC
 	pushw	de	; F73C0F  push DE
-	call	sub_F74AC5	; F73C10  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F73C10  call 0xf74ac5
 	popw	de	; F73C14  pop DE
 	popw	bc	; F73C15  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73C16  cp (0x1238),0x03
@@ -174565,7 +174565,7 @@ Smf_WriteFile_Join2:
 	and	w, 127	; F73C2A  and W,0x7f
 	pushw	bc	; F73C2D  push BC
 	pushw	de	; F73C2E  push DE
-	calr	sub_F74AC5	; F73C2F  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73C2F  calr 0xf74ac5
 	popw	de	; F73C32  pop DE
 	popw	bc	; F73C33  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73C34  cp (0x1238),0x03
@@ -174580,7 +174580,7 @@ Smf_WriteFile_Skip12:
 	srl	l, 3	; F73C4C  srl 0x03,L
 	pushw	bc	; F73C4F  push BC
 	pushw	de	; F73C50  push DE
-	calr	sub_F74AC5	; F73C51  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73C51  calr 0xf74ac5
 	popw	de	; F73C54  pop DE
 	popw	bc	; F73C55  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73C56  cp (0x1238),0x03
@@ -174593,7 +174593,7 @@ Smf_WriteFile_Skip12:
 	sla	l, 4	; F73C6C  sla 0x04,L
 	pushw	bc	; F73C6F  push BC
 	pushw	de	; F73C70  push DE
-	calr	sub_F74AC5	; F73C71  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73C71  calr 0xf74ac5
 	popw	de	; F73C74  pop DE
 	popw	bc	; F73C75  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73C76  cp (0x1238),0x03
@@ -174604,7 +174604,7 @@ Smf_WriteFile_Skip12:
 	and	w, 127	; F73C87  and W,0x7f
 	pushw	bc	; F73C8A  push BC
 	pushw	de	; F73C8B  push DE
-	calr	sub_F74AC5	; F73C8C  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73C8C  calr 0xf74ac5
 	popw	de	; F73C8F  pop DE
 	popw	bc	; F73C90  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73C91  cp (0x1238),0x03
@@ -174616,7 +174616,7 @@ Smf_WriteFile_Join3:
 	ld	l, b	; F73CA2  ld L,B
 	pushw	wa	; F73CA4  push WA
 	pushw	de	; F73CA5  push DE
-	calr	sub_F74AC5	; F73CA6  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73CA6  calr 0xf74ac5
 	popw	de	; F73CA9  pop DE
 	popw	wa	; F73CAA  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73CAB  cp (0x1238),0x03
@@ -174625,7 +174625,7 @@ Smf_WriteFile_Join3:
 	ld	l, (4763:16)	; F73CB5  ld L,(0x129b)
 	pushw	wa	; F73CB9  push WA
 	pushw	de	; F73CBA  push DE
-	calr	sub_F74AC5	; F73CBB  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73CBB  calr 0xf74ac5
 	popw	de	; F73CBE  pop DE
 	popw	wa	; F73CBF  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73CC0  cp (0x1238),0x03
@@ -174634,7 +174634,7 @@ Smf_WriteFile_Join3:
 	ld	l, (4944:16)	; F73CCA  ld L,(0x1350)
 	pushw	wa	; F73CCE  push WA
 	pushw	de	; F73CCF  push DE
-	calr	sub_F74AC5	; F73CD0  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73CD0  calr 0xf74ac5
 	popw	de	; F73CD3  pop DE
 	popw	wa	; F73CD4  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73CD5  cp (0x1238),0x03
@@ -174643,7 +174643,7 @@ Smf_WriteFile_Join3:
 	ld	l, (4686:16)	; F73CDF  ld L,(0x124e)
 	and	l, 127	; F73CE3  and L,0x7f
 	pushw	wa	; F73CE6  push WA
-	calr	sub_F74AC5	; F73CE7  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73CE7  calr 0xf74ac5
 	popw	wa	; F73CEA  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73CEB  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73CF0  jrl NZ,0xf747dc
@@ -174673,7 +174673,7 @@ Smf_WriteFile_Join3:
 	ld	w, 10:opc	; F73D3B  ld W,0x0a
 	pushw	wa	; F73D3D  push WA
 	pushw	bc	; F73D3E  push BC
-	calr	sub_F74AC5	; F73D3F  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73D3F  calr 0xf74ac5
 	popw	bc	; F73D42  pop BC
 	popw	wa	; F73D43  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73D44  cp (0x1238),0x03
@@ -174681,14 +174681,14 @@ Smf_WriteFile_Join3:
 	ld	w, 101:opc	; F73D4C  ld W,0x65
 	ld	l, 0:opc	; F73D4E  ld L,0x00
 	pushw	wa	; F73D50  push WA
-	calr	sub_F74AC5	; F73D51  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73D51  calr 0xf74ac5
 	popw	wa	; F73D54  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73D55  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73D5A  jrl NZ,0xf747dc
 	ld	w, 100:opc	; F73D5D  ld W,0x64
 	ld	l, 1:opc	; F73D5F  ld L,0x01
 	pushw	wa	; F73D61  push WA
-	calr	sub_F74AC5	; F73D62  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73D62  calr 0xf74ac5
 	popw	wa	; F73D65  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73D66  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73D6B  jrl NZ,0xf747dc
@@ -174710,7 +174710,7 @@ Smf_WriteFile_Join3:
 	ld	w, 6:opc	; F73DA2  ld W,0x06
 	pushw	wa	; F73DA4  push WA
 	pushw	bc	; F73DA5  push BC
-	calr	sub_F74AC5	; F73DA6  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73DA6  calr 0xf74ac5
 	popw	bc	; F73DA9  pop BC
 	popw	wa	; F73DAA  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73DAB  cp (0x1238),0x03
@@ -174720,21 +174720,21 @@ Smf_WriteFile_Join3:
 	.byte 0xCF, 0xE9, 0x02	; F73DB8  rrc 0x02,L   [llvm-mc cannot encode this]
 	ld	w, 38:opc	; F73DBB  ld W,0x26
 	pushw	wa	; F73DBD  push WA
-	calr	sub_F74AC5	; F73DBE  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73DBE  calr 0xf74ac5
 	popw	wa	; F73DC1  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73DC2  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73DC7  jrl NZ,0xf747dc
 	ld	w, 101:opc	; F73DCA  ld W,0x65
 	ld	l, 0:opc	; F73DCC  ld L,0x00
 	pushw	wa	; F73DCE  push WA
-	calr	sub_F74AC5	; F73DCF  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73DCF  calr 0xf74ac5
 	popw	wa	; F73DD2  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73DD3  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73DD8  jrl NZ,0xf747dc
 	ld	w, 100:opc	; F73DDB  ld W,0x64
 	ld	l, 2:opc	; F73DDD  ld L,0x02
 	pushw	wa	; F73DDF  push WA
-	calr	sub_F74AC5	; F73DE0  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73DE0  calr 0xf74ac5
 	popw	wa	; F73DE3  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73DE4  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73DE9  jrl NZ,0xf747dc
@@ -174754,28 +174754,28 @@ Smf_WriteFile_Join3:
 	m_rd_ld_rrx RLX, 0x38, r5	; F73E1B  ld XIY,XDE3
 	ld	w, 6:opc	; F73E1E  ld W,0x06
 	pushw	wa	; F73E20  push WA
-	calr	sub_F74AC5	; F73E21  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73E21  calr 0xf74ac5
 	popw	wa	; F73E24  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73E25  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73E2A  jrl NZ,0xf747dc
 	ld	w, 38:opc	; F73E2D  ld W,0x26
 	xor	l, l	; F73E2F  xor L,L
 	pushw	wa	; F73E31  push WA
-	calr	sub_F74AC5	; F73E32  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73E32  calr 0xf74ac5
 	popw	wa	; F73E35  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73E36  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73E3B  jrl NZ,0xf747dc
 	ld	w, 101:opc	; F73E3E  ld W,0x65
 	ld	l, 0:opc	; F73E40  ld L,0x00
 	pushw	wa	; F73E42  push WA
-	calr	sub_F74AC5	; F73E43  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73E43  calr 0xf74ac5
 	popw	wa	; F73E46  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73E47  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73E4C  jrl NZ,0xf747dc
 	ld	w, 100:opc	; F73E4F  ld W,0x64
 	ld	l, 0:opc	; F73E51  ld L,0x00
 	pushw	wa	; F73E53  push WA
-	calr	sub_F74AC5	; F73E54  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73E54  calr 0xf74ac5
 	popw	wa	; F73E57  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73E58  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73E5D  jrl NZ,0xf747dc
@@ -174793,14 +174793,14 @@ Smf_WriteFile_Join3:
 	ld	l, (xiy+13)	; F73E89  ld L,(XIY+0x0d)
 	ld	w, 6:opc	; F73E8C  ld W,0x06
 	pushw	wa	; F73E8E  push WA
-	calr	sub_F74AC5	; F73E8F  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73E8F  calr 0xf74ac5
 	popw	wa	; F73E92  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73E93  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73E98  jrl NZ,0xf747dc
 	ld	w, 38:opc	; F73E9B  ld W,0x26
 	xor	l, l	; F73E9D  xor L,L
 	pushw	wa	; F73E9F  push WA
-	calr	sub_F74AC5	; F73EA0  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F73EA0  calr 0xf74ac5
 	popw	wa	; F73EA3  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73EA4  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73EA9  jrl NZ,0xf747dc
@@ -174820,7 +174820,7 @@ Smf_WriteFile_Join4:
 	jr	z, Smf_WriteFile_Skip14	; F73ED0  jr Z,0xf73eec
 	m_push MW16, BStore_CursorBlock	; F73ED2  pushw (0x345c)
 	m_push MW16, BStore_CursorOffset	; F73ED6  pushw (0x345e)
-	calr	sub_F74E86	; F73EDA  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F73EDA  calr 0xf74e86
 	calr	sub_F74E71	; F73EDD  calr 0xf74e71
 	m_popw MD16, BStore_CursorOffset	; F73EE0  popw (0x345e)
 	m_popw MD16, BStore_CursorBlock	; F73EE4  popw (0x345c)
@@ -174832,7 +174832,7 @@ Smf_WriteFile_Skip14:
 Smf_WriteFile_Loop6:
 	xor	xhl, xhl	; F73EFE  xor XHL,XHL
 	push	xhl	; F73F00  push XHL
-	calr	sub_F74E60	; F73F01  calr 0xf74e60
+	calr	SmfWrite_ClearEventFields	; F73F01  calr 0xf74e60
 	calr	sub_F74E71	; F73F04  calr 0xf74e71
 	pop	xhl	; F73F07  pop XHL
 	cp	a, 130	; F73F08  cp A,0x82
@@ -174843,7 +174843,7 @@ Smf_WriteFile_Loop7:
 	mx_st_mr8 MXD, ra_DE, ra_HL, 1	; F73F14  ld (XDE+HL),A
 	pop	xde	; F73F19  pop XDE
 	push	xhl	; F73F1A  push XHL
-	calr	sub_F74E86	; F73F1B  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F73F1B  calr 0xf74e86
 	calr	sub_F74E71	; F73F1E  calr 0xf74e71
 	pop	xhl	; F73F21  pop XHL
 	inc	1, hl	; F73F22  inc 1,HL
@@ -174878,7 +174878,7 @@ Smf_WriteFile_Join5:
 	cp	a, 129	; F73F71  cp A,0x81
 	jr	nz, Smf_WriteFile_Skip16	; F73F74  jr NZ,0xf73f7f
 	incw	1, (4230:16)	; F73F76  incw 1,(0x1086)
-	calr	sub_F74E86	; F73F7A  calr 0xf74e86
+	calr	SmfWrite_AdvanceSongCursor	; F73F7A  calr 0xf74e86
 	jr	Smf_WriteFile_Join5	; F73F7D  jr T,0xf73f6e
 Smf_WriteFile_Skip16:
 	ld	wa, (4230:16)	; F73F7F  ld WA,(0x1086)
@@ -174895,8 +174895,8 @@ Smf_WriteFile_Skip17:
 	cp	hl, 4:i3	; F73FA0  cp HL,4
 	jrl	nz, Smf_WriteFile_Loop6	; F73FA2  jrl NZ,0xf73efe
 	ld	c, (4505:16)	; F73FA5  ld C,(0x1199)
-	calr	sub_F74A74	; F73FA9  calr 0xf74a74
-	calr	sub_F74BF6	; F73FAC  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F73FA9  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F73FAC  calr 0xf74bf6
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73FAF  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73FB4  jrl NZ,0xf747dc
 	ld	hl, (4506:16)	; F73FB7  ld HL,(0x119a)
@@ -174913,14 +174913,14 @@ Smf_WriteFile_Skip17:
 	xor	a, a	; F73FD6  xor A,A
 	or	hl, wa	; F73FD8  or HL,WA
 	popw	wa	; F73FDA  pop WA
-	calr	sub_F749A2	; F73FDB  calr 0xf749a2
+	calr	SmfWrite_StageTempoFromBpm	; F73FDB  calr 0xf749a2
 	calr	sub_F749C5	; F73FDE  calr 0xf749c5
 	jrl	Smf_WriteFile_Loop6	; F73FE1  jrl T,0xf73efe
 Smf_WriteFile_Skip18:
 	ld	c, (4505:16)	; F73FE4  ld C,(0x1199)
 	pushw	wa	; F73FE8  push WA
-	calr	sub_F74A74	; F73FE9  calr 0xf74a74
-	calr	sub_F74BF6	; F73FEC  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F73FE9  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F73FEC  calr 0xf74bf6
 	popw	wa	; F73FEF  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73FF0  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73FF5  jrl NZ,0xf747dc
@@ -174928,7 +174928,7 @@ Smf_WriteFile_Skip18:
 	or	a, 208	; F73FFB  or A,0xd0
 	ld	w, (4506:16)	; F73FFE  ld W,(0x119a)
 	xor	l, l	; F74002  xor L,L
-	calr	sub_F74AC5	; F74004  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74004  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74007  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7400C  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F7400F  jrl T,0xf73efe
@@ -174937,8 +174937,8 @@ Smf_WriteFile_Skip19:
 	jrl	nz, Smf_WriteFile_Loop6	; F74014  jrl NZ,0xf73efe
 	ld	c, (4505:16)	; F74017  ld C,(0x1199)
 	pushw	wa	; F7401B  push WA
-	calr	sub_F74A74	; F7401C  calr 0xf74a74
-	calr	sub_F74BF6	; F7401F  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7401C  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F7401F  calr 0xf74bf6
 	popw	wa	; F74022  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74023  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74028  jrl NZ,0xf747dc
@@ -174946,7 +174946,7 @@ Smf_WriteFile_Skip19:
 	or	a, 176	; F7402E  or A,0xb0
 	ld	w, 1:opc	; F74031  ld W,0x01
 	ld	l, (4506:16)	; F74033  ld L,(0x119a)
-	calr	sub_F74AC5	; F74037  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74037  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7403A  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7403F  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74042  jrl T,0xf73efe
@@ -174955,14 +174955,14 @@ Smf_WriteFile_Skip20:
 	jrl	nz, Smf_WriteFile_Loop6	; F74047  jrl NZ,0xf73efe
 	ld	c, (4505:16)	; F7404A  ld C,(0x1199)
 	pushw	wa	; F7404E  push WA
-	calr	sub_F74A74	; F7404F  calr 0xf74a74
-	calr	sub_F74BF6	; F74052  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7404F  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74052  calr 0xf74bf6
 	popw	wa	; F74055  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74056  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7405B  jrl NZ,0xf747dc
 	ld	w, (4506:16)	; F7405E  ld W,(0x119a)
 	ld	l, (4507:16)	; F74062  ld L,(0x119b)
-	calr	sub_F74AC5	; F74066  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74066  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74069  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7406E  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74071  jrl T,0xf73efe
@@ -174974,8 +174974,8 @@ Smf_WriteFile_Skip21:
 	xor	h, h	; F7407E  xor H,H
 	ld	c, (4505:16)	; F74080  ld C,(0x1199)
 	pushw	wa	; F74084  push WA
-	calr	sub_F74A74	; F74085  calr 0xf74a74
-	calr	sub_F74BF6	; F74088  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F74085  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74088  calr 0xf74bf6
 	popw	wa	; F7408B  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7408C  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74091  jrl NZ,0xf747dc
@@ -174983,7 +174983,7 @@ Smf_WriteFile_Skip21:
 	or	a, 176	; F74097  or A,0xb0
 	ld	w, 11:opc	; F7409A  ld W,0x0b
 	ld	l, (4506:16)	; F7409C  ld L,(0x119a)
-	calr	sub_F74AC5	; F740A0  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F740A0  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F740A3  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F740A8  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F740AB  jrl T,0xf73efe
@@ -175005,8 +175005,8 @@ Smf_WriteFile_Skip23:
 	m_or_mi8 MB16, 0x11b1, 0x01	; F740D0  or (0x11b1),0x01
 	pushw	hl	; F740D5  push HL
 	ld	c, (4505:16)	; F740D6  ld C,(0x1199)
-	calr	sub_F74A74	; F740DA  calr 0xf74a74
-	calr	sub_F74BF6	; F740DD  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F740DA  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F740DD  calr 0xf74bf6
 	popw	hl	; F740E0  pop HL
 	m_cp_mi8 MB16, 0x1238, 0x03	; F740E1  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F740E6  jrl NZ,0xf747dc
@@ -175014,7 +175014,7 @@ Smf_WriteFile_Skip23:
 	ld	a, (4504:16)	; F740EA  ld A,(0x1198)
 	ld	w, (4506:16)	; F740EE  ld W,(0x119a)
 	ld	l, (4507:16)	; F740F2  ld L,(0x119b)
-	calr	sub_F74AC5	; F740F6  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F740F6  calr 0xf74ac5
 	popw	hl	; F740F9  pop HL
 	m_cp_mi8 MB16, 0x1238, 0x03	; F740FA  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F740FF  jrl NZ,0xf747dc
@@ -175049,8 +175049,8 @@ Smf_WriteFile_Skip24:
 Smf_WriteFile_Skip25:
 	ld	c, (4505:16)	; F74158  ld C,(0x1199)
 	pushw	wa	; F7415C  push WA
-	calr	sub_F74A74	; F7415D  calr 0xf74a74
-	calr	sub_F74BF6	; F74160  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7415D  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74160  calr 0xf74bf6
 	popw	wa	; F74163  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74164  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74169  jrl NZ,0xf747dc
@@ -175086,7 +175086,7 @@ Smf_WriteFile_Skip25:
 	xor	w, w	; F741D0  xor W,W
 	ld	l, (6352917:24)	; F741D2  ld L,(0x60f015)
 	pushw	wa	; F741D7  push WA
-	call	sub_F74AC5	; F741D8  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F741D8  call 0xf74ac5
 	popw	wa	; F741DC  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F741DD  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F741E2  jrl NZ,0xf747dc
@@ -175094,7 +175094,7 @@ Smf_WriteFile_Skip25:
 	ld	(4501:16), 0	; F741EB  ld (0x1195),0x00
 	ld	w, 32:opc	; F741F0  ld W,0x20
 	ld	l, (6352916:24)	; F741F2  ld L,(0x60f014)
-	call	sub_F74AC5	; F741F7  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F741F7  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F741FB  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74200  jrl NZ,0xf747dc
 	ld	a, 192:opc	; F74203  ld A,0xc0
@@ -175103,7 +175103,7 @@ Smf_WriteFile_Skip25:
 	or	a, w	; F7420C  or A,W
 	ld	w, (6352918:24)	; F7420E  ld W,(0x60f016)
 	xor	l, l	; F74213  xor L,L
-	calr	sub_F74AC5	; F74215  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74215  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74218  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7421D  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74220  jrl T,0xf73efe
@@ -175112,7 +175112,7 @@ Smf_WriteFile_Skip26:
 	ld	l, (4509:16)	; F74225  ld L,(0x119d)
 	and	l, 56	; F74229  and L,0x38
 	srl	l, 3	; F7422C  srl 0x03,L
-	calr	sub_F74A66	; F7422F  calr 0xf74a66
+	calr	SmfWrite_WriteControlChange	; F7422F  calr 0xf74a66
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74232  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74237  jrl NZ,0xf747dc
 	ldw	(4499:16), 0	; F7423A  ld (0x1193),0x0000
@@ -175121,7 +175121,7 @@ Smf_WriteFile_Skip26:
 	ld	l, (4509:16)	; F74247  ld L,(0x119d)
 	and	l, 7	; F7424B  and L,0x07
 	sla	l, 4	; F7424E  sla 0x04,L
-	calr	sub_F74A66	; F74251  calr 0xf74a66
+	calr	SmfWrite_WriteControlChange	; F74251  calr 0xf74a66
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74254  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74259  jrl NZ,0xf747dc
 	ld	a, 192:opc	; F7425C  ld A,0xc0
@@ -175130,7 +175130,7 @@ Smf_WriteFile_Skip26:
 	or	a, w	; F74265  or A,W
 	ld	w, (4508:16)	; F74267  ld W,(0x119c)
 	xor	l, l	; F7426B  xor L,L
-	calr	sub_F74AC5	; F7426D  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F7426D  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74270  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74275  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74278  jrl T,0xf73efe
@@ -175191,8 +175191,8 @@ Smf_WriteFile_Skip29:
 	ld	c, (4505:16)	; F74310  ld C,(0x1199)
 	pushw	wa	; F74314  push WA
 	pushw	hl	; F74315  push HL
-	calr	sub_F74A74	; F74316  calr 0xf74a74
-	calr	sub_F74BF6	; F74319  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F74316  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74319  calr 0xf74bf6
 	popw	hl	; F7431C  pop HL
 	popw	wa	; F7431D  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7431E  cp (0x1238),0x03
@@ -175203,7 +175203,7 @@ Smf_WriteFile_Skip29:
 	or	a, w	; F7432D  or A,W
 	ld	w, 64:opc	; F7432F  ld W,0x40
 	ld	l, (4508:16)	; F74331  ld L,(0x119c)
-	call	sub_F74AC5	; F74335  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F74335  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74339  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7433E  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74341  jrl T,0xf73efe
@@ -175211,8 +175211,8 @@ Smf_WriteFile_Skip30:
 	ld	c, (4505:16)	; F74344  ld C,(0x1199)
 	pushw	wa	; F74348  push WA
 	pushw	hl	; F74349  push HL
-	calr	sub_F74A74	; F7434A  calr 0xf74a74
-	calr	sub_F74BF6	; F7434D  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7434A  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F7434D  calr 0xf74bf6
 	popw	hl	; F74350  pop HL
 	popw	wa	; F74351  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74352  cp (0x1238),0x03
@@ -175223,7 +175223,7 @@ Smf_WriteFile_Skip30:
 	or	a, w	; F74361  or A,W
 	ld	w, 2:opc	; F74363  ld W,0x02
 	ld	l, (4508:16)	; F74365  ld L,(0x119c)
-	call	sub_F74AC5	; F74369  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F74369  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7436D  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74372  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74375  jrl T,0xf73efe
@@ -175231,8 +175231,8 @@ Smf_WriteFile_Skip31:
 	ld	c, (4505:16)	; F74378  ld C,(0x1199)
 	pushw	wa	; F7437C  push WA
 	pushw	hl	; F7437D  push HL
-	calr	sub_F74A74	; F7437E  calr 0xf74a74
-	calr	sub_F74BF6	; F74381  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7437E  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74381  calr 0xf74bf6
 	popw	hl	; F74384  pop HL
 	popw	wa	; F74385  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74386  cp (0x1238),0x03
@@ -175243,7 +175243,7 @@ Smf_WriteFile_Skip31:
 	or	a, w	; F74395  or A,W
 	ld	w, 4:opc	; F74397  ld W,0x04
 	ld	l, (4508:16)	; F74399  ld L,(0x119c)
-	call	sub_F74AC5	; F7439D  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F7439D  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F743A1  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F743A6  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F743A9  jrl T,0xf73efe
@@ -175251,8 +175251,8 @@ Smf_WriteFile_Skip32:
 	ld	c, (4505:16)	; F743AC  ld C,(0x1199)
 	pushw	wa	; F743B0  push WA
 	pushw	hl	; F743B1  push HL
-	calr	sub_F74A74	; F743B2  calr 0xf74a74
-	calr	sub_F74BF6	; F743B5  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F743B2  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F743B5  calr 0xf74bf6
 	popw	hl	; F743B8  pop HL
 	popw	wa	; F743B9  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F743BA  cp (0x1238),0x03
@@ -175263,7 +175263,7 @@ Smf_WriteFile_Skip32:
 	or	a, w	; F743C9  or A,W
 	ld	w, 16:opc	; F743CB  ld W,0x10
 	ld	l, (4508:16)	; F743CD  ld L,(0x119c)
-	call	sub_F74AC5	; F743D1  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F743D1  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F743D5  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F743DA  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F743DD  jrl T,0xf73efe
@@ -175271,8 +175271,8 @@ Smf_WriteFile_Skip33:
 	ld	c, (4505:16)	; F743E0  ld C,(0x1199)
 	pushw	wa	; F743E4  push WA
 	pushw	hl	; F743E5  push HL
-	calr	sub_F74A74	; F743E6  calr 0xf74a74
-	calr	sub_F74BF6	; F743E9  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F743E6  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F743E9  calr 0xf74bf6
 	popw	hl	; F743EC  pop HL
 	popw	wa	; F743ED  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F743EE  cp (0x1238),0x03
@@ -175283,7 +175283,7 @@ Smf_WriteFile_Skip33:
 	or	a, w	; F743FD  or A,W
 	ld	w, 17:opc	; F743FF  ld W,0x11
 	ld	l, (4508:16)	; F74401  ld L,(0x119c)
-	call	sub_F74AC5	; F74405  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F74405  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74409  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7440E  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74411  jrl T,0xf73efe
@@ -175291,8 +175291,8 @@ Smf_WriteFile_Skip34:
 	ld	c, (4505:16)	; F74414  ld C,(0x1199)
 	pushw	wa	; F74418  push WA
 	pushw	hl	; F74419  push HL
-	calr	sub_F74A74	; F7441A  calr 0xf74a74
-	calr	sub_F74BF6	; F7441D  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7441A  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F7441D  calr 0xf74bf6
 	popw	hl	; F74420  pop HL
 	popw	wa	; F74421  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74422  cp (0x1238),0x03
@@ -175303,7 +175303,7 @@ Smf_WriteFile_Skip34:
 	or	a, w	; F74431  or A,W
 	ld	w, 18:opc	; F74433  ld W,0x12
 	ld	l, (4508:16)	; F74435  ld L,(0x119c)
-	call	sub_F74AC5	; F74439  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F74439  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7443D  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74442  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74445  jrl T,0xf73efe
@@ -175311,8 +175311,8 @@ Smf_WriteFile_Skip35:
 	ld	c, (4505:16)	; F74448  ld C,(0x1199)
 	pushw	wa	; F7444C  push WA
 	pushw	hl	; F7444D  push HL
-	calr	sub_F74A74	; F7444E  calr 0xf74a74
-	calr	sub_F74BF6	; F74451  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7444E  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74451  calr 0xf74bf6
 	popw	hl	; F74454  pop HL
 	popw	wa	; F74455  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74456  cp (0x1238),0x03
@@ -175323,7 +175323,7 @@ Smf_WriteFile_Skip35:
 	or	a, w	; F74465  or A,W
 	ld	w, 19:opc	; F74467  ld W,0x13
 	ld	l, (4508:16)	; F74469  ld L,(0x119c)
-	call	sub_F74AC5	; F7446D  call 0xf74ac5
+	call	SmfWrite_WriteChannelEvent	; F7446D  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74471  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74476  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74479  jrl T,0xf73efe
@@ -175365,8 +175365,8 @@ Smf_WriteFile_Skip37:
 	ld	c, (4505:16)	; F744D5  ld C,(0x1199)
 	pushw	wa	; F744D9  push WA
 	push	xhl	; F744DA  push XHL
-	calr	sub_F74A74	; F744DB  calr 0xf74a74
-	calr	sub_F74BF6	; F744DE  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F744DB  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F744DE  calr 0xf74bf6
 	pop	xhl	; F744E1  pop XHL
 	popw	wa	; F744E2  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F744E3  cp (0x1238),0x03
@@ -175378,7 +175378,7 @@ Smf_WriteFile_Skip37:
 	ld	w, 101:opc	; F744F6  ld W,0x65
 	ld	l, 0:opc	; F744F8  ld L,0x00
 	pushw	wa	; F744FA  push WA
-	calr	sub_F74AC5	; F744FB  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F744FB  calr 0xf74ac5
 	popw	wa	; F744FE  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F744FF  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74504  jrl NZ,0xf747dc
@@ -175386,7 +175386,7 @@ Smf_WriteFile_Skip37:
 	ld	l, 1:opc	; F74509  ld L,0x01
 	ld	(4499:16), 0	; F7450B  ld (0x1193),0x00
 	pushw	wa	; F74510  push WA
-	calr	sub_F74AC5	; F74511  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74511  calr 0xf74ac5
 	popw	wa	; F74514  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74515  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7451A  jrl NZ,0xf747dc
@@ -175398,7 +175398,7 @@ Smf_WriteFile_Skip37:
 	srl	l, 1	; F7452D  srl 0x01,L
 	or	l, h	; F74530  or L,H
 	pushw	wa	; F74532  push WA
-	calr	sub_F74AC5	; F74533  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74533  calr 0xf74ac5
 	popw	wa	; F74536  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74537  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7453C  jrl NZ,0xf747dc
@@ -175407,7 +175407,7 @@ Smf_WriteFile_Skip37:
 	and	l, 1	; F74545  and L,0x01
 	.byte 0xCF, 0xE9, 0x02	; F74548  rrc 0x02,L   [llvm-mc cannot encode this]
 	pushw	wa	; F7454B  push WA
-	calr	sub_F74AC5	; F7454C  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F7454C  calr 0xf74ac5
 	popw	wa	; F7454F  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74550  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74555  jrl NZ,0xf747dc
@@ -175421,8 +175421,8 @@ Smf_WriteFile_Skip39:
 	ld	c, (4505:16)	; F74569  ld C,(0x1199)
 	pushw	wa	; F7456D  push WA
 	pushw	hl	; F7456E  push HL
-	calr	sub_F74A74	; F7456F  calr 0xf74a74
-	calr	sub_F74BF6	; F74572  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7456F  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74572  calr 0xf74bf6
 	popw	hl	; F74575  pop HL
 	popw	wa	; F74576  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74577  cp (0x1238),0x03
@@ -175434,7 +175434,7 @@ Smf_WriteFile_Skip39:
 	ld	w, 101:opc	; F7458A  ld W,0x65
 	ld	l, 0:opc	; F7458C  ld L,0x00
 	pushw	wa	; F7458E  push WA
-	calr	sub_F74AC5	; F7458F  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F7458F  calr 0xf74ac5
 	popw	wa	; F74592  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74593  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74598  jrl NZ,0xf747dc
@@ -175442,20 +175442,20 @@ Smf_WriteFile_Skip39:
 	ld	l, 0:opc	; F7459D  ld L,0x00
 	ld	(4499:16), 0	; F7459F  ld (0x1193),0x00
 	pushw	wa	; F745A4  push WA
-	calr	sub_F74AC5	; F745A5  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F745A5  calr 0xf74ac5
 	popw	wa	; F745A8  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F745A9  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F745AE  jrl NZ,0xf747dc
 	ld	w, 6:opc	; F745B1  ld W,0x06
 	ld	l, (4508:16)	; F745B3  ld L,(0x119c)
 	pushw	wa	; F745B7  push WA
-	calr	sub_F74AC5	; F745B8  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F745B8  calr 0xf74ac5
 	popw	wa	; F745BB  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F745BC  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F745C1  jrl NZ,0xf747dc
 	ld	w, 38:opc	; F745C4  ld W,0x26
 	ld	l, 0:opc	; F745C6  ld L,0x00
-	calr	sub_F74AC5	; F745C8  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F745C8  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F745CB  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F745D0  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F745D3  jrl T,0xf73efe
@@ -175468,8 +175468,8 @@ Smf_WriteFile_Skip41:
 	ld	c, (4505:16)	; F745E4  ld C,(0x1199)
 	pushw	wa	; F745E8  push WA
 	push	xhl	; F745E9  push XHL
-	calr	sub_F74A74	; F745EA  calr 0xf74a74
-	calr	sub_F74BF6	; F745ED  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F745EA  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F745ED  calr 0xf74bf6
 	pop	xhl	; F745F0  pop XHL
 	popw	wa	; F745F1  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F745F2  cp (0x1238),0x03
@@ -175481,7 +175481,7 @@ Smf_WriteFile_Skip41:
 	ld	w, 101:opc	; F74605  ld W,0x65
 	ld	l, 0:opc	; F74607  ld L,0x00
 	pushw	wa	; F74609  push WA
-	calr	sub_F74AC5	; F7460A  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F7460A  calr 0xf74ac5
 	popw	wa	; F7460D  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7460E  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74613  jrl NZ,0xf747dc
@@ -175489,20 +175489,20 @@ Smf_WriteFile_Skip41:
 	ld	l, 2:opc	; F74618  ld L,0x02
 	ld	(4499:16), 0	; F7461A  ld (0x1193),0x00
 	pushw	wa	; F7461F  push WA
-	calr	sub_F74AC5	; F74620  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74620  calr 0xf74ac5
 	popw	wa	; F74623  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74624  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74629  jrl NZ,0xf747dc
 	ld	w, 6:opc	; F7462C  ld W,0x06
 	ld	l, (4508:16)	; F7462E  ld L,(0x119c)
 	pushw	wa	; F74632  push WA
-	calr	sub_F74AC5	; F74633  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74633  calr 0xf74ac5
 	popw	wa	; F74636  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74637  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7463C  jrl NZ,0xf747dc
 	ld	w, 38:opc	; F7463F  ld W,0x26
 	ld	l, 0:opc	; F74641  ld L,0x00
-	calr	sub_F74AC5	; F74643  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74643  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74646  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7464B  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F7464E  jrl T,0xf73efe
@@ -175515,8 +175515,8 @@ Smf_WriteFile_Skip43:
 	ld	c, (4505:16)	; F7465E  ld C,(0x1199)
 	pushw	wa	; F74662  push WA
 	push	xhl	; F74663  push XHL
-	calr	sub_F74A74	; F74664  calr 0xf74a74
-	calr	sub_F74BF6	; F74667  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F74664  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F74667  calr 0xf74bf6
 	pop	xhl	; F7466A  pop XHL
 	popw	wa	; F7466B  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7466C  cp (0x1238),0x03
@@ -175527,7 +175527,7 @@ Smf_WriteFile_Skip43:
 	or	a, w	; F7467D  or A,W
 	ld	w, 10:opc	; F7467F  ld W,0x0a
 	ld	l, (4508:16)	; F74681  ld L,(0x119c)
-	calr	sub_F74AC5	; F74685  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74685  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74688  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F7468D  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74690  jrl T,0xf73efe
@@ -175588,13 +175588,13 @@ Smf_WriteFile_Join7:
 	ld	c, (4505:16)	; F74713  ld C,(0x1199)
 	pushw	wa	; F74717  push WA
 	pushw	hl	; F74718  push HL
-	calr	sub_F74A74	; F74719  calr 0xf74a74
-	calr	sub_F74BF6	; F7471C  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F74719  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F7471C  calr 0xf74bf6
 	popw	hl	; F7471F  pop HL
 	popw	wa	; F74720  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74721  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74726  jrl NZ,0xf747dc
-	calr	sub_F74AC5	; F74729  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74729  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F7472C  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74731  jrl NZ,0xf747dc
 	jrl	Smf_WriteFile_Loop6	; F74734  jrl T,0xf73efe
@@ -175602,14 +175602,14 @@ Smf_WriteFile_Skip54:
 	jrl	Smf_WriteFile_Loop6	; F74737  jrl T,0xf73efe
 Smf_WriteFile_Skip55:
 	ld	c, 0:opc	; F7473A  ld C,0x00
-	calr	sub_F74A74	; F7473C  calr 0xf74a74
-	calr	sub_F74BF6	; F7473F  calr 0xf74bf6
+	calr	SmfWrite_EncodeDeltaTime	; F7473C  calr 0xf74a74
+	calr	SmfWrite_AgePendingNoteOffs	; F7473F  calr 0xf74bf6
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74742  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74747  jrl NZ,0xf747dc
 	ld	a, 255:opc	; F7474A  ld A,0xff
 	ld	w, 47:opc	; F7474C  ld W,0x2f
 	ld	l, 0:opc	; F7474E  ld L,0x00
-	calr	sub_F74AC5	; F74750  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74750  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74753  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74758  jrl NZ,0xf747dc
 	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F7475B  cp (0x126c),0x0000
@@ -175645,7 +175645,7 @@ Smf_WriteFile_Join9:
 	popw	hl	; F747BE  pop HL
 	ld	(UI_StatusCode:16), l	; F747BF  ld (0x2880),L
 Smf_WriteFile_Skip57:
-	calr	sub_F7491F	; F747C3  calr 0xf7491f
+	calr	SmfWrite_RestoreFileName	; F747C3  calr 0xf7491f
 	ld	(8745:16), 0	; F747C6  ld (0x2229),0x00
 	jr	Smf_WriteFile_Join11	; F747CB  jr T,0xf747fa
 Smf_WriteFile_Loop9:
@@ -175859,7 +175859,7 @@ sub_F748AD_Epilogue:
 ; sub_F748F0
 ; Called from: in-module: 0xF74775 0xF747CD 0xF747EB
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x2725)
-; Calls:   T_F425C8 T_F425B0 sub_F7491F
+; Calls:   T_F425C8 T_F425B0 SmfWrite_RestoreFileName
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF748F0 is an instruction boundary of this
@@ -175879,11 +175879,11 @@ sub_F748F0:
 	ld	(Disk_FileName+9:16), 63	; F7490D  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F74912  ld (0x21d2),0x3f
 	call	T_F425B0	; F74917  call 0xf425b0
-	calr	sub_F7491F	; F7491B  calr 0xf7491f
+	calr	SmfWrite_RestoreFileName	; F7491B  calr 0xf7491f
 	ret	; F7491E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7491F
+; SmfWrite_RestoreFileName
 ; Called from: in-module: 0xF7393C 0xF747C3 0xF7491B 0xF74BEE
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -175894,7 +175894,8 @@ sub_F748F0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7491F:
+; SmfWrite_RestoreFileName: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role RestoreFileName as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_RestoreFileName:
 	ld	xiy, 4666	; F7491F  ld XIY,0x0000123a
 	ld	xix, Disk_FileName	; F74924  ld XIX,0x000021c8
 	ldw	bc, 4	; F74929  ld BC,0x0004
@@ -175902,7 +175903,7 @@ sub_F7491F:
 	ret	; F7492E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7492F
+; SmfWrite_SaveFileName
 ; Called from: in-module: 0xF73914 0xF74BBB
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -175913,7 +175914,8 @@ sub_F7491F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7492F:
+; SmfWrite_SaveFileName: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role SaveFileName as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_SaveFileName:
 	ld	xiy, Disk_FileName	; F7492F  ld XIY,0x000021c8
 	ld	xix, 4666	; F74934  ld XIX,0x0000123a
 	ldw	bc, 4	; F74939  ld BC,0x0004
@@ -175978,7 +175980,7 @@ SmfPartOffsets_F74960:
 
 
 ; --------------------------------------------------------------------------
-; sub_F749A2
+; SmfWrite_StageTempoFromBpm
 ; Called from: in-module: 0xF73ABB 0xF73FDB
 ; Touches: (0x108C) (0x108E)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -175989,7 +175991,8 @@ SmfPartOffsets_F74960:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F749A2:
+; SmfWrite_StageTempoFromBpm: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role StageTempoFromBpm as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_StageTempoFromBpm:
 	ldw	de, 9	; F749A2  ld DE,0x0009
 	ldw	wa, 10176	; F749A5  ld WA,0x27c0
 	ld	qwa, de	; F749A8  ld QWA,DE
@@ -176008,7 +176011,7 @@ sub_F749A2:
 ; sub_F749C5
 ; Called from: in-module: 0xF73ABE 0xF73FDE
 ; Touches: (0x1088) (0x108C) (0x108D) (0x108E) (0x1238)
-; Calls:   sub_F74B3A
+; Calls:   SmfWrite_CommitOutputByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF749C5 is an instruction boundary of this
@@ -176025,7 +176028,7 @@ sub_F749C5_Loop:
 	ld	(xix+), a	; F749D1  ld (XIX+),A
 	pushw	wa	; F749D4  push WA
 	push	xiy	; F749D5  push XIY
-	calr	sub_F74B3A	; F749D6  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F749D6  calr 0xf74b3a
 	pop	xiy	; F749D9  pop XIY
 	popw	wa	; F749DA  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F749DB  cp (0x1238),0x03
@@ -176035,37 +176038,37 @@ sub_F749C5_Loop:
 	jr	nz, sub_F749C5_Loop	; F749EA  jr NZ,0xf749ce
 	ld	a, 255:opc	; F749EC  ld A,0xff
 	ld	(xix+), a	; F749EE  ld (XIX+),A
-	calr	sub_F74B3A	; F749F1  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F749F1  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F749F4  cp (0x1238),0x03
 	jrl	nz, sub_F749C5_Return	; F749F9  jrl NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F749FC  ld XIX,(0x1088)
 	ld	a, 81:opc	; F74A00  ld A,0x51
 	ld	(xix+), a	; F74A02  ld (XIX+),A
-	calr	sub_F74B3A	; F74A05  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74A05  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A08  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A0D  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A0F  ld XIX,(0x1088)
 	ld	a, 3:opc	; F74A13  ld A,0x03
 	ld	(xix+), a	; F74A15  ld (XIX+),A
-	calr	sub_F74B3A	; F74A18  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74A18  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A1B  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A20  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A22  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+2:16)	; F74A26  ld A,(0x108e)
 	ld	(xix+), a	; F74A2A  ld (XIX+),A
-	calr	sub_F74B3A	; F74A2D  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74A2D  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A30  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A35  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A37  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+1:16)	; F74A3B  ld A,(0x108d)
 	ld	(xix+), a	; F74A3F  ld (XIX+),A
-	calr	sub_F74B3A	; F74A42  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74A42  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A45  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A4A  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A4C  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo:16)	; F74A50  ld A,(0x108c)
 	ld	(xix+), a	; F74A54  ld (XIX+),A
-	calr	sub_F74B3A	; F74A57  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74A57  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A5A  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A5F  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A61  ld XIX,(0x1088)
@@ -176073,10 +176076,10 @@ sub_F749C5_Return:
 	ret	; F74A65  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74A66
+; SmfWrite_WriteControlChange
 ; Called from: in-module: 0xF7422F 0xF74251
 ; Touches: (0x119A)
-; Calls:   sub_F74AC5
+; Calls:   SmfWrite_WriteChannelEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74A66 is an instruction boundary of this
@@ -176085,19 +176088,20 @@ sub_F749C5_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74A66:
+; SmfWrite_WriteControlChange: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role WriteControlChange as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_WriteControlChange:
 	ld	a, (4506:16)	; F74A66  ld A,(0x119a)
 	and	a, 15	; F74A6A  and A,0x0f
 	or	a, 176	; F74A6D  or A,0xb0
-	calr	sub_F74AC5	; F74A70  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74A70  calr 0xf74ac5
 	ret	; F74A73  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74A74
+; SmfWrite_EncodeDeltaTime
 ; Called from: in-module: 0xF73FA9 0xF73FE9 0xF7401C 0xF7404F 0xF74085
 ;              0xF740DA 0xF7415D 0xF74316 +12 more
 ; Touches: (0x107E) (0x1082) (0x1090) (0x11AA) (0x11AC) (0x1268) (0x133E)
-; Calls:   sub_F74D99
+; Calls:   SmfWrite_EncodeVlq
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74A74 is an instruction boundary of this
@@ -176106,7 +176110,8 @@ sub_F74A66:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74A74:
+; SmfWrite_EncodeDeltaTime: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role EncodeDeltaTime as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_EncodeDeltaTime:
 	pushw	wa	; F74A74  push WA
 	push	xhl	; F74A75  push XHL
 	pushw	de	; F74A76  push DE
@@ -176135,15 +176140,15 @@ sub_F74A74_Skip2:
 	popw	de	; F74ABE  pop DE
 	pop	xhl	; F74ABF  pop XHL
 	popw	wa	; F74AC0  pop WA
-	calr	sub_F74D99	; F74AC1  calr 0xf74d99
+	calr	SmfWrite_EncodeVlq	; F74AC1  calr 0xf74d99
 	ret	; F74AC4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74AC5
+; SmfWrite_WriteChannelEvent
 ; Called from: in-module: 0xF73BF8 0xF73C10 0xF73C2F 0xF73C51 0xF73C71
 ;              0xF73C8C 0xF73CA6 0xF73CBB +48 more
 ; Touches: (0x1088) (0x1238)
-; Calls:   sub_F74B3A
+; Calls:   SmfWrite_CommitOutputByte
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -176153,7 +176158,8 @@ sub_F74A74_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74AC5:
+; SmfWrite_WriteChannelEvent: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role WriteChannelEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_WriteChannelEvent:
 	push	xiy	; F74AC5  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F74AC6  ld XIX,(0x1088)
 	ld	xiy, 4499	; F74ACA  ld XIY,0x00001193
@@ -176164,7 +176170,7 @@ sub_F74AC5_Loop:
 	pushw	wa	; F74AD6  push WA
 	pushw	hl	; F74AD7  push HL
 	push	xiy	; F74AD8  push XIY
-	calr	sub_F74B3A	; F74AD9  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74AD9  calr 0xf74b3a
 	pop	xiy	; F74ADC  pop XIY
 	popw	hl	; F74ADD  pop HL
 	popw	wa	; F74ADE  pop WA
@@ -176181,7 +176187,7 @@ sub_F74AC5_Skip:
 	ld	(xix+), a	; F74AF5  ld (XIX+),A
 	pushw	wa	; F74AF8  push WA
 	pushw	hl	; F74AF9  push HL
-	calr	sub_F74B3A	; F74AFA  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74AFA  calr 0xf74b3a
 	popw	hl	; F74AFD  pop HL
 	popw	wa	; F74AFE  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74AFF  cp (0x1238),0x03
@@ -176190,7 +176196,7 @@ sub_F74AC5_Skip:
 	ld	a, w	; F74B0A  ld A,W
 	ld	(xix+), a	; F74B0C  ld (XIX+),A
 	pushw	hl	; F74B0F  push HL
-	calr	sub_F74B3A	; F74B10  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74B10  calr 0xf74b3a
 	popw	hl	; F74B13  pop HL
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74B14  cp (0x1238),0x03
 	jr	nz, sub_F74AC5_Join	; F74B19  jr NZ,0xf74b34
@@ -176202,19 +176208,19 @@ sub_F74AC5_Skip:
 	jr	z, sub_F74AC5_Join	; F74B2A  jr Z,0xf74b34
 	ld	a, l	; F74B2C  ld A,L
 	ld	(xix+), a	; F74B2E  ld (XIX+),A
-	calr	sub_F74B3A	; F74B31  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74B31  calr 0xf74b3a
 sub_F74AC5_Join:
 	pop	xiy	; F74B34  pop XIY
 	ld	xix, (InputStream_Cursor:16)	; F74B35  ld XIX,(0x1088)
 	ret	; F74B39  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74B3A
+; SmfWrite_CommitOutputByte
 ; Called from: in-module: 0xF73AFE 0xF749D6 0xF749F1 0xF74A05 0xF74A18
 ;              0xF74A2D 0xF74A42 0xF74A57 +5 more
 ; Touches: (0x1088) (0x1238) (0x1248) (0x126C) (0x21D0) (0x21D1) (0x21D2)
 ;          (0x2724)  |  0x60A480 0x60A700 0x60AAFF
-; Calls:   sub_F765E6 T_F42604 sub_F76661 sub_F7492F T_F425B0 sub_F7491F
+; Calls:   sub_F765E6 T_F42604 sub_F76661 SmfWrite_SaveFileName T_F425B0 SmfWrite_RestoreFileName
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74B3A is an instruction boundary of this
@@ -176223,7 +176229,8 @@ sub_F74AC5_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74B3A:
+; SmfWrite_CommitOutputByte: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role CommitOutputByte as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_CommitOutputByte:
 	push	xhl	; F74B3A  push XHL
 	pushw	bc	; F74B3B  push BC
 	ld	(4664:16), 3	; F74B3C  ld (0x1238),0x03
@@ -176287,7 +176294,7 @@ sub_F74B3A_Epilogue:
 	push	xiy	; F74BB8  push XIY
 	push	xhl	; F74BB9  push XHL
 	push	xbc	; F74BBA  push XBC
-	calr	sub_F7492F	; F74BBB  calr 0xf7492f
+	calr	SmfWrite_SaveFileName	; F74BBB  calr 0xf7492f
 	ld	xiy, 6333568	; F74BBE  ld XIY,0x0060a480
 	ld	l, (10020:16)	; F74BC3  ld L,(0x2724)
 	xor	h, h	; F74BC7  xor H,H
@@ -176300,7 +176307,7 @@ sub_F74B3A_Epilogue:
 	ld	(Disk_FileName+9:16), 63	; F74BE0  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F74BE5  ld (0x21d2),0x3f
 	call	T_F425B0	; F74BEA  call 0xf425b0
-	calr	sub_F7491F	; F74BEE  calr 0xf7491f
+	calr	SmfWrite_RestoreFileName	; F74BEE  calr 0xf7491f
 	pop	xbc	; F74BF1  pop XBC
 	pop	xhl	; F74BF2  pop XHL
 	pop	xiy	; F74BF3  pop XIY
@@ -176308,11 +176315,11 @@ sub_F74B3A_Epilogue:
 	ret	; F74BF5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74BF6
+; SmfWrite_AgePendingNoteOffs
 ; Called from: in-module: 0xF73FAC 0xF73FEC 0xF7401F 0xF74052 0xF74088
 ;              0xF740DD 0xF74160 0xF74319 +12 more
 ; Touches: (0x107E) (0x1080) (0x11AA) (0x1238)
-; Calls:   sub_F74E4C sub_F74C87
+; Calls:   SmfWrite_ClearDueList SmfWrite_SortDueNoteOffs
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74BF6 is an instruction boundary of this
@@ -176321,9 +176328,10 @@ sub_F74B3A_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74BF6:
+; SmfWrite_AgePendingNoteOffs: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role AgePendingNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_AgePendingNoteOffs:
 	ld	(4664:16), 3	; F74BF6  ld (0x1238),0x03
-	calr	sub_F74E4C	; F74BFB  calr 0xf74e4c
+	calr	SmfWrite_ClearDueList	; F74BFB  calr 0xf74e4c
 	xor	hl, hl	; F74BFE  xor HL,HL
 	xor	bc, bc	; F74C00  xor BC,BC
 	xor	iy, iy	; F74C02  xor IY,IY
@@ -176368,17 +176376,17 @@ sub_F74BF6_Join:
 	srl	iy, 1	; F74C70  srl 0x01,IY
 	cp	iy, 0:i3	; F74C73  cp IY,0
 	jr	z, sub_F74BF6_Skip2	; F74C75  jr Z,0xf74c7a
-	calr	sub_F74C87	; F74C77  calr 0xf74c87
+	calr	SmfWrite_SortDueNoteOffs	; F74C77  calr 0xf74c87
 sub_F74BF6_Skip2:
 	ldw	(4222:16), 0	; F74C7A  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F74C80  ld (0x1080),0x0000
 	ret	; F74C86  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74C87
+; SmfWrite_SortDueNoteOffs
 ; Called from: in-module: 0xF74C77
 ; Touches: (0x10D3)
-; Calls:   sub_F74CF2
+; Calls:   SmfWrite_WriteDueNoteOffs
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74C87 is an instruction boundary of this
@@ -176387,7 +176395,8 @@ sub_F74BF6_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74C87:
+; SmfWrite_SortDueNoteOffs: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role SortDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_SortDueNoteOffs:
 	cp	iy, 0:i3	; F74C87  cp IY,0
 	jr	z, sub_F74C87_Return	; F74C89  jr Z,0xf74cf1
 	xor	de, de	; F74C8B  xor DE,DE
@@ -176427,15 +176436,15 @@ sub_F74C87_Skip2:
 	cp	de, 96	; F74CE8  cp DE,0x0060
 	jr	ule, sub_F74C87_Loop	; F74CEC  jr ULE,0xf74c94
 sub_F74C87_Skip3:
-	calr	sub_F74CF2	; F74CEE  calr 0xf74cf2
+	calr	SmfWrite_WriteDueNoteOffs	; F74CEE  calr 0xf74cf2
 sub_F74C87_Return:
 	ret	; F74CF1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74CF2
+; SmfWrite_WriteDueNoteOffs
 ; Called from: in-module: 0xF74CEE
 ; Touches: (0x107E) (0x1080) (0x1082) (0x1090) (0x11AA)
-; Calls:   sub_F74D99 sub_F74AC5
+; Calls:   SmfWrite_EncodeVlq SmfWrite_WriteChannelEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74CF2 is an instruction boundary of this
@@ -176444,7 +176453,8 @@ sub_F74C87_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74CF2:
+; SmfWrite_WriteDueNoteOffs: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role WriteDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_WriteDueNoteOffs:
 	ld	bc, (4226:16)	; F74CF2  ld BC,(0x1082)
 	ld	xiy, 4307	; F74CF6  ld XIY,0x000010d3
 	xor	hl, hl	; F74CFB  xor HL,HL
@@ -176475,7 +176485,7 @@ sub_F74CF2_Join2:
 	push	xhl	; F74D33  push XHL
 	pushw	bc	; F74D34  push BC
 	push	xix	; F74D35  push XIX
-	calr	sub_F74D99	; F74D36  calr 0xf74d99
+	calr	SmfWrite_EncodeVlq	; F74D36  calr 0xf74d99
 	pop	xix	; F74D39  pop XIX
 	popw	bc	; F74D3A  pop BC
 	pop	xhl	; F74D3B  pop XHL
@@ -176491,7 +176501,7 @@ sub_F74CF2_Join2:
 	ld	l, 0:opc	; F74D50  ld L,0x00
 	pushw	bc	; F74D52  push BC
 	push	xix	; F74D53  push XIX
-	calr	sub_F74AC5	; F74D54  calr 0xf74ac5
+	calr	SmfWrite_WriteChannelEvent	; F74D54  calr 0xf74ac5
 	pop	xix	; F74D57  pop XIX
 	popw	bc	; F74D58  pop BC
 	pop	xhl	; F74D59  pop XHL
@@ -176510,13 +176520,13 @@ sub_F74CF2_Skip2:
 	m_add_rm MW16, 0x107e, 1	; F74D7F  add BC,(0x107e)
 	sub	bc, wa	; F74D83  sub BC,WA
 	ld	(4522:16), bc	; F74D85  ld (0x11aa),BC
-	calr	sub_F74D99	; F74D89  calr 0xf74d99
+	calr	SmfWrite_EncodeVlq	; F74D89  calr 0xf74d99
 	ldw	(4222:16), 0	; F74D8C  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F74D92  ld (0x1080),0x0000
 	ret	; F74D98  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74D99
+; SmfWrite_EncodeVlq
 ; Called from: in-module: 0xF74AC1 0xF74D36 0xF74D89
 ; Touches: (0x1193) (0x1194) (0x1195) (0x11AA) (0x11AB) (0x11AC)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -176527,7 +176537,8 @@ sub_F74CF2_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74D99:
+; SmfWrite_EncodeVlq: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_EncodeVlq:
 	ldw	(4499:16), 0	; F74D99  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F74D9F  ld (0x1195),0x0000
 	m_cp_mi8 MB16, 0x11ac, 0x00	; F74DA5  cp (0x11ac),0x00
@@ -176589,7 +176600,7 @@ sub_F74D99_Return:
 	ret	; F74E4B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74E4C
+; SmfWrite_ClearDueList
 ; Called from: in-module: 0xF74BFB
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -176600,7 +176611,8 @@ sub_F74D99_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74E4C:
+; SmfWrite_ClearDueList: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role ClearDueList as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_ClearDueList:
 	push	xix	; F74E4C  push XIX
 	ld	xix, 4307	; F74E4D  ld XIX,0x000010d3
 	ldw	bc, 96	; F74E52  ld BC,0x0060
@@ -176611,7 +176623,7 @@ sub_F74E4C:
 	ret	; F74E5F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74E60
+; SmfWrite_ClearEventFields
 ; Called from: in-module: 0xF73F01
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -176622,7 +176634,8 @@ sub_F74E4C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74E60:
+; SmfWrite_ClearEventFields: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role ClearEventFields as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_ClearEventFields:
 	ld	xix, 4504	; F74E60  ld XIX,0x00001198
 	xor	wa, wa	; F74E65  xor WA,WA
 	ldw	bc, 4	; F74E67  ld BC,0x0004
@@ -176653,7 +176666,7 @@ sub_F74E71:
 	ret	; F74E85  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74E86
+; SmfWrite_AdvanceSongCursor
 ; Called from: in-module: 0xF7372F 0xF73757 0xF737A6 0xF737DC 0xF7381C
 ;              0xF73EDA 0xF73F1B 0xF73F7A
 ; Touches: (0x126E) (0x345C) (0x345E)
@@ -176666,7 +176679,8 @@ sub_F74E71:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74E86:
+; SmfWrite_AdvanceSongCursor: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role AdvanceSongCursor as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_AdvanceSongCursor:
 	ld	wa, (BStore_CursorOffset:16)	; F74E86  ld WA,(0x345e)
 	cp	wa, 255	; F74E8A  cp WA,0x00ff
 	jr	nz, sub_F74E86_Skip	; F74E8E  jr NZ,0xf74ea7
@@ -176684,7 +176698,7 @@ sub_F74E86_Join:
 	ret	; F74EAD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F74EAE
+; SmfWrite_ClearPendingNoteOffs
 ; Called from: in-module: 0xF739C7 0xF739D1
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -176695,7 +176709,8 @@ sub_F74E86_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F74EAE:
+; SmfWrite_ClearPendingNoteOffs: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role ClearPendingNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWrite_ClearPendingNoteOffs:
 	pushw	wa	; F74EAE  push WA
 	pushw	bc	; F74EAF  push BC
 	push	xix	; F74EB0  push XIX
@@ -176713,7 +176728,7 @@ sub_F74EAE:
 ; SmfExport_WriteParamSysEx
 ; Called from: in-module: 0xF73B24
 ; Touches: (0x1088) (0x1238) (0x133E)
-; Calls:   T_F4090C sub_F74B3A
+; Calls:   T_F4090C SmfWrite_CommitOutputByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74EC5 is an instruction boundary of this
@@ -176726,7 +176741,7 @@ sub_F74EAE:
 ;          into the SMF being exported: per record, template -> RAM 0x1351 and
 ;          (body) 0x1365, value nibbles from RamPtrTable_F7554D, checksum via
 ;          T_F4090C (prom_a SysEx_Checksum), then 19 bytes to the (0x1088) cursor
-;          through sub_F74B3A; it stops early when sub_F74B3A leaves (0x1238)
+;          through SmfWrite_CommitOutputByte; it stops early when SmfWrite_CommitOutputByte leaves (0x1238)
 ;          != 3.  python3 notes/promb-2026-09-25/smf_param_sysex_probe.py
 SmfExport_WriteParamSysEx:
 	push	xwa	; F74EC5  push XWA
@@ -176827,7 +176842,7 @@ SmfExport_WriteParamSysEx_Skip6:
 	pushw	bc	; F74FA6  push BC
 	push	xix	; F74FA7  push XIX
 	push	xiz	; F74FA8  push XIZ
-	calr	sub_F74B3A	; F74FA9  calr 0xf74b3a
+	calr	SmfWrite_CommitOutputByte	; F74FA9  calr 0xf74b3a
 	pop	xiz	; F74FAC  pop XIZ
 	pop	xix	; F74FAD  pop XIX
 	popw	bc	; F74FAE  pop BC
@@ -176904,7 +176919,7 @@ Data_F74FCF:
 ;   RAM byte that parameter lives in), stores its high and low NIBBLES at
 ;   record +14 and +15, computes a checksum with prom_a SysEx_Checksum (slot
 ;   T_F4090C: the negated 7-bit sum of the bytes after the first) into +17,
-;   and writes all 19 bytes to the output cursor (0x1088) through sub_F74B3A,
+;   and writes all 19 bytes to the output cursor (0x1088) through SmfWrite_CommitOutputByte,
 ;   which flushes the 1 KiB window at 0x60A700 (notes/FINDINGS-prom_b-smf-
 ;   writer.md).  Record 0's delta is written as 0 unless bit 1 of (0x133E).
 ; Record layout (every field re-derived from the ROM by
@@ -176936,8 +176951,8 @@ Data_F74FCF:
 ;   that nothing in prom_a or prom_b can be shown to enter -- a byte scan at
 ;   every offset for `jp`/`call` nnn, `calr`/`jrl`, `jr` and 32-bit pointers
 ;   finds no reference to sub_F7669D, to 0xF76E10 (after 0xF76E0F's `ret`), to
-;   0xF77E9E (after 0xF77E9D's `ret`), or to sub_F76E74, the run whose code is
-;   the only caller of sub_F77CB7 / sub_F77CCC.  The pair `ld HL,(0x345c) /
+;   0xF77E9E (after 0xF77E9D's `ret`), or to SmfSizeCopy_Pass, the run whose code is
+;   the only caller of SmfSizeCopy_ReadSongByte / SmfSizeCopy_AdvanceSongCursor.  The pair `ld HL,(0x345c) /
 ;   calr X / ... ld A,(XHL+IY)` occurs three times, with X = 0xF75095 twice
 ;   and 0xF752DF once --
 ;   the same shape as SC1_DeadTail: code linked against another layout.
@@ -177145,13 +177160,13 @@ Data_F75675:
 
 
 ; --------------------------------------------------------------------------
-; sub_F75685
+; SmfSize_Pass
 ; Called from: in-module: 0xF739CE
 ; Touches: (0x0C70) (0x107E) (0x1080) (0x1082) (0x1084) (0x1086) (0x1088)
 ;          (0x1193) (0x1195) (0x1198) +18 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A700 0x60AAFF
-; Calls:   sub_F7615B sub_F761A1 sub_F762BD T_F41008 sub_F7626A sub_F75685_Nop
-;          sub_F76552 sub_F76567 sub_F76541 sub_F76219 sub_F762DF sub_F7620B
+; Calls:   SmfSize_StageTempo SmfSize_WriteTempoEvent SmfSize_CommitOutputByte T_F41008 SmfSize_WriteChannelEvent sub_F75685_Nop
+;          SmfSize_ReadSongByte SmfSize_AdvanceSongCursor SmfSize_ClearEventFields SmfSize_EncodeDeltaTime SmfSize_AgePendingNoteOffs SmfSize_WriteControlChange
 ;          +1 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -177161,7 +177176,8 @@ Data_F75675:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F75685:
+; SmfSize_Pass: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), the whole sizing pass over the song (its main; see the module note) -- notes/prom_b_smf_writer_names.py
+SmfSize_Pass:
 	xor	hl, hl	; F75685  xor HL,HL
 	xor	bc, bc	; F75687  xor BC,BC
 sub_F75685_Join:
@@ -177228,8 +177244,8 @@ sub_F75685_Loop:
 	xor	c, c	; F7574B  xor C,C
 	or	hl, bc	; F7574D  or HL,BC
 	popw	bc	; F7574F  pop BC
-	calr	sub_F7615B	; F75750  calr 0xf7615b
-	calr	sub_F761A1	; F75753  calr 0xf761a1
+	calr	SmfSize_StageTempo	; F75750  calr 0xf7615b
+	calr	SmfSize_WriteTempoEvent	; F75753  calr 0xf761a1
 	ld	(4665:16), 255	; F75756  ld (0x1239),0xff
 	ld	xiy, Data_F75675	; F7575B  ld XIY,0x00f75675
 	m_bit 2, MD16, 0x7f4d	; F75760  bit 2,(0x7f4d)
@@ -177252,7 +177268,7 @@ sub_F75685_Skip3:
 	pushw	bc	; F75791  push BC
 	push	xiy	; F75792  push XIY
 	push	xix	; F75793  push XIX
-	calr	sub_F762BD	; F75794  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F75794  calr 0xf762bd
 	pop	xix	; F75797  pop XIX
 	pop	xiy	; F75798  pop XIY
 	popw	bc	; F75799  pop BC
@@ -177330,7 +177346,7 @@ sub_F75685_Join2:
 	pushw	wa	; F75863  push WA
 	pushw	bc	; F75864  push BC
 	pushw	de	; F75865  push DE
-	call	sub_F7626A	; F75866  call 0xf7626a
+	call	SmfSize_WriteChannelEvent	; F75866  call 0xf7626a
 	popw	de	; F7586A  pop DE
 	popw	bc	; F7586B  pop BC
 	popw	wa	; F7586C  pop WA
@@ -177338,7 +177354,7 @@ sub_F75685_Join2:
 	ld	l, (6352916:24)	; F7586F  ld L,(0x60f014)
 	pushw	bc	; F75874  push BC
 	pushw	de	; F75875  push DE
-	call	sub_F7626A	; F75876  call 0xf7626a
+	call	SmfSize_WriteChannelEvent	; F75876  call 0xf7626a
 	popw	de	; F7587A  pop DE
 	popw	bc	; F7587B  pop BC
 	ld	a, (3184:16)	; F7587C  ld A,(0x0c70)
@@ -177347,7 +177363,7 @@ sub_F75685_Join2:
 	and	w, 127	; F75888  and W,0x7f
 	pushw	bc	; F7588B  push BC
 	pushw	de	; F7588C  push DE
-	calr	sub_F7626A	; F7588D  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F7588D  calr 0xf7626a
 	popw	de	; F75890  pop DE
 	popw	bc	; F75891  pop BC
 	jrl	sub_F75685_Join3	; F75892  jrl T,0xf758d8
@@ -177360,7 +177376,7 @@ sub_F75685_Skip4:
 	srl	l, 3	; F758A3  srl 0x03,L
 	pushw	bc	; F758A6  push BC
 	pushw	de	; F758A7  push DE
-	calr	sub_F7626A	; F758A8  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F758A8  calr 0xf7626a
 	popw	de	; F758AB  pop DE
 	popw	bc	; F758AC  pop BC
 	ld	a, (3184:16)	; F758AD  ld A,(0x0c70)
@@ -177371,7 +177387,7 @@ sub_F75685_Skip4:
 	sla	l, 4	; F758BB  sla 0x04,L
 	pushw	bc	; F758BE  push BC
 	pushw	de	; F758BF  push DE
-	calr	sub_F7626A	; F758C0  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F758C0  calr 0xf7626a
 	popw	de	; F758C3  pop DE
 	popw	bc	; F758C4  pop BC
 	ld	a, (3184:16)	; F758C5  ld A,(0x0c70)
@@ -177380,7 +177396,7 @@ sub_F75685_Skip4:
 	and	w, 127	; F758CE  and W,0x7f
 	pushw	bc	; F758D1  push BC
 	pushw	de	; F758D2  push DE
-	calr	sub_F7626A	; F758D3  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F758D3  calr 0xf7626a
 	popw	de	; F758D6  pop DE
 	popw	bc	; F758D7  pop BC
 sub_F75685_Join3:
@@ -177390,27 +177406,27 @@ sub_F75685_Join3:
 	ld	l, b	; F758E1  ld L,B
 	pushw	wa	; F758E3  push WA
 	pushw	de	; F758E4  push DE
-	calr	sub_F7626A	; F758E5  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F758E5  calr 0xf7626a
 	popw	de	; F758E8  pop DE
 	popw	wa	; F758E9  pop WA
 	ld	w, 93:opc	; F758EA  ld W,0x5d
 	ld	l, (4763:16)	; F758EC  ld L,(0x129b)
 	pushw	wa	; F758F0  push WA
 	pushw	de	; F758F1  push DE
-	calr	sub_F7626A	; F758F2  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F758F2  calr 0xf7626a
 	popw	de	; F758F5  pop DE
 	popw	wa	; F758F6  pop WA
 	ld	w, 94:opc	; F758F7  ld W,0x5e
 	ld	l, (4944:16)	; F758F9  ld L,(0x1350)
 	pushw	wa	; F758FD  push WA
 	pushw	de	; F758FE  push DE
-	calr	sub_F7626A	; F758FF  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F758FF  calr 0xf7626a
 	popw	de	; F75902  pop DE
 	popw	wa	; F75903  pop WA
 	ld	w, 91:opc	; F75904  ld W,0x5b
 	ld	l, (4686:16)	; F75906  ld L,(0x124e)
 	pushw	wa	; F7590A  push WA
-	calr	sub_F7626A	; F7590B  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F7590B  calr 0xf7626a
 	popw	wa	; F7590E  pop WA
 	ld	l, (3184:16)	; F7590F  ld L,(0x0c70)
 	xor	h, h	; F75913  xor H,H
@@ -177437,17 +177453,17 @@ sub_F75685_Join3:
 	m_rd_ld_rrx RLX, 0x38, r5	; F75954  ld XIY,XDE3
 	ld	w, 10:opc	; F75957  ld W,0x0a
 	pushw	wa	; F75959  push WA
-	calr	sub_F7626A	; F7595A  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F7595A  calr 0xf7626a
 	popw	wa	; F7595D  pop WA
 	ld	w, 101:opc	; F7595E  ld W,0x65
 	ld	l, 0:opc	; F75960  ld L,0x00
 	pushw	wa	; F75962  push WA
-	calr	sub_F7626A	; F75963  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75963  calr 0xf7626a
 	popw	wa	; F75966  pop WA
 	ld	w, 100:opc	; F75967  ld W,0x64
 	ld	l, 1:opc	; F75969  ld L,0x01
 	pushw	wa	; F7596B  push WA
-	calr	sub_F7626A	; F7596C  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F7596C  calr 0xf7626a
 	popw	wa	; F7596F  pop WA
 	ld	l, (3184:16)	; F75970  ld L,(0x0c70)
 	xor	h, h	; F75974  xor H,H
@@ -177467,7 +177483,7 @@ sub_F75685_Join3:
 	ld	w, 6:opc	; F759A4  ld W,0x06
 	pushw	wa	; F759A6  push WA
 	pushw	bc	; F759A7  push BC
-	calr	sub_F7626A	; F759A8  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F759A8  calr 0xf7626a
 	popw	bc	; F759AB  pop BC
 	popw	wa	; F759AC  pop WA
 	ld	l, c	; F759AD  ld L,C
@@ -177475,17 +177491,17 @@ sub_F75685_Join3:
 	and	l, 127	; F759B2  and L,0x7f
 	ld	w, 38:opc	; F759B5  ld W,0x26
 	pushw	wa	; F759B7  push WA
-	calr	sub_F7626A	; F759B8  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F759B8  calr 0xf7626a
 	popw	wa	; F759BB  pop WA
 	ld	w, 101:opc	; F759BC  ld W,0x65
 	ld	l, 0:opc	; F759BE  ld L,0x00
 	pushw	wa	; F759C0  push WA
-	calr	sub_F7626A	; F759C1  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F759C1  calr 0xf7626a
 	popw	wa	; F759C4  pop WA
 	ld	w, 100:opc	; F759C5  ld W,0x64
 	ld	l, 2:opc	; F759C7  ld L,0x02
 	pushw	wa	; F759C9  push WA
-	calr	sub_F7626A	; F759CA  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F759CA  calr 0xf7626a
 	popw	wa	; F759CD  pop WA
 	ld	l, (3184:16)	; F759CE  ld L,(0x0c70)
 	xor	h, h	; F759D2  xor H,H
@@ -177503,22 +177519,22 @@ sub_F75685_Join3:
 	m_rd_ld_rrx RLX, 0x38, r5	; F759FD  ld XIY,XDE3
 	ld	w, 6:opc	; F75A00  ld W,0x06
 	pushw	wa	; F75A02  push WA
-	calr	sub_F7626A	; F75A03  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75A03  calr 0xf7626a
 	popw	wa	; F75A06  pop WA
 	ld	w, 38:opc	; F75A07  ld W,0x26
 	xor	l, l	; F75A09  xor L,L
 	pushw	wa	; F75A0B  push WA
-	calr	sub_F7626A	; F75A0C  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75A0C  calr 0xf7626a
 	popw	wa	; F75A0F  pop WA
 	ld	w, 101:opc	; F75A10  ld W,0x65
 	ld	l, 0:opc	; F75A12  ld L,0x00
 	pushw	wa	; F75A14  push WA
-	calr	sub_F7626A	; F75A15  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75A15  calr 0xf7626a
 	popw	wa	; F75A18  pop WA
 	ld	w, 100:opc	; F75A19  ld W,0x64
 	ld	l, 0:opc	; F75A1B  ld L,0x00
 	pushw	wa	; F75A1D  push WA
-	calr	sub_F7626A	; F75A1E  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75A1E  calr 0xf7626a
 	popw	wa	; F75A21  pop WA
 	ld	l, (3184:16)	; F75A22  ld L,(0x0c70)
 	xor	h, h	; F75A26  xor H,H
@@ -177534,12 +177550,12 @@ sub_F75685_Join3:
 	ld	l, (xiy+13)	; F75A4B  ld L,(XIY+0x0d)
 	ld	w, 6:opc	; F75A4E  ld W,0x06
 	pushw	wa	; F75A50  push WA
-	calr	sub_F7626A	; F75A51  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75A51  calr 0xf7626a
 	popw	wa	; F75A54  pop WA
 	ld	w, 6:opc	; F75A55  ld W,0x06
 	xor	l, l	; F75A57  xor L,L
 	pushw	wa	; F75A59  push WA
-	calr	sub_F7626A	; F75A5A  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75A5A  calr 0xf7626a
 	popw	wa	; F75A5D  pop WA
 sub_F75685_Skip5:
 	inc	1, (3184:16)	; F75A5E  inc 1,(0x0c70)
@@ -177560,15 +177576,15 @@ sub_F75685_Join5:
 	xor	wa, wa	; F75A8F  xor WA,WA
 	ld	(4226:16), wa	; F75A91  ld (0x1082),WA
 	ld	(4228:16), wa	; F75A95  ld (0x1084),WA
-	calr	sub_F76552	; F75A99  calr 0xf76552
+	calr	SmfSize_ReadSongByte	; F75A99  calr 0xf76552
 	cp	a, 130	; F75A9C  cp A,0x82
 	jr	z, sub_F75685_Skip7	; F75A9F  jr Z,0xf75ac0
 	cp	a, 129	; F75AA1  cp A,0x81
 	jr	z, sub_F75685_Skip7	; F75AA4  jr Z,0xf75ac0
 	m_push MW16, BStore_CursorBlock	; F75AA6  pushw (0x345c)
 	m_push MW16, BStore_CursorOffset	; F75AAA  pushw (0x345e)
-	calr	sub_F76567	; F75AAE  calr 0xf76567
-	calr	sub_F76552	; F75AB1  calr 0xf76552
+	calr	SmfSize_AdvanceSongCursor	; F75AAE  calr 0xf76567
+	calr	SmfSize_ReadSongByte	; F75AB1  calr 0xf76552
 	m_popw MD16, BStore_CursorOffset	; F75AB4  popw (0x345e)
 	m_popw MD16, BStore_CursorBlock	; F75AB8  popw (0x345c)
 	ld	(4228:16), a	; F75ABC  ld (0x1084),A
@@ -177579,8 +177595,8 @@ sub_F75685_Skip7:
 sub_F75685_Loop4:
 	xor	hl, hl	; F75AD2  xor HL,HL
 	push	xhl	; F75AD4  push XHL
-	calr	sub_F76541	; F75AD5  calr 0xf76541
-	calr	sub_F76552	; F75AD8  calr 0xf76552
+	calr	SmfSize_ClearEventFields	; F75AD5  calr 0xf76541
+	calr	SmfSize_ReadSongByte	; F75AD8  calr 0xf76552
 	pop	xhl	; F75ADB  pop XHL
 	cp	a, 130	; F75ADC  cp A,0x82
 	jrl	z, sub_F75685_Skip42	; F75ADF  jrl Z,0xf76089
@@ -177590,8 +177606,8 @@ sub_F75685_Loop5:
 	mx_st_mr8 MXD, ra_DE, ra_HL, 1	; F75AE8  ld (XDE+HL),A
 	pop	xde	; F75AED  pop XDE
 	pushw	hl	; F75AEE  push HL
-	calr	sub_F76567	; F75AEF  calr 0xf76567
-	calr	sub_F76552	; F75AF2  calr 0xf76552
+	calr	SmfSize_AdvanceSongCursor	; F75AEF  calr 0xf76567
+	calr	SmfSize_ReadSongByte	; F75AF2  calr 0xf76552
 	popw	hl	; F75AF5  pop HL
 	inc	1, hl	; F75AF6  inc 1,HL
 	bit	7, a	; F75AF8  bit 0x07,A
@@ -177621,11 +177637,11 @@ sub_F75685_Loop5:
 sub_F75685_Skip8:
 	incw	1, (4230:16)	; F75B3F  incw 1,(0x1086)
 sub_F75685_Join6:
-	calr	sub_F76552	; F75B43  calr 0xf76552
+	calr	SmfSize_ReadSongByte	; F75B43  calr 0xf76552
 	cp	a, 129	; F75B46  cp A,0x81
 	jr	nz, sub_F75685_Skip9	; F75B49  jr NZ,0xf75b54
 	incw	1, (4230:16)	; F75B4B  incw 1,(0x1086)
-	calr	sub_F76567	; F75B4F  calr 0xf76567
+	calr	SmfSize_AdvanceSongCursor	; F75B4F  calr 0xf76567
 	jr	sub_F75685_Join6	; F75B52  jr T,0xf75b43
 sub_F75685_Skip9:
 	ld	wa, (4230:16)	; F75B54  ld WA,(0x1086)
@@ -177643,8 +177659,8 @@ sub_F75685_Skip10:
 	cp	hl, 4:i3	; F75B77  cp HL,4
 	jrl	nz, sub_F75685_Loop4	; F75B79  jrl NZ,0xf75ad2
 	ld	c, (4505:16)	; F75B7C  ld C,(0x1199)
-	calr	sub_F76219	; F75B80  calr 0xf76219
-	calr	sub_F762DF	; F75B83  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75B80  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75B83  calr 0xf762df
 	ld	hl, (4506:16)	; F75B86  ld HL,(0x119a)
 	and	l, 127	; F75B8A  and L,0x7f
 	and	h, 1	; F75B8D  and H,0x01
@@ -177659,46 +177675,46 @@ sub_F75685_Skip10:
 	xor	a, a	; F75BA5  xor A,A
 	or	hl, wa	; F75BA7  or HL,WA
 	popw	wa	; F75BA9  pop WA
-	calr	sub_F7615B	; F75BAA  calr 0xf7615b
-	calr	sub_F761A1	; F75BAD  calr 0xf761a1
+	calr	SmfSize_StageTempo	; F75BAA  calr 0xf7615b
+	calr	SmfSize_WriteTempoEvent	; F75BAD  calr 0xf761a1
 	jrl	sub_F75685_Loop4	; F75BB0  jrl T,0xf75ad2
 sub_F75685_Skip11:
 	ld	c, (4505:16)	; F75BB3  ld C,(0x1199)
 	pushw	wa	; F75BB7  push WA
-	calr	sub_F76219	; F75BB8  calr 0xf76219
-	calr	sub_F762DF	; F75BBB  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75BB8  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75BBB  calr 0xf762df
 	popw	wa	; F75BBE  pop WA
 	and	a, 15	; F75BBF  and A,0x0f
 	or	a, 208	; F75BC2  or A,0xd0
 	ld	w, (4506:16)	; F75BC5  ld W,(0x119a)
 	xor	l, l	; F75BC9  xor L,L
-	calr	sub_F7626A	; F75BCB  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75BCB  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75BCE  jrl T,0xf75ad2
 sub_F75685_Skip12:
 	cp	hl, 3:i3	; F75BD1  cp HL,3
 	jrl	nz, sub_F75685_Loop4	; F75BD3  jrl NZ,0xf75ad2
 	ld	c, (4505:16)	; F75BD6  ld C,(0x1199)
 	pushw	wa	; F75BDA  push WA
-	calr	sub_F76219	; F75BDB  calr 0xf76219
-	calr	sub_F762DF	; F75BDE  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75BDB  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75BDE  calr 0xf762df
 	popw	wa	; F75BE1  pop WA
 	and	a, 15	; F75BE2  and A,0x0f
 	or	a, 176	; F75BE5  or A,0xb0
 	ld	w, 1:opc	; F75BE8  ld W,0x01
 	ld	l, (4506:16)	; F75BEA  ld L,(0x119a)
-	calr	sub_F7626A	; F75BEE  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75BEE  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75BF1  jrl T,0xf75ad2
 sub_F75685_Skip13:
 	cp	hl, 4:i3	; F75BF4  cp HL,4
 	jrl	nz, sub_F75685_Loop4	; F75BF6  jrl NZ,0xf75ad2
 	ld	c, (4505:16)	; F75BF9  ld C,(0x1199)
 	pushw	wa	; F75BFD  push WA
-	calr	sub_F76219	; F75BFE  calr 0xf76219
-	calr	sub_F762DF	; F75C01  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75BFE  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75C01  calr 0xf762df
 	popw	wa	; F75C04  pop WA
 	ld	w, (4506:16)	; F75C05  ld W,(0x119a)
 	ld	l, (4507:16)	; F75C09  ld L,(0x119b)
-	calr	sub_F7626A	; F75C0D  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75C0D  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75C10  jrl T,0xf75ad2
 sub_F75685_Skip14:
 	cp	hl, 3:i3	; F75C13  cp HL,3
@@ -177708,14 +177724,14 @@ sub_F75685_Skip14:
 	xor	h, h	; F75C1D  xor H,H
 	ld	c, (4505:16)	; F75C1F  ld C,(0x1199)
 	pushw	wa	; F75C23  push WA
-	calr	sub_F76219	; F75C24  calr 0xf76219
-	calr	sub_F762DF	; F75C27  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75C24  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75C27  calr 0xf762df
 	popw	wa	; F75C2A  pop WA
 	and	a, 15	; F75C2B  and A,0x0f
 	or	a, 176	; F75C2E  or A,0xb0
 	ld	w, 11:opc	; F75C31  ld W,0x0b
 	ld	l, (4506:16)	; F75C33  ld L,(0x119a)
-	calr	sub_F7626A	; F75C37  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75C37  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75C3A  jrl T,0xf75ad2
 sub_F75685_Skip15:
 	cp	hl, 6:i3	; F75C3D  cp HL,6
@@ -177735,12 +177751,12 @@ sub_F75685_Skip16:
 	m_or_mi8 MB16, 0x11b1, 0x01	; F75C5F  or (0x11b1),0x01
 	pushw	hl	; F75C64  push HL
 	ld	c, (4505:16)	; F75C65  ld C,(0x1199)
-	calr	sub_F76219	; F75C69  calr 0xf76219
-	calr	sub_F762DF	; F75C6C  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75C69  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75C6C  calr 0xf762df
 	ld	a, (4504:16)	; F75C6F  ld A,(0x1198)
 	ld	w, (4506:16)	; F75C73  ld W,(0x119a)
 	ld	l, (4507:16)	; F75C77  ld L,(0x119b)
-	calr	sub_F7626A	; F75C7B  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75C7B  calr 0xf7626a
 	popw	hl	; F75C7E  pop HL
 	ld	xix, 12378	; F75C7F  ld XIX,0x0000305a
 	mx_lda32 MXD, ra_IX, ra_HL, 4	; F75C84  lda XIX,XIX+HL
@@ -177773,8 +177789,8 @@ sub_F75685_Skip17:
 sub_F75685_Skip18:
 	ld	c, (4505:16)	; F75CD5  ld C,(0x1199)
 	pushw	wa	; F75CD9  push WA
-	calr	sub_F76219	; F75CDA  calr 0xf76219
-	calr	sub_F762DF	; F75CDD  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75CDA  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75CDD  calr 0xf762df
 	popw	wa	; F75CE0  pop WA
 	m_cp_mi8 MB16, 0x1239, 0x00	; F75CE1  cp (0x1239),0x00
 	jrl	z, sub_F75685_Skip19	; F75CE6  jrl Z,0xf75d7f
@@ -177808,27 +177824,27 @@ sub_F75685_Skip18:
 	xor	w, w	; F75D44  xor W,W
 	ld	l, (6352917:24)	; F75D46  ld L,(0x60f015)
 	pushw	wa	; F75D4B  push WA
-	call	sub_F7626A	; F75D4C  call 0xf7626a
+	call	SmfSize_WriteChannelEvent	; F75D4C  call 0xf7626a
 	popw	wa	; F75D50  pop WA
 	ldw	(4499:16), 0	; F75D51  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F75D57  ld (0x1195),0x00
 	ld	w, 32:opc	; F75D5C  ld W,0x20
 	ld	l, (6352916:24)	; F75D5E  ld L,(0x60f014)
-	call	sub_F7626A	; F75D63  call 0xf7626a
+	call	SmfSize_WriteChannelEvent	; F75D63  call 0xf7626a
 	ld	a, 192:opc	; F75D67  ld A,0xc0
 	ld	w, (4506:16)	; F75D69  ld W,(0x119a)
 	and	w, 15	; F75D6D  and W,0x0f
 	or	a, w	; F75D70  or A,W
 	ld	w, (6352918:24)	; F75D72  ld W,(0x60f016)
 	xor	l, l	; F75D77  xor L,L
-	calr	sub_F7626A	; F75D79  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75D79  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75D7C  jrl T,0xf75ad2
 sub_F75685_Skip19:
 	ld	w, 0:opc	; F75D7F  ld W,0x00
 	ld	l, (4509:16)	; F75D81  ld L,(0x119d)
 	and	l, 56	; F75D85  and L,0x38
 	srl	l, 3	; F75D88  srl 0x03,L
-	calr	sub_F7620B	; F75D8B  calr 0xf7620b
+	calr	SmfSize_WriteControlChange	; F75D8B  calr 0xf7620b
 	ldw	(4499:16), 0	; F75D8E  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F75D94  ld (0x1195),0x00
 	ld	w, 32:opc	; F75D99  ld W,0x20
@@ -177836,14 +177852,14 @@ sub_F75685_Skip19:
 	and	l, 7	; F75D9F  and L,0x07
 	sla	l, 4	; F75DA2  sla 0x04,L
 	and	l, 127	; F75DA5  and L,0x7f
-	calr	sub_F7620B	; F75DA8  calr 0xf7620b
+	calr	SmfSize_WriteControlChange	; F75DA8  calr 0xf7620b
 	ld	a, 192:opc	; F75DAB  ld A,0xc0
 	ld	w, (4506:16)	; F75DAD  ld W,(0x119a)
 	and	w, 15	; F75DB1  and W,0x0f
 	or	a, w	; F75DB4  or A,W
 	ld	w, (4508:16)	; F75DB6  ld W,(0x119c)
 	xor	l, l	; F75DBA  xor L,L
-	calr	sub_F7626A	; F75DBC  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75DBC  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75DBF  jrl T,0xf75ad2
 sub_F75685_Skip20:
 	cp	hl, 6:i3	; F75DC2  cp HL,6
@@ -177902,8 +177918,8 @@ sub_F75685_Skip22:
 	ld	c, (4505:16)	; F75E56  ld C,(0x1199)
 	pushw	wa	; F75E5A  push WA
 	pushw	hl	; F75E5B  push HL
-	calr	sub_F76219	; F75E5C  calr 0xf76219
-	calr	sub_F762DF	; F75E5F  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75E5C  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75E5F  calr 0xf762df
 	popw	hl	; F75E62  pop HL
 	popw	wa	; F75E63  pop WA
 	ld	a, 176:opc	; F75E64  ld A,0xb0
@@ -177912,7 +177928,7 @@ sub_F75685_Skip22:
 	or	a, w	; F75E6B  or A,W
 	ld	w, 64:opc	; F75E6D  ld W,0x40
 	ld	l, (4508:16)	; F75E6F  ld L,(0x119c)
-	call	sub_F7626A	; F75E73  call 0xf7626a
+	call	SmfSize_WriteChannelEvent	; F75E73  call 0xf7626a
 	jrl	sub_F75685_Loop4	; F75E77  jrl T,0xf75ad2
 sub_F75685_Join7:
 	cp	l, 3:i3	; F75E7A  cp L,3
@@ -177952,8 +177968,8 @@ sub_F75685_Skip24:
 	ld	c, (4505:16)	; F75ED2  ld C,(0x1199)
 	pushw	wa	; F75ED6  push WA
 	push	xhl	; F75ED7  push XHL
-	calr	sub_F76219	; F75ED8  calr 0xf76219
-	calr	sub_F762DF	; F75EDB  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75ED8  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75EDB  calr 0xf762df
 	pop	xhl	; F75EDE  pop XHL
 	popw	wa	; F75EDF  pop WA
 	ld	a, 176:opc	; F75EE0  ld A,0xb0
@@ -177963,13 +177979,13 @@ sub_F75685_Skip24:
 	ld	w, 101:opc	; F75EEB  ld W,0x65
 	ld	l, 0:opc	; F75EED  ld L,0x00
 	pushw	wa	; F75EEF  push WA
-	calr	sub_F7626A	; F75EF0  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75EF0  calr 0xf7626a
 	popw	wa	; F75EF3  pop WA
 	ld	w, 100:opc	; F75EF4  ld W,0x64
 	ld	l, 1:opc	; F75EF6  ld L,0x01
 	ld	(4499:16), 0	; F75EF8  ld (0x1193),0x00
 	pushw	wa	; F75EFD  push WA
-	calr	sub_F7626A	; F75EFE  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75EFE  calr 0xf7626a
 	popw	wa	; F75F01  pop WA
 	ld	w, 6:opc	; F75F02  ld W,0x06
 	ld	l, (4508:16)	; F75F04  ld L,(0x119c)
@@ -177979,14 +177995,14 @@ sub_F75685_Skip24:
 	srl	l, 1	; F75F12  srl 0x01,L
 	or	l, h	; F75F15  or L,H
 	pushw	wa	; F75F17  push WA
-	calr	sub_F7626A	; F75F18  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75F18  calr 0xf7626a
 	popw	wa	; F75F1B  pop WA
 	ld	w, 38:opc	; F75F1C  ld W,0x26
 	ld	l, (4508:16)	; F75F1E  ld L,(0x119c)
 	and	l, 1	; F75F22  and L,0x01
 	.byte 0xCF, 0xE9, 0x02	; F75F25  rrc 0x02,L   [llvm-mc cannot encode this]
 	pushw	wa	; F75F28  push WA
-	calr	sub_F7626A	; F75F29  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75F29  calr 0xf7626a
 	popw	wa	; F75F2C  pop WA
 	jrl	sub_F75685_Loop4	; F75F2D  jrl T,0xf75ad2
 sub_F75685_Skip25:
@@ -177998,8 +178014,8 @@ sub_F75685_Skip26:
 	ld	c, (4505:16)	; F75F3E  ld C,(0x1199)
 	pushw	wa	; F75F42  push WA
 	pushw	hl	; F75F43  push HL
-	calr	sub_F76219	; F75F44  calr 0xf76219
-	calr	sub_F762DF	; F75F47  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75F44  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75F47  calr 0xf762df
 	popw	hl	; F75F4A  pop HL
 	popw	wa	; F75F4B  pop WA
 	ld	a, 176:opc	; F75F4C  ld A,0xb0
@@ -178009,22 +178025,22 @@ sub_F75685_Skip26:
 	ld	w, 101:opc	; F75F57  ld W,0x65
 	ld	l, 0:opc	; F75F59  ld L,0x00
 	pushw	wa	; F75F5B  push WA
-	calr	sub_F7626A	; F75F5C  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75F5C  calr 0xf7626a
 	popw	wa	; F75F5F  pop WA
 	ld	w, 100:opc	; F75F60  ld W,0x64
 	ld	l, 0:opc	; F75F62  ld L,0x00
 	ld	(4499:16), 0	; F75F64  ld (0x1193),0x00
 	pushw	wa	; F75F69  push WA
-	calr	sub_F7626A	; F75F6A  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75F6A  calr 0xf7626a
 	popw	wa	; F75F6D  pop WA
 	ld	w, 6:opc	; F75F6E  ld W,0x06
 	ld	l, (4508:16)	; F75F70  ld L,(0x119c)
 	pushw	wa	; F75F74  push WA
-	calr	sub_F7626A	; F75F75  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75F75  calr 0xf7626a
 	popw	wa	; F75F78  pop WA
 	ld	w, 38:opc	; F75F79  ld W,0x26
 	ld	l, 0:opc	; F75F7B  ld L,0x00
-	calr	sub_F7626A	; F75F7D  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75F7D  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75F80  jrl T,0xf75ad2
 sub_F75685_Skip27:
 	m_bit 0, MD16, 0x133e	; F75F83  bit 0,(0x133e)
@@ -178035,8 +178051,8 @@ sub_F75685_Skip28:
 	ld	c, (4505:16)	; F75F90  ld C,(0x1199)
 	pushw	wa	; F75F94  push WA
 	pushw	hl	; F75F95  push HL
-	calr	sub_F76219	; F75F96  calr 0xf76219
-	calr	sub_F762DF	; F75F99  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75F96  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75F99  calr 0xf762df
 	popw	hl	; F75F9C  pop HL
 	popw	wa	; F75F9D  pop WA
 	ld	a, 176:opc	; F75F9E  ld A,0xb0
@@ -178046,22 +178062,22 @@ sub_F75685_Skip28:
 	ld	w, 101:opc	; F75FA7  ld W,0x65
 	ld	l, 0:opc	; F75FA9  ld L,0x00
 	pushw	wa	; F75FAB  push WA
-	calr	sub_F7626A	; F75FAC  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75FAC  calr 0xf7626a
 	popw	wa	; F75FAF  pop WA
 	ld	w, 100:opc	; F75FB0  ld W,0x64
 	ld	l, 2:opc	; F75FB2  ld L,0x02
 	ld	(4499:16), 0	; F75FB4  ld (0x1193),0x00
 	pushw	wa	; F75FB9  push WA
-	calr	sub_F7626A	; F75FBA  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75FBA  calr 0xf7626a
 	popw	wa	; F75FBD  pop WA
 	ld	w, 6:opc	; F75FBE  ld W,0x06
 	ld	l, (4508:16)	; F75FC0  ld L,(0x119c)
 	pushw	wa	; F75FC4  push WA
-	calr	sub_F7626A	; F75FC5  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75FC5  calr 0xf7626a
 	popw	wa	; F75FC8  pop WA
 	ld	w, 38:opc	; F75FC9  ld W,0x26
 	ld	l, 0:opc	; F75FCB  ld L,0x00
-	calr	sub_F7626A	; F75FCD  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75FCD  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75FD0  jrl T,0xf75ad2
 sub_F75685_Skip29:
 	m_bit 0, MD16, 0x133e	; F75FD3  bit 0,(0x133e)
@@ -178072,8 +178088,8 @@ sub_F75685_Skip30:
 	ld	c, (4505:16)	; F75FE0  ld C,(0x1199)
 	pushw	wa	; F75FE4  push WA
 	pushw	hl	; F75FE5  push HL
-	calr	sub_F76219	; F75FE6  calr 0xf76219
-	calr	sub_F762DF	; F75FE9  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F75FE6  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F75FE9  calr 0xf762df
 	popw	hl	; F75FEC  pop HL
 	popw	wa	; F75FED  pop WA
 	ld	a, 176:opc	; F75FEE  ld A,0xb0
@@ -178082,7 +178098,7 @@ sub_F75685_Skip30:
 	or	a, w	; F75FF7  or A,W
 	ld	w, 10:opc	; F75FF9  ld W,0x0a
 	ld	l, (4508:16)	; F75FFB  ld L,(0x119c)
-	calr	sub_F7626A	; F75FFF  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F75FFF  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F76002  jrl T,0xf75ad2
 sub_F75685_Skip31:
 	ld	bc, (4508:16)	; F76005  ld BC,(0x119c)
@@ -178134,23 +178150,23 @@ sub_F75685_Join8:
 	ld	c, (4505:16)	; F76072  ld C,(0x1199)
 	pushw	wa	; F76076  push WA
 	pushw	hl	; F76077  push HL
-	calr	sub_F76219	; F76078  calr 0xf76219
-	calr	sub_F762DF	; F7607B  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F76078  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F7607B  calr 0xf762df
 	popw	hl	; F7607E  pop HL
 	popw	wa	; F7607F  pop WA
-	calr	sub_F7626A	; F76080  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F76080  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F76083  jrl T,0xf75ad2
 sub_F75685_Skip41:
 	jrl	sub_F75685_Loop4	; F76086  jrl T,0xf75ad2
 sub_F75685_Skip42:
 	ld	c, 0:opc	; F76089  ld C,0x00
-	calr	sub_F76219	; F7608B  calr 0xf76219
-	calr	sub_F762DF	; F7608E  calr 0xf762df
+	calr	SmfSize_EncodeDeltaTime	; F7608B  calr 0xf76219
+	calr	SmfSize_AgePendingNoteOffs	; F7608E  calr 0xf762df
 	ld	a, 255:opc	; F76091  ld A,0xff
 	ld	w, 47:opc	; F76093  ld W,0x2f
 	ld	l, 0:opc	; F76095  ld L,0x00
-	calr	sub_F7626A	; F76097  calr 0xf7626a
-	calr	sub_F76123	; F7609A  calr 0xf76123
+	calr	SmfSize_WriteChannelEvent	; F76097  calr 0xf7626a
+	calr	SmfSize_StoreTrackLength	; F7609A  calr 0xf76123
 sub_F75685_Return:
 	ret	; F7609D  ret
 
@@ -178251,7 +178267,7 @@ sub_F75685_Nop:
 	ret	; F76122  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76123
+; SmfSize_StoreTrackLength
 ; Called from: in-module: 0xF7609A
 ; Touches: (0x1088) (0x10C4) (0x10C5) (0x10C6) (0x10C7) (0x126C)  |
 ;          0x60A700
@@ -178263,7 +178279,8 @@ sub_F75685_Nop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F76123:
+; SmfSize_StoreTrackLength: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role StoreTrackLength as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_StoreTrackLength:
 	xor	wa, wa	; F76123  xor WA,WA
 	ld	(SmfOut_TrackLength:16), wa	; F76125  ld (0x10c4),WA
 	ld	(SmfOut_TrackLength+2:16), wa	; F76129  ld (0x10c6),WA
@@ -178281,7 +178298,7 @@ sub_F76123:
 	ret	; F7615A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7615B
+; SmfSize_StageTempo
 ; Called from: in-module: 0xF75750 0xF75BAA
 ; Touches: (0x108C) (0x108E)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -178292,7 +178309,8 @@ sub_F76123:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7615B:
+; SmfSize_StageTempo: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role StageTempo as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_StageTempo:
 	ldw	wa, 60000	; F7615B  ld WA,0xea60
 	extz	xwa	; F7615E  extz XWA
 	mul	xwa, hl	; F76160  mul XWA,HL
@@ -178321,10 +178339,10 @@ sub_F7615B_Skip:
 	ret	; F761A0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F761A1
+; SmfSize_WriteTempoEvent
 ; Called from: in-module: 0xF75753 0xF75BAD
 ; Touches: (0x1088) (0x108C) (0x108D) (0x108E)
-; Calls:   sub_F762BD
+; Calls:   SmfSize_CommitOutputByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF761A1 is an instruction boundary of this
@@ -178333,47 +178351,48 @@ sub_F7615B_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F761A1:
+; SmfSize_WriteTempoEvent: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role WriteTempoEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_WriteTempoEvent:
 	ld	xiy, 4499	; F761A1  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F761A6  ld XIX,(0x1088)
 sub_F761A1_Loop:
 	ld	a, (xiy+)	; F761AA  ld A,(XIY+)
 	ld	(xix+), a	; F761AD  ld (XIX+),A
-	calr	sub_F762BD	; F761B0  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F761B0  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761B3  ld XIX,(0x1088)
 	bit	7, a	; F761B7  bit 0x07,A
 	jr	nz, sub_F761A1_Loop	; F761BA  jr NZ,0xf761aa
 	ld	a, 255:opc	; F761BC  ld A,0xff
 	ld	(xix+), a	; F761BE  ld (XIX+),A
-	calr	sub_F762BD	; F761C1  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F761C1  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761C4  ld XIX,(0x1088)
 	ld	a, 81:opc	; F761C8  ld A,0x51
 	ld	(xix+), a	; F761CA  ld (XIX+),A
-	calr	sub_F762BD	; F761CD  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F761CD  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761D0  ld XIX,(0x1088)
 	ld	a, 3:opc	; F761D4  ld A,0x03
 	ld	(xix+), a	; F761D6  ld (XIX+),A
-	calr	sub_F762BD	; F761D9  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F761D9  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761DC  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+2:16)	; F761E0  ld A,(0x108e)
 	ld	(xix+), a	; F761E4  ld (XIX+),A
-	calr	sub_F762BD	; F761E7  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F761E7  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761EA  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+1:16)	; F761EE  ld A,(0x108d)
 	ld	(xix+), a	; F761F2  ld (XIX+),A
-	calr	sub_F762BD	; F761F5  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F761F5  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761F8  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo:16)	; F761FC  ld A,(0x108c)
 	ld	(xix+), a	; F76200  ld (XIX+),A
-	calr	sub_F762BD	; F76203  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F76203  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F76206  ld XIX,(0x1088)
 	ret	; F7620A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7620B
+; SmfSize_WriteControlChange
 ; Called from: in-module: 0xF75D8B 0xF75DA8
 ; Touches: (0x119A)
-; Calls:   sub_F7626A
+; Calls:   SmfSize_WriteChannelEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7620B is an instruction boundary of this
@@ -178382,19 +178401,20 @@ sub_F761A1_Loop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7620B:
+; SmfSize_WriteControlChange: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role WriteControlChange as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_WriteControlChange:
 	ld	a, (4506:16)	; F7620B  ld A,(0x119a)
 	and	a, 15	; F7620F  and A,0x0f
 	or	a, 176	; F76212  or A,0xb0
-	calr	sub_F7626A	; F76215  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F76215  calr 0xf7626a
 	ret	; F76218  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76219
+; SmfSize_EncodeDeltaTime
 ; Called from: in-module: 0xF75B80 0xF75BB8 0xF75BDB 0xF75BFE 0xF75C24
 ;              0xF75C69 0xF75CDA 0xF75E5C +6 more
 ; Touches: (0x107E) (0x1082) (0x1090) (0x11AA) (0x11AC) (0x1268) (0x133E)
-; Calls:   sub_F7647A
+; Calls:   SmfSize_EncodeVlq
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF76219 is an instruction boundary of this
@@ -178403,7 +178423,8 @@ sub_F7620B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F76219:
+; SmfSize_EncodeDeltaTime: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role EncodeDeltaTime as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_EncodeDeltaTime:
 	pushw	wa	; F76219  push WA
 	push	xhl	; F7621A  push XHL
 	pushw	de	; F7621B  push DE
@@ -178432,15 +178453,15 @@ sub_F76219_Skip2:
 	popw	de	; F76263  pop DE
 	pop	xhl	; F76264  pop XHL
 	popw	wa	; F76265  pop WA
-	calr	sub_F7647A	; F76266  calr 0xf7647a
+	calr	SmfSize_EncodeVlq	; F76266  calr 0xf7647a
 	ret	; F76269  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7626A
+; SmfSize_WriteChannelEvent
 ; Called from: in-module: 0xF75866 0xF75876 0xF7588D 0xF758A8 0xF758C0
 ;              0xF758D3 0xF758E5 0xF758F2 +42 more
 ; Touches: (0x1088)
-; Calls:   sub_F762BD
+; Calls:   SmfSize_CommitOutputByte
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -178450,7 +178471,8 @@ sub_F76219_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7626A:
+; SmfSize_WriteChannelEvent: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role WriteChannelEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_WriteChannelEvent:
 	push	xiy	; F7626A  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F7626B  ld XIX,(0x1088)
 	ld	xiy, 4499	; F7626F  ld XIY,0x00001193
@@ -178459,7 +178481,7 @@ sub_F7626A_Loop:
 	ld	a, (xiy+)	; F76275  ld A,(XIY+)
 	ld	(xix+), a	; F76278  ld (XIX+),A
 	pushw	wa	; F7627B  push WA
-	calr	sub_F762BD	; F7627C  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F7627C  calr 0xf762bd
 	popw	wa	; F7627F  pop WA
 	ld	xix, (InputStream_Cursor:16)	; F76280  ld XIX,(0x1088)
 	bit	7, a	; F76284  bit 0x07,A
@@ -178467,11 +178489,11 @@ sub_F7626A_Loop:
 	popw	wa	; F76289  pop WA
 	ld	h, a	; F7628A  ld H,A
 	ld	(xix+), a	; F7628C  ld (XIX+),A
-	calr	sub_F762BD	; F7628F  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F7628F  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F76292  ld XIX,(0x1088)
 	ld	a, w	; F76296  ld A,W
 	ld	(xix+), a	; F76298  ld (XIX+),A
-	calr	sub_F762BD	; F7629B  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F7629B  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F7629E  ld XIX,(0x1088)
 	and	h, 240	; F762A2  and H,0xf0
 	cp	h, 192	; F762A5  cp H,0xc0
@@ -178480,14 +178502,14 @@ sub_F7626A_Loop:
 	jr	z, sub_F7626A_Epilogue	; F762AD  jr Z,0xf762bb
 	ld	a, l	; F762AF  ld A,L
 	ld	(xix+), a	; F762B1  ld (XIX+),A
-	calr	sub_F762BD	; F762B4  calr 0xf762bd
+	calr	SmfSize_CommitOutputByte	; F762B4  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F762B7  ld XIX,(0x1088)
 sub_F7626A_Epilogue:
 	pop	xiy	; F762BB  pop XIY
 	ret	; F762BC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F762BD
+; SmfSize_CommitOutputByte
 ; Called from: in-module: 0xF75794 0xF761B0 0xF761C1 0xF761CD 0xF761D9
 ;              0xF761E7 0xF761F5 0xF76203 +4 more
 ; Touches: (0x1088) (0x126C)  |  0x60A700 0x60AAFF
@@ -178499,7 +178521,8 @@ sub_F7626A_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F762BD:
+; SmfSize_CommitOutputByte: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role CommitOutputByte as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_CommitOutputByte:
 	push	xhl	; F762BD  push XHL
 	pushw	bc	; F762BE  push BC
 	cp	xix, 6335231	; F762BF  cp XIX,0x0060aaff
@@ -178516,11 +178539,11 @@ sub_F762BD_Skip:
 	ret	; F762DE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F762DF
+; SmfSize_AgePendingNoteOffs
 ; Called from: in-module: 0xF75B83 0xF75BBB 0xF75BDE 0xF75C01 0xF75C27
 ;              0xF75C6C 0xF75CDD 0xF75E5F +6 more
 ; Touches: (0x107E) (0x1080) (0x11AA)
-; Calls:   sub_F7652D sub_F7636C
+; Calls:   SmfSize_ClearDueList SmfSize_SortDueNoteOffs
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF762DF is an instruction boundary of this
@@ -178529,8 +178552,9 @@ sub_F762BD_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F762DF:
-	calr	sub_F7652D	; F762DF  calr 0xf7652d
+; SmfSize_AgePendingNoteOffs: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role AgePendingNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_AgePendingNoteOffs:
+	calr	SmfSize_ClearDueList	; F762DF  calr 0xf7652d
 	xor	hl, hl	; F762E2  xor HL,HL
 	xor	bc, bc	; F762E4  xor BC,BC
 	xor	iy, iy	; F762E6  xor IY,IY
@@ -178574,17 +178598,17 @@ sub_F762DF_Join:
 	srl	iy, 1	; F76355  srl 0x01,IY
 	cp	iy, 0:i3	; F76358  cp IY,0
 	jr	z, sub_F762DF_Skip2	; F7635A  jr Z,0xf7635f
-	calr	sub_F7636C	; F7635C  calr 0xf7636c
+	calr	SmfSize_SortDueNoteOffs	; F7635C  calr 0xf7636c
 sub_F762DF_Skip2:
 	ldw	(4222:16), 0	; F7635F  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F76365  ld (0x1080),0x0000
 	ret	; F7636B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7636C
+; SmfSize_SortDueNoteOffs
 ; Called from: in-module: 0xF7635C
 ; Touches: (0x10D3)
-; Calls:   sub_F763D7
+; Calls:   SmfSize_WriteDueNoteOffs
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7636C is an instruction boundary of this
@@ -178593,7 +178617,8 @@ sub_F762DF_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7636C:
+; SmfSize_SortDueNoteOffs: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role SortDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_SortDueNoteOffs:
 	cp	iy, 0:i3	; F7636C  cp IY,0
 	jr	z, sub_F7636C_Return	; F7636E  jr Z,0xf763d6
 	xor	de, de	; F76370  xor DE,DE
@@ -178633,15 +178658,15 @@ sub_F7636C_Skip2:
 	cp	de, 96	; F763CD  cp DE,0x0060
 	jr	ule, sub_F7636C_Loop	; F763D1  jr ULE,0xf76379
 sub_F7636C_Skip3:
-	calr	sub_F763D7	; F763D3  calr 0xf763d7
+	calr	SmfSize_WriteDueNoteOffs	; F763D3  calr 0xf763d7
 sub_F7636C_Return:
 	ret	; F763D6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F763D7
+; SmfSize_WriteDueNoteOffs
 ; Called from: in-module: 0xF763D3
 ; Touches: (0x107E) (0x1080) (0x1082) (0x1090) (0x11AA)
-; Calls:   sub_F7647A sub_F7626A
+; Calls:   SmfSize_EncodeVlq SmfSize_WriteChannelEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF763D7 is an instruction boundary of this
@@ -178650,7 +178675,8 @@ sub_F7636C_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F763D7:
+; SmfSize_WriteDueNoteOffs: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role WriteDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_WriteDueNoteOffs:
 	ld	bc, (4226:16)	; F763D7  ld BC,(0x1082)
 	ld	xiy, 4307	; F763DB  ld XIY,0x000010d3
 	xor	hl, hl	; F763E0  xor HL,HL
@@ -178681,7 +178707,7 @@ sub_F763D7_Join2:
 	push	xhl	; F76418  push XHL
 	pushw	bc	; F76419  push BC
 	push	xix	; F7641A  push XIX
-	calr	sub_F7647A	; F7641B  calr 0xf7647a
+	calr	SmfSize_EncodeVlq	; F7641B  calr 0xf7647a
 	pop	xix	; F7641E  pop XIX
 	popw	bc	; F7641F  pop BC
 	pop	xhl	; F76420  pop XHL
@@ -178695,7 +178721,7 @@ sub_F763D7_Join2:
 	ld	l, 0:opc	; F76432  ld L,0x00
 	pushw	bc	; F76434  push BC
 	push	xix	; F76435  push XIX
-	calr	sub_F7626A	; F76436  calr 0xf7626a
+	calr	SmfSize_WriteChannelEvent	; F76436  calr 0xf7626a
 	pop	xix	; F76439  pop XIX
 	popw	bc	; F7643A  pop BC
 	pop	xhl	; F7643B  pop XHL
@@ -178713,13 +178739,13 @@ sub_F763D7_Skip2:
 	m_add_rm MW16, 0x107e, 1	; F76460  add BC,(0x107e)
 	sub	bc, wa	; F76464  sub BC,WA
 	ld	(4522:16), bc	; F76466  ld (0x11aa),BC
-	calr	sub_F7647A	; F7646A  calr 0xf7647a
+	calr	SmfSize_EncodeVlq	; F7646A  calr 0xf7647a
 	ldw	(4222:16), 0	; F7646D  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F76473  ld (0x1080),0x0000
 	ret	; F76479  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7647A
+; SmfSize_EncodeVlq
 ; Called from: in-module: 0xF76266 0xF7641B 0xF7646A
 ; Touches: (0x1193) (0x1194) (0x1195) (0x11AA) (0x11AB) (0x11AC)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -178730,7 +178756,8 @@ sub_F763D7_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7647A:
+; SmfSize_EncodeVlq: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_EncodeVlq:
 	ldw	(4499:16), 0	; F7647A  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F76480  ld (0x1195),0x0000
 	m_cp_mi8 MB16, 0x11ac, 0x00	; F76486  cp (0x11ac),0x00
@@ -178792,7 +178819,7 @@ sub_F7647A_Return:
 	ret	; F7652C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7652D
+; SmfSize_ClearDueList
 ; Called from: in-module: 0xF762DF
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -178803,7 +178830,8 @@ sub_F7647A_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7652D:
+; SmfSize_ClearDueList: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role ClearDueList as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_ClearDueList:
 	push	xix	; F7652D  push XIX
 	ld	xix, 4307	; F7652E  ld XIX,0x000010d3
 	ldw	bc, 96	; F76533  ld BC,0x0060
@@ -178814,7 +178842,7 @@ sub_F7652D:
 	ret	; F76540  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76541
+; SmfSize_ClearEventFields
 ; Called from: in-module: 0xF75AD5
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -178825,7 +178853,8 @@ sub_F7652D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F76541:
+; SmfSize_ClearEventFields: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role ClearEventFields as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_ClearEventFields:
 	ld	xix, 4504	; F76541  ld XIX,0x00001198
 	xor	wa, wa	; F76546  xor WA,WA
 	ldw	bc, 4	; F76548  ld BC,0x0004
@@ -178834,7 +178863,7 @@ sub_F76541:
 	ret	; F76551  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76552
+; SmfSize_ReadSongByte
 ; Called from: in-module: 0xF75A99 0xF75AB1 0xF75AD8 0xF75AF2 0xF75B43
 ; Touches: (0x126E) (0x345C) (0x345E)
 ; Calls:   sub_F72F0A
@@ -178846,7 +178875,8 @@ sub_F76541:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F76552:
+; SmfSize_ReadSongByte: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role ReadSongByte as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_ReadSongByte:
 	ld	hl, (BStore_CursorBlock:16)	; F76552  ld HL,(0x345c)
 	calr	sub_F72F0A	; F76556  calr 0xf72f0a
 	ld	iy, (BStore_CursorOffset:16)	; F76559  ld IY,(0x345e)
@@ -178855,7 +178885,7 @@ sub_F76552:
 	ret	; F76566  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76567
+; SmfSize_AdvanceSongCursor
 ; Called from: in-module: 0xF75AAE 0xF75AEF 0xF75B4F
 ; Touches: (0x126E) (0x345C) (0x345E)
 ; Calls:   sub_F72F0A sub_F7659B InputStream_Refill InputStream_RefillDone
@@ -178867,7 +178897,8 @@ sub_F76552:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F76567:
+; SmfSize_AdvanceSongCursor: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role AdvanceSongCursor as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_AdvanceSongCursor:
 	ld	wa, (BStore_CursorOffset:16)	; F76567  ld WA,(0x345e)
 	cp	wa, 255	; F7656B  cp WA,0x00ff
 	jr	nz, sub_F76567_Skip	; F7656F  jr NZ,0xf76588
@@ -179138,26 +179169,26 @@ sub_F7669D_Code_Join:
 	ld	c, (4505:16)	; F766C4  ld C,(0x1199)
 	pushw	wa	; F766C8  push WA
 	pushw	hl	; F766C9  push HL
-	calr	sub_F76A25	; F766CA  calr 0xf76a25
-	calr	sub_F76B9B	; F766CD  calr 0xf76b9b
+	calr	SmfWriteCopy_EncodeDeltaTime	; F766CA  calr 0xf76a25
+	calr	SmfWriteCopy_AgePendingNoteOffs	; F766CD  calr 0xf76b9b
 	popw	hl	; F766D0  pop HL
 	popw	wa	; F766D1  pop WA
 	cp	(0x1238:16), 3	; F766D2  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F766D7  jrl NZ,0xf7678d
-	calr	sub_F76A6A	; F766DA  calr 0xf76a6a
+	calr	SmfWriteCopy_WriteChannelEvent	; F766DA  calr 0xf76a6a
 	cp	(0x1238:16), 3	; F766DD  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F766E2  jrl NZ,0xf7678d
 	jrl	-1727	; F766E5  jrl T,0xf76029
 	jrl	-1730	; F766E8  jrl T,0xf76029
 	ld	c, 0:opc	; F766EB  ld C,0x00
-	calr	sub_F76A25	; F766ED  calr 0xf76a25
-	calr	sub_F76B9B	; F766F0  calr 0xf76b9b
+	calr	SmfWriteCopy_EncodeDeltaTime	; F766ED  calr 0xf76a25
+	calr	SmfWriteCopy_AgePendingNoteOffs	; F766F0  calr 0xf76b9b
 	cp	(0x1238:16), 3	; F766F3  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F766F8  jrl NZ,0xf7678d
 	ld	a, 255:opc	; F766FB  ld A,0xff
 	ld	w, 47:opc	; F766FD  ld W,0x2f
 	ld	l, 0:opc	; F766FF  ld L,0x00
-	calr	sub_F76A6A	; F76701  calr 0xf76a6a
+	calr	SmfWriteCopy_WriteChannelEvent	; F76701  calr 0xf76a6a
 	cp	(0x1238:16), 3	; F76704  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F76709  jrl NZ,0xf7678d
 	cpw	(SmfOut_WindowsFlushed:16), 0	; F7670C  cp (0x126c),0x0000
@@ -179191,7 +179222,7 @@ sub_F7669D_Code_Skip3:
 	popw	hl	; F7676F  pop HL
 	ld	(UI_StatusCode:16), l	; F76770  ld (0x2880),L
 sub_F7669D_Code_Skip4:
-	calr	sub_F768D0	; F76774  calr 0xf768d0
+	calr	SmfSize_RestoreFileName	; F76774  calr 0xf768d0
 	ld	(8745:16), 0	; F76777  ld (0x2229),0x00
 	jr	sub_F7669D_Code_Entry2	; F7677C  jr T,0xf767ab
 sub_F7669D_Code_Loop:
@@ -179397,18 +179428,19 @@ sub_F768A1:
 	ld	(Disk_FileName+9:16), 63	; F768BE  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F768C3  ld (0x21d2),0x3f
 	call	T_F425B0	; F768C8  call 0xf425b0
-	calr	sub_F768D0	; F768CC  calr 0xf768d0
+	calr	SmfSize_RestoreFileName	; F768CC  calr 0xf768d0
 	ret	; F768CF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F768D0
+; SmfSize_RestoreFileName
 ; Called from: 0xF76774, 0xF768CC, 0xF76B93
 ; Evidence: 0xF768D0 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F768D0:
+; SmfSize_RestoreFileName: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role RestoreFileName as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_RestoreFileName:
 	ld	xiy, 4666	; F768D0  ld XIY,0x0000123a
 	ld	xix, Disk_FileName	; F768D5  ld XIX,0x000021c8
 	ldw	bc, 4	; F768DA  ld BC,0x0004
@@ -179416,14 +179448,15 @@ sub_F768D0:
 	ret	; F768DF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F768E0
+; SmfSize_SaveFileName
 ; Called from: 0xF76B60
 ; Evidence: 0xF768E0 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F768E0:
+; SmfSize_SaveFileName: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role SaveFileName as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSize_SaveFileName:
 	ld	xiy, Disk_FileName	; F768E0  ld XIY,0x000021c8
 	ld	xix, 4666	; F768E5  ld XIX,0x0000123a
 	ldw	bc, 4	; F768EA  ld BC,0x0004
@@ -179482,7 +179515,7 @@ SmfPartOffsets_F76911:
 	.short	0xFFFF	; F76951  terminator
 
 ; --------------------------------------------------------------------------
-; sub_F76953
+; SmfWriteCopy_StageTempoFromBpm
 ; Called from: no call site is known.  The label marks where a
 ;              converted run STARTS, so that a tool walking this file
 ;              by label does not attribute the run to its neighbour.
@@ -179491,7 +179524,8 @@ SmfPartOffsets_F76911:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76953:
+; SmfWriteCopy_StageTempoFromBpm: copy C of prom_b's SMF writer (an unreferenced copy of A), role StageTempoFromBpm as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_StageTempoFromBpm:
 	ldw	de, 9	; F76953  ld DE,0x0009
 	ldw	wa, 10176	; F76956  ld WA,0x27c0
 	ld	qwa, de	; F76959  ld QWA,DE
@@ -179512,7 +179546,7 @@ sub_F76953_Loop:
 	ld	(xix+), a	; F76982  ld (XIX+),A
 	pushw	wa	; F76985  push WA
 	push	xiy	; F76986  push XIY
-	calr	sub_F76ADF	; F76987  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F76987  calr 0xf76adf
 	pop	xiy	; F7698A  pop XIY
 	popw	wa	; F7698B  pop WA
 	cp	(0x1238:16), 3	; F7698C  cp (0x1238),0x03
@@ -179522,37 +179556,37 @@ sub_F76953_Loop:
 	jr	nz, sub_F76953_Loop	; F7699B  jr NZ,0xf7697f
 	ld	a, 255:opc	; F7699D  ld A,0xff
 	ld	(xix+), a	; F7699F  ld (XIX+),A
-	calr	sub_F76ADF	; F769A2  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F769A2  calr 0xf76adf
 	cp	(0x1238:16), 3	; F769A5  cp (0x1238),0x03
 	jrl	nz, sub_F76953_Return	; F769AA  jrl NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769AD  ld XIX,(0x1088)
 	ld	a, 81:opc	; F769B1  ld A,0x51
 	ld	(xix+), a	; F769B3  ld (XIX+),A
-	calr	sub_F76ADF	; F769B6  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F769B6  calr 0xf76adf
 	cp	(0x1238:16), 3	; F769B9  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769BE  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769C0  ld XIX,(0x1088)
 	ld	a, 3:opc	; F769C4  ld A,0x03
 	ld	(xix+), a	; F769C6  ld (XIX+),A
-	calr	sub_F76ADF	; F769C9  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F769C9  calr 0xf76adf
 	cp	(0x1238:16), 3	; F769CC  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769D1  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769D3  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+2:16)	; F769D7  ld A,(0x108e)
 	ld	(xix+), a	; F769DB  ld (XIX+),A
-	calr	sub_F76ADF	; F769DE  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F769DE  calr 0xf76adf
 	cp	(0x1238:16), 3	; F769E1  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769E6  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769E8  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+1:16)	; F769EC  ld A,(0x108d)
 	ld	(xix+), a	; F769F0  ld (XIX+),A
-	calr	sub_F76ADF	; F769F3  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F769F3  calr 0xf76adf
 	cp	(0x1238:16), 3	; F769F6  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769FB  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769FD  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo:16)	; F76A01  ld A,(0x108c)
 	ld	(xix+), a	; F76A05  ld (XIX+),A
-	calr	sub_F76ADF	; F76A08  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F76A08  calr 0xf76adf
 	cp	(0x1238:16), 3	; F76A0B  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F76A10  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F76A12  ld XIX,(0x1088)
@@ -179561,18 +179595,19 @@ sub_F76953_Return:
 	ld	a, (4506:16)	; F76A17  ld A,(0x119a)
 	and	a, 15	; F76A1B  and A,0x0f
 	or	a, 176	; F76A1E  or A,0xb0
-	calr	sub_F76A6A	; F76A21  calr 0xf76a6a
+	calr	SmfWriteCopy_WriteChannelEvent	; F76A21  calr 0xf76a6a
 	ret	; F76A24  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76A25
+; SmfWriteCopy_EncodeDeltaTime
 ; Called from: 0xF766CA, 0xF766ED
 ; Evidence: 0xF76A25 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76A25:
+; SmfWriteCopy_EncodeDeltaTime: copy C of prom_b's SMF writer (an unreferenced copy of A), role EncodeDeltaTime as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_EncodeDeltaTime:
 	pushw	wa	; F76A25  push WA
 	push	xhl	; F76A26  push XHL
 	pushw	de	; F76A27  push DE
@@ -179597,18 +179632,19 @@ sub_F76A25_Skip:
 	popw	de	; F76A63  pop DE
 	pop	xhl	; F76A64  pop XHL
 	popw	wa	; F76A65  pop WA
-	calr	sub_F76D38	; F76A66  calr 0xf76d38
+	calr	SmfWriteCopy_EncodeVlq	; F76A66  calr 0xf76d38
 	ret	; F76A69  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76A6A
+; SmfWriteCopy_WriteChannelEvent
 ; Called from: 0xF766DA, 0xF76701, 0xF76A21, 0xF76CF9
 ; Evidence: 0xF76A6A is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76A6A:
+; SmfWriteCopy_WriteChannelEvent: copy C of prom_b's SMF writer (an unreferenced copy of A), role WriteChannelEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_WriteChannelEvent:
 	push	xiy	; F76A6A  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F76A6B  ld XIX,(0x1088)
 	ld	xiy, 4499	; F76A6F  ld XIY,0x00001193
@@ -179619,7 +179655,7 @@ sub_F76A6A_Loop:
 	pushw	wa	; F76A7B  push WA
 	pushw	hl	; F76A7C  push HL
 	push	xiy	; F76A7D  push XIY
-	calr	sub_F76ADF	; F76A7E  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F76A7E  calr 0xf76adf
 	pop	xiy	; F76A81  pop XIY
 	popw	hl	; F76A82  pop HL
 	popw	wa	; F76A83  pop WA
@@ -179636,7 +179672,7 @@ sub_F76A6A_Skip:
 	ld	(xix+), a	; F76A9A  ld (XIX+),A
 	pushw	wa	; F76A9D  push WA
 	pushw	hl	; F76A9E  push HL
-	calr	sub_F76ADF	; F76A9F  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F76A9F  calr 0xf76adf
 	popw	hl	; F76AA2  pop HL
 	popw	wa	; F76AA3  pop WA
 	cp	(0x1238:16), 3	; F76AA4  cp (0x1238),0x03
@@ -179645,7 +179681,7 @@ sub_F76A6A_Skip:
 	ld	a, w	; F76AAF  ld A,W
 	ld	(xix+), a	; F76AB1  ld (XIX+),A
 	pushw	hl	; F76AB4  push HL
-	calr	sub_F76ADF	; F76AB5  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F76AB5  calr 0xf76adf
 	popw	hl	; F76AB8  pop HL
 	cp	(0x1238:16), 3	; F76AB9  cp (0x1238),0x03
 	jr	nz, sub_F76A6A_Join	; F76ABE  jr NZ,0xf76ad9
@@ -179657,14 +179693,14 @@ sub_F76A6A_Skip:
 	jr	z, sub_F76A6A_Join	; F76ACF  jr Z,0xf76ad9
 	ld	a, l	; F76AD1  ld A,L
 	ld	(xix+), a	; F76AD3  ld (XIX+),A
-	calr	sub_F76ADF	; F76AD6  calr 0xf76adf
+	calr	SmfWriteCopy_CommitOutputByte	; F76AD6  calr 0xf76adf
 sub_F76A6A_Join:
 	pop	xiy	; F76AD9  pop XIY
 	ld	xix, (InputStream_Cursor:16)	; F76ADA  ld XIX,(0x1088)
 	ret	; F76ADE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76ADF
+; SmfWriteCopy_CommitOutputByte
 ; Called from: 0xF76987, 0xF769A2, 0xF769B6, 0xF769C9, 0xF769DE, 0xF769F3,
 ;              0xF76A08, 0xF76A7E, 0xF76A9F, 0xF76AB5, 0xF76AD6
 ; Evidence: 0xF76ADF is an instruction boundary of this transcription,
@@ -179672,7 +179708,8 @@ sub_F76A6A_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76ADF:
+; SmfWriteCopy_CommitOutputByte: copy C of prom_b's SMF writer (an unreferenced copy of A), role CommitOutputByte as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_CommitOutputByte:
 	push	xhl	; F76ADF  push XHL
 	pushw	bc	; F76AE0  push BC
 	ld	(4664:16), 3	; F76AE1  ld (0x1238),0x03
@@ -179736,7 +179773,7 @@ sub_F76ADF_Epilogue:
 	push	xiy	; F76B5D  push XIY
 	push	xhl	; F76B5E  push XHL
 	push	xbc	; F76B5F  push XBC
-	calr	sub_F768E0	; F76B60  calr 0xf768e0
+	calr	SmfSize_SaveFileName	; F76B60  calr 0xf768e0
 	ld	xiy, 6333568	; F76B63  ld XIY,0x0060a480
 	ld	l, (10020:16)	; F76B68  ld L,(0x2724)
 	xor	h, h	; F76B6C  xor H,H
@@ -179749,7 +179786,7 @@ sub_F76ADF_Epilogue:
 	ld	(Disk_FileName+9:16), 63	; F76B85  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F76B8A  ld (0x21d2),0x3f
 	call	T_F425B0	; F76B8F  call 0xf425b0
-	calr	sub_F768D0	; F76B93  calr 0xf768d0
+	calr	SmfSize_RestoreFileName	; F76B93  calr 0xf768d0
 	pop	xbc	; F76B96  pop XBC
 	pop	xhl	; F76B97  pop XHL
 	pop	xiy	; F76B98  pop XIY
@@ -179757,16 +179794,17 @@ sub_F76ADF_Epilogue:
 	ret	; F76B9A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76B9B
+; SmfWriteCopy_AgePendingNoteOffs
 ; Called from: 0xF766CD, 0xF766F0
 ; Evidence: 0xF76B9B is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76B9B:
+; SmfWriteCopy_AgePendingNoteOffs: copy C of prom_b's SMF writer (an unreferenced copy of A), role AgePendingNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_AgePendingNoteOffs:
 	ld	(4664:16), 3	; F76B9B  ld (0x1238),0x03
-	calr	sub_F76DEB	; F76BA0  calr 0xf76deb
+	calr	SmfWriteCopy_ClearDueList	; F76BA0  calr 0xf76deb
 	xor	hl, hl	; F76BA3  xor HL,HL
 	xor	bc, bc	; F76BA5  xor BC,BC
 	xor	iy, iy	; F76BA7  xor IY,IY
@@ -179811,21 +179849,22 @@ sub_F76B9B_Join:
 	srl	iy, 1	; F76C15  srl 0x01,IY
 	cp	iy, 0:i3	; F76C18  cp IY,0
 	jr	z, sub_F76B9B_Skip2	; F76C1A  jr Z,0xf76c1f
-	calr	sub_F76C2C	; F76C1C  calr 0xf76c2c
+	calr	SmfWriteCopy_SortDueNoteOffs	; F76C1C  calr 0xf76c2c
 sub_F76B9B_Skip2:
 	ldw	(4222:16), 0	; F76C1F  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F76C25  ld (0x1080),0x0000
 	ret	; F76C2B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76C2C
+; SmfWriteCopy_SortDueNoteOffs
 ; Called from: 0xF76C1C
 ; Evidence: 0xF76C2C is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76C2C:
+; SmfWriteCopy_SortDueNoteOffs: copy C of prom_b's SMF writer (an unreferenced copy of A), role SortDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_SortDueNoteOffs:
 	cp	iy, 0:i3	; F76C2C  cp IY,0
 	jr	z, sub_F76C2C_Return	; F76C2E  jr Z,0xf76c96
 	xor	de, de	; F76C30  xor DE,DE
@@ -179865,19 +179904,20 @@ sub_F76C2C_Skip2:
 	cp	de, 96	; F76C8D  cp DE,0x0060
 	jr	ule, sub_F76C2C_Loop	; F76C91  jr ULE,0xf76c39
 sub_F76C2C_Skip3:
-	calr	sub_F76C97	; F76C93  calr 0xf76c97
+	calr	SmfWriteCopy_WriteDueNoteOffs	; F76C93  calr 0xf76c97
 sub_F76C2C_Return:
 	ret	; F76C96  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76C97
+; SmfWriteCopy_WriteDueNoteOffs
 ; Called from: 0xF76C93
 ; Evidence: 0xF76C97 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76C97:
+; SmfWriteCopy_WriteDueNoteOffs: copy C of prom_b's SMF writer (an unreferenced copy of A), role WriteDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_WriteDueNoteOffs:
 	ld	bc, (4226:16)	; F76C97  ld BC,(0x1082)
 	ld	xiy, 4307	; F76C9B  ld XIY,0x000010d3
 	xor	hl, hl	; F76CA0  xor HL,HL
@@ -179908,7 +179948,7 @@ sub_F76C97_Join2:
 	push	xhl	; F76CD8  push XHL
 	pushw	bc	; F76CD9  push BC
 	push	xix	; F76CDA  push XIX
-	calr	sub_F76D38	; F76CDB  calr 0xf76d38
+	calr	SmfWriteCopy_EncodeVlq	; F76CDB  calr 0xf76d38
 	pop	xix	; F76CDE  pop XIX
 	popw	bc	; F76CDF  pop BC
 	pop	xhl	; F76CE0  pop XHL
@@ -179924,7 +179964,7 @@ sub_F76C97_Join2:
 	ld	l, 0:opc	; F76CF5  ld L,0x00
 	pushw	bc	; F76CF7  push BC
 	push	xix	; F76CF8  push XIX
-	calr	sub_F76A6A	; F76CF9  calr 0xf76a6a
+	calr	SmfWriteCopy_WriteChannelEvent	; F76CF9  calr 0xf76a6a
 	pop	xix	; F76CFC  pop XIX
 	popw	bc	; F76CFD  pop BC
 	pop	xhl	; F76CFE  pop XHL
@@ -179941,20 +179981,21 @@ sub_F76C97_Skip2:
 	add	bc, (4222:16)	; F76D1E  add BC,(0x107e)
 	sub	bc, wa	; F76D22  sub BC,WA
 	ld	(4522:16), bc	; F76D24  ld (0x11aa),BC
-	calr	sub_F76D38	; F76D28  calr 0xf76d38
+	calr	SmfWriteCopy_EncodeVlq	; F76D28  calr 0xf76d38
 	ldw	(4222:16), 0	; F76D2B  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F76D31  ld (0x1080),0x0000
 	ret	; F76D37  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76D38
+; SmfWriteCopy_EncodeVlq
 ; Called from: 0xF76A66, 0xF76CDB, 0xF76D28
 ; Evidence: 0xF76D38 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76D38:
+; SmfWriteCopy_EncodeVlq: copy C of prom_b's SMF writer (an unreferenced copy of A), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_EncodeVlq:
 	ldw	(4499:16), 0	; F76D38  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F76D3E  ld (0x1195),0x0000
 	cp	(0x11ac:16), 0	; F76D44  cp (0x11ac),0x00
@@ -180016,14 +180057,15 @@ sub_F76D38_Return:
 	ret	; F76DEA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F76DEB
+; SmfWriteCopy_ClearDueList
 ; Called from: 0xF76BA0
 ; Evidence: 0xF76DEB is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76DEB:
+; SmfWriteCopy_ClearDueList: copy C of prom_b's SMF writer (an unreferenced copy of A), role ClearDueList as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfWriteCopy_ClearDueList:
 	push	xix	; F76DEB  push XIX
 	ld	xix, 4307	; F76DEC  ld XIX,0x000010d3
 	ldw	bc, 96	; F76DF1  ld BC,0x0060
@@ -180101,7 +180143,7 @@ GmSystemSysEx_F76E64:
 
 
 ; --------------------------------------------------------------------------
-; sub_F76E74
+; SmfSizeCopy_Pass
 ; Called from: no call site is known.  The label marks where a
 ;              converted run STARTS, so that a tool walking this file
 ;              by label does not attribute the run to its neighbour.
@@ -180110,7 +180152,8 @@ GmSystemSysEx_F76E64:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F76E74:
+; SmfSizeCopy_Pass: copy D of prom_b's SMF writer (an unreferenced copy of B), the whole sizing pass over the song (its main; see the module note) -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_Pass:
 	xor	hl, hl	; F76E74  xor HL,HL
 	xor	bc, bc	; F76E76  xor BC,BC
 sub_F76E74_Join:
@@ -180177,8 +180220,8 @@ sub_F76E74_Loop:
 	xor	c, c	; F76F3A  xor C,C
 	or	hl, bc	; F76F3C  or HL,BC
 	popw	bc	; F76F3E  pop BC
-	calr	sub_F778D2	; F76F3F  calr 0xf778d2
-	calr	sub_F77918	; F76F42  calr 0xf77918
+	calr	SmfSizeCopy_StageTempo	; F76F3F  calr 0xf778d2
+	calr	SmfSizeCopy_WriteTempoEvent	; F76F42  calr 0xf77918
 	ld	(4665:16), 255	; F76F45  ld (0x1239),0xff
 	ld	xiy, GmSystemSysEx_F76E64	; F76F4A  ld XIY,0x00f76e64
 	bit	2, (0x7f4d:16)	; F76F4F  bit 2,(0x7f4d)
@@ -180193,7 +180236,7 @@ sub_F76E74_Skip2:
 	pushw	bc	; F76F6C  push BC
 	push	xiy	; F76F6D  push XIY
 	push	xix	; F76F6E  push XIX
-	calr	sub_F77A28	; F76F6F  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F76F6F  calr 0xf77a28
 	pop	xix	; F76F72  pop XIX
 	pop	xiy	; F76F73  pop XIY
 	popw	bc	; F76F74  pop BC
@@ -180271,7 +180314,7 @@ sub_F76E74_Join2:
 	pushw	wa	; F7703E  push WA
 	pushw	bc	; F7703F  push BC
 	pushw	de	; F77040  push DE
-	call	sub_F779D5	; F77041  call 0xf779d5
+	call	SmfSizeCopy_WriteChannelEvent	; F77041  call 0xf779d5
 	popw	de	; F77045  pop DE
 	popw	bc	; F77046  pop BC
 	popw	wa	; F77047  pop WA
@@ -180279,7 +180322,7 @@ sub_F76E74_Join2:
 	ld	l, (6352916:24)	; F7704A  ld L,(0x60f014)
 	pushw	bc	; F7704F  push BC
 	pushw	de	; F77050  push DE
-	call	sub_F779D5	; F77051  call 0xf779d5
+	call	SmfSizeCopy_WriteChannelEvent	; F77051  call 0xf779d5
 	popw	de	; F77055  pop DE
 	popw	bc	; F77056  pop BC
 	ld	a, (3184:16)	; F77057  ld A,(0x0c70)
@@ -180288,7 +180331,7 @@ sub_F76E74_Join2:
 	and	w, 127	; F77063  and W,0x7f
 	pushw	bc	; F77066  push BC
 	pushw	de	; F77067  push DE
-	calr	sub_F779D5	; F77068  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77068  calr 0xf779d5
 	popw	de	; F7706B  pop DE
 	popw	bc	; F7706C  pop BC
 	jrl	sub_F76E74_Join3	; F7706D  jrl T,0xf770b3
@@ -180301,7 +180344,7 @@ sub_F76E74_Skip3:
 	srl	l, 3	; F7707E  srl 0x03,L
 	pushw	bc	; F77081  push BC
 	pushw	de	; F77082  push DE
-	calr	sub_F779D5	; F77083  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77083  calr 0xf779d5
 	popw	de	; F77086  pop DE
 	popw	bc	; F77087  pop BC
 	ld	a, (3184:16)	; F77088  ld A,(0x0c70)
@@ -180312,7 +180355,7 @@ sub_F76E74_Skip3:
 	sla	l, 4	; F77096  sla 0x04,L
 	pushw	bc	; F77099  push BC
 	pushw	de	; F7709A  push DE
-	calr	sub_F779D5	; F7709B  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F7709B  calr 0xf779d5
 	popw	de	; F7709E  pop DE
 	popw	bc	; F7709F  pop BC
 	ld	a, (3184:16)	; F770A0  ld A,(0x0c70)
@@ -180321,7 +180364,7 @@ sub_F76E74_Skip3:
 	and	w, 127	; F770A9  and W,0x7f
 	pushw	bc	; F770AC  push BC
 	pushw	de	; F770AD  push DE
-	calr	sub_F779D5	; F770AE  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F770AE  calr 0xf779d5
 	popw	de	; F770B1  pop DE
 	popw	bc	; F770B2  pop BC
 sub_F76E74_Join3:
@@ -180331,27 +180374,27 @@ sub_F76E74_Join3:
 	ld	l, b	; F770BC  ld L,B
 	pushw	wa	; F770BE  push WA
 	pushw	de	; F770BF  push DE
-	calr	sub_F779D5	; F770C0  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F770C0  calr 0xf779d5
 	popw	de	; F770C3  pop DE
 	popw	wa	; F770C4  pop WA
 	ld	w, 93:opc	; F770C5  ld W,0x5d
 	ld	l, (4763:16)	; F770C7  ld L,(0x129b)
 	pushw	wa	; F770CB  push WA
 	pushw	de	; F770CC  push DE
-	calr	sub_F779D5	; F770CD  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F770CD  calr 0xf779d5
 	popw	de	; F770D0  pop DE
 	popw	wa	; F770D1  pop WA
 	ld	w, 94:opc	; F770D2  ld W,0x5e
 	ld	l, (4944:16)	; F770D4  ld L,(0x1350)
 	pushw	wa	; F770D8  push WA
 	pushw	de	; F770D9  push DE
-	calr	sub_F779D5	; F770DA  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F770DA  calr 0xf779d5
 	popw	de	; F770DD  pop DE
 	popw	wa	; F770DE  pop WA
 	ld	w, 91:opc	; F770DF  ld W,0x5b
 	ld	l, (4686:16)	; F770E1  ld L,(0x124e)
 	pushw	wa	; F770E5  push WA
-	calr	sub_F779D5	; F770E6  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F770E6  calr 0xf779d5
 	popw	wa	; F770E9  pop WA
 	ld	l, (3184:16)	; F770EA  ld L,(0x0c70)
 	xor	h, h	; F770EE  xor H,H
@@ -180378,17 +180421,17 @@ sub_F76E74_Join3:
 	ldto_lerp	xiy, 56	; F7712F  ld XIY,XDE3
 	ld	w, 10:opc	; F77132  ld W,0x0a
 	pushw	wa	; F77134  push WA
-	calr	sub_F779D5	; F77135  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77135  calr 0xf779d5
 	popw	wa	; F77138  pop WA
 	ld	w, 101:opc	; F77139  ld W,0x65
 	ld	l, 0:opc	; F7713B  ld L,0x00
 	pushw	wa	; F7713D  push WA
-	calr	sub_F779D5	; F7713E  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F7713E  calr 0xf779d5
 	popw	wa	; F77141  pop WA
 	ld	w, 100:opc	; F77142  ld W,0x64
 	ld	l, 1:opc	; F77144  ld L,0x01
 	pushw	wa	; F77146  push WA
-	calr	sub_F779D5	; F77147  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77147  calr 0xf779d5
 	popw	wa	; F7714A  pop WA
 	ld	l, (3184:16)	; F7714B  ld L,(0x0c70)
 	xor	h, h	; F7714F  xor H,H
@@ -180408,7 +180451,7 @@ sub_F76E74_Join3:
 	ld	w, 6:opc	; F7717F  ld W,0x06
 	pushw	wa	; F77181  push WA
 	pushw	bc	; F77182  push BC
-	calr	sub_F779D5	; F77183  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77183  calr 0xf779d5
 	popw	bc	; F77186  pop BC
 	popw	wa	; F77187  pop WA
 	ld	l, c	; F77188  ld L,C
@@ -180416,17 +180459,17 @@ sub_F76E74_Join3:
 	and	l, 127	; F7718D  and L,0x7f
 	ld	w, 38:opc	; F77190  ld W,0x26
 	pushw	wa	; F77192  push WA
-	calr	sub_F779D5	; F77193  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77193  calr 0xf779d5
 	popw	wa	; F77196  pop WA
 	ld	w, 101:opc	; F77197  ld W,0x65
 	ld	l, 0:opc	; F77199  ld L,0x00
 	pushw	wa	; F7719B  push WA
-	calr	sub_F779D5	; F7719C  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F7719C  calr 0xf779d5
 	popw	wa	; F7719F  pop WA
 	ld	w, 100:opc	; F771A0  ld W,0x64
 	ld	l, 2:opc	; F771A2  ld L,0x02
 	pushw	wa	; F771A4  push WA
-	calr	sub_F779D5	; F771A5  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F771A5  calr 0xf779d5
 	popw	wa	; F771A8  pop WA
 	ld	l, (3184:16)	; F771A9  ld L,(0x0c70)
 	xor	h, h	; F771AD  xor H,H
@@ -180444,22 +180487,22 @@ sub_F76E74_Join3:
 	ldto_lerp	xiy, 56	; F771D8  ld XIY,XDE3
 	ld	w, 6:opc	; F771DB  ld W,0x06
 	pushw	wa	; F771DD  push WA
-	calr	sub_F779D5	; F771DE  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F771DE  calr 0xf779d5
 	popw	wa	; F771E1  pop WA
 	ld	w, 38:opc	; F771E2  ld W,0x26
 	xor	l, l	; F771E4  xor L,L
 	pushw	wa	; F771E6  push WA
-	calr	sub_F779D5	; F771E7  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F771E7  calr 0xf779d5
 	popw	wa	; F771EA  pop WA
 	ld	w, 101:opc	; F771EB  ld W,0x65
 	ld	l, 0:opc	; F771ED  ld L,0x00
 	pushw	wa	; F771EF  push WA
-	calr	sub_F779D5	; F771F0  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F771F0  calr 0xf779d5
 	popw	wa	; F771F3  pop WA
 	ld	w, 100:opc	; F771F4  ld W,0x64
 	ld	l, 0:opc	; F771F6  ld L,0x00
 	pushw	wa	; F771F8  push WA
-	calr	sub_F779D5	; F771F9  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F771F9  calr 0xf779d5
 	popw	wa	; F771FC  pop WA
 	ld	l, (3184:16)	; F771FD  ld L,(0x0c70)
 	xor	h, h	; F77201  xor H,H
@@ -180475,12 +180518,12 @@ sub_F76E74_Join3:
 	ld	l, (xiy+13)	; F77226  ld L,(XIY+0x0d)
 	ld	w, 6:opc	; F77229  ld W,0x06
 	pushw	wa	; F7722B  push WA
-	calr	sub_F779D5	; F7722C  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F7722C  calr 0xf779d5
 	popw	wa	; F7722F  pop WA
 	ld	w, 6:opc	; F77230  ld W,0x06
 	xor	l, l	; F77232  xor L,L
 	pushw	wa	; F77234  push WA
-	calr	sub_F779D5	; F77235  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77235  calr 0xf779d5
 	popw	wa	; F77238  pop WA
 sub_F76E74_Skip4:
 	inc	1, (3184:16)	; F77239  inc 1,(0x0c70)
@@ -180491,15 +180534,15 @@ sub_F76E74_Join4:
 	xor	wa, wa	; F77248  xor WA,WA
 	ld	(4226:16), wa	; F7724A  ld (0x1082),WA
 	ld	(4228:16), wa	; F7724E  ld (0x1084),WA
-	calr	sub_F77CB7	; F77252  calr 0xf77cb7
+	calr	SmfSizeCopy_ReadSongByte	; F77252  calr 0xf77cb7
 	cp	a, 130	; F77255  cp A,0x82
 	jr	z, sub_F76E74_Skip5	; F77258  jr Z,0xf77279
 	cp	a, 129	; F7725A  cp A,0x81
 	jr	z, sub_F76E74_Skip5	; F7725D  jr Z,0xf77279
 	pushw	(BStore_CursorBlock:16)	; F7725F  pushw (0x345c)
 	pushw	(BStore_CursorOffset:16)	; F77263  pushw (0x345e)
-	calr	sub_F77CCC	; F77267  calr 0xf77ccc
-	calr	sub_F77CB7	; F7726A  calr 0xf77cb7
+	calr	SmfSizeCopy_AdvanceSongCursor	; F77267  calr 0xf77ccc
+	calr	SmfSizeCopy_ReadSongByte	; F7726A  calr 0xf77cb7
 	popw	(BStore_CursorOffset:16)	; F7726D  popw (0x345e)
 	popw	(BStore_CursorBlock:16)	; F77271  popw (0x345c)
 	ld	(4228:16), a	; F77275  ld (0x1084),A
@@ -180510,8 +180553,8 @@ sub_F76E74_Skip5:
 sub_F76E74_Loop4:
 	xor	hl, hl	; F7728B  xor HL,HL
 	push	xhl	; F7728D  push XHL
-	calr	sub_F77CA6	; F7728E  calr 0xf77ca6
-	calr	sub_F77CB7	; F77291  calr 0xf77cb7
+	calr	SmfSizeCopy_ClearEventFields	; F7728E  calr 0xf77ca6
+	calr	SmfSizeCopy_ReadSongByte	; F77291  calr 0xf77cb7
 	pop	xhl	; F77294  pop XHL
 	cp	a, 130	; F77295  cp A,0x82
 	jrl	z, sub_F76E74_Skip32	; F77298  jrl Z,0xf77800
@@ -180521,8 +180564,8 @@ sub_F76E74_Loop5:
 	ld	(xde+hl), a	; F772A1  ld (XDE+HL),A
 	pop	xde	; F772A6  pop XDE
 	pushw	hl	; F772A7  push HL
-	calr	sub_F77CCC	; F772A8  calr 0xf77ccc
-	calr	sub_F77CB7	; F772AB  calr 0xf77cb7
+	calr	SmfSizeCopy_AdvanceSongCursor	; F772A8  calr 0xf77ccc
+	calr	SmfSizeCopy_ReadSongByte	; F772AB  calr 0xf77cb7
 	popw	hl	; F772AE  pop HL
 	inc	1, hl	; F772AF  inc 1,HL
 	bit	7, a	; F772B1  bit 0x07,A
@@ -180552,11 +180595,11 @@ sub_F76E74_Loop5:
 sub_F76E74_Skip6:
 	incw	1, (4230:16)	; F772F8  incw 1,(0x1086)
 sub_F76E74_Join5:
-	calr	sub_F77CB7	; F772FC  calr 0xf77cb7
+	calr	SmfSizeCopy_ReadSongByte	; F772FC  calr 0xf77cb7
 	cp	a, 129	; F772FF  cp A,0x81
 	jr	nz, sub_F76E74_Skip7	; F77302  jr NZ,0xf7730d
 	incw	1, (4230:16)	; F77304  incw 1,(0x1086)
-	calr	sub_F77CCC	; F77308  calr 0xf77ccc
+	calr	SmfSizeCopy_AdvanceSongCursor	; F77308  calr 0xf77ccc
 	jr	sub_F76E74_Join5	; F7730B  jr T,0xf772fc
 sub_F76E74_Skip7:
 	ld	wa, (4230:16)	; F7730D  ld WA,(0x1086)
@@ -180574,8 +180617,8 @@ sub_F76E74_Skip8:
 	cp	hl, 4:i3	; F77330  cp HL,4
 	jrl	nz, sub_F76E74_Loop4	; F77332  jrl NZ,0xf7728b
 	ld	c, (4505:16)	; F77335  ld C,(0x1199)
-	calr	sub_F77990	; F77339  calr 0xf77990
-	calr	sub_F77A4A	; F7733C  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F77339  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F7733C  calr 0xf77a4a
 	ld	hl, (4506:16)	; F7733F  ld HL,(0x119a)
 	and	l, 127	; F77343  and L,0x7f
 	and	h, 1	; F77346  and H,0x01
@@ -180590,46 +180633,46 @@ sub_F76E74_Skip8:
 	xor	a, a	; F7735E  xor A,A
 	or	hl, wa	; F77360  or HL,WA
 	popw	wa	; F77362  pop WA
-	calr	sub_F778D2	; F77363  calr 0xf778d2
-	calr	sub_F77918	; F77366  calr 0xf77918
+	calr	SmfSizeCopy_StageTempo	; F77363  calr 0xf778d2
+	calr	SmfSizeCopy_WriteTempoEvent	; F77366  calr 0xf77918
 	jrl	sub_F76E74_Loop4	; F77369  jrl T,0xf7728b
 sub_F76E74_Skip9:
 	ld	c, (4505:16)	; F7736C  ld C,(0x1199)
 	pushw	wa	; F77370  push WA
-	calr	sub_F77990	; F77371  calr 0xf77990
-	calr	sub_F77A4A	; F77374  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F77371  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77374  calr 0xf77a4a
 	popw	wa	; F77377  pop WA
 	and	a, 15	; F77378  and A,0x0f
 	or	a, 208	; F7737B  or A,0xd0
 	ld	w, (4506:16)	; F7737E  ld W,(0x119a)
 	xor	l, l	; F77382  xor L,L
-	calr	sub_F779D5	; F77384  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77384  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F77387  jrl T,0xf7728b
 sub_F76E74_Skip10:
 	cp	hl, 3:i3	; F7738A  cp HL,3
 	jrl	nz, sub_F76E74_Loop4	; F7738C  jrl NZ,0xf7728b
 	ld	c, (4505:16)	; F7738F  ld C,(0x1199)
 	pushw	wa	; F77393  push WA
-	calr	sub_F77990	; F77394  calr 0xf77990
-	calr	sub_F77A4A	; F77397  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F77394  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77397  calr 0xf77a4a
 	popw	wa	; F7739A  pop WA
 	and	a, 15	; F7739B  and A,0x0f
 	or	a, 176	; F7739E  or A,0xb0
 	ld	w, 1:opc	; F773A1  ld W,0x01
 	ld	l, (4506:16)	; F773A3  ld L,(0x119a)
-	calr	sub_F779D5	; F773A7  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F773A7  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F773AA  jrl T,0xf7728b
 sub_F76E74_Skip11:
 	cp	hl, 4:i3	; F773AD  cp HL,4
 	jrl	nz, sub_F76E74_Loop4	; F773AF  jrl NZ,0xf7728b
 	ld	c, (4505:16)	; F773B2  ld C,(0x1199)
 	pushw	wa	; F773B6  push WA
-	calr	sub_F77990	; F773B7  calr 0xf77990
-	calr	sub_F77A4A	; F773BA  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F773B7  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F773BA  calr 0xf77a4a
 	popw	wa	; F773BD  pop WA
 	ld	w, (4506:16)	; F773BE  ld W,(0x119a)
 	ld	l, (4507:16)	; F773C2  ld L,(0x119b)
-	calr	sub_F779D5	; F773C6  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F773C6  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F773C9  jrl T,0xf7728b
 sub_F76E74_Skip12:
 	cp	hl, 3:i3	; F773CC  cp HL,3
@@ -180639,14 +180682,14 @@ sub_F76E74_Skip12:
 	xor	h, h	; F773D6  xor H,H
 	ld	c, (4505:16)	; F773D8  ld C,(0x1199)
 	pushw	wa	; F773DC  push WA
-	calr	sub_F77990	; F773DD  calr 0xf77990
-	calr	sub_F77A4A	; F773E0  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F773DD  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F773E0  calr 0xf77a4a
 	popw	wa	; F773E3  pop WA
 	and	a, 15	; F773E4  and A,0x0f
 	or	a, 176	; F773E7  or A,0xb0
 	ld	w, 11:opc	; F773EA  ld W,0x0b
 	ld	l, (4506:16)	; F773EC  ld L,(0x119a)
-	calr	sub_F779D5	; F773F0  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F773F0  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F773F3  jrl T,0xf7728b
 sub_F76E74_Skip13:
 	cp	hl, 6:i3	; F773F6  cp HL,6
@@ -180666,12 +180709,12 @@ sub_F76E74_Entry:
 	or	(0x11b1:16), 1	; F77418  or (0x11b1),0x01
 	pushw	hl	; F7741D  push HL
 	ld	c, (4505:16)	; F7741E  ld C,(0x1199)
-	calr	sub_F77990	; F77422  calr 0xf77990
-	calr	sub_F77A4A	; F77425  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F77422  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77425  calr 0xf77a4a
 	ld	a, (4504:16)	; F77428  ld A,(0x1198)
 	ld	w, (4506:16)	; F7742C  ld W,(0x119a)
 	ld	l, (4507:16)	; F77430  ld L,(0x119b)
-	calr	sub_F779D5	; F77434  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77434  calr 0xf779d5
 	popw	hl	; F77437  pop HL
 	ld	xix, 12378	; F77438  ld XIX,0x0000305a
 	lda	xix, (xix+hl)	; F7743D  lda XIX,XIX+HL
@@ -180704,8 +180747,8 @@ sub_F76E74_Skip14:
 sub_F76E74_Skip15:
 	ld	c, (4505:16)	; F7748E  ld C,(0x1199)
 	pushw	wa	; F77492  push WA
-	calr	sub_F77990	; F77493  calr 0xf77990
-	calr	sub_F77A4A	; F77496  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F77493  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77496  calr 0xf77a4a
 	popw	wa	; F77499  pop WA
 	cp	(0x1239:16), 0	; F7749A  cp (0x1239),0x00
 	jrl	z, sub_F76E74_Skip16	; F7749F  jrl Z,0xf77538
@@ -180739,27 +180782,27 @@ sub_F76E74_Skip15:
 	xor	w, w	; F774FD  xor W,W
 	ld	l, (6352917:24)	; F774FF  ld L,(0x60f015)
 	pushw	wa	; F77504  push WA
-	call	sub_F779D5	; F77505  call 0xf779d5
+	call	SmfSizeCopy_WriteChannelEvent	; F77505  call 0xf779d5
 	popw	wa	; F77509  pop WA
 	ldw	(4499:16), 0	; F7750A  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F77510  ld (0x1195),0x00
 	ld	w, 32:opc	; F77515  ld W,0x20
 	ld	l, (6352916:24)	; F77517  ld L,(0x60f014)
-	call	sub_F779D5	; F7751C  call 0xf779d5
+	call	SmfSizeCopy_WriteChannelEvent	; F7751C  call 0xf779d5
 	ld	a, 192:opc	; F77520  ld A,0xc0
 	ld	w, (4506:16)	; F77522  ld W,(0x119a)
 	and	w, 15	; F77526  and W,0x0f
 	or	a, w	; F77529  or A,W
 	ld	w, (6352918:24)	; F7752B  ld W,(0x60f016)
 	xor	l, l	; F77530  xor L,L
-	calr	sub_F779D5	; F77532  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77532  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F77535  jrl T,0xf7728b
 sub_F76E74_Skip16:
 	ld	w, 0:opc	; F77538  ld W,0x00
 	ld	l, (4509:16)	; F7753A  ld L,(0x119d)
 	and	l, 56	; F7753E  and L,0x38
 	srl	l, 3	; F77541  srl 0x03,L
-	calr	sub_F77982	; F77544  calr 0xf77982
+	calr	SmfSizeCopy_WriteControlChange	; F77544  calr 0xf77982
 	ldw	(4499:16), 0	; F77547  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F7754D  ld (0x1195),0x00
 	ld	w, 32:opc	; F77552  ld W,0x20
@@ -180767,14 +180810,14 @@ sub_F76E74_Skip16:
 	and	l, 7	; F77558  and L,0x07
 	sla	l, 4	; F7755B  sla 0x04,L
 	and	l, 127	; F7755E  and L,0x7f
-	calr	sub_F77982	; F77561  calr 0xf77982
+	calr	SmfSizeCopy_WriteControlChange	; F77561  calr 0xf77982
 	ld	a, 192:opc	; F77564  ld A,0xc0
 	ld	w, (4506:16)	; F77566  ld W,(0x119a)
 	and	w, 15	; F7756A  and W,0x0f
 	or	a, w	; F7756D  or A,W
 	ld	w, (4508:16)	; F7756F  ld W,(0x119c)
 	xor	l, l	; F77573  xor L,L
-	calr	sub_F779D5	; F77575  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77575  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F77578  jrl T,0xf7728b
 sub_F76E74_Skip17:
 	cp	hl, 6:i3	; F7757B  cp HL,6
@@ -180809,8 +180852,8 @@ sub_F76E74_Skip19:
 	ld	c, (4505:16)	; F775CD  ld C,(0x1199)
 	pushw	wa	; F775D1  push WA
 	pushw	hl	; F775D2  push HL
-	calr	sub_F77990	; F775D3  calr 0xf77990
-	calr	sub_F77A4A	; F775D6  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F775D3  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F775D6  calr 0xf77a4a
 	popw	hl	; F775D9  pop HL
 	popw	wa	; F775DA  pop WA
 	ld	a, 176:opc	; F775DB  ld A,0xb0
@@ -180819,7 +180862,7 @@ sub_F76E74_Skip19:
 	or	a, w	; F775E2  or A,W
 	ld	w, 64:opc	; F775E4  ld W,0x40
 	ld	l, (4508:16)	; F775E6  ld L,(0x119c)
-	call	sub_F779D5	; F775EA  call 0xf779d5
+	call	SmfSizeCopy_WriteChannelEvent	; F775EA  call 0xf779d5
 	jrl	sub_F76E74_Loop4	; F775EE  jrl T,0xf7728b
 sub_F76E74_Join6:
 	cp	l, 3:i3	; F775F1  cp L,3
@@ -180859,8 +180902,8 @@ sub_F76E74_Skip20:
 	ld	c, (4505:16)	; F77649  ld C,(0x1199)
 	pushw	wa	; F7764D  push WA
 	push	xhl	; F7764E  push XHL
-	calr	sub_F77990	; F7764F  calr 0xf77990
-	calr	sub_F77A4A	; F77652  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F7764F  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77652  calr 0xf77a4a
 	pop	xhl	; F77655  pop XHL
 	popw	wa	; F77656  pop WA
 	ld	a, 176:opc	; F77657  ld A,0xb0
@@ -180870,13 +180913,13 @@ sub_F76E74_Skip20:
 	ld	w, 101:opc	; F77662  ld W,0x65
 	ld	l, 0:opc	; F77664  ld L,0x00
 	pushw	wa	; F77666  push WA
-	calr	sub_F779D5	; F77667  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77667  calr 0xf779d5
 	popw	wa	; F7766A  pop WA
 	ld	w, 100:opc	; F7766B  ld W,0x64
 	ld	l, 1:opc	; F7766D  ld L,0x01
 	ld	(4499:16), 0	; F7766F  ld (0x1193),0x00
 	pushw	wa	; F77674  push WA
-	calr	sub_F779D5	; F77675  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77675  calr 0xf779d5
 	popw	wa	; F77678  pop WA
 	ld	w, 6:opc	; F77679  ld W,0x06
 	ld	l, (4508:16)	; F7767B  ld L,(0x119c)
@@ -180886,14 +180929,14 @@ sub_F76E74_Skip20:
 	srl	l, 1	; F77689  srl 0x01,L
 	or	l, h	; F7768C  or L,H
 	pushw	wa	; F7768E  push WA
-	calr	sub_F779D5	; F7768F  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F7768F  calr 0xf779d5
 	popw	wa	; F77692  pop WA
 	ld	w, 38:opc	; F77693  ld W,0x26
 	ld	l, (4508:16)	; F77695  ld L,(0x119c)
 	and	l, 1	; F77699  and L,0x01
 	.byte 0xCF, 0xE9, 0x02	; F7769C  rrc 0x02,L   [llvm-mc cannot encode this]
 	pushw	wa	; F7769F  push WA
-	calr	sub_F779D5	; F776A0  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F776A0  calr 0xf779d5
 	popw	wa	; F776A3  pop WA
 	jrl	sub_F76E74_Loop4	; F776A4  jrl T,0xf7728b
 sub_F76E74_Entry3:
@@ -180905,8 +180948,8 @@ sub_F76E74_Skip21:
 	ld	c, (4505:16)	; F776B5  ld C,(0x1199)
 	pushw	wa	; F776B9  push WA
 	pushw	hl	; F776BA  push HL
-	calr	sub_F77990	; F776BB  calr 0xf77990
-	calr	sub_F77A4A	; F776BE  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F776BB  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F776BE  calr 0xf77a4a
 	popw	hl	; F776C1  pop HL
 	popw	wa	; F776C2  pop WA
 	ld	a, 176:opc	; F776C3  ld A,0xb0
@@ -180916,22 +180959,22 @@ sub_F76E74_Skip21:
 	ld	w, 101:opc	; F776CE  ld W,0x65
 	ld	l, 0:opc	; F776D0  ld L,0x00
 	pushw	wa	; F776D2  push WA
-	calr	sub_F779D5	; F776D3  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F776D3  calr 0xf779d5
 	popw	wa	; F776D6  pop WA
 	ld	w, 100:opc	; F776D7  ld W,0x64
 	ld	l, 0:opc	; F776D9  ld L,0x00
 	ld	(4499:16), 0	; F776DB  ld (0x1193),0x00
 	pushw	wa	; F776E0  push WA
-	calr	sub_F779D5	; F776E1  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F776E1  calr 0xf779d5
 	popw	wa	; F776E4  pop WA
 	ld	w, 6:opc	; F776E5  ld W,0x06
 	ld	l, (4508:16)	; F776E7  ld L,(0x119c)
 	pushw	wa	; F776EB  push WA
-	calr	sub_F779D5	; F776EC  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F776EC  calr 0xf779d5
 	popw	wa	; F776EF  pop WA
 	ld	w, 38:opc	; F776F0  ld W,0x26
 	ld	l, 0:opc	; F776F2  ld L,0x00
-	calr	sub_F779D5	; F776F4  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F776F4  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F776F7  jrl T,0xf7728b
 sub_F76E74_Entry4:
 	bit	0, (0x133e:16)	; F776FA  bit 0,(0x133e)
@@ -180942,8 +180985,8 @@ sub_F76E74_Skip22:
 	ld	c, (4505:16)	; F77707  ld C,(0x1199)
 	pushw	wa	; F7770B  push WA
 	pushw	hl	; F7770C  push HL
-	calr	sub_F77990	; F7770D  calr 0xf77990
-	calr	sub_F77A4A	; F77710  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F7770D  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77710  calr 0xf77a4a
 	popw	hl	; F77713  pop HL
 	popw	wa	; F77714  pop WA
 	ld	a, 176:opc	; F77715  ld A,0xb0
@@ -180953,22 +180996,22 @@ sub_F76E74_Skip22:
 	ld	w, 101:opc	; F7771E  ld W,0x65
 	ld	l, 0:opc	; F77720  ld L,0x00
 	pushw	wa	; F77722  push WA
-	calr	sub_F779D5	; F77723  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77723  calr 0xf779d5
 	popw	wa	; F77726  pop WA
 	ld	w, 100:opc	; F77727  ld W,0x64
 	ld	l, 2:opc	; F77729  ld L,0x02
 	ld	(4499:16), 0	; F7772B  ld (0x1193),0x00
 	pushw	wa	; F77730  push WA
-	calr	sub_F779D5	; F77731  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77731  calr 0xf779d5
 	popw	wa	; F77734  pop WA
 	ld	w, 6:opc	; F77735  ld W,0x06
 	ld	l, (4508:16)	; F77737  ld L,(0x119c)
 	pushw	wa	; F7773B  push WA
-	calr	sub_F779D5	; F7773C  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F7773C  calr 0xf779d5
 	popw	wa	; F7773F  pop WA
 	ld	w, 38:opc	; F77740  ld W,0x26
 	ld	l, 0:opc	; F77742  ld L,0x00
-	calr	sub_F779D5	; F77744  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77744  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F77747  jrl T,0xf7728b
 sub_F76E74_Entry5:
 	bit	0, (0x133e:16)	; F7774A  bit 0,(0x133e)
@@ -180979,8 +181022,8 @@ sub_F76E74_Skip23:
 	ld	c, (4505:16)	; F77757  ld C,(0x1199)
 	pushw	wa	; F7775B  push WA
 	pushw	hl	; F7775C  push HL
-	calr	sub_F77990	; F7775D  calr 0xf77990
-	calr	sub_F77A4A	; F77760  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F7775D  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77760  calr 0xf77a4a
 	popw	hl	; F77763  pop HL
 	popw	wa	; F77764  pop WA
 	ld	a, 176:opc	; F77765  ld A,0xb0
@@ -180989,7 +181032,7 @@ sub_F76E74_Skip23:
 	or	a, w	; F7776E  or A,W
 	ld	w, 10:opc	; F77770  ld W,0x0a
 	ld	l, (4508:16)	; F77772  ld L,(0x119c)
-	calr	sub_F779D5	; F77776  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77776  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F77779  jrl T,0xf7728b
 sub_F76E74_Skip24:
 	ld	bc, (4508:16)	; F7777C  ld BC,(0x119c)
@@ -181041,23 +181084,23 @@ sub_F76E74_Join7:
 	ld	c, (4505:16)	; F777E9  ld C,(0x1199)
 	pushw	wa	; F777ED  push WA
 	pushw	hl	; F777EE  push HL
-	calr	sub_F77990	; F777EF  calr 0xf77990
-	calr	sub_F77A4A	; F777F2  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F777EF  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F777F2  calr 0xf77a4a
 	popw	hl	; F777F5  pop HL
 	popw	wa	; F777F6  pop WA
-	calr	sub_F779D5	; F777F7  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F777F7  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F777FA  jrl T,0xf7728b
 sub_F76E74_Skip31:
 	jrl	sub_F76E74_Loop4	; F777FD  jrl T,0xf7728b
 sub_F76E74_Skip32:
 	ld	c, 0:opc	; F77800  ld C,0x00
-	calr	sub_F77990	; F77802  calr 0xf77990
-	calr	sub_F77A4A	; F77805  calr 0xf77a4a
+	calr	SmfSizeCopy_EncodeDeltaTime	; F77802  calr 0xf77990
+	calr	SmfSizeCopy_AgePendingNoteOffs	; F77805  calr 0xf77a4a
 	ld	a, 255:opc	; F77808  ld A,0xff
 	ld	w, 47:opc	; F7780A  ld W,0x2f
 	ld	l, 0:opc	; F7780C  ld L,0x00
-	calr	sub_F779D5	; F7780E  calr 0xf779d5
-	calr	sub_F7789A	; F77811  calr 0xf7789a
+	calr	SmfSizeCopy_WriteChannelEvent	; F7780E  calr 0xf779d5
+	calr	SmfSizeCopy_StoreTrackLength	; F77811  calr 0xf7789a
 sub_F76E74_Return:
 	ret	; F77814  ret
 
@@ -181154,14 +181197,15 @@ sub_F76E74_Nop:
 	ret	; F77899  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7789A
+; SmfSizeCopy_StoreTrackLength
 ; Called from: 0xF77811
 ; Evidence: 0xF7789A is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F7789A:
+; SmfSizeCopy_StoreTrackLength: copy D of prom_b's SMF writer (an unreferenced copy of B), role StoreTrackLength as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_StoreTrackLength:
 	xor	wa, wa	; F7789A  xor WA,WA
 	ld	(SmfOut_TrackLength:16), wa	; F7789C  ld (0x10c4),WA
 	ld	(SmfOut_TrackLength+2:16), wa	; F778A0  ld (0x10c6),WA
@@ -181179,14 +181223,15 @@ sub_F7789A:
 	ret	; F778D1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F778D2
+; SmfSizeCopy_StageTempo
 ; Called from: 0xF76F3F, 0xF77363
 ; Evidence: 0xF778D2 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F778D2:
+; SmfSizeCopy_StageTempo: copy D of prom_b's SMF writer (an unreferenced copy of B), role StageTempo as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_StageTempo:
 	ldw	wa, 60000	; F778D2  ld WA,0xea60
 	extz	xwa	; F778D5  extz XWA
 	mul	xwa, hl	; F778D7  mul XWA,HL
@@ -181215,66 +181260,68 @@ sub_F778D2_Skip:
 	ret	; F77917  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77918
+; SmfSizeCopy_WriteTempoEvent
 ; Called from: 0xF76F42, 0xF77366
 ; Evidence: 0xF77918 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F77918:
+; SmfSizeCopy_WriteTempoEvent: copy D of prom_b's SMF writer (an unreferenced copy of B), role WriteTempoEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_WriteTempoEvent:
 	ld	xiy, 4499	; F77918  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F7791D  ld XIX,(0x1088)
 sub_F77918_Loop:
 	ld	a, (xiy+)	; F77921  ld A,(XIY+)
 	ld	(xix+), a	; F77924  ld (XIX+),A
-	calr	sub_F77A28	; F77927  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F77927  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F7792A  ld XIX,(0x1088)
 	bit	7, a	; F7792E  bit 0x07,A
 	jr	nz, sub_F77918_Loop	; F77931  jr NZ,0xf77921
 	ld	a, 255:opc	; F77933  ld A,0xff
 	ld	(xix+), a	; F77935  ld (XIX+),A
-	calr	sub_F77A28	; F77938  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F77938  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F7793B  ld XIX,(0x1088)
 	ld	a, 81:opc	; F7793F  ld A,0x51
 	ld	(xix+), a	; F77941  ld (XIX+),A
-	calr	sub_F77A28	; F77944  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F77944  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F77947  ld XIX,(0x1088)
 	ld	a, 3:opc	; F7794B  ld A,0x03
 	ld	(xix+), a	; F7794D  ld (XIX+),A
-	calr	sub_F77A28	; F77950  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F77950  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F77953  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+2:16)	; F77957  ld A,(0x108e)
 	ld	(xix+), a	; F7795B  ld (XIX+),A
-	calr	sub_F77A28	; F7795E  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F7795E  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F77961  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo+1:16)	; F77965  ld A,(0x108d)
 	ld	(xix+), a	; F77969  ld (XIX+),A
-	calr	sub_F77A28	; F7796C  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F7796C  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F7796F  ld XIX,(0x1088)
 	ld	a, (SmfOut_Tempo:16)	; F77973  ld A,(0x108c)
 	ld	(xix+), a	; F77977  ld (XIX+),A
-	calr	sub_F77A28	; F7797A  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F7797A  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F7797D  ld XIX,(0x1088)
 	ret	; F77981  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77982
+; SmfSizeCopy_WriteControlChange
 ; Called from: 0xF77544, 0xF77561
 ; Evidence: 0xF77982 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F77982:
+; SmfSizeCopy_WriteControlChange: copy D of prom_b's SMF writer (an unreferenced copy of B), role WriteControlChange as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_WriteControlChange:
 	ld	a, (4506:16)	; F77982  ld A,(0x119a)
 	and	a, 15	; F77986  and A,0x0f
 	or	a, 176	; F77989  or A,0xb0
-	calr	sub_F779D5	; F7798C  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F7798C  calr 0xf779d5
 	ret	; F7798F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77990
+; SmfSizeCopy_EncodeDeltaTime
 ; Called from: 0xF77339, 0xF77371, 0xF77394, 0xF773B7, 0xF773DD, 0xF77422,
 ;              0xF77493, 0xF775D3, 0xF7764F, 0xF776BB, 0xF7770D, 0xF7775D,
 ;              0xF777EF, 0xF77802
@@ -181283,7 +181330,8 @@ sub_F77982:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-sub_F77990:
+; SmfSizeCopy_EncodeDeltaTime: copy D of prom_b's SMF writer (an unreferenced copy of B), role EncodeDeltaTime as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_EncodeDeltaTime:
 	pushw	wa	; F77990  push WA
 	push	xhl	; F77991  push XHL
 	pushw	de	; F77992  push DE
@@ -181308,15 +181356,15 @@ sub_F77990_Skip:
 	popw	de	; F779CE  pop DE
 	pop	xhl	; F779CF  pop XHL
 	popw	wa	; F779D0  pop WA
-	calr	sub_F77BDF	; F779D1  calr 0xf77bdf
+	calr	SmfSizeCopy_EncodeVlq	; F779D1  calr 0xf77bdf
 	ret	; F779D4  ret
 
 
 ; --------------------------------------------------------------------------
-; sub_F779D5
+; SmfSizeCopy_WriteChannelEvent
 ; Called from: in-module: 0xF77BA1
 ; Touches: (0x1088)
-; Calls:   sub_F77A28
+; Calls:   SmfSizeCopy_CommitOutputByte
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -181326,7 +181374,8 @@ sub_F77990_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F779D5:
+; SmfSizeCopy_WriteChannelEvent: copy D of prom_b's SMF writer (an unreferenced copy of B), role WriteChannelEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_WriteChannelEvent:
 	push	xiy	; F779D5  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F779D6  ld XIX,(0x1088)
 	ld	xiy, 4499	; F779DA  ld XIY,0x00001193
@@ -181335,7 +181384,7 @@ sub_F779D5_Loop:
 	ld	a, (xiy+)	; F779E0  ld A,(XIY+)
 	ld	(xix+), a	; F779E3  ld (XIX+),A
 	pushw	wa	; F779E6  push WA
-	calr	sub_F77A28	; F779E7  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F779E7  calr 0xf77a28
 	popw	wa	; F779EA  pop WA
 	ld	xix, (InputStream_Cursor:16)	; F779EB  ld XIX,(0x1088)
 	bit	7, a	; F779EF  bit 0x07,A
@@ -181343,11 +181392,11 @@ sub_F779D5_Loop:
 	popw	wa	; F779F4  pop WA
 	ld	h, a	; F779F5  ld H,A
 	ld	(xix+), a	; F779F7  ld (XIX+),A
-	calr	sub_F77A28	; F779FA  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F779FA  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F779FD  ld XIX,(0x1088)
 	ld	a, w	; F77A01  ld A,W
 	ld	(xix+), a	; F77A03  ld (XIX+),A
-	calr	sub_F77A28	; F77A06  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F77A06  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F77A09  ld XIX,(0x1088)
 	and	h, 240	; F77A0D  and H,0xf0
 	cp	h, 192	; F77A10  cp H,0xc0
@@ -181356,18 +181405,18 @@ sub_F779D5_Loop:
 	jr	z, sub_F779D5_Epilogue	; F77A18  jr Z,0xf77a26
 	ld	a, l	; F77A1A  ld A,L
 	ld	(xix+), a	; F77A1C  ld (XIX+),A
-	calr	sub_F77A28	; F77A1F  calr 0xf77a28
+	calr	SmfSizeCopy_CommitOutputByte	; F77A1F  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F77A22  ld XIX,(0x1088)
 sub_F779D5_Epilogue:
 	pop	xiy	; F77A26  pop XIY
 	ret	; F77A27  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77A28
+; SmfSizeCopy_CommitOutputByte
 ; Called from: in-module: 0xF779E7 0xF779FA 0xF77A06 0xF77A1F
 ; Touches: (0x107E) (0x1080) (0x1088) (0x11AA) (0x126C)  |  0x60A700
 ;          0x60AAFF
-; Calls:   sub_F77C92 sub_F77AD7
+; Calls:   SmfSizeCopy_ClearDueList SmfSizeCopy_SortDueNoteOffs
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77A28 is an instruction boundary of this
@@ -181376,7 +181425,8 @@ sub_F779D5_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77A28:
+; SmfSizeCopy_CommitOutputByte: copy D of prom_b's SMF writer (an unreferenced copy of B), role CommitOutputByte as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_CommitOutputByte:
 	push	xhl	; F77A28  push XHL
 	pushw	bc	; F77A29  push BC
 	cp	xix, 6335231	; F77A2A  cp XIX,0x0060aaff
@@ -181391,8 +181441,9 @@ sub_F77A28_Skip:
 	popw	bc	; F77A47  pop BC
 	pop	xhl	; F77A48  pop XHL
 	ret	; F77A49  ret
-sub_F77A4A:
-	calr	sub_F77C92	; F77A4A  calr 0xf77c92
+; SmfSizeCopy_AgePendingNoteOffs: copy D of prom_b's SMF writer (an unreferenced copy of B), role AgePendingNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_AgePendingNoteOffs:
+	calr	SmfSizeCopy_ClearDueList	; F77A4A  calr 0xf77c92
 	xor	hl, hl	; F77A4D  xor HL,HL
 	xor	bc, bc	; F77A4F  xor BC,BC
 	xor	iy, iy	; F77A51  xor IY,IY
@@ -181436,17 +181487,17 @@ sub_F77A28_Join:
 	srl	iy, 1	; F77AC0  srl 0x01,IY
 	cp	iy, 0:i3	; F77AC3  cp IY,0
 	jr	z, sub_F77A28_Skip3	; F77AC5  jr Z,0xf77aca
-	calr	sub_F77AD7	; F77AC7  calr 0xf77ad7
+	calr	SmfSizeCopy_SortDueNoteOffs	; F77AC7  calr 0xf77ad7
 sub_F77A28_Skip3:
 	ldw	(4222:16), 0	; F77ACA  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F77AD0  ld (0x1080),0x0000
 	ret	; F77AD6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77AD7
+; SmfSizeCopy_SortDueNoteOffs
 ; Called from: in-module: 0xF77AC7
 ; Touches: (0x10D3)
-; Calls:   sub_F77B42
+; Calls:   SmfSizeCopy_WriteDueNoteOffs
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77AD7 is an instruction boundary of this
@@ -181455,7 +181506,8 @@ sub_F77A28_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77AD7:
+; SmfSizeCopy_SortDueNoteOffs: copy D of prom_b's SMF writer (an unreferenced copy of B), role SortDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_SortDueNoteOffs:
 	cp	iy, 0:i3	; F77AD7  cp IY,0
 	jr	z, sub_F77AD7_Return	; F77AD9  jr Z,0xf77b41
 	xor	de, de	; F77ADB  xor DE,DE
@@ -181495,15 +181547,15 @@ sub_F77AD7_Skip2:
 	cp	de, 96	; F77B38  cp DE,0x0060
 	jr	ule, sub_F77AD7_Loop	; F77B3C  jr ULE,0xf77ae4
 sub_F77AD7_Skip3:
-	calr	sub_F77B42	; F77B3E  calr 0xf77b42
+	calr	SmfSizeCopy_WriteDueNoteOffs	; F77B3E  calr 0xf77b42
 sub_F77AD7_Return:
 	ret	; F77B41  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77B42
+; SmfSizeCopy_WriteDueNoteOffs
 ; Called from: in-module: 0xF77B3E
 ; Touches: (0x107E) (0x1080) (0x1082) (0x1090) (0x11AA)
-; Calls:   sub_F77BDF sub_F779D5
+; Calls:   SmfSizeCopy_EncodeVlq SmfSizeCopy_WriteChannelEvent
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77B42 is an instruction boundary of this
@@ -181512,7 +181564,8 @@ sub_F77AD7_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77B42:
+; SmfSizeCopy_WriteDueNoteOffs: copy D of prom_b's SMF writer (an unreferenced copy of B), role WriteDueNoteOffs as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_WriteDueNoteOffs:
 	ld	bc, (4226:16)	; F77B42  ld BC,(0x1082)
 	ld	xiy, 4307	; F77B46  ld XIY,0x000010d3
 	xor	hl, hl	; F77B4B  xor HL,HL
@@ -181543,7 +181596,7 @@ sub_F77B42_Join2:
 	push	xhl	; F77B83  push XHL
 	pushw	bc	; F77B84  push BC
 	push	xix	; F77B85  push XIX
-	calr	sub_F77BDF	; F77B86  calr 0xf77bdf
+	calr	SmfSizeCopy_EncodeVlq	; F77B86  calr 0xf77bdf
 	pop	xix	; F77B89  pop XIX
 	popw	bc	; F77B8A  pop BC
 	pop	xhl	; F77B8B  pop XHL
@@ -181557,7 +181610,7 @@ sub_F77B42_Join2:
 	ld	l, 0:opc	; F77B9D  ld L,0x00
 	pushw	bc	; F77B9F  push BC
 	push	xix	; F77BA0  push XIX
-	calr	sub_F779D5	; F77BA1  calr 0xf779d5
+	calr	SmfSizeCopy_WriteChannelEvent	; F77BA1  calr 0xf779d5
 	pop	xix	; F77BA4  pop XIX
 	popw	bc	; F77BA5  pop BC
 	pop	xhl	; F77BA6  pop XHL
@@ -181573,13 +181626,13 @@ sub_F77B42_Skip2:
 	m_add_rm MW16, 0x107e, 1	; F77BC5  add BC,(0x107e)
 	sub	bc, wa	; F77BC9  sub BC,WA
 	ld	(4522:16), bc	; F77BCB  ld (0x11aa),BC
-	calr	sub_F77BDF	; F77BCF  calr 0xf77bdf
+	calr	SmfSizeCopy_EncodeVlq	; F77BCF  calr 0xf77bdf
 	ldw	(4222:16), 0	; F77BD2  ld (0x107e),0x0000
 	ldw	(4224:16), 0	; F77BD8  ld (0x1080),0x0000
 	ret	; F77BDE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77BDF
+; SmfSizeCopy_EncodeVlq
 ; Called from: in-module: 0xF77B86 0xF77BCF
 ; Touches: (0x1193) (0x1194) (0x1195) (0x11AA) (0x11AB) (0x11AC)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -181590,7 +181643,8 @@ sub_F77B42_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77BDF:
+; SmfSizeCopy_EncodeVlq: copy D of prom_b's SMF writer (an unreferenced copy of B), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_EncodeVlq:
 	ldw	(4499:16), 0	; F77BDF  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F77BE5  ld (0x1195),0x0000
 	m_cp_mi8 MB16, 0x11ac, 0x00	; F77BEB  cp (0x11ac),0x00
@@ -181652,7 +181706,7 @@ sub_F77BDF_Return:
 	ret	; F77C91  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77C92
+; SmfSizeCopy_ClearDueList
 ; Called from: in-module: 0xF77A4A
 ; Touches: (0x126E) (0x345C) (0x345E)
 ; Calls:   0xF75095 sub_F77D00 sub_F77D39 sub_F77D43
@@ -181664,7 +181718,8 @@ sub_F77BDF_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77C92:
+; SmfSizeCopy_ClearDueList: copy D of prom_b's SMF writer (an unreferenced copy of B), role ClearDueList as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_ClearDueList:
 	push	xix	; F77C92  push XIX
 	ld	xix, 4307	; F77C93  ld XIX,0x000010d3
 	ldw	bc, 96	; F77C98  ld BC,0x0060
@@ -181673,21 +181728,24 @@ sub_F77C92:
 	djnz16	bc, -6	; F77CA1  djnz BC,0xf77c9e
 	pop	xix	; F77CA4  pop XIX
 	ret	; F77CA5  ret
-sub_F77CA6:
+; SmfSizeCopy_ClearEventFields: copy D of prom_b's SMF writer (an unreferenced copy of B), role ClearEventFields as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_ClearEventFields:
 	ld	xix, 4504	; F77CA6  ld XIX,0x00001198
 	xor	wa, wa	; F77CAB  xor WA,WA
 	ldw	bc, 4	; F77CAD  ld BC,0x0004
 	ld	(xix+), wa	; F77CB0  ld (XIX+),WA
 	djnz16	bc, -6	; F77CB3  djnz BC,0xf77cb0
 	ret	; F77CB6  ret
-sub_F77CB7:
+; SmfSizeCopy_ReadSongByte: copy D of prom_b's SMF writer (an unreferenced copy of B), role ReadSongByte as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_ReadSongByte:
 	ld	hl, (BStore_CursorBlock:16)	; F77CB7  ld HL,(0x345c)
 	calr	SmfExport_ParamSysExTemplates + 0xC6	; F77CBB  calr 0xf75095  (lands inside record 10 at +8; see SmfExport_ParamSysExTemplates)
 	ld	iy, (BStore_CursorOffset:16)	; F77CBE  ld IY,(0x345e)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F77CC2  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F77CC6  ld A,(XHL+IY)
 	ret	; F77CCB  ret
-sub_F77CCC:
+; SmfSizeCopy_AdvanceSongCursor: copy D of prom_b's SMF writer (an unreferenced copy of B), role AdvanceSongCursor as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
+SmfSizeCopy_AdvanceSongCursor:
 	ld	wa, (BStore_CursorOffset:16)	; F77CCC  ld WA,(0x345e)
 	cp	wa, 255	; F77CD0  cp WA,0x00ff
 	jr	nz, sub_F77C92_Skip	; F77CD4  jr NZ,0xf77ced

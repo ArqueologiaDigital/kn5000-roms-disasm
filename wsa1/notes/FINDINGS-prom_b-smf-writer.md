@@ -167,3 +167,17 @@ Measured with `--debt`:
   bytes and {0xF760BF, 0xF77836} share 280 — but no caller was traced.
 * Every routine in the 4,186 converted bytes is `sub_XXXXXX`. Semantic naming
   is deferred by the push's brief.
+
+  **Answered 2026-10-04** (`notes/prom_b_smf_writer_names.py`, which re-checks the call chains it
+  relies on). The copies are two PASSES and two orphans. Copy A's helpers are Smf_WriteFile's own
+  writing pass: its byte-commit, now `SmfWrite_CommitOutputByte` (0xF74B3A), writes each full
+  1,024-byte window to disk. Copy B's main, `SmfSize_Pass` (0xF75685), is what Smf_WriteFile
+  calls at 0xF739CE, before the header is written. B's byte-commit, `SmfSize_CommitOutputByte`
+  (0xF762BD), only wraps the cursor and counts windows. B also computes SmfOut_TrackLength
+  (`SmfSize_StoreTrackLength`). So B is a sizing pass, and it produces the MTrk length that copy A
+  writes. C and D have no caller; by identical masked instruction sequences they are copies of A
+  and of B. 58 routines are named, `SmfWrite_` / `SmfSize_` / `SmfWriteCopy_` / `SmfSizeCopy_` +
+  the role read from the body. The pending-note-off machinery (33 five-byte records at RAM 0x305A,
+  a due list at 0x10D3, note-offs written as velocity-0 note-ons) is in that script's docstring.
+  Still `sub_`: the two big pass bodies' other helpers and the disk-side routines whose prom_a
+  targets (T_F425A8 / AC / B0 / E4 / E8) are unnamed.

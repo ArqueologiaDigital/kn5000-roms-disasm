@@ -919,7 +919,7 @@ def debt(rev=None):
     lines = txt.split("\n")
     heads = [i for i, l in enumerate(lines)
              if l in ("Data_F7669D:", "sub_F7669D:")]
-    tails = [i for i, l in enumerate(lines) if l == "sub_F779D5:"]
+    tails = [i for i, l in enumerate(lines) if l == "SmfSizeCopy_WriteChannelEvent:"]
     if len(heads) != 1 or len(tails) != 1:
         raise SystemExit("cannot bracket the range: %d heads, %d tails"
                          % (len(heads), len(tails)))
