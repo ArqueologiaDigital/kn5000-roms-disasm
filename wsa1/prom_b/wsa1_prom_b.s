@@ -28094,7 +28094,7 @@ sub_F0F1BE:
 	pushw	hl	; F0F1BE  push HL
 	push	xix	; F0F1BF  push XIX
 	lda	xix, (UI_Request_Hi:16)	; F0F1C0  lda XIX,0x2071
-	ld	c, (10416:16)	; F0F1C4  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F0F1C4  ld C,(0x28b0)
 	and	c, 1	; F0F1C8  and C,0x01
 	jrl	nz, sub_F0F277_Epilogue	; F0F1CB  jrl NZ,0xf0f27e
 	ld	bc, (10128:16)	; F0F1CE  ld BC,(0x2790)
@@ -29244,7 +29244,7 @@ DispatchTable_F0F516_Nop0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F536:
-	ld	c, (10416:16)	; F0F536  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F0F536  ld C,(0x28b0)
 	and	c, 1	; F0F53A  and C,0x01
 	jr	z, sub_F0F579_Skip	; F0F53D  jr Z,0xf0f59b
 	ld	bc, (10128:16)	; F0F53F  ld BC,(0x2790)
@@ -29379,7 +29379,7 @@ DispatchTable_F0F558_Nop4:
 ; --------------------------------------------------------------------------
 sub_F0F59F:
 	pushw	hl	; F0F59F  push HL
-	ld	h, (10416:16)	; F0F5A0  ld H,(0x28b0)
+	ld	h, (PanelEvent_Flags:16)	; F0F5A0  ld H,(0x28b0)
 	ld	bc, (10128:16)	; F0F5A4  ld BC,(0x2790)
 	extz	bc	; F0F5A8  extz BC
 	extz	xbc	; F0F5AA  extz XBC
@@ -29574,7 +29574,7 @@ sub_F0F61E:
 ; --------------------------------------------------------------------------
 sub_F0F620:
 	pushw	hl	; F0F620  push HL
-	ld	h, (10416:16)	; F0F621  ld H,(0x28b0)
+	ld	h, (PanelEvent_Flags:16)	; F0F621  ld H,(0x28b0)
 	ld	bc, (10128:16)	; F0F625  ld BC,(0x2790)
 	extz	bc	; F0F629  extz BC
 	extz	xbc	; F0F62B  extz XBC
@@ -29722,7 +29722,7 @@ sub_F0F684:
 ; --------------------------------------------------------------------------
 sub_F0F686:
 	pushw	hl	; F0F686  push HL
-	ld	h, (10416:16)	; F0F687  ld H,(0x28b0)
+	ld	h, (PanelEvent_Flags:16)	; F0F687  ld H,(0x28b0)
 	ld	bc, (10128:16)	; F0F68B  ld BC,(0x2790)
 	extz	bc	; F0F68F  extz BC
 	extz	xbc	; F0F691  extz XBC
@@ -29929,7 +29929,7 @@ DispatchTable_F0F708:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F720:
-	ld	c, (10416:16)	; F0F720  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F0F720  ld C,(0x28b0)
 	and	c, 1	; F0F724  and C,0x01
 	jr	z, DispatchTable_F0F708_Nop4	; F0F727  jr Z,0xf0f75a
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F729  cp (0x2076),0x17
@@ -29960,7 +29960,7 @@ sub_F0F720:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F74A:
-	ld	c, (10416:16)	; F0F74A  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F0F74A  ld C,(0x28b0)
 	and	c, 1	; F0F74E  and C,0x01
 	jr	z, DispatchTable_F0F708_Nop4	; F0F751  jr Z,0xf0f75a
 	calr	sub_F10CC4	; F0F753  calr 0xf10cc4
@@ -31319,7 +31319,7 @@ sub_F10252:
 	pushw	de	; F10257  push DE
 	push	xix	; F10258  push XIX
 	ld	(xiz-1), 1	; F10259  ld (XIZ+0xff),0x01
-	ld	c, (10416:16)	; F1025D  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F1025D  ld C,(0x28b0)
 	and	c, 4	; F10261  and C,0x04
 	jr	z, sub_F10252_Skip	; F10264  jr Z,0xf1026a
 	ld	(xiz-1), 2	; F10266  ld (XIZ+0xff),0x02
@@ -31396,7 +31396,7 @@ sub_F10252_Join2:
 	srl	bc, 6	; F1030B  srl 0x06,BC
 	ld	e, c	; F1030E  ld E,C
 	ld	h, c	; F10310  ld H,C
-	ld	a, (10416:16)	; F10312  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F10312  ld A,(0x28b0)
 	and	a, 1	; F10316  and A,0x01
 	popw	iy	; F10319  pop IY
 	jr	z, sub_F10252_Skip6	; F1031A  jr Z,0xf10330
@@ -31486,7 +31486,7 @@ sub_F103AB:
 	push	xix	; F103B1  push XIX
 	ld	e, (xiz+10)	; F103B2  ld E,(XIZ+0x0a)
 	ld	d, 1:opc	; F103B5  ld D,0x01
-	ld	c, (10416:16)	; F103B7  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F103B7  ld C,(0x28b0)
 	and	c, 4	; F103BB  and C,0x04
 	jr	z, sub_F103AB_Skip	; F103BE  jr Z,0xf103c2
 	ld	d, 2:opc	; F103C0  ld D,0x02
@@ -31507,7 +31507,7 @@ sub_F103AB_Skip:
 	ld	l, (xiz-2)	; F103E3  ld L,(XIZ+0xfe)
 	and	l, 63	; F103E6  and L,0x3f
 	ld	h, l	; F103E9  ld H,L
-	ld	c, (10416:16)	; F103EB  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F103EB  ld C,(0x28b0)
 	and	c, 1	; F103EF  and C,0x01
 	popw	wa	; F103F2  pop WA
 	jr	z, sub_F103AB_Skip3	; F103F3  jr Z,0xf10403
@@ -31626,7 +31626,7 @@ DspEffect_StepAlgorithm_Skip:
 	ld	d, h	; F104AF  ld D,H
 	cp	h, 255	; F104B1  cp H,0xff
 	jr	z, DspEffect_StepAlgorithm_Skip3	; F104B4  jr Z,0xf104ef
-	ld	a, (10416:16)	; F104B6  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F104B6  ld A,(0x28b0)
 	and	a, 1	; F104BA  and A,0x01
 	jr	z, DspEffect_StepAlgorithm_Skip2	; F104BD  jr Z,0xf104c7
 	cp	h, 0:i3	; F104BF  cp H,0
@@ -31663,7 +31663,7 @@ DspEffect_StepAlgorithm_Skip4:
 	ld	d, h	; F10504  ld D,H
 	cp	h, 255	; F10506  cp H,0xff
 	jr	z, DspEffect_StepAlgorithm_Skip6	; F10509  jr Z,0xf10543
-	ld	a, (10416:16)	; F1050B  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F1050B  ld A,(0x28b0)
 	and	a, 1	; F1050F  and A,0x01
 	jr	z, DspEffect_StepAlgorithm_Skip5	; F10512  jr Z,0xf1051c
 	cp	h, 0:i3	; F10514  cp H,0
@@ -31700,7 +31700,7 @@ DspEffect_StepAlgorithm_Skip7:
 	ld	d, h	; F10557  ld D,H
 	cp	h, 255	; F10559  cp H,0xff
 	jr	z, DspEffect_StepAlgorithm_Skip9	; F1055C  jr Z,0xf10596
-	ld	a, (10416:16)	; F1055E  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F1055E  ld A,(0x28b0)
 	and	a, 1	; F10562  and A,0x01
 	jr	z, DspEffect_StepAlgorithm_Skip8	; F10565  jr Z,0xf1056f
 	cp	h, 0:i3	; F10567  cp H,0
@@ -31784,7 +31784,7 @@ DspEffect_MoveCursor:
 	pop	xiy	; F105D4  pop XIY
 	cp	a, 0:i3	; F105D5  cp A,0
 	jrl	nz, DspEffect_MoveCursor_Skip8	; F105D7  jrl NZ,0xf10695
-	ld	c, (10416:16)	; F105DA  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F105DA  ld C,(0x28b0)
 	and	c, 1	; F105DE  and C,0x01
 	jrl	z, DspEffect_MoveCursor_Skip5	; F105E1  jrl Z,0xf1066c
 	ld	c, (xix)	; F105E4  ld C,(XIX)
@@ -31983,7 +31983,7 @@ DspEffect_StepU8:
 	pushw	de	; F10720  push DE
 	push	xix	; F10721  push XIX
 	ld	h, 1:opc	; F10722  ld H,0x01
-	ld	c, (10416:16)	; F10724  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F10724  ld C,(0x28b0)
 	and	c, 4	; F10728  and C,0x04
 	jr	z, DspEffect_StepU8_Skip	; F1072B  jr Z,0xf1073e
 	ld	c, 6:opc	; F1072D  ld C,0x06
@@ -32015,7 +32015,7 @@ DspEffect_StepU8_Skip:
 	ld	xix, xiy	; F10775  ld XIX,XIY
 	add	xix, xbc	; F10777  add XIX,XBC
 	ld	l, (xix)	; F10779  ld L,(XIX)
-	ld	c, (10416:16)	; F1077B  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F1077B  ld C,(0x28b0)
 	and	c, 1	; F1077F  and C,0x01
 	popw	wa	; F10782  pop WA
 	jr	z, DspEffect_StepU8_Skip3	; F10783  jr Z,0xf10795
@@ -32097,7 +32097,7 @@ DspEffect_StepS8:
 	pushw	de	; F107D5  push DE
 	push	xix	; F107D6  push XIX
 	ld	h, 1:opc	; F107D7  ld H,0x01
-	ld	c, (10416:16)	; F107D9  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F107D9  ld C,(0x28b0)
 	and	c, 4	; F107DD  and C,0x04
 	jr	z, DspEffect_StepS8_Skip	; F107E0  jr Z,0xf107f3
 	ld	c, 6:opc	; F107E2  ld C,0x06
@@ -32129,7 +32129,7 @@ DspEffect_StepS8_Skip:
 	ld	xix, xiy	; F1082A  ld XIX,XIY
 	add	xix, xbc	; F1082C  add XIX,XBC
 	ld	l, (xix)	; F1082E  ld L,(XIX)
-	ld	c, (10416:16)	; F10830  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F10830  ld C,(0x28b0)
 	and	c, 1	; F10834  and C,0x01
 	popw	wa	; F10837  pop WA
 	jr	z, DspEffect_StepS8_Skip3	; F10838  jr Z,0xf1084a
@@ -32211,7 +32211,7 @@ DspEffect_StepU16:
 	pushw	de	; F1088A  push DE
 	pushw	ix	; F1088B  push IX
 	ldw	de, 1	; F1088C  ld DE,0x0001
-	ld	c, (10416:16)	; F1088F  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F1088F  ld C,(0x28b0)
 	and	c, 4	; F10893  and C,0x04
 	jr	z, DspEffect_StepU16_Skip	; F10896  jr Z,0xf108a9
 	ld	c, 6:opc	; F10898  ld C,0x06
@@ -32246,7 +32246,7 @@ DspEffect_StepU16_Skip:
 	ld	bc, (xiy)	; F108E8  ld BC,(XIY)
 	ld	(xiz-2), bc	; F108EA  ld (XIZ+0xfe),BC
 	ld	(xiz-10), bc	; F108ED  ld (XIZ+0xf6),BC
-	ld	c, (10416:16)	; F108F0  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F108F0  ld C,(0x28b0)
 	and	c, 1	; F108F4  and C,0x01
 	popw	wa	; F108F7  pop WA
 	jr	z, DspEffect_StepU16_Skip3	; F108F8  jr Z,0xf10917
@@ -32350,7 +32350,7 @@ DspEffect_StepEqFc:
 	pushw	de	; F1098A  push DE
 	push	xix	; F1098B  push XIX
 	ld	(xiz-1), 1	; F1098C  ld (XIZ+0xff),0x01
-	ld	c, (10416:16)	; F10990  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F10990  ld C,(0x28b0)
 	and	c, 4	; F10994  and C,0x04
 	jr	z, DspEffect_StepEqFc_Skip	; F10997  jr Z,0xf109ad
 	ld	c, 6:opc	; F10999  ld C,0x06
@@ -32390,7 +32390,7 @@ DspEffect_StepEqFc_Skip:
 	srl	bc, 6	; F109F7  srl 0x06,BC
 	ld	l, c	; F109FA  ld L,C
 	ld	h, c	; F109FC  ld H,C
-	ld	a, (10416:16)	; F109FE  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F109FE  ld A,(0x28b0)
 	and	a, 1	; F10A02  and A,0x01
 	popw	iy	; F10A05  pop IY
 	jr	z, DspEffect_StepEqFc_Skip3	; F10A06  jr Z,0xf10a1c
@@ -32495,7 +32495,7 @@ DspEffect_StepEqQ:
 	pushw	de	; F10A9C  push DE
 	push	xix	; F10A9D  push XIX
 	ld	(xiz-1), 1	; F10A9E  ld (XIZ+0xff),0x01
-	ld	c, (10416:16)	; F10AA2  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F10AA2  ld C,(0x28b0)
 	and	c, 4	; F10AA6  and C,0x04
 	jr	z, DspEffect_StepEqQ_Skip	; F10AA9  jr Z,0xf10abf
 	ld	c, 6:opc	; F10AAB  ld C,0x06
@@ -32535,7 +32535,7 @@ DspEffect_StepEqQ_Skip:
 	srl	bc, 11	; F10B09  srl 0x0b,BC
 	ld	l, c	; F10B0C  ld L,C
 	ld	h, c	; F10B0E  ld H,C
-	ld	a, (10416:16)	; F10B10  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F10B10  ld A,(0x28b0)
 	and	a, 1	; F10B14  and A,0x01
 	popw	iy	; F10B17  pop IY
 	jr	z, DspEffect_StepEqQ_Skip3	; F10B18  jr Z,0xf10b2e
@@ -32640,7 +32640,7 @@ DspEffect_StepEqGain:
 	pushw	de	; F10BAE  push DE
 	push	xix	; F10BAF  push XIX
 	ld	(xiz-1), 1	; F10BB0  ld (XIZ+0xff),0x01
-	ld	c, (10416:16)	; F10BB4  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F10BB4  ld C,(0x28b0)
 	and	c, 4	; F10BB8  and C,0x04
 	jr	z, DspEffect_StepEqGain_Skip	; F10BBB  jr Z,0xf10bd1
 	ld	c, 6:opc	; F10BBD  ld C,0x06
@@ -32677,7 +32677,7 @@ DspEffect_StepEqGain_Skip:
 	ld	l, (xiz-4)	; F10C11  ld L,(XIZ+0xfc)
 	and	l, 63	; F10C14  and L,0x3f
 	ld	h, l	; F10C17  ld H,L
-	ld	c, (10416:16)	; F10C19  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F10C19  ld C,(0x28b0)
 	and	c, 1	; F10C1D  and C,0x01
 	popw	wa	; F10C20  pop WA
 	jr	z, DspEffect_StepEqGain_Skip3	; F10C21  jr Z,0xf10c37
@@ -35835,7 +35835,7 @@ sub_F12334_Resume:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F1235B:
-	ld	c, (10416:16)	; F1235B  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F1235B  ld C,(0x28b0)
 	and	c, 1	; F1235F  and C,0x01
 	jr	nz, sub_F1195A_Return	; F12362  jr NZ,0xf1236d
 	m_set 7, MD16, UI_Request_Hi	; F12364  set 7,(0x2071)
@@ -103321,7 +103321,7 @@ sub_F4C4DD:
 	jrl	sub_F4C4DD_Epilogue	; F4C502  jrl T,0xf4c585
 sub_F4C4DD_Skip:
 	push	0	; F4C505  push 0x00
-	m_push MB16, 0x28b1	; F4C507  push (0x28b1)
+	m_push MB16, PanelEvent_ButtonCode	; F4C507  push (0x28b1)
 	lda	xiy, (sub_F4C4DD_Resume:24)	; F4C50B  lda XIY,0xf4c513
 	push	xiy	; F4C510  push XIY
 	jp	(xix)	; F4C511  jp T,XIX
@@ -103337,7 +103337,7 @@ sub_F4C4DD_Resume:
 	jr	z, sub_F4C4DD_Epilogue	; F4C527  jr Z,0xf4c585
 	pushw	63	; F4C529  push 0x003f
 	push	0	; F4C52C  push 0x00
-	m_push MB16, 0x28b1	; F4C52E  push (0x28b1)
+	m_push MB16, PanelEvent_ButtonCode	; F4C52E  push (0x28b1)
 	lda	xiy, (sub_F4C513_Resume:24)	; F4C532  lda XIY,0xf4c53a
 	push	xiy	; F4C537  push XIY
 	jp	(xix)	; F4C538  jp T,XIX
@@ -103348,7 +103348,7 @@ sub_F4C513_Resume:
 	jr	sub_F4C4DD_Join	; F4C53F  jr T,0xf4c57b
 sub_F4C4DD_Skip2:
 	push	0	; F4C541  push 0x00
-	m_push MB16, 0x28b1	; F4C543  push (0x28b1)
+	m_push MB16, PanelEvent_ButtonCode	; F4C543  push (0x28b1)
 	lda	xiy, (sub_F4C53A_Resume:24)	; F4C547  lda XIY,0xf4c54f
 	push	xiy	; F4C54C  push XIY
 	jp	(xix)	; F4C54D  jp T,XIX
@@ -103364,7 +103364,7 @@ sub_F4C53A_Resume:
 	jr	z, sub_F4C4DD_Epilogue	; F4C563  jr Z,0xf4c585
 	pushw	63	; F4C565  push 0x003f
 	push	0	; F4C568  push 0x00
-	m_push MB16, 0x28b1	; F4C56A  push (0x28b1)
+	m_push MB16, PanelEvent_ButtonCode	; F4C56A  push (0x28b1)
 	lda	xiy, (sub_F4C54F_Resume:24)	; F4C56E  lda XIY,0xf4c576
 	push	xiy	; F4C573  push XIY
 	jp	(xix)	; F4C574  jp T,XIX
@@ -103382,7 +103382,7 @@ sub_F4C4DD_Epilogue:
 	popw	hl	; F4C586  pop HL
 	ret	; F4C587  ret
 sub_F4C588:
-	ld	c, (10416:16)	; F4C588  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F4C588  ld C,(0x28b0)
 	and	c, 1	; F4C58C  and C,0x01
 	jr	nz, sub_F4C588_Return	; F4C58F  jr NZ,0xf4c5a1
 	m_cp_mi8 MB16, 0x2870, 0x00	; F4C591  cp (0x2870),0x00
@@ -103392,7 +103392,7 @@ sub_F4C588:
 sub_F4C588_Return:
 	ret	; F4C5A1  ret
 sub_F4C5A2:
-	ld	c, (10416:16)	; F4C5A2  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F4C5A2  ld C,(0x28b0)
 	and	c, 1	; F4C5A6  and C,0x01
 	jr	nz, sub_F4C5A2_Return	; F4C5A9  jr NZ,0xf4c5c8
 	ld	c, (UI_ScreenHoldState:16)	; F4C5AB  ld C,(0x2092)
@@ -107195,7 +107195,7 @@ sub_F4F02E:
 	mx_ld_rm MXL, ra_IY, ra_HL, 5	; F4F041  ld XIY,(XIY+HL)
 	ld	a, (xiz+8)	; F4F046  ld A,(XIZ+0x08)
 	ld	(10080:24), a	; F4F049  ld (0x002760),A
-	ld	w, (10416:16)	; F4F04E  ld W,(0x28b0)
+	ld	w, (PanelEvent_Flags:16)	; F4F04E  ld W,(0x28b0)
 	and	w, 1	; F4F052  and W,0x01
 	sll	w, 7	; F4F055  sll 0x07,W
 	or	w, 1	; F4F058  or W,0x01
@@ -110007,7 +110007,7 @@ sub_F53052_Skip7:
 ; --------------------------------------------------------------------------
 LcdKeyRow1_DrawbarScreen:
 	push	xix	; F53136  push XIX
-	lda	xix, (10416:16)	; F53137  lda XIX,0x28b0
+	lda	xix, (PanelEvent_Flags:16)	; F53137  lda XIX,0x28b0
 	ld	c, (xix)	; F5313B  ld C,(XIX)
 	and	c, 1	; F5313D  and C,0x01
 	jr	z, LcdKeyRow1_DrawbarScreen_Skip	; F53140  jr Z,0xf53154
@@ -110073,7 +110073,7 @@ LcdKeyRow1_DrawbarScreen_Epilogue:
 ; --------------------------------------------------------------------------
 LcdKeyRow2_DrawbarScreen:
 	push	xix	; F53163  push XIX
-	lda	xix, (10416:16)	; F53164  lda XIX,0x28b0
+	lda	xix, (PanelEvent_Flags:16)	; F53164  lda XIX,0x28b0
 	ld	c, (xix)	; F53168  ld C,(XIX)
 	and	c, 1	; F5316A  and C,0x01
 	jr	z, LcdKeyRow2_DrawbarScreen_Skip	; F5316D  jr Z,0xf53174
@@ -110140,7 +110140,7 @@ LcdKeyRow2_DrawbarScreen_Epilogue:
 ; --------------------------------------------------------------------------
 LcdKeyRow4_DrawbarScreen:
 	push	xix	; F5318E  push XIX
-	lda	xix, (10416:16)	; F5318F  lda XIX,0x28b0
+	lda	xix, (PanelEvent_Flags:16)	; F5318F  lda XIX,0x28b0
 	m_cp_mi8 MB16, 0x289e, 0x01	; F53193  cp (0x289e),0x01
 	jr	nz, LcdKeyRow4_DrawbarScreen_Epilogue	; F53198  jr NZ,0xf531b3
 	ld	c, (xix)	; F5319A  ld C,(XIX)
@@ -110203,7 +110203,7 @@ LcdKeyRow4_DrawbarScreen_Epilogue:
 ; --------------------------------------------------------------------------
 LcdKeyRow5_DrawbarScreen:
 	push	xix	; F531B5  push XIX
-	lda	xix, (10416:16)	; F531B6  lda XIX,0x28b0
+	lda	xix, (PanelEvent_Flags:16)	; F531B6  lda XIX,0x28b0
 	m_cp_mi8 MB16, 0x289e, 0x01	; F531BA  cp (0x289e),0x01
 	jr	nz, LcdKeyRow5_DrawbarScreen_Epilogue	; F531BF  jr NZ,0xf531da
 	ld	c, (xix)	; F531C1  ld C,(XIX)
@@ -110253,7 +110253,7 @@ sub_F531DC_Resume:
 sub_F531F5:
 	push	xix	; F531F5  push XIX
 	lda	xix, (10401:16)	; F531F6  lda XIX,0x28a1
-	ld	c, (10416:16)	; F531FA  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F531FA  ld C,(0x28b0)
 	and	c, 1	; F531FE  and C,0x01
 	jr	z, sub_F531F5_Skip	; F53201  jr Z,0xf5320d
 	ld	c, (xix)	; F53203  ld C,(XIX)
@@ -110311,7 +110311,7 @@ sub_F5321F_Join:
 sub_F5323E:
 	push	xix	; F5323E  push XIX
 	lda	xix, (10390:16)	; F5323F  lda XIX,0x2896
-	ld	c, (10416:16)	; F53243  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F53243  ld C,(0x28b0)
 	and	c, 1	; F53247  and C,0x01
 	jr	z, sub_F5323E_Skip	; F5324A  jr Z,0xf53251
 	m_xor_mi8 MBI+r4, 0, 0x10	; F5324C  xor (XIX),0x10
@@ -110339,7 +110339,7 @@ sub_F5323E_Join:
 sub_F53264:
 	push	xix	; F53264  push XIX
 	lda	xix, (10385:16)	; F53265  lda XIX,0x2891
-	ld	c, (10416:16)	; F53269  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F53269  ld C,(0x28b0)
 	and	c, 1	; F5326D  and C,0x01
 	jr	z, sub_F5323E_Skip2	; F53270  jr Z,0xf53290
 	ld	c, (xix)	; F53272  ld C,(XIX)
@@ -110389,7 +110389,7 @@ sub_F5323E_Epilogue:
 sub_F532BF:
 	push	xix	; F532BF  push XIX
 	lda	xix, (10385:16)	; F532C0  lda XIX,0x2891
-	ld	c, (10416:16)	; F532C4  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F532C4  ld C,(0x28b0)
 	and	c, 1	; F532C8  and C,0x01
 	jr	z, sub_F5323E_Skip3	; F532CB  jr Z,0xf532ee
 	ld	c, (xix)	; F532CD  ld C,(XIX)
@@ -110441,7 +110441,7 @@ sub_F5323E_Epilogue2:
 sub_F53320:
 	push	xix	; F53320  push XIX
 	lda	xix, (10384:16)	; F53321  lda XIX,0x2890
-	ld	c, (10416:16)	; F53325  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F53325  ld C,(0x28b0)
 	and	c, 1	; F53329  and C,0x01
 	jr	z, sub_F5323E_Skip4	; F5332C  jr Z,0xf5334f
 	ld	c, (xix)	; F5332E  ld C,(XIX)
@@ -110493,7 +110493,7 @@ sub_F5323E_Epilogue3:
 sub_F53381:
 	push	xix	; F53381  push XIX
 	lda	xix, (10384:16)	; F53382  lda XIX,0x2890
-	ld	c, (10416:16)	; F53386  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F53386  ld C,(0x28b0)
 	and	c, 1	; F5338A  and C,0x01
 	jr	z, sub_F5323E_Skip5	; F5338D  jr Z,0xf533ad
 	ld	c, (xix)	; F5338F  ld C,(XIX)
@@ -110547,7 +110547,7 @@ sub_F533DC:
 	ld	h, (xiz+8)	; F533E1  ld H,(XIZ+0x08)
 	m_cp_mi8 MB16, 0x289e, 0x00	; F533E4  cp (0x289e),0x00
 	jr	nz, sub_F533DC_Skip2	; F533E9  jr NZ,0xf53407
-	ld	c, (10416:16)	; F533EB  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F533EB  ld C,(0x28b0)
 	and	c, 1	; F533EF  and C,0x01
 	jr	z, sub_F533DC_Skip	; F533F2  jr Z,0xf533fd
 	cp	h, 8	; F533F4  cp H,0x08
@@ -111302,7 +111302,7 @@ sub_F533DC_Epilogue9:
 ExitKey_DrawbarScreen:
 	push	xix	; F53683  push XIX
 	lda	xix, (UI_Request_Hi:16)	; F53684  lda XIX,0x2071
-	ld	c, (10416:16)	; F53688  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F53688  ld C,(0x28b0)
 	and	c, 1	; F5368C  and C,0x01
 	jr	nz, sub_F533DC_Epilogue10	; F5368F  jr NZ,0xf536ba
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53691  cp (0x289e),0x00
@@ -113862,11 +113862,11 @@ PanelCode_ToSlotAndFlags:
 	link XIZ,0x0000	; F55019  link XIZ,0x0000
 	pushw	hl	; F5501D  push HL
 	push	xix	; F5501E  push XIX
-	lda	xix, (10416:16)	; F5501F  lda XIX,0x28b0
+	lda	xix, (PanelEvent_Flags:16)	; F5501F  lda XIX,0x28b0
 	ld	hl, (xiz+8)	; F55023  ld HL,(XIZ+0x08)
 	cp	hl, 31	; F55026  cp HL,0x001f
 	jrl	ugt, PanelCode_ToSlotAndFlags_Skip6	; F5502A  jrl UGT,0xf550a1
-	ld	(10417:16), l	; F5502D  ld (0x28b1),L
+	ld	(PanelEvent_ButtonCode:16), l	; F5502D  ld (0x28b1),L
 	ld	(xix), 0	; F55031  ld (XIX),0x00
 	ld	bc, (xiz+10)	; F55034  ld BC,(XIZ+0x0a)
 	and	bc, 128	; F55037  and BC,0x0080
@@ -113877,7 +113877,7 @@ PanelCode_ToSlotAndFlags_Skip:
 	ld	(xix), 0	; F55042  ld (XIX),0x00
 PanelCode_ToSlotAndFlags_Join:
 	ld	c, 4:opc	; F55045  ld C,0x04
-	m_mul MB16, 0x28b1, 3	; F55047  mul BC,(0x28b1)
+	m_mul MB16, PanelEvent_ButtonCode, 3	; F55047  mul BC,(0x28b1)
 	extz	xbc	; F5504B  extz XBC
 	add	xbc, Bit32MaskTable	; F5504D  add XBC,0x00f55755
 	ld	xbc, (xbc)	; F55053  ld XBC,(XBC)
@@ -113885,24 +113885,24 @@ PanelCode_ToSlotAndFlags_Join:
 	jr	z, PanelCode_ToSlotAndFlags_Skip2	; F55059  jr Z,0xf5505e
 	m_or_mi8 MBI+r4, 0, 0x02	; F5505B  or (XIX),0x02
 PanelCode_ToSlotAndFlags_Skip2:
-	m_cp_mi8 MB16, 0x28b1, 0x11	; F5505E  cp (0x28b1),0x11
+	m_cp_mi8 MB16, PanelEvent_ButtonCode, 0x11	; F5505E  cp (0x28b1),0x11
 	jr	c, PanelCode_ToSlotAndFlags_Skip3	; F55063  jr C,0xf5507a
-	m_cp_mi8 MB16, 0x28b1, 0x19	; F55065  cp (0x28b1),0x19
+	m_cp_mi8 MB16, PanelEvent_ButtonCode, 0x19	; F55065  cp (0x28b1),0x19
 	jr	ugt, PanelCode_ToSlotAndFlags_Skip3	; F5506A  jr UGT,0xf5507a
 	m_or_mi8 MBI+r4, 0, 0x04	; F5506C  or (XIX),0x04
-	ld	hl, (10417:16)	; F5506F  ld HL,(0x28b1)
+	ld	hl, (PanelEvent_ButtonCode:16)	; F5506F  ld HL,(0x28b1)
 	extz	hl	; F55073  extz HL
 	ldw	bc, 17	; F55075  ld BC,0x0011
 	sub	hl, bc	; F55078  sub HL,BC
 PanelCode_ToSlotAndFlags_Skip3:
-	m_cp_mi8 MB16, 0x28b1, 0x1a	; F5507A  cp (0x28b1),0x1a
+	m_cp_mi8 MB16, PanelEvent_ButtonCode, 0x1a	; F5507A  cp (0x28b1),0x1a
 	jr	c, PanelCode_ToSlotAndFlags_Skip4	; F5507F  jr C,0xf5508c
-	ld	hl, (10417:16)	; F55081  ld HL,(0x28b1)
+	ld	hl, (PanelEvent_ButtonCode:16)	; F55081  ld HL,(0x28b1)
 	extz	hl	; F55085  extz HL
 	ldw	bc, 9	; F55087  ld BC,0x0009
 	sub	hl, bc	; F5508A  sub HL,BC
 PanelCode_ToSlotAndFlags_Skip4:
-	m_cp_mi8 MB16, 0x28b1, 0x1b	; F5508C  cp (0x28b1),0x1b
+	m_cp_mi8 MB16, PanelEvent_ButtonCode, 0x1b	; F5508C  cp (0x28b1),0x1b
 	jr	nz, PanelCode_ToSlotAndFlags_Skip5	; F55091  jr NZ,0xf5509d
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F55093  cp (0x2267),0x0f
 	jr	nz, PanelCode_ToSlotAndFlags_Skip5	; F55098  jr NZ,0xf5509d
@@ -113951,7 +113951,7 @@ sub_F550A6:
 	push	xix	; F550AC  push XIX
 	ld	xix, (xiz+12)	; F550AD  ld XIX,(XIZ+0x0c)
 	ld	c, (xix+7)	; F550B0  ld C,(XIX+0x07)
-	xor	(10416:16), c	; F550B3  xor (0x28b0),C
+	xor	(PanelEvent_Flags:16), c	; F550B3  xor (0x28b0),C
 	m_set 3, MD16, UI_RequestBits	; F550B7  set 3,(0x2075)
 	ld	xbc, (xiz+8)	; F550BB  ld XBC,(XIZ+0x08)
 	ld	e, (xbc)	; F550BE  ld E,(XBC)
@@ -113970,7 +113970,7 @@ sub_F550A6_Join:
 	jr	sub_F550A6_Join	; F550D9  jr T,0xf550cc
 sub_F550A6_Skip:
 	ld	h, d	; F550DB  ld H,D
-	ld	c, (10416:16)	; F550DD  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F550DD  ld C,(0x28b0)
 	and	c, 4	; F550E1  and C,0x04
 	jr	z, sub_F550A6_Skip2	; F550E4  jr Z,0xf550eb
 	ld	l, (xix+6)	; F550E6  ld L,(XIX+0x06)
@@ -113982,7 +113982,7 @@ sub_F550A6_Skip2:
 	jr	z, sub_F550A6_Join2	; F550F4  jr Z,0xf550f9
 	ld	l, (xix+5)	; F550F6  ld L,(XIX+0x05)
 sub_F550A6_Join2:
-	ld	c, (10416:16)	; F550F9  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F550F9  ld C,(0x28b0)
 	and	c, 1	; F550FD  and C,0x01
 	jr	z, sub_F550A6_Skip4	; F55100  jr Z,0xf5511f
 	ld	e, (xix+4)	; F55102  ld E,(XIX+0x04)
@@ -114073,9 +114073,9 @@ sub_F5517B:
 	ld	xix, (xiz+8)	; F55182  ld XIX,(XIZ+0x08)
 	ld	xbc, (xiz+12)	; F55185  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+2)	; F55188  ld A,(XBC+0x02)
-	xor	(10416:16), a	; F5518B  xor (0x28b0),A
+	xor	(PanelEvent_Flags:16), a	; F5518B  xor (0x28b0),A
 	ld	l, (xix)	; F5518F  ld L,(XIX)
-	ld	a, (10416:16)	; F55191  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F55191  ld A,(0x28b0)
 	and	a, 1	; F55195  and A,0x01
 	jr	z, sub_F5517B_Skip	; F55198  jr Z,0xf551ab
 	ld	h, (xbc+1)	; F5519A  ld H,(XBC+0x01)
@@ -114142,7 +114142,7 @@ sub_F551E7:
 	pushw	ix	; F551ED  push IX
 	ld	xbc, (xiz+12)	; F551EE  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+7)	; F551F1  ld A,(XBC+0x07)
-	xor	(10416:16), a	; F551F4  xor (0x28b0),A
+	xor	(PanelEvent_Flags:16), a	; F551F4  xor (0x28b0),A
 	ld	xwa, (xiz+8)	; F551F8  ld XWA,(XIZ+0x08)
 	ld	ix, (xwa)	; F551FB  ld IX,(XWA)
 	ld	de, ix	; F551FD  ld DE,IX
@@ -114409,8 +114409,8 @@ IndexedParam_AdjustField:
 	ld	xix, (xiz+10)	; F55362  ld XIX,(XIZ+0x0a)
 	m_set 3, MD16, UI_RequestBits	; F55365  set 3,(0x2075)
 	ld	c, (xix+7)	; F55369  ld C,(XIX+0x07)
-	xor	(10416:16), c	; F5536C  xor (0x28b0),C
-	ld	c, (10416:16)	; F55370  ld C,(0x28b0)
+	xor	(PanelEvent_Flags:16), c	; F5536C  xor (0x28b0),C
+	ld	c, (PanelEvent_Flags:16)	; F55370  ld C,(0x28b0)
 	and	c, 16	; F55374  and C,0x10
 	jr	z, IndexedTable_GetByte_Skip	; F55377  jr Z,0xf5537d
 	m_add_mi8 MBD+r6, 0x08, 0x20	; F55379  add (XIZ+0x08),0x20
@@ -114441,7 +114441,7 @@ IndexedTable_GetByte_Join:
 	jr	IndexedTable_GetByte_Join	; F553AF  jr T,0xf553a2
 IndexedTable_GetByte_Skip2:
 	ld	h, d	; F553B1  ld H,D
-	ld	c, (10416:16)	; F553B3  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F553B3  ld C,(0x28b0)
 	and	c, 4	; F553B7  and C,0x04
 	jr	z, IndexedTable_GetByte_Skip3	; F553BA  jr Z,0xf553c1
 	ld	l, (xix+6)	; F553BC  ld L,(XIX+0x06)
@@ -114453,7 +114453,7 @@ IndexedTable_GetByte_Skip3:
 	jr	z, IndexedTable_GetByte_Join2	; F553CA  jr Z,0xf553cf
 	ld	l, (xix+5)	; F553CC  ld L,(XIX+0x05)
 IndexedTable_GetByte_Join2:
-	ld	c, (10416:16)	; F553CF  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F553CF  ld C,(0x28b0)
 	and	c, 1	; F553D3  and C,0x01
 	jr	z, IndexedTable_GetByte_Skip5	; F553D6  jr Z,0xf553f5
 	ld	e, (xix+4)	; F553D8  ld E,(XIX+0x04)
@@ -114502,7 +114502,7 @@ IndexedTable_GetByte_Skip7:
 	ld	l, (xix+1)	; F5542A  ld L,(XIX+0x01)
 	ld	c, l	; F5542D  ld C,L
 	and	h, c	; F5542F  and H,C
-	ld	a, (10416:16)	; F55431  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F55431  ld A,(0x28b0)
 	and	a, 8	; F55435  and A,0x08
 	jr	z, IndexedTable_GetByte_Skip8	; F55438  jr Z,0xf5544c
 	pushw	bc	; F5543A  push BC
@@ -114584,8 +114584,8 @@ IndexedParam_SetBit:
 	ld	xix, (xiz+10)	; F55482  ld XIX,(XIZ+0x0a)
 	ld	e, (xiz+8)	; F55485  ld E,(XIZ+0x08)
 	ld	c, (xix+2)	; F55488  ld C,(XIX+0x02)
-	xor	(10416:16), c	; F5548B  xor (0x28b0),C
-	ld	c, (10416:16)	; F5548F  ld C,(0x28b0)
+	xor	(PanelEvent_Flags:16), c	; F5548B  xor (0x28b0),C
+	ld	c, (PanelEvent_Flags:16)	; F5548F  ld C,(0x28b0)
 	and	c, 16	; F55493  and C,0x10
 	jr	z, IndexedTable_GetByte_Skip10	; F55496  jr Z,0xf5549b
 	add	e, 32	; F55498  add E,0x20
@@ -114599,7 +114599,7 @@ IndexedTable_GetByte_Skip10:
 	add	xiy, xbc	; F554A8  add XIY,XBC
 	ld	(xiz-4), xiy	; F554AA  ld (XIZ+0xfc),XIY
 	ld	d, (xiy)	; F554AD  ld D,(XIY)
-	ld	c, (10416:16)	; F554AF  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F554AF  ld C,(0x28b0)
 	and	c, 1	; F554B3  and C,0x01
 	popw	wa	; F554B6  pop WA
 	jr	z, IndexedTable_GetByte_Skip11	; F554B7  jr Z,0xf554ca
@@ -114626,7 +114626,7 @@ IndexedTable_GetByte_Join6:
 	ld	h, (xix+1)	; F554E0  ld H,(XIX+0x01)
 	ld	a, h	; F554E3  ld A,H
 	and	d, a	; F554E5  and D,A
-	ld	w, (10416:16)	; F554E7  ld W,(0x28b0)
+	ld	w, (PanelEvent_Flags:16)	; F554E7  ld W,(0x28b0)
 	and	w, 8	; F554EB  and W,0x08
 	jr	z, IndexedTable_GetByte_Skip12	; F554EE  jr Z,0xf55510
 	pushw	wa	; F554F0  push WA
@@ -114791,7 +114791,7 @@ IndexedParam_SetFieldFromAsciiEntry:		; <- T_IndexedParam_SetFieldFromAsciiEntry
 	pushw	hl	; F55543  push HL
 	pushw	de	; F55544  push DE
 	push	xix	; F55545  push XIX
-	ld	c, (10416:16)	; F55546  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F55546  ld C,(0x28b0)
 	and	c, 64	; F5554A  and C,0x40
 	jr	z, IndexedTable_GetByte_Skip14	; F5554D  jr Z,0xf5556d
 	ld	xbc, (xiz+10)	; F5554F  ld XBC,(XIZ+0x0a)
@@ -114804,14 +114804,14 @@ IndexedTable_GetByte_Skip13:
 	pushw	0	; F5555E  push 0x0000
 IndexedTable_GetByte_Join8:
 	call	T_Blink_SetEnable	; F55561  call 0xf42e28
-	m_res 6, MD16, 0x28b0	; F55565  res 6,(0x28b0)
+	m_res 6, MD16, PanelEvent_Flags	; F55565  res 6,(0x28b0)
 	popw	bc	; F55569  pop BC
 	jrl	IndexedTable_GetByte_Loop	; F5556A  jrl T,0xf555e1
 IndexedTable_GetByte_Skip14:
 	ld	xbc, (xiz+10)	; F5556D  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+7)	; F55570  ld A,(XBC+0x07)
-	xor	(10416:16), a	; F55573  xor (0x28b0),A
-	ld	a, (10416:16)	; F55577  ld A,(0x28b0)
+	xor	(PanelEvent_Flags:16), a	; F55573  xor (0x28b0),A
+	ld	a, (PanelEvent_Flags:16)	; F55577  ld A,(0x28b0)
 	and	a, 16	; F5557B  and A,0x10
 	jr	z, IndexedTable_GetByte_Skip15	; F5557E  jr Z,0xf55584
 	m_add_mi8 MBD+r6, 0x08, 0x20	; F55580  add (XIZ+0x08),0x20
@@ -114856,7 +114856,7 @@ IndexedTable_GetByte_Loop:
 	sub	a, a	; F555E1  sub A,A
 	jrl	IndexedTable_GetByte_Join16	; F555E3  jrl T,0xf556cc
 IndexedTable_GetByte_Join11:
-	ld	c, (10416:16)	; F555E6  ld C,(0x28b0)
+	ld	c, (PanelEvent_Flags:16)	; F555E6  ld C,(0x28b0)
 	and	c, 128	; F555EA  and C,0x80
 	jr	z, IndexedTable_GetByte_Skip20	; F555ED  jr Z,0xf555f1
 	dec	1, hl	; F555EF  dec 1,HL
@@ -114922,7 +114922,7 @@ IndexedTable_GetByte_Skip25:
 	ld	a, h	; F55662  ld A,H
 	extz	wa	; F55664  extz WA
 	and	de, wa	; F55666  and DE,WA
-	ld	a, (10416:16)	; F55668  ld A,(0x28b0)
+	ld	a, (PanelEvent_Flags:16)	; F55668  ld A,(0x28b0)
 	and	a, 8	; F5566C  and A,0x08
 	jr	z, IndexedTable_GetByte_Skip26	; F5566F  jr Z,0xf55687
 	push	0	; F55671  push 0x00

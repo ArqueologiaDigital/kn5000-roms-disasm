@@ -344,5 +344,9 @@
 	.equ UI_ScreenHoldState,			0x2092	; bit 0 = UI_ScreenHoldTimer running this pass, bit 1 = it stopped this pass -- PanelState_UpdateScreenHoldState
 	.equ UI_ScreenHoldPending,			0x209a	; one-shot preload for UI_ScreenHoldTimer (1 from 32 handlers, 0xFF / 0x3F from the splash) -- PanelState_TakePendingHoldTime
 
+; ---- wsa1/notes/FINDINGS-prom_b-panel-event-flags.md -- "The two bytes"
+	.equ PanelEvent_Flags,				0x28b0	; flags of the panel event being handled: bit 0 = pair position, bit 1 = in (0x208C), bit 2 = rewritten code, bit 5 = number pad -- PanelCode_ToSlotAndFlags
+	.equ PanelEvent_ButtonCode,			0x28b1	; the 5-bit panel button code of that event -- PanelCode_ToSlotAndFlags
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,				0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

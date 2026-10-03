@@ -396,6 +396,10 @@ GROUPS = [
         0x209A: ("UI_ScreenHoldPending", "one-shot preload for UI_ScreenHoldTimer (1 from 32 handlers, 0xFF / 0x3F from the splash)", "PanelState_TakePendingHoldTime"),
         0x2092: ("UI_ScreenHoldState", "bit 0 = UI_ScreenHoldTimer running this pass, bit 1 = it stopped this pass", "PanelState_UpdateScreenHoldState"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-panel-event-flags.md", "The two bytes", {
+        0x28B0: ("PanelEvent_Flags", "flags of the panel event being handled: bit 0 = pair position, bit 1 = in (0x208C), bit 2 = rewritten code, bit 5 = number pad", "PanelCode_ToSlotAndFlags"),
+        0x28B1: ("PanelEvent_ButtonCode", "the 5-bit panel button code of that event", "PanelCode_ToSlotAndFlags"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
