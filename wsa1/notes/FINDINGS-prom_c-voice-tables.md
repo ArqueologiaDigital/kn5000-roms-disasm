@@ -115,7 +115,8 @@ out = ToneGen_Velocity_Output_Curve[v]        ; 0xFCC71A, non-decreasing 1..127
   the middle and both have to agree. The note is offset by 0x24 = 36 = three octaves before
   the remainder is taken, which does not disturb the pitch class.
 * **Two of `unexplained_FCC5BE`'s bytes are no longer unexplained**: `0xFCC5C5` = 77 is the
-  pivot subtrahend and `0xFCC5C7` = 128 is the divisor. 77 occurs at exactly one index of the
+  pivot subtrahend and `0xFCC5C7` = 128 is the divisor (in the source since 2026-10-03:
+  `ToneGen_VelocityFromTouch_Data` and `ToneGen_VelocityFromTouch_Divisor`, two `.short`s). 77 occurs at exactly one index of the
   input curve (144), so the pivot is a single point, and at it the output is
   `ModeParams[mode].pivot` regardless of gain — which is what the "output level at the pivot"
   column *means*.

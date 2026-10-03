@@ -201,7 +201,10 @@ P7Unit_StreamPtrsByGroupAndUnit:
 ; ----------------------------------------------------------------------------
 unexplained_FCC5BE:
 	.byte	0x00, 0x00, 0x00, 0x00, 0xff, 0xfa, 0xfb
-ToneGen_VelocityFromTouch_Data:	.byte	0x4d, 0x00, 0x80, 0x00
+; ToneGen_VelocityFromTouch reads these two words in place: it subtracts the first from the curve sum
+; (`sub de,(ToneGen_VelocityFromTouch_Data)`) and divides the scaled product by the second (`divs xbc,(...Divisor)`).
+ToneGen_VelocityFromTouch_Data:		.short	77
+ToneGen_VelocityFromTouch_Divisor:	.short	128
 
 ; ----------------------------------------------------------------------------
 ; ToneGen_VelCurve_Trim51 -- 0xFCC5C9..0xFCC5FB  (51 bytes)

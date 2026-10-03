@@ -1183,12 +1183,13 @@ Table_FE11AC:
 ; ------------------------------------------------------------------------------
 ; DuplicateImage_CopyA -- 0xFE0A6D-0xFE15E0, 2,932 bytes.  This is the extent of
 ; the DUPLICATION, not of an object: it begins 92 bytes before
-; MathTable_Cos_S16_256 ends, which is why the name is now an absolute symbol
-; rather than a label -- there is no object boundary at that address to hang it on.
+; MathTable_Cos_S16_256 ends, which is why the name is a `.set` rather than a label -- there
+; is no object boundary at that address to hang it on.  Since 2026-10-03 the `.set` is spelled
+; from the table's start instead of as a number.
 ; ⚠ This `.set` and the matching one for copy B at 0xFE1698 are the ONLY lines in these
 ; three generated blocks that `gen_prom_c_tail_tables.py --emit` does not produce.
 ; ------------------------------------------------------------------------------
-	.set DuplicateImage_CopyA, 0x00FE0A6D
+	.set DuplicateImage_CopyA, MathTable_Cos_S16_256 + 0x200 - 92	; 92 bytes before the 512-byte table ends
 
 ; ------------------------------------------------------------------------------
 ; ⚠ CORRECTED 2026-08-25 (round 3).  Eleven citations in this block named the address of
@@ -1941,8 +1942,8 @@ DupTail_FE15E1:
 ; ============================================================================
 
 ; DuplicateImage_CopyB is round 2's name for this whole 2,894-byte copy.  It is kept
-; as an absolute symbol, not a label, so that the objects below carry their own names.
-	.set DuplicateImage_CopyB, 0x00FE1698
+; as a `.set`, not a label, so that the objects below carry their own names.
+	.set DuplicateImage_CopyB, MathTable_Cos_S16_256_Tail_B
 
 ; ----------------------------------------------------------------------------
 ; MathTable_Cos_S16_256_Tail_B -- 0xFE1698-0xFE16F3  (92 bytes)

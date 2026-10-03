@@ -271,7 +271,7 @@ ToneGen_VelocityFromTouch:
 	add	wa, de
 	muls	xbc, wa
 	exts	xbc
-	divs	xbc, (0xfcc5c7:24)
+	divs	xbc, (ToneGen_VelocityFromTouch_Divisor:24)
 	exts	xbc
 	ld	(xiz-14), xbc
 	ld	xwa, xix
