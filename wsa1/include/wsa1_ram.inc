@@ -289,5 +289,16 @@
 	.equ MidiFilter_BankSelect,		0x7f3a	; bit 7 BANK SELECT -- MidiInputOutputFilter_EditBankSelect
 	.equ MidiFilter_ResetAllCtrl,		0x7f3b	; bit 0 RESET ALL CTRL -- MidiInputOutputFilter_EditResetAllCtrl
 
+; ---- wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md -- "the sequencer buffer, the timed-event ring and the 96-tick counter"
+	.equ Seq_BeatTick,			0x0093	; tick within the beat, 0..0x5F -- INTTR4_SequencerTick, TimedEvents_IsNotYetDue
+	.equ SeqBuf_Flags,			0x00aa	; bit 0: append through the staging buffer -- SeqBuf_AppendEvent / _FlushStaged
+	.equ SeqBuf_StagedCount,		0x00ac	; bytes staged (word) -- SeqBuf_FlushStaged
+	.equ SeqBuf_Staged,			0x00ae	; the staged bytes -- SeqBuf_FlushStaged
+	.equ MainTask_TickCountdown,		0x00c2	; ticks until the main loop's periodic pass -- MainTask_RearmTickCountdown
+	.equ TimedEvents_Ring,			0x60080a	; the timed-event ring -- Ring60080A_*, TimedEvents_DrainDue
+	.equ SeqBuf_RingPut,			0x600a10	; the ring's write index -- SeqBuf_PutByte
+	.equ SeqBuf_RingFree,			0x600a12	; the ring's free count -- SeqBuf_PutByte
+	.equ SeqBuf_Ring,			0x600a14	; the 0x200-byte sequencer ring; descriptor below it -- Ring600A14_*, SeqBuf_PutByte
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

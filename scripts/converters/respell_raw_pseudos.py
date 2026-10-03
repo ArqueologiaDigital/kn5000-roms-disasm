@@ -8,7 +8,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
   when the assembler could not express those modes; many it now can.  CLAUDE.md "Native
   Instructions Over .byte" and the encoding-quirks table want the real spelling.
 
-  For every line whose mnemonic is such a pseudo (`*_sri*`, `*_dri*`, `*_ind`, `*_sril*`):
+  For every line whose mnemonic is such a pseudo (`*_sri*`, `*_dri*`, `*_ind`, `*_sril*`, and the
+  direct-page `*_dd8*` / `*_sd8*` -- `st_dd8b a, 0xc2` is `ld (0xc2:8), a`):
     1. assemble it with the pinned llvm-mc -> its bytes;
     2. read the bytes with MAME's unidasm (the project's reference decoder);
     3. translate that reading into this assembler's syntax, as a short list of candidates
@@ -81,7 +82,7 @@ def line_kind(l):
     return "data" if c.startswith(".") else "code"
 
 
-LINE = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)(?P<mn>[a-z]\w*_(?:sri|dri|ind|sril)\w*)'
+LINE = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)(?P<mn>[a-z]\w*_(?:sri|dri|ind|sril|dd8|sd8)\w*)'
                   r'(?P<ws>\s+)(?P<ops>[^;]*?)(?P<post>\s*(?:;.*)?)$', re.I)
 
 

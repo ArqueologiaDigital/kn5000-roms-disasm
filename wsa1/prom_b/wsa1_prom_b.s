@@ -1650,9 +1650,9 @@ sub_F0003C_Skip:
 	calr	sub_F000B9	; F00059  calr 0xf000b9
 	jr	sub_F0003C_Return	; F0005C  jr T,0xf00096
 sub_F0003C_Skip2:
-	bit_dd8	7, 148	; F0005E  bit 7,(0x94)
+	bit	7, (0x94:8)	; F0005E  bit 7,(0x94)
 	jr	z, sub_F0003C_Skip3	; F00061  jr Z,0xf0006a
-	bit_dd8	2, 150	; F00063  bit 2,(0x96)
+	bit	2, (0x96:8)	; F00063  bit 2,(0x96)
 	jr	nz, sub_F0003C_Skip3	; F00066  jr NZ,0xf0006a
 	jr	sub_F0003C_Return	; F00068  jr T,0xf00096
 sub_F0003C_Skip3:
@@ -1662,15 +1662,15 @@ sub_F0003C_Skip3:
 	popw	wa	; F00070  pop WA
 	jr	z, sub_F0003C_Return	; F00071  jr Z,0xf00096
 	ei	6	; F00073  ei 0x06
-	ld_sd8b	a, 149	; F00075  ld A,(0x95)
+	ld	a, (0x95:8)	; F00075  ld A,(0x95)
 	bit	2, a	; F00078  bit 0x02,A
 	jr	nz, sub_F0003C_Skip4	; F0007B  jr NZ,0xf00091
 	bit	0, a	; F0007D  bit 0x00,A
 	jr	z, sub_F0003C_Skip4	; F00080  jr Z,0xf00091
 	xor	a, a	; F00082  xor A,A
-	st_dd8b	a, 149	; F00084  ld (0x95),A
-	st_dd8b	a, 148	; F00087  ld (0x94),A
-	st_dd8b	a, 150	; F0008A  ld (0x96),A
+	ld	(0x95:8), a	; F00084  ld (0x95),A
+	ld	(0x94:8), a	; F00087  ld (0x94),A
+	ld	(0x96:8), a	; F0008A  ld (0x96),A
 	ei	0	; F0008D  ei 0x00
 	jr	sub_F0003C_Return	; F0008F  jr T,0xf00096
 sub_F0003C_Skip4:
@@ -1715,15 +1715,15 @@ sub_F00099_Return:
 sub_F000B9:
 	xor	xhl, xhl	; F000B9  xor XHL,XHL
 	ei	6	; F000BB  ei 0x06
-	bit_dd8	2, 148	; F000BD  bit 2,(0x94)
+	bit	2, (0x94:8)	; F000BD  bit 2,(0x94)
 	jr	z, sub_F00099_Skip2	; F000C0  jr Z,0xf000c5
 	or	l, 4	; F000C2  or L,0x04
 sub_F00099_Skip2:
-	bit_dd8	2, 150	; F000C5  bit 2,(0x96)
+	bit	2, (0x96:8)	; F000C5  bit 2,(0x96)
 	jr	z, sub_F00099_Skip3	; F000C8  jr Z,0xf000cd
 	or	l, 8	; F000CA  or L,0x08
 sub_F00099_Skip3:
-	bit_dd8	2, 149	; F000CD  bit 2,(0x95)
+	bit	2, (0x95:8)	; F000CD  bit 2,(0x95)
 	jr	z, sub_F00099_Skip4	; F000D0  jr Z,0xf000d5
 	or	l, 16	; F000D2  or L,0x10
 sub_F00099_Skip4:
@@ -1846,12 +1846,12 @@ sub_F00108_Return:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F0017D:
-	bit_dd8	2, 149	; F0017D  bit 2,(0x95)
+	bit	2, (0x95:8)	; F0017D  bit 2,(0x95)
 	jr	nz, sub_F0017D_Skip	; F00180  jr NZ,0xf00187
 	calr	sub_F001C9	; F00182  calr 0xf001c9
 	jr	sub_F0017D_Return	; F00185  jr T,0xf001ad
 sub_F0017D_Skip:
-	bit_dd8	2, 150	; F00187  bit 2,(0x96)
+	bit	2, (0x96:8)	; F00187  bit 2,(0x96)
 	jr	z, sub_F0017D_Skip2	; F0018A  jr Z,0xf001aa
 	ld	xwa, (12288:16)	; F0018C  ld XWA,(0x3000)
 	cp	xwa, 0	; F00190  cp XWA,0x00000000
@@ -1904,7 +1904,7 @@ sub_F001B0:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F001B5:
-	bit_dd8	2, 149	; F001B5  bit 2,(0x95)
+	bit	2, (0x95:8)	; F001B5  bit 2,(0x95)
 	jr	nz, sub_F001B5_Skip	; F001B8  jr NZ,0xf001c3
 	ei	6	; F001BA  ei 0x06
 	calr	sub_F00293	; F001BC  calr 0xf00293
@@ -1932,9 +1932,9 @@ sub_F001B5_Return:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F001C9:
-	bit_dd8	0, 149	; F001C9  bit 0,(0x95)
+	bit	0, (0x95:8)	; F001C9  bit 0,(0x95)
 	jr	nz, sub_F001C9_Skip2	; F001CC  jr NZ,0xf001fa
-	bit_dd8	2, 149	; F001CE  bit 2,(0x95)
+	bit	2, (0x95:8)	; F001CE  bit 2,(0x95)
 	jr	nz, sub_F001C9_Skip2	; F001D1  jr NZ,0xf001fa
 	m_bit 2, MD16, 0x34d9	; F001D3  bit 2,(0x34d9)
 	jr	nz, sub_F001C9_Skip	; F001D7  jr NZ,0xf001f1
@@ -1958,12 +1958,12 @@ sub_F001C9_Skip2:
 sub_F001C9_Return:
 	ret	; F0020A  ret
 sub_F0020B:
-	bit_dd8	2, 149	; F0020B  bit 2,(0x95)
+	bit	2, (0x95:8)	; F0020B  bit 2,(0x95)
 	jr	nz, sub_F001C9_Skip3	; F0020E  jr NZ,0xf00215
 	calr	sub_F00244	; F00210  calr 0xf00244
 	jr	sub_F001C9_Return2	; F00213  jr T,0xf0023b
 sub_F001C9_Skip3:
-	bit_dd8	2, 150	; F00215  bit 2,(0x96)
+	bit	2, (0x96:8)	; F00215  bit 2,(0x96)
 	jr	z, sub_F001C9_Skip4	; F00218  jr Z,0xf00238
 	ld	xwa, (12288:16)	; F0021A  ld XWA,(0x3000)
 	cp	xwa, 0	; F0021E  cp XWA,0x00000000
@@ -1983,9 +1983,9 @@ sub_F00240:
 	calr	sub_F001B5	; F00240  calr 0xf001b5
 	ret	; F00243  ret
 sub_F00244:
-	bit_dd8	0, 149	; F00244  bit 0,(0x95)
+	bit	0, (0x95:8)	; F00244  bit 0,(0x95)
 	jr	nz, sub_F001C9_Skip6	; F00247  jr NZ,0xf00272
-	bit_dd8	2, 149	; F00249  bit 2,(0x95)
+	bit	2, (0x95:8)	; F00249  bit 2,(0x95)
 	jr	nz, sub_F001C9_Skip6	; F0024C  jr NZ,0xf00272
 	m_bit 2, MD16, 0x34d9	; F0024E  bit 2,(0x34d9)
 	jr	nz, sub_F001C9_Skip5	; F00252  jr NZ,0xf0026c
@@ -2011,9 +2011,9 @@ sub_F001C9_Return3:
 ;     entry 0x00F00280 (and 0x00F0028D) of the array Data_F000E5
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 sub_F00280:
-	bit_dd8	3, 149	; F00280  bit 3,(0x95)
+	bit	3, (0x95:8)	; F00280  bit 3,(0x95)
 	jr	nz, sub_F001C9_Arm	; F00283  jr NZ,0xf0028d
-	bit_dd8	2, 149	; F00285  bit 2,(0x95)
+	bit	2, (0x95:8)	; F00285  bit 2,(0x95)
 	jr	z, sub_F001C9_Arm	; F00288  jr Z,0xf0028d
 	ld	(149:8), 12:io	; F0028A  ld (0x95),0x0c
 sub_F001C9_Arm:
@@ -2042,9 +2042,9 @@ sub_F00293:
 ; --- 0xF0029D-0xF002C8, 44 B, converted by lane promB6 (CODE).
 ;     entries 0x00F002B9 0x00F002B6 0x00F002B3 of Data_F000E5
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
-	bit_dd8	0, 149	; F0029D  bit 0,(0x95)
+	bit	0, (0x95:8)	; F0029D  bit 0,(0x95)
 	jr	nz, sub_F00293_Return	; F002A0  jr NZ,0xf002b0
-	bit_dd8	2, 149	; F002A2  bit 2,(0x95)
+	bit	2, (0x95:8)	; F002A2  bit 2,(0x95)
 	jr	nz, sub_F00293_Return	; F002A5  jr NZ,0xf002b0
 	ld	(149:8), 1:io	; F002A7  ld (0x95),0x01
 	calr	sub_F002F4	; F002AA  calr 0xf002f4
@@ -2058,9 +2058,9 @@ sub_F00293_Arm3:
 sub_F00293_Arm2:
 	ld	(150:8), 12:io	; F002B6  ld (0x96),0x0c
 sub_F00293_Arm:
-	bit_dd8	3, 149	; F002B9  bit 3,(0x95)
+	bit	3, (0x95:8)	; F002B9  bit 3,(0x95)
 	jr	nz, sub_F00293_Arm_Return	; F002BC  jr NZ,0xf002c6
-	bit_dd8	2, 149	; F002BE  bit 2,(0x95)
+	bit	2, (0x95:8)	; F002BE  bit 2,(0x95)
 	jr	z, sub_F00293_Arm_Return	; F002C1  jr Z,0xf002c6
 	ld	(149:8), 12:io	; F002C3  ld (0x95),0x0c
 sub_F00293_Arm_Return:
@@ -2090,9 +2090,9 @@ sub_F002C9:
 	nop	; F002CE  nop
 	ld	(148:8), 1:io	; F002CF  ld (0x94),0x01
 	calr	sub_F00301	; F002D2  calr 0xf00301
-	bit_dd8	0, 149	; F002D5  bit 0,(0x95)
+	bit	0, (0x95:8)	; F002D5  bit 0,(0x95)
 	jr	nz, sub_F002C9_Return	; F002D8  jr NZ,0xf002e8
-	bit_dd8	2, 149	; F002DA  bit 2,(0x95)
+	bit	2, (0x95:8)	; F002DA  bit 2,(0x95)
 	jr	nz, sub_F002C9_Return	; F002DD  jr NZ,0xf002e8
 	ld	(149:8), 1:io	; F002DF  ld (0x95),0x01
 	calr	sub_F002F4	; F002E2  calr 0xf002f4
@@ -2122,23 +2122,23 @@ sub_F002C9_Arm:
 sub_F002F4:
 	xor	wa, wa	; F002F4  xor WA,WA
 	ei	6	; F002F6  ei 0x06
-	st_dd8b	a, 141	; F002F8  ld (0x8d),A
-	st_dd8w	wa, 142	; F002FB  ld (0x8e),WA
+	ld	(0x8d:8), a	; F002F8  ld (0x8d),A
+	ld	(0x8e:8), wa	; F002FB  ld (0x8e),WA
 	ei	0	; F002FE  ei 0x00
 	ret	; F00300  ret
 sub_F00301:
 	xor	wa, wa	; F00301  xor WA,WA
 	ei	6	; F00303  ei 0x06
-	st_dd8b	a, 139	; F00305  ld (0x8b),A
-	st_dd8b	a, 140	; F00308  ld (0x8c),A
+	ld	(0x8b:8), a	; F00305  ld (0x8b),A
+	ld	(0x8c:8), a	; F00308  ld (0x8c),A
 	ld	(6311938:24), a	; F0030B  ld (0x605002),A
 	ei	0	; F00310  ei 0x00
 	ret	; F00312  ret
 sub_F00313:
 	xor	wa, wa	; F00313  xor WA,WA
 	ei	6	; F00315  ei 0x06
-	st_dd8w	wa, 145	; F00317  ld (0x91),WA
-	st_dd8b	a, 147	; F0031A  ld (0x93),A
+	ld	(0x91:8), wa	; F00317  ld (0x91),WA
+	ld	(Seq_BeatTick:8), a	; F0031A  ld (0x93),A
 	ei	0	; F0031D  ei 0x00
 	ret	; F0031F  ret
 sub_F00320:
@@ -2659,7 +2659,7 @@ Data_F007FE:
 ; --------------------------------------------------------------------------
 sub_F00800:
 	ei	6	; F00800  ei 0x06
-	ld_sd8b	a, 150	; F00802  ld A,(0x96)
+	ld	a, (0x96:8)	; F00802  ld A,(0x96)
 	ei	0	; F00805  ei 0x00
 	ld	w, (6311962:24)	; F00807  ld W,(0x60501a)
 	ld	(6311962:24), a	; F0080C  ld (0x60501a),A
@@ -2671,14 +2671,14 @@ sub_F00800:
 	jr	nz, sub_F00800_Skip	; F0081D  jr NZ,0xf00822
 	calr	sub_F009A8	; F0081F  calr 0xf009a8
 sub_F00800_Skip:
-	bit_dd8	2, 150	; F00822  bit 2,(0x96)
+	bit	2, (0x96:8)	; F00822  bit 2,(0x96)
 	jr	z, sub_F00800_Skip2	; F00825  jr Z,0xf0082a
 	calr	sub_F00895	; F00827  calr 0xf00895
 sub_F00800_Skip2:
 	calr	sub_F0082E	; F0082A  calr 0xf0082e
 	ret	; F0082D  ret
 sub_F0082E:
-	bit_dd8	2, 148	; F0082E  bit 2,(0x94)
+	bit	2, (0x94:8)	; F0082E  bit 2,(0x94)
 	jr	z, sub_F0082E_Return	; F00831  jr Z,0xf00894
 	ld	xwa, (12288:16)	; F00833  ld XWA,(0x3000)
 	cp	xwa, 0	; F00837  cp XWA,0x00000000
@@ -2686,11 +2686,11 @@ sub_F0082E:
 	ei	6	; F0083F  ei 0x06
 	ld	a, (6311938:24)	; F00841  ld A,(0x605002)
 	ld	(6311953:24), a	; F00846  ld (0x605011),A
-	ld_sd8b	a, 140	; F0084B  ld A,(0x8c)
+	ld	a, (0x8c:8)	; F0084B  ld A,(0x8c)
 	ld	(6311954:24), a	; F0084E  ld (0x605012),A
-	ld_sd8b	a, 139	; F00853  ld A,(0x8b)
+	ld	a, (0x8b:8)	; F00853  ld A,(0x8b)
 	ld	(6311955:24), a	; F00856  ld (0x605013),A
-	ld_sd8b	a, 148	; F0085B  ld A,(0x94)
+	ld	a, (0x94:8)	; F0085B  ld A,(0x94)
 	ld	(6311959:24), a	; F0085E  ld (0x605017),A
 	ei	0	; F00863  ei 0x00
 sub_F0082E_Join:
@@ -2715,7 +2715,7 @@ sub_F0082E_Return:
 sub_F00895:
 	ld	wa, (13650:16)	; F00895  ld WA,(0x3552)
 	m_ld_rm MW8, 0x91, 1	; F00899  ld BC,(0x91)
-	ld_sd8b	e, 147	; F0089C  ld E,(0x93)
+	ld	e, (Seq_BeatTick:8)	; F0089C  ld E,(0x93)
 	m_cp_rm MW24, 0x60501c, 0	; F0089F  cp WA,(0x60501c)
 	jr	z, sub_F00895_Skip	; F008A4  jr Z,0xf008ab
 	calr	sub_F00984	; F008A6  calr 0xf00984
@@ -30221,7 +30221,7 @@ EffectEditor_PaintJob1:
 	push	xix	; F0F91C  push XIX
 	lda	xix, (LCD_CurrentLayer:16)	; F0F91D  lda XIX,0x2540
 	m_res 1, MD16, 0x2799	; F0F921  res 1,(0x2799)
-	set_dd8	0, 198	; F0F925  set 0,(0xc6)
+	set	0, (0xc6:8)	; F0F925  set 0,(0xc6)
 	ld	(xix), 1	; F0F928  ld (XIX),0x01
 	ld	(9792:16), 0	; F0F92B  ld (0x2640),0x00
 sub_F0F788_Join4:
@@ -30286,7 +30286,7 @@ sub_F0F788_Skip13:
 sub_F0F788_Join5:
 	inc	8, xsp	; F0F9DA  inc 0,XSP
 	inc	4, xsp	; F0F9DC  inc 4,XSP
-	res_dd8	0, 198	; F0F9DE  res 0,(0xc6)
+	res	0, (0xc6:8)	; F0F9DE  res 0,(0xc6)
 	ld	(xix), 0	; F0F9E1  ld (XIX),0x00
 	lda	xbc, (DL_F143AF:24)	; F0F9E4  lda XBC,0xf143af
 	push	xbc	; F0F9E9  push XBC
@@ -33096,7 +33096,7 @@ sub_F10EE9:
 	ld	c, (10132:16)	; F10F18  ld C,(0x2794)
 	m_cp_rm MB16, 0x2795, 3	; F10F1C  cp C,(0x2795)
 	jr	z, sub_F10EE9_Skip	; F10F20  jr Z,0xf10f50
-	set_dd8	0, 198	; F10F22  set 0,(0xc6)
+	set	0, (0xc6:8)	; F10F22  set 0,(0xc6)
 	ld	(LCD_CurrentLayer:16), 1	; F10F25  ld (0x2540),0x01
 	ld	(xix), c	; F10F2A  ld (XIX),C
 	ld	d, (10132:16)	; F10F2C  ld D,(0x2794)
@@ -33108,7 +33108,7 @@ sub_F10EE9:
 	lda	xwa, (DL_F14712:24)	; F10F41  lda XWA,0xf14712
 	push	xwa	; F10F46  push XWA
 	call	T_DisplayListB_Run_Stack	; F10F47  call 0xf42e04
-	res_dd8	0, 198	; F10F4B  res 0,(0xc6)
+	res	0, (0xc6:8)	; F10F4B  res 0,(0xc6)
 	inc	8, xsp	; F10F4E  inc 0,XSP
 sub_F10EE9_Skip:
 	cp	h, l	; F10F50  cp H,L
@@ -90764,7 +90764,7 @@ sub_F440A0_Skip2:
 sub_F44131:		; <- T_F40AC8
 	ld	a, (6304983:24)	; F44131  ld A,(0x6034d7)
 	ld	(6311936:24), a	; F44136  ld (0x605000),A
-	st_dd8b	a, 195	; F4413B  ld (0xc3),A
+	ld	(0xc3:8), a	; F4413B  ld (0xc3),A
 	ld	(3555:16), a	; F4413E  ld (0x0de3),A
 	ret	; F44142  ret
 
@@ -91271,7 +91271,7 @@ sub_F44582:		; <- T_F409C8
 	ld	(6304798:24), xwa	; F4458A  ld (0x60341e),XWA
 	ld	(12288:16), xwa	; F4458F  ld (0x3000),XWA
 sub_F44516_Skip3:
-	bit_dd8	2, 150	; F44593  bit 2,(0x96)
+	bit	2, (0x96:8)	; F44593  bit 2,(0x96)
 	jr	nz, sub_F44516_Skip5	; F44596  jr NZ,0xf445bc
 	m_cp_mi8 MB16, UI_ScreenId, 0x06	; F44598  cp (0x207c),0x06
 	jr	z, sub_F44516_Skip4	; F4459D  jr Z,0xf445a6
@@ -91358,7 +91358,7 @@ sub_F44623:
 	m_cp_mi8 MB8, 0x8b, 0x47	; F44651  cp (0x8b),0x47
 	jr	ule, sub_F44623_Return	; F44655  jr ULE,0xf4466c
 	xor	wa, wa	; F44657  xor WA,WA
-	st_dd8b	a, 147	; F44659  ld (0x93),A
+	ld	(Seq_BeatTick:8), a	; F44659  ld (0x93),A
 	m_ld_rm MW8, 0x91, 0	; F4465C  ld WA,(0x91)
 	ld	(13398:16), wa	; F4465F  ld (0x3456),WA
 	m_and_mi8 MB16, 0x34d4, 0xf7	; F44663  and (0x34d4),0xf7
@@ -91380,15 +91380,15 @@ sub_F44623_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4466D:
-	bit_dd8	7, 165	; F4466D  bit 7,(0xa5)
+	bit	7, (0xa5:8)	; F4466D  bit 7,(0xa5)
 	jrl	z, sub_F4466D_Join2	; F44670  jrl Z,0xf4477a
 	ld	xwa, (6304798:24)	; F44673  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44678  cp XWA,0x00000000
 	jrl	z, sub_F4466D_Join2	; F4467E  jrl Z,0xf4477a
-	bit_dd8	2, 150	; F44681  bit 2,(0x96)
+	bit	2, (0x96:8)	; F44681  bit 2,(0x96)
 	jrl	nz, sub_F4466D_Join2	; F44684  jrl NZ,0xf4477a
-	ld_sd8b	w, 165	; F44687  ld W,(0xa5)
-	ld_sd8b	a, 164	; F4468A  ld A,(0xa4)
+	ld	w, (0xa5:8)	; F44687  ld W,(0xa5)
+	ld	a, (0xa4:8)	; F4468A  ld A,(0xa4)
 	and	a, 127	; F4468D  and A,0x7f
 	rrc	w	; F44690  rrc 0x01,W
 	jr	nc, sub_F4466D_Skip	; F44693  jr NC,0xf44698
@@ -91398,16 +91398,16 @@ sub_F4466D_Skip:
 	ld	c, a	; F4469B  ld C,A
 	and	c, 3	; F4469D  and C,0x03
 	srl	wa, 2	; F446A0  srl 0x02,WA
-	st_dd8w	wa, 145	; F446A3  ld (0x91),WA
+	ld	(0x91:8), wa	; F446A3  ld (0x91),WA
 	ld	(3157:16), wa	; F446A6  ld (0x0c55),WA
 	xor	b, b	; F446AA  xor B,B
 	ld	iy, bc	; F446AC  ld IY,BC
 	ld	xix, WorkspaceDefaults + 0x77	; F446AE  ld XIX,0x00f460eb
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F446B3  ld A,(XIX+IY)
-	st_dd8b	a, 147	; F446B8  ld (0x93),A
+	ld	(Seq_BeatTick:8), a	; F446B8  ld (0x93),A
 	m_cp_mi16 MW8, 0x91, 0x0000	; F446BB  cp (0x91),0x0000
 	jr	nz, sub_F4466D_Skip2	; F446C0  jr NZ,0xf446cf
-	m_cp_mi8 MB8, 0x93, 0x00	; F446C2  cp (0x93),0x00
+	m_cp_mi8 MB8, Seq_BeatTick, 0x00	; F446C2  cp (0x93),0x00
 	jr	nz, sub_F4466D_Skip2	; F446C6  jr NZ,0xf446cf
 	call	sub_F44033	; F446C8  call 0xf44033
 	jrl	sub_F4466D_Join2	; F446CC  jrl T,0xf4477a
@@ -91434,7 +91434,7 @@ sub_F4466D_Loop:
 	jr	nz, sub_F4466D_Skip3	; F4470B  jr NZ,0xf44710
 	calr	sub_F45FE5	; F4470D  calr 0xf45fe5
 sub_F4466D_Skip3:
-	ld_sd8b	a, 147	; F44710  ld A,(0x93)
+	ld	a, (Seq_BeatTick:8)	; F44710  ld A,(0x93)
 	ld	(13643:16), a	; F44713  ld (0x354b),A
 	calr	sub_F4477F	; F44717  calr 0xf4477f
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F4471A  cp (0x0d4a),0x00
@@ -91563,12 +91563,12 @@ sub_F44809:
 	m_bit 0, MD16, 0x34d3	; F44809  bit 0,(0x34d3)
 	jrl	z, sub_F44809_Return	; F4480D  jrl Z,0xf448a2
 	m_and_mi8 MB16, 0x34d3, 0xfe	; F44810  and (0x34d3),0xfe
-	bit_dd8	2, 150	; F44815  bit 2,(0x96)
+	bit	2, (0x96:8)	; F44815  bit 2,(0x96)
 	jrl	nz, sub_F44809_Return	; F44818  jrl NZ,0xf448a2
 	ld	xwa, (12288:16)	; F4481B  ld XWA,(0x3000)
 	cp	xwa, 0	; F4481F  cp XWA,0x00000000
 	jr	nz, sub_F44809_Return	; F44825  jr NZ,0xf448a2
-	bit_dd8	2, 148	; F44827  bit 2,(0x94)
+	bit	2, (0x94:8)	; F44827  bit 2,(0x94)
 	jr	nz, sub_F44809_Return	; F4482A  jr NZ,0xf448a2
 	calr	sub_F448C6	; F4482C  calr 0xf448c6
 	cp	a, 0:i3	; F4482F  cp A,0
@@ -91717,7 +91717,7 @@ sub_F4491C:
 	ld	xwa, (6304798:24)	; F44922  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44927  cp XWA,0x00000000
 	jr	z, sub_F4491C_Skip	; F4492D  jr Z,0xf44938
-	bit_dd8	2, 149	; F4492F  bit 2,(0x95)
+	bit	2, (0x95:8)	; F4492F  bit 2,(0x95)
 	jr	nz, sub_F4491C_Return	; F44932  jr NZ,0xf4493d
 	call	T_F42578	; F44934  call 0xf42578
 sub_F4491C_Skip:
@@ -91779,7 +91779,7 @@ sub_F4495A_Epilogue:
 sub_F44964:
 	calr	sub_F4598A	; F44964  calr 0xf4598a
 	ei	6	; F44967  ei 0x06
-	ld_sd8b	a, 150	; F44969  ld A,(0x96)
+	ld	a, (0x96:8)	; F44969  ld A,(0x96)
 	ld	(13402:16), a	; F4496C  ld (0x345a),A
 	m_and_mi8 MB8, 0x96, 0xed	; F44970  and (0x96),0xed
 	ei	0	; F44974  ei 0x00
@@ -91902,7 +91902,7 @@ sub_F44A3B_Skip3:
 	jr	z, sub_F44A3B_Return	; F44AAB  jr Z,0xf44ad9
 	call	T_F409AC	; F44AAD  call 0xf409ac
 	ldw	bc, 61440	; F44AB1  ld BC,0xf000
-	bit_dd8	2, 149	; F44AB4  bit 2,(0x95)
+	bit	2, (0x95:8)	; F44AB4  bit 2,(0x95)
 	jr	z, sub_F44A3B_Skip4	; F44AB7  jr Z,0xf44abf
 	nop	; F44AB9  nop
 	nop	; F44ABA  nop
@@ -91955,7 +91955,7 @@ sub_F44ADA_Return:
 sub_F44AEE:		; <- T_F40AC4
 	m_bit 3, MD16, 0x34bb	; F44AEE  bit 3,(0x34bb)
 	jr	z, sub_F44AEE_Skip	; F44AF2  jr Z,0xf44b0f
-	ld_sd8b	a, 147	; F44AF4  ld A,(0x93)
+	ld	a, (Seq_BeatTick:8)	; F44AF4  ld A,(0x93)
 	ld	(13403:16), a	; F44AF7  ld (0x345b),A
 	m_ld_rm MW8, 0x91, 0	; F44AFB  ld WA,(0x91)
 	ld	xix, 13290	; F44AFE  ld XIX,0x000033ea
@@ -91967,7 +91967,7 @@ sub_F44AEE:		; <- T_F40AC4
 sub_F44AEE_Skip:
 	ld	(13403:16), 0	; F44B0F  ld (0x345b),0x00
 	ldw	(145:8), 0:io	; F44B14  ld (0x91),0x0000
-	ld	(147:8), 0:io	; F44B18  ld (0x93),0x00
+	ld	(Seq_BeatTick:8), 0:io	; F44B18  ld (0x93),0x00
 	xor	wa, wa	; F44B1B  xor WA,WA
 	ld	xix, 13290	; F44B1D  ld XIX,0x000033ea
 	xor	bc, bc	; F44B22  xor BC,BC
@@ -92000,7 +92000,7 @@ sub_F44B2D:		; <- T_F40AAC
 sub_F44B2D_Skip:
 	m_bit 0, MD16, 0x34d2	; F44B46  bit 0,(0x34d2)
 	jr	nz, sub_F44B2D_Return	; F44B4A  jr NZ,0xf44b94
-	bit_dd8	2, 150	; F44B4C  bit 2,(0x96)
+	bit	2, (0x96:8)	; F44B4C  bit 2,(0x96)
 	jr	nz, sub_F44B2D_Return	; F44B4F  jr NZ,0xf44b94
 	m_bit 6, MD16, 0x34d4	; F44B51  bit 6,(0x34d4)
 	jr	nz, sub_F44B2D_Return	; F44B55  jr NZ,0xf44b94
@@ -92009,7 +92009,7 @@ sub_F44B2D_Skip:
 	m_and_mi8 MB16, 0x34d4, 0xef	; F44B5D  and (0x34d4),0xef
 	m_bit 3, MD16, 0x34bb	; F44B62  bit 3,(0x34bb)
 	jr	z, sub_F44B2D_Skip2	; F44B66  jr Z,0xf44b91
-	ld_sd8b	a, 147	; F44B68  ld A,(0x93)
+	ld	a, (Seq_BeatTick:8)	; F44B68  ld A,(0x93)
 	ld	(13403:16), a	; F44B6B  ld (0x345b),A
 	m_ld_rm MW8, 0x91, 0	; F44B6F  ld WA,(0x91)
 	ld	xix, 13290	; F44B72  ld XIX,0x000033ea
@@ -92042,7 +92042,7 @@ sub_F44B2D_Return:
 sub_F44B95:
 	ld	(13403:16), 0	; F44B95  ld (0x345b),0x00
 	ldw	(145:8), 0:io	; F44B9A  ld (0x91),0x0000
-	ld	(147:8), 0:io	; F44B9E  ld (0x93),0x00
+	ld	(Seq_BeatTick:8), 0:io	; F44B9E  ld (0x93),0x00
 	xor	wa, wa	; F44BA1  xor WA,WA
 	ld	xix, 13290	; F44BA3  ld XIX,0x000033ea
 	xor	bc, bc	; F44BA8  xor BC,BC
@@ -92200,7 +92200,7 @@ sub_F44CA7:
 	m_ld_rm MW8, 0x91, 2	; F44CB3  ld DE,(0x91)
 	sla	de, 2	; F44CB6  sla 0x02,DE
 	xor	w, w	; F44CB9  xor W,W
-	ld_sd8b	a, 147	; F44CBB  ld A,(0x93)
+	ld	a, (Seq_BeatTick:8)	; F44CBB  ld A,(0x93)
 	ld	c, 24:opc	; F44CBE  ld C,0x18
 	div	wa, c	; F44CC0  div WA,C
 	xor	w, w	; F44CC2  xor W,W
@@ -92235,7 +92235,7 @@ sub_F44CA7_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44CEA:
-	bit_dd8	2, 150	; F44CEA  bit 2,(0x96)
+	bit	2, (0x96:8)	; F44CEA  bit 2,(0x96)
 	jr	z, sub_F44CEA_Skip	; F44CED  jr Z,0xf44cf1
 	jr	sub_F44CEA_Join	; F44CEF  jr T,0xf44d2b
 sub_F44CEA_Skip:
@@ -92328,9 +92328,9 @@ sub_F44D94_Skip:
 	jr	nz, sub_F44D94_Skip2	; F44DD5  jr NZ,0xf44ddc
 	m_or_mi8 MB16, 0x34d4, 0x04	; F44DD7  or (0x34d4),0x04
 sub_F44D94_Skip2:
-	bit_dd8	3, 148	; F44DDC  bit 3,(0x94)
+	bit	3, (0x94:8)	; F44DDC  bit 3,(0x94)
 	jr	nz, sub_F44D94_Skip3	; F44DDF  jr NZ,0xf44de6
-	bit_dd8	2, 148	; F44DE1  bit 2,(0x94)
+	bit	2, (0x94:8)	; F44DE1  bit 2,(0x94)
 	jr	nz, sub_F44D94_Skip4	; F44DE4  jr NZ,0xf44dec
 sub_F44D94_Skip3:
 	call	T_F409AC	; F44DE6  call 0xf409ac
@@ -92455,7 +92455,7 @@ sub_F44E8E_Skip:
 	m_rd_stcf_a RW+r6	; F44EBE  stcf A,IZ
 	ld	(14138:16), iz	; F44EC0  ld (0x373a),IZ
 sub_F44E8E_Join:
-	bit_dd8	2, 150	; F44EC4  bit 2,(0x96)
+	bit	2, (0x96:8)	; F44EC4  bit 2,(0x96)
 	jrl	nz, sub_F44E8E_Return	; F44EC7  jrl NZ,0xf44f66
 	ld	xwa, (6304798:24)	; F44ECA  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44ECF  cp XWA,0x00000000
@@ -92546,7 +92546,7 @@ sub_F44E8E_Skip5:
 	m_rd_stcf_a RW+r6	; F44F97  stcf A,IZ
 	ld	(14138:16), iz	; F44F99  ld (0x373a),IZ
 sub_F44E8E_Join3:
-	bit_dd8	2, 150	; F44F9D  bit 2,(0x96)
+	bit	2, (0x96:8)	; F44F9D  bit 2,(0x96)
 	jrl	nz, sub_F44E8E_Return2	; F44FA0  jrl NZ,0xf4503c
 	ld	xwa, (6304798:24)	; F44FA3  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44FA8  cp XWA,0x00000000
@@ -92849,7 +92849,7 @@ sub_F45119_Skip5:
 	calr	sub_F45FE5	; F45228  calr 0xf45fe5
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F4522B  and (0x34bb),0xf7
 	ldw	(145:8), 0:io	; F45230  ld (0x91),0x0000
-	ld	(147:8), 0:io	; F45234  ld (0x93),0x00
+	ld	(Seq_BeatTick:8), 0:io	; F45234  ld (0x93),0x00
 	ld	a, (6311936:24)	; F45237  ld A,(0x605000)
 	ld	(13400:16), a	; F4523C  ld (0x3458),A
 	ld	xwa, (6304798:24)	; F45240  ld XWA,(0x60341e)
@@ -92931,7 +92931,7 @@ sub_F45263_Loop3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F452D3:		; <- T_F409D4
-	bit_dd8	2, 150	; F452D3  bit 2,(0x96)
+	bit	2, (0x96:8)	; F452D3  bit 2,(0x96)
 	jr	nz, sub_F45263_Skip2	; F452D6  jr NZ,0xf4530a
 	cpl	wa	; F452D8  cpl WA
 	cpl	qwa	; F452DA  cpl QWA
@@ -93104,7 +93104,7 @@ sub_F4542D:		; <- T_F409E0
 	ld	xwa, (6304798:24)	; F4542D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45432  cp XWA,0x00000000
 	jr	z, sub_F4542D_Return	; F45438  jr Z,0xf45444
-	bit_dd8	2, 150	; F4543A  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4543A  bit 2,(0x96)
 	jr	nz, sub_F4542D_Return	; F4543D  jr NZ,0xf45444
 	m_or_mi8 MB16, 0x34d3, 0x01	; F4543F  or (0x34d3),0x01
 sub_F4542D_Return:
@@ -93630,7 +93630,7 @@ sub_F456F0:
 	ld	xwa, (12288:16)	; F456FD  ld XWA,(0x3000)
 	cp	xwa, 0	; F45701  cp XWA,0x00000000
 	jr	z, sub_F456F0_Return	; F45707  jr Z,0xf45760
-	ld_sd8b	a, 150	; F45709  ld A,(0x96)
+	ld	a, (0x96:8)	; F45709  ld A,(0x96)
 	and	a, 5	; F4570C  and A,0x05
 	jr	z, sub_F456F0_Skip	; F4570F  jr Z,0xf45713
 	jr	sub_F456F0_Return	; F45711  jr T,0xf45760
@@ -93651,7 +93651,7 @@ sub_F456F0_Skip:
 	m_or_mi8 MB16, 0x3614, 0x01	; F45743  or (0x3614),0x01
 	ei	6	; F45748  ei 0x06
 	ldw	(145:8), 0:io	; F4574A  ld (0x91),0x0000
-	ld	(147:8), 0:io	; F4574E  ld (0x93),0x00
+	ld	(Seq_BeatTick:8), 0:io	; F4574E  ld (0x93),0x00
 	ei	0	; F45751  ei 0x00
 	call	T_F409B4	; F45753  call 0xf409b4
 	m_bit 2, MD16, MidiCfg_ModeBits	; F45757  bit 2,(0x7f32)
@@ -93844,11 +93844,11 @@ sub_F45812_Return:
 ; --------------------------------------------------------------------------
 sub_F458EA:
 	ld	(149:8), 6:io	; F458EA  ld (0x95),0x06
-	bit_dd8	0, 148	; F458ED  bit 0,(0x94)
+	bit	0, (0x94:8)	; F458ED  bit 0,(0x94)
 	jr	z, sub_F458EA_Skip	; F458F0  jr Z,0xf458f5
 	ld	(148:8), 6:io	; F458F2  ld (0x94),0x06
 sub_F458EA_Skip:
-	bit_dd8	0, 150	; F458F5  bit 0,(0x96)
+	bit	0, (0x96:8)	; F458F5  bit 0,(0x96)
 	jr	z, sub_F458EA_Return	; F458F8  jr Z,0xf458fd
 	ld	(150:8), 6:io	; F458FA  ld (0x96),0x06
 sub_F458EA_Return:
@@ -93948,11 +93948,11 @@ sub_F4598A:
 	m_and_mi8 MB8, 0x94, 0xed	; F4598E  and (0x94),0xed
 	m_bit 5, MD16, 0x34d0	; F45992  bit 5,(0x34d0)
 	jr	nz, sub_F4598A_Skip2	; F45996  jr NZ,0xf459a6
-	bit_dd8	2, 150	; F45998  bit 2,(0x96)
+	bit	2, (0x96:8)	; F45998  bit 2,(0x96)
 	jr	z, sub_F4598A_Skip	; F4599B  jr Z,0xf4599f
 	jr	sub_F4598A_Return	; F4599D  jr T,0xf459a9
 sub_F4598A_Skip:
-	bit_dd8	2, 148	; F4599F  bit 2,(0x94)
+	bit	2, (0x94:8)	; F4599F  bit 2,(0x94)
 	jr	z, sub_F4598A_Skip2	; F459A2  jr Z,0xf459a6
 	jr	sub_F4598A_Return	; F459A4  jr T,0xf459a9
 sub_F4598A_Skip2:
@@ -94155,7 +94155,7 @@ sub_F45B0A:		; <- T_F40A14
 sub_F45B1F:
 	ei	6	; F45B1F  ei 0x06
 	ldw	(145:8), 0:io	; F45B21  ld (0x91),0x0000
-	ld	(147:8), 0:io	; F45B25  ld (0x93),0x00
+	ld	(Seq_BeatTick:8), 0:io	; F45B25  ld (0x93),0x00
 	ei	0	; F45B28  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B2A  bit 5,(0x34d0)
 	jr	nz, sub_F45B1F_Skip	; F45B2E  jr NZ,0xf45b3a
@@ -94184,7 +94184,7 @@ sub_F45B1F_Join:
 sub_F45B48:
 	ei	6	; F45B48  ei 0x06
 	ldw	(145:8), 0:io	; F45B4A  ld (0x91),0x0000
-	ld	(147:8), 0:io	; F45B4E  ld (0x93),0x00
+	ld	(Seq_BeatTick:8), 0:io	; F45B4E  ld (0x93),0x00
 	ei	0	; F45B51  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B53  bit 5,(0x34d0)
 	jr	nz, sub_F45B48_Skip	; F45B57  jr NZ,0xf45b63
@@ -94320,16 +94320,16 @@ sub_F45BD3_Loop:
 	jr	nz, sub_F45BD3_Skip7	; F45C2B  jr NZ,0xf45c82
 	ld	(13400:16), a	; F45C2D  ld (0x3458),A
 	ld	(6311936:24), a	; F45C31  ld (0x605000),A
-	st_dd8b	a, 195	; F45C36  ld (0xc3),A
+	ld	(0xc3:8), a	; F45C36  ld (0xc3),A
 	ld	(6304983:24), a	; F45C39  ld (0x6034d7),A
 	m_bit 0, MD16, 0x3735	; F45C3E  bit 0,(0x3735)
 	jr	z, sub_F45BD3_Skip5	; F45C42  jr Z,0xf45c48
 	ld	(14169:16), a	; F45C44  ld (0x3759),A
 sub_F45BD3_Skip5:
 	ld	(BStore_CursorOffset:16), iy	; F45C48  ld (0x345e),IY
-	st_dd8w	ix, 145	; F45C4C  ld (0x91),IX
+	ld	(0x91:8), ix	; F45C4C  ld (0x91),IX
 	ld	(13398:16), ix	; F45C4F  ld (0x3456),IX
-	ld	(147:8), 0:io	; F45C53  ld (0x93),0x00
+	ld	(Seq_BeatTick:8), 0:io	; F45C53  ld (0x93),0x00
 	ld	c, (13471:16)	; F45C56  ld C,(0x349f)
 	cp	c, 16	; F45C5A  cp C,0x10
 	jr	nc, sub_F45BD3_Skip6	; F45C5D  jr NC,0xf45c6e
@@ -94787,7 +94787,7 @@ Dispatch_3629_Nop3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45EAF:
-	bit_dd8	2, 150	; F45EAF  bit 2,(0x96)
+	bit	2, (0x96:8)	; F45EAF  bit 2,(0x96)
 	jr	nz, sub_F45EAF_Return	; F45EB2  jr NZ,0xf45ed1
 	ld	a, (14038:16)	; F45EB4  ld A,(0x36d6)
 	ld	(13471:16), a	; F45EB8  ld (0x349f),A
@@ -94814,7 +94814,7 @@ sub_F45EAF_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45ED2:
-	bit_dd8	2, 150	; F45ED2  bit 2,(0x96)
+	bit	2, (0x96:8)	; F45ED2  bit 2,(0x96)
 	jr	nz, sub_F45ED2_Return	; F45ED5  jr NZ,0xf45ef1
 	ld	a, (14038:16)	; F45ED7  ld A,(0x36d6)
 	ld	(13471:16), a	; F45EDB  ld (0x349f),A
@@ -94840,7 +94840,7 @@ sub_F45ED2_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45EF2:
-	bit_dd8	2, 150	; F45EF2  bit 2,(0x96)
+	bit	2, (0x96:8)	; F45EF2  bit 2,(0x96)
 	jr	nz, sub_F45EF2_Return	; F45EF5  jr NZ,0xf45f18
 	ld	a, (14038:16)	; F45EF7  ld A,(0x36d6)
 	ld	(13471:16), a	; F45EFB  ld (0x349f),A
@@ -95104,14 +95104,14 @@ sub_F4603C:		; <- T_F40AC0
 	ld	(13400:16), a	; F46052  ld (0x3458),A
 	ld	(3555:16), a	; F46056  ld (0x0de3),A
 	ld	(6304983:24), a	; F4605A  ld (0x6034d7),A
-	bit_dd8	2, 148	; F4605F  bit 2,(0x94)
+	bit	2, (0x94:8)	; F4605F  bit 2,(0x94)
 	jr	z, sub_F4603C_Skip	; F46062  jr Z,0xf46070
 	m_cp_mi8 MB8, 0x8c, 0x00	; F46064  cp (0x8c),0x00
 	jr	nz, sub_F4603C_Return	; F46068  jr NZ,0xf46073
 	m_cp_mi8 MB8, 0x8b, 0x5f	; F4606A  cp (0x8b),0x5f
 	jr	nc, sub_F4603C_Return	; F4606E  jr NC,0xf46073
 sub_F4603C_Skip:
-	st_dd8b	a, 195	; F46070  ld (0xc3),A
+	ld	(0xc3:8), a	; F46070  ld (0xc3),A
 sub_F4603C_Return:
 	ret	; F46073  ret
 
@@ -95393,7 +95393,7 @@ sub_F4783A:
 	ei	6	; F4783F  ei 0x06
 	m_ld_rm MW8, 0x91, 0	; F47841  ld WA,(0x91)
 	ld	(13394:16), wa	; F47844  ld (0x3452),WA
-	ld_sd8b	a, 147	; F47848  ld A,(0x93)
+	ld	a, (Seq_BeatTick:8)	; F47848  ld A,(0x93)
 	ld	(13396:16), a	; F4784B  ld (0x3454),A
 	ei	0	; F4784F  ei 0x00
 	ld	a, (13396:16)	; F47851  ld A,(0x3454)
@@ -95463,7 +95463,7 @@ sub_F4783A_Join3:
 	jrl	ugt, sub_F4783A_Return	; F478FC  jrl UGT,0xf479a1
 sub_F4783A_Skip7:
 	calr	sub_F47C25	; F478FF  calr 0xf47c25
-	bit_dd8	2, 150	; F47902  bit 2,(0x96)
+	bit	2, (0x96:8)	; F47902  bit 2,(0x96)
 	jr	nz, sub_F4783A_Skip8	; F47905  jr NZ,0xf4790d
 	m_bit 5, MD16, 0x34d4	; F47907  bit 5,(0x34d4)
 	jr	z, sub_F4783A_Skip12	; F4790B  jr Z,0xf47978
@@ -98643,7 +98643,7 @@ sub_F498A0_Skip12:
 sub_F498A0_Skip13:
 	ld	xhl, 6294026	; F498BD  ld XHL,0x00600a0a
 	ld	iy, (xhl+2)	; F498C2  ld IY,(XHL+0x02)
-	ld	xhl, 6294036	; F498C5  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F498C5  ld XHL,0x00600a14
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F498CA  ld A,(XHL+IY)
 	cp	a, 129	; F498CF  cp A,0x81
 	jrl	z, sub_F498A0_Skip15	; F498D2  jrl Z,0xf499bc
@@ -99122,7 +99122,7 @@ sub_F49C7D:
 	jr	z, sub_F49C7D_Return	; F49C8F  jr Z,0xf49ca8
 	ld	xhl, 6294026	; F49C91  ld XHL,0x00600a0a
 	ld	iy, (xhl+2)	; F49C96  ld IY,(XHL+0x02)
-	ld	xhl, 6294036	; F49C99  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F49C99  ld XHL,0x00600a14
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F49C9E  ld A,(XHL+IY)
 	bit	7, a	; F49CA3  bit 0x07,A
 	jr	z, sub_F49C7D	; F49CA6  jr Z,0xf49c7d
@@ -101147,7 +101147,7 @@ sub_F4AB8A_Return:
 sub_F4ABE8:
 	m_bit 0, MD16, 0x3731	; F4ABE8  bit 0,(0x3731)
 	jr	z, sub_F4ABE8_Skip	; F4ABEC  jr Z,0xf4abf8
-	m_cp_mi8 MB8, 0x93, 0x14	; F4ABEE  cp (0x93),0x14
+	m_cp_mi8 MB8, Seq_BeatTick, 0x14	; F4ABEE  cp (0x93),0x14
 	jr	ule, sub_F4ABE8_Skip	; F4ABF2  jr ULE,0xf4abf8
 	calr	sub_F4ABFC	; F4ABF4  calr 0xf4abfc
 	ret	; F4ABF7  ret
@@ -101570,7 +101570,7 @@ sub_F4AF51:		; <- T_F40BFC
 	call	T_F40A60	; F4AF5E  call 0xf40a60
 	call	T_F413C8	; F4AF62  call 0xf413c8
 	call	T_F41F18	; F4AF66  call 0xf41f18
-	bit_dd8	2, 150	; F4AF6A  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4AF6A  bit 2,(0x96)
 	jr	nz, sub_F4AEEE_Skip2	; F4AF6D  jr NZ,0xf4af7d
 	ld	xwa, (12288:16)	; F4AF6F  ld XWA,(0x3000)
 	cp	xwa, 0	; F4AF73  cp XWA,0x00000000
@@ -104505,7 +104505,7 @@ sub_F4D0FB:		; <- T_F40C58
 	ret	; F4D11C  ret
 sub_F4D002_Join4:
 	ld	iy, (xhl+2)	; F4D11D  ld IY,(XHL+0x02)
-	ld	xhl, 6293514	; F4D120  ld XHL,0x0060080a
+	ld	xhl, TimedEvents_Ring	; F4D120  ld XHL,0x0060080a
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F4D125  ld A,(XHL+IY)
 	inc	1, iy	; F4D12A  inc 1,IY
 	cp	iy, 512	; F4D12C  cp IY,0x0200
@@ -105581,7 +105581,7 @@ sub_F4E05B_Skip2:
 	m_rd_xorcf_a RW+r2	; F4E0A8  xorcf A,DE
 	jr	c, sub_F4E05B_Skip4	; F4E0AA  jr C,0xf4e0bf
 sub_F4E05B_Join:
-	bit_dd8	2, 150	; F4E0AC  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4E0AC  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip3	; F4E0AF  jr Z,0xf4e0b4
 	jrl	sub_F4E05B_Return	; F4E0B1  jrl T,0xf4e150
 sub_F4E05B_Skip3:
@@ -105608,7 +105608,7 @@ sub_F4E05B_Skip5:
 	m_rd_xorcf_a RW+r2	; F4E0E1  xorcf A,DE
 	jr	c, sub_F4E05B_Skip7	; F4E0E3  jr C,0xf4e0f6
 sub_F4E05B_Join2:
-	bit_dd8	2, 150	; F4E0E5  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4E0E5  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip6	; F4E0E8  jr Z,0xf4e0ec
 	jr	sub_F4E05B_Return	; F4E0EA  jr T,0xf4e150
 sub_F4E05B_Skip6:
@@ -105618,7 +105618,7 @@ sub_F4E05B_Skip6:
 	popw	bc	; F4E0F3  pop BC
 	jr	sub_F4E05B_Return	; F4E0F4  jr T,0xf4e150
 sub_F4E05B_Skip7:
-	bit_dd8	2, 150	; F4E0F6  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4E0F6  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip8	; F4E0F9  jr Z,0xf4e0fd
 	jr	sub_F4E05B_Return	; F4E0FB  jr T,0xf4e150
 sub_F4E05B_Skip8:
@@ -105644,7 +105644,7 @@ sub_F4E05B_Skip10:
 	m_rd_xorcf_a RW+r2	; F4E126  xorcf A,DE
 	jr	c, sub_F4E05B_Skip12	; F4E128  jr C,0xf4e139
 sub_F4E05B_Join3:
-	bit_dd8	2, 150	; F4E12A  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4E12A  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip11	; F4E12D  jr Z,0xf4e134
 	calr	sub_F4E390	; F4E12F  calr 0xf4e390
 	jr	sub_F4E05B_Return	; F4E132  jr T,0xf4e150
@@ -105652,7 +105652,7 @@ sub_F4E05B_Skip11:
 	calr	sub_F4E32A	; F4E134  calr 0xf4e32a
 	jr	sub_F4E05B_Return	; F4E137  jr T,0xf4e150
 sub_F4E05B_Skip12:
-	bit_dd8	2, 150	; F4E139  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4E139  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip13	; F4E13C  jr Z,0xf4e143
 	calr	sub_F4E478	; F4E13E  calr 0xf4e478
 	jr	sub_F4E05B_Return	; F4E141  jr T,0xf4e150
@@ -105901,7 +105901,7 @@ sub_F4E259_Skip5:
 sub_F4E259_Skip6:
 	call	T_F411B8	; F4E2FB  call 0xf411b8
 sub_F4E259_Join3:
-	ld_sd8b	a, 149	; F4E2FF  ld A,(0x95)
+	ld	a, (0x95:8)	; F4E2FF  ld A,(0x95)
 	and	a, 5	; F4E302  and A,0x05
 	jr	nz, sub_F4E259_Skip7	; F4E305  jr NZ,0xf4e30b
 	call	T_F409AC	; F4E307  call 0xf409ac
@@ -106029,7 +106029,7 @@ sub_F4E390_Join:
 	ld	xwa, (6304798:24)	; F4E3C2  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E3C7  cp XWA,0x00000000
 	jr	nz, sub_F4E390_Join2	; F4E3CD  jr NZ,0xf4e3e2
-	bit_dd8	2, 148	; F4E3CF  bit 2,(0x94)
+	bit	2, (0x94:8)	; F4E3CF  bit 2,(0x94)
 	jr	nz, sub_F4E390_Skip2	; F4E3D2  jr NZ,0xf4e3dc
 	pushw	bc	; F4E3D4  push BC
 	call	T_F409AC	; F4E3D5  call 0xf409ac
@@ -106290,12 +106290,12 @@ sub_F4E545:
 	ld	xwa, (6304798:24)	; F4E545  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E54A  cp XWA,0x00000000
 	jr	z, sub_F4E545_Return	; F4E550  jr Z,0xf4e56e
-	bit_dd8	2, 150	; F4E552  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4E552  bit 2,(0x96)
 	jr	nz, sub_F4E545_Return	; F4E555  jr NZ,0xf4e56e
 	ld	xwa, (12288:16)	; F4E557  ld XWA,(0x3000)
 	cp	xwa, 0	; F4E55B  cp XWA,0x00000000
 	jr	nz, sub_F4E545_Return	; F4E561  jr NZ,0xf4e56e
-	bit_dd8	2, 148	; F4E563  bit 2,(0x94)
+	bit	2, (0x94:8)	; F4E563  bit 2,(0x94)
 	jr	nz, sub_F4E545_Return	; F4E566  jr NZ,0xf4e56e
 	pushw	iy	; F4E568  push IY
 	call	T_F409E0	; F4E569  call 0xf409e0
@@ -106469,7 +106469,7 @@ sub_F4EC00:		; <- T_F40CE0
 	ld	xwa, (12288:16)	; F4EC0D  ld XWA,(0x3000)
 	cp	xwa, 0	; F4EC11  cp XWA,0x00000000
 	jr	nz, sub_F4EC00_Return	; F4EC17  jr NZ,0xf4ec24
-	bit_dd8	2, 150	; F4EC19  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4EC19  bit 2,(0x96)
 	jr	z, sub_F4EC00_Return	; F4EC1C  jr Z,0xf4ec24
 	ldw	(UI_Request:16), 520	; F4EC1E  ld (0x2070),0x0208
 sub_F4EC00_Return:
@@ -106676,7 +106676,7 @@ sub_F4ED0C:		; <- T_F40D14
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4ED10:
-	bit_dd8	2, 149	; F4ED10  bit 2,(0x95)
+	bit	2, (0x95:8)	; F4ED10  bit 2,(0x95)
 	jr	z, sub_F4ED10_Skip	; F4ED13  jr Z,0xf4ed17
 	jr	sub_F4ED10_Return	; F4ED15  jr T,0xf4ed83
 sub_F4ED10_Skip:
@@ -106780,7 +106780,7 @@ sub_F4EDC6:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4EDD8  ld DE,QHL3
 	jr	z, sub_F4EDC6_Skip	; F4EDDB  jr Z,0xf4eddd
 sub_F4EDC6_Skip:
-	bit_dd8	2, 149	; F4EDDD  bit 2,(0x95)
+	bit	2, (0x95:8)	; F4EDDD  bit 2,(0x95)
 	jrl	nz, sub_F4EDC6_Skip2	; F4EDE0  jrl NZ,0xf4ee64
 	m_bit 2, MD16, 0x34d9	; F4EDE3  bit 2,(0x34d9)
 	jrl	nz, sub_F4EDC6_Skip2	; F4EDE7  jrl NZ,0xf4ee64
@@ -106825,7 +106825,7 @@ sub_F4ED10_Join3:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F4EE59  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 34953	; F4EE5E  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F4EDC6_Skip2:
-	bit_dd8	2, 150	; F4EE64  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4EE64  bit 2,(0x96)
 	jr	z, sub_F4ED10_Return3	; F4EE67  jr Z,0xf4ee6e
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F4EE69  and (0x2075),0xf6
 sub_F4ED10_Return3:
@@ -106866,7 +106866,7 @@ sub_F4EE73:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4EE84  ld DE,QHL3
 	jr	nz, sub_F4EE73_Return	; F4EE87  jr NZ,0xf4eeac
 sub_F4EE73_Skip:
-	bit_dd8	2, 148	; F4EE89  bit 2,(0x94)
+	bit	2, (0x94:8)	; F4EE89  bit 2,(0x94)
 	jr	z, sub_F4EE73_Skip2	; F4EE8C  jr Z,0xf4ee9a
 	m_bit 0, MD16, 0x34d9	; F4EE8E  bit 0,(0x34d9)
 	jr	nz, sub_F4EE73_Skip2	; F4EE92  jr NZ,0xf4ee9a
@@ -106916,7 +106916,7 @@ sub_F4EEBC:		; <- T_F40D08
 	ld	xwa, (6304798:24)	; F4EEBC  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4EEC1  cp XWA,0x00000000
 	jr	z, sub_F4EE73_Return3	; F4EEC7  jr Z,0xf4eed8
-	bit_dd8	2, 150	; F4EEC9  bit 2,(0x96)
+	bit	2, (0x96:8)	; F4EEC9  bit 2,(0x96)
 	jr	nz, sub_F4EE73_Return3	; F4EECC  jr NZ,0xf4eed8
 	call	T_F409E0	; F4EECE  call 0xf409e0
 	ldw	(13650:16), 1	; F4EED2  ld (0x3552),0x0001
@@ -111449,7 +111449,7 @@ PaintAllDrawbars_Skip2:
 	push	xwa	; F53816  push XWA
 PaintAllDrawbars_Join2:
 	call	T_DisplayListB_Run_Stack	; F53817  call 0xf42e04
-	res_dd8	0, 198	; F5381B  res 0,(0xc6)
+	res	0, (0xc6:8)	; F5381B  res 0,(0xc6)
 	inc	8, xsp	; F5381E  inc 0,XSP
 	pop	xix	; F53820  pop XIX
 	popw	hl	; F53821  pop HL
@@ -116633,7 +116633,7 @@ sub_F56058:
 sub_F56058_Skip:
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x08	; F56073  cp (0x207b),0x08
 	jr	z, sub_F56058_Skip4	; F56078  jr Z,0xf560bb
-	bit_dd8	2, 150	; F5607A  bit 2,(0x96)
+	bit	2, (0x96:8)	; F5607A  bit 2,(0x96)
 	jr	nz, sub_F56058_Skip3	; F5607D  jr NZ,0xf560a1
 	call	T_CallbackQueue_ResetAndRestartTask2	; F5607F  call 0xf42e80
 	call	T_F40CF8	; F56083  call 0xf40cf8
@@ -117262,7 +117262,7 @@ sub_F56129_Skip19:
 	call	T_Kernel_SemaSignal	; F5637A  call 0xf42d88
 	jr	sub_F56129_Return2	; F5637E  jr T,0xf563dc
 sub_F56129_Skip20:
-	bit_dd8	2, 150	; F56380  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56380  bit 2,(0x96)
 	jr	nz, sub_F56129_Return2	; F56383  jr NZ,0xf563dc
 	m_bit 2, MD16, 0x34d9	; F56385  bit 2,(0x34d9)
 	jr	nz, sub_F56129_Return2	; F56389  jr NZ,0xf563dc
@@ -117308,7 +117308,7 @@ sub_F56129_Return2:
 sub_F563DD:
 	bit	7, w	; F563DD  bit 0x07,W
 	jr	nz, sub_F56129_Skip23	; F563E0  jr NZ,0xf5645c
-	bit_dd8	2, 150	; F563E2  bit 2,(0x96)
+	bit	2, (0x96:8)	; F563E2  bit 2,(0x96)
 	jrl	nz, sub_F56129_Return3	; F563E5  jrl NZ,0xf56473
 	m_bit 2, MD16, 0x34d9	; F563E8  bit 2,(0x34d9)
 	jrl	nz, sub_F56129_Return3	; F563EC  jrl NZ,0xf56473
@@ -117350,7 +117350,7 @@ sub_F56129_Skip23:
 	jr	nz, sub_F56129_Skip24	; F56460  jr NZ,0xf56464
 	jr	sub_F56129_Return3	; F56462  jr T,0xf56473
 sub_F56129_Skip24:
-	bit_dd8	2, 150	; F56464  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56464  bit 2,(0x96)
 	jr	nz, sub_F56129_Skip25	; F56467  jr NZ,0xf5646f
 	m_bit 2, MD16, 0x34d9	; F56469  bit 2,(0x34d9)
 	jr	nz, sub_F56129_Return3	; F5646D  jr NZ,0xf56473
@@ -117395,7 +117395,7 @@ sub_F56129_Return4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56492:
-	bit_dd8	2, 150	; F56492  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56492  bit 2,(0x96)
 	jr	nz, sub_F56492_Return	; F56495  jr NZ,0xf5650f
 	m_bit 2, MD16, 0x34d9	; F56497  bit 2,(0x34d9)
 	jr	nz, sub_F56492_Return	; F5649B  jr NZ,0xf5650f
@@ -117420,7 +117420,7 @@ sub_F56492_Skip2:
 sub_F56492_Join:
 	ld	a, (6304983:24)	; F564D6  ld A,(0x6034d7)
 	ld	(6311936:24), a	; F564DB  ld (0x605000),A
-	st_dd8b	a, 195	; F564E0  ld (0xc3),A
+	ld	(0xc3:8), a	; F564E0  ld (0xc3),A
 	ld	(13400:16), a	; F564E3  ld (0x3458),A
 	pushw	wa	; F564E7  push WA
 	call	T_F40CCC	; F564E8  call 0xf40ccc
@@ -117471,7 +117471,7 @@ Nop_Ret_F56510:
 sub_F56511:
 	bit	7, w	; F56511  bit 0x07,W
 	jr	nz, sub_F56492_Return2	; F56514  jr NZ,0xf56523
-	bit_dd8	2, 150	; F56516  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56516  bit 2,(0x96)
 	jr	nz, sub_F56492_Return2	; F56519  jr NZ,0xf56523
 	ldw	(UI_Request:16), 515	; F5651B  ld (0x2070),0x0203
 	jr	sub_F56492_Return2	; F56521  jr T,0xf56523
@@ -117549,7 +117549,7 @@ Nop_Ret_F56524_Join:
 sub_F56579:
 	call	T_F409AC	; F56579  call 0xf409ac
 	ldw	wa, 65535	; F5657D  ld WA,0xffff
-	bit_dd8	2, 149	; F56580  bit 2,(0x95)
+	bit	2, (0x95:8)	; F56580  bit 2,(0x95)
 	jr	z, sub_F56579_Return	; F56583  jr Z,0xf5658b
 	nop	; F56585  nop
 	nop	; F56586  nop
@@ -117747,7 +117747,7 @@ sub_F5664A:
 	m_bit 4, MD16, 0x2095	; F5665E  bit 4,(0x2095)
 	jr	nz, sub_F5664A_Skip6	; F56662  jr NZ,0xf566c6
 sub_F5664A_Skip:
-	bit_dd8	2, 150	; F56664  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56664  bit 2,(0x96)
 	jr	nz, sub_F5664A_Skip3	; F56667  jr NZ,0xf5668f
 	call	T_CallbackQueue_ResetAndRestartTask2	; F56669  call 0xf42e80
 	ld	wa, (13858:16)	; F5666D  ld WA,(0x3622)
@@ -117902,7 +117902,7 @@ sub_F5670C_Return2:
 sub_F56752:
 	bit	7, w	; F56752  bit 0x07,W
 	jr	nz, sub_F5670C_Skip3	; F56755  jr NZ,0xf56767
-	bit_dd8	2, 150	; F56757  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56757  bit 2,(0x96)
 	jr	nz, sub_F5670C_Return3	; F5675A  jr NZ,0xf5676a
 	m_bit 2, MD16, 0x34d9	; F5675C  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return3	; F56760  jr NZ,0xf5676a
@@ -117927,7 +117927,7 @@ sub_F5670C_Return3:
 sub_F5676B:
 	bit	7, w	; F5676B  bit 0x07,W
 	jr	nz, sub_F5670C_Skip5	; F5676E  jr NZ,0xf5678d
-	bit_dd8	2, 150	; F56770  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56770  bit 2,(0x96)
 	jr	nz, sub_F5670C_Return4	; F56773  jr NZ,0xf56790
 	m_bit 2, MD16, 0x34d9	; F56775  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return4	; F56779  jr NZ,0xf56790
@@ -117983,7 +117983,7 @@ sub_F5679B:
 sub_F5670C_Skip7:
 	call	T_Blink_Stop	; F567AF  call 0xf42e24
 	m_or_mi8 MB16, 0x2095, 0x10	; F567B3  or (0x2095),0x10
-	bit_dd8	2, 150	; F567B8  bit 2,(0x96)
+	bit	2, (0x96:8)	; F567B8  bit 2,(0x96)
 	jr	nz, sub_F5670C_Skip8	; F567BB  jr NZ,0xf567c3
 	m_bit 2, MD16, 0x34d9	; F567BD  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return5	; F567C1  jr NZ,0xf567c7
@@ -118043,7 +118043,7 @@ sub_F5670C_Return6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F567DE:
-	bit_dd8	2, 150	; F567DE  bit 2,(0x96)
+	bit	2, (0x96:8)	; F567DE  bit 2,(0x96)
 	jr	nz, sub_F5670C_Return7	; F567E1  jr NZ,0xf5684f
 	m_bit 2, MD16, 0x34d9	; F567E3  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return7	; F567E7  jr NZ,0xf5684f
@@ -118362,7 +118362,7 @@ sub_F5696D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5698E:
-	bit_dd8	2, 150	; F5698E  bit 2,(0x96)
+	bit	2, (0x96:8)	; F5698E  bit 2,(0x96)
 	jr	nz, sub_F5696D_Return	; F56991  jr NZ,0xf569ae
 	call	T_Blink_Stop	; F56993  call 0xf42e24
 	m_cp_mi16 MW16, 0x3622, 0x03e7	; F56997  cp (0x3622),0x03e7
@@ -118447,7 +118447,7 @@ sub_F569FA:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56A1D:
-	bit_dd8	2, 150	; F56A1D  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56A1D  bit 2,(0x96)
 	jr	nz, sub_F569FA_Return	; F56A20  jr NZ,0xf56a5e
 	call	T_Blink_Stop	; F56A22  call 0xf42e24
 	m_cp_mi16 MW16, 0x3624, 0x03e7	; F56A26  cp (0x3624),0x03e7
@@ -118562,7 +118562,7 @@ sub_F56A8D_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56AB1:
-	bit_dd8	2, 150	; F56AB1  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56AB1  bit 2,(0x96)
 	jr	nz, sub_F56AB1_Return	; F56AB4  jr NZ,0xf56af2
 	call	T_Blink_Stop	; F56AB6  call 0xf42e24
 	m_cp_mi16 MW16, 0x3622, 0x0001	; F56ABA  cp (0x3622),0x0001
@@ -118597,7 +118597,7 @@ sub_F56AB1_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56AF3:
-	bit_dd8	2, 150	; F56AF3  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56AF3  bit 2,(0x96)
 	jr	nz, sub_F56AF3_Return	; F56AF6  jr NZ,0xf56b13
 	call	T_Blink_Stop	; F56AF8  call 0xf42e24
 	m_cp_mi16 MW16, 0x3624, 0x0001	; F56AFC  cp (0x3624),0x0001
@@ -118717,7 +118717,7 @@ sub_F56B95_Skip:
 	call	T_F40D04	; F56BBA  call 0xf40d04
 	m_bit 0, MD16, 0x360b	; F56BBE  bit 0,(0x360b)
 	jr	z, sub_F56B95_Join	; F56BC2  jr Z,0xf56bdc
-	bit_dd8	2, 150	; F56BC4  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56BC4  bit 2,(0x96)
 	jr	z, sub_F56B95_Skip2	; F56BC7  jr Z,0xf56bd0
 	m_and_mi8 MB16, 0x360b, 0xfe	; F56BC9  and (0x360b),0xfe
 	jr	sub_F56B95_Join	; F56BCE  jr T,0xf56bdc
@@ -118776,7 +118776,7 @@ sub_F56C35_Skip:
 	jr	z, sub_F56C35_Skip2	; F56C46  jr Z,0xf56c4d
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F56C48  and (0x20a9),0xfe
 sub_F56C35_Skip2:
-	bit_dd8	2, 150	; F56C4D  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56C4D  bit 2,(0x96)
 	jr	nz, sub_F56C35_Return	; F56C50  jr NZ,0xf56c56
 	call	T_F40D18	; F56C52  call 0xf40d18
 sub_F56C35_Return:
@@ -118800,7 +118800,7 @@ sub_F56C57:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F56C5C  and (0x2075),0xf6
 	m_bit 0, MD16, 0x360b	; F56C61  bit 0,(0x360b)
 	jr	nz, sub_F56C35_Skip3	; F56C65  jr NZ,0xf56c7d
-	bit_dd8	2, 150	; F56C67  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56C67  bit 2,(0x96)
 	jr	nz, sub_F56C35_Return2	; F56C6A  jr NZ,0xf56cd5
 	m_set 0, MD16, 0x360b	; F56C6C  set 0,(0x360b)
 	ld	(13863:16), 1	; F56C70  ld (0x3627),0x01
@@ -118852,7 +118852,7 @@ sub_F56CD6:
 	bit	7, w	; F56CD6  bit 0x07,W
 	jr	nz, sub_F56C35_Skip5	; F56CD9  jr NZ,0xf56cf7
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F56CDB  and (0x2075),0xf6
-	bit_dd8	2, 150	; F56CE0  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56CE0  bit 2,(0x96)
 	jr	nz, sub_F56C35_Return3	; F56CE3  jr NZ,0xf56d1c
 	xor	xwa, xwa	; F56CE5  xor XWA,XWA
 	ld	(12296:16), xwa	; F56CE7  ld (0x3008),XWA
@@ -118887,7 +118887,7 @@ sub_F56C35_Return3:
 sub_F56D1D:
 	bit	7, w	; F56D1D  bit 0x07,W
 	jr	nz, sub_F56C35_Skip7	; F56D20  jr NZ,0xf56d32
-	bit_dd8	2, 150	; F56D22  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56D22  bit 2,(0x96)
 	jr	z, sub_F56C35_Skip6	; F56D25  jr Z,0xf56d2d
 	m_bit 0, MD16, 0x360b	; F56D27  bit 0,(0x360b)
 	jr	nz, sub_F56C35_Return4	; F56D2B  jr NZ,0xf56d45
@@ -118950,7 +118950,7 @@ sub_F56D7E:
 	ld	(14162:16), 1	; F56D7E  ld (0x3752),0x01
 	ld	xwa, 65536	; F56D83  ld XWA,0x00010000
 	m_or_mr ML16, 0x360c, 0	; F56D88  or (0x360c),XWA
-	bit_dd8	2, 150	; F56D8C  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56D8C  bit 2,(0x96)
 	jr	z, sub_F56D7E_Skip	; F56D8F  jr Z,0xf56d9d
 	ld	c, 16:opc	; F56D91  ld C,0x10
 	ld	(14134:16), c	; F56D93  ld (0x3736),C
@@ -118978,7 +118978,7 @@ sub_F56DA8:
 	ld	xwa, 65536	; F56DAD  ld XWA,0x00010000
 	xor	xwa, 4294967295	; F56DB2  xor XWA,0xffffffff
 	m_and_mr ML16, 0x360c, 0	; F56DB8  and (0x360c),XWA
-	bit_dd8	2, 150	; F56DBC  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56DBC  bit 2,(0x96)
 	jr	z, sub_F56DA8_Skip	; F56DBF  jr Z,0xf56dcd
 	ld	c, 16:opc	; F56DC1  ld C,0x10
 	ld	(14134:16), c	; F56DC3  ld (0x3736),C
@@ -119023,7 +119023,7 @@ Nop_Ret_F56DD8:
 sub_F56DD9:
 	bit	7, w	; F56DD9  bit 0x07,W
 	jr	nz, sub_F56DA8_Return2	; F56DDC  jr NZ,0xf56def
-	bit_dd8	2, 150	; F56DDE  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56DDE  bit 2,(0x96)
 	jr	nz, sub_F56DA8_Return2	; F56DE1  jr NZ,0xf56def
 	call	T_F40D18	; F56DE3  call 0xf40d18
 	ldw	(UI_Request:16), 513	; F56DE7  ld (0x2070),0x0201
@@ -119072,7 +119072,7 @@ sub_F56DF1:
 	m_bit 4, MD16, 0x2095	; F56E05  bit 4,(0x2095)
 	jr	nz, sub_F56DF1_Skip5	; F56E09  jr NZ,0xf56e50
 sub_F56DF1_Skip:
-	bit_dd8	2, 150	; F56E0B  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56E0B  bit 2,(0x96)
 	jr	nz, sub_F56DF1_Skip4	; F56E0E  jr NZ,0xf56e3e
 	call	T_CallbackQueue_ResetAndRestartTask2	; F56E10  call 0xf42e80
 	m_cp_mi8 MB16, 0x3627, 0x03	; F56E14  cp (0x3627),0x03
@@ -119310,7 +119310,7 @@ sub_F56ED4_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56F09:
-	bit_dd8	2, 150	; F56F09  bit 2,(0x96)
+	bit	2, (0x96:8)	; F56F09  bit 2,(0x96)
 	jr	nz, sub_F56F09_Return	; F56F0C  jr NZ,0xf56f7a
 	m_bit 2, MD16, 0x34d9	; F56F0E  bit 2,(0x34d9)
 	jr	nz, sub_F56F09_Return	; F56F12  jr NZ,0xf56f7a
@@ -119571,7 +119571,7 @@ StateDispatchTable_F5706A:
 sub_F5707E:
 	m_bit 0, MD16, 0x360b	; F5707E  bit 0,(0x360b)
 	jr	nz, sub_F5707E_Return	; F57082  jr NZ,0xf5709c
-	bit_dd8	2, 150	; F57084  bit 2,(0x96)
+	bit	2, (0x96:8)	; F57084  bit 2,(0x96)
 	jr	nz, sub_F5707E_Return	; F57087  jr NZ,0xf5709c
 	m_set 0, MD16, 0x360b	; F57089  set 0,(0x360b)
 	calr	sub_F5709D	; F5708D  calr 0xf5709d
@@ -119615,7 +119615,7 @@ sub_F5709D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F570BB:
-	bit_dd8	2, 150	; F570BB  bit 2,(0x96)
+	bit	2, (0x96:8)	; F570BB  bit 2,(0x96)
 	jr	nz, sub_F5709D_Return	; F570BE  jr NZ,0xf570db
 	call	T_Blink_Stop	; F570C0  call 0xf42e24
 	m_cp_mi16 MW16, 0x361e, 0x03e7	; F570C4  cp (0x361e),0x03e7
@@ -119700,7 +119700,7 @@ sub_F57127:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5714A:
-	bit_dd8	2, 150	; F5714A  bit 2,(0x96)
+	bit	2, (0x96:8)	; F5714A  bit 2,(0x96)
 	jr	nz, sub_F57127_Return	; F5714D  jr NZ,0xf5718b
 	call	T_Blink_Stop	; F5714F  call 0xf42e24
 	m_cp_mi16 MW16, 0x3620, 0x03e7	; F57153  cp (0x3620),0x03e7
@@ -119814,7 +119814,7 @@ sub_F571BA_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F571D8:
-	bit_dd8	2, 150	; F571D8  bit 2,(0x96)
+	bit	2, (0x96:8)	; F571D8  bit 2,(0x96)
 	jr	nz, sub_F571D8_Return	; F571DB  jr NZ,0xf57219
 	call	T_Blink_Stop	; F571DD  call 0xf42e24
 	m_cp_mi16 MW16, 0x361e, 0x0001	; F571E1  cp (0x361e),0x0001
@@ -119849,7 +119849,7 @@ sub_F571D8_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5721A:
-	bit_dd8	2, 150	; F5721A  bit 2,(0x96)
+	bit	2, (0x96:8)	; F5721A  bit 2,(0x96)
 	jr	nz, sub_F5721A_Return	; F5721D  jr NZ,0xf5723a
 	call	T_Blink_Stop	; F5721F  call 0xf42e24
 	m_cp_mi16 MW16, 0x3620, 0x0001	; F57223  cp (0x3620),0x0001
@@ -119977,7 +119977,7 @@ sub_F57311:
 	jr	sub_F57311_Return	; F5731B  jr T,0xf57336
 sub_F57311_Skip:
 	ld	(13864:16), 0	; F5731D  ld (0x3628),0x00
-	bit_dd8	2, 150	; F57322  bit 2,(0x96)
+	bit	2, (0x96:8)	; F57322  bit 2,(0x96)
 	jr	z, sub_F57311_Skip2	; F57325  jr Z,0xf57332
 	calr	sub_F56579	; F57327  calr 0xf56579
 	call	T_F413C8	; F5732A  call 0xf413c8
@@ -124636,12 +124636,12 @@ SC1_ConfigurePort:
 	ld	a, 1:opc	; F5A88C  ld A,0x01
 	and	a, 215	; F5A88E  and A,0xd7
 	ld	(SC1_P8FC_Shadow:16), a	; F5A891  ld (0x2a87),A
-	st_dd8b	a, 27	; F5A895  ld (0x1b),A
+	ld	(0x1b:8), a	; F5A895  ld (0x1b),A
 	ld	a, 1:opc	; F5A898  ld A,0x01
 	or	a, 8	; F5A89A  or A,0x08
 	and	a, 199	; F5A89D  and A,0xc7
 	ld	(SC1_P8CR_Shadow:16), a	; F5A8A0  ld (0x2a86),A
-	st_dd8b	a, 26	; F5A8A4  ld (0x1a),A
+	ld	(0x1a:8), a	; F5A8A4  ld (0x1a),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5A8A7  and (0x18),0xdf
 	m_and_mi8 MB8, 0x58, 0xfd	; F5A8AB  and (0x58),0xfd
 	ld	(86:8), 0:io	; F5A8AF  ld (0x56),0x00
@@ -124712,13 +124712,13 @@ SC1_SendWord_Polled:
 	ld	(SC1_TxRing:16), wa	; F5A95D  ld (0x2ae4),WA
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5A961  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5A966  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5A96A  ld (0x1b),A
+	ld	(0x1b:8), a	; F5A96A  ld (0x1b),A
 	ld	(120:8), 255:io	; F5A96D  ld (0x78),0xff
 	ld	(114:8), 143:io	; F5A970  ld (0x72),0x8f
 	m_and_mi8 MB8, 0x18, 0xdf	; F5A973  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5A977  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5A97C  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5A980  ld (0x1a),A
+	ld	(0x1a:8), a	; F5A980  ld (0x1a),A
 	calr	SC1_Spin100	; F5A983  calr 0xf5aa4a
 	m_cp_mi8 MB16, SC1_ConfigSelector, 0x01	; F5A986  cp (0x2a83),0x01
 	jr	z, SC1_SendWord_Polled_Skip	; F5A98B  jr Z,0xf5a9a4
@@ -124732,39 +124732,39 @@ SC1_SendWord_Polled:
 SC1_SendWord_Polled_Skip:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xdf	; F5A9A4  and (0x2a86),0xdf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5A9A9  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5A9AD  ld (0x1a),A
+	ld	(0x1a:8), a	; F5A9AD  ld (0x1a),A
 	calr	SC1_Spin100	; F5A9B0  calr 0xf5aa4a
 	calr	SC1_Spin100	; F5A9B3  calr 0xf5aa4a
 	m_or_mi8 MB16, SC1_P8FC_Shadow, 0x28	; F5A9B6  or (0x2a87),0x28
 	ld	a, (SC1_P8FC_Shadow:16)	; F5A9BB  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5A9BF  ld (0x1b),A
+	ld	(0x1b:8), a	; F5A9BF  ld (0x1b),A
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x28	; F5A9C2  or (0x2a86),0x28
 	ld	a, (SC1_P8CR_Shadow:16)	; F5A9C7  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5A9CB  ld (0x1a),A
+	ld	(0x1a:8), a	; F5A9CB  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5A9CE  and (0x55),0xfe
 	ld	(120:8), 255:io	; F5A9D2  ld (0x78),0xff
 	ld	xiy, SC1_TxRing	; F5A9D5  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5A9DA  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5A9DE  ld A,(XIY)
 	incw	1, (SC1_TxReadIndex:16)	; F5A9E0  incw 1,(0x2ae0)
-	st_dd8b	a, 84	; F5A9E4  ld (0x54),A
+	ld	(0x54:8), a	; F5A9E4  ld (0x54),A
 	calr	SC1_Spin100	; F5A9E7  calr 0xf5aa4a
 	calr	SC1_Spin100	; F5A9EA  calr 0xf5aa4a
 	ld	xiy, SC1_TxRing	; F5A9ED  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5A9F2  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5A9F6  ld A,(XIY)
 	incw	1, (SC1_TxReadIndex:16)	; F5A9F8  incw 1,(0x2ae0)
-	st_dd8b	a, 84	; F5A9FC  ld (0x54),A
+	ld	(0x54:8), a	; F5A9FC  ld (0x54),A
 	calr	SC1_Spin100	; F5A9FF  calr 0xf5aa4a
 	calr	SC1_Spin100	; F5AA02  calr 0xf5aa4a
 	m_or_mi8 MB8, 0x55, 0x01	; F5AA05  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AA09  and (0x55),0xfd
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xd7	; F5AA0D  and (0x2a86),0xd7
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AA12  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AA16  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AA16  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xd7	; F5AA19  and (0x2a87),0xd7
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AA1E  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AA22  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AA22  ld (0x1b),A
 	ret	; F5AA25  ret
 ; ---------------------------------------------------------------------
 ; SC1_Spin2 / SC1_Spin6 / SC1_Spin10 / SC1_Spin100 / SC1_Spin500 -- busy waits
@@ -124993,9 +124993,9 @@ SC1_WaitTxDrain:
 	ld	(SC1_TxDrainRetries:16), 200	; F5AB74  ld (0x2a8b),0xc8
 SC1_WaitTxDrain_Join:
 	ei	6	; F5AB79  ei 0x06
-	bit_dd8	5, 24	; F5AB7B  bit 5,(0x18)
+	bit	5, (0x18:8)	; F5AB7B  bit 5,(0x18)
 	jr	z, SC1_WaitTxDrain_Loop	; F5AB7E  jr Z,0xf5ab95
-	bit_dd8	4, 31	; F5AB80  bit 4,(0x1f)
+	bit	4, (0x1f:8)	; F5AB80  bit 4,(0x1f)
 	jr	nz, SC1_WaitTxDrain_Loop	; F5AB83  jr NZ,0xf5ab95
 	m_bit 1, MD16, SC1_BusyFlags	; F5AB85  bit 1,(0x2a82)
 	jrl	nz, SC1_TxFlush_Exit	; F5AB89  jrl NZ,0xf5b05d
@@ -125042,15 +125042,15 @@ SC1_StartWordTx:
 	ld	(87:8), 40:io	; F5ABD9  ld (0x57),0x28
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5ABDC  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5ABE1  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5ABE5  ld (0x1b),A
+	ld	(0x1b:8), a	; F5ABE5  ld (0x1b),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5ABE8  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5ABEC  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5ABF1  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5ABF5  ld (0x1a),A
+	ld	(0x1a:8), a	; F5ABF5  ld (0x1a),A
 	m_and_mi8 MB8, 0x56, 0xdf	; F5ABF8  and (0x56),0xdf
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ABFC  and (0x55),0xfe
 	ld	(120:8), 80:io	; F5AC00  ld (0x78),0x50
-	st_dd8b	a, 84	; F5AC03  ld (0x54),A
+	ld	(0x54:8), a	; F5AC03  ld (0x54),A
 	ei	0	; F5AC06  ei 0x00
 	nop	; F5AC08  nop
 	ret	; F5AC09  ret
@@ -125079,7 +125079,7 @@ INT6_SC1_PeerRequest:
 	jr	nz, SC1_StartWordTx_Skip	; F5AC10  jr NZ,0xf5ac3c
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AC12  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AC17  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AC1B  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AC1B  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AC1E  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AC22  and (0x55),0xfd
 	ld	(114:8), 133:io	; F5AC26  ld (0x72),0x85
@@ -125370,16 +125370,16 @@ SC1_Irq_Exit_3b_Delayed:
 SC1_State04_TxByte1:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xdf	; F5ACE3  and (0x2a86),0xdf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5ACE8  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5ACEC  ld (0x1a),A
+	ld	(0x1a:8), a	; F5ACEC  ld (0x1a),A
 	ld	(87:8), 36:io	; F5ACEF  ld (0x57),0x24
 	ld	(114:8), 143:io	; F5ACF2  ld (0x72),0x8f
 	ld	(120:8), 80:io	; F5ACF5  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ACF8  and (0x55),0xfe
-	st_dd8b	a, 84	; F5ACFC  ld (0x54),A
+	ld	(0x54:8), a	; F5ACFC  ld (0x54),A
 	inc	4, (SC1_State:16)	; F5ACFF  inc 4,(0x2a80)
 	mul	a, 1	; F5AD03  mul A,0x01
 	mul	a, 1	; F5AD06  mul A,0x01
-	bit_dd8	5, 24	; F5AD09  bit 5,(0x18)
+	bit	5, (0x18:8)	; F5AD09  bit 5,(0x18)
 	jr	nz, SC1_Irq_Exit_3	; F5AD0C  jr NZ,0xf5aca8
 	ld	(SC1_RxBytesExpected:16), 0	; F5AD0E  ld (0x2a81),0x00
 	ld	(SC1_State:16), 0	; F5AD13  ld (0x2a80),0x00
@@ -125393,47 +125393,47 @@ SC1_State0C:
 	calr	SC1_Spin10	; F5AD2E  calr 0xf5aa3e
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xd7	; F5AD31  and (0x2a86),0xd7
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AD36  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AD3A  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AD3A  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xd7	; F5AD3D  and (0x2a87),0xd7
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AD42  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AD46  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AD46  ld (0x1b),A
 	ld	(87:8), 36:io	; F5AD49  ld (0x57),0x24
 	ld	(120:8), 80:io	; F5AD4C  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AD4F  and (0x55),0xfe
-	st_dd8b	a, 84	; F5AD53  ld (0x54),A
+	ld	(0x54:8), a	; F5AD53  ld (0x54),A
 	inc	4, (SC1_State:16)	; F5AD56  inc 4,(0x2a80)
 	jrl	SC1_Irq_Exit_3	; F5AD5A  jrl T,0xf5aca8
 SC1_State14:
 	calr	SC1_Spin10	; F5AD5D  calr 0xf5aa3e
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xd7	; F5AD60  and (0x2a86),0xd7
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AD65  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AD69  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AD69  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xd7	; F5AD6C  and (0x2a87),0xd7
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AD71  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AD75  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AD75  ld (0x1b),A
 	ld	(87:8), 36:io	; F5AD78  ld (0x57),0x24
-	st_dd8b	a, 84	; F5AD7B  ld (0x54),A
+	ld	(0x54:8), a	; F5AD7B  ld (0x54),A
 	ld	(114:8), 133:io	; F5AD7E  ld (0x72),0x85
 	ld	(120:8), 80:io	; F5AD81  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AD84  and (0x55),0xfe
-	st_dd8b	a, 84	; F5AD88  ld (0x54),A
+	ld	(0x54:8), a	; F5AD88  ld (0x54),A
 	inc	4, (SC1_State:16)	; F5AD8B  inc 4,(0x2a80)
 	jrl	SC1_Irq_Exit_3	; F5AD8F  jrl T,0xf5aca8
 SC1_State08_TxFromRing:
 	ld	(87:8), 34:io	; F5AD92  ld (0x57),0x22
 	m_or_mi8 MB16, SC1_P8FC_Shadow, 0x28	; F5AD95  or (0x2a87),0x28
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AD9A  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AD9E  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AD9E  ld (0x1b),A
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x28	; F5ADA1  or (0x2a86),0x28
 	ld	a, (SC1_P8CR_Shadow:16)	; F5ADA6  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5ADAA  ld (0x1a),A
+	ld	(0x1a:8), a	; F5ADAA  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ADAD  and (0x55),0xfe
 	ld	(114:8), 133:io	; F5ADB1  ld (0x72),0x85
 	ld	(120:8), 80:io	; F5ADB4  ld (0x78),0x50
 	ld	xiy, SC1_TxRing	; F5ADB7  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5ADBC  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5ADC0  ld A,(XIY)
-	st_dd8b	a, 84	; F5ADC2  ld (0x54),A
+	ld	(0x54:8), a	; F5ADC2  ld (0x54),A
 	incw	1, (SC1_TxReadIndex:16)	; F5ADC5  incw 1,(0x2ae0)
 	m_cp_mi16 MW16, SC1_TxReadIndex, 0x003c	; F5ADC9  cp (0x2ae0),0x003c
 	jr	c, SC1_State08_TxFromRing_Skip	; F5ADCF  jr C,0xf5add7
@@ -125454,17 +125454,17 @@ SC1_State10_TxFromRing:
 	ld	(87:8), 34:io	; F5ADF7  ld (0x57),0x22
 	m_or_mi8 MB16, SC1_P8FC_Shadow, 0x28	; F5ADFA  or (0x2a87),0x28
 	ld	a, (SC1_P8FC_Shadow:16)	; F5ADFF  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AE03  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AE03  ld (0x1b),A
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x28	; F5AE06  or (0x2a86),0x28
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AE0B  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AE0F  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AE0F  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AE12  and (0x55),0xfe
 	ld	(114:8), 133:io	; F5AE16  ld (0x72),0x85
 	ld	(120:8), 80:io	; F5AE19  ld (0x78),0x50
 	ld	xiy, SC1_TxRing	; F5AE1C  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5AE21  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5AE25  ld A,(XIY)
-	st_dd8b	a, 84	; F5AE27  ld (0x54),A
+	ld	(0x54:8), a	; F5AE27  ld (0x54),A
 	incw	1, (SC1_TxReadIndex:16)	; F5AE2A  incw 1,(0x2ae0)
 	m_cp_mi16 MW16, SC1_TxReadIndex, 0x003c	; F5AE2E  cp (0x2ae0),0x003c
 	jr	c, SC1_State10_TxFromRing_Skip	; F5AE34  jr C,0xf5ae3c
@@ -125490,25 +125490,25 @@ SC1_State18_TxDone:
 	ld	(SC1_State:16), 4	; F5AE72  ld (0x2a80),0x04
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5AE77  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AE7C  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AE80  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AE80  ld (0x1b),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5AE83  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5AE87  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AE8C  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AE90  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AE90  ld (0x1a),A
 	ld	(87:8), 40:io	; F5AE93  ld (0x57),0x28
 	ld	(114:8), 143:io	; F5AE96  ld (0x72),0x8f
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AE99  and (0x55),0xfe
 	ld	(120:8), 80:io	; F5AE9D  ld (0x78),0x50
-	st_dd8b	a, 84	; F5AEA0  ld (0x54),A
+	ld	(0x54:8), a	; F5AEA0  ld (0x54),A
 	m_or_mi8 MB16, SC1_BusyFlags, 0x02	; F5AEA3  or (0x2a82),0x02
 	jrl	SC1_Irq_Exit_3	; F5AEA8  jrl T,0xf5aca8
 SC1_State18_TxDone_Skip:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xdf	; F5AEAB  and (0x2a86),0xdf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AEB0  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AEB4  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AEB4  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5AEB7  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AEBC  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AEC0  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AEC0  ld (0x1b),A
 	ld	(114:8), 133:io	; F5AEC3  ld (0x72),0x85
 	ld	(120:8), 255:io	; F5AEC6  ld (0x78),0xff
 	ld	(87:8), 36:io	; F5AEC9  ld (0x57),0x24
@@ -125517,12 +125517,12 @@ SC1_State18_TxDone_Skip:
 SC1_State20_RxFirstByte:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AED4  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AED9  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AEDD  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AEDD  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AEE0  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AEE4  and (0x55),0xfd
 	ld	(114:8), 133:io	; F5AEE8  ld (0x72),0x85
 	ld	(120:8), 5:io	; F5AEEB  ld (0x78),0x05
-	ld_sd8b	a, 84	; F5AEEE  ld A,(0x54)
+	ld	a, (0x54:8)	; F5AEEE  ld A,(0x54)
 	ld	xiy, SC1_RxRing	; F5AEF1  ld XIY,0x00002a94
 	m_add_rm MW16, SC1_RxWriteIndex, 5	; F5AEF6  add IY,(0x2a92)
 	ld	(xiy), a	; F5AEFA  ld (XIY),A
@@ -125558,7 +125558,7 @@ SC1_State20_RxFirstByte_Skip3:
 	inc	4, (SC1_State:16)	; F5AF4A  inc 4,(0x2a80)
 	jrl	SC1_Irq_Exit_3b	; F5AF4E  jrl T,0xf5acd0
 SC1_State24_RxNextByte:
-	ld_sd8b	a, 84	; F5AF51  ld A,(0x54)
+	ld	a, (0x54:8)	; F5AF51  ld A,(0x54)
 	ld	xiy, SC1_RxRing	; F5AF54  ld XIY,0x00002a94
 	m_add_rm MW16, SC1_RxWriteIndex, 5	; F5AF59  add IY,(0x2a92)
 	ld	(xiy), a	; F5AF5D  ld (XIY),A
@@ -125577,10 +125577,10 @@ SC1_State24_RxNextByte_Skip:
 	ld	(SC1_State:16), 0	; F5AF8C  ld (0x2a80),0x00
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AF91  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AF96  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AF9A  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AF9A  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5AF9D  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AFA2  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5AFA6  ld (0x1b),A
+	ld	(0x1b:8), a	; F5AFA6  ld (0x1b),A
 	ld	(114:8), 133:io	; F5AFA9  ld (0x72),0x85
 	ld	(120:8), 5:io	; F5AFAC  ld (0x78),0x05
 	m_and_mi8 MB8, 0x56, 0xdf	; F5AFAF  and (0x56),0xdf
@@ -125588,7 +125588,7 @@ SC1_State24_RxNextByte_Skip:
 SC1_State24_RxNextByte_Skip2:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AFB6  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AFBB  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5AFBF  ld (0x1a),A
+	ld	(0x1a:8), a	; F5AFBF  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AFC2  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AFC6  and (0x55),0xfd
 	ld	(114:8), 133:io	; F5AFCA  ld (0x72),0x85
@@ -125644,9 +125644,9 @@ SC1_State_Unexpected_Return:
 SC1_TxFlush_Body:
 	calr	SC1_TxEncode	; F5AFF2  calr 0xf5b243
 	ei	6	; F5AFF5  ei 0x06
-	bit_dd8	5, 24	; F5AFF7  bit 5,(0x18)
+	bit	5, (0x18:8)	; F5AFF7  bit 5,(0x18)
 	jr	z, SC1_TxFlush_Exit	; F5AFFA  jr Z,0xf5b05d
-	bit_dd8	4, 31	; F5AFFC  bit 4,(0x1f)
+	bit	4, (0x1f:8)	; F5AFFC  bit 4,(0x1f)
 	jr	nz, SC1_TxFlush_Exit	; F5AFFF  jr NZ,0xf5b05d
 	m_bit 1, MD16, SC1_BusyFlags	; F5B001  bit 1,(0x2a82)
 	jr	nz, SC1_TxFlush_Exit	; F5B005  jr NZ,0xf5b05d
@@ -125668,15 +125668,15 @@ SC1_TxFlush_Body_Skip:
 	ld	(87:8), 40:io	; F5B030  ld (0x57),0x28
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5B033  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5B038  ld A,(0x2a87)
-	st_dd8b	a, 27	; F5B03C  ld (0x1b),A
+	ld	(0x1b:8), a	; F5B03C  ld (0x1b),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5B03F  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5B043  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5B048  ld A,(0x2a86)
-	st_dd8b	a, 26	; F5B04C  ld (0x1a),A
+	ld	(0x1a:8), a	; F5B04C  ld (0x1a),A
 	m_and_mi8 MB8, 0x56, 0xdf	; F5B04F  and (0x56),0xdf
 	m_and_mi8 MB8, 0x55, 0xfe	; F5B053  and (0x55),0xfe
 	ld	(120:8), 80:io	; F5B057  ld (0x78),0x50
-	st_dd8b	a, 84	; F5B05A  ld (0x54),A
+	ld	(0x54:8), a	; F5B05A  ld (0x54),A
 ; ---------------------------------------------------------------------
 ; SC1_TxFlush_Exit -- `ei 0x00 / ret`, a SHARED epilogue
 ;
@@ -126278,12 +126278,12 @@ SC1_Entry_F40F24_Body_Ret_Return2:
 	ld	a, 0:opc	; F5B367  ld A,0x00
 	and	a, 215	; F5B369  and A,0xd7
 	ld	(SC1_P8FC_Shadow:16), a	; F5B36C  ld (0x2a87),A
-	st_dd8b	a, 27	; F5B370  ld (0x1b),A
+	ld	(0x1b:8), a	; F5B370  ld (0x1b),A
 	ld	a, 0:opc	; F5B373  ld A,0x00
 	or	a, 8	; F5B375  or A,0x08
 	and	a, 223	; F5B378  and A,0xdf
 	ld	(SC1_P8CR_Shadow:16), a	; F5B37B  ld (0x2a86),A
-	st_dd8b	a, 26	; F5B37F  ld (0x1a),A
+	ld	(0x1a:8), a	; F5B37F  ld (0x1a),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5B382  and (0x18),0xdf
 	ld	(87:8), 34:io	; F5B386  ld (0x57),0x22
 	ldw	(SC1_TxReadIndex:16), 0	; F5B389  ld (0x2ae0),0x0000
@@ -142495,7 +142495,7 @@ sub_F65DD3_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F65DF8:		; <- T_F42BA0
-	bit_dd8	2, 150	; F65DF8  bit 2,(0x96)
+	bit	2, (0x96:8)	; F65DF8  bit 2,(0x96)
 	jr	z, sub_F65DF8_Skip	; F65DFB  jr Z,0xf65dfe
 	ret	; F65DFD  ret
 sub_F65DF8_Skip:
@@ -142590,7 +142590,7 @@ sub_F65E94:		; <- T_F42BA4
 ; --------------------------------------------------------------------------
 sub_F65E98:
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F65E98  and (0x2075),0xf7
-	bit_dd8	2, 149	; F65E9D  bit 2,(0x95)
+	bit	2, (0x95:8)	; F65E9D  bit 2,(0x95)
 	jr	z, sub_F65E98_Skip	; F65EA0  jr Z,0xf65ea3
 	ret	; F65EA2  ret
 sub_F65E98_Skip:
@@ -142683,7 +142683,7 @@ MaskTable_F65F5C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F65F7C:		; <- T_F42BA8
-	bit_dd8	2, 150	; F65F7C  bit 2,(0x96)
+	bit	2, (0x96:8)	; F65F7C  bit 2,(0x96)
 	jr	nz, sub_F65F7C_Return	; F65F7F  jr NZ,0xf65fdc
 	ld	c, (3075:16)	; F65F81  ld C,(0x0c03)
 	ld	wa, (6304852:24)	; F65F85  ld WA,(0x603454)
@@ -142733,7 +142733,7 @@ sub_F65F7C_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F65FDD:		; <- T_F42BAC
-	bit_dd8	2, 150	; F65FDD  bit 2,(0x96)
+	bit	2, (0x96:8)	; F65FDD  bit 2,(0x96)
 	jr	nz, sub_F65FDD_Return	; F65FE0  jr NZ,0xf6601f
 	ld	xhl, 6304819	; F65FE2  ld XHL,0x00603433
 	xor	bc, bc	; F65FE7  xor BC,BC
@@ -142776,7 +142776,7 @@ sub_F65FDD_Return:
 ; --------------------------------------------------------------------------
 sub_F66020:		; <- T_F42BB0
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66020  and (0x2075),0xf7
-	bit_dd8	2, 149	; F66025  bit 2,(0x95)
+	bit	2, (0x95:8)	; F66025  bit 2,(0x95)
 	jr	z, sub_F66020_Skip	; F66028  jr Z,0xf6602b
 	ret	; F6602A  ret
 sub_F66020_Skip:
@@ -142817,7 +142817,7 @@ sub_F66020_Skip:
 ; --------------------------------------------------------------------------
 sub_F66081:		; <- T_F42BC0
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66081  and (0x2075),0xf7
-	bit_dd8	2, 149	; F66086  bit 2,(0x95)
+	bit	2, (0x95:8)	; F66086  bit 2,(0x95)
 	jr	z, sub_F66081_Skip	; F66089  jr Z,0xf6608c
 	ret	; F6608B  ret
 sub_F66081_Skip:
@@ -143193,7 +143193,7 @@ sub_F66201_Return3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66294:
-	bit_dd8	2, 149	; F66294  bit 2,(0x95)
+	bit	2, (0x95:8)	; F66294  bit 2,(0x95)
 	jr	z, sub_F66294_Skip	; F66297  jr Z,0xf6629a
 	ret	; F66299  ret
 sub_F66294_Skip:
@@ -143261,7 +143261,7 @@ sub_F662D7_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F662F7:
-	bit_dd8	2, 149	; F662F7  bit 2,(0x95)
+	bit	2, (0x95:8)	; F662F7  bit 2,(0x95)
 	jr	z, sub_F662F7_Skip	; F662FA  jr Z,0xf662fd
 	ret	; F662FC  ret
 sub_F662F7_Skip:
@@ -147580,7 +147580,7 @@ DispatchTable_F68972:
 	.long	sub_F689AD	; F6897E  [3] -> 0xF689AD
 
 sub_F68982:
-	ld	xhl, 6294036	; F68982  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F68982  ld XHL,0x00600a14
 	calr	sub_F6C507	; F68987  calr 0xf6c507
 	cp	w, 0:i3	; F6898A  cp W,0
 	jr	nz, sub_F68982_Return	; F6898C  jr NZ,0xf689ab
@@ -147599,7 +147599,7 @@ sub_F68982_Return:
 sub_F68982_Return2:
 	ret	; F689AC  ret
 sub_F689AD:
-	ld	xhl, 6294036	; F689AD  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F689AD  ld XHL,0x00600a14
 	calr	sub_F6C507	; F689B2  calr 0xf6c507
 	cp	w, 0:i3	; F689B5  cp W,0
 	jr	nz, sub_F689AD_Return	; F689B7  jr NZ,0xf689de
@@ -147621,7 +147621,7 @@ sub_F689AD_Return:
 sub_F689AD_Return2:
 	ret	; F689DF  ret
 sub_F689E0:
-	ld	xhl, 6294036	; F689E0  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F689E0  ld XHL,0x00600a14
 	calr	sub_F6C507	; F689E5  calr 0xf6c507
 	cp	w, 0:i3	; F689E8  cp W,0
 	jr	nz, sub_F689E0_Return	; F689EA  jr NZ,0xf689f4
@@ -147674,7 +147674,7 @@ sub_F689F5_Return:
 	m_or_mi8 MB16, 0x34d4, 0x40	; F68A3E  or (0x34d4),0x40
 	ld	a, 1:opc	; F68A43  ld A,0x01
 	calr	sub_F6C292	; F68A45  calr 0xf6c292
-	ld	xhl, 6293514	; F68A48  ld XHL,0x0060080a
+	ld	xhl, TimedEvents_Ring	; F68A48  ld XHL,0x0060080a
 sub_F689F5_Loop:
 	call	T_Ring60080A_Get	; F68A4D  call 0xf41d60
 	cp	wa, 65535	; F68A51  cp WA,0xffff
@@ -147761,7 +147761,7 @@ sub_F68AD0:
 	calr	sub_F6A304	; F68AE6  calr 0xf6a304
 	xor	a, a	; F68AE9  xor A,A
 	calr	sub_F6C292	; F68AEB  calr 0xf6c292
-	ld	xhl, 6293514	; F68AEE  ld XHL,0x0060080a
+	ld	xhl, TimedEvents_Ring	; F68AEE  ld XHL,0x0060080a
 	calr	sub_F68B3A	; F68AF3  calr 0xf68b3a
 	pushw	wa	; F68AF6  push WA
 	call	T_Ring60080A_Put	; F68AF7  call 0xf41d64
@@ -149451,7 +149451,7 @@ sub_F695B7:
 	ld	a, w	; F695C9  ld A,W
 sub_F69597_Skip:
 	ld	(3795:16), a	; F695CB  ld (0x0ed3),A
-	ld	xhl, 6294036	; F695CF  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F695CF  ld XHL,0x00600a14
 sub_F69597_Loop2:
 	calr	sub_F6C4FC	; F695D4  calr 0xf6c4fc
 	ld	e, a	; F695D7  ld E,A
@@ -149465,7 +149465,7 @@ sub_F69597_Loop2:
 sub_F69597_Loop3:
 	calr	sub_F6C4DF	; F695F0  calr 0xf6c4df
 sub_F69597_Join:
-	ld	xhl, 6294036	; F695F3  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F695F3  ld XHL,0x00600a14
 	calr	sub_F6C507	; F695F8  calr 0xf6c507
 	cp	w, 255	; F695FB  cp W,0xff
 	jr	nz, sub_F69597_Loop2	; F695FE  jr NZ,0xf695d4
@@ -149669,7 +149669,7 @@ sub_F69697_Skip3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F69780:
-	ld	xhl, 6294036	; F69780  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F69780  ld XHL,0x00600a14
 	call	T_Ring600A14_Get	; F69785  call 0xf41d84
 	ld	(3816:16), a	; F69789  ld (0x0ee8),A
 	call	T_Ring600A14_Get	; F6978D  call 0xf41d84
@@ -151208,7 +151208,7 @@ sub_F6A304:
 	push	xhl	; F6A304  push XHL
 	pushw	wa	; F6A305  push WA
 	m_or_mi8 MB16, 0x34d4, 0x40	; F6A306  or (0x34d4),0x40
-	ld	xhl, 6293514	; F6A30B  ld XHL,0x0060080a
+	ld	xhl, TimedEvents_Ring	; F6A30B  ld XHL,0x0060080a
 	ld	a, 144:opc	; F6A310  ld A,0x90
 	pushw	wa	; F6A312  push WA
 	call	T_Ring60080A_Put	; F6A313  call 0xf41d64
@@ -152380,7 +152380,7 @@ sub_F6A9E3_Skip10:
 	calr	sub_F6B01E	; F6AB31  calr 0xf6b01e
 sub_F6A9E3_Join:
 	calr	sub_F6ADC2	; F6AB34  calr 0xf6adc2
-	bit_dd8	2, 150	; F6AB37  bit 2,(0x96)
+	bit	2, (0x96:8)	; F6AB37  bit 2,(0x96)
 	jr	z, sub_F6A9E3_Skip11	; F6AB3A  jr Z,0xf6ab40
 	call	T_F40A20	; F6AB3C  call 0xf40a20
 sub_F6A9E3_Skip11:
@@ -152736,7 +152736,7 @@ sub_F6AD24:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6AD30:
-	ld	xhl, 6294036	; F6AD30  ld XHL,0x00600a14
+	ld	xhl, SeqBuf_Ring	; F6AD30  ld XHL,0x00600a14
 sub_F6AD30_Loop:
 	call	T_Ring600A14_Get	; F6AD35  call 0xf41d84
 	cp	wa, 65535	; F6AD39  cp WA,0xffff
@@ -186629,7 +186629,7 @@ sub_F7BF74_Skip2:
 	jr	nz, sub_F7BF74_Return2	; F7C088  jr NZ,0xf7c0ae
 	m_cp_mi8 MB16, 0x133f, 0x1a	; F7C08A  cp (0x133f),0x1a
 	jr	z, sub_F7BF74_Skip3	; F7C08F  jr Z,0xf7c0a8
-	bit_dd8	2, 150	; F7C091  bit 2,(0x96)
+	bit	2, (0x96:8)	; F7C091  bit 2,(0x96)
 	jr	nz, sub_F7BF74_Return2	; F7C094  jr NZ,0xf7c0ae
 	xor	xwa, xwa	; F7C096  xor XWA,XWA
 	ld	(12296:16), xwa	; F7C098  ld (0x3008),XWA
@@ -197918,7 +197918,7 @@ ExitKey_Quantize_207EZero:
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip:
 	m_cp_mi8 MB16, 0x133f, 0x1a	; F7F728  cp (0x133f),0x1a
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip2	; F7F72D  jr Z,0xf7f746
-	bit_dd8	2, 150	; F7F72F  bit 2,(0x96)
+	bit	2, (0x96:8)	; F7F72F  bit 2,(0x96)
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return2	; F7F732  jr NZ,0xf7f74c
 	xor	xwa, xwa	; F7F734  xor XWA,XWA
 	ld	(12296:16), xwa	; F7F736  ld (0x3008),XWA
