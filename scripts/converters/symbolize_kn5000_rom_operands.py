@@ -94,6 +94,13 @@ def main():
     col0 = labels_in_source(files)
     stats, rows = collections.Counter(), []
     changed_files = 0
+    # a macro may split its argument into bytes (`.byte (X) & 0xFF` in WSA1's m_cp_mi16 / m_jp_cc),
+    # which only a constant survives: macro invocations are never touched (2026-10-03, after
+    # 2ad61128 broke prom_a's build that way)
+    macros = set()
+    for f in sorted(sum((glob.glob(os.path.join(REPO, IMAGES[a.image][1].split("/")[0], "**", g), recursive=True)
+                         for g in ("*.s", "*.inc")), [])):
+        macros |= set(m.lower() for m in re.findall(r'^\s*\.macro\s+(\w+)', open(f, "rb").read().decode("latin-1"), re.M))
     for f in files:
         L = open(f, "rb").read().decode("latin-1").split("\n")
         dirty = False
@@ -102,7 +109,7 @@ def main():
             if not m:
                 continue
             head, mn, ws, ops, tail = m.groups()
-            if "\\" in ops:
+            if "\\" in ops or mn.lower() in macros:
                 continue
 
             def sub(mm):

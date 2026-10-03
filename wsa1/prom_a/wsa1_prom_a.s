@@ -7356,7 +7356,7 @@ VersionScreen_Show:
 	push XWA                                             ; F82AC0  38
 	call T_DisplayList_Run_Stack                         ; F82AC1  1d 00 2e f4
 	inc 8,XSP                                            ; F82AC5  ef 60
-	m_cp_mi16 MW24, VersionScreen_Show_Data, 0x6673                     ; F82AC7  d2 fa ff ff 3f 73 66
+	m_cp_mi16 MW24, 0xfffffa, 0x6673                     ; F82AC7  d2 fa ff ff 3f 73 66
 	jr nz, .LF82ADC                                      ; F82ACE  6e 0c
 	ld XWA,VersionScreen_DisplayLists+0x9C               ; F82AD0  40 9f 2b f8 00
 	ld XHL,VersionScreen_DisplayLists+0x69               ; F82AD5  43 6c 2b f8 00
@@ -64909,7 +64909,7 @@ MIDI_UART_Configure:
 	ld (0x52:8), 0x29:io                               ; FA58F2  08 52 29   SC0MOD = 8-bit UART, baud-rate generator
 	ld (0x51:8), 0x00:io                               ; FA58F5  08 51 00   SC0CR cleared
 	ld (0x53:8), 0x0e:io                               ; FA58F8  08 53 0e   BR0CR: divide by 896 -> 31250 baud at fc = 28 MHz
-	m_cp_mi8 MB24, MIDI_UART_Configure_Data, 0x24                 ; FA58FB  c2 f8 ff ff 3f 24   the byte here is 0x02 -- never equal
+	m_cp_mi8 MB24, 0xfffff8, 0x24                 ; FA58FB  c2 f8 ff ff 3f 24   the byte here is 0x02 -- never equal
 	jr nz, .LFA5906                               ; FA5901  6e 03
 	ld (0x53:8), 0x0c:io                               ; FA5903  08 53 0c   divide by 768 -- NOT REACHED
 .LFA5906:
