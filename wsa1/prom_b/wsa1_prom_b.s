@@ -7378,7 +7378,7 @@ DL_OriginalStringCylinderCone:
 	.short 0x00C3	; +0x0F -> (0x2532)
 DL_F0306E:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -7394,7 +7394,7 @@ DL_F0306E:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0B99	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -7410,7 +7410,7 @@ DL_F0306E:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1161	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -7426,7 +7426,7 @@ DL_F0306E:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1729	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -7797,14 +7797,14 @@ DLTable_OriginalStringCylinder:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_P0siti0n:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1236	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -7812,7 +7812,7 @@ DL_P0siti0n:
 	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F03455:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -7820,14 +7820,14 @@ DL_F03455:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x16E6	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x148E	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -7895,7 +7895,7 @@ DLBRecordPtrs_F03480:
 ; ------------------------------------------------------------------
 DL_F03498:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -7903,7 +7903,7 @@ DL_F03498:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -7911,14 +7911,14 @@ DL_F03498:
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F034AD:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x139E	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -7999,7 +7999,7 @@ DLText_OffOn_F034D8:
 ; ------------------------------------------------------------------
 DL_F034DE:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8007,7 +8007,7 @@ DL_F034DE:
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F034E8:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8015,7 +8015,7 @@ DL_F034E8:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8023,7 +8023,7 @@ DL_F034E8:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x187A	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8031,7 +8031,7 @@ DL_F034E8:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8039,7 +8039,7 @@ DL_F034E8:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8047,7 +8047,7 @@ DL_F034E8:
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F03522:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8055,7 +8055,7 @@ DL_F03522:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8063,7 +8063,7 @@ DL_F03522:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D52	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8071,7 +8071,7 @@ DL_F03522:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8079,7 +8079,7 @@ DL_F03522:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -8154,7 +8154,7 @@ DL_F03595:
 	.short 0x00E4
 DL_F0359F:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -8202,7 +8202,7 @@ DLTable_F035BA:
 ; ------------------------------------------------------------------
 DL_F035CA:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8210,7 +8210,7 @@ DL_F035CA:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8218,7 +8218,7 @@ DL_F035CA:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8226,7 +8226,7 @@ DL_F035CA:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8234,7 +8234,7 @@ DL_F035CA:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8242,7 +8242,7 @@ DL_F035CA:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8250,7 +8250,7 @@ DL_F035CA:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -8298,7 +8298,7 @@ Data_F03617:
 ; ------------------------------------------------------------------
 DL_F03633:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8306,7 +8306,7 @@ DL_F03633:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -8314,7 +8314,7 @@ DL_F03633:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1870	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -8322,7 +8322,7 @@ DL_F03633:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1875	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -8330,7 +8330,7 @@ DL_F03633:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x187A	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -8338,7 +8338,7 @@ DL_F03633:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -8346,7 +8346,7 @@ DL_F03633:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D48	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -8354,7 +8354,7 @@ DL_F03633:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D4D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -8363,21 +8363,21 @@ DL_F03633:
 	.short 0x1D52	; +0x0D -> IX
 DL_F036A3:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1867	; +0x07 -> IX
 	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1D3F	; +0x07 -> IX
 	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -11813,7 +11813,7 @@ DLTable_F04D1F:	; 6 entries of 6 bytes -- the filter-mode names
 ; ------------------------------------------------------------------
 DL_F04D43:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -11821,14 +11821,14 @@ DL_F04D43:
 	.byte 0x01	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2294	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -11836,7 +11836,7 @@ DL_F04D43:
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2289	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -11844,7 +11844,7 @@ DL_F04D43:
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x228F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -11861,7 +11861,7 @@ DL_F04D43:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_LowHigh:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -11869,7 +11869,7 @@ DL_LowHigh:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x22A0	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -11986,7 +11986,7 @@ DLText_DashesMinus6ToPlus6:
 ; ------------------------------------------------------------------
 DL_F04DFF:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -11994,14 +11994,14 @@ DL_F04DFF:
 	.byte 0x01	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x229E	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12009,7 +12009,7 @@ DL_F04DFF:
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12059,7 +12059,7 @@ Data_F04E32:
 ; ------------------------------------------------------------------
 DL_F04E42:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12067,14 +12067,14 @@ DL_F04E42:
 	.byte 0x01	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x22A3	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12082,7 +12082,7 @@ DL_F04E42:
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x228C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12090,7 +12090,7 @@ DL_F04E42:
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12098,7 +12098,7 @@ DL_F04E42:
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12155,7 +12155,7 @@ DLRecordPtrs_F04E93:
 ; ------------------------------------------------------------------
 DL_F04EAB:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12163,7 +12163,7 @@ DL_F04EAB:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12171,7 +12171,7 @@ DL_F04EAB:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12179,14 +12179,14 @@ DL_F04EAB:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2261	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12194,14 +12194,14 @@ DL_F04EAB:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x226A	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12209,14 +12209,14 @@ DL_F04EAB:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2274	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12224,14 +12224,14 @@ DL_F04EAB:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x227F	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -12344,35 +12344,35 @@ Data_F04F46:
 ; ------------------------------------------------------------------
 DL_F04F72:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x0D51	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1251	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1779	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1C79	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12380,7 +12380,7 @@ DL_F04F72:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12388,7 +12388,7 @@ DL_F04F72:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12396,7 +12396,7 @@ DL_F04F72:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12404,7 +12404,7 @@ DL_F04F72:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12412,7 +12412,7 @@ DL_F04F72:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12420,7 +12420,7 @@ DL_F04F72:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12428,7 +12428,7 @@ DL_F04F72:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+12	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12532,7 +12532,7 @@ DLBoxes_F0503B:
 ; ------------------------------------------------------------------
 DL_F05063:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12540,7 +12540,7 @@ DL_F05063:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -12548,7 +12548,7 @@ DL_F05063:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -12556,7 +12556,7 @@ DL_F05063:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -12611,49 +12611,49 @@ DLRecordPtrs_F0509B:
 ; ------------------------------------------------------------------
 DL_F050AB:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2261	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2265	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x226A	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x226F	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2274	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2279	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12701,7 +12701,7 @@ Data_F050F1:
 ; ------------------------------------------------------------------
 DL_F0510D:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12709,7 +12709,7 @@ DL_F0510D:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12717,7 +12717,7 @@ DL_F0510D:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -12725,7 +12725,7 @@ DL_F0510D:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -12733,7 +12733,7 @@ DL_F0510D:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2297	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -12741,7 +12741,7 @@ DL_F0510D:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A1	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12749,7 +12749,7 @@ DL_F0510D:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12757,7 +12757,7 @@ DL_F0510D:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12765,7 +12765,7 @@ DL_F0510D:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -12840,7 +12840,7 @@ DLBRecordPtrs_F0519A:
 ; ------------------------------------------------------------------
 DL_F051C2:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12848,7 +12848,7 @@ DL_F051C2:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12856,7 +12856,7 @@ DL_F051C2:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12864,7 +12864,7 @@ DL_F051C2:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x0D58	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12872,7 +12872,7 @@ DL_F051C2:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12880,7 +12880,7 @@ DL_F051C2:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12888,7 +12888,7 @@ DL_F051C2:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1258	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12896,7 +12896,7 @@ DL_F051C2:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12904,7 +12904,7 @@ DL_F051C2:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12912,7 +12912,7 @@ DL_F051C2:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1758	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12920,7 +12920,7 @@ DL_F051C2:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12928,7 +12928,7 @@ DL_F051C2:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+12	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12936,7 +12936,7 @@ DL_F051C2:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1C58	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+16	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12944,7 +12944,7 @@ DL_F051C2:
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x175F	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27B5	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+15	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -12952,13 +12952,13 @@ DL_F051C2:
 	.byte 0x01	; +0x09 digit count
 	.byte 0x08	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F05286 + 0x98	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27B3	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+13	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -13079,7 +13079,7 @@ Data_F05372:
 ; ------------------------------------------------------------------
 DL_F053B6:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -13087,21 +13087,21 @@ DL_F053B6:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2294	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2298	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x229D	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -13109,14 +13109,14 @@ DL_F053B6:
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F053E3:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x22A6	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -13124,7 +13124,7 @@ DL_F053E3:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22AB	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -13162,7 +13162,7 @@ DL_F053E3:
 DL_F05407:
 Data_F05407:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x10	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -13171,7 +13171,7 @@ Data_F05407:
 	.short 0x0A32	; +0x0D -> IX
 DL_F05416:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x10	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -13180,7 +13180,7 @@ DL_F05416:
 	.short 0x0F0A	; +0x0D -> IX
 DL_F05425:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0x10	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -13189,7 +13189,7 @@ DL_F05425:
 	.short 0x13E2	; +0x0D -> IX
 DL_F05434:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x10	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -13725,14 +13725,14 @@ DLTable_F05798:	; 5 entries of 8 bytes -- highlight rectangles (x1,y1,x2,y2)
 ; ------------------------------------------------------------------
 DL_F057C0:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1377	; +0x07 -> IX
 	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -13759,7 +13759,7 @@ DL_F057C0:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_MemoryBank:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -14030,7 +14030,7 @@ DL_F05A4C:
 	.short 0x0051	; +0x0D -> (0x2530)
 	.short 0x003F	; +0x0F -> (0x2532)
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -14046,7 +14046,7 @@ DL_F05A68:
 	.short 0x0051	; +0x0D -> (0x2530)
 	.short 0x003F	; +0x0F -> (0x2532)
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -14062,7 +14062,7 @@ DL_F05A84:
 	.short 0x0051	; +0x0D -> (0x2530)
 	.short 0x003F	; +0x0F -> (0x2532)
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -15181,14 +15181,14 @@ DL_Parallel:
 	.short 0x0060
 DL_F064E5:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x228D	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -15196,7 +15196,7 @@ DL_F064E5:
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F064F9:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -15204,7 +15204,7 @@ DL_F064F9:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1648	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -15213,7 +15213,7 @@ DL_F064F9:
 	.short 0x229D	; +0x0D -> IX
 DL_F06517:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -15221,7 +15221,7 @@ DL_F06517:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x19B8	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -15229,7 +15229,7 @@ DL_F06517:
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -15238,7 +15238,7 @@ DL_F06517:
 	.short 0x2292	; +0x0D -> IX
 DL_F06544:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -15246,7 +15246,7 @@ DL_F06544:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A8	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -15288,7 +15288,7 @@ Data_F06562:
 ; ------------------------------------------------------------------
 DL_F06576:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -15297,7 +15297,7 @@ DL_F06576:
 	.short 0x00BE	; +0x0D -> (0x2530)
 	.short 0x0044	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xF0	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -17102,9 +17102,9 @@ sub_F099C7_Skip:
 ;           and 0xFC47FF by the same (0x27B6).
 ; --------------------------------------------------------------------------
 SoundEditDigitalEffect_Paint:
-	ld	a, (10150:16)	; F099F5  ld A,(0x27a6)
+	ld	a, (ModelingPage_Fields:16)	; F099F5  ld A,(0x27a6)
 	and	a, 15	; F099F9  and A,0x0f
-	ld	(10166:16), a	; F099FC  ld (0x27b6),A
+	ld	(ModelingPage_Fields+16:16), a	; F099FC  ld (0x27b6),A
 	cp	a, 10	; F09A00  cp A,0x0a
 	jr	nz, sub_F099C7_Skip2	; F09A03  jr NZ,0xf09a0c
 	ld	xiy, 16531727	; F09A05  ld XIY,0x00fc410f
@@ -17115,7 +17115,7 @@ sub_F099C7_Join:
 	ld	xix, 16531983	; F09A11  ld XIX,0x00fc420f
 	call	T_DisplayList_Run	; F09A16  call 0xf417f0
 	xor	xwa, xwa	; F09A1A  xor XWA,XWA
-	ld	a, (10166:16)	; F09A1C  ld A,(0x27b6)
+	ld	a, (ModelingPage_Fields+16:16)	; F09A1C  ld A,(0x27b6)
 	sla	wa, 3	; F09A20  sla 0x03,WA
 	ld	xiz, 16532786	; F09A23  ld XIZ,0x00fc4532
 	add	xiz, xwa	; F09A28  add XIZ,XWA
@@ -17125,11 +17125,11 @@ sub_F099C7_Join:
 	ld	xiy, DisplayList_FC4000	; F09A33  ld XIY,0x00fc4000
 	xor	xbc, xbc	; F09A38  xor XBC,XBC
 	ld	xiz, 16533503	; F09A3A  ld XIZ,0x00fc47ff
-	ld	c, (10166:16)	; F09A3F  ld C,(0x27b6)
+	ld	c, (ModelingPage_Fields+16:16)	; F09A3F  ld C,(0x27b6)
 	sla	bc, 2	; F09A43  sla 0x02,BC
 	mx_ld_rm MXL, ra_IZ, ra_BC, 4	; F09A46  ld XIX,(XIZ+BC)
 	call	T_DisplayList_Run	; F09A4B  call 0xf417f0
-	ld	a, (10166:16)	; F09A4F  ld A,(0x27b6)
+	ld	a, (ModelingPage_Fields+16:16)	; F09A4F  ld A,(0x27b6)
 	cp	a, 10	; F09A53  cp A,0x0a
 	jr	nz, sub_F099C7_Skip3	; F09A56  jr NZ,0xf09a5f
 	ld	xiy, 16531666	; F09A58  ld XIY,0x00fc40d2
@@ -17140,7 +17140,7 @@ sub_F099C7_Join2:
 	ld	xix, 16531696	; F09A64  ld XIX,0x00fc40f0
 	call	T_DisplayList_Run	; F09A69  call 0xf417f0
 	ld	xiy, 16532882	; F09A6D  ld XIY,0x00fc4592
-	ld	a, (10166:16)	; F09A72  ld A,(0x27b6)
+	ld	a, (ModelingPage_Fields+16:16)	; F09A72  ld A,(0x27b6)
 	cp	a, 10	; F09A76  cp A,0x0a
 	jr	nz, sub_F099C7_Skip4	; F09A79  jr NZ,0xf09a82
 	ld	xix, 16532938	; F09A7B  ld XIX,0x00fc45ca
@@ -17150,7 +17150,7 @@ sub_F099C7_Skip4:
 sub_F099C7_Join3:
 	call	T_DisplayListB_Run	; F09A87  call 0xf417f4
 	xor	xwa, xwa	; F09A8B  xor XWA,XWA
-	ld	a, (10166:16)	; F09A8D  ld A,(0x27b6)
+	ld	a, (ModelingPage_Fields+16:16)	; F09A8D  ld A,(0x27b6)
 	sla	wa, 3	; F09A91  sla 0x03,WA
 	ld	xiz, 16532949	; F09A94  ld XIZ,0x00fc45d5
 	add	xiz, xwa	; F09A99  add XIZ,XWA
@@ -17177,7 +17177,7 @@ SoundEditDigitalEffect_RepaintField:
 	jr	nc, sub_F099C7_Skip6	; F09AAB  jr NC,0xf09ad2
 	xor	xbc, xbc	; F09AAD  xor XBC,XBC
 	ld	xiz, 16533455	; F09AAF  ld XIZ,0x00fc47cf
-	ld	c, (10166:16)	; F09AB4  ld C,(0x27b6)
+	ld	c, (ModelingPage_Fields+16:16)	; F09AB4  ld C,(0x27b6)
 	sla	bc, 2	; F09AB8  sla 0x02,BC
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F09ABB  ld XIY,(XIZ+BC)
 	jr	sub_F099C7_Join4	; F09AC0  jr T,0xf09ad7
@@ -17219,7 +17219,7 @@ sub_F09AF1:
 	ld	w, a	; F09AFB  ld W,A
 	sla	a, 1	; F09AFD  sla 0x01,A
 	mx8_ld_rm MXW, ra_IY, rb_A, 4	; F09B00  ld IX,(XIY+A)
-	ld	xbc, 10152	; F09B05  ld XBC,0x000027a8
+	ld	xbc, ModelingPage_Fields+2	; F09B05  ld XBC,0x000027a8
 	mx8_ld_rm MXB, ra_BC, rb_W, 1	; F09B0A  ld A,(XBC+W)
 	and	a, 63	; F09B0F  and A,0x3f
 	ld	xbc, IndexMap_F09B3B	; F09B12  ld XBC,0x00f09b3b
@@ -17400,9 +17400,9 @@ SoundEditCopy_RepaintField_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F09C63:
-	ld	l, (10160:16)	; F09C63  ld L,(0x27b0)
+	ld	l, (ModelingPage_Fields+10:16)	; F09C63  ld L,(0x27b0)
 	ld	w, l	; F09C67  ld W,L
-	ld	h, (10161:16)	; F09C69  ld H,(0x27b1)
+	ld	h, (ModelingPage_Fields+11:16)	; F09C69  ld H,(0x27b1)
 	ld	a, h	; F09C6D  ld A,H
 	ld	b, 0:opc	; F09C6F  ld B,0x00
 	call	T_F41010	; F09C71  call 0xf41010
@@ -17410,10 +17410,10 @@ sub_F09C63:
 	and	a, 192	; F09C78  and A,0xc0
 	cp	a, 64	; F09C7B  cp A,0x40
 	jr	nz, sub_F09C63_Skip	; F09C7E  jr NZ,0xf09c87
-	ld	(10165:16), 1	; F09C80  ld (0x27b5),0x01
+	ld	(ModelingPage_Fields+15:16), 1	; F09C80  ld (0x27b5),0x01
 	jr	sub_F09C63_Return	; F09C85  jr T,0xf09ca8
 sub_F09C63_Skip:
-	ld	(10165:16), 0	; F09C87  ld (0x27b5),0x00
+	ld	(ModelingPage_Fields+15:16), 0	; F09C87  ld (0x27b5),0x00
 	ldw	bc, 16	; F09C8C  ld BC,0x0010
 	ld	(LCD_CurrentLayer:16), 0	; F09C8F  ld (0x2540),0x00
 	xor	hl, hl	; F09C94  xor HL,HL
@@ -17594,7 +17594,7 @@ sub_F09DED_Loop:
 sub_F09E02:
 	xor	xbc, xbc	; F09E02  xor XBC,XBC
 	xor	w, w	; F09E04  xor W,W
-	ldw	bc, 10150	; F09E06  ld BC,0x27a6
+	ldw	bc, ModelingPage_Fields	; F09E06  ld BC,0x27a6
 	add	bc, wa	; F09E09  add BC,WA
 	ld	d, (xbc)	; F09E0B  ld D,(XBC)
 	cp	d, 0:i3	; F09E0D  cp D,0
@@ -17654,7 +17654,7 @@ sub_F09E02_Loop:
 sub_F09E67:
 	xor	xbc, xbc	; F09E67  xor XBC,XBC
 	xor	w, w	; F09E69  xor W,W
-	ldw	bc, 10150	; F09E6B  ld BC,0x27a6
+	ldw	bc, ModelingPage_Fields	; F09E6B  ld BC,0x27a6
 	add	bc, wa	; F09E6E  add BC,WA
 	ld	d, (xbc)	; F09E70  ld D,(XBC)
 	cp	d, 0:i3	; F09E72  cp D,0
@@ -56575,7 +56575,7 @@ DL_F296CC:
 ; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2250	; +0x02 source variable, 16-bit address
+	.short UI_PartIndex	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56619,7 +56619,7 @@ DLTable_F296E7:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F29725	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2250	; +0x02 source variable, 16-bit address
+	.short UI_PartIndex	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -66943,7 +66943,7 @@ Data_F32864:
 ; ------------------------------------------------------------------
 DL_F328DC:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -66951,7 +66951,7 @@ DL_F328DC:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x0D4F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -66959,7 +66959,7 @@ DL_F328DC:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1277	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x30	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -66967,7 +66967,7 @@ DL_F328DC:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x174F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -66975,28 +66975,28 @@ DL_F328DC:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1C4F	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x0D59	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1281	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x1759	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67010,7 +67010,7 @@ DL_F328DC:
 	.long DLBoxes_F32A87	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F3294B:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67018,7 +67018,7 @@ DL_F3294B:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0D52	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67026,7 +67026,7 @@ DL_F3294B:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x127A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0x30	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67034,7 +67034,7 @@ DL_F3294B:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1752	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67101,7 +67101,7 @@ Data_F32992:
 ; ------------------------------------------------------------------
 DL_F329FA:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67122,7 +67122,7 @@ DL_F329FA:
 ; --splice
 ; ------------------------------------------------------------------
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67130,7 +67130,7 @@ DL_F329FA:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1277	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67138,7 +67138,7 @@ DL_F329FA:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x174F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67306,7 +67306,7 @@ DLBoxes_F32AAF:
 ; ------------------------------------------------------------------
 DL_F32AD7:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67314,7 +67314,7 @@ DL_F32AD7:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67322,7 +67322,7 @@ DL_F32AD7:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67330,7 +67330,7 @@ DL_F32AD7:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67431,28 +67431,28 @@ Data_F32B3C:
 ; ------------------------------------------------------------------
 DL_F32B64:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2291	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2297	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x229D	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67513,7 +67513,7 @@ DLRecordPtrs_F32B97:
 ; ------------------------------------------------------------------
 DL_F32BAB:
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67521,7 +67521,7 @@ DL_F32BAB:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67529,7 +67529,7 @@ DL_F32BAB:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -67537,7 +67537,7 @@ DL_F32BAB:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67545,7 +67545,7 @@ DL_F32BAB:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67553,7 +67553,7 @@ DL_F32BAB:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -67561,7 +67561,7 @@ DL_F32BAB:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -68036,7 +68036,7 @@ DL_Page22AfterTouchCtrlPedal:
 	.short 0x19F3
 DL_F32F43:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68044,7 +68044,7 @@ DL_F32F43:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0BBA	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68052,7 +68052,7 @@ DL_F32F43:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x115A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68060,7 +68060,7 @@ DL_F32F43:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0BD1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68068,33 +68068,33 @@ DL_F32F43:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1171	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F33394	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27B4	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+14	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F33394 + 0x28	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27B5	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+15	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F33394 + 0x58	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F32FA0:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2298	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+12	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68102,7 +68102,7 @@ DL_F32FA0:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+12	; +0x02 source variable, 16-bit address
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68111,7 +68111,7 @@ DL_F32FA0:
 	.short 0x22A3	; +0x0D -> IX
 DL_F32FC8:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+12	; +0x02 source variable, 16-bit address
 	.byte 0x30	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68119,7 +68119,7 @@ DL_F32FC8:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A7	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+12	; +0x02 source variable, 16-bit address
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68330,7 +68330,7 @@ Data_F33394:
 ; ------------------------------------------------------------------
 DL_F3341C:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68338,7 +68338,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x064A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68346,7 +68346,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0B4A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68354,7 +68354,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0B58	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68362,7 +68362,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x109A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68370,7 +68370,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x10A8	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68378,7 +68378,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1B12	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68386,7 +68386,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1B20	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68394,7 +68394,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x159A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68402,7 +68402,7 @@ DL_F3341C:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x15A8	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -68524,7 +68524,7 @@ DLRecordPtrs_F33508:
 ; ------------------------------------------------------------------
 DL_F33538:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -68533,7 +68533,7 @@ DL_F33538:
 	.short 0x0020	; +0x0D -> (0x2530)
 	.short 0x00D6	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -68840,7 +68840,7 @@ DL_KeyOffModeTouchAtkDecay1Sust1Decay2Sust2:
 	.short 0x0034
 DL_F33796:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68848,14 +68848,14 @@ DL_F33796:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x227F	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2284	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68863,7 +68863,7 @@ DL_F33796:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68871,7 +68871,7 @@ DL_F33796:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68879,7 +68879,7 @@ DL_F33796:
 	.byte 0x01	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0xE0	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -68887,28 +68887,28 @@ DL_F33796:
 	.byte 0x01	; +0x09 digit count
 	.byte 0x03	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x0D4F	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x124F	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x0D53	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69025,7 +69025,7 @@ DLBoxes_F33840:
 ; ------------------------------------------------------------------
 DL_F33858:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69033,35 +69033,35 @@ DL_F33858:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D70	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2261	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2265	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x226A	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x226F	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69069,7 +69069,7 @@ DL_F33858:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69118,14 +69118,14 @@ Data_F338A5:
 ; ------------------------------------------------------------------
 DL_F338C9:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x2274	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69140,14 +69140,14 @@ DL_F338DD:
 	.ascii " --"
 DL_F338EB:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x27A6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F33A49	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F338F6:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69163,7 +69163,7 @@ DL_F338F6:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x12A2	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
-	.short 0x27A7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69392,7 +69392,7 @@ Data_F33A49:
 ; ------------------------------------------------------------------
 DL_F33A71:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69400,7 +69400,7 @@ DL_F33A71:
 	.short 0x0057	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69409,7 +69409,7 @@ DL_F33A71:
 	.byte 0x02	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69418,7 +69418,7 @@ DL_F33A71:
 	.byte 0x03	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69426,7 +69426,7 @@ DL_F33A71:
 	.short 0x0077	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27AC	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69435,7 +69435,7 @@ DL_F33A71:
 	.byte 0x02	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27AD	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69444,7 +69444,7 @@ DL_F33A71:
 	.byte 0x03	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x27AE	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+8	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69452,7 +69452,7 @@ DL_F33A71:
 	.short 0x0097	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27AF	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+9	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69461,7 +69461,7 @@ DL_F33A71:
 	.byte 0x02	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27B0	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69470,7 +69470,7 @@ DL_F33A71:
 	.byte 0x03	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x27B1	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+11	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69478,7 +69478,7 @@ DL_F33A71:
 	.short 0x00B7	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27B2	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+12	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69487,7 +69487,7 @@ DL_F33A71:
 	.byte 0x02	; +0x0B digit count
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x27B3	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+13	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -69497,7 +69497,7 @@ DL_F33A71:
 	.byte 0x00	; +0x0C bit 7 set = unsigned, clear = signed
 DL_F33B09:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B4	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+14	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69513,7 +69513,7 @@ DL_F33B09:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0D50	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B5	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+15	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69529,7 +69529,7 @@ DL_F33B09:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1250	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B6	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+16	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -69545,7 +69545,7 @@ DL_F33B09:
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1750	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x27B7	; +0x02 source variable, 16-bit address
+	.short ModelingPage_Fields+17	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -127404,10 +127404,10 @@ sub_F5BDBB_Join2:
 	ld	(9042:16), wa	; F5BE12  ld (0x2352),WA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BE16  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip2	; F5BE1B  jr NZ,0xf5be24
-	ld	xiz, 10155	; F5BE1D  ld XIZ,0x000027ab
+	ld	xiz, ModelingPage_Fields+5	; F5BE1D  ld XIZ,0x000027ab
 	jr	sub_F5BDBB_Join3	; F5BE22  jr T,0xf5be29
 sub_F5BDBB_Skip2:
-	ld	xiz, 10158	; F5BE24  ld XIZ,0x000027ae
+	ld	xiz, ModelingPage_Fields+8	; F5BE24  ld XIZ,0x000027ae
 sub_F5BDBB_Join3:
 	xor	xwa, xwa	; F5BE29  xor XWA,XWA
 	ld	a, (10147:16)	; F5BE2B  ld A,(0x27a3)
@@ -127589,7 +127589,7 @@ sub_F5BF8A_Loop:
 sub_F5BF9F:
 	xor	xbc, xbc	; F5BF9F  xor XBC,XBC
 	xor	w, w	; F5BFA1  xor W,W
-	ldw	bc, 10150	; F5BFA3  ld BC,0x27a6
+	ldw	bc, ModelingPage_Fields	; F5BFA3  ld BC,0x27a6
 	add	bc, wa	; F5BFA6  add BC,WA
 	ld	d, (xbc)	; F5BFA8  ld D,(XBC)
 	cp	d, 0:i3	; F5BFAA  cp D,0
@@ -127740,7 +127740,7 @@ sub_F5C10A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5C144:
-	m_cp_mi8 MB16, 0x27b5, 0x01	; F5C144  cp (0x27b5),0x01
+	m_cp_mi8 MB16, ModelingPage_Fields+15, 0x01	; F5C144  cp (0x27b5),0x01
 	jr	z, sub_F5C144_Return	; F5C149  jr Z,0xf5c171
 	ld	(LCD_CurrentLayer:16), 1	; F5C14B  ld (0x2540),0x01
 	ld	xiy, DL_F03595	; F5C150  ld XIY,0x00f03595
@@ -127795,7 +127795,7 @@ sub_F5C144_Join:
 	call	sub_F5C144	; F5C20B  call 0xf5c144
 	ret	; F5C20F  ret
 Draw_Serial:
-	ldw	bc, 10154	; F5C210  ld BC,0x27aa
+	ldw	bc, ModelingPage_Fields+4	; F5C210  ld BC,0x27aa
 	ld	d, (xbc)	; F5C213  ld D,(XBC)
 	cp	d, 0:i3	; F5C215  cp D,0
 	jr	z, sub_F5C144_Skip2	; F5C217  jr Z,0xf5c237
@@ -127839,7 +127839,7 @@ sub_F5C144_Join2:
 ; --------------------------------------------------------------------------
 sub_F5C27D:
 	ld	(LCD_CurrentLayer:16), 0	; F5C27D  ld (0x2540),0x00
-	m_cp_mi8 MB16, 0x27ab, 0x01	; F5C282  cp (0x27ab),0x01
+	m_cp_mi8 MB16, ModelingPage_Fields+5, 0x01	; F5C282  cp (0x27ab),0x01
 	jr	z, sub_F5C27D_Skip	; F5C287  jr Z,0xf5c299
 	ld	xiy, DL_F06481	; F5C289  ld XIY,0x00f06481
 	ld	xix, DL_F06495	; F5C28E  ld XIX,0x00f06495
@@ -128266,7 +128266,7 @@ sub_F5C5A5:
 	ld	xix, Data_F0550B	; F5C5E3  ld XIX,0x00f0550b
 	call	T_DisplayList_Run	; F5C5E8  call 0xf417f0
 	ld	c, 4:opc	; F5C5EC  ld C,0x04
-	ld	xiy, 10155	; F5C5EE  ld XIY,0x000027ab
+	ld	xiy, ModelingPage_Fields+5	; F5C5EE  ld XIY,0x000027ab
 sub_F5C5A5_Loop:
 	ld	w, (xiy)	; F5C5F3  ld W,(XIY)
 	and	w, 32	; F5C5F5  and W,0x20
@@ -128488,7 +128488,7 @@ sub_F5C772_Return:
 ; --------------------------------------------------------------------------
 Draw_Keyoff:
 	ld	(LCD_CurrentLayer:16), 0	; F5C823  ld (0x2540),0x00
-	ld	a, (10150:16)	; F5C828  ld A,(0x27a6)
+	ld	a, (ModelingPage_Fields:16)	; F5C828  ld A,(0x27a6)
 	and	a, 32	; F5C82C  and A,0x20
 	jr	z, Draw_Keyoff_Skip	; F5C82F  jr Z,0xf5c854
 	ld	xiy, DL_F338C9	; F5C831  ld XIY,0x00f338c9
@@ -128835,7 +128835,7 @@ sub_F5CBD9:
 	ld	xiy, DL_F03169	; F5CBDE  ld XIY,0x00f03169
 	ld	xix, DLRecordPtrs_F03173	; F5CBE3  ld XIX,0x00f03173
 	call	T_DisplayList_Run	; F5CBE8  call 0xf417f0
-	ld	a, (10156:16)	; F5CBEC  ld A,(0x27ac)
+	ld	a, (ModelingPage_Fields+6:16)	; F5CBEC  ld A,(0x27ac)
 	cp	a, 0:i3	; F5CBF0  cp A,0
 	jr	z, sub_F5CBD9_Return	; F5CBF2  jr Z,0xf5cc3c
 	cp	a, 1:i3	; F5CBF4  cp A,1
@@ -128901,7 +128901,7 @@ sub_F5CC64:
 	ld	xix, DL_F3391E	; F5CC7C  ld XIX,0x00f3391e
 	call	T_DisplayListB_Run	; F5CC81  call 0xf417f4
 	ld	c, 0:opc	; F5CC85  ld C,0x00
-	ld	xiz, 10154	; F5CC87  ld XIZ,0x000027aa
+	ld	xiz, ModelingPage_Fields+4	; F5CC87  ld XIZ,0x000027aa
 sub_F5CC64_Loop:
 	push	c	; F5CC8C  push C
 	push	xiz	; F5CC8E  push XIZ
@@ -129190,7 +129190,7 @@ sub_F5CFA4:
 	ld	xiy, DL_F054ED	; F5CFA9  ld XIY,0x00f054ed
 	ld	xix, DL_F054F7	; F5CFAE  ld XIX,0x00f054f7
 	call	T_DisplayList_Run	; F5CFB3  call 0xf417f0
-	ld	c, (10150:16)	; F5CFB7  ld C,(0x27a6)
+	ld	c, (ModelingPage_Fields:16)	; F5CFB7  ld C,(0x27a6)
 	xor	b, b	; F5CFBB  xor B,B
 	sla	bc, 2	; F5CFBD  sla 0x02,BC
 	ld	xiz, Data_F0550B + 0x50	; F5CFC0  ld XIZ,0x00f0555b
@@ -129374,26 +129374,26 @@ sub_F5CFA4_Join6:
 sub_F5D199:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D199  cp (0x27f5),0x01
 	jr	z, sub_F5D199_Skip	; F5D19E  jr Z,0xf5d1b2
-	ld	l, (10150:16)	; F5D1A0  ld L,(0x27a6)
+	ld	l, (ModelingPage_Fields:16)	; F5D1A0  ld L,(0x27a6)
 	inc	7, l	; F5D1A4  inc 7,L
 	ld	w, l	; F5D1A6  ld W,L
-	ld	h, (10151:16)	; F5D1A8  ld H,(0x27a7)
+	ld	h, (ModelingPage_Fields+1:16)	; F5D1A8  ld H,(0x27a7)
 	dec	1, h	; F5D1AC  dec 1,H
 	ld	a, h	; F5D1AE  ld A,H
 	jr	sub_F5D199_Join	; F5D1B0  jr T,0xf5d1d6
 sub_F5D199_Skip:
-	m_cp_mi8 MB16, 0x27a7, 0x03	; F5D1B2  cp (0x27a7),0x03
+	m_cp_mi8 MB16, ModelingPage_Fields+1, 0x03	; F5D1B2  cp (0x27a7),0x03
 	jr	z, sub_F5D199_Skip2	; F5D1B7  jr Z,0xf5d1cc
-	m_cp_mi8 MB16, 0x27a7, 0x04	; F5D1B9  cp (0x27a7),0x04
+	m_cp_mi8 MB16, ModelingPage_Fields+1, 0x04	; F5D1B9  cp (0x27a7),0x04
 	jr	z, sub_F5D199_Skip2	; F5D1BE  jr Z,0xf5d1cc
 	ld	w, 40:opc	; F5D1C0  ld W,0x28
-	ld	h, (10151:16)	; F5D1C2  ld H,(0x27a7)
+	ld	h, (ModelingPage_Fields+1:16)	; F5D1C2  ld H,(0x27a7)
 	dec	1, h	; F5D1C6  dec 1,H
 	ld	a, h	; F5D1C8  ld A,H
 	jr	sub_F5D199_Join	; F5D1CA  jr T,0xf5d1d6
 sub_F5D199_Skip2:
 	ld	w, 41:opc	; F5D1CC  ld W,0x29
-	ld	h, (10151:16)	; F5D1CE  ld H,(0x27a7)
+	ld	h, (ModelingPage_Fields+1:16)	; F5D1CE  ld H,(0x27a7)
 	dec	3, h	; F5D1D2  dec 3,H
 	ld	a, h	; F5D1D4  ld A,H
 sub_F5D199_Join:
@@ -129424,9 +129424,9 @@ sub_F5D199_Skip4:
 	ld	xix, DL_F05A2E	; F5D21E  ld XIX,0x00f05a2e
 	call	T_DisplayList_Run	; F5D223  call 0xf417f0
 sub_F5D199_Join2:
-	m_cp_mi8 MB16, 0x27a8, 0x10	; F5D227  cp (0x27a8),0x10
+	m_cp_mi8 MB16, ModelingPage_Fields+2, 0x10	; F5D227  cp (0x27a8),0x10
 	jr	z, sub_F5D199_Skip5	; F5D22C  jr Z,0xf5d257
-	m_cp_mi8 MB16, 0x27a8, 0x02	; F5D22E  cp (0x27a8),0x02
+	m_cp_mi8 MB16, ModelingPage_Fields+2, 0x02	; F5D22E  cp (0x27a8),0x02
 	jr	z, sub_F5D199_Skip6	; F5D233  jr Z,0xf5d279
 	ld	xiy, DL_F05A38	; F5D235  ld XIY,0x00f05a38
 	ld	xix, DL_F05A42	; F5D23A  ld XIX,0x00f05a42
@@ -129504,9 +129504,9 @@ sub_F5D199_Skip8:
 	ld	xix, DLBoxes_F05AB4	; F5D329  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D32E  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5D332  ld (0x2540),0x00
-	m_cp_mi8 MB16, 0x27a8, 0x0d	; F5D337  cp (0x27a8),0x0d
+	m_cp_mi8 MB16, ModelingPage_Fields+2, 0x0d	; F5D337  cp (0x27a8),0x0d
 	jr	z, sub_F5D199_Skip9	; F5D33C  jr Z,0xf5d34c
-	m_cp_mi8 MB16, 0x27a8, 0x02	; F5D33E  cp (0x27a8),0x02
+	m_cp_mi8 MB16, ModelingPage_Fields+2, 0x02	; F5D33E  cp (0x27a8),0x02
 	jr	z, sub_F5D199_Skip10	; F5D343  jr Z,0xf5d353
 	ld	xiy, DL_F05A4C	; F5D345  ld XIY,0x00f05a4c
 	jr	sub_F5D199_Join4	; F5D34A  jr T,0xf5d358
@@ -129534,7 +129534,7 @@ sub_F5D199_Skip12:
 	ld	xix, DLBoxes_F05AB4	; F5D38E  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D393  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5D397  ld (0x2540),0x00
-	m_cp_mi8 MB16, 0x27a8, 0x0d	; F5D39C  cp (0x27a8),0x0d
+	m_cp_mi8 MB16, ModelingPage_Fields+2, 0x0d	; F5D39C  cp (0x27a8),0x0d
 	jr	z, sub_F5D199_Skip13	; F5D3A1  jr Z,0xf5d3b3
 	ld	xiy, DL_F05A4C	; F5D3A3  ld XIY,0x00f05a4c
 	ld	xix, DL_F05A68	; F5D3A8  ld XIX,0x00f05a68
@@ -129565,7 +129565,7 @@ sub_F5D199_Return2:
 ; --------------------------------------------------------------------------
 sub_F5D3C6:
 	xor	wa, wa	; F5D3C6  xor WA,WA
-	ld	a, (10151:16)	; F5D3C8  ld A,(0x27a7)
+	ld	a, (ModelingPage_Fields+1:16)	; F5D3C8  ld A,(0x27a7)
 	div	a, 16	; F5D3CC  div A,0x10
 	ld	xiz, Data_F05B34	; F5D3CF  ld XIZ,0x00f05b34
 	xor	hl, hl	; F5D3D4  xor HL,HL
@@ -129590,7 +129590,7 @@ DispatchTable_F5B9F8_Nop42:
 	ret	; F5D40D  ret
 sub_F5D40E:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer	; F5D40E  call 0xf5c49f
-	ldw	bc, 10166	; F5D412  ld BC,0x27b6
+	ldw	bc, ModelingPage_Fields+16	; F5D412  ld BC,0x27b6
 	ld	d, (xbc)	; F5D415  ld D,(XBC)
 	cp	d, 0:i3	; F5D417  cp D,0
 	jr	z, sub_F5D3C6_Skip	; F5D419  jr Z,0xf5d43d
@@ -129651,7 +129651,7 @@ sub_F5D46B_Loop:
 ; --------------------------------------------------------------------------
 sub_F5D47A:
 	xor	w, w	; F5D47A  xor W,W
-	ldw	bc, 10150	; F5D47C  ld BC,0x27a6
+	ldw	bc, ModelingPage_Fields	; F5D47C  ld BC,0x27a6
 	add	bc, wa	; F5D47F  add BC,WA
 	ld	d, (xbc)	; F5D481  ld D,(XBC)
 	and	d, 128	; F5D483  and D,0x80
@@ -129700,7 +129700,7 @@ sub_F5D497_Loop:
 ; --------------------------------------------------------------------------
 sub_F5D4A7:
 	xor	w, w	; F5D4A7  xor W,W
-	ldw	bc, 10150	; F5D4A9  ld BC,0x27a6
+	ldw	bc, ModelingPage_Fields	; F5D4A9  ld BC,0x27a6
 	add	bc, wa	; F5D4AC  add BC,WA
 	ld	d, (xbc)	; F5D4AE  ld D,(XBC)
 	cp	d, 0:i3	; F5D4B0  cp D,0
@@ -129846,7 +129846,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2:
 	ld	xix, DLBoxes_F32A87	; F5D674  ld XIX,0x00f32a87
 	call	T_DisplayList_Run	; F5D679  call 0xf417f0
 	ld	a, 0:opc	; F5D67D  ld A,0x00
-	ldw	bc, 10166	; F5D67F  ld BC,0x27b6
+	ldw	bc, ModelingPage_Fields+16	; F5D67F  ld BC,0x27b6
 	ld	d, (xbc)	; F5D682  ld D,(XBC)
 	cp	d, 0:i3	; F5D684  cp D,0
 	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3	; F5D686  jr Z,0xf5d69d

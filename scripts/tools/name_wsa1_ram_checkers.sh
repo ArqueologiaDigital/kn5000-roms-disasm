@@ -1,7 +1,7 @@
 #!/bin/bash
 # name_wsa1_ram_checkers.sh -- do the read-only WSA1 checker scripts say the same thing before and
 # after a RAM-naming commit?  name_wsa1_ram.py rewrites operands, and a checker that parsed a numeric
-# operand out of the source would silently change its answer.  The 36 below are the read-only ones
+# operand out of the source would silently change its answer.  The 38 below are the read-only ones
 # (no file writes, no --apply, not a gen_* generator) among the wsa1/notes scripts that mention a
 # named address and the prom_a / prom_b sources.
 # Runs each with its default arguments in a detached worktree at BASE and in the working tree, and
@@ -24,7 +24,7 @@ CHECKS="prom_b_sc1_states audit_wave6_round2_probes lcd_layer_census prom_a_byte
         sysex-probes/sysex_bulkdump_tx sysex-probes/sysex_command_map sysex-probes/sysex_dump_categories
         sysex-probes/sysex_handshake_gate sysex-probes/sysex_model_variant
         sysex-probes/sysex_sequencer_layout sysex-probes/sysex_third_region_wire
-        sysex-probes/sysex_user_settings"
+        sysex-probes/sysex_user_settings prom_b_var_screens prom_b_dl_length_audit"
 git -C "$REPO" worktree add --detach "${WORK:?}" "$BASE" > /dev/null
 run() {  # tree outdir
     mkdir -p "$2"

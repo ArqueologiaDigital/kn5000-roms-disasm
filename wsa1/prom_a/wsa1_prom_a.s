@@ -136123,7 +136123,7 @@ Arr27A6_Set:
 	extz BC                                              ; FD6C6C  d9 12
 	extz XBC                                             ; FD6C6E  e9 12
 	ld A,(XIZ+0x0a)                                      ; FD6C70  8e 0a 21
-	ld (XBC+0x27a6),A                                    ; FD6C73  f3 e5 a6 27 41
+	ld (XBC+ModelingPage_Fields),A                                    ; FD6C73  f3 e5 a6 27 41
 	unlk XIZ                                             ; FD6C78  ee 0d
 	ret                                                  ; FD6C7A  0e
 ; ---------------------------------------------------------------------
@@ -136144,7 +136144,7 @@ Arr27A6_Get:
 	ld BC,(XIZ+0x08)                                     ; FD6C7F  9e 08 21
 	extz BC                                              ; FD6C82  d9 12
 	extz XBC                                             ; FD6C84  e9 12
-	ld A,(XBC+0x27a6)                                    ; FD6C86  c3 e5 a6 27 21
+	ld A,(XBC+ModelingPage_Fields)                                    ; FD6C86  c3 e5 a6 27 21
 	ld XBC,(XIZ+0x0a)                                    ; FD6C8B  ae 0a 21
 	ld (XBC),A                                           ; FD6C8E  b1 41
 	unlk XIZ                                             ; FD6C90  ee 0d

@@ -41,6 +41,11 @@ and none altered.
 
 ## 0. THE ANSWER, IN ONE PARAGRAPH
 
+[Named in the source 2026-10-03: `((u8 *)0x27A6)` is `ModelingPage_Fields` in `wsa1/include/wsa1_ram.inc`,
+its bytes `ModelingPage_Fields+n` to 0x27B7 (extent from FINDINGS-prom_b-ui-variable-index.md) -- in the
+code's operands, in `ld (XBC+ModelingPage_Fields),A`, and in the display-list records' `+0x02` source-variable
+fields (`scripts/tools/name_wsa1_ram.py`).]
+
 **The MAIN/SUB direction is CORROBORATED, by evidence that never mentions
 `SUB GAIN`.**  The seven MODELING pages each read their fields back from CPU 2 in
 a fixed order and store reply *n* at `((u8 *)0x27A6)[n]`, so the request order IS

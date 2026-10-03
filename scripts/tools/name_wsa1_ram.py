@@ -14,7 +14,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
   (`MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24, N`), the last argument of the memory-to-memory macros
   (m_ld_mm16 / m_ldw_mm16 / m_ld_m16m: the other 16-bit address) and 24-bit immediates (`ld XIY,0x006007db`: at that width
   only an address) change; a 16-bit immediate equal to the number may be a value, and data
-  (`.byte` / `.short`) is left alone.  Comments keep the numbers -- the WSA1 tools read
+  (`.byte` / `.short`) is left alone -- except the +0x02 field of an interpreter-B display-list
+  record (`.short 0x27A7 ; +0x02 source variable`), which IS the 16-bit address of the variable drawn.  Comments keep the numbers -- the WSA1 tools read
   `; F8E85F  f1 58 25 41` and the evidence headers cite `(0x2540)`.
   prom_c is another CPU with its own RAM: its sources are not touched, and it does not include
   wsa1_ram.inc.  Same bytes: `make gate-all`.
@@ -182,10 +183,19 @@ GROUPS = [
         0x259C: ("LCD_TextColumnAddr", "display-RAM address of the byte column the packed-text services write", "LCD_TextCol_SetCursor: Inputs"),
         0x259E: ("LCD_TextBitOffset", "the packed-text bit offset / shift count, 0..8", "the packed-text services' Inputs"),
     }),
+    ("wsa1/notes/FINDINGS-l7a1429-editor-pages.md", "0. THE ANSWER: the MODELING pages store reply n at ((u8 *)0x27A6)[n]; extent 0x27A6-0x27B7 per FINDINGS-prom_b-ui-variable-index.md", dict(
+        [(0x27A6, ("ModelingPage_Fields", "the MODELING pages' fields as read back from CPU 2, reply n at +n (bytes to 0x27B7)", "the pages' read-back order, 8 of 8 field editors agree"))] +
+        [(0x27A6 + k, ("ModelingPage_Fields+%d" % k, "", "")) for k in range(1, 18)])),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')
 MAC = re.compile(r'\b(MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24),(\s*)(0x[0-9a-fA-F]+|\d+)\b')
+# an interpreter-B display-list record's +0x02 field is the 16-bit address of the RAM variable it
+# draws (wsa1/notes/FINDINGS-ui-display-list-interpreter-b.md): `.short 0x27A7\t; +0x02 source variable`
+SRCVAR = re.compile(r'^(\s*\.short\s+)(0x[0-9a-fA-F]+|\d+)(\s*;\s*\+0x02 source variable.*)$')
+# an indexed operand whose displacement is a named address -- `ld (XBC+0x27a6),A`, element XBC of the
+# array there; same encoding (d16) with the absolute symbol
+IDX = re.compile(r'\((x[a-z]{2})\s*\+\s*(0x[0-9a-fA-F]{3,}|\d{3,})\)', re.I)
 # memory-to-memory macros: the LAST argument is the other 16-bit memory address
 MM = re.compile(r'^(\s*m_(?:ld_mm16|ldw_mm16|ld_m16m)\s+[^,]+,[^,]+,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$')
 # an immediate is renamed when it is 24-bit (>= 0x10000: there it can only be an address), or when
@@ -246,6 +256,11 @@ def main():
         L = open(p, "rb").read().decode("latin-1").split("\n")
         n = 0
         for i, l in enumerate(L):
+            sv = SRCVAR.match(l)
+            if sv and int(sv.group(2), 0) in NAMES:
+                L[i] = sv.group(1) + NAMES[int(sv.group(2), 0)][0] + sv.group(3)
+                n += 1
+                continue
             code, sep, cmt = l.partition(";")
             s = code.strip()
             if not s or s.startswith(".") or re.match(r'^[\w.$]+:\s*$', s):
@@ -271,10 +286,17 @@ def main():
                 v = int(m.group(2), 0)
                 return m.group(1) + NAMES[v][0] + m.group(3) if v in NAMES and v >= 0x100 else m.group(0)
 
+            def idx(m):
+                v = int(m.group(2), 0)
+                return "(%s+%s)" % (m.group(1), NAMES[v][0]) if v in NAMES and v >= 0x100 else m.group(0)
+
+            orig = code
+            n += len([1 for x in IDX.finditer(code) if int(x.group(2), 0) in NAMES and int(x.group(2), 0) >= 0x100])
+            code = IDX.sub(idx, code)
             stage = MAC.sub(mac, MEM.sub(mem, code))
             stage2 = IMM.sub(imm, stage)
             new = REGIMM.sub(regimm, MM.sub(mm, stage2))
-            if new != code:
+            if new != orig:
                 g = MM.match(stage2)
                 n += 1 if g and int(g.group(2), 0) in NAMES else 0
                 g = REGIMM.match(MM.sub(mm, stage2))

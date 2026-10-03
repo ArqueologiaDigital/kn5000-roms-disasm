@@ -137,3 +137,6 @@
 	.equ Disk_LastError,		0x2243	; the error code the FDC layer returned -- Disk_FormatSelectedMedia: Outputs
 	.equ LCD_TextColumnAddr,	0x259c	; display-RAM address of the byte column the packed-text services write -- LCD_TextCol_SetCursor: Inputs
 	.equ LCD_TextBitOffset,		0x259e	; the packed-text bit offset / shift count, 0..8 -- the packed-text services' Inputs
+
+; ---- wsa1/notes/FINDINGS-l7a1429-editor-pages.md -- "0. THE ANSWER: the MODELING pages store reply n at ((u8 *)0x27A6)[n]; extent 0x27A6-0x27B7 per FINDINGS-prom_b-ui-variable-index.md"
+	.equ ModelingPage_Fields,	0x27a6	; the MODELING pages' fields as read back from CPU 2, reply n at +n (bytes to 0x27B7) -- the pages' read-back order, 8 of 8 field editors agree
