@@ -1,0 +1,19 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_F4B75F\b/BStore_SetCursorBlockAddr/g
+s/\bsub_F6EC31\b/BStore_SetCursorBlockAddr_B/g
+s/\bsub_F6BBC0\b/BStore_SetCursorBlockAddrFromIY/g
+s/\bsub_F5E2F0\b/BStore_CursorBlockAddrToNumber/g
+s/\bsub_F4D0DB\b/BStore_ReadCursorByte/g
+s/\bsub_F4D0FB\b/BStore_WriteCursorByte/g
+s/\bsub_F633F5\b/BStore_ReadBlockByteAtIX/g
+s/\bsub_F48690\b/BStore_GetHeapBase_B/g
+s/\bsub_F6AD24\b/BStore_ResetAllocHeapBase/g
+s/\bsub_F65792\b/BStore_RemapErrorCode/g
+s/\bsub_F6BBD4\b/BStore_DirEntryOffsetX2/g
+s/\bsub_F6BBE6\b/BStore_DirEntryOffsetX3/g
+s/\bsub_F45FB4\b/UiStatus_ShowMessage0E/g
+s/\bsub_F46026\b/UiRequest_Post08/g
+s/\bsub_F6D5E2\b/MsgLine_SetTextDashes/g
+s/\bsub_F68590\b/Text_FillSpaces30/g
+s/\bsub_F69597\b/Text_PutTRACK/g
+s/\bsub_F6547E\b/Words3AtXIX_Clear/g

@@ -88173,7 +88173,7 @@ T_F40A4C:	jp sub_F450B2  ; -> prom_b 0x450B2
 T_F40A50:	jp sub_F454B3  ; -> prom_b 0x454B3
 T_F40A54:	jp sub_F46015  ; -> prom_b 0x46015
 T_F40A58:	jp Var20A9_SetBits01  ; -> prom_b 0x45FAE
-T_F40A5C:	jp sub_F45FB4  ; -> prom_b 0x45FB4   x3
+T_F40A5C:	jp UiStatus_ShowMessage0E  ; -> prom_b 0x45FB4   x3
 T_F40A60:	jp sub_F4402A  ; -> prom_b 0x4402A   x1
 T_F40A64:	jp sub_F44030  ; -> prom_b 0x44030
 	.fill 0x4, 1, 0x00  ; 0xF40A68: 4 x nop
@@ -88238,8 +88238,8 @@ T_F40C00:	jp sub_F4A5B5  ; -> prom_b 0x4A5B5   x3
 T_F40C04:	jp sub_F4B414  ; -> prom_b 0x4B414   x3
 	.fill 0x48, 1, 0x0E  ; 0xF40C08: 72 x ret
 T_F40C50:	jp sub_F4D02C  ; -> prom_b 0x4D02C   x15
-T_F40C54:	jp sub_F4D0DB  ; -> prom_b 0x4D0DB   x18
-T_F40C58:	jp sub_F4D0FB  ; -> prom_b 0x4D0FB   x14
+T_F40C54:	jp BStore_ReadCursorByte  ; -> prom_b 0x4D0DB   x18
+T_F40C58:	jp BStore_WriteCursorByte  ; -> prom_b 0x4D0FB   x14
 T_F40C5C:	jp sub_F4D690  ; -> prom_b 0x4D690   x7
 T_F40C60:	jp sub_F4D6F6  ; -> prom_b 0x4D6F6   x2
 T_F40C64:	jp sub_F4D000  ; -> prom_b 0x4D000   x9
@@ -89794,7 +89794,7 @@ T_F42778:	jp sub_F62DC9  ; -> prom_b 0x62DC9   x8
 T_F4277C:	jp sub_F6306A  ; -> prom_b 0x6306A   x13
 T_F42780:	jp sub_F63317  ; -> prom_b 0x63317   x4
 T_F42784:	jp sub_F63383  ; -> prom_b 0x63383   x6
-T_F42788:	jp sub_F633F5  ; -> prom_b 0x633F5
+T_F42788:	jp BStore_ReadBlockByteAtIX  ; -> prom_b 0x633F5
 ; Evidence: slot 0xF4278C is `jp 0xF6342C`; prom_b 0xF6342C carries the label
 ;           BStore_ErrorToStatusByte, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_BStore_ErrorToStatusByte:	jp BStore_ErrorToStatusByte  ; F4278C (was T_F4278C) -> prom_b 0x6342C   x5
@@ -93324,7 +93324,7 @@ sub_F45263_Return:
 ; Touches: (0x3000) (0x3004) (0x3008) (0x300C) (0x34D0) (0x34D2) (0x34D4)
 ;          (0x34D9) (0x3552) (0x3610) +1 more  |  0x000000
 ; Calls:   T_F411B8 sub_F44903 T_F40C04 T_F40BF4 T_F40BF8 T_F40BF0 T_F40BCC
-;          sub_F453E9 sub_F45942 sub_F459D9 T_F409AC sub_F46026
+;          sub_F453E9 sub_F45942 sub_F459D9 T_F409AC UiRequest_Post08
 ; Evidence: thunk slot T_F409D8 holds `jp 0x00F45348`, and 0xF45348 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -93379,7 +93379,7 @@ sub_F45348_Join:
 	call	T_F409AC	; F453D7  call 0xf409ac
 	m_bit 1, MD16, 0x3614	; F453DB  bit 1,(0x3614)
 	jr	nz, sub_F45348_Join2	; F453DF  jr NZ,0xf453e4
-	calr	sub_F46026	; F453E1  calr 0xf46026
+	calr	UiRequest_Post08	; F453E1  calr 0xf46026
 sub_F45348_Join2:
 	m_res 1, MD16, 0x3614	; F453E4  res 1,(0x3614)
 	ret	; F453E8  ret
@@ -95287,7 +95287,7 @@ Var20A9_SetBits01:		; <- T_F40A58
 	ret	; F45FB3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45FB4
+; UiStatus_ShowMessage0E
 ; Called from: T_F40A5C (x3)
 ; Touches: (0x2070) (0x2071) (0x2880)
 ; Evidence: thunk slot T_F40A5C holds `jp 0x00F45FB4`, and 0xF45FB4 is an
@@ -95297,7 +95297,8 @@ Var20A9_SetBits01:		; <- T_F40A58
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45FB4:		; <- T_F40A5C
+; UiStatus_ShowMessage0E: UI_StatusCode = 14, UI_Request = 0xAB, UI_Request_Hi |= 0x40 (the status-message request SysExDump_ShowStatusMessage also makes).
+UiStatus_ShowMessage0E:		; <- T_F40A5C
 	ld	(UI_StatusCode:16), 14	; F45FB4  ld (0x2880),0x0e
 	ld	(UI_Request:16), 171	; F45FB9  ld (0x2070),0xab
 	m_or_mi8 MB16, UI_Request_Hi, 0x40	; F45FBE  or (0x2071),0x40
@@ -95390,7 +95391,7 @@ sub_F46015:		; <- T_F40A54
 	ret	; F46025  ret
 
 ; --------------------------------------------------------------------------
-; sub_F46026
+; UiRequest_Post08
 ; Called from: in-module: 0xF453E1
 ; Touches: (0x2070) (0x2071)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -95399,7 +95400,8 @@ sub_F46015:		; <- T_F40A54
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F46026:
+; UiRequest_Post08: UI_Request = 8, UI_Request_Hi |= 0x02.
+UiRequest_Post08:
 	ld	(UI_Request:16), 8	; F46026  ld (0x2070),0x08
 	m_or_mi8 MB16, UI_Request_Hi, 0x02	; F4602B  or (0x2071),0x02
 	ret	; F46030  ret
@@ -97529,7 +97531,7 @@ sub_F485D7_Skip:
 ; sub_F48647
 ; Called from: T_F40B6C (x3); in-module: 0xF4860D
 ; Touches: (0x0D4A) (0x345C) (0x345E)  |  0x000001
-; Calls:   T_F40C54 sub_F48690
+; Calls:   T_F40C54 BStore_GetHeapBase_B
 ; Evidence: thunk slot T_F40B6C holds `jp 0x00F48647`, and 0xF48647 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -97549,7 +97551,7 @@ sub_F48647_Join:
 	jr	z, sub_F48647_Loop	; F4865F  jr Z,0xf4864c
 	ret	; F48661  ret
 sub_F48647_Skip:
-	calr	sub_F48690	; F48662  calr 0xf48690
+	calr	BStore_GetHeapBase_B	; F48662  calr 0xf48690
 	ld	ix, (BStore_CursorBlock:16)	; F48665  ld IX,(0x345c)
 	extz	xix	; F48669  extz XIX
 	dec	1, xix	; F4866B  dec 1,XIX
@@ -97567,7 +97569,7 @@ sub_F48647_Skip2:
 	ret	; F4868F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F48690
+; BStore_GetHeapBase_B
 ; Called from: in-module: 0xF48662
 ; Touches: (0x3604)  |  0x000000
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -97576,7 +97578,8 @@ sub_F48647_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F48690:
+; BStore_GetHeapBase_B: XIY = BStore_HeapBase -- prom_b's copy of prom_a's BStore_GetHeapBase.
+BStore_GetHeapBase_B:
 	ld	xiy, (BStore_HeapBase:16)	; F48690  ld XIY,(0x3604)
 	add	xiy, 0	; F48694  add XIY,0x00000000
 	ret	; F4869A  ret
@@ -102549,7 +102552,7 @@ sub_F4B433_Return:
 ; Called from: in-module: 0xF4AA16 0xF4AAC0 0xF4B32E
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C63) (0x0C67) (0x0C6B)
 ;          (0x0C96) (0x0C98) (0x0C9A) +4 more
-; Calls:   sub_F4B75F T_BStore_CopyAcrossBlocks sub_F4B726 sub_F4B69F
+; Calls:   BStore_SetCursorBlockAddr T_BStore_CopyAcrossBlocks sub_F4B726 sub_F4B69F
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B462 is an instruction boundary.
 ;           The name IS the address.
@@ -102559,12 +102562,12 @@ sub_F4B433_Return:
 sub_F4B462:
 	ld	(BStore_ErrorCode:16), 0	; F4B462  ld (0x0d4a),0x00
 	ld	hl, (3169:16)	; F4B467  ld HL,(0x0c61)
-	calr	sub_F4B75F	; F4B46B  calr 0xf4b75f
+	calr	BStore_SetCursorBlockAddr	; F4B46B  calr 0xf4b75f
 	push	xwa	; F4B46E  push XWA
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F4B46F  ld XWA,(0x126e)
 	ld	(BStore_CopySrcAddr:16), xwa	; F4B473  ld (0x0c63),XWA
 	ld	hl, (3159:16)	; F4B477  ld HL,(0x0c57)
-	calr	sub_F4B75F	; F4B47B  calr 0xf4b75f
+	calr	BStore_SetCursorBlockAddr	; F4B47B  calr 0xf4b75f
 	ld	xwa, (BStore_CursorBlockAddr:16)	; F4B47E  ld XWA,(0x126e)
 	ld	(BStore_CopyDestAddr:16), xwa	; F4B482  ld (0x0c59),XWA
 	pop	xwa	; F4B486  pop XWA
@@ -102849,7 +102852,7 @@ sub_F4B726_Return:
 	ret	; F4B75E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4B75F
+; BStore_SetCursorBlockAddr
 ; Called from: in-module: 0xF4B46B 0xF4B47B
 ; Touches: (0x126E) (0x3604)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -102858,7 +102861,8 @@ sub_F4B726_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4B75F:
+; BStore_SetCursorBlockAddr(HL = block number): BStore_CursorBlockAddr = BStore_HeapBase + (HL - 1) * 256; XHL = 0.
+BStore_SetCursorBlockAddr:
 	dec	1, hl	; F4B75F  dec 1,HL
 	extz	xhl	; F4B761  extz XHL
 	sla	xhl, 8	; F4B763  sla 0x08,XHL
@@ -104790,7 +104794,7 @@ sub_F4D002_Join3:
 	ret	; F4D0DA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4D0DB
+; BStore_ReadCursorByte
 ; Called from: T_F40C54 (x18)
 ; Touches: (0x345C) (0x345E) (0x3604)
 ; Evidence: thunk slot T_F40C54 holds `jp 0x00F4D0DB`, and 0xF4D0DB is an
@@ -104800,7 +104804,8 @@ sub_F4D002_Join3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4D0DB:		; <- T_F40C54
+; BStore_ReadCursorByte: A = the byte at BStore_HeapBase + (BStore_CursorBlock - 1) * 256 + BStore_CursorOffset.
+BStore_ReadCursorByte:		; <- T_F40C54
 	push	xix	; F4D0DB  push XIX
 	xor	xhl, xhl	; F4D0DC  xor XHL,XHL
 	ld	hl, (BStore_CursorBlock:16)	; F4D0DE  ld HL,(0x345c)
@@ -104815,7 +104820,7 @@ sub_F4D0DB:		; <- T_F40C54
 	ret	; F4D0FA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4D0FB
+; BStore_WriteCursorByte
 ; Called from: T_F40C58 (x14)
 ; Touches: (0x3010) (0x345C) (0x345E) (0x34D1) (0x3604) (0x360C)  |
 ;          0x600800 0x60080A 0x603500
@@ -104827,7 +104832,8 @@ sub_F4D0DB:		; <- T_F40C54
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4D0FB:		; <- T_F40C58
+; BStore_WriteCursorByte(A): store A at the cursor address BStore_ReadCursorByte reads.
+BStore_WriteCursorByte:		; <- T_F40C58
 	push	xix	; F4D0FB  push XIX
 	xor	xhl, xhl	; F4D0FC  xor XHL,XHL
 	ld	hl, (BStore_CursorBlock:16)	; F4D0FE  ld HL,(0x345c)
@@ -131386,7 +131392,7 @@ sub_F5E0BD_Return:
 ; Called from: in-module: 0xF5E130
 ; Touches: (0x0C57) (0x0C59) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0D21)
 ;          (0x0D22) (0x0D24) (0x0D28) +6 more  |  0x000D36
-; Calls:   T_BStore_CursorAdvance sub_F5E2B9 sub_F5E2F0 T_F4277C T_BStore_SeekBlock
+; Calls:   T_BStore_CursorAdvance sub_F5E2B9 BStore_CursorBlockAddrToNumber T_F4277C T_BStore_SeekBlock
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5E1A1 is an instruction boundary.
 ;           The name IS the address.
@@ -131414,7 +131420,7 @@ sub_F5E1A1_Skip:
 	calr	sub_F5E2B9	; F5E1D8  calr 0xf5e2b9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E1DB  cp (0x0d4a),0x00
 	jrl	nz, sub_F5E1A1_Return	; F5E1E0  jrl NZ,0xf5e2b8
-	calr	sub_F5E2F0	; F5E1E3  calr 0xf5e2f0
+	calr	BStore_CursorBlockAddrToNumber	; F5E1E3  calr 0xf5e2f0
 	ld	(3165:16), iy	; F5E1E6  ld (0x0c5d),IY
 	ld	wa, (3374:16)	; F5E1EA  ld WA,(0x0d2e)
 	ld	(3159:16), wa	; F5E1EE  ld (0x0c57),WA
@@ -131426,7 +131432,7 @@ sub_F5E1A1_Skip:
 	calr	sub_F5E2B9	; F5E207  calr 0xf5e2b9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F5E20A  cp (0x0d4a),0x00
 	jrl	nz, sub_F5E1A1_Return	; F5E20F  jrl NZ,0xf5e2b8
-	calr	sub_F5E2F0	; F5E212  calr 0xf5e2f0
+	calr	BStore_CursorBlockAddrToNumber	; F5E212  calr 0xf5e2f0
 	ld	(3175:16), iy	; F5E215  ld (0x0c67),IY
 	ld	wa, (3374:16)	; F5E219  ld WA,(0x0d2e)
 	ld	(3169:16), wa	; F5E21D  ld (0x0c61),WA
@@ -131434,7 +131440,7 @@ sub_F5E1A1_Skip:
 	ld	xhl, (3364:16)	; F5E222  ld XHL,(0x0d24)
 	ld	(BStore_CursorBlockAddr:16), xhl	; F5E226  ld (0x126e),XHL
 	pop	xhl	; F5E22A  pop XHL
-	calr	sub_F5E2F0	; F5E22B  calr 0xf5e2f0
+	calr	BStore_CursorBlockAddrToNumber	; F5E22B  calr 0xf5e2f0
 	ld	de, (3374:16)	; F5E22E  ld DE,(0x0d2e)
 	ld	iy, (3362:16)	; F5E232  ld IY,(0x0d22)
 	ld	(3179:16), iy	; F5E236  ld (0x0c6b),IY
@@ -131520,7 +131526,7 @@ sub_F5E2B9_Return:
 	ret	; F5E2EF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5E2F0
+; BStore_CursorBlockAddrToNumber
 ; Called from: in-module: 0xF5E1E3 0xF5E212 0xF5E22B
 ; Touches: (0x0D2E) (0x126E)  |  0x617800
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -131529,7 +131535,8 @@ sub_F5E2B9_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5E2F0:
+; BStore_CursorBlockAddrToNumber: (0x0D2E) = (BStore_CursorBlockAddr - 0x617800) / 256 + 1, the inverse of BStore_SetCursorBlockAddr; XHL = 0.
+BStore_CursorBlockAddrToNumber:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F5E2F0  ld XHL,(0x126e)
 	sub	xhl, 6387712	; F5E2F4  sub XHL,0x00617800
 	srl	xhl, 8	; F5E2FA  srl 0x08,XHL
@@ -138372,7 +138379,7 @@ sub_F62C20:		; <- T_F427FC
 	ret	; F62C39  ret
 	calr	sub_F63383	; F62C3A  calr 0xf63383
 	ret	; F62C3D  ret
-	calr	sub_F633F5	; F62C3E  calr 0xf633f5
+	calr	BStore_ReadBlockByteAtIX	; F62C3E  calr 0xf633f5
 	ret	; F62C41  ret
 	calr	BStore_ErrorToStatusByte	; F62C42  calr 0xf6342c
 	ret	; F62C45  ret
@@ -139153,7 +139160,8 @@ sub_F63383_Join3:
 	ld	(3306:16), wa	; F633F0  ld (0x0cea),WA
 sub_F63383_Return:
 	ret	; F633F4  ret
-sub_F633F5:		; <- T_F42788
+; BStore_ReadBlockByteAtIX: A = (BStore_CursorBlockAddr)[IX].
+BStore_ReadBlockByteAtIX:		; <- T_F42788
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F633F5  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F633F9  ld A,(XHL+IX)
 	ret	; F633FE  ret
@@ -141828,7 +141836,7 @@ sub_F65009:		; <- T_F432CC
 ; Called from: in-module: 0xF65027 0xF65191 0xF65286
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C73) (0x0C75)
 ;          (0x0C77) (0x0C90) (0x0CAE) +27 more  |  0x60347E 0x6034A0
-; Calls:   sub_F6500C T_F427A0 T_BStore_ValidateSavedCursor T_F42774 sub_F653A5 sub_F65792
+; Calls:   sub_F6500C T_F427A0 T_BStore_ValidateSavedCursor T_F42774 sub_F653A5 BStore_RemapErrorCode
 ;          T_BStore_AllocChain T_BStore_SaveCursor T_F4277C sub_F65761 sub_F65489
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6500C is an instruction
@@ -141885,7 +141893,7 @@ sub_F6500C_Join:
 	ld	xix, 3474	; F650A8  ld XIX,0x00000d92
 	calr	sub_F653A5	; F650AD  calr 0xf653a5
 sub_F6500C_Skip:
-	calr	sub_F65792	; F650B0  calr 0xf65792
+	calr	BStore_RemapErrorCode	; F650B0  calr 0xf65792
 	ret	; F650B3  ret
 sub_F6500C_Join2:
 	m_cp_mi8 MB16, 0x0d92, 0x00	; F650B4  cp (0x0d92),0x00
@@ -141948,7 +141956,7 @@ sub_F6500C_Join2:
 	ld	iy, (3488:16)	; F65186  ld IY,(0x0da0)
 	calr	sub_F65761	; F6518A  calr 0xf65761
 sub_F6500C_Skip2:
-	calr	sub_F65792	; F6518D  calr 0xf65792
+	calr	BStore_RemapErrorCode	; F6518D  calr 0xf65792
 	ret	; F65190  ret
 sub_F6500C_Join3:
 	calr	sub_F6500C	; F65191  calr 0xf6500c
@@ -142017,7 +142025,7 @@ sub_F6500C_Skip3:
 	ld	(3504:16), wa	; F6527B  ld (0x0db0),WA
 	calr	sub_F65489	; F6527F  calr 0xf65489
 sub_F6500C_Skip4:
-	calr	sub_F65792	; F65282  calr 0xf65792
+	calr	BStore_RemapErrorCode	; F65282  calr 0xf65792
 	ret	; F65285  ret
 sub_F6500C_Join4:
 	calr	sub_F6500C	; F65286  calr 0xf6500c
@@ -142098,7 +142106,7 @@ sub_F6500C_Join5:
 	ld	(3504:16), wa	; F6539A  ld (0x0db0),WA
 	calr	sub_F65489	; F6539E  calr 0xf65489
 sub_F6500C_Skip6:
-	calr	sub_F65792	; F653A1  calr 0xf65792
+	calr	BStore_RemapErrorCode	; F653A1  calr 0xf65792
 	ret	; F653A4  ret
 
 ; --------------------------------------------------------------------------
@@ -142106,7 +142114,7 @@ sub_F6500C_Skip6:
 ; Called from: in-module: 0xF650AD 0xF6520B 0xF65265 0xF6530B 0xF65380
 ; Touches: (0x0C90) (0x0CBC) (0x0CBE) (0x0D1C) (0x0D4A) (0x0D9E) (0x0DAA)
 ;          (0x0DAC) (0x126E) (0x345C)
-; Calls:   T_F42774 T_F4270C sub_F6547E T_F427A8 sub_F65792
+; Calls:   T_F42774 T_F4270C Words3AtXIX_Clear T_F427A8 BStore_RemapErrorCode
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF653A5 is an instruction
 ;           boundary.  The name IS the address.
@@ -142185,7 +142193,7 @@ sub_F653A5_Join3:
 	jr	z, sub_F653A5_Skip3	; F65442  jr Z,0xf6544d
 	cp	hl, 2:i3	; F65444  cp HL,2
 	jr	z, sub_F653A5_Skip3	; F65446  jr Z,0xf6544d
-	calr	sub_F6547E	; F65448  calr 0xf6547e
+	calr	Words3AtXIX_Clear	; F65448  calr 0xf6547e
 	jr	sub_F653A5_Loop	; F6544B  jr T,0xf653de
 sub_F653A5_Skip3:
 	inc	1, hl	; F6544D  inc 1,HL
@@ -142213,11 +142221,11 @@ sub_F653A5_Skip4:
 	pop	xiz	; F65476  pop XIZ
 	jrl	sub_F653A5_Join	; F65477  jrl T,0xf653cf
 sub_F653A5_Skip5:
-	calr	sub_F65792	; F6547A  calr 0xf65792
+	calr	BStore_RemapErrorCode	; F6547A  calr 0xf65792
 	ret	; F6547D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6547E
+; Words3AtXIX_Clear
 ; Called from: in-module: 0xF65448
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -142226,7 +142234,8 @@ sub_F653A5_Skip5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6547E:
+; Words3AtXIX_Clear(XIX): zero the three words at XIX.
+Words3AtXIX_Clear:
 	xor	wa, wa	; F6547E  xor WA,WA
 	ld	(xix), wa	; F65480  ld (XIX),WA
 	ld	(xix+2), wa	; F65482  ld (XIX+0x02),WA
@@ -142238,7 +142247,7 @@ sub_F6547E:
 ; Called from: in-module: 0xF6527F 0xF6539E
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0CAE) (0x0CBC)
 ;          (0x0CC0) (0x0CC6) (0x0CCC) +16 more  |  0x60347E 0x6034A0
-; Calls:   T_BStore_AllocChain T_BStore_SaveCursor T_F4277C sub_F65761 T_BStore_SeekBlock sub_F65792
+; Calls:   T_BStore_AllocChain T_BStore_SaveCursor T_F4277C sub_F65761 T_BStore_SeekBlock BStore_RemapErrorCode
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65489 is an instruction
 ;           boundary.  The name IS the address.
@@ -142461,14 +142470,14 @@ sub_F65489_Skip7:
 sub_F65489_Join6:
 	calr	sub_F65761	; F6575A  calr 0xf65761
 sub_F65489_Join7:
-	calr	sub_F65792	; F6575D  calr 0xf65792
+	calr	BStore_RemapErrorCode	; F6575D  calr 0xf65792
 	ret	; F65760  ret
 
 ; --------------------------------------------------------------------------
 ; sub_F65761
 ; Called from: in-module: 0xF6518A 0xF65534 0xF655C3 0xF656B4 0xF6575A
 ; Touches: (0x0D4A) (0x126E)
-; Calls:   T_BStore_SeekBlock T_F4270C sub_F65792
+; Calls:   T_BStore_SeekBlock T_F4270C BStore_RemapErrorCode
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65761 is an instruction
 ;           boundary.  The name IS the address.
@@ -142495,11 +142504,11 @@ sub_F65761_Join:
 	inc	1, bc	; F6578A  inc 1,BC
 	jr	sub_F65761_Join	; F6578C  jr T,0xf65767
 sub_F65761_Skip:
-	calr	sub_F65792	; F6578E  calr 0xf65792
+	calr	BStore_RemapErrorCode	; F6578E  calr 0xf65792
 	ret	; F65791  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65792
+; BStore_RemapErrorCode
 ; Called from: in-module: 0xF650B0 0xF6518D 0xF65282 0xF653A1 0xF6547A
 ;              0xF6575D 0xF6578E
 ; Touches: (0x0D4A)
@@ -142509,7 +142518,8 @@ sub_F65761_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65792:
+; BStore_RemapErrorCode: BStore_ErrorCode = Remap_0D4A_F657A7[BStore_ErrorCode].
+BStore_RemapErrorCode:
 	xor	hl, hl	; F65792  xor HL,HL
 	ld	l, (BStore_ErrorCode:16)	; F65794  ld L,(0x0d4a)
 	ld	xde, Remap_0D4A_F657A7	; F65798  ld XDE,0x00f657a7
@@ -142522,7 +142532,7 @@ sub_F65792:
 ;   instructions (`push SR`, `pop SR`, `max`, `halt`, `ei 0` ...) under the
 ;   label sub_F657A7 and the 12th as `Data_F657B2` ("everything about it
 ;   except its bytes" unknown).
-; Read by: sub_F65792 -- L = (0x0D4A), `ld XDE,0x00F657A7 / ld L,(XDE+HL)`,
+; Read by: BStore_RemapErrorCode -- L = (0x0D4A), `ld XDE,0x00F657A7 / ld L,(XDE+HL)`,
 ;   `ld (0x0D4A),L`, called from seven sites in this module.  Entry k is k
 ;   itself except 1, 7 and 8, which become 0: the routine replaces three
 ;   values of (0x0D4A) by zero and leaves the others alone.
@@ -145036,7 +145046,7 @@ sub_F67479:		; <- T_F42EFC
 ; sub_F6747D
 ; Called from: T_F42EF8 (x1)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6BBD4
+; Calls:   BStore_DirEntryOffsetX2
 ; Evidence: thunk slot T_F42EF8 holds `jp 0x00F6747D`, and 0xF6747D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -145045,7 +145055,7 @@ sub_F67479:		; <- T_F42EFC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6747D:		; <- T_F42EF8
-	calr	sub_F6BBD4	; F6747D  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6747D  calr 0xf6bbd4
 	ret	; F67480  ret
 
 ; --------------------------------------------------------------------------
@@ -147362,7 +147372,7 @@ sub_F68354_Nop:
 ; sub_F68575
 ; Called from: in-module: 0xF6835F
 ; Touches: nothing with an absolute address
-; Calls:   sub_F68590
+; Calls:   Text_FillSpaces30
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68575 is an instruction
 ;           boundary.  The name IS the address.
@@ -147371,14 +147381,14 @@ sub_F68354_Nop:
 ; --------------------------------------------------------------------------
 sub_F68575:
 	ld	xix, 4114	; F68575  ld XIX,0x00001012
-	calr	sub_F68590	; F6857A  calr 0xf68590
+	calr	Text_FillSpaces30	; F6857A  calr 0xf68590
 	ret	; F6857D  ret
 
 ; --------------------------------------------------------------------------
 ; sub_F6857E
 ; Called from: in-module: 0xF683ED
 ; Touches: nothing with an absolute address
-; Calls:   sub_F68590
+; Calls:   Text_FillSpaces30
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6857E is an instruction
 ;           boundary.  The name IS the address.
@@ -147387,14 +147397,14 @@ sub_F68575:
 ; --------------------------------------------------------------------------
 sub_F6857E:
 	ld	xix, 4144	; F6857E  ld XIX,0x00001030
-	calr	sub_F68590	; F68583  calr 0xf68590
+	calr	Text_FillSpaces30	; F68583  calr 0xf68590
 	ret	; F68586  ret
 
 ; --------------------------------------------------------------------------
 ; sub_F68587
 ; Called from: in-module: 0xF68478
 ; Touches: nothing with an absolute address
-; Calls:   sub_F68590
+; Calls:   Text_FillSpaces30
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68587 is an instruction
 ;           boundary.  The name IS the address.
@@ -147403,11 +147413,11 @@ sub_F6857E:
 ; --------------------------------------------------------------------------
 sub_F68587:
 	ld	xix, 4174	; F68587  ld XIX,0x0000104e
-	calr	sub_F68590	; F6858C  calr 0xf68590
+	calr	Text_FillSpaces30	; F6858C  calr 0xf68590
 	ret	; F6858F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68590
+; Text_FillSpaces30
 ; Called from: in-module: 0xF6857A 0xF68583 0xF6858C
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -147416,7 +147426,8 @@ sub_F68587:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68590:
+; Text_FillSpaces30(XIX): fill 15 words (30 characters) at XIX with spaces.
+Text_FillSpaces30:
 	pushw	wa	; F68590  push WA
 	ldw	wa, 8224	; F68591  ld WA,0x2020
 	ldw	bc, 15	; F68594  ld BC,0x000f
@@ -149486,7 +149497,7 @@ sub_F69240_Skip5:
 ; Called from: in-module: 0xF6AB74
 ; Touches: (0x0E63) (0x0E6A) (0x0F56) (0x0F58) (0x1008)  |  0x603422
 ;          0x603500
-; Calls:   sub_F6BBD4 sub_F6C4A5 sub_F6B8BD sub_F6B75E sub_F6B8F1
+; Calls:   BStore_DirEntryOffsetX2 sub_F6C4A5 sub_F6B8BD sub_F6B75E sub_F6B8F1
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69327 is an instruction
 ;           boundary.  The name IS the address.
@@ -149507,7 +149518,7 @@ sub_F69240_Loop3:
 	cp	a, 17	; F69347  cp A,0x11
 	jrl	ugt, sub_F69240_Skip8	; F6934A  jrl UGT,0xf693ed
 	ld	(BStore_DirEntry:16), a	; F6934D  ld (0x1008),A
-	calr	sub_F6BBD4	; F69351  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F69351  calr 0xf6bbd4
 	srl	xiz, 1	; F69354  srl 0x01,XIZ
 	push	xix	; F69357  push XIX
 	ld	xix, 6304802	; F69358  ld XIX,0x00603422
@@ -149677,7 +149688,7 @@ sub_F69476:
 ; sub_F6948B
 ; Called from: in-module: 0xF69CD5 0xF69D3A
 ; Touches: (0x0ED1)
-; Calls:   sub_F6B8BD sub_F6B770 sub_F6B75E LcdKeyRow4_Screen0ESub02 sub_F69597
+; Calls:   sub_F6B8BD sub_F6B770 sub_F6B75E LcdKeyRow4_Screen0ESub02 Text_PutTRACK
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6948B is an instruction
 ;           boundary.  The name IS the address.
@@ -149721,7 +149732,7 @@ LcdKeyRow3_Screen0ESub16:
 	bit	7, w	; F694C4  bit 0x07,W
 	jr	nz, sub_F6948B_Return	; F694C7  jr NZ,0xf694cf
 	calr	LcdKeyRow4_Screen0ESub02	; F694C9  calr 0xf694d0
-	calr	sub_F69597	; F694CC  calr 0xf69597
+	calr	Text_PutTRACK	; F694CC  calr 0xf69597
 sub_F6948B_Return:
 	ret	; F694CF  ret
 
@@ -149858,7 +149869,7 @@ sub_F69560_Join:
 	ret	; F69596  ret
 
 ; --------------------------------------------------------------------------
-; sub_F69597
+; Text_PutTRACK
 ; Called from: in-module: 0xF694CC
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -149867,7 +149878,8 @@ sub_F69560_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F69597:
+; Text_PutTRACK(XIY): write "TRACK" at XIY.
+Text_PutTRACK:
 	push	xiy	; F69597  push XIY
 	ld	(xiy), 84	; F69598  ld (XIY),0x54
 	m_ld_mi16 MDD+r5, 0x01, 0x4152	; F6959B  ld (XIY+0x01),0x4152
@@ -150008,7 +150020,7 @@ sub_F69692:
 ; Called from: in-module: 0xF69653
 ; Touches: (0x0E4F) (0x0E53) (0x0E5A) (0x0E63) (0x0ED7) (0x0EE8) (0x106D)
 ;          (0x12AF) (0x12B0) (0x12E7) +3 more  |  0x603422
-; Calls:   sub_F6A908 T_SeqBufRing_Get sub_F69780 sub_F6A7EB sub_F6BBD4 T_F413E4
+; Calls:   sub_F6A908 T_SeqBufRing_Get sub_F69780 sub_F6A7EB BStore_DirEntryOffsetX2 T_F413E4
 ;          sub_F6B387 sub_F6C43C StepLength_AddTo0E53 sub_F6A7C5 sub_F69811
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69697 is an instruction
@@ -150042,7 +150054,7 @@ sub_F69697_Loop:
 	mx_ld_rm MXB, ra_IY, ra_HL, 1	; F696D5  ld A,(XIY+HL)
 	ld	(xix+2), a	; F696DA  ld (XIX+0x02),A
 	pushw	wa	; F696DD  push WA
-	calr	sub_F6BBD4	; F696DE  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F696DE  calr 0xf6bbd4
 	srl	xiz, 1	; F696E1  srl 0x01,XIZ
 	popw	wa	; F696E4  pop WA
 	push	xix	; F696E5  push XIX
@@ -150287,7 +150299,7 @@ sub_F6987E:
 ; Touches: (0x0E53) (0x0E63) (0x0EFA) (0x12B0) (0x2075) (0x7F4D)  |
 ;          0x603422
 ; Calls:   sub_F6C43C sub_F6B8BD sub_F6B8F1 sub_F6C292 sub_F6BA11 sub_F69910
-;          sub_F69938 sub_F6BBD4 sub_F6B9DF sub_F6C2E5 MsgLine_FormatNoteAndVelocity T_F431B4
+;          sub_F69938 BStore_DirEntryOffsetX2 sub_F6B9DF sub_F6C2E5 MsgLine_FormatNoteAndVelocity T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69887 is an instruction
 ;           boundary.  The name IS the address.
@@ -150324,7 +150336,7 @@ sub_F69887_Skip:
 	pushw	hl	; F698CE  push HL
 	calr	sub_F69938	; F698CF  calr 0xf69938
 	popw	hl	; F698D2  pop HL
-	calr	sub_F6BBD4	; F698D3  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F698D3  calr 0xf6bbd4
 	sra	iz, 1	; F698D6  sra 0x01,IZ
 	push	xde	; F698D9  push XDE
 	ld	xde, 6304802	; F698DA  ld XDE,0x00603422
@@ -150353,7 +150365,7 @@ sub_F69887_Return:
 ; sub_F69910
 ; Called from: in-module: 0xF698B8
 ; Touches: (0x7922) (0x7F4D)  |  0x603422
-; Calls:   sub_F6BBD4 T_F413E4
+; Calls:   BStore_DirEntryOffsetX2 T_F413E4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69910 is an instruction
 ;           boundary.  The name IS the address.
@@ -150362,7 +150374,7 @@ sub_F69887_Return:
 ; --------------------------------------------------------------------------
 sub_F69910:
 	pushw	wa	; F69910  push WA
-	calr	sub_F6BBD4	; F69911  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F69911  calr 0xf6bbd4
 	srl	xiz, 1	; F69914  srl 0x01,XIZ
 	popw	wa	; F69917  pop WA
 	push	xix	; F69918  push XIX
@@ -150383,7 +150395,7 @@ sub_F69910_Return:
 ; sub_F69938
 ; Called from: in-module: 0xF698CF
 ; Touches: (0x7922) (0x7F4D)  |  0x603422
-; Calls:   sub_F6BBD4 T_F413E8
+; Calls:   BStore_DirEntryOffsetX2 T_F413E8
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69938 is an instruction
 ;           boundary.  The name IS the address.
@@ -150392,7 +150404,7 @@ sub_F69910_Return:
 ; --------------------------------------------------------------------------
 sub_F69938:
 	pushw	wa	; F69938  push WA
-	calr	sub_F6BBD4	; F69939  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F69939  calr 0xf6bbd4
 	srl	xiz, 1	; F6993C  srl 0x01,XIZ
 	popw	wa	; F6993F  pop WA
 	push	xix	; F69940  push XIX
@@ -151030,7 +151042,7 @@ sub_F69D9E_Skip2:
 ; sub_F69DBD
 ; Called from: in-module: 0xF69D68
 ; Touches: (0x0EEA) (0x0EEC) (0x0EEE) (0x0EEF) (0x1008) (0x1075) (0x1076)
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F6BBD4 sub_F6B75E sub_F6C43C sub_F6BC89
+; Calls:   sub_F6B8BD sub_F6B8F1 BStore_DirEntryOffsetX2 sub_F6B75E sub_F6C43C sub_F6BC89
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69DBD is an instruction
 ;           boundary.  The name IS the address.
@@ -151102,7 +151114,7 @@ sub_F69DBD_Skip2:
 	ld	(4213:16), 2	; F69E77  ld (0x1075),0x02
 	jrl	sub_F69DBD_Epilogue	; F69E7C  jrl T,0xf69f59
 sub_F69DBD_Loop:
-	calr	sub_F6BBD4	; F69E7F  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F69E7F  calr 0xf6bbd4
 	srl	xiz, 1	; F69E82  srl 0x01,XIZ
 	push	xde	; F69E85  push XDE
 	ld	xde, 13442	; F69E86  ld XDE,0x00003482
@@ -151547,7 +151559,7 @@ sub_F6A20F_Skip4:
 ; sub_F6A26C
 ; Called from: T_F42ED4 (x0)
 ; Touches: (0x0E4E) (0x0F11) (0x0F13) (0x126E)
-; Calls:   sub_F6C292 sub_F6B039 sub_F6B8BD sub_F6B75E sub_F6BBD4 sub_F6C2E5
+; Calls:   sub_F6C292 sub_F6B039 sub_F6B8BD sub_F6B75E BStore_DirEntryOffsetX2 sub_F6C2E5
 ; Evidence: thunk slot T_F42ED4 holds `jp 0x00F6A26C`, and 0xF6A26C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -151580,7 +151592,7 @@ sub_F6A20F_Join3:
 	calr	sub_F6B75E	; F6A296  calr 0xf6b75e
 	cp	w, 255	; F6A299  cp W,0xff
 	jr	z, sub_F6A20F_Skip8	; F6A29C  jr Z,0xf6a2e3
-	calr	sub_F6BBD4	; F6A29E  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6A29E  calr 0xf6bbd4
 	push	xix	; F6A2A1  push XIX
 	ld	xix, 13408	; F6A2A2  ld XIX,0x00003460
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6A2A7  ld IY,(XIX+IZ)
@@ -152702,7 +152714,7 @@ sub_F6A9CA:		; <- T_F42EC0
 ; Called from: in-module: 0xF68871 0xF68927 0xF6A8E8
 ; Touches: (0x0E4E) (0x0E4F) (0x0E63) (0x0E64) (0x0E68) (0x0ED5) (0x1008)
 ;          (0x1072) (0x126B) (0x12AC) +15 more
-; Calls:   sub_F6AD24 sub_F6AC7E sub_F6ACC8 sub_F6AD40 0xF6AD5A sub_F6C4A5
+; Calls:   BStore_ResetAllocHeapBase sub_F6AC7E sub_F6ACC8 sub_F6AD40 0xF6AD5A sub_F6C4A5
 ;          sub_F6AD30 T_F40A14 sub_F6AC4D sub_F6A9E3_Nop T_F42574 sub_F68982_Nop +13
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -152715,7 +152727,7 @@ sub_F6A9E3:
 	ld	(4780:16), 4	; F6A9E3  ld (0x12ac),0x04
 	ld	(4781:16), 0	; F6A9E8  ld (0x12ad),0x00
 	ld	(4782:16), 1	; F6A9ED  ld (0x12ae),0x01
-	calr	sub_F6AD24	; F6A9F2  calr 0xf6ad24
+	calr	BStore_ResetAllocHeapBase	; F6A9F2  calr 0xf6ad24
 	calr	sub_F6AC7E	; F6A9F5  calr 0xf6ac7e
 	ld	a, (UI_PartIndex:16)	; F6A9F8  ld A,(0x2250)
 	ld	(3684:16), a	; F6A9FC  ld (0x0e64),A
@@ -153047,7 +153059,7 @@ sub_F6AC24_Skip:
 ; sub_F6AC4D
 ; Called from: in-module: 0xF6AA2C
 ; Touches:   |  0x603500
-; Calls:   sub_F6BBE6 sub_F6BBD4
+; Calls:   BStore_DirEntryOffsetX3 BStore_DirEntryOffsetX2
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AC4D is an instruction
 ;           boundary.  The name IS the address.
@@ -153055,13 +153067,13 @@ sub_F6AC24_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6AC4D:
-	calr	sub_F6BBE6	; F6AC4D  calr 0xf6bbe6
+	calr	BStore_DirEntryOffsetX3	; F6AC4D  calr 0xf6bbe6
 	push	xde	; F6AC50  push XDE
 	ld	xde, 6305024	; F6AC51  ld XDE,0x00603500
 	mx_bit 7, MXD, ra_DE, ra_IZ	; F6AC56  bit 7,(XDE+IZ)
 	pop	xde	; F6AC5B  pop XDE
 	jr	nz, sub_F6AC4D_Return	; F6AC5C  jr NZ,0xf6ac7d
-	calr	sub_F6BBD4	; F6AC5E  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6AC5E  calr 0xf6bbd4
 	push	xix	; F6AC61  push XIX
 	ld	xix, 13408	; F6AC62  ld XIX,0x00003460
 	mx_ld_mi16 MXD, ra_IX, ra_IZ, 0xffff	; F6AC67  ld (XIX+IZ),0xffff
@@ -153076,7 +153088,7 @@ sub_F6AC4D_Return:
 ; sub_F6AC7E
 ; Called from: in-module: 0xF6A9F5
 ; Touches: (0x0E5C) (0x0E63) (0x1008)  |  0x603422
-; Calls:   sub_F6BBD4
+; Calls:   BStore_DirEntryOffsetX2
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AC7E is an instruction
 ;           boundary.  The name IS the address.
@@ -153086,7 +153098,7 @@ sub_F6AC4D_Return:
 sub_F6AC7E:
 	ld	a, (3676:16)	; F6AC7E  ld A,(0x0e5c)
 	ld	(BStore_DirEntry:16), a	; F6AC82  ld (0x1008),A
-	calr	sub_F6BBD4	; F6AC86  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6AC86  calr 0xf6bbd4
 	srl	xiz, 1	; F6AC89  srl 0x01,XIZ
 	push	xix	; F6AC8C  push XIX
 	ld	xix, 6304802	; F6AC8D  ld XIX,0x00603422
@@ -153117,7 +153129,7 @@ Map_0E63_F6ACA7:
 ; sub_F6ACC8
 ; Called from: in-module: 0xF6AA00
 ; Touches:   |  0x603422
-; Calls:   sub_F6BBD4
+; Calls:   BStore_DirEntryOffsetX2
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6ACC8 is an instruction
 ;           boundary.  The name IS the address.
@@ -153125,7 +153137,7 @@ Map_0E63_F6ACA7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6ACC8:
-	calr	sub_F6BBD4	; F6ACC8  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6ACC8  calr 0xf6bbd4
 	srl	xiz, 1	; F6ACCB  srl 0x01,XIZ
 	push	xix	; F6ACCE  push XIX
 	ld	xix, 6304802	; F6ACCF  ld XIX,0x00603422
@@ -153184,7 +153196,7 @@ IndexMap_F6AD04:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6AD24
+; BStore_ResetAllocHeapBase
 ; Called from: in-module: 0xF6A9F2
 ; Touches: (0x3604)
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -153193,7 +153205,8 @@ IndexMap_F6AD04:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6AD24:
+; BStore_ResetAllocHeapBase: BStore_AllocHeapBase = BStore_HeapBase.
+BStore_ResetAllocHeapBase:
 	ld	xhl, BStore_AllocHeapBase	; F6AD24  ld XHL,0x000012a2
 	ld	xwa, (BStore_HeapBase:16)	; F6AD29  ld XWA,(0x3604)
 	ld	(xhl), xwa	; F6AD2D  ld (XHL),XWA
@@ -153611,7 +153624,7 @@ sub_F6B01E_Skip:
 ; sub_F6B039
 ; Called from: in-module: 0xF6A289 0xF6B029 0xF6C662
 ; Touches:   |  0x603500
-; Calls:   sub_F6BBE6 sub_F6BBD4
+; Calls:   BStore_DirEntryOffsetX3 BStore_DirEntryOffsetX2
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B039 is an instruction
 ;           boundary.  The name IS the address.
@@ -153619,7 +153632,7 @@ sub_F6B01E_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B039:
-	calr	sub_F6BBE6	; F6B039  calr 0xf6bbe6
+	calr	BStore_DirEntryOffsetX3	; F6B039  calr 0xf6bbe6
 	push	xde	; F6B03C  push XDE
 	ld	xde, 6305024	; F6B03D  ld XDE,0x00603500
 	add	xde, xiz	; F6B042  add XDE,XIZ
@@ -153628,7 +153641,7 @@ sub_F6B039:
 	cp	wa, 65535	; F6B048  cp WA,0xffff
 	jr	z, sub_F6B039_Skip	; F6B04C  jr Z,0xf6b070
 	pushw	wa	; F6B04E  push WA
-	calr	sub_F6BBD4	; F6B04F  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B04F  calr 0xf6bbd4
 	popw	wa	; F6B052  pop WA
 	push	xix	; F6B053  push XIX
 	ld	xix, 13408	; F6B054  ld XIX,0x00003460
@@ -153642,7 +153655,7 @@ sub_F6B039_Join:
 	pop	xix	; F6B06E  pop XIX
 	ret	; F6B06F  ret
 sub_F6B039_Skip:
-	calr	sub_F6BBD4	; F6B070  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B070  calr 0xf6bbd4
 	jr	sub_F6B039_Join	; F6B073  jr T,0xf6b05f
 
 ; --------------------------------------------------------------------------
@@ -153763,7 +153776,7 @@ sub_F6B0C4_Skip4:
 ; sub_F6B134
 ; Called from: in-module: 0xF6B0B4 0xF6B120 0xF6B2E9
 ; Touches: (0x126E) (0x3608)  |  0x60347E 0x6034A0
-; Calls:   sub_F6BBD4 sub_F6BBC0 sub_F6BAFA
+; Calls:   BStore_DirEntryOffsetX2 BStore_SetCursorBlockAddrFromIY sub_F6BAFA
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B134 is an instruction
 ;           boundary.  The name IS the address.
@@ -153771,7 +153784,7 @@ sub_F6B0C4_Skip4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B134:
-	calr	sub_F6BBD4	; F6B134  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B134  calr 0xf6bbd4
 	push	xix	; F6B137  push XIX
 	ld	xix, 13408	; F6B138  ld XIX,0x00003460
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B13D  ld IY,(XIX+IZ)
@@ -153797,7 +153810,7 @@ sub_F6B134_Skip:
 	ld	xix, 13408	; F6B172  ld XIX,0x00003460
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B177  ld IY,(XIX+IZ)
 	pop	xix	; F6B17C  pop XIX
-	calr	sub_F6BBC0	; F6B17D  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B17D  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B180  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6B184  ld IY,(XHL+0x03)
 	push	xix	; F6B187  push XIX
@@ -153807,7 +153820,7 @@ sub_F6B134_Skip:
 	cp	iy, 65535	; F6B193  cp IY,0xffff
 	jr	z, sub_F6B134_Return	; F6B197  jr Z,0xf6b149
 sub_F6B134_Join:
-	calr	sub_F6BBC0	; F6B199  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B199  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B19C  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6B1A0  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6B1A3  cp IY,0xffff
@@ -154035,7 +154048,7 @@ sub_F6B257:
 ; sub_F6B276
 ; Called from: in-module: 0xF6AF4A
 ; Touches:   |  0x60347E 0x6034A0
-; Calls:   sub_F6C4A5 sub_F6BBD4 sub_F6B8BD sub_F6B770 sub_F6C292 sub_F6B9DF
+; Calls:   sub_F6C4A5 BStore_DirEntryOffsetX2 sub_F6B8BD sub_F6B770 sub_F6C292 sub_F6B9DF
 ;          sub_F6BA11 sub_F6C2E5 sub_F6B134
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B276 is an instruction
@@ -154051,7 +154064,7 @@ sub_F6B276:
 	calr	sub_F6C4A5	; F6B281  calr 0xf6c4a5
 	cp	w, 0:i3	; F6B284  cp W,0
 	jr	nz, sub_F6B276_Return	; F6B286  jr NZ,0xf6b2ec
-	calr	sub_F6BBD4	; F6B288  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B288  calr 0xf6bbd4
 	push	xix	; F6B28B  push XIX
 	ld	xix, 6304894	; F6B28C  ld XIX,0x0060347e
 	mx_ld_rm MXW, ra_IX, ra_IZ, 0	; F6B291  ld WA,(XIX+IZ)
@@ -154211,7 +154224,7 @@ sub_F6B387:
 ; Called from: in-module: 0xF67475 0xF6B38B
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x1008) (0x126E)
 ;          (0x1272) (0x2070) (0x2075) +1 more  |  0x60347E
-; Calls:   sub_F6BBD4 T_F427EC sub_F6B50C T_F42884 sub_F6BBC0 sub_F67481
+; Calls:   BStore_DirEntryOffsetX2 T_F427EC sub_F6B50C T_F42884 BStore_SetCursorBlockAddrFromIY sub_F67481
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B399 is an instruction
 ;           boundary.  The name IS the address.
@@ -154223,7 +154236,7 @@ sub_F6B399:
 	ld	(4722:16), xiy	; F6B39A  ld (0x1272),XIY
 	ld	(BStore_DirEntry:16), a	; F6B39E  ld (0x1008),A
 	ld	c, w	; F6B3A2  ld C,W
-	calr	sub_F6BBD4	; F6B3A4  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B3A4  calr 0xf6bbd4
 	ld	xix, 6304894	; F6B3A7  ld XIX,0x0060347e
 	xor	b, b	; F6B3AC  xor B,B
 sub_F6B399_Join:
@@ -154317,7 +154330,7 @@ sub_F6B399_Skip2:
 	ld	(xix+34), a	; F6B4A7  ld (XIX+0x22),A
 	m_rd_ld_rrx RLX, 0x38, r4	; F6B4AA  ld XIX,XDE3
 	sla	iz, 1	; F6B4AD  sla 0x01,IZ
-	calr	sub_F6BBC0	; F6B4B0  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B4B0  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B4B3  ld XHL,(0x126e)
 	m_ld_mi16 MDD+r3, 0x03, 0xffff	; F6B4B7  ld (XHL+0x03),0xffff
 	ld	(3159:16), iy	; F6B4BC  ld (0x0c57),IY
@@ -154328,7 +154341,7 @@ sub_F6B399_Skip2:
 	ld	(xhl+1), de	; F6B4CD  ld (XHL+0x01),DE
 	mx_st_mr16 MXD, ra_IX, ra_IZ, 0	; F6B4D0  ld (XIX+IZ),WA
 	ld	iy, de	; F6B4D5  ld IY,DE
-	calr	sub_F6BBC0	; F6B4D7  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B4D7  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B4DA  ld XHL,(0x126e)
 	ld	(xhl+3), wa	; F6B4DE  ld (XHL+0x03),WA
 	popw	de	; F6B4E1  pop DE
@@ -154358,7 +154371,7 @@ sub_F6B399_Loop:
 ; sub_F6B50C
 ; Called from: in-module: 0xF67479 0xF6B476 0xF6B4EE
 ; Touches: (0x1008) (0x126E) (0x1272)  |  0x603500
-; Calls:   sub_F6BBC0 T_F42884
+; Calls:   BStore_SetCursorBlockAddrFromIY T_F42884
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B50C is an instruction
 ;           boundary.  The name IS the address.
@@ -154390,7 +154403,7 @@ sub_F6B50C_Skip:
 	sla	iz, 1	; F6B548  sla 0x01,IZ
 	pushw	iy	; F6B54B  push IY
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B54C  ld IY,(XIX+IZ)
-	calr	sub_F6BBC0	; F6B551  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B551  calr 0xf6bbc0
 	popw	iy	; F6B554  pop IY
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B555  ld XHL,(0x126e)
 	extz	xiy	; F6B559  extz XIY
@@ -154410,7 +154423,7 @@ sub_F6B50C_Skip2:
 	and	ix, 255	; F6B57C  and IX,0x00ff
 	sub	wa, ix	; F6B580  sub WA,IX
 	ld	bc, wa	; F6B582  ld BC,WA
-	calr	sub_F6BBC0	; F6B584  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B584  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B587  ld XHL,(0x126e)
 	extz	xix	; F6B58B  extz XIX
 	add	xhl, xix	; F6B58D  add XHL,XIX
@@ -154428,10 +154441,10 @@ sub_F6B50C_Skip2:
 	sla	iz, 1	; F6B5B4  sla 0x01,IZ
 	sub	c, 5	; F6B5B7  sub C,0x05
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B5BA  ld IY,(XIX+IZ)
-	calr	sub_F6BBC0	; F6B5BF  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B5BF  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B5C2  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6B5C6  ld IY,(XHL+0x03)
-	calr	sub_F6BBC0	; F6B5C9  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B5C9  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B5CC  ld XHL,(0x126e)
 	mx_st_mr16 MXD, ra_IX, ra_IZ, 5	; F6B5D0  ld (XIX+IZ),IY
 	ld	xix, xhl	; F6B5D5  ld XIX,XHL
@@ -154478,7 +154491,7 @@ sub_F6B50C_Skip3:
 	pop	xix	; F6B640  pop XIX
 	pop	xiz	; F6B641  pop XIZ
 	popw	wa	; F6B642  pop WA
-	calr	sub_F6BBC0	; F6B643  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B643  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B646  ld XHL,(0x126e)
 	m_ld_mi16 MDD+r3, 0x01, 0x0000	; F6B64A  ld (XHL+0x01),0x0000
 	m_ld_mi16 MDD+r3, 0x03, 0xffff	; F6B64F  ld (XHL+0x03),0xffff
@@ -154489,7 +154502,7 @@ sub_F6B50C_Skip3:
 ; Called from: in-module: 0xF68E4A 0xF68E61 0xF69006 0xF69407
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x126E)  |
 ;          0x60347E
-; Calls:   sub_F6BBD4 sub_F6BBC0 T_F427E8 sub_F6BAFA
+; Calls:   BStore_DirEntryOffsetX2 BStore_SetCursorBlockAddrFromIY T_F427E8 sub_F6BAFA
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B657 is an instruction
 ;           boundary.  The name IS the address.
@@ -154498,7 +154511,7 @@ sub_F6B50C_Skip3:
 ; --------------------------------------------------------------------------
 sub_F6B657:
 	ld	c, w	; F6B657  ld C,W
-	calr	sub_F6BBD4	; F6B659  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B659  calr 0xf6bbd4
 	ld	xix, 13408	; F6B65C  ld XIX,0x00003460
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B661  ld IY,(XIX+IZ)
 	ld	(3159:16), iy	; F6B666  ld (0x0c57),IY
@@ -154519,7 +154532,7 @@ sub_F6B657_Join:
 	ld	(3175:16), wa	; F6B692  ld (0x0c67),WA
 	jr	sub_F6B657_Join2	; F6B696  jr T,0xf6b6a8
 sub_F6B657_Skip:
-	calr	sub_F6BBC0	; F6B698  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B698  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B69B  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6B69F  ld IY,(XHL+0x03)
 	sub	wa, 251	; F6B6A2  sub WA,0x00fb
@@ -154569,12 +154582,12 @@ sub_F6B657_Skip3:
 	sub	wa, 5	; F6B704  sub WA,0x0005
 sub_F6B657_Join3:
 	ld	iy, de	; F6B708  ld IY,DE
-	calr	sub_F6BBC0	; F6B70A  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B70A  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B70D  ld XHL,(0x126e)
 	ld	de, (xhl+1)	; F6B711  ld DE,(XHL+0x01)
 	mx_st_mr16 MXD, ra_IX, ra_IZ, 2	; F6B714  ld (XIX+IZ),DE
 	ld	iy, de	; F6B719  ld IY,DE
-	calr	sub_F6BBC0	; F6B71B  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B71B  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B71E  ld XHL,(0x126e)
 	srl	iz, 1	; F6B722  srl 0x01,IZ
 	m_rd_ld_rr2x RLX, 0x38, r4	; F6B725  ld XDE3,XIX
@@ -154670,7 +154683,7 @@ sub_F6B770:
 ; sub_F6B77C
 ; Called from: in-module: 0xF67438
 ; Touches: (0x0E54) (0x0ECE) (0x126E)
-; Calls:   sub_F6BBD4 sub_F6BBC0 sub_F6BC89 sub_F6B8FB sub_F6B8AD
+; Calls:   BStore_DirEntryOffsetX2 BStore_SetCursorBlockAddrFromIY sub_F6BC89 sub_F6B8FB sub_F6B8AD
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B77C is an instruction
 ;           boundary.  The name IS the address.
@@ -154679,7 +154692,7 @@ sub_F6B770:
 ; --------------------------------------------------------------------------
 sub_F6B77C:
 	ld	h, w	; F6B77C  ld H,W
-	calr	sub_F6BBD4	; F6B77E  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B77E  calr 0xf6bbd4
 	pushw	bc	; F6B781  push BC
 	xor	c, c	; F6B782  xor C,C
 	ld	b, h	; F6B784  ld B,H
@@ -154687,7 +154700,7 @@ sub_F6B77C:
 	ld	xix, 13408	; F6B787  ld XIX,0x00003460
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B78C  ld IY,(XIX+IZ)
 	pop	xix	; F6B791  pop XIX
-	calr	sub_F6BBC0	; F6B792  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B792  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B795  ld XHL,(0x126e)
 	srl	iz, 1	; F6B799  srl 0x01,IZ
 	push	xde	; F6B79C  push XDE
@@ -154749,12 +154762,12 @@ sub_F6B770_Skip3:
 	ld	xde, 13408	; F6B816  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B81B  ld IY,(XDE+IZ)
 	pop	xde	; F6B820  pop XDE
-	calr	sub_F6BBC0	; F6B821  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B821  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B824  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6B828  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6B82B  cp IY,0xffff
 	jr	z, sub_F6B770_Skip6	; F6B82F  jr Z,0xf6b8a9
-	calr	sub_F6BBC0	; F6B831  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B831  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B834  ld XHL,(0x126e)
 	ldw	ix, 4	; F6B838  ld IX,0x0004
 	jrl	sub_F6B770_Loop	; F6B83B  jrl T,0xf6b7b4
@@ -154791,12 +154804,12 @@ sub_F6B770_Skip5:
 	ld	xde, 13408	; F6B884  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B889  ld IY,(XDE+IZ)
 	pop	xde	; F6B88E  pop XDE
-	calr	sub_F6BBC0	; F6B88F  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B88F  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B892  ld XHL,(0x126e)
 	ld	iy, (xhl+1)	; F6B896  ld IY,(XHL+0x01)
 	cp	iy, 0:i3	; F6B899  cp IY,0
 	jr	z, sub_F6B770_Skip6	; F6B89B  jr Z,0xf6b8a9
-	calr	sub_F6BBC0	; F6B89D  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B89D  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B8A0  ld XHL,(0x126e)
 	ldw	ix, 256	; F6B8A4  ld IX,0x0100
 	jr	sub_F6B770_Loop2	; F6B8A7  jr T,0xf6b83e
@@ -154830,7 +154843,7 @@ sub_F6B8AD_Epilogue:
 ; Called from: in-module: 0xF68224 0xF68240 0xF6825E 0xF68A35 0xF68ADB
 ;              0xF68BE4 0xF68C3A 0xF68D1C +59 more
 ; Touches: (0x126E)
-; Calls:   sub_F6BBD4 sub_F6BBC0
+; Calls:   BStore_DirEntryOffsetX2 BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B8BD is an instruction
 ;           boundary.  The name IS the address.
@@ -154838,12 +154851,12 @@ sub_F6B8AD_Epilogue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B8BD:
-	calr	sub_F6BBD4	; F6B8BD  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B8BD  calr 0xf6bbd4
 	push	xde	; F6B8C0  push XDE
 	ld	xde, 13408	; F6B8C1  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B8C6  ld IY,(XDE+IZ)
 	pop	xde	; F6B8CB  pop XDE
-	calr	sub_F6BBC0	; F6B8CC  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B8CC  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B8CF  ld XHL,(0x126e)
 	srl	iz, 1	; F6B8D3  srl 0x01,IZ
 	push	xde	; F6B8D6  push XDE
@@ -154893,7 +154906,7 @@ sub_F6B8FB:
 ; sub_F6B905
 ; Called from: in-module: 0xF6B8F7 0xF6B901
 ; Touches: (0x0EFE) (0x126E)
-; Calls:   sub_F6BBD4 sub_F6BBC0
+; Calls:   BStore_DirEntryOffsetX2 BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B905 is an instruction
 ;           boundary.  The name IS the address.
@@ -154901,13 +154914,13 @@ sub_F6B8FB:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B905:
-	calr	sub_F6BBD4	; F6B905  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B905  calr 0xf6bbd4
 	xor	w, w	; F6B908  xor W,W
 	push	xde	; F6B90A  push XDE
 	ld	xde, 13408	; F6B90B  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B910  ld IY,(XDE+IZ)
 	pop	xde	; F6B915  pop XDE
-	calr	sub_F6BBC0	; F6B916  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B916  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B919  ld XHL,(0x126e)
 	srl	iz, 1	; F6B91D  srl 0x01,IZ
 	push	xde	; F6B920  push XDE
@@ -154925,7 +154938,7 @@ sub_F6B905_Skip:
 	ld	iy, (xhl+3)	; F6B943  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6B946  cp IY,0xffff
 	jr	z, sub_F6B905_Skip2	; F6B94A  jr Z,0xf6b95c
-	calr	sub_F6BBC0	; F6B94C  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B94C  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6B94F  ld XHL,(0x126e)
 	ldw	iy, 5	; F6B953  ld IY,0x0005
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F6B956  ld A,(XHL+IY)
@@ -154982,7 +154995,7 @@ sub_F6B96F:
 ; sub_F6B97B
 ; Called from: in-module: 0xF68AC0
 ; Touches: (0x126E)
-; Calls:   sub_F6BBC0
+; Calls:   BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B97B is an instruction
 ;           boundary.  The name IS the address.
@@ -155001,7 +155014,7 @@ sub_F6B97B:
 	ld	xix, 13408	; F6B989  ld XIX,0x00003460
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6B98E  ld IY,(XIX+IZ)
 	pop	xix	; F6B993  pop XIX
-	calr	sub_F6BBC0	; F6B994  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B994  calr 0xf6bbc0
 	srl	iz, 1	; F6B997  srl 0x01,IZ
 	push	xix	; F6B99A  push XIX
 	ld	xix, 13442	; F6B99B  ld XIX,0x00003482
@@ -155056,7 +155069,7 @@ sub_F6B9B9:
 ; Called from: in-module: 0xF6822B 0xF68252 0xF68268 0xF68F57 0xF698FA
 ;              0xF699FC 0xF69A15 0xF69B6D +8 more
 ; Touches: (0x126E)
-; Calls:   sub_F6BBD4 sub_F6BBC0
+; Calls:   BStore_DirEntryOffsetX2 BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B9DF is an instruction
 ;           boundary.  The name IS the address.
@@ -155064,12 +155077,12 @@ sub_F6B9B9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B9DF:
-	calr	sub_F6BBD4	; F6B9DF  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6B9DF  calr 0xf6bbd4
 	push	xde	; F6B9E2  push XDE
 	ld	xde, 13408	; F6B9E3  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B9E8  ld IY,(XDE+IZ)
 	pop	xde	; F6B9ED  pop XDE
-	calr	sub_F6BBC0	; F6B9EE  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6B9EE  calr 0xf6bbc0
 	srl	iz, 1	; F6B9F1  srl 0x01,IZ
 	push	xde	; F6B9F4  push XDE
 	ld	xde, 13442	; F6B9F5  ld XDE,0x00003482
@@ -155086,7 +155099,7 @@ sub_F6B9DF:
 ; Called from: in-module: 0xF68221 0xF6825B 0xF68AB6 0xF698B2 0xF699B6
 ;              0xF69B52 0xF69B89 0xF6B0A7 +5 more
 ; Touches: (0x0EF4) (0x1008) (0x126E) (0x3604)  |  0x60347E
-; Calls:   sub_F6BBC0
+; Calls:   BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6BA11 is an instruction
 ;           boundary.  The name IS the address.
@@ -155141,7 +155154,7 @@ sub_F6BA11_Skip:
 	inc	1, wa	; F6BA8A  inc 1,WA
 	ld	bc, wa	; F6BA8C  ld BC,WA
 	mx_ld_rm MXW, ra_IX, ra_IZ, 5	; F6BA8E  ld IY,(XIX+IZ)
-	calr	sub_F6BBC0	; F6BA93  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BA93  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BA96  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6BA9A  ld IY,(XHL+0x03)
 	ld	l, (3828:16)	; F6BA9D  ld L,(0x0ef4)
@@ -155184,7 +155197,7 @@ sub_F6BA11_Skip3:
 ; sub_F6BAFA
 ; Called from: in-module: 0xF6B1AD 0xF6B73C
 ; Touches: (0x0C88) (0x126E) (0x3604)
-; Calls:   sub_F6BBC0
+; Calls:   BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6BAFA is an instruction
 ;           boundary.  The name IS the address.
@@ -155201,7 +155214,7 @@ sub_F6BAFA:
 	ld	bc, (BStore_FreeHead:24)	; F6BB0B  ld BC,(0x6034b8)
 	ld	(BStore_FreeHead:24), iy	; F6BB10  ld (0x6034b8),IY
 	xor	wa, wa	; F6BB15  xor WA,WA
-	calr	sub_F6BBC0	; F6BB17  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BB17  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB1A  ld XHL,(0x126e)
 	ld	ix, (xhl+1)	; F6BB1E  ld IX,(XHL+0x01)
 	ld	de, ix	; F6BB21  ld DE,IX
@@ -155209,12 +155222,12 @@ sub_F6BAFA:
 	jrl	z, sub_F6BAFA_Skip3	; F6BB25  jrl Z,0xf6bba1
 	ld	iy, ix	; F6BB28  ld IY,IX
 	m_ld_mi16 MDD+r3, 0x01, 0x0000	; F6BB2A  ld (XHL+0x01),0x0000
-	calr	sub_F6BBC0	; F6BB2F  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BB2F  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB32  ld XHL,(0x126e)
 	ld	ix, iy	; F6BB36  ld IX,IY
 	ld	iy, (xhl+3)	; F6BB38  ld IY,(XHL+0x03)
 sub_F6BAFA_Loop:
-	calr	sub_F6BBC0	; F6BB3B  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BB3B  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB3E  ld XHL,(0x126e)
 	ld	ix, iy	; F6BB42  ld IX,IY
 	ld	iy, (xhl+3)	; F6BB44  ld IY,(XHL+0x03)
@@ -155228,7 +155241,7 @@ sub_F6BAFA_Loop2:
 	jr	nz, sub_F6BAFA_Loop	; F6BB5A  jr NZ,0xf6bb3b
 	dec	1, wa	; F6BB5C  dec 1,WA
 sub_F6BAFA_Join:
-	calr	sub_F6BBC0	; F6BB5E  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BB5E  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB61  ld XHL,(0x126e)
 	ld	(xhl+1), de	; F6BB65  ld (XHL+0x01),DE
 sub_F6BAFA_Skip:
@@ -155236,26 +155249,26 @@ sub_F6BAFA_Skip:
 	jr	z, sub_F6BAFA_Skip2	; F6BB6A  jr Z,0xf6bb7a
 	push	xiy	; F6BB6C  push XIY
 	ld	iy, de	; F6BB6D  ld IY,DE
-	calr	sub_F6BBC0	; F6BB6F  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BB6F  calr 0xf6bbc0
 	pop	xiy	; F6BB72  pop XIY
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB73  ld XHL,(0x126e)
 	ld	(xhl+3), iy	; F6BB77  ld (XHL+0x03),IY
 sub_F6BAFA_Skip2:
 	ld	iy, ix	; F6BB7A  ld IY,IX
-	calr	sub_F6BBC0	; F6BB7C  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BB7C  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB7F  ld XHL,(0x126e)
 	m_and_mi8 MBI+r3, 0, 0x7f	; F6BB83  and (XHL),0x7f
 	ld	(xhl+5), 130	; F6BB86  ld (XHL+0x05),0x82
 	ld	(xhl+3), bc	; F6BB8A  ld (XHL+0x03),BC
 	ld	iy, bc	; F6BB8D  ld IY,BC
-	calr	sub_F6BBC0	; F6BB8F  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BB8F  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BB92  ld XHL,(0x126e)
 	ld	(xhl+1), ix	; F6BB96  ld (XHL+0x01),IX
 	inc	1, wa	; F6BB99  inc 1,WA
 	add	(BStore_FreeCount:24), wa	; F6BB9B  add (0x6034ba),WA
 	ret	; F6BBA0  ret
 sub_F6BAFA_Skip3:
-	calr	sub_F6BBC0	; F6BBA1  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6BBA1  calr 0xf6bbc0
 	ld	ix, iy	; F6BBA4  ld IX,IY
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6BBA6  ld XHL,(0x126e)
 	ld	iy, (xhl+3)	; F6BBAA  ld IY,(XHL+0x03)
@@ -155267,7 +155280,7 @@ sub_F6BAFA_Skip3:
 	jr	sub_F6BAFA_Join	; F6BBBE  jr T,0xf6bb5e
 
 ; --------------------------------------------------------------------------
-; sub_F6BBC0
+; BStore_SetCursorBlockAddrFromIY
 ; Called from: in-module: 0xF6B17D 0xF6B199 0xF6B4B0 0xF6B4D7 0xF6B551
 ;              0xF6B584 0xF6B5BF 0xF6B5C9 +25 more
 ; Touches: (0x126E) (0x3604)
@@ -155277,7 +155290,8 @@ sub_F6BAFA_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6BBC0:
+; BStore_SetCursorBlockAddrFromIY: BStore_SetCursorBlockAddr with the block number in IY.
+BStore_SetCursorBlockAddrFromIY:
 	ld	hl, iy	; F6BBC0  ld HL,IY
 	dec	1, hl	; F6BBC2  dec 1,HL
 	extz	xhl	; F6BBC4  extz XHL
@@ -155288,7 +155302,7 @@ sub_F6BBC0:
 	ret	; F6BBD3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6BBD4
+; BStore_DirEntryOffsetX2
 ; Called from: in-module: 0xF6747D 0xF69351 0xF696DE 0xF698D3 0xF69911
 ;              0xF69939 0xF69E7F 0xF6A29E +19 more
 ; Touches: (0x1008)
@@ -155298,7 +155312,8 @@ sub_F6BBC0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6BBD4:
+; BStore_DirEntryOffsetX2: XIZ = (BStore_DirEntry - 1) * 2.
+BStore_DirEntryOffsetX2:
 	pushw	wa	; F6BBD4  push WA
 	ld	a, (BStore_DirEntry:16)	; F6BBD5  ld A,(0x1008)
 	dec	1, a	; F6BBD9  dec 1,A
@@ -155310,7 +155325,7 @@ sub_F6BBD4:
 	ret	; F6BBE5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6BBE6
+; BStore_DirEntryOffsetX3
 ; Called from: in-module: 0xF6AC4D 0xF6B039
 ; Touches: (0x1008)
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -155319,7 +155334,8 @@ sub_F6BBD4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6BBE6:
+; BStore_DirEntryOffsetX3: XIZ = (BStore_DirEntry - 1) * 3.
+BStore_DirEntryOffsetX3:
 	pushw	wa	; F6BBE6  push WA
 	ld	a, (BStore_DirEntry:16)	; F6BBE7  ld A,(0x1008)
 	dec	1, a	; F6BBEB  dec 1,A
@@ -155441,7 +155457,7 @@ sub_F6BC89_Skip2:
 ; Touches: (0x0E53) (0x0E63) (0x0ECA) (0x0EF5) (0x100E) (0x100F) (0x1258)
 ;          (0x1259) (0x125A) (0x1264) +11 more  |  0x603422
 ; Calls:   sub_F6B8BD sub_F6B8F1 sub_F6BBFC 0xF6D410 sub_F67448 sub_F6B95F
-;          sub_F6C230 sub_F6BBD4 T_F413E4 0xF6D710 0xF6D70C T_F40790 +15
+;          sub_F6C230 BStore_DirEntryOffsetX2 T_F413E4 0xF6D710 0xF6D70C T_F40790 +15
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6BCB2 is an instruction
@@ -155497,7 +155513,7 @@ sub_F6BC89_Skip6:
 	calr	sub_F6B95F	; F6BD28  calr 0xf6b95f
 	calr	sub_F6C230	; F6BD2B  calr 0xf6c230
 	pushw	wa	; F6BD2E  push WA
-	calr	sub_F6BBD4	; F6BD2F  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6BD2F  calr 0xf6bbd4
 	srl	iz, 1	; F6BD32  srl 0x01,IZ
 	popw	wa	; F6BD35  pop WA
 	push	xix	; F6BD36  push XIX
@@ -156112,7 +156128,7 @@ Map_0EF5_F6C282:
 ; Called from: in-module: 0xF68218 0xF6823D 0xF68A45 0xF68AEB 0xF68B96
 ;              0xF68C2C 0xF68E72 0xF68EF5 +25 more
 ; Touches: (0x0E53) (0x0E54) (0x0E56)
-; Calls:   sub_F6BBD4
+; Calls:   BStore_DirEntryOffsetX2
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C292 is an instruction
 ;           boundary.  The name IS the address.
@@ -156130,7 +156146,7 @@ sub_F6C292:
 	exts	xwa	; F6C29E  exts XWA
 	add	xwa, 3857	; F6C2A0  add XWA,0x00000f11
 	ld	xhl, xwa	; F6C2A6  ld XHL,XWA
-	calr	sub_F6BBD4	; F6C2A8  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6C2A8  calr 0xf6bbd4
 	ld	xiy, 13408	; F6C2AB  ld XIY,0x00003460
 	mx_ld_rm MXW, ra_IY, ra_IZ, 0	; F6C2B0  ld WA,(XIY+IZ)
 	ld	(xhl), wa	; F6C2B5  ld (XHL),WA
@@ -156194,7 +156210,7 @@ sub_F6C2E5:
 ; sub_F6C30A
 ; Called from: in-module: 0xF6C2E9 0xF6C2F8
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6BBD4
+; Calls:   BStore_DirEntryOffsetX2
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C30A is an instruction
 ;           boundary.  The name IS the address.
@@ -156208,7 +156224,7 @@ sub_F6C30A:
 	exts	xwa	; F6C312  exts XWA
 	add	xwa, 3857	; F6C314  add XWA,0x00000f11
 	ld	xhl, xwa	; F6C31A  ld XHL,XWA
-	calr	sub_F6BBD4	; F6C31C  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6C31C  calr 0xf6bbd4
 	ld	xiy, 13408	; F6C31F  ld XIY,0x00003460
 	ld	wa, (xhl)	; F6C324  ld WA,(XHL)
 	mx_st_mr16 MXD, ra_IY, ra_IZ, 0	; F6C326  ld (XIY+IZ),WA
@@ -156224,7 +156240,7 @@ sub_F6C30A:
 ; sub_F6C340
 ; Called from: in-module: 0xF6C2EC 0xF6C302
 ; Touches: (0x0E54) (0x0E56) (0x126E)
-; Calls:   sub_F6BBD4 sub_F6BBC0
+; Calls:   BStore_DirEntryOffsetX2 BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C340 is an instruction
 ;           boundary.  The name IS the address.
@@ -156247,7 +156263,7 @@ sub_F6C340:
 	exts	xwa	; F6C35B  exts XWA
 	add	xwa, 3857	; F6C35D  add XWA,0x00000f11
 	ld	xix, xwa	; F6C363  ld XIX,XWA
-	calr	sub_F6BBD4	; F6C365  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6C365  calr 0xf6bbd4
 	ld	xiy, 13408	; F6C368  ld XIY,0x00003460
 	mx_ld_rm MXW, ra_IY, ra_IZ, 0	; F6C36D  ld WA,(XIY+IZ)
 	cp	(xix), wa	; F6C372  cp (XIX),WA
@@ -156275,7 +156291,7 @@ sub_F6C340_Epilogue:
 	ret	; F6C39C  ret
 sub_F6C340_Join:
 	ld	iy, wa	; F6C39D  ld IY,WA
-	calr	sub_F6BBC0	; F6C39F  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6C39F  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6C3A2  ld XHL,(0x126e)
 	ld	wa, (xhl+1)	; F6C3A6  ld WA,(XHL+0x01)
 	cp	wa, 0:i3	; F6C3A9  cp WA,0
@@ -156315,7 +156331,7 @@ sub_F6C340_Epilogue2:
 ; sub_F6C3E5
 ; Called from: in-module: 0xF69CD8
 ; Touches: (0x1008) (0x126E)
-; Calls:   sub_F6BBC0
+; Calls:   BStore_SetCursorBlockAddrFromIY
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C3E5 is an instruction
 ;           boundary.  The name IS the address.
@@ -156341,7 +156357,7 @@ sub_F6C3E5:
 	cp	wa, 0:i3	; F6C408  cp WA,0
 	jr	z, sub_F6C3E5_Skip2	; F6C40A  jr Z,0xf6c435
 	ld	iy, wa	; F6C40C  ld IY,WA
-	calr	sub_F6BBC0	; F6C40E  calr 0xf6bbc0
+	calr	BStore_SetCursorBlockAddrFromIY	; F6C40E  calr 0xf6bbc0
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6C411  ld XHL,(0x126e)
 	m_cp_mi16 MWD+r3, 0x01, 0x0000	; F6C415  cp (XHL+0x01),0x0000
 	jr	z, sub_F6C3E5_Skip	; F6C41A  jr Z,0xf6c423
@@ -156714,7 +156730,7 @@ sub_F6C5BA_Join:
 ; sub_F6C625
 ; Called from: T_F42EF4 (x0)
 ; Touches: (0x0F11) (0x0F13) (0x1070) (0x126E)
-; Calls:   sub_F6C292 sub_F6B8BD sub_F6B770 sub_F6B75E sub_F6B039 sub_F6BBD4
+; Calls:   sub_F6C292 sub_F6B8BD sub_F6B770 sub_F6B75E sub_F6B039 BStore_DirEntryOffsetX2
 ;          sub_F6C6DE sub_F6C2E5
 ; Evidence: thunk slot T_F42EF4 holds `jp 0x00F6C625`, and 0xF6C625 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -156762,7 +156778,7 @@ sub_F6C5BA_Loop2:
 	calr	sub_F6B75E	; F6C66F  calr 0xf6b75e
 	cp	w, 255	; F6C672  cp W,0xff
 	jr	z, sub_F6C5BA_Skip6	; F6C675  jr Z,0xf6c6c5
-	calr	sub_F6BBD4	; F6C677  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6C677  calr 0xf6bbd4
 	push	xde	; F6C67A  push XDE
 	ld	xde, 13408	; F6C67B  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6C680  ld IY,(XDE+IZ)
@@ -156813,7 +156829,7 @@ sub_F6C5BA_Skip6:
 ; sub_F6C6DE
 ; Called from: in-module: 0xF6C6AA
 ; Touches: (0x0FC7) (0x0FC9) (0x0FCA) (0x0FCB) (0x0FCC) (0x0FD4) (0x0FD6)
-; Calls:   sub_F6BBD4 sub_F6746C
+; Calls:   BStore_DirEntryOffsetX2 sub_F6746C
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C6DE is an instruction
 ;           boundary.  The name IS the address.
@@ -156821,7 +156837,7 @@ sub_F6C5BA_Skip6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6C6DE:
-	calr	sub_F6BBD4	; F6C6DE  calr 0xf6bbd4
+	calr	BStore_DirEntryOffsetX2	; F6C6DE  calr 0xf6bbd4
 	push	xde	; F6C6E1  push XDE
 	ld	xde, 13408	; F6C6E2  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6C6E7  ld IY,(XDE+IZ)
@@ -159415,7 +159431,7 @@ sub_F6D5B5:
 ; Called from: in-module: 0xF6D483; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x12B2)
-; Calls:   sub_F6D5E2 T_Value_ToAsciiDigits3_RightJustified
+; Calls:   MsgLine_SetTextDashes T_Value_ToAsciiDigits3_RightJustified
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -159433,7 +159449,7 @@ sub_F6D5BA:
 	ld	wa, (4786:16)	; F6D5BA  ld WA,(0x12b2)
 	cp	wa, 1000	; F6D5BE  cp WA,0x03e8
 	jr	c, sub_F6D5BA_Skip	; F6D5C2  jr C,0xf6d5c9
-	calr	sub_F6D5E2	; F6D5C4  calr 0xf6d5e2
+	calr	MsgLine_SetTextDashes	; F6D5C4  calr 0xf6d5e2
 	jr	sub_F6D5BA_Return	; F6D5C7  jr T,0xf6d5e1
 sub_F6D5BA_Skip:
 	call	T_Value_ToAsciiDigits3_RightJustified	; F6D5C9  call 0xf41af0
@@ -159447,7 +159463,7 @@ sub_F6D5BA_Return:
 	ret	; F6D5E1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D5E2
+; MsgLine_SetTextDashes
 ; Called from: in-module: 0xF6D5C4 0xF6D6E6 0xF6DA7C
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -159458,7 +159474,8 @@ sub_F6D5BA_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6D5E2:
+; MsgLine_SetTextDashes: MsgLine_Text = "---".
+MsgLine_SetTextDashes:
 	ld	xix, MsgLine_Text	; F6D5E2  ld XIX,0x00000fe4
 	ldw	wa, 45	; F6D5E7  ld WA,0x002d
 	ld	(xix), wa	; F6D5EA  ld (XIX),WA
@@ -159692,7 +159709,7 @@ sub_F6D6D6:
 ;              0xF6D590 0xF6D71D 0xF6D885; an already-converted call site
 ;              elsewhere in the image
 ; Touches: (0x12B2) (0x12B4)
-; Calls:   sub_F6D5E2 T_Value_ToAsciiDigits3_RightJustified T_F431B4
+; Calls:   MsgLine_SetTextDashes T_Value_ToAsciiDigits3_RightJustified T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -159710,7 +159727,7 @@ sub_F6D6DC:
 	ld	wa, (4786:16)	; F6D6DC  ld WA,(0x12b2)
 	cp	wa, 1000	; F6D6E0  cp WA,0x03e8
 	jr	c, sub_F6D6DC_Skip	; F6D6E4  jr C,0xf6d6eb
-	calr	sub_F6D5E2	; F6D6E6  calr 0xf6d5e2
+	calr	MsgLine_SetTextDashes	; F6D6E6  calr 0xf6d5e2
 	jr	sub_F6D6DC_Join	; F6D6E9  jr T,0xf6d707
 sub_F6D6DC_Skip:
 	call	T_Value_ToAsciiDigits3_RightJustified	; F6D6EB  call 0xf41af0
@@ -160259,7 +160276,7 @@ sub_F6DA0D:
 ; sub_F6DA12
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0E60) (0x0E62) (0x12B2)
-; Calls:   T_Value_ToAsciiDigits3_LeftJustified sub_F6D5E2 T_Value_ToAsciiDigits3_RightJustified
+; Calls:   T_Value_ToAsciiDigits3_LeftJustified MsgLine_SetTextDashes T_Value_ToAsciiDigits3_RightJustified
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -160311,7 +160328,7 @@ sub_F6DA12_Return:
 	ld	wa, (4786:16)	; F6DA72  ld WA,(0x12b2)
 	cp	wa, 1000	; F6DA76  cp WA,0x03e8
 	jr	c, sub_F6DA12_Skip3	; F6DA7A  jr C,0xf6da81
-	calr	sub_F6D5E2	; F6DA7C  calr 0xf6d5e2
+	calr	MsgLine_SetTextDashes	; F6DA7C  calr 0xf6d5e2
 	jr	sub_F6DA12_Return2	; F6DA7F  jr T,0xf6da99
 sub_F6DA12_Skip3:
 	call	T_Value_ToAsciiDigits3_RightJustified	; F6DA81  call 0xf41af0
@@ -163197,7 +163214,7 @@ sub_F6E9BB_Return:
 ; sub_F6E9E6
 ; Called from: in-module: 0xF6E9C0 0xF6E9D8 0xF6EC46
 ; Touches: (0x0FD4) (0x0FD6) (0x126E)
-; Calls:   sub_F6EC31
+; Calls:   BStore_SetCursorBlockAddr_B
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6E9E6 is an instruction boundary of this
@@ -163214,7 +163231,7 @@ sub_F6E9E6:
 	m_rd_pushx RLX, 0x38	; F6E9EF  push XDE3
 	push	xix	; F6E9F2  push XIX
 	ld	hl, (4052:16)	; F6E9F3  ld HL,(0x0fd4)
-	calr	sub_F6EC31	; F6E9F7  calr 0xf6ec31
+	calr	BStore_SetCursorBlockAddr_B	; F6E9F7  calr 0xf6ec31
 	ld	xiy, (BStore_CursorBlockAddr:16)	; F6E9FA  ld XIY,(0x126e)
 	ld	ix, (4054:16)	; F6E9FE  ld IX,(0x0fd6)
 	mx_ld_rm MXB, ra_IY, ra_IX, 1	; F6EA02  ld A,(XIY+IX)
@@ -163230,7 +163247,7 @@ sub_F6E9E6:
 ; sub_F6EA15
 ; Called from: in-module: 0xF6E9D0 0xF6E9D5 0xF6EC60 0xF6EC66
 ; Touches: (0x0FD4) (0x0FD6) (0x126E)
-; Calls:   sub_F6EC31
+; Calls:   BStore_SetCursorBlockAddr_B
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6EA15 is an instruction boundary of this
@@ -163250,7 +163267,7 @@ sub_F6EA15:
 	cp	wa, 255	; F6EA26  cp WA,0x00ff
 	jr	nz, sub_F6EA15_Skip	; F6EA2A  jr NZ,0xf6ea43
 	ld	hl, (4052:16)	; F6EA2C  ld HL,(0x0fd4)
-	calr	sub_F6EC31	; F6EA30  calr 0xf6ec31
+	calr	BStore_SetCursorBlockAddr_B	; F6EA30  calr 0xf6ec31
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6EA33  ld XHL,(0x126e)
 	ld	hl, (xhl+3)	; F6EA37  ld HL,(XHL+0x03)
 	ld	(4052:16), hl	; F6EA3A  ld (0x0fd4),HL
@@ -163501,7 +163518,7 @@ sub_F6EBE9_Skip:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6EC31
+; BStore_SetCursorBlockAddr_B
 ; Called from: in-module: 0xF6E9F7 0xF6EA30
 ; Touches: (0x126E) (0x3604)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -163512,7 +163529,8 @@ sub_F6EBE9_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6EC31:
+; BStore_SetCursorBlockAddr_B: byte-identical twin of BStore_SetCursorBlockAddr.
+BStore_SetCursorBlockAddr_B:
 	dec	1, hl	; F6EC31  dec 1,HL
 	extz	xhl	; F6EC33  extz XHL
 	sla	xhl, 8	; F6EC35  sla 0x08,XHL
