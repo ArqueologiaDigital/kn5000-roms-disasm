@@ -283,42 +283,42 @@
 	.set	Ring60000C_Scan, 0xF84540
 	.set	Ring60000C_ScanToPut, 0xF8454F
 	.set	Ring60000C_GetCommit, 0xF8455E
-	.set	Ring60080A_Get, 0xF8456B
-	.set	Ring60080A_Put, 0xF84579
-	.set	Ring60080A_PutBlock, 0xF84590
-	.set	Ring60080A_IsEmpty, 0xF845B3
-	.set	Ring60080A_Init, 0xF845C8
-	.set	Ring60080A_ScanRewind, 0xF845D6
-	.set	Ring60080A_Scan, 0xF845E3
-	.set	Ring60080A_ScanToPut, 0xF845F2
-	.set	Ring60080A_GetCommit, 0xF84601
-	.set	Ring600A14_Get, 0xF8460E
-	.set	Ring600A14_Put, 0xF8461C
-	.set	Ring600A14_PutBlock, 0xF84633
-	.set	Ring600A14_IsEmpty, 0xF84656
-	.set	Ring600A14_Init, 0xF8466B
-	.set	Ring600A14_ScanRewind, 0xF84679
-	.set	Ring600A14_Scan, 0xF84686
-	.set	Ring600A14_ScanToPut, 0xF84695
-	.set	Ring600A14_GetCommit, 0xF846A4
-	.set	Ring600C1E_Get, 0xF846B1
-	.set	Ring600C1E_Put, 0xF846BF
-	.set	Ring600C1E_PutBlock, 0xF846D6
-	.set	Ring600C1E_IsEmpty, 0xF846F9
-	.set	Ring600C1E_Init, 0xF8470E
-	.set	Ring600C1E_ScanRewind, 0xF8471C
-	.set	Ring600C1E_Scan, 0xF84729
-	.set	Ring600C1E_ScanToPut, 0xF84738
-	.set	Ring600C1E_GetCommit, 0xF84747
-	.set	Ring601028_Get, 0xF84754
-	.set	Ring601028_Put, 0xF84762
-	.set	Ring601028_PutBlock, 0xF84779
-	.set	Ring601028_IsEmpty, 0xF8479C
-	.set	Ring601028_Init, 0xF847B1
-	.set	Ring601028_ScanRewind, 0xF847BF
-	.set	Ring601028_Scan, 0xF847CC
-	.set	Ring601028_ScanToPut, 0xF847DB
-	.set	Ring601028_GetCommit, 0xF847EA
+	.set	TimedEventRing_Get, 0xF8456B
+	.set	TimedEventRing_Put, 0xF84579
+	.set	TimedEventRing_PutBlock, 0xF84590
+	.set	TimedEventRing_IsEmpty, 0xF845B3
+	.set	TimedEventRing_Init, 0xF845C8
+	.set	TimedEventRing_ScanRewind, 0xF845D6
+	.set	TimedEventRing_Scan, 0xF845E3
+	.set	TimedEventRing_ScanToPut, 0xF845F2
+	.set	TimedEventRing_GetCommit, 0xF84601
+	.set	SeqBufRing_Get, 0xF8460E
+	.set	SeqBufRing_Put, 0xF8461C
+	.set	SeqBufRing_PutBlock, 0xF84633
+	.set	SeqBufRing_IsEmpty, 0xF84656
+	.set	SeqBufRing_Init, 0xF8466B
+	.set	SeqBufRing_ScanRewind, 0xF84679
+	.set	SeqBufRing_Scan, 0xF84686
+	.set	SeqBufRing_ScanToPut, 0xF84695
+	.set	SeqBufRing_GetCommit, 0xF846A4
+	.set	MidiInARing_Get, 0xF846B1
+	.set	MidiInARing_Put, 0xF846BF
+	.set	MidiInARing_PutBlock, 0xF846D6
+	.set	MidiInARing_IsEmpty, 0xF846F9
+	.set	MidiInARing_Init, 0xF8470E
+	.set	MidiInARing_ScanRewind, 0xF8471C
+	.set	MidiInARing_Scan, 0xF84729
+	.set	MidiInARing_ScanToPut, 0xF84738
+	.set	MidiInARing_GetCommit, 0xF84747
+	.set	MidiInBRing_Get, 0xF84754
+	.set	MidiInBRing_Put, 0xF84762
+	.set	MidiInBRing_PutBlock, 0xF84779
+	.set	MidiInBRing_IsEmpty, 0xF8479C
+	.set	MidiInBRing_Init, 0xF847B1
+	.set	MidiInBRing_ScanRewind, 0xF847BF
+	.set	MidiInBRing_Scan, 0xF847CC
+	.set	MidiInBRing_ScanToPut, 0xF847DB
+	.set	MidiInBRing_GetCommit, 0xF847EA
 	.set	Ring601432_Get, 0xF847F7
 	.set	Ring601432_Put, 0xF84805
 	.set	Ring601432_PutBlock, 0xF8481C
@@ -88759,113 +88759,113 @@ T_Ring601B64_ScanToPut:	jp Ring601B64_ScanToPut  ; F41D58 (was T_F41D58) -> prom
 ;           Ring601B64_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Ring601B64_GetCommit:	jp Ring601B64_GetCommit  ; F41D5C (was T_F41D5C) -> prom_a 0x044BB
 ; Evidence: slot 0xF41D60 is `jp 0xF8456B`; prom_a 0xF8456B carries the label
-;           Ring60080A_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_Get:	jp Ring60080A_Get  ; F41D60 (was T_F41D60) -> prom_a 0x0456B   x1
+;           TimedEventRing_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_Get:	jp TimedEventRing_Get  ; F41D60 (was T_F41D60) -> prom_a 0x0456B   x1
 ; Evidence: slot 0xF41D64 is `jp 0xF84579`; prom_a 0xF84579 carries the label
-;           Ring60080A_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_Put:	jp Ring60080A_Put  ; F41D64 (was T_F41D64) -> prom_a 0x04579   x67
+;           TimedEventRing_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_Put:	jp TimedEventRing_Put  ; F41D64 (was T_F41D64) -> prom_a 0x04579   x67
 ; Evidence: slot 0xF41D68 is `jp 0xF84590`; prom_a 0xF84590 carries the label
-;           Ring60080A_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_PutBlock:	jp Ring60080A_PutBlock  ; F41D68 (was T_F41D68) -> prom_a 0x04590
+;           TimedEventRing_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_PutBlock:	jp TimedEventRing_PutBlock  ; F41D68 (was T_F41D68) -> prom_a 0x04590
 ; Evidence: slot 0xF41D6C is `jp 0xF845B3`; prom_a 0xF845B3 carries the label
-;           Ring60080A_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_IsEmpty:	jp Ring60080A_IsEmpty  ; F41D6C (was T_F41D6C) -> prom_a 0x045B3
+;           TimedEventRing_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_IsEmpty:	jp TimedEventRing_IsEmpty  ; F41D6C (was T_F41D6C) -> prom_a 0x045B3
 ; Evidence: slot 0xF41D70 is `jp 0xF845C8`; prom_a 0xF845C8 carries the label
-;           Ring60080A_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_Init:	jp Ring60080A_Init  ; F41D70 (was T_F41D70) -> prom_a 0x045C8   x2
+;           TimedEventRing_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_Init:	jp TimedEventRing_Init  ; F41D70 (was T_F41D70) -> prom_a 0x045C8   x2
 ; Evidence: slot 0xF41D74 is `jp 0xF845D6`; prom_a 0xF845D6 carries the label
-;           Ring60080A_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_ScanRewind:	jp Ring60080A_ScanRewind  ; F41D74 (was T_F41D74) -> prom_a 0x045D6   x2
+;           TimedEventRing_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_ScanRewind:	jp TimedEventRing_ScanRewind  ; F41D74 (was T_F41D74) -> prom_a 0x045D6   x2
 ; Evidence: slot 0xF41D78 is `jp 0xF845E3`; prom_a 0xF845E3 carries the label
-;           Ring60080A_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_Scan:	jp Ring60080A_Scan  ; F41D78 (was T_F41D78) -> prom_a 0x045E3   x6
+;           TimedEventRing_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_Scan:	jp TimedEventRing_Scan  ; F41D78 (was T_F41D78) -> prom_a 0x045E3   x6
 ; Evidence: slot 0xF41D7C is `jp 0xF845F2`; prom_a 0xF845F2 carries the label
-;           Ring60080A_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_ScanToPut:	jp Ring60080A_ScanToPut  ; F41D7C (was T_F41D7C) -> prom_a 0x045F2
+;           TimedEventRing_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_ScanToPut:	jp TimedEventRing_ScanToPut  ; F41D7C (was T_F41D7C) -> prom_a 0x045F2
 ; Evidence: slot 0xF41D80 is `jp 0xF84601`; prom_a 0xF84601 carries the label
-;           Ring60080A_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring60080A_GetCommit:	jp Ring60080A_GetCommit  ; F41D80 (was T_F41D80) -> prom_a 0x04601
+;           TimedEventRing_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_TimedEventRing_GetCommit:	jp TimedEventRing_GetCommit  ; F41D80 (was T_F41D80) -> prom_a 0x04601
 ; Evidence: slot 0xF41D84 is `jp 0xF8460E`; prom_a 0xF8460E carries the label
-;           Ring600A14_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_Get:	jp Ring600A14_Get  ; F41D84 (was T_F41D84) -> prom_a 0x0460E   x48
+;           SeqBufRing_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_Get:	jp SeqBufRing_Get  ; F41D84 (was T_F41D84) -> prom_a 0x0460E   x48
 ; Evidence: slot 0xF41D88 is `jp 0xF8461C`; prom_a 0xF8461C carries the label
-;           Ring600A14_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_Put:	jp Ring600A14_Put  ; F41D88 (was T_F41D88) -> prom_a 0x0461C
+;           SeqBufRing_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_Put:	jp SeqBufRing_Put  ; F41D88 (was T_F41D88) -> prom_a 0x0461C
 ; Evidence: slot 0xF41D8C is `jp 0xF84633`; prom_a 0xF84633 carries the label
-;           Ring600A14_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_PutBlock:	jp Ring600A14_PutBlock  ; F41D8C (was T_F41D8C) -> prom_a 0x04633   x2
+;           SeqBufRing_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_PutBlock:	jp SeqBufRing_PutBlock  ; F41D8C (was T_F41D8C) -> prom_a 0x04633   x2
 ; Evidence: slot 0xF41D90 is `jp 0xF84656`; prom_a 0xF84656 carries the label
-;           Ring600A14_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_IsEmpty:	jp Ring600A14_IsEmpty  ; F41D90 (was T_F41D90) -> prom_a 0x04656   x7
+;           SeqBufRing_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_IsEmpty:	jp SeqBufRing_IsEmpty  ; F41D90 (was T_F41D90) -> prom_a 0x04656   x7
 ; Evidence: slot 0xF41D94 is `jp 0xF8466B`; prom_a 0xF8466B carries the label
-;           Ring600A14_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_Init:	jp Ring600A14_Init  ; F41D94 (was T_F41D94) -> prom_a 0x0466B   x4
+;           SeqBufRing_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_Init:	jp SeqBufRing_Init  ; F41D94 (was T_F41D94) -> prom_a 0x0466B   x4
 ; Evidence: slot 0xF41D98 is `jp 0xF84679`; prom_a 0xF84679 carries the label
-;           Ring600A14_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_ScanRewind:	jp Ring600A14_ScanRewind  ; F41D98 (was T_F41D98) -> prom_a 0x04679
+;           SeqBufRing_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_ScanRewind:	jp SeqBufRing_ScanRewind  ; F41D98 (was T_F41D98) -> prom_a 0x04679
 ; Evidence: slot 0xF41D9C is `jp 0xF84686`; prom_a 0xF84686 carries the label
-;           Ring600A14_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_Scan:	jp Ring600A14_Scan  ; F41D9C (was T_F41D9C) -> prom_a 0x04686
+;           SeqBufRing_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_Scan:	jp SeqBufRing_Scan  ; F41D9C (was T_F41D9C) -> prom_a 0x04686
 ; Evidence: slot 0xF41DA0 is `jp 0xF84695`; prom_a 0xF84695 carries the label
-;           Ring600A14_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_ScanToPut:	jp Ring600A14_ScanToPut  ; F41DA0 (was T_F41DA0) -> prom_a 0x04695
+;           SeqBufRing_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_ScanToPut:	jp SeqBufRing_ScanToPut  ; F41DA0 (was T_F41DA0) -> prom_a 0x04695
 ; Evidence: slot 0xF41DA4 is `jp 0xF846A4`; prom_a 0xF846A4 carries the label
-;           Ring600A14_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600A14_GetCommit:	jp Ring600A14_GetCommit  ; F41DA4 (was T_F41DA4) -> prom_a 0x046A4
+;           SeqBufRing_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_SeqBufRing_GetCommit:	jp SeqBufRing_GetCommit  ; F41DA4 (was T_F41DA4) -> prom_a 0x046A4
 ; Evidence: slot 0xF41DA8 is `jp 0xF846B1`; prom_a 0xF846B1 carries the label
-;           Ring600C1E_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_Get:	jp Ring600C1E_Get  ; F41DA8 (was T_F41DA8) -> prom_a 0x046B1
+;           MidiInARing_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_Get:	jp MidiInARing_Get  ; F41DA8 (was T_F41DA8) -> prom_a 0x046B1
 ; Evidence: slot 0xF41DAC is `jp 0xF846BF`; prom_a 0xF846BF carries the label
-;           Ring600C1E_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_Put:	jp Ring600C1E_Put  ; F41DAC (was T_F41DAC) -> prom_a 0x046BF   x5
+;           MidiInARing_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_Put:	jp MidiInARing_Put  ; F41DAC (was T_F41DAC) -> prom_a 0x046BF   x5
 ; Evidence: slot 0xF41DB0 is `jp 0xF846D6`; prom_a 0xF846D6 carries the label
-;           Ring600C1E_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_PutBlock:	jp Ring600C1E_PutBlock  ; F41DB0 (was T_F41DB0) -> prom_a 0x046D6   x1
+;           MidiInARing_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_PutBlock:	jp MidiInARing_PutBlock  ; F41DB0 (was T_F41DB0) -> prom_a 0x046D6   x1
 ; Evidence: slot 0xF41DB4 is `jp 0xF846F9`; prom_a 0xF846F9 carries the label
-;           Ring600C1E_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_IsEmpty:	jp Ring600C1E_IsEmpty  ; F41DB4 (was T_F41DB4) -> prom_a 0x046F9   x1
+;           MidiInARing_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_IsEmpty:	jp MidiInARing_IsEmpty  ; F41DB4 (was T_F41DB4) -> prom_a 0x046F9   x1
 ; Evidence: slot 0xF41DB8 is `jp 0xF8470E`; prom_a 0xF8470E carries the label
-;           Ring600C1E_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_Init:	jp Ring600C1E_Init  ; F41DB8 (was T_F41DB8) -> prom_a 0x0470E   x4
+;           MidiInARing_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_Init:	jp MidiInARing_Init  ; F41DB8 (was T_F41DB8) -> prom_a 0x0470E   x4
 ; Evidence: slot 0xF41DBC is `jp 0xF8471C`; prom_a 0xF8471C carries the label
-;           Ring600C1E_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_ScanRewind:	jp Ring600C1E_ScanRewind  ; F41DBC (was T_F41DBC) -> prom_a 0x0471C   x2
+;           MidiInARing_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_ScanRewind:	jp MidiInARing_ScanRewind  ; F41DBC (was T_F41DBC) -> prom_a 0x0471C   x2
 ; Evidence: slot 0xF41DC0 is `jp 0xF84729`; prom_a 0xF84729 carries the label
-;           Ring600C1E_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_Scan:	jp Ring600C1E_Scan  ; F41DC0 (was T_F41DC0) -> prom_a 0x04729   x4
+;           MidiInARing_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_Scan:	jp MidiInARing_Scan  ; F41DC0 (was T_F41DC0) -> prom_a 0x04729   x4
 ; Evidence: slot 0xF41DC4 is `jp 0xF84738`; prom_a 0xF84738 carries the label
-;           Ring600C1E_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_ScanToPut:	jp Ring600C1E_ScanToPut  ; F41DC4 (was T_F41DC4) -> prom_a 0x04738
+;           MidiInARing_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_ScanToPut:	jp MidiInARing_ScanToPut  ; F41DC4 (was T_F41DC4) -> prom_a 0x04738
 ; Evidence: slot 0xF41DC8 is `jp 0xF84747`; prom_a 0xF84747 carries the label
-;           Ring600C1E_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring600C1E_GetCommit:	jp Ring600C1E_GetCommit  ; F41DC8 (was T_F41DC8) -> prom_a 0x04747
+;           MidiInARing_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInARing_GetCommit:	jp MidiInARing_GetCommit  ; F41DC8 (was T_F41DC8) -> prom_a 0x04747
 ; Evidence: slot 0xF41DCC is `jp 0xF84754`; prom_a 0xF84754 carries the label
-;           Ring601028_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_Get:	jp Ring601028_Get  ; F41DCC (was T_F41DCC) -> prom_a 0x04754
+;           MidiInBRing_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_Get:	jp MidiInBRing_Get  ; F41DCC (was T_F41DCC) -> prom_a 0x04754
 ; Evidence: slot 0xF41DD0 is `jp 0xF84762`; prom_a 0xF84762 carries the label
-;           Ring601028_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_Put:	jp Ring601028_Put  ; F41DD0 (was T_F41DD0) -> prom_a 0x04762
+;           MidiInBRing_Put, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_Put:	jp MidiInBRing_Put  ; F41DD0 (was T_F41DD0) -> prom_a 0x04762
 ; Evidence: slot 0xF41DD4 is `jp 0xF84779`; prom_a 0xF84779 carries the label
-;           Ring601028_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_PutBlock:	jp Ring601028_PutBlock  ; F41DD4 (was T_F41DD4) -> prom_a 0x04779   x2
+;           MidiInBRing_PutBlock, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_PutBlock:	jp MidiInBRing_PutBlock  ; F41DD4 (was T_F41DD4) -> prom_a 0x04779   x2
 ; Evidence: slot 0xF41DD8 is `jp 0xF8479C`; prom_a 0xF8479C carries the label
-;           Ring601028_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_IsEmpty:	jp Ring601028_IsEmpty  ; F41DD8 (was T_F41DD8) -> prom_a 0x0479C   x1
+;           MidiInBRing_IsEmpty, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_IsEmpty:	jp MidiInBRing_IsEmpty  ; F41DD8 (was T_F41DD8) -> prom_a 0x0479C   x1
 ; Evidence: slot 0xF41DDC is `jp 0xF847B1`; prom_a 0xF847B1 carries the label
-;           Ring601028_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_Init:	jp Ring601028_Init  ; F41DDC (was T_F41DDC) -> prom_a 0x047B1   x2
+;           MidiInBRing_Init, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_Init:	jp MidiInBRing_Init  ; F41DDC (was T_F41DDC) -> prom_a 0x047B1   x2
 ; Evidence: slot 0xF41DE0 is `jp 0xF847BF`; prom_a 0xF847BF carries the label
-;           Ring601028_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_ScanRewind:	jp Ring601028_ScanRewind  ; F41DE0 (was T_F41DE0) -> prom_a 0x047BF   x2
+;           MidiInBRing_ScanRewind, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_ScanRewind:	jp MidiInBRing_ScanRewind  ; F41DE0 (was T_F41DE0) -> prom_a 0x047BF   x2
 ; Evidence: slot 0xF41DE4 is `jp 0xF847CC`; prom_a 0xF847CC carries the label
-;           Ring601028_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_Scan:	jp Ring601028_Scan  ; F41DE4 (was T_F41DE4) -> prom_a 0x047CC   x4
+;           MidiInBRing_Scan, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_Scan:	jp MidiInBRing_Scan  ; F41DE4 (was T_F41DE4) -> prom_a 0x047CC   x4
 ; Evidence: slot 0xF41DE8 is `jp 0xF847DB`; prom_a 0xF847DB carries the label
-;           Ring601028_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_ScanToPut:	jp Ring601028_ScanToPut  ; F41DE8 (was T_F41DE8) -> prom_a 0x047DB
+;           MidiInBRing_ScanToPut, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_ScanToPut:	jp MidiInBRing_ScanToPut  ; F41DE8 (was T_F41DE8) -> prom_a 0x047DB
 ; Evidence: slot 0xF41DEC is `jp 0xF847EA`; prom_a 0xF847EA carries the label
-;           Ring601028_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_Ring601028_GetCommit:	jp Ring601028_GetCommit  ; F41DEC (was T_F41DEC) -> prom_a 0x047EA
+;           MidiInBRing_GetCommit, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_MidiInBRing_GetCommit:	jp MidiInBRing_GetCommit  ; F41DEC (was T_F41DEC) -> prom_a 0x047EA
 ; Evidence: slot 0xF41DF0 is `jp 0xF847F7`; prom_a 0xF847F7 carries the label
 ;           Ring601432_Get, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Ring601432_Get:	jp Ring601432_Get  ; F41DF0 (was T_F41DF0) -> prom_a 0x047F7   x1
@@ -92378,7 +92378,7 @@ sub_F44D94_Join3:
 ; sub_F44E58
 ; Called from: in-module: 0xF44E3C
 ; Touches: nothing with an absolute address
-; Calls:   T_Ring60080A_Put
+; Calls:   T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44E58 is an instruction boundary.
 ;           The name IS the address.
@@ -92388,11 +92388,11 @@ sub_F44D94_Join3:
 sub_F44E58:
 	ld	a, 136:opc	; F44E58  ld A,0x88
 	pushw	wa	; F44E5A  push WA
-	call	T_Ring60080A_Put	; F44E5B  call 0xf41d64
+	call	T_TimedEventRing_Put	; F44E5B  call 0xf41d64
 	inc	2, xsp	; F44E5F  inc 2,XSP
 	ld	a, 127:opc	; F44E61  ld A,0x7f
 	pushw	wa	; F44E63  push WA
-	call	T_Ring60080A_Put	; F44E64  call 0xf41d64
+	call	T_TimedEventRing_Put	; F44E64  call 0xf41d64
 	inc	2, xsp	; F44E68  inc 2,XSP
 	ret	; F44E6A  ret
 
@@ -92605,7 +92605,7 @@ sub_F44E8E_Return2:
 ; sub_F4503D
 ; Called from: in-module: 0xF450F2
 ; Touches: (0x3616) (0x3617) (0x3618) (0x3619) (0x361A) (0x361B) (0x361C)
-; Calls:   T_Ring60080A_Put
+; Calls:   T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4503D is an instruction boundary.
 ;           The name IS the address.
@@ -92630,31 +92630,31 @@ sub_F4503D_Skip2:
 	m_res 7, MD16, 0x3618	; F45064  res 7,(0x3618)
 sub_F4503D_Skip3:
 	pushw	wa	; F45068  push WA
-	call	T_Ring60080A_Put	; F45069  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45069  call 0xf41d64
 	inc	2, xsp	; F4506D  inc 2,XSP
 	ld	a, (13847:16)	; F4506F  ld A,(0x3617)
 	pushw	wa	; F45073  push WA
-	call	T_Ring60080A_Put	; F45074  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45074  call 0xf41d64
 	inc	2, xsp	; F45078  inc 2,XSP
 	ld	a, (13848:16)	; F4507A  ld A,(0x3618)
 	pushw	wa	; F4507E  push WA
-	call	T_Ring60080A_Put	; F4507F  call 0xf41d64
+	call	T_TimedEventRing_Put	; F4507F  call 0xf41d64
 	inc	2, xsp	; F45083  inc 2,XSP
 	ld	a, (13849:16)	; F45085  ld A,(0x3619)
 	pushw	wa	; F45089  push WA
-	call	T_Ring60080A_Put	; F4508A  call 0xf41d64
+	call	T_TimedEventRing_Put	; F4508A  call 0xf41d64
 	inc	2, xsp	; F4508E  inc 2,XSP
 	ld	a, (13850:16)	; F45090  ld A,(0x361a)
 	pushw	wa	; F45094  push WA
-	call	T_Ring60080A_Put	; F45095  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45095  call 0xf41d64
 	inc	2, xsp	; F45099  inc 2,XSP
 	ld	a, (13851:16)	; F4509B  ld A,(0x361b)
 	pushw	wa	; F4509F  push WA
-	call	T_Ring60080A_Put	; F450A0  call 0xf41d64
+	call	T_TimedEventRing_Put	; F450A0  call 0xf41d64
 	inc	2, xsp	; F450A4  inc 2,XSP
 	ld	a, (13852:16)	; F450A6  ld A,(0x361c)
 	pushw	wa	; F450AA  push WA
-	call	T_Ring60080A_Put	; F450AB  call 0xf41d64
+	call	T_TimedEventRing_Put	; F450AB  call 0xf41d64
 	inc	2, xsp	; F450AF  inc 2,XSP
 	ret	; F450B1  ret
 
@@ -93616,7 +93616,7 @@ sub_F456EC:		; <- T_F40A24
 ; sub_F456F0
 ; Called from: in-module: 0xF456EC
 ; Touches: (0x3000) (0x3004) (0x34D4) (0x3614) (0x7F32)  |  0x000000
-; Calls:   T_Ring600A14_IsEmpty sub_F45761 sub_F45FAE T_F409B4 sub_F458EA
+; Calls:   T_SeqBufRing_IsEmpty sub_F45761 sub_F45FAE T_F409B4 sub_F458EA
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF456F0 is an instruction boundary.
 ;           The name IS the address.
@@ -93639,7 +93639,7 @@ sub_F456F0_Skip:
 	cp	xwa, 0	; F45717  cp XWA,0x00000000
 	jr	nz, sub_F456F0_Return	; F4571D  jr NZ,0xf45760
 	m_and_mi8 MB16, 0x34d4, 0xfd	; F4571F  and (0x34d4),0xfd
-	call	T_Ring600A14_IsEmpty	; F45724  call 0xf41d90
+	call	T_SeqBufRing_IsEmpty	; F45724  call 0xf41d90
 	cp	wa, 0:i3	; F45728  cp WA,0
 	jr	z, sub_F456F0_Return	; F4572A  jr Z,0xf45760
 	m_or_mi8 MB16, 0x34d4, 0x02	; F4572C  or (0x34d4),0x02
@@ -94202,7 +94202,7 @@ sub_F45B48_Return:
 ; sub_F45B6E
 ; Called from: in-module: 0xF44F60 0xF45039
 ; Touches: (0x349F)
-; Calls:   T_Ring60080A_Put
+; Calls:   T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45B6E is an instruction boundary.
 ;           The name IS the address.
@@ -94212,43 +94212,43 @@ sub_F45B48_Return:
 sub_F45B6E:
 	ld	a, 144:opc	; F45B6E  ld A,0x90
 	pushw	wa	; F45B70  push WA
-	call	T_Ring60080A_Put	; F45B71  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45B71  call 0xf41d64
 	inc	2, xsp	; F45B75  inc 2,XSP
 	ld	a, 127:opc	; F45B77  ld A,0x7f
 	pushw	wa	; F45B79  push WA
-	call	T_Ring60080A_Put	; F45B7A  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45B7A  call 0xf41d64
 	inc	2, xsp	; F45B7E  inc 2,XSP
 	xor	a, a	; F45B80  xor A,A
 	pushw	wa	; F45B82  push WA
-	call	T_Ring60080A_Put	; F45B83  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45B83  call 0xf41d64
 	inc	2, xsp	; F45B87  inc 2,XSP
 	xor	a, a	; F45B89  xor A,A
 	pushw	wa	; F45B8B  push WA
-	call	T_Ring60080A_Put	; F45B8C  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45B8C  call 0xf41d64
 	inc	2, xsp	; F45B90  inc 2,XSP
 	ld	a, (13471:16)	; F45B92  ld A,(0x349f)
 	pushw	wa	; F45B96  push WA
-	call	T_Ring60080A_Put	; F45B97  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45B97  call 0xf41d64
 	inc	2, xsp	; F45B9B  inc 2,XSP
 	ld	a, 210:opc	; F45B9D  ld A,0xd2
 	pushw	wa	; F45B9F  push WA
-	call	T_Ring60080A_Put	; F45BA0  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45BA0  call 0xf41d64
 	inc	2, xsp	; F45BA4  inc 2,XSP
 	ld	a, 127:opc	; F45BA6  ld A,0x7f
 	pushw	wa	; F45BA8  push WA
-	call	T_Ring60080A_Put	; F45BA9  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45BA9  call 0xf41d64
 	inc	2, xsp	; F45BAD  inc 2,XSP
 	ld	a, 0:opc	; F45BAF  ld A,0x00
 	pushw	wa	; F45BB1  push WA
-	call	T_Ring60080A_Put	; F45BB2  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45BB2  call 0xf41d64
 	inc	2, xsp	; F45BB6  inc 2,XSP
 	ld	a, 64:opc	; F45BB8  ld A,0x40
 	pushw	wa	; F45BBA  push WA
-	call	T_Ring60080A_Put	; F45BBB  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45BBB  call 0xf41d64
 	inc	2, xsp	; F45BBF  inc 2,XSP
 	ld	a, (13471:16)	; F45BC1  ld A,(0x349f)
 	pushw	wa	; F45BC5  push WA
-	call	T_Ring60080A_Put	; F45BC6  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45BC6  call 0xf41d64
 	inc	2, xsp	; F45BCA  inc 2,XSP
 	ret	; F45BCC  ret
 
@@ -94541,7 +94541,7 @@ sub_F45D80_Return:
 ; sub_F45D9B
 ; Called from: in-module: 0xF44BD3
 ; Touches: (0x349F) (0x34BB)  |  0x603422
-; Calls:   T_Ring60080A_Put
+; Calls:   T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45D9B is an instruction boundary.
 ;           The name IS the address.
@@ -94583,19 +94583,19 @@ sub_F45D9B_Join:
 	jr	z, sub_F45D9B_Skip2	; F45DDD  jr Z,0xf45e05
 	ld	a, 211:opc	; F45DDF  ld A,0xd3
 	pushw	wa	; F45DE1  push WA
-	call	T_Ring60080A_Put	; F45DE2  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45DE2  call 0xf41d64
 	inc	2, xsp	; F45DE6  inc 2,XSP
 	ld	a, 0:opc	; F45DE8  ld A,0x00
 	pushw	wa	; F45DEA  push WA
-	call	T_Ring60080A_Put	; F45DEB  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45DEB  call 0xf41d64
 	inc	2, xsp	; F45DEF  inc 2,XSP
 	ld	a, 127:opc	; F45DF1  ld A,0x7f
 	pushw	wa	; F45DF3  push WA
-	call	T_Ring60080A_Put	; F45DF4  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45DF4  call 0xf41d64
 	inc	2, xsp	; F45DF8  inc 2,XSP
 	ld	a, (13471:16)	; F45DFA  ld A,(0x349f)
 	pushw	wa	; F45DFE  push WA
-	call	T_Ring60080A_Put	; F45DFF  call 0xf41d64
+	call	T_TimedEventRing_Put	; F45DFF  call 0xf41d64
 	inc	2, xsp	; F45E03  inc 2,XSP
 sub_F45D9B_Skip2:
 	inc	1, c	; F45E05  inc 1,C
@@ -95725,7 +95725,7 @@ sub_F47A73_Return:
 ; Called from: in-module: 0xF47ABB
 ; Touches: (0x33DA) (0x33DD) (0x33DE) (0x33DF) (0x33E0) (0x33E2) (0x3454)
 ;          (0x349F) (0x34A0) (0x34D1)  |  0x003015 0x003038
-; Calls:   sub_F47A41 sub_F47A5D T_F40C6C T_Ring60080A_Put
+; Calls:   sub_F47A41 sub_F47A5D T_F40C6C T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF47AD0 is an instruction boundary.
 ;           The name IS the address.
@@ -95765,7 +95765,7 @@ sub_F47AD0_Skip:
 	ld	d, (xhl+1)	; F47B27  ld D,(XHL+0x01)
 	ld	a, (xhl+3)	; F47B2A  ld A,(XHL+0x03)
 	pushw	wa	; F47B2D  push WA
-	call	T_Ring60080A_Put	; F47B2E  call 0xf41d64
+	call	T_TimedEventRing_Put	; F47B2E  call 0xf41d64
 	inc	2, xsp	; F47B32  inc 2,XSP
 	ld	a, (13396:16)	; F47B34  ld A,(0x3454)
 	add	a, d	; F47B38  add A,D
@@ -95774,19 +95774,19 @@ sub_F47AD0_Skip:
 	sub	a, 96	; F47B3F  sub A,0x60
 sub_F47AD0_Skip2:
 	pushw	wa	; F47B42  push WA
-	call	T_Ring60080A_Put	; F47B43  call 0xf41d64
+	call	T_TimedEventRing_Put	; F47B43  call 0xf41d64
 	inc	2, xsp	; F47B47  inc 2,XSP
 	ld	a, e	; F47B49  ld A,E
 	pushw	wa	; F47B4B  push WA
-	call	T_Ring60080A_Put	; F47B4C  call 0xf41d64
+	call	T_TimedEventRing_Put	; F47B4C  call 0xf41d64
 	inc	2, xsp	; F47B50  inc 2,XSP
 	xor	a, a	; F47B52  xor A,A
 	pushw	wa	; F47B54  push WA
-	call	T_Ring60080A_Put	; F47B55  call 0xf41d64
+	call	T_TimedEventRing_Put	; F47B55  call 0xf41d64
 	inc	2, xsp	; F47B59  inc 2,XSP
 	ld	a, (13471:16)	; F47B5B  ld A,(0x349f)
 	pushw	wa	; F47B5F  push WA
-	call	T_Ring60080A_Put	; F47B60  call 0xf41d64
+	call	T_TimedEventRing_Put	; F47B60  call 0xf41d64
 	inc	2, xsp	; F47B64  inc 2,XSP
 	m_cp_mi8 MB16, 0x33dd, 0x00	; F47B66  cp (0x33dd),0x00
 	jr	z, sub_F47AD0_Skip3	; F47B6B  jr Z,0xf47b81
@@ -96583,7 +96583,7 @@ sub_F4812F_Epilogue:
 ; Called from: in-module: 0xF47EAF
 ; Touches: (0x33DA) (0x33DB) (0x33DE) (0x33DF) (0x33E0) (0x349E) (0x349F)
 ;          (0x34A0) (0x34A5) (0x34A6) +2 more  |  0x003015 0x003038
-; Calls:   sub_F47A5D sub_F48318 T_Ring60080A_Put sub_F47A41
+; Calls:   sub_F47A5D sub_F48318 T_TimedEventRing_Put sub_F47A41
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF481B5 is an instruction boundary.
 ;           The name IS the address.
@@ -96622,11 +96622,11 @@ sub_F481B5_Skip:
 	ld	a, (13478:16)	; F48205  ld A,(0x34a6)
 	pop	xhl	; F48209  pop XHL
 	pushw	wa	; F4820A  push WA
-	call	T_Ring60080A_Put	; F4820B  call 0xf41d64
+	call	T_TimedEventRing_Put	; F4820B  call 0xf41d64
 	inc	2, xsp	; F4820F  inc 2,XSP
 	ld	a, (13471:16)	; F48211  ld A,(0x349f)
 	pushw	wa	; F48215  push WA
-	call	T_Ring60080A_Put	; F48216  call 0xf41d64
+	call	T_TimedEventRing_Put	; F48216  call 0xf41d64
 	inc	2, xsp	; F4821A  inc 2,XSP
 	calr	sub_F47A41	; F4821C  calr 0xf47a41
 	ld	a, (13275:16)	; F4821F  ld A,(0x33db)
@@ -96757,7 +96757,7 @@ sub_F482C0_Return:
 ; Called from: in-module: 0xF47EC7 0xF47ECD 0xF47EE5 0xF482AC 0xF482B7
 ;              0xF482BC 0xF48305
 ; Touches: (0x349F)
-; Calls:   sub_F48318 T_Ring60080A_Put
+; Calls:   sub_F48318 T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48309 is an instruction boundary.
 ;           The name IS the address.
@@ -96768,7 +96768,7 @@ sub_F48309:
 	calr	sub_F48318	; F48309  calr 0xf48318
 	ld	a, (13471:16)	; F4830C  ld A,(0x349f)
 	pushw	wa	; F48310  push WA
-	call	T_Ring60080A_Put	; F48311  call 0xf41d64
+	call	T_TimedEventRing_Put	; F48311  call 0xf41d64
 	inc	2, xsp	; F48315  inc 2,XSP
 	ret	; F48317  ret
 
@@ -96776,7 +96776,7 @@ sub_F48309:
 ; sub_F48318
 ; Called from: in-module: 0xF48202 0xF48309
 ; Touches: (0x3454) (0x349E) (0x34A0)  |  0x0034A5
-; Calls:   T_Ring60080A_Put
+; Calls:   T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48318 is an instruction boundary.
 ;           The name IS the address.
@@ -96786,7 +96786,7 @@ sub_F48309:
 sub_F48318:
 	ld	a, (13470:16)	; F48318  ld A,(0x349e)
 	pushw	wa	; F4831C  push WA
-	call	T_Ring60080A_Put	; F4831D  call 0xf41d64
+	call	T_TimedEventRing_Put	; F4831D  call 0xf41d64
 	inc	2, xsp	; F48321  inc 2,XSP
 	ld	a, (13472:16)	; F48323  ld A,(0x34a0)
 	add	a, (13396:16)	; F48327  add A,(0x3454)
@@ -96795,7 +96795,7 @@ sub_F48318:
 	sub	a, 96	; F48330  sub A,0x60
 sub_F48318_Skip:
 	pushw	wa	; F48333  push WA
-	call	T_Ring60080A_Put	; F48334  call 0xf41d64
+	call	T_TimedEventRing_Put	; F48334  call 0xf41d64
 	inc	2, xsp	; F48338  inc 2,XSP
 	xor	ix, ix	; F4833A  xor IX,IX
 sub_F48318_Join:
@@ -96807,7 +96807,7 @@ sub_F48318_Skip2:
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F48346  ld A,(XHL+IX)
 	inc	1, ix	; F4834B  inc 1,IX
 	pushw	wa	; F4834D  push WA
-	call	T_Ring60080A_Put	; F4834E  call 0xf41d64
+	call	T_TimedEventRing_Put	; F4834E  call 0xf41d64
 	inc	2, xsp	; F48352  inc 2,XSP
 	dec	1, de	; F48354  dec 1,DE
 	jr	sub_F48318_Join	; F48356  jr T,0xf4833c
@@ -96816,7 +96816,7 @@ sub_F48318_Skip2:
 ; sub_F48358
 ; Called from: in-module: 0xF47F31
 ; Touches: (0x3454) (0x349F) (0x34A0) (0x36C6) (0x36C8)
-; Calls:   T_Ring60080A_Put T_F40AA4
+; Calls:   T_TimedEventRing_Put T_F40AA4
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48358 is an instruction boundary.
 ;           The name IS the address.
@@ -96826,7 +96826,7 @@ sub_F48318_Skip2:
 sub_F48358:
 	ld	a, 130:opc	; F48358  ld A,0x82
 	pushw	wa	; F4835A  push WA
-	call	T_Ring60080A_Put	; F4835B  call 0xf41d64
+	call	T_TimedEventRing_Put	; F4835B  call 0xf41d64
 	inc	2, xsp	; F4835F  inc 2,XSP
 	ld	a, (13472:16)	; F48361  ld A,(0x34a0)
 	add	a, (13396:16)	; F48365  add A,(0x3454)
@@ -96835,11 +96835,11 @@ sub_F48358:
 	sub	a, 96	; F4836E  sub A,0x60
 sub_F48358_Skip:
 	pushw	wa	; F48371  push WA
-	call	T_Ring60080A_Put	; F48372  call 0xf41d64
+	call	T_TimedEventRing_Put	; F48372  call 0xf41d64
 	inc	2, xsp	; F48376  inc 2,XSP
 	ld	a, (13471:16)	; F48378  ld A,(0x349f)
 	pushw	wa	; F4837C  push WA
-	call	T_Ring60080A_Put	; F4837D  call 0xf41d64
+	call	T_TimedEventRing_Put	; F4837D  call 0xf41d64
 	inc	2, xsp	; F48381  inc 2,XSP
 	call	T_F40AA4	; F48383  call 0xf40aa4
 	cp	a, 0:i3	; F48387  cp A,0
@@ -98619,7 +98619,7 @@ sub_F49861_Skip2:
 ; Called from: in-module: 0xF4986D 0xF49892
 ; Touches: (0x349F) (0x34AA) (0x34AB) (0x34AD) (0x34AE) (0x34B0) (0x34D4)
 ;          (0x34DD) (0x36F0)  |  0x0034AA 0x600A0A 0x600A14
-; Calls:   T_Ring600A14_IsEmpty sub_F49ADE sub_F49AFD sub_F49CA9 sub_F49A3D sub_F4A2B6
+; Calls:   T_SeqBufRing_IsEmpty sub_F49ADE sub_F49AFD sub_F49CA9 sub_F49A3D sub_F4A2B6
 ;          sub_F49CE6 sub_F49C7D sub_F4A0FF sub_F49F6D sub_F49CC2 sub_F4A2C8
 ;          +4 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -98629,7 +98629,7 @@ sub_F49861_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F498A0:
-	call	T_Ring600A14_IsEmpty	; F498A0  call 0xf41d90
+	call	T_SeqBufRing_IsEmpty	; F498A0  call 0xf41d90
 	cp	wa, 0:i3	; F498A4  cp WA,0
 	jr	nz, sub_F498A0_Skip12	; F498A6  jr NZ,0xf498b1
 	calr	sub_F49ADE	; F498A8  calr 0xf49ade
@@ -98732,7 +98732,7 @@ sub_F498A0_Skip8:
 	jrl	sub_F498A0	; F499B9  jrl T,0xf498a0
 sub_F498A0_Skip15:
 	ld	(13482:16), 129	; F499BC  ld (0x34aa),0x81
-	call	T_Ring600A14_Get	; F499C1  call 0xf41d84
+	call	T_SeqBufRing_Get	; F499C1  call 0xf41d84
 	calr	sub_F49D00	; F499C5  calr 0xf49d00
 	jrl	sub_F498A0	; F499C8  jrl T,0xf498a0
 sub_F498A0_Skip9:
@@ -99105,7 +99105,7 @@ sub_F49BFA_Skip2:
 ; sub_F49C7D
 ; Called from: in-module: 0xF49931
 ; Touches:   |  0x600A0A 0x600A14
-; Calls:   T_Ring600A14_IsEmpty T_Ring600A14_Get
+; Calls:   T_SeqBufRing_IsEmpty T_SeqBufRing_Get
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49C7D is an instruction boundary.
 ;           The name IS the address.
@@ -99113,11 +99113,11 @@ sub_F49BFA_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F49C7D:
-	call	T_Ring600A14_IsEmpty	; F49C7D  call 0xf41d90
+	call	T_SeqBufRing_IsEmpty	; F49C7D  call 0xf41d90
 	cp	wa, 0:i3	; F49C81  cp WA,0
 	jr	z, sub_F49C7D_Return	; F49C83  jr Z,0xf49ca8
-	call	T_Ring600A14_Get	; F49C85  call 0xf41d84
-	call	T_Ring600A14_IsEmpty	; F49C89  call 0xf41d90
+	call	T_SeqBufRing_Get	; F49C85  call 0xf41d84
+	call	T_SeqBufRing_IsEmpty	; F49C89  call 0xf41d90
 	cp	wa, 0:i3	; F49C8D  cp WA,0
 	jr	z, sub_F49C7D_Return	; F49C8F  jr Z,0xf49ca8
 	ld	xhl, 6294026	; F49C91  ld XHL,0x00600a0a
@@ -99134,7 +99134,7 @@ sub_F49C7D_Return:
 ; Called from: in-module: 0xF498F2 0xF4993A 0xF49980 0xF499CE 0xF499DD
 ;              0xF49A0E
 ; Touches:   |  0x0034AA
-; Calls:   T_Ring600A14_Get
+; Calls:   T_SeqBufRing_Get
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49CA9 is an instruction boundary.
 ;           The name IS the address.
@@ -99144,7 +99144,7 @@ sub_F49C7D_Return:
 sub_F49CA9:
 	xor	ix, ix	; F49CA9  xor IX,IX
 sub_F49CA9_Loop:
-	call	T_Ring600A14_Get	; F49CAB  call 0xf41d84
+	call	T_SeqBufRing_Get	; F49CAB  call 0xf41d84
 	ld	xhl, 13482	; F49CAF  ld XHL,0x000034aa
 	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F49CB4  ld (XHL+IX),A
 	inc	1, ix	; F49CB9  inc 1,IX
@@ -147634,8 +147634,8 @@ sub_F689E0_Return:
 ; sub_F689F5
 ; Called from: in-module: 0xF689A8
 ; Touches: (0x0EC2) (0x1008) (0x1071) (0x12A7) (0x34D4)  |  0x60080A
-; Calls:   T_F431C0 sub_F6B8BD sub_F6C292 T_Ring60080A_Get sub_F6A304 sub_F6B96F
-;          sub_F6B9B9 T_Ring60080A_Put sub_F6BA11 sub_F6B97B sub_F6C2E5
+; Calls:   T_F431C0 sub_F6B8BD sub_F6C292 T_TimedEventRing_Get sub_F6A304 sub_F6B96F
+;          sub_F6B9B9 T_TimedEventRing_Put sub_F6BA11 sub_F6B97B sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF689F5 is an instruction
 ;           boundary.  The name IS the address.
@@ -147676,7 +147676,7 @@ sub_F689F5_Return:
 	calr	sub_F6C292	; F68A45  calr 0xf6c292
 	ld	xhl, TimedEvents_Ring	; F68A48  ld XHL,0x0060080a
 sub_F689F5_Loop:
-	call	T_Ring60080A_Get	; F68A4D  call 0xf41d60
+	call	T_TimedEventRing_Get	; F68A4D  call 0xf41d60
 	cp	wa, 65535	; F68A51  cp WA,0xffff
 	jr	nz, sub_F689F5_Loop	; F68A55  jr NZ,0xf68a4d
 	calr	sub_F6A304	; F68A57  calr 0xf6a304
@@ -147691,26 +147691,26 @@ sub_F689F5_Join:
 sub_F689F5_Skip:
 	calr	sub_F6B9B9	; F68A70  calr 0xf6b9b9
 	pushw	wa	; F68A73  push WA
-	call	T_Ring60080A_Put	; F68A74  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68A74  call 0xf41d64
 	inc	2, xsp	; F68A78  inc 2,XSP
 	calr	sub_F6B9B9	; F68A7A  calr 0xf6b9b9
 	ld	(3778:16), a	; F68A7D  ld (0x0ec2),A
 	ld	a, 0:opc	; F68A81  ld A,0x00
 	pushw	wa	; F68A83  push WA
-	call	T_Ring60080A_Put	; F68A84  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68A84  call 0xf41d64
 	inc	2, xsp	; F68A88  inc 2,XSP
 	calr	sub_F6B9B9	; F68A8A  calr 0xf6b9b9
 	pushw	wa	; F68A8D  push WA
-	call	T_Ring60080A_Put	; F68A8E  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68A8E  call 0xf41d64
 	inc	2, xsp	; F68A92  inc 2,XSP
 	ld	a, 64:opc	; F68A94  ld A,0x40
 	pushw	wa	; F68A96  push WA
-	call	T_Ring60080A_Put	; F68A97  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68A97  call 0xf41d64
 	inc	2, xsp	; F68A9B  inc 2,XSP
 	ld	a, (BStore_DirEntry:16)	; F68A9D  ld A,(0x1008)
 	dec	1, a	; F68AA1  dec 1,A
 	pushw	wa	; F68AA3  push WA
-	call	T_Ring60080A_Put	; F68AA4  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68AA4  call 0xf41d64
 	inc	2, xsp	; F68AA8  inc 2,XSP
 	ld	wa, de	; F68AAA  ld WA,DE
 	push	xwa	; F68AAC  push XWA
@@ -147742,7 +147742,7 @@ sub_F689F5_Join2:
 ; sub_F68AD0
 ; Called from: in-module: 0xF67544
 ; Touches: (0x1008) (0x106E) (0x34D4)  |  0x60080A
-; Calls:   sub_F6B8BD sub_F6A304 sub_F6C292 sub_F68B3A T_Ring60080A_Put sub_F6C2E5
+; Calls:   sub_F6B8BD sub_F6A304 sub_F6C292 sub_F68B3A T_TimedEventRing_Put sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68AD0 is an instruction
 ;           boundary.  The name IS the address.
@@ -147764,25 +147764,25 @@ sub_F68AD0:
 	ld	xhl, TimedEvents_Ring	; F68AEE  ld XHL,0x0060080a
 	calr	sub_F68B3A	; F68AF3  calr 0xf68b3a
 	pushw	wa	; F68AF6  push WA
-	call	T_Ring60080A_Put	; F68AF7  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68AF7  call 0xf41d64
 	inc	2, xsp	; F68AFB  inc 2,XSP
 	calr	sub_F68B3A	; F68AFD  calr 0xf68b3a
 	xor	a, a	; F68B00  xor A,A
 	pushw	wa	; F68B02  push WA
-	call	T_Ring60080A_Put	; F68B03  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68B03  call 0xf41d64
 	inc	2, xsp	; F68B07  inc 2,XSP
 	calr	sub_F68B3A	; F68B09  calr 0xf68b3a
 	pushw	wa	; F68B0C  push WA
-	call	T_Ring60080A_Put	; F68B0D  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68B0D  call 0xf41d64
 	inc	2, xsp	; F68B11  inc 2,XSP
 	calr	sub_F68B3A	; F68B13  calr 0xf68b3a
 	pushw	wa	; F68B16  push WA
-	call	T_Ring60080A_Put	; F68B17  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68B17  call 0xf41d64
 	inc	2, xsp	; F68B1B  inc 2,XSP
 	ld	a, (BStore_DirEntry:16)	; F68B1D  ld A,(0x1008)
 	dec	1, a	; F68B21  dec 1,A
 	pushw	wa	; F68B23  push WA
-	call	T_Ring60080A_Put	; F68B24  call 0xf41d64
+	call	T_TimedEventRing_Put	; F68B24  call 0xf41d64
 	inc	2, xsp	; F68B28  inc 2,XSP
 	xor	a, a	; F68B2A  xor A,A
 	calr	sub_F6C2E5	; F68B2C  calr 0xf6c2e5
@@ -149555,7 +149555,7 @@ sub_F69692:
 ; Called from: in-module: 0xF69653
 ; Touches: (0x0E4F) (0x0E53) (0x0E5A) (0x0E63) (0x0ED7) (0x0EE8) (0x106D)
 ;          (0x12AF) (0x12B0) (0x12E7) +3 more  |  0x603422
-; Calls:   sub_F6A908 T_Ring600A14_Get sub_F69780 sub_F6A7EB sub_F6BBD4 T_F413E4
+; Calls:   sub_F6A908 T_SeqBufRing_Get sub_F69780 sub_F6A7EB sub_F6BBD4 T_F413E4
 ;          sub_F6B387 sub_F6C43C StepLength_AddTo0E53 sub_F6A7C5 sub_F69811
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69697 is an instruction
@@ -149567,7 +149567,7 @@ sub_F69697:
 	calr	sub_F6A908	; F69697  calr 0xf6a908
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F6969A  cp (0x0e63),0x01
 	jr	z, sub_F69697_Skip	; F6969F  jr Z,0xf696a6
-	call	T_Ring600A14_Get	; F696A1  call 0xf41d84
+	call	T_SeqBufRing_Get	; F696A1  call 0xf41d84
 sub_F69697_Return:
 	ret	; F696A5  ret
 sub_F69697_Skip:
@@ -149661,7 +149661,7 @@ sub_F69697_Skip3:
 ; Called from: in-module: 0xF696A6
 ; Touches: (0x0E4F) (0x0ED5) (0x0ED6) (0x0ED7) (0x0EE8) (0x12E7) (0x12E8)  |
 ;          0x600A14
-; Calls:   T_Ring600A14_Get
+; Calls:   T_SeqBufRing_Get
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69780 is an instruction
 ;           boundary.  The name IS the address.
@@ -149670,14 +149670,14 @@ sub_F69697_Skip3:
 ; --------------------------------------------------------------------------
 sub_F69780:
 	ld	xhl, SeqBuf_Ring	; F69780  ld XHL,0x00600a14
-	call	T_Ring600A14_Get	; F69785  call 0xf41d84
+	call	T_SeqBufRing_Get	; F69785  call 0xf41d84
 	ld	(3816:16), a	; F69789  ld (0x0ee8),A
-	call	T_Ring600A14_Get	; F6978D  call 0xf41d84
-	call	T_Ring600A14_Get	; F69791  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6978D  call 0xf41d84
+	call	T_SeqBufRing_Get	; F69791  call 0xf41d84
 	ld	(4839:16), a	; F69795  ld (0x12e7),A
-	call	T_Ring600A14_Get	; F69799  call 0xf41d84
+	call	T_SeqBufRing_Get	; F69799  call 0xf41d84
 	ld	(4840:16), a	; F6979D  ld (0x12e8),A
-	call	T_Ring600A14_Get	; F697A1  call 0xf41d84
+	call	T_SeqBufRing_Get	; F697A1  call 0xf41d84
 	m_cp_mi8 MB16, 0x12e8, 0x00	; F697A5  cp (0x12e8),0x00
 	jr	nz, sub_F69780_Skip	; F697AA  jr NZ,0xf697ae
 	jr	sub_F69780_Join	; F697AC  jr T,0xf697f3
@@ -151197,7 +151197,7 @@ sub_F6A2FF:
 ; sub_F6A304
 ; Called from: in-module: 0xF68A57 0xF68AE6 0xF6AE74 0xF6AFBB
 ; Touches: (0x1008) (0x34D4)  |  0x60080A
-; Calls:   T_Ring60080A_Put
+; Calls:   T_TimedEventRing_Put
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A304 is an instruction
 ;           boundary.  The name IS the address.
@@ -151211,24 +151211,24 @@ sub_F6A304:
 	ld	xhl, TimedEvents_Ring	; F6A30B  ld XHL,0x0060080a
 	ld	a, 144:opc	; F6A310  ld A,0x90
 	pushw	wa	; F6A312  push WA
-	call	T_Ring60080A_Put	; F6A313  call 0xf41d64
+	call	T_TimedEventRing_Put	; F6A313  call 0xf41d64
 	inc	2, xsp	; F6A317  inc 2,XSP
 	ld	a, 127:opc	; F6A319  ld A,0x7f
 	pushw	wa	; F6A31B  push WA
-	call	T_Ring60080A_Put	; F6A31C  call 0xf41d64
+	call	T_TimedEventRing_Put	; F6A31C  call 0xf41d64
 	inc	2, xsp	; F6A320  inc 2,XSP
 	ld	a, 51:opc	; F6A322  ld A,0x33
 	pushw	wa	; F6A324  push WA
-	call	T_Ring60080A_Put	; F6A325  call 0xf41d64
+	call	T_TimedEventRing_Put	; F6A325  call 0xf41d64
 	inc	2, xsp	; F6A329  inc 2,XSP
 	ld	a, 0:opc	; F6A32B  ld A,0x00
 	pushw	wa	; F6A32D  push WA
-	call	T_Ring60080A_Put	; F6A32E  call 0xf41d64
+	call	T_TimedEventRing_Put	; F6A32E  call 0xf41d64
 	inc	2, xsp	; F6A332  inc 2,XSP
 	ld	a, (BStore_DirEntry:16)	; F6A334  ld A,(0x1008)
 	dec	1, a	; F6A338  dec 1,A
 	pushw	wa	; F6A33A  push WA
-	call	T_Ring60080A_Put	; F6A33B  call 0xf41d64
+	call	T_TimedEventRing_Put	; F6A33B  call 0xf41d64
 	inc	2, xsp	; F6A33F  inc 2,XSP
 	popw	wa	; F6A341  pop WA
 	pop	xhl	; F6A342  pop XHL
@@ -151238,7 +151238,7 @@ sub_F6A304:
 ; sub_F6A344
 ; Called from: in-module: 0xF67424
 ; Touches: (0x0E53) (0x0E5A) (0x0E63) (0x0ECB) (0x0EF7) (0x12B8)
-; Calls:   sub_F6C4DF T_Ring600A14_Get sub_F6A406 sub_F6CE26 sub_F6CED0 sub_F6CF7A
+; Calls:   sub_F6C4DF T_SeqBufRing_Get sub_F6A406 sub_F6CE26 sub_F6CED0 sub_F6CF7A
 ;          0xF6D024 0xF6D0CE 0xF6D178 0xF6D222 0xF6D2CC 0xF6D36C +4 more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A344 is an instruction
@@ -151256,23 +151256,23 @@ sub_F6A304_Skip:
 	ld	(3831:16), a	; F6A351  ld (0x0ef7),A
 	ld	(4792:16), a	; F6A355  ld (0x12b8),A
 	ld	xiy, 3726	; F6A359  ld XIY,0x00000e8e
-	call	T_Ring600A14_Get	; F6A35E  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A35E  call 0xf41d84
 	ld	(xiy), a	; F6A362  ld (XIY),A
 	ld	w, a	; F6A364  ld W,A
 	and	w, 3	; F6A366  and W,0x03
 	ld	(3787:16), w	; F6A369  ld (0x0ecb),W
-	call	T_Ring600A14_Get	; F6A36D  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A36D  call 0xf41d84
 	ld	a, (3667:16)	; F6A371  ld A,(0x0e53)
 	ld	(xiy+1), a	; F6A375  ld (XIY+0x01),A
-	call	T_Ring600A14_Get	; F6A378  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A378  call 0xf41d84
 	ld	(xiy+2), a	; F6A37C  ld (XIY+0x02),A
-	call	T_Ring600A14_Get	; F6A37F  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A37F  call 0xf41d84
 	ld	(xiy+3), a	; F6A383  ld (XIY+0x03),A
-	call	T_Ring600A14_Get	; F6A386  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A386  call 0xf41d84
 	ld	(xiy+4), a	; F6A38A  ld (XIY+0x04),A
-	call	T_Ring600A14_Get	; F6A38D  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A38D  call 0xf41d84
 	ld	(xiy+5), a	; F6A391  ld (XIY+0x05),A
-	call	T_Ring600A14_Get	; F6A394  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A394  call 0xf41d84
 	calr	sub_F6A406	; F6A398  calr 0xf6a406
 	cp	a, 0:i3	; F6A39B  cp A,0
 	jr	nz, sub_F6A304_Skip2	; F6A39D  jr NZ,0xf6a3fa
@@ -151474,7 +151474,7 @@ sub_F6A344_Nop:
 ; Called from: in-module: 0xF6965F
 ; Touches: (0x0E53) (0x0E5A) (0x0E63) (0x0EF5) (0x0F59) (0x100E) (0x100F)
 ;          (0x12B5) (0x12B6) (0x12B7) +5 more
-; Calls:   T_Ring600A14_Get T_F40790 sub_F6908B sub_F6B387 sub_F67481 0xF6D86B
+; Calls:   T_SeqBufRing_Get T_F40790 sub_F6908B sub_F6B387 sub_F67481 0xF6D86B
 ;          sub_F6C4DF 0xF6D5F0 0xF6D46C
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A4D9 is an instruction
@@ -151488,17 +151488,17 @@ sub_F6A4D9:
 	ret	; F6A4E0  ret
 sub_F6A4D9_Skip:
 	ld	xiy, 3726	; F6A4E1  ld XIY,0x00000e8e
-	call	T_Ring600A14_Get	; F6A4E6  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A4E6  call 0xf41d84
 	ld	(xiy), a	; F6A4EA  ld (XIY),A
 	ld	e, a	; F6A4EC  ld E,A
 	and	e, 1	; F6A4EE  and E,0x01
 	rrc	e	; F6A4F1  rrc 0x01,E
 	ld	(4110:16), a	; F6A4F4  ld (0x100e),A
 	m_and_mi8 MB16, 0x100e, 0x04	; F6A4F8  and (0x100e),0x04
-	call	T_Ring600A14_Get	; F6A4FD  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A4FD  call 0xf41d84
 	ld	a, (3667:16)	; F6A501  ld A,(0x0e53)
 	ld	(xiy+1), a	; F6A505  ld (XIY+0x01),A
-	call	T_Ring600A14_Get	; F6A508  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A508  call 0xf41d84
 	ld	(xiy+2), a	; F6A50C  ld (XIY+0x02),A
 	ld	l, (4110:16)	; F6A50F  ld L,(0x100e)
 	and	l, 4	; F6A513  and L,0x04
@@ -151506,15 +151506,15 @@ sub_F6A4D9_Skip:
 	or	a, l	; F6A519  or A,L
 	ld	(4789:16), a	; F6A51B  ld (0x12b5),A
 	ld	(6352925:24), a	; F6A51F  ld (0x60f01d),A
-	call	T_Ring600A14_Get	; F6A524  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A524  call 0xf41d84
 	ld	(xiy+3), a	; F6A528  ld (XIY+0x03),A
 	ld	(4795:16), a	; F6A52B  ld (0x12bb),A
-	call	T_Ring600A14_Get	; F6A52F  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A52F  call 0xf41d84
 	ld	(xiy+4), a	; F6A533  ld (XIY+0x04),A
 	or	a, e	; F6A536  or A,E
 	ld	(4791:16), a	; F6A538  ld (0x12b7),A
 	ld	(4794:16), a	; F6A53C  ld (0x12ba),A
-	call	T_Ring600A14_Get	; F6A540  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A540  call 0xf41d84
 	ld	(xiy+5), a	; F6A544  ld (XIY+0x05),A
 	ld	(4111:16), a	; F6A547  ld (0x100f),A
 	ld	(4802:16), a	; F6A54B  ld (0x12c2),A
@@ -151535,7 +151535,7 @@ sub_F6A4D9_Loop:
 	ld	(4802:16), h	; F6A577  ld (0x12c2),H
 	ld	(4803:16), h	; F6A57B  ld (0x12c3),H
 	pop	xhl	; F6A57F  pop XHL
-	call	T_Ring600A14_Get	; F6A580  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A580  call 0xf41d84
 	push	xhl	; F6A584  push XHL
 	calr	sub_F6908B	; F6A585  calr 0xf6908b
 	cp	w, 1:i3	; F6A588  cp W,1
@@ -151613,7 +151613,7 @@ sub_F6A4D9_Skip5:
 ; sub_F6A5FF
 ; Called from: in-module: 0xF6966A
 ; Touches: (0x0E4E) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x100C)
-; Calls:   T_Ring600A14_Get T_F431B0 0xF6D505
+; Calls:   T_SeqBufRing_Get T_F431B0 0xF6D505
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A5FF is an instruction
 ;           boundary.  The name IS the address.
@@ -151622,16 +151622,16 @@ sub_F6A4D9_Skip5:
 ; --------------------------------------------------------------------------
 sub_F6A5FF:
 	ld	xiy, 3726	; F6A5FF  ld XIY,0x00000e8e
-	call	T_Ring600A14_Get	; F6A604  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A604  call 0xf41d84
 	ld	(xiy), a	; F6A608  ld (XIY),A
 	ld	(3664:16), a	; F6A60A  ld (0x0e50),A
-	call	T_Ring600A14_Get	; F6A60E  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A60E  call 0xf41d84
 	ld	a, (3667:16)	; F6A612  ld A,(0x0e53)
 	ld	(xiy+1), a	; F6A616  ld (XIY+0x01),A
-	call	T_Ring600A14_Get	; F6A619  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A619  call 0xf41d84
 	ld	(xiy+2), a	; F6A61D  ld (XIY+0x02),A
 	ld	e, a	; F6A620  ld E,A
-	call	T_Ring600A14_Get	; F6A622  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A622  call 0xf41d84
 	ld	(xiy+3), a	; F6A626  ld (XIY+0x03),A
 	ld	l, a	; F6A629  ld L,A
 	rrc	a	; F6A62B  rrc 0x01,A
@@ -151679,7 +151679,7 @@ sub_F6A674:
 ; sub_F6A67D
 ; Called from: in-module: 0xF67428
 ; Touches: (0x0E53) (0x0E5A) (0x12C0)
-; Calls:   sub_F6A67D_Nop T_Ring600A14_Get sub_F6A6BC sub_F6B387 sub_F67481
+; Calls:   sub_F6A67D_Nop T_SeqBufRing_Get sub_F6A6BC sub_F6B387 sub_F67481
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A67D is an instruction
 ;           boundary.  The name IS the address.
@@ -151693,7 +151693,7 @@ sub_F6A674_Join:
 	call	sub_F6A67D_Nop	; F6A684  call 0xf6a6bb
 	cp	c, 0:i3	; F6A688  cp C,0
 	jr	z, sub_F6A674_Skip	; F6A68A  jr Z,0xf6a692
-	call	T_Ring600A14_Get	; F6A68C  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A68C  call 0xf41d84
 	jr	sub_F6A674_Return	; F6A690  jr T,0xf6a6ba
 sub_F6A674_Skip:
 	pushw	wa	; F6A692  push WA
@@ -151707,7 +151707,7 @@ sub_F6A674_Skip:
 	push	xhl	; F6A6A7  push XHL
 	calr	sub_F6B387	; F6A6A8  calr 0xf6b387
 	pop	xhl	; F6A6AB  pop XHL
-	call	T_Ring600A14_Get	; F6A6AC  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A6AC  call 0xf41d84
 	ld	w, 98:opc	; F6A6B0  ld W,0x62
 	calr	sub_F67481	; F6A6B2  calr 0xf67481
 	ld	(3674:16), 16	; F6A6B5  ld (0x0e5a),0x10
@@ -151795,7 +151795,7 @@ MsgLine_TransportState_Plus10_Call_2:
 ; Called from: in-module: 0xF69681
 ; Touches: (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED6) (0x0EF5) (0x12B8)
 ;          (0x12B9)
-; Calls:   T_Ring600A14_Get 0xF6D447 0xF6D443
+; Calls:   T_SeqBufRing_Get 0xF6D447 0xF6D443
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A704 is an instruction
 ;           boundary.  The name IS the address.
@@ -151805,20 +151805,20 @@ MsgLine_TransportState_Plus10_Call_2:
 sub_F6A704:
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6A704  cp (0x0e63),0x03
 	jr	nz, sub_F6A704_Skip	; F6A709  jr NZ,0xf6a710
-	call	T_Ring600A14_Get	; F6A70B  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A70B  call 0xf41d84
 	ret	; F6A70F  ret
 sub_F6A704_Skip:
 	ld	xiy, 3726	; F6A710  ld XIY,0x00000e8e
-	call	T_Ring600A14_Get	; F6A715  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A715  call 0xf41d84
 	ld	(xiy), a	; F6A719  ld (XIY),A
 	ld	(3664:16), a	; F6A71B  ld (0x0e50),A
-	call	T_Ring600A14_Get	; F6A71F  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A71F  call 0xf41d84
 	ld	a, (3667:16)	; F6A723  ld A,(0x0e53)
 	ld	(xiy+1), a	; F6A727  ld (XIY+0x01),A
-	call	T_Ring600A14_Get	; F6A72A  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A72A  call 0xf41d84
 	ld	(xiy+2), a	; F6A72E  ld (XIY+0x02),A
 	ld	(4793:16), a	; F6A731  ld (0x12b9),A
-	call	T_Ring600A14_Get	; F6A735  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A735  call 0xf41d84
 	ld	(3796:16), 3	; F6A739  ld (0x0ed4),0x03
 	ld	(4792:16), 2	; F6A73E  ld (0x12b8),0x02
 	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x02	; F6A743  cp (0x0ef5),0x02
@@ -151837,7 +151837,7 @@ sub_F6A704_Join:
 ; Called from: in-module: 0xF6968C
 ; Touches: (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED6) (0x0EF5) (0x12B8)
 ;          (0x12B9) (0x12EB)
-; Calls:   T_Ring600A14_Get 0xF6D447 0xF6D443
+; Calls:   T_SeqBufRing_Get 0xF6D447 0xF6D443
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A75F is an instruction
 ;           boundary.  The name IS the address.
@@ -151847,23 +151847,23 @@ sub_F6A704_Join:
 sub_F6A75F:
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6A75F  cp (0x0e63),0x03
 	jr	nz, sub_F6A75F_Skip	; F6A764  jr NZ,0xf6a76b
-	call	T_Ring600A14_Get	; F6A766  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A766  call 0xf41d84
 	ret	; F6A76A  ret
 sub_F6A75F_Skip:
 	ld	xiy, 3726	; F6A76B  ld XIY,0x00000e8e
-	call	T_Ring600A14_Get	; F6A770  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A770  call 0xf41d84
 	ld	(xiy), a	; F6A774  ld (XIY),A
 	ld	(3664:16), a	; F6A776  ld (0x0e50),A
-	call	T_Ring600A14_Get	; F6A77A  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A77A  call 0xf41d84
 	ld	a, (3667:16)	; F6A77E  ld A,(0x0e53)
 	ld	(xiy+1), a	; F6A782  ld (XIY+0x01),A
-	call	T_Ring600A14_Get	; F6A785  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A785  call 0xf41d84
 	ld	(xiy+2), a	; F6A789  ld (XIY+0x02),A
 	ld	(4793:16), a	; F6A78C  ld (0x12b9),A
-	call	T_Ring600A14_Get	; F6A790  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A790  call 0xf41d84
 	ld	(xiy+3), a	; F6A794  ld (XIY+0x03),A
 	ld	(4843:16), a	; F6A797  ld (0x12eb),A
-	call	T_Ring600A14_Get	; F6A79B  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6A79B  call 0xf41d84
 	ld	(3796:16), 4	; F6A79F  ld (0x0ed4),0x04
 	ld	(4792:16), 1	; F6A7A4  ld (0x12b8),0x01
 	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x02	; F6A7A9  cp (0x0ef5),0x02
@@ -152728,7 +152728,7 @@ sub_F6AD24:
 ; sub_F6AD30
 ; Called from: in-module: 0xF689C0 0xF6AA25
 ; Touches:   |  0x600A14
-; Calls:   T_Ring600A14_Get
+; Calls:   T_SeqBufRing_Get
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AD30 is an instruction
 ;           boundary.  The name IS the address.
@@ -152738,7 +152738,7 @@ sub_F6AD24:
 sub_F6AD30:
 	ld	xhl, SeqBuf_Ring	; F6AD30  ld XHL,0x00600a14
 sub_F6AD30_Loop:
-	call	T_Ring600A14_Get	; F6AD35  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6AD35  call 0xf41d84
 	cp	wa, 65535	; F6AD39  cp WA,0xffff
 	jr	nz, sub_F6AD30_Loop	; F6AD3D  jr NZ,0xf6ad35
 	ret	; F6AD3F  ret
@@ -156005,7 +156005,7 @@ sub_F6C4A5_Skip:
 ; sub_F6C4DF
 ; Called from: in-module: 0xF695F0 0xF6964D 0xF6A34B 0xF6A5C0
 ; Touches: nothing with an absolute address
-; Calls:   T_Ring600A14_Get sub_F6C4FC
+; Calls:   T_SeqBufRing_Get sub_F6C4FC
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C4DF is an instruction
 ;           boundary.  The name IS the address.
@@ -156013,13 +156013,13 @@ sub_F6C4A5_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6C4DF:
-	call	T_Ring600A14_Get	; F6C4DF  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6C4DF  call 0xf41d84
 	cp	wa, 65535	; F6C4E3  cp WA,0xffff
 	jr	z, sub_F6C4DF_Return	; F6C4E7  jr Z,0xf6c4fb
 	calr	sub_F6C4FC	; F6C4E9  calr 0xf6c4fc
 	bit	7, a	; F6C4EC  bit 0x07,A
 	jr	nz, sub_F6C4DF_Return	; F6C4EF  jr NZ,0xf6c4fb
-	call	T_Ring600A14_Get	; F6C4F1  call 0xf41d84
+	call	T_SeqBufRing_Get	; F6C4F1  call 0xf41d84
 	cp	wa, 65535	; F6C4F5  cp WA,0xffff
 	jr	nz, sub_F6C4DF	; F6C4F9  jr NZ,0xf6c4df
 sub_F6C4DF_Return:
@@ -156046,7 +156046,7 @@ sub_F6C4FC:
 ; sub_F6C507
 ; Called from: in-module: 0xF68987 0xF689B2 0xF689E5 0xF695F8
 ; Touches: nothing with an absolute address
-; Calls:   T_Ring600A14_IsEmpty
+; Calls:   T_SeqBufRing_IsEmpty
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C507 is an instruction
 ;           boundary.  The name IS the address.
@@ -156054,7 +156054,7 @@ sub_F6C4FC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6C507:
-	call	T_Ring600A14_IsEmpty	; F6C507  call 0xf41d90
+	call	T_SeqBufRing_IsEmpty	; F6C507  call 0xf41d90
 	cp	wa, 0:i3	; F6C50B  cp WA,0
 	jr	z, sub_F6C507_Skip	; F6C50D  jr Z,0xf6c512
 	ld	w, 0:opc	; F6C50F  ld W,0x00
@@ -163641,7 +163641,7 @@ sub_F6F404:		; <- T_F43384
 ; sub_F6F408
 ; Called from: in-module: 0xF6F400
 ; Touches: (0x272B) (0x360A) (0x360B)
-; Calls:   sub_F6F476 sub_F6F4A3 T_F40AC8 Smf_ReadFile_Entry T_Ring601850_Init T_Ring600A14_Init
+; Calls:   sub_F6F476 sub_F6F4A3 T_F40AC8 Smf_ReadFile_Entry T_Ring601850_Init T_SeqBufRing_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -163667,7 +163667,7 @@ sub_F6F408:
 sub_F6F408_Skip:
 	call	Smf_ReadFile_Entry	; F6F42A  call 0xf6f526
 	call	T_Ring601850_Init	; F6F42E  call 0xf41e6c
-	call	T_Ring600A14_Init	; F6F432  call 0xf41d94
+	call	T_SeqBufRing_Init	; F6F432  call 0xf41d94
 	m_and_mi8 MB16, 0x360b, 0xfe	; F6F436  and (0x360b),0xfe
 	pop	xde	; F6F43B  pop XDE
 	pop	xhl	; F6F43C  pop XHL
@@ -163680,7 +163680,7 @@ sub_F6F408_Skip:
 ; Called from: in-module: 0xF6F404
 ; Touches: (0x272B) (0x360A)
 ; Calls:   sub_F6F476 sub_F6F4A3 sub_F6F4F2 T_F40AC8 sub_F73840 T_Ring601850_Init
-;          T_Ring600A14_Init
+;          T_SeqBufRing_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -163707,7 +163707,7 @@ sub_F6F440:
 sub_F6F440_Skip:
 	call	sub_F73840	; F6F465  call 0xf73840
 	call	T_Ring601850_Init	; F6F469  call 0xf41e6c
-	call	T_Ring600A14_Init	; F6F46D  call 0xf41d94
+	call	T_SeqBufRing_Init	; F6F46D  call 0xf41d94
 	pop	xde	; F6F471  pop XDE
 	pop	xhl	; F6F472  pop XHL
 	pop	xix	; F6F473  pop XIX

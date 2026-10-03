@@ -19,7 +19,7 @@ WHAT IT READS
 
 WHAT IT FOUND (2026-08-30, working tree, gate green)
     17 of 20 names hold.  Three headers carry a number the listing refutes:
-      * Ring600C1E_InitIfPanelMode79 says the listing tests (0x207A) against
+      * MidiInARing_InitIfPanelMode79 says the listing tests (0x207A) against
         FIVE values.  It tests TWENTY-FOUR, at 57 sites.  (The name itself is
         fine: the 0x79 gate is exact, and `mode` for (0x207A) is carried by the
         Msg0716 module banner -- just not by the header this one cites.)
@@ -78,7 +78,7 @@ def calr_target(a, b):
 # ---------------------------------------------------------------- the checks
 def q_207a_values(rows):
     """How many DISTINCT immediates does prom_a compare (0x207A) against?
-    Ring600C1E_InitIfPanelMode79's header names five: 0x0D 0x13 0x79 0xB7 0xDB."""
+    MidiInARing_InitIfPanelMode79's header names five: 0x0D 0x13 0x79 0xB7 0xDB."""
     vals = set()
     n = 0
     for a, t, b, o in rows:
@@ -214,7 +214,7 @@ def main(argv):
                      ("SoundCode_FromGroupMember_ModeOffset", 1),
                      ("SoundCode_FromGroupMember_ByteGroup", 1),
                      ("Ring601432_SpinUntilEmpty", 2),
-                     ("Ring600C1E_InitIfPanelMode79", 4),
+                     ("MidiInARing_InitIfPanelMode79", 4),
                      ("Ring601646_InitIrqMasked", 1),
                      ("DLB_Handler_StringTable_Veneer", 7),
                      ("DLB_Handler_Decimal_Veneer", 10),

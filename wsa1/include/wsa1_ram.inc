@@ -300,5 +300,9 @@
 	.equ SeqBuf_RingFree,			0x600a12	; the ring's free count -- SeqBuf_PutByte
 	.equ SeqBuf_Ring,			0x600a14	; the 0x200-byte sequencer ring; descriptor below it -- Ring600A14_*, SeqBuf_PutByte
 
+; ---- wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md -- "2. The MIDI-in rings"
+	.equ MidiIn_PortARing,			0x600c1e	; MIDI port A's received-byte ring (0x400) -- MidiIn_PumpPortA, MidiIn_RoutePortA
+	.equ MidiIn_PortBRing,			0x601028	; MIDI port B's received-byte ring (0x400) -- MidiIn_PumpPortB, MidiIn_RoutePortB
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

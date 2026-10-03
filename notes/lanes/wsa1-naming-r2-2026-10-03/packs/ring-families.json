@@ -1,0 +1,280 @@
+{
+ "name": "wsa1-ring-families",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "also": [
+  "wsa1/dsp/dsp_channel_regs.s",
+  "wsa1/dsp/dsp_channel_regs_maincpu.inc",
+  "wsa1/dsp/dsp_channel_regs_subcpu.inc",
+  "wsa1/include/tlcs900_mem_ops.inc",
+  "wsa1/include/tmp95c061_sfr.inc",
+  "wsa1/include/wsa1_ram.inc",
+  "wsa1/kernel/kernel.s",
+  "wsa1/kernel/kernel_maincpu.inc",
+  "wsa1/kernel/kernel_subcpu.inc",
+  "wsa1/maincpu/shared/indexed_table.s",
+  "wsa1/maincpu/shared/lcd_screen_redraw.s",
+  "wsa1/prom_a/prom_a.ld",
+  "wsa1/prom_b/prom_b.ld",
+  "wsa1/prom_b/wsa1_prom_b.s",
+  "wsa1/prom_c/boot/boot_and_main.s",
+  "wsa1/prom_c/boot/reset_and_vectors.s",
+  "wsa1/prom_c/boot/scheduler_intt1.s",
+  "wsa1/prom_c/data_tables/preset_bank.s",
+  "wsa1/prom_c/data_tables/tail_data_zone.s",
+  "wsa1/prom_c/data_tables/touch_eq_mixer.s",
+  "wsa1/prom_c/data_tables/voice_dsp_tables.s",
+  "wsa1/prom_c/devices/dev10c_dev104_drivers.s",
+  "wsa1/prom_c/devices/dev10c_reg_writers.s",
+  "wsa1/prom_c/field_accessors.s",
+  "wsa1/prom_c/keyscan/keyboard_scanner.s",
+  "wsa1/prom_c/keyscan/touch_to_velocity.s",
+  "wsa1/prom_c/link/link_interrupts.s",
+  "wsa1/prom_c/link/link_key_events.s",
+  "wsa1/prom_c/link/link_service.s",
+  "wsa1/prom_c/mathlib/mathlib.s",
+  "wsa1/prom_c/midi/midi_controllers.s",
+  "wsa1/prom_c/midi/midi_serial_port.s",
+  "wsa1/prom_c/p7/p7_module.s",
+  "wsa1/prom_c/p7/p7_stream_pool.s",
+  "wsa1/prom_c/prom_c.ld",
+  "wsa1/prom_c/storage/eeprom.s",
+  "wsa1/prom_c/storage/flash.s",
+  "wsa1/prom_c/tone_db/tone_db_module.s",
+  "wsa1/prom_c/voice/note_engine.s",
+  "wsa1/prom_c/voice/voice_leaf_helpers.s",
+  "wsa1/prom_c/voice/voice_parameters.s",
+  "wsa1/prom_c/wsa1_prom_c.s",
+  "wsa1/prom_d/prom_d.ld",
+  "wsa1/prom_d/tone_database_aux.s",
+  "wsa1/prom_d/tone_database_directory.s",
+  "wsa1/prom_d/tone_database_records.s",
+  "wsa1/prom_d/wsa1_prom_d.s"
+ ],
+ "renames": [
+  {
+   "old": "Ring600A14_Get",
+   "new": "SeqBufRing_Get",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_Put",
+   "new": "SeqBufRing_Put",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_PutBlock",
+   "new": "SeqBufRing_PutBlock",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_IsEmpty",
+   "new": "SeqBufRing_IsEmpty",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_Init",
+   "new": "SeqBufRing_Init",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_ScanRewind",
+   "new": "SeqBufRing_ScanRewind",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_Scan",
+   "new": "SeqBufRing_Scan",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_ScanToPut",
+   "new": "SeqBufRing_ScanToPut",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring600A14_GetCommit",
+   "new": "SeqBufRing_GetCommit",
+   "evidence": "0x600A14 is SeqBuf_Ring (FINDINGS-prom_a-seqbuf-and-timed-events.md)",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_Get",
+   "new": "TimedEventRing_Get",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_Put",
+   "new": "TimedEventRing_Put",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_PutBlock",
+   "new": "TimedEventRing_PutBlock",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_IsEmpty",
+   "new": "TimedEventRing_IsEmpty",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_Init",
+   "new": "TimedEventRing_Init",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_ScanRewind",
+   "new": "TimedEventRing_ScanRewind",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_Scan",
+   "new": "TimedEventRing_Scan",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_ScanToPut",
+   "new": "TimedEventRing_ScanToPut",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring60080A_GetCommit",
+   "new": "TimedEventRing_GetCommit",
+   "evidence": "0x60080A is TimedEvents_Ring, walked by TimedEvents_DrainDue / _DispatchDueRun",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_Get",
+   "new": "MidiInARing_Get",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_Put",
+   "new": "MidiInARing_Put",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_PutBlock",
+   "new": "MidiInARing_PutBlock",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_IsEmpty",
+   "new": "MidiInARing_IsEmpty",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_Init",
+   "new": "MidiInARing_Init",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_ScanRewind",
+   "new": "MidiInARing_ScanRewind",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_Scan",
+   "new": "MidiInARing_Scan",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_ScanToPut",
+   "new": "MidiInARing_ScanToPut",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_GetCommit",
+   "new": "MidiInARing_GetCommit",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring600C1E_InitIfPanelMode79",
+   "new": "MidiInARing_InitIfPanelMode79",
+   "evidence": "MidiIn_PumpPortA drains ring 0x600C1E, MidiIn_RoutePortA splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_Get",
+   "new": "MidiInBRing_Get",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_Put",
+   "new": "MidiInBRing_Put",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_PutBlock",
+   "new": "MidiInBRing_PutBlock",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_IsEmpty",
+   "new": "MidiInBRing_IsEmpty",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_Init",
+   "new": "MidiInBRing_Init",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_ScanRewind",
+   "new": "MidiInBRing_ScanRewind",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_Scan",
+   "new": "MidiInBRing_Scan",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_ScanToPut",
+   "new": "MidiInBRing_ScanToPut",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  },
+  {
+   "old": "Ring601028_GetCommit",
+   "new": "MidiInBRing_GetCommit",
+   "evidence": "MidiIn_PumpPortB drains ring 0x601028, MidiIn_RoutePortB splits it",
+   "children": false
+  }
+ ],
+ "headers": []
+}

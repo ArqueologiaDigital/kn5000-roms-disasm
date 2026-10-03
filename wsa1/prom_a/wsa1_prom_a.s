@@ -1602,25 +1602,25 @@
 	.set T_Ring60195A_IsEmpty,                                                          0x00F41D24
 	.set T_Ring60195A_Init,                                                             0x00F41D28
 	.set T_Ring601B64_Init,                                                             0x00F41D4C
-	.set T_Ring60080A_Put,                                                              0x00F41D64
-	.set T_Ring60080A_Init,                                                             0x00F41D70
-	.set T_Ring60080A_ScanRewind,                                                       0x00F41D74
-	.set T_Ring60080A_Scan,                                                             0x00F41D78
-	.set T_Ring600A14_Get,                                                              0x00F41D84
-	.set T_Ring600A14_PutBlock,                                                         0x00F41D8C
-	.set T_Ring600A14_IsEmpty,                                                          0x00F41D90
-	.set T_Ring600A14_Init,                                                             0x00F41D94
-	.set T_Ring600C1E_Put,                                                              0x00F41DAC
-	.set T_Ring600C1E_PutBlock,                                                         0x00F41DB0
-	.set T_Ring600C1E_IsEmpty,                                                          0x00F41DB4
-	.set T_Ring600C1E_Init,                                                             0x00F41DB8
-	.set T_Ring600C1E_ScanRewind,                                                       0x00F41DBC
-	.set T_Ring600C1E_Scan,                                                             0x00F41DC0
-	.set T_Ring601028_PutBlock,                                                         0x00F41DD4
-	.set T_Ring601028_IsEmpty,                                                          0x00F41DD8
-	.set T_Ring601028_Init,                                                             0x00F41DDC
-	.set T_Ring601028_ScanRewind,                                                       0x00F41DE0
-	.set T_Ring601028_Scan,                                                             0x00F41DE4
+	.set T_TimedEventRing_Put,                                                              0x00F41D64
+	.set T_TimedEventRing_Init,                                                             0x00F41D70
+	.set T_TimedEventRing_ScanRewind,                                                       0x00F41D74
+	.set T_TimedEventRing_Scan,                                                             0x00F41D78
+	.set T_SeqBufRing_Get,                                                              0x00F41D84
+	.set T_SeqBufRing_PutBlock,                                                         0x00F41D8C
+	.set T_SeqBufRing_IsEmpty,                                                          0x00F41D90
+	.set T_SeqBufRing_Init,                                                             0x00F41D94
+	.set T_MidiInARing_Put,                                                              0x00F41DAC
+	.set T_MidiInARing_PutBlock,                                                         0x00F41DB0
+	.set T_MidiInARing_IsEmpty,                                                          0x00F41DB4
+	.set T_MidiInARing_Init,                                                             0x00F41DB8
+	.set T_MidiInARing_ScanRewind,                                                       0x00F41DBC
+	.set T_MidiInARing_Scan,                                                             0x00F41DC0
+	.set T_MidiInBRing_PutBlock,                                                         0x00F41DD4
+	.set T_MidiInBRing_IsEmpty,                                                          0x00F41DD8
+	.set T_MidiInBRing_Init,                                                             0x00F41DDC
+	.set T_MidiInBRing_ScanRewind,                                                       0x00F41DE0
+	.set T_MidiInBRing_Scan,                                                             0x00F41DE4
 	.set T_Ring601432_Get,                                                              0x00F41DF0
 	.set T_Ring601432_Put,                                                              0x00F41DF4
 	.set T_Ring601432_PutBlock,                                                         0x00F41DF8
@@ -5610,7 +5610,7 @@ MainTask_Loop:
 	ld	a, (0x9e:8)                                      ; F8205B  c0 9e 21
 	and A,0x2c                                           ; F8205E  c9 cc 2c
 	jr z, .LF82075                                       ; F82061  66 12
-	call T_Ring600C1E_Init                               ; F82063  1d b8 1d f4
+	call T_MidiInARing_Init                               ; F82063  1d b8 1d f4
 	m_and_mi8 MB8, 0x9e, 0xd3                            ; F82067  c0 9e 3c d3
 	ei 0x00                                              ; F8206B  06 00
 	call T_F413C0                                        ; F8206D  1d c0 13 f4
@@ -5620,12 +5620,12 @@ MainTask_Loop:
 	call T_F408E8                                        ; F82077  1d e8 08 f4
 	m_cp_mi8 MB8, 0x89, 0xff                             ; F8207B  c0 89 3f ff
 	jr z, .LF8208C                                       ; F8207F  66 0b
-	call T_Ring600C1E_IsEmpty                            ; F82081  1d b4 1d f4
+	call T_MidiInARing_IsEmpty                            ; F82081  1d b4 1d f4
 	and WA,WA                                            ; F82085  d8 c0
 	jr z, .LF8208C                                       ; F82087  66 03
 	calr MidiIn_RoutePortA                                      ; F82089  1e 78 01
 .LF8208C:
-	call T_Ring601028_IsEmpty                            ; F8208C  1d d8 1d f4
+	call T_MidiInBRing_IsEmpty                            ; F8208C  1d d8 1d f4
 	and WA,WA                                            ; F82090  d8 c0
 	jr z, .LF82097                                       ; F82092  66 03
 	calr MidiIn_RoutePortB                                      ; F82094  1e 3d 02
@@ -5779,7 +5779,7 @@ MainTask_PanelTimersTick:
 ; Evidence: ring 0x600C1E (MidiIn_PumpPortA's), scanned from (ring-8) to (ring-4) mod 0x400.  Note class = status 0x8n, 0x9n, or 0xBn whose next byte is >=0x7B (cp 0x7B at 0xF8224A/0xF82280).  At the first class change it stores the position in (ring-6) and calls T_F413B4 (prom_a sub_FC80E2) for a note run, or MidiIn_PumpPortA + T_F41F14 + Queue2C00_DrainPassAB otherwise; then (ring-8)=(ring-6) and (ring-2) += bytes consumed.
 ; Called from MainTask_Loop 0xF82089 when (0x89)!=0xFF and the ring is not empty.
 MidiIn_RoutePortA:
-	ld XHL,0x00600c1e                                    ; F82204  43 1e 0c 60 00
+	ld XHL,MidiIn_PortARing                                    ; F82204  43 1e 0c 60 00
 	ld iy, (xhl-8)                                       ; F82209  9b f8 25
 	ld ix, (xhl-4)                                       ; F8220C  9b fc 24
 	xor BC,BC                                            ; F8220F  d9 d1
@@ -5861,7 +5861,7 @@ MidiIn_RoutePortA:
 	call T_F41F14                                        ; F822BD  1d 14 1f f4
 	calr Queue2C00_DrainPassAB                                      ; F822C1  1e e8 00
 .LF822C4:
-	ld XHL,0x00600c1e                                    ; F822C4  43 1e 0c 60 00
+	ld XHL,MidiIn_PortARing                                    ; F822C4  43 1e 0c 60 00
 	ld wa, (xhl-6)                                       ; F822C9  9b fa 20
 	ld (xhl-8), wa                                       ; F822CC  bb f8 50
 	popw wa                                              ; F822CF  48
@@ -5870,7 +5870,7 @@ MidiIn_RoutePortA:
 ; MidiIn_RoutePortB -- MidiIn_RoutePortA for MIDI IN port B
 ; Evidence: the same code on ring 0x601028; the note run goes to T_F413F8 (prom_a sub_FC8448), the rest to T_MidiIn_PumpPortB + T_F41F14 + Queue2C00_DrainPassAB (0xF8237F-0xF82391).  Called from MainTask_Loop 0xF82094.
 MidiIn_RoutePortB:
-	ld XHL,0x00601028                                    ; F822D4  43 28 10 60 00
+	ld XHL,MidiIn_PortBRing                                    ; F822D4  43 28 10 60 00
 	ld iy, (xhl-8)                                       ; F822D9  9b f8 25
 	ld ix, (xhl-4)                                       ; F822DC  9b fc 24
 	xor BC,BC                                            ; F822DF  d9 d1
@@ -5952,7 +5952,7 @@ MidiIn_RoutePortB:
 	call T_F41F14                                        ; F8238D  1d 14 1f f4
 	calr Queue2C00_DrainPassAB                                      ; F82391  1e 18 00
 .LF82394:
-	ld XHL,0x00601028                                    ; F82394  43 28 10 60 00
+	ld XHL,MidiIn_PortBRing                                    ; F82394  43 28 10 60 00
 	ld wa, (xhl-6)                                       ; F82399  9b fa 20
 	ld (xhl-8), wa                                       ; F8239C  bb f8 50
 	popw wa                                              ; F8239F  48
@@ -6291,8 +6291,8 @@ Ring601850_ServiceIfNotEmpty:
 ;           0xF82601, 0xF82605, 0xF82609, 0xF8260D, 0xF82611, 0xF82615
 ;           and 0xF82619, whose operands are the prom_b slots
 ;           T_Ring608A0A_Init, T_Ring60480A_Init, T_Ring60000C_Init,
-;           T_Ring601B64_Init, T_Ring60080A_Init, T_Ring600A14_Init,
-;           T_Ring600C1E_Init, T_Ring601028_Init, T_Ring601432_Init,
+;           T_Ring601B64_Init, T_TimedEventRing_Init, T_SeqBufRing_Init,
+;           T_MidiInARing_Init, T_MidiInBRing_Init, T_Ring601432_Init,
 ;           T_Ring60153C_Init, T_Ring601646_Init, T_Ring601850_Init,
 ;           T_Ring60195A_Init and T_Ring601C6E_Init -- that is EVERY
 ;           `T_Ring*_Init` label in prom_b, each exactly once, and
@@ -6323,10 +6323,10 @@ Ring_InitAllFourteen:
 	call T_Ring60480A_Init                               ; F825E9  1d 04 1d f4
 	call T_Ring60000C_Init                               ; F825ED  1d 90 1e f4
 	call T_Ring601B64_Init                               ; F825F1  1d 4c 1d f4
-	call T_Ring60080A_Init                               ; F825F5  1d 70 1d f4
-	call T_Ring600A14_Init                               ; F825F9  1d 94 1d f4
-	call T_Ring600C1E_Init                               ; F825FD  1d b8 1d f4
-	call T_Ring601028_Init                               ; F82601  1d dc 1d f4
+	call T_TimedEventRing_Init                               ; F825F5  1d 70 1d f4
+	call T_SeqBufRing_Init                               ; F825F9  1d 94 1d f4
+	call T_MidiInARing_Init                               ; F825FD  1d b8 1d f4
+	call T_MidiInBRing_Init                               ; F82601  1d dc 1d f4
 	call T_Ring601432_Init                               ; F82605  1d 00 1e f4
 	call T_Ring60153C_Init                               ; F82609  1d 24 1e f4
 	call T_Ring601646_Init                               ; F8260D  1d 48 1e f4
@@ -9339,9 +9339,9 @@ Ring60000C_GetCommit:
 	popw wa                                              ; F84569  48
 	ret                                                  ; F8456A  0e
 ; ---------------------------------------------------------------------
-; Ring60080A_Get and its group -- the eleven veneers of ring 0x60080A
+; TimedEventRing_Get and its group -- the eleven veneers of ring 0x60080A
 ;
-; Called from: prom_b directory slot T_Ring60080A_Get (T_F41D60) (`jp 0xf8456b`), which is the ONLY
+; Called from: prom_b directory slot T_TimedEventRing_Get (T_F41D60) (`jp 0xf8456b`), which is the ONLY
 ;          slot naming this veneer; 1 call site reaches that slot.  The
 ;          group's other veneers own their own slots in the same module
 ;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
@@ -9359,7 +9359,7 @@ Ring60000C_GetCommit:
 ;          0x200 bytes of data at and above it.
 ; Extent:  0xF8456B-0xF8460D, 163 bytes, the same length as every other group.
 ; ---------------------------------------------------------------------
-Ring60080A_Get:
+TimedEventRing_Get:
 	pushw ix                                             ; F8456B  2c
 	push XHL                                             ; F8456C  3b
 	lda xhl, (TimedEvents_Ring:24)                               ; F8456D  f2 0a 08 60 33
@@ -9367,7 +9367,7 @@ Ring60080A_Get:
 	pop XHL                                              ; F84576  5b
 	popw ix                                              ; F84577  4c
 	ret                                                  ; F84578  0e
-Ring60080A_Put:
+TimedEventRing_Put:
 	link XIZ,0x0000                                      ; F84579  ee 0c 00 00
 	pushw ix                                             ; F8457D  2c
 	push XHL                                             ; F8457E  3b
@@ -9378,7 +9378,7 @@ Ring60080A_Put:
 	popw ix                                              ; F8458C  4c
 	unlk XIZ                                             ; F8458D  ee 0d
 	ret                                                  ; F8458F  0e
-Ring60080A_PutBlock:
+TimedEventRing_PutBlock:
 	link XIZ,0x0000                                      ; F84590  ee 0c 00 00
 	push XIY                                             ; F84594  3d
 	push XIX                                             ; F84595  3c
@@ -9396,7 +9396,7 @@ Ring60080A_PutBlock:
 	pop XIY                                              ; F845AF  5d
 	unlk XIZ                                             ; F845B0  ee 0d
 	ret                                                  ; F845B2  0e
-Ring60080A_IsEmpty:
+TimedEventRing_IsEmpty:
 	pushw bc                                             ; F845B3  29
 	ldw wa, 0x00                                         ; F845B4  30 00 00
 	ld bc, (0x600806:24)                                ; F845B7  d2 06 08 60 21
@@ -9406,7 +9406,7 @@ Ring60080A_IsEmpty:
 .LF845C6:
 	popw bc                                              ; F845C6  49
 	ret                                                  ; F845C7  0e
-Ring60080A_Init:
+TimedEventRing_Init:
 	pushw ix                                             ; F845C8  2c
 	push XHL                                             ; F845C9  3b
 	lda xhl, (TimedEvents_Ring:24)                               ; F845CA  f2 0a 08 60 33
@@ -9414,13 +9414,13 @@ Ring60080A_Init:
 	pop XHL                                              ; F845D3  5b
 	popw ix                                              ; F845D4  4c
 	ret                                                  ; F845D5  0e
-Ring60080A_ScanRewind:
+TimedEventRing_ScanRewind:
 	pushw wa                                             ; F845D6  28
 	ld wa, (0x600802:24)                                ; F845D7  d2 02 08 60 20
 	ld (0x600800:24), wa                                ; F845DC  f2 00 08 60 50
 	popw wa                                              ; F845E1  48
 	ret                                                  ; F845E2  0e
-Ring60080A_Scan:
+TimedEventRing_Scan:
 	pushw ix                                             ; F845E3  2c
 	push XHL                                             ; F845E4  3b
 	lda xhl, (TimedEvents_Ring:24)                               ; F845E5  f2 0a 08 60 33
@@ -9429,7 +9429,7 @@ Ring60080A_Scan:
 	popw ix                                              ; F845EF  4c
 	ret                                                  ; F845F0  0e
 	ret                                                  ; F845F1  0e
-Ring60080A_ScanToPut:
+TimedEventRing_ScanToPut:
 	pushw ix                                             ; F845F2  2c
 	push XHL                                             ; F845F3  3b
 	lda xhl, (TimedEvents_Ring:24)                               ; F845F4  f2 0a 08 60 33
@@ -9438,16 +9438,16 @@ Ring60080A_ScanToPut:
 	popw ix                                              ; F845FE  4c
 	ret                                                  ; F845FF  0e
 	ret                                                  ; F84600  0e
-Ring60080A_GetCommit:
+TimedEventRing_GetCommit:
 	pushw wa                                             ; F84601  28
 	ld wa, (0x600804:24)                                ; F84602  d2 04 08 60 20
 	ld (0x600802:24), wa                                ; F84607  f2 02 08 60 50
 	popw wa                                              ; F8460C  48
 	ret                                                  ; F8460D  0e
 ; ---------------------------------------------------------------------
-; Ring600A14_Get and its group -- the eleven veneers of ring 0x600A14
+; SeqBufRing_Get and its group -- the eleven veneers of ring 0x600A14
 ;
-; Called from: prom_b directory slot T_Ring600A14_Get (T_F41D84) (`jp 0xf8460e`), which is the ONLY
+; Called from: prom_b directory slot T_SeqBufRing_Get (T_F41D84) (`jp 0xf8460e`), which is the ONLY
 ;          slot naming this veneer; 48 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
 ;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
@@ -9465,7 +9465,7 @@ Ring60080A_GetCommit:
 ;          0x200 bytes of data at and above it.
 ; Extent:  0xF8460E-0xF846B0, 163 bytes, the same length as every other group.
 ; ---------------------------------------------------------------------
-Ring600A14_Get:
+SeqBufRing_Get:
 	pushw ix                                             ; F8460E  2c
 	push XHL                                             ; F8460F  3b
 	lda xhl, (SeqBuf_Ring:24)                               ; F84610  f2 14 0a 60 33
@@ -9473,7 +9473,7 @@ Ring600A14_Get:
 	pop XHL                                              ; F84619  5b
 	popw ix                                              ; F8461A  4c
 	ret                                                  ; F8461B  0e
-Ring600A14_Put:
+SeqBufRing_Put:
 	link XIZ,0x0000                                      ; F8461C  ee 0c 00 00
 	pushw ix                                             ; F84620  2c
 	push XHL                                             ; F84621  3b
@@ -9484,7 +9484,7 @@ Ring600A14_Put:
 	popw ix                                              ; F8462F  4c
 	unlk XIZ                                             ; F84630  ee 0d
 	ret                                                  ; F84632  0e
-Ring600A14_PutBlock:
+SeqBufRing_PutBlock:
 	link XIZ,0x0000                                      ; F84633  ee 0c 00 00
 	push XIY                                             ; F84637  3d
 	push XIX                                             ; F84638  3c
@@ -9502,7 +9502,7 @@ Ring600A14_PutBlock:
 	pop XIY                                              ; F84652  5d
 	unlk XIZ                                             ; F84653  ee 0d
 	ret                                                  ; F84655  0e
-Ring600A14_IsEmpty:
+SeqBufRing_IsEmpty:
 	pushw bc                                             ; F84656  29
 	ldw wa, 0x00                                         ; F84657  30 00 00
 	ld bc, (SeqBuf_RingPut:24)                                ; F8465A  d2 10 0a 60 21
@@ -9512,7 +9512,7 @@ Ring600A14_IsEmpty:
 .LF84669:
 	popw bc                                              ; F84669  49
 	ret                                                  ; F8466A  0e
-Ring600A14_Init:
+SeqBufRing_Init:
 	pushw ix                                             ; F8466B  2c
 	push XHL                                             ; F8466C  3b
 	lda xhl, (SeqBuf_Ring:24)                               ; F8466D  f2 14 0a 60 33
@@ -9520,13 +9520,13 @@ Ring600A14_Init:
 	pop XHL                                              ; F84676  5b
 	popw ix                                              ; F84677  4c
 	ret                                                  ; F84678  0e
-Ring600A14_ScanRewind:
+SeqBufRing_ScanRewind:
 	pushw wa                                             ; F84679  28
 	ld wa, (0x600a0c:24)                                ; F8467A  d2 0c 0a 60 20
 	ld (0x600a0a:24), wa                                ; F8467F  f2 0a 0a 60 50
 	popw wa                                              ; F84684  48
 	ret                                                  ; F84685  0e
-Ring600A14_Scan:
+SeqBufRing_Scan:
 	pushw ix                                             ; F84686  2c
 	push XHL                                             ; F84687  3b
 	lda xhl, (SeqBuf_Ring:24)                               ; F84688  f2 14 0a 60 33
@@ -9535,7 +9535,7 @@ Ring600A14_Scan:
 	popw ix                                              ; F84692  4c
 	ret                                                  ; F84693  0e
 	ret                                                  ; F84694  0e
-Ring600A14_ScanToPut:
+SeqBufRing_ScanToPut:
 	pushw ix                                             ; F84695  2c
 	push XHL                                             ; F84696  3b
 	lda xhl, (SeqBuf_Ring:24)                               ; F84697  f2 14 0a 60 33
@@ -9544,16 +9544,16 @@ Ring600A14_ScanToPut:
 	popw ix                                              ; F846A1  4c
 	ret                                                  ; F846A2  0e
 	ret                                                  ; F846A3  0e
-Ring600A14_GetCommit:
+SeqBufRing_GetCommit:
 	pushw wa                                             ; F846A4  28
 	ld wa, (0x600a0e:24)                                ; F846A5  d2 0e 0a 60 20
 	ld (0x600a0c:24), wa                                ; F846AA  f2 0c 0a 60 50
 	popw wa                                              ; F846AF  48
 	ret                                                  ; F846B0  0e
 ; ---------------------------------------------------------------------
-; Ring600C1E_Get and its group -- the eleven veneers of ring 0x600C1E
+; MidiInARing_Get and its group -- the eleven veneers of ring 0x600C1E
 ;
-; Called from: prom_b directory slot T_Ring600C1E_Get (T_F41DA8) (`jp 0xf846b1`), which is the ONLY
+; Called from: prom_b directory slot T_MidiInARing_Get (T_F41DA8) (`jp 0xf846b1`), which is the ONLY
 ;          slot naming this veneer; 0 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
 ;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
@@ -9571,33 +9571,33 @@ Ring600A14_GetCommit:
 ;          0x400 bytes of data at and above it.
 ; Extent:  0xF846B1-0xF84753, 163 bytes, the same length as every other group.
 ; ---------------------------------------------------------------------
-Ring600C1E_Get:
+MidiInARing_Get:
 	pushw ix                                             ; F846B1  2c
 	push XHL                                             ; F846B2  3b
-	lda xhl, (0x600c1e:24)                               ; F846B3  f2 1e 0c 60 33
+	lda xhl, (MidiIn_PortARing:24)                               ; F846B3  f2 1e 0c 60 33
 	call Ring_Get_0400                                   ; F846B8  1d 5d 40 f8
 	pop XHL                                              ; F846BC  5b
 	popw ix                                              ; F846BD  4c
 	ret                                                  ; F846BE  0e
-Ring600C1E_Put:
+MidiInARing_Put:
 	link XIZ,0x0000                                      ; F846BF  ee 0c 00 00
 	pushw ix                                             ; F846C3  2c
 	push XHL                                             ; F846C4  3b
 	ld A,(XIZ+0x08)                                      ; F846C5  8e 08 21
-	lda xhl, (0x600c1e:24)                               ; F846C8  f2 1e 0c 60 33
+	lda xhl, (MidiIn_PortARing:24)                               ; F846C8  f2 1e 0c 60 33
 	call Ring_Put_0400                                   ; F846CD  1d 19 42 f8
 	pop XHL                                              ; F846D1  5b
 	popw ix                                              ; F846D2  4c
 	unlk XIZ                                             ; F846D3  ee 0d
 	ret                                                  ; F846D5  0e
-Ring600C1E_PutBlock:
+MidiInARing_PutBlock:
 	link XIZ,0x0000                                      ; F846D6  ee 0c 00 00
 	push XIY                                             ; F846DA  3d
 	push XIX                                             ; F846DB  3c
 	push XHL                                             ; F846DC  3b
 	ld BC,(XIZ+0x08)                                     ; F846DD  9e 08 21
 	ld XIY,(XIZ+0x0a)                                    ; F846E0  ae 0a 25
-	lda xhl, (0x600c1e:24)                               ; F846E3  f2 1e 0c 60 33
+	lda xhl, (MidiIn_PortARing:24)                               ; F846E3  f2 1e 0c 60 33
 .LF846E8:
 	ld A,(XIY)                                           ; F846E8  85 21
 	call Ring_Put_0400                                   ; F846EA  1d 19 42 f8
@@ -9608,7 +9608,7 @@ Ring600C1E_PutBlock:
 	pop XIY                                              ; F846F5  5d
 	unlk XIZ                                             ; F846F6  ee 0d
 	ret                                                  ; F846F8  0e
-Ring600C1E_IsEmpty:
+MidiInARing_IsEmpty:
 	pushw bc                                             ; F846F9  29
 	ldw wa, 0x00                                         ; F846FA  30 00 00
 	ld bc, (0x600c1a:24)                                ; F846FD  d2 1a 0c 60 21
@@ -9618,48 +9618,48 @@ Ring600C1E_IsEmpty:
 .LF8470C:
 	popw bc                                              ; F8470C  49
 	ret                                                  ; F8470D  0e
-Ring600C1E_Init:
+MidiInARing_Init:
 	pushw ix                                             ; F8470E  2c
 	push XHL                                             ; F8470F  3b
-	lda xhl, (0x600c1e:24)                               ; F84710  f2 1e 0c 60 33
+	lda xhl, (MidiIn_PortARing:24)                               ; F84710  f2 1e 0c 60 33
 	call Ring_Init_0400                                  ; F84715  1d ab 42 f8
 	pop XHL                                              ; F84719  5b
 	popw ix                                              ; F8471A  4c
 	ret                                                  ; F8471B  0e
-Ring600C1E_ScanRewind:
+MidiInARing_ScanRewind:
 	pushw wa                                             ; F8471C  28
 	ld wa, (0x600c16:24)                                ; F8471D  d2 16 0c 60 20
 	ld (0x600c14:24), wa                                ; F84722  f2 14 0c 60 50
 	popw wa                                              ; F84727  48
 	ret                                                  ; F84728  0e
-Ring600C1E_Scan:
+MidiInARing_Scan:
 	pushw ix                                             ; F84729  2c
 	push XHL                                             ; F8472A  3b
-	lda xhl, (0x600c1e:24)                               ; F8472B  f2 1e 0c 60 33
+	lda xhl, (MidiIn_PortARing:24)                               ; F8472B  f2 1e 0c 60 33
 	call Ring_Scan_0400                                  ; F84730  1d ef 40 f8
 	pop XHL                                              ; F84734  5b
 	popw ix                                              ; F84735  4c
 	ret                                                  ; F84736  0e
 	ret                                                  ; F84737  0e
-Ring600C1E_ScanToPut:
+MidiInARing_ScanToPut:
 	pushw ix                                             ; F84738  2c
 	push XHL                                             ; F84739  3b
-	lda xhl, (0x600c1e:24)                               ; F8473A  f2 1e 0c 60 33
+	lda xhl, (MidiIn_PortARing:24)                               ; F8473A  f2 1e 0c 60 33
 	call Ring_ScanToPut_0400                             ; F8473F  1d 7b 41 f8
 	pop XHL                                              ; F84743  5b
 	popw ix                                              ; F84744  4c
 	ret                                                  ; F84745  0e
 	ret                                                  ; F84746  0e
-Ring600C1E_GetCommit:
+MidiInARing_GetCommit:
 	pushw wa                                             ; F84747  28
 	ld wa, (0x600c18:24)                                ; F84748  d2 18 0c 60 20
 	ld (0x600c16:24), wa                                ; F8474D  f2 16 0c 60 50
 	popw wa                                              ; F84752  48
 	ret                                                  ; F84753  0e
 ; ---------------------------------------------------------------------
-; Ring601028_Get and its group -- the eleven veneers of ring 0x601028
+; MidiInBRing_Get and its group -- the eleven veneers of ring 0x601028
 ;
-; Called from: prom_b directory slot T_Ring601028_Get (T_F41DCC) (`jp 0xf84754`), which is the ONLY
+; Called from: prom_b directory slot T_MidiInBRing_Get (T_F41DCC) (`jp 0xf84754`), which is the ONLY
 ;          slot naming this veneer; 0 call sites reach that slot.  The
 ;          group's other veneers own their own slots in the same module
 ;          T_Ring608A0A_Get (T_F41CD0)-T_Ring601C6E_GetCommit (T_F41EC4) (`python3 notes/prom_a_call_graph.py --module
@@ -9677,33 +9677,33 @@ Ring600C1E_GetCommit:
 ;          0x400 bytes of data at and above it.
 ; Extent:  0xF84754-0xF847F6, 163 bytes, the same length as every other group.
 ; ---------------------------------------------------------------------
-Ring601028_Get:
+MidiInBRing_Get:
 	pushw ix                                             ; F84754  2c
 	push XHL                                             ; F84755  3b
-	lda xhl, (0x601028:24)                               ; F84756  f2 28 10 60 33
+	lda xhl, (MidiIn_PortBRing:24)                               ; F84756  f2 28 10 60 33
 	call Ring_Get_0400                                   ; F8475B  1d 5d 40 f8
 	pop XHL                                              ; F8475F  5b
 	popw ix                                              ; F84760  4c
 	ret                                                  ; F84761  0e
-Ring601028_Put:
+MidiInBRing_Put:
 	link XIZ,0x0000                                      ; F84762  ee 0c 00 00
 	pushw ix                                             ; F84766  2c
 	push XHL                                             ; F84767  3b
 	ld A,(XIZ+0x08)                                      ; F84768  8e 08 21
-	lda xhl, (0x601028:24)                               ; F8476B  f2 28 10 60 33
+	lda xhl, (MidiIn_PortBRing:24)                               ; F8476B  f2 28 10 60 33
 	call Ring_Put_0400                                   ; F84770  1d 19 42 f8
 	pop XHL                                              ; F84774  5b
 	popw ix                                              ; F84775  4c
 	unlk XIZ                                             ; F84776  ee 0d
 	ret                                                  ; F84778  0e
-Ring601028_PutBlock:
+MidiInBRing_PutBlock:
 	link XIZ,0x0000                                      ; F84779  ee 0c 00 00
 	push XIY                                             ; F8477D  3d
 	push XIX                                             ; F8477E  3c
 	push XHL                                             ; F8477F  3b
 	ld BC,(XIZ+0x08)                                     ; F84780  9e 08 21
 	ld XIY,(XIZ+0x0a)                                    ; F84783  ae 0a 25
-	lda xhl, (0x601028:24)                               ; F84786  f2 28 10 60 33
+	lda xhl, (MidiIn_PortBRing:24)                               ; F84786  f2 28 10 60 33
 .LF8478B:
 	ld A,(XIY)                                           ; F8478B  85 21
 	call Ring_Put_0400                                   ; F8478D  1d 19 42 f8
@@ -9714,7 +9714,7 @@ Ring601028_PutBlock:
 	pop XIY                                              ; F84798  5d
 	unlk XIZ                                             ; F84799  ee 0d
 	ret                                                  ; F8479B  0e
-Ring601028_IsEmpty:
+MidiInBRing_IsEmpty:
 	pushw bc                                             ; F8479C  29
 	ldw wa, 0x00                                         ; F8479D  30 00 00
 	ld bc, (0x601024:24)                                ; F847A0  d2 24 10 60 21
@@ -9724,39 +9724,39 @@ Ring601028_IsEmpty:
 .LF847AF:
 	popw bc                                              ; F847AF  49
 	ret                                                  ; F847B0  0e
-Ring601028_Init:
+MidiInBRing_Init:
 	pushw ix                                             ; F847B1  2c
 	push XHL                                             ; F847B2  3b
-	lda xhl, (0x601028:24)                               ; F847B3  f2 28 10 60 33
+	lda xhl, (MidiIn_PortBRing:24)                               ; F847B3  f2 28 10 60 33
 	call Ring_Init_0400                                  ; F847B8  1d ab 42 f8
 	pop XHL                                              ; F847BC  5b
 	popw ix                                              ; F847BD  4c
 	ret                                                  ; F847BE  0e
-Ring601028_ScanRewind:
+MidiInBRing_ScanRewind:
 	pushw wa                                             ; F847BF  28
 	ld wa, (0x601020:24)                                ; F847C0  d2 20 10 60 20
 	ld (0x60101e:24), wa                                ; F847C5  f2 1e 10 60 50
 	popw wa                                              ; F847CA  48
 	ret                                                  ; F847CB  0e
-Ring601028_Scan:
+MidiInBRing_Scan:
 	pushw ix                                             ; F847CC  2c
 	push XHL                                             ; F847CD  3b
-	lda xhl, (0x601028:24)                               ; F847CE  f2 28 10 60 33
+	lda xhl, (MidiIn_PortBRing:24)                               ; F847CE  f2 28 10 60 33
 	call Ring_Scan_0400                                  ; F847D3  1d ef 40 f8
 	pop XHL                                              ; F847D7  5b
 	popw ix                                              ; F847D8  4c
 	ret                                                  ; F847D9  0e
 	ret                                                  ; F847DA  0e
-Ring601028_ScanToPut:
+MidiInBRing_ScanToPut:
 	pushw ix                                             ; F847DB  2c
 	push XHL                                             ; F847DC  3b
-	lda xhl, (0x601028:24)                               ; F847DD  f2 28 10 60 33
+	lda xhl, (MidiIn_PortBRing:24)                               ; F847DD  f2 28 10 60 33
 	call Ring_ScanToPut_0400                             ; F847E2  1d 7b 41 f8
 	pop XHL                                              ; F847E6  5b
 	popw ix                                              ; F847E7  4c
 	ret                                                  ; F847E8  0e
 	ret                                                  ; F847E9  0e
-Ring601028_GetCommit:
+MidiInBRing_GetCommit:
 	pushw wa                                             ; F847EA  28
 	ld wa, (0x601022:24)                                ; F847EB  d2 22 10 60 20
 	ld (0x601020:24), wa                                ; F847F0  f2 20 10 60 50
@@ -66411,15 +66411,15 @@ MIDI_RX_Drop:
 ; ---------------------------------------------------------------------
 MIDI_RX_DeliverTwo:
 	m_set 0, MD16, 0x216f                         ; FA57AF  f1 6f 21 b8   MIDI activity
-	ld XIX,0x00600c1e                             ; FA57B3  44 1e 0c 60 00
+	ld XIX,MidiIn_PortARing                             ; FA57B3  44 1e 0c 60 00
 	m_cp_mi16 MWD+r4, 0xfe, 0x0003                ; FA57B8  9c fe 3f 03 00   free space >= 3?
 	jr c, MIDI_RX_QueueFull2                      ; FA57BD  67 11
 	ld A,D                                        ; FA57BF  cc 89
 	pushw wa                                      ; FA57C1  28
-	call T_Ring600C1E_Put                         ; FA57C2  1d ac 1d f4   append the status byte
+	call T_MidiInARing_Put                         ; FA57C2  1d ac 1d f4   append the status byte
 	inc 2,XSP                                     ; FA57C6  ef 62
 	pushw de                                      ; FA57C8  2a
-	call T_Ring600C1E_Put                         ; FA57C9  1d ac 1d f4   append the data byte
+	call T_MidiInARing_Put                         ; FA57C9  1d ac 1d f4   append the data byte
 	inc 2,XSP                                     ; FA57CD  ef 62
 	ret                                           ; FA57CF  0e
 MIDI_RX_QueueFull2:
@@ -66475,7 +66475,7 @@ MIDI_RX_SecondDataByte:
 	jr z, .LFA57E9                                ; FA57E5  66 02
 	ld d, 0xf2:opc                                   ; FA57E7  24 f2   restore the status the F2 handler cleared
 .LFA57E9:
-	ld XIX,0x00600c1e                             ; FA57E9  44 1e 0c 60 00
+	ld XIX,MidiIn_PortARing                             ; FA57E9  44 1e 0c 60 00
 	m_cp_mi16 MWD+r4, 0xfe, 0x0040                ; FA57EE  9c fe 3f 40 00   plenty of room?
 	jr ugt, MIDI_RX_DeliverThree                  ; FA57F3  6b 0e
 	pushw de                                      ; FA57F5  2a
@@ -66490,14 +66490,14 @@ MIDI_RX_DeliverThree:
 	jr c, MIDI_RX_QueueFull3                      ; FA5808  67 1e
 	ld A,D                                        ; FA580A  cc 89
 	pushw wa                                      ; FA580C  28
-	call T_Ring600C1E_Put                         ; FA580D  1d ac 1d f4   status
+	call T_MidiInARing_Put                         ; FA580D  1d ac 1d f4   status
 	inc 2,XSP                                     ; FA5811  ef 62
 	ld A,C                                        ; FA5813  cb 89
 	pushw wa                                      ; FA5815  28
-	call T_Ring600C1E_Put                         ; FA5816  1d ac 1d f4   first data byte
+	call T_MidiInARing_Put                         ; FA5816  1d ac 1d f4   first data byte
 	inc 2,XSP                                     ; FA581A  ef 62
 	pushw de                                      ; FA581C  2a
-	call T_Ring600C1E_Put                         ; FA581D  1d ac 1d f4   second data byte
+	call T_MidiInARing_Put                         ; FA581D  1d ac 1d f4   second data byte
 	inc 2,XSP                                     ; FA5821  ef 62
 	m_and_mi8 MB8, 0x9e, 0xbd                     ; FA5823  c0 9e 3c bd   clear bits 6 and 1
 MIDI_RX_Return:
@@ -67104,7 +67104,7 @@ MIDI_Fg_Deliver2:
 	ld (XIX+0x01),C                               ; FA5A9D  bc 01 43   buffer[1] = the data byte
 	push XIX                                      ; FA5AA0  3c
 	pushw 0x02                                    ; FA5AA1  0b 02 00   length 2
-	call T_Ring601028_PutBlock                    ; FA5AA4  1d d4 1d f4
+	call T_MidiInBRing_PutBlock                    ; FA5AA4  1d d4 1d f4
 	inc 6,XSP                                     ; FA5AA8  ef 66
 	pop XIX                                       ; FA5AAA  5c
 	unlk XIZ                                      ; FA5AAB  ee 0d
@@ -67158,7 +67158,7 @@ MIDI_Fg_Deliver3:
 	ld (XIX+0x02),C                               ; FA5AD5  bc 02 43   buffer[2] = second data byte
 	push XIX                                      ; FA5AD8  3c
 	pushw 0x03                                    ; FA5AD9  0b 03 00   length 3
-	call T_Ring601028_PutBlock                    ; FA5ADC  1d d4 1d f4
+	call T_MidiInBRing_PutBlock                    ; FA5ADC  1d d4 1d f4
 	m_and_mi8 MB16, 0x0963, 0xbd                  ; FA5AE0  c1 63 09 3c bd
 	inc 6,XSP                                     ; FA5AE5  ef 66
 	pop XIX                                       ; FA5AE7  5c
@@ -67561,10 +67561,10 @@ MidiIn_EntryThunks:
 ;          (measured, check T1): the ring base and the two thunk slots.
 ; ---------------------------------------------------------------------
 MidiIn_PumpPortA:   ; entry: prom_b directory slot T_MidiIn_PumpPortA (T_F40744)
-	call T_Ring600C1E_ScanRewind                  ; FA6018  1d bc 1d f4
+	call T_MidiInARing_ScanRewind                  ; FA6018  1d bc 1d f4
 	ldw (0x60f000:24), 0x00                      ; FA601C  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
 .LFA6023:
-	ld XIX,0x00600c1e                             ; FA6023  44 1e 0c 60 00
+	ld XIX,MidiIn_PortARing                             ; FA6023  44 1e 0c 60 00
 	ld wa, (xix-10)                               ; FA6028  9c f6 20   ld WA,(XIX+0xf6)
 	m_cp_rm MWD+r4, 0xfa, r0                      ; FA602B  9c fa f0   cp WA,(XIX+0xfa)
 	jr z, .LFA6053                                ; FA602E  66 23
@@ -67628,15 +67628,15 @@ MidiIn_StatusClassTable:
 ;          twin writes 0x10 there instead, and MidiIn_RouteChannelMessage
 ;          ORs that byte into the channel to index a 32-entry map, so the
 ;          tag is the 0x10 bit that separates the two ports' 16 channels.
-;          The copy loop calls 0xF41DC0 (Ring600C1E_Scan) and stops when the
+;          The copy loop calls 0xF41DC0 (MidiInARing_Scan) and stops when the
 ;          NEXT byte has bit 7 set, i.e. at the next status byte.
 ; ---------------------------------------------------------------------
 MidiIn_FetchMessage_PortA:   ; entry: call from 0xFA6034
-	ld XIZ,0x00600c1e                             ; FA609A  46 1e 0c 60 00
+	ld XIZ,MidiIn_PortARing                             ; FA609A  46 1e 0c 60 00
 	ld XIY,0x00001940                             ; FA609F  45 40 19 00 00
 	ld (XIY+0x03),0x00                            ; FA60A4  bd 03 00 00
 .LFA60A8:
-	call T_Ring600C1E_Scan                        ; FA60A8  1d c0 1d f4
+	call T_MidiInARing_Scan                        ; FA60A8  1d c0 1d f4
 	ld (xiy+), a                             ; FA60AC  f5 f4 41   ld (XIY+),A
 	ld hl, (xiz-10)                               ; FA60AF  9e f6 23   ld HL,(XIZ+0xf6)
 	m_cp_rm MWD+r6, 0xfa, r3                      ; FA60B2  9e fa f3   cp HL,(XIZ+0xfa)
@@ -67656,10 +67656,10 @@ MidiIn_FetchMessage_PortA:   ; entry: call from 0xFA6034
 ;          Ring601028 veneers 0xF41DE0/0xF41DE4 for 0xF41DBC/0xF41DC0.
 ; ---------------------------------------------------------------------
 MidiIn_PumpPortB:   ; entry: prom_b directory slot T_MidiIn_PumpPortB (T_F43358)
-	call T_Ring601028_ScanRewind                  ; FA60C2  1d e0 1d f4
+	call T_MidiInBRing_ScanRewind                  ; FA60C2  1d e0 1d f4
 	ldw (0x60f000:24), 0x00                      ; FA60C6  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
 .LFA60CD:
-	ld XIX,0x00601028                             ; FA60CD  44 28 10 60 00
+	ld XIX,MidiIn_PortBRing                             ; FA60CD  44 28 10 60 00
 	ld wa, (xix-10)                               ; FA60D2  9c f6 20   ld WA,(XIX+0xf6)
 	m_cp_rm MWD+r4, 0xfa, r0                      ; FA60D5  9c fa f0   cp WA,(XIX+0xfa)
 	jr z, .LFA60FD                                ; FA60D8  66 23
@@ -67702,11 +67702,11 @@ sub_FA6112:
 ;          `ld (XIY+0x03),0x10` where port A writes 0x00.
 ; ---------------------------------------------------------------------
 MidiIn_FetchMessage_PortB:   ; entry: call from 0xFA60DE
-	ld XIZ,0x00601028                             ; FA6123  46 28 10 60 00
+	ld XIZ,MidiIn_PortBRing                             ; FA6123  46 28 10 60 00
 	ld XIY,0x00001940                             ; FA6128  45 40 19 00 00
 	ld (XIY+0x03),0x10                            ; FA612D  bd 03 00 10
 .LFA6131:
-	call T_Ring601028_Scan                        ; FA6131  1d e4 1d f4
+	call T_MidiInBRing_Scan                        ; FA6131  1d e4 1d f4
 	ld (xiy+), a                             ; FA6135  f5 f4 41   ld (XIY+),A
 	ld hl, (xiz-10)                               ; FA6138  9e f6 23   ld HL,(XIZ+0xf6)
 	m_cp_rm MWD+r6, 0xfa, r3                      ; FA613B  9e fa f3   cp HL,(XIZ+0xfa)
@@ -83725,7 +83725,7 @@ SeqBuf_LoadSlotKeyList:
 	and A,0x07
 	pushw wa
 	ei 0x06
-	call T_Ring600A14_PutBlock
+	call T_SeqBufRing_PutBlock
 	inc 6,XSP
 	ei 0x00
 	m_cp_mi8 MB24, 0x60f01e, 0xff
@@ -83844,7 +83844,7 @@ SeqBuf_LoadSlotKeyList:
 .LFAED8E:
 	ld wa, (0x60f000:24)
 	ld (0x60f002:24), wa
-	call T_Ring60080A_ScanRewind
+	call T_TimedEventRing_ScanRewind
 .LFAED9C:
 	ld XIX,TimedEvents_Ring
 	ld hl, (xix-10)
@@ -83852,7 +83852,7 @@ SeqBuf_LoadSlotKeyList:
 	jr z, Evt2030_ClassHandlers_Code_Skip
 	ld XIY,0x0060f308
 .LFAEDAE:
-	call T_Ring60080A_Scan
+	call T_TimedEventRing_Scan
 	ld (xiy+), a
 	ld hl, (xix-10)
 	m_cp_rm MWD+r4, 0xfa, r3
@@ -86439,14 +86439,14 @@ sub_FB203C:
 	pop XDE                                              ; FB2047  5a
 	ret                                                  ; FB2048  0e
 ; SysExDump_RunSendJob -- run the pending SysEx bulk-dump transmit job: when bit 7 of (0x60F802) is set, prepare, send the category selected by (0x60F802) & 7, close the dump and report the status
-; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, Ring600C1E_InitIfPanelMode79, sub_FB7B0B, sub_FB2323 (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then sub_FB27AD (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.
+; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, MidiInARing_InitIfPanelMode79, sub_FB7B0B, sub_FB2323 (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then sub_FB27AD (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.
 ; Run by: prom_b T_SysExDump_RunSendJob after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
 SysExDump_RunSendJob:
 	ld c, (0x60f802:24)                                 ; FB2049  c2 02 f8 60 23
 	and C,0x80                                           ; FB204E  cb cc 80
 	jr z, JumpTable_FB2081_Code_Skip                                           ; FB2051  66 70
 	m_set 6, MD24, 0x60fd40                              ; FB2053  f2 40 fd 60 be
-	call Ring600C1E_InitIfPanelMode79                                      ; FB2058  1d fd 7e fb
+	call MidiInARing_InitIfPanelMode79                                      ; FB2058  1d fd 7e fb
 	call sub_FB7B0B                                      ; FB205C  1d 0b 7b fb
 	call sub_FB2323                                      ; FB2060  1d 23 23 fb
 	ld c, (0x60f802:24)                                 ; FB2064  c2 02 f8 60 23
@@ -86522,7 +86522,7 @@ sub_FB20CE:
 	cp WA,0xffff                                         ; FB20E9  d8 cf ff ff
 	jrl z, .LFB215C                                      ; FB20ED  76 6c 00
 	ld H,A                                               ; FB20F0  c9 8e
-	call Ring600C1E_InitIfPanelMode79                                      ; FB20F2  1d fd 7e fb
+	call MidiInARing_InitIfPanelMode79                                      ; FB20F2  1d fd 7e fb
 	ld C,(XIX)                                           ; FB20F6  84 23
 	extz BC                                              ; FB20F8  d9 12
 	cp bc, 0x00:i3                                         ; FB20FA  d9 d8
@@ -86637,7 +86637,7 @@ sub_FB21CB:
 	cp WA,0xffff                                         ; FB21E6  d8 cf ff ff
 	jrl z, .LFB2259                                      ; FB21EA  76 6c 00
 	ld H,A                                               ; FB21ED  c9 8e
-	call Ring600C1E_InitIfPanelMode79                                      ; FB21EF  1d fd 7e fb
+	call MidiInARing_InitIfPanelMode79                                      ; FB21EF  1d fd 7e fb
 	ld C,(XIX)                                           ; FB21F3  84 23
 	extz BC                                              ; FB21F5  d9 12
 	cp bc, 0x00:i3                                         ; FB21F7  d9 d8
@@ -93387,7 +93387,7 @@ sub_FB6072:
 	calr Ring601432_SpinUntilEmpty                                      ; FB6076  1e 0b 00
 	calr sub_FB6098                                      ; FB6079  1e 1c 00
 	calr sub_FB63AF                                          ; FB607C  1e 30 03
-	call Ring600C1E_InitIfPanelMode79                                      ; FB607F  1d fd 7e fb
+	call MidiInARing_InitIfPanelMode79                                      ; FB607F  1d fd 7e fb
 	ret                                                  ; FB6083  0e
 ; ---------------------------------------------------------------------
 ; Ring601432_SpinUntilEmpty -- polls ring 0x601432 until it is empty, or 65535 times,
@@ -96857,12 +96857,12 @@ sub_FB7EE5:
 	pop XDE                                              ; FB7EFB  5a
 	ret                                                  ; FB7EFC  0e
 ; ---------------------------------------------------------------------
-; Ring600C1E_InitIfPanelMode79 -- re-initialises ring 0x600C1E, with interrupts masked, only
+; MidiInARing_InitIfPanelMode79 -- re-initialises ring 0x600C1E, with interrupts masked, only
 ;                                 while the panel mode byte reads 0x79
 ;
 ; Evidence: 0xFB7EFD `m_cp_mi8 MB16, 0x207a, 0x79` and 0xFB7F02 `jr nz`
 ;           gate the whole body; 0xFB7F04 `ei 0x06` raises the mask,
-;           0xFB7F06 `call 0xF41DB8` = prom_b slot T_Ring600C1E_Init,
+;           0xFB7F06 `call 0xF41DB8` = prom_b slot T_MidiInARing_Init,
 ;           0xFB7F0A `ei 0x00` lowers it. (0x207A) is this listing's
 ;           panel mode byte -- PanelState_Update207A (0xF863F5) is
 ;           headed `(0x207A) := (0x207C) unless the mode is unchanged`.
@@ -96873,11 +96873,11 @@ sub_FB7EE5:
 ;           names none of the values
 ; Was `sub_FB7EFD`, named by notes/prom_a_census_round8.py (bucket round 9).
 ; ---------------------------------------------------------------------
-Ring600C1E_InitIfPanelMode79:
+MidiInARing_InitIfPanelMode79:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB7EFD  c1 7a 20 3f 79
 	jr nz, .LFB7F0C                                      ; FB7F02  6e 08
 	ei 0x06                                              ; FB7F04  06 06
-	call T_Ring600C1E_Init                               ; FB7F06  1d b8 1d f4
+	call T_MidiInARing_Init                               ; FB7F06  1d b8 1d f4
 	ei 0x00                                              ; FB7F0A  06 00
 .LFB7F0C:
 	ret                                                  ; FB7F0C  0e
@@ -97730,7 +97730,7 @@ sub_FB91EE_Loop:
 ; MidiInQueue_InjectAllNotesOff_AllChannels -- appends `Bn 7B 00` to the MIDI INPUT queue for n = 0..0x0F
 ;
 ; Evidence: 0xFB921E loads the thunk 0xF41DAC, which prom_b publishes as
-;           T_Ring600C1E_Put, and 0x600C1E is the ring
+;           T_MidiInARing_Put, and 0x600C1E is the ring
 ;           MIDI_RX_DeliverTwo appends received bytes to (0xFA57B3 `ld
 ;           XIX,0x00600c1e`), so this INJECTS into the receive path
 ;           rather than transmitting; 0xFB9227 `or H,0xb0` builds the
@@ -97748,7 +97748,7 @@ sub_FB91EE_Loop:
 MidiInQueue_InjectAllNotesOff_AllChannels:
 	pushw hl                                             ; FB921C  2b
 	push XIX                                             ; FB921D  3c
-	lda xix, (T_Ring600C1E_Put:24)                       ; FB921E  f2 ac 1d f4 34
+	lda xix, (T_MidiInARing_Put:24)                       ; FB921E  f2 ac 1d f4 34
 	ld l, 0x00:opc                                          ; FB9223  27 00
 .LFB9225:
 	ld H,L                                               ; FB9225  cf 8e
@@ -97799,7 +97799,7 @@ MidiInQueue_InjectAllNotesOff_AllChannels:
 MidiInQueue_InjectController0_AllChannels:
 	pushw hl                                             ; FB925C  2b
 	push XIX                                             ; FB925D  3c
-	lda xix, (T_Ring600C1E_Put:24)                       ; FB925E  f2 ac 1d f4 34
+	lda xix, (T_MidiInARing_Put:24)                       ; FB925E  f2 ac 1d f4 34
 	ld l, 0x00:opc                                          ; FB9263  27 00
 .LFB9265:
 	ld H,L                                               ; FB9265  cf 8e
@@ -97848,7 +97848,7 @@ MidiInQueue_InjectController0_AllChannels:
 MidiInQueue_InjectHoldPedalOff_AllChannels:
 	pushw hl                                             ; FB929C  2b
 	push XIX                                             ; FB929D  3c
-	lda xix, (T_Ring600C1E_Put:24)                       ; FB929E  f2 ac 1d f4 34
+	lda xix, (T_MidiInARing_Put:24)                       ; FB929E  f2 ac 1d f4 34
 	ld l, 0x00:opc                                          ; FB92A3  27 00
 .LFB92A5:
 	ld H,L                                               ; FB92A5  cf 8e
@@ -98263,7 +98263,7 @@ sub_FB95D9:
 	ld xbc, (0x605140:24)                               ; FB9623  e2 40 51 60 21
 	push XBC                                             ; FB9628  39
 	pushw hl                                             ; FB9629  2b
-	call T_Ring600C1E_PutBlock                           ; FB962A  1d b0 1d f4
+	call T_MidiInARing_PutBlock                           ; FB962A  1d b0 1d f4
 	inc 6,XSP                                            ; FB962E  ef 66
 	ei 0x00                                              ; FB9630  06 00
 	pop XIX                                              ; FB9632  5c
@@ -116382,10 +116382,10 @@ MixedTables_FC6626:
 ; all but three targets are already converted in this file, so they can be named
 ; rather than guessed:
 ;
-;   T_Ring60080A_ScanRewind (T_F41D74)/T_Ring60080A_Scan (T_F41D78)  Ring60080A_ScanRewind / _Scan       1 + 5 calls
-;   T_Ring600A14_PutBlock (T_F41D8C)           Ring600A14_PutBlock                 1
-;   T_Ring600C1E_ScanRewind (T_F41DBC)/T_Ring600C1E_Scan (T_F41DC0)  Ring600C1E_ScanRewind / _Scan       1 + 3
-;   T_Ring601028_ScanRewind (T_F41DE0)/T_Ring601028_Scan (T_F41DE4)  Ring601028_ScanRewind / _Scan       1 + 3
+;   T_TimedEventRing_ScanRewind (T_F41D74)/T_TimedEventRing_Scan (T_F41D78)  TimedEventRing_ScanRewind / _Scan       1 + 5 calls
+;   T_SeqBufRing_PutBlock (T_F41D8C)           SeqBufRing_PutBlock                 1
+;   T_MidiInARing_ScanRewind (T_F41DBC)/T_MidiInARing_Scan (T_F41DC0)  MidiInARing_ScanRewind / _Scan       1 + 3
+;   T_MidiInBRing_ScanRewind (T_F41DE0)/T_MidiInBRing_Scan (T_F41DE4)  MidiInBRing_ScanRewind / _Scan       1 + 3
 ;   T_Ring601432_PutBlock (T_F41DF8)           Ring601432_PutBlock                 3
 ;   T_Ring60153C_PutBlock (T_F41E1C)           Ring60153C_PutBlock                 3
 ;   T_Ring601850_Get (T_F41E5C)           Ring601850_Get                      2
@@ -116605,7 +116605,7 @@ sub_FC80E2:
 	pushw hl                                             ; FC80E6  2b
 	pushw de                                             ; FC80E7  2a
 	push XIX                                             ; FC80E8  3c
-	call T_Ring600C1E_ScanRewind                         ; FC80E9  1d bc 1d f4
+	call T_MidiInARing_ScanRewind                         ; FC80E9  1d bc 1d f4
 	ld (xiz-6), 0x00                                     ; FC80ED  be fa 00 00
 .LFC80F1:
 	lda xbc, (xiz-302)                                   ; FC80F1  f3 f9 d2 fe 31
@@ -116937,7 +116937,7 @@ sub_FC8448:
 	pushw hl                                             ; FC844C  2b
 	pushw de                                             ; FC844D  2a
 	push XIX                                             ; FC844E  3c
-	call T_Ring601028_ScanRewind                         ; FC844F  1d e0 1d f4
+	call T_MidiInBRing_ScanRewind                         ; FC844F  1d e0 1d f4
 	ld (xiz-6), 0x00                                     ; FC8453  be fa 00 00
 .LFC8457:
 	lda xbc, (xiz-302)                                   ; FC8457  f3 f9 d2 fe 31
@@ -117426,7 +117426,7 @@ sub_FC8960:
 	pushw hl                                             ; FC8964  2b
 	push XIX                                             ; FC8965  3c
 	lda xix, (xiz-314)                                   ; FC8966  f3 f9 c6 fe 34
-	call T_Ring60080A_ScanRewind                         ; FC896B  1d 74 1d f4
+	call T_TimedEventRing_ScanRewind                         ; FC896B  1d 74 1d f4
 	ld (xiz-6), 0x00                                     ; FC896F  be fa 00 00
 .LFC8973:
 	push XIX                                             ; FC8973  3c
@@ -118346,16 +118346,16 @@ sub_FC915C:
 	ld A,(XBC)                                           ; FC91BC  81 21
 	cp A,0xff                                            ; FC91BE  c9 cf ff
 	jrl z, .LFC9338                                      ; FC91C1  76 74 01
-	call T_Ring600C1E_Scan                               ; FC91C4  1d c0 1d f4
+	call T_MidiInARing_Scan                               ; FC91C4  1d c0 1d f4
 	ld HL,WA                                             ; FC91C8  d8 8b
 	ld (xiz-6), wa                                       ; FC91CA  be fa 50
 	cp HL,0xffff                                         ; FC91CD  db cf ff ff
 	jr z, .LFC91EE                                       ; FC91D1  66 1b
-	call T_Ring600C1E_Scan                               ; FC91D3  1d c0 1d f4
+	call T_MidiInARing_Scan                               ; FC91D3  1d c0 1d f4
 	ld DE,WA                                             ; FC91D7  d8 8a
 	cp WA,0xffff                                         ; FC91D9  d8 cf ff ff
 	jr z, .LFC91EE                                       ; FC91DD  66 0f
-	call T_Ring600C1E_Scan                               ; FC91DF  1d c0 1d f4
+	call T_MidiInARing_Scan                               ; FC91DF  1d c0 1d f4
 	ld HL,WA                                             ; FC91E3  d8 8b
 	ld (xiz-4), wa                                       ; FC91E5  be fc 50
 	cp HL,0xffff                                         ; FC91E8  db cf ff ff
@@ -118545,16 +118545,16 @@ sub_FC9343:
 	ld A,(XBC)                                           ; FC93A3  81 21
 	cp A,0xff                                            ; FC93A5  c9 cf ff
 	jrl z, .LFC951D                                      ; FC93A8  76 72 01
-	call T_Ring601028_Scan                               ; FC93AB  1d e4 1d f4
+	call T_MidiInBRing_Scan                               ; FC93AB  1d e4 1d f4
 	ld HL,WA                                             ; FC93AF  d8 8b
 	ld (xiz-6), wa                                       ; FC93B1  be fa 50
 	cp HL,0xffff                                         ; FC93B4  db cf ff ff
 	jr z, .LFC93D5                                       ; FC93B8  66 1b
-	call T_Ring601028_Scan                               ; FC93BA  1d e4 1d f4
+	call T_MidiInBRing_Scan                               ; FC93BA  1d e4 1d f4
 	ld DE,WA                                             ; FC93BE  d8 8a
 	cp WA,0xffff                                         ; FC93C0  d8 cf ff ff
 	jr z, .LFC93D5                                       ; FC93C4  66 0f
-	call T_Ring601028_Scan                               ; FC93C6  1d e4 1d f4
+	call T_MidiInBRing_Scan                               ; FC93C6  1d e4 1d f4
 	ld HL,WA                                             ; FC93CA  d8 8b
 	ld (xiz-4), wa                                       ; FC93CC  be fc 50
 	cp HL,0xffff                                         ; FC93CF  db cf ff ff
@@ -118752,25 +118752,25 @@ sub_FC9528:
 	ld A,(XBC)                                           ; FC959E  81 21
 	cp A,0xff                                            ; FC95A0  c9 cf ff
 	jrl z, .LFC971B                                      ; FC95A3  76 75 01
-	call T_Ring60080A_Scan                               ; FC95A6  1d 78 1d f4
+	call T_TimedEventRing_Scan                               ; FC95A6  1d 78 1d f4
 	ld HL,WA                                             ; FC95AA  d8 8b
 	cp WA,0xffff                                         ; FC95AC  d8 cf ff ff
 	jr z, .LFC95E8                                       ; FC95B0  66 36
-	call T_Ring60080A_Scan                               ; FC95B2  1d 78 1d f4
+	call T_TimedEventRing_Scan                               ; FC95B2  1d 78 1d f4
 	ld IX,WA                                             ; FC95B6  d8 8c
 	cp WA,0xffff                                         ; FC95B8  d8 cf ff ff
 	jr z, .LFC95E8                                       ; FC95BC  66 2a
-	call T_Ring60080A_Scan                               ; FC95BE  1d 78 1d f4
+	call T_TimedEventRing_Scan                               ; FC95BE  1d 78 1d f4
 	ld DE,WA                                             ; FC95C2  d8 8a
 	ld (xiz-6), wa                                       ; FC95C4  be fa 50
 	cp DE,0xffff                                         ; FC95C7  da cf ff ff
 	jr z, .LFC95E8                                       ; FC95CB  66 1b
-	call T_Ring60080A_Scan                               ; FC95CD  1d 78 1d f4
+	call T_TimedEventRing_Scan                               ; FC95CD  1d 78 1d f4
 	ld DE,WA                                             ; FC95D1  d8 8a
 	ld (xiz-4), wa                                       ; FC95D3  be fc 50
 	cp DE,0xffff                                         ; FC95D6  da cf ff ff
 	jr z, .LFC95E8                                       ; FC95DA  66 0c
-	call T_Ring60080A_Scan                               ; FC95DC  1d 78 1d f4
+	call T_TimedEventRing_Scan                               ; FC95DC  1d 78 1d f4
 	ld DE,WA                                             ; FC95E0  d8 8a
 	cp WA,0xffff                                         ; FC95E2  d8 cf ff ff
 	jr nz, .LFC95F1                                      ; FC95E6  6e 09
@@ -121257,7 +121257,7 @@ sub_FCACAA:
 	lda xbc, (0x602000:24)                               ; FCAD4D  f2 00 20 60 31
 	push XBC                                             ; FCAD52  39
 	pushw hl                                             ; FCAD53  2b
-	call T_Ring600A14_PutBlock                           ; FCAD54  1d 8c 1d f4
+	call T_SeqBufRing_PutBlock                           ; FCAD54  1d 8c 1d f4
 	lda xbc, (0x602000:24)                               ; FCAD58  f2 00 20 60 31
 	ld (xiz-4), xbc                                      ; FCAD5D  be fc 61
 	ldw hl, 0x00                                         ; FCAD60  33 00 00
@@ -158826,8 +158826,8 @@ sub_FE1CE9:
 ; Evidence: ten consecutive `call` instructions at 0xFE1D29, 0xFE1D2D,
 ;           0xFE1D31, 0xFE1D35, 0xFE1D39, 0xFE1D3D, 0xFE1D41, 0xFE1D45,
 ;           0xFE1D49 and 0xFE1D4D, whose operands are prom_b directory
-;           slots T_Ring60080A_Init, T_Ring600A14_Init,
-;           T_Ring600C1E_Init, T_Ring601028_Init, T_Ring601432_Init,
+;           slots T_TimedEventRing_Init, T_SeqBufRing_Init,
+;           T_MidiInARing_Init, T_MidiInBRing_Init, T_Ring601432_Init,
 ;           T_Ring60153C_Init, T_Ring601646_Init, T_Ring601850_Init,
 ;           T_Ring60195A_Init and T_Ring601C6E_Init -- TEN of the
 ;           FOURTEEN `T_Ring*_Init` slots in prom_b, and no other call.
@@ -158843,10 +158843,10 @@ sub_FE1CE9:
 ; Was `sub_FE1D29`, named by notes/prom_a_census_round8.py (bucket T1).
 ; ---------------------------------------------------------------------
 Ring_InitTenOfFourteen:
-	call T_Ring60080A_Init                               ; FE1D29  1d 70 1d f4
-	call T_Ring600A14_Init                               ; FE1D2D  1d 94 1d f4
-	call T_Ring600C1E_Init                               ; FE1D31  1d b8 1d f4
-	call T_Ring601028_Init                               ; FE1D35  1d dc 1d f4
+	call T_TimedEventRing_Init                               ; FE1D29  1d 70 1d f4
+	call T_SeqBufRing_Init                               ; FE1D2D  1d 94 1d f4
+	call T_MidiInARing_Init                               ; FE1D31  1d b8 1d f4
+	call T_MidiInBRing_Init                               ; FE1D35  1d dc 1d f4
 	call T_Ring601432_Init                               ; FE1D39  1d 00 1e f4
 	call T_Ring60153C_Init                               ; FE1D3D  1d 24 1e f4
 	call T_Ring601646_Init                               ; FE1D41  1d 48 1e f4
@@ -172333,7 +172333,7 @@ sub_FE8F97:
 	sub	(0x601f53:24), 0x01                  ; FE8FF5  c2 53 1f 60 3a 01
 	jr .LFE8FA8                                          ; FE8FFB  68 ab
 sub_FE8FFD:
-	call T_Ring600A14_IsEmpty                            ; FE8FFD  1d 90 1d f4
+	call T_SeqBufRing_IsEmpty                            ; FE8FFD  1d 90 1d f4
 	cp wa, 0x00:i3                                         ; FE9001  d8 d8
 	jr nz, .LFE9006                                      ; FE9003  6e 01
 	ret                                                  ; FE9005  0e
@@ -172352,12 +172352,12 @@ sub_FE8FFD:
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0000                     ; FE901D  d2 ba 34 60 3f 00 00
 	jrl z, .LFE90AE                                      ; FE9024  76 87 00
 .LFE9027:
-	call T_Ring600A14_IsEmpty                            ; FE9027  1d 90 1d f4
+	call T_SeqBufRing_IsEmpty                            ; FE9027  1d 90 1d f4
 	cp wa, 0x00:i3                                         ; FE902B  d8 d8
 	jr nz, .LFE9030                                      ; FE902D  6e 01
 	ret                                                  ; FE902F  0e
 .LFE9030:
-	call T_Ring600A14_Get                                ; FE9030  1d 84 1d f4
+	call T_SeqBufRing_Get                                ; FE9030  1d 84 1d f4
 	bit 0x07,A                                           ; FE9034  c9 33 07
 	jr z, .LFE9027                                       ; FE9037  66 ee
 	and A,0xf0                                           ; FE9039  c9 cc f0
@@ -172365,12 +172365,12 @@ sub_FE8FFD:
 	jr z, .LFE9043                                       ; FE903F  66 02
 	jr .LFE9027                                          ; FE9041  68 e4
 .LFE9043:
-	call T_Ring600A14_Get                                ; FE9043  1d 84 1d f4
-	call T_Ring600A14_Get                                ; FE9047  1d 84 1d f4
+	call T_SeqBufRing_Get                                ; FE9043  1d 84 1d f4
+	call T_SeqBufRing_Get                                ; FE9047  1d 84 1d f4
 	ld (0x601f34:24), a                                 ; FE904B  f2 34 1f 60 41
-	call T_Ring600A14_Get                                ; FE9050  1d 84 1d f4
+	call T_SeqBufRing_Get                                ; FE9050  1d 84 1d f4
 	ld (0x601f35:24), a                                 ; FE9054  f2 35 1f 60 41
-	call T_Ring600A14_Get                                ; FE9059  1d 84 1d f4
+	call T_SeqBufRing_Get                                ; FE9059  1d 84 1d f4
 	ld a, (0x601f35:24)                                 ; FE905D  c2 35 1f 60 21
 	cp a, 0x00:i3                                          ; FE9062  c9 d8
 	jr z, .LFE906B                                       ; FE9064  66 05
@@ -174426,23 +174426,23 @@ sub_FEA566:
 	m_or_mi8 MB16, 0x34d4, 0x40                          ; FEA574  c1 d4 34 3e 40
 	ld a, 0x90:opc                                          ; FEA579  21 90
 	pushw wa                                             ; FEA57B  28
-	call T_Ring60080A_Put                                ; FEA57C  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA57C  1d 64 1d f4
 	inc 2,XSP                                            ; FEA580  ef 62
 	ld a, 0x7e:opc                                          ; FEA582  21 7e
 	pushw wa                                             ; FEA584  28
-	call T_Ring60080A_Put                                ; FEA585  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA585  1d 64 1d f4
 	inc 2,XSP                                            ; FEA589  ef 62
 	ld a, (0x601f44:24)                                 ; FEA58B  c2 44 1f 60 21
 	pushw wa                                             ; FEA590  28
-	call T_Ring60080A_Put                                ; FEA591  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA591  1d 64 1d f4
 	inc 2,XSP                                            ; FEA595  ef 62
 	ld a, (0x601f45:24)                                 ; FEA597  c2 45 1f 60 21
 	pushw wa                                             ; FEA59C  28
-	call T_Ring60080A_Put                                ; FEA59D  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA59D  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5A1  ef 62
 	ld a, (0x601f00:24)                                 ; FEA5A3  c2 00 1f 60 21
 	pushw wa                                             ; FEA5A8  28
-	call T_Ring60080A_Put                                ; FEA5A9  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA5A9  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5AD  ef 62
 .LFEA5AF:
 	ret                                                  ; FEA5AF  0e
@@ -174454,46 +174454,46 @@ sub_FEA5B0:
 	m_or_mi8 MB16, 0x34d4, 0x40                          ; FEA5BE  c1 d4 34 3e 40
 	ld a, 0x90:opc                                          ; FEA5C3  21 90
 	pushw wa                                             ; FEA5C5  28
-	call T_Ring60080A_Put                                ; FEA5C6  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA5C6  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5CA  ef 62
 	ld a, 0x7e:opc                                          ; FEA5CC  21 7e
 	pushw wa                                             ; FEA5CE  28
-	call T_Ring60080A_Put                                ; FEA5CF  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA5CF  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5D3  ef 62
 	ld a, (0x601f44:24)                                 ; FEA5D5  c2 44 1f 60 21
 	pushw wa                                             ; FEA5DA  28
-	call T_Ring60080A_Put                                ; FEA5DB  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA5DB  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5DF  ef 62
 	ld a, 0x50:opc                                          ; FEA5E1  21 50
 	pushw wa                                             ; FEA5E3  28
-	call T_Ring60080A_Put                                ; FEA5E4  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA5E4  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5E8  ef 62
 	ld a, (0x601f00:24)                                 ; FEA5EA  c2 00 1f 60 21
 	pushw wa                                             ; FEA5EF  28
-	call T_Ring60080A_Put                                ; FEA5F0  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA5F0  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5F4  ef 62
 .LFEA5F6:
 	ret                                                  ; FEA5F6  0e
 sub_FEA5F7:
 	ld a, 0x90:opc                                          ; FEA5F7  21 90
 	pushw wa                                             ; FEA5F9  28
-	call T_Ring60080A_Put                                ; FEA5FA  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA5FA  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5FE  ef 62
 	ld a, 0x7f:opc                                          ; FEA600  21 7f
 	pushw wa                                             ; FEA602  28
-	call T_Ring60080A_Put                                ; FEA603  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA603  1d 64 1d f4
 	inc 2,XSP                                            ; FEA607  ef 62
 	ld a, 0x28:opc                                          ; FEA609  21 28
 	pushw wa                                             ; FEA60B  28
-	call T_Ring60080A_Put                                ; FEA60C  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA60C  1d 64 1d f4
 	inc 2,XSP                                            ; FEA610  ef 62
 	ld a, 0x00:opc                                          ; FEA612  21 00
 	pushw wa                                             ; FEA614  28
-	call T_Ring60080A_Put                                ; FEA615  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA615  1d 64 1d f4
 	inc 2,XSP                                            ; FEA619  ef 62
 	ld a, (0x601f00:24)                                 ; FEA61B  c2 00 1f 60 21
 	pushw wa                                             ; FEA620  28
-	call T_Ring60080A_Put                                ; FEA621  1d 64 1d f4
+	call T_TimedEventRing_Put                                ; FEA621  1d 64 1d f4
 	inc 2,XSP                                            ; FEA625  ef 62
 	ret                                                  ; FEA627  0e
 sub_FEA628:

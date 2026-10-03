@@ -150,7 +150,9 @@ that the field layout is what the class says it is. It is the last check in
 ### What is NOT established
 
 What any ring **carries**. The object addresses are RAM addresses and the
-producers and consumers are outside the module. One ring is identified
+producers and consumers are outside the module.  (2026-10-03: four are now known --
+0x600A14 the sequencer buffer, 0x60080A the timed events, 0x600C1E / 0x601028 MIDI ports A / B --
+and their routine families renamed; FINDINGS-prom_a-seqbuf-and-timed-events.md.) One ring is identified
 independently — `0x600A14` is the 512-byte sequencer event buffer this tree
 already documents at `SeqBuf_AppendMarker` — and its capacity from that side
 (`minc1_16 hl,0x01ff`) agrees with the capacity the bank gives it.

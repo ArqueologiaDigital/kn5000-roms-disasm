@@ -352,6 +352,10 @@ GROUPS = [
         0x600A12: ("SeqBuf_RingFree", "the ring's free count", "SeqBuf_PutByte"),
         0x60080A: ("TimedEvents_Ring", "the timed-event ring", "Ring60080A_*, TimedEvents_DrainDue"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "2. The MIDI-in rings", {
+        0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
+        0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
