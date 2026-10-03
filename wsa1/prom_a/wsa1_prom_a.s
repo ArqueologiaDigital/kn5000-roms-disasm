@@ -70192,7 +70192,7 @@ MidiIn_AfterRebuildTable_Nop1:   ; entry: MidiIn_AfterRebuildTable[1]
 	and L,0x1f                                    ; FA7081  cf cc 1f
 	add XIX,XHL                                   ; FA7084  eb 84
 	inc 1,XIX                                     ; FA7086  ec 61
-	.byte 0x23, 0x1f                              ; FA7088  23 1f   ld C,0x1f
+	ld C,0x1f:opc                                 ; FA7088  23 1f   ld C,0x1f
 	sub C,L                                       ; FA708A  cf a3
 .LFA708C:
 	ld A,(XIX)                                    ; FA708C  84 21
@@ -70237,15 +70237,15 @@ MidiIn_AfterRebuildTable_Nop1:   ; entry: MidiIn_AfterRebuildTable[1]
 MidiIn_ResetChannelRouteTable:   ; entry: MidiIn_AfterRebuildTable[2]
 	ld XIX,0x00001800                             ; FA70CE  44 00 18 00 00
 	xor A,A                                       ; FA70D3  c9 d1
-	.byte 0x23, 0x20                              ; FA70D5  23 20   ld C,0x20
+	ld C,0x20:opc                                 ; FA70D5  23 20   ld C,0x20
 .LFA70D7:
 	ld (XIX+),A                                   ; FA70D7  f5 f0 41   ld (XIX+),A
 	inc 3,A                                       ; FA70DA  c9 63
 	djnz8 c, .LFA70D7                             ; FA70DC  cb 1c f8   djnz C,0xfa70d7
 	ld XIX,0x00001820                             ; FA70DF  44 20 18 00 00
 	ldw	wa, 0xff02                           ; FA70E4  30 02 ff
-	.byte 0x25, 0x00                              ; FA70E7  25 00   ld E,0x00
-	.byte 0x23, 0x20                              ; FA70E9  23 20   ld C,0x20
+	ld E,0x00:opc                                 ; FA70E7  25 00   ld E,0x00
+	ld C,0x20:opc                                 ; FA70E9  23 20   ld C,0x20
 .LFA70EB:
 	ld (XIX+),WA                                  ; FA70EB  f5 f1 50   ld (XIX+),WA
 	ld (XIX+),E                                   ; FA70EE  f5 f0 45   ld (XIX+),E
@@ -70277,7 +70277,7 @@ MidiOut_ParamChanged:   ; entry: prom_b directory slot T_MidiOut_ParamChanged (T
 	jr ugt, .LFA7123                              ; FA710E  6b 13   jr UGT,0xfa7123
 	ld L,C                                        ; FA7110  cb 8f
 	extz HL                                       ; FA7112  db 12
-	.byte 0xdb, 0xee, 0x02                        ; FA7114  db ee 02   sll 0x02,HL
+	sll HL,2                                      ; FA7114  db ee 02   sll 0x02,HL
 	ld XIX,MidiOut_ParamNumberTable               ; FA7117  44 c8 8c fa 00
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA711C  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	call (xix)                                    ; FA7121  b4 e8   call T,XIX
@@ -70312,7 +70312,7 @@ MidiOut_ParamGate_Part0:   ; entry: MidiOut_ParamNumberTable[0]
 	jr nz, .LFA7141                               ; FA7135  6e 0a   jr NZ,0xfa7141
 .LFA7137:
 	ld XIY,MidiOut_ParamClassTable                ; FA7137  45 80 71 fa 00
-	.byte 0x21, 0x10                              ; FA713C  21 10   ld A,0x10
+	ld A,0x10:opc                                 ; FA713C  21 10   ld A,0x10
 	calr MidiOut_DispatchByClass                  ; FA713E  1e 0b 04   calr 0xfa754c
 .LFA7141:
 	ret                                           ; FA7141  0e
@@ -70323,7 +70323,7 @@ MidiOut_ParamGate_Part1:   ; entry: MidiOut_ParamNumberTable[1]
 	jr nz, .LFA7159                               ; FA714D  6e 0a   jr NZ,0xfa7159
 .LFA714F:
 	ld XIY,MidiOut_ParamClassTable                ; FA714F  45 80 71 fa 00
-	.byte 0x21, 0x10                              ; FA7154  21 10   ld A,0x10
+	ld A,0x10:opc                                 ; FA7154  21 10   ld A,0x10
 	calr MidiOut_DispatchByClass                  ; FA7156  1e f3 03   calr 0xfa754c
 .LFA7159:
 	ret                                           ; FA7159  0e
@@ -70334,7 +70334,7 @@ MidiOut_ParamGate_Part2:   ; entry: MidiOut_ParamNumberTable[2]
 	jr nz, .LFA7171                               ; FA7165  6e 0a   jr NZ,0xfa7171
 .LFA7167:
 	ld XIY,MidiOut_ParamClassTable                ; FA7167  45 80 71 fa 00
-	.byte 0x21, 0x10                              ; FA716C  21 10   ld A,0x10
+	ld A,0x10:opc                                 ; FA716C  21 10   ld A,0x10
 	calr MidiOut_DispatchByClass                  ; FA716E  1e db 03   calr 0xfa754c
 .LFA7171:
 	ret                                           ; FA7171  0e
@@ -70348,7 +70348,7 @@ MidiOut_ParamGate_Part2:   ; entry: MidiOut_ParamNumberTable[2]
 ; ---------------------------------------------------------------------
 MidiOut_ParamDispatch:   ; entry: MidiOut_ParamNumberTable[3-31]
 	ld XIY,MidiOut_ParamClassTable                ; FA7172  45 80 71 fa 00
-	.byte 0x21, 0x10                              ; FA7177  21 10   ld A,0x10
+	ld A,0x10:opc                                 ; FA7177  21 10   ld A,0x10
 	calr MidiOut_DispatchByClass                  ; FA7179  1e d0 03   calr 0xfa754c
 	ret                                           ; FA717C  0e
 	ret                                           ; FA717D  0e
