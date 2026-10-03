@@ -309,7 +309,7 @@ Flash_SectorErase:
 	ld	xbc, 0xE80000                       ; FC864B  ld XBC,0x00e80000
 	ld	(xiz-4), xbc                        ; FC8650  ld (XIZ+0xfc),XBC
 	ld	xix, (xiz+8)                        ; FC8653  ld XIX,(XIZ+0x08)
-	ld	xwa, 0xFF0000                       ; FC8656  ld XWA,0x00ff0000
+	ld	xwa, MASK_BITS16_23                       ; FC8656  ld XWA,0x00ff0000
 	and	xix, xwa                           ; FC865B  and XIX,XWA
 	ei	6                                   ; FC865D  ei 0x06
 	ld	xbc, (xiz-4)                        ; FC865F  ld XBC,(XIZ+0xfc)
@@ -759,7 +759,7 @@ Flash_ProgramSectorFromBuffer:
 	push	xix                               ; FC88FD  push XIX
 	ld	xhl, 0xE8AAAA                       ; FC88FE  ld XHL,0x00e8aaaa
 	ld	xix, 0x10000                        ; FC8903  ld XIX,0x00010000
-	and	xiy, 0xFF0000                      ; FC8908  and XIY,0x00ff0000
+	and	xiy, MASK_BITS16_23                      ; FC8908  and XIY,0x00ff0000
 	ldw	bc, 0x8000                         ; FC890E  ld BC,0x8000
 	ld	wa, (xix+)                       ; FC8911  ld WA,(XIX+)
 	cp	wa, 0xFFFF                          ; FC8914  cp WA,0xffff
@@ -816,7 +816,7 @@ Flash_ProgramSlice1K:
 	ld	xix, 0x10000                        ; FC8945  ld XIX,0x00010000
 	lda	xiy, (0x8568:24)                   ; FC894A  lda XIY,0x008568
 	ld	xiy, (xiy)                          ; FC894F  ld XIY,(XIY)
-	and	xiy, 0xFF0000                      ; FC8951  and XIY,0x00ff0000
+	and	xiy, MASK_BITS16_23                      ; FC8951  and XIY,0x00ff0000
 	extz	wa                                ; FC8957  extz WA
 	sll	wa, 10                             ; FC8959  sll 0x0a,WA
 	extz	xwa                               ; FC895C  extz XWA
@@ -873,7 +873,7 @@ Flash_ProgramSlice1K__FC8987:
 ; --------------------------------------------------------------------------
 Flash_SectorBlankCheck:
 	ld	xiy, (xsp+4)                        ; FC898F  ld XIY,(XSP+0x04)
-	and	xiy, 0xFF0000                      ; FC8992  and XIY,0x00ff0000
+	and	xiy, MASK_BITS16_23                      ; FC8992  and XIY,0x00ff0000
 	ldw	bc, 0x4000                         ; FC8998  ld BC,0x4000
 	ld	xwa, 0xFFFFFFFF                     ; FC899B  ld XWA,0xffffffff
 	cp	xwa, (xiy+)                      ; FC89A0  cp XWA,(XIY+)
@@ -908,7 +908,7 @@ Flash_ReadSectorToBuffer:
 	ld	xiy, (xsp+4)                        ; FC89AF  ld XIY,(XSP+0x04)
 	push	xix                               ; FC89B2  push XIX
 	ld	xix, 0x10000                        ; FC89B3  ld XIX,0x00010000
-	and	xiy, 0xFF0000                      ; FC89B8  and XIY,0x00ff0000
+	and	xiy, MASK_BITS16_23                      ; FC89B8  and XIY,0x00ff0000
 	ldw	bc, 0x8000                         ; FC89BE  ld BC,0x8000
 	ldirw                     ; FC89C1  ldirw   [llvm-mc cannot encode this]
 	pop	xix                                ; FC89C3  pop XIX

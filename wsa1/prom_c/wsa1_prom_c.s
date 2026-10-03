@@ -265,6 +265,8 @@
 ; ==============================================================================
 
 	.include "include/tmp95c061_sfr.inc"
+; bits 16-23: the 64 KB block of a 24-bit address (storage/flash.s) or the third byte of a word
+	.equ MASK_BITS16_23, 0x00FF0000
 
 	.include "prom_c/data_tables/preset_bank.s"	; 0xF80000-0xF97FFF  THE PRESET BANK
 	.include "prom_c/boot/boot_and_main.s"	; 0xF98000-0xF98CB8  power-on: the task table, the kernel, the RAM image, MAIN

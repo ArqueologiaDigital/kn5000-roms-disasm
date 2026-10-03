@@ -7104,7 +7104,7 @@ Stream_ReadU24BE_Shl8:
 	extz	bc                                    ; F9DFE1  extz BC
 	extz	xbc                                   ; F9DFE3  extz XBC
 	sll	xbc, 16                                ; F9DFE5  sll 0x00,XBC
-	and	xbc, 0xFF0000                          ; F9DFE8  and XBC,0x00ff0000
+	and	xbc, MASK_BITS16_23                          ; F9DFE8  and XBC,0x00ff0000
 	ld	(xiz-8), xbc                            ; F9DFEE  ld (XIZ+0xf8),XBC
 	sub	xwa, xwa                               ; F9DFF1  sub XWA,XWA
 	inc	1, xwa                                 ; F9DFF3  inc 1,XWA
@@ -7179,7 +7179,7 @@ Stream_ReadU24BE:
 	extz	wa                                    ; F9E029  extz WA
 	extz	xwa                                   ; F9E02B  extz XWA
 	sll	xwa, 16                                ; F9E02D  sll 0x00,XWA
-	and	xwa, 0xFF0000                          ; F9E030  and XWA,0x00ff0000
+	and	xwa, MASK_BITS16_23                          ; F9E030  and XWA,0x00ff0000
 	ld	(xiz-4), xwa                            ; F9E036  ld (XIZ+0xfc),XWA
 	inc	1, xbc                                 ; F9E039  inc 1,XBC
 	ld	(xiz+8), xbc                            ; F9E03B  ld (XIZ+0x08),XBC
