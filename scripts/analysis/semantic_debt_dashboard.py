@@ -88,9 +88,13 @@ PUSHW = re.compile(rb'^\s*(?:[A-Za-z_.$][\w.$]*:)?\s*pushw\s+(0x[0-9a-fA-F]+|\d+
 #   Dev7E_WriteByte (value, ATA command-block register); T_[Pending]EventQueue_AppendStackArgs (four
 #   stacked words = one 0x2C00/0x2E00 queue record); T_Gfx_EraseRect (four coordinates, prom_b's header);
 #   TuneScale_AdjustUserKey (a key pair, 0xFF = no key); sub_FC5CDA ((0xFF, 0/1, 7/8) -- 0x00FF000x would
-#   land inside sub_FEFFF3).
+#   land inside sub_FEFFF3); ByteField_AddOrSub_Clamped (mask, high bound, low bound, its prom_c header).
+#   The window also follows one unconditional `jr` (sub_FC5CDA's calls are jumped to).
 VALUE_ARG_CALL = re.compile(rb'\b(?:call|calr)\s+(Dev7E_WriteByte|T_PendingEventQueue_AppendStackArgs|'
-                            rb'T_EventQueue_AppendStackArgs|T_Gfx_EraseRect|TuneScale_AdjustUserKey|sub_FC5CDA)\b')
+                            rb'T_EventQueue_AppendStackArgs|T_Gfx_EraseRect|TuneScale_AdjustUserKey|sub_FC5CDA|'
+                            rb'ByteField_AddOrSub_Clamped)\b')
+JR_ALWAYS = re.compile(rb'^\s*jr\s+([A-Za-z_.$][\w.$]*)\s*(?:;.*)?$')
+LABEL_DEF = re.compile(rb'^([A-Za-z_.$][\w.$]*):')
 REGMAC = re.compile(rb'^\s+(RegObjTable|RegObjTabl|RegModeHiLo|RegTitleHiLo|RegMode|RegTitle|'
                     rb'RegObjTableHama|RegObjTablHama|RegTitleHama)\s+([^;\n]*)', re.M)
 REG_ADDR_ARGS = {b"RegObjTable": (1, 2, 3), b"RegObjTabl": (1, 3), b"RegObjTableHama": (1, 2, 3),
@@ -145,12 +149,20 @@ def numfar(data, rng):
     lo, hi = rng
     n = 0
     lines = data.split(b"\n")
+    labels = {m.group(1): k for k, x in enumerate(lines) for m in [LABEL_DEF.match(x)] if m}
     for i in range(len(lines) - 1):
         m1, m2 = PUSHW.match(lines[i]), PUSHW.match(lines[i + 1])
         if m1 and m2 and COLOUR_CALL.search(b" ".join(x.split(b";")[0] for x in lines[i + 2:i + 8])):
             continue        # a DrawString* colour pair, not a far pointer (2026-10-03)
-        if m1 and m2 and VALUE_ARG_CALL.search(b" ".join(x.split(b";")[0] for x in lines[i + 2:i + 8])):
-            continue        # value arguments of a callee listed above, not a far pointer (2026-10-03)
+        if m1 and m2:
+            ctx = lines[i + 2:i + 14]     # 12 lines: ByteField_AddOrSub_Clamped takes 7 stacked words
+            for x in ctx[:2]:
+                j = JR_ALWAYS.match(x)
+                if j and j.group(1) in labels:
+                    ctx = ctx + lines[labels[j.group(1)] + 1:labels[j.group(1)] + 7]
+                    break
+            if VALUE_ARG_CALL.search(b" ".join(x.split(b";")[0] for x in ctx)):
+                continue    # value arguments of a callee listed above, not a far pointer (2026-10-03)
         if m1 and m2:
             h, l = int(m1.group(1), 0), int(m2.group(1), 0)
             if h <= 0xff and l <= 0xffff and lo <= (h << 16 | l) <= hi and \
