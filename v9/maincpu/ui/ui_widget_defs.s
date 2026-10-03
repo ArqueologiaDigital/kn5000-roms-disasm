@@ -19608,14 +19608,14 @@ Gfx_BlitDirtyRegions:
 	pushw iz
 	cpw (0x03ef92:24), 0
 	jrl z, SetChangeRect_Prologue
-	cpw (0x03045e:24), 0
+	cpw (DISPLAY_UPDATE_FLAG:24), 0
 	jrl z, SetChangeRect_Prologue
 	cpw (PALETTE_UPDATE_FLAG:24), 0
 	jr z, Gfx_BlitDirty_ScanMatch
 	ld wa, (PALETTE_INDEX_CACHED:24)
 	cp wa, 4:i3
 	jr nz, Gfx_BlitDirty_Prologue
-	cpw (0x03efa0:24), 4
+	cpw (PALETTE_INDEX_PREVIOUS:24), 4
 	jr z, Display_CheckScreenDimensions
 	cp wa, 4:i3
 	jr nz, Display_CheckScreenDimensions
@@ -19679,7 +19679,7 @@ Display_CheckDim_CheckWidth:
 	jr z, Display_CheckDim_CheckHeight
 	calr InitGraphics_SetupVRAM_Loop
 	ld wa, (PALETTE_INDEX_CACHED:24)
-	ld (0x03efa0:24), wa
+	ld (PALETTE_INDEX_PREVIOUS:24), wa
 	ldw (PALETTE_UPDATE_FLAG:24), 0x0000
 	jr Display_CheckDim_Done
 
@@ -19691,7 +19691,7 @@ Display_CheckDim_Done:
 	ldw (0x030462:24), 0x0000
 
 Display_CheckDim_Return:
-	ldw (0x03045e:24), 0x0000
+	ldw (DISPLAY_UPDATE_FLAG:24), 0x0000
 	lda xwa, (DIRTY_BBOX:24)
 	ldw (xwa + 2), 0xf0
 	ldw (xwa), 0x140
@@ -19726,7 +19726,7 @@ SetChangeRect:
 	call TaskSched_ChangePriority
 
 SetChangeRect_ClampLeft:
-	ldw (0x03045e:24), 0x0001
+	ldw (DISPLAY_UPDATE_FLAG:24), 0x0001
 	lda xde, (DIRTY_BBOX:24)
 	lda xbc, (xde + 2)
 	ld wa, (xiz + 2)

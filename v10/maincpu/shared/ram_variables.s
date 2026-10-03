@@ -90,3 +90,29 @@
 	.equ DEMO_CURRENT_SONG,		0x1158	; current song index (Demo_SelectEntry_*, clamped to 18)
 	.equ DEMO_ACTIVE_ENTRY,		0x28a4	; active demo entry index
 	.equ DEMO_CONTROL_FLAGS,	0x28ad	; demo control flags, bit 3 = auto-play
+; boot-cpserial-link.md "Rings and transfer-control blocks": the boot-time control-panel serial driver
+	.equ BOOTSERIAL_STATE,		0x0f62	; state byte, a raw dispatch-table offset
+	.equ BOOTSERIAL_FLAGS,		0x0f64	; bit 0 RX active, 1 TX pending, 2 RX busy, 4 decode-collapse sentinel, 7:6 link mode
+	.equ BOOTSERIAL_STATUS,		0x0f6a	; bit 0 RX overflow, 1 TX arbitration failed, 3 frame discarded, 7 done / abort
+	.equ BOOTSERIAL_RX_TAIL,	0x0f75	; RX serial ring tail
+	.equ BOOTSERIAL_RX_HEAD,	0x0f77	; RX serial ring head
+	.equ BOOTSERIAL_RX_RING,	0x0f79	; RX serial ring, 0x5C bytes
+	.equ BOOTSERIAL_TX_SEND_INDEX,	0x0fd5	; TX serial ring send index
+	.equ BOOTSERIAL_TX_PENDING,	0x0fd7	; TX serial ring pending count
+	.equ BOOTSERIAL_TX_RING,	0x0fd9	; TX serial ring, 0x3C bytes
+	.equ BOOTSERIAL_RX_TCB,		0x988a	; RX transfer-control block, 0x80 bytes (tail -8, head -4, free count -2)
+	.equ BOOTSERIAL_TX_TCB,		0x9914	; TX transfer-control block, same layout
+; data-wheel-investigation.md "Dial Callback Table (RAM 0x3EF50-0x3EF6A)"
+	.equ DIAL_ENABLE,		0x3ef50	; enable flag (word)
+	.equ DIAL_UP_CALLBACK,		0x3ef52	; SetDialUp callback (the XWA component, clockwise)
+	.equ DIAL_DOWN_CALLBACK,	0x3ef56	; SetDialDown callback (XWA, counter-clockwise)
+	.equ DIAL_UP_EVENT,		0x3ef5a	; SetDialUp event (XBC, e.g. 0x1C00007)
+	.equ DIAL_DOWN_EVENT,		0x3ef5e	; SetDialDown event (XBC)
+	.equ DIAL_UP_PARAM,		0x3ef62	; SetDialUp parameter (XDE)
+	.equ DIAL_DOWN_PARAM,		0x3ef66	; SetDialDown parameter (XDE)
+	.equ DIAL_FOCUS,		0x3ef6a	; the UI object the dial is focused on (32-bit)
+; boot-sequence.md / hdae5000-homebrew.md: "the flag at 0x03DD04 is the only gate" for the extension ROM
+	.equ XAPR_PRESENT_FLAG,		0x3dd04	; 1 = extension ROM (XAPR) detected
+; display-subsystem.md "Change Tracking" / "Palette-Based Fade Effects"
+	.equ DISPLAY_UPDATE_FLAG,	0x3045e	; non-zero = needs refresh
+	.equ PALETTE_INDEX_PREVIOUS,	0x3efa0	; previous palette index, for partial updates

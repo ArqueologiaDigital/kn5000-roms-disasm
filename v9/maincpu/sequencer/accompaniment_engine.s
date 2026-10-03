@@ -5245,7 +5245,7 @@ AccVoice_SelectByMask_Skip:
 	extz	xiz
 	ld	xhl, xiz
 	sla	xhl, 8
-	add	xhl, 0x095c00
+	add	xhl, RHYTHM_PATTERN_BUF_B
 AccVoice_SelectByMask_Return:
 	ret
 
@@ -14364,7 +14364,7 @@ AccPatch_GetEntryAddr:
 	ld xhl, 0:i3
 	popw hl
 	sll xhl, 8
-	ld xix, 0x95c00
+	ld xix, RHYTHM_PATTERN_BUF_B
 	add xix, xhl
 	popw hl
 
@@ -18816,7 +18816,7 @@ AccPlayback_Finalize_Code:
 ToneGen_CalcBufferAddr:
 	and xhl, 0xffff
 	sla xhl, 8
-	add xhl, 0x95c00
+	add xhl, RHYTHM_PATTERN_BUF_B
 	ret
 
 ToneGen_CalcBufferAddr_Pad:
@@ -22105,7 +22105,7 @@ AccPat_ShiftAndMask_Pad:
 AccPat_IndexToAddress:
 	and xhl, 0xffff
 	sla xhl, 8
-	add xhl, 0x95c00
+	add xhl, RHYTHM_PATTERN_BUF_B
 	ret
 
 AccPat_InlineFunctions_DataBlock:
@@ -22113,7 +22113,7 @@ AccPat_InlineFunctions_DataBlock:
 	nop
 	and	xhl, 0xffff
 	sla	xhl, 8
-	add	xhl, 0x095c00
+	add	xhl, RHYTHM_PATTERN_BUF_B
 	ret
 	push	xwa
 	push	xix
@@ -28186,7 +28186,7 @@ VoiceTable_AdvWrite_LinkEntry:
 	extz xwa
 	sll xwa, 8
 	ld xhl, xwa
-	add xhl, 0x95c00
+	add xhl, RHYTHM_PATTERN_BUF_B
 	ld a, c
 	ld (xhl + 3), a
 	ld wa, bc
@@ -28215,7 +28215,7 @@ Voice_ResolveTableAddr:
 	ld wa, (0x3980:16)
 	extz xwa
 	sll xwa, 8
-	add xwa, 0x95c00
+	add xwa, RHYTHM_PATTERN_BUF_B
 	add xwa, xbc
 	ld xhl, xwa
 	ret
@@ -29472,7 +29472,7 @@ AccPatch_ResolveEntryAddr:
 	ld xhl, 0:i3
 	popw hl
 	sll xhl, 8
-	ld xwa, 0x95c00
+	ld xwa, RHYTHM_PATTERN_BUF_B
 	add xwa, xhl
 	popw hl
 	pop xix
@@ -35116,7 +35116,7 @@ AccPatch_VoiceAssignDataBlock_Helper:
 	xor	xiz, xiz
 	ld	xiz, 256
 	mul	xiz, hl
-	add	xiz, 0x095c00
+	add	xiz, RHYTHM_PATTERN_BUF_B
 	ret
 	push	xiz
 	call	AccPatch_VoiceAssignDataBlock_Helper22

@@ -267,7 +267,7 @@ GroupBox_NavUpDown:
 	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	ld (0x03ef6a:24), xwa
+	ld (DIAL_FOCUS:24), xwa
 	call InitializeTimer
 	ld xwa, (xsp + 38)
 	ld xbc, EVT_REFRESH_SW_EVENT
@@ -345,43 +345,43 @@ GroupBox_Epilogue:
 	ret
 
 SetDialEnable:
-	ld (0x03ef50:24), wa
+	ld (DIAL_ENABLE:24), wa
 	ret
 
 GetDialEnableState:
-	ld hl, (0x03ef50:24)
+	ld hl, (DIAL_ENABLE:24)
 	ret
 
 SetDialFocus:
 	ld xde, xwa
-	cp (0x03ef6a:24), xde
+	cp (DIAL_FOCUS:24), xde
 	ret z
-	ld (0x03ef6a:24), xde
+	ld (DIAL_FOCUS:24), xde
 	ld xwa, 0xffffffff
 	ld xbc, EVT_CHANGE_DIAL_FOCUS
 	call SendEvent
 	ret
 
 GetDialFocus:
-	cpw (0x03ef50:24), 0
+	cpw (DIAL_ENABLE:24), 0
 	jr nz, GetDialFocus_Active
 	ld xhl, 0xffffffff
 	ret
 
 GetDialFocus_Active:
-	ld xhl, (0x03ef6a:24)
+	ld xhl, (DIAL_FOCUS:24)
 	ret
 
 SetDialUp:
-	ld (0x03ef52:24), xwa
-	ld (0x03ef5a:24), xbc
-	ld (0x03ef62:24), xde
+	ld (DIAL_UP_CALLBACK:24), xwa
+	ld (DIAL_UP_EVENT:24), xbc
+	ld (DIAL_UP_PARAM:24), xde
 	jr SetDialFocus
 
 SetDialDown:
-	ld (0x03ef56:24), xwa
-	ld (0x03ef5e:24), xbc
-	ld (0x03ef66:24), xde
+	ld (DIAL_DOWN_CALLBACK:24), xwa
+	ld (DIAL_DOWN_EVENT:24), xbc
+	ld (DIAL_DOWN_PARAM:24), xde
 	jr SetDialFocus
 
 SetAutoIncDefault:

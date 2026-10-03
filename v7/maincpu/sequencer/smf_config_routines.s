@@ -58,14 +58,14 @@ SMF_ProcessEventLoop_Entry:
 SMF_IncrementPosition:
 	push xwa
 	push xde
-	incw 1, (3946:16)
-	ld wa, (3946:16)
+	incw 1, (BOOTSERIAL_STATUS:16)
+	ld wa, (BOOTSERIAL_STATUS:16)
 	ldw de, 0x60
 	mul xwa, de
 	ldto_werp DE, 0xe2
-	add (3938:16), wa
-	ld (3940:16), de
-	ldw (3946:16), 0
+	add (BOOTSERIAL_STATE:16), wa
+	ld (BOOTSERIAL_FLAGS:16), de
+	ldw (BOOTSERIAL_STATUS:16), 0
 	pop xde
 	pop xwa
 	ld c, 0x0:opc
@@ -800,7 +800,7 @@ SMF_CalcTimeDelta:
 	xor wa, wa
 	ld (4229:16), wa
 	ld (4231:16), a
-	ld wa, (3938:16)
+	ld wa, (BOOTSERIAL_STATE:16)
 	xor b, b
 	add wa, bc
 	ld de, (3942:16)
@@ -884,8 +884,8 @@ SMF_ProcessCh_Next:
 	call SMF_SortOutputQueue
 
 SMF_ProcessCh_Finalize:
-	ldw (3938:16), 0
-	ldw (3940:16), 0
+	ldw (BOOTSERIAL_STATE:16), 0
+	ldw (BOOTSERIAL_FLAGS:16), 0
 	ret
 
 SMF_SendChannelConfig:
@@ -1641,12 +1641,12 @@ SMF_UpdateTempo_Finalize:
 	ld wa, (3942:16)
 	add wa, (3952:16)
 	ld (3942:16), bc
-	add bc, (3938:16)
+	add bc, (BOOTSERIAL_STATE:16)
 	sub bc, wa
 	ld (4229:16), bc
 	calr SMF_EncodeTimeDelta
-	ldw (3938:16), 0
-	ldw (3940:16), 0
+	ldw (BOOTSERIAL_STATE:16), 0
+	ldw (BOOTSERIAL_FLAGS:16), 0
 	ret
 
 SMF_CalcFilePosition:

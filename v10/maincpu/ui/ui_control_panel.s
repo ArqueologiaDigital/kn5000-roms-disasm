@@ -3861,7 +3861,7 @@ GroupBox_StateCompare_Default:
 	jrl GroupBox_NavDispatch
 	ld xwa, (xsp + 38)
 	call SetCurrentTarget
-	ldw (0x03ef50:24), 0x0000
+	ldw (DIAL_ENABLE:24), 0x0000
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -3895,7 +3895,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
-	ld (0x03ef6a:24), xwa
+	ld (DIAL_FOCUS:24), xwa
 	lda xde, (0x0274e8:24)
 	lda xbc, (xde + 15)
 	ld xwa, xbc
@@ -3920,19 +3920,19 @@ GroupBox_Nav_ClearWidgetFlags:
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleCursorNav:
-	cpw (0x3ef50:24), 0
+	cpw (DIAL_ENABLE:24), 0
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive
-	ld xwa, (0x03ef56:24)
-	ld xbc, (0x03ef5e:24)
-	ld xde, (0x03ef66:24)
+	ld xwa, (DIAL_DOWN_CALLBACK:24)
+	ld xbc, (DIAL_DOWN_EVENT:24)
+	ld xde, (DIAL_DOWN_PARAM:24)
 	jr GroupBox_CursorNav_SendAndTitle
 
 GroupBox_CursorNav_LoadPositive:
-	ld xwa, (0x03ef52:24)
-	ld xbc, (0x03ef5a:24)
-	ld xde, (0x03ef62:24)
+	ld xwa, (DIAL_UP_CALLBACK:24)
+	ld xbc, (DIAL_UP_EVENT:24)
+	ld xde, (DIAL_UP_PARAM:24)
 
 GroupBox_CursorNav_SendAndTitle:
 	call SendEvent

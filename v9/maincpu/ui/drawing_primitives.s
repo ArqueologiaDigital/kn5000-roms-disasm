@@ -3529,14 +3529,14 @@ DrawBitmapFile_Impl:
 	ld xwa, (xsp + 32)
 	srl xwa, 2
 	ld (xsp + 32), xwa
-	ld xbc, 0x69400
+	ld xbc, OFFSCREEN_BUFFER_4
 	ld xwa, 0:i3
 	ld (xsp + 12), xwa
 
 DrawBitmapFile_Impl_InitPalette:
 	ld xde, (xsp + 12)
 	sll xde, 2
-	add xde, 0x69400
+	add xde, OFFSCREEN_BUFFER_4
 	ld xwa, 0xff000000
 	ld (xde), xwa
 	ld xwa, 1:i3
@@ -3641,7 +3641,7 @@ DrawBitmapFile_Impl_ComputeStride:
 	ld xwa, (xsp + 32)
 	call Math_MultiplyAccumulate
 	ld (xsp + 32), xhl
-	add xhl, 0x56800
+	add xhl, OFFSCREEN_BUFFER_2
 	ld (xsp + 28), xhl
 	ld xwa, 0:i3
 	ld (xsp + 12), xwa
@@ -3731,9 +3731,9 @@ DrawBitmapFile_Impl_FillRemaining:
 	jr ge, DrawBitmapFile_Impl_CopyToVRAM
 	ld xwa, 0x140
 	add (xsp + 32), xwa
-	ld xiz, 0x56800
+	ld xiz, OFFSCREEN_BUFFER_2
 	ld xwa, (xsp + 32)
-	add xwa, 0x56800
+	add xwa, OFFSCREEN_BUFFER_2
 	ld (xsp + 28), xwa
 	ld (xsp + 12), xbc
 	cp xbc, 0xf0
@@ -3784,7 +3784,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ld xde, OFFSCREEN_BUFFER_1
 	add xde, xwa
 	ld xiz, xde
-	ld xwa, 0x56800
+	ld xwa, OFFSCREEN_BUFFER_2
 	ld (xsp + 36), xwa
 	ld (xsp + 34), bc
 	ldw (xsp + 32), 0x0

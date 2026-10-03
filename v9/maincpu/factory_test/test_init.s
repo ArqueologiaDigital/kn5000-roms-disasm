@@ -466,7 +466,7 @@ LoadExtROM_JumpEntry:
 	jp (xhl)
 
 GetAprStatus_Entry:
-	ld l, (0x03dd04:24)
+	ld l, (XAPR_PRESENT_FLAG:24)
 	ret
 
 LoadXaprInit_Entry:
@@ -479,7 +479,7 @@ LoadXaprInit_Entry:
 	add xsp, 0xa
 	cp hl, 0:i3
 	ret nz
-	ld (0x03dd04:24), 0x01
+	ld (XAPR_PRESENT_FLAG:24), 0x01
 	ret
 
 HamaStub1_Entry:
@@ -492,7 +492,7 @@ HamaStub3_Entry:
 	ret
 
 CallExtIfActive_Entry:
-	cp (0x03dd04:24), 0x00
+	cp (XAPR_PRESENT_FLAG:24), 0x00
 	ret z
 	ld xhl, 0x280010
 	call (xhl)
@@ -508,14 +508,14 @@ LoadAndRunXapr_Entry:
 	add xsp, 0xa
 	cp hl, 0:i3
 	jr nz, LoadAndRunXapr_ClearFlag
-	ld (0x03dd04:24), 0x01
+	ld (XAPR_PRESENT_FLAG:24), 0x01
 	jr LoadAndRunXapr_CallIfActive
 
 LoadAndRunXapr_ClearFlag:
-	ld (0x03dd04:24), 0x00
+	ld (XAPR_PRESENT_FLAG:24), 0x00
 
 LoadAndRunXapr_CallIfActive:
-	cp (0x03dd04:24), 0x00
+	cp (XAPR_PRESENT_FLAG:24), 0x00
 	ret z
 	ld xhl, 0x280008
 	lda xwa, (0x027ed2:24)

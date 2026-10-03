@@ -16,7 +16,10 @@ QUESTION THIS ANSWERS / JOB IT DOES
   v7 code never used them.  So for v9 and v7 the address of each name is DERIVED: every v10 code line
   that uses the name's address is matched to the same routine (same label) in the other tree, whose
   body must have the same number of instructions with the same shape once numbers are blanked; the
-  number in the matching position is a vote.  A name is applied only when all its votes agree, and the
+  number in the matching position is a vote.  Positions are paired operand by operand, names included
+  (addr_tokens): memory operands, pointer loads, both ldmm operands, and a 32-bit register immediate
+  when v10's value is DRAM.  Pairing the bare numbers instead mis-aligned an instruction whose other
+  operand was already named and gave v9 MIDI_MSG_DATA3 = 0x9131 (the gate caught it, 2026-10-03).  A name is applied only when all its votes agree, and the
   tree's `.equ` is corrected to that value (a comment says so).  A name with no vote whose voted
   neighbours (within 0x100, at least five) ALL moved by one delta takes that delta -- v7's panel block
   moved -0x9C as one, the low variables (0x408, 0x409, 0xC9A) not at all.  Same bytes: make gate-all.
@@ -39,6 +42,7 @@ CONST = ["midi_encoder_constants.s", "cpanel_constants.s", "gui_constants.s", "k
          "shared/ram_variables.s"]
 EQU = re.compile(r'^(\s*\.equ\s+)([A-Za-z_]\w*)(\s*,\s*)(0x[0-9a-fA-F]+)(.*)$')
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')
+TOK = re.compile(r'\(([A-Za-z_]\w*|0x[0-9a-fA-F]+|\d+)(?::8|:16|:24)?\)')
 PTR = re.compile(r'^(\s*ld\s+x(?:ix|iy|iz|hl)\s*,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$', re.I)
 COL0 = re.compile(r'^([A-Za-z_][\w$]*):')
 # memory-to-memory pseudos: both operands are addresses (`ldmm8 0x8d39, 0x8d38`)
@@ -103,6 +107,29 @@ def operands10(code):
     return out
 
 
+A = r'([A-Za-z_]\w*|0x[0-9a-fA-F]+|\d+)'
+PTR_A = re.compile(r'^\s*ld\s+x(?:ix|iy|iz|hl)\s*,\s*%s\s*$' % A, re.I)
+MM_A = re.compile(r'^\s*ldmm(?:8|16)\s+%s\s*,\s*%s\s*$' % (A, A), re.I)
+WIDE_A = re.compile(r'^\s*(?:ld|add|sub)\s+x(?:wa|bc|de|hl|ix|iy|iz)\s*,\s*%s\s*$' % A, re.I)
+
+
+def addr_tokens(code):
+    """the address-valued operands of an instruction, in order, named or numeric -- the same forms the
+    rewrite below handles: memory operands, a pointer into an index register, both ldmm operands, and
+    a 32-bit register immediate (flagged `wide`: it votes only when v10's value is DRAM, >= 0x10000)"""
+    out = [(m.group(1), False) for m in TOK.finditer(code)]
+    m = MM_A.match(code)
+    if m:
+        return out + [(m.group(1), False), (m.group(2), False)]
+    m = PTR_A.match(code)
+    if m:
+        return out + [(m.group(1), False)]
+    m = WIDE_A.match(code)
+    if m:
+        return out + [(m.group(1), True)]
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tree", required=True, choices=["v10", "v9", "v7"])
@@ -124,11 +151,18 @@ def main():
             if len(other) != len(body) or any(shape(x[1]) != shape(y[1]) for x, y in zip(body, other)):
                 continue
             for (_, c10), (_, ct) in zip(body, other):
-                n10 = operands10(c10)
-                nt = [int(m.group(1), 0) for m in MEM.finditer(ct)]
-                for x, y in zip(n10, nt):
-                    if x in byaddr10:
-                        votes[byaddr10[x]][y] += 1
+                # pair memory operands by their FULL position -- names included.  Pairing the numbers
+                # alone mis-aligned an instruction whose other operand the tree had already named
+                # (v10's MIDI_MSG_DATA3 voted for v9's 0x9131: 2026-10-03, caught by the gate)
+                t10, tt = addr_tokens(c10), addr_tokens(ct)
+                if len(t10) != len(tt):
+                    continue
+                for (x, wide), (y, _) in zip(t10, tt):
+                    v10 = NAMED.get(x, int(x, 0) if re.match(r'^(0x|\d)', x) else None)
+                    if wide and (v10 is None or v10 < 0x10000):
+                        continue
+                    if v10 in byaddr10 and re.match(r'^(0x[0-9a-fA-F]+|\d+)$', y):
+                        votes[byaddr10[v10]][int(y, 0)] += 1
         addr, report, inferred = {}, {}, {}
         for n in ref:
             v = votes.get(n)
@@ -144,7 +178,8 @@ def main():
                 if not l.lstrip().startswith(".equ"):
                     used |= set(re.findall(r'\b(%s)\b' % "|".join(map(re.escape, own)), l.split(";")[0]))
         for n in used:
-            if n not in addr and n in own:
+            if n in own:
+                # a name the code already uses keeps its value: a later vote never overrides it
                 addr[n] = own[n]
                 report[n] = {own[n]: "already used"}
         # a name with no vote inside a block whose voted names ALL moved by the same delta takes that

@@ -1737,9 +1737,9 @@ SMF_FinishChannelAndGetNextEvent:
 	ld (3944:16), a
 
 SMF_ResetEventTimers:
-	ldw (3946:16), 0
-	ldw (3938:16), 0
-	ldw (3940:16), 0
+	ldw (BOOTSERIAL_STATUS:16), 0
+	ldw (BOOTSERIAL_STATE:16), 0
+	ldw (BOOTSERIAL_FLAGS:16), 0
 
 ; ============================================================================
 ; SMF_ProcessEventLoop - Process MIDI events from sequence data
@@ -1801,24 +1801,24 @@ SMF_EventLoop_ReadDataBytes:
 	jrl SMF_ProcessEventLoop
 
 SMF_MetaTiming_IncrementCount:
-	incw 1, (3946:16)
+	incw 1, (BOOTSERIAL_STATUS:16)
 
 SMF_MetaTiming_GetNextLoop:
 	call SMF_GetNextEvent
 	cp a, 0x81
 	jr nz, SMF_MetaTiming_ApplyMultiplier
-	incw 1, (3946:16)
+	incw 1, (BOOTSERIAL_STATUS:16)
 	call SMF_AdvancePosition
 	jr SMF_MetaTiming_GetNextLoop
 
 SMF_MetaTiming_ApplyMultiplier:
-	ld wa, (3946:16)
+	ld wa, (BOOTSERIAL_STATUS:16)
 	ldw de, 0x60
 	mul xwa, de
 	ldto_werp DE, 0xe2
-	add (3938:16), wa
-	ld (3940:16), de
-	ldw (3946:16), 0
+	add (BOOTSERIAL_STATE:16), wa
+	ld (BOOTSERIAL_FLAGS:16), de
+	ldw (BOOTSERIAL_STATUS:16), 0
 	jrl SMF_ProcessEventLoop
 
 SMF_PolyAftertouch_Dispatch:

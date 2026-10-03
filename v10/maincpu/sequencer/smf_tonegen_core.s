@@ -446,7 +446,7 @@ SeqTrack_DispatchPart_Done:
 	ret
 
 SeqTrack_ComputeTempoScaling:
-	ldw (3946:16), 0
+	ldw (BOOTSERIAL_STATUS:16), 0
 	sla iy, 1
 	push xix
 	ld xix, 0xfae
@@ -464,7 +464,7 @@ SeqTrack_ComputeTempoScaling:
 	ldfr_werp DE, 0xe2
 	div xwa, hl
 	ldto_werp DE, 0xe2
-	add (3946:16), wa
+	add (BOOTSERIAL_STATUS:16), wa
 	popw wa
 	ldiw_erp 0xea, 0
 	ldiw_erp 0xe6, 0
@@ -478,7 +478,7 @@ SeqTrack_ComputeTempoScaling:
 	ldfr_werp DE, 0xe2
 	div xwa, hl
 	ldto_werp DE, 0xe2
-	add (3946:16), wa
+	add (BOOTSERIAL_STATUS:16), wa
 	popw wa
 
 SeqTrack_ComputeTempo_Phase2:
@@ -491,7 +491,7 @@ SeqTrack_ComputeTempo_Phase2:
 	ldfr_werp DE, 0xe2
 	div xwa, hl
 	ldto_werp DE, 0xe2
-	add (3946:16), wa
+	add (BOOTSERIAL_STATUS:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -514,7 +514,7 @@ SeqTrack_ComputeTempo_Phase3:
 	ldfr_werp DE, 0xe2
 	div xwa, hl
 	ldto_werp DE, 0xe2
-	add (3946:16), wa
+	add (BOOTSERIAL_STATUS:16), wa
 	ld wa, de
 
 SeqTrack_ComputeTempo_Phase3Store:
@@ -544,7 +544,7 @@ SeqTrack_ComputeTempo_NoDelta:
 	ldfr_werp DE, 0xe2
 	div xwa, hl
 	ldto_werp DE, 0xe2
-	add (3946:16), wa
+	add (BOOTSERIAL_STATUS:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -566,7 +566,7 @@ SeqTrack_ComputeTempo_NoDeltaDirect:
 	ldfr_werp DE, 0xe2
 	div xwa, hl
 	ldto_werp DE, 0xe2
-	add (3946:16), wa
+	add (BOOTSERIAL_STATUS:16), wa
 	pushw wa
 	pushw de
 	push xiy
@@ -1606,7 +1606,7 @@ SoundGen_RefreshAllVoices:
 	push xiy
 	call SoundGen_CaptureVoiceParams
 	pop xiy
-	ld bc, (3946:16)
+	ld bc, (BOOTSERIAL_STATUS:16)
 	ld a, 0x81:opc
 
 SoundGen_RefreshVoices_Loop:

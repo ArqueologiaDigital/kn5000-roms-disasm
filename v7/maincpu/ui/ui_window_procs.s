@@ -6212,7 +6212,7 @@ DrawDesignBox_Impl_Join2:
 Gfx_ClearFrameBuffers:
 	pushw	38400
 	pushw	0
-	ld	xwa, 354304
+	ld	xwa, OFFSCREEN_BUFFER_2
 	push	xwa
 	call	Memset
 	pushw	38400
@@ -6222,7 +6222,7 @@ Gfx_ClearFrameBuffers:
 	call	Memset
 	pushw	1024
 	pushw	0
-	ld	xwa, 431104
+	ld	xwa, OFFSCREEN_BUFFER_4
 	push	xwa
 	call	Memset
 	lda	xsp, (xsp+24)
@@ -6285,8 +6285,8 @@ SplashBMP_ValidateSize:
 	ld xwa, (xsp + 30)
 	srl xwa, 2
 	ld (xsp + 30), xwa
-	ld xde, 0x69400
-	ld xbc, 0x69400
+	ld xde, OFFSCREEN_BUFFER_4
+	ld xbc, OFFSCREEN_BUFFER_4
 	ld xhl, 0x69800
 
 SplashBMP_ClearPalette:
@@ -6399,7 +6399,7 @@ SplashBMP_PrepareRowBuffer:
 	ld	xwa, (xsp+30)
 	call	Math_MultiplyAccumulate
 	ld	(xsp+30), xhl
-	add	xhl, 354304
+	add	xhl, OFFSCREEN_BUFFER_2
 	ld	(xsp+22), xhl
 	ld	xwa, 0:i3
 	ld	(xsp+6), xwa
@@ -6517,10 +6517,10 @@ SplashBMP_PadRows:
 	jr ge, SplashBMP_Finish
 	ld xwa, 0x140
 	add (xsp + 30), xwa
-	ld xwa, 0x56800
+	ld xwa, OFFSCREEN_BUFFER_2
 	ld (xsp + 26), xwa
 	ld xwa, (xsp + 30)
-	add xwa, 0x56800
+	add xwa, OFFSCREEN_BUFFER_2
 	ld (xsp + 22), xwa
 	ld (xsp + 6), xbc
 	cp xbc, 0xf0
@@ -6726,7 +6726,7 @@ ImageDecode_ClearPaletteLoop:
 	ldw (xbc+), 0x0000
 	cp xbc, xwa
 	jr c, ImageDecode_ClearPaletteLoop
-	ld xhl, 0x56800
+	ld xhl, OFFSCREEN_BUFFER_2
 	ld ix, 0:i3
 
 ImageDecode_RowLoop:
@@ -6832,11 +6832,11 @@ PaletteReduce_SortCompare:
 	ld (xiz), e
 	ld xix, (xsp + 40)
 	sll xix, 2
-	add xix, 0x69400
+	add xix, OFFSCREEN_BUFFER_4
 	ld xwa, (xix)
 	ld xiy, (xsp + 36)
 	sll xiy, 2
-	add xiy, 0x69400
+	add xiy, OFFSCREEN_BUFFER_4
 	ld xde, (xiy)
 	ld (xix), xde
 	ld (xiy), xwa
@@ -6890,7 +6890,7 @@ PaletteReduce_HighColorReduce:
 PaletteReduce_FindClosest:
 	ld XWA,(XSP+0x08)
 	sll XWA, 0x02
-	add XWA,0x00069400
+	add XWA,OFFSCREEN_BUFFER_4
 	ld XWA,(XWA)
 	ld (XSP+0x2c),XWA
 	and XWA,0x0000ff00
@@ -6898,7 +6898,7 @@ PaletteReduce_FindClosest:
 	ld XDE,XWA
 	ld XWA,(XSP+0x04)
 	sll XWA, 0x02
-	add XWA,0x00069400
+	add XWA,OFFSCREEN_BUFFER_4
 	ld XWA,(XWA)
 	ld (XSP+0x28),XWA
 	and XWA,0x0000ff00
@@ -6969,7 +6969,7 @@ ImageDecode_PaletteCopyLoop:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xc0
 	jr lt, ImageDecode_PaletteCopyLoop
-	ld xhl, 0x56800
+	ld xhl, OFFSCREEN_BUFFER_2
 	ld ix, 0:i3
 
 ImageDecode_ProcessRowsOuter:
@@ -7007,7 +7007,7 @@ ImageDecode_PixelNext:
 
 Flash_SaveSplashScreen:
 	ld wa, 1:i3
-	ld xbc, 0x56800
+	ld xbc, OFFSCREEN_BUFFER_2
 	ld xde, 0x3c0000
 	call Flash_EraseSectorAndWrite
 	ld xwa, 0x3d0000
@@ -7394,7 +7394,7 @@ PaletteBankRotate_Impl:
 	ld	xiz, xwa
 	pushw	38400
 	push	xwa
-	ld	xwa, 354304
+	ld	xwa, OFFSCREEN_BUFFER_2
 	push	xwa
 	call	Mem_Copy
 	add	xiz, 38400
@@ -7532,7 +7532,7 @@ ClipBlit_Replace_CalcVRAMAddr:
 	lda	xwa, (OFFSCREEN_BUFFER_1:24)
 	add xwa, xhl
 	ld (xsp + 16), xwa
-	ld xwa, 0x00056800
+	ld xwa, OFFSCREEN_BUFFER_2
 	ld (xsp + 12), xwa
 	ld wa, qiz
 	exts xwa

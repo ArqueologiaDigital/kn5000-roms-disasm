@@ -1351,7 +1351,7 @@ Boot_ReadFDCStatus:
 
 ; VoiceSynth command handler case 0
 VoiceSynth_CmdCase0:
-	cp	(253188:24), 0
+	cp	(XAPR_PRESENT_FLAG:24), 0
 	ret	z
 	ld	xhl, 0x280014
 	call	(xhl)
