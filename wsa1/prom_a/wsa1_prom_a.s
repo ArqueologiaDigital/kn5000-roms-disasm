@@ -12793,23 +12793,23 @@ PanelState_CheckRequestAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b 
 ;          16-bit.
 ; ---------------------------------------------------------------------
 EditValue_ApplyStep:   ; entry: prom_b directory slot T_EditValue_ApplyStep (T_F40F68)
-	ld de, (0x20cc:16)                          ; F86B43  d1 cc 20 22   ld DE,(0x20cc)
+	ld de, (EditValue_Value:16)                          ; F86B43  d1 cc 20 22   ld DE,(0x20cc)
 	bit 0x07,W                                    ; F86B47  c8 33 07
 	jr nz, .LF86B5E                               ; F86B4A  6e 12
-	m_add_rm MW16, 0x20ce, r2                     ; F86B4C  d1 ce 20 82   add DE,(0x20ce)
+	m_add_rm MW16, EditValue_Step, r2                     ; F86B4C  d1 ce 20 82   add DE,(0x20ce)
 	jr ov, .LF86B58                               ; F86B50  64 06
-	m_cp_rm MW16, 0x20c8, r2                      ; F86B52  d1 c8 20 f2   cp DE,(0x20c8)
+	m_cp_rm MW16, EditValue_Max, r2                      ; F86B52  d1 c8 20 f2   cp DE,(0x20c8)
 	jr le, .LF86B6E                               ; F86B56  62 16
 .LF86B58:
-	ld de, (0x20c8:16)                          ; F86B58  d1 c8 20 22   ld DE,(0x20c8)
+	ld de, (EditValue_Max:16)                          ; F86B58  d1 c8 20 22   ld DE,(0x20c8)
 	jr .LF86B6E                                   ; F86B5C  68 10
 .LF86B5E:
-	m_sub_rm MW16, 0x20ce, r2                     ; F86B5E  d1 ce 20 a2   sub DE,(0x20ce)
+	m_sub_rm MW16, EditValue_Step, r2                     ; F86B5E  d1 ce 20 a2   sub DE,(0x20ce)
 	jr ov, .LF86B6A                               ; F86B62  64 06
-	m_cp_rm MW16, 0x20ca, r2                      ; F86B64  d1 ca 20 f2   cp DE,(0x20ca)
+	m_cp_rm MW16, EditValue_Min, r2                      ; F86B64  d1 ca 20 f2   cp DE,(0x20ca)
 	jr ge, .LF86B6E                               ; F86B68  69 04
 .LF86B6A:
-	ld de, (0x20ca:16)                          ; F86B6A  d1 ca 20 22   ld DE,(0x20ca)
+	ld de, (EditValue_Min:16)                          ; F86B6A  d1 ca 20 22   ld DE,(0x20ca)
 .LF86B6E:
 	ret                                           ; F86B6E  0e
 
@@ -12864,7 +12864,7 @@ EditStep_Lookup:
 	ld L,W                                        ; F86B8F  c8 8f
 	and L,0x7f                                    ; F86B91  cf cc 7f
 	mx_ld_rm MXB, ra_IY, ra_HL, r7                ; F86B94  c3 07 f4 ec 27   ld L,(XIY+HL)
-	ld (0x20ce:16), hl                           ; F86B99  f1 ce 20 53   ld (0x20ce),HL
+	ld (EditValue_Step:16), hl                           ; F86B99  f1 ce 20 53   ld (0x20ce),HL
 	pop XHL                                       ; F86B9D  5b
 	pop XIY                                       ; F86B9E  5d
 	ret                                           ; F86B9F  0e
@@ -19215,7 +19215,7 @@ sub_F8A6F3:
 	m_mul MB16, UI_PartIndex, 1                                ; F8A704  c1 50 22 41
 	add WA,0x0080                                        ; F8A708  d8 c8 80 00
 	extz XWA                                             ; F8A70C  e8 12
-	add xwa, (0x60f018:24)                           ; F8A70E  e2 18 f0 60 80
+	add xwa, (IndexedTable_Base:24)                           ; F8A70E  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8A713  a0 20
 	ld A,(XWA+0x1d)                                      ; F8A715  88 1d 21
 	ld w, (SoundSel_Bank:16)                                   ; F8A718  c1 6a 21 20
@@ -19265,7 +19265,7 @@ sub_F8A6F3:
 	m_mul MB16, UI_PartIndex, 1                                ; F8A779  c1 50 22 41
 	add WA,0x0080                                        ; F8A77D  d8 c8 80 00
 	extz XWA                                             ; F8A781  e8 12
-	add xwa, (0x60f018:24)                           ; F8A783  e2 18 f0 60 80
+	add xwa, (IndexedTable_Base:24)                           ; F8A783  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8A788  a0 20
 	ld A,(XWA+0x1d)                                      ; F8A78A  88 1d 21
 	cp e, 0x01:i3                                          ; F8A78D  cd d9
@@ -19953,7 +19953,7 @@ PanelAction_BankRemap:   ; entry: PanelGroupActionListPool
 	m_mul MB16, UI_PartIndex, 1                                ; F8ABDB  c1 50 22 41
 	add WA,0x0080                                        ; F8ABDF  d8 c8 80 00
 	extz XWA                                             ; F8ABE3  e8 12
-	add xwa, (0x60f018:24)                           ; F8ABE5  e2 18 f0 60 80
+	add xwa, (IndexedTable_Base:24)                           ; F8ABE5  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8ABEA  a0 20
 	ld A,(XWA+0x1d)                                      ; F8ABEC  88 1d 21
 	ld w, (SoundSel_Bank:16)                                   ; F8ABEF  c1 6a 21 20
@@ -20021,7 +20021,7 @@ PanelAction_BankButton:   ; entry: PanelGroupActionListPool
 	m_mul MB16, UI_PartIndex, 1                                ; F8AC71  c1 50 22 41
 	add WA,0x0080                                        ; F8AC75  d8 c8 80 00
 	extz XWA                                             ; F8AC79  e8 12
-	add xwa, (0x60f018:24)                           ; F8AC7B  e2 18 f0 60 80
+	add xwa, (IndexedTable_Base:24)                           ; F8AC7B  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8AC80  a0 20
 	ld A,(XWA+0x1d)                                      ; F8AC82  88 1d 21
 	cp e, 0x01:i3                                          ; F8AC85  cd d9
@@ -20622,7 +20622,7 @@ PanelAction_SelectNextSound:
 	mul A,0x04                                           ; F8B107  c9 08 04
 	add WA,0x0080                                        ; F8B10A  d8 c8 80 00
 	extz XWA                                             ; F8B10E  e8 12
-	add xwa, (0x60f018:24)                           ; F8B110  e2 18 f0 60 80
+	add xwa, (IndexedTable_Base:24)                           ; F8B110  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8B115  a0 20
 	ld b, (UI_PartIndex:16)                                   ; F8B117  c1 50 22 22
 	ld C,(XWA+0x1d)                                      ; F8B11B  88 1d 23
@@ -20734,7 +20734,7 @@ PanelAction_SelectPrevSound:
 	mul A,0x04                                           ; F8B1F5  c9 08 04
 	add WA,0x0080                                        ; F8B1F8  d8 c8 80 00
 	extz XWA                                             ; F8B1FC  e8 12
-	add xwa, (0x60f018:24)                           ; F8B1FE  e2 18 f0 60 80
+	add xwa, (IndexedTable_Base:24)                           ; F8B1FE  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8B203  a0 20
 	ld C,(XWA+0x1d)                                      ; F8B205  88 1d 23
 	ld L,(XWA+0x1b)                                      ; F8B208  88 1b 27
@@ -22715,7 +22715,7 @@ PanelLed_RequestIfBlinkEnableChanged:   ; entry: reachable-run entry
 	orw	(0x2116:16), 0x0004                  ; F8C30C  d1 16 21 3e 04 00
 	jr .LF8C337                                          ; F8C312  68 23
 .LF8C314:
-	m_bit 0, MD16, 0x216f                                ; F8C314  f1 6f 21 c8
+	m_bit 0, MD16, MIDI_ActivityFlags                                ; F8C314  f1 6f 21 c8
 	jr nz, .LF8C337                                      ; F8C318  6e 1d
 	ld XIX,PanelLed_Shadow                                    ; F8C31A  44 d0 20 00 00
 	ld a, (UI_RequestBits:16)                                   ; F8C31F  c1 75 20 21
@@ -22782,7 +22782,7 @@ PanelLed_Refresh:   ; entry: prom_b routine directory
 .LF8C3E4:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; F8C3E4  c0 c4 3f 01
 	jr z, .LF8C3FA                                       ; F8C3E8  66 10
-	ld XIX,0x0000216f                                    ; F8C3EA  44 6f 21 00 00
+	ld XIX,MIDI_ActivityFlags                                    ; F8C3EA  44 6f 21 00 00
 	bit 0,(XIX)                                          ; F8C3EF  b4 c8
 	jr z, .LF8C3FA                                       ; F8C3F1  66 07
 	m_xor_mi8 MB16, PanelLed_Shadow+6, 0x08                         ; F8C3F3  c1 d6 20 3d 08
@@ -30079,7 +30079,7 @@ LCD_Svc_17_DrawText8x8Packed:
 	jrl z, .LF9025D                               ; F9011A  76 40 01
 	ldw wa, 0x08                                  ; F9011D  30 08 00
 	calr TextShift_ClearBufA                                   ; F90120  1e e7 02
-	ld (0x259a:16), bc                           ; F90123  f1 9a 25 51
+	ld (LCD_TextCharsLeft:16), bc                           ; F90123  f1 9a 25 51
 	calr LCD_SelectCurrentLayer                                   ; F90127  1e 69 ed
 	ld WA,HL                                      ; F9012A  db 88
 	mul xwa, bc                                  ; F9012C  d9 40
@@ -30104,10 +30104,10 @@ LCD_Svc_17_DrawText8x8Packed:
 	ld HL,WA                                      ; F90167  d8 8b
 	ld XIX,Font_Svc17_8x8                         ; F90169  44 70 e4 f1 00
 	add XIX,XHL                                   ; F9016E  eb 84
-	ld (0x259f:16), xix                          ; F90170  f1 9f 25 64
+	ld (LCD_TextGlyphPtr:16), xix                          ; F90170  f1 9f 25 64
 	ldw bc, 0x08                                  ; F90174  31 08 00
 	calr TextShift_LoadGlyph8                                   ; F90177  1e b4 02
-	decw 0x01, (0x259a:16)                        ; F9017A  d1 9a 25 69
+	decw 0x01, (LCD_TextCharsLeft:16)                        ; F9017A  d1 9a 25 69
 	ld d, 0x08:opc                                   ; F9017E  24 08
 	calr TextShift_ShiftRight                                   ; F90180  1e f4 02
 	m_cp_mi8 MB16, LCD_TextBitOffset, 0x02                   ; F90183  c1 9e 25 3f 02
@@ -30121,7 +30121,7 @@ LCD_Svc_17_DrawText8x8Packed:
 	incw 0x01, (LCD_TextColumnAddr:16)                        ; F9019E  d1 9c 25 61
 	jr .LF901C9                                   ; F901A2  68 25
 .LF901A4:
-	m_cp_mi16 MW16, 0x259a, 0x0000                ; F901A4  d1 9a 25 3f 00 00
+	m_cp_mi16 MW16, LCD_TextCharsLeft, 0x0000                ; F901A4  d1 9a 25 3f 00 00
 	jr z, .LF901C9                                ; F901AA  66 1d
 	calr LCD_TextCol_SetCursor                                   ; F901AC  1e cf 06
 	ldw bc, 0x08                                  ; F901AF  31 08 00
@@ -30133,7 +30133,7 @@ LCD_Svc_17_DrawText8x8Packed:
 	ldw bc, 0x08                                  ; F901C3  31 08 00
 	calr LCD_TextCol_MergeHead8                                   ; F901C6  1e e1 04
 .LF901C9:
-	m_cp_mi16 MW16, 0x259a, 0x0000                ; F901C9  d1 9a 25 3f 00 00
+	m_cp_mi16 MW16, LCD_TextCharsLeft, 0x0000                ; F901C9  d1 9a 25 3f 00 00
 	jr z, .LF9023B                                ; F901CF  66 6a
 	inc 1,XIY                                     ; F901D1  ed 61
 	mx_ld_rm MXB, ra_IY, ra_IZ, r1                ; F901D3  c3 07 f4 f8 21
@@ -30143,10 +30143,10 @@ LCD_Svc_17_DrawText8x8Packed:
 	ld HL,WA                                      ; F901DE  d8 8b
 	ld XIX,Font_Svc17_8x8                         ; F901E0  44 70 e4 f1 00
 	add XIX,XHL                                   ; F901E5  eb 84
-	ld (0x259f:16), xix                          ; F901E7  f1 9f 25 64
+	ld (LCD_TextGlyphPtr:16), xix                          ; F901E7  f1 9f 25 64
 	ldw bc, 0x08                                  ; F901EB  31 08 00
 	calr TextShift_LoadGlyph8                                   ; F901EE  1e 3d 02
-	decw 0x01, (0x259a:16)                        ; F901F1  d1 9a 25 69
+	decw 0x01, (LCD_TextCharsLeft:16)                        ; F901F1  d1 9a 25 69
 	m_add_mi8 MB16, LCD_TextBitOffset, 0x06                  ; F901F5  c1 9e 25 38 06
 	m_cp_mi8 MB16, LCD_TextBitOffset, 0x08                   ; F901FA  c1 9e 25 3f 08
 	jr ule, .LF90206                              ; F901FF  63 05
@@ -30211,7 +30211,7 @@ LCD_Svc_1C_DrawText16x16Packed:
 	jrl z, .LF90409                               ; F90260  76 a6 01
 	ldw wa, 0x10                                  ; F90263  30 10 00
 	calr TextShift_ClearBufA                                   ; F90266  1e a1 01
-	ld (0x259a:16), bc                           ; F90269  f1 9a 25 51
+	ld (LCD_TextCharsLeft:16), bc                           ; F90269  f1 9a 25 51
 	calr LCD_SelectCurrentLayer                                   ; F9026D  1e 23 ec
 	ld WA,HL                                      ; F90270  db 88
 	mul xwa, bc                                  ; F90272  d9 40
@@ -30237,10 +30237,10 @@ LCD_Svc_1C_DrawText16x16Packed:
 	sla hl, 0x01                                  ; F902AF  db ec 01
 	ld XIX,Font_Svc1C_16x16                       ; F902B2  44 b0 ea f1 00
 	add XIX,XHL                                   ; F902B7  eb 84
-	ld (0x259f:16), xix                          ; F902B9  f1 9f 25 64
+	ld (LCD_TextGlyphPtr:16), xix                          ; F902B9  f1 9f 25 64
 	ldw bc, 0x10                                  ; F902BD  31 10 00
 	calr TextShift_LoadGlyph16                                   ; F902C0  1e 8f 01
-	decw 0x01, (0x259a:16)                        ; F902C3  d1 9a 25 69
+	decw 0x01, (LCD_TextCharsLeft:16)                        ; F902C3  d1 9a 25 69
 	ld d, 0x10:opc                                   ; F902C7  24 10
 	calr TextShift_ShiftRight                                   ; F902C9  1e ab 01
 	calr LCD_TextCol_SetCursor                                   ; F902CC  1e af 05
@@ -30279,7 +30279,7 @@ LCD_Svc_1C_DrawText16x16Packed:
 	ldw bc, 0x08                                  ; F90331  31 08 00
 	calr TextShift_CopyBtoC                                   ; F90334  1e ad 01
 .LF90337:
-	m_cp_mi16 MW16, 0x259a, 0x0000                ; F90337  d1 9a 25 3f 00 00
+	m_cp_mi16 MW16, LCD_TextCharsLeft, 0x0000                ; F90337  d1 9a 25 3f 00 00
 	jrl z, .LF903F4                               ; F9033D  76 b4 00
 	inc 1,XIY                                     ; F90340  ed 61
 	mx_ld_rm MXB, ra_IY, ra_IZ, r1                ; F90342  c3 07 f4 f8 21
@@ -30290,10 +30290,10 @@ LCD_Svc_1C_DrawText16x16Packed:
 	sla hl, 0x01                                  ; F9034F  db ec 01
 	ld XIX,Font_Svc1C_16x16                       ; F90352  44 b0 ea f1 00
 	add XIX,XHL                                   ; F90357  eb 84
-	ld (0x259f:16), xix                          ; F90359  f1 9f 25 64
+	ld (LCD_TextGlyphPtr:16), xix                          ; F90359  f1 9f 25 64
 	ldw bc, 0x10                                  ; F9035D  31 10 00
 	calr TextShift_LoadGlyph16                                     ; F90360  1e ef 00
-	decw 0x01, (0x259a:16)                        ; F90363  d1 9a 25 69
+	decw 0x01, (LCD_TextCharsLeft:16)                        ; F90363  d1 9a 25 69
 	m_add_mi8 MB16, LCD_TextBitOffset, 0x0b                  ; F90367  c1 9e 25 38 0b
 .LF9036C:
 	m_cp_mi8 MB16, LCD_TextBitOffset, 0x08                   ; F9036C  c1 9e 25 3f 08
@@ -30411,7 +30411,7 @@ TextShift_LoadGlyph8:
 	xor WA,WA                                     ; F90430  d8 d0
 	ld XHL,0x0000257a                             ; F90432  43 7a 25 00 00
 	ld XIX,0x0000256a                             ; F90437  44 6a 25 00 00
-	ld xiy, (0x259f:16)                          ; F9043C  e1 9f 25 25
+	ld xiy, (LCD_TextGlyphPtr:16)                          ; F9043C  e1 9f 25 25
 .LF90440:
 	ld A,(XIY)                                    ; F90440  85 21
 	ld (XIX),A                                    ; F90442  b4 41
@@ -30442,7 +30442,7 @@ TextShift_LoadGlyph16:
 	push XIY                                      ; F90453  3d
 	ld XHL,0x0000257a                             ; F90454  43 7a 25 00 00
 	ld XIX,0x0000256a                             ; F90459  44 6a 25 00 00
-	ld xiy, (0x259f:16)                          ; F9045E  e1 9f 25 25
+	ld xiy, (LCD_TextGlyphPtr:16)                          ; F9045E  e1 9f 25 25
 .LF90462:
 	ld WA,(XIY)                                   ; F90462  95 20
 	ld (XIX),A                                    ; F90464  b4 41
@@ -57066,7 +57066,7 @@ DrumsMap_DrawSoundColumn:
 	mul C,0x04                                           ; F9F46D  cb 08 04
 	extz XBC                                             ; F9F470  e9 12
 	add XBC,0x00000080                                   ; F9F472  e9 c8 80 00 00 00
-	add xbc, (0x60f018:24)                           ; F9F478  e2 18 f0 60 81
+	add xbc, (IndexedTable_Base:24)                           ; F9F478  e2 18 f0 60 81
 	ld XWA,(XBC)                                         ; F9F47D  a1 20
 	ld C,(XWA+0x1d)                                      ; F9F47F  88 1d 23
 	extz BC                                              ; F9F482  d9 12
@@ -66411,7 +66411,7 @@ MIDI_RX_Drop:
 ;          (0x600D1C) a FREE count and not a used one.
 ; ---------------------------------------------------------------------
 MIDI_RX_DeliverTwo:
-	m_set 0, MD16, 0x216f                         ; FA57AF  f1 6f 21 b8   MIDI activity
+	m_set 0, MD16, MIDI_ActivityFlags                         ; FA57AF  f1 6f 21 b8   MIDI activity
 	ld XIX,MidiIn_PortARing                             ; FA57B3  44 1e 0c 60 00
 	m_cp_mi16 MWD+r4, 0xfe, 0x0003                ; FA57B8  9c fe 3f 03 00   free space >= 3?
 	jr c, MIDI_RX_QueueFull2                      ; FA57BD  67 11
@@ -66425,7 +66425,7 @@ MIDI_RX_DeliverTwo:
 	ret                                           ; FA57CF  0e
 MIDI_RX_QueueFull2:
 	set	2, (MIDI_RX_Flags:8)                            ; FA57D0  f0 9e ba   (0x9E) bit 2 = the input queue overflowed
-	inc 0x01, (0x0932:16)                         ; FA57D3  c1 32 09 61   8-bit overflow counter
+	inc 0x01, (MIDI_RX_OverflowCount:16)                         ; FA57D3  c1 32 09 61   8-bit overflow counter
 	ret                                           ; FA57D7  0e
 
 ; ---------------------------------------------------------------------
@@ -66471,7 +66471,7 @@ MIDI_RX_AwaitSecondByte:
 ;          that says which message this is.
 ; ---------------------------------------------------------------------
 MIDI_RX_SecondDataByte:
-	m_set 0, MD16, 0x216f                         ; FA57DE  f1 6f 21 b8   MIDI activity
+	m_set 0, MD16, MIDI_ActivityFlags                         ; FA57DE  f1 6f 21 b8   MIDI activity
 	bit	1, (MIDI_RX_Flags:8)                            ; FA57E2  f0 9e c9   a Song Position Pointer?
 	jr z, .LFA57E9                                ; FA57E5  66 02
 	ld d, 0xf2:opc                                   ; FA57E7  24 f2   restore the status the F2 handler cleared
@@ -66505,7 +66505,7 @@ MIDI_RX_Return:
 	ret                                           ; FA5827  0e
 MIDI_RX_QueueFull3:
 	set	2, (MIDI_RX_Flags:8)                            ; FA5828  f0 9e ba
-	inc 0x01, (0x0932:16)                         ; FA582B  c1 32 09 61
+	inc 0x01, (MIDI_RX_OverflowCount:16)                         ; FA582B  c1 32 09 61
 	ret                                           ; FA582F  0e
 
 ; ---------------------------------------------------------------------
@@ -66594,7 +66594,7 @@ MIDI_RX_SysExData:
 	jr z, MIDI_SysEx_DataDone                     ; FA5871  66 10
 	bit	5, (MIDI_RX_SysExState:8)                            ; FA5873  f0 a9 cd
 	jr nz, MIDI_SysEx_DataDone                    ; FA5876  6e 0b
-	m_set 0, MD16, 0x216f                         ; FA5878  f1 6f 21 b8   MIDI activity
+	m_set 0, MD16, MIDI_ActivityFlags                         ; FA5878  f1 6f 21 b8   MIDI activity
 	pushw de                                      ; FA587C  2a
 	call T_Ring601646_Put                         ; FA587D  1d 3c 1e f4
 	inc 2,XSP                                     ; FA5881  ef 62
@@ -66618,22 +66618,22 @@ MIDI_SysEx_DataDone:
 ;          that the block is seven entries and not eight.
 ; ---------------------------------------------------------------------
 MIDI_Parser_LoadContext:
-	ld xwa, (0x0900:16)                          ; FA5884  e1 00 09 20
-	ld xbc, (0x0904:16)                          ; FA5888  e1 04 09 21
-	ld xde, (0x0908:16)                          ; FA588C  e1 08 09 22
-	ld xhl, (0x090c:16)                          ; FA5890  e1 0c 09 23
-	ld xix, (0x0910:16)                          ; FA5894  e1 10 09 24
-	ld xiy, (0x0914:16)                          ; FA5898  e1 14 09 25
-	ld xiz, (0x0918:16)                          ; FA589C  e1 18 09 26
+	ld xwa, (MIDI_Parser_SavedXWA:16)                          ; FA5884  e1 00 09 20
+	ld xbc, (MIDI_Parser_SavedXBC:16)                          ; FA5888  e1 04 09 21
+	ld xde, (MIDI_Parser_SavedXDE:16)                          ; FA588C  e1 08 09 22
+	ld xhl, (MIDI_Parser_SavedXHL:16)                          ; FA5890  e1 0c 09 23
+	ld xix, (MIDI_Parser_SavedXIX:16)                          ; FA5894  e1 10 09 24
+	ld xiy, (MIDI_Parser_SavedXIY:16)                          ; FA5898  e1 14 09 25
+	ld xiz, (MIDI_Parser_SavedXIZ:16)                          ; FA589C  e1 18 09 26
 	ret                                           ; FA58A0  0e
 MIDI_Parser_SaveContext:
-	ld (0x0900:16), xwa                          ; FA58A1  f1 00 09 60
-	ld (0x0904:16), xbc                          ; FA58A5  f1 04 09 61
-	ld (0x0908:16), xde                          ; FA58A9  f1 08 09 62
-	ld (0x090c:16), xhl                          ; FA58AD  f1 0c 09 63
-	ld (0x0910:16), xix                          ; FA58B1  f1 10 09 64
-	ld (0x0914:16), xiy                          ; FA58B5  f1 14 09 65
-	ld (0x0918:16), xiz                          ; FA58B9  f1 18 09 66
+	ld (MIDI_Parser_SavedXWA:16), xwa                          ; FA58A1  f1 00 09 60
+	ld (MIDI_Parser_SavedXBC:16), xbc                          ; FA58A5  f1 04 09 61
+	ld (MIDI_Parser_SavedXDE:16), xde                          ; FA58A9  f1 08 09 62
+	ld (MIDI_Parser_SavedXHL:16), xhl                          ; FA58AD  f1 0c 09 63
+	ld (MIDI_Parser_SavedXIX:16), xix                          ; FA58B1  f1 10 09 64
+	ld (MIDI_Parser_SavedXIY:16), xiy                          ; FA58B5  f1 14 09 65
+	ld (MIDI_Parser_SavedXIZ:16), xiz                          ; FA58B9  f1 18 09 66
 	ret                                           ; FA58BD  0e
 
 ; ---------------------------------------------------------------------
@@ -66665,13 +66665,13 @@ MIDI_Reset:
 ;          seven addresses MIDI_Parser_LoadContext reads.
 ; ---------------------------------------------------------------------
 MIDI_Parser_ClearContext:
-	ld (0x0900:16), 0x00                          ; FA58CC  f1 00 09 00 00
-	ld (0x0904:16), 0x00                          ; FA58D1  f1 04 09 00 00
-	ld (0x0908:16), 0x00                          ; FA58D6  f1 08 09 00 00
-	ld (0x090c:16), 0x00                          ; FA58DB  f1 0c 09 00 00
-	ld (0x0910:16), 0x00                          ; FA58E0  f1 10 09 00 00
-	ld (0x0914:16), 0x00                          ; FA58E5  f1 14 09 00 00
-	ld (0x0918:16), 0x00                          ; FA58EA  f1 18 09 00 00
+	ld (MIDI_Parser_SavedXWA:16), 0x00                          ; FA58CC  f1 00 09 00 00
+	ld (MIDI_Parser_SavedXBC:16), 0x00                          ; FA58D1  f1 04 09 00 00
+	ld (MIDI_Parser_SavedXDE:16), 0x00                          ; FA58D6  f1 08 09 00 00
+	ld (MIDI_Parser_SavedXHL:16), 0x00                          ; FA58DB  f1 0c 09 00 00
+	ld (MIDI_Parser_SavedXIX:16), 0x00                          ; FA58E0  f1 10 09 00 00
+	ld (MIDI_Parser_SavedXIY:16), 0x00                          ; FA58E5  f1 14 09 00 00
+	ld (MIDI_Parser_SavedXIZ:16), 0x00                          ; FA58EA  f1 18 09 00 00
 	ret                                           ; FA58EF  0e
 
 ; ---------------------------------------------------------------------
@@ -67255,7 +67255,7 @@ MIDI_Fg_SysExData:
 	jr z, .LFA5B5C                                ; FA5B45  66 15
 	m_bit 5, MD16, MIDI_Fg_SysExState                         ; FA5B47  f1 64 09 cd   bit 5,(0x0964)
 	jr nz, .LFA5B5C                               ; FA5B4B  6e 0f
-	m_set 0, MD16, 0x216f                         ; FA5B4D  f1 6f 21 b8   set 0,(0x216f)
+	m_set 0, MD16, MIDI_ActivityFlags                         ; FA5B4D  f1 6f 21 b8   set 0,(0x216f)
 	ld BC,(XIZ+0x08)                              ; FA5B51  9e 08 21
 	extz BC                                       ; FA5B54  d9 12
 	pushw bc                                      ; FA5B56  29   push BC
@@ -67571,7 +67571,7 @@ MidiIn_PumpPortA:   ; entry: prom_b directory slot T_MidiIn_PumpPortA (T_F40744)
 	jr z, .LFA6053                                ; FA602E  66 23
 	m_and_mi8 MB8, 0x9f, 0xfe                     ; FA6030  c0 9f 3c fe   and (0x9f),0xfe
 	calr MidiIn_FetchMessage_PortA                                     ; FA6034  1e 63 00   calr 0xfa609a
-	ld a, (0x1940:16)                            ; FA6037  c1 40 19 21   ld A,(0x1940)
+	ld a, (MidiIn_MsgStatus:16)                            ; FA6037  c1 40 19 21   ld A,(0x1940)
 	ld (0x1960:16), a                            ; FA603B  f1 60 19 41   ld (0x1960),A
 	and A,0x70                                    ; FA603F  c9 cc 70
 	srl a, 0x02                                   ; FA6042  c9 ef 02   srl 0x02,A
@@ -67634,7 +67634,7 @@ MidiIn_StatusClassTable:
 ; ---------------------------------------------------------------------
 MidiIn_FetchMessage_PortA:   ; entry: call from 0xFA6034
 	ld XIZ,MidiIn_PortARing                             ; FA609A  46 1e 0c 60 00
-	ld XIY,0x00001940                             ; FA609F  45 40 19 00 00
+	ld XIY,MidiIn_MsgStatus                             ; FA609F  45 40 19 00 00
 	ld (XIY+0x03),0x00                            ; FA60A4  bd 03 00 00
 .LFA60A8:
 	call T_MidiInARing_Scan                        ; FA60A8  1d c0 1d f4
@@ -67666,7 +67666,7 @@ MidiIn_PumpPortB:   ; entry: prom_b directory slot T_MidiIn_PumpPortB (T_F43358)
 	jr z, .LFA60FD                                ; FA60D8  66 23
 	m_and_mi8 MB8, 0x9f, 0xfe                     ; FA60DA  c0 9f 3c fe   and (0x9f),0xfe
 	calr .LFA6123                                 ; FA60DE  1e 42 00
-	ld a, (0x1940:16)                            ; FA60E1  c1 40 19 21   ld A,(0x1940)
+	ld a, (MidiIn_MsgStatus:16)                            ; FA60E1  c1 40 19 21   ld A,(0x1940)
 	ld (0x1960:16), a                            ; FA60E5  f1 60 19 41   ld (0x1960),A
 	and A,0x70                                    ; FA60E9  c9 cc 70
 	srl a, 0x02                                   ; FA60EC  c9 ef 02   srl 0x02,A
@@ -67704,7 +67704,7 @@ sub_FA6112:
 ; ---------------------------------------------------------------------
 MidiIn_FetchMessage_PortB:   ; entry: call from 0xFA60DE
 	ld XIZ,MidiIn_PortBRing                             ; FA6123  46 28 10 60 00
-	ld XIY,0x00001940                             ; FA6128  45 40 19 00 00
+	ld XIY,MidiIn_MsgStatus                             ; FA6128  45 40 19 00 00
 	ld (XIY+0x03),0x10                            ; FA612D  bd 03 00 10
 .LFA6131:
 	call T_MidiInBRing_Scan                        ; FA6131  1d e4 1d f4
@@ -67726,7 +67726,7 @@ MidiIn_FetchMessage_PortB:   ; entry: call from 0xFA60DE
 ;          IS the System sub-type: 2 = Song Position, 3 = Song Select.
 ; ---------------------------------------------------------------------
 MidiIn_SystemMessage:   ; entry: MidiIn_StatusClassTable[7]
-	ld l, (0x1940:16)                            ; FA614B  c1 40 19 27   ld L,(0x1940)
+	ld l, (MidiIn_MsgStatus:16)                            ; FA614B  c1 40 19 27   ld L,(0x1940)
 	and L,0x0f                                    ; FA614F  cf cc 0f
 	sla l, 0x02                                   ; FA6152  cf ec 02   sla 0x02,L
 	extz HL                                       ; FA6155  db 12
@@ -67776,7 +67776,7 @@ MidiIn_SystemSubTable:
 ;          Song Position, and the only System message with two.
 ; ---------------------------------------------------------------------
 MidiIn_SongPosition:   ; entry: MidiIn_SystemSubTable[2]
-	ld wa, (0x1941:16)                          ; FA61A4  d1 41 19 20   ld WA,(0x1941)
+	ld wa, (MidiIn_MsgData1:16)                          ; FA61A4  d1 41 19 20   ld WA,(0x1941)
 	ld	(0xa4:8), a                               ; FA61A8  f0 a4 41   ld (0xa4),A
 	m_bit 2, MD16, 0x7f34                         ; FA61AB  f1 34 7f ca   bit 2,(0x7f34)
 	jr z, .LFA61B4                                ; FA61AF  66 03
@@ -67795,7 +67795,7 @@ MidiIn_SongPosition:   ; entry: MidiIn_SystemSubTable[2]
 ;          shape and distinguishes it from the handler above.
 ; ---------------------------------------------------------------------
 MidiIn_SongSelect:   ; entry: MidiIn_SystemSubTable[3]
-	ld a, (0x1941:16)                            ; FA61B8  c1 41 19 21   ld A,(0x1941)
+	ld a, (MidiIn_MsgData1:16)                            ; FA61B8  c1 41 19 21   ld A,(0x1941)
 	m_bit 3, MD16, MidiFilter_SongSelect                         ; FA61BC  f1 33 7f cb   bit 3,(0x7f33)
 	jr z, .LFA61C5                                ; FA61C0  66 03
 	set 0x07,A                                    ; FA61C2  c9 31 07
@@ -67831,37 +67831,37 @@ MidiIn_SystemIgnore:   ; entry: MidiIn_SystemSubTable[0-1,4-15]
 ;          MidiIn_BuildChannelRouteTable, which writes exactly that shape.
 ; ---------------------------------------------------------------------
 MidiIn_RouteChannelMessage:   ; entry: MidiIn_StatusClassTable[0-6]
-	ld a, (0x1940:16)                            ; FA61CE  c1 40 19 21   ld A,(0x1940)
+	ld a, (MidiIn_MsgStatus:16)                            ; FA61CE  c1 40 19 21   ld A,(0x1940)
 	and A,0x0f                                    ; FA61D2  c9 cc 0f
-	or a, (0x1943:16)                             ; FA61D5  c1 43 19 e1   or A,(0x1943)
-	ld (0x197e:16), a                            ; FA61D9  f1 7e 19 41   ld (0x197e),A
+	or a, (MidiIn_MsgPortTag:16)                             ; FA61D5  c1 43 19 e1   or A,(0x1943)
+	ld (MidiIn_ChannelTag:16), a                            ; FA61D9  f1 7e 19 41   ld (0x197e),A
 	ld (0x197d:16), 0xff                          ; FA61DD  f1 7d 19 00 ff   ld (0x197d),0xff
 	ld XHL,0x00001800                             ; FA61E2  43 00 18 00 00
 	mx8_ld_rm MXB, ra_HL, rb_A, r1                ; FA61E7  c3 03 ec e0 21   ld A,(XHL+A)
 	cp A,0xff                                     ; FA61EC  c9 cf ff
 	jr z, .LFA6241                                ; FA61EF  66 50
-	ld (0x1974:16), a                            ; FA61F1  f1 74 19 41   ld (0x1974),A
+	ld (MidiIn_RouteCursor:16), a                            ; FA61F1  f1 74 19 41   ld (0x1974),A
 	ld XHL,0x00001820                             ; FA61F5  43 20 18 00 00
 	mx8_ld_rm MXB, ra_HL, rb_A, r1                ; FA61FA  c3 03 ec e0 21   ld A,(XHL+A)
 	cp a, 0x00:i3                                   ; FA61FF  c9 d8   cp A,0
 	jr z, .LFA6241                                ; FA6201  66 3e
-	ld (0x1975:16), a                            ; FA6203  f1 75 19 41   ld (0x1975),A
-	ld (0x1977:16), a                            ; FA6207  f1 77 19 41   ld (0x1977),A
+	ld (MidiIn_RouteCount:16), a                            ; FA6203  f1 75 19 41   ld (0x1975),A
+	ld (MidiIn_RouteRemaining:16), a                            ; FA6207  f1 77 19 41   ld (0x1977),A
 .LFA620B:
-	inc 0x01, (0x1974:16)                         ; FA620B  c1 74 19 61   inc 1,(0x1974)
+	inc 0x01, (MidiIn_RouteCursor:16)                         ; FA620B  c1 74 19 61   inc 1,(0x1974)
 	xor H,H                                       ; FA620F  ce d6
-	ld l, (0x1974:16)                            ; FA6211  c1 74 19 27   ld L,(0x1974)
+	ld l, (MidiIn_RouteCursor:16)                            ; FA6211  c1 74 19 27   ld L,(0x1974)
 	ld XIX,0x00001820                             ; FA6215  44 20 18 00 00
 	mx_ld_rm MXB, ra_IX, ra_HL, r1                ; FA621A  c3 07 f0 ec 21   ld A,(XIX+HL)
-	ld (0x1976:16), a                            ; FA621F  f1 76 19 41   ld (0x1976),A
+	ld (MidiIn_CurrentPart:16), a                            ; FA621F  f1 76 19 41   ld (0x1976),A
 	xor H,H                                       ; FA6223  ce d6
-	ld l, (0x1940:16)                            ; FA6225  c1 40 19 27   ld L,(0x1940)
+	ld l, (MidiIn_MsgStatus:16)                            ; FA6225  c1 40 19 27   ld L,(0x1940)
 	and L,0x70                                    ; FA6229  cf cc 70
 	srl hl, 0x02                                  ; FA622C  db ef 02   srl 0x02,HL
 	ld XIX,MidiIn_ChannelStatusTable              ; FA622F  44 42 62 fa 00
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA6234  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	call (xix)                                    ; FA6239  b4 e8   call T,XIX
-	dec 0x01, (0x1977:16)                         ; FA623B  c1 77 19 69   dec 1,(0x1977)
+	dec 0x01, (MidiIn_RouteRemaining:16)                         ; FA623B  c1 77 19 69   dec 1,(0x1977)
 	jr nz, .LFA620B                               ; FA623F  6e ca
 .LFA6241:
 	ret                                           ; FA6241  0e
@@ -67919,7 +67919,7 @@ MidiIn_ChannelIgnore:   ; entry: MidiIn_ChannelStatusTable[0-2,7]
 ; ---------------------------------------------------------------------
 MidiIn_ControlChange:   ; entry: MidiIn_ChannelStatusTable[3]
 	ld XIX,MidiIn_ControllerNumberToIndex         ; FA6267  44 e8 83 fa 00
-	ld l, (0x1941:16)                            ; FA626C  c1 41 19 27   ld L,(0x1941)
+	ld l, (MidiIn_MsgData1:16)                            ; FA626C  c1 41 19 27   ld L,(0x1941)
 	mx8_ld_rm MXB, ra_IX, rb_L, r1                ; FA6270  c3 03 f0 ec 21   ld A,(XIX+L)
 	ld (0x1963:16), a                            ; FA6275  f1 63 19 41   ld (0x1963),A
 	cp A,0xff                                     ; FA6279  c9 cf ff
@@ -68022,22 +68022,22 @@ MidiIn_NullHandler:   ; entry: MidiIn_ControllerHandlerTable[19-23,26-31,36-39,4
 ; ---------------------------------------------------------------------
 MidiIn_CC20_BankSelLSB:   ; entry: MidiIn_ControllerHandlerTable[25]
 	extz HL                                       ; FA6379  db 12
-	ld l, (0x1976:16)                            ; FA637B  c1 76 19 27   ld L,(0x1976)
+	ld l, (MidiIn_CurrentPart:16)                            ; FA637B  c1 76 19 27   ld L,(0x1976)
 	cp L,0xff                                     ; FA637F  cf cf ff
 	jr nz, .LFA6391                               ; FA6382  6e 0d
-	ld c, (0x197e:16)                            ; FA6384  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6384  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6388  f1 7d 19 43   ld (0x197d),C
 	ldw bc, 0x0198                                ; FA638C  31 98 01   ld BC,0x0198
 	jr .LFA63CE                                   ; FA638F  68 3d
 .LFA6391:
 	cp L,0x1f                                     ; FA6391  cf cf 1f
 	jr ugt, .LFA63E8                              ; FA6394  6b 52
-	ld c, (0x197e:16)                            ; FA6396  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6396  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA639A  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA63BC                                ; FA639E  66 1c
 	pushw hl                                      ; FA63A0  2b   push HL
 	sll hl, 0x02                                  ; FA63A1  db ee 02   sll 0x02,HL
-	ld xix, (0x60f018:24)                        ; FA63A4  e2 18 f0 60 24   ld XIX,(0x60f018)
+	ld xix, (IndexedTable_Base:24)                        ; FA63A4  e2 18 f0 60 24   ld XIX,(0x60f018)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA63A9  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	popw hl                                       ; FA63AE  4b   pop HL
 	cp XIX,0xffffffff                             ; FA63AF  ec cf ff ff ff ff
@@ -68051,9 +68051,9 @@ MidiIn_CC20_BankSelLSB:   ; entry: MidiIn_ControllerHandlerTable[25]
 	cp C,0xff                                     ; FA63C9  cb cf ff
 	jr z, .LFA63E8                                ; FA63CC  66 1a
 .LFA63CE:
-	ld e, (0x1942:16)                            ; FA63CE  c1 42 19 25   ld E,(0x1942)
+	ld e, (MidiIn_MsgData2:16)                            ; FA63CE  c1 42 19 25   ld E,(0x1942)
 	ld d, 0xff:opc                                   ; FA63D2  24 ff   ld D,0xff
-	ld a, (0x1943:16)                            ; FA63D4  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA63D4  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA63D8  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA63DC  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA63E0  f1 52 19 52   ld (0x1952),DE
@@ -68073,22 +68073,22 @@ MidiIn_CC20_BankSelLSB:   ; entry: MidiIn_ControllerHandlerTable[25]
 ; ---------------------------------------------------------------------
 MidiIn_CC00_BankSelMSB:   ; entry: MidiIn_ControllerHandlerTable[24]
 	extz HL                                       ; FA63E9  db 12
-	ld l, (0x1976:16)                            ; FA63EB  c1 76 19 27   ld L,(0x1976)
+	ld l, (MidiIn_CurrentPart:16)                            ; FA63EB  c1 76 19 27   ld L,(0x1976)
 	cp L,0xff                                     ; FA63EF  cf cf ff
 	jr nz, .LFA6401                               ; FA63F2  6e 0d
-	ld c, (0x197e:16)                            ; FA63F4  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA63F4  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA63F8  f1 7d 19 43   ld (0x197d),C
 	ldw bc, 0x0198                                ; FA63FC  31 98 01   ld BC,0x0198
 	jr .LFA643E                                   ; FA63FF  68 3d
 .LFA6401:
 	cp L,0x1f                                     ; FA6401  cf cf 1f
 	jr ugt, .LFA6458                              ; FA6404  6b 52
-	ld c, (0x197e:16)                            ; FA6406  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6406  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA640A  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA642C                                ; FA640E  66 1c
 	pushw hl                                      ; FA6410  2b   push HL
 	sll hl, 0x02                                  ; FA6411  db ee 02   sll 0x02,HL
-	ld xix, (0x60f018:24)                        ; FA6414  e2 18 f0 60 24   ld XIX,(0x60f018)
+	ld xix, (IndexedTable_Base:24)                        ; FA6414  e2 18 f0 60 24   ld XIX,(0x60f018)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA6419  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	popw hl                                       ; FA641E  4b   pop HL
 	cp XIX,0xffffffff                             ; FA641F  ec cf ff ff ff ff
@@ -68102,9 +68102,9 @@ MidiIn_CC00_BankSelMSB:   ; entry: MidiIn_ControllerHandlerTable[24]
 	cp C,0xff                                     ; FA6439  cb cf ff
 	jr z, .LFA6458                                ; FA643C  66 1a
 .LFA643E:
-	ld d, (0x1942:16)                            ; FA643E  c1 42 19 24   ld D,(0x1942)
+	ld d, (MidiIn_MsgData2:16)                            ; FA643E  c1 42 19 24   ld D,(0x1942)
 	ld e, 0xff:opc                                   ; FA6442  25 ff   ld E,0xff
-	ld a, (0x1943:16)                            ; FA6444  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6444  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6448  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA644C  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6450  f1 52 19 52   ld (0x1952),DE
@@ -68167,15 +68167,15 @@ MidiIn_ControllerHandlerTable_Nop17:   ; entry: MidiIn_ControllerHandlerTable[17
 ;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
 MidiIn_CC40_Hold:   ; entry: MidiIn_ControllerHandlerTable[0]
-	ld a, (0x1976:16)                            ; FA645B  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA645B  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA645F  c9 cf ff
 	jr nz, .LFA6470                               ; FA6462  6e 0c
 	ld a, 0x00:opc                                   ; FA6464  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6466  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6466  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA646A  f1 7d 19 43   ld (0x197d),C
 	jr .LFA647A                                   ; FA646E  68 0a
 .LFA6470:
-	ld c, (0x197e:16)                            ; FA6470  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6470  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6474  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA64E4                                ; FA6478  66 6a
 .LFA647A:
@@ -68191,12 +68191,12 @@ MidiIn_CC40_Hold:   ; entry: MidiIn_ControllerHandlerTable[0]
 	jr z, .LFA64E4                                ; FA6495  66 4d
 	inc 2,XIX                                     ; FA6497  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6499  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA649E  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA64A2  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA649E  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA64A2  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA64A6  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA64AA  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA64AE  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA64B2  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA64B2  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA64E0                               ; FA64B7  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA64B9  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA64D2                               ; FA64BD  6e 13
@@ -68228,7 +68228,7 @@ MidiIn_CC40_Hold:   ; entry: MidiIn_ControllerHandlerTable[0]
 ; Reads:   sub_FA64E5_ParamTable.
 ; ---------------------------------------------------------------------
 sub_FA64E5:   ; entry: MidiIn_ControllerHandlerTable[8]
-	ld a, (0x1976:16)                            ; FA64E5  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA64E5  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA64E9  c9 cf 1f
 	jr ugt, .LFA6525                              ; FA64EC  6b 37
 	xor W,W                                       ; FA64EE  c8 d0
@@ -68241,8 +68241,8 @@ sub_FA64E5:   ; entry: MidiIn_ControllerHandlerTable[8]
 	jr z, .LFA6525                                ; FA6504  66 1f
 	inc 2,XIX                                     ; FA6506  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6508  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA650D  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6511  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA650D  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6511  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6515  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6519  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA651D  f1 52 19 52   ld (0x1952),DE
@@ -68261,7 +68261,7 @@ sub_FA64E5:   ; entry: MidiIn_ControllerHandlerTable[8]
 ; Reads:   sub_FA6526_ParamTable.
 ; ---------------------------------------------------------------------
 sub_FA6526:   ; entry: MidiIn_ControllerHandlerTable[9]
-	ld a, (0x1976:16)                            ; FA6526  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6526  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA652A  c9 cf 1f
 	jr ugt, .LFA6566                              ; FA652D  6b 37
 	xor W,W                                       ; FA652F  c8 d0
@@ -68274,8 +68274,8 @@ sub_FA6526:   ; entry: MidiIn_ControllerHandlerTable[9]
 	jr z, .LFA6566                                ; FA6545  66 1f
 	inc 2,XIX                                     ; FA6547  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6549  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA654E  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6552  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA654E  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6552  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6556  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA655A  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA655E  f1 52 19 52   ld (0x1952),DE
@@ -68296,15 +68296,15 @@ sub_FA6526:   ; entry: MidiIn_ControllerHandlerTable[9]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC01_Modulation:   ; entry: MidiIn_ControllerHandlerTable[1]
-	ld a, (0x1976:16)                            ; FA6567  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6567  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA656B  c9 cf ff
 	jr nz, .LFA657C                               ; FA656E  6e 0c
 	ld a, 0x00:opc                                   ; FA6570  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6572  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6572  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6576  f1 7d 19 43   ld (0x197d),C
 	jr .LFA6586                                   ; FA657A  68 0a
 .LFA657C:
-	ld c, (0x197e:16)                            ; FA657C  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA657C  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6580  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA65F0                                ; FA6584  66 6a
 .LFA6586:
@@ -68320,12 +68320,12 @@ MidiIn_CC01_Modulation:   ; entry: MidiIn_ControllerHandlerTable[1]
 	jr z, .LFA65F0                                ; FA65A1  66 4d
 	inc 2,XIX                                     ; FA65A3  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA65A5  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA65AA  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA65AE  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA65AA  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA65AE  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA65B2  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA65B6  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA65BA  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA65BE  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA65BE  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA65EC                               ; FA65C3  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA65C5  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA65DE                               ; FA65C9  6e 13
@@ -68359,13 +68359,13 @@ MidiIn_CC01_Modulation:   ; entry: MidiIn_ControllerHandlerTable[1]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC07_Volume:   ; entry: MidiIn_ControllerHandlerTable[2]
-	ld a, (0x1976:16)                            ; FA65F1  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA65F1  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA65F5  c9 cf 1f
 	jr ugt, .LFA664F                              ; FA65F8  6b 55
 	extz HL                                       ; FA65FA  db 12
 	ld L,A                                        ; FA65FC  c9 8f
 	sll hl, 0x02                                  ; FA65FE  db ee 02   sll 0x02,HL
-	ld xix, (0x60f018:24)                        ; FA6601  e2 18 f0 60 24   ld XIX,(0x60f018)
+	ld xix, (IndexedTable_Base:24)                        ; FA6601  e2 18 f0 60 24   ld XIX,(0x60f018)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA6606  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	cp XIX,0xffffffff                             ; FA660B  ec cf ff ff ff ff
 	jr z, .LFA664F                                ; FA6611  66 3c
@@ -68381,8 +68381,8 @@ MidiIn_CC07_Volume:   ; entry: MidiIn_ControllerHandlerTable[2]
 	jr z, .LFA664F                                ; FA662E  66 1f
 	inc 2,XIX                                     ; FA6630  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6632  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6637  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA663B  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6637  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA663B  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA663F  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6643  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6647  f1 52 19 52   ld (0x1952),DE
@@ -68403,15 +68403,15 @@ MidiIn_CC07_Volume:   ; entry: MidiIn_ControllerHandlerTable[2]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC0B_Expression:   ; entry: MidiIn_ControllerHandlerTable[3]
-	ld a, (0x1976:16)                            ; FA6650  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6650  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6654  c9 cf ff
 	jr nz, .LFA6665                               ; FA6657  6e 0c
 	ld a, 0x00:opc                                   ; FA6659  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA665B  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA665B  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA665F  f1 7d 19 43   ld (0x197d),C
 	jr .LFA666F                                   ; FA6663  68 0a
 .LFA6665:
-	ld c, (0x197e:16)                            ; FA6665  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6665  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6669  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA66D9                                ; FA666D  66 6a
 .LFA666F:
@@ -68427,12 +68427,12 @@ MidiIn_CC0B_Expression:   ; entry: MidiIn_ControllerHandlerTable[3]
 	jr z, .LFA664F                                ; FA668A  66 c3
 	inc 2,XIX                                     ; FA668C  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA668E  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6693  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6697  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6693  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6697  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA669B  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA669F  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA66A3  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA66A7  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA66A7  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA66D5                               ; FA66AC  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA66AE  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA66C7                               ; FA66B2  6e 13
@@ -68466,7 +68466,7 @@ MidiIn_CC0B_Expression:   ; entry: MidiIn_ControllerHandlerTable[3]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC0A_Pan:   ; entry: MidiIn_ControllerHandlerTable[4]
-	ld a, (0x1976:16)                            ; FA66DA  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA66DA  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA66DE  c9 cf 1f
 	jr ugt, .LFA671A                              ; FA66E1  6b 37
 	xor W,W                                       ; FA66E3  c8 d0
@@ -68479,8 +68479,8 @@ MidiIn_CC0A_Pan:   ; entry: MidiIn_ControllerHandlerTable[4]
 	jr z, .LFA671A                                ; FA66F9  66 1f
 	inc 2,XIX                                     ; FA66FB  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA66FD  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6702  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6706  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6702  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6706  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA670A  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA670E  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6712  f1 52 19 52   ld (0x1952),DE
@@ -68501,7 +68501,7 @@ MidiIn_CC0A_Pan:   ; entry: MidiIn_ControllerHandlerTable[4]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC5D_Effect3Depth:   ; entry: MidiIn_ControllerHandlerTable[5]
-	ld a, (0x1976:16)                            ; FA671B  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA671B  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA671F  c9 cf 1f
 	jr ugt, .LFA675B                              ; FA6722  6b 37
 	xor W,W                                       ; FA6724  c8 d0
@@ -68514,8 +68514,8 @@ MidiIn_CC5D_Effect3Depth:   ; entry: MidiIn_ControllerHandlerTable[5]
 	jr z, .LFA675B                                ; FA673A  66 1f
 	inc 2,XIX                                     ; FA673C  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA673E  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6743  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6747  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6743  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6747  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA674B  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA674F  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6753  f1 52 19 52   ld (0x1952),DE
@@ -68536,7 +68536,7 @@ MidiIn_CC5D_Effect3Depth:   ; entry: MidiIn_ControllerHandlerTable[5]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC5E_Effect4Depth:   ; entry: MidiIn_ControllerHandlerTable[6]
-	ld a, (0x1976:16)                            ; FA675C  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA675C  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA6760  c9 cf 1f
 	jr ugt, .LFA679C                              ; FA6763  6b 37
 	xor W,W                                       ; FA6765  c8 d0
@@ -68549,8 +68549,8 @@ MidiIn_CC5E_Effect4Depth:   ; entry: MidiIn_ControllerHandlerTable[6]
 	jr z, .LFA679C                                ; FA677B  66 1f
 	inc 2,XIX                                     ; FA677D  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA677F  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6784  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6788  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6784  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6788  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA678C  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6790  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6794  f1 52 19 52   ld (0x1952),DE
@@ -68571,7 +68571,7 @@ MidiIn_CC5E_Effect4Depth:   ; entry: MidiIn_ControllerHandlerTable[6]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC5B_Effect1Depth:   ; entry: MidiIn_ControllerHandlerTable[7]
-	ld a, (0x1976:16)                            ; FA679D  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA679D  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA67A1  c9 cf 1f
 	jr ugt, .LFA67E7                              ; FA67A4  6b 41
 	xor W,W                                       ; FA67A6  c8 d0
@@ -68584,8 +68584,8 @@ MidiIn_CC5B_Effect1Depth:   ; entry: MidiIn_ControllerHandlerTable[7]
 	jr z, .LFA67E7                                ; FA67BC  66 29
 	inc 2,XIX                                     ; FA67BE  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA67C0  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA67C5  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA67C9  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA67C5  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA67C9  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA67CD  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA67D1  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA67D5  f1 52 19 52   ld (0x1952),DE
@@ -68625,15 +68625,15 @@ MidiIn_CC5B_Effect1Depth:   ; entry: MidiIn_ControllerHandlerTable[7]
 ;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
 MidiIn_CC02_Modulation2:   ; entry: MidiIn_ControllerHandlerTable[10]
-	ld a, (0x1976:16)                            ; FA67E8  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA67E8  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA67EC  c9 cf ff
 	jr nz, .LFA67FD                               ; FA67EF  6e 0c
 	ld a, 0x00:opc                                   ; FA67F1  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA67F3  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA67F3  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA67F7  f1 7d 19 43   ld (0x197d),C
 	jr .LFA6807                                   ; FA67FB  68 0a
 .LFA67FD:
-	ld c, (0x197e:16)                            ; FA67FD  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA67FD  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6801  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6871                                ; FA6805  66 6a
 .LFA6807:
@@ -68649,12 +68649,12 @@ MidiIn_CC02_Modulation2:   ; entry: MidiIn_ControllerHandlerTable[10]
 	jr z, .LFA6871                                ; FA6822  66 4d
 	inc 2,XIX                                     ; FA6824  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6826  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA682B  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA682F  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA682B  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA682F  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6833  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6837  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA683B  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA683F  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA683F  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA686D                               ; FA6844  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6846  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA685F                               ; FA684A  6e 13
@@ -68702,15 +68702,15 @@ MidiIn_CC02_Modulation2:   ; entry: MidiIn_ControllerHandlerTable[10]
 ;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
 MidiIn_CC04_CtrlPedal:   ; entry: MidiIn_ControllerHandlerTable[11]
-	ld a, (0x1976:16)                            ; FA6872  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6872  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6876  c9 cf ff
 	jr nz, .LFA6887                               ; FA6879  6e 0c
 	ld a, 0x00:opc                                   ; FA687B  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA687D  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA687D  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6881  f1 7d 19 43   ld (0x197d),C
 	jr .LFA6891                                   ; FA6885  68 0a
 .LFA6887:
-	ld c, (0x197e:16)                            ; FA6887  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6887  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA688B  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA68FB                                ; FA688F  66 6a
 .LFA6891:
@@ -68726,12 +68726,12 @@ MidiIn_CC04_CtrlPedal:   ; entry: MidiIn_ControllerHandlerTable[11]
 	jr z, .LFA68FB                                ; FA68AC  66 4d
 	inc 2,XIX                                     ; FA68AE  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA68B0  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA68B5  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA68B9  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA68B5  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA68B9  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA68BD  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA68C1  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA68C5  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA68C9  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA68C9  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA68F7                               ; FA68CE  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA68D0  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA68E9                               ; FA68D4  6e 13
@@ -68779,15 +68779,15 @@ MidiIn_CC04_CtrlPedal:   ; entry: MidiIn_ControllerHandlerTable[11]
 ;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
 MidiIn_CC10_RTCreatX:   ; entry: MidiIn_ControllerHandlerTable[12]
-	ld a, (0x1976:16)                            ; FA68FC  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA68FC  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6900  c9 cf ff
 	jr nz, .LFA6911                               ; FA6903  6e 0c
 	ld a, 0x00:opc                                   ; FA6905  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6907  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6907  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA690B  f1 7d 19 43   ld (0x197d),C
 	jr .LFA691B                                   ; FA690F  68 0a
 .LFA6911:
-	ld c, (0x197e:16)                            ; FA6911  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6911  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6915  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6985                                ; FA6919  66 6a
 .LFA691B:
@@ -68803,12 +68803,12 @@ MidiIn_CC10_RTCreatX:   ; entry: MidiIn_ControllerHandlerTable[12]
 	jr z, .LFA6985                                ; FA6936  66 4d
 	inc 2,XIX                                     ; FA6938  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA693A  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA693F  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6943  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA693F  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6943  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6947  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA694B  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA694F  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA6953  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA6953  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA6981                               ; FA6958  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA695A  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6973                               ; FA695E  6e 13
@@ -68856,15 +68856,15 @@ MidiIn_CC10_RTCreatX:   ; entry: MidiIn_ControllerHandlerTable[12]
 ;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
 MidiIn_CC11_RTCreatY:   ; entry: MidiIn_ControllerHandlerTable[13]
-	ld a, (0x1976:16)                            ; FA6986  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6986  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA698A  c9 cf ff
 	jr nz, .LFA699B                               ; FA698D  6e 0c
 	ld a, 0x00:opc                                   ; FA698F  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6991  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6991  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6995  f1 7d 19 43   ld (0x197d),C
 	jr .LFA69A5                                   ; FA6999  68 0a
 .LFA699B:
-	ld c, (0x197e:16)                            ; FA699B  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA699B  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA699F  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6A0F                                ; FA69A3  66 6a
 .LFA69A5:
@@ -68880,12 +68880,12 @@ MidiIn_CC11_RTCreatY:   ; entry: MidiIn_ControllerHandlerTable[13]
 	jr z, .LFA6A0F                                ; FA69C0  66 4d
 	inc 2,XIX                                     ; FA69C2  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA69C4  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA69C9  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA69CD  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA69C9  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA69CD  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA69D1  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA69D5  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA69D9  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA69DD  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA69DD  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA6A0B                               ; FA69E2  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA69E4  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA69FD                               ; FA69E8  6e 13
@@ -68933,15 +68933,15 @@ MidiIn_CC11_RTCreatY:   ; entry: MidiIn_ControllerHandlerTable[13]
 ;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
 MidiIn_CC12_RTCtrlX:   ; entry: MidiIn_ControllerHandlerTable[14]
-	ld a, (0x1976:16)                            ; FA6A10  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6A10  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6A14  c9 cf ff
 	jr nz, .LFA6A25                               ; FA6A17  6e 0c
 	ld a, 0x00:opc                                   ; FA6A19  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6A1B  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6A1B  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6A1F  f1 7d 19 43   ld (0x197d),C
 	jr .LFA6A2F                                   ; FA6A23  68 0a
 .LFA6A25:
-	ld c, (0x197e:16)                            ; FA6A25  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6A25  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6A29  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6A99                                ; FA6A2D  66 6a
 .LFA6A2F:
@@ -68957,12 +68957,12 @@ MidiIn_CC12_RTCtrlX:   ; entry: MidiIn_ControllerHandlerTable[14]
 	jr z, .LFA6A99                                ; FA6A4A  66 4d
 	inc 2,XIX                                     ; FA6A4C  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6A4E  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6A53  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6A57  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6A53  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6A57  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6A5B  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6A5F  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6A63  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA6A67  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA6A67  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA6A95                               ; FA6A6C  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6A6E  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6A87                               ; FA6A72  6e 13
@@ -69010,15 +69010,15 @@ MidiIn_CC12_RTCtrlX:   ; entry: MidiIn_ControllerHandlerTable[14]
 ;          entry and re-extracts the number from the parentheses.
 ; ---------------------------------------------------------------------
 MidiIn_CC13_RTCtrlY:   ; entry: MidiIn_ControllerHandlerTable[15]
-	ld a, (0x1976:16)                            ; FA6A9A  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6A9A  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6A9E  c9 cf ff
 	jr nz, .LFA6AAF                               ; FA6AA1  6e 0c
 	ld a, 0x00:opc                                   ; FA6AA3  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6AA5  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6AA5  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6AA9  f1 7d 19 43   ld (0x197d),C
 	jr .LFA6AB9                                   ; FA6AAD  68 0a
 .LFA6AAF:
-	ld c, (0x197e:16)                            ; FA6AAF  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6AAF  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6AB3  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6B23                                ; FA6AB7  66 6a
 .LFA6AB9:
@@ -69034,12 +69034,12 @@ MidiIn_CC13_RTCtrlY:   ; entry: MidiIn_ControllerHandlerTable[15]
 	jr z, .LFA6B23                                ; FA6AD4  66 4d
 	inc 2,XIX                                     ; FA6AD6  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6AD8  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6ADD  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6AE1  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6ADD  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6AE1  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6AE5  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6AE9  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6AED  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA6AF1  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA6AF1  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA6B1F                               ; FA6AF6  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6AF8  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6B11                               ; FA6AFC  6e 13
@@ -69073,7 +69073,7 @@ MidiIn_CC13_RTCtrlY:   ; entry: MidiIn_ControllerHandlerTable[15]
 ;          records of stride 3.
 ; ---------------------------------------------------------------------
 MidiIn_CC51_General6:   ; entry: MidiIn_ControllerHandlerTable[18]
-	ld a, (0x1976:16)                            ; FA6B24  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6B24  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA6B28  c9 cf 1f
 	jr ugt, .LFA6B64                              ; FA6B2B  6b 37
 	xor W,W                                       ; FA6B2D  c8 d0
@@ -69086,8 +69086,8 @@ MidiIn_CC51_General6:   ; entry: MidiIn_ControllerHandlerTable[18]
 	jr z, .LFA6B64                                ; FA6B43  66 1f
 	inc 2,XIX                                     ; FA6B45  ec 62
 	mx_ld_rm MXB, ra_IX, ra_HL, r4                ; FA6B47  c3 07 f0 ec 24   ld D,(XIX+HL)
-	ld e, (0x1942:16)                            ; FA6B4C  c1 42 19 25   ld E,(0x1942)
-	ld a, (0x1943:16)                            ; FA6B50  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6B4C  c1 42 19 25   ld E,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6B50  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6B54  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6B58  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6B5C  f1 52 19 52   ld (0x1952),DE
@@ -69106,7 +69106,7 @@ MidiIn_CC51_General6:   ; entry: MidiIn_ControllerHandlerTable[18]
 ;          first (check M1).
 ; ---------------------------------------------------------------------
 MidiIn_CC06_DataEntMSB:   ; entry: MidiIn_ControllerHandlerTable[32]
-	ld l, (0x1976:16)                            ; FA6B65  c1 76 19 27   ld L,(0x1976)
+	ld l, (MidiIn_CurrentPart:16)                            ; FA6B65  c1 76 19 27   ld L,(0x1976)
 	cp L,0x1f                                     ; FA6B69  cf cf 1f
 	jrl ugt, .LFA6BF4                             ; FA6B6C  7b 85 00
 	extz HL                                       ; FA6B6F  db 12
@@ -69117,7 +69117,7 @@ MidiIn_CC06_DataEntMSB:   ; entry: MidiIn_ControllerHandlerTable[32]
 	extz WA                                       ; FA6B80  d8 12
 	ld A,C                                        ; FA6B82  cb 89
 	sll wa, 0x02                                  ; FA6B84  d8 ee 02   sll 0x02,WA
-	ld xiy, (0x60f018:24)                        ; FA6B87  e2 18 f0 60 25   ld XIY,(0x60f018)
+	ld xiy, (IndexedTable_Base:24)                        ; FA6B87  e2 18 f0 60 25   ld XIY,(0x60f018)
 	mx_ld_rm MXL, ra_IY, ra_WA, r5                ; FA6B8C  e3 07 f4 e0 25   ld XIY,(XIY+WA)
 	sll hl, 0x01                                  ; FA6B91  db ee 01   sll 0x01,HL
 	ld XIX,0x00001980                             ; FA6B94  44 80 19 00 00
@@ -69131,27 +69131,27 @@ MidiIn_CC06_DataEntMSB:   ; entry: MidiIn_ControllerHandlerTable[32]
 	jr .LFA6BF4                                   ; FA6BB0  68 42
 .LFA6BB2:
 	ld b, 0x0b:opc                                   ; FA6BB2  22 0b   ld B,0x0b
-	ld e, (0x1942:16)                            ; FA6BB4  c1 42 19 25   ld E,(0x1942)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6BB4  c1 42 19 25   ld E,(0x1942)
 	cp E,0x0c                                     ; FA6BB8  cd cf 0c
 	jr ugt, .LFA6BF4                              ; FA6BBB  6b 37
 	ld d, 0x7f:opc                                   ; FA6BBD  24 7f   ld D,0x7f
 	jr .LFA6BE0                                   ; FA6BBF  68 1f
 .LFA6BC1:
 	ld b, 0x0a:opc                                   ; FA6BC1  22 0a   ld B,0x0a
-	ld e, (0x1942:16)                            ; FA6BC3  c1 42 19 25   ld E,(0x1942)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6BC3  c1 42 19 25   ld E,(0x1942)
 	sll e, 0x01                                   ; FA6BC7  cd ee 01   sll 0x01,E
 	ld d, 0xff:opc                                   ; FA6BCA  24 ff   ld D,0xff
 	jr .LFA6BE0                                   ; FA6BCC  68 12
 .LFA6BCE:
 	ld b, 0x09:opc                                   ; FA6BCE  22 09   ld B,0x09
-	ld e, (0x1942:16)                            ; FA6BD0  c1 42 19 25   ld E,(0x1942)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6BD0  c1 42 19 25   ld E,(0x1942)
 	cp E,0x64                                     ; FA6BD4  cd cf 64
 	jr ugt, .LFA6BF4                              ; FA6BD7  6b 1b
 	cp E,0x1c                                     ; FA6BD9  cd cf 1c
 	jr c, .LFA6BF4                                ; FA6BDC  67 16
 	ld d, 0x7f:opc                                   ; FA6BDE  24 7f   ld D,0x7f
 .LFA6BE0:
-	ld a, (0x1943:16)                            ; FA6BE0  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6BE0  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6BE4  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6BE8  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6BEC  f1 52 19 52   ld (0x1952),DE
@@ -69170,7 +69170,7 @@ MidiIn_CC06_DataEntMSB:   ; entry: MidiIn_ControllerHandlerTable[32]
 ;          first (check M1).
 ; ---------------------------------------------------------------------
 MidiIn_CC26_DataEntLSB:   ; entry: MidiIn_ControllerHandlerTable[33]
-	ld l, (0x1976:16)                            ; FA6BF5  c1 76 19 27   ld L,(0x1976)
+	ld l, (MidiIn_CurrentPart:16)                            ; FA6BF5  c1 76 19 27   ld L,(0x1976)
 	cp L,0x1f                                     ; FA6BF9  cf cf 1f
 	jr ugt, .LFA6C5A                              ; FA6BFC  6b 5c
 	extz HL                                       ; FA6BFE  db 12
@@ -69183,18 +69183,18 @@ MidiIn_CC26_DataEntLSB:   ; entry: MidiIn_ControllerHandlerTable[33]
 	cpw	(xix+hl), 0x8081                     ; FA6C17  d3 07 f0 ec 3f 81 80
 	jr nz, .LFA6C5A                               ; FA6C1E  6e 3a
 	ld b, 0x0a:opc                                   ; FA6C20  22 0a   ld B,0x0a
-	ld xix, (0x60f018:24)                        ; FA6C22  e2 18 f0 60 24   ld XIX,(0x60f018)
+	ld xix, (IndexedTable_Base:24)                        ; FA6C22  e2 18 f0 60 24   ld XIX,(0x60f018)
 	extz HL                                       ; FA6C27  db 12
-	ld l, (0x1976:16)                            ; FA6C29  c1 76 19 27   ld L,(0x1976)
+	ld l, (MidiIn_CurrentPart:16)                            ; FA6C29  c1 76 19 27   ld L,(0x1976)
 	sll hl, 0x02                                  ; FA6C2D  db ee 02   sll 0x02,HL
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA6C30  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	ld A,(XIX+0x0a)                               ; FA6C35  8c 0a 21
 	res 0x00,A                                    ; FA6C38  c9 30 00
-	ld e, (0x1942:16)                            ; FA6C3B  c1 42 19 25   ld E,(0x1942)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6C3B  c1 42 19 25   ld E,(0x1942)
 	srl e, 0x06                                   ; FA6C3F  cd ef 06   srl 0x06,E
 	or E,A                                        ; FA6C42  c9 e5
 	ld d, 0xff:opc                                   ; FA6C44  24 ff   ld D,0xff
-	ld a, (0x1943:16)                            ; FA6C46  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6C46  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6C4A  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6C4E  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6C52  f1 52 19 52   ld (0x1952),DE
@@ -69213,10 +69213,10 @@ MidiIn_CC26_DataEntLSB:   ; entry: MidiIn_ControllerHandlerTable[33]
 ;          first (check M1).
 ; ---------------------------------------------------------------------
 MidiIn_CC65_RpnMSB:   ; entry: MidiIn_ControllerHandlerTable[34]
-	ld a, (0x1942:16)                            ; FA6C5B  c1 42 19 21   ld A,(0x1942)
+	ld a, (MidiIn_MsgData2:16)                            ; FA6C5B  c1 42 19 21   ld A,(0x1942)
 	set 0x07,A                                    ; FA6C5F  c9 31 07
 	extz HL                                       ; FA6C62  db 12
-	ld l, (0x1976:16)                            ; FA6C64  c1 76 19 27   ld L,(0x1976)
+	ld l, (MidiIn_CurrentPart:16)                            ; FA6C64  c1 76 19 27   ld L,(0x1976)
 	sll hl, 0x01                                  ; FA6C68  db ee 01   sll 0x01,HL
 	ld XIX,0x00001981                             ; FA6C6B  44 81 19 00 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1               ; FA6C70  f3 07 f0 ec 41   ld (XIX+HL),A
@@ -69239,10 +69239,10 @@ MidiIn_CC65_RpnMSB:   ; entry: MidiIn_ControllerHandlerTable[34]
 ;          first (check M1).
 ; ---------------------------------------------------------------------
 MidiIn_CC64_RpnLSB:   ; entry: MidiIn_ControllerHandlerTable[35]
-	ld a, (0x1942:16)                            ; FA6C8A  c1 42 19 21   ld A,(0x1942)
+	ld a, (MidiIn_MsgData2:16)                            ; FA6C8A  c1 42 19 21   ld A,(0x1942)
 	set 0x07,A                                    ; FA6C8E  c9 31 07
 	extz HL                                       ; FA6C91  db 12
-	ld l, (0x1976:16)                            ; FA6C93  c1 76 19 27   ld L,(0x1976)
+	ld l, (MidiIn_CurrentPart:16)                            ; FA6C93  c1 76 19 27   ld L,(0x1976)
 	sll hl, 0x01                                  ; FA6C97  db ee 01   sll 0x01,HL
 	ld XIX,0x00001980                             ; FA6C9A  44 80 19 00 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1               ; FA6C9F  f3 07 f0 ec 41   ld (XIX+HL),A
@@ -69268,7 +69268,7 @@ MidiIn_CC64_RpnLSB:   ; entry: MidiIn_ControllerHandlerTable[35]
 ;          records of stride 2.
 ; ---------------------------------------------------------------------
 MidiIn_CC79_ResetAllCtrl:   ; entry: MidiIn_ControllerHandlerTable[40]
-	ld a, (0x1976:16)                            ; FA6CBB  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6CBB  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA6CBF  c9 cf 1f
 	jr ugt, .LFA6CF0                              ; FA6CC2  6b 2c
 	sll a, 0x01                                   ; FA6CC4  c9 ee 01   sll 0x01,A
@@ -69276,9 +69276,9 @@ MidiIn_CC79_ResetAllCtrl:   ; entry: MidiIn_ControllerHandlerTable[40]
 	mx8_ld_rm MXW, ra_IX, rb_A, r1                ; FA6CCC  d3 03 f0 e0 21   ld BC,(XIX+A)
 	cp C,0xff                                     ; FA6CD1  cb cf ff
 	jr z, .LFA6CF0                                ; FA6CD4  66 1a
-	ld e, (0x1942:16)                            ; FA6CD6  c1 42 19 25   ld E,(0x1942)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6CD6  c1 42 19 25   ld E,(0x1942)
 	ld d, 0x7f:opc                                   ; FA6CDA  24 7f   ld D,0x7f
-	ld a, (0x1943:16)                            ; FA6CDC  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6CDC  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6CE0  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6CE4  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6CE8  f1 52 19 52   ld (0x1952),DE
@@ -69299,7 +69299,7 @@ MidiIn_CC79_ResetAllCtrl:   ; entry: MidiIn_ControllerHandlerTable[40]
 ;          records of stride 2.
 ; ---------------------------------------------------------------------
 MidiIn_CC78_AllSoundOff:   ; entry: MidiIn_ControllerHandlerTable[41]
-	ld a, (0x1976:16)                            ; FA6CF1  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6CF1  c1 76 19 21   ld A,(0x1976)
 	cp A,0x1f                                     ; FA6CF5  c9 cf 1f
 	jr ugt, .LFA6D26                              ; FA6CF8  6b 2c
 	sll a, 0x01                                   ; FA6CFA  c9 ee 01   sll 0x01,A
@@ -69307,9 +69307,9 @@ MidiIn_CC78_AllSoundOff:   ; entry: MidiIn_ControllerHandlerTable[41]
 	mx8_ld_rm MXW, ra_IX, rb_A, r1                ; FA6D02  d3 03 f0 e0 21   ld BC,(XIX+A)
 	cp C,0xff                                     ; FA6D07  cb cf ff
 	jr z, .LFA6D26                                ; FA6D0A  66 1a
-	ld e, (0x1942:16)                            ; FA6D0C  c1 42 19 25   ld E,(0x1942)
+	ld e, (MidiIn_MsgData2:16)                            ; FA6D0C  c1 42 19 25   ld E,(0x1942)
 	ld d, 0x7f:opc                                   ; FA6D10  24 7f   ld D,0x7f
-	ld a, (0x1943:16)                            ; FA6D12  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6D12  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6D16  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6D1A  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6D1E  f1 52 19 52   ld (0x1952),DE
@@ -69329,7 +69329,7 @@ MidiIn_CC78_AllSoundOff:   ; entry: MidiIn_ControllerHandlerTable[41]
 ;          senders mean is a question for the 0xFAD800 module.
 ; ---------------------------------------------------------------------
 sub_FA6D27:   ; entry: call from 0xFA67E4
-	ld a, (0x1942:16)                            ; FA6D27  c1 42 19 21   ld A,(0x1942)
+	ld a, (MidiIn_MsgData2:16)                            ; FA6D27  c1 42 19 21   ld A,(0x1942)
 	ld de, (0x1952:16)                          ; FA6D2B  d1 52 19 22   ld DE,(0x1952)
 	xor E,E                                       ; FA6D2F  cd d5
 	cp A,0x40                                     ; FA6D31  c9 cf 40
@@ -69340,7 +69340,7 @@ sub_FA6D27:   ; entry: call from 0xFA67E4
 	call T_ParamApply_MaskedWriteAndPublish                                 ; FA6D3C  1d 58 08 f4
 	ret                                           ; FA6D40  0e
 	ld E,A                                        ; FA6D41  c9 8d
-	ld a, (0x1943:16)                            ; FA6D43  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6D43  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6D47  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6D4B  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6D4F  f1 52 19 52   ld (0x1952),DE
@@ -69360,7 +69360,7 @@ sub_FA6D27:   ; entry: call from 0xFA67E4
 MidiIn_ProgramChange:   ; entry: MidiIn_ChannelStatusTable[4]
 	m_bit 4, MD16, MidiFilter_ChannelMsgs                         ; FA6D58  f1 39 7f cc   bit 4,(0x7f39)
 	jrl z, .LFA6DE2                               ; FA6D5C  76 83 00
-	ld a, (0x1976:16)                            ; FA6D5F  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6D5F  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6D63  c9 cf ff
 	jr nz, .LFA6D91                               ; FA6D66  6e 29
 	ld a, (MidiCfg_InOutMode:16)                            ; FA6D68  c1 35 7f 21   ld A,(0x7f35)
@@ -69373,17 +69373,17 @@ MidiIn_ProgramChange:   ; entry: MidiIn_ChannelStatusTable[4]
 	and A,0xf0                                    ; FA6D7D  c9 cc f0
 	cp a, 0x00:i3                                   ; FA6D80  c9 d8   cp A,0
 	jr z, .LFA6DE2                                ; FA6D82  66 5e
-	ld c, (0x197e:16)                            ; FA6D84  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6D84  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6D88  f1 7d 19 43   ld (0x197d),C
 	ldw bc, 0x0198                                ; FA6D8C  31 98 01   ld BC,0x0198
 	jr .LFA6DC8                                   ; FA6D8F  68 37
 .LFA6D91:
-	ld c, (0x197e:16)                            ; FA6D91  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6D91  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6D95  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6DE2                                ; FA6D99  66 47
 	cp A,0x1f                                     ; FA6D9B  c9 cf 1f
 	jr ugt, .LFA6DE2                              ; FA6D9E  6b 42
-	ld xix, (0x60f018:24)                        ; FA6DA0  e2 18 f0 60 24   ld XIX,(0x60f018)
+	ld xix, (IndexedTable_Base:24)                        ; FA6DA0  e2 18 f0 60 24   ld XIX,(0x60f018)
 	extz HL                                       ; FA6DA5  db 12
 	ld L,A                                        ; FA6DA7  c9 8f
 	sll hl, 0x02                                  ; FA6DA9  db ee 02   sll 0x02,HL
@@ -69396,9 +69396,9 @@ MidiIn_ProgramChange:   ; entry: MidiIn_ChannelStatusTable[4]
 	cp C,0xff                                     ; FA6DC3  cb cf ff
 	jr z, .LFA6DE2                                ; FA6DC6  66 1a
 .LFA6DC8:
-	ld e, (0x1941:16)                            ; FA6DC8  c1 41 19 25   ld E,(0x1941)
+	ld e, (MidiIn_MsgData1:16)                            ; FA6DC8  c1 41 19 25   ld E,(0x1941)
 	ld d, 0xff:opc                                   ; FA6DCC  24 ff   ld D,0xff
-	ld a, (0x1943:16)                            ; FA6DCE  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6DCE  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6DD2  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6DD6  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6DDA  f1 52 19 52   ld (0x1952),DE
@@ -69415,15 +69415,15 @@ MidiIn_ProgramChange:   ; entry: MidiIn_ChannelStatusTable[4]
 ;          is Pitch Bend's shape.  Gated on bit 6 of (0x7F39).
 ; ---------------------------------------------------------------------
 MidiIn_PitchBend:   ; entry: MidiIn_ChannelStatusTable[6]
-	ld a, (0x1976:16)                            ; FA6DE3  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6DE3  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6DE7  c9 cf ff
 	jr nz, .LFA6DF8                               ; FA6DEA  6e 0c
 	ld a, 0x00:opc                                   ; FA6DEC  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6DEE  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6DEE  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6DF2  f1 7d 19 43   ld (0x197d),C
 	jr .LFA6E02                                   ; FA6DF6  68 0a
 .LFA6DF8:
-	ld c, (0x197e:16)                            ; FA6DF8  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6DF8  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6DFC  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6E69                                ; FA6E00  66 67
 .LFA6E02:
@@ -69436,13 +69436,13 @@ MidiIn_PitchBend:   ; entry: MidiIn_ChannelStatusTable[6]
 	mx8_ld_rm MXW, ra_IX, rb_A, r1                ; FA6E15  d3 03 f0 e0 21   ld BC,(XIX+A)
 	cp C,0xff                                     ; FA6E1A  cb cf ff
 	jr z, .LFA6E69                                ; FA6E1D  66 4a
-	ld e, (0x1941:16)                            ; FA6E1F  c1 41 19 25   ld E,(0x1941)
-	ld d, (0x1942:16)                            ; FA6E23  c1 42 19 24   ld D,(0x1942)
-	ld a, (0x1943:16)                            ; FA6E27  c1 43 19 21   ld A,(0x1943)
+	ld e, (MidiIn_MsgData1:16)                            ; FA6E1F  c1 41 19 25   ld E,(0x1941)
+	ld d, (MidiIn_MsgData2:16)                            ; FA6E23  c1 42 19 24   ld D,(0x1942)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6E27  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6E2B  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6E2F  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6E33  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA6E37  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA6E37  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA6E65                               ; FA6E3C  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6E3E  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6E57                               ; FA6E42  6e 13
@@ -69472,15 +69472,15 @@ MidiIn_PitchBend:   ; entry: MidiIn_ChannelStatusTable[6]
 ;          Program Change, Channel Pressure and Pitch Bend in table order.
 ; ---------------------------------------------------------------------
 MidiIn_ChannelPressure:   ; entry: MidiIn_ChannelStatusTable[5]
-	ld a, (0x1976:16)                            ; FA6E6A  c1 76 19 21   ld A,(0x1976)
+	ld a, (MidiIn_CurrentPart:16)                            ; FA6E6A  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6E6E  c9 cf ff
 	jr nz, .LFA6E7F                               ; FA6E71  6e 0c
 	ld a, 0x00:opc                                   ; FA6E73  21 00   ld A,0x00
-	ld c, (0x197e:16)                            ; FA6E75  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6E75  c1 7e 19 23   ld C,(0x197e)
 	ld (0x197d:16), c                            ; FA6E79  f1 7d 19 43   ld (0x197d),C
 	jr .LFA6E89                                   ; FA6E7D  68 0a
 .LFA6E7F:
-	ld c, (0x197e:16)                            ; FA6E7F  c1 7e 19 23   ld C,(0x197e)
+	ld c, (MidiIn_ChannelTag:16)                            ; FA6E7F  c1 7e 19 23   ld C,(0x197e)
 	m_cp_rm MB16, 0x197d, r3                      ; FA6E83  c1 7d 19 f3   cp C,(0x197d)
 	jr z, .LFA6EEE                                ; FA6E87  66 65
 .LFA6E89:
@@ -69493,13 +69493,13 @@ MidiIn_ChannelPressure:   ; entry: MidiIn_ChannelStatusTable[5]
 	mx8_ld_rm MXW, ra_IX, rb_A, r1                ; FA6E9C  d3 03 f0 e0 21   ld BC,(XIX+A)
 	cp C,0xff                                     ; FA6EA1  cb cf ff
 	jr z, .LFA6EEE                                ; FA6EA4  66 48
-	ld e, (0x1941:16)                            ; FA6EA6  c1 41 19 25   ld E,(0x1941)
+	ld e, (MidiIn_MsgData1:16)                            ; FA6EA6  c1 41 19 25   ld E,(0x1941)
 	ld d, 0x7f:opc                                   ; FA6EAA  24 7f   ld D,0x7f
-	ld a, (0x1943:16)                            ; FA6EAC  c1 43 19 21   ld A,(0x1943)
+	ld a, (MidiIn_MsgPortTag:16)                            ; FA6EAC  c1 43 19 21   ld A,(0x1943)
 	ld (0x1954:16), a                            ; FA6EB0  f1 54 19 41   ld (0x1954),A
 	ld (0x1950:16), bc                           ; FA6EB4  f1 50 19 51   ld (0x1950),BC
 	ld (0x1952:16), de                           ; FA6EB8  f1 52 19 52   ld (0x1952),DE
-	m_cp_mi8 MB16, 0x1976, 0xff                   ; FA6EBC  c1 76 19 3f ff   cp (0x1976),0xff
+	m_cp_mi8 MB16, MidiIn_CurrentPart, 0xff                   ; FA6EBC  c1 76 19 3f ff   cp (0x1976),0xff
 	jr nz, .LFA6EEA                               ; FA6EC1  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6EC3  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6EDC                               ; FA6EC7  6e 13
@@ -69622,7 +69622,7 @@ MidiIn_BuildChannelRouteTable:   ; entry: call from 0xFA6F1A
 	jr nz, .LFA6F9F                               ; FA6F98  6e 05
 	ld (0x197c:16), 0xff                          ; FA6F9A  f1 7c 19 00 ff   ld (0x197c),0xff
 .LFA6F9F:
-	ld xiz, (0x60f018:24)                        ; FA6F9F  e2 18 f0 60 26   ld XIZ,(0x60f018)
+	ld xiz, (IndexedTable_Base:24)                        ; FA6F9F  e2 18 f0 60 26   ld XIZ,(0x60f018)
 	xor D,D                                       ; FA6FA4  cc d4
 	ld e, (0x197c:16)                            ; FA6FA6  c1 7c 19 25   ld E,(0x197c)
 	cp E,0xff                                     ; FA6FAA  cd cf ff
@@ -75410,7 +75410,7 @@ Queue2C00_PublishStagedIfPending_StaleCopy:
 	xor H,H                                              ; FAA1AE  ce d6
 	ld L,C                                               ; FAA1B0  cb 8f
 	sla hl, 0x02                                         ; FAA1B2  db ec 02
-	ld xix, (0x60f018:24)                               ; FAA1B5  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA1B5  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA1BA  e3 07 f0 ec 24
 	cp XIX,0xffffffff                                    ; FAA1BF  ec cf ff ff ff ff
 	jr z, .LFAA1FA                                       ; FAA1C5  66 33
@@ -75478,7 +75478,7 @@ ParamChange_Notify_StaleCopy:
 	xor H,H                                              ; FAA22A  ce d6
 	ld L,C                                               ; FAA22C  cb 8f
 	sla hl, 0x02                                         ; FAA22E  db ec 02
-	ld xix, (0x60f018:24)                               ; FAA231  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA231  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA236  e3 07 f0 ec 24
 	cp XIX,0xffffffff                                    ; FAA23B  ec cf ff ff ff ff
 	jr z, .LFAA266                                       ; FAA241  66 23
@@ -75518,7 +75518,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	xor H,H                                              ; FAA271  ce d6
 	ld L,C                                               ; FAA273  cb 8f
 	sla hl, 0x02                                         ; FAA275  db ec 02
-	ld xix, (0x60f018:24)                               ; FAA278  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA278  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA27D  e3 07 f0 ec 24
 	cp XIX,0xffffffff                                    ; FAA282  ec cf ff ff ff ff
 	jr z, .LFAA2AD                                       ; FAA288  66 23
@@ -75552,7 +75552,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	ld L,C                                               ; FAA2C6  cb 8f
 	sla hl, 0x02                                         ; FAA2C8  db ec 02
 	ld (0x60f174:24), hl                                ; FAA2CB  f2 74 f1 60 53
-	ld xix, (0x60f018:24)                               ; FAA2D0  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA2D0  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA2D5  e3 07 f0 ec 24
 	and (XIX+0x01),0x80                                  ; FAA2DA  8c 01 3c 80
 	or (XIX+0x01),B                                      ; FAA2DE  8c 01 ea
@@ -75562,7 +75562,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	ld iy, (0x60f174:24)                                ; FAA2E8  d2 74 f1 60 25
 	add IY,0x0080                                        ; FAA2ED  dd c8 80 00
 	extz XIY                                             ; FAA2F1  ed 12
-	add xiy, (0x60f018:24)                           ; FAA2F3  e2 18 f0 60 85
+	add xiy, (IndexedTable_Base:24)                           ; FAA2F3  e2 18 f0 60 85
 	ld XIY,(XIY)                                         ; FAA2F8  a5 25
 	ld (XIY+0x1c),H                                      ; FAA2FA  bd 1c 46
 	ld (XIY+0x1b),L                                      ; FAA2FD  bd 1b 47
@@ -75973,7 +75973,7 @@ ParamRecord_WriteFieldIfChanged:
 	xor H,H                                              ; FAA5AE  ce d6
 	ld L,C                                               ; FAA5B0  cb 8f
 	sla hl, 0x02                                         ; FAA5B2  db ec 02
-	ld xix, (0x60f018:24)                               ; FAA5B5  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA5B5  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA5BA  e3 07 f0 ec 24
 	cp XIX,0xffffffff                                    ; FAA5BF  ec cf ff ff ff ff
 	jr z, .LFAA5FA                                       ; FAA5C5  66 33
@@ -76084,7 +76084,7 @@ ParamRecord_WriteFieldAndStage:
 	xor H,H                                              ; FAA62A  ce d6
 	ld L,C                                               ; FAA62C  cb 8f
 	sla hl, 0x02                                         ; FAA62E  db ec 02
-	ld xix, (0x60f018:24)                               ; FAA631  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA631  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA636  e3 07 f0 ec 24
 	cp XIX,0xffffffff                                    ; FAA63B  ec cf ff ff ff ff
 	jr z, .LFAA666                                       ; FAA641  66 23
@@ -76127,7 +76127,7 @@ ParamRecord_WriteFieldAndStage_Copy:
 	xor H,H                                              ; FAA671  ce d6
 	ld L,C                                               ; FAA673  cb 8f
 	sla hl, 0x02                                         ; FAA675  db ec 02
-	ld xix, (0x60f018:24)                               ; FAA678  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA678  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA67D  e3 07 f0 ec 24
 	cp XIX,0xffffffff                                    ; FAA682  ec cf ff ff ff ff
 	jr z, .LFAA6AD                                       ; FAA688  66 23
@@ -76162,7 +76162,7 @@ sub_FAA6B1:
 	ld L,C                                               ; FAA6C6  cb 8f
 	sla hl, 0x02                                         ; FAA6C8  db ec 02
 	ld (0x60f174:24), hl                                ; FAA6CB  f2 74 f1 60 53
-	ld xix, (0x60f018:24)                               ; FAA6D0  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FAA6D0  e2 18 f0 60 24
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                       ; FAA6D5  e3 07 f0 ec 24
 	and (XIX+0x01),0x80                                  ; FAA6DA  8c 01 3c 80
 	or (XIX+0x01),B                                      ; FAA6DE  8c 01 ea
@@ -76172,7 +76172,7 @@ sub_FAA6B1:
 	ld iy, (0x60f174:24)                                ; FAA6E8  d2 74 f1 60 25
 	add IY,0x0080                                        ; FAA6ED  dd c8 80 00
 	extz XIY                                             ; FAA6F1  ed 12
-	add xiy, (0x60f018:24)                           ; FAA6F3  e2 18 f0 60 85
+	add xiy, (IndexedTable_Base:24)                           ; FAA6F3  e2 18 f0 60 85
 	ld XIY,(XIY)                                         ; FAA6F8  a5 25
 	ld (XIY+0x1c),H                                      ; FAA6FA  bd 1c 46
 	ld (XIY+0x1b),L                                      ; FAA6FD  bd 1b 47
@@ -76336,7 +76336,7 @@ sub_FAA82A:
 	ld (0x60f330:24), h                                 ; FAA868  f2 30 f3 60 46
 	ld (0x60f01e:24), 0x7f                             ; FAA86D  f2 1e f0 60 00 7f
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAA873  f2 ea cd fa 31
-	ld (0x60f018:24), xbc                               ; FAA878  f2 18 f0 60 61
+	ld (IndexedTable_Base:24), xbc                               ; FAA878  f2 18 f0 60 61
 	calr sub_FAA82A_Nop                                      ; FAA87D  1e 8e 03
 	popw hl                                              ; FAA880  4b
 	ret                                                  ; FAA881  0e
@@ -76442,7 +76442,7 @@ sub_FAA8F0:
 	ret                                                  ; FAA94D  0e
 sub_FAA94E:
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAA94E  f2 ea cd fa 31
-	ld (0x60f018:24), xbc                               ; FAA953  f2 18 f0 60 61
+	ld (IndexedTable_Base:24), xbc                               ; FAA953  f2 18 f0 60 61
 	m_cp_mi8 MB24, 0x60f2d8, 0x00                        ; FAA958  c2 d8 f2 60 3f 00
 	jr z, .LFAA963                                       ; FAA95E  66 03
 	calr sub_FAABB3                                      ; FAA960  1e 50 02
@@ -78027,7 +78027,7 @@ sub_FAB7E6:
 	m_res 0, MD24, 0x60f0c6                              ; FAB7EF  f2 c6 f0 60 b0
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAB7F4  f2 ea cd fa 31
 sub_FAB7F9:
-	ld (0x60f018:24), xbc                               ; FAB7F9  f2 18 f0 60 61
+	ld (IndexedTable_Base:24), xbc                               ; FAB7F9  f2 18 f0 60 61
 	calr List2030_TranslateToQueue2C00                                      ; FAB7FE  1e 1e 00
 	push XDE                                             ; FAB801  3a
 	push XHL                                             ; FAB802  3b
@@ -81700,7 +81700,7 @@ Evt2030_ProgChgMode3_Notify:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	ld WA,(XIX)
 	ld (0x60f010:24), wa
@@ -81732,7 +81732,7 @@ Evt2030_Class00to1F_Op03:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	ld L,B
 	mx8_ld_rm MXB, ra_IX, rb_L, r5
@@ -81762,7 +81762,7 @@ Evt2030_Class00to1F_Op04:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	ld L,B
 	mx8_ld_rm MXB, ra_IX, rb_L, r5
@@ -81785,7 +81785,7 @@ Evt2030_Class00to1F_Op05:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	ld L,B
 	mx8_ld_rm MXB, ra_IX, rb_L, r5
@@ -81861,7 +81861,7 @@ Evt2030_Class20to3F_Op1A:   ; entry: pointer-table entry
 	extz HL
 	ld l, (0x60f0bc:24)
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	ld E,(XIX+0x18)
 	ld D,E
@@ -82619,7 +82619,7 @@ ParamApply_PartProgNormal:   ; entry: pointer-table entry
 	xor H,H
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	cp XIX,0xffffffff
 	jr z, .LFAE0FB
@@ -82668,7 +82668,7 @@ ParamApply_PartProgTech:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	cp XIX,0xffffffff
 	jr z, .LFAE187
@@ -82735,7 +82735,7 @@ ParamApply_PartProgMode3:   ; entry: pointer-table entry
 	xor H,H
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	cp XIX,0xffffffff
 	jr z, .LFAE222
@@ -82942,7 +82942,7 @@ Evt2030_ProgChgNormal_Notify:   ; entry: pointer-table entry
 	ld L,C
 	or L,0x20
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	pushw bc
 	xor D,D
@@ -82969,7 +82969,7 @@ Evt2030_ProgChgTech_Notify:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	pushw bc
 	extz DE
@@ -83534,7 +83534,7 @@ SeqBuf_PutProgramEvent:   ; entry: pointer-table entry
 	ld (xix+), wa
 	ld wa, (0x60f310:24)
 	ld (xix+), wa
-	ld xiy, (0x60f018:24)
+	ld xiy, (IndexedTable_Base:24)
 	extz WA
 	sll wa, 0x02
 	mx_ld_rm MXL, ra_IY, ra_WA, r5
@@ -83978,7 +83978,7 @@ SeqEvt_WriteRecordField:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	cp XIX,0xffffffff
 	jr z, .LFAEF23
@@ -84690,7 +84690,7 @@ SeqEvt_ApplyProgramEvent:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
-	ld xix, (0x60f018:24)
+	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	cp XIX,0xffffffff
 	jrl z, SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2
@@ -92092,7 +92092,7 @@ sub_FB5425:
 	lda xbc, (xiz-18)                                    ; FB549F  be ee 31
 	push XBC                                             ; FB54A2  39
 	call sub_FB6F24                                      ; FB54A3  1d 24 6f fb
-	ld xbc, (0x60f018:24)                               ; FB54A7  e2 18 f0 60 21
+	ld xbc, (IndexedTable_Base:24)                               ; FB54A7  e2 18 f0 60 21
 	ld (xiz-4), xbc                                      ; FB54AC  be fc 61
 	sub XWA,XWA                                          ; FB54AF  e8 a0
 	dec 1,XWA                                            ; FB54B1  e8 69
@@ -96322,7 +96322,7 @@ sub_FB791C:
 sub_FB7A02:
 	link XIZ,0xfff8                                      ; FB7A02  ee 0c f8 ff
 	push XIX                                             ; FB7A06  3c
-	ld xbc, (0x60f018:24)                               ; FB7A07  e2 18 f0 60 21
+	ld xbc, (IndexedTable_Base:24)                               ; FB7A07  e2 18 f0 60 21
 	ld (xiz-4), xbc                                      ; FB7A0C  be fc 61
 	sub XWA,XWA                                          ; FB7A0F  e8 a0
 	dec 1,XWA                                            ; FB7A11  e8 69
@@ -169427,7 +169427,7 @@ sub_FE715E:
 	ret                                                  ; FE71B2  0e
 	link XIZ,0x0000                                      ; FE71B3  ee 0c 00 00
 	push XIX                                             ; FE71B7  3c
-	ld xix, (0x60f018:24)                               ; FE71B8  e2 18 f0 60 24
+	ld xix, (IndexedTable_Base:24)                               ; FE71B8  e2 18 f0 60 24
 	ld c, 0x04:opc                                          ; FE71BD  23 04
 	m_mul MBD+r6, 0x08, 3                                ; FE71BF  8e 08 43
 	extz XBC                                             ; FE71C2  e9 12

@@ -366,5 +366,36 @@
 	.equ MIDI_Fg_Flags,				0x0963	; bit 6 = first data byte pending -- MIDI_Fg_StashFirstData, MIDI_Fg_DataByte
 	.equ MIDI_Fg_SysExState,			0x0964	; bit 0 = SysEx open, bit 1 = system-common gate; 4 = closed, 0 = abandoned -- MIDI_DrainQueue__status, MIDI_Fg_SysExData
 
+; ---- wsa1/notes/FINDINGS-prom_a-midi-in-routing-and-small-cells.md -- "1. The staged MIDI-in message and its routing"
+	.equ MidiIn_MsgStatus,				0x1940	; the staged message's status byte -- MidiIn_FetchMessage_PortA/B
+	.equ MidiIn_MsgData1,				0x1941	; its first data byte -- MidiIn_FetchMessage_PortA/B; MidiIn_ControlChange
+	.equ MidiIn_MsgData2,				0x1942	; its second data byte -- MidiIn_FetchMessage_PortA/B; MidiIn_ControlChange
+	.equ MidiIn_MsgPortTag,				0x1943	; 0x00 port A, 0x10 port B -- MidiIn_FetchMessage_PortA/B
+	.equ MidiIn_RouteCursor,			0x1974	; offset into the part list at 0x1820 -- MidiIn_RouteChannelMessage
+	.equ MidiIn_RouteCount,				0x1975	; the part list's count -- MidiIn_RouteChannelMessage
+	.equ MidiIn_CurrentPart,			0x1976	; the part the message is applied to -- MidiIn_RouteChannelMessage; MidiIn_CC*_ParamTable readers
+	.equ MidiIn_RouteRemaining,			0x1977	; parts left in the list -- MidiIn_RouteChannelMessage
+	.equ MidiIn_ChannelTag,				0x197e	; channel | port tag, 0..0x1F -- MidiIn_RouteChannelMessage
+
+; ---- wsa1/notes/FINDINGS-prom_a-midi-in-routing-and-small-cells.md -- "2. Five more cells"
+	.equ MIDI_RX_OverflowCount,			0x0932	; 8-bit count of input-queue overflows -- the MIDI_RX banner
+	.equ EditValue_Max,				0x20c8	; ceiling, signed 16-bit -- EditValue_ApplyStep
+	.equ EditValue_Min,				0x20ca	; floor, signed 16-bit -- EditValue_ApplyStep
+	.equ EditValue_Value,				0x20cc	; the value a step is applied to -- EditValue_ApplyStep
+	.equ EditValue_Step,				0x20ce	; the step -- EditValue_ApplyStep, EditStep_Lookup
+	.equ LCD_TextCharsLeft,				0x259a	; characters left to draw -- the packed-text services
+	.equ LCD_TextGlyphPtr,				0x259f	; 32-bit pointer to the current glyph's bitmap -- the packed-text services; TextShift_LoadGlyph8/16
+	.equ IndexedTable_Base,				0x60f018	; 32-bit base of the pointer table IndexedTable_GetPtr indexes -- FINDINGS-prom_b-thunk-table.md
+
+; ---- wsa1/notes/FINDINGS-prom_a-midi-in-routing-and-small-cells.md -- "3. The rest of the MIDI_RX banner's RAM list"
+	.equ MIDI_Parser_SavedXWA,			0x0900	; the interrupt parser's saved XWA between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
+	.equ MIDI_Parser_SavedXBC,			0x0904	; the interrupt parser's saved XBC between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
+	.equ MIDI_Parser_SavedXDE,			0x0908	; the interrupt parser's saved XDE between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
+	.equ MIDI_Parser_SavedXHL,			0x090c	; the interrupt parser's saved XHL between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
+	.equ MIDI_Parser_SavedXIX,			0x0910	; the interrupt parser's saved XIX between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
+	.equ MIDI_Parser_SavedXIY,			0x0914	; the interrupt parser's saved XIY between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
+	.equ MIDI_Parser_SavedXIZ,			0x0918	; the interrupt parser's saved XIZ between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
+	.equ MIDI_ActivityFlags,			0x216f	; bit 0 set on every MIDI byte actually delivered -- the MIDI_RX banner; PanelLed_RequestIfBlinkEnableChanged
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,				0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

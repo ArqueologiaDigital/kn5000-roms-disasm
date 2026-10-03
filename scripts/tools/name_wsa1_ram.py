@@ -418,6 +418,33 @@ GROUPS = [
         0x0964: ("MIDI_Fg_SysExState", "bit 0 = SysEx open, bit 1 = system-common gate; 4 = closed, 0 = abandoned", "MIDI_DrainQueue__status, MIDI_Fg_SysExData"),
         0x0931: ("MIDI_RX_ErrorCount", "8-bit receive-error counter", "MIDI_RX_ErrorReset"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-midi-in-routing-and-small-cells.md", "1. The staged MIDI-in message and its routing", {
+        0x1940: ("MidiIn_MsgStatus", "the staged message's status byte", "MidiIn_FetchMessage_PortA/B"),
+        0x1941: ("MidiIn_MsgData1", "its first data byte", "MidiIn_FetchMessage_PortA/B; MidiIn_ControlChange"),
+        0x1942: ("MidiIn_MsgData2", "its second data byte", "MidiIn_FetchMessage_PortA/B; MidiIn_ControlChange"),
+        0x1943: ("MidiIn_MsgPortTag", "0x00 port A, 0x10 port B", "MidiIn_FetchMessage_PortA/B"),
+        0x1974: ("MidiIn_RouteCursor", "offset into the part list at 0x1820", "MidiIn_RouteChannelMessage"),
+        0x1975: ("MidiIn_RouteCount", "the part list's count", "MidiIn_RouteChannelMessage"),
+        0x1976: ("MidiIn_CurrentPart", "the part the message is applied to", "MidiIn_RouteChannelMessage; MidiIn_CC*_ParamTable readers"),
+        0x1977: ("MidiIn_RouteRemaining", "parts left in the list", "MidiIn_RouteChannelMessage"),
+        0x197E: ("MidiIn_ChannelTag", "channel | port tag, 0..0x1F", "MidiIn_RouteChannelMessage"),
+    }),
+    ("wsa1/notes/FINDINGS-prom_a-midi-in-routing-and-small-cells.md", "2. Five more cells", {
+        0x60F018: ("IndexedTable_Base", "32-bit base of the pointer table IndexedTable_GetPtr indexes", "FINDINGS-prom_b-thunk-table.md"),
+        0x20C8: ("EditValue_Max", "ceiling, signed 16-bit", "EditValue_ApplyStep"),
+        0x20CA: ("EditValue_Min", "floor, signed 16-bit", "EditValue_ApplyStep"),
+        0x20CC: ("EditValue_Value", "the value a step is applied to", "EditValue_ApplyStep"),
+        0x20CE: ("EditValue_Step", "the step", "EditValue_ApplyStep, EditStep_Lookup"),
+        0x259A: ("LCD_TextCharsLeft", "characters left to draw", "the packed-text services"),
+        0x259F: ("LCD_TextGlyphPtr", "32-bit pointer to the current glyph's bitmap", "the packed-text services; TextShift_LoadGlyph8/16"),
+        0x0932: ("MIDI_RX_OverflowCount", "8-bit count of input-queue overflows", "the MIDI_RX banner"),
+    }),
+    ("wsa1/notes/FINDINGS-prom_a-midi-in-routing-and-small-cells.md", "3. The rest of the MIDI_RX banner's RAM list", {
+        **{0x0900 + 4 * k: ("MIDI_Parser_Saved" + r, "the interrupt parser's saved " + r + " between interrupts",
+                            "MIDI_Parser_LoadContext / _SaveContext / _ClearContext")
+           for k, r in enumerate(["XWA", "XBC", "XDE", "XHL", "XIX", "XIY", "XIZ"])},
+        0x216F: ("MIDI_ActivityFlags", "bit 0 set on every MIDI byte actually delivered", "the MIDI_RX banner; PanelLed_RequestIfBlinkEnableChanged"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
@@ -501,7 +528,9 @@ def main():
             p = f if os.path.isabs(f) else os.path.join(REPO, f)
             for k, l in enumerate(open(p, "rb").read().decode("latin-1").split("\n")):
                 code = l.split(";")[0]
-                if not code.strip() or code.strip().startswith("."):
+                # a data directive is a value, also after a label: `Draw_..._Data:\t.short\t0x0910` is a
+                # KeyValueList key, not MIDI_Parser_SavedXIX (2026-10-03)
+                if not code.strip() or re.sub(r'^[\w.$]+:\s*', '', code.strip()).startswith("."):
                     continue
                 for m in re.finditer(r'(0x[0-9a-fA-F]+|\b\d+\b)', code):
                     v = int(m.group(1), 0)

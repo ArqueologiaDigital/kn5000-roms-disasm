@@ -72,7 +72,7 @@
 IndexedTable_GetPtr:
 	link XIZ,0x0000                               ; FB77D8/F55321  ee 0c 00 00   link XIZ,0x0000
 	push XIX                                      ; FB77DC/F55325  3c   push XIX
-	ld xix, (0x60f018:24)                        ; FB77DD/F55326  e2 18 f0 60 24   ld XIX,(0x60f018)
+	ld xix, (IndexedTable_Base:24)                        ; FB77DD/F55326  e2 18 f0 60 24   ld XIX,(0x60f018)
 	ld c, 0x04:opc                                   ; FB77E2/F5532B  23 04   ld C,0x04
 	m_mul MBD+r6, 0x08, 3                         ; FB77E4/F5532D  8e 08 43   mul BC,(XIZ+0x08)
 	extz XBC                                      ; FB77E7/F55330  e9 12   extz XBC

@@ -76200,7 +76200,7 @@ sub_F389A2_Join:
 	ret	; F38A5D  ret
 	link XIZ,0x0000	; F38A5E  link XIZ,0x0000
 	push	xix	; F38A62  push XIX
-	ld	xix, (6352920:24)	; F38A63  ld XIX,(0x60f018)
+	ld	xix, (IndexedTable_Base:24)	; F38A63  ld XIX,(0x60f018)
 	ld	c, 4:opc	; F38A68  ld C,0x04
 	m_mul MBD+r6, 0x08, 3	; F38A6A  mul BC,(XIZ+0x08)
 	extz	xbc	; F38A6D  extz XBC
@@ -107188,7 +107188,7 @@ sub_F4F02E:
 	push	xix	; F4F031  push XIX
 	push	xhl	; F4F032  push XHL
 	push	xde	; F4F033  push XDE
-	ld	xiy, (6352920:24)	; F4F034  ld XIY,(0x60f018)
+	ld	xiy, (IndexedTable_Base:24)	; F4F034  ld XIY,(0x60f018)
 	ld	l, (xiz+8)	; F4F039  ld L,(XIZ+0x08)
 	extz	hl	; F4F03C  extz HL
 	sla	hl, 2	; F4F03E  sla 0x02,HL
