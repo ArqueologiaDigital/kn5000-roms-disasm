@@ -2259,6 +2259,10 @@ AdvanceDelay_DrawFieldCursor:
 	ld XIY,0x00f3b3a7                                    ; F80030  45 a7 b3 f3 00
 	call T_DLB_Handler_Array8                                        ; F80035  1d 1c 18 f4
 	ret                                                  ; F80039  0e
+; LcdKeyRow2_AdvanceDelay_StageZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_AdvanceDelay_StageZero slot 0x09.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow2_AdvanceDelay_StageZero:
 	bit 0x07,W                                           ; F8003A  c8 33 07
 	jr z, .LF80058                                       ; F8003D  66 19
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x02                          ; F8003F  c1 e5 0d 3f 02
@@ -2270,6 +2274,10 @@ AdvanceDelay_DrawFieldCursor:
 	calr AdvanceDelay_DrawFieldCursor                                      ; F80055  1e c2 ff
 .LF80058:
 	ret                                                  ; F80058  0e
+; LcdKeyRow3_AdvanceDelay_StageZero: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_AdvanceDelay_StageZero slot 0x0A.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow3_AdvanceDelay_StageZero:
 	bit 0x07,W                                           ; F80059  c8 33 07
 	jr z, .LF80079                                       ; F8005C  66 1b
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x03                          ; F8005E  c1 e5 0d 3f 03
@@ -2297,6 +2305,10 @@ AdvanceDelay_DrawValues:
 	ld XIX,0x00f3b3a7                                    ; F80093  44 a7 b3 f3 00
 	call T_DisplayListB_Run                              ; F80098  1d f4 17 f4
 	ret                                                  ; F8009C  0e
+; LcdKeyRow4_AdvanceDelay_StageZero: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_AdvanceDelay_StageZero slot 0x0B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow4_AdvanceDelay_StageZero:
 	bit 0x07,W                                           ; F8009D  c8 33 07
 	jr z, .LF800BD                                       ; F800A0  66 1b
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x04                          ; F800A2  c1 e5 0d 3f 04
@@ -2309,9 +2321,18 @@ AdvanceDelay_DrawValues:
 	jr .LF800BD                                          ; F800BB  68 00
 .LF800BD:
 	ret                                                  ; F800BD  0e
+; ButtonTable_AdvanceDelay_StageZero_Nop12: a bare ret -- ButtonTable_AdvanceDelay_StageZero slot 0x0C.
+ButtonTable_AdvanceDelay_StageZero_Nop12:
 	ret                                                  ; F800BE  0e
+; ButtonTable_AdvanceDelay_StageZero_Nop13: a bare ret -- ButtonTable_AdvanceDelay_StageZero slot 0x0D.
+ButtonTable_AdvanceDelay_StageZero_Nop13:
 	ret                                                  ; F800BF  0e
+; ButtonTable_AdvanceDelay_StageZero_Nop14: a bare ret -- ButtonTable_AdvanceDelay_StageZero slot 0x0E.
+ButtonTable_AdvanceDelay_StageZero_Nop14:
 	ret                                                  ; F800C0  0e
+; ExitKey_AdvanceDelay_StageZero: the EXIT key; ButtonTable_AdvanceDelay_StageZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_AdvanceDelay_StageZero:
 	bit 0x07,W                                           ; F800C1  c8 33 07
 	jr z, .LF800C8                                       ; F800C4  66 02
 	jr .LF800CE                                          ; F800C6  68 06
@@ -2319,7 +2340,14 @@ AdvanceDelay_DrawValues:
 	ldw (UI_Request:16), 0x801a                              ; F800C8  f1 70 20 02 1a 80
 .LF800CE:
 	ret                                                  ; F800CE  0e
+; ButtonTable_AdvanceDelay_StageZero_Nop16: a bare ret -- ButtonTable_AdvanceDelay_StageZero slots 0x10, 0x11,
+;   0x12, 0x13, 0x14.
+ButtonTable_AdvanceDelay_StageZero_Nop16:
 	ret                                                  ; F800CF  0e
+; AdvanceDelay_StageZero_Button21 -- ButtonTable_AdvanceDelay_StageZero slot 0x15, NOT NAMED: slot 0x15 is only
+;   the VARIANT-1 already-held rewrite of base code 0x04; the SX-WSA1R is variant 2, so the slot is never
+;   delivered here.
+AdvanceDelay_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits                                ; F800D0  f1 75 20 c9
 	jr z, .LF800DA                                       ; F800D4  66 04
 	call T_Blink_Stop                                    ; F800D6  1d 24 2e f4
@@ -2335,39 +2363,89 @@ AdvanceDelay_DrawValues:
 .LF800F3:
 	calr AdvanceDelay_DrawValues                                      ; F800F3  1e 90 ff
 	ret                                                  ; F800F6  0e
+; ButtonTable_AdvanceDelay_StageZero_Nop22: a bare ret -- ButtonTable_AdvanceDelay_StageZero slots 0x16, 0x17,
+;   0x18, 0x19, 0x1A.
+ButtonTable_AdvanceDelay_StageZero_Nop22:
 	ret                                                  ; F800F7  0e
+; NumberPadKey_AdvanceDelay_StageZero: the twelve-key number pad (0-9, +/-, ENTER);
+;   ButtonTable_AdvanceDelay_StageZero slot 0x1B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+NumberPadKey_AdvanceDelay_StageZero:
 	calr AdvanceDelay_NumberPad                                      ; F800F8  1e 34 00
 	ret                                                  ; F800FB  0e
+; ButtonTable_AdvanceDelay_StageZero_Nop28: a bare ret -- ButtonTable_AdvanceDelay_StageZero slots 0x1C, 0x1D,
+;   0x1E, 0x1F.
+ButtonTable_AdvanceDelay_StageZero_Nop28:
 	ret                                                  ; F800FC  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop0: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x00.
+ButtonTable_AdvanceDelay_StageNonZero_Nop0:
 	ret                                                  ; F800FD  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop1: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x01.
+ButtonTable_AdvanceDelay_StageNonZero_Nop1:
 	ret                                                  ; F800FE  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop2: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x02.
+ButtonTable_AdvanceDelay_StageNonZero_Nop2:
 	ret                                                  ; F800FF  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop3: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x03.
+ButtonTable_AdvanceDelay_StageNonZero_Nop3:
 	ret                                                  ; F80100  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop4: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x04.
+ButtonTable_AdvanceDelay_StageNonZero_Nop4:
 	ret                                                  ; F80101  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop5: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x05.
+ButtonTable_AdvanceDelay_StageNonZero_Nop5:
 	ret                                                  ; F80102  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop6: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x06.
+ButtonTable_AdvanceDelay_StageNonZero_Nop6:
 	ret                                                  ; F80103  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop7: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x07.
+ButtonTable_AdvanceDelay_StageNonZero_Nop7:
 	ret                                                  ; F80104  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop8: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x08.
+ButtonTable_AdvanceDelay_StageNonZero_Nop8:
 	ret                                                  ; F80105  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop9: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x09.
+ButtonTable_AdvanceDelay_StageNonZero_Nop9:
 	ret                                                  ; F80106  0e
+; LcdKeyRow3_AdvanceDelay_StageNonZero: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks
+;   the CP2 side (set) or the CP1 side (clear); ButtonTable_AdvanceDelay_StageNonZero slot 0x0A.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow3_AdvanceDelay_StageNonZero:
 	bit 0x07,W                                           ; F80107  c8 33 07
 	jr nz, .LF80115                                      ; F8010A  6e 09
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F8010C  c1 75 20 3c 6f
 	call T_F42A80                                        ; F80111  1d 80 2a f4
 .LF80115:
 	ret                                                  ; F80115  0e
+; LcdKeyRow4_AdvanceDelay_StageNonZero: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks
+;   the CP2 side (set) or the CP1 side (clear); ButtonTable_AdvanceDelay_StageNonZero slot 0x0B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow4_AdvanceDelay_StageNonZero:
 	bit 0x07,W                                           ; F80116  c8 33 07
 	jr nz, .LF8011F                                      ; F80119  6e 04
 	call T_F42A84                                        ; F8011B  1d 84 2a f4
 .LF8011F:
 	ret                                                  ; F8011F  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop12: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x0C.
+ButtonTable_AdvanceDelay_StageNonZero_Nop12:
 	ret                                                  ; F80120  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop13: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x0D.
+ButtonTable_AdvanceDelay_StageNonZero_Nop13:
 	ret                                                  ; F80121  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop14: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slot 0x0E.
+ButtonTable_AdvanceDelay_StageNonZero_Nop14:
 	ret                                                  ; F80122  0e
+; ExitKey_AdvanceDelay_StageNonZero: the EXIT key; ButtonTable_AdvanceDelay_StageNonZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_AdvanceDelay_StageNonZero:
 	bit 0x07,W                                           ; F80123  c8 33 07
 	jr nz, .LF8012C                                      ; F80126  6e 04
 	call T_F42A84                                        ; F80128  1d 84 2a f4
 .LF8012C:
 	ret                                                  ; F8012C  0e
+; ButtonTable_AdvanceDelay_StageNonZero_Nop16: a bare ret -- ButtonTable_AdvanceDelay_StageNonZero slots 0x10,
+;   0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_AdvanceDelay_StageNonZero_Nop16:
 	ret                                                  ; F8012D  0e
 	ret                                                  ; F8012E  0e
 ; AdvanceDelay_NumberPad -- NUMBER PAD key on the ADVANCE/DELAY screen: dispatch on the keypad code (0x2267)
@@ -2662,49 +2740,116 @@ S0ngC0py_DrawTracks:
 	ret                                                  ; F803C7  0e
 ScreenLeave_S0ngC0py_Nop:
 	ret                                                  ; F803C8  0e
+; SoftKeyCol1_S0ngC0py_StageZero: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x00, 0x11.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol1_S0ngC0py_StageZero:
 	call T_F42A14                                        ; F803C9  1d 14 2a f4
 	call S0ngC0py_DrawFromSong                                      ; F803CD  1d ec 02 f8
 	ret                                                  ; F803D1  0e
+; SoftKeyCol2_S0ngC0py_StageZero: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x01, 0x12.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol2_S0ngC0py_StageZero:
 	call T_F42A10                                        ; F803D2  1d 10 2a f4
 	call S0ngC0py_DrawFromSong                                      ; F803D6  1d ec 02 f8
 	ret                                                  ; F803DA  0e
+; SoftKeyCol3_S0ngC0py_StageZero: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x02, 0x13.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol3_S0ngC0py_StageZero:
 	call T_F42A1C                                        ; F803DB  1d 1c 2a f4
 	call S0ngC0py_DrawTracks                                      ; F803DF  1d 84 03 f8
 	ret                                                  ; F803E3  0e
+; SoftKeyCol4_S0ngC0py_StageZero: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x03, 0x14.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol4_S0ngC0py_StageZero:
 	call T_F42A18                                        ; F803E4  1d 18 2a f4
 	call S0ngC0py_DrawTracks                                      ; F803E8  1d 84 03 f8
 	ret                                                  ; F803EC  0e
+; SoftKeyCol5_S0ngC0py_StageZero: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x04, 0x15.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol5_S0ngC0py_StageZero:
 	call T_F42A24                                        ; F803ED  1d 24 2a f4
 	call S0ngC0py_DrawToSong                                      ; F803F1  1d 38 03 f8
 	ret                                                  ; F803F5  0e
+; SoftKeyCol6_S0ngC0py_StageZero: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x05, 0x16.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol6_S0ngC0py_StageZero:
 	call T_F42A20                                        ; F803F6  1d 20 2a f4
 	call S0ngC0py_DrawToSong                                      ; F803FA  1d 38 03 f8
 	ret                                                  ; F803FE  0e
+; SoftKeyCol7_S0ngC0py_StageZero: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x06, 0x17.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol7_S0ngC0py_StageZero:
 	call T_F42A2C                                        ; F803FF  1d 2c 2a f4
 	call S0ngC0py_DrawTracks                                      ; F80403  1d 84 03 f8
 	ret                                                  ; F80407  0e
+; SoftKeyCol8_S0ngC0py_StageZero: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x07, 0x18.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol8_S0ngC0py_StageZero:
 	call T_F42A28                                        ; F80408  1d 28 2a f4
 	call S0ngC0py_DrawTracks                                      ; F8040C  1d 84 03 f8
 	ret                                                  ; F80410  0e
+; ButtonTable_S0ngC0py_StageZero_Nop8: a bare ret -- ButtonTable_S0ngC0py_StageZero slot 0x08.
+ButtonTable_S0ngC0py_StageZero_Nop8:
 	ret                                                  ; F80411  0e
+; LcdKeyRow2_S0ngC0py_StageZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2
+;   side (set) or the CP1 side (clear); ButtonTable_S0ngC0py_StageZero slot 0x09.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow2_S0ngC0py_StageZero:
 	call T_F42A30                                        ; F80412  1d 30 2a f4
 	ret                                                  ; F80416  0e
+; ButtonTable_S0ngC0py_StageZero_Nop10: a bare ret -- ButtonTable_S0ngC0py_StageZero slots 0x0A, 0x0B, 0x0C,
+;   0x0D, 0x0E.
+ButtonTable_S0ngC0py_StageZero_Nop10:
 	ret                                                  ; F80417  0e
+; ExitKey_S0ngC0py_StageZero: the EXIT key; ButtonTable_S0ngC0py_StageZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_S0ngC0py_StageZero:
 	bit 0x07,W                                           ; F80418  c8 33 07
 	jr nz, .LF80425                                      ; F8041B  6e 08
 	ldw (UI_Request:16), 0x801a                              ; F8041D  f1 70 20 02 1a 80
 	jr .LF80425                                          ; F80423  68 00
 .LF80425:
 	ret                                                  ; F80425  0e
+; ButtonTable_S0ngC0py_StageZero_Nop16: a bare ret -- ButtonTable_S0ngC0py_StageZero slots 0x10, 0x19, 0x1A,
+;   0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_S0ngC0py_StageZero_Nop16:
 	ret                                                  ; F80426  0e
+; ButtonTable_S0ngC0py_StageNonZero_Nop0: a bare ret -- ButtonTable_S0ngC0py_StageNonZero slots 0x00, 0x01,
+;   0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08.
+ButtonTable_S0ngC0py_StageNonZero_Nop0:
 	ret                                                  ; F80427  0e
+; LcdKeyRow2_S0ngC0py_StageNonZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_S0ngC0py_StageNonZero slot 0x09.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow2_S0ngC0py_StageNonZero:
 	call T_F42A30                                        ; F80428  1d 30 2a f4
 	ret                                                  ; F8042C  0e
+; LcdKeyRow3_S0ngC0py_StageNonZero: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_S0ngC0py_StageNonZero slot 0x0A.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow3_S0ngC0py_StageNonZero:
 	call T_F42A34                                        ; F8042D  1d 34 2a f4
 	ret                                                  ; F80431  0e
+; ButtonTable_S0ngC0py_StageNonZero_Nop11: a bare ret -- ButtonTable_S0ngC0py_StageNonZero slots 0x0B, 0x0C,
+;   0x0D, 0x0E.
+ButtonTable_S0ngC0py_StageNonZero_Nop11:
 	ret                                                  ; F80432  0e
+; ExitKey_S0ngC0py_StageNonZero: the EXIT key; ButtonTable_S0ngC0py_StageNonZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_S0ngC0py_StageNonZero:
 	call T_F42A34                                        ; F80433  1d 34 2a f4
 	ret                                                  ; F80437  0e
+; ButtonTable_S0ngC0py_StageNonZero_Nop16: a bare ret -- ButtonTable_S0ngC0py_StageNonZero slots 0x10, 0x11,
+;   0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_S0ngC0py_StageNonZero_Nop16:
 	ret                                                  ; F80438  0e
 ; Paint_N0teChange -- paints the screen whose own text reads "N0TE CHANGE", "TARGET NOTE", "TRACK         :"
 ;
@@ -2789,10 +2934,22 @@ Paint_N0teChange:
 ScreenLeaveBody_N0teChange:
 	call T_F42A8C                                        ; F804EC  1d 8c 2a f4
 	ret                                                  ; F804F0  0e
+; ButtonTable_N0teChange_StageZero_Nop0: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x00.
+ButtonTable_N0teChange_StageZero_Nop0:
 	ret                                                  ; F804F1  0e
+; ButtonTable_N0teChange_StageZero_Nop1: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x01.
+ButtonTable_N0teChange_StageZero_Nop1:
 	ret                                                  ; F804F2  0e
+; ButtonTable_N0teChange_StageZero_Nop2: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x02.
+ButtonTable_N0teChange_StageZero_Nop2:
 	ret                                                  ; F804F3  0e
+; ButtonTable_N0teChange_StageZero_Nop3: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x03.
+ButtonTable_N0teChange_StageZero_Nop3:
 	ret                                                  ; F804F4  0e
+; SoftKeyCol5_N0teChange_StageZero: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_N0teChange_StageZero slot 0x04.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol5_N0teChange_StageZero:
 	m_bit 1, MD16, UI_RequestBits                                ; F804F5  f1 75 20 c9
 	jr z, .LF804FF                                       ; F804F9  66 04
 	call T_Blink_Stop                                    ; F804FB  1d 24 2e f4
@@ -2808,10 +2965,18 @@ ScreenLeaveBody_N0teChange:
 .LF80518:
 	calr N0teChange_DrawValues                                      ; F80518  1e 9d 00
 	ret                                                  ; F8051B  0e
+; ButtonTable_N0teChange_StageZero_Nop5: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x05.
+ButtonTable_N0teChange_StageZero_Nop5:
 	ret                                                  ; F8051C  0e
+; ButtonTable_N0teChange_StageZero_Nop6: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x06.
+ButtonTable_N0teChange_StageZero_Nop6:
 	ret                                                  ; F8051D  0e
 ButtonTable_N0teChange_StageZero_Nop7:
 	ret                                                  ; F8051E  0e
+; LcdKeyRow2_N0teChange_StageZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2
+;   side (set) or the CP1 side (clear); ButtonTable_N0teChange_StageZero slot 0x09.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow2_N0teChange_StageZero:
 	bit 0x07,W                                           ; F8051F  c8 33 07
 	jr z, .LF80534                                       ; F80522  66 10
 	m_cp_mi8 MB16, N0teChange_Field, 0x01                          ; F80524  c1 ed 0d 3f 01
@@ -2841,6 +3006,10 @@ N0teChange_DrawFieldCursor:
 	ld XIY,0x00f3b05a                                    ; F8055F  45 5a b0 f3 00
 	call T_DLB_Handler_Array8                                        ; F80564  1d 1c 18 f4
 	ret                                                  ; F80568  0e
+; LcdKeyRow3_N0teChange_StageZero: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2
+;   side (set) or the CP1 side (clear); ButtonTable_N0teChange_StageZero slot 0x0A.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow3_N0teChange_StageZero:
 	bit 0x07,W                                           ; F80569  c8 33 07
 	jr z, .LF8057E                                       ; F8056C  66 10
 	m_cp_mi8 MB16, N0teChange_Field, 0x02                          ; F8056E  c1 ed 0d 3f 02
@@ -2859,6 +3028,10 @@ N0teChange_DrawFieldCursor:
 	jr .LF80594                                          ; F80592  68 00
 .LF80594:
 	ret                                                  ; F80594  0e
+; LcdKeyRow4_N0teChange_StageZero: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2
+;   side (set) or the CP1 side (clear); ButtonTable_N0teChange_StageZero slot 0x0B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow4_N0teChange_StageZero:
 	bit 0x07,W                                           ; F80595  c8 33 07
 	jr z, .LF805B0                                       ; F80598  66 16
 	m_cp_mi8 MB16, N0teChange_Field, 0x03                          ; F8059A  c1 ed 0d 3f 03
@@ -2882,9 +3055,18 @@ N0teChange_DrawValues:
 	ld XIX,0x00f3b05a                                    ; F805C5  44 5a b0 f3 00
 	call T_DisplayListB_Run                              ; F805CA  1d f4 17 f4
 	ret                                                  ; F805CE  0e
+; ButtonTable_N0teChange_StageZero_Nop12: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x0C.
+ButtonTable_N0teChange_StageZero_Nop12:
 	ret                                                  ; F805CF  0e
+; ButtonTable_N0teChange_StageZero_Nop13: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x0D.
+ButtonTable_N0teChange_StageZero_Nop13:
 	ret                                                  ; F805D0  0e
+; ButtonTable_N0teChange_StageZero_Nop14: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x0E.
+ButtonTable_N0teChange_StageZero_Nop14:
 	ret                                                  ; F805D1  0e
+; ExitKey_N0teChange_StageZero: the EXIT key; ButtonTable_N0teChange_StageZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_N0teChange_StageZero:
 	bit 0x07,W                                           ; F805D2  c8 33 07
 	jr z, .LF805D9                                       ; F805D5  66 02
 	jr .LF805DF                                          ; F805D7  68 06
@@ -2892,7 +3074,14 @@ N0teChange_DrawValues:
 	ldw (UI_Request:16), 0x801a                              ; F805D9  f1 70 20 02 1a 80
 .LF805DF:
 	ret                                                  ; F805DF  0e
+; ButtonTable_N0teChange_StageZero_Nop16: a bare ret -- ButtonTable_N0teChange_StageZero slots 0x10, 0x11, 0x12,
+;   0x13, 0x14.
+ButtonTable_N0teChange_StageZero_Nop16:
 	ret                                                  ; F805E0  0e
+; N0teChange_StageZero_Button21 -- ButtonTable_N0teChange_StageZero slot 0x15, NOT NAMED: slot 0x15 is only the
+;   VARIANT-1 already-held rewrite of base code 0x04; the SX-WSA1R is variant 2, so the slot is never delivered
+;   here.
+N0teChange_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits                                ; F805E1  f1 75 20 c9
 	jr z, .LF805EB                                       ; F805E5  66 04
 	call T_Blink_Stop                                    ; F805E7  1d 24 2e f4
@@ -2908,24 +3097,53 @@ N0teChange_DrawValues:
 .LF80604:
 	calr N0teChange_DrawValues                                      ; F80604  1e b1 ff
 	ret                                                  ; F80607  0e
+; ButtonTable_N0teChange_StageZero_Nop22: a bare ret -- ButtonTable_N0teChange_StageZero slots 0x16, 0x17, 0x18,
+;   0x19, 0x1A.
+ButtonTable_N0teChange_StageZero_Nop22:
 	ret                                                  ; F80608  0e
+; NumberPadKey_N0teChange_StageZero: the twelve-key number pad (0-9, +/-, ENTER);
+;   ButtonTable_N0teChange_StageZero slot 0x1B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+NumberPadKey_N0teChange_StageZero:
 	calr N0teChange_NumberPad                                      ; F80609  1e 1e 00
 	ret                                                  ; F8060C  0e
+; ButtonTable_N0teChange_StageZero_Nop28: a bare ret -- ButtonTable_N0teChange_StageZero slots 0x1C, 0x1D, 0x1E,
+;   0x1F.
+ButtonTable_N0teChange_StageZero_Nop28:
 	ret                                                  ; F8060D  0e
+; ButtonTable_N0teChange_StageNonZero_Nop0: a bare ret -- ButtonTable_N0teChange_StageNonZero slots 0x00, 0x01,
+;   0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A.
+ButtonTable_N0teChange_StageNonZero_Nop0:
 	ret                                                  ; F8060E  0e
+; LcdKeyRow4_N0teChange_StageNonZero: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_N0teChange_StageNonZero slot 0x0B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow4_N0teChange_StageNonZero:
 	bit 0x07,W                                           ; F8060F  c8 33 07
 	jr nz, .LF80618                                      ; F80612  6e 04
 	call T_F42AAC                                        ; F80614  1d ac 2a f4
 .LF80618:
 	ret                                                  ; F80618  0e
+; LcdKeyRow5_N0teChange_StageNonZero: row 5 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_N0teChange_StageNonZero slot 0x0C.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow5_N0teChange_StageNonZero:
 	bit 0x07,W                                           ; F80619  c8 33 07
 	jr nz, .LF80622                                      ; F8061C  6e 04
 	call T_F42AB0                                        ; F8061E  1d b0 2a f4
 .LF80622:
 	ret                                                  ; F80622  0e
+; ButtonTable_N0teChange_StageNonZero_Nop13: a bare ret -- ButtonTable_N0teChange_StageNonZero slots 0x0D, 0x0E.
+ButtonTable_N0teChange_StageNonZero_Nop13:
 	ret                                                  ; F80623  0e
+; ExitKey_N0teChange_StageNonZero: the EXIT key; ButtonTable_N0teChange_StageNonZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_N0teChange_StageNonZero:
 	call T_F42AB0                                        ; F80624  1d b0 2a f4
 	ret                                                  ; F80628  0e
+; ButtonTable_N0teChange_StageNonZero_Nop16: a bare ret -- ButtonTable_N0teChange_StageNonZero slots 0x10, 0x11,
+;   0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_N0teChange_StageNonZero_Nop16:
 	ret                                                  ; F80629  0e
 ; N0teChange_NumberPad -- NUMBER PAD key on the NOTE CHANGE screen: dispatch on (0x2267)
 ; Evidence: reached only by `calr` at 0xF80609, slot 27 of ButtonTable_N0teChange_StageZero; <=9 -> N0teChange_KeypadDigit, 0x0F -> N0teChange_KeypadCommit, 0x80 -> N0teChange_KeypadSign, then N0teChange_BlinkSelectedField.
@@ -3138,10 +3356,22 @@ Paint_MeasureC0py_Nop:
 ScreenLeaveBody_MeasureC0py:
 	call T_F429DC                                        ; F80809  1d dc 29 f4
 	ret                                                  ; F8080D  0e
+; ButtonTable_MeasureC0py_StageZero_Nop0: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x00.
+ButtonTable_MeasureC0py_StageZero_Nop0:
 	ret                                                  ; F8080E  0e
+; ButtonTable_MeasureC0py_StageZero_Nop1: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x01.
+ButtonTable_MeasureC0py_StageZero_Nop1:
 	ret                                                  ; F8080F  0e
+; ButtonTable_MeasureC0py_StageZero_Nop2: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x02.
+ButtonTable_MeasureC0py_StageZero_Nop2:
 	ret                                                  ; F80810  0e
+; ButtonTable_MeasureC0py_StageZero_Nop3: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x03.
+ButtonTable_MeasureC0py_StageZero_Nop3:
 	ret                                                  ; F80811  0e
+; SoftKeyCol5_MeasureC0py_StageZero: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_MeasureC0py_StageZero slot 0x04.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol5_MeasureC0py_StageZero:
 	m_bit 1, MD16, UI_RequestBits                                ; F80812  f1 75 20 c9
 	jr z, .LF8081C                                       ; F80816  66 04
 	call T_Blink_Stop                                    ; F80818  1d 24 2e f4
@@ -3161,15 +3391,29 @@ ScreenLeaveBody_MeasureC0py:
 	ld XIX,0x00f3bd4d                                    ; F80842  44 4d bd f3 00
 	call T_DisplayListB_Run                              ; F80847  1d f4 17 f4
 	ret                                                  ; F8084B  0e
+; ButtonTable_MeasureC0py_StageZero_Nop5: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x05.
+ButtonTable_MeasureC0py_StageZero_Nop5:
 	ret                                                  ; F8084C  0e
+; ButtonTable_MeasureC0py_StageZero_Nop6: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x06.
+ButtonTable_MeasureC0py_StageZero_Nop6:
 	ret                                                  ; F8084D  0e
+; ButtonTable_MeasureC0py_StageZero_Nop7: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x07.
+ButtonTable_MeasureC0py_StageZero_Nop7:
 	ret                                                  ; F8084E  0e
+; LcdKeyRow1_MeasureC0py_StageZero: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureC0py_StageZero slot 0x08.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow1_MeasureC0py_StageZero:
 	bit 0x07,W                                           ; F8084F  c8 33 07
 	jr nz, .LF8085B                                      ; F80852  6e 07
 	calr sub_F7F245                                          ; F80854  1e ee e9
 	call T_F42A04                                        ; F80857  1d 04 2a f4
 .LF8085B:
 	ret                                                  ; F8085B  0e
+; LcdKeyRow2_MeasureC0py_StageZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureC0py_StageZero slot 0x09.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow2_MeasureC0py_StageZero:
 	bit 0x07,W                                           ; F8085C  c8 33 07
 	jr z, .LF80871                                       ; F8085F  66 10
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x01                          ; F80861  c1 bc 0d 3f 01
@@ -3201,6 +3445,10 @@ MeasureC0py_DrawFieldCursor:
 	ld XIY,0x00f3bd4d                                    ; F808A7  45 4d bd f3 00
 	call T_DLB_Handler_Array8                                        ; F808AC  1d 1c 18 f4
 	ret                                                  ; F808B0  0e
+; LcdKeyRow3_MeasureC0py_StageZero: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureC0py_StageZero slot 0x0A.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow3_MeasureC0py_StageZero:
 	bit 0x07,W                                           ; F808B1  c8 33 07
 	jr nz, .LF808C6                                      ; F808B4  6e 10
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x05                          ; F808B6  c1 bc 0d 3f 05
@@ -3221,6 +3469,10 @@ MeasureC0py_DrawFieldCursor:
 	calr Paint_MeasureC0py_Nop                                      ; F808E2  1e 23 ff
 .LF808E5:
 	ret                                                  ; F808E5  0e
+; LcdKeyRow4_MeasureC0py_StageZero: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureC0py_StageZero slot 0x0B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow4_MeasureC0py_StageZero:
 	bit 0x07,W                                           ; F808E6  c8 33 07
 	jr z, .LF808FB                                       ; F808E9  66 10
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x03                          ; F808EB  c1 bc 0d 3f 03
@@ -3241,9 +3493,18 @@ MeasureC0py_DrawFieldCursor:
 	calr Paint_MeasureC0py_Nop                                      ; F80917  1e ee fe
 .LF8091A:
 	ret                                                  ; F8091A  0e
+; ButtonTable_MeasureC0py_StageZero_Nop12: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x0C.
+ButtonTable_MeasureC0py_StageZero_Nop12:
 	ret                                                  ; F8091B  0e
+; ButtonTable_MeasureC0py_StageZero_Nop13: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x0D.
+ButtonTable_MeasureC0py_StageZero_Nop13:
 	ret                                                  ; F8091C  0e
+; ButtonTable_MeasureC0py_StageZero_Nop14: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x0E.
+ButtonTable_MeasureC0py_StageZero_Nop14:
 	ret                                                  ; F8091D  0e
+; ExitKey_MeasureC0py_StageZero: the EXIT key; ButtonTable_MeasureC0py_StageZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_MeasureC0py_StageZero:
 	bit 0x07,W                                           ; F8091E  c8 33 07
 	jr z, .LF80925                                       ; F80921  66 02
 	jr .LF8092B                                          ; F80923  68 06
@@ -3251,7 +3512,14 @@ MeasureC0py_DrawFieldCursor:
 	ldw (UI_Request:16), 0x801a                              ; F80925  f1 70 20 02 1a 80
 .LF8092B:
 	ret                                                  ; F8092B  0e
+; ButtonTable_MeasureC0py_StageZero_Nop16: a bare ret -- ButtonTable_MeasureC0py_StageZero slots 0x10, 0x11,
+;   0x12, 0x13, 0x14.
+ButtonTable_MeasureC0py_StageZero_Nop16:
 	ret                                                  ; F8092C  0e
+; MeasureC0py_StageZero_Button21 -- ButtonTable_MeasureC0py_StageZero slot 0x15, NOT NAMED: slot 0x15 is only
+;   the VARIANT-1 already-held rewrite of base code 0x04; the SX-WSA1R is variant 2, so the slot is never
+;   delivered here.
+MeasureC0py_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits                                ; F8092D  f1 75 20 c9
 	jr z, .LF80937                                       ; F80931  66 04
 	call T_Blink_Stop                                    ; F80933  1d 24 2e f4
@@ -3271,38 +3539,87 @@ MeasureC0py_DrawFieldCursor:
 	ld XIX,0x00f3bd4d                                    ; F8095D  44 4d bd f3 00
 	call T_DisplayListB_Run                              ; F80962  1d f4 17 f4
 	ret                                                  ; F80966  0e
+; ButtonTable_MeasureC0py_StageZero_Nop22: a bare ret -- ButtonTable_MeasureC0py_StageZero slots 0x16, 0x17,
+;   0x18, 0x19, 0x1A.
+ButtonTable_MeasureC0py_StageZero_Nop22:
 	ret                                                  ; F80967  0e
+; NumberPadKey_MeasureC0py_StageZero: the twelve-key number pad (0-9, +/-, ENTER);
+;   ButtonTable_MeasureC0py_StageZero slot 0x1B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+NumberPadKey_MeasureC0py_StageZero:
 	calr MeasureC0py_NumberPad                                      ; F80968  1e 42 00
 	ret                                                  ; F8096B  0e
+; ButtonTable_MeasureC0py_StageZero_Nop28: a bare ret -- ButtonTable_MeasureC0py_StageZero slots 0x1C, 0x1D,
+;   0x1E, 0x1F.
+ButtonTable_MeasureC0py_StageZero_Nop28:
 	ret                                                  ; F8096C  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop0: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x00.
+ButtonTable_MeasureC0py_StageNonZero_Nop0:
 	ret                                                  ; F8096D  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop1: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x01.
+ButtonTable_MeasureC0py_StageNonZero_Nop1:
 	ret                                                  ; F8096E  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop2: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x02.
+ButtonTable_MeasureC0py_StageNonZero_Nop2:
 	ret                                                  ; F8096F  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop3: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x03.
+ButtonTable_MeasureC0py_StageNonZero_Nop3:
 	ret                                                  ; F80970  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop4: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x04.
+ButtonTable_MeasureC0py_StageNonZero_Nop4:
 	ret                                                  ; F80971  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop5: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x05.
+ButtonTable_MeasureC0py_StageNonZero_Nop5:
 	ret                                                  ; F80972  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop6: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x06.
+ButtonTable_MeasureC0py_StageNonZero_Nop6:
 	ret                                                  ; F80973  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop7: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x07.
+ButtonTable_MeasureC0py_StageNonZero_Nop7:
 	ret                                                  ; F80974  0e
+; LcdKeyRow1_MeasureC0py_StageNonZero: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureC0py_StageNonZero slot 0x08.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow1_MeasureC0py_StageNonZero:
 	bit 0x07,W                                           ; F80975  c8 33 07
 	jr nz, .LF80983                                      ; F80978  6e 09
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F8097A  c1 75 20 3c 6f
 	call T_F42A04                                        ; F8097F  1d 04 2a f4
 .LF80983:
 	ret                                                  ; F80983  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop9: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x09.
+ButtonTable_MeasureC0py_StageNonZero_Nop9:
 	ret                                                  ; F80984  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop10: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slots 0x0A,
+;   0x0B.
+ButtonTable_MeasureC0py_StageNonZero_Nop10:
 	ret                                                  ; F80985  0e
+; LcdKeyRow5_MeasureC0py_StageNonZero: row 5 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureC0py_StageNonZero slot 0x0C.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow5_MeasureC0py_StageNonZero:
 	bit 0x07,W                                           ; F80986  c8 33 07
 	jr nz, .LF8098F                                      ; F80989  6e 04
 	call T_F42A00                                        ; F8098B  1d 00 2a f4
 .LF8098F:
 	ret                                                  ; F8098F  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop13: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x0D.
+ButtonTable_MeasureC0py_StageNonZero_Nop13:
 	ret                                                  ; F80990  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop14: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x0E.
+ButtonTable_MeasureC0py_StageNonZero_Nop14:
 	ret                                                  ; F80991  0e
+; ExitKey_MeasureC0py_StageNonZero: the EXIT key; ButtonTable_MeasureC0py_StageNonZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_MeasureC0py_StageNonZero:
 	bit 0x07,W                                           ; F80992  c8 33 07
 	jr nz, .LF8099B                                      ; F80995  6e 04
 	call T_F42A00                                        ; F80997  1d 00 2a f4
 .LF8099B:
 	ret                                                  ; F8099B  0e
+; ButtonTable_MeasureC0py_StageNonZero_Nop16: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slots 0x10,
+;   0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_MeasureC0py_StageNonZero_Nop16:
 	ret                                                  ; F8099C  0e
 ; MeasureC0py_DrawValues -- redraw the live values of the MEASURE COPY screen
 ; Evidence: site 0xF809A7 runs interpreter B over DL_F3BD07-0xF3BD4D: string readouts (0x12F6) (0x12FB), 3-digit (0x12F7) (0x12F9) (0x12FC), (0x12FE) -- the list Paint_MeasureC0py runs at 0xF807F6.  It does not set (0x2540); callers have.
@@ -3508,10 +3825,22 @@ Paint_MeasureInsert_Nop:
 ScreenLeaveBody_MeasureInsert:
 	call T_F429AC                                        ; F80B66  1d ac 29 f4
 	ret                                                  ; F80B6A  0e
+; ButtonTable_MeasureInsert_StageZero_Nop0: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x00.
+ButtonTable_MeasureInsert_StageZero_Nop0:
 	ret                                                  ; F80B6B  0e
+; ButtonTable_MeasureInsert_StageZero_Nop1: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x01.
+ButtonTable_MeasureInsert_StageZero_Nop1:
 	ret                                                  ; F80B6C  0e
+; ButtonTable_MeasureInsert_StageZero_Nop2: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x02.
+ButtonTable_MeasureInsert_StageZero_Nop2:
 	ret                                                  ; F80B6D  0e
+; ButtonTable_MeasureInsert_StageZero_Nop3: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x03.
+ButtonTable_MeasureInsert_StageZero_Nop3:
 	ret                                                  ; F80B6E  0e
+; SoftKeyCol5_MeasureInsert_StageZero: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_MeasureInsert_StageZero slot 0x04.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol5_MeasureInsert_StageZero:
 	m_bit 1, MD16, UI_RequestBits                                ; F80B6F  f1 75 20 c9
 	jr z, .LF80B79                                       ; F80B73  66 04
 	call T_Blink_Stop                                    ; F80B75  1d 24 2e f4
@@ -3531,15 +3860,29 @@ ScreenLeaveBody_MeasureInsert:
 	ld XIX,0x00f3bf3d                                    ; F80B9F  44 3d bf f3 00
 	call T_DisplayListB_Run                              ; F80BA4  1d f4 17 f4
 	ret                                                  ; F80BA8  0e
+; ButtonTable_MeasureInsert_StageZero_Nop5: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x05.
+ButtonTable_MeasureInsert_StageZero_Nop5:
 	ret                                                  ; F80BA9  0e
+; ButtonTable_MeasureInsert_StageZero_Nop6: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x06.
+ButtonTable_MeasureInsert_StageZero_Nop6:
 	ret                                                  ; F80BAA  0e
+; ButtonTable_MeasureInsert_StageZero_Nop7: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x07.
+ButtonTable_MeasureInsert_StageZero_Nop7:
 	ret                                                  ; F80BAB  0e
+; LcdKeyRow1_MeasureInsert_StageZero: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureInsert_StageZero slot 0x08.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow1_MeasureInsert_StageZero:
 	bit 0x07,W                                           ; F80BAC  c8 33 07
 	jr nz, .LF80BB8                                      ; F80BAF  6e 07
 	calr sub_F7F245                                          ; F80BB1  1e 91 e6
 	call T_F429D4                                        ; F80BB4  1d d4 29 f4
 .LF80BB8:
 	ret                                                  ; F80BB8  0e
+; LcdKeyRow2_MeasureInsert_StageZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureInsert_StageZero slot 0x09.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow2_MeasureInsert_StageZero:
 	bit 0x07,W                                           ; F80BB9  c8 33 07
 	jr z, .LF80BCE                                       ; F80BBC  66 10
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x01                          ; F80BBE  c1 da 0d 3f 01
@@ -3572,6 +3915,10 @@ sub_F80C04:
 	ld XIY,0x00f3bf3d                                    ; F80C04  45 3d bf f3 00
 	call T_DLB_Handler_Array8                                        ; F80C09  1d 1c 18 f4
 	ret                                                  ; F80C0D  0e
+; LcdKeyRow3_MeasureInsert_StageZero: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureInsert_StageZero slot 0x0A.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow3_MeasureInsert_StageZero:
 	bit 0x07,W                                           ; F80C0E  c8 33 07
 	jr nz, .LF80C23                                      ; F80C11  6e 10
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x05                          ; F80C13  c1 da 0d 3f 05
@@ -3592,6 +3939,10 @@ sub_F80C04:
 	calr Paint_MeasureInsert_Nop                                      ; F80C3F  1e 23 ff
 .LF80C42:
 	ret                                                  ; F80C42  0e
+; LcdKeyRow4_MeasureInsert_StageZero: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the
+;   CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureInsert_StageZero slot 0x0B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow4_MeasureInsert_StageZero:
 	bit 0x07,W                                           ; F80C43  c8 33 07
 	jr z, .LF80C58                                       ; F80C46  66 10
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x03                          ; F80C48  c1 da 0d 3f 03
@@ -3612,9 +3963,18 @@ sub_F80C04:
 	calr Paint_MeasureInsert_Nop                                      ; F80C74  1e ee fe
 .LF80C77:
 	ret                                                  ; F80C77  0e
+; ButtonTable_MeasureInsert_StageZero_Nop12: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x0C.
+ButtonTable_MeasureInsert_StageZero_Nop12:
 	ret                                                  ; F80C78  0e
+; ButtonTable_MeasureInsert_StageZero_Nop13: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x0D.
+ButtonTable_MeasureInsert_StageZero_Nop13:
 	ret                                                  ; F80C79  0e
+; ButtonTable_MeasureInsert_StageZero_Nop14: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x0E.
+ButtonTable_MeasureInsert_StageZero_Nop14:
 	ret                                                  ; F80C7A  0e
+; ExitKey_MeasureInsert_StageZero: the EXIT key; ButtonTable_MeasureInsert_StageZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_MeasureInsert_StageZero:
 	bit 0x07,W                                           ; F80C7B  c8 33 07
 	jr z, .LF80C82                                       ; F80C7E  66 02
 	jr .LF80C88                                          ; F80C80  68 06
@@ -3622,7 +3982,14 @@ sub_F80C04:
 	ldw (UI_Request:16), 0x801a                              ; F80C82  f1 70 20 02 1a 80
 .LF80C88:
 	ret                                                  ; F80C88  0e
+; ButtonTable_MeasureInsert_StageZero_Nop16: a bare ret -- ButtonTable_MeasureInsert_StageZero slots 0x10, 0x11,
+;   0x12, 0x13, 0x14.
+ButtonTable_MeasureInsert_StageZero_Nop16:
 	ret                                                  ; F80C89  0e
+; MeasureInsert_StageZero_Button21 -- ButtonTable_MeasureInsert_StageZero slot 0x15, NOT NAMED: slot 0x15 is
+;   only the VARIANT-1 already-held rewrite of base code 0x04; the SX-WSA1R is variant 2, so the slot is never
+;   delivered here.
+MeasureInsert_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits                                ; F80C8A  f1 75 20 c9
 	jr z, .LF80C94                                       ; F80C8E  66 04
 	call T_Blink_Stop                                    ; F80C90  1d 24 2e f4
@@ -3642,39 +4009,89 @@ sub_F80C04:
 	ld XIX,0x00f3bf3d                                    ; F80CBA  44 3d bf f3 00
 	call T_DisplayListB_Run                              ; F80CBF  1d f4 17 f4
 	ret                                                  ; F80CC3  0e
+; ButtonTable_MeasureInsert_StageZero_Nop22: a bare ret -- ButtonTable_MeasureInsert_StageZero slots 0x16, 0x17,
+;   0x18, 0x19, 0x1A.
+ButtonTable_MeasureInsert_StageZero_Nop22:
 	ret                                                  ; F80CC4  0e
+; NumberPadKey_MeasureInsert_StageZero: the twelve-key number pad (0-9, +/-, ENTER);
+;   ButtonTable_MeasureInsert_StageZero slot 0x1B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+NumberPadKey_MeasureInsert_StageZero:
 	calr MeasureInsert_NumberPad                                      ; F80CC5  1e 4a 00
 	ret                                                  ; F80CC8  0e
+; ButtonTable_MeasureInsert_StageZero_Nop28: a bare ret -- ButtonTable_MeasureInsert_StageZero slots 0x1C, 0x1D,
+;   0x1E, 0x1F.
+ButtonTable_MeasureInsert_StageZero_Nop28:
 	ret                                                  ; F80CC9  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop0: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x00.
+ButtonTable_MeasureInsert_StageNonZero_Nop0:
 	ret                                                  ; F80CCA  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop1: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x01.
+ButtonTable_MeasureInsert_StageNonZero_Nop1:
 	ret                                                  ; F80CCB  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop2: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x02.
+ButtonTable_MeasureInsert_StageNonZero_Nop2:
 	ret                                                  ; F80CCC  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop3: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x03.
+ButtonTable_MeasureInsert_StageNonZero_Nop3:
 	ret                                                  ; F80CCD  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop4: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x04.
+ButtonTable_MeasureInsert_StageNonZero_Nop4:
 	ret                                                  ; F80CCE  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop5: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x05.
+ButtonTable_MeasureInsert_StageNonZero_Nop5:
 	ret                                                  ; F80CCF  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop6: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x06.
+ButtonTable_MeasureInsert_StageNonZero_Nop6:
 	ret                                                  ; F80CD0  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop7: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x07.
+ButtonTable_MeasureInsert_StageNonZero_Nop7:
 	ret                                                  ; F80CD1  0e
+; LcdKeyRow1_MeasureInsert_StageNonZero: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks
+;   the CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureInsert_StageNonZero slot 0x08.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow1_MeasureInsert_StageNonZero:
 	bit 0x07,W                                           ; F80CD2  c8 33 07
 	jr nz, .LF80CE0                                      ; F80CD5  6e 09
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F80CD7  c1 75 20 3c 6f
 	call T_F429D4                                        ; F80CDC  1d d4 29 f4
 .LF80CE0:
 	ret                                                  ; F80CE0  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop9: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x09.
+ButtonTable_MeasureInsert_StageNonZero_Nop9:
 	ret                                                  ; F80CE1  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop10: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x0A.
+ButtonTable_MeasureInsert_StageNonZero_Nop10:
 	ret                                                  ; F80CE2  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop11: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x0B.
+ButtonTable_MeasureInsert_StageNonZero_Nop11:
 	ret                                                  ; F80CE3  0e
+; LcdKeyRow5_MeasureInsert_StageNonZero: row 5 of the five key pairs flanking the LCD; bit 7 of the code picks
+;   the CP2 side (set) or the CP1 side (clear); ButtonTable_MeasureInsert_StageNonZero slot 0x0C.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow5_MeasureInsert_StageNonZero:
 	bit 0x07,W                                           ; F80CE4  c8 33 07
 	jr nz, sub_F80C04_Return                                    ; F80CE7  6e 04
 	call T_F429D0                                        ; F80CE9  1d d0 29 f4
 sub_F80C04_Return:
 	ret                                                  ; F80CED  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop13: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x0D.
+ButtonTable_MeasureInsert_StageNonZero_Nop13:
 	ret                                                  ; F80CEE  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop14: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x0E.
+ButtonTable_MeasureInsert_StageNonZero_Nop14:
 	ret                                                  ; F80CEF  0e
+; ExitKey_MeasureInsert_StageNonZero: the EXIT key; ButtonTable_MeasureInsert_StageNonZero slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_MeasureInsert_StageNonZero:
 	bit 0x07,W                                           ; F80CF0  c8 33 07
 	jr nz, .LF80CF9                                      ; F80CF3  6e 04
 	call T_F429D0                                        ; F80CF5  1d d0 29 f4
 .LF80CF9:
 	ret                                                  ; F80CF9  0e
+; ButtonTable_MeasureInsert_StageNonZero_Nop16: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slots 0x10,
+;   0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_MeasureInsert_StageNonZero_Nop16:
 	ret                                                  ; F80CFA  0e
 ; MeasureInsert_DrawValues -- redraw the live values of the MEASURE INSERT screen on layer 0
 ; Evidence: (0x2540)=0; site 0xF80D0D runs interpreter B over DL_F3BEF7-0xF3BF3D (same six variables as MeasureC0py_DrawValues), the list Paint_MeasureInsert runs at 0xF80B53.
@@ -4003,38 +4420,89 @@ Paint_StepRecordPartSelect:
 ScreenLeaveBody_StepRecordPartSelect:
 	call T_F42BC8                                        ; F80FC0  1d c8 2b f4
 	ret                                                  ; F80FC4  0e
+; SoftKeyCol1_StepRecordPartSelect: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x00,
+;   0x11.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol1_StepRecordPartSelect:
 	call SoftKeyCol1_TrackClear_StageZero                 ; F80FC5  1d ff ec f7
 	call T_F42BBC                                        ; F80FC9  1d bc 2b f4
 	ret                                                  ; F80FCD  0e
+; SoftKeyCol2_StepRecordPartSelect: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x01,
+;   0x12.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol2_StepRecordPartSelect:
 	call SoftKeyCol2_TrackClear_StageZero                 ; F80FCE  1d 18 ed f7
 	call T_F42BBC                                        ; F80FD2  1d bc 2b f4
 	ret                                                  ; F80FD6  0e
+; SoftKeyCol3_StepRecordPartSelect: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x02,
+;   0x13.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol3_StepRecordPartSelect:
 	call SoftKeyCol3_TrackClear_StageZero                 ; F80FD7  1d 31 ed f7
 	call T_F42BBC                                        ; F80FDB  1d bc 2b f4
 	ret                                                  ; F80FDF  0e
+; SoftKeyCol4_StepRecordPartSelect: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x03,
+;   0x14.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol4_StepRecordPartSelect:
 	call SoftKeyCol4_TrackClear_StageZero                 ; F80FE0  1d 4a ed f7
 	call T_F42BBC                                        ; F80FE4  1d bc 2b f4
 	ret                                                  ; F80FE8  0e
+; SoftKeyCol5_StepRecordPartSelect: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x04,
+;   0x15.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol5_StepRecordPartSelect:
 	call SoftKeyCol5_TrackClear_StageZero                 ; F80FE9  1d 63 ed f7
 	call T_F42BBC                                        ; F80FED  1d bc 2b f4
 	ret                                                  ; F80FF1  0e
+; SoftKeyCol6_StepRecordPartSelect: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x05,
+;   0x16.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol6_StepRecordPartSelect:
 	call SoftKeyCol6_TrackClear_StageZero                 ; F80FF2  1d 7c ed f7
 	call T_F42BBC                                        ; F80FF6  1d bc 2b f4
 	ret                                                  ; F80FFA  0e
+; SoftKeyCol7_StepRecordPartSelect: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x06,
+;   0x17.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol7_StepRecordPartSelect:
 	call SoftKeyCol7_TrackClear_StageZero                 ; F80FFB  1d 95 ed f7
 	call T_F42BBC                                        ; F80FFF  1d bc 2b f4
 	ret                                                  ; F81003  0e
+; SoftKeyCol8_StepRecordPartSelect: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the
+;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x07,
+;   0x18.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol8_StepRecordPartSelect:
 	call SoftKeyCol8_TrackClear_StageZero                 ; F81004  1d ae ed f7
 	call T_F42BBC                                        ; F81008  1d bc 2b f4
 	ret                                                  ; F8100C  0e
+; ButtonTable_StepRecordPartSelect_Nop8: a bare ret -- ButtonTable_StepRecordPartSelect slot 0x08.
+ButtonTable_StepRecordPartSelect_Nop8:
 	ret                                                  ; F8100D  0e
+; ButtonTable_StepRecordPartSelect_Nop9: a bare ret -- ButtonTable_StepRecordPartSelect slots 0x09, 0x0A, 0x0B,
+;   0x0C, 0x0D, 0x0E.
+ButtonTable_StepRecordPartSelect_Nop9:
 	ret                                                  ; F8100E  0e
+; ExitKey_StepRecordPartSelect: the EXIT key; ButtonTable_StepRecordPartSelect slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_StepRecordPartSelect:
 	bit 0x07,W                                           ; F8100F  c8 33 07
 	jr nz, .LF8101C                                      ; F81012  6e 08
 	ldw (UI_Request:16), 0x8004                              ; F81014  f1 70 20 02 04 80
 	jr .LF8101C                                          ; F8101A  68 00
 .LF8101C:
 	ret                                                  ; F8101C  0e
+; ButtonTable_StepRecordPartSelect_Nop16: a bare ret -- ButtonTable_StepRecordPartSelect slots 0x10, 0x19, 0x1A,
+;   0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_StepRecordPartSelect_Nop16:
 	ret                                                  ; F8101D  0e
 sub_F8101E:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F8101E  1d 80 2e f4
@@ -4134,7 +4602,13 @@ ScreenLeaveBody_SequencerMedley:
 .LF810FC:
 	call T_F42BD0                                        ; F810FC  1d d0 2b f4
 	ret                                                  ; F81100  0e
+; ButtonTable_SequencerMedley_Nop0: a bare ret -- ButtonTable_SequencerMedley slot 0x00.
+ButtonTable_SequencerMedley_Nop0:
 	ret                                                  ; F81101  0e
+; SoftKeyCol2_SequencerMedley: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER
+;   (set) or UPPER (clear) of the column's two switches; ButtonTable_SequencerMedley slots 0x01, 0x12.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol2_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Source, 0x00                          ; F81102  c1 0b 22 3f 00
 	jr z, .LF8111D                                       ; F81107  66 14
 	call T_Blink_Stop                                    ; F81109  1d 24 2e f4
@@ -4144,6 +4618,10 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawFileTypeBox                                      ; F81119  1d 1c 14 f8
 .LF8111D:
 	ret                                                  ; F8111D  0e
+; SoftKeyCol3_SequencerMedley: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER
+;   (set) or UPPER (clear) of the column's two switches; ButtonTable_SequencerMedley slots 0x02, 0x13.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol3_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Source, 0x01                          ; F8111E  c1 0b 22 3f 01
 	jr z, .LF81135                                       ; F81123  66 10
 	call T_Blink_Stop                                    ; F81125  1d 24 2e f4
@@ -4152,7 +4630,13 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawSourceBox                                      ; F81131  1d ff 13 f8
 .LF81135:
 	ret                                                  ; F81135  0e
+; ButtonTable_SequencerMedley_Nop3: a bare ret -- ButtonTable_SequencerMedley slots 0x03, 0x14.
+ButtonTable_SequencerMedley_Nop3:
 	ret                                                  ; F81136  0e
+; SoftKeyCol5_SequencerMedley: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER
+;   (set) or UPPER (clear) of the column's two switches; ButtonTable_SequencerMedley slots 0x04, 0x15.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol5_SequencerMedley:
 	m_bit 1, MD16, UI_RequestBits                                ; F81137  f1 75 20 c9
 	jr z, .LF81141                                       ; F8113B  66 04
 	call T_Blink_Stop                                    ; F8113D  1d 24 2e f4
@@ -4170,7 +4654,13 @@ ScreenLeaveBody_SequencerMedley:
 	ld (DisplayListB_Stage+10:16), a                                   ; F8115C  f1 00 13 41
 	call Draw_FirstS0ngLastS0ng                                      ; F81160  1d bf 13 f8
 	ret                                                  ; F81164  0e
+; ButtonTable_SequencerMedley_Nop5: a bare ret -- ButtonTable_SequencerMedley slot 0x05.
+ButtonTable_SequencerMedley_Nop5:
 	ret                                                  ; F81165  0e
+; SoftKeyCol7_SequencerMedley: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER
+;   (set) or UPPER (clear) of the column's two switches; ButtonTable_SequencerMedley slots 0x06, 0x17.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol7_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Source, 0x01                          ; F81166  c1 0b 22 3f 01
 	jr nz, .LF81184                                      ; F8116B  6e 17
 	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; F8116D  c1 35 0e 3f 01
@@ -4181,6 +4671,10 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawFileTypeBox                                      ; F81180  1d 1c 14 f8
 .LF81184:
 	ret                                                  ; F81184  0e
+; SoftKeyCol8_SequencerMedley: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER
+;   (set) or UPPER (clear) of the column's two switches; ButtonTable_SequencerMedley slots 0x07, 0x18.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+SoftKeyCol8_SequencerMedley:
 	m_cp_mi8 MB16, Medley_FileType, 0x00                          ; F81185  c1 35 0e 3f 00
 	jr z, .LF8119C                                       ; F8118A  66 10
 	call T_Blink_Stop                                    ; F8118C  1d 24 2e f4
@@ -4189,7 +4683,13 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawFileTypeBox                                      ; F81198  1d 1c 14 f8
 .LF8119C:
 	ret                                                  ; F8119C  0e
+; ButtonTable_SequencerMedley_Nop8: a bare ret -- ButtonTable_SequencerMedley slot 0x08.
+ButtonTable_SequencerMedley_Nop8:
 	ret                                                  ; F8119D  0e
+; LcdKeyRow2_SequencerMedley: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side
+;   (set) or the CP1 side (clear); ButtonTable_SequencerMedley slot 0x09.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow2_SequencerMedley:
 	bit 0x07,W                                           ; F8119E  c8 33 07
 	jr nz, .LF811C8                                      ; F811A1  6e 25
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811A3  c1 c1 0d 3f 01
@@ -4213,6 +4713,10 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawFieldBox                                      ; F811DD  1d e7 13 f8
 .LF811E1:
 	ret                                                  ; F811E1  0e
+; LcdKeyRow3_SequencerMedley: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side
+;   (set) or the CP1 side (clear); ButtonTable_SequencerMedley slot 0x0A.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow3_SequencerMedley:
 	bit 0x07,W                                           ; F811E2  c8 33 07
 	jr nz, .LF811FE                                      ; F811E5  6e 17
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811E7  c1 c1 0d 3f 01
@@ -4224,6 +4728,10 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawPlayState                                      ; F811FA  1d 50 13 f8
 .LF811FE:
 	ret                                                  ; F811FE  0e
+; LcdKeyRow4_SequencerMedley: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side
+;   (set) or the CP1 side (clear); ButtonTable_SequencerMedley slot 0x0B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+LcdKeyRow4_SequencerMedley:
 	bit 0x07,W                                           ; F811FF  c8 33 07
 	jr nz, .LF8120A                                      ; F81202  6e 06
 	call T_F42C2C                                        ; F81204  1d 2c 2c f4
@@ -4238,14 +4746,26 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawFieldBox                                      ; F8121F  1d e7 13 f8
 .LF81223:
 	ret                                                  ; F81223  0e
+; ExitKey_SequencerMedley: the EXIT key; ButtonTable_SequencerMedley slot 0x0F.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+ExitKey_SequencerMedley:
 	bit 0x07,W                                           ; F81224  c8 33 07
 	jr nz, .LF8122F                                      ; F81227  6e 06
 	ldw (UI_Request:16), 0x8004                              ; F81229  f1 70 20 02 04 80
 .LF8122F:
 	ret                                                  ; F8122F  0e
+; ButtonTable_SequencerMedley_Nop12: a bare ret -- ButtonTable_SequencerMedley slots 0x0C, 0x0D, 0x0E, 0x10,
+;   0x11, 0x16, 0x19, 0x1A.
+ButtonTable_SequencerMedley_Nop12:
 	ret                                                  ; F81230  0e
+; NumberPadKey_SequencerMedley: the twelve-key number pad (0-9, +/-, ENTER); ButtonTable_SequencerMedley slot
+;   0x1B.
+; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
+NumberPadKey_SequencerMedley:
 	calr SequencerMedley_NumberPad                                      ; F81231  1e 02 00
 	ret                                                  ; F81234  0e
+; ButtonTable_SequencerMedley_Nop28: a bare ret -- ButtonTable_SequencerMedley slots 0x1C, 0x1D, 0x1E, 0x1F.
+ButtonTable_SequencerMedley_Nop28:
 	ret                                                  ; F81235  0e
 ; SequencerMedley_NumberPad -- NUMBER PAD key on the SEQUENCER MEDLEY screen: dispatch on (0x2267)
 ; Evidence: reached only by `calr` at 0xF81231, slot 27 of ButtonTable_SequencerMedley; returns at once while (0x0DC1)=1 (set by the START arm through T_F42BD4); digit / 0x0F / 0x80 arms then SequencerMedley_BlinkSelectedField.

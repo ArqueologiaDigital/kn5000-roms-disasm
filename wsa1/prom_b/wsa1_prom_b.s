@@ -213,16 +213,164 @@
 ;     python3 scripts/converters/symbolize_wsa1_rom_addresses.py --check-equates
 ; Never edit by hand: re-run the tool with --apply, which rewrites this block.
 	.set	AdvanceDelay_SelectField1_Ret, 0xF80019
+	.set	LcdKeyRow2_AdvanceDelay_StageZero, 0xF8003A
+	.set	LcdKeyRow3_AdvanceDelay_StageZero, 0xF80059
 	.set	AdvanceDelay_DrawValues, 0xF80086
+	.set	LcdKeyRow4_AdvanceDelay_StageZero, 0xF8009D
+	.set	ButtonTable_AdvanceDelay_StageZero_Nop12, 0xF800BE
+	.set	ButtonTable_AdvanceDelay_StageZero_Nop13, 0xF800BF
+	.set	ButtonTable_AdvanceDelay_StageZero_Nop14, 0xF800C0
+	.set	ExitKey_AdvanceDelay_StageZero, 0xF800C1
+	.set	ButtonTable_AdvanceDelay_StageZero_Nop16, 0xF800CF
+	.set	AdvanceDelay_StageZero_Button21, 0xF800D0
+	.set	ButtonTable_AdvanceDelay_StageZero_Nop22, 0xF800F7
+	.set	NumberPadKey_AdvanceDelay_StageZero, 0xF800F8
+	.set	ButtonTable_AdvanceDelay_StageZero_Nop28, 0xF800FC
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop0, 0xF800FD
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop1, 0xF800FE
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop2, 0xF800FF
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop3, 0xF80100
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop4, 0xF80101
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop5, 0xF80102
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop6, 0xF80103
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop7, 0xF80104
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop8, 0xF80105
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop9, 0xF80106
+	.set	LcdKeyRow3_AdvanceDelay_StageNonZero, 0xF80107
+	.set	LcdKeyRow4_AdvanceDelay_StageNonZero, 0xF80116
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop12, 0xF80120
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop13, 0xF80121
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop14, 0xF80122
+	.set	ExitKey_AdvanceDelay_StageNonZero, 0xF80123
+	.set	ButtonTable_AdvanceDelay_StageNonZero_Nop16, 0xF8012D
 	.set	Paint_S0ngC0py, 0xF80261
 	.set	ScreenLeave_S0ngC0py_Nop, 0xF803C8
+	.set	SoftKeyCol1_S0ngC0py_StageZero, 0xF803C9
+	.set	SoftKeyCol2_S0ngC0py_StageZero, 0xF803D2
+	.set	SoftKeyCol3_S0ngC0py_StageZero, 0xF803DB
+	.set	SoftKeyCol4_S0ngC0py_StageZero, 0xF803E4
+	.set	SoftKeyCol5_S0ngC0py_StageZero, 0xF803ED
+	.set	SoftKeyCol6_S0ngC0py_StageZero, 0xF803F6
+	.set	SoftKeyCol7_S0ngC0py_StageZero, 0xF803FF
+	.set	SoftKeyCol8_S0ngC0py_StageZero, 0xF80408
+	.set	ButtonTable_S0ngC0py_StageZero_Nop8, 0xF80411
+	.set	LcdKeyRow2_S0ngC0py_StageZero, 0xF80412
+	.set	ButtonTable_S0ngC0py_StageZero_Nop10, 0xF80417
+	.set	ExitKey_S0ngC0py_StageZero, 0xF80418
+	.set	ButtonTable_S0ngC0py_StageZero_Nop16, 0xF80426
+	.set	ButtonTable_S0ngC0py_StageNonZero_Nop0, 0xF80427
+	.set	LcdKeyRow2_S0ngC0py_StageNonZero, 0xF80428
+	.set	LcdKeyRow3_S0ngC0py_StageNonZero, 0xF8042D
+	.set	ButtonTable_S0ngC0py_StageNonZero_Nop11, 0xF80432
+	.set	ExitKey_S0ngC0py_StageNonZero, 0xF80433
+	.set	ButtonTable_S0ngC0py_StageNonZero_Nop16, 0xF80438
 	.set	Paint_N0teChange, 0xF80439
 	.set	ScreenLeaveBody_N0teChange, 0xF804EC
+	.set	ButtonTable_N0teChange_StageZero_Nop0, 0xF804F1
+	.set	ButtonTable_N0teChange_StageZero_Nop1, 0xF804F2
+	.set	ButtonTable_N0teChange_StageZero_Nop2, 0xF804F3
+	.set	ButtonTable_N0teChange_StageZero_Nop3, 0xF804F4
+	.set	SoftKeyCol5_N0teChange_StageZero, 0xF804F5
+	.set	ButtonTable_N0teChange_StageZero_Nop5, 0xF8051C
+	.set	ButtonTable_N0teChange_StageZero_Nop6, 0xF8051D
 	.set	ButtonTable_N0teChange_StageZero_Nop7, 0xF8051E
+	.set	LcdKeyRow2_N0teChange_StageZero, 0xF8051F
+	.set	LcdKeyRow3_N0teChange_StageZero, 0xF80569
+	.set	LcdKeyRow4_N0teChange_StageZero, 0xF80595
+	.set	ButtonTable_N0teChange_StageZero_Nop12, 0xF805CF
+	.set	ButtonTable_N0teChange_StageZero_Nop13, 0xF805D0
+	.set	ButtonTable_N0teChange_StageZero_Nop14, 0xF805D1
+	.set	ExitKey_N0teChange_StageZero, 0xF805D2
+	.set	ButtonTable_N0teChange_StageZero_Nop16, 0xF805E0
+	.set	N0teChange_StageZero_Button21, 0xF805E1
+	.set	ButtonTable_N0teChange_StageZero_Nop22, 0xF80608
+	.set	NumberPadKey_N0teChange_StageZero, 0xF80609
+	.set	ButtonTable_N0teChange_StageZero_Nop28, 0xF8060D
+	.set	ButtonTable_N0teChange_StageNonZero_Nop0, 0xF8060E
+	.set	LcdKeyRow4_N0teChange_StageNonZero, 0xF8060F
+	.set	LcdKeyRow5_N0teChange_StageNonZero, 0xF80619
+	.set	ButtonTable_N0teChange_StageNonZero_Nop13, 0xF80623
+	.set	ExitKey_N0teChange_StageNonZero, 0xF80624
+	.set	ButtonTable_N0teChange_StageNonZero_Nop16, 0xF80629
 	.set	Paint_MeasureC0py, 0xF8076C
 	.set	ScreenLeaveBody_MeasureC0py, 0xF80809
+	.set	ButtonTable_MeasureC0py_StageZero_Nop0, 0xF8080E
+	.set	ButtonTable_MeasureC0py_StageZero_Nop1, 0xF8080F
+	.set	ButtonTable_MeasureC0py_StageZero_Nop2, 0xF80810
+	.set	ButtonTable_MeasureC0py_StageZero_Nop3, 0xF80811
+	.set	SoftKeyCol5_MeasureC0py_StageZero, 0xF80812
+	.set	ButtonTable_MeasureC0py_StageZero_Nop5, 0xF8084C
+	.set	ButtonTable_MeasureC0py_StageZero_Nop6, 0xF8084D
+	.set	ButtonTable_MeasureC0py_StageZero_Nop7, 0xF8084E
+	.set	LcdKeyRow1_MeasureC0py_StageZero, 0xF8084F
+	.set	LcdKeyRow2_MeasureC0py_StageZero, 0xF8085C
+	.set	LcdKeyRow3_MeasureC0py_StageZero, 0xF808B1
+	.set	LcdKeyRow4_MeasureC0py_StageZero, 0xF808E6
+	.set	ButtonTable_MeasureC0py_StageZero_Nop12, 0xF8091B
+	.set	ButtonTable_MeasureC0py_StageZero_Nop13, 0xF8091C
+	.set	ButtonTable_MeasureC0py_StageZero_Nop14, 0xF8091D
+	.set	ExitKey_MeasureC0py_StageZero, 0xF8091E
+	.set	ButtonTable_MeasureC0py_StageZero_Nop16, 0xF8092C
+	.set	MeasureC0py_StageZero_Button21, 0xF8092D
+	.set	ButtonTable_MeasureC0py_StageZero_Nop22, 0xF80967
+	.set	NumberPadKey_MeasureC0py_StageZero, 0xF80968
+	.set	ButtonTable_MeasureC0py_StageZero_Nop28, 0xF8096C
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop0, 0xF8096D
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop1, 0xF8096E
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop2, 0xF8096F
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop3, 0xF80970
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop4, 0xF80971
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop5, 0xF80972
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop6, 0xF80973
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop7, 0xF80974
+	.set	LcdKeyRow1_MeasureC0py_StageNonZero, 0xF80975
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop9, 0xF80984
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop10, 0xF80985
+	.set	LcdKeyRow5_MeasureC0py_StageNonZero, 0xF80986
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop13, 0xF80990
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop14, 0xF80991
+	.set	ExitKey_MeasureC0py_StageNonZero, 0xF80992
+	.set	ButtonTable_MeasureC0py_StageNonZero_Nop16, 0xF8099C
 	.set	Paint_MeasureInsert, 0xF80AC9
 	.set	ScreenLeaveBody_MeasureInsert, 0xF80B66
+	.set	ButtonTable_MeasureInsert_StageZero_Nop0, 0xF80B6B
+	.set	ButtonTable_MeasureInsert_StageZero_Nop1, 0xF80B6C
+	.set	ButtonTable_MeasureInsert_StageZero_Nop2, 0xF80B6D
+	.set	ButtonTable_MeasureInsert_StageZero_Nop3, 0xF80B6E
+	.set	SoftKeyCol5_MeasureInsert_StageZero, 0xF80B6F
+	.set	ButtonTable_MeasureInsert_StageZero_Nop5, 0xF80BA9
+	.set	ButtonTable_MeasureInsert_StageZero_Nop6, 0xF80BAA
+	.set	ButtonTable_MeasureInsert_StageZero_Nop7, 0xF80BAB
+	.set	LcdKeyRow1_MeasureInsert_StageZero, 0xF80BAC
+	.set	LcdKeyRow2_MeasureInsert_StageZero, 0xF80BB9
+	.set	LcdKeyRow3_MeasureInsert_StageZero, 0xF80C0E
+	.set	LcdKeyRow4_MeasureInsert_StageZero, 0xF80C43
+	.set	ButtonTable_MeasureInsert_StageZero_Nop12, 0xF80C78
+	.set	ButtonTable_MeasureInsert_StageZero_Nop13, 0xF80C79
+	.set	ButtonTable_MeasureInsert_StageZero_Nop14, 0xF80C7A
+	.set	ExitKey_MeasureInsert_StageZero, 0xF80C7B
+	.set	ButtonTable_MeasureInsert_StageZero_Nop16, 0xF80C89
+	.set	MeasureInsert_StageZero_Button21, 0xF80C8A
+	.set	ButtonTable_MeasureInsert_StageZero_Nop22, 0xF80CC4
+	.set	NumberPadKey_MeasureInsert_StageZero, 0xF80CC5
+	.set	ButtonTable_MeasureInsert_StageZero_Nop28, 0xF80CC9
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop0, 0xF80CCA
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop1, 0xF80CCB
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop2, 0xF80CCC
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop3, 0xF80CCD
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop4, 0xF80CCE
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop5, 0xF80CCF
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop6, 0xF80CD0
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop7, 0xF80CD1
+	.set	LcdKeyRow1_MeasureInsert_StageNonZero, 0xF80CD2
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop9, 0xF80CE1
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop10, 0xF80CE2
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop11, 0xF80CE3
+	.set	LcdKeyRow5_MeasureInsert_StageNonZero, 0xF80CE4
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop13, 0xF80CEE
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop14, 0xF80CEF
+	.set	ExitKey_MeasureInsert_StageNonZero, 0xF80CF0
+	.set	ButtonTable_MeasureInsert_StageNonZero_Nop16, 0xF80CFA
 	.set	Paint_S0ngSelectName, 0xF80E2E
 	.set	ScreenLeaveBody_S0ngSelectName, 0xF80EAF
 	.set	ScreenButtonBody_S0ngSelectName, 0xF80EB4
@@ -230,10 +378,38 @@
 	.set	sub_F80F4F, 0xF80F4F
 	.set	Paint_StepRecordPartSelect, 0xF80F5A
 	.set	ScreenLeaveBody_StepRecordPartSelect, 0xF80FC0
+	.set	SoftKeyCol1_StepRecordPartSelect, 0xF80FC5
+	.set	SoftKeyCol2_StepRecordPartSelect, 0xF80FCE
+	.set	SoftKeyCol3_StepRecordPartSelect, 0xF80FD7
+	.set	SoftKeyCol4_StepRecordPartSelect, 0xF80FE0
+	.set	SoftKeyCol5_StepRecordPartSelect, 0xF80FE9
+	.set	SoftKeyCol6_StepRecordPartSelect, 0xF80FF2
+	.set	SoftKeyCol7_StepRecordPartSelect, 0xF80FFB
+	.set	SoftKeyCol8_StepRecordPartSelect, 0xF81004
+	.set	ButtonTable_StepRecordPartSelect_Nop8, 0xF8100D
+	.set	ButtonTable_StepRecordPartSelect_Nop9, 0xF8100E
+	.set	ExitKey_StepRecordPartSelect, 0xF8100F
+	.set	ButtonTable_StepRecordPartSelect_Nop16, 0xF8101D
 	.set	sub_F8101E, 0xF8101E
 	.set	sub_F81039, 0xF81039
 	.set	Paint_SequencerMedley, 0xF81048
 	.set	ScreenLeaveBody_SequencerMedley, 0xF810F0
+	.set	ButtonTable_SequencerMedley_Nop0, 0xF81101
+	.set	SoftKeyCol2_SequencerMedley, 0xF81102
+	.set	SoftKeyCol3_SequencerMedley, 0xF8111E
+	.set	ButtonTable_SequencerMedley_Nop3, 0xF81136
+	.set	SoftKeyCol5_SequencerMedley, 0xF81137
+	.set	ButtonTable_SequencerMedley_Nop5, 0xF81165
+	.set	SoftKeyCol7_SequencerMedley, 0xF81166
+	.set	SoftKeyCol8_SequencerMedley, 0xF81185
+	.set	ButtonTable_SequencerMedley_Nop8, 0xF8119D
+	.set	LcdKeyRow2_SequencerMedley, 0xF8119E
+	.set	LcdKeyRow3_SequencerMedley, 0xF811E2
+	.set	LcdKeyRow4_SequencerMedley, 0xF811FF
+	.set	ExitKey_SequencerMedley, 0xF81224
+	.set	ButtonTable_SequencerMedley_Nop12, 0xF81230
+	.set	NumberPadKey_SequencerMedley, 0xF81231
+	.set	ButtonTable_SequencerMedley_Nop28, 0xF81235
 	.set	SongStore_MeasureSongSize, 0xF819E9
 	.set	sub_F81ACB, 0xF81ACB
 	.set	Paint_StepRecordTrackClrMeas, 0xF81BD4
@@ -191674,29 +191850,29 @@ ButtonTable_AdvanceDelay_StageZero:
 	.long ButtonTable_AdvanceDelay_StageZero_Nop6	; [ 6]
 	.long ButtonTable_AdvanceDelay_StageZero_Nop7	; [ 7]
 	.long LcdKeyRow1_AdvanceDelay_StageZero	; [ 8]
-	.long 0x00F8003A	; [ 9]
-	.long 0x00F80059	; [10]
-	.long 0x00F8009D	; [11]
-	.long 0x00F800BE	; [12]
-	.long 0x00F800BF	; [13]
-	.long 0x00F800C0	; [14]
-	.long 0x00F800C1	; [15]
-	.long 0x00F800CF	; [16]
-	.long 0x00F800CF	; [17]
-	.long 0x00F800CF	; [18]
-	.long 0x00F800CF	; [19]
-	.long 0x00F800CF	; [20]
-	.long 0x00F800D0	; [21]
-	.long 0x00F800F7	; [22]
-	.long 0x00F800F7	; [23]
-	.long 0x00F800F7	; [24]
-	.long 0x00F800F7	; [25]
-	.long 0x00F800F7	; [26]
-	.long 0x00F800F8	; [27]
-	.long 0x00F800FC	; [28]
-	.long 0x00F800FC	; [29]
-	.long 0x00F800FC	; [30]
-	.long 0x00F800FC	; [31]
+	.long LcdKeyRow2_AdvanceDelay_StageZero	; [ 9]
+	.long LcdKeyRow3_AdvanceDelay_StageZero	; [10]
+	.long LcdKeyRow4_AdvanceDelay_StageZero	; [11]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop12	; [12]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop13	; [13]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop14	; [14]
+	.long ExitKey_AdvanceDelay_StageZero	; [15]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop16	; [16]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop16	; [17]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop16	; [18]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop16	; [19]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop16	; [20]
+	.long AdvanceDelay_StageZero_Button21	; [21]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop22	; [22]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop22	; [23]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop22	; [24]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop22	; [25]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop22	; [26]
+	.long NumberPadKey_AdvanceDelay_StageZero	; [27]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop28	; [28]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop28	; [29]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop28	; [30]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop28	; [31]
 
 ; --- table 21 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D1EB
 ; ButtonTable_AdvanceDelay_StageNonZero -- the 32 panel-button handlers of this screen
@@ -191711,38 +191887,38 @@ ButtonTable_AdvanceDelay_StageZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_AdvanceDelay_StageNonZero:
-	.long 0x00F800FD	; [ 0]
-	.long 0x00F800FE	; [ 1]
-	.long 0x00F800FF	; [ 2]
-	.long 0x00F80100	; [ 3]
-	.long 0x00F80101	; [ 4]
-	.long 0x00F80102	; [ 5]
-	.long 0x00F80103	; [ 6]
-	.long 0x00F80104	; [ 7]
-	.long 0x00F80105	; [ 8]
-	.long 0x00F80106	; [ 9]
-	.long 0x00F80107	; [10]
-	.long 0x00F80116	; [11]
-	.long 0x00F80120	; [12]
-	.long 0x00F80121	; [13]
-	.long 0x00F80122	; [14]
-	.long 0x00F80123	; [15]
-	.long 0x00F8012D	; [16]
-	.long 0x00F8012D	; [17]
-	.long 0x00F8012D	; [18]
-	.long 0x00F8012D	; [19]
-	.long 0x00F8012D	; [20]
-	.long 0x00F8012D	; [21]
-	.long 0x00F8012D	; [22]
-	.long 0x00F8012D	; [23]
-	.long 0x00F8012D	; [24]
-	.long 0x00F8012D	; [25]
-	.long 0x00F8012D	; [26]
-	.long 0x00F8012D	; [27]
-	.long 0x00F8012D	; [28]
-	.long 0x00F8012D	; [29]
-	.long 0x00F8012D	; [30]
-	.long 0x00F8012D	; [31]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop7	; [ 7]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop8	; [ 8]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop9	; [ 9]
+	.long LcdKeyRow3_AdvanceDelay_StageNonZero	; [10]
+	.long LcdKeyRow4_AdvanceDelay_StageNonZero	; [11]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop12	; [12]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop13	; [13]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop14	; [14]
+	.long ExitKey_AdvanceDelay_StageNonZero	; [15]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [16]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [17]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [18]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [19]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [20]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [21]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [22]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [23]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [24]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [25]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [26]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [27]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [28]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [29]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [30]
+	.long ButtonTable_AdvanceDelay_StageNonZero_Nop16	; [31]
 
 ; --- table 22 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D200
 ; ButtonTable_S0ngC0py_StageZero -- the 32 panel-button handlers of this screen
@@ -191757,38 +191933,38 @@ ButtonTable_AdvanceDelay_StageNonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_S0ngC0py_StageZero:
-	.long 0x00F803C9	; [ 0]
-	.long 0x00F803D2	; [ 1]
-	.long 0x00F803DB	; [ 2]
-	.long 0x00F803E4	; [ 3]
-	.long 0x00F803ED	; [ 4]
-	.long 0x00F803F6	; [ 5]
-	.long 0x00F803FF	; [ 6]
-	.long 0x00F80408	; [ 7]
-	.long 0x00F80411	; [ 8]
-	.long 0x00F80412	; [ 9]
-	.long 0x00F80417	; [10]
-	.long 0x00F80417	; [11]
-	.long 0x00F80417	; [12]
-	.long 0x00F80417	; [13]
-	.long 0x00F80417	; [14]
-	.long 0x00F80418	; [15]
-	.long 0x00F80426	; [16]
-	.long 0x00F803C9	; [17]
-	.long 0x00F803D2	; [18]
-	.long 0x00F803DB	; [19]
-	.long 0x00F803E4	; [20]
-	.long 0x00F803ED	; [21]
-	.long 0x00F803F6	; [22]
-	.long 0x00F803FF	; [23]
-	.long 0x00F80408	; [24]
-	.long 0x00F80426	; [25]
-	.long 0x00F80426	; [26]
-	.long 0x00F80426	; [27]
-	.long 0x00F80426	; [28]
-	.long 0x00F80426	; [29]
-	.long 0x00F80426	; [30]
-	.long 0x00F80426	; [31]
+	.long SoftKeyCol1_S0ngC0py_StageZero	; [ 0]
+	.long SoftKeyCol2_S0ngC0py_StageZero	; [ 1]
+	.long SoftKeyCol3_S0ngC0py_StageZero	; [ 2]
+	.long SoftKeyCol4_S0ngC0py_StageZero	; [ 3]
+	.long SoftKeyCol5_S0ngC0py_StageZero	; [ 4]
+	.long SoftKeyCol6_S0ngC0py_StageZero	; [ 5]
+	.long SoftKeyCol7_S0ngC0py_StageZero	; [ 6]
+	.long SoftKeyCol8_S0ngC0py_StageZero	; [ 7]
+	.long ButtonTable_S0ngC0py_StageZero_Nop8	; [ 8]
+	.long LcdKeyRow2_S0ngC0py_StageZero	; [ 9]
+	.long ButtonTable_S0ngC0py_StageZero_Nop10	; [10]
+	.long ButtonTable_S0ngC0py_StageZero_Nop10	; [11]
+	.long ButtonTable_S0ngC0py_StageZero_Nop10	; [12]
+	.long ButtonTable_S0ngC0py_StageZero_Nop10	; [13]
+	.long ButtonTable_S0ngC0py_StageZero_Nop10	; [14]
+	.long ExitKey_S0ngC0py_StageZero	; [15]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [16]
+	.long SoftKeyCol1_S0ngC0py_StageZero	; [17]
+	.long SoftKeyCol2_S0ngC0py_StageZero	; [18]
+	.long SoftKeyCol3_S0ngC0py_StageZero	; [19]
+	.long SoftKeyCol4_S0ngC0py_StageZero	; [20]
+	.long SoftKeyCol5_S0ngC0py_StageZero	; [21]
+	.long SoftKeyCol6_S0ngC0py_StageZero	; [22]
+	.long SoftKeyCol7_S0ngC0py_StageZero	; [23]
+	.long SoftKeyCol8_S0ngC0py_StageZero	; [24]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [25]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [26]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [27]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [28]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [29]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [30]
+	.long ButtonTable_S0ngC0py_StageZero_Nop16	; [31]
 
 ; --- table 23 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D20C
 ; ButtonTable_S0ngC0py_StageNonZero -- the 32 panel-button handlers of this screen
@@ -191803,38 +191979,38 @@ ButtonTable_S0ngC0py_StageZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_S0ngC0py_StageNonZero:
-	.long 0x00F80427	; [ 0]
-	.long 0x00F80427	; [ 1]
-	.long 0x00F80427	; [ 2]
-	.long 0x00F80427	; [ 3]
-	.long 0x00F80427	; [ 4]
-	.long 0x00F80427	; [ 5]
-	.long 0x00F80427	; [ 6]
-	.long 0x00F80427	; [ 7]
-	.long 0x00F80427	; [ 8]
-	.long 0x00F80428	; [ 9]
-	.long 0x00F8042D	; [10]
-	.long 0x00F80432	; [11]
-	.long 0x00F80432	; [12]
-	.long 0x00F80432	; [13]
-	.long 0x00F80432	; [14]
-	.long 0x00F80433	; [15]
-	.long 0x00F80438	; [16]
-	.long 0x00F80438	; [17]
-	.long 0x00F80438	; [18]
-	.long 0x00F80438	; [19]
-	.long 0x00F80438	; [20]
-	.long 0x00F80438	; [21]
-	.long 0x00F80438	; [22]
-	.long 0x00F80438	; [23]
-	.long 0x00F80438	; [24]
-	.long 0x00F80438	; [25]
-	.long 0x00F80438	; [26]
-	.long 0x00F80438	; [27]
-	.long 0x00F80438	; [28]
-	.long 0x00F80438	; [29]
-	.long 0x00F80438	; [30]
-	.long 0x00F80438	; [31]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 1]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 2]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 3]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 4]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 5]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 6]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 7]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop0	; [ 8]
+	.long LcdKeyRow2_S0ngC0py_StageNonZero	; [ 9]
+	.long LcdKeyRow3_S0ngC0py_StageNonZero	; [10]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop11	; [11]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop11	; [12]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop11	; [13]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop11	; [14]
+	.long ExitKey_S0ngC0py_StageNonZero	; [15]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [16]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [17]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [18]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [19]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [20]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [21]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [22]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [23]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [24]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [25]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [26]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [27]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [28]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [29]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [30]
+	.long ButtonTable_S0ngC0py_StageNonZero_Nop16	; [31]
 
 ; --- table 24 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D221
 ; ButtonTable_N0teChange_StageZero -- the 32 panel-button handlers of this screen
@@ -191849,38 +192025,38 @@ ButtonTable_S0ngC0py_StageNonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_N0teChange_StageZero:
-	.long 0x00F804F1	; [ 0]
-	.long 0x00F804F2	; [ 1]
-	.long 0x00F804F3	; [ 2]
-	.long 0x00F804F4	; [ 3]
-	.long 0x00F804F5	; [ 4]
-	.long 0x00F8051C	; [ 5]
-	.long 0x00F8051D	; [ 6]
+	.long ButtonTable_N0teChange_StageZero_Nop0	; [ 0]
+	.long ButtonTable_N0teChange_StageZero_Nop1	; [ 1]
+	.long ButtonTable_N0teChange_StageZero_Nop2	; [ 2]
+	.long ButtonTable_N0teChange_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_N0teChange_StageZero	; [ 4]
+	.long ButtonTable_N0teChange_StageZero_Nop5	; [ 5]
+	.long ButtonTable_N0teChange_StageZero_Nop6	; [ 6]
 	.long ButtonTable_N0teChange_StageZero_Nop7	; [ 7]
 	.long ButtonTable_N0teChange_StageZero_Nop7	; [ 8]
-	.long 0x00F8051F	; [ 9]
-	.long 0x00F80569	; [10]
-	.long 0x00F80595	; [11]
-	.long 0x00F805CF	; [12]
-	.long 0x00F805D0	; [13]
-	.long 0x00F805D1	; [14]
-	.long 0x00F805D2	; [15]
-	.long 0x00F805E0	; [16]
-	.long 0x00F805E0	; [17]
-	.long 0x00F805E0	; [18]
-	.long 0x00F805E0	; [19]
-	.long 0x00F805E0	; [20]
-	.long 0x00F805E1	; [21]
-	.long 0x00F80608	; [22]
-	.long 0x00F80608	; [23]
-	.long 0x00F80608	; [24]
-	.long 0x00F80608	; [25]
-	.long 0x00F80608	; [26]
-	.long 0x00F80609	; [27]
-	.long 0x00F8060D	; [28]
-	.long 0x00F8060D	; [29]
-	.long 0x00F8060D	; [30]
-	.long 0x00F8060D	; [31]
+	.long LcdKeyRow2_N0teChange_StageZero	; [ 9]
+	.long LcdKeyRow3_N0teChange_StageZero	; [10]
+	.long LcdKeyRow4_N0teChange_StageZero	; [11]
+	.long ButtonTable_N0teChange_StageZero_Nop12	; [12]
+	.long ButtonTable_N0teChange_StageZero_Nop13	; [13]
+	.long ButtonTable_N0teChange_StageZero_Nop14	; [14]
+	.long ExitKey_N0teChange_StageZero	; [15]
+	.long ButtonTable_N0teChange_StageZero_Nop16	; [16]
+	.long ButtonTable_N0teChange_StageZero_Nop16	; [17]
+	.long ButtonTable_N0teChange_StageZero_Nop16	; [18]
+	.long ButtonTable_N0teChange_StageZero_Nop16	; [19]
+	.long ButtonTable_N0teChange_StageZero_Nop16	; [20]
+	.long N0teChange_StageZero_Button21	; [21]
+	.long ButtonTable_N0teChange_StageZero_Nop22	; [22]
+	.long ButtonTable_N0teChange_StageZero_Nop22	; [23]
+	.long ButtonTable_N0teChange_StageZero_Nop22	; [24]
+	.long ButtonTable_N0teChange_StageZero_Nop22	; [25]
+	.long ButtonTable_N0teChange_StageZero_Nop22	; [26]
+	.long NumberPadKey_N0teChange_StageZero	; [27]
+	.long ButtonTable_N0teChange_StageZero_Nop28	; [28]
+	.long ButtonTable_N0teChange_StageZero_Nop28	; [29]
+	.long ButtonTable_N0teChange_StageZero_Nop28	; [30]
+	.long ButtonTable_N0teChange_StageZero_Nop28	; [31]
 
 ; --- table 25 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D22D
 ; ButtonTable_N0teChange_StageNonZero -- the 32 panel-button handlers of this screen
@@ -191895,38 +192071,38 @@ ButtonTable_N0teChange_StageZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_N0teChange_StageNonZero:
-	.long 0x00F8060E	; [ 0]
-	.long 0x00F8060E	; [ 1]
-	.long 0x00F8060E	; [ 2]
-	.long 0x00F8060E	; [ 3]
-	.long 0x00F8060E	; [ 4]
-	.long 0x00F8060E	; [ 5]
-	.long 0x00F8060E	; [ 6]
-	.long 0x00F8060E	; [ 7]
-	.long 0x00F8060E	; [ 8]
-	.long 0x00F8060E	; [ 9]
-	.long 0x00F8060E	; [10]
-	.long 0x00F8060F	; [11]
-	.long 0x00F80619	; [12]
-	.long 0x00F80623	; [13]
-	.long 0x00F80623	; [14]
-	.long 0x00F80624	; [15]
-	.long 0x00F80629	; [16]
-	.long 0x00F80629	; [17]
-	.long 0x00F80629	; [18]
-	.long 0x00F80629	; [19]
-	.long 0x00F80629	; [20]
-	.long 0x00F80629	; [21]
-	.long 0x00F80629	; [22]
-	.long 0x00F80629	; [23]
-	.long 0x00F80629	; [24]
-	.long 0x00F80629	; [25]
-	.long 0x00F80629	; [26]
-	.long 0x00F80629	; [27]
-	.long 0x00F80629	; [28]
-	.long 0x00F80629	; [29]
-	.long 0x00F80629	; [30]
-	.long 0x00F80629	; [31]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 1]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 2]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 3]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 4]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 5]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 6]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 7]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 8]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [ 9]
+	.long ButtonTable_N0teChange_StageNonZero_Nop0	; [10]
+	.long LcdKeyRow4_N0teChange_StageNonZero	; [11]
+	.long LcdKeyRow5_N0teChange_StageNonZero	; [12]
+	.long ButtonTable_N0teChange_StageNonZero_Nop13	; [13]
+	.long ButtonTable_N0teChange_StageNonZero_Nop13	; [14]
+	.long ExitKey_N0teChange_StageNonZero	; [15]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [16]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [17]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [18]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [19]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [20]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [21]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [22]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [23]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [24]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [25]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [26]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [27]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [28]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [29]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [30]
+	.long ButtonTable_N0teChange_StageNonZero_Nop16	; [31]
 
 ; --- table 26 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D242
 ; ButtonTable_MeasureC0py_StageZero -- the 32 panel-button handlers of this screen
@@ -191941,38 +192117,38 @@ ButtonTable_N0teChange_StageNonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureC0py_StageZero:
-	.long 0x00F8080E	; [ 0]
-	.long 0x00F8080F	; [ 1]
-	.long 0x00F80810	; [ 2]
-	.long 0x00F80811	; [ 3]
-	.long 0x00F80812	; [ 4]
-	.long 0x00F8084C	; [ 5]
-	.long 0x00F8084D	; [ 6]
-	.long 0x00F8084E	; [ 7]
-	.long 0x00F8084F	; [ 8]
-	.long 0x00F8085C	; [ 9]
-	.long 0x00F808B1	; [10]
-	.long 0x00F808E6	; [11]
-	.long 0x00F8091B	; [12]
-	.long 0x00F8091C	; [13]
-	.long 0x00F8091D	; [14]
-	.long 0x00F8091E	; [15]
-	.long 0x00F8092C	; [16]
-	.long 0x00F8092C	; [17]
-	.long 0x00F8092C	; [18]
-	.long 0x00F8092C	; [19]
-	.long 0x00F8092C	; [20]
-	.long 0x00F8092D	; [21]
-	.long 0x00F80967	; [22]
-	.long 0x00F80967	; [23]
-	.long 0x00F80967	; [24]
-	.long 0x00F80967	; [25]
-	.long 0x00F80967	; [26]
-	.long 0x00F80968	; [27]
-	.long 0x00F8096C	; [28]
-	.long 0x00F8096C	; [29]
-	.long 0x00F8096C	; [30]
-	.long 0x00F8096C	; [31]
+	.long ButtonTable_MeasureC0py_StageZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureC0py_StageZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureC0py_StageZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureC0py_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_MeasureC0py_StageZero	; [ 4]
+	.long ButtonTable_MeasureC0py_StageZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureC0py_StageZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureC0py_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_MeasureC0py_StageZero	; [ 8]
+	.long LcdKeyRow2_MeasureC0py_StageZero	; [ 9]
+	.long LcdKeyRow3_MeasureC0py_StageZero	; [10]
+	.long LcdKeyRow4_MeasureC0py_StageZero	; [11]
+	.long ButtonTable_MeasureC0py_StageZero_Nop12	; [12]
+	.long ButtonTable_MeasureC0py_StageZero_Nop13	; [13]
+	.long ButtonTable_MeasureC0py_StageZero_Nop14	; [14]
+	.long ExitKey_MeasureC0py_StageZero	; [15]
+	.long ButtonTable_MeasureC0py_StageZero_Nop16	; [16]
+	.long ButtonTable_MeasureC0py_StageZero_Nop16	; [17]
+	.long ButtonTable_MeasureC0py_StageZero_Nop16	; [18]
+	.long ButtonTable_MeasureC0py_StageZero_Nop16	; [19]
+	.long ButtonTable_MeasureC0py_StageZero_Nop16	; [20]
+	.long MeasureC0py_StageZero_Button21	; [21]
+	.long ButtonTable_MeasureC0py_StageZero_Nop22	; [22]
+	.long ButtonTable_MeasureC0py_StageZero_Nop22	; [23]
+	.long ButtonTable_MeasureC0py_StageZero_Nop22	; [24]
+	.long ButtonTable_MeasureC0py_StageZero_Nop22	; [25]
+	.long ButtonTable_MeasureC0py_StageZero_Nop22	; [26]
+	.long NumberPadKey_MeasureC0py_StageZero	; [27]
+	.long ButtonTable_MeasureC0py_StageZero_Nop28	; [28]
+	.long ButtonTable_MeasureC0py_StageZero_Nop28	; [29]
+	.long ButtonTable_MeasureC0py_StageZero_Nop28	; [30]
+	.long ButtonTable_MeasureC0py_StageZero_Nop28	; [31]
 
 ; --- table 27 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D24E
 ; ButtonTable_MeasureC0py_StageNonZero -- the 32 panel-button handlers of this screen
@@ -191987,38 +192163,38 @@ ButtonTable_MeasureC0py_StageZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureC0py_StageNonZero:
-	.long 0x00F8096D	; [ 0]
-	.long 0x00F8096E	; [ 1]
-	.long 0x00F8096F	; [ 2]
-	.long 0x00F80970	; [ 3]
-	.long 0x00F80971	; [ 4]
-	.long 0x00F80972	; [ 5]
-	.long 0x00F80973	; [ 6]
-	.long 0x00F80974	; [ 7]
-	.long 0x00F80975	; [ 8]
-	.long 0x00F80984	; [ 9]
-	.long 0x00F80985	; [10]
-	.long 0x00F80985	; [11]
-	.long 0x00F80986	; [12]
-	.long 0x00F80990	; [13]
-	.long 0x00F80991	; [14]
-	.long 0x00F80992	; [15]
-	.long 0x00F8099C	; [16]
-	.long 0x00F8099C	; [17]
-	.long 0x00F8099C	; [18]
-	.long 0x00F8099C	; [19]
-	.long 0x00F8099C	; [20]
-	.long 0x00F8099C	; [21]
-	.long 0x00F8099C	; [22]
-	.long 0x00F8099C	; [23]
-	.long 0x00F8099C	; [24]
-	.long 0x00F8099C	; [25]
-	.long 0x00F8099C	; [26]
-	.long 0x00F8099C	; [27]
-	.long 0x00F8099C	; [28]
-	.long 0x00F8099C	; [29]
-	.long 0x00F8099C	; [30]
-	.long 0x00F8099C	; [31]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop7	; [ 7]
+	.long LcdKeyRow1_MeasureC0py_StageNonZero	; [ 8]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop9	; [ 9]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop10	; [10]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop10	; [11]
+	.long LcdKeyRow5_MeasureC0py_StageNonZero	; [12]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop13	; [13]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop14	; [14]
+	.long ExitKey_MeasureC0py_StageNonZero	; [15]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [16]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [17]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [18]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [19]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [20]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [21]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [22]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [23]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [24]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [25]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [26]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [27]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [28]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [29]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [30]
+	.long ButtonTable_MeasureC0py_StageNonZero_Nop16	; [31]
 
 ; --- table 28 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D263
 ; ButtonTable_MeasureInsert_StageZero -- the 32 panel-button handlers of this screen
@@ -192033,38 +192209,38 @@ ButtonTable_MeasureC0py_StageNonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureInsert_StageZero:
-	.long 0x00F80B6B	; [ 0]
-	.long 0x00F80B6C	; [ 1]
-	.long 0x00F80B6D	; [ 2]
-	.long 0x00F80B6E	; [ 3]
-	.long 0x00F80B6F	; [ 4]
-	.long 0x00F80BA9	; [ 5]
-	.long 0x00F80BAA	; [ 6]
-	.long 0x00F80BAB	; [ 7]
-	.long 0x00F80BAC	; [ 8]
-	.long 0x00F80BB9	; [ 9]
-	.long 0x00F80C0E	; [10]
-	.long 0x00F80C43	; [11]
-	.long 0x00F80C78	; [12]
-	.long 0x00F80C79	; [13]
-	.long 0x00F80C7A	; [14]
-	.long 0x00F80C7B	; [15]
-	.long 0x00F80C89	; [16]
-	.long 0x00F80C89	; [17]
-	.long 0x00F80C89	; [18]
-	.long 0x00F80C89	; [19]
-	.long 0x00F80C89	; [20]
-	.long 0x00F80C8A	; [21]
-	.long 0x00F80CC4	; [22]
-	.long 0x00F80CC4	; [23]
-	.long 0x00F80CC4	; [24]
-	.long 0x00F80CC4	; [25]
-	.long 0x00F80CC4	; [26]
-	.long 0x00F80CC5	; [27]
-	.long 0x00F80CC9	; [28]
-	.long 0x00F80CC9	; [29]
-	.long 0x00F80CC9	; [30]
-	.long 0x00F80CC9	; [31]
+	.long ButtonTable_MeasureInsert_StageZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureInsert_StageZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureInsert_StageZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureInsert_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_MeasureInsert_StageZero	; [ 4]
+	.long ButtonTable_MeasureInsert_StageZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureInsert_StageZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureInsert_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_MeasureInsert_StageZero	; [ 8]
+	.long LcdKeyRow2_MeasureInsert_StageZero	; [ 9]
+	.long LcdKeyRow3_MeasureInsert_StageZero	; [10]
+	.long LcdKeyRow4_MeasureInsert_StageZero	; [11]
+	.long ButtonTable_MeasureInsert_StageZero_Nop12	; [12]
+	.long ButtonTable_MeasureInsert_StageZero_Nop13	; [13]
+	.long ButtonTable_MeasureInsert_StageZero_Nop14	; [14]
+	.long ExitKey_MeasureInsert_StageZero	; [15]
+	.long ButtonTable_MeasureInsert_StageZero_Nop16	; [16]
+	.long ButtonTable_MeasureInsert_StageZero_Nop16	; [17]
+	.long ButtonTable_MeasureInsert_StageZero_Nop16	; [18]
+	.long ButtonTable_MeasureInsert_StageZero_Nop16	; [19]
+	.long ButtonTable_MeasureInsert_StageZero_Nop16	; [20]
+	.long MeasureInsert_StageZero_Button21	; [21]
+	.long ButtonTable_MeasureInsert_StageZero_Nop22	; [22]
+	.long ButtonTable_MeasureInsert_StageZero_Nop22	; [23]
+	.long ButtonTable_MeasureInsert_StageZero_Nop22	; [24]
+	.long ButtonTable_MeasureInsert_StageZero_Nop22	; [25]
+	.long ButtonTable_MeasureInsert_StageZero_Nop22	; [26]
+	.long NumberPadKey_MeasureInsert_StageZero	; [27]
+	.long ButtonTable_MeasureInsert_StageZero_Nop28	; [28]
+	.long ButtonTable_MeasureInsert_StageZero_Nop28	; [29]
+	.long ButtonTable_MeasureInsert_StageZero_Nop28	; [30]
+	.long ButtonTable_MeasureInsert_StageZero_Nop28	; [31]
 
 ; --- table 29 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D26F
 ; ButtonTable_MeasureInsert_StageNonZero -- the 32 panel-button handlers of this screen
@@ -192079,38 +192255,38 @@ ButtonTable_MeasureInsert_StageZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureInsert_StageNonZero:
-	.long 0x00F80CCA	; [ 0]
-	.long 0x00F80CCB	; [ 1]
-	.long 0x00F80CCC	; [ 2]
-	.long 0x00F80CCD	; [ 3]
-	.long 0x00F80CCE	; [ 4]
-	.long 0x00F80CCF	; [ 5]
-	.long 0x00F80CD0	; [ 6]
-	.long 0x00F80CD1	; [ 7]
-	.long 0x00F80CD2	; [ 8]
-	.long 0x00F80CE1	; [ 9]
-	.long 0x00F80CE2	; [10]
-	.long 0x00F80CE3	; [11]
-	.long 0x00F80CE4	; [12]
-	.long 0x00F80CEE	; [13]
-	.long 0x00F80CEF	; [14]
-	.long 0x00F80CF0	; [15]
-	.long 0x00F80CFA	; [16]
-	.long 0x00F80CFA	; [17]
-	.long 0x00F80CFA	; [18]
-	.long 0x00F80CFA	; [19]
-	.long 0x00F80CFA	; [20]
-	.long 0x00F80CFA	; [21]
-	.long 0x00F80CFA	; [22]
-	.long 0x00F80CFA	; [23]
-	.long 0x00F80CFA	; [24]
-	.long 0x00F80CFA	; [25]
-	.long 0x00F80CFA	; [26]
-	.long 0x00F80CFA	; [27]
-	.long 0x00F80CFA	; [28]
-	.long 0x00F80CFA	; [29]
-	.long 0x00F80CFA	; [30]
-	.long 0x00F80CFA	; [31]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop7	; [ 7]
+	.long LcdKeyRow1_MeasureInsert_StageNonZero	; [ 8]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop9	; [ 9]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop10	; [10]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop11	; [11]
+	.long LcdKeyRow5_MeasureInsert_StageNonZero	; [12]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop13	; [13]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop14	; [14]
+	.long ExitKey_MeasureInsert_StageNonZero	; [15]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [16]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [17]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [18]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [19]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [20]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [21]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [22]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [23]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [24]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [25]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [26]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [27]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [28]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [29]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [30]
+	.long ButtonTable_MeasureInsert_StageNonZero_Nop16	; [31]
 
 ; --- table 30 of 32: 12 distinct targets; named by the `ld XIX` at 0xF7D294
 ; ButtonTable_StepRecordPartSelect -- the 32 panel-button handlers of this screen
@@ -192125,38 +192301,38 @@ ButtonTable_MeasureInsert_StageNonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_StepRecordPartSelect:
-	.long 0x00F80FC5	; [ 0]
-	.long 0x00F80FCE	; [ 1]
-	.long 0x00F80FD7	; [ 2]
-	.long 0x00F80FE0	; [ 3]
-	.long 0x00F80FE9	; [ 4]
-	.long 0x00F80FF2	; [ 5]
-	.long 0x00F80FFB	; [ 6]
-	.long 0x00F81004	; [ 7]
-	.long 0x00F8100D	; [ 8]
-	.long 0x00F8100E	; [ 9]
-	.long 0x00F8100E	; [10]
-	.long 0x00F8100E	; [11]
-	.long 0x00F8100E	; [12]
-	.long 0x00F8100E	; [13]
-	.long 0x00F8100E	; [14]
-	.long 0x00F8100F	; [15]
-	.long 0x00F8101D	; [16]
-	.long 0x00F80FC5	; [17]
-	.long 0x00F80FCE	; [18]
-	.long 0x00F80FD7	; [19]
-	.long 0x00F80FE0	; [20]
-	.long 0x00F80FE9	; [21]
-	.long 0x00F80FF2	; [22]
-	.long 0x00F80FFB	; [23]
-	.long 0x00F81004	; [24]
-	.long 0x00F8101D	; [25]
-	.long 0x00F8101D	; [26]
-	.long 0x00F8101D	; [27]
-	.long 0x00F8101D	; [28]
-	.long 0x00F8101D	; [29]
-	.long 0x00F8101D	; [30]
-	.long 0x00F8101D	; [31]
+	.long SoftKeyCol1_StepRecordPartSelect	; [ 0]
+	.long SoftKeyCol2_StepRecordPartSelect	; [ 1]
+	.long SoftKeyCol3_StepRecordPartSelect	; [ 2]
+	.long SoftKeyCol4_StepRecordPartSelect	; [ 3]
+	.long SoftKeyCol5_StepRecordPartSelect	; [ 4]
+	.long SoftKeyCol6_StepRecordPartSelect	; [ 5]
+	.long SoftKeyCol7_StepRecordPartSelect	; [ 6]
+	.long SoftKeyCol8_StepRecordPartSelect	; [ 7]
+	.long ButtonTable_StepRecordPartSelect_Nop8	; [ 8]
+	.long ButtonTable_StepRecordPartSelect_Nop9	; [ 9]
+	.long ButtonTable_StepRecordPartSelect_Nop9	; [10]
+	.long ButtonTable_StepRecordPartSelect_Nop9	; [11]
+	.long ButtonTable_StepRecordPartSelect_Nop9	; [12]
+	.long ButtonTable_StepRecordPartSelect_Nop9	; [13]
+	.long ButtonTable_StepRecordPartSelect_Nop9	; [14]
+	.long ExitKey_StepRecordPartSelect	; [15]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [16]
+	.long SoftKeyCol1_StepRecordPartSelect	; [17]
+	.long SoftKeyCol2_StepRecordPartSelect	; [18]
+	.long SoftKeyCol3_StepRecordPartSelect	; [19]
+	.long SoftKeyCol4_StepRecordPartSelect	; [20]
+	.long SoftKeyCol5_StepRecordPartSelect	; [21]
+	.long SoftKeyCol6_StepRecordPartSelect	; [22]
+	.long SoftKeyCol7_StepRecordPartSelect	; [23]
+	.long SoftKeyCol8_StepRecordPartSelect	; [24]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [25]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [26]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [27]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [28]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [29]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [30]
+	.long ButtonTable_StepRecordPartSelect_Nop16	; [31]
 
 ; --- table 31 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D2A9
 ; ButtonTable_SequencerMedley -- the 32 panel-button handlers of this screen
@@ -192171,38 +192347,38 @@ ButtonTable_StepRecordPartSelect:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_SequencerMedley:
-	.long 0x00F81101	; [ 0]
-	.long 0x00F81102	; [ 1]
-	.long 0x00F8111E	; [ 2]
-	.long 0x00F81136	; [ 3]
-	.long 0x00F81137	; [ 4]
-	.long 0x00F81165	; [ 5]
-	.long 0x00F81166	; [ 6]
-	.long 0x00F81185	; [ 7]
-	.long 0x00F8119D	; [ 8]
-	.long 0x00F8119E	; [ 9]
-	.long 0x00F811E2	; [10]
-	.long 0x00F811FF	; [11]
-	.long 0x00F81230	; [12]
-	.long 0x00F81230	; [13]
-	.long 0x00F81230	; [14]
-	.long 0x00F81224	; [15]
-	.long 0x00F81230	; [16]
-	.long 0x00F81230	; [17]
-	.long 0x00F81102	; [18]
-	.long 0x00F8111E	; [19]
-	.long 0x00F81136	; [20]
-	.long 0x00F81137	; [21]
-	.long 0x00F81230	; [22]
-	.long 0x00F81166	; [23]
-	.long 0x00F81185	; [24]
-	.long 0x00F81230	; [25]
-	.long 0x00F81230	; [26]
-	.long 0x00F81231	; [27]
-	.long 0x00F81235	; [28]
-	.long 0x00F81235	; [29]
-	.long 0x00F81235	; [30]
-	.long 0x00F81235	; [31]
+	.long ButtonTable_SequencerMedley_Nop0	; [ 0]
+	.long SoftKeyCol2_SequencerMedley	; [ 1]
+	.long SoftKeyCol3_SequencerMedley	; [ 2]
+	.long ButtonTable_SequencerMedley_Nop3	; [ 3]
+	.long SoftKeyCol5_SequencerMedley	; [ 4]
+	.long ButtonTable_SequencerMedley_Nop5	; [ 5]
+	.long SoftKeyCol7_SequencerMedley	; [ 6]
+	.long SoftKeyCol8_SequencerMedley	; [ 7]
+	.long ButtonTable_SequencerMedley_Nop8	; [ 8]
+	.long LcdKeyRow2_SequencerMedley	; [ 9]
+	.long LcdKeyRow3_SequencerMedley	; [10]
+	.long LcdKeyRow4_SequencerMedley	; [11]
+	.long ButtonTable_SequencerMedley_Nop12	; [12]
+	.long ButtonTable_SequencerMedley_Nop12	; [13]
+	.long ButtonTable_SequencerMedley_Nop12	; [14]
+	.long ExitKey_SequencerMedley	; [15]
+	.long ButtonTable_SequencerMedley_Nop12	; [16]
+	.long ButtonTable_SequencerMedley_Nop12	; [17]
+	.long SoftKeyCol2_SequencerMedley	; [18]
+	.long SoftKeyCol3_SequencerMedley	; [19]
+	.long ButtonTable_SequencerMedley_Nop3	; [20]
+	.long SoftKeyCol5_SequencerMedley	; [21]
+	.long ButtonTable_SequencerMedley_Nop12	; [22]
+	.long SoftKeyCol7_SequencerMedley	; [23]
+	.long SoftKeyCol8_SequencerMedley	; [24]
+	.long ButtonTable_SequencerMedley_Nop12	; [25]
+	.long ButtonTable_SequencerMedley_Nop12	; [26]
+	.long NumberPadKey_SequencerMedley	; [27]
+	.long ButtonTable_SequencerMedley_Nop28	; [28]
+	.long ButtonTable_SequencerMedley_Nop28	; [29]
+	.long ButtonTable_SequencerMedley_Nop28	; [30]
+	.long ButtonTable_SequencerMedley_Nop28	; [31]
 
 ; ==============================================================================
 ; 0xF7E2D8-0xF7FFFF -- THE PANEL-SCREEN METHOD BLOCK: 15 Enter bodies, 15 Leave
