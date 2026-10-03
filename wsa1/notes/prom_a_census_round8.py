@@ -1835,7 +1835,7 @@ RING_NAMES = [
      "0xFB7EFD `m_cp_mi8 MB16, 0x207a, 0x79` and 0xFB7F02 `jr nz` gate the "
      "whole body; 0xFB7F04 `ei 0x06` raises the mask, 0xFB7F06 `call "
      "0xF41DB8` = prom_b slot T_Ring600C1E_Init, 0xFB7F0A `ei 0x00` lowers "
-     "it. (0x207A) is this listing's panel mode byte -- PanelState_Update207A "
+     "it. (0x207A) is this listing's panel mode byte -- PanelState_UpdateScreenLatch "
      "(0xF863F5) is headed `(0x207A) := (0x207C) unless the mode is "
      "unchanged`. Called by `call` at 0xFB2058, 0xFB20F2, 0xFB21EF and "
      "0xFB607F",

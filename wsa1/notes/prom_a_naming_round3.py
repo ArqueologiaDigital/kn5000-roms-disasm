@@ -752,7 +752,7 @@ NAMES = [
         "Evidence: 0xD0 is bits 7, 6 and 4 -- exactly the three request bits the",
         "         panel task acts on: bit 7 PanelScreen_ApplyHomeForce (0xF863AC),",
         "         bit 6 PanelScreen_ApplyHomeRequest (0xF862A6), bit 4 the bit",
-        "         PanelState_Sync2095 moves in and out of (0x2095) (0xF86559).",
+        "         PanelState_SyncScreenFlags moves in and out of (0x2095) (0xF86559).",
         "         Bits 2, 1, 3 and 0 -- the other four consumers -- are NOT in the",
         "         mask, which is what makes the name specific.  Check Q2."]),
     (0xFD60D9, "PanelScreen_PostRequestBit6", [

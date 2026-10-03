@@ -67,7 +67,7 @@ the census as `byte lda x3`.
 
 - **Who sets it.** The value-change handlers, e.g. `SoundBank_Select*`, `*_StepItem`,
   `*_AdjustBank` and `S0ngSelectName_NextSong`.
-- **How it reaches the redraw.** `PanelState_Sync2095` copies it into `UI_Request_Hi` bit 4, and
+- **How it reaches the redraw.** `PanelState_SyncScreenFlags` copies it into `UI_Request_Hi` bit 4, and
   `UI_Request_Hi` is published into (0x2072) when quiet. `PanelScreen_RunRedraw` re-Enters the
   current screen on (0x2072) bit 4.
 - **What the Paint routines do with it.** When the bit is set, the Paint routines skip the screen
@@ -96,7 +96,7 @@ override.
 
 ## 3. Two prom_a headers corrected
 
-- **`PanelState_Sync2095`.** The header said that bit 4 of (0x2095) is cleared "when bit 4 of
+- **`PanelState_SyncScreenFlags`.** The header said that bit 4 of (0x2095) is cleared "when bit 4 of
   (0x2071) is clear". The code does the opposite:
   - `bit 4,(0x2071) / jr z` jumps over the `and (0x2095),0xEF` when the (0x2071) bit is clear;
   - so (0x2095) bit 4 is cleared only when (0x2071) bit 4 is already set, i.e. when the request

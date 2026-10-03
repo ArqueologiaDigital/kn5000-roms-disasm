@@ -391,10 +391,10 @@ def structure():
       "Called from: thunk slot T_F40F34 (`jp 0x00F86066`), whose one proven call",
       "         site is prom_a 0xF8210E; also `calr` from PanelTask_ResetAndPoll",
       "         0xF8601C.",
-      "Body, in order: PanelState_CheckHomeAllowed, PanelState_Sync2095,",
+      "Body, in order: PanelState_CheckHomeAllowed, PanelState_SyncScreenFlags,",
       "         PanelState_LatchPrevious, PanelState_RunRequests,",
-      "         PanelMode_To2076, PanelState_UpdateFlags2092,",
-      "         PanelState_Update207A, PanelState_ClearOnChange,",
+      "         PanelMode_ToGroup, PanelState_UpdateScreenHoldState,",
+      "         PanelState_UpdateScreenLatch, PanelState_ClearOnChange,",
       "         PanelScreen_RunLeave, PanelScreen_RunEnter,",
       "         PanelScreen_RunRedraw, `and (0x2095),0xEF`,",
       "         PanelButton_RunPending, PanelState_TakePendingHoldTime.",
@@ -413,7 +413,7 @@ def structure():
       "",
       "Called from: PanelTask_Step 0xF8608F (`calr`), and nothing else.",
       "Outputs: if (0x209A) != 0 then (0x2073) = (0x209A) and (0x209A) = 0.",
-      "Evidence: (0x2073) is the cell PanelTimer_Screen2073 counts down and that",
+      "Evidence: (0x2073) is the cell PanelTimer_ScreenHold counts down and that",
       "         PanelScreen_ApplyHomeRequest reloads with 0x70, so (0x209A) is a",
       "         one-shot request to preload that counter.")
     N(0xF860A6, "UiEventList_Publish",
@@ -586,22 +586,22 @@ def structure():
       "Evidence: `bit 0x07,A` at 0xF863AC is the guard -- bit 7 of (0x2071), the",
       "         same bit PanelState_CheckHomeAllowed tests at 0xF86B1F on the",
       "         high half of the 16-bit load from (0x2070).")
-    N(0xF863D3, "PanelState_UpdateFlags2092",
-      "PanelState_UpdateFlags2092 -- fold `(0x2073) is running` into (0x2092)",
+    N(0xF863D3, "PanelState_UpdateScreenHoldState",
+      "PanelState_UpdateScreenHoldState -- fold `(0x2073) is running` into (0x2092)",
       "",
       "Called from: PanelTask_Step 0xF86075 (`calr`), and nothing else.",
       "Outputs: (0x2073) != 0 -> bit 0 = 1, bit 1 = 0;  (0x2073) == 0 -> bit 0 =",
       "         0, bit 1 = the OLD bit 0.  Bits 2-7 are preserved (`and A,0xfc`).",
-      "Evidence: PanelState_Update207A at 0xF86405 tests exactly bit 0 of this",
+      "Evidence: PanelState_UpdateScreenLatch at 0xF86405 tests exactly bit 0 of this",
       "         byte, so bit 0 means `the (0x2073) countdown is running` and",
       "         bit 1 means `it was running last pass`.")
-    N(0xF863F5, "PanelState_Update207A",
-      "PanelState_Update207A -- (0x207A) := (0x207C) unless the mode is unchanged",
+    N(0xF863F5, "PanelState_UpdateScreenLatch",
+      "PanelState_UpdateScreenLatch -- (0x207A) := (0x207C) unless the mode is unchanged",
       "                         and bit 0 of (0x2092) is set",
       "",
       "Called from: PanelTask_Step 0xF86078 (`calr`), and nothing else.",
       "Evidence: `bit 0x00,A` at 0xF86405 on (0x2092), the bit",
-      "         PanelState_UpdateFlags2092 writes from (0x2073).")
+      "         PanelState_UpdateScreenHoldState writes from (0x2073).")
     N(0xF86413, "PanelState_ClearOnChange",
       "PanelState_ClearOnChange -- drop held-button state when an id changes",
       "",
@@ -677,8 +677,8 @@ def structure():
       "Evidence: `sla 0x02,HL` at 0xF86545 is the 4-byte stride of an LE32",
       "         pointer table; `add WA,BC` at 0xF8654C adds only to the low 16",
       "         bits, which is safe because BC is 0 or 4 at every call site.")
-    N(0xF86553, "PanelState_Sync2095",
-      "PanelState_Sync2095 -- move bit 4 between (0x2095) and (0x2071), then",
+    N(0xF86553, "PanelState_SyncScreenFlags",
+      "PanelState_SyncScreenFlags -- move bit 4 between (0x2095) and (0x2071), then",
       "                       publish (0x2071) into (0x2072) when it is quiet",
       "",
       "Called from: PanelTask_Step 0xF86069 (`calr`), and nothing else.",
@@ -825,7 +825,7 @@ def structure():
       "",
       "Called from: thunk slot T_F40F44 (`jp 0x00F86903`), whose one proven call",
       "         site is prom_a 0xF821ED.",
-      "Body:    (0x2088) == 0 (no button held) -> PanelTimer_Screen2073 and",
+      "Body:    (0x2088) == 0 (no button held) -> PanelTimer_ScreenHold and",
       "         PanelTimer_Repeat20AB;  otherwise PanelTimer_Button2074.",
       "Evidence: the discriminator is a 32-bit compare of (0x2088) with zero at",
       "         0xF86907, the same bitmap PanelButton_Accept maintains.")
@@ -842,8 +842,8 @@ def structure():
       "Outputs: on expiry, `inc 1,(0x207E)` and `or (0x2071),0x10`.",
       "Evidence: (0x20AB) is loaded by PanelState_ClearOnChange at 0xF86483 with",
       "         the new screen id, so this counter starts on every screen change.")
-    N(0xF86933, "PanelTimer_Screen2073",
-      "PanelTimer_Screen2073 -- count (0x2073) down and raise request bit 2",
+    N(0xF86933, "PanelTimer_ScreenHold",
+      "PanelTimer_ScreenHold -- count (0x2073) down and raise request bit 2",
       "",
       "Called from: PanelTimers_Step 0xF8690F (`calr`), and nothing else.",
       "Body:    (0x20A2) != 0: (0x2073) <= 1 -> `or (0x2071),0x04` and return;",
@@ -1096,13 +1096,13 @@ def structure():
       "         `and (0x2075),0xEF`.",
       "Evidence: the index is `ld WA,(0x2096) / sla 0x01,WA` at 0xF86C6C -- a",
       "         16-bit index doubled, i.e. a table of WORDS.")
-    N(0xF86CAE, "PanelMode_To2076",
-      "PanelMode_To2076 -- (0x2076) := PanelMode_To2076Map[min((0x2078), 0x1F)]",
+    N(0xF86CAE, "PanelMode_ToGroup",
+      "PanelMode_ToGroup -- (0x2076) := PanelMode_GroupMap[min((0x2078), 0x1F)]",
       "",
       "Called from: PanelTask_Step 0xF86072 (`calr`), and nothing else.",
       "Evidence: `cp L,0x1f / jr ULE / ld L,0x01` at 0xF86CB4 -- an index above",
       "         0x1F is replaced by 1, NOT clamped to 0x1F.  That bound is what",
-      "         fixes PanelMode_To2076Map at 32 entries.")
+      "         fixes PanelMode_GroupMap at 32 entries.")
     N(0xF872C1, "PanelScreen_NullVtable",
       "PanelScreen_NullVtable -- the do-nothing screen object",
       "",
@@ -1189,7 +1189,7 @@ def structure():
       "         0x40.  So an entry is `screen id + the go-there request flag`, the",
       "         same pair PanelState_Init writes as the literal 0x40AA.  Check H2.",
       "⚠ ENTRY COUNT 17 IS UNPINNED.  Nothing bounds (0x2096); the count rests",
-      "         only on the table ending where PanelMode_To2076's code begins at",
+      "         only on the table ending where PanelMode_ToGroup's code begins at",
       "         0xF86CAE.  The three writers inside this span use indices 0, 2 and",
       "         7, and prom_a 0xFF4795 compares (0x2096) with 7.",
       "Evidence: `ld XHL,0x00f86c8c` at 0xF86C73 is the only instruction in",
@@ -1207,10 +1207,10 @@ def structure():
       "         with `djnz BC` at 0xF86B33 is what makes it a 2-entry scan.",
       "Note:    0xAA -- the id PanelState_Init installs as the home screen -- is",
       "         NOT one of these two.")
-    N(0xF86E81, "PanelMode_To2076Map",
-      "PanelMode_To2076Map -- 32 bytes, (0x2078) -> (0x2076)",
+    N(0xF86E81, "PanelMode_GroupMap",
+      "PanelMode_GroupMap -- 32 bytes, (0x2078) -> (0x2076)",
       "",
-      "Read by: ONE site, `ld XIY,0x00F86E81` at 0xF86CBB (PanelMode_To2076).",
+      "Read by: ONE site, `ld XIY,0x00F86E81` at 0xF86CBB (PanelMode_ToGroup).",
       "ENTRY COUNT 32, pinned by `cp L,0x1f` at 0xF86CB4.",
       "Contents: 01 01 02 03 03 03 03 03 08 09 0A 0B 0C 0D 0E 0F 10 01 12 13 14",
       "         15 16 17 01 01 01 01 01 01 01 01 -- every value is <= 0x17, i.e.",
@@ -1740,7 +1740,7 @@ def selftest():
 
     print("H. PanelHold_ScreenRequest carries the request FLAG with the id")
     ents = [w16(0xF86C8C + 2 * i) for i in range(17)]
-    bad += check("H1 17 entries end where PanelMode_To2076's code begins",
+    bad += check("H1 17 entries end where PanelMode_ToGroup's code begins",
                  "0x%06X" % (0xF86C8C + 2 * 17), "0xF86CAE")
     bad += check("H2 live entries whose high byte is NOT 0x40",
                  [i for i, v in enumerate(ents) if v != 0xFFFF and (v >> 8) != 0x40], [])
@@ -1796,7 +1796,7 @@ def selftest():
                  "0x%06X" % w32(entC[0xA9]), "0x%06X" % 0xF8659B)
 
     print("M. the two 32-byte maps")
-    bad += check("M1 PanelMode_To2076Map's reader bound", dis1(0xF86CB4), "cp L,0x1f")
+    bad += check("M1 PanelMode_GroupMap's reader bound", dis1(0xF86CB4), "cp L,0x1f")
     bad += check("M2 0xF86CB0 READS (0x2078)", dis1(0xF86CB0), "ld L,(0x2078)")
     bad += check("M2 0xF86CC4 WRITES (0x2076)", dis1(0xF86CC4), "ld (0x2076),A")
     bad += check("M2 0xF8638F READS (0x2078) too -- the SAME cell, not the "

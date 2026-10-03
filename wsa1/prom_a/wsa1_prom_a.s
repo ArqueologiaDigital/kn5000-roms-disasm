@@ -10892,10 +10892,10 @@ sub_F8605C:
 ; Called from: thunk slot T_PanelTask_Step (T_F40F34) (`jp 0x00F86066`), whose one proven call
 ;          site is prom_a 0xF8210E; also `calr` from PanelTask_StepAndCheckRequest
 ;          0xF8601C.
-; Body, in order: PanelState_CheckRequestAllowed, PanelState_Sync2095,
+; Body, in order: PanelState_CheckRequestAllowed, PanelState_SyncScreenFlags,
 ;          PanelState_LatchPrevious, PanelState_RunRequests,
-;          PanelMode_To2076, PanelState_UpdateFlags2092,
-;          PanelState_Update207A, PanelState_ClearOnChange,
+;          PanelMode_ToGroup, PanelState_UpdateScreenHoldState,
+;          PanelState_UpdateScreenLatch, PanelState_ClearOnChange,
 ;          PanelScreen_RunLeave, PanelScreen_RunEnter,
 ;          PanelScreen_RunRedraw, `and (0x2095),0xEF`,
 ;          PanelButton_RunPending, PanelState_TakePendingHoldTime.
@@ -10908,7 +10908,7 @@ PanelTask_Step:   ; entry: calr from 0xF8601C, prom_b directory slot T_PanelTask
 	calr .LF86553                                 ; F86069  1e e7 04
 	calr .LF860D9                                 ; F8606C  1e 6a 00
 	calr .LF86101                                 ; F8606F  1e 8f 00
-	calr PanelMode_To2076                                   ; F86072  1e 39 0c   calr 0xf86cae
+	calr PanelMode_ToGroup                                   ; F86072  1e 39 0c   calr 0xf86cae
 	calr .LF863D3                                 ; F86075  1e 5b 03
 	calr .LF863F5                                 ; F86078  1e 7a 03
 	calr .LF86413                                 ; F8607B  1e 95 03
@@ -10937,7 +10937,7 @@ sub_F86093:
 ;
 ; Called from: PanelTask_Step 0xF8608F (`calr`), and nothing else.
 ; Outputs: if (0x209A) != 0 then (0x2073) = (0x209A) and (0x209A) = 0.
-; Evidence: (0x2073) is the cell PanelTimer_Screen2073 counts down and that
+; Evidence: (0x2073) is the cell PanelTimer_ScreenHold counts down and that
 ;          PanelScreen_ApplyRequest reloads with 0x70, so (0x209A) is a
 ;          one-shot request to preload that counter.
 ; ---------------------------------------------------------------------
@@ -11505,17 +11505,17 @@ PanelScreen_ApplyRequestForced:   ; entry: calr from 0xF86112
 	ret                                           ; F863D2  0e
 
 ; ---------------------------------------------------------------------
-; PanelState_UpdateFlags2092 -- fold `(0x2073) is running` into (0x2092)
+; PanelState_UpdateScreenHoldState -- fold `(0x2073) is running` into (0x2092)
 ;
 ; Called from: PanelTask_Step 0xF86075 (`calr`), and nothing else.
 ; Outputs: (0x2073) != 0 -> bit 0 = 1, bit 1 = 0;  (0x2073) == 0 -> bit 0 =
 ;          0, bit 1 = the OLD bit 0.  Bits 2-7 are preserved (`and A,0xfc`).
-; Evidence: PanelState_Update207A at 0xF86405 tests exactly bit 0 of this
+; Evidence: PanelState_UpdateScreenLatch at 0xF86405 tests exactly bit 0 of this
 ;          byte, so bit 0 means `the (0x2073) countdown is running` and
 ;          bit 1 means `it was running last pass`.
 ; ---------------------------------------------------------------------
 .LF863D3:
-PanelState_UpdateFlags2092:   ; entry: calr from 0xF86075
+PanelState_UpdateScreenHoldState:   ; entry: calr from 0xF86075
 	ld a, (UI_ScreenHoldState:16)                            ; F863D3  c1 92 20 21   ld A,(0x2092)
 	ld W,A                                        ; F863D7  c9 88
 	and A,0xfc                                    ; F863D9  c9 cc fc
@@ -11533,15 +11533,15 @@ PanelState_UpdateFlags2092:   ; entry: calr from 0xF86075
 	ret                                           ; F863F4  0e
 
 ; ---------------------------------------------------------------------
-; PanelState_Update207A -- (0x207A) := (0x207C) unless the mode is unchanged
+; PanelState_UpdateScreenLatch -- (0x207A) := (0x207C) unless the mode is unchanged
 ;                          and bit 0 of (0x2092) is set
 ;
 ; Called from: PanelTask_Step 0xF86078 (`calr`), and nothing else.
 ; Evidence: `bit 0x00,A` at 0xF86405 on (0x2092), the bit
-;          PanelState_UpdateFlags2092 writes from (0x2073).
+;          PanelState_UpdateScreenHoldState writes from (0x2073).
 ; ---------------------------------------------------------------------
 .LF863F5:
-PanelState_Update207A:   ; entry: calr from 0xF86078
+PanelState_UpdateScreenLatch:   ; entry: calr from 0xF86078
 	ld w, (PanelMode:16)                            ; F863F5  c1 78 20 20   ld W,(0x2078)
 	ld a, (PanelMode_Previous:16)                            ; F863F9  c1 79 20 21   ld A,(0x2079)
 	cp W,A                                        ; F863FD  c9 f0
@@ -11780,7 +11780,7 @@ PanelScreen_ResolveMethod:   ; entry: calr from 0xF864D6, 0xF864F4, 0xF86528, 0x
 	ret                                           ; F86552  0e
 
 ; ---------------------------------------------------------------------
-; PanelState_Sync2095 -- move bit 4 between (0x2095) and (0x2071), then
+; PanelState_SyncScreenFlags -- move bit 4 between (0x2095) and (0x2071), then
 ;                        publish (0x2071) into (0x2072) when it is quiet
 ;
 ; Called from: PanelTask_Step 0xF86069 (`calr`), and nothing else.
@@ -11797,7 +11797,7 @@ PanelScreen_ResolveMethod:   ; entry: calr from 0xF864D6, 0xF864F4, 0xF86528, 0x
 ;          test; `and A,0xef` at 0xF8657A clears the same bit 4 again.
 ; ---------------------------------------------------------------------
 .LF86553:
-PanelState_Sync2095:   ; entry: calr from 0xF86069
+PanelState_SyncScreenFlags:   ; entry: calr from 0xF86069
 	m_bit 4, MD16, UI_ScreenFlags                         ; F86553  f1 95 20 cc   bit 4,(0x2095)
 	jr z, .LF86569                                ; F86557  66 10
 	m_bit 4, MD16, UI_Request_Hi                         ; F86559  f1 71 20 cc   bit 4,(0x2071)
@@ -12368,7 +12368,7 @@ PanelDial_StepSizes:
 ;
 ; Called from: thunk slot T_PanelTimers_Step (T_F40F44) (`jp 0x00F86903`), whose one proven call
 ;          site is prom_a 0xF821ED.
-; Body:    (0x2088) == 0 (no button held) -> PanelTimer_Screen2073 and
+; Body:    (0x2088) == 0 (no button held) -> PanelTimer_ScreenHold and
 ;          PanelTimer_Repeat20AB;  otherwise PanelTimer_Button2074.
 ; Evidence: the discriminator is a 32-bit compare of (0x2088) with zero at
 ;          0xF86907, the same bitmap PanelButton_Accept maintains.
@@ -12415,7 +12415,7 @@ PanelTimer_Repeat20AB:   ; entry: calr from 0xF86912
 	ret                                           ; F86932  0e
 
 ; ---------------------------------------------------------------------
-; PanelTimer_Screen2073 -- count (0x2073) down and raise request bit 2
+; PanelTimer_ScreenHold -- count (0x2073) down and raise request bit 2
 ;
 ; Called from: PanelTimers_Step 0xF8690F (`calr`), and nothing else.
 ; Body:    (0x20A2) != 0: (0x2073) <= 1 -> `or (0x2071),0x04` and return;
@@ -12427,7 +12427,7 @@ PanelTimer_Repeat20AB:   ; entry: calr from 0xF86912
 ;          routine consumes -- so this is the `auto-return after N ticks`.
 ; ---------------------------------------------------------------------
 .LF86933:
-PanelTimer_Screen2073:   ; entry: calr from 0xF8690F
+PanelTimer_ScreenHold:   ; entry: calr from 0xF8690F
 	m_cp_mi8 MB16, 0x20a2, 0x00                   ; F86933  c1 a2 20 3f 00   cp (0x20a2),0x00
 	jr z, .LF86952                                ; F86938  66 18
 	m_cp_mi8 MB16, UI_ScreenHoldTimer, 0x01                   ; F8693A  c1 73 20 3f 01   cp (0x2073),0x01
@@ -13069,7 +13069,7 @@ PanelHold_Tick:   ; entry: prom_b directory slot T_PanelHold_Tick (T_F40F74)
 ;          0x40.  So an entry is `screen id + the go-there request flag`, the
 ;          same pair PanelState_Init writes as the literal 0x40AA.  Check H2.
 ; ⚠ ENTRY COUNT 17 IS UNPINNED.  Nothing bounds (0x2096); the count rests
-;          only on the table ending where PanelMode_To2076's code begins at
+;          only on the table ending where PanelMode_ToGroup's code begins at
 ;          0xF86CAE.  The three writers inside this span use indices 0, 2 and
 ;          7, and prom_a 0xFF4795 compares (0x2096) with 7.
 ; Evidence: `ld XHL,0x00f86c8c` at 0xF86C73 is the only instruction in
@@ -13096,21 +13096,21 @@ PanelHold_ScreenRequest:
 	.byte 0x01, 0x40                                    ; F86CAC  [16]  0x4001  screen 0x01, request flags 0x40
 
 ; ---------------------------------------------------------------------
-; PanelMode_To2076 -- (0x2076) := PanelMode_To2076Map[min((0x2078), 0x1F)]
+; PanelMode_ToGroup -- (0x2076) := PanelMode_GroupMap[min((0x2078), 0x1F)]
 ;
 ; Called from: PanelTask_Step 0xF86072 (`calr`), and nothing else.
 ; Evidence: `cp L,0x1f / jr ULE / ld L,0x01` at 0xF86CB4 -- an index above
 ;          0x1F is replaced by 1, NOT clamped to 0x1F.  That bound is what
-;          fixes PanelMode_To2076Map at 32 entries.
+;          fixes PanelMode_GroupMap at 32 entries.
 ; ---------------------------------------------------------------------
-PanelMode_To2076:   ; entry: calr from 0xF86072
+PanelMode_ToGroup:   ; entry: calr from 0xF86072
 	xor HL,HL                                     ; F86CAE  db d3
 	ld l, (PanelMode:16)                            ; F86CB0  c1 78 20 27   ld L,(0x2078)
 	cp L,0x1f                                     ; F86CB4  cf cf 1f
 	jr ule, .LF86CBB                              ; F86CB7  63 02
 	ld l, 0x01:opc                                   ; F86CB9  27 01   ld L,0x01
 .LF86CBB:
-	ld XIY,PanelMode_To2076Map                    ; F86CBB  45 81 6e f8 00
+	ld XIY,PanelMode_GroupMap                    ; F86CBB  45 81 6e f8 00
 	add IY,HL                                     ; F86CC0  db 85
 	ld A,(XIY)                                    ; F86CC2  85 21
 	ld (PanelModeGroup:16), a                            ; F86CC4  f1 76 20 41   ld (0x2076),A
@@ -13147,9 +13147,9 @@ PanelState_AllowedScreenIds:
 ; --- 0xF86E81-0xF86EA0  table (32 bytes) ---
 
 ; ---------------------------------------------------------------------
-; PanelMode_To2076Map -- 32 bytes, (0x2078) -> (0x2076)
+; PanelMode_GroupMap -- 32 bytes, (0x2078) -> (0x2076)
 ;
-; Read by: ONE site, `ld XIY,0x00F86E81` at 0xF86CBB (PanelMode_To2076).
+; Read by: ONE site, `ld XIY,0x00F86E81` at 0xF86CBB (PanelMode_ToGroup).
 ; ENTRY COUNT 32, pinned by `cp L,0x1f` at 0xF86CB4.
 ; Contents: 01 01 02 03 03 03 03 03 08 09 0A 0B 0C 0D 0E 0F 10 01 12 13 14
 ;          15 16 17 01 01 01 01 01 01 01 01 -- every value is <= 0x17, i.e.
@@ -13159,7 +13159,7 @@ PanelState_AllowedScreenIds:
 ;          either image that names this base, and `cp L,0x1f` three
 ;          instructions earlier is what bounds the index.
 ; ---------------------------------------------------------------------
-PanelMode_To2076Map:
+PanelMode_GroupMap:
 	.byte 0x01, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f   ; F86E81
 	.byte 0x10, 0x01, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01   ; F86E91
 
@@ -38023,7 +38023,7 @@ GroupCombiDisplayHold_DrawMemberNames:
 ; UiEvent_MarkRedrawFromPartClass -- on screen 0x01 (or 0x02 with (0x2687) == 0), OR a per-event bit into (0x2676)/(0x2677) and request a redraw
 ; Evidence: prom_b slot T_F415B0, an entry of UiListB_Class00..1F, UiListB_Class79 and UiListB_ClassA8; XIY = the record, (0x20B8) its code.  Class 0x79 code 0
 ; -> (0x2676) |= 0x40; class 0xA8 code 0x12/0x13 -> |= 1/2; other classes code 0 -> (0x2677) |= 7, 3/8/5/7/6/0x0D -> (0x2676) |= 1/2/4/8/0x80/0x30.  Each then
-; (0x2095) |= 0x10, which PanelState_Sync2095 / PanelScreen_RunRedraw turn into a re-Enter of the current screen.  Screen 0x02 with (0x2687) != 0 goes to
+; (0x2095) |= 0x10, which PanelState_SyncScreenFlags / PanelScreen_RunRedraw turn into a re-Enter of the current screen.  Screen 0x02 with (0x2687) != 0 goes to
 ; UiEvent_MarkPartRedrawBits.  ⚠ prom_b T_F41590-T_F4159C (all four methods of screen object 0xA7) jump here too.
 UiEvent_MarkRedrawFromPartClass:
 	ld a, (UI_ScreenId:16)                                   ; F93F4E  c1 7c 20 21
@@ -46124,7 +46124,7 @@ MessageScreen_PairTableByLanguage:
 ; Evidence: UiEventPassB_TailList[2] = T_PanelScreen_RequestRedrawIfFieldQueued = `jp 0xF99400`; runs only with bit 1 of (0x97) set and bit 3
 ; of (0x2673) clear; XHL = ScreenFieldListPtrs[(0x207C)]; each record's first word (skipped if +3 == 0) is
 ; compared with the list's words up to 0xFFFF; a match does `or (0x2095),0x10`; always `and (0x2673),0xD7`.
-; Bit 4 of (0x2095) -> (0x2072) via PanelState_Sync2095, which PanelScreen_RunRedraw turns into a re-Enter.
+; Bit 4 of (0x2095) -> (0x2072) via PanelState_SyncScreenFlags, which PanelScreen_RunRedraw turns into a re-Enter.
 PanelScreen_RequestRedrawIfFieldQueued:
 	bit	1, (0x97:8)                                   ; F99400  f0 97 c9
 	jr z, .LF99459                                       ; F99403  66 54
@@ -96865,7 +96865,7 @@ sub_FB7EE5:
 ;           gate the whole body; 0xFB7F04 `ei 0x06` raises the mask,
 ;           0xFB7F06 `call 0xF41DB8` = prom_b slot T_MidiInARing_Init,
 ;           0xFB7F0A `ei 0x00` lowers it. (0x207A) is this listing's
-;           panel mode byte -- PanelState_Update207A (0xF863F5) is
+;           panel mode byte -- PanelState_UpdateScreenLatch (0xF863F5) is
 ;           headed `(0x207A) := (0x207C) unless the mode is unchanged`.
 ;           Called by `call` at 0xFB2058, 0xFB20F2, 0xFB21EF and
 ;           0xFB607F
@@ -136156,7 +136156,7 @@ PanelScreen_PostRequest:
 ; Evidence: 0xD0 is bits 7, 6 and 4 -- exactly the three request bits the
 ;          panel task acts on: bit 7 PanelScreen_ApplyRequestForced (0xF863AC),
 ;          bit 6 PanelScreen_ApplyRequest (0xF862A6), bit 4 the bit
-;          PanelState_Sync2095 moves in and out of (0x2095) (0xF86559).
+;          PanelState_SyncScreenFlags moves in and out of (0x2095) (0xF86559).
 ;          Bits 2, 1, 3 and 0 -- the other four consumers -- are NOT in the
 ;          mask, which is what makes the name specific.  Check Q2.
 ; ---------------------------------------------------------------------

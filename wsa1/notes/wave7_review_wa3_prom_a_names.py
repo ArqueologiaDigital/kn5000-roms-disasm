@@ -255,7 +255,7 @@ def main(argv):
     for l in q[:4]:
         say("       %s", l.rstrip())
     say("     VERDICT: the morpheme IS carried, but NOT by the citation chosen.")
-    say("       - the header cites PanelState_Update207A, whose 'the mode' names")
+    say("       - the header cites PanelState_UpdateScreenLatch, whose 'the mode' names")
     say("         the (0x2078)/(0x2079) test -- a DIFFERENT cell pair;")
     say("       - the real support is prom_a's Msg0716 module banner, which says")
     say("         `0x207A  a mode byte, named at 3 sites, all three inside")

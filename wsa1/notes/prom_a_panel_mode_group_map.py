@@ -2,7 +2,7 @@
 """prom_a_panel_mode_group_map.py -- which panel modes share a PanelModeGroup (0x2076).
 
 QUESTION THIS ANSWERS (FINDINGS-prom_a-panel-mode-group-and-screen-hold.md)
-  PanelMode_To2076 (0xF86CAE) stores the byte at 0xF86E81 + min(PanelMode, 0x1F -> 1) into (0x2076).
+  PanelMode_ToGroup (0xF86CAE) stores the byte at 0xF86E81 + min(PanelMode, 0x1F -> 1) into (0x2076).
   This prints the 32-byte map from the ROM dump and lists the modes that land in each value.
 
 USAGE

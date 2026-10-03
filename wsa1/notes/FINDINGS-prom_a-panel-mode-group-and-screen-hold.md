@@ -8,8 +8,8 @@ on the existing prom_a headers of the routines named, and was re-checked against
 
 ## 1. `PanelModeGroup` (0x2076) and `PanelModeGroup_Previous` (0x2077)
 
-`PanelMode_To2076` (0xF86CAE), called once per pass from `PanelTask_Step`, stores
-`PanelMode_To2076Map[PanelMode]` into (0x2076). A mode above 0x1F is replaced by 1, not clamped.
+`PanelMode_ToGroup` (0xF86CAE), called once per pass from `PanelTask_Step`, stores
+`PanelMode_GroupMap[PanelMode]` into (0x2076). A mode above 0x1F is replaced by 1, not clamped.
 
 The map at 0xF86E81 is the identity for 18 of its 32 entries. It merges the rest:
 
@@ -35,7 +35,7 @@ selects. The name says only what the code does: it groups modes.
 
 ## 2. The screen hold timer: `UI_ScreenHoldTimer` (0x2073), `UI_ScreenHoldPending` (0x209A), `UI_ScreenHoldState` (0x2092)
 
-**`UI_ScreenHoldTimer` (0x2073)** is the countdown `PanelTimer_Screen2073` runs (two
+**`UI_ScreenHoldTimer` (0x2073)** is the countdown `PanelTimer_ScreenHold` runs (two
 `dec 1,(0x2073)`). When the countdown reaches zero, or when it is at most 1 while (0x20A2) holds a
 screen, it raises `UI_Request_Hi` bit 2. That is the bit `PanelState_RunRequests` hands to
 `PanelScreen_ApplyPendingId`, so the requested screen is dropped after a time.
@@ -58,7 +58,7 @@ it into the timer when it is non-zero and then zeroes it. It is written:
 - 0xFF by `InstallPainter_MessageScreen` and `Paint_PowerOnSplash`;
 - 0x3F by `Paint_PowerOnSplash`.
 
-**`UI_ScreenHoldState` (0x2092)** is written only by `PanelState_UpdateFlags2092`:
+**`UI_ScreenHoldState` (0x2092)** is written only by `PanelState_UpdateScreenHoldState`:
 
 - bit 0 = the timer is non-zero this pass;
 - bit 1 = it has just stopped. While the timer runs, the bit is written 0 (`ld W,1`). Once the
@@ -72,11 +72,11 @@ one `bit 0,A` and one `and A,1`.
 Two loads are not followed by a test in the census, and neither is an exception:
 
 - in `sub_FBFE2C`, the `and C,0x01` comes one line later, after that routine's label;
-- the other is `PanelState_UpdateFlags2092`'s own read-modify-write.
+- the other is `PanelState_UpdateScreenHoldState`'s own read-modify-write.
 
 Among the readers:
 
-- `PanelState_Update207A` re-latches `UI_ScreenLatch` from `UI_ScreenId` when the mode changed,
+- `PanelState_UpdateScreenLatch` re-latches `UI_ScreenLatch` from `UI_ScreenId` when the mode changed,
   or when bit 0 is clear. So while the timer runs, an unchanged mode keeps the latch.
 - `PanelState_CheckRequestAllowed` clears the `UI_ScreenFlags` bit 0 override when bit 0 here is
   clear and `UI_RequestBits` bit 4 is set.
