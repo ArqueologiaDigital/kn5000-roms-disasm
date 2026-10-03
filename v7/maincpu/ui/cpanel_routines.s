@@ -1242,7 +1242,6 @@ MBytePkt_EncWriteResult:
 	ld	a, (CPANEL_LAST_EVENT_VALUE:16)
 MBytePkt_WriteEventByte:
 
-c:
 	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 	bit 4, w

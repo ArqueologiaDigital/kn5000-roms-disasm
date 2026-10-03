@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,605
-#   semantic names ........... 50,756 (98.4%)
+#   symbols .................. 51,604
+#   semantic names ........... 50,755 (98.4%)
 #   positional names ......... 849
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -45062,7 +45062,6 @@ MBytePkt_LoopBody 00FC4A8B
 MBytePkt_EncNoEvent 00FC4AB7
 MBytePkt_EncWriteResult 00FC4AC1
 MBytePkt_WriteEventByte 00FC4AC5
-c 00FC4AC5
 MBytePkt_EncFFMarker 00FC4AEA
 MBytePkt_CommitAndContinue 00FC4AEC
 MBytePkt_CommitRXPtr 00FC4B00
