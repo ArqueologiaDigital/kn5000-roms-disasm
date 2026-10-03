@@ -743,6 +743,7 @@
 	.set	sub_FA7E0C, 0xFA7E0C
 	.set	MidiIn_ReqListRebuild_Msg13_16, 0xFA835E
 	.set	MidiIn_ReqRebuild_Msg03_0A, 0xFA8378
+	.set	ParamModule_PhaseVector, 0xFAA400
 	.set	sub_FAA418, 0xFAA418
 	.set	sub_FAA43A, 0xFAA43A
 	.set	sub_FAA45C, 0xFAA45C
@@ -87693,7 +87694,7 @@ T_MidiIn_ServiceDeferred:	jp MidiIn_ServiceDeferred  ; F40758 (was T_F40758) -> 
 T_F4075C:	jp sub_FA7DA3  ; -> prom_a 0x27DA3   x1
 T_F40760:	jp sub_FA7E0C  ; -> prom_a 0x27E0C   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40764: 12 x ret
-T_F40770:	.long 0x00FAA400	; ptr -> 0xFAA400 (prom_a 0x2A400)
+T_F40770:	.long ParamModule_PhaseVector	; ptr -> 0xFAA400 (prom_a 0x2A400)
 T_F40774:	jp sub_FAAAB1  ; -> prom_a 0x2AAB1   x2
 T_F40778:	jp sub_FAAA8F  ; -> prom_a 0x2AA8F
 T_F4077C:	jp sub_FAA967  ; -> prom_a 0x2A967   x2

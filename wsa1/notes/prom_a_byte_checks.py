@@ -1479,13 +1479,18 @@ for _s, _st, _l, _lv in _INT:
           int.from_bytes(a(_s + 1, 3), "little") == _st
           and int.from_bytes(a(_l + 1, 3), "little") == _lv
           and _lv - _st == 0x400)
-check("stale veneer copy: ZERO directory slots point into 0xFAA000-0xFAA417",
-      not any(0xFAA000 <= t < 0xFAA418 for t in _DIR))
-_st_refs = _refs_abs(0xFAA000, 0xFAA418)
+# The copy is 0xFAA000-0xFAA3FF: 0xFAA400 opens the LIVE block with its own five-slot
+# vector (the last check below), which prom_b publishes through the POINTER slot T_F40770.
+# (Until 2026-10-03 these two checks ran to 0xFAA417 and the pointer slot went unchecked.)
+check("stale veneer copy: ZERO directory jp slots point into 0xFAA000-0xFAA3FF",
+      not any(0xFAA000 <= t < 0xFAA400 for t in _DIR))
+check("stale veneer copy: prom_b's pointer slot 0xF40770 holds 0xFAA400, the LIVE vector",
+      B[0x40770:0x40774] == bytes([0x00, 0xA4, 0xFA, 0x00]))
+_st_refs = _refs_abs(0xFAA000, 0xFAA400)
 _lv_refs = _refs_abs(0xFAA418, 0xFAA830)
 check("stale veneer copy: exactly 2 absolute call/jp literals name it, and both "
       "sites are inside it; the live block has 37",
-      len(_st_refs) == 2 and all(0xFAA000 <= s < 0xFAA418 for s, _ in _st_refs)
+      len(_st_refs) == 2 and all(0xFAA000 <= s < 0xFAA400 for s, _ in _st_refs)
       and len(_lv_refs) == 37,
       "stale %d live %d" % (len(_st_refs), len(_lv_refs)))
 check("stale veneer copy: both blocks open with five `jp nnn` slots then a `ret`",

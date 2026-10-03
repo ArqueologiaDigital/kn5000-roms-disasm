@@ -75100,8 +75100,9 @@ MidiOut_PartRecordPtrs_CC51General6:
 ;     picked.
 ;
 ; WHAT IS IN IT
-;   0xFAA000-0xFAA417  a DUPLICATE of the published veneer bank -- see below
-;   0xFAA418-0xFAC8E5  code: 34 published veneers over 0x60F000-0x60F1FF RAM,
+;   0xFAA000-0xFAA3FF  a stale copy of the bank's first 1 KiB -- see below
+;   0xFAA400-0xFAC8E5  code: the phase vector ParamModule_PhaseVector, then
+;                      34 published veneers over 0x60F000-0x60F1FF RAM,
 ;                      a command dispatcher, and four INLINE jump tables
 ;   0xFAC8E6-0xFAD485  data: two 256-entry tables, a 32-entry identity byte
 ;                      table, the 32 powers of two, and pointer tables into
@@ -75126,8 +75127,12 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; passes the decode check on its own; only 0xFAA000-0xFAB8B4 still reports
 ; callers into non-boundaries, and those three are the stale block below.
 ;
-; ★★ 0xFAA000-0xFAA417 IS A DUPLICATE OF 0xFAA418-0xFAA82F, TEN BYTES APART
+; ★★ 0xFAA000-0xFAA3FF IS AN OLDER COPY OF 0xFAA400-0xFAA7FF
 ; (and this is the reason the decode check cannot be made to pass over it).
+; Corrected 2026-10-03: this said 0xFAA000-0xFAA417 and 0xFAA418-0xFAA82F.  Both blocks
+; open with a five-slot vector, and 0xFAA400's is the LIVE one -- prom_b's pointer slot
+; T_F40770 publishes it.  The copy's last instruction is cut off at 0xFAA3FF; decoded
+; as one instruction with 0xFAA400, it had hidden the live vector's first slot.
 ;   * 0xFAA018-0xFAA3FF and 0xFAA418-0xFAA7FF are 1000 bytes that differ in
 ;     exactly TEN positions.  Measured, not sampled.
 ;   * eight of the ten are the low halves of FOUR `call` operands:
@@ -75146,7 +75151,7 @@ MidiOut_PartRecordPtrs_CC51General6:
 ;     against a decode anchored on the published entry 0xFAAE2A, not on a
 ;     linear run.
 ;   * NOTHING PUBLISHES OR NAMES THE COPY: zero prom_b directory slots point
-;     into 0xFAA000-0xFAA417, and of every `call`/`jp` literal in prom_a+prom_b
+;     into 0xFAA000-0xFAA3FF, and of every `call`/`jp` literal in prom_a+prom_b
 ;     naming an address in it there are exactly TWO, both of them inside the
 ;     copy itself.  The live block has 37.
 ;   READING: an earlier build of the veneer bank, left in the ROM, carrying
@@ -75163,11 +75168,11 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; sub_XXXXXX except where a header below states its evidence.
 ; =====================================================================
 sub_FAA000:
-	jp 0xfaa42a                                          ; FAA000  1b 2a a4 fa
-	jp Queue2C00_PublishStagedIfPending_Join                                        ; FAA004  1b b7 a4 fa
-	jp 0xfaa482                                          ; FAA008  1b 82 a4 fa
-	jp 0xfaa4d7                                          ; FAA00C  1b d7 a4 fa
-	jp 0xfaa4b3                                          ; FAA010  1b b3 a4 fa
+	jp	sub_FAA82A - 0x400                                ; FAA000  1b 2a a4 fa   stale: slot 0; the live slot holds +0x400, the distance between the copies
+	jp	sub_FAA8F0 - 0x439                                ; FAA004  1b b7 a4 fa   stale: slot 1
+	jp	sub_FAA882 - 0x400                                ; FAA008  1b 82 a4 fa   stale: slot 2
+	jp	sub_FAA94E - 0x477                                ; FAA00C  1b d7 a4 fa   stale: slot 3
+	jp	sub_FAA8EC - 0x439                                ; FAA010  1b b3 a4 fa   stale: slot 4
 	ret                                                  ; FAA014  0e
 	nop                                                  ; FAA015  00
 	nop                                                  ; FAA016  00
@@ -75181,7 +75186,7 @@ sub_FAA000:
 	push XIX                                             ; FAA026  3c
 	push XIY                                             ; FAA027  3d
 	push XIZ                                             ; FAA028  3e
-	call 0xfaadc2                                        ; FAA029  1d c2 ad fa
+	call	sub_FAB658 - 0x896                              ; FAA029  1d c2 ad fa   stale: the live twin at +0x400 calls sub_FAB658
 	pop XIZ                                              ; FAA02D  5e
 	pop XIY                                              ; FAA02E  5d
 	pop XIX                                              ; FAA02F  5c
@@ -75200,7 +75205,7 @@ sub_FAA03A:
 	push XIX                                             ; FAA043  3c
 	push XIY                                             ; FAA044  3d
 	push XIZ                                             ; FAA045  3e
-	call 0xfaae41                                        ; FAA046  1d 41 ae fa
+	call	sub_FAB6D7 - 0x896                              ; FAA046  1d 41 ae fa   stale: the live twin calls sub_FAB6D7
 	pop XIZ                                              ; FAA04A  5e
 	pop XIY                                              ; FAA04B  5d
 	pop XIX                                              ; FAA04C  5c
@@ -75220,7 +75225,7 @@ sub_FAA03A:
 	push XIX                                             ; FAA06A  3c
 	push XIY                                             ; FAA06B  3d
 	push XIZ                                             ; FAA06C  3e
-	call sub_FAAEE3                                      ; FAA06D  1d e3 ae fa
+	call	sub_FAB779 - 0x896                              ; FAA06D  1d e3 ae fa   stale: the live twin calls sub_FAB779
 	pop XIZ                                              ; FAA071  5e
 	pop XIY                                              ; FAA072  5d
 	pop XIX                                              ; FAA073  5c
@@ -75238,7 +75243,7 @@ sub_FAA03A:
 	push XIX                                             ; FAA087  3c
 	push XIY                                             ; FAA088  3d
 	push XIZ                                             ; FAA089  3e
-	call 0xfaae92                                        ; FAA08A  1d 92 ae fa
+	call	sub_FAB728 - 0x896                              ; FAA08A  1d 92 ae fa   stale: the live twin calls sub_FAB728
 	pop XIZ                                              ; FAA08E  5e
 	pop XIY                                              ; FAA08F  5d
 	pop XIX                                              ; FAA090  5c
@@ -75654,8 +75659,17 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	ld w, (0x60f162:24)                                 ; FAA3F0  c2 62 f1 60 20
 	ld b, (0x60f01c:24)                                 ; FAA3F5  c2 1c f0 60 22
 	call T_SoundGroup_MaxMemberIndex_Get                 ; FAA3FA  1d 1c 10 f4
-	tset	0, (0x2a1b76:24)                     ; FAA3FE  f2 76 1b 2a a8
-	swi 2                                                ; FAA403  fa
+; The stale copy ends at the 1 KiB boundary in the middle of an instruction: these are the first two bytes
+; of `ld (0x60f176:24), a`, whose complete twin is at 0xFAA7FE.
+	.byte	0xf2, 0x76                                      ; FAA3FE  f2 76
+; ---------------------------------------------------------------------
+; ParamModule_PhaseVector -- this module's boot phase vector, five `jp` slots and a `ret`.
+; Evidence: ModuleInitDirectory_F82641[11] = T_F40770, whose word in prom_b is `.long ParamModule_PhaseVector`;
+;          the walker calls vector + phase.  sub_FB7EA8 also reads that word, adds 8 and jumps: slot 2.
+;          Was decoded as `tset 0,(0x2a1b76)` + `swi 2`, the copy's cut-off instruction run on into it.
+; ---------------------------------------------------------------------
+ParamModule_PhaseVector:
+	jp	sub_FAA82A                                        ; FAA400  1b 2a a8 fa   slot 0
 	jp sub_FAA8F0                                        ; FAA404  1b f0 a8 fa
 	jp sub_FAA882                                        ; FAA408  1b 82 a8 fa
 	jp sub_FAA94E                                        ; FAA40C  1b 4e a9 fa
@@ -75778,7 +75792,6 @@ Queue2C00_PublishStagedIfPending:
 	cp HL,0x01fc                                         ; FAA4B0  db cf fc 01
 	jr c, .LFAA4CA                                       ; FAA4B4  67 14
 	push XWA                                             ; FAA4B6  38
-Queue2C00_PublishStagedIfPending_Join:
 	push XBC                                             ; FAA4B7  39
 	push XDE                                             ; FAA4B8  3a
 	push XHL                                             ; FAA4B9  3b
@@ -77017,7 +77030,6 @@ sub_FAAE2A:
 	extz XBC                                             ; FAAEDB  e9 12
 	m_add_rm MLD+r6, 0xf2, r1                            ; FAAEDD  ae f2 81
 	ld w, (xiz-20)                                       ; FAAEE0  8e ec 20
-sub_FAAEE3:
 	ld (XBC),W                                           ; FAAEE3  b1 40
 	ld xbc, (xiz-18)                                     ; FAAEE5  ae ee 21
 	inc 1,XBC                                            ; FAAEE8  e9 61
@@ -96786,7 +96798,7 @@ sub_FB7EA8:
 	push XHL                                             ; FB7EAE  3b
 	push XIX                                             ; FB7EAF  3c
 	push XIZ                                             ; FB7EB0  3e
-	ld xbc, (0xf40770:24)                               ; FB7EB1  e2 70 07 f4 21
+	ld xbc, (T_F40770:24)                               ; FB7EB1  e2 70 07 f4 21
 	inc 8,XBC                                            ; FB7EB6  e9 60
 	lda xiy, (.LFB7EC0:24)                               ; FB7EB8  f2 c0 7e fb 35
 	push XIY                                             ; FB7EBD  3d
