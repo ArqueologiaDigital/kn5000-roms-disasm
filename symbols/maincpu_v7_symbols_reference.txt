@@ -16069,7 +16069,7 @@ HDAE5000_Detect_Return 00EF3D4A
 Flash_ProgramByte 00EF3D51
 Flash_ProgramByte_WaitReady 00EF3D61
 Flash_ProgramByte_Done 00EF3D8D
-HDAE5000_Flash_Verify 00EF3D91
+TableDataFlash_ChipErase 00EF3D91
 HDAE5000_Flash_Erase_AllSectors 00EF3DF7
 HDAE5000_Status_Check 00EF3EFF
 HDAE5000_Status_NotPresent 00EF3F07

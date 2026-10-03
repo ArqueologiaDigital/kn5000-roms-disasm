@@ -6722,15 +6722,18 @@ Flash_ProgramByte_Done:
 	ret
 
 ; ===========================================================================
-; HDAE5000_Flash_Verify - Flash verification sequence on Table Data ROM
+; TableDataFlash_ChipErase - erase the whole Table Data flash at 0x800000
 ; ===========================================================================
 ; Entry: None
-; Exit:  Flash ID verified
-; Notes: Sends flash command sequence to Table Data ROM at 0x800000
-;        Uses standard AMD/Atmel flash protocol for device identification
-;        Called during HDAE5000 initialization to verify ROM presence
+; Exit:  the erase is started; three of the four callers then poll HDAE5000_Status_Check
+; Notes: The six writes are the AMD/JEDEC CHIP ERASE command (FLASH_CMD_UNLOCK1, _UNLOCK2,
+;        _ERASE_SETUP, _UNLOCK1, _UNLOCK2, _CHIP_ERASE) to both chips of the 32-bit bus.
+;        It was named HDAE5000_Flash_Verify and described as an ID check; it is not one
+;        (HDAE5000_Detect sends AUTOSELECT, 0x90).  Called by Flash_BurnWithProgress (which
+;        then polls the status in its progress loop), HDAE5000_Status_DataBlock,
+;        HDAE5000_Status_Check_Skip and HDAE5000_Init_VerifyROM.
 ; ===========================================================================
-HDAE5000_Flash_Verify:
+TableDataFlash_ChipErase:
 	push xiz
 	ld xiz, 0x800000
 	ei 6
@@ -6894,7 +6897,7 @@ HDAE5000_Status_NotPresent:
 	ret
 
 HDAE5000_Status_DataBlock:
-	calr	HDAE5000_Flash_Verify
+	calr	TableDataFlash_ChipErase
 	calr	HDAE5000_Status_Check
 	cp	hl, 0xffff
 	ret	nz
@@ -6913,7 +6916,7 @@ HDAE5000_Status_Check_Loop:
 	ldw	hl, 0xffff
 	jr	HDAE5000_Status_Check_Epilogue
 HDAE5000_Status_Check_Skip:
-	calr	HDAE5000_Flash_Verify
+	calr	TableDataFlash_ChipErase
 	ld	xwa, 0x80000
 	ld	xbc, 0x10000
 	call	Flash_FillBuffer
@@ -7786,7 +7789,7 @@ Flash_BurnWithProgress:
 	ldw iz, 0x32
 	ld xwa, 0:i3
 	ld (SYSTEM_TIMESTAMP:16), xwa
-	call HDAE5000_Flash_Verify
+	call TableDataFlash_ChipErase
 	call HDAE5000_Status_Check
 	cp hl, 0xffff
 	jr nz, FlashBurn_Done
@@ -8272,7 +8275,7 @@ HDAE5000_Init_VerifyROM:
 	calr TableData_ROM_Verify
 	or xhl, xhl
 	jr z, HDAE5000_Init_TransferData
-	call HDAE5000_Flash_Verify
+	call TableDataFlash_ChipErase
 	call HDAE5000_Status_Check
 	cp hl, 0xffff
 	jr nz, HDAE5000_Init_TransferData
