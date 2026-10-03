@@ -21,5 +21,4 @@
 	.set TuningSystem_Handler_Table_0x1F3F, TuningSystem_Handler_Table + 7999
 	.set TuningSystem_Handler_Table_0x71F, TuningSystem_Handler_Table + 1823
 	.set TuningSystem_Handler_Table_0xDF, TuningSystem_Handler_Table + 223
-	.set VoiceSlot_ResolveIndex_0x2, VoiceSlot_ResolveIndex + 2
 	.set WidgetParam_Entry_018_0x26, WidgetParam_Entry_018 + 38

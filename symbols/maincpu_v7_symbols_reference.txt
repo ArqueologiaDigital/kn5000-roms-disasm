@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,323
+#   symbols .................. 51,322
 #   semantic names ........... 50,398 (98.2%)
-#   positional names ......... 925
+#   positional names ......... 924
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -32587,8 +32587,7 @@ ToneData_LookupEffectParam_Code 00F63668
 RhythmROM_LoadKit_CopyLoop 00F636A4
 RhythmROM_LoadKit_CopyReturn 00F636E1
 RhythmROM_LoadKit_CopyReturn_Code 00F636E3
-VoiceSlot_ResolveIndex 00F636FE
-VoiceSlot_ResolveIndex_0x2 00F63700
+ToneData_EffectParamWords 00F63700
 VoiceSlot_Resolve_Loop 00F63723
 VoiceSlot_Resolve_CheckA 00F63740
 VoiceSlot_Resolve_CheckB 00F63745

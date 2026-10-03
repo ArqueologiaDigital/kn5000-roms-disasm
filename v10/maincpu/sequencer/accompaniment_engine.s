@@ -23123,31 +23123,19 @@ ToneData_LookupEffectParam_Helper:
 	and l, 0xf
 	xor h, h
 	sla hl, 1
-	ld xix, VoiceSlot_ResolveIndex_0x2
+	ld xix, ToneData_EffectParamWords
 	ld	wa, (xix+hl)
 	ld (0x35b4:16), wa
 	ret
 
-VoiceSlot_ResolveIndex:
-	.zero 8
 	nop
 	nop
-	push	xwa
-	normal
-	push	xwa
-	halt
-	push	xix
-	normal
-	push	xix
-	halt
-	ldw	wa, 0x3201
-	normal
-	ldw	ix, 0x3601
-	normal
-	ldw	wa, 0x3205
-	halt
-	ldw	ix, 0x3605
-	halt
+; ToneData_EffectParamWords -- 16 words: ToneData_LookupEffectParam_Helper stores entry [(0x34EF) & 15] to
+;          (0x35B4).  Was named VoiceSlot_ResolveIndex and decoded as `.zero 8 / nop / nop / push xwa /
+;          normal ...`; its reader used the positional alias VoiceSlot_ResolveIndex_0x2.
+ToneData_EffectParamWords:
+	.short	0, 0, 0, 0, 0x0138, 0x0538, 0x013c, 0x053c
+	.short	0x0130, 0x0132, 0x0134, 0x0136, 0x0530, 0x0532, 0x0534, 0x0536
 	ret
 	nop
 	nop
