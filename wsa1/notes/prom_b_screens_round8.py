@@ -1340,7 +1340,7 @@ def zero_for_o_labels():
     """Labels the misreading has already been baked into.  The test is a 0 with
     a letter before it and a LOWERCASE letter after it: that is a CamelCase word
     ('S0ng', 'Transp0se'), and it cannot match a trailing hex address, whose
-    digits are uppercase ('sub_F0A0B1')."""
+    digits are uppercase ('ScreenButton_Code89')."""
     pat = re.compile(r"[A-Za-z]0[a-z]")
     lab = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
     out = {}

@@ -18039,7 +18039,7 @@ Unclaimed_F09E85:
 
 
 ; --------------------------------------------------------------------------
-; sub_F0A000
+; ScreenButton_Code87
 ; Called from: T_F42004 (x0)
 ; Touches:   |  0xFCF383
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -18049,7 +18049,8 @@ Unclaimed_F09E85:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A000:		; <- T_F42004
+; ScreenButton_Code87: the +8 BUTTON method of PanelScreen_VtableTable entry 0x87: that entry points at the thunk triple T_F41FFC (Enter) / T_F42000 (Leave) / T_F42004 (Button).
+ScreenButton_Code87:		; <- T_F42004
 	link XIZ,0xfffc	; F0A000  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A004  lda XBC,XIZ+0xfe
 	push	xbc	; F0A007  push XBC
@@ -18086,7 +18087,7 @@ sub_F0A000_Skip:
 	ret	; F0A050  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A051
+; ScreenButton_Code88
 ; Called from: T_F42014 (x0)
 ; Touches:   |  0xFCF3CB
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
@@ -18096,7 +18097,8 @@ sub_F0A000_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A051:		; <- T_F42014
+; ScreenButton_Code88: the +8 BUTTON method of PanelScreen_VtableTable entry 0x88: that entry points at the thunk triple T_F4200C (Enter) / T_F42010 (Leave) / T_F42014 (Button).
+ScreenButton_Code88:		; <- T_F42014
 	link XIZ,0xfffc	; F0A051  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A055  lda XBC,XIZ+0xfe
 	push	xbc	; F0A058  push XBC
@@ -18137,7 +18139,7 @@ sub_F0A051_Skip:
 	ret	; F0A0B0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A0B1
+; ScreenButton_Code89
 ; Called from: T_F42024 (x0)
 ; Touches:   |  0xFCF413
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
@@ -18147,7 +18149,8 @@ sub_F0A051_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A0B1:		; <- T_F42024
+; ScreenButton_Code89: the +8 BUTTON method of PanelScreen_VtableTable entry 0x89: that entry points at the thunk triple T_F4201C (Enter) / T_F42020 (Leave) / T_F42024 (Button).
+ScreenButton_Code89:		; <- T_F42024
 	link XIZ,0xfffc	; F0A0B1  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A0B5  lda XBC,XIZ+0xfe
 	push	xbc	; F0A0B8  push XBC
@@ -18188,7 +18191,7 @@ sub_F0A0B1_Skip:
 	ret	; F0A110  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A111
+; ScreenButton_Code8A
 ; Called from: T_F42034 (x0)
 ; Touches:   |  0xFCF45B
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -18198,7 +18201,8 @@ sub_F0A0B1_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A111:		; <- T_F42034
+; ScreenButton_Code8A: the +8 BUTTON method of PanelScreen_VtableTable entry 0x8A: that entry points at the thunk triple T_F4202C (Enter) / T_F42030 (Leave) / T_F42034 (Button).
+ScreenButton_Code8A:		; <- T_F42034
 	link XIZ,0xfffc	; F0A111  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A115  lda XBC,XIZ+0xfe
 	push	xbc	; F0A118  push XBC
@@ -18235,7 +18239,7 @@ sub_F0A111_Skip:
 	ret	; F0A161  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A162
+; SoftKeyCol2_ScreenCode87
 ; Called from: table 0xFCF21B[91]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6B4D 0xFD6C7B 0xFD7C2D 0xFD7435 0xFD7C01
@@ -18245,7 +18249,10 @@ sub_F0A111_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A162:
+; SoftKeyCol2_ScreenCode87: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 1 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode87:
 	link XIZ,0xfff2	; F0A162  link XIZ,0xfff2
 	pushw	hl	; F0A166  push HL
 	pushw	de	; F0A167  push DE
@@ -18293,7 +18300,7 @@ sub_F0A162:
 	ret	; F0A1D0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A1D1
+; SoftKeyCol3_ScreenCode87
 ; Called from: table 0xFCF21B[92]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6B4D 0xFD6C7B 0xFD7C2D 0xFD7435 0xFD7C01
@@ -18303,7 +18310,10 @@ sub_F0A162:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A1D1:
+; SoftKeyCol3_ScreenCode87: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 2 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode87:
 	link XIZ,0xfff2	; F0A1D1  link XIZ,0xfff2
 	pushw	hl	; F0A1D5  push HL
 	pushw	de	; F0A1D6  push DE
@@ -18351,7 +18361,7 @@ sub_F0A1D1:
 	ret	; F0A23F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A240
+; SoftKeyCol4_ScreenCode87
 ; Called from: table 0xFCF21B[93]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6B4D 0xFD6C7B 0xFD7C2D 0xFD7435 0xFD7C01
@@ -18361,7 +18371,10 @@ sub_F0A1D1:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A240:
+; SoftKeyCol4_ScreenCode87: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 3 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode87:
 	link XIZ,0xfff2	; F0A240  link XIZ,0xfff2
 	pushw	hl	; F0A244  push HL
 	pushw	de	; F0A245  push DE
@@ -18407,7 +18420,7 @@ sub_F0A240:
 	ret	; F0A2AA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A2AB
+; SoftKeyCol6_ScreenCode87
 ; Called from: table 0xFCF21B[95]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D 0xFD6CE1 0xFD6C65 0xFDA777 0xFD616A T_Dispatch_Code80
@@ -18418,7 +18431,10 @@ sub_F0A240:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A2AB:
+; SoftKeyCol6_ScreenCode87: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 5 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode87:
 	link XIZ,0xffec	; F0A2AB  link XIZ,0xffec
 	push	xix	; F0A2AF  push XIX
 	lda	xix, (xiz-16)	; F0A2B0  lda XIX,XIZ+0xf0
@@ -18511,7 +18527,7 @@ sub_F0A2AB_Join:
 	ret	; F0A3A0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A3A1
+; LcdKeyRow1_ScreenCode87
 ; Called from: table 0xFCF21B[98]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD6E90
@@ -18521,7 +18537,10 @@ sub_F0A2AB_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A3A1:
+; LcdKeyRow1_ScreenCode87: LCD key row 1 (left or right) on ScreenCode87 -- ScreenCode87 op 8 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode87:
 	link XIZ,0x0000	; F0A3A1  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3A5  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A3A1_Skip	; F0A3A9  jr NZ,0xf0a3b8
@@ -18537,7 +18556,7 @@ sub_F0A3A1_Join:
 	ret	; F0A3BE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A3BF
+; LcdKeyRow2_ScreenCode87
 ; Called from: table 0xFCF21B[99]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD9863
@@ -18547,7 +18566,10 @@ sub_F0A3A1_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A3BF:
+; LcdKeyRow2_ScreenCode87: LCD key row 2 (left or right) on ScreenCode87 -- ScreenCode87 op 9 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode87:
 	link XIZ,0x0000	; F0A3BF  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3C3  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A3BF_Skip	; F0A3C7  jr Z,0xf0a3d8
@@ -18561,7 +18583,7 @@ sub_F0A3BF_Skip:
 	ret	; F0A3DA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A3DB
+; LcdKeyRow3_ScreenCode87
 ; Called from: table 0xFCF21B[100]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD9863
@@ -18571,7 +18593,10 @@ sub_F0A3BF_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A3DB:
+; LcdKeyRow3_ScreenCode87: LCD key row 3 (left or right) on ScreenCode87 -- ScreenCode87 op 10 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode87:
 	link XIZ,0x0000	; F0A3DB  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3DF  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A3DB_Skip	; F0A3E3  jr NZ,0xf0a3f2
@@ -18591,7 +18616,7 @@ sub_F0A3DB_Join:
 	ret	; F0A403  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A404
+; LcdKeyRow4_ScreenCode87
 ; Called from: table 0xFCF21B[101]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 T_Dispatch_Code80 0xFD9863
@@ -18601,7 +18626,10 @@ sub_F0A3DB_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A404:
+; LcdKeyRow4_ScreenCode87: LCD key row 4 (left or right) on ScreenCode87 -- ScreenCode87 op 11 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode87:
 	link XIZ,0xfffe	; F0A404  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A408  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A404_Skip	; F0A40C  jr NZ,0xf0a43f
@@ -18634,7 +18662,7 @@ sub_F0A404_Join:
 	ret	; F0A450  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A451
+; LcdKeyRow5_ScreenCode87
 ; Called from: table 0xFCF21B[102]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 T_Dispatch_Code80 0xFD9863
@@ -18644,7 +18672,10 @@ sub_F0A404_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A451:
+; LcdKeyRow5_ScreenCode87: LCD key row 5 (left or right) on ScreenCode87 -- ScreenCode87 op 12 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode87:
 	link XIZ,0xfffe	; F0A451  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A455  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A451_Skip	; F0A459  jr NZ,0xf0a48c
@@ -18677,7 +18708,7 @@ sub_F0A451_Join:
 	ret	; F0A49D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A49E
+; ExitKey_ScreenCode87
 ; Called from: table 0xFCF21B[105]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -18687,7 +18718,10 @@ sub_F0A451_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A49E:
+; ExitKey_ScreenCode87: the EXIT key on ScreenCode87 -- ScreenCode87 op 15 (PanelOpTable_FCF383).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode87:
 	link XIZ,0x0000	; F0A49E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A4A2  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A49E_Skip	; F0A4A6  jr NZ,0xf0a4bb
@@ -18702,7 +18736,7 @@ sub_F0A49E_Skip:
 	ret	; F0A4BD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A4BE
+; SoftKeyCol1_ScreenCode88
 ; Called from: table 0xFCF21B[108]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8155
@@ -18712,7 +18746,10 @@ sub_F0A49E_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A4BE:
+; SoftKeyCol1_ScreenCode88: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 0 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode88:
 	link XIZ,0x0000	; F0A4BE  link XIZ,0x0000
 	pushw	0	; F0A4C2  push 0x0000
 	pushw	9	; F0A4C5  push 0x0009
@@ -18725,7 +18762,7 @@ sub_F0A4BE:
 	ret	; F0A4D6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A4D7
+; SoftKeyCol2_ScreenCode88
 ; Called from: table 0xFCF21B[109]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD81C8
@@ -18735,7 +18772,10 @@ sub_F0A4BE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A4D7:
+; SoftKeyCol2_ScreenCode88: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 1 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode88:
 	link XIZ,0x0000	; F0A4D7  link XIZ,0x0000
 	pushw	0	; F0A4DB  push 0x0000
 	pushw	10	; F0A4DE  push 0x000a
@@ -18748,7 +18788,7 @@ sub_F0A4D7:
 	ret	; F0A4EF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A4F0
+; SoftKeyCol3_ScreenCode88
 ; Called from: table 0xFCF21B[110]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD823B
@@ -18758,7 +18798,10 @@ sub_F0A4D7:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A4F0:
+; SoftKeyCol3_ScreenCode88: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 2 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode88:
 	link XIZ,0x0000	; F0A4F0  link XIZ,0x0000
 	pushw	11	; F0A4F4  push 0x000b
 	pushw	8	; F0A4F7  push 0x0008
@@ -18771,7 +18814,7 @@ sub_F0A4F0:
 	ret	; F0A508  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A509
+; SoftKeyCol4_ScreenCode88
 ; Called from: table 0xFCF21B[111]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD82D8
@@ -18781,7 +18824,10 @@ sub_F0A4F0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A509:
+; SoftKeyCol4_ScreenCode88: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 3 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode88:
 	link XIZ,0x0000	; F0A509  link XIZ,0x0000
 	pushw	0	; F0A50D  push 0x0000
 	pushw	12	; F0A510  push 0x000c
@@ -18794,7 +18840,7 @@ sub_F0A509:
 	ret	; F0A521  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A522
+; SoftKeyCol5_ScreenCode88
 ; Called from: table 0xFCF21B[112]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD834B
@@ -18804,7 +18850,10 @@ sub_F0A509:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A522:
+; SoftKeyCol5_ScreenCode88: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 4 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode88:
 	link XIZ,0x0000	; F0A522  link XIZ,0x0000
 	pushw	13	; F0A526  push 0x000d
 	pushw	16	; F0A529  push 0x0010
@@ -18817,7 +18866,7 @@ sub_F0A522:
 	ret	; F0A53A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A53B
+; SoftKeyCol6_ScreenCode88
 ; Called from: table 0xFCF21B[113]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD83E8
@@ -18827,7 +18876,10 @@ sub_F0A522:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A53B:
+; SoftKeyCol6_ScreenCode88: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 5 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode88:
 	link XIZ,0x0000	; F0A53B  link XIZ,0x0000
 	pushw	0	; F0A53F  push 0x0000
 	pushw	14	; F0A542  push 0x000e
@@ -18840,7 +18892,7 @@ sub_F0A53B:
 	ret	; F0A553  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A554
+; SoftKeyCol7_ScreenCode88
 ; Called from: table 0xFCF21B[114]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD845B
@@ -18850,7 +18902,10 @@ sub_F0A53B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A554:
+; SoftKeyCol7_ScreenCode88: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 6 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode88:
 	link XIZ,0x0000	; F0A554  link XIZ,0x0000
 	pushw	15	; F0A558  push 0x000f
 	pushw	7	; F0A55B  push 0x0007
@@ -18863,7 +18918,7 @@ sub_F0A554:
 	ret	; F0A56C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A56D
+; LcdKeyRow1_ScreenCode88
 ; Called from: table 0xFCF21B[116]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6E90
@@ -18873,7 +18928,10 @@ sub_F0A554:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A56D:
+; LcdKeyRow1_ScreenCode88: LCD key row 1 (left or right) on ScreenCode88 -- ScreenCode88 op 8 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode88:
 	link XIZ,0x0000	; F0A56D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A571  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A56D_Skip	; F0A575  jr Z,0xf0a57b
@@ -18883,7 +18941,7 @@ sub_F0A56D_Skip:
 	ret	; F0A57D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A57E
+; LcdKeyRow2_ScreenCode88
 ; Called from: table 0xFCF21B[117]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -18893,7 +18951,10 @@ sub_F0A56D_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A57E:
+; LcdKeyRow2_ScreenCode88: LCD key row 2 (left or right) on ScreenCode88 -- ScreenCode88 op 9 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode88:
 	link XIZ,0x0000	; F0A57E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A582  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A57E_Skip	; F0A586  jr NZ,0xf0a590
@@ -18916,7 +18977,7 @@ sub_F0A57E_Skip2:
 	ret	; F0A5A9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A5AA
+; LcdKeyRow3_ScreenCode88
 ; Called from: table 0xFCF21B[118]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -18926,7 +18987,10 @@ sub_F0A57E_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A5AA:
+; LcdKeyRow3_ScreenCode88: LCD key row 3 (left or right) on ScreenCode88 -- ScreenCode88 op 10 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode88:
 	link XIZ,0x0000	; F0A5AA  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A5AE  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A5AA_Skip	; F0A5B2  jr NZ,0xf0a5bc
@@ -18949,7 +19013,7 @@ sub_F0A5AA_Skip2:
 	ret	; F0A5D5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A5D6
+; LcdKeyRow4_ScreenCode88
 ; Called from: table 0xFCF21B[119]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8116 0xFD74AE 0xFD608B
@@ -18959,7 +19023,10 @@ sub_F0A5AA_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A5D6:
+; LcdKeyRow4_ScreenCode88: LCD key row 4 (left or right) on ScreenCode88 -- ScreenCode88 op 11 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode88:
 	link XIZ,0x0000	; F0A5D6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A5DA  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A5D6_Skip	; F0A5DE  jr NZ,0xf0a5ea
@@ -18982,7 +19049,7 @@ sub_F0A5D6_Join:
 	ret	; F0A603  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A604
+; LcdKeyRow5_ScreenCode88
 ; Called from: table 0xFCF21B[120]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8116 0xFD74AE 0xFD608B
@@ -18992,7 +19059,10 @@ sub_F0A5D6_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A604:
+; LcdKeyRow5_ScreenCode88: LCD key row 5 (left or right) on ScreenCode88 -- ScreenCode88 op 12 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode88:
 	link XIZ,0x0000	; F0A604  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A608  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A604_Skip	; F0A60C  jr NZ,0xf0a618
@@ -19015,7 +19085,7 @@ sub_F0A604_Join:
 	ret	; F0A631  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A632
+; PageKey_ScreenCode88
 ; Called from: table 0xFCF21B[124]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -19025,7 +19095,10 @@ sub_F0A604_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A632:
+; PageKey_ScreenCode88: the PAGE pair (code 0x10) on ScreenCode88 -- ScreenCode88 op 16 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode88:
 	link XIZ,0x0000	; F0A632  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A636  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A632_Skip	; F0A63A  jr NZ,0xf0a647
@@ -19038,7 +19111,7 @@ sub_F0A632_Skip:
 	ret	; F0A649  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A64A
+; ExitKey_ScreenCode88
 ; Called from: table 0xFCF21B[123]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -19048,7 +19121,10 @@ sub_F0A632_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A64A:
+; ExitKey_ScreenCode88: the EXIT key on ScreenCode88 -- ScreenCode88 op 15 (PanelOpTable_FCF3CB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode88:
 	link XIZ,0x0000	; F0A64A  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A64E  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A64A_Skip	; F0A652  jr NZ,0xf0a667
@@ -19063,7 +19139,7 @@ sub_F0A64A_Skip:
 	ret	; F0A669  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A66A
+; SoftKeyCol2_ScreenCode89
 ; Called from: table 0xFCF21B[127]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD84F8
@@ -19073,7 +19149,10 @@ sub_F0A64A_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A66A:
+; SoftKeyCol2_ScreenCode89: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 1 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode89:
 	link XIZ,0x0000	; F0A66A  link XIZ,0x0000
 	pushw	20	; F0A66E  push 0x0014
 	ld	bc, (xiz+8)	; F0A671  ld BC,(XIZ+0x08)
@@ -19085,7 +19164,7 @@ sub_F0A66A:
 	ret	; F0A67E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A67F
+; SoftKeyCol3_ScreenCode89
 ; Called from: table 0xFCF21B[128]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD859B
@@ -19095,7 +19174,10 @@ sub_F0A66A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A67F:
+; SoftKeyCol3_ScreenCode89: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 2 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode89:
 	link XIZ,0x0000	; F0A67F  link XIZ,0x0000
 	pushw	21	; F0A683  push 0x0015
 	ld	bc, (xiz+8)	; F0A686  ld BC,(XIZ+0x08)
@@ -19107,7 +19189,7 @@ sub_F0A67F:
 	ret	; F0A693  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A694
+; SoftKeyCol4_ScreenCode89
 ; Called from: table 0xFCF21B[129]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD863E
@@ -19117,7 +19199,10 @@ sub_F0A67F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A694:
+; SoftKeyCol4_ScreenCode89: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 3 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode89:
 	link XIZ,0x0000	; F0A694  link XIZ,0x0000
 	pushw	22	; F0A698  push 0x0016
 	ld	bc, (xiz+8)	; F0A69B  ld BC,(XIZ+0x08)
@@ -19129,7 +19214,7 @@ sub_F0A694:
 	ret	; F0A6A8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A6A9
+; SoftKeyCol5_ScreenCode89
 ; Called from: table 0xFCF21B[130]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD86E1
@@ -19139,7 +19224,10 @@ sub_F0A694:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A6A9:
+; SoftKeyCol5_ScreenCode89: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 4 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode89:
 	link XIZ,0x0000	; F0A6A9  link XIZ,0x0000
 	pushw	19	; F0A6AD  push 0x0013
 	ld	bc, (xiz+8)	; F0A6B0  ld BC,(XIZ+0x08)
@@ -19151,7 +19239,7 @@ sub_F0A6A9:
 	ret	; F0A6BD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A6BE
+; SoftKeyCol7_ScreenCode89
 ; Called from: table 0xFCF21B[132]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8747
@@ -19161,7 +19249,10 @@ sub_F0A6A9:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A6BE:
+; SoftKeyCol7_ScreenCode89: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 6 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode89:
 	link XIZ,0x0000	; F0A6BE  link XIZ,0x0000
 	pushw	17	; F0A6C2  push 0x0011
 	ld	bc, (xiz+8)	; F0A6C5  ld BC,(XIZ+0x08)
@@ -19173,7 +19264,7 @@ sub_F0A6BE:
 	ret	; F0A6D2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A6D3
+; SoftKeyCol8_ScreenCode89
 ; Called from: table 0xFCF21B[133]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD87A5
@@ -19183,7 +19274,10 @@ sub_F0A6BE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A6D3:
+; SoftKeyCol8_ScreenCode89: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 7 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode89:
 	link XIZ,0x0000	; F0A6D3  link XIZ,0x0000
 	pushw	18	; F0A6D7  push 0x0012
 	ld	bc, (xiz+8)	; F0A6DA  ld BC,(XIZ+0x08)
@@ -19195,7 +19289,7 @@ sub_F0A6D3:
 	ret	; F0A6E7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A6E8
+; LcdKeyRow1_ScreenCode89
 ; Called from: table 0xFCF21B[134]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6E90
@@ -19205,7 +19299,10 @@ sub_F0A6D3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A6E8:
+; LcdKeyRow1_ScreenCode89: LCD key row 1 (left or right) on ScreenCode89 -- ScreenCode89 op 8 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode89:
 	link XIZ,0x0000	; F0A6E8  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A6EC  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A6E8_Skip	; F0A6F0  jr Z,0xf0a6f6
@@ -19215,7 +19312,7 @@ sub_F0A6E8_Skip:
 	ret	; F0A6F8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A6F9
+; LcdKeyRow2_ScreenCode89
 ; Called from: table 0xFCF21B[135]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19225,7 +19322,10 @@ sub_F0A6E8_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A6F9:
+; LcdKeyRow2_ScreenCode89: LCD key row 2 (left or right) on ScreenCode89 -- ScreenCode89 op 9 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode89:
 	link XIZ,0x0000	; F0A6F9  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A6FD  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A6F9_Skip	; F0A701  jr NZ,0xf0a70b
@@ -19248,7 +19348,7 @@ sub_F0A6F9_Skip2:
 	ret	; F0A724  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A725
+; LcdKeyRow3_ScreenCode89
 ; Called from: table 0xFCF21B[136]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19258,7 +19358,10 @@ sub_F0A6F9_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A725:
+; LcdKeyRow3_ScreenCode89: LCD key row 3 (left or right) on ScreenCode89 -- ScreenCode89 op 10 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode89:
 	link XIZ,0x0000	; F0A725  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A729  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A725_Skip	; F0A72D  jr NZ,0xf0a737
@@ -19281,7 +19384,7 @@ sub_F0A725_Skip2:
 	ret	; F0A750  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A751
+; LcdKeyRow4_ScreenCode89
 ; Called from: table 0xFCF21B[137]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19291,7 +19394,10 @@ sub_F0A725_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A751:
+; LcdKeyRow4_ScreenCode89: LCD key row 4 (left or right) on ScreenCode89 -- ScreenCode89 op 11 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode89:
 	link XIZ,0x0000	; F0A751  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A755  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A751_Skip	; F0A759  jr Z,0xf0a772
@@ -19309,7 +19415,7 @@ sub_F0A751_Skip:
 	ret	; F0A774  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A775
+; LcdKeyRow5_ScreenCode89
 ; Called from: table 0xFCF21B[138]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19319,7 +19425,10 @@ sub_F0A751_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A775:
+; LcdKeyRow5_ScreenCode89: LCD key row 5 (left or right) on ScreenCode89 -- ScreenCode89 op 12 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode89:
 	link XIZ,0x0000	; F0A775  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A779  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A775_Skip	; F0A77D  jr Z,0xf0a796
@@ -19337,7 +19446,7 @@ sub_F0A775_Skip:
 	ret	; F0A798  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A799
+; PageKey_ScreenCode89
 ; Called from: table 0xFCF21B[142]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -19347,7 +19456,10 @@ sub_F0A775_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A799:
+; PageKey_ScreenCode89: the PAGE pair (code 0x10) on ScreenCode89 -- ScreenCode89 op 16 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode89:
 	link XIZ,0x0000	; F0A799  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A79D  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A799_Skip	; F0A7A1  jr Z,0xf0a7ae
@@ -19360,7 +19472,7 @@ sub_F0A799_Skip:
 	ret	; F0A7B0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A7B1
+; ExitKey_ScreenCode89
 ; Called from: table 0xFCF21B[141]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -19370,7 +19482,10 @@ sub_F0A799_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A7B1:
+; ExitKey_ScreenCode89: the EXIT key on ScreenCode89 -- ScreenCode89 op 15 (PanelOpTable_FCF413).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode89:
 	link XIZ,0x0000	; F0A7B1  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A7B5  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A7B1_Skip	; F0A7B9  jr NZ,0xf0a7ce
@@ -19385,7 +19500,7 @@ sub_F0A7B1_Skip:
 	ret	; F0A7D0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A7D1
+; SoftKeyCol2_ScreenCode8A
 ; Called from: table 0xFCF21B[145]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7E1A
@@ -19395,7 +19510,10 @@ sub_F0A7B1_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A7D1:
+; SoftKeyCol2_ScreenCode8A: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 1 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode8A:
 	link XIZ,0x0000	; F0A7D1  link XIZ,0x0000
 	pushw	1	; F0A7D5  push 0x0001
 	ld	bc, (xiz+8)	; F0A7D8  ld BC,(XIZ+0x08)
@@ -19407,7 +19525,7 @@ sub_F0A7D1:
 	ret	; F0A7E5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A7E6
+; SoftKeyCol3_ScreenCode8A
 ; Called from: table 0xFCF21B[146]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7E66
@@ -19417,7 +19535,10 @@ sub_F0A7D1:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A7E6:
+; SoftKeyCol3_ScreenCode8A: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 2 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode8A:
 	link XIZ,0x0000	; F0A7E6  link XIZ,0x0000
 	pushw	1	; F0A7EA  push 0x0001
 	ld	bc, (xiz+8)	; F0A7ED  ld BC,(XIZ+0x08)
@@ -19429,7 +19550,7 @@ sub_F0A7E6:
 	ret	; F0A7FA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A7FB
+; SoftKeyCol4_ScreenCode8A
 ; Called from: table 0xFCF21B[147]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7ED9
@@ -19439,7 +19560,10 @@ sub_F0A7E6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A7FB:
+; SoftKeyCol4_ScreenCode8A: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 3 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode8A:
 	link XIZ,0x0000	; F0A7FB  link XIZ,0x0000
 	pushw	1	; F0A7FF  push 0x0001
 	ld	bc, (xiz+8)	; F0A802  ld BC,(XIZ+0x08)
@@ -19451,7 +19575,7 @@ sub_F0A7FB:
 	ret	; F0A80F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A810
+; SoftKeyCol5_ScreenCode8A
 ; Called from: table 0xFCF21B[148]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7F4C
@@ -19461,7 +19585,10 @@ sub_F0A7FB:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A810:
+; SoftKeyCol5_ScreenCode8A: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 4 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode8A:
 	link XIZ,0x0000	; F0A810  link XIZ,0x0000
 	pushw	1	; F0A814  push 0x0001
 	ld	bc, (xiz+8)	; F0A817  ld BC,(XIZ+0x08)
@@ -19473,7 +19600,7 @@ sub_F0A810:
 	ret	; F0A824  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A825
+; SoftKeyCol6_ScreenCode8A
 ; Called from: table 0xFCF21B[149]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7FBF
@@ -19483,7 +19610,10 @@ sub_F0A810:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A825:
+; SoftKeyCol6_ScreenCode8A: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 5 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode8A:
 	link XIZ,0x0000	; F0A825  link XIZ,0x0000
 	pushw	1	; F0A829  push 0x0001
 	ld	bc, (xiz+8)	; F0A82C  ld BC,(XIZ+0x08)
@@ -19495,7 +19625,7 @@ sub_F0A825:
 	ret	; F0A839  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A83A
+; SoftKeyCol7_ScreenCode8A
 ; Called from: table 0xFCF21B[150]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8030
@@ -19505,7 +19635,10 @@ sub_F0A825:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A83A:
+; SoftKeyCol7_ScreenCode8A: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 6 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode8A:
 	link XIZ,0x0000	; F0A83A  link XIZ,0x0000
 	pushw	1	; F0A83E  push 0x0001
 	ld	bc, (xiz+8)	; F0A841  ld BC,(XIZ+0x08)
@@ -19517,7 +19650,7 @@ sub_F0A83A:
 	ret	; F0A84E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A84F
+; SoftKeyCol8_ScreenCode8A
 ; Called from: table 0xFCF21B[151]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD80A3
@@ -19527,7 +19660,10 @@ sub_F0A83A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A84F:
+; SoftKeyCol8_ScreenCode8A: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 7 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode8A:
 	link XIZ,0x0000	; F0A84F  link XIZ,0x0000
 	pushw	1	; F0A853  push 0x0001
 	ld	bc, (xiz+8)	; F0A856  ld BC,(XIZ+0x08)
@@ -19539,7 +19675,7 @@ sub_F0A84F:
 	ret	; F0A863  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A864
+; LcdKeyRow1_ScreenCode8A
 ; Called from: table 0xFCF21B[152]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD6E90
@@ -19549,7 +19685,10 @@ sub_F0A84F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A864:
+; LcdKeyRow1_ScreenCode8A: LCD key row 1 (left or right) on ScreenCode8A -- ScreenCode8A op 8 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode8A:
 	link XIZ,0x0000	; F0A864  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A868  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A864_Skip	; F0A86C  jr NZ,0xf0a87b
@@ -19565,7 +19704,7 @@ sub_F0A864_Join:
 	ret	; F0A881  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A882
+; LcdKeyRow2_ScreenCode8A
 ; Called from: table 0xFCF21B[153]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD74E0
@@ -19575,7 +19714,10 @@ sub_F0A864_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A882:
+; LcdKeyRow2_ScreenCode8A: LCD key row 2 (left or right) on ScreenCode8A -- ScreenCode8A op 9 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode8A:
 	link XIZ,0x0000	; F0A882  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A886  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A882_Skip	; F0A88A  jr NZ,0xf0a898
@@ -19593,7 +19735,7 @@ sub_F0A882_Join:
 	ret	; F0A8A5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A8A6
+; LcdKeyRow3_ScreenCode8A
 ; Called from: table 0xFCF21B[154]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74E0
@@ -19603,7 +19745,10 @@ sub_F0A882_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A8A6:
+; LcdKeyRow3_ScreenCode8A: LCD key row 3 (left or right) on ScreenCode8A -- ScreenCode8A op 10 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode8A:
 	link XIZ,0x0000	; F0A8A6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8AA  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A8A6_Skip	; F0A8AE  jr Z,0xf0a8bb
@@ -19616,7 +19761,7 @@ sub_F0A8A6_Skip:
 	ret	; F0A8BD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A8BE
+; LcdKeyRow4_ScreenCode8A
 ; Called from: table 0xFCF21B[155]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74E0
@@ -19626,7 +19771,10 @@ sub_F0A8A6_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A8BE:
+; LcdKeyRow4_ScreenCode8A: LCD key row 4 (left or right) on ScreenCode8A -- ScreenCode8A op 11 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode8A:
 	link XIZ,0x0000	; F0A8BE  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8C2  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A8BE_Skip	; F0A8C6  jr Z,0xf0a8d3
@@ -19639,7 +19787,7 @@ sub_F0A8BE_Skip:
 	ret	; F0A8D5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A8D6
+; LcdKeyRow5_ScreenCode8A
 ; Called from: table 0xFCF21B[156]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74E0
@@ -19649,7 +19797,10 @@ sub_F0A8BE_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A8D6:
+; LcdKeyRow5_ScreenCode8A: LCD key row 5 (left or right) on ScreenCode8A -- ScreenCode8A op 12 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode8A:
 	link XIZ,0x0000	; F0A8D6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8DA  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A8D6_Skip	; F0A8DE  jr Z,0xf0a8eb
@@ -19662,7 +19813,7 @@ sub_F0A8D6_Skip:
 	ret	; F0A8ED  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A8EE
+; ExitKey_ScreenCode8A
 ; Called from: table 0xFCF21B[159]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -19672,7 +19823,10 @@ sub_F0A8D6_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A8EE:
+; ExitKey_ScreenCode8A: the EXIT key on ScreenCode8A -- ScreenCode8A op 15 (PanelOpTable_FCF45B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode8A:
 	link XIZ,0x0000	; F0A8EE  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8F2  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A8EE_Skip	; F0A8F6  jr NZ,0xf0a90b
@@ -19687,7 +19841,7 @@ sub_F0A8EE_Skip:
 	ret	; F0A90D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A90E
+; ScreenButton_Code9D
 ; Called from: T_F42358 (x0)
 ; Touches:   |  0xFCFC44
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19697,7 +19851,8 @@ sub_F0A8EE_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A90E:		; <- T_F42358
+; ScreenButton_Code9D: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9D: that entry points at the thunk triple T_F42350 (Enter) / T_F42354 (Leave) / T_F42358 (Button).
+ScreenButton_Code9D:		; <- T_F42358
 	link XIZ,0xfffc	; F0A90E  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A912  lda XBC,XIZ+0xfe
 	push	xbc	; F0A915  push XBC
@@ -19734,7 +19889,7 @@ sub_F0A90E_Skip:
 	ret	; F0A95E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A95F
+; ScreenButton_Code9E
 ; Called from: T_F42368 (x0)
 ; Touches:   |  0xFCFB6C
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
@@ -19744,7 +19899,8 @@ sub_F0A90E_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A95F:		; <- T_F42368
+; ScreenButton_Code9E: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9E: that entry points at the thunk triple T_F42360 (Enter) / T_F42364_Nop (Leave) / T_F42368 (Button).
+ScreenButton_Code9E:		; <- T_F42368
 	link XIZ,0xfffc	; F0A95F  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A963  lda XBC,XIZ+0xfe
 	push	xbc	; F0A966  push XBC
@@ -19785,7 +19941,7 @@ sub_F0A95F_Skip:
 	ret	; F0A9BE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0A9BF
+; ScreenButton_Code9F
 ; Called from: T_F42378 (x0)
 ; Touches:   |  0xFCFBB4
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19795,7 +19951,8 @@ sub_F0A95F_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0A9BF:		; <- T_F42378
+; ScreenButton_Code9F: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9F: that entry points at the thunk triple T_F42370 (Enter) / T_F42374_Nop (Leave) / T_F42378 (Button).
+ScreenButton_Code9F:		; <- T_F42378
 	link XIZ,0xfffc	; F0A9BF  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A9C3  lda XBC,XIZ+0xfe
 	push	xbc	; F0A9C6  push XBC
@@ -19832,7 +19989,7 @@ sub_F0A9BF_Skip:
 	ret	; F0AA0F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AA10
+; ScreenButton_Code9A
 ; Called from: T_F433D8 (x0)
 ; Touches:   |  0xFCFBFC
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19842,7 +19999,8 @@ sub_F0A9BF_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AA10:		; <- T_F433D8
+; ScreenButton_Code9A: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9A: that entry points at the thunk triple T_F433D0 (Enter) / T_F433D4 (Leave) / T_F433D8 (Button). Screen 0x9A is SOUND EDIT DIGITAL EFFECT (DispatchTable_F5B8F8[0x9A]).
+ScreenButton_Code9A:		; <- T_F433D8
 	link XIZ,0xfffc	; F0AA10  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA14  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA17  push XBC
@@ -19879,7 +20037,7 @@ sub_F0AA10_Skip:
 	ret	; F0AA60  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AA61
+; ScreenButton_Code9C
 ; Called from: T_F420B4 (x0)
 ; Touches:   |  0xFCFBFC
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19889,7 +20047,8 @@ sub_F0AA10_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AA61:		; <- T_F420B4
+; ScreenButton_Code9C: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9C: that entry points at the thunk triple T_F420AC (Enter) / T_F420B0 (Leave) / T_F420B4 (Button).
+ScreenButton_Code9C:		; <- T_F420B4
 	link XIZ,0xfffc	; F0AA61  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA65  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA68  push XBC
@@ -19979,7 +20138,7 @@ sub_F0AAB3_Skip:
 	ret	; F0AAF8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AAF9
+; ScreenButton_CodeCB
 ; Called from: T_F42338 (x0)
 ; Touches:   |  0xFCFC8C
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19989,7 +20148,8 @@ sub_F0AAB3_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AAF9:		; <- T_F42338
+; ScreenButton_CodeCB: the +8 BUTTON method of PanelScreen_VtableTable entry 0xCB: that entry points at the thunk triple T_F42330 (Enter) / T_F42334 (Leave) / T_F42338 (Button).
+ScreenButton_CodeCB:		; <- T_F42338
 	link XIZ,0xfffc	; F0AAF9  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AAFD  lda XBC,XIZ+0xfe
 	push	xbc	; F0AB00  push XBC
@@ -20039,7 +20199,7 @@ T_F42348_Nop:		; <- T_F42348
 	ret	; F0AB4A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AB4B
+; SoftKeyCol2_ScreenCodeCB
 ; Called from: table 0xFCF80C[289]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFDA194 0xFDA142 0xFDA152 0xFD608B 0xFDA467
@@ -20049,7 +20209,10 @@ T_F42348_Nop:		; <- T_F42348
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AB4B:
+; SoftKeyCol2_ScreenCodeCB: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCodeCB -- ScreenCodeCB op 1 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCodeCB:
 	link XIZ,0xfffc	; F0AB4B  link XIZ,0xfffc
 	pushw	hl	; F0AB4F  push HL
 	lda	xbc, (xiz-2)	; F0AB50  lda XBC,XIZ+0xfe
@@ -20101,7 +20264,7 @@ sub_F0AB4B_Skip3:
 	ret	; F0ABB8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0ABB9
+; SoftKeyCol3_ScreenCodeCB
 ; Called from: table 0xFCF80C[290]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFDA05E 0xFD9D5C 0xFDA002 0xFD66A6 0xFD608B 0xFDA467
@@ -20111,7 +20274,10 @@ sub_F0AB4B_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0ABB9:
+; SoftKeyCol3_ScreenCodeCB: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCodeCB -- ScreenCodeCB op 2 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCodeCB:
 	link XIZ,0xfff8	; F0ABB9  link XIZ,0xfff8
 	pushw	hl	; F0ABBD  push HL
 	lda	xbc, (xiz-2)	; F0ABBE  lda XBC,XIZ+0xfe
@@ -20171,7 +20337,7 @@ sub_F0ABB9_Skip2:
 	ret	; F0AC42  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AC43
+; SoftKeyCol4_ScreenCodeCB
 ; Called from: table 0xFCF80C[291]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFDA0F6 0xFDA114 0xFD66A6 0xFD608B 0xFDA467
@@ -20181,7 +20347,10 @@ sub_F0ABB9_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AC43:
+; SoftKeyCol4_ScreenCodeCB: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCodeCB -- ScreenCodeCB op 3 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCodeCB:
 	link XIZ,0xfffa	; F0AC43  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0AC47  lda XBC,XIZ+0xfe
 	push	xbc	; F0AC4A  push XBC
@@ -20228,7 +20397,7 @@ sub_F0AC43_Skip2:
 	ret	; F0ACB0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0ACB1
+; LcdKeyRow1_ScreenCodeCB
 ; Called from: table 0xFCF80C[296]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -20238,7 +20407,10 @@ sub_F0AC43_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0ACB1:
+; LcdKeyRow1_ScreenCodeCB: LCD key row 1 (left or right) on ScreenCodeCB -- ScreenCodeCB op 8 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCodeCB:
 	link XIZ,0x0000	; F0ACB1  link XIZ,0x0000
 	pushw	0	; F0ACB5  push 0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0ACB8  cp (XIZ+0x08),0x00
@@ -20254,7 +20426,7 @@ sub_F0ACB1_Join:
 	ret	; F0ACCD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0ACCE
+; LcdKeyRow2_ScreenCodeCB
 ; Called from: table 0xFCF80C[297]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD608B
@@ -20264,7 +20436,10 @@ sub_F0ACB1_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0ACCE:
+; LcdKeyRow2_ScreenCodeCB: LCD key row 2 (left or right) on ScreenCodeCB -- ScreenCodeCB op 9 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCodeCB:
 	link XIZ,0xfffe	; F0ACCE  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0ACD2  cp (XIZ+0x08),0x00
 	jr	z, sub_F0ACCE_Skip	; F0ACD6  jr Z,0xf0ace0
@@ -20290,7 +20465,7 @@ sub_F0ACCE_Join:
 	ret	; F0AD01  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AD02
+; LcdKeyRow3_ScreenCodeCB
 ; Called from: table 0xFCF80C[298]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD608B
@@ -20300,7 +20475,10 @@ sub_F0ACCE_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AD02:
+; LcdKeyRow3_ScreenCodeCB: LCD key row 3 (left or right) on ScreenCodeCB -- ScreenCodeCB op 10 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCodeCB:
 	link XIZ,0xfffe	; F0AD02  link XIZ,0xfffe
 	lda	xbc, (xiz-2)	; F0AD06  lda XBC,XIZ+0xfe
 	push	xbc	; F0AD09  push XBC
@@ -20326,7 +20504,7 @@ sub_F0AD02_Join:
 	ret	; F0AD35  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AD36
+; LcdKeyRow4_ScreenCodeCB
 ; Called from: table 0xFCF80C[299]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD608B
@@ -20336,7 +20514,10 @@ sub_F0AD02_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AD36:
+; LcdKeyRow4_ScreenCodeCB: LCD key row 4 (left or right) on ScreenCodeCB -- ScreenCodeCB op 11 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCodeCB:
 	link XIZ,0xfffe	; F0AD36  link XIZ,0xfffe
 	lda	xbc, (xiz-2)	; F0AD3A  lda XBC,XIZ+0xfe
 	push	xbc	; F0AD3D  push XBC
@@ -20367,7 +20548,7 @@ sub_F0AD36_Join:
 	ret	; F0AD74  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AD75
+; LcdKeyRow5_ScreenCodeCB
 ; Called from: table 0xFCF80C[300]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD608B 0xFDA0AC
@@ -20377,7 +20558,10 @@ sub_F0AD36_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AD75:
+; LcdKeyRow5_ScreenCodeCB: LCD key row 5 (left or right) on ScreenCodeCB -- ScreenCodeCB op 12 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCodeCB:
 	link XIZ,0xfffe	; F0AD75  link XIZ,0xfffe
 	lda	xbc, (xiz-2)	; F0AD79  lda XBC,XIZ+0xfe
 	push	xbc	; F0AD7C  push XBC
@@ -20410,7 +20594,7 @@ sub_F0AD75_Join2:
 	ret	; F0ADBB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0ADBC
+; ExitKey_ScreenCodeCB
 ; Called from: table 0xFCF80C[303]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -20420,7 +20604,10 @@ sub_F0AD75_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0ADBC:
+; ExitKey_ScreenCodeCB: the EXIT key on ScreenCodeCB -- ScreenCodeCB op 15 (PanelOpTable_FCFC8C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCodeCB:
 	link XIZ,0x0000	; F0ADBC  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0ADC0  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0ADBC_Skip	; F0ADC4  jr NZ,0xf0add1
@@ -21596,7 +21783,7 @@ sub_F0B36C_Skip2:
 	ret	; F0B532  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B533
+; LcdKeyRow1_ScreenCode9E
 ; Called from: table 0xFCF80C[224]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA901 0xFD60D9 0xFDA911 T_F413C4 T_F413C0 T_F413C8 0xFDA341
@@ -21607,7 +21794,10 @@ sub_F0B36C_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B533:
+; LcdKeyRow1_ScreenCode9E: LCD key row 1 (left or right) on ScreenCode9E -- ScreenCode9E op 8 (PanelOpTable_FCFB6C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode9E:
 	link XIZ,0x0000	; F0B533  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B537  cp (XIZ+0x08),0x00
 	jr	z, sub_F0B36C_Join	; F0B53B  jr Z,0xf0b575
@@ -21635,7 +21825,7 @@ sub_F0B36C_Join:
 	ret	; F0B577  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B578
+; LcdKeyRow3_ScreenCode9E
 ; Called from: table 0xFCF80C[226]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7B6B 0xFDA0CA 0xFD7B7B 0xFD6C65 T_Dispatch_Code80
@@ -21645,7 +21835,10 @@ sub_F0B36C_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B578:
+; LcdKeyRow3_ScreenCode9E: LCD key row 3 (left or right) on ScreenCode9E -- ScreenCode9E op 10 (PanelOpTable_FCFB6C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode9E:
 	link XIZ,0xfff8	; F0B578  link XIZ,0xfff8
 	pushw	hl	; F0B57C  push HL
 	push	xix	; F0B57D  push XIX
@@ -21725,7 +21918,7 @@ sub_F0B578_Join2:
 	ret	; F0B62E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B62F
+; LcdKeyRow4_ScreenCode9E
 ; Called from: table 0xFCF80C[227]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7B6B 0xFD7B7B 0xFDA0CA 0xFD6C65 T_Dispatch_Code80
@@ -21735,7 +21928,10 @@ sub_F0B578_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B62F:
+; LcdKeyRow4_ScreenCode9E: LCD key row 4 (left or right) on ScreenCode9E -- ScreenCode9E op 11 (PanelOpTable_FCFB6C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode9E:
 	link XIZ,0xfff8	; F0B62F  link XIZ,0xfff8
 	pushw	hl	; F0B633  push HL
 	push	xix	; F0B634  push XIX
@@ -21808,7 +22004,7 @@ sub_F0B62F_Skip2:
 	ret	; F0B6D6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B6D7
+; LcdKeyRow5_ScreenCode9E
 ; Called from: table 0xFCF80C[228]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -21818,7 +22014,10 @@ sub_F0B62F_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B6D7:
+; LcdKeyRow5_ScreenCode9E: LCD key row 5 (left or right) on ScreenCode9E -- ScreenCode9E op 12 (PanelOpTable_FCFB6C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode9E:
 	link XIZ,0x0000	; F0B6D7  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B6DB  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B36C_Skip4	; F0B6DF  jr NZ,0xf0b6ec
@@ -21831,7 +22030,7 @@ sub_F0B36C_Skip4:
 	ret	; F0B6EE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B6EF
+; ExitKey_ScreenCode9E
 ; Called from: table 0xFCF80C[231]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0AC 0xFD608B
@@ -21841,7 +22040,10 @@ sub_F0B36C_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B6EF:
+; ExitKey_ScreenCode9E: the EXIT key on ScreenCode9E -- ScreenCode9E op 15 (PanelOpTable_FCFB6C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode9E:
 	link XIZ,0x0000	; F0B6EF  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B6F3  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B36C_Skip5	; F0B6F7  jr NZ,0xf0b70c
@@ -21856,7 +22058,7 @@ sub_F0B36C_Skip5:
 	ret	; F0B70E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B70F
+; SoftKeyCol1_ScreenCode9F
 ; Called from: table 0xFCF80C[234]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0B9B3
@@ -21866,12 +22068,15 @@ sub_F0B36C_Skip5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B70F:
+; SoftKeyCol1_ScreenCode9F: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 0 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode9F:
 	calr	sub_F0B9B3	; F0B70F  calr 0xf0b9b3
 	ret	; F0B712  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B713
+; SoftKeyCol2_ScreenCode9F
 ; Called from: table 0xFCF80C[235]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BA20
@@ -21881,12 +22086,15 @@ sub_F0B70F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B713:
+; SoftKeyCol2_ScreenCode9F: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 1 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode9F:
 	calr	sub_F0BA20	; F0B713  calr 0xf0ba20
 	ret	; F0B716  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B717
+; SoftKeyCol3_ScreenCode9F
 ; Called from: table 0xFCF80C[236]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BAA8
@@ -21896,12 +22104,15 @@ sub_F0B713:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B717:
+; SoftKeyCol3_ScreenCode9F: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 2 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode9F:
 	calr	sub_F0BAA8	; F0B717  calr 0xf0baa8
 	ret	; F0B71A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B71B
+; SoftKeyCol4_ScreenCode9F
 ; Called from: table 0xFCF80C[237]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BBB4
@@ -21911,12 +22122,15 @@ sub_F0B717:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B71B:
+; SoftKeyCol4_ScreenCode9F: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 3 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode9F:
 	calr	sub_F0BBB4	; F0B71B  calr 0xf0bbb4
 	ret	; F0B71E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B71F
+; SoftKeyCol5_ScreenCode9F
 ; Called from: table 0xFCF80C[238]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BC98
@@ -21926,12 +22140,15 @@ sub_F0B71B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B71F:
+; SoftKeyCol5_ScreenCode9F: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 4 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode9F:
 	calr	sub_F0BC98	; F0B71F  calr 0xf0bc98
 	ret	; F0B722  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B723
+; SoftKeyCol6_ScreenCode9F
 ; Called from: table 0xFCF80C[239]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BD31
@@ -21941,12 +22158,15 @@ sub_F0B71F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B723:
+; SoftKeyCol6_ScreenCode9F: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 5 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode9F:
 	calr	sub_F0BD31	; F0B723  calr 0xf0bd31
 	ret	; F0B726  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B727
+; SoftKeyCol7_ScreenCode9F
 ; Called from: table 0xFCF80C[240]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BDAC
@@ -21956,7 +22176,10 @@ sub_F0B723:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B727:
+; SoftKeyCol7_ScreenCode9F: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 6 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode9F:
 	link XIZ,0x0000	; F0B727  link XIZ,0x0000
 	pushw	hl	; F0B72B  push HL
 	ld	c, (xiz+8)	; F0B72C  ld C,(XIZ+0x08)
@@ -21976,7 +22199,7 @@ sub_F0B727_Join:
 	ret	; F0B746  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B747
+; SoftKeyCol8_ScreenCode9F
 ; Called from: table 0xFCF80C[241]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BE44
@@ -21986,12 +22209,15 @@ sub_F0B727_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B747:
+; SoftKeyCol8_ScreenCode9F: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 7 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode9F:
 	calr	sub_F0BE44	; F0B747  calr 0xf0be44
 	ret	; F0B74A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B74B
+; LcdKeyRow1_ScreenCode9F
 ; Called from: table 0xFCF80C[242]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BEBF 0xFDA0CA 0xFDA0BA 0xFD785C 0xFD6704 0xFD7BA5 0xFD616A
@@ -22002,7 +22228,10 @@ sub_F0B747:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B74B:
+; LcdKeyRow1_ScreenCode9F: LCD key row 1 (left or right) on ScreenCode9F -- ScreenCode9F op 8 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode9F:
 	link XIZ,0xffe8	; F0B74B  link XIZ,0xffe8
 	pushw	hl	; F0B74F  push HL
 	push	xix	; F0B750  push XIX
@@ -22092,7 +22321,7 @@ sub_F0B74B_Join2:
 	ret	; F0B80C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B80D
+; LcdKeyRow2_ScreenCode9F
 ; Called from: table 0xFCF80C[243]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BF04
@@ -22102,7 +22331,10 @@ sub_F0B74B_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B80D:
+; LcdKeyRow2_ScreenCode9F: LCD key row 2 (left or right) on ScreenCode9F -- ScreenCode9F op 9 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode9F:
 	link XIZ,0x0000	; F0B80D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B811  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B80D_Skip	; F0B815  jr NZ,0xf0b81a
@@ -22112,7 +22344,7 @@ sub_F0B80D_Skip:
 	ret	; F0B81C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B81D
+; ExitKey_ScreenCode9F
 ; Called from: table 0xFCF80C[249]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFDA0BA 0xFD785C 0xFD6704 0xFD608B 0xFDA0AC 0xFD7BA5
@@ -22123,7 +22355,10 @@ sub_F0B80D_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B81D:
+; ExitKey_ScreenCode9F: the EXIT key on ScreenCode9F -- ScreenCode9F op 15 (PanelOpTable_FCFBB4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode9F:
 	link XIZ,0xffe4	; F0B81D  link XIZ,0xffe4
 	pushw	hl	; F0B821  push HL
 	push	xix	; F0B822  push XIX
@@ -23186,7 +23421,7 @@ sub_F0BF04_Skip4:
 	ret	; F0C0BA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0C0BB
+; SoftKeyCol1_ScreenCode9D
 ; Called from: table 0xFCF80C[270]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80 sub_F0C291 0xFD7ADD T_F40FFC 0xFD7B00
@@ -23197,7 +23432,10 @@ sub_F0BF04_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0C0BB:
+; SoftKeyCol1_ScreenCode9D: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 0 (PanelOpTable_FCFC44).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode9D:
 	link XIZ,0xfff0	; F0C0BB  link XIZ,0xfff0
 	pushw	hl	; F0C0BF  push HL
 	pushw	de	; F0C0C0  push DE
@@ -23501,7 +23739,7 @@ sub_F0C336_Resume:
 	ret	; F0C35C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0C35D
+; SoftKeyCol2_ScreenCode9D
 ; Called from: table 0xFCF80C[271]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 sub_F0C291 0xFD64D1 0xFD7C01
@@ -23511,7 +23749,10 @@ sub_F0C336_Resume:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0C35D:
+; SoftKeyCol2_ScreenCode9D: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 1 (PanelOpTable_FCFC44).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode9D:
 	link XIZ,0xfffa	; F0C35D  link XIZ,0xfffa
 	ld	c, (xiz+8)	; F0C361  ld C,(XIZ+0x08)
 	res	7, c	; F0C364  res 0x07,C
@@ -23581,7 +23822,7 @@ sub_F0C291_Skip4:
 	ret	; F0C3F8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0C3F9
+; SoftKeyCol3_ScreenCode9D
 ; Called from: table 0xFCF80C[272]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_Dispatch_Code80
@@ -23591,7 +23832,10 @@ sub_F0C291_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0C3F9:
+; SoftKeyCol3_ScreenCode9D: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 2 (PanelOpTable_FCFC44).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode9D:
 	link XIZ,0xfffa	; F0C3F9  link XIZ,0xfffa
 	pushw	hl	; F0C3FD  push HL
 	lda	xbc, (xiz-2)	; F0C3FE  lda XBC,XIZ+0xfe
@@ -23651,7 +23895,7 @@ sub_F0C291_Skip8:
 	ret	; F0C47A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0C47B
+; SoftKeyCol4_ScreenCode9D
 ; Called from: table 0xFCF80C[273]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_Dispatch_Code80
@@ -23661,7 +23905,10 @@ sub_F0C291_Skip8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0C47B:
+; SoftKeyCol4_ScreenCode9D: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 3 (PanelOpTable_FCFC44).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode9D:
 	link XIZ,0xfffa	; F0C47B  link XIZ,0xfffa
 	pushw	hl	; F0C47F  push HL
 	pushw	de	; F0C480  push DE
@@ -23747,7 +23994,7 @@ sub_F0C291_Skip14:
 	ret	; F0C527  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0C528
+; SoftKeyCol6_ScreenCode9D
 ; Called from: table 0xFCF80C[275]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80
@@ -23757,7 +24004,10 @@ sub_F0C291_Skip14:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0C528:
+; SoftKeyCol6_ScreenCode9D: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 5 (PanelOpTable_FCFC44).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode9D:
 	link XIZ,0xfffc	; F0C528  link XIZ,0xfffc
 	pushw	hl	; F0C52C  push HL
 	push	xix	; F0C52D  push XIX
@@ -23864,7 +24114,7 @@ sub_F0C291_Join11:
 	ret	; F0C615  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0C616
+; LcdKeyRow4_ScreenCode9D
 ; Called from: table 0xFCF80C[281]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C94 0xFD6811 0xFD60D9 0xFDA341
@@ -23874,7 +24124,10 @@ sub_F0C291_Join11:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0C616:
+; LcdKeyRow4_ScreenCode9D: LCD key row 4 (left or right) on ScreenCode9D -- ScreenCode9D op 11 (PanelOpTable_FCFC44).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode9D:
 	link XIZ,0xfff2	; F0C616  link XIZ,0xfff2
 	pushw	hl	; F0C61A  push HL
 	push	xix	; F0C61B  push XIX
@@ -23980,7 +24233,7 @@ sub_F0C291_Skip23:
 	ret	; F0C709  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0C70A
+; ExitKey_ScreenCode9D
 ; Called from: table 0xFCF80C[285]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD608B
@@ -23990,7 +24243,10 @@ sub_F0C291_Skip23:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0C70A:
+; ExitKey_ScreenCode9D: the EXIT key on ScreenCode9D -- ScreenCode9D op 15 (PanelOpTable_FCFC44).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode9D:
 	link XIZ,0xfffe	; F0C70A  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0C70E  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0C291_Skip25	; F0C712  jr NZ,0xf0c733
@@ -89451,19 +89707,19 @@ T_ToneEditPage_A8_KeyDispatch:	jp ToneEditPage_A8_KeyDispatch  ; -> prom_a 0x53F
 T_F41FF8:	jp T_F41FF8_Nop  ; -> prom_a 0x5E3AF
 T_F41FFC:	jp ScreenCode87_Handler  ; -> prom_a 0x5B22F
 T_F42000:	jp ScreenLeave_Code87  ; -> prom_a 0x5E160
-T_F42004:	jp sub_F0A000  ; -> prom_b 0x0A000
+T_F42004:	jp ScreenButton_Code87  ; -> prom_b 0x0A000
 T_F42008:	jp T_F42008_Nop  ; -> prom_a 0x5E16D
 T_F4200C:	jp ScreenCode88_Handler  ; -> prom_a 0x5B38C
 T_F42010:	jp ScreenLeave_Code88  ; -> prom_a 0x5E16E
-T_F42014:	jp sub_F0A051  ; -> prom_b 0x0A051
+T_F42014:	jp ScreenButton_Code88  ; -> prom_b 0x0A051
 T_F42018:	jp T_F42018_Nop  ; -> prom_a 0x5E17B
 T_F4201C:	jp ScreenCode89_Handler  ; -> prom_a 0x5B44D
 T_F42020:	jp ScreenLeave_Code89  ; -> prom_a 0x5E17C
-T_F42024:	jp sub_F0A0B1  ; -> prom_b 0x0A0B1
+T_F42024:	jp ScreenButton_Code89  ; -> prom_b 0x0A0B1
 T_F42028:	jp T_F42028_Nop  ; -> prom_a 0x5E189
 T_F4202C:	jp ScreenCode8A_Handler  ; -> prom_a 0x5B529
 T_F42030:	jp ScreenLeave_Code8A  ; -> prom_a 0x5E18A
-T_F42034:	jp sub_F0A111  ; -> prom_b 0x0A111
+T_F42034:	jp ScreenButton_Code8A  ; -> prom_b 0x0A111
 T_F42038:	jp T_F42038_Nop  ; -> prom_a 0x5E197
 T_F4203C:	jp ScreenCode8B_Handler  ; -> prom_a 0x5B693
 T_F42040:	jp ScreenLeave_Code8B  ; -> prom_a 0x5E198
@@ -89495,7 +89751,7 @@ T_F420A4:	jp ScreenButton_Code9B  ; -> prom_a 0x5058E
 T_F420A8:	jp T_F420A8_Nop  ; -> prom_a 0x5E1F9
 T_F420AC:	jp ScreenCode9C_Handler  ; -> prom_a 0x5C0E1
 T_F420B0:	jp ScreenLeave_Code9C  ; -> prom_a 0x5E1FA
-T_F420B4:	jp sub_F0AA61  ; -> prom_b 0x0AA61
+T_F420B4:	jp ScreenButton_Code9C  ; -> prom_b 0x0AA61
 T_F420B8:	jp T_F420B8_Nop  ; -> prom_a 0x5E207
 T_F420BC:	jp ScreenCode90_Handler  ; -> prom_a 0x5C0ED
 T_F420C0:	jp ScreenLeave_Code90  ; -> prom_a 0x5E24E
@@ -89580,7 +89836,7 @@ T_F42328:	jp sub_F0AAB3  ; -> prom_b 0x0AAB3
 T_F4232C:	jp T_F4232C_Nop  ; -> prom_a 0x5E315
 T_F42330:	jp ScreenCodeCB_Handler  ; -> prom_a 0x5D27F
 T_F42334:	jp ScreenLeave_CodeCB  ; -> prom_a 0x5E316
-T_F42338:	jp sub_F0AAF9  ; -> prom_b 0x0AAF9
+T_F42338:	jp ScreenButton_CodeCB  ; -> prom_b 0x0AAF9
 T_F4233C:	jp T_F4233C_Nop  ; -> prom_a 0x5E323
 T_F42340:	jp T_F42340_Nop  ; -> prom_a 0x5D436
 T_F42344:	jp sub_FDE324  ; -> prom_a 0x5E324
@@ -89588,15 +89844,15 @@ T_F42348:	jp T_F42348_Nop  ; -> prom_b 0x0AB4A
 T_F4234C:	jp T_F4234C_Nop  ; -> prom_a 0x5E331
 T_F42350:	jp ScreenCode9D_Handler  ; -> prom_a 0x5D0D4
 T_F42354:	jp ScreenLeave_Code9D  ; -> prom_a 0x5E2FA
-T_F42358:	jp sub_F0A90E  ; -> prom_b 0x0A90E
+T_F42358:	jp ScreenButton_Code9D  ; -> prom_b 0x0A90E
 T_F4235C:	jp T_F4235C_Nop  ; -> prom_a 0x5E307
 T_F42360:	jp ScreenCode9E_Handler  ; -> prom_a 0x5CDE0
 T_F42364:	jp T_F42364_Nop  ; -> prom_a 0x5E2DA
-T_F42368:	jp sub_F0A95F  ; -> prom_b 0x0A95F
+T_F42368:	jp ScreenButton_Code9E  ; -> prom_b 0x0A95F
 T_F4236C:	jp T_F4236C_Nop  ; -> prom_a 0x5E2DB
 T_F42370:	jp ScreenCode9F_Handler  ; -> prom_a 0x5CFEB
 T_F42374:	jp T_F42374_Nop  ; -> prom_a 0x5E2DC
-T_F42378:	jp sub_F0A9BF  ; -> prom_b 0x0A9BF
+T_F42378:	jp ScreenButton_Code9F  ; -> prom_b 0x0A9BF
 T_F4237C:	jp T_F4237C_Nop  ; -> prom_a 0x5E2DD
 ; Evidence: slot 0xF42380 is `jp 0xFD2504`; prom_a 0xFD2504 carries the label
 ;           Ring608A0A_DrainAll (graded CONTENT).  DERIVATIVE name.
@@ -90641,7 +90897,7 @@ T_F433C0:	jp sub_FE02AB  ; -> prom_a 0x602AB
 	.fill 0xC, 1, 0x0E  ; 0xF433C4: 12 x ret
 T_F433D0:	jp sub_FDD02D  ; -> prom_a 0x5D02D
 T_F433D4:	jp sub_FDE2EC  ; -> prom_a 0x5E2EC
-T_F433D8:	jp sub_F0AA10  ; -> prom_b 0x0AA10
+T_F433D8:	jp ScreenButton_Code9A  ; -> prom_b 0x0AA10
 T_F433DC:	jp T_F433DC_Nop  ; -> prom_a 0x5E2F9
 T_F433E0:	jp T_F433E0_Nop  ; -> prom_a 0x5E151
 T_F433E4:	jp sub_FDE3B0  ; -> prom_a 0x5E3B0

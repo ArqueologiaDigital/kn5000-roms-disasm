@@ -27,7 +27,8 @@ QUESTION IT ANSWERS
   REFUSED, and left as they are:
     * a target already carrying a name (PanelOp_Nop and the rest);
     * a target reached at two DIFFERENT ops (one routine serving two controls has no one name);
-    * a table whose reader is not a ScreenButton_* routine, or that has no reader;
+    * a table whose reader is not a ScreenButton_* routine, or that has no reader (readers are
+      looked for in prom_b too: nine of these tables belong to prom_b screen objects);
     * ops 13 and 14, as above.
   A target reached at the same op from several screens is named after the first table in
   address order; the header lists every (screen, op).
@@ -80,16 +81,20 @@ def tables(L):
 
 
 def readers(L):
-    """{table: [reader routine]} from `add XBC,<table>` lines."""
-    out, cur = collections.defaultdict(list), None
-    for l in L:
-        m = GLOBAL.match(l)
-        if m:
-            cur = m.group(1)
-            continue
-        mm = re.search(r'\badd\s+X[A-Z]{2},\s*((?:PanelOpTable|DispatchTable)_FCF[0-9A-F]{3})\b', l.split(";")[0])
-        if mm and cur:
-            out[mm.group(1)].append(cur)
+    """{table: [reader routine]} from `add XBC,<table>` lines, in prom_a AND prom_b: nine of the
+    tables are read by prom_b screen objects' BUTTON methods (ScreenButton_Code87 ...)."""
+    out = collections.defaultdict(list)
+    LB = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "rb").read().decode("latin-1").split("\n")
+    for src in (L, LB):
+        cur = None
+        for l in src:
+            m = GLOBAL.match(l)
+            if m:
+                cur = m.group(1)
+                continue
+            mm = re.search(r'\badd\s+x[a-z]{2},\s*((?:PanelOpTable|DispatchTable)_FCF[0-9A-F]{3})\b', l.split(";")[0], re.I)
+            if mm and cur:
+                out[mm.group(1)].append(cur)
     return out
 
 
@@ -113,7 +118,7 @@ def plan():
             refused_tables.append((t, rs))
             continue
         for op, tgt in ents:
-            if re.match(r'^sub_F[89A-F][0-9A-F]{4}$', tgt):
+            if re.match(r'^sub_F[0-9A-F]{5}$', tgt):          # prom_a or prom_b handlers
                 uses.setdefault(tgt, []).append((t, scr[0], op))
     rows, refused = [], []
     for tgt, us in uses.items():

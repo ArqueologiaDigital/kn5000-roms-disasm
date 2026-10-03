@@ -1,6 +1,6 @@
 # prom_a 0xFDFEE2-0xFDFFDE: stale handler copies, paired with their live twins (2026-10-03)
 
-The bytes after the live handler `sub_FDFEC2` (its `ret` is at 0xFDFEE1) decode as more handlers of
+The bytes after the live handler `ExitKey_ScreenCode99` (its `ret` is at 0xFDFEE1) decode as more handlers of
 the same shape -- `link XIZ,0 / cp (XIZ+8),0 / jr / pushw ... / call ... / unlk / ret` -- but:
 
 - nothing references them: no label, and no 24-bit value in prom_a, prom_b or prom_c equals one of
