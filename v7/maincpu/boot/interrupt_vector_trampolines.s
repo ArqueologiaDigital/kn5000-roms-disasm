@@ -97,10 +97,10 @@ AcApcToggleProc_Helper_Join2:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x34100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, AcApcToggleProc_Helper_Loop
 ; (v7 label .Lc_fcccf8 stood here; dropped, see the file header)
 AcApcToggleProc_Helper_Skip2:

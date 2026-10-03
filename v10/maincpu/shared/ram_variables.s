@@ -149,3 +149,8 @@
 	.equ DIRMD_FLAG,		0x276c4	; GetDirmdFlag returns it (word)
 	.equ LSW_FILTER,		0x276c6	; SetLswFilter / ResetLswFilter store into it (32-bit)
 	.equ CURRENT_TARGET,		0x2f83c	; GetCurrentTarget returns it (32-bit)
+; sound-parameter hash table (DRAM, the same address in every version): 2047 slots of
+; {u32 key, u32 record pointer}.  SndParam_InitHashTable stamps {SNDPARAM_HASH_EMPTY_KEY, 0} over
+; 0x34100 .. +16376; the probe loops (SndParam_ProbeEntry and its twins) index slot n at +8n,
+; wrapping modulo 0x7FF.
+	.equ SNDPARAM_HASH_TABLE,	0x34100

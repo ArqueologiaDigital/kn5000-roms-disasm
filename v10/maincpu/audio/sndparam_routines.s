@@ -6,6 +6,11 @@
 ; lookup and comparison services for sound preset data.
 ; =============================================================================
 
+; A free slot of SNDPARAM_HASH_TABLE has this key (extension_data.s
+; SndParam_InitHashFillLoop_Data is the {key, pointer} pair stamped over the table).  It is the
+; same number as NakaData_RomEnd, which is why the probes used to spell it that way.
+	.equ SNDPARAM_HASH_EMPTY_KEY, 0x00FFFFFF
+
 SndParam_ProbeCheckMatch:
 	ld bc, 0:i3
 	cp xiz, xde
@@ -33,10 +38,10 @@ SndParam_ProbeEntry:
 	ld bc, ix
 	extz xbc
 	sll xbc, 3
-	ld xwa, 0x34100
+	ld xwa, SNDPARAM_HASH_TABLE
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, NakaData_RomEnd
+	cp xde, SNDPARAM_HASH_EMPTY_KEY
 	jr nz, SndParam_ProbeCheckMatch
 
 SndParam_DispatchCallback:
@@ -165,10 +170,10 @@ SndParam_Lkp2_ProbeEntry:
 	ld bc, ix
 	extz xbc
 	sll xbc, 3
-	ld xwa, 0x34100
+	ld xwa, SNDPARAM_HASH_TABLE
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, NakaData_RomEnd
+	cp xde, SNDPARAM_HASH_EMPTY_KEY
 	jr nz, SndParam_Lkp2_ProbeCheck
 
 SndParam_Lkp2_Dispatch:
@@ -280,10 +285,10 @@ SndParam_RO_ProbeEntry:
 	ld bc, ix
 	extz xbc
 	sll xbc, 3
-	ld xwa, 0x34100
+	ld xwa, SNDPARAM_HASH_TABLE
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, NakaData_RomEnd
+	cp xde, SNDPARAM_HASH_EMPTY_KEY
 	jr nz, SndParam_RO_ProbeCheck
 
 SndParam_RO_Dispatch:
@@ -565,10 +570,10 @@ SndParam_ResolveWidget_Join2:
 	ld bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x034100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, SndParam_ResolveWidget_Loop
 SndParam_ResolveWidget_Skip2:
 	ld	xwa, (xsp+6)
@@ -677,10 +682,10 @@ SndParam_DMA_ProbeEntry:
 	ld bc, ix
 	extz xbc
 	sll xbc, 3
-	ld xwa, 0x34100
+	ld xwa, SNDPARAM_HASH_TABLE
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, NakaData_RomEnd
+	cp xde, SNDPARAM_HASH_EMPTY_KEY
 	jr nz, SndParam_DMA_ProbeCheck
 
 SndParam_DMA_ExtractFields:
@@ -788,10 +793,10 @@ SndParam_DecodeMidiAddr_Join2:
 	ld bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x034100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, SndParam_DecodeMidiAddr_Loop
 SndParam_DecodeMidiAddr_Skip2:
 	ld	xwa, (xsp+8)
@@ -3075,7 +3080,7 @@ SndParam_EncodeAddress:
 	ret
 
 SndParam_InitHashTable:
-	lda xbc, (0x034100:24)
+	lda xbc, (SNDPARAM_HASH_TABLE:24)
 	ld xwa, xbc
 	lda xde, (xbc+16376)
 
@@ -3137,10 +3142,10 @@ SndParam_InsertProbe:
 	ld wa, hl
 	extz xwa
 	sll xwa, 3
-	ld xbc, 0x34100
+	ld xbc, SNDPARAM_HASH_TABLE
 	add xbc, xwa
 	ld xde, (xbc)
-	cp xde, NakaData_RomEnd
+	cp xde, SNDPARAM_HASH_EMPTY_KEY
 	jr nz, SndParam_InsertCheckKey
 	ld (xbc), xiz
 	ld xwa, (xsp + 6)

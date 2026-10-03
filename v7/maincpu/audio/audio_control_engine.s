@@ -11595,10 +11595,10 @@ MidiStream_HandleRunningStatus_Join2:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x34100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, MidiStream_HandleRunningStatus_Loop
 MidiStream_HandleRunningStatus_Skip6:
 	ld	xwa, (xsp+0x6)
@@ -11716,10 +11716,10 @@ MidiStream_HandleRunningStatus_Join4:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x34100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, MidiStream_HandleRunningStatus_Loop3
 MidiStream_HandleRunningStatus_Skip11:
 	ld	xwa, (xsp+0x6)

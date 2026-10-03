@@ -25,6 +25,11 @@
 ; bytes with no byte-identical v10 counterpart.  Comments carried over
 ; from v10 may cite v10 addresses.
 
+; A free slot of SNDPARAM_HASH_TABLE has this key (extension_data.s
+; SndParam_InitHashFillLoop_Data is the {key, pointer} pair stamped over the table).  It is the
+; same number as NakaData_RomEnd, which is why the probes used to spell it that way.
+	.equ SNDPARAM_HASH_EMPTY_KEY, 0x00FFFFFF
+
 SndParam_ProbeCheckMatch:
 	.byte 0xe8
 	ld	xwa, (xsp + 14)
@@ -122,10 +127,10 @@ SndParam_ResolveWidget_Join2:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x034100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, SndParam_ResolveWidget_Loop
 SndParam_ResolveWidget_Skip2:
 	ld	xwa, (xsp+6)
@@ -233,10 +238,10 @@ SndParam_DMA_ProbeEntry:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x34100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, SndParam_DMA_ProbeCheck
 SndParam_DMA_ExtractFields:
 	ld	xwa, (xsp + 10)
@@ -344,10 +349,10 @@ SndParam_DecodeMidiAddr_Join2:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
-	ld	xwa, 0x034100
+	ld	xwa, SNDPARAM_HASH_TABLE
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, SndParam_DecodeMidiAddr_Loop
 SndParam_DecodeMidiAddr_Skip2:
 	ld	xwa, (xsp+8)
@@ -2627,7 +2632,7 @@ UIState_CheckAndRenderBitmap_Helper_Helper:
 	add	xhl, 0x10000
 	ret
 SndParam_InitHashTable:
-	lda	xbc, (0x034100:24)
+	lda	xbc, (SNDPARAM_HASH_TABLE:24)
 	ld	xwa, xbc
 	lda	xde, (xbc+16376)
 SndParam_InitHashFillLoop:
@@ -2684,10 +2689,10 @@ SndParam_InsertProbe:
 	ld	wa, hl
 	extz	xwa
 	sll	xwa, 3
-	ld	xbc, 0x34100
+	ld	xbc, SNDPARAM_HASH_TABLE
 	add	xbc, xwa
 	ld	xde, (xbc)
-	cp	xde, NakaData_RomEnd
+	cp	xde, SNDPARAM_HASH_EMPTY_KEY
 	jr	nz, SndParam_InsertCheckKey
 SndParam_InsertProbe_Part:
 	ld	(xbc), xiz

@@ -3299,7 +3299,7 @@ SndParam_ResetDefaultTable_Data:
 SndParam_RW_Fail_Data:
 	.byte 0x00, 0x00, 0x00, 0x00
 SndParam_InitHashFillLoop_Data:
-	.long 0x00ffffff, 0x00000000
+	.long SNDPARAM_HASH_EMPTY_KEY, 0x00000000
 ; ---------------------------------------------------------------------------
 ; sndparam_descriptor -- ONE 18-byte sound-parameter descriptor
 ; ---------------------------------------------------------------------------
