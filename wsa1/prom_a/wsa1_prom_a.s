@@ -183633,7 +183633,7 @@ Paint_MidiFileDirectPlay:
 	lda xbc, (DLText_F59535:24)                          ; FF4535  f2 35 95 f5 31
 	push XBC                                             ; FF453A  39
 .LFF453B:
-	call sub_FF7895                                      ; FF453B  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF453B  1d 95 78 ff
 	inc 8,XSP                                            ; FF453F  ef 60
 	inc 2,XSP                                            ; FF4541  ef 62
 	pushw 0x02                                           ; FF4543  0b 02 00
@@ -183924,7 +183924,7 @@ LcdKeyRow4_MidiFileDirectPlay:
 	pushw 0x1e3d                                         ; FF46A3  0b 3d 1e
 	lda xbc, (0xf59538:24)                               ; FF46A6  f2 38 95 f5 31
 	push XBC                                             ; FF46AB  39
-	call sub_FF7895                                      ; FF46AC  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF46AC  1d 95 78 ff
 	inc 8,XSP                                            ; FF46B0  ef 60
 	inc 2,XSP                                            ; FF46B2  ef 62
 	jr .LFF46BD                                          ; FF46B4  68 07
@@ -183995,7 +183995,7 @@ LcdKeyRow5_MidiFileDirectPlay:
 	pushw 0x1e3d                                         ; FF471B  0b 3d 1e
 	lda xbc, (DLText_F59535:24)                          ; FF471E  f2 35 95 f5 31
 	push XBC                                             ; FF4723  39
-	call sub_FF7895                                      ; FF4724  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF4724  1d 95 78 ff
 	inc 8,XSP                                            ; FF4728  ef 60
 	inc 2,XSP                                            ; FF472A  ef 62
 	jr .LFF473E                                          ; FF472C  68 10
@@ -184054,7 +184054,7 @@ sub_FF475C:
 	push XBC                                             ; FF4775  39
 	lda xbc, (Disk_FileName:16)                                ; FF4776  f1 c8 21 31
 	push XBC                                             ; FF477A  39
-	call sub_FF78B5                                      ; FF477B  1d b5 78 ff
+	call MemCpy_C                                      ; FF477B  1d b5 78 ff
 	inc 8,XSP                                            ; FF477F  ef 60
 	inc 2,XSP                                            ; FF4781  ef 62
 	unlk XIZ                                             ; FF4783  ee 0d
@@ -185341,7 +185341,7 @@ Paint_MidiFileL0ad:
 	lda xbc, (DLText_F59535:24)                          ; FF50D4  f2 35 95 f5 31
 	push XBC                                             ; FF50D9  39
 .LFF50DA:
-	call sub_FF7895                                      ; FF50DA  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF50DA  1d 95 78 ff
 	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF50DE  1d 15 76 ff
 	inc 8,XSP                                            ; FF50E2  ef 60
 	inc 2,XSP                                            ; FF50E4  ef 62
@@ -185399,7 +185399,7 @@ sub_FF5118:
 .LFF515D:
 	pushw hl                                             ; FF515D  2b
 	pushw ix                                             ; FF515E  2c
-	call sub_FF7846                                      ; FF515F  1d 46 78 ff
+	call LCD_DrawVar272ENumberTag_SaveRegs                                      ; FF515F  1d 46 78 ff
 	pushw 0x06                                           ; FF5163  0b 06 00
 	pushw 0x08                                           ; FF5166  0b 08 00
 	m_push MWD+r6, 0xfe                                  ; FF5169  9e fe 04
@@ -185410,7 +185410,7 @@ sub_FF5118:
 	add XBC,0x00000480                                   ; FF5178  e9 c8 80 04 00 00
 	add XBC,0x0060a000                                   ; FF517E  e9 c8 00 a0 60 00
 	push XBC                                             ; FF5184  39
-	call sub_FF7895                                      ; FF5185  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF5185  1d 95 78 ff
 	ld xbc, (xiz-8)                                      ; FF5189  ae f8 21
 	ld A,(XBC)                                           ; FF518C  81 21
 	inc 8,XSP                                            ; FF518E  ef 60
@@ -185450,7 +185450,7 @@ sub_FF5118:
 	lda xbc, (DLText_F59857_MID:24)                      ; FF51E3  f2 57 98 f5 31
 	push XBC                                             ; FF51E8  39
 .LFF51E9:
-	call sub_FF7895                                      ; FF51E9  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF51E9  1d 95 78 ff
 	inc 8,XSP                                            ; FF51ED  ef 60
 	inc 2,XSP                                            ; FF51EF  ef 62
 .LFF51F1:
@@ -185765,7 +185765,7 @@ LcdKeyRow4_MidiFileL0ad:
 	pushw 0x215d                                         ; FF5394  0b 5d 21
 	lda xbc, (0xf59538:24)                               ; FF5397  f2 38 95 f5 31
 	push XBC                                             ; FF539C  39
-	call sub_FF7895                                      ; FF539D  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF539D  1d 95 78 ff
 	inc 8,XSP                                            ; FF53A1  ef 60
 	inc 2,XSP                                            ; FF53A3  ef 62
 	jr .LFF53C2                                          ; FF53A5  68 1b
@@ -185858,7 +185858,7 @@ LcdKeyRow5_MidiFileL0ad:
 	pushw 0x215d                                         ; FF543D  0b 5d 21
 	lda xbc, (DLText_F59535:24)                          ; FF5440  f2 35 95 f5 31
 	push XBC                                             ; FF5445  39
-	call sub_FF7895                                      ; FF5446  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF5446  1d 95 78 ff
 	inc 8,XSP                                            ; FF544A  ef 60
 	inc 2,XSP                                            ; FF544C  ef 62
 	jr .LFF546B                                          ; FF544E  68 1b
@@ -186110,7 +186110,7 @@ sub_FF5621:   ; entry: named by 1 `.long` operand, first at 0xFF3A0C
 	push XBC                                             ; FF562D  39
 	lda xwa, (0x22f0:16)                                ; FF562E  f1 f0 22 30
 	push XWA                                             ; FF5632  38
-	call sub_FF78B5                                      ; FF5633  1d b5 78 ff
+	call MemCpy_C                                      ; FF5633  1d b5 78 ff
 	pushw 0x02                                           ; FF5637  0b 02 00
 	call T_F42F80                                        ; FF563A  1d 80 2f f4
 	pushw 0x00                                           ; FF563E  0b 00 00
@@ -186135,7 +186135,7 @@ sub_FF566B:   ; entry: named by 1 `.long` operand, first at 0xFF3A10
 	lda xbc, (Text_FF3A18:24)                            ; FF5677  f2 18 3a ff 31
 	push XBC                                             ; FF567C  39
 	push XIX                                             ; FF567D  3c
-	call sub_FF78B5                                      ; FF567E  1d b5 78 ff
+	call MemCpy_C                                      ; FF567E  1d b5 78 ff
 	ld (XIX),0x5f                                        ; FF5682  b4 00 5f
 	extz XIX                                             ; FF5685  ec 12
 	ld (XIX+0x01),0x5f                                   ; FF5687  bc 01 00 5f
@@ -186580,7 +186580,7 @@ LcdKeyRow1_DiskSaveFile_Page1:
 	jr .LFF5A2A                                          ; FF59FD  68 2b
 .LFF59FF:
 	m_res 3, MD16, UI_RequestBits                                ; FF59FF  f1 75 20 b3
-	call sub_FF7832                                      ; FF5A03  1d 32 78 ff
+	call Disk_CopyEntry2724HeadToFileName_SaveRegs                                      ; FF5A03  1d 32 78 ff
 	ld c, (0x2726:16)                                   ; FF5A07  c1 26 27 23
 	and C,0x01                                           ; FF5A0B  cb cc 01
 	jr nz, .LFF5A1A                                      ; FF5A0E  6e 0a
@@ -187071,7 +187071,7 @@ LcdKeyRow3_DiskSaveFile_Page5:
 	push XBC                                             ; FF5BCA  39
 	lda xwa, (xiz-12)                                    ; FF5BCB  be f4 30
 	push XWA                                             ; FF5BCE  38
-	call sub_FF78B5                                      ; FF5BCF  1d b5 78 ff
+	call MemCpy_C                                      ; FF5BCF  1d b5 78 ff
 	calr sub_FF7084                                      ; FF5BD3  1e ae 14
 	call T_F425F4                                        ; FF5BD6  1d f4 25 f4
 	pushw 0x0b                                           ; FF5BDA  0b 0b 00
@@ -187079,7 +187079,7 @@ LcdKeyRow3_DiskSaveFile_Page5:
 	push XBC                                             ; FF5BE0  39
 	lda xwa, (Disk_FileName:16)                                ; FF5BE1  f1 c8 21 30
 	push XWA                                             ; FF5BE5  38
-	call sub_FF78B5                                      ; FF5BE6  1d b5 78 ff
+	call MemCpy_C                                      ; FF5BE6  1d b5 78 ff
 	call sub_FF7959                                      ; FF5BEA  1d 59 79 ff
 	m_res 0, MD16, 0x2726                                ; FF5BEE  f1 26 27 b0
 	ld (0x2229:16), 0x00                                 ; FF5BF2  f1 29 22 00 00
@@ -187976,7 +187976,7 @@ LcdKeyRow4_MidiFileSave_Page1:
 .LFF6281:
 	lda xbc, (0xf59538:24)                               ; FF6281  f2 38 95 f5 31
 	push XBC                                             ; FF6286  39
-	call sub_FF7895                                      ; FF6287  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF6287  1d 95 78 ff
 	inc 8,XSP                                            ; FF628B  ef 60
 	inc 2,XSP                                            ; FF628D  ef 62
 	jr .LFF62AC                                          ; FF628F  68 1b
@@ -188090,7 +188090,7 @@ LcdKeyRow5_MidiFileSave_Page1:
 .LFF6359:
 	lda xbc, (DLText_F59535:24)                          ; FF6359  f2 35 95 f5 31
 	push XBC                                             ; FF635E  39
-	call sub_FF7895                                      ; FF635F  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF635F  1d 95 78 ff
 	inc 8,XSP                                            ; FF6363  ef 60
 	inc 2,XSP                                            ; FF6365  ef 62
 	jr .LFF6384                                          ; FF6367  68 1b
@@ -188319,7 +188319,7 @@ LcdKeyRow3_MidiFileSave_Page3:
 	push XIX                                             ; FF64B3  3c
 	lda xbc, (xiz-12)                                    ; FF64B4  be f4 31
 	push XBC                                             ; FF64B7  39
-	call sub_FF78B5                                      ; FF64B8  1d b5 78 ff
+	call MemCpy_C                                      ; FF64B8  1d b5 78 ff
 	ld bc, (0x2724:16)                                 ; FF64BC  d1 24 27 21
 	extz BC                                              ; FF64C0  d9 12
 	pushw bc                                             ; FF64C2  29
@@ -188333,7 +188333,7 @@ LcdKeyRow3_MidiFileSave_Page3:
 	lda xbc, (xiz-12)                                    ; FF64DB  be f4 31
 	push XBC                                             ; FF64DE  39
 	push XIX                                             ; FF64DF  3c
-	call sub_FF78B5                                      ; FF64E0  1d b5 78 ff
+	call MemCpy_C                                      ; FF64E0  1d b5 78 ff
 	ld (UI_Request:16), 0x40                                 ; FF64E4  f1 70 20 00 40
 	ld (UI_Request_Hi:16), 0x80                                 ; FF64E9  f1 71 20 00 80
 	add XSP,0x00000016                                   ; FF64EE  ef c8 16 00 00 00
@@ -188995,7 +188995,7 @@ sub_FF674D:   ; entry: named by 1 `.long` operand, first at 0xFF4041
 	push 0x00                                            ; FF67FC  09 00
 	m_push MB16, 0x2735                                  ; FF67FE  c1 35 27 04
 	calr sub_FF7436                                      ; FF6802  1e 31 0c
-	call sub_FF7776                                      ; FF6805  1d 76 77 ff
+	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6805  1d 76 77 ff
 	lda xbc, (0xf5911e:24)                               ; FF6809  f2 1e 91 f5 31
 	push XBC                                             ; FF680E  39
 	lda xwa, (DL_F590F1:24)                              ; FF680F  f2 f1 90 f5 30
@@ -189045,7 +189045,7 @@ sub_FF6835:   ; entry: named by 1 `.long` operand, first at 0xFF4045
 	push 0x00                                            ; FF6888  09 00
 	m_push MB16, 0x273a                                  ; FF688A  c1 3a 27 04
 	calr sub_FF7153                                      ; FF688E  1e c2 08
-	call sub_FF7776                                      ; FF6891  1d 76 77 ff
+	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6891  1d 76 77 ff
 	ld c, (0x2727:16)                                   ; FF6895  c1 27 27 23
 	inc 1,C                                              ; FF6899  cb 61
 	ld (0x2730:16), c                                   ; FF689B  f1 30 27 43
@@ -189130,7 +189130,7 @@ sub_FF6906:   ; entry: named by 8 `.long` operands, first at 0xFF4049
 	pushw 0x00                                           ; FF6909  0b 00 00
 	calr sub_FF712A                                      ; FF690C  1e 1b 08
 	call UI_ScreenItem_StepByDial                                      ; FF690F  1d 43 77 ff
-	call sub_FF7776                                      ; FF6913  1d 76 77 ff
+	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6913  1d 76 77 ff
 	lda xbc, (DL_F5910F:24)                              ; FF6917  f2 0f 91 f5 31
 	push XBC                                             ; FF691C  39
 	call DLB_Handler_StringTable_Veneer                                      ; FF691D  1d 56 76 ff
@@ -189380,7 +189380,7 @@ LcdKeyRow1_L0adSingleS0und_Page1:
 	popw bc                                              ; FF6B1D  49
 	cp wa, 0x00:i3                                         ; FF6B1E  d8 d8
 	jr z, .LFF6B28                                       ; FF6B20  66 06
-	call sub_FF77E3                                      ; FF6B22  1d e3 77 ff
+	call Disk_CheckSelectedEntrySignature                                      ; FF6B22  1d e3 77 ff
 	jr .LFF6B32                                          ; FF6B26  68 0a
 .LFF6B28:
 	ld (UI_Request:16), 0xb3                                 ; FF6B28  f1 70 20 00 b3
@@ -189679,7 +189679,7 @@ LcdKeyRow1_L0adSingleS0und_Page0:
 	popw bc                                              ; FF6D84  49
 	cp wa, 0x00:i3                                         ; FF6D85  d8 d8
 	jr z, .LFF6D8F                                       ; FF6D87  66 06
-	call sub_FF77E3                                      ; FF6D89  1d e3 77 ff
+	call Disk_CheckSelectedEntrySignature                                      ; FF6D89  1d e3 77 ff
 	jr .LFF6D99                                          ; FF6D8D  68 0a
 .LFF6D8F:
 	ld (UI_Request:16), 0xb3                                 ; FF6D8F  f1 70 20 00 b3
@@ -189803,7 +189803,7 @@ sub_FF6DD7:   ; entry: named by 1 `.long` operand, first at 0xFF4149
 	push 0x00                                            ; FF6E5D  09 00
 	m_push MB16, 0x2735                                  ; FF6E5F  c1 35 27 04
 	calr sub_FF7436                                      ; FF6E63  1e d0 05
-	call sub_FF7776                                      ; FF6E66  1d 76 77 ff
+	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6E66  1d 76 77 ff
 	lda xbc, (0xf5911e:24)                               ; FF6E6A  f2 1e 91 f5 31
 	push XBC                                             ; FF6E6F  39
 	lda xwa, (DL_F5910F:24)                              ; FF6E70  f2 0f 91 f5 30
@@ -189838,7 +189838,7 @@ sub_FF6E95:   ; entry: named by 1 `.long` operand, first at 0xFF414D
 	push 0x00                                            ; FF6ED2  09 00
 	m_push MB16, 0x273a                                  ; FF6ED4  c1 3a 27 04
 	calr sub_FF7333                                      ; FF6ED8  1e 58 04
-	call sub_FF7776                                      ; FF6EDB  1d 76 77 ff
+	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6EDB  1d 76 77 ff
 	ld c, (0x2727:16)                                   ; FF6EDF  c1 27 27 23
 	inc 1,C                                              ; FF6EE3  cb 61
 	ld (0x2730:16), c                                   ; FF6EE5  f1 30 27 43
@@ -189957,7 +189957,7 @@ LcdKeyRow1_L0adSingleC0mbination_Page1:
 	popw bc                                              ; FF6F6E  49
 	cp wa, 0x00:i3                                         ; FF6F6F  d8 d8
 	jr z, .LFF6F79                                       ; FF6F71  66 06
-	call sub_FF77E3                                      ; FF6F73  1d e3 77 ff
+	call Disk_CheckSelectedEntrySignature                                      ; FF6F73  1d e3 77 ff
 	jr .LFF6F83                                          ; FF6F77  68 0a
 .LFF6F79:
 	ld (UI_Request:16), 0xb3                                 ; FF6F79  f1 70 20 00 b3
@@ -190081,7 +190081,7 @@ LcdKeyRow1_L0adSingleC0mbination_Page0:
 	popw bc                                              ; FF7051  49
 	cp wa, 0x00:i3                                         ; FF7052  d8 d8
 	jr z, .LFF705C                                       ; FF7054  66 06
-	call sub_FF77E3                                      ; FF7056  1d e3 77 ff
+	call Disk_CheckSelectedEntrySignature                                      ; FF7056  1d e3 77 ff
 	jr .LFF7066                                          ; FF705A  68 0a
 .LFF705C:
 	ld (UI_Request:16), 0xb3                                 ; FF705C  f1 70 20 00 b3
@@ -190262,7 +190262,7 @@ sub_FF7153:
 	pushw 0x0d36                                         ; FF7184  0b 36 0d
 	lda xbc, (0x2940:16)                                ; FF7187  f1 40 29 31
 	push XBC                                             ; FF718B  39
-	call sub_FF7895                                      ; FF718C  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF718C  1d 95 78 ff
 	ldw hl, 0x0230                                       ; FF7190  33 30 02
 	ldw de, 0x0f66                                       ; FF7193  32 66 0f
 	add XSP,0x00000012                                   ; FF7196  ef c8 12 00 00 00
@@ -190273,7 +190273,7 @@ sub_FF7153:
 	pushw ix                                             ; FF71A4  2c
 	lda xbc, (Text_FF4291:24)                            ; FF71A5  f2 91 42 ff 31
 	push XBC                                             ; FF71AA  39
-	call sub_FF7895                                      ; FF71AB  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF71AB  1d 95 78 ff
 	add HL,0x0230                                        ; FF71AF  db c8 30 02
 	ld DE,IX                                             ; FF71B3  dc 8a
 	add DE,0x0230                                        ; FF71B5  da c8 30 02
@@ -190306,7 +190306,7 @@ sub_FF7153:
 	m_push MWD+r6, 0xfe                                  ; FF71F9  9e fe 04
 	lda xbc, (0x2940:16)                                ; FF71FC  f1 40 29 31
 	push XBC                                             ; FF7200  39
-	call sub_FF7895                                      ; FF7201  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF7201  1d 95 78 ff
 	add HL,0x0230                                        ; FF7205  db c8 30 02
 	ld ix, (xiz-2)                                       ; FF7209  9e fe 24
 	add IX,0x0230                                        ; FF720C  dc c8 30 02
@@ -190337,7 +190337,7 @@ sub_FF7224:
 	pushw 0x0c1e                                         ; FF724A  0b 1e 0c
 	lda xbc, (0x2940:16)                                ; FF724D  f1 40 29 31
 	push XBC                                             ; FF7251  39
-	call sub_FF7895                                      ; FF7252  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF7252  1d 95 78 ff
 	add XSP,0x00000012                                   ; FF7256  ef c8 12 00 00 00
 	ret                                                  ; FF725C  0e
 sub_FF725D:
@@ -190357,7 +190357,7 @@ sub_FF725D:
 	pushw 0x0c1e                                         ; FF7283  0b 1e 0c
 	lda xbc, (0x2940:16)                                ; FF7286  f1 40 29 31
 	push XBC                                             ; FF728A  39
-	call sub_FF7895                                      ; FF728B  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF728B  1d 95 78 ff
 	add XSP,0x00000012                                   ; FF728F  ef c8 12 00 00 00
 	ret                                                  ; FF7295  0e
 ; ---------------------------------------------------------------------
@@ -190433,7 +190433,7 @@ sub_FF7296:
 	lda xbc, (0x2940:16)                                ; FF7310  f1 40 29 31
 	push XBC                                             ; FF7314  39
 .LFF7315:
-	call sub_FF7895                                      ; FF7315  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF7315  1d 95 78 ff
 	add DE,0x0208                                        ; FF7319  da c8 08 02
 	add HL,0x0208                                        ; FF731D  db c8 08 02
 	inc 1,IX                                             ; FF7321  dc 61
@@ -190475,7 +190475,7 @@ sub_FF7333:
 	m_push MWD+r6, 0xfe                                  ; FF736E  9e fe 04
 	lda xbc, (0x2940:16)                                ; FF7371  f1 40 29 31
 	push XBC                                             ; FF7375  39
-	call sub_FF7895                                      ; FF7376  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF7376  1d 95 78 ff
 	add HL,0x0230                                        ; FF737A  db c8 30 02
 	ld de, (xiz-2)                                       ; FF737E  9e fe 22
 	add DE,0x0230                                        ; FF7381  da c8 30 02
@@ -190558,7 +190558,7 @@ sub_FF7399:
 	lda xbc, (0x2940:16)                                ; FF7413  f1 40 29 31
 	push XBC                                             ; FF7417  39
 .LFF7418:
-	call sub_FF7895                                      ; FF7418  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF7418  1d 95 78 ff
 	add DE,0x0208                                        ; FF741C  da c8 08 02
 	add HL,0x0208                                        ; FF7420  db c8 08 02
 	inc 1,IX                                             ; FF7424  dc 61
@@ -190606,7 +190606,7 @@ sub_FF7436:
 	add XBC,Text_FF42A1                                  ; FF744E  e9 c8 a1 42 ff 00
 	push XBC                                             ; FF7454  39
 	push XIX                                             ; FF7455  3c
-	call sub_FF78B5                                      ; FF7456  1d b5 78 ff
+	call MemCpy_C                                      ; FF7456  1d b5 78 ff
 	ld D,L                                               ; FF745A  cf 8c
 	inc 1,L                                              ; FF745C  cf 61
 	inc 8,XSP                                            ; FF745E  ef 60
@@ -190653,7 +190653,7 @@ sub_FF7436:
 	pushw 0x07                                           ; FF74C0  0b 07 00
 	pushw 0x19a5                                         ; FF74C3  0b a5 19
 	push XIX                                             ; FF74C6  3c
-	call sub_FF7895                                      ; FF74C7  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF74C7  1d 95 78 ff
 	ld H,D                                               ; FF74CB  cc 8e
 	srl h, 0x03                                          ; FF74CD  ce ef 03
 	inc 1,H                                              ; FF74D0  ce 61
@@ -190676,7 +190676,7 @@ sub_FF7436:
 	pushw 0x02                                           ; FF74F6  0b 02 00
 	pushw 0x1c2a                                         ; FF74F9  0b 2a 1c
 	push XIX                                             ; FF74FC  3c
-	call sub_FF7895                                      ; FF74FD  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF74FD  1d 95 78 ff
 	ld C,D                                               ; FF7501  cc 8b
 	and C,0x07                                           ; FF7503  cb cc 07
 	add C,0x31                                           ; FF7506  cb c8 31
@@ -190685,7 +190685,7 @@ sub_FF7436:
 	pushw 0x01                                           ; FF750E  0b 01 00
 	pushw 0x1c2d                                         ; FF7511  0b 2d 1c
 	push XIX                                             ; FF7514  3c
-	call sub_FF7895                                      ; FF7515  1d 95 78 ff
+	call LCD_SwiTextCall_SaveRegs                                      ; FF7515  1d 95 78 ff
 	add XSP,0x00000014                                   ; FF7519  ef c8 14 00 00 00
 	pop XIX                                              ; FF751F  5c
 	popw de                                              ; FF7520  4a
@@ -191128,20 +191128,22 @@ UI_ScreenItem_StepByDial:
 	pop XIX                                              ; FF7773  5c
 	pop XIZ                                              ; FF7774  5e
 	ret                                                  ; FF7775  0e
-sub_FF7776:
+; Disk_FormatSelectedEntry_SaveRegs: Disk_FormatSelectedEntry with XIX/XHL/XDE/XIZ kept.
+Disk_FormatSelectedEntry_SaveRegs:
 	push XIZ                                             ; FF7776  3e
 	push XIX                                             ; FF7777  3c
 	push XHL                                             ; FF7778  3b
 	push XDE                                             ; FF7779  3a
-	call sub_FF7783                                      ; FF777A  1d 83 77 ff
+	call Disk_FormatSelectedEntry                                      ; FF777A  1d 83 77 ff
 	pop XDE                                              ; FF777E  5a
 	pop XHL                                              ; FF777F  5b
 	pop XIX                                              ; FF7780  5c
 	pop XIZ                                              ; FF7781  5e
 	ret                                                  ; FF7782  0e
-sub_FF7783:
+; Disk_FormatSelectedEntry: UI_DrawScratch = entry word 0, ':', then the next 6 bytes of directory entry UI_ScreenItem.
+Disk_FormatSelectedEntry:
 	ld a, (UI_ScreenItem:16)                                   ; FF7783  c1 20 27 21
-	call sub_FF77A7                                      ; FF7787  1d a7 77 ff
+	call Disk_DirEntryPtr                                      ; FF7787  1d a7 77 ff
 	ld XIX,UI_DrawScratch                                    ; FF778B  44 40 26 00 00
 	ld WA,(XIY)                                          ; FF7790  95 20
 	add IY,0x0002                                        ; FF7792  dd c8 02 00
@@ -191152,7 +191154,8 @@ sub_FF7783:
 	ldw bc, 0x03                                         ; FF77A1  31 03 00
 	ldirw                                                ; FF77A4  95 11
 	ret                                                  ; FF77A6  0e
-sub_FF77A7:
+; Disk_DirEntryPtr(A = index): XIY = 0x60A480 + 16 * min(A, 0x13), the directory entry (Disk_DrawDirectory20 draws from +2).
+Disk_DirEntryPtr:
 	pushw bc                                             ; FF77A7  29
 	cp A,0x13                                            ; FF77A8  c9 cf 13
 	jr ule, .LFF77AF                                     ; FF77AB  63 02
@@ -191164,7 +191167,8 @@ sub_FF77A7:
 	add IY,WA                                            ; FF77B8  d8 85
 	popw bc                                              ; FF77BA  49
 	ret                                                  ; FF77BB  0e
-sub_FF77BC:
+; Disk_SetStatusFromCheck(A): A = 1 -> UI_StatusCode 0x23, 4 -> 0x03, 0x2B -> 0x2B, each then UI_Request = 0x40AB; else nothing.
+Disk_SetStatusFromCheck:
 	cp a, 0x01:i3                                          ; FF77BC  c9 d9
 	jr nz, .LFF77C7                                      ; FF77BE  6e 07
 	ld (UI_StatusCode:16), 0x23                                 ; FF77C0  f1 80 28 00 23
@@ -191182,7 +191186,9 @@ sub_FF77BC:
 	ldw (UI_Request:16), 0x40ab                              ; FF77DC  f1 70 20 02 ab 40
 .LFF77E2:
 	ret                                                  ; FF77E2  0e
-sub_FF77E3:
+; Disk_CheckSelectedEntrySignature: with Disk_FileName saved, copies directory entry UI_ScreenItem into it, runs
+;   T_DiskFile_CheckSignature, restores Disk_FileName and passes the result to Disk_SetStatusFromCheck.
+Disk_CheckSelectedEntrySignature:
 	push XIZ                                             ; FF77E3  3e
 	push XIX                                             ; FF77E4  3c
 	push XHL                                             ; FF77E5  3b
@@ -191195,38 +191201,41 @@ sub_FF77E3:
 	m_push MWD+r4, 0x06                                  ; FF77FA  9c 06 04
 	ld a, (UI_ScreenItem:16)                                   ; FF77FD  c1 20 27 21
 	ldw bc, 0x04                                         ; FF7801  31 04 00
-	call sub_FF7826                                      ; FF7804  1d 26 78 ff
+	call Disk_CopyDirEntryToFileName                                      ; FF7804  1d 26 78 ff
 	call T_DiskFile_CheckSignature                                        ; FF7808  1d 30 34 f4
 	ld XIX,Disk_FileName                                    ; FF780C  44 c8 21 00 00
 	m_popw MDD+r4, 0x06                                  ; FF7811  bc 06 06
 	m_popw MDD+r4, 0x04                                  ; FF7814  bc 04 06
 	m_popw MDD+r4, 0x02                                  ; FF7817  bc 02 06
 	m_popw MDD+r4, 0x00                                  ; FF781A  bc 00 06
-	call sub_FF77BC                                      ; FF781D  1d bc 77 ff
+	call Disk_SetStatusFromCheck                                      ; FF781D  1d bc 77 ff
 	pop XDE                                              ; FF7821  5a
 	pop XHL                                              ; FF7822  5b
 	pop XIX                                              ; FF7823  5c
 	pop XIZ                                              ; FF7824  5e
 	ret                                                  ; FF7825  0e
-sub_FF7826:
-	call sub_FF77A7                                      ; FF7826  1d a7 77 ff
+; Disk_CopyDirEntryToFileName(A = index, BC = words): ldirw from Disk_DirEntryPtr(A) to Disk_FileName.
+Disk_CopyDirEntryToFileName:
+	call Disk_DirEntryPtr                                      ; FF7826  1d a7 77 ff
 	ld XIX,Disk_FileName                                    ; FF782A  44 c8 21 00 00
 	ldirw                                                ; FF782F  95 11
 	ret                                                  ; FF7831  0e
-sub_FF7832:
+; Disk_CopyEntry2724HeadToFileName_SaveRegs: the first word of directory entry (0x2724) to Disk_FileName.
+Disk_CopyEntry2724HeadToFileName_SaveRegs:
 	push XIZ                                             ; FF7832  3e
 	push XIX                                             ; FF7833  3c
 	push XHL                                             ; FF7834  3b
 	push XDE                                             ; FF7835  3a
 	ld a, (0x2724:16)                                   ; FF7836  c1 24 27 21
 	ldw bc, 0x01                                         ; FF783A  31 01 00
-	call sub_FF7826                                      ; FF783D  1d 26 78 ff
+	call Disk_CopyDirEntryToFileName                                      ; FF783D  1d 26 78 ff
 	pop XDE                                              ; FF7841  5a
 	pop XHL                                              ; FF7842  5b
 	pop XIX                                              ; FF7843  5c
 	pop XIZ                                              ; FF7844  5e
 	ret                                                  ; FF7845  0e
-sub_FF7846:
+; LCD_DrawVar272ENumberTag_SaveRegs(pos, row): draws DLText_F595CD[(0x272E)] (" 01:", " 02:" ...) on layer 0, SWI7 service 6.
+LCD_DrawVar272ENumberTag_SaveRegs:
 	push XIZ                                             ; FF7846  3e
 	ld XIZ,XSP                                           ; FF7847  ef 8e
 	push XIX                                             ; FF7849  3c
@@ -191248,6 +191257,9 @@ sub_FF7846:
 	pop XIX                                              ; FF7873  5c
 	pop XIZ                                              ; FF7874  5e
 	ret                                                  ; FF7875  0e
+; LCD_DrawText16_SaveRegs(pos, text): 16 characters of text at pos on layer 0, SWI7 service 6.  No reference found
+;   (no call site, no pointer in either ROM).
+LCD_DrawText16_SaveRegs:
 	push XIZ                                             ; FF7876  3e
 	ld XIZ,XSP                                           ; FF7877  ef 8e
 	push XIX                                             ; FF7879  3c
@@ -191265,7 +191277,8 @@ sub_FF7846:
 	pop XIX                                              ; FF7892  5c
 	pop XIZ                                              ; FF7893  5e
 	ret                                                  ; FF7894  0e
-sub_FF7895:
+; LCD_SwiTextCall_SaveRegs(text, -, pos, count, service): layer 0, then SWI7 with A = service; C-callable.
+LCD_SwiTextCall_SaveRegs:
 	push XIZ                                             ; FF7895  3e
 	ld XIZ,XSP                                           ; FF7896  ef 8e
 	push XIX                                             ; FF7898  3c
@@ -191283,7 +191296,8 @@ sub_FF7895:
 	pop XIX                                              ; FF78B2  5c
 	pop XIZ                                              ; FF78B3  5e
 	ret                                                  ; FF78B4  0e
-sub_FF78B5:
+; MemCpy_C(dst, src, count): ldir (XIX+) <- (XIY+), count bytes; C-callable.
+MemCpy_C:
 	push XIZ                                             ; FF78B5  3e
 	ld XIZ,XSP                                           ; FF78B6  ef 8e
 	push XIX                                             ; FF78B8  3c
@@ -191307,7 +191321,7 @@ sub_FF78C9:
 	ld (0x2210:16), a                                   ; FF78DB  f1 10 22 41
 	ld a, (0x2724:16)                                   ; FF78DF  c1 24 27 21
 	ldw bc, 0x01                                         ; FF78E3  31 01 00
-	call sub_FF7826                                      ; FF78E6  1d 26 78 ff
+	call Disk_CopyDirEntryToFileName                                      ; FF78E6  1d 26 78 ff
 	call T_F42608                                        ; FF78EA  1d 08 26 f4
 	pop XDE                                              ; FF78EE  5a
 	pop XHL                                              ; FF78EF  5b
@@ -191326,7 +191340,7 @@ sub_FF78C9:
 	m_push MWD+r4, 0x06                                  ; FF7907  9c 06 04
 	ld a, (0x2724:16)                                   ; FF790A  c1 24 27 21
 	ldw bc, 0x04                                         ; FF790E  31 04 00
-	call sub_FF7826                                      ; FF7911  1d 26 78 ff
+	call Disk_CopyDirEntryToFileName                                      ; FF7911  1d 26 78 ff
 	ld XIY,Disk_FileName                                    ; FF7915  45 c8 21 00 00
 	ldw wa, 0x3f3f                                       ; FF791A  30 3f 3f
 	ld (XIY+0x08),WA                                     ; FF791D  bd 08 50
@@ -191423,7 +191437,7 @@ sub_FF79B1:
 	ld (0x2210:16), a                                   ; FF79C3  f1 10 22 41
 	ld a, (0x2724:16)                                   ; FF79C7  c1 24 27 21
 	ldw bc, 0x01                                         ; FF79CB  31 01 00
-	call sub_FF7826                                      ; FF79CE  1d 26 78 ff
+	call Disk_CopyDirEntryToFileName                                      ; FF79CE  1d 26 78 ff
 	call T_F4260C                                        ; FF79D2  1d 0c 26 f4
 	pop XDE                                              ; FF79D6  5a
 	pop XHL                                              ; FF79D7  5b
