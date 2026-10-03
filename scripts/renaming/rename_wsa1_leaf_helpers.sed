@@ -1,0 +1,27 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FB81E6\b/Shl8ByCount/g
+s/\bsub_FB8207\b/Shl16ByCount/g
+s/\bsub_FB8228\b/Lsr8ByCount/g
+s/\bsub_FB8249\b/Lsr16ByCount/g
+s/\bsub_FC065A\b/Msg0716_SetPendingBit0/g
+s/\bsub_FC0663\b/Msg0716_SetPendingBit1/g
+s/\bsub_FC066C\b/Msg0716_SetPendingBit2/g
+s/\bsub_FC0675\b/Msg0716_SetPendingBit3/g
+s/\bsub_FC0CFF\b/Msg0716_SetPendingBit4/g
+s/\bsub_FC0E00\b/Msg0716_SetPendingBit5/g
+s/\bsub_FC0E09\b/Msg0716_SetPendingBit5_B/g
+s/\bsub_FC0DEE\b/Msg0716_SetPendingBit6IfHighNibble/g
+s/\bsub_FDA482\b/UiRequestBits_TestBit3/g
+s/\bsub_FDA467\b/UiRequestBits_SetBit3/g
+s/\bsub_FDABF1\b/UiScreenFlags_TestBit4/g
+s/\bsub_FD7B89\b/Arr22F0_Set/g
+s/\bsub_FD7BA5\b/Arr22F0_Get/g
+s/\bsub_FDA8EA\b/Buf60A000_SetByte/g
+s/\bsub_FD9400\b/Math_MulDivU16/g
+s/\bsub_FD96C3\b/Math_AbsS8/g
+s/\bsub_FE45F3\b/Fat_CopyName11/g
+s/\bsub_FE460A\b/Fat_CopyName11_B/g
+s/\bsub_FE3BCD\b/Fat_DirEntryToFileInfo/g
+s/\bsub_FE3C08\b/Fat_NameHasWildcard/g
+s/\bsub_FE7A63\b/Name11At0E38_Blank/g
+s/\bsub_FB3223\b/SysExSession_ClearCombinationReceived/g

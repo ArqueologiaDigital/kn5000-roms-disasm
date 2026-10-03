@@ -1270,10 +1270,10 @@
 	.set	T_F41104_Nop, 0xFC0657
 	.set	T_F41108_Nop, 0xFC0658
 	.set	T_F4110C_Nop, 0xFC0659
-	.set	sub_FC065A, 0xFC065A
-	.set	sub_FC0663, 0xFC0663
-	.set	sub_FC066C, 0xFC066C
-	.set	sub_FC0675, 0xFC0675
+	.set	Msg0716_SetPendingBit0, 0xFC065A
+	.set	Msg0716_SetPendingBit1, 0xFC0663
+	.set	Msg0716_SetPendingBit2, 0xFC066C
+	.set	Msg0716_SetPendingBit3, 0xFC0675
 	.set	T_F41120_Nop, 0xFC067E
 	.set	T_F41124_Nop, 0xFC067F
 	.set	T_F41128_Nop, 0xFC0680
@@ -1498,8 +1498,8 @@
 	.set	sub_FD7B00, 0xFD7B00
 	.set	Var27E9_Get, 0xFD7B6B
 	.set	Var27E9_Set, 0xFD7B7B
-	.set	sub_FD7B89, 0xFD7B89
-	.set	sub_FD7BA5, 0xFD7BA5
+	.set	Arr22F0_Set, 0xFD7B89
+	.set	Arr22F0_Get, 0xFD7BA5
 	.set	PanelDial_SetButtonMode, 0xFD7BC3
 	.set	PanelDial_SetDirectionButton, 0xFD7BDE
 	.set	PanelDial_ActAsButton, 0xFD7C01
@@ -1541,7 +1541,7 @@
 	.set	sub_FDA194, 0xFDA194
 	.set	sub_FDA252, 0xFDA252
 	.set	Var27FE_Set, 0xFDA341
-	.set	sub_FDA467, 0xFDA467
+	.set	UiRequestBits_SetBit3, 0xFDA467
 	.set	sub_FDA6FC, 0xFDA6FC
 	.set	sub_FDA777, 0xFDA777
 	.set	sub_FDA901, 0xFDA901
@@ -20093,7 +20093,7 @@ sub_F0AB4B_Join2:
 	pushw	203	; F0ABA5  push 0x00cb
 	call	PanelScreen_PostRequest	; F0ABA8  call 0xfd608b
 	pushw	1	; F0ABAC  push 0x0001
-	call	sub_FDA467	; F0ABAF  call 0xfda467
+	call	UiRequestBits_SetBit3	; F0ABAF  call 0xfda467
 	inc	8, xsp	; F0ABB3  inc 0,XSP
 sub_F0AB4B_Skip3:
 	popw	hl	; F0ABB5  pop HL
@@ -20162,7 +20162,7 @@ sub_F0ABB9_Join:
 	pushw	203	; F0AC2D  push 0x00cb
 	call	PanelScreen_PostRequest	; F0AC30  call 0xfd608b
 	pushw	1	; F0AC34  push 0x0001
-	call	sub_FDA467	; F0AC37  call 0xfda467
+	call	UiRequestBits_SetBit3	; F0AC37  call 0xfda467
 	inc	8, xsp	; F0AC3B  inc 0,XSP
 	inc	8, xsp	; F0AC3D  inc 0,XSP
 sub_F0ABB9_Skip2:
@@ -20221,7 +20221,7 @@ sub_F0AC43_Join:
 	pushw	203	; F0AC9E  push 0x00cb
 	call	PanelScreen_PostRequest	; F0ACA1  call 0xfd608b
 	pushw	1	; F0ACA5  push 0x0001
-	call	sub_FDA467	; F0ACA8  call 0xfda467
+	call	UiRequestBits_SetBit3	; F0ACA8  call 0xfda467
 	inc	8, xsp	; F0ACAC  inc 0,XSP
 sub_F0AC43_Skip2:
 	unlk XIZ	; F0ACAE  unlk XIZ
@@ -21478,7 +21478,7 @@ sub_F0B39C_Join:
 	add	xsp, 18	; F0B44F  add XSP,0x00000012
 	pushw	0	; F0B455  push 0x0000
 sub_F0B39C_Join2:
-	call	sub_FDA467	; F0B458  call 0xfda467
+	call	UiRequestBits_SetBit3	; F0B458  call 0xfda467
 	popw	bc	; F0B45C  pop BC
 sub_F0B39C_Skip3:
 	pop	xix	; F0B45D  pop XIX
@@ -21564,7 +21564,7 @@ sub_F0B462_Join:
 	add	xsp, 18	; F0B508  add XSP,0x00000012
 	pushw	0	; F0B50E  push 0x0000
 sub_F0B462_Join2:
-	call	sub_FDA467	; F0B511  call 0xfda467
+	call	UiRequestBits_SetBit3	; F0B511  call 0xfda467
 	popw	bc	; F0B515  pop BC
 sub_F0B462_Skip3:
 	pop	xix	; F0B516  pop XIX
@@ -22059,7 +22059,7 @@ sub_F0B74B_Loop2:
 	ld	a, h	; F0B7C3  ld A,H
 	extz	wa	; F0B7C5  extz WA
 	pushw	wa	; F0B7C7  push WA
-	call	sub_FD7BA5	; F0B7C8  call 0xfd7ba5
+	call	Arr22F0_Get	; F0B7C8  call 0xfd7ba5
 	pushw	127	; F0B7CC  push 0x007f
 	lda	xbc, (xiz-6)	; F0B7CF  lda XBC,XIZ+0xfa
 	push	xbc	; F0B7D2  push XBC
@@ -22205,7 +22205,7 @@ sub_F0B81D_Loop3:
 	ld	a, h	; F0B8D1  ld A,H
 	extz	wa	; F0B8D3  extz WA
 	pushw	wa	; F0B8D5  push WA
-	call	sub_FD7BA5	; F0B8D6  call 0xfd7ba5
+	call	Arr22F0_Get	; F0B8D6  call 0xfd7ba5
 	pushw	127	; F0B8DA  push 0x007f
 	lda	xbc, (xiz-6)	; F0B8DD  lda XBC,XIZ+0xfa
 	push	xbc	; F0B8E0  push XBC
@@ -22272,7 +22272,7 @@ sub_F0B91C_Resume:
 	lda	xbc, (xiz-2)	; F0B948  lda XBC,XIZ+0xfe
 	push	xbc	; F0B94B  push XBC
 	pushw	0	; F0B94C  push 0x0000
-	call	sub_FD7BA5	; F0B94F  call 0xfd7ba5
+	call	Arr22F0_Get	; F0B94F  call 0xfd7ba5
 	lda	xbc, (xiz-4)	; F0B953  lda XBC,XIZ+0xfc
 	push	xbc	; F0B956  push XBC
 	ld	wa, (xiz-2)	; F0B957  ld WA,(XIZ+0xfe)
@@ -22342,7 +22342,7 @@ sub_F0B9B3:		; <- T_F42F84
 	ld	wa, (xiz-2)	; F0B9DE  ld WA,(XIZ+0xfe)
 	extz	wa	; F0B9E1  extz WA
 	pushw	wa	; F0B9E3  push WA
-	call	sub_FD7BA5	; F0B9E4  call 0xfd7ba5
+	call	Arr22F0_Get	; F0B9E4  call 0xfd7ba5
 	lda	xbc, (xiz-6)	; F0B9E8  lda XBC,XIZ+0xfa
 	push	xbc	; F0B9EB  push XBC
 	ld	a, (xiz-4)	; F0B9EC  ld A,(XIZ+0xfc)
@@ -22408,7 +22408,7 @@ sub_F0BA20:		; <- T_F42F88
 	ld	wa, (xiz-2)	; F0BA65  ld WA,(XIZ+0xfe)
 	extz	wa	; F0BA68  extz WA
 	pushw	wa	; F0BA6A  push WA
-	call	sub_FD7BA5	; F0BA6B  call 0xfd7ba5
+	call	Arr22F0_Get	; F0BA6B  call 0xfd7ba5
 	lda	xbc, (xiz-8)	; F0BA6F  lda XBC,XIZ+0xf8
 	push	xbc	; F0BA72  push XBC
 	ld	a, (xiz-6)	; F0BA73  ld A,(XIZ+0xfa)
@@ -22464,7 +22464,7 @@ sub_F0BAA8_Loop:
 	ld	c, d	; F0BACD  ld C,D
 	extz	bc	; F0BACF  extz BC
 	pushw	bc	; F0BAD1  push BC
-	call	sub_FD7BA5	; F0BAD2  call 0xfd7ba5
+	call	Arr22F0_Get	; F0BAD2  call 0xfd7ba5
 	inc	1, d	; F0BAD6  inc 1,D
 	inc	6, xsp	; F0BAD8  inc 6,XSP
 	cp	d, 15	; F0BADA  cp D,0x0f
@@ -22592,7 +22592,7 @@ sub_F0BBB4_Loop:
 	ld	c, d	; F0BBD9  ld C,D
 	extz	bc	; F0BBDB  extz BC
 	pushw	bc	; F0BBDD  push BC
-	call	sub_FD7BA5	; F0BBDE  call 0xfd7ba5
+	call	Arr22F0_Get	; F0BBDE  call 0xfd7ba5
 	inc	1, d	; F0BBE2  inc 1,D
 	inc	6, xsp	; F0BBE4  inc 6,XSP
 	cp	d, 15	; F0BBE6  cp D,0x0f
@@ -22695,7 +22695,7 @@ sub_F0BC98:		; <- T_F42F94
 	ld	bc, (xiz-2)	; F0BCAD  ld BC,(XIZ+0xfe)
 	extz	bc	; F0BCB0  extz BC
 	pushw	bc	; F0BCB2  push BC
-	call	sub_FD7BA5	; F0BCB3  call 0xfd7ba5
+	call	Arr22F0_Get	; F0BCB3  call 0xfd7ba5
 	ld	h, (xix)	; F0BCB7  ld H,(XIX)
 	inc	8, xsp	; F0BCB9  inc 0,XSP
 	inc	4, xsp	; F0BCBB  inc 4,XSP
@@ -22725,7 +22725,7 @@ sub_F0BC98_Join:
 	ld	bc, (xiz-2)	; F0BCEE  ld BC,(XIZ+0xfe)
 	extz	bc	; F0BCF1  extz BC
 	pushw	bc	; F0BCF3  push BC
-	call	sub_FD7B89	; F0BCF4  call 0xfd7b89
+	call	Arr22F0_Set	; F0BCF4  call 0xfd7b89
 	lda	xbc, (xiz-4)	; F0BCF8  lda XBC,XIZ+0xfc
 	push	xbc	; F0BCFB  push XBC
 	ld	a, (xix)	; F0BCFC  ld A,(XIX)
@@ -22792,7 +22792,7 @@ sub_F0BD31:		; <- T_F42F98
 	ld	bc, (xiz-6)	; F0BD77  ld BC,(XIZ+0xfa)
 	extz	bc	; F0BD7A  extz BC
 	pushw	bc	; F0BD7C  push BC
-	call	sub_FD7B89	; F0BD7D  call 0xfd7b89
+	call	Arr22F0_Set	; F0BD7D  call 0xfd7b89
 	pushw	1	; F0BD81  push 0x0001
 	call	LCD_SetPanelDarkFlag	; F0BD84  call 0xfdac5b
 	pushw	0	; F0BD88  push 0x0000
@@ -22869,7 +22869,7 @@ sub_F0BDAC_Join:
 	ld	bc, (xiz-6)	; F0BE1C  ld BC,(XIZ+0xfa)
 	extz	bc	; F0BE1F  extz BC
 	pushw	bc	; F0BE21  push BC
-	call	sub_FD7B89	; F0BE22  call 0xfd7b89
+	call	Arr22F0_Set	; F0BE22  call 0xfd7b89
 	pushw	0	; F0BE26  push 0x0000
 	pushw	159	; F0BE29  push 0x009f
 	call	T_Dispatch_Code80	; F0BE2C  call 0xf41ed4
@@ -22924,7 +22924,7 @@ sub_F0BE44:		; <- T_F42FA0
 	ld	bc, (xiz-6)	; F0BE8A  ld BC,(XIZ+0xfa)
 	extz	bc	; F0BE8D  extz BC
 	pushw	bc	; F0BE8F  push BC
-	call	sub_FD7B89	; F0BE90  call 0xfd7b89
+	call	Arr22F0_Set	; F0BE90  call 0xfd7b89
 	pushw	1	; F0BE94  push 0x0001
 	call	LCD_SetPanelDarkFlag	; F0BE97  call 0xfdac5b
 	pushw	0	; F0BE9B  push 0x0000
@@ -22959,7 +22959,7 @@ sub_F0BEBF_Loop:
 	ld	c, h	; F0BEC5  ld C,H
 	extz	bc	; F0BEC7  extz BC
 	pushw	bc	; F0BEC9  push BC
-	call	sub_FD7B89	; F0BECA  call 0xfd7b89
+	call	Arr22F0_Set	; F0BECA  call 0xfd7b89
 	inc	1, h	; F0BECE  inc 1,H
 	pop	xiy	; F0BED0  pop XIY
 	cp	h, 15	; F0BED1  cp H,0x0f
@@ -23019,7 +23019,7 @@ sub_F0BF04_Loop:
 	ld	bc, (xiz-5)	; F0BF3B  ld BC,(XIZ+0xfb)
 	extz	bc	; F0BF3E  extz BC
 	pushw	bc	; F0BF40  push BC
-	call	sub_FD7BA5	; F0BF41  call 0xfd7ba5
+	call	Arr22F0_Get	; F0BF41  call 0xfd7ba5
 	incm8	1, (xiz-5)	; F0BF45  inc 1,(XIZ+0xfb)
 	inc	6, xsp	; F0BF48  inc 6,XSP
 	m_cp_mi8 MBD+r6, 0xfb, 0x0f	; F0BF4A  cp (XIZ+0xfb),0x0f
@@ -88536,10 +88536,10 @@ T_F41100:	jp T_F41100_Nop  ; -> prom_a 0x40656
 T_F41104:	jp T_F41104_Nop  ; -> prom_a 0x40657
 T_F41108:	jp T_F41108_Nop  ; -> prom_a 0x40658
 T_F4110C:	jp T_F4110C_Nop  ; -> prom_a 0x40659
-T_F41110:	jp sub_FC065A  ; -> prom_a 0x4065A
-T_F41114:	jp sub_FC0663  ; -> prom_a 0x40663
-T_F41118:	jp sub_FC066C  ; -> prom_a 0x4066C
-T_F4111C:	jp sub_FC0675  ; -> prom_a 0x40675
+T_F41110:	jp Msg0716_SetPendingBit0  ; -> prom_a 0x4065A
+T_F41114:	jp Msg0716_SetPendingBit1  ; -> prom_a 0x40663
+T_F41118:	jp Msg0716_SetPendingBit2  ; -> prom_a 0x4066C
+T_F4111C:	jp Msg0716_SetPendingBit3  ; -> prom_a 0x40675
 T_F41120:	jp T_F41120_Nop  ; -> prom_a 0x4067E
 T_F41124:	jp T_F41124_Nop  ; -> prom_a 0x4067F
 T_F41128:	jp T_F41128_Nop  ; -> prom_a 0x40680

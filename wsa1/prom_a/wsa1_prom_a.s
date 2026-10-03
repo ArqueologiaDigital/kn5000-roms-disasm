@@ -88841,7 +88841,7 @@ SysExSession_DumpEnd:
 	calr sub_FB31CC                                      ; FB310F  1e ba 00
 	calr sub_FB2F35_Nop                                      ; FB3112  1e ec 00
 	calr sub_FB3202                                      ; FB3115  1e ea 00
-	calr sub_FB3223                                      ; FB3118  1e 08 01
+	calr SysExSession_ClearCombinationReceived                                      ; FB3118  1e 08 01
 	inc 8,XSP                                            ; FB311B  ef 60
 	ret                                                  ; FB311D  0e
 sub_FB311E:
@@ -88978,7 +88978,8 @@ sub_FB3202:
 	m_res 4, MD24, 0x60fd41                              ; FB321D  f2 41 fd 60 b4
 .LFB3222:
 	ret                                                  ; FB3222  0e
-sub_FB3223:
+; SysExSession_ClearCombinationReceived: clear bit 3 of (0x60FD41), the bit SysExSession_CategoryEnd_Combination sets.
+SysExSession_ClearCombinationReceived:
 	m_bit 3, MD24, 0x60fd41                              ; FB3223  f2 41 fd 60 cb
 	jr z, .LFB322F                                       ; FB3228  66 05
 	m_res 3, MD24, 0x60fd41                              ; FB322A  f2 41 fd 60 b3
@@ -89668,7 +89669,7 @@ sub_FB374D:
 	push 0x00                                            ; FB37F7  09 00
 	push H                                               ; FB37F9  ce 04
 	pushw bc                                             ; FB37FB  29
-	call sub_FB81E6                                      ; FB37FC  1d e6 81 fb
+	call Shl8ByCount                                      ; FB37FC  1d e6 81 fb
 	ld L,A                                               ; FB3800  c9 8f
 	ld C,(XIX+0x0f)                                      ; FB3802  8c 0f 23
 	xor A,C                                              ; FB3805  cb d1
@@ -89710,7 +89711,7 @@ sub_FB374D:
 	ld C,(XIX+0x0b)                                      ; FB3854  8c 0b 23
 	pushw bc                                             ; FB3857  29
 	pushw de                                             ; FB3858  2a
-	call sub_FB8207                                      ; FB3859  1d 07 82 fb
+	call Shl16ByCount                                      ; FB3859  1d 07 82 fb
 	ld (xiz-4), wa                                       ; FB385D  be fc 50
 	ld C,(XIX+0x08)                                      ; FB3860  8c 08 23
 	extz BC                                              ; FB3863  d9 12
@@ -89718,7 +89719,7 @@ sub_FB374D:
 	ld A,(XIX+0x0b)                                      ; FB3867  8c 0b 21
 	pushw wa                                             ; FB386A  28
 	pushw bc                                             ; FB386B  29
-	call sub_FB8207                                      ; FB386C  1d 07 82 fb
+	call Shl16ByCount                                      ; FB386C  1d 07 82 fb
 	ld (xiz-2), wa                                       ; FB3870  be fe 50
 	lda xbc, (xiz-6)                                     ; FB3873  be fa 31
 	push XBC                                             ; FB3876  39
@@ -89765,7 +89766,7 @@ sub_FB38C3:
 	pushw wa                                             ; FB38CF  28
 	push 0x00                                            ; FB38D0  09 00
 	push H                                               ; FB38D2  ce 04
-	call sub_FB81E6                                      ; FB38D4  1d e6 81 fb
+	call Shl8ByCount                                      ; FB38D4  1d e6 81 fb
 	or A,L                                               ; FB38D8  cf e1
 	ld xbc, (xiz-4)                                      ; FB38DA  ae fc 21
 	ld (XBC),A                                           ; FB38DD  b1 41
@@ -89837,7 +89838,7 @@ sub_FB38C3:
 	push 0x00                                            ; FB3980  09 00
 	push H                                               ; FB3982  ce 04
 	pushw wa                                             ; FB3984  28
-	call sub_FB81E6                                      ; FB3985  1d e6 81 fb
+	call Shl8ByCount                                      ; FB3985  1d e6 81 fb
 	ld (XIX+0x02),A                                      ; FB3989  bc 02 41
 	ld XBC,(XIZ+0x08)                                    ; FB398C  ae 08 21
 	ld A,(XBC+0x08)                                      ; FB398F  89 08 21
@@ -90255,7 +90256,7 @@ sub_FB3C34:
 	push 0x00                                            ; FB3D96  09 00
 	push H                                               ; FB3D98  ce 04
 	pushw wa                                             ; FB3D9A  28
-	call sub_FB81E6                                      ; FB3D9B  1d e6 81 fb
+	call Shl8ByCount                                      ; FB3D9B  1d e6 81 fb
 	ld (xiz-2), a                                        ; FB3D9F  be fe 41
 	ld XBC,(XIZ+0x08)                                    ; FB3DA2  ae 08 21
 	ld A,(XBC+0x08)                                      ; FB3DA5  89 08 21
@@ -90451,7 +90452,7 @@ sub_FB3C34:
 	ld A,(XBC+0x0b)                                      ; FB3F0A  89 0b 21
 	pushw wa                                             ; FB3F0D  28
 	pushw 0x01                                           ; FB3F0E  0b 01 00
-	call sub_FB8207                                      ; FB3F11  1d 07 82 fb
+	call Shl16ByCount                                      ; FB3F11  1d 07 82 fb
 	ld (XIX+0x02),A                                      ; FB3F15  bc 02 41
 	jr .LFB3F2B                                          ; FB3F18  68 11
 .LFB3F1A:
@@ -90459,7 +90460,7 @@ sub_FB3C34:
 	ld A,(XBC+0x0b)                                      ; FB3F1D  89 0b 21
 	pushw wa                                             ; FB3F20  28
 	pushw 0x00                                           ; FB3F21  0b 00 00
-	call sub_FB8207                                      ; FB3F24  1d 07 82 fb
+	call Shl16ByCount                                      ; FB3F24  1d 07 82 fb
 	ld (XIX+0x02),A                                      ; FB3F28  bc 02 41
 .LFB3F2B:
 	ld XBC,(XIZ+0x08)                                    ; FB3F2B  ae 08 21
@@ -90500,7 +90501,7 @@ sub_FB3C34:
 	ld C,(XIX+0x0b)                                      ; FB3F7A  8c 0b 23
 	pushw bc                                             ; FB3F7D  29
 	pushw wa                                             ; FB3F7E  28
-	call sub_FB81E6                                      ; FB3F7F  1d e6 81 fb
+	call Shl8ByCount                                      ; FB3F7F  1d e6 81 fb
 	extz WA                                              ; FB3F83  d8 12
 	pushw wa                                             ; FB3F85  28
 	ld C,(XIX+0x07)                                      ; FB3F86  8c 07 23
@@ -90645,7 +90646,7 @@ sub_FB3C34:
 	pushw bc                                             ; FB40FD  29
 	push 0x00                                            ; FB40FE  09 00
 	push H                                               ; FB4100  ce 04
-	call sub_FB81E6                                      ; FB4102  1d e6 81 fb
+	call Shl8ByCount                                      ; FB4102  1d e6 81 fb
 	ld L,A                                               ; FB4106  c9 8f
 	ld (xiz-2), a                                        ; FB4108  be fe 41
 	ld C,L                                               ; FB410B  cf 8b
@@ -90750,7 +90751,7 @@ sub_FB3C34:
 	ld C,(XIX+0x0b)                                      ; FB41F4  8c 0b 23
 	pushw bc                                             ; FB41F7  29
 	pushw wa                                             ; FB41F8  28
-	call sub_FB81E6                                      ; FB41F9  1d e6 81 fb
+	call Shl8ByCount                                      ; FB41F9  1d e6 81 fb
 	ld L,A                                               ; FB41FD  c9 8f
 	ld (0x60f812:24), a                                 ; FB41FF  f2 12 f8 60 41
 	ld C,(XIX+0x09)                                      ; FB4204  8c 09 23
@@ -90795,7 +90796,7 @@ sub_FB3C34:
 	pushw bc                                             ; FB425D  29
 	push 0x00                                            ; FB425E  09 00
 	push H                                               ; FB4260  ce 04
-	call sub_FB81E6                                      ; FB4262  1d e6 81 fb
+	call Shl8ByCount                                      ; FB4262  1d e6 81 fb
 	extz WA                                              ; FB4266  d8 12
 	cp wa, 0x00:i3                                         ; FB4268  d8 d8
 	jr z, .LFB4274                                       ; FB426A  66 08
@@ -91232,7 +91233,7 @@ SysExParam_Request_Area60:
 	ld A,(XIX+0x0b)                                      ; FB45F4  8c 0b 21
 	pushw wa                                             ; FB45F7  28
 	pushw bc                                             ; FB45F8  29
-	call sub_FB8207                                      ; FB45F9  1d 07 82 fb
+	call Shl16ByCount                                      ; FB45F9  1d 07 82 fb
 	ld (xiz-2), wa                                       ; FB45FD  be fe 50
 	lda xbc, (xiz-6)                                     ; FB4600  be fa 31
 	ld (xiz-14), xbc                                     ; FB4603  be f2 61
@@ -92075,7 +92076,7 @@ sub_FB4D62:
 	ld A,(XBC+0x0b)                                      ; FB4DD9  89 0b 21
 	pushw wa                                             ; FB4DDC  28
 	pushw hl                                             ; FB4DDD  2b
-	call sub_FB8228                                      ; FB4DDE  1d 28 82 fb
+	call Lsr8ByCount                                      ; FB4DDE  1d 28 82 fb
 	ld H,A                                               ; FB4DE2  c9 8e
 	ld (xiz-7), a                                        ; FB4DE4  be f9 41
 	ld C,H                                               ; FB4DE7  ce 8b
@@ -92144,7 +92145,7 @@ sub_FB4E20:
 	ld A,(XBC+0x0b)                                      ; FB4E8C  89 0b 21
 	pushw wa                                             ; FB4E8F  28
 	pushw de                                             ; FB4E90  2a
-	call sub_FB8249                                      ; FB4E91  1d 49 82 fb
+	call Lsr16ByCount                                      ; FB4E91  1d 49 82 fb
 	ld H,A                                               ; FB4E95  c9 8e
 	ld (xiz-3), a                                        ; FB4E97  be fd 41
 	ld C,H                                               ; FB4E9A  ce 8b
@@ -92304,7 +92305,7 @@ sub_FB4F8F:
 	ld A,(XBC+0x0b)                                      ; FB501F  89 0b 21
 	pushw wa                                             ; FB5022  28
 	pushw hl                                             ; FB5023  2b
-	call sub_FB8228                                      ; FB5024  1d 28 82 fb
+	call Lsr8ByCount                                      ; FB5024  1d 28 82 fb
 	ld H,A                                               ; FB5028  c9 8e
 	ld (xiz-7), a                                        ; FB502A  be f9 41
 	ld C,H                                               ; FB502D  ce 8b
@@ -97923,7 +97924,8 @@ MemCopyWords_Copy:
 	ldirw                                                ; FB81E2  95 11
 	pop XIX                                              ; FB81E4  5c
 	ret                                                  ; FB81E5  0e
-sub_FB81E6:
+; Shl8ByCount(value, count): value << count, count up to 31 -- shifts by 16 (`sll A,C` with A = 0) when count >> 4 is set, then by count & 0x0F; retd 4.
+Shl8ByCount:
 	ld C,(XSP+0x04)                                      ; FB81E6  8f 04 23
 	ld B,(XSP+0x06)                                      ; FB81E9  8f 06 22
 	ld W,B                                               ; FB81EC  ca 88
@@ -97940,7 +97942,8 @@ sub_FB81E6:
 .LFB8202:
 	ld A,C                                               ; FB8202  cb 89
 	retd 0x0004                                          ; FB8204  0f 04 00
-sub_FB8207:
+; Shl16ByCount(value, count): the 16-bit (IY) twin of Shl8ByCount.
+Shl16ByCount:
 	ld IY,(XSP+0x04)                                     ; FB8207  9f 04 25
 	ld B,(XSP+0x06)                                      ; FB820A  8f 06 22
 	ld W,B                                               ; FB820D  ca 88
@@ -97957,7 +97960,8 @@ sub_FB8207:
 .LFB8223:
 	ld WA,IY                                             ; FB8223  dd 88
 	retd 0x0004                                          ; FB8225  0f 04 00
-sub_FB8228:
+; Lsr8ByCount(value, count): value >> count (logical), count up to 31, as Shl8ByCount with `srl A,C`.
+Lsr8ByCount:
 	ld C,(XSP+0x04)                                      ; FB8228  8f 04 23
 	ld B,(XSP+0x06)                                      ; FB822B  8f 06 22
 	ld W,B                                               ; FB822E  ca 88
@@ -97974,7 +97978,8 @@ sub_FB8228:
 .LFB8244:
 	ld A,C                                               ; FB8244  cb 89
 	retd 0x0004                                          ; FB8246  0f 04 00
-sub_FB8249:
+; Lsr16ByCount(value, count): the 16-bit (IY) twin of Lsr8ByCount.
+Lsr16ByCount:
 	ld IY,(XSP+0x04)                                     ; FB8249  9f 04 25
 	ld B,(XSP+0x06)                                      ; FB824C  8f 06 22
 	ld W,B                                               ; FB824F  ca 88
@@ -109689,19 +109694,20 @@ T_F41108_Nop:
 	ret                                                  ; FC0658  0e
 T_F4110C_Nop:
 	ret                                                  ; FC0659  0e
-sub_FC065A:
+; Msg0716_SetPendingBit0: set bit 0 of (0x070E) and bit 0 of (0x070F), the 0x0716 module's pending flags.
+Msg0716_SetPendingBit0:
 	m_set 0, MD16, 0x070e                                ; FC065A  f1 0e 07 b8
 	m_set 0, MD16, 0x070f                                ; FC065E  f1 0f 07 b8
 	ret                                                  ; FC0662  0e
-sub_FC0663:
+Msg0716_SetPendingBit1:
 	m_set 1, MD16, 0x070e                                ; FC0663  f1 0e 07 b9
 	m_set 0, MD16, 0x070f                                ; FC0667  f1 0f 07 b8
 	ret                                                  ; FC066B  0e
-sub_FC066C:
+Msg0716_SetPendingBit2:
 	m_set 2, MD16, 0x070e                                ; FC066C  f1 0e 07 ba
 	m_set 0, MD16, 0x070f                                ; FC0670  f1 0f 07 b8
 	ret                                                  ; FC0674  0e
-sub_FC0675:
+Msg0716_SetPendingBit3:
 	m_set 3, MD16, 0x070e                                ; FC0675  f1 0e 07 bb
 	m_set 0, MD16, 0x070f                                ; FC0679  f1 0f 07 b8
 	ret                                                  ; FC067D  0e
@@ -110128,10 +110134,10 @@ Msg0716_HandlerTables:
 	.long sub_FC0CE3                                 ; FC0A6A  [ 39]
 	.long sub_FC0CED                                 ; FC0A6E  [ 40]
 	.long Msg0716_HandlerTables_Nop41                                 ; FC0A72  [ 41]
-	.long sub_FC0CFF                                 ; FC0A76  [ 42]
-	.long sub_FC0CFF                                 ; FC0A7A  [ 43]
-	.long sub_FC0CFF                                 ; FC0A7E  [ 44]
-	.long sub_FC0CFF                                 ; FC0A82  [ 45]
+	.long Msg0716_SetPendingBit4                                 ; FC0A76  [ 42]
+	.long Msg0716_SetPendingBit4                                 ; FC0A7A  [ 43]
+	.long Msg0716_SetPendingBit4                                 ; FC0A7E  [ 44]
+	.long Msg0716_SetPendingBit4                                 ; FC0A82  [ 45]
 	.long Msg0716_Post_Trampoline_Wrap_2_Call                                 ; FC0A86  [ 46]
 	.long Msg0716_HandlerTables_Nop47                                 ; FC0A8A  [ 47]
 	.long sub_FC0D12                                 ; FC0A8E  [ 48]
@@ -110174,9 +110180,9 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop77                                 ; FC0B22  [ 85]
 	.long Msg0716_HandlerTables_Nop77                                 ; FC0B26  [ 86]
 	.long Msg0716_HandlerTables_Nop77                                 ; FC0B2A  [ 87]
-	.long sub_FC0DEE                                 ; FC0B2E  [ 88]
-	.long sub_FC0E00                                 ; FC0B32  [ 89]
-	.long sub_FC0E09                                 ; FC0B36  [ 90]
+	.long Msg0716_SetPendingBit6IfHighNibble                                 ; FC0B2E  [ 88]
+	.long Msg0716_SetPendingBit5                                 ; FC0B32  [ 89]
+	.long Msg0716_SetPendingBit5_B                                 ; FC0B36  [ 90]
 	.long sub_FC0E12                                 ; FC0B3A  [ 91]
 	.long Msg0716_HandlerTables_Nop92                                 ; FC0B3E  [ 92]
 	.long Msg0716_HandlerTables_Nop93                                 ; FC0B42  [ 93]
@@ -110362,7 +110368,7 @@ sub_FC0CED:   ; entry: named by 1 `.long` operand, first at 0xFC0A6E
 	ret                                                  ; FC0CFD  0e
 Msg0716_HandlerTables_Nop41:   ; entry: named by 1 `.long` operand, first at 0xFC0A72
 	ret                                                  ; FC0CFE  0e
-sub_FC0CFF:   ; entry: named by 4 `.long` operands, first at 0xFC0A76
+Msg0716_SetPendingBit4:   ; entry: named by 4 `.long` operands, first at 0xFC0A76
 	m_set 4, MD16, 0x070e                                ; FC0CFF  f1 0e 07 bc
 	m_set 0, MD16, 0x070f                                ; FC0D03  f1 0f 07 b8
 	ret                                                  ; FC0D07  0e
@@ -110542,7 +110548,8 @@ Msg0716_HandlerTables_Nop76:   ; entry: named by 1 `.long` operand, first at 0xF
 	ret                                                  ; FC0DEC  0e
 Msg0716_HandlerTables_Nop77:   ; entry: named by 11 `.long` operands, first at 0xFC0B02
 	ret                                                  ; FC0DED  0e
-sub_FC0DEE:   ; entry: named by 1 `.long` operand, first at 0xFC0B2E
+; Msg0716_SetPendingBit6IfHighNibble: when UiEvent_Byte3 & 0xF0, set bit 6 of (0x070E) and bit 0 of (0x070F).
+Msg0716_SetPendingBit6IfHighNibble:   ; entry: named by 1 `.long` operand, first at 0xFC0B2E
 	ld a, (UiEvent_Byte3:16)                                   ; FC0DEE  c1 ba 20 21
 	and A,0xf0                                           ; FC0DF2  c9 cc f0
 	jr z, .LFC0DFF                                       ; FC0DF5  66 08
@@ -110550,11 +110557,12 @@ sub_FC0DEE:   ; entry: named by 1 `.long` operand, first at 0xFC0B2E
 	m_set 0, MD16, 0x070f                                ; FC0DFB  f1 0f 07 b8
 .LFC0DFF:
 	ret                                                  ; FC0DFF  0e
-sub_FC0E00:   ; entry: named by 1 `.long` operand, first at 0xFC0B32
+Msg0716_SetPendingBit5:   ; entry: named by 1 `.long` operand, first at 0xFC0B32
 	m_set 5, MD16, 0x070e                                ; FC0E00  f1 0e 07 bd
 	m_set 0, MD16, 0x070f                                ; FC0E04  f1 0f 07 b8
 	ret                                                  ; FC0E08  0e
-sub_FC0E09:   ; entry: named by 1 `.long` operand, first at 0xFC0B36
+; Msg0716_SetPendingBit5_B: byte-identical to Msg0716_SetPendingBit5; the handler tables name both.
+Msg0716_SetPendingBit5_B:   ; entry: named by 1 `.long` operand, first at 0xFC0B36
 	m_set 5, MD16, 0x070e                                ; FC0E09  f1 0e 07 bd
 	m_set 0, MD16, 0x070f                                ; FC0E0D  f1 0f 07 b8
 	ret                                                  ; FC0E11  0e
@@ -125345,7 +125353,7 @@ ScreenButton_Code80:
 	inc 4,XSP                                            ; FCFDBF  ef 64
 	cp WA,0xffff                                         ; FCFDC1  d8 cf ff ff
 	jrl z, .LFCFE3F                                      ; FCFDC5  76 77 00
-	call sub_FDA482                                      ; FCFDC8  1d 82 a4 fd
+	call UiRequestBits_TestBit3                                      ; FCFDC8  1d 82 a4 fd
 	cp a, 0x00:i3                                          ; FCFDCC  c9 d8
 	jr z, .LFCFDFC                                       ; FCFDCE  66 2c
 	lda xbc, (xiz-6)                                     ; FCFDD0  be fa 31
@@ -125986,7 +125994,7 @@ LcdKeyRow1_ScreenCode80:
 	pushw 0x80                                           ; FD0360  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD0363  1d 8b 60 fd
 	pushw 0x01                                           ; FD0367  0b 01 00
-	call sub_FDA467                                      ; FD036A  1d 67 a4 fd
+	call UiRequestBits_SetBit3                                      ; FD036A  1d 67 a4 fd
 	inc 6,XSP                                            ; FD036E  ef 66
 .LFD0370:
 	popw hl                                              ; FD0370  4b
@@ -126057,7 +126065,7 @@ LcdKeyRow2_ScreenCode80:
 	pushw 0x80                                           ; FD03F5  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD03F8  1d 8b 60 fd
 	pushw 0x01                                           ; FD03FC  0b 01 00
-	call sub_FDA467                                      ; FD03FF  1d 67 a4 fd
+	call UiRequestBits_SetBit3                                      ; FD03FF  1d 67 a4 fd
 	inc 6,XSP                                            ; FD0403  ef 66
 .LFD0405:
 	popw hl                                              ; FD0405  4b
@@ -126258,7 +126266,7 @@ ScreenButton_Code9B:
 	inc 4,XSP                                            ; FD05A6  ef 64
 	cp WA,0xffff                                         ; FD05A8  d8 cf ff ff
 	jr z, .LFD05FF                                       ; FD05AC  66 51
-	call sub_FDA482                                      ; FD05AE  1d 82 a4 fd
+	call UiRequestBits_TestBit3                                      ; FD05AE  1d 82 a4 fd
 	cp a, 0x00:i3                                          ; FD05B2  c9 d8
 	jr z, .LFD05C7                                       ; FD05B4  66 11
 	lda xbc, (xiz-6)                                     ; FD05B6  be fa 31
@@ -129472,7 +129480,7 @@ sub_FD2014:
 	ld bc, (xiz-4)                                       ; FD2041  9e fc 21
 	add BC,0x0800                                        ; FD2044  d9 c8 00 08
 	pushw bc                                             ; FD2048  29
-	call sub_FDA8EA                                      ; FD2049  1d ea a8 fd
+	call Buf60A000_SetByte                                      ; FD2049  1d ea a8 fd
 	incw 0x01, (xiz-4)                                   ; FD204D  9e fc 61
 .LFD2050:
 	pop XIY                                              ; FD2050  5d
@@ -129689,7 +129697,7 @@ sub_FD21E9:
 	ld bc, (xiz-4)                                       ; FD225A  9e fc 21
 	add BC,0x0800                                        ; FD225D  d9 c8 00 08
 	pushw bc                                             ; FD2261  29
-	call sub_FDA8EA                                      ; FD2262  1d ea a8 fd
+	call Buf60A000_SetByte                                      ; FD2262  1d ea a8 fd
 	incw 0x01, (xiz-4)                                   ; FD2266  9e fc 61
 	inc 1,HL                                             ; FD2269  db 61
 	pop XIY                                              ; FD226B  5d
@@ -133299,7 +133307,7 @@ ToneEditField_A0_ResonatorType:
 .LFD4210:
 	add XSP,0x00000012                                   ; FD4210  ef c8 12 00 00 00
 	pushw 0x01                                           ; FD4216  0b 01 00
-	call sub_FDA467                                      ; FD4219  1d 67 a4 fd
+	call UiRequestBits_SetBit3                                      ; FD4219  1d 67 a4 fd
 	pushw 0x06                                           ; FD421D  0b 06 00
 	call PanelDial_ActAsButton                                      ; FD4220  1d 01 7c fd
 	pop XIY                                              ; FD4224  5d
@@ -140606,7 +140614,7 @@ PanelEvent_ToFieldIndex:
 .LFD798B:
 	cp DE,0x001e                                         ; FD798B  da cf 1e 00
 	jr nz, .LFD79CF                                      ; FD798F  6e 3e
-	calr sub_FDA482                                      ; FD7991  1e ee 2a
+	calr UiRequestBits_TestBit3                                      ; FD7991  1e ee 2a
 	cp a, 0x00:i3                                          ; FD7994  c9 d8
 	jr nz, .LFD79CF                                      ; FD7996  6e 37
 	pushw 0x00                                           ; FD7998  0b 00 00
@@ -140867,7 +140875,8 @@ Var27E9_Set:
 	ld (0x27e9:16), c                                   ; FD7B82  f1 e9 27 43
 	unlk XIZ                                             ; FD7B86  ee 0d
 	ret                                                  ; FD7B88  0e
-sub_FD7B89:
+; Arr22F0_Set(i, v): ((u8 *)0x22F0)[i] = v for i <= 15.
+Arr22F0_Set:
 	link XIZ,0x0000                                      ; FD7B89  ee 0c 00 00
 	cp (XIZ+0x08),0x0f                                   ; FD7B8D  8e 08 3f 0f
 	jr ugt, .LFD7BA2                                     ; FD7B91  6b 0f
@@ -140879,7 +140888,8 @@ sub_FD7B89:
 .LFD7BA2:
 	unlk XIZ                                             ; FD7BA2  ee 0d
 	ret                                                  ; FD7BA4  0e
-sub_FD7BA5:
+; Arr22F0_Get(i, &v): v = ((u8 *)0x22F0)[i] for i <= 15.
+Arr22F0_Get:
 	link XIZ,0x0000                                      ; FD7BA5  ee 0c 00 00
 	cp (XIZ+0x08),0x0f                                   ; FD7BA9  8e 08 3f 0f
 	jr ugt, .LFD7BC0                                     ; FD7BAD  6b 11
@@ -142996,7 +143006,7 @@ sub_FD8DAF:
 	exts BC                                              ; FD8E90  d9 13
 	sub WA,BC                                            ; FD8E92  d9 a0
 	pushw wa                                             ; FD8E94  28
-	calr sub_FD96C3                                      ; FD8E95  1e 2b 08
+	calr Math_AbsS8                                      ; FD8E95  1e 2b 08
 	ld de, (xiz-18)                                      ; FD8E98  9e ee 22
 	extz DE                                              ; FD8E9B  da 12
 	ld c, (xiz-6)                                        ; FD8E9D  8e fa 23
@@ -143057,7 +143067,7 @@ sub_FD8DAF:
 	exts BC                                              ; FD8F27  d9 13
 	sub BC,WA                                            ; FD8F29  d8 a1
 	pushw bc                                             ; FD8F2B  29
-	calr sub_FD96C3                                      ; FD8F2C  1e 94 07
+	calr Math_AbsS8                                      ; FD8F2C  1e 94 07
 	ld de, (xiz-18)                                      ; FD8F2F  9e ee 22
 	extz DE                                              ; FD8F32  da 12
 	ld c, (xiz-5)                                        ; FD8F34  8e fb 23
@@ -143118,7 +143128,7 @@ sub_FD8DAF:
 	exts BC                                              ; FD8FBC  d9 13
 	sub BC,WA                                            ; FD8FBE  d8 a1
 	pushw bc                                             ; FD8FC0  29
-	calr sub_FD96C3                                      ; FD8FC1  1e ff 06
+	calr Math_AbsS8                                      ; FD8FC1  1e ff 06
 	ld de, (xiz-18)                                      ; FD8FC4  9e ee 22
 	extz DE                                              ; FD8FC7  da 12
 	ld c, (xiz-4)                                        ; FD8FC9  8e fc 23
@@ -143179,7 +143189,7 @@ sub_FD8DAF:
 	exts BC                                              ; FD9056  d9 13
 	sub BC,WA                                            ; FD9058  d8 a1
 	pushw bc                                             ; FD905A  29
-	calr sub_FD96C3                                      ; FD905B  1e 65 06
+	calr Math_AbsS8                                      ; FD905B  1e 65 06
 	ld bc, (xiz-18)                                      ; FD905E  9e ee 21
 	extz BC                                              ; FD9061  d9 12
 	ld (xiz-40), bc                                      ; FD9063  be d8 51
@@ -143333,7 +143343,7 @@ sub_FD9145:
 	exts BC                                              ; FD91C1  d9 13
 	sub BC,WA                                            ; FD91C3  d8 a1
 	pushw bc                                             ; FD91C5  29
-	calr sub_FD96C3                                      ; FD91C6  1e fa 04
+	calr Math_AbsS8                                      ; FD91C6  1e fa 04
 	ld ix, (xiz-18)                                      ; FD91C9  9e ee 24
 	extz IX                                              ; FD91CC  dc 12
 	ld c, (xiz-3)                                        ; FD91CE  8e fd 23
@@ -143531,7 +143541,7 @@ sub_FD930F:
 	ld BC,(XIZ+0x0c)                                     ; FD9373  9e 0c 21
 	sub BC,IX                                            ; FD9376  dc a1
 	pushw bc                                             ; FD9378  29
-	calr sub_FD9400                                      ; FD9379  1e 84 00
+	calr Math_MulDivU16                                      ; FD9379  1e 84 00
 	add WA,IX                                            ; FD937C  dc 80
 	ld (XIZ+0x0c),WA                                     ; FD937E  be 0c 50
 	ldw de, 0x92                                         ; FD9381  32 92 00
@@ -143548,7 +143558,7 @@ sub_FD930F:
 	ld BC,(XIZ+0x0c)                                     ; FD9397  9e 0c 21
 	sub BC,IX                                            ; FD939A  dc a1
 	pushw bc                                             ; FD939C  29
-	calr sub_FD9400                                      ; FD939D  1e 60 00
+	calr Math_MulDivU16                                      ; FD939D  1e 60 00
 	add IX,WA                                            ; FD93A0  d8 84
 	ldw hl, 0x3b                                         ; FD93A2  33 3b 00
 	jr .LFD93EC                                          ; FD93A5  68 45
@@ -143564,7 +143574,7 @@ sub_FD930F:
 	ld BC,(XIZ+0x0c)                                     ; FD93B9  9e 0c 21
 	sub BC,IX                                            ; FD93BC  dc a1
 	pushw bc                                             ; FD93BE  29
-	calr sub_FD9400                                      ; FD93BF  1e 3e 00
+	calr Math_MulDivU16                                      ; FD93BF  1e 3e 00
 	add WA,IX                                            ; FD93C2  dc 80
 	ld (XIZ+0x0c),WA                                     ; FD93C4  be 0c 50
 	ldw de, 0x3b                                         ; FD93C7  32 3b 00
@@ -143581,7 +143591,7 @@ sub_FD930F:
 	ld BC,(XIZ+0x0c)                                     ; FD93DE  9e 0c 21
 	sub BC,IX                                            ; FD93E1  dc a1
 	pushw bc                                             ; FD93E3  29
-	calr sub_FD9400                                      ; FD93E4  1e 19 00
+	calr Math_MulDivU16                                      ; FD93E4  1e 19 00
 	add IX,WA                                            ; FD93E7  d8 84
 	ldw hl, 0x92                                         ; FD93E9  33 92 00
 .LFD93EC:
@@ -143599,7 +143609,8 @@ sub_FD930F:
 	popw hl                                              ; FD93FC  4b
 	unlk XIZ                                             ; FD93FD  ee 0d
 	ret                                                  ; FD93FF  0e
-sub_FD9400:
+; Math_MulDivU16(a, b, c): WA = a * b / c.
+Math_MulDivU16:
 	link XIZ,0x0000                                      ; FD9400  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD9404  9e 08 21
 	m_mul MWD+r6, 0x0a, 1                                ; FD9407  9e 0a 41
@@ -143787,7 +143798,7 @@ EditPage_DrawKeyboardGraph:
 	ld wa, (xiz-6)                                       ; FD95B6  9e fa 20
 	exts WA                                              ; FD95B9  d8 13
 	pushw wa                                             ; FD95BB  28
-	calr sub_FD96C3                                      ; FD95BC  1e 04 01
+	calr Math_AbsS8                                      ; FD95BC  1e 04 01
 	ld bc, (xiz-24)                                      ; FD95BF  9e e8 21
 	extz BC                                              ; FD95C2  d9 12
 	ld (xiz-26), bc                                      ; FD95C4  be e6 51
@@ -143899,7 +143910,8 @@ EditPage_DrawKeyboardGraph:
 	popw hl                                              ; FD96BF  4b
 	unlk XIZ                                             ; FD96C0  ee 0d
 	ret                                                  ; FD96C2  0e
-sub_FD96C3:
+; Math_AbsS8(v, &out): out = |v| for a signed byte.
+Math_AbsS8:
 	link XIZ,0x0000                                      ; FD96C3  ee 0c 00 00
 	pushw hl                                             ; FD96C7  2b
 	ld H,(XIZ+0x08)                                      ; FD96C8  8e 08 26
@@ -145630,7 +145642,8 @@ sub_FDA459:
 	or (0x28af:16), c                                   ; FDA460  c1 af 28 eb
 	unlk XIZ                                             ; FDA464  ee 0d
 	ret                                                  ; FDA466  0e
-sub_FDA467:
+; UiRequestBits_SetBit3(flag): bit 3 of UI_RequestBits = (flag == 1).
+UiRequestBits_SetBit3:
 	link XIZ,0x0000                                      ; FDA467  ee 0c 00 00
 	push XIX                                             ; FDA46B  3c
 	lda xix, (UI_RequestBits:16)                                ; FDA46C  f1 75 20 34
@@ -145644,7 +145657,8 @@ sub_FDA467:
 	pop XIX                                              ; FDA47E  5c
 	unlk XIZ                                             ; FDA47F  ee 0d
 	ret                                                  ; FDA481  0e
-sub_FDA482:
+; UiRequestBits_TestBit3: A = UI_RequestBits & 0x08.
+UiRequestBits_TestBit3:
 	ld c, (UI_RequestBits:16)                                   ; FDA482  c1 75 20 23
 	and C,0x08                                           ; FDA486  cb cc 08
 	ld A,C                                               ; FDA489  cb 89
@@ -146423,7 +146437,8 @@ Var2810_Get:
 	ld (XBC),A                                           ; FDA8E5  b1 41
 	unlk XIZ                                             ; FDA8E7  ee 0d
 	ret                                                  ; FDA8E9  0e
-sub_FDA8EA:
+; Buf60A000_SetByte(offset, v): ((u8 *)0x60A000)[offset] = v.
+Buf60A000_SetByte:
 	link XIZ,0x0000                                      ; FDA8EA  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FDA8EE  9e 08 21
 	extz XBC                                             ; FDA8F1  e9 12
@@ -146783,7 +146798,8 @@ Var2811_Set:
 	ld (0x2811:16), c                                   ; FDABEA  f1 11 28 43
 	unlk XIZ                                             ; FDABEE  ee 0d
 	ret                                                  ; FDABF0  0e
-sub_FDABF1:
+; UiScreenFlags_TestBit4: A = 1 when bit 4 of UI_ScreenFlags is set, else 0.
+UiScreenFlags_TestBit4:
 	ld c, (UI_ScreenFlags:16)                                   ; FDABF1  c1 95 20 23
 	and C,0x10                                           ; FDABF5  cb cc 10
 	jr z, .LFDABFE                                       ; FDABF8  66 04
@@ -147947,7 +147963,7 @@ sub_FDB53C:
 	pop XIY                                              ; FDB661  5d
 .LFDB662:
 	pushw 0x00                                           ; FDB662  0b 00 00
-	call sub_FDA467                                      ; FDB665  1d 67 a4 fd
+	call UiRequestBits_SetBit3                                      ; FDB665  1d 67 a4 fd
 	lda xbc, (xiz-16)                                    ; FDB669  be f0 31
 	push XBC                                             ; FDB66C  39
 	call Var27DF_Get                                      ; FDB66D  1d 12 61 fd
@@ -148545,7 +148561,7 @@ ScreenCodeCD_Handler:
 	pushw de                                             ; FDBBDB  2a
 	push XIX                                             ; FDBBDC  3c
 	lda xix, (xiz-36)                                    ; FDBBDD  be dc 34
-	call sub_FDABF1                                      ; FDBBE0  1d f1 ab fd
+	call UiScreenFlags_TestBit4                                      ; FDBBE0  1d f1 ab fd
 	cp a, 0x00:i3                                          ; FDBBE4  c9 d8
 	jr z, .LFDBC00                                       ; FDBBE6  66 18
 	lda xbc, (xiz-2)                                     ; FDBBE8  be fe 31
@@ -151546,7 +151562,7 @@ ScreenCodeC0_Handler:
 	jr nz, .LFDD7B1                                      ; FDD7C4  6e eb
 .LFDD7C6:
 	pushw 0x00                                           ; FDD7C6  0b 00 00
-	call sub_FDA467                                      ; FDD7C9  1d 67 a4 fd
+	call UiRequestBits_SetBit3                                      ; FDD7C9  1d 67 a4 fd
 	pushw 0x00                                           ; FDD7CD  0b 00 00
 	call Var27DA_Set                                      ; FDD7D0  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDD7D4  1d 13 77 fd
@@ -163504,7 +163520,7 @@ sub_FE3A4C:
 	push XIZ                                             ; FE3AA4  3e
 	ld xwa, (0x605d2c:24)                               ; FE3AA5  e2 2c 5d 60 20
 	push XWA                                             ; FE3AAA  38
-	calr sub_FE3BCD                                          ; FE3AAB  1e 1f 01
+	calr Fat_DirEntryToFileInfo                                          ; FE3AAB  1e 1f 01
 	inc 8,XSP                                            ; FE3AAE  ef 60
 	ld WA,(XSP+0x08)                                     ; FE3AB0  9f 08 20
 	ld (0x605d2a:24), wa                                ; FE3AB3  f2 2a 5d 60 50
@@ -163599,7 +163615,7 @@ sub_FE3B3A:
 	push XIZ                                             ; FE3B97  3e
 	ld xwa, (0x605d2c:24)                               ; FE3B98  e2 2c 5d 60 20
 	push XWA                                             ; FE3B9D  38
-	calr sub_FE3BCD                                            ; FE3B9E  1e 2c 00
+	calr Fat_DirEntryToFileInfo                                            ; FE3B9E  1e 2c 00
 	inc 8,XSP                                            ; FE3BA1  ef 60
 	ld hl, 0x00:i3                                         ; FE3BA3  db a8
 	jr .LFE3BC8                                              ; FE3BA5  68 21
@@ -163621,14 +163637,16 @@ sub_FE3B3A:
 	pop XIZ                                              ; FE3BC8  5e
 	lda xsp, (xsp+0x0a)                                  ; FE3BC9  bf 0a 37
 	ret                                                  ; FE3BCC  0e
-sub_FE3BCD:
+; Fat_DirEntryToFileInfo(info, dirent): name (Fat_CopyName11), then the FAT directory entry's time (+0x16), date (+0x18),
+;   size (+0x1C, +0x1E) and first cluster (+0x1A) into info; info+0 = (0x605D98).
+Fat_DirEntryToFileInfo:
 	push XIZ                                             ; FE3BCD  3e
 	ld XWA,(XSP+0x0c)                                    ; FE3BCE  af 0c 20
 	push XWA                                             ; FE3BD1  38
 	ld XIZ,(XSP+0x0c)                                    ; FE3BD2  af 0c 26
 	lda xwa, (xiz+0x01)                                  ; FE3BD5  be 01 30
 	push XWA                                             ; FE3BD8  38
-	calr sub_FE45F3                                          ; FE3BD9  1e 17 0a
+	calr Fat_CopyName11                                          ; FE3BD9  1e 17 0a
 	inc 8,XSP                                            ; FE3BDC  ef 60
 	ld XBC,(XSP+0x0c)                                    ; FE3BDE  af 0c 21
 	ld a, (0x605d98:24)                                 ; FE3BE1  c2 98 5d 60 21
@@ -163645,7 +163663,8 @@ sub_FE3BCD:
 	ld (XIZ+0x1a),WA                                     ; FE3C03  be 1a 50
 	pop XIZ                                              ; FE3C06  5e
 	ret                                                  ; FE3C07  0e
-sub_FE3C08:
+; Fat_NameHasWildcard(name): HL = 1 when any of the 11 name bytes is `?`, else 0.
+Fat_NameHasWildcard:
 	ld XWA,(XSP+0x04)                                    ; FE3C08  af 04 20
 	inc 1,XWA                                            ; FE3C0B  e8 61
 	ld bc, 0x00:i3                                         ; FE3C0D  d9 a8
@@ -163738,7 +163757,7 @@ sub_FE3CB1:
 	jr .LFE3CF2                                              ; FE3CCC  68 24
 .LFE3CCE:
 	push XIZ                                             ; FE3CCE  3e
-	calr sub_FE3C08                                          ; FE3CCF  1e 36 ff
+	calr Fat_NameHasWildcard                                          ; FE3CCF  1e 36 ff
 	inc 4,XSP                                            ; FE3CD2  ef 64
 	cp hl, 0x00:i3                                         ; FE3CD4  db d8
 	jr z, .LFE3CF0                                           ; FE3CD6  66 18
@@ -163882,7 +163901,7 @@ sub_FE3DB2:
 	mx_lda32 MXD, ra_BC, ra_WA, r6                       ; FE3E1A  f3 07 e4 e0 36
 	push XDE                                             ; FE3E1F  3a
 	push XIZ                                             ; FE3E20  3e
-	calr sub_FE460A                                          ; FE3E21  1e e6 07
+	calr Fat_CopyName11_B                                          ; FE3E21  1e e6 07
 	ld BC,(XSP+0x0c)                                     ; FE3E24  9f 0c 21
 	ld (XIZ+0x1a),BC                                     ; FE3E27  be 1a 51
 	ld (XIZ+0x0b),0x20                                   ; FE3E2A  be 0b 00 20
@@ -164756,7 +164775,8 @@ sub_FE45BF:
 	jr lt, .LFE45C7                                           ; FE45EE  61 d7
 	ld hl, 0x00:i3                                         ; FE45F0  db a8
 	ret                                                  ; FE45F2  0e
-sub_FE45F3:
+; Fat_CopyName11(dst, src): copy the 11 bytes of an 8.3 directory-entry name.
+Fat_CopyName11:
 	ld XBC,(XSP+0x08)                                    ; FE45F3  af 08 21
 	ld XDE,(XSP+0x04)                                    ; FE45F6  af 04 22
 	ld hl, 0x00:i3                                         ; FE45F9  db a8
@@ -164767,7 +164787,8 @@ sub_FE45F3:
 	cp HL,0x000b                                         ; FE4603  db cf 0b 00
 	jr lt, .LFE45FB                                           ; FE4607  61 f2
 	ret                                                  ; FE4609  0e
-sub_FE460A:
+; Fat_CopyName11_B: byte-identical twin of Fat_CopyName11.
+Fat_CopyName11_B:
 	ld XBC,(XSP+0x08)                                    ; FE460A  af 08 21
 	ld XDE,(XSP+0x04)                                    ; FE460D  af 04 22
 	ld hl, 0x00:i3                                         ; FE4610  db a8
@@ -171662,7 +171683,7 @@ sub_FE7864:
 sub_FE78FB:
 	call T_F409AC                                        ; FE78FB  1d ac 09 f4
 	m_and_mi8 MB16, 0x34d0, 0xfb                         ; FE78FF  c1 d0 34 3c fb
-	calr sub_FE7A63                                      ; FE7904  1e 5c 01
+	calr Name11At0E38_Blank                                      ; FE7904  1e 5c 01
 	ret                                                  ; FE7907  0e
 sub_FE7908:
 	calr sub_FE78FB                                      ; FE7908  1e f0 ff
@@ -171784,7 +171805,7 @@ sub_FE7A30:
 	m_and_mi8 MB16, 0x34d0, 0xfb                         ; FE7A30  c1 d0 34 3c fb
 	calr sub_FE7A73                                      ; FE7A35  1e 3b 00
 	call T_F42E90                                        ; FE7A38  1d 90 2e f4
-	calr sub_FE7A63                                      ; FE7A3C  1e 24 00
+	calr Name11At0E38_Blank                                      ; FE7A3C  1e 24 00
 	ret                                                  ; FE7A3F  0e
 sub_FE7A40:
 	calr sub_FE7A30                                      ; FE7A40  1e ed ff
@@ -171800,7 +171821,8 @@ sub_FE7A49:
 	ld (0x22d0:16), 0x0a                                 ; FE7A5D  f1 d0 22 00 0a
 .LFE7A62:
 	ret                                                  ; FE7A62  0e
-sub_FE7A63:
+; Name11At0E38_Blank: fill the 11 bytes at RAM 0x0E38 with spaces.
+Name11At0E38_Blank:
 	ld XIX,0x00000e38                                    ; FE7A63  44 38 0e 00 00
 	ld a, 0x20:opc                                          ; FE7A68  21 20
 	ld b, 0x0b:opc                                          ; FE7A6A  22 0b
