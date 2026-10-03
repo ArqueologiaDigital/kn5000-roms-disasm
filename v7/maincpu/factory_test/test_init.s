@@ -238,14 +238,14 @@ InitializeHama:
 	lda	xwa, (InitializeHama_Str_TT_HDDEXT:24)
 	push	xwa
 	ld	xwa, 127
-	ld	xbc, 21561344
+	ld	xbc, NAKA_MAINFUNC_TestTitleFunc
 	ld	xde, NAKA_VIEW_FDD_TEST
 	call	RegisterTitle
 	pushw 9
 	lda	xwa, (InitializeHama_Str_TT_EXTAPR:24)
 	push	xwa
 	ld	xwa, 252
-	ld	xbc, 21561344
+	ld	xbc, NAKA_MAINFUNC_TestTitleFunc
 	ld	xde, NAKA_VIEW_FDD_TEST
 	call	RegisterTitle
 	lda	xsp, (xsp+14)

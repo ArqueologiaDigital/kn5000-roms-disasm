@@ -111,8 +111,8 @@ InitializeHama:
 	RegObjTablHama NAKA_CLASS_Viewable, ViewableProc, 0x1a, String_CONSOLE + 0xc, 0xfc
 	RegObjTablHama NAKA_CLASS_ResName, ResNameProc, 0x1a, FDTest_Config_Table, 0x3fc
 
-	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0xa, 0x7f, 0x1490000, NAKA_VIEW_FDD_TEST
-	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0x14, 0xfc, 0x1490000, NAKA_VIEW_FDD_TEST
+	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0xa, 0x7f, NAKA_MAINFUNC_TestTitleFunc, NAKA_VIEW_FDD_TEST
+	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0x14, 0xfc, NAKA_MAINFUNC_TestTitleFunc, NAKA_VIEW_FDD_TEST
 
 	lda xsp, (xsp + 14)
 	ret
