@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,695
-#   semantic names ........... 50,882 (98.4%)
+#   symbols .................. 51,698
+#   semantic names ........... 50,885 (98.4%)
 #   positional names ......... 813
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -46279,7 +46279,10 @@ VoiceMode4_SetupChannelAndWrite 00FCAE33
 VoiceMode4_CheckPart0 00FCAE84
 MidiCtrl_DispatchHandler 00FCAE92
 MidiCtrl_ModeDispatch_Table 00FCAEE9
+MidiCtrl_Mode0_Handler 00FCAEF9
+MidiCtrl_Mode1_Handler 00FCAF31
 VoiceMode_ParamHandler_4_Skip 00FCAF41
+MidiCtrl_Mode3_Handler 00FCAF78
 VoiceMode_ParamHandler_4_Skip2 00FCAFAA
 MidiCtrl_NullRet 00FCAFD1
 VoiceMode_CheckPendingFlags 00FCAFD2

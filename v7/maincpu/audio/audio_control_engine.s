@@ -8945,13 +8945,12 @@ MidiCtrl_DispatchHandler:
 	ld	xix, (xix+hl)
 	jp	(xix)
 MidiCtrl_ModeDispatch_Table:
-	.byte 0x2e
-	.byte	0xa7, 0xfc, 0x00
-	.byte 0x66, 0xa7, 0xfc
-	nop
-	.byte	0x6, 0xa8, 0xfc, 0x00
-	.byte 0xad, 0xa7, 0xfc
-	nop
+	; (0xFD50) & 3 -> handler; mode 2 does nothing.  Was `.byte` / `nop` fragments.
+	.long	MidiCtrl_Mode0_Handler
+	.long	MidiCtrl_Mode1_Handler
+	.long	MidiCtrl_NullRet
+	.long	MidiCtrl_Mode3_Handler
+MidiCtrl_Mode0_Handler:
 	ld	c, 129:opc
 	ld	b, (0x90bf:16)
 	ld	e, (0x9134:16)
@@ -8968,6 +8967,7 @@ MidiCtrl_ModeDispatch_Table:
 	ld	d, 255:opc
 	call	MIDI_DispatchCC_Guarded
 	jrl	MidiCtrl_NullRet
+MidiCtrl_Mode1_Handler:
 	ld	b, (0x90bf:16)
 	ld	c, 129:opc
 	xor	d, d
@@ -8991,6 +8991,7 @@ VoiceMode_ParamHandler_4_Skip:
 	ld	d, 255:opc
 	call	MIDI_DispatchCC_Guarded
 	jr	MidiCtrl_NullRet
+MidiCtrl_Mode3_Handler:
 	ld	wa, (0x90c1:16)
 	ld	(0x904e:16), wa
 	ld	a, (0x90bf:16)
@@ -9089,7 +9090,7 @@ VoiceMode_ParamHandler_3_Data:
 	.long	VoiceMode_ParamHandler_1
 	.long	VoiceMode_ParamHandler_1
 VoiceMode3_EvType0:
-	call	0xfcb1c5
+	call	PartCtrl_CheckBitmaskBit
 	jr	nc, VoiceMode3_DispatchTable_Code_Skip3
 	ldb_d8	a, (0x911e)
 	and	a, 7

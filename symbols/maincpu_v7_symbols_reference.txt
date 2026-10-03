@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,445
-#   semantic names ........... 50,543 (98.2%)
+#   symbols .................. 51,448
+#   semantic names ........... 50,546 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -45889,7 +45889,10 @@ VoiceMode4_SetupChannelAndWrite 00FCA668
 VoiceMode4_CheckPart0 00FCA6B9
 MidiCtrl_DispatchHandler 00FCA6C7
 MidiCtrl_ModeDispatch_Table 00FCA71E
+MidiCtrl_Mode0_Handler 00FCA72E
+MidiCtrl_Mode1_Handler 00FCA766
 VoiceMode_ParamHandler_4_Skip 00FCA776
+MidiCtrl_Mode3_Handler 00FCA7AD
 VoiceMode_ParamHandler_4_Skip2 00FCA7DF
 MidiCtrl_NullRet 00FCA806
 VoiceMode_CheckPendingFlags 00FCA807

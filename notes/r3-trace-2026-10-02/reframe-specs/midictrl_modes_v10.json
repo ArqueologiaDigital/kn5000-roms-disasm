@@ -1,0 +1,56 @@
+[
+ {
+  "file": "v10/maincpu/audio/audio_control_engine.s",
+  "start": "0xFCAEE9",
+  "end": "0xFCAF09",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "long",
+    "len": 16
+   },
+   {
+    "kind": "code",
+    "len": 16
+   }
+  ],
+  "labels": {
+   "0xFCAEF9": "MidiCtrl_Mode0_Handler"
+  },
+  "comments": {
+   "0xFCAEE9": [
+    "(0xFD50) & 3 -> handler; mode 2 does nothing.  Was decoded as `swi 1 / .byte ... / jrl -849`."
+   ]
+  }
+ },
+ {
+  "file": "v10/maincpu/audio/audio_control_engine.s",
+  "start": "0xFCAF31",
+  "end": "0xFCAF35",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 4
+   }
+  ],
+  "labels": {
+   "0xFCAF31": "MidiCtrl_Mode1_Handler"
+  }
+ },
+ {
+  "file": "v10/maincpu/audio/audio_control_engine.s",
+  "start": "0xFCAF78",
+  "end": "0xFCAF7C",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 4
+   }
+  ],
+  "labels": {
+   "0xFCAF78": "MidiCtrl_Mode3_Handler"
+  }
+ }
+]

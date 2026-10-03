@@ -9341,18 +9341,17 @@ MidiCtrl_DispatchHandler:
 	ld	xix, (xix+hl)
 	jp (xix)
 MidiCtrl_ModeDispatch_Table:
-	swi	1
-	.byte 0xae, 0xfc, 0x00
-	ldw	bc, 64687
-	nop
-	.byte 0xd1, 0xaf, 0xfc, 0x00
-	jrl	-849
-	nop
+	; (0xFD50) & 3 -> handler; mode 2 does nothing.  Was decoded as `swi 1 / .byte ... / jrl -849`.
+	.long	MidiCtrl_Mode0_Handler
+	.long	MidiCtrl_Mode1_Handler
+	.long	MidiCtrl_NullRet
+	.long	MidiCtrl_Mode3_Handler
+MidiCtrl_Mode0_Handler:
 	ld	c, 129:opc
 	ld	b, (37211:16)
 	ld	e, (37328:16)
 	xor	d, d
-	call	16556547
+	call	MIDI_DispatchCC_Guarded
 	xor	h, h
 	ld	l, (37320:16)
 	ld	xix, 37070
@@ -9364,6 +9363,7 @@ MidiCtrl_ModeDispatch_Table:
 	ld	d, 255:opc
 	call	MIDI_DispatchCC_Guarded
 	jrl	MidiCtrl_NullRet
+MidiCtrl_Mode1_Handler:
 	ld	b, (37211:16)
 	ld	c, 129:opc
 	xor	d, d
@@ -9387,6 +9387,7 @@ VoiceMode_ParamHandler_4_Skip:
 	ld	d, 255:opc
 	call	MIDI_DispatchCC_Guarded
 	jr	MidiCtrl_NullRet
+MidiCtrl_Mode3_Handler:
 	ld	wa, (37213:16)
 	ld	(37098:16), wa
 	ld	a, (37211:16)
@@ -9492,7 +9493,7 @@ VoiceMode_ParamHandler_3_Data:
 	.long	VoiceMode_ParamHandler_1
 	.long	VoiceMode_ParamHandler_1
 VoiceMode3_EvType0:
-	call	0xfcb990
+	call	PartCtrl_CheckBitmaskBit
 	jr	nc, VoiceMode3_DispatchTable_Code_Skip3
 	ldb_d8	a, (0x91ba)
 	and	a, 7
