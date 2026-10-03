@@ -186,6 +186,9 @@ GROUPS = [
     ("wsa1/notes/FINDINGS-l7a1429-editor-pages.md", "0. THE ANSWER: the MODELING pages store reply n at ((u8 *)0x27A6)[n]; extent 0x27A6-0x27B7 per FINDINGS-prom_b-ui-variable-index.md", dict(
         [(0x27A6, ("ModelingPage_Fields", "the MODELING pages' fields as read back from CPU 2, reply n at +n (bytes to 0x27B7)", "the pages' read-back order, 8 of 8 field editors agree"))] +
         [(0x27A6 + k, ("ModelingPage_Fields+%d" % k, "", "")) for k in range(1, 18)])),
+    ("wsa1/notes/FINDINGS-prom_b-message-line.md", "2. 0x00000FE4 is one line of on-screen text: record 0xF3D38A draws 30 characters from it", dict(
+        [(0x0FE4, ("MsgLine_Text", "the 30 characters (to 0x1001) of the bottom text line the panel draws (y = 180)", "record 0xF3D38A; MsgLine_Clear blanks exactly 30"))] +
+        [(0x0FE4 + k, ("MsgLine_Text+%d" % k, "", "")) for k in range(1, 30)])),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')
@@ -240,12 +243,13 @@ def main():
                     continue
                 for m in re.finditer(r'(0x[0-9a-fA-F]+|\b\d+\b)', code):
                     v = int(m.group(1), 0)
-                    # a named address >= 0x100 is flagged anywhere; below 0x100 (0x80, 0xC4) the
-                    # number is a common VALUE, so only in an address position: `(N...)` or the
-                    # address argument of an 8/16/24-bit macro kind
+                    # a named address >= 0x100 is flagged anywhere; below 0x100 (0x80, 0xC4), and an
+                    # array element (`Name+n`: 0x0FFF / 0x1000 are masks and sizes), the number is a
+                    # common VALUE, so only in an address position: `(N...)` or the address argument
+                    # of an 8/16/24-bit macro kind
                     addr_pos = code[:m.start()].rstrip().endswith("(") or \
                         re.search(r'\bM[BWD](?:8|16|24),\s*$', code[:m.start()])
-                    if v in NAMES and (v >= 0x100 or addr_pos):
+                    if v in NAMES and ((v >= 0x100 and "+" not in NAMES[v][0]) or addr_pos):
                         left += 1
                         print("%s:%d: %s" % (os.path.relpath(p, REPO), k + 1, code.strip()))
         print("%d numeric spellings of named addresses left" % left)
@@ -284,7 +288,11 @@ def main():
 
             def regimm(m):
                 v = int(m.group(2), 0)
-                return m.group(1) + NAMES[v][0] + m.group(3) if v in NAMES and v >= 0x100 else m.group(0)
+                # an element of an array (`Name+n`) is never taken from a 16-bit register immediate:
+                # `ldw bc, 0x1000` in prom_a is a size, not MsgLine_Text+28 (2026-10-03)
+                wide = re.match(r'\s*(?:ld|ldw|lda)\s+x', m.group(1), re.I)
+                ok = v in NAMES and v >= 0x100 and ("+" not in NAMES[v][0] or wide)
+                return m.group(1) + NAMES[v][0] + m.group(3) if ok else m.group(0)
 
             def idx(m):
                 v = int(m.group(2), 0)

@@ -80,6 +80,10 @@ sibling records sit immediately after `0xF3D38A` and have the identical shape:
 Four 30-character lines down the left of a 320 x 240 panel. `0x0FE4` is the
 **bottom** one.
 
+[Named in the source 2026-10-03: `0x0FE4`-`0x1001` is `MsgLine_Text` (`MsgLine_Text+n` for its
+characters) in `wsa1/include/wsa1_ram.inc` -- 66 operands, mostly `ld xix, MsgLine_Text+5`-style
+pointers (`scripts/tools/name_wsa1_ram.py`).  The three sibling lines have no writers and stay numbers.]
+
 ⚠ The cursor in the record is LAYER-RELATIVE: `LCD_Svc_06_DrawText8x14` does
 `add IX,(0x2555)` before using it, and `(0x2555)` is set by
 `LCD_SelectCurrentLayer`. The panel has three OR-composited layers of

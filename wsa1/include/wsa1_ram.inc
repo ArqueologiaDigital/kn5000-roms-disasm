@@ -140,3 +140,6 @@
 
 ; ---- wsa1/notes/FINDINGS-l7a1429-editor-pages.md -- "0. THE ANSWER: the MODELING pages store reply n at ((u8 *)0x27A6)[n]; extent 0x27A6-0x27B7 per FINDINGS-prom_b-ui-variable-index.md"
 	.equ ModelingPage_Fields,	0x27a6	; the MODELING pages' fields as read back from CPU 2, reply n at +n (bytes to 0x27B7) -- the pages' read-back order, 8 of 8 field editors agree
+
+; ---- wsa1/notes/FINDINGS-prom_b-message-line.md -- "2. 0x00000FE4 is one line of on-screen text: record 0xF3D38A draws 30 characters from it"
+	.equ MsgLine_Text,		0x0fe4	; the 30 characters (to 0x1001) of the bottom text line the panel draws (y = 180) -- record 0xF3D38A; MsgLine_Clear blanks exactly 30

@@ -145954,13 +145954,13 @@ sub_F67D6F_Return:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_Volume:
-	ld	xix, 4071	; F67D8C  ld XIX,0x00000fe7
+	ld	xix, MsgLine_Text+3	; F67D8C  ld XIX,0x00000fe7
 	ld	a, 32:opc	; F67D91  ld A,0x20
 	ldw	bc, 27	; F67D93  ld BC,0x001b
 	ld	(xix+), a	; F67D96  ld (XIX+),A
 	djnz16	bc, -6	; F67D99  djnz BC,0xf67d96
 	ld	xiy, MsgLine_Volume + 0x3A	; F67D9C  ld XIY,0x00f67dc6
-	ld	xix, 4079	; F67DA1  ld XIX,0x00000fef
+	ld	xix, MsgLine_Text+11	; F67DA1  ld XIX,0x00000fef
 	ldw	bc, 9	; F67DA6  ld BC,0x0009
 	ldir85	; F67DA9  ldir
 	ld	a, (4113:16)	; F67DAB  ld A,(0x1011)
@@ -156742,7 +156742,7 @@ sub_F6C984_Epilogue:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PanKeyShiftTuningBendSens:
-	ld	xix, 4071	; F6C9C7  ld XIX,0x00000fe7
+	ld	xix, MsgLine_Text+3	; F6C9C7  ld XIX,0x00000fe7
 	ld	a, 32:opc	; F6C9CC  ld A,0x20
 	ldw	bc, 27	; F6C9CE  ld BC,0x001b
 	ld	(xix+), a	; F6C9D1  ld (XIX+),A
@@ -156755,7 +156755,7 @@ MsgLine_PanKeyShiftTuningBendSens:
 	add	a, w	; F6C9E8  add A,W
 	xor	w, w	; F6C9EA  xor W,W
 	mx_lda32 MXD, ra_IY, ra_WA, 5	; F6C9EC  lda XIY,XIY+WA
-	ld	xix, 4073	; F6C9F1  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6C9F1  ld XIX,0x00000fe9
 	ldw	bc, 10	; F6C9F6  ld BC,0x000a
 	ldir85	; F6C9F9  ldir
 	xor	wa, wa	; F6C9FB  xor WA,WA
@@ -158364,13 +158364,13 @@ sub_F6D40C:
 ; --------------------------------------------------------------------------
 MsgLine_Control_Cleared:
 	calr	MsgLine_Clear	; F6D410  calr 0xf6d9fb
-	ld	xix, 4068	; F6D413  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D413  ld XIX,0x00000fe4
 	ldw	wa, 8224	; F6D418  ld WA,0x2020
 	ldw	bc, 15	; F6D41B  ld BC,0x000f
 	ld	(xix+), wa	; F6D41E  ld (XIX+),WA
 	djnz16	bc, -6	; F6D421  djnz BC,0xf6d41e
 	ld	xiy, MsgLine_Control_Cleared_Code	; F6D424  ld XIY,0x00f6d464
-	ld	xix, 4073	; F6D429  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6D429  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D42E  ld BC,0x0007
 	ldir85	; F6D431  ldir
 	ld	a, 32:opc	; F6D433  ld A,0x20
@@ -158437,7 +158437,7 @@ sub_F6D443:
 MsgLine_Control:
 	calr	MsgLine_Clear	; F6D447  calr 0xf6d9fb
 	ld	xiy, MsgLine_Control_Cleared_Code	; F6D44A  ld XIY,0x00f6d464
-	ld	xix, 4073	; F6D44F  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6D44F  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D454  ld BC,0x0007
 	ldir85	; F6D457  ldir
 	calr	sub_F6D6DC	; F6D459  calr 0xf6d6dc
@@ -158551,7 +158551,7 @@ sub_F6D482:
 	calr	sub_F6D5BA	; F6D483  calr 0xf6d5ba
 	calr	MsgLine_ClearTail	; F6D486  calr 0xf6d5f1
 	popw	bc	; F6D489  pop BC
-	ld	xix, 4078	; F6D48A  ld XIX,0x00000fee
+	ld	xix, MsgLine_Text+10	; F6D48A  ld XIX,0x00000fee
 	calr	sub_F6D497	; F6D48F  calr 0xf6d497
 	call	T_F431B4	; F6D492  call 0xf431b4
 	ret	; F6D496  ret
@@ -158635,7 +158635,7 @@ Data_F6D4BA:
 MsgLine_TransportState_Plus14:
 	calr	MsgLine_ClearTail	; F6D4C6  calr 0xf6d5f1
 	ld	xiy, Text_StartStopFillIn1fillIn2intro1CountInending1	; F6D4C9  ld XIY,0x00f6d66d
-	ld	xix, 4082	; F6D4CE  ld XIX,0x00000ff2
+	ld	xix, MsgLine_Text+14	; F6D4CE  ld XIX,0x00000ff2
 	xor	xwa, xwa	; F6D4D3  xor XWA,XWA
 	ld	a, (4800:16)	; F6D4D5  ld A,(0x12c0)
 	sla	xwa, 3	; F6D4D9  sla 0x03,XWA
@@ -158681,7 +158681,7 @@ MsgLine_Rhythm:
 	call	T_F431B0	; F6D4E4  call 0xf431b0
 	calr	MsgLine_Clear	; F6D4E8  calr 0xf6d9fb
 	ld	xiy, Data_F6D46D	; F6D4EB  ld XIY,0x00f6d46d
-	ld	xix, 4073	; F6D4F0  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6D4F0  ld XIX,0x00000fe9
 	ldw	bc, 9	; F6D4F5  ld BC,0x0009
 	ldir85	; F6D4F8  ldir
 	calr	sub_F6D6DC	; F6D4FA  calr 0xf6d6dc
@@ -158724,9 +158724,9 @@ MsgLine_Rhythm:
 ; --------------------------------------------------------------------------
 MsgLine_Tempo:
 	calr	MsgLine_Clear	; F6D505  calr 0xf6d9fb
-	ld	xix, 4068	; F6D508  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D508  ld XIX,0x00000fe4
 	ld	xiy, Data_F6D527	; F6D50D  ld XIY,0x00f6d527
-	ld	xix, 4073	; F6D512  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6D512  ld XIX,0x00000fe9
 	ldw	bc, 25	; F6D517  ld BC,0x0019
 	ldir85	; F6D51A  ldir
 	calr	sub_F6D6DC	; F6D51C  calr 0xf6d6dc
@@ -158791,7 +158791,7 @@ MsgLine_Tempo_Repaint:
 	call	T_F431B0	; F6D540  call 0xf431b0
 	calr	MsgLine_Clear	; F6D544  calr 0xf6d9fb
 	ld	xiy, Data_F6D561	; F6D547  ld XIY,0x00f6d561
-	ld	xix, 4073	; F6D54C  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6D54C  ld XIX,0x00000fe9
 	ldw	bc, 25	; F6D551  ld BC,0x0019
 	ldir85	; F6D554  ldir
 	calr	sub_F6D6DC	; F6D556  calr 0xf6d6dc
@@ -158876,7 +158876,7 @@ sub_F6D57A:
 MsgLine_Blank:
 	calr	MsgLine_Clear	; F6D57E  calr 0xf6d9fb
 	ld	xiy, Text_F6D59C	; F6D581  ld XIY,0x00f6d59c
-	ld	xix, 4068	; F6D586  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D586  ld XIX,0x00000fe4
 	ldw	bc, 25	; F6D58B  ld BC,0x0019
 	ldir85	; F6D58E  ldir
 	calr	sub_F6D6DC	; F6D590  calr 0xf6d6dc
@@ -158954,7 +158954,7 @@ sub_F6D5BA:
 sub_F6D5BA_Skip:
 	call	T_F41AF0	; F6D5C9  call 0xf41af0
 	ld	xiy, Value_AsciiDigits	; F6D5CD  ld XIY,0x00002661
-	ld	xix, 4068	; F6D5D2  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D5D2  ld XIX,0x00000fe4
 	ld	wa, (xiy)	; F6D5D7  ld WA,(XIY)
 	ld	(xix), wa	; F6D5D9  ld (XIX),WA
 	ld	a, (xiy+2)	; F6D5DB  ld A,(XIY+0x02)
@@ -158975,7 +158975,7 @@ sub_F6D5BA_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6D5E2:
-	ld	xix, 4068	; F6D5E2  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D5E2  ld XIX,0x00000fe4
 	ldw	wa, 45	; F6D5E7  ld WA,0x002d
 	ld	(xix), wa	; F6D5EA  ld (XIX),WA
 	ld	(xix+2), a	; F6D5EC  ld (XIX+0x02),A
@@ -159029,7 +159029,7 @@ MsgLine_ClearTail:
 	pushw	wa	; F6D5F1  push WA
 	pushw	bc	; F6D5F2  push BC
 	push	xix	; F6D5F3  push XIX
-	ld	xix, 4071	; F6D5F4  ld XIX,0x00000fe7
+	ld	xix, MsgLine_Text+3	; F6D5F4  ld XIX,0x00000fe7
 	ldw	bc, 27	; F6D5F9  ld BC,0x001b
 	ld	a, 32:opc	; F6D5FC  ld A,0x20
 	ld	(xix+), a	; F6D5FE  ld (XIX+),A
@@ -159075,7 +159075,7 @@ MsgLine_ClearTail:
 MsgLine_TransportState_Plus4:
 	calr	MsgLine_ClearTail	; F6D608  calr 0xf6d5f1
 	ld	xiy, Text_StartStopFillIn1fillIn2intro1CountInending1	; F6D60B  ld XIY,0x00f6d66d
-	ld	xix, 4072	; F6D610  ld XIX,0x00000fe8
+	ld	xix, MsgLine_Text+4	; F6D610  ld XIX,0x00000fe8
 	xor	wa, wa	; F6D615  xor WA,WA
 	ld	a, (4800:16)	; F6D617  ld A,(0x12c0)
 	sla	wa, 3	; F6D61B  sla 0x03,WA
@@ -159127,7 +159127,7 @@ MsgLine_TransportState_Plus4:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_TransportState_Plus10:
-	ld	xix, 4078	; F6D642  ld XIX,0x00000fee
+	ld	xix, MsgLine_Text+10	; F6D642  ld XIX,0x00000fee
 	xor	xhl, xhl	; F6D647  xor XHL,XHL
 	ld	l, (4800:16)	; F6D649  ld L,(0x12c0)
 	sla	xhl, 3	; F6D64D  sla 0x03,XHL
@@ -159231,7 +159231,7 @@ sub_F6D6DC:
 sub_F6D6DC_Skip:
 	call	T_F41AF0	; F6D6EB  call 0xf41af0
 	ld	xiy, Value_AsciiDigits	; F6D6EF  ld XIY,0x00002661
-	ld	xix, 4068	; F6D6F4  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D6F4  ld XIX,0x00000fe4
 	ld	wa, (xiy)	; F6D6F9  ld WA,(XIY)
 	ld	(xix), wa	; F6D6FB  ld (XIX),WA
 	ld	a, (xiy+2)	; F6D6FD  ld A,(XIY+0x02)
@@ -159282,7 +159282,7 @@ sub_F6D70C:
 ; --------------------------------------------------------------------------
 sub_F6D710:
 	calr	MsgLine_Clear	; F6D710  calr 0xf6d9fb
-	ld	xix, 4068	; F6D713  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D713  ld XIX,0x00000fe4
 	m_ld_mi16 MDD+r4, 0x09, 0x5620	; F6D718  ld (XIX+0x09),0x5620
 	calr	sub_F6D6DC	; F6D71D  calr 0xf6d6dc
 	calr	MsgLine_FormatNoteAndVelocity	; F6D720  calr 0xf6dd17
@@ -159305,7 +159305,7 @@ sub_F6D710:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6D72F:
-	ld	xix, 4078	; F6D72F  ld XIX,0x00000fee
+	ld	xix, MsgLine_Text+10	; F6D72F  ld XIX,0x00000fee
 	ld	xiy, ByteMap_F6D7C7 + 0x20	; F6D734  ld XIY,0x00f6d7e7
 	ld	a, (4789:16)	; F6D739  ld A,(0x12b5)
 	ld	(6332418:24), a	; F6D73D  ld (0x60a002),A
@@ -159337,7 +159337,7 @@ sub_F6D72F_Skip:
 	ld	a, (4791:16)	; F6D791  ld A,(0x12b7)
 	ld	w, (4790:16)	; F6D795  ld W,(0x12b6)
 	call	T_F41010	; F6D799  call 0xf41010
-	ld	xix, 4082	; F6D79D  ld XIX,0x00000ff2
+	ld	xix, MsgLine_Text+14	; F6D79D  ld XIX,0x00000ff2
 	m_cp_mi8 MB16, 0x12b5, 0x40	; F6D7A2  cp (0x12b5),0x40
 	jr	nz, sub_F6D72F_Skip2	; F6D7A7  jr NZ,0xf6d7c1
 	m_cp_mi8 MB16, 0x12b7, 0x80	; F6D7A9  cp (0x12b7),0x80
@@ -159459,7 +159459,7 @@ Data_F6D867:
 sub_F6D86B:
 	call	T_F431B0	; F6D86B  call 0xf431b0
 	calr	MsgLine_Clear	; F6D86F  calr 0xf6d9fb
-	ld	xix, 4068	; F6D872  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D872  ld XIX,0x00000fe4
 	ld	(xix+4), 83	; F6D877  ld (XIX+0x04),0x53
 	m_ld_mi16 MDD+r4, 0x05, 0x554f	; F6D87B  ld (XIX+0x05),0x554f
 	m_ld_mi16 MDD+r4, 0x07, 0x444e	; F6D880  ld (XIX+0x07),0x444e
@@ -159489,7 +159489,7 @@ sub_F6D86B:
 ; --------------------------------------------------------------------------
 sub_F6D890:
 	ld	xiy, Text_PBendMod1ExpPMemAftOnoff	; F6D890  ld XIY,0x00f6d915
-	ld	xix, 4082	; F6D895  ld XIX,0x00000ff2
+	ld	xix, MsgLine_Text+14	; F6D895  ld XIX,0x00000ff2
 	xor	hl, hl	; F6D89A  xor HL,HL
 	ld	l, (4792:16)	; F6D89C  ld L,(0x12b8)
 	and	l, 7	; F6D8A0  and L,0x07
@@ -159510,7 +159510,7 @@ sub_F6D890:
 	call	sub_F6D963	; F6D8CC  call 0xf6d963
 	jr	sub_F6D890_Return	; F6D8D0  jr T,0xf6d914
 sub_F6D890_Skip:
-	ld	xix, 4089	; F6D8D2  ld XIX,0x00000ff9
+	ld	xix, MsgLine_Text+21	; F6D8D2  ld XIX,0x00000ff9
 	ld	a, (4793:16)	; F6D8D7  ld A,(0x12b9)
 	bit	7, a	; F6D8DB  bit 0x07,A
 	jr	z, sub_F6D890_Skip2	; F6D8DE  jr Z,0xf6d8ff
@@ -159607,7 +159607,7 @@ sub_F6D963:
 	push	xwa	; F6D985  push XWA
 	call	T_F41AF0	; F6D986  call 0xf41af0
 	pop	xwa	; F6D98A  pop XWA
-	ld	xix, 4089	; F6D98B  ld XIX,0x00000ff9
+	ld	xix, MsgLine_Text+21	; F6D98B  ld XIX,0x00000ff9
 	ld	xiy, Value_AsciiDigits+1	; F6D990  ld XIY,0x00002662
 	ldw	bc, 2	; F6D995  ld BC,0x0002
 	ldir85	; F6D998  ldir
@@ -159643,7 +159643,7 @@ sub_F6D9AE:
 	ld	wa, (4108:16)	; F6D9AE  ld WA,(0x100c)
 	call	T_F41AF0	; F6D9B2  call 0xf41af0
 	ld	xiy, Value_AsciiDigits	; F6D9B6  ld XIY,0x00002661
-	ld	xix, 4084	; F6D9BB  ld XIX,0x00000ff4
+	ld	xix, MsgLine_Text+16	; F6D9BB  ld XIX,0x00000ff4
 	ld	wa, (xiy)	; F6D9C0  ld WA,(XIY)
 	ld	(xix), wa	; F6D9C2  ld (XIX),WA
 	ld	w, (xiy+2)	; F6D9C4  ld W,(XIY+0x02)
@@ -159685,7 +159685,7 @@ sub_F6D9AE:
 ; --------------------------------------------------------------------------
 MsgLine_Tempo_F6D9CB:
 	ld	xiy, Data_F6D9E2	; F6D9CB  ld XIY,0x00f6d9e2
-	ld	xix, 4073	; F6D9D0  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6D9D0  ld XIX,0x00000fe9
 	ldw	bc, 26	; F6D9D5  ld BC,0x001a
 	ldir85	; F6D9D8  ldir
 	calr	sub_F6D9AE	; F6D9DA  calr 0xf6d9ae
@@ -159743,7 +159743,7 @@ Data_F6D9E2:
 ; --------------------------------------------------------------------------
 MsgLine_Clear:
 	ldw	bc, 15	; F6D9FB  ld BC,0x000f
-	ld	xix, 4068	; F6D9FE  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6D9FE  ld XIX,0x00000fe4
 	ldw	wa, 8224	; F6DA03  ld WA,0x2020
 	ld	(xix+), wa	; F6DA06  ld (XIX+),WA
 	djnz16	bc, -6	; F6DA09  djnz BC,0xf6da06
@@ -159791,7 +159791,7 @@ sub_F6DA0D:
 ; --------------------------------------------------------------------------
 sub_F6DA12:
 	ldw	bc, 7	; F6DA12  ld BC,0x0007
-	ld	xix, 4078	; F6DA15  ld XIX,0x00000fee
+	ld	xix, MsgLine_Text+10	; F6DA15  ld XIX,0x00000fee
 	push	xix	; F6DA1A  push XIX
 	ldw	wa, 8224	; F6DA1B  ld WA,0x2020
 	ld	(xix+), wa	; F6DA1E  ld (XIX+),WA
@@ -159832,7 +159832,7 @@ sub_F6DA12_Return:
 sub_F6DA12_Skip3:
 	call	T_F41AF0	; F6DA81  call 0xf41af0
 	ld	xiy, Value_AsciiDigits	; F6DA85  ld XIY,0x00002661
-	ld	xix, 4068	; F6DA8A  ld XIX,0x00000fe4
+	ld	xix, MsgLine_Text	; F6DA8A  ld XIX,0x00000fe4
 	ld	wa, (xiy)	; F6DA8F  ld WA,(XIY)
 	ld	(xix), wa	; F6DA91  ld (XIX),WA
 	ld	a, (xiy+2)	; F6DA93  ld A,(XIY+0x02)
@@ -159859,7 +159859,7 @@ sub_F6DA12_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6DA9A:
-	ld	xix, 4078	; F6DA9A  ld XIX,0x00000fee
+	ld	xix, MsgLine_Text+10	; F6DA9A  ld XIX,0x00000fee
 	calr	Format_ChordName	; F6DA9F  calr 0xf6daa6
 	calr	sub_F6DAED	; F6DAA2  calr 0xf6daed
 	ret	; F6DAA5  ret
@@ -159943,7 +159943,7 @@ sub_F6DAED:
 	ld	(xix+7), wa	; F6DAF0  ld (XIX+0x07),WA
 	ld	(xix+10), wa	; F6DAF3  ld (XIX+0x0a),WA
 	xor	hl, hl	; F6DAF6  xor HL,HL
-	ld	xix, 4087	; F6DAF8  ld XIX,0x00000ff7
+	ld	xix, MsgLine_Text+19	; F6DAF8  ld XIX,0x00000ff7
 	ld	l, (3677:16)	; F6DAFD  ld L,(0x0e5d)
 	sla	hl, 2	; F6DB01  sla 0x02,HL
 	ld	xiy, Data_F6DB7C + 0x5D	; F6DB04  ld XIY,0x00f6dbd9
@@ -160097,7 +160097,7 @@ Data_F6DB7C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6DBF9:
-	ld	xix, 4083	; F6DBF9  ld XIX,0x00000ff3
+	ld	xix, MsgLine_Text+15	; F6DBF9  ld XIX,0x00000ff3
 	xor	hl, hl	; F6DBFE  xor HL,HL
 	ld	l, (4780:16)	; F6DC00  ld L,(0x12ac)
 	and	l, 15	; F6DC04  and L,0x0f
@@ -160108,7 +160108,7 @@ sub_F6DBF9:
 	m_st_mr16 MDD+r4, 0x00, 0	; F6DC16  ld (XIX+0x00),WA
 	ld	w, (xiy+2)	; F6DC19  ld W,(XIY+0x02)
 	ld	(xix+2), w	; F6DC1C  ld (XIX+0x02),W
-	ld	xix, 4087	; F6DC1F  ld XIX,0x00000ff7
+	ld	xix, MsgLine_Text+19	; F6DC1F  ld XIX,0x00000ff7
 	xor	hl, hl	; F6DC24  xor HL,HL
 	ld	l, (4781:16)	; F6DC26  ld L,(0x12ad)
 	and	l, 15	; F6DC2A  and L,0x0f
@@ -160123,7 +160123,7 @@ sub_F6DBF9:
 	ld	(xix+2), wa	; F6DC46  ld (XIX+0x02),WA
 	ld	a, (xiy+4)	; F6DC49  ld A,(XIY+0x04)
 	ld	(xix+4), a	; F6DC4C  ld (XIX+0x04),A
-	ld	xix, 4093	; F6DC4F  ld XIX,0x00000ffd
+	ld	xix, MsgLine_Text+25	; F6DC4F  ld XIX,0x00000ffd
 	xor	hl, hl	; F6DC54  xor HL,HL
 	ld	l, (4782:16)	; F6DC56  ld L,(0x12ae)
 	and	l, 3	; F6DC5A  and L,0x03
@@ -160230,7 +160230,7 @@ Text_4Tenunormstaccutt:
 ;          (0x12B0) are in the firmware's state is not established here.
 ; --------------------------------------------------------------------------
 MsgLine_FormatNoteAndVelocity:
-	ld	xix, 4073	; F6DD17  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6DD17  ld XIX,0x00000fe9
 	m_cp_mi8 MB16, 0x12af, 0xff	; F6DD1C  cp (0x12af),0xff
 	jr	nz, MsgLine_FormatNoteAndVelocity_HaveValue	; F6DD21  jr NZ,0xf6dd37
 	ldw	wa, 8224	; F6DD23  ld WA,0x2020
@@ -160352,7 +160352,7 @@ OctaveNames_Minus2To8_Code_Skip:
 	sla	hl, 2	; F6DDD0  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DDD3  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DDD8  lda XIY,XIY+HL
-	ld	xix, 4075	; F6DDDD  ld XIX,0x00000feb
+	ld	xix, MsgLine_Text+7	; F6DDDD  ld XIX,0x00000feb
 	ldw	bc, 4	; F6DDE2  ld BC,0x0004
 	ldir85	; F6DDE5  ldir
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15	; F6DDE7  ld XIY,0x00f6de10
@@ -160458,7 +160458,7 @@ MsgLine_PartPanpot_Skip:
 	sla	hl, 2	; F6DF10  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DF13  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DF18  lda XIY,XIY+HL
-	ld	xix, 4075	; F6DF1D  ld XIX,0x00000feb
+	ld	xix, MsgLine_Text+7	; F6DF1D  ld XIX,0x00000feb
 	ldw	bc, 4	; F6DF22  ld BC,0x0004
 	ldir85	; F6DF25  ldir
 	ld	xiy, Data_F6DF50	; F6DF27  ld XIY,0x00f6df50
@@ -160541,7 +160541,7 @@ MsgLine_PartKeyShift_Skip:
 	sla	hl, 2	; F6DF70  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DF73  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DF78  lda XIY,XIY+HL
-	ld	xix, 4073	; F6DF7D  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6DF7D  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6DF82  ld BC,0x0004
 	ldir85	; F6DF85  ldir
 	ld	xiy, Data_F6DFBA	; F6DF87  ld XIY,0x00f6dfba
@@ -160627,7 +160627,7 @@ MsgLine_PartTuning_Skip:
 	sla	hl, 2	; F6DFDD  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DFE0  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DFE5  lda XIY,XIY+HL
-	ld	xix, 4073	; F6DFEA  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6DFEA  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6DFEF  ld BC,0x0004
 	ldir85	; F6DFF2  ldir
 	ld	xiy, Data_F6E027	; F6DFF4  ld XIY,0x00f6e027
@@ -160713,7 +160713,7 @@ MsgLine_PartBendSens_Skip:
 	sla	hl, 2	; F6E047  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E04A  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E04F  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E054  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E054  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E059  ld BC,0x0004
 	ldir85	; F6E05C  ldir
 	ld	xiy, Data_F6E087	; F6E05E  ld XIY,0x00f6e087
@@ -160796,7 +160796,7 @@ MsgLine_PartSustain_Skip:
 	sla	hl, 2	; F6E0AA  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E0AD  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E0B2  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E0B7  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E0B7  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E0BC  ld BC,0x0004
 	ldir85	; F6E0BF  ldir
 	ld	xiy, Data_F6E0EB	; F6E0C1  ld XIY,0x00f6e0eb
@@ -160888,7 +160888,7 @@ MsgLine_PartDspEffect_Skip:
 	sla	hl, 2	; F6E16B  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E16E  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E173  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E178  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E178  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E17D  ld BC,0x0004
 	ldir85	; F6E180  ldir
 	ld	xiy, Data_F6E1A6	; F6E182  ld XIY,0x00f6e1a6
@@ -160968,7 +160968,7 @@ MsgLine_PartEffect_Skip:
 	sla	hl, 2	; F6E1CA  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E1CD  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E1D2  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E1D7  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E1D7  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E1DC  ld BC,0x0004
 	ldir85	; F6E1DF  ldir
 	ld	xiy, Data_F6E20B	; F6E1E1  ld XIY,0x00f6e20b
@@ -161047,7 +161047,7 @@ MsgLine_PartEffect1:
 	sla	hl, 2	; F6E21B  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E21E  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E223  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E228  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E228  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E22D  ld BC,0x0004
 	ldir85	; F6E230  ldir
 	ld	xiy, Data_F6E259	; F6E232  ld XIY,0x00f6e259
@@ -161124,7 +161124,7 @@ MsgLine_PartEffect2:
 	sla	hl, 2	; F6E26A  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E26D  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E272  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E277  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E277  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E27C  ld BC,0x0004
 	ldir85	; F6E27F  ldir
 	ld	xiy, Data_F6E2AC	; F6E281  ld XIY,0x00f6e2ac
@@ -161203,7 +161203,7 @@ MsgLine_PartReverb:
 	sla	hl, 2	; F6E2C3  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E2C6  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E2CB  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E2D0  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E2D0  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E2D5  ld BC,0x0004
 	ldir85	; F6E2D8  ldir
 	ld	xiy, Data_F6E2FF	; F6E2DA  ld XIY,0x00f6e2ff
@@ -161283,7 +161283,7 @@ MsgLine_PanelMemory_Skip:
 	calr	MsgLine_ClearTail	; F6E319  calr 0xf6d5f1
 	popw	wa	; F6E31C  pop WA
 	ld	xiy, Data_F6E33F	; F6E31D  ld XIY,0x00f6e33f
-	ld	xix, 4073	; F6E322  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E322  ld XIX,0x00000fe9
 	ldw	bc, 13	; F6E327  ld BC,0x000d
 	ldir85	; F6E32A  ldir
 	xor	w, w	; F6E32C  xor W,W
@@ -161465,8 +161465,8 @@ MsgLine_NoteName_Skip:
 	pushw	wa	; F6E475  push WA
 	calr	MsgLine_ClearTail	; F6E476  calr 0xf6d5f1
 	popw	wa	; F6E479  pop WA
-	ld	(4072:16), 32	; F6E47A  ld (0x0fe8),0x20
-	ld	xix, 4073	; F6E47F  ld XIX,0x00000fe9
+	ld	(MsgLine_Text+4:16), 32	; F6E47A  ld (0x0fe8),0x20
+	ld	xix, MsgLine_Text+5	; F6E47F  ld XIX,0x00000fe9
 	ld	l, (4698:16)	; F6E484  ld L,(0x125a)
 	and	l, 15	; F6E488  and L,0x0f
 	xor	h, h	; F6E48B  xor H,H
@@ -161557,14 +161557,14 @@ MsgLine_AccompVolume_Skip:
 	sla	hl, 4	; F6E510  sla 0x04,HL
 	ld	xiy, Text_AccTotalVolBassVolumeDrumsVolumeAccmp1Volume	; F6E513  ld XIY,0x00f6e542
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E518  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E51D  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E51D  ld XIX,0x00000fe9
 	ldw	bc, 16	; F6E522  ld BC,0x0010
 	ldir85	; F6E525  ldir
 	popw	wa	; F6E527  pop WA
 	xor	w, w	; F6E528  xor W,W
 	call	T_F41AF0	; F6E52A  call 0xf41af0
 	ld	xiy, Value_AsciiDigits	; F6E52E  ld XIY,0x00002661
-	ld	xix, 4089	; F6E533  ld XIX,0x00000ff9
+	ld	xix, MsgLine_Text+21	; F6E533  ld XIX,0x00000ff9
 	ldw	bc, 3	; F6E538  ld BC,0x0003
 	ldir85	; F6E53B  ldir
 	call	T_F431B4	; F6E53D  call 0xf431b4
@@ -161673,7 +161673,7 @@ MsgLine_PartTremolo_Skip:
 	sla	hl, 2	; F6E5BE  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E5C1  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E5C6  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E5CB  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E5CB  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E5D0  ld BC,0x0004
 	ldir85	; F6E5D3  ldir
 	ld	xiy, Data_F6E5FF	; F6E5D5  ld XIY,0x00f6e5ff
@@ -161867,7 +161867,7 @@ MsgLine_TotalReverb:
 	call	T_F431B0	; F6E636  call 0xf431b0
 MsgLine_TotalReverb_Skip:
 	calr	MsgLine_ClearTail	; F6E63A  calr 0xf6d5f1
-	ld	xix, 4075	; F6E63D  ld XIX,0x00000feb
+	ld	xix, MsgLine_Text+7	; F6E63D  ld XIX,0x00000feb
 	ld	xiy, Data_F6E66A	; F6E642  ld XIY,0x00f6e66a
 	ldw	bc, 13	; F6E647  ld BC,0x000d
 	ldir85	; F6E64A  ldir
@@ -161947,7 +161947,7 @@ MsgLine_PartMellowNormalBright_Skip:
 	sla	hl, 2	; F6E691  sla 0x02,HL
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E694  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E699  lda XIY,XIY+HL
-	ld	xix, 4075	; F6E69E  ld XIX,0x00000feb
+	ld	xix, MsgLine_Text+7	; F6E69E  ld XIX,0x00000feb
 	ldw	bc, 4	; F6E6A3  ld BC,0x0004
 	ldir85	; F6E6A6  ldir
 	inc	1, xix	; F6E6A8  inc 1,XIX
@@ -162062,13 +162062,13 @@ MsgLine_TimeSignature:
 	pushw	wa	; F6E706  push WA
 	calr	MsgLine_ClearTail	; F6E707  calr 0xf6d5f1
 	popw	wa	; F6E70A  pop WA
-	ld	xix, 4073	; F6E70B  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E70B  ld XIX,0x00000fe9
 	ld	xiy, Data_F6E728	; F6E710  ld XIY,0x00f6e728
 	ldw	bc, 9	; F6E715  ld BC,0x0009
 	ldirw	; F6E718  ldirw
 	inc	1, a	; F6E71A  inc 1,A
 	add	a, 48	; F6E71C  add A,0x30
-	ld	(4088:16), a	; F6E71F  ld (0x0ff8),A
+	ld	(MsgLine_Text+20:16), a	; F6E71F  ld (0x0ff8),A
 	call	T_F431B4	; F6E723  call 0xf431b4
 	ret	; F6E727  ret
 
@@ -162136,7 +162136,7 @@ MsgLine_PartModulation2:
 	xor	h, h	; F6E74E  xor H,H
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E750  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E755  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E75A  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E75A  ld XIX,0x00000fe9
 	ldw	bc, 3	; F6E75F  ld BC,0x0003
 	ldir85	; F6E762  ldir
 	inc	1, xix	; F6E764  inc 1,XIX
@@ -162218,7 +162218,7 @@ MsgLine_PartCtrlPedal:
 	xor	h, h	; F6E7AB  xor H,H
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E7AD  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E7B2  lda XIY,XIY+HL
-	ld	xix, 4073	; F6E7B7  ld XIX,0x00000fe9
+	ld	xix, MsgLine_Text+5	; F6E7B7  ld XIX,0x00000fe9
 	ldw	bc, 3	; F6E7BC  ld BC,0x0003
 	ldir85	; F6E7BF  ldir
 	inc	1, xix	; F6E7C1  inc 1,XIX
@@ -162300,7 +162300,7 @@ MsgLine_PartHold:
 	xor	h, h	; F6E807  xor H,H
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E809  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E80E  lda XIY,XIY+HL
-	ld	xix, 4072	; F6E813  ld XIX,0x00000fe8
+	ld	xix, MsgLine_Text+4	; F6E813  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E818  ld BC,0x0003
 	ldir85	; F6E81B  ldir
 	inc	8, xix	; F6E81D  inc 0,XIX
@@ -162383,7 +162383,7 @@ MsgLine_PartRtCreateX:
 	xor	h, h	; F6E85D  xor H,H
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E85F  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E864  lda XIY,XIY+HL
-	ld	xix, 4072	; F6E869  ld XIX,0x00000fe8
+	ld	xix, MsgLine_Text+4	; F6E869  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E86E  ld BC,0x0003
 	ldir85	; F6E871  ldir
 	inc	1, xix	; F6E873  inc 1,XIX
@@ -162466,7 +162466,7 @@ MsgLine_PartRtCreateY:
 	xor	h, h	; F6E8BA  xor H,H
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E8BC  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E8C1  lda XIY,XIY+HL
-	ld	xix, 4072	; F6E8C6  ld XIX,0x00000fe8
+	ld	xix, MsgLine_Text+4	; F6E8C6  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E8CB  ld BC,0x0003
 	ldir85	; F6E8CE  ldir
 	inc	1, xix	; F6E8D0  inc 1,XIX
@@ -162549,7 +162549,7 @@ MsgLine_PartRtCtrlX:
 	xor	h, h	; F6E917  xor H,H
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E919  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E91E  lda XIY,XIY+HL
-	ld	xix, 4072	; F6E923  ld XIX,0x00000fe8
+	ld	xix, MsgLine_Text+4	; F6E923  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E928  ld BC,0x0003
 	ldir85	; F6E92B  ldir
 	inc	2, xix	; F6E92D  inc 2,XIX
@@ -162632,7 +162632,7 @@ MsgLine_PartRtCtrlY:
 	xor	h, h	; F6E973  xor H,H
 	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E975  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E97A  lda XIY,XIY+HL
-	ld	xix, 4072	; F6E97F  ld XIX,0x00000fe8
+	ld	xix, MsgLine_Text+4	; F6E97F  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E984  ld BC,0x0003
 	ldir85	; F6E987  ldir
 	inc	2, xix	; F6E989  inc 2,XIX
