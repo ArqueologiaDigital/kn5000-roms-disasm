@@ -778,17 +778,17 @@ MidiPkt_DispatchData_Chan6_Join2:
 MidiPkt_DispatchData_Chan6_Skip:
 	jr	MidiPkt_DispatchData_Chan6_Join
 MidiPkt_DispatchData_Chan6_Skip2:
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 17
 	jp	MIDI_ReadChannelParam
 MidiPkt_SendBankSelect:
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld bc, 4:i3
 	call	SeqData_ReadFieldByIndex
 	cp l, 0:i3
 	ret z
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld bc, 5:i3
 	call	SeqData_ReadFieldByIndex
 	cp l, 0x2b
@@ -873,7 +873,7 @@ MidiPkt_SysExProcessor_Data_Skip3:
 	pop	xiz
 	ret
 MidiPkt_SysExBulkTransfer_Data:
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 1:i3
 	call	SeqData_ReadFieldByIndex
 	extz	hl
@@ -939,7 +939,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2:
 MidiPkt_SysExBulkTransfer_Data_Join:
 	lda	xsp, (xsp-12)
 	push	qiz
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 9
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -952,7 +952,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ld	a, (xbc+wa)
 	ldfr_berp	a, 251
 	; v7 bytes do not decode as v10's `sub	(xbc-31), ix`
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	; v7 bytes; v10 has: .byte 0xb6
@@ -1044,7 +1044,7 @@ MidiPkt_SysExBulkTransfer_Data_Join3:
 MidiPkt_SysExBulkTransfer_Data_Join4:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -1111,7 +1111,7 @@ SysEx_ClampVoiceIndex8_DoLookup:
 MidiPkt_SysExBulkTransfer_Data_Helper2_Join:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -1168,7 +1168,7 @@ SysEx_ClampVoiceIndex128_DoLookup:
 MidiPkt_SysExBulkTransfer_Data_Helper2_Join2:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -1226,7 +1226,7 @@ SysEx_ClampVoiceIndex8_49_DoLookup:
 MidiPkt_SendBankSelect_Helper:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbc10:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l

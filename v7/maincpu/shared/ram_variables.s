@@ -25,3 +25,9 @@
 ; named from the writer census (python3 scripts/analysis/kn5000_ram_writers.py --tree v10 <addr>)
 	.equ SEQ_ERROR_CODE,		0x287a	; sequencer-data error code: 0 = none; 1..11 / 255 set by the end-mark, overflow and bad-parameter paths (SeqData_HandleEndMark_SetError1, SeqBuf_PageOverflowError, Part_ValidateSetup_ErrorEnd ...); cleared before operations, tested against 0 after
 	.equ GLOBAL_ERROR_CODE,		0x7ea6	; set by SetGlobalError and the error / status paths of disk, medley, drum-kit, password ... code (values 1..74, 255); compared against constants	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x7f42
+; MidiSeq_SwapActiveBuffers exchanges (0xBCAC) with (0xBCB0) and (0xBC54) with (0xBC58): two
+; active / spare pointer pairs (MidiChan_InitAllBufferPtrs sets them up)
+	.equ MIDISEQ_ACTIVE_BUF_PTR,	0xbc10	; the active buffer; read at 220 sites	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xbcac
+	.equ MIDISEQ_SPARE_BUF_PTR,	0xbc14	; the one MidiSeq_SwapActiveBuffers exchanges it with	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xbcb0
+	.equ MIDISEQ_ACTIVE_BLOCK_PTR,	0xbbb8	; the second pair's active pointer (its +10 / +14 words are compared)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xbc54
+	.equ MIDISEQ_SPARE_BLOCK_PTR,	0xbbbc	; and its spare	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xbc58

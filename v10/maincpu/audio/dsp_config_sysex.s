@@ -21,7 +21,7 @@ SysEx_ClampVoiceIndex8_DoLookup:
 SysEx_ApplyToSlot4B_Data:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -81,7 +81,7 @@ SysEx_ClampVoiceIndex128_DoLookup:
 SysEx_ApplyToSlot49_Data:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -142,7 +142,7 @@ SysEx_ClampVoiceIndex8_49_DoLookup:
 SysEx_ApplyToSlot49_Format_Data:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l

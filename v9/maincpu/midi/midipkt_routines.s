@@ -88,7 +88,7 @@ MidiPkt_BuildControl:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -118,7 +118,7 @@ MidiPkt_BuildControl:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -152,7 +152,7 @@ MidiPkt_BuildControl:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jrl	z, MidiPkt_BuildControl_Epilogue
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -219,7 +219,7 @@ MidiPkt_BuildControl_Epilogue:
 	ld	xwa, (xsp+18)
 	cp	(xwa+14), 255
 	jr	z, MidiPkt_BuildControl_Epilogue2
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -1226,18 +1226,18 @@ MidiPkt_DispatchData_Chan6_Join2:
 MidiPkt_DispatchData_Chan6_Skip:
 	jr	MidiPkt_DispatchData_Chan6_Join
 MidiPkt_DispatchData_Chan6_Skip2:
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 17
 	jp	MIDI_ReadChannelParam
 
 MidiPkt_SendBankSelect:
-	ld xwa, (0xbcac:16)
+	ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld bc, 4:i3
 	call SeqData_ReadFieldByIndex
 	cp l, 0:i3
 	ret z
-	ld xwa, (0xbcac:16)
+	ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld bc, 5:i3
 	call SeqData_ReadFieldByIndex
 	cp l, 0x2b
@@ -1316,7 +1316,7 @@ MidiPkt_SysExProcessor_Data_Skip3:
 	pop	xiz
 	ret
 MidiPkt_SysExBulkTransfer_Data:
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 1:i3
 	call	SeqData_ReadFieldByIndex
 	extz	hl
@@ -1382,7 +1382,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2:
 MidiPkt_SysExBulkTransfer_Data_Join:
 	lda	xsp, (xsp-12)
 	push	qiz
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 9
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -1394,7 +1394,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	lda	xbc, (SysExBulk_SlotMap:24)
 	ld	a, (xbc+wa)
 	ldfr_berp	a, 251
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	cp	l, 2:i3
@@ -1484,7 +1484,7 @@ MidiPkt_SysExBulkTransfer_Data_Join3:
 MidiPkt_SysExBulkTransfer_Data_Join4:
 	dec	2, xsp
 	push	xiz
-	ld	xwa, (0xbcac:16)
+	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
