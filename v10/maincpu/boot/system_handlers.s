@@ -701,7 +701,7 @@ INTTR4_CheckSeqEnable:
 INTTR4_SeqTick_CheckBeat:
 	ld a, (1046:16)
 	ld w, (1075:16)
-	ex_sd16b W, 0x58, 0x04
+	ex (0x458:16), w
 	cp a, w
 	jr c, INTTR4_CheckAltSeqEnable
 	ld (1046:16), 0

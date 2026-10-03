@@ -3186,7 +3186,7 @@ SndParam_Widget1_AppendType2_Entry4:
 SndParam_Widget1_AppendType2_Skip13:
 	ld	a, (1046:16)
 	ld	w, (1075:16)
-	.byte 0xc1, 0x58, 0x04, 0x30
+	ex	(0x458:16), w
 	cp	a, w
 	jr	c, SndParam_Widget1_AppendType2_Skip14
 	ld	(1046:16), 0

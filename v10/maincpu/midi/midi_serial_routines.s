@@ -343,7 +343,7 @@ ClkTick_Src2FineBeatCheck:
 ClkTick_Src2CoarseOverflow:
 	ld a, (1046:16)
 	ld w, (1075:16)
-	ex_sd16b W, 0x58, 0x04
+	ex (0x458:16), w
 	cp a, w
 	jr c, ClkTick_Src2ErrorDelta
 	ld (1046:16), 0
