@@ -504,7 +504,7 @@ FileIO_ReadBlockToBuffer:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_ReadBlock
-	ld (6701:16), xhl
+	ld (FILEIO_BLOCK_BYTES:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -517,7 +517,7 @@ FileIO_ReadBlockToFilePos:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_ReadBlock
-	ld (6701:16), xhl
+	ld (FILEIO_BLOCK_BYTES:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -667,7 +667,7 @@ SMF_ProcessSysExBlock:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_SysEx_FileUnderflow
 	pop xbc
@@ -717,7 +717,7 @@ SysEx_ReadBytesLoop:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SysEx_ReadBytes_FileUnderflow
 	pop xbc
@@ -991,7 +991,7 @@ SMF_WaitForReady:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_Setup_FileUnderflow
 	pop xbc
@@ -1027,7 +1027,7 @@ SMF_WriteChannelDataLoop:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteChannel_FileUnderflow
 	pop xbc
@@ -1135,7 +1135,7 @@ SMF_WriteChannelNoteData:
 	push	xwa
 	push	xbc
 	ld	xbc, 0:i3
-	ld	xwa, (6701:16)
+	ld	xwa, (FILEIO_BLOCK_BYTES:16)
 	cp	xwa, xbc
 	jr	lt, SMF_WriteNote_FileUnderflow1
 	pop	xbc
@@ -1157,7 +1157,7 @@ SMF_WriteNote_BankSelect:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow2
 	pop xbc
@@ -1182,7 +1182,7 @@ SMF_WriteNote_ProgramChange:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow3
 	pop xbc
@@ -1210,7 +1210,7 @@ SMF_WriteNote_AltPath:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow4
 	pop xbc
@@ -1237,7 +1237,7 @@ SMF_WriteNote_BankSelectLSB:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow5
 	pop xbc
@@ -1262,7 +1262,7 @@ SMF_WriteNote_ProgramNumber:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteNote_FileUnderflow6
 	pop xbc
@@ -1287,7 +1287,7 @@ SMF_WriteChannelVolume:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow1
 	pop xbc
@@ -1310,7 +1310,7 @@ SMF_WriteVol_Chorus:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow2
 	pop xbc
@@ -1336,7 +1336,7 @@ SMF_WriteVol_SustainValue:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow3
 	pop xbc
@@ -1358,7 +1358,7 @@ SMF_WriteVol_Reverb:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteVol_FileUnderflow4
 	pop xbc
@@ -1405,7 +1405,7 @@ SMF_WriteVol_PanAndPitch:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow1
 	pop xbc
@@ -1426,7 +1426,7 @@ SMF_WriteRPN_MSBZero:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow2
 	pop xbc
@@ -1447,7 +1447,7 @@ SMF_WriteRPN_LSBOne:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow3
 	pop xbc
@@ -1484,7 +1484,7 @@ SMF_WriteRPN_FineTune:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow4
 	pop xbc
@@ -1507,7 +1507,7 @@ SMF_WriteRPN_FineTuneLSB:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow5
 	pop xbc
@@ -1528,7 +1528,7 @@ SMF_WriteRPN_MSBZero2:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow6
 	pop xbc
@@ -1549,7 +1549,7 @@ SMF_WriteRPN_LSBTwo:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow7
 	pop xbc
@@ -1583,7 +1583,7 @@ SMF_WriteRPN_CoarseTune:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow8
 	pop xbc
@@ -1604,7 +1604,7 @@ SMF_WriteRPN_CoarseTuneLSB:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow9
 	pop xbc
@@ -1625,7 +1625,7 @@ SMF_WriteRPN_MSBZero3:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow10
 	pop xbc
@@ -1646,7 +1646,7 @@ SMF_WriteRPN_LSBZero:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow11
 	pop xbc
@@ -1678,7 +1678,7 @@ SMF_WriteRPN_Transpose:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow12
 	pop xbc
@@ -1699,7 +1699,7 @@ SMF_WriteRPN_TransposeLSB:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteRPN_FileUnderflow13
 	pop xbc
@@ -1832,7 +1832,7 @@ SMF_PolyAftertouch_Dispatch:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_PolyAftertouch_4Byte_Underflow
 	pop xbc
@@ -1872,7 +1872,7 @@ SMF_PolyAftertouch_3Byte_CalcTime:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_PolyAftertouch_3Byte_Underflow
 	pop xbc
@@ -1893,7 +1893,7 @@ SMF_PolyAftertouch_3Byte_SendStatus:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_PolyAftertouch_3Byte_WriteUnderflow
 	pop xbc
@@ -1919,7 +1919,7 @@ SMF_ChannelPressure_Handler:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ChannelPressure_Underflow
 	pop xbc
@@ -1940,7 +1940,7 @@ SMF_ChannelPressure_WriteCC:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ChannelPressure_WriteUnderflow
 	pop xbc
@@ -1966,7 +1966,7 @@ SMF_PitchBend_Handler:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_PitchBend_Underflow
 	pop xbc
@@ -1985,7 +1985,7 @@ SMF_PitchBend_WriteCC_MSB:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_PitchBend_WriteCC_MSB_Underflow
 	pop xbc
@@ -2019,7 +2019,7 @@ SMF_SystemExclusive_Handler:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_SystemExclusive_Underflow
 	pop xbc
@@ -2040,7 +2040,7 @@ SMF_SystemExclusive_WriteCC_MSB:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_SystemExclusive_WriteCC_MSB_Underflow
 	pop xbc
@@ -2098,7 +2098,7 @@ SMF_NoteOn_SlotFound:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_NoteOn_SlotFound_Underflow
 	pop xbc
@@ -2120,7 +2120,7 @@ SMF_NoteOn_WriteEventBytes:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_NoteOn_WriteEvent_Underflow
 	pop xbc
@@ -2172,7 +2172,7 @@ SMF_ProgramChange_CalcTime:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_Underflow
 	pop xbc
@@ -2223,7 +2223,7 @@ SMF_ProgramChange_ProcessPatch:
 	push	xwa
 	push	xbc
 	ld	xbc, 0:i3
-	ld	xwa, (6701:16)
+	ld	xwa, (FILEIO_BLOCK_BYTES:16)
 	cp	xwa, xbc
 	jr	lt, SMF_ProgramChange_WriteBankMSB_Underflow
 	pop	xbc
@@ -2243,7 +2243,7 @@ SMF_ProgramChange_WriteBankMSB_Data:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WriteBankLSB_Underflow
 	pop xbc
@@ -2266,7 +2266,7 @@ SMF_ProgramChange_WriteBankLSB_Data:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WriteVolume_Underflow
 	pop xbc
@@ -2289,7 +2289,7 @@ SMF_ProgramChange_DirectWrite:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_SendConfig_Underflow
 	pop xbc
@@ -2320,7 +2320,7 @@ SMF_ProgramChange_SendConfig_Data:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WritePatch_Underflow
 	pop xbc
@@ -2343,7 +2343,7 @@ SMF_ProgramChange_WritePatchByte:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ProgramChange_WritePatch_Done_Underflow
 	pop xbc
@@ -2426,7 +2426,7 @@ SMF_CC_RPN_CalcTime:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_Underflow
 	pop xbc
@@ -2451,7 +2451,7 @@ SMF_CC_RPN_WriteCC101:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC101_Underflow
 	pop xbc
@@ -2473,7 +2473,7 @@ SMF_CC_RPN_WriteCC100:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC100_Underflow
 	pop xbc
@@ -2499,7 +2499,7 @@ SMF_CC_RPN_WriteCC6_DataEntry:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC6_Underflow
 	pop xbc
@@ -2522,7 +2522,7 @@ SMF_CC_RPN_WriteCC38_DataEntryLSB:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_RPN_WriteCC38_Underflow
 	pop xbc
@@ -2554,7 +2554,7 @@ SMF_CC_PitchBendSens_CalcTime:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_Underflow
 	pop xbc
@@ -2579,7 +2579,7 @@ SMF_CC_PitchBendSens_WriteCC101:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC101_Underflow
 	pop xbc
@@ -2601,7 +2601,7 @@ SMF_CC_PitchBendSens_WriteCC100:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC100_Underflow
 	pop xbc
@@ -2622,7 +2622,7 @@ SMF_CC_PitchBendSens_WriteCC6:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC6_Underflow
 	pop xbc
@@ -2641,7 +2641,7 @@ SMF_CC_PitchBendSens_WriteCC38:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_PitchBendSens_WriteCC38_Underflow
 	pop xbc
@@ -2673,7 +2673,7 @@ SMF_CC_Modulation_CalcTime:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_Underflow
 	pop xbc
@@ -2698,7 +2698,7 @@ SMF_CC_Modulation_WriteCC101:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC101_Underflow
 	pop xbc
@@ -2720,7 +2720,7 @@ SMF_CC_Modulation_WriteCC100:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC100_Underflow
 	pop xbc
@@ -2741,7 +2741,7 @@ SMF_CC_Modulation_WriteCC6:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC6_Underflow
 	pop xbc
@@ -2760,7 +2760,7 @@ SMF_CC_Modulation_WriteCC38:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Modulation_WriteCC38_Underflow
 	pop xbc
@@ -2792,7 +2792,7 @@ SMF_CC_Pan_CalcTime:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Pan_Underflow
 	pop xbc
@@ -2815,7 +2815,7 @@ SMF_CC_Pan_WriteCC10:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_CC_Pan_WriteCC10_Underflow
 	pop xbc

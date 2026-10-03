@@ -20,7 +20,7 @@ SMF_ProcessTimedEvent_Continue:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop1_BufferEmpty
 	pop xbc
@@ -37,7 +37,7 @@ SMF_WriteLoop1_Continue:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop2_BufferEmpty
 	pop xbc
@@ -74,7 +74,7 @@ SMF_IncrementPosition:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_IncrPos_BufferEmpty
 	pop xbc
@@ -94,7 +94,7 @@ SMF_IncrPos_WriteEndMarker:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_EndMarker_BufferEmpty
 	pop xbc
@@ -113,7 +113,7 @@ SMF_EndMarker_CheckPlayback:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_Flush_BufferEmpty
 	pop xbc
@@ -155,7 +155,7 @@ SMF_Finalize_RestoreAndPlay:
 ; ============================================================================
 SMF_FlushAndFinalize:
 	push xhl
-	ld xhl, (6701:16)
+	ld xhl, (FILEIO_BLOCK_BYTES:16)
 	ld (6699:16), hl
 	pop xhl
 	call Vga_RestoreMultiPlaneDisplay
@@ -423,7 +423,7 @@ SMF_OutputCmd_ReadByte:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck1
 	pop xbc
@@ -445,7 +445,7 @@ SMF_OutputCmd_SendFF:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck2
 	pop xbc
@@ -465,7 +465,7 @@ SMF_OutputCmd_Send51:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck3
 	pop xbc
@@ -485,7 +485,7 @@ SMF_OutputCmd_Send03:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck4
 	pop xbc
@@ -505,7 +505,7 @@ SMF_OutputCmd_SendTempoH:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck5
 	pop xbc
@@ -525,7 +525,7 @@ SMF_OutputCmd_SendTempoM:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck6
 	pop xbc
@@ -545,7 +545,7 @@ SMF_OutputCmd_SendTempoL:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck7
 	pop xbc
@@ -569,7 +569,7 @@ SMF_WriteByte:
 	push xwa
 	xor xwa, xwa
 	ld xwa, 2:i3
-	ld (6701:16), xwa
+	ld (FILEIO_BLOCK_BYTES:16), xwa
 	pop xwa
 	cp xix, 0x17f9
 	jr ugt, SMF_WriteByte_SectorCheck
@@ -586,7 +586,7 @@ SMF_WriteByte_SectorCheck:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteByte_SectorError
 	pop xbc
@@ -628,7 +628,7 @@ SMF_WriteByte_AlignCheck:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteByte_AlignError
 	pop xbc
@@ -671,7 +671,7 @@ SMF_WriteLoop_ReadByte:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_Error
 	pop xbc
@@ -699,7 +699,7 @@ SMF_WriteLoop_Continue:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_SendFF
 	pop xbc
@@ -721,7 +721,7 @@ SMF_WriteLoop_AfterFF:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_Send51
 	pop xbc
@@ -746,7 +746,7 @@ SMF_WriteLoop_After51:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_FinalError
 	pop xbc
@@ -831,7 +831,7 @@ SMF_ProcessChannels:
 	push xwa
 	xor xwa, xwa
 	ld xwa, 2:i3
-	ld (6701:16), xwa
+	ld (FILEIO_BLOCK_BYTES:16), xwa
 	pop xwa
 	call SMF_ClearOutputQueue
 	xor hl, hl
@@ -908,7 +908,7 @@ SMF_CheckAndFlush:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_WriteByte_Impl
-	ld (6701:16), xhl
+	ld (FILEIO_BLOCK_BYTES:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -1423,7 +1423,7 @@ SMF_FileWrite:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_WriteByte_Impl
-	ld (6701:16), xhl
+	ld (FILEIO_BLOCK_BYTES:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa
@@ -1436,7 +1436,7 @@ SMF_FileWriteAndClear:
 	ld xwa, 0x13fa
 	ld xbc, 0x400
 	call FileIO_WriteByte_Impl
-	ld (6701:16), xhl
+	ld (FILEIO_BLOCK_BYTES:16), xhl
 	pop xhl
 	pop xbc
 	pop xwa

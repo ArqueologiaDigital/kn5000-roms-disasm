@@ -28,7 +28,7 @@ SeqPlay_ResetAndStop:
 	ld (0x00ffec:24), wa
 	ldw (0xf19c:16), 0
 	push xhl
-	ld xhl, (6701:16)
+	ld xhl, (FILEIO_BLOCK_BYTES:16)
 	ld (6699:16), hl
 	pop xhl
 	jrl SeqPlay_ReadyStateTransition
@@ -369,7 +369,7 @@ FloppyIO_ReadTrackBuf_ReadLoop:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadTrackBuf_EarlyExit
 	pop xbc
@@ -624,7 +624,7 @@ SMF_ParseTrackEvent:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_EarlyExit
 	pop xbc
@@ -652,7 +652,7 @@ SMF_ParseTrack_Dispatch:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_ValidateExit
 	pop xbc
@@ -673,7 +673,7 @@ SMF_ParseTrack_MetaEvt02:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta02_EarlyExit
 	pop xbc
@@ -694,7 +694,7 @@ SMF_ParseTrack_MetaEvt03:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta03_EarlyExit
 	pop xbc
@@ -715,7 +715,7 @@ SMF_ParseTrack_MetaEvt2F:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta2F_EarlyExit
 	pop xbc
@@ -736,7 +736,7 @@ SMF_ParseTrack_MetaEvt51:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta51_Read1_EarlyExit
 	pop xbc
@@ -753,7 +753,7 @@ SMF_ParseTrack_Meta51_ReadByte2:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta51_Read2_EarlyExit
 	pop xbc
@@ -774,7 +774,7 @@ SMF_ParseTrack_MetaEvt58:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta58_EarlyExit
 	pop xbc
@@ -860,7 +860,7 @@ SMF_ReadMidiEvt_ReadLoop:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ReadMidiEvt_ReadFailed
 	pop xbc
@@ -927,7 +927,7 @@ FloppyIO_ReadMidiEvtBytes_CheckDone:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadMidiEvtBytes_ReadFailed
 	pop xbc
@@ -1101,7 +1101,7 @@ SMF_MTrk_ReadByteLoop:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_MTrk_ReadFailed
 	pop xbc
@@ -1136,7 +1136,7 @@ SMF_MTrk_SignatureMatch:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_MTrk_FileSizeReadFailed
 	pop xbc
@@ -1158,7 +1158,7 @@ SMF_ProcessVoiceData:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_CheckFailed
 	pop xbc
@@ -1176,7 +1176,7 @@ SMF_VoiceData_ReadTrackBuffer:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_ReadTrackFailed
 	pop xbc
@@ -1199,7 +1199,7 @@ SMF_VoiceData_DispatchAndParse:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_ParseFailed
 	pop xbc
@@ -1219,7 +1219,7 @@ SMF_VoiceData_CheckMetaFlag:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_MetaParseFailed
 	pop xbc
@@ -1268,7 +1268,7 @@ SMF_VoiceData_HandleSysEx:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_SysExFailed
 	pop xbc
@@ -1293,7 +1293,7 @@ SMF_VoiceData_CheckMidiStatus:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_MidiStatusFailed
 	pop xbc
@@ -1315,7 +1315,7 @@ SMF_VoiceData_ReadMidiRunning:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_RunningMidiFailed
 	pop xbc
@@ -1674,7 +1674,7 @@ Sequencer_ValidateFileData:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, Sequencer_Validate_ReadFailed
 	pop xbc
@@ -1745,7 +1745,7 @@ SMF_SetTempoFromMetaEvent:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_SetTempo_ReadByte1Failed
 	pop xbc
@@ -1763,7 +1763,7 @@ SMF_SetTempo_StoreByte1:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_SetTempo_ReadByte2Failed
 	pop xbc
@@ -2105,7 +2105,7 @@ SMF_ReadMidiStatus_ReadLoop:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, SMF_ReadMidiStatus_ReadFailed
 	pop xbc
@@ -2545,7 +2545,7 @@ FloppyIO_ReadVarLen_ReadLoop:
 	push xwa
 	push xbc
 	ld xbc, 0:i3
-	ld xwa, (6701:16)
+	ld xwa, (FILEIO_BLOCK_BYTES:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadVarLen_ReadFailed
 	pop xbc

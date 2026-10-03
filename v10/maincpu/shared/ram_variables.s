@@ -56,3 +56,7 @@
 ; 1 -> ColorBlit_Mode1_Entry, 0 -> the mode-0 path
 	.equ COLORBLIT_MODE,		0x3efa8	; the blit mode the next ColorBlit uses, 0..2 (set by ~150 drawing sites)
 	.equ COLORBLIT_MODE_ACTIVE,	0x3efaa	; the mode ColorBlit_Impl is running with
+; FileIO_ReadBlockToBuffer stores FileIO_ReadBlock's result (it reads 0x400 bytes into 0x13FA) here; the
+; 113 readers do `ld xwa,(this) / cp xwa,xbc / jr lt, ..._FileUnderflow` -- fewer bytes than they need.
+; SMF_WriteByte also stores 2 here (not explained)
+	.equ FILEIO_BLOCK_BYTES,	0x1a2d	; bytes the last block read returned (32-bit)
