@@ -106687,8 +106687,8 @@ sub_F4ED10_Skip:
 	jr	z, sub_F4ED10_Skip2	; F4ED23  jr Z,0xf4ed27
 	jr	sub_F4ED10_Join	; F4ED25  jr T,0xf4ed67
 sub_F4ED10_Skip2:
-	ld	wa, (8328:16)	; F4ED27  ld WA,(0x2088)
-	m_and_rm MW16, 0x2084, 0	; F4ED2B  and WA,(0x2084)
+	ld	wa, (PanelButton_HeldMask:16)	; F4ED27  ld WA,(0x2088)
+	m_and_rm MW16, PanelButton_HeldPairPos, 0	; F4ED2B  and WA,(0x2084)
 	bit	8, wa	; F4ED2F  bit 0x08,WA
 	jr	nz, sub_F4ED10_Skip3	; F4ED32  jr NZ,0xf4ed5d
 	bit	9, wa	; F4ED34  bit 0x09,WA
@@ -106696,12 +106696,12 @@ sub_F4ED10_Skip2:
 	jr	sub_F4ED10_Join	; F4ED39  jr T,0xf4ed67
 sub_F4ED10_Entry:
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F4ED3B  ld QHL3,DE
-	ld	de, (8328:16)	; F4ED3E  ld DE,(0x2088)
+	ld	de, (PanelButton_HeldMask:16)	; F4ED3E  ld DE,(0x2088)
 	and	de, 1024	; F4ED42  and DE,0x0400
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4ED46  ld DE,QHL3
 	jr	nz, sub_F4ED10_Skip3	; F4ED49  jr NZ,0xf4ed5d
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F4ED4B  ld QHL3,DE
-	ld	de, (8328:16)	; F4ED4E  ld DE,(0x2088)
+	ld	de, (PanelButton_HeldMask:16)	; F4ED4E  ld DE,(0x2088)
 	and	de, 2048	; F4ED52  and DE,0x0800
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4ED56  ld DE,QHL3
 	jr	nz, sub_F4ED10_Skip3	; F4ED59  jr NZ,0xf4ed5d
@@ -106775,7 +106775,7 @@ sub_F4EDC6:
 	m_cp_mi8 MB16, UI_ScreenId, 0x12	; F4EDC6  cp (0x207c),0x12
 	jr	nz, sub_F4EDC6_Skip	; F4EDCB  jr NZ,0xf4eddd
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F4EDCD  ld QHL3,DE
-	ld	de, (8328:16)	; F4EDD0  ld DE,(0x2088)
+	ld	de, (PanelButton_HeldMask:16)	; F4EDD0  ld DE,(0x2088)
 	and	de, 512	; F4EDD4  and DE,0x0200
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4EDD8  ld DE,QHL3
 	jr	z, sub_F4EDC6_Skip	; F4EDDB  jr Z,0xf4eddd
@@ -106976,12 +106976,12 @@ sub_F4EEE6_Return:
 ; --------------------------------------------------------------------------
 sub_F4EEF3:		; <- T_F40D18
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F4EEF3  ld QHL3,DE
-	ld	de, (8328:16)	; F4EEF6  ld DE,(0x2088)
+	ld	de, (PanelButton_HeldMask:16)	; F4EEF6  ld DE,(0x2088)
 	and	de, 512	; F4EEFA  and DE,0x0200
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4EEFE  ld DE,QHL3
 	jr	z, sub_F4EEF3_Return	; F4EF01  jr Z,0xf4ef13
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F4EF03  ld QHL3,DE
-	ld	de, (8324:16)	; F4EF06  ld DE,(0x2084)
+	ld	de, (PanelButton_HeldPairPos:16)	; F4EF06  ld DE,(0x2084)
 	and	de, 512	; F4EF0A  and DE,0x0200
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4EF0E  ld DE,QHL3
 	jr	nz, sub_F4EEF3_Return	; F4EF11  jr NZ,0xf4ef13
@@ -116965,7 +116965,7 @@ sub_F56129_Join8:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F561F2:
 	push	xbc	; F561F2  push XBC
-	ld	xbc, (8328:16)	; F561F3  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F561F3  ld XBC,(0x2088)
 	and	xbc, 1	; F561F7  and XBC,0x00000001
 	cp	xbc, 0	; F561FD  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue	; F56203  jr NZ,0xf5621a
@@ -117000,7 +117000,7 @@ sub_F56129_Epilogue:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F5621C:
 	push	xbc	; F5621C  push XBC
-	ld	xbc, (8328:16)	; F5621D  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F5621D  ld XBC,(0x2088)
 	and	xbc, 2	; F56221  and XBC,0x00000002
 	cp	xbc, 0	; F56227  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue2	; F5622D  jr NZ,0xf56244
@@ -117035,7 +117035,7 @@ sub_F56129_Epilogue2:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F56246:
 	push	xbc	; F56246  push XBC
-	ld	xbc, (8328:16)	; F56247  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F56247  ld XBC,(0x2088)
 	and	xbc, 4	; F5624B  and XBC,0x00000004
 	cp	xbc, 0	; F56251  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue3	; F56257  jr NZ,0xf5626e
@@ -117070,7 +117070,7 @@ sub_F56129_Epilogue3:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F56270:
 	push	xbc	; F56270  push XBC
-	ld	xbc, (8328:16)	; F56271  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F56271  ld XBC,(0x2088)
 	and	xbc, 8	; F56275  and XBC,0x00000008
 	cp	xbc, 0	; F5627B  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue4	; F56281  jr NZ,0xf56298
@@ -117105,7 +117105,7 @@ sub_F56129_Epilogue4:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F5629A:
 	push	xbc	; F5629A  push XBC
-	ld	xbc, (8328:16)	; F5629B  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F5629B  ld XBC,(0x2088)
 	and	xbc, 16	; F5629F  and XBC,0x00000010
 	cp	xbc, 0	; F562A5  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue5	; F562AB  jr NZ,0xf562c2
@@ -117140,7 +117140,7 @@ sub_F56129_Epilogue5:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F562C4:
 	push	xbc	; F562C4  push XBC
-	ld	xbc, (8328:16)	; F562C5  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F562C5  ld XBC,(0x2088)
 	and	xbc, 32	; F562C9  and XBC,0x00000020
 	cp	xbc, 0	; F562CF  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue6	; F562D5  jr NZ,0xf562ec
@@ -117175,7 +117175,7 @@ sub_F56129_Epilogue6:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F562EE:
 	push	xbc	; F562EE  push XBC
-	ld	xbc, (8328:16)	; F562EF  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F562EF  ld XBC,(0x2088)
 	and	xbc, 64	; F562F3  and XBC,0x00000040
 	cp	xbc, 0	; F562F9  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue7	; F562FF  jr NZ,0xf56316
@@ -117210,7 +117210,7 @@ sub_F56129_Epilogue7:
 ; --------------------------------------------------------------------------
 Write3602_IfBit2088_F56318:
 	push	xbc	; F56318  push XBC
-	ld	xbc, (8328:16)	; F56319  ld XBC,(0x2088)
+	ld	xbc, (PanelButton_HeldMask:16)	; F56319  ld XBC,(0x2088)
 	and	xbc, 128	; F5631D  and XBC,0x00000080
 	cp	xbc, 0	; F56323  cp XBC,0x00000000
 	jr	nz, sub_F56129_Epilogue8	; F56329  jr NZ,0xf56340
@@ -153043,7 +153043,7 @@ sub_F6AF57_Skip2:
 	add	c, 5	; F6AF9C  add C,0x05
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F6AF9F  ld RL3,A
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F6AFA2  ld QHL3,DE
-	ld	de, (8328:16)	; F6AFA5  ld DE,(0x2088)
+	ld	de, (PanelButton_HeldMask:16)	; F6AFA5  ld DE,(0x2088)
 	ld	a, c	; F6AFA9  ld A,C
 	scf	; F6AFAB  scf
 	m_rd_xorcf_a RW+r2	; F6AFAC  xorcf A,DE

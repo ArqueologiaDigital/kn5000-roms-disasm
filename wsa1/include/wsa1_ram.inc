@@ -348,5 +348,13 @@
 	.equ PanelEvent_Flags,				0x28b0	; flags of the panel event being handled: bit 0 = pair position, bit 1 = in (0x208C), bit 2 = rewritten code, bit 5 = number pad -- PanelCode_ToSlotAndFlags
 	.equ PanelEvent_ButtonCode,			0x28b1	; the 5-bit panel button code of that event -- PanelCode_ToSlotAndFlags
 
+; ---- wsa1/notes/FINDINGS-prom_a-panel-button-state.md -- "1. The held-button state; 2. The hold timer"
+	.equ PanelButton_RepeatTimer,			0x2074	; ticks to the next auto-repeat: 0x10 first, then 3 -- PanelButton_Accept, PanelButton_Dispatch, PanelTimer_ButtonRepeat
+	.equ PanelButton_Current,			0x2082	; the button code to route, | 0x80 = pair position -- PanelButton_DispatchCurrent
+	.equ PanelButton_HeldPairPos,			0x2084	; 32-bit; bit i = button i was pressed in pair position 1 -- PanelButton_Accept, PanelButton_SweepHeld
+	.equ PanelButton_HeldMask,			0x2088	; 32-bit; bit i = button i is down -- PanelButton_Accept, PanelButton_SweepHeld, PanelTimers_Step
+	.equ PanelHold_Index,				0x2096	; 16-bit index into PanelHold_ScreenRequest -- PanelHold_Tick
+	.equ PanelHold_Timer,				0x20a7	; ticks before a held event requests its screen (0x40 / 0x30) -- PanelEvent_Code01/20_ArmHold, PanelHold_Tick
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,				0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

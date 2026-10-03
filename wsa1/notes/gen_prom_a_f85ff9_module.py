@@ -473,7 +473,7 @@ def structure():
       "Body:    bit 3 of (0x2071) AND bit 3 of (0x2075) -> PanelButton_SweepHeld,",
       "         (0x2074) = 3, `or (0x2075),0x04`; otherwise bit 0 of (0x2071) ->",
       "         PanelButton_DispatchCurrent.",
-      "Evidence: (0x2074) is the counter PanelTimer_Button2074 decrements before",
+      "Evidence: (0x2074) is the counter PanelTimer_ButtonRepeat decrements before",
       "         setting bit 3 of (0x2071) again, so the bit-3 arm IS the repeat.")
     N(0xF8615C, "PanelButton_SweepHeld",
       "PanelButton_SweepHeld -- route every button whose bit is set in (0x2088)",
@@ -826,7 +826,7 @@ def structure():
       "Called from: thunk slot T_F40F44 (`jp 0x00F86903`), whose one proven call",
       "         site is prom_a 0xF821ED.",
       "Body:    (0x2088) == 0 (no button held) -> PanelTimer_ScreenHold and",
-      "         PanelTimer_Repeat20AB;  otherwise PanelTimer_Button2074.",
+      "         PanelTimer_Repeat20AB;  otherwise PanelTimer_ButtonRepeat.",
       "Evidence: the discriminator is a 32-bit compare of (0x2088) with zero at",
       "         0xF86907, the same bitmap PanelButton_Accept maintains.")
     N(0xF8691B, "sub_F8691B",
@@ -853,8 +853,8 @@ def structure():
       "Evidence: bit 2 of (0x2071) is the bit PanelState_RunRequests hands to",
       "         PanelScreen_ApplyPendingId, and (0x20A2) is exactly the cell that",
       "         routine consumes -- so this is the `auto-return after N ticks`.")
-    N(0xF8696B, "PanelTimer_Button2074",
-      "PanelTimer_Button2074 -- count (0x2074) down and raise repeat bit 3",
+    N(0xF8696B, "PanelTimer_ButtonRepeat",
+      "PanelTimer_ButtonRepeat -- count (0x2074) down and raise repeat bit 3",
       "",
       "Called from: PanelTimers_Step 0xF86917 (`calr`), and nothing else.",
       "Evidence: (0x2074) is loaded with 3 by PanelButton_Dispatch at 0xF86147",

@@ -400,6 +400,14 @@ GROUPS = [
         0x28B0: ("PanelEvent_Flags", "flags of the panel event being handled: bit 0 = pair position, bit 1 = in (0x208C), bit 2 = rewritten code, bit 5 = number pad", "PanelCode_ToSlotAndFlags"),
         0x28B1: ("PanelEvent_ButtonCode", "the 5-bit panel button code of that event", "PanelCode_ToSlotAndFlags"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-panel-button-state.md", "1. The held-button state; 2. The hold timer", {
+        0x2088: ("PanelButton_HeldMask", "32-bit; bit i = button i is down", "PanelButton_Accept, PanelButton_SweepHeld, PanelTimers_Step"),
+        0x2084: ("PanelButton_HeldPairPos", "32-bit; bit i = button i was pressed in pair position 1", "PanelButton_Accept, PanelButton_SweepHeld"),
+        0x2082: ("PanelButton_Current", "the button code to route, | 0x80 = pair position", "PanelButton_DispatchCurrent"),
+        0x2074: ("PanelButton_RepeatTimer", "ticks to the next auto-repeat: 0x10 first, then 3", "PanelButton_Accept, PanelButton_Dispatch, PanelTimer_ButtonRepeat"),
+        0x20A7: ("PanelHold_Timer", "ticks before a held event requests its screen (0x40 / 0x30)", "PanelEvent_Code01/20_ArmHold, PanelHold_Tick"),
+        0x2096: ("PanelHold_Index", "16-bit index into PanelHold_ScreenRequest", "PanelHold_Tick"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),

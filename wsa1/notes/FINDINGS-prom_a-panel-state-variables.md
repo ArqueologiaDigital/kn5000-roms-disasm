@@ -19,7 +19,8 @@ ld A,(0x207C) / ld (0x207D),A      ; screen id (UI_ScreenId)
 | 0x207B | `UI_ScreenLatch_Previous` | `UI_ScreenLatch` at the previous pass; the screens' Enter / Leave bodies compare the two (`ld c,(0x207a) / cp (0x207b),c`) to tell a fresh entry from a redraw | PanelState_LatchPrevious; e.g. ScreenLeave_SoundCopy |
 | 0x207D | `UI_ScreenId_Previous` | `UI_ScreenId` at the previous pass | PanelState_LatchPrevious |
 
-What `(0x2077)` = 0xFF and bit 0 of `(0x2092)` mean is not established.
+`(0x2077)` = 0xFF and bit 0 of `(0x2092)` are answered in FINDINGS-prom_a-panel-mode-group-and-screen-hold.md:
+`PanelModeGroup_Previous` after init (the first latch is skipped) and `UI_ScreenHoldState` "the hold timer runs".
 
 ## 2. The dial's button pair
 

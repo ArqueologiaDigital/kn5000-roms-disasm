@@ -11069,7 +11069,7 @@ PanelButton_RunPending:   ; entry: calr from 0xF8608C
 ; Body:    bit 3 of (0x2071) AND bit 3 of (0x2075) -> PanelButton_SweepHeld,
 ;          (0x2074) = 3, `or (0x2075),0x04`; otherwise bit 0 of (0x2071) ->
 ;          PanelButton_DispatchCurrent.
-; Evidence: (0x2074) is the counter PanelTimer_Button2074 decrements before
+; Evidence: (0x2074) is the counter PanelTimer_ButtonRepeat decrements before
 ;          setting bit 3 of (0x2071) again, so the bit-3 arm IS the repeat.
 ; ---------------------------------------------------------------------
 .LF86132:
@@ -11081,7 +11081,7 @@ PanelButton_Dispatch:   ; entry: calr from 0xF86129
 	bit 0x03,W                                    ; F8613F  c8 33 03
 	jr z, .LF86153                                ; F86142  66 0f
 	calr .LF8615C                                 ; F86144  1e 15 00
-	ld (0x2074:16), 0x03                          ; F86147  f1 74 20 00 03   ld (0x2074),0x03
+	ld (PanelButton_RepeatTimer:16), 0x03                          ; F86147  f1 74 20 00 03   ld (0x2074),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x04                   ; F8614C  c1 75 20 3e 04   or (0x2075),0x04
 	jr .LF8615B                                   ; F86151  68 08
 .LF86153:
@@ -11106,13 +11106,13 @@ PanelButton_Dispatch:   ; entry: calr from 0xF86129
 ; ---------------------------------------------------------------------
 .LF8615C:
 PanelButton_SweepHeld:   ; entry: calr from 0xF86144
-	ld xwa, (0x2088:16)                          ; F8615C  e1 88 20 20   ld XWA,(0x2088)
+	ld xwa, (PanelButton_HeldMask:16)                          ; F8615C  e1 88 20 20   ld XWA,(0x2088)
 	cp XWA,0x00000000                             ; F86160  e8 cf 00 00 00 00
 	jr z, .LF861A3                                ; F86166  66 3b
 	xor BC,BC                                     ; F86168  d9 d1
 .LF8616A:
-	ld xwa, (0x2088:16)                          ; F8616A  e1 88 20 20   ld XWA,(0x2088)
-	ld xde, (0x2084:16)                          ; F8616E  e1 84 20 22   ld XDE,(0x2084)
+	ld xwa, (PanelButton_HeldMask:16)                          ; F8616A  e1 88 20 20   ld XWA,(0x2088)
+	ld xde, (PanelButton_HeldPairPos:16)                          ; F8616E  e1 84 20 22   ld XDE,(0x2084)
 	ld XHL,PanelButton_BitMask32                  ; F86172  43 1a 67 f8 00
 	pushw bc                                      ; F86177  29   push BC
 	sll bc, 0x02                                  ; F86178  d9 ee 02   sll 0x02,BC
@@ -11127,7 +11127,7 @@ PanelButton_SweepHeld:   ; entry: calr from 0xF86144
 	or B,0x80                                     ; F8618A  ca ce 80
 .LF8618D:
 	or B,C                                        ; F8618D  cb e2
-	ld (0x2082:16), b                            ; F8618F  f1 82 20 42   ld (0x2082),B
+	ld (PanelButton_Current:16), b                            ; F8618F  f1 82 20 42   ld (0x2082),B
 	xor B,B                                       ; F86193  ca d2
 	pushw bc                                      ; F86195  29   push BC
 	calr .LF861A4                                 ; F86196  1e 0b 00
@@ -11151,7 +11151,7 @@ PanelButton_SweepHeld:   ; entry: calr from 0xF86144
 ; ---------------------------------------------------------------------
 .LF861A4:
 PanelButton_DispatchCurrent:   ; entry: calr from 0xF86158, 0xF86196
-	ld w, (0x2082:16)                            ; F861A4  c1 82 20 20   ld W,(0x2082)
+	ld w, (PanelButton_Current:16)                            ; F861A4  c1 82 20 20   ld W,(0x2082)
 	calr .LF861AC                                 ; F861A8  1e 01 00
 	ret                                           ; F861AB  0e
 
@@ -11578,7 +11578,7 @@ PanelState_ClearOnChange:   ; entry: calr from 0xF8607B
 	cp A,W                                        ; F8641B  c8 f1
 	jr z, .LF8643E                                ; F8641D  66 1f
 	xor WA,WA                                     ; F8641F  d8 d0
-	ld (0x2088:16), wa                           ; F86421  f1 88 20 50   ld (0x2088),WA
+	ld (PanelButton_HeldMask:16), wa                           ; F86421  f1 88 20 50   ld (0x2088),WA
 	ld (0x208c:16), wa                           ; F86425  f1 8c 20 50   ld (0x208c),WA
 	m_and_mi8 MB16, UI_RequestBits, 0x04                  ; F86429  c1 75 20 3c 04   and (0x2075),0x04
 	m_and_mi8 MB16, UI_ScreenFlags, 0xef                  ; F8642E  c1 95 20 3c ef   and (0x2095),0xef
@@ -11590,7 +11590,7 @@ PanelState_ClearOnChange:   ; entry: calr from 0xF8607B
 	cp A,W                                        ; F86446  c8 f1
 	jr z, .LF86462                                ; F86448  66 18
 	xor WA,WA                                     ; F8644A  d8 d0
-	ld (0x2088:16), wa                           ; F8644C  f1 88 20 50   ld (0x2088),WA
+	ld (PanelButton_HeldMask:16), wa                           ; F8644C  f1 88 20 50   ld (0x2088),WA
 	ld (0x208c:16), wa                           ; F86450  f1 8c 20 50   ld (0x208c),WA
 	ld (UI_ScreenStage:16), a                            ; F86454  f1 7e 20 41   ld (0x207e),A
 	m_and_mi8 MB16, UI_RequestBits, 0x04                  ; F86458  c1 75 20 3c 04   and (0x2075),0x04
@@ -11602,7 +11602,7 @@ PanelState_ClearOnChange:   ; entry: calr from 0xF8607B
 	jr z, .LF86487                                ; F8646C  66 19
 	m_and_mi8 MB16, UI_RequestBits, 0x94                  ; F8646E  c1 75 20 3c 94   and (0x2075),0x94
 	ld XWA,0xf7ffffff                             ; F86473  40 ff ff ff f7
-	and	(0x2088:16), xwa                     ; F86478  e1 88 20 c8
+	and	(PanelButton_HeldMask:16), xwa                     ; F86478  e1 88 20 c8
 	m_and_mi8 MB16, UI_ScreenFlags, 0xef                  ; F8647C  c1 95 20 3c ef   and (0x2095),0xef
 	xor WA,WA                                     ; F86481  d8 d0
 	ld (0x20ab:16), a                            ; F86483  f1 ab 20 41   ld (0x20ab),A
@@ -11668,7 +11668,7 @@ PanelScreen_CallLeave_B:   ; entry: calr from 0xF86499, 0xF864B4
 	call (xwa)                                    ; F864D9  b0 e8   call T,XWA
 .LF864DB:
 	ld XWA,0x00000000                             ; F864DB  40 00 00 00 00
-	ld (0x2088:16), xwa                          ; F864E0  f1 88 20 60   ld (0x2088),XWA
+	ld (PanelButton_HeldMask:16), xwa                          ; F864E0  f1 88 20 60   ld (0x2088),XWA
 	ret                                           ; F864E4  0e
 
 ; ---------------------------------------------------------------------
@@ -11983,13 +11983,13 @@ PanelButton_Accept:   ; entry: calr from 0xF865A4
 	and E,D                                       ; F8666A  cc c5
 	jr nz, .LF86695                               ; F8666C  6e 27
 	xor XWA,0xffffffff                            ; F8666E  e8 cd ff ff ff ff
-	and	(0x2088:16), xwa                     ; F86674  e1 88 20 c8
+	and	(PanelButton_HeldMask:16), xwa                     ; F86674  e1 88 20 c8
 	and	(0x208c:16), xwa                     ; F86678  e1 8c 20 c8
-	ld xwa, (0x2088:16)                          ; F8667C  e1 88 20 20   ld XWA,(0x2088)
+	ld xwa, (PanelButton_HeldMask:16)                          ; F8667C  e1 88 20 20   ld XWA,(0x2088)
 	cp XWA,0x00000000                             ; F86680  e8 cf 00 00 00 00
 	jr nz, .LF866F8                               ; F86686  6e 70
 	xor A,A                                       ; F86688  c9 d1
-	ld (0x2074:16), a                            ; F8668A  f1 74 20 41   ld (0x2074),A
+	ld (PanelButton_RepeatTimer:16), a                            ; F8668A  f1 74 20 41   ld (0x2074),A
 	m_and_mi8 MB16, UI_RequestBits, 0xf3                  ; F8668E  c1 75 20 3c f3   and (0x2075),0xf3
 	jr .LF866F8                                   ; F86693  68 63
 .LF86695:
@@ -12008,22 +12008,22 @@ PanelButton_Accept:   ; entry: calr from 0xF865A4
 	jr .LF86719                                   ; F866B0  68 67
 .LF866B2:
 	pop XWA                                       ; F866B2  58
-	or	(0x2088:16), xwa                     ; F866B3  e1 88 20 e8
+	or	(PanelButton_HeldMask:16), xwa                     ; F866B3  e1 88 20 e8
 	ld b, (UiEvent_Byte2:16)                            ; F866B7  c1 b9 20 22   ld B,(0x20b9)
 	cp b, 0x03:i3                                   ; F866BB  ca db   cp B,3
 	jr nz, .LF866C3                               ; F866BD  6e 04
 	or	(0x208c:16), xwa                     ; F866BF  e1 8c 20 e8
 .LF866C3:
-	or	(0x2084:16), xwa                     ; F866C3  e1 84 20 e8
+	or	(PanelButton_HeldPairPos:16), xwa                     ; F866C3  e1 84 20 e8
 	m_bit 0, MD16, UiEvent_Byte2                         ; F866C7  f1 b9 20 c8   bit 0,(0x20b9)
 	jr nz, .LF866D7                               ; F866CB  6e 0a
 	xor XWA,0xffffffff                            ; F866CD  e8 cd ff ff ff ff
-	and	(0x2084:16), xwa                     ; F866D3  e1 84 20 c8
+	and	(PanelButton_HeldPairPos:16), xwa                     ; F866D3  e1 84 20 c8
 .LF866D7:
 	ld a, (UI_RequestBits:16)                            ; F866D7  c1 75 20 21   ld A,(0x2075)
 	bit 0x02,A                                    ; F866DB  c9 33 02
 	jr nz, .LF866EA                               ; F866DE  6e 0a
-	ld (0x2074:16), 0x10                          ; F866E0  f1 74 20 00 10   ld (0x2074),0x10
+	ld (PanelButton_RepeatTimer:16), 0x10                          ; F866E0  f1 74 20 00 10   ld (0x2074),0x10
 	m_and_mi8 MB16, UI_RequestBits, 0xf3                  ; F866E5  c1 75 20 3c f3   and (0x2075),0xf3
 .LF866EA:
 	ld a, (UI_ScreenHoldTimer:16)                            ; F866EA  c1 73 20 21   ld A,(0x2073)
@@ -12041,7 +12041,7 @@ PanelButton_Accept:   ; entry: calr from 0xF865A4
 	jr z, .LF86710                                ; F8670B  66 03
 	or A,0x80                                     ; F8670D  c9 ce 80
 .LF86710:
-	ld (0x2082:16), a                            ; F86710  f1 82 20 41   ld (0x2082),A
+	ld (PanelButton_Current:16), a                            ; F86710  f1 82 20 41   ld (0x2082),A
 	m_or_mi8 MB16, UI_Request_Hi, 0x01                   ; F86714  c1 71 20 3e 01   or (0x2071),0x01
 .LF86719:
 	ret                                           ; F86719  0e
@@ -12369,12 +12369,12 @@ PanelDial_StepSizes:
 ; Called from: thunk slot T_PanelTimers_Step (T_F40F44) (`jp 0x00F86903`), whose one proven call
 ;          site is prom_a 0xF821ED.
 ; Body:    (0x2088) == 0 (no button held) -> PanelTimer_ScreenHold and
-;          PanelTimer_Repeat20AB;  otherwise PanelTimer_Button2074.
+;          PanelTimer_Repeat20AB;  otherwise PanelTimer_ButtonRepeat.
 ; Evidence: the discriminator is a 32-bit compare of (0x2088) with zero at
 ;          0xF86907, the same bitmap PanelButton_Accept maintains.
 ; ---------------------------------------------------------------------
 PanelTimers_Step:   ; entry: prom_b directory slot T_PanelTimers_Step (T_F40F44)
-	ld xwa, (0x2088:16)                          ; F86903  e1 88 20 20   ld XWA,(0x2088)
+	ld xwa, (PanelButton_HeldMask:16)                          ; F86903  e1 88 20 20   ld XWA,(0x2088)
 	cp XWA,0x00000000                             ; F86907  e8 cf 00 00 00 00
 	jr nz, .LF86917                               ; F8690D  6e 08
 	calr .LF86933                                 ; F8690F  1e 21 00
@@ -12450,7 +12450,7 @@ PanelTimer_ScreenHold:   ; entry: calr from 0xF8690F
 	ret                                           ; F8696A  0e
 
 ; ---------------------------------------------------------------------
-; PanelTimer_Button2074 -- count (0x2074) down and raise repeat bit 3
+; PanelTimer_ButtonRepeat -- count (0x2074) down and raise repeat bit 3
 ;
 ; Called from: PanelTimers_Step 0xF86917 (`calr`), and nothing else.
 ; Evidence: (0x2074) is loaded with 3 by PanelButton_Dispatch at 0xF86147
@@ -12459,10 +12459,10 @@ PanelTimer_ScreenHold:   ; entry: calr from 0xF8690F
 ;          to the first repeat and 3 between repeats.
 ; ---------------------------------------------------------------------
 .LF8696B:
-PanelTimer_Button2074:   ; entry: calr from 0xF86917
-	m_cp_mi8 MB16, 0x2074, 0x00                   ; F8696B  c1 74 20 3f 00   cp (0x2074),0x00
+PanelTimer_ButtonRepeat:   ; entry: calr from 0xF86917
+	m_cp_mi8 MB16, PanelButton_RepeatTimer, 0x00                   ; F8696B  c1 74 20 3f 00   cp (0x2074),0x00
 	jr z, .LF8697D                                ; F86970  66 0b
-	dec 0x01, (0x2074:16)                         ; F86972  c1 74 20 69   dec 1,(0x2074)
+	dec 0x01, (PanelButton_RepeatTimer:16)                         ; F86972  c1 74 20 69   dec 1,(0x2074)
 	jr nz, .LF8697D                               ; F86976  6e 05
 	m_or_mi8 MB16, UI_Request_Hi, 0x08                   ; F86978  c1 71 20 3e 08   or (0x2071),0x08
 .LF8697D:
@@ -12907,12 +12907,12 @@ PanelEvent_Code01_ArmHold:   ; entry: prom_b directory slot T_PanelEvent_Code01_
 	jr z, .LF86BEB                                ; F86BD5  66 14
 	m_bit 1, MD24, 0x60f020                       ; F86BD7  f2 20 f0 60 c9   bit 1,(0x60f020)
 	jr nz, .LF86BF3                               ; F86BDC  6e 15
-	ldw (0x2096:16), 0x02                         ; F86BDE  f1 96 20 02 02 00   ld (0x2096),0x0002
-	ld (0x20a7:16), 0x40                          ; F86BE4  f1 a7 20 00 40   ld (0x20a7),0x40
+	ldw (PanelHold_Index:16), 0x02                         ; F86BDE  f1 96 20 02 02 00   ld (0x2096),0x0002
+	ld (PanelHold_Timer:16), 0x40                          ; F86BE4  f1 a7 20 00 40   ld (0x20a7),0x40
 	jr .LF86BF3                                   ; F86BE9  68 08
 .LF86BEB:
 	xor A,A                                       ; F86BEB  c9 d1
-	ld (0x20a7:16), a                            ; F86BED  f1 a7 20 41   ld (0x20a7),A
+	ld (PanelHold_Timer:16), a                            ; F86BED  f1 a7 20 41   ld (0x20a7),A
 	jr .LF86BF3                                   ; F86BF1  68 00
 .LF86BF3:
 	ret                                           ; F86BF3  0e
@@ -12980,8 +12980,8 @@ PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_PanelEvent_Code20_
 	jr z, .LF86C58                                ; F86C2B  66 2b
 	m_bit 1, MD24, 0x60f020                       ; F86C2D  f2 20 f0 60 c9   bit 1,(0x60f020)
 	jr nz, .LF86C58                               ; F86C32  6e 24
-	ldw (0x2096:16), 0x07                         ; F86C34  f1 96 20 02 07 00   ld (0x2096),0x0007
-	ld (0x20a7:16), 0x30                          ; F86C3A  f1 a7 20 00 30   ld (0x20a7),0x30
+	ldw (PanelHold_Index:16), 0x07                         ; F86C34  f1 96 20 02 07 00   ld (0x2096),0x0007
+	ld (PanelHold_Timer:16), 0x30                          ; F86C3A  f1 a7 20 00 30   ld (0x20a7),0x30
 	jr .LF86C58                                   ; F86C3F  68 17
 .LF86C41:
 	cp l, 0x05:i3                                   ; F86C41  cf dd   cp L,5
@@ -12990,8 +12990,8 @@ PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_PanelEvent_Code20_
 	jr z, .LF86C58                                ; F86C4A  66 0c
 .LF86C4C:
 	xor A,A                                       ; F86C4C  c9 d1
-	ldw (0x2096:16), 0x00                         ; F86C4E  f1 96 20 02 00 00   ld (0x2096),0x0000
-	ld (0x20a7:16), a                            ; F86C54  f1 a7 20 41   ld (0x20a7),A
+	ldw (PanelHold_Index:16), 0x00                         ; F86C4E  f1 96 20 02 00 00   ld (0x2096),0x0000
+	ld (PanelHold_Timer:16), a                            ; F86C54  f1 a7 20 41   ld (0x20a7),A
 .LF86C58:
 	ret                                           ; F86C58  0e
 
@@ -13038,13 +13038,13 @@ PanelEvent_NoOp_T40F94:   ; entry: prom_b directory slot T_PanelEvent_NoOp_T40F9
 ;          16-bit index doubled, i.e. a table of WORDS.
 ; ---------------------------------------------------------------------
 PanelHold_Tick:   ; entry: prom_b directory slot T_PanelHold_Tick (T_F40F74)
-	ld a, (0x20a7:16)                            ; F86C5C  c1 a7 20 21   ld A,(0x20a7)
+	ld a, (PanelHold_Timer:16)                            ; F86C5C  c1 a7 20 21   ld A,(0x20a7)
 	cp a, 0x00:i3                                   ; F86C60  c9 d8   cp A,0
 	jr z, .LF86C8B                                ; F86C62  66 27
 	dec 1,A                                       ; F86C64  c9 69
-	ld (0x20a7:16), a                            ; F86C66  f1 a7 20 41   ld (0x20a7),A
+	ld (PanelHold_Timer:16), a                            ; F86C66  f1 a7 20 41   ld (0x20a7),A
 	jr nz, .LF86C8B                               ; F86C6A  6e 1f
-	ld wa, (0x2096:16)                          ; F86C6C  d1 96 20 20   ld WA,(0x2096)
+	ld wa, (PanelHold_Index:16)                          ; F86C6C  d1 96 20 20   ld WA,(0x2096)
 	sla wa, 0x01                                  ; F86C70  d8 ec 01   sla 0x01,WA
 	ld XHL,PanelHold_ScreenRequest                ; F86C73  43 8c 6c f8 00
 	mx_ld_rm MXW, ra_HL, ra_WA, r0                ; F86C78  d3 07 ec e0 20   ld WA,(XHL+WA)
@@ -184085,9 +184085,9 @@ Paint_DiskL0adFile:
 	lda xix, (sub_FF75D3:24)                             ; FF4787  f2 d3 75 ff 34
 	ld (0x21fa:16), 0x00                                 ; FF478C  f1 fa 21 00 00
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF4791  1d 80 2e f4
-	m_cp_mi16 MW16, 0x2096, 0x0007                       ; FF4795  d1 96 20 3f 07 00
+	m_cp_mi16 MW16, PanelHold_Index, 0x0007                       ; FF4795  d1 96 20 3f 07 00
 	jr nz, .LFF47B3                                      ; FF479B  6e 16
-	ldw (0x2096:16), 0x00                                ; FF479D  f1 96 20 02 00 00
+	ldw (PanelHold_Index:16), 0x00                                ; FF479D  f1 96 20 02 00 00
 	inc 0x01, (0x2724:16)                                ; FF47A3  c1 24 27 61
 	m_cp_mi8 MB16, 0x2724, 0x13                          ; FF47A7  c1 24 27 3f 13
 	jr ule, .LFF47B3                                     ; FF47AC  63 05
@@ -191346,7 +191346,7 @@ sub_FF7959:
 	push XDE                                             ; FF795C  3a
 	call T_F40F1C                                        ; FF795D  1d 1c 0f f4
 	sub XBC,XBC                                          ; FF7961  e9 a1
-	ld (0x2088:16), xbc                                 ; FF7963  f1 88 20 61
+	ld (PanelButton_HeldMask:16), xbc                                 ; FF7963  f1 88 20 61
 	pop XDE                                              ; FF7967  5a
 	pop XHL                                              ; FF7968  5b
 	pop XIX                                              ; FF7969  5c
