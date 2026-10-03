@@ -11,7 +11,7 @@ QUESTION THIS ANSWERS
     before the run and classifies it:
       * "after HW register/port write" -- one of them writes/accesses the tone-generator latch
         (0x100000/0x100002, spelled hex or decimal), the 0x110000 keybed/TG status window, the
-        0x130000 DSP window, or toggles a port bit (`set_dd8` / `res_dd8`, or SFR 0x34 / 0x3C);
+        0x130000 DSP window, or toggles a port bit (`set_dd8` / `res_dd8`, natively any `(X:8)` operand, or SFR 0x34 / 0x3C);
       * "after jr-to-next delay" -- the instruction before is a `jr` to the next instruction;
       * "other".
     A marker count dominated by the first class means the nops are settling delays between
@@ -26,7 +26,11 @@ import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 FILES = ["v142/subcpu/kn5000_subprogram_v142.s", "subcpu/boot/kn5000_subcpu_boot.s"]
-HW = re.compile(r"\(0x1[013]000[02]|\(1048576|\(1048578|\(1114112|\(1114114|_dd8|0x130|\(0x3c|\(0x34", re.I)
+# `_dd8` is the pseudo spelling of an 8-bit-direct (SFR) access; respell_raw_pseudos.py and
+# respell_symbolic_dd8.py (2026-10-03) write it natively as `set 0, (PH:8)`, so any direct-page
+# operand `(X:8)` counts too (a `(xsp+0:8)` displacement has a `+` and does not match)
+HW = re.compile(r"\(0x1[013]000[02]|\(1048576|\(1048578|\(1114112|\(1114114|_dd8|0x130|\(0x3c|\(0x34"
+                r"|\((?:[a-z_]\w*|0x[0-9a-f]+|\d+):8\)", re.I)
 
 
 def main():

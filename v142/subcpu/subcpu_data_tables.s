@@ -12883,8 +12883,8 @@ INTRX1_HANDLER:	; 1F736
 	push xde
 	push xbc
 	push xwa
-	ld_sd8b C, SC1BUF
-	ld_sd8b A, SC1CR
+	ld	c, (SC1BUF:8)
+	ld	a, (SC1CR:8)
 	and a, 0x1C	; 0001 1100
 	jr z, Serial1_RX_NoError
 
@@ -12933,7 +12933,7 @@ Serial1_TX_Normal:	; 01F77Bh
 	calr READ_BYTE_FROM_RING_BUFFER
 	cp hl, 0xFFFF	; Buffer empty?
 	jr z, Serial1_TX_CheckEmpty
-	st_dd8b L, SC1BUF	; Send byte
+	ld	(SC1BUF:8), l	; Send byte
 
 Serial1_TX_CheckEmpty:	; 01F78Ch
 	bit 0, (SERIAL_1_VAR_1034:16)
