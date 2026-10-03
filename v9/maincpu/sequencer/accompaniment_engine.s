@@ -11677,7 +11677,7 @@ AccDemo_LoadVariation_EntryLoop:
 	add xiy, xde
 	ldw bc, 0x10
 	ldir85
-	ld xiy, Demo_StyleRhythmData_0x57C
+	ld xiy, AccDemo_SectionRecordTail
 	ldw bc, 0x10
 	ldir85
 	add a, 0x1
@@ -11781,9 +11781,8 @@ Demo_StyleRhythmData:
 ;                                                    -> 0x94800+0x1400..
 ;   Demo_LoadVariationC_Data     +0x574, 0x100 B x190 -> 0x94800+0xAA00
 ; 0x94800 is also the base AccPatch_InitSlotChain_WithAddr stores to (0x39ae), so
-; this is the style image the AccDemo_* loaders build in that RAM area.  The
-; interior offsets are the Demo_StyleRhythmData_0x* symbols in
-; shared/positional_labels.s.
+; this is the style image the AccDemo_* loaders build in that RAM area.  The one
+; interior offset a reader names by itself, +0x57C, is AccDemo_SectionRecordTail.
 ; 30 section names: AccDemo_LoadVariation's loop bound is `cp a, 0x1e`, and the
 ; order (A/B/C variation 1-4, then intro/fill-in/ending 1-2 per variation) is the
 ; order of the 30 seven-byte section-name cells in AccScreen_UIDataBlock.
@@ -11901,10 +11900,13 @@ Demo_LoadVariationData_Inner_Data:
 	.byte 0x87
 ; +0x574  0x100 B -- Demo_LoadVariationC_Loop copies it 0xBE (190) times to
 ;                 0x94800+0xAA00.  AccDemo_LoadVariation also reads 16 bytes of it
-;                 at +0x57C (Demo_StyleRhythmData_0x57C) into every section record.
+;                 at +0x57C (AccDemo_SectionRecordTail) into every section record.
 Demo_LoadVariationData_Inner_Data_2:
 	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0x87
-	.zero 249
+	.zero 2
+; the 16 bytes AccDemo_LoadVariation copies into every section record (+0x57C of the image; all zero)
+AccDemo_SectionRecordTail:
+	.zero 247
 	.byte 0x87
 
 AccTone_LookupByProgram:

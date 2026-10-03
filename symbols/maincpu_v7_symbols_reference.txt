@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 51,321
-#   semantic names ........... 50,404 (98.2%)
-#   positional names ......... 917
+#   semantic names ........... 50,405 (98.2%)
+#   positional names ......... 916
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -31425,7 +31425,7 @@ AccDemo_LoadFillIn_Data 00F5CEFC
 Demo_LoadVariationData_Data 00F5CF3C
 Demo_LoadVariationData_Inner_Data 00F5D03C
 Demo_LoadVariationData_Inner_Data_2 00F5D13C
-Demo_StyleRhythmData_0x57C 00F5D144
+AccDemo_SectionRecordTail 00F5D144
 AccTone_LookupByProgram 00F5D23C
 AccTone_ReadAndProcess 00F5D274
 AccTone_Process_Under80 00F5D2B2
