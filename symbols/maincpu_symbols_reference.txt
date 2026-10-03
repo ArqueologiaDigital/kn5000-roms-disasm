@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,606
-#   semantic names ........... 50,757 (98.4%)
+#   symbols .................. 51,603
+#   semantic names ........... 50,754 (98.4%)
 #   positional names ......... 849
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -5757,9 +5757,6 @@ Pad_AfterBitmap_Dredt0k 00E3DEF1
 Pad_AfterBitmap_Dredt0k_2 00E3E0F1
 Pad_BeforeBitmap_Dredt0d 00E3E2F2
 Bitmap_Dredt0d 00E3F660
-NakaData_ExternalBase 00E40000
-Pad_AfterNakaData_ExternalBase 00E40002
-Pad_NakaExternal_Block1 00E40005
 Pad_NakaExternal_Block2 00E40031
 Pad_NakaExternal_Block3 00E40046
 Pad_NakaExternal_Block4 00E40081

@@ -3266,7 +3266,7 @@ InitializeEast:
 	pushw	InitializeEast_Str_TT_SPLITSEL@lo16
 	ld	xwa, 236
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, InitializeEast_Data
+	ld	xde, NAKA_VIEW_SplitSetting
 	call	RegisterTitle
 	lda	xsp, (xsp+14)
 	ret

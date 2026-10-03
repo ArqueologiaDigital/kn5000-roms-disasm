@@ -705,7 +705,7 @@ StyleBmp_LAWarmth:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8C48,
 StyleBmp_KnopflerTribute:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8CD0, 0x88
 StyleBmp_KeyGrooves:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D58, 0x88
 StyleBmp_JustTheFlute:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8DE0, 0x62
-InitializeEast_Data:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8E42, 0xC7
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8E42, 0xC7
 NakaStr_SoundPreset176:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F09, 0x25
 SoundName_160:			.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F2E, 0x4F
 SoundName_ToTheBone:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F7D, 0x4
@@ -4328,6 +4328,6 @@ MainChordPre_PtrTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18
 ; [nakarest] word in AcWelcomScreenProc_Data_2 (at 0xe9edcc), which is read by AcWelcomScreenProc
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`); 2 data words in
 ; [nakarest] Naka_KeyScaling_NavTrail (at 0xe8303c, 0xe846c6).
-InitializeSuna_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18E42, 0x8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18E42, 0x8
 ; External label offsets within the binary blob above.
 .include "extensions/extension_data.s"

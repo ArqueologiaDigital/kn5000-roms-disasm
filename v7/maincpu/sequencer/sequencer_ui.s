@@ -215,14 +215,14 @@ InitializeYoko:
 	pushw InitializeYoko_Str_TT_DEMOMENU@lo16
 	ld XWA,0x000000e0
 	ld XBC,NAKA_MAINFUNC_DemoMenuTtlFunc
-	ld XDE,LED_patterns_indicating_firmware_version
+	ld XDE,NAKA_VIEW_DemoMenu
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DEMOSTYLE@hi16
 	pushw InitializeYoko_Str_TT_DEMOSTYLE@lo16
 	ld XWA,0x000000e1
 	ld XBC,NAKA_MAINFUNC_DemoStyleTtlFunc
-	ld XDE,InitializeYoko_Data
+	ld XDE,NAKA_VIEW_DemoStyle
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DEMOSOUND@hi16
@@ -236,7 +236,7 @@ InitializeYoko:
 	pushw InitializeYoko_Str_TT_DEMORHY@lo16
 	ld XWA,0x000000e3
 	ld XBC,NAKA_MAINFUNC_DemoRhyTtlFunc
-	ld XDE,InitializeYoko_PtrTable
+	ld XDE,NAKA_VIEW_DemoRhy
 	call RegisterTitle
 	lda xsp, (xsp + 0x0e)
 	ret

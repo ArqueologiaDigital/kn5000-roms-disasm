@@ -1049,7 +1049,7 @@ Root_FunctionTable_100:	.incbin "includes/generated/naka_widget_names_charmap.bi
 ; [nakarest] InitializeRoot), 352 entry pointers x 4 bytes.
 WidgetName_InitPtrTable:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B82, 0xE
-InitializeMurai_Data_2:			.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B90, 0x7
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B90, 0x7
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B97, 0x1
 ; [nakarest] WidgetName_PtrBlock_A  +0x2b98..+0x2bb0 (0xeb0008, 24 B)
 ; [nakarest] Continues the table itself: Function slot 0x400 (table 0xeafff2, 352 entries,

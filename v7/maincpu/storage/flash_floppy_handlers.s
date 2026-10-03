@@ -6531,7 +6531,7 @@ InitializeSuna:
 	pushw InitializeSuna_Str_TT_APCSEL@lo16
 	ld XWA,0x000000ed
 	ld XBC,NAKA_APFUNC_DefaultFunction
-	ld XDE,InitializeSuna_Data
+	ld XDE,NAKA_VIEW_ApcSelScreen
 	call RegisterTitle
 	lda xsp, (xsp + 0x0e)
 	ret

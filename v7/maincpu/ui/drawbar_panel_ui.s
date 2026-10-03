@@ -4906,21 +4906,21 @@ InitializeMurai:
 	pushw	InitializeMurai_Str_TT_DEMOFEATURE@lo16
 	ld	xwa, 228
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, NakaData_ExternalBase
+	ld	xde, NAKA_VIEW_Demofeature
 	call	RegisterTitle
 	pushw	1
 	pushw	InitializeMurai_Str_TT_DRAWBAR@hi16
 	pushw	InitializeMurai_Str_TT_DRAWBAR@lo16
 	ld	xwa, 234
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, Presentation_RootEntry
+	ld	xde, NAKA_VIEW_Drawbar
 	call	RegisterTitle
 	pushw	1
 	pushw	InitializeMurai_Str_TT_ACCORDION@hi16
 	pushw	InitializeMurai_Str_TT_ACCORDION@lo16
 	ld	xwa, 235
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, InitializeMurai_Data_2
+	ld	xde, NAKA_VIEW_Accordion
 	call	RegisterTitle
 	pushw	1
 	pushw	InitializeMurai_Str_TT_MESAGE@hi16
@@ -4934,7 +4934,7 @@ InitializeMurai:
 	pushw	InitializeMurai_Str_TT_WELCOM@lo16
 	ld	xwa, 239
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, InitializeMurai_Data_3
+	ld	xde, NAKA_VIEW_Welcom
 	call	RegisterTitle
 	pushw	1
 	pushw	InitializeMurai_Str_TT_SOFTVER@hi16

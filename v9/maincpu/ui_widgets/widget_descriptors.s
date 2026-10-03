@@ -3489,9 +3489,9 @@ Pad_BeforeBitmap_Dredt0d:	.incbin "includes/generated/naka_widget_descriptors.bi
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0d:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x9A0
-NakaData_ExternalBase:			.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A0, 0x2
-Pad_AfterNakaData_ExternalBase:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A2, 0x3
-Pad_NakaExternal_Block1:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A5, 0x3
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A0, 0x2
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A2, 0x3
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A5, 0x3
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A8, 0x1
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A9, 0x1
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1AA, 0x27

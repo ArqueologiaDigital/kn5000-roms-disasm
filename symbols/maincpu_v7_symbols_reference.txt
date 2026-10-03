@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,324
-#   semantic names ........... 50,396 (98.2%)
+#   symbols .................. 51,316
+#   semantic names ........... 50,388 (98.2%)
 #   positional names ......... 928
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -1056,7 +1056,6 @@ NakaWidget_ftdemo01_165_Label 00E0FF6C
 NakaWidget_ftdemo01_166_Box 00E0FF90
 NakaWidget_ftdemo01_167_Label 00E0FFAA
 NakaWidget_ftdemo01_168_Label 00E0FFE6
-InitializeYoko_Data 00E10000
 NakaWidget_ftdemo01_169_Label 00E1000C
 NakaWidget_ftdemo01_170_Label 00E10040
 NakaWidget_ftdemo01_171_Label 00E10080
@@ -5749,9 +5748,6 @@ Pad_AfterBitmap_Dredt0k 00E3DEF1
 Pad_AfterBitmap_Dredt0k_2 00E3E0F1
 Pad_BeforeBitmap_Dredt0d 00E3E2F2
 Bitmap_Dredt0d 00E3F660
-NakaData_ExternalBase 00E40000
-Pad_AfterNakaData_ExternalBase 00E40002
-Pad_NakaExternal_Block1 00E40005
 Pad_NakaExternal_Block2 00E40031
 Pad_NakaExternal_Block3 00E40046
 Pad_NakaExternal_Block4 00E40081
@@ -9665,7 +9661,6 @@ Root_ResMethodTable_1E0 00EAEBB2
 Root_ResMethodCount_1E0 00EAFA6C
 Root_FunctionTable_100 00EAFA6E
 WidgetName_InitPtrTable 00EAFFF2
-InitializeMurai_Data_2 00EB0000
 WidgetName_PtrBlock_A 00EB0008
 WidgetName_PtrBlock_B1 00EB0020
 WidgetName_PtrBlock_B2 00EB0021
@@ -10699,7 +10694,6 @@ StyleBmp_LAWarmth 00EBFE06
 StyleBmp_KnopflerTribute 00EBFE8E
 StyleBmp_KeyGrooves 00EBFF16
 StyleBmp_JustTheFlute 00EBFF9E
-InitializeEast_Data 00EC0000
 NakaStr_SoundPreset176 00EC00C7
 SoundName_160 00EC00EC
 SoundName_ToTheBone 00EC013B
@@ -11513,7 +11507,6 @@ NakaInst_D_a0_ECFF5C 00ECFF5C
 MemScreen_NoteC 00ECFF62
 MemScreen_Blank 00ECFF66
 MainChordPre_PtrTable 00ECFF6A
-InitializeSuna_Data 00ED0000
 ExtData_ChordTypeTable_Top 00ED0008
 ChordTypeStr_Blank_0 00ED006A
 ChordTypeStr_Blank_1 00ED0070
@@ -15361,7 +15354,6 @@ Palette_8bit_RGBA_2_Data 00EEFAF0
 WorkRam2_VoiceLinkA_Nodes21 00EEFF4E
 CharEncoding_PrintableHi 00EEFFD6
 NakaData_NormalModeMap 00EEFFF5
-InitializeMurai_Data_3 00EF0000
 WorkRam2_VoiceLinkA_FreeList 00EF000C
 WorkRam2_VoiceLinkA_ListHeads 00EF000E
 CharEncoding_ExtendedLo 00EF001C

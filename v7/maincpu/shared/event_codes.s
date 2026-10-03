@@ -2033,9 +2033,12 @@
 
 ; ---- NAKA VIEW (widget) object ids: 0x00SSnnnn = entry nnnn of Viewable slot SS, named by the ResName
 ; table registered at slot SS + 0x300 (scripts/tools/name_naka_view_ids.py).
+.equ NAKA_VIEW_DemoMenu, 0xe00000	; view "DemoMenu": Viewable slot 0xE0 entry 0
+.equ NAKA_VIEW_DemoStyle, 0xe10000	; view "DemoStyle": Viewable slot 0xE1 entry 0
 .equ NAKA_VIEW_DemoMed1, 0xe1000b	; view "DemoMed1": Viewable slot 0xE1 entry 11
 .equ NAKA_VIEW_DemoSound, 0xe20000	; view "DemoSound": Viewable slot 0xE2 entry 0
 .equ NAKA_VIEW_DemoMed2, 0xe2000b	; view "DemoMed2": Viewable slot 0xE2 entry 11
+.equ NAKA_VIEW_DemoRhy, 0xe30000	; view "DemoRhy": Viewable slot 0xE3 entry 0
 .equ NAKA_VIEW_DemoMed3, 0xe3000b	; view "DemoMed3": Viewable slot 0xE3 entry 11
 .equ NAKA_VIEW_Demofeature, 0xe40000	; view "Demofeature": Viewable slot 0xE4 entry 0
 .equ NAKA_VIEW_Demofeature1, 0xe40002	; view "Demofeature1": Viewable slot 0xE4 entry 2
@@ -2059,6 +2062,7 @@
 .equ NAKA_VIEW_HelpTtlStr4, 0xe7002f	; view "HelpTtlStr4": Viewable slot 0xE7 entry 47
 .equ NAKA_VIEW_SVARI, 0xe80000	; view "SVARI": Viewable slot 0xE8 entry 0
 .equ NAKA_VIEW_RVARI, 0xe90000	; view "RVARI": Viewable slot 0xE9 entry 0
+.equ NAKA_VIEW_Drawbar, 0xea0000	; view "Drawbar": Viewable slot 0xEA entry 0
 .equ NAKA_VIEW_DrawPerc4, 0xea0002	; view "DrawPerc4": Viewable slot 0xEA entry 2
 .equ NAKA_VIEW_DrawPerc223, 0xea0003	; view "DrawPerc223": Viewable slot 0xEA entry 3
 .equ NAKA_VIEW_White23, 0xea0004	; view "White23": Viewable slot 0xEA entry 4
@@ -2068,11 +2072,15 @@
 .equ NAKA_VIEW_DrawbarPart, 0xea001f	; view "DrawbarPart": Viewable slot 0xEA entry 31
 .equ NAKA_VIEW_DrawTremolo, 0xea0020	; view "DrawTremolo": Viewable slot 0xEA entry 32
 .equ NAKA_VIEW_DrawbarSndE, 0xea0026	; view "DrawbarSndE": Viewable slot 0xEA entry 38
+.equ NAKA_VIEW_Accordion, 0xeb0000	; view "Accordion": Viewable slot 0xEB entry 0
 .equ NAKA_VIEW_AccordionPart, 0xeb0007	; view "AccordionPart": Viewable slot 0xEB entry 7
 .equ NAKA_VIEW_Accordion1, 0xeb0009	; view "Accordion1": Viewable slot 0xEB entry 9
 .equ NAKA_VIEW_Accordion2, 0xeb0017	; view "Accordion2": Viewable slot 0xEB entry 23
+.equ NAKA_VIEW_SplitSetting, 0xec0000	; view "SplitSetting": Viewable slot 0xEC entry 0
+.equ NAKA_VIEW_ApcSelScreen, 0xed0000	; view "ApcSelScreen": Viewable slot 0xED entry 0
 .equ NAKA_VIEW_Mesage, 0xee0000	; view "Mesage": Viewable slot 0xEE entry 0
 .equ NAKA_VIEW_PleaseWait, 0xee0016	; view "PleaseWait": Viewable slot 0xEE entry 22
+.equ NAKA_VIEW_Welcom, 0xef0000	; view "Welcom": Viewable slot 0xEF entry 0
 .equ NAKA_VIEW_AllInitial, 0xef0004	; view "AllInitial": Viewable slot 0xEF entry 4
 .equ NAKA_VIEW_MPVersion, 0xef0007	; view "MPVersion": Viewable slot 0xEF entry 7
 .equ NAKA_VIEW_MPver, 0xef000a	; view "MPver": Viewable slot 0xEF entry 10
