@@ -187752,9 +187752,9 @@ sub_F7C6B2:		; <- T_F42A50
 	ld	(3151:16), w	; F7C6BE  ld (0x0c4f),W
 	ld	l, (3574:16)	; F7C6C2  ld L,(0x0df6)
 	cp	l, 1:i3	; F7C6C6  cp L,1
-	m_jp_cc MD24, 0xf7c6e5, 7	; F7C6C8  jp C,0xf7c6e5
+	jp	c, (sub_F7C6B2_Code:24)	; F7C6C8  jp C,0xf7c6e5
 	cp	l, 4:i3	; F7C6CD  cp L,4
-	m_jp_cc MD24, 0xf7c6e5, 11	; F7C6CF  jp UGT,0xf7c6e5
+	jp	ugt, (sub_F7C6B2_Code:24)	; F7C6CF  jp UGT,0xf7c6e5
 	xor	h, h	; F7C6D4  xor H,H
 	sla	hl, 2	; F7C6D6  sla 0x02,HL
 	ld	xde, SongStore_DispatchA_1	; F7C6D9  ld XDE,0x00f7c6e6
@@ -187833,9 +187833,9 @@ sub_F7C6FB:		; <- T_F42A54
 	ld	(3151:16), w	; F7C707  ld (0x0c4f),W
 	ld	l, (3574:16)	; F7C70B  ld L,(0x0df6)
 	cp	l, 1:i3	; F7C70F  cp L,1
-	m_jp_cc MD24, 0xf7c72e, 7	; F7C711  jp C,0xf7c72e
+	jp	c, (sub_F7C6FB_Code:24)	; F7C711  jp C,0xf7c72e
 	cp	l, 4:i3	; F7C716  cp L,4
-	m_jp_cc MD24, 0xf7c72e, 11	; F7C718  jp UGT,0xf7c72e
+	jp	ugt, (sub_F7C6FB_Code:24)	; F7C718  jp UGT,0xf7c72e
 	xor	h, h	; F7C71D  xor H,H
 	sla	hl, 2	; F7C71F  sla 0x02,HL
 	ld	xde, SongStore_DispatchA_2	; F7C722  ld XDE,0x00f7c72f
@@ -188239,9 +188239,9 @@ sub_F7C918:		; <- T_F42AA4
 	ld	(3151:16), w	; F7C924  ld (0x0c4f),W
 	ld	l, (N0teChange_Field:16)	; F7C928  ld L,(0x0ded)
 	cp	l, 1:i3	; F7C92C  cp L,1
-	m_jp_cc MD24, 0xf7c94b, 7	; F7C92E  jp C,0xf7c94b
+	jp	c, (sub_F7C918_Code:24)	; F7C92E  jp C,0xf7c94b
 	cp	l, 5:i3	; F7C933  cp L,5
-	m_jp_cc MD24, 0xf7c94b, 11	; F7C935  jp UGT,0xf7c94b
+	jp	ugt, (sub_F7C918_Code:24)	; F7C935  jp UGT,0xf7c94b
 	xor	h, h	; F7C93A  xor H,H
 	sla	hl, 2	; F7C93C  sla 0x02,HL
 	ld	xde, SongStore_DispatchB_1	; F7C93F  ld XDE,0x00f7c94c
@@ -188304,9 +188304,9 @@ sub_F7C964:		; <- T_F42AA8
 	ld	(3151:16), w	; F7C970  ld (0x0c4f),W
 	ld	l, (N0teChange_Field:16)	; F7C974  ld L,(0x0ded)
 	cp	l, 1:i3	; F7C978  cp L,1
-	m_jp_cc MD24, 0xf7c997, 7	; F7C97A  jp C,0xf7c997
+	jp	c, (sub_F7C964_Code:24)	; F7C97A  jp C,0xf7c997
 	cp	l, 5:i3	; F7C97F  cp L,5
-	m_jp_cc MD24, 0xf7c997, 11	; F7C981  jp UGT,0xf7c997
+	jp	ugt, (sub_F7C964_Code:24)	; F7C981  jp UGT,0xf7c997
 	xor	h, h	; F7C986  xor H,H
 	sla	hl, 2	; F7C988  sla 0x02,HL
 	ld	xde, SongStore_DispatchB_2	; F7C98B  ld XDE,0x00f7c998
@@ -188681,9 +188681,9 @@ sub_F7CB4A:		; <- T_F42A78
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7CB53  or (0x2075),0x09
 	ld	l, (AdvanceDelay_Field:16)	; F7CB58  ld L,(0x0de5)
 	cp	l, 1:i3	; F7CB5C  cp L,1
-	m_jp_cc MD24, 0xf7cb7b, 7	; F7CB5E  jp C,0xf7cb7b
+	jp	c, (sub_F7CB4A_Code:24)	; F7CB5E  jp C,0xf7cb7b
 	cp	l, 4:i3	; F7CB63  cp L,4
-	m_jp_cc MD24, 0xf7cb7b, 11	; F7CB65  jp UGT,0xf7cb7b
+	jp	ugt, (sub_F7CB4A_Code:24)	; F7CB65  jp UGT,0xf7cb7b
 	xor	h, h	; F7CB6A  xor H,H
 	sla	hl, 2	; F7CB6C  sla 0x02,HL
 	ld	xde, SongStore_DispatchC_1	; F7CB6F  ld XDE,0x00f7cb7c
@@ -188747,9 +188747,9 @@ sub_F7CB90:		; <- T_F42A7C
 	ld	(3151:16), w	; F7CBA5  ld (0x0c4f),W
 	ld	l, (AdvanceDelay_Field:16)	; F7CBA9  ld L,(0x0de5)
 	cp	l, 1:i3	; F7CBAD  cp L,1
-	m_jp_cc MD24, 0xf7cbcc, 7	; F7CBAF  jp C,0xf7cbcc
+	jp	c, (sub_F7CB90_Code:24)	; F7CBAF  jp C,0xf7cbcc
 	cp	l, 4:i3	; F7CBB4  cp L,4
-	m_jp_cc MD24, 0xf7cbcc, 11	; F7CBB6  jp UGT,0xf7cbcc
+	jp	ugt, (sub_F7CB90_Code:24)	; F7CBB6  jp UGT,0xf7cbcc
 	xor	h, h	; F7CBBB  xor H,H
 	sla	hl, 2	; F7CBBD  sla 0x02,HL
 	ld	xde, SongStore_DispatchC_2	; F7CBC0  ld XDE,0x00f7cbcd
