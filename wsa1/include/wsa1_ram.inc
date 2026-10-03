@@ -168,3 +168,6 @@
 	.equ SmfOut_TrackLength,	0x10c4	; the MTrk chunk length, most significant byte first (4 bytes) -- 0xF7789A stores it; copy A writes it into the file
 	.equ SmfOut_WindowsFlushed,	0x126c	; how many 1,024-byte output windows the SMF writer has flushed -- the MTrk length computation at 0xF7789A
 	.equ Disk_FileName,		0x21c8	; an 8.3 file name: 8 characters, extension at +8..+10 (default MID) -- the SMF reader writes M I D to 0x21D0-0x21D2; the writer's track name takes the 8
+
+; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
+	.equ Effect_Algorithm,		0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

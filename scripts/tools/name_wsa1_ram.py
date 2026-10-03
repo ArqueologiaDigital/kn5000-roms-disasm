@@ -217,6 +217,9 @@ GROUPS = [
         (0x108D, ("SmfOut_Tempo+1", "", "")), (0x108E, ("SmfOut_Tempo+2", "", "")),
         (0x21C8, ("Disk_FileName", "an 8.3 file name: 8 characters, extension at +8..+10 (default MID)", "the SMF reader writes M I D to 0x21D0-0x21D2; the writer's track name takes the 8")),
     ] + [(0x21C8 + k, ("Disk_FileName+%d" % k, "", "")) for k in range(1, 11)])),
+    ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
+        0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')

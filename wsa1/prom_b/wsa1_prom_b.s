@@ -31072,9 +31072,9 @@ sub_F1008E_Skip:
 	call	T_IndexedTable_GetByte	; F100D4  call 0xf42c90
 	ld	h, a	; F100D8  ld H,A
 	pop	xiy	; F100DA  pop XIY
-	cp	(10134:16), a	; F100DB  cp (0x2796),A
+	cp	(Effect_Algorithm:16), a	; F100DB  cp (0x2796),A
 	jr	z, sub_F1008E_Skip2	; F100DF  jr Z,0xf100ff
-	ld	(10134:16), a	; F100E1  ld (0x2796),A
+	ld	(Effect_Algorithm:16), a	; F100E1  ld (0x2796),A
 	m_res 4, MD16, 0x2095	; F100E5  res 4,(0x2095)
 	ld	(10130:16), 0	; F100E9  ld (0x2792),0x00
 	ld	(10131:16), 1	; F100EE  ld (0x2793),0x01
@@ -31803,7 +31803,7 @@ DspEffect_MoveCursor_Skip:
 	inc	6, xbc	; F10602  inc 6,XBC
 	ld	(xiz-4), xbc	; F10604  ld (XIZ+0xfc),XBC
 	ld	a, 4:opc	; F10607  ld A,0x04
-	m_mul MB16, 0x2796, 1	; F10609  mul WA,(0x2796)
+	m_mul MB16, Effect_Algorithm, 1	; F10609  mul WA,(0x2796)
 	extz	xwa	; F1060D  extz XWA
 	add	xwa, EffectParamDescriptors_F12F24	; F1060F  add XWA,0x00f12f24
 	ld	xwa, (xwa)	; F10615  ld XWA,(XWA)
@@ -31826,7 +31826,7 @@ DspEffect_MoveCursor_Skip3:
 	ld	xix, xbc	; F1063D  ld XIX,XBC
 	inc	6, xix	; F1063F  inc 6,XIX
 	ld	c, 4:opc	; F10641  ld C,0x04
-	m_mul MB16, 0x2796, 3	; F10643  mul BC,(0x2796)
+	m_mul MB16, Effect_Algorithm, 3	; F10643  mul BC,(0x2796)
 	extz	xbc	; F10647  extz XBC
 	add	xbc, EffectParamDescriptors_F12F24	; F10649  add XBC,0x00f12f24
 	ld	xbc, (xbc)	; F1064F  ld XBC,(XBC)
@@ -31913,7 +31913,7 @@ DspEffect_StepCursorValue:
 	inc	1, xbc	; F106CD  inc 1,XBC
 	ld	(xiz-4), xbc	; F106CF  ld (XIZ+0xfc),XBC
 	ld	a, 4:opc	; F106D2  ld A,0x04
-	m_mul MB16, 0x2796, 1	; F106D4  mul WA,(0x2796)
+	m_mul MB16, Effect_Algorithm, 1	; F106D4  mul WA,(0x2796)
 	extz	xwa	; F106D8  extz XWA
 	add	xwa, EffectParamDescriptors_F12F24	; F106DA  add XWA,0x00f12f24
 	ld	xwa, (xwa)	; F106E0  ld XWA,(XWA)
@@ -32830,7 +32830,7 @@ sub_F10CC4:
 	inc	3, xbc	; F10D10  inc 3,XBC
 	ld	(xiz-4), xbc	; F10D12  ld (XIZ+0xfc),XBC
 	ld	a, 4:opc	; F10D15  ld A,0x04
-	m_mul MB16, 0x2796, 1	; F10D17  mul WA,(0x2796)
+	m_mul MB16, Effect_Algorithm, 1	; F10D17  mul WA,(0x2796)
 	extz	xwa	; F10D1B  extz XWA
 	add	xwa, EffectParamDescriptors_F12F24	; F10D1D  add XWA,0x00f12f24
 	ld	xwa, (xwa)	; F10D23  ld XWA,(XWA)
@@ -33035,7 +33035,7 @@ EffectEditor_PaintJob5_Resume8:
 EffectEditor_PaintJob6:
 	m_res 6, MD16, 0x2799	; F10EB8  res 6,(0x2799)
 	ld	(LCD_CurrentLayer:16), 0	; F10EBC  ld (0x2540),0x00
-	m_ld_m16m MB16, 0x2796, 0x2640	; F10EC1  ld (0x2640),(0x2796)
+	m_ld_m16m MB16, Effect_Algorithm, 0x2640	; F10EC1  ld (0x2640),(0x2796)
 	lda	xbc, (DL_F146F0:24)	; F10EC7  lda XBC,0xf146f0
 	push	xbc	; F10ECC  push XBC
 	lda	xwa, (DL_F146E1:24)	; F10ECD  lda XWA,0xf146e1
@@ -33128,7 +33128,7 @@ sub_F10EE9_Skip2:
 	add	xbc, 34	; F10F78  add XBC,0x00000022
 	ld	(xiz-4), xbc	; F10F7E  ld (XIZ+0xfc),XBC
 	ld	a, 4:opc	; F10F81  ld A,0x04
-	m_mul MB16, 0x2796, 1	; F10F83  mul WA,(0x2796)
+	m_mul MB16, Effect_Algorithm, 1	; F10F83  mul WA,(0x2796)
 	extz	xwa	; F10F87  extz XWA
 	add	xwa, EffectParamDescriptors_F12F24	; F10F89  add XWA,0x00f12f24
 	ld	xwa, (xwa)	; F10F8F  ld XWA,(XWA)
@@ -33206,7 +33206,7 @@ DspEffect_LoadParamNames:
 	push	xix	; F10FF7  push XIX
 	ld	d, 0:opc	; F10FF8  ld D,0x00
 	ld	c, 4:opc	; F10FFA  ld C,0x04
-	m_mul MB16, 0x2796, 3	; F10FFC  mul BC,(0x2796)
+	m_mul MB16, Effect_Algorithm, 3	; F10FFC  mul BC,(0x2796)
 	extz	xbc	; F11000  extz XBC
 	ld	xix, xbc	; F11002  ld XIX,XBC
 	ld	a, 4:opc	; F11004  ld A,0x04
@@ -33296,7 +33296,7 @@ DspEffect_PaintParamEditor:
 	ld	(xiz-1), a	; F11070  ld (XIZ+0xff),A
 	ld	e, 0:opc	; F11073  ld E,0x00
 	ld	(LCD_CurrentLayer:16), 0	; F11075  ld (0x2540),0x00
-	lda	xix, (10134:16)	; F1107A  lda XIX,0x2796
+	lda	xix, (Effect_Algorithm:16)	; F1107A  lda XIX,0x2796
 	ld	h, 0:opc	; F1107E  ld H,0x00
 	pop	xiy	; F11080  pop XIY
 DspEffect_PaintParamEditor_Loop:
