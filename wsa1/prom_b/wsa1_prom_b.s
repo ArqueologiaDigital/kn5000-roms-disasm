@@ -1194,7 +1194,7 @@
 	.set	ToneMsg88_Id14, 0xFD66A6
 	.set	ToneMsg8D_SendParam, 0xFD6704
 	.set	ToneMsg88_Id1A, 0xFD6811
-	.set	sub_FD69E0, 0xFD69E0
+	.set	ToneMsg_SendP23FromArr2800, 0xFD69E0
 	.set	Var27A3_GetValidSlot, 0xFD6B4D
 	.set	Arr27A6_Set, 0xFD6C65
 	.set	Arr27A6_Get, 0xFD6C7B
@@ -18404,7 +18404,7 @@ sub_F0A49E:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A4A2  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A49E_Skip	; F0A4A6  jr NZ,0xf0a4bb
 	pushw	0	; F0A4A8  push 0x0000
-	call	sub_FD69E0	; F0A4AB  call 0xfd69e0
+	call	ToneMsg_SendP23FromArr2800	; F0A4AB  call 0xfd69e0
 	pushw	0	; F0A4AF  push 0x0000
 	pushw	128	; F0A4B2  push 0x0080
 	call	PanelScreen_PostRequest	; F0A4B5  call 0xfd608b
@@ -18765,7 +18765,7 @@ sub_F0A64A:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A64E  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A64A_Skip	; F0A652  jr NZ,0xf0a667
 	pushw	0	; F0A654  push 0x0000
-	call	sub_FD69E0	; F0A657  call 0xfd69e0
+	call	ToneMsg_SendP23FromArr2800	; F0A657  call 0xfd69e0
 	pushw	0	; F0A65B  push 0x0000
 	pushw	128	; F0A65E  push 0x0080
 	call	PanelScreen_PostRequest	; F0A661  call 0xfd608b
@@ -19087,7 +19087,7 @@ sub_F0A7B1:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A7B5  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A7B1_Skip	; F0A7B9  jr NZ,0xf0a7ce
 	pushw	0	; F0A7BB  push 0x0000
-	call	sub_FD69E0	; F0A7BE  call 0xfd69e0
+	call	ToneMsg_SendP23FromArr2800	; F0A7BE  call 0xfd69e0
 	pushw	0	; F0A7C2  push 0x0000
 	pushw	128	; F0A7C5  push 0x0080
 	call	PanelScreen_PostRequest	; F0A7C8  call 0xfd608b
@@ -19389,7 +19389,7 @@ sub_F0A8EE:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8F2  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A8EE_Skip	; F0A8F6  jr NZ,0xf0a90b
 	pushw	0	; F0A8F8  push 0x0000
-	call	sub_FD69E0	; F0A8FB  call 0xfd69e0
+	call	ToneMsg_SendP23FromArr2800	; F0A8FB  call 0xfd69e0
 	pushw	0	; F0A8FF  push 0x0000
 	pushw	128	; F0A902  push 0x0080
 	call	PanelScreen_PostRequest	; F0A905  call 0xfd608b

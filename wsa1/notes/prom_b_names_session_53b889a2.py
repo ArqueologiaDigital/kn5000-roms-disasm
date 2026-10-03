@@ -343,4 +343,8 @@ RENAMES = [
     ("sub_F7F1C2", "Var2820_Set2B"),
     ("sub_F7F4EE", "Var2820_Set2B_2"),
     ("sub_F7F85A", "Var2820_Set2B_3"),
+    ("sub_FD7693", "Arr27D6_GetForSlot"),
+    ("sub_FD76BF", "Var27A3_GetPackedSlot"),
+    ("sub_FD7744", "Rec2330_CopyData"),
+    ("sub_FD69E0", "ToneMsg_SendP23FromArr2800"),
 ]

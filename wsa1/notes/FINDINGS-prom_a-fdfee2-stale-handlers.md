@@ -25,7 +25,7 @@ prom_a with the same bytes except the `call` operands -- a live twin. Output on 
 | 0xFDFF1B | 0xFD763E | 0xFDFE7A | sub_FD74E0 | -0x15E |
 | 0xFDFF33 | 0xFD763E | 0xFDFE92 | sub_FD74E0 | -0x15E |
 | 0xFDFF4B | 0xFD763E | 0xFDFEAA | sub_FD74E0 | -0x15E |
-| 0xFDFF63 | 0xFD6B3E, 0xFD61E9 | ten, from 0xFD13A1 to 0xFDFEC2 | sub_FD69E0, PanelScreen_PostRequest | -0x15E, -0x15E |
+| 0xFDFF63 | 0xFD6B3E, 0xFD61E9 | ten, from 0xFD13A1 to 0xFDFEC2 | ToneMsg_SendP23FromArr2800, PanelScreen_PostRequest | -0x15E, -0x15E |
 | 0xFDFFA3 | 0xFD5486, 0xFD40B6 | 0xFD1FD7 | Var27A3_ChangeSlot, PanelScreen_PostRequest | +0x2028, +0x1FD5 |
 | 0xFDFFC7 | 0xFD40B6 | seven, from 0xFD1010 to 0xFD5C4B | PanelScreen_PostRequest | +0x1FD5 |
 

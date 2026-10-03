@@ -127046,7 +127046,7 @@ sub_FD13A1:
 	cp (XIZ+0x08),0x00                                   ; FD13A5  8e 08 3f 00
 	jr nz, .LFD13BE                                      ; FD13A9  6e 13
 	pushw 0x00                                           ; FD13AB  0b 00 00
-	call sub_FD69E0                                      ; FD13AE  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD13AE  1d e0 69 fd
 	pushw 0x00                                           ; FD13B2  0b 00 00
 	pushw 0x80                                           ; FD13B5  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD13B8  1d 8b 60 fd
@@ -127404,7 +127404,7 @@ sub_FD16E9:
 	cp (XIZ+0x08),0x00                                   ; FD16ED  8e 08 3f 00
 	jr nz, .LFD1706                                      ; FD16F1  6e 13
 	pushw 0x00                                           ; FD16F3  0b 00 00
-	call sub_FD69E0                                      ; FD16F6  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD16F6  1d e0 69 fd
 	pushw 0x00                                           ; FD16FA  0b 00 00
 	pushw 0x80                                           ; FD16FD  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD1700  1d 8b 60 fd
@@ -127744,7 +127744,7 @@ sub_FD1A19:
 	cp (XIZ+0x08),0x00                                   ; FD1A1D  8e 08 3f 00
 	jr nz, .LFD1A36                                      ; FD1A21  6e 13
 	pushw 0x00                                           ; FD1A23  0b 00 00
-	call sub_FD69E0                                      ; FD1A26  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD1A26  1d e0 69 fd
 	pushw 0x00                                           ; FD1A2A  0b 00 00
 	pushw 0x80                                           ; FD1A2D  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD1A30  1d 8b 60 fd
@@ -128244,7 +128244,7 @@ sub_FD1C35:
 	push XBC                                             ; FD1EA7  39
 	m_cp_mi8 MBD+r6, 0xf0, 0x00                          ; FD1EA8  8e f0 3f 00
 	jr nz, .LFD1EEA                                      ; FD1EAC  6e 3c
-	call sub_FD76BF                                      ; FD1EAE  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD1EAE  1d bf 76 fd
 	ld (xiz-14), 0x01                                    ; FD1EB2  be f2 00 01
 	pop XIY                                              ; FD1EB6  5d
 .LFD1EB7:
@@ -129142,7 +129142,7 @@ sub_FD26D3:
 	pushw 0x00                                           ; FD26E0  0b 00 00
 	call Arr27A6_Get                                      ; FD26E3  1d 7b 6c fd
 	push XIX                                             ; FD26E7  3c
-	call sub_FD7744                                      ; FD26E8  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FD26E8  1d 44 77 fd
 	ld C,(XIX)                                           ; FD26EC  84 23
 	ld H,C                                               ; FD26EE  cb 8e
 	and H,0x3f                                           ; FD26F0  ce cc 3f
@@ -129838,7 +129838,7 @@ sub_FD2D2B:
 	cp (XIZ+0x08),0x00                                   ; FD2D2F  8e 08 3f 00
 	jr nz, .LFD2D5C                                      ; FD2D33  6e 27
 	pushw 0x00                                           ; FD2D35  0b 00 00
-	call sub_FD69E0                                      ; FD2D38  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD2D38  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD2D3C  be fe 31
 	push XBC                                             ; FD2D3F  39
 	call Var27F5_Get                                      ; FD2D40  1d ca a0 fd
@@ -130182,7 +130182,7 @@ sub_FD3052:
 	cp (XIZ+0x08),0x00                                   ; FD3056  8e 08 3f 00
 	jr nz, .LFD306F                                      ; FD305A  6e 13
 	pushw 0x00                                           ; FD305C  0b 00 00
-	call sub_FD69E0                                      ; FD305F  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD305F  1d e0 69 fd
 	pushw 0x00                                           ; FD3063  0b 00 00
 	pushw 0x80                                           ; FD3066  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD3069  1d 8b 60 fd
@@ -130918,7 +130918,7 @@ sub_FD36F5:
 	cp (XIZ+0x08),0x00                                   ; FD36F9  8e 08 3f 00
 	jr nz, .LFD3726                                      ; FD36FD  6e 27
 	pushw 0x00                                           ; FD36FF  0b 00 00
-	call sub_FD69E0                                      ; FD3702  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD3702  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD3706  be fe 31
 	push XBC                                             ; FD3709  39
 	call Var27F5_Get                                      ; FD370A  1d ca a0 fd
@@ -131471,7 +131471,7 @@ sub_FD3C4A:
 	cp (XIZ+0x08),0x00                                   ; FD3C4E  8e 08 3f 00
 	jr nz, .LFD3C67                                      ; FD3C52  6e 13
 	pushw 0x00                                           ; FD3C54  0b 00 00
-	call sub_FD69E0                                      ; FD3C57  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD3C57  1d e0 69 fd
 	pushw 0x00                                           ; FD3C5B  0b 00 00
 	pushw 0x80                                           ; FD3C5E  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD3C61  1d 8b 60 fd
@@ -131629,7 +131629,7 @@ sub_FD3D87:
 	cp (XIZ+0x08),0x00                                   ; FD3D8B  8e 08 3f 00
 	jr nz, .LFD3DA4                                      ; FD3D8F  6e 13
 	pushw 0x00                                           ; FD3D91  0b 00 00
-	call sub_FD69E0                                      ; FD3D94  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD3D94  1d e0 69 fd
 	pushw 0x00                                           ; FD3D98  0b 00 00
 	pushw 0x80                                           ; FD3D9B  0b 80 00
 	call PanelScreen_PostRequest                                      ; FD3D9E  1d 8b 60 fd
@@ -131921,7 +131921,7 @@ sub_FD400D:
 	pushw 0xc0                                           ; FD4023  0b c0 00
 	call T_Dispatch_Code80                               ; FD4026  1d d4 1e f4
 	pushw 0x01                                           ; FD402A  0b 01 00
-	call sub_FD69E0                                      ; FD402D  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD402D  1d e0 69 fd
 	inc 8,XSP                                            ; FD4031  ef 60
 	inc 2,XSP                                            ; FD4033  ef 62
 .LFD4035:
@@ -132461,7 +132461,7 @@ ToneEditPage_A0_Op15:
 	cp (XIZ+0x08),0x00                                   ; FD4497  8e 08 3f 00
 	jr nz, .LFD44C4                                      ; FD449B  6e 27
 	pushw 0x00                                           ; FD449D  0b 00 00
-	call sub_FD69E0                                      ; FD44A0  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD44A0  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD44A4  be fe 31
 	push XBC                                             ; FD44A7  39
 	call Var27F5_Get                                      ; FD44A8  1d ca a0 fd
@@ -132540,7 +132540,7 @@ ToneEditField_A3_Position:
 	push XBC                                             ; FD4526  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4527  8e fe 3f 00
 	jr nz, .LFD4544                                      ; FD452B  6e 17
-	call sub_FD76BF                                      ; FD452D  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD452D  1d bf 76 fd
 	pushw 0xff                                           ; FD4531  0b ff 00
 	push XIX                                             ; FD4534  3c
 	pushw 0x0d                                           ; FD4535  0b 0d 00
@@ -132628,7 +132628,7 @@ ToneEditField_A3_Depth:
 	push XBC                                             ; FD45C4  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD45C5  8e fe 3f 00
 	jr nz, .LFD45D1                                      ; FD45C9  6e 06
-	call sub_FD76BF                                      ; FD45CB  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD45CB  1d bf 76 fd
 	jr .LFD45D5                                          ; FD45CF  68 04
 .LFD45D1:
 	call Var27A3_GetValidSlot                                      ; FD45D1  1d 4d 6b fd
@@ -132693,7 +132693,7 @@ ToneEditField_A3_Formant:
 	push XBC                                             ; FD463A  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD463B  8e fe 3f 00
 	jr nz, .LFD4647                                      ; FD463F  6e 06
-	call sub_FD76BF                                      ; FD4641  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4641  1d bf 76 fd
 	jr .LFD464B                                          ; FD4645  68 04
 .LFD4647:
 	call Var27A3_GetValidSlot                                      ; FD4647  1d 4d 6b fd
@@ -132759,7 +132759,7 @@ ToneEditField_A3_InteractionGain:
 	push XBC                                             ; FD46B0  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD46B1  8e fe 3f 00
 	jr nz, .LFD46BD                                      ; FD46B5  6e 06
-	call sub_FD76BF                                      ; FD46B7  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD46B7  1d bf 76 fd
 	jr .LFD46C1                                          ; FD46BB  68 04
 .LFD46BD:
 	call Var27A3_GetValidSlot                                      ; FD46BD  1d 4d 6b fd
@@ -132941,7 +132941,7 @@ ToneEditField_A4_Width:
 	push XBC                                             ; FD4814  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4815  8e fe 3f 00
 	jr nz, .LFD4821                                      ; FD4819  6e 06
-	call sub_FD76BF                                      ; FD481B  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD481B  1d bf 76 fd
 	jr .LFD4825                                          ; FD481F  68 04
 .LFD4821:
 	call Var27A3_GetValidSlot                                      ; FD4821  1d 4d 6b fd
@@ -133006,7 +133006,7 @@ ToneEditField_A4_Speed:
 	push XBC                                             ; FD488A  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD488B  8e fe 3f 00
 	jr nz, .LFD4897                                      ; FD488F  6e 06
-	call sub_FD76BF                                      ; FD4891  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4891  1d bf 76 fd
 	jr .LFD489B                                          ; FD4895  68 04
 .LFD4897:
 	call Var27A3_GetValidSlot                                      ; FD4897  1d 4d 6b fd
@@ -133071,7 +133071,7 @@ ToneEditField_A4_SampleHold:
 	push XBC                                             ; FD4900  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4901  8e fe 3f 00
 	jr nz, .LFD490D                                      ; FD4905  6e 06
-	call sub_FD76BF                                      ; FD4907  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4907  1d bf 76 fd
 	jr .LFD4911                                          ; FD490B  68 04
 .LFD490D:
 	call Var27A3_GetValidSlot                                      ; FD490D  1d 4d 6b fd
@@ -133136,7 +133136,7 @@ ToneEditField_A4_Touch:
 	push XBC                                             ; FD4976  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4977  8e fe 3f 00
 	jr nz, .LFD4983                                      ; FD497B  6e 06
-	call sub_FD76BF                                      ; FD497D  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD497D  1d bf 76 fd
 	jr .LFD4987                                          ; FD4981  68 04
 .LFD4983:
 	call Var27A3_GetValidSlot                                      ; FD4983  1d 4d 6b fd
@@ -133325,7 +133325,7 @@ ToneEditField_A5_Fitting:
 	push XBC                                             ; FD4ADC  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4ADD  8e fe 3f 00
 	jr nz, .LFD4AE9                                      ; FD4AE1  6e 06
-	call sub_FD76BF                                      ; FD4AE3  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4AE3  1d bf 76 fd
 	jr .LFD4AED                                          ; FD4AE7  68 04
 .LFD4AE9:
 	call Var27A3_GetValidSlot                                      ; FD4AE9  1d 4d 6b fd
@@ -133448,7 +133448,7 @@ ToneEditField_A5_Muting:
 	push XBC                                             ; FD4BBA  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4BBB  8e fe 3f 00
 	jr nz, .LFD4BC7                                      ; FD4BBF  6e 06
-	call sub_FD76BF                                      ; FD4BC1  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4BC1  1d bf 76 fd
 	jr .LFD4BCB                                          ; FD4BC5  68 04
 .LFD4BC7:
 	call Var27A3_GetValidSlot                                      ; FD4BC7  1d 4d 6b fd
@@ -133650,7 +133650,7 @@ ToneEditField_A5_KeyShift:
 	push XBC                                             ; FD4D4F  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4D50  8e fe 3f 00
 	jr nz, .LFD4D5C                                      ; FD4D54  6e 06
-	call sub_FD76BF                                      ; FD4D56  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4D56  1d bf 76 fd
 	jr .LFD4D60                                          ; FD4D5A  68 04
 .LFD4D5C:
 	call Var27A3_GetValidSlot                                      ; FD4D5C  1d 4d 6b fd
@@ -133772,7 +133772,7 @@ ToneEditField_A5_Detune:
 	push XBC                                             ; FD4E30  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4E31  8e fe 3f 00
 	jr nz, .LFD4E3D                                      ; FD4E35  6e 06
-	call sub_FD76BF                                      ; FD4E37  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4E37  1d bf 76 fd
 	jr .LFD4E41                                          ; FD4E3B  68 04
 .LFD4E3D:
 	call Var27A3_GetValidSlot                                      ; FD4E3D  1d 4d 6b fd
@@ -133894,7 +133894,7 @@ ToneEditField_A5_ResoScale:
 	push XBC                                             ; FD4F11  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4F12  8e fe 3f 00
 	jr nz, .LFD4F1E                                      ; FD4F16  6e 06
-	call sub_FD76BF                                      ; FD4F18  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD4F18  1d bf 76 fd
 	jr .LFD4F22                                          ; FD4F1C  68 04
 .LFD4F1E:
 	call Var27A3_GetValidSlot                                      ; FD4F1E  1d 4d 6b fd
@@ -134206,7 +134206,7 @@ ToneEditField_A6_FittingTouchDepth:
 	push XBC                                             ; FD5187  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD5188  8e fe 3f 00
 	jr nz, .LFD5194                                      ; FD518C  6e 06
-	call sub_FD76BF                                      ; FD518E  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD518E  1d bf 76 fd
 	jr .LFD5198                                          ; FD5192  68 04
 .LFD5194:
 	call Var27A3_GetValidSlot                                      ; FD5194  1d 4d 6b fd
@@ -134328,7 +134328,7 @@ ToneEditField_A6_MutingTouchDepth:
 	push XBC                                             ; FD5268  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD5269  8e fe 3f 00
 	jr nz, .LFD5275                                      ; FD526D  6e 06
-	call sub_FD76BF                                      ; FD526F  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD526F  1d bf 76 fd
 	jr .LFD5279                                          ; FD5273  68 04
 .LFD5275:
 	call Var27A3_GetValidSlot                                      ; FD5275  1d 4d 6b fd
@@ -134443,7 +134443,7 @@ ToneEditField_A6_SubGainTouchDepth:
 	push XBC                                             ; FD5347  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD5348  8e fe 3f 00
 	jr nz, .LFD5354                                      ; FD534C  6e 06
-	call sub_FD76BF                                      ; FD534E  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD534E  1d bf 76 fd
 	jr .LFD5358                                          ; FD5352  68 04
 .LFD5354:
 	call Var27A3_GetValidSlot                                      ; FD5354  1d 4d 6b fd
@@ -134527,7 +134527,7 @@ ToneEditField_A6_SubGain:
 	push XBC                                             ; FD53E3  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD53E4  8e fe 3f 00
 	jr nz, .LFD53F0                                      ; FD53E8  6e 06
-	call sub_FD76BF                                      ; FD53EA  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD53EA  1d bf 76 fd
 	jr .LFD53F4                                          ; FD53EE  68 04
 .LFD53F0:
 	call Var27A3_GetValidSlot                                      ; FD53F0  1d 4d 6b fd
@@ -134749,7 +134749,7 @@ ToneEditField_A7_ResoMode:
 	push XBC                                             ; FD558A  39
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD558B  8e fe 3f 00
 	jr nz, .LFD5597                                      ; FD558F  6e 06
-	call sub_FD76BF                                      ; FD5591  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD5591  1d bf 76 fd
 	jr .LFD559B                                          ; FD5595  68 04
 .LFD5597:
 	call Var27A3_GetValidSlot                                      ; FD5597  1d 4d 6b fd
@@ -134871,7 +134871,7 @@ ToneEditField_A7_MutingSlope:
 	jrl z, .LFD572C                                      ; FD566C  76 bd 00
 	lda xbc, (xiz-4)                                     ; FD566F  be fc 31
 	push XBC                                             ; FD5672  39
-	call sub_FD76BF                                      ; FD5673  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD5673  1d bf 76 fd
 	lda xbc, (xiz-6)                                     ; FD5677  be fa 31
 	push XBC                                             ; FD567A  39
 	pushw 0x00                                           ; FD567B  0b 00 00
@@ -134996,7 +134996,7 @@ ToneEditField_A7_KeyFollowLow:
 	jrl z, .LFD587D                                      ; FD574B  76 2f 01
 	lda xbc, (xiz-4)                                     ; FD574E  be fc 31
 	push XBC                                             ; FD5751  39
-	call sub_FD76BF                                      ; FD5752  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD5752  1d bf 76 fd
 	lda xbc, (xiz-6)                                     ; FD5756  be fa 31
 	push XBC                                             ; FD5759  39
 	pushw 0x00                                           ; FD575A  0b 00 00
@@ -135179,7 +135179,7 @@ ToneEditField_A7_KeyFollowBreak:
 	jrl z, .LFD5A08                                      ; FD589C  76 69 01
 	lda xbc, (xiz-4)                                     ; FD589F  be fc 31
 	push XBC                                             ; FD58A2  39
-	call sub_FD76BF                                      ; FD58A3  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD58A3  1d bf 76 fd
 	lda xbc, (xiz-6)                                     ; FD58A7  be fa 31
 	push XBC                                             ; FD58AA  39
 	pushw 0x00                                           ; FD58AB  0b 00 00
@@ -135386,7 +135386,7 @@ ToneEditField_A7_KeyFollowHigh:
 	jrl z, .LFD5B59                                      ; FD5A27  76 2f 01
 	lda xbc, (xiz-4)                                     ; FD5A2A  be fc 31
 	push XBC                                             ; FD5A2D  39
-	call sub_FD76BF                                      ; FD5A2E  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FD5A2E  1d bf 76 fd
 	lda xbc, (xiz-6)                                     ; FD5A32  be fa 31
 	push XBC                                             ; FD5A35  39
 	pushw 0x00                                           ; FD5A36  0b 00 00
@@ -136080,7 +136080,7 @@ ToneEditPage_A8_Op15:
 	cp (XIZ+0x08),0x00                                   ; FD605B  8e 08 3f 00
 	jr nz, .LFD6088                                      ; FD605F  6e 27
 	pushw 0x00                                           ; FD6061  0b 00 00
-	call sub_FD69E0                                      ; FD6064  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FD6064  1d e0 69 fd
 	lda xbc, (xiz-2)                                     ; FD6068  be fe 31
 	push XBC                                             ; FD606B  39
 	call Var27F5_Get                                      ; FD606C  1d ca a0 fd
@@ -137312,7 +137312,9 @@ ToneMsg_ApplySelector:
 	pop XIX                                              ; FD69DC  5c
 	unlk XIZ                                             ; FD69DD  ee 0d
 	ret                                                  ; FD69DF  0e
-sub_FD69E0:
+; ToneMsg_SendP23FromArr2800(arg): sends tone parameter 0x17 (p23; FINDINGS-l7a1429-parameter-names.md grades it touch depth)
+;   through ToneMsg_SendParam, mask 0x7F, values from the 0x2800 array (Arr2800_Get1): all four when arg == 0, else one.
+ToneMsg_SendP23FromArr2800:
 	link XIZ,0xffee                                      ; FD69E0  ee 0c ee ff
 	pushw hl                                             ; FD69E4  2b
 	pushw de                                             ; FD69E5  2a
@@ -137982,7 +137984,7 @@ sub_FD6E90:
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD6E9C  8e fe 3f 00
 	jr z, .LFD6EB0                                       ; FD6EA0  66 0e
 	pushw 0x00                                           ; FD6EA2  0b 00 00
-	calr sub_FD69E0                                      ; FD6EA5  1e 38 fb
+	calr ToneMsg_SendP23FromArr2800                                      ; FD6EA5  1e 38 fb
 	pushw 0x00                                           ; FD6EA8  0b 00 00
 	calr sub_FD6B07                                      ; FD6EAB  1e 59 fc
 	jr .LFD6EBC                                          ; FD6EAE  68 0c
@@ -137990,7 +137992,7 @@ sub_FD6E90:
 	pushw 0x01                                           ; FD6EB0  0b 01 00
 	calr sub_FD6B07                                      ; FD6EB3  1e 51 fc
 	pushw 0x01                                           ; FD6EB6  0b 01 00
-	calr sub_FD69E0                                      ; FD6EB9  1e 24 fb
+	calr ToneMsg_SendP23FromArr2800                                      ; FD6EB9  1e 24 fb
 .LFD6EBC:
 	pop XIY                                              ; FD6EBC  5d
 	call T_UiPaint_Solo                                  ; FD6EBD  1d d8 1e f4
@@ -139004,7 +139006,8 @@ Arr27D6_Set1:
 	ld (XBC+0x27d6),A                                    ; FD768B  f3 e5 d6 27 41
 	unlk XIZ                                             ; FD7690  ee 0d
 	ret                                                  ; FD7692  0e
-sub_FD7693:
+; Arr27D6_GetForSlot(slot, u8 *out): *out = ((u8 *)0x27D6)[slot - 1], or 1 when that is 0 or above 4.
+Arr27D6_GetForSlot:
 	link XIZ,0x0000                                      ; FD7693  ee 0c 00 00
 	pushw hl                                             ; FD7697  2b
 	ld BC,(XIZ+0x08)                                     ; FD7698  9e 08 21
@@ -139027,7 +139030,8 @@ sub_FD7693:
 	popw hl                                              ; FD76BB  4b
 	unlk XIZ                                             ; FD76BC  ee 0d
 	ret                                                  ; FD76BE  0e
-sub_FD76BF:
+; Var27A3_GetPackedSlot(u8 *out): *out = (Var27A3_GetValidSlot << 4) + Arr27D6_GetForSlot(that slot).
+Var27A3_GetPackedSlot:
 	link XIZ,0xfffc                                      ; FD76BF  ee 0c fc ff
 	push XIX                                             ; FD76C3  3c
 	ld XIX,(XIZ+0x08)                                    ; FD76C4  ae 08 24
@@ -139044,7 +139048,7 @@ sub_FD76BF:
 	ld wa, (xiz-2)                                       ; FD76DF  9e fe 20
 	extz WA                                              ; FD76E2  d8 12
 	pushw wa                                             ; FD76E4  28
-	calr sub_FD7693                                      ; FD76E5  1e ab ff
+	calr Arr27D6_GetForSlot                                      ; FD76E5  1e ab ff
 	ld c, (xiz-4)                                        ; FD76E8  8e fc 23
 	add (XIX),C                                          ; FD76EB  84 8b
 	inc 8,XSP                                            ; FD76ED  ef 60
@@ -139143,7 +139147,8 @@ Var27DB_Get:
 	ld (XBC),A                                           ; FD773F  b1 41
 	unlk XIZ                                             ; FD7741  ee 0d
 	ret                                                  ; FD7743  0e
-sub_FD7744:
+; Rec2330_CopyData(u8 *dst): copies (0x2333) bytes from 0x2336 (the record at 0x2330, data from +6) to dst.
+Rec2330_CopyData:
 	link XIZ,0xfffe                                      ; FD7744  ee 0c fe ff
 	pushw hl                                             ; FD7748  2b
 	pushw de                                             ; FD7749  2a
@@ -139448,7 +139453,7 @@ PanelEvent_ToFieldIndex:
 	cp a, 0x00:i3                                          ; FD7994  c9 d8
 	jr nz, .LFD79CF                                      ; FD7996  6e 37
 	pushw 0x00                                           ; FD7998  0b 00 00
-	calr sub_FD69E0                                          ; FD799B  1e 42 f0
+	calr ToneMsg_SendP23FromArr2800                                          ; FD799B  1e 42 f0
 	pushw 0x00                                           ; FD799E  0b 00 00
 	calr sub_FD6B07                                          ; FD79A1  1e 63 f1
 	pop XIY                                              ; FD79A4  5d
@@ -142950,7 +142955,7 @@ sub_FD9863:
 	pushw bc                                             ; FD98A9  29
 	call T_Dispatch_Code80                               ; FD98AA  1d d4 1e f4
 	pushw 0x01                                           ; FD98AE  0b 01 00
-	calr sub_FD69E0                                          ; FD98B1  1e 2c d1
+	calr ToneMsg_SendP23FromArr2800                                          ; FD98B1  1e 2c d1
 	inc 8,XSP                                            ; FD98B4  ef 60
 	inc 4,XSP                                            ; FD98B6  ef 64
 .LFD98B8:
@@ -144242,7 +144247,7 @@ sub_FDA282:
 .LFDA2BB:
 	lda xbc, (xiz-22)                                    ; FDA2BB  be ea 31
 	push XBC                                             ; FDA2BE  39
-	calr sub_FD7744                                      ; FDA2BF  1e 82 d4
+	calr Rec2330_CopyData                                      ; FDA2BF  1e 82 d4
 	lda xbc, (xiz-22)                                    ; FDA2C2  be ea 31
 	push XBC                                             ; FDA2C5  39
 	ld wa, (xiz-6)                                       ; FDA2C6  9e fa 20
@@ -145793,7 +145798,7 @@ sub_FDACBD:
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FDACE8  8e fc 3f 01
 	jr nz, .LFDACFD                                      ; FDACEC  6e 0f
 	pushw 0x00                                           ; FDACEE  0b 00 00
-	call sub_FD69E0                                      ; FDACF1  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDACF1  1d e0 69 fd
 	pushw 0x00                                           ; FDACF5  0b 00 00
 	call sub_FD6B07                                      ; FDACF8  1d 07 6b fd
 	pop XIY                                              ; FDACFC  5d
@@ -145848,7 +145853,7 @@ ScreenCode80_Handler:
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FDAD7F  8e fe 3f 01
 	jrl nz, .LFDAE04                                     ; FDAD83  7e 7e 00
 	push XIX                                             ; FDAD86  3c
-	call sub_FD7744                                      ; FDAD87  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDAD87  1d 44 77 fd
 	and (XIX),0xc0                                       ; FDAD8B  84 3c c0
 	ld C,(XIX)                                           ; FDAD8E  84 23
 	pop XIY                                              ; FDAD90  5d
@@ -145934,7 +145939,7 @@ sub_FDAE1F:
 	m_cp_mi8 MBD+r6, 0xfe, 0x03                          ; FDAE4E  8e fe 3f 03
 	jr nz, .LFDAE76                                      ; FDAE52  6e 22
 	push XIX                                             ; FDAE54  3c
-	call sub_FD7744                                      ; FDAE55  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDAE55  1d 44 77 fd
 	ld C,(XIX)                                           ; FDAE59  84 23
 	extz BC                                              ; FDAE5B  d9 12
 	pushw bc                                             ; FDAE5D  29
@@ -145983,7 +145988,7 @@ sub_FDAE1F:
 	push XBC                                             ; FDAEC2  39
 	call Var27DB_Get                                      ; FDAEC3  1d 34 77 fd
 	push XIX                                             ; FDAEC7  3c
-	call sub_FD7744                                      ; FDAEC8  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDAEC8  1d 44 77 fd
 	ld C,(XIX)                                           ; FDAECC  84 23
 	extz BC                                              ; FDAECE  d9 12
 	pushw bc                                             ; FDAED0  29
@@ -146057,7 +146062,7 @@ sub_FDAF07:
 	m_cp_mi8 MBD+r6, 0xfe, 0x03                          ; FDAF7D  8e fe 3f 03
 	jrl nz, .LFDB0DB                                     ; FDAF81  7e 57 01
 	push XIX                                             ; FDAF84  3c
-	call sub_FD7744                                      ; FDAF85  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDAF85  1d 44 77 fd
 	ld d, 0x00:opc                                          ; FDAF89  24 00
 	pop XIY                                              ; FDAF8B  5d
 .LFDAF8C:
@@ -146198,7 +146203,7 @@ sub_FDAF07:
 	push XBC                                             ; FDB0E5  39
 	call Var27DB_Get                                      ; FDB0E6  1d 34 77 fd
 	push XIX                                             ; FDB0EA  3c
-	call sub_FD7744                                      ; FDB0EB  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB0EB  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB0EF  84 23
 	extz BC                                              ; FDB0F1  d9 12
 	pushw bc                                             ; FDB0F3  29
@@ -146391,7 +146396,7 @@ ScreenCode87_Handler:
 	push XBC                                             ; FDB2D0  39
 	call Var27DB_Get                                      ; FDB2D1  1d 34 77 fd
 	push XIX                                             ; FDB2D5  3c
-	call sub_FD7744                                      ; FDB2D6  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB2D6  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB2DA  84 23
 	extz BC                                              ; FDB2DC  d9 12
 	pushw bc                                             ; FDB2DE  29
@@ -146452,7 +146457,7 @@ sub_FDB30B:
 	pushw 0x87                                           ; FDB362  0b 87 00
 	call T_Dispatch_Code80_Bracketed                     ; FDB365  1d d0 1e f4
 	pushw 0x01                                           ; FDB369  0b 01 00
-	call sub_FD69E0                                      ; FDB36C  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDB36C  1d e0 69 fd
 	pushw 0x00                                           ; FDB370  0b 00 00
 	call Var27DA_Set                                      ; FDB373  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB377  1d 13 77 fd
@@ -146515,7 +146520,7 @@ ScreenCode88_Handler:
 	call Var27DB_Get                                      ; FDB3F8  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDB3FC  be f6 31
 	push XBC                                             ; FDB3FF  39
-	call sub_FD7744                                      ; FDB400  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB400  1d 44 77 fd
 	ld c, (xiz-10)                                       ; FDB404  8e f6 23
 	extz BC                                              ; FDB407  d9 12
 	pushw bc                                             ; FDB409  29
@@ -146532,7 +146537,7 @@ ScreenCode88_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDB424  1d d0 1e f4
 	call sub_FD8DAF                                      ; FDB428  1d af 8d fd
 	pushw 0x01                                           ; FDB42C  0b 01 00
-	call sub_FD69E0                                      ; FDB42F  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDB42F  1d e0 69 fd
 	pushw 0x00                                           ; FDB433  0b 00 00
 	call Var27DA_Set                                      ; FDB436  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB43A  1d 13 77 fd
@@ -146591,7 +146596,7 @@ sub_FDB4B0:
 	push XBC                                             ; FDB4B0  39
 	call Var27DB_Get                                      ; FDB4B1  1d 34 77 fd
 	push XIX                                             ; FDB4B5  3c
-	call sub_FD7744                                      ; FDB4B6  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB4B6  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB4BA  84 23
 	extz BC                                              ; FDB4BC  d9 12
 	pushw bc                                             ; FDB4BE  29
@@ -146621,7 +146626,7 @@ sub_FDB4B0:
 	pushw 0x02                                           ; FDB4FD  0b 02 00
 	call sub_FD946B                                      ; FDB500  1d 6b 94 fd
 	pushw 0x01                                           ; FDB504  0b 01 00
-	call sub_FD69E0                                      ; FDB507  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDB507  1d e0 69 fd
 	pushw 0x00                                           ; FDB50B  0b 00 00
 	call Var27DA_Set                                      ; FDB50E  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB512  1d 13 77 fd
@@ -146745,7 +146750,7 @@ sub_FDB53C:
 	call Var27DB_Get                                      ; FDB611  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDB615  be f4 31
 	push XBC                                             ; FDB618  39
-	call sub_FD7744                                      ; FDB619  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB619  1d 44 77 fd
 	ld c, (xiz-12)                                       ; FDB61D  8e f4 23
 	extz BC                                              ; FDB620  d9 12
 	pushw bc                                             ; FDB622  29
@@ -146787,7 +146792,7 @@ sub_FDB53C:
 	m_cp_mi8 MBD+r6, 0xf0, 0x00                          ; FDB673  8e f0 3f 00
 	jr nz, .LFDB681                                      ; FDB677  6e 08
 	pushw 0x01                                           ; FDB679  0b 01 00
-	call sub_FD69E0                                      ; FDB67C  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDB67C  1d e0 69 fd
 	popw bc                                              ; FDB680  49
 .LFDB681:
 	pushw 0x00                                           ; FDB681  0b 00 00
@@ -146843,7 +146848,7 @@ ScreenCode8B_Handler:
 	push XBC                                             ; FDB6F7  39
 	call Var27DB_Get                                      ; FDB6F8  1d 34 77 fd
 	push XIX                                             ; FDB6FC  3c
-	call sub_FD7744                                      ; FDB6FD  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB6FD  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB701  84 23
 	extz BC                                              ; FDB703  d9 12
 	pushw bc                                             ; FDB705  29
@@ -146931,7 +146936,7 @@ ScreenCode8B_Handler:
 	pushw 0x8b                                           ; FDB7CD  0b 8b 00
 	call T_Dispatch_Code80_Bracketed                     ; FDB7D0  1d d0 1e f4
 	pushw 0x01                                           ; FDB7D4  0b 01 00
-	call sub_FD69E0                                      ; FDB7D7  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDB7D7  1d e0 69 fd
 	pushw 0x00                                           ; FDB7DB  0b 00 00
 	call Var27DA_Set                                      ; FDB7DE  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB7E2  1d 13 77 fd
@@ -147094,7 +147099,7 @@ ScreenCode8C_Handler:
 	push XBC                                             ; FDB93C  39
 	call Var27DB_Get                                      ; FDB93D  1d 34 77 fd
 	push XIX                                             ; FDB941  3c
-	call sub_FD7744                                      ; FDB942  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB942  1d 44 77 fd
 	ld C,(XIX)                                           ; FDB946  84 23
 	extz BC                                              ; FDB948  d9 12
 	pushw bc                                             ; FDB94A  29
@@ -147121,7 +147126,7 @@ ScreenCode8C_Handler:
 	pushw 0x00                                           ; FDB97F  0b 00 00
 	call sub_FD946B                                      ; FDB982  1d 6b 94 fd
 	pushw 0x01                                           ; FDB986  0b 01 00
-	call sub_FD69E0                                      ; FDB989  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDB989  1d e0 69 fd
 	pushw 0x00                                           ; FDB98D  0b 00 00
 	call Var27DA_Set                                      ; FDB990  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB994  1d 13 77 fd
@@ -147166,7 +147171,7 @@ ScreenCode8D_Handler:
 	call Var27DB_Get                                      ; FDB9EF  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDB9F3  be f6 31
 	push XBC                                             ; FDB9F6  39
-	call sub_FD7744                                      ; FDB9F7  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDB9F7  1d 44 77 fd
 	ld c, (xiz-10)                                       ; FDB9FB  8e f6 23
 	extz BC                                              ; FDB9FE  d9 12
 	pushw bc                                             ; FDBA00  29
@@ -147193,7 +147198,7 @@ ScreenCode8D_Handler:
 	pushw 0x00                                           ; FDBA33  0b 00 00
 	call Var27DA_Set                                      ; FDBA36  1d 05 77 fd
 	pushw 0x01                                           ; FDBA3A  0b 01 00
-	call sub_FD69E0                                      ; FDBA3D  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDBA3D  1d e0 69 fd
 	call Var27DB_Clear                                      ; FDBA41  1d 13 77 fd
 	pushw 0x10                                           ; FDBA45  0b 10 00
 	call ToneMsg80_Id00                                      ; FDBA48  1d 47 64 fd
@@ -147320,7 +147325,7 @@ ScreenCode8E_Handler:
 	push XBC                                             ; FDBB4A  39
 	call Var27DB_Get                                      ; FDBB4B  1d 34 77 fd
 	push XIX                                             ; FDBB4F  3c
-	call sub_FD7744                                      ; FDBB50  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDBB50  1d 44 77 fd
 	ld C,(XIX)                                           ; FDBB54  84 23
 	extz BC                                              ; FDBB56  d9 12
 	pushw bc                                             ; FDBB58  29
@@ -147350,7 +147355,7 @@ ScreenCode8E_Handler:
 	pushw 0x02                                           ; FDBB97  0b 02 00
 	call sub_FD946B                                      ; FDBB9A  1d 6b 94 fd
 	pushw 0x01                                           ; FDBB9E  0b 01 00
-	call sub_FD69E0                                      ; FDBBA1  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDBBA1  1d e0 69 fd
 	pushw 0x00                                           ; FDBBA5  0b 00 00
 	call Var27DA_Set                                      ; FDBBA8  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDBBAC  1d 13 77 fd
@@ -147490,7 +147495,7 @@ ScreenCodeCD_Handler:
 	push XBC                                             ; FDBD19  39
 	call Var27DB_Get                                      ; FDBD1A  1d 34 77 fd
 	push XIX                                             ; FDBD1E  3c
-	call sub_FD7744                                      ; FDBD1F  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDBD1F  1d 44 77 fd
 	inc 8,XSP                                            ; FDBD23  ef 60
 	m_cp_mi8 MBD+r6, 0xf4, 0x01                          ; FDBD25  8e f4 3f 01
 	jr nz, .LFDBD62                                      ; FDBD29  6e 37
@@ -147840,7 +147845,7 @@ sub_FDBF5E:
 	push XBC                                             ; FDC04B  39
 	call Var27DB_Get                                      ; FDC04C  1d 34 77 fd
 	push XIX                                             ; FDC050  3c
-	call sub_FD7744                                      ; FDC051  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDC051  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC055  84 23
 	extz BC                                              ; FDC057  d9 12
 	pushw bc                                             ; FDC059  29
@@ -147940,7 +147945,7 @@ sub_FDC0FD:
 	push XBC                                             ; FDC136  39
 	call Var27DB_Get                                      ; FDC137  1d 34 77 fd
 	push XIX                                             ; FDC13B  3c
-	call sub_FD7744                                      ; FDC13C  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDC13C  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC140  84 23
 	extz BC                                              ; FDC142  d9 12
 	pushw bc                                             ; FDC144  29
@@ -147993,7 +147998,7 @@ sub_FDC0FD:
 	call sub_FD98BD                                      ; FDC1B2  1d bd 98 fd
 	call sub_FD9A7A                                      ; FDC1B6  1d 7a 9a fd
 	pushw 0x01                                           ; FDC1BA  0b 01 00
-	call sub_FD69E0                                      ; FDC1BD  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC1BD  1d e0 69 fd
 	pushw 0x10                                           ; FDC1C1  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC1C4  1d 47 64 fd
 	inc 8,XSP                                            ; FDC1C8  ef 60
@@ -148098,7 +148103,7 @@ ScreenCode91_Handler:
 	call sub_FD98BD                                      ; FDC28C  1d bd 98 fd
 	call sub_FD9A7A                                      ; FDC290  1d 7a 9a fd
 	pushw 0x01                                           ; FDC294  0b 01 00
-	call sub_FD69E0                                      ; FDC297  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC297  1d e0 69 fd
 	pushw 0x10                                           ; FDC29B  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC29E  1d 47 64 fd
 sub_FDC2A2:
@@ -148113,7 +148118,7 @@ ScreenCode92_Handler:
 	pushw 0x00                                           ; FDC2B5  0b 00 00
 	call sub_FD98BD                                      ; FDC2B8  1d bd 98 fd
 	pushw 0x01                                           ; FDC2BC  0b 01 00
-	call sub_FD69E0                                      ; FDC2BF  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC2BF  1d e0 69 fd
 	pushw 0x10                                           ; FDC2C3  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC2C6  1d 47 64 fd
 	inc 8,XSP                                            ; FDC2CA  ef 60
@@ -148127,7 +148132,7 @@ ScreenCode93_Handler:
 	pushw 0x01                                           ; FDC2DD  0b 01 00
 	call sub_FD98BD                                      ; FDC2E0  1d bd 98 fd
 	pushw 0x01                                           ; FDC2E4  0b 01 00
-	call sub_FD69E0                                      ; FDC2E7  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC2E7  1d e0 69 fd
 	pushw 0x10                                           ; FDC2EB  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC2EE  1d 47 64 fd
 	inc 8,XSP                                            ; FDC2F2  ef 60
@@ -148139,7 +148144,7 @@ ScreenCode94_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDC2FE  1d d0 1e f4
 	call sub_FD9B58                                      ; FDC302  1d 58 9b fd
 	pushw 0x01                                           ; FDC306  0b 01 00
-	call sub_FD69E0                                      ; FDC309  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC309  1d e0 69 fd
 	pushw 0x10                                           ; FDC30D  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC310  1d 47 64 fd
 	inc 6,XSP                                            ; FDC314  ef 66
@@ -148149,7 +148154,7 @@ ScreenCode95_Handler:
 	pushw 0x95                                           ; FDC31B  0b 95 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC31E  1d d0 1e f4
 	pushw 0x01                                           ; FDC322  0b 01 00
-	call sub_FD69E0                                      ; FDC325  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC325  1d e0 69 fd
 	pushw 0x10                                           ; FDC329  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC32C  1d 47 64 fd
 	inc 6,XSP                                            ; FDC330  ef 66
@@ -148199,7 +148204,7 @@ ScreenCode96_Handler:
 	push XBC                                             ; FDC396  39
 	call Var27DB_Get                                      ; FDC397  1d 34 77 fd
 	push XIX                                             ; FDC39B  3c
-	call sub_FD7744                                      ; FDC39C  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDC39C  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC3A0  84 23
 	extz BC                                              ; FDC3A2  d9 12
 	pushw bc                                             ; FDC3A4  29
@@ -148226,7 +148231,7 @@ ScreenCode96_Handler:
 	pushw 0x00                                           ; FDC3D9  0b 00 00
 	call sub_FD946B                                      ; FDC3DC  1d 6b 94 fd
 	pushw 0x01                                           ; FDC3E0  0b 01 00
-	call sub_FD69E0                                      ; FDC3E3  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC3E3  1d e0 69 fd
 	pushw 0x00                                           ; FDC3E7  0b 00 00
 	call Var27DA_Set                                      ; FDC3EA  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC3EE  1d 13 77 fd
@@ -148291,7 +148296,7 @@ sub_FDC438:
 	call Var27DB_Get                                      ; FDC471  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDC475  be f6 31
 	push XBC                                             ; FDC478  39
-	call sub_FD7744                                      ; FDC479  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDC479  1d 44 77 fd
 	ld c, (xiz-10)                                       ; FDC47D  8e f6 23
 	extz BC                                              ; FDC480  d9 12
 	pushw bc                                             ; FDC482  29
@@ -148308,7 +148313,7 @@ sub_FDC438:
 	call T_Dispatch_Code80_Bracketed                     ; FDC49D  1d d0 1e f4
 	call sub_FD8DAF                                      ; FDC4A1  1d af 8d fd
 	pushw 0x01                                           ; FDC4A5  0b 01 00
-	call sub_FD69E0                                      ; FDC4A8  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC4A8  1d e0 69 fd
 	pushw 0x00                                           ; FDC4AC  0b 00 00
 	call Var27DA_Set                                      ; FDC4AF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC4B3  1d 13 77 fd
@@ -148366,7 +148371,7 @@ ScreenCode98_Handler:
 	push XBC                                             ; FDC529  39
 	call Var27DB_Get                                      ; FDC52A  1d 34 77 fd
 	push XIX                                             ; FDC52E  3c
-	call sub_FD7744                                      ; FDC52F  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDC52F  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC533  84 23
 	extz BC                                              ; FDC535  d9 12
 	pushw bc                                             ; FDC537  29
@@ -148396,7 +148401,7 @@ ScreenCode98_Handler:
 	pushw 0x02                                           ; FDC576  0b 02 00
 	call sub_FD946B                                      ; FDC579  1d 6b 94 fd
 	pushw 0x01                                           ; FDC57D  0b 01 00
-	call sub_FD69E0                                      ; FDC580  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC580  1d e0 69 fd
 	pushw 0x00                                           ; FDC584  0b 00 00
 	call Var27DA_Set                                      ; FDC587  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC58B  1d 13 77 fd
@@ -148535,7 +148540,7 @@ sub_FDC6CB:
 	push XBC                                             ; FDC6DF  39
 	call Var27DB_Get                                      ; FDC6E0  1d 34 77 fd
 	push XIX                                             ; FDC6E4  3c
-	call sub_FD7744                                      ; FDC6E5  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDC6E5  1d 44 77 fd
 	ld C,(XIX)                                           ; FDC6E9  84 23
 	extz BC                                              ; FDC6EB  d9 12
 	pushw bc                                             ; FDC6ED  29
@@ -148668,7 +148673,7 @@ sub_FDC6CB:
 	pushw 0x82                                           ; FDC824  0b 82 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC827  1d d0 1e f4
 	pushw 0x01                                           ; FDC82B  0b 01 00
-	call sub_FD69E0                                      ; FDC82E  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC82E  1d e0 69 fd
 	pushw 0x00                                           ; FDC832  0b 00 00
 	call Var27DA_Set                                      ; FDC835  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC839  1d 13 77 fd
@@ -148757,7 +148762,7 @@ sub_FDC87E:
 	call Var27DB_Get                                      ; FDC8F0  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDC8F4  be f6 31
 	push XBC                                             ; FDC8F7  39
-	call sub_FD7744                                      ; FDC8F8  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDC8F8  1d 44 77 fd
 	ld c, (xiz-10)                                       ; FDC8FC  8e f6 23
 	extz BC                                              ; FDC8FF  d9 12
 	pushw bc                                             ; FDC901  29
@@ -148783,7 +148788,7 @@ sub_FDC87E:
 	pushw 0x83                                           ; FDC92B  0b 83 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC92E  1d d0 1e f4
 	pushw 0x01                                           ; FDC932  0b 01 00
-	call sub_FD69E0                                      ; FDC935  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDC935  1d e0 69 fd
 	pushw 0x00                                           ; FDC939  0b 00 00
 	call Var27DA_Set                                      ; FDC93C  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC940  1d 13 77 fd
@@ -148872,7 +148877,7 @@ sub_FDC9C4:
 	call Var27DB_Get                                      ; FDC9FF  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDCA03  be f6 31
 	push XBC                                             ; FDCA06  39
-	call sub_FD7744                                      ; FDCA07  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDCA07  1d 44 77 fd
 	ld c, (xiz-10)                                       ; FDCA0B  8e f6 23
 	extz BC                                              ; FDCA0E  d9 12
 	pushw bc                                             ; FDCA10  29
@@ -148906,7 +148911,7 @@ sub_FDCA4E:
 	m_cp_mi8 MBD+r6, 0xfb, 0x04                          ; FDCA50  8e fb 3f 04
 	jr ule, .LFDCA37                                     ; FDCA54  63 e1
 	pushw 0x01                                           ; FDCA56  0b 01 00
-	call sub_FD69E0                                      ; FDCA59  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDCA59  1d e0 69 fd
 	pushw 0x00                                           ; FDCA5D  0b 00 00
 	call Var27DA_Set                                      ; FDCA60  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDCA64  1d 13 77 fd
@@ -148992,7 +148997,7 @@ ScreenCode85_Handler:
 	call Var27DB_Get                                      ; FDCB1B  1d 34 77 fd
 	lda xbc, (xiz-10)                                    ; FDCB1F  be f6 31
 	push XBC                                             ; FDCB22  39
-	call sub_FD7744                                      ; FDCB23  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDCB23  1d 44 77 fd
 	ld c, (xiz-10)                                       ; FDCB27  8e f6 23
 	extz BC                                              ; FDCB2A  d9 12
 	pushw bc                                             ; FDCB2C  29
@@ -149025,7 +149030,7 @@ ScreenCode85_Handler:
 	m_cp_mi8 MBD+r6, 0xfb, 0x04                          ; FDCB6C  8e fb 3f 04
 	jr ule, .LFDCB53                                     ; FDCB70  63 e1
 	pushw 0x01                                           ; FDCB72  0b 01 00
-	call sub_FD69E0                                      ; FDCB75  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDCB75  1d e0 69 fd
 	pushw 0x00                                           ; FDCB79  0b 00 00
 	call Var27DA_Set                                      ; FDCB7C  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDCB80  1d 13 77 fd
@@ -149062,7 +149067,7 @@ ScreenCode86_Handler:
 	call Var2805_Set                                      ; FDCBC6  1d 92 a7 fd
 	lda xbc, (xiz-8)                                     ; FDCBCA  be f8 31
 	push XBC                                             ; FDCBCD  39
-	call sub_FD76BF                                      ; FDCBCE  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FDCBCE  1d bf 76 fd
 	ld h, 0x00:opc                                          ; FDCBD2  26 00
 	inc 6,XSP                                            ; FDCBD4  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDCBD6  8e fe 3f 00
@@ -149112,7 +149117,7 @@ ScreenCode86_Handler:
 	call Var27DB_Get                                      ; FDCC39  1d 34 77 fd
 	lda xbc, (xiz-42)                                    ; FDCC3D  be d6 31
 	push XBC                                             ; FDCC40  39
-	call sub_FD7744                                      ; FDCC41  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDCC41  1d 44 77 fd
 	ld c, (xiz-42)                                       ; FDCC45  8e d6 23
 	extz BC                                              ; FDCC48  d9 12
 	pushw bc                                             ; FDCC4A  29
@@ -149194,7 +149199,7 @@ ScreenCode86_Handler:
 	pushw 0x86                                           ; FDCCF9  0b 86 00
 	call T_Dispatch_Code80_Bracketed                     ; FDCCFC  1d d0 1e f4
 	pushw 0x01                                           ; FDCD00  0b 01 00
-	call sub_FD69E0                                      ; FDCD03  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDCD03  1d e0 69 fd
 	pushw 0x00                                           ; FDCD07  0b 00 00
 	call Var27DA_Set                                      ; FDCD0A  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDCD0E  1d 13 77 fd
@@ -149404,7 +149409,7 @@ sub_FDCECF:
 	jrl .LFDCFE6                                         ; FDCEE2  78 01 01
 .LFDCEE5:
 	push XIX                                             ; FDCEE5  3c
-	call sub_FD7744                                      ; FDCEE6  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDCEE6  1d 44 77 fd
 	ld l, 0x00:opc                                          ; FDCEEA  27 00
 	pop XIY                                              ; FDCEEC  5d
 .LFDCEED:
@@ -149568,7 +149573,7 @@ sub_FDD02D:
 .LFDD069:
 	lda xbc, (xiz-16)                                    ; FDD069  be f0 31
 	push XBC                                             ; FDD06C  39
-	call sub_FD7744                                      ; FDD06D  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDD06D  1d 44 77 fd
 	ld h, 0x00:opc                                          ; FDD071  26 00
 	pop XIY                                              ; FDD073  5d
 .LFDD074:
@@ -149883,7 +149888,7 @@ ScreenCodeCB_Handler:
 	push XBC                                             ; FDD34D  39
 	call Var27DB_Get                                      ; FDD34E  1d 34 77 fd
 	push XIX                                             ; FDD352  3c
-	call sub_FD7744                                      ; FDD353  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDD353  1d 44 77 fd
 	ld C,(XIX)                                           ; FDD357  84 23
 	extz BC                                              ; FDD359  d9 12
 	pushw bc                                             ; FDD35B  29
@@ -150018,7 +150023,7 @@ ScreenCodeC0_Handler:
 	jr nz, .LFDD4F7                                      ; FDD490  6e 65
 	lda xbc, (xiz-12)                                    ; FDD492  be f4 31
 	push XBC                                             ; FDD495  39
-	call sub_FD7744                                      ; FDD496  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDD496  1d 44 77 fd
 	ld c, (xiz-12)                                       ; FDD49A  8e f4 23
 	extz BC                                              ; FDD49D  d9 12
 	pushw bc                                             ; FDD49F  29
@@ -150068,7 +150073,7 @@ ScreenCodeC0_Handler:
 	call Var27DB_Get                                      ; FDD502  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDD506  be f4 31
 	push XBC                                             ; FDD509  39
-	call sub_FD7744                                      ; FDD50A  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDD50A  1d 44 77 fd
 	ld l, 0x03:opc                                          ; FDD50E  27 03
 	ld h, 0x00:opc                                          ; FDD510  26 00
 	inc 8,XSP                                            ; FDD512  ef 60
@@ -150193,7 +150198,7 @@ ScreenCodeC0_Handler:
 	call Var27DB_Get                                      ; FDD61E  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDD622  be f4 31
 	push XBC                                             ; FDD625  39
-	call sub_FD7744                                      ; FDD626  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDD626  1d 44 77 fd
 	ld c, (xiz-12)                                       ; FDD62A  8e f4 23
 	extz BC                                              ; FDD62D  d9 12
 	pushw bc                                             ; FDD62F  29
@@ -150385,7 +150390,7 @@ ScreenCodeC0_Handler:
 	pushw 0x06                                           ; FDD7D8  0b 06 00
 	call PanelDial_ActAsButton                                      ; FDD7DB  1d 01 7c fd
 	pushw 0x01                                           ; FDD7DF  0b 01 00
-	call sub_FD69E0                                      ; FDD7E2  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDD7E2  1d e0 69 fd
 	pushw 0x10                                           ; FDD7E6  0b 10 00
 	call ToneMsg80_Id00                                      ; FDD7E9  1d 47 64 fd
 .LFDD7ED:
@@ -150447,7 +150452,7 @@ ToneEditPage_A3_PositionParameter:
 	jr nz, .LFDD870                                      ; FDD82B  6e 43
 	lda xbc, (xiz-6)                                     ; FDD82D  be fa 31
 	push XBC                                             ; FDD830  39
-	call sub_FD76BF                                      ; FDD831  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FDD831  1d bf 76 fd
 	pushw 0xc3                                           ; FDD835  0b c3 00
 	pushw 0x01                                           ; FDD838  0b 01 00
 	pushw 0x0d                                           ; FDD83B  0b 0d 00
@@ -150507,7 +150512,7 @@ ToneEditPage_A3_PositionParameter:
 	call Var27DB_Get                                      ; FDD8C6  1d 34 77 fd
 	lda xbc, (xiz-18)                                    ; FDD8CA  be ee 31
 	push XBC                                             ; FDD8CD  39
-	call sub_FD7744                                      ; FDD8CE  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDD8CE  1d 44 77 fd
 	ld c, (xiz-18)                                       ; FDD8D2  8e ee 23
 	extz BC                                              ; FDD8D5  d9 12
 	pushw bc                                             ; FDD8D7  29
@@ -150551,7 +150556,7 @@ ToneEditPage_A3_PositionParameter:
 	call Var27DA_Set                                      ; FDD937  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDD93B  1d 13 77 fd
 	pushw 0x01                                           ; FDD93F  0b 01 00
-	call sub_FD69E0                                      ; FDD942  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDD942  1d e0 69 fd
 	pushw 0x10                                           ; FDD946  0b 10 00
 	call ToneMsg80_Id00                                      ; FDD949  1d 47 64 fd
 	add XSP,0x00000016                                   ; FDD94D  ef c8 16 00 00 00
@@ -150606,7 +150611,7 @@ ToneEditPage_A4_PositionMovement:
 	jr nz, .LFDD9A4                                      ; FDD985  6e 1d
 	lda xbc, (xiz-6)                                     ; FDD987  be fa 31
 	push XBC                                             ; FDD98A  39
-	call sub_FD76BF                                      ; FDD98B  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FDD98B  1d bf 76 fd
 	pushw 0xc4                                           ; FDD98F  0b c4 00
 	pushw 0x03                                           ; FDD992  0b 03 00
 	pushw 0x10                                           ; FDD995  0b 10 00
@@ -150636,7 +150641,7 @@ ToneEditPage_A4_PositionMovement:
 .LFDD9CD:
 	lda xbc, (xiz-16)                                    ; FDD9CD  be f0 31
 	push XBC                                             ; FDD9D0  39
-	call sub_FD7744                                      ; FDD9D1  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDD9D1  1d 44 77 fd
 	ld h, 0x00:opc                                          ; FDD9D5  26 00
 	pop XIY                                              ; FDD9D7  5d
 .LFDD9D8:
@@ -150661,7 +150666,7 @@ ToneEditPage_A4_PositionMovement:
 	call Var27DA_Set                                      ; FDDA00  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDDA04  1d 13 77 fd
 	pushw 0x01                                           ; FDDA08  0b 01 00
-	call sub_FD69E0                                      ; FDDA0B  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDDA0B  1d e0 69 fd
 	pushw 0x10                                           ; FDDA0F  0b 10 00
 	call ToneMsg80_Id00                                      ; FDDA12  1d 47 64 fd
 	inc 8,XSP                                            ; FDDA16  ef 60
@@ -150722,7 +150727,7 @@ ToneEditPage_A5_FittingMutingTuning:
 	jrl nz, .LFDDAE7                                     ; FDDA4E  7e 96 00
 	lda xbc, (xiz-6)                                     ; FDDA51  be fa 31
 	push XBC                                             ; FDDA54  39
-	call sub_FD76BF                                      ; FDDA55  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FDDA55  1d bf 76 fd
 	ldw hl, 0xc5                                         ; FDDA59  33 c5 00
 	pushw hl                                             ; FDDA5C  2b
 	pushw 0x01                                           ; FDDA5D  0b 01 00
@@ -150861,7 +150866,7 @@ ToneEditPage_A5_FittingMutingTuning:
 	push XBC                                             ; FDDBA9  39
 	call Var27DB_Get                                      ; FDDBAA  1d 34 77 fd
 	push XIX                                             ; FDDBAE  3c
-	call sub_FD7744                                      ; FDDBAF  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDDBAF  1d 44 77 fd
 	ld C,(XIX)                                           ; FDDBB3  84 23
 	extz BC                                              ; FDDBB5  d9 12
 	pushw bc                                             ; FDDBB7  29
@@ -150906,7 +150911,7 @@ ToneEditPage_A5_FittingMutingTuning:
 	call Var27DA_Set                                      ; FDDC19  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDDC1D  1d 13 77 fd
 	pushw 0x01                                           ; FDDC21  0b 01 00
-	call sub_FD69E0                                      ; FDDC24  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDDC24  1d e0 69 fd
 	pushw 0x10                                           ; FDDC28  0b 10 00
 	call ToneMsg80_Id00                                      ; FDDC2B  1d 47 64 fd
 	add XSP,0x0000001c                                   ; FDDC2F  ef c8 1c 00 00 00
@@ -150964,7 +150969,7 @@ ToneEditPage_A6_TouchDepth:
 	jr nz, .LFDDCCC                                      ; FDDC6F  6e 5b
 	lda xbc, (xiz-6)                                     ; FDDC71  be fa 31
 	push XBC                                             ; FDDC74  39
-	call sub_FD76BF                                      ; FDDC75  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FDDC75  1d bf 76 fd
 	ldw hl, 0x17                                         ; FDDC79  33 17 00
 	ld d, 0x02:opc                                          ; FDDC7C  24 02
 	pop XIY                                              ; FDDC7E  5d
@@ -151066,7 +151071,7 @@ sub_FDDCB9:
 	call Var27DB_Get                                      ; FDDD56  1d 34 77 fd
 	lda xbc, (xiz-26)                                    ; FDDD5A  be e6 31
 	push XBC                                             ; FDDD5D  39
-	call sub_FD7744                                      ; FDDD5E  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDDD5E  1d 44 77 fd
 	ld c, (xiz-26)                                       ; FDDD62  8e e6 23
 	extz BC                                              ; FDDD65  d9 12
 	pushw bc                                             ; FDDD67  29
@@ -151088,7 +151093,7 @@ sub_FDDCB9:
 	call Var27DA_Set                                      ; FDDD8C  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDDD90  1d 13 77 fd
 	pushw 0x01                                           ; FDDD94  0b 01 00
-	call sub_FD69E0                                      ; FDDD97  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDDD97  1d e0 69 fd
 	pushw 0x10                                           ; FDDD9B  0b 10 00
 	call ToneMsg80_Id00                                      ; FDDD9E  1d 47 64 fd
 	inc 8,XSP                                            ; FDDDA2  ef 60
@@ -151148,7 +151153,7 @@ ToneEditPage_A7_ResoModeKeyFollow:
 	jrl nz, .LFDDE78                                     ; FDDDDF  7e 96 00
 	lda xbc, (xiz-6)                                     ; FDDDE2  be fa 31
 	push XBC                                             ; FDDDE5  39
-	call sub_FD76BF                                      ; FDDDE6  1d bf 76 fd
+	call Var27A3_GetPackedSlot                                      ; FDDDE6  1d bf 76 fd
 	pushw 0xc7                                           ; FDDDEA  0b c7 00
 	pushw 0x01                                           ; FDDDED  0b 01 00
 	pushw 0x15                                           ; FDDDF0  0b 15 00
@@ -151249,7 +151254,7 @@ ToneEditPage_A7_ResoModeKeyFollow:
 	call Var27DB_Get                                      ; FDDED5  1d 34 77 fd
 	lda xbc, (xiz-26)                                    ; FDDED9  be e6 31
 	push XBC                                             ; FDDEDC  39
-	call sub_FD7744                                      ; FDDEDD  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDDEDD  1d 44 77 fd
 	ld c, (xiz-26)                                       ; FDDEE1  8e e6 23
 	extz BC                                              ; FDDEE4  d9 12
 	pushw bc                                             ; FDDEE6  29
@@ -151277,7 +151282,7 @@ sub_FDDEFB:
 	call Var27DA_Set                                      ; FDDF18  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDDF1C  1d 13 77 fd
 	pushw 0x01                                           ; FDDF20  0b 01 00
-	call sub_FD69E0                                      ; FDDF23  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                      ; FDDF23  1d e0 69 fd
 	pushw 0x10                                           ; FDDF27  0b 10 00
 	call ToneMsg80_Id00                                      ; FDDF2A  1d 47 64 fd
 	inc 8,XSP                                            ; FDDF2E  ef 60
@@ -151350,7 +151355,7 @@ ScreenCodeC8_Handler:
 	call Var27DB_Get                                      ; FDDFCB  1d 34 77 fd
 	lda xbc, (xiz-12)                                    ; FDDFCF  be f4 31
 	push XBC                                             ; FDDFD2  39
-	call sub_FD7744                                      ; FDDFD3  1d 44 77 fd
+	call Rec2330_CopyData                                      ; FDDFD3  1d 44 77 fd
 	ld c, (xiz-12)                                       ; FDDFD7  8e f4 23
 	extz BC                                              ; FDDFDA  d9 12
 	pushw bc                                             ; FDDFDC  29
@@ -153076,7 +153081,7 @@ sub_FDED48:
 	cp (XIZ+0x08),0x00                            ; FDED4C  8e 08 3f 00
 	jr nz, .LFDED79                               ; FDED50  6e 27
 	pushw 0x00                                    ; FDED52  0b 00 00
-	call sub_FD69E0                                 ; FDED55  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDED55  1d e0 69 fd
 	lda xbc, (xiz-2)                              ; FDED59  be fe 31
 	push XBC                                      ; FDED5C  39
 	call Var27F5_Get                                 ; FDED5D  1d ca a0 fd
@@ -153285,7 +153290,7 @@ sub_FDEEEC:
 	cp (XIZ+0x08),0x00                            ; FDEEF0  8e 08 3f 00
 	jr nz, .LFDEF1D                               ; FDEEF4  6e 27
 	pushw 0x00                                    ; FDEEF6  0b 00 00
-	call sub_FD69E0                                 ; FDEEF9  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDEEF9  1d e0 69 fd
 	lda xbc, (xiz-2)                              ; FDEEFD  be fe 31
 	push XBC                                      ; FDEF00  39
 	call Var27F5_Get                                 ; FDEF01  1d ca a0 fd
@@ -153517,7 +153522,7 @@ sub_FDF0D8:
 	cp (XIZ+0x08),0x00                            ; FDF0DC  8e 08 3f 00
 	jr nz, .LFDF109                               ; FDF0E0  6e 27
 	pushw 0x00                                    ; FDF0E2  0b 00 00
-	call sub_FD69E0                                 ; FDF0E5  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDF0E5  1d e0 69 fd
 	lda xbc, (xiz-2)                              ; FDF0E9  be fe 31
 	push XBC                                      ; FDF0EC  39
 	call Var27F5_Get                                 ; FDF0ED  1d ca a0 fd
@@ -153696,7 +153701,7 @@ sub_FDF249:
 	cp (XIZ+0x08),0x00                            ; FDF24D  8e 08 3f 00
 	jr nz, .LFDF27A                               ; FDF251  6e 27
 	pushw 0x00                                    ; FDF253  0b 00 00
-	call sub_FD69E0                                 ; FDF256  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDF256  1d e0 69 fd
 	lda xbc, (xiz-2)                              ; FDF25A  be fe 31
 	push XBC                                      ; FDF25D  39
 	call Var27F5_Get                                 ; FDF25E  1d ca a0 fd
@@ -154085,7 +154090,7 @@ sub_FDF5D7:
 	cp (XIZ+0x08),0x00                            ; FDF5DB  8e 08 3f 00
 	jr nz, .LFDF608                               ; FDF5DF  6e 27
 	pushw 0x00                                    ; FDF5E1  0b 00 00
-	call sub_FD69E0                                 ; FDF5E4  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDF5E4  1d e0 69 fd
 	lda xbc, (xiz-2)                              ; FDF5E8  be fe 31
 	push XBC                                      ; FDF5EB  39
 	call Var27F5_Get                                 ; FDF5EC  1d ca a0 fd
@@ -154257,7 +154262,7 @@ sub_FDF74B:
 	cp (XIZ+0x08),0x00                            ; FDF74F  8e 08 3f 00
 	jr nz, .LFDF77C                               ; FDF753  6e 27
 	pushw 0x00                                    ; FDF755  0b 00 00
-	call sub_FD69E0                                 ; FDF758  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDF758  1d e0 69 fd
 	lda xbc, (xiz-2)                              ; FDF75C  be fe 31
 	push XBC                                      ; FDF75F  39
 	call Var27F5_Get                                 ; FDF760  1d ca a0 fd
@@ -154600,7 +154605,7 @@ sub_FDFA72:
 	cp (XIZ+0x08),0x00                            ; FDFA76  8e 08 3f 00
 	jr nz, .LFDFA8F                               ; FDFA7A  6e 13
 	pushw 0x00                                    ; FDFA7C  0b 00 00
-	call sub_FD69E0                                 ; FDFA7F  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDFA7F  1d e0 69 fd
 	pushw 0x00                                    ; FDFA83  0b 00 00
 	pushw 0x80                                    ; FDFA86  0b 80 00
 	call PanelScreen_PostRequest                                 ; FDFA89  1d 8b 60 fd
@@ -154807,7 +154812,7 @@ sub_FDFC1E:
 	cp (XIZ+0x08),0x00                            ; FDFC22  8e 08 3f 00
 	jr nz, .LFDFC3B                               ; FDFC26  6e 13
 	pushw 0x00                                    ; FDFC28  0b 00 00
-	call sub_FD69E0                                 ; FDFC2B  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDFC2B  1d e0 69 fd
 	pushw 0x00                                    ; FDFC2F  0b 00 00
 	pushw 0x80                                    ; FDFC32  0b 80 00
 	call PanelScreen_PostRequest                                 ; FDFC35  1d 8b 60 fd
@@ -154986,7 +154991,7 @@ sub_FDFD85:
 	cp (XIZ+0x08),0x00                            ; FDFD89  8e 08 3f 00
 	jr nz, .LFDFDA2                               ; FDFD8D  6e 13
 	pushw 0x00                                    ; FDFD8F  0b 00 00
-	call sub_FD69E0                                 ; FDFD92  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDFD92  1d e0 69 fd
 	pushw 0x00                                    ; FDFD96  0b 00 00
 	pushw 0x80                                    ; FDFD99  0b 80 00
 	call PanelScreen_PostRequest                                 ; FDFD9C  1d 8b 60 fd
@@ -155145,7 +155150,7 @@ sub_FDFEC2:
 	cp (XIZ+0x08),0x00                            ; FDFEC6  8e 08 3f 00
 	jr nz, .LFDFEDF                               ; FDFECA  6e 13
 	pushw 0x00                                    ; FDFECC  0b 00 00
-	call sub_FD69E0                                 ; FDFECF  1d e0 69 fd
+	call ToneMsg_SendP23FromArr2800                                 ; FDFECF  1d e0 69 fd
 	pushw 0x00                                    ; FDFED3  0b 00 00
 	pushw 0x80                                    ; FDFED6  0b 80 00
 	call PanelScreen_PostRequest                                 ; FDFED9  1d 8b 60 fd
@@ -155230,8 +155235,8 @@ sub_FDFEC2:
 	cp (XIZ+0x08),0x00                            ; FDFF67  8e 08 3f 00
 	jr nz, .LFDFF80                               ; FDFF6B  6e 13
 	pushw 0x00                                    ; FDFF6D  0b 00 00
-; stale, 0x15E above: its ten live twins (sub_FDFEC2 among them) call sub_FD69E0
-	call	sub_FD69E0 + 0x15e                      ; FDFF70  1d 3e 6b fd
+; stale, 0x15E above: its ten live twins (sub_FDFEC2 among them) call ToneMsg_SendP23FromArr2800
+	call	ToneMsg_SendP23FromArr2800 + 0x15e                      ; FDFF70  1d 3e 6b fd
 	pushw 0x00                                    ; FDFF74  0b 00 00
 	pushw 0x80                                    ; FDFF77  0b 80 00
 ; stale, 0x15E above: the same ten twins call PanelScreen_PostRequest

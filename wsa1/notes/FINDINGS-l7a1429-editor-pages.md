@@ -151,7 +151,7 @@ Each page's ENTER routine in prom_a fires a run of read-back requests
 (`ToneMsg80_SendParam`, message class `0x80 | arm`, i.e. bit 3 clear).  Its reply handler is
 
 ```
-    Var27DB_Get(&n);  sub_FD7744(&v);  Arr27A6_Set(n, v);  if (++count > N) redraw
+    Var27DB_Get(&n);  Rec2330_CopyData(&v);  Arr27A6_Set(n, v);  if (++count > N) redraw
 ```
 
 -- so reply *n* lands at `((u8 *)0x27A6)[n]`.  Two of the five pages call
