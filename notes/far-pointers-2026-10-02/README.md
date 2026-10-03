@@ -99,3 +99,23 @@ HD-AE5000 image (own ROM 0x280000..0x2FFFFF).  Reports in `operands/`:
 
 numaddr: HD-AE5000 116 -> 11, v10 109 -> 79, v9 118 -> 88, v7 346 -> 189; numfar 607 -> 534.
 Gate 13/13.  (v7's 157 includes 115 exact matches that had never been applied.)
+
+## Fourth pass, 2026-10-03: format strings and data the first passes left `inside` objects
+
+`round3/FAR_<v>.json` are the reports this pass ran from
+(`symbolize_far_pointer_pushes.py --image <v> --report ...` on the tree before it).  It placed
+labels (`label_far_pointer_targets.py --apply`), rebuilt, and symbolized (`--apply`): 32 pushes in
+v10, 32 in v9, 30 in v7.  Most targets are the `sprintf` format strings of compiled C ("%1d",
+"%2d", "%3d", "%4d", "%2d%%"...), four bytes each, one small pool per routine inside the generated
+StyleUI / SepaOut binaries -- now `<Reader>_Str_Fmt1d` ...; four are MidiSysEx_* data.
+
+**Two false-positive classes found on the way, and fixed in the tools before applying:**
+* a DrawString colour pair whose `call` is reached through a JUMP (`jr AcFileSfx_CallDrawString`)
+  is outside COLOUR_CALL's six-line window: `symbolize_far_pointer_pushes.py` and the dashboard's
+  `numfar` now also recognise the colour VALUES (0xFF00F5, 0xFB00F5, ... -- the list
+  `unsymbolize_color_pairs.py` established);
+* a push pair that lands on an UNLABELLED CODE LINE is word arguments, not a pointer (SeMenu's
+  `pushw 121 / 254 / 73 / 48` made 0xFE0049): `label_far_pointer_targets.py` no longer places a
+  `<Reader>_Code` label for a push-pair row.  The first dry run would have put three such labels
+  on code (SeMenu_ApplyPartEdit_AltStore_Code, NoteEditBox_EventDispatch2_Code_2,
+  AcFileSfx_DrawLoop_Code); they were reverted before anything was committed.

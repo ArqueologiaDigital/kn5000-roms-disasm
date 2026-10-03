@@ -94,6 +94,10 @@ def reg_macro_addresses(line):
     return m, out
 
 
+# the DrawString family's colour pairs, by value: a pair whose call is reached through a jump
+# (`jr AcFileSfx_CallDrawString`) is not seen by COLOUR_CALL's window
+# (scripts/tools/unsymbolize_color_pairs.py, which established the list)
+COLOUR_VALUES = {0x00FF0008, 0x00FF00F2, 0x00FF00F5, 0x00FF00F7, 0x00FB00F5, 0x00FB00F7, 0x00F400F7}
 COLOUR_CALL = re.compile(r'\bcall\s+(DrawString|DrawStringCentered|DrawStringLeftJustify|'
                          r'DrawStringRightJustify|DrawStringAlignment|DrawStringReverse)\b')
 PUSH = re.compile(r'^(\s*(?:[A-Za-z_.$][\w.$]*:)?\s*pushw\s+)(0x[0-9a-fA-F]+|\d+)(\s*(?:;.*)?)$')
@@ -156,7 +160,7 @@ def main():
                 continue
             v = (h << 16) | l
             rel = os.path.relpath(f, REPO)
-            if COLOUR_CALL.search(" ".join(x.split(";")[0] for x in L[i + 2:i + 8])):
+            if v in COLOUR_VALUES or COLOUR_CALL.search(" ".join(x.split(";")[0] for x in L[i + 2:i + 8])):
                 # the 32-bit argument of the DrawString family is a COLOUR PAIR, not a pointer
                 # ((0xff, 0xf5), (0xfb, 0xf5) ...; scripts/tools/unsymbolize_color_pairs.py)
                 stats["colour pair for DrawString*"] += 1

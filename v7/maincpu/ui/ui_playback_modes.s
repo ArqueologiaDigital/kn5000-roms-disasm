@@ -2136,8 +2136,8 @@ NameGetFuncCall_Dispatch:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	226
-	pushw	242
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts@hi16
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts@lo16
 	pushw	0
 	pushw	7248
 	call	Sprintf_Locked
@@ -2153,8 +2153,8 @@ NameGetFuncCall_Dispatch:
 	call	GetCurrentFileIndex
 	inc	1, hl
 	pushw	hl
-	pushw	226
-	pushw	252
+	pushw	NameGetFuncCall_Dispatch_Str_FILE_Fmt2d_Fmts@hi16
+	pushw	NameGetFuncCall_Dispatch_Str_FILE_Fmt2d_Fmts@lo16
 	pushw	0
 	pushw	7270
 	call	Sprintf_Locked
@@ -2171,8 +2171,8 @@ NameGetFuncCall_Dispatch:
 	call	GetFirstPageBase
 	inc	1, hl
 	pushw	hl
-	pushw	226
-	pushw	264
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt3d_Fmts@hi16
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt3d_Fmts@lo16
 	pushw	0
 	pushw	7284
 	call	Sprintf_Locked
@@ -2212,8 +2212,8 @@ NameGetFuncCall_Skip2:
 	call	FileIO_GetCurrentFileIndex_Alt
 	inc	1, hl
 	pushw	hl
-	pushw	226
-	pushw	272
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_2@hi16
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_2@lo16
 	pushw	0
 	pushw	7362
 	call	Sprintf_Locked
@@ -2251,8 +2251,8 @@ NameGetFuncCall_Skip3:
 	call	GetCurrentFileIndexAlt
 	inc	1, hl
 	pushw	hl
-	pushw	226
-	pushw	280
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_3@hi16
+	pushw	NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_3@lo16
 	pushw	0
 	pushw	7366
 	call	Sprintf_Locked

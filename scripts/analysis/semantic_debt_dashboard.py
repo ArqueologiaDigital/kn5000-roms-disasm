@@ -128,6 +128,10 @@ OWN_ROM = {"v10/maincpu": (0xE00000, 0xFFFFFF), "v9/maincpu": (0xE00000, 0xFFFFF
            "wsa1/prom_b": (0xF00000, 0xF7FFFF), "wsa1/prom_c": (0xF80000, 0xFFFFFF)}
 
 
+# DrawString colour pairs by value (scripts/tools/unsymbolize_color_pairs.py)
+COLOUR_VALUES = {0x00FF0008, 0x00FF00F2, 0x00FF00F5, 0x00FF00F7, 0x00FB00F5, 0x00FB00F7, 0x00F400F7}
+
+
 def numfar(data, rng):
     lo, hi = rng
     n = 0
@@ -138,7 +142,8 @@ def numfar(data, rng):
             continue        # a DrawString* colour pair, not a far pointer (2026-10-03)
         if m1 and m2:
             h, l = int(m1.group(1), 0), int(m2.group(1), 0)
-            if h <= 0xff and l <= 0xffff and lo <= (h << 16 | l) <= hi:
+            if h <= 0xff and l <= 0xffff and lo <= (h << 16 | l) <= hi and \
+                    (h << 16 | l) not in COLOUR_VALUES:     # a colour pair whose call is jumped to
                 n += 1
     for m in REGMAC.finditer(data):
         args = [x.strip() for x in m.group(2).split(b",")]

@@ -227,15 +227,30 @@ StyleUI_ScreenData_YesCtl:	.incbin "includes/generated/style_ui_screendata_yesct
 ; [nakarest] style_ui/ctlonly.c -- drawn by UIRender_TwoTableGeneral, which hands its xiy/xix
 ; [nakarest] pair to Scoop_EventLoop_12Entry (display/scoop_display.s).  Reached through
 ; [nakarest] StyleUI_ParamBlockPtrTable entries 30, 68.
-StyleUI_ScreenData_CtlOnly:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x0, 0x20
-Display_RedrawAltContent_Str_END:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x20, 0x3
-Scoop_CurveUpdate_Finalize_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x23, 0x100
-Scoop_EnvCalc_Handler1_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x123, 0x8
-Scoop_GlideParam_Configure_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x12B, 0x8
-Scoop_GlideCalc_Handler0_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x133, 0x8
-Scoop_EventLoop_12Entry_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x13B, 0x90
-Scoop_EventLoop_12Entry_Process_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1CB, 0x14
-Scoop_EventLoop_12Entry_Alt_Data_Target5_Data:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1DF, 0x20
-Scoop_EventLoop_36Entry_Data_2:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1FF, 0x14
-Scoop_EventLoop_36Entry_Branch3_Data_4:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x213, 0x14
+StyleUI_ScreenData_CtlOnly:				.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x0, 0x20
+Display_RedrawAltContent_Str_END:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x20, 0x3
+Scoop_CurveUpdate_Finalize_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x23, 0x100
+Scoop_EnvCalc_Handler1_Data:				.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x123, 0x8
+Scoop_GlideParam_Configure_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x12B, 0x8
+Scoop_GlideCalc_Handler0_Data:				.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x133, 0x8
+Scoop_EventLoop_12Entry_Data:				.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x13B, 0x90
+Scoop_EventLoop_12Entry_Process_Data:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1CB, 0x8
+Scoop_EventLoop_12Entry_Process_Str_Fmt1d:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1D3, 0x4
+Scoop_EventLoop_12Entry_Process_Str_Fmt2d:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1D7, 0x4
+Scoop_EventLoop_12Entry_Process_Str_Fmt3d:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1DB, 0x4
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1DF, 0x8
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt1d:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1E7, 0x4
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1EB, 0x4
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1EF, 0x4
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d_2:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1F3, 0x4
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d_2:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1F7, 0x4
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt4d:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1FB, 0x4
+Scoop_EventLoop_36Entry_Data_2:				.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1FF, 0x8
+Scoop_EventLoop_36Entry_Str_Fmt1d:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x207, 0x4
+Scoop_EventLoop_36Entry_Branch1_Str_Fmt2d:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x20B, 0x4
+Scoop_EventLoop_36Entry_Branch2_Str_Fmt3d:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x20F, 0x4
+Scoop_EventLoop_36Entry_Branch3_Data_4:			.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x213, 0x8
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_3:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x21B, 0x4
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_4:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x21F, 0x4
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_4:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x223, 0x4
 

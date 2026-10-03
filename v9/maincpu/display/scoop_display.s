@@ -18779,8 +18779,8 @@ Scoop_EventLoop_12Entry_Skip9:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xccca
+	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt1d@hi16
+	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt1d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18790,8 +18790,8 @@ Scoop_EventLoop_12Entry_Skip:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xccce
+	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt2d@hi16
+	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt2d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18801,8 +18801,8 @@ Scoop_EventLoop_12Entry_Skip2:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw 0xccd2
+	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt3d@hi16
+	pushw Scoop_EventLoop_12Entry_Process_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18889,8 +18889,8 @@ Scoop_EventLoop_12Entry_Join2:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xccde
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt1d@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt1d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18900,8 +18900,8 @@ Scoop_EventLoop_12Entry_Skip5:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcce2
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18911,8 +18911,8 @@ Scoop_EventLoop_12Entry_Skip6:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcce6
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18928,8 +18928,8 @@ Scoop_EventLoop_12Entry_Skip11:
 	ld	a, e
 	extz	wa
 	pushw wa
-	pushw 224
-	pushw 0xccea
+	pushw Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d_2@hi16
+	pushw Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d_2@lo16
 	lda	xwa, (xsp+10)
 	push xwa
 	call	Sprintf_Locked
@@ -18939,8 +18939,8 @@ Scoop_EventLoop_12Entry_Skip7:
 	ld	a, e
 	extz	wa
 	pushw wa
-	pushw 224
-	pushw 0xccee
+	pushw Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d_2@hi16
+	pushw Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+10)
 	push xwa
 	call	Sprintf_Locked
@@ -18950,8 +18950,8 @@ Scoop_EventLoop_12Entry_Skip8:
 	ld	a, e
 	extz	wa
 	pushw wa
-	pushw 224
-	pushw 0xccf2
+	pushw Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt4d@hi16
+	pushw Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt4d@lo16
 	lda	xwa, (xsp+10)
 	push xwa
 	call	Sprintf_Locked
@@ -19011,8 +19011,8 @@ Scoop_EventLoop_36Entry:
 	cp wa, 1:i3
 	jr nz, Scoop_EventLoop_36Entry_Branch2
 	pushm (xde)
-	pushw 0xe0
-	pushw 0xccfe
+	pushw Scoop_EventLoop_36Entry_Str_Fmt1d@hi16
+	pushw Scoop_EventLoop_36Entry_Str_Fmt1d@lo16
 	lda xwa, (xsp + 12)
 	push xwa
 	call Sprintf_Locked
@@ -19021,8 +19021,8 @@ Scoop_EventLoop_36Entry:
 
 Scoop_EventLoop_36Entry_Branch1:
 	pushm (xde)
-	pushw 0xe0
-	pushw 0xcd02
+	pushw Scoop_EventLoop_36Entry_Branch1_Str_Fmt2d@hi16
+	pushw Scoop_EventLoop_36Entry_Branch1_Str_Fmt2d@lo16
 	lda xwa, (xsp + 12)
 	push xwa
 	call Sprintf_Locked
@@ -19031,8 +19031,8 @@ Scoop_EventLoop_36Entry_Branch1:
 
 Scoop_EventLoop_36Entry_Branch2:
 	pushm (xde)
-	pushw 0xe0
-	pushw 0xcd06
+	pushw Scoop_EventLoop_36Entry_Branch2_Str_Fmt3d@hi16
+	pushw Scoop_EventLoop_36Entry_Branch2_Str_Fmt3d@lo16
 	lda xwa, (xsp + 12)
 	push xwa
 	call Sprintf_Locked
@@ -19116,8 +19116,8 @@ Scoop_EventLoop_36Entry_Skip5:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd12
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_3@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -19127,8 +19127,8 @@ Scoop_EventLoop_36Entry_Skip6:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_4@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_4@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -19138,8 +19138,8 @@ Scoop_EventLoop_36Entry_Skip7:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd1a
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_4@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_4@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked

@@ -317,8 +317,8 @@ SongBankLookup_BuildAudioCmd:
 	ld a, (xix)
 	extz wa
 	pushw wa
-	pushw 0xe2
-	pushw 0x202
+	pushw SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct@hi16
+	pushw SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct@lo16
 	push xiz
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)

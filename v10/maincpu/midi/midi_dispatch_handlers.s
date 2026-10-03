@@ -7701,8 +7701,8 @@ MidiSysEx_SendAllParams:
 	cp hl, 0:i3
 	jr z, MidiSysEx_SendReverbParam
 	pushw 0xe
-	pushw 0xee
-	pushw 0x2cd8
+	pushw MidiSysEx_SendAllParams_Data@hi16
+	pushw MidiSysEx_SendAllParams_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7731,8 +7731,8 @@ MidiSysEx_SendReverbParam:
 	cp hl, 0:i3
 	jr z, MidiSysEx_SendProgramChange
 	pushw 0xe
-	pushw 0xee
-	pushw 0x2cd8
+	pushw MidiSysEx_SendAllParams_Data@hi16
+	pushw MidiSysEx_SendAllParams_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7780,8 +7780,8 @@ MidiSysEx_SendProgramChange:
 	cp hl, 0:i3
 	jr z, MidiSysEx_SendControlChange1
 	pushw 0x2
-	pushw 0xee
-	pushw 0x2cea
+	pushw MidiSysEx_SendProgramChange_Data@hi16
+	pushw MidiSysEx_SendProgramChange_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7815,8 +7815,8 @@ MidiSysEx_SendControlChange1:
 	cp hl, 0:i3
 	jr z, MidiSysEx_SendControlChange2
 	pushw 0x3
-	pushw 0xee
-	pushw 0x2ce6
+	pushw MidiSysEx_SendControlChange1_Data@hi16
+	pushw MidiSysEx_SendControlChange1_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7850,8 +7850,8 @@ MidiSysEx_SendControlChange2:
 	cp hl, 0:i3
 	jr z, MidiSysEx_CheckDelayAndSend
 	pushw 0x3
-	pushw 0xee
-	pushw 0x2ce6
+	pushw MidiSysEx_SendControlChange1_Data@hi16
+	pushw MidiSysEx_SendControlChange1_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7893,8 +7893,8 @@ MidiSysEx_SendAfterDelay:
 	cp hl, 0:i3
 	jr z, MidiSysEx_SendBankData1
 	pushw 0xe
-	pushw 0xee
-	pushw 0x2cd8
+	pushw MidiSysEx_SendAllParams_Data@hi16
+	pushw MidiSysEx_SendAllParams_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7925,8 +7925,8 @@ MidiSysEx_SendBankData1:
 	cp hl, 0:i3
 	jr z, MidiSysEx_SendBankData2
 	pushw 0xe
-	pushw 0xee
-	pushw 0x2cd8
+	pushw MidiSysEx_SendAllParams_Data@hi16
+	pushw MidiSysEx_SendAllParams_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7974,8 +7974,8 @@ MidiSysEx_SendBankData2:
 	cp hl, 0:i3
 	jr z, MidiSysEx_SendBankData3
 	pushw 0xe
-	pushw 0xee
-	pushw 0x2cd8
+	pushw MidiSysEx_SendAllParams_Data@hi16
+	pushw MidiSysEx_SendAllParams_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -8025,8 +8025,8 @@ MidiSysEx_SendBankData3:
 	cp hl, 0:i3
 	jr z, MidiSysEx_FreeAndReturn
 	pushw 0xe
-	pushw 0xee
-	pushw 0x2cd8
+	pushw MidiSysEx_SendAllParams_Data@hi16
+	pushw MidiSysEx_SendAllParams_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -8093,8 +8093,8 @@ MidiSysEx_SendAllPartChannels:
 	ldw	(xsp+4), 0
 MidiSysEx_SendPartChanLoop:
 	pushw	14
-	pushw	238
-	pushw	0x2cec
+	pushw	MidiSysEx_SendPartChanLoop_Data@hi16
+	pushw	MidiSysEx_SendPartChanLoop_Data@lo16
 	push xiz
 	call Mem_Copy
 	lda	xsp, (xsp+10)

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,605
-#   semantic names ........... 50,745 (98.3%)
+#   symbols .................. 51,631
+#   semantic names ........... 50,771 (98.3%)
 #   positional names ......... 860
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -627,9 +627,24 @@ Scoop_GlideParam_Configure_Data 00E0CC22
 Scoop_GlideCalc_Handler0_Data 00E0CC2A
 Scoop_EventLoop_12Entry_Data 00E0CC32
 Scoop_EventLoop_12Entry_Process_Data 00E0CCC2
+Scoop_EventLoop_12Entry_Process_Str_Fmt1d 00E0CCCA
+Scoop_EventLoop_12Entry_Process_Str_Fmt2d 00E0CCCE
+Scoop_EventLoop_12Entry_Process_Str_Fmt3d 00E0CCD2
 Scoop_EventLoop_12Entry_Alt_Data_Target5_Data 00E0CCD6
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt1d 00E0CCDE
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d 00E0CCE2
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d 00E0CCE6
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d_2 00E0CCEA
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d_2 00E0CCEE
+Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt4d 00E0CCF2
 Scoop_EventLoop_36Entry_Data_2 00E0CCF6
+Scoop_EventLoop_36Entry_Str_Fmt1d 00E0CCFE
+Scoop_EventLoop_36Entry_Branch1_Str_Fmt2d 00E0CD02
+Scoop_EventLoop_36Entry_Branch2_Str_Fmt3d 00E0CD06
 Scoop_EventLoop_36Entry_Branch3_Data_4 00E0CD0A
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_3 00E0CD12
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_4 00E0CD16
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_4 00E0CD1A
 GUI_FormatStrings 00E0CD1E
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d 00E0CD26
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d 00E0CD2A
@@ -3510,6 +3525,11 @@ DpMdlyPdTtlFunc_Data 00E200CE
 DpMdlySmfTtlFunc_Data 00E200DA
 DpMdlySmfLyrTtlFunc_Data 00E200E6
 SepaOut_FormatData_Tail 00E200ED
+NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts 00E200F2
+NameGetFuncCall_Dispatch_Str_FILE_Fmt2d_Fmts 00E200FC
+NameGetFuncCall_Dispatch_Str_Fmt3d_Fmts 00E20108
+NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_2 00E20110
+NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts_3 00E20118
 NameGetFuncCall_Data 00E20120
 DpDocTtl_Dispatch_Data 00E2013C
 DpDocTtlFunc_Data 00E20150
@@ -3524,6 +3544,7 @@ DemoStyleTtlFunc_Data 00E201C4
 DemoSoundTtlFunc_Data 00E201D0
 DemoRhyTtlFunc_Data 00E201DC
 MiddleFuncCall_Data 00E201E8
+SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct 00E20202
 SeqInit_LookupDispatchEntry_Data 00E20208
 PlayMode_SendStopEvent_Data 00E20250
 DbgStr_NakaProcName_Table 00E20320
@@ -8158,6 +8179,7 @@ FDemoText_ByteData_VoiceProbeC_Data_3 00E9FCD4
 FDemoText_ProcessMarkup_LookupTag_PtrTable 00E9FCF2
 FDemoText_ProcessMarkup_LookupTag_PtrTable_2 00E9FCF6
 FDemoText_ByteData_DisplayRefresh_Str_NONE 00E9FDD0
+FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd 00E9FDD6
 ErrStr_GetInstanceID 00E9FDDC
 FileType_NameTable 00E9FDF4
 FileTypeName_Empty 00E9FE04
@@ -14008,6 +14030,10 @@ DSPCfg_ConfigureVoiceSlotB_Data 00EE15AC
 DSPCfg_VoiceSlotB_MapAndWrite_Data 00EE15BC
 DSPCfg_VoiceSlotB_ExtractData_Data 00EE15CC
 SndParam_AllocAndCopyPreset_Data 00EE15FE
+MidiSysEx_SendAllParams_Data 00EE2CD8
+MidiSysEx_SendControlChange1_Data 00EE2CE6
+MidiSysEx_SendProgramChange_Data 00EE2CEA
+MidiSysEx_SendPartChanLoop_Data 00EE2CEC
 MidiSysEx_CopyParamToBuffer_Data 00EE2CFA
 MIDI_ReadChannelParam_Data 00EE2D2A
 SeqData_ReadFieldByIndex_Data 00EE2D4A

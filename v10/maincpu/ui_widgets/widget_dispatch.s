@@ -1227,7 +1227,11 @@ DSPCfg_ConfigureVoiceSlotA_Data:	.incbin "includes/generated/sound_config_lookup
 DSPCfg_ConfigureVoiceSlotB_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x38, 0x10
 DSPCfg_VoiceSlotB_MapAndWrite_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x48, 0x10
 DSPCfg_VoiceSlotB_ExtractData_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x58, 0x32
-SndParam_AllocAndCopyPreset_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x8A, 0x16FC
+SndParam_AllocAndCopyPreset_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x8A, 0x16DA
+MidiSysEx_SendAllParams_Data:		.incbin "includes/generated/sound_config_lookup.bin", 0x1764, 0xE
+MidiSysEx_SendControlChange1_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1772, 0x4
+MidiSysEx_SendProgramChange_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1776, 0x2
+MidiSysEx_SendPartChanLoop_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1778, 0xE
 MidiSysEx_CopyParamToBuffer_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1786, 0x30
 MIDI_ReadChannelParam_Data:		.incbin "includes/generated/sound_config_lookup.bin", 0x17B6, 0x20
 SeqData_ReadFieldByIndex_Data:		.incbin "includes/generated/sound_config_lookup.bin", 0x17D6, 0x20

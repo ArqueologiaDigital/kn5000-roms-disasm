@@ -1228,8 +1228,8 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	233
-	pushw	0xfdd6
+	pushw	FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd@hi16
+	pushw	FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd@lo16
 	pushw	2
 	pushw	0x47f6
 	call	Sprintf_Locked

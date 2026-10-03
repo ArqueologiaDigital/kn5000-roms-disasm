@@ -4883,8 +4883,8 @@ FDemoText_ProcessMarkup_LookupTag_PtrTable_2:	.incbin "includes/generated/naka_t
 ; [nakarest] Text (12 B at 0xe9fdd0), first string "NONE"; no registered NAKA table points into
 ; [nakarest] it; reached through source references FDemoText_ByteData_DisplayRefresh
 ; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (FDemoText_ByteData_DisplayRefresh_Str_NONE:24)`).
-FDemoText_ByteData_DisplayRefresh_Str_NONE:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19E82, 0x6	; "NONE"
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x19E88, 0x6	; 6 bytes after FDemoText_ByteData_DisplayRefresh_Str_NONE's string; unnamed (they sat under its label until 2026-10-03)
+FDemoText_ByteData_DisplayRefresh_Str_NONE:		.incbin "includes/generated/naka_technichord_strings.bin", 0x19E82, 0x6	; "NONE"
+FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19E88, 0x6	; 6 bytes after FDemoText_ByteData_DisplayRefresh_Str_NONE's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] ErrStr_GetInstanceID  +0x19e8e..+0x19ea6 (0xe9fddc, 24 B)
 ; [nakarest] Text (24 B at 0xe9fddc), first string "Error! (GetInstanceID)"; no registered NAKA
 ; [nakarest] table points into it; reached through source references

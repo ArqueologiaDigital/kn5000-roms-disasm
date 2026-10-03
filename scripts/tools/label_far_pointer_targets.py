@@ -85,6 +85,14 @@ def main():
         w = planner.where(v)
         code = bool(w) and w[0] == v and \
             place_labels.snb.drc.classify_line(planner.lines(w[1])[w[2]], planner.macros)[0] == "code"
+        if code and str(x.get("result", "")).startswith("inside "):
+            # a PUSH-PAIR "pointer" onto an unlabelled code line, in a tree where every routine
+            # entry is labelled, is two word arguments that happen to make a code address --
+            # SeMenu's `pushw 121 / 254 / 73 / 48`, a DrawString colour pair whose call is
+            # reached by a jump (0xFF00F5 ...).  2026-10-03: three such labels were placed and
+            # reverted.  Reported, not placed.
+            st["push pair onto unlabelled code: not a pointer, not placed"] += 1
+            continue
         want[v] = "%s_Code" % r if code else "%s_Str_%s" % (r, sb.text_token(s)) if good else "%s_Data" % r
     for v, nm in sorted(want.items()):
         b, k = nm, 2
