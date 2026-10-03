@@ -70485,7 +70485,7 @@ DL_F34256:
 ; ------------------------------------------------------------------
 DL_F3434C:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -70543,7 +70543,7 @@ DL_F34361:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_MasterSongMeasure:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1309	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+19	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -71418,7 +71418,7 @@ DL_CycleMasterS0ngMeasureTimeSig:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0573	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1309	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+19	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -71987,7 +71987,7 @@ DLTable_F34D18:
 ; ------------------------------------------------------------------
 DL_F34D98:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -71995,7 +71995,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B59	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72003,7 +72003,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B5E	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72011,7 +72011,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B63	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72019,7 +72019,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B68	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FA	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72027,7 +72027,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B6D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72035,7 +72035,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B72	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72043,7 +72043,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B77	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72051,7 +72051,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B7C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72059,7 +72059,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+9	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72067,7 +72067,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B6	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1300	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72075,7 +72075,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22BB	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1301	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72083,7 +72083,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C0	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1302	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+12	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72091,7 +72091,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C5	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1303	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+13	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72099,7 +72099,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CA	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1304	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+14	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72107,7 +72107,7 @@ DL_F34D98:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CF	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1305	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+15	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -72351,13 +72351,13 @@ DL_F34FF2:
 	.short 0x1800	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -72601,13 +72601,13 @@ DL_F351A7:
 	.short 0x1800	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -72747,7 +72747,7 @@ DL_CyclePlayCurrentMeasureEdit:
 	.short 0x007A
 DL_F352F9:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1308	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+18	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -72776,13 +72776,13 @@ DL_F352F9:
 	.short 0x1800	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -77267,7 +77267,7 @@ DL_F3998E:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0D80	; +0x0D -> IX
 	.byte 0x0A, 0x0C	; B op 0A, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -77275,7 +77275,7 @@ DL_F3998E:
 	.short 0x0049	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -77283,7 +77283,7 @@ DL_F3998E:
 	.short 0x0056	; +0x09 -> (0x2532)
 	.byte 0x02	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -77605,7 +77605,7 @@ DL_F39C02:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x091D	; +0x0D -> IX
 	.byte 0x0A, 0x0C	; B op 0A, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -77613,7 +77613,7 @@ DL_F39C02:
 	.short 0x002C	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -77621,7 +77621,7 @@ DL_F39C02:
 	.short 0x003A	; +0x09 -> (0x2532)
 	.byte 0x02	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -78252,7 +78252,7 @@ Data_F3A0D9:
 ;
 Data_F3A0E4:
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
@@ -78321,7 +78321,7 @@ DLTable_F3A14F:
 ; ------------------------------------------------------------------
 DL_F3A1CF:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78329,7 +78329,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B59	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78337,7 +78337,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B5E	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78345,7 +78345,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B63	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78353,7 +78353,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B68	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FA	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78361,7 +78361,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B6D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78369,7 +78369,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B72	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78377,7 +78377,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B77	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78385,7 +78385,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B7C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78393,7 +78393,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+9	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78401,7 +78401,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B6	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1300	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78409,7 +78409,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22BB	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1301	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78417,7 +78417,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C0	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1302	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+12	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78425,7 +78425,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C5	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1303	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+13	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78433,7 +78433,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CA	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1304	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+14	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78441,7 +78441,7 @@ DL_F3A1CF:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CF	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1305	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+15	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78611,7 +78611,7 @@ DL_All:
 	.ascii "  ALL "
 DL_F3A429:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -78677,7 +78677,7 @@ Data_F3A433:
 ; ------------------------------------------------------------------
 DL_F3A43E:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -78838,28 +78838,28 @@ DL_Track:
 	.short 0x00E0
 DL_F3A561:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0C16	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x172E	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x11C9	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -79024,7 +79024,7 @@ DL_F3A66E:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_LastMeasure:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79032,21 +79032,21 @@ DL_LastMeasure:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C1C	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x11BC	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x175C	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -79429,7 +79429,7 @@ DL_F3A99D:
 	.short 0x00E0
 DL_F3A9DA:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79437,7 +79437,7 @@ DL_F3A9DA:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x067C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79445,21 +79445,21 @@ DL_F3A9DA:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x17AC	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0C1C	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x11BC	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -79624,7 +79624,7 @@ DL_Vel0cityChangeTrackFirstMeasure:
 	.short 0x00E0
 DL_F3AB3B:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79632,21 +79632,21 @@ DL_F3AB3B:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0C44	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x11E4	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79654,7 +79654,7 @@ DL_F3AB3B:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -79889,7 +79889,7 @@ DL_F3ACB3:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79897,7 +79897,7 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0651	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79905,28 +79905,28 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x1751	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0BF1	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1191	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0660	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
-	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -79934,7 +79934,7 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -80228,7 +80228,7 @@ DL_F3AFAF:
 	.short 0x00E0
 DL_F3AFE7:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80236,7 +80236,7 @@ DL_F3AFE7:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B79	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80244,7 +80244,7 @@ DL_F3AFE7:
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x0C9B	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80252,7 +80252,7 @@ DL_F3AFE7:
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x0C9D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80260,7 +80260,7 @@ DL_F3AFE7:
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x12DB	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FA	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80268,35 +80268,35 @@ DL_F3AFE7:
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x12DD	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0CA1	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x11B9	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x12E1	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+9	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x17F9	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1301	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+11	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -80523,7 +80523,7 @@ DL_Transp0seTrackFirstMeasure:
 	.short 0x00E0
 DL_F3B1E3:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80531,21 +80531,21 @@ DL_F3B1E3:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0C44	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x11E4	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80553,7 +80553,7 @@ DL_F3B1E3:
 	.byte 0x03	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -80731,7 +80731,7 @@ DL_F3B33C:
 	.short 0x00E0
 DL_F3B379:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80739,21 +80739,21 @@ DL_F3B379:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0C44	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x11E4	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_Value_ToSignedAsciiDigits3_RightJustified), buffer 0x2660
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -80761,7 +80761,7 @@ DL_F3B379:
 	.byte 0x02	; +0x09 digit count
 	.byte 0x00	; +0x0A bit 7 set = unsigned, clear = signed
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -81568,7 +81568,7 @@ DL_TrackAssignChangeAttention:
 	.short 0x0044
 DL_F3BA91:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -81576,7 +81576,7 @@ DL_F3BA91:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1256	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -81584,7 +81584,7 @@ DL_F3BA91:
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x125E	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -81669,7 +81669,7 @@ DL_AfterT0uchSettingSelectWhetherOrNotAfter:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_AfterTouchRecord:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -81888,7 +81888,7 @@ DL_F3BCCB:
 	.short 0x00AA
 DL_F3BD07:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -81896,7 +81896,7 @@ DL_F3BD07:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C89	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -81904,35 +81904,35 @@ DL_F3BD07:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C9E	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1279	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1891	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x128E	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1768	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+9	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -82159,7 +82159,7 @@ DL_F3BEBF:
 	.short 0x00E0
 DL_F3BEF7:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -82167,7 +82167,7 @@ DL_F3BEF7:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C89	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FB	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+5	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -82175,35 +82175,35 @@ DL_F3BEF7:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C9E	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F7	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+1	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1279	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F9	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+3	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1869	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x128E	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1768	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+9	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -82502,7 +82502,7 @@ DL_F3C16C:
 	.short 0x0DB1	; +0x0D -> IX
 DL_F3C17B:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1304	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+14	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -82510,7 +82510,7 @@ DL_F3C17B:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1344	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1305	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+15	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -82706,7 +82706,7 @@ DL_F3C31E:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0998	; +0x0D -> IX
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -82714,7 +82714,7 @@ DL_F3C31E:
 	.short 0x003D	; +0x09 -> (0x2532)
 	.byte 0x02	; +0x0B digit count
 	.byte 0x0A, 0x0C	; B op 0A, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12FD	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -82722,7 +82722,7 @@ DL_F3C31E:
 	.short 0x0030	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x12FF	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+9	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -82758,13 +82758,13 @@ DL_F3C351:
 ; ------------------------------------------------------------------
 DL_F3C367:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1301	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+11	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
 	.long Data_F3C37D	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1302	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+12	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -82938,7 +82938,7 @@ DL_ACurrentTrackWillBeClearedAutomaticaly:
 	.short 0x00E9
 DL_F3C530:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1307	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+17	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -83282,33 +83282,33 @@ DL_SelectIntFd:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_FirstS0ngLastS0ng:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0C1A	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x1300	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1822	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1302	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+12	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F3C7E3	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1303	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+13	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long Data_F3C7E3 + 0x18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1304	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+14	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -83438,7 +83438,7 @@ DL_F3C873:
 ; ------------------------------------------------------------------
 DL_F3C89D:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -83514,7 +83514,7 @@ DL_F3C947:
 	.short 0x0022
 	.short 0x0006
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x12FC	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -85598,7 +85598,7 @@ DL_F3DA6F:
 ;
 Data_F3DA77:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1303	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+13	; +0x02 source variable, 16-bit address
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x82	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -85621,7 +85621,7 @@ DLTable_F3DA82:
 
 Data_F3DAA2:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x1300	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -85648,7 +85648,7 @@ DLTable_F3DAAD:
 
 Data_F3DAED:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -85859,7 +85859,7 @@ Data_F3DD24:
 	.short 0x0A6D	; +0x0D -> IX
 Data_F3DD33:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1301	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+11	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85868,7 +85868,7 @@ Data_F3DD33:
 	.short 0x1159	; +0x0D -> IX
 Data_F3DD42:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1302	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+12	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85877,7 +85877,7 @@ Data_F3DD42:
 	.short 0x115D	; +0x0D -> IX
 Data_F3DD51:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1303	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+13	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85886,7 +85886,7 @@ Data_F3DD51:
 	.short 0x1161	; +0x0D -> IX
 Data_F3DD60:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1304	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+14	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85895,7 +85895,7 @@ Data_F3DD60:
 	.short 0x1165	; +0x0D -> IX
 Data_F3DD6F:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1305	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+15	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85904,7 +85904,7 @@ Data_F3DD6F:
 	.short 0x1169	; +0x0D -> IX
 Data_F3DD7E:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1306	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+16	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85913,7 +85913,7 @@ Data_F3DD7E:
 	.short 0x116D	; +0x0D -> IX
 Data_F3DD8D:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1307	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+17	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85922,7 +85922,7 @@ Data_F3DD8D:
 	.short 0x1171	; +0x0D -> IX
 Data_F3DD9C:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1308	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+18	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85931,7 +85931,7 @@ Data_F3DD9C:
 	.short 0x1175	; +0x0D -> IX
 Data_F3DDAB:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1309	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+19	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85940,7 +85940,7 @@ Data_F3DDAB:
 	.short 0x1861	; +0x0D -> IX
 Data_F3DDBA:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x130A	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+20	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85949,7 +85949,7 @@ Data_F3DDBA:
 	.short 0x1865	; +0x0D -> IX
 Data_F3DDC9:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x130B	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+21	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85958,7 +85958,7 @@ Data_F3DDC9:
 	.short 0x1869	; +0x0D -> IX
 Data_F3DDD8:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x130C	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+22	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85967,7 +85967,7 @@ Data_F3DDD8:
 	.short 0x186D	; +0x0D -> IX
 Data_F3DDE7:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x130D	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+23	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85976,7 +85976,7 @@ Data_F3DDE7:
 	.short 0x1871	; +0x0D -> IX
 Data_F3DDF6:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x130E	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+24	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85985,7 +85985,7 @@ Data_F3DDF6:
 	.short 0x1875	; +0x0D -> IX
 Data_F3DE05:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x130F	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+25	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85994,7 +85994,7 @@ Data_F3DE05:
 	.short 0x1879	; +0x0D -> IX
 Data_F3DE14:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x1310	; +0x02 source variable, 16-bit address
+	.short DisplayListB_Stage+26	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -116201,12 +116201,12 @@ sub_F55C3D:
 sub_F55C44:
 	cp	wa, 32770	; F55C44  cp WA,0x8002
 	jr	nz, sub_F55C44_Skip	; F55C48  jr NZ,0xf55c51
-	ld	(4854:16), 1	; F55C4A  ld (0x12f6),0x01
+	ld	(DisplayListB_Stage:16), 1	; F55C4A  ld (0x12f6),0x01
 	jr	sub_F55C44_Join	; F55C4F  jr T,0xf55c5c
 sub_F55C44_Skip:
 	cp	wa, 32769	; F55C51  cp WA,0x8001
 	jr	nz, sub_F55C44_Return	; F55C55  jr NZ,0xf55c60
-	ld	(4854:16), 0	; F55C57  ld (0x12f6),0x00
+	ld	(DisplayListB_Stage:16), 0	; F55C57  ld (0x12f6),0x00
 sub_F55C44_Join:
 	call	T_DLB_Handler_StringTable	; F55C5C  call 0xf417f8
 sub_F55C44_Return:
@@ -116299,7 +116299,7 @@ sub_F55D3D:
 ; --------------------------------------------------------------------------
 sub_F55D67:
 	ld	xiy, 6304802	; F55D67  ld XIY,0x00603422
-	ld	xix, 4854	; F55D6C  ld XIX,0x000012f6
+	ld	xix, DisplayListB_Stage	; F55D6C  ld XIX,0x000012f6
 	ld	c, 16:opc	; F55D71  ld C,0x10
 sub_F55D67_Join:
 	ld	a, (xiy)	; F55D73  ld A,(XIY)
@@ -116420,7 +116420,7 @@ sub_F55E20_Loop:
 	pushw	wa	; F55E44  push WA
 	calr	Nop_Ret_F55C2E	; F55E45  calr 0xf55c2e
 	popw	wa	; F55E48  pop WA
-	ld	(4854:16), c	; F55E49  ld (0x12f6),C
+	ld	(DisplayListB_Stage:16), c	; F55E49  ld (0x12f6),C
 	pushw	wa	; F55E4D  push WA
 	pushw	hl	; F55E4E  push HL
 	pushw	bc	; F55E4F  push BC
@@ -116459,11 +116459,11 @@ sub_F55E8F:
 	call	T_DisplayListB_Run	; F55EA5  call 0xf417f4
 	ld	(LCD_CurrentLayer:16), 1	; F55EA9  ld (0x2540),0x01
 	ld	a, (14166:16)	; F55EAE  ld A,(0x3756)
-	ld	(4854:16), a	; F55EB2  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F55EB2  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x38	; F55EB6  ld XIY,0x00f3502a
 	call	T_DLB_Handler_Array8_2	; F55EBB  call 0xf41820
 	ld	a, (13863:16)	; F55EBF  ld A,(0x3627)
-	ld	(4854:16), a	; F55EC3  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F55EC3  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F55EC7  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F55ECC  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55ED0  and (0xc6),0xfe
@@ -116484,11 +116484,11 @@ sub_F55EEA:
 	call	T_DisplayListB_Run	; F55F00  call 0xf417f4
 	ld	(LCD_CurrentLayer:16), 1	; F55F04  ld (0x2540),0x01
 	ld	a, (14166:16)	; F55F09  ld A,(0x3756)
-	ld	(4854:16), a	; F55F0D  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F55F0D  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x38	; F55F11  ld XIY,0x00f3502a
 	call	T_DLB_Handler_Array8_2	; F55F16  call 0xf41820
 	ld	a, (13863:16)	; F55F1A  ld A,(0x3627)
-	ld	(4854:16), a	; F55F1E  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F55F1E  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F55F22  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F55F27  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F2B  and (0xc6),0xfe
@@ -116513,11 +116513,11 @@ sub_F55F45:
 	calr	sub_F55C44	; F55F6D  calr 0xf55c44
 	ld	(LCD_CurrentLayer:16), 1	; F55F70  ld (0x2540),0x01
 	ld	a, (14165:16)	; F55F75  ld A,(0x3755)
-	ld	(4854:16), a	; F55F79  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F55F79  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x38	; F55F7D  ld XIY,0x00f3502a
 	call	T_DLB_Handler_Array8_2	; F55F82  call 0xf41820
 	ld	a, (14030:16)	; F55F86  ld A,(0x36ce)
-	ld	(4854:16), a	; F55F8A  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F55F8A  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F55F8E  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F55F93  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F97  and (0xc6),0xfe
@@ -117403,7 +117403,7 @@ sub_F56492:
 	jr	z, sub_F56492_Skip	; F564A2  jr Z,0xf564c1
 	calr	sub_F56DA8	; F564A4  calr 0xf56da8
 	ld	a, (14162:16)	; F564A7  ld A,(0x3752)
-	ld	(4873:16), a	; F564AB  ld (0x1309),A
+	ld	(DisplayListB_Stage+19:16), a	; F564AB  ld (0x1309),A
 	ld	xwa, DisplayListB_Run_MasterSongMeasure	; F564AF  ld XWA,0x00f56017
 	push	xwa	; F564B4  push XWA
 	call	T_CallbackQueue_Post	; F564B5  call 0xf42e84
@@ -118193,7 +118193,7 @@ Select36CE_F568AB_Return:
 	ld	xiy, DL_F34FF2 + 0x38	; F568CE  ld XIY,0x00f3502a
 	call	T_DLB_Handler_Array8_2	; F568D3  call 0xf41820
 	ld	a, (14030:16)	; F568D7  ld A,(0x36ce)
-	ld	(4854:16), a	; F568DB  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F568DB  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F568DF  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F568E4  call 0xf4181c
 	ret	; F568E8  ret
@@ -119455,7 +119455,7 @@ sub_F56FD6_Return:
 	ld	xiy, DL_F34FF2 + 0x38	; F56FF9  ld XIY,0x00f3502a
 	call	T_DLB_Handler_Array8_2	; F56FFE  call 0xf41820
 	ld	a, (13863:16)	; F57002  ld A,(0x3627)
-	ld	(4854:16), a	; F57006  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F57006  ld (0x12f6),A
 	ld	xiy, DL_F34FF2 + 0x2D	; F5700A  ld XIY,0x00f3501f
 	call	T_DLB_Handler_Array8	; F5700F  call 0xf4181c
 	ret	; F57013  ret
@@ -120241,7 +120241,7 @@ sub_F5739C_Return2:
 ; --------------------------------------------------------------------------
 sub_F573D8:
 	ld	a, (13862:16)	; F573D8  ld A,(0x3626)
-	ld	(4872:16), a	; F573DC  ld (0x1308),A
+	ld	(DisplayListB_Stage+18:16), a	; F573DC  ld (0x1308),A
 	ld	xwa, sub_F55FEF	; F573E0  ld XWA,0x00f55fef
 	push	xwa	; F573E5  push XWA
 	call	T_CallbackQueue_Post	; F573E6  call 0xf42e84
@@ -120587,7 +120587,7 @@ SeqPlayScreen_StageValues:
 	and	a, 1	; F5746B  and A,0x01
 	ld	(9799:16), a	; F5746E  ld (0x2647),A
 	ld	a, (14162:16)	; F57472  ld A,(0x3752)
-	ld	(4873:16), a	; F57476  ld (0x1309),A
+	ld	(DisplayListB_Stage+19:16), a	; F57476  ld (0x1309),A
 	ld	a, (BStore_CurrentBank:16)	; F5747A  ld A,(0x360a)
 	inc	1, a	; F5747E  inc 1,A
 	ld	(9803:16), a	; F57480  ld (0x264b),A
@@ -120631,7 +120631,7 @@ RealtimeRecordScreen_StageValues:
 	ld	wa, (3080:16)	; F574C2  ld WA,(0x0c08)
 	ld	(9801:16), wa	; F574C6  ld (0x2649),WA
 	ld	a, (14162:16)	; F574CA  ld A,(0x3752)
-	ld	(4873:16), a	; F574CE  ld (0x1309),A
+	ld	(DisplayListB_Stage+19:16), a	; F574CE  ld (0x1309),A
 	ld	a, (BStore_CurrentBank:16)	; F574D2  ld A,(0x360a)
 	inc	1, a	; F574D6  inc 1,A
 	ld	(9803:16), a	; F574D8  ld (0x264b),A
@@ -120653,7 +120653,7 @@ RealtimeRecordScreen_StageValues:
 CyclePlayScreen_StageValues:
 	pushw	wa	; F574DE  push WA
 	ld	a, (13863:16)	; F574DF  ld A,(0x3627)
-	ld	(4854:16), a	; F574E3  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F574E3  ld (0x12f6),A
 	ld	wa, (13650:16)	; F574E7  ld WA,(0x3552)
 	ld	(9796:16), wa	; F574EB  ld (0x2644),WA
 	ld	a, (13835:16)	; F574EF  ld A,(0x360b)
@@ -120681,7 +120681,7 @@ CyclePlayScreen_StageValues:
 CyclePlayEditScreen_StageValues:
 	pushw	wa	; F5750C  push WA
 	ld	a, (13863:16)	; F5750D  ld A,(0x3627)
-	ld	(4854:16), a	; F57511  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F57511  ld (0x12f6),A
 	ld	wa, (13650:16)	; F57515  ld WA,(0x3552)
 	ld	(9796:16), wa	; F57519  ld (0x2644),WA
 	ld	wa, (13854:16)	; F5751D  ld WA,(0x361e)
@@ -120689,7 +120689,7 @@ CyclePlayEditScreen_StageValues:
 	ld	wa, (13856:16)	; F57525  ld WA,(0x3620)
 	ld	(9812:16), wa	; F57529  ld (0x2654),WA
 	ld	a, (13862:16)	; F5752D  ld A,(0x3626)
-	ld	(4872:16), a	; F57531  ld (0x1308),A
+	ld	(DisplayListB_Stage+18:16), a	; F57531  ld (0x1308),A
 	popw	wa	; F57535  pop WA
 	ret	; F57536  ret
 
@@ -120709,7 +120709,7 @@ CyclePlayEditScreen_StageValues:
 CycleRecordScreen_StageValues:
 	pushw	wa	; F57537  push WA
 	ld	a, (13863:16)	; F57538  ld A,(0x3627)
-	ld	(4854:16), a	; F5753C  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F5753C  ld (0x12f6),A
 	ld	wa, (13650:16)	; F57540  ld WA,(0x3552)
 	ld	(9796:16), wa	; F57544  ld (0x2644),WA
 	ld	a, (13835:16)	; F57548  ld A,(0x360b)
@@ -143107,7 +143107,7 @@ sub_F66201_Return:
 sub_F66246:		; <- T_F42B7C
 	ld	a, 1:opc	; F66246  ld A,0x01
 	ld	(Medley_Field:16), a	; F66248  ld (0x0c0f),A
-	ld	(4866:16), a	; F6624C  ld (0x1302),A
+	ld	(DisplayListB_Stage+12:16), a	; F6624C  ld (0x1302),A
 	ret	; F66250  ret
 
 ; --------------------------------------------------------------------------
@@ -143124,7 +143124,7 @@ sub_F66246:		; <- T_F42B7C
 sub_F66251:		; <- T_F42B80
 	ld	a, 2:opc	; F66251  ld A,0x02
 	ld	(Medley_Field:16), a	; F66253  ld (0x0c0f),A
-	ld	(4866:16), a	; F66257  ld (0x1302),A
+	ld	(DisplayListB_Stage+12:16), a	; F66257  ld (0x1302),A
 	ret	; F6625B  ret
 
 ; --------------------------------------------------------------------------
@@ -143306,24 +143306,24 @@ sub_F6633A:		; <- T_F42C18
 	jr	nz, sub_F662F7_Return	; F6633F  jr NZ,0xf66381
 	ld	a, 0:opc	; F66341  ld A,0x00
 	ld	(Medley_Source:16), a	; F66343  ld (0x220b),A
-	ld	(4867:16), a	; F66347  ld (0x1303),A
+	ld	(DisplayListB_Stage+13:16), a	; F66347  ld (0x1303),A
 	ld	a, 0:opc	; F6634B  ld A,0x00
 	ld	(Medley_FileType:16), a	; F6634D  ld (0x0e35),A
-	ld	(4868:16), a	; F66351  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F66351  ld (0x1304),A
 	m_cp_mi8 MB16, Medley_FirstSong, 0x0a	; F66355  cp (0x2208),0x0a
 	jr	c, sub_F662F7_Skip4	; F6635A  jr C,0xf66361
 	ld	(Medley_FirstSong:16), 9	; F6635C  ld (0x2208),0x09
 sub_F662F7_Skip4:
 	ld	a, (Medley_FirstSong:16)	; F66361  ld A,(0x2208)
 	inc	1, a	; F66365  inc 1,A
-	ld	(4862:16), a	; F66367  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F66367  ld (0x12fe),A
 	m_cp_mi8 MB16, Medley_LastSong, 0x0a	; F6636B  cp (0x2209),0x0a
 	jr	c, sub_F662F7_Skip5	; F66370  jr C,0xf66377
 	ld	(Medley_LastSong:16), 9	; F66372  ld (0x2209),0x09
 sub_F662F7_Skip5:
 	ld	a, (Medley_LastSong:16)	; F66377  ld A,(0x2209)
 	inc	1, a	; F6637B  inc 1,A
-	ld	(4864:16), a	; F6637D  ld (0x1300),A
+	ld	(DisplayListB_Stage+10:16), a	; F6637D  ld (0x1300),A
 sub_F662F7_Return:
 	ret	; F66381  ret
 
@@ -143344,7 +143344,7 @@ sub_F66382:		; <- T_F42C1C
 	jr	nz, sub_F662F7_Return2	; F66387  jr NZ,0xf663d5
 	ld	a, 1:opc	; F66389  ld A,0x01
 	ld	(Medley_Source:16), a	; F6638B  ld (0x220b),A
-	ld	(4867:16), a	; F6638F  ld (0x1303),A
+	ld	(DisplayListB_Stage+13:16), a	; F6638F  ld (0x1303),A
 	ld	a, 20:opc	; F66393  ld A,0x14
 	m_cp_mi8 MB16, Medley_FileType, 0x00	; F66395  cp (0x0e35),0x00
 	jr	z, sub_F662F7_Skip6	; F6639A  jr Z,0xf6639e
@@ -143357,7 +143357,7 @@ sub_F662F7_Skip6:
 sub_F662F7_Skip7:
 	ld	a, (Medley_FirstSong:16)	; F663AA  ld A,(0x2208)
 	inc	1, a	; F663AE  inc 1,A
-	ld	(4862:16), a	; F663B0  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F663B0  ld (0x12fe),A
 	ld	a, 20:opc	; F663B4  ld A,0x14
 	m_cp_mi8 MB16, Medley_FileType, 0x00	; F663B6  cp (0x0e35),0x00
 	jr	z, sub_F662F7_Skip8	; F663BB  jr Z,0xf663bf
@@ -143370,7 +143370,7 @@ sub_F662F7_Skip8:
 sub_F662F7_Skip9:
 	ld	a, (Medley_LastSong:16)	; F663CB  ld A,(0x2209)
 	inc	1, a	; F663CF  inc 1,A
-	ld	(4864:16), a	; F663D1  ld (0x1300),A
+	ld	(DisplayListB_Stage+10:16), a	; F663D1  ld (0x1300),A
 sub_F662F7_Return2:
 	ret	; F663D5  ret
 
@@ -143404,21 +143404,21 @@ sub_F663D7:		; <- T_F42C28
 	jr	nz, sub_F662F7_Return3	; F663DC  jr NZ,0xf66414
 	ld	a, 0:opc	; F663DE  ld A,0x00
 	ld	(Medley_FileType:16), a	; F663E0  ld (0x0e35),A
-	ld	(4868:16), a	; F663E4  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F663E4  ld (0x1304),A
 	m_cp_mi8 MB16, Medley_FirstSong, 0x14	; F663E8  cp (0x2208),0x14
 	jr	c, sub_F662F7_Skip10	; F663ED  jr C,0xf663f4
 	ld	(Medley_FirstSong:16), 19	; F663EF  ld (0x2208),0x13
 sub_F662F7_Skip10:
 	ld	a, (Medley_FirstSong:16)	; F663F4  ld A,(0x2208)
 	inc	1, a	; F663F8  inc 1,A
-	ld	(4862:16), a	; F663FA  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F663FA  ld (0x12fe),A
 	m_cp_mi8 MB16, Medley_LastSong, 0x14	; F663FE  cp (0x2209),0x14
 	jr	c, sub_F662F7_Skip11	; F66403  jr C,0xf6640a
 	ld	(Medley_LastSong:16), 19	; F66405  ld (0x2209),0x13
 sub_F662F7_Skip11:
 	ld	a, (Medley_LastSong:16)	; F6640A  ld A,(0x2209)
 	inc	1, a	; F6640E  inc 1,A
-	ld	(4864:16), a	; F66410  ld (0x1300),A
+	ld	(DisplayListB_Stage+10:16), a	; F66410  ld (0x1300),A
 sub_F662F7_Return3:
 	ret	; F66414  ret
 
@@ -143441,21 +143441,21 @@ sub_F66415:		; <- T_F42C24
 	jr	nz, sub_F662F7_Return4	; F66421  jr NZ,0xf66459
 	ld	a, 1:opc	; F66423  ld A,0x01
 	ld	(Medley_FileType:16), a	; F66425  ld (0x0e35),A
-	ld	(4868:16), a	; F66429  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F66429  ld (0x1304),A
 	m_cp_mi8 MB16, Medley_FirstSong, 0x64	; F6642D  cp (0x2208),0x64
 	jr	c, sub_F662F7_Skip12	; F66432  jr C,0xf66439
 	ld	(Medley_FirstSong:16), 99	; F66434  ld (0x2208),0x63
 sub_F662F7_Skip12:
 	ld	a, (Medley_FirstSong:16)	; F66439  ld A,(0x2208)
 	inc	1, a	; F6643D  inc 1,A
-	ld	(4862:16), a	; F6643F  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F6643F  ld (0x12fe),A
 	m_cp_mi8 MB16, Medley_LastSong, 0x64	; F66443  cp (0x2209),0x64
 	jr	c, sub_F662F7_Skip13	; F66448  jr C,0xf6644f
 	ld	(Medley_LastSong:16), 99	; F6644A  ld (0x2209),0x63
 sub_F662F7_Skip13:
 	ld	a, (Medley_LastSong:16)	; F6644F  ld A,(0x2209)
 	inc	1, a	; F66453  inc 1,A
-	ld	(4864:16), a	; F66455  ld (0x1300),A
+	ld	(DisplayListB_Stage+10:16), a	; F66455  ld (0x1300),A
 sub_F662F7_Return4:
 	ret	; F66459  ret
 
@@ -143749,12 +143749,12 @@ sub_F665B4:		; <- T_F42BF8
 	ld	a, 1:opc	; F665C5  ld A,0x01
 	ld	(3581:16), a	; F665C7  ld (0x0dfd),A
 	dec	1, a	; F665CB  dec 1,A
-	ld	(4854:16), a	; F665CD  ld (0x12f6),A
-	ld	(4856:16), a	; F665D1  ld (0x12f8),A
+	ld	(DisplayListB_Stage:16), a	; F665CD  ld (0x12f6),A
+	ld	(DisplayListB_Stage+2:16), a	; F665D1  ld (0x12f8),A
 	ld	a, (BStore_CurrentBank:16)	; F665D5  ld A,(0x360a)
 	ld	(3582:16), a	; F665D9  ld (0x0dfe),A
 	inc	1, a	; F665DD  inc 1,A
-	ld	(4855:16), a	; F665DF  ld (0x12f7),A
+	ld	(DisplayListB_Stage+1:16), a	; F665DF  ld (0x12f7),A
 sub_F662F7_Skip20:
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F665E3  cp (0x2880),0x23
 	jr	nz, sub_F662F7_Return11	; F665E8  jr NZ,0xf665f0
@@ -143791,7 +143791,7 @@ sub_F665F2:		; <- T_F42C00
 	ld	a, 1:opc	; F665F2  ld A,0x01
 	ld	(3581:16), a	; F665F4  ld (0x0dfd),A
 	dec	1, a	; F665F8  dec 1,A
-	ld	(4854:16), a	; F665FA  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F665FA  ld (0x12f6),A
 	ret	; F665FE  ret
 
 ; --------------------------------------------------------------------------
@@ -143809,7 +143809,7 @@ sub_F665FF:		; <- T_F42C04
 	ld	a, 2:opc	; F665FF  ld A,0x02
 	ld	(3581:16), a	; F66601  ld (0x0dfd),A
 	dec	1, a	; F66605  dec 1,A
-	ld	(4854:16), a	; F66607  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F66607  ld (0x12f6),A
 	ret	; F6660B  ret
 
 ; --------------------------------------------------------------------------
@@ -143827,7 +143827,7 @@ sub_F6660C:		; <- T_F42C08
 	ld	a, 3:opc	; F6660C  ld A,0x03
 	ld	(3581:16), a	; F6660E  ld (0x0dfd),A
 	dec	1, a	; F66612  dec 1,A
-	ld	(4854:16), a	; F66614  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F66614  ld (0x12f6),A
 	ret	; F66618  ret
 
 ; --------------------------------------------------------------------------
@@ -143851,7 +143851,7 @@ sub_F66619:		; <- T_F42C0C
 sub_F662F7_Skip21:
 	ld	(3582:16), a	; F6662E  ld (0x0dfe),A
 	inc	1, a	; F66632  inc 1,A
-	ld	(4855:16), a	; F66634  ld (0x12f7),A
+	ld	(DisplayListB_Stage+1:16), a	; F66634  ld (0x12f7),A
 	ret	; F66638  ret
 
 ; --------------------------------------------------------------------------
@@ -143875,7 +143875,7 @@ sub_F66639:		; <- T_F42C10
 sub_F662F7_Skip22:
 	ld	(3582:16), a	; F6664D  ld (0x0dfe),A
 	inc	1, a	; F66651  inc 1,A
-	ld	(4855:16), a	; F66653  ld (0x12f7),A
+	ld	(DisplayListB_Stage+1:16), a	; F66653  ld (0x12f7),A
 	ret	; F66657  ret
 
 ; --------------------------------------------------------------------------
@@ -163173,7 +163173,7 @@ OldCopy_sub_F7AA29:
 	ld	a, (BStore_CurrentBank:16)	; F6F035  ld A,(0x360a)
 	ld	(3586:16), a	; F6F039  ld (0x0e02),A
 	inc	1, a	; F6F03D  inc 1,A
-	ld	(4854:16), a	; F6F03F  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F6F03F  ld (0x12f6),A
 	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F043  call 0xf6f05e
 	jr	OldCopy_F7AA5D	; F6F047  jr T,0xf6f05d
 OldCopy_F7AA49:
@@ -163213,7 +163213,7 @@ OldCopy_SongStore_LoadSongHeaderToDisplay:
 	add	xwa, xbc	; F6F073  add XWA,XBC
 	add	xiy, xwa	; F6F075  add XIY,XWA
 	add	xiy, 202	; F6F077  add XIY,0x000000ca
-	ld	xix, 4855	; F6F07D  ld XIX,0x000012f7
+	ld	xix, DisplayListB_Stage+1	; F6F07D  ld XIX,0x000012f7
 	ldw	bc, 6	; F6F082  ld BC,0x0006
 	ldir85	; F6F085  ldir
 	ret	; F6F087  ret
@@ -163229,7 +163229,7 @@ OldCopy_sub_F7AA89:
 	inc	1, a	; F6F09E  inc 1,A
 	ld	(3586:16), a	; F6F0A0  ld (0x0e02),A
 	inc	1, a	; F6F0A4  inc 1,A
-	ld	(4854:16), a	; F6F0A6  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F6F0A6  ld (0x12f6),A
 	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F0AA  call 0xf6f05e
 OldCopy_F7AAAE:
 	ret	; F6F0AE  ret
@@ -163249,7 +163249,7 @@ OldCopy_F7AACC:
 OldCopy_F7AACE:
 	ld	(3586:16), a	; F6F0CE  ld (0x0e02),A
 	inc	1, a	; F6F0D2  inc 1,A
-	ld	(4854:16), a	; F6F0D4  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F6F0D4  ld (0x12f6),A
 	call	OldCopy_SongStore_LoadSongHeaderToDisplay	; F6F0D8  call 0xf6f05e
 OldCopy_F7AADC:
 	ret	; F6F0DC  ret
@@ -163551,7 +163551,7 @@ OldCopy_F7AD7B:
 OldCopy_F7AD81:
 	ld	(3091:16), a	; F6F381  ld (0x0c13),A
 	ld	(6304857:24), a	; F6F385  ld (0x603459),A
-	ld	(4854:16), a	; F6F38A  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F6F38A  ld (0x12f6),A
 	ret	; F6F38E  ret
 OldCopy_sub_F7AD8F:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F38F  or (0x2075),0x09
@@ -163584,7 +163584,7 @@ OldCopy_F7ADC8:
 OldCopy_F7ADCE:
 	ld	(3092:16), a	; F6F3CE  ld (0x0c14),A
 	ld	(6304858:24), a	; F6F3D2  ld (0x60345a),A
-	ld	(4855:16), a	; F6F3D7  ld (0x12f7),A
+	ld	(DisplayListB_Stage+1:16), a	; F6F3D7  ld (0x12f7),A
 	ret	; F6F3DB  ret
 OldCopy_sub_F7ADDC:
 	ld	a, (3093:16)	; F6F3DC  ld A,(0x0c15)
@@ -163593,7 +163593,7 @@ OldCopy_sub_F7ADDC:
 	calr	sub_F7CCDB - 0xBA60	; F6F3E4  calr 0xf7127b
 	ld	(3093:16), a	; F6F3E7  ld (0x0c15),A
 	ld	(6304859:24), a	; F6F3EB  ld (0x60345b),A
-	ld	(4856:16), a	; F6F3F0  ld (0x12f8),A
+	ld	(DisplayListB_Stage+2:16), a	; F6F3F0  ld (0x12f8),A
 	ret	; F6F3F4  ret
 OldCopy_sub_F7ADF5:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F3F5  cp (0x207e),0x01
@@ -183368,7 +183368,7 @@ sub_F7AA29:		; <- T_F428B8
 	ld	a, (BStore_CurrentBank:16)	; F7AA35  ld A,(0x360a)
 	ld	(3586:16), a	; F7AA39  ld (0x0e02),A
 	inc	1, a	; F7AA3D  inc 1,A
-	ld	(4854:16), a	; F7AA3F  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7AA3F  ld (0x12f6),A
 	call	SongStore_LoadSongHeaderToDisplay	; F7AA43  call 0xf7aa5e
 	jr	BStore_AppendBytes_Return	; F7AA47  jr T,0xf7aa5d
 BStore_AppendBytes_Skip4:
@@ -183411,7 +183411,7 @@ SongStore_LoadSongHeaderToDisplay:
 	add	xwa, xbc	; F7AA73  add XWA,XBC
 	add	xiy, xwa	; F7AA75  add XIY,XWA
 	add	xiy, 202	; F7AA77  add XIY,0x000000ca
-	ld	xix, 4855	; F7AA7D  ld XIX,0x000012f7
+	ld	xix, DisplayListB_Stage+1	; F7AA7D  ld XIX,0x000012f7
 	ldw	bc, 6	; F7AA82  ld BC,0x0006
 	ldir85	; F7AA85  ldir
 	ret	; F7AA87  ret
@@ -183452,7 +183452,7 @@ sub_F7AA89:		; <- T_F428C0
 	inc	1, a	; F7AA9E  inc 1,A
 	ld	(3586:16), a	; F7AAA0  ld (0x0e02),A
 	inc	1, a	; F7AAA4  inc 1,A
-	ld	(4854:16), a	; F7AAA6  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7AAA6  ld (0x12f6),A
 	call	SongStore_LoadSongHeaderToDisplay	; F7AAAA  call 0xf7aa5e
 SongStore_LoadSongHeaderToDisplay_Return:
 	ret	; F7AAAE  ret
@@ -183485,7 +183485,7 @@ SongStore_LoadSongHeaderToDisplay_Skip:
 SongStore_LoadSongHeaderToDisplay_Join:
 	ld	(3586:16), a	; F7AACE  ld (0x0e02),A
 	inc	1, a	; F7AAD2  inc 1,A
-	ld	(4854:16), a	; F7AAD4  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7AAD4  ld (0x12f6),A
 	call	SongStore_LoadSongHeaderToDisplay	; F7AAD8  call 0xf7aa5e
 SongStore_LoadSongHeaderToDisplay_Return2:
 	ret	; F7AADC  ret
@@ -183929,7 +183929,7 @@ sub_F7AD42_Skip2:
 sub_F7AD42_Join:
 	ld	(3091:16), a	; F7AD81  ld (0x0c13),A
 	ld	(6304857:24), a	; F7AD85  ld (0x603459),A
-	ld	(4854:16), a	; F7AD8A  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7AD8A  ld (0x12f6),A
 	ret	; F7AD8E  ret
 
 ; --------------------------------------------------------------------------
@@ -183973,7 +183973,7 @@ sub_F7AD8F_Skip2:
 sub_F7AD8F_Join:
 	ld	(3092:16), a	; F7ADCE  ld (0x0c14),A
 	ld	(6304858:24), a	; F7ADD2  ld (0x60345a),A
-	ld	(4855:16), a	; F7ADD7  ld (0x12f7),A
+	ld	(DisplayListB_Stage+1:16), a	; F7ADD7  ld (0x12f7),A
 	ret	; F7ADDB  ret
 
 ; --------------------------------------------------------------------------
@@ -183994,7 +183994,7 @@ sub_F7ADDC:
 	calr	sub_F7CCDB	; F7ADE4  calr 0xf7ccdb
 	ld	(3093:16), a	; F7ADE7  ld (0x0c15),A
 	ld	(6304859:24), a	; F7ADEB  ld (0x60345b),A
-	ld	(4856:16), a	; F7ADF0  ld (0x12f8),A
+	ld	(DisplayListB_Stage+2:16), a	; F7ADF0  ld (0x12f8),A
 	ret	; F7ADF4  ret
 
 ; --------------------------------------------------------------------------
@@ -184206,13 +184206,13 @@ SongStore_BitMask32:
 sub_F7AFD8:
 	ld	a, (6304857:24)	; F7AFD8  ld A,(0x603459)
 	ld	(3091:16), a	; F7AFDD  ld (0x0c13),A
-	ld	(4854:16), a	; F7AFE1  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7AFE1  ld (0x12f6),A
 	ld	a, (6304858:24)	; F7AFE5  ld A,(0x60345a)
 	ld	(3092:16), a	; F7AFEA  ld (0x0c14),A
-	ld	(4855:16), a	; F7AFEE  ld (0x12f7),A
+	ld	(DisplayListB_Stage+1:16), a	; F7AFEE  ld (0x12f7),A
 	ld	a, (6304859:24)	; F7AFF2  ld A,(0x60345b)
 	ld	(3093:16), a	; F7AFF7  ld (0x0c15),A
-	ld	(4856:16), a	; F7AFFB  ld (0x12f8),A
+	ld	(DisplayListB_Stage+2:16), a	; F7AFFB  ld (0x12f8),A
 	ret	; F7AFFF  ret
 
 ; --------------------------------------------------------------------------
@@ -184230,7 +184230,7 @@ sub_F7AFD8:
 sub_F7B000:		; <- T_F4295C
 	calr	sub_F7B1D1	; F7B000  calr 0xf7b1d1
 	ld	(3540:16), 1	; F7B003  ld (0x0dd4),0x01
-	ld	(4859:16), 1	; F7B008  ld (0x12fb),0x01
+	ld	(DisplayListB_Stage+5:16), 1	; F7B008  ld (0x12fb),0x01
 	ret	; F7B00D  ret
 
 ; --------------------------------------------------------------------------
@@ -184414,7 +184414,7 @@ sub_F7B0B7_Skip:
 	ld	(6304860:24), a	; F7B0E3  ld (0x60345c),A
 	m_or_mi8 MB16, 0x0c35, 0x01	; F7B0E8  or (0x0c35),0x01
 sub_F7B0B7_Join:
-	ld	(4854:16), a	; F7B0ED  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B0ED  ld (0x12f6),A
 	ret	; F7B0F1  ret
 
 ; --------------------------------------------------------------------------
@@ -184436,10 +184436,10 @@ sub_F7B0F2:
 	m_cp_rm MW16, 0x0dd8, 0	; F7B102  cp WA,(0x0dd8)
 	jr	ule, sub_F7B0F2_Skip	; F7B106  jr ULE,0xf7b110
 	ld	(3544:16), wa	; F7B108  ld (0x0dd8),WA
-	ld	(4857:16), wa	; F7B10C  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B10C  ld (0x12f9),WA
 sub_F7B0F2_Skip:
 	ld	(3542:16), wa	; F7B110  ld (0x0dd6),WA
-	ld	(4855:16), wa	; F7B114  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B114  ld (0x12f7),WA
 	ld	wa, (3544:16)	; F7B118  ld WA,(0x0dd8)
 	m_sub_rm MW16, 0x0dd6, 0	; F7B11C  sub WA,(0x0dd6)
 	inc	1, wa	; F7B120  inc 1,WA
@@ -184461,11 +184461,11 @@ sub_F7B128:
 	ld	wa, (3544:16)	; F7B128  ld WA,(0x0dd8)
 	calr	sub_F7CD5F	; F7B12C  calr 0xf7cd5f
 	ld	(3544:16), wa	; F7B12F  ld (0x0dd8),WA
-	ld	(4857:16), wa	; F7B133  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B133  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0dd6, 0	; F7B137  cp WA,(0x0dd6)
 	jr	nc, sub_F7B128_Skip	; F7B13B  jr NC,0xf7b14e
 	ld	(3542:16), wa	; F7B13D  ld (0x0dd6),WA
-	ld	(4855:16), wa	; F7B141  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B141  ld (0x12f7),WA
 	ld	(3096:16), wa	; F7B145  ld (0x0c18),WA
 	ld	(6304861:24), wa	; F7B149  ld (0x60345d),WA
 sub_F7B128_Skip:
@@ -184539,16 +184539,16 @@ sub_F7B1D1:
 	ld	a, (6304860:24)	; F7B1D1  ld A,(0x60345c)
 	ld	(3091:16), a	; F7B1D6  ld (0x0c13),A
 	ld	(3541:16), a	; F7B1DA  ld (0x0dd5),A
-	ld	(4854:16), a	; F7B1DE  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B1DE  ld (0x12f6),A
 	ld	wa, (6304861:24)	; F7B1E2  ld WA,(0x60345d)
 	ld	(3096:16), wa	; F7B1E7  ld (0x0c18),WA
 	ld	(3542:16), wa	; F7B1EB  ld (0x0dd6),WA
-	ld	(4855:16), wa	; F7B1EF  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B1EF  ld (0x12f7),WA
 	ld	wa, (6304863:24)	; F7B1F3  ld WA,(0x60345f)
 	dec	1, wa	; F7B1F8  dec 1,WA
 	add	wa, (6304861:24)	; F7B1FA  add WA,(0x60345d)
 	ld	(3544:16), wa	; F7B1FF  ld (0x0dd8),WA
-	ld	(4857:16), wa	; F7B203  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B203  ld (0x12f9),WA
 	ld	wa, (3544:16)	; F7B207  ld WA,(0x0dd8)
 	m_sub_rm MW16, 0x0dd6, 0	; F7B20B  sub WA,(0x0dd6)
 	inc	1, wa	; F7B20F  inc 1,WA
@@ -184576,7 +184576,7 @@ sub_F7B1D1_Return:
 sub_F7B22C:		; <- T_F42980
 	calr	sub_F7B457	; F7B22C  calr 0xf7b457
 	ld	(3515:16), 1	; F7B22F  ld (0x0dbb),0x01
-	ld	(4860:16), 1	; F7B234  ld (0x12fc),0x01
+	ld	(DisplayListB_Stage+6:16), 1	; F7B234  ld (0x12fc),0x01
 	ret	; F7B239  ret
 
 ; --------------------------------------------------------------------------
@@ -184786,7 +184786,7 @@ sub_F7B306_Skip:
 	ld	(6304865:24), a	; F7B332  ld (0x603461),A
 	m_or_mi8 MB16, 0x0c35, 0x02	; F7B337  or (0x0c35),0x02
 sub_F7B306_Join:
-	ld	(4854:16), a	; F7B33C  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B33C  ld (0x12f6),A
 	ret	; F7B340  ret
 
 ; --------------------------------------------------------------------------
@@ -184808,10 +184808,10 @@ sub_F7B341:
 	m_cp_rm MW16, 0x0c2c, 0	; F7B351  cp WA,(0x0c2c)
 	jr	ule, sub_F7B341_Skip	; F7B355  jr ULE,0xf7b35f
 	ld	(3116:16), wa	; F7B357  ld (0x0c2c),WA
-	ld	(4857:16), wa	; F7B35B  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B35B  ld (0x12f9),WA
 sub_F7B341_Skip:
 	ld	(3114:16), wa	; F7B35F  ld (0x0c2a),WA
-	ld	(4855:16), wa	; F7B363  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B363  ld (0x12f7),WA
 	ld	wa, (3116:16)	; F7B367  ld WA,(0x0c2c)
 	m_sub_rm MW16, 0x0c2a, 0	; F7B36B  sub WA,(0x0c2a)
 	inc	1, wa	; F7B36F  inc 1,WA
@@ -184833,13 +184833,13 @@ sub_F7B377:
 	ld	wa, (3116:16)	; F7B377  ld WA,(0x0c2c)
 	calr	sub_F7CD5F	; F7B37B  calr 0xf7cd5f
 	ld	(3116:16), wa	; F7B37E  ld (0x0c2c),WA
-	ld	(4857:16), wa	; F7B382  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B382  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c2a, 0	; F7B386  cp WA,(0x0c2a)
 	jr	nc, sub_F7B377_Skip	; F7B38A  jr NC,0xf7b39d
 	ld	(3114:16), wa	; F7B38C  ld (0x0c2a),WA
 	ld	(3096:16), wa	; F7B390  ld (0x0c18),WA
 	ld	(6304866:24), wa	; F7B394  ld (0x603462),WA
-	ld	(4855:16), wa	; F7B399  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B399  ld (0x12f7),WA
 sub_F7B377_Skip:
 	ld	(3116:16), wa	; F7B39D  ld (0x0c2c),WA
 	ld	wa, (3116:16)	; F7B3A1  ld WA,(0x0c2c)
@@ -184878,7 +184878,7 @@ sub_F7B3B1_Skip2:
 sub_F7B3B1_Join:
 	ld	(3094:16), a	; F7B3D2  ld (0x0c16),A
 	ld	(6304870:24), a	; F7B3D6  ld (0x603466),A
-	ld	(4859:16), a	; F7B3DB  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7B3DB  ld (0x12fb),A
 	ret	; F7B3DF  ret
 
 ; --------------------------------------------------------------------------
@@ -184946,16 +184946,16 @@ sub_F7B457:
 	ld	a, (6304865:24)	; F7B457  ld A,(0x603461)
 	ld	(3091:16), a	; F7B45C  ld (0x0c13),A
 	ld	(3118:16), a	; F7B460  ld (0x0c2e),A
-	ld	(4854:16), a	; F7B464  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B464  ld (0x12f6),A
 	ld	wa, (6304866:24)	; F7B468  ld WA,(0x603462)
 	ld	(3096:16), wa	; F7B46D  ld (0x0c18),WA
 	ld	(3114:16), wa	; F7B471  ld (0x0c2a),WA
-	ld	(4855:16), wa	; F7B475  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B475  ld (0x12f7),WA
 	ld	wa, (6304868:24)	; F7B479  ld WA,(0x603464)
 	dec	1, wa	; F7B47E  dec 1,WA
 	add	wa, (6304866:24)	; F7B480  add WA,(0x603462)
 	ld	(3116:16), wa	; F7B485  ld (0x0c2c),WA
-	ld	(4857:16), wa	; F7B489  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B489  ld (0x12f9),WA
 	ld	wa, (3116:16)	; F7B48D  ld WA,(0x0c2c)
 	m_sub_rm MW16, 0x0c2a, 0	; F7B491  sub WA,(0x0c2a)
 	inc	1, wa	; F7B495  inc 1,WA
@@ -184963,7 +184963,7 @@ sub_F7B457:
 	ld	(3100:16), wa	; F7B49C  ld (0x0c1c),WA
 	ld	a, (6304870:24)	; F7B4A0  ld A,(0x603466)
 	ld	(3094:16), a	; F7B4A5  ld (0x0c16),A
-	ld	(4859:16), a	; F7B4A9  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7B4A9  ld (0x12fb),A
 	m_and_mi8 MB16, 0x0c35, 0xfd	; F7B4AD  and (0x0c35),0xfd
 	m_cp_mi8 MB16, 0x0c13, 0x12	; F7B4B2  cp (0x0c13),0x12
 	jr	nz, sub_F7B457_Return	; F7B4B7  jr NZ,0xf7b4be
@@ -184987,7 +184987,7 @@ sub_F7B4BF:		; <- T_F429A8
 	calr	sub_F7B852	; F7B4BF  calr 0xf7b852
 	ld	a, 1:opc	; F7B4C2  ld A,0x01
 	ld	(MeasureInsert_Field:16), a	; F7B4C4  ld (0x0dda),A
-	ld	(4863:16), a	; F7B4C8  ld (0x12ff),A
+	ld	(DisplayListB_Stage+9:16), a	; F7B4C8  ld (0x12ff),A
 	ret	; F7B4CC  ret
 
 ; --------------------------------------------------------------------------
@@ -185236,23 +185236,23 @@ sub_F7B5F5:
 	ld	(3552:16), l	; F7B60D  ld (0x0de0),L
 	ld	(3092:16), l	; F7B611  ld (0x0c14),L
 	ld	(6304876:24), l	; F7B615  ld (0x60346c),L
-	ld	(4859:16), l	; F7B61A  ld (0x12fb),L
+	ld	(DisplayListB_Stage+5:16), l	; F7B61A  ld (0x12fb),L
 sub_F7B5F5_Skip:
 	ld	(3091:16), a	; F7B61E  ld (0x0c13),A
 	ld	(6304871:24), a	; F7B622  ld (0x603467),A
 	ld	(3547:16), a	; F7B627  ld (0x0ddb),A
-	ld	(4854:16), a	; F7B62B  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B62B  ld (0x12f6),A
 	m_and_mi8 MB16, 0x0c35, 0xfb	; F7B62F  and (0x0c35),0xfb
 	jr	sub_F7B5F5_Return	; F7B634  jr T,0xf7b65d
 sub_F7B5F5_Skip2:
 	ld	(3547:16), a	; F7B636  ld (0x0ddb),A
 	ld	(3091:16), a	; F7B63A  ld (0x0c13),A
 	ld	(6304871:24), a	; F7B63E  ld (0x603467),A
-	ld	(4854:16), a	; F7B643  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B643  ld (0x12f6),A
 	ld	(3552:16), a	; F7B647  ld (0x0de0),A
 	ld	(3092:16), a	; F7B64B  ld (0x0c14),A
 	ld	(6304876:24), a	; F7B64F  ld (0x60346c),A
-	ld	(4859:16), a	; F7B654  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7B654  ld (0x12fb),A
 	m_or_mi8 MB16, 0x0c35, 0x04	; F7B658  or (0x0c35),0x04
 sub_F7B5F5_Return:
 	ret	; F7B65D  ret
@@ -185273,11 +185273,11 @@ sub_F7B65E:
 	calr	sub_F7CD5F	; F7B662  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7B665  ld (0x0c18),WA
 	ld	(6304872:24), wa	; F7B669  ld (0x603468),WA
-	ld	(4855:16), wa	; F7B66E  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B66E  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0dde, 0	; F7B672  cp WA,(0x0dde)
 	jr	ule, sub_F7B65E_Skip	; F7B676  jr ULE,0xf7b680
 	ld	(3550:16), wa	; F7B678  ld (0x0dde),WA
-	ld	(4857:16), wa	; F7B67C  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B67C  ld (0x12f9),WA
 sub_F7B65E_Skip:
 	ld	(3548:16), wa	; F7B680  ld (0x0ddc),WA
 	ld	wa, (3550:16)	; F7B684  ld WA,(0x0dde)
@@ -185301,13 +185301,13 @@ sub_F7B694:
 	ld	wa, (3550:16)	; F7B694  ld WA,(0x0dde)
 	calr	sub_F7CD5F	; F7B698  calr 0xf7cd5f
 	ld	(3550:16), wa	; F7B69B  ld (0x0dde),WA
-	ld	(4857:16), wa	; F7B69F  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B69F  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0ddc, 0	; F7B6A3  cp WA,(0x0ddc)
 	jr	nc, sub_F7B694_Skip	; F7B6A7  jr NC,0xf7b6ba
 	ld	(3548:16), wa	; F7B6A9  ld (0x0ddc),WA
 	ld	(3096:16), wa	; F7B6AD  ld (0x0c18),WA
 	ld	(6304872:24), wa	; F7B6B1  ld (0x603468),WA
-	ld	(4855:16), wa	; F7B6B6  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B6B6  ld (0x12f7),WA
 sub_F7B694_Skip:
 	ld	(3550:16), wa	; F7B6BA  ld (0x0dde),WA
 	ld	wa, (3550:16)	; F7B6BE  ld WA,(0x0dde)
@@ -185340,23 +185340,23 @@ sub_F7B6CE:
 	ld	(3547:16), l	; F7B6E6  ld (0x0ddb),L
 	ld	(3091:16), l	; F7B6EA  ld (0x0c13),L
 	ld	(6304871:24), l	; F7B6EE  ld (0x603467),L
-	ld	(4854:16), l	; F7B6F3  ld (0x12f6),L
+	ld	(DisplayListB_Stage:16), l	; F7B6F3  ld (0x12f6),L
 sub_F7B6CE_Skip:
 	ld	(3092:16), a	; F7B6F7  ld (0x0c14),A
 	ld	(6304876:24), a	; F7B6FB  ld (0x60346c),A
 	ld	(3552:16), a	; F7B700  ld (0x0de0),A
-	ld	(4859:16), a	; F7B704  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7B704  ld (0x12fb),A
 	m_and_mi8 MB16, 0x0c35, 0xfb	; F7B708  and (0x0c35),0xfb
 	jr	sub_F7B6CE_Return	; F7B70D  jr T,0xf7b736
 sub_F7B6CE_Skip2:
 	ld	(3552:16), a	; F7B70F  ld (0x0de0),A
 	ld	(3092:16), a	; F7B713  ld (0x0c14),A
 	ld	(6304876:24), a	; F7B717  ld (0x60346c),A
-	ld	(4859:16), a	; F7B71C  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7B71C  ld (0x12fb),A
 	ld	(3547:16), a	; F7B720  ld (0x0ddb),A
 	ld	(3091:16), a	; F7B724  ld (0x0c13),A
 	ld	(6304871:24), a	; F7B728  ld (0x603467),A
-	ld	(4854:16), a	; F7B72D  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B72D  ld (0x12f6),A
 	m_or_mi8 MB16, 0x0c35, 0x04	; F7B731  or (0x0c35),0x04
 sub_F7B6CE_Return:
 	ret	; F7B736  ret
@@ -185377,7 +185377,7 @@ sub_F7B737:
 	calr	sub_F7CD5F	; F7B73B  calr 0xf7cd5f
 	ld	(3098:16), wa	; F7B73E  ld (0x0c1a),WA
 	ld	(6304877:24), wa	; F7B742  ld (0x60346d),WA
-	ld	(4860:16), wa	; F7B747  ld (0x12fc),WA
+	ld	(DisplayListB_Stage+6:16), wa	; F7B747  ld (0x12fc),WA
 	ret	; F7B74B  ret
 
 ; --------------------------------------------------------------------------
@@ -185397,7 +185397,7 @@ sub_F7B74C:
 	ld	h, 127:opc	; F7B752  ld H,0x7f
 	call	sub_F7CCDB	; F7B754  call 0xf7ccdb
 	ld	(3607:16), a	; F7B758  ld (0x0e17),A
-	ld	(4862:16), a	; F7B75C  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7B75C  ld (0x12fe),A
 	ret	; F7B760  ret
 
 ; --------------------------------------------------------------------------
@@ -185523,16 +185523,16 @@ sub_F7B852:
 sub_F7B852_Skip:
 	ld	(3091:16), a	; F7B860  ld (0x0c13),A
 	ld	(3547:16), a	; F7B864  ld (0x0ddb),A
-	ld	(4854:16), a	; F7B868  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7B868  ld (0x12f6),A
 	ld	wa, (6304872:24)	; F7B86C  ld WA,(0x603468)
 	ld	(3096:16), wa	; F7B871  ld (0x0c18),WA
 	ld	(3548:16), wa	; F7B875  ld (0x0ddc),WA
-	ld	(4855:16), wa	; F7B879  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7B879  ld (0x12f7),WA
 	ld	wa, (6304874:24)	; F7B87D  ld WA,(0x60346a)
 	dec	1, wa	; F7B882  dec 1,WA
 	add	wa, (6304872:24)	; F7B884  add WA,(0x603468)
 	ld	(3550:16), wa	; F7B889  ld (0x0dde),WA
-	ld	(4857:16), wa	; F7B88D  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7B88D  ld (0x12f9),WA
 	ld	wa, (3550:16)	; F7B891  ld WA,(0x0dde)
 	m_sub_rm MW16, 0x0ddc, 0	; F7B895  sub WA,(0x0ddc)
 	inc	1, wa	; F7B899  inc 1,WA
@@ -185541,12 +185541,12 @@ sub_F7B852_Skip:
 	ld	a, (6304876:24)	; F7B8A4  ld A,(0x60346c)
 	ld	(3092:16), a	; F7B8A9  ld (0x0c14),A
 	ld	(3552:16), a	; F7B8AD  ld (0x0de0),A
-	ld	(4859:16), a	; F7B8B1  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7B8B1  ld (0x12fb),A
 	ld	wa, (6304877:24)	; F7B8B5  ld WA,(0x60346d)
 	ld	(3098:16), wa	; F7B8BA  ld (0x0c1a),WA
-	ld	(4860:16), wa	; F7B8BE  ld (0x12fc),WA
+	ld	(DisplayListB_Stage+6:16), wa	; F7B8BE  ld (0x12fc),WA
 	ld	a, (3607:16)	; F7B8C2  ld A,(0x0e17)
-	ld	(4862:16), a	; F7B8C6  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7B8C6  ld (0x12fe),A
 	m_and_mi8 MB16, 0x0c35, 0xfb	; F7B8CA  and (0x0c35),0xfb
 	m_cp_mi8 MB16, 0x0c13, 0x12	; F7B8CF  cp (0x0c13),0x12
 	jr	nz, sub_F7B852_Return	; F7B8D4  jr NZ,0xf7b8db
@@ -185570,7 +185570,7 @@ sub_F7B8DC:		; <- T_F429D8
 	calr	sub_F7BC73	; F7B8DC  calr 0xf7bc73
 	ld	a, 1:opc	; F7B8DF  ld A,0x01
 	ld	(MeasureC0py_Field:16), a	; F7B8E1  ld (0x0dbc),A
-	ld	(4863:16), a	; F7B8E5  ld (0x12ff),A
+	ld	(DisplayListB_Stage+9:16), a	; F7B8E5  ld (0x12ff),A
 	ret	; F7B8E9  ret
 
 ; --------------------------------------------------------------------------
@@ -185821,23 +185821,23 @@ sub_F7BA16:
 	ld	(3124:16), l	; F7BA2E  ld (0x0c34),L
 	ld	(3092:16), l	; F7BA32  ld (0x0c14),L
 	ld	(6304884:24), l	; F7BA36  ld (0x603474),L
-	ld	(4859:16), a	; F7BA3B  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7BA3B  ld (0x12fb),A
 sub_F7BA16_Skip:
 	ld	(3091:16), a	; F7BA3F  ld (0x0c13),A
 	ld	(6304879:24), a	; F7BA43  ld (0x60346f),A
 	ld	(3119:16), a	; F7BA48  ld (0x0c2f),A
-	ld	(4854:16), a	; F7BA4C  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BA4C  ld (0x12f6),A
 	m_and_mi8 MB16, 0x0c35, 0xf7	; F7BA50  and (0x0c35),0xf7
 	jr	sub_F7BA16_Return	; F7BA55  jr T,0xf7ba7e
 sub_F7BA16_Skip2:
 	ld	(3119:16), a	; F7BA57  ld (0x0c2f),A
 	ld	(3091:16), a	; F7BA5B  ld (0x0c13),A
 	ld	(6304879:24), a	; F7BA5F  ld (0x60346f),A
-	ld	(4854:16), a	; F7BA64  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BA64  ld (0x12f6),A
 	ld	(3124:16), a	; F7BA68  ld (0x0c34),A
 	ld	(3092:16), a	; F7BA6C  ld (0x0c14),A
 	ld	(6304884:24), a	; F7BA70  ld (0x603474),A
-	ld	(4859:16), a	; F7BA75  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7BA75  ld (0x12fb),A
 	m_or_mi8 MB16, 0x0c35, 0x08	; F7BA79  or (0x0c35),0x08
 sub_F7BA16_Return:
 	ret	; F7BA7E  ret
@@ -185858,11 +185858,11 @@ sub_F7BA7F:
 	calr	sub_F7CD5F	; F7BA83  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7BA86  ld (0x0c18),WA
 	ld	(6304880:24), wa	; F7BA8A  ld (0x603470),WA
-	ld	(4855:16), wa	; F7BA8F  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7BA8F  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0c32, 0	; F7BA93  cp WA,(0x0c32)
 	jr	ule, sub_F7BA7F_Skip	; F7BA97  jr ULE,0xf7baa1
 	ld	(3122:16), wa	; F7BA99  ld (0x0c32),WA
-	ld	(4857:16), wa	; F7BA9D  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7BA9D  ld (0x12f9),WA
 sub_F7BA7F_Skip:
 	ld	(3120:16), wa	; F7BAA1  ld (0x0c30),WA
 	ld	wa, (3122:16)	; F7BAA5  ld WA,(0x0c32)
@@ -185886,13 +185886,13 @@ sub_F7BAB5:
 	ld	wa, (3122:16)	; F7BAB5  ld WA,(0x0c32)
 	calr	sub_F7CD5F	; F7BAB9  calr 0xf7cd5f
 	ld	(3122:16), wa	; F7BABC  ld (0x0c32),WA
-	ld	(4857:16), wa	; F7BAC0  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7BAC0  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c30, 0	; F7BAC4  cp WA,(0x0c30)
 	jr	nc, sub_F7BAB5_Skip	; F7BAC8  jr NC,0xf7badb
 	ld	(3120:16), wa	; F7BACA  ld (0x0c30),WA
 	ld	(3096:16), wa	; F7BACE  ld (0x0c18),WA
 	ld	(6304880:24), wa	; F7BAD2  ld (0x603470),WA
-	ld	(4855:16), wa	; F7BAD7  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7BAD7  ld (0x12f7),WA
 sub_F7BAB5_Skip:
 	ld	(3122:16), wa	; F7BADB  ld (0x0c32),WA
 	ld	wa, (3122:16)	; F7BADF  ld WA,(0x0c32)
@@ -185925,23 +185925,23 @@ sub_F7BAEF:
 	ld	(3119:16), l	; F7BB07  ld (0x0c2f),L
 	ld	(3091:16), l	; F7BB0B  ld (0x0c13),L
 	ld	(6304879:24), l	; F7BB0F  ld (0x60346f),L
-	ld	(4854:16), a	; F7BB14  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BB14  ld (0x12f6),A
 sub_F7BAEF_Skip:
 	ld	(3092:16), a	; F7BB18  ld (0x0c14),A
 	ld	(6304884:24), a	; F7BB1C  ld (0x603474),A
 	ld	(3124:16), a	; F7BB21  ld (0x0c34),A
-	ld	(4859:16), a	; F7BB25  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7BB25  ld (0x12fb),A
 	m_and_mi8 MB16, 0x0c35, 0xf7	; F7BB29  and (0x0c35),0xf7
 	jr	sub_F7BAEF_Return	; F7BB2E  jr T,0xf7bb57
 sub_F7BAEF_Skip2:
 	ld	(3124:16), a	; F7BB30  ld (0x0c34),A
 	ld	(3092:16), a	; F7BB34  ld (0x0c14),A
 	ld	(6304884:24), a	; F7BB38  ld (0x603474),A
-	ld	(4859:16), a	; F7BB3D  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7BB3D  ld (0x12fb),A
 	ld	(3119:16), a	; F7BB41  ld (0x0c2f),A
 	ld	(3091:16), a	; F7BB45  ld (0x0c13),A
 	ld	(6304879:24), a	; F7BB49  ld (0x60346f),A
-	ld	(4854:16), a	; F7BB4E  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BB4E  ld (0x12f6),A
 	m_or_mi8 MB16, 0x0c35, 0x08	; F7BB52  or (0x0c35),0x08
 sub_F7BAEF_Return:
 	ret	; F7BB57  ret
@@ -185962,7 +185962,7 @@ sub_F7BB58:
 	calr	sub_F7CD5F	; F7BB5C  calr 0xf7cd5f
 	ld	(3098:16), wa	; F7BB5F  ld (0x0c1a),WA
 	ld	(6304885:24), wa	; F7BB63  ld (0x603475),WA
-	ld	(4860:16), wa	; F7BB68  ld (0x12fc),WA
+	ld	(DisplayListB_Stage+6:16), wa	; F7BB68  ld (0x12fc),WA
 	ret	; F7BB6C  ret
 
 ; --------------------------------------------------------------------------
@@ -185982,7 +185982,7 @@ sub_F7BB6D:
 	ld	h, 127:opc	; F7BB73  ld H,0x7f
 	call	sub_F7CCDB	; F7BB75  call 0xf7ccdb
 	ld	(3606:16), a	; F7BB79  ld (0x0e16),A
-	ld	(4862:16), a	; F7BB7D  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7BB7D  ld (0x12fe),A
 	ret	; F7BB81  ret
 
 ; --------------------------------------------------------------------------
@@ -186108,16 +186108,16 @@ sub_F7BC73:
 sub_F7BC73_Skip:
 	ld	(3091:16), a	; F7BC81  ld (0x0c13),A
 	ld	(3119:16), a	; F7BC85  ld (0x0c2f),A
-	ld	(4854:16), a	; F7BC89  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BC89  ld (0x12f6),A
 	ld	wa, (6304880:24)	; F7BC8D  ld WA,(0x603470)
 	ld	(3096:16), wa	; F7BC92  ld (0x0c18),WA
 	ld	(3120:16), wa	; F7BC96  ld (0x0c30),WA
-	ld	(4855:16), wa	; F7BC9A  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7BC9A  ld (0x12f7),WA
 	ld	wa, (6304882:24)	; F7BC9E  ld WA,(0x603472)
 	dec	1, wa	; F7BCA3  dec 1,WA
 	add	wa, (6304880:24)	; F7BCA5  add WA,(0x603470)
 	ld	(3122:16), wa	; F7BCAA  ld (0x0c32),WA
-	ld	(4857:16), wa	; F7BCAE  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7BCAE  ld (0x12f9),WA
 	ld	wa, (3122:16)	; F7BCB2  ld WA,(0x0c32)
 	m_sub_rm MW16, 0x0c30, 0	; F7BCB6  sub WA,(0x0c30)
 	inc	1, wa	; F7BCBA  inc 1,WA
@@ -186126,12 +186126,12 @@ sub_F7BC73_Skip:
 	ld	a, (6304884:24)	; F7BCC5  ld A,(0x603474)
 	ld	(3092:16), a	; F7BCCA  ld (0x0c14),A
 	ld	(3124:16), a	; F7BCCE  ld (0x0c34),A
-	ld	(4859:16), a	; F7BCD2  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7BCD2  ld (0x12fb),A
 	ld	wa, (6304885:24)	; F7BCD6  ld WA,(0x603475)
 	ld	(3098:16), wa	; F7BCDB  ld (0x0c1a),WA
-	ld	(4860:16), wa	; F7BCDF  ld (0x12fc),WA
+	ld	(DisplayListB_Stage+6:16), wa	; F7BCDF  ld (0x12fc),WA
 	ld	a, (3606:16)	; F7BCE3  ld A,(0x0e16)
-	ld	(4862:16), a	; F7BCE7  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7BCE7  ld (0x12fe),A
 	m_and_mi8 MB16, 0x0c35, 0xf7	; F7BCEB  and (0x0c35),0xf7
 	m_cp_mi8 MB16, 0x0c13, 0x12	; F7BCF0  cp (0x0c13),0x12
 	jr	nz, sub_F7BC73_Return	; F7BCF5  jr NZ,0xf7bcfc
@@ -186158,9 +186158,9 @@ sub_F7BCFD:		; <- T_F428E0
 	xor	wa, wa	; F7BD0B  xor WA,WA
 	ld	a, (3102:16)	; F7BD0D  ld A,(0x0c1e)
 	ld	(3108:16), a	; F7BD11  ld (0x0c24),A
-	ld	(4859:16), a	; F7BD15  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7BD15  ld (0x12fb),A
 	ld	(3512:16), 1	; F7BD19  ld (0x0db8),0x01
-	ld	(4860:16), 1	; F7BD1E  ld (0x12fc),0x01
+	ld	(DisplayListB_Stage+6:16), 1	; F7BD1E  ld (0x12fc),0x01
 	ret	; F7BD23  ret
 
 ; --------------------------------------------------------------------------
@@ -186195,7 +186195,7 @@ sub_F7BC73_Return2:
 ; --------------------------------------------------------------------------
 sub_F7BD30:		; <- T_F428E8
 	ld	(3512:16), 1	; F7BD30  ld (0x0db8),0x01
-	ld	(4860:16), 1	; F7BD35  ld (0x12fc),0x01
+	ld	(DisplayListB_Stage+6:16), 1	; F7BD35  ld (0x12fc),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7BD3A  or (0x2075),0x09
 	ret	; F7BD3F  ret
 
@@ -186212,7 +186212,7 @@ sub_F7BD30:		; <- T_F428E8
 ; --------------------------------------------------------------------------
 sub_F7BD40:		; <- T_F428EC
 	ld	(3512:16), 2	; F7BD40  ld (0x0db8),0x02
-	ld	(4860:16), 2	; F7BD45  ld (0x12fc),0x02
+	ld	(DisplayListB_Stage+6:16), 2	; F7BD45  ld (0x12fc),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD4A  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7BD4F  or (0x2075),0x01
 	ret	; F7BD54  ret
@@ -186230,7 +186230,7 @@ sub_F7BD40:		; <- T_F428EC
 ; --------------------------------------------------------------------------
 sub_F7BD55:		; <- T_F428F0
 	ld	(3512:16), 3	; F7BD55  ld (0x0db8),0x03
-	ld	(4860:16), 3	; F7BD5A  ld (0x12fc),0x03
+	ld	(DisplayListB_Stage+6:16), 3	; F7BD5A  ld (0x12fc),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD5F  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7BD64  or (0x2075),0x01
 	ret	; F7BD69  ret
@@ -186248,7 +186248,7 @@ sub_F7BD55:		; <- T_F428F0
 ; --------------------------------------------------------------------------
 sub_F7BD6A:		; <- T_F428F4
 	ld	(3512:16), 4	; F7BD6A  ld (0x0db8),0x04
-	ld	(4860:16), 4	; F7BD6F  ld (0x12fc),0x04
+	ld	(DisplayListB_Stage+6:16), 4	; F7BD6F  ld (0x12fc),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD74  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7BD79  or (0x2075),0x01
 	ret	; F7BD7E  ret
@@ -186368,13 +186368,13 @@ sub_F7BE0C:
 	jr	z, sub_F7BE0C_Skip	; F7BE1A  jr Z,0xf7be30
 	ld	(3091:16), a	; F7BE1C  ld (0x0c13),A
 	ld	(6304945:24), a	; F7BE20  ld (0x6034b1),A
-	ld	(4854:16), a	; F7BE25  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BE25  ld (0x12f6),A
 	m_and_mi8 MB16, 0x0c35, 0xdf	; F7BE29  and (0x0c35),0xdf
 	jr	sub_F7BE0C_Return	; F7BE2E  jr T,0xf7be42
 sub_F7BE0C_Skip:
 	ld	(3091:16), a	; F7BE30  ld (0x0c13),A
 	ld	(6304945:24), a	; F7BE34  ld (0x6034b1),A
-	ld	(4854:16), a	; F7BE39  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BE39  ld (0x12f6),A
 	m_or_mi8 MB16, 0x0c35, 0x20	; F7BE3D  or (0x0c35),0x20
 sub_F7BE0C_Return:
 	ret	; F7BE42  ret
@@ -186395,11 +186395,11 @@ sub_F7BE43:
 	calr	sub_F7CD5F	; F7BE47  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7BE4A  ld (0x0c18),WA
 	ld	(6304946:24), wa	; F7BE4E  ld (0x6034b2),WA
-	ld	(4855:16), wa	; F7BE53  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7BE53  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0c22, 0	; F7BE57  cp WA,(0x0c22)
 	jr	ule, sub_F7BE43_Skip	; F7BE5B  jr ULE,0xf7be65
 	ld	(3106:16), wa	; F7BE5D  ld (0x0c22),WA
-	ld	(4857:16), wa	; F7BE61  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7BE61  ld (0x12f9),WA
 sub_F7BE43_Skip:
 	ld	(3104:16), wa	; F7BE65  ld (0x0c20),WA
 	ld	wa, (3106:16)	; F7BE69  ld WA,(0x0c22)
@@ -186423,13 +186423,13 @@ sub_F7BE79:
 	ld	wa, (3106:16)	; F7BE79  ld WA,(0x0c22)
 	calr	sub_F7CD5F	; F7BE7D  calr 0xf7cd5f
 	ld	(3106:16), wa	; F7BE80  ld (0x0c22),WA
-	ld	(4857:16), wa	; F7BE84  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7BE84  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c20, 0	; F7BE88  cp WA,(0x0c20)
 	jr	nc, sub_F7BE79_Skip	; F7BE8C  jr NC,0xf7be9f
 	ld	(3104:16), wa	; F7BE8E  ld (0x0c20),WA
 	ld	(3096:16), wa	; F7BE92  ld (0x0c18),WA
 	ld	(6304946:24), wa	; F7BE96  ld (0x6034b2),WA
-	ld	(4855:16), wa	; F7BE9B  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7BE9B  ld (0x12f7),WA
 sub_F7BE79_Skip:
 	ld	(3106:16), wa	; F7BE9F  ld (0x0c22),WA
 	ld	wa, (3106:16)	; F7BEA3  ld WA,(0x0c22)
@@ -186471,7 +186471,7 @@ sub_F7BEB3_Join:
 	ld	a, (3102:16)	; F7BEE2  ld A,(0x0c1e)
 	ld	(3108:16), a	; F7BEE6  ld (0x0c24),A
 	ldw	de, 127	; F7BEEA  ld DE,0x007f
-	ld	(4859:16), a	; F7BEED  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7BEED  ld (0x12fb),A
 	jr	sub_F7BEB3_Return	; F7BEF1  jr T,0xf7bef3
 sub_F7BEB3_Return:
 	ret	; F7BEF3  ret
@@ -186543,16 +186543,16 @@ sub_F7BEB3_Return2:
 sub_F7BF74:
 	ld	a, (6304945:24)	; F7BF74  ld A,(0x6034b1)
 	ld	(3091:16), a	; F7BF79  ld (0x0c13),A
-	ld	(4854:16), a	; F7BF7D  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7BF7D  ld (0x12f6),A
 	ld	wa, (6304946:24)	; F7BF81  ld WA,(0x6034b2)
 	ld	(3096:16), wa	; F7BF86  ld (0x0c18),WA
 	ld	(3104:16), wa	; F7BF8A  ld (0x0c20),WA
-	ld	(4855:16), wa	; F7BF8E  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7BF8E  ld (0x12f7),WA
 	ld	wa, (6304948:24)	; F7BF92  ld WA,(0x6034b4)
 	dec	1, wa	; F7BF97  dec 1,WA
 	add	wa, (6304946:24)	; F7BF99  add WA,(0x6034b2)
 	ld	(3106:16), wa	; F7BF9E  ld (0x0c22),WA
-	ld	(4857:16), wa	; F7BFA2  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7BFA2  ld (0x12f9),WA
 	ld	wa, (3106:16)	; F7BFA6  ld WA,(0x0c22)
 	m_sub_rm MW16, 0x0c20, 0	; F7BFAA  sub WA,(0x0c20)
 	inc	1, wa	; F7BFAE  inc 1,WA
@@ -186595,16 +186595,16 @@ sub_F7BF74_Skip:
 	ld	(3126:16), a	; F7C002  ld (0x0c36),A
 	inc	1, a	; F7C006  inc 1,A
 	ld	(3109:16), a	; F7C008  ld (0x0c25),A
-	ld	(4854:16), a	; F7C00C  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7C00C  ld (0x12f6),A
 	ld	wa, (6304888:24)	; F7C010  ld WA,(0x603478)
 	ld	(3146:16), wa	; F7C015  ld (0x0c4a),WA
 	ld	(3110:16), wa	; F7C019  ld (0x0c26),WA
-	ld	(4855:16), wa	; F7C01D  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7C01D  ld (0x12f7),WA
 	ld	wa, (6304890:24)	; F7C021  ld WA,(0x60347a)
 	dec	1, wa	; F7C026  dec 1,WA
 	add	wa, (6304888:24)	; F7C028  add WA,(0x603478)
 	ld	(3112:16), wa	; F7C02D  ld (0x0c28),WA
-	ld	(4857:16), wa	; F7C031  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7C031  ld (0x12f9),WA
 	ld	wa, (3112:16)	; F7C035  ld WA,(0x0c28)
 	m_sub_rm MW16, 0x0c26, 0	; F7C039  sub WA,(0x0c26)
 	inc	1, wa	; F7C03D  inc 1,WA
@@ -186613,13 +186613,13 @@ sub_F7BF74_Skip:
 	xor	wa, wa	; F7C048  xor WA,WA
 	ld	a, (6304892:24)	; F7C04A  ld A,(0x60347c)
 	ld	(3127:16), a	; F7C04F  ld (0x0c37),A
-	ld	(4859:16), a	; F7C053  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7C053  ld (0x12fb),A
 	ld	(3513:16), 1	; F7C057  ld (0x0db9),0x01
-	ld	(4862:16), 1	; F7C05C  ld (0x12fe),0x01
+	ld	(DisplayListB_Stage+8:16), 1	; F7C05C  ld (0x12fe),0x01
 	ld	a, (3588:16)	; F7C061  ld A,(0x0e04)
-	ld	(4860:16), a	; F7C065  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C065  ld (0x12fc),A
 	ld	a, (3589:16)	; F7C069  ld A,(0x0e05)
-	ld	(4861:16), a	; F7C06D  ld (0x12fd),A
+	ld	(DisplayListB_Stage+7:16), a	; F7C06D  ld (0x12fd),A
 	m_and_mi8 MB16, 0x0c35, 0xef	; F7C071  and (0x0c35),0xef
 	m_cp_mi8 MB24, 0x603477, 0x11	; F7C076  cp (0x603477),0x11
 	jr	nz, sub_F7BF74_Skip2	; F7C07C  jr NZ,0xf7c083
@@ -186877,7 +186877,7 @@ sub_F7C1C1:
 	ld	(3126:16), a	; F7C1DB  ld (0x0c36),A
 	inc	1, a	; F7C1DF  inc 1,A
 	ld	(3109:16), a	; F7C1E1  ld (0x0c25),A
-	ld	(4854:16), a	; F7C1E5  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7C1E5  ld (0x12f6),A
 	m_and_mi8 MB16, 0x0c35, 0xef	; F7C1E9  and (0x0c35),0xef
 	jr	sub_F7C1C1_Return	; F7C1EE  jr T,0xf7c20a
 sub_F7C1C1_Skip:
@@ -186886,7 +186886,7 @@ sub_F7C1C1_Skip:
 	ld	(3126:16), a	; F7C1F7  ld (0x0c36),A
 	inc	1, a	; F7C1FB  inc 1,A
 	ld	(3109:16), a	; F7C1FD  ld (0x0c25),A
-	ld	(4854:16), a	; F7C201  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7C201  ld (0x12f6),A
 	m_or_mi8 MB16, 0x0c35, 0x10	; F7C205  or (0x0c35),0x10
 sub_F7C1C1_Return:
 	ret	; F7C20A  ret
@@ -186910,10 +186910,10 @@ sub_F7C20B:
 	m_cp_rm MW16, 0x0c28, 0	; F7C21C  cp WA,(0x0c28)
 	jr	ule, sub_F7C20B_Skip	; F7C220  jr ULE,0xf7c22a
 	ld	(3112:16), wa	; F7C222  ld (0x0c28),WA
-	ld	(4857:16), wa	; F7C226  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7C226  ld (0x12f9),WA
 sub_F7C20B_Skip:
 	ld	(3110:16), wa	; F7C22A  ld (0x0c26),WA
-	ld	(4855:16), wa	; F7C22E  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7C22E  ld (0x12f7),WA
 	ld	wa, (3112:16)	; F7C232  ld WA,(0x0c28)
 	m_sub_rm MW16, 0x0c26, 0	; F7C236  sub WA,(0x0c26)
 	inc	1, wa	; F7C23A  inc 1,WA
@@ -186938,12 +186938,12 @@ sub_F7C242:
 	m_cp_rm MW16, 0x0c26, 0	; F7C24D  cp WA,(0x0c26)
 	jr	nc, sub_F7C242_Skip	; F7C251  jr NC,0xf7c264
 	ld	(3110:16), wa	; F7C253  ld (0x0c26),WA
-	ld	(4855:16), wa	; F7C257  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7C257  ld (0x12f7),WA
 	ld	(6304888:24), wa	; F7C25B  ld (0x603478),WA
 	ld	(3146:16), wa	; F7C260  ld (0x0c4a),WA
 sub_F7C242_Skip:
 	ld	(3112:16), wa	; F7C264  ld (0x0c28),WA
-	ld	(4857:16), wa	; F7C268  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7C268  ld (0x12f9),WA
 	ld	wa, (3112:16)	; F7C26C  ld WA,(0x0c28)
 	m_sub_rm MW16, 0x0c26, 0	; F7C270  sub WA,(0x0c26)
 	inc	1, wa	; F7C274  inc 1,WA
@@ -186980,7 +186980,7 @@ sub_F7C27C_Skip2:
 sub_F7C27C_Join:
 	ld	(3127:16), a	; F7C29D  ld (0x0c37),A
 	ld	(6304892:24), a	; F7C2A1  ld (0x60347c),A
-	ld	(4859:16), a	; F7C2A6  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7C2A6  ld (0x12fb),A
 	ret	; F7C2AA  ret
 
 ; --------------------------------------------------------------------------
@@ -187010,7 +187010,7 @@ sub_F7C2AB_Skip:
 	dec	1, a	; F7C2C8  dec 1,A
 sub_F7C2AB_Join:
 	ld	(3588:16), a	; F7C2CA  ld (0x0e04),A
-	ld	(4860:16), a	; F7C2CE  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C2CE  ld (0x12fc),A
 	ret	; F7C2D2  ret
 
 ; --------------------------------------------------------------------------
@@ -187075,7 +187075,7 @@ SongStore_Island_F7C2FA:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C30B:
-	ld	(4861:16), a	; F7C30B  ld (0x12fd),A
+	ld	(DisplayListB_Stage+7:16), a	; F7C30B  ld (0x12fd),A
 	ret	; F7C30F  ret
 
 ; --------------------------------------------------------------------------
@@ -187184,17 +187184,17 @@ sub_F7C3B2:		; <- T_F42A08
 	jr	z, sub_F7C3B2_Return	; F7C3B7  jr Z,0xf7c3ed
 	ld	a, 1:opc	; F7C3B9  ld A,0x01
 	ld	(S0ngC0py_FromSong:16), a	; F7C3BB  ld (0x0e0c),A
-	ld	(4854:16), a	; F7C3BF  ld (0x12f6),A
-	ld	xix, 4856	; F7C3C3  ld XIX,0x000012f8
+	ld	(DisplayListB_Stage:16), a	; F7C3BF  ld (0x12f6),A
+	ld	xix, DisplayListB_Stage+2	; F7C3C3  ld XIX,0x000012f8
 	call	sub_F7C440	; F7C3C8  call 0xf7c440
 	ld	(S0ngC0py_ToSong:16), a	; F7C3CC  ld (0x0e0d),A
-	ld	(4855:16), a	; F7C3D0  ld (0x12f7),A
-	ld	xix, 4862	; F7C3D4  ld XIX,0x000012fe
+	ld	(DisplayListB_Stage+1:16), a	; F7C3D0  ld (0x12f7),A
+	ld	xix, DisplayListB_Stage+8	; F7C3D4  ld XIX,0x000012fe
 	call	sub_F7C440	; F7C3D9  call 0xf7c440
 	ld	(S0ngC0py_FromTrack:16), a	; F7C3DD  ld (0x0e0e),A
-	ld	(4868:16), a	; F7C3E1  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F7C3E1  ld (0x1304),A
 	ld	(S0ngC0py_ToTrack:16), a	; F7C3E5  ld (0x0e0f),A
-	ld	(4869:16), a	; F7C3E9  ld (0x1305),A
+	ld	(DisplayListB_Stage+15:16), a	; F7C3E9  ld (0x1305),A
 sub_F7C3B2_Return:
 	ret	; F7C3ED  ret
 
@@ -187237,8 +187237,8 @@ sub_F7C3FA:		; <- T_F42A14
 	jr	ule, sub_F7C3FA_Return	; F7C407  jr ULE,0xf7c41c
 	dec	1, a	; F7C409  dec 1,A
 	ld	(S0ngC0py_FromSong:16), a	; F7C40B  ld (0x0e0c),A
-	ld	(4854:16), a	; F7C40F  ld (0x12f6),A
-	ld	xix, 4856	; F7C413  ld XIX,0x000012f8
+	ld	(DisplayListB_Stage:16), a	; F7C40F  ld (0x12f6),A
+	ld	xix, DisplayListB_Stage+2	; F7C413  ld XIX,0x000012f8
 	call	sub_F7C440	; F7C418  call 0xf7c440
 sub_F7C3FA_Return:
 	ret	; F7C41C  ret
@@ -187263,8 +187263,8 @@ sub_F7C41D:		; <- T_F42A10
 	jr	nc, sub_F7C41D_Return	; F7C42A  jr NC,0xf7c43f
 	inc	1, a	; F7C42C  inc 1,A
 	ld	(S0ngC0py_FromSong:16), a	; F7C42E  ld (0x0e0c),A
-	ld	(4854:16), a	; F7C432  ld (0x12f6),A
-	ld	xix, 4856	; F7C436  ld XIX,0x000012f8
+	ld	(DisplayListB_Stage:16), a	; F7C432  ld (0x12f6),A
+	ld	xix, DisplayListB_Stage+2	; F7C436  ld XIX,0x000012f8
 	call	sub_F7C440	; F7C43B  call 0xf7c440
 sub_F7C41D_Return:
 	ret	; F7C43F  ret
@@ -187314,11 +187314,11 @@ sub_F7C463:		; <- T_F42A1C
 	jr	z, sub_F7C440_Return	; F7C470  jr Z,0xf7c48b
 	dec	1, a	; F7C472  dec 1,A
 	ld	(S0ngC0py_FromTrack:16), a	; F7C474  ld (0x0e0e),A
-	ld	(4868:16), a	; F7C478  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F7C478  ld (0x1304),A
 	m_cp_mi8 MB16, S0ngC0py_ToTrack, 0x12	; F7C47C  cp (0x0e0f),0x12
 	jr	nz, sub_F7C440_Return	; F7C481  jr NZ,0xf7c48b
 	ld	(S0ngC0py_ToTrack:16), a	; F7C483  ld (0x0e0f),A
-	ld	(4869:16), a	; F7C487  ld (0x1305),A
+	ld	(DisplayListB_Stage+15:16), a	; F7C487  ld (0x1305),A
 sub_F7C440_Return:
 	ret	; F7C48B  ret
 
@@ -187341,13 +187341,13 @@ sub_F7C48C:		; <- T_F42A18
 	jr	z, sub_F7C440_Return2	; F7C499  jr Z,0xf7c4b8
 	inc	1, a	; F7C49B  inc 1,A
 	ld	(S0ngC0py_FromTrack:16), a	; F7C49D  ld (0x0e0e),A
-	ld	(4868:16), a	; F7C4A1  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F7C4A1  ld (0x1304),A
 	cp	a, 18	; F7C4A5  cp A,0x12
 	jr	nz, sub_F7C440_Return2	; F7C4A8  jr NZ,0xf7c4b8
 	cp	(S0ngC0py_ToTrack:16), a	; F7C4AA  cp (0x0e0f),A
 	jr	z, sub_F7C440_Return2	; F7C4AE  jr Z,0xf7c4b8
 	ld	(S0ngC0py_ToTrack:16), a	; F7C4B0  ld (0x0e0f),A
-	ld	(4869:16), a	; F7C4B4  ld (0x1305),A
+	ld	(DisplayListB_Stage+15:16), a	; F7C4B4  ld (0x1305),A
 sub_F7C440_Return2:
 	ret	; F7C4B8  ret
 
@@ -187371,8 +187371,8 @@ sub_F7C4B9:		; <- T_F42A24
 	jr	z, sub_F7C440_Return3	; F7C4C6  jr Z,0xf7c4db
 	dec	1, a	; F7C4C8  dec 1,A
 	ld	(S0ngC0py_ToSong:16), a	; F7C4CA  ld (0x0e0d),A
-	ld	(4855:16), a	; F7C4CE  ld (0x12f7),A
-	ld	xix, 4862	; F7C4D2  ld XIX,0x000012fe
+	ld	(DisplayListB_Stage+1:16), a	; F7C4CE  ld (0x12f7),A
+	ld	xix, DisplayListB_Stage+8	; F7C4D2  ld XIX,0x000012fe
 	call	sub_F7C440	; F7C4D7  call 0xf7c440
 sub_F7C440_Return3:
 	ret	; F7C4DB  ret
@@ -187397,8 +187397,8 @@ sub_F7C4DC:		; <- T_F42A20
 	jr	z, sub_F7C440_Return4	; F7C4E9  jr Z,0xf7c4fe
 	inc	1, a	; F7C4EB  inc 1,A
 	ld	(S0ngC0py_ToSong:16), a	; F7C4ED  ld (0x0e0d),A
-	ld	(4855:16), a	; F7C4F1  ld (0x12f7),A
-	ld	xix, 4862	; F7C4F5  ld XIX,0x000012fe
+	ld	(DisplayListB_Stage+1:16), a	; F7C4F1  ld (0x12f7),A
+	ld	xix, DisplayListB_Stage+8	; F7C4F5  ld XIX,0x000012fe
 	call	sub_F7C440	; F7C4FA  call 0xf7c440
 sub_F7C440_Return4:
 	ret	; F7C4FE  ret
@@ -187422,11 +187422,11 @@ sub_F7C4FF:		; <- T_F42A2C
 	jr	z, sub_F7C440_Return5	; F7C50C  jr Z,0xf7c527
 	dec	1, a	; F7C50E  dec 1,A
 	ld	(S0ngC0py_ToTrack:16), a	; F7C510  ld (0x0e0f),A
-	ld	(4869:16), a	; F7C514  ld (0x1305),A
+	ld	(DisplayListB_Stage+15:16), a	; F7C514  ld (0x1305),A
 	m_cp_mi8 MB16, S0ngC0py_FromTrack, 0x12	; F7C518  cp (0x0e0e),0x12
 	jr	nz, sub_F7C440_Return5	; F7C51D  jr NZ,0xf7c527
 	ld	(S0ngC0py_FromTrack:16), a	; F7C51F  ld (0x0e0e),A
-	ld	(4868:16), a	; F7C523  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F7C523  ld (0x1304),A
 sub_F7C440_Return5:
 	ret	; F7C527  ret
 
@@ -187449,13 +187449,13 @@ sub_F7C528:		; <- T_F42A28
 	jr	z, sub_F7C440_Return6	; F7C535  jr Z,0xf7c554
 	inc	1, a	; F7C537  inc 1,A
 	ld	(S0ngC0py_ToTrack:16), a	; F7C539  ld (0x0e0f),A
-	ld	(4869:16), a	; F7C53D  ld (0x1305),A
+	ld	(DisplayListB_Stage+15:16), a	; F7C53D  ld (0x1305),A
 	cp	a, 18	; F7C541  cp A,0x12
 	jr	nz, sub_F7C440_Return6	; F7C544  jr NZ,0xf7c554
 	cp	(S0ngC0py_FromTrack:16), a	; F7C546  cp (0x0e0e),A
 	jr	z, sub_F7C440_Return6	; F7C54A  jr Z,0xf7c554
 	ld	(S0ngC0py_FromTrack:16), a	; F7C54C  ld (0x0e0e),A
-	ld	(4868:16), a	; F7C550  ld (0x1304),A
+	ld	(DisplayListB_Stage+14:16), a	; F7C550  ld (0x1304),A
 sub_F7C440_Return6:
 	ret	; F7C554  ret
 
@@ -187604,7 +187604,7 @@ sub_F7C606:		; <- T_F42A38
 	calr	sub_F7C62D	; F7C60D  calr 0xf7c62d
 	ld	a, 1:opc	; F7C610  ld A,0x01
 	ld	(3574:16), a	; F7C612  ld (0x0df6),A
-	ld	(4860:16), a	; F7C616  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C616  ld (0x12fc),A
 	ld	(UI_StatusCode:16), 255	; F7C61A  ld (0x2880),0xff
 sub_F7C440_Skip4:
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7C61F  cp (0x2880),0x23
@@ -187626,16 +187626,16 @@ sub_F7C440_Return10:
 ; --------------------------------------------------------------------------
 sub_F7C62D:
 	ld	a, (3575:16)	; F7C62D  ld A,(0x0df7)
-	ld	(4854:16), a	; F7C631  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7C631  ld (0x12f6),A
 	ld	wa, (3576:16)	; F7C635  ld WA,(0x0df8)
-	ld	(4855:16), wa	; F7C639  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7C639  ld (0x12f7),WA
 	ld	wa, (3578:16)	; F7C63D  ld WA,(0x0dfa)
-	ld	(4857:16), wa	; F7C641  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7C641  ld (0x12f9),WA
 	ld	a, (3580:16)	; F7C645  ld A,(0x0dfc)
-	ld	(4859:16), a	; F7C649  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7C649  ld (0x12fb),A
 	ld	a, 1:opc	; F7C64D  ld A,0x01
 	ld	(3574:16), a	; F7C64F  ld (0x0df6),A
-	ld	(4860:16), a	; F7C653  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C653  ld (0x12fc),A
 	ld	wa, (3578:16)	; F7C657  ld WA,(0x0dfa)
 	m_sub_rm MW16, 0x0df8, 0	; F7C65B  sub WA,(0x0df8)
 	inc	1, wa	; F7C65F  inc 1,WA
@@ -187676,7 +187676,7 @@ sub_F7C672:		; <- T_F42A40
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C672  or (0x2075),0x01
 	ld	a, 1:opc	; F7C677  ld A,0x01
 	ld	(3574:16), a	; F7C679  ld (0x0df6),A
-	ld	(4860:16), a	; F7C67D  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C67D  ld (0x12fc),A
 	ret	; F7C681  ret
 
 ; --------------------------------------------------------------------------
@@ -187694,7 +187694,7 @@ sub_F7C682:		; <- T_F42A44
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C682  or (0x2075),0x01
 	ld	a, 2:opc	; F7C687  ld A,0x02
 	ld	(3574:16), a	; F7C689  ld (0x0df6),A
-	ld	(4860:16), a	; F7C68D  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C68D  ld (0x12fc),A
 	ret	; F7C691  ret
 
 ; --------------------------------------------------------------------------
@@ -187712,7 +187712,7 @@ sub_F7C692:		; <- T_F42A48
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C692  or (0x2075),0x01
 	ld	a, 3:opc	; F7C697  ld A,0x03
 	ld	(3574:16), a	; F7C699  ld (0x0df6),A
-	ld	(4860:16), a	; F7C69D  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C69D  ld (0x12fc),A
 	ret	; F7C6A1  ret
 
 ; --------------------------------------------------------------------------
@@ -187730,7 +187730,7 @@ sub_F7C6A2:		; <- T_F42A4C
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C6A2  or (0x2075),0x01
 	ld	a, 4:opc	; F7C6A7  ld A,0x04
 	ld	(3574:16), a	; F7C6A9  ld (0x0df6),A
-	ld	(4860:16), a	; F7C6AD  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7C6AD  ld (0x12fc),A
 	ret	; F7C6B1  ret
 
 ; --------------------------------------------------------------------------
@@ -187898,7 +187898,7 @@ sub_F7C743:
 	ld	h, 17:opc	; F7C74E  ld H,0x11
 	calr	sub_F7CD01	; F7C750  calr 0xf7cd01
 	ld	(3575:16), a	; F7C753  ld (0x0df7),A
-	ld	(4854:16), a	; F7C757  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7C757  ld (0x12f6),A
 	ret	; F7C75B  ret
 
 ; --------------------------------------------------------------------------
@@ -187918,11 +187918,11 @@ sub_F7C75C:
 	ld	wa, (3576:16)	; F7C75C  ld WA,(0x0df8)
 	calr	sub_F7CD5F	; F7C760  calr 0xf7cd5f
 	ld	(3576:16), wa	; F7C763  ld (0x0df8),WA
-	ld	(4855:16), wa	; F7C767  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7C767  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0dfa, 0	; F7C76B  cp WA,(0x0dfa)
 	jr	ule, sub_F7C75C_Skip	; F7C76F  jr ULE,0xf7c779
 	ld	(3578:16), wa	; F7C771  ld (0x0dfa),WA
-	ld	(4857:16), wa	; F7C775  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7C775  ld (0x12f9),WA
 sub_F7C75C_Skip:
 	ld	wa, (3578:16)	; F7C779  ld WA,(0x0dfa)
 	m_sub_rm MW16, 0x0df8, 0	; F7C77D  sub WA,(0x0df8)
@@ -187948,11 +187948,11 @@ sub_F7C78C:
 	ld	wa, (3578:16)	; F7C78C  ld WA,(0x0dfa)
 	calr	sub_F7CD5F	; F7C790  calr 0xf7cd5f
 	ld	(3578:16), wa	; F7C793  ld (0x0dfa),WA
-	ld	(4857:16), wa	; F7C797  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7C797  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0df8, 0	; F7C79B  cp WA,(0x0df8)
 	jr	nc, sub_F7C78C_Skip	; F7C79F  jr NC,0xf7c7a9
 	ld	(3576:16), wa	; F7C7A1  ld (0x0df8),WA
-	ld	(4855:16), wa	; F7C7A5  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7C7A5  ld (0x12f7),WA
 sub_F7C78C_Skip:
 	ld	wa, (3578:16)	; F7C7A9  ld WA,(0x0dfa)
 	m_sub_rm MW16, 0x0df8, 0	; F7C7AD  sub WA,(0x0df8)
@@ -187990,7 +187990,7 @@ sub_F7C7BC_Skip:
 	ld	a, 129:opc	; F7C7DE  ld A,0x81
 sub_F7C7BC_Join:
 	ld	(3580:16), a	; F7C7E0  ld (0x0dfc),A
-	ld	(4859:16), a	; F7C7E4  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7C7E4  ld (0x12fb),A
 	ld	(4764:16), a	; F7C7E8  ld (0x129c),A
 	ldw	de, 127	; F7C7EC  ld DE,0x007f
 	ret	; F7C7EF  ret
@@ -188069,7 +188069,7 @@ sub_F7C853:		; <- T_F42A88
 	call	sub_F7C869	; F7C85A  call 0xf7c869
 	ld	a, 1:opc	; F7C85E  ld A,0x01
 	ld	(N0teChange_Field:16), a	; F7C860  ld (0x0ded),A
-	ld	(4865:16), a	; F7C864  ld (0x1301),A
+	ld	(DisplayListB_Stage+11:16), a	; F7C864  ld (0x1301),A
 sub_F7C853_Return:
 	ret	; F7C868  ret
 
@@ -188086,25 +188086,25 @@ sub_F7C853_Return:
 ; --------------------------------------------------------------------------
 sub_F7C869:
 	ld	a, (3566:16)	; F7C869  ld A,(0x0dee)
-	ld	(4854:16), a	; F7C86D  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7C86D  ld (0x12f6),A
 	ld	wa, (N0teChange_FromMeasure:16)	; F7C871  ld WA,(0x0df0)
-	ld	(4860:16), wa	; F7C875  ld (0x12fc),WA
+	ld	(DisplayListB_Stage+6:16), wa	; F7C875  ld (0x12fc),WA
 	ld	wa, (N0teChange_ToMeasure:16)	; F7C879  ld WA,(0x0df2)
-	ld	(4863:16), wa	; F7C87D  ld (0x12ff),WA
+	ld	(DisplayListB_Stage+9:16), wa	; F7C87D  ld (0x12ff),WA
 	ld	a, (N0teChange_FromNote:16)	; F7C881  ld A,(0x0df4)
-	ld	(4859:16), a	; F7C885  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7C885  ld (0x12fb),A
 	xor	w, w	; F7C889  xor W,W
 	ld	l, 12:opc	; F7C88B  ld L,0x0c
 	divs	wa, l	; F7C88D  divs WA,L
-	ld	(4855:16), w	; F7C88F  ld (0x12f7),W
-	ld	(4856:16), a	; F7C893  ld (0x12f8),A
+	ld	(DisplayListB_Stage+1:16), w	; F7C88F  ld (0x12f7),W
+	ld	(DisplayListB_Stage+2:16), a	; F7C893  ld (0x12f8),A
 	ld	a, (N0teChange_ToNote:16)	; F7C897  ld A,(0x0df5)
-	ld	(4862:16), a	; F7C89B  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7C89B  ld (0x12fe),A
 	xor	w, w	; F7C89F  xor W,W
 	ld	l, 12:opc	; F7C8A1  ld L,0x0c
 	divs	wa, l	; F7C8A3  divs WA,L
-	ld	(4857:16), w	; F7C8A5  ld (0x12f9),W
-	ld	(4858:16), a	; F7C8A9  ld (0x12fa),A
+	ld	(DisplayListB_Stage+3:16), w	; F7C8A5  ld (0x12f9),W
+	ld	(DisplayListB_Stage+4:16), a	; F7C8A9  ld (0x12fa),A
 	ld	wa, (N0teChange_ToMeasure:16)	; F7C8AD  ld WA,(0x0df2)
 	m_sub_rm MW16, N0teChange_FromMeasure, 0	; F7C8B1  sub WA,(0x0df0)
 	inc	1, wa	; F7C8B5  inc 1,WA
@@ -188145,7 +188145,7 @@ sub_F7C8C8:		; <- T_F42A90
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8C8  or (0x2075),0x09
 	ld	a, 1:opc	; F7C8CD  ld A,0x01
 	ld	(N0teChange_Field:16), a	; F7C8CF  ld (0x0ded),A
-	ld	(4865:16), a	; F7C8D3  ld (0x1301),A
+	ld	(DisplayListB_Stage+11:16), a	; F7C8D3  ld (0x1301),A
 	ret	; F7C8D7  ret
 
 ; --------------------------------------------------------------------------
@@ -188163,7 +188163,7 @@ sub_F7C8D8:		; <- T_F42A94
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8D8  or (0x2075),0x09
 	ld	a, 2:opc	; F7C8DD  ld A,0x02
 	ld	(N0teChange_Field:16), a	; F7C8DF  ld (0x0ded),A
-	ld	(4865:16), a	; F7C8E3  ld (0x1301),A
+	ld	(DisplayListB_Stage+11:16), a	; F7C8E3  ld (0x1301),A
 	ret	; F7C8E7  ret
 
 ; --------------------------------------------------------------------------
@@ -188181,7 +188181,7 @@ sub_F7C8E8:		; <- T_F42A98
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8E8  or (0x2075),0x09
 	ld	a, 3:opc	; F7C8ED  ld A,0x03
 	ld	(N0teChange_Field:16), a	; F7C8EF  ld (0x0ded),A
-	ld	(4865:16), a	; F7C8F3  ld (0x1301),A
+	ld	(DisplayListB_Stage+11:16), a	; F7C8F3  ld (0x1301),A
 	ret	; F7C8F7  ret
 
 ; --------------------------------------------------------------------------
@@ -188199,7 +188199,7 @@ sub_F7C8F8:		; <- T_F42A9C
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8F8  or (0x2075),0x09
 	ld	a, 4:opc	; F7C8FD  ld A,0x04
 	ld	(N0teChange_Field:16), a	; F7C8FF  ld (0x0ded),A
-	ld	(4865:16), a	; F7C903  ld (0x1301),A
+	ld	(DisplayListB_Stage+11:16), a	; F7C903  ld (0x1301),A
 	ret	; F7C907  ret
 
 ; --------------------------------------------------------------------------
@@ -188217,7 +188217,7 @@ sub_F7C908:		; <- T_F42AA0
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C908  or (0x2075),0x09
 	ld	a, 5:opc	; F7C90D  ld A,0x05
 	ld	(N0teChange_Field:16), a	; F7C90F  ld (0x0ded),A
-	ld	(4865:16), a	; F7C913  ld (0x1301),A
+	ld	(DisplayListB_Stage+11:16), a	; F7C913  ld (0x1301),A
 	ret	; F7C917  ret
 
 ; --------------------------------------------------------------------------
@@ -188370,7 +188370,7 @@ sub_F7C9B0:
 	ld	h, 17:opc	; F7C9BB  ld H,0x11
 	calr	sub_F7CD01	; F7C9BD  calr 0xf7cd01
 	ld	(3566:16), a	; F7C9C0  ld (0x0dee),A
-	ld	(4854:16), a	; F7C9C4  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7C9C4  ld (0x12f6),A
 	ret	; F7C9C8  ret
 
 ; --------------------------------------------------------------------------
@@ -188390,11 +188390,11 @@ sub_F7C9C9:
 	ld	wa, (N0teChange_FromMeasure:16)	; F7C9C9  ld WA,(0x0df0)
 	calr	sub_F7CD5F	; F7C9CD  calr 0xf7cd5f
 	ld	(N0teChange_FromMeasure:16), wa	; F7C9D0  ld (0x0df0),WA
-	ld	(4860:16), wa	; F7C9D4  ld (0x12fc),WA
+	ld	(DisplayListB_Stage+6:16), wa	; F7C9D4  ld (0x12fc),WA
 	m_cp_rm MW16, N0teChange_ToMeasure, 0	; F7C9D8  cp WA,(0x0df2)
 	jr	ule, sub_F7C9C9_Skip	; F7C9DC  jr ULE,0xf7c9e6
 	ld	(N0teChange_ToMeasure:16), wa	; F7C9DE  ld (0x0df2),WA
-	ld	(4863:16), wa	; F7C9E2  ld (0x12ff),WA
+	ld	(DisplayListB_Stage+9:16), wa	; F7C9E2  ld (0x12ff),WA
 sub_F7C9C9_Skip:
 	ld	wa, (N0teChange_ToMeasure:16)	; F7C9E6  ld WA,(0x0df2)
 	m_sub_rm MW16, N0teChange_FromMeasure, 0	; F7C9EA  sub WA,(0x0df0)
@@ -188419,11 +188419,11 @@ sub_F7C9F5:
 	ld	wa, (N0teChange_ToMeasure:16)	; F7C9F5  ld WA,(0x0df2)
 	calr	sub_F7CD5F	; F7C9F9  calr 0xf7cd5f
 	ld	(N0teChange_ToMeasure:16), wa	; F7C9FC  ld (0x0df2),WA
-	ld	(4863:16), wa	; F7CA00  ld (0x12ff),WA
+	ld	(DisplayListB_Stage+9:16), wa	; F7CA00  ld (0x12ff),WA
 	m_cp_rm MW16, N0teChange_FromMeasure, 0	; F7CA04  cp WA,(0x0df0)
 	jr	nc, sub_F7C9F5_Skip	; F7CA08  jr NC,0xf7ca12
 	ld	(N0teChange_FromMeasure:16), wa	; F7CA0A  ld (0x0df0),WA
-	ld	(4860:16), wa	; F7CA0E  ld (0x12fc),WA
+	ld	(DisplayListB_Stage+6:16), wa	; F7CA0E  ld (0x12fc),WA
 sub_F7C9F5_Skip:
 	ld	wa, (N0teChange_ToMeasure:16)	; F7CA12  ld WA,(0x0df2)
 	m_sub_rm MW16, N0teChange_FromMeasure, 0	; F7CA16  sub WA,(0x0df0)
@@ -188451,12 +188451,12 @@ sub_F7CA21:
 	ld	h, 127:opc	; F7CA2C  ld H,0x7f
 	calr	sub_F7CCDB	; F7CA2E  calr 0xf7ccdb
 	ld	(N0teChange_FromNote:16), a	; F7CA31  ld (0x0df4),A
-	ld	(4859:16), a	; F7CA35  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7CA35  ld (0x12fb),A
 	xor	w, w	; F7CA39  xor W,W
 	ld	l, 12:opc	; F7CA3B  ld L,0x0c
 	divs	wa, l	; F7CA3D  divs WA,L
-	ld	(4855:16), w	; F7CA3F  ld (0x12f7),W
-	ld	(4856:16), a	; F7CA43  ld (0x12f8),A
+	ld	(DisplayListB_Stage+1:16), w	; F7CA3F  ld (0x12f7),W
+	ld	(DisplayListB_Stage+2:16), a	; F7CA43  ld (0x12f8),A
 	ret	; F7CA47  ret
 
 ; --------------------------------------------------------------------------
@@ -188479,12 +188479,12 @@ sub_F7CA48:
 	ld	h, 127:opc	; F7CA53  ld H,0x7f
 	calr	sub_F7CCDB	; F7CA55  calr 0xf7ccdb
 	ld	(N0teChange_ToNote:16), a	; F7CA58  ld (0x0df5),A
-	ld	(4862:16), a	; F7CA5C  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7CA5C  ld (0x12fe),A
 	xor	w, w	; F7CA60  xor W,W
 	ld	l, 12:opc	; F7CA62  ld L,0x0c
 	divs	wa, l	; F7CA64  divs WA,L
-	ld	(4857:16), w	; F7CA66  ld (0x12f9),W
-	ld	(4858:16), a	; F7CA6A  ld (0x12fa),A
+	ld	(DisplayListB_Stage+3:16), w	; F7CA66  ld (0x12f9),W
+	ld	(DisplayListB_Stage+4:16), a	; F7CA6A  ld (0x12fa),A
 	ret	; F7CA6E  ret
 
 ; --------------------------------------------------------------------------
@@ -188559,20 +188559,20 @@ sub_F7CAD2:		; <- T_F42A60
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2c	; F7CAD2  cp (0x207b),0x2c
 	jr	z, sub_F7CAD2_Return	; F7CAD7  jr Z,0xf7cb11
 	ld	a, (3558:16)	; F7CAD9  ld A,(0x0de6)
-	ld	(4854:16), a	; F7CADD  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7CADD  ld (0x12f6),A
 	ld	wa, (3560:16)	; F7CAE1  ld WA,(0x0de8)
-	ld	(4855:16), wa	; F7CAE5  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7CAE5  ld (0x12f7),WA
 	ld	wa, (3562:16)	; F7CAE9  ld WA,(0x0dea)
-	ld	(4857:16), wa	; F7CAED  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7CAED  ld (0x12f9),WA
 	ld	wa, (3562:16)	; F7CAF1  ld WA,(0x0dea)
 	m_sub_rm MW16, 0x0de8, 0	; F7CAF5  sub WA,(0x0de8)
 	inc	1, wa	; F7CAF9  inc 1,WA
 	ld	(3590:16), wa	; F7CAFB  ld (0x0e06),WA
 	ld	a, (3564:16)	; F7CAFF  ld A,(0x0dec)
-	ld	(4859:16), a	; F7CB03  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7CB03  ld (0x12fb),A
 	ld	a, 1:opc	; F7CB07  ld A,0x01
 	ld	(AdvanceDelay_Field:16), a	; F7CB09  ld (0x0de5),A
-	ld	(4860:16), a	; F7CB0D  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7CB0D  ld (0x12fc),A
 sub_F7CAD2_Return:
 	ret	; F7CB11  ret
 
@@ -188609,7 +188609,7 @@ sub_F7CB12_Return:
 sub_F7CB1E:		; <- T_F42A68
 	ld	a, 1:opc	; F7CB1E  ld A,0x01
 	ld	(AdvanceDelay_Field:16), a	; F7CB20  ld (0x0de5),A
-	ld	(4860:16), a	; F7CB24  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7CB24  ld (0x12fc),A
 	ret	; F7CB28  ret
 
 ; --------------------------------------------------------------------------
@@ -188626,7 +188626,7 @@ sub_F7CB1E:		; <- T_F42A68
 sub_F7CB29:		; <- T_F42A6C
 	ld	a, 2:opc	; F7CB29  ld A,0x02
 	ld	(AdvanceDelay_Field:16), a	; F7CB2B  ld (0x0de5),A
-	ld	(4860:16), a	; F7CB2F  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7CB2F  ld (0x12fc),A
 	ret	; F7CB33  ret
 
 ; --------------------------------------------------------------------------
@@ -188643,7 +188643,7 @@ sub_F7CB29:		; <- T_F42A6C
 sub_F7CB34:		; <- T_F42A70
 	ld	a, 3:opc	; F7CB34  ld A,0x03
 	ld	(AdvanceDelay_Field:16), a	; F7CB36  ld (0x0de5),A
-	ld	(4860:16), a	; F7CB3A  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7CB3A  ld (0x12fc),A
 	ret	; F7CB3E  ret
 
 ; --------------------------------------------------------------------------
@@ -188660,7 +188660,7 @@ sub_F7CB34:		; <- T_F42A70
 sub_F7CB3F:		; <- T_F42A74
 	ld	a, 4:opc	; F7CB3F  ld A,0x04
 	ld	(AdvanceDelay_Field:16), a	; F7CB41  ld (0x0de5),A
-	ld	(4860:16), a	; F7CB45  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7CB45  ld (0x12fc),A
 	ret	; F7CB49  ret
 
 ; --------------------------------------------------------------------------
@@ -188812,7 +188812,7 @@ sub_F7CBE1:
 	ld	h, 17:opc	; F7CBEC  ld H,0x11
 	calr	sub_F7CD01	; F7CBEE  calr 0xf7cd01
 	ld	(3558:16), a	; F7CBF1  ld (0x0de6),A
-	ld	(4854:16), a	; F7CBF5  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7CBF5  ld (0x12f6),A
 	ret	; F7CBF9  ret
 
 ; --------------------------------------------------------------------------
@@ -188832,11 +188832,11 @@ sub_F7CBFA:
 	ld	wa, (3560:16)	; F7CBFA  ld WA,(0x0de8)
 	call	sub_F7CD5F	; F7CBFE  call 0xf7cd5f
 	ld	(3560:16), wa	; F7CC02  ld (0x0de8),WA
-	ld	(4855:16), wa	; F7CC06  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7CC06  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0dea, 0	; F7CC0A  cp WA,(0x0dea)
 	jr	ule, sub_F7CBFA_Skip	; F7CC0E  jr ULE,0xf7cc18
 	ld	(3562:16), wa	; F7CC10  ld (0x0dea),WA
-	ld	(4857:16), wa	; F7CC14  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7CC14  ld (0x12f9),WA
 sub_F7CBFA_Skip:
 	ld	wa, (3562:16)	; F7CC18  ld WA,(0x0dea)
 	m_sub_rm MW16, 0x0de8, 0	; F7CC1C  sub WA,(0x0de8)
@@ -188861,11 +188861,11 @@ sub_F7CC27:
 	ld	wa, (3562:16)	; F7CC27  ld WA,(0x0dea)
 	call	sub_F7CD5F	; F7CC2B  call 0xf7cd5f
 	ld	(3562:16), wa	; F7CC2F  ld (0x0dea),WA
-	ld	(4857:16), wa	; F7CC33  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7CC33  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0de8, 0	; F7CC37  cp WA,(0x0de8)
 	jr	nc, sub_F7CC27_Skip	; F7CC3B  jr NC,0xf7cc45
 	ld	(3560:16), wa	; F7CC3D  ld (0x0de8),WA
-	ld	(4855:16), wa	; F7CC41  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7CC41  ld (0x12f7),WA
 sub_F7CC27_Skip:
 	ld	wa, (3562:16)	; F7CC45  ld WA,(0x0dea)
 	m_sub_rm MW16, 0x0de8, 0	; F7CC49  sub WA,(0x0de8)
@@ -188903,7 +188903,7 @@ sub_F7CC54_Skip:
 	ld	a, l	; F7CC71  ld A,L
 sub_F7CC54_Join:
 	ld	(3564:16), a	; F7CC73  ld (0x0dec),A
-	ld	(4859:16), a	; F7CC77  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7CC77  ld (0x12fb),A
 	ret	; F7CC7B  ret
 
 ; --------------------------------------------------------------------------
@@ -189964,7 +189964,7 @@ sub_F7CE04_Skip11:
 	call	T_F42BEC	; F7D1B0  call 0xf42bec
 	call	sub_F7E430	; F7D1B4  call 0xf7e430
 	ld	a, (32706:16)	; F7D1B8  ld A,(0x7fc2)
-	ld	(4854:16), a	; F7D1BC  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7D1BC  ld (0x12f6),A
 	call	Draw_AfterTouchRecord	; F7D1C0  call 0xf7e421
 	jr	sub_F7CE04_Return2	; F7D1C4  jr T,0xf7d1d3
 sub_F7CE04_Skip12:
@@ -192053,7 +192053,7 @@ sub_F7E2FC:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7E300  or (0x2075),0x08
 	ld	(LCD_CurrentLayer:16), 0	; F7E305  ld (0x2540),0x00
 	ld	a, (3078:16)	; F7E30A  ld A,(0x0c06)
-	ld	(4859:16), a	; F7E30E  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7E30E  ld (0x12fb),A
 	ld	xiy, DL_F39737	; F7E312  ld XIY,0x00f39737
 	ld	l, (3075:16)	; F7E317  ld L,(0x0c03)
 	xor	h, h	; F7E31B  xor H,H
@@ -192079,7 +192079,7 @@ sub_F7E2FC_Return:
 ;           0xF7ECD5, and from nothing else the scans see.
 sub_F7E354:
 	ld	xiy, 6304802	; F7E354  ld XIY,0x00603422
-	ld	xix, 4854	; F7E359  ld XIX,0x000012f6
+	ld	xix, DisplayListB_Stage	; F7E359  ld XIX,0x000012f6
 	ld	c, 16:opc	; F7E35E  ld C,0x10
 sub_F7E354_Join:
 	ld	a, (xiy)	; F7E360  ld A,(XIY)
@@ -192130,7 +192130,7 @@ sub_F7E39F_Loop:
 	pushw	wa	; F7E3BF  push WA
 	calr	sub_F7E39F_Nop	; F7E3C0  calr 0xf7e2d8
 	popw	wa	; F7E3C3  pop WA
-	ld	(4854:16), c	; F7E3C4  ld (0x12f6),C
+	ld	(DisplayListB_Stage:16), c	; F7E3C4  ld (0x12f6),C
 	pushw	wa	; F7E3C8  push WA
 	pushw	hl	; F7E3C9  push HL
 	pushw	bc	; F7E3CA  push BC
@@ -192178,7 +192178,7 @@ Paint_AfterT0uchSetting:
 	ld	xix, DL_AfterTouchRecord	; F7E407  ld XIX,0x00f3bb7e
 	call	T_DisplayList_Run	; F7E40C  call 0xf417f0
 	ld	a, (32706:16)	; F7E410  ld A,(0x7fc2)
-	ld	(4854:16), a	; F7E414  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7E414  ld (0x12f6),A
 	call	Draw_AfterTouchRecord	; F7E418  call 0xf7e421
 	call	LCD_ScreenRedraw_End	; F7E41C  call 0xf7e2e7
 	ret	; F7E420  ret
@@ -192252,18 +192252,18 @@ Paint_TrackAssign_Skip4:
 	ld	xix, DL_F3BA91	; F7E4B6  ld XIX,0x00f3ba91
 	call	T_DisplayList_Run	; F7E4BB  call 0xf417f0
 	ld	a, (3075:16)	; F7E4BF  ld A,(0x0c03)
-	ld	(4854:16), a	; F7E4C3  ld (0x12f6),A
+	ld	(DisplayListB_Stage:16), a	; F7E4C3  ld (0x12f6),A
 	push	xix	; F7E4C7  push XIX
 	pushw	hl	; F7E4C8  push HL
 	ld	xix, 6304802	; F7E4C9  ld XIX,0x00603422
 	xor	hl, hl	; F7E4CE  xor HL,HL
 	ld	l, (3075:16)	; F7E4D0  ld L,(0x0c03)
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F7E4D4  ld A,(XIX+HL)
-	ld	(4855:16), a	; F7E4D9  ld (0x12f7),A
+	ld	(DisplayListB_Stage+1:16), a	; F7E4D9  ld (0x12f7),A
 	popw	hl	; F7E4DD  pop HL
 	pop	xix	; F7E4DE  pop XIX
 	ld	a, (3078:16)	; F7E4DF  ld A,(0x0c06)
-	ld	(4856:16), a	; F7E4E3  ld (0x12f8),A
+	ld	(DisplayListB_Stage+2:16), a	; F7E4E3  ld (0x12f8),A
 	ld	xiy, DL_F3BA91	; F7E4E7  ld XIY,0x00f3ba91
 	ld	xix, DL_AfterT0uchSettingSelectWhetherOrNotAfter	; F7E4EC  ld XIX,0x00f3bab9
 	call	T_DisplayListB_Run	; F7E4F1  call 0xf417f4
@@ -193360,7 +193360,7 @@ ScreenLeaveBody_TrackAssignPresets_Skip:
 	jr	z, ScreenLeaveBody_TrackAssignPresets_Return7	; F7E6E9  jr Z,0xf7e6fd
 	ld	a, (3581:16)	; F7E6EB  ld A,(0x0dfd)
 	dec	1, a	; F7E6EF  dec 1,A
-	ld	(4856:16), a	; F7E6F1  ld (0x12f8),A
+	ld	(DisplayListB_Stage+2:16), a	; F7E6F1  ld (0x12f8),A
 	call	T_F42C00	; F7E6F5  call 0xf42c00
 	call	sub_F7E770	; F7E6F9  call 0xf7e770
 ScreenLeaveBody_TrackAssignPresets_Return7:
@@ -193411,7 +193411,7 @@ ScreenLeaveBody_TrackAssignPresets_Skip2:
 	jr	z, ScreenLeaveBody_TrackAssignPresets_Return8	; F7E70A  jr Z,0xf7e71e
 	ld	a, (3581:16)	; F7E70C  ld A,(0x0dfd)
 	dec	1, a	; F7E710  dec 1,A
-	ld	(4856:16), a	; F7E712  ld (0x12f8),A
+	ld	(DisplayListB_Stage+2:16), a	; F7E712  ld (0x12f8),A
 	call	T_F42C04	; F7E716  call 0xf42c04
 	call	sub_F7E770	; F7E71A  call 0xf7e770
 ScreenLeaveBody_TrackAssignPresets_Return8:
@@ -193462,7 +193462,7 @@ ScreenLeaveBody_TrackAssignPresets_Skip3:
 	jr	z, ScreenLeaveBody_TrackAssignPresets_Return9	; F7E72B  jr Z,0xf7e73f
 	ld	a, (3581:16)	; F7E72D  ld A,(0x0dfd)
 	dec	1, a	; F7E731  dec 1,A
-	ld	(4856:16), a	; F7E733  ld (0x12f8),A
+	ld	(DisplayListB_Stage+2:16), a	; F7E733  ld (0x12f8),A
 	call	T_F42C08	; F7E737  call 0xf42c08
 	call	sub_F7E770	; F7E73B  call 0xf7e770
 ScreenLeaveBody_TrackAssignPresets_Return9:
@@ -193710,7 +193710,7 @@ sub_F7E81F_Loop:
 	pop	xiy	; F7E82D  pop XIY
 	pop	xhl	; F7E82E  pop XHL
 	ld	b, (xhl)	; F7E82F  ld B,(XHL)
-	ld	(4854:16), b	; F7E831  ld (0x12f6),B
+	ld	(DisplayListB_Stage:16), b	; F7E831  ld (0x12f6),B
 	push	xiy	; F7E835  push XIY
 	push	xhl	; F7E836  push XHL
 	pushw	bc	; F7E837  push BC
@@ -193742,17 +193742,17 @@ sub_F7E852_Loop:
 	pop	xhl	; F7E864  pop XHL
 	popw	wa	; F7E865  pop WA
 	jr	nz, sub_F7E852_Entry	; F7E866  jr NZ,0xf7e86f
-	ld	(4854:16), 2	; F7E868  ld (0x12f6),0x02
+	ld	(DisplayListB_Stage:16), 2	; F7E868  ld (0x12f6),0x02
 	jr	sub_F7E852_Join	; F7E86D  jr T,0xf7e885
 sub_F7E852_Entry:
 	m_rd_ld_rr2x RBX, 0x3C, r7	; F7E86F  ld RL3,L
 	and	l, c	; F7E872  and L,C
 	m_rd_ld_rrx RBX, 0x3C, r7	; F7E874  ld L,RL3
 	jr	nz, sub_F7E852_Skip	; F7E877  jr NZ,0xf7e880
-	ld	(4854:16), 0	; F7E879  ld (0x12f6),0x00
+	ld	(DisplayListB_Stage:16), 0	; F7E879  ld (0x12f6),0x00
 	jr	sub_F7E852_Join	; F7E87E  jr T,0xf7e885
 sub_F7E852_Skip:
-	ld	(4854:16), 1	; F7E880  ld (0x12f6),0x01
+	ld	(DisplayListB_Stage:16), 1	; F7E880  ld (0x12f6),0x01
 sub_F7E852_Join:
 	push	xiy	; F7E885  push XIY
 	pushw	wa	; F7E886  push WA
@@ -193844,7 +193844,7 @@ sub_F7E919:
 	ld	xix, Data_F3B7CD	; F7E926  ld XIX,0x00f3b7cd
 	call	T_DisplayList_Run	; F7E92B  call 0xf417f0
 	ld	a, (3079:16)	; F7E92F  ld A,(0x0c07)
-	ld	(4858:16), a	; F7E933  ld (0x12fa),A
+	ld	(DisplayListB_Stage+4:16), a	; F7E933  ld (0x12fa),A
 	ld	xiy, Data_F3B7CD	; F7E937  ld XIY,0x00f3b7cd
 	call	T_DLB_Handler_Array8	; F7E93C  call 0xf4181c
 	ret	; F7E940  ret
@@ -194570,9 +194570,9 @@ Paint_SongClear_Skip:
 	ld	(3634:16), a	; F7EB1F  ld (0x0e32),A
 	call	SongStore_MeasureSongSize	; F7EB23  call 0xf819e9
 	ld	wa, (3631:16)	; F7EB27  ld WA,(0x0e2f)
-	ld	(4862:16), wa	; F7EB2B  ld (0x12fe),WA
+	ld	(DisplayListB_Stage+8:16), wa	; F7EB2B  ld (0x12fe),WA
 	ld	a, (3633:16)	; F7EB2F  ld A,(0x0e31)
-	ld	(4861:16), a	; F7EB33  ld (0x12fd),A
+	ld	(DisplayListB_Stage+7:16), a	; F7EB33  ld (0x12fd),A
 Paint_SongClear_Skip2:
 	ld	xiy, DL_F39A73	; F7EB37  ld XIY,0x00f39a73
 	ld	xix, DL_SongClearKbSongAttenti0n	; F7EB3C  ld XIX,0x00f39a7d
@@ -194694,9 +194694,9 @@ SoftKeyCol3_SongClear:
 	ld	(3634:16), a	; F7EBF2  ld (0x0e32),A
 	call	SongStore_MeasureSongSize	; F7EBF6  call 0xf819e9
 	ld	wa, (3631:16)	; F7EBFA  ld WA,(0x0e2f)
-	ld	(4862:16), wa	; F7EBFE  ld (0x12fe),WA
+	ld	(DisplayListB_Stage+8:16), wa	; F7EBFE  ld (0x12fe),WA
 	ld	a, (3633:16)	; F7EC02  ld A,(0x0e31)
-	ld	(4861:16), a	; F7EC06  ld (0x12fd),A
+	ld	(DisplayListB_Stage+7:16), a	; F7EC06  ld (0x12fd),A
 SoftKeyCol3_SongClear_Skip:
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7EC0A  or (0x2095),0x10
 SoftKeyCol3_SongClear_Return:
@@ -194758,9 +194758,9 @@ SoftKeyCol4_SongClear:
 	ld	(3634:16), a	; F7EC24  ld (0x0e32),A
 	call	SongStore_MeasureSongSize	; F7EC28  call 0xf819e9
 	ld	wa, (3631:16)	; F7EC2C  ld WA,(0x0e2f)
-	ld	(4862:16), wa	; F7EC30  ld (0x12fe),WA
+	ld	(DisplayListB_Stage+8:16), wa	; F7EC30  ld (0x12fe),WA
 	ld	a, (3633:16)	; F7EC34  ld A,(0x0e31)
-	ld	(4861:16), a	; F7EC38  ld (0x12fd),A
+	ld	(DisplayListB_Stage+7:16), a	; F7EC38  ld (0x12fd),A
 SoftKeyCol4_SongClear_Skip:
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7EC3C  or (0x2095),0x10
 SoftKeyCol4_SongClear_Return:
@@ -195637,7 +195637,7 @@ Paint_TrackMerge:
 	ldw	(9834:16), 65535	; F7EE24  ld (0x266a),0xffff
 	call	T_F42938	; F7EE2A  call 0xf42938
 	ld	a, (3514:16)	; F7EE2E  ld A,(0x0dba)
-	ld	(4857:16), a	; F7EE32  ld (0x12f9),A
+	ld	(DisplayListB_Stage+3:16), a	; F7EE32  ld (0x12f9),A
 Paint_TrackMerge_Skip:
 	calr	LCD_ScreenRedraw_Begin	; F7EE36  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7EE39  ld (0x2540),0x00
@@ -195795,7 +195795,7 @@ LcdKeyRow2_TrackMerge_StageZero:
 	jr	z, ScreenLeaveBody_TrackMerge_Return	; F7EED7  jr Z,0xf7eeee
 	call	T_F42940	; F7EED9  call 0xf42940
 	ld	a, (3514:16)	; F7EEDD  ld A,(0x0dba)
-	ld	(4857:16), a	; F7EEE1  ld (0x12f9),A
+	ld	(DisplayListB_Stage+3:16), a	; F7EEE1  ld (0x12f9),A
 	calr	sub_F7EEEF	; F7EEE5  calr 0xf7eeef
 	jr	ScreenLeaveBody_TrackMerge_Return	; F7EEE8  jr T,0xf7eeee
 ScreenLeaveBody_TrackMerge_Skip2:
@@ -195855,7 +195855,7 @@ LcdKeyRow3_TrackMerge_StageZero:
 	jr	z, sub_F7EEEF_Return	; F7EF0C  jr Z,0xf7ef1d
 	call	T_F42948	; F7EF0E  call 0xf42948
 	ld	a, (3514:16)	; F7EF12  ld A,(0x0dba)
-	ld	(4857:16), a	; F7EF16  ld (0x12f9),A
+	ld	(DisplayListB_Stage+3:16), a	; F7EF16  ld (0x12f9),A
 	calr	sub_F7EEEF	; F7EF1A  calr 0xf7eeef
 sub_F7EEEF_Return:
 	ret	; F7EF1D  ret
@@ -195903,7 +195903,7 @@ LcdKeyRow4_TrackMerge_StageZero:
 	jr	z, sub_F7EEEF_Return2	; F7EF28  jr Z,0xf7ef39
 	call	T_F42944	; F7EF2A  call 0xf42944
 	ld	a, (3514:16)	; F7EF2E  ld A,(0x0dba)
-	ld	(4857:16), a	; F7EF32  ld (0x12f9),A
+	ld	(DisplayListB_Stage+3:16), a	; F7EF32  ld (0x12f9),A
 	calr	sub_F7EEEF	; F7EF36  calr 0xf7eeef
 sub_F7EEEF_Return2:
 	ret	; F7EF39  ret
@@ -196288,7 +196288,7 @@ LcdKeyRow2_MeasureDelete_StageZero:
 	calr	sub_F7F245	; F7F070  calr 0xf7f245
 	call	T_F42964	; F7F073  call 0xf42964
 	ld	a, (3540:16)	; F7F077  ld A,(0x0dd4)
-	ld	(4859:16), a	; F7F07B  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7F07B  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F07F  calr 0xf7f01a
 	calr	sub_F7EFFA	; F7F082  calr 0xf7effa
 	jr	ScreenLeaveBody_MeasureDelete_Return	; F7F085  jr T,0xf7f087
@@ -196339,7 +196339,7 @@ LcdKeyRow3_MeasureDelete_StageZero:
 	calr	sub_F7F237	; F7F094  calr 0xf7f237
 	call	T_F42968	; F7F097  call 0xf42968
 	ld	a, (3540:16)	; F7F09B  ld A,(0x0dd4)
-	ld	(4859:16), a	; F7F09F  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7F09F  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F0A3  calr 0xf7f01a
 	calr	sub_F7EFFA	; F7F0A6  calr 0xf7effa
 	jr	ScreenLeaveBody_MeasureDelete_Return2	; F7F0A9  jr T,0xf7f0b2
@@ -196393,7 +196393,7 @@ LcdKeyRow4_MeasureDelete_StageZero:
 	calr	sub_F7F237	; F7F0BF  calr 0xf7f237
 	call	T_F4296C	; F7F0C2  call 0xf4296c
 	ld	a, (3540:16)	; F7F0C6  ld A,(0x0dd4)
-	ld	(4859:16), a	; F7F0CA  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7F0CA  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F0CE  calr 0xf7f01a
 	calr	sub_F7EFFA	; F7F0D1  calr 0xf7effa
 ScreenLeaveBody_MeasureDelete_Return3:
@@ -196550,18 +196550,18 @@ sub_F7F144_Skip:
 	m_cp_rm MW16, 0x0dd8, 0	; F7F170  cp WA,(0x0dd8)
 	jr	ule, sub_F7F144_Skip2	; F7F174  jr ULE,0xf7f17e
 	ld	(3544:16), wa	; F7F176  ld (0x0dd8),WA
-	ld	(4857:16), wa	; F7F17A  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7F17A  ld (0x12f9),WA
 sub_F7F144_Skip2:
 	ld	(3542:16), wa	; F7F17E  ld (0x0dd6),WA
-	ld	(4855:16), wa	; F7F182  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7F182  ld (0x12f7),WA
 	jr	sub_F7F144_Join	; F7F186  jr T,0xf7f1ab
 sub_F7F144_Skip3:
 	ld	(3544:16), wa	; F7F188  ld (0x0dd8),WA
-	ld	(4857:16), wa	; F7F18C  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7F18C  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0dd6, 0	; F7F190  cp WA,(0x0dd6)
 	jr	nc, sub_F7F144_Skip4	; F7F194  jr NC,0xf7f1a7
 	ld	(3542:16), wa	; F7F196  ld (0x0dd6),WA
-	ld	(4855:16), wa	; F7F19A  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7F19A  ld (0x12f7),WA
 	ld	(3096:16), wa	; F7F19E  ld (0x0c18),WA
 	ld	(6304861:24), wa	; F7F1A2  ld (0x60345d),WA
 sub_F7F144_Skip4:
@@ -196961,7 +196961,7 @@ LcdKeyRow1_MeasureErase_StageZero:
 	calr	sub_F7F245	; F7F314  calr 0xf7f245
 	call	T_F42988	; F7F317  call 0xf42988
 	ld	a, (3515:16)	; F7F31B  ld A,(0x0dbb)
-	ld	(4860:16), a	; F7F31F  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7F31F  ld (0x12fc),A
 	calr	sub_F7F397	; F7F323  calr 0xf7f397
 	calr	sub_F7F32A	; F7F326  calr 0xf7f32a
 ScreenLeaveBody_MeasureErase_Return:
@@ -197023,7 +197023,7 @@ LcdKeyRow2_MeasureErase_StageZero:
 	calr	sub_F7F237	; F7F356  calr 0xf7f237
 	call	T_F4298C	; F7F359  call 0xf4298c
 	ld	a, (3515:16)	; F7F35D  ld A,(0x0dbb)
-	ld	(4860:16), a	; F7F361  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7F361  ld (0x12fc),A
 	calr	sub_F7F397	; F7F365  calr 0xf7f397
 	calr	sub_F7F32A	; F7F368  calr 0xf7f32a
 	jr	sub_F7F32A_Return	; F7F36B  jr T,0xf7f374
@@ -197077,7 +197077,7 @@ LcdKeyRow3_MeasureErase_StageZero:
 	calr	sub_F7F237	; F7F381  calr 0xf7f237
 	call	T_F42990	; F7F384  call 0xf42990
 	ld	a, (3515:16)	; F7F388  ld A,(0x0dbb)
-	ld	(4860:16), a	; F7F38C  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7F38C  ld (0x12fc),A
 	calr	sub_F7F397	; F7F390  calr 0xf7f397
 	calr	sub_F7F32A	; F7F393  calr 0xf7f32a
 sub_F7F32A_Return2:
@@ -197137,7 +197137,7 @@ LcdKeyRow4_MeasureErase_StageZero:
 	calr	sub_F7F245	; F7F3BA  calr 0xf7f245
 	call	T_F42994	; F7F3BD  call 0xf42994
 	ld	a, (3515:16)	; F7F3C1  ld A,(0x0dbb)
-	ld	(4860:16), a	; F7F3C5  ld (0x12fc),A
+	ld	(DisplayListB_Stage+6:16), a	; F7F3C5  ld (0x12fc),A
 	calr	sub_F7F397	; F7F3C9  calr 0xf7f397
 	calr	sub_F7F32A	; F7F3CC  calr 0xf7f32a
 sub_F7F397_Return:
@@ -197436,18 +197436,18 @@ sub_F7F470_Skip:
 	m_cp_rm MW16, 0x0c2c, 0	; F7F49C  cp WA,(0x0c2c)
 	jr	ule, sub_F7F470_Skip2	; F7F4A0  jr ULE,0xf7f4aa
 	ld	(3116:16), wa	; F7F4A2  ld (0x0c2c),WA
-	ld	(4857:16), wa	; F7F4A6  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7F4A6  ld (0x12f9),WA
 sub_F7F470_Skip2:
 	ld	(3114:16), wa	; F7F4AA  ld (0x0c2a),WA
-	ld	(4855:16), wa	; F7F4AE  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7F4AE  ld (0x12f7),WA
 	jr	sub_F7F470_Join	; F7F4B2  jr T,0xf7f4d7
 sub_F7F470_Skip3:
 	ld	(3116:16), wa	; F7F4B4  ld (0x0c2c),WA
-	ld	(4857:16), wa	; F7F4B8  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7F4B8  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c2a, 0	; F7F4BC  cp WA,(0x0c2a)
 	jr	nc, sub_F7F470_Skip4	; F7F4C0  jr NC,0xf7f4d3
 	ld	(3114:16), wa	; F7F4C2  ld (0x0c2a),WA
-	ld	(4855:16), wa	; F7F4C6  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7F4C6  ld (0x12f7),WA
 	ld	(3096:16), wa	; F7F4CA  ld (0x0c18),WA
 	ld	(6304866:24), wa	; F7F4CE  ld (0x603462),WA
 sub_F7F470_Skip4:
@@ -197763,7 +197763,7 @@ ScreenLeaveBody_Quantize_Skip3:
 	call	T_F42920	; F7F655  call 0xf42920
 ScreenLeaveBody_Quantize_Join2:
 	ld	a, (3513:16)	; F7F659  ld A,(0x0db9)
-	ld	(4862:16), a	; F7F65D  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7F65D  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F661  calr 0xf7f6e5
 	calr	sub_F7F668	; F7F664  calr 0xf7f668
 ScreenLeaveBody_Quantize_Return:
@@ -197832,7 +197832,7 @@ sub_F7F668_Skip:
 	call	T_F42924	; F7F6A7  call 0xf42924
 sub_F7F668_Join:
 	ld	a, (3513:16)	; F7F6AB  ld A,(0x0db9)
-	ld	(4862:16), a	; F7F6AF  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7F6AF  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6B3  calr 0xf7f6e5
 	calr	sub_F7F668	; F7F6B6  calr 0xf7f668
 sub_F7F668_Return:
@@ -197882,7 +197882,7 @@ LcdKeyRow3_Quantize_StageZero:
 	calr	sub_F7F237	; F7F6C6  calr 0xf7f237
 	call	T_F42918	; F7F6C9  call 0xf42918
 	ld	a, (3513:16)	; F7F6CD  ld A,(0x0db9)
-	ld	(4862:16), a	; F7F6D1  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7F6D1  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6D5  calr 0xf7f6e5
 	calr	sub_F7F668	; F7F6D8  calr 0xf7f668
 	jr	sub_F7F668_Return2	; F7F6DB  jr T,0xf7f6e4
@@ -197946,7 +197946,7 @@ LcdKeyRow4_Quantize_StageZero:
 	calr	sub_F7F245	; F7F708  calr 0xf7f245
 	call	T_F4291C	; F7F70B  call 0xf4291c
 	ld	a, (3513:16)	; F7F70F  ld A,(0x0db9)
-	ld	(4862:16), a	; F7F713  ld (0x12fe),A
+	ld	(DisplayListB_Stage+8:16), a	; F7F713  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F717  calr 0xf7f6e5
 	calr	sub_F7F668	; F7F71A  calr 0xf7f668
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return:
@@ -198253,18 +198253,18 @@ sub_F7F7DC_Skip:
 	m_cp_rm MW16, 0x0c28, 0	; F7F808  cp WA,(0x0c28)
 	jr	ule, sub_F7F7DC_Skip2	; F7F80C  jr ULE,0xf7f816
 	ld	(3112:16), wa	; F7F80E  ld (0x0c28),WA
-	ld	(4857:16), wa	; F7F812  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7F812  ld (0x12f9),WA
 sub_F7F7DC_Skip2:
 	ld	(3110:16), wa	; F7F816  ld (0x0c26),WA
-	ld	(4855:16), wa	; F7F81A  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7F81A  ld (0x12f7),WA
 	jr	sub_F7F7DC_Join	; F7F81E  jr T,0xf7f843
 sub_F7F7DC_Skip3:
 	ld	(3112:16), wa	; F7F820  ld (0x0c28),WA
-	ld	(4857:16), wa	; F7F824  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7F824  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c26, 0	; F7F828  cp WA,(0x0c26)
 	jr	nc, sub_F7F7DC_Skip4	; F7F82C  jr NC,0xf7f83f
 	ld	(3110:16), wa	; F7F82E  ld (0x0c26),WA
-	ld	(4855:16), wa	; F7F832  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7F832  ld (0x12f7),WA
 	ld	(6304888:24), wa	; F7F836  ld (0x603478),WA
 	ld	(3146:16), wa	; F7F83B  ld (0x0c4a),WA
 sub_F7F7DC_Skip4:
@@ -199001,11 +199001,11 @@ sub_F7FAD2_Skip2:
 	jrl	gt, sub_F7FAD2_Return	; F7FB14  jrl GT,0xf7fba3
 	ld	(3096:16), wa	; F7FB17  ld (0x0c18),WA
 	ld	(6304946:24), wa	; F7FB1B  ld (0x6034b2),WA
-	ld	(4855:16), wa	; F7FB20  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7FB20  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0c22, 0	; F7FB24  cp WA,(0x0c22)
 	jr	ule, sub_F7FAD2_Skip3	; F7FB28  jr ULE,0xf7fb32
 	ld	(3106:16), wa	; F7FB2A  ld (0x0c22),WA
-	ld	(4857:16), wa	; F7FB2E  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7FB2E  ld (0x12f9),WA
 sub_F7FAD2_Skip3:
 	ld	(3104:16), wa	; F7FB32  ld (0x0c20),WA
 	jr	sub_F7FAD2_Join2	; F7FB36  jr T,0xf7fb65
@@ -199015,13 +199015,13 @@ sub_F7FAD2_Skip4:
 	cp	wa, 999	; F7FB3C  cp WA,0x03e7
 	jr	gt, sub_F7FAD2_Return	; F7FB40  jr GT,0xf7fba3
 	ld	(3106:16), wa	; F7FB42  ld (0x0c22),WA
-	ld	(4857:16), wa	; F7FB46  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7FB46  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c20, 0	; F7FB4A  cp WA,(0x0c20)
 	jr	nc, sub_F7FAD2_Skip5	; F7FB4E  jr NC,0xf7fb61
 	ld	(3104:16), wa	; F7FB50  ld (0x0c20),WA
 	ld	(3096:16), wa	; F7FB54  ld (0x0c18),WA
 	ld	(6304946:24), wa	; F7FB58  ld (0x6034b2),WA
-	ld	(4855:16), wa	; F7FB5D  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7FB5D  ld (0x12f7),WA
 sub_F7FAD2_Skip5:
 	ld	(3106:16), wa	; F7FB61  ld (0x0c22),WA
 sub_F7FAD2_Join2:
@@ -199043,7 +199043,7 @@ sub_F7FAD2_Join3:
 	ld	(3102:16), a	; F7FB8B  ld (0x0c1e),A
 	ld	(6304956:24), a	; F7FB8F  ld (0x6034bc),A
 	ld	(3108:16), a	; F7FB94  ld (0x0c24),A
-	ld	(4859:16), a	; F7FB98  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7FB98  ld (0x12fb),A
 sub_F7FAD2_Join4:
 	call	T_Blink_Stop	; F7FB9C  call 0xf42e24
 	calr	sub_F7F9FB	; F7FBA0  calr 0xf7f9fb
@@ -199769,11 +199769,11 @@ sub_F7FE19_Skip2:
 	cp	wa, 999	; F7FE55  cp WA,0x03e7
 	jr	gt, sub_F7FE19_Return	; F7FE59  jr GT,0xf7fed2
 	ld	(3576:16), wa	; F7FE5B  ld (0x0df8),WA
-	ld	(4855:16), wa	; F7FE5F  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7FE5F  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0dfa, 0	; F7FE63  cp WA,(0x0dfa)
 	jr	ule, sub_F7FE19_Skip3	; F7FE67  jr ULE,0xf7fe71
 	ld	(3578:16), wa	; F7FE69  ld (0x0dfa),WA
-	ld	(4857:16), wa	; F7FE6D  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7FE6D  ld (0x12f9),WA
 sub_F7FE19_Skip3:
 	jr	sub_F7FE19_Join2	; F7FE71  jr T,0xf7fe93
 sub_F7FE19_Skip4:
@@ -199782,11 +199782,11 @@ sub_F7FE19_Skip4:
 	cp	wa, 999	; F7FE77  cp WA,0x03e7
 	jr	gt, sub_F7FE19_Return	; F7FE7B  jr GT,0xf7fed2
 	ld	(3578:16), wa	; F7FE7D  ld (0x0dfa),WA
-	ld	(4857:16), wa	; F7FE81  ld (0x12f9),WA
+	ld	(DisplayListB_Stage+3:16), wa	; F7FE81  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0df8, 0	; F7FE85  cp WA,(0x0df8)
 	jr	nc, sub_F7FE19_Join2	; F7FE89  jr NC,0xf7fe93
 	ld	(3576:16), wa	; F7FE8B  ld (0x0df8),WA
-	ld	(4855:16), wa	; F7FE8F  ld (0x12f7),WA
+	ld	(DisplayListB_Stage+1:16), wa	; F7FE8F  ld (0x12f7),WA
 sub_F7FE19_Join2:
 	ld	wa, (3578:16)	; F7FE93  ld WA,(0x0dfa)
 	m_sub_rm MW16, 0x0df8, 0	; F7FE97  sub WA,(0x0df8)
@@ -199805,7 +199805,7 @@ sub_F7FE19_Skip6:
 	jr	gt, sub_F7FE19_Return	; F7FEBA  jr GT,0xf7fed2
 sub_F7FE19_Join3:
 	ld	(3580:16), a	; F7FEBC  ld (0x0dfc),A
-	ld	(4859:16), a	; F7FEC0  ld (0x12fb),A
+	ld	(DisplayListB_Stage+5:16), a	; F7FEC0  ld (0x12fb),A
 	ld	(4764:16), a	; F7FEC4  ld (0x129c),A
 	ldw	de, 127	; F7FEC8  ld DE,0x007f
 sub_F7FE19_Join4:

@@ -397,5 +397,8 @@
 	.equ MIDI_Parser_SavedXIZ,			0x0918	; the interrupt parser's saved XIZ between interrupts -- MIDI_Parser_LoadContext / _SaveContext / _ClearContext
 	.equ MIDI_ActivityFlags,			0x216f	; bit 0 set on every MIDI byte actually delivered -- the MIDI_RX banner; PanelLed_RequestIfBlinkEnableChanged
 
+; ---- wsa1/notes/FINDINGS-prom_ab-display-list-b-stage.md -- "the display-list-B staging block"
+	.equ DisplayListB_Stage,			0x12f6	; 27 bytes the screens stage for interpreter-B display-list records; meaning per screen -- every byte is a `+0x02 source variable`; 363 code stores, 1 code read
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,				0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

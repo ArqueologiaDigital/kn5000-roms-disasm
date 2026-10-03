@@ -2424,11 +2424,11 @@ AdvanceDelay_KeypadCommit:
 	cp WA,0x03e7                                         ; F8019A  d8 cf e7 03
 	jr gt, .LF8020C                                      ; F8019E  6a 6c
 	ld (0x0de8:16), wa                                  ; F801A0  f1 e8 0d 50
-	ld (0x12f7:16), wa                                  ; F801A4  f1 f7 12 50
+	ld (DisplayListB_Stage+1:16), wa                                  ; F801A4  f1 f7 12 50
 	m_cp_rm MW16, 0x0dea, r0                             ; F801A8  d1 ea 0d f0
 	jr ule, .LF801B6                                     ; F801AC  63 08
 	ld (0x0dea:16), wa                                  ; F801AE  f1 ea 0d 50
-	ld (0x12f9:16), wa                                  ; F801B2  f1 f9 12 50
+	ld (DisplayListB_Stage+3:16), wa                                  ; F801B2  f1 f9 12 50
 .LF801B6:
 	jr .LF801D8                                          ; F801B6  68 20
 .LF801B8:
@@ -2437,11 +2437,11 @@ AdvanceDelay_KeypadCommit:
 	cp WA,0x03e7                                         ; F801BC  d8 cf e7 03
 	jr gt, .LF8020C                                      ; F801C0  6a 4a
 	ld (0x0dea:16), wa                                  ; F801C2  f1 ea 0d 50
-	ld (0x12f9:16), wa                                  ; F801C6  f1 f9 12 50
+	ld (DisplayListB_Stage+3:16), wa                                  ; F801C6  f1 f9 12 50
 	m_cp_rm MW16, 0x0de8, r0                             ; F801CA  d1 e8 0d f0
 	jr nc, .LF801D8                                      ; F801CE  6f 08
 	ld (0x0de8:16), wa                                  ; F801D0  f1 e8 0d 50
-	ld (0x12f7:16), wa                                  ; F801D4  f1 f7 12 50
+	ld (DisplayListB_Stage+1:16), wa                                  ; F801D4  f1 f7 12 50
 .LF801D8:
 	ld wa, (0x0dea:16)                                 ; F801D8  d1 ea 0d 20
 	m_sub_rm MW16, 0x0de8, r0                            ; F801DC  d1 e8 0d a0
@@ -2459,7 +2459,7 @@ AdvanceDelay_KeypadCommit:
 	jr gt, .LF8020C                                      ; F801FB  6a 0f
 .LF801FD:
 	ld (0x0dec:16), a                                   ; F801FD  f1 ec 0d 41
-	ld (0x12fb:16), a                                   ; F80201  f1 fb 12 41
+	ld (DisplayListB_Stage+5:16), a                                   ; F80201  f1 fb 12 41
 .LF80205:
 	call T_Blink_Stop                                    ; F80205  1d 24 2e f4
 	calr AdvanceDelay_DrawValues                                      ; F80209  1e 7a fe
@@ -2566,7 +2566,7 @@ Paint_S0ngC0py:
 	ld XIX,DL_F3C530                                     ; F802AC  44 30 c5 f3 00
 	call T_DisplayList_Run                               ; F802B1  1d f0 17 f4
 	ld a, (0x0e34:16)                                   ; F802B5  c1 34 0e 21
-	ld (0x1307:16), a                                   ; F802B9  f1 07 13 41
+	ld (DisplayListB_Stage+17:16), a                                   ; F802B9  f1 07 13 41
 	ld XIY,DL_F3C530                                     ; F802BD  45 30 c5 f3 00
 	ld XIX,Data_F3C53F                                   ; F802C2  44 3f c5 f3 00
 	call T_DisplayListB_Run                              ; F802C7  1d f4 17 f4
@@ -2587,7 +2587,7 @@ Paint_S0ngC0py:
 S0ngC0py_DrawFromSong:
 	xor XWA,XWA                                          ; F802EC  e8 d0
 	ld a, (S0ngC0py_FromSong:16)                                   ; F802EE  c1 0c 0e 21
-	ld (0x12f6:16), a                                   ; F802F2  f1 f6 12 41
+	ld (DisplayListB_Stage:16), a                                   ; F802F2  f1 f6 12 41
 	ld XIY,DL_F3C199                                     ; F802F6  45 99 c1 f3 00
 	ld XIX,0x00f3c1a3                                    ; F802FB  44 a3 c1 f3 00
 .LF80300:
@@ -2602,7 +2602,7 @@ S0ngC0py_DrawFromSong:
 	add XWA,XIX                                          ; F80315  ec 80
 	add XIY,XWA                                          ; F80317  e8 85
 	add XIY,0x000000ca                                   ; F80319  ed c8 ca 00 00 00
-	ld XIX,0x000012f8                                    ; F8031F  44 f8 12 00 00
+	ld XIX,DisplayListB_Stage+2                                    ; F8031F  44 f8 12 00 00
 	ldw bc, 0x06                                         ; F80324  31 06 00
 	ldir85                                               ; F80327  85 11
 	ld XIY,DL_F3C15D                                     ; F80329  45 5d c1 f3 00
@@ -2615,7 +2615,7 @@ S0ngC0py_DrawFromSong:
 S0ngC0py_DrawToSong:
 	xor XWA,XWA                                          ; F80338  e8 d0
 	ld a, (S0ngC0py_ToSong:16)                                   ; F8033A  c1 0d 0e 21
-	ld (0x12f7:16), a                                   ; F8033E  f1 f7 12 41
+	ld (DisplayListB_Stage+1:16), a                                   ; F8033E  f1 f7 12 41
 	ld XIY,0x00f3c1a3                                    ; F80342  45 a3 c1 f3 00
 	ld XIX,DL_S0ngSelectNameKbS0ngName                   ; F80347  44 ad c1 f3 00
 	push XWA                                             ; F8034C  38
@@ -2629,7 +2629,7 @@ S0ngC0py_DrawToSong:
 	add XWA,XIX                                          ; F80361  ec 80
 	add XIY,XWA                                          ; F80363  e8 85
 	add XIY,0x000000ca                                   ; F80365  ed c8 ca 00 00 00
-	ld XIX,0x000012fe                                    ; F8036B  44 fe 12 00 00
+	ld XIX,DisplayListB_Stage+8                                    ; F8036B  44 fe 12 00 00
 	ldw bc, 0x06                                         ; F80370  31 06 00
 	ldir85                                               ; F80373  85 11
 	ld XIY,DL_F3C16C                                     ; F80375  45 6c c1 f3 00
@@ -2648,9 +2648,9 @@ S0ngC0py_DrawTracks:
 	jr .LF803C7                                          ; F80399  68 2c
 .LF8039B:
 	ld a, (S0ngC0py_FromTrack:16)                                   ; F8039B  c1 0e 0e 21
-	ld (0x1304:16), a                                   ; F8039F  f1 04 13 41
+	ld (DisplayListB_Stage+14:16), a                                   ; F8039F  f1 04 13 41
 	ld a, (S0ngC0py_ToTrack:16)                                   ; F803A3  c1 0f 0e 21
-	ld (0x1305:16), a                                   ; F803A7  f1 05 13 41
+	ld (DisplayListB_Stage+15:16), a                                   ; F803A7  f1 05 13 41
 	ld XIY,DL_F3C17B                                     ; F803AB  45 7b c1 f3 00
 	ld XIX,DL_F3C199                                     ; F803B0  44 99 c1 f3 00
 	call T_DisplayListB_Run                              ; F803B5  1d f4 17 f4
@@ -2974,11 +2974,11 @@ N0teChange_KeypadCommit:
 	cp WA,0x03e7                                         ; F80687  d8 cf e7 03
 	jrl gt, .LF80713                                     ; F8068B  7a 85 00
 	ld (N0teChange_FromMeasure:16), wa                                  ; F8068E  f1 f0 0d 50
-	ld (0x12fc:16), wa                                  ; F80692  f1 fc 12 50
+	ld (DisplayListB_Stage+6:16), wa                                  ; F80692  f1 fc 12 50
 	m_cp_rm MW16, N0teChange_ToMeasure, r0                             ; F80696  d1 f2 0d f0
 	jr ule, .LF806A4                                     ; F8069A  63 08
 	ld (N0teChange_ToMeasure:16), wa                                  ; F8069C  f1 f2 0d 50
-	ld (0x12ff:16), wa                                  ; F806A0  f1 ff 12 50
+	ld (DisplayListB_Stage+9:16), wa                                  ; F806A0  f1 ff 12 50
 .LF806A4:
 	jr .LF806C6                                          ; F806A4  68 20
 .LF806A6:
@@ -2987,11 +2987,11 @@ N0teChange_KeypadCommit:
 	cp WA,0x03e7                                         ; F806AA  d8 cf e7 03
 	jr gt, .LF80713                                      ; F806AE  6a 63
 	ld (N0teChange_ToMeasure:16), wa                                  ; F806B0  f1 f2 0d 50
-	ld (0x12ff:16), wa                                  ; F806B4  f1 ff 12 50
+	ld (DisplayListB_Stage+9:16), wa                                  ; F806B4  f1 ff 12 50
 	m_cp_rm MW16, N0teChange_FromMeasure, r0                             ; F806B8  d1 f0 0d f0
 	jr nc, .LF806C6                                      ; F806BC  6f 08
 	ld (N0teChange_FromMeasure:16), wa                                  ; F806BE  f1 f0 0d 50
-	ld (0x12fc:16), wa                                  ; F806C2  f1 fc 12 50
+	ld (DisplayListB_Stage+6:16), wa                                  ; F806C2  f1 fc 12 50
 .LF806C6:
 	ld wa, (N0teChange_ToMeasure:16)                                 ; F806C6  d1 f2 0d 20
 	m_sub_rm MW16, N0teChange_FromMeasure, r0                            ; F806CA  d1 f0 0d a0
@@ -3002,21 +3002,21 @@ N0teChange_KeypadCommit:
 	cp WA,0x007f                                         ; F806D6  d8 cf 7f 00
 	jr gt, .LF80713                                      ; F806DA  6a 37
 	ld (N0teChange_FromNote:16), a                                   ; F806DC  f1 f4 0d 41
-	ld (0x12fb:16), a                                   ; F806E0  f1 fb 12 41
+	ld (DisplayListB_Stage+5:16), a                                   ; F806E0  f1 fb 12 41
 	ld l, 0x0c:opc                                          ; F806E4  27 0c
 	divs wa, l                                         ; F806E6  cf 59
-	ld (0x12f7:16), w                                   ; F806E8  f1 f7 12 40
-	ld (0x12f8:16), a                                   ; F806EC  f1 f8 12 41
+	ld (DisplayListB_Stage+1:16), w                                   ; F806E8  f1 f7 12 40
+	ld (DisplayListB_Stage+2:16), a                                   ; F806EC  f1 f8 12 41
 	jr .LF8070C                                          ; F806F0  68 1a
 .LF806F2:
 	cp WA,0x007f                                         ; F806F2  d8 cf 7f 00
 	jr gt, .LF80713                                      ; F806F6  6a 1b
 	ld (N0teChange_ToNote:16), a                                   ; F806F8  f1 f5 0d 41
-	ld (0x12fe:16), a                                   ; F806FC  f1 fe 12 41
+	ld (DisplayListB_Stage+8:16), a                                   ; F806FC  f1 fe 12 41
 	ld l, 0x0c:opc                                          ; F80700  27 0c
 	divs wa, l                                         ; F80702  cf 59
-	ld (0x12f9:16), w                                   ; F80704  f1 f9 12 40
-	ld (0x12fa:16), a                                   ; F80708  f1 fa 12 41
+	ld (DisplayListB_Stage+3:16), w                                   ; F80704  f1 f9 12 40
+	ld (DisplayListB_Stage+4:16), a                                   ; F80708  f1 fa 12 41
 .LF8070C:
 	call T_Blink_Stop                                    ; F8070C  1d 24 2e f4
 	calr N0teChange_DrawValues                                      ; F80710  1e a5 fe
@@ -3183,7 +3183,7 @@ ScreenLeaveBody_MeasureC0py:
 	call T_F429EC                                        ; F8087B  1d ec 29 f4
 .LF8087F:
 	ld a, (MeasureC0py_Field:16)                                   ; F8087F  c1 bc 0d 21
-	ld (0x12ff:16), a                                   ; F80883  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F80883  f1 ff 12 41
 	calr MeasureC0py_DrawValues                                      ; F80887  1e 13 01
 	calr MeasureC0py_DrawFieldCursor                                      ; F8088A  1e 04 00
 	calr Paint_MeasureC0py_Nop                                      ; F8088D  1e 78 ff
@@ -3214,7 +3214,7 @@ MeasureC0py_DrawFieldCursor:
 	call T_F429E4                                        ; F808D0  1d e4 29 f4
 .LF808D4:
 	ld a, (MeasureC0py_Field:16)                                   ; F808D4  c1 bc 0d 21
-	ld (0x12ff:16), a                                   ; F808D8  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F808D8  f1 ff 12 41
 	calr MeasureC0py_DrawValues                                      ; F808DC  1e be 00
 	calr MeasureC0py_DrawFieldCursor                                      ; F808DF  1e af ff
 	calr Paint_MeasureC0py_Nop                                      ; F808E2  1e 23 ff
@@ -3234,7 +3234,7 @@ MeasureC0py_DrawFieldCursor:
 	call T_F429F4                                        ; F80905  1d f4 29 f4
 .LF80909:
 	ld a, (MeasureC0py_Field:16)                                   ; F80909  c1 bc 0d 21
-	ld (0x12ff:16), a                                   ; F8090D  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F8090D  f1 ff 12 41
 	calr MeasureC0py_DrawValues                                      ; F80911  1e 89 00
 	calr MeasureC0py_DrawFieldCursor                                      ; F80914  1e 7a ff
 	calr Paint_MeasureC0py_Nop                                      ; F80917  1e ee fe
@@ -3360,23 +3360,23 @@ MeasureC0py_KeypadCommit:
 .LF80A10:
 	ld (0x0c18:16), wa                                  ; F80A10  f1 18 0c 50
 	ld (0x603470:24), wa                                ; F80A14  f2 70 34 60 50
-	ld (0x12f7:16), wa                                  ; F80A19  f1 f7 12 50
+	ld (DisplayListB_Stage+1:16), wa                                  ; F80A19  f1 f7 12 50
 	m_cp_rm MW16, 0x0c32, r0                             ; F80A1D  d1 32 0c f0
 	jr ule, .LF80A2B                                     ; F80A21  63 08
 	ld (0x0c32:16), wa                                  ; F80A23  f1 32 0c 50
-	ld (0x12f9:16), wa                                  ; F80A27  f1 f9 12 50
+	ld (DisplayListB_Stage+3:16), wa                                  ; F80A27  f1 f9 12 50
 .LF80A2B:
 	ld (0x0c30:16), wa                                  ; F80A2B  f1 30 0c 50
 	jr .LF80A54                                          ; F80A2F  68 23
 .LF80A31:
 	ld (0x0c32:16), wa                                  ; F80A31  f1 32 0c 50
-	ld (0x12f9:16), wa                                  ; F80A35  f1 f9 12 50
+	ld (DisplayListB_Stage+3:16), wa                                  ; F80A35  f1 f9 12 50
 	m_cp_rm MW16, 0x0c30, r0                             ; F80A39  d1 30 0c f0
 	jr nc, .LF80A50                                      ; F80A3D  6f 11
 	ld (0x0c30:16), wa                                  ; F80A3F  f1 30 0c 50
 	ld (0x0c18:16), wa                                  ; F80A43  f1 18 0c 50
 	ld (0x603470:24), wa                                ; F80A47  f2 70 34 60 50
-	ld (0x12f7:16), wa                                  ; F80A4C  f1 f7 12 50
+	ld (DisplayListB_Stage+1:16), wa                                  ; F80A4C  f1 f7 12 50
 .LF80A50:
 	ld (0x0c32:16), wa                                  ; F80A50  f1 32 0c 50
 .LF80A54:
@@ -3388,7 +3388,7 @@ MeasureC0py_KeypadCommit:
 .LF80A65:
 	ld (0x0c1a:16), wa                                  ; F80A65  f1 1a 0c 50
 	ld (0x603475:24), wa                                ; F80A69  f2 75 34 60 50
-	ld (0x12fc:16), wa                                  ; F80A6E  f1 fc 12 50
+	ld (DisplayListB_Stage+6:16), wa                                  ; F80A6E  f1 fc 12 50
 .LF80A72:
 	call T_Blink_Stop                                    ; F80A72  1d 24 2e f4
 	calr MeasureC0py_DrawValues                                      ; F80A76  1e 24 ff
@@ -3553,7 +3553,7 @@ ScreenLeaveBody_MeasureInsert:
 	call T_F429BC                                        ; F80BD8  1d bc 29 f4
 .LF80BDC:
 	ld a, (MeasureInsert_Field:16)                                   ; F80BDC  c1 da 0d 21
-	ld (0x12ff:16), a                                   ; F80BE0  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F80BE0  f1 ff 12 41
 	calr MeasureInsert_DrawValues                                      ; F80BE4  1e 14 01
 	calr MeasureInsert_DrawFieldCursor                                      ; F80BE7  1e 04 00
 	calr Paint_MeasureInsert_Nop                                      ; F80BEA  1e 78 ff
@@ -3585,7 +3585,7 @@ sub_F80C04:
 	call T_F429B4                                        ; F80C2D  1d b4 29 f4
 .LF80C31:
 	ld a, (MeasureInsert_Field:16)                                   ; F80C31  c1 da 0d 21
-	ld (0x12ff:16), a                                   ; F80C35  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F80C35  f1 ff 12 41
 	calr MeasureInsert_DrawValues                                      ; F80C39  1e bf 00
 	calr MeasureInsert_DrawFieldCursor                                      ; F80C3C  1e af ff
 	calr Paint_MeasureInsert_Nop                                      ; F80C3F  1e 23 ff
@@ -3605,7 +3605,7 @@ sub_F80C04:
 	call T_F429C4                                        ; F80C62  1d c4 29 f4
 .LF80C66:
 	ld a, (MeasureInsert_Field:16)                                   ; F80C66  c1 da 0d 21
-	ld (0x12ff:16), a                                   ; F80C6A  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F80C6A  f1 ff 12 41
 	calr MeasureInsert_DrawValues                                      ; F80C6E  1e 8a 00
 	calr MeasureInsert_DrawFieldCursor                                      ; F80C71  1e 7a ff
 	calr Paint_MeasureInsert_Nop                                      ; F80C74  1e ee fe
@@ -3733,21 +3733,21 @@ MeasureInsert_KeypadCommit:
 .LF80D75:
 	ld (0x0c18:16), wa                                  ; F80D75  f1 18 0c 50
 	ld (0x603468:24), wa                                ; F80D79  f2 68 34 60 50
-	ld (0x12f7:16), wa                                  ; F80D7E  f1 f7 12 50
+	ld (DisplayListB_Stage+1:16), wa                                  ; F80D7E  f1 f7 12 50
 	m_cp_rm MW16, 0x0dde, r0                             ; F80D82  d1 de 0d f0
 	jr ule, .LF80D90                                     ; F80D86  63 08
 	ld (0x0dde:16), wa                                  ; F80D88  f1 de 0d 50
-	ld (0x12f9:16), wa                                  ; F80D8C  f1 f9 12 50
+	ld (DisplayListB_Stage+3:16), wa                                  ; F80D8C  f1 f9 12 50
 .LF80D90:
 	ld (0x0ddc:16), wa                                  ; F80D90  f1 dc 0d 50
 	jr .LF80DB9                                          ; F80D94  68 23
 .LF80D96:
 	ld (0x0dde:16), wa                                  ; F80D96  f1 de 0d 50
-	ld (0x12f9:16), wa                                  ; F80D9A  f1 f9 12 50
+	ld (DisplayListB_Stage+3:16), wa                                  ; F80D9A  f1 f9 12 50
 	m_cp_rm MW16, 0x0ddc, r0                             ; F80D9E  d1 dc 0d f0
 	jr nc, .LF80DB5                                      ; F80DA2  6f 11
 	ld (0x0ddc:16), wa                                  ; F80DA4  f1 dc 0d 50
-	ld (0x12f7:16), wa                                  ; F80DA8  f1 f7 12 50
+	ld (DisplayListB_Stage+1:16), wa                                  ; F80DA8  f1 f7 12 50
 	ld (0x0c18:16), wa                                  ; F80DAC  f1 18 0c 50
 	ld (0x603468:24), wa                                ; F80DB0  f2 68 34 60 50
 .LF80DB5:
@@ -3761,7 +3761,7 @@ MeasureInsert_KeypadCommit:
 .LF80DCA:
 	ld (0x0c1a:16), wa                                  ; F80DCA  f1 1a 0c 50
 	ld (0x60346d:24), wa                                ; F80DCE  f2 6d 34 60 50
-	ld (0x12fc:16), wa                                  ; F80DD3  f1 fc 12 50
+	ld (DisplayListB_Stage+6:16), wa                                  ; F80DD3  f1 fc 12 50
 .LF80DD7:
 	call T_Blink_Stop                                    ; F80DD7  1d 24 2e f4
 	calr MeasureInsert_DrawValues                                      ; F80DDB  1e 1d ff
@@ -3991,7 +3991,7 @@ Paint_StepRecordPartSelect:
 	cp a, 0x00:i3                                          ; F80FA9  c9 d8
 	jr z, .LF80FBC                                       ; F80FAB  66 0f
 	dec 1,A                                              ; F80FAD  c9 69
-	ld (0x12f6:16), a                                   ; F80FAF  f1 f6 12 41
+	ld (DisplayListB_Stage:16), a                                   ; F80FAF  f1 f6 12 41
 	ld XIY,Data_F3A0D9                                   ; F80FB3  45 d9 a0 f3 00
 	call T_DLB_Handler_Array8                                        ; F80FB8  1d 1c 18 f4
 .LF80FBC:
@@ -4108,16 +4108,16 @@ Paint_SequencerMedley:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F810AA  f1 40 25 00 00
 	ld a, (Medley_FirstSong:16)                                   ; F810AF  c1 08 22 21
 	inc 1,A                                              ; F810B3  c9 61
-	ld (0x12fe:16), a                                   ; F810B5  f1 fe 12 41
+	ld (DisplayListB_Stage+8:16), a                                   ; F810B5  f1 fe 12 41
 	ld a, (Medley_LastSong:16)                                   ; F810B9  c1 09 22 21
 	inc 1,A                                              ; F810BD  c9 61
-	ld (0x1300:16), a                                   ; F810BF  f1 00 13 41
+	ld (DisplayListB_Stage+10:16), a                                   ; F810BF  f1 00 13 41
 	ld a, (Medley_FileType:16)                                   ; F810C3  c1 35 0e 21
-	ld (0x1304:16), a                                   ; F810C7  f1 04 13 41
+	ld (DisplayListB_Stage+14:16), a                                   ; F810C7  f1 04 13 41
 	ld a, (Medley_Source:16)                                   ; F810CB  c1 0b 22 21
-	ld (0x1303:16), a                                   ; F810CF  f1 03 13 41
+	ld (DisplayListB_Stage+13:16), a                                   ; F810CF  f1 03 13 41
 	ld	a, (0x01:8)                                      ; F810D3  c0 01 21
-	ld (0x1305:16), a                                   ; F810D6  f1 05 13 41
+	ld (DisplayListB_Stage+15:16), a                                   ; F810D6  f1 05 13 41
 	ld XIY,DL_FirstS0ngLastS0ng                          ; F810DA  45 78 c7 f3 00
 	ld XIX,DL_F3C7AD                                     ; F810DF  44 ad c7 f3 00
 	call T_DisplayListB_Run                              ; F810E4  1d f4 17 f4
@@ -4164,9 +4164,9 @@ ScreenLeaveBody_SequencerMedley:
 	call T_F42B88                                        ; F8114C  1d 88 2b f4
 .LF81150:
 	ld a, (Medley_FirstSong:16)                                   ; F81150  c1 08 22 21
-	ld (0x12fe:16), a                                   ; F81154  f1 fe 12 41
+	ld (DisplayListB_Stage+8:16), a                                   ; F81154  f1 fe 12 41
 	ld a, (Medley_LastSong:16)                                   ; F81158  c1 09 22 21
-	ld (0x1300:16), a                                   ; F8115C  f1 00 13 41
+	ld (DisplayListB_Stage+10:16), a                                   ; F8115C  f1 00 13 41
 	call Draw_FirstS0ngLastS0ng                                      ; F81160  1d bf 13 f8
 	ret                                                  ; F81164  0e
 	ret                                                  ; F81165  0e
@@ -4400,7 +4400,7 @@ SequencerMedley_DrawPlayState:
 	call T_DLHandler_IX_Text                             ; F8137A  1d 2c 18 f4
 	ld a, (Medley_PlayingSong:16)                                   ; F8137E  c1 0a 22 21
 	inc 1,A                                              ; F81382  c9 61
-	ld (0x12f6:16), a                                   ; F81384  f1 f6 12 41
+	ld (DisplayListB_Stage:16), a                                   ; F81384  f1 f6 12 41
 	ld XIY,DL_F3C89D                                     ; F81388  45 9d c8 f3 00
 	ld XIX,DL_StepRecordPartSelectPressTheUpDownButton   ; F8138D  44 a7 c8 f3 00
 	call T_DisplayListB_Run                              ; F81392  1d f4 17 f4
@@ -4409,7 +4409,7 @@ SequencerMedley_DrawPlayState:
 .LF8139F:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8139F  f1 40 25 00 01
 	ld a, (Medley_Playing:16)                                   ; F813A4  c1 c1 0d 21
-	ld (0x1305:16), a                                   ; F813A8  f1 05 13 41
+	ld (DisplayListB_Stage+15:16), a                                   ; F813A8  f1 05 13 41
 	ld XIY,0x00f3c7d8                                    ; F813AC  45 d8 c7 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F813B1  1d 20 18 f4
 	ld XIY,DL_F3C7AD                                     ; F813B5  45 ad c7 f3 00
@@ -4419,10 +4419,10 @@ Draw_FirstS0ngLastS0ng:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F813BF  f1 40 25 00 00
 	ld a, (Medley_FirstSong:16)                                   ; F813C4  c1 08 22 21
 	inc 1,A                                              ; F813C8  c9 61
-	ld (0x12fe:16), a                                   ; F813CA  f1 fe 12 41
+	ld (DisplayListB_Stage+8:16), a                                   ; F813CA  f1 fe 12 41
 	ld a, (Medley_LastSong:16)                                   ; F813CE  c1 09 22 21
 	inc 1,A                                              ; F813D2  c9 61
-	ld (0x1300:16), a                                   ; F813D4  f1 00 13 41
+	ld (DisplayListB_Stage+10:16), a                                   ; F813D4  f1 00 13 41
 	ld XIY,DL_FirstS0ngLastS0ng                          ; F813D8  45 78 c7 f3 00
 	ld XIX,0x00f3c78c                                    ; F813DD  44 8c c7 f3 00
 	call T_DisplayListB_Run                              ; F813E2  1d f4 17 f4
@@ -4478,7 +4478,7 @@ S0ngSelectName_PrevSong:
 	dec 1,A                                              ; F8145E  c9 69
 	ld (BStore_CurrentBank:16), a                                   ; F81460  f1 0a 36 41
 	inc 1,A                                              ; F81464  c9 61
-	ld (0x12fc:16), a                                   ; F81466  f1 fc 12 41
+	ld (DisplayListB_Stage+6:16), a                                   ; F81466  f1 fc 12 41
 	call S0ngSelectName_LoadSongFromBank                                      ; F8146A  1d 0d 18 f8
 	ld (0x0e45:16), 0x04                                 ; F8146E  f1 45 0e 00 04
 	call S0ngSelectName_UpdateSizeValues                                      ; F81473  1d 7d 14 f8
@@ -4492,9 +4492,9 @@ S0ngSelectName_UpdateSizeValues:
 	ld (0x0e32:16), a                                   ; F81481  f1 32 0e 41
 	call SongStore_MeasureSongSize                                      ; F81485  1d e9 19 f8
 	ld wa, (0x0e2f:16)                                 ; F81489  d1 2f 0e 20
-	ld (0x12fd:16), wa                                  ; F8148D  f1 fd 12 50
+	ld (DisplayListB_Stage+7:16), wa                                  ; F8148D  f1 fd 12 50
 	ld a, (0x0e31:16)                                   ; F81491  c1 31 0e 21
-	ld (0x12ff:16), a                                   ; F81495  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F81495  f1 ff 12 41
 	ret                                                  ; F81499  0e
 ; S0ngSelectName_SaveWorkspaceToBank -- copy the 3 KiB song workspace back into its bank (0x360A)
 ; Evidence: (0x60341E)=(0x360C); `ld XIX,0x610000+n*0xC00 / ld XIY,0x603400 / ld BC,0x0C00 / ldir` (ldir writes (XIX+) from (XIY+)).  Same effect as prom_b BStore_Workspace_SaveToBank (0xF64BE3), written independently (instruction order differs).
@@ -4534,7 +4534,7 @@ S0ngSelectName_NextSong:
 	inc 1,A                                              ; F814F2  c9 61
 	ld (BStore_CurrentBank:16), a                                   ; F814F4  f1 0a 36 41
 	inc 1,A                                              ; F814F8  c9 61
-	ld (0x12fc:16), a                                   ; F814FA  f1 fc 12 41
+	ld (DisplayListB_Stage+6:16), a                                   ; F814FA  f1 fc 12 41
 	call S0ngSelectName_LoadSongFromBank                                      ; F814FE  1d 0d 18 f8
 	ld (0x0e45:16), 0x04                                 ; F81502  f1 45 0e 00 04
 	call S0ngSelectName_UpdateSizeValues                                      ; F81507  1d 7d 14 f8
@@ -4557,10 +4557,10 @@ S0ngSelectName_CursorLeft:
 	jr lt, .LF81552                                      ; F81538  61 18
 	ld (NameEdit_CursorPos:16), a                                   ; F8153A  f1 2d 22 41
 	ld (0x2721:16), a                                   ; F8153E  f1 21 27 41
-	ld (0x1301:16), a                                   ; F81542  f1 01 13 41
+	ld (DisplayListB_Stage+11:16), a                                   ; F81542  f1 01 13 41
 	call SongName_CharIndexAtCursor                                      ; F81546  1d 88 16 f8
 	ld a, (NameEdit_CharIndex:16)                                   ; F8154A  c1 f9 21 21
-	ld (0x1302:16), a                                   ; F8154E  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F8154E  f1 02 13 41
 .LF81552:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F81552  f1 40 25 00 01
 	ld XIY,DL_F3C351                                     ; F81557  45 51 c3 f3 00
@@ -4585,10 +4585,10 @@ S0ngSelectName_CursorRight:
 	jr gt, .LF815B4                                      ; F8159A  6a 18
 	ld (NameEdit_CursorPos:16), a                                   ; F8159C  f1 2d 22 41
 	ld (0x2721:16), a                                   ; F815A0  f1 21 27 41
-	ld (0x1301:16), a                                   ; F815A4  f1 01 13 41
+	ld (DisplayListB_Stage+11:16), a                                   ; F815A4  f1 01 13 41
 	call SongName_CharIndexAtCursor                                      ; F815A8  1d 88 16 f8
 	ld a, (NameEdit_CharIndex:16)                                   ; F815AC  c1 f9 21 21
-	ld (0x1302:16), a                                   ; F815B0  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F815B0  f1 02 13 41
 .LF815B4:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F815B4  f1 40 25 00 01
 	ld XIY,DL_F3C351                                     ; F815B9  45 51 c3 f3 00
@@ -4609,7 +4609,7 @@ S0ngSelectName_CharPrev:
 	ld w, 0x81:opc                                          ; F815EF  20 81
 	call SongName_StepCharAtCursor                                      ; F815F1  1d da 16 f8
 	ld a, (NameEdit_CharIndex:16)                                   ; F815F5  c1 f9 21 21
-	ld (0x1302:16), a                                   ; F815F9  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F815F9  f1 02 13 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F815FD  f1 40 25 00 00
 	call SongName_Draw6Chars                                      ; F81602  1d 5e 16 f8
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F81606  f1 40 25 00 01
@@ -4628,7 +4628,7 @@ S0ngSelectName_CharNext:
 	ld w, 0x01:opc                                          ; F81633  20 01
 	call SongName_StepCharAtCursor                                      ; F81635  1d da 16 f8
 	ld a, (NameEdit_CharIndex:16)                                   ; F81639  c1 f9 21 21
-	ld (0x1302:16), a                                   ; F8163D  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F8163D  f1 02 13 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F81641  f1 40 25 00 00
 	call SongName_Draw6Chars                                      ; F81646  1d 5e 16 f8
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8164A  f1 40 25 00 01
@@ -4766,7 +4766,7 @@ SongName_StoreCharAtCursor:
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; F8174E  f3 07 f0 ec 41
 	ld XIX,0x006034ca                                    ; F81753  44 ca 34 60 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; F81758  f3 07 f0 ec 41
-	ld XIX,0x000012f6                                    ; F8175D  44 f6 12 00 00
+	ld XIX,DisplayListB_Stage                                    ; F8175D  44 f6 12 00 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; F81762  f3 07 f0 ec 41
 	ret                                                  ; F81767  0e
 ; ---------------------------------------------------------------------
@@ -4797,27 +4797,27 @@ S0ngSelectName_PrepareValues:
 	m_or_mi8 MB16, 0x34bb, 0x04                          ; F8179D  c1 bb 34 3e 04
 	xor A,A                                              ; F817A2  c9 d1
 	ld (NameEdit_CursorPos:16), a                                   ; F817A4  f1 2d 22 41
-	ld (0x1301:16), a                                   ; F817A8  f1 01 13 41
+	ld (DisplayListB_Stage+11:16), a                                   ; F817A8  f1 01 13 41
 	ld xwa, (0x360c:16)                                 ; F817AC  e1 0c 36 20
 	ld (0x60341e:24), xwa                               ; F817B0  f2 1e 34 60 60
 .LF817B5:
 	ld XIY,0x006034ca                                    ; F817B5  45 ca 34 60 00
-	ld XIX,0x000012f6                                    ; F817BA  44 f6 12 00 00
+	ld XIX,DisplayListB_Stage                                    ; F817BA  44 f6 12 00 00
 	ldw bc, 0x06                                         ; F817BF  31 06 00
 	ldir85                                               ; F817C2  85 11
 	ld a, (BStore_CurrentBank:16)                                   ; F817C4  c1 0a 36 21
 	inc 1,A                                              ; F817C8  c9 61
-	ld (0x12fc:16), a                                   ; F817CA  f1 fc 12 41
+	ld (DisplayListB_Stage+6:16), a                                   ; F817CA  f1 fc 12 41
 	call SongName_CharIndexAtCursor                                      ; F817CE  1d 88 16 f8
 	ld a, (NameEdit_CharIndex:16)                                   ; F817D2  c1 f9 21 21
-	ld (0x1302:16), a                                   ; F817D6  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F817D6  f1 02 13 41
 	ld a, (BStore_CurrentBank:16)                                   ; F817DA  c1 0a 36 21
 	ld (0x0e32:16), a                                   ; F817DE  f1 32 0e 41
 	call SongStore_MeasureSongSize                                      ; F817E2  1d e9 19 f8
 	ld wa, (0x0e2f:16)                                 ; F817E6  d1 2f 0e 20
-	ld (0x12fd:16), wa                                  ; F817EA  f1 fd 12 50
+	ld (DisplayListB_Stage+7:16), wa                                  ; F817EA  f1 fd 12 50
 	ld a, (0x0e31:16)                                   ; F817EE  c1 31 0e 21
-	ld (0x12ff:16), a                                   ; F817F2  f1 ff 12 41
+	ld (DisplayListB_Stage+9:16), a                                   ; F817F2  f1 ff 12 41
 	ret                                                  ; F817F6  0e
 ; S0ngSelectName_Leave -- the work of the S0ngSelectName Leave method
 ; Evidence: only caller is ScreenLeaveBody_S0ngSelectName.  Unless (0x207A)=0x0D: and (0x34BB),0xFB (undoing S0ngSelectName_PrepareValues' or), call T_F411B8, (0x0E45)=0.
@@ -4866,14 +4866,14 @@ sub_F81812:
 	call T_F409E0                                        ; F81873  1d e0 09 f4
 	xor A,A                                              ; F81877  c9 d1
 	ld (NameEdit_CursorPos:16), a                                   ; F81879  f1 2d 22 41
-	ld (0x1301:16), a                                   ; F8187D  f1 01 13 41
-	ld XIX,0x000012f6                                    ; F81881  44 f6 12 00 00
+	ld (DisplayListB_Stage+11:16), a                                   ; F8187D  f1 01 13 41
+	ld XIX,DisplayListB_Stage                                    ; F81881  44 f6 12 00 00
 	ld XIY,0x006034ca                                    ; F81886  45 ca 34 60 00
 	ldw bc, 0x06                                         ; F8188B  31 06 00
 	ldir85                                               ; F8188E  85 11
 	call SongName_CharIndexAtCursor                                      ; F81890  1d 88 16 f8
 	ld a, (NameEdit_CharIndex:16)                                   ; F81894  c1 f9 21 21
-	ld (0x1302:16), a                                   ; F81898  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F81898  f1 02 13 41
 	m_cp_mi8 MB24, 0x6034c6, 0xff                        ; F8189C  c2 c6 34 60 3f ff
 	jr z, .LF818B3                                       ; F818A2  66 0f
 	m_bit 2, MD16, 0x7f4d                                ; F818A4  f1 4d 7f ca
@@ -4930,15 +4930,15 @@ SongName_ResetToUnderscores:
 	ld XIY,sub_F81948                                    ; F81917  45 48 19 f8 00
 	ldw bc, 0x06                                         ; F8191C  31 06 00
 	ldir85                                               ; F8191F  85 11
-	ld XIX,0x000012f6                                    ; F81921  44 f6 12 00 00
+	ld XIX,DisplayListB_Stage                                    ; F81921  44 f6 12 00 00
 	ld XIY,sub_F81948                                    ; F81926  45 48 19 f8 00
 	ldw bc, 0x06                                         ; F8192B  31 06 00
 	ldir85                                               ; F8192E  85 11
 	xor A,A                                              ; F81930  c9 d1
 	ld (NameEdit_CursorPos:16), a                                   ; F81932  f1 2d 22 41
-	ld (0x1301:16), a                                   ; F81936  f1 01 13 41
+	ld (DisplayListB_Stage+11:16), a                                   ; F81936  f1 01 13 41
 	ld (NameEdit_CharIndex:16), a                                   ; F8193A  f1 f9 21 41
-	ld (0x1302:16), a                                   ; F8193E  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F8193E  f1 02 13 41
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; F81942  c1 71 20 3e 10
 	ret                                                  ; F81947  0e
 sub_F81948:   ; entry: named by 3 `ld` operands, first at 0xF818EF
@@ -4949,7 +4949,7 @@ sub_F81948:   ; entry: named by 3 `ld` operands, first at 0xF818EF
 	pop XSP                                              ; F8194C  5f
 	pop XSP                                              ; F8194D  5f
 	ld a, (0x0c03:16)                                   ; F8194E  c1 03 0c 21
-	sub a, (0x12f6:16)                                   ; F81952  c1 f6 12 a1
+	sub a, (DisplayListB_Stage:16)                                   ; F81952  c1 f6 12 a1
 	ld (0x0e03:16), a                                   ; F81956  f1 03 0e 41
 	inc 1,A                                              ; F8195A  c9 61
 	ld c, 0x08:opc                                          ; F8195C  23 08
@@ -5156,7 +5156,7 @@ SongStore_SeekBlock:
 	m_cp_mi8 MB16, 0x0e63, 0x02                          ; F81B56  c1 63 0e 3f 02
 	jr z, .LF81B70                                       ; F81B5B  66 13
 	ld a, (0x0e5c:16)                                   ; F81B5D  c1 5c 0e 21
-	ld (0x12fd:16), a                                   ; F81B61  f1 fd 12 41
+	ld (DisplayListB_Stage+7:16), a                                   ; F81B61  f1 fd 12 41
 	ld XIY,0x00f3d380                                    ; F81B65  45 80 d3 f3 00
 	push XHL                                             ; F81B6A  3b
 	call T_DLB_Handler_Decimal                                        ; F81B6B  1d 00 18 f4
@@ -5187,7 +5187,7 @@ SongStore_SeekBlock:
 	m_cp_mi8 MB16, 0x0e63, 0x02                          ; F81BB7  c1 63 0e 3f 02
 	jr z, .LF81BCF                                       ; F81BBC  66 11
 	ld a, (0x0e63:16)                                   ; F81BBE  c1 63 0e 21
-	ld (0x12fc:16), a                                   ; F81BC2  f1 fc 12 41
+	ld (DisplayListB_Stage+6:16), a                                   ; F81BC2  f1 fc 12 41
 	ld XIY,0x00f3c967                                    ; F81BC6  45 67 c9 f3 00
 	call T_DLB_Handler_StringTable                       ; F81BCB  1d f8 17 f4
 .LF81BCF:
@@ -5223,11 +5223,11 @@ Paint_StepRecordTrackClrMeas:
 	ld XIX,StepSelectAddrTable_F3D089                    ; F81BE5  44 89 d0 f3 00
 	call T_DisplayList_Run                               ; F81BEA  1d f0 17 f4
 	ld a, (0x0e5c:16)                                   ; F81BEE  c1 5c 0e 21
-	ld (0x12fd:16), a                                   ; F81BF2  f1 fd 12 41
+	ld (DisplayListB_Stage+7:16), a                                   ; F81BF2  f1 fd 12 41
 	ld XIY,0x00f3d380                                    ; F81BF6  45 80 d3 f3 00
 	call T_DLB_Handler_Decimal                                        ; F81BFB  1d 00 18 f4
 	ld a, (0x0e63:16)                                   ; F81BFF  c1 63 0e 21
-	ld (0x12fc:16), a                                   ; F81C03  f1 fc 12 41
+	ld (DisplayListB_Stage+6:16), a                                   ; F81C03  f1 fc 12 41
 	ld XIY,0x00f3c967                                    ; F81C07  45 67 c9 f3 00
 	call T_DLB_Handler_StringTable                       ; F81C0C  1d f8 17 f4
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81C10  c0 c6 3c fe
@@ -5248,13 +5248,13 @@ Paint_StepRecordTrackClrMeas:
 	m_cp_mi16 MW16, 0x0f5e, 0x0000                       ; F81C43  d1 5e 0f 3f 00 00
 	jr nz, .LF81C5A                                      ; F81C49  6e 0f
 	ld a, (0x106c:16)                                   ; F81C4B  c1 6c 10 21
-	ld (0x1301:16), a                                   ; F81C4F  f1 01 13 41
+	ld (DisplayListB_Stage+11:16), a                                   ; F81C4F  f1 01 13 41
 	ld XIY,0x00f3d3cb                                    ; F81C53  45 cb d3 f3 00
 	jr .LF81C6B                                          ; F81C58  68 11
 .LF81C5A:
 	ld a, (0x106c:16)                                   ; F81C5A  c1 6c 10 21
-	ld (0x1300:16), a                                   ; F81C5E  f1 00 13 41
-	ld (0x1301:16), a                                   ; F81C62  f1 01 13 41
+	ld (DisplayListB_Stage+10:16), a                                   ; F81C5E  f1 00 13 41
+	ld (DisplayListB_Stage+11:16), a                                   ; F81C62  f1 01 13 41
 	ld XIY,0x00f3d3ad                                    ; F81C66  45 ad d3 f3 00
 .LF81C6B:
 	m_cp_mi16 MW16, 0x0f62, 0x0000                       ; F81C6B  d1 62 0f 3f 00 00
@@ -5263,7 +5263,7 @@ Paint_StepRecordTrackClrMeas:
 	jr .LF81C87                                          ; F81C78  68 0d
 .LF81C7A:
 	ld a, (0x106c:16)                                   ; F81C7A  c1 6c 10 21
-	ld (0x1302:16), a                                   ; F81C7E  f1 02 13 41
+	ld (DisplayListB_Stage+12:16), a                                   ; F81C7E  f1 02 13 41
 	ld XIX,0x00f3d407                                    ; F81C82  44 07 d4 f3 00
 .LF81C87:
 	call T_DisplayListB_Run                              ; F81C87  1d f4 17 f4
@@ -5287,7 +5287,7 @@ Paint_StepRecordTrackClrMeas:
 	jr .LF81CD8                                          ; F81CC5  68 11
 .LF81CC7:
 	ld wa, (0x0f5e:16)                                 ; F81CC7  d1 5e 0f 20
-	ld (0x12f6:16), wa                                  ; F81CCB  f1 f6 12 50
+	ld (DisplayListB_Stage:16), wa                                  ; F81CCB  f1 f6 12 50
 	ld XIY,0x00f3d353                                    ; F81CCF  45 53 d3 f3 00
 	call T_DLB_Handler_Decimal_2                                        ; F81CD4  1d 04 18 f4
 .LF81CD8:
@@ -5302,7 +5302,7 @@ Paint_StepRecordTrackClrMeas:
 	jr .LF81D0A                                          ; F81CF7  68 11
 .LF81CF9:
 	ld wa, (0x0f60:16)                                 ; F81CF9  d1 60 0f 20
-	ld (0x12f8:16), wa                                  ; F81CFD  f1 f8 12 50
+	ld (DisplayListB_Stage+2:16), wa                                  ; F81CFD  f1 f8 12 50
 	ld XIY,0x00f3d35d                                    ; F81D01  45 5d d3 f3 00
 	call T_DLB_Handler_Decimal_2                                        ; F81D06  1d 04 18 f4
 .LF81D0A:
@@ -5317,7 +5317,7 @@ Paint_StepRecordTrackClrMeas:
 	jr .LF81D3C                                          ; F81D29  68 11
 .LF81D2B:
 	ld wa, (0x0f62:16)                                 ; F81D2B  d1 62 0f 20
-	ld (0x12fa:16), wa                                  ; F81D2F  f1 fa 12 50
+	ld (DisplayListB_Stage+4:16), wa                                  ; F81D2F  f1 fa 12 50
 	ld XIY,0x00f3d367                                    ; F81D33  45 67 d3 f3 00
 	call T_DLB_Handler_Decimal_2                                        ; F81D38  1d 04 18 f4
 .LF81D3C:
@@ -5481,7 +5481,7 @@ sub_F81E79:   ; entry: named by 1 `ld` operand, first at 0xF81E42
 	jr nz, .LF81EB9                                      ; F81EA2  6e 15
 	pushw wa                                             ; F81EA4  28
 	ld a, (0x1009:16)                                   ; F81EA5  c1 09 10 21
-	ld (0x1300:16), a                                   ; F81EA9  f1 00 13 41
+	ld (DisplayListB_Stage+10:16), a                                   ; F81EA9  f1 00 13 41
 	popw wa                                              ; F81EAD  48
 	ld XIY,Data_F3DAA2                                   ; F81EAE  45 a2 da f3 00
 	call T_DLB_Handler_Array8                                        ; F81EB3  1d 1c 18 f4
@@ -5493,7 +5493,7 @@ sub_F81E79:   ; entry: named by 1 `ld` operand, first at 0xF81E42
 	m_cp_mi8 MB16, 0x12a7, 0x00                          ; F81EBD  c1 a7 12 3f 00
 	jr z, .LF81EEE                                       ; F81EC2  66 2a
 	ld a, (0x12a7:16)                                   ; F81EC4  c1 a7 12 21
-	ld (0x12fe:16), a                                   ; F81EC8  f1 fe 12 41
+	ld (DisplayListB_Stage+8:16), a                                   ; F81EC8  f1 fe 12 41
 	ld XIY,Data_F3DAED                                   ; F81ECC  45 ed da f3 00
 	call T_DLB_Handler_Array8                                        ; F81ED1  1d 1c 18 f4
 	jr .LF81EEE                                          ; F81ED5  68 17
@@ -5502,7 +5502,7 @@ sub_F81E79:   ; entry: named by 1 `ld` operand, first at 0xF81E42
 	jr z, .LF81EBD                                       ; F81ED9  66 e2
 	pushw wa                                             ; F81EDB  28
 	ld a, (0x106c:16)                                   ; F81EDC  c1 6c 10 21
-	ld (0x1303:16), a                                   ; F81EE0  f1 03 13 41
+	ld (DisplayListB_Stage+13:16), a                                   ; F81EE0  f1 03 13 41
 	popw wa                                              ; F81EE4  48
 	ld XIY,Data_F3DA77                                   ; F81EE5  45 77 da f3 00
 	call T_DLB_Handler_Array8                                        ; F81EEA  1d 1c 18 f4
@@ -171193,7 +171193,7 @@ Paint_DrumEditPartSelect:
 ; ---------------------------------------------------------------------
 sub_FE83DC:
 	ld XIY,0x00603422                                    ; FE83DC  45 22 34 60 00
-	ld XIX,0x000012f6                                    ; FE83E1  44 f6 12 00 00
+	ld XIX,DisplayListB_Stage                                    ; FE83E1  44 f6 12 00 00
 	ld c, 0x10:opc                                          ; FE83E6  23 10
 .LFE83E8:
 	ld A,(XIY)                                           ; FE83E8  85 21
