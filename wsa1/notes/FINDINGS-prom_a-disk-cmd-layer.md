@@ -96,6 +96,8 @@ groups, and neither can be named honestly yet:
    whose *purpose* the source does not state. `FINDINGS-prom_a-portb-and-blockdev-entry.md`
    §1 explicitly declines to say what the Port B bit-2 pulse even does — so a
    name like "reset" would be a guess, not a reading.
+   [Named 2026-10-03: `(0x21E7)` is `Disk_Flags` in `wsa1/include/wsa1_ram.inc` -- only its
+   bit 6, the ready flag, is established; 91 operands.]
 
 ### The control that makes the refusal a measurement, not a mood
 

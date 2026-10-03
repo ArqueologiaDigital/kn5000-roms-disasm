@@ -211,6 +211,7 @@ entries — which is exactly what the record at `0xF3D38A` does with `BC = 30` a
   in work DRAM, cursor `(0x1088)`, refilled by `InputStream_Refill`
   (`0xF765D4`) which leaves prom_b through slot `T_F425A8` to prom_a
   `0xFE1C3A`. The floppy is the obvious source and is **not** asserted here.
+  [Named 2026-10-03: the cursor `(0x1088)` is `InputStream_Cursor`, `wsa1/include/wsa1_ram.inc`.]
 
 For the driver this makes the `uPD72070` TODO concrete: a floppy image for this
 machine should contain ordinary `.MID` files, so an implemented FDC is testable

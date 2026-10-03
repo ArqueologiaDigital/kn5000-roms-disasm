@@ -158,6 +158,9 @@ That matters to the driver: MAME's unbound port read returns 0, so an emulated
 machine takes the `(0xC4) == 2` branch of every test below without anyone having
 decided that is the right variant.
 
+**Named in the source (2026-10-03):** `(0xC4)` is `Variant_Flag` (`wsa1/include/wsa1_ram.inc`),
+102 operands; the chords' change-mask cells are `Panel_SwitchShadow+N` (FINDINGS-prom_b-sc1-link.md).
+
 ---
 
 ## 4. ★★ The three power-on chords, both variants

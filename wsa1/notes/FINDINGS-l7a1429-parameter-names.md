@@ -176,6 +176,8 @@ of arm 4, with no indirection in between.** All of those bytes are asserted by
 
 ### 2c. The CPU 1 sender, and the element bits — GRADE PROVEN
 
+[Named 2026-10-03: `(0x2250)` is `UI_PartIndex` in `wsa1/include/wsa1_ram.inc`, 127 operands.]
+
 prom_a `sub_FD616A` (`0xFD616A`) builds the six bytes — byte[0] `0x88`, byte[1]
 the part index from `(0x2250)`, byte[2] the **parameter**, byte[3] `0x01`,
 byte[4] the **value**, byte[5] a mask — and `sub_FD6917` (`0xFD6917`) ORs the arm

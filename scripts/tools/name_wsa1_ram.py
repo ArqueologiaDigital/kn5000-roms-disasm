@@ -7,10 +7,11 @@ QUESTION THIS ANSWERS / JOB IT DOES
   wsa1/notes FINDINGS table establishes what an address holds -- with the routine or service that
   establishes it -- the address gets a name in wsa1/include/wsa1_ram.inc (generated here from GROUPS:
   the LCD drawing state, the inter-processor link block, prom_b's field-blink control block, the
-  UI request / screen state, the block store),
+  UI request / screen state, the block store, the SC1 panel link and the switch shadow, the tick
+  counter, the model-variant flag, the disk flags, the part index),
   and the memory operands and the macro address arguments that spell it become the name.
   Only memory operands `(N)` / `(N:16)` / `(N:24)`, the address argument of the m_* macros
-  (`MB16|MW16|MD16|MB24|MW24|MD24, N`), the last argument of the memory-to-memory macros
+  (`MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24, N`), the last argument of the memory-to-memory macros
   (m_ld_mm16 / m_ldw_mm16 / m_ld_m16m: the other 16-bit address) and 24-bit immediates (`ld XIY,0x006007db`: at that width
   only an address) change; a 16-bit immediate equal to the number may be a value, and data
   (`.byte` / `.short`) is left alone.  Comments keep the numbers -- the WSA1 tools read
@@ -103,6 +104,7 @@ GROUPS = [
         0x2661: ("Value_AsciiDigits", "three ASCII digits, the output of prom_a's Value_ToAsciiDigits3", "FINDINGS-prom_b-for-the-mame-driver.md"),
         0x2662: ("Value_AsciiDigits+1", "", ""),
         0x2663: ("Value_AsciiDigits+2", "", ""),
+        0x1088: ("InputStream_Cursor", "cursor into the 1,024-byte input window at 0x60A700-0x60AAFF", "InputStream_Refill refills the window"),
         0x2880: ("UI_StatusCode", "a status/error byte: eleven literal values; the block store's error table feeds it", "song-store.md; f6d002-module.md"),
     }),
     ("wsa1/notes/FINDINGS-prom_b-block-store.md", "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table", {
@@ -112,15 +114,51 @@ GROUPS = [
         0x126E: ("BStore_CursorBlockAddr", "the cursor's block address (0x617800 + (n-1)*0x100)", "BStore_SeekBlock"),
         0x12A2: ("BStore_AllocHeapBase", "the allocator's own copy of the heap base", "BStore_LatchHeapBase"),
         0x345C: ("BStore_CursorBlock", "the cursor's 1-based block number", "the block-store cursor section"),
+        0x360A: ("BStore_CurrentBank", "the current bank, 0..9 (prom_a refuses to step outside); bank n lives at 0x610000 + n*0xC00", "0xF8143F cp A,0 / 0xF814D2 cp A,0x09"),
         0x3604: ("BStore_HeapBase", "the heap base, 0x00617800", "BStore_SeekBlock and its two inverses"),
         0x3608: ("BStore_BlockCount", "how many blocks BStore_FreeList_Init threads onto the free list", "BStore_FreeList_Init"),
         0x6034B8: ("BStore_FreeHead", "head of the free list; 0xFFFF = empty", "BStore_AllocBlock"),
         0x6034BA: ("BStore_FreeCount", "number of blocks on the free list", "BStore_FreeChain"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-sc1-link.md", "The RAM, and why every extent is exact; with prom_b's SC1 module header (THE RAM STATE)", {
+        0x0080: ("Tick_Count", "the tick counter INTT1_Tick increments (488.28 Hz)", "INTT1_Tick; prom_a's own header"),
+        0x2A80: ("SC1_State", "state; a byte offset into SC1_StateTable, stepped by 4", "inc 4,(0x2A80) / dec 4,(0x2A80)"),
+        0x2A81: ("SC1_RxBytesExpected", "bytes still expected in the message being received", "SC1 receive path"),
+        0x2A82: ("SC1_BusyFlags", "bit 0 rx active, bit 1 tx active, bit 2 SC1_Service_SetBit2/ClearBit2, bit 4 tested once", "SC1 module header"),
+        0x2A83: ("SC1_ConfigSelector", "compared against 1, 2 and 3 in SC1_ConfigurePort only", "SC1_ConfigurePort"),
+        0x2A84: ("SC1_ErrorBits", "sticky error/event bits: 0 rx ring full, 1 tx aborted, 2 abort, 3 decoder gave up, 6 INT6 while busy, 7 impossible state", "SC1 module header"),
+        0x2A85: ("SC1_StatusResult", "result byte of SC1_Cmd_E0_ReadStatus", "SC1_Cmd_E0_ReadStatus"),
+        0x2A86: ("SC1_P8CR_Shadow", "shadow of P8CR, which this driver only writes from here", "every write to 0x1A is ld A,(shadow)"),
+        0x2A87: ("SC1_P8FC_Shadow", "shadow of P8FC, which this driver only writes from here", "every write to 0x1B is ld A,(shadow)"),
+        0x2A88: ("SC1_LastInbound", "the last three bytes handed to the inbound queue", "SC1_RxOp0_ThreeByte and SC1_RxOp2"),
+        0x2A89: ("SC1_LastInbound+1", "", ""),
+        0x2A8A: ("SC1_LastInbound+2", "", ""),
+        0x2A8B: ("SC1_TxDrainRetries", "retry counter of SC1_WaitTxDrain, 0xC8 = 200", "SC1_WaitTxDrain"),
+        0x2A8E: ("SC1_TickSnapshot", "snapshot of Tick_Count taken by the three tick waits", "the tick waits"),
+        0x2A90: ("SC1_RxReadIndex", "rx ring read index", "SC1 module header"),
+        0x2A92: ("SC1_RxWriteIndex", "rx ring write index", "SC1 module header"),
+        0x2A94: ("SC1_RxRing", "rx ring, 76 bytes (0x4C, the modulus of SC1_RxRing_Next)", "abuts 0x2AE0"),
+        0x2AE0: ("SC1_TxReadIndex", "tx ring read index", "SC1 module header"),
+        0x2AE2: ("SC1_TxWriteIndex", "tx ring write index", "SC1 module header"),
+        0x2AE4: ("SC1_TxRing", "tx ring, 60 bytes (0x3C, the modulus of SC1_TxRing_Next)", "abuts 0x2B20"),
+        0x2B20: ("Panel_SwitchShadow", "the debounced switch-state shadow: one byte per switch-matrix column, index 0..0x1F", "round 10: wires 0xC0-0xCA index 0x10 + (wire & 0x0F)"),
+        0x2B40: ("SC1_InQueue", "inbound queue: 10-byte descriptor + 86 bytes", "SC1_ConfigurePort writes the descriptor"),
+        0x2BA0: ("SC1_OutQueue", "outbound queue: the same shape", "SC1_ConfigurePort"),
+        **{0x2B20 + k: ("Panel_SwitchShadow+0x%02x" % k, "", "") for k in range(1, 32)},
+    }),
+    ("wsa1/notes/FINDINGS-prom_a-boot-and-version-screen.md", "3. The model-variant flag (0x00C4) comes from PORT B BIT 0", {
+        0x00C4: ("Variant_Flag", "the model variant: 1 when port B bit 0 reads high, 2 when low; set once on reset", "Variant_SetFromPB0"),
+    }),
+    ("wsa1/notes/FINDINGS-prom_a-disk-cmd-layer.md", "File-system workers", {
+        0x21E7: ("Disk_Flags", "bit 6: the ready flag, set and cleared from the result byte (0x1735); other bits not established", "sub_FE08BD; Disk_FormatSelectedMedia tests and C,0x40"),
+    }),
+    ("wsa1/notes/FINDINGS-l7a1429-parameter-names.md", "2c. The CPU 1 sender, and the element bits -- GRADE PROVEN", {
+        0x2250: ("UI_PartIndex", "the part index the CPU 1 parameter sender puts in byte[1]", "sub_FD616A"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')
-MAC = re.compile(r'\b(MB16|MW16|MD16|MB24|MW24|MD24),(\s*)(0x[0-9a-fA-F]+|\d+)\b')
+MAC = re.compile(r'\b(MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24),(\s*)(0x[0-9a-fA-F]+|\d+)\b')
 # memory-to-memory macros: the LAST argument is the other 16-bit memory address
 MM = re.compile(r'^(\s*m_(?:ld_mm16|ldw_mm16|ld_m16m)\s+[^,]+,[^,]+,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$')
 # an immediate is renamed when it is 24-bit (>= 0x10000: there it can only be an address), or when
@@ -164,7 +202,13 @@ def main():
                 if not code.strip() or code.strip().startswith("."):
                     continue
                 for m in re.finditer(r'(0x[0-9a-fA-F]+|\b\d+\b)', code):
-                    if int(m.group(1), 0) in NAMES:
+                    v = int(m.group(1), 0)
+                    # a named address >= 0x100 is flagged anywhere; below 0x100 (0x80, 0xC4) the
+                    # number is a common VALUE, so only in an address position: `(N...)` or the
+                    # address argument of an 8/16/24-bit macro kind
+                    addr_pos = code[:m.start()].rstrip().endswith("(") or \
+                        re.search(r'\bM[BWD](?:8|16|24),\s*$', code[:m.start()])
+                    if v in NAMES and (v >= 0x100 or addr_pos):
                         left += 1
                         print("%s:%d: %s" % (os.path.relpath(p, REPO), k + 1, code.strip()))
         print("%d numeric spellings of named addresses left" % left)

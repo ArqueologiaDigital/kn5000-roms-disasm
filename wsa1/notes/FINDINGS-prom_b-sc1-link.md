@@ -157,6 +157,14 @@ And the queue descriptor is self-checking: `SC1_ConfigurePort` writes
 low = `0x0A`, high = `0x5F`, count = `0x56`, and `0x5F - 0x0A + 1 = 0x56`, so
 `+8` is the **free** count and the indices are offsets from the descriptor base.
 
+**Named in the source (2026-10-03).** This RAM is symbols in `wsa1/include/wsa1_ram.inc`, taken
+from the per-offset table in prom_b's SC1 module header: `SC1_State`, `SC1_RxBytesExpected`,
+`SC1_BusyFlags`, `SC1_ConfigSelector`, `SC1_ErrorBits`, `SC1_StatusResult`, the `SC1_P8CR_Shadow` /
+`SC1_P8FC_Shadow` pair, `SC1_LastInbound` (+1, +2), `SC1_TxDrainRetries`, `SC1_TickSnapshot`, the
+four ring indices, `SC1_RxRing` / `SC1_TxRing`, `SC1_InQueue` / `SC1_OutQueue`, and
+`Panel_SwitchShadow` (0x2B20; prom_a's direct reads are `Panel_SwitchShadow+0x10` ...);
+`(0x80)` is `Tick_Count`.  274 operands (`python3 scripts/tools/name_wsa1_ram_count.py`).
+
 ## Timing
 
 `(0x80)` is the tick counter `INTT1_Tick` increments (prom_a's own header says

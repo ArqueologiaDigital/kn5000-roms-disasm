@@ -108,6 +108,7 @@ Two things make this the interesting part:
   `0xF814D2 cp A,0x09` refuses to increment past 9. So **ten banks**, and
   `0x610000 + 10*0xC00 = 0x617800` — the heap base. Two independently derived
   constants abut with **no slack**.
+  [Named 2026-10-03: `(0x360A)` is `BStore_CurrentBank`, `wsa1/include/wsa1_ram.inc`.]
 
 ⚠ That abutment is *consistency between two derivations*, not proof that the two
 regions were laid out as one object. It would survive a coincidence of 12 bits.

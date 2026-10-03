@@ -174,7 +174,8 @@ check(ROM[0xFF42A1 - BASE:0xFF42B1 - BASE] == b"U1 -U2 -UD1-UD2-",
       'Text_FF42A1 is "U1 -U2 -UD1-UD2-", four four-character labels')
 
 print("\n7. the module-variant site the emulation notes already knew")
-check(has(0xFF42EE, "0xc4"),
+# (0xC4) is spelled Variant_Flag since 2026-10-03 (scripts/tools/name_wsa1_ram.py)
+check(has(0xFF42EE, "Variant_Flag"),
       "0xFF42EE tests the model-variant strap (0x0000C4) -- this module owns "
       "the screen whose two display lists that strap chooses between")
 for a in (0xF580B0, 0xF58127, 0xF58162, 0xF58014):

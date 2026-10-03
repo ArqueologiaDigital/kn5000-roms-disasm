@@ -139,8 +139,9 @@ def portb_census():
                  "%.0f" % (arg2 * TICK_MS) if arg2 else "-"))
     check("0xFE08C8's pulse calls Delay_150Ticks",
           "%06X" % calr_target(0xFE08CB), "%06X" % DELAY_150)
+    # (0x21E7) is spelled Disk_Flags since 2026-10-03 (scripts/tools/name_wsa1_ram.py)
     check("nothing waits after the 0xFE08CE clear (next insn)",
-          src_line(0xFE08D1).split(";")[0].strip(), "m_res 6, MD16, 0x21e7")
+          src_line(0xFE08D1).split(";")[0].strip(), "m_res 6, MD16, Disk_Flags")
     check("0xFE2F3A's pulse pushes", pushed_word(0xFE2F3D), 2)
     check("...and calls Delay_Ticks",
           "%06X" % calr_target(0xFE2F40), "%06X" % DELAY_TICKS)

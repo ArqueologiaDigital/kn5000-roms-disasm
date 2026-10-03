@@ -58,6 +58,7 @@
 
 ; ---- wsa1/notes/FINDINGS-prom_b-for-the-mame-driver.md -- "Related RAM the driver may want in a comment; with FINDINGS-prom_b-song-store.md and FINDINGS-prom_a-panel-control-map.md"
 	.equ UI_Screen0E_SubScreen,	0x0ef5	; which sub-screen of screen 0x0E is showing -- FINDINGS-prom_b-for-the-mame-driver.md
+	.equ InputStream_Cursor,	0x1088	; cursor into the 1,024-byte input window at 0x60A700-0x60AAFF -- InputStream_Refill refills the window
 	.equ UI_Request,		0x2070	; 16-bit message code; high byte 0x80 = go to the screen id in the low byte -- the panel row handlers; song-store.md: `(0x2070)` takes a 16-bit message code
 	.equ UI_Request_Hi,		0x2071	; UI_Request's high byte: 0x80 with a screen id -- panel-control-map.md: the screen-request pair
 	.equ UI_RequestBits,		0x2075	; request bits, set by `or` and cleared by `and`; several owners (bit 1 = blink enable) -- song-store.md; field-blink.md
@@ -74,5 +75,38 @@
 	.equ BStore_CursorBlock,	0x345c	; the cursor's 1-based block number -- the block-store cursor section
 	.equ BStore_HeapBase,		0x3604	; the heap base, 0x00617800 -- BStore_SeekBlock and its two inverses
 	.equ BStore_BlockCount,		0x3608	; how many blocks BStore_FreeList_Init threads onto the free list -- BStore_FreeList_Init
+	.equ BStore_CurrentBank,	0x360a	; the current bank, 0..9 (prom_a refuses to step outside); bank n lives at 0x610000 + n*0xC00 -- 0xF8143F cp A,0 / 0xF814D2 cp A,0x09
 	.equ BStore_FreeHead,		0x6034b8	; head of the free list; 0xFFFF = empty -- BStore_AllocBlock
 	.equ BStore_FreeCount,		0x6034ba	; number of blocks on the free list -- BStore_FreeChain
+
+; ---- wsa1/notes/FINDINGS-prom_b-sc1-link.md -- "The RAM, and why every extent is exact; with prom_b's SC1 module header (THE RAM STATE)"
+	.equ Tick_Count,		0x0080	; the tick counter INTT1_Tick increments (488.28 Hz) -- INTT1_Tick; prom_a's own header
+	.equ SC1_State,			0x2a80	; state; a byte offset into SC1_StateTable, stepped by 4 -- inc 4,(0x2A80) / dec 4,(0x2A80)
+	.equ SC1_RxBytesExpected,	0x2a81	; bytes still expected in the message being received -- SC1 receive path
+	.equ SC1_BusyFlags,		0x2a82	; bit 0 rx active, bit 1 tx active, bit 2 SC1_Service_SetBit2/ClearBit2, bit 4 tested once -- SC1 module header
+	.equ SC1_ConfigSelector,	0x2a83	; compared against 1, 2 and 3 in SC1_ConfigurePort only -- SC1_ConfigurePort
+	.equ SC1_ErrorBits,		0x2a84	; sticky error/event bits: 0 rx ring full, 1 tx aborted, 2 abort, 3 decoder gave up, 6 INT6 while busy, 7 impossible state -- SC1 module header
+	.equ SC1_StatusResult,		0x2a85	; result byte of SC1_Cmd_E0_ReadStatus -- SC1_Cmd_E0_ReadStatus
+	.equ SC1_P8CR_Shadow,		0x2a86	; shadow of P8CR, which this driver only writes from here -- every write to 0x1A is ld A,(shadow)
+	.equ SC1_P8FC_Shadow,		0x2a87	; shadow of P8FC, which this driver only writes from here -- every write to 0x1B is ld A,(shadow)
+	.equ SC1_LastInbound,		0x2a88	; the last three bytes handed to the inbound queue -- SC1_RxOp0_ThreeByte and SC1_RxOp2
+	.equ SC1_TxDrainRetries,	0x2a8b	; retry counter of SC1_WaitTxDrain, 0xC8 = 200 -- SC1_WaitTxDrain
+	.equ SC1_TickSnapshot,		0x2a8e	; snapshot of Tick_Count taken by the three tick waits -- the tick waits
+	.equ SC1_RxReadIndex,		0x2a90	; rx ring read index -- SC1 module header
+	.equ SC1_RxWriteIndex,		0x2a92	; rx ring write index -- SC1 module header
+	.equ SC1_RxRing,		0x2a94	; rx ring, 76 bytes (0x4C, the modulus of SC1_RxRing_Next) -- abuts 0x2AE0
+	.equ SC1_TxReadIndex,		0x2ae0	; tx ring read index -- SC1 module header
+	.equ SC1_TxWriteIndex,		0x2ae2	; tx ring write index -- SC1 module header
+	.equ SC1_TxRing,		0x2ae4	; tx ring, 60 bytes (0x3C, the modulus of SC1_TxRing_Next) -- abuts 0x2B20
+	.equ Panel_SwitchShadow,	0x2b20	; the debounced switch-state shadow: one byte per switch-matrix column, index 0..0x1F -- round 10: wires 0xC0-0xCA index 0x10 + (wire & 0x0F)
+	.equ SC1_InQueue,		0x2b40	; inbound queue: 10-byte descriptor + 86 bytes -- SC1_ConfigurePort writes the descriptor
+	.equ SC1_OutQueue,		0x2ba0	; outbound queue: the same shape -- SC1_ConfigurePort
+
+; ---- wsa1/notes/FINDINGS-prom_a-boot-and-version-screen.md -- "3. The model-variant flag (0x00C4) comes from PORT B BIT 0"
+	.equ Variant_Flag,		0x00c4	; the model variant: 1 when port B bit 0 reads high, 2 when low; set once on reset -- Variant_SetFromPB0
+
+; ---- wsa1/notes/FINDINGS-prom_a-disk-cmd-layer.md -- "File-system workers"
+	.equ Disk_Flags,		0x21e7	; bit 6: the ready flag, set and cleared from the result byte (0x1735); other bits not established -- sub_FE08BD; Disk_FormatSelectedMedia tests and C,0x40
+
+; ---- wsa1/notes/FINDINGS-l7a1429-parameter-names.md -- "2c. The CPU 1 sender, and the element bits -- GRADE PROVEN"
+	.equ UI_PartIndex,		0x2250	; the part index the CPU 1 parameter sender puts in byte[1] -- sub_FD616A
