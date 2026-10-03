@@ -143,7 +143,14 @@ class Map:
         try:
             return int(tok, 0)
         except ValueError:
-            return self.sym[tok] if tok in self.sym else self.abssym.get(tok)
+            pass
+        # `Label + 0xc` / `Label - 2`: a symbolizer anchors a mid-object address on the nearest
+        # label (factory_test's Viewable table is `String_CONSOLE + 0xc`)
+        m = re.match(r'^([A-Za-z_.$][\w.$]*)\s*([+-])\s*(0x[0-9a-fA-F]+|\d+)$', tok)
+        if m:
+            base = self._val(m.group(1))
+            return None if base is None else base + (1 if m.group(2) == '+' else -1) * int(m.group(3), 0)
+        return self.sym[tok] if tok in self.sym else self.abssym.get(tok)
 
     def _parse(self):
         """Both spellings: the RegObjTabl macro (v10/v9), and the same code
@@ -151,8 +158,12 @@ class Map:
             ld XWA,<class> / lda xwa,(<proc>:24) / ldw (XBC+0x08),<count> /
             lda xwa,(<table>:24) / ld (XBC+0x0a),XWA / ldw WA,<slot> /
             call RegisterObjectTable"""
-        rx = re.compile(r'^\s*RegObjTabl\s+([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,;\s]+)')
-        rxe = re.compile(r'^\s*RegObjTable\s+([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,;\s]+)')
+        # factory_test/test_init.s has its own copies, RegObjTablHama (count immediate) and
+        # RegObjTableHama (count read from an address); without them the FD-test tables -- Viewable
+        # slots 0x7F and 0xFC, ResName 0x37F / 0x3FC -- were invisible and their view ids looked like
+        # ROM addresses (`ld xwa, 0x00fc0001` before ApPostEvent; 2026-10-03)
+        rx = re.compile(r'^\s*RegObjTabl(?:Hama)?\s+([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,;\s]+)')
+        rxe = re.compile(r'^\s*RegObjTable(?:Hama)?\s+([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,;\s]+)')
         for f in sorted(glob.glob(os.path.join(ROOT, self.v, 'maincpu', '**', '*.s'), recursive=True)):
             init = None
             window = []
@@ -197,16 +208,17 @@ class Map:
                 cls = self._val(m.group(1))
             m = re.match(r'^lda\s+xwa,\s*\(([^:)]+):24\)$', t, re.I)
             if m and j + 1 < len(txt):
-                nxt = txt[j + 1].replace(' ', '').lower()
-                if nxt == 'ld(xbc+0x04),xwa':
+                nxt = re.sub(r'\s', '', txt[j + 1]).lower()      # v7 separates with a TAB
+                # (XBC+n) in the RegObjTabl expansion; (xsp+n) in v7's expanded RegObjTabl[e]Hama
+                if nxt in ('ld(xbc+0x04),xwa', 'ld(xsp+4),xwa'):
                     proc = self._val(m.group(1))
-                elif nxt == 'ld(xbc+0x0a),xwa':
+                elif nxt in ('ld(xbc+0x0a),xwa', 'ld(xsp+10),xwa'):
                     tab = self._val(m.group(1))
-            m = re.match(r'^ldw\s+\(XBC\+0x08\),\s*(\S+)$', t, re.I)
+            m = re.match(r'^ldw\s+\((?:XBC\+0x08|xsp\+8)\),\s*(\S+)$', t, re.I)
             if m:
                 cnt = self._val(m.group(1))
             m = re.match(r'^ld\s+wa,\s*\(([^:)]+):24\)$', t, re.I)
-            if m and j + 1 < len(txt) and txt[j + 1].replace(' ', '').lower() == 'ld(xbc+0x08),wa':
+            if m and j + 1 < len(txt) and re.sub(r'\s', '', txt[j + 1]).lower() in ('ld(xbc+0x08),wa', 'ld(xsp+8),wa'):
                 a = self._val(m.group(1))
                 cnt = self.u16(a) if a is not None and self.inrom(a) else None
                 self._count_at = a

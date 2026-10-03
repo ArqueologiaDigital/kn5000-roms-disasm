@@ -239,14 +239,14 @@ InitializeHama:
 	push	xwa
 	ld	xwa, 127
 	ld	xbc, 21561344
-	ld	xde, 16515072
+	ld	xde, NAKA_VIEW_FDD_TEST
 	call	RegisterTitle
 	pushw 9
 	lda	xwa, (InitializeHama_Str_TT_EXTAPR:24)
 	push	xwa
 	ld	xwa, 252
 	ld	xbc, 21561344
-	ld	xde, 16515072
+	ld	xde, NAKA_VIEW_FDD_TEST
 	call	RegisterTitle
 	lda	xsp, (xsp+14)
 	ret
@@ -434,17 +434,17 @@ RunTestCounters_Display:
 	calr FDTest_PrintDiag
 	ld de, (0x03dcfe:24)
 	exts xde
-	ld xwa, RunTestCounters_Display_Code
+	ld xwa, NAKA_VIEW_TOTAL
 	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd00:24)
 	exts xde
-	ld xwa, RunTestCounters_Display_Code_2
+	ld xwa, NAKA_VIEW_OK
 	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd02:24)
 	exts xde
-	ld xwa, 0x00fc0002
+	ld xwa, NAKA_VIEW_NG
 	ld xbc, EVT_PARA_DRAW
 	jp ApPostEvent
 

@@ -365,7 +365,6 @@ RVari_SelectO_SecondItem_Draw:
 	divs wa, 0x4
 	extz wa
 	div a, 0xa
-RunTestCounters_Display_Code:
 	ld a, w
 	inc 1, a
 	extz wa

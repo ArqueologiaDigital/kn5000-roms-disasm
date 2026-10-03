@@ -111,8 +111,8 @@ InitializeHama:
 	RegObjTablHama NAKA_CLASS_Viewable, ViewableProc, 0x1a, String_CONSOLE + 0xc, 0xfc
 	RegObjTablHama NAKA_CLASS_ResName, ResNameProc, 0x1a, FDTest_Config_Table, 0x3fc
 
-	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0xa, 0x7f, 0x1490000, 0xfc0000
-	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0x14, 0xfc, 0x1490000, 0xfc0000
+	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0xa, 0x7f, 0x1490000, NAKA_VIEW_FDD_TEST
+	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0x14, 0xfc, 0x1490000, NAKA_VIEW_FDD_TEST
 
 	lda xsp, (xsp + 14)
 	ret
@@ -301,17 +301,17 @@ RunTestCounters_Display:
 	calr FDTest_PrintDiag
 	ld de, (0x03dcfe:24)
 	exts xde
-	ld xwa, 0x00fc0001
+	ld xwa, NAKA_VIEW_TOTAL
 	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd00:24)
 	exts xde
-	ld xwa, 0x00fc0003
+	ld xwa, NAKA_VIEW_OK
 	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd02:24)
 	exts xde
-	ld xwa, RunTestCounters_Display_Code
+	ld xwa, NAKA_VIEW_NG
 	ld xbc, EVT_PARA_DRAW
 	jp ApPostEvent
 

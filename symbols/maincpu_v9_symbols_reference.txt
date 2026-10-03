@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,594
-#   semantic names ........... 50,736 (98.3%)
+#   symbols .................. 51,593
+#   semantic names ........... 50,735 (98.3%)
 #   positional names ......... 858
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -44631,7 +44631,6 @@ RVari_SelectO_Item_Draw 00FBFF0B
 RVari_SelectO_SecondItem_Setup 00FBFF9D
 RVari_SelectO_SecondItem_NotFirst 00FBFFD2
 RVari_SelectO_SecondItem_Draw 00FBFFE0
-RunTestCounters_Display_Code 00FC0002
 RVari_SelectO_SecondBtn_NotFirst 00FC0079
 RVari_SelectO_SecondBtn_Draw 00FC0087
 RVari_Select_TypeNotE 00FC00AE

@@ -1042,9 +1042,7 @@ RVari_ConfirmE_Loop:
 	exts XBC
 	divs BC,0x0004
 	ld BC,QBC
-RunTestCounters_Display_Code:
 	add C,E
-RunTestCounters_Display_Code_2:
 	extz BC
 	call AccVoice_DispatchWithChannel
 	extz XHL

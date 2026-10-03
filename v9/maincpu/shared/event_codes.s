@@ -2107,5 +2107,9 @@
 .equ NAKA_VIEW_TEST56, 0xf80010	; view "TEST56": Viewable slot 0xF8 entry 16
 .equ NAKA_VIEW_TEST6, 0xf90000	; view "TEST6": Viewable slot 0xF9 entry 0
 .equ NAKA_VIEW_EXT, 0xfb0000	; view "EXT": Viewable slot 0xFB entry 0
+.equ NAKA_VIEW_FDD_TEST, 0xfc0000	; view "FDD_TEST": Viewable slot 0xFC entry 0
+.equ NAKA_VIEW_TOTAL, 0xfc0001	; view "TOTAL": Viewable slot 0xFC entry 1
+.equ NAKA_VIEW_NG, 0xfc0002	; view "NG": Viewable slot 0xFC entry 2
+.equ NAKA_VIEW_OK, 0xfc0003	; view "OK": Viewable slot 0xFC entry 3
 .equ NAKA_VIEW_ftdemo01, 0xfd0000	; view "ftdemo01": Viewable slot 0xFD entry 0
 .equ NAKA_VIEW_CheckTitle, 0xff0000	; view "CheckTitle": Viewable slot 0xFF entry 0

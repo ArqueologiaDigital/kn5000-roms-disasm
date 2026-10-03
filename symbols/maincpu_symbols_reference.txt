@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,603
-#   semantic names ........... 50,754 (98.4%)
+#   symbols .................. 51,602
+#   semantic names ........... 50,753 (98.4%)
 #   positional names ......... 849
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -44652,7 +44652,6 @@ RVari_SelectO_Item_Draw 00FBFF0B
 RVari_SelectO_SecondItem_Setup 00FBFF9D
 RVari_SelectO_SecondItem_NotFirst 00FBFFD2
 RVari_SelectO_SecondItem_Draw 00FBFFE0
-RunTestCounters_Display_Code 00FC0002
 RVari_SelectO_SecondBtn_NotFirst 00FC0079
 RVari_SelectO_SecondBtn_Draw 00FC0087
 RVari_Select_TypeNotE 00FC00AE

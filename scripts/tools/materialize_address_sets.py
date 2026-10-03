@@ -81,7 +81,12 @@ def main():
             if m:
                 col0.add(m.group(1))
             m = ABSSET.match(l)
-            if m and lo <= int(m.group(2), 16) <= hi:
+            # NAKA_VIEW_* are object ids 0x00SSnnnn, not addresses: for a Viewable slot SS >= 0xE0
+            # they only LOOK like ROM addresses (scripts/tools/name_naka_view_ids.py).  Before this
+            # guard (2026-10-03) a dry run over v10's 80 view ids planned 55 new ROM labels, retired
+            # 2 into existing labels and renamed 1 (SendPartDataBlock_Data2 -> NAKA_VIEW_CheckTitle);
+            # --apply would have undone 5ff67996.
+            if m and lo <= int(m.group(2), 16) <= hi and not m.group(1).startswith("NAKA_VIEW_"):
                 sets[m.group(1)] = (int(m.group(2), 16), f)
     # uses: any mention outside its own .set line and outside comments (.s); any mention (.c/.h/.ld)
     uses = collections.Counter()
