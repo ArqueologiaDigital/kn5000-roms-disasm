@@ -28373,7 +28373,7 @@ sub_F0F2DB:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF0F2DE is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F29A_Nop4 after what reaches it
 ;          (was sub_F0F2DE; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -28493,7 +28493,7 @@ sub_F0F315:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF0F32D is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F2F8_Nop0 after what reaches it
 ;          (was sub_F0F32D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -28748,7 +28748,7 @@ sub_F0F3E8:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF0F3EB is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F3AE_Nop4 after what reaches it
 ;          (was sub_F0F3EB; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -29221,7 +29221,7 @@ sub_F0F52E:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF0F535 is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F516_Nop0 after what reaches it
 ;          (was sub_F0F535; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -29355,7 +29355,7 @@ sub_F0F579_Skip:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF0F59E is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F558_Nop4 after what reaches it
 ;          (was sub_F0F59E; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -29977,7 +29977,7 @@ sub_F0F74A:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF0F75A is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F708_Nop4 after what reaches it
 ;          (was sub_F0F75A; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -31958,7 +31958,7 @@ DspEffect_StepCursorValue_Join:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF1071B is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Name: DspEffect_StepU8 -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x01, 0x06, 0x07, 0x08,
 ;          0x09, 0x0A, 0x0D, 0x0E, 0x0F, 0x10, 0x12, 0x13, 0x17, 0x19, 0x1D,
@@ -32072,7 +32072,7 @@ DspEffect_StepU8_Skip5:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF107D0 is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Name: DspEffect_StepS8 -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x0C, 0x11 here;
 ;          DspEffect_StepCursorValue pushes (type, slot) first, so (XIZ+8) is the type and
@@ -32186,7 +32186,7 @@ DspEffect_StepS8_Skip5:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF10885 is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Name: DspEffect_StepU16 -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x14, 0x15, 0x16, 0x18,
 ;          0x1A, 0x1B, 0x1C here; DspEffect_StepCursorValue pushes (type, slot) first, so
@@ -32326,7 +32326,7 @@ DspEffect_StepU16_Skip5:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF10985 is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Name: DspEffect_StepEqFc -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x02, 0x03 here;
 ;          DspEffect_StepCursorValue pushes (type, slot) first, so (XIZ+8) is the type and
@@ -32472,7 +32472,7 @@ DspEffect_StepEqFc_Skip5:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF10A97 is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Name: DspEffect_StepEqQ -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x04 here; DspEffect_StepCursorValue
 ;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
@@ -32617,7 +32617,7 @@ DspEffect_StepEqQ_Skip5:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF10BA9 is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Name: DspEffect_StepEqGain -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x05 here; DspEffect_StepCursorValue
 ;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
@@ -32758,7 +32758,7 @@ DspEffect_StepEqGain_Skip5:
 ;                   this module's three 128-entry tables are NOT of that
 ;                   kind and their targets are emitted as data.  0xF10CAF is
 ;                   an instruction boundary of this transcription, re-
-;                   asserted on every emit.  The name IS the address.
+;                   asserted on every emit.
 ; Name: DspEffect_StepSlowFast -- named 2026-09-25 (lane promb).
 ;          ScreenTable_F131E4 sends value type(s) 0x0B here; DspEffect_StepCursorValue
 ;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
@@ -96975,7 +96975,7 @@ sub_F4842F_Join:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48463 is an instruction boundary.
-;           The name IS the address.
+;
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F4840E_Nop after what reaches it
 ;          (was sub_F48463; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -143722,7 +143722,7 @@ sub_F662F7_Return10:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF665B3 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F65C0D_Nop after what reaches it
 ;          (was sub_F665B3; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -145934,7 +145934,7 @@ sub_F67D6F_Return:
 ; Calls:   T_Value_ToAsciiDigits3_RightJustified T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF67D8C is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Name:    MsgLine_Volume -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 9 characters from the literal at
 ;          0xF67DC6 -- `VOLUME = ` -- into the 30-character on-screen text
@@ -146913,7 +146913,7 @@ sub_F68504_Code_Return:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68574 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F68354_Nop after what reaches it
 ;          (was sub_F68574; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -151460,7 +151460,7 @@ sub_F6A49D_Epilogue:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A4D6 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A344_Nop after what reaches it
 ;          (was sub_F6A4D6; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -151720,7 +151720,7 @@ sub_F6A674_Return:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A6BB is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A67D_Nop after what reaches it
 ;          (was sub_F6A6BB; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -152992,7 +152992,7 @@ sub_F6ADC2_Return:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AF57 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6AE4B_Nop after what reaches it
 ;          (was sub_F6AF57; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -153085,7 +153085,7 @@ sub_F6AF57_Return:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B005 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67430_Nop after what reaches it
 ;          (was sub_F6B005; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -153358,7 +153358,7 @@ sub_F6B134_Skip2:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1D7 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67604_Nop after what reaches it
 ;          (was sub_F6B1D7; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -153372,7 +153372,7 @@ sub_F67604_Nop:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1D9 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67604_Nop2 after what reaches it
 ;          (was sub_F6B1D9; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -153408,7 +153408,7 @@ sub_F6B1DF:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1E8 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F68982_Nop after what reaches it
 ;          (was sub_F6B1E8; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -153421,7 +153421,7 @@ sub_F68982_Nop:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1E9 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A9E3_Nop after what reaches it
 ;          (was sub_F6B1E9; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -153619,7 +153619,7 @@ sub_F6B276_Return:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B2ED is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67434_Nop after what reaches it
 ;          (was sub_F6B2ED; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -156090,7 +156090,7 @@ sub_F6C507_Return:
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C529 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67440_Nop after what reaches it
 ;          (was sub_F6C529; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -156607,7 +156607,7 @@ sub_F6C877_Return:
 ; Calls:   T_F431B0 sub_F6C984 MsgLine_PanKeyShiftTuningBendSens sub_F6C935
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C8F3 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67440_Nop2 after what reaches it
 ;          (was sub_F6C8F3; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -156722,7 +156722,7 @@ sub_F6C984_Epilogue:
 ; Calls:   T_Value_ToSignedAsciiDigits3_RightJustified T_Value_ToAsciiDigits3_RightJustified T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C9C7 is an instruction
-;           boundary.  The name IS the address.
+;           boundary.
 ; Name:    MsgLine_PanKeyShiftTuningBendSens -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 10 characters from entry 0 of the table at
 ;          0xF6CA3B -- `PAN      :` -- into the 30-character on-screen text
@@ -157697,7 +157697,7 @@ Data_F6D002:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D023
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6CFCB_Nop after what reaches it
 ;          (was sub_F6D023; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -158343,7 +158343,7 @@ sub_F6D40C:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D410
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_Control_Cleared -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 7 characters from the literal at
 ;          0xF6D464 -- `CONTROL` -- into the 30-character on-screen text
@@ -158415,7 +158415,7 @@ sub_F6D443:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D447
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_Control -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 7 characters from the literal at
 ;          0xF6D464 -- `CONTROL` -- into the 30-character on-screen text
@@ -158463,7 +158463,7 @@ MsgLine_Control_Cleared_Code:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D46C
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A4D9_Nop after what reaches it
 ;          (was sub_F6D46C; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -158502,7 +158502,7 @@ Data_F6D46D:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D477
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A49D_Nop after what reaches it
 ;          (was sub_F6D477; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -158658,7 +158658,7 @@ MsgLine_TransportState_Plus14:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D4E4
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_Rhythm -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 9 characters from the literal at
 ;          0xF6D46D -- ` RHYTHM  ` -- into the 30-character on-screen text
@@ -158703,7 +158703,7 @@ MsgLine_Rhythm:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D505
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_Tempo -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 25 characters from the literal at
 ;          0xF6D527 -- `  TEMPO  <glyph 0x15>=              ` -- into the 30-character on-screen text
@@ -158768,7 +158768,7 @@ Data_F6D527:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D540
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_Tempo_Repaint -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 25 characters from the literal at
 ;          0xF6D561 -- `  TEMPO  <glyph 0x15>=              ` -- into the 30-character on-screen text
@@ -158854,7 +158854,7 @@ sub_F6D57A:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D57E
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_Blank -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 25 characters from the literal at
 ;          0xF6D59C -- `                         ` -- into the 30-character on-screen text
@@ -158994,7 +158994,7 @@ sub_F6D5E2:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D5F0
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A4D9_Nop2 after what reaches it
 ;          (was sub_F6D5F0; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -159053,7 +159053,7 @@ MsgLine_ClearTail:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D608
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_TransportState_Plus4 -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 8 characters from entry 0 of the table at
 ;          0xF6D66D -- `        ` -- into the 30-character on-screen text
@@ -159107,7 +159107,7 @@ MsgLine_TransportState_Plus4:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D642
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_TransportState_Plus10 -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 8 characters from entry 0 of the table at
 ;          0xF6D66D -- `        ` -- into the 30-character on-screen text
@@ -159664,7 +159664,7 @@ sub_F6D9AE:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D9CB
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_Tempo_F6D9CB -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 26 characters from the literal at
 ;          0xF6D9E2 -- ` TEMPO   <glyph 0x15>=              1` -- into the 30-character on-screen text
@@ -159878,7 +159878,7 @@ sub_F6DA9A:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DAA6
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    Format_ChordName -- named 2026-08-31 for the two tables it indexes,
 ;          in the style of prom_a's Format_HexByte.
 ; Evidence (TABLE): two copies into the caller's XIX --
@@ -160321,7 +160321,7 @@ OctaveNames_Minus2To8:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DDB7
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartVolume -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 7 characters from the literal at
 ;          0xF6DE10 -- `VOLUME=` -- into the 30-character on-screen text
@@ -160427,7 +160427,7 @@ Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DEF7
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartPanpot -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 7 characters from the literal at
 ;          0xF6DF50 -- `PANPOT=` -- into the 30-character on-screen text
@@ -160510,7 +160510,7 @@ Data_F6DF50:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DF57
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartKeyShift -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 10 characters from the literal at
 ;          0xF6DFBA -- `KEY SHIFT=` -- into the 30-character on-screen text
@@ -160596,7 +160596,7 @@ Data_F6DFBA:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DFC4
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartTuning -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 7 characters from the literal at
 ;          0xF6E027 -- `TUNING=` -- into the 30-character on-screen text
@@ -160682,7 +160682,7 @@ Data_F6E027:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E02E
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartBendSens -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 10 characters from the literal at
 ;          0xF6E087 -- `BEND SENS=` -- into the 30-character on-screen text
@@ -160765,7 +160765,7 @@ Data_F6E087:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E091
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartSustain -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 8 characters from the literal at
 ;          0xF6E0EB -- `SUSTAIN ` -- into the 30-character on-screen text
@@ -160857,7 +160857,7 @@ Data_F6E0EB:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E152
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartDspEffect -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 11 characters from the literal at
 ;          0xF6E1A6 -- `DSP EFFECT ` -- into the 30-character on-screen text
@@ -160937,7 +160937,7 @@ Data_F6E1A6:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E1B1
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartEffect -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 7 characters from the literal at
 ;          0xF6E20B -- `EFFECT ` -- into the 30-character on-screen text
@@ -161021,7 +161021,7 @@ Data_F6E20B:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E212
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartEffect1 -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 8 characters from the literal at
 ;          0xF6E259 -- `EFFECT1=` -- into the 30-character on-screen text
@@ -161098,7 +161098,7 @@ Data_F6E259:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E261
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartEffect2 -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 8 characters from the literal at
 ;          0xF6E2AC -- `EFFECT2 ` -- into the 30-character on-screen text
@@ -161177,7 +161177,7 @@ Data_F6E2AC:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E2BA
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartReverb -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 7 characters from the literal at
 ;          0xF6E2FF -- `REVERB=` -- into the 30-character on-screen text
@@ -161252,7 +161252,7 @@ Data_F6E2FF:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E306
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PanelMemory -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 13 characters from the literal at
 ;          0xF6E33F -- `PANEL MEMORY=` -- into the 30-character on-screen text
@@ -161437,7 +161437,7 @@ Data_F6E43E:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E463
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_NoteName -- named 2026-08-31 for the table it indexes.
 ; Evidence (TABLE): `ld L,(0x125a) / and L,0x0f / sla 0x02,HL /
 ;          ld XIY,0x00f6e4b2 / ld WA,(XIY+HL)` and two `ld (XIX),WA` stores put
@@ -161621,7 +161621,7 @@ Text_AccTotalVolBassVolumeDrumsVolumeAccmp1Volume:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E5A4
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6BFF2_Nop after what reaches it
 ;          (was sub_F6E5A4; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -161642,7 +161642,7 @@ sub_F6BFF2_Nop:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E5A5
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartTremolo -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 8 characters from the literal at
 ;          0xF6E5FF -- `TREMOLO ` -- into the 30-character on-screen text
@@ -161724,7 +161724,7 @@ Data_F6E5FF:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E607
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6745C_Nop after what reaches it
 ;          (was sub_F6E607; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -161744,7 +161744,7 @@ sub_F6745C_Nop:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E608
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F6BFF2_Nop2 after what reaches it
 ;          (was sub_F6E608; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -161766,7 +161766,7 @@ sub_F6BFF2_Nop2:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E60B
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67460_Nop after what reaches it
 ;          (was sub_F6E60B; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -161818,7 +161818,7 @@ Text_ExtTabEffectEnDis:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E627
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F67464_Nop after what reaches it
 ;          (was sub_F6E627; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -161841,7 +161841,7 @@ sub_F67464_Nop:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E62A
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_TotalReverb -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 13 characters from the literal at
 ;          0xF6E66A -- `TOTAL REVERB ` -- into the 30-character on-screen text
@@ -161916,7 +161916,7 @@ Data_F6E66A:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E678
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartMellowNormalBright -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 6 characters from entry 0 of the table at
 ;          0xF6E6D4 -- `      ` -- into the 30-character on-screen text
@@ -162039,7 +162039,7 @@ Text_MSAOffOn23:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E706
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_TimeSignature -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 18 characters from the literal at
 ;          0xF6E728 -- `TIME SIGNATURE: /4` -- into the 30-character on-screen text
@@ -162106,7 +162106,7 @@ Data_F6E728:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E73A
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartModulation2 -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 12 characters from the literal at
 ;          0xF6E78B -- `MODULATION2=` -- into the 30-character on-screen text
@@ -162188,7 +162188,7 @@ Data_F6E78B:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E797
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartCtrlPedal -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 11 characters from the literal at
 ;          0xF6E7E8 -- `CTRL.PEDAL=` -- into the 30-character on-screen text
@@ -162270,7 +162270,7 @@ Data_F6E7E8:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E7F3
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartHold -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 5 characters from the literal at
 ;          0xF6E844 -- `HOLD=` -- into the 30-character on-screen text
@@ -162353,7 +162353,7 @@ Data_F6E844:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E849
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartRtCreateX -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 12 characters from the literal at
 ;          0xF6E89A -- `R.T.CREAT.X=` -- into the 30-character on-screen text
@@ -162436,7 +162436,7 @@ Data_F6E89A:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E8A6
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartRtCreateY -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 12 characters from the literal at
 ;          0xF6E8F7 -- `R.T.CREAT.Y=` -- into the 30-character on-screen text
@@ -162519,7 +162519,7 @@ Data_F6E8F7:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E903
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartRtCtrlX -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 11 characters from the literal at
 ;          0xF6E954 -- `R.T.CTRL.X=` -- into the 30-character on-screen text
@@ -162602,7 +162602,7 @@ Data_F6E954:
 ;                    prom_b span put together (`python3
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E95F
 ;                    is an instruction boundary of this transcription, re-
-;                    asserted on every emit.  The name IS the address.
+;                    asserted on every emit.
 ; Name:    MsgLine_PartRtCtrlY -- named 2026-08-31 from the text it copies.
 ; Evidence (STRING): this routine copies 11 characters from the literal at
 ;          0xF6E9B0 -- `R.T.CTRL.Y=` -- into the 30-character on-screen text
@@ -163823,7 +163823,7 @@ sub_F6F4F2_Join:
 ;                  is an upper bound on the CALL COUNT -- but a hit that
 ;                  decodes is still a real instruction.  0xF6F526 is an
 ;                  instruction boundary of this transcription, re-asserted
-;                  on every emit.  The name IS the address.
+;                  on every emit.
 ; Name:    Smf_ReadFile_Entry -- named 2026-08-31.
 ; Evidence (BRANCH): the whole routine is `jr 0xF6F530`, a two-byte hop over the
 ;          eight-byte tag table SmfChunkTags that sits between it and the body.
@@ -166563,7 +166563,7 @@ sub_F7083B_Epilogue:
 ;                  is an upper bound on the CALL COUNT -- but a hit that
 ;                  decodes is still a real instruction.  0xF7091D is an
 ;                  instruction boundary of this transcription, re-asserted
-;                  on every emit.  The name IS the address.
+;                  on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F7039A_Nop after what reaches it
 ;          (was sub_F7091D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -166611,7 +166611,7 @@ ByteMap_F7091E:
 ;                  is an upper bound on the CALL COUNT -- but a hit that
 ;                  decodes is still a real instruction.  0xF7095E is an
 ;                  instruction boundary of this transcription, re-asserted
-;                  on every emit.  The name IS the address.
+;                  on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F7039A_Nop2 after what reaches it
 ;          (was sub_F7095E; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -173275,7 +173275,7 @@ Data_F73844:
 ;                  is an upper bound on the CALL COUNT -- but a hit that
 ;                  decodes is still a real instruction.  0xF7385F is an
 ;                  instruction boundary of this transcription, re-asserted
-;                  on every emit.  The name IS the address.
+;                  on every emit.
 ; Name:    Smf_WriteFile -- named 2026-08-31.
 ; Extent:  0xF7385F-0xF74809, 4,011 bytes, ends `ret`.  Bracketed by the same
 ;          flag as Smf_ReadFile and by the OTHER of its only two brackets:
@@ -175783,8 +175783,6 @@ sub_F74EAE:
 ;                    0xF74EC5 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Name:    SmfExport_WriteParamSysEx -- named 2026-09-25 (lane promb; was
 ;          sub_F74EC5, and the Unknown line above is superseded).  It writes
@@ -180211,7 +180209,7 @@ SmfPartOffsets_F77857:
 ; sub_F76E74_Nop
 ; Called from: 0xF77245
 ; Evidence: 0xF77899 is an instruction boundary of this transcription,
-;           re-asserted on every emit.  The name IS the address.
+;           re-asserted on every emit.
 ; Purpose: none -- the entry is a lone `ret`.  Named sub_F76E74_Nop after what reaches it
 ;          (was sub_F77899; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
@@ -187809,7 +187807,7 @@ SongStore_DispatchA_1:
 ; Evidence: 0xF7C6FA is stored as entry 0 of SongStore_DispatchA_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
-;           emit).  The name IS the address.
+;           emit).
 ; Purpose: none -- the entry is a lone `ret`.  Named SongStore_DispatchA_1_Nop0 after what reaches it
 ;          (was sub_F7C6FA; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
