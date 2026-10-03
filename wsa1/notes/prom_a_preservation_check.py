@@ -382,6 +382,9 @@ RENAMES = {
     "sub_FE8D15": "BStore_CursorSlot_Restore",
     "sub_FE8BF8": "BStore_CursorSlot_RestoreMark",
     "sub_FF712A": "PanelDial_SetButtonPair",
+    "sub_FF759C": "UI_StatusCode_Is0or2or4",
+    "sub_FF7525": "Var2728_Is2or3",
+    "sub_FF753B": "Var7FD6_IsBitClear",
 }
 
 

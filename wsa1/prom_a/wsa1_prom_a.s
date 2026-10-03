@@ -183542,7 +183542,7 @@ Paint_MidiFileDirectPlay:
 	call T_F40958                                        ; FF442B  1d 58 09 f4
 	call T_F409AC                                        ; FF442F  1d ac 09 f4
 	call T_F42614                                        ; FF4433  1d 14 26 f4
-	calr sub_FF759C                                      ; FF4437  1e 62 31
+	calr UI_StatusCode_Is0or2or4                                      ; FF4437  1e 62 31
 	cp wa, 0x00:i3                                         ; FF443A  d8 d8
 	jr z, .LFF444B                                       ; FF443C  66 0d
 	ld (UI_Request:16), 0x40                                 ; FF443E  f1 70 20 00 40
@@ -184122,7 +184122,7 @@ Paint_DiskL0adFile:
 	jr z, .LFF47EB                                       ; FF47C7  66 22
 	call T_F42594                                        ; FF47C9  1d 94 25 f4
 	call T_F425B4                                        ; FF47CD  1d b4 25 f4
-	calr sub_FF759C                                      ; FF47D1  1e c8 2d
+	calr UI_StatusCode_Is0or2or4                                      ; FF47D1  1e c8 2d
 	cp wa, 0x00:i3                                         ; FF47D4  d8 d8
 	jr z, .LFF47E2                                       ; FF47D6  66 0a
 	ld (UI_Request:16), 0x40                                 ; FF47D8  f1 70 20 00 40
@@ -184403,7 +184403,7 @@ PanelButtonDispatch_DiskL0adFile:
 LcdKeyRow1_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF49C0  ee 0c 00 00
 	push XIX                                             ; FF49C4  3c
-	lda xix, (sub_FF753B:24)                             ; FF49C5  f2 3b 75 ff 34
+	lda xix, (Var7FD6_IsBitClear:24)                             ; FF49C5  f2 3b 75 ff 34
 	ld BC,(XIZ+0x08)                                     ; FF49CA  9e 08 21
 	and BC,0x0080                                        ; FF49CD  d9 cc 80 00
 	jrl nz, .LFF4A55                                     ; FF49D1  7e 81 00
@@ -185285,7 +185285,7 @@ Paint_MidiFileL0ad:
 	ld (XIX),0x00                                        ; FF5020  b4 00 00
 	call T_F42614                                        ; FF5023  1d 14 26 f4
 	ld (0x2730:16), 0x00                                 ; FF5027  f1 30 27 00 00
-	calr sub_FF759C                                      ; FF502C  1e 6d 25
+	calr UI_StatusCode_Is0or2or4                                      ; FF502C  1e 6d 25
 	cp wa, 0x00:i3                                         ; FF502F  d8 d8
 	jr nz, .LFF504C                                      ; FF5031  6e 19
 	m_set 6, MD16, 0x2094                                ; FF5033  f1 94 20 be
@@ -186439,7 +186439,7 @@ LcdKeyRow1_DiskSaveFile_Page0:
 	m_res 0, MD16, 0x2726                                ; FF5934  f1 26 27 b0
 	call T_F42594                                        ; FF5938  1d 94 25 f4
 	call T_F425B8                                        ; FF593C  1d b8 25 f4
-	calr sub_FF759C                                      ; FF5940  1e 59 1c
+	calr UI_StatusCode_Is0or2or4                                      ; FF5940  1e 59 1c
 	cp wa, 0x00:i3                                         ; FF5943  d8 d8
 	jr z, .LFF5951                                       ; FF5945  66 0a
 	ld (UI_Request:16), 0x40                                 ; FF5947  f1 70 20 00 40
@@ -186481,7 +186481,7 @@ LcdKeyRow4_DiskSaveFile_Page0:
 	ld (UI_Request_Hi:16), 0x10                                 ; FF596A  f1 71 20 00 10
 	call T_F42594                                        ; FF596F  1d 94 25 f4
 	call T_F425B8                                        ; FF5973  1d b8 25 f4
-	calr sub_FF759C                                      ; FF5977  1e 22 1c
+	calr UI_StatusCode_Is0or2or4                                      ; FF5977  1e 22 1c
 	cp wa, 0x00:i3                                         ; FF597A  d8 d8
 	jr z, .LFF5988                                       ; FF597C  66 0a
 	ld (UI_Request:16), 0x40                                 ; FF597E  f1 70 20 00 40
@@ -187641,7 +187641,7 @@ LcdKeyRow1_MidiFileSave_Page0:
 	m_res 0, MD16, 0x2726                                ; FF6089  f1 26 27 b0
 	call T_F42594                                        ; FF608D  1d 94 25 f4
 	call T_F42614                                        ; FF6091  1d 14 26 f4
-	calr sub_FF759C                                      ; FF6095  1e 04 15
+	calr UI_StatusCode_Is0or2or4                                      ; FF6095  1e 04 15
 	cp wa, 0x00:i3                                         ; FF6098  d8 d8
 	jr z, .LFF60A6                                       ; FF609A  66 0a
 	ld (UI_Request:16), 0x40                                 ; FF609C  f1 70 20 00 40
@@ -187683,7 +187683,7 @@ LcdKeyRow4_MidiFileSave_Page0:
 	ld (UI_Request_Hi:16), 0x10                                 ; FF60BF  f1 71 20 00 10
 	call T_F42594                                        ; FF60C4  1d 94 25 f4
 	call T_F42614                                        ; FF60C8  1d 14 26 f4
-	calr sub_FF759C                                      ; FF60CC  1e cd 14
+	calr UI_StatusCode_Is0or2or4                                      ; FF60CC  1e cd 14
 	cp wa, 0x00:i3                                         ; FF60CF  d8 d8
 	jr z, .LFF60DD                                       ; FF60D1  66 0a
 	ld (UI_Request:16), 0x40                                 ; FF60D3  f1 70 20 00 40
@@ -188943,7 +188943,7 @@ sub_FF674D:   ; entry: named by 1 `.long` operand, first at 0xFF4041
 	call T_F42594                                        ; FF6763  1d 94 25 f4
 	ld (UI_ScreenItem:16), 0x00                                 ; FF6767  f1 20 27 00 00
 	call T_F425B4                                        ; FF676C  1d b4 25 f4
-	calr sub_FF759C                                      ; FF6770  1e 29 0e
+	calr UI_StatusCode_Is0or2or4                                      ; FF6770  1e 29 0e
 	cp wa, 0x00:i3                                         ; FF6773  d8 d8
 	jr z, .LFF6781                                       ; FF6775  66 0a
 	ld (UI_Request:16), 0x40                                 ; FF6777  f1 70 20 00 40
@@ -189170,7 +189170,7 @@ sub_FF6924:   ; entry: named by 2 `.long` operands, first at 0xFF40CD
 	push 0x00                                            ; FF6966  09 00
 	m_push MB16, 0x273a                                  ; FF6968  c1 3a 27 04
 	calr sub_FF7153                                      ; FF696C  1e e4 07
-	calr sub_FF7525                                      ; FF696F  1e b3 0b
+	calr Var2728_Is2or3                                      ; FF696F  1e b3 0b
 	inc 8,XSP                                            ; FF6972  ef 60
 	inc 2,XSP                                            ; FF6974  ef 62
 	cp wa, 0x00:i3                                         ; FF6976  d8 d8
@@ -189202,7 +189202,7 @@ sub_FF69B9:   ; entry: named by 8 `.long` operands, first at 0xFF40D1
 	push XIX                                             ; FF69BF  3c
 	lda xix, (0x2727:16)                                ; FF69C0  f1 27 27 34
 	ld h, 0x10:opc                                          ; FF69C4  26 10
-	calr sub_FF7525                                      ; FF69C6  1e 5c 0b
+	calr Var2728_Is2or3                                      ; FF69C6  1e 5c 0b
 	cp wa, 0x00:i3                                         ; FF69C9  d8 d8
 	jr z, .LFF69CF                                       ; FF69CB  66 02
 	ld h, 0x01:opc                                          ; FF69CD  26 01
@@ -189253,7 +189253,7 @@ sub_FF6A17:   ; entry: named by 4 `.long` operands, first at 0xFF40D9
 	and BC,0x0080                                        ; FF6A2C  d9 cc 80 00
 	pop XIY                                              ; FF6A30  5d
 	jr nz, .LFF6A44                                      ; FF6A31  6e 11
-	calr sub_FF7525                                      ; FF6A33  1e ef 0a
+	calr Var2728_Is2or3                                      ; FF6A33  1e ef 0a
 	cp wa, 0x00:i3                                         ; FF6A36  d8 d8
 	jr nz, .LFF6A3F                                      ; FF6A38  6e 05
 	ld (XIX),0x01                                        ; FF6A3A  b4 00 01
@@ -189262,7 +189262,7 @@ sub_FF6A17:   ; entry: named by 4 `.long` operands, first at 0xFF40D9
 	ld (XIX),0x03                                        ; FF6A3F  b4 00 03
 	jr .LFF6A53                                          ; FF6A42  68 0f
 .LFF6A44:
-	calr sub_FF7525                                      ; FF6A44  1e de 0a
+	calr Var2728_Is2or3                                      ; FF6A44  1e de 0a
 	cp wa, 0x00:i3                                         ; FF6A47  d8 d8
 	jr nz, .LFF6A50                                      ; FF6A49  6e 05
 	ld (XIX),0x00                                        ; FF6A4B  b4 00 00
@@ -189284,7 +189284,7 @@ sub_FF6A6C:   ; entry: named by 8 `.long` operands, first at 0xFF40E1
 	link XIZ,0x0000                                      ; FF6A6C  ee 0c 00 00
 	push XIX                                             ; FF6A70  3c
 	lda xix, (0x273a:16)                                ; FF6A71  f1 3a 27 34
-	calr sub_FF7525                                      ; FF6A75  1e ad 0a
+	calr Var2728_Is2or3                                      ; FF6A75  1e ad 0a
 	cp wa, 0x00:i3                                         ; FF6A78  d8 d8
 	jrl nz, .LFF6AFA                                     ; FF6A7A  7e 7d 00
 	pushw 0x06                                           ; FF6A7D  0b 06 00
@@ -189379,7 +189379,7 @@ LcdKeyRow1_L0adSingleS0und_Page1:
 	jr .LFF6B32                                          ; FF6B15  68 1b
 .LFF6B17:
 	pushw 0x00                                           ; FF6B17  0b 00 00
-	calr sub_FF753B                                      ; FF6B1A  1e 1e 0a
+	calr Var7FD6_IsBitClear                                      ; FF6B1A  1e 1e 0a
 	popw bc                                              ; FF6B1D  49
 	cp wa, 0x00:i3                                         ; FF6B1E  d8 d8
 	jr z, .LFF6B28                                       ; FF6B20  66 06
@@ -189464,7 +189464,7 @@ sub_FF6BD2:   ; entry: named by 4 `.long` operands, first at 0xFF4051
 	push XIX                                             ; FF6BD8  3c
 	lda xix, (0x2735:16)                                ; FF6BD9  f1 35 27 34
 	ld h, 0x80:opc                                          ; FF6BDD  26 80
-	calr sub_FF7525                                      ; FF6BDF  1e 43 09
+	calr Var2728_Is2or3                                      ; FF6BDF  1e 43 09
 	cp wa, 0x00:i3                                         ; FF6BE2  d8 d8
 	jr z, .LFF6BE8                                       ; FF6BE4  66 02
 	ld h, 0x02:opc                                          ; FF6BE6  26 02
@@ -189513,7 +189513,7 @@ sub_FF6C24:   ; entry: named by 2 `.long` operands, first at 0xFF4059
 	and BC,0x0080                                        ; FF6C3A  d9 cc 80 00
 	pop XIY                                              ; FF6C3E  5d
 	jr z, .LFF6C52                                       ; FF6C3F  66 11
-	calr sub_FF7525                                      ; FF6C41  1e e1 08
+	calr Var2728_Is2or3                                      ; FF6C41  1e e1 08
 	cp wa, 0x00:i3                                         ; FF6C44  d8 d8
 	jr z, .LFF6C4D                                       ; FF6C46  66 05
 	ld (XIX),0x02                                        ; FF6C48  b4 00 02
@@ -189522,7 +189522,7 @@ sub_FF6C24:   ; entry: named by 2 `.long` operands, first at 0xFF4059
 	ld (XIX),0x00                                        ; FF6C4D  b4 00 00
 	jr .LFF6C61                                          ; FF6C50  68 0f
 .LFF6C52:
-	calr sub_FF7525                                      ; FF6C52  1e d0 08
+	calr Var2728_Is2or3                                      ; FF6C52  1e d0 08
 	cp wa, 0x00:i3                                         ; FF6C55  d8 d8
 	jr z, .LFF6C5E                                       ; FF6C57  66 05
 	ld (XIX),0x03                                        ; FF6C59  b4 00 03
@@ -189576,7 +189576,7 @@ sub_FF6C9E:   ; entry: named by 4 `.long` operands, first at 0xFF405D
 	jr nc, .LFF6CCD                                      ; FF6CC9  6f 02
 	incm8 0x01, (xix)                                    ; FF6CCB  84 61
 .LFF6CCD:
-	calr sub_FF7525                                      ; FF6CCD  1e 55 08
+	calr Var2728_Is2or3                                      ; FF6CCD  1e 55 08
 	cp wa, 0x00:i3                                         ; FF6CD0  d8 d8
 	jr z, .LFF6CD7                                       ; FF6CD2  66 03
 	ld (XIX),0x00                                        ; FF6CD4  b4 00 00
@@ -189678,7 +189678,7 @@ LcdKeyRow1_L0adSingleS0und_Page0:
 	jr .LFF6D99                                          ; FF6D7C  68 1b
 .LFF6D7E:
 	pushw 0x00                                           ; FF6D7E  0b 00 00
-	calr sub_FF753B                                      ; FF6D81  1e b7 07
+	calr Var7FD6_IsBitClear                                      ; FF6D81  1e b7 07
 	popw bc                                              ; FF6D84  49
 	cp wa, 0x00:i3                                         ; FF6D85  d8 d8
 	jr z, .LFF6D8F                                       ; FF6D87  66 06
@@ -189766,7 +189766,7 @@ sub_FF6DD7:   ; entry: named by 1 `.long` operand, first at 0xFF4149
 	call T_F42594                                        ; FF6DEC  1d 94 25 f4
 	ld (UI_ScreenItem:16), 0x00                                 ; FF6DF0  f1 20 27 00 00
 	call T_F425B4                                        ; FF6DF5  1d b4 25 f4
-	calr sub_FF759C                                      ; FF6DF9  1e a0 07
+	calr UI_StatusCode_Is0or2or4                                      ; FF6DF9  1e a0 07
 	cp wa, 0x00:i3                                         ; FF6DFC  d8 d8
 	jr Z,.LFF6E0A                                        ; FF6DFE  66 0a
 	ld (UI_Request:16), 0x40                                 ; FF6E00  f1 70 20 00 40
@@ -189956,7 +189956,7 @@ LcdKeyRow1_L0adSingleC0mbination_Page1:
 	jr .LFF6F83                                          ; FF6F66  68 1b
 .LFF6F68:
 	pushw 0x01                                           ; FF6F68  0b 01 00
-	calr sub_FF753B                                      ; FF6F6B  1e cd 05
+	calr Var7FD6_IsBitClear                                      ; FF6F6B  1e cd 05
 	popw bc                                              ; FF6F6E  49
 	cp wa, 0x00:i3                                         ; FF6F6F  d8 d8
 	jr z, .LFF6F79                                       ; FF6F71  66 06
@@ -190080,7 +190080,7 @@ LcdKeyRow1_L0adSingleC0mbination_Page0:
 	jr .LFF7066                                          ; FF7049  68 1b
 .LFF704B:
 	pushw 0x01                                           ; FF704B  0b 01 00
-	calr sub_FF753B                                      ; FF704E  1e ea 04
+	calr Var7FD6_IsBitClear                                      ; FF704E  1e ea 04
 	popw bc                                              ; FF7051  49
 	cp wa, 0x00:i3                                         ; FF7052  d8 d8
 	jr z, .LFF705C                                       ; FF7054  66 06
@@ -190249,7 +190249,7 @@ sub_FF7153:
 	pushw hl                                             ; FF7157  2b
 	pushw de                                             ; FF7158  2a
 	pushw ix                                             ; FF7159  2c
-	calr sub_FF7525                                      ; FF715A  1e c8 03
+	calr Var2728_Is2or3                                      ; FF715A  1e c8 03
 	cp wa, 0x00:i3                                         ; FF715D  d8 d8
 	jr z, .LFF71C5                                       ; FF715F  66 64
 	lda xbc, (0x2940:16)                                ; FF7161  f1 40 29 31
@@ -190697,7 +190697,8 @@ sub_FF7436:
 	popw hl                                              ; FF7521  4b
 	unlk XIZ                                             ; FF7522  ee 0d
 	ret                                                  ; FF7524  0e
-sub_FF7525:
+; Var2728_Is2or3: WA = 1 when (0x2728) is 2 or 3, else 0.
+Var2728_Is2or3:
 	m_cp_mi8 MB16, 0x2728, 0x02                          ; FF7525  c1 28 27 3f 02
 	jr z, .LFF7533                                       ; FF752A  66 07
 	m_cp_mi8 MB16, 0x2728, 0x03                          ; FF752C  c1 28 27 3f 03
@@ -190709,7 +190710,8 @@ sub_FF7525:
 	sub WA,WA                                            ; FF7538  d8 a0
 .LFF753A:
 	ret                                                  ; FF753A  0e
-sub_FF753B:
+; Var7FD6_IsBitClear(which): WA = 1 when bit 0 (which == 0) or bit 1 (which != 0) of (0x7FD6) is clear, else 0.
+Var7FD6_IsBitClear:
 	link XIZ,0x0000                                      ; FF753B  ee 0c 00 00
 	m_cp_mi16 MWD+r6, 0x08, 0x0000                       ; FF753F  9e 08 3f 00 00
 	jr nz, .LFF7551                                      ; FF7544  6e 0b
@@ -190753,7 +190755,8 @@ sub_FF7564:
 .LFF759A:
 	popw hl                                              ; FF759A  4b
 	ret                                                  ; FF759B  0e
-sub_FF759C:
+; UI_StatusCode_Is0or2or4: WA = 1 when UI_StatusCode is 0, 2 or 4, else 0.  What those codes mean is not established.
+UI_StatusCode_Is0or2or4:
 	pushw hl                                             ; FF759C  2b
 	ld h, (UI_StatusCode:16)                                   ; FF759D  c1 80 28 26
 	cp h, 0x00:i3                                          ; FF75A1  ce d8
