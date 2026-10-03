@@ -5321,7 +5321,7 @@ AudioModeChange_Handler:
 	ld (0xc200:16), 255
 	ld (0xc201:16), 255
 	orw (0xc59c:16), 257
-	ld a, (0x8d34:16)
+	ld a, (CURRENT_MODE:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (AudioVoiceHandler_Table:24)
@@ -5363,7 +5363,7 @@ AudioSubsystem_Callback:
 	ld (0xc200:16), 255
 	ld (0xc201:16), 255
 	orw (0xc59c:16), 257
-	ld a, (0x8d34:16)
+	ld a, (CURRENT_MODE:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (AudioVoiceHandler_Table:24)
@@ -5434,7 +5434,7 @@ AudioDispatch_SetBusyFlag:
 
 ; Audio voice callback dispatch
 AudioVoice_Callback:
-	ld a, (0x8d34:16)
+	ld a, (CURRENT_MODE:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (AudioVoiceHandler_Table:24)
@@ -5479,7 +5479,7 @@ AudioVoiceReset_Handler:
 	ld (0xc201:16), 255
 	orw (0xc59c:16), 257
 	andw (0xc594:16), 0xfffd
-	ld a, (0x8d34:16)
+	ld a, (CURRENT_MODE:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (AudioVoiceHandler_Table:24)

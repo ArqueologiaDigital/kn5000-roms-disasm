@@ -312,7 +312,7 @@ FmmIntMedleyFunc:
 	jrl z, IntMed_HandleStop
 	cp XDE,0x00000002
 	jrl nz, IntMed_Exit
-	cp (0x8c9b:16), 0x7a
+	cp (PREVIOUS_TITLE:16), 0x7a
 	jr z, IntMed_CheckPlaying
 	call CDlike_InitModeAndLoadBank
 	ld (MEDLEY_PLAY_FLAG:16), 0x00
@@ -430,7 +430,7 @@ IntMed_HandleError:
 	call	SoundCtrl_SendCommand
 	jrl	IntMed_Exit
 IntMed_HandleStop:
-	cp (SEQ_MASTER_STATE:16), 0x7a
+	cp (CURRENT_TITLE:16), 0x7a
 	jrl z, IntMed_Exit
 	call CDlike_ExitModeAndRestore
 	ld (MEDLEY_PLAY_FLAG:16), 0x00
@@ -966,7 +966,7 @@ FmmDiskMedleySelectFunc:
 	jrl nz, DiskSel_Exit
 	ld wa, 0:i3
 	calr InitializeOperationState
-	cp (0x8c9b:16), 0x78
+	cp (PREVIOUS_TITLE:16), 0x78
 	jrl z, DiskSel_CheckPlaying
 	ld XWA,0xffffffff
 	ld XBC,EVT_SET_NOT_DRAW_FLAG
@@ -1295,7 +1295,7 @@ DiskSel_ShowError:
 	ldw	wa, 238
 	jrl	DiskSel_ShowErrorAndExit
 DiskSel_HandleStopEvent:
-	cp (SEQ_MASTER_STATE:16), 0x78
+	cp (CURRENT_TITLE:16), 0x78
 	jr z, DiskSel_PostStopEvent
 	call CDlike_ExitModeAndRestore
 	ld (MEDLEY_PLAY_FLAG:16), 0x00
@@ -1905,7 +1905,7 @@ FmmSmfMedleyFunc:
 	jrl	nz, SmfMed_Exit
 	ld	wa, 0:i3
 	calr	InitializeOperationState
-	ld	a, (35995:16)
+	ld	a, (PREVIOUS_TITLE:16)
 	ld	(33694:16), a
 	cp	a, 111
 	jr	z, SmfMed_CheckNotPlaying
@@ -2111,7 +2111,7 @@ SmfMed_FinishInit:
 	ld	(33688:16), xwa
 	jrl	SmfMed_Exit
 SmfMed_HandleStop:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 111
 	jrl	z, SmfMed_Exit
 	cp	a, 114
@@ -2692,7 +2692,7 @@ FmmPdMedleyFunc:
 	jrl	nz, PdMed_Exit
 	ld	wa, 0:i3
 	call	InitializeOperationState
-	ld	a, (35995:16)
+	ld	a, (PREVIOUS_TITLE:16)
 	cp	a, 113
 	jr	nz, PdMed_CheckPlayMode
 	ld	(MEDLEY_PLAY_FLAG:16), 0
@@ -2843,7 +2843,7 @@ PdMed_FinishInit:
 	ld	(33788:16), xwa
 	jrl	PdMed_Exit
 PdMed_HandleStop:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 113
 	jrl	z, PdMed_Exit
 	cp	a, 117
@@ -3458,7 +3458,7 @@ FmmDocMedleyFunc:
 	jrl	nz, DocMed_Exit
 	ld	wa, 0:i3
 	call	InitializeOperationState
-	ld	a, (35995:16)
+	ld	a, (PREVIOUS_TITLE:16)
 	cp	a, 112
 	jr	nz, DocMed_CheckPlayMode
 	ld	(MEDLEY_PLAY_FLAG:16), 0
@@ -3613,7 +3613,7 @@ DocMed_FinishInit:
 	ld	(33884:16), xwa
 	jrl	DocMed_Exit
 DocMed_HandleStop:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 112
 	jrl	z, DocMed_Exit
 	cp	a, 116

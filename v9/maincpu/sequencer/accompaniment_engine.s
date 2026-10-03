@@ -142,7 +142,7 @@ AccStyle_CheckRecordMode:
 	ld a, (0x32f1:16)
 	cp a, 0xe
 	jr nz, AccStyle_CheckRecordReturn
-	ld a, (0x8d34:16)
+	ld a, (CURRENT_MODE:16)
 	cp a, 0xe
 	jr z, AccStyle_CheckRecordReturn
 	or (0x34cd:16), 128
@@ -2587,7 +2587,7 @@ AccSeq_ParseNote_VelNonZero:
 	ld a, (0x379b:16)
 	and a, 0x3f
 	jr z, AccSeq_ParseNote_CheckMode
-	cp (SEQ_MASTER_STATE:16), 181
+	cp (CURRENT_TITLE:16), 181
 	jr z, AccSeq_ParseNote_WriteToKbd2
 	jr AccSeq_ParseNote_Return
 
@@ -6393,13 +6393,13 @@ AccPedal_Sustain_CallReset:
 	jrl AccPedal_SustainReturn
 
 AccPedal_Sustain_CheckStyle:
-	cp (SEQ_MASTER_STATE:16), 111
+	cp (CURRENT_TITLE:16), 111
 	jr z, AccPedal_Sustain_SpecialStyle
-	cp (SEQ_MASTER_STATE:16), 112
+	cp (CURRENT_TITLE:16), 112
 	jr z, AccPedal_Sustain_SpecialStyle
-	cp (SEQ_MASTER_STATE:16), 113
+	cp (CURRENT_TITLE:16), 113
 	jr z, AccPedal_Sustain_SpecialStyle
-	cp (SEQ_MASTER_STATE:16), 114
+	cp (CURRENT_TITLE:16), 114
 	jr nz, AccPedal_Sustain_CheckPlay
 
 AccPedal_Sustain_SpecialStyle:
@@ -6427,27 +6427,27 @@ AccPedal_Sustain_PlayJump:
 	jrl AccPedal_SustainReturn
 
 AccPedal_Sustain_CheckMultiStyle:
-	cp (SEQ_MASTER_STATE:16), 120
+	cp (CURRENT_TITLE:16), 120
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 122
+	cp (CURRENT_TITLE:16), 122
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 115
+	cp (CURRENT_TITLE:16), 115
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 116
+	cp (CURRENT_TITLE:16), 116
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 117
+	cp (CURRENT_TITLE:16), 117
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 118
+	cp (CURRENT_TITLE:16), 118
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 119
+	cp (CURRENT_TITLE:16), 119
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 121
+	cp (CURRENT_TITLE:16), 121
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 108
+	cp (CURRENT_TITLE:16), 108
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 109
+	cp (CURRENT_TITLE:16), 109
 	jr z, AccPedal_Sustain_MultiMatch
-	cp (SEQ_MASTER_STATE:16), 110
+	cp (CURRENT_TITLE:16), 110
 	jr nz, AccPedal_Sustain_Normal
 
 AccPedal_Sustain_MultiMatch:
@@ -6487,18 +6487,18 @@ AccPedal_SustainPadding:
 	nop
 
 AccPedal_StyleCheck:
-	cp (SEQ_MASTER_STATE:16), 111
+	cp (CURRENT_TITLE:16), 111
 	jr z, AccPedal_StyleCheck_Ineligible
-	cp (SEQ_MASTER_STATE:16), 108
+	cp (CURRENT_TITLE:16), 108
 	jr c, AccPedal_StyleCheck_Extended
-	cp (SEQ_MASTER_STATE:16), 122
+	cp (CURRENT_TITLE:16), 122
 	jr ugt, AccPedal_StyleCheck_Extended
 	jr AccPedal_StyleCheck_Ineligible
 
 AccPedal_StyleCheck_Extended:
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr z, AccPedal_StyleCheck_Ineligible
-	cp (SEQ_MASTER_STATE:16), 120
+	cp (CURRENT_TITLE:16), 120
 	jr z, AccPedal_StyleCheck_Match120
 	jr AccPedal_StyleCheck_Eligible
 
@@ -6547,7 +6547,7 @@ AccPedal_ExprPadding:
 	nop
 
 AccPedal_DistributeParams:
-	cp (0x8d34:16), 14
+	cp (CURRENT_MODE:16), 14
 	jr z, AccPedal_Distribute_JumpMain
 	bit 0, (0x28a6:16)
 	jr z, AccPedal_Distribute_ClearAll
@@ -8012,7 +8012,7 @@ AccAutoPlay_ModeAvail_Process:
 	ld l, (xhl)
 
 AccAutoPlay_ModeAvail_SetMode:
-	cp (0x8d34:16), 14
+	cp (CURRENT_MODE:16), 14
 	jr nz, AccAutoPlay_ModeAvail_Return
 	ld l, 0x7f:opc
 
@@ -9198,7 +9198,7 @@ AccPos_ClearOnStart_Padding:
 	nop
 	nop
 AccPos_ClearOnStart_Padding_Sub:
-	cp	(0x8d34:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	nz, AccPos_ClearOnStart_Padding_Sub_Skip
 	and	(0x347a:16), 253
 	and	(0x28a6:16), 254
@@ -10912,7 +10912,7 @@ AccStyle_Process_SaveState:
 
 AccStyle_ToggleBit0:
 	; --- Routine 1: XOR toggle bit 0 at (0x3391), conditional calls (51 bytes) ---
-	cp	(0x8d34:16), 17
+	cp	(CURRENT_MODE:16), 17
 	jr nz, AccStyle_ToggleBit0_CheckC07D
 	jr t, AccStyle_ToggleBit0_Ret
 AccStyle_ToggleBit0_CheckC07D:
@@ -10933,7 +10933,7 @@ AccStyle_ToggleBit0_Ret:
 	ret
 AccStyle_IndexedLookup:
 	; --- Routine 2: indexed table lookup at 0xf5c8b4, store + DE/W setup (63 bytes) ---
-	cp	(0x8d34:16), 17
+	cp	(CURRENT_MODE:16), 17
 	jr nz, AccStyle_IndexedLookup_Ret
 	cp	(SWBTWR_PAYLOAD_1:16), 16
 	jr nz, AccStyle_IndexedLookup_Ret
@@ -10963,7 +10963,7 @@ AccStyle_ModeEnter_Wrap:
 	ret
 
 AccStyle_ModeEnter:
-	cp (0x8d35:16), 17
+	cp (PREVIOUS_MODE:16), 17
 	jr z, AccStyle_ModeEnter_Ret
 	ld (0x338e:16), 0
 	ld (0x338f:16), 0
@@ -10992,7 +10992,7 @@ AccStyle_ModeExit_Wrap:
 	ret
 
 AccStyle_ModeExit:
-	cp (0x8d34:16), 17
+	cp (CURRENT_MODE:16), 17
 	jr z, AccStyle_ModeExit_Ret
 	ld (0x338e:16), 0
 	ld (0x338f:16), 0
@@ -11017,7 +11017,7 @@ AccStyle_InlinedBlock:
 	pop	xiz
 	ret
 AccStyle_InlinedBlock_Helper:
-	cp	(0x8d37:16), 220
+	cp	(PREVIOUS_TITLE:16), 220
 	jrl	z, AccStyle_InlinedBlock_Skip3
 	cp	(0xfc5a:16), 128
 	jr	c, AccStyle_InlinedBlock_Skip2
@@ -11158,7 +11158,7 @@ AccStyle_IndexedLookup_Data:
 	.byte 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 AccVoiceReg_WritePart3:
-	cp (0x8d34:16), 17
+	cp (CURRENT_MODE:16), 17
 	jr nz, AccVoiceReg_WritePart3_Ret
 	ld a, (0x338e:16)
 	and a, 0x1f
@@ -11187,7 +11187,7 @@ AccVoiceReg_WritePart3_Ret:
 	ret
 
 AccVoiceReg_WritePart4:
-	cp (0x8d34:16), 17
+	cp (CURRENT_MODE:16), 17
 	jr nz, AccVoiceReg_WritePart4_Ret
 	ld a, (0x338e:16)
 	and a, 0x1f
@@ -11216,7 +11216,7 @@ AccVoiceReg_WritePart4_Ret:
 	ret
 
 AccVoiceReg_WritePart5:
-	cp (0x8d34:16), 17
+	cp (CURRENT_MODE:16), 17
 	jr nz, AccVoiceReg_WritePart5_Ret
 	ld a, (0x338e:16)
 	and a, 0x1f
@@ -11245,7 +11245,7 @@ AccVoiceReg_WritePart5_Ret:
 	ret
 
 AccVoiceReg_WritePart2:
-	cp (0x8d34:16), 17
+	cp (CURRENT_MODE:16), 17
 	jr nz, AccVoiceReg_WritePart2_Ret
 	ld a, (0x338e:16)
 	and a, 0x1f
@@ -11274,7 +11274,7 @@ AccVoiceReg_WritePart2_Ret:
 	ret
 
 AccVoiceReg_WritePart1:
-	cp (0x8d34:16), 17
+	cp (CURRENT_MODE:16), 17
 	jr nz, AccVoiceReg_WritePart1_Ret
 	ld a, (0x338e:16)
 	and a, 0x1f
@@ -14171,7 +14171,7 @@ Seq_RhythmProcessor:
 	ret
 
 RhythmProc_CheckStyleChange:
-	cp (SEQ_MASTER_STATE:16), 178
+	cp (CURRENT_TITLE:16), 178
 	jr z, RhythmProc_StyleChange_Init
 	jr RhythmProc_StyleChange_Ret
 
@@ -14187,7 +14187,7 @@ RhythmProc_StyleChange_Ret:
 	ret
 
 RhythmProc_CheckPlayMode:
-	cp (SEQ_MASTER_STATE:16), 181
+	cp (CURRENT_TITLE:16), 181
 	jr z, RhythmProc_PlayMode_Compare
 	ld a, (0x34cf:16)
 	and a, 0xf3
@@ -14238,7 +14238,7 @@ AccPatch_DetectModeChange:
 	cp a, (0x34dc:16)
 	jr z, AccPatch_CopySlotsExit
 	ld (0x34dc:16), a
-	cp (MAIN_TITLE_CURRENT:16), 181
+	cp (ACTIVE_TITLE:16), 181
 	jr nz, AccPatch_CopySlotsExit
 	push xwa
 	push xhl
@@ -14756,7 +14756,7 @@ AccPatch_ReadVoiceStride:
 	ret
 
 RhythmProc_CheckRhythmEdit:
-	cp (SEQ_MASTER_STATE:16), 180
+	cp (CURRENT_TITLE:16), 180
 	jr nz, RhythmProc_RhythmEdit_Ret
 	calr RhythmProc_CheckVoiceChange
 	calr RhythmProc_CheckConfigBits
@@ -15046,7 +15046,7 @@ AccPatch_FetchVolume_Default:
 	ret
 
 RhythmProc_CheckStyleSwitch:
-	cp (SEQ_MASTER_STATE:16), 184
+	cp (CURRENT_TITLE:16), 184
 	jr z, RhythmProc_StyleSwitch_Call
 	jr RhythmProc_StyleSwitch_Ret
 
@@ -15057,7 +15057,7 @@ RhythmProc_StyleSwitch_Ret:
 	ret
 
 RhythmProc_CheckRepeatFlag:
-	cp (SEQ_MASTER_STATE:16), 189
+	cp (CURRENT_TITLE:16), 189
 	jr nz, RhythmProc_RepeatFlag_Ret
 	bit 1, (0x34d3:16)
 	jr z, RhythmProc_RepeatFlag_Ret
@@ -15078,14 +15078,14 @@ RhythmProc_RepeatFlag_Ret:
 	ret
 
 RhythmProc_SavePrevState:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	ld (0x3525:16), a
 	ld a, (0x379b:16)
 	and a, 0x7f
 	ld (0x3510:16), a
 	ld a, (0x3283:16)
 	ld (0x3601:16), a
-	cp (0x8d34:16), 14
+	cp (CURRENT_MODE:16), 14
 	jr z, RhythmProc_SavePrevState_Done
 	ld (0x379b:16), 0
 
@@ -15781,7 +15781,7 @@ AccPatch_StoreVoiceParams:
 	ret
 
 AccPatch_ComplexDataBlock:
-	ld	a, (0x8d34:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 14
 	jr	nz, AccPatch_CallParamLookup_Return
 	calr	AccPatch_CallParamLookup_Helper
@@ -15795,7 +15795,7 @@ AccPatch_CallParamLookup_Helper:
 	jr	nc, AccPatch_CallParamLookup_Skip
 	cp	(SWBTWR_PAYLOAD_3:16), 0
 	jr	z, AccPatch_CallParamLookup_Skip
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 180
 	jr	nz, AccPatch_CallParamLookup_Skip
 	ld	xiy, RHYTHM_PATTERN_BUF_A
@@ -15811,7 +15811,7 @@ AccPatch_CallParamLookup_Skip:
 	jr	nz, AccPatch_CallParamLookup_Return2
 	cp	(SWBTWR_PAYLOAD_3:16), 0
 	jr	z, AccPatch_CallParamLookup_Return2
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 184
 	jr	nz, AccPatch_CallParamLookup_Return2
 	call	TimeSig_DisplayStrings_Code_Sub
@@ -16278,7 +16278,7 @@ AccPatch_ReadModeFlags:
 	ld a, (0x34cf:16)
 	and a, 0xf3
 	ld (0x34cf:16), a
-	cp (MAIN_TITLE_CURRENT:16), 181
+	cp (ACTIVE_TITLE:16), 181
 	jr z, AccPatch_ReadModeFlags_Active
 	jr AccPatch_SetFlagExit
 
@@ -18701,7 +18701,7 @@ AccPlayback_InitOrUpdate:
 	or (0x34d0:16), 16
 
 AccPlayback_CheckStyleMatch:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0xb6
 	jr z, AccPlayback_CheckActiveStyle
 	jrl AccPlayback_Finalize
@@ -18868,8 +18868,8 @@ AccTiming_StoreResult:
 	ld (0x370f:16), h
 
 AccTiming_CompareStyles:
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (MAIN_TITLE_CURRENT:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (ACTIVE_TITLE:16)
 	jr nz, AccTiming_Return
 
 AccTiming_Return:
@@ -18983,8 +18983,8 @@ ToneGen_ParseAllEvents:
 	inc 1, (0x350e:16)
 	ld c, (0x3741:16)
 	calr ToneGen_ParseEventBuffer
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (MAIN_TITLE_CURRENT:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (ACTIVE_TITLE:16)
 	jr nz, ToneGen_SaveRegsAndCall
 	ld (0xe3e0:16), 16
 
@@ -19918,8 +19918,8 @@ AccPlayback_ReadEvt_OverflowOK:
 	calr AccVoice_InitPatternBuffer
 	ld (0x3712:16), 4
 	ld (0x3717:16), 255
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (MAIN_TITLE_CURRENT:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (ACTIVE_TITLE:16)
 	jr nz, ToneGenSetup_Done
 	ld (0xe3e0:16), 16
 
@@ -22039,7 +22039,7 @@ RhythmFunc_NullRet:
 AccPlayback_PartAssign_DataBlock:
 	nop
 	nop
-	cp	(MAIN_TITLE_CURRENT:16), 182
+	cp	(ACTIVE_TITLE:16), 182
 	jr	z, 2
 	jr	60
 	ld	a, (0x370f:16)
@@ -22225,7 +22225,7 @@ AccPat_Dispatch_InitWorkArea:
 AccPat_Dispatch_CheckBit0:
 	bit 0, (0x35b0:16)
 	jr nz, AccPat_Dispatch_InitSlot
-	cp (SEQ_MASTER_STATE:16), 184
+	cp (CURRENT_TITLE:16), 184
 	jr nz, AccPat_CleanupAndFree
 	ld (GLOBAL_ERROR_CODE:16), 20
 	call DrumVoice_NotifyEE
@@ -24314,7 +24314,7 @@ DrumKitInit_Wrapper:
 DrumKitInit_Entry:
 	ld a, 0x48:opc
 	call CtrlPanel_SetIndicatorBit
-	cp (0x8d35:16), 14
+	cp (PREVIOUS_MODE:16), 14
 	jr nz, DrumKitInit_Setup
 	jrl DrumKitInit_Return
 
@@ -24399,12 +24399,12 @@ DrumKitExit_Wrapper:
 DrumKitExit_Entry:
 	ld a, 0x48:opc
 	call CtrlPanel_SetIndicatorBit
-	cp (0x8d34:16), 14
+	cp (CURRENT_MODE:16), 14
 	jr nz, DrumKitExit_CheckState1
 	jrl DrumKitExit_Return
 
 DrumKitExit_CheckState1:
-	cp (0x8d34:16), 1
+	cp (CURRENT_MODE:16), 1
 	jr z, DrumKitExit_ClearFlags
 	and (0x8d88:16), 254
 
@@ -24585,7 +24585,7 @@ CmpBkslTtl_Dispatch_Helper:
 	pop	xiz
 	ret
 DrumKit_InlineCode1_Data:
-	cp	(36151:16), 177
+	cp	(PREVIOUS_TITLE:16), 177
 	jr	z, DrumKit_InlineCode1_Data_Skip
 	calr	DrumKit_UpdateStatusFlags_Helper2
 	ld	(0x379b:16), 64
@@ -24752,11 +24752,11 @@ RhythmPatInit_Wrapper:
 	ret
 RhythmPatInit_Entry:
 	; --- Conditional init: check (0x8d37), calr, store, optional call (39 bytes) ---
-	cp	(0x8d37:16), 178
+	cp	(PREVIOUS_TITLE:16), 178
 	jr z, RhythmPatInit_Cleanup
 	calr RhythmPatInit_LoadParams
 	ld	(0x379b:16), 32
-	cp	(0x8d37:16), 181
+	cp	(PREVIOUS_TITLE:16), 181
 	jr nz, RhythmPatInit_Cleanup
 	call AccWrap_PlayModeDispatch
 	or	(0x28a7:16), 4
@@ -24868,14 +24868,14 @@ RhythmFillIn_PatternTable_Sub:
 RhythmFillIn_PatternTable_Sub_Helper:
 	and	(0x28a7:16), 251
 	and	(0xe3e2:16), 254
-	cp	(36151:16), 181
+	cp	(PREVIOUS_TITLE:16), 181
 	jr	z, RhythmFillIn_Select_Return
 	or	(0x8d88:16), 1
 	bit	0, (0x3283:16)
 	jr	nz, RhythmFillIn_Select_Return
 	or	(0x34cd:16), 128
 	call	Seq_DispatcherEntry
-	cp	(36151:16), 178
+	cp	(PREVIOUS_TITLE:16), 178
 	jr	nz, RhythmFillIn_Select_Return
 	call	AccWrap_PlayModeStartAccPlay
 RhythmFillIn_Select_Return:
@@ -25012,7 +25012,7 @@ AccScreen_DataBlock_Helper:
 	pop	xiz
 	ret
 RhythmVariation_Select_Helper4:
-	cp	(0x8d37:16), 182
+	cp	(PREVIOUS_TITLE:16), 182
 	jr	z, RhythmVariation_Select_Skip4
 	ld	(0x3712:16), 4
 	or	(0x8d88:16), 1
@@ -25192,7 +25192,7 @@ CmpSetTtl_Dispatch_Helper:
 	pop	xiz
 	ret
 RhythmVariation_Select_Entry_Data:
-	cp	(36151:16), 180
+	cp	(PREVIOUS_TITLE:16), 180
 	jr	z, RhythmVariation_Select_Entry_Data_Skip
 	ld	(13632:16), 1
 	call	AccPatch_GetCurrentSlotAddr
@@ -25215,7 +25215,7 @@ RhythmConfig_InlineCode2:
 	pop	xiz
 	ret
 RhythmConfig_InlineCode2_Data:
-	cp	(SEQ_MASTER_STATE:16), 180
+	cp	(CURRENT_TITLE:16), 180
 	jr	z, RhythmConfig_InlineCode2_Data_Return
 	calr	DrumKit_SendProgramChange
 RhythmConfig_InlineCode2_Data_Return:
@@ -26889,7 +26889,7 @@ TimeSig_DisplayStrings_Code6:
 	ld e, 45:opc
 	ldw iy, 49469
 	ldw iz, 8589
-	cp	a, (36151:16)
+	cp	a, (PREVIOUS_TITLE:16)
 	ret	z
 	ld	a, (0xffe3:24)
 	inc	1, a
@@ -30292,7 +30292,7 @@ CmpSetTtlFunc:
 	jp	t, (xix+de)
 ; CmpSetTtlFunc title dispatch
 CmpSetTtl_Dispatch:
-	cp	(0x8d37:16), 180
+	cp	(PREVIOUS_TITLE:16), 180
 	jrl	z, CmpReal_ReturnZero
 	call	CmpSetTtl_Dispatch_Helper
 	ld	xwa, 0xb40007
@@ -30300,7 +30300,7 @@ CmpSetTtl_Dispatch:
 	ld	xde, 0xffff0001
 	call	ApDeliveryEvent
 	jrl	CmpReal_ReturnZero
-	cp	(SEQ_MASTER_STATE:16), 180
+	cp	(CURRENT_TITLE:16), 180
 	jrl	z, CmpReal_ReturnZero
 	call	RhythmConfig_InlineCode2
 	jrl	CmpReal_ReturnZero
@@ -31628,7 +31628,7 @@ CmEsyTtlFunc:
 	jp	t, (xix+de)
 ; CmEsyTtlFunc title dispatch
 CmEsyTtl_Dispatch:
-	cp	(0x8d37:16), 186
+	cp	(PREVIOUS_TITLE:16), 186
 	jrl	z, S2cTtl_ReturnZero
 	ld	a, (0x34d6:16)
 	cp	a, 29
@@ -31815,7 +31815,7 @@ S2cTtlFunc:
 	jp	t, (xix+de)
 ; S2cTtlFunc title dispatch
 S2cTtl_Dispatch:
-	cp	(0x8d37:16), 185
+	cp	(PREVIOUS_TITLE:16), 185
 	jr	z, S2cTtlFunc_Skip
 	ld	xwa, 0xb90021
 	ld	xbc, EVT_SET_SELECTED_CEL
@@ -32154,12 +32154,12 @@ CstmCpTtlFunc:
 	jp	t, (xix+de)
 ; CstmCpTtlFunc title dispatch
 CstmCpTtl_Dispatch:
-	cp	(0x8d37:16), 190
+	cp	(PREVIOUS_TITLE:16), 190
 	jr	z, CstmCpTtlFunc_Skip
 	ld	(0x3a7e:16), 0
 	jrl	CstmCp_ReturnZero2
 CstmCpTtlFunc_Skip:
-	cp	(MAIN_TITLE_PREVIOUS:16), 238
+	cp	(ACTIVE_TITLE_PREVIOUS:16), 238
 	jrl	nz, CstmCp_ReturnZero2
 	ld	a, (0x3a7e:16)
 	cp	a, 2:i3
@@ -32744,7 +32744,7 @@ MainCmpCp_HandleEvent03:
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	cp (MAIN_TITLE_CURRENT:16), 184
+	cp (ACTIVE_TITLE:16), 184
 	jr nz, MemCopy_SetupParams
 	lda xbc, (xsp + 4)
 	ld a, (xbc + 3)
@@ -32785,7 +32785,7 @@ MainCmpCp_MemCopyAndFinalize:
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld (xiz + 13), 0x0
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0xb8
 	jr nz, MainCmpSet_Init
 	ld xwa, 0xb8001f
@@ -33094,7 +33094,7 @@ MainMspBnkNameFunc:
 	ret
 
 SoundCtrl_SendAccTempo:
-	cp (MAIN_TITLE_CURRENT:16), 181
+	cp (ACTIVE_TITLE:16), 181
 	ret nz
 	ld xwa, 0xb5001e
 	ld xbc, EVT_PAINT
@@ -33103,7 +33103,7 @@ SoundCtrl_SendAccTempo:
 	ret
 
 SoundCtrl_SendTempoScaled:
-	cp (MAIN_TITLE_CURRENT:16), 181
+	cp (ACTIVE_TITLE:16), 181
 	ret nz
 	calr SoundCtrl_CalcScaledTempo
 	ld xwa, 0xb50002
@@ -33147,7 +33147,7 @@ AccGuard_CheckMode09:
 	ret z
 	cp c, 0x40
 	ret nz
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp a, 0xcb
 	ret z
 	cp a, 0xcc
@@ -33166,7 +33166,7 @@ AccGuard_SendProgramChange:
 
 
 AccSeq_DeliverC9_0009:
-	cp (MAIN_TITLE_CURRENT:16), 201
+	cp (ACTIVE_TITLE:16), 201
 	ret nz
 	ld xwa, 0xc90009
 	ld xbc, EVT_PAINT
@@ -33175,7 +33175,7 @@ AccSeq_DeliverC9_0009:
 	ret
 
 AccSeq_DeliverC9_000A:
-	cp (MAIN_TITLE_CURRENT:16), 201
+	cp (ACTIVE_TITLE:16), 201
 	ret nz
 	ld xwa, 0xc9000a
 	ld xbc, EVT_PAINT
@@ -33342,7 +33342,7 @@ MspNameTtlFunc:
 	jp	t, (xix+de)
 ; MspNameTtlFunc title dispatch
 MspNameTtl_Dispatch:
-	cp	(0x8d37:16), 203
+	cp	(PREVIOUS_TITLE:16), 203
 	jr	z, MspNameTtlFunc_Skip
 	ld	c, (0x7f3e:16)
 	add	c, 13
@@ -33351,7 +33351,7 @@ MspNameTtl_Dispatch:
 	ld	de, 0:i3
 	call	SoundParam_NotifyChange
 MspNameTtlFunc_Skip:
-	cp	(0x8d37:16), 204
+	cp	(PREVIOUS_TITLE:16), 204
 	jr	z, MspRecMode_ReturnZero
 	ld	xwa, 0xcc0003
 	ld	xbc, EVT_SET_SELECTED_CEL
@@ -33398,7 +33398,7 @@ MspRecTtlFunc:
 	jp	t, (xix+de)
 ; MspRecTtlFunc title dispatch
 MspRecTtl_Dispatch:
-	cp	(0x8d37:16), 201
+	cp	(PREVIOUS_TITLE:16), 201
 	jr	z, MspRecTtlFunc_Skip2
 	ld	xwa, 0x028103
 	ld	bc, 0:i3
@@ -33424,7 +33424,7 @@ MspRecTtlFunc_Skip2:
 	ld	wa, 0:i3
 	call	UI_PostDialEnable
 	jr	MspRecTtl_ReturnZero
-	cp	(SEQ_MASTER_STATE:16), 201
+	cp	(CURRENT_TITLE:16), 201
 	jr	z, MspRecTtl_ReturnZero
 	cp	(0x7f0b:16), 0
 	jr	z, MspRecTtl_ReturnZero
@@ -33529,7 +33529,7 @@ SndArgTtlFunc:
 	jp	t, (xix+de)
 ; SndArgTtlFunc title dispatch
 SndArgTtl_Dispatch:
-	cp	(0x8d37:16), 220
+	cp	(PREVIOUS_TITLE:16), 220
 	jr	z, SndArgTtlFunc_Skip
 	ld	xwa, 0xdc0005
 	ld	xbc, EVT_SET_SELECTED_CEL
@@ -33869,7 +33869,7 @@ CmpStep_DataBlock_Helper:
 	pop	xiz
 	ret
 AccDraw_Secondary_Helper2:
-	cp	(0x8d37:16), 182
+	cp	(PREVIOUS_TITLE:16), 182
 	jr	z, AccDraw_Secondary_Helper2_Skip
 	call	AccPlayback_InitOrUpdate
 	ld	(0x3525:16), 182
@@ -36285,7 +36285,7 @@ DialUI_CalcProlog:
 
 DialCalc_EventLoop:
 	ld xbc, 0x110002
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x15
 	jr z, DialCalc_SetMode15
 	cp a, 0x12
@@ -36334,7 +36334,7 @@ StylCnvWaitTtlFunc:
 	jr z, AccChord_ReturnZero
 	cp xde, 0x2
 	jr nz, AccChord_ReturnZero
-	cp (0x8d37:16), 96
+	cp (PREVIOUS_TITLE:16), 96
 	jr nz, StylCnvWait_CheckPending
 	calr StyleConv_InitEntryTable
 	ld (0x3d06:16), 0
@@ -36359,9 +36359,9 @@ StylCnvWait_CheckPending:
 	jr AccChord_ReturnZero
 
 StylCnvWait_HandleClose:
-	cp (SEQ_MASTER_STATE:16), 96
+	cp (CURRENT_TITLE:16), 96
 	jr z, StylCnvWait_RestoreDisplay
-	cp (0x8d34:16), 6
+	cp (CURRENT_MODE:16), 6
 	jr z, AccChord_ReturnZero
 
 StylCnvWait_RestoreDisplay:
@@ -36390,7 +36390,7 @@ StylCnvTxtTtlFunc:
 	jr StylCnvTxt_ReturnZero
 
 StylCnvTxt_HandleClose:
-	cp (0x8d34:16), 6
+	cp (CURRENT_MODE:16), 6
 	call nz, (Display_RestoreEntry:24)
 
 StylCnvTxt_ReturnZero:
@@ -36569,9 +36569,9 @@ StylCnvModl_HandleScroll:
 	jrl StylCnvModl_OK_CallRedraw
 
 StylCnvModl_HandleRedraw:
-	cp (SEQ_MASTER_STATE:16), 96
+	cp (CURRENT_TITLE:16), 96
 	jr z, StylCnvModl_RedrawDone
-	cp (0x8d34:16), 6
+	cp (CURRENT_MODE:16), 6
 	jr z, StylCnvModl_RedrawReturnZero
 
 StylCnvModl_RedrawDone:
@@ -36919,7 +36919,7 @@ StylCnvCnvt_HandleScroll:
 	jrl StylCnvCnvt_OK_CallRedraw
 
 StylCnvCnvt_HandleRedraw:
-	cp (0x8d34:16), 6
+	cp (CURRENT_MODE:16), 6
 	call nz, (Display_RestoreEntry:24)
 	ld wa, 0:i3
 	jr StylCnvCnvt_CallReturnAction
@@ -37132,7 +37132,7 @@ StylCnvSel_HandleScroll:
 	jrl StylCnvSel_OK_CallRedraw
 
 StylCnvSel_HandleRedraw:
-	cp (0x8d34:16), 6
+	cp (CURRENT_MODE:16), 6
 	call nz, (Display_RestoreEntry:24)
 	ld wa, 0:i3
 	jr StylCnvSel_CallReturnAction
@@ -37320,7 +37320,7 @@ StylCnvCont_CheckPending:
 	jr AccRhythm_ReturnZero
 
 StylCnvCont_HandleClose:
-	cp (0x8d34:16), 6
+	cp (CURRENT_MODE:16), 6
 	jr z, AccRhythm_ReturnZero
 	calr Display_RestoreEntry
 	jr AccRhythm_ReturnZero
@@ -37362,7 +37362,7 @@ StylCnvStorTtlFunc:
 	ret
 
 StylCnvStor_HandleClose:
-	cp (0x8d34:16), 6
+	cp (CURRENT_MODE:16), 6
 	call nz, (Display_RestoreEntry:24)
 
 StylCnvStor_ReturnZero:
@@ -37720,13 +37720,13 @@ StylCnv_DispatchByType:
 	jr z, StylCnv_Type2_CheckSoundMem
 	cp a, 1:i3
 	jrl nz, StyleConv_DispatchSoundMemState
-	cp (SEQ_MASTER_STATE:16), 22
+	cp (CURRENT_TITLE:16), 22
 	jrl nz, StylCnv_Epilogue114
 	ldw wa, 0x12
 	jrl StylCnv_PostModeChange
 
 StylCnv_Type2_CheckSoundMem:
-	cp (SEQ_MASTER_STATE:16), 22
+	cp (CURRENT_TITLE:16), 22
 	jrl nz, StylCnv_Epilogue114
 	ldw wa, 0x12
 	jrl StylCnv_PostModeChange
@@ -38601,7 +38601,7 @@ AccStyle_TableDataEntry:
 	ret	nz
 	bit	0, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	ld	c, (SEQ_MASTER_STATE:16)
+	ld	c, (CURRENT_TITLE:16)
 	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, AccStyle_TableDataEntry_Skip
 	cp	c, 17

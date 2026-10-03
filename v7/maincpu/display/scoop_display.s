@@ -719,8 +719,8 @@ Display_CallMenuInit:
 	ret
 Display_ConditionalCompare:
 	call Display_CallMenuConfig
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8c9b:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (PREVIOUS_TITLE:16)
 	jr z, Display_ConditionalCompare_Ret
 Display_ConditionalCompare_Ret:
 	ret
@@ -2752,7 +2752,7 @@ PerfMode_Handler_EvtB_Epilogue:
 	jrl	nz, PerfMode_Handler_EvtB_Skip4
 	cp	(3429:16), 0
 	jrl	nz, PerfMode_Handler_EvtB_Skip4
-	cp	(MAIN_TITLE_CURRENT:16), 138
+	cp	(ACTIVE_TITLE:16), 138
 	jrl	nz, PerfMode_Handler_EvtB_Skip4
 	cp	(3567:16), 18
 	jrl	z, PerfMode_Handler_EvtB_Skip3
@@ -6894,8 +6894,8 @@ SerialPort_ModeHandler_0_Data2:
 	.byte	0x03, 0x03, 0x03, 0x04
 Display_CallMenuInit_Helper:
 	ld	(0x10fa:16), 0
-	ldb_d8	a, (SEQ_MASTER_STATE)
-	cp	a, (0x8c9b:16)
+	ldb_d8	a, (CURRENT_TITLE)
+	cp	a, (PREVIOUS_TITLE:16)
 	jrl	z, PerfMode_Handler_EvtB_Helper2_Skip4
 	ld	(0x28be:16), 255
 	call	SeqBuf_Init
@@ -7606,8 +7606,8 @@ Display_CallMenuConfig_Helper:
 	ld (0x0d55:16), 0xff
 	and (0x0f57:16), 0xfe
 	ld (0x0d36:16), 0x00
-	ld a, (0x8c9b:16)
-	cp	(SEQ_MASTER_STATE:16), a
+	ld a, (PREVIOUS_TITLE:16)
+	cp	(CURRENT_TITLE:16), a
 	jrl	z, ClockConfig_Handler_0_Tbl2_Return
 	and	(0x0d53:16), 254
 	bit	0, (0x0f54:16)
@@ -7754,7 +7754,7 @@ SysEx_ModeChangeCheck:
 	jrl nz, ControllerMode_UpdateFlags
 
 ControllerMode_UpdateFlags:
-	cp (SEQ_MASTER_STATE:16), 0x8a
+	cp (CURRENT_TITLE:16), 0x8a
 	jrl nz, SysEx_FlagClearAndCompare
 	cp (0x0d65:16), 0x03
 	jrl nz, SysEx_FlagClearAndCompare
@@ -7764,11 +7764,11 @@ SysEx_FlagClearAndCompare:
 	and (3926:16), 253
 
 	; cpdi8 (0x8d36), 129 (v7 patched)
-	cp	(SEQ_MASTER_STATE:16), 129
+	cp	(CURRENT_TITLE:16), 129
 	; jrl z, SysEx_DecrementCounter (v7 displacement)
 	jrl	z, SysEx_DecrementCounter
 	; cpdi8 (0x8d36), 142 (v7 patched)
-	cp	(SEQ_MASTER_STATE:16), 142
+	cp	(CURRENT_TITLE:16), 142
 	; jrl nz, SubCPU_CmdCountdownRet (v7 displacement)
 	jrl	nz, SubCPU_CmdCountdownRet
 
@@ -12861,7 +12861,7 @@ PerfMode_ParamHandler_11_Return4:
 	call	Display_UpdateDirtyRegions
 	ret
 SubCPU_ToneParamRet_Helper3:
-	cp	(MAIN_TITLE_CURRENT:16), 138
+	cp	(ACTIVE_TITLE:16), 138
 	jrl	nz, SubCPU_ToneParamRet_Return2
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 0:i3
@@ -16429,7 +16429,7 @@ ParamPopup_PartPedal_Entry:
 Display_RedrawStatusBar:
 	bit 0, (0x0f57:16)
 	jrl nz, Scoop_Return
-	cp (MAIN_TITLE_CURRENT:16), 0x8a
+	cp (ACTIVE_TITLE:16), 0x8a
 	jrl nz, Scoop_Return
 	ld (0x03efa8:24), 0x00
 	call UIRender_LoadTwoDescriptors
@@ -16610,7 +16610,7 @@ Scoop_InitDisplayFull:
 	ret
 
 Display_RedrawMainContent:
-	cp (MAIN_TITLE_CURRENT:16), 0x8a
+	cp (ACTIVE_TITLE:16), 0x8a
 	jr nz, Scoop_RedrawMainContent_End
 	ld (0x03efa8:24), 0x00
 	ld XIY,Display_RedrawMainContent_Data
@@ -16619,7 +16619,7 @@ Scoop_RedrawMainContent_End:
 	ret
 
 Display_RedrawFooter:
-	cp (MAIN_TITLE_CURRENT:16), 0x8a
+	cp (ACTIVE_TITLE:16), 0x8a
 	jr nz, Scoop_RedrawFooter_End
 	ld (0x03efa8:24), 0x00
 	ld a, (0x0f52:16)
@@ -16645,7 +16645,7 @@ Scoop_RedrawFooter_End:
 ; Display_RedrawTitleBar - Redraw the title bar region
 ;=============================================================================
 Display_RedrawTitleBar:
-	cp (MAIN_TITLE_CURRENT:16), 0x8a
+	cp (ACTIVE_TITLE:16), 0x8a
 	jrl nz, Scoop_TitleBar_End
 	ld (0x03efa8:24), 0x02
 	calr Scoop_DrawGridLines
@@ -16759,7 +16759,7 @@ Scoop_TitleBar_GetPartConfig_End:
 	ret
 
 Display_RedrawSelection:
-	cp (MAIN_TITLE_CURRENT:16), 0x8a
+	cp (ACTIVE_TITLE:16), 0x8a
 	jr z, Scoop_Selection_RedrawActive
 	jp Scoop_Selection_End
 Scoop_Selection_RedrawActive:
@@ -16815,7 +16815,7 @@ Display_RedrawSidePanel:
 	; jrl nz, Scoop_SidePanel_End (v7 displacement)
 	jrl	nz, Scoop_SidePanel_End
 	; cpdi8 (0x8d38), 138 (v7 patched)
-	cp	(MAIN_TITLE_CURRENT:16), 138
+	cp	(ACTIVE_TITLE:16), 138
 	; jrl nz, Scoop_SidePanel_End (v7 displacement)
 	jrl	nz, Scoop_SidePanel_End
 	; ld xiy, 0x372e (v7 patched)
@@ -16973,7 +16973,7 @@ Scoop_AltContent_ClearOneRegion:
 	ret
 
 Display_RedrawButtonLabels:
-	cp (MAIN_TITLE_CURRENT:16), 0x8a
+	cp (ACTIVE_TITLE:16), 0x8a
 	jr nz, Scoop_ButtonLabels_End
 	ld (0x03efa8:24), 0x00
 	call Scoop_ButtonLabels_CopySlotData
@@ -17134,7 +17134,7 @@ Scoop_ButtonLabels_DrawFilterLabel1:
 	ret
 
 Scoop_ButtonLabels_DrawCategory:
-	cp (MAIN_TITLE_CURRENT:16), 0x8a
+	cp (ACTIVE_TITLE:16), 0x8a
 	jr nz, Scoop_EventHandler_SetupData
 	xor BC,BC
 Scoop_ButtonLabels_DrawCategoryData:

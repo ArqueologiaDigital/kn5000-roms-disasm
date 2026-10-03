@@ -1960,7 +1960,7 @@ UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7
 	cp hl, 0:i3
 	ret z
-	ldb_d8 a, (MAIN_TITLE_CURRENT)
+	ldb_d8 a, (ACTIVE_TITLE)
 	extz wa
 	sla wa, 2
 	lda xbc, (SSF_PresentationGateTable:24)
@@ -2790,7 +2790,7 @@ MainTitleControl:
 	jrl	z, MainTitleCtrl_HandleBA
 	cp	xbc, EVT_OTHER_PART_LED
 	jrl	z, MainTitleCtrl_HandleAB
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	xbc, EVT_ACTIVATE_STATE
 	jrl	z, SeqState_DemoModeHandler
 	cp	xbc, EVT_RETURN_TITLE
@@ -2801,8 +2801,8 @@ MainTitleControl:
 	jr	z, SeqState_TransitionMode
 	cp	xbc, EVT_CHANGE_MODE
 	jrl	nz, UIWidget_ReturnZero
-	ldmm8 35993, 35992
-	ld	(35992:16), l
+	ldmm8 PREVIOUS_MODE, CURRENT_MODE
+	ld	(CURRENT_MODE:16), l
 	ldw	wa, 72
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0:i3
@@ -2811,15 +2811,15 @@ MainTitleControl:
 	ld	(TRANSITION_PROGRESS:24), xwa
 	jrl	UIWidget_ReturnZero
 SeqState_TransitionMode:
-	ld	(35995:16), a
-	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
-	ld	(SEQ_MASTER_STATE:16), l
-	ld	(MAIN_TITLE_CURRENT:16), l
+	ld	(PREVIOUS_TITLE:16), a
+	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
+	ld	(CURRENT_TITLE:16), l
+	ld	(ACTIVE_TITLE:16), l
 	ldw	wa, 97
 	jr	MainTitleCtrl_SetIndicatorAndClear
 MainTitleCtrl_SaveAndTransition:
-	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
-	ld	(MAIN_TITLE_CURRENT:16), l
+	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
+	ld	(ACTIVE_TITLE:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
 	call	CtrlPanel_SetIndicatorBit
@@ -2832,12 +2832,12 @@ MainTitleCtrl_SetIndicatorAndClear:
 SeqState_DemoModeHandler:
 	cp	xde, 8
 	jrl	nz, UIWidget_ReturnZero
-	cp	(MAIN_TITLE_CURRENT:16), a
+	cp	(ACTIVE_TITLE:16), a
 	jr	nz, SeqDemo_SaveCurrentState
-	ld	(35995:16), a
+	ld	(PREVIOUS_TITLE:16), a
 SeqDemo_SaveCurrentState:
-	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
-	ldmm8 35993, 35992
+	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
+	ldmm8 PREVIOUS_MODE, CURRENT_MODE
 	jr UIWidget_ReturnZero
 MainTitleCtrl_HandleAB:
 	ld (0x0274ac:24), de
@@ -2982,9 +2982,9 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 
-	cp a, (MAIN_TITLE_CURRENT:16)
+	cp a, (ACTIVE_TITLE:16)
 
 	scc16 nz, hl
 

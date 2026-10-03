@@ -1237,7 +1237,7 @@ Encoder_PrepareCallback:
 	extz	bc
 	sla	bc, 2
 	ld	xwa, Encoder_PrepareCallback_PtrTable
-	cp	(0x8c98:16), 20
+	cp	(CURRENT_MODE:16), 20
 	jr	nz, Encoder_ResolveCallbackAddr
 	ld	xwa, Encoder_PrepareCallback_PtrTable_2
 Encoder_ResolveCallbackAddr:

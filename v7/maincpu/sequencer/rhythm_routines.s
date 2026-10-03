@@ -1182,7 +1182,7 @@ Rhythm_SaveState:
 	ld	(12908:16), a
 	ld	a, (13268:16)
 	ld	(12773:16), a
-	ld	a, (35992:16)
+	ld	a, (CURRENT_MODE:16)
 	ld	(12885:16), a
 	ld	a, (12953:16)
 	ld	(12886:16), a

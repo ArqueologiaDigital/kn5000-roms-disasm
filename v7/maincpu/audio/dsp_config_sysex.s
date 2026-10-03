@@ -4773,7 +4773,7 @@ AudioModeChange_Handler:
 	ld	(0xc164:16), 255
 	ld	(0xc165:16), 255
 	orw	(0xc500:16), 257
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (AudioVoiceHandler_Table:24)
@@ -4813,7 +4813,7 @@ AudioSubsystem_Callback:
 	ld	(0xc164:16), 255
 	ld	(0xc165:16), 255
 	orw	(0xc500:16), 257
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (AudioVoiceHandler_Table:24)

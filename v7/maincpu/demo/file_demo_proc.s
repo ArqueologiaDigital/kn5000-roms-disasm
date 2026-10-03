@@ -335,7 +335,7 @@ ApPreControl_Exit:
 
 FDemo_MultiGuardCheck:
 ; [v10] --- Routine 1: multi-guard check, return HL=1 or 0 (30 bytes) ---
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	jr	nz, Banner_ReturnZero
 	cpw	(0x28b4:16), 0
 	jr	nz, Banner_ReturnZero
@@ -624,7 +624,7 @@ Demo_SelectEntry_NoNewButton:
 	ret
 
 Demo_SelectEntry_PreSaveCheck:
-	cp (0x8c98:16), 0x13
+	cp (CURRENT_MODE:16), 0x13
 	jr nz, Demo_SelectEntry_CheckVoiceKeys
 	calr Voice_SavePreset
 	lda xbc, (0xf9a0:16)
@@ -639,7 +639,7 @@ Demo_SelectEntry_PreSaveCheck:
 	lda xsp, (xsp + 0x0a)
 	jr t, Demo_SelectEntry_ExitDispatch
 Demo_SelectEntry_CheckVoiceKeys:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 114
 	jr	z, Demo_SelectEntry_SaveVoice
 	cp	a, 112
@@ -667,7 +667,7 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	cp	(SWBTWR_PAYLOAD_1:16), 1
 	ret	nz
-	cp	(35992:16), 19
+	cp	(CURRENT_MODE:16), 19
 	ret	nz
 	bit	0, (SWBTWR_PAYLOAD_2:16)
 	ret	z
@@ -677,20 +677,20 @@ Demo_SelectEntry_ByteTable:
 	jr	z, Demo_SelectEntry_ByteTable_Code_Entry2
 Demo_SelectEntry_ByteTable_Code_Entry:
 	res	3, (0x28ad:16)
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (0xf229c7:24)
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	ldw	(154500:24), 1
 	ld	(36530:16), 4
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (0xf22a23:24)
 	ld	a, (10404:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
 Demo_SelectEntry_ByteTable_Code_Entry2:
 	set	3, (0x28ad:16)
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	jr	z, Demo_SelectEntry_ByteTable_Skip3
 	call	CDlikeSwTtl_SetRecordAndNotify
 	ld	(4440:16), 0
@@ -710,7 +710,7 @@ Demo_SelectEntry_ProcessSongList:
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	calr	Banner_Loop_Check
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (SeqInit_FinalEvent:24)
 	jrl	Demo_SelectEntry_AfterSongLoad
 Demo_SelectEntry_ManualSelect:
@@ -720,14 +720,14 @@ Demo_SelectEntry_ManualSelect:
 	ld	a, (0x28a4:16)
 	cp	a, (4439:16)
 	jr	z, Demo_SelectEntry_StartAutoPlay
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (SeqInit_FinalEvent:24)
 Demo_SelectEntry_ToCountdown:
 	jrl Demo_ResetCountdownTimer
 
 Demo_SelectEntry_StartAutoPlay:
 	ld	(0x8eb2:16), 4
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (SeqInit_FinalEvent:24)
 	ld	a, (0x28a4:16)
 	extz	wa
@@ -758,7 +758,7 @@ Demo_SelectEntry_CheckCountdown:
 	ld (0x2966:16), 133
 	ret
 Demo_SelectEntry_CheckCPanel:
-	cp	(35992:16), 19
+	cp	(CURRENT_MODE:16), 19
 
 	ret nz
 
@@ -774,7 +774,7 @@ Demo_SelectEntry_Debounce:
 	cp	a, 0:i3
 	ret	nz
 	set	3, (0x28ad:16)
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (CDlikeSwTtl_SetRecordAndNotify:24)
 	pushw	0x1
 	ldw	wa, 168
@@ -783,7 +783,7 @@ Demo_SelectEntry_Debounce:
 	call	AddswbWr
 	ret
 Demo_SelectEntry_AfterSongLoad:
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (SeqInit_FinalEvent:24)
 	ld	a, (10404:16)
 	extz	wa
@@ -791,7 +791,7 @@ Demo_SelectEntry_AfterSongLoad:
 	ld	(36530:16), 4
 	bit	3, (0x28ad:16)
 	ret	z
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 	jr	z, Demo_SelectEntry_CheckSongCount
 	cp	(4440:16), 18
 	jr	c, Demo_SelectEntry_UpdateDisplay
@@ -833,7 +833,7 @@ Demo_SelectEntry_DrawSecondary:
 	ret z
 
 ; cpdi8 (0x8d38), 228 (v7 patched)
-	cp	(MAIN_TITLE_CURRENT:16), 228
+	cp	(ACTIVE_TITLE:16), 228
 
 	ret z
 
@@ -855,7 +855,7 @@ Demo_SelectEntry_DrawSecondary:
 
 
 Demo_SelectEntry_PlaySong:
-	cp (0x8c98:16), 0x13
+	cp (CURRENT_MODE:16), 0x13
 	ret NZ
 	ld a, (0x28a4:16)
 	extz WA
@@ -883,12 +883,12 @@ Demo_SelectEntry_PlaySong:
 	call Seq_DispatchEventType5
 	ret
 Demo_SelectEntry_StartPlayback:
-	cp (0x8c98:16), 0x13
+	cp (CURRENT_MODE:16), 0x13
 	ret NZ
 	call Seq_ResetAndRestartAccompaniment
 	call PerfMode_Handler_EvtB_Helper2_Helper11
 	ldmm8 0x1157, 0x28a4
-	cp (MAIN_TITLE_CURRENT:16), 0xe4
+	cp (ACTIVE_TITLE:16), 0xe4
 	ret Z
 	call SeqInit_PostDispatchEvent
 	ret
@@ -8716,7 +8716,7 @@ FileIO_ErrorCodeByteBlock:
 	ret	nz
 	bit	0, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	ld	c, (SEQ_MASTER_STATE:16)
+	ld	c, (CURRENT_TITLE:16)
 	cp	c, 16
 	jr	c, FileIO_ErrorCodeByteBlock_Entry
 	cp	c, 22
@@ -8724,7 +8724,7 @@ FileIO_ErrorCodeByteBlock:
 FileIO_ErrorCodeByteBlock_Entry:
 	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, FileIO_ErrorCodeByteBlock_Skip5
-	cp	(35992:16), 6
+	cp	(CURRENT_MODE:16), 6
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip
 	cp	c, 96
 	jr	z, FileIO_ErrorCodeByteBlock_Loop
@@ -8758,7 +8758,7 @@ FileIO_ErrorCodeByteBlock_Loop:
 	ret
 FileIO_ErrorCodeByteBlock_Skip5:
 	ld	a, (213234:24)
-	cp	(35992:16), 1
+	cp	(CURRENT_MODE:16), 1
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip7
 	bit	2, (0x420:16)
 	ret	nz
@@ -8846,7 +8846,7 @@ FileIO_ErrorCodeByteBlock_Skip12:
 	ret	z
 	jp	FDemo_LoadRegsAndPostEvent
 FileIO_MedleyDispatchByMode:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 121
 	jr	nz, MedleyDisp_ModeSmf
 	ld	xwa, 0:i3

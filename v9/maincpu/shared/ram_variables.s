@@ -4,9 +4,14 @@
 ; (a corrected line says so).  Names it could not derive for v9 are left out (RHYTHM_PATTERN_SEL_A,
 ; RHYTHM_PATTERN_TYPE, RHYTHM_PATTERN_BUF_B).  Each line cites the page that establishes the variable.
 
-; sequencer.md "State Machine Variable (8D36h)": written only by SeqState_TransitionMode
-	.equ SEQ_MASTER_STATE,		0x8d36	; master sequencer state; 0x10-0x16 = Seq_DispatcherTick skips
+; MainTitleControl (the title / mode object) -- EVT_CHANGE_MODE: `ldmm8 PREVIOUS_MODE, CURRENT_MODE / ld (CURRENT_MODE), l`;
+; EVT_CHANGE_TITLE -> SeqState_TransitionMode: PREVIOUS_TITLE := CURRENT_TITLE, CURRENT_TITLE := l.  sequencer.md
+; called 0x8D36 the "master sequencer state": its skip range 0x10-0x16 is exactly the TT_STYLCNV* titles
+	.equ CURRENT_MODE,		0x8d34	; the current mode id (NAKA_MODE_* - 0x1800000), set by EVT_CHANGE_MODE
+	.equ PREVIOUS_MODE,		0x8d35	; the mode before the last EVT_CHANGE_MODE
+	.equ CURRENT_TITLE,		0x8d36	; the current title id (TITLE_* - 0x1A00000); Seq_DispatcherTick skips while a style-conversion title (0x10-0x16) is current
 ; sequencer.md "Key RAM Addresses"
+	.equ PREVIOUS_TITLE,		0x8d37	; the title before the last EVT_CHANGE_TITLE
 	.equ RHYTHM_VARIATION_INDEX,	0x3476	; variation index, 0..0x1E
 	.equ RHYTHM_PATTERN_SEL_B,	0x348e	; pattern selector B
 	.equ RHYTHM_PATTERN_BUF_A,	0x94800	; pattern buffer A, 1,024 bytes per pattern
@@ -31,10 +36,11 @@
 	.equ MIDISEQ_SPARE_BUF_PTR,	0xbcb0	; the one MidiSeq_SwapActiveBuffers exchanges it with
 	.equ MIDISEQ_ACTIVE_BLOCK_PTR,	0xbc54	; the second pair's active pointer (its +10 / +14 words are compared)
 	.equ MIDISEQ_SPARE_BLOCK_PTR,	0xbc58	; and its spare
-; SeqState_TransitionMode / MainTitleCtrl_SaveAndTransition: `ldmm8 0x8d39, 0x8d38 / ld (0x8d38), l` --
-; the previous value saved, the new one stored; their header names the transition variables
-	.equ MAIN_TITLE_CURRENT,	0x8d38	; the title state MainTitleCtrl_* sets
-	.equ MAIN_TITLE_PREVIOUS,	0x8d39	; its previous value, saved before each change
+; the ACTIVE title: EVT_CHANGE_TITLE, EVT_RETURN_TITLE and EVT_INTERRUPT_TITLE all set it (`ldmm8
+; ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE / ld (ACTIVE_TITLE), l`); SeqState_TransitionMode's header names the
+; transition variables
+	.equ ACTIVE_TITLE,	0x8d38	; the title on screen: CURRENT_TITLE, or an interrupting / returned-to one
+	.equ ACTIVE_TITLE_PREVIOUS,	0x8d39	; its previous value, saved before each change
 	.equ TRANSITION_PROGRESS,	0x2749a	; transition progress counter (cleared on every title change)
 	.equ TRANSITION_TIMER,		0x2749e	; transition timer
 	.equ TRANSITION_FLAGS,		0x274a2	; transition type / flags

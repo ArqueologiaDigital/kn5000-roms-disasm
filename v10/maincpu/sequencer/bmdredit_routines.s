@@ -508,7 +508,7 @@ BmDrEdit_CheckTempoData:
 	call TempoRingBuf_CheckEmpty
 	cp hl, 0:i3
 	ret z
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0x95
 	jr z, BmDrEdit_CheckTempoData_ReadyToProcess
 	cp a, 0x98
@@ -1838,11 +1838,11 @@ BmDrEdit_InitCommon:
 	ldw (0x2792:16), 48
 
 BmDrEdit_InitCommon_CheckSongActive:
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8d37:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (PREVIOUS_TITLE:16)
 	jr nz, BmDrEdit_InitCommon_SetupDisplay
-	ld a, (MAIN_TITLE_CURRENT:16)
-	cp a, (MAIN_TITLE_PREVIOUS:16)
+	ld a, (ACTIVE_TITLE:16)
+	cp a, (ACTIVE_TITLE_PREVIOUS:16)
 	jr z, BmDrEdit_InitCommon_SetupDisplay
 	bit 4, (0x28ad:16)
 	jr z, BmDrEdit_InitCommon_SetupDisplay
@@ -1861,7 +1861,7 @@ BmDrEdit_InitCommon_SetupDisplay:
 	ld wa, (0x2963:16)
 	ld (3407:16), wa
 	ldmm16 3409, 0x2963
-	ld a, (MAIN_TITLE_PREVIOUS:16)
+	ld a, (ACTIVE_TITLE_PREVIOUS:16)
 	cp a, 0x96
 	jr z, BmDrEdit_CopyStepCount
 	cp a, 0x99
@@ -1985,7 +1985,7 @@ BmDrEdit_CleanupDrumMode:
 	push xwa
 	call Free
 	inc 4, xsp
-	cp (SEQ_MASTER_STATE:16), 152
+	cp (CURRENT_TITLE:16), 152
 	jr z, BmDrEdit_SkipPartSelect
 	res 0, (9954:16)
 	call PartSelect_UpdateDisplayState
@@ -1994,7 +1994,7 @@ BmDrEdit_SkipPartSelect:
 	jr BmDrEdit_CleanupCommon
 
 BmDrEdit_CleanupMelodicMode:
-	cp (SEQ_MASTER_STATE:16), 149
+	cp (CURRENT_TITLE:16), 149
 	jr z, BmDrEdit_SkipMelodicPartSelect
 	res 0, (9954:16)
 	call PartSelect_UpdateDisplayState
@@ -4499,8 +4499,8 @@ BmDrEdit_SecondaryNote_PopIzReturn:
 	ret
 
 BmDrEdit_EnterPlayMode:
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8d37:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (PREVIOUS_TITLE:16)
 	ret z
 	ld a, (0x28b1:16)
 	ld (0x283c:16), a
@@ -4531,14 +4531,14 @@ BmDrEdit_EnterPlay_AllocAndInit:
 	jp SeqPlay_AllocBuffersAndInit
 
 BmDrEdit_ExitPlayMode:
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8d37:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (PREVIOUS_TITLE:16)
 	ret z
 	ldmm8 0x28b1, 0x283c
 	ldw (0xf19e:16), 0
 	call Audio_CheckSubsystemReady
 	call AccWrap_PlayModeDispatch
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0x95
 	jr z, BmDrEdit_ExitPlay_RestoreSequencer
 	cp a, 0x98

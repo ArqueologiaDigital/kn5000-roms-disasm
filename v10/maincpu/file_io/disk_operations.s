@@ -449,7 +449,7 @@ FmmFormatFunc:
 	jrl nz, FmmFmt_Return
 	ld wa, 1:i3
 	calr InitializeOperationState
-	ldmm8 0x7f6a, 0x8d37
+	ldmm8 0x7f6a, PREVIOUS_TITLE
 	cpw (0x8500:16), 0
 	jr ge, FmmFmt_InitPhase_CheckDrive
 	call GetDiskSizeInfo
@@ -635,7 +635,7 @@ FmmLoadTitleFunc:
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
-	ldmm8 0x7f6e, 0x8d37
+	ldmm8 0x7f6e, PREVIOUS_TITLE
 	cpw (0x8500:16), 0
 	jr ge, FmmLoadTtl_StateDispatch
 	call GetDiskSizeInfo
@@ -785,7 +785,7 @@ FmmLoadTtl_HandleCancelOp:
 FmmLoadTtl_HandleOk:
 	cp xde, 0xf
 	jr nz, FmmLoadTtl_Return
-	cp (0x8d34:16), 7
+	cp (CURRENT_MODE:16), 7
 	jr nz, FmmLoadTtl_Ok_DefaultSound
 	ldw wa, 0xd6
 	jr FmmLoadTtl_PlaySound
@@ -827,7 +827,7 @@ FmmSaveTitleFunc:
 	calr SignalProgressUpdate
 
 FmmSaveTtl_CheckFont:
-	cp (0x8d37:16), 102
+	cp (PREVIOUS_TITLE:16), 102
 	jr z, FmmSaveTtl_CommitSave
 	ld iz, 0:i3
 

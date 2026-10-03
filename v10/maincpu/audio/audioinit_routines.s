@@ -183,7 +183,7 @@ AudioInit_PushAndConfigVoiceAlt:
 	ld (xsp), a
 	cp (xsp), 0x1
 	call z, (AudioInit_RefreshToneBank:24)
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0xc9
 	jr nz, AudioInit_LoadStackAndConfig
 	ld (0xc1ff:16), 23
@@ -200,9 +200,9 @@ AudioInit_RestoreStack:
 	ret
 
 AudioInit_CheckSoundGroup:
-	cp (SEQ_MASTER_STATE:16), 3
+	cp (CURRENT_TITLE:16), 3
 	jr z, AudioInit_LoadGroupVoice
-	cp (SEQ_MASTER_STATE:16), 8
+	cp (CURRENT_TITLE:16), 8
 	jr nz, AudioInit_GroupFallbackDefault
 
 AudioInit_LoadGroupVoice:
@@ -257,7 +257,7 @@ AudioInit_GroupFallbackDefault:
 	jrl AudioInit_ConfigStereoVoice
 
 AudioInit_CheckSoundGroup51:
-	cp (SEQ_MASTER_STATE:16), 81
+	cp (CURRENT_TITLE:16), 81
 	jr nz, AudioInit_G51FallbackDefault
 	ld c, (0x8d3a:16)
 	extz bc
@@ -310,7 +310,7 @@ AudioInit_G51FallbackDefault:
 	jrl AudioInit_ConfigStereoVoice
 
 AudioInit_CheckMixMode:
-	ld c, (SEQ_MASTER_STATE:16)
+	ld c, (CURRENT_TITLE:16)
 	cp c, 0x76
 	jr z, AudioInit_LoadAndConfigure
 	cp c, 0x73
@@ -403,7 +403,7 @@ AudioInit_CompareAndSendMIDI:
 	lda xwa, (xsp)
 	call MIDI_SendCmdPacket
 	call MIDI_PostSendStub
-	cp (0x8d34:16), 13
+	cp (CURRENT_MODE:16), 13
 	jr z, AudioInit_VoiceParamDone
 	push xde
 	push xhl
@@ -872,7 +872,7 @@ AudioInit_GroupA_TypeE:
 	jrl AudioInit_CheckGroupB_Channel
 
 AudioInit_GroupA_OtherType:
-	cp (SEQ_MASTER_STATE:16), 138
+	cp (CURRENT_TITLE:16), 138
 	jr nz, AudioInit_GroupA_DefaultMapping
 	ld a, e
 	extz wa

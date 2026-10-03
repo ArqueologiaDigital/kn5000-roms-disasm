@@ -324,7 +324,7 @@ FmmIntMedleyFunc:
 	jrl z, IntMed_HandleStop
 	cp xde, 0x2
 	jrl nz, IntMed_Exit
-	cp (0x8d37:16), 122
+	cp (PREVIOUS_TITLE:16), 122
 	jr z, IntMed_CheckPlaying
 	call CDlike_InitModeAndLoadBank
 	ld (MEDLEY_PLAY_FLAG:16), 0
@@ -453,7 +453,7 @@ IntMed_HandleError:
 	jrl IntMed_Exit
 
 IntMed_HandleStop:
-	cp (SEQ_MASTER_STATE:16), 122
+	cp (CURRENT_TITLE:16), 122
 	jrl z, IntMed_Exit
 	call CDlike_ExitModeAndRestore
 	ld (MEDLEY_PLAY_FLAG:16), 0
@@ -1014,7 +1014,7 @@ FmmDiskMedleySelectFunc:
 	jrl nz, DiskSel_Exit
 	ld wa, 0:i3
 	calr InitializeOperationState
-	cp (0x8d37:16), 120
+	cp (PREVIOUS_TITLE:16), 120
 	jrl z, DiskSel_CheckPlaying
 	ld xwa, 0xffffffff
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
@@ -1359,7 +1359,7 @@ DiskSel_ShowError:
 	jrl DiskSel_ShowErrorAndExit
 
 DiskSel_HandleStopEvent:
-	cp (SEQ_MASTER_STATE:16), 120
+	cp (CURRENT_TITLE:16), 120
 	jr z, DiskSel_PostStopEvent
 	call CDlike_ExitModeAndRestore
 	ld (MEDLEY_PLAY_FLAG:16), 0
@@ -1994,7 +1994,7 @@ FmmSmfMedleyFunc:
 	jrl nz, SmfMed_Exit
 	ld wa, 0:i3
 	calr InitializeOperationState
-	ld a, (0x8d37:16)
+	ld a, (PREVIOUS_TITLE:16)
 	ld (0x843a:16), a
 	cp a, 0x6f
 	jr z, SmfMed_CheckNotPlaying
@@ -2220,7 +2220,7 @@ SmfMed_FinishInit:
 	jrl SmfMed_Exit
 
 SmfMed_HandleStop:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x6f
 	jrl z, SmfMed_Exit
 	cp a, 0x72
@@ -2826,7 +2826,7 @@ FmmPdMedleyFunc:
 	jrl nz, PdMed_Exit
 	ld wa, 0:i3
 	call InitializeOperationState
-	ld a, (0x8d37:16)
+	ld a, (PREVIOUS_TITLE:16)
 	cp a, 0x71
 	jr nz, PdMed_CheckPlayMode
 	ld (MEDLEY_PLAY_FLAG:16), 0
@@ -2989,7 +2989,7 @@ PdMed_FinishInit:
 	jrl PdMed_Exit
 
 PdMed_HandleStop:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x71
 	jrl z, PdMed_Exit
 	cp a, 0x75
@@ -3630,7 +3630,7 @@ FmmDocMedleyFunc:
 	jrl nz, DocMed_Exit
 	ld wa, 0:i3
 	call InitializeOperationState
-	ld a, (0x8d37:16)
+	ld a, (PREVIOUS_TITLE:16)
 	cp a, 0x70
 	jr nz, DocMed_CheckPlayMode
 	ld (MEDLEY_PLAY_FLAG:16), 0
@@ -3798,7 +3798,7 @@ DocMed_FinishInit:
 	jrl DocMed_Exit
 
 DocMed_HandleStop:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x70
 	jrl z, DocMed_Exit
 	cp a, 0x74

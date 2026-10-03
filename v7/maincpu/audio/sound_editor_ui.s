@@ -7359,7 +7359,7 @@ SeMenu_PopupDialog_Close:
 	jr c, SeMenu_PopupDialog_Close
 
 SeMenu_PopupDialog_Close_Data:
-	ld	a, (MAIN_TITLE_CURRENT:16)
+	ld	a, (ACTIVE_TITLE:16)
 	cp	(134200:24), a
 	jr	nz, SeMenu_ValueEditor_Init	; -> 0xF0E9F0
 	cp	a, 32
@@ -7406,7 +7406,7 @@ SeMenu_ValueEditor_Draw:
 	lda	xbc, (xwa+5)
 	cp	e, 9
 	jr	nz, SeMenu_ValueEditor_Increment
-	cp	(MAIN_TITLE_CURRENT:16), 34
+	cp	(ACTIVE_TITLE:16), 34
 	jr	nz, SeMenu_ValueEditor_Data3
 	ld	a, (xbc)
 	cp	a, 34
@@ -7425,7 +7425,7 @@ SeMenu_ValueEditor_Increment:
 	jr nz, SeMenu_ValueEditor_Redraw
 
 SeMenu_ValueEditor_Decrement:
-	cp	(MAIN_TITLE_CURRENT:16), 38
+	cp	(ACTIVE_TITLE:16), 38
 	jr	nz, SeMenu_ValueEditor_Data3
 	ld	a, (xbc)
 	cp	a, 38
@@ -7441,14 +7441,14 @@ SeMenu_ValueEditor_ClampAndStore:
 SeMenu_ValueEditor_Redraw:
 	cp	e, 16
 	jr	nz, SeMenu_ValueEditor_Complete
-	ldb_d8	a, (MAIN_TITLE_CURRENT)
+	ldb_d8	a, (ACTIVE_TITLE)
 	cp	a, (xbc)
 	jr	z, SeMenu_ValueEditor_Cancel
 	jrl	SeMenu_ListSelector_ScrollDown
 SeMenu_ValueEditor_Complete:
 	cp	e, 18
 	jr	nz, SeMenu_ValueEditor_Data3
-	cp	(MAIN_TITLE_CURRENT:16), 32
+	cp	(ACTIVE_TITLE:16), 32
 	jr	nz, SeMenu_ValueEditor_Data3
 	ld	a, (xbc)
 	cp	a, 32
@@ -7511,7 +7511,7 @@ SeMenu_ListSelector_Draw:
 	jr SeMenu_ListSelector_ScrollDown
 
 SeMenu_ListSelector_HandleInput:
-	ld	a, (MAIN_TITLE_CURRENT:16)
+	ld	a, (ACTIVE_TITLE:16)
 	cp	c, a
 	jr	nz, SeMenu_ListSelector_ScrollDown	; -> 0xF0EB3B
 	cp	a, 32
@@ -7787,7 +7787,7 @@ SeMenu_NameEditor_End:
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 64
 	sla	a, 1
-	cp	(MAIN_TITLE_CURRENT:16), 33
+	cp	(ACTIVE_TITLE:16), 33
 	jr	nz, SeMenu_NameEditor_End_Skip
 	ldb_d8	w, (0x66a)
 	and	w, 127
@@ -7796,7 +7796,7 @@ SeMenu_NameEditor_End:
 	call	SeMenu_NameEdit_CheckBit7
 	jr	SeMenu_NameEditor_End_Return
 SeMenu_NameEditor_End_Skip:
-	cp	(MAIN_TITLE_CURRENT:16), 58
+	cp	(ACTIVE_TITLE:16), 58
 	jr	nz, SeMenu_NameEditor_End_Return
 	ldb_d8	w, (0x660)
 	and	w, 127
@@ -9241,7 +9241,7 @@ SeMenu_Utility_FormatNumber_Loop:
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_Utility_FormatNumber_End:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	ld (0x0678:16), a
 	ld (0x03efa8:24), 0x02
 	ld XIY,SeScreenData_0x175E

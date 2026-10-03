@@ -1216,10 +1216,10 @@ MidiPkt_DispatchData_Chan6_Join:
 	extz	wa
 	jp	SysEx_InitiateSend
 MidiPkt_DispatchData_Chan6_Join2:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 87
 	jr	z, MidiPkt_DispatchData_Chan6_Skip
-	cp	(0x8d34:16), 1
+	cp	(CURRENT_MODE:16), 1
 	jr	nz, MidiPkt_DispatchData_Chan6_Skip2
 	cp	a, 1:i3
 	jr	nz, MidiPkt_DispatchData_Chan6_Skip2
@@ -1255,7 +1255,7 @@ MidiPkt_SendBankSelect_Send:
 	ret
 
 MidiPkt_SysExValidator_Data:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 108
 	jr	c, MidiPkt_SysExValidator_Data_Skip
 	cp	a, 118
@@ -1284,7 +1284,7 @@ MidiPkt_SysExValidator_Data_Skip3:
 	pop	xiz
 	ret
 MidiPkt_SysExProcessor_Data:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 108
 	jr	c, MidiPkt_SysExProcessor_Data_Skip
 	cp	a, 118

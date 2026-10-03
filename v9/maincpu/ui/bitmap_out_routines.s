@@ -261,7 +261,7 @@ BitMapOut_ByteData_RenderE:
 	ret
 
 BitMapOut_CheckDiskAndApply:
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jp z, (Interrupt_ModeGuardCheck:24)
 	ld xwa, 0xffffffff
 	ld xbc, EVT_CHORD_SHOW
@@ -350,7 +350,7 @@ BitMapOut_ByteData_TransitionSeq_Join:
 	ret
 BitMapOut_ByteData_PresetCopy:
 	push qiz
-	cp (36148:16), 14
+	cp (CURRENT_MODE:16), 14
 	jr	z, BitMapOut_ByteData_PresetCopy_Skip
 	bit 3, (36166:16)
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip
@@ -2388,7 +2388,7 @@ BitMapOut_DetectChanges:
 	calr BitMapOut_GetRenderMode
 	bit 0, l
 	jr nz, BitMapOut_DetectChanges_CheckMode
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr z, BitMapOut_DetectChanges_CheckMode
 	lda xhl, (0xf9a0:16)
 	lda xde, (0xfc5a:16)

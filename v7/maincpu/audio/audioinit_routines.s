@@ -154,7 +154,7 @@ AudioInit_StereoVoiceCfg:
 	ld	(xsp), a
 	cp	(xsp), 0x1
 	call	z, (AudioInit_RefreshToneBank:24)
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 0xc9
 	jr	nz, AudioInit_LoadStackAndConfig
 	ld	(0xc163:16), 23
@@ -168,9 +168,9 @@ AudioInit_RestoreStack:
 	inc	2, xsp
 	ret
 ; v10 name for this address: AudioInit_CheckSoundGroup -- not a label here: v7 defines that name outside this span (= 0xFDE7BB)
-	cp	(SEQ_MASTER_STATE:16), 3
+	cp	(CURRENT_TITLE:16), 3
 	jr	z, AudioInit_LoadGroupVoice
-	cp	(SEQ_MASTER_STATE:16), 8
+	cp	(CURRENT_TITLE:16), 8
 	jr	nz, AudioInit_GroupFallbackDefault
 AudioInit_LoadGroupVoice:
 	ld	c, (0x8c9e:16)
@@ -216,7 +216,7 @@ AudioInit_GroupFallbackDefault:
 	extz	wa
 	jrl	AudioInit_VoiceNotConfigured_Code_Helper
 ; v10 name for this address: AudioInit_CheckSoundGroup51 -- not a label here: v7 defines that name outside this span (= 0xFDE84A)
-	cp	(SEQ_MASTER_STATE:16), 81
+	cp	(CURRENT_TITLE:16), 81
 	jr	nz, AudioInit_G51FallbackDefault
 	ld	c, (0x8c9e:16)
 	extz	bc
@@ -261,7 +261,7 @@ AudioInit_G51FallbackDefault:
 	extz	wa
 	jrl	AudioInit_VoiceNotConfigured_Code_Helper
 ; v10 name for this address: AudioInit_CheckMixMode -- not a label here: v7 defines that name outside this span (= 0xFDE8D2)
-	ld	c, (SEQ_MASTER_STATE:16)
+	ld	c, (CURRENT_TITLE:16)
 	cp	c, 0x76
 	jr	z, AudioInit_LoadAndConfigure
 	cp	c, 0x73
@@ -349,7 +349,7 @@ AudioInit_CompareAndSendMIDI:
 	lda	xwa, (xsp)
 	call	MIDI_SendCmdPacket
 	call	MIDI_PostSendStub
-	cp	(0x8c98:16), 13
+	cp	(CURRENT_MODE:16), 13
 	jr	z, AudioInit_VoiceParamDone
 	push	xde
 	push	xhl
@@ -790,7 +790,7 @@ AudioInit_GroupA_TypeE:
 	ld	(xiy), a
 	jrl	AudioInit_CheckGroupB_Channel
 AudioInit_GroupA_OtherType:
-	cp	(SEQ_MASTER_STATE:16), 138
+	cp	(CURRENT_TITLE:16), 138
 	jr	nz, AudioInit_GroupA_DefaultMapping
 	ld	a, e
 	extz	wa

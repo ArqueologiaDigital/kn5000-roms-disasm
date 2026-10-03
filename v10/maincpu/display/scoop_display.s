@@ -720,8 +720,8 @@ Display_CallMenuInit:
 Display_ConditionalCompare:
 	; --- Conditional handler: call EF6047, compare mem, ret ---
 	call Display_CallMenuConfig
-	ld	a, (SEQ_MASTER_STATE:16)
-	cp	a, (0x8d37:16)
+	ld	a, (CURRENT_TITLE:16)
+	cp	a, (PREVIOUS_TITLE:16)
 	jr z, Display_ConditionalCompare_Ret
 Display_ConditionalCompare_Ret:
 	ret
@@ -2716,7 +2716,7 @@ PerfMode_Handler_EvtB_Epilogue:
 	jrl	nz, PerfMode_Handler_EvtB_Skip5
 	cp	(0x0d65:16), 0
 	jrl	nz, PerfMode_Handler_EvtB_Skip5
-	cp	(MAIN_TITLE_CURRENT:16), 138
+	cp	(ACTIVE_TITLE:16), 138
 	jrl	nz, PerfMode_Handler_EvtB_Skip5
 	cp	(0x0def:16), 18
 	jrl	z, PerfMode_Handler_EvtB_Skip4
@@ -6868,8 +6868,8 @@ SerialPort_ModeHandler_0_Data2:
 	.byte	0x03, 0x03, 0x03, 0x04
 Display_CallMenuInit_Helper:
 	ld	(4346:16), 0
-	ld	a, (SEQ_MASTER_STATE:16)
-	cp	a, (36151:16)
+	ld	a, (CURRENT_TITLE:16)
+	cp	a, (PREVIOUS_TITLE:16)
 	jrl	z, ScoopParam_ValueTable_Entry3_Code_Skip
 	ld	(10430:16), 255
 	call	SeqBuf_Init
@@ -7585,8 +7585,8 @@ Display_CallMenuConfig_Helper:
 	ld	(3413:16), 255
 	and	(0x0f57:16), 254
 	ld	(3382:16), 0
-	ld	a, (0x8d37:16)
-	cp	(SEQ_MASTER_STATE:16), a
+	ld	a, (PREVIOUS_TITLE:16)
+	cp	(CURRENT_TITLE:16), a
 	jrl	z, ScoopParam_ValueTable_Helper6_Return2
 	and	(0x0d53:16), 254
 	bit	0, (0x0f54:16)
@@ -7735,7 +7735,7 @@ SysEx_ModeChangeCheck:
 	jrl nz, ControllerMode_UpdateFlags
 
 ControllerMode_UpdateFlags:
-	cp (SEQ_MASTER_STATE:16), 138
+	cp (CURRENT_TITLE:16), 138
 	jrl nz, SysEx_FlagClearAndCompare
 	cp (3429:16), 3
 	jrl nz, SysEx_FlagClearAndCompare
@@ -7744,9 +7744,9 @@ ControllerMode_UpdateFlags:
 
 SysEx_FlagClearAndCompare:
 	and (3926:16), 253
-	cp (SEQ_MASTER_STATE:16), 129
+	cp (CURRENT_TITLE:16), 129
 	jrl z, SysEx_DecrementCounter
-	cp (SEQ_MASTER_STATE:16), 142
+	cp (CURRENT_TITLE:16), 142
 	jrl nz, SubCPU_CmdCountdownRet
 
 SysEx_DecrementCounter:
@@ -12845,7 +12845,7 @@ PerfMode_ParamHandler_11_Return5:
 	call	Display_UpdateDirtyRegions
 	ret
 SubCPU_ToneParamRet_Helper3:
-	cp	(MAIN_TITLE_CURRENT:16), 138
+	cp	(ACTIVE_TITLE:16), 138
 	jrl	nz, PerfMode_ParamHandler_11_Return6
 	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 0:i3
@@ -16438,7 +16438,7 @@ ParamPopup_PartPedal_Entry5:
 Display_RedrawStatusBar:
 	bit 0, (3927:16)
 	jrl nz, Scoop_Return
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jrl nz, Scoop_Return
 	ld (0x03efa8:24), 0x00
 	call UIRender_LoadTwoDescriptors
@@ -16624,7 +16624,7 @@ Scoop_InitDisplayFull:
 	ret
 
 Display_RedrawMainContent:
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jr nz, Scoop_RedrawMainContent_End
 	ld (0x03efa8:24), 0x00
 	ld xiy, Display_RedrawMainContent_Data
@@ -16634,7 +16634,7 @@ Scoop_RedrawMainContent_End:
 	ret
 
 Display_RedrawFooter:
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jr nz, Scoop_RedrawFooter_End
 	ld (0x03efa8:24), 0x00
 	ld a, (3922:16)
@@ -16661,7 +16661,7 @@ Scoop_RedrawFooter_End:
 ; Display_RedrawTitleBar - Redraw the title bar region
 ;=============================================================================
 Display_RedrawTitleBar:
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jrl nz, Scoop_TitleBar_End
 	ld (0x03efa8:24), 0x02
 	calr Scoop_DrawGridLines
@@ -16776,7 +16776,7 @@ Scoop_TitleBar_GetPartConfig_End:
 	ret
 
 Display_RedrawSelection:
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jr z, Scoop_Selection_RedrawActive
 	jp Scoop_Selection_End
 
@@ -16831,7 +16831,7 @@ Scoop_Selection_End:
 Display_RedrawSidePanel:
 	bit 0, (3927:16)
 	jrl nz, Scoop_SidePanel_End
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jrl nz, Scoop_SidePanel_End
 	ld xiy, 0x372e
 	ld xix, 0xa51
@@ -16983,7 +16983,7 @@ Scoop_AltContent_ClearOneRegion:
 	ret
 
 Display_RedrawButtonLabels:
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jr nz, Scoop_ButtonLabels_End
 	ld (0x03efa8:24), 0x00
 	call Scoop_ButtonLabels_CopySlotData
@@ -17145,7 +17145,7 @@ Scoop_ButtonLabels_DrawFilterLabel1:
 	ret
 
 Scoop_ButtonLabels_DrawCategory:
-	cp (MAIN_TITLE_CURRENT:16), 138
+	cp (ACTIVE_TITLE:16), 138
 	jr nz, Scoop_EventHandler_SetupData
 	xor bc, bc
 

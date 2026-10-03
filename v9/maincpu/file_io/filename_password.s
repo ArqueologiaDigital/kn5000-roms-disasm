@@ -715,7 +715,7 @@ FileName_CheckCallback:
 	ld xwa, (0x7f76:16)
 	or xwa, xwa
 	jrl z, FileName_Return
-	cp (SEQ_MASTER_STATE:16), 103
+	cp (CURRENT_TITLE:16), 103
 	jr z, FileName_Callback_Simple
 	call CheckFileSystemStatus
 	ld iz, hl
@@ -757,7 +757,7 @@ FileName_Callback_Simple:
 
 FileName_HandleRegister:
 	ld (0x7f76:16), xbc
-	cp (SEQ_MASTER_STATE:16), 103
+	cp (CURRENT_TITLE:16), 103
 	jr z, FileName_Register_Simple
 	call CheckFileSystemStatus
 	ld iz, hl

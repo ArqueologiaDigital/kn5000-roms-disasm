@@ -1148,7 +1148,7 @@ AccPlay_UpdateStateFlags:
 	stb_d8	(32368), a
 	bit	2, (32377:16)
 	jr	z, AccPlay_DispatchRet
-	cp	(SEQ_MASTER_STATE:16), 1
+	cp	(CURRENT_TITLE:16), 1
 	jr	nz, AccPlay_DispatchRet
 	and	(32377:16), 251
 	ld	(GLOBAL_ERROR_CODE:16), 15
@@ -1216,7 +1216,7 @@ AccPlay_MainUpdateLoop:
 	call AudioInit_CheckMIDIAndDispatch
 	calr AccPlay_RestoreMuteStates
 	calr AccPlay_ClearSlotTable
-	cp (0x8c98:16), 0x10
+	cp (CURRENT_MODE:16), 0x10
 	jr nz, AccPlay_SetIndicatorAndRet
 	push XWA
 	push XHL
@@ -1971,7 +1971,7 @@ AccPlay_TrackMeasureChange:
 	inc	1, hl
 AccPlay_MeasureIncrement:
 	ld	(32370:16), hl
-	cp	(MAIN_TITLE_CURRENT:16), 201
+	cp	(ACTIVE_TITLE:16), 201
 	jr	nz, AccPlay_MeasureNotifyDone
 	push	xwa
 	push	xhl
@@ -1998,7 +1998,7 @@ AccPlay_TrackVoiceCount:
 	ld hl, (0x7d7e:16)
 	cp WA,HL
 	jr z, AccPlay_VoiceCountRet
-	cp (MAIN_TITLE_CURRENT:16), 0xc9
+	cp (ACTIVE_TITLE:16), 0xc9
 	jr nz, AccPlay_VoiceCountNotify
 	push XWA
 	push XHL
@@ -5256,7 +5256,7 @@ AccWrap_SetMinVelocity:
 	ld c, a
 
 	; cpdi8 (0x8d38), 236 (v7 patched)
-	cp	(MAIN_TITLE_CURRENT:16), 236
+	cp	(ACTIVE_TITLE:16), 236
 
 	ret nz
 

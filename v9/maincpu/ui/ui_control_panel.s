@@ -1940,7 +1940,7 @@ UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7				; Check key-scan enable (bit 7 of RAM[0x0406])
 	cp hl, 0:i3				; Returns HL=1 if enabled
 	ret z					; Return if scanning disabled
-	ld a, (MAIN_TITLE_CURRENT:16); Load current UI state ID
+	ld a, (ACTIVE_TITLE:16); Load current UI state ID
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
 	lda xbc, (SSF_PresentationGateTable:24); Base of state->key-map pointer table
@@ -2742,7 +2742,7 @@ MainTitleControl:
 	jrl z, MainTitleCtrl_HandleBA
 	cp xbc, EVT_OTHER_PART_LED
 	jrl z, MainTitleCtrl_HandleAB
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp xbc, EVT_ACTIVATE_STATE
 	jrl z, SeqState_DemoModeHandler
 	cp xbc, EVT_RETURN_TITLE
@@ -2753,8 +2753,8 @@ MainTitleControl:
 	jr z, SeqState_TransitionMode
 	cp xbc, EVT_CHANGE_MODE
 	jrl nz, UIWidget_ReturnZero
-	ldmm8 0x8d35, 0x8d34
-	ld (0x8d34:16), l
+	ldmm8 PREVIOUS_MODE, CURRENT_MODE
+	ld (CURRENT_MODE:16), l
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	ld xwa, 0:i3
@@ -2778,16 +2778,16 @@ MainTitleControl:
 ;   0x0274a8-0x0274ae - Additional transition parameters
 ; =============================================================================
 SeqState_TransitionMode:
-	ld (0x8d37:16), a
-	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
-	ld (SEQ_MASTER_STATE:16), l
-	ld (MAIN_TITLE_CURRENT:16), l
+	ld (PREVIOUS_TITLE:16), a
+	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
+	ld (CURRENT_TITLE:16), l
+	ld (ACTIVE_TITLE:16), l
 	ldw wa, 0x61
 	jr MainTitleCtrl_SetIndicatorAndClear
 
 MainTitleCtrl_SaveAndTransition:
-	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
-	ld (MAIN_TITLE_CURRENT:16), l
+	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
+	ld (ACTIVE_TITLE:16), l
 	ldw wa, 0x61
 
 MainTitleCtrl_SetIndicatorAndClear:
@@ -2802,13 +2802,13 @@ MainTitleCtrl_SetIndicatorAndClear:
 SeqState_DemoModeHandler:
 	cp xde, 0x8
 	jrl nz, UIWidget_ReturnZero
-	cp (MAIN_TITLE_CURRENT:16), a
+	cp (ACTIVE_TITLE:16), a
 	jr nz, SeqDemo_SaveCurrentState
-	ld (0x8d37:16), a
+	ld (PREVIOUS_TITLE:16), a
 
 SeqDemo_SaveCurrentState:
-	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
-	ldmm8 0x8d35, 0x8d34
+	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
+	ldmm8 PREVIOUS_MODE, CURRENT_MODE
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleAB:
@@ -2955,8 +2955,8 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (MAIN_TITLE_CURRENT:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (ACTIVE_TITLE:16)
 	scc16 nz, hl
 	ret
 

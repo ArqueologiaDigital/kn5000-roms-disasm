@@ -97,7 +97,7 @@ FmmUtilityTitleFunc:
 	ld xbc, EVT_ON_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
-	ldmm8 0x7f5c, 0x8d37
+	ldmm8 0x7f5c, PREVIOUS_TITLE
 	cpw (0x8500:16), 0
 	jr ge, FmmUtility_DispatchState
 	call GetDiskSizeInfo
@@ -229,7 +229,7 @@ FmmSmfUtilityTitleFunc:
 	ld xbc, EVT_ON_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
-	ldmm8 0x7f5e, 0x8d37
+	ldmm8 0x7f5e, PREVIOUS_TITLE
 	cpw (0x8500:16), 0
 	jr ge, FmmSmfUtility_DispatchState
 	call GetDiskSizeInfo

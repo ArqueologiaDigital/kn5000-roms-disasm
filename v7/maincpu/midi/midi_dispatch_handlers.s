@@ -10557,7 +10557,7 @@ MidiPkt_ArpConfigChain_Data_Join2:
 	ret
 	; --- Main: guard check, loop with bit 4 flag, multiple calls (76 bytes) ---
 MidiPkt_ArpChordHandler:
-	cp	(SEQ_MASTER_STATE:16), 87
+	cp	(CURRENT_TITLE:16), 87
 	jr	nz, ArpChord_ClearBitAndReturn
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 0:i3
@@ -11489,7 +11489,7 @@ SeqChan_UnhandledCmd_Join5:
 	pop	xde
 	ret
 SeqAlt_CheckInitBuffer:
-	cp	(SEQ_MASTER_STATE:16), 87
+	cp	(CURRENT_TITLE:16), 87
 	ret nz
 	ei 6
 	call	SeqMain_InitBuffer
@@ -11795,7 +11795,7 @@ SoundMode_RenderWithNotify:
 	push xix
 	push xiz
 	call	Display_SetupAndPrepareRender
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp a, 0x76
 	jr	z, SoundMode_NotifyActiveVoices
 	cp a, 0x72
@@ -11910,7 +11910,7 @@ MidiCtrl_FullReconfigure:
 	calr	SoundMode_FullRenderUpdate
 	bit 0, (4330:16)
 	jr	nz, SoundMode_ProcessToneAndParams
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp a, 0x76
 	jr	ugt, MidiCtrl_DeltaAndProcess
 	cp a, 0x6c
@@ -12650,7 +12650,7 @@ SeqData_DispatchLoop_Done:
 	jr	z, VoiceData_ZeroFillInner
 	bit	0, (0xb74b:16)
 	jr	nz, VoiceData_ZeroFillInner
-	cp	(SEQ_MASTER_STATE:16), 87
+	cp	(CURRENT_TITLE:16), 87
 	jr	z, VoiceData_ZeroFillInner
 	ld a, (0xfd50:16)
 	and a, 0x14
@@ -12693,7 +12693,7 @@ SeqData_FormatOutput_Dispatch:
 	call	AccWrap_ReturnZero
 	cp hl, 0xffff
 	ret z
-	cp	(SEQ_MASTER_STATE:16), 87
+	cp	(CURRENT_TITLE:16), 87
 	ret z
 	ld	a, (0xfd50:16)
 	and a, 0x14
@@ -13727,7 +13727,7 @@ VoiceParam_ApplyBoundsCheck:
 	dec 8, xsp
 	pushw_erp 0xfa
 	ld (xsp + 6), xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp a, 0xe
 	jr	nz, VoiceParam_ApplyBoundsValidated
 	cp a, 0x11

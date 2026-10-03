@@ -441,7 +441,7 @@ INTT1_CheckTickCount:
 	ld (1056:16), 16
 
 INTT1_CheckMidiSync:
-	cp (0x8c98:16), 0x13
+	cp (CURRENT_MODE:16), 0x13
 	jr z, UIState_DispatchBranch
 	bit 2, (0xfd52:16)
 	jr z, UIState_DispatchBranch
@@ -472,7 +472,7 @@ INTT1_CheckAltSeqOverflow:
 	res 0, (1139:16)
 
 INTT1_CheckMidiSyncGate:
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, INTT1_SkipToDispatch
 	push	sr
 	ei	6
@@ -749,7 +749,7 @@ INTTR4_SeqAutoStart:
 	ld	a, 0x1:opc
 	ld	(1056:16), a
 	ld	(1057:16), a
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, INTTR4_SeqAutoStart_Skip
 	bit	2, (0xfd52:16)
 	jr	z, INTTR4_SeqAutoStart_Skip
@@ -782,7 +782,7 @@ INTTR4_MetroBeat_Check:
 
 INTTR4_MetroBeat_OnBeat:
 	ld	(1056:16), 16
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, INTTR4_SeqBeat_Check
 	bit	2, (0xfd52:16)
 	jr	z, INTTR4_SeqBeat_Check
@@ -813,7 +813,7 @@ INTTR4_MetroQuarter_Check:
 	ld	a, (1047:16)
 	and	a, 0x3
 	jr	nz, INTTR4_SeqAccum_Update
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, INTTR4_SeqAccum_Update
 	push	sr
 	ei	6

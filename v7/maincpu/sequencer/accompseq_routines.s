@@ -1416,7 +1416,7 @@ AccompSeq_OutputEvent:
 	ld	hl, bc
 	cpw	(0x28aa:16), 0
 	jr	nz, AccompSeq_Output_CheckFilter
-	cp	(SEQ_MASTER_STATE:16), 138
+	cp	(CURRENT_TITLE:16), 138
 	jr	nz, AccompSeq_Output_CheckManual
 	cp	(0xd65:16), 2
 	jr	nz, AccompSeq_Output_CheckManual
@@ -1531,9 +1531,9 @@ AccompSeq_GuardedNoteOff:
 	and A,0x03
 	cp a, 0:i3
 	jr z, AccompSeq_GuardedNote_Return
-	cp (0x8c98:16), 0x13
+	cp (CURRENT_MODE:16), 0x13
 	jr z, AccompSeq_GuardedNote_Return
-	cp (MAIN_TITLE_CURRENT:16), 0xc8
+	cp (ACTIVE_TITLE:16), 0xc8
 	jr z, AccompSeq_GuardedNote_Return
 	push XWA
 	push XHL

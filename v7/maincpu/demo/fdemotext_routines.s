@@ -494,7 +494,7 @@ FDemoText_ParseControlMessage:
 	ld A,(XBC+0x01)
 	cp a, (0x8c9e:16)
 	ret NZ
-	cp	(MAIN_TITLE_CURRENT:16), 234
+	cp	(ACTIVE_TITLE:16), 234
 	ret	nz
 	ld	a, (xbc)
 	cp	a, 131

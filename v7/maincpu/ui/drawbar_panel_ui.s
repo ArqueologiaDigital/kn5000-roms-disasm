@@ -4458,7 +4458,7 @@ MidiPart_DataBlock:
 	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, c
 	ret	z
-	cp	(MAIN_TITLE_CURRENT:16), 0xf
+	cp	(ACTIVE_TITLE:16), 0xf
 	ret	z
 	ldw	wa, 15
 	call	SoundCtrl_SendCommand

@@ -65,7 +65,7 @@ FileIO_BytecodeData_Code_Skip:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData_Code_Helper2
@@ -79,7 +79,7 @@ FileIO_BytecodeData_Code_Epilogue:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue2
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
@@ -97,7 +97,7 @@ FileIO_BytecodeData_Code_Epilogue2:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 14
 	jr	z, FileIO_BytecodeData_Code_Skip2
 	cp	a, 19
@@ -195,7 +195,7 @@ FileIO_BytecodeData_Code_Join3:
 FileIO_BytecodeData_Code_Helper:
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	nz, FileIO_BytecodeData_Code_Skip11
 	ld	a, (xiz+2)
 	cp	a, 19
@@ -265,7 +265,7 @@ FileIO_BytecodeData_Code_Epilogue4:
 	ld	a, (xbc)
 	cp	a, 0:i3
 	jr	z, FileIO_BytecodeData_Code_Epilogue5
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue5
 	.byte	0xf1, 0x21, 0x04, 0xca
@@ -273,7 +273,7 @@ FileIO_BytecodeData_Code_Epilogue4:
 	ld	a, (10405:16)
 	xor	a, 1
 	ld	(10405:16), a
-	ld	c, (0x8c98:16)
+	ld	c, (CURRENT_MODE:16)
 	cp	c, 13
 	jr	ugt, FileIO_BytecodeData_Code_Skip17
 	cp	c, 8
@@ -320,7 +320,7 @@ FileIO_BytecodeData_Code_Epilogue5:
 	ld	a, (xiz+1)
 	cp	a, 14
 	jr	nz, FileIO_BytecodeData_Code_Skip19
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue6
 FileIO_BytecodeData_Code_Skip19:
 	extz	wa
@@ -354,7 +354,7 @@ FileIO_BytecodeData_Code_Epilogue6:
 	ld	a, (xiz+1)
 	cp	a, 14
 	jr	nz, FileIO_BytecodeData_Code_Skip22
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue7
 FileIO_BytecodeData_Code_Skip22:
 	extz	wa
@@ -385,7 +385,7 @@ FileIO_BytecodeData_Code_Epilogue7:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	nz, FileIO_BytecodeData_Code_Skip25
 	ld	(xiz), 168
 	ld	(xiz+1), 1
@@ -399,7 +399,7 @@ FileIO_BytecodeData_Code_Skip25:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 	jr	z, FileIO_BytecodeData_Code_Epilogue8
 	cp	a, 19
@@ -419,7 +419,7 @@ FileIO_BytecodeData_Code_Epilogue8:
 	ld	c, (xwa+2)
 	cp	c, 0:i3
 	jrl	z, FileIO_BytecodeData_Code_Epilogue9
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 14
 	jr	z, FileIO_BytecodeData_Code_Skip27
 	cp	a, 3:i3
@@ -534,14 +534,14 @@ FileIO_BytecodeData_Code_Epilogue9:
 	ld	c, (xiz+2)
 	cp	c, 0:i3
 	jrl	z, FileIO_BytecodeData_Code_Epilogue10
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 19
 	jrl	z, FileIO_BytecodeData_Code_Epilogue10
 	.byte	0xf1, 0x37, 0x33, 0xc8
 	jrl	nz, FileIO_BytecodeData_Code_Epilogue10
 	cp	a, 14
 	jr	nz, FileIO_BytecodeData_Code_Skip38
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 184
 	jr	z, FileIO_BytecodeData_Code_Skip38
 	cp	a, 180
@@ -580,7 +580,7 @@ FileIO_BytecodeData_Code_Skip40:
 	ld	xwa, FileIO_BytecodeData_Data_11
 	jr	FileIO_BytecodeData_Code_Join8
 FileIO_BytecodeData_Code_Skip41:
-	cp	(SEQ_MASTER_STATE:16), 184
+	cp	(CURRENT_TITLE:16), 184
 	jr	nz, FileIO_BytecodeData_Code_Skip42
 	cp	c, 14
 	jr	z, FileIO_BytecodeData_Code_Epilogue10
@@ -600,7 +600,7 @@ FileIO_BytecodeData_Code_Epilogue10:
 	dec	2, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 	jr	z, FileIO_BytecodeData_Code_Skip43
 	cp	a, 15
@@ -616,7 +616,7 @@ FileIO_BytecodeData_Code_Epilogue10:
 FileIO_BytecodeData_Code_Skip43:
 	jr	FileIO_BytecodeData_Code_Epilogue11
 FileIO_BytecodeData_Code_Skip44:
-	ld	a, (MAIN_TITLE_CURRENT:16)
+	ld	a, (ACTIVE_TITLE:16)
 	cp	a, 211
 	jr	z, FileIO_BytecodeData_Code_Skip45
 	cp	a, 210
@@ -654,7 +654,7 @@ FileIO_BytecodeData_Code_Epilogue11:
 	ld	xiz, xwa
 	.byte	0x8e, 0x02, 0x3f, 0x00
 	jr	z, FileIO_BytecodeData_Code_Epilogue12
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 	jr	z, FileIO_BytecodeData_Code_Skip47
 	cp	a, 15
@@ -670,7 +670,7 @@ FileIO_BytecodeData_Code_Epilogue11:
 FileIO_BytecodeData_Code_Skip47:
 	jr	FileIO_BytecodeData_Code_Epilogue12
 FileIO_BytecodeData_Code_Skip48:
-	ld	a, (MAIN_TITLE_CURRENT:16)
+	ld	a, (ACTIVE_TITLE:16)
 	cp	a, 211
 	jr	z, FileIO_BytecodeData_Code_Skip49
 	cp	a, 210
@@ -692,7 +692,7 @@ FileIO_BytecodeData_Code_Epilogue12:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue13
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
@@ -704,7 +704,7 @@ FileIO_BytecodeData_Code_Epilogue13:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue14
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
@@ -733,7 +733,7 @@ FileIO_BytecodeData_Code_Epilogue14:
 	ld	xiz, xwa
 	.byte	0x8e, 0x02, 0x3f, 0x00
 	jr	z, FileIO_BytecodeData_Code_Epilogue15
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue15
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
@@ -767,7 +767,7 @@ FileIO_BytecodeData_Code_Epilogue15:
 	ld	a, (xiz+2)
 	cp	a, 0:i3
 	jr	z, FileIO_BytecodeData_Code_Epilogue16
-	ld	c, (0x8c98:16)
+	ld	c, (CURRENT_MODE:16)
 	cp	c, 16
 	jr	z, FileIO_BytecodeData_Code_Skip54
 	cp	c, 15
@@ -778,7 +778,7 @@ FileIO_BytecodeData_Code_Epilogue15:
 	jr	z, FileIO_BytecodeData_Code_Skip54
 	cp	c, 19
 	jr	z, FileIO_BytecodeData_Code_Skip54
-	cp	(SEQ_MASTER_STATE:16), 81
+	cp	(CURRENT_TITLE:16), 81
 	jr	nz, FileIO_BytecodeData_Code_Entry6
 FileIO_BytecodeData_Code_Skip54:
 	jr	FileIO_BytecodeData_Code_Epilogue16
@@ -804,7 +804,7 @@ FileIO_BytecodeData_Code_Epilogue16:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 	jr	z, FileIO_BytecodeData_Code_Epilogue17
 	cp	a, 15
@@ -825,7 +825,7 @@ FileIO_BytecodeData_Code_Epilogue17:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue18
 	calr	FileIO_BytecodeData_Code_Helper3
 	.byte	0x83, 0x3f, 0x0f
@@ -844,7 +844,7 @@ FileIO_BytecodeData_Code_Epilogue18:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 17
 	jr	z, FileIO_BytecodeData_Code_Skip55
 	cp	a, 14
@@ -901,7 +901,7 @@ FileIO_BytecodeData_Code_Epilogue19:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 17
 	jr	z, FileIO_BytecodeData_Code_Epilogue20
 	cp	a, 19
@@ -918,7 +918,7 @@ FileIO_BytecodeData_Code_Epilogue20:
 	ld	xiz, xwa
 	.byte	0xf1, 0x31, 0x34, 0xcb
 	jr	nz, FileIO_BytecodeData_Code_Epilogue21
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 17
 	jr	z, FileIO_BytecodeData_Code_Skip58
 	cp	a, 19
@@ -942,7 +942,7 @@ FileIO_BytecodeData_Code_Epilogue21:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue22
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
@@ -963,7 +963,7 @@ FileIO_BytecodeData_Code_Epilogue22:
 	dec	4, xsp
 	push	qiz
 	ld	(xsp+2), xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jrl	z, FileIO_BytecodeData_Code_Epilogue23
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
@@ -1022,7 +1022,7 @@ FileIO_BytecodeData_Code_Epilogue23:
 	ldfr_berp	a, 251
 	cpib_erp	251, 0
 	jrl	z, FileIO_BytecodeData_Code_Epilogue24
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 14
 	jr	z, FileIO_BytecodeData_Code_Skip62
 	cp	a, 19
@@ -1086,7 +1086,7 @@ FileIO_BytecodeData_Code_Epilogue24:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue25
 	ld	xwa, 10374
 	call	AcApcToggleProc_Helper
@@ -1099,7 +1099,7 @@ FileIO_BytecodeData_Code_Epilogue25:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue26
 	ld	xwa, 10376
 	call	AcApcToggleProc_Helper
@@ -1112,7 +1112,7 @@ FileIO_BytecodeData_Code_Epilogue26:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue27
 	ld	xwa, 10378
 	call	AcApcToggleProc_Helper
@@ -1125,7 +1125,7 @@ FileIO_BytecodeData_Code_Epilogue27:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue28
 	ld	xwa, 10380
 	call	AcApcToggleProc_Helper
@@ -1138,7 +1138,7 @@ FileIO_BytecodeData_Code_Epilogue28:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue29
 	ld	xwa, 10382
 	call	AcApcToggleProc_Helper
@@ -1151,7 +1151,7 @@ FileIO_BytecodeData_Code_Epilogue29:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue30
 	ld	xwa, 10384
 	call	AcApcToggleProc_Helper
@@ -1162,7 +1162,7 @@ FileIO_BytecodeData_Code_Epilogue29:
 FileIO_BytecodeData_Code_Epilogue30:
 	pop	xiz
 	ret
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	ret	z
 	lda	xhl, (xwa+2)
 	lda	xix, (xwa+3)
@@ -1192,7 +1192,7 @@ FileIO_BytecodeData_Code_Join14:
 	ld	xwa, xiz
 	jr	FileIO_BytecodeData_Code_Join15
 FileIO_BytecodeData_Code_Skip65:
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue31
 	ld	(xiz), 179
 	ld	(xiz+1), 0
@@ -1202,12 +1202,12 @@ FileIO_BytecodeData_Code_Join15:
 FileIO_BytecodeData_Code_Epilogue31:
 	pop	xiz
 	ret
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	ret	z
 	jrl	FileIO_BytecodeData
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, FileIO_BytecodeData_Code_Epilogue32
 	ld	xwa, 260
 	call	AcApcToggleProc_Helper
@@ -1273,7 +1273,7 @@ FileIO_BytecodeData_Code_Helper4:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	cp	(0x8c98:16), 17
+	cp	(CURRENT_MODE:16), 17
 	jr	z, FileIO_BytecodeData_Code_Epilogue33
 	.byte	0xf1, 0x31, 0x34, 0xcb
 	jr	nz, FileIO_BytecodeData_Code_Epilogue33
@@ -1338,7 +1338,7 @@ FileIO_BytecodeData_Code_Join16:
 FileIO_BytecodeData_Code_Loop3:
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 	jr	z, FileIO_BytecodeData_Code_Skip69
 	cp	a, 15
@@ -1384,7 +1384,7 @@ FileIO_BytecodeData_Code_Epilogue34:
 FileIO_BytecodeData_Code_Join18:
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 	jr	z, FileIO_BytecodeData_Code_Skip72
 	cp	a, 15
@@ -1546,7 +1546,7 @@ FileIO_BytecodeData_Code_Helper4_Join3:
 	ld	(xhl), 64
 	jrl	FileIO_BytecodeData
 ExtDev_SndParam_BlockA9_Var02:
-	cp	(SEQ_MASTER_STATE:16), 135
+	cp	(CURRENT_TITLE:16), 135
 	ret	nz
 	.byte	0xf1
 	.byte 0x5d
@@ -1696,7 +1696,7 @@ FileIO_BytecodeData_Code_Helper4_Epilogue2:
 ; (pre-port v7 note about the bytes at 0xFC5FA0:)
 ; cpdi8	(0x8d34), 16 (v7 patched)
 ExtDev_SndParam_Block48_Var02:
-	cp	(0x8c98:16), 16
+	cp	(CURRENT_MODE:16), 16
 	ret	z
 ; (pre-port v7 note about the bytes at 0xFC5FA7:)
 ; setda	1, 0x90f9 (v7 patched)
@@ -1736,7 +1736,7 @@ FileIO_BytecodeData_Code_Join26:
 ExtDev_SndParam_DispatchAndWriteA8:
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 ; (pre-port v7 note about the bytes at 0xFC5FFB:)
 ; -> 0xFC6015
@@ -1797,7 +1797,7 @@ FileIO_BytecodeData_Code_Helper4_Epilogue3:
 ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 ; (pre-port v7 note about the bytes at 0xFC6054:)
 ; -> 0xFC606E
@@ -1875,7 +1875,7 @@ ExtDev_SndParam_DispatchComplex:
 	push	xiz
 	ld	(xsp+4), c
 	ld	xiz, xwa
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
 	jr	z, FileIO_BytecodeData_Code_Skip84
 	cp	a, 15
@@ -2026,7 +2026,7 @@ Audio_PeriodicUpdate:
 	ldmm16	0x8e26, SYSTEM_TIMESTAMP
 ; (pre-port v7 note about the bytes at 0xFC6212:)
 ; cpdi8 (0x8d36), 247 (v7 patched)
-	cp	(SEQ_MASTER_STATE:16), 247
+	cp	(CURRENT_TITLE:16), 247
 	ret	z
 ; (pre-port v7 note about the bytes at 0xFC6219:)
 ; calr Audio_ProcessVoiceQueue (v7 displacement)
@@ -2217,7 +2217,7 @@ Voice_SetupFromData:
 	lda	xde, (0x8df8:16)
 	exts	xwa
 	add	xwa, xde
-	cp	(SEQ_MASTER_STATE:16), 251
+	cp	(CURRENT_TITLE:16), 251
 	jrl	nz, MidiCC_ReturnClean
 	cp	(xiz), 0x3
 	jr	nz, MidiCC_ValidateRange
@@ -2490,7 +2490,7 @@ Audio_UpdateLEDsAndChannels:
 	orw	(0x8ea6:16), 2
 	ret
 MIDI_ProcessChangedChannels:
-	cp	(SEQ_MASTER_STATE:16), 251
+	cp	(CURRENT_TITLE:16), 251
 	ret	z
 	calr	Audio_CheckAndFlagChanges
 	ld	wa, (0x8ea0:16)
@@ -2526,7 +2526,7 @@ MidiChanged_ProcessGroup4:
 	ldw	(0x8eaa:16), 0
 	ret
 MidiChannel_DispatchChanged:
-	cp	(SEQ_MASTER_STATE:16), 251
+	cp	(CURRENT_TITLE:16), 251
 	ret	z
 	ld	wa, (0x8ea0:16)
 	cp	wa, 0:i3
@@ -2617,7 +2617,7 @@ CtrlPanel_UpdateLEDState:
 	ld	(xsp + 2), xwa
 	lda	xwa, (0x8e8c:16)
 	ld	(xsp + 6), xwa
-	cp	(SEQ_MASTER_STATE:16), 247
+	cp	(CURRENT_TITLE:16), 247
 	jr	z, LEDUpdate_Cleanup
 	ldib_erp	0xfb, 0
 LEDUpdate_ProcessChannel:
@@ -3098,7 +3098,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	resm	1, (xiy)
 	resm	2, (xiy)
 	resm	3, (xiy)
-	ldb_d8	a, (0x8c98)
+	ldb_d8	a, (CURRENT_MODE)
 	extz	wa
 	dec	2, wa
 	cp	wa, 0:i3
@@ -3232,7 +3232,7 @@ MidiChanged_ProcessGroup3_Data_Target8:
 	ret	z
 	; (pre-port v7 note about the bytes at 0xFC6DF7:)
 	; v10 does not spell this byte either
-	ld	c, (0x8c98:16)
+	ld	c, (CURRENT_MODE:16)
 	cp	c, 13
 	ret	z
 	cp	c, 12
@@ -3513,7 +3513,7 @@ CtrlPanel_SetBit3_OnStyleD0D3:
 	; --- Sub 4: conditionally set bit 3 at (0x8f25) based on (0x8d38) (33 bytes) ---
 	lda	xwa, (0x8e89:16)
 	resm	3, (xwa)
-	ld	c, (MAIN_TITLE_CURRENT:16)
+	ld	c, (ACTIVE_TITLE:16)
 	cp	c, 0xd3
 	jr	z, CtrlPanel_SetBit3
 	cp	c, 0xd2
@@ -3607,7 +3607,7 @@ CtrlPanel_GuardedNibbleSet_8F4E:
 	call	AcApcToggleProc_Helper
 	cp	hl, 0:i3
 	jr	z, CtrlPanelGuard_PassedCheck
-	cp	(0x8c98:16), 19
+	cp	(CURRENT_MODE:16), 19
 	jr	z, CtrlPanelGuard_PassedCheck
 	cp	(0x7e6f:16), 0
 	jr	z, CtrlPanel_BitOp_Cleanup
@@ -4142,7 +4142,7 @@ Audio_ResetAfterPayloadError:
 	call	SubCPU_Payload_GetErrorFlag
 	cp	hl, 0xffff
 	jr	nz, Audio_ReinitToneGen
-	cp	(SEQ_MASTER_STATE:16), 65
+	cp	(CURRENT_TITLE:16), 65
 	jr	nz, Audio_ReinitDisplay
 	ld	xwa, 0xc0
 	call	AcApcToggleProc_Helper
@@ -5067,7 +5067,7 @@ ExtData_ToneParam_DispatchHandler_Join:
 	jr	nz, ExtData_ToneParam_DispatchHandler_Skip4
 ; (pre-port v7 note about the bytes at 0xFC7E06:)
 ; differs from v10 here and llvm-objdump cannot read it
-	cp	(0x8c98:16), 13
+	cp	(CURRENT_MODE:16), 13
 	jr	nz, ExtData_ToneParam_DispatchHandler_Epilogue2
 ExtData_ToneParam_DispatchHandler_Skip4:
 	ld	a, (xde+3)
@@ -8623,7 +8623,7 @@ MidiStream_ProcessHandler_4:
 	ret
 MidiStream_ProcessSeqBuffer:
 	push	xiz
-	cp	(SEQ_MASTER_STATE:16), 201
+	cp	(CURRENT_TITLE:16), 201
 	jrl	nz, MidiSeqBuf_Return
 	cp	(0x7e6f:16), 0
 	jrl	z, MidiSeqBuf_Return
@@ -8782,12 +8782,12 @@ Audio_ProcessAllMidiStreams:
 MIDI_SelectTempoExpressionSource:
 	push	xiz
 	xor	wa, wa
-	ld	e, (0x8c98:16)
+	ld	e, (CURRENT_MODE:16)
 	cp	e, 0xb
 	jr	z, TempoSrc_CheckAutoPlay
 	cp	e, 0xd
 	jr	z, TempoSrc_DirectTempoMode
-	ld	d, (SEQ_MASTER_STATE:16)
+	ld	d, (CURRENT_TITLE:16)
 	cp	d, 0x87
 	jr	z, Tempo_Expression_Bypass
 	cp	d, 0x88
@@ -8816,12 +8816,12 @@ Tempo_ExpressionStore:
 	ret
 Mod_SelectExpressionSource:
 	xor	wa, wa
-	ld	e, (0x8c98:16)
+	ld	e, (CURRENT_MODE:16)
 	cp	e, 0xb
 	jr	z, ModExpr_CheckAutoPlay
 	cp	e, 0xd
 	jr	z, ModExpr_DirectMode
-	ld	d, (SEQ_MASTER_STATE:16)
+	ld	d, (CURRENT_TITLE:16)
 	cp	d, 0x87
 	jr	z, Tempo_Expression_Bypass
 	cp	d, 0x88
@@ -10871,7 +10871,7 @@ MidiCC_NullHandlerBlock_Helper:
 	calr	MidiStream_ExtendedDispatch
 	ret
 MidiStream_ApplyPendingParams:
-	cp	(0x8c98:16), 14
+	cp	(CURRENT_MODE:16), 14
 	jr	z, MidiStream_ApplyDone
 	ld	(0x905c:16), 255
 	and	d, 0x7
@@ -11308,7 +11308,7 @@ MidiStream_SysExJumpTable:
 MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
-	cp	(0x8c98:16), 14
+	cp	(CURRENT_MODE:16), 14
 	jr	z, 18
 	and	d, 7
 	jr	z, MidiStream_SysExData_Return
@@ -11397,7 +11397,7 @@ MidiStream_CmdMaskedDone:
 	ret
 ; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
 MidiStream_CmdPedalNotify:
-	cp	(0x8c98:16), 14
+	cp	(CURRENT_MODE:16), 14
 	jr	z, MidiStream_CmdPedalDone
 	bit	3, (0xfd50:16)
 	jr	z, MidiStream_CmdPedalDone
@@ -11457,9 +11457,9 @@ MidiRx_ProgramChange_Helper:
 	ld	(0x95a8:16), 72
 	ld	c, 72:opc
 MidiStream_CmdPedalNotify_Skip:
-	cp	(0x8c98:16), 14
+	cp	(CURRENT_MODE:16), 14
 	jr	z, MidiStream_CmdPedalNotify_Skip2
-	cp	(0x8c98:16), 17
+	cp	(CURRENT_MODE:16), 17
 	jr	nz, MidiStream_CmdPedalNotify_Skip3
 MidiStream_CmdPedalNotify_Skip2:
 	cp	c, 72
@@ -11470,9 +11470,9 @@ MidiStream_CmdPedalNotify_Skip3:
 	jr	nz, MidiStream_CmdPedalNotify_Skip4
 	bit	3, (0xfd50:16)
 	jr	z, MidiStream_CmdPedalNotify_Skip4
-	cp	(0x8c98:16), 14
+	cp	(CURRENT_MODE:16), 14
 	jr	z, MidiStream_ExtendedDispatch_Return4
-	cp	(0x8c98:16), 17
+	cp	(CURRENT_MODE:16), 17
 	jr	z, MidiStream_ExtendedDispatch_Return4
 	cp	e, 80
 	jr	nc, MidiStream_ExtendedDispatch_Return4
@@ -11736,7 +11736,7 @@ MidiCC_Handler_PairedParamA_Helper:
 	cp	(0x95a8:16), 72
 	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip4
 	ld	(0x95a8:16), 20
-	cp	(0x8c98:16), 14
+	cp	(CURRENT_MODE:16), 14
 	jrl	z, MidiStream_ExtendedDispatch_Helper_Return
 MidiStream_ExtendedDispatch_Helper_Skip4:
 	ldw_d16	bc, (0x95a8)

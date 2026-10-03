@@ -506,7 +506,7 @@ BmDrEdit_CheckTempoData:
 	call	TempoRingBuf_CheckEmpty
 	cp	hl, 0:i3
 	ret	z
-	ld	a, (MAIN_TITLE_CURRENT:16)
+	ld	a, (ACTIVE_TITLE:16)
 	cp	a, 149
 	jr	z, BmDrEdit_CheckTempoData_ReadyToProcess
 	cp	a, 152
@@ -1844,11 +1844,11 @@ BmDrEdit_InitCommon:
 	jr nz, BmDrEdit_InitCommon_CheckSongActive
 	ldw (0x2792:16), 48
 BmDrEdit_InitCommon_CheckSongActive:
-	ld	a, (SEQ_MASTER_STATE:16)
-	cp	a, (35995:16)
+	ld	a, (CURRENT_TITLE:16)
+	cp	a, (PREVIOUS_TITLE:16)
 	jr	nz, BmDrEdit_InitCommon_SetupDisplay
-	ld	a, (MAIN_TITLE_CURRENT:16)
-	cp	a, (MAIN_TITLE_PREVIOUS:16)
+	ld	a, (ACTIVE_TITLE:16)
+	cp	a, (ACTIVE_TITLE_PREVIOUS:16)
 	jr	z, BmDrEdit_InitCommon_SetupDisplay
 	bit 4, (0x28ad:16)
 	jr	z, BmDrEdit_InitCommon_SetupDisplay
@@ -1866,7 +1866,7 @@ BmDrEdit_InitCommon_SetupDisplay:
 	ld	wa, (10595:16)
 	ld	(3407:16), wa
 	ldmm16 0x0d51, 0x2963
-	ld	a, (MAIN_TITLE_PREVIOUS:16)
+	ld	a, (ACTIVE_TITLE_PREVIOUS:16)
 	cp	a, 150
 	jr	z, BmDrEdit_CopyStepCount
 	cp	a, 153
@@ -1991,7 +1991,7 @@ BmDrEdit_CleanupDrumMode:
 	push XWA
 	call Free
 	inc 4,XSP
-	cp (SEQ_MASTER_STATE:16), 0x98
+	cp (CURRENT_TITLE:16), 0x98
 	jr z, BmDrEdit_SkipPartSelect
 	res 0, (0x26e2:16)
 	call PartSelect_UpdateDisplayState
@@ -1999,7 +1999,7 @@ BmDrEdit_SkipPartSelect:
 	jr BmDrEdit_CleanupCommon
 
 BmDrEdit_CleanupMelodicMode:
-	cp (SEQ_MASTER_STATE:16), 0x95
+	cp (CURRENT_TITLE:16), 0x95
 	jr z, BmDrEdit_SkipMelodicPartSelect
 	res 0, (0x26e2:16)
 	call PartSelect_UpdateDisplayState
@@ -4516,8 +4516,8 @@ BmDrEdit_SecondaryNote_PopIzReturn:
 	ret
 
 BmDrEdit_EnterPlayMode:
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8c9b:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (PREVIOUS_TITLE:16)
 	ret Z
 	ld a, (0x28b1:16)
 	ld (0x283c:16), a
@@ -4546,14 +4546,14 @@ BmDrEdit_EnterPlay_AllocAndInit:
 	jp SeqPlay_AllocBuffersAndInit
 
 BmDrEdit_ExitPlayMode:
-	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8c9b:16)
+	ld a, (CURRENT_TITLE:16)
+	cp a, (PREVIOUS_TITLE:16)
 	ret Z
 	ldmm8 0x28b1, 0x283c
 	ldw (0xf19e:16), 0
 	call PerfMode_Handler_EvtB_Helper2_Helper11
 	call AccWrap_PlayModeDispatch
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 149
 	jr z, BmDrEdit_ExitPlay_RestoreSequencer
 	cp a, 152

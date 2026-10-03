@@ -36,7 +36,7 @@ screen_group_dispatch_Skip:
 screen_group_dispatch_Entry:
 	.byte	0xd1, 0x00, 0xc5, 0x3e, 0x01, 0x00
 screen_group_dispatch_Skip2:
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	extz	wa
 ; (v7 label ScreenGroup_SetupWidgetPtr stood here; dropped, see the file header)
 	sla	wa, 2
@@ -81,7 +81,7 @@ DkMdlyPly_CheckState_Helper2_Join:
 	ld	(0xc165:16), 255
 	orw	(0xc500:16), 257
 	.byte	0xd1, 0xf8, 0xc4, 0x3c, 0xfd, 0xff
-	ld	a, (0x8c98:16)
+	ld	a, (CURRENT_MODE:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (AudioVoiceHandler_Table:24)

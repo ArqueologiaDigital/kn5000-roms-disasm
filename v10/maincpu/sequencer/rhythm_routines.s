@@ -1230,7 +1230,7 @@ Rhythm_SaveState:
 	ld (0x3308:16), a
 	ld a, (0x3470:16)
 	ld (0x3281:16), a
-	ld a, (0x8d34:16)
+	ld a, (CURRENT_MODE:16)
 	ld (0x32f1:16), a
 	ld a, (0x3335:16)
 	ld (0x32f2:16), a

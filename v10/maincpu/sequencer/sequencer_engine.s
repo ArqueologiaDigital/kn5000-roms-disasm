@@ -92,7 +92,7 @@ SeqAcc_InitAndDispatch:
 ; -----------------------------------------------------------------------------
 
 SeqAcc_HandlePlaybackTick:
-	cp (SEQ_MASTER_STATE:16), 136
+	cp (CURRENT_TITLE:16), 136
 	jr z, SeqAcc_HandlePlaybackTick_ClearBit2
 	bit 1, (8970:16)
 	jr z, SeqAcc_HandlePlaybackTick_ClearBit1
@@ -145,7 +145,7 @@ SeqAcc_StartPlayback:
 	jp SeqBuf_Init
 
 SeqAcc_StopPlayback:
-	cp (SEQ_MASTER_STATE:16), 136
+	cp (CURRENT_TITLE:16), 136
 	jr z, SeqAcc_StopPlayback_HandleTick
 	res 0, (0xf23c:16)
 	calr SeqAcc_SetupRepeatCount
@@ -745,7 +745,7 @@ SeqPlay_SelectStopCommand:
 	jr SeqPlay_SendStopAndClearParts
 
 SeqPlay_SelectStopCommand_Check88:
-	cp (MAIN_TITLE_PREVIOUS:16), 136
+	cp (ACTIVE_TITLE_PREVIOUS:16), 136
 	jr nz, SeqPlay_SelectStopCommand_Default18
 	ldw wa, 0x3b
 	jr SeqPlay_SendStopAndClearParts
@@ -1459,7 +1459,7 @@ SeqPlay_ProcessCh_FoundDrum:
 SeqPlay_ProcessCh_DrumShiftDone:
 	and bc, (0xf19e:16)
 	jrl z, SeqPlay_PopIzSkip6Ret
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr nz, SeqPlay_ProcessCh_ValidateChannel
 	set 0, (1115:16)
 	jrl SeqPlay_PopIzSkip6Ret
@@ -2071,7 +2071,7 @@ SeqPlay_InitializePlayback:
 	pushw_erp 0xfa
 	res 5, (0x28b3:16)
 	ld (7572:16), 0
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	jr z, SeqPlay_Init_AccMode87_88
 	cp a, 0x88
@@ -2314,7 +2314,7 @@ SeqPlay_FindSpecialVoices:
 	ldw bc, 0xf
 	call Part_FindVoiceByByte
 	ld (8996:16), l
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	jr z, SeqPlay_ClearPositionAndFlags
 	cp a, 0x88
@@ -2494,7 +2494,7 @@ SeqPlay_PreparePlaybackState:
 SeqPlay_Prepare_CheckRepeat:
 	call SeqPlay_CheckRepeatAndReactivate
 	call Seq_CheckChordVoiceAndSetFlag
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr z, SeqPlay_Prepare_LoadVoiceConfig
 	set 3, (0x28a7:16)
 
@@ -2512,7 +2512,7 @@ SeqPlay_Prepare_SetState6:
 	ld (8956:16), 6
 
 SeqPlay_Prepare_CheckMode87:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	jr z, KeyScan_DisableComplete_Return
 	cp a, 0x88
@@ -2525,7 +2525,7 @@ KeyScan_DisableComplete_Return:
 	ret
 
 SeqPlay_HandlePlaybackEvent:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	jr z, SeqPlay_HandleEvent_AccMode
 	cp a, 0x88
@@ -2558,7 +2558,7 @@ SeqPlay_HandleEvent_StopAndClean:
 	call AccompSeq_StopSequence
 	cpw (0xf19e:16), 0
 	jr z, SeqPlay_ClearFlagsRet
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr nz, SeqPlay_HandleEvent_SyncTiming
 	ldw (0xf19e:16), 0
 	call Audio_CheckSubsystemReady
@@ -2616,7 +2616,7 @@ SeqPlay_ClearFlagsRet:
 SeqPlay_ProcessVoiceAndNotes:
 	lda xsp, (xsp - 12)
 	push xiz
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	jr z, SeqPlay_ProcessVoice_AccMode
 	cp a, 0x88
@@ -2718,7 +2718,7 @@ SeqPlay_ProcessVoice_Cleanup:
 	ld (0x28be:16), 255
 	bit 1, (9834:16)
 	jr nz, SeqPlay_ProcessVoice_PartChange
-	cp (0x8d34:16), 10
+	cp (CURRENT_MODE:16), 10
 	jr z, SeqPlay_ProcessVoice_ClearBit
 	ldw wa, 0xa
 	call UI_PostPartChangeEvent
@@ -4930,7 +4930,7 @@ AccPedalCfg_StoreValues:
 AccPedalCfg_CheckBit6Replay:
 	bit_erpb 0xfb, 0x06
 	jr z, AccPedalCfg_CheckBit7Alt
-	cp (MAIN_TITLE_CURRENT:16), 129
+	cp (ACTIVE_TITLE:16), 129
 	jr nz, AccPedalConfig_ApplyChannelSettings
 	bit 5, (0x28b3:16)
 	jr z, AccPedalConfig_ApplyChannelSettings
@@ -6991,7 +6991,7 @@ NotePool_DataBlock_890:
 NotePool_DataBlock_8BA:
 	bit	7, (8958:16)
 	ret	nz
-	cp	(0x8d34:16), 14
+	cp	(CURRENT_MODE:16), 14
 	ret	z
 	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 5:i3
@@ -7001,7 +7001,7 @@ NotePool_DataBlock_8BA:
 	and	c, a
 	and	c, 64
 	ret	z
-	cp	(MAIN_TITLE_CURRENT:16), 138
+	cp	(ACTIVE_TITLE:16), 138
 	ret	z
 	cpw	(0xf19e:16), 0
 	ret	z
@@ -7058,7 +7058,7 @@ SeqStart_CheckPlaybackBit:
 
 SeqStart_LoadPositionAndMode:
 	ld wa, (9832:16)
-	ld c, (MAIN_TITLE_CURRENT:16)
+	ld c, (ACTIVE_TITLE:16)
 	cp c, 0x85
 	jr z, SeqStart_HandleMode85_86
 	cp c, 0x86
@@ -7165,7 +7165,7 @@ Seq_ResetAndRestartAccompaniment:
 	res 1, (0x347a:16)
 	res 3, (0x28a7:16)
 	res 2, (0x28b3:16)
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr nz, Seq_ResetRestart_NormalPath
 	ld (7572:16), 1
 	calr SeqPlay_InitFromDemoRecord
@@ -7219,7 +7219,7 @@ SeqPlay_StopReset_CleanupAll:
 	set 2, a
 	ld (0x28b3:16), a
 	ld (8956:16), 0
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	ret nz
 	ldw (0xf19e:16), 0
 	call Audio_CheckSubsystemReady
@@ -9643,7 +9643,7 @@ PartDeact_CheckSubsystem:
 	ret
 
 Accomp_UpdateModeFlag:
-	cp (SEQ_MASTER_STATE:16), 129
+	cp (CURRENT_TITLE:16), 129
 	jr z, AccompMode_SetFlag
 	cpw (0xf19e:16), 0
 	jr z, AccompMode_ClearFlag
@@ -9713,7 +9713,7 @@ Seq_SyncPositionAndOutputMIDITiming:
 	jr Seq_PopIzSkip8Ret
 
 SeqSync_CheckDemoMode:
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr z, Seq_PopIzSkip8Ret
 	bit 0, (0xb7e7:16)
 	jr nz, Seq_PopIzSkip8Ret
@@ -10410,7 +10410,7 @@ SeqBuffer_RemoveLast_Fixup:
 	ret
 
 SeqPlay_AllocBuffersAndInit:
-	ld c, (SEQ_MASTER_STATE:16)
+	ld c, (CURRENT_TITLE:16)
 	cp c, 0x85
 	jr z, SeqPlay_AllocBuf_Mode85_86
 	cp c, 0x86
@@ -10495,7 +10495,7 @@ SeqPlay_InitStartState:
 	jr SeqInitStart_SetActiveFlag
 
 SeqInitStart_CheckPlayMode:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x85
 	jr z, SeqInitStart_Mode85_86
 	cp a, 0x86
@@ -10534,7 +10534,7 @@ SeqPlay_ResetStartState:
 	res 4, (0x28b3:16)
 	ld (7518:16), 0
 	ld (9508:16), 0
-	cp (SEQ_MASTER_STATE:16), 142
+	cp (CURRENT_TITLE:16), 142
 	ret z
 	cp (0xe386:16), 1
 	jr nz, SeqResetStart_ClearActiveFlag
@@ -10808,14 +10808,14 @@ MidiEvtSize_Return1:
 
 SeqPlay_CheckRepeatActive:
 	ld l, 0x0:opc
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	ret z
 	cp a, 0x88
 	ret z
 	ld bc, (9004:16)
 	ld wa, (9002:16)
-	ld e, (0x8d34:16)
+	ld e, (CURRENT_MODE:16)
 	cp e, 0xb
 	jr nz, SeqRepeatCheck_Mode13
 	bit 1, (0x28b1:16)
@@ -10991,7 +10991,7 @@ SeqNotify_DataBlock:
 SeqNotify_CheckAndClearStart:
 	bit 0, (0x28b3:16)
 	ret z
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	jr z, SeqNotify_ClearStartFlag
 	cp a, 0x88
@@ -11014,7 +11014,7 @@ SeqModeTransit_ClearFlags:
 	res 4, a
 	res 1, a
 	ld (1054:16), a
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr nz, SeqModeTransit_CheckBit5
 	calr SeqModeTransit_DemoPath
 	jr Voice_LoadPresetReturn
@@ -17255,7 +17255,7 @@ SeqMIDI_ProcessControlChange:
 	jrl z, SeqScan_CheckPartActiveAndStore
 	bit 1, (0x28b1:16)
 	jrl z, SeqScan_CheckPartActiveAndStore
-	cp (0x8d34:16), 11
+	cp (CURRENT_MODE:16), 11
 	jrl nz, SeqScan_CheckPartActiveAndStore
 	ld e, (9696:16)
 	ld a, e
@@ -17320,7 +17320,7 @@ SeqMIDI_PitchBendReturn:
 	jr z, SeqScan_StoreTrackEndData
 	bit 1, (0x28b1:16)
 	jr z, SeqScan_StoreTrackEndData
-	cp (0x8d34:16), 11
+	cp (CURRENT_MODE:16), 11
 	jr nz, SeqScan_StoreTrackEndData
 	ld e, (9696:16)
 	ld a, e
@@ -18910,7 +18910,7 @@ SeqPlay_StateDeactivateChannel:
 
 SeqPlay_ClearFlags_Exit:
 	res 3, (0x28a7:16)
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x87
 	jr z, SeqPlay_ResetModeAndDisplay
 	cp a, 0x88
@@ -19134,7 +19134,7 @@ SeqPlay_FindSetBitAndDeact:
 	extz wa
 	ld bc, 0:i3
 	calr Chan_SetActiveBit
-	cp (0x8d34:16), 11
+	cp (CURRENT_MODE:16), 11
 	jr z, SeqPlay_FindAfterReset
 	ldw (0x28b4:16), 0
 	ldw (9008:16), 0
@@ -19169,7 +19169,7 @@ SeqVoice_DeactivateAndReinit:
 	ld a, (xsp)
 	extz wa
 	calr SeqVoice_UpdateSubBlockAssign
-	cp (0x8d34:16), 11
+	cp (CURRENT_MODE:16), 11
 	jr z, SeqDeact_DetectTypeReturn
 	ldw (0x28b4:16), 0
 	ldw (9008:16), 0
@@ -19190,9 +19190,9 @@ SeqDeact_DetectTypeReturn:
 SeqVoice_UpdateSubBlockAssign:
 	dec 2, xsp
 	ld (xsp), a
-	cp (0x8d34:16), 11
+	cp (CURRENT_MODE:16), 11
 	jr z, SeqUpdate_FindVoiceAndWrite
-	cp (SEQ_MASTER_STATE:16), 135
+	cp (CURRENT_TITLE:16), 135
 	jr nz, Part_WriteSubBlock_Exit
 
 SeqUpdate_FindVoiceAndWrite:
@@ -19513,9 +19513,9 @@ SeqPlay_BufferUpdateBlock:
 	cp	e, c
 	ret	ugt
 	ld	wa, (9832:16)
-	cp	(SEQ_MASTER_STATE:16), 133
+	cp	(CURRENT_TITLE:16), 133
 	jr	z, SeqPlay_StopAndClearSequence_Skip4
-	cp	(MAIN_TITLE_CURRENT:16), 134
+	cp	(ACTIVE_TITLE:16), 134
 	jr	nz, SeqPlay_StopAndClearSequence_Skip5
 SeqPlay_StopAndClearSequence_Skip4:
 	cp wa, (9506:16)
@@ -19898,7 +19898,7 @@ SeqTimer_BarOverflow:
 SeqTimer_BarReturn:
 	dec 4, xsp
 	pushw_erp 0xfa
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr nz, SeqTimer_BarChangeProcess
 	ld a, (0x28a4:16)
 	ldfr_berp A, 0xfb
@@ -19982,7 +19982,7 @@ SeqTimer_BarChangeCleanup:
 	ret
 
 SeqTimer_CheckPlaybackCountdown:
-	cp (0x8d34:16), 19
+	cp (CURRENT_MODE:16), 19
 	jr nz, SeqTimer_FlagsReturn
 	ld a, (0x2966:16)
 	bit 7, a
@@ -20054,7 +20054,7 @@ SeqEvent_CaseE:
 
 ; SeqEvent main handler
 SeqEvent_MainHandler:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0x91
 	jrl z, AppEvent_SubHandler0
 	cp a, 0x90
@@ -20337,7 +20337,7 @@ AppEvent_ChainDispatch1:
 ; Handles up to 32 event types (XBC 0-0x1f), used by ApDeliveryEvent system
 ; Each handler increments counters, sends notifications via CALL 0FA9E07h
 APP_EVENT_HANDLER_TABLE:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
@@ -20357,7 +20357,7 @@ AppEvtHandler_Branch_002:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AppEvtHandler_Branch_033
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
@@ -20412,13 +20412,13 @@ AppEvtHandler_Branch_005:
 	ld xde, 2:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_006:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0xa3
 	jrl z, AppEvtHandler_Branch_011
 	cp a, 0xa1
 	jrl z, AppEvtHandler_Branch_013
 	jrl AppEvent_Epilogue
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
@@ -20474,7 +20474,7 @@ AppEvtHandler_Branch_009:
 	ld xde, 1:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_010:
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	cp a, 0xa3
 	jr nz, AppEvtHandler_Branch_012
 AppEvtHandler_Branch_011:
@@ -20912,7 +20912,7 @@ AppEvent_InlineHandler:
 	jp	t, (xix+bc)
 ; Application event sub-dispatch
 AppEvent_SubDispatch:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	extz	wa
 	sub	wa, 156
 	cp	wa, 0:i3
@@ -20932,7 +20932,7 @@ AppEvent_InlineHandler_Skip16:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jrl	AppEvent_InlineHandler_Join8
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	extz	wa
 	sub	wa, 156
 	cp	wa, 0:i3
@@ -20987,13 +20987,13 @@ AppEvent_InlineHandler_Skip18:
 	ld	xde, 2:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 163
 	jrl	z, AppEvent_InlineHandler_Skip4
 	cp	a, 161
 	jrl	z, AppEvent_InlineHandler_Skip20
 	jrl	SeqState_DispatchEntry
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	extz	wa
 	sub	wa, 156
 	cp	wa, 0:i3
@@ -21049,7 +21049,7 @@ AppEvent_InlineHandler_Skip2:
 	ld	xde, 1:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip3:
-	ld	a, (SEQ_MASTER_STATE:16)
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, 163
 	jr	nz, AppEvent_InlineHandler_Skip5
 AppEvent_InlineHandler_Skip4:
@@ -21528,7 +21528,7 @@ SeqVoice_DispatchEventToHandler:
 SeqVoice_ComputeStatusFlags:
 	dec 2, xsp
 	ld (xsp), a
-	ld e, (MAIN_TITLE_CURRENT:16)
+	ld e, (ACTIVE_TITLE:16)
 	ld bc, 1:i3
 	ld a, (xsp)
 	and a, 0xf
@@ -21604,7 +21604,7 @@ AppEvent_HandleChannelEvent:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
-	ld e, (SEQ_MASTER_STATE:16)
+	ld e, (CURRENT_TITLE:16)
 	cp e, 0x9a
 	jrl z, AppEvent_Handle9AToggle
 	ld c, (xsp + 4)
@@ -21837,7 +21837,7 @@ EffEditMain:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xde
-	ld e, (MAIN_TITLE_CURRENT:16)
+	ld e, (ACTIVE_TITLE:16)
 	cp xbc, EVT_CNG_EFF_PARA
 	jrl z, EffEdit_HandleDirectWrite
 	cp xbc, EVT_CNG_EFF_TYPE
@@ -21853,7 +21853,7 @@ EffEditMain:
 	ld xbc, EVT_RET_EFF_FIX
 	ld xde, 0:i3
 	call ApDeliveryEvent
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0xd6
 	jr z, EffEdit_DispatchTypeD6
 	cp a, 0xe
@@ -22085,7 +22085,7 @@ EffEdit_DSPConfigBlock:
 	call	EffEdit_DSPConfigBlock_Helper
 	cp	hl, 0:i3
 	jrl	lt, EffEdit_DSPConfigBlock_Epilogue
-	ld	a, (MAIN_TITLE_CURRENT:16)
+	ld	a, (ACTIVE_TITLE:16)
 	cp	a, 214
 	jrl	z, EffEdit_DSPConfigBlock_Skip4
 	cp	a, 14
@@ -22329,7 +22329,7 @@ EffEdit_ValidateLoop:
 	ld (xwa+), 0x00
 	cp xwa, xde
 	jr c, EffEdit_ValidateLoop
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0xd6
 	jrl z, EffEdit_ReadParamD6
 	cp a, 0xe
@@ -22627,7 +22627,7 @@ ApPlaySyori:
 	ldfr_werp WA, 0xea
 	ld a, (0x283a:16)
 	ldfr_berp A, 0xee
-	ld a, (SEQ_MASTER_STATE:16)
+	ld a, (CURRENT_TITLE:16)
 	ldfr_berp A, 0xef
 	cp xbc, EVT_DEC_VAL
 	jrl z, SeqAccomp_SubChain
@@ -22637,7 +22637,7 @@ ApPlaySyori:
 	jrl nz, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
 	ld (0x2972:16), xwa
-	ld c, (SEQ_MASTER_STATE:16)
+	ld c, (CURRENT_TITLE:16)
 	cp c, 0x99
 	jrl z, SeqAccomp_DispatchRhythmEvents
 	cp c, 0x96
@@ -22902,7 +22902,7 @@ ApPlaySyori_Join9:
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(SEQ_MASTER_STATE:16), 134
+	cp	(CURRENT_TITLE:16), 134
 	jr	nz, ApPlaySyori_Skip2
 	ld	wa, iy
 	cp	iy, 999
@@ -22940,7 +22940,7 @@ ApPlaySyori_Skip:
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(SEQ_MASTER_STATE:16), 134
+	cp	(CURRENT_TITLE:16), 134
 	jr	nz, ApPlaySyori_Skip3
 	ld	wa, hl
 	cp	hl, 999
@@ -23077,7 +23077,7 @@ ApPlaySyori_Join5:
 	jrl	SeqAccomp_StartHandler
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(SEQ_MASTER_STATE:16), 134
+	cp	(CURRENT_TITLE:16), 134
 	jr	nz, ApPlaySyori_Skip8
 	ld	wa, iy
 	cp	iy, 1:i3
@@ -23101,7 +23101,7 @@ ApPlaySyori_Join6:
 	jr	SeqAccomp_SubHandlerB_Code_Join
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(SEQ_MASTER_STATE:16), 134
+	cp	(CURRENT_TITLE:16), 134
 	jr	nz, ApPlaySyori_Skip9
 	ld	wa, hl
 	cp	hl, 1:i3
@@ -23195,7 +23195,7 @@ ApPlaySyori_Skip12:
 
 ; SeqAccomp start helper
 SeqAccomp_StartHelper:
-	cp (SEQ_MASTER_STATE:16), 133
+	cp (CURRENT_TITLE:16), 133
 	jrl nz, SeqAccomp_HandleOtherState
 	bit 2, (1057:16)
 	jr nz, SeqAccomp_TogglePlayback
@@ -23302,7 +23302,7 @@ NoteEdit_ScrollSetZero:
 	ld (xsp + 2), xwa
 
 NoteEdit_ScrollDispatchMode:
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0x85
 	jr nz, NoteEdit_ScrollCheck86
 	ld xwa, (xsp + 2)
@@ -23343,7 +23343,7 @@ NoteEdit_ScrollInactive:
 NoteEdit_ScrollActivate:
 	set 0, c
 	ld (0x28b2:16), c
-	cp (MAIN_TITLE_CURRENT:16), 133
+	cp (ACTIVE_TITLE:16), 133
 	jr nz, SeqAccomp_InitAndReturn
 	ldw wa, 0xab
 	call SoundCtrl_SendCommand
@@ -23525,7 +23525,7 @@ NoteEditSy_ScrollCase2:
 	jp ApDeliveryEvent
 
 NoteEditSy_SendModeScrollReset:
-	ld c, (MAIN_TITLE_CURRENT:16)
+	ld c, (ACTIVE_TITLE:16)
 	ld xwa, (0x2972:16)
 	cp c, 0x99
 	jr z, NoteEditSy_ScrollCase4
@@ -23589,7 +23589,7 @@ NoteEditSy_DeliverReturn:
 	ret
 
 SeqMode_SendStatusUpdate:
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0x87
 	jr z, SeqMode_Status87
 	cp a, 0x85
@@ -23617,7 +23617,7 @@ SeqMode_StatusDeliver:
 	ret
 
 SeqAccomp_SendStopNotify:
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0x85
 	jr z, SeqAccomp_StopNotifyDeliver
 	cp a, 0x87
@@ -23658,7 +23658,7 @@ SngSel_HandlePrevSong:
 	inc 1, a
 	ld (7502:16), a
 	call SetWall_LoadToneGenData
-	cp (MAIN_TITLE_CURRENT:16), 129
+	cp (ACTIVE_TITLE:16), 129
 	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
 	ld xwa, 0:i3
@@ -23675,7 +23675,7 @@ SngSel_HandleNextSong:
 	dec 1, a
 	ld (7502:16), a
 	call SetWall_LoadToneGenData
-	cp (MAIN_TITLE_CURRENT:16), 129
+	cp (ACTIVE_TITLE:16), 129
 	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
 	ld xwa, 0:i3
@@ -24262,7 +24262,7 @@ SqRealRecTitleFunc:
 	jr z, SqRealRec_HandleExitState
 	cp xde, 0x2
 	jr nz, SqRealRec_ReturnZero
-	cp (MAIN_TITLE_PREVIOUS:16), 131
+	cp (ACTIVE_TITLE_PREVIOUS:16), 131
 	jr nz, SqRealRec_ReturnZero
 	cp (9980:16), 1
 	jr nz, SqRealRec_ReturnZero
@@ -24302,7 +24302,7 @@ SqRealRec_DetectAndInit:
 	jr SqRealRec_ReturnZero
 
 SqRealRec_HandleExitState:
-	cp (0x8d34:16), 10
+	cp (CURRENT_MODE:16), 10
 	jr z, SqRealRec_ReturnZero
 	res 0, (0x8d88:16)
 
@@ -24322,7 +24322,7 @@ SqPlayTitleFunc:
 	jr z, SqPlay_ReturnZero
 	bit 2, (1057:16)
 	jr nz, SqPlay_ReturnZero
-	cp (MAIN_TITLE_PREVIOUS:16), 130
+	cp (ACTIVE_TITLE_PREVIOUS:16), 130
 	jr z, SqPlay_ReturnZero
 	ldmm16 9832, 9500
 	call SeqPlay_InitStartState
@@ -24330,7 +24330,7 @@ SqPlayTitleFunc:
 	jr SqPlay_ReturnZero
 
 SqPlay_HandleExitState:
-	cp (0x8d34:16), 1
+	cp (CURRENT_MODE:16), 1
 	jr z, SqPlay_ReturnZero
 	res 0, (0x8d88:16)
 
@@ -24705,7 +24705,7 @@ EtmenuTitleFunc:
 	cp xde, 0x2
 	jrl nz, EtmenuTtl_ReturnZero
 	ld (0xe38c:16), 0
-	cp (0x8d34:16), 7
+	cp (CURRENT_MODE:16), 7
 	jr nz, EtmenuTtl_ReturnZero
 	ld xwa, 0xd60003
 	ld bc, 1:i3
@@ -24751,7 +24751,7 @@ EtmenuTtl_ReturnZero:
 	ret
 
 MainExeCall:
-	ld a, (MAIN_TITLE_CURRENT:16)
+	ld a, (ACTIVE_TITLE:16)
 	cp a, 0x91
 	jrl z, MainExe_Handle91
 	cp a, 0x8d
@@ -25294,7 +25294,7 @@ HelpLang_DispatchDataBlock:
 	cp	a, 49
 	ret	ugt
 	ld	(0x2970:16), a
-	cp	(MAIN_TITLE_CURRENT:16), 231
+	cp	(ACTIVE_TITLE:16), 231
 	ret	nz
 	ld	e, (0x0340e4:24)
 	ld	c, (0x296e:16)
@@ -25371,9 +25371,9 @@ HelpLangChkMain:
 	jr z, HelpLang_LoadSlide
 	cp xbc, EVT_SHOW
 	jr nz, HelpLangChk_ReturnZero
-	cp (MAIN_TITLE_CURRENT:16), 231
+	cp (ACTIVE_TITLE:16), 231
 	jr nz, HelpLang_SetFlashAndLoadSlide
-	cp (MAIN_TITLE_PREVIOUS:16), 238
+	cp (ACTIVE_TITLE_PREVIOUS:16), 238
 	jr z, HelpLang_SetFlashAndLoadSlide
 	call Get_Region_Code
 	cp l, 3:i3

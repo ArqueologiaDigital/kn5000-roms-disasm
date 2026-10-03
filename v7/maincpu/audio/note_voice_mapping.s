@@ -493,7 +493,7 @@ AccNoteOn_AutoPlayCheck:
 	cp	iz, wa
 	jr	c, AccNoteOn_AutoPlayLoop
 	call	CompIface_ResetPedal
-	cp	(MAIN_TITLE_CURRENT:16), 236
+	cp	(ACTIVE_TITLE:16), 236
 	jr	nz, AccNoteOn_EmitVoiceLoop_Init
 	ld	iz, 0:i3
 	ld	e, 0x7f:opc
@@ -8933,7 +8933,7 @@ NoteMap_ResetEntryTimers:
 	pushw_erp	0xfa
 	ld	(xsp + 16), e
 	ld	(xsp + 18), xwa
-	cp	(SEQ_MASTER_STATE:16), 152
+	cp	(CURRENT_TITLE:16), 152
 	jr	nz, ResetTimers_Return
 	ldw	(xsp + 2), 0x0
 	jr	ResetTimers_CheckCount
@@ -9968,7 +9968,7 @@ SelectTone_Continue_Return:
 	ret
 SelectTone_Continue_Prologue:
 	dec	6, xsp
-	cp	(SEQ_MASTER_STATE:16), 246
+	cp	(CURRENT_TITLE:16), 246
 	jr	nz, SelectTone_Continue_LoadReg
 	ld	wa, 0:i3
 	ld	bc, 0:i3
@@ -12628,7 +12628,7 @@ ProcessEventDispatch_LoadParam:
 	ld	de, (xsp + 10)
 	ldw	bc, 0x20
 	call	UIState_CheckAndRenderBitmap_Helper
-	cp	(SEQ_MASTER_STATE:16), 220
+	cp	(CURRENT_TITLE:16), 220
 	jr	z, ProcessEventDispatch_InitVal
 	ld	wa, (xsp + 4)
 	pushw	0x3
@@ -12656,7 +12656,7 @@ ProcessEventDispatch_LoadParam2:
 	ld	de, (xsp + 12)
 	ldw	bc, 0x5e
 	call	UIState_CheckAndRenderBitmap_Helper
-	cp	(SEQ_MASTER_STATE:16), 220
+	cp	(CURRENT_TITLE:16), 220
 	jr	z, ProcessEventDispatch_LoadParam3
 	ld	wa, (xsp + 4)
 	pushw	0x3
@@ -24253,7 +24253,7 @@ CommPort_StatusCheckAndSend:
 CommPort_StatusCheck_Compare:
 	cp	a, c
 	jr	nz, CheckValidityReturn_SetByteFF
-	ld	wa, (MAIN_TITLE_CURRENT:16)
+	ld	wa, (ACTIVE_TITLE:16)
 	cp	a, 0xd6
 	jr	z, Note_CheckValidityReturn
 	cp	a, 0xe

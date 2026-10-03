@@ -14,7 +14,7 @@ FmmSmfLoadTitleFunc:
 	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
-	ldmm8	0x7fee, 0x8c9b
+	ldmm8	0x7fee, PREVIOUS_TITLE
 	cpw	(33892:16), 0
 	jr	ge, SmfLoad_DispatchState
 	call	GetDiskSizeInfo
@@ -136,7 +136,7 @@ SmfLoad_CancelCleanup:
 SmfLoad_HandleOk:
 	cp	xde, 15
 	jr	nz, SmfLoad_Return
-	cp	(35992:16), 7
+	cp	(CURRENT_MODE:16), 7
 	jr	nz, SmfLoad_OkReturnCode
 	ldw	wa, 214
 	jr	SmfLoad_CallHandler
@@ -542,7 +542,7 @@ FmmSmfFileNameFunc_Code:
 	ld	xwa, 0:i3
 	ld	(33032:16), xwa
 	ld	(33036:16), xwa
-	cp	(SEQ_MASTER_STATE:16), 107
+	cp	(CURRENT_TITLE:16), 107
 	jr	z, FmmSmfFileNameFunc_Skip
 	call	GetFirstPageBase
 	ld	(33040:16), hl
@@ -592,7 +592,7 @@ SmfFN_NavSetup:
 	jr	nz, SmfFN_NavUp
 	ld	bc, ix
 	inc	1, bc
-	cp	(SEQ_MASTER_STATE:16), 107
+	cp	(CURRENT_TITLE:16), 107
 	jr	z, SmfFN_NavDown_WrapCheck
 	cp	bc, (0x8468:16)
 	jr	lt, SmfFN_NavDown_Apply
@@ -634,7 +634,7 @@ SmfFN_PageDown:
 	ld	de, ix
 	exts	xde
 	divs	de, 0xa
-	cp	(SEQ_MASTER_STATE:16), 107
+	cp	(CURRENT_TITLE:16), 107
 	jr	z, SmfFN_PageDown_WrapCheck
 	ld	hl, bc
 	cp	iy, bc
@@ -1147,14 +1147,14 @@ SmfFN_RefreshIfChanged:
 SmfFN_RedrawPage:
 	muls	bc, 10
 	calr	DisplaySmfFileList
-	cp	(SEQ_MASTER_STATE:16), 108
+	cp	(CURRENT_TITLE:16), 108
 	jr	nz, SmfFN_UpdateFilenameField
 	ld	xwa, (xsp+32)
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	FmmSmfMedleyFunc
 SmfFN_UpdateFilenameField:
-	cp	(SEQ_MASTER_STATE:16), 107
+	cp	(CURRENT_TITLE:16), 107
 	jr	nz, SmfFN_SendOkState
 	lda	xiz, (34740:16)
 	ld	wa, (33040:16)
