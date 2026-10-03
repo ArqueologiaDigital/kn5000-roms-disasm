@@ -64,4 +64,14 @@ prom_a only although prom_b's thunks reach prom_a's names through `.set sub_X, 0
 
 | pack | rebased renames | read | rejected | applied in |
 |---|---:|---:|---:|---|
-| prom_a-s06 | 120 | 120 | 0 | (this commit) |
+| prom_a-s00 | 109 | 109 | 0 | 8180b9b1 |
+| prom_a-s01 | 102 | 102 | 0 | bcc02630 |
+| prom_a-s02 | 100 | 100 | 0 | 42ab99c7 |
+| prom_a-s03 | 93 | 93 | 0 | 295213fd |
+| prom_a-s04 | 60 | 60 | 0 | 818baaed |
+| prom_a-s05 | 104 | 104 | 0 | 591c85fa |
+| prom_a-s06 | 120 | 120 | 0 | 4305cf6e |
+| prom_a-s08 | 99 | 99 | 0 | 94f69793 |
+
+Total 787 renames, all read, none rejected.  prom_a's `addrlbl` (semantic_debt_dashboard.py) went
+3,177 -> 2,390.  Slices s07 and s09-s25 of prom_a, prom_b's 16 slices, prom_c and the kernel were never named.
