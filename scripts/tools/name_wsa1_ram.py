@@ -19,6 +19,7 @@ QUESTION THIS ANSWERS / JOB IT DOES
 
 USAGE
   python3 scripts/tools/name_wsa1_ram.py [--apply]
+  python3 scripts/tools/name_wsa1_ram.py --check   # any number left that a name covers? (exit 1)
 """
 import argparse
 import glob
@@ -124,7 +125,23 @@ def inc_text():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--check", action="store_true",
+                    help="list code lines that still spell a named address as a number; exit 1 if any")
     a = ap.parse_args()
+    if a.check:
+        left = 0
+        for f in SOURCES:
+            p = f if os.path.isabs(f) else os.path.join(REPO, f)
+            for k, l in enumerate(open(p, "rb").read().decode("latin-1").split("\n")):
+                code = l.split(";")[0]
+                if not code.strip() or code.strip().startswith("."):
+                    continue
+                for m in re.finditer(r'(0x[0-9a-fA-F]+|\b\d+\b)', code):
+                    if int(m.group(1), 0) in NAMES:
+                        left += 1
+                        print("%s:%d: %s" % (os.path.relpath(p, REPO), k + 1, code.strip()))
+        print("%d numeric spellings of named addresses left" % left)
+        return 1 if left else 0
     total = 0
     for f in SOURCES:
         p = f if os.path.isabs(f) else os.path.join(REPO, f)
