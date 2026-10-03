@@ -31,9 +31,9 @@ NMI_ClearGuardAndHalt:
 	ld (1024:16), 0
 	res 7, (354:16)
 	set	2, (PF:8)
-	halt
 NMI_HaltLoop:
-	jr	t, 0xfd
+	halt
+	jr	t, NMI_HaltLoop
 
 ; ===========================================================================
 ; NMI_StorePayloadChecksums - Power-off NMI: save checksums and copy payload
@@ -2029,6 +2029,7 @@ INTT3_PriorityAdjust_Active:
 	ld a, 0x5:opc
 	ld c, 0x3:opc
 	jrl TaskSched_ChangePriority_Inline
+TaskTimer_NullCallback:
 	ret
 
 INTT3_HANDLER:
@@ -2151,17 +2152,15 @@ TaskSched_InitMsgQueues:
 	ld (xhl+), IX
 	ld (xhl+), IX
 	djnz8 b, TaskSched_InitMsgQueues
-	ld xwa, TaskSched_InitMsgQueues_Code
+	ld xwa, TaskSched_TimerDesc_Slot1
 	jr TaskSched_PostInit
 
-TaskSched_InitMsgQueues_Code:
-	normal
-	nop
-	normal
-	nop
-	jr	pe, 25
-	.byte 0xef
-	nop
+TaskSched_TimerDesc_Slot1:
+	; The descriptor TaskSched_InitMsgQueues passes to TaskTimer_Register in XWA.  TaskTimer_Register
+	; reads byte +0 as the timer slot; +4 is TaskTimer_NullCallback, a bare `ret`.  Was decoded as
+	; `normal / nop / normal / nop / jr pe, 25 / .byte 0xef / nop`.
+	.byte	1, 0, 1, 0
+	.long	TaskTimer_NullCallback
 
 TaskSched_PostInit:
 	call TaskTimer_Register
@@ -5903,10 +5902,11 @@ INT0_HANDLER:
 			; out of the latch into the buffer, DMAC0 decremented once.
 	reti
 INT0_UnusedBranch:
-	jr	t, 0x03
+	jr	t, INT0_ProcessCommand_Reti
 
 INT0_ProcessCommand:
 	calr INT0_ReadLatch
+INT0_ProcessCommand_Reti:
 	reti
 
 INT0_ReadLatch:

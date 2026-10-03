@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,448
-#   semantic names ........... 50,546 (98.2%)
+#   symbols .................. 51,450
+#   semantic names ........... 50,548 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -15432,7 +15432,7 @@ INTT2_HANDLER 00EF087A
 NMI_HANDLER 00EF087B
 NMI_SetPowerOffCode_A5A5 00EF0894
 NMI_ClearGuardAndHalt 00EF089B
-NMI_HaltLoop 00EF08A8
+NMI_HaltLoop 00EF08A7
 NMI_StorePayloadChecksums 00EF08AA
 NMI_CopyPayloadToSRAM 00EF08EA
 SubCPU_Payload_Verify 00EF0901
@@ -15664,6 +15664,7 @@ TaskSched_ExtQueue2ByteInit 00EF1913
 ScreenGroup3_IdleSpin 00EF191F
 INTT3_PriorityAdjust 00EF1921
 INTT3_PriorityAdjust_Active 00EF192E
+TaskTimer_NullCallback 00EF193A
 INTT3_HANDLER 00EF193B
 TaskSched_Init 00EF194D
 TaskSched_InitPriorityQueues 00EF196A
@@ -15675,7 +15676,7 @@ TaskSched_InitFreeList 00EF19F4
 TaskSched_LinkFreeSlots 00EF1A0E
 TaskSched_InitLockQueues 00EF1A30
 TaskSched_InitMsgQueues 00EF1A42
-TaskSched_InitMsgQueues_Code 00EF1A54
+TaskSched_TimerDesc_Slot1 00EF1A54
 TaskSched_PostInit 00EF1A5C
 TaskSched_AllIdle 00EF1A8D
 TaskSched_HaltLoop 00EF1A94
@@ -15986,6 +15987,7 @@ FlashBufferIO_Exit 00EF34F9
 INT0_HANDLER 00EF34FB
 INT0_UnusedBranch 00EF3506
 INT0_ProcessCommand 00EF3508
+INT0_ProcessCommand_Reti 00EF350B
 INT0_ReadLatch 00EF350C
 INT0_CheckE2Command 00EF3545
 INT0_HandleDataCommand 00EF356F
