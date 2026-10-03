@@ -25564,37 +25564,44 @@ TimeSig_DisplayStrings_Code_Helper2_Return:
 	ret
 TimeSig_DisplayStrings_Code_Helper3:
 	push	xwa
-	ld	xwa, TimeSig_DisplayStrings_Code4
+	ld	xwa, TimeSig_SlotBitMask
 	ld	a, (xwa+h)
 	or (14449:16), a
 	pop	xwa
 	ret
-TimeSig_DisplayStrings_Code4:
-	normal
-	push	sr
-	max
-	ld	(P2:8), 8:io
-	ld	(P2:8), 62:io
-	call	16145497
+TimeSig_SlotBitMask:
+	; H -> the bit TimeSig_DisplayStrings_Code_Helper3 ORs into (0x3871); 3..7 share bit 3.
+	; Was decoded as `normal / push sr / max / ld (P2:8), 8 ...`.
+	.byte	0x01, 0x02, 0x04, 0x08, 0x08, 0x08, 0x08, 0x08
+	push	xiz
+	call	TimeSig_DisplayStrings_Helper2
 	pop	xiz
 	ret
+TimeSig_DisplayStrings_Helper2:
 	ret
-	.byte 0xc1, 0x6e, 0x38, 0x04, 0xc1, 0x6f, 0x38, 0x04
-	ld	(14446:16), 0
+	; No reference found.  Saves (0x386E)/(0x386F), runs (0x386E) = 0..4 through
+	; DrumVoice_NotifyEE_Helper5, DrumVoice_NotifyEE_Helper7 (XIX = XIY) and DrumVoice_NotifyEE_Helper10,
+	; restores both and clears (0x3871).  (v10/v9 name the helpers TimeSig_DisplayStrings_Helper,
+	; TimeSig_DisplayStrings_Code_Helper_Helper and TimeSig_DisplayStrings_Code_Helper3_Helper.)
+TimeSig_RunSlots0to4:
+	push	(0x386e:16)
+	push	(0x386f:16)
+	ld	(0x386e:16), 0
 DrumVoice_NotifyEE_Join13:
-	cp	(14446:16), 5
-	jr	z, 19
-	calr	-416
+	cp	(0x386e:16), 5
+	jr	z, TimeSig_RunSlots0to4_Done
+	calr	DrumVoice_NotifyEE_Helper5
 	ld	xix, xiy
 	push	xix
 	calr	DrumVoice_NotifyEE_Helper7
 	pop	xix
 	calr	DrumVoice_NotifyEE_Helper10
-	inc	1, (14446:16)
+	inc	1, (0x386e:16)
 	jr	DrumVoice_NotifyEE_Join13
+TimeSig_RunSlots0to4_Done:
 	pop	(0x386f:16)
 	pop	(0x386e:16)
-	ld	(14449:16), 0
+	ld	(0x3871:16), 0
 	ret
 DrumVoice_NotifyEE_Helper10:
 	bit	1, (0x3871:16)

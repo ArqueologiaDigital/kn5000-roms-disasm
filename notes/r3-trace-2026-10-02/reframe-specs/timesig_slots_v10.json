@@ -1,0 +1,35 @@
+[
+ {
+  "file": "v10/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF6604E",
+  "end": "0xF66093",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "byte",
+    "len": 8,
+    "per_line": 8
+   },
+   {
+    "kind": "code",
+    "len": 61
+   }
+  ],
+  "labels": {
+   "0xF6605E": "TimeSig_RunSlots0to4",
+   "0xF66085": "TimeSig_RunSlots0to4_Done"
+  },
+  "comments": {
+   "0xF6604E": [
+    "H -> the bit TimeSig_DisplayStrings_Code_Helper3 ORs into (0x390D); 3..7 share bit 3.",
+    "Was decoded as `normal / push sr / max / ld (P2:8), 8 ...`."
+   ],
+   "0xF6605E": [
+    "No reference found.  Saves (0x390A)/(0x390B), runs (0x390A) = 0..4 through",
+    "TimeSig_DisplayStrings_Helper, TimeSig_DisplayStrings_Code_Helper_Helper (XIX = XIY) and",
+    "TimeSig_DisplayStrings_Code_Helper3_Helper, restores both and clears (0x390D).",
+    "Was `.byte 0xc1 / ldw (57:8), 0xc104 / pushw 1081`, i.e. `push (0x390a) / push (0x390b)`."
+   ]
+  }
+ }
+]

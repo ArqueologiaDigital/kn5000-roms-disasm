@@ -134,3 +134,17 @@ With the targets labelled, `symbolize_numeric_branches.py --image v7 --only sequ
 `call 16069349`, refused as an R2 fragment because it follows the TimeSig table, and the v7 port copied
 the number. It is named in all three trees.
 
+
+### `timesig_slots_<tree>.json` (2026-10-03)
+
+v10/v9 0xF6604E-0xF66093 (R3 cluster at 0xF6605E):
+
+- `TimeSig_SlotBitMask` (renamed from `TimeSig_DisplayStrings_Code4` by
+  `scripts/renaming/rename_timesig_slot_bitmask.sed`, all three trees) holds `01 02 04 08 08 08 08 08`,
+  the masks `TimeSig_DisplayStrings_Code_Helper3` ORs into (0x390D).
+- `TimeSig_RunSlots0to4` was `.byte 0xc1 / ldw (57:8), 0xc104 / pushw 1081`. No absolute pointer in the
+  ROM, no number in the source and no branch reaches it.
+
+v7 (0xF65C4A, lines 25573-25598): `port_islands.py ... --whole 25573-25598 --delta 0x404 --apply`
+ported 69 B in 23 lines, identical after round 0. Its comments were then restated by hand with v7's RAM
+addresses (0x386E/0x386F/0x3871) and v7's helper names (`DrumVoice_NotifyEE_Helper5/7/10`).

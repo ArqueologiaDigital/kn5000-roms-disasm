@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,633
-#   semantic names ........... 50,819 (98.4%)
+#   symbols .................. 51,635
+#   semantic names ........... 50,821 (98.4%)
 #   positional names ......... 814
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33317,9 +33317,11 @@ TimeSig_DisplayStrings_Code_Helper2 00F66015
 TimeSig_DisplayStrings_Code_Helper2_Skip 00F66039
 TimeSig_DisplayStrings_Code_Helper2_Return 00F6603C
 TimeSig_DisplayStrings_Code_Helper3 00F6603D
-TimeSig_DisplayStrings_Code4 00F6604E
+TimeSig_SlotBitMask 00F6604E
 TimeSig_DisplayStrings_Helper2 00F6605D
+TimeSig_RunSlots0to4 00F6605E
 TimeSig_DisplayStrings_Code_Helper3_Join 00F6606B
+TimeSig_RunSlots0to4_Done 00F66085
 TimeSig_DisplayStrings_Code_Helper3_Helper 00F66093
 TimeSig_DisplayStrings_Code_Helper3_Skip 00F660A2
 TimeSig_DisplayStrings_Code_Helper3_Skip2 00F660B1

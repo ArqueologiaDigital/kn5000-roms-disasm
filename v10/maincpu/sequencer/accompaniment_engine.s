@@ -26674,30 +26674,33 @@ TimeSig_DisplayStrings_Code_Helper2_Return:
 	ret
 TimeSig_DisplayStrings_Code_Helper3:
 	push	xwa
-	ld	xwa, TimeSig_DisplayStrings_Code4
+	ld	xwa, TimeSig_SlotBitMask
 	ld	a, (xwa+h)
 	or (14605:16), a
 	pop	xwa
 	ret
-TimeSig_DisplayStrings_Code4:
-	normal
-	push	sr
-	max
-	ld	(P2:8), 8:io
-	ld	(P2:8), 62:io
+TimeSig_SlotBitMask:
+	; H -> the bit TimeSig_DisplayStrings_Code_Helper3 ORs into (0x390D); 3..7 share bit 3.
+	; Was decoded as `normal / push sr / max / ld (P2:8), 8 ...`.
+	.byte	0x01, 0x02, 0x04, 0x08, 0x08, 0x08, 0x08, 0x08
+	push	xiz
 	call	TimeSig_DisplayStrings_Helper2
 	pop	xiz
 	ret
 TimeSig_DisplayStrings_Helper2:
 	ret
-	.byte 0xc1
-	ldw	(57:8), 0xc104:io
-	pushw	1081
+	; No reference found.  Saves (0x390A)/(0x390B), runs (0x390A) = 0..4 through
+	; TimeSig_DisplayStrings_Helper, TimeSig_DisplayStrings_Code_Helper_Helper (XIX = XIY) and
+	; TimeSig_DisplayStrings_Code_Helper3_Helper, restores both and clears (0x390D).
+	; Was `.byte 0xc1 / ldw (57:8), 0xc104 / pushw 1081`, i.e. `push (0x390a) / push (0x390b)`.
+TimeSig_RunSlots0to4:
+	push	(0x390a:16)
+	push	(0x390b:16)
 	ld	(0x390a:16), 0
 TimeSig_DisplayStrings_Code_Helper3_Join:
 	cp	(0x390a:16), 5
-	jr	z, 19
-	calr	65120
+	jr	z, TimeSig_RunSlots0to4_Done
+	calr	TimeSig_DisplayStrings_Helper
 	ld	xix, xiy
 	push	xix
 	calr	TimeSig_DisplayStrings_Code_Helper_Helper
@@ -26705,6 +26708,7 @@ TimeSig_DisplayStrings_Code_Helper3_Join:
 	calr	TimeSig_DisplayStrings_Code_Helper3_Helper
 	inc	1, (0x390a:16)
 	jr	TimeSig_DisplayStrings_Code_Helper3_Join
+TimeSig_RunSlots0to4_Done:
 	pop	(0x390b:16)
 	pop	(0x390a:16)
 	ld	(0x390d:16), 0
