@@ -7356,7 +7356,7 @@ VersionScreen_Show:
 	push XWA                                             ; F82AC0  38
 	call T_DisplayList_Run_Stack                         ; F82AC1  1d 00 2e f4
 	inc 8,XSP                                            ; F82AC5  ef 60
-	m_cp_mi16 MW24, 0xfffffa, 0x6673                     ; F82AC7  d2 fa ff ff 3f 73 66
+	m_cp_mi16 MW24, VersionScreen_Show_Data, 0x6673                     ; F82AC7  d2 fa ff ff 3f 73 66
 	jr nz, .LF82ADC                                      ; F82ACE  6e 0c
 	ld XWA,VersionScreen_DisplayLists+0x9C               ; F82AD0  40 9f 2b f8 00
 	ld XHL,VersionScreen_DisplayLists+0x69               ; F82AD5  43 6c 2b f8 00
@@ -40132,7 +40132,7 @@ sub_F95AD1__F95B07:
 	extz XBC                                             ; F95B07  e9 12
 	ld (xiz-4), xbc                                      ; F95B09  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95B0C  e1 46 28 20
-	and XWA,0x00ff0fff                                   ; F95B10  e8 cc ff 0f ff 00
+	and XWA,sub_F95AD1_Data                                   ; F95B10  e8 cc ff 0f ff 00
 	or XBC,XWA                                           ; F95B16  e8 e1
 	ld (0x2846:16), xbc                                 ; F95B18  f1 46 28 61
 	calr sub_F95C2D                                          ; F95B1C  1e 0e 01
@@ -40224,7 +40224,7 @@ sub_F95BCA:   ; entry: screen button-handler table
 	extz XBC                                             ; F95BF7  e9 12
 	ld (xiz-4), xbc                                      ; F95BF9  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95BFC  e1 46 28 20
-	and XWA,0x00fffff0                                   ; F95C00  e8 cc f0 ff ff 00
+	and XWA,BUILD_TAG                                   ; F95C00  e8 cc f0 ff ff 00
 	or XBC,XWA                                           ; F95C06  e8 e1
 	ld (0x2846:16), xbc                                 ; F95C08  f1 46 28 61
 	calr sub_F95C2D                                            ; F95C0C  1e 1e 00
@@ -64909,7 +64909,7 @@ MIDI_UART_Configure:
 	ld (0x52:8), 0x29:io                               ; FA58F2  08 52 29   SC0MOD = 8-bit UART, baud-rate generator
 	ld (0x51:8), 0x00:io                               ; FA58F5  08 51 00   SC0CR cleared
 	ld (0x53:8), 0x0e:io                               ; FA58F8  08 53 0e   BR0CR: divide by 896 -> 31250 baud at fc = 28 MHz
-	m_cp_mi8 MB24, 0xfffff8, 0x24                 ; FA58FB  c2 f8 ff ff 3f 24   the byte here is 0x02 -- never equal
+	m_cp_mi8 MB24, MIDI_UART_Configure_Data, 0x24                 ; FA58FB  c2 f8 ff ff 3f 24   the byte here is 0x02 -- never equal
 	jr nz, .LFA5906                               ; FA5901  6e 03
 	ld (0x53:8), 0x0c:io                               ; FA5903  08 53 0c   divide by 768 -- NOT REACHED
 .LFA5906:
@@ -106520,7 +106520,7 @@ sub_FBFFA6:
 	ld XBC,0x00000000                                    ; FBFFA6  41 00 00 00 00
 	and XBC,XBC                                          ; FBFFAB  e9 c1
 	jr z, .LFBFFBB                                       ; FBFFAD  66 0c
-	lda xiy, (0xfbffd5:24)                               ; FBFFAF  f2 d5 ff fb 35
+	lda xiy, (sub_FBFFA6_Data:24)                               ; FBFFAF  f2 d5 ff fb 35
 	lda xix, (0x00:24)                                   ; FBFFB4  f2 00 00 00 34
 	ldir85                                               ; FBFFB9  85 11
 .LFBFFBB:
@@ -106539,6 +106539,7 @@ sub_FBFFA6:
 ; 0xFBFFD5-0xFBFFFF -- 43 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
+sub_FBFFA6_Data:
 	.fill 43, 1, 0x0E
 
 ; ==============================================================================
@@ -179416,7 +179417,8 @@ DisplayList_NoteEditTrackSong:
 	.byte 0x0A, 0x0A                               ; FF0FF0  op 0A, 10 bytes, handler 0xF31A75
 	.byte 0x05, 0x00, 0xD4, 0x00, 0x22, 0x00, 0xEC, 0x00  ; FF0FF2
 	.byte 0x0A, 0x0A                               ; FF0FFA  op 0A, 10 bytes, handler 0xF31A75
-	.byte 0x2D, 0x00, 0xD4, 0x00, 0x4A, 0x00, 0xEC, 0x00  ; FF0FFC
+	.byte	0x2D, 0x00, 0xD4  ; FF0FFC
+sub_F95AD1_Data:	.byte	0x00, 0x4A, 0x00, 0xEC, 0x00
 	.byte 0x0A, 0x0A                               ; FF1004  op 0A, 10 bytes, handler 0xF31A75
 	.byte 0x55, 0x00, 0xD4, 0x00, 0x72, 0x00, 0xEC, 0x00  ; FF1006
 	.byte 0x0A, 0x0A                               ; FF100E  op 0A, 10 bytes, handler 0xF31A75
@@ -191956,8 +191958,10 @@ VECTORS:
 ; image in its own right.
 BUILD_TAG:
 	.ascii "wsaa_822"
+MIDI_UART_Configure_Data:
 	.byte 0x02
-	.ascii "ssf"
+	.ascii	"s"
+VersionScreen_Show_Data:	.ascii	"sf"
 	.byte 0x00, 0x00, 0x00, 0x00
 ; ★ RENAMED 2026-08-30 from `end`.  It is an end-of-image marker -- the
 ; address one past the last byte -- and nothing in this tree references it,

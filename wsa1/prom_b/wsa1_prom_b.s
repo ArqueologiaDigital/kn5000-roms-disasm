@@ -2152,6 +2152,7 @@ sub_F002F4_Skip:
 	m_or_mi8 MB8, 0xa0, 0x02	; F00334  or (0xa0),0x02
 sub_F002F4_Join:
 	call	T_MIDI_PostSendWork	; F00338  call 0xf40724
+sub_F00D24_Code:
 	ei	0	; F0033C  ei 0x00
 sub_F002F4_Return:
 	ret	; F0033E  ret
@@ -3147,7 +3148,7 @@ sub_F00D24:
 	ld	c, 4:opc	; F00D4A  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F00D4C  mul BC,(XIZ+0xfc)
 	extz	xbc	; F00D4F  extz XBC
-	add	xbc, 15729468	; F00D51  add XBC,0x00f0033c
+	add	xbc, sub_F00D24_Code	; F00D51  add XBC,0x00f0033c
 	ld	xbc, (xbc)	; F00D57  ld XBC,(XBC)
 	lda	xiy, (sub_F00D24_Resume:24)	; F00D59  lda XIY,0xf00d61
 	push	xiy	; F00D5E  push XIY
@@ -33364,7 +33365,7 @@ DspEffect_PaintParamEditor_Join:
 	ld	c, d	; F1114E  ld C,D
 	extz	bc	; F11150  extz BC
 	extz	xbc	; F11152  extz XBC
-	add	xbc, 15816736	; F11154  add XBC,0x00f15820
+	add	xbc, DspEffect_PaintParamEditor_Resume_Data	; F11154  add XBC,0x00f15820
 	push	xbc	; F1115A  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F1115B  call 0xf42e0c
 	add	h, 15	; F1115F  add H,0x0f
@@ -41151,6 +41152,7 @@ DLB_Records_F157A8:
 	.long	DLTable_HzHzHzHzHzSSSSMsMsMs	;   +7 string table
 	.short	0x0007		;   +0x0B bytes per entry
 	.short	0x1D2A		;   +0x0D -> IX
+DspEffect_PaintParamEditor_Resume_Data:
 	.byte	0x02, 0x0F	; F15820  [ 8] op 02 -> handler 0xF31B21, 15 bytes
 	.short	0x2640		;   +2 source variable
 	.byte	0x03, 0x00	;   +4 AND mask, +5 right shift
@@ -97433,6 +97435,7 @@ sub_F487A7:		; <- T_F40B74
 ;           notes/prom_b_dl_screens_round5.py --tables --apply.
 Table_WsaSoundRamS0Wsa1:
 	.ascii	"WSA SOUND RAM S0"	; F48C00  16 bytes
+DiskFile_CheckSignature_Data:
 	.ascii	"WSA1"	; F48C10  4 bytes
 	.byte	0x88, 0x00, 0x18, 0x00, 0x00, 0x00	; F48C14  [0..5]
 
@@ -97478,7 +97481,7 @@ DiskFile_CheckSignature:		; <- T_DiskFile_CheckSignature
 	lda	xiy, (Table_WsaSoundRamS0Wsa1:24)	; F48C24  lda XIY,0xf48c00
 	lda	xix, (xiz-58)	; F48C29  lda XIX,XIZ+0xc6
 	ldirw	; F48C2C  ldirw
-	ld	xbc, (16026640:24)	; F48C2E  ld XBC,(0xf48c10)
+	ld	xbc, (DiskFile_CheckSignature_Data:24)	; F48C2E  ld XBC,(0xf48c10)
 	ld	(xiz-36), xbc	; F48C33  ld (XIZ+0xdc),XBC
 	ld	(10368:16), 38	; F48C36  ld (0x2880),0x26
 	push	xde	; F48C3B  push XDE
@@ -158327,7 +158330,7 @@ MsgLine_Control_Cleared:
 	ldw	bc, 15	; F6D41B  ld BC,0x000f
 	ld	(xix+), wa	; F6D41E  ld (XIX+),WA
 	djnz16	bc, -6	; F6D421  djnz BC,0xf6d41e
-	ld	xiy, 16176228	; F6D424  ld XIY,0x00f6d464
+	ld	xiy, MsgLine_Control_Cleared_Code	; F6D424  ld XIY,0x00f6d464
 	ld	xix, 4073	; F6D429  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D42E  ld BC,0x0007
 	ldir85	; F6D431  ldir
@@ -158394,7 +158397,7 @@ sub_F6D443:
 ; --------------------------------------------------------------------------
 MsgLine_Control:
 	calr	MsgLine_Clear	; F6D447  calr 0xf6d9fb
-	ld	xiy, 16176228	; F6D44A  ld XIY,0x00f6d464
+	ld	xiy, MsgLine_Control_Cleared_Code	; F6D44A  ld XIY,0x00f6d464
 	ld	xix, 4073	; F6D44F  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D454  ld BC,0x0007
 	ldir85	; F6D457  ldir
@@ -158402,6 +158405,7 @@ MsgLine_Control:
 	calr	sub_F6D890	; F6D45C  calr 0xf6d890
 	call	T_F431B4	; F6D45F  call 0xf431b4
 	ret	; F6D463  ret
+MsgLine_Control_Cleared_Code:
 	ld	xhl, 1381256783	; F6D464  ld XHL,0x52544e4f
 	popw	sp	; F6D469  pop SP
 	popw	ix	; F6D46A  pop IX
@@ -187709,14 +187713,15 @@ sub_F7C6B2:		; <- T_F42A50
 	ld	(3151:16), w	; F7C6BE  ld (0x0c4f),W
 	ld	l, (3574:16)	; F7C6C2  ld L,(0x0df6)
 	cp	l, 1:i3	; F7C6C6  cp L,1
-	m_jp_cc MD24, 0xf7c6e5, 7	; F7C6C8  jp C,0xf7c6e5
+	m_jp_cc MD24, sub_F7C6B2_Code, 7	; F7C6C8  jp C,0xf7c6e5
 	cp	l, 4:i3	; F7C6CD  cp L,4
-	m_jp_cc MD24, 0xf7c6e5, 11	; F7C6CF  jp UGT,0xf7c6e5
+	m_jp_cc MD24, sub_F7C6B2_Code, 11	; F7C6CF  jp UGT,0xf7c6e5
 	xor	h, h	; F7C6D4  xor H,H
 	sla	hl, 2	; F7C6D6  sla 0x02,HL
 	ld	xde, SongStore_DispatchA_1	; F7C6D9  ld XDE,0x00f7c6e6
 	mx_ld_rm MXL, ra_DE, ra_HL, 3	; F7C6DE  ld XHL,(XDE+HL)
 	call	(xhl)	; F7C6E3  call T,XHL
+sub_F7C6B2_Code:
 	ret	; F7C6E5  ret
 
 ; SongStore_DispatchA_1 -- 5 pointers, dispatched on (0x0DF6)
@@ -187789,14 +187794,15 @@ sub_F7C6FB:		; <- T_F42A54
 	ld	(3151:16), w	; F7C707  ld (0x0c4f),W
 	ld	l, (3574:16)	; F7C70B  ld L,(0x0df6)
 	cp	l, 1:i3	; F7C70F  cp L,1
-	m_jp_cc MD24, 0xf7c72e, 7	; F7C711  jp C,0xf7c72e
+	m_jp_cc MD24, sub_F7C6FB_Code, 7	; F7C711  jp C,0xf7c72e
 	cp	l, 4:i3	; F7C716  cp L,4
-	m_jp_cc MD24, 0xf7c72e, 11	; F7C718  jp UGT,0xf7c72e
+	m_jp_cc MD24, sub_F7C6FB_Code, 11	; F7C718  jp UGT,0xf7c72e
 	xor	h, h	; F7C71D  xor H,H
 	sla	hl, 2	; F7C71F  sla 0x02,HL
 	ld	xde, SongStore_DispatchA_2	; F7C722  ld XDE,0x00f7c72f
 	mx_ld_rm MXL, ra_DE, ra_HL, 3	; F7C727  ld XHL,(XDE+HL)
 	call	(xhl)	; F7C72C  call T,XHL
+sub_F7C6FB_Code:
 	ret	; F7C72E  ret
 
 ; SongStore_DispatchA_2 -- 5 pointers, dispatched on (0x0DF6)
@@ -188194,14 +188200,15 @@ sub_F7C918:		; <- T_F42AA4
 	ld	(3151:16), w	; F7C924  ld (0x0c4f),W
 	ld	l, (3565:16)	; F7C928  ld L,(0x0ded)
 	cp	l, 1:i3	; F7C92C  cp L,1
-	m_jp_cc MD24, 0xf7c94b, 7	; F7C92E  jp C,0xf7c94b
+	m_jp_cc MD24, sub_F7C918_Code, 7	; F7C92E  jp C,0xf7c94b
 	cp	l, 5:i3	; F7C933  cp L,5
-	m_jp_cc MD24, 0xf7c94b, 11	; F7C935  jp UGT,0xf7c94b
+	m_jp_cc MD24, sub_F7C918_Code, 11	; F7C935  jp UGT,0xf7c94b
 	xor	h, h	; F7C93A  xor H,H
 	sla	hl, 2	; F7C93C  sla 0x02,HL
 	ld	xde, SongStore_DispatchB_1	; F7C93F  ld XDE,0x00f7c94c
 	mx_ld_rm MXL, ra_DE, ra_HL, 3	; F7C944  ld XHL,(XDE+HL)
 	call	(xhl)	; F7C949  call T,XHL
+sub_F7C918_Code:
 	ret	; F7C94B  ret
 
 ; SongStore_DispatchB_1 -- 6 pointers, dispatched on (0x0DED)
@@ -188258,14 +188265,15 @@ sub_F7C964:		; <- T_F42AA8
 	ld	(3151:16), w	; F7C970  ld (0x0c4f),W
 	ld	l, (3565:16)	; F7C974  ld L,(0x0ded)
 	cp	l, 1:i3	; F7C978  cp L,1
-	m_jp_cc MD24, 0xf7c997, 7	; F7C97A  jp C,0xf7c997
+	m_jp_cc MD24, sub_F7C964_Code, 7	; F7C97A  jp C,0xf7c997
 	cp	l, 5:i3	; F7C97F  cp L,5
-	m_jp_cc MD24, 0xf7c997, 11	; F7C981  jp UGT,0xf7c997
+	m_jp_cc MD24, sub_F7C964_Code, 11	; F7C981  jp UGT,0xf7c997
 	xor	h, h	; F7C986  xor H,H
 	sla	hl, 2	; F7C988  sla 0x02,HL
 	ld	xde, SongStore_DispatchB_2	; F7C98B  ld XDE,0x00f7c998
 	mx_ld_rm MXL, ra_DE, ra_HL, 3	; F7C990  ld XHL,(XDE+HL)
 	call	(xhl)	; F7C995  call T,XHL
+sub_F7C964_Code:
 	ret	; F7C997  ret
 
 ; SongStore_DispatchB_2 -- 6 pointers, dispatched on (0x0DED)
@@ -188634,14 +188642,15 @@ sub_F7CB4A:		; <- T_F42A78
 	m_or_mi8 MB16, 0x2075, 0x09	; F7CB53  or (0x2075),0x09
 	ld	l, (3557:16)	; F7CB58  ld L,(0x0de5)
 	cp	l, 1:i3	; F7CB5C  cp L,1
-	m_jp_cc MD24, 0xf7cb7b, 7	; F7CB5E  jp C,0xf7cb7b
+	m_jp_cc MD24, sub_F7CB4A_Code, 7	; F7CB5E  jp C,0xf7cb7b
 	cp	l, 4:i3	; F7CB63  cp L,4
-	m_jp_cc MD24, 0xf7cb7b, 11	; F7CB65  jp UGT,0xf7cb7b
+	m_jp_cc MD24, sub_F7CB4A_Code, 11	; F7CB65  jp UGT,0xf7cb7b
 	xor	h, h	; F7CB6A  xor H,H
 	sla	hl, 2	; F7CB6C  sla 0x02,HL
 	ld	xde, SongStore_DispatchC_1	; F7CB6F  ld XDE,0x00f7cb7c
 	mx_ld_rm MXL, ra_DE, ra_HL, 3	; F7CB74  ld XHL,(XDE+HL)
 	call	(xhl)	; F7CB79  call T,XHL
+sub_F7CB4A_Code:
 	ret	; F7CB7B  ret
 
 ; SongStore_DispatchC_1 -- 5 pointers, dispatched on (0x0DE5)
@@ -188699,14 +188708,15 @@ sub_F7CB90:		; <- T_F42A7C
 	ld	(3151:16), w	; F7CBA5  ld (0x0c4f),W
 	ld	l, (3557:16)	; F7CBA9  ld L,(0x0de5)
 	cp	l, 1:i3	; F7CBAD  cp L,1
-	m_jp_cc MD24, 0xf7cbcc, 7	; F7CBAF  jp C,0xf7cbcc
+	m_jp_cc MD24, sub_F7CB90_Code, 7	; F7CBAF  jp C,0xf7cbcc
 	cp	l, 4:i3	; F7CBB4  cp L,4
-	m_jp_cc MD24, 0xf7cbcc, 11	; F7CBB6  jp UGT,0xf7cbcc
+	m_jp_cc MD24, sub_F7CB90_Code, 11	; F7CBB6  jp UGT,0xf7cbcc
 	xor	h, h	; F7CBBB  xor H,H
 	sla	hl, 2	; F7CBBD  sla 0x02,HL
 	ld	xde, SongStore_DispatchC_2	; F7CBC0  ld XDE,0x00f7cbcd
 	mx_ld_rm MXL, ra_DE, ra_HL, 3	; F7CBC5  ld XHL,(XDE+HL)
 	call	(xhl)	; F7CBCA  call T,XHL
+sub_F7CB90_Code:
 	ret	; F7CBCC  ret
 
 ; SongStore_DispatchC_2 -- 5 pointers, dispatched on (0x0DE5)

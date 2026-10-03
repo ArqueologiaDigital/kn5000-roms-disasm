@@ -48,7 +48,11 @@ STRUCT = re.compile(r'_(Skip|Join|Loop|Return|Helper|Epilogue|Entry|Sub|Tail|Nex
 IMAGES = {"v10": ("rebuilt_ROMs/kn5000_v10_program.llvm.elf", "v10/maincpu", (0xE00000, 0xFFFFFF)),
           "v9": ("rebuilt_ROMs/kn5000_v9_program.llvm.elf", "v9/maincpu", (0xE00000, 0xFFFFFF)),
           "v7": ("rebuilt_ROMs/kn5000_v7_program.llvm.elf", "v7/maincpu", (0xE00000, 0xFFFFFF)),
-          "hdae5000": ("rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf", "hdae5000", (0x280000, 0x2FFFFF))}
+          "hdae5000": ("rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf", "hdae5000", (0x280000, 0x2FFFFF)),
+          # SX-WSA1R (2026-10-03): each image's own subdirectory and own range
+          "prom_a": ("wsa1/rebuilt_ROMs/wsa1_prom_a.llvm.elf", "wsa1/prom_a", (0xF80000, 0xFFFFFF)),
+          "prom_b": ("wsa1/rebuilt_ROMs/wsa1_prom_b.llvm.elf", "wsa1/prom_b", (0xF00000, 0xF7FFFF)),
+          "prom_c": ("wsa1/rebuilt_ROMs/wsa1_prom_c.llvm.elf", "wsa1/prom_c", (0xF80000, 0xFFFFFF))}
 
 
 def elf_symbols(image):

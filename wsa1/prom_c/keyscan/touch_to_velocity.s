@@ -259,7 +259,7 @@ ToneGen_VelocityFromTouch:
 	ld	wa, (xiz-1)
 	extz	wa
 	ld	de, wa
-	sub de, (0x00FCC5C5:24)
+	sub de, (ToneGen_VelocityFromTouch_Data:24)
 	ld	a, (xiz+10)
 	res	7, a
 	extz	wa

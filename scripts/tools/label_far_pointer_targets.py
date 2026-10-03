@@ -47,7 +47,7 @@ COL0 = re.compile(r'^([A-Za-z_][\w.$]*):')
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tree", required=True, choices=("v10", "v9", "v7", "hdae5000", "prom_a", "prom_b"))
+    ap.add_argument("--tree", required=True, choices=("v10", "v9", "v7", "hdae5000", "prom_a", "prom_b", "prom_c"))
     ap.add_argument("report")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
@@ -91,7 +91,7 @@ def main():
         while nm in taken:
             nm, k = "%s_%d" % (b, k), k + 1
         how = planner.add(v, nm)
-        if how in ("line-start", "incbin", "list"):
+        if how in ("line-start", "incbin", "list", "ascii"):
             taken.add(nm)
         st["placed: " + how] += 1
     print("%s: %d pointers into objects; %s%s" % (a.tree, len(want), dict(st), "" if a.apply else " (dry run)"))

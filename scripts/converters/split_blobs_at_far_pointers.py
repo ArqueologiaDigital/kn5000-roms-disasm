@@ -71,7 +71,9 @@ ROM = {"v10": ("original_ROMs/kn5000_v10_program.rom", 0xE00000),
        "v9": ("original_ROMs/kn5000_v9_program.rom", 0xE00000),
        "v7": ("original_ROMs/kn5000_v7_program.rom", 0xE00000),
        "hdae5000": ("original_ROMs/hd-ae5000_v2_06i.ic4", 0x280000),
-       "prom_a": ("wsa1/original_ROMs/wsa1_prom_a.ic12", 0xF80000)}
+       "prom_a": ("wsa1/original_ROMs/wsa1_prom_a.ic12", 0xF80000),
+       "prom_b": ("wsa1/original_ROMs/wsa1_prom_b.ic13", 0xF00000),
+       "prom_c": ("wsa1/original_ROMs/wsa1_prom_c.ic28", 0xF80000)}
 NUM = r'(0x[0-9a-fA-F]+|\d+)'
 INCBIN_SAME = re.compile(r'^([A-Za-z_][\w.$]*):\s*\.incbin\s+"([^"]+)"\s*,\s*' + NUM + r'\s*,\s*' +
                          NUM + r'\s*(;.*)?$')
