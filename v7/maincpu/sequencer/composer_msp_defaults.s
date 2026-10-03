@@ -78,7 +78,11 @@ MSP_Default_VoiceFlags1:	.byte 0x81, 0x81
 MSP_Default_VoiceFlags2:	.byte 0x81, 0x81, 0x81, 0x81
 MSP_Default_VoiceFlags3:	.byte 0x81, 0x81
 MSP_Default_VoiceFlags4:	.byte 0x83, 0x87
-MSP_Default_SoundReserved:	.zero 112
+MSP_Default_SoundReserved:	.zero 48
+; 16 words NoteEvent_CopyVoiceParamsLoop copies into every 32-byte voice parameter slot
+MSP_Default_VoiceParamSlot:	.zero 32
+; 16 words NoteEvent_CopyExtParamsInner copies into every 32-byte extended parameter slot
+MSP_Default_ExtParamSlot:	.zero 32
 
 ; ---------------------------------------------------------------------------
 ; Sub-block 2: Sequencer Defaults (offset 0xe0, 96 bytes)
@@ -90,7 +94,9 @@ MSP_Default_Tempo:		.byte 40, 0		; internal units
 MSP_Default_TimeSig:		.byte 4, 0		; numerator
 MSP_Default_Quantize:		.byte 16, 0		; 16th note
 MSP_Default_SeqMode:		.byte 0, 1
-MSP_Default_SeqReserved:	.zero 80
+; the first 64 bytes are copied to the sequencer block at +16, the last 16 to +80 (flash_floppy_handlers.s)
+MSP_Default_SeqReserved:	.zero 64
+MSP_Default_SeqTail:		.zero 16
 
 ; ---------------------------------------------------------------------------
 ; Sub-block 3: Accompaniment/Rhythm Defaults (offset 0x140, ~1220 bytes)

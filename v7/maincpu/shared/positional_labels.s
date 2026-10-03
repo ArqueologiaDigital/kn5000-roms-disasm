@@ -7,9 +7,6 @@
 	.set Data_UnknownBlock_0x23D, Data_UnknownBlock + 573
 	.set Data_UnknownBlock_0x6E, Data_UnknownBlock + 110
 	.set Demo_StyleRhythmData_0x57C, Demo_StyleRhythmData + 1404
-	.set MSP_Default_SeqReserved_0x40, MSP_Default_SeqReserved + 64
-	.set MSP_Default_SoundReserved_0x30, MSP_Default_SoundReserved + 48
-	.set MSP_Default_SoundReserved_0x50, MSP_Default_SoundReserved + 80
 	.set MidiPkt_ArpConfigChain_Data_0x34C, MidiPkt_ArpConfigChain_Data + 844
 	.set Naka_MainDispatch_Table_0xDC0, Naka_MainDispatch_Table + 3520
 	.set Scoop_SoundEditorData_0x127C, Scoop_SoundEditorData + 4732

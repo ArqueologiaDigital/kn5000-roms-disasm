@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 51,641
-#   semantic names ........... 50,808 (98.4%)
-#   positional names ......... 833
+#   semantic names ........... 50,811 (98.4%)
+#   positional names ......... 830
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -1428,8 +1428,8 @@ MSP_Default_VoiceFlags2 00E15BE8
 MSP_Default_VoiceFlags3 00E15BEC
 MSP_Default_VoiceFlags4 00E15BEE
 MSP_Default_SoundReserved 00E15BF0
-MSP_Default_SoundReserved_0x30 00E15C20
-MSP_Default_SoundReserved_0x50 00E15C40
+MSP_Default_VoiceParamSlot 00E15C20
+MSP_Default_ExtParamSlot 00E15C40
 MSP_Default_Sequencer 00E15C60
 MSP_Default_Signature2 00E15C60
 MSP_Default_SeqFlags 00E15C64
@@ -1438,7 +1438,7 @@ MSP_Default_TimeSig 00E15C6A
 MSP_Default_Quantize 00E15C6C
 MSP_Default_SeqMode 00E15C6E
 MSP_Default_SeqReserved 00E15C70
-MSP_Default_SeqReserved_0x40 00E15CB0
+MSP_Default_SeqTail 00E15CB0
 MSP_Default_Accompaniment 00E15CC0
 MSP_Default_Signature3 00E15CC0
 MSP_Default_AccompFlags 00E15CC4

@@ -5,9 +5,6 @@
 	; which should call CDlikeSwTtl_SendStartEvtArg1 / CDlikeSwTtl_SendEvt4.
 	.set Data_SaveLoadMenuTable_0x64, Data_SaveLoadMenuTable + 100
 	.set Demo_StyleRhythmData_0x57C, Demo_StyleRhythmData + 1404
-	.set MSP_Default_SeqReserved_0x40, MSP_Default_SeqReserved + 64
-	.set MSP_Default_SoundReserved_0x30, MSP_Default_SoundReserved + 48
-	.set MSP_Default_SoundReserved_0x50, MSP_Default_SoundReserved + 80
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096
 	.set SeBitmap_EnvCurve5_0x4B0, SeBitmap_EnvCurve5 + 1200
 	.set TaskSched_ScreenGroupTable_0x46, TaskSched_ScreenGroupTable + 70

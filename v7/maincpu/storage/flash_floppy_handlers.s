@@ -1275,7 +1275,7 @@ NoteEvent_LoadSoundGenParams:
 	lda xde, (xbc+128:16)
 
 NoteEvent_CopyVoiceParamsLoop:
-	ld xiy, MSP_Default_SoundReserved_0x30
+	ld xiy, MSP_Default_VoiceParamSlot
 	ld xix, xwa
 	ldw bc, 0x10
 	ldirw
@@ -1293,7 +1293,7 @@ NoteEvent_CopyExtParamsOuter:
 	lda xhl, (xde+128:16)
 
 NoteEvent_CopyExtParamsInner:
-	ld xiy, MSP_Default_SoundReserved_0x50
+	ld xiy, MSP_Default_ExtParamSlot
 	ld xix, xwa
 	ldw bc, 0x10
 	ldirw
@@ -3466,7 +3466,7 @@ Flash_ExtendedOpsBlock_Code_Join:
 	ldw BC, 0x0020
 	ldirw
 	ld xwa, (0x0c96:16)
-	ld XIY,MSP_Default_SeqReserved_0x40
+	ld XIY,MSP_Default_SeqTail
 	lda xix, (xwa + 0x50)
 	ldw BC, 0x0008
 	ldirw
