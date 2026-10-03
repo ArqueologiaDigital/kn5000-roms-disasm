@@ -218,3 +218,13 @@ v7: `port_islands.py --line 25637` (the `.byte` island at 0xF65CD2: 352 of 360 B
 - restates the carried comments with v7's RAM: v10 0x39AA = v7 0x390E, and v10 0x3989/0x398A..0x3995 =
   v7 0x38ED/0x38EE..0x38F9;
 - drops the unreferenced mid-body label `CmpSetTtl_Dispatch2_Code`.
+
+### Two code tables after `ToneGen_Stereo_Return` (2026-10-03, by hand, all three trees)
+
+v10/v9 0xF6288E-0xF62986, v7 0xF6248A, identical bytes. These held three refusals in v10: R6 at 0xF6290A
+and two "external" targets, `jp 0x1e1d1c` and `jp 0x09121d`. The bytes are two runs of 120 distinct codes
+in 0x01..0x7F, each after `0e 00 00`. No reader was found. No label is referenced, and the only ROM hits
+for addresses in the span are three `1e 29 f6` byte runs inside `calr` instructions
+(BmDrEdit_DelayAction_SetupAndWalk+11, Part_CheckAndReallocVoices_Join+2, AccPatch_ChIdx1_Bank1+51). The
+region is now `.byte` with a comment, and the unreferenced positional label `ToneGen_Stereo_WriteParam_Code`
+is removed.

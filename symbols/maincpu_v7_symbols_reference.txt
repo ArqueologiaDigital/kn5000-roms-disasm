@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,434
-#   semantic names ........... 50,532 (98.2%)
+#   symbols .................. 51,433
+#   semantic names ........... 50,531 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -32381,7 +32381,6 @@ ToneGen_Stereo_ClampLow 00F62463
 ToneGen_Stereo_Store 00F6246D
 ToneGen_Stereo_WriteParam 00F6246F
 ToneGen_Stereo_Return 00F62489
-ToneGen_Stereo_WriteParam_Code 00F6248A
 ToneGen_WriteMultiChanParam 00F62582
 ToneGen_MultiChan_Compare 00F625B2
 ToneGen_MultiChan_AdjustVel 00F625BE
