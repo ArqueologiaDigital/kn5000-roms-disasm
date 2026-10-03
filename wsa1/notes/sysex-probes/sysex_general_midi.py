@@ -59,7 +59,7 @@ WHAT IT ESTABLISHES (all of it recomputed from the instruction bytes)
      CPU-1 RAM 0x7620..0x7F80, and 0x7F4D is inside it.  That block is a
      list of {id, length, payload} records: walking the factory default
      image at prom_b 0xF3F400 yields 77 records ending EXACTLY on 0x7F7E,
-     which is the same constant `sub_FB75E4` uses to size the transfer.
+     which is the same constant `SysExXfer_SetPart_SystemPart2` uses to size the transfer.
      The GM bit is payload byte 3 of the record whose id is 0x91 -- the
      same 0x91/0x03 pair the internal event carries -- at block offset
      2349 (0x92D) of 2400.  Factory default: 0x00, GM off.
@@ -348,10 +348,10 @@ def main():
     print("  (bit 0 of (0x60F01F)).")
 
     # --- 6. the dump -------------------------------------------------------
-    #   sub_FB75E4 sizes SYSTEM,PART & MIDI part 2 from 0x7620 and 0x7F7E
+    #   SysExXfer_SetPart_SystemPart2 sizes SYSTEM,PART & MIDI part 2 from 0x7620 and 0x7F7E
     desc = rd(a, 0xFB75E4, 0x45)
     assert bytes.fromhex("330076") in desc and bytes.fromhex("322076") in desc
-    assert bytes.fromhex("317e7f") in desc, "0x7F7E not in sub_FB75E4"
+    assert bytes.fromhex("317e7f") in desc, "0x7F7E not in SysExXfer_SetPart_SystemPart2"
     size = (SYSPART2_LAST - SYSPART2_START) + 2
     assert size == 2400, size
     #   the same two constants bound the record walk at 0xFAAAD4/0xFAAADA

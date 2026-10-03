@@ -269,7 +269,7 @@ check("no `call`/`jp 0x00FB248A` exists in prom_a or prom_b, which is why that "
       "routine has no label", _hits == [], str(["0x%06X" % h for h in _hits]))
 
 LABELS = {0xFB24EC: "Remote_E80000_Read32Blocks",
-          0xFB2081: "JumpTable_FB2081", 0xFB6240: "U8Rec16_SetField_Cases",
+          0xFB2081: "SysExDump_JobTable", 0xFB6240: "U8Rec16_SetField_Cases",
           0xFBD320: "JumpTable_FBD320",
           0xFB82A0: "RecordTables_FB82A0",
           0xFBA169: "MidiFile_Tables_FBA169"}

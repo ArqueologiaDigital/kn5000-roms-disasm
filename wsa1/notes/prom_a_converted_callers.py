@@ -115,9 +115,9 @@ EXPECT = [
     (0xF9FAFC, "call 0xf40ef0"),   # added with the 0xF99021 UI block
     (0xFAABFB, "call 0xf40ef0"),
     (0xFB24D7, "call 0xf40ef0"),
-    (0xFB256E, "call sub_FB7649"),
+    (0xFB256E, "call SysExXfer_SetPart_SoundBlock"),
     (0xFB26D2, "call 0xf40ef0"),
-    (0xFB2769, "call sub_FB7722"),
+    (0xFB2769, "call SysExXfer_SetPart_CombinationBlock"),
     (0xFB6FD1, "calr SysExTx_AppendContHeaderIfCont"),
     (0xFC00BE, "call 0xf40ef0"),
     (0xFC0188, "call 0xf40ef0"),

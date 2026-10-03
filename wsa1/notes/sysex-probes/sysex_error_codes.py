@@ -12,10 +12,10 @@ THE CHAIN, AND WHERE EACH LINK IS READ
         (0xFB62D3) the GETTER; both are 16-way jump tables over offsets
         +0..+15 (`cp BC,0x000F / jrl ugt`, 0xFB622C / 0xFB62E2).
 
-    (2) At the end of a session prom_a sub_FB7DFE (0xFB7DFE) reads field 4:
-              == 0x00 -> sub_FB7E29: message 0x23 ("COMPLETED!")
-              == 0x21 -> sub_FB7E38: screen 0xB3, NO popup
-              else    -> sub_FB7E43: message := STATUS_MAP[field4]
+    (2) At the end of a session prom_a SysExDump_ShowResult (0xFB7DFE) reads field 4:
+              == 0x00 -> SysExDump_ShowCompleted: message 0x23 ("COMPLETED!")
+              == 0x21 -> SysExDump_ShowScreenB3: screen 0xB3, NO popup
+              else    -> SysExDump_ShowStatusMessage: message := STATUS_MAP[field4]
         STATUS_MAP is prom_b 0xF511C7, named by the single instruction
         `add XWA,0x00f511c7` at prom_a 0xFB7E54.  The message id goes to
         RAM (0x2880) at 0xFB7E5C and a screen request 0xAB is posted.
@@ -27,7 +27,7 @@ THE CHAIN, AND WHERE EACH LINK IS READ
         and hands (start, end) to display-list interpreter A.  All three
         language slots hold 0x00F99121 in this ROM.
 
-    SELF-CHECK built into the chain: sub_FB7DFE special-cases field4 == 0
+    SELF-CHECK built into the chain: SysExDump_ShowResult special-cases field4 == 0
     to message 0x23, and STATUS_MAP[0] is 0x23 as well.  Two independent
     statements of the same fact -- that is what pins the table's index
     origin (no off-by-one).
@@ -86,7 +86,7 @@ def message(code):
 # the table is read to the last status the firmware can raise (0x21).
 STATUS_MAP = b(0xF511C7, 0x22)
 
-assert STATUS_MAP[0x00] == 0x23, "table origin (self-check against sub_FB7E29)"
+assert STATUS_MAP[0x00] == 0x23, "table origin (self-check against SysExDump_ShowCompleted)"
 
 # --- every site that writes field 4, from the ROM ----------------------
 # `pushw imm16 / pushw 0x04 / ld Xrr,(0x60FCxx) / push Xrr / call|calr setter`
@@ -149,7 +149,7 @@ for st in range(len(STATUS_MAP)):
     msg = STATUS_MAP[st]
     _, _, txt = message(msg) if msg < MSGMAX else (0, 0, "<out of range>")
     where = ", ".join(f"0x{x:06X}" for x, _ in by_code.get(st, [])) or "-- never raised --"
-    note = "  [special-cased by sub_FB7DFE]" if st in (0x00, 0x21) else ""
+    note = "  [special-cased by SysExDump_ShowResult]" if st in (0x00, 0x21) else ""
     print(f"  0x{st:02X}   | 0x{msg:02X} | {txt.split(' | ')[0][:45]:45s} | {where}{note}")
 
 if "--sites" in sys.argv:
@@ -161,7 +161,7 @@ if "--sites" in sys.argv:
 # (a) the ERROR 42 raise writes the SAME status to BOTH records: 0xFB6FFB
 #     targets *(0x60FCE0) and its companion 0xFB700A targets *(0x60FCD8)
 #     (`ld XBC,(XIX)` with XIX = 0x60FCD8, so the byte pattern above misses
-#     it).  Only the second one is what sub_FB7DFE reads.
+#     it).  Only the second one is what SysExDump_ShowResult reads.
 assert a(0xFB700A, 9) == bytes([0x0B, 0x20, 0x00, 0x0B, 0x04, 0x00,
                                 0xA4, 0x21, 0x39]), "ERROR 42 companion raise"
 assert _call_target(0xFB7013 - PA_BASE) == SETTER, "ERROR 42 companion setter"

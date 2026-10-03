@@ -162,7 +162,7 @@ assert b(0xF4FEBE, 5) == bytes([0xF0, 0x50, 0x27, 0x7E, 0xF7])
 CAT_PARTS = {}
 for cat in TOTAL_ORDER:
     if cat == SEQ_ROUTINE:
-        # ★ the SEQUENCER category is GUARDED: `pushw 3 / call sub_FB5FF5 /
+        # ★ the SEQUENCER category is GUARDED: `pushw 3 / call SysEx_FeatureWordForVariant /
         # popw / cp WA,0xFFFF / jr z,<ret>` -- on the 0xFFFF arm it sends
         # nothing at all, not even the end-of-category message.
         assert a(cat, 3) == bytes([0x0B, 0x03, 0x00])
@@ -423,7 +423,7 @@ RUNTIME_UNIT = 0x10
 RUNTIME_MAX = EXTENTS[0xFB76B5][2]
 
 # ------------------- 9. the SEQUENCER availability gate, read from the table
-# sub_FB5FF5(n<6) returns a word from 0xF4FE6A when the model-variant strap
+# SysEx_FeatureWordForVariant(n<6) returns a word from 0xF4FE6A when the model-variant strap
 # (0x00C4) is 1, and from 0xF4FE76 otherwise; 0xFFFF means "not available".
 assert a(0xFB6000, 4) == bytes([0xC0, 0xC4, 0x3F, 0x01]), "cp (0xC4),0x01"
 assert imm24_lda(0xFB6006) == 0xF4FE6A

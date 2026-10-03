@@ -241,7 +241,7 @@ assert ra(0xFB6E53, 3) == bytes([0xCE, 0x30, 0x07])
 assert ra(0xFB6E64, 3) == bytes([0x0B, 0x14, 0x00])
 
 # --- 8. the two ENABLE gates on the `25` message ----------------------------
-# prom_a sub_FB5FF5 (0xFB5FF5) picks one of two 6-word prom_b tables on the
+# prom_a SysEx_FeatureWordForVariant (0xFB5FF5) picks one of two 6-word prom_b tables on the
 # model-variant strap `(0x0000C4)` and the caller bails on 0xFFFF:
 #   0xFB6000 `cp (0xC4),0x01` -> 0xF4FE6A when equal, else 0xF4FE76.
 # Index 5 is the `25` message; index 3 is the SEQUENCER block store.

@@ -2036,7 +2036,7 @@
 	.set MidiSysEx_Tail3Init,                     0x00F4FA76
 	.set PtrTable_F4FB1C,                         0x00F4FB1C
 	.set PtrTable_F4FB38,                         0x00F4FB38
-	.set AsciiRun_F511C7,                         0x00F511C7
+	.set SysExStatus_MessageIdMap,                         0x00F511C7
 	.set Pointer_F51E20,                          0x00F51E20
 	.set Pointer_F51E24,                          0x00F51E24
 	.set Pointer_F51E28,                          0x00F51E28
@@ -86428,7 +86428,7 @@ SoundGroup_ReloadSelection_SaveRegs:
 	pop XDE                                              ; FB2047  5a
 	ret                                                  ; FB2048  0e
 ; SysExDump_RunSendJob -- run the pending SysEx bulk-dump transmit job: when bit 7 of (0x60F802) is set, prepare, send the category selected by (0x60F802) & 7, close the dump and report the status
-; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, MidiInARing_InitIfPanelMode79, sub_FB7B0B, SysExDump_Handshake (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then SysExDump_SendJobDone (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.
+; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, MidiInARing_InitIfPanelMode79, sub_FB7B0B, SysExDump_Handshake (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and SysExDump_JobTable at 0xFB2070-0xFB207F; then SysExDump_SendJobDone (end-of-dump template) and SysExDump_ShowResult (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and SysEx_ResetSession.
 ; Run by: prom_b T_SysExDump_RunSendJob after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
 SysExDump_RunSendJob:
 	ld c, (0x60f802:24)                                 ; FB2049  c2 02 f8 60 23
@@ -86445,12 +86445,12 @@ SysExDump_RunSendJob:
 	cp bc, 0x05:i3                                         ; FB2070  d9 dd
 	jr ugt, JumpTable_FB2081_Code_Return                                         ; FB2072  6b 59
 	sll bc, 0x02                                         ; FB2074  d9 ee 02
-	add XBC,JumpTable_FB2081                             ; FB2077  e9 c8 81 20 fb 00
+	add XBC,SysExDump_JobTable                             ; FB2077  e9 c8 81 20 fb 00
 	ld XBC,(XBC)                                         ; FB207D  a1 21
 	jp (xbc)                                             ; FB207F  b1 d8
 
 ; ---------------------------------------------------------------------
-; JumpTable_FB2081 -- 6 LE32 code addresses, an INLINE jump table
+; SysExDump_JobTable -- 6 LE32 code addresses, an INLINE jump table
 ;
 ; Read by: ONE site, `sll bc,0x02 / add XBC,0x00FB2081 / ld XBC,(XBC) / jp (XBC)`
 ;          at 0xFB2074-0xFB207F.
@@ -86465,36 +86465,37 @@ SysExDump_RunSendJob:
 ; Unknown:  what the arms DO.  A jump table names its targets, not its
 ;          operations.
 ; ---------------------------------------------------------------------
-JumpTable_FB2081:
-	.long sub_FB2099                                 ; FB2081  [  0]
-	.long sub_FB209F                                 ; FB2085  [  1]
-	.long sub_FB20A5                                 ; FB2089  [  2]
-	.long sub_FB20AB                                 ; FB208D  [  3]
-	.long sub_FB20B1                                 ; FB2091  [  4]
-	.long sub_FB20B7                                 ; FB2095  [  5]
-sub_FB2099:   ; entry: named by 1 `.long` operand, first at 0xFB2081
-	call sub_FB22CD                                      ; FB2099  1d cd 22 fb
+; SysExDump_JobTable: the SEND job number (0x60F802) & 7 -> job routine; row->job is prom_a 0xF99AE3 (sysex-probes/sysex_dump_categories.py).
+SysExDump_JobTable:
+	.long SysExDump_Job0_TotalKeyboard                                 ; FB2081  [  0]
+	.long SysExDump_Job1_None                                 ; FB2085  [  1]
+	.long SysExDump_Job2_Sequencer                                 ; FB2089  [  2]
+	.long SysExDump_Job3_Sound                                 ; FB208D  [  3]
+	.long SysExDump_Job4_SystemPartMidi                                 ; FB2091  [  4]
+	.long SysExDump_Job5_Combination                                 ; FB2095  [  5]
+SysExDump_Job0_TotalKeyboard:   ; entry: named by 1 `.long` operand, first at 0xFB2081
+	call SysExJob_TotalKeyboard                                      ; FB2099  1d cd 22 fb
 	jr .LFB20BB                                          ; FB209D  68 1c
-sub_FB209F:   ; entry: named by 1 `.long` operand, first at 0xFB2085
+SysExDump_Job1_None:   ; entry: named by 1 `.long` operand, first at 0xFB2085
 	call sub_FB209F_Nop                                      ; FB209F  1d e6 22 fb
 	jr .LFB20BB                                          ; FB20A3  68 16
-sub_FB20A5:   ; entry: named by 1 `.long` operand, first at 0xFB2089
-	call sub_FB22E7                                      ; FB20A5  1d e7 22 fb
+SysExDump_Job2_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFB2089
+	call SysExJob_Sequencer                                      ; FB20A5  1d e7 22 fb
 	jr .LFB20BB                                          ; FB20A9  68 10
-sub_FB20AB:   ; entry: named by 1 `.long` operand, first at 0xFB208D
-	call sub_FB22F6                                      ; FB20AB  1d f6 22 fb
+SysExDump_Job3_Sound:   ; entry: named by 1 `.long` operand, first at 0xFB208D
+	call SysExJob_Sound                                      ; FB20AB  1d f6 22 fb
 	jr .LFB20BB                                          ; FB20AF  68 0a
-sub_FB20B1:   ; entry: named by 1 `.long` operand, first at 0xFB2091
-	call sub_FB2305                                      ; FB20B1  1d 05 23 fb
+SysExDump_Job4_SystemPartMidi:   ; entry: named by 1 `.long` operand, first at 0xFB2091
+	call SysExJob_SystemPartMidi                                      ; FB20B1  1d 05 23 fb
 	jr .LFB20BB                                          ; FB20B5  68 04
-sub_FB20B7:   ; entry: named by 1 `.long` operand, first at 0xFB2095
-	call sub_FB2314                                      ; FB20B7  1d 14 23 fb
+SysExDump_Job5_Combination:   ; entry: named by 1 `.long` operand, first at 0xFB2095
+	call SysExJob_Combination                                      ; FB20B7  1d 14 23 fb
 .LFB20BB:
 	call SysExDump_SendJobDone                                      ; FB20BB  1d ad 27 fb
-	call sub_FB7DFE                                      ; FB20BF  1d fe 7d fb
+	call SysExDump_ShowResult                                      ; FB20BF  1d fe 7d fb
 JumpTable_FB2081_Code_Skip:
 	ld (0x60fd40:24), 0x00                             ; FB20C3  f2 40 fd 60 00 00
-	call sub_FB8156                                      ; FB20C9  1d 56 81 fb
+	call SysEx_ResetSession                                      ; FB20C9  1d 56 81 fb
 JumpTable_FB2081_Code_Return:
 	ret                                                  ; FB20CD  0e
 ; SysExRx_PollRing601646: drain ring 0x601646 through a 3-state SysEx assembler (F0, then 0x50 or 0x7E, then body up to F7) into
@@ -86613,7 +86614,7 @@ SysExRx_ParseDispatch_Ring601646:
 	inc 6,XSP                                            ; FB21BF  ef 66
 .LFB21C1:
 	call sub_FB5197                                      ; FB21C1  1d 97 51 fb
-	call sub_FB8156                                      ; FB21C5  1d 56 81 fb
+	call SysEx_ResetSession                                      ; FB21C5  1d 56 81 fb
 	pop XIX                                              ; FB21C9  5c
 	ret                                                  ; FB21CA  0e
 ; SysExRx_PollRing601C6E: the same assembler on ring 0x601C6E; on F7 run SysExRx_ParseDispatch_Ring601C6E.
@@ -86730,48 +86731,53 @@ SysExRx_ParseDispatch_Ring601C6E:
 	inc 6,XSP                                            ; FB22BC  ef 66
 .LFB22BE:
 	call sub_FB5197                                      ; FB22BE  1d 97 51 fb
-	call sub_FB8156                                      ; FB22C2  1d 56 81 fb
+	call SysEx_ResetSession                                      ; FB22C2  1d 56 81 fb
 	pop XIX                                              ; FB22C6  5c
 	ret                                                  ; FB22C7  0e
-	call sub_FB8156                                      ; FB22C8  1d 56 81 fb
+	call SysEx_ResetSession                                      ; FB22C8  1d 56 81 fb
 	ret                                                  ; FB22CC  0e
-sub_FB22CD:
+; SysExJob_TotalKeyboard: bit 3 of (0x60FD40) around SysExXfer_SetJobTotal_TotalKeyboard and SysExDump_SendAllCategories.
+SysExJob_TotalKeyboard:
 	m_set 3, MD24, 0x60fd40                              ; FB22CD  f2 40 fd 60 bb
 	lda xbc, (0x60fce8:24)                               ; FB22D2  f2 e8 fc 60 31
 	push XBC                                             ; FB22D7  39
-	call sub_FB749B                                      ; FB22D8  1d 9b 74 fb
-	calr sub_FB23E2                                      ; FB22DC  1e 03 01
+	call SysExXfer_SetJobTotal_TotalKeyboard                                      ; FB22D8  1d 9b 74 fb
+	calr SysExDump_SendAllCategories                                      ; FB22DC  1e 03 01
 	m_res 3, MD24, 0x60fd40                              ; FB22DF  f2 40 fd 60 b3
 	pop XBC                                              ; FB22E4  59
 	ret                                                  ; FB22E5  0e
 sub_FB209F_Nop:
 	ret                                                  ; FB22E6  0e
-sub_FB22E7:
+; SysExJob_Sequencer: SysExXfer_SetJobTotal_Sequencer((0x60FCE8)), SysExDump_SendSequencer.
+SysExJob_Sequencer:
 	lda xbc, (0x60fce8:24)                               ; FB22E7  f2 e8 fc 60 31
 	push XBC                                             ; FB22EC  39
-	call sub_FB753E                                      ; FB22ED  1d 3e 75 fb
-	calr sub_FB2587                                      ; FB22F1  1e 93 02
+	call SysExXfer_SetJobTotal_Sequencer                                      ; FB22ED  1d 3e 75 fb
+	calr SysExDump_SendSequencer                                      ; FB22F1  1e 93 02
 	pop XBC                                              ; FB22F4  59
 	ret                                                  ; FB22F5  0e
-sub_FB22F6:
+; SysExJob_Sound: SysExXfer_SetJobTotal_Sound((0x60FCE8)), SysExDump_SendSound.
+SysExJob_Sound:
 	lda xbc, (0x60fce8:24)                               ; FB22F6  f2 e8 fc 60 31
 	push XBC                                             ; FB22FB  39
-	call sub_FB751A                                      ; FB22FC  1d 1a 75 fb
-	calr sub_FB2483                                      ; FB2300  1e 80 01
+	call SysExXfer_SetJobTotal_Sound                                      ; FB22FC  1d 1a 75 fb
+	calr SysExDump_SendSound                                      ; FB2300  1e 80 01
 	pop XBC                                              ; FB2303  59
 	ret                                                  ; FB2304  0e
-sub_FB2305:
+; SysExJob_SystemPartMidi: SysExXfer_SetJobTotal_SystemPartMidi((0x60FCE8)), SysExDump_SendSystemPartMidi.
+SysExJob_SystemPartMidi:
 	lda xbc, (0x60fce8:24)                               ; FB2305  f2 e8 fc 60 31
 	push XBC                                             ; FB230A  39
-	call sub_FB74D7                                      ; FB230B  1d d7 74 fb
-	calr sub_FB23EF                                      ; FB230F  1e dd 00
+	call SysExXfer_SetJobTotal_SystemPartMidi                                      ; FB230B  1d d7 74 fb
+	calr SysExDump_SendSystemPartMidi                                      ; FB230F  1e dd 00
 	pop XBC                                              ; FB2312  59
 	ret                                                  ; FB2313  0e
-sub_FB2314:
+; SysExJob_Combination: SysExXfer_SetJobTotal_Combination((0x60FCE8)), SysExDump_SendCombination.
+SysExJob_Combination:
 	lda xbc, (0x60fce8:24)                               ; FB2314  f2 e8 fc 60 31
 	push XBC                                             ; FB2319  39
-	call sub_FB758A                                      ; FB231A  1d 8a 75 fb
-	calr sub_FB2675                                      ; FB231E  1e 54 03
+	call SysExXfer_SetJobTotal_Combination                                      ; FB231A  1d 8a 75 fb
+	calr SysExDump_SendCombination                                      ; FB231E  1e 54 03
 	pop XBC                                              ; FB2321  59
 	ret                                                  ; FB2322  0e
 ; SysExDump_Handshake: send F0 50 21 04 00 11 F7 and await class 8, then F0 50 22 04 00 11 F7 and await class 1, 3 tries each; success sets bit 7
@@ -86853,18 +86859,21 @@ SysExDump_Handshake:
 	pop XIX                                              ; FB23DF  5c
 	popw hl                                              ; FB23E0  4b
 	ret                                                  ; FB23E1  0e
-sub_FB23E2:
-	calr sub_FB23EF                                      ; FB23E2  1e 0a 00
-	calr sub_FB2483                                      ; FB23E5  1e 9b 00
-	calr sub_FB2675                                      ; FB23E8  1e 8a 02
-	calr sub_FB2587                                      ; FB23EB  1e 99 01
+; SysExDump_SendAllCategories: the TOTAL KEYBOARD order -- SYSTEM,PART & MIDI, SOUND, COMBINATION, SEQUENCER.
+SysExDump_SendAllCategories:
+	calr SysExDump_SendSystemPartMidi                                      ; FB23E2  1e 0a 00
+	calr SysExDump_SendSound                                      ; FB23E5  1e 9b 00
+	calr SysExDump_SendCombination                                      ; FB23E8  1e 8a 02
+	calr SysExDump_SendSequencer                                      ; FB23EB  1e 99 01
 	ret                                                  ; FB23EE  0e
-sub_FB23EF:
-	calr sub_FB23F9                                      ; FB23EF  1e 07 00
-	calr sub_FB243E                                      ; FB23F2  1e 49 00
+; SysExDump_SendSystemPartMidi: parts 1 and 2, then SysExDump_SendCategoryDone.
+SysExDump_SendSystemPartMidi:
+	calr SysExDump_SendSystemPart1                                      ; FB23EF  1e 07 00
+	calr SysExDump_SendSystemPart2                                      ; FB23F2  1e 49 00
 	calr SysExDump_SendCategoryDone                                      ; FB23F5  1e 86 03
 	ret                                                  ; FB23F8  0e
-sub_FB23F9:
+; SysExDump_SendSystemPart1: step 1, CPU1 0x7600..0x7620, header prom_b 0xF4FEF8 (dump address 0x100000).
+SysExDump_SendSystemPart1:
 	pushw 0x04                                           ; FB23F9  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB23FC  e2 d8 fc 60 21
 	push XBC                                             ; FB2401  39
@@ -86879,7 +86888,7 @@ sub_FB23F9:
 	call U8Rec16_SetField                                      ; FB2418  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB241C  f2 f8 fc 60 31
 	push XBC                                             ; FB2421  39
-	call sub_FB75BA                                      ; FB2422  1d ba 75 fb
+	call SysExXfer_SetPart_SystemPart1                                      ; FB2422  1d ba 75 fb
 	pushw 0x0c                                           ; FB2426  0b 0c 00
 	lda xbc, (0xf4fef8:24)                               ; FB2429  f2 f8 fe f4 31
 	push XBC                                             ; FB242E  39
@@ -86888,7 +86897,8 @@ sub_FB23F9:
 	add XSP,0x00000012                                   ; FB2437  ef c8 12 00 00 00
 .LFB243D:
 	ret                                                  ; FB243D  0e
-sub_FB243E:
+; SysExDump_SendSystemPart2: step 2, CPU1 0x7620..0x7F80, header prom_b 0xF4FF04 (dump address 0x100020).
+SysExDump_SendSystemPart2:
 	pushw 0x04                                           ; FB243E  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2441  e2 d8 fc 60 21
 	push XBC                                             ; FB2446  39
@@ -86903,7 +86913,7 @@ sub_FB243E:
 	call U8Rec16_SetField                                      ; FB245D  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB2461  f2 f8 fc 60 31
 	push XBC                                             ; FB2466  39
-	call sub_FB75E4                                      ; FB2467  1d e4 75 fb
+	call SysExXfer_SetPart_SystemPart2                                      ; FB2467  1d e4 75 fb
 	pushw 0x0c                                           ; FB246B  0b 0c 00
 	lda xbc, (0xf4ff04:24)                               ; FB246E  f2 04 ff f4 31
 	push XBC                                             ; FB2473  39
@@ -86912,7 +86922,8 @@ sub_FB243E:
 	add XSP,0x00000012                                   ; FB247C  ef c8 12 00 00 00
 .LFB2482:
 	ret                                                  ; FB2482  0e
-sub_FB2483:
+; SysExDump_SendSound: Remote_E80000_Read32Blocks (CPU2 flash 0xE80000..0xEC0000), then SysExDump_SendCategoryDone.
+SysExDump_SendSound:
 	calr Remote_E80000_Read32Blocks                      ; FB2483  1e 66 00
 	calr SysExDump_SendCategoryDone                                      ; FB2486  1e f5 02
 	ret                                                  ; FB2489  0e
@@ -86960,7 +86971,7 @@ sub_FB2483:
 	call U8Rec16_SetField                                      ; FB24A9  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB24AD  f2 f8 fc 60 31
 	push XBC                                             ; FB24B2  39
-	call sub_FB7629                                      ; FB24B3  1d 29 76 fb
+	call SysExXfer_SetPart_SoundOrphan                                      ; FB24B3  1d 29 76 fb
 	pushw 0x0c                                           ; FB24B7  0b 0c 00
 	lda xbc, (0xf4ff10:24)                               ; FB24BA  f2 10 ff f4 31
 	push XBC                                             ; FB24BF  39
@@ -87029,7 +87040,7 @@ Remote_E80000_Read32Blocks:
 	call T_Link_SendCommandE2                            ; FB2534  1d f0 0e f4
 	lda xbc, (0x60fcf8:24)                               ; FB2538  f2 f8 fc 60 31
 	push XBC                                             ; FB253D  39
-	call sub_FB7649                                      ; FB253E  1d 49 76 fb
+	call SysExXfer_SetPart_SoundBlock                                      ; FB253E  1d 49 76 fb
 	call SysExDump_SendFramesStreamed                                      ; FB2542  1d b2 6f fb
 	dec 1,H                                              ; FB2546  ce 69
 	add XIX,0x00002000                                   ; FB2548  ec c8 00 20 00 00
@@ -87044,7 +87055,7 @@ Remote_E80000_Read32Blocks:
 	call T_Link_SendCommandE2                            ; FB2560  1d f0 0e f4
 	lda xbc, (0x60fcf8:24)                               ; FB2564  f2 f8 fc 60 31
 	push XBC                                             ; FB2569  39
-	call sub_FB7649                                      ; FB256A  1d 49 76 fb
+	call SysExXfer_SetPart_SoundBlock                                      ; FB256A  1d 49 76 fb
 	call T_Link_WaitBlockDone                            ; FB256E  1d 3c 12 f4
 	inc 8,XSP                                            ; FB2572  ef 60
 	inc 6,XSP                                            ; FB2574  ef 66
@@ -87059,19 +87070,21 @@ Remote_E80000_Read32Blocks:
 	ret                                                  ; FB2584  0e
 	ret                                                  ; FB2585  0e
 	ret                                                  ; FB2586  0e
-sub_FB2587:
+; SysExDump_SendSequencer: when SysEx_FeatureWordForVariant(3) is not 0xFFFF: parts 1, 2, 3 and SysExDump_SendCategoryDone.
+SysExDump_SendSequencer:
 	pushw 0x03                                           ; FB2587  0b 03 00
-	call sub_FB5FF5                                      ; FB258A  1d f5 5f fb
+	call SysEx_FeatureWordForVariant                                      ; FB258A  1d f5 5f fb
 	popw bc                                              ; FB258E  49
 	cp WA,0xffff                                         ; FB258F  d8 cf ff ff
 	jr z, .LFB25A1                                       ; FB2593  66 0c
-	calr sub_FB25A2                                      ; FB2595  1e 0a 00
-	calr sub_FB25E7                                      ; FB2598  1e 4c 00
-	calr sub_FB262C                                      ; FB259B  1e 8e 00
+	calr SysExDump_SendSequencerPart1                                      ; FB2595  1e 0a 00
+	calr SysExDump_SendSequencerPart2                                      ; FB2598  1e 4c 00
+	calr SysExDump_SendSequencerPart3                                      ; FB259B  1e 8e 00
 	calr SysExDump_SendCategoryDone                                      ; FB259E  1e dd 01
 .LFB25A1:
 	ret                                                  ; FB25A1  0e
-sub_FB25A2:
+; SysExDump_SendSequencerPart1: step 0x0B, CPU1 0x603400..0x604000, header prom_b 0xF4FF28.
+SysExDump_SendSequencerPart1:
 	pushw 0x04                                           ; FB25A2  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB25A5  e2 d8 fc 60 21
 	push XBC                                             ; FB25AA  39
@@ -87086,7 +87099,7 @@ sub_FB25A2:
 	call U8Rec16_SetField                                      ; FB25C1  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB25C5  f2 f8 fc 60 31
 	push XBC                                             ; FB25CA  39
-	call sub_FB766F                                      ; FB25CB  1d 6f 76 fb
+	call SysExXfer_SetPart_Sequencer1                                      ; FB25CB  1d 6f 76 fb
 	pushw 0x0c                                           ; FB25CF  0b 0c 00
 	lda xbc, (0xf4ff28:24)                               ; FB25D2  f2 28 ff f4 31
 	push XBC                                             ; FB25D7  39
@@ -87095,7 +87108,8 @@ sub_FB25A2:
 	add XSP,0x00000012                                   ; FB25E0  ef c8 12 00 00 00
 .LFB25E6:
 	ret                                                  ; FB25E6  0e
-sub_FB25E7:
+; SysExDump_SendSequencerPart2: step 0x0C, CPU1 0x610000..0x617800, header prom_b 0xF4FF34.
+SysExDump_SendSequencerPart2:
 	pushw 0x04                                           ; FB25E7  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB25EA  e2 d8 fc 60 21
 	push XBC                                             ; FB25EF  39
@@ -87110,7 +87124,7 @@ sub_FB25E7:
 	call U8Rec16_SetField                                      ; FB2606  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB260A  f2 f8 fc 60 31
 	push XBC                                             ; FB260F  39
-	call sub_FB7692                                      ; FB2610  1d 92 76 fb
+	call SysExXfer_SetPart_Sequencer2                                      ; FB2610  1d 92 76 fb
 	pushw 0x0c                                           ; FB2614  0b 0c 00
 	lda xbc, (0xf4ff34:24)                               ; FB2617  f2 34 ff f4 31
 	push XBC                                             ; FB261C  39
@@ -87119,7 +87133,8 @@ sub_FB25E7:
 	add XSP,0x00000012                                   ; FB2625  ef c8 12 00 00 00
 .LFB262B:
 	ret                                                  ; FB262B  0e
-sub_FB262C:
+; SysExDump_SendSequencerPart3: step 0x0D, CPU1 0x617800.., header prom_b 0xF4FF40 plus the run-time size (SysExTx_AppendRemainingSize).
+SysExDump_SendSequencerPart3:
 	pushw 0x04                                           ; FB262C  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB262F  e2 d8 fc 60 21
 	push XBC                                             ; FB2634  39
@@ -87134,7 +87149,7 @@ sub_FB262C:
 	call U8Rec16_SetField                                      ; FB264B  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB264F  f2 f8 fc 60 31
 	push XBC                                             ; FB2654  39
-	call sub_FB76B5                                      ; FB2655  1d b5 76 fb
+	call SysExXfer_SetPart_Sequencer3                                      ; FB2655  1d b5 76 fb
 	pushw 0x09                                           ; FB2659  0b 09 00
 	lda xbc, (0xf4ff40:24)                               ; FB265C  f2 40 ff f4 31
 	push XBC                                             ; FB2661  39
@@ -87144,12 +87159,14 @@ sub_FB262C:
 	add XSP,0x00000012                                   ; FB266E  ef c8 12 00 00 00
 .LFB2674:
 	ret                                                  ; FB2674  0e
-sub_FB2675:
-	calr sub_FB267F                                      ; FB2675  1e 07 00
-	calr sub_FB26E7                                      ; FB2678  1e 6c 00
+; SysExDump_SendCombination: parts 1 and 2, then SysExDump_SendCategoryDone.
+SysExDump_SendCombination:
+	calr SysExDump_SendCombinationPart1                                      ; FB2675  1e 07 00
+	calr SysExDump_SendCombinationPart2                                      ; FB2678  1e 6c 00
 	calr SysExDump_SendCategoryDone                                      ; FB267B  1e 00 01
 	ret                                                  ; FB267E  0e
-sub_FB267F:
+; SysExDump_SendCombinationPart1: step 0x0F, CPU2 flash 0xEC0000..0xEC0300 fetched through T_Link_SendCommandE2, header prom_b 0xF4FF49.
+SysExDump_SendCombinationPart1:
 	pushw 0x04                                           ; FB267F  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2682  e2 d8 fc 60 21
 	push XBC                                             ; FB2687  39
@@ -87164,7 +87181,7 @@ sub_FB267F:
 	call U8Rec16_SetField                                      ; FB269E  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB26A2  f2 f8 fc 60 31
 	push XBC                                             ; FB26A7  39
-	call sub_FB76F2                                      ; FB26A8  1d f2 76 fb
+	call SysExXfer_SetPart_Combination1                                      ; FB26A8  1d f2 76 fb
 	pushw 0x0c                                           ; FB26AC  0b 0c 00
 	lda xbc, (0xf4ff49:24)                               ; FB26AF  f2 49 ff f4 31
 	push XBC                                             ; FB26B4  39
@@ -87183,7 +87200,8 @@ sub_FB267F:
 	call SysExDump_SendFrames                                      ; FB26E2  1d 6b 6f fb
 .LFB26E6:
 	ret                                                  ; FB26E6  0e
-sub_FB26E7:
+; SysExDump_SendCombinationPart2: step 0x10, CPU2 flash 0xEC0300.. in 16 blocks of 0x1600, header prom_b 0xF4FF55.
+SysExDump_SendCombinationPart2:
 	pushw hl                                             ; FB26E7  2b
 	push XIX                                             ; FB26E8  3c
 	pushw 0x04                                           ; FB26E9  0b 04 00
@@ -87214,7 +87232,7 @@ sub_FB26E7:
 	call T_Link_SendCommandE2                            ; FB272F  1d f0 0e f4
 	lda xbc, (0x60fcf8:24)                               ; FB2733  f2 f8 fc 60 31
 	push XBC                                             ; FB2738  39
-	call sub_FB7722                                      ; FB2739  1d 22 77 fb
+	call SysExXfer_SetPart_CombinationBlock                                      ; FB2739  1d 22 77 fb
 	call SysExDump_SendFramesStreamed                                      ; FB273D  1d b2 6f fb
 	dec 1,H                                              ; FB2741  ce 69
 	add XIX,0x00001600                                   ; FB2743  ec c8 00 16 00 00
@@ -87229,7 +87247,7 @@ sub_FB26E7:
 	call T_Link_SendCommandE2                            ; FB275B  1d f0 0e f4
 	lda xbc, (0x60fcf8:24)                               ; FB275F  f2 f8 fc 60 31
 	push XBC                                             ; FB2764  39
-	call sub_FB7722                                      ; FB2765  1d 22 77 fb
+	call SysExXfer_SetPart_CombinationBlock                                      ; FB2765  1d 22 77 fb
 	call T_Link_WaitBlockDone                            ; FB2769  1d 3c 12 f4
 	inc 8,XSP                                            ; FB276D  ef 60
 	inc 6,XSP                                            ; FB276F  ef 66
@@ -87339,16 +87357,17 @@ SysExDump_SendJobDone:
 .LFB2863:
 	call SysExRx_AwaitReply                                      ; FB2863  1d 72 60 fb
 .LFB2867:
-	calr sub_FB2877                                      ; FB2867  1e 0d 00
+	calr SysExSession_DispatchCommand                                      ; FB2867  1e 0d 00
 	jr .LFB2848                                          ; FB286A  68 dc
 .LFB286C:
 	calr sub_FB3234                                      ; FB286C  1e c5 09
-	call sub_FB7DFE                                      ; FB286F  1d fe 7d fb
+	call SysExDump_ShowResult                                      ; FB286F  1d fe 7d fb
 .LFB2873:
 	res 4,(XIX)                                          ; FB2873  b4 b4
 	pop XIX                                              ; FB2875  5c
 	ret                                                  ; FB2876  0e
-sub_FB2877:
+; SysExSession_DispatchCommand: status 0 and command < 0x22: PtrTable_F4F916[command]; then sub_FB28BE, sub_FB7BB9, PanelLed_ToggleActivityLed_SaveRegs2.
+SysExSession_DispatchCommand:
 	pushw hl                                             ; FB2877  2b
 	pushw 0x04                                           ; FB2878  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB287B  e2 d8 fc 60 21
@@ -87456,10 +87475,10 @@ sub_FB28BE:
 	call sub_FB77B6                                      ; FB298B  1d b6 77 fb
 	lda xbc, (0x60fd08:24)                               ; FB298F  f2 08 fd 60 31
 	push XBC                                             ; FB2994  39
-	call sub_FB74D7                                      ; FB2995  1d d7 74 fb
+	call SysExXfer_SetJobTotal_SystemPartMidi                                      ; FB2995  1d d7 74 fb
 	lda xbc, (0x60fd18:24)                               ; FB2999  f2 18 fd 60 31
 	push XBC                                             ; FB299E  39
-	call sub_FB75BA                                      ; FB299F  1d ba 75 fb
+	call SysExXfer_SetPart_SystemPart1                                      ; FB299F  1d ba 75 fb
 	calr sub_FB2CAD                                      ; FB29A3  1e 07 03
 	jr .LFB29B8                                          ; FB29A6  68 10
 .LFB29A8:
@@ -87480,7 +87499,7 @@ sub_FB28BE:
 	jr nz, .LFB29DE                                      ; FB29CC  6e 10
 	lda xbc, (0x60fd18:24)                               ; FB29CE  f2 18 fd 60 31
 	push XBC                                             ; FB29D3  39
-	call sub_FB75E4                                      ; FB29D4  1d e4 75 fb
+	call SysExXfer_SetPart_SystemPart2                                      ; FB29D4  1d e4 75 fb
 	calr sub_FB2CE7                                      ; FB29D8  1e 0c 03
 	pop XIY                                              ; FB29DB  5d
 	jr .LFB29F0                                          ; FB29DC  68 12
@@ -87502,7 +87521,7 @@ sub_FB28BE:
 	jr nz, .LFB2A14                                      ; FB2A02  6e 10
 	lda xbc, (0x60fd18:24)                               ; FB2A04  f2 18 fd 60 31
 	push XBC                                             ; FB2A09  39
-	call sub_FB7629                                      ; FB2A0A  1d 29 76 fb
+	call SysExXfer_SetPart_SoundOrphan                                      ; FB2A0A  1d 29 76 fb
 	calr sub_FB2D21                                      ; FB2A0E  1e 10 03
 	pop XIY                                              ; FB2A11  5d
 	jr .LFB2A26                                          ; FB2A12  68 12
@@ -87528,10 +87547,10 @@ sub_FB28BE:
 	call T_Link_SendCommand3_WaitTicks                                        ; FB2A41  1d 34 12 f4
 	lda xbc, (0x60fd08:24)                               ; FB2A45  f2 08 fd 60 31
 	push XBC                                             ; FB2A4A  39
-	call sub_FB751A                                      ; FB2A4B  1d 1a 75 fb
+	call SysExXfer_SetJobTotal_Sound                                      ; FB2A4B  1d 1a 75 fb
 	lda xbc, (0x60fd18:24)                               ; FB2A4F  f2 18 fd 60 31
 	push XBC                                             ; FB2A54  39
-	call sub_FB7649                                      ; FB2A55  1d 49 76 fb
+	call SysExXfer_SetPart_SoundBlock                                      ; FB2A55  1d 49 76 fb
 	push XIX                                             ; FB2A59  3c
 	call sub_FB7A63                                      ; FB2A5A  1d 63 7a fb
 	calr sub_FB328D                                      ; FB2A5E  1e 2c 08
@@ -87627,10 +87646,10 @@ sub_FB28BE:
 	jr nz, .LFB2B5C                                      ; FB2B41  6e 19
 	lda xbc, (0x60fd08:24)                               ; FB2B43  f2 08 fd 60 31
 	push XBC                                             ; FB2B48  39
-	call sub_FB753E                                      ; FB2B49  1d 3e 75 fb
+	call SysExXfer_SetJobTotal_Sequencer                                      ; FB2B49  1d 3e 75 fb
 	lda xbc, (0x60fd18:24)                               ; FB2B4D  f2 18 fd 60 31
 	push XBC                                             ; FB2B52  39
-	call sub_FB766F                                      ; FB2B53  1d 6f 76 fb
+	call SysExXfer_SetPart_Sequencer1                                      ; FB2B53  1d 6f 76 fb
 	calr sub_FB2E20                                      ; FB2B57  1e c6 02
 	jr .LFB2B6C                                          ; FB2B5A  68 10
 .LFB2B5C:
@@ -87651,7 +87670,7 @@ sub_FB28BE:
 	jr nz, .LFB2B93                                      ; FB2B81  6e 10
 	lda xbc, (0x60fd18:24)                               ; FB2B83  f2 18 fd 60 31
 	push XBC                                             ; FB2B88  39
-	call sub_FB7692                                      ; FB2B89  1d 92 76 fb
+	call SysExXfer_SetPart_Sequencer2                                      ; FB2B89  1d 92 76 fb
 	calr sub_FB2E69                                      ; FB2B8D  1e d9 02
 	pop XIY                                              ; FB2B90  5d
 	jr .LFB2BA5                                          ; FB2B91  68 12
@@ -87673,7 +87692,7 @@ sub_FB28BE:
 	jr nz, .LFB2BCE                                      ; FB2BB8  6e 14
 	lda xbc, (0x60fd18:24)                               ; FB2BBA  f2 18 fd 60 31
 	push XBC                                             ; FB2BBF  39
-	call sub_FB76B5                                      ; FB2BC0  1d b5 76 fb
+	call SysExXfer_SetPart_Sequencer3                                      ; FB2BC0  1d b5 76 fb
 	call sub_FB741A                                      ; FB2BC4  1d 1a 74 fb
 	calr sub_FB2EB2                                      ; FB2BC8  1e e7 02
 	pop XIY                                              ; FB2BCB  5d
@@ -87700,10 +87719,10 @@ sub_FB28BE:
 	call T_Link_SendCommand3_WaitTicks                                        ; FB2BFB  1d 34 12 f4
 	lda xbc, (0x60fd08:24)                               ; FB2BFF  f2 08 fd 60 31
 	push XBC                                             ; FB2C04  39
-	call sub_FB758A                                      ; FB2C05  1d 8a 75 fb
+	call SysExXfer_SetJobTotal_Combination                                      ; FB2C05  1d 8a 75 fb
 	lda xbc, (0x60fd18:24)                               ; FB2C09  f2 18 fd 60 31
 	push XBC                                             ; FB2C0E  39
-	call sub_FB76F2                                      ; FB2C0F  1d f2 76 fb
+	call SysExXfer_SetPart_Combination1                                      ; FB2C0F  1d f2 76 fb
 	push XIX                                             ; FB2C13  3c
 	call sub_FB7A63                                      ; FB2C14  1d 63 7a fb
 	calr sub_FB2EFB                                      ; FB2C18  1e e0 02
@@ -87729,7 +87748,7 @@ sub_FB28BE:
 	jr nz, .LFB2C59                                      ; FB2C47  6e 10
 	lda xbc, (0x60fd18:24)                               ; FB2C49  f2 18 fd 60 31
 	push XBC                                             ; FB2C4E  39
-	call sub_FB7722                                      ; FB2C4F  1d 22 77 fb
+	call SysExXfer_SetPart_CombinationBlock                                      ; FB2C4F  1d 22 77 fb
 	calr sub_FB2F35                                      ; FB2C53  1e df 02
 	pop XIY                                              ; FB2C56  5d
 	jr .LFB2C6B                                          ; FB2C57  68 12
@@ -87939,7 +87958,7 @@ sub_FB2E20:
 	push XBC                                             ; FB2E2E  39
 	call U8Rec16_SetField                                      ; FB2E2F  1d 19 62 fb
 	pushw 0x03                                           ; FB2E33  0b 03 00
-	call sub_FB5FF5                                      ; FB2E36  1d f5 5f fb
+	call SysEx_FeatureWordForVariant                                      ; FB2E36  1d f5 5f fb
 	inc 8,XSP                                            ; FB2E3A  ef 60
 	inc 2,XSP                                            ; FB2E3C  ef 62
 	cp WA,0xffff                                         ; FB2E3E  d8 cf ff ff
@@ -87971,7 +87990,7 @@ sub_FB2E69:
 	push XBC                                             ; FB2E77  39
 	call U8Rec16_SetField                                      ; FB2E78  1d 19 62 fb
 	pushw 0x03                                           ; FB2E7C  0b 03 00
-	call sub_FB5FF5                                      ; FB2E7F  1d f5 5f fb
+	call SysEx_FeatureWordForVariant                                      ; FB2E7F  1d f5 5f fb
 	inc 8,XSP                                            ; FB2E83  ef 60
 	inc 2,XSP                                            ; FB2E85  ef 62
 	cp WA,0xffff                                         ; FB2E87  d8 cf ff ff
@@ -88003,7 +88022,7 @@ sub_FB2EB2:
 	push XBC                                             ; FB2EC0  39
 	call U8Rec16_SetField                                      ; FB2EC1  1d 19 62 fb
 	pushw 0x03                                           ; FB2EC5  0b 03 00
-	call sub_FB5FF5                                      ; FB2EC8  1d f5 5f fb
+	call SysEx_FeatureWordForVariant                                      ; FB2EC8  1d f5 5f fb
 	inc 8,XSP                                            ; FB2ECC  ef 60
 	inc 2,XSP                                            ; FB2ECE  ef 62
 	cp WA,0xffff                                         ; FB2ED0  d8 cf ff ff
@@ -88508,7 +88527,7 @@ sub_FB3355:
 	ldir85                                               ; FB336B  85 11
 	pop XIX                                              ; FB336D  5c
 	pushw 0x05                                           ; FB336E  0b 05 00
-	call sub_FB5FF5                                      ; FB3371  1d f5 5f fb
+	call SysEx_FeatureWordForVariant                                      ; FB3371  1d f5 5f fb
 	popw bc                                              ; FB3375  49
 	cp WA,0xffff                                         ; FB3376  d8 cf ff ff
 	jrl z, .LFB33FA                                      ; FB337A  76 7d 00
@@ -88563,7 +88582,7 @@ sub_FB3355:
 	pushw hl                                             ; FB33FE  2b
 	pushw de                                             ; FB33FF  2a
 	pushw 0x05                                           ; FB3400  0b 05 00
-	call sub_FB5FF5                                      ; FB3403  1d f5 5f fb
+	call SysEx_FeatureWordForVariant                                      ; FB3403  1d f5 5f fb
 	popw bc                                              ; FB3407  49
 	cp WA,0xffff                                         ; FB3408  d8 cf ff ff
 	jr z, .LFB3468                                       ; FB340C  66 5a
@@ -91967,7 +91986,7 @@ sub_FB5197:
 	add XSP,0x00000026                                   ; FB535C  ef c8 26 00 00 00
 	jr .LFB5368                                          ; FB5362  68 04
 .LFB5364:
-	call sub_FB7E38                                      ; FB5364  1d 38 7e fb
+	call SysExDump_ShowScreenB3                                      ; FB5364  1d 38 7e fb
 .LFB5368:
 	pop XIX                                              ; FB5368  5c
 	popw hl                                              ; FB5369  4b
@@ -93321,7 +93340,8 @@ SysExTx_PatchModelByteVariant2:
 	popw hl                                              ; FB5FF1  4b
 	unlk XIZ                                             ; FB5FF2  ee 0d
 	ret                                                  ; FB5FF4  0e
-sub_FB5FF5:
+; SysEx_FeatureWordForVariant(i): i < 6: word i of prom_b 0xF4FE6A (Variant_Flag == 1) or 0xF4FE76 (else); 0xFFFF = not available.
+SysEx_FeatureWordForVariant:
 	link XIZ,0x0000                                      ; FB5FF5  ee 0c 00 00
 	push XIX                                             ; FB5FF9  3c
 	cp (XIZ+0x08),0x06                                   ; FB5FFA  8e 08 3f 06
@@ -95745,14 +95765,15 @@ sub_FB741A:
 	pop XIX                                              ; FB7497  5c
 	unlk XIZ                                             ; FB7498  ee 0d
 	ret                                                  ; FB749A  0e
-sub_FB749B:
+; SysExXfer_SetJobTotal_TotalKeyboard(desc): {start, end, size} of the whole TOTAL KEYBOARD job, the sequencer part at its run-time size.
+SysExXfer_SetJobTotal_TotalKeyboard:
 	link XIZ,0xfff8                                      ; FB749B  ee 0c f8 ff
 	pushw hl                                             ; FB749F  2b
 	push XIX                                             ; FB74A0  3c
 	ld XIX,(XIZ+0x08)                                    ; FB74A1  ae 08 24
 	lda xbc, (0x7600:16)                                ; FB74A4  f1 00 76 31
 	ld (XIX),XBC                                         ; FB74A8  b4 61
-	calr sub_FB7748                                      ; FB74AA  1e 9b 02
+	calr SysExDump_SequencerUsedBytes                                      ; FB74AA  1e 9b 02
 	ld (xiz-4), xiy                                      ; FB74AD  be fc 65
 	ldw hl, 0x7620                                       ; FB74B0  33 20 76
 	ldw bc, 0x7f7e                                       ; FB74B3  31 7e 7f
@@ -95770,7 +95791,8 @@ sub_FB749B:
 	popw hl                                              ; FB74D3  4b
 	unlk XIZ                                             ; FB74D4  ee 0d
 	ret                                                  ; FB74D6  0e
-sub_FB74D7:
+; SysExXfer_SetJobTotal_SystemPartMidi(desc): {0x7600, .., size} of SYSTEM,PART & MIDI.
+SysExXfer_SetJobTotal_SystemPartMidi:
 	link XIZ,0xfffc                                      ; FB74D7  ee 0c fc ff
 	pushw hl                                             ; FB74DB  2b
 	pushw de                                             ; FB74DC  2a
@@ -95798,7 +95820,8 @@ sub_FB74D7:
 	popw hl                                              ; FB7516  4b
 	unlk XIZ                                             ; FB7517  ee 0d
 	ret                                                  ; FB7519  0e
-sub_FB751A:
+; SysExXfer_SetJobTotal_Sound(desc): {0x60A000, 0x64A000, 0x40000}.
+SysExXfer_SetJobTotal_Sound:
 	link XIZ,0x0000                                      ; FB751A  ee 0c 00 00
 	push XIX                                             ; FB751E  3c
 	ld XIX,(XIZ+0x08)                                    ; FB751F  ae 08 24
@@ -95813,7 +95836,8 @@ sub_FB751A:
 	ret                                                  ; FB753C  0e
 sub_FB28BE_Nop:
 	ret                                                  ; FB753D  0e
-sub_FB753E:
+; SysExXfer_SetJobTotal_Sequencer(desc): {0x603400, 0x65C400, 0x59000}; on a SEND (bit 6 of (0x60FD40)) part 3 at its run-time size.
+SysExXfer_SetJobTotal_Sequencer:
 	link XIZ,0xfff8                                      ; FB753E  ee 0c f8 ff
 	push XIX                                             ; FB7542  3c
 	ld XIX,(XIZ+0x08)                                    ; FB7543  ae 08 24
@@ -95825,7 +95849,7 @@ sub_FB753E:
 	ld (XIX+0x08),XBC                                    ; FB755A  bc 08 61
 	m_bit 6, MD24, 0x60fd40                              ; FB755D  f2 40 fd 60 ce
 	jr z, .LFB7586                                       ; FB7562  66 22
-	calr sub_FB7748                                      ; FB7564  1e e1 01
+	calr SysExDump_SequencerUsedBytes                                      ; FB7564  1e e1 01
 	ld (xiz-4), xiy                                      ; FB7567  be fc 65
 	add XIY,0x00008400                                   ; FB756A  ed c8 00 84 00 00
 	ld (xiz-8), xiy                                      ; FB7570  be f8 65
@@ -95839,7 +95863,8 @@ sub_FB753E:
 	pop XIX                                              ; FB7586  5c
 	unlk XIZ                                             ; FB7587  ee 0d
 	ret                                                  ; FB7589  0e
-sub_FB758A:
+; SysExXfer_SetJobTotal_Combination(desc): {0x60A000 - 0x300, + 0x16300, 0x16300}.
+SysExXfer_SetJobTotal_Combination:
 	link XIZ,0xfffc                                      ; FB758A  ee 0c fc ff
 	push XIX                                             ; FB758E  3c
 	ld XIX,(XIZ+0x08)                                    ; FB758F  ae 08 24
@@ -95855,7 +95880,8 @@ sub_FB758A:
 	pop XIX                                              ; FB75B6  5c
 	unlk XIZ                                             ; FB75B7  ee 0d
 	ret                                                  ; FB75B9  0e
-sub_FB75BA:
+; SysExXfer_SetPart_SystemPart1(desc): {0x7600, 0x7620, 0x20}.
+SysExXfer_SetPart_SystemPart1:
 	link XIZ,0xfffc                                      ; FB75BA  ee 0c fc ff
 	push XIX                                             ; FB75BE  3c
 	ld XIX,(XIZ+0x08)                                    ; FB75BF  ae 08 24
@@ -95871,7 +95897,8 @@ sub_FB75BA:
 	pop XIX                                              ; FB75E0  5c
 	unlk XIZ                                             ; FB75E1  ee 0d
 	ret                                                  ; FB75E3  0e
-sub_FB75E4:
+; SysExXfer_SetPart_SystemPart2(desc): source 0x7620 .. 0x7F7E + 2 (2400 bytes).
+SysExXfer_SetPart_SystemPart2:
 	link XIZ,0xfffa                                      ; FB75E4  ee 0c fa ff
 	pushw hl                                             ; FB75E8  2b
 	pushw de                                             ; FB75E9  2a
@@ -95904,7 +95931,8 @@ sub_FB75E4:
 	popw hl                                              ; FB7625  4b
 	unlk XIZ                                             ; FB7626  ee 0d
 	ret                                                  ; FB7628  0e
-sub_FB7629:
+; SysExXfer_SetPart_SoundOrphan(desc): {0x60A000, 0x60A000, 0}; used only by the uncalled transmitter at 0xFB248A and its receive twin.
+SysExXfer_SetPart_SoundOrphan:
 	link XIZ,0x0000                                      ; FB7629  ee 0c 00 00
 	push XIX                                             ; FB762D  3c
 	ld XIX,(XIZ+0x08)                                    ; FB762E  ae 08 24
@@ -95917,7 +95945,8 @@ sub_FB7629:
 	pop XIX                                              ; FB7645  5c
 	unlk XIZ                                             ; FB7646  ee 0d
 	ret                                                  ; FB7648  0e
-sub_FB7649:
+; SysExXfer_SetPart_SoundBlock(desc): {0x60A000, 0x60C000, 0x2000}, one of the 32 SOUND blocks.
+SysExXfer_SetPart_SoundBlock:
 	link XIZ,0x0000                                      ; FB7649  ee 0c 00 00
 	push XIX                                             ; FB764D  3c
 	ld XIX,(XIZ+0x08)                                    ; FB764E  ae 08 24
@@ -95936,7 +95965,8 @@ sub_FB28BE_Nop3:
 	ret                                                  ; FB766D  0e
 sub_FB28BE_Nop4:
 	ret                                                  ; FB766E  0e
-sub_FB766F:
+; SysExXfer_SetPart_Sequencer1(desc): {0x603400, 0x604000, 0xC00}.
+SysExXfer_SetPart_Sequencer1:
 	link XIZ,0x0000                                      ; FB766F  ee 0c 00 00
 	push XIX                                             ; FB7673  3c
 	ld XIX,(XIZ+0x08)                                    ; FB7674  ae 08 24
@@ -95949,7 +95979,8 @@ sub_FB766F:
 	pop XIX                                              ; FB768E  5c
 	unlk XIZ                                             ; FB768F  ee 0d
 	ret                                                  ; FB7691  0e
-sub_FB7692:
+; SysExXfer_SetPart_Sequencer2(desc): {0x610000, 0x617800, 0x7800}.
+SysExXfer_SetPart_Sequencer2:
 	link XIZ,0x0000                                      ; FB7692  ee 0c 00 00
 	push XIX                                             ; FB7696  3c
 	ld XIX,(XIZ+0x08)                                    ; FB7697  ae 08 24
@@ -95962,7 +95993,8 @@ sub_FB7692:
 	pop XIX                                              ; FB76B1  5c
 	unlk XIZ                                             ; FB76B2  ee 0d
 	ret                                                  ; FB76B4  0e
-sub_FB76B5:
+; SysExXfer_SetPart_Sequencer3(desc): {0x617800, 0x668400, 0x50C00}; on a SEND the run-time size (SysExDump_SequencerUsedBytes).
+SysExXfer_SetPart_Sequencer3:
 	link XIZ,0xfffc                                      ; FB76B5  ee 0c fc ff
 	push XIX                                             ; FB76B9  3c
 	ld XIX,(XIZ+0x08)                                    ; FB76BA  ae 08 24
@@ -95974,7 +96006,7 @@ sub_FB76B5:
 	ld (XIX+0x08),XBC                                    ; FB76D1  bc 08 61
 	m_bit 6, MD24, 0x60fd40                              ; FB76D4  f2 40 fd 60 ce
 	jr z, .LFB76EE                                       ; FB76D9  66 13
-	calr sub_FB7748                                      ; FB76DB  1e 6a 00
+	calr SysExDump_SequencerUsedBytes                                      ; FB76DB  1e 6a 00
 	ld (xiz-4), xiy                                      ; FB76DE  be fc 65
 	ld XBC,(XIX)                                         ; FB76E1  a4 21
 	add XBC,XIY                                          ; FB76E3  ed 81
@@ -95985,7 +96017,8 @@ sub_FB76B5:
 	pop XIX                                              ; FB76EE  5c
 	unlk XIZ                                             ; FB76EF  ee 0d
 	ret                                                  ; FB76F1  0e
-sub_FB76F2:
+; SysExXfer_SetPart_Combination1(desc): {0x60A000 - 0x300, 0x60A000, 0x300}.
+SysExXfer_SetPart_Combination1:
 	link XIZ,0xfffc                                      ; FB76F2  ee 0c fc ff
 	push XIX                                             ; FB76F6  3c
 	ld XIX,(XIZ+0x08)                                    ; FB76F7  ae 08 24
@@ -96001,7 +96034,8 @@ sub_FB76F2:
 	pop XIX                                              ; FB771E  5c
 	unlk XIZ                                             ; FB771F  ee 0d
 	ret                                                  ; FB7721  0e
-sub_FB7722:
+; SysExXfer_SetPart_CombinationBlock(desc): {0x60A000, 0x60B600, 0x1600}, one of the 16 COMBINATION blocks.
+SysExXfer_SetPart_CombinationBlock:
 	link XIZ,0x0000                                      ; FB7722  ee 0c 00 00
 	push XIX                                             ; FB7726  3c
 	ld XIX,(XIZ+0x08)                                    ; FB7727  ae 08 24
@@ -96016,7 +96050,8 @@ sub_FB7722:
 	ret                                                  ; FB7744  0e
 	sub XIY,XIY                                          ; FB7745  ed a5
 	ret                                                  ; FB7747  0e
-sub_FB7748:
+; SysExDump_SequencerUsedBytes: T_F414BC, then XIY = 0x10 * (0x603452), the sequencer's own memory-use counter.
+SysExDump_SequencerUsedBytes:
 	push XDE                                             ; FB7748  3a
 	push XHL                                             ; FB7749  3b
 	push XIX                                             ; FB774A  3c
@@ -96752,7 +96787,8 @@ sub_FB7D91:
 .LFB7DFC:
 	pop XIX                                              ; FB7DFC  5c
 	ret                                                  ; FB7DFD  0e
-sub_FB7DFE:
+; SysExDump_ShowResult: status (field 4) 0 -> SysExDump_ShowCompleted; 0x21 -> SysExDump_ShowScreenB3; else SysExDump_ShowStatusMessage.
+SysExDump_ShowResult:
 	pushw 0x04                                           ; FB7DFE  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7E01  e2 d8 fc 60 21
 	push XBC                                             ; FB7E06  39
@@ -96765,32 +96801,35 @@ sub_FB7DFE:
 	jr z, .LFB7E20                                       ; FB7E17  66 07
 	jr .LFB7E25                                          ; FB7E19  68 0a
 .LFB7E1B:
-	calr sub_FB7E29                                      ; FB7E1B  1e 0b 00
+	calr SysExDump_ShowCompleted                                      ; FB7E1B  1e 0b 00
 	jr .LFB7E28                                          ; FB7E1E  68 08
 .LFB7E20:
-	calr sub_FB7E38                                      ; FB7E20  1e 15 00
+	calr SysExDump_ShowScreenB3                                      ; FB7E20  1e 15 00
 	jr .LFB7E28                                          ; FB7E23  68 03
 .LFB7E25:
-	calr sub_FB7E43                                      ; FB7E25  1e 1b 00
+	calr SysExDump_ShowStatusMessage                                      ; FB7E25  1e 1b 00
 .LFB7E28:
 	ret                                                  ; FB7E28  0e
-sub_FB7E29:
+; SysExDump_ShowCompleted: UI_StatusCode = 0x23 (COMPLETED!), UI_Request = 0xAB.
+SysExDump_ShowCompleted:
 	ld (UI_StatusCode:16), 0x23                                 ; FB7E29  f1 80 28 00 23
 	ld (UI_Request:16), 0xab                                 ; FB7E2E  f1 70 20 00 ab
 	m_set 6, MD16, UI_Request_Hi                                ; FB7E33  f1 71 20 be
 	ret                                                  ; FB7E37  0e
-sub_FB7E38:
+; SysExDump_ShowScreenB3: UI_Request = 0xB3, no popup.
+SysExDump_ShowScreenB3:
 	ld (UI_Request:16), 0xb3                                 ; FB7E38  f1 70 20 00 b3
 	ld (UI_Request_Hi:16), 0x40                                 ; FB7E3D  f1 71 20 00 40
 	ret                                                  ; FB7E42  0e
-sub_FB7E43:
+; SysExDump_ShowStatusMessage: UI_StatusCode = SysExStatus_MessageIdMap[status], UI_Request = 0xAB.
+SysExDump_ShowStatusMessage:
 	pushw 0x04                                           ; FB7E43  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7E46  e2 d8 fc 60 21
 	push XBC                                             ; FB7E4B  39
 	call U8Rec16_GetField                                      ; FB7E4C  1d d3 62 fb
 	extz WA                                              ; FB7E50  d8 12
 	extz XWA                                             ; FB7E52  e8 12
-	add XWA,AsciiRun_F511C7                              ; FB7E54  e8 c8 c7 11 f5 00
+	add XWA,SysExStatus_MessageIdMap                              ; FB7E54  e8 c8 c7 11 f5 00
 	ld C,(XWA)                                           ; FB7E5A  80 23
 	ld (UI_StatusCode:16), c                                   ; FB7E5C  f1 80 28 43
 	ld (UI_Request:16), 0xab                                 ; FB7E60  f1 70 20 00 ab
@@ -96942,7 +96981,8 @@ Ring601646_InitIrqMasked:
 	call T_Ring601432_Init                               ; FB7F18  1d 00 1e f4
 	ei 0x00                                              ; FB7F1C  06 00
 	ret                                                  ; FB7F1E  0e
-sub_FB7F1F:
+; SysEx_ClearRemoteId: 0xFF into the remote device id triple (0x60FC90..92) and (0x60FC94..96).
+SysEx_ClearRemoteId:
 	pushw hl                                             ; FB7F1F  2b
 	push XIX                                             ; FB7F20  3c
 	lda xix, (0x60fc90:24)                               ; FB7F21  f2 90 fc 60 34
@@ -97144,9 +97184,10 @@ sub_FB8117:
 	ldirw                                                ; FB8152  95 11
 	pop XIX                                              ; FB8154  5c
 	ret                                                  ; FB8155  0e
-sub_FB8156:
+; SysEx_ResetSession: SysExBuf_InitAll, SysEx_ClearRemoteId, sub_FB8117; clear (0x60FD40..0x60FD44), (0x60F802), (0x60F804).
+SysEx_ResetSession:
 	calr SysExBuf_InitAll                                      ; FB8156  1e e9 fd
-	calr sub_FB7F1F                                      ; FB8159  1e c3 fd
+	calr SysEx_ClearRemoteId                                      ; FB8159  1e c3 fd
 	calr sub_FB8117                                      ; FB815C  1e b8 ff
 	ld (0x60fd40:24), 0x00                             ; FB815F  f2 40 fd 60 00 00
 	ld (0x60fd41:24), 0x00                             ; FB8165  f2 41 fd 60 00 00
@@ -97157,7 +97198,7 @@ sub_FB8156:
 	ld (0x60f804:24), 0x00                             ; FB8183  f2 04 f8 60 00 00
 	ret                                                  ; FB8189  0e
 sub_FB818A:
-	calr sub_FB8156                                      ; FB818A  1e c9 ff
+	calr SysEx_ResetSession                                      ; FB818A  1e c9 ff
 	ret                                                  ; FB818D  0e
 	ld XBC,(XSP+0x04)                                    ; FB818E  af 04 21
 	m_ldc_cr_reg RL+r1, CR_DMAD2                         ; FB8191  e9 2e 18

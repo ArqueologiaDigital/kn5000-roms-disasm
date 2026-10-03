@@ -115,9 +115,9 @@ converted code, because the source rebuilds the ROM byte-identically — finds
 |---|---|---|
 | `0xFAABFB` | `call 0xf40ef0` | src `0x00F80300` — **prom_a's own ROM**, not flash |
 | `0xFB24D7` | `call 0xf40ef0` | src `0x00E80000`, count `0x0000` |
-| `0xFB256E` | `call sub_FB7649` | builder two calls back at `0xFB2560`, src `XIX` |
+| `0xFB256E` | `call SysExXfer_SetPart_SoundBlock` | builder two calls back at `0xFB2560`, src `XIX` |
 | `0xFB26D2` | `call 0xf40ef0` | src `0x00EC0000`, count `0x0300` |
-| `0xFB2769` | `call sub_FB7722` | builder two calls back at `0xFB275B`, src `XIX` |
+| `0xFB2769` | `call SysExXfer_SetPart_CombinationBlock` | builder two calls back at `0xFB275B`, src `XIX` |
 | `0xFB6FD1` | `calr SysExTx_AppendContHeaderIfCont` | **no builder anywhere on the path** |
 | `0xFC00BE` | `call 0xf40ef0` | src `0x00C00000`, count `0x34` |
 | `0xFC0188` | `call 0xf40ef0` | src `0x00C00000 + (0x0878)` |

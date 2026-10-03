@@ -108090,7 +108090,7 @@ ParamFieldInit_F4FE50:
 ; Word_F4FE68 -- one word, 0xF700.  Read by prom_a SysExTx_AppendChecksumF7 (0xFB7119
 ;   `ld BC,(0xF4FE68)`), which works on the output buffer at (0x60FC88).
 ; WordTables_F4FE6A / _F4FE76 -- two 6-entry tables of 16-bit words, read by
-;   prom_a sub_FB5FF5: for an argument k < 6 it takes 0xF4FE6A when the strap
+;   prom_a SysEx_FeatureWordForVariant: for an argument k < 6 it takes 0xF4FE6A when the strap
 ;   byte (0xC4) is 1 and 0xF4FE76 otherwise, and returns word [k] (`mul
 ;   BC,2`).  The first table is all zero; the second is 0, 0, 0, 0xFFFF, 0,
 ;   0xFFFF.  What k and the words mean is not decoded here.
@@ -109014,7 +109014,7 @@ SysExDecodeTree_Root:
 ; --- 0xF511C7-0xF511DC  ascii (22 bytes) ---
 
 ; --------------------------------------------------------------------------
-; AsciiRun_F511C7 -- 22 bytes that are printable but are not text:
+; SysExStatus_MessageIdMap -- 22 bytes that are printable but are not text:
 ;           '#!!!!!!!"""!!!!!!!!!!!'
 ; Read by: prom_a 0xFB7E54 `add XWA,0x00f511c7` -- an INDEXED TABLE, not a
 ;          string.
@@ -109023,7 +109023,7 @@ SysExDecodeTree_Root:
 ;           integer table that happens to land in the printable range.
 ;           Named for what it IS.
 ; --------------------------------------------------------------------------
-AsciiRun_F511C7:
+SysExStatus_MessageIdMap:
 	.byte 0x23, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x22, 0x22, 0x22, 0x21, 0x21, 0x21, 0x21, 0x21   ; F511C7  #!!!!!!!"""!!!!!
 	.byte 0x21, 0x21, 0x21, 0x21, 0x21, 0x21   ; F511D7  !!!!!!
 

@@ -50,7 +50,7 @@ WHERE THE SIGNAL IS
   * WRITE PROTECT.  SysExRx_CheckCommandClass maps the command number through the byte
     table at prom_b 0xF4FE82 to a class, and refuses class 1 when
     (0x7FD6) bit 1 is set, class 2 when bit 0 is set and class 3 when
-    either is -- with status 0x21, which sub_FB7DFE turns into screen 0xB3,
+    either is -- with status 0x21, which SysExDump_ShowResult turns into screen 0xB3,
     the "The SOUND or COMBINATION memories are write protected" screen.
 
 RUN
@@ -186,7 +186,7 @@ print("  Any other address or length falls off the trie and is an ERROR 41.")
 print()
 
 # --- 3. the destination bound --------------------------------------------
-# sub_FB76B5 (SEQUENCER part 3's destination) hard-codes 0x00050C00 at +8,
+# SysExXfer_SetPart_Sequencer3 (SEQUENCER part 3's destination) hard-codes 0x00050C00 at +8,
 # and SysExRx_CheckAddress rejects a larger length field with status 0x16.
 assert a(0xFB76CC, 5) == bytes([0x41, 0x00, 0x0C, 0x05, 0x00]), "seq3 extent moved"
 assert a(0xFB6C69, 6) == bytes([0xE9, 0xCF, 0x00, 0x0C, 0x05, 0x00]), "seq3 ceiling moved"

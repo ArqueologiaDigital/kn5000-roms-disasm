@@ -32,11 +32,11 @@ WHAT IT ESTABLISHES, AND HOW
      "variant 1" / "variant 2" and never a model name.
 
   2. THE FEATURE TABLE IS SIX ENTRIES AND HAS EXACTLY ONE READER.
-     `sub_FB5FF5` (0xFB5FF5) bounds its argument with `cp (XIZ+0x08),0x06 /
+     `SysEx_FeatureWordForVariant` (0xFB5FF5) bounds its argument with `cp (XIZ+0x08),0x06 /
      jr NC` -> 0xFFFF, picks prom_b 0xF4FE6A when (0x00C4)==1 and 0xF4FE76
      otherwise, and indexes it with stride 2.  Both table addresses appear in
      exactly two instructions in 1 MiB (exhaustive scan), so nothing else
-     reads them.  `sub_FB5FF5` itself has exactly six callers -- an
+     reads them.  `SysEx_FeatureWordForVariant` itself has exactly six callers -- an
      exhaustive scan for BOTH `call imm24` and PC-relative `calr` -- and this
      script reads the `pushw imm16` immediately before each one.  All six
      pass 3 or 5.  ⇒ entries 0, 1, 2 and 4 are read by NOTHING.  They are
@@ -231,7 +231,7 @@ for i in UNREAD:
 # what each consulted index is, named by what the caller does with it
 #   3: the SEQUENCER category -- one transmit gate, three receive gates
 #   5: the `25` tempo message -- transmitter and receiver
-SEQ_TX = 0xFB258A            # inside sub_FB2587, the SEQUENCER send routine
+SEQ_TX = 0xFB258A            # inside SysExDump_SendSequencer, the SEQUENCER send routine
 SEQ_RX = (0xFB2E36, 0xFB2E7F, 0xFB2EC8)     # parts 1, 2, 3 data handlers
 TEMPO_TX = 0xFB3371          # inside sub_FB3355
 TEMPO_RX = 0xFB3403          # inside the 0x25 handler

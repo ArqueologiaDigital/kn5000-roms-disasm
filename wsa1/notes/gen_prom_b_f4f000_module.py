@@ -1229,8 +1229,8 @@ def structure():
                  "the bands and the live count are re-derived by index_bands() "
                  "and checked in --selftest, last band included.")))
 
-    objc(0xF511C7, "AsciiRun_F511C7",
-        "AsciiRun_F511C7 -- 22 bytes that are printable but are not text:",
+    objc(0xF511C7, "SysExStatus_MessageIdMap",
+        "SysExStatus_MessageIdMap -- 22 bytes that are printable but are not text:",
         "          %r" % txt(0xF511C7, 22),
         *(wrap("Read by: ", namer_text(0xF511C7) + " -- an INDEXED TABLE, not a "
                "string.")
@@ -1787,7 +1787,7 @@ def selftest():
     check("  the raw bytes are NOT monotone (59 non-rising pairs)",
           sum(1 for i in range(128) if bm[i] >= bm[i + 1]), 59)
     ar = list(sl(0xF511C7, 22))
-    check("AsciiRun_F511C7 spans 0x21..0x23", (min(ar), max(ar)), (0x21, 0x23))
+    check("SysExStatus_MessageIdMap spans 0x21..0x23", (min(ar), max(ar)), (0x21, 0x23))
 
     print("M. the emitted text rebuilds the span")
     body = emit()

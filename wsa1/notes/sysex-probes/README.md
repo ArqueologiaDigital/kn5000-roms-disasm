@@ -57,7 +57,7 @@ The status byte is **field 4 of the parse record** whose pointer is RAM
 `(0x60FCD8)`; prom_a `U8Rec16_SetField` (0xFB6219) is the setter and `U8Rec16_GetField`
 (0xFB62D3) the getter, both 16-way jump tables over offsets +0..+15.
 
-* `sub_FB7DFE` (0xFB7DFE) reads field 4 at the end of a session:
+* `SysExDump_ShowResult` (0xFB7DFE) reads field 4 at the end of a session:
   `0` -> message `0x23` (`COMPLETED!`), `0x21` -> screen 0xB3 with no popup,
   anything else -> `STATUS_MAP[field4]`.
 * `STATUS_MAP` = prom_b `0xF511C7`, named by the ONE instruction
@@ -75,7 +75,7 @@ Every assert is silent and the script prints `OK`. The headline ones are
 
 ### Two independent checks on the index origin
 
-1. `sub_FB7DFE` special-cases `field4 == 0` to message `0x23`, and
+1. `SysExDump_ShowResult` special-cases `field4 == 0` to message `0x23`, and
    `STATUS_MAP[0]` is `0x23` too — so the table is indexed by the raw
    status with no bias.
 2. Each node of the grammar trie ends in a `0xFF` record whose **second**
@@ -85,7 +85,7 @@ Every assert is silent and the script prints `OK`. The headline ones are
 
 ### Trap
 
-The `.s` declares only 22 bytes at `0xF511C7` (`AsciiRun_F511C7`) because
+The `.s` declares only 22 bytes at `0xF511C7` (`SysExStatus_MessageIdMap`) because
 the ASCII heuristic stops at the first non-printable byte, `0x0F` at
 `0xF511DD`. **The reader has no bound at all**, and statuses up to `0x21`
 are raised, so the table is 34 bytes. Reading only 22 loses `ERROR 42`
@@ -99,7 +99,7 @@ Both load bases are asserted first: prom_b must hold `F0 50 23 7E F7` at
 * **Menu row -> job.** `0xF99AE3` is a 5-byte table the screen-0x79 button
   handler at `0xF99A8F` indexes with `(0x2720) & 7`; the value becomes
   `(0x60F802) | 0x80` and prom_b thunk `T_F408E4` runs `0xFB2049`, which
-  jumps through `JumpTable_FB2081` (6 entries, bound `cp BC,5 / jr ugt`).
+  jumps through `SysExDump_JobTable` (6 entries, bound `cp BC,5 / jr ugt`).
 * **Templates.** Nine fixed messages at `0xF4FEB4`-`0xF4FEE2` and ten data
   headers at `0xF4FEF2`-`0xF4FF60`, each named by exactly one `lda xbc,(imm24)`
   in prom_a; the script prints the naming site next to each one.
@@ -152,7 +152,7 @@ Both load bases are asserted before anything is read: prom_b must hold
   instruction `add XWA,0x00f4f916` at prom_a `0xFB28A1`.  `0xF4F800` /
   `0xF4F888` send almost everything to the *same* default, `0xFB2820`,
   which is the bulk-transfer **session loop**; inside that loop
-  `sub_FB2877` re-dispatches the very same command number through
+  `SysExSession_DispatchCommand` re-dispatches the very same command number through
   `0xF4F916`.  So a command's real behaviour is in the THIRD table, not
   the first two.  Nine slots of `0xF4F916` are the `2D` category
   handlers; one is the `7E` continuation; two are the handshake.
@@ -203,7 +203,7 @@ complete list is how the `2D` subtree and the dump request were missed.
 Both are checked from the instruction bytes, and both sit in the
 receiver *and* the transmitter, identically:
 
-1. **The model-variant strap `(0x0000C4)`.** `sub_FB5FF5` picks
+1. **The model-variant strap `(0x0000C4)`.** `SysEx_FeatureWordForVariant` picks
    `0xF4FE6A` (six zero words, everything allowed) when the strap is 1
    and `0xF4FE76` (`0xFFFF` at indices 3 and 5) otherwise.  Index 5 is
    the `25` message; index 3 is the SEQUENCER **block store** — so on
@@ -225,12 +225,12 @@ receiver *and* the transmitter, identically:
 Both load bases are asserted first, as above.
 
 * **The transmit call graph is DECODED, not assumed.** Menu row → job code
-  (`0xF99AE3`) → job routine (`JumpTable_FB2081`) → category routine → part
+  (`0xF99AE3`) → job routine (`SysExDump_JobTable`) → category routine → part
   emitters. Every edge is a `calr` (`1E disp16`) or `call` (`1D imm24`) whose
   target the script computes from the bytes, and every chain is closed by the
   `RET` that follows it, so the number of parts is the ROM's statement, not a
   guess.
-* **TOTAL KEYBOARD's order is the `calr` chain** in `sub_FB23E2`:
+* **TOTAL KEYBOARD's order is the `calr` chain** in `SysExDump_SendAllCategories`:
   SYSTEM,PART & MIDI → SOUND → COMBINATION → SEQUENCER. The script asserts
   that the four routines the four single-category jobs run are exactly the
   four in that chain.
@@ -256,10 +256,10 @@ Both load bases are asserted first, as above.
   parse-record fields `0x0C/0x0D/0x0E`. Both shift literals are asserted.
   The value itself is `0x10 ×` the sequencer's own memory-use counter
   (`mul XBC,(0x603452)` at `0xFB7757`), capped by the static extent 0x50C00.
-* **The SEQUENCER availability gate.** `sub_FB5FF5(3)` returns a word from
+* **The SEQUENCER availability gate.** `SysEx_FeatureWordForVariant(3)` returns a word from
   `0xF4FE6A` when the model-variant strap `(0x00C4)` is 1 and from
   `0xF4FE76` otherwise; the second table holds `0xFFFF` at index 3, and on
-  that arm `sub_FB2587` returns before sending anything — **including the
+  that arm `SysExDump_SendSequencer` returns before sending anything — **including the
   end-of-category message**, which is inside the guarded block.
 
 * **★★★ The DUMP REQUEST names a category BY ITS ADDRESS.** The `2B`
@@ -463,7 +463,7 @@ asserts them.
   descriptor writer, not from the message. The single exception is
   SEQUENCER part 3, whose length the trie leaves free: `SysExRx_CheckAddress`
   rejects it above `0x50C00` (`cp XBC,0x00050C00` at `0xFB6C69`) with
-  status `0x16`, and `0x50C00` is exactly the extent `sub_FB76B5`
+  status `0x16`, and `0x50C00` is exactly the extent `SysExXfer_SetPart_Sequencer3`
   reserves — the script asserts the two agree.
 * **Order.** Each data handler compares parse-record field 3 (the session
   step) against one literal; the script finds that compare by scanning
@@ -632,7 +632,7 @@ in prom_a and twice in prom_b. The script asserts the store idiom `F0 C4 41`
 occurs exactly once in either CPU-1 image, and that every compare site tests
 1 or 2 and nothing else.
 
-* **The feature table.** `sub_FB5FF5` (`0xFB5FF5`) bounds its argument with
+* **The feature table.** `SysEx_FeatureWordForVariant` (`0xFB5FF5`) bounds its argument with
   `cp (XIZ+0x08),0x06 / jr NC` → `0xFFFF`, picks prom_b `0xF4FE6A` when the
   strap is 1 and `0xF4FE76` otherwise, and indexes with stride 2. Both table
   addresses occur in **exactly one instruction each** in 1 MiB, so nothing
@@ -782,7 +782,7 @@ mismatches), so the instruction boundaries are the tree's, not a guess.
   caller in prom_a. Its header prom_b `0xF4FF10` is `20 00 00 / 00 00 10` —
   the SOUND address with a length of 16 — and the trie accepts the SOUND
   address only with `10 00 00`. The descriptor writer both halves call,
-  `sub_FB7629`, sets `start == end` and size 0.
+  `SysExXfer_SetPart_SoundOrphan`, sets `start == end` and size 0.
 * **0x0F / 0x10 / 0x11 are a whole three-part category that was stubbed out.**
   They demand steps 0 / 8 / 9 where SEQUENCER demands 0 / 12 / 13, they arm
   continuation slots 7 / 8 / 9, 0x11 calls the same run-time length decoder
@@ -791,7 +791,7 @@ mismatches), so the instruction boundaries are the tree's, not a guess.
   the entry hook `0xFB7EE3` and the error recovery `0xFB7EE4`. Each stub sits
   one byte before a real routine of the same shape, which is why the script
   asserts the entry byte rather than trusting a name.
-* **0x1D is a dump request for job 1**, and `JumpTable_FB2081[1]` runs
+* **0x1D is a dump request for job 1**, and `SysExDump_JobTable[1]` runs
   `sub_FB209F_Nop`, a single `ret` — the one job slot with no body. The other
   four request arms carry jobs 4/3/2/5, which are in the SEND menu's own
   row→job table.
@@ -845,7 +845,7 @@ of range, and to the sender's own prefill `08 07 F7`.
    descriptor writer — it is the run-time length decoder. Asserting that
    every routine 0x11 calls is a stub fails on it.
 2. A routine that is "a single `ret`" must be tested by its **entry byte**,
-   not by its name: `sub_FB28BE_Nop` and `sub_FB753E` differ by one byte and one
+   not by its name: `sub_FB28BE_Nop` and `SysExXfer_SetJobTotal_Sequencer` differ by one byte and one
    of them is the SEQUENCER's real descriptor writer.
 3. The parse record is **double buffered** (`0x60FCD8` and `0x60FCDC` swap in
    `SysExRx_SwapBuffers`), which is why a data handler reads the session step out of
@@ -877,7 +877,7 @@ Both load bases are asserted by content: prom_b must hold `F0 50 23 7E F7` at
   check is the only one that covers its tag in full, all sixteen bytes.
   `0xFE2E3D` also passes a block whose four bytes are all `0xFF`.
 * **The MIDI path never looks.** The script asserts the part-1 receive
-  descriptor (`0x7600 .. 0x7620`, size `0x20`, written by `sub_FB75BA`)
+  descriptor (`0x7600 .. 0x7620`, size `0x20`, written by `SysExXfer_SetPart_SystemPart1`)
   and that nothing in prom_a or prom_b reads `0x7600`-`0x7607` as a value.
 * **The model triple's middle byte**, read out of the trie at all five
   nodes that carry it: two records, `00` and `01`, both descending to the
@@ -971,7 +971,7 @@ Both load bases are asserted by content first: prom_b must hold
   filter (`(0x7F38)` bit 3), which guards only `sub_FB4B7D`; it IS dropped
   while `sub_FB590A` is already inside itself (bit 0 of `(0x60F01F)`,
   set at `0xFB5929` and cleared at `0xFB5958`).
-* **★★★ Where GM sits in a dump.** `sub_FB75E4` sizes SYSTEM,PART & MIDI
+* **★★★ Where GM sits in a dump.** `SysExXfer_SetPart_SystemPart2` sizes SYSTEM,PART & MIDI
   part 2 from the constants `0x7620` and `0x7F7E`; the same two bound the
   record walk at `0xFAAAD4`/`0xFAAADA`, whose stride is
   `ld C,(XIX+1) / inc 2,XBC / add XIX,XBC`. The block is a list of

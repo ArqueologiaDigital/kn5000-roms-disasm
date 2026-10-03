@@ -66,7 +66,7 @@ assert a(0xF99AE3, 8) == bytes([0, 3, 5, 4, 2, 0, 0, 0]), "prom_a base wrong"
 # prom_a 0xF99A9E reads (0x2720), masks it with 7, and indexes the 8-byte
 # table at 0xF99AE3; the result becomes (0x60F802) | 0x80 and prom_b thunk
 # T_F408E4 (0xF408E4 -> prom_a 0xFB2049) runs it.  0xFB2049 masks with 7,
-# bounds the index with `cp BC,5 / jr ugt` and jumps through JumpTable_FB2081.
+# bounds the index with `cp BC,5 / jr ugt` and jumps through SysExDump_JobTable.
 ROW_NAMES = ["TOTAL KEYBOARD", "SOUND", "COMBINATION",
              "SYSTEM,PART & MIDI", "SEQUENCER"]
 ROW_TO_JOB = list(a(0xF99AE3, 5))

@@ -30,7 +30,7 @@ WHERE THE SIGNAL IS  (ROM addresses, prom_a @0xF80000, prom_b @0xF00000)
     handler tables -- this script reuses both and does not re-derive them.
   * handler tables prom_b 0xF4F800 (interrupt ring), 0xF4F888 (foreground
     ring), 0xF4F916 (inside the bulk-transfer session loop).
-  * the session loop prom_a 0xFB2820; the per-message step sub_FB2877;
+  * the session loop prom_a 0xFB2820; the per-message step SysExSession_DispatchCommand;
     the acknowledger sub_FB28BE.
   * the RECEIVE handlers: 0xFB28FF (cmd 0x07 = wire 0x21) and 0xFB291D
     (cmd 0x08 = wire 0x22).
@@ -255,7 +255,7 @@ for slot, lst in refs.items():
             assert op == 0x34 and at == 0xFB7F21, "unclassified access at 0x%06X" % at
             nlda += 1
 assert (nwrite, nlda) == (9, 1), (nwrite, nlda)
-# the one address-of is inside sub_FB7F1F, which fills all six bytes with 0xFF
+# the one address-of is inside SysEx_ClearRemoteId, which fills all six bytes with 0xFF
 # at reset -- three through XIX, three directly.  It is a WRITER too.
 assert a(0xFB7F26, 2) == bytes([0x26, 0xFF]), "H := 0xFF"
 assert a(0xFB7F37, 7) == bytes([0xB4, 0x46, 0xBC, 0x01, 0x46, 0xBC, 0x02]), "writes via XIX"
@@ -423,7 +423,7 @@ print("  0x60FC90..92 (transmit side, 0xFB237F/8E/9D)")
 print("  0x60FC94..96 (receive side,  0xFB2935/44/53)")
 print("  %d references in prom_a, %d writes + %d address-of, and the address-of"
       % (nwrite + nlda, nwrite, nlda))
-print("  is sub_FB7F1F filling all six with 0xFF at reset.  NOTHING READS THEM.")
+print("  is SysEx_ClearRemoteId filling all six with 0xFF at reset.  NOTHING READS THEM.")
 print()
 print("THE INSTRUMENT IS THE ONE THAT SENDS A `21`")
 print("  the `21` template 0xF4FED5 is named by exactly ONE instruction in the")
