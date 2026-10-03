@@ -137,3 +137,7 @@
 	.equ FOCUS_OBJECT,		0x2bc24	; GetFocusObject
 	.equ FOCUS_EVENT,		0x2bc28	; GetFocusEvent
 	.equ FOCUS_PARAM,		0x2bc2c	; GetFocusParam
+; code: accessors with the firmware's own names (exported name table)
+	.equ DIRMD_FLAG,		0x276c4	; GetDirmdFlag returns it (word)
+	.equ LSW_FILTER,		0x276c6	; SetLswFilter / ResetLswFilter store into it (32-bit)
+	.equ CURRENT_TARGET,		0x2f83c	; GetCurrentTarget returns it (32-bit)

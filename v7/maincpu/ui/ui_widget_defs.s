@@ -1705,12 +1705,12 @@ MainLswPartGet:
 
 SetLswFilter:
 	add xwa, xbc
-	ld (0x0276c6:24), xwa
+	ld (LSW_FILTER:24), xwa
 	ret
 
 ResetLswFilter:
 	add xwa, xbc
-	ld (0x0276c6:24), xwa
+	ld (LSW_FILTER:24), xwa
 	ret
 
 AcRamEditBoxProc:
@@ -18404,13 +18404,13 @@ MainSendEvent_Prologue:
 
 
 GetCurrentTarget:
-	ld xhl, (0x02f83c:24)
+	ld xhl, (CURRENT_TARGET:24)
 	ret
 
 SetCurrentTarget:
 	cp xwa, 0xffffffff
 	ret z
-	ld (0x02f83c:24), xwa
+	ld (CURRENT_TARGET:24), xwa
 	ret
 
 MainDispatchEvent:

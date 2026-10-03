@@ -1159,9 +1159,9 @@ DirmdEmu_CaseC:
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
-	ldw (0x0276c4:24), 0x0000
+	ldw (DIRMD_FLAG:24), 0x0000
 	jrl TaskWake_ZeroReturn
-	ldw (0x0276c4:24), 0x0001
+	ldw (DIRMD_FLAG:24), 0x0001
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1173,7 +1173,7 @@ DirmdEmu_CaseC:
 	ld wa, 2:i3
 	call ChangePalette
 	jr TaskWake_ZeroReturn
-	ldw (0x0276c4:24), 0x0001
+	ldw (DIRMD_FLAG:24), 0x0001
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, EVT_GET_TITLE_PROC_ID
@@ -1256,7 +1256,7 @@ IvDirmd_Epilogue:
 PostTitle_Function:
 
 GetDirmdFlag:
-	ld hl, (0x0276c4:24)
+	ld hl, (DIRMD_FLAG:24)
 	ret
 
 DirmdTitleFunc:
