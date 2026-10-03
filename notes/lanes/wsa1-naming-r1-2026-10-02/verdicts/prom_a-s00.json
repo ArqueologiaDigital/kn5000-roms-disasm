@@ -1,0 +1,8 @@
+{
+ "date": "2026-10-03",
+ "reviewer": "Claude (session 53b889a2), alone, sequentially -- not the namer",
+ "read": [[0, 109]],
+ "method": "review_sheet.py prom_a-s00 (all 109 renames): each routine's first instructions as they stand, the display lists / descriptors it loads, and its callers, against the evidence line. Areas: song/measure edit screens (AdvanceDelay, N0teChange, MeasureC0py/Insert, S0ngSelectName, SequencerMedley), the main-task loop, timed events, module-init phases, power-on chords, panel-wire polling, panel event commit/drop. Evidence lines that could be read off the code (stores, bit tests, table operands, record variables, caller chains) matched it; none was found wrong. Names that spell ROM text with zero-for-O (S0ng, C0mbinati0nM0de) follow the tree's existing convention (Paint_S0ngC0py, Paint_C0mbinati0nM0dePage2).",
+ "rejected": {},
+ "amended": {}
+}

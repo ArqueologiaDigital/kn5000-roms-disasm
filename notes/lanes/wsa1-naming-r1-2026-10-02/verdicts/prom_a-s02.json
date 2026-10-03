@@ -1,0 +1,8 @@
+{
+ "date": "2026-10-03",
+ "reviewer": "Claude (session 53b889a2), alone, sequentially -- not the namer",
+ "read": [[0, 100]],
+ "method": "review_sheet.py prom_a-s02 (all 100 renames): each routine's first instructions as they stand, the display lists / descriptors it loads, and its callers, against the evidence line. Areas: COMBINATION MODE page-2 field drawers (per-part sound/INT/pan/vol), soft keys and row keys, sound-bank selection, GROUP: SOUND DISPLAY HOLD screen. Evidence lines that could be read off the code (stores, bit tests, table operands, record variables, caller chains) matched it; none was found wrong. Names that spell ROM text with zero-for-O (S0ng, C0mbinati0nM0de) follow the tree's existing convention (Paint_S0ngC0py, Paint_C0mbinati0nM0dePage2).",
+ "rejected": {},
+ "amended": {}
+}

@@ -42,3 +42,26 @@ title op 0x1C "MIDI"). Nobody has independently re-derived them.
 3. Re-derive the `T_` trampoline names in prom_b with `wsa1/notes/prom_b_thunks_round6.py`,
    which only promotes from CONTENT targets.
 4. Regenerate the worklist: routines whose callees are now named become "ready" for round 2.
+
+## Applying them (from 2026-10-03)
+
+The packs were made at AT_COMMIT; later work renamed some of the same routines, and the packs listed
+prom_a only although prom_b's thunks reach prom_a's names through `.set sub_X, 0xX` aliases.  So:
+
+1. `rebase_packs.py` -> `rebased/<pack>.json`: drops renames whose OLD name is gone, adds the
+   `also` list (prom_b and both linker scripts) that `scripts/tools/apply_label_edits.py` now
+   understands -- the renames reach those files, where OLD may only be a `.set` alias.
+2. `review_sheet.py <pack> FROM TO` prints each rename with the routine as it stands, the display
+   lists / descriptors it loads, and its callers.  An independent reader goes through it.
+3. `verdicts/<pack>.json` records what was read, how, and what was rejected or amended;
+   `apply_verdicts.py <pack>` writes `accepted/<pack>.json` with that record as `"verified"`.
+4. `python3 scripts/tools/apply_label_edits.py accepted/<pack>.json`, then `make gate-all`.  The
+   sed it writes (`scripts/renaming/rename_wsa1-naming-r1-<pack>.sed`) is also run over prose
+   that quotes the old names (prom_c's preset_bank.s comments, notes docstrings).
+5. Step 3 of the list above (`wsa1/notes/prom_b_thunks_round6.py --apply`) currently REFUSES:
+   prom_b was split into include files after that tool was written, and it writes the whole image
+   into the master; it needs `asm_source.edit_image()`.  Not done.
+
+| pack | rebased renames | read | rejected | applied in |
+|---|---:|---:|---:|---|
+| prom_a-s06 | 120 | 120 | 0 | (this commit) |

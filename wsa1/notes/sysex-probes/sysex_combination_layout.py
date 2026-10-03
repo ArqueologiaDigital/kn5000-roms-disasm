@@ -10,10 +10,10 @@ QUESTION IT ANSWERS
 
   This settles it from the ROMs and then reads the 704-byte unit out:
 
-  1. WHICH UNIT IS THE COMBINATION.  prom_a `sub_F9F984` addresses the area as
-     `base + 0x1600*H + 0x2C0*L`; the sibling `sub_F9F910` addresses a SECOND
+  1. WHICH UNIT IS THE COMBINATION.  prom_a `CombiBank_RemoteCombiAddr` addresses the area as
+     `base + 0x1600*H + 0x2C0*L`; the sibling `CombiBank_RemoteGroupNameAddr` addresses a SECOND
      table with `base-0x100 + 0x10*H`, indexed by H ALONE.  In prom_c -- the ROM
-     `sub_F9F984` names as its preset base -- that second table holds SIXTEEN
+     `CombiBank_RemoteCombiAddr` names as its preset base -- that second table holds SIXTEEN
      printable 16-character strings ("FUSION COMBO1", "JAZZ COMBO", ...,
      "DRUM & EFFECT"), and each 704-byte unit under it holds its own printable
      16-character name ("Downtown Set", "Jazz Chops", ...).  A 5632-byte object
@@ -36,7 +36,7 @@ WHY IT IS A REAL TEST
 
   * 0xF8F500 - 0xF80300 is EXACTLY 11 * 0x1600 and 0xF90B00 - 0xF80300 is
     EXACTLY 12 * 0x1600 (same for the flash bases 0xECF500 / 0xED0B00 against
-    0xEC0300).  `sub_F9F984`'s three branches are therefore ONE linear array,
+    0xEC0300).  `CombiBank_RemoteCombiAddr`'s three branches are therefore ONE linear array,
     and the H stride is a bank stride.
   * RANGE CONFORMANCE.  Sixteen per-part fields and six common fields are
     range-checked against the min/max the ROM's own parameter descriptors carry.
@@ -129,7 +129,7 @@ if "--json" in sys.argv:
 print("base check OK: prom_a @0xF80000, prom_b @0xF00000, prom_c @0xF80000")
 
 # =========================================================== the two routines
-# sub_F9F984 -- the COMBINATION pointer.  Every constant below is an operand of
+# CombiBank_RemoteCombiAddr -- the COMBINATION pointer.  Every constant below is an operand of
 # an instruction whose opcode bytes are asserted with it.
 assert a_(0xF9F9BC, 4) == bytes([0xD9, 0x08, 0xC0, 0x02]), "mul BC,0x02c0"
 assert a_(0xF9F9C6, 4) == bytes([0xD8, 0x08, 0x00, 0x16]), "mul WA,0x1600"
@@ -149,7 +149,7 @@ for site, want, what, reg in ROUTE:
     got = int.from_bytes(ins[2:], "little")
     assert got == want, "0x%06X adds 0x%08X, expected 0x%08X" % (site, got, want)
 
-# sub_F9F910 -- the BANK NAME pointer.  `ld c,0x10 / mul8rr c,h` is a 16-byte
+# CombiBank_RemoteGroupNameAddr -- the BANK NAME pointer.  `ld c,0x10 / mul8rr c,h` is a 16-byte
 # stride over ONE index; there is no second index anywhere in the routine.
 assert a_(0xF9F92F, 2) == bytes([0x23, 0x10]), "ld c,0x10"
 assert a_(0xF9F931, 2) == bytes([0xCE, 0x43]), "mul8rr c,h"
@@ -166,16 +166,16 @@ for site, want, what, comb in ((0xF9F935, 0x00F80200, "preset  (prom_c ROM)", 0x
 
 print("""
 TWO ROUTINES, ONE AREA
-  sub_F9F984(mode, H, L) -> XIY = <combination base> + 0x%04X*H + 0x%03X*L
-  sub_F9F910(mode, H)    -> XIY = <name base>        + 0x10*H
-  the second index is ABSENT from sub_F9F910: there are 16 names, not 128, so
+  CombiBank_RemoteCombiAddr(mode, H, L) -> XIY = <combination base> + 0x%04X*H + 0x%03X*L
+  CombiBank_RemoteGroupNameAddr(mode, H)    -> XIY = <name base>        + 0x10*H
+  the second index is ABSENT from CombiBank_RemoteGroupNameAddr: there are 16 names, not 128, so
   H is the BANK and L the memory inside it.""" % (BANK, COMB))
 for nb, what, cb in PAIRED:
     print("    %-20s names 0x%06X   combinations 0x%06X   (names 0x100 below)"
           % (what, nb, cb))
 
 print("""
-  the three branches of sub_F9F984 are ONE linear array -- the folded constants
+  the three branches of CombiBank_RemoteCombiAddr are ONE linear array -- the folded constants
   are the general formula with H substituted in:""")
 for folded, base, h in ((0xF8F500, 0xF80300, 11), (0xF90B00, 0xF80300, 12),
                         (0xECF500, 0xEC0300, 11), (0xED0B00, 0xEC0300, 12)):
@@ -238,7 +238,7 @@ assert len(PRESETS) == BANKS * PARTS + 1, \
     "%d preset combinations, expected %d" % (len(PRESETS), BANKS * PARTS + 1)
 
 print("""
-THE PRESET AREA IN prom_c  (the base sub_F9F984 names for mode 0)
+THE PRESET AREA IN prom_c  (the base CombiBank_RemoteCombiAddr names for mode 0)
   0x%06X  %d bank names of 16 bytes
   0x%06X  %d combinations of 0x%03X, walked as TLV, every one the same 23 records
              = %d banks of %d, plus ONE extra at index %d (bank %d, memory 0)"""
@@ -309,13 +309,13 @@ if cap is not None:
         CORPUS.append(("user flash", [combination(data, i * COMB)
                                       for i in range(BANKS * PARTS)]))
         # the flash header the dump also carries: the SAME name table, 0x100
-        # below the data, exactly as sub_F9F910 says.
+        # below the data, exactly as CombiBank_RemoteGroupNameAddr says.
         assert names is not None and len(names) == 0x300, "flash header"
         ub = [names[0x200 + 0x10 * i:0x200 + 0x10 * i + 16] for i in range(BANKS)]
         for i, n in enumerate(ub):
             assert all(0x20 <= ch < 0x7F for ch in n), "user bank %d" % i
         print("""
-THE USER AREA IN THE CAPTURE  (the base sub_F9F984 names for mode 8)
+THE USER AREA IN THE CAPTURE  (the base CombiBank_RemoteCombiAddr names for mode 8)
   0x%06X  %d bank names, the LAST 0x100 of the 768-byte flash header
   0x%06X  %d combinations of 0x%03X, the same 23 records every one
     %s""" % (0xEC0200, BANKS, 0xEC0300, BANKS * PARTS, COMB,

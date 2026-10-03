@@ -1,0 +1,8 @@
+{
+ "date": "2026-10-03",
+ "reviewer": "Claude (session 53b889a2), alone, sequentially -- not the namer",
+ "read": [[0, 104]],
+ "method": "review_sheet.py prom_a-s05 (all 104 renames): each routine's first instructions as they stand, the display lists / descriptors it loads, and its callers, against the evidence line. Areas: GENERAL MIDI YES/NO, the MIDI menu and its sub-screens (TOTAL MODE, REALTIME MESSAGES, INPUT/OUTPUT FILTER, OUT PROGRAM CHANGE) with their item/value steppers and bit-field editors. Evidence lines that could be read off the code (stores, bit tests, table operands, record variables, caller chains) matched it; none was found wrong.",
+ "rejected": {},
+ "amended": {}
+}

@@ -644,9 +644,9 @@
 	.set	Screen_ReMapEdit_Leave, 0xF9C0C1
 	.set	Screen_ReMapEdit_Button, 0xF9C0C2
 	.set	T_F41974_Nop, 0xF9C0E9
-	.set	sub_F9C9F4, 0xF9C9F4
+	.set	Screen_SoundCombinationManager_Enter, 0xF9C9F4
 	.set	T_F4197C_Nop, 0xF9CA0C
-	.set	sub_F9CA0D, 0xF9CA0D
+	.set	Screen_SoundCombinationManager_Button, 0xF9CA0D
 	.set	T_F41984_Nop, 0xF9CA34
 	.set	Screen_SoundGroupNaming_Enter, 0xF9CB00
 	.set	Screen_SoundGroupNaming_Leave, 0xF9CB52
@@ -656,57 +656,57 @@
 	.set	Screen_CombinationGroupNaming_Leave, 0xF9CFBA
 	.set	Screen_CombinationGroupNaming_Button, 0xF9CFBB
 	.set	T_F4269C_Nop, 0xF9CFE2
-	.set	sub_F9D3BA, 0xF9D3BA
-	.set	sub_F9D3F4, 0xF9D3F4
-	.set	sub_F9D404, 0xF9D404
+	.set	Screen_SoundCopy_Enter, 0xF9D3BA
+	.set	Screen_SoundCopy_Leave, 0xF9D3F4
+	.set	Screen_SoundCopy_Button, 0xF9D404
 	.set	T_F426AC_Nop, 0xF9D432
-	.set	sub_F9DF91, 0xF9DF91
+	.set	Screen_CombinationCopy_Enter, 0xF9DF91
 	.set	T_F426B4_Nop, 0xF9DFCB
-	.set	sub_F9DFCC, 0xF9DFCC
+	.set	Screen_CombinationCopy_Button, 0xF9DFCC
 	.set	T_F426BC_Nop, 0xF9DFF3
-	.set	sub_F9EB75, 0xF9EB75
+	.set	Screen_DataLoadFilter_Enter, 0xF9EB75
 	.set	T_F4199C_Nop, 0xF9EBED
-	.set	sub_F9EBEE, 0xF9EBEE
+	.set	Screen_DataLoadFilter_Button, 0xF9EBEE
 	.set	T_F419A4_Nop, 0xF9EC15
-	.set	sub_F9ED34, 0xF9ED34
+	.set	Screen_MemoryProtect_Enter, 0xF9ED34
 	.set	T_F4198C_Nop, 0xF9EDA1
-	.set	sub_F9EDA2, 0xF9EDA2
+	.set	Screen_MemoryProtect_Button, 0xF9EDA2
 	.set	T_F41994_Nop, 0xF9EDC9
-	.set	sub_F9EEAB, 0xF9EEAB
+	.set	Screen_SoundMute_Enter, 0xF9EEAB
 	.set	T_F434C4_Nop, 0xF9EEDF
-	.set	sub_F9EEE0, 0xF9EEE0
+	.set	Screen_SoundMute_Button, 0xF9EEE0
 	.set	T_F434CC_Nop, 0xF9EF07
-	.set	sub_F9EF6C, 0xF9EF6C
+	.set	Screen_MainOutEqualizer_Enter, 0xF9EF6C
 	.set	T_F4195C_Nop, 0xF9EF71
-	.set	sub_F9EF72, 0xF9EF72
+	.set	Screen_MainOutEqualizer_Button, 0xF9EF72
 	.set	T_F41964_Nop, 0xF9EF84
 	.set	Screen_DrumsMapNaming_Enter, 0xF9EF85
 	.set	Screen_DrumsMapNaming_Leave, 0xF9EFF6
 	.set	Screen_DrumsMapNaming_Button, 0xF9F006
 	.set	T_F419C4_Nop, 0xF9F034
-	.set	sub_F9F457, 0xF9F457
-	.set	sub_F9F5E8, 0xF9F5E8
-	.set	sub_F9F65B, 0xF9F65B
-	.set	sub_F9F6B2, 0xF9F6B2
-	.set	sub_F9F6EC, 0xF9F6EC
-	.set	sub_F9F75C, 0xF9F75C
-	.set	sub_F9F7B8, 0xF9F7B8
-	.set	sub_F9FBDE, 0xF9FBDE
-	.set	sub_F9FDC8, 0xF9FDC8
-	.set	sub_F9FED1, 0xF9FED1
-	.set	sub_F9FEE2, 0xF9FEE2
-	.set	sub_F9FEE7, 0xF9FEE7
+	.set	DrumsMap_RefreshSoundColumn, 0xF9F457
+	.set	SoundName_CopyToBuffer, 0xF9F5E8
+	.set	SoundGroupName_CopyToBuffer, 0xF9F65B
+	.set	SoundGroup_MaxMemberIndex_ByStack, 0xF9F6B2
+	.set	CombiName_CopyToBuffer, 0xF9F6EC
+	.set	CombiGroupName_CopyToBuffer, 0xF9F75C
+	.set	CombiGroup_MaxMemberIndex_ByStack, 0xF9F7B8
+	.set	SoundCopy_HandleReceivedSound, 0xF9FBDE
+	.set	SoundCopy_ReadExtGroupDrumFlag, 0xF9FDC8
+	.set	PanelMode_System_Enter, 0xF9FED1
+	.set	PanelMode_System_Leave, 0xF9FEE2
+	.set	Screen_System_Enter, 0xF9FEE7
 	.set	T_F4191C_Nop, 0xF9FEFF
-	.set	sub_F9FF00, 0xF9FF00
+	.set	Screen_System_Button, 0xF9FF00
 	.set	T_F41924_Nop, 0xF9FF27
-	.set	sub_FA0054, 0xFA0054
-	.set	sub_FA007B, 0xFA007B
+	.set	TuneScale_KeyScalingCodeToIndex, 0xFA0054
+	.set	Screen_DspEffect_Enter, 0xFA007B
 	.set	T_F419AC_Nop, 0xFA0080
-	.set	sub_FA0081, 0xFA0081
+	.set	Screen_DspEffect_Button, 0xFA0081
 	.set	T_F419B4_Nop, 0xFA0093
-	.set	sub_FA0094, 0xFA0094
+	.set	Screen_TuneScale_Enter, 0xFA0094
 	.set	T_F4192C_Nop, 0xFA00E9
-	.set	sub_FA00EA, 0xFA00EA
+	.set	Screen_TuneScale_Button, 0xFA00EA
 	.set	T_F41934_Nop, 0xFA0111
 	.set	sub_FA0689, 0xFA0689
 	.set	T_F4193C_Nop, 0xFA07A1
@@ -88541,15 +88541,15 @@ T_F418D0:	jp sub_FBB800  ; -> prom_a 0x3B800   x3
 T_F418D4:	jp sub_FBB93C  ; -> prom_a 0x3B93C
 T_F418D8:	jp sub_FBEE83  ; -> prom_a 0x3EE83
 	.fill 0x34, 1, 0x0E  ; 0xF418DC: 52 x ret
-T_F41910:	jp sub_F9FED1  ; -> prom_a 0x1FED1
-T_F41914:	jp sub_F9FEE2  ; -> prom_a 0x1FEE2
-T_F41918:	jp sub_F9FEE7  ; -> prom_a 0x1FEE7
+T_F41910:	jp PanelMode_System_Enter  ; -> prom_a 0x1FED1
+T_F41914:	jp PanelMode_System_Leave  ; -> prom_a 0x1FEE2
+T_F41918:	jp Screen_System_Enter  ; -> prom_a 0x1FEE7
 T_F4191C:	jp T_F4191C_Nop  ; -> prom_a 0x1FEFF
-T_F41920:	jp sub_F9FF00  ; -> prom_a 0x1FF00
+T_F41920:	jp Screen_System_Button  ; -> prom_a 0x1FF00
 T_F41924:	jp T_F41924_Nop  ; -> prom_a 0x1FF27
-T_F41928:	jp sub_FA0094  ; -> prom_a 0x20094
+T_F41928:	jp Screen_TuneScale_Enter  ; -> prom_a 0x20094
 T_F4192C:	jp T_F4192C_Nop  ; -> prom_a 0x200E9
-T_F41930:	jp sub_FA00EA  ; -> prom_a 0x200EA
+T_F41930:	jp Screen_TuneScale_Button  ; -> prom_a 0x200EA
 T_F41934:	jp T_F41934_Nop  ; -> prom_a 0x20111
 T_F41938:	jp sub_FA0689  ; -> prom_a 0x20689
 T_F4193C:	jp T_F4193C_Nop  ; -> prom_a 0x207A1
@@ -88559,29 +88559,29 @@ T_F41948:	jp sub_FA0DF3  ; -> prom_a 0x20DF3
 T_F4194C:	jp sub_FA0E4D  ; -> prom_a 0x20E4D
 T_F41950:	jp sub_FA0EEA  ; -> prom_a 0x20EEA
 T_F41954:	jp T_F41954_Nop  ; -> prom_a 0x20F11
-T_F41958:	jp sub_F9EF6C  ; -> prom_a 0x1EF6C
+T_F41958:	jp Screen_MainOutEqualizer_Enter  ; -> prom_a 0x1EF6C
 T_F4195C:	jp T_F4195C_Nop  ; -> prom_a 0x1EF71
-T_F41960:	jp sub_F9EF72  ; -> prom_a 0x1EF72
+T_F41960:	jp Screen_MainOutEqualizer_Button  ; -> prom_a 0x1EF72
 T_F41964:	jp T_F41964_Nop  ; -> prom_a 0x1EF84
 T_Screen_ReMapEdit_Enter:	jp Screen_ReMapEdit_Enter  ; -> prom_a 0x1C087
 T_Screen_ReMapEdit_Leave:	jp Screen_ReMapEdit_Leave  ; -> prom_a 0x1C0C1
 T_Screen_ReMapEdit_Button:	jp Screen_ReMapEdit_Button  ; -> prom_a 0x1C0C2
 T_F41974:	jp T_F41974_Nop  ; -> prom_a 0x1C0E9
-T_F41978:	jp sub_F9C9F4  ; -> prom_a 0x1C9F4
+T_F41978:	jp Screen_SoundCombinationManager_Enter  ; -> prom_a 0x1C9F4
 T_F4197C:	jp T_F4197C_Nop  ; -> prom_a 0x1CA0C
-T_F41980:	jp sub_F9CA0D  ; -> prom_a 0x1CA0D
+T_F41980:	jp Screen_SoundCombinationManager_Button  ; -> prom_a 0x1CA0D
 T_F41984:	jp T_F41984_Nop  ; -> prom_a 0x1CA34
-T_F41988:	jp sub_F9ED34  ; -> prom_a 0x1ED34
+T_F41988:	jp Screen_MemoryProtect_Enter  ; -> prom_a 0x1ED34
 T_F4198C:	jp T_F4198C_Nop  ; -> prom_a 0x1EDA1
-T_F41990:	jp sub_F9EDA2  ; -> prom_a 0x1EDA2
+T_F41990:	jp Screen_MemoryProtect_Button  ; -> prom_a 0x1EDA2
 T_F41994:	jp T_F41994_Nop  ; -> prom_a 0x1EDC9
-T_F41998:	jp sub_F9EB75  ; -> prom_a 0x1EB75
+T_F41998:	jp Screen_DataLoadFilter_Enter  ; -> prom_a 0x1EB75
 T_F4199C:	jp T_F4199C_Nop  ; -> prom_a 0x1EBED
-T_F419A0:	jp sub_F9EBEE  ; -> prom_a 0x1EBEE
+T_F419A0:	jp Screen_DataLoadFilter_Button  ; -> prom_a 0x1EBEE
 T_F419A4:	jp T_F419A4_Nop  ; -> prom_a 0x1EC15
-T_F419A8:	jp sub_FA007B  ; -> prom_a 0x2007B
+T_F419A8:	jp Screen_DspEffect_Enter  ; -> prom_a 0x2007B
 T_F419AC:	jp T_F419AC_Nop  ; -> prom_a 0x20080
-T_F419B0:	jp sub_FA0081  ; -> prom_a 0x20081
+T_F419B0:	jp Screen_DspEffect_Button  ; -> prom_a 0x20081
 T_F419B4:	jp T_F419B4_Nop  ; -> prom_a 0x20093
 T_Screen_DrumsMapNaming_Enter:	jp Screen_DrumsMapNaming_Enter  ; -> prom_a 0x1EF85
 T_Screen_DrumsMapNaming_Leave:	jp Screen_DrumsMapNaming_Leave  ; -> prom_a 0x1EFF6
@@ -89423,13 +89423,13 @@ T_Screen_CombinationGroupNaming_Enter:	jp Screen_CombinationGroupNaming_Enter  ;
 T_Screen_CombinationGroupNaming_Leave:	jp Screen_CombinationGroupNaming_Leave  ; -> prom_a 0x1CFBA
 T_Screen_CombinationGroupNaming_Button:	jp Screen_CombinationGroupNaming_Button  ; -> prom_a 0x1CFBB
 T_F4269C:	jp T_F4269C_Nop  ; -> prom_a 0x1CFE2
-T_F426A0:	jp sub_F9D3BA  ; -> prom_a 0x1D3BA
-T_F426A4:	jp sub_F9D3F4  ; -> prom_a 0x1D3F4
-T_F426A8:	jp sub_F9D404  ; -> prom_a 0x1D404
+T_F426A0:	jp Screen_SoundCopy_Enter  ; -> prom_a 0x1D3BA
+T_F426A4:	jp Screen_SoundCopy_Leave  ; -> prom_a 0x1D3F4
+T_F426A8:	jp Screen_SoundCopy_Button  ; -> prom_a 0x1D404
 T_F426AC:	jp T_F426AC_Nop  ; -> prom_a 0x1D432
-T_F426B0:	jp sub_F9DF91  ; -> prom_a 0x1DF91
+T_F426B0:	jp Screen_CombinationCopy_Enter  ; -> prom_a 0x1DF91
 T_F426B4:	jp T_F426B4_Nop  ; -> prom_a 0x1DFCB
-T_F426B8:	jp sub_F9DFCC  ; -> prom_a 0x1DFCC
+T_F426B8:	jp Screen_CombinationCopy_Button  ; -> prom_a 0x1DFCC
 T_F426BC:	jp T_F426BC_Nop  ; -> prom_a 0x1DFF3
 	.fill 0x20, 1, 0x0E  ; 0xF426C0: 32 x ret
 T_F426E0:	jp sub_F608D0  ; -> prom_b 0x608D0   x3
@@ -90312,15 +90312,15 @@ T_F433E4:	jp sub_FDE3B0  ; -> prom_a 0x5E3B0
 T_F433E8:	jp T_F433E8_Nop  ; -> prom_b 0x0AAB2
 T_F433EC:	jp T_F433EC_Nop  ; -> prom_a 0x5E3BD
 	.fill 0x10, 1, 0x0E  ; 0xF433F0: 16 x ret
-T_F43400:	jp sub_F9F5E8  ; -> prom_a 0x1F5E8   x1
-T_F43404:	jp sub_F9F65B  ; -> prom_a 0x1F65B   x3
-T_F43408:	jp sub_F9F6B2  ; -> prom_a 0x1F6B2   x4
-T_F4340C:	jp sub_F9F6EC  ; -> prom_a 0x1F6EC   x1
-T_F43410:	jp sub_F9F75C  ; -> prom_a 0x1F75C   x2
-T_F43414:	jp sub_F9F7B8  ; -> prom_a 0x1F7B8   x2
-T_F43418:	jp sub_F9F457  ; -> prom_a 0x1F457   x1
-T_F4341C:	jp sub_F9FBDE  ; -> prom_a 0x1FBDE   x1
-T_F43420:	jp sub_FA0054  ; -> prom_a 0x20054   x1
+T_F43400:	jp SoundName_CopyToBuffer  ; -> prom_a 0x1F5E8   x1
+T_F43404:	jp SoundGroupName_CopyToBuffer  ; -> prom_a 0x1F65B   x3
+T_F43408:	jp SoundGroup_MaxMemberIndex_ByStack  ; -> prom_a 0x1F6B2   x4
+T_F4340C:	jp CombiName_CopyToBuffer  ; -> prom_a 0x1F6EC   x1
+T_F43410:	jp CombiGroupName_CopyToBuffer  ; -> prom_a 0x1F75C   x2
+T_F43414:	jp CombiGroup_MaxMemberIndex_ByStack  ; -> prom_a 0x1F7B8   x2
+T_F43418:	jp DrumsMap_RefreshSoundColumn  ; -> prom_a 0x1F457   x1
+T_F4341C:	jp SoundCopy_HandleReceivedSound  ; -> prom_a 0x1FBDE   x1
+T_F43420:	jp TuneScale_KeyScalingCodeToIndex  ; -> prom_a 0x20054   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43424: 12 x ret
 T_DiskFile_CheckSignature:	jp DiskFile_CheckSignature  ; -> prom_b 0x48C1A   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43434: 12 x ret
@@ -90347,11 +90347,11 @@ T_F4348C:	jp sub_FD6513  ; -> prom_a 0x56513   x1
 T_DspParam_WriteByNumber:	jp DspParam_WriteByNumber  ; -> prom_b 0x11C30   x2
 T_DspParam_ReadByNumber:	jp DspParam_ReadByNumber  ; -> prom_b 0x1220B   x2
 	.fill 0x18, 1, 0x0E  ; 0xF434A8: 24 x ret
-T_F434C0:	jp sub_F9EEAB  ; -> prom_a 0x1EEAB
+T_F434C0:	jp Screen_SoundMute_Enter  ; -> prom_a 0x1EEAB
 T_F434C4:	jp T_F434C4_Nop  ; -> prom_a 0x1EEDF
-T_F434C8:	jp sub_F9EEE0  ; -> prom_a 0x1EEE0
+T_F434C8:	jp Screen_SoundMute_Button  ; -> prom_a 0x1EEE0
 T_F434CC:	jp T_F434CC_Nop  ; -> prom_a 0x1EF07
-T_F434D0:	jp sub_F9FDC8  ; -> prom_a 0x1FDC8
+T_F434D0:	jp SoundCopy_ReadExtGroupDrumFlag  ; -> prom_a 0x1FDC8
 T_F434D4:	jp sub_FA0D10  ; -> prom_a 0x20D10   x1
 	.fill 0x8, 1, 0x0E  ; 0xF434D8: 8 x ret
 T_F434E0:	jp sub_F4C46A  ; -> prom_b 0x4C46A

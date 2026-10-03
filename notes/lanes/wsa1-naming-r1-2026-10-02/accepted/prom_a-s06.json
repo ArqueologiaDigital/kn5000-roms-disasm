@@ -1,0 +1,1248 @@
+{
+ "name": "wsa1-naming-r1-prom_a-s06",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "renames": [
+  {
+   "old": "sub_F9C52D",
+   "new": "ReMapEdit_LoadNameBuffers",
+   "evidence": "fills the 16-char text buffers 0x2940-0x2A5F that DisplayList_FA3230 records FA324E-FA334D draw, via the group/sound-name copiers"
+  },
+  {
+   "old": "sub_F9C7BD",
+   "new": "ReMapEdit_DrawFields",
+   "evidence": "runs interpreter B over DisplayList_FA3230 (SOUND/COMBI + 18 name buffers) then the bank/re-map names and cursors for the mode in (0x26F3) bit 0"
+  },
+  {
+   "old": "sub_F9C824",
+   "new": "ReMapEdit_DrawSoundCombiSelector",
+   "evidence": "layer 1: erases rect FA349D then fills the box chosen by (0x26F3) bit 0 from interpreter-B record FA3398"
+  },
+  {
+   "old": "sub_F9C840",
+   "new": "ReMapEdit_DrawSoundSourceCursor",
+   "evidence": "if (0x2900) bit0: erase FA34E7 and fill row box from FA33A3 indexed by (0x26F6), then clear the bit"
+  },
+  {
+   "old": "sub_F9C86C",
+   "new": "ReMapEdit_DrawSoundReMapCursor",
+   "evidence": "if (0x2900) bit1: erase FA3531 and fill row box from FA33AE indexed by (0x26FC), clear bit 1"
+  },
+  {
+   "old": "sub_F9C898",
+   "new": "ReMapEdit_DrawCombiSourceCursor",
+   "evidence": "as the SOUND source cursor but on var 0x26F9 via DisplayList_FA33B9"
+  },
+  {
+   "old": "sub_F9C8C4",
+   "new": "ReMapEdit_DrawCombiReMapCursor",
+   "evidence": "as the SOUND re-map cursor but on var 0x26FF via DisplayList_FA33C4"
+  },
+  {
+   "old": "sub_F9C8F0",
+   "new": "ReMapEdit_AssignSourceToReMap",
+   "evidence": "writes the source sound/combi code into the RE-MAP table entry ByteTable12_FA16FA/FA1706[map] + 2*(group*8+member)"
+  },
+  {
+   "old": "sub_F9C9F4",
+   "new": "Screen_SoundCombinationManager_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; prom_b T_F41978/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34; posts .LF9CAE0 which paints DisplayList_FA353B 'SOUND/COMBINATION MANAGER'"
+  },
+  {
+   "old": "sub_F9CA0D",
+   "new": "Screen_SoundCombinationManager_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; +8 slot T_F41980; dispatches PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1712"
+  },
+  {
+   "old": "sub_F9CB7B",
+   "new": "SoundGroupNaming_AdjustBank",
+   "evidence": "T_F42C78 on (0x2695) with Descriptor9_FA1AA6 (0..4 -> ByteTable5_FA17CA USER1/USER2/RE-MAP1-3); sets (0x2095) bit 4 on change"
+  },
+  {
+   "old": "sub_F9CC11",
+   "new": "SoundGroupNaming_AdjustGroup",
+   "evidence": "T_F42C78 on (0x2696) with Descriptor9_FA1AAF (0..15); redraws cursor via SoundGroupNaming_DrawGroupCursor"
+  },
+  {
+   "old": "sub_F9CE33",
+   "new": "SoundGroupNaming_LoadGroupNames",
+   "evidence": "16x SoundGroupName_CopyToBuffer(group H, ByteTable5_FA17CA[(0x2695)]) into 0x2940+16*H"
+  },
+  {
+   "old": "sub_F9CE66",
+   "new": "SoundGroupNaming_DrawFields",
+   "evidence": "runs DisplayList_FA377A ('1.'..'16.'), FA3804-FA38F4 (16 name rows), FA37EA-FA3804 (bank name + group cursor)"
+  },
+  {
+   "old": "sub_F9CEA7",
+   "new": "SoundGroupNaming_DrawGroupCursor",
+   "evidence": "layer 1: erase rect FA39D4, fill box from record FA37F9 (var 0x2696)"
+  },
+  {
+   "old": "sub_F9CEC3",
+   "new": "SoundGroupNaming_StoreGroupName",
+   "evidence": "writes the edited name at 0x22F0 to the group slot: USER1/2 via link (UserSoundBank_RemoteGroupNameAddr + Link_WriteRemoteBlock), RE-MAP 1-3 into RAM 0x5240/0x5450/0x5660"
+  },
+  {
+   "old": "sub_F9CFE3",
+   "new": "CombinationGroupNaming_AdjustBank",
+   "evidence": "T_F42C78 on (0x2698) with Descriptor9_FA1AB8 (0..3 -> ByteTable4_FA182B USER1/RE-MAP1-3); sets (0x2095) bit 4"
+  },
+  {
+   "old": "sub_F9D079",
+   "new": "CombinationGroupNaming_AdjustGroup",
+   "evidence": "T_F42C78 on (0x2699) with Descriptor9_FA1AC1 (0..15); redraws cursor"
+  },
+  {
+   "old": "sub_F9D29B",
+   "new": "CombinationGroupNaming_LoadGroupNames",
+   "evidence": "16x CombiGroupName_CopyToBuffer(group H, ByteTable4_FA182B[(0x2698)]) into 0x2940+16*H"
+  },
+  {
+   "old": "sub_F9D2CE",
+   "new": "CombinationGroupNaming_DrawFields",
+   "evidence": "runs DisplayList_FA377A ('1.'..'16.'), FA3804-FA38F4 (name rows), FA3A52-FA3A6C (bank + cursor)"
+  },
+  {
+   "old": "sub_F9D30F",
+   "new": "CombinationGroupNaming_DrawGroupCursor",
+   "evidence": "layer 1: erase FA39D4, fill box from record FA3A61 (var 0x2699)"
+  },
+  {
+   "old": "sub_F9D32B",
+   "new": "CombinationGroupNaming_StoreGroupName",
+   "evidence": "USER: CombiBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0); RE-MAP 1-3: copy to 0x5890 + 0x210*(bank-1) + 16*group"
+  },
+  {
+   "old": "sub_F9D3BA",
+   "new": "Screen_SoundCopy_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432; paints via Paint_SoundCopy ('SOUND COPY')"
+  },
+  {
+   "old": "sub_F9D3F4",
+   "new": "Screen_SoundCopy_Leave",
+   "evidence": "PanelScreen_VtableTable_ViewB [94] = T_F426A0; +4 slot T_F426A4 jp 0xF9D3F4; clears (0x2806) on a screen change"
+  },
+  {
+   "old": "sub_F9D404",
+   "new": "Screen_SoundCopy_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [94] = T_F426A0; +8 slot T_F426A8; ignores buttons while (0x2806) != 0, else dispatches through HandlerTable23_FA182F"
+  },
+  {
+   "old": "sub_F9D433",
+   "new": "SoundCopy_AdjustSourceBank",
+   "evidence": "T_F42C78 on (0x269B) with Descriptor9_FA1636 (max 3, or 4 when (0x08EC) bit0 = EXT present); resets group and list position"
+  },
+  {
+   "old": "sub_F9D69D",
+   "new": "SoundCopy_AdjustDestBank",
+   "evidence": "T_F42C78 on (0x26A0) with Descriptor9_FA1ACA (USER 1/USER 2); resets dest group and list position"
+  },
+  {
+   "old": "sub_F9D943",
+   "new": "Paint_SoundCopy",
+   "evidence": "dispatches on (0x269A) through JumpTable_F9D966 to the four SOUND COPY page painters"
+  },
+  {
+   "old": "sub_F9D986",
+   "new": "Paint_SoundCopyGroup",
+   "evidence": "JumpTable_F9D966[0]: lists FA3BA8 'GROUP/SINGLE' (layer 0) and FA3A9C 'SOUND COPY' BANK/GROUP layout (layer 2)"
+  },
+  {
+   "old": "sub_F9D9AC",
+   "new": "Paint_SoundCopySingle",
+   "evidence": "JumpTable_F9D966[1]: FA3BA8 'GROUP/SINGLE' + FA3ED3 'SOUND COPY' BANK/GROUP/SOUND layout"
+  },
+  {
+   "old": "sub_F9D9D2",
+   "new": "Paint_SoundCopyAreYouSure",
+   "evidence": "JumpTable_F9D966[2,3]: FA3BD1 'The memory to which you are copying will be overwritten.' + FA302F 'ATTENTI0N!'/'Are You Sure?'/YES/NO"
+  },
+  {
+   "old": "sub_F9D9F5",
+   "new": "Paint_ErrorImpossibleCopyDrumKit",
+   "evidence": "JumpTable_F9D966[4..7]: FA3C39 'ERROR!' 'It is impossible to copy a Drum Kit.'"
+  },
+  {
+   "old": "sub_F9DA10",
+   "new": "SoundCopy_LoadNameBuffers",
+   "evidence": "GROUP: 16 source group names -> 0x2940.., 16 dest group names -> 0x60A000..; SINGLE: group name + 8 sound names per side -> 0x2940/0x2950.., 0x29D0/0x29E0.."
+  },
+  {
+   "old": "sub_F9DBC6",
+   "new": "SoundCopy_DrawFields",
+   "evidence": "dispatches on (0x269A) through JumpTable_F9DBE6 to the GROUP/SINGLE field drawers (none for confirm, error-state clear for 4-7)"
+  },
+  {
+   "old": "sub_F9DC06",
+   "new": "SoundCopy_DrawGroupModeFields",
+   "evidence": "JumpTable_F9DBE6[0]: B lists FA3CA0 (banks), FA3D34 (GROUP/SINGLE box), both cursors and both group lists"
+  },
+  {
+   "old": "sub_F9DC3B",
+   "new": "SoundCopy_DrawSingleModeFields",
+   "evidence": "JumpTable_F9DBE6[1]: B lists FA4041 (banks), FA3230+0x1E..+0x12C (name buffers), FA3D34, both sound cursors"
+  },
+  {
+   "old": "sub_F9DC85",
+   "new": "SoundCopy_ClearErrorState",
+   "evidence": "JumpTable_F9DBE6[4..7]: and (0x269A),0xF9 -- drops bits 1-2 after the error page has been painted"
+  },
+  {
+   "old": "sub_F9DC8C",
+   "new": "SoundCopy_DrawSourceGroupCursor",
+   "evidence": "if (0x2900) bit0: erase FA3E7F, fill row from FA3CBE (var 0x269E); clear bit 0"
+  },
+  {
+   "old": "sub_F9DCB8",
+   "new": "SoundCopy_DrawSourceSoundCursor",
+   "evidence": "if (0x2900) bit0: erase FA34E7, fill row from FA405F (var 0x269D); clear bit 0"
+  },
+  {
+   "old": "sub_F9DCE4",
+   "new": "SoundCopy_DrawDestGroupCursor",
+   "evidence": "if (0x2900) bit1: erase FA3EC9, fill row from FA3CC9 (var 0x26A3); clear bit 1"
+  },
+  {
+   "old": "sub_F9DD10",
+   "new": "SoundCopy_DrawDestSoundCursor",
+   "evidence": "if (0x2900) bit1: erase FA3531, fill row from FA406A (var 0x26A2); clear bit 1"
+  },
+  {
+   "old": "sub_F9DD3C",
+   "new": "SoundCopy_DrawSourceGroupList",
+   "evidence": "B list FA3D4F-FA3DC7: 8 rows of 0x2940.. group names scrolled by (0x269F)"
+  },
+  {
+   "old": "sub_F9DD54",
+   "new": "SoundCopy_DrawDestGroupList",
+   "evidence": "B list FA3DC7-FA3E3F: 8 rows of 0x60A000.. group names scrolled by (0x26A4)"
+  },
+  {
+   "old": "sub_F9DD6C",
+   "new": "SoundCopy_Execute",
+   "evidence": "YES action: copies group name + 8 sounds (GROUP) or one sound (SINGLE) source->dest over the link; ROM/EXT sources go through the CPU-2 request path"
+  },
+  {
+   "old": "sub_F9DF91",
+   "new": "Screen_CombinationCopy_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_F426B0; prom_b T_F426B0/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3; paints via Paint_CombinationCopy ('COMBINATION COPY')"
+  },
+  {
+   "old": "sub_F9DFCC",
+   "new": "Screen_CombinationCopy_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [95] = T_F426B0; +8 slot T_F426B8; dispatches through HandlerTable23_FA1892"
+  },
+  {
+   "old": "sub_F9DFF4",
+   "new": "CombinationCopy_AdjustSourceBank",
+   "evidence": "T_F42C78 on (0x2706) with Descriptor9_FA1663 (+EXT when (0x08EC) bit1); ByteTable3_FA16F4 {00,08,10}"
+  },
+  {
+   "old": "sub_F9E25E",
+   "new": "CombinationCopy_AdjustDestBank",
+   "evidence": "T_F42C78 on (0x270B) with Descriptor9_FA1AF7; resets dest group and list position"
+  },
+  {
+   "old": "sub_F9E519",
+   "new": "Paint_CombinationCopy",
+   "evidence": "Enter painter of screen 0x5F (only caller Screen_CombinationCopy_Enter): reuses SOUND COPY layouts and overlays 'COMBINATION COPY'/'COMBI' (FA408D) or the overwrite warning FA40B5"
+  },
+  {
+   "old": "sub_F9E5FD",
+   "new": "CombinationCopy_LoadNameBuffers",
+   "evidence": "COMBI twin of SoundCopy_LoadNameBuffers using CombiGroupName_/CombiName_CopyToBuffer"
+  },
+  {
+   "old": "sub_F9E7B3",
+   "new": "CombinationCopy_DrawFields",
+   "evidence": "GROUP: B FA40A3+0x80..FA4141 (banks), FA3D34, cursors, lists; SINGLE: FA4247-FA4265, name buffers, FA3D34, member cursors"
+  },
+  {
+   "old": "sub_F9E849",
+   "new": "CombinationCopy_DrawSourceGroupCursor",
+   "evidence": "if (0x2900) bit0: erase FA3E7F, fill from FA4141 (var 0x2709)"
+  },
+  {
+   "old": "sub_F9E875",
+   "new": "CombinationCopy_DrawSourceCombiCursor",
+   "evidence": "if (0x2900) bit0: erase FA34E7, fill from FA4265 (var 0x2708)"
+  },
+  {
+   "old": "sub_F9E8A1",
+   "new": "CombinationCopy_DrawDestGroupCursor",
+   "evidence": "if (0x2900) bit1: erase FA3EC9, fill from FA414C (var 0x270E)"
+  },
+  {
+   "old": "sub_F9E8CD",
+   "new": "CombinationCopy_DrawDestCombiCursor",
+   "evidence": "if (0x2900) bit1: erase FA3531, fill from FA4270 (var 0x270D)"
+  },
+  {
+   "old": "sub_F9E8F9",
+   "new": "CombinationCopy_DrawSourceGroupList",
+   "evidence": "B list FA4157-FA41CF: 8 rows of 0x2940.. names scrolled by (0x270A)"
+  },
+  {
+   "old": "sub_F9E911",
+   "new": "CombinationCopy_DrawDestGroupList",
+   "evidence": "B list FA41CF-FA4247: 8 rows of 0x60A000.. names scrolled by (0x270F)"
+  },
+  {
+   "old": "sub_F9E929",
+   "new": "CombinationCopy_Execute",
+   "evidence": "YES action: reads source combi group (name + 0x1600 B) or one combi (0x2C0 B) over the link and writes it to the destination; refreshes the current combination"
+  },
+  {
+   "old": "sub_F9FE88",
+   "new": "CombinationCopy_RefreshIfCurrentCombi",
+   "evidence": "resolves (bank, group, member) to a combi code via T_F40804 and calls T_F43454 when it equals (0x7F03)/(0x7F04)"
+  },
+  {
+   "old": "sub_F9EB75",
+   "new": "Screen_DataLoadFilter_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_F41998; prom_b T_F41998/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15; posts .LF9ECE0 painting DisplayList_FA427B 'DATA LOAD FILTER'"
+  },
+  {
+   "old": "sub_F9EBEE",
+   "new": "Screen_DataLoadFilter_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [97] = T_F41998; +8 slot T_F419A0; dispatches through HandlerTable23_FA18EE"
+  },
+  {
+   "old": "sub_F9EC74",
+   "new": "DataLoadFilter_AdjustEffectOutput",
+   "evidence": "entry 0 of JumpTable_F9EC58 (indexed by item cursor 0x26A5; cursor box 0 of 0xFA443D is the 'EFFECT & OUTPUT :' row); IndexedParam_AdjustField(0x7A, Descriptor9_FA1B2D); record FA43C9 shows 0x7EE4 & 0x0F as OFF/COMBI/SOUND&COMBI"
+  },
+  {
+   "old": "sub_F9EC7C",
+   "new": "DataLoadFilter_AdjustRtCreator",
+   "evidence": "entry 1 of JumpTable_F9EC58 (row 'R.T.CREATOR 1_6 :'); IndexedParam_AdjustField(0x7A, Descriptor9_FA1B36, mask 0xF0); record FA43D8 shows 0x7EE4 >> 4"
+  },
+  {
+   "old": "sub_F9EC8D",
+   "new": "DataLoadFilter_SetOctave",
+   "evidence": "entry 2 of JumpTable_F9EC58 (row 'OCTAVE'); IndexedParam_SetBit(0x98, Descriptor3_FA1B3F) mask 0x04; record FA43E7 shows 0x7F07 bit 2 as ON/OFF"
+  },
+  {
+   "old": "sub_F9EC95",
+   "new": "DataLoadFilter_SetMidiSetting",
+   "evidence": "entry 3 of JumpTable_F9EC58 (row 'MIDI SETTING'); IndexedParam_SetBit(0x98, Descriptor3_FA1B42) mask 0x02; record FA43F6 shows 0x7F07 bit 1"
+  },
+  {
+   "old": "sub_F9EC9D",
+   "new": "DataLoadFilter_SetKeyVelLayer",
+   "evidence": "entry 4 of JumpTable_F9EC58 (row 'KEY&VEL LAYER'); IndexedParam_SetBit(0x98, Descriptor3_FA1B45) mask 0x01; record FA4405 shows 0x7F07 bit 0"
+  },
+  {
+   "old": "sub_F9ECA5",
+   "new": "DataLoadFilter_SetMainOutEq",
+   "evidence": "entry 5 of JumpTable_F9EC58 (row 'MAIN OUT EQ'); IndexedParam_SetBit(0x98, Descriptor3_FA1B48) mask 0x08; record FA4414 shows 0x7F07 bit 3"
+  },
+  {
+   "old": "sub_F9ECAD",
+   "new": "DataLoadFilter_SetKeyScaling",
+   "evidence": "entry 6 of JumpTable_F9EC58 (row 'KEY SCALING'); IndexedParam_SetBit(0x98, Descriptor3_FA1B4B) mask 0x10; record FA4423 shows 0x7F07 bit 4"
+  },
+  {
+   "old": "sub_F9ED34",
+   "new": "Screen_MemoryProtect_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_F41988; prom_b T_F41988/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9; posts .LF9EE57 painting DisplayList_FA44E8 'MEMORY PROTECT'"
+  },
+  {
+   "old": "sub_F9EDA2",
+   "new": "Screen_MemoryProtect_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [110] = T_F41988; +8 slot T_F41990; dispatches through HandlerTable23_FA194A"
+  },
+  {
+   "old": "sub_F9EEAB",
+   "new": "Screen_SoundMute_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_F434C0; prom_b T_F434C0/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07; posts .LF9EF3B painting DisplayList_FA45D2 'SOUND MUTE'"
+  },
+  {
+   "old": "sub_F9EEE0",
+   "new": "Screen_SoundMute_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [93] = T_F434C0; +8 slot T_F434C8; dispatches through HandlerTable23_FA19A6"
+  },
+  {
+   "old": "sub_F9EF6C",
+   "new": "Screen_MainOutEqualizer_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_F41958; prom_b T_F41958/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; forwards to prom_b sub_F122C5, which posts sub_F123C2 painting DL_MainOutEqualizer_F1774D"
+  },
+  {
+   "old": "sub_F9EF72",
+   "new": "Screen_MainOutEqualizer_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [107] = T_F41958; +8 slot T_F41960; forwards (XIZ+8)/(XIZ+0x0A) to prom_b sub_F12334 (T_F42F6C), which dispatches through DispatchTable_F1394F"
+  },
+  {
+   "old": "sub_F9F035",
+   "new": "DrumsMap_AdjustMap",
+   "evidence": "T_F42C78 on (0x2702) with Descriptor9_FA1B5A (NORMAL/USER1-3); on change stores the map code and reloads/redraws the rows"
+  },
+  {
+   "old": "sub_F9F095",
+   "new": "DrumsMap_MoveRowCursor",
+   "evidence": "moves the row cursor (0x2703, 0..11) with ByteTable9_FA1B63 and scrolls (0x2704) with ByteTable9_FA1B6C at the edges"
+  },
+  {
+   "old": "sub_F9F188",
+   "new": "DrumsMap_AdjustRowSound",
+   "evidence": "USER maps only: T_F42C78 on map byte ByteTable16_FA1A72[map][(0x2704)+(0x2703)] and on (0x2A50+row) with Descriptor9_FA1B75 (0..127); redraws SOUND column"
+  },
+  {
+   "old": "sub_F9F36B",
+   "new": "DrumsMap_StoreMapCode",
+   "evidence": "(0x7F4E) = ByteTable4_FA1A6E[(0x2702)] {00,40,41,42}; journals Queue2C00_Append4(0x91, 4, code, 0xFF)"
+  },
+  {
+   "old": "sub_F9F3F4",
+   "new": "DrumsMap_DrawFields",
+   "evidence": "B lists FA4881..+0x1E (map + name), ..+0x96 (note numbers), ..+0x14A (note names), ..FA4A7F (octaves)"
+  },
+  {
+   "old": "sub_F9F457",
+   "new": "DrumsMap_RefreshSoundColumn",
+   "evidence": "only external caller prom_a 0xFDA329 via T_F43418; draws the SOUND column if (0x207C)==0x67 and (0x2700)==0"
+  },
+  {
+   "old": "sub_F9F469",
+   "new": "DrumsMap_DrawSoundColumn",
+   "evidence": "if the current part's record (0x60F018 table entry 0x20+(0x2250)) +0x1D is 0x20/0x28/0x29 (drum banks), runs FA4A7F-FA4B33; always clears (0x2806)"
+  },
+  {
+   "old": "sub_F9F4B5",
+   "new": "DrumsMap_LoadRowFields",
+   "evidence": "finds (0x2702) from (0x7F4E); map name -> 0x2940 (blank for NORMAL); notes, octaves, note-name offset and per-row sound into 0x2640.., 0x2A40.., 0x2A20, 0x2A50.."
+  },
+  {
+   "old": "sub_F9F5CC",
+   "new": "DrumsMap_DrawRowCursor",
+   "evidence": "layer 1: erase FA4C2A, fill row box from FA4B9F (var 0x2703)"
+  },
+  {
+   "old": "sub_F9F5E8",
+   "new": "SoundName_CopyToBuffer",
+   "evidence": "(group,member,bank) -> T_F407F4 code -> T_F41010 (sub_FC1B81, fallback 'Sound Name *****') -> 16 bytes copied to dest"
+  },
+  {
+   "old": "sub_F9F65B",
+   "new": "SoundGroupName_CopyToBuffer",
+   "evidence": "(group, bank) -> T_F41018 (sub_FC2035: ToneGroupNames / RAM re-map names / link) -> 16 bytes to dest"
+  },
+  {
+   "old": "sub_F9F6B2",
+   "new": "SoundGroup_MaxMemberIndex_ByStack",
+   "evidence": "stack-argument wrapper: (0x2640)=group,(0x2641)=bank -> SoundGroup_MaxMemberIndex_Get -> A"
+  },
+  {
+   "old": "sub_F9F6EC",
+   "new": "CombiName_CopyToBuffer",
+   "evidence": "(group,member,bank) -> T_F40804 combi code -> T_F4102C (sub_FC1C59, fallback 'Combi Name *****') -> 16 bytes to dest"
+  },
+  {
+   "old": "sub_F9F75C",
+   "new": "CombiGroupName_CopyToBuffer",
+   "evidence": "(group, bank, 0x98) -> T_F41030 (sub_FC2155, fallback 'Combi Group Name'/'EXT Silent Group') -> 16 bytes to dest"
+  },
+  {
+   "old": "sub_F9F7B8",
+   "new": "CombiGroup_MaxMemberIndex_ByStack",
+   "evidence": "stack wrapper with B=0x98 around SoundGroup_MaxMemberIndex_GetToneCopy; every caller passes a COMBI bank/group"
+  },
+  {
+   "old": "sub_F9F7F6",
+   "new": "UserSoundBank_RemoteGroupNameAddr",
+   "evidence": "bank 8/9, group H -> XIY = 0xE80010/0xEA0010 + 16H (H<8) or 0xE8FF90/0xEAFF90 + 16H; else -1; result is the remote arg of Link_Read/WriteRemoteBlock"
+  },
+  {
+   "old": "sub_F9F861",
+   "new": "UserSoundBank_RemoteSoundAddr",
+   "evidence": "bank 8/9, group H, member L -> XIY = 0xE80090/0xEA0090 + 0x1648*H + 0x2C9*L (or 0xE90090/0xEB0090 for H>7); else -1"
+  },
+  {
+   "old": "sub_F9F910",
+   "new": "CombiBank_RemoteGroupNameAddr",
+   "evidence": "bank 0 -> 0xF80200+16H, 8 -> 0xEC0200+16H, 0x10 -> base read from remote 0xC0001C + 0xC00200 + 16H; else -1"
+  },
+  {
+   "old": "sub_F9F984",
+   "new": "CombiBank_RemoteCombiAddr",
+   "evidence": "bank 0/8/0x10, group H, member L -> base + 0x1600*H + 0x2C0*L (group 11 members >3 at 0xF8F500/0xECF500, groups >=12 relocated); else -1"
+  },
+  {
+   "old": "sub_F9FAC1",
+   "new": "Link_WriteRemoteBlock",
+   "evidence": "Link_SendCommand3_WaitTicks(remote); Link_SendCommandE4(local src, count, remote dst); Link_SendCommand5_WaitDone(remote)"
+  },
+  {
+   "old": "sub_F9FAE9",
+   "new": "Link_ReadRemoteBlock",
+   "evidence": "Link_SendCommandE2(remote src, count, local dst) then Link_WaitBlockDone"
+  },
+  {
+   "old": "sub_F9FB07",
+   "new": "PanelFlags_PairBitAsWord",
+   "evidence": "WA = 0x8080 if (0x28B0) bit0 else 0; result is pushed to the prom_b naming-editor handlers T_F42F84..T_F42FA8"
+  },
+  {
+   "old": "sub_F9FB18",
+   "new": "SoundCopy_RequestSingleSound",
+   "evidence": "stages the 6-byte 0x2915 request with the code of (0x269C,0x269D) in bank ByteTable5_FA188B[(0x269B)], sends it via T_F40ED4, (0x2806)=1"
+  },
+  {
+   "old": "sub_F9FB7A",
+   "new": "SoundCopy_RequestGroupSounds",
+   "evidence": "as RequestSingleSound but member 7 and (0x2901)=0 -- starts the 8-sound fetch SoundCopy_HandleReceivedSound continues"
+  },
+  {
+   "old": "sub_F9FBDE",
+   "new": "SoundCopy_HandleReceivedSound",
+   "evidence": "external hook (T_F4341C from prom_a 0xFD2073); on SOUND COPY (0x207C)=0x5E: GROUP collects 8 sounds then writes name+data to USER; SINGLE writes one"
+  },
+  {
+   "old": "sub_F9FDB0",
+   "new": "SoundCopy_InitRequestHeader",
+   "evidence": "writes 0x80, 0x14, 0x01, 0x5E at +0/+2/+4/+5 of the 6-byte record 0x2915"
+  },
+  {
+   "old": "sub_F9FDC8",
+   "new": "SoundCopy_ReadExtGroupDrumFlag",
+   "evidence": "reads a 4-byte base from remote 0xC00018, then one byte at base + 8*group + 0xC00000; non-zero sends SOUND COPY to its 'impossible to copy a Drum Kit' page"
+  },
+  {
+   "old": "sub_F9FE03",
+   "new": "SoundCopy_RefreshPartsUsingSound",
+   "evidence": "for parts 0..31: if part record +0/+1 equals the copied sound's code, re-journal both bytes via Queue2E00_Append4"
+  },
+  {
+   "old": "sub_F9FED1",
+   "new": "PanelMode_System_Enter",
+   "evidence": "PanelScreen_VtableTable view-A entry [10] = T_F41910 (+0 = 0xF9FED1); PanelMode_ToScreenIdMap[10] = 0x60 = the SYSTEM screen"
+  },
+  {
+   "old": "sub_F9FEE2",
+   "new": "PanelMode_System_Leave",
+   "evidence": "view-A entry [10] +4 = T_F41914 -> 0xF9FEE2: set 1,(0x2134)"
+  },
+  {
+   "old": "sub_F9FEE7",
+   "new": "Screen_System_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_F41918; prom_b T_F41918/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27; posts .LFA0020 painting DisplayList_FA1F21 'SYSTEM' menu"
+  },
+  {
+   "old": "sub_F9FF00",
+   "new": "Screen_System_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [96] = T_F41918; HandlerTable23_FA1B94 slots 8-12 request 0x62/0x6A, 0x65/0x6C, 0x64/0x6D, 0xB7/0x67, 0x66/0x6B; slot 15 -> 0x01"
+  },
+  {
+   "old": "sub_FA007B",
+   "new": "Screen_DspEffect_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_F419A8; prom_b T_F419A8/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 = SYSTEM row-5 LEFT key labelled 'DSP EFFECT'; forwards to prom_b sub_F0F105"
+  },
+  {
+   "old": "sub_FA0081",
+   "new": "Screen_DspEffect_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [102] = T_F419A8; +8 slot T_F419B0; forwards the button arguments to prom_b sub_F0F17C (T_F42F50)"
+  },
+  {
+   "old": "sub_FA0094",
+   "new": "Screen_TuneScale_Enter",
+   "evidence": "PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_F41928; prom_b T_F41928/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111; posts .LFA04F2 painting DisplayList_FA2070 'TUNE & SCALE'"
+  },
+  {
+   "old": "sub_FA00EA",
+   "new": "Screen_TuneScale_Button",
+   "evidence": "PanelScreen_VtableTable_ViewB [98] = T_F41928; +8 slot T_F41930; dispatches through HandlerTable23_FA1BF0"
+  },
+  {
+   "old": "sub_FA0054",
+   "new": "TuneScale_KeyScalingCodeToIndex",
+   "evidence": "returns the index H (0..14, 15 = not found) of the argument in ByteTable16_FA1C4C; TuneScale_LoadFields stores it to (0x2692), printed by record FA21ED as OFF/RANDOM/PIANO/.../USER"
+  },
+  {
+   "old": "sub_FA0264",
+   "new": "TuneScale_AdjustUserKey",
+   "evidence": "if (0x78A2)==0x80 (USER): steps 0x2640+key (key = arg picked by (0x2690) bit 4) with Descriptor9_FA1E88, then TuneScale_StoreUserKey"
+  },
+  {
+   "old": "sub_FA02E5",
+   "new": "TuneScale_StoreMasterTune",
+   "evidence": "writes ByteTable79_FA1C5C[(0x2691)] to IndexedTable 0x91 byte 0 if different, journaling via Queue2C00_Append4"
+  },
+  {
+   "old": "sub_FA033B",
+   "new": "TuneScale_StoreKeyScalingType",
+   "evidence": "writes ByteTable16_FA1C4C[(0x2692)] to IndexedTable 0x92 byte 0 if different, journaling"
+  },
+  {
+   "old": "sub_FA0391",
+   "new": "TuneScale_StoreUserKey",
+   "evidence": "converts (0x2640+key) with TuneScale_UserKeyValueToByte and writes it to table 0x92 byte key+2 if different, journaling"
+  },
+  {
+   "old": "sub_FA040A",
+   "new": "TuneScale_UserKeyValueToByte",
+   "evidence": "A = (((arg - 0x1C) << 8) + 0x80) / 0xC9 -- inverse of TuneScale_UserKeyByteToValue"
+  },
+  {
+   "old": "sub_FA0429",
+   "new": "TuneScale_UserKeyByteToValue",
+   "evidence": "A = ((arg * 0xC9 + 0x7F) >> 8) + 0x1C -- maps 0..255 onto the 0x1C..0xE4 edit range"
+  },
+  {
+   "old": "sub_FA0441",
+   "new": "TuneScale_MoveItemCursor",
+   "evidence": "T_F42C78 on (0x2690) with Descriptor9_FA1E49 (0..4); posts .LFA0651 (cursor box from FA22C0)"
+  },
+  {
+   "old": "sub_FA046A",
+   "new": "TuneScale_AdjustSelectedItem",
+   "evidence": "dispatches on (0x2690)&7 through the 5-entry table at 0xFA0487: MASTER TUNE, KEY TRANSPOSE, KEY SCALING MODE, TOTAL KEY SCALING, KEY SCALING SHIFT"
+  },
+  {
+   "old": "sub_FA0525",
+   "new": "TuneScale_LoadFields",
+   "evidence": "derives (0x2691) from (0x7F4A) via ByteTable79_FA1C5C, MASTER TUNE digits (0x264C/D), (0x2692) from (0x78A2), and the 12 USER key values 0x2640.."
+  }
+ ],
+ "headers": [
+  {
+   "label": "ReMapEdit_LoadNameBuffers",
+   "mode": "insert",
+   "text": "ReMapEdit_LoadNameBuffers -- fills RE-MAP EDIT's two name columns: group name + 8 member names for the source bank (0x2940, 0x2950..) and for the RE-MAP bank (0x29D0, 0x29E0..), padding unused rows with spaces\nEvidence: (0x26F3) bit 0 picks SOUND or COMBI (DisplayList_FA3230 draws 'SOUND'/'COMBI' from it); SOUND uses SoundGroupName_CopyToBuffer / SoundName_CopyToBuffer with bank ByteTable8_FA16EC[(0x26F4)], group (0x26F5), and ByteTable3_FA16F7[(0x26FA)] / (0x26FB) for the re-map side; COMBI uses the Combi* copiers with (0x26F7)/(0x26F8) and (0x26FD)/(0x26FE).\nEvidence: member count from SoundGroup_/CombiGroup_MaxMemberIndex_ByStack; rows past it get 16 x 0x20 (loops at 0xF9C5C9, 0xF9C66A); the buffers are exactly the ones records FA324E-FA334D of DisplayList_FA3230 print.\nCalled from: Screen_ReMapEdit_Enter 0xF9C0BA, every Enter including the (0x2095)-bit-4 refresh path."
+  },
+  {
+   "label": "ReMapEdit_DrawFields",
+   "mode": "insert",
+   "text": "ReMapEdit_DrawFields -- draws RE-MAP EDIT's live fields: SOUND/COMBI captions and the 18 name rows, the source-bank and RE-MAP names, both row cursors and the SOUND/COMBI selector\nEvidence: T_DisplayListB_Run_Stack over DisplayList_FA3230..+0x12C (op-02 records: var 0x26F3 -> 'SOUND'/'COMBI', then 0x2940-0x2A50 text); then +0x12C..+0x14A (0x26F4 'ROM 1'..'EXT 1', 0x26FA 'RE-MAP 1..3') when (0x26F3) bit 0 is clear, else +0x14A..DisplayList_FA3398 (0x26F7, 0x26FD).\nEvidence: then ReMapEdit_Draw{Sound,Combi}{Source,ReMap}Cursor and ReMapEdit_DrawSoundCombiSelector. Called from Screen_ReMapEdit_Enter 0xF9C0BD."
+  },
+  {
+   "label": "ReMapEdit_DrawSoundCombiSelector",
+   "mode": "insert",
+   "text": "ReMapEdit_DrawSoundCombiSelector -- moves RE-MAP EDIT's SOUND/COMBI highlight: on layer 1 erases the selector area and fills the box for the current mode\nEvidence: (0x2540)=1; DisplayList_FA349D is one op-1B record (LCD_Svc_1B_EraseRect) over x 0xD6-0x132, y 0x21-0x2E; DisplayList_FA3398 is an interpreter-B op-03 record on var 0x26F3 mask 0x01 selecting one of two 8-byte rects at 0xFA348D, service 0x05 (FillRect).\nCalled from ReMapEdit_DrawFields 0xF9C81F."
+  },
+  {
+   "label": "ReMapEdit_DrawSoundSourceCursor",
+   "mode": "insert",
+   "text": "ReMapEdit_DrawSoundSourceCursor -- redraws the row cursor of the source (left) column in SOUND mode when bit 0 of (0x2900) requests it, then clears that bit\nEvidence: layer 1; DisplayList_FA34E7 = op-1B EraseRect x 0x0C-0x93, y 0x5E-0xC4; DisplayList_FA33A3 = interpreter-B op-03 on var 0x26F6 (mask 7) into the 8 row rects at 0xFA34A7, service 0x05; `and (XIX),0xfe` with XIX = 0x2900.\nCallers: ReMapEdit_DrawFields, and the member-adjust button handler at 0xF9C2F2 after setting (0x2900) bit 0."
+  },
+  {
+   "label": "ReMapEdit_DrawSoundReMapCursor",
+   "mode": "insert",
+   "text": "ReMapEdit_DrawSoundReMapCursor -- redraws the row cursor of the RE-MAP (right) column in SOUND mode when bit 1 of (0x2900) requests it, then clears that bit\nEvidence: layer 1; DisplayList_FA3531 = op-1B EraseRect x 0xAC-0x133, y 0x5E-0xC4; DisplayList_FA33AE = interpreter-B op-03 on var 0x26FC (re-map member) into the rects at 0xFA34F1; `and (XIX),0xfd` with XIX = 0x2900.\nCallers: ReMapEdit_DrawFields and the re-map-member handler (HandlerTable23_FA1690 slots 6/7) at 0xF9C47C."
+  },
+  {
+   "label": "ReMapEdit_DrawCombiSourceCursor",
+   "mode": "insert",
+   "text": "ReMapEdit_DrawCombiSourceCursor -- the COMBI-mode twin of ReMapEdit_DrawSoundSourceCursor: left-column row cursor for (0x26F9), gated and cleared by (0x2900) bit 0\nEvidence: same erase rect DisplayList_FA34E7; DisplayList_FA33B9 = interpreter-B op-03 on var 0x26F9 into the rects at 0xFA34A7.\nCallers: ReMapEdit_DrawFields (COMBI arm, 0xF9C817) and the member handler at 0xF9C32C."
+  },
+  {
+   "label": "ReMapEdit_DrawCombiReMapCursor",
+   "mode": "insert",
+   "text": "ReMapEdit_DrawCombiReMapCursor -- the COMBI-mode twin of ReMapEdit_DrawSoundReMapCursor: right-column row cursor for (0x26FF), gated and cleared by (0x2900) bit 1\nEvidence: same erase rect DisplayList_FA3531; DisplayList_FA33C4 = interpreter-B op-03 on var 0x26FF into the rects at 0xFA34F1.\nCallers: ReMapEdit_DrawFields (COMBI arm, 0xF9C81A) and the re-map-member handler at 0xF9C4B6."
+  },
+  {
+   "label": "ReMapEdit_AssignSourceToReMap",
+   "mode": "insert",
+   "text": "ReMapEdit_AssignSourceToReMap -- the RE-MAP EDIT 'OK' action: stores the code of the selected source sound (or combination) into the selected RE-MAP slot\nEvidence: SOUND: slot = ByteTable12_FA16FA[(0x26FA)] (0x5340/0x5550/0x5760) + 2*((0x26FB)<<3 + (0x26FC)); the code comes from T_F407F4 (sub_FAB658) given (0x26F5),(0x26F6), ByteTable8_FA16EC[(0x26F4)], read back from (0x60F164)/(0x60F165) into slot+0/+1.\nEvidence: COMBI: ByteTable12_FA1706 (0x5990/0x5BA0/0x5DB0) with (0x26FD),(0x26FE),(0x26FF); code via T_F40804 (sub_FAB779, (0x60F17F)=0x98) from (0x60F185)/(0x60F186).\nCalled from the HandlerTable23_FA1690 slot-8 handler at 0xF9C4D1 on pair position 0 -- the left LCD-row key under 'OK' (DisplayList_FA30A6, pos 0x057A); pair position 1 toggles (0x26F3) instead."
+  },
+  {
+   "label": "Screen_SoundCombinationManager_Enter",
+   "mode": "insert",
+   "text": "Screen_SoundCombinationManager_Enter -- Enter (+0) method of screen 0x6D: restarts task 2's callback queue and posts the painter of the SOUND/COMBINATION MANAGER menu\nEvidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; prom_b T_F41978/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.\nEvidence: posts .LF9CAE0 (T_CallbackQueue_Post + T_Kernel_SemaSignal_StackArg 1), which runs DisplayList_FA353B-FA3678 on layer 2: title 'SOUND/COMBINATION MANAGER', items SOUND GROUP NAMING / DATA LOAD FILTER / COMBI.GROUP NAMING / MEMORY PROTECT / SOUND COPY / SOUND MUTE / COMBINATION COPY.\nScreen id 0x6D is what Screen_System's row-3 right key requests (0xF9FF95)."
+  },
+  {
+   "label": "Screen_SoundCombinationManager_Button",
+   "mode": "insert",
+   "text": "Screen_SoundCombinationManager_Button -- Button (+8) method: maps the panel code to a slot (T_F42C74 = PanelCode_ToSlotAndFlags) and jumps through HandlerTable23_FA1712\nEvidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; prom_b T_F41978/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.\nSlots 9-12 (LCD-row pairs 2-5) request screens 0x5B/0x61, 0x5C/0x6E, 0x5E/0x5D, 0x5F (left/right labels of DisplayList_FA353B); slot 15 (EXIT) requests 0x60 (SYSTEM)."
+  },
+  {
+   "label": "SoundGroupNaming_AdjustBank",
+   "mode": "insert",
+   "text": "SoundGroupNaming_AdjustBank -- steps the SOUND GROUP NAMING bank selector (0x2695) one place and requests a screen refresh if it moved\nEvidence: T_F42C78 (sub_F550A6, the descriptor-driven field adjuster) on (0x2695) with Descriptor9_FA1AA6 (mask 7, max 4); (0x2695) indexes ByteTable5_FA17CA {08,09,18,19,1A} and is drawn by record FA37EA as 'USER 1','USER 2','RE-MAP 1..3'.\nEvidence: on A=1 `set 4,(0x2095)`, the bit the Enter methods test to repaint only the fields. Called from the HandlerTable23_FA176E soft-key handlers (0xF9CBA5...) in mode (0x2694)=0."
+  },
+  {
+   "label": "SoundGroupNaming_AdjustGroup",
+   "mode": "insert",
+   "text": "SoundGroupNaming_AdjustGroup -- steps the selected group (0x2696, 0..15) of SOUND GROUP NAMING and moves the row cursor if it changed\nEvidence: T_F42C78 on (0x2696) with Descriptor9_FA1AAF (mask 0x0F, max 15); on change calls SoundGroupNaming_DrawGroupCursor, whose record FA37F9 highlights row (0x2696) of the '1.'..'16.' list.\nCalled from the HandlerTable23_FA176E soft-key handlers at 0xF9CC3A... in mode (0x2694)=0."
+  },
+  {
+   "label": "SoundGroupNaming_LoadGroupNames",
+   "mode": "insert",
+   "text": "SoundGroupNaming_LoadGroupNames -- copies the 16 group names of the selected bank into the text buffers 0x2940-0x2A3F\nEvidence: loop H = 0..15 calling SoundGroupName_CopyToBuffer(group H, bank ByteTable5_FA17CA[(0x2695)], dest 0x2940+16*H); records FA3804-FA38E5 print those buffers.\nCalled from Screen_SoundGroupNaming_Enter 0xF9CB3E."
+  },
+  {
+   "label": "SoundGroupNaming_DrawFields",
+   "mode": "insert",
+   "text": "SoundGroupNaming_DrawFields -- draws SOUND GROUP NAMING's numbered group list, the 16 group names and the bank name with its group cursor\nEvidence: layer 0; T_DisplayList_Run_Stack over DisplayList_FA377A-FA37EA ('1. '..'16.'); T_DisplayListB_Run_Stack over DisplayList_FA3804-OperandTable_FA38F4 (op-02 records printing 0x2940-0x2A30) and DisplayList_FA37EA-FA3804 (var 0x2695 bank name, var 0x2696 cursor).\nCalled from Screen_SoundGroupNaming_Enter 0xF9CB41."
+  },
+  {
+   "label": "SoundGroupNaming_DrawGroupCursor",
+   "mode": "insert",
+   "text": "SoundGroupNaming_DrawGroupCursor -- moves the group-row highlight: erases the list area on layer 1 and fills the box of row (0x2696)\nEvidence: DisplayList_FA39D4 = op-1B EraseRect x 0x04-0x13B, y 0x55-0xBB; DisplayList_FA37EA+0xF = interpreter-B op-03 on var 0x2696 (mask 0x0F) into the rects at 0xFA3954, service 0x05.\nCalled from SoundGroupNaming_AdjustGroup 0xF9CC26."
+  },
+  {
+   "label": "SoundGroupNaming_StoreGroupName",
+   "mode": "insert",
+   "text": "SoundGroupNaming_StoreGroupName -- stores the 16-byte name edited at 0x22F0 as the name of group (0x2696) of the selected bank\nEvidence: 5-entry LE32 table at 0xF9CEE6 indexed by (0x2695): USER 1/2 -> UserSoundBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0, 0x10, remote); RE-MAP 1-3 -> copy to 0x5240 + 0x210*(bank-2) + 16*group.\nEvidence: those RAM bases are exactly where sub_FC2035 (the group-name source behind SoundGroupName_CopyToBuffer) reads re-map group names for codes 0x18/0x19/0x1A (0xFC20F4-0xFC2102).\nCalled at 0xF9CD6E from the HandlerTable23_FA176E slot-8 handler (0xF9CCA6) -- the WRITE key in naming state (0x2694)=1 -- after the (0x7FD6) bit-0 protect test for USER banks."
+  },
+  {
+   "label": "CombinationGroupNaming_AdjustBank",
+   "mode": "insert",
+   "text": "CombinationGroupNaming_AdjustBank -- steps the COMBINATION GROUP NAMING bank selector (0x2698) and requests a field refresh if it moved\nEvidence: T_F42C78 on (0x2698) with Descriptor9_FA1AB8 (mask 3, max 3); (0x2698) indexes ByteTable4_FA182B {08,18,19,1A} and record FA3A52 prints it as 'USER 1','RE-MAP 1..3'; `set 4,(0x2095)` on change.\nCalled from the HandlerTable23_FA17CF soft-key handlers (0xF9D00D...) in mode (0x2697)=0."
+  },
+  {
+   "label": "CombinationGroupNaming_AdjustGroup",
+   "mode": "insert",
+   "text": "CombinationGroupNaming_AdjustGroup -- steps the selected combination group (0x2699, 0..15) and moves the row cursor if it changed\nEvidence: T_F42C78 on (0x2699) with Descriptor9_FA1AC1 (mask 0x0F, max 15); on change CombinationGroupNaming_DrawGroupCursor (record FA3A61 on var 0x2699).\nCalled from the HandlerTable23_FA17CF soft-key handlers in mode (0x2697)=0."
+  },
+  {
+   "label": "CombinationGroupNaming_LoadGroupNames",
+   "mode": "insert",
+   "text": "CombinationGroupNaming_LoadGroupNames -- copies the 16 combination-group names of the selected bank into the text buffers 0x2940-0x2A3F\nEvidence: loop H = 0..15 calling CombiGroupName_CopyToBuffer(group H, bank ByteTable4_FA182B[(0x2698)], dest 0x2940+16*H).\nCalled from Screen_CombinationGroupNaming_Enter."
+  },
+  {
+   "label": "CombinationGroupNaming_DrawFields",
+   "mode": "insert",
+   "text": "CombinationGroupNaming_DrawFields -- draws the numbered group list, the 16 combination-group names and the bank name with its group cursor\nEvidence: layer 0; DisplayList_FA377A-FA37EA and DisplayList_FA3804-OperandTable_FA38F4 (shared with SoundGroupNaming_DrawFields), then interpreter B over DisplayList_FA3A52-OperandTable_FA3A6C (var 0x2698 'USER 1'/'RE-MAP n', var 0x2699 cursor).\nCalled from Screen_CombinationGroupNaming_Enter."
+  },
+  {
+   "label": "CombinationGroupNaming_DrawGroupCursor",
+   "mode": "insert",
+   "text": "CombinationGroupNaming_DrawGroupCursor -- moves the group-row highlight to row (0x2699) on layer 1\nEvidence: DisplayList_FA39D4 EraseRect, then DisplayList_FA3A52+0xF = interpreter-B op-03 on var 0x2699 into the rects at 0xFA3954. Called from CombinationGroupNaming_AdjustGroup 0xF9D08E."
+  },
+  {
+   "label": "CombinationGroupNaming_StoreGroupName",
+   "mode": "insert",
+   "text": "CombinationGroupNaming_StoreGroupName -- stores the 16-byte name edited at 0x22F0 as the name of combination group (0x2699) of the selected bank\nEvidence: (0x2698)=0 (USER 1): CombiBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0, 0x10, remote); 1-3 (RE-MAP 1-3): copy to 0x5890 + 0x210*(sel-1) + 16*group -- the RAM bases sub_FC2155 (behind CombiGroupName_CopyToBuffer) reads for codes 0x18-0x1A.\nCalled from the HandlerTable23_FA17CF slot-8 handler at 0xF9D1D6 after the (0x7FD6) bit-1 protect test."
+  },
+  {
+   "label": "Screen_SoundCopy_Enter",
+   "mode": "insert",
+   "text": "Screen_SoundCopy_Enter -- Enter (+0) method of screen 0x5E, SOUND COPY: on a new entry selects SINGLE mode ((0x269A)=1), then paints (unless only a field refresh is pending) and loads/draws the fields\nEvidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432.\nEvidence: calls Paint_SoundCopy (whose lists all carry the title 'SOUND COPY' or its error page), SoundCopy_LoadNameBuffers and SoundCopy_DrawFields; id 0x5E is what SOUND/COMBINATION MANAGER's 'SOUND COPY' key requests (0xF9CA99)."
+  },
+  {
+   "label": "Screen_SoundCopy_Leave",
+   "mode": "replace",
+   "text": "Screen_SoundCopy_Leave -- Leave (+4) method of SOUND COPY: if (0x207A) != (0x207B) it clears (0x2806), the link-request-outstanding flag SoundCopy_Request*Sound* set\nEvidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432 -- the vtable walk the old header asked for.\nEvidence: ALL 16 bytes of 0xF9D3F4-0xF9D403 equal Screen_DrumsMapNaming_Leave at 0xF9EFF6 (0 differ); the shared shape is explained by both screens setting (0x2806)=1 while a CPU-2 transfer is pending (SoundCopy_RequestGroupSounds 0xF9FBD5, Screen_DrumsMapNaming_Enter 0xF9EFCE).\nBody: if (0x207A) == (0x207B), return; else clear (0x2806)."
+  },
+  {
+   "label": "Screen_SoundCopy_Button",
+   "mode": "insert",
+   "text": "Screen_SoundCopy_Button -- Button (+8) method of SOUND COPY: ignores every button while (0x2806) is set, otherwise dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA182F\nEvidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432; `cp (0x2806),0x00 / jr NZ` at 0xF9D408.\nSlots: 0-7 soft keys (bank/group/sound edits), 8 OK / GROUP-SINGLE, 10 YES (-> SoundCopy_Execute), 11 NO, 15 EXIT (-> screen 0x6D)."
+  },
+  {
+   "label": "SoundCopy_AdjustSourceBank",
+   "mode": "insert",
+   "text": "SoundCopy_AdjustSourceBank -- steps the SOUND COPY source bank (0x269B: ROM 1, ROM 2, USER 1, USER 2, EXT 1) and resets the source group and list position\nEvidence: T_F42C78 on (0x269B) with Descriptor9_FA1636; the max is raised to 4 when (0x08EC) bit 0 is set; record FA3CA0 prints (0x269B) through 'ROM 1'..'EXT 1'; ByteTable5_FA188B {00,01,08,09,10} gives the bank code.\nEvidence: on change (0x269C)=0; GROUP mode clears (0x269F)/(0x269E), SINGLE clears (0x269D), setting (0x2900) bit 0 so the cursor is redrawn; then `set 4,(0x2095)`. Called from HandlerTable23_FA182F slots 0/1."
+  },
+  {
+   "label": "SoundCopy_AdjustDestBank",
+   "mode": "insert",
+   "text": "SoundCopy_AdjustDestBank -- steps the SOUND COPY destination bank (0x26A0: USER 1 / USER 2) and resets the destination group and list position\nEvidence: T_F42C78 on (0x26A0) with Descriptor9_FA1ACA (max 1); record FA3CAF prints it from 'USER 1','USER 2'; ByteTable2_FA1890 {08,09}; on change (0x26A1)=0 and (0x26A4)/(0x26A3) or (0x26A2) cleared with (0x2900) bit 1, then `set 4,(0x2095)`.\nCalled from HandlerTable23_FA182F slots 4/5."
+  },
+  {
+   "label": "Paint_SoundCopy",
+   "mode": "insert",
+   "text": "Paint_SoundCopy -- paints the SOUND COPY page for the current state (0x269A) through JumpTable_F9D966: GROUP, SINGLE, overwrite confirmation, or drum-kit error\nEvidence: T_F42E10, bound `cp BC,7`, JumpTable_F9D966 = {Paint_SoundCopyGroup, Paint_SoundCopySingle, Paint_SoundCopyAreYouSure x2, Paint_ErrorImpossibleCopyDrumKit x4}; XIX = 0x2540 (layer); exits through T_F42E14.\nCalled from Screen_SoundCopy_Enter 0xF9D3EA."
+  },
+  {
+   "label": "Paint_SoundCopyGroup",
+   "mode": "insert",
+   "text": "Paint_SoundCopyGroup -- paints SOUND COPY in GROUP mode ((0x269A)=0): the 'GROUP/SINGLE' legend and the BANK/GROUP-to-BANK/GROUP layout\nEvidence: JumpTable_F9D966 entry 0; layer 0 DisplayList_FA3BA8-FA3BD1 ('GROUP/SINGLE'), layer 2 DisplayList_FA3A9C-FA3BA8 ('SOUND COPY','SYSTEM','OK','BANK','GROUP','GROUP','BANK'); shares the tail .LF9DA04 of Paint_SoundCopy."
+  },
+  {
+   "label": "Paint_SoundCopySingle",
+   "mode": "insert",
+   "text": "Paint_SoundCopySingle -- paints SOUND COPY in SINGLE mode ((0x269A)=1): the legend and the BANK/GROUP/SOUND layout of both columns\nEvidence: JumpTable_F9D966 entry 1; layer 0 DisplayList_FA3BA8-FA3BD1, layer 2 DisplayList_FA3ED3-FA4041 ('SOUND COPY','OK','BANK','GROUP','SOUND','GROUP','SOUND','BANK')."
+  },
+  {
+   "label": "Paint_SoundCopyAreYouSure",
+   "mode": "insert",
+   "text": "Paint_SoundCopyAreYouSure -- paints SOUND COPY's confirmation page ((0x269A) bit 1 set): the overwrite warning and the ATTENTI0N!/Are You Sure? YES/NO box\nEvidence: JumpTable_F9D966 entries 2-3; layer 0 DisplayList_FA3BD1-FA3C39 ('SOUND COPY','The memory to which you','are copying will be','overwritten.') then DisplayList_FA302F-FA30A6 ('YES','NO','ATTENTI0N!','Are You Sure?')."
+  },
+  {
+   "label": "Paint_ErrorImpossibleCopyDrumKit",
+   "mode": "insert",
+   "text": "Paint_ErrorImpossibleCopyDrumKit -- paints SOUND COPY's error page ((0x269A) bit 2 set): 'ERROR! It is impossible to copy a Drum Kit.'\nEvidence: JumpTable_F9D966 entries 4-7; layer 0 DisplayList_FA3C39-FA3CA0 ('ERROR!','It is impossible to copy a Drum Kit.','Please select a Sound other than a','Drum Kit.'); same naming pattern as Paint_ErrorImpossibleDrumMap.\nThe state is set by SoundCopy_Execute (0xF9DEEC) when SoundCopy_ReadExtGroupDrumFlag is non-zero."
+  },
+  {
+   "label": "SoundCopy_LoadNameBuffers",
+   "mode": "insert",
+   "text": "SoundCopy_LoadNameBuffers -- fills the name buffers the SOUND COPY lists print, according to the mode (0x269A)\nEvidence: mode 0 (GROUP): SoundGroupName_CopyToBuffer for every group of the source bank into 0x2940+16*g (count (0x08E8) for EXT, else 16; blanks after) and of the destination bank (ByteTable2_FA1890[(0x26A0)]) into 0x60A000+16*g -- the tables records FA3D4F and FA3DC7 index.\nEvidence: mode 1 (SINGLE): source group name -> 0x2940, its sounds (SoundName_CopyToBuffer, count from SoundGroup_MaxMemberIndex_ByStack) -> 0x2950..; destination group name -> 0x29D0, its 8 sounds -> 0x29E0...\nCalled from Screen_SoundCopy_Enter 0xF9D3ED."
+  },
+  {
+   "label": "SoundCopy_DrawFields",
+   "mode": "insert",
+   "text": "SoundCopy_DrawFields -- draws SOUND COPY's live fields for the current state (0x269A) through JumpTable_F9DBE6\nEvidence: bound `cp BC,7`; entries {SoundCopy_DrawGroupModeFields, SoundCopy_DrawSingleModeFields, none, none, SoundCopy_ClearErrorState x4}; XIX = T_DisplayListB_Run_Stack for the `jp (xix)` calls.\nCalled from Screen_SoundCopy_Enter 0xF9D3F0."
+  },
+  {
+   "label": "SoundCopy_DrawGroupModeFields",
+   "mode": "insert",
+   "text": "SoundCopy_DrawGroupModeFields -- GROUP-mode field drawer: bank names, the GROUP/SINGLE highlight, both group-row cursors and both scrolling group lists\nEvidence: JumpTable_F9DBE6 entry 0; interpreter B over DisplayList_FA3CA0-FA3CBE (var 0x269B, 0x26A0), record DisplayList_FA3D34 (var 0x269A bit 0 box), then SoundCopy_DrawSourceGroupCursor, _DrawDestGroupCursor, _DrawSourceGroupList, _DrawDestGroupList."
+  },
+  {
+   "label": "SoundCopy_DrawSingleModeFields",
+   "mode": "insert",
+   "text": "SoundCopy_DrawSingleModeFields -- SINGLE-mode field drawer: bank names, the group/sound name buffers, the GROUP/SINGLE highlight and both sound-row cursors\nEvidence: JumpTable_F9DBE6 entry 1; interpreter B over DisplayList_FA3ED3+0x16E..FA405F (vars 0x269B, 0x26A0), DisplayList_FA3230+0x1E..+0x12C (the 0x2940-0x2A50 buffers, shared with RE-MAP EDIT), DisplayList_FA3D34; then SoundCopy_DrawSourceSoundCursor and _DrawDestSoundCursor."
+  },
+  {
+   "label": "SoundCopy_ClearErrorState",
+   "mode": "insert",
+   "text": "SoundCopy_ClearErrorState -- field step of the error state: clears bits 1 and 2 of (0x269A) so the next refresh returns to GROUP/SINGLE\nEvidence: JumpTable_F9DBE6 entries 4-7 (the states Paint_ErrorImpossibleCopyDrumKit paints); body `and (0x269A),0xf9` then the shared `pop XIX / ret`."
+  },
+  {
+   "label": "SoundCopy_DrawSourceGroupCursor",
+   "mode": "insert",
+   "text": "SoundCopy_DrawSourceGroupCursor -- GROUP mode: redraws the source-list row cursor (0x269E) when (0x2900) bit 0 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA3E7F = EraseRect x 0x0A-0x93, y 0x53-0xC0; DisplayList_FA3CBE = interpreter-B op-03 on var 0x269E (mask 7) into the rects at 0xFA3E3F; `and (0x2900),0xfe`."
+  },
+  {
+   "label": "SoundCopy_DrawSourceSoundCursor",
+   "mode": "insert",
+   "text": "SoundCopy_DrawSourceSoundCursor -- SINGLE mode: redraws the source-sound row cursor (0x269D) when (0x2900) bit 0 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA34E7 EraseRect (left column); DisplayList_FA405F = interpreter-B op-03 on var 0x269D into the rects at 0xFA34A7."
+  },
+  {
+   "label": "SoundCopy_DrawDestGroupCursor",
+   "mode": "insert",
+   "text": "SoundCopy_DrawDestGroupCursor -- GROUP mode: redraws the destination-list row cursor (0x26A3) when (0x2900) bit 1 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA3EC9 = EraseRect x 0xAC-0x133, y 0x53-0xC0; DisplayList_FA3CC9 = interpreter-B op-03 on var 0x26A3 into the rects at 0xFA3E89."
+  },
+  {
+   "label": "SoundCopy_DrawDestSoundCursor",
+   "mode": "insert",
+   "text": "SoundCopy_DrawDestSoundCursor -- SINGLE mode: redraws the destination-sound row cursor (0x26A2) when (0x2900) bit 1 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA3531 EraseRect (right column); DisplayList_FA406A = interpreter-B op-03 on var 0x26A2 into the rects at 0xFA34F1."
+  },
+  {
+   "label": "SoundCopy_DrawSourceGroupList",
+   "mode": "insert",
+   "text": "SoundCopy_DrawSourceGroupList -- GROUP mode: prints 8 rows of source group names starting at the scroll position (0x269F)\nEvidence: interpreter B over DisplayList_FA3D4F-FA3DC7: op-02 records on var 0x269F (mask 0x0F) indexing 16-byte tables at 0x2940, 0x2950, ... -- row r shows group (0x269F)+r of the names SoundCopy_LoadNameBuffers left at 0x2940."
+  },
+  {
+   "label": "SoundCopy_DrawDestGroupList",
+   "mode": "insert",
+   "text": "SoundCopy_DrawDestGroupList -- GROUP mode: prints 8 rows of destination group names starting at the scroll position (0x26A4)\nEvidence: interpreter B over DisplayList_FA3DC7-OperandTable_FA3E3F: op-02 records on var 0x26A4 indexing 16-byte tables at 0x60A000, 0x60A010, ... (filled by SoundCopy_LoadNameBuffers)."
+  },
+  {
+   "label": "SoundCopy_Execute",
+   "mode": "insert",
+   "text": "SoundCopy_Execute -- performs the SOUND COPY (the YES key): copies the source group (name + 8 sounds, 0x1648 bytes) or one sound (0x2C9 bytes) into the USER destination\nEvidence: USER 1/2 sources: Link_ReadRemoteBlock from UserSoundBank_Remote*Addr into 0x60A7F0/0x60A800, Link_WriteRemoteBlock to the destination's addresses, SoundCopy_RefreshPartsUsingSound per copied sound; ROM 1/2 and EXT sources: SoundCopy_RequestGroupSounds / _RequestSingleSound.\nEvidence: EXT: SoundCopy_ReadExtGroupDrumFlag non-zero -> `set 2,(0x269A)` and screen request 0x5E (error page); done: `res 1,(0x269A)`, (0x2880)=0x23, (0x2070)=0xAB with (0x2071) bit 6.\nCalled from HandlerTable23_FA182F slot 10 (the 'YES' row) at 0xF9D8DA in states 2/3."
+  },
+  {
+   "label": "Screen_CombinationCopy_Enter",
+   "mode": "insert",
+   "text": "Screen_CombinationCopy_Enter -- Enter (+0) method of screen 0x5F, COMBINATION COPY: on a new entry selects SINGLE mode ((0x269A)=1), then paints and loads/draws the fields\nEvidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_F426B0; prom_b T_F426B0/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3.\nEvidence: calls Paint_CombinationCopy, CombinationCopy_LoadNameBuffers, CombinationCopy_DrawFields; id 0x5F is what SOUND/COMBINATION MANAGER's 'COMBINATION COPY' key requests (0xF9CAB7)."
+  },
+  {
+   "label": "Screen_CombinationCopy_Button",
+   "mode": "insert",
+   "text": "Screen_CombinationCopy_Button -- Button (+8) method of COMBINATION COPY: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1892\nEvidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_F426B0; prom_b T_F426B0/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3; unlike Screen_SoundCopy_Button it has no (0x2806) guard."
+  },
+  {
+   "label": "CombinationCopy_AdjustSourceBank",
+   "mode": "insert",
+   "text": "CombinationCopy_AdjustSourceBank -- steps the COMBINATION COPY source bank (0x2706: ROM 1, USER 1, EXT 1) and resets the source group and list position\nEvidence: T_F42C78 on (0x2706) with Descriptor9_FA1663 (max 1, 2 when (0x08EC) bit 1 is set); records FA4123/FA4247 print it; ByteTable3_FA16F4 {00,08,10}; on change (0x2707)=0, (0x270A)/(0x2709) or (0x2708) cleared, `set 4,(0x2095)`.\nCalled from HandlerTable23_FA1892 slots 0/1."
+  },
+  {
+   "label": "CombinationCopy_AdjustDestBank",
+   "mode": "insert",
+   "text": "CombinationCopy_AdjustDestBank -- steps the COMBINATION COPY destination bank (0x270B) and resets the destination group and list position\nEvidence: T_F42C78 on (0x270B) with Descriptor9_FA1AF7; records FA4132/FA4256 print it ('USER 1','RE-MAP 1..3'), ByteTable4_FA182B gives the code; on change (0x270C)=0, (0x270F)/(0x270E) or (0x270D) cleared with (0x2900) bit 1, `set 4,(0x2095)`."
+  },
+  {
+   "label": "Paint_CombinationCopy",
+   "mode": "replace",
+   "text": "Paint_CombinationCopy -- paints the COMBINATION COPY page for state (0x269A): SOUND COPY's GROUP/SINGLE layouts with 'COMBINATION COPY' and 'COMBI' overlaid, or the overwrite confirmation\nEvidence: called only from Screen_CombinationCopy_Enter (0xF9DFC1), the Enter of screen 0x5F that SOUND/COMBINATION MANAGER's 'COMBINATION COPY' key requests -- which resolves the old refusal that the lists span two screens.\nEvidence: state 0: FA3BA8 'GROUP/SINGLE', FA3A9C-FA3B82 (layout incl. its 'SOUND COPY' title), then FA408D 'COMBINATION COPY' over it; state 1: FA3ED3-FA401B then FA408D-FA40B5 ('COMBINATION COPY','COMBI','COMBI'); states 2-3: FA40B5-FA4123 ('...The memory to witch you...') + FA302F 'ATTENTI0N!'/'Are You Sure?'.\nEvidence: each list's bounds are the two immediates of a 12-byte push idiom and the record walk lands exactly on the end (notes/prom_a_dl_stack_map.py)."
+  },
+  {
+   "label": "CombinationCopy_LoadNameBuffers",
+   "mode": "insert",
+   "text": "CombinationCopy_LoadNameBuffers -- fills the name buffers the COMBINATION COPY lists print, according to (0x269A)\nEvidence: same shape as SoundCopy_LoadNameBuffers with the combination copiers: GROUP: CombiGroupName_CopyToBuffer for the source bank ByteTable3_FA16F4[(0x2706)] into 0x2940.. (count (0x08EA) for EXT) and the destination ByteTable4_FA182B[(0x270B)] into 0x60A000..\nEvidence: SINGLE: group name -> 0x2940 / 0x29D0, CombiName_CopyToBuffer for the members -> 0x2950.. / 0x29E0... Called from Screen_CombinationCopy_Enter 0xF9DFC4."
+  },
+  {
+   "label": "CombinationCopy_DrawFields",
+   "mode": "insert",
+   "text": "CombinationCopy_DrawFields -- draws COMBINATION COPY's live fields for GROUP ((0x269A)=0) or SINGLE (1); nothing in the other states\nEvidence: GROUP: interpreter B over DisplayList_FA40A3+0x80..FA4141 (vars 0x2706, 0x270B), record FA3D34, then the four CombinationCopy_DrawSource/Dest Group Cursor/List routines; SINGLE: FA4247-FA4265, DisplayList_FA3230+0x1E..+0x12C, FA3D34, CombinationCopy_DrawSourceCombiCursor/_DrawDestCombiCursor.\nCalled from Screen_CombinationCopy_Enter 0xF9DFC7."
+  },
+  {
+   "label": "CombinationCopy_DrawSourceGroupCursor",
+   "mode": "insert",
+   "text": "CombinationCopy_DrawSourceGroupCursor -- GROUP mode: redraws the source-list row cursor (0x2709) when (0x2900) bit 0 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA3E7F EraseRect; DisplayList_FA4141 = interpreter-B op-03 on var 0x2709 into the rects at 0xFA3E3F."
+  },
+  {
+   "label": "CombinationCopy_DrawSourceCombiCursor",
+   "mode": "insert",
+   "text": "CombinationCopy_DrawSourceCombiCursor -- SINGLE mode: redraws the source-combination row cursor (0x2708) when (0x2900) bit 0 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA34E7 EraseRect; DisplayList_FA4265 = interpreter-B op-03 on var 0x2708 into the rects at 0xFA34A7."
+  },
+  {
+   "label": "CombinationCopy_DrawDestGroupCursor",
+   "mode": "insert",
+   "text": "CombinationCopy_DrawDestGroupCursor -- GROUP mode: redraws the destination-list row cursor (0x270E) when (0x2900) bit 1 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA3EC9 EraseRect; DisplayList_FA414C = interpreter-B op-03 on var 0x270E into the rects at 0xFA3E89."
+  },
+  {
+   "label": "CombinationCopy_DrawDestCombiCursor",
+   "mode": "insert",
+   "text": "CombinationCopy_DrawDestCombiCursor -- SINGLE mode: redraws the destination-combination row cursor (0x270D) when (0x2900) bit 1 asks, then clears the bit\nEvidence: layer 1; DisplayList_FA3531 EraseRect; DisplayList_FA4270 = interpreter-B op-03 on var 0x270D into the rects at 0xFA34F1."
+  },
+  {
+   "label": "CombinationCopy_DrawSourceGroupList",
+   "mode": "insert",
+   "text": "CombinationCopy_DrawSourceGroupList -- GROUP mode: prints 8 rows of source group names starting at the scroll position (0x270A)\nEvidence: interpreter B over DisplayList_FA4157-FA41CF, op-02 records on var 0x270A indexing 16-byte tables at 0x2940, 0x2950, ...."
+  },
+  {
+   "label": "CombinationCopy_DrawDestGroupList",
+   "mode": "insert",
+   "text": "CombinationCopy_DrawDestGroupList -- GROUP mode: prints 8 rows of destination group names starting at the scroll position (0x270F)\nEvidence: interpreter B over DisplayList_FA41CF-FA4247, op-02 records on var 0x270F indexing 16-byte tables at 0x60A000, 0x60A010, ...."
+  },
+  {
+   "label": "CombinationCopy_Execute",
+   "mode": "insert",
+   "text": "CombinationCopy_Execute -- performs the COMBINATION COPY: copies a combination group (name + 8 x 0x2C0 bytes) or one combination (0x2C0 bytes) from the source to the destination over the link\nEvidence: GROUP: Link_ReadRemoteBlock(CombiBank_RemoteGroupNameAddr) into 0x60A7F0 and Link_WriteRemoteBlock to the destination's; 0x1600 data bytes via CombiBank_RemoteCombiAddr (group 11 split into 0x0B00 + 0x0B00 through 0x60B300); CombinationCopy_RefreshIfCurrentCombi for members 0-7.\nEvidence: SINGLE: 0x2C0 bytes for (0x2706)/(0x2707)/(0x2708) -> (0x270B)/(0x270C)/(0x270D). Reached from the YES handler of HandlerTable23_FA1892 (slot 10)."
+  },
+  {
+   "label": "CombinationCopy_RefreshIfCurrentCombi",
+   "mode": "insert",
+   "text": "CombinationCopy_RefreshIfCurrentCombi -- after a combination was overwritten, re-triggers T_F43454 if the copied slot is the combination currently selected\nEvidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_F40804 (sub_FAB779) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_F43454` (prom_a sub_FAC80F).\nIn: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from CombinationCopy_Execute."
+  },
+  {
+   "label": "Screen_DataLoadFilter_Enter",
+   "mode": "insert",
+   "text": "Screen_DataLoadFilter_Enter -- Enter (+0) method of screen 0x61, DATA LOAD FILTER: resets the item cursor (0x26A5) on a new entry and posts the painter, value and cursor callbacks\nEvidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_F41998; prom_b T_F41998/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15.\nEvidence: posts .LF9ECE0 (DisplayList_FA427B-FA43C9: 'DATA LOAD FILTER', 'EFFECT & OUTPUT :', 'R.T.CREATOR 1_6 :', 'OCTAVE', 'MIDI SETTING', 'KEY&VEL LAYER', 'MAIN OUT EQ', 'KEY SCALING'), .LF9ED00 (values) and .LF9ED18 (cursor); id 0x61 = MANAGER's 'DATA LOAD FILTER' key (0xF9CA54)."
+  },
+  {
+   "label": "Screen_DataLoadFilter_Button",
+   "mode": "insert",
+   "text": "Screen_DataLoadFilter_Button -- Button (+8) method of DATA LOAD FILTER: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA18EE\nEvidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_F41998; prom_b T_F41998/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15; slots 0-3 move the item cursor (0xF9EC16), slots 4-7 adjust the item through JumpTable_F9EC58 (0xF9EC3F), slot 15 EXIT requests 0x6D."
+  },
+  {
+   "label": "DataLoadFilter_AdjustEffectOutput",
+   "mode": "insert",
+   "text": "DataLoadFilter_AdjustEffectOutput -- steps the 'EFFECT & OUTPUT' load filter (OFF / COMBI / SOUND&COMBI) through IndexedParam_AdjustField\nEvidence: entry 0 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 0 of 0xFA443D lies on the 'EFFECT & OUTPUT :' row of DisplayList_FA427B; pushes Descriptor9_FA1B2D (+0=2, mask 0x0F, max 2) and index 0x7A; record FA43C9 shows var 0x7EE4 & 0x0F from 'OFF','COMBI','SOUND&COMBI'."
+  },
+  {
+   "label": "DataLoadFilter_AdjustRtCreator",
+   "mode": "insert",
+   "text": "DataLoadFilter_AdjustRtCreator -- steps the 'R.T.CREATOR 1_6' load filter through IndexedParam_AdjustField\nEvidence: entry 1 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 1 of 0xFA443D lies on the 'R.T.CREATOR 1_6 :' row of DisplayList_FA427B; Descriptor9_FA1B36 (+0=2, mask 0xF0, shift 4, max 2) with index 0x7A; record FA43D8 shows var 0x7EE4 >> 4."
+  },
+  {
+   "label": "DataLoadFilter_SetOctave",
+   "mode": "insert",
+   "text": "DataLoadFilter_SetOctave -- sets or clears the 'OCTAVE' load-filter bit (0x7F07 bit 2) according to which key of the pair was pressed\nEvidence: entry 2 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 2 of 0xFA443D lies on the 'OCTAVE' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B3F) forces bit mask 0x04 on/off by pair position; record FA43E7 shows var 0x7F07 bit 2 as 'ON '/'OFF'."
+  },
+  {
+   "label": "DataLoadFilter_SetMidiSetting",
+   "mode": "insert",
+   "text": "DataLoadFilter_SetMidiSetting -- sets or clears the 'MIDI SETTING' load-filter bit (0x7F07 bit 1)\nEvidence: entry 3 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 3 of 0xFA443D lies on the 'MIDI SETTING' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B42) forces bit mask 0x02 on/off by pair position; record FA43F6 shows var 0x7F07 bit 1 as 'ON '/'OFF'."
+  },
+  {
+   "label": "DataLoadFilter_SetKeyVelLayer",
+   "mode": "insert",
+   "text": "DataLoadFilter_SetKeyVelLayer -- sets or clears the 'KEY&VEL LAYER' load-filter bit (0x7F07 bit 0)\nEvidence: entry 4 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 4 of 0xFA443D lies on the 'KEY&VEL LAYER' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B45) forces bit mask 0x01 on/off by pair position; record FA4405 shows var 0x7F07 bit 0 as 'ON '/'OFF'."
+  },
+  {
+   "label": "DataLoadFilter_SetMainOutEq",
+   "mode": "insert",
+   "text": "DataLoadFilter_SetMainOutEq -- sets or clears the 'MAIN OUT EQ' load-filter bit (0x7F07 bit 3)\nEvidence: entry 5 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 5 of 0xFA443D lies on the 'MAIN OUT EQ' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B48) forces bit mask 0x08 on/off by pair position; record FA4414 shows var 0x7F07 bit 3 as 'ON '/'OFF'."
+  },
+  {
+   "label": "DataLoadFilter_SetKeyScaling",
+   "mode": "insert",
+   "text": "DataLoadFilter_SetKeyScaling -- sets or clears the 'KEY SCALING' load-filter bit (0x7F07 bit 4)\nEvidence: entry 6 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 6 of 0xFA443D lies on the 'KEY SCALING' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B4B) forces bit mask 0x10 on/off by pair position; record FA4423 shows var 0x7F07 bit 4 as 'ON '/'OFF'.\nNote: the label's extent runs on through the shared tail .LF9ECB3, the EXIT handler 0xF9ECBD and the paint callbacks .LF9ECE0-.LF9ED18."
+  },
+  {
+   "label": "Screen_MemoryProtect_Enter",
+   "mode": "insert",
+   "text": "Screen_MemoryProtect_Enter -- Enter (+0) method of screen 0x6E, MEMORY PROTECT: resets the cursor (0x26A6) on a new entry and posts the painter, value and cursor callbacks\nEvidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_F41988; prom_b T_F41988/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9.\nEvidence: posts .LF9EE57 (DisplayList_FA44E8-FA458F: 'MEMORY PROTECT', 'SOUND :', 'COMBINATION :'), .LF9EE77 (records FA458F/FA459E: (0x7FD6) bits 0/1 as OFF/ON) and .LF9EE8F (cursor on (0x26A6)); id 0x6E = MANAGER's 'MEMORY PROTECT' key (0xF9CA7B).\nNote: sub_F9ED44 (the `ld (0x26a6),0` after `jr z` at 0xF9ED42) is a label inside this routine, not a separate entry."
+  },
+  {
+   "label": "Screen_MemoryProtect_Button",
+   "mode": "insert",
+   "text": "Screen_MemoryProtect_Button -- Button (+8) method of MEMORY PROTECT: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA194A\nEvidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_F41988; prom_b T_F41988/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9; slots 0-3 move the cursor (0xF9EDCA, T_F42C7C on (0x26A6)), slots 4-7 set/clear (0x7FD6) bit 0 or 1 (0xF9EDF3), slot 15 EXIT requests 0x6D."
+  },
+  {
+   "label": "Screen_SoundMute_Enter",
+   "mode": "insert",
+   "text": "Screen_SoundMute_Enter -- Enter (+0) method of screen 0x5D, SOUND MUTE: posts the painter (unless only a refresh is pending) and the ON/OFF value callback\nEvidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_F434C0; prom_b T_F434C0/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07.\nEvidence: .LF9EF3B runs DisplayList_FA45D2-FA46B4 ('SOUND MUTE', 'If you want held notes to continue ... Please turn off Sound Mute.', 'SOUND MUTE :'); .LF9EF5B runs record FA46B4 ((0x7F0B) bit 0 as 'ON '/'OFF'); id 0x5D = MANAGER's 'SOUND MUTE' key (0xF9CAA2)."
+  },
+  {
+   "label": "Screen_SoundMute_Button",
+   "mode": "insert",
+   "text": "Screen_SoundMute_Button -- Button (+8) method of SOUND MUTE: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA19A6\nEvidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_F434C0; prom_b T_F434C0/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07; slots 2-5 -> 0xF9EF08 (IndexedParam_SetBit(0x98, Descriptor3_FA1B57) = (0x7F0B) bit 0), slot 15 EXIT requests 0x6D."
+  },
+  {
+   "label": "Screen_MainOutEqualizer_Enter",
+   "mode": "insert",
+   "text": "Screen_MainOutEqualizer_Enter -- Enter (+0) method of screen 0x6B, MAIN OUT EQUALIZER: forwards to the prom_b screen code (T_F42F68 -> sub_F122C5)\nEvidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_F41958; prom_b T_F41958/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84.\nEvidence: sub_F122C5 posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D ('MAIN OUT EQUALIZER'); id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24)."
+  },
+  {
+   "label": "Screen_MainOutEqualizer_Button",
+   "mode": "insert",
+   "text": "Screen_MainOutEqualizer_Button -- Button (+8) method of MAIN OUT EQUALIZER: re-pushes the two button arguments and calls prom_b sub_F12334 (T_F42F6C), which maps them with T_F42C74 and dispatches through DispatchTable_F1394F\nEvidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_F41958; prom_b T_F41958/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24)."
+  },
+  {
+   "label": "DrumsMap_AdjustMap",
+   "mode": "insert",
+   "text": "DrumsMap_AdjustMap -- steps the DRUMS MAP selection (0x2702: NORMAL, USER1, USER2, USER3) and, if it moved, stores it and redraws the whole page\nEvidence: T_F42C78 on (0x2702) with Descriptor9_FA1B5A (mask 3, max 3); record FA4881 prints (0x2702) from 'NORMAL','USER1 ','USER2 ','USER3 '; on change DrumsMap_StoreMapCode, DrumsMap_LoadRowFields, DrumsMap_DrawFields, DrumsMap_DrawSoundColumn.\nCalled from HandlerTable23_FA1A02 slots 0/1 in mode (0x2700)=0."
+  },
+  {
+   "label": "DrumsMap_MoveRowCursor",
+   "mode": "insert",
+   "text": "DrumsMap_MoveRowCursor -- moves the DRUMS MAP note-row cursor (0x2703, rows 0-11) and scrolls the note window (0x2704) when the cursor is at an edge\nEvidence: T_F42C78 (called via XIX) on (0x2703) with ByteTable9_FA1B63 (a 9-byte descriptor: max 11) unless at row 0 / row 11, else on (0x2704) with ByteTable9_FA1B6C (max 0x74); cursor-only moves redraw DrumsMap_DrawRowCursor, scrolls reload and redraw all rows.\nCalled from HandlerTable23_FA1A02 slots 2-4 in mode (0x2700)=0."
+  },
+  {
+   "label": "DrumsMap_AdjustRowSound",
+   "mode": "insert",
+   "text": "DrumsMap_AdjustRowSound -- for USER1-3 maps, steps the drum sound assigned to the note on the cursor row and redraws the SOUND column\nEvidence: returns unless 1 <= (0x2702) <= 3; T_F42C78 with Descriptor9_FA1B75 (mask 0x7F, max 127) on byte (0x2704)+(0x2703) of ByteTable16_FA1A72[(0x2702)] (RAM 0x5EE0/0x5F70/0x6000), then on its display copy 0x2A50+(0x2703); record FA4A7F prints 0x2A50.. as names from 0x60A000.\nEvidence: on change DrumsMap_DrawSoundColumn. Called from HandlerTable23_FA1A02 slots 5-7."
+  },
+  {
+   "label": "DrumsMap_StoreMapCode",
+   "mode": "insert",
+   "text": "DrumsMap_StoreMapCode -- writes the code of the selected drum map to (0x7F4E) and journals the change\nEvidence: (0x7F4E) = ByteTable4_FA1A6E[(0x2702)] ({00,40,41,42} for NORMAL/USER1-3); T_Queue2C00_Append4 with index 0x91, offset 4, the code and 0xFF -- the same table-0x91 record whose +0 TuneScale_StoreMasterTune writes and FA0525 reads as (0x7F4A).\nCalled from DrumsMap_AdjustMap 0xF9F04A."
+  },
+  {
+   "label": "DrumsMap_DrawFields",
+   "mode": "insert",
+   "text": "DrumsMap_DrawFields -- draws the DRUMS MAP selector and name and the 12 rows' note number, note name and octave\nEvidence: four interpreter-B runs over DisplayList_FA4881 (var 0x2702 'NORMAL'..'USER3', name buffer 0x2940), +0x1E..+0x96 (op-00 on 0x2640..0x264B), +0x96..+0x14A (op-02 on 0x2A20 through the note-name tables at 0xFA4B4B...), +0x14A..FA4A7F (octave digits 0x2A40.. from '-2'..' 8').\nCallers: Screen_DrumsMapNaming_Enter 0xF9EFDD, DrumsMap_AdjustMap, DrumsMap_MoveRowCursor."
+  },
+  {
+   "label": "DrumsMap_RefreshSoundColumn",
+   "mode": "insert",
+   "text": "DrumsMap_RefreshSoundColumn -- external hook: redraws the DRUMS MAP SOUND column, but only while screen 0x67 is current and in its edit state\nEvidence: `cp (0x207C),0x67` (the current screen id) and `cp (0x2700),0x00`, then DrumsMap_DrawSoundColumn; its only caller is prom_a 0xFDA329 through T_F43418, in the routine starting at sub_FDA252 that Screen_DrumsMapNaming_Enter calls through T_F42FAC (0xF9EFCA) before setting (0x2806)=1."
+  },
+  {
+   "label": "DrumsMap_DrawSoundColumn",
+   "mode": "insert",
+   "text": "DrumsMap_DrawSoundColumn -- prints the drum-sound name of each of the 12 rows, but only when the current part plays a drum kit; then clears (0x2806)\nEvidence: reads the part record for (0x2250) from the (0x60F018) pointer table (entry 0x20+part, byte +0x1D) and draws only for bank codes 0x20/0x28/0x29 -- ByteTable8_FA16EC's codes for ' ROM DRUMS ','USER 1 DRUMS','USER 2 DRUMS' (DisplayList FA335C's table).\nEvidence: interpreter B over DisplayList_FA4A7F-OperandTable_FA4B33 (op-02 on 0x2A50.. into the 13-char names at 0x60A000); `ld (0x2806),0` releases the Button method's guard."
+  },
+  {
+   "label": "DrumsMap_LoadRowFields",
+   "mode": "insert",
+   "text": "DrumsMap_LoadRowFields -- derives the map index from (0x7F4E) and fills every DRUMS MAP display variable for the current 12-note window\nEvidence: (0x2702) = index of (0x7F4E) in ByteTable4_FA1A6E; 0x2940 = 16 spaces for NORMAL else the 16 bytes at 0x5ED0+0x90*(map-1); for row r: (0x2640+r) = (0x2704)+r, (0x2A40+r) = that /12; (0x2A20) = (0x2704) mod 12.\nEvidence: (0x2A50+r) = note (NORMAL) or byte (0x2704)+r of ByteTable16_FA1A72[map] (USER) -- the fields DrumsMap_DrawFields / _DrawSoundColumn print."
+  },
+  {
+   "label": "DrumsMap_DrawRowCursor",
+   "mode": "insert",
+   "text": "DrumsMap_DrawRowCursor -- moves the DRUMS MAP row highlight to row (0x2703) on layer 1\nEvidence: DisplayList_FA4C2A = EraseRect x 0x67-0x135, y 0x2E-0xC8; DisplayList_FA4B9F = interpreter-B op-03 on var 0x2703 into the rects at 0xFA4BAA, service 0x05."
+  },
+  {
+   "label": "SoundName_CopyToBuffer",
+   "mode": "insert",
+   "text": "SoundName_CopyToBuffer -- copies the 16-character name of sound (group, member) of a bank into a caller's buffer\nEvidence: (0x60F160..162) = args, (0x60F01C) = (0x2250); T_F407F4 (sub_FAB658) resolves the sound code into (0x60F164)/(0x60F165); T_F41010 (sub_FC1B81, fallback Msg0716_Str_SoundName 'Sound Name *****') returns XIY; four longwords copied to (XIZ+0x0E).\nIn: (XIZ+8) group, (XIZ+0x0A) member, (XIZ+0x0C) bank code, (XIZ+0x0E) destination."
+  },
+  {
+   "label": "SoundGroupName_CopyToBuffer",
+   "mode": "insert",
+   "text": "SoundGroupName_CopyToBuffer -- copies the 16-character name of sound group `group` of a bank into a caller's buffer\nEvidence: A = (XIZ+8) group, W = (XIZ+0x0A) bank code, B = (0x2250); T_F41018 (sub_FC2035, which returns ToneGroupNames 'PIANO..', RAM 0x5240/0x5450/0x5660 for codes 0x18-0x1A, or a link-fetched name) leaves XIY; four longwords copied to (XIZ+0x0C)."
+  },
+  {
+   "label": "SoundGroup_MaxMemberIndex_ByStack",
+   "mode": "insert",
+   "text": "SoundGroup_MaxMemberIndex_ByStack -- stack-argument wrapper of SoundGroup_MaxMemberIndex_Get: returns in A the highest member index of a sound group\nEvidence: stores (XIZ+8)/(XIZ+0x0A) to (0x2640)/(0x2641), calls T_SoundGroup_MaxMemberIndex_Get with A = group, W = bank code, B = (0x2250), returns the byte it stores back in (0x2640).\nCallers use it as the loop bound for sound-name rows (ReMapEdit_LoadNameBuffers, SoundCopy_LoadNameBuffers) and as a descriptor max."
+  },
+  {
+   "label": "CombiName_CopyToBuffer",
+   "mode": "insert",
+   "text": "CombiName_CopyToBuffer -- copies the 16-character name of combination (group, member) of a bank into a caller's buffer\nEvidence: (0x60F181..183) = args, (0x60F17F) = 0x98; T_F40804 (sub_FAB779) resolves the code into (0x60F185)/(0x60F186); T_F4102C (sub_FC1C59, fallback Msg0716_Str_CombiName 'Combi Name *****') returns XIY; four longwords copied to (XIZ+0x0E)."
+  },
+  {
+   "label": "CombiGroupName_CopyToBuffer",
+   "mode": "insert",
+   "text": "CombiGroupName_CopyToBuffer -- copies the 16-character name of combination group `group` of a bank into a caller's buffer\nEvidence: A = group, W = bank code, B = 0x98; T_F41030 (sub_FC2155: RAM 0x5890/0x5AA0/0x5CB0 for codes 0x18-0x1A, else link-fetched with fallback Msg0716_Str_GroupPair_B 'Combi Group Name'/'EXT Silent Group') leaves XIY; four longwords copied to (XIZ+0x0C)."
+  },
+  {
+   "label": "CombiGroup_MaxMemberIndex_ByStack",
+   "mode": "insert",
+   "text": "CombiGroup_MaxMemberIndex_ByStack -- stack-argument wrapper returning the highest member index of a combination group\nEvidence: (0x2640)=group, (0x2641)=bank code, (0x2642)=0x98 (the combination selector CombiName_CopyToBuffer also uses), then T_SoundGroup_MaxMemberIndex_GetToneCopy; all callers pass combination banks (ReMapEdit COMBI arm 0x26F7/0x26FD, CombinationCopy 0x2706/0x270B)."
+  },
+  {
+   "label": "UserSoundBank_RemoteGroupNameAddr",
+   "mode": "insert",
+   "text": "UserSoundBank_RemoteGroupNameAddr -- returns in XIY the far-side (link) address of the 16-byte name of group H of USER 1 (code 8) or USER 2 (code 9), or 0xFFFFFFFF for any other bank\nEvidence: groups 0-7 at 0xE80010/0xEA0010 + 16*H, groups 8-15 at 0xE8FF90/0xEAFF90 + 16*H (i.e. 0xE90010/0xEB0010 onward); callers hand XIY to Link_ReadRemoteBlock / Link_WriteRemoteBlock as the remote address -- the same 0xE8-0xEB windows sub_FC2035 reads user group names from.\nIn: (XIZ+8) bank code, (XIZ+0x0A) group."
+  },
+  {
+   "label": "UserSoundBank_RemoteSoundAddr",
+   "mode": "insert",
+   "text": "UserSoundBank_RemoteSoundAddr -- returns in XIY the far-side address of the 0x2C9-byte data of sound (H, L) in USER 1 / USER 2, or 0xFFFFFFFF otherwise\nEvidence: 0xE80090 (0xEA0090) + 0x1648*H + 0x2C9*L for H <= 7, 0xE90090 (0xEB0090) + 0x1648*(H-8) + 0x2C9*L above; 0x1648 = 8 x 0x2C9 is the group size SoundCopy_Execute transfers, 0x2C9 the single-sound size.\nIn: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member."
+  },
+  {
+   "label": "CombiBank_RemoteGroupNameAddr",
+   "mode": "insert",
+   "text": "CombiBank_RemoteGroupNameAddr -- returns in XIY the far-side address of the 16-byte name of combination group H (ROM: 0xF80200, USER: 0xEC0200, EXT: 0xC00200 + a base read from 0xC0001C), or 0xFFFFFFFF\nEvidence: three arms on bank code 0/8/0x10; the EXT arm first does Link_ReadRemoteBlock(0xC0001C, 4, 0x60F170); used by CombinationGroupNaming_StoreGroupName and CombinationCopy_Execute as the remote address."
+  },
+  {
+   "label": "CombiBank_RemoteCombiAddr",
+   "mode": "insert",
+   "text": "CombiBank_RemoteCombiAddr -- returns in XIY the far-side address of the 0x2C0-byte data of combination (H, L) in ROM (0xF80300), USER (0xEC0300) or EXT (0xC00300 + base from 0xC0001C)\nEvidence: 0x1600*H + 0x2C0*L; group 11's members 4-7 at 0xF8F500/0xECF500 + 0x2C0*L, groups >= 12 at 0xF90B00/0xED0B00 + 0x1600*(H-12); 0x1600 = 8 x 0x2C0 is the group size CombinationCopy_Execute moves."
+  },
+  {
+   "label": "Link_WriteRemoteBlock",
+   "mode": "insert",
+   "text": "Link_WriteRemoteBlock -- sends `count` bytes from a local buffer to an address on the far side of the link, bracketed by commands 3 and 5 on that address\nEvidence: T_F41234 (Link_SendCommand3_WaitTicks) with (XIZ+0x0E); T_Link_SendCommandE4 with (XIZ+8), (XIZ+0x0C), (XIZ+0x0E) -- E4 has E1's dst/count/payload shape; T_Link_SendCommand5_WaitDone with (XIZ+0x0E).\nEvidence: callers pass a buffer they just filled (0x22F0 edited name; 0x60A7F0/0x60A800 data read with Link_ReadRemoteBlock) and a *_Remote*Addr result. In: (XIZ+8) local source, (XIZ+0x0C) count, (XIZ+0x0E) remote destination."
+  },
+  {
+   "label": "Link_ReadRemoteBlock",
+   "mode": "insert",
+   "text": "Link_ReadRemoteBlock -- fetches `count` bytes from a far-side address into a local buffer and waits for the transfer\nEvidence: T_Link_SendCommandE2 with (XIZ+8) remote address, (XIZ+0x0C) length, (XIZ+0x0E) local buffer -- the order Link_SendCommandE2's own header establishes for its two known callers -- then T_Link_WaitBlockDone."
+  },
+  {
+   "label": "PanelFlags_PairBitAsWord",
+   "mode": "insert",
+   "text": "PanelFlags_PairBitAsWord -- returns WA = 0x8080 when bit 0 of (0x28B0) is set and 0 otherwise\nEvidence: bit 0 of (0x28B0) is the pair position PanelCode_ToSlotAndFlags copies from bit 7 of the button's flag argument; every caller does `pushw wa` into one of T_F42F84..T_F42FA8 in the naming states ((0x2694)/(0x2697)/(0x2700) = 1), rebuilding that flag word."
+  },
+  {
+   "label": "SoundCopy_RequestSingleSound",
+   "mode": "insert",
+   "text": "SoundCopy_RequestSingleSound -- asks CPU 2 for the data of the selected source sound (SINGLE mode, ROM/EXT source) and marks a request outstanding\nEvidence: SoundCopy_InitRequestHeader, then the code from T_F407F4 for group (0x269C), member (0x269D), bank ByteTable5_FA188B[(0x269B)] into bytes +3/+1 of the record at 0x2915; T_F40ED4 (Link_SendBlockIn32ByteChunks) with 6 bytes; (0x2806)=1.\nCalled from SoundCopy_Execute 0xF9DEE6."
+  },
+  {
+   "label": "SoundCopy_RequestGroupSounds",
+   "mode": "insert",
+   "text": "SoundCopy_RequestGroupSounds -- starts a GROUP copy from a ROM/EXT source: resets the received count (0x2901) and asks CPU 2 for member 7 of the source group\nEvidence: SoundCopy_InitRequestHeader; (0x2901)=0; code of (group (0x269C), member 7, bank) via T_F407F4 into the 0x2915 record; T_F40ED4 sends 6 bytes; (0x2806)=1. SoundCopy_HandleReceivedSound then requests 7-(0x2901) for each arrival.\nCalled from SoundCopy_Execute 0xF9DDCA."
+  },
+  {
+   "label": "SoundCopy_HandleReceivedSound",
+   "mode": "insert",
+   "text": "SoundCopy_HandleReceivedSound -- called when a requested sound block has arrived; finishes or continues the SOUND COPY from a ROM/EXT source\nEvidence: sole caller prom_a 0xFD2073 (T_F4341C), right after a T_Ring608A0A_Get receive loop reaches its count; acts only when `cp (0x207C),0x5E` (SOUND COPY current).\nEvidence: GROUP: while (0x2901) < 7 shifts 0x60A800.. up by 0x2C9 and requests member 7-(0x2901); then writes the group name (SoundGroupName_CopyToBuffer -> 0x60A7F0) and 0x1648 data bytes with Link_WriteRemoteBlock; SINGLE: writes 0x2C9 bytes.\nEvidence: then SoundCopy_RefreshPartsUsingSound, `res 1,(0x269A)`, (0x2880)=0x23, (0x2070)=0xAB, (0x2806)=0 -- the same epilogue as SoundCopy_Execute's USER path."
+  },
+  {
+   "label": "SoundCopy_InitRequestHeader",
+   "mode": "insert",
+   "text": "SoundCopy_InitRequestHeader -- writes the fixed bytes of the 6-byte request record at 0x2915: +0 = 0x80, +2 = 0x14, +4 = 0x01, +5 = 0x5E\nEvidence: the two SoundCopy_Request* routines then fill +1/+3 with the sound code and send the record through T_F40ED4; +5 = 0x5E equals SOUND COPY's screen id, which SoundCopy_HandleReceivedSound tests in (0x207C). sub_FC1BB9's name request uses the same 0x80 / +2 sub-command layout with 0x04."
+  },
+  {
+   "label": "SoundCopy_ReadExtGroupDrumFlag",
+   "mode": "insert",
+   "text": "SoundCopy_ReadExtGroupDrumFlag -- reads from the EXT memory (far side, 0xC00000 window) the flag byte of group `group` and returns it in A\nEvidence: Link_ReadRemoteBlock(0xC00018, 4) into the frame, then Link_ReadRemoteBlock(that + 8*group + 0xC00000, 1); SoundCopy_Execute (0xF9DDC1, 0xF9DEDE) treats non-zero as 'drum kit': `set 2,(0x269A)`, whose page is Paint_ErrorImpossibleCopyDrumKit.\nIn: (XIZ+8) group. Out: A = the byte."
+  },
+  {
+   "label": "SoundCopy_RefreshPartsUsingSound",
+   "mode": "insert",
+   "text": "SoundCopy_RefreshPartsUsingSound -- after a sound was overwritten, re-sends the sound selection of every part that uses it\nEvidence: loop H = 0..0x1F (the 32 part records, ParamNumber_RecordPtrs entries 0-0x1F) with (0x60F01C)=H; T_F407F4 resolves (bank, group, member); if record +0 == (0x60F164) and (+1 & 0x7F) == (0x60F165): T_Queue2E00_Append4(H,1,hi,0x7F) and (H,0,lo,0xFF).\nIn: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from SoundCopy_Execute and SoundCopy_HandleReceivedSound."
+  },
+  {
+   "label": "PanelMode_System_Enter",
+   "mode": "insert",
+   "text": "PanelMode_System_Enter -- Enter (+0) method of panel mode 10, whose screen is SYSTEM: sets bit 1 of (0x2134) and calls T_F415C8 (prom_a sub_F9433A)\nEvidence: PanelScreen_VtableTable entry [10] (0xF86EE9, view A, read by PanelScreen_CallEnter_A) holds T_F41910 -> 0xF9FED1; PanelMode_ToScreenIdMap[10] = 0x60, the id of Screen_System (title 'SYSTEM')."
+  },
+  {
+   "label": "PanelMode_System_Leave",
+   "mode": "insert",
+   "text": "PanelMode_System_Leave -- Leave (+4) method of panel mode 10 (SYSTEM): sets bit 1 of (0x2134)\nEvidence: PanelScreen_VtableTable entry [10] = T_F41910, whose +4 slot T_F41914 jp 0xF9FEE2 (read by PanelScreen_CallLeave_A); PanelMode_ToScreenIdMap[10] = 0x60 (SYSTEM)."
+  },
+  {
+   "label": "Screen_System_Enter",
+   "mode": "insert",
+   "text": "Screen_System_Enter -- Enter (+0) method of screen 0x60, the SYSTEM menu: restarts task 2's queue and posts its painter\nEvidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_F41918; prom_b T_F41918/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.\nEvidence: .LFA0020 runs DisplayList_FA1F21-FA204B (or FA1F2E-FA2070 when (0xC4) = 1): title 'SYSTEM', 'TUNE & SCALE', 'INITIAL', 'C0NTR0LLER ASSIGN', 'RE-MAP EDIT', 'S0UND/C0MBI MANAGER', 'MIXER', 'DRUMS MAP', 'MAIN OUT EQUALIZER', 'DSP EFFECT'; 0x60 is the EXIT target of all its sub-screens."
+  },
+  {
+   "label": "Screen_System_Button",
+   "mode": "insert",
+   "text": "Screen_System_Button -- Button (+8) method of the SYSTEM menu: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1B94\nEvidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_F41918; prom_b T_F41918/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.\nSlots 8-12 (LCD-row pairs, left/right) request 0x62 TUNE & SCALE / 0x6A, 0x65 / 0x6C RE-MAP EDIT, 0x64 / 0x6D SOUND/COMBI MANAGER, 0xB7 / 0x67 DRUMS MAP, 0x66 DSP EFFECT / 0x6B MAIN OUT EQUALIZER; slot 15 (EXIT) requests 0x01."
+  },
+  {
+   "label": "Screen_DspEffect_Enter",
+   "mode": "insert",
+   "text": "Screen_DspEffect_Enter -- Enter (+0) method of screen 0x66, DSP EFFECT: forwards to the prom_b screen code (T_F42F4C -> sub_F0F105)\nEvidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_F419A8; prom_b T_F419A8/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093.\nEvidence: id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5); the 'DSP EFFECT' + 'SYSTEM' title record at prom_b 0xF13D8F is run by the same prom_b module (0xF0F857, 0xF0FE05)."
+  },
+  {
+   "label": "Screen_DspEffect_Button",
+   "mode": "insert",
+   "text": "Screen_DspEffect_Button -- Button (+8) method of DSP EFFECT: re-pushes the two button arguments and calls prom_b sub_F0F17C (T_F42F50), which maps them with T_F42C74 and dispatches through DispatchTable_F135FD\nEvidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_F419A8; prom_b T_F419A8/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5)."
+  },
+  {
+   "label": "Screen_TuneScale_Enter",
+   "mode": "insert",
+   "text": "Screen_TuneScale_Enter -- Enter (+0) method of screen 0x62, TUNE & SCALE: on a new entry sets the item cursor (0x2690)=0x10, posts the painter, loads the fields and posts the value callback\nEvidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_F41928; prom_b T_F41928/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111.\nEvidence: .LFA04F2 runs DisplayList_FA2070-FA21BF ('TUNE & SCALE','MASTER TUNE','KEY TRANSPOSE','KEY SCALING MODE','TOTAL KEY SCALING','KEY SCALING SHIFT','[KEY:  ]') and FA2315-FA244B; then TuneScale_LoadFields and .LFA05DE; id 0x62 = SYSTEM row-1 left key (0xF9FF3E)."
+  },
+  {
+   "label": "Screen_TuneScale_Button",
+   "mode": "insert",
+   "text": "Screen_TuneScale_Button -- Button (+8) method of TUNE & SCALE: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1BF0\nEvidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_F41928; prom_b T_F41928/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111; slots 1-7 -> TuneScale_AdjustUserKey key pairs, 8/9 -> TuneScale_MoveItemCursor, 10/11 -> TuneScale_AdjustSelectedItem, 0 toggles the [KEY:] row, 15 EXIT -> 0x60."
+  },
+  {
+   "label": "TuneScale_KeyScalingCodeToIndex",
+   "mode": "insert",
+   "text": "TuneScale_KeyScalingCodeToIndex -- returns in A the position of a key-scaling type code within ByteTable16_FA1C4C (15 if absent)\nEvidence: linear search H = 0..14 comparing (XIZ+8) with ByteTable16_FA1C4C[H]; TuneScale_LoadFields passes (0x78A2) and stores the result in (0x2692), which record FA21ED prints as 'OFF','RANDOM','PIANO',...,'USER' -- the inverse of the lookup in TuneScale_StoreKeyScalingType."
+  },
+  {
+   "label": "TuneScale_AdjustUserKey",
+   "mode": "insert",
+   "text": "TuneScale_AdjustUserKey -- for the USER key scaling, steps the per-key value of one key of a soft key's pair and stores it\nEvidence: returns unless (0x78A2) == 0x80 (ByteTable16_FA1C4C's code for 'USER'); bit 4 of (0x2690) picks (XIZ+8) or (XIZ+0x0A) (0xFF = no key); T_F42C78 on 0x2640+key with Descriptor9_FA1E88 (0x1C..0xE4); on change TuneScale_StoreUserKey.\nCallers: HandlerTable23_FA1BF0 slots 1-7 with pairs (C,C#), (D,D#), (E,-), (F,F#), (G,G#), (A,A#), (B,-) -- matching records FA2479.. (white keys 0,2,4,5,7,9,11 on the lower row, black keys on the upper)."
+  },
+  {
+   "label": "TuneScale_StoreMasterTune",
+   "mode": "insert",
+   "text": "TuneScale_StoreMasterTune -- writes the MASTER TUNE value for index (0x2691) into parameter table 0x91 byte 0 when it differs, and journals the change\nEvidence: T_IndexedTable_GetByte(0x91, 0) compared with ByteTable79_FA1C5C[(0x2691)]; on difference the byte is written through T_IndexedTable_GetPtr(0x91) and T_Queue2C00_Append4(0x91, 0, value, 0xFF); TuneScale_LoadFields reads it back as (0x7F4A).\nCalled from TuneScale_AdjustSelectedItem item 0."
+  },
+  {
+   "label": "TuneScale_StoreKeyScalingType",
+   "mode": "insert",
+   "text": "TuneScale_StoreKeyScalingType -- writes the TOTAL KEY SCALING type code for menu index (0x2692) into parameter table 0x92 byte 0 when it differs, and journals the change\nEvidence: T_IndexedTable_GetByte(0x92, 0) vs ByteTable16_FA1C4C[(0x2692)]; write through T_IndexedTable_GetPtr(0x92) and T_Queue2C00_Append4(0x92, 0, code, 0xFF); TuneScale_LoadFields reads that byte as (0x78A2).\nCalled from TuneScale_AdjustSelectedItem item 3."
+  },
+  {
+   "label": "TuneScale_StoreUserKey",
+   "mode": "insert",
+   "text": "TuneScale_StoreUserKey -- converts the edited value of USER-scale key `key` back to its stored byte and writes it to parameter table 0x92 byte key+2 when it differs\nEvidence: T_IndexedTable_GetByte(0x92, key+2) vs TuneScale_UserKeyValueToByte((0x2640+key)); write via T_IndexedTable_GetPtr(0x92)+key+2 and T_Queue2C00_Append4(0x92, key+2, byte, 0xFF) -- the bytes TuneScale_LoadFields reads at 0x78A4...\nIn: (XIZ+8) key 0-11. Called from TuneScale_AdjustUserKey."
+  },
+  {
+   "label": "TuneScale_UserKeyValueToByte",
+   "mode": "insert",
+   "text": "TuneScale_UserKeyValueToByte -- maps an edit value 0x1C..0xE4 back to the 0..255 stored per-key byte: A = (((v - 0x1C) << 8) + 0x80) / 0xC9\nEvidence: the exact inverse (rounded) of TuneScale_UserKeyByteToValue; 0x1C..0xE4 are Descriptor9_FA1E88's bounds; called twice by TuneScale_StoreUserKey (stored value and new value)."
+  },
+  {
+   "label": "TuneScale_UserKeyByteToValue",
+   "mode": "insert",
+   "text": "TuneScale_UserKeyByteToValue -- maps a stored per-key byte 0..255 onto the 201-step edit range 0x1C..0xE4: A = ((b * 0xC9 + 0x7F) >> 8) + 0x1C\nEvidence: TuneScale_LoadFields applies it to (0x78A4..0x78AF) and stores the results at 0x2640..0x264B, which records FA2479.. print under '[KEY:  ]'; Descriptor9_FA1E88 bounds the same range."
+  },
+  {
+   "label": "TuneScale_MoveItemCursor",
+   "mode": "insert",
+   "text": "TuneScale_MoveItemCursor -- moves the TUNE & SCALE item cursor (0x2690 low bits, 0-4) and posts the cursor redraw\nEvidence: T_F42C78 on (0x2690) with Descriptor9_FA1E49 (mask 7, max 4); on change posts .LFA0651 (EraseRect FA230B + record FA22C0 on var 0x2690 into the five item rows at 0xFA22CB).\nCallers: HandlerTable23_FA1BF0 slots 8/9."
+  },
+  {
+   "label": "TuneScale_AdjustSelectedItem",
+   "mode": "insert",
+   "text": "TuneScale_AdjustSelectedItem -- steps the TUNE & SCALE item under the cursor ((0x2690) & 7) through the 5-entry LE32 table at 0xFA0487\nEvidence: 0: (0x2691) with the descriptor at 0xFA1E5B + TuneScale_StoreMasterTune; 1: IndexedParam_AdjustField(0x79, Descriptor9_FA1E64) (KEY TRANSPOSE); 2: (0x92, Descriptor9_FA1E6D) mask 0x80 (KEY SCALING MODE TOTAL/SOUND); 3: (0x2692) + TuneScale_StoreKeyScalingType; 4: (0x92, Descriptor9_FA1E7F) mask 0x0F (KEY SCALING SHIFT).\nNote: the listing decodes the table 0xFA0487-0xFA049A and the `lda XBC,0xFA1E5B` at 0xFA049B as instructions (0xFA0497 swallows the F2 byte). Callers: HandlerTable23_FA1BF0 slots 10/11."
+  },
+  {
+   "label": "TuneScale_LoadFields",
+   "mode": "insert",
+   "text": "TuneScale_LoadFields -- fills TUNE & SCALE's display variables from the stored parameters\nEvidence: (0x2691) = index of (0x7F4A) in ByteTable79_FA1C5C, (0x264C) = idx/3 + 0x1B and (0x264D) = 3*(idx mod 3) -- the '4  . Hz' digits records FA21BF/FA21C9 print; (0x2692) = TuneScale_KeyScalingCodeToIndex((0x78A2)).\nEvidence: when (0x78A2) == 0x80 (USER): (0x2640+k) = TuneScale_UserKeyByteToValue((0x78A4+k)), k = 0..11. Called from Screen_TuneScale_Enter 0xFA00D2."
+  }
+ ],
+ "left_unnamed": [
+  {
+   "name": "sub_F9C41F",
+   "why": "mid-routine label: the RE-MAP EDIT handler for HandlerTable23_FA1690 slots 6/7 starts at 0xF9C40D (unlabeled); 0xF9C41F is 18 bytes in, after `lda xiy,(Descriptor9_FA1624)` -- no caller or reference names it"
+  },
+  {
+   "name": "sub_F9CBF6",
+   "why": "mid-routine label: the SOUND GROUP NAMING slot-3 handler starts at 0xF9CBF2 (`ld bc,(0x2694)`, HandlerTable23_FA176E[3]); 0xF9CBF6 is its second instruction"
+  },
+  {
+   "name": "sub_F9CC9F",
+   "why": "mid-routine label: the return point after `calr sub_F9FB07` at 0xF9CC9C inside the slot-7 handler that starts at 0xF9CC87 (HandlerTable23_FA176E[7]); not an entry"
+  },
+  {
+   "name": "sub_F9ED44",
+   "why": "mid-routine label: fall-through `ld (0x26a6),0` after `jr z` at 0xF9ED42 inside Screen_MemoryProtect_Enter (0xF9ED34); no caller or reference"
+  }
+ ],
+ "notes": "MODULE MAP (0xF9C41F-0xFA0688): this slice is eleven SYSTEM-menu screens plus their shared helpers. Screen ids come from the PanelScreen_VtableTable_ViewB entry that holds each screen's prom_b thunk run (T_x / +4 / +8 / +0x0C). Titles come from each screen's own display lists, decoded with the interpreter A/B layouts in FINDINGS-ui-display-list*.md, and are cross-checked against the menu keys that request them. Screen_System (0x60) rows request 0x62 TUNE & SCALE, 0x6C RE-MAP EDIT, 0x6D SOUND/COMBI MANAGER, 0x67 DRUMS MAP, 0x66 DSP EFFECT and 0x6B MAIN OUT EQUALIZER. SOUND/COMBINATION MANAGER (0x6D) requests 0x5B/0x5C (group naming), 0x5D SOUND MUTE, 0x5E SOUND COPY, 0x5F COMBINATION COPY, 0x61 DATA LOAD FILTER and 0x6E MEMORY PROTECT. In every case checked (12 ids whose target screen draws its own title), the left key ((0x28B0) bit 0 SET = pair position 0) matched a label in the left text column (pos mod 40 = 3..5). My decoder for these lists (read-only) is /home/fsanches/compartilhado/disasm-lanes/wsa1-naming-r1/scratch/prom_a-s06/dl.py, and the pack generator is pack.py in the same folder.\nWATCH OUT: SYSTEM row 5 is LEFT 'DSP EFFECT' (pos 0x1E05) -> 0x66 and RIGHT 'MAIN OUT EQUALIZER' (pos 0x1D00/0x1F30) -> 0x6B. That is the opposite of the order the text appears in the list. prom_b confirms 0x6B: its Enter sub_F122C5 posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D.\nRAM MAP (for other lanes): 0x2900 bit0/bit1 = left/right cursor-redraw requests. 0x2940-0x2A5F = 16-char name buffers shared by all these screens. 0x60A000.. = right-hand group-name table and copy staging (0x60A7F0 name, 0x60A800 data). 0x2915 = 6-byte CPU-2 request record. 0x2806 = 'CPU-2 transfer outstanding': set by SoundCopy_Request* and Screen_DrumsMapNaming_Enter, cleared by the Leave methods and DrumsMap_DrawSoundColumn, and Screen_SoundCopy_Button / Screen_DrumsMapNaming_Button ignore keys while it is set. 0x7FD6 bit0/bit1 = SOUND / COMBINATION memory protect (MEMORY PROTECT's own records). SoundCopy's OK handler 0xF9D851, SoundGroupNaming's WRITE 0xF9CD52 (bit 0) and CombinationGroupNaming's WRITE 0xF9D1BA (bit 1) test exactly these bits before writing, and request message screen 0xB3 if protected. Parameter table 0x91 = 0x7F4A.. (master tune +0, drum map +4). Table 0x92 = 0x78A2.. (key scaling type, mode/shift, 12 user keys). Table 0x98 = 0x7F02.. (load filter 0x7F07, sound mute 0x7F0B). RE-MAP tables at 0x5240/0x5450/0x5660 (sound) and 0x5890/0x5AA0/0x5CB0 (combi) = 16 group names, then the 8x8x2-byte slot array (ByteTable12_FA16FA / FA1706 point at +0x100).\nMISFRAMING SUSPICIONS (bytes are exact, instruction text is wrong): (1) sub_FA046A: 0xFA0487-0xFA049A is a 5-entry LE32 jump table (0xFA049B, 0xFA04B5, 0xFA04C0, 0xFA04C8, 0xFA04E2) emitted as instructions, and the decode loses sync. `m_cp_rm ML24,0x00fa04,r2` at 0xFA0497 eats the F2 of `lda XBC,(0xFA1E5B)` at 0xFA049B, which then appears as `pop XHL / calr 0x31fa`. The worklist's callee '0x31fa' and mem refs 0x0031fa/0x00fa04 are artefacts of this. (2) sub_F9CEC3: 0xF9CEE6-0xF9CEF9 is a 5-entry LE32 table (F9CEFA x2, F9CF24 x3) shown as swi/ld instructions; the decode re-syncs at 0xF9CEFA. (3) ByteTable18_FA1E52 is two Descriptor9 objects: 0xFA1E52 (mask 0x10 toggle used at 0xFA011B) and 0xFA1E5B (MASTER TUNE index 1..0x4E used at 0xFA049B). (4) ByteTable9_FA1B63 / ByteTable9_FA1B6C are Descriptor9 objects that DrumsMap_MoveRowCursor passes to T_F42C78 (via XIX). (5) Four phantom mid-routine labels (see left_unnamed).\nEXTENT ARTEFACTS: the 'lines' count of many slice entries includes unlabeled code that follows them. Each +0x0C 'Nop' ret is followed by that screen's button handlers and paint callbacks (.LF9CAE0, .LF9ECE0, .LF9EE57, .LF9EF3B, .LFA0020, .LFA04F2, .LFA05DE, .LFA0651, .LFA066D). Each Adjust* routine (sub_F9CB7B, sub_F9CC11, sub_F9D433, ...) is followed by the HandlerTable23_* handlers that call it. Those handlers are the next naming target, e.g. HandlerTable23_FA1690 entries 0xF9C0EA (bank), 0xF9C196 (group), 0xF9C283 (member), 0xF9C333/0xF9C3A5/0xF9C40D (re-map bank/group/member), 0xF9C4BD (OK/SOUND-COMBI) and 0xF9C4D9 (EXIT).\nLEADS FOR OTHER SLICES: sub_F9C0E9 (T_F41974) is RE-MAP EDIT's +0x0C bare ret; the same evidence names it Screen_ReMapEdit_Nop. The callback painters (.LF9CAE0 'SOUND/COMBINATION MANAGER', .LF9ECE0 'DATA LOAD FILTER', .LF9EE57 'MEMORY PROTECT', .LF9EF3B 'SOUND MUTE', .LFA0020 'SYSTEM', .LFA04F2 'TUNE & SCALE') deserve Paint_* labels. In prom_b: sub_F122C5/sub_F12334 are MAIN OUT EQUALIZER's Enter/Button, and sub_F0F105/sub_F0F17C are DSP EFFECT's. T_F42F84..T_F42FA8 (prom_b sub_F0B9B3..sub_F0BF04) are the naming text-editor key actions shared by the three NAMING screens. T_F42FAC -> prom_a sub_FDA252 is the DRUMS MAP drum-name fetch. SoundGroup_MaxMemberIndex_GetToneCopy is only reached here with B = 0x98 for COMBINATION banks (CombiGroup_MaxMemberIndex_ByStack), so its Tone/Sound name may be a misframing worth re-checking. In Paint_ReMapEdit's header, the quoted '] GROUP' / 'X BANK' etc. start with op-20 position bytes, not text.\nCONFIDENCE NOTES: 0x60F000-0x60F1FF and 0x60A000 are local RAM (link staging), not a device. The 'remote' addresses (0xE8xxxx-0xEDxxxx, 0xF8xxxx, 0xC0xxxx) are only ever used as the far-side argument of E2/E4 link commands. The 'write' in Link_WriteRemoteBlock rests on two things: E4 has E1's dst/count/payload shape (per the Link_SendCommandE4 header), and every caller's data flow fits a write. What the command 3/5 bracketing means is not established. Mapping 0x7F4A to parameter table 0x91 byte 0 is inferred: TuneScale_LoadFields reads 0x7F4A, and DrumsMap_StoreMapCode writes 0x7F4E while journaling (0x91, +4).",
+ "verified": {
+  "date": "2026-10-03",
+  "reviewer": "Claude (session 53b889a2), alone, sequentially -- not the namer",
+  "read": [
+   [
+    0,
+    120
+   ]
+  ],
+  "method": "review_sheet.py prom_a-s06: each routine's instructions as they stand, the display lists and descriptors it loads (raw bytes: text such as 'SOUND' 53 4f 55 4e 44, 'ERROR', record source-variable fields such as 0x26F6 at +2), and its callers. Spot-checked against the ROM tables: PanelScreen_VtableTable_ViewB [94] = T_F426A0 and [109] = T_F41978, whose prom_b thunks jp to the claimed routines; SoundCopy_InitRequestHeader's four stores; TuneScale_UserKeyValueToByte / _ByteToValue arithmetic; the cursor drawers' bit masks (0x01 source, 0x02 destination). Every evidence line that could be read off the code matched it; none was found wrong.",
+  "rejected": {},
+  "amended": {}
+ },
+ "also": [
+  "wsa1/prom_b/wsa1_prom_b.s",
+  "wsa1/prom_a/prom_a.ld",
+  "wsa1/prom_b/prom_b.ld"
+ ],
+ "rebased_from": "packs/prom_a-s06.json"
+}

@@ -49200,7 +49200,7 @@ sub_F9B652__F9B6A5:
 ; ---------------------------------------------------------------------
 ; LCD_ShowLayers1And2_SaveRegs -- service 0x0C with C = 3 -- layers 1 and 2 on, layer 3 off
 ;
-; Called from: prom_a sub_FA0525 (`call`) at 0xFA064A
+; Called from: prom_a TuneScale_LoadFields (`call`) at 0xFA064A
 ; Issues:  SWI7 service 0x0C at 0xF9C036 -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
 ; Evidence: identical in shape to LCD_ShowAllThreeLayers_SaveRegs except for the
 ;           immediate: `ld C,0x03`, so bits 0 and 1 are set and bit 2 is not.  Service
@@ -49303,8 +49303,8 @@ Screen_ReMapEdit_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9C0B3  1d 80 2e f4
 	calr Paint_ReMapEdit                                      ; F9C0B7  1e 42 04
 .LF9C0BA:
-	calr sub_F9C52D                                      ; F9C0BA  1e 70 04
-	calr sub_F9C7BD                                      ; F9C0BD  1e fd 06
+	calr ReMapEdit_LoadNameBuffers                                      ; F9C0BA  1e 70 04
+	calr ReMapEdit_DrawFields                                      ; F9C0BD  1e fd 06
 	ret                                                  ; F9C0C0  0e
 ; ---------------------------------------------------------------------
 ; Screen_ReMapEdit_Leave -- the Leave method of the RE-MAP EDIT screen
@@ -49559,7 +49559,7 @@ T_F41974_Nop:
 	pushw wa                                             ; F9C2CD  28
 	push 0x00                                            ; F9C2CE  09 00
 	m_push MB16, 0x26f5                                  ; F9C2D0  c1 f5 26 04
-	calr sub_F9F6B2                                          ; F9C2D4  1e db 33
+	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9C2D4  1e db 33
 	ld (xiz-6), a                                        ; F9C2D7  be fa 41
 	lda xbc, (xiz-9)                                     ; F9C2DA  be f7 31
 	push XBC                                             ; F9C2DD  39
@@ -49571,7 +49571,7 @@ T_F41974_Nop:
 	cp a, 0x01:i3                                          ; F9C2EB  c9 d9
 	jr nz, .LF9C32F                                      ; F9C2ED  6e 40
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9C2EF  84 3e 01
-	calr sub_F9C840                                      ; F9C2F2  1e 4b 05
+	calr ReMapEdit_DrawSoundSourceCursor                                      ; F9C2F2  1e 4b 05
 	jr .LF9C32F                                          ; F9C2F5  68 38
 .LF9C2F7:
 	ld bc, (0x26f7:16)                                 ; F9C2F7  d1 f7 26 21
@@ -49582,7 +49582,7 @@ T_F41974_Nop:
 	pushw wa                                             ; F9C307  28
 	push 0x00                                            ; F9C308  09 00
 	m_push MB16, 0x26f8                                  ; F9C30A  c1 f8 26 04
-	calr sub_F9F7B8                                          ; F9C30E  1e a7 34
+	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9C30E  1e a7 34
 	ld (xiz-15), a                                       ; F9C311  be f1 41
 	lda xbc, (xiz-18)                                    ; F9C314  be ee 31
 	push XBC                                             ; F9C317  39
@@ -49594,7 +49594,7 @@ T_F41974_Nop:
 	cp a, 0x01:i3                                          ; F9C325  c9 d9
 	jr nz, .LF9C32F                                      ; F9C327  6e 06
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9C329  84 3e 01
-	calr sub_F9C898                                      ; F9C32C  1e 69 05
+	calr ReMapEdit_DrawCombiSourceCursor                                      ; F9C32C  1e 69 05
 .LF9C32F:
 	pop XIX                                              ; F9C32F  5c
 	unlk XIZ                                             ; F9C330  ee 0d
@@ -49710,7 +49710,7 @@ sub_F9C41F:
 	pushw wa                                             ; F9C457  28
 	push 0x00                                            ; F9C458  09 00
 	m_push MB16, 0x26fb                                  ; F9C45A  c1 fb 26 04
-	calr sub_F9F6B2                                          ; F9C45E  1e 51 32
+	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9C45E  1e 51 32
 	ld (xiz-6), a                                        ; F9C461  be fa 41
 	lda xbc, (xiz-9)                                     ; F9C464  be f7 31
 	push XBC                                             ; F9C467  39
@@ -49722,7 +49722,7 @@ sub_F9C41F:
 	cp a, 0x01:i3                                          ; F9C475  c9 d9
 	jr nz, .LF9C4B9                                      ; F9C477  6e 40
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9C479  84 3e 02
-	calr sub_F9C86C                                      ; F9C47C  1e ed 03
+	calr ReMapEdit_DrawSoundReMapCursor                                      ; F9C47C  1e ed 03
 	jr .LF9C4B9                                          ; F9C47F  68 38
 .LF9C481:
 	ld bc, (0x26fd:16)                                 ; F9C481  d1 fd 26 21
@@ -49733,7 +49733,7 @@ sub_F9C41F:
 	pushw wa                                             ; F9C491  28
 	push 0x00                                            ; F9C492  09 00
 	m_push MB16, 0x26fe                                  ; F9C494  c1 fe 26 04
-	calr sub_F9F7B8                                          ; F9C498  1e 1d 33
+	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9C498  1e 1d 33
 	ld (xiz-15), a                                       ; F9C49B  be f1 41
 	lda xbc, (xiz-18)                                    ; F9C49E  be ee 31
 	push XBC                                             ; F9C4A1  39
@@ -49745,7 +49745,7 @@ sub_F9C41F:
 	cp a, 0x01:i3                                          ; F9C4AF  c9 d9
 	jr nz, .LF9C4B9                                      ; F9C4B1  6e 06
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9C4B3  84 3e 02
-	calr sub_F9C8C4                                      ; F9C4B6  1e 0b 04
+	calr ReMapEdit_DrawCombiReMapCursor                                      ; F9C4B6  1e 0b 04
 .LF9C4B9:
 	pop XIX                                              ; F9C4B9  5c
 	unlk XIZ                                             ; F9C4BA  ee 0d
@@ -49757,7 +49757,7 @@ sub_F9C41F:
 	m_set 4, MD16, UI_Request_Hi                                ; F9C4CB  f1 71 20 bc
 	jr .LF9C4D8                                          ; F9C4CF  68 07
 .LF9C4D1:
-	calr sub_F9C8F0                                      ; F9C4D1  1e 1c 04
+	calr ReMapEdit_AssignSourceToReMap                                      ; F9C4D1  1e 1c 04
 	m_set 4, MD16, 0x2095                                ; F9C4D4  f1 95 20 bc
 .LF9C4D8:
 	ret                                                  ; F9C4D8  0e
@@ -49817,7 +49817,11 @@ Paint_ReMapEdit:
 	inc 8,XSP                                            ; F9C528  ef 60
 	inc 4,XSP                                            ; F9C52A  ef 64
 	ret                                                  ; F9C52C  0e
-sub_F9C52D:
+; ReMapEdit_LoadNameBuffers -- fills RE-MAP EDIT's two name columns: group name + 8 member names for the source bank (0x2940, 0x2950..) and for the RE-MAP bank (0x29D0, 0x29E0..), padding unused rows with spaces
+; Evidence: (0x26F3) bit 0 picks SOUND or COMBI (DisplayList_FA3230 draws 'SOUND'/'COMBI' from it); SOUND uses SoundGroupName_CopyToBuffer / SoundName_CopyToBuffer with bank ByteTable8_FA16EC[(0x26F4)], group (0x26F5), and ByteTable3_FA16F7[(0x26FA)] / (0x26FB) for the re-map side; COMBI uses the Combi* copiers with (0x26F7)/(0x26F8) and (0x26FD)/(0x26FE).
+; Evidence: member count from SoundGroup_/CombiGroup_MaxMemberIndex_ByStack; rows past it get 16 x 0x20 (loops at 0xF9C5C9, 0xF9C66A); the buffers are exactly the ones records FA324E-FA334D of DisplayList_FA3230 print.
+; Called from: Screen_ReMapEdit_Enter 0xF9C0BA, every Enter including the (0x2095)-bit-4 refresh path.
+ReMapEdit_LoadNameBuffers:
 	pushw hl                                             ; F9C52D  2b
 	pushw de                                             ; F9C52E  2a
 	push XIX                                             ; F9C52F  3c
@@ -49835,7 +49839,7 @@ sub_F9C52D:
 	push W                                               ; F9C551  c8 04
 	push 0x00                                            ; F9C553  09 00
 	m_push MB16, 0x26f5                                  ; F9C555  c1 f5 26 04
-	calr sub_F9F65B                                          ; F9C559  1e ff 30
+	calr SoundGroupName_CopyToBuffer                                          ; F9C559  1e ff 30
 	ld bc, (0x26f4:16)                                 ; F9C55C  d1 f4 26 21
 	extz BC                                              ; F9C560  d9 12
 	extz XBC                                             ; F9C562  e9 12
@@ -49844,7 +49848,7 @@ sub_F9C52D:
 	pushw wa                                             ; F9C56C  28
 	push 0x00                                            ; F9C56D  09 00
 	m_push MB16, 0x26f5                                  ; F9C56F  c1 f5 26 04
-	calr sub_F9F6B2                                          ; F9C573  1e 3c 31
+	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9C573  1e 3c 31
 	ld H,A                                               ; F9C576  c9 8e
 	ld l, 0x00:opc                                          ; F9C578  27 00
 	lda xix, (0x2950:16)                                ; F9C57A  f1 50 29 34
@@ -49862,7 +49866,7 @@ sub_F9C52D:
 	pushw hl                                             ; F9C596  2b
 	push 0x00                                            ; F9C597  09 00
 	m_push MB16, 0x26f5                                  ; F9C599  c1 f5 26 04
-	calr sub_F9F5E8                                          ; F9C59D  1e 48 30
+	calr SoundName_CopyToBuffer                                          ; F9C59D  1e 48 30
 	inc 1,L                                              ; F9C5A0  cf 61
 	add XIX,0x00000010                                   ; F9C5A2  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9C5A8  ef 60
@@ -49903,7 +49907,7 @@ sub_F9C52D:
 	push W                                               ; F9C5F2  c8 04
 	push 0x00                                            ; F9C5F4  09 00
 	m_push MB16, 0x26fb                                  ; F9C5F6  c1 fb 26 04
-	calr sub_F9F65B                                          ; F9C5FA  1e 5e 30
+	calr SoundGroupName_CopyToBuffer                                          ; F9C5FA  1e 5e 30
 	ld bc, (0x26fa:16)                                 ; F9C5FD  d1 fa 26 21
 	extz BC                                              ; F9C601  d9 12
 	extz XBC                                             ; F9C603  e9 12
@@ -49912,7 +49916,7 @@ sub_F9C52D:
 	pushw wa                                             ; F9C60D  28
 	push 0x00                                            ; F9C60E  09 00
 	m_push MB16, 0x26fb                                  ; F9C610  c1 fb 26 04
-	calr sub_F9F6B2                                          ; F9C614  1e 9b 30
+	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9C614  1e 9b 30
 	ld H,A                                               ; F9C617  c9 8e
 	ld l, 0x00:opc                                          ; F9C619  27 00
 	lda xix, (0x29e0:16)                                ; F9C61B  f1 e0 29 34
@@ -49930,7 +49934,7 @@ sub_F9C52D:
 	pushw hl                                             ; F9C637  2b
 	push 0x00                                            ; F9C638  09 00
 	m_push MB16, 0x26fb                                  ; F9C63A  c1 fb 26 04
-	calr sub_F9F5E8                                          ; F9C63E  1e a7 2f
+	calr SoundName_CopyToBuffer                                          ; F9C63E  1e a7 2f
 	inc 1,L                                              ; F9C641  cf 61
 	add XIX,0x00000010                                   ; F9C643  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9C649  ef 60
@@ -49970,7 +49974,7 @@ sub_F9C52D:
 	pushw wa                                             ; F9C68F  28
 	push 0x00                                            ; F9C690  09 00
 	m_push MB16, 0x26f8                                  ; F9C692  c1 f8 26 04
-	calr sub_F9F75C                                          ; F9C696  1e c3 30
+	calr CombiGroupName_CopyToBuffer                                          ; F9C696  1e c3 30
 	ld bc, (0x26f7:16)                                 ; F9C699  d1 f7 26 21
 	extz BC                                              ; F9C69D  d9 12
 	extz XBC                                             ; F9C69F  e9 12
@@ -49979,7 +49983,7 @@ sub_F9C52D:
 	pushw wa                                             ; F9C6A9  28
 	push 0x00                                            ; F9C6AA  09 00
 	m_push MB16, 0x26f8                                  ; F9C6AC  c1 f8 26 04
-	calr sub_F9F7B8                                          ; F9C6B0  1e 05 31
+	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9C6B0  1e 05 31
 	ld H,A                                               ; F9C6B3  c9 8e
 	ld l, 0x00:opc                                          ; F9C6B5  27 00
 	lda xix, (0x2950:16)                                ; F9C6B7  f1 50 29 34
@@ -49997,7 +50001,7 @@ sub_F9C52D:
 	pushw hl                                             ; F9C6D3  2b
 	push 0x00                                            ; F9C6D4  09 00
 	m_push MB16, 0x26f8                                  ; F9C6D6  c1 f8 26 04
-	calr sub_F9F6EC                                          ; F9C6DA  1e 0f 30
+	calr CombiName_CopyToBuffer                                          ; F9C6DA  1e 0f 30
 	inc 1,L                                              ; F9C6DD  cf 61
 	add XIX,0x00000010                                   ; F9C6DF  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9C6E5  ef 60
@@ -50038,7 +50042,7 @@ sub_F9C52D:
 	push W                                               ; F9C72F  c8 04
 	push 0x00                                            ; F9C731  09 00
 	m_push MB16, 0x26fe                                  ; F9C733  c1 fe 26 04
-	calr sub_F9F75C                                          ; F9C737  1e 22 30
+	calr CombiGroupName_CopyToBuffer                                          ; F9C737  1e 22 30
 	ld bc, (0x26fd:16)                                 ; F9C73A  d1 fd 26 21
 	extz BC                                              ; F9C73E  d9 12
 	extz XBC                                             ; F9C740  e9 12
@@ -50047,7 +50051,7 @@ sub_F9C52D:
 	pushw wa                                             ; F9C74A  28
 	push 0x00                                            ; F9C74B  09 00
 	m_push MB16, 0x26fe                                  ; F9C74D  c1 fe 26 04
-	calr sub_F9F7B8                                          ; F9C751  1e 64 30
+	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9C751  1e 64 30
 	ld H,A                                               ; F9C754  c9 8e
 	ld l, 0x00:opc                                          ; F9C756  27 00
 	lda xix, (0x29e0:16)                                ; F9C758  f1 e0 29 34
@@ -50065,7 +50069,7 @@ sub_F9C52D:
 	pushw hl                                             ; F9C774  2b
 	push 0x00                                            ; F9C775  09 00
 	m_push MB16, 0x26fe                                  ; F9C777  c1 fe 26 04
-	calr sub_F9F6EC                                          ; F9C77B  1e 6e 2f
+	calr CombiName_CopyToBuffer                                          ; F9C77B  1e 6e 2f
 	inc 1,L                                              ; F9C77E  cf 61
 	add XIX,0x00000010                                   ; F9C780  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9C786  ef 60
@@ -50100,7 +50104,10 @@ sub_F9C52D:
 	popw de                                              ; F9C7BA  4a
 	popw hl                                              ; F9C7BB  4b
 	ret                                                  ; F9C7BC  0e
-sub_F9C7BD:
+; ReMapEdit_DrawFields -- draws RE-MAP EDIT's live fields: SOUND/COMBI captions and the 18 name rows, the source-bank and RE-MAP names, both row cursors and the SOUND/COMBI selector
+; Evidence: T_DisplayListB_Run_Stack over DisplayList_FA3230..+0x12C (op-02 records: var 0x26F3 -> 'SOUND'/'COMBI', then 0x2940-0x2A50 text); then +0x12C..+0x14A (0x26F4 'ROM 1'..'EXT 1', 0x26FA 'RE-MAP 1..3') when (0x26F3) bit 0 is clear, else +0x14A..DisplayList_FA3398 (0x26F7, 0x26FD).
+; Evidence: then ReMapEdit_Draw{Sound,Combi}{Source,ReMap}Cursor and ReMapEdit_DrawSoundCombiSelector. Called from Screen_ReMapEdit_Enter 0xF9C0BD.
+ReMapEdit_DrawFields:
 	push XIX                                             ; F9C7BD  3c
 	lda xix, (T_DisplayListB_Run_Stack:24)               ; F9C7BE  f2 04 2e f4 34
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9C7C3  f1 40 25 00 00
@@ -50124,8 +50131,8 @@ sub_F9C7BD:
 	push XIY                                             ; F9C7F8  3d
 	jp (xix)                                             ; F9C7F9  b4 d8
 .LF9C7FB:
-	calr sub_F9C840                                      ; F9C7FB  1e 42 00
-	calr sub_F9C86C                                      ; F9C7FE  1e 6b 00
+	calr ReMapEdit_DrawSoundSourceCursor                                      ; F9C7FB  1e 42 00
+	calr ReMapEdit_DrawSoundReMapCursor                                      ; F9C7FE  1e 6b 00
 	jr .LF9C81D                                          ; F9C801  68 1a
 .LF9C803:
 	lda xbc, (DisplayList_FA3398:24)                     ; F9C803  f2 98 33 fa 31
@@ -50136,14 +50143,17 @@ sub_F9C7BD:
 	push XIY                                             ; F9C814  3d
 	jp (xix)                                             ; F9C815  b4 d8
 .LF9C817:
-	calr sub_F9C898                                      ; F9C817  1e 7e 00
-	calr sub_F9C8C4                                      ; F9C81A  1e a7 00
+	calr ReMapEdit_DrawCombiSourceCursor                                      ; F9C817  1e 7e 00
+	calr ReMapEdit_DrawCombiReMapCursor                                      ; F9C81A  1e a7 00
 .LF9C81D:
 	inc 8,XSP                                            ; F9C81D  ef 60
-	calr sub_F9C824                                      ; F9C81F  1e 02 00
+	calr ReMapEdit_DrawSoundCombiSelector                                      ; F9C81F  1e 02 00
 	pop XIX                                              ; F9C822  5c
 	ret                                                  ; F9C823  0e
-sub_F9C824:
+; ReMapEdit_DrawSoundCombiSelector -- moves RE-MAP EDIT's SOUND/COMBI highlight: on layer 1 erases the selector area and fills the box for the current mode
+; Evidence: (0x2540)=1; DisplayList_FA349D is one op-1B record (LCD_Svc_1B_EraseRect) over x 0xD6-0x132, y 0x21-0x2E; DisplayList_FA3398 is an interpreter-B op-03 record on var 0x26F3 mask 0x01 selecting one of two 8-byte rects at 0xFA348D, service 0x05 (FillRect).
+; Called from ReMapEdit_DrawFields 0xF9C81F.
+ReMapEdit_DrawSoundCombiSelector:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9C824  f1 40 25 00 01
 	lda xbc, (DisplayList_FA349D:24)                     ; F9C829  f2 9d 34 fa 31
 	push XBC                                             ; F9C82E  39
@@ -50153,7 +50163,10 @@ sub_F9C824:
 	call T_DisplayListB_RunOne_Stack                     ; F9C839  1d 0c 2e f4
 	inc 8,XSP                                            ; F9C83D  ef 60
 	ret                                                  ; F9C83F  0e
-sub_F9C840:
+; ReMapEdit_DrawSoundSourceCursor -- redraws the row cursor of the source (left) column in SOUND mode when bit 0 of (0x2900) requests it, then clears that bit
+; Evidence: layer 1; DisplayList_FA34E7 = op-1B EraseRect x 0x0C-0x93, y 0x5E-0xC4; DisplayList_FA33A3 = interpreter-B op-03 on var 0x26F6 (mask 7) into the 8 row rects at 0xFA34A7, service 0x05; `and (XIX),0xfe` with XIX = 0x2900.
+; Callers: ReMapEdit_DrawFields, and the member-adjust button handler at 0xF9C2F2 after setting (0x2900) bit 0.
+ReMapEdit_DrawSoundSourceCursor:
 	push XIX                                             ; F9C840  3c
 	lda xix, (0x2900:16)                                ; F9C841  f1 00 29 34
 	ld C,(XIX)                                           ; F9C845  84 23
@@ -50171,7 +50184,10 @@ sub_F9C840:
 	and (XIX),0xfe                                       ; F9C867  84 3c fe
 	pop XIX                                              ; F9C86A  5c
 	ret                                                  ; F9C86B  0e
-sub_F9C86C:
+; ReMapEdit_DrawSoundReMapCursor -- redraws the row cursor of the RE-MAP (right) column in SOUND mode when bit 1 of (0x2900) requests it, then clears that bit
+; Evidence: layer 1; DisplayList_FA3531 = op-1B EraseRect x 0xAC-0x133, y 0x5E-0xC4; DisplayList_FA33AE = interpreter-B op-03 on var 0x26FC (re-map member) into the rects at 0xFA34F1; `and (XIX),0xfd` with XIX = 0x2900.
+; Callers: ReMapEdit_DrawFields and the re-map-member handler (HandlerTable23_FA1690 slots 6/7) at 0xF9C47C.
+ReMapEdit_DrawSoundReMapCursor:
 	push XIX                                             ; F9C86C  3c
 	lda xix, (0x2900:16)                                ; F9C86D  f1 00 29 34
 	ld C,(XIX)                                           ; F9C871  84 23
@@ -50189,7 +50205,10 @@ sub_F9C86C:
 	and (XIX),0xfd                                       ; F9C893  84 3c fd
 	pop XIX                                              ; F9C896  5c
 	ret                                                  ; F9C897  0e
-sub_F9C898:
+; ReMapEdit_DrawCombiSourceCursor -- the COMBI-mode twin of ReMapEdit_DrawSoundSourceCursor: left-column row cursor for (0x26F9), gated and cleared by (0x2900) bit 0
+; Evidence: same erase rect DisplayList_FA34E7; DisplayList_FA33B9 = interpreter-B op-03 on var 0x26F9 into the rects at 0xFA34A7.
+; Callers: ReMapEdit_DrawFields (COMBI arm, 0xF9C817) and the member handler at 0xF9C32C.
+ReMapEdit_DrawCombiSourceCursor:
 	push XIX                                             ; F9C898  3c
 	lda xix, (0x2900:16)                                ; F9C899  f1 00 29 34
 	ld C,(XIX)                                           ; F9C89D  84 23
@@ -50207,7 +50226,10 @@ sub_F9C898:
 	and (XIX),0xfe                                       ; F9C8BF  84 3c fe
 	pop XIX                                              ; F9C8C2  5c
 	ret                                                  ; F9C8C3  0e
-sub_F9C8C4:
+; ReMapEdit_DrawCombiReMapCursor -- the COMBI-mode twin of ReMapEdit_DrawSoundReMapCursor: right-column row cursor for (0x26FF), gated and cleared by (0x2900) bit 1
+; Evidence: same erase rect DisplayList_FA3531; DisplayList_FA33C4 = interpreter-B op-03 on var 0x26FF into the rects at 0xFA34F1.
+; Callers: ReMapEdit_DrawFields (COMBI arm, 0xF9C81A) and the re-map-member handler at 0xF9C4B6.
+ReMapEdit_DrawCombiReMapCursor:
 	push XIX                                             ; F9C8C4  3c
 	lda xix, (0x2900:16)                                ; F9C8C5  f1 00 29 34
 	ld C,(XIX)                                           ; F9C8C9  84 23
@@ -50225,7 +50247,11 @@ sub_F9C8C4:
 	and (XIX),0xfd                                       ; F9C8EB  84 3c fd
 	pop XIX                                              ; F9C8EE  5c
 	ret                                                  ; F9C8EF  0e
-sub_F9C8F0:
+; ReMapEdit_AssignSourceToReMap -- the RE-MAP EDIT 'OK' action: stores the code of the selected source sound (or combination) into the selected RE-MAP slot
+; Evidence: SOUND: slot = ByteTable12_FA16FA[(0x26FA)] (0x5340/0x5550/0x5760) + 2*((0x26FB)<<3 + (0x26FC)); the code comes from T_F407F4 (sub_FAB658) given (0x26F5),(0x26F6), ByteTable8_FA16EC[(0x26F4)], read back from (0x60F164)/(0x60F165) into slot+0/+1.
+; Evidence: COMBI: ByteTable12_FA1706 (0x5990/0x5BA0/0x5DB0) with (0x26FD),(0x26FE),(0x26FF); code via T_F40804 (sub_FAB779, (0x60F17F)=0x98) from (0x60F185)/(0x60F186).
+; Called from the HandlerTable23_FA1690 slot-8 handler at 0xF9C4D1 on pair position 0 -- the left LCD-row key under 'OK' (DisplayList_FA30A6, pos 0x057A); pair position 1 toggles (0x26F3) instead.
+ReMapEdit_AssignSourceToReMap:
 	link XIZ,0xfff8                                      ; F9C8F0  ee 0c f8 ff
 	pushw hl                                             ; F9C8F4  2b
 	push XIX                                             ; F9C8F5  3c
@@ -50312,7 +50338,11 @@ sub_F9C8F0:
 	popw hl                                              ; F9C9F0  4b
 	unlk XIZ                                             ; F9C9F1  ee 0d
 	ret                                                  ; F9C9F3  0e
-sub_F9C9F4:
+; Screen_SoundCombinationManager_Enter -- Enter (+0) method of screen 0x6D: restarts task 2's callback queue and posts the painter of the SOUND/COMBINATION MANAGER menu
+; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; prom_b T_F41978/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
+; Evidence: posts .LF9CAE0 (T_CallbackQueue_Post + T_Kernel_SemaSignal_StackArg 1), which runs DisplayList_FA353B-FA3678 on layer 2: title 'SOUND/COMBINATION MANAGER', items SOUND GROUP NAMING / DATA LOAD FILTER / COMBI.GROUP NAMING / MEMORY PROTECT / SOUND COPY / SOUND MUTE / COMBINATION COPY.
+; Screen id 0x6D is what Screen_System's row-3 right key requests (0xF9FF95).
+Screen_SoundCombinationManager_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9C9F4  1d 80 2e f4
 	lda xbc, (.LF9CAE0:24)                               ; F9C9F8  f2 e0 ca f9 31
 	push XBC                                             ; F9C9FD  39
@@ -50323,7 +50353,10 @@ sub_F9C9F4:
 	ret                                                  ; F9CA0B  0e
 T_F4197C_Nop:
 	ret                                                  ; F9CA0C  0e
-sub_F9CA0D:
+; Screen_SoundCombinationManager_Button -- Button (+8) method: maps the panel code to a slot (T_F42C74 = PanelCode_ToSlotAndFlags) and jumps through HandlerTable23_FA1712
+; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_F41978; prom_b T_F41978/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
+; Slots 9-12 (LCD-row pairs 2-5) request screens 0x5B/0x61, 0x5C/0x6E, 0x5E/0x5D, 0x5F (left/right labels of DisplayList_FA353B); slot 15 (EXIT) requests 0x60 (SYSTEM).
+Screen_SoundCombinationManager_Button:
 	link XIZ,0x0000                                      ; F9CA0D  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9CA11  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9CA14  9e 08 04
@@ -50472,8 +50505,8 @@ Screen_SoundGroupNaming_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9CB37  1d 80 2e f4
 	calr Paint_SoundGroupNaming                                      ; F9CB3B  1e a6 02
 .LF9CB3E:
-	calr sub_F9CE33                                      ; F9CB3E  1e f2 02
-	calr sub_F9CE66                                      ; F9CB41  1e 22 03
+	calr SoundGroupNaming_LoadGroupNames                                      ; F9CB3E  1e f2 02
+	calr SoundGroupNaming_DrawFields                                      ; F9CB41  1e 22 03
 	jr .LF9CB51                                          ; F9CB44  68 0b
 .LF9CB46:
 	pushw 0x10                                           ; F9CB46  0b 10 00
@@ -50565,7 +50598,10 @@ Screen_SoundGroupNaming_Button:
 	ret                                                  ; F9CB79  0e
 T_F4268C_Nop:
 	ret                                                  ; F9CB7A  0e
-sub_F9CB7B:
+; SoundGroupNaming_AdjustBank -- steps the SOUND GROUP NAMING bank selector (0x2695) one place and requests a screen refresh if it moved
+; Evidence: T_F42C78 (sub_F550A6, the descriptor-driven field adjuster) on (0x2695) with Descriptor9_FA1AA6 (mask 7, max 4); (0x2695) indexes ByteTable5_FA17CA {08,09,18,19,1A} and is drawn by record FA37EA as 'USER 1','USER 2','RE-MAP 1..3'.
+; Evidence: on A=1 `set 4,(0x2095)`, the bit the Enter methods test to repaint only the fields. Called from the HandlerTable23_FA176E soft-key handlers (0xF9CBA5...) in mode (0x2694)=0.
+SoundGroupNaming_AdjustBank:
 	lda xbc, (Descriptor9_FA1AA6:24)                     ; F9CB7B  f2 a6 1a fa 31
 	push XBC                                             ; F9CB80  39
 	lda xwa, (0x2695:16)                                ; F9CB81  f1 95 26 30
@@ -50585,10 +50621,10 @@ sub_F9CB7B:
 	jr z, .LF9CBAA                                       ; F9CBA1  66 07
 	jr .LF9CBB3                                          ; F9CBA3  68 0e
 .LF9CBA5:
-	calr sub_F9CB7B                                      ; F9CBA5  1e d3 ff
+	calr SoundGroupNaming_AdjustBank                                      ; F9CBA5  1e d3 ff
 	jr .LF9CBB3                                          ; F9CBA8  68 09
 .LF9CBAA:
-	calr sub_F9FB07                                          ; F9CBAA  1e 5a 2f
+	calr PanelFlags_PairBitAsWord                                          ; F9CBAA  1e 5a 2f
 	pushw wa                                             ; F9CBAD  28
 	call T_F42F84                                        ; F9CBAE  1d 84 2f f4
 	popw bc                                              ; F9CBB2  49
@@ -50602,10 +50638,10 @@ sub_F9CB7B:
 	jr z, .LF9CBC9                                       ; F9CBC0  66 07
 	jr .LF9CBD2                                          ; F9CBC2  68 0e
 .LF9CBC4:
-	calr sub_F9CB7B                                      ; F9CBC4  1e b4 ff
+	calr SoundGroupNaming_AdjustBank                                      ; F9CBC4  1e b4 ff
 	jr .LF9CBD2                                          ; F9CBC7  68 09
 .LF9CBC9:
-	calr sub_F9FB07                                          ; F9CBC9  1e 3b 2f
+	calr PanelFlags_PairBitAsWord                                          ; F9CBC9  1e 3b 2f
 	pushw wa                                             ; F9CBCC  28
 	call T_F42F88                                        ; F9CBCD  1d 88 2f f4
 	popw bc                                              ; F9CBD1  49
@@ -50619,10 +50655,10 @@ sub_F9CB7B:
 	jr z, .LF9CBE8                                       ; F9CBDF  66 07
 	jr .LF9CBF1                                          ; F9CBE1  68 0e
 .LF9CBE3:
-	calr sub_F9CB7B                                      ; F9CBE3  1e 95 ff
+	calr SoundGroupNaming_AdjustBank                                      ; F9CBE3  1e 95 ff
 	jr .LF9CBF1                                          ; F9CBE6  68 09
 .LF9CBE8:
-	calr sub_F9FB07                                          ; F9CBE8  1e 1c 2f
+	calr PanelFlags_PairBitAsWord                                          ; F9CBE8  1e 1c 2f
 	pushw wa                                             ; F9CBEB  28
 	call T_F42F8C                                        ; F9CBEC  1d 8c 2f f4
 	popw bc                                              ; F9CBF0  49
@@ -50637,16 +50673,19 @@ sub_F9CBF6:
 	jr Z,.LF9CC07                                        ; F9CBFE  66 07
 	jr .LF9CC10                                          ; F9CC00  68 0e
 .LF9CC02:
-	calr sub_F9CB7B                                      ; F9CC02  1e 76 ff
+	calr SoundGroupNaming_AdjustBank                                      ; F9CC02  1e 76 ff
 	jr .LF9CC10                                          ; F9CC05  68 09
 .LF9CC07:
-	calr sub_F9FB07                                          ; F9CC07  1e fd 2e
+	calr PanelFlags_PairBitAsWord                                          ; F9CC07  1e fd 2e
 	pushw wa                                             ; F9CC0A  28
 	call T_F42F90                                        ; F9CC0B  1d 90 2f f4
 	popw bc                                              ; F9CC0F  49
 .LF9CC10:
 	ret                                                  ; F9CC10  0e
-sub_F9CC11:
+; SoundGroupNaming_AdjustGroup -- steps the selected group (0x2696, 0..15) of SOUND GROUP NAMING and moves the row cursor if it changed
+; Evidence: T_F42C78 on (0x2696) with Descriptor9_FA1AAF (mask 0x0F, max 15); on change calls SoundGroupNaming_DrawGroupCursor, whose record FA37F9 highlights row (0x2696) of the '1.'..'16.' list.
+; Called from the HandlerTable23_FA176E soft-key handlers at 0xF9CC3A... in mode (0x2694)=0.
+SoundGroupNaming_AdjustGroup:
 	lda xbc, (Descriptor9_FA1AAF:24)                     ; F9CC11  f2 af 1a fa 31
 	push XBC                                             ; F9CC16  39
 	lda xwa, (0x2696:16)                                ; F9CC17  f1 96 26 30
@@ -50655,7 +50694,7 @@ sub_F9CC11:
 	inc 8,XSP                                            ; F9CC20  ef 60
 	cp a, 0x01:i3                                          ; F9CC22  c9 d9
 	jr nz, .LF9CC29                                      ; F9CC24  6e 03
-	calr sub_F9CEA7                                      ; F9CC26  1e 7e 02
+	calr SoundGroupNaming_DrawGroupCursor                                      ; F9CC26  1e 7e 02
 .LF9CC29:
 	ret                                                  ; F9CC29  0e
 	ld bc, (0x2694:16)                                 ; F9CC2A  d1 94 26 21
@@ -50666,10 +50705,10 @@ sub_F9CC11:
 	jr z, .LF9CC3F                                       ; F9CC36  66 07
 	jr .LF9CC48                                          ; F9CC38  68 0e
 .LF9CC3A:
-	calr sub_F9CC11                                      ; F9CC3A  1e d4 ff
+	calr SoundGroupNaming_AdjustGroup                                      ; F9CC3A  1e d4 ff
 	jr .LF9CC48                                          ; F9CC3D  68 09
 .LF9CC3F:
-	calr sub_F9FB07                                          ; F9CC3F  1e c5 2e
+	calr PanelFlags_PairBitAsWord                                          ; F9CC3F  1e c5 2e
 	pushw wa                                             ; F9CC42  28
 	call T_F42F94                                        ; F9CC43  1d 94 2f f4
 	popw bc                                              ; F9CC47  49
@@ -50683,10 +50722,10 @@ sub_F9CC11:
 	jr z, .LF9CC5E                                       ; F9CC55  66 07
 	jr .LF9CC67                                          ; F9CC57  68 0e
 .LF9CC59:
-	calr sub_F9CC11                                      ; F9CC59  1e b5 ff
+	calr SoundGroupNaming_AdjustGroup                                      ; F9CC59  1e b5 ff
 	jr .LF9CC67                                          ; F9CC5C  68 09
 .LF9CC5E:
-	calr sub_F9FB07                                          ; F9CC5E  1e a6 2e
+	calr PanelFlags_PairBitAsWord                                          ; F9CC5E  1e a6 2e
 	pushw wa                                             ; F9CC61  28
 	call T_F42F98                                        ; F9CC62  1d 98 2f f4
 	popw bc                                              ; F9CC66  49
@@ -50700,10 +50739,10 @@ sub_F9CC11:
 	jr z, .LF9CC7D                                       ; F9CC74  66 07
 	jr .LF9CC86                                          ; F9CC76  68 0e
 .LF9CC78:
-	calr sub_F9CC11                                      ; F9CC78  1e 96 ff
+	calr SoundGroupNaming_AdjustGroup                                      ; F9CC78  1e 96 ff
 	jr .LF9CC86                                          ; F9CC7B  68 09
 .LF9CC7D:
-	calr sub_F9FB07                                          ; F9CC7D  1e 87 2e
+	calr PanelFlags_PairBitAsWord                                          ; F9CC7D  1e 87 2e
 	pushw wa                                             ; F9CC80  28
 	call T_F42F9C                                        ; F9CC81  1d 9c 2f f4
 	popw bc                                              ; F9CC85  49
@@ -50717,10 +50756,10 @@ sub_F9CC11:
 	jr z, .LF9CC9C                                       ; F9CC93  66 07
 	jr .LF9CCA5                                          ; F9CC95  68 0e
 .LF9CC97:
-	calr sub_F9CC11                                      ; F9CC97  1e 77 ff
+	calr SoundGroupNaming_AdjustGroup                                      ; F9CC97  1e 77 ff
 	jr .LF9CCA5                                          ; F9CC9A  68 09
 .LF9CC9C:
-	calr sub_F9FB07                                          ; F9CC9C  1e 68 2e
+	calr PanelFlags_PairBitAsWord                                          ; F9CC9C  1e 68 2e
 sub_F9CC9F:
 	pushw wa                                             ; F9CC9F  28
 	call T_F42FA0                                        ; F9CCA0  1d a0 2f f4
@@ -50771,7 +50810,7 @@ sub_F9CC9F:
 	ld c, (0x28b0:16)                                   ; F9CD0B  c1 b0 28 23
 	and C,0x01                                           ; F9CD0F  cb cc 01
 	jr nz, .LF9CD20                                      ; F9CD12  6e 0c
-	calr sub_F9FB07                                          ; F9CD14  1e f0 2d
+	calr PanelFlags_PairBitAsWord                                          ; F9CD14  1e f0 2d
 	pushw wa                                             ; F9CD17  28
 	call T_F42FA4                                        ; F9CD18  1d a4 2f f4
 	popw bc                                              ; F9CD1C  49
@@ -50804,7 +50843,7 @@ sub_F9CC9F:
 .LF9CD65:
 	ld (UI_StatusCode:16), 0x25                                 ; F9CD65  f1 80 28 00 25
 	call T_F41600                                        ; F9CD6A  1d 00 16 f4
-	calr sub_F9CEC3                                      ; F9CD6E  1e 52 01
+	calr SoundGroupNaming_StoreGroupName                                      ; F9CD6E  1e 52 01
 	ld (0x2694:16), 0x00                                 ; F9CD71  f1 94 26 00 00
 	ld (UI_StatusCode:16), 0x23                                 ; F9CD76  f1 80 28 00 23
 	m_or_mi8 MBI+r4, 0, 0x40                             ; F9CD7B  84 3e 40
@@ -50822,7 +50861,7 @@ sub_F9CC9F:
 	jr z, .LF9CD98                                       ; F9CD94  66 02
 	jr .LF9CDA1                                          ; F9CD96  68 09
 .LF9CD98:
-	calr sub_F9FB07                                          ; F9CD98  1e 6c 2d
+	calr PanelFlags_PairBitAsWord                                          ; F9CD98  1e 6c 2d
 	pushw wa                                             ; F9CD9B  28
 	call T_F42FA8                                        ; F9CD9C  1d a8 2f f4
 	popw bc                                              ; F9CDA0  49
@@ -50939,7 +50978,10 @@ Paint_SoundGroupNamingWrite:
 	call T_DisplayList_Run_Stack                         ; F9CE2C  1d 00 2e f4
 	inc 8,XSP                                            ; F9CE30  ef 60
 	ret                                                  ; F9CE32  0e
-sub_F9CE33:
+; SoundGroupNaming_LoadGroupNames -- copies the 16 group names of the selected bank into the text buffers 0x2940-0x2A3F
+; Evidence: loop H = 0..15 calling SoundGroupName_CopyToBuffer(group H, bank ByteTable5_FA17CA[(0x2695)], dest 0x2940+16*H); records FA3804-FA38E5 print those buffers.
+; Called from Screen_SoundGroupNaming_Enter 0xF9CB3E.
+SoundGroupNaming_LoadGroupNames:
 	pushw hl                                             ; F9CE33  2b
 	push XIX                                             ; F9CE34  3c
 	ld h, 0x00:opc                                          ; F9CE35  26 00
@@ -50954,7 +50996,7 @@ sub_F9CE33:
 	pushw wa                                             ; F9CE4C  28
 	push 0x00                                            ; F9CE4D  09 00
 	push H                                               ; F9CE4F  ce 04
-	calr sub_F9F65B                                          ; F9CE51  1e 07 28
+	calr SoundGroupName_CopyToBuffer                                          ; F9CE51  1e 07 28
 	inc 1,H                                              ; F9CE54  ce 61
 	add XIX,0x00000010                                   ; F9CE56  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9CE5C  ef 60
@@ -50963,7 +51005,10 @@ sub_F9CE33:
 	pop XIX                                              ; F9CE63  5c
 	popw hl                                              ; F9CE64  4b
 	ret                                                  ; F9CE65  0e
-sub_F9CE66:
+; SoundGroupNaming_DrawFields -- draws SOUND GROUP NAMING's numbered group list, the 16 group names and the bank name with its group cursor
+; Evidence: layer 0; T_DisplayList_Run_Stack over DisplayList_FA377A-FA37EA ('1. '..'16.'); T_DisplayListB_Run_Stack over DisplayList_FA3804-OperandTable_FA38F4 (op-02 records printing 0x2940-0x2A30) and DisplayList_FA37EA-FA3804 (var 0x2695 bank name, var 0x2696 cursor).
+; Called from Screen_SoundGroupNaming_Enter 0xF9CB41.
+SoundGroupNaming_DrawFields:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9CE66  f1 40 25 00 00
 	lda xbc, (DisplayList_FA37EA:24)                     ; F9CE6B  f2 ea 37 fa 31
 	push XBC                                             ; F9CE70  39
@@ -50983,7 +51028,10 @@ sub_F9CE66:
 	call T_DisplayListB_Run_Stack                        ; F9CE9C  1d 04 2e f4
 	add XSP,0x00000018                                   ; F9CEA0  ef c8 18 00 00 00
 	ret                                                  ; F9CEA6  0e
-sub_F9CEA7:
+; SoundGroupNaming_DrawGroupCursor -- moves the group-row highlight: erases the list area on layer 1 and fills the box of row (0x2696)
+; Evidence: DisplayList_FA39D4 = op-1B EraseRect x 0x04-0x13B, y 0x55-0xBB; DisplayList_FA37EA+0xF = interpreter-B op-03 on var 0x2696 (mask 0x0F) into the rects at 0xFA3954, service 0x05.
+; Called from SoundGroupNaming_AdjustGroup 0xF9CC26.
+SoundGroupNaming_DrawGroupCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9CEA7  f1 40 25 00 01
 	lda xbc, (DisplayList_FA39D4:24)                     ; F9CEAC  f2 d4 39 fa 31
 	push XBC                                             ; F9CEB1  39
@@ -50993,7 +51041,11 @@ sub_F9CEA7:
 	call T_DisplayListB_RunOne_Stack                     ; F9CEBC  1d 0c 2e f4
 	inc 8,XSP                                            ; F9CEC0  ef 60
 	ret                                                  ; F9CEC2  0e
-sub_F9CEC3:
+; SoundGroupNaming_StoreGroupName -- stores the 16-byte name edited at 0x22F0 as the name of group (0x2696) of the selected bank
+; Evidence: 5-entry LE32 table at 0xF9CEE6 indexed by (0x2695): USER 1/2 -> UserSoundBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0, 0x10, remote); RE-MAP 1-3 -> copy to 0x5240 + 0x210*(bank-2) + 16*group.
+; Evidence: those RAM bases are exactly where sub_FC2035 (the group-name source behind SoundGroupName_CopyToBuffer) reads re-map group names for codes 0x18/0x19/0x1A (0xFC20F4-0xFC2102).
+; Called at 0xF9CD6E from the HandlerTable23_FA176E slot-8 handler (0xF9CCA6) -- the WRITE key in naming state (0x2694)=1 -- after the (0x7FD6) bit-0 protect test for USER banks.
+SoundGroupNaming_StoreGroupName:
 	link XIZ,0xfffc                                      ; F9CEC3  ee 0c fc ff
 	pushw hl                                             ; F9CEC7  2b
 	pushw de                                             ; F9CEC8  2a
@@ -51005,10 +51057,10 @@ sub_F9CEC3:
 	cp bc, 0x04:i3                                         ; F9CED4  d9 dc
 	jrl ugt, .LF9CF62                                    ; F9CED6  7b 89 00
 	sll bc, 0x02                                         ; F9CED9  d9 ee 02
-	add XBC,sub_F9CEC3__F9CEE6                                   ; F9CEDC  e9 c8 e6 ce f9 00
+	add XBC,SoundGroupNaming_StoreGroupName__F9CEE6                                   ; F9CEDC  e9 c8 e6 ce f9 00
 	ld XBC,(XBC)                                         ; F9CEE2  a1 21
 	jp (xbc)                                             ; F9CEE4  b1 d8
-sub_F9CEC3__F9CEE6:
+SoundGroupNaming_StoreGroupName__F9CEE6:
 	swi 2                                                ; F9CEE6  fa
 	.byte 0xce, 0xf9                                     ; F9CEE7  ce f9   rrc A,H
 	nop                                                  ; F9CEE9  00
@@ -51032,12 +51084,12 @@ sub_F9CEC3__F9CEE6:
 	add XBC,ByteTable5_FA17CA                            ; F9CF06  e9 c8 ca 17 fa 00
 	ld A,(XBC)                                           ; F9CF0C  81 21
 	pushw wa                                             ; F9CF0E  28
-	calr sub_F9F7F6                                          ; F9CF0F  1e e4 28
+	calr UserSoundBank_RemoteGroupNameAddr                                          ; F9CF0F  1e e4 28
 	push XIY                                             ; F9CF12  3d
 	pushw 0x10                                           ; F9CF13  0b 10 00
 	lda xbc, (0x22f0:16)                                ; F9CF16  f1 f0 22 31
 	push XBC                                             ; F9CF1A  39
-	calr sub_F9FAC1                                          ; F9CF1B  1e a3 2b
+	calr Link_WriteRemoteBlock                                          ; F9CF1B  1e a3 2b
 	inc 8,XSP                                            ; F9CF1E  ef 60
 	inc 6,XSP                                            ; F9CF20  ef 66
 	jr .LF9CF62                                          ; F9CF22  68 3e
@@ -51119,8 +51171,8 @@ Screen_CombinationGroupNaming_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9CF9F  1d 80 2e f4
 	calr Paint_CombinationGroupNaming                                      ; F9CFA3  1e a6 02
 .LF9CFA6:
-	calr sub_F9D29B                                      ; F9CFA6  1e f2 02
-	calr sub_F9D2CE                                      ; F9CFA9  1e 22 03
+	calr CombinationGroupNaming_LoadGroupNames                                      ; F9CFA6  1e f2 02
+	calr CombinationGroupNaming_DrawFields                                      ; F9CFA9  1e 22 03
 	jr .LF9CFB9                                          ; F9CFAC  68 0b
 .LF9CFAE:
 	pushw 0x10                                           ; F9CFAE  0b 10 00
@@ -51196,7 +51248,10 @@ Screen_CombinationGroupNaming_Button:
 	ret                                                  ; F9CFE1  0e
 T_F4269C_Nop:
 	ret                                                  ; F9CFE2  0e
-sub_F9CFE3:
+; CombinationGroupNaming_AdjustBank -- steps the COMBINATION GROUP NAMING bank selector (0x2698) and requests a field refresh if it moved
+; Evidence: T_F42C78 on (0x2698) with Descriptor9_FA1AB8 (mask 3, max 3); (0x2698) indexes ByteTable4_FA182B {08,18,19,1A} and record FA3A52 prints it as 'USER 1','RE-MAP 1..3'; `set 4,(0x2095)` on change.
+; Called from the HandlerTable23_FA17CF soft-key handlers (0xF9D00D...) in mode (0x2697)=0.
+CombinationGroupNaming_AdjustBank:
 	lda xbc, (Descriptor9_FA1AB8:24)                     ; F9CFE3  f2 b8 1a fa 31
 	push XBC                                             ; F9CFE8  39
 	lda xwa, (0x2698:16)                                ; F9CFE9  f1 98 26 30
@@ -51216,10 +51271,10 @@ sub_F9CFE3:
 	jr z, .LF9D012                                       ; F9D009  66 07
 	jr .LF9D01B                                          ; F9D00B  68 0e
 .LF9D00D:
-	calr sub_F9CFE3                                      ; F9D00D  1e d3 ff
+	calr CombinationGroupNaming_AdjustBank                                      ; F9D00D  1e d3 ff
 	jr .LF9D01B                                          ; F9D010  68 09
 .LF9D012:
-	calr sub_F9FB07                                          ; F9D012  1e f2 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D012  1e f2 2a
 	pushw wa                                             ; F9D015  28
 	call T_F42F84                                        ; F9D016  1d 84 2f f4
 	popw bc                                              ; F9D01A  49
@@ -51233,10 +51288,10 @@ sub_F9CFE3:
 	jr z, .LF9D031                                       ; F9D028  66 07
 	jr .LF9D03A                                          ; F9D02A  68 0e
 .LF9D02C:
-	calr sub_F9CFE3                                      ; F9D02C  1e b4 ff
+	calr CombinationGroupNaming_AdjustBank                                      ; F9D02C  1e b4 ff
 	jr .LF9D03A                                          ; F9D02F  68 09
 .LF9D031:
-	calr sub_F9FB07                                          ; F9D031  1e d3 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D031  1e d3 2a
 	pushw wa                                             ; F9D034  28
 	call T_F42F88                                        ; F9D035  1d 88 2f f4
 	popw bc                                              ; F9D039  49
@@ -51250,10 +51305,10 @@ sub_F9CFE3:
 	jr z, .LF9D050                                       ; F9D047  66 07
 	jr .LF9D059                                          ; F9D049  68 0e
 .LF9D04B:
-	calr sub_F9CFE3                                      ; F9D04B  1e 95 ff
+	calr CombinationGroupNaming_AdjustBank                                      ; F9D04B  1e 95 ff
 	jr .LF9D059                                          ; F9D04E  68 09
 .LF9D050:
-	calr sub_F9FB07                                          ; F9D050  1e b4 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D050  1e b4 2a
 	pushw wa                                             ; F9D053  28
 	call T_F42F8C                                        ; F9D054  1d 8c 2f f4
 	popw bc                                              ; F9D058  49
@@ -51267,16 +51322,19 @@ sub_F9CFE3:
 	jr z, .LF9D06F                                       ; F9D066  66 07
 	jr .LF9D078                                          ; F9D068  68 0e
 .LF9D06A:
-	calr sub_F9CFE3                                      ; F9D06A  1e 76 ff
+	calr CombinationGroupNaming_AdjustBank                                      ; F9D06A  1e 76 ff
 	jr .LF9D078                                          ; F9D06D  68 09
 .LF9D06F:
-	calr sub_F9FB07                                          ; F9D06F  1e 95 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D06F  1e 95 2a
 	pushw wa                                             ; F9D072  28
 	call T_F42F90                                        ; F9D073  1d 90 2f f4
 	popw bc                                              ; F9D077  49
 .LF9D078:
 	ret                                                  ; F9D078  0e
-sub_F9D079:
+; CombinationGroupNaming_AdjustGroup -- steps the selected combination group (0x2699, 0..15) and moves the row cursor if it changed
+; Evidence: T_F42C78 on (0x2699) with Descriptor9_FA1AC1 (mask 0x0F, max 15); on change CombinationGroupNaming_DrawGroupCursor (record FA3A61 on var 0x2699).
+; Called from the HandlerTable23_FA17CF soft-key handlers in mode (0x2697)=0.
+CombinationGroupNaming_AdjustGroup:
 	lda xbc, (Descriptor9_FA1AC1:24)                     ; F9D079  f2 c1 1a fa 31
 	push XBC                                             ; F9D07E  39
 	lda xwa, (0x2699:16)                                ; F9D07F  f1 99 26 30
@@ -51285,7 +51343,7 @@ sub_F9D079:
 	inc 8,XSP                                            ; F9D088  ef 60
 	cp a, 0x01:i3                                          ; F9D08A  c9 d9
 	jr nz, .LF9D091                                      ; F9D08C  6e 03
-	calr sub_F9D30F                                      ; F9D08E  1e 7e 02
+	calr CombinationGroupNaming_DrawGroupCursor                                      ; F9D08E  1e 7e 02
 .LF9D091:
 	ret                                                  ; F9D091  0e
 	ld bc, (0x2697:16)                                 ; F9D092  d1 97 26 21
@@ -51296,10 +51354,10 @@ sub_F9D079:
 	jr z, .LF9D0A7                                       ; F9D09E  66 07
 	jr .LF9D0B0                                          ; F9D0A0  68 0e
 .LF9D0A2:
-	calr sub_F9D079                                      ; F9D0A2  1e d4 ff
+	calr CombinationGroupNaming_AdjustGroup                                      ; F9D0A2  1e d4 ff
 	jr .LF9D0B0                                          ; F9D0A5  68 09
 .LF9D0A7:
-	calr sub_F9FB07                                          ; F9D0A7  1e 5d 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D0A7  1e 5d 2a
 	pushw wa                                             ; F9D0AA  28
 	call T_F42F94                                        ; F9D0AB  1d 94 2f f4
 	popw bc                                              ; F9D0AF  49
@@ -51313,10 +51371,10 @@ sub_F9D079:
 	jr z, .LF9D0C6                                       ; F9D0BD  66 07
 	jr .LF9D0CF                                          ; F9D0BF  68 0e
 .LF9D0C1:
-	calr sub_F9D079                                      ; F9D0C1  1e b5 ff
+	calr CombinationGroupNaming_AdjustGroup                                      ; F9D0C1  1e b5 ff
 	jr .LF9D0CF                                          ; F9D0C4  68 09
 .LF9D0C6:
-	calr sub_F9FB07                                          ; F9D0C6  1e 3e 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D0C6  1e 3e 2a
 	pushw wa                                             ; F9D0C9  28
 	call T_F42F98                                        ; F9D0CA  1d 98 2f f4
 	popw bc                                              ; F9D0CE  49
@@ -51330,10 +51388,10 @@ sub_F9D079:
 	jr z, .LF9D0E5                                       ; F9D0DC  66 07
 	jr .LF9D0EE                                          ; F9D0DE  68 0e
 .LF9D0E0:
-	calr sub_F9D079                                      ; F9D0E0  1e 96 ff
+	calr CombinationGroupNaming_AdjustGroup                                      ; F9D0E0  1e 96 ff
 	jr .LF9D0EE                                          ; F9D0E3  68 09
 .LF9D0E5:
-	calr sub_F9FB07                                          ; F9D0E5  1e 1f 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D0E5  1e 1f 2a
 	pushw wa                                             ; F9D0E8  28
 	call T_F42F9C                                        ; F9D0E9  1d 9c 2f f4
 	popw bc                                              ; F9D0ED  49
@@ -51347,10 +51405,10 @@ sub_F9D079:
 	jr z, .LF9D104                                       ; F9D0FB  66 07
 	jr .LF9D10D                                          ; F9D0FD  68 0e
 .LF9D0FF:
-	calr sub_F9D079                                      ; F9D0FF  1e 77 ff
+	calr CombinationGroupNaming_AdjustGroup                                      ; F9D0FF  1e 77 ff
 	jr .LF9D10D                                          ; F9D102  68 09
 .LF9D104:
-	calr sub_F9FB07                                          ; F9D104  1e 00 2a
+	calr PanelFlags_PairBitAsWord                                          ; F9D104  1e 00 2a
 	pushw wa                                             ; F9D107  28
 	call T_F42FA0                                        ; F9D108  1d a0 2f f4
 	popw bc                                              ; F9D10C  49
@@ -51400,7 +51458,7 @@ sub_F9D079:
 	ld c, (0x28b0:16)                                   ; F9D173  c1 b0 28 23
 	and C,0x01                                           ; F9D177  cb cc 01
 	jr nz, .LF9D188                                      ; F9D17A  6e 0c
-	calr sub_F9FB07                                          ; F9D17C  1e 88 29
+	calr PanelFlags_PairBitAsWord                                          ; F9D17C  1e 88 29
 	pushw wa                                             ; F9D17F  28
 	call T_F42FA4                                        ; F9D180  1d a4 2f f4
 	popw bc                                              ; F9D184  49
@@ -51433,7 +51491,7 @@ sub_F9D079:
 .LF9D1CD:
 	ld (UI_StatusCode:16), 0x25                                 ; F9D1CD  f1 80 28 00 25
 	call T_F41600                                        ; F9D1D2  1d 00 16 f4
-	calr sub_F9D32B                                      ; F9D1D6  1e 52 01
+	calr CombinationGroupNaming_StoreGroupName                                      ; F9D1D6  1e 52 01
 	ld (0x2697:16), 0x00                                 ; F9D1D9  f1 97 26 00 00
 	ld (UI_StatusCode:16), 0x23                                 ; F9D1DE  f1 80 28 00 23
 	m_or_mi8 MBI+r4, 0, 0x40                             ; F9D1E3  84 3e 40
@@ -51451,7 +51509,7 @@ sub_F9D079:
 	jr z, .LF9D200                                       ; F9D1FC  66 02
 	jr T,.LF9D209                                        ; F9D1FE  68 09
 .LF9D200:
-	calr sub_F9FB07                                          ; F9D200  1e 04 29
+	calr PanelFlags_PairBitAsWord                                          ; F9D200  1e 04 29
 	pushw wa                                             ; F9D203  28
 	call T_F42FA8                                        ; F9D204  1d a8 2f f4
 	popw bc                                              ; F9D208  49
@@ -51568,7 +51626,10 @@ Paint_CombinationGroupNamingWrite:
 	call T_DisplayList_Run_Stack                         ; F9D294  1d 00 2e f4
 	inc 8,XSP                                            ; F9D298  ef 60
 	ret                                                  ; F9D29A  0e
-sub_F9D29B:
+; CombinationGroupNaming_LoadGroupNames -- copies the 16 combination-group names of the selected bank into the text buffers 0x2940-0x2A3F
+; Evidence: loop H = 0..15 calling CombiGroupName_CopyToBuffer(group H, bank ByteTable4_FA182B[(0x2698)], dest 0x2940+16*H).
+; Called from Screen_CombinationGroupNaming_Enter.
+CombinationGroupNaming_LoadGroupNames:
 	pushw hl                                             ; F9D29B  2b
 	push XIX                                             ; F9D29C  3c
 	ld h, 0x00:opc                                          ; F9D29D  26 00
@@ -51583,7 +51644,7 @@ sub_F9D29B:
 	pushw wa                                             ; F9D2B4  28
 	push 0x00                                            ; F9D2B5  09 00
 	push H                                               ; F9D2B7  ce 04
-	calr sub_F9F75C                                          ; F9D2B9  1e a0 24
+	calr CombiGroupName_CopyToBuffer                                          ; F9D2B9  1e a0 24
 	inc 1,H                                              ; F9D2BC  ce 61
 	add XIX,0x00000010                                   ; F9D2BE  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9D2C4  ef 60
@@ -51592,7 +51653,10 @@ sub_F9D29B:
 	pop XIX                                              ; F9D2CB  5c
 	popw hl                                              ; F9D2CC  4b
 	ret                                                  ; F9D2CD  0e
-sub_F9D2CE:
+; CombinationGroupNaming_DrawFields -- draws the numbered group list, the 16 combination-group names and the bank name with its group cursor
+; Evidence: layer 0; DisplayList_FA377A-FA37EA and DisplayList_FA3804-OperandTable_FA38F4 (shared with SoundGroupNaming_DrawFields), then interpreter B over DisplayList_FA3A52-OperandTable_FA3A6C (var 0x2698 'USER 1'/'RE-MAP n', var 0x2699 cursor).
+; Called from Screen_CombinationGroupNaming_Enter.
+CombinationGroupNaming_DrawFields:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9D2CE  f1 40 25 00 00
 	lda xbc, (DisplayList_FA37EA:24)                     ; F9D2D3  f2 ea 37 fa 31
 	push XBC                                             ; F9D2D8  39
@@ -51612,7 +51676,9 @@ sub_F9D2CE:
 	call T_DisplayListB_Run_Stack                        ; F9D304  1d 04 2e f4
 	add XSP,0x00000018                                   ; F9D308  ef c8 18 00 00 00
 	ret                                                  ; F9D30E  0e
-sub_F9D30F:
+; CombinationGroupNaming_DrawGroupCursor -- moves the group-row highlight to row (0x2699) on layer 1
+; Evidence: DisplayList_FA39D4 EraseRect, then DisplayList_FA3A52+0xF = interpreter-B op-03 on var 0x2699 into the rects at 0xFA3954. Called from CombinationGroupNaming_AdjustGroup 0xF9D08E.
+CombinationGroupNaming_DrawGroupCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9D30F  f1 40 25 00 01
 	lda xbc, (DisplayList_FA39D4:24)                     ; F9D314  f2 d4 39 fa 31
 	push XBC                                             ; F9D319  39
@@ -51622,7 +51688,10 @@ sub_F9D30F:
 	call T_DisplayListB_RunOne_Stack                     ; F9D324  1d 0c 2e f4
 	inc 8,XSP                                            ; F9D328  ef 60
 	ret                                                  ; F9D32A  0e
-sub_F9D32B:
+; CombinationGroupNaming_StoreGroupName -- stores the 16-byte name edited at 0x22F0 as the name of combination group (0x2699) of the selected bank
+; Evidence: (0x2698)=0 (USER 1): CombiBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0, 0x10, remote); 1-3 (RE-MAP 1-3): copy to 0x5890 + 0x210*(sel-1) + 16*group -- the RAM bases sub_FC2155 (behind CombiGroupName_CopyToBuffer) reads for codes 0x18-0x1A.
+; Called from the HandlerTable23_FA17CF slot-8 handler at 0xF9D1D6 after the (0x7FD6) bit-1 protect test.
+CombinationGroupNaming_StoreGroupName:
 	link XIZ,0xfffc                                      ; F9D32B  ee 0c fc ff
 	pushw hl                                             ; F9D32F  2b
 	pushw de                                             ; F9D330  2a
@@ -51648,12 +51717,12 @@ sub_F9D32B:
 	add XBC,ByteTable4_FA182B                            ; F9D358  e9 c8 2b 18 fa 00
 	ld A,(XBC)                                           ; F9D35E  81 21
 	pushw wa                                             ; F9D360  28
-	calr sub_F9F910                                          ; F9D361  1e ac 25
+	calr CombiBank_RemoteGroupNameAddr                                          ; F9D361  1e ac 25
 	push XIY                                             ; F9D364  3d
 	pushw 0x10                                           ; F9D365  0b 10 00
 	lda xbc, (0x22f0:16)                                ; F9D368  f1 f0 22 31
 	push XBC                                             ; F9D36C  39
-	calr sub_F9FAC1                                          ; F9D36D  1e 51 27
+	calr Link_WriteRemoteBlock                                          ; F9D36D  1e 51 27
 	inc 8,XSP                                            ; F9D370  ef 60
 	inc 6,XSP                                            ; F9D372  ef 66
 	jr .LF9D3B4                                          ; F9D374  68 3e
@@ -51690,7 +51759,10 @@ sub_F9D32B:
 	popw hl                                              ; F9D3B6  4b
 	unlk XIZ                                             ; F9D3B7  ee 0d
 	ret                                                  ; F9D3B9  0e
-sub_F9D3BA:
+; Screen_SoundCopy_Enter -- Enter (+0) method of screen 0x5E, SOUND COPY: on a new entry selects SINGLE mode ((0x269A)=1), then paints (unless only a field refresh is pending) and loads/draws the fields
+; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432.
+; Evidence: calls Paint_SoundCopy (whose lists all carry the title 'SOUND COPY' or its error page), SoundCopy_LoadNameBuffers and SoundCopy_DrawFields; id 0x5E is what SOUND/COMBINATION MANAGER's 'SOUND COPY' key requests (0xF9CA99).
+Screen_SoundCopy_Enter:
 	ld c, (0x207a:16)                                   ; F9D3BA  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9D3BE  c1 7b 20 f3
 	jr z, .LF9D3D3                                       ; F9D3C2  66 0f
@@ -51704,13 +51776,13 @@ sub_F9D3BA:
 	jr nz, .LF9D3ED                                      ; F9D3DF  6e 0c
 	m_or_mi8 MB16, 0x2900, 0x03                          ; F9D3E1  c1 00 29 3e 03
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9D3E6  1d 80 2e f4
-	calr sub_F9D943                                      ; F9D3EA  1e 56 05
+	calr Paint_SoundCopy                                      ; F9D3EA  1e 56 05
 .LF9D3ED:
-	calr sub_F9DA10                                          ; F9D3ED  1e 20 06
-	calr sub_F9DBC6                                          ; F9D3F0  1e d3 07
+	calr SoundCopy_LoadNameBuffers                                          ; F9D3ED  1e 20 06
+	calr SoundCopy_DrawFields                                          ; F9D3F0  1e d3 07
 	ret                                                  ; F9D3F3  0e
 ; ---------------------------------------------------------------------
-; sub_F9D3F4 -- NOT NAMED, though a byte-identical twin has a name.
+; Screen_SoundCopy_Leave -- NOT NAMED, though a byte-identical twin has a name.
 ;
 ; Body:    if (0x207A) == (0x207B), return; else clear (0x2806).
 ; ★ ALL 16 bytes of 0xF9D3F4-0xF9D403 are identical to
@@ -51727,14 +51799,21 @@ sub_F9D3BA:
 ;          did not run one.
 ; ---------------------------------------------------------------------
 
-sub_F9D3F4:
+; Screen_SoundCopy_Leave -- Leave (+4) method of SOUND COPY: if (0x207A) != (0x207B) it clears (0x2806), the link-request-outstanding flag SoundCopy_Request*Sound* set
+; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432 -- the vtable walk the old header asked for.
+; Evidence: ALL 16 bytes of 0xF9D3F4-0xF9D403 equal Screen_DrumsMapNaming_Leave at 0xF9EFF6 (0 differ); the shared shape is explained by both screens setting (0x2806)=1 while a CPU-2 transfer is pending (SoundCopy_RequestGroupSounds 0xF9FBD5, Screen_DrumsMapNaming_Enter 0xF9EFCE).
+; Body: if (0x207A) == (0x207B), return; else clear (0x2806).
+Screen_SoundCopy_Leave:
 	ld c, (0x207a:16)                                   ; F9D3F4  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9D3F8  c1 7b 20 f3
 	jr z, .LF9D403                                       ; F9D3FC  66 05
 	ld (0x2806:16), 0x00                                 ; F9D3FE  f1 06 28 00 00
 .LF9D403:
 	ret                                                  ; F9D403  0e
-sub_F9D404:
+; Screen_SoundCopy_Button -- Button (+8) method of SOUND COPY: ignores every button while (0x2806) is set, otherwise dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA182F
+; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_F426A0; prom_b T_F426A0/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432; `cp (0x2806),0x00 / jr NZ` at 0xF9D408.
+; Slots: 0-7 soft keys (bank/group/sound edits), 8 OK / GROUP-SINGLE, 10 YES (-> SoundCopy_Execute), 11 NO, 15 EXIT (-> screen 0x6D).
+Screen_SoundCopy_Button:
 	link XIZ,0x0000                                      ; F9D404  ee 0c 00 00
 	m_cp_mi8 MB16, 0x2806, 0x00                          ; F9D408  c1 06 28 3f 00
 	jr nz, .LF9D42F                                      ; F9D40D  6e 20
@@ -51755,7 +51834,10 @@ sub_F9D404:
 	ret                                                  ; F9D431  0e
 T_F426AC_Nop:
 	ret                                                  ; F9D432  0e
-sub_F9D433:
+; SoundCopy_AdjustSourceBank -- steps the SOUND COPY source bank (0x269B: ROM 1, ROM 2, USER 1, USER 2, EXT 1) and resets the source group and list position
+; Evidence: T_F42C78 on (0x269B) with Descriptor9_FA1636; the max is raised to 4 when (0x08EC) bit 0 is set; record FA3CA0 prints (0x269B) through 'ROM 1'..'EXT 1'; ByteTable5_FA188B {00,01,08,09,10} gives the bank code.
+; Evidence: on change (0x269C)=0; GROUP mode clears (0x269F)/(0x269E), SINGLE clears (0x269D), setting (0x2900) bit 0 so the cursor is redrawn; then `set 4,(0x2095)`. Called from HandlerTable23_FA182F slots 0/1.
+SoundCopy_AdjustSourceBank:
 	link XIZ,0xfff7                                      ; F9D433  ee 0c f7 ff
 	push XIX                                             ; F9D437  3c
 	lda xix, (0x2900:16)                                ; F9D438  f1 00 29 34
@@ -51814,7 +51896,7 @@ sub_F9D433:
 	jr z, .LF9D4C7                                       ; F9D4C3  66 02
 	jr .LF9D4CA                                          ; F9D4C5  68 03
 .LF9D4C7:
-	calr sub_F9D433                                      ; F9D4C7  1e 69 ff
+	calr SoundCopy_AdjustSourceBank                                      ; F9D4C7  1e 69 ff
 .LF9D4CA:
 	ret                                                  ; F9D4CA  0e
 	link XIZ,0xfff7                                      ; F9D4CB  ee 0c f7 ff
@@ -51833,7 +51915,7 @@ sub_F9D433:
 	jr z, .LF9D4FC                                       ; F9D4F3  66 07
 	jr .LF9D546                                          ; F9D4F5  68 4f
 .LF9D4F7:
-	calr sub_F9D433                                      ; F9D4F7  1e 39 ff
+	calr SoundCopy_AdjustSourceBank                                      ; F9D4F7  1e 39 ff
 	jr .LF9D546                                          ; F9D4FA  68 4a
 .LF9D4FC:
 	ld bc, (0x269b:16)                                 ; F9D4FC  d1 9b 26 21
@@ -51938,7 +52020,7 @@ sub_F9D433:
 	cp a, 0x01:i3                                          ; F9D5F7  c9 d9
 	jrl nz, .LF9D698                                     ; F9D5F9  7e 9c 00
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9D5FC  84 3e 01
-	calr sub_F9DC8C                                          ; F9D5FF  1e 8a 06
+	calr SoundCopy_DrawSourceGroupCursor                                          ; F9D5FF  1e 8a 06
 	jr .LF9D61B                                          ; F9D602  68 17
 .LF9D604:
 	lda xbc, (xiz-9)                                     ; F9D604  be f7 31
@@ -51949,7 +52031,7 @@ sub_F9D433:
 	inc 8,XSP                                            ; F9D611  ef 60
 	cp a, 0x01:i3                                          ; F9D613  c9 d9
 	jrl nz, .LF9D698                                     ; F9D615  7e 80 00
-	calr sub_F9DD3C                                          ; F9D618  1e 21 07
+	calr SoundCopy_DrawSourceGroupList                                          ; F9D618  1e 21 07
 .LF9D61B:
 	dec 0x01, (0x269c:16)                                ; F9D61B  c1 9c 26 69
 	jrl .LF9D698                                         ; F9D61F  78 76 00
@@ -51965,7 +52047,7 @@ sub_F9D433:
 	cp a, 0x01:i3                                          ; F9D638  c9 d9
 	jr nz, .LF9D698                                      ; F9D63A  6e 5c
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9D63C  84 3e 01
-	calr sub_F9DC8C                                          ; F9D63F  1e 4a 06
+	calr SoundCopy_DrawSourceGroupCursor                                          ; F9D63F  1e 4a 06
 	jr .LF9D65A                                          ; F9D642  68 16
 .LF9D644:
 	lda xbc, (xiz-9)                                     ; F9D644  be f7 31
@@ -51976,7 +52058,7 @@ sub_F9D433:
 	inc 8,XSP                                            ; F9D651  ef 60
 	cp a, 0x01:i3                                          ; F9D653  c9 d9
 	jr nz, .LF9D698                                      ; F9D655  6e 41
-	calr sub_F9DD3C                                          ; F9D657  1e e2 06
+	calr SoundCopy_DrawSourceGroupList                                          ; F9D657  1e e2 06
 .LF9D65A:
 	inc 0x01, (0x269c:16)                                ; F9D65A  c1 9c 26 61
 	jr .LF9D698                                          ; F9D65E  68 38
@@ -51989,7 +52071,7 @@ sub_F9D433:
 	pushw wa                                             ; F9D670  28
 	push 0x00                                            ; F9D671  09 00
 	m_push MB16, 0x269c                                  ; F9D673  c1 9c 26 04
-	calr sub_F9F6B2                                          ; F9D677  1e 38 20
+	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9D677  1e 38 20
 	ld (xiz-24), a                                       ; F9D67A  be e8 41
 	lda xbc, (xiz-27)                                    ; F9D67D  be e5 31
 	push XBC                                             ; F9D680  39
@@ -52001,13 +52083,16 @@ sub_F9D433:
 	cp a, 0x01:i3                                          ; F9D68E  c9 d9
 	jr nz, .LF9D698                                      ; F9D690  6e 06
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9D692  84 3e 01
-	calr sub_F9DCB8                                          ; F9D695  1e 20 06
+	calr SoundCopy_DrawSourceSoundCursor                                          ; F9D695  1e 20 06
 .LF9D698:
 	pop XIX                                              ; F9D698  5c
 	popw hl                                              ; F9D699  4b
 	unlk XIZ                                             ; F9D69A  ee 0d
 	ret                                                  ; F9D69C  0e
-sub_F9D69D:
+; SoundCopy_AdjustDestBank -- steps the SOUND COPY destination bank (0x26A0: USER 1 / USER 2) and resets the destination group and list position
+; Evidence: T_F42C78 on (0x26A0) with Descriptor9_FA1ACA (max 1); record FA3CAF prints it from 'USER 1','USER 2'; ByteTable2_FA1890 {08,09}; on change (0x26A1)=0 and (0x26A4)/(0x26A3) or (0x26A2) cleared with (0x2900) bit 1, then `set 4,(0x2095)`.
+; Called from HandlerTable23_FA182F slots 4/5.
+SoundCopy_AdjustDestBank:
 	push XIX                                             ; F9D69D  3c
 	lda xix, (0x2900:16)                                ; F9D69E  f1 00 29 34
 	lda xbc, (Descriptor9_FA1ACA:24)                     ; F9D6A2  f2 ca 1a fa 31
@@ -52053,7 +52138,7 @@ sub_F9D69D:
 	jr z, .LF9D711                                       ; F9D70D  66 02
 	jr .LF9D714                                          ; F9D70F  68 03
 .LF9D711:
-	calr sub_F9D69D                                      ; F9D711  1e 89 ff
+	calr SoundCopy_AdjustDestBank                                      ; F9D711  1e 89 ff
 .LF9D714:
 	ret                                                  ; F9D714  0e
 	ld (0x209b:16), 0x06                                 ; F9D715  f1 9b 20 00 06
@@ -52066,7 +52151,7 @@ sub_F9D69D:
 	jr z, .LF9D734                                       ; F9D72B  66 07
 	jr .LF9D75D                                          ; F9D72D  68 2e
 .LF9D72F:
-	calr sub_F9D69D                                      ; F9D72F  1e 6b ff
+	calr SoundCopy_AdjustDestBank                                      ; F9D72F  1e 6b ff
 	jr .LF9D75D                                          ; F9D732  68 29
 .LF9D734:
 	lda xbc, (Descriptor9_FA1AE5:24)                     ; F9D734  f2 e5 1a fa 31
@@ -52111,7 +52196,7 @@ sub_F9D69D:
 	cp a, 0x01:i3                                          ; F9D7A0  c9 d9
 	jrl nz, .LF9D829                                     ; F9D7A2  7e 84 00
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9D7A5  84 3e 02
-	calr sub_F9DCE4                                          ; F9D7A8  1e 39 05
+	calr SoundCopy_DrawDestGroupCursor                                          ; F9D7A8  1e 39 05
 	jr .LF9D7C6                                          ; F9D7AB  68 19
 .LF9D7AD:
 	lda xbc, (Descriptor9_FA1AD3:24)                     ; F9D7AD  f2 d3 1a fa 31
@@ -52122,7 +52207,7 @@ sub_F9D69D:
 	inc 8,XSP                                            ; F9D7BC  ef 60
 	cp a, 0x01:i3                                          ; F9D7BE  c9 d9
 	jrl nz, .LF9D829                                     ; F9D7C0  7e 66 00
-	calr sub_F9DD54                                          ; F9D7C3  1e 8e 05
+	calr SoundCopy_DrawDestGroupList                                          ; F9D7C3  1e 8e 05
 .LF9D7C6:
 	dec 0x01, (0x26a1:16)                                ; F9D7C6  c1 a1 26 69
 	jr .LF9D829                                          ; F9D7CA  68 5d
@@ -52138,7 +52223,7 @@ sub_F9D69D:
 	cp a, 0x01:i3                                          ; F9D7E4  c9 d9
 	jr nz, .LF9D829                                      ; F9D7E6  6e 41
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9D7E8  84 3e 02
-	calr sub_F9DCE4                                          ; F9D7EB  1e f6 04
+	calr SoundCopy_DrawDestGroupCursor                                          ; F9D7EB  1e f6 04
 	jr .LF9D808                                          ; F9D7EE  68 18
 .LF9D7F0:
 	lda xbc, (Descriptor9_FA1AD3:24)                     ; F9D7F0  f2 d3 1a fa 31
@@ -52149,7 +52234,7 @@ sub_F9D69D:
 	inc 8,XSP                                            ; F9D7FF  ef 60
 	cp a, 0x01:i3                                          ; F9D801  c9 d9
 	jr nz, .LF9D829                                      ; F9D803  6e 24
-	calr sub_F9DD54                                          ; F9D805  1e 4c 05
+	calr SoundCopy_DrawDestGroupList                                          ; F9D805  1e 4c 05
 .LF9D808:
 	inc 0x01, (0x26a1:16)                                ; F9D808  c1 a1 26 61
 	jr .LF9D829                                          ; F9D80C  68 1b
@@ -52163,7 +52248,7 @@ sub_F9D69D:
 	cp a, 0x01:i3                                          ; F9D81F  c9 d9
 	jr nz, .LF9D829                                      ; F9D821  6e 06
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9D823  84 3e 02
-	calr sub_F9DD10                                          ; F9D826  1e e7 04
+	calr SoundCopy_DrawDestSoundCursor                                          ; F9D826  1e e7 04
 .LF9D829:
 	pop XIX                                              ; F9D829  5c
 	ret                                                  ; F9D82A  0e
@@ -52241,7 +52326,7 @@ sub_F9D69D:
 .LF9D8D1:
 	ld (UI_StatusCode:16), 0x25                                 ; F9D8D1  f1 80 28 00 25
 	call T_F41600                                        ; F9D8D6  1d 00 16 f4
-	calr sub_F9DD6C                                          ; F9D8DA  1e 8f 04
+	calr SoundCopy_Execute                                          ; F9D8DA  1e 8f 04
 .LF9D8DD:
 	ret                                                  ; F9D8DD  0e
 	push XIX                                             ; F9D8DE  3c
@@ -52291,7 +52376,10 @@ sub_F9D69D:
 .LF9D941:
 	pop XIX                                              ; F9D941  5c
 	ret                                                  ; F9D942  0e
-sub_F9D943:
+; Paint_SoundCopy -- paints the SOUND COPY page for the current state (0x269A) through JumpTable_F9D966: GROUP, SINGLE, overwrite confirmation, or drum-kit error
+; Evidence: T_F42E10, bound `cp BC,7`, JumpTable_F9D966 = {Paint_SoundCopyGroup, Paint_SoundCopySingle, Paint_SoundCopyAreYouSure x2, Paint_ErrorImpossibleCopyDrumKit x4}; XIX = 0x2540 (layer); exits through T_F42E14.
+; Called from Screen_SoundCopy_Enter 0xF9D3EA.
+Paint_SoundCopy:
 	push XIX                                             ; F9D943  3c
 	lda xix, (LCD_CurrentLayer:16)                                ; F9D944  f1 40 25 34
 	call T_F42E10                                        ; F9D948  1d 10 2e f4
@@ -52314,15 +52402,17 @@ sub_F9D943:
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 JumpTable_F9D966:
-	.long sub_F9D986                                 ; F9D966  [  0]
-	.long sub_F9D9AC                                 ; F9D96A  [  1]
-	.long sub_F9D9D2                                 ; F9D96E  [  2]
-	.long sub_F9D9D2                                 ; F9D972  [  3]
-	.long sub_F9D9F5                                 ; F9D976  [  4]
-	.long sub_F9D9F5                                 ; F9D97A  [  5]
-	.long sub_F9D9F5                                 ; F9D97E  [  6]
-	.long sub_F9D9F5                                 ; F9D982  [  7]
-sub_F9D986:   ; entry: named by 1 `.long` operand, first at 0xF9D966
+	.long Paint_SoundCopyGroup                                 ; F9D966  [  0]
+	.long Paint_SoundCopySingle                                 ; F9D96A  [  1]
+	.long Paint_SoundCopyAreYouSure                                 ; F9D96E  [  2]
+	.long Paint_SoundCopyAreYouSure                                 ; F9D972  [  3]
+	.long Paint_ErrorImpossibleCopyDrumKit                                 ; F9D976  [  4]
+	.long Paint_ErrorImpossibleCopyDrumKit                                 ; F9D97A  [  5]
+	.long Paint_ErrorImpossibleCopyDrumKit                                 ; F9D97E  [  6]
+	.long Paint_ErrorImpossibleCopyDrumKit                                 ; F9D982  [  7]
+; Paint_SoundCopyGroup -- paints SOUND COPY in GROUP mode ((0x269A)=0): the 'GROUP/SINGLE' legend and the BANK/GROUP-to-BANK/GROUP layout
+; Evidence: JumpTable_F9D966 entry 0; layer 0 DisplayList_FA3BA8-FA3BD1 ('GROUP/SINGLE'), layer 2 DisplayList_FA3A9C-FA3BA8 ('SOUND COPY','SYSTEM','OK','BANK','GROUP','GROUP','BANK'); shares the tail .LF9DA04 of Paint_SoundCopy.
+Paint_SoundCopyGroup:   ; entry: named by 1 `.long` operand, first at 0xF9D966
 	ld (XIX),0x00                                        ; F9D986  b4 00 00
 	lda xbc, (DisplayList_FA3BD1:24)                     ; F9D989  f2 d1 3b fa 31
 	push XBC                                             ; F9D98E  39
@@ -52336,7 +52426,9 @@ sub_F9D986:   ; entry: named by 1 `.long` operand, first at 0xF9D966
 	lda xwa, (DisplayList_FA3A9C:24)                     ; F9D9A4  f2 9c 3a fa 30
 	push XWA                                             ; F9D9A9  38
 	jr .LF9DA04                                          ; F9D9AA  68 58
-sub_F9D9AC:   ; entry: named by 1 `.long` operand, first at 0xF9D96A
+; Paint_SoundCopySingle -- paints SOUND COPY in SINGLE mode ((0x269A)=1): the legend and the BANK/GROUP/SOUND layout of both columns
+; Evidence: JumpTable_F9D966 entry 1; layer 0 DisplayList_FA3BA8-FA3BD1, layer 2 DisplayList_FA3ED3-FA4041 ('SOUND COPY','OK','BANK','GROUP','SOUND','GROUP','SOUND','BANK').
+Paint_SoundCopySingle:   ; entry: named by 1 `.long` operand, first at 0xF9D96A
 	ld (XIX),0x00                                        ; F9D9AC  b4 00 00
 	lda xbc, (DisplayList_FA3BD1:24)                     ; F9D9AF  f2 d1 3b fa 31
 	push XBC                                             ; F9D9B4  39
@@ -52350,7 +52442,9 @@ sub_F9D9AC:   ; entry: named by 1 `.long` operand, first at 0xF9D96A
 	lda xwa, (DisplayList_FA3ED3:24)                     ; F9D9CA  f2 d3 3e fa 30
 	push XWA                                             ; F9D9CF  38
 	jr .LF9DA04                                          ; F9D9D0  68 32
-sub_F9D9D2:   ; entry: named by 2 `.long` operands, first at 0xF9D96E
+; Paint_SoundCopyAreYouSure -- paints SOUND COPY's confirmation page ((0x269A) bit 1 set): the overwrite warning and the ATTENTI0N!/Are You Sure? YES/NO box
+; Evidence: JumpTable_F9D966 entries 2-3; layer 0 DisplayList_FA3BD1-FA3C39 ('SOUND COPY','The memory to which you','are copying will be','overwritten.') then DisplayList_FA302F-FA30A6 ('YES','NO','ATTENTI0N!','Are You Sure?').
+Paint_SoundCopyAreYouSure:   ; entry: named by 2 `.long` operands, first at 0xF9D96E
 	ld (XIX),0x00                                        ; F9D9D2  b4 00 00
 	lda xbc, (DisplayList_FA3C39:24)                     ; F9D9D5  f2 39 3c fa 31
 	push XBC                                             ; F9D9DA  39
@@ -52363,7 +52457,10 @@ sub_F9D9D2:   ; entry: named by 2 `.long` operands, first at 0xF9D96E
 	lda xwa, (DisplayList_FA302F:24)                     ; F9D9ED  f2 2f 30 fa 30
 	push XWA                                             ; F9D9F2  38
 	jr .LF9DA04                                          ; F9D9F3  68 0f
-sub_F9D9F5:   ; entry: named by 4 `.long` operands, first at 0xF9D976
+; Paint_ErrorImpossibleCopyDrumKit -- paints SOUND COPY's error page ((0x269A) bit 2 set): 'ERROR! It is impossible to copy a Drum Kit.'
+; Evidence: JumpTable_F9D966 entries 4-7; layer 0 DisplayList_FA3C39-FA3CA0 ('ERROR!','It is impossible to copy a Drum Kit.','Please select a Sound other than a','Drum Kit.'); same naming pattern as Paint_ErrorImpossibleDrumMap.
+; The state is set by SoundCopy_Execute (0xF9DEEC) when SoundCopy_ReadExtGroupDrumFlag is non-zero.
+Paint_ErrorImpossibleCopyDrumKit:   ; entry: named by 4 `.long` operands, first at 0xF9D976
 	ld (XIX),0x00                                        ; F9D9F5  b4 00 00
 	lda xbc, (DisplayList_FA3CA0:24)                     ; F9D9F8  f2 a0 3c fa 31
 	push XBC                                             ; F9D9FD  39
@@ -52376,7 +52473,11 @@ sub_F9D9F5:   ; entry: named by 4 `.long` operands, first at 0xF9D976
 	call T_F42E14                                        ; F9DA0A  1d 14 2e f4
 	pop XIX                                              ; F9DA0E  5c
 	ret                                                  ; F9DA0F  0e
-sub_F9DA10:
+; SoundCopy_LoadNameBuffers -- fills the name buffers the SOUND COPY lists print, according to the mode (0x269A)
+; Evidence: mode 0 (GROUP): SoundGroupName_CopyToBuffer for every group of the source bank into 0x2940+16*g (count (0x08E8) for EXT, else 16; blanks after) and of the destination bank (ByteTable2_FA1890[(0x26A0)]) into 0x60A000+16*g -- the tables records FA3D4F and FA3DC7 index.
+; Evidence: mode 1 (SINGLE): source group name -> 0x2940, its sounds (SoundName_CopyToBuffer, count from SoundGroup_MaxMemberIndex_ByStack) -> 0x2950..; destination group name -> 0x29D0, its 8 sounds -> 0x29E0...
+; Called from Screen_SoundCopy_Enter 0xF9D3ED.
+SoundCopy_LoadNameBuffers:
 	pushw hl                                             ; F9DA10  2b
 	pushw de                                             ; F9DA11  2a
 	push XIX                                             ; F9DA12  3c
@@ -52413,7 +52514,7 @@ sub_F9DA10:
 	ld A,(XBC)                                           ; F9DA5B  81 21
 	pushw wa                                             ; F9DA5D  28
 	pushw hl                                             ; F9DA5E  2b
-	calr sub_F9F65B                                          ; F9DA5F  1e f9 1b
+	calr SoundGroupName_CopyToBuffer                                          ; F9DA5F  1e f9 1b
 	inc 1,L                                              ; F9DA62  cf 61
 	add XIX,0x00000010                                   ; F9DA64  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9DA6A  ef 60
@@ -52453,7 +52554,7 @@ sub_F9DA10:
 	ld A,(XBC)                                           ; F9DAB1  81 21
 	pushw wa                                             ; F9DAB3  28
 	pushw hl                                             ; F9DAB4  2b
-	calr sub_F9F65B                                          ; F9DAB5  1e a3 1b
+	calr SoundGroupName_CopyToBuffer                                          ; F9DAB5  1e a3 1b
 	inc 1,L                                              ; F9DAB8  cf 61
 	add XIX,0x00000010                                   ; F9DABA  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9DAC0  ef 60
@@ -52472,7 +52573,7 @@ sub_F9DA10:
 	push W                                               ; F9DAE1  c8 04
 	push 0x00                                            ; F9DAE3  09 00
 	m_push MB16, 0x269c                                  ; F9DAE5  c1 9c 26 04
-	calr sub_F9F65B                                          ; F9DAE9  1e 6f 1b
+	calr SoundGroupName_CopyToBuffer                                          ; F9DAE9  1e 6f 1b
 	ld bc, (0x269b:16)                                 ; F9DAEC  d1 9b 26 21
 	extz BC                                              ; F9DAF0  d9 12
 	extz XBC                                             ; F9DAF2  e9 12
@@ -52481,7 +52582,7 @@ sub_F9DA10:
 	pushw wa                                             ; F9DAFC  28
 	push 0x00                                            ; F9DAFD  09 00
 	m_push MB16, 0x269c                                  ; F9DAFF  c1 9c 26 04
-	calr sub_F9F6B2                                          ; F9DB03  1e ac 1b
+	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9DB03  1e ac 1b
 	ld H,A                                               ; F9DB06  c9 8e
 	ld l, 0x00:opc                                          ; F9DB08  27 00
 	lda xix, (0x2950:16)                                ; F9DB0A  f1 50 29 34
@@ -52499,7 +52600,7 @@ sub_F9DA10:
 	pushw hl                                             ; F9DB26  2b
 	push 0x00                                            ; F9DB27  09 00
 	m_push MB16, 0x269c                                  ; F9DB29  c1 9c 26 04
-	calr sub_F9F5E8                                          ; F9DB2D  1e b8 1a
+	calr SoundName_CopyToBuffer                                          ; F9DB2D  1e b8 1a
 	inc 1,L                                              ; F9DB30  cf 61
 	add XIX,0x00000010                                   ; F9DB32  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9DB38  ef 60
@@ -52540,7 +52641,7 @@ sub_F9DA10:
 	push W                                               ; F9DB82  c8 04
 	push 0x00                                            ; F9DB84  09 00
 	m_push MB16, 0x26a1                                  ; F9DB86  c1 a1 26 04
-	calr sub_F9F65B                                          ; F9DB8A  1e ce 1a
+	calr SoundGroupName_CopyToBuffer                                          ; F9DB8A  1e ce 1a
 	ld l, 0x00:opc                                          ; F9DB8D  27 00
 	lda xix, (0x29e0:16)                                ; F9DB8F  f1 e0 29 34
 	inc 8,XSP                                            ; F9DB93  ef 60
@@ -52555,7 +52656,7 @@ sub_F9DA10:
 	pushw hl                                             ; F9DBA7  2b
 	push 0x00                                            ; F9DBA8  09 00
 	m_push MB16, 0x26a1                                  ; F9DBAA  c1 a1 26 04
-	calr sub_F9F5E8                                          ; F9DBAE  1e 37 1a
+	calr SoundName_CopyToBuffer                                          ; F9DBAE  1e 37 1a
 	inc 1,L                                              ; F9DBB1  cf 61
 	add XIX,0x00000010                                   ; F9DBB3  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9DBB9  ef 60
@@ -52567,7 +52668,10 @@ sub_F9DA10:
 	popw de                                              ; F9DBC3  4a
 	popw hl                                              ; F9DBC4  4b
 	ret                                                  ; F9DBC5  0e
-sub_F9DBC6:
+; SoundCopy_DrawFields -- draws SOUND COPY's live fields for the current state (0x269A) through JumpTable_F9DBE6
+; Evidence: bound `cp BC,7`; entries {SoundCopy_DrawGroupModeFields, SoundCopy_DrawSingleModeFields, none, none, SoundCopy_ClearErrorState x4}; XIX = T_DisplayListB_Run_Stack for the `jp (xix)` calls.
+; Called from Screen_SoundCopy_Enter 0xF9D3F0.
+SoundCopy_DrawFields:
 	push XIX                                             ; F9DBC6  3c
 	lda xix, (T_DisplayListB_Run_Stack:24)               ; F9DBC7  f2 04 2e f4 34
 	ld bc, (0x269a:16)                                 ; F9DBCC  d1 9a 26 21
@@ -52589,15 +52693,17 @@ sub_F9DBC6:
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 JumpTable_F9DBE6:
-	.long sub_F9DC06                                 ; F9DBE6  [  0]
-	.long sub_F9DC3B                                 ; F9DBEA  [  1]
+	.long SoundCopy_DrawGroupModeFields                                 ; F9DBE6  [  0]
+	.long SoundCopy_DrawSingleModeFields                                 ; F9DBEA  [  1]
 	.long .LF9DC8A                                   ; F9DBEE  [  2]
 	.long .LF9DC8A                                   ; F9DBF2  [  3]
-	.long sub_F9DC85                                 ; F9DBF6  [  4]
-	.long sub_F9DC85                                 ; F9DBFA  [  5]
-	.long sub_F9DC85                                 ; F9DBFE  [  6]
-	.long sub_F9DC85                                 ; F9DC02  [  7]
-sub_F9DC06:   ; entry: named by 1 `.long` operand, first at 0xF9DBE6
+	.long SoundCopy_ClearErrorState                                 ; F9DBF6  [  4]
+	.long SoundCopy_ClearErrorState                                 ; F9DBFA  [  5]
+	.long SoundCopy_ClearErrorState                                 ; F9DBFE  [  6]
+	.long SoundCopy_ClearErrorState                                 ; F9DC02  [  7]
+; SoundCopy_DrawGroupModeFields -- GROUP-mode field drawer: bank names, the GROUP/SINGLE highlight, both group-row cursors and both scrolling group lists
+; Evidence: JumpTable_F9DBE6 entry 0; interpreter B over DisplayList_FA3CA0-FA3CBE (var 0x269B, 0x26A0), record DisplayList_FA3D34 (var 0x269A bit 0 box), then SoundCopy_DrawSourceGroupCursor, _DrawDestGroupCursor, _DrawSourceGroupList, _DrawDestGroupList.
+SoundCopy_DrawGroupModeFields:   ; entry: named by 1 `.long` operand, first at 0xF9DBE6
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9DC06  f1 40 25 00 00
 	lda xbc, (DisplayList_FA3CBE:24)                     ; F9DC0B  f2 be 3c fa 31
 	push XBC                                             ; F9DC10  39
@@ -52610,14 +52716,16 @@ sub_F9DC06:   ; entry: named by 1 `.long` operand, first at 0xF9DBE6
 	lda xbc, (DisplayList_FA3D34:24)                     ; F9DC1F  f2 34 3d fa 31
 	push XBC                                             ; F9DC24  39
 	call T_DisplayListB_RunOne_Stack                     ; F9DC25  1d 0c 2e f4
-	calr sub_F9DC8C                                      ; F9DC29  1e 60 00
-	calr sub_F9DCE4                                      ; F9DC2C  1e b5 00
-	calr sub_F9DD3C                                      ; F9DC2F  1e 0a 01
-	calr sub_F9DD54                                      ; F9DC32  1e 1f 01
+	calr SoundCopy_DrawSourceGroupCursor                                      ; F9DC29  1e 60 00
+	calr SoundCopy_DrawDestGroupCursor                                      ; F9DC2C  1e b5 00
+	calr SoundCopy_DrawSourceGroupList                                      ; F9DC2F  1e 0a 01
+	calr SoundCopy_DrawDestGroupList                                      ; F9DC32  1e 1f 01
 	inc 8,XSP                                            ; F9DC35  ef 60
 	inc 4,XSP                                            ; F9DC37  ef 64
 	jr .LF9DC8A                                          ; F9DC39  68 4f
-sub_F9DC3B:   ; entry: named by 1 `.long` operand, first at 0xF9DBEA
+; SoundCopy_DrawSingleModeFields -- SINGLE-mode field drawer: bank names, the group/sound name buffers, the GROUP/SINGLE highlight and both sound-row cursors
+; Evidence: JumpTable_F9DBE6 entry 1; interpreter B over DisplayList_FA3ED3+0x16E..FA405F (vars 0x269B, 0x26A0), DisplayList_FA3230+0x1E..+0x12C (the 0x2940-0x2A50 buffers, shared with RE-MAP EDIT), DisplayList_FA3D34; then SoundCopy_DrawSourceSoundCursor and _DrawDestSoundCursor.
+SoundCopy_DrawSingleModeFields:   ; entry: named by 1 `.long` operand, first at 0xF9DBEA
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9DC3B  f1 40 25 00 00
 	lda xbc, (DisplayList_FA405F:24)                     ; F9DC40  f2 5f 40 fa 31
 	push XBC                                             ; F9DC45  39
@@ -52639,16 +52747,20 @@ sub_F9DC3B:   ; entry: named by 1 `.long` operand, first at 0xF9DBEA
 	lda xbc, (DisplayList_FA3D34:24)                     ; F9DC6D  f2 34 3d fa 31
 	push XBC                                             ; F9DC72  39
 	call T_DisplayListB_RunOne_Stack                     ; F9DC73  1d 0c 2e f4
-	calr sub_F9DCB8                                      ; F9DC77  1e 3e 00
-	calr sub_F9DD10                                      ; F9DC7A  1e 93 00
+	calr SoundCopy_DrawSourceSoundCursor                                      ; F9DC77  1e 3e 00
+	calr SoundCopy_DrawDestSoundCursor                                      ; F9DC7A  1e 93 00
 	add XSP,0x00000014                                   ; F9DC7D  ef c8 14 00 00 00
 	jr .LF9DC8A                                          ; F9DC83  68 05
-sub_F9DC85:   ; entry: named by 4 `.long` operands, first at 0xF9DBF6
+; SoundCopy_ClearErrorState -- field step of the error state: clears bits 1 and 2 of (0x269A) so the next refresh returns to GROUP/SINGLE
+; Evidence: JumpTable_F9DBE6 entries 4-7 (the states Paint_ErrorImpossibleCopyDrumKit paints); body `and (0x269A),0xf9` then the shared `pop XIX / ret`.
+SoundCopy_ClearErrorState:   ; entry: named by 4 `.long` operands, first at 0xF9DBF6
 	m_and_mi8 MB16, 0x269a, 0xf9                         ; F9DC85  c1 9a 26 3c f9
 .LF9DC8A:
 	pop XIX                                              ; F9DC8A  5c
 	ret                                                  ; F9DC8B  0e
-sub_F9DC8C:
+; SoundCopy_DrawSourceGroupCursor -- GROUP mode: redraws the source-list row cursor (0x269E) when (0x2900) bit 0 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA3E7F = EraseRect x 0x0A-0x93, y 0x53-0xC0; DisplayList_FA3CBE = interpreter-B op-03 on var 0x269E (mask 7) into the rects at 0xFA3E3F; `and (0x2900),0xfe`.
+SoundCopy_DrawSourceGroupCursor:
 	push XIX                                             ; F9DC8C  3c
 	lda xix, (0x2900:16)                                ; F9DC8D  f1 00 29 34
 	ld C,(XIX)                                           ; F9DC91  84 23
@@ -52666,7 +52778,9 @@ sub_F9DC8C:
 	and (XIX),0xfe                                       ; F9DCB3  84 3c fe
 	pop XIX                                              ; F9DCB6  5c
 	ret                                                  ; F9DCB7  0e
-sub_F9DCB8:
+; SoundCopy_DrawSourceSoundCursor -- SINGLE mode: redraws the source-sound row cursor (0x269D) when (0x2900) bit 0 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA34E7 EraseRect (left column); DisplayList_FA405F = interpreter-B op-03 on var 0x269D into the rects at 0xFA34A7.
+SoundCopy_DrawSourceSoundCursor:
 	push XIX                                             ; F9DCB8  3c
 	lda xix, (0x2900:16)                                ; F9DCB9  f1 00 29 34
 	ld C,(XIX)                                           ; F9DCBD  84 23
@@ -52684,7 +52798,9 @@ sub_F9DCB8:
 	and (XIX),0xfe                                       ; F9DCDF  84 3c fe
 	pop XIX                                              ; F9DCE2  5c
 	ret                                                  ; F9DCE3  0e
-sub_F9DCE4:
+; SoundCopy_DrawDestGroupCursor -- GROUP mode: redraws the destination-list row cursor (0x26A3) when (0x2900) bit 1 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA3EC9 = EraseRect x 0xAC-0x133, y 0x53-0xC0; DisplayList_FA3CC9 = interpreter-B op-03 on var 0x26A3 into the rects at 0xFA3E89.
+SoundCopy_DrawDestGroupCursor:
 	push XIX                                             ; F9DCE4  3c
 	lda xix, (0x2900:16)                                ; F9DCE5  f1 00 29 34
 	ld C,(XIX)                                           ; F9DCE9  84 23
@@ -52702,7 +52818,9 @@ sub_F9DCE4:
 	and (XIX),0xfd                                       ; F9DD0B  84 3c fd
 	pop XIX                                              ; F9DD0E  5c
 	ret                                                  ; F9DD0F  0e
-sub_F9DD10:
+; SoundCopy_DrawDestSoundCursor -- SINGLE mode: redraws the destination-sound row cursor (0x26A2) when (0x2900) bit 1 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA3531 EraseRect (right column); DisplayList_FA406A = interpreter-B op-03 on var 0x26A2 into the rects at 0xFA34F1.
+SoundCopy_DrawDestSoundCursor:
 	push XIX                                             ; F9DD10  3c
 	lda xix, (0x2900:16)                                ; F9DD11  f1 00 29 34
 	ld C,(XIX)                                           ; F9DD15  84 23
@@ -52720,7 +52838,9 @@ sub_F9DD10:
 	and (XIX),0xfd                                       ; F9DD37  84 3c fd
 	pop XIX                                              ; F9DD3A  5c
 	ret                                                  ; F9DD3B  0e
-sub_F9DD3C:
+; SoundCopy_DrawSourceGroupList -- GROUP mode: prints 8 rows of source group names starting at the scroll position (0x269F)
+; Evidence: interpreter B over DisplayList_FA3D4F-FA3DC7: op-02 records on var 0x269F (mask 0x0F) indexing 16-byte tables at 0x2940, 0x2950, ... -- row r shows group (0x269F)+r of the names SoundCopy_LoadNameBuffers left at 0x2940.
+SoundCopy_DrawSourceGroupList:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9DD3C  f1 40 25 00 00
 	lda xbc, (DisplayList_FA3DC7:24)                     ; F9DD41  f2 c7 3d fa 31
 	push XBC                                             ; F9DD46  39
@@ -52729,7 +52849,9 @@ sub_F9DD3C:
 	call T_DisplayListB_Run_Stack                        ; F9DD4D  1d 04 2e f4
 	inc 8,XSP                                            ; F9DD51  ef 60
 	ret                                                  ; F9DD53  0e
-sub_F9DD54:
+; SoundCopy_DrawDestGroupList -- GROUP mode: prints 8 rows of destination group names starting at the scroll position (0x26A4)
+; Evidence: interpreter B over DisplayList_FA3DC7-OperandTable_FA3E3F: op-02 records on var 0x26A4 indexing 16-byte tables at 0x60A000, 0x60A010, ... (filled by SoundCopy_LoadNameBuffers).
+SoundCopy_DrawDestGroupList:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9DD54  f1 40 25 00 00
 	lda xbc, (OperandTable_FA3E3F:24)                    ; F9DD59  f2 3f 3e fa 31
 	push XBC                                             ; F9DD5E  39
@@ -52738,7 +52860,11 @@ sub_F9DD54:
 	call T_DisplayListB_Run_Stack                        ; F9DD65  1d 04 2e f4
 	inc 8,XSP                                            ; F9DD69  ef 60
 	ret                                                  ; F9DD6B  0e
-sub_F9DD6C:
+; SoundCopy_Execute -- performs the SOUND COPY (the YES key): copies the source group (name + 8 sounds, 0x1648 bytes) or one sound (0x2C9 bytes) into the USER destination
+; Evidence: USER 1/2 sources: Link_ReadRemoteBlock from UserSoundBank_Remote*Addr into 0x60A7F0/0x60A800, Link_WriteRemoteBlock to the destination's addresses, SoundCopy_RefreshPartsUsingSound per copied sound; ROM 1/2 and EXT sources: SoundCopy_RequestGroupSounds / _RequestSingleSound.
+; Evidence: EXT: SoundCopy_ReadExtGroupDrumFlag non-zero -> `set 2,(0x269A)` and screen request 0x5E (error page); done: `res 1,(0x269A)`, (0x2880)=0x23, (0x2070)=0xAB with (0x2071) bit 6.
+; Called from HandlerTable23_FA182F slot 10 (the 'YES' row) at 0xF9D8DA in states 2/3.
+SoundCopy_Execute:
 	link XIZ,0xfff8                                      ; F9DD6C  ee 0c f8 ff
 	pushw hl                                             ; F9DD70  2b
 	push XIX                                             ; F9DD71  3c
@@ -52772,12 +52898,12 @@ sub_F9DD6C:
 .LF9DDBB:
 	push 0x00                                            ; F9DDBB  09 00
 	m_push MB16, 0x269c                                  ; F9DDBD  c1 9c 26 04
-	calr sub_F9FDC8                                          ; F9DDC1  1e 04 20
+	calr SoundCopy_ReadExtGroupDrumFlag                                          ; F9DDC1  1e 04 20
 	popw bc                                              ; F9DDC4  49
 	cp a, 0x00:i3                                          ; F9DDC5  c9 d8
 	jrl nz, .LF9DEEC                                     ; F9DDC7  7e 22 01
 .LF9DDCA:
-	calr sub_F9FB7A                                          ; F9DDCA  1e ad 1d
+	calr SoundCopy_RequestGroupSounds                                          ; F9DDCA  1e ad 1d
 	jrl .LF9DF8C                                         ; F9DDCD  78 bc 01
 .LF9DDD0:
 	lda xbc, (0x60a7f0:24)                               ; F9DDD0  f2 f0 a7 60 31
@@ -52793,10 +52919,10 @@ sub_F9DD6C:
 	ld W,(XWA)                                           ; F9DDF0  80 20
 	push 0x00                                            ; F9DDF2  09 00
 	push W                                               ; F9DDF4  c8 04
-	calr sub_F9F7F6                                          ; F9DDF6  1e fd 19
+	calr UserSoundBank_RemoteGroupNameAddr                                          ; F9DDF6  1e fd 19
 	pop XBC                                              ; F9DDF9  59
 	push XIY                                             ; F9DDFA  3d
-	calr sub_F9FAE9                                          ; F9DDFB  1e eb 1c
+	calr Link_ReadRemoteBlock                                          ; F9DDFB  1e eb 1c
 	push 0x00                                            ; F9DDFE  09 00
 	m_push MB16, 0x26a1                                  ; F9DE00  c1 a1 26 04
 	ld bc, (0x26a0:16)                                 ; F9DE04  d1 a0 26 21
@@ -52805,12 +52931,12 @@ sub_F9DD6C:
 	add XBC,XIX                                          ; F9DE0C  ec 81
 	ld A,(XBC)                                           ; F9DE0E  81 21
 	pushw wa                                             ; F9DE10  28
-	calr sub_F9F7F6                                          ; F9DE11  1e e2 19
+	calr UserSoundBank_RemoteGroupNameAddr                                          ; F9DE11  1e e2 19
 	push XIY                                             ; F9DE14  3d
 	pushw 0x10                                           ; F9DE15  0b 10 00
 	ld xbc, (xiz-4)                                      ; F9DE18  ae fc 21
 	push XBC                                             ; F9DE1B  39
-	calr sub_F9FAC1                                          ; F9DE1C  1e a2 1c
+	calr Link_WriteRemoteBlock                                          ; F9DE1C  1e a2 1c
 	lda xbc, (0x60a800:24)                               ; F9DE1F  f2 00 a8 60 31
 	ld (xiz-8), xbc                                      ; F9DE24  be f8 61
 	add XSP,0x00000018                                   ; F9DE27  ef c8 18 00 00 00
@@ -52826,10 +52952,10 @@ sub_F9DD6C:
 	ld W,(XWA)                                           ; F9DE48  80 20
 	push 0x00                                            ; F9DE4A  09 00
 	push W                                               ; F9DE4C  c8 04
-	calr sub_F9F861                                          ; F9DE4E  1e 10 1a
+	calr UserSoundBank_RemoteSoundAddr                                          ; F9DE4E  1e 10 1a
 	inc 6,XSP                                            ; F9DE51  ef 66
 	push XIY                                             ; F9DE53  3d
-	calr sub_F9FAE9                                          ; F9DE54  1e 92 1c
+	calr Link_ReadRemoteBlock                                          ; F9DE54  1e 92 1c
 	pushw 0x00                                           ; F9DE57  0b 00 00
 	push 0x00                                            ; F9DE5A  09 00
 	m_push MB16, 0x26a1                                  ; F9DE5C  c1 a1 26 04
@@ -52839,12 +52965,12 @@ sub_F9DD6C:
 	add XBC,XIX                                          ; F9DE68  ec 81
 	ld A,(XBC)                                           ; F9DE6A  81 21
 	pushw wa                                             ; F9DE6C  28
-	calr sub_F9F861                                          ; F9DE6D  1e f1 19
+	calr UserSoundBank_RemoteSoundAddr                                          ; F9DE6D  1e f1 19
 	push XIY                                             ; F9DE70  3d
 	pushw 0x1648                                         ; F9DE71  0b 48 16
 	ld xbc, (xiz-8)                                      ; F9DE74  ae f8 21
 	push XBC                                             ; F9DE77  39
-	calr sub_F9FAC1                                          ; F9DE78  1e 46 1c
+	calr Link_WriteRemoteBlock                                          ; F9DE78  1e 46 1c
 	ld h, 0x00:opc                                          ; F9DE7B  26 00
 	add XSP,0x0000001a                                   ; F9DE7D  ef c8 1a 00 00 00
 .LF9DE83:
@@ -52858,7 +52984,7 @@ sub_F9DD6C:
 	add XBC,XIX                                          ; F9DE95  ec 81
 	ld A,(XBC)                                           ; F9DE97  81 21
 	pushw wa                                             ; F9DE99  28
-	calr sub_F9FE03                                          ; F9DE9A  1e 66 1f
+	calr SoundCopy_RefreshPartsUsingSound                                          ; F9DE9A  1e 66 1f
 	inc 1,H                                              ; F9DE9D  ce 61
 	inc 6,XSP                                            ; F9DE9F  ef 66
 	cp H,0x08                                            ; F9DEA1  ce cf 08
@@ -52885,12 +53011,12 @@ sub_F9DD6C:
 .LF9DED8:
 	push 0x00                                            ; F9DED8  09 00
 	m_push MB16, 0x269c                                  ; F9DEDA  c1 9c 26 04
-	calr sub_F9FDC8                                          ; F9DEDE  1e e7 1e
+	calr SoundCopy_ReadExtGroupDrumFlag                                          ; F9DEDE  1e e7 1e
 	popw bc                                              ; F9DEE1  49
 	cp a, 0x00:i3                                          ; F9DEE2  c9 d8
 	jr nz, .LF9DEEC                                      ; F9DEE4  6e 06
 .LF9DEE6:
-	calr sub_F9FB18                                          ; F9DEE6  1e 2f 1c
+	calr SoundCopy_RequestSingleSound                                          ; F9DEE6  1e 2f 1c
 	jrl .LF9DF8C                                         ; F9DEE9  78 a0 00
 .LF9DEEC:
 	m_set 2, MD16, 0x269a                                ; F9DEEC  f1 9a 26 ba
@@ -52913,10 +53039,10 @@ sub_F9DD6C:
 	ld W,(XWA)                                           ; F9DF22  80 20
 	push 0x00                                            ; F9DF24  09 00
 	push W                                               ; F9DF26  c8 04
-	calr sub_F9F861                                          ; F9DF28  1e 36 19
+	calr UserSoundBank_RemoteSoundAddr                                          ; F9DF28  1e 36 19
 	inc 6,XSP                                            ; F9DF2B  ef 66
 	push XIY                                             ; F9DF2D  3d
-	calr sub_F9FAE9                                          ; F9DF2E  1e b8 1b
+	calr Link_ReadRemoteBlock                                          ; F9DF2E  1e b8 1b
 	push 0x00                                            ; F9DF31  09 00
 	m_push MB16, 0x26a2                                  ; F9DF33  c1 a2 26 04
 	push 0x00                                            ; F9DF37  09 00
@@ -52927,12 +53053,12 @@ sub_F9DD6C:
 	add XBC,XIX                                          ; F9DF45  ec 81
 	ld A,(XBC)                                           ; F9DF47  81 21
 	pushw wa                                             ; F9DF49  28
-	calr sub_F9F861                                          ; F9DF4A  1e 14 19
+	calr UserSoundBank_RemoteSoundAddr                                          ; F9DF4A  1e 14 19
 	push XIY                                             ; F9DF4D  3d
 	pushw 0x02c9                                         ; F9DF4E  0b c9 02
 	ld xbc, (xiz-4)                                      ; F9DF51  ae fc 21
 	push XBC                                             ; F9DF54  39
-	calr sub_F9FAC1                                          ; F9DF55  1e 69 1b
+	calr Link_WriteRemoteBlock                                          ; F9DF55  1e 69 1b
 	push 0x00                                            ; F9DF58  09 00
 	m_push MB16, 0x26a2                                  ; F9DF5A  c1 a2 26 04
 	push 0x00                                            ; F9DF5E  09 00
@@ -52943,7 +53069,7 @@ sub_F9DD6C:
 	add XBC,XIX                                          ; F9DF6C  ec 81
 	ld A,(XBC)                                           ; F9DF6E  81 21
 	pushw wa                                             ; F9DF70  28
-	calr sub_F9FE03                                          ; F9DF71  1e 8f 1e
+	calr SoundCopy_RefreshPartsUsingSound                                          ; F9DF71  1e 8f 1e
 	add XSP,0x00000020                                   ; F9DF74  ef c8 20 00 00 00
 .LF9DF7A:
 	m_res 1, MD16, 0x269a                                ; F9DF7A  f1 9a 26 b1
@@ -52955,7 +53081,10 @@ sub_F9DD6C:
 	popw hl                                              ; F9DF8D  4b
 	unlk XIZ                                             ; F9DF8E  ee 0d
 	ret                                                  ; F9DF90  0e
-sub_F9DF91:
+; Screen_CombinationCopy_Enter -- Enter (+0) method of screen 0x5F, COMBINATION COPY: on a new entry selects SINGLE mode ((0x269A)=1), then paints and loads/draws the fields
+; Evidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_F426B0; prom_b T_F426B0/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3.
+; Evidence: calls Paint_CombinationCopy, CombinationCopy_LoadNameBuffers, CombinationCopy_DrawFields; id 0x5F is what SOUND/COMBINATION MANAGER's 'COMBINATION COPY' key requests (0xF9CAB7).
+Screen_CombinationCopy_Enter:
 	ld c, (0x207a:16)                                   ; F9DF91  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; F9DF95  c1 7b 20 f3
 	jr z, .LF9DFAA                                       ; F9DF99  66 0f
@@ -52969,14 +53098,16 @@ sub_F9DF91:
 	jr nz, .LF9DFC4                                      ; F9DFB6  6e 0c
 	m_or_mi8 MB16, 0x2900, 0x03                          ; F9DFB8  c1 00 29 3e 03
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9DFBD  1d 80 2e f4
-	calr sub_F9E519                                      ; F9DFC1  1e 55 05
+	calr Paint_CombinationCopy                                      ; F9DFC1  1e 55 05
 .LF9DFC4:
-	calr sub_F9E5FD                                      ; F9DFC4  1e 36 06
-	calr sub_F9E7B3                                      ; F9DFC7  1e e9 07
+	calr CombinationCopy_LoadNameBuffers                                      ; F9DFC4  1e 36 06
+	calr CombinationCopy_DrawFields                                      ; F9DFC7  1e e9 07
 	ret                                                  ; F9DFCA  0e
 T_F426B4_Nop:
 	ret                                                  ; F9DFCB  0e
-sub_F9DFCC:
+; Screen_CombinationCopy_Button -- Button (+8) method of COMBINATION COPY: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1892
+; Evidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_F426B0; prom_b T_F426B0/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3; unlike Screen_SoundCopy_Button it has no (0x2806) guard.
+Screen_CombinationCopy_Button:
 	link XIZ,0x0000                                      ; F9DFCC  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9DFD0  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9DFD3  9e 08 04
@@ -52994,7 +53125,10 @@ sub_F9DFCC:
 	ret                                                  ; F9DFF2  0e
 T_F426BC_Nop:
 	ret                                                  ; F9DFF3  0e
-sub_F9DFF4:
+; CombinationCopy_AdjustSourceBank -- steps the COMBINATION COPY source bank (0x2706: ROM 1, USER 1, EXT 1) and resets the source group and list position
+; Evidence: T_F42C78 on (0x2706) with Descriptor9_FA1663 (max 1, 2 when (0x08EC) bit 1 is set); records FA4123/FA4247 print it; ByteTable3_FA16F4 {00,08,10}; on change (0x2707)=0, (0x270A)/(0x2709) or (0x2708) cleared, `set 4,(0x2095)`.
+; Called from HandlerTable23_FA1892 slots 0/1.
+CombinationCopy_AdjustSourceBank:
 	link XIZ,0xfff7                                      ; F9DFF4  ee 0c f7 ff
 	push XIX                                             ; F9DFF8  3c
 	lda xix, (0x2900:16)                                ; F9DFF9  f1 00 29 34
@@ -53053,7 +53187,7 @@ sub_F9DFF4:
 	jr z, .LF9E088                                       ; F9E084  66 02
 	jr .LF9E08B                                          ; F9E086  68 03
 .LF9E088:
-	calr sub_F9DFF4                                      ; F9E088  1e 69 ff
+	calr CombinationCopy_AdjustSourceBank                                      ; F9E088  1e 69 ff
 .LF9E08B:
 	ret                                                  ; F9E08B  0e
 	link XIZ,0xfff7                                      ; F9E08C  ee 0c f7 ff
@@ -53072,7 +53206,7 @@ sub_F9DFF4:
 	jr z, .LF9E0BD                                       ; F9E0B4  66 07
 	jr .LF9E107                                          ; F9E0B6  68 4f
 .LF9E0B8:
-	calr sub_F9DFF4                                      ; F9E0B8  1e 39 ff
+	calr CombinationCopy_AdjustSourceBank                                      ; F9E0B8  1e 39 ff
 	jr .LF9E107                                          ; F9E0BB  68 4a
 .LF9E0BD:
 	ld bc, (0x2706:16)                                 ; F9E0BD  d1 06 27 21
@@ -53177,7 +53311,7 @@ sub_F9DFF4:
 	cp a, 0x01:i3                                          ; F9E1B8  c9 d9
 	jrl nz, .LF9E259                                     ; F9E1BA  7e 9c 00
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9E1BD  84 3e 01
-	calr sub_F9E849                                      ; F9E1C0  1e 86 06
+	calr CombinationCopy_DrawSourceGroupCursor                                      ; F9E1C0  1e 86 06
 	jr .LF9E1DC                                          ; F9E1C3  68 17
 .LF9E1C5:
 	lda xbc, (xiz-9)                                     ; F9E1C5  be f7 31
@@ -53188,7 +53322,7 @@ sub_F9DFF4:
 	inc 8,XSP                                            ; F9E1D2  ef 60
 	cp a, 0x01:i3                                          ; F9E1D4  c9 d9
 	jrl nz, .LF9E259                                     ; F9E1D6  7e 80 00
-	calr sub_F9E8F9                                      ; F9E1D9  1e 1d 07
+	calr CombinationCopy_DrawSourceGroupList                                      ; F9E1D9  1e 1d 07
 .LF9E1DC:
 	dec 0x01, (0x2707:16)                                ; F9E1DC  c1 07 27 69
 	jrl .LF9E259                                         ; F9E1E0  78 76 00
@@ -53204,7 +53338,7 @@ sub_F9DFF4:
 	cp a, 0x01:i3                                          ; F9E1F9  c9 d9
 	jr nz, .LF9E259                                      ; F9E1FB  6e 5c
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9E1FD  84 3e 01
-	calr sub_F9E849                                      ; F9E200  1e 46 06
+	calr CombinationCopy_DrawSourceGroupCursor                                      ; F9E200  1e 46 06
 	jr .LF9E21B                                          ; F9E203  68 16
 .LF9E205:
 	lda xbc, (xiz-9)                                     ; F9E205  be f7 31
@@ -53215,7 +53349,7 @@ sub_F9DFF4:
 	inc 8,XSP                                            ; F9E212  ef 60
 	cp a, 0x01:i3                                          ; F9E214  c9 d9
 	jr nz, .LF9E259                                      ; F9E216  6e 41
-	calr sub_F9E8F9                                      ; F9E218  1e de 06
+	calr CombinationCopy_DrawSourceGroupList                                      ; F9E218  1e de 06
 .LF9E21B:
 	inc 0x01, (0x2707:16)                                ; F9E21B  c1 07 27 61
 	jr .LF9E259                                          ; F9E21F  68 38
@@ -53228,7 +53362,7 @@ sub_F9DFF4:
 	pushw wa                                             ; F9E231  28
 	push 0x00                                            ; F9E232  09 00
 	m_push MB16, 0x2707                                  ; F9E234  c1 07 27 04
-	calr sub_F9F7B8                                          ; F9E238  1e 7d 15
+	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9E238  1e 7d 15
 	ld (xiz-24), a                                       ; F9E23B  be e8 41
 	lda xbc, (xiz-27)                                    ; F9E23E  be e5 31
 	push XBC                                             ; F9E241  39
@@ -53240,13 +53374,15 @@ sub_F9DFF4:
 	cp a, 0x01:i3                                          ; F9E24F  c9 d9
 	jr nz, .LF9E259                                      ; F9E251  6e 06
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9E253  84 3e 01
-	calr sub_F9E875                                      ; F9E256  1e 1c 06
+	calr CombinationCopy_DrawSourceCombiCursor                                      ; F9E256  1e 1c 06
 .LF9E259:
 	pop XIX                                              ; F9E259  5c
 	popw hl                                              ; F9E25A  4b
 	unlk XIZ                                             ; F9E25B  ee 0d
 	ret                                                  ; F9E25D  0e
-sub_F9E25E:
+; CombinationCopy_AdjustDestBank -- steps the COMBINATION COPY destination bank (0x270B) and resets the destination group and list position
+; Evidence: T_F42C78 on (0x270B) with Descriptor9_FA1AF7; records FA4132/FA4256 print it ('USER 1','RE-MAP 1..3'), ByteTable4_FA182B gives the code; on change (0x270C)=0, (0x270F)/(0x270E) or (0x270D) cleared with (0x2900) bit 1, `set 4,(0x2095)`.
+CombinationCopy_AdjustDestBank:
 	push XIX                                             ; F9E25E  3c
 	lda xix, (0x2900:16)                                ; F9E25F  f1 00 29 34
 	lda xbc, (Descriptor9_FA1AF7:24)                     ; F9E263  f2 f7 1a fa 31
@@ -53292,7 +53428,7 @@ sub_F9E25E:
 	jr z, .LF9E2D2                                       ; F9E2CE  66 02
 	jr .LF9E2D5                                          ; F9E2D0  68 03
 .LF9E2D2:
-	calr sub_F9E25E                                      ; F9E2D2  1e 89 ff
+	calr CombinationCopy_AdjustDestBank                                      ; F9E2D2  1e 89 ff
 .LF9E2D5:
 	ret                                                  ; F9E2D5  0e
 	ld (0x209b:16), 0x06                                 ; F9E2D6  f1 9b 20 00 06
@@ -53305,7 +53441,7 @@ sub_F9E25E:
 	jr z, .LF9E2F5                                       ; F9E2EC  66 07
 	jr .LF9E31E                                          ; F9E2EE  68 2e
 .LF9E2F0:
-	calr sub_F9E25E                                      ; F9E2F0  1e 6b ff
+	calr CombinationCopy_AdjustDestBank                                      ; F9E2F0  1e 6b ff
 	jr .LF9E31E                                          ; F9E2F3  68 29
 .LF9E2F5:
 	lda xbc, (Descriptor9_FA1B12:24)                     ; F9E2F5  f2 12 1b fa 31
@@ -53350,7 +53486,7 @@ sub_F9E25E:
 	cp a, 0x01:i3                                          ; F9E361  c9 d9
 	jrl nz, .LF9E3EA                                     ; F9E363  7e 84 00
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9E366  84 3e 02
-	calr sub_F9E8A1                                      ; F9E369  1e 35 05
+	calr CombinationCopy_DrawDestGroupCursor                                      ; F9E369  1e 35 05
 	jr .LF9E387                                          ; F9E36C  68 19
 .LF9E36E:
 	lda xbc, (Descriptor9_FA1B00:24)                     ; F9E36E  f2 00 1b fa 31
@@ -53361,7 +53497,7 @@ sub_F9E25E:
 	inc 8,XSP                                            ; F9E37D  ef 60
 	cp a, 0x01:i3                                          ; F9E37F  c9 d9
 	jrl nz, .LF9E3EA                                     ; F9E381  7e 66 00
-	calr sub_F9E911                                      ; F9E384  1e 8a 05
+	calr CombinationCopy_DrawDestGroupList                                      ; F9E384  1e 8a 05
 .LF9E387:
 	dec 0x01, (0x270c:16)                                ; F9E387  c1 0c 27 69
 	jr .LF9E3EA                                          ; F9E38B  68 5d
@@ -53377,7 +53513,7 @@ sub_F9E25E:
 	cp a, 0x01:i3                                          ; F9E3A5  c9 d9
 	jr nz, .LF9E3EA                                      ; F9E3A7  6e 41
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9E3A9  84 3e 02
-	calr sub_F9E8A1                                      ; F9E3AC  1e f2 04
+	calr CombinationCopy_DrawDestGroupCursor                                      ; F9E3AC  1e f2 04
 	jr .LF9E3C9                                          ; F9E3AF  68 18
 .LF9E3B1:
 	lda xbc, (Descriptor9_FA1B00:24)                     ; F9E3B1  f2 00 1b fa 31
@@ -53388,7 +53524,7 @@ sub_F9E25E:
 	inc 8,XSP                                            ; F9E3C0  ef 60
 	cp a, 0x01:i3                                          ; F9E3C2  c9 d9
 	jr nz, .LF9E3EA                                      ; F9E3C4  6e 24
-	calr sub_F9E911                                      ; F9E3C6  1e 48 05
+	calr CombinationCopy_DrawDestGroupList                                      ; F9E3C6  1e 48 05
 .LF9E3C9:
 	inc 0x01, (0x270c:16)                                ; F9E3C9  c1 0c 27 61
 	jr .LF9E3EA                                          ; F9E3CD  68 1b
@@ -53402,7 +53538,7 @@ sub_F9E25E:
 	cp a, 0x01:i3                                          ; F9E3E0  c9 d9
 	jr nz, .LF9E3EA                                      ; F9E3E2  6e 06
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9E3E4  84 3e 02
-	calr sub_F9E8CD                                      ; F9E3E7  1e e3 04
+	calr CombinationCopy_DrawDestCombiCursor                                      ; F9E3E7  1e e3 04
 .LF9E3EA:
 	pop XIX                                              ; F9E3EA  5c
 	ret                                                  ; F9E3EB  0e
@@ -53482,7 +53618,7 @@ sub_F9E25E:
 .LF9E495:
 	ld (UI_StatusCode:16), 0x25                                 ; F9E495  f1 80 28 00 25
 	call T_F41600                                        ; F9E49A  1d 00 16 f4
-	calr sub_F9E929                                      ; F9E49E  1e 88 04
+	calr CombinationCopy_Execute                                      ; F9E49E  1e 88 04
 	and (XIX),0xfd                                       ; F9E4A1  84 3c fd
 	ld (UI_StatusCode:16), 0x23                                 ; F9E4A4  f1 80 28 00 23
 	m_set 6, MD16, UI_Request_Hi                                ; F9E4A9  f1 71 20 be
@@ -53537,35 +53673,11 @@ sub_F9E25E:
 .LF9E517:
 	pop XIX                                              ; F9E517  5c
 	ret                                                  ; F9E518  0e
-; ---------------------------------------------------------------------
-; sub_F9E519 -- a screen painter this round REFUSED to name.
-;
-; It hands 7 display list(s) to the interpreter ON THE STACK.
-;     site 0xF9E543  list 0xFA3BA8-0xFA3BD1 (41 B, leaves by jp(XIX))
-;        text: "GROUP/SINGLE"
-;     site 0xF9E55C  list 0xFA3A9C-0xFA3B82 (230 B, leaves by jp(XIX))
-;        text: "SOUND COPY"; "SYSTEM"; "[ BANK"; "d GROUP"; "y GROUP"
-;     site 0xF9E587  list 0xFA3BA8-0xFA3BD1 (41 B, leaves by jp(XIX))
-;        text: "GROUP/SINGLE"
-;     site 0xF9E5A0  list 0xFA3ED3-0xFA401B (328 B, leaves by jp(XIX))
-;        text: "SOUND COPY"; "SYSTEM"; "X BANK"; "] GROUP"; "d SOUND"; "r GROUP"; ...
-;     site 0xF9E5B8  list 0xFA408D-0xFA40B5 (40 B, leaves by jr)
-;        text: "COMBINATION COPY"; "d COMBI"; "y COMBI"
-;     site 0xF9E5CB  list 0xFA40B5-0xFA4123 (110 B, leaves by jp(XIX))
-;        text: "COMBINATION COPY"; "SYSTEM"; "The memory to witch you"; ...
-;     site 0xF9E5E1  list 0xFA302F-0xFA30A6 (119 B, leaves by jp(XIX))
-;        text: "YES"; "NO"; "ATTENTI0N!"; "Are You Sure?"
-; Evidence: the two 24-bit immediates of the 12-byte push idiom at
-;          the cited site; the record walk from <start> lands exactly
-;          on <end>; the text is the `.ascii` the interpreter draws.
-; NOT NAMED because it draws seven lists spanning TWO screens -- SOUND
-;          COPY and COMBINATION COPY -- plus the shared ATTENTI0N!/Are You
-;          Sure? box. No single caption names the routine.
-;          A wrong name passes the byte gate forever, so this keeps
-;          sub_XXXXXX and states the gap.
-; Recorded by notes/prom_a_understanding_round7.py --apply.
-; ---------------------------------------------------------------------
-sub_F9E519:
+; Paint_CombinationCopy -- paints the COMBINATION COPY page for state (0x269A): SOUND COPY's GROUP/SINGLE layouts with 'COMBINATION COPY' and 'COMBI' overlaid, or the overwrite confirmation
+; Evidence: called only from Screen_CombinationCopy_Enter (0xF9DFC1), the Enter of screen 0x5F that SOUND/COMBINATION MANAGER's 'COMBINATION COPY' key requests -- which resolves the old refusal that the lists span two screens.
+; Evidence: state 0: FA3BA8 'GROUP/SINGLE', FA3A9C-FA3B82 (layout incl. its 'SOUND COPY' title), then FA408D 'COMBINATION COPY' over it; state 1: FA3ED3-FA401B then FA408D-FA40B5 ('COMBINATION COPY','COMBI','COMBI'); states 2-3: FA40B5-FA4123 ('...The memory to witch you...') + FA302F 'ATTENTI0N!'/'Are You Sure?'.
+; Evidence: each list's bounds are the two immediates of a 12-byte push idiom and the record walk lands exactly on the end (notes/prom_a_dl_stack_map.py).
+Paint_CombinationCopy:
 	push XIX                                             ; F9E519  3c
 	lda xix, (T_DisplayList_Run_Stack:24)                ; F9E51A  f2 00 2e f4 34
 	call T_F42E10                                        ; F9E51F  1d 10 2e f4
@@ -53655,7 +53767,10 @@ sub_F9E519:
 	call T_F42E14                                        ; F9E5F7  1d 14 2e f4
 	pop XIX                                              ; F9E5FB  5c
 	ret                                                  ; F9E5FC  0e
-sub_F9E5FD:
+; CombinationCopy_LoadNameBuffers -- fills the name buffers the COMBINATION COPY lists print, according to (0x269A)
+; Evidence: same shape as SoundCopy_LoadNameBuffers with the combination copiers: GROUP: CombiGroupName_CopyToBuffer for the source bank ByteTable3_FA16F4[(0x2706)] into 0x2940.. (count (0x08EA) for EXT) and the destination ByteTable4_FA182B[(0x270B)] into 0x60A000..
+; Evidence: SINGLE: group name -> 0x2940 / 0x29D0, CombiName_CopyToBuffer for the members -> 0x2950.. / 0x29E0... Called from Screen_CombinationCopy_Enter 0xF9DFC4.
+CombinationCopy_LoadNameBuffers:
 	pushw hl                                             ; F9E5FD  2b
 	pushw de                                             ; F9E5FE  2a
 	push XIX                                             ; F9E5FF  3c
@@ -53692,7 +53807,7 @@ sub_F9E5FD:
 	ld A,(XBC)                                           ; F9E648  81 21
 	pushw wa                                             ; F9E64A  28
 	pushw hl                                             ; F9E64B  2b
-	calr sub_F9F75C                                          ; F9E64C  1e 0d 11
+	calr CombiGroupName_CopyToBuffer                                          ; F9E64C  1e 0d 11
 	inc 1,L                                              ; F9E64F  cf 61
 	add XIX,0x00000010                                   ; F9E651  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9E657  ef 60
@@ -53732,7 +53847,7 @@ sub_F9E5FD:
 	ld A,(XBC)                                           ; F9E69E  81 21
 	pushw wa                                             ; F9E6A0  28
 	pushw hl                                             ; F9E6A1  2b
-	calr sub_F9F75C                                          ; F9E6A2  1e b7 10
+	calr CombiGroupName_CopyToBuffer                                          ; F9E6A2  1e b7 10
 	inc 1,L                                              ; F9E6A5  cf 61
 	add XIX,0x00000010                                   ; F9E6A7  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9E6AD  ef 60
@@ -53751,7 +53866,7 @@ sub_F9E5FD:
 	push W                                               ; F9E6CE  c8 04
 	push 0x00                                            ; F9E6D0  09 00
 	m_push MB16, 0x2707                                  ; F9E6D2  c1 07 27 04
-	calr sub_F9F75C                                          ; F9E6D6  1e 83 10
+	calr CombiGroupName_CopyToBuffer                                          ; F9E6D6  1e 83 10
 	ld bc, (0x2706:16)                                 ; F9E6D9  d1 06 27 21
 	extz BC                                              ; F9E6DD  d9 12
 	extz XBC                                             ; F9E6DF  e9 12
@@ -53760,7 +53875,7 @@ sub_F9E5FD:
 	pushw wa                                             ; F9E6E9  28
 	push 0x00                                            ; F9E6EA  09 00
 	m_push MB16, 0x2707                                  ; F9E6EC  c1 07 27 04
-	calr sub_F9F7B8                                          ; F9E6F0  1e c5 10
+	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9E6F0  1e c5 10
 	ld H,A                                               ; F9E6F3  c9 8e
 	ld l, 0x00:opc                                          ; F9E6F5  27 00
 	lda xix, (0x2950:16)                                ; F9E6F7  f1 50 29 34
@@ -53778,7 +53893,7 @@ sub_F9E5FD:
 	pushw hl                                             ; F9E713  2b
 	push 0x00                                            ; F9E714  09 00
 	m_push MB16, 0x2707                                  ; F9E716  c1 07 27 04
-	calr sub_F9F6EC                                          ; F9E71A  1e cf 0f
+	calr CombiName_CopyToBuffer                                          ; F9E71A  1e cf 0f
 	inc 1,L                                              ; F9E71D  cf 61
 	add XIX,0x00000010                                   ; F9E71F  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9E725  ef 60
@@ -53819,7 +53934,7 @@ sub_F9E5FD:
 	push W                                               ; F9E76F  c8 04
 	push 0x00                                            ; F9E771  09 00
 	m_push MB16, 0x270c                                  ; F9E773  c1 0c 27 04
-	calr sub_F9F75C                                          ; F9E777  1e e2 0f
+	calr CombiGroupName_CopyToBuffer                                          ; F9E777  1e e2 0f
 	ld l, 0x00:opc                                          ; F9E77A  27 00
 	lda xix, (0x29e0:16)                                ; F9E77C  f1 e0 29 34
 	inc 8,XSP                                            ; F9E780  ef 60
@@ -53834,7 +53949,7 @@ sub_F9E5FD:
 	pushw hl                                             ; F9E794  2b
 	push 0x00                                            ; F9E795  09 00
 	m_push MB16, 0x270c                                  ; F9E797  c1 0c 27 04
-	calr sub_F9F6EC                                          ; F9E79B  1e 4e 0f
+	calr CombiName_CopyToBuffer                                          ; F9E79B  1e 4e 0f
 	inc 1,L                                              ; F9E79E  cf 61
 	add XIX,0x00000010                                   ; F9E7A0  ec c8 10 00 00 00
 	inc 8,XSP                                            ; F9E7A6  ef 60
@@ -53846,7 +53961,10 @@ sub_F9E5FD:
 	popw de                                              ; F9E7B0  4a
 	popw hl                                              ; F9E7B1  4b
 	ret                                                  ; F9E7B2  0e
-sub_F9E7B3:
+; CombinationCopy_DrawFields -- draws COMBINATION COPY's live fields for GROUP ((0x269A)=0) or SINGLE (1); nothing in the other states
+; Evidence: GROUP: interpreter B over DisplayList_FA40A3+0x80..FA4141 (vars 0x2706, 0x270B), record FA3D34, then the four CombinationCopy_DrawSource/Dest Group Cursor/List routines; SINGLE: FA4247-FA4265, DisplayList_FA3230+0x1E..+0x12C, FA3D34, CombinationCopy_DrawSourceCombiCursor/_DrawDestCombiCursor.
+; Called from Screen_CombinationCopy_Enter 0xF9DFC7.
+CombinationCopy_DrawFields:
 	push XIX                                             ; F9E7B3  3c
 	lda xix, (T_DisplayListB_Run_Stack:24)               ; F9E7B4  f2 04 2e f4 34
 	ld bc, (0x269a:16)                                 ; F9E7B9  d1 9a 26 21
@@ -53869,10 +53987,10 @@ sub_F9E7B3:
 	lda xbc, (DisplayList_FA3D34:24)                     ; F9E7E3  f2 34 3d fa 31
 	push XBC                                             ; F9E7E8  39
 	call T_DisplayListB_RunOne_Stack                     ; F9E7E9  1d 0c 2e f4
-	calr sub_F9E849                                      ; F9E7ED  1e 59 00
-	calr sub_F9E8A1                                      ; F9E7F0  1e ae 00
-	calr sub_F9E8F9                                      ; F9E7F3  1e 03 01
-	calr sub_F9E911                                      ; F9E7F6  1e 18 01
+	calr CombinationCopy_DrawSourceGroupCursor                                      ; F9E7ED  1e 59 00
+	calr CombinationCopy_DrawDestGroupCursor                                      ; F9E7F0  1e ae 00
+	calr CombinationCopy_DrawSourceGroupList                                      ; F9E7F3  1e 03 01
+	calr CombinationCopy_DrawDestGroupList                                      ; F9E7F6  1e 18 01
 	inc 8,XSP                                            ; F9E7F9  ef 60
 	inc 4,XSP                                            ; F9E7FB  ef 64
 	jr .LF9E847                                          ; F9E7FD  68 48
@@ -53898,13 +54016,15 @@ sub_F9E7B3:
 	lda xbc, (DisplayList_FA3D34:24)                     ; F9E831  f2 34 3d fa 31
 	push XBC                                             ; F9E836  39
 	call T_DisplayListB_RunOne_Stack                     ; F9E837  1d 0c 2e f4
-	calr sub_F9E875                                      ; F9E83B  1e 37 00
-	calr sub_F9E8CD                                      ; F9E83E  1e 8c 00
+	calr CombinationCopy_DrawSourceCombiCursor                                      ; F9E83B  1e 37 00
+	calr CombinationCopy_DrawDestCombiCursor                                      ; F9E83E  1e 8c 00
 	add XSP,0x00000014                                   ; F9E841  ef c8 14 00 00 00
 .LF9E847:
 	pop XIX                                              ; F9E847  5c
 	ret                                                  ; F9E848  0e
-sub_F9E849:
+; CombinationCopy_DrawSourceGroupCursor -- GROUP mode: redraws the source-list row cursor (0x2709) when (0x2900) bit 0 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA3E7F EraseRect; DisplayList_FA4141 = interpreter-B op-03 on var 0x2709 into the rects at 0xFA3E3F.
+CombinationCopy_DrawSourceGroupCursor:
 	push XIX                                             ; F9E849  3c
 	lda xix, (0x2900:16)                                ; F9E84A  f1 00 29 34
 	ld C,(XIX)                                           ; F9E84E  84 23
@@ -53922,7 +54042,9 @@ sub_F9E849:
 	and (XIX),0xfe                                       ; F9E870  84 3c fe
 	pop XIX                                              ; F9E873  5c
 	ret                                                  ; F9E874  0e
-sub_F9E875:
+; CombinationCopy_DrawSourceCombiCursor -- SINGLE mode: redraws the source-combination row cursor (0x2708) when (0x2900) bit 0 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA34E7 EraseRect; DisplayList_FA4265 = interpreter-B op-03 on var 0x2708 into the rects at 0xFA34A7.
+CombinationCopy_DrawSourceCombiCursor:
 	push XIX                                             ; F9E875  3c
 	lda xix, (0x2900:16)                                ; F9E876  f1 00 29 34
 	ld C,(XIX)                                           ; F9E87A  84 23
@@ -53940,7 +54062,9 @@ sub_F9E875:
 	and (XIX),0xfe                                       ; F9E89C  84 3c fe
 	pop XIX                                              ; F9E89F  5c
 	ret                                                  ; F9E8A0  0e
-sub_F9E8A1:
+; CombinationCopy_DrawDestGroupCursor -- GROUP mode: redraws the destination-list row cursor (0x270E) when (0x2900) bit 1 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA3EC9 EraseRect; DisplayList_FA414C = interpreter-B op-03 on var 0x270E into the rects at 0xFA3E89.
+CombinationCopy_DrawDestGroupCursor:
 	push XIX                                             ; F9E8A1  3c
 	lda xix, (0x2900:16)                                ; F9E8A2  f1 00 29 34
 	ld C,(XIX)                                           ; F9E8A6  84 23
@@ -53958,7 +54082,9 @@ sub_F9E8A1:
 	and (XIX),0xfd                                       ; F9E8C8  84 3c fd
 	pop XIX                                              ; F9E8CB  5c
 	ret                                                  ; F9E8CC  0e
-sub_F9E8CD:
+; CombinationCopy_DrawDestCombiCursor -- SINGLE mode: redraws the destination-combination row cursor (0x270D) when (0x2900) bit 1 asks, then clears the bit
+; Evidence: layer 1; DisplayList_FA3531 EraseRect; DisplayList_FA4270 = interpreter-B op-03 on var 0x270D into the rects at 0xFA34F1.
+CombinationCopy_DrawDestCombiCursor:
 	push XIX                                             ; F9E8CD  3c
 	lda xix, (0x2900:16)                                ; F9E8CE  f1 00 29 34
 	ld C,(XIX)                                           ; F9E8D2  84 23
@@ -53976,7 +54102,9 @@ sub_F9E8CD:
 	and (XIX),0xfd                                       ; F9E8F4  84 3c fd
 	pop XIX                                              ; F9E8F7  5c
 	ret                                                  ; F9E8F8  0e
-sub_F9E8F9:
+; CombinationCopy_DrawSourceGroupList -- GROUP mode: prints 8 rows of source group names starting at the scroll position (0x270A)
+; Evidence: interpreter B over DisplayList_FA4157-FA41CF, op-02 records on var 0x270A indexing 16-byte tables at 0x2940, 0x2950, ....
+CombinationCopy_DrawSourceGroupList:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9E8F9  f1 40 25 00 00
 	lda xbc, (DisplayList_FA41CF:24)                     ; F9E8FE  f2 cf 41 fa 31
 	push XBC                                             ; F9E903  39
@@ -53985,7 +54113,9 @@ sub_F9E8F9:
 	call T_DisplayListB_Run_Stack                        ; F9E90A  1d 04 2e f4
 	inc 8,XSP                                            ; F9E90E  ef 60
 	ret                                                  ; F9E910  0e
-sub_F9E911:
+; CombinationCopy_DrawDestGroupList -- GROUP mode: prints 8 rows of destination group names starting at the scroll position (0x270F)
+; Evidence: interpreter B over DisplayList_FA41CF-FA4247, op-02 records on var 0x270F indexing 16-byte tables at 0x60A000, 0x60A010, ....
+CombinationCopy_DrawDestGroupList:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9E911  f1 40 25 00 00
 	lda xbc, (DisplayList_FA4247:24)                     ; F9E916  f2 47 42 fa 31
 	push XBC                                             ; F9E91B  39
@@ -53994,7 +54124,10 @@ sub_F9E911:
 	call T_DisplayListB_Run_Stack                        ; F9E922  1d 04 2e f4
 	inc 8,XSP                                            ; F9E926  ef 60
 	ret                                                  ; F9E928  0e
-sub_F9E929:
+; CombinationCopy_Execute -- performs the COMBINATION COPY: copies a combination group (name + 8 x 0x2C0 bytes) or one combination (0x2C0 bytes) from the source to the destination over the link
+; Evidence: GROUP: Link_ReadRemoteBlock(CombiBank_RemoteGroupNameAddr) into 0x60A7F0 and Link_WriteRemoteBlock to the destination's; 0x1600 data bytes via CombiBank_RemoteCombiAddr (group 11 split into 0x0B00 + 0x0B00 through 0x60B300); CombinationCopy_RefreshIfCurrentCombi for members 0-7.
+; Evidence: SINGLE: 0x2C0 bytes for (0x2706)/(0x2707)/(0x2708) -> (0x270B)/(0x270C)/(0x270D). Reached from the YES handler of HandlerTable23_FA1892 (slot 10).
+CombinationCopy_Execute:
 	link XIZ,0xfffc                                      ; F9E929  ee 0c fc ff
 	pushw hl                                             ; F9E92D  2b
 	push XIX                                             ; F9E92E  3c
@@ -54035,10 +54168,10 @@ sub_F9E929:
 	ld W,(XWA)                                           ; F9E98D  80 20
 	push 0x00                                            ; F9E98F  09 00
 	push W                                               ; F9E991  c8 04
-	calr sub_F9F910                                          ; F9E993  1e 7a 0f
+	calr CombiBank_RemoteGroupNameAddr                                          ; F9E993  1e 7a 0f
 	pop XBC                                              ; F9E996  59
 	push XIY                                             ; F9E997  3d
-	calr sub_F9FAE9                                          ; F9E998  1e 4e 11
+	calr Link_ReadRemoteBlock                                          ; F9E998  1e 4e 11
 	ld C,(XIX)                                           ; F9E99B  84 23
 	pushw bc                                             ; F9E99D  29
 	ld bc, (0x270b:16)                                 ; F9E99E  d1 0b 27 21
@@ -54047,12 +54180,12 @@ sub_F9E929:
 	add XBC,ByteTable4_FA182B                            ; F9E9A6  e9 c8 2b 18 fa 00
 	ld A,(XBC)                                           ; F9E9AC  81 21
 	pushw wa                                             ; F9E9AE  28
-	calr sub_F9F910                                          ; F9E9AF  1e 5e 0f
+	calr CombiBank_RemoteGroupNameAddr                                          ; F9E9AF  1e 5e 0f
 	push XIY                                             ; F9E9B2  3d
 	pushw 0x10                                           ; F9E9B3  0b 10 00
 	ld xbc, (xiz-4)                                      ; F9E9B6  ae fc 21
 	push XBC                                             ; F9E9B9  39
-	calr sub_F9FAC1                                          ; F9E9BA  1e 04 11
+	calr Link_WriteRemoteBlock                                          ; F9E9BA  1e 04 11
 	lda xbc, (0x60a800:24)                               ; F9E9BD  f2 00 a8 60 31
 	add XSP,0x00000018                                   ; F9E9C2  ef c8 18 00 00 00
 	push XBC                                             ; F9E9C8  39
@@ -54068,10 +54201,10 @@ sub_F9E929:
 	add XBC,ByteTable3_FA16F4                            ; F9E9E4  e9 c8 f4 16 fa 00
 	ld A,(XBC)                                           ; F9E9EA  81 21
 	pushw wa                                             ; F9E9EC  28
-	calr sub_F9F984                                          ; F9E9ED  1e 94 0f
+	calr CombiBank_RemoteCombiAddr                                          ; F9E9ED  1e 94 0f
 	inc 6,XSP                                            ; F9E9F0  ef 66
 	push XIY                                             ; F9E9F2  3d
-	calr sub_F9FAE9                                          ; F9E9F3  1e f3 10
+	calr Link_ReadRemoteBlock                                          ; F9E9F3  1e f3 10
 	lda xbc, (0x60b300:24)                               ; F9E9F6  f2 00 b3 60 31
 	inc 8,XSP                                            ; F9E9FB  ef 60
 	inc 2,XSP                                            ; F9E9FD  ef 62
@@ -54091,10 +54224,10 @@ sub_F9E929:
 	add XBC,ByteTable3_FA16F4                            ; F9EA1C  e9 c8 f4 16 fa 00
 	ld A,(XBC)                                           ; F9EA22  81 21
 	pushw wa                                             ; F9EA24  28
-	calr sub_F9F984                                          ; F9EA25  1e 5c 0f
+	calr CombiBank_RemoteCombiAddr                                          ; F9EA25  1e 5c 0f
 	inc 6,XSP                                            ; F9EA28  ef 66
 	push XIY                                             ; F9EA2A  3d
-	calr sub_F9FAE9                                          ; F9EA2B  1e bb 10
+	calr Link_ReadRemoteBlock                                          ; F9EA2B  1e bb 10
 	inc 8,XSP                                            ; F9EA2E  ef 60
 	inc 2,XSP                                            ; F9EA30  ef 62
 	pushw 0x00                                           ; F9EA32  0b 00 00
@@ -54109,12 +54242,12 @@ sub_F9E929:
 	ld A,(XIX)                                           ; F9EA49  84 21
 	cp A,0x0b                                            ; F9EA4B  c9 cf 0b
 	jr nz, .LF9EA8C                                      ; F9EA4E  6e 3c
-	calr sub_F9F984                                          ; F9EA50  1e 31 0f
+	calr CombiBank_RemoteCombiAddr                                          ; F9EA50  1e 31 0f
 	push XIY                                             ; F9EA53  3d
 	pushw 0x0b00                                         ; F9EA54  0b 00 0b
 	lda xbc, (0x60a800:24)                               ; F9EA57  f2 00 a8 60 31
 	push XBC                                             ; F9EA5C  39
-	calr sub_F9FAC1                                          ; F9EA5D  1e 61 10
+	calr Link_WriteRemoteBlock                                          ; F9EA5D  1e 61 10
 	pushw 0x04                                           ; F9EA60  0b 04 00
 	ld C,(XIX)                                           ; F9EA63  84 23
 	pushw bc                                             ; F9EA65  29
@@ -54124,7 +54257,7 @@ sub_F9E929:
 	add XBC,ByteTable4_FA182B                            ; F9EA6E  e9 c8 2b 18 fa 00
 	ld A,(XBC)                                           ; F9EA74  81 21
 	pushw wa                                             ; F9EA76  28
-	calr sub_F9F984                                          ; F9EA77  1e 0a 0f
+	calr CombiBank_RemoteCombiAddr                                          ; F9EA77  1e 0a 0f
 	add XSP,0x00000016                                   ; F9EA7A  ef c8 16 00 00 00
 	push XIY                                             ; F9EA80  3d
 	pushw 0x0b00                                         ; F9EA81  0b 00 0b
@@ -54132,14 +54265,14 @@ sub_F9E929:
 	push XBC                                             ; F9EA89  39
 	jr .LF9EA9B                                          ; F9EA8A  68 0f
 .LF9EA8C:
-	calr sub_F9F984                                          ; F9EA8C  1e f5 0e
+	calr CombiBank_RemoteCombiAddr                                          ; F9EA8C  1e f5 0e
 	inc 6,XSP                                            ; F9EA8F  ef 66
 	push XIY                                             ; F9EA91  3d
 	pushw 0x1600                                         ; F9EA92  0b 00 16
 	lda xbc, (0x60a800:24)                               ; F9EA95  f2 00 a8 60 31
 	push XBC                                             ; F9EA9A  39
 .LF9EA9B:
-	calr sub_F9FAC1                                          ; F9EA9B  1e 23 10
+	calr Link_WriteRemoteBlock                                          ; F9EA9B  1e 23 10
 	ld h, 0x00:opc                                          ; F9EA9E  26 00
 	inc 8,XSP                                            ; F9EAA0  ef 60
 	inc 2,XSP                                            ; F9EAA2  ef 62
@@ -54154,7 +54287,7 @@ sub_F9E929:
 	add XBC,ByteTable4_FA182B                            ; F9EAB3  e9 c8 2b 18 fa 00
 	ld A,(XBC)                                           ; F9EAB9  81 21
 	pushw wa                                             ; F9EABB  28
-	calr sub_F9FE88                                          ; F9EABC  1e c9 13
+	calr CombinationCopy_RefreshIfCurrentCombi                                          ; F9EABC  1e c9 13
 	inc 1,H                                              ; F9EABF  ce 61
 	inc 6,XSP                                            ; F9EAC1  ef 66
 	cp H,0x08                                            ; F9EAC3  ce cf 08
@@ -54190,10 +54323,10 @@ sub_F9E929:
 	ld W,(XWA)                                           ; F9EB16  80 20
 	push 0x00                                            ; F9EB18  09 00
 	push W                                               ; F9EB1A  c8 04
-	calr sub_F9F984                                          ; F9EB1C  1e 65 0e
+	calr CombiBank_RemoteCombiAddr                                          ; F9EB1C  1e 65 0e
 	inc 6,XSP                                            ; F9EB1F  ef 66
 	push XIY                                             ; F9EB21  3d
-	calr sub_F9FAE9                                          ; F9EB22  1e c4 0f
+	calr Link_ReadRemoteBlock                                          ; F9EB22  1e c4 0f
 	push 0x00                                            ; F9EB25  09 00
 	m_push MB16, 0x270d                                  ; F9EB27  c1 0d 27 04
 	ld C,(XIX)                                           ; F9EB2B  84 23
@@ -54204,12 +54337,12 @@ sub_F9E929:
 	add XBC,ByteTable4_FA182B                            ; F9EB36  e9 c8 2b 18 fa 00
 	ld A,(XBC)                                           ; F9EB3C  81 21
 	pushw wa                                             ; F9EB3E  28
-	calr sub_F9F984                                          ; F9EB3F  1e 42 0e
+	calr CombiBank_RemoteCombiAddr                                          ; F9EB3F  1e 42 0e
 	push XIY                                             ; F9EB42  3d
 	pushw 0x02c0                                         ; F9EB43  0b c0 02
 	ld xbc, (xiz-4)                                      ; F9EB46  ae fc 21
 	push XBC                                             ; F9EB49  39
-	calr sub_F9FAC1                                          ; F9EB4A  1e 74 0f
+	calr Link_WriteRemoteBlock                                          ; F9EB4A  1e 74 0f
 	push 0x00                                            ; F9EB4D  09 00
 	m_push MB16, 0x270d                                  ; F9EB4F  c1 0d 27 04
 	ld C,(XIX)                                           ; F9EB53  84 23
@@ -54220,14 +54353,17 @@ sub_F9E929:
 	add XBC,ByteTable4_FA182B                            ; F9EB5E  e9 c8 2b 18 fa 00
 	ld A,(XBC)                                           ; F9EB64  81 21
 	pushw wa                                             ; F9EB66  28
-	calr sub_F9FE88                                          ; F9EB67  1e 1e 13
+	calr CombinationCopy_RefreshIfCurrentCombi                                          ; F9EB67  1e 1e 13
 	add XSP,0x00000020                                   ; F9EB6A  ef c8 20 00 00 00
 .LF9EB70:
 	pop XIX                                              ; F9EB70  5c
 	popw hl                                              ; F9EB71  4b
 	unlk XIZ                                             ; F9EB72  ee 0d
 	ret                                                  ; F9EB74  0e
-sub_F9EB75:
+; Screen_DataLoadFilter_Enter -- Enter (+0) method of screen 0x61, DATA LOAD FILTER: resets the item cursor (0x26A5) on a new entry and posts the painter, value and cursor callbacks
+; Evidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_F41998; prom_b T_F41998/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15.
+; Evidence: posts .LF9ECE0 (DisplayList_FA427B-FA43C9: 'DATA LOAD FILTER', 'EFFECT & OUTPUT :', 'R.T.CREATOR 1_6 :', 'OCTAVE', 'MIDI SETTING', 'KEY&VEL LAYER', 'MAIN OUT EQ', 'KEY SCALING'), .LF9ED00 (values) and .LF9ED18 (cursor); id 0x61 = MANAGER's 'DATA LOAD FILTER' key (0xF9CA54).
+Screen_DataLoadFilter_Enter:
 	push XIX                                             ; F9EB75  3c
 	lda xix, (T_Kernel_SemaSignal_StackArg:24)           ; F9EB76  f2 c0 2d f4 34
 	ld c, (0x207a:16)                                   ; F9EB7B  c1 7a 20 23
@@ -54274,7 +54410,9 @@ sub_F9EB75:
 	ret                                                  ; F9EBEC  0e
 T_F4199C_Nop:
 	ret                                                  ; F9EBED  0e
-sub_F9EBEE:
+; Screen_DataLoadFilter_Button -- Button (+8) method of DATA LOAD FILTER: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA18EE
+; Evidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_F41998; prom_b T_F41998/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15; slots 0-3 move the item cursor (0xF9EC16), slots 4-7 adjust the item through JumpTable_F9EC58 (0xF9EC3F), slot 15 EXIT requests 0x6D.
+Screen_DataLoadFilter_Button:
 	link XIZ,0x0000                                      ; F9EBEE  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EBF2  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9EBF5  9e 08 04
@@ -54327,18 +54465,22 @@ T_F419A4_Nop:
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 JumpTable_F9EC58:
-	.long sub_F9EC74                                 ; F9EC58  [  0]
-	.long sub_F9EC7C                                 ; F9EC5C  [  1]
-	.long sub_F9EC8D                                 ; F9EC60  [  2]
-	.long sub_F9EC95                                 ; F9EC64  [  3]
-	.long sub_F9EC9D                                 ; F9EC68  [  4]
-	.long sub_F9ECA5                                 ; F9EC6C  [  5]
-	.long sub_F9ECAD                                 ; F9EC70  [  6]
-sub_F9EC74:   ; entry: named by 1 `.long` operand, first at 0xF9EC58
+	.long DataLoadFilter_AdjustEffectOutput                                 ; F9EC58  [  0]
+	.long DataLoadFilter_AdjustRtCreator                                 ; F9EC5C  [  1]
+	.long DataLoadFilter_SetOctave                                 ; F9EC60  [  2]
+	.long DataLoadFilter_SetMidiSetting                                 ; F9EC64  [  3]
+	.long DataLoadFilter_SetKeyVelLayer                                 ; F9EC68  [  4]
+	.long DataLoadFilter_SetMainOutEq                                 ; F9EC6C  [  5]
+	.long DataLoadFilter_SetKeyScaling                                 ; F9EC70  [  6]
+; DataLoadFilter_AdjustEffectOutput -- steps the 'EFFECT & OUTPUT' load filter (OFF / COMBI / SOUND&COMBI) through IndexedParam_AdjustField
+; Evidence: entry 0 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 0 of 0xFA443D lies on the 'EFFECT & OUTPUT :' row of DisplayList_FA427B; pushes Descriptor9_FA1B2D (+0=2, mask 0x0F, max 2) and index 0x7A; record FA43C9 shows var 0x7EE4 & 0x0F from 'OFF','COMBI','SOUND&COMBI'.
+DataLoadFilter_AdjustEffectOutput:   ; entry: named by 1 `.long` operand, first at 0xF9EC58
 	lda xbc, (Descriptor9_FA1B2D:24)                     ; F9EC74  f2 2d 1b fa 31
 	push XBC                                             ; F9EC79  39
 	jr .LF9EC82                                          ; F9EC7A  68 06
-sub_F9EC7C:   ; entry: named by 1 `.long` operand, first at 0xF9EC5C
+; DataLoadFilter_AdjustRtCreator -- steps the 'R.T.CREATOR 1_6' load filter through IndexedParam_AdjustField
+; Evidence: entry 1 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 1 of 0xFA443D lies on the 'R.T.CREATOR 1_6 :' row of DisplayList_FA427B; Descriptor9_FA1B36 (+0=2, mask 0xF0, shift 4, max 2) with index 0x7A; record FA43D8 shows var 0x7EE4 >> 4.
+DataLoadFilter_AdjustRtCreator:   ; entry: named by 1 `.long` operand, first at 0xF9EC5C
 	lda xbc, (Descriptor9_FA1B36:24)                     ; F9EC7C  f2 36 1b fa 31
 	push XBC                                             ; F9EC81  39
 .LF9EC82:
@@ -54347,23 +54489,34 @@ sub_F9EC7C:   ; entry: named by 1 `.long` operand, first at 0xF9EC5C
 .LF9EC89:
 	inc 6,XSP                                            ; F9EC89  ef 66
 	jr .LF9ECBC                                          ; F9EC8B  68 2f
-sub_F9EC8D:   ; entry: named by 1 `.long` operand, first at 0xF9EC60
+; DataLoadFilter_SetOctave -- sets or clears the 'OCTAVE' load-filter bit (0x7F07 bit 2) according to which key of the pair was pressed
+; Evidence: entry 2 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 2 of 0xFA443D lies on the 'OCTAVE' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B3F) forces bit mask 0x04 on/off by pair position; record FA43E7 shows var 0x7F07 bit 2 as 'ON '/'OFF'.
+DataLoadFilter_SetOctave:   ; entry: named by 1 `.long` operand, first at 0xF9EC60
 	lda xbc, (Descriptor3_FA1B3F:24)                     ; F9EC8D  f2 3f 1b fa 31
 	push XBC                                             ; F9EC92  39
 	jr .LF9ECB3                                          ; F9EC93  68 1e
-sub_F9EC95:   ; entry: named by 1 `.long` operand, first at 0xF9EC64
+; DataLoadFilter_SetMidiSetting -- sets or clears the 'MIDI SETTING' load-filter bit (0x7F07 bit 1)
+; Evidence: entry 3 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 3 of 0xFA443D lies on the 'MIDI SETTING' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B42) forces bit mask 0x02 on/off by pair position; record FA43F6 shows var 0x7F07 bit 1 as 'ON '/'OFF'.
+DataLoadFilter_SetMidiSetting:   ; entry: named by 1 `.long` operand, first at 0xF9EC64
 	lda xbc, (Descriptor3_FA1B42:24)                     ; F9EC95  f2 42 1b fa 31
 	push XBC                                             ; F9EC9A  39
 	jr .LF9ECB3                                          ; F9EC9B  68 16
-sub_F9EC9D:   ; entry: named by 1 `.long` operand, first at 0xF9EC68
+; DataLoadFilter_SetKeyVelLayer -- sets or clears the 'KEY&VEL LAYER' load-filter bit (0x7F07 bit 0)
+; Evidence: entry 4 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 4 of 0xFA443D lies on the 'KEY&VEL LAYER' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B45) forces bit mask 0x01 on/off by pair position; record FA4405 shows var 0x7F07 bit 0 as 'ON '/'OFF'.
+DataLoadFilter_SetKeyVelLayer:   ; entry: named by 1 `.long` operand, first at 0xF9EC68
 	lda xbc, (Descriptor3_FA1B45:24)                     ; F9EC9D  f2 45 1b fa 31
 	push XBC                                             ; F9ECA2  39
 	jr .LF9ECB3                                          ; F9ECA3  68 0e
-sub_F9ECA5:   ; entry: named by 1 `.long` operand, first at 0xF9EC6C
+; DataLoadFilter_SetMainOutEq -- sets or clears the 'MAIN OUT EQ' load-filter bit (0x7F07 bit 3)
+; Evidence: entry 5 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 5 of 0xFA443D lies on the 'MAIN OUT EQ' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B48) forces bit mask 0x08 on/off by pair position; record FA4414 shows var 0x7F07 bit 3 as 'ON '/'OFF'.
+DataLoadFilter_SetMainOutEq:   ; entry: named by 1 `.long` operand, first at 0xF9EC6C
 	lda xbc, (Descriptor3_FA1B48:24)                     ; F9ECA5  f2 48 1b fa 31
 	push XBC                                             ; F9ECAA  39
 	jr .LF9ECB3                                          ; F9ECAB  68 06
-sub_F9ECAD:   ; entry: named by 1 `.long` operand, first at 0xF9EC70
+; DataLoadFilter_SetKeyScaling -- sets or clears the 'KEY SCALING' load-filter bit (0x7F07 bit 4)
+; Evidence: entry 6 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 6 of 0xFA443D lies on the 'KEY SCALING' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B4B) forces bit mask 0x10 on/off by pair position; record FA4423 shows var 0x7F07 bit 4 as 'ON '/'OFF'.
+; Note: the label's extent runs on through the shared tail .LF9ECB3, the EXIT handler 0xF9ECBD and the paint callbacks .LF9ECE0-.LF9ED18.
+DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0xF9EC70
 	lda xbc, (Descriptor3_FA1B4B:24)                     ; F9ECAD  f2 4b 1b fa 31
 	push XBC                                             ; F9ECB2  39
 .LF9ECB3:
@@ -54415,7 +54568,11 @@ sub_F9ECAD:   ; entry: named by 1 `.long` operand, first at 0xF9EC70
 	call T_DisplayListB_RunOne_Stack                     ; F9ED2D  1d 0c 2e f4
 	inc 8,XSP                                            ; F9ED31  ef 60
 	ret                                                  ; F9ED33  0e
-sub_F9ED34:
+; Screen_MemoryProtect_Enter -- Enter (+0) method of screen 0x6E, MEMORY PROTECT: resets the cursor (0x26A6) on a new entry and posts the painter, value and cursor callbacks
+; Evidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_F41988; prom_b T_F41988/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9.
+; Evidence: posts .LF9EE57 (DisplayList_FA44E8-FA458F: 'MEMORY PROTECT', 'SOUND :', 'COMBINATION :'), .LF9EE77 (records FA458F/FA459E: (0x7FD6) bits 0/1 as OFF/ON) and .LF9EE8F (cursor on (0x26A6)); id 0x6E = MANAGER's 'MEMORY PROTECT' key (0xF9CA7B).
+; Note: sub_F9ED44 (the `ld (0x26a6),0` after `jr z` at 0xF9ED42) is a label inside this routine, not a separate entry.
+Screen_MemoryProtect_Enter:
 	push XIX                                             ; F9ED34  3c
 	lda xix, (T_Kernel_SemaSignal_StackArg:24)           ; F9ED35  f2 c0 2d f4 34
 	ld c, (0x207a:16)                                   ; F9ED3A  c1 7a 20 23
@@ -54461,7 +54618,9 @@ sub_F9ED44:
 	ret                                                  ; F9EDA0  0e
 T_F4198C_Nop:
 	ret                                                  ; F9EDA1  0e
-sub_F9EDA2:
+; Screen_MemoryProtect_Button -- Button (+8) method of MEMORY PROTECT: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA194A
+; Evidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_F41988; prom_b T_F41988/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9; slots 0-3 move the cursor (0xF9EDCA, T_F42C7C on (0x26A6)), slots 4-7 set/clear (0x7FD6) bit 0 or 1 (0xF9EDF3), slot 15 EXIT requests 0x6D.
+Screen_MemoryProtect_Button:
 	link XIZ,0x0000                                      ; F9EDA2  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EDA6  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9EDA9  9e 08 04
@@ -54568,7 +54727,10 @@ T_F41994_Nop:
 	call T_DisplayListB_RunOne_Stack                     ; F9EEA4  1d 0c 2e f4
 	inc 8,XSP                                            ; F9EEA8  ef 60
 	ret                                                  ; F9EEAA  0e
-sub_F9EEAB:
+; Screen_SoundMute_Enter -- Enter (+0) method of screen 0x5D, SOUND MUTE: posts the painter (unless only a refresh is pending) and the ON/OFF value callback
+; Evidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_F434C0; prom_b T_F434C0/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07.
+; Evidence: .LF9EF3B runs DisplayList_FA45D2-FA46B4 ('SOUND MUTE', 'If you want held notes to continue ... Please turn off Sound Mute.', 'SOUND MUTE :'); .LF9EF5B runs record FA46B4 ((0x7F0B) bit 0 as 'ON '/'OFF'); id 0x5D = MANAGER's 'SOUND MUTE' key (0xF9CAA2).
+Screen_SoundMute_Enter:
 	ld c, (0x2095:16)                                   ; F9EEAB  c1 95 20 23
 	and C,0x10                                           ; F9EEAF  cb cc 10
 	jr nz, .LF9EECB                                      ; F9EEB2  6e 17
@@ -54589,7 +54751,9 @@ sub_F9EEAB:
 	ret                                                  ; F9EEDE  0e
 T_F434C4_Nop:
 	ret                                                  ; F9EEDF  0e
-sub_F9EEE0:
+; Screen_SoundMute_Button -- Button (+8) method of SOUND MUTE: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA19A6
+; Evidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_F434C0; prom_b T_F434C0/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07; slots 2-5 -> 0xF9EF08 (IndexedParam_SetBit(0x98, Descriptor3_FA1B57) = (0x7F0B) bit 0), slot 15 EXIT requests 0x6D.
+Screen_SoundMute_Button:
 	link XIZ,0x0000                                      ; F9EEE0  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EEE4  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9EEE7  9e 08 04
@@ -54644,12 +54808,17 @@ T_F434CC_Nop:
 	call T_DisplayListB_RunOne_Stack                     ; F9EF66  1d 0c 2e f4
 	pop XBC                                              ; F9EF6A  59
 	ret                                                  ; F9EF6B  0e
-sub_F9EF6C:
+; Screen_MainOutEqualizer_Enter -- Enter (+0) method of screen 0x6B, MAIN OUT EQUALIZER: forwards to the prom_b screen code (T_F42F68 -> sub_F122C5)
+; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_F41958; prom_b T_F41958/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84.
+; Evidence: sub_F122C5 posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D ('MAIN OUT EQUALIZER'); id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
+Screen_MainOutEqualizer_Enter:
 	call T_F42F68                                        ; F9EF6C  1d 68 2f f4
 	ret                                                  ; F9EF70  0e
 T_F4195C_Nop:
 	ret                                                  ; F9EF71  0e
-sub_F9EF72:
+; Screen_MainOutEqualizer_Button -- Button (+8) method of MAIN OUT EQUALIZER: re-pushes the two button arguments and calls prom_b sub_F12334 (T_F42F6C), which maps them with T_F42C74 and dispatches through DispatchTable_F1394F
+; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_F41958; prom_b T_F41958/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
+Screen_MainOutEqualizer_Button:
 	link XIZ,0x0000                                      ; F9EF72  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EF76  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9EF79  9e 08 04
@@ -54712,9 +54881,9 @@ Screen_DrumsMapNaming_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9EFD3  1d 80 2e f4
 	calr Paint_DrumsMapNaming                                      ; F9EFD7  1e c2 03
 .LF9EFDA:
-	calr sub_F9F4B5                                      ; F9EFDA  1e d8 04
-	calr sub_F9F3F4                                      ; F9EFDD  1e 14 04
-	calr sub_F9F5CC                                      ; F9EFE0  1e e9 05
+	calr DrumsMap_LoadRowFields                                      ; F9EFDA  1e d8 04
+	calr DrumsMap_DrawFields                                      ; F9EFDD  1e 14 04
+	calr DrumsMap_DrawRowCursor                                      ; F9EFE0  1e e9 05
 	jr .LF9EFF5                                          ; F9EFE3  68 10
 .LF9EFE5:
 	pushw 0x10                                           ; F9EFE5  0b 10 00
@@ -54806,7 +54975,10 @@ Screen_DrumsMapNaming_Button:
 	ret                                                  ; F9F033  0e
 T_F419C4_Nop:
 	ret                                                  ; F9F034  0e
-sub_F9F035:
+; DrumsMap_AdjustMap -- steps the DRUMS MAP selection (0x2702: NORMAL, USER1, USER2, USER3) and, if it moved, stores it and redraws the whole page
+; Evidence: T_F42C78 on (0x2702) with Descriptor9_FA1B5A (mask 3, max 3); record FA4881 prints (0x2702) from 'NORMAL','USER1 ','USER2 ','USER3 '; on change DrumsMap_StoreMapCode, DrumsMap_LoadRowFields, DrumsMap_DrawFields, DrumsMap_DrawSoundColumn.
+; Called from HandlerTable23_FA1A02 slots 0/1 in mode (0x2700)=0.
+DrumsMap_AdjustMap:
 	lda xbc, (Descriptor9_FA1B5A:24)                     ; F9F035  f2 5a 1b fa 31
 	push XBC                                             ; F9F03A  39
 	lda xwa, (0x2702:16)                                ; F9F03B  f1 02 27 30
@@ -54815,10 +54987,10 @@ sub_F9F035:
 	inc 8,XSP                                            ; F9F044  ef 60
 	cp a, 0x01:i3                                          ; F9F046  c9 d9
 	jr nz, .LF9F056                                      ; F9F048  6e 0c
-	calr sub_F9F36B                                      ; F9F04A  1e 1e 03
-	calr sub_F9F4B5                                      ; F9F04D  1e 65 04
-	calr sub_F9F3F4                                      ; F9F050  1e a1 03
-	calr sub_F9F469                                      ; F9F053  1e 13 04
+	calr DrumsMap_StoreMapCode                                      ; F9F04A  1e 1e 03
+	calr DrumsMap_LoadRowFields                                      ; F9F04D  1e 65 04
+	calr DrumsMap_DrawFields                                      ; F9F050  1e a1 03
+	calr DrumsMap_DrawSoundColumn                                      ; F9F053  1e 13 04
 .LF9F056:
 	ret                                                  ; F9F056  0e
 	ld bc, (0x2700:16)                                 ; F9F057  d1 00 27 21
@@ -54829,10 +55001,10 @@ sub_F9F035:
 	jr z, .LF9F06C                                       ; F9F063  66 07
 	jr .LF9F075                                          ; F9F065  68 0e
 .LF9F067:
-	calr sub_F9F035                                      ; F9F067  1e cb ff
+	calr DrumsMap_AdjustMap                                      ; F9F067  1e cb ff
 	jr .LF9F075                                          ; F9F06A  68 09
 .LF9F06C:
-	calr sub_F9FB07                                      ; F9F06C  1e 98 0a
+	calr PanelFlags_PairBitAsWord                                      ; F9F06C  1e 98 0a
 	pushw wa                                             ; F9F06F  28
 	call T_F42F84                                        ; F9F070  1d 84 2f f4
 	popw bc                                              ; F9F074  49
@@ -54846,16 +55018,19 @@ sub_F9F035:
 	jr z, .LF9F08B                                       ; F9F082  66 07
 	jr .LF9F094                                          ; F9F084  68 0e
 .LF9F086:
-	calr sub_F9F035                                      ; F9F086  1e ac ff
+	calr DrumsMap_AdjustMap                                      ; F9F086  1e ac ff
 	jr .LF9F094                                          ; F9F089  68 09
 .LF9F08B:
-	calr sub_F9FB07                                      ; F9F08B  1e 79 0a
+	calr PanelFlags_PairBitAsWord                                      ; F9F08B  1e 79 0a
 	pushw wa                                             ; F9F08E  28
 	call T_F42F88                                        ; F9F08F  1d 88 2f f4
 	popw bc                                              ; F9F093  49
 .LF9F094:
 	ret                                                  ; F9F094  0e
-sub_F9F095:
+; DrumsMap_MoveRowCursor -- moves the DRUMS MAP note-row cursor (0x2703, rows 0-11) and scrolls the note window (0x2704) when the cursor is at an edge
+; Evidence: T_F42C78 (called via XIX) on (0x2703) with ByteTable9_FA1B63 (a 9-byte descriptor: max 11) unless at row 0 / row 11, else on (0x2704) with ByteTable9_FA1B6C (max 0x74); cursor-only moves redraw DrumsMap_DrawRowCursor, scrolls reload and redraw all rows.
+; Called from HandlerTable23_FA1A02 slots 2-4 in mode (0x2700)=0.
+DrumsMap_MoveRowCursor:
 	push XIX                                             ; F9F095  3c
 	lda xix, (T_F42C78:24)                               ; F9F096  f2 78 2c f4 34
 	ld c, (0x28b0:16)                                   ; F9F09B  c1 b0 28 23
@@ -54903,7 +55078,7 @@ sub_F9F095:
 	cp a, 0x01:i3                                          ; F9F0FE  c9 d9
 	jr nz, .LF9F129                                      ; F9F100  6e 27
 .LF9F102:
-	calr sub_F9F5CC                                      ; F9F102  1e c7 04
+	calr DrumsMap_DrawRowCursor                                      ; F9F102  1e c7 04
 	jr .LF9F129                                          ; F9F105  68 22
 .LF9F107:
 	lda xbc, (ByteTable9_FA1B6C:24)                      ; F9F107  f2 6c 1b fa 31
@@ -54918,9 +55093,9 @@ sub_F9F095:
 	cp a, 0x01:i3                                          ; F9F11C  c9 d9
 	jr nz, .LF9F129                                      ; F9F11E  6e 09
 .LF9F120:
-	calr sub_F9F4B5                                      ; F9F120  1e 92 03
-	calr sub_F9F3F4                                      ; F9F123  1e ce 02
-	calr sub_F9F469                                      ; F9F126  1e 40 03
+	calr DrumsMap_LoadRowFields                                      ; F9F120  1e 92 03
+	calr DrumsMap_DrawFields                                      ; F9F123  1e ce 02
+	calr DrumsMap_DrawSoundColumn                                      ; F9F126  1e 40 03
 .LF9F129:
 	pop XIX                                              ; F9F129  5c
 	ret                                                  ; F9F12A  0e
@@ -54932,10 +55107,10 @@ sub_F9F095:
 	jr z, .LF9F140                                       ; F9F137  66 07
 	jr .LF9F149                                          ; F9F139  68 0e
 .LF9F13B:
-	calr sub_F9F095                                      ; F9F13B  1e 57 ff
+	calr DrumsMap_MoveRowCursor                                      ; F9F13B  1e 57 ff
 	jr .LF9F149                                          ; F9F13E  68 09
 .LF9F140:
-	calr sub_F9FB07                                      ; F9F140  1e c4 09
+	calr PanelFlags_PairBitAsWord                                      ; F9F140  1e c4 09
 	pushw wa                                             ; F9F143  28
 	call T_F42F8C                                        ; F9F144  1d 8c 2f f4
 	popw bc                                              ; F9F148  49
@@ -54949,10 +55124,10 @@ sub_F9F095:
 	jr z, .LF9F15F                                       ; F9F156  66 07
 	jr .LF9F168                                          ; F9F158  68 0e
 .LF9F15A:
-	calr sub_F9F095                                      ; F9F15A  1e 38 ff
+	calr DrumsMap_MoveRowCursor                                      ; F9F15A  1e 38 ff
 	jr .LF9F168                                          ; F9F15D  68 09
 .LF9F15F:
-	calr sub_F9FB07                                      ; F9F15F  1e a5 09
+	calr PanelFlags_PairBitAsWord                                      ; F9F15F  1e a5 09
 	pushw wa                                             ; F9F162  28
 	call T_F42F90                                        ; F9F163  1d 90 2f f4
 	popw bc                                              ; F9F167  49
@@ -54966,16 +55141,19 @@ sub_F9F095:
 	jr z, .LF9F17E                                       ; F9F175  66 07
 	jr .LF9F187                                          ; F9F177  68 0e
 .LF9F179:
-	calr sub_F9F095                                      ; F9F179  1e 19 ff
+	calr DrumsMap_MoveRowCursor                                      ; F9F179  1e 19 ff
 	jr .LF9F187                                          ; F9F17C  68 09
 .LF9F17E:
-	calr sub_F9FB07                                      ; F9F17E  1e 86 09
+	calr PanelFlags_PairBitAsWord                                      ; F9F17E  1e 86 09
 	pushw wa                                             ; F9F181  28
 	call T_F42F94                                        ; F9F182  1d 94 2f f4
 	popw bc                                              ; F9F186  49
 .LF9F187:
 	ret                                                  ; F9F187  0e
-sub_F9F188:
+; DrumsMap_AdjustRowSound -- for USER1-3 maps, steps the drum sound assigned to the note on the cursor row and redraws the SOUND column
+; Evidence: returns unless 1 <= (0x2702) <= 3; T_F42C78 with Descriptor9_FA1B75 (mask 0x7F, max 127) on byte (0x2704)+(0x2703) of ByteTable16_FA1A72[(0x2702)] (RAM 0x5EE0/0x5F70/0x6000), then on its display copy 0x2A50+(0x2703); record FA4A7F prints 0x2A50.. as names from 0x60A000.
+; Evidence: on change DrumsMap_DrawSoundColumn. Called from HandlerTable23_FA1A02 slots 5-7.
+DrumsMap_AdjustRowSound:
 	link XIZ,0xfffc                                      ; F9F188  ee 0c fc ff
 	pushw hl                                             ; F9F18C  2b
 	pushw de                                             ; F9F18D  2a
@@ -55018,7 +55196,7 @@ sub_F9F188:
 	inc 8,XSP                                            ; F9F1E9  ef 60
 	cp a, 0x01:i3                                          ; F9F1EB  c9 d9
 	jr nz, .LF9F1F2                                      ; F9F1ED  6e 03
-	calr sub_F9F469                                      ; F9F1EF  1e 77 02
+	calr DrumsMap_DrawSoundColumn                                      ; F9F1EF  1e 77 02
 .LF9F1F2:
 	pop XIX                                              ; F9F1F2  5c
 	popw de                                              ; F9F1F3  4a
@@ -55033,10 +55211,10 @@ sub_F9F188:
 	jr z, .LF9F20D                                       ; F9F204  66 07
 	jr .LF9F216                                          ; F9F206  68 0e
 .LF9F208:
-	calr sub_F9F188                                      ; F9F208  1e 7d ff
+	calr DrumsMap_AdjustRowSound                                      ; F9F208  1e 7d ff
 	jr .LF9F216                                          ; F9F20B  68 09
 .LF9F20D:
-	calr sub_F9FB07                                      ; F9F20D  1e f7 08
+	calr PanelFlags_PairBitAsWord                                      ; F9F20D  1e f7 08
 	pushw wa                                             ; F9F210  28
 	call T_F42F98                                        ; F9F211  1d 98 2f f4
 	popw bc                                              ; F9F215  49
@@ -55050,10 +55228,10 @@ sub_F9F188:
 	jr z, .LF9F22C                                       ; F9F223  66 07
 	jr .LF9F235                                          ; F9F225  68 0e
 .LF9F227:
-	calr sub_F9F188                                      ; F9F227  1e 5e ff
+	calr DrumsMap_AdjustRowSound                                      ; F9F227  1e 5e ff
 	jr .LF9F235                                          ; F9F22A  68 09
 .LF9F22C:
-	calr sub_F9FB07                                      ; F9F22C  1e d8 08
+	calr PanelFlags_PairBitAsWord                                      ; F9F22C  1e d8 08
 	pushw wa                                             ; F9F22F  28
 	call T_F42F9C                                        ; F9F230  1d 9c 2f f4
 	popw bc                                              ; F9F234  49
@@ -55067,10 +55245,10 @@ sub_F9F188:
 	jr z, .LF9F24B                                       ; F9F242  66 07
 	jr .LF9F254                                          ; F9F244  68 0e
 .LF9F246:
-	calr sub_F9F188                                      ; F9F246  1e 3f ff
+	calr DrumsMap_AdjustRowSound                                      ; F9F246  1e 3f ff
 	jr .LF9F254                                          ; F9F249  68 09
 .LF9F24B:
-	calr sub_F9FB07                                      ; F9F24B  1e b9 08
+	calr PanelFlags_PairBitAsWord                                      ; F9F24B  1e b9 08
 	pushw wa                                             ; F9F24E  28
 	call T_F42FA0                                        ; F9F24F  1d a0 2f f4
 	popw bc                                              ; F9F253  49
@@ -55121,7 +55299,7 @@ sub_F9F188:
 	ld c, (0x28b0:16)                                   ; F9F2BA  c1 b0 28 23
 	and C,0x01                                           ; F9F2BE  cb cc 01
 	jr nz, .LF9F2CE                                      ; F9F2C1  6e 0b
-	calr sub_F9FB07                                      ; F9F2C3  1e 41 08
+	calr PanelFlags_PairBitAsWord                                      ; F9F2C3  1e 41 08
 	pushw wa                                             ; F9F2C6  28
 	call T_F42FA4                                        ; F9F2C7  1d a4 2f f4
 	popw bc                                              ; F9F2CB  49
@@ -55163,7 +55341,7 @@ sub_F9F188:
 	jr z, .LF9F31B                                       ; F9F317  66 02
 	jr .LF9F324                                          ; F9F319  68 09
 .LF9F31B:
-	calr sub_F9FB07                                      ; F9F31B  1e e9 07
+	calr PanelFlags_PairBitAsWord                                      ; F9F31B  1e e9 07
 	pushw wa                                             ; F9F31E  28
 	call T_F42FA8                                        ; F9F31F  1d a8 2f f4
 	popw bc                                              ; F9F323  49
@@ -55199,7 +55377,10 @@ sub_F9F188:
 .LF9F369:
 	pop XIX                                              ; F9F369  5c
 	ret                                                  ; F9F36A  0e
-sub_F9F36B:
+; DrumsMap_StoreMapCode -- writes the code of the selected drum map to (0x7F4E) and journals the change
+; Evidence: (0x7F4E) = ByteTable4_FA1A6E[(0x2702)] ({00,40,41,42} for NORMAL/USER1-3); T_Queue2C00_Append4 with index 0x91, offset 4, the code and 0xFF -- the same table-0x91 record whose +0 TuneScale_StoreMasterTune writes and FA0525 reads as (0x7F4A).
+; Called from DrumsMap_AdjustMap 0xF9F04A.
+DrumsMap_StoreMapCode:
 	push XIX                                             ; F9F36B  3c
 	ld ix, (0x2702:16)                                 ; F9F36C  d1 02 27 24
 	extz IX                                              ; F9F370  dc 12
@@ -55332,7 +55513,10 @@ Paint_ErrorImpossibleDrumMap:
 	call T_F42E14                                        ; F9F3ED  1d 14 2e f4
 	inc 8,XSP                                            ; F9F3F1  ef 60
 	ret                                                  ; F9F3F3  0e
-sub_F9F3F4:
+; DrumsMap_DrawFields -- draws the DRUMS MAP selector and name and the 12 rows' note number, note name and octave
+; Evidence: four interpreter-B runs over DisplayList_FA4881 (var 0x2702 'NORMAL'..'USER3', name buffer 0x2940), +0x1E..+0x96 (op-00 on 0x2640..0x264B), +0x96..+0x14A (op-02 on 0x2A20 through the note-name tables at 0xFA4B4B...), +0x14A..FA4A7F (octave digits 0x2A40.. from '-2'..' 8').
+; Callers: Screen_DrumsMapNaming_Enter 0xF9EFDD, DrumsMap_AdjustMap, DrumsMap_MoveRowCursor.
+DrumsMap_DrawFields:
 	push XIX                                             ; F9F3F4  3c
 	lda xix, (T_DisplayListB_Run_Stack:24)               ; F9F3F5  f2 04 2e f4 34
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9F3FA  f1 40 25 00 00
@@ -55371,15 +55555,20 @@ sub_F9F3F4:
 	add XSP,0x00000020                                   ; F9F44F  ef c8 20 00 00 00
 	pop XIX                                              ; F9F455  5c
 	ret                                                  ; F9F456  0e
-sub_F9F457:
+; DrumsMap_RefreshSoundColumn -- external hook: redraws the DRUMS MAP SOUND column, but only while screen 0x67 is current and in its edit state
+; Evidence: `cp (0x207C),0x67` (the current screen id) and `cp (0x2700),0x00`, then DrumsMap_DrawSoundColumn; its only caller is prom_a 0xFDA329 through T_F43418, in the routine starting at sub_FDA252 that Screen_DrumsMapNaming_Enter calls through T_F42FAC (0xF9EFCA) before setting (0x2806)=1.
+DrumsMap_RefreshSoundColumn:
 	m_cp_mi8 MB16, UI_ScreenId, 0x67                          ; F9F457  c1 7c 20 3f 67
 	jr nz, .LF9F468                                      ; F9F45C  6e 0a
 	m_cp_mi8 MB16, 0x2700, 0x00                          ; F9F45E  c1 00 27 3f 00
 	jr nz, .LF9F468                                      ; F9F463  6e 03
-	calr sub_F9F469                                      ; F9F465  1e 01 00
+	calr DrumsMap_DrawSoundColumn                                      ; F9F465  1e 01 00
 .LF9F468:
 	ret                                                  ; F9F468  0e
-sub_F9F469:
+; DrumsMap_DrawSoundColumn -- prints the drum-sound name of each of the 12 rows, but only when the current part plays a drum kit; then clears (0x2806)
+; Evidence: reads the part record for (0x2250) from the (0x60F018) pointer table (entry 0x20+part, byte +0x1D) and draws only for bank codes 0x20/0x28/0x29 -- ByteTable8_FA16EC's codes for ' ROM DRUMS ','USER 1 DRUMS','USER 2 DRUMS' (DisplayList FA335C's table).
+; Evidence: interpreter B over DisplayList_FA4A7F-OperandTable_FA4B33 (op-02 on 0x2A50.. into the 13-char names at 0x60A000); `ld (0x2806),0` releases the Button method's guard.
+DrumsMap_DrawSoundColumn:
 	ld c, (UI_PartIndex:16)                                   ; F9F469  c1 50 22 23
 	mul C,0x04                                           ; F9F46D  cb 08 04
 	extz XBC                                             ; F9F470  e9 12
@@ -55406,7 +55595,10 @@ sub_F9F469:
 .LF9F4AF:
 	ld (0x2806:16), 0x00                                 ; F9F4AF  f1 06 28 00 00
 	ret                                                  ; F9F4B4  0e
-sub_F9F4B5:
+; DrumsMap_LoadRowFields -- derives the map index from (0x7F4E) and fills every DRUMS MAP display variable for the current 12-note window
+; Evidence: (0x2702) = index of (0x7F4E) in ByteTable4_FA1A6E; 0x2940 = 16 spaces for NORMAL else the 16 bytes at 0x5ED0+0x90*(map-1); for row r: (0x2640+r) = (0x2704)+r, (0x2A40+r) = that /12; (0x2A20) = (0x2704) mod 12.
+; Evidence: (0x2A50+r) = note (NORMAL) or byte (0x2704)+r of ByteTable16_FA1A72[map] (USER) -- the fields DrumsMap_DrawFields / _DrawSoundColumn print.
+DrumsMap_LoadRowFields:
 	link XIZ,0xfff8                                      ; F9F4B5  ee 0c f8 ff
 	pushw hl                                             ; F9F4B9  2b
 	push XIX                                             ; F9F4BA  3c
@@ -55529,7 +55721,9 @@ sub_F9F4B5:
 	popw hl                                              ; F9F5C8  4b
 	unlk XIZ                                             ; F9F5C9  ee 0d
 	ret                                                  ; F9F5CB  0e
-sub_F9F5CC:
+; DrumsMap_DrawRowCursor -- moves the DRUMS MAP row highlight to row (0x2703) on layer 1
+; Evidence: DisplayList_FA4C2A = EraseRect x 0x67-0x135, y 0x2E-0xC8; DisplayList_FA4B9F = interpreter-B op-03 on var 0x2703 into the rects at 0xFA4BAA, service 0x05.
+DrumsMap_DrawRowCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9F5CC  f1 40 25 00 01
 	lda xbc, (DisplayList_FA4C2A:24)                     ; F9F5D1  f2 2a 4c fa 31
 	push XBC                                             ; F9F5D6  39
@@ -55539,7 +55733,10 @@ sub_F9F5CC:
 	call T_DisplayListB_RunOne_Stack                     ; F9F5E1  1d 0c 2e f4
 	inc 8,XSP                                            ; F9F5E5  ef 60
 	ret                                                  ; F9F5E7  0e
-sub_F9F5E8:
+; SoundName_CopyToBuffer -- copies the 16-character name of sound (group, member) of a bank into a caller's buffer
+; Evidence: (0x60F160..162) = args, (0x60F01C) = (0x2250); T_F407F4 (sub_FAB658) resolves the sound code into (0x60F164)/(0x60F165); T_F41010 (sub_FC1B81, fallback Msg0716_Str_SoundName 'Sound Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
+; In: (XIZ+8) group, (XIZ+0x0A) member, (XIZ+0x0C) bank code, (XIZ+0x0E) destination.
+SoundName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F5E8  ee 0c fc ff
 	pushw hl                                             ; F9F5EC  2b
 	push XIX                                             ; F9F5ED  3c
@@ -55585,7 +55782,9 @@ sub_F9F5E8:
 	popw hl                                              ; F9F657  4b
 	unlk XIZ                                             ; F9F658  ee 0d
 	ret                                                  ; F9F65A  0e
-sub_F9F65B:
+; SoundGroupName_CopyToBuffer -- copies the 16-character name of sound group `group` of a bank into a caller's buffer
+; Evidence: A = (XIZ+8) group, W = (XIZ+0x0A) bank code, B = (0x2250); T_F41018 (sub_FC2035, which returns ToneGroupNames 'PIANO..', RAM 0x5240/0x5450/0x5660 for codes 0x18-0x1A, or a link-fetched name) leaves XIY; four longwords copied to (XIZ+0x0C).
+SoundGroupName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F65B  ee 0c fc ff
 	pushw hl                                             ; F9F65F  2b
 	push XIX                                             ; F9F660  3c
@@ -55625,7 +55824,10 @@ sub_F9F65B:
 	popw hl                                              ; F9F6AE  4b
 	unlk XIZ                                             ; F9F6AF  ee 0d
 	ret                                                  ; F9F6B1  0e
-sub_F9F6B2:
+; SoundGroup_MaxMemberIndex_ByStack -- stack-argument wrapper of SoundGroup_MaxMemberIndex_Get: returns in A the highest member index of a sound group
+; Evidence: stores (XIZ+8)/(XIZ+0x0A) to (0x2640)/(0x2641), calls T_SoundGroup_MaxMemberIndex_Get with A = group, W = bank code, B = (0x2250), returns the byte it stores back in (0x2640).
+; Callers use it as the loop bound for sound-name rows (ReMapEdit_LoadNameBuffers, SoundCopy_LoadNameBuffers) and as a descriptor max.
+SoundGroup_MaxMemberIndex_ByStack:
 	link XIZ,0x0000                                      ; F9F6B2  ee 0c 00 00
 	push XIX                                             ; F9F6B6  3c
 	lda xix, (0x2640:16)                                ; F9F6B7  f1 40 26 34
@@ -55652,7 +55854,9 @@ sub_F9F6B2:
 	pop XIX                                              ; F9F6E8  5c
 	unlk XIZ                                             ; F9F6E9  ee 0d
 	ret                                                  ; F9F6EB  0e
-sub_F9F6EC:
+; CombiName_CopyToBuffer -- copies the 16-character name of combination (group, member) of a bank into a caller's buffer
+; Evidence: (0x60F181..183) = args, (0x60F17F) = 0x98; T_F40804 (sub_FAB779) resolves the code into (0x60F185)/(0x60F186); T_F4102C (sub_FC1C59, fallback Msg0716_Str_CombiName 'Combi Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
+CombiName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F6EC  ee 0c fc ff
 	pushw hl                                             ; F9F6F0  2b
 	push XIX                                             ; F9F6F1  3c
@@ -55697,7 +55901,9 @@ sub_F9F6EC:
 	popw hl                                              ; F9F758  4b
 	unlk XIZ                                             ; F9F759  ee 0d
 	ret                                                  ; F9F75B  0e
-sub_F9F75C:
+; CombiGroupName_CopyToBuffer -- copies the 16-character name of combination group `group` of a bank into a caller's buffer
+; Evidence: A = group, W = bank code, B = 0x98; T_F41030 (sub_FC2155: RAM 0x5890/0x5AA0/0x5CB0 for codes 0x18-0x1A, else link-fetched with fallback Msg0716_Str_GroupPair_B 'Combi Group Name'/'EXT Silent Group') leaves XIY; four longwords copied to (XIZ+0x0C).
+CombiGroupName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F75C  ee 0c fc ff
 	pushw hl                                             ; F9F760  2b
 	push XIX                                             ; F9F761  3c
@@ -55738,7 +55944,9 @@ sub_F9F75C:
 	popw hl                                              ; F9F7B4  4b
 	unlk XIZ                                             ; F9F7B5  ee 0d
 	ret                                                  ; F9F7B7  0e
-sub_F9F7B8:
+; CombiGroup_MaxMemberIndex_ByStack -- stack-argument wrapper returning the highest member index of a combination group
+; Evidence: (0x2640)=group, (0x2641)=bank code, (0x2642)=0x98 (the combination selector CombiName_CopyToBuffer also uses), then T_SoundGroup_MaxMemberIndex_GetToneCopy; all callers pass combination banks (ReMapEdit COMBI arm 0x26F7/0x26FD, CombinationCopy 0x2706/0x270B).
+CombiGroup_MaxMemberIndex_ByStack:
 	link XIZ,0x0000                                      ; F9F7B8  ee 0c 00 00
 	push XIX                                             ; F9F7BC  3c
 	lda xix, (0x2640:16)                                ; F9F7BD  f1 40 26 34
@@ -55766,7 +55974,10 @@ sub_F9F7B8:
 	pop XIX                                              ; F9F7F2  5c
 	unlk XIZ                                             ; F9F7F3  ee 0d
 	ret                                                  ; F9F7F5  0e
-sub_F9F7F6:
+; UserSoundBank_RemoteGroupNameAddr -- returns in XIY the far-side (link) address of the 16-byte name of group H of USER 1 (code 8) or USER 2 (code 9), or 0xFFFFFFFF for any other bank
+; Evidence: groups 0-7 at 0xE80010/0xEA0010 + 16*H, groups 8-15 at 0xE8FF90/0xEAFF90 + 16*H (i.e. 0xE90010/0xEB0010 onward); callers hand XIY to Link_ReadRemoteBlock / Link_WriteRemoteBlock as the remote address -- the same 0xE8-0xEB windows sub_FC2035 reads user group names from.
+; In: (XIZ+8) bank code, (XIZ+0x0A) group.
+UserSoundBank_RemoteGroupNameAddr:
 	link XIZ,0x0000                                      ; F9F7F6  ee 0c 00 00
 	pushw hl                                             ; F9F7FA  2b
 	push XIX                                             ; F9F7FB  3c
@@ -55817,7 +56028,10 @@ sub_F9F7F6:
 	popw hl                                              ; F9F85D  4b
 	unlk XIZ                                             ; F9F85E  ee 0d
 	ret                                                  ; F9F860  0e
-sub_F9F861:
+; UserSoundBank_RemoteSoundAddr -- returns in XIY the far-side address of the 0x2C9-byte data of sound (H, L) in USER 1 / USER 2, or 0xFFFFFFFF otherwise
+; Evidence: 0xE80090 (0xEA0090) + 0x1648*H + 0x2C9*L for H <= 7, 0xE90090 (0xEB0090) + 0x1648*(H-8) + 0x2C9*L above; 0x1648 = 8 x 0x2C9 is the group size SoundCopy_Execute transfers, 0x2C9 the single-sound size.
+; In: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member.
+UserSoundBank_RemoteSoundAddr:
 	link XIZ,0x0000                                      ; F9F861  ee 0c 00 00
 	pushw hl                                             ; F9F865  2b
 	push XIX                                             ; F9F866  3c
@@ -55893,7 +56107,9 @@ sub_F9F861:
 	popw hl                                              ; F9F90C  4b
 	unlk XIZ                                             ; F9F90D  ee 0d
 	ret                                                  ; F9F90F  0e
-sub_F9F910:
+; CombiBank_RemoteGroupNameAddr -- returns in XIY the far-side address of the 16-byte name of combination group H (ROM: 0xF80200, USER: 0xEC0200, EXT: 0xC00200 + a base read from 0xC0001C), or 0xFFFFFFFF
+; Evidence: three arms on bank code 0/8/0x10; the EXT arm first does Link_ReadRemoteBlock(0xC0001C, 4, 0x60F170); used by CombinationGroupNaming_StoreGroupName and CombinationCopy_Execute as the remote address.
+CombiBank_RemoteGroupNameAddr:
 	link XIZ,0x0000                                      ; F9F910  ee 0c 00 00
 	pushw hl                                             ; F9F914  2b
 	ld H,(XIZ+0x0a)                                      ; F9F915  8e 0a 26
@@ -55926,7 +56142,7 @@ sub_F9F910:
 	pushw 0x04                                           ; F9F955  0b 04 00
 	ld XWA,0x00c0001c                                    ; F9F958  40 1c 00 c0 00
 	push XWA                                             ; F9F95D  38
-	calr sub_F9FAE9                                      ; F9F95E  1e 88 01
+	calr Link_ReadRemoteBlock                                      ; F9F95E  1e 88 01
 	ld c, 0x10:opc                                          ; F9F961  23 10
 	mul bc, h                                          ; F9F963  ce 43
 	extz XBC                                             ; F9F965  e9 12
@@ -55944,7 +56160,9 @@ sub_F9F910:
 	popw hl                                              ; F9F980  4b
 	unlk XIZ                                             ; F9F981  ee 0d
 	ret                                                  ; F9F983  0e
-sub_F9F984:
+; CombiBank_RemoteCombiAddr -- returns in XIY the far-side address of the 0x2C0-byte data of combination (H, L) in ROM (0xF80300), USER (0xEC0300) or EXT (0xC00300 + base from 0xC0001C)
+; Evidence: 0x1600*H + 0x2C0*L; group 11's members 4-7 at 0xF8F500/0xECF500 + 0x2C0*L, groups >= 12 at 0xF90B00/0xED0B00 + 0x1600*(H-12); 0x1600 = 8 x 0x2C0 is the group size CombinationCopy_Execute moves.
+CombiBank_RemoteCombiAddr:
 	link XIZ,0x0000                                      ; F9F984  ee 0c 00 00
 	pushw hl                                             ; F9F988  2b
 	push XIX                                             ; F9F989  3c
@@ -56047,7 +56265,7 @@ sub_F9F984:
 	pushw 0x04                                           ; F9FA7F  0b 04 00
 	ld XWA,0x00c0001c                                    ; F9FA82  40 1c 00 c0 00
 	push XWA                                             ; F9FA87  38
-	calr sub_F9FAE9                                      ; F9FA88  1e 5e 00
+	calr Link_ReadRemoteBlock                                      ; F9FA88  1e 5e 00
 	ld C,H                                               ; F9FA8B  ce 8b
 	extz BC                                              ; F9FA8D  d9 12
 	mul BC,0x1600                                        ; F9FA8F  d9 08 00 16
@@ -56074,7 +56292,10 @@ sub_F9F984:
 	popw hl                                              ; F9FABD  4b
 	unlk XIZ                                             ; F9FABE  ee 0d
 	ret                                                  ; F9FAC0  0e
-sub_F9FAC1:
+; Link_WriteRemoteBlock -- sends `count` bytes from a local buffer to an address on the far side of the link, bracketed by commands 3 and 5 on that address
+; Evidence: T_F41234 (Link_SendCommand3_WaitTicks) with (XIZ+0x0E); T_Link_SendCommandE4 with (XIZ+8), (XIZ+0x0C), (XIZ+0x0E) -- E4 has E1's dst/count/payload shape; T_Link_SendCommand5_WaitDone with (XIZ+0x0E).
+; Evidence: callers pass a buffer they just filled (0x22F0 edited name; 0x60A7F0/0x60A800 data read with Link_ReadRemoteBlock) and a *_Remote*Addr result. In: (XIZ+8) local source, (XIZ+0x0C) count, (XIZ+0x0E) remote destination.
+Link_WriteRemoteBlock:
 	link XIZ,0x0000                                      ; F9FAC1  ee 0c 00 00
 	push XIX                                             ; F9FAC5  3c
 	ld XIX,(XIZ+0x0e)                                    ; F9FAC6  ae 0e 24
@@ -56091,7 +56312,9 @@ sub_F9FAC1:
 	pop XIX                                              ; F9FAE5  5c
 	unlk XIZ                                             ; F9FAE6  ee 0d
 	ret                                                  ; F9FAE8  0e
-sub_F9FAE9:
+; Link_ReadRemoteBlock -- fetches `count` bytes from a far-side address into a local buffer and waits for the transfer
+; Evidence: T_Link_SendCommandE2 with (XIZ+8) remote address, (XIZ+0x0C) length, (XIZ+0x0E) local buffer -- the order Link_SendCommandE2's own header establishes for its two known callers -- then T_Link_WaitBlockDone.
+Link_ReadRemoteBlock:
 	link XIZ,0x0000                                      ; F9FAE9  ee 0c 00 00
 	ld XBC,(XIZ+0x0e)                                    ; F9FAED  ae 0e 21
 	push XBC                                             ; F9FAF0  39
@@ -56104,7 +56327,9 @@ sub_F9FAE9:
 	inc 2,XSP                                            ; F9FB02  ef 62
 	unlk XIZ                                             ; F9FB04  ee 0d
 	ret                                                  ; F9FB06  0e
-sub_F9FB07:
+; PanelFlags_PairBitAsWord -- returns WA = 0x8080 when bit 0 of (0x28B0) is set and 0 otherwise
+; Evidence: bit 0 of (0x28B0) is the pair position PanelCode_ToSlotAndFlags copies from bit 7 of the button's flag argument; every caller does `pushw wa` into one of T_F42F84..T_F42FA8 in the naming states ((0x2694)/(0x2697)/(0x2700) = 1), rebuilding that flag word.
+PanelFlags_PairBitAsWord:
 	ld c, (0x28b0:16)                                   ; F9FB07  c1 b0 28 23
 	and C,0x01                                           ; F9FB0B  cb cc 01
 	jr nz, .LF9FB14                                      ; F9FB0E  6e 04
@@ -56114,10 +56339,13 @@ sub_F9FB07:
 	ldw wa, 0x8080                                       ; F9FB14  30 80 80
 .LF9FB17:
 	ret                                                  ; F9FB17  0e
-sub_F9FB18:
+; SoundCopy_RequestSingleSound -- asks CPU 2 for the data of the selected source sound (SINGLE mode, ROM/EXT source) and marks a request outstanding
+; Evidence: SoundCopy_InitRequestHeader, then the code from T_F407F4 for group (0x269C), member (0x269D), bank ByteTable5_FA188B[(0x269B)] into bytes +3/+1 of the record at 0x2915; T_F40ED4 (Link_SendBlockIn32ByteChunks) with 6 bytes; (0x2806)=1.
+; Called from SoundCopy_Execute 0xF9DEE6.
+SoundCopy_RequestSingleSound:
 	push XIX                                             ; F9FB18  3c
 	lda xix, (0x2915:16)                                ; F9FB19  f1 15 29 34
-	calr sub_F9FDB0                                      ; F9FB1D  1e 90 02
+	calr SoundCopy_InitRequestHeader                                      ; F9FB1D  1e 90 02
 	ld c, (UI_PartIndex:16)                                   ; F9FB20  c1 50 22 23
 	ld (0x60f01c:24), c                                 ; F9FB24  f2 1c f0 60 43
 	ld a, (0x269c:16)                                   ; F9FB29  c1 9c 26 21
@@ -56144,10 +56372,13 @@ sub_F9FB18:
 	inc 8,XSP                                            ; F9FB76  ef 60
 	pop XIX                                              ; F9FB78  5c
 	ret                                                  ; F9FB79  0e
-sub_F9FB7A:
+; SoundCopy_RequestGroupSounds -- starts a GROUP copy from a ROM/EXT source: resets the received count (0x2901) and asks CPU 2 for member 7 of the source group
+; Evidence: SoundCopy_InitRequestHeader; (0x2901)=0; code of (group (0x269C), member 7, bank) via T_F407F4 into the 0x2915 record; T_F40ED4 sends 6 bytes; (0x2806)=1. SoundCopy_HandleReceivedSound then requests 7-(0x2901) for each arrival.
+; Called from SoundCopy_Execute 0xF9DDCA.
+SoundCopy_RequestGroupSounds:
 	push XIX                                             ; F9FB7A  3c
 	lda xix, (0x2915:16)                                ; F9FB7B  f1 15 29 34
-	calr sub_F9FDB0                                      ; F9FB7F  1e 2e 02
+	calr SoundCopy_InitRequestHeader                                      ; F9FB7F  1e 2e 02
 	ld (0x2901:16), 0x00                                 ; F9FB82  f1 01 29 00 00
 	ld c, (UI_PartIndex:16)                                   ; F9FB87  c1 50 22 23
 	ld (0x60f01c:24), c                                 ; F9FB8B  f2 1c f0 60 43
@@ -56174,7 +56405,11 @@ sub_F9FB7A:
 	inc 8,XSP                                            ; F9FBDA  ef 60
 	pop XIX                                              ; F9FBDC  5c
 	ret                                                  ; F9FBDD  0e
-sub_F9FBDE:
+; SoundCopy_HandleReceivedSound -- called when a requested sound block has arrived; finishes or continues the SOUND COPY from a ROM/EXT source
+; Evidence: sole caller prom_a 0xFD2073 (T_F4341C), right after a T_Ring608A0A_Get receive loop reaches its count; acts only when `cp (0x207C),0x5E` (SOUND COPY current).
+; Evidence: GROUP: while (0x2901) < 7 shifts 0x60A800.. up by 0x2C9 and requests member 7-(0x2901); then writes the group name (SoundGroupName_CopyToBuffer -> 0x60A7F0) and 0x1648 data bytes with Link_WriteRemoteBlock; SINGLE: writes 0x2C9 bytes.
+; Evidence: then SoundCopy_RefreshPartsUsingSound, `res 1,(0x269A)`, (0x2880)=0x23, (0x2070)=0xAB, (0x2806)=0 -- the same epilogue as SoundCopy_Execute's USER path.
+SoundCopy_HandleReceivedSound:
 	link XIZ,0xfffc                                      ; F9FBDE  ee 0c fc ff
 	pushw hl                                             ; F9FBE2  2b
 	push XIX                                             ; F9FBE3  3c
@@ -56249,7 +56484,7 @@ sub_F9FBDE:
 	pushw wa                                             ; F9FCBA  28
 	push 0x00                                            ; F9FCBB  09 00
 	m_push MB16, 0x269c                                  ; F9FCBD  c1 9c 26 04
-	calr sub_F9F65B                                      ; F9FCC1  1e 97 f9
+	calr SoundGroupName_CopyToBuffer                                      ; F9FCC1  1e 97 f9
 	push 0x00                                            ; F9FCC4  09 00
 	m_push MB16, 0x26a1                                  ; F9FCC6  c1 a1 26 04
 	ld bc, (0x26a0:16)                                 ; F9FCCA  d1 a0 26 21
@@ -56258,11 +56493,11 @@ sub_F9FBDE:
 	add XBC,ByteTable2_FA1890                            ; F9FCD2  e9 c8 90 18 fa 00
 	ld A,(XBC)                                           ; F9FCD8  81 21
 	pushw wa                                             ; F9FCDA  28
-	calr sub_F9F7F6                                      ; F9FCDB  1e 18 fb
+	calr UserSoundBank_RemoteGroupNameAddr                                      ; F9FCDB  1e 18 fb
 	push XIY                                             ; F9FCDE  3d
 	pushw 0x10                                           ; F9FCDF  0b 10 00
 	push XIX                                             ; F9FCE2  3c
-	calr sub_F9FAC1                                      ; F9FCE3  1e db fd
+	calr Link_WriteRemoteBlock                                      ; F9FCE3  1e db fd
 	pushw 0x00                                           ; F9FCE6  0b 00 00
 	push 0x00                                            ; F9FCE9  09 00
 	m_push MB16, 0x26a1                                  ; F9FCEB  c1 a1 26 04
@@ -56272,12 +56507,12 @@ sub_F9FBDE:
 	add XBC,ByteTable2_FA1890                            ; F9FCF7  e9 c8 90 18 fa 00
 	ld A,(XBC)                                           ; F9FCFD  81 21
 	pushw wa                                             ; F9FCFF  28
-	calr sub_F9F861                                      ; F9FD00  1e 5e fb
+	calr UserSoundBank_RemoteSoundAddr                                      ; F9FD00  1e 5e fb
 	push XIY                                             ; F9FD03  3d
 	pushw 0x1648                                         ; F9FD04  0b 48 16
 	lda xbc, (0x60a800:24)                               ; F9FD07  f2 00 a8 60 31
 	push XBC                                             ; F9FD0C  39
-	calr sub_F9FAC1                                      ; F9FD0D  1e b1 fd
+	calr Link_WriteRemoteBlock                                      ; F9FD0D  1e b1 fd
 	ld h, 0x00:opc                                          ; F9FD10  26 00
 	add XSP,0x00000026                                   ; F9FD12  ef c8 26 00 00 00
 .LF9FD18:
@@ -56291,7 +56526,7 @@ sub_F9FBDE:
 	add XBC,ByteTable2_FA1890                            ; F9FD2A  e9 c8 90 18 fa 00
 	ld A,(XBC)                                           ; F9FD30  81 21
 	pushw wa                                             ; F9FD32  28
-	calr sub_F9FE03                                      ; F9FD33  1e cd 00
+	calr SoundCopy_RefreshPartsUsingSound                                      ; F9FD33  1e cd 00
 	inc 1,H                                              ; F9FD36  ce 61
 	inc 6,XSP                                            ; F9FD38  ef 66
 	cp H,0x08                                            ; F9FD3A  ce cf 08
@@ -56308,12 +56543,12 @@ sub_F9FBDE:
 	add XBC,ByteTable2_FA1890                            ; F9FD55  e9 c8 90 18 fa 00
 	ld A,(XBC)                                           ; F9FD5B  81 21
 	pushw wa                                             ; F9FD5D  28
-	calr sub_F9F861                                      ; F9FD5E  1e 00 fb
+	calr UserSoundBank_RemoteSoundAddr                                      ; F9FD5E  1e 00 fb
 	push XIY                                             ; F9FD61  3d
 	pushw 0x02c9                                         ; F9FD62  0b c9 02
 	lda xbc, (0x60a800:24)                               ; F9FD65  f2 00 a8 60 31
 	push XBC                                             ; F9FD6A  39
-	calr sub_F9FAC1                                      ; F9FD6B  1e 53 fd
+	calr Link_WriteRemoteBlock                                      ; F9FD6B  1e 53 fd
 	push 0x00                                            ; F9FD6E  09 00
 	m_push MB16, 0x26a2                                  ; F9FD70  c1 a2 26 04
 	push 0x00                                            ; F9FD74  09 00
@@ -56324,7 +56559,7 @@ sub_F9FBDE:
 	add XBC,ByteTable2_FA1890                            ; F9FD82  e9 c8 90 18 fa 00
 	ld A,(XBC)                                           ; F9FD88  81 21
 	pushw wa                                             ; F9FD8A  28
-	calr sub_F9FE03                                      ; F9FD8B  1e 75 00
+	calr SoundCopy_RefreshPartsUsingSound                                      ; F9FD8B  1e 75 00
 	add XSP,0x00000016                                   ; F9FD8E  ef c8 16 00 00 00
 .LF9FD94:
 	m_res 1, MD16, 0x269a                                ; F9FD94  f1 9a 26 b1
@@ -56337,7 +56572,9 @@ sub_F9FBDE:
 	popw hl                                              ; F9FDAC  4b
 	unlk XIZ                                             ; F9FDAD  ee 0d
 	ret                                                  ; F9FDAF  0e
-sub_F9FDB0:
+; SoundCopy_InitRequestHeader -- writes the fixed bytes of the 6-byte request record at 0x2915: +0 = 0x80, +2 = 0x14, +4 = 0x01, +5 = 0x5E
+; Evidence: the two SoundCopy_Request* routines then fill +1/+3 with the sound code and send the record through T_F40ED4; +5 = 0x5E equals SOUND COPY's screen id, which SoundCopy_HandleReceivedSound tests in (0x207C). sub_FC1BB9's name request uses the same 0x80 / +2 sub-command layout with 0x04.
+SoundCopy_InitRequestHeader:
 	push XIX                                             ; F9FDB0  3c
 	lda xix, (0x2915:16)                                ; F9FDB1  f1 15 29 34
 	ld (XIX),0x80                                        ; F9FDB5  b4 00 80
@@ -56347,14 +56584,17 @@ sub_F9FDB0:
 	ld (XIX+0x05),0x5e                                   ; F9FDC2  bc 05 00 5e
 	pop XIX                                              ; F9FDC6  5c
 	ret                                                  ; F9FDC7  0e
-sub_F9FDC8:
+; SoundCopy_ReadExtGroupDrumFlag -- reads from the EXT memory (far side, 0xC00000 window) the flag byte of group `group` and returns it in A
+; Evidence: Link_ReadRemoteBlock(0xC00018, 4) into the frame, then Link_ReadRemoteBlock(that + 8*group + 0xC00000, 1); SoundCopy_Execute (0xF9DDC1, 0xF9DEDE) treats non-zero as 'drum kit': `set 2,(0x269A)`, whose page is Paint_ErrorImpossibleCopyDrumKit.
+; In: (XIZ+8) group. Out: A = the byte.
+SoundCopy_ReadExtGroupDrumFlag:
 	link XIZ,0xfffa                                      ; F9FDC8  ee 0c fa ff
 	lda xbc, (xiz-4)                                     ; F9FDCC  be fc 31
 	push XBC                                             ; F9FDCF  39
 	pushw 0x04                                           ; F9FDD0  0b 04 00
 	ld XWA,0x00c00018                                    ; F9FDD3  40 18 00 c0 00
 	push XWA                                             ; F9FDD8  38
-	calr sub_F9FAE9                                      ; F9FDD9  1e 0d fd
+	calr Link_ReadRemoteBlock                                      ; F9FDD9  1e 0d fd
 	lda xbc, (xiz-6)                                     ; F9FDDC  be fa 31
 	push XBC                                             ; F9FDDF  39
 	pushw 0x01                                           ; F9FDE0  0b 01 00
@@ -56364,12 +56604,15 @@ sub_F9FDC8:
 	m_add_rm MLD+r6, 0xfc, r0                            ; F9FDEA  ae fc 80
 	add XWA,0x00c00000                                   ; F9FDED  e8 c8 00 00 c0 00
 	push XWA                                             ; F9FDF3  38
-	calr sub_F9FAE9                                      ; F9FDF4  1e f2 fc
+	calr Link_ReadRemoteBlock                                      ; F9FDF4  1e f2 fc
 	add XSP,0x00000014                                   ; F9FDF7  ef c8 14 00 00 00
 	ld a, (xiz-6)                                        ; F9FDFD  8e fa 21
 	unlk XIZ                                             ; F9FE00  ee 0d
 	ret                                                  ; F9FE02  0e
-sub_F9FE03:
+; SoundCopy_RefreshPartsUsingSound -- after a sound was overwritten, re-sends the sound selection of every part that uses it
+; Evidence: loop H = 0..0x1F (the 32 part records, ParamNumber_RecordPtrs entries 0-0x1F) with (0x60F01C)=H; T_F407F4 resolves (bank, group, member); if record +0 == (0x60F164) and (+1 & 0x7F) == (0x60F165): T_Queue2E00_Append4(H,1,hi,0x7F) and (H,0,lo,0xFF).
+; In: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from SoundCopy_Execute and SoundCopy_HandleReceivedSound.
+SoundCopy_RefreshPartsUsingSound:
 	link XIZ,0x0000                                      ; F9FE03  ee 0c 00 00
 	pushw hl                                             ; F9FE07  2b
 	pushw de                                             ; F9FE08  2a
@@ -56423,7 +56666,10 @@ sub_F9FE03:
 	popw hl                                              ; F9FE84  4b
 	unlk XIZ                                             ; F9FE85  ee 0d
 	ret                                                  ; F9FE87  0e
-sub_F9FE88:
+; CombinationCopy_RefreshIfCurrentCombi -- after a combination was overwritten, re-triggers T_F43454 if the copied slot is the combination currently selected
+; Evidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_F40804 (sub_FAB779) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_F43454` (prom_a sub_FAC80F).
+; In: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from CombinationCopy_Execute.
+CombinationCopy_RefreshIfCurrentCombi:
 	link XIZ,0x0000                                      ; F9FE88  ee 0c 00 00
 	pushw hl                                             ; F9FE8C  2b
 	push XIX                                             ; F9FE8D  3c
@@ -56450,7 +56696,9 @@ sub_F9FE88:
 	popw hl                                              ; F9FECD  4b
 	unlk XIZ                                             ; F9FECE  ee 0d
 	ret                                                  ; F9FED0  0e
-sub_F9FED1:
+; PanelMode_System_Enter -- Enter (+0) method of panel mode 10, whose screen is SYSTEM: sets bit 1 of (0x2134) and calls T_F415C8 (prom_a sub_F9433A)
+; Evidence: PanelScreen_VtableTable entry [10] (0xF86EE9, view A, read by PanelScreen_CallEnter_A) holds T_F41910 -> 0xF9FED1; PanelMode_ToScreenIdMap[10] = 0x60, the id of Screen_System (title 'SYSTEM').
+PanelMode_System_Enter:
 	m_set 1, MD16, 0x2134                                ; F9FED1  f1 34 21 b9
 	push XDE                                             ; F9FED5  3a
 	push XHL                                             ; F9FED6  3b
@@ -56462,10 +56710,15 @@ sub_F9FED1:
 	pop XHL                                              ; F9FEDF  5b
 	pop XDE                                              ; F9FEE0  5a
 	ret                                                  ; F9FEE1  0e
-sub_F9FEE2:
+; PanelMode_System_Leave -- Leave (+4) method of panel mode 10 (SYSTEM): sets bit 1 of (0x2134)
+; Evidence: PanelScreen_VtableTable entry [10] = T_F41910, whose +4 slot T_F41914 jp 0xF9FEE2 (read by PanelScreen_CallLeave_A); PanelMode_ToScreenIdMap[10] = 0x60 (SYSTEM).
+PanelMode_System_Leave:
 	m_set 1, MD16, 0x2134                                ; F9FEE2  f1 34 21 b9
 	ret                                                  ; F9FEE6  0e
-sub_F9FEE7:
+; Screen_System_Enter -- Enter (+0) method of screen 0x60, the SYSTEM menu: restarts task 2's queue and posts its painter
+; Evidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_F41918; prom_b T_F41918/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.
+; Evidence: .LFA0020 runs DisplayList_FA1F21-FA204B (or FA1F2E-FA2070 when (0xC4) = 1): title 'SYSTEM', 'TUNE & SCALE', 'INITIAL', 'C0NTR0LLER ASSIGN', 'RE-MAP EDIT', 'S0UND/C0MBI MANAGER', 'MIXER', 'DRUMS MAP', 'MAIN OUT EQUALIZER', 'DSP EFFECT'; 0x60 is the EXIT target of all its sub-screens.
+Screen_System_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9FEE7  1d 80 2e f4
 	lda xbc, (.LFA0020:24)                               ; F9FEEB  f2 20 00 fa 31
 	push XBC                                             ; F9FEF0  39
@@ -56476,7 +56729,10 @@ sub_F9FEE7:
 	ret                                                  ; F9FEFE  0e
 T_F4191C_Nop:
 	ret                                                  ; F9FEFF  0e
-sub_F9FF00:
+; Screen_System_Button -- Button (+8) method of the SYSTEM menu: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1B94
+; Evidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_F41918; prom_b T_F41918/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.
+; Slots 8-12 (LCD-row pairs, left/right) request 0x62 TUNE & SCALE / 0x6A, 0x65 / 0x6C RE-MAP EDIT, 0x64 / 0x6D SOUND/COMBI MANAGER, 0xB7 / 0x67 DRUMS MAP, 0x66 DSP EFFECT / 0x6B MAIN OUT EQUALIZER; slot 15 (EXIT) requests 0x01.
+Screen_System_Button:
 	link XIZ,0x0000                                      ; F9FF00  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9FF04  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; F9FF07  9e 08 04
@@ -56622,7 +56878,9 @@ T_F41924_Nop:
 	call T_F42E14                                        ; FA004D  1d 14 2e f4
 	inc 8,XSP                                            ; FA0051  ef 60
 	ret                                                  ; FA0053  0e
-sub_FA0054:
+; TuneScale_KeyScalingCodeToIndex -- returns in A the position of a key-scaling type code within ByteTable16_FA1C4C (15 if absent)
+; Evidence: linear search H = 0..14 comparing (XIZ+8) with ByteTable16_FA1C4C[H]; TuneScale_LoadFields passes (0x78A2) and stores the result in (0x2692), which record FA21ED prints as 'OFF','RANDOM','PIANO',...,'USER' -- the inverse of the lookup in TuneScale_StoreKeyScalingType.
+TuneScale_KeyScalingCodeToIndex:
 	link XIZ,0x0000                                      ; FA0054  ee 0c 00 00
 	pushw hl                                             ; FA0058  2b
 	ld h, 0x00:opc                                          ; FA0059  26 00
@@ -56642,12 +56900,17 @@ sub_FA0054:
 	popw hl                                              ; FA0077  4b
 	unlk XIZ                                             ; FA0078  ee 0d
 	ret                                                  ; FA007A  0e
-sub_FA007B:
+; Screen_DspEffect_Enter -- Enter (+0) method of screen 0x66, DSP EFFECT: forwards to the prom_b screen code (T_F42F4C -> sub_F0F105)
+; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_F419A8; prom_b T_F419A8/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093.
+; Evidence: id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5); the 'DSP EFFECT' + 'SYSTEM' title record at prom_b 0xF13D8F is run by the same prom_b module (0xF0F857, 0xF0FE05).
+Screen_DspEffect_Enter:
 	call T_F42F4C                                        ; FA007B  1d 4c 2f f4
 	ret                                                  ; FA007F  0e
 T_F419AC_Nop:
 	ret                                                  ; FA0080  0e
-sub_FA0081:
+; Screen_DspEffect_Button -- Button (+8) method of DSP EFFECT: re-pushes the two button arguments and calls prom_b sub_F0F17C (T_F42F50), which maps them with T_F42C74 and dispatches through DispatchTable_F135FD
+; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_F419A8; prom_b T_F419A8/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5).
+Screen_DspEffect_Button:
 	link XIZ,0x0000                                      ; FA0081  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA0085  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA0088  9e 08 04
@@ -56657,7 +56920,10 @@ sub_FA0081:
 	ret                                                  ; FA0092  0e
 T_F419B4_Nop:
 	ret                                                  ; FA0093  0e
-sub_FA0094:
+; Screen_TuneScale_Enter -- Enter (+0) method of screen 0x62, TUNE & SCALE: on a new entry sets the item cursor (0x2690)=0x10, posts the painter, loads the fields and posts the value callback
+; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_F41928; prom_b T_F41928/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111.
+; Evidence: .LFA04F2 runs DisplayList_FA2070-FA21BF ('TUNE & SCALE','MASTER TUNE','KEY TRANSPOSE','KEY SCALING MODE','TOTAL KEY SCALING','KEY SCALING SHIFT','[KEY:  ]') and FA2315-FA244B; then TuneScale_LoadFields and .LFA05DE; id 0x62 = SYSTEM row-1 left key (0xF9FF3E).
+Screen_TuneScale_Enter:
 	ld c, (0x207a:16)                                   ; FA0094  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; FA0098  c1 7b 20 f3
 	jr z, .LFA00AD                                       ; FA009C  66 0f
@@ -56677,7 +56943,7 @@ sub_FA0094:
 	call T_Kernel_SemaSignal_StackArg                    ; FA00CC  1d c0 2d f4
 	inc 6,XSP                                            ; FA00D0  ef 66
 .LFA00D2:
-	calr sub_FA0525                                      ; FA00D2  1e 50 04
+	calr TuneScale_LoadFields                                      ; FA00D2  1e 50 04
 	lda xbc, (.LFA05DE:24)                               ; FA00D5  f2 de 05 fa 31
 	push XBC                                             ; FA00DA  39
 	call T_CallbackQueue_Post                            ; FA00DB  1d 84 2e f4
@@ -56687,7 +56953,9 @@ sub_FA0094:
 	ret                                                  ; FA00E8  0e
 T_F4192C_Nop:
 	ret                                                  ; FA00E9  0e
-sub_FA00EA:
+; Screen_TuneScale_Button -- Button (+8) method of TUNE & SCALE: dispatches the PanelCode_ToSlotAndFlags slot through HandlerTable23_FA1BF0
+; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_F41928; prom_b T_F41928/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111; slots 1-7 -> TuneScale_AdjustUserKey key pairs, 8/9 -> TuneScale_MoveItemCursor, 10/11 -> TuneScale_AdjustSelectedItem, 0 toggles the [KEY:] row, 15 EXIT -> 0x60.
+Screen_TuneScale_Button:
 	link XIZ,0x0000                                      ; FA00EA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA00EE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA00F1  9e 08 04
@@ -56728,49 +56996,49 @@ T_F41934_Nop:
 	ld (0x209c:16), 0x01                                 ; FA0149  f1 9c 20 00 01
 	pushw 0x01                                           ; FA014E  0b 01 00
 	pushw 0x00                                           ; FA0151  0b 00 00
-	calr sub_FA0264                                      ; FA0154  1e 0d 01
+	calr TuneScale_AdjustUserKey                                      ; FA0154  1e 0d 01
 	pop XBC                                              ; FA0157  59
 	ret                                                  ; FA0158  0e
 	ld (0x209b:16), 0x82                                 ; FA0159  f1 9b 20 00 82
 	ld (0x209c:16), 0x02                                 ; FA015E  f1 9c 20 00 02
 	pushw 0x03                                           ; FA0163  0b 03 00
 	pushw 0x02                                           ; FA0166  0b 02 00
-	calr sub_FA0264                                      ; FA0169  1e f8 00
+	calr TuneScale_AdjustUserKey                                      ; FA0169  1e f8 00
 	pop XBC                                              ; FA016C  59
 	ret                                                  ; FA016D  0e
 	ld (0x209b:16), 0x83                                 ; FA016E  f1 9b 20 00 83
 	ld (0x209c:16), 0x03                                 ; FA0173  f1 9c 20 00 03
 	pushw 0xff                                           ; FA0178  0b ff 00
 	pushw 0x04                                           ; FA017B  0b 04 00
-	calr sub_FA0264                                      ; FA017E  1e e3 00
+	calr TuneScale_AdjustUserKey                                      ; FA017E  1e e3 00
 	pop XBC                                              ; FA0181  59
 	ret                                                  ; FA0182  0e
 	ld (0x209b:16), 0x84                                 ; FA0183  f1 9b 20 00 84
 	ld (0x209c:16), 0x04                                 ; FA0188  f1 9c 20 00 04
 	pushw 0x06                                           ; FA018D  0b 06 00
 	pushw 0x05                                           ; FA0190  0b 05 00
-	calr sub_FA0264                                      ; FA0193  1e ce 00
+	calr TuneScale_AdjustUserKey                                      ; FA0193  1e ce 00
 	pop XBC                                              ; FA0196  59
 	ret                                                  ; FA0197  0e
 	ld (0x209b:16), 0x85                                 ; FA0198  f1 9b 20 00 85
 	ld (0x209c:16), 0x05                                 ; FA019D  f1 9c 20 00 05
 	pushw 0x08                                           ; FA01A2  0b 08 00
 	pushw 0x07                                           ; FA01A5  0b 07 00
-	calr sub_FA0264                                      ; FA01A8  1e b9 00
+	calr TuneScale_AdjustUserKey                                      ; FA01A8  1e b9 00
 	pop XBC                                              ; FA01AB  59
 	ret                                                  ; FA01AC  0e
 	ld (0x209b:16), 0x86                                 ; FA01AD  f1 9b 20 00 86
 	ld (0x209c:16), 0x06                                 ; FA01B2  f1 9c 20 00 06
 	pushw 0x0a                                           ; FA01B7  0b 0a 00
 	pushw 0x09                                           ; FA01BA  0b 09 00
-	calr sub_FA0264                                      ; FA01BD  1e a4 00
+	calr TuneScale_AdjustUserKey                                      ; FA01BD  1e a4 00
 	pop XBC                                              ; FA01C0  59
 	ret                                                  ; FA01C1  0e
 	ld (0x209b:16), 0x87                                 ; FA01C2  f1 9b 20 00 87
 	ld (0x209c:16), 0x07                                 ; FA01C7  f1 9c 20 00 07
 	pushw 0xff                                           ; FA01CC  0b ff 00
 	pushw 0x0b                                           ; FA01CF  0b 0b 00
-	calr sub_FA0264                                      ; FA01D2  1e 8f 00
+	calr TuneScale_AdjustUserKey                                      ; FA01D2  1e 8f 00
 	pop XBC                                              ; FA01D5  59
 	ret                                                  ; FA01D6  0e
 	push XIX                                             ; FA01D7  3c
@@ -56781,7 +57049,7 @@ T_F41934_Nop:
 	ld (0x209b:16), 0x0b                                 ; FA01E3  f1 9b 20 00 0b
 	ld (0x209c:16), 0x0a                                 ; FA01E8  f1 9c 20 00 0a
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FA01ED  84 3e 01
-	calr sub_FA0441                                      ; FA01F0  1e 4e 02
+	calr TuneScale_MoveItemCursor                                      ; FA01F0  1e 4e 02
 .LFA01F3:
 	pop XIX                                              ; FA01F3  5c
 	ret                                                  ; FA01F4  0e
@@ -56790,7 +57058,7 @@ T_F41934_Nop:
 	jr nz, .LFA020B                                      ; FA01FC  6e 0d
 	ld (0x209b:16), 0x0b                                 ; FA01FE  f1 9b 20 00 0b
 	ld (0x209c:16), 0x0a                                 ; FA0203  f1 9c 20 00 0a
-	calr sub_FA0441                                      ; FA0208  1e 36 02
+	calr TuneScale_MoveItemCursor                                      ; FA0208  1e 36 02
 .LFA020B:
 	ret                                                  ; FA020B  0e
 	ld c, (0x28b0:16)                                   ; FA020C  c1 b0 28 23
@@ -56798,7 +57066,7 @@ T_F41934_Nop:
 	jr nz, .LFA0222                                      ; FA0213  6e 0d
 	ld (0x209b:16), 0x0b                                 ; FA0215  f1 9b 20 00 0b
 	ld (0x209c:16), 0x0a                                 ; FA021A  f1 9c 20 00 0a
-	calr sub_FA046A                                      ; FA021F  1e 48 02
+	calr TuneScale_AdjustSelectedItem                                      ; FA021F  1e 48 02
 .LFA0222:
 	ret                                                  ; FA0222  0e
 	push XIX                                             ; FA0223  3c
@@ -56809,7 +57077,7 @@ T_F41934_Nop:
 	ld (0x209b:16), 0x0b                                 ; FA022F  f1 9b 20 00 0b
 	ld (0x209c:16), 0x0a                                 ; FA0234  f1 9c 20 00 0a
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FA0239  84 3e 01
-	calr sub_FA046A                                      ; FA023C  1e 2b 02
+	calr TuneScale_AdjustSelectedItem                                      ; FA023C  1e 2b 02
 .LFA023F:
 	pop XIX                                              ; FA023F  5c
 	ret                                                  ; FA0240  0e
@@ -56826,7 +57094,10 @@ T_F41934_Nop:
 	ld (UI_Request:16), 0x60                                 ; FA025E  f1 70 20 00 60
 .LFA0263:
 	ret                                                  ; FA0263  0e
-sub_FA0264:
+; TuneScale_AdjustUserKey -- for the USER key scaling, steps the per-key value of one key of a soft key's pair and stores it
+; Evidence: returns unless (0x78A2) == 0x80 (ByteTable16_FA1C4C's code for 'USER'); bit 4 of (0x2690) picks (XIZ+8) or (XIZ+0x0A) (0xFF = no key); T_F42C78 on 0x2640+key with Descriptor9_FA1E88 (0x1C..0xE4); on change TuneScale_StoreUserKey.
+; Callers: HandlerTable23_FA1BF0 slots 1-7 with pairs (C,C#), (D,D#), (E,-), (F,F#), (G,G#), (A,A#), (B,-) -- matching records FA2479.. (white keys 0,2,4,5,7,9,11 on the lower row, black keys on the upper).
+TuneScale_AdjustUserKey:
 	link XIZ,0x0000                                      ; FA0264  ee 0c 00 00
 	pushw hl                                             ; FA0268  2b
 	pushw de                                             ; FA0269  2a
@@ -56880,14 +57151,17 @@ sub_FA0264:
 	push 0x00                                            ; FA02D8  09 00
 	push H                                               ; FA02DA  ce 04
 .LFA02DC:
-	calr sub_FA0391                                      ; FA02DC  1e b2 00
+	calr TuneScale_StoreUserKey                                      ; FA02DC  1e b2 00
 	popw bc                                              ; FA02DF  49
 .LFA02E0:
 	popw de                                              ; FA02E0  4a
 	popw hl                                              ; FA02E1  4b
 	unlk XIZ                                             ; FA02E2  ee 0d
 	ret                                                  ; FA02E4  0e
-sub_FA02E5:
+; TuneScale_StoreMasterTune -- writes the MASTER TUNE value for index (0x2691) into parameter table 0x91 byte 0 when it differs, and journals the change
+; Evidence: T_IndexedTable_GetByte(0x91, 0) compared with ByteTable79_FA1C5C[(0x2691)]; on difference the byte is written through T_IndexedTable_GetPtr(0x91) and T_Queue2C00_Append4(0x91, 0, value, 0xFF); TuneScale_LoadFields reads it back as (0x7F4A).
+; Called from TuneScale_AdjustSelectedItem item 0.
+TuneScale_StoreMasterTune:
 	pushw hl                                             ; FA02E5  2b
 	push XIX                                             ; FA02E6  3c
 	pushw 0x00                                           ; FA02E7  0b 00 00
@@ -56923,7 +57197,10 @@ sub_FA02E5:
 	pop XIX                                              ; FA0338  5c
 	popw hl                                              ; FA0339  4b
 	ret                                                  ; FA033A  0e
-sub_FA033B:
+; TuneScale_StoreKeyScalingType -- writes the TOTAL KEY SCALING type code for menu index (0x2692) into parameter table 0x92 byte 0 when it differs, and journals the change
+; Evidence: T_IndexedTable_GetByte(0x92, 0) vs ByteTable16_FA1C4C[(0x2692)]; write through T_IndexedTable_GetPtr(0x92) and T_Queue2C00_Append4(0x92, 0, code, 0xFF); TuneScale_LoadFields reads that byte as (0x78A2).
+; Called from TuneScale_AdjustSelectedItem item 3.
+TuneScale_StoreKeyScalingType:
 	pushw hl                                             ; FA033B  2b
 	push XIX                                             ; FA033C  3c
 	pushw 0x00                                           ; FA033D  0b 00 00
@@ -56959,7 +57236,10 @@ sub_FA033B:
 	pop XIX                                              ; FA038E  5c
 	popw hl                                              ; FA038F  4b
 	ret                                                  ; FA0390  0e
-sub_FA0391:
+; TuneScale_StoreUserKey -- converts the edited value of USER-scale key `key` back to its stored byte and writes it to parameter table 0x92 byte key+2 when it differs
+; Evidence: T_IndexedTable_GetByte(0x92, key+2) vs TuneScale_UserKeyValueToByte((0x2640+key)); write via T_IndexedTable_GetPtr(0x92)+key+2 and T_Queue2C00_Append4(0x92, key+2, byte, 0xFF) -- the bytes TuneScale_LoadFields reads at 0x78A4...
+; In: (XIZ+8) key 0-11. Called from TuneScale_AdjustUserKey.
+TuneScale_StoreUserKey:
 	link XIZ,0xfffc                                      ; FA0391  ee 0c fc ff
 	pushw hl                                             ; FA0395  2b
 	push XDE                                             ; FA0396  3a
@@ -56980,7 +57260,7 @@ sub_FA0391:
 	ld W,(XBC+0x2640)                                    ; FA03B6  c3 e5 40 26 20
 	push 0x00                                            ; FA03BB  09 00
 	push W                                               ; FA03BD  c8 04
-	calr sub_FA040A                                      ; FA03BF  1e 48 00
+	calr TuneScale_UserKeyValueToByte                                      ; FA03BF  1e 48 00
 	inc 6,XSP                                            ; FA03C2  ef 66
 	cp (xiz-2), a                                        ; FA03C4  8e fe f9
 	jr z, .LFA0404                                       ; FA03C7  66 3b
@@ -56996,7 +57276,7 @@ sub_FA0391:
 	extz XDE                                             ; FA03DF  ea 12
 	ld C,(XDE+0x2640)                                    ; FA03E1  c3 e9 40 26 23
 	pushw bc                                             ; FA03E6  29
-	calr sub_FA040A                                      ; FA03E7  1e 20 00
+	calr TuneScale_UserKeyValueToByte                                      ; FA03E7  1e 20 00
 	ld L,A                                               ; FA03EA  c9 8f
 	ld xbc, (xiz-4)                                      ; FA03EC  ae fc 21
 	ld (XBC),A                                           ; FA03EF  b1 41
@@ -57014,7 +57294,9 @@ sub_FA0391:
 	popw hl                                              ; FA0406  4b
 	unlk XIZ                                             ; FA0407  ee 0d
 	ret                                                  ; FA0409  0e
-sub_FA040A:
+; TuneScale_UserKeyValueToByte -- maps an edit value 0x1C..0xE4 back to the 0..255 stored per-key byte: A = (((v - 0x1C) << 8) + 0x80) / 0xC9
+; Evidence: the exact inverse (rounded) of TuneScale_UserKeyByteToValue; 0x1C..0xE4 are Descriptor9_FA1E88's bounds; called twice by TuneScale_StoreUserKey (stored value and new value).
+TuneScale_UserKeyValueToByte:
 	link XIZ,0x0000                                      ; FA040A  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FA040E  9e 08 21
 	extz BC                                              ; FA0411  d9 12
@@ -57026,7 +57308,9 @@ sub_FA040A:
 	ld A,C                                               ; FA0424  cb 89
 	unlk XIZ                                             ; FA0426  ee 0d
 	ret                                                  ; FA0428  0e
-sub_FA0429:
+; TuneScale_UserKeyByteToValue -- maps a stored per-key byte 0..255 onto the 201-step edit range 0x1C..0xE4: A = ((b * 0xC9 + 0x7F) >> 8) + 0x1C
+; Evidence: TuneScale_LoadFields applies it to (0x78A4..0x78AF) and stores the results at 0x2640..0x264B, which records FA2479.. print under '[KEY:  ]'; Descriptor9_FA1E88 bounds the same range.
+TuneScale_UserKeyByteToValue:
 	link XIZ,0x0000                                      ; FA0429  ee 0c 00 00
 	ld c, 0xc9:opc                                          ; FA042D  23 c9
 	m_mul MBD+r6, 0x08, 3                                ; FA042F  8e 08 43
@@ -57036,7 +57320,10 @@ sub_FA0429:
 	ld A,C                                               ; FA043C  cb 89
 	unlk XIZ                                             ; FA043E  ee 0d
 	ret                                                  ; FA0440  0e
-sub_FA0441:
+; TuneScale_MoveItemCursor -- moves the TUNE & SCALE item cursor (0x2690 low bits, 0-4) and posts the cursor redraw
+; Evidence: T_F42C78 on (0x2690) with Descriptor9_FA1E49 (mask 7, max 4); on change posts .LFA0651 (EraseRect FA230B + record FA22C0 on var 0x2690 into the five item rows at 0xFA22CB).
+; Callers: HandlerTable23_FA1BF0 slots 8/9.
+TuneScale_MoveItemCursor:
 	lda xbc, (Descriptor9_FA1E49:24)                     ; FA0441  f2 49 1e fa 31
 	push XBC                                             ; FA0446  39
 	lda xwa, (0x2690:16)                                ; FA0447  f1 90 26 30
@@ -57053,7 +57340,10 @@ sub_FA0441:
 	inc 6,XSP                                            ; FA0467  ef 66
 .LFA0469:
 	ret                                                  ; FA0469  0e
-sub_FA046A:
+; TuneScale_AdjustSelectedItem -- steps the TUNE & SCALE item under the cursor ((0x2690) & 7) through the 5-entry LE32 table at 0xFA0487
+; Evidence: 0: (0x2691) with the descriptor at 0xFA1E5B + TuneScale_StoreMasterTune; 1: IndexedParam_AdjustField(0x79, Descriptor9_FA1E64) (KEY TRANSPOSE); 2: (0x92, Descriptor9_FA1E6D) mask 0x80 (KEY SCALING MODE TOTAL/SOUND); 3: (0x2692) + TuneScale_StoreKeyScalingType; 4: (0x92, Descriptor9_FA1E7F) mask 0x0F (KEY SCALING SHIFT).
+; Note: the listing decodes the table 0xFA0487-0xFA049A and the `lda XBC,0xFA1E5B` at 0xFA049B as instructions (0xFA0497 swallows the F2 byte). Callers: HandlerTable23_FA1BF0 slots 10/11.
+TuneScale_AdjustSelectedItem:
 	ld c, (0x2690:16)                                   ; FA046A  c1 90 26 23
 	and C,0x07                                           ; FA046E  cb cc 07
 	extz BC                                              ; FA0471  d9 12
@@ -57061,10 +57351,10 @@ sub_FA046A:
 	cp bc, 0x04:i3                                         ; FA0475  d9 dc
 	jrl ugt, .LFA04F1                                    ; FA0477  7b 77 00
 	sll bc, 0x02                                         ; FA047A  d9 ee 02
-	add XBC,sub_FA046A__FA0487                                   ; FA047D  e9 c8 87 04 fa 00
+	add XBC,TuneScale_AdjustSelectedItem__FA0487                                   ; FA047D  e9 c8 87 04 fa 00
 	ld XBC,(XBC)                                         ; FA0483  a1 21
 	jp (xbc)                                             ; FA0485  b1 d8
-sub_FA046A__FA0487:
+TuneScale_AdjustSelectedItem__FA0487:
 	cp (XHL+0x04),DE                                     ; FA0487  9b 04 fa
 	nop                                                  ; FA048A  00
 	m_pop MDI+r5, 0                                      ; FA048B  b5 04
@@ -57085,7 +57375,7 @@ sub_FA046A__FA0487:
 	inc 8,XSP                                            ; FA04AA  ef 60
 	cp a, 0x01:i3                                          ; FA04AC  c9 d9
 	jr nz, .LFA04F1                                      ; FA04AE  6e 41
-	calr sub_FA02E5                                      ; FA04B0  1e 32 fe
+	calr TuneScale_StoreMasterTune                                      ; FA04B0  1e 32 fe
 	jr .LFA04F1                                          ; FA04B3  68 3c
 	lda xbc, (Descriptor9_FA1E64:24)                     ; FA04B5  f2 64 1e fa 31
 	push XBC                                             ; FA04BA  39
@@ -57102,7 +57392,7 @@ sub_FA046A__FA0487:
 	inc 8,XSP                                            ; FA04D7  ef 60
 	cp a, 0x01:i3                                          ; FA04D9  c9 d9
 	jr nz, .LFA04F1                                      ; FA04DB  6e 14
-	calr sub_FA033B                                      ; FA04DD  1e 5b fe
+	calr TuneScale_StoreKeyScalingType                                      ; FA04DD  1e 5b fe
 	jr .LFA04F1                                          ; FA04E0  68 0f
 	lda xbc, (Descriptor9_FA1E7F:24)                     ; FA04E2  f2 7f 1e fa 31
 	push XBC                                             ; FA04E7  39
@@ -57130,7 +57420,10 @@ sub_FA046A__FA0487:
 	inc 8,XSP                                            ; FA0520  ef 60
 	inc 8,XSP                                            ; FA0522  ef 60
 	ret                                                  ; FA0524  0e
-sub_FA0525:
+; TuneScale_LoadFields -- fills TUNE & SCALE's display variables from the stored parameters
+; Evidence: (0x2691) = index of (0x7F4A) in ByteTable79_FA1C5C, (0x264C) = idx/3 + 0x1B and (0x264D) = 3*(idx mod 3) -- the '4  . Hz' digits records FA21BF/FA21C9 print; (0x2692) = TuneScale_KeyScalingCodeToIndex((0x78A2)).
+; Evidence: when (0x78A2) == 0x80 (USER): (0x2640+k) = TuneScale_UserKeyByteToValue((0x78A4+k)), k = 0..11. Called from Screen_TuneScale_Enter 0xFA00D2.
+TuneScale_LoadFields:
 	link XIZ,0xfffe                                      ; FA0525  ee 0c fe ff
 	pushw hl                                             ; FA0529  2b
 	pushw de                                             ; FA052A  2a
@@ -57184,7 +57477,7 @@ sub_FA0525:
 .LFA0593:
 	ld c, (0x78a2:16)                                   ; FA0593  c1 a2 78 23
 	pushw bc                                             ; FA0597  29
-	calr sub_FA0054                                      ; FA0598  1e b9 fa
+	calr TuneScale_KeyScalingCodeToIndex                                      ; FA0598  1e b9 fa
 	ld (0x2692:16), a                                   ; FA059B  f1 92 26 41
 	ld c, (0x78a2:16)                                   ; FA059F  c1 a2 78 23
 	popw iy                                              ; FA05A3  4d
@@ -57198,7 +57491,7 @@ sub_FA0525:
 	extz XBC                                             ; FA05B4  e9 12
 	ld A,(XBC+0x78a2)                                    ; FA05B6  c3 e5 a2 78 21
 	pushw wa                                             ; FA05BB  28
-	calr sub_FA0429                                      ; FA05BC  1e 6a fe
+	calr TuneScale_UserKeyByteToValue                                      ; FA05BC  1e 6a fe
 	ld L,A                                               ; FA05BF  c9 8f
 	ld C,H                                               ; FA05C1  ce 8b
 	extz BC                                              ; FA05C3  d9 12
@@ -109937,7 +110230,7 @@ Msg0716_Str_SoundName:
 ; Called from: prom_b T_F4102C (`jp`)
 ;          prom_a sub_F918E5 (`call` through T_F4102C) at 0xF91D01
 ;          prom_a sub_F93ED4 (`call` through T_F4102C) at 0xF93F35
-;          prom_a sub_F9F6EC (`call` through T_F4102C) at 0xF9F727
+;          prom_a CombiName_CopyToBuffer (`call` through T_F4102C) at 0xF9F727
 ;          ... and 1 more
 ;
 ;     0xFC1C6C loads 0xFC1CC1, where the ROM reads:
@@ -110431,7 +110724,7 @@ sub_FC200D:
 ; Called from: prom_b T_F41018 (`jp`)
 ;          prom_a InstallPainter_SoundGroupMenu (`call` through T_F41018) at 0xF92872
 ;          prom_a InstallPainter_GroupSoundDisplayHold (`call` through T_F41018) at 0xF92D91
-;          prom_a sub_F9F65B (`call` through T_F41018) at 0xF9F67F
+;          prom_a SoundGroupName_CopyToBuffer (`call` through T_F41018) at 0xF9F67F
 ;
 ;     0xFC2070 loads 0xF068B4, where the ROM reads:
 ;        "PIANO           E.PIANO         HARPSI. & MALLET"
@@ -110578,7 +110871,7 @@ Msg0716_Str_GroupPair_A:
 ; Called from: prom_b T_F41030 (`jp`)
 ;          prom_a InstallPainter_CombinationGroupMenu (`call` through T_F41030) at 0xF936A1
 ;          prom_a InstallPainter_GroupCombiDisplayHold (`call` through T_F41030) at 0xF93961
-;          prom_a sub_F9F75C (`call` through T_F41030) at 0xF9F785
+;          prom_a CombiGroupName_CopyToBuffer (`call` through T_F41030) at 0xF9F785
 ;
 ;     0xFC2187 loads 0xFC2203, where the ROM reads:
 ;        "EXT Silent Group"

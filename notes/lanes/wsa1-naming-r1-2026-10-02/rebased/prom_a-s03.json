@@ -1,0 +1,1094 @@
+{
+ "name": "wsa1-naming-r1-prom_a-s03",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "renames": [
+  {
+   "old": "sub_F932C6",
+   "new": "GroupSoundDisplayHold_SelectMemberLastPage",
+   "evidence": "only caller sub_F9320D (the row-key path of ScreenButtonHandlers_GroupSoundDisplayHold[8..11]) when (0x2670)==(0x2672); body = sub_F93D6D with (0x2250) as event class"
+  },
+  {
+   "old": "sub_F93398",
+   "new": "GroupSoundDisplayHold_HighlightSelected",
+   "evidence": "LCD_EraseLayer1_FixedRect then prom_b record 0xF2B4C5 = op 03 FillRect of DLTable_F2B4D0[(0x2671)] (8 member boxes); compares the part record +0x3B/+0x3D with the shown group"
+  },
+  {
+   "old": "sub_F934AF",
+   "new": "GroupSoundDisplayHold_DrawMemberNames",
+   "evidence": "per member: position from DLPtrTable_F2B510 word arrays, name via T_F41010 (sub_FC1B81, fallback \"Sound Name *****\"), SWI7 0x06 with BC=0x10"
+  },
+  {
+   "old": "sub_F9352D",
+   "new": "GroupDisplayHold_ClearNameSlots",
+   "evidence": "list 0xF2BDF5-0xF2BE35 is eight op-0E records = SWI7 0x0E LCD_Svc_0E_ClearColumns, 16 cols x 14 rows each; callers are the two display-hold painters"
+  },
+  {
+   "old": "sub_F936DA",
+   "new": "CombinationGroupMenu_MoveHighlight",
+   "evidence": "erase DLTable_F2B445[(0x2640)=old (0x2675)] via record 0xF2B42F (SWI7 0x1B), fill DLTable_F2B445[(0x2169)] via 0xF2B43A (SWI7 0x05); (0x2675) = (0x2169)"
+  },
+  {
+   "old": "sub_F93708",
+   "new": "SoftKeyCol1_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x00] and [0x11] = code 0x00, SOFT KEY column 1"
+  },
+  {
+   "old": "sub_F93742",
+   "new": "SoftKeyCol4_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x03] and [0x14] = code 0x03, SOFT KEY column 4"
+  },
+  {
+   "old": "sub_F93780",
+   "new": "SoftKeyCol5_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x04] and [0x15] = code 0x04, SOFT KEY column 5"
+  },
+  {
+   "old": "sub_F937DB",
+   "new": "SoftKeyCol6_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x05] and [0x16] = code 0x05, SOFT KEY column 6"
+  },
+  {
+   "old": "sub_F937F4",
+   "new": "LcdKeyRow1_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x08] = code 0x08, LCD row 1 pair"
+  },
+  {
+   "old": "sub_F937F8",
+   "new": "LcdKeyRow2_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x09] = code 0x09, LCD row 2 pair"
+  },
+  {
+   "old": "sub_F937FC",
+   "new": "LcdKeyRow3_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x0A] = code 0x0A, LCD row 3 pair"
+  },
+  {
+   "old": "sub_F93804",
+   "new": "ExitKey_CombinationGroupMenu",
+   "evidence": "ScreenButtonHandlers_CombinationGroupMenu[0x0F] = code 0x0F, EXIT; requests screen 0x02"
+  },
+  {
+   "old": "sub_F93942",
+   "new": "GroupCombiDisplayHold_PaintGroupAndNames",
+   "evidence": "second painter queued by InstallPainter_GroupCombiDisplayHold (0xF9390E): group name via T_F41030 + SWI7 0x06, then member names and highlight by page count"
+  },
+  {
+   "old": "sub_F939FC",
+   "new": "GroupCombiDisplayHold_ShowMemberPage_TwoPages",
+   "evidence": "L<=7 -> page 0 members 0..7, else page 1 members 8..A, via GroupCombiDisplayHold_DrawMemberNames, then the highlight; picked for max index 9..15"
+  },
+  {
+   "old": "sub_F93A3C",
+   "new": "GroupCombiDisplayHold_ShowMemberPage_ManyPages",
+   "evidence": "page = L/8 for groups with max index > 15; members page*8..page*8+7 (last page ..A) via GroupCombiDisplayHold_DrawMemberNames"
+  },
+  {
+   "old": "sub_F93ADE",
+   "new": "SoftKeyCol1_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x00] and [0x11] = code 0x00, SOFT KEY column 1"
+  },
+  {
+   "old": "sub_F93AE4",
+   "new": "SoftKeyCol4_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x03] and [0x14] = code 0x03, SOFT KEY column 4"
+  },
+  {
+   "old": "sub_F93AE8",
+   "new": "SoftKeyCol5_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x04] and [0x15] = code 0x04, SOFT KEY column 5"
+  },
+  {
+   "old": "sub_F93AEC",
+   "new": "SoftKeyCol6_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x05] and [0x16] = code 0x05, SOFT KEY column 6"
+  },
+  {
+   "old": "sub_F93B03",
+   "new": "SoftKeyCol7_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x06] and [0x17] = code 0x06, SOFT KEY column 7"
+  },
+  {
+   "old": "sub_F93B1B",
+   "new": "SoftKeyCol8_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x07] and [0x18] = code 0x07, SOFT KEY column 8"
+  },
+  {
+   "old": "sub_F93B33",
+   "new": "CombiGroup_MaxMemberIndexOfCurrent",
+   "evidence": "A = T_SoundGroup_MaxMemberIndex_GetToneCopy(A=(0x2169), W=(0x216A)); all callers are combination-side; sound twin sub_F92F7F uses SoundGroup_MaxMemberIndex_Get"
+  },
+  {
+   "old": "sub_F93B4D",
+   "new": "LcdKeyRow1_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x08] = code 0x08, LCD row 1 pair"
+  },
+  {
+   "old": "sub_F93B57",
+   "new": "LcdKeyRow2_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x09] = code 0x09, LCD row 2 pair"
+  },
+  {
+   "old": "sub_F93B61",
+   "new": "LcdKeyRow3_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x0A] = code 0x0A, LCD row 3 pair"
+  },
+  {
+   "old": "sub_F93B6B",
+   "new": "LcdKeyRow4_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x0B] = code 0x0B, LCD row 4 pair"
+  },
+  {
+   "old": "sub_F93C1A",
+   "new": "ExitKey_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x0F] = code 0x0F, EXIT; requests screen 0x02"
+  },
+  {
+   "old": "sub_F93C3D",
+   "new": "NumberPadKey_GroupCombiDisplayHold",
+   "evidence": "ScreenButtonHandlers_GroupCombiDisplayHold[0x1B] = code 0x1B, the number pad; typed number 1..N -> (0x2169)=N-1 and {0xA8,0x08} post"
+  },
+  {
+   "old": "sub_F93CB9",
+   "new": "GroupCombiDisplayHold_SelectMemberAtRow",
+   "evidence": "LcdKeyRow1..4_GroupCombiDisplayHold call it with HL=row; L=(0x2670)*8+row(+4); posts {0x98,0x01,..} via List2030, highlight, leaves screen unless DISPLAY HOLD"
+  },
+  {
+   "old": "sub_F93D6D",
+   "new": "GroupCombiDisplayHold_SelectMemberLastPage",
+   "evidence": "only caller GroupCombiDisplayHold_SelectMemberAtRow on the last page; remaps row through word table 0xF93386[A mod 8]"
+  },
+  {
+   "old": "sub_F93E28",
+   "new": "GroupCombiDisplayHold_HighlightSelected",
+   "evidence": "LCD_EraseLayer1_FixedRect, compare shown group/bank with (0x7F08)/(0x7F0A), fill DLTable_F2B4D0[(0x2671)] via record 0xF2B4C5"
+  },
+  {
+   "old": "sub_F93ED4",
+   "new": "GroupCombiDisplayHold_DrawMemberNames",
+   "evidence": "per member: position from DLPtrTable_F2B510, name via T_F4102C (sub_FC1C59, fallback \"Combi Name *****\"), SWI7 0x06 BC=0x10"
+  },
+  {
+   "old": "sub_F93F4E",
+   "new": "UiEvent_MarkRedrawFromPartClass",
+   "evidence": "T_F415B0 in UiListB_Class00..1F/79/A8; ORs per-code bits into (0x2676)/(0x2677) and (0x2095)|=0x10 on screen 0x01/0x02"
+  },
+  {
+   "old": "sub_F93FF2",
+   "new": "UiEvent_MarkRedrawFromClass20Block",
+   "evidence": "T_F415A0 in UiListB_Class20..3F; codes 0x18/0x19/0x1A -> (0x2677)|=1/2/4, (0x2095)|=0x10 on screen 0x01/0x02"
+  },
+  {
+   "old": "sub_F94037",
+   "new": "UiEvent_MarkPartRedrawBits",
+   "evidence": "class<=7: scf/stcf A sets bit (class) of (0x2679)/(0x267A)/(0x267B)/(0x267C) for codes 0/0x0D/8/3; (0x2095)|=0x10"
+  },
+  {
+   "old": "sub_F94078",
+   "new": "ScreenEnter_PowerOnSplash",
+   "evidence": "+0 slot T_F41510 of PanelScreen_VtableTable_ViewB[0xAA]; PanelState_Init requests screen 0xAA (0x40AA); calr Paint_PowerOnSplash_Entry"
+  },
+  {
+   "old": "sub_F9407C",
+   "new": "ScreenLeave_PowerOnSplash",
+   "evidence": "+4 slot T_F41514 of screen object 0xAA; calr ScreenLeaveBody_PowerOnSplash (a lone ret)"
+  },
+  {
+   "old": "sub_F94080",
+   "new": "ScreenButton_PowerOnSplash",
+   "evidence": "+8 slot T_F41518 of screen object 0xAA; ld XIX,DisplayListPtrs_F9408E / call T_F41B08"
+  },
+  {
+   "old": "sub_F9410E",
+   "new": "Paint_PowerOnSplash_Entry",
+   "evidence": "pure wrapper: calr Paint_PowerOnSplash / ret; only caller ScreenEnter_PowerOnSplash"
+  },
+  {
+   "old": "sub_F94112",
+   "new": "Paint_PowerOnSplash",
+   "evidence": "blits SplashImage_DitherA/B, scrolls layers 0/2 3 lines per re-Enter, then SplashImage_Wordmark and (0x209A)=0x3F; or LCD_DrawAllInitialSettingMessage when (0x97) bit0 & !bit4"
+  },
+  {
+   "old": "sub_F9427D",
+   "new": "UiEvent_SyncSoundSelection",
+   "evidence": "T_F415A8 in UiListB_Class00..1F/90/98/A8; A8/07 sets (0x216A), A8/08 sets (0x2169), other cases SoundGroup_ReloadSelection"
+  },
+  {
+   "old": "sub_F9433A",
+   "new": "SoundGroup_ReloadSelection",
+   "evidence": "chooses SoundGroup_LoadSelectionFromPart vs FromGlobal by (0x7F02)&0xF0, mode (0x2078) and (0x207A)==0xB7; published T_F415C8"
+  },
+  {
+   "old": "sub_F9437E",
+   "new": "SoundGroup_LoadSelectionFromPart",
+   "evidence": "unless (0x2078)==2: (0x2674)=old (0x216A); (0x216A)/(0x2169)/(0x216B) = part record +0x3D/+0x3B/+0x3C via PartRecord_GetSecondHalfPtr"
+  },
+  {
+   "old": "sub_F943B6",
+   "new": "SoundGroup_LoadSelectionFromGlobal",
+   "evidence": "unless (0x2078)==1: (0x216A)/(0x2169)/(0x216B) = (0x7F0A)/(0x7F08)/(0x7F09), the cells GroupCombiDisplayHold_HighlightSelected compares"
+  },
+  {
+   "old": "sub_F943EE",
+   "new": "UiEventClassA8_ShowGroupScreen",
+   "evidence": "T_F415AC = sole entry of UiListC_ClassA8; codes 0x07/0x08 request 0xA1 or 0xA6 or redraw, by current screen"
+  },
+  {
+   "old": "sub_F944A1",
+   "new": "UiEventClassA8_ShowGroupScreenOtherMode",
+   "evidence": "only caller UiEventClassA8_ShowGroupScreen when mode is not 1/2; requests 0x40A1 or 0x40A6"
+  },
+  {
+   "old": "sub_F94539",
+   "new": "PartRecord_GetPtr",
+   "evidence": "XIY = LE32 array 0xF2AB50[(0x2250)] = 0x76A2+0x40*i (one 0x80 step) -- the 64-byte part records MidiOut_PartRecordPtrs_00 index (+0x0D)"
+  },
+  {
+   "old": "sub_F9454D",
+   "new": "PartRecord_GetSecondHalfPtr",
+   "evidence": "XIY = LE32 array 0xF2ABD0[(0x2250)] = PartRecord_GetPtr + 0x20 entry for entry; callers read +0x1B..+0x1D (group/member/bank)"
+  },
+  {
+   "old": "sub_F94561",
+   "new": "Value_StepAndPostIfChanged",
+   "evidence": "A := T_F41B04(A,W,B,C) = clamp(A+SignedNibbleDelta(W),C..B); if changed post {E,D,A,H} via T_List2030_AppendRegs"
+  },
+  {
+   "old": "sub_F94578",
+   "new": "BitMask_LowestSetBitOrdinal_SaveC",
+   "evidence": "A := 1-based index of A's lowest set bit (0 stays 0), C preserved -- BitMask_LowestSetBitOrdinal with push/pop C"
+  },
+  {
+   "old": "sub_F9458C",
+   "new": "LCD_BlitValueBar",
+   "evidence": "frame (A/8+1, or 0 for A=0) of prom_b 0xF29BC6 (17 frames, blank..full) blitted by SWI7 0x03 BC=5 HL=0x2E"
+  },
+  {
+   "old": "sub_F945B0",
+   "new": "Value_StepWordClamped",
+   "evidence": "DE += signed 3-bit delta from table 0xF945E4 indexed (W&7)|((W&0x80)>>4); negative underflow -> 0; clamp to [IY, IX]"
+  },
+  {
+   "old": "sub_F945F4",
+   "new": "UiEventClass7A_QueueDialValueRedraw",
+   "evidence": "T_F415B8 = entry [1] of UiListB_Class7A (the class PanelDial_PostClass7A posts); codes 0/1 fall into PanelDial_QueueValueRedraw_Entry"
+  },
+  {
+   "old": "sub_F94600",
+   "new": "PanelDial_QueueValueRedraw_Entry",
+   "evidence": "pure wrapper calr PanelDial_QueueValueRedraw; published T_F415BC (prom_b 0xF55CAE, 0xF55D5F)"
+  },
+  {
+   "old": "sub_F94604",
+   "new": "PanelDial_QueueValueRedraw",
+   "evidence": "if (0x97) bit 1: T_CallbackQueue_Post(PanelDial_DrawValueDigits) + T_Kernel_SemaSignal(1)"
+  },
+  {
+   "old": "sub_F9461C",
+   "new": "PanelDial_DrawValueDigits",
+   "evidence": "(0x7EE2)+bit0 of (0x7EE3) -> T_F41AF0 (Value_ToAsciiDigits3, leading blanks) -> SWI7 0x08 of 3 chars at IX 0x1281 (screen 0x06) / 0x1079 (screen 0x12)"
+  },
+  {
+   "old": "sub_F94CBB",
+   "new": "DebugMonitor_PrintHexDump",
+   "evidence": "16 x DebugMonitor_PrintHexDumpLine from (0x2846), 8 bytes per line; called by sub_F95C2D (DEBUG MONITOR screen)"
+  },
+  {
+   "old": "sub_F94CDE",
+   "new": "DebugMonitor_PrintHexDumpLine",
+   "evidence": "builds \"    AAAAAAAA  HH HH .. \" in 0x60A000 from (0x284A) and prints it with LCD_PrintLine40_AdvanceRow"
+  },
+  {
+   "old": "sub_F94D73",
+   "new": "DebugMonitor_NibbleToHexChar",
+   "evidence": "L := ASCII hex digit of L&0x0F (+0x30, +7 above 0x39)"
+  },
+  {
+   "old": "sub_F94D9D",
+   "new": "DebugMonitor_StepHexDigit",
+   "evidence": "(0x60A000) := T_F41B04(A=(0x60A000), W=(0x60A001), B=0x0F, C=0); called by SoftKeyCol1..6_DebugMonitor"
+  },
+  {
+   "old": "sub_F94DF8",
+   "new": "PanelCpuCheck_ReadStatus",
+   "evidence": "call T_F40F20 = prom_b SC1_Entry_F40F20 -> SC1_Cmd_E0_ReadStatus; A -> 0x60A000"
+  },
+  {
+   "old": "sub_F94E0A",
+   "new": "TestMode_SendStagedLed",
+   "evidence": "WA = word at 0x60A000 (A bits, W group) -> T_F40670 (sub_F8C846, queues (PanelLedWireMap[W], A) to the panel)"
+  },
+  {
+   "old": "sub_F95137",
+   "new": "CheckingDevice_RunSelfTest",
+   "evidence": "T_F40144 from boot 0xF827D1; returns if P5 bit4=1; RAM test, 4 flashes, delay, ROM-id test, 4 flashes (gap L)"
+  },
+  {
+   "old": "sub_F95158",
+   "new": "CheckingDevice_FlashLedNibble",
+   "evidence": "4 x: P5 bit3=0, delay 0xC000 (arg bit0 set) or 0x4000, P5 bit3=1, delay 0x4000, arg>>=1"
+  },
+  {
+   "old": "sub_F951C1",
+   "new": "Delay_SpinNestedLoopsShort",
+   "evidence": "0x1000 x 0x100 decrement loops, HL/DE saved, no memory touched; Delay_SpinNestedLoops is 0x1000 x 0x600"
+  },
+  {
+   "old": "sub_F951D8",
+   "new": "CheckingDevice_RamTest",
+   "evidence": "records at 0xF95C83 {start, length, fail bit}: (0x000100, 0x100, 1), (0x600000, 0x1000, 2); write/verify 0x5A/0xA5, restore; WA = fail bits"
+  },
+  {
+   "old": "sub_F95287",
+   "new": "CheckingDevice_RomIdTest",
+   "evidence": "record 0xF95C7A {ptr 0x00FFFFF0, \"wsaa\", bit 1}: compare the 4 bytes at 0xFFFFF0 (prom_a ID \"wsaa_822\") with \"wsaa\""
+  },
+  {
+   "old": "sub_F952FC",
+   "new": "TestMode_SelectFromPowerOnKeys",
+   "evidence": "T_F40148 from boot 0xF827F8; (0xC4)==2 -> _Variant2 else _Variant1"
+  },
+  {
+   "old": "sub_F9530B",
+   "new": "TestMode_SelectFromPowerOnKeys_Variant1",
+   "evidence": "8 bytes from remote 0x0000FFF0 via Link_SendCommandE2/WaitBlockDone; exactly two set bits; bit pairs -> screens 0xD9..0xDC"
+  },
+  {
+   "old": "sub_F953CD",
+   "new": "TestMode_SelectFromPowerOnKeys_Variant2",
+   "evidence": "(0x2B31) == 0x04/0x08/0x10/0x20 -> screen 0xD9 PanelCpuCheck / 0xDA SineWaveCheckMode / 0xDB PanelSwLedCheck / 0xDC; 0x02 -> none"
+  },
+  {
+   "old": "sub_F9541A",
+   "new": "BitMask_PopCountByte",
+   "evidence": "A = number of set bits in the byte at (XIZ+8), 8 shifts"
+  },
+  {
+   "old": "sub_F95444",
+   "new": "TestMode_Tick",
+   "evidence": "T_F4014C from the main loop (0xF8215C, tset 4,(0x88)); sine-wave poll, SOFT KEY 1+4+8 chord -> screen 0xDD, 0xDD redraw every 4th tick, 0xDC cycle"
+  },
+  {
+   "old": "sub_F9549F",
+   "new": "SineWaveCheck_PollIfCurrent",
+   "evidence": "if (0x207A)==0xDA (SineWaveCheckMode) -> SineWaveCheck_ServiceSwitches"
+  },
+  {
+   "old": "sub_F954AA",
+   "new": "SineWaveCheck_ServiceSwitches",
+   "evidence": "(0x2B33)&0x0F single bit k -> (0x2840) bit k+2 set, T_F413FC/T_F41400(0,0x3C+k,0x7F); none -> same calls with 0 for each set bit"
+  },
+  {
+   "old": "sub_F955F8",
+   "new": "TestMode_DisplayCycleTick",
+   "evidence": "screen 0xDC: (0x2844)==0 -> LCD_FlashWholePanel x2; then every 0x1E ticks (0x2070)=0xF95C60[(0x2844)] (0x01,0xA0,0xA1,0x41,0x71,0x02,0x06), wrap at 8"
+  },
+  {
+   "old": "sub_F95648",
+   "new": "PanelCpuCheck_FlashStatusOnLed",
+   "evidence": "PanelCpuCheck_ReadStatus, C = ~status, CheckingDevice_FlashLedNibble(C); calr from Paint_PanelCpuCheck"
+  },
+  {
+   "old": "sub_F9566A",
+   "new": "PanelSwLedCheck_Step",
+   "evidence": "first entry: all LEDs on, SC1 flush, 3 delays, all off; later TestMode_PanelSwitchesToLeds; (0x2071) bit 4"
+  },
+  {
+   "old": "sub_F956B0",
+   "new": "PanelSwLedCheck_AllLedsOn",
+   "evidence": "for each (A,W) pair of 0xF95C68 until 0xFFFF: stage at 0x60A000/1 and TestMode_SendStagedLed"
+  },
+  {
+   "old": "sub_F956F9",
+   "new": "PanelSwLedCheck_AllLedsOff",
+   "evidence": "same groups from 0xF95C68 with value 0 -> TestMode_SendStagedLed"
+  },
+  {
+   "old": "sub_F958C9",
+   "new": "SoftKeyCol4_SineWaveCheckMode",
+   "evidence": "ScreenButtonHandlers_SineWaveCheckMode[code 0x03] and [0x14] = SOFT KEY column 4; sets (0x76A7) to 0x7F (upper) / 0 (lower) via T_F41B10"
+  },
+  {
+   "old": "sub_F95901",
+   "new": "SoftKeyCol5_SineWaveCheckMode",
+   "evidence": "ScreenButtonHandlers_SineWaveCheckMode[code 0x04] and [0x15] = SOFT KEY column 5; sets (0x76A8) to 0x7F (upper) / 0 (lower) via T_F41B10"
+  },
+  {
+   "old": "sub_F95939",
+   "new": "SoftKeyCol6_SineWaveCheckMode",
+   "evidence": "ScreenButtonHandlers_SineWaveCheckMode[code 0x05] and [0x16] = SOFT KEY column 6; sets (0x76A9) to 0x7F (upper) / 0 (lower) via T_F41B10"
+  },
+  {
+   "old": "sub_F95971",
+   "new": "NumberPadKey_SineWaveCheckMode",
+   "evidence": "ScreenButtonHandlers_SineWaveCheckMode[code 0x1B] = number pad; (0x2267)&0x0F in 1..7 -> (0x2169) = n-1, redraw"
+  },
+  {
+   "old": "sub_F959C8",
+   "new": "ScreenEnter_DebugMonitor",
+   "evidence": "+0 slot T_F40130 of PanelScreen_VtableTable_ViewB[0xDD]; sub_F95C2D prints Print_DebugMonitor + DebugMonitor_PrintHexDump"
+  },
+  {
+   "old": "sub_F959E2",
+   "new": "ScreenButton_DebugMonitor",
+   "evidence": "+8 slot T_F40138; indexes ScreenObjF40130_ButtonHandlers by (XIZ+8) <= 0x1F with H = bit 7 of (XIZ+0x0A)"
+  },
+  {
+   "old": "sub_F95A1A",
+   "new": "SoftKeyCol1_DebugMonitor",
+   "evidence": "ScreenObjF40130_ButtonHandlers[code 0x00] and [0x11]; steps hex digit bits 23-20 of (0x2846) -1/+1"
+  },
+  {
+   "old": "sub_F95A7A",
+   "new": "SoftKeyCol2_DebugMonitor",
+   "evidence": "ScreenObjF40130_ButtonHandlers[code 0x01] and [0x12]; steps hex digit bits 19-16 of (0x2846) -1/+1"
+  },
+  {
+   "old": "sub_F95AD1",
+   "new": "SoftKeyCol3_DebugMonitor",
+   "evidence": "ScreenObjF40130_ButtonHandlers[code 0x02] and [0x13]; steps hex digit bits 15-12 of (0x2846) -1/+1"
+  },
+  {
+   "old": "sub_F95B24",
+   "new": "SoftKeyCol4_DebugMonitor",
+   "evidence": "ScreenObjF40130_ButtonHandlers[code 0x03] and [0x14]; steps hex digit bits 11-8 of (0x2846) -1/+1"
+  },
+  {
+   "old": "sub_F95B77",
+   "new": "SoftKeyCol5_DebugMonitor",
+   "evidence": "ScreenObjF40130_ButtonHandlers[code 0x04] and [0x15]; steps hex digit bits 7-4 of (0x2846) -1/+1"
+  },
+  {
+   "old": "sub_F95BCA",
+   "new": "SoftKeyCol6_DebugMonitor",
+   "evidence": "ScreenObjF40130_ButtonHandlers[code 0x05] and [0x16]; steps hex digit bits 3-0 of (0x2846) -1/+1"
+  },
+  {
+   "old": "sub_F95C15",
+   "new": "ExitKey_SineWaveCheckModeAndDebugMonitor",
+   "evidence": "[code 0x0F] of both ScreenButtonHandlers_SineWaveCheckMode and ScreenObjF40130_ButtonHandlers; (0x2075)&=0x77, (0x209A)=1"
+  }
+ ],
+ "headers": [
+  {
+   "label": "GroupSoundDisplayHold_SelectMemberLastPage",
+   "text": "GroupSoundDisplayHold_SelectMemberLastPage -- pick a group member from an LCD-row key when the shown page is the group's last page\nEvidence: only caller sub_F9320D (reached from ScreenButtonHandlers_GroupSoundDisplayHold [8]-[11]) branches here when (0x2670) == (0x2672) and A != 8.\nBC = word table 0xF93386[A mod 8] (B = last usable row, C = right-column offset); L = row + C (W bit 7 clear) + (0x2670)*8; if L <= A: (0x216B) = L,\nposts {(0x2250),0x00,(0x216A),0x3F} and {(0x2250),0x00,(0x2169),L} via T_List2030_AppendRegs, (0x2673) |= 8, T_Blink_Stop, queues sub_F93124 and\nGroupSoundDisplayHold_HighlightSelected; unless (0x267F) bit 0 (DISPLAY HOLD) requests screen 0x01 (from 0xA1) or 0x02 via (0x2070).\nIn: A = max member index, HL = row 0..3, W bit 7 = which key of the row pair. Twin: GroupCombiDisplayHold_SelectMemberLastPage.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupSoundDisplayHold_HighlightSelected",
+   "text": "GroupSoundDisplayHold_HighlightSelected -- erase layer 1's member-list area, then fill the box of the selected member if it is on the shown page\nEvidence: `calr 0xf3` = LCD_EraseLayer1_FixedRect (x 13..306, y 34..167); unless (0x2673) bit 3, the part record's +0x3B/+0x3D (PartRecord_GetSecondHalfPtr,\n(XIY+0x1B)/(XIY+0x1D)) must equal the shown group C and (0x216A); then (0x2671) = slot of (0x216B) on page (0x2670) (remapped through PtrTable_F93444 on\nthe last page) and T_F4181C runs prom_b record 0xF2B4C5 = interpreter-B op 03, SWI7 0x05 FillRect of DLTable_F2B4D0[(0x2671)] (8 boxes, 2 columns x 4 rows).\nCallers: sub_F92D70/sub_F92E36/sub_F92E76 (GroupSoundDisplayHold painters); queued by sub_F9320D and GroupSoundDisplayHold_SelectMemberLastPage.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupSoundDisplayHold_DrawMemberNames",
+   "text": "GroupSoundDisplayHold_DrawMemberNames -- draw the 16-character sound names of members DE..WA of the shown group into their layer-0 slots\nEvidence: XIZ = DLPtrTable_F2B510[A folded to 0..7] (prom_b screen-position word arrays); per member IX = position (sub_F92F16), (0x60F01C) = (0x2250),\nT_F4078C, then T_F41010 = sub_FC1B81 (its not-found fallback is the ROM string \"Sound Name *****\") with B = (0x2250), and SWI7 0x06 with BC = 0x10.\nIn: A = max member index, L = group, DE = first member, WA = last member. Callers: sub_F92D70, sub_F92E36, sub_F92E76. Twin: GroupCombiDisplayHold_DrawMemberNames.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupDisplayHold_ClearNameSlots",
+   "text": "GroupDisplayHold_ClearNameSlots -- clear the eight 16-column member-name slots of a group display-hold screen on layer 0\nEvidence: (0x2540) = 0 and interpreter A over 0xF2BDF5-0xF2BE35 (site 0xF9353C).  That list has no .ascii (why it stayed sub_XXXXXX) but its eight records are\nop 0E, which is SWI7 service 0x0E (LCD_Svc_0E_ClearColumns: IY offset, BC columns, HL rows; FINDINGS-ui-display-list.md handler 0xF31A9F), each BC = 0x10, HL = 0x0E\nat 0x05A3/0x0BBB/0x11D3/0x17EB (left) and 0x05B5/0x0BCD/0x11E5/0x17FD (right).  Callers: sub_F92D70 (0xF92D79, GroupSoundDisplayHold) and\nGroupCombiDisplayHold_PaintGroupAndNames (0xF9394B) -- the two screens that then draw member names into those slots.",
+   "mode": "replace"
+  },
+  {
+   "label": "CombinationGroupMenu_MoveHighlight",
+   "text": "CombinationGroupMenu_MoveHighlight -- move the group cursor box on layer 1 from the last-drawn group to (0x2169)\nEvidence: queued by InstallPainter_CombinationGroupMenu at 0xF9361E.  (0x2640) = (0x2675), (0x2675) = (0x2169); T_F41820 on prom_b record 0xF2B42F\n(interpreter-B op 03, source (0x2640), SWI7 0x1B EraseRect of DLTable_F2B445[]) then T_F4181C on 0xF2B43A (source (0x2169), SWI7 0x05 FillRect);\nDLTable_F2B445 is 16 boxes, two columns of 8, matching the \"1.\"..\"16.\" layout; ends with SWI7 0x0C C = 7.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol1_CombinationGroupMenu",
+   "text": "SoftKeyCol1_CombinationGroupMenu -- SOFT KEY column 1 on this screen: switch the group bank (0x216A) to 0x00 and post a BANK event\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x00] and [0x11]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x00 = SOFT KEY column 1, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nBody: unless (0x216A) bit 3 is set or it is already 0: (0x216A) = 0, T_Queue2E00_AppendRegs {0xA8, 0x07 (BANK), 0x00, 0x3F}, (0x2075) &= 0xF7, then a\nredraw request ((0x2071) |= 0x10 on screen 0xA5, else (0x2095) |= 0x10).  Also `calr` from SoftKeyCol1_GroupCombiDisplayHold.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol4_CombinationGroupMenu",
+   "text": "SoftKeyCol4_CombinationGroupMenu -- SOFT KEY column 4 on this screen: switch the group bank (0x216A) to 0x10, only while (0x08EC) bit 1 is set\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x03] and [0x14]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x03 = SOFT KEY column 4, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nBody: SoftKeyCol1's with 0x10 and an extra `bit 1,(0x08EC)` gate; sub_FC2155 (the group-name fetch) answers banks 0x10-0x17 with the ROM string\n\"EXT Silent Group\" when that same bit is clear.  Also `calr` from SoftKeyCol4_GroupCombiDisplayHold.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol5_CombinationGroupMenu",
+   "text": "SoftKeyCol5_CombinationGroupMenu -- SOFT KEY column 5 on this screen: step the selected group (0x2169) down (lower key) or up (upper key) and post it\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x04] and [0x15]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x04 = SOFT KEY column 5, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nBody: `xor W,0x80` then bit 7 of W (set = lower key, SoftKeyCol1_DrawbarScreen header) picks dec/inc within 0..15, or 0..(0x08EA)-1 when (0x216A) == 0x10;\non a change (0x2075) |= 8, (0x2169) = A, T_Queue2E00_AppendRegs {0xA8, 0x08, A, 0x0F}.  InstallPainter_CombinationGroupMenu stores 0x0484 at (0x209B) and\nsets (0x2075) bit 0, so PanelEvent_Code21_Dial routes the dial here as code 0x04/0x84.  Also `calr` from SoftKeyCol5_GroupCombiDisplayHold.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol6_CombinationGroupMenu",
+   "text": "SoftKeyCol6_CombinationGroupMenu -- SOFT KEY column 6 on this screen: request screen 0xA6 (GroupCombiDisplayHold)\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x05] and [0x16]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x05 = SOFT KEY column 6, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nBody: `ld (0x2070),0x80A6` = screen id 0xA6 + request flags 0x80; if (0x2092) bit 0: (0x2071) = 0x40, (0x2075) |= 0x80.  The list's \"OK\" legend\nsits at position 0x236B = x 216, inside column 6's band (x 200-239).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow1_CombinationGroupMenu",
+   "text": "LcdKeyRow1_CombinationGroupMenu -- LCD row 1 key pair on this screen: no lasting effect -- `calr CombiGroup_MaxMemberIndexOfCurrent / ret`, the result is discarded\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x08] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x08 = the LCD-row-1 key pair (W bit 7 set = the left-hand key).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow2_CombinationGroupMenu",
+   "text": "LcdKeyRow2_CombinationGroupMenu -- LCD row 2 key pair on this screen: no lasting effect -- `calr CombiGroup_MaxMemberIndexOfCurrent / ret`, the result is discarded\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x09] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x09 = the LCD-row-2 key pair (W bit 7 set = the left-hand key).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow3_CombinationGroupMenu",
+   "text": "LcdKeyRow3_CombinationGroupMenu -- LCD row 3 key pair on this screen: no lasting effect -- `calr CombiGroup_MaxMemberIndexOfCurrent / ret`, the result is discarded\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x0A] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x0A = the LCD-row-3 key pair (W bit 7 set = the left-hand key).",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_CombinationGroupMenu",
+   "text": "ExitKey_CombinationGroupMenu -- EXIT on the COMBINATION GROUP MENU: request screen 0x02\nEvidence: ScreenButtonHandlers_CombinationGroupMenu [0x0F] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x0F = EXIT.\nBody: acts only when W bit 7 is clear (code 0x0F exists only at pair position 1, where bit 7 is clear -- FINDINGS-prom_a-panel-control-map.md 1):\n(0x2070) = 0x8002, i.e. request screen 0x02; if (0x2092) bit 0: (0x209A) = 1 (PanelState_TakePendingHoldTime preloads the auto-return timer) and (0x2071) = 0.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupCombiDisplayHold_PaintGroupAndNames",
+   "text": "GroupCombiDisplayHold_PaintGroupAndNames -- the second painter: group name and numbers, then the member names of the right page and the highlight\nEvidence: queued at 0xF9390E.  T_Blink_Stop, GroupDisplayHold_ClearNameSlots, B record 0xF2B8F9, T_F41030 (group-name fetch sub_FC2155) + SWI7 0x06 of 16\ncharacters at IX 0x0129, sub_F931A4, sub_F93124, sub_F92A10/sub_F92A40 by (0x216A) bit 3, sub_F9291F, sub_F9315D (DISPLAY HOLD box).  Then (0x2672) = last\npage index from T_SoundGroup_MaxMemberIndex_GetToneCopy, and: max index <= 8 -> GroupCombiDisplayHold_DrawMemberNames + _HighlightSelected on page 0;\n9..15 -> GroupCombiDisplayHold_ShowMemberPage_TwoPages; more -> _ManyPages; ends with (0x2673) &= 0xBF.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupCombiDisplayHold_ShowMemberPage_TwoPages",
+   "text": "GroupCombiDisplayHold_ShowMemberPage_TwoPages -- draw the page holding member L of a two-page group, then the highlight\nEvidence: L <= 7 -> (0x2670) = 0, members 0..7; else (0x2670) = 1, members 8..A -- both through GroupCombiDisplayHold_DrawMemberNames (DE/WA = first/last),\nthen GroupCombiDisplayHold_HighlightSelected and SWI7 0x0C C = 3.  GroupCombiDisplayHold_PaintGroupAndNames picks it for max member index 9..15\n(`cp WA,0x0008 / cp WA,0x000F`).  In: A = max member index, L = member.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupCombiDisplayHold_ShowMemberPage_ManyPages",
+   "text": "GroupCombiDisplayHold_ShowMemberPage_ManyPages -- draw the page holding member L of a group with more than two pages, then a highlight\nEvidence: (0x2670) = L/8; members page*8..page*8+7, or page*8..A on the last page ((0x2672)), through GroupCombiDisplayHold_DrawMemberNames;\npicked by GroupCombiDisplayHold_PaintGroupAndNames for max member index > 15.  In: A = max member index, L = member.\n\u26a0 Its page-0 arm is `jrl 0xF92F0D`, the tail of the SOUND twin sub_F92E76, so that arm ends in GroupSoundDisplayHold_HighlightSelected, not\nGroupCombiDisplayHold_HighlightSelected -- recorded as the ROM has it.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol1_GroupCombiDisplayHold",
+   "text": "SoftKeyCol1_GroupCombiDisplayHold -- SOFT KEY column 1 on this screen: switch the group bank to 0x00 -- `calr SoftKeyCol1_CombinationGroupMenu / ret`\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x00] and [0x11]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x00 = SOFT KEY column 1, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol4_GroupCombiDisplayHold",
+   "text": "SoftKeyCol4_GroupCombiDisplayHold -- SOFT KEY column 4 on this screen: switch the group bank to 0x10 -- `calr SoftKeyCol4_CombinationGroupMenu / ret`\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x03] and [0x14]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x03 = SOFT KEY column 4, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol5_GroupCombiDisplayHold",
+   "text": "SoftKeyCol5_GroupCombiDisplayHold -- SOFT KEY column 5 on this screen: step the shown group down/up -- `calr SoftKeyCol5_CombinationGroupMenu / ret`\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x04] and [0x15]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x04 = SOFT KEY column 5, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nThe list draws glyphs 0x8D/0x8E at 0x2096/0x22C6 (x 176, rows 208/222), inside column 5's band, above and below each other.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol6_GroupCombiDisplayHold",
+   "text": "SoftKeyCol6_GroupCombiDisplayHold -- SOFT KEY column 6 on this screen: request screen 0xA5 (CombinationGroupMenu)\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x05] and [0x16]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x05 = SOFT KEY column 6, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nBody: `ld (0x2070),0x80A5`; if (0x2092) bit 0: (0x2071) = 0x40, (0x2075) |= 0x80.  The list's \"GR0UP\" / \"MENU\" legend sits at 0x1EDF / 0x227A,\nx 184-239, centred on column 6's band.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol7_GroupCombiDisplayHold",
+   "text": "SoftKeyCol7_GroupCombiDisplayHold -- SOFT KEY column 7 on this screen: toggle DISPLAY HOLD\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x06] and [0x17]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x06 = SOFT KEY column 7, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nBody: `xor (0x267F),0x01`, then queues sub_F9315D, which fills (DL_F2BA0C, op 05) or erases (DL_F2BA16, op 1B) the box x 254-313, y 212-236 around the\n\"DISPLAY\" / \"HOLD\" legend (0x2190 / 0x2371).  (0x267F) bit 0 is what GroupCombiDisplayHold_SelectMemberAtRow tests before leaving the screen.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol8_GroupCombiDisplayHold",
+   "text": "SoftKeyCol8_GroupCombiDisplayHold -- SOFT KEY column 8 on this screen: toggle DISPLAY HOLD (byte-identical to column 7's)\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x07] and [0x18]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x07 = SOFT KEY column 8, and\n         [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nBody: `xor (0x267F),0x01`, then queues sub_F9315D, which fills (DL_F2BA0C, op 05) or erases (DL_F2BA16, op 1B) the box x 254-313, y 212-236 around the\n\"DISPLAY\" / \"HOLD\" legend (0x2190 / 0x2371).  (0x267F) bit 0 is what GroupCombiDisplayHold_SelectMemberAtRow tests before leaving the screen.",
+   "mode": "insert"
+  },
+  {
+   "label": "CombiGroup_MaxMemberIndexOfCurrent",
+   "text": "CombiGroup_MaxMemberIndexOfCurrent -- A := the max member index of the shown group (0x2169) in bank (0x216A)\nEvidence: C = L = A = (0x2169), B = 0x98, W = (0x216A), call T_SoundGroup_MaxMemberIndex_GetToneCopy (W preserved).  Every caller is a\nCombinationGroupMenu / GroupCombiDisplayHold routine (13 sites incl. sub_F931A4 and the four dead-stub callbacks); its sound twin sub_F92F7F makes the same call through\nT_SoundGroup_MaxMemberIndex_Get with B = (0x2250).  Out: A = max member index (0xFF = unused group slot), C = L = group.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow1_GroupCombiDisplayHold",
+   "text": "LcdKeyRow1_GroupCombiDisplayHold -- LCD row 1 key pair on this screen: select member row 0 -- CombiGroup_MaxMemberIndexOfCurrent, HL = 0, GroupCombiDisplayHold_SelectMemberAtRow\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x08] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x08 = the LCD-row-1 key pair (W bit 7 set = the left-hand key).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow2_GroupCombiDisplayHold",
+   "text": "LcdKeyRow2_GroupCombiDisplayHold -- LCD row 2 key pair on this screen: select member row 1 -- CombiGroup_MaxMemberIndexOfCurrent, HL = 1, GroupCombiDisplayHold_SelectMemberAtRow\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x09] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x09 = the LCD-row-2 key pair (W bit 7 set = the left-hand key).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow3_GroupCombiDisplayHold",
+   "text": "LcdKeyRow3_GroupCombiDisplayHold -- LCD row 3 key pair on this screen: select member row 2 -- CombiGroup_MaxMemberIndexOfCurrent, HL = 2, GroupCombiDisplayHold_SelectMemberAtRow\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x0A] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x0A = the LCD-row-3 key pair (W bit 7 set = the left-hand key).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow4_GroupCombiDisplayHold",
+   "text": "LcdKeyRow4_GroupCombiDisplayHold -- LCD row 4 key pair on this screen: select member row 3 -- CombiGroup_MaxMemberIndexOfCurrent, HL = 3, GroupCombiDisplayHold_SelectMemberAtRow\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x0B] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x0B = the LCD-row-4 key pair (W bit 7 set = the left-hand key).\n[0x0C] (LCD row 5) is .LF93B75, a `ret` inside this routine's extent.",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_GroupCombiDisplayHold",
+   "text": "ExitKey_GroupCombiDisplayHold -- EXIT on the group display-hold screen 0xA6: request screen 0x02\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x0F] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x0F = EXIT.\nBody: acts only when W bit 7 is clear (code 0x0F exists only at pair position 1, where bit 7 is clear -- FINDINGS-prom_a-panel-control-map.md 1):\n(0x2070) = 0x8002, i.e. request screen 0x02; if (0x2092) bit 0: (0x209A) = 1 (PanelState_TakePendingHoldTime preloads the auto-return timer) and (0x2071) = 0.\nSame body as ExitKey_CombinationGroupMenu plus `and (0x2075),0x7F` in the (0x2092) arm.",
+   "mode": "insert"
+  },
+  {
+   "label": "NumberPadKey_GroupCombiDisplayHold",
+   "text": "NumberPadKey_GroupCombiDisplayHold -- number-pad entry of a group number on screen 0xA6\nEvidence: ScreenButtonHandlers_GroupCombiDisplayHold [0x1B] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x1B = the number pad, whole field.  (0x2823) == 0x20 -> T_Blink_Stop only.  Else when\n(0x2267) & 0x0F == 0x0F (ordinal 12's value in PanelKeypad_OrdinalToKey_V2): (0x2826) = 2, T_AsciiDigits3_ToValue -> A; bound 1 (banks 0x28/0x29), 2 (0x20),\n(0x08EA) (0x10) or 16; if 1 <= A <= bound: (0x2169) = A-1, T_Queue2E00_AppendRegs {0xA8, 0x08, A-1, 0x0F}, T_Blink_Stop.  Then queues sub_F93109, which\ncopies (0x2822) to (0x2661) and blinks the record DL_F2BA64.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupCombiDisplayHold_SelectMemberAtRow",
+   "text": "GroupCombiDisplayHold_SelectMemberAtRow -- select the member under an LCD-row key and, unless DISPLAY HOLD, leave the screen\nEvidence: callers LcdKeyRow1..4_GroupCombiDisplayHold with HL = 0..3.  On the last page ((0x2670) == (0x2672), A != 8) -> GroupCombiDisplayHold_SelectMemberLastPage;\nelse L = (0x2670)*8 + HL (+4 when W bit 7 is clear, the right-hand key; DLTable_F2B4D0 boxes 0-3 left, 4-7 right); if L <= A: (0x216B) = L,\n{0x98,0x01,(0x216A),0x3F} and {0x98,0x01,(0x2169),L} via T_List2030_AppendRegs, (0x2673) |= 8, T_Blink_Stop, queue sub_F93124 and _HighlightSelected;\nunless (0x267F) bit 0 (DISPLAY HOLD) request screen 0x01 (from 0xA1) else 0x02, or the auto-return when (0x2092) bit 0.  In: A = max member index.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupCombiDisplayHold_SelectMemberLastPage",
+   "text": "GroupCombiDisplayHold_SelectMemberLastPage -- GroupCombiDisplayHold_SelectMemberAtRow's arm for the group's last page\nEvidence: only caller GroupCombiDisplayHold_SelectMemberAtRow (0xF93CC8).  BC = word table 0xF93386[A mod 8] (B = last usable row, C = right-column\noffset -- the last page's members split evenly over the two columns); L = row (+C when W bit 7 clear) + (0x2670)*8; the commit path is the caller's,\ninstruction for instruction.  Twin: GroupSoundDisplayHold_SelectMemberLastPage.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupCombiDisplayHold_HighlightSelected",
+   "text": "GroupCombiDisplayHold_HighlightSelected -- erase layer 1's member-list area, then fill the box of the selected member if it is on the shown page\nEvidence: LCD_EraseLayer1_FixedRect, CombiGroup_MaxMemberIndexOfCurrent; unless (0x2673) bit 3, (0x7F08) must equal the shown group C and (0x7F0A) the\nbank (0x216A); then (0x2671) = slot of (0x216B) on page (0x2670) (PtrTable_F93444 on the last page) and T_F4181C runs record 0xF2B4C5 (SWI7 0x05\nFillRect of DLTable_F2B4D0[(0x2671)]); SWI7 0x0C C = 3.  Twin: GroupSoundDisplayHold_HighlightSelected, which compares the part record instead.",
+   "mode": "insert"
+  },
+  {
+   "label": "GroupCombiDisplayHold_DrawMemberNames",
+   "text": "GroupCombiDisplayHold_DrawMemberNames -- draw the 16-character combination names of members DE..WA of the shown group into their layer-0 slots\nEvidence: GroupSoundDisplayHold_DrawMemberNames' loop with 0x98 for (0x2250): (0x60F17F) = 0x98, T_F407FC, then T_F4102C = sub_FC1C59 (its not-found\nfallback is the ROM string \"Combi Name *****\") with B = 0x98, and SWI7 0x06 with BC = 0x10.  In: A = max member index, L = group, DE..WA = members.",
+   "mode": "insert"
+  },
+  {
+   "label": "UiEvent_MarkRedrawFromPartClass",
+   "text": "UiEvent_MarkRedrawFromPartClass -- on screen 0x01 (or 0x02 with (0x2687) == 0), OR a per-event bit into (0x2676)/(0x2677) and request a redraw\nEvidence: prom_b slot T_F415B0, an entry of UiListB_Class00..1F, UiListB_Class79 and UiListB_ClassA8; XIY = the record, (0x20B8) its code.  Class 0x79 code 0\n-> (0x2676) |= 0x40; class 0xA8 code 0x12/0x13 -> |= 1/2; other classes code 0 -> (0x2677) |= 7, 3/8/5/7/6/0x0D -> (0x2676) |= 1/2/4/8/0x80/0x30.  Each then\n(0x2095) |= 0x10, which PanelState_Sync2095 / PanelScreen_RunRedraw turn into a re-Enter of the current screen.  Screen 0x02 with (0x2687) != 0 goes to\nUiEvent_MarkPartRedrawBits.  \u26a0 prom_b T_F41590-T_F4159C (all four methods of screen object 0xA7) jump here too.",
+   "mode": "insert"
+  },
+  {
+   "label": "UiEvent_MarkRedrawFromClass20Block",
+   "text": "UiEvent_MarkRedrawFromClass20Block -- the same redraw marking for event classes 0x20-0x3F: codes 0x18/0x19/0x1A set (0x2677) bits 0/1/2\nEvidence: prom_b slot T_F415A0 is an entry of UiListB_Class20..UiListB_Class3F and of no other list; screen gate as UiEvent_MarkRedrawFromPartClass\n((0x207C) == 0x01, or 0x02 with (0x2687) == 0); then (0x2095) |= 0x10.  What the bits of (0x2677) select is not established.",
+   "mode": "insert"
+  },
+  {
+   "label": "UiEvent_MarkPartRedrawBits",
+   "text": "UiEvent_MarkPartRedrawBits -- for a part event of class 0..7, set bit (class) of one of four per-code bitmaps and request a redraw\nEvidence: only caller UiEvent_MarkRedrawFromPartClass (screen 0x02 with (0x2687) != 0).  A = (XIY) <= 7; `scf / stcf A,(m)` sets bit A of (0x2679) for\ncode 0, (0x267A) for 0x0D, (0x267B) for 8, (0x267C) for 3; then (0x2095) |= 0x10.  The dead `ret` at 0xF94077 follows it.",
+   "mode": "insert"
+  },
+  {
+   "label": "ScreenEnter_PowerOnSplash",
+   "text": "ScreenEnter_PowerOnSplash -- the +0 ENTER method of screen 0xAA, the screen PanelState_Init requests at power-on\nEvidence: PanelScreen_VtableTable_ViewB[0xAA] = T_F41510, whose +0 slot is `jp 0xF94078`; PanelState_Init stores 0x40AA to (0x2070) (screen id 0xAA\n+ request flag 0x40).  Body: `calr Paint_PowerOnSplash_Entry / ret`.",
+   "mode": "insert"
+  },
+  {
+   "label": "ScreenLeave_PowerOnSplash",
+   "text": "ScreenLeave_PowerOnSplash -- the +4 LEAVE method of screen 0xAA\nEvidence: T_F41514 (`jp 0xF9407C`) is the +4 slot of the object PanelScreen_VtableTable_ViewB[0xAA] names; body `calr ScreenLeaveBody_PowerOnSplash / ret`.",
+   "mode": "insert"
+  },
+  {
+   "label": "ScreenButton_PowerOnSplash",
+   "text": "ScreenButton_PowerOnSplash -- the +8 BUTTON method of screen 0xAA\nEvidence: T_F41518 (`jp 0xF94080`) is the +8 slot; body `ld XIX,DisplayListPtrs_F9408E / call T_F41B08`.  That table's only live entry is [0x0F]\n(EXIT) = 0xF94262, which requests screen 0x01, or 0x02 when (0x7F02) & 0xF0 != 0, with flags 0x02 -- so EXIT skips the splash.",
+   "mode": "insert"
+  },
+  {
+   "label": "Paint_PowerOnSplash_Entry",
+   "text": "Paint_PowerOnSplash_Entry -- a PURE WRAPPER for Paint_PowerOnSplash: `calr 0xF94112 / ret`, named for it\nEvidence: its only caller is ScreenEnter_PowerOnSplash (0xF94078); the extent ends at 0xF94112, where Paint_PowerOnSplash begins.",
+   "mode": "insert"
+  },
+  {
+   "label": "Paint_PowerOnSplash",
+   "text": "Paint_PowerOnSplash -- draw the power-on splash (dithered halves sliding together, then the Technics wordmark), or ALL INITIAL SETTING!\nEvidence: (0x97) bit 0 set, bit 4 clear -> LCD_DrawAllInitialSettingMessage (FACTORY CLEAR sets (0x97) bit 0 before re-entering RESET).  First Enter\n((0x207C) != (0x207D)): SWI7 0x03 blits SplashImage_DitherA (IX 0) and SplashImage_DitherB (IX 0x4C00), SWI7 0x0C C = 5, (0x2541)/(0x2543) = 0x2580,\n(0x2545) = 0x2680, (0x207E) = 0.  Each re-Enter ((0x2071) |= 0x10, (0x209A) = 0xFF): phase 0 runs LCD_ScrollLayer0_Back3Lines / _ScrollLayer2_Forward3Lines\nevery >= 0x14 counts of (0x80) until (0x2545) reaches 0x4C00; phase 1 counts (0x2680) = 0x800 down, then blits SplashImage_Wordmark to layer 1,\nSWI7 0x0C C = 2, (0x209A) = 0x3F (auto-return, PanelState_TakePendingHoldTime).  Caller: Paint_PowerOnSplash_Entry.",
+   "mode": "insert"
+  },
+  {
+   "label": "UiEvent_SyncSoundSelection",
+   "text": "UiEvent_SyncSoundSelection -- keep the group/member/bank cells (0x2169)/(0x216B)/(0x216A) in step with part, bank and group events\nEvidence: prom_b slot T_F415A8, an entry of UiListB_Class00..1F, UiListB_Class90, UiListB_Class98, UiListB_ClassA8; XIY = the record.  Class 0xA8 code 0x07\n(BANK, FINDINGS-prom_a-panel-control-map.md 1): SoundGroup_ReloadSelection, then if (0x20BA) & 0x3F: (0x216A) = (0x20B9) & 0x3F and, when it changed,\n(0x2169) = 0.  Class 0xA8 code 0x08: (0x2169) = (0x20B9) & 0x0F.  Class 0x90 code 0x10, class 0x98 code 1/0, and a part class <= 0x1F equal to (0x2250)\nwith code 0: SoundGroup_ReloadSelection.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoundGroup_ReloadSelection",
+   "text": "SoundGroup_ReloadSelection -- reload (0x2169)/(0x216B)/(0x216A) from the current part's record or from the global cells\nEvidence: SoundGroup_LoadSelectionFromPart when (0x7F02) & 0xF0 == 0, or mode (0x2078) in {3,4,5,6,7,8,9,0x16}, or (0x207A) == 0xB7; otherwise\nSoundGroup_LoadSelectionFromGlobal.  Published as T_F415C8 (prom_b 0xF56B62, prom_a 0xF99F0C, 0xF9FED9) and called four times by UiEvent_SyncSoundSelection.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoundGroup_LoadSelectionFromPart",
+   "text": "SoundGroup_LoadSelectionFromPart -- copy the current part's group/member/bank into (0x2169)/(0x216B)/(0x216A)\nEvidence: unless (0x2078) == 2: PartRecord_GetSecondHalfPtr, then (0x2674) = old (0x216A), (0x216A) = (XIY+0x1D), (0x2169) = (XIY+0x1B),\n(0x216B) = (XIY+0x1C) (record +0x3D/+0x3B/+0x3C), and `or (0x2116),0x0044`.  Callers: SoundGroup_ReloadSelection, numeric calr from sub_F90B8E (0xF90C0E).",
+   "mode": "insert"
+  },
+  {
+   "label": "SoundGroup_LoadSelectionFromGlobal",
+   "text": "SoundGroup_LoadSelectionFromGlobal -- copy the global group/member/bank cells (0x7F08)/(0x7F09)/(0x7F0A) into (0x2169)/(0x216B)/(0x216A)\nEvidence: unless (0x2078) == 1: (0x2674) = old (0x216A), (0x216A) = (0x7F0A), (0x2169) = (0x7F08), (0x216B) = (0x7F09), `or (0x2116),0x0044` -- the\nsame shape as SoundGroup_LoadSelectionFromPart; (0x7F08)/(0x7F0A) are what GroupCombiDisplayHold_HighlightSelected compares against.\nCallers: SoundGroup_ReloadSelection, sub_F90C13 (0xF90C1C).",
+   "mode": "insert"
+  },
+  {
+   "label": "UiEventClassA8_ShowGroupScreen",
+   "text": "UiEventClassA8_ShowGroupScreen -- on a BANK (0xA8/0x07) or group (0xA8/0x08) event, open or redraw the group display-hold screen\nEvidence: prom_b slot T_F415AC, the only entry of UiListC_ClassA8.  Mode (0x2078) 1 or 2 (else UiEventClassA8_ShowGroupScreenOtherMode).  Code 0x08: screen\n0x01 or 0xA0 (SoundGroupMenu) -> request 0xA1 (GroupSoundDisplayHold); 0x02 or 0xA5 -> 0xA6 (GroupCombiDisplayHold); 0xA1/0xA6 -> (0x2095) |= 0x10;\n0xA3 -> 0xA1 with (0x2075) |= 0x80.  Code 0x07: 0x01 -> 0xA1, 0x02 -> 0xA6, 0xA1/0xA6 -> redraw, 0xA0/0xA5 -> (0x2071) |= 0x10.",
+   "mode": "insert"
+  },
+  {
+   "label": "UiEventClassA8_ShowGroupScreenOtherMode",
+   "text": "UiEventClassA8_ShowGroupScreenOtherMode -- the same for modes other than 1 and 2: request 0x40A1 or 0x40A6, or redraw it if already shown\nEvidence: only caller UiEventClassA8_ShowGroupScreen (0xF943FA); codes 0x07/0x08 only.  (0x7F02) & 0xF0 == 0: modes 0x17-0x1B ignored, else 0xA1;\notherwise 0xA1 when (0x207A) == 0xB7 or mode in {3..9, 0x16}, else 0xA6.  Requests store 0x40A1/0x40A6 to (0x2070) and (0x2075) |= 0x80;\nwhen that screen is already current, (0x2095) |= 0x10 instead.",
+   "mode": "insert"
+  },
+  {
+   "label": "PartRecord_GetPtr",
+   "text": "PartRecord_GetPtr -- XIY := the 64-byte RAM part record of part (0x2250)\nEvidence: L = (0x2250)*4, XIY = LE32 at 0xF2AB50 + L; prom_b's array there is 0x76A2 + 0x40*i with one 0x80 step, the same 32 bases as\nRecordPtrs_RAM76A2_Panel, and MidiOut_PartRecordPtrs_00 maps part k to the same records + 0x0D.  28 call sites, sub_F90E4B..sub_F93A3C.",
+   "mode": "insert"
+  },
+  {
+   "label": "PartRecord_GetSecondHalfPtr",
+   "text": "PartRecord_GetSecondHalfPtr -- XIY := part record of part (0x2250) + 0x20\nEvidence: the same shape as PartRecord_GetPtr against 0xF2ABD0, whose 32 words are the 0xF2AB50 array + 0x20 entry for entry (prom_b's own note).\nCallers then read (XIY+0x1B/0x1C/0x1D) = record +0x3B/+0x3C/+0x3D as group/member/bank (SoundGroup_LoadSelectionFromPart).",
+   "mode": "insert"
+  },
+  {
+   "label": "Value_StepAndPostIfChanged",
+   "text": "Value_StepAndPostIfChanged -- step A by the encoded delta in W within [C, B]; if it changed, post {E, D, A, H} to the 0x2030 list\nEvidence: L = A, T_F41B04 (sub_F8BD73: A + SignedNibbleDelta_Table[(W&0x0F)|((W&0x80)>>3)], clamped to C..B), `cp A,L / jr z`, then W = H and\nT_List2030_AppendRegs.  Callers: sub_F912A3, sub_F91356, sub_F92693, sub_F926C9.",
+   "mode": "insert"
+  },
+  {
+   "label": "BitMask_LowestSetBitOrdinal_SaveC",
+   "text": "BitMask_LowestSetBitOrdinal_SaveC -- A := 1 + index of A's lowest set bit, 0 for 0; C preserved\nEvidence: `cps A,0 / jr z`, then C counts `srl A,1` until carry; identical to BitMask_LowestSetBitOrdinal (0xF95118) plus `push C / pop C`.\nCallers: sub_F90F9F (0xF90FF1, 0xF91072, 0xF910E6).",
+   "mode": "insert"
+  },
+  {
+   "label": "LCD_BlitValueBar",
+   "text": "LCD_BlitValueBar -- draw a 0..127 value as one of 17 bar frames at IX (current layer)\nEvidence: index = 0 for A = 0, else A/8 + 1 (so 1..127 -> frames 1..16); XIY = prom_b pointer table 0xF29BC6[index] (17 records of 0xE6 bytes, frame 0 blank,\nframe 16 full -- prom_b's note); SWI7 0x03 (LCD_Svc_03_BlitColumns) with BC = 5 columns, HL = 0x2E rows, 5 x 46 = 0xE6 exactly.  IX = the caller's.\nCallers: sub_F91BAE..sub_F91C64 (8), and T_F415B4 (prom_b 0xF4F00E, prom_a 0xF9C00E).",
+   "mode": "insert"
+  },
+  {
+   "label": "Value_StepWordClamped",
+   "text": "Value_StepWordClamped -- DE := clamp(DE + delta(W), IY, IX), the 16-bit sibling of sub_F8BD73\nEvidence: index (W & 7) | ((W & 0x80) >> 4) into the 16 bytes at 0xF945E4 (0..7, then 0, -1..-7 -- framed as code after the `ret`), sign-extended and added\nto DE; a negative sum from a negative delta becomes 0; then max with IY, min with IX.  Callers: sub_F911EF (2), sub_F9242E (3).",
+   "mode": "insert"
+  },
+  {
+   "label": "UiEventClass7A_QueueDialValueRedraw",
+   "text": "UiEventClass7A_QueueDialValueRedraw -- on a class-0x7A event with code 0 or 1, queue the redraw of the dial value\nEvidence: prom_b slot T_F415B8, entry [1] of UiListB_Class7A; class 0x7A is what PanelDial_PostClass7A posts for (0x7EE2).  (0x20B8) == 0 -> `jr z`\nto PanelDial_QueueValueRedraw_Entry; == 1 falls into it; anything else returns.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelDial_QueueValueRedraw_Entry",
+   "text": "PanelDial_QueueValueRedraw_Entry -- a PURE WRAPPER for PanelDial_QueueValueRedraw (`calr 0xF94604 / ret`)\nEvidence: published as T_F415BC (called from prom_b 0xF55CAE and 0xF55D5F) and reached from UiEventClass7A_QueueDialValueRedraw.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelDial_QueueValueRedraw",
+   "text": "PanelDial_QueueValueRedraw -- queue PanelDial_DrawValueDigits on the callback queue when (0x97) bit 1 is set\nEvidence: `bit 1,(0x97) / jr z`, then `ld XWA,0xF9461C / push / call T_CallbackQueue_Post` and T_Kernel_SemaSignal with A = 1 -- the queueing idiom\nthe InstallPainter_* routines use.  Only caller PanelDial_QueueValueRedraw_Entry.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelDial_DrawValueDigits",
+   "text": "PanelDial_DrawValueDigits -- draw the dial value (0x7EE2) as three 16x16 digits on screen 0x06 or 0x12\nEvidence: A = (0x7EE2), W = (0x7EE3) & 1 (the 9-bit value PanelDial_ApplyStep steps), T_F41AF0 = sub_F8BCAF (Value_ToAsciiDigits3 into 0x2661..0x2663,\nleading digits blanked); IX = 0x1281 on screen 0x06, 0x1079 on 0x12, else nothing; layer 0, \"---\" when (0x7F32) bit 2; SWI7 0x08\n(LCD_Svc_08_DrawText16x16) of BC = 3 characters from 0x2661.  Queued by PanelDial_QueueValueRedraw.",
+   "mode": "insert"
+  },
+  {
+   "label": "DebugMonitor_PrintHexDump",
+   "text": "DebugMonitor_PrintHexDump -- print 16 hex-dump lines (128 bytes) starting at (0x2846)\nEvidence: (0x284A) = (0x2846), then DE = 0x10 iterations of DebugMonitor_PrintHexDumpLine and `add (0x284A),8`.  Only caller sub_F95C2D (0xF95C52), the\nDEBUG MONITOR screen's painter, which also calls Print_DebugMonitor.",
+   "mode": "insert"
+  },
+  {
+   "label": "DebugMonitor_PrintHexDumpLine",
+   "text": "DebugMonitor_PrintHexDumpLine -- print one dump line: the 32-bit address (0x284A) in hex and the 8 bytes stored there\nEvidence: builds the line at 0x60A000: four spaces, 8 hex digits of (0x284A) (high word then low, nibble shifts and DebugMonitor_NibbleToHexChar), two spaces,\n8 x \"HH \" from the bytes at (0x284A), then LCD_PrintLine40_AdvanceRow.  Only caller DebugMonitor_PrintHexDump.",
+   "mode": "insert"
+  },
+  {
+   "label": "DebugMonitor_NibbleToHexChar",
+   "text": "DebugMonitor_NibbleToHexChar -- L := the ASCII hex digit of L's low nibble\nEvidence: `and L,0x0F / add L,0x30 / cp L,0x39 / jr ule / add L,7`.  Called four times by DebugMonitor_PrintHexDumpLine.",
+   "mode": "insert"
+  },
+  {
+   "label": "DebugMonitor_StepHexDigit",
+   "text": "DebugMonitor_StepHexDigit -- step the hex digit at 0x60A000 by the encoded delta at 0x60A001, clamped to 0..0x0F\nEvidence: A = (0x60A000), W = (0x60A001), B = 0x0F, C = 0, T_F41B04 (sub_F8BD73: A + SignedNibbleDelta_Table[...], clamped to C..B), A back to 0x60A000.\nCallers: the six SoftKeyColN_DebugMonitor handlers, which load W = 0x81 (-1) or 0x01 (+1).",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelCpuCheck_ReadStatus",
+   "text": "PanelCpuCheck_ReadStatus -- read the panel CPU's status byte over SC1 into 0x60A000\nEvidence: `call T_F40F20` (prom_b SC1_Entry_F40F20 = `calr SC1_Cmd_E0_ReadStatus / ret`), then `ld (0x60A000),A`.  Only caller\nPanelCpuCheck_FlashStatusOnLed.",
+   "mode": "insert"
+  },
+  {
+   "label": "TestMode_SendStagedLed",
+   "text": "TestMode_SendStagedLed -- send the LED byte staged at 0x60A000 for the LED group staged at 0x60A001 to the panel\nEvidence: `ld WA,(0x60A000)` then T_F40670 -> sub_F8C846, which TestMode_PanelSwitchesToLeds's header records as queueing (PanelLedWireMap[W], A)\nto the panel.  Callers: PanelSwLedCheck_AllLedsOn, PanelSwLedCheck_AllLedsOff.",
+   "mode": "insert"
+  },
+  {
+   "label": "CheckingDevice_RunSelfTest",
+   "text": "CheckingDevice_RunSelfTest -- the service CHECKING DEVICE power-on test: RAM check then ROM check, each reported as four LED flashes\nEvidence: prom_b slot T_F40144, called once from boot at 0xF827D1.  `ld C,(P5) / and C,0x10` -- returns when P5 bit 4 reads 1 (device switch off);\nelse CheckingDevice_RamTest, CheckingDevice_FlashLedNibble(result), Delay_SpinNestedLoopsShort, CheckingDevice_RomIdTest, CheckingDevice_FlashLedNibble(result):\nthe manual's \"first 4 flashes RAM, latter 4 ROM\" (notes/WSA1-EMULATION-DISASM-GAPS.md gap L, FINDINGS-prom_a-ui-screen-blocks.md 5).",
+   "mode": "insert"
+  },
+  {
+   "label": "CheckingDevice_FlashLedNibble",
+   "text": "CheckingDevice_FlashLedNibble -- flash the CHECKING DEVICE LED (P5 bit 3) four times, long for each set bit of the argument, LSB first\nEvidence: E = 4 passes of `res 0,C / ldcf 0,C / stcf 3,(P5)` (bit low), HL = 0xC000 if (XIZ+0x08) bit 0 else 0x4000 times a 0x20 inner loop,\n`set 0,C ... stcf 3,(P5)` (bit high), HL = 0x4000, then `srl (XIZ+0x08)`.  In: word argument on the stack (failure bits).\nCallers: CheckingDevice_RunSelfTest (twice), PanelCpuCheck_FlashStatusOnLed.",
+   "mode": "insert"
+  },
+  {
+   "label": "Delay_SpinNestedLoopsShort",
+   "text": "Delay_SpinNestedLoopsShort -- a busy-wait of 0x1000 outer passes of 0x100 inner decrements, touching no memory\nEvidence: `ldw DE,0x1000 / ldw HL,0x0100 / dec HL ... dec DE`, HL and DE pushed and popped -- the shape of Delay_SpinNestedLoops with a 0x100 inner count\ninstead of 0x600.  Callers: CheckingDevice_RunSelfTest; PanelSwLedCheck_Step loads its address (0xF9566B) and runs it three times by `push / jp (xix)`.",
+   "mode": "insert"
+  },
+  {
+   "label": "CheckingDevice_RamTest",
+   "text": "CheckingDevice_RamTest -- non-destructive RAM test of two regions; WA = OR of the failing regions' bits\nEvidence: two 9-byte records at 0xF95C83 {start LE32, length LE32, bit}: (0x00000100, 0x100, 0x01) and (0x00600000, 0x1000, 0x02); for each byte pair\nit saves the byte, writes 0x5A (then 0xA5 for the next), reads back, ORs the record's bit on mismatch and restores.  Only caller CheckingDevice_RunSelfTest.",
+   "mode": "insert"
+  },
+  {
+   "label": "CheckingDevice_RomIdTest",
+   "text": "CheckingDevice_RomIdTest -- compare the first four bytes of prom_a's ID string with \"wsaa\"; WA = 0x01 on mismatch\nEvidence: one 9-byte record at 0xF95C7A {pointer 0x00FFFFF0, expected bytes 77 73 61 61 = \"wsaa\", bit 0x01}; 0xFFFFF0 holds \"wsaa_822\" (the ROM ID the\nboot block reads).  Each differing byte ORs the bit into the result.  Only caller CheckingDevice_RunSelfTest.",
+   "mode": "insert"
+  },
+  {
+   "label": "TestMode_SelectFromPowerOnKeys",
+   "text": "TestMode_SelectFromPowerOnKeys -- at boot, pick a service test screen from the keys held at power-on, by panel variant\nEvidence: prom_b slot T_F40148, called once from boot at 0xF827F8 (after ExtBoard_Identify); `cp (0xC4),0x02` -> TestMode_SelectFromPowerOnKeys_Variant2\n(variant 2 = SX-WSA1R, Variant_SetFromPB0 header) else TestMode_SelectFromPowerOnKeys_Variant1.",
+   "mode": "insert"
+  },
+  {
+   "label": "TestMode_SelectFromPowerOnKeys_Variant1",
+   "text": "TestMode_SelectFromPowerOnKeys_Variant1 -- variant 1: read 8 bytes from CPU 2 and map a two-bit chord to screen 0xD9..0xDC\nEvidence: T_Link_SendCommandE2 (remote 0x0000FFF0, 8 bytes, into a stack buffer) + T_Link_WaitBlockDone; BitMask_PopCountByte over the 8 bytes must total 2;\nbyte3 bit2 + byte4 bit6 -> 0xD9, byte3 bit4 + byte5 bit0 -> 0xDA (+ T_F407AC, T_F407B0), byte3 bit5 + byte5 bit1 -> 0xDB, byte3 bit7 + byte5 bit3 -> 0xDC,\nbyte3 bit0 + byte4 bit4 -> nothing; (0x2070) = id, (0x2071) = 0x80.  What those bits are on CPU 2 is not established.",
+   "mode": "insert"
+  },
+  {
+   "label": "TestMode_SelectFromPowerOnKeys_Variant2",
+   "text": "TestMode_SelectFromPowerOnKeys_Variant2 -- variant 2 (SX-WSA1R): number-pad key 2/3/4/5 held at power-on -> test screen 0xD9/0xDA/0xDB/0xDC\nEvidence: C = (0x2B31), the segment-1 change shadow; exactly 0x04 -> (0x2070) = 0xD9 (Paint_PanelCpuCheck's screen), 0x08 -> 0xDA (SineWaveCheckMode, plus\nT_F407AC/T_F407B0), 0x10 -> 0xDB (PanelSwLedCheck), 0x20 -> 0xDC; 0x02 -> nothing; (0x2071) = 0x80.  Segment-1 bit b is the number-pad key printed b\non variant 2 (PanelKeypad_OrdinalToKey_V2: ordinal b+1 -> digit b).  Was flagged in FINDINGS-prom_a-ui-screen-blocks.md 5 as a gap-O datum.",
+   "mode": "insert"
+  },
+  {
+   "label": "BitMask_PopCountByte",
+   "text": "BitMask_PopCountByte -- A := the number of set bits in the byte argument\nEvidence: L = (XIZ+0x08), 8 passes of `and C,1 / inc D / srl C,1`, A = D.  Only caller TestMode_SelectFromPowerOnKeys_Variant1.",
+   "mode": "insert"
+  },
+  {
+   "label": "TestMode_Tick",
+   "text": "TestMode_Tick -- the periodic service-mode step: sine-wave switch poll, the DEBUG MONITOR chord, and the per-tick work of screens 0xDD and 0xDC\nEvidence: prom_b slot T_F4014C, called from the main loop at 0xF8215C after `tset 4,(0x88)`.  Variant 2: SineWaveCheck_PollIfCurrent.  If (0x208C) has bits 0,\n3 and 7 (codes 0x00/0x03/0x07 = SOFT KEY columns 1, 4, 8, entered into (0x208C) when (0x20B9) == 3, PanelButton_Accept) -> (0x2070) = 0xDD, (0x2071) bit 6.\nOn screen 0xDD every 4th tick ((0x284E)) sets (0x2095) bit 4; on 0xDC calls TestMode_DisplayCycleTick.",
+   "mode": "insert"
+  },
+  {
+   "label": "SineWaveCheck_PollIfCurrent",
+   "text": "SineWaveCheck_PollIfCurrent -- run SineWaveCheck_ServiceSwitches while screen 0xDA is the current one\nEvidence: `cp (0x207A),0xDA / jr nz`; 0xDA's object is T_Paint_SineWaveCheckMode (PanelScreen_VtableTable_ViewB[0xDA]).  Only caller TestMode_Tick (variant 2).",
+   "mode": "insert"
+  },
+  {
+   "label": "SineWaveCheck_ServiceSwitches",
+   "text": "SineWaveCheck_ServiceSwitches -- per switch of (0x2B33) bits 0-3: issue T_F413FC/T_F41400 with 0x7F while it alone is held, with 0 once released\nEvidence: C = (0x2B33) & 0x0F; exactly bit k (k = 0..3) and (0x2840) bit k+2 clear -> set it, T_F413FC(0, 0x3C+k, 0x7F) and T_F41400(0, 0x3C+k, 0x7F); any\nother value -> for each set bit k+2 of (0x2840): clear it and make the same two calls with 0 in place of 0x7F.\n\u26a0 What T_F413FC/T_F41400 (sub_FC8FD7/sub_FC9016) do is not established; nor which panel controls segment 3 bits 0-3 are.",
+   "mode": "insert"
+  },
+  {
+   "label": "TestMode_DisplayCycleTick",
+   "text": "TestMode_DisplayCycleTick -- screen 0xDC's per-tick work: flash the whole LCD twice, then step through seven screens every 0x1E ticks\nEvidence: XIX = 0x2844 (index): 0 -> LCD_FlashWholePanel twice, index 1.  Else when the (0x2843) countdown is 0: (0x2070) = byte 0xF95C60[index], (0x2071) = 0x40;\nindex 8 resets to 1, otherwise (0x2843) = 0x1E and index+1.  Table 0xF95C60 [1..7] = 0x01, 0xA0, 0xA1, 0x41, 0x71, 0x02, 0x06 ([8] = 0xFF); it is framed\nas instructions after sub_F95C2D's `ret`.  Only caller TestMode_Tick.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelCpuCheck_FlashStatusOnLed",
+   "text": "PanelCpuCheck_FlashStatusOnLed -- read the panel CPU status and flash its complement's low nibble on the CHECKING DEVICE LED\nEvidence: PanelCpuCheck_ReadStatus, `ld C,(0x60A000) / cpl C`, CheckingDevice_FlashLedNibble(C).  `calr` from Paint_PanelCpuCheck (0xF9578F), whose\nscreen reads \"PANEL CPU CHECK\", \"Please check the CPU port\", \"LED flash.\"; published as T_F40158.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelSwLedCheck_Step",
+   "text": "PanelSwLedCheck_Step -- the PANEL SW&LED CHECK screen's work: lamp test on entry, then switch-to-LED echo, re-run every pass\nEvidence: `calr` from Paint_PanelSwLedCheck (0xF959B9), published as T_F40168.  (0x207B) != (0x207A) (first entry): PanelSwLedCheck_AllLedsOn,\nT_SC1_TxFlush, Delay_SpinNestedLoopsShort three times (`push <ret> / jp (xix)`), PanelSwLedCheck_AllLedsOff; otherwise TestMode_PanelSwitchesToLeds\n(whose header cites this very condition).  Then `set 4,(0x2071)`, a redraw request.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelSwLedCheck_AllLedsOn",
+   "text": "PanelSwLedCheck_AllLedsOn -- light every panel LED group from the table at 0xF95C68\nEvidence: word pairs at 0xF95C68 until 0xFFFF -- (0xFF,0) (0xFF,1) (0xFF,2) (0xFF,3) (0xFF,4) (0x03,5) (0x0F,6) (0x02,7) -- each staged as (0x60A001) = group,\n(0x60A000) = bits, then TestMode_SendStagedLed.  Only caller PanelSwLedCheck_Step.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelSwLedCheck_AllLedsOff",
+   "text": "PanelSwLedCheck_AllLedsOff -- clear every LED group named in the table at 0xF95C68\nEvidence: the same walk as PanelSwLedCheck_AllLedsOn with (0x60A000) = 0 for each group byte.  Only caller PanelSwLedCheck_Step.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol4_SineWaveCheckMode",
+   "text": "SoftKeyCol4_SineWaveCheckMode -- SOFT KEY column 4 on SINE WAVE CHECK MODE: set part record 0's byte +5 (0x76A7) to 0x7F (upper key) or 0 (lower)\nEvidence: ScreenButtonHandlers_SineWaveCheckMode [0x03] and [0x14]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x03 = SOFT KEY column 4; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\n(XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A7) != 0 -> T_F41B10(0, 5, 0x00, 0x7F); == 0 and (0x76A7) != 0x7F -> T_F41B10(0, 5, 0x7F, 0x7F).\n(0x76A7) = 0x76A2 + 5, part record 0 (PartRecord_GetPtr's array).  What T_F41B10 (sub_F8BC00) does with it is not established.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol5_SineWaveCheckMode",
+   "text": "SoftKeyCol5_SineWaveCheckMode -- SOFT KEY column 5 on SINE WAVE CHECK MODE: set part record 0's byte +6 (0x76A8) to 0x7F (upper key) or 0 (lower)\nEvidence: ScreenButtonHandlers_SineWaveCheckMode [0x04] and [0x15]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x04 = SOFT KEY column 5; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\n(XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A8) != 0 -> T_F41B10(0, 6, 0x00, 0x7F); == 0 and (0x76A8) != 0x7F -> T_F41B10(0, 6, 0x7F, 0x7F).\n(0x76A8) = 0x76A2 + 6, part record 0 (PartRecord_GetPtr's array).  What T_F41B10 (sub_F8BC00) does with it is not established.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol6_SineWaveCheckMode",
+   "text": "SoftKeyCol6_SineWaveCheckMode -- SOFT KEY column 6 on SINE WAVE CHECK MODE: set part record 0's byte +7 (0x76A9) to 0x7F (upper key) or 0 (lower)\nEvidence: ScreenButtonHandlers_SineWaveCheckMode [0x05] and [0x16]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x05 = SOFT KEY column 6; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\n(XIZ+0x08) != 0 (the lower key, bit 7 set) and (0x76A9) != 0 -> T_F41B10(0, 7, 0x00, 0x7F); == 0 and (0x76A9) != 0x7F -> T_F41B10(0, 7, 0x7F, 0x7F).\n(0x76A9) = 0x76A2 + 7, part record 0 (PartRecord_GetPtr's array).  What T_F41B10 (sub_F8BC00) does with it is not established.",
+   "mode": "insert"
+  },
+  {
+   "label": "NumberPadKey_SineWaveCheckMode",
+   "text": "NumberPadKey_SineWaveCheckMode -- number-pad key 1..7 on SINE WAVE CHECK MODE: (0x2169) = key - 1 and redraw\nEvidence: ScreenButtonHandlers_SineWaveCheckMode [0x1B] only; Dispatch_FF3D39's CONTROL LEGEND gives code 0x1B = the number pad.  H = (0x2267) & 0x0F; 1..7 -> (0x2169) = H-1, `set 4,(0x2095)`.",
+   "mode": "insert"
+  },
+  {
+   "label": "ScreenEnter_DebugMonitor",
+   "text": "ScreenEnter_DebugMonitor -- the +0 ENTER method of screen 0xDD, the DEBUG MONITOR\nEvidence: PanelScreen_VtableTable_ViewB[0xDD] = T_F40130 (`jp 0xF959C8`).  Unless (0x2095) bit 4 (redraw): LCD_BlankThenSetPanel2Layer, (0x2075) bit 7;\nthen sub_F95C2D, which calls Print_DebugMonitor (ROM line \" --- DEBUG MONITOR BY (c)masa,toshi --- \") and DebugMonitor_PrintHexDump; then\nLCD_ShowLayers1And2_StackFrame.  TestMode_Tick requests 0xDD on the SOFT KEY 1+4+8 chord.",
+   "mode": "insert"
+  },
+  {
+   "label": "ScreenButton_DebugMonitor",
+   "text": "ScreenButton_DebugMonitor -- the +8 BUTTON method of screen 0xDD: dispatch ScreenObjF40130_ButtonHandlers by button code\nEvidence: T_F40138 (`jp 0xF959E2`); `cp (XIZ+8),0x001F / jr ugt`, H = 1 when bit 7 of (XIZ+0x0A) is set, then calls ScreenObjF40130_ButtonHandlers[(XIZ+8)]\nwith H on the stack -- ScreenButton_SineWaveCheckMode's reader shape, instruction for instruction.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol1_DebugMonitor",
+   "text": "SoftKeyCol1_DebugMonitor -- SOFT KEY column 1 on the DEBUG MONITOR: step address digit (bits 23-20 of (0x2846)) down (lower key) or up (upper key)\nEvidence: ScreenObjF40130_ButtonHandlers [0x00] and [0x11]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x00 = SOFT KEY column 1; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nH = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),\nthe digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol2_DebugMonitor",
+   "text": "SoftKeyCol2_DebugMonitor -- SOFT KEY column 2 on the DEBUG MONITOR: step address digit (bits 19-16 of (0x2846)) down (lower key) or up (upper key)\nEvidence: ScreenObjF40130_ButtonHandlers [0x01] and [0x12]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x01 = SOFT KEY column 2; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nH = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),\nthe digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol3_DebugMonitor",
+   "text": "SoftKeyCol3_DebugMonitor -- SOFT KEY column 3 on the DEBUG MONITOR: step address digit (bits 15-12 of (0x2846)) down (lower key) or up (upper key)\nEvidence: ScreenObjF40130_ButtonHandlers [0x02] and [0x13]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x02 = SOFT KEY column 3; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nH = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),\nthe digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol4_DebugMonitor",
+   "text": "SoftKeyCol4_DebugMonitor -- SOFT KEY column 4 on the DEBUG MONITOR: step address digit (bits 11-8 of (0x2846)) down (lower key) or up (upper key)\nEvidence: ScreenObjF40130_ButtonHandlers [0x03] and [0x14]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x03 = SOFT KEY column 4; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nH = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),\nthe digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol5_DebugMonitor",
+   "text": "SoftKeyCol5_DebugMonitor -- SOFT KEY column 5 on the DEBUG MONITOR: step address digit (bits 7-4 of (0x2846)) down (lower key) or up (upper key)\nEvidence: ScreenObjF40130_ButtonHandlers [0x04] and [0x15]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x04 = SOFT KEY column 5; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nH = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),\nthe digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.",
+   "mode": "insert"
+  },
+  {
+   "label": "SoftKeyCol6_DebugMonitor",
+   "text": "SoftKeyCol6_DebugMonitor -- SOFT KEY column 6 on the DEBUG MONITOR: step address digit (bits 3-0 of (0x2846)) down (lower key) or up (upper key)\nEvidence: ScreenObjF40130_ButtonHandlers [0x05] and [0x16]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x05 = SOFT KEY column 6; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).\nH = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),\nthe digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_SineWaveCheckModeAndDebugMonitor",
+   "text": "ExitKey_SineWaveCheckModeAndDebugMonitor -- EXIT on SINE WAVE CHECK MODE and on the DEBUG MONITOR: leave through the auto-return timer\nEvidence: entry [0x0F] of ScreenButtonHandlers_SineWaveCheckMode and of ScreenObjF40130_ButtonHandlers; Dispatch_FF3D39's CONTROL LEGEND gives code 0x0F = EXIT.  Acts when\n(XIZ+0x08) == 0 (bit 7 clear, EXIT's only pair position): `and (0x2075),0x77`, (0x209A) = 1 (PanelState_TakePendingHoldTime preloads the timer).",
+   "mode": "insert"
+  }
+ ],
+ "left_unnamed": [
+  {
+   "name": "sub_F93553",
+   "why": "screen 0xA5's +0x0C (fourth) method slot (T_F4157C); PanelScreen_ResolveMethod only adds BC = 0/4 and PanelButton_Route +8, no reader of +0x0C found in prom_a, so the method's role is not established; body is `calr` to the lone ret sub_F93822"
+  },
+  {
+   "name": "sub_F93802",
+   "why": "ScreenButtonHandlers_CombinationGroupMenu[0x0D] (-1/+1 slot), a lone ret; round 12 withdrew MinusPlusKey_* names because PanelButton_Accept substitutes code 0x0D (here with (0x209B)/(0x209C) = 0x84/0x04) -- no demonstrated way in"
+  },
+  {
+   "name": "sub_F93803",
+   "why": "ScreenButtonHandlers_CombinationGroupMenu[0x0E], a lone ret; code 0x0E has no producer on this panel (Dispatch_FF3D39 legend)"
+  },
+  {
+   "name": "sub_F93822",
+   "why": "lone `ret` reached only from sub_F93553, the unexplained +0x0C method of screen 0xA5"
+  },
+  {
+   "name": "sub_F93835",
+   "why": "screen 0xA6's +0x0C method slot (T_F4158C), no reader of +0x0C found; body is `calr` to the lone ret sub_F93CB8"
+  },
+  {
+   "name": "sub_F93BDA",
+   "why": "clears layer-0 rows and draws page 0 of a two-page combi group, but is queued only by unlabelled callback-posting stubs at 0xF93B76-0xF93BD8 that nothing references (no LE24 address, calr/jrl/jr into them in prom_a or prom_b bytes) -- dead code, role not established"
+  },
+  {
+   "name": "sub_F93BE6",
+   "why": "draws page 1 of a two-page combi group; queued only by the dead stubs at 0xF93B76-0xF93BD8"
+  },
+  {
+   "name": "sub_F93BF2",
+   "why": "draws page 0 via GroupCombiDisplayHold_ShowMemberPage_ManyPages (whose page-0 arm ends in the SOUND highlight); queued only by the dead stubs at 0xF93B76-0xF93BD8"
+  },
+  {
+   "name": "sub_F93BFE",
+   "why": "draws the next page through the SOUND-side sub_F92E76; queued only by the dead stubs at 0xF93B76-0xF93BD8; the sound/combi mix makes either screen name wrong"
+  },
+  {
+   "name": "sub_F93C18",
+   "why": "ScreenButtonHandlers_GroupCombiDisplayHold[0x0D] (-1/+1 slot), a lone ret; same round-12 refusal as sub_F93802"
+  },
+  {
+   "name": "sub_F93C19",
+   "why": "ScreenButtonHandlers_GroupCombiDisplayHold[0x0E], a lone ret; code 0x0E has no producer"
+  },
+  {
+   "name": "sub_F93CB8",
+   "why": "lone `ret` reached only from sub_F93835, the unexplained +0x0C method of screen 0xA6"
+  },
+  {
+   "name": "sub_F9408A",
+   "why": "screen 0xAA's +0x0C method slot (T_F4151C), no reader of +0x0C found; body `calr` to the lone ret sub_F9427C"
+  },
+  {
+   "name": "sub_F9427C",
+   "why": "lone `ret` reached only from sub_F9408A, the unexplained +0x0C method of screen 0xAA"
+  },
+  {
+   "name": "sub_F94CB9",
+   "why": "MISFRAMED, not a routine start: the last two instructions (pop XIZ / ret) of an unlabelled routine at 0xF94C8F (bytes 3E 3C 3B 3A = push XIZ/XIX/XHL/XDE, currently decoded as the tail of the DEBUG MONITOR string) that prints a 40-char blank line; sub_F95C2D jumps to 0xF94C8F; nothing references 0xF94CB9"
+  },
+  {
+   "name": "sub_F94E28",
+   "why": "not a routine: the loop head inside TestMode_PanelSwitchesToLeds (target of its own `jrl ule` at 0xF94EC6 and `jp` at 0xF94ECC); should become a structural child label"
+  },
+  {
+   "name": "sub_F95647",
+   "why": "lone ret published as T_F40154 (second slot of the GateArrayCheck test-hook pair); no caller anywhere"
+  },
+  {
+   "name": "sub_F95659",
+   "why": "lone ret published as T_F4015C (second slot of the PanelCpuCheck pair); no caller"
+  },
+  {
+   "name": "sub_F9565A",
+   "why": "SineWaveCheckMode's test hook (calr from Paint_SineWaveCheckMode, T_F40160): on first entry ((0x207B) != (0x207A)) it only calls T_F413C0 = sub_FC8A8D, whose role is not established, so a name would merely restate the call"
+  },
+  {
+   "name": "sub_F95669",
+   "why": "lone ret published as T_F40164 (second slot of the SineWaveCheck pair); no caller"
+  },
+  {
+   "name": "sub_F95731",
+   "why": "lone ret published as T_F4016C (second slot of the PanelSwLedCheck pair); no caller"
+  },
+  {
+   "name": "sub_F95732",
+   "why": "lone ret published as T_F40170; no caller, no screen tie"
+  },
+  {
+   "name": "sub_F95733",
+   "why": "lone ret published as T_F40174; no caller, no screen tie"
+  },
+  {
+   "name": "sub_F95767",
+   "why": "screen 0xD8 (GateArrayCheck)'s +0x0C method slot (T_F400DC), no reader found; lone ret"
+  },
+  {
+   "name": "sub_F95797",
+   "why": "screen 0xD9 (PanelCpuCheck)'s +0x0C method slot (T_F400EC), no reader found; lone ret"
+  },
+  {
+   "name": "sub_F9598F",
+   "why": "screen 0xDA (SineWaveCheckMode)'s +0x0C method slot (T_F400FC), no reader found; lone ret"
+  },
+  {
+   "name": "sub_F959BF",
+   "why": "screen 0xDB (PanelSwLedCheck)'s +0x0C method slot (T_F4010C), no reader found; lone ret"
+  },
+  {
+   "name": "sub_F959C0",
+   "why": "lone ret, +0 Enter of screen 0xDC's object (T_F40110); 0xDC has no ROM text and its only behaviour is TestMode_DisplayCycleTick, so no screen name is established"
+  },
+  {
+   "name": "sub_F959C1",
+   "why": "lone ret, +4 Leave of screen 0xDC's object (T_F40110); screen name not established (see sub_F959C0)"
+  },
+  {
+   "name": "sub_F959C2",
+   "why": "lone ret, +8 Button of screen 0xDC's object (T_F40110); screen name not established"
+  },
+  {
+   "name": "sub_F959C3",
+   "why": "lone ret, +0x0C slot of screen 0xDC's object; screen and slot role not established"
+  },
+  {
+   "name": "sub_F959C4",
+   "why": "lone ret behind T_F40120, an object PanelScreen_VtableTable does not name; no caller"
+  },
+  {
+   "name": "sub_F959C5",
+   "why": "lone ret behind T_F40124 (same unreferenced object); no caller"
+  },
+  {
+   "name": "sub_F959C6",
+   "why": "lone ret behind T_F40128 (same unreferenced object); no caller"
+  },
+  {
+   "name": "sub_F959C7",
+   "why": "lone ret behind T_F4012C (same unreferenced object); no caller"
+  },
+  {
+   "name": "sub_F95C14",
+   "why": "screen 0xDD (DEBUG MONITOR)'s +0x0C method slot (T_F4013C), no reader found; lone ret"
+  }
+ ],
+ "notes": "SCOPE: 146 slice-3 entries, 110 renamed, 36 left unnamed. Every new name checked free against all tokens in wsa1/ (*.s/*.inc/*.py/*.md/*.txt/*.json) and unique in the pack; every header 2-6 lines starting '<Name> -- '. Instruments (scratch, not committed, READ-ONLY lane): /home/fsanches/compartilhado/disasm-lanes/wsa1-naming-r1/scratch/prom_a-s03/{refs.py (reference census incl. numeric calr), tokens.py (name-freeness), pack.py (builds+checks pack.json)}. Two first-choice names were taken as tokens in notes/prom_a_understanding_round5.py (Paint_CombinationGroupMenu, Paint_GroupCombiDisplayHold = old names of the InstallPainter_* pair) so the painters got CombinationGroupMenu_PaintTitleAndGroups / GroupCombiDisplayHold_PaintLegends.\n\nJUDGEMENT CALL TO REVIEW: SoftKeyColN_<Screen> names for handlers reached at both [c] and [c+0x11]. Wave 8 (prom_a_naming_wave8_apply.py) REFUSED exactly this case ('control index not unique', citing round 11's variant-1 rewrite). Since then PanelButton_InterlockMask32's header (lane proma 2026-09-25, gen_held_sets.py S1-S4) establishes c+0x11 is code c re-pressed while already held, i.e. the same physical column, so I named them. If the orchestrator keeps the old refusal, drop the 36 SoftKeyCol* renames whose evidence says '[c] and [c+0x11]' (headers are self-contained). Slot 0x0D (-1/+1) and 0x0E handlers were left unnamed per the round-12 refusal.\n\nSCREENS IDENTIFIED (vtable ViewB index = screen id): 0xAA = power-on splash (PanelState_Init requests 0x40AA; Enter paints SplashImage_DitherA/B + Wordmark; EXIT handler at 0xF94262 is UNLABELLED, numeric `.long 0x00f94262` in DisplayListPtrs_F9408E[15] -- that table is really the splash's ScreenButtonHandlers); 0xDD = DEBUG MONITOR (hex dump of (0x2846), soft keys 1-6 edit the 6 address digits; opened by TestMode_Tick when SOFT KEY cols 1+4+8 are in (0x208C)); 0xDC = display-cycle test (flash LCD twice, then cycle screens 0x01,0xA0,0xA1,0x41,0x71,0x02,0x06 every 0x1E ticks); 0xA7 = an object whose four slots all jump to UiEvent_MarkRedrawFromPartClass (odd; probably never requested). Screen objects have FOUR jp slots (+0x0C too); no reader of +0x0C exists in prom_a -- all +0x0C targets left unnamed.\n\nGAP L / GAP O LEAD (worth a findings line): on variant 2 the power-on chord byte (0x2B31) is number-pad segment 1 (PanelKeypad_OrdinalToKey_V2: bit b = key b), so holding number-pad 2/3/4/5 at power-on opens PANEL CPU CHECK / SINE WAVE CHECK MODE / PANEL SW&LED CHECK / 0xDC (TestMode_SelectFromPowerOnKeys_Variant2). The manual's 'hold 2, power on -> CPU (IC1) check, LED flashes' matches key 2 -> 0xD9 whose hook PanelCpuCheck_FlashStatusOnLed flashes the CHECKING DEVICE LED with ~SC1_Cmd_E0_ReadStatus. Variant 1 reads 8 bytes from CPU-2 address 0xFFF0 instead and wants a two-bit chord. Also: CheckingDevice_RamTest covers only 0x000100+0x100 and 0x600000+0x1000; ROM test is just 'wsaa' at 0xFFFFF0.\n\nMISFRAMING (data framed as code / code framed as data) for a conversion lane: (1) 0xF93386-0xF93397, 9 LE16 words (C,B) read by both *_SelectMemberLastPage -- decoded as normal/push SR/...; (2) 0xF945E4-0xF945F3, 16-byte signed 3-bit delta table read by Value_StepWordClamped -- decoded as nop/normal/swi; (3) 0xF95C60-0xF95C94 after sub_F95C2D's ret: screen-id cycle table 0xF95C60 (8 B), LED group table 0xF95C68 (9 words incl. 0xFFFF end), ROM-id record 0xF95C7A (9 B), RAM-test records 0xF95C83/0xF95C8C (2x9 B) -- all decoded as instructions; (4) 0xF94C8F-0xF94CBA is a real routine (print 40 blanks) whose first 4 bytes sit in what the listing renders as the DEBUG MONITOR string tail; sub_F94CB9 is its last two instructions; (5) 0xF94240-0xF94260 after the 20-byte 'ALL INITIAL SETTING!' text at 0xF9422C is a routine (ld (0x2540),0; (0x2530..0x2536)=0x92,0xD8,0xA2,0xD8; SWI7 0x01; ret) decoded from 'ld XSP,0x2540f121' onward; byte scan finds no LE24 or calr/jrl/jr reference to it; (6) dead code: five callback-posting stubs 0xF93B76-0xF93BD8 (after LcdKeyRow4_GroupCombiDisplayHold), no reference found; (7) sub_F94E28 is a loop head inside TestMode_PanelSwitchesToLeds.\n\nROM ODDITIES: GroupCombiDisplayHold_ShowMemberPage_ManyPages' page-0 arm jumps into the SOUND twin's tail (0xF92F0D) and so highlights via the part record; dead callback sub_F93BFE also calls the sound-side sub_F92E76.\n\nLEADS FOR SLICE 2 (sound twins, same evidence pattern): sub_F9320D = GroupSoundDisplayHold_SelectMemberAtRow; sub_F92F7F = sound twin of CombiGroup_MaxMemberIndexOfCurrent (SoundGroup_MaxMemberIndex_Get, B=(0x2250), also sets XIY via PartRecord_GetPtr); sub_F92F9E/FA8/FB2/FBC = LcdKeyRow1-4_GroupSoundDisplayHold; sub_F92F38 = SoftKeyCol6_GroupSoundDisplayHold (requests 0xA0); sub_F92D4F/sub_F92D70 = GroupSoundDisplayHold_PaintLegends/_PaintGroupAndNames; sub_F92E36/sub_F92E76 = _ShowMemberPage_TwoPages/_ManyPages; sub_F92800/sub_F928AE = SoundGroupMenu painter/MoveHighlight; sub_F9315D = DISPLAY HOLD box painter (DL_F2BA0C fill / DL_F2BA16 erase); sub_F93187 = 'bank (0x216A) is 0x18-0x1A' (re-map) test; sub_F93109 = number-field blink; sub_F931A4/sub_F9319F = combi/sound entries of the page-number drawer; sub_F92CE6 = the shared do-nothing default. Slice 4: sub_F95C2D = DEBUG MONITOR painter (DebugMonitor_Paint). Table renames for whoever owns them: DisplayListPtrs_F9408E -> ScreenButtonHandlers_PowerOnSplash, ScreenObjF40130_ButtonHandlers -> ScreenButtonHandlers_DebugMonitor.\n\nLEADS FOR PROM_B: the 17 records at 0xF29BC6/0xF29C0A are blitted by LCD_BlitValueBar with LCD_Svc_03_BlitColumns BC=5, HL=0x2E, i.e. 5 columns x 46 rows COLUMN-MAJOR (5*46 = 0xE6); the generator's '1 flag byte, 45 zero bytes, 46 rows x 3 bytes, 46 zero bytes' reading is row-major and its 'flag' byte is just column 0, row 0. prom_b record pairs 0xF2B42F/0xF2B43A and 0xF2B4C5 are erase/fill highlight records for DLTable_F2B445 (16 group boxes) and DLTable_F2B4D0 (8 member boxes).\n\nHEADER ERRORS SEEN ELSEWHERE (not fixed, not my labels): sub_FC2155's 'Called from: InstallPainter_CombinationGroupMenu at 0xF936A1 / InstallPainter_GroupCombiDisplayHold at 0xF93961' is nearest-label attribution -- those sites are in sub_F93631 and sub_F93942. notes/WSA1-EMULATION-DISASM-GAPS.md gap L says (XIZ+0x08) bit 0 'picks HL = 0x4000 against 0xC000, the two RAM banks the check covers' -- in CheckingDevice_FlashLedNibble HL is a delay count (short vs long flash), and the RAM regions come from the records at 0xF95C83.\n\nRAM CELLS NOW READABLE: (0x2169) group index, (0x216A) group bank/kind, (0x216B) member index, (0x2670) shown page, (0x2672) last page, (0x2671) highlighted slot, (0x267F) bit 0 DISPLAY HOLD, (0x2846) debug-monitor dump address, (0x284F) debug print cursor, (0x2840) sine-check active bits, (0x2844)/(0x2843) display-cycle index/countdown, (0x7F08..0x7F0A) global group/member/bank, part record +0x3B..+0x3D group/member/bank.",
+ "verified": false,
+ "also": [
+  "wsa1/prom_b/wsa1_prom_b.s",
+  "wsa1/prom_a/prom_a.ld",
+  "wsa1/prom_b/prom_b.ld"
+ ],
+ "rebased_from": "packs/prom_a-s03.json"
+}

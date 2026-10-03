@@ -1,0 +1,1222 @@
+{
+ "name": "wsa1-naming-r1-prom_a-s00",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "renames": [
+  {
+   "old": "sub_F80000",
+   "new": "AdvanceDelay_SelectField1",
+   "evidence": "prom_b LcdKeyRow1_AdvanceDelay_207EZero ends `bit 7,W / jr Z,0xF80019` at 0xF7FFFB-0xF7FFFF and falls through the chip boundary into 0xF80000; body selects field 1 via T_F42A68 (prom_b 0xF7CB1E: (0x0DE5)=(0x12FC)=1) then redraws values and cursor"
+  },
+  {
+   "old": "sub_F8001A",
+   "new": "AdvanceDelay_DrawFieldCursor",
+   "evidence": "(0x2540)=1, DL_F39551 = op 0E svc LCD_Svc_0E_ClearColumns IY=0 BC=0x28 HL=0xF0 (whole layer), then T_F4181C=DLB_Handler_Array8 on op-03 record 0xF3B3A7: (0x12FC)&7 -> DLBoxes_F3B3B2, swi 5 FillRect"
+  },
+  {
+   "old": "sub_F80086",
+   "new": "AdvanceDelay_DrawValues",
+   "evidence": "(0x2540)=0, interpreter B over 0xF3B379-0xF3B3A7 = readouts of (0x12F6) (0x12F7) (0x12F9) (0x12FB), the start of the list Paint_AdvanceDelay draws at prom_b 0xF7FFB6"
+  },
+  {
+   "old": "sub_F8012F",
+   "new": "AdvanceDelay_NumberPad",
+   "evidence": "only caller is slot 27 (NumberPadKey) of ButtonTable_AdvanceDelay_207EZero at 0xF800F8; dispatches on keypad code (0x2267): <=9 digit, 0x0F commit, 0x80 sign"
+  },
+  {
+   "old": "sub_F8015F",
+   "new": "AdvanceDelay_KeypadCommit",
+   "evidence": "0x0F arm: T_AsciiDigits3_ToValue / T_AsciiField_ToSignedValue, range-checks and stores into (0x0DE8)/(0x12F7), (0x0DEA)/(0x12F9), (0x0DEC)/(0x12FB) by field (0x0DE5), then Blink_Stop + AdvanceDelay_DrawValues"
+  },
+  {
+   "old": "sub_F8020D",
+   "new": "AdvanceDelay_KeypadSign",
+   "evidence": "0x80 arm: if (0x2075) bit 1 and (0x0DE5)!=4, ld (0x2820),0x2B ('+'); field 4 is the only signed field"
+  },
+  {
+   "old": "sub_F80220",
+   "new": "AdvanceDelay_BlinkSelectedField",
+   "evidence": "push BlinkArgPtrs_F8024D[(0x0DE5)] / call T_Blink_Command, skipped when blink disabled or (0x2267)=0x0F"
+  },
+  {
+   "old": "sub_F802EC",
+   "new": "S0ngC0py_DrawFromSong",
+   "evidence": "(0x12F6)=(0x0E0C), copies 6 name bytes from 0x610000+((0x0E0C)-1)*0xC00+0xCA to 0x12F8, redraws records 0xF3C199 (number, x=12) and DL_F3C15D (name) under 'FROM' (DL_S0ngC0pyFromToSongSongOk, x=8)"
+  },
+  {
+   "old": "sub_F80338",
+   "new": "S0ngC0py_DrawToSong",
+   "evidence": "same with (0x0E0D)->(0x12F7) and name -> 0x12FE, records 0xF3C1A3/DL_F3C16C at the 'TO' column (x=29)"
+  },
+  {
+   "old": "sub_F80384",
+   "new": "S0ngC0py_DrawTracks",
+   "evidence": "(0x0E0E)==0x12 draws DL_AllAll ('  ALL   ' twice); else (0x1304)=(0x0E0E), (0x1305)=(0x0E0F), DLB DL_F3C17B (DLText_0To17All) and DL_TrackTrack"
+  },
+  {
+   "old": "sub_F804EC",
+   "new": "ScreenLeaveBody_N0teChange",
+   "evidence": "prom_b ScreenLeave_N0teChange (0xF7D21C) is `call 0xF804EC / ret`; body `call T_F42A8C / ret`, the shape of prom_b ScreenLeaveBody_AdvanceDelay"
+  },
+  {
+   "old": "sub_F80549",
+   "new": "N0teChange_DrawFieldCursor",
+   "evidence": "(0x2540)=1, clear layer (DL_F39551), DLB_Handler_Array8 on op-03 record 0xF3B05A: (0x1301)&7 -> boxes 0xF3B065, swi 5 FillRect"
+  },
+  {
+   "old": "sub_F805B8",
+   "new": "N0teChange_DrawValues",
+   "evidence": "(0x2540)=0, interpreter B over 0xF3AFE7-0xF3B05A (readouts of 0x12F6..0x12FF), the list Paint_N0teChange runs from 0xF804DA"
+  },
+  {
+   "old": "sub_F8062A",
+   "new": "N0teChange_NumberPad",
+   "evidence": "only caller is slot 27 of ButtonTable_N0teChange_207EZero (0xF80609); (0x2267) dispatch digit/0x0F/0x80"
+  },
+  {
+   "old": "sub_F8065A",
+   "new": "N0teChange_KeypadCommit",
+   "evidence": "0x0F arm: field (0x0DED) 2/3 measures 1..999 -> (0x0DF0)/(0x12FC), (0x0DF2)/(0x12FF), count (0x129E); 4/5 notes 0..127 -> (0x0DF4)/(0x12FB), (0x0DF5)/(0x12FE) with divs by 12 into (0x12F7..0x12FA)"
+  },
+  {
+   "old": "sub_F80714",
+   "new": "N0teChange_KeypadSign",
+   "evidence": "0x80 arm: ld (0x2820),0x2B gated on (0x2075) bit 1 and (0x0DB8)!=4"
+  },
+  {
+   "old": "sub_F80727",
+   "new": "N0teChange_BlinkSelectedField",
+   "evidence": "T_Blink_Command with BlinkArgPtrs_F80754[(0x0DED)]"
+  },
+  {
+   "old": "sub_F80809",
+   "new": "ScreenLeaveBody_MeasureC0py",
+   "evidence": "prom_b ScreenLeave_MeasureC0py (0xF7D23D) is `call 0xF80809 / ret`; body `call T_F429DC / ret`"
+  },
+  {
+   "old": "sub_F80891",
+   "new": "MeasureC0py_DrawFieldCursor",
+   "evidence": "(0x2540)=1, clear layer, DLB_Handler_Array8 on op-03 record 0xF3BD4D: (0x12FF)&7 -> boxes 0xF3BD58, swi 5"
+  },
+  {
+   "old": "sub_F8099D",
+   "new": "MeasureC0py_DrawValues",
+   "evidence": "interpreter B over 0xF3BD07-0xF3BD4D (readouts of 0x12F6 0x12FB 0x12F7 0x12F9 0x12FC 0x12FE), the list Paint_MeasureC0py runs"
+  },
+  {
+   "old": "sub_F809AD",
+   "new": "MeasureC0py_NumberPad",
+   "evidence": "only caller is slot 27 of ButtonTable_MeasureC0py_207EZero (0xF80968); (0x2267) dispatch"
+  },
+  {
+   "old": "sub_F809DD",
+   "new": "MeasureC0py_KeypadCommit",
+   "evidence": "0x0F arm: 1..999 into (0x0C18)/(0x603470)/(0x12F7), (0x0C32)/(0x12F9), count (0x603472), or (0x0C1A)/(0x603475)/(0x12FC) by field (0x0DBC)"
+  },
+  {
+   "old": "sub_F80A7A",
+   "new": "MeasureC0py_KeypadSign",
+   "evidence": "0x80 arm: ld (0x2820),0x2B unconditionally"
+  },
+  {
+   "old": "sub_F80A80",
+   "new": "MeasureC0py_BlinkSelectedField",
+   "evidence": "T_Blink_Command with BlinkArgPtrs_F80AAD[(0x0DBC)]"
+  },
+  {
+   "old": "sub_F80B66",
+   "new": "ScreenLeaveBody_MeasureInsert",
+   "evidence": "prom_b ScreenLeave_MeasureInsert (0xF7D25E) is `call 0xF80B66 / ret`; body `call T_F429AC / ret`"
+  },
+  {
+   "old": "sub_F80BEE",
+   "new": "MeasureInsert_DrawFieldCursor",
+   "evidence": "(0x2540)=1, clear layer, falls into 0xF80C04: DLB_Handler_Array8 on op-03 record 0xF3BF3D ((0x12FF)&7, boxes 0xF3BF48, swi 5)"
+  },
+  {
+   "old": "sub_F80CFB",
+   "new": "MeasureInsert_DrawValues",
+   "evidence": "(0x2540)=0, interpreter B over 0xF3BEF7-0xF3BF3D, the list Paint_MeasureInsert runs"
+  },
+  {
+   "old": "sub_F80D12",
+   "new": "MeasureInsert_NumberPad",
+   "evidence": "only caller is slot 27 of ButtonTable_MeasureInsert_207EZero (0xF80CC5); (0x2267) dispatch"
+  },
+  {
+   "old": "sub_F80D42",
+   "new": "MeasureInsert_KeypadCommit",
+   "evidence": "0x0F arm: 1..999 into (0x0C18)/(0x603468)/(0x12F7), (0x0DDE)/(0x12F9), count (0x60346A), or (0x0C1A)/(0x60346D)/(0x12FC) by field (0x0DDA)"
+  },
+  {
+   "old": "sub_F80DDF",
+   "new": "MeasureInsert_KeypadSign",
+   "evidence": "0x80 arm: ld (0x2820),0x2B"
+  },
+  {
+   "old": "sub_F80DE5",
+   "new": "MeasureInsert_BlinkSelectedField",
+   "evidence": "T_Blink_Command with BlinkArgPtrs_F80E12[(0x0DDA)]"
+  },
+  {
+   "old": "sub_F80E9B",
+   "new": "S0ngSelectName_DrawValues",
+   "evidence": "(0x2540)=0, interpreter B over DL_F3C31E-DL_F3C351: name 0x12F6, song (0x12FC), KB (0x12FD) beside ' KB', percent (0x12FF) beside '%'"
+  },
+  {
+   "old": "sub_F80EAF",
+   "new": "ScreenLeaveBody_S0ngSelectName",
+   "evidence": "prom_b ScreenLeave_S0ngSelectName (0xF7D27F) is `call 0xF80EAF / ret`"
+  },
+  {
+   "old": "sub_F80EB4",
+   "new": "ScreenButtonBody_S0ngSelectName",
+   "evidence": "prom_b ScreenButton_S0ngSelectName (0xF7D284) is `call 0xF80EB4 / ret`; body switches on the button slot in HL (0/0x11, 1/0x12, 3/0x14 .. 7/0x18, 0x0F)"
+  },
+  {
+   "old": "sub_F80FC0",
+   "new": "ScreenLeaveBody_StepRecordPartSelect",
+   "evidence": "prom_b ScreenLeave_StepRecordPartSelect (0xF7D28F) is `call 0xF80FC0 / ret`; body `call T_F42BC8 / ret`"
+  },
+  {
+   "old": "sub_F810F0",
+   "new": "ScreenLeaveBody_SequencerMedley",
+   "evidence": "prom_b ScreenLeave_SequencerMedley (0xF7D2A4) is `call 0xF810F0 / ret`; clears (0x2094) bit 6 (set by Paint_SequencerMedley) unless (0x207A)=0x13, then T_F42BD0"
+  },
+  {
+   "old": "sub_F81236",
+   "new": "SequencerMedley_NumberPad",
+   "evidence": "only caller is slot 27 of ButtonTable_SequencerMedley (0xF81231); ignored while (0x0DC1)=1; (0x2267) dispatch"
+  },
+  {
+   "old": "sub_F8126D",
+   "new": "SequencerMedley_KeypadCommit",
+   "evidence": "0x0F arm: value 1..10/20/100 by (0x220B)/(0x0E35), value-1 into (0x2208) or (0x2209) by field (0x0C0F), keeps first<=last, then SequencerMedley_DrawFirstLastSong"
+  },
+  {
+   "old": "sub_F8130A",
+   "new": "SequencerMedley_KeypadSign",
+   "evidence": "0x80 arm: ld (0x2820),0x2B"
+  },
+  {
+   "old": "sub_F81310",
+   "new": "SequencerMedley_BlinkSelectedField",
+   "evidence": "T_Blink_Command with BlinkArgPtrs_F81344[(0x0C0F)], skipped while (0x0DC1)=1"
+  },
+  {
+   "old": "sub_F81350",
+   "new": "SequencerMedley_DrawPlayState",
+   "evidence": "(0x0DC1)=1: draws 'N0W PLAYING S0NG ' (DL_F3C873) and (0x220A)+1; else clears that line (DL_F3C86B op 0E); then erase/fill box pair on (0x1305)=(0x0DC1) around 'START'/'STOP'"
+  },
+  {
+   "old": "sub_F813E7",
+   "new": "SequencerMedley_DrawFieldBox",
+   "evidence": "layer 1: EraseRect (record 0xF3C7B8) then FillRect (0xF3C78C) on (0x1302)=(0x0C0F); entries 1/2 are the FIRST S0NG and LAST S0NG boxes, swapped between the two arrays"
+  },
+  {
+   "old": "sub_F813FF",
+   "new": "SequencerMedley_DrawSourceBox",
+   "evidence": "layer 1: DL_F3C7C3 (op 1B EraseRect over the SELECT INT/FD/HD boxes) then FillRect entry[(0x1303)] of Data_F3C7E3+0x18 = INT/FD/HD box; (0x1303)=(0x220B)"
+  },
+  {
+   "old": "sub_F8141C",
+   "new": "SequencerMedley_DrawFileTypeBox",
+   "evidence": "layer 1: EraseRect (0xF3C7CD) / FillRect (0xF3C7A2) on (0x1304)=(0x0E35): boxes around 'NORM'+'FILE' (0) and 'MIDI'+'FILE' (1)"
+  },
+  {
+   "old": "sub_F81434",
+   "new": "S0ngSelectName_PrevSong",
+   "evidence": "SoftKeyCol1 arm of ScreenButtonBody_S0ngSelectName: if (0x360A)>0: save workspace to bank, dec (0x360A), (0x12FC)=song+1, load the new song, size values"
+  },
+  {
+   "old": "sub_F8147D",
+   "new": "S0ngSelectName_UpdateSizeValues",
+   "evidence": "(0x0E32)=(0x360A); SongStore_MeasureSongSize; (0x12FD)=(0x0E2F) KB, (0x12FF)=(0x0E31) percent -- the values DL_F3C31E shows beside ' KB' and '%'"
+  },
+  {
+   "old": "sub_F8149A",
+   "new": "S0ngSelectName_SaveWorkspaceToBank",
+   "evidence": "(0x60341E)=(0x360C); ldir 0xC00 bytes 0x603400 -> 0x610000+(0x360A)*0xC00; same effect as prom_b BStore_Workspace_SaveToBank"
+  },
+  {
+   "old": "sub_F814C7",
+   "new": "S0ngSelectName_NextSong",
+   "evidence": "SoftKeyCol2 arm: if (0x360A)!=9: save, inc (0x360A), load, size values"
+  },
+  {
+   "old": "sub_F81512",
+   "new": "S0ngSelectName_CursorLeft",
+   "evidence": "SoftKeyCol4 arm: (0x222D)-1 if >=0 into (0x2721)/(0x1301), re-reads the char index; erase/fill the position and character boxes (DL_F3C367 / DL_F3C351)"
+  },
+  {
+   "old": "sub_F81574",
+   "new": "S0ngSelectName_CursorRight",
+   "evidence": "SoftKeyCol5 arm: (0x222D)+1 if <=5, same box redraw"
+  },
+  {
+   "old": "sub_F815D6",
+   "new": "S0ngSelectName_CharPrev",
+   "evidence": "SoftKeyCol6 arm: SongName_StepCharAtCursor with W=0x81 (-> SongName_PrevCharAtCursor), redraws name and character box"
+  },
+  {
+   "old": "sub_F8161A",
+   "new": "S0ngSelectName_CharNext",
+   "evidence": "SoftKeyCol7 arm: SongName_StepCharAtCursor with W=0x01 (-> SongName_NextCharAtCursor)"
+  },
+  {
+   "old": "sub_F81670",
+   "new": "S0ngSelectName_ClearName",
+   "evidence": "SoftKeyCol8 arm ('CLR' in DL_S0ngSelectNameKbS0ngName): erase position box, SongName_ResetToUnderscores"
+  },
+  {
+   "old": "sub_F81688",
+   "new": "SongName_CharIndexAtCursor",
+   "evidence": "reads bank name byte 0x610000+(0x360A)*0xC00+0xCA+(0x222D), finds it in CharSet_F81768 (37 entries), (0x21F9)=index or 0"
+  },
+  {
+   "old": "sub_F816DA",
+   "new": "SongName_StepCharAtCursor",
+   "evidence": "W bit 7 clear -> SongName_NextCharAtCursor, set -> SongName_PrevCharAtCursor"
+  },
+  {
+   "old": "sub_F816EA",
+   "new": "SongName_NextCharAtCursor",
+   "evidence": "(0x21F9)+1 clamped to 0x24, then SongName_StoreCharAtCursor"
+  },
+  {
+   "old": "sub_F81700",
+   "new": "SongName_PrevCharAtCursor",
+   "evidence": "(0x21F9)-1 clamped at 0, then SongName_StoreCharAtCursor"
+  },
+  {
+   "old": "sub_F81716",
+   "new": "SongName_StoreCharAtCursor",
+   "evidence": "A=CharSet_F81768[(0x21F9)] stored at offset (0x222D) of the bank name (+0xCA), of 0x6034CA and of 0x12F6"
+  },
+  {
+   "old": "sub_F8178D",
+   "new": "S0ngSelectName_PrepareValues",
+   "evidence": "first call of Paint_S0ngSelectName: unless (0x207B)=0x0D resets cursor/flags; copies 0x6034CA name to 0x12F6, (0x12FC)=song+1, char index, KB/percent"
+  },
+  {
+   "old": "sub_F817F7",
+   "new": "S0ngSelectName_Leave",
+   "evidence": "whole work of ScreenLeaveBody_S0ngSelectName: unless (0x207A)=0x0D, and (0x34BB),0xFB / T_F411B8 / (0x0E45)=0"
+  },
+  {
+   "old": "sub_F8180D",
+   "new": "S0ngSelectName_LoadSongFromBank",
+   "evidence": "keeps workspace +0xB8/+0xBA, ldir 0xC00 bytes 0x610000+(0x360A)*0xC00 -> 0x603400, (0x360C)=(0x60341E), resets name cursor, copies name to 0x12F6; called by PrevSong/NextSong after the bank index changes"
+  },
+  {
+   "old": "sub_F819E9",
+   "new": "SongStore_MeasureSongSize",
+   "evidence": "counts heap blocks of every in-use directory entry of song (0x0E32) (0x603500 or bank+0x100); (0x0E2F)=blocks/4 (KB of 256-byte blocks), (0x0E31)=blocks*100/(0x3608)+1 capped 99"
+  },
+  {
+   "old": "sub_F81A83",
+   "new": "SongStore_CountChainBlocks",
+   "evidence": "XBC3 = number of blocks in the chain whose head is word (XIX+DE+1): follows +3 next links through SongStore_SeekBlock until 0xFFFF"
+  },
+  {
+   "old": "sub_F81AB5",
+   "new": "SongStore_SeekBlock",
+   "evidence": "(0x126E) = (0x3604) + (HL-1)*0x100, XHL=0, XIY preserved -- BStore_SeekBlock's result"
+  },
+  {
+   "old": "sub_F81DFE",
+   "new": "StepRecord_DrawNibbleAsStars",
+   "evidence": "svc 6 DrawText8x14, BC=4 chars of table 0xF3DC7B indexed by L; entry n has '*' at position k iff bit k of n is set, 0x91 otherwise (all 16 entries checked)"
+  },
+  {
+   "old": "sub_F82028",
+   "new": "MainTask_Loop",
+   "evidence": "closed by unconditional `jrl sub_F82028` at 0xF821C5; entered by `jp` from MainTask_Entry; polls rota bits tset n,(0x88)/(0x98), the rings, Blink_Tick at 0xF82182"
+  },
+  {
+   "old": "sub_F821C8",
+   "new": "MainTask_RearmTickCountdown",
+   "evidence": "(0xC1)=0, call T_F409C4, (0xC2)=10 -- (0xC2) is the countdown INTTR4 decrements (0xF83024); called when it reaches 0 and at the end of every pass"
+  },
+  {
+   "old": "sub_F821D7",
+   "new": "MainTask_RunUiPassC",
+   "evidence": "T_UiEventList_RunPassC, T_F40780, (0x2030)=0xFF (empty the event list), Queue2C00_DrainPassAB"
+  },
+  {
+   "old": "sub_F821E9",
+   "new": "MainTask_PanelTimersTick",
+   "evidence": "T_F413CC, T_PanelTimers_Step, T_PanelHold_Tick; run from the loop when `tset 6,(0x98)` finds the bit clear (0xF82142)"
+  },
+  {
+   "old": "sub_F82204",
+   "new": "MidiIn_RoutePortA",
+   "evidence": "splits ring 0x600C1E (MidiIn_PumpPortA's) at the first class change between {0x8n,0x9n, 0xBn with data>=0x7B} and other status bytes, writes the boundary to (ring-6), hands the run to T_F413B4 or MidiIn_PumpPortA, commits"
+  },
+  {
+   "old": "sub_F822D4",
+   "new": "MidiIn_RoutePortB",
+   "evidence": "same as MidiIn_RoutePortA on ring 0x601028 with T_F413F8 / T_MidiIn_PumpPortB"
+  },
+  {
+   "old": "sub_F823A4",
+   "new": "MainTask_ServiceTimedEvents",
+   "evidence": "calr to a bare ret then TimedEvents_Service; called three times per pass of MainTask_Loop"
+  },
+  {
+   "old": "sub_F823E2",
+   "new": "TimedEvents_Service",
+   "evidence": "(0x34D0) bit 5 -> T_F409E4+T_F40720; else ring 0x60080A non-empty -> TimedEvents_DrainDue, empty -> res 6,(0x34D4)"
+  },
+  {
+   "old": "sub_F82407",
+   "new": "TimedEvents_DrainDue",
+   "evidence": "when (0x34D4) bit 6 or (0x96) bit 2: repeat TimedEvents_DispatchDueRun on ring 0x60080A while non-empty, stop when it consumed 0 (IZ=0); directory slot T_F4003C"
+  },
+  {
+   "old": "sub_F82427",
+   "new": "TimedEvents_DispatchDueRun",
+   "evidence": "ring 0x60080A: class of first status (TimedEvents_ClassifyStatus), extends over same-class due events (stamp vs tick (0x93)), sets (ring-6), dispatches to T_F413BC/T_F411BC/T_F40A0C/T_F41F10 by class, commits"
+  },
+  {
+   "old": "sub_F8252B",
+   "new": "TimedEvents_ClassifyStatus",
+   "evidence": "A=0x82 -> E=3, A=0x88 -> E=2, A&0xF0=0x90 -> E=1, else E=0"
+  },
+  {
+   "old": "sub_F82546",
+   "new": "TimedEvents_IsNotYetDue",
+   "evidence": "for stamp W<0x60: (W-(0x93)) mod 0x60 in 1..96, C set when <0x30 (less than half of the 96-tick cycle ahead)"
+  },
+  {
+   "old": "sub_F82557",
+   "new": "SeqBuf_FlushStaged",
+   "evidence": "with ei 6, SeqBuf_PutByte for each of (0xAC) bytes staged at 0xAE (SeqBuf_AppendMarker's trace path), then res 0,(0xAA) and (0xAC)=0; directory slot T_F40024"
+  },
+  {
+   "old": "sub_F825A0",
+   "new": "SeqBuf_PutByte",
+   "evidence": "E stored at 0x600A14+(0x600A10), index +1 mod 0x200, (0x600A12) free count -1; dropped when free count is 0"
+  },
+  {
+   "old": "sub_F82630",
+   "new": "ModuleInit_Phase0Veneer",
+   "evidence": "`calr ModuleInit_RunPhase0 / ret`, published as prom_b directory slot T_F4002C"
+  },
+  {
+   "old": "sub_F82634",
+   "new": "ModuleInit_Phase1Veneer",
+   "evidence": "`calr ModuleInit_RunPhase1 / ret`, slot T_F40030"
+  },
+  {
+   "old": "sub_F82638",
+   "new": "ModuleInit_Phase2Veneer",
+   "evidence": "`calr ModuleInit_RunPhase2 / ret`, slot T_F40034 (called from 0xFB3DC0)"
+  },
+  {
+   "old": "sub_F827C8",
+   "new": "MainTask_Entry",
+   "evidence": "EntryPoint_Records[0] entry 0x00F4005C = `jp sub_F827C8`; sets INTET10/INTE45/INTET54, runs module phases 0 and 3, the power-on chords, Kernel_StartTask(2), then `jp sub_F82028` (MainTask_Loop); prom_c's record 0 is MAIN"
+  },
+  {
+   "old": "sub_F82832",
+   "new": "ModuleInit_RunPhase0",
+   "evidence": "`ld A,0x00 / jr 0xF82846`, the ModuleInitDirectory_F82641 walker"
+  },
+  {
+   "old": "sub_F82836",
+   "new": "ModuleInit_RunPhase1",
+   "evidence": "`ld A,0x04 / jr 0xF82846`"
+  },
+  {
+   "old": "sub_F8283A",
+   "new": "ModuleInit_RunPhase2",
+   "evidence": "`ld A,0x08 / jr 0xF82846`"
+  },
+  {
+   "old": "sub_F8283E",
+   "new": "ModuleInit_RunPhase3",
+   "evidence": "`ld A,0x0C / jr 0xF82846`; its span also holds the phase-4 entry 0xF82842 and the walker"
+  },
+  {
+   "old": "sub_F82870",
+   "new": "Irq_InitLevelsTC23",
+   "evidence": "`ld (0x7A),0xDD` -- 0x7A is INTETC23 in include/tmp95c061_sfr.inc; one call from MainTask_Entry 0xF827FF"
+  },
+  {
+   "old": "sub_F828D1",
+   "new": "PowerOnChord_ClearRamAndReset",
+   "evidence": "returns if (0x7FCA)=0x5AA5; on the chord ((0x2B38) test per (0xC4)) zeroes 0x80-0x7FFF and 0x600000-0x67FFFF, writes 0x5AA5 to (0x7FCA), jrl RESET"
+  },
+  {
+   "old": "sub_F8294C",
+   "new": "PowerOnChord_ShowRevisionLeds",
+   "evidence": "on its chord reads 11 bytes of remote 0xFFFFF0 (BUILD_TAG) into 0x2640 over the link, then loops for ever calling RomRevisions_ShowOnLeds every 50 ticks of (0x80)"
+  },
+  {
+   "old": "sub_F829A6",
+   "new": "RomRevisions_ShowOnLeds",
+   "evidence": "LedNibblePatterns_F829F4[(0xFFFFF8)&0x0F] -> T_F40678 W=0 and [(0x2648)&0x0F] -> W=1 (>>4 on variant 2), then T_SC1_TxFlush"
+  },
+  {
+   "old": "sub_F82A04",
+   "new": "PowerOnChord_VersionScreen",
+   "evidence": "variant 1 (0x2B3A)&0xE0=0xE0 / variant 2 (0x2B33)&0xE0=0xE0 -> calr VersionScreen_Show"
+  },
+  {
+   "old": "sub_F82C80",
+   "new": "PowerFail_VerifySavedBlocks",
+   "evidence": "(0x7FD1)=0; bit 0 set when the 512 bytes at 0x7620 match (0x7FD2), bit 1 when 0x617800 matches (0x7FD4) -- the two blocks NMI_PowerFail_SaveAndHalt check-sums"
+  },
+  {
+   "old": "sub_F82CAB",
+   "new": "ModuleInit_RunPhaseByChecksums",
+   "evidence": "(0x7FD1) bits 0 and 1 both set -> ModuleInit_RunPhase1; else adjusts (0x97) and ModuleInit_RunPhase2"
+  },
+  {
+   "old": "sub_F82CD3",
+   "new": "PowerFail_VerifyChecksum512",
+   "evidence": "PowerFail_Checksum512's loop (256 x add WA,(XIY+), cpl WA) but `cp (XIX),WA` instead of a store; C set on mismatch"
+  },
+  {
+   "old": "sub_F85EC2",
+   "new": "SoftTimer_RotateLevel3",
+   "evidence": "its address is the +4 callback of SoftTimer_Request_Boot (KERNEL_BOOT_TIMER_CALLBACK, 0xF856E4); body `ld A,3 / calr Kernel_YieldRotate`; prom_c's twin is SoftTimer_RotateLevel2"
+  },
+  {
+   "old": "sub_F8A000",
+   "new": "PanelWire_EntryThunks",
+   "evidence": "six 4-byte slots: `jp sub_F8A018` then five `ret`+3 pad; ModuleInitDirectory_F82641[3] = T_F40610 = .long 0xF8A000 -- same shape as MidiIn_EntryThunks"
+  },
+  {
+   "old": "sub_F8A023",
+   "new": "PanelWire_Service",
+   "evidence": "directory slot T_F40614, called from MainTask_Loop 0xF8204C; `calr PanelWire_ThrottledPoll / ret`"
+  },
+  {
+   "old": "sub_F8A028",
+   "new": "PanelWire_ThrottledPoll",
+   "evidence": "phase=(0x2196)+1 &3 (reset when (0x80)-(0x2197)>=16) indexes Dispatch_F8A05F: phases 0,2 -> PanelWire_PollProducers, 1,3 -> ret"
+  },
+  {
+   "old": "sub_F8A070",
+   "new": "PanelWire_PollProducers",
+   "evidence": "(0x2197)=(0x80); unless (0x207A)=0xDB: PanelWireQueue_DrainToGroupQueue, AssignableSwitch_Poll, PanelGroupQueue_AppendFlaggedGroups"
+  },
+  {
+   "old": "sub_F8A209",
+   "new": "AssignableSwitch_Poll",
+   "evidence": "skipped on (0xC4)=2; (0x2190)/(0x2191) = P7 bits 6/7 (SFR 0x13) each XOR (0x7F12) bit 0/1; calls AssignableSwitch_PostChanges when any is set or (0x2194) non-zero"
+  },
+  {
+   "old": "sub_F8A24A",
+   "new": "AssignableSwitch_PostChanges",
+   "evidence": "for groups 0x16 and 0x17 ((0x219C) from 0x16) posts the changed switch state with PanelGroupQueue_Append, parking it in (0x2185)/(0x219D) when the queue holds 7; groups PanelAction_AssignableSwitch handles"
+  },
+  {
+   "old": "sub_F8A4A1",
+   "new": "PanelEvent_ShiftThenRunAction_DeadCopy",
+   "evidence": "unreachable region 0xF8A44B-0xF8A7FF; first 37 bytes equal PanelEvent_ShiftThenRunAction (0xF8A8A1), then the same walk against one table 0xF8AF9F with no (0xC4) select (65 of 111 positional bytes differ)"
+  },
+  {
+   "old": "sub_F8A500",
+   "new": "PanelEvent_CommitValue_DeadCopy",
+   "evidence": "bytes f5 f1 52 0e identical to PanelEvent_CommitValue (0xF8A90B); only dead-region callers"
+  },
+  {
+   "old": "sub_F8A504",
+   "new": "PanelEvent_Drop_DeadCopy",
+   "evidence": "bytes ec 6a 68 fb identical to PanelEvent_Drop (0xF8A90F); only dead-region callers"
+  },
+  {
+   "old": "sub_F8A81D",
+   "new": "PanelEvent_Service",
+   "evidence": "directory slot T_F40634, called from MainTask_Loop 0xF820F1: PanelGroupQueue_ExpandToEvents then sub_F8B2C4 over the 0x2030 list"
+  },
+  {
+   "old": "sub_F8A90B",
+   "new": "PanelEvent_CommitValue",
+   "evidence": "`ld (XIX+),DE / ret` -- the commit PanelEvent_ShiftThenRunAction falls into and 20 action handlers jump to"
+  },
+  {
+   "old": "sub_F8A90F",
+   "new": "PanelEvent_Drop",
+   "evidence": "`dec 2,XIX` then ret -- backs XIX over the class/code pair already written, dropping the event"
+  },
+  {
+   "old": "sub_F8AA24",
+   "new": "PanelAction_LowestBitOneHot",
+   "evidence": "PanelGroupActionListPool v1 group 0x08 mask 0x3F: E=0 -> drop; else E = IndexToBitMask8(LowestSetBitIndex1Based(E)), D=0x3F, code rewritten to 0x1A when record +0x38 bit 0 set, commit"
+  }
+ ],
+ "headers": [
+  {
+   "label": "AdvanceDelay_SelectField1",
+   "mode": "append",
+   "text": "AdvanceDelay_SelectField1 -- the prom_a half of prom_b's LcdKeyRow1_AdvanceDelay_207EZero: select field 1 of the ADVANCE/DELAY screen\nEvidence: that handler's last instructions `bit 7,W / jr Z,0xF80019` (0xF7FFFB-0xF7FFFF) fall through the chip boundary into 0xF80000; nothing calls or names 0xF80000 (24-bit scan of prom_a/b/c).\nBody: if (0x0DE5)!=1, calr 0xF7F245 (Blink_SetEnable(0) + Blink_Stop); or (0x2075),1; T_F42A68 = prom_b 0xF7CB1E sets (0x0DE5)=(0x12FC)=1; AdvanceDelay_DrawValues; AdvanceDelay_DrawFieldCursor.\nRows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_207EZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_F42A6C/70/74."
+  },
+  {
+   "label": "AdvanceDelay_DrawFieldCursor",
+   "mode": "replace",
+   "text": "AdvanceDelay_DrawFieldCursor -- clear LCD layer 1, then fill the box of the ADVANCE/DELAY field (0x12FC) selects\nEvidence: (0x2540)=1; site 0xF8002C runs DL_F39551-0xF39559 (interpreter A), one op-0E record = svc 0x0E LCD_Svc_0E_ClearColumns with IY=0, BC=0x28, HL=0xF0 (40 columns x 240 rows); then T_F4181C (jp DLB_Handler_Array8) on the op-03 record 0xF3B3A7: (0x12FC)&7 indexes DLBoxes_F3B3B2, swi 5 = LCD_Svc_05_FillRect.\nScreen: ADVANCE/DELAY -- callers are AdvanceDelay_SelectField1 and the row-key handlers of ButtonTable_AdvanceDelay_207EZero at 0xF8003A-0xF800BB; (0x12FC) is written with (0x0DE5) by T_F42A68..T_F42A74.\ncalr 0xF7E2D8 at 0xF8001F is a bare `ret` in prom_b."
+  },
+  {
+   "label": "AdvanceDelay_DrawValues",
+   "mode": "replace",
+   "text": "AdvanceDelay_DrawValues -- redraw the live values of the ADVANCE/DELAY screen on layer 0\nEvidence: (0x2540)=0; site 0xF80098 runs interpreter B over DL_F3B379-0xF3B3A7: track (0x12F6) via DLText_0To16All, 3-digit (0x12F7) and (0x12F9), signed 2-digit (0x12FB).\nPaint_AdvanceDelay (prom_b 0xF7FFB6) runs the same list start; BlinkArgPtrs_F8024D[2..4] are its records 0xF3B388/0xF3B392/0xF3B39C, i.e. fields 2-4.\ncalr 0xF7E2D8 at 0xF8008B is a bare `ret` in prom_b."
+  },
+  {
+   "label": "AdvanceDelay_NumberPad",
+   "mode": "insert",
+   "text": "AdvanceDelay_NumberPad -- NUMBER PAD key on the ADVANCE/DELAY screen: dispatch on the keypad code (0x2267)\nEvidence: reached only by `calr` at 0xF800F8, slot 27 (NumberPadKey) of ButtonTable_AdvanceDelay_207EZero.  (0x2267)<=9 -> AdvanceDelay_KeypadDigit, 0x0F -> AdvanceDelay_KeypadCommit, 0x80 -> AdvanceDelay_KeypadSign; then always AdvanceDelay_BlinkSelectedField.\nThe codes are PanelKeypad_OrdinalToKey_V1's: 0..9 digit (shifted into 0x2821-0x2823), 0x80 sign toggle of (0x2820), 0x0F commit."
+  },
+  {
+   "label": "AdvanceDelay_KeypadCommit",
+   "mode": "insert",
+   "text": "AdvanceDelay_KeypadCommit -- keypad code 0x0F: convert the typed digits and store them into the field (0x0DE5) selects\nEvidence: field 4: (0x2826)=2, T_AsciiField_ToSignedValue, accepts <=+0x60 when (0x2820)='+' else >=-0x60, stores (0x0DEC)/(0x12FB).  Fields 2/3: (0x2826)=3, T_AsciiDigits3_ToValue, 1..999 into (0x0DE8)/(0x12F7) or (0x0DEA)/(0x12F9), keeping (0x0DE8)<=(0x0DEA); (0x0E06)=(0x0DEA)-(0x0DE8)+1.\nThen T_Blink_Stop and AdvanceDelay_DrawValues; out-of-range input returns with nothing stored."
+  },
+  {
+   "label": "AdvanceDelay_KeypadSign",
+   "mode": "insert",
+   "text": "AdvanceDelay_KeypadSign -- keypad code 0x80: put '+' back in the sign cell (0x2820) unless field 4 is selected\nEvidence: `bit 1,(0x2075)` (blink enable, FINDINGS-prom_b-field-blink.md) and `cp (0x0DE5),4` gate `ld (0x2820),0x2B`; field 4 is the only one AdvanceDelay_KeypadCommit converts as signed."
+  },
+  {
+   "label": "AdvanceDelay_BlinkSelectedField",
+   "mode": "insert",
+   "text": "AdvanceDelay_BlinkSelectedField -- start the field blink on the field (0x0DE5) selects\nEvidence: unless (0x2075) bit 1 is clear or (0x2267)=0x0F: (0x2540)=0, push BlinkArgPtrs_F8024D[(0x0DE5)], call T_Blink_Command."
+  },
+  {
+   "label": "S0ngC0py_DrawFromSong",
+   "mode": "replace",
+   "text": "S0ngC0py_DrawFromSong -- redraw the FROM song number and its six-character name on the SONG COPY screen\nEvidence: (0x12F6)=(0x0E0C); site 0xF80301 runs B record 0xF3C199 ((0x12F6) at IX 0x0A84, x=12 beside 'SONG ' x=7 under 'FROM' x=8 in DL_S0ngC0pyFromToSongSongOk); ldir 6 bytes from 0x610000+((0x0E0C)-1)*0xC00+0xCA (song bank name, FINDINGS-prom_b-block-store.md) to 0x12F8; site 0xF80333 runs DL_F3C15D (string 0x12F8 at IX 0x0DA0).\nCallers: Paint_S0ngC0py and the SoftKeyCol1/2 slot handlers (0xF803C9/0xF803D2) after T_F42A14/T_F42A10 step (0x0E0C) down/up in 1..10."
+  },
+  {
+   "label": "S0ngC0py_DrawToSong",
+   "mode": "replace",
+   "text": "S0ngC0py_DrawToSong -- redraw the TO song number and name on the SONG COPY screen\nEvidence: (0x12F7)=(0x0E0D); site 0xF8034D runs B record 0xF3C1A3 (IX 0x0A95, x=29 under 'TO' x=26); name of bank (0x0E0D)-1 copied to 0x12FE; site 0xF8037F runs DL_F3C16C (IX 0x0DB1).\nCallers: Paint_S0ngC0py and the SoftKeyCol5/6 slot handlers (0xF803ED/0xF803F6) after T_F42A24/T_F42A20."
+  },
+  {
+   "label": "S0ngC0py_DrawTracks",
+   "mode": "insert",
+   "text": "S0ngC0py_DrawTracks -- redraw the FROM and TO track fields of the SONG COPY screen\nEvidence: (0x0E0E)=0x12 draws DL_AllAll ('  ALL   ' at both columns); otherwise (0x1304)=(0x0E0E), (0x1305)=(0x0E0F), DLB DL_F3C17B (two DLText_0To17All readouts at IX 0x1344/0x1355) and DL_TrackTrack.\nCallers: Paint_S0ngC0py and SoftKeyCol3/4/7/8 handlers after T_F42A1C/18/2C/28 step (0x0E0E)/(0x0E0F) in 1..0x12."
+  },
+  {
+   "label": "ScreenLeaveBody_N0teChange",
+   "mode": "insert",
+   "text": "ScreenLeaveBody_N0teChange -- the whole body of the N0teChange screen's Leave method\nEvidence: prom_b ScreenLeave_N0teChange (0xF7D21C) is `call 0xF804EC / ret` (+4 of screen object 0xF43120); body `call T_F42A8C / ret` -- prom_b 0xF7C8BC: unless (0x207A)=0x2D, call T_F409E0.  Same shape as prom_b ScreenLeaveBody_AdvanceDelay."
+  },
+  {
+   "label": "N0teChange_DrawFieldCursor",
+   "mode": "replace",
+   "text": "N0teChange_DrawFieldCursor -- clear LCD layer 1, then fill the box of the NOTE CHANGE field (0x1301) selects\nEvidence: (0x2540)=1; site 0xF8055B runs DL_F39551-0xF39559 (op 0E ClearColumns, whole layer); then DLB_Handler_Array8 (T_F4181C) on op-03 record 0xF3B05A: (0x1301)&7 indexes the boxes at 0xF3B065, swi 5 FillRect.  (0x1301) is written with (0x0DED) (T_F42A88 = prom_b 0xF7C853).\nCallers: the row-key handlers of ButtonTable_N0teChange_207EZero at 0xF8051F-0xF805AB."
+  },
+  {
+   "label": "N0teChange_DrawValues",
+   "mode": "replace",
+   "text": "N0teChange_DrawValues -- redraw the live values of the NOTE CHANGE screen on layer 0\nEvidence: (0x2540)=0; site 0xF805CA runs interpreter B over DL_F3AFE7-0xF3B05A (readouts of 0x12F6-0x12FA, 0x12FB, 0x12FC, 0x12FE, 0x12FF), the list Paint_N0teChange runs at 0xF804DA; BlinkArgPtrs_F80754[2..5] are its records for fields 2-5."
+  },
+  {
+   "label": "N0teChange_NumberPad",
+   "mode": "insert",
+   "text": "N0teChange_NumberPad -- NUMBER PAD key on the NOTE CHANGE screen: dispatch on (0x2267)\nEvidence: reached only by `calr` at 0xF80609, slot 27 of ButtonTable_N0teChange_207EZero; <=9 -> N0teChange_KeypadDigit, 0x0F -> N0teChange_KeypadCommit, 0x80 -> N0teChange_KeypadSign, then N0teChange_BlinkSelectedField."
+  },
+  {
+   "label": "N0teChange_KeypadCommit",
+   "mode": "insert",
+   "text": "N0teChange_KeypadCommit -- keypad code 0x0F: store the typed number into the NOTE CHANGE field (0x0DED) selects\nEvidence: T_AsciiDigits3_ToValue; fields 2/3 accept 1..999 into (0x0DF0)/(0x12FC) and (0x0DF2)/(0x12FF) keeping first<=last, (0x129E)=last-first+1; fields 4/5 accept 0..127 into (0x0DF4)/(0x12FB) and (0x0DF5)/(0x12FE), and `divs WA,12` splits each into (0x12F7)/(0x12F8) and (0x12F9)/(0x12FA).\nThen T_Blink_Stop and N0teChange_DrawValues."
+  },
+  {
+   "label": "N0teChange_KeypadSign",
+   "mode": "insert",
+   "text": "N0teChange_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)\nEvidence: `bit 1,(0x2075)` and `cp (0x0DB8),4` gate `ld (0x2820),0x2B`.  This screen's field index is (0x0DED); why it tests (0x0DB8) is not established."
+  },
+  {
+   "label": "N0teChange_BlinkSelectedField",
+   "mode": "insert",
+   "text": "N0teChange_BlinkSelectedField -- start the field blink on the field (0x0DED) selects\nEvidence: unless blink is off or (0x2267)=0x0F: push BlinkArgPtrs_F80754[(0x0DED)], call T_Blink_Command."
+  },
+  {
+   "label": "ScreenLeaveBody_MeasureC0py",
+   "mode": "insert",
+   "text": "ScreenLeaveBody_MeasureC0py -- the whole body of the MeasureC0py screen's Leave method\nEvidence: prom_b ScreenLeave_MeasureC0py (0xF7D23D) is `call 0xF80809 / ret` (+4 of screen object 0xF430C0); body `call T_F429DC / ret`.  Bytes after it are ButtonTable_MeasureC0py slot handlers."
+  },
+  {
+   "label": "MeasureC0py_DrawFieldCursor",
+   "mode": "replace",
+   "text": "MeasureC0py_DrawFieldCursor -- clear LCD layer 1, then fill the box of the MEASURE COPY field (0x12FF) selects\nEvidence: (0x2540)=1; site 0xF808A3 runs DL_F39551-0xF39559 (op 0E ClearColumns, whole layer); DLB_Handler_Array8 on op-03 record 0xF3BD4D: (0x12FF)&7 indexes boxes 0xF3BD58, swi 5 FillRect.  Every caller first stores (0x0DBC) into (0x12FF) (0xF8087F, 0xF808D4, 0xF80909)."
+  },
+  {
+   "label": "MeasureC0py_DrawValues",
+   "mode": "replace",
+   "text": "MeasureC0py_DrawValues -- redraw the live values of the MEASURE COPY screen\nEvidence: site 0xF809A7 runs interpreter B over DL_F3BD07-0xF3BD4D: string readouts (0x12F6) (0x12FB), 3-digit (0x12F7) (0x12F9) (0x12FC), (0x12FE) -- the list Paint_MeasureC0py runs at 0xF807F6.  It does not set (0x2540); callers have."
+  },
+  {
+   "label": "MeasureC0py_NumberPad",
+   "mode": "insert",
+   "text": "MeasureC0py_NumberPad -- NUMBER PAD key on the MEASURE COPY screen: dispatch on (0x2267)\nEvidence: reached only by `calr` at 0xF80968, slot 27 of ButtonTable_MeasureC0py_207EZero; digit / 0x0F / 0x80 arms then MeasureC0py_BlinkSelectedField."
+  },
+  {
+   "label": "MeasureC0py_KeypadCommit",
+   "mode": "insert",
+   "text": "MeasureC0py_KeypadCommit -- keypad code 0x0F: store the typed measure number into the field (0x0DBC) selects\nEvidence: T_AsciiDigits3_ToValue, 1..999; field 2 -> (0x0C18), (0x603470), (0x12F7), (0x0C30) with last (0x0C32) raised to match; field 3 -> (0x0C32)/(0x12F9) with first lowered; (0x603472)=last-first+1; field 5 -> (0x0C1A), (0x603475), (0x12FC).  Then T_Blink_Stop and MeasureC0py_DrawValues.\nIt first returns when `cp (0x02),0x20` is equal -- address 0x0002 is not a named SFR and the other screens' commits lack the test; not established."
+  },
+  {
+   "label": "MeasureC0py_KeypadSign",
+   "mode": "insert",
+   "text": "MeasureC0py_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)\nEvidence: body is `ld (0x2820),0x2B / ret`; only caller is the 0x80 arm of MeasureC0py_NumberPad (no field here is signed)."
+  },
+  {
+   "label": "MeasureC0py_BlinkSelectedField",
+   "mode": "insert",
+   "text": "MeasureC0py_BlinkSelectedField -- start the field blink on the field (0x0DBC) selects\nEvidence: unless blink is off or (0x2267)=0x0F: push BlinkArgPtrs_F80AAD[(0x0DBC)], call T_Blink_Command; the non-null entries 2/3/5 are the records of (0x12F7)/(0x12F9)/(0x12FC), the variables MeasureC0py_KeypadCommit writes."
+  },
+  {
+   "label": "ScreenLeaveBody_MeasureInsert",
+   "mode": "insert",
+   "text": "ScreenLeaveBody_MeasureInsert -- the whole body of the MeasureInsert screen's Leave method\nEvidence: prom_b ScreenLeave_MeasureInsert (0xF7D25E) is `call 0xF80B66 / ret` (+4 of screen object 0xF430D0); body `call T_F429AC / ret`."
+  },
+  {
+   "label": "MeasureInsert_DrawFieldCursor",
+   "mode": "replace",
+   "text": "MeasureInsert_DrawFieldCursor -- clear LCD layer 1, then fill the box of the MEASURE INSERT field (0x12FF) selects\nEvidence: (0x2540)=1; site 0xF80C00 runs DL_F39551-0xF39559 (op 0E ClearColumns); execution falls through the unreferenced label sub_F80C04 into DLB_Handler_Array8 on op-03 record 0xF3BF3D ((0x12FF)&7, boxes 0xF3BF48, swi 5 FillRect).  Callers first store (0x0DDA) into (0x12FF)."
+  },
+  {
+   "label": "MeasureInsert_DrawValues",
+   "mode": "replace",
+   "text": "MeasureInsert_DrawValues -- redraw the live values of the MEASURE INSERT screen on layer 0\nEvidence: (0x2540)=0; site 0xF80D0D runs interpreter B over DL_F3BEF7-0xF3BF3D (same six variables as MeasureC0py_DrawValues), the list Paint_MeasureInsert runs at 0xF80B53."
+  },
+  {
+   "label": "MeasureInsert_NumberPad",
+   "mode": "insert",
+   "text": "MeasureInsert_NumberPad -- NUMBER PAD key on the MEASURE INSERT screen: dispatch on (0x2267)\nEvidence: reached only by `calr` at 0xF80CC5, slot 27 of ButtonTable_MeasureInsert_207EZero; digit / 0x0F / 0x80 arms then MeasureInsert_BlinkSelectedField."
+  },
+  {
+   "label": "MeasureInsert_KeypadCommit",
+   "mode": "insert",
+   "text": "MeasureInsert_KeypadCommit -- keypad code 0x0F: store the typed measure number into the field (0x0DDA) selects\nEvidence: 1..999; field 2 -> (0x0C18), (0x603468), (0x12F7), (0x0DDC); field 3 -> (0x0DDE)/(0x12F9), keeping first<=last; (0x60346A)=last-first+1; field 5 -> (0x0C1A), (0x60346D), (0x12FC); then T_Blink_Stop and MeasureInsert_DrawValues.\nSame `cp (0x02),0x20` early return as MeasureC0py_KeypadCommit -- not established."
+  },
+  {
+   "label": "MeasureInsert_KeypadSign",
+   "mode": "insert",
+   "text": "MeasureInsert_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)\nEvidence: `ld (0x2820),0x2B / ret`; only caller is the 0x80 arm of MeasureInsert_NumberPad."
+  },
+  {
+   "label": "MeasureInsert_BlinkSelectedField",
+   "mode": "insert",
+   "text": "MeasureInsert_BlinkSelectedField -- start the field blink on the field (0x0DDA) selects\nEvidence: push BlinkArgPtrs_F80E12[(0x0DDA)], call T_Blink_Command, unless blink is off or (0x2267)=0x0F."
+  },
+  {
+   "label": "S0ngSelectName_DrawValues",
+   "mode": "replace",
+   "text": "S0ngSelectName_DrawValues -- redraw the song name, song number, size in KB and percent on the SONG SELECT & NAME screen\nEvidence: (0x2540)=0; site 0xF80EAA runs interpreter B over DL_F3C31E-DL_F3C351: string 0x12F6 (6 bytes, svc 8 at 0x0998), (0x12FC) 2 digits beside 'S0NG', (0x12FD) 3 digits at (0xF8,0x30) beside ' KB' (0x10A,0x30), (0x12FF) at (0xF0,0x3D) beside '%' (0x111,0x3D).\nCaller: Paint_S0ngSelectName only."
+  },
+  {
+   "label": "ScreenLeaveBody_S0ngSelectName",
+   "mode": "insert",
+   "text": "ScreenLeaveBody_S0ngSelectName -- the Leave method body of the S0ngSelectName screen\nEvidence: prom_b ScreenLeave_S0ngSelectName (0xF7D27F) is `call 0xF80EAF / ret` (+4 of screen object 0xF431A0); body `call S0ngSelectName_Leave / ret`."
+  },
+  {
+   "label": "ScreenButtonBody_S0ngSelectName",
+   "mode": "insert",
+   "text": "ScreenButtonBody_S0ngSelectName -- the Button method body of the S0ngSelectName screen: dispatch on the button slot in HL\nEvidence: prom_b ScreenButton_S0ngSelectName (0xF7D284) is `call 0xF80EB4 / ret`.  Slots 0/0x11 -> S0ngSelectName_PrevSong, 1/0x12 -> NextSong, 3/0x14 -> CursorLeft, 4/0x15 -> CursorRight, 5/0x16 -> CharPrev, 6/0x17 -> CharNext, 7/0x18 -> ClearName; 0x0F (ExitKey) posts (0x2070)=0x8004 when W bit 7 is clear.\nThe bottom row of DL_S0ngSelectNameKbS0ngName reads SONG < >, POSITION < >, ABC..789 < >, CLR, which is this pairing."
+  },
+  {
+   "label": "ScreenLeaveBody_StepRecordPartSelect",
+   "mode": "insert",
+   "text": "ScreenLeaveBody_StepRecordPartSelect -- the Leave method body of the StepRecordPartSelect screen\nEvidence: prom_b ScreenLeave_StepRecordPartSelect (0xF7D28F) is `call 0xF80FC0 / ret` (+4 of screen object 0xF43170); body `call T_F42BC8 / ret` (prom_b 0xF6650F: (0x60341E)=(0x3010), T_F40CB4, and (0x34BB),0xFB)."
+  },
+  {
+   "label": "ScreenLeaveBody_SequencerMedley",
+   "mode": "insert",
+   "text": "ScreenLeaveBody_SequencerMedley -- the Leave method body of the SequencerMedley screen\nEvidence: prom_b ScreenLeave_SequencerMedley (0xF7D2A4) is `call 0xF810F0 / ret` (+4 of screen object 0xF43150).  Unless (0x207A)=0x13 it clears (0x2094) bit 6, which Paint_SequencerMedley sets; then call T_F42BD0 (prom_b 0xF6614E).  Bytes after the `ret` are ButtonTable_SequencerMedley slot handlers."
+  },
+  {
+   "label": "SequencerMedley_NumberPad",
+   "mode": "insert",
+   "text": "SequencerMedley_NumberPad -- NUMBER PAD key on the SEQUENCER MEDLEY screen: dispatch on (0x2267)\nEvidence: reached only by `calr` at 0xF81231, slot 27 of ButtonTable_SequencerMedley; returns at once while (0x0DC1)=1 (set by the START arm through T_F42BD4); digit / 0x0F / 0x80 arms then SequencerMedley_BlinkSelectedField."
+  },
+  {
+   "label": "SequencerMedley_KeypadCommit",
+   "mode": "insert",
+   "text": "SequencerMedley_KeypadCommit -- keypad code 0x0F: store the typed song number as FIRST or LAST medley song\nEvidence: T_AsciiDigits3_ToValue; upper bound 10 when (0x220B)=0, 20 when (0x0E35)=0, else 100; value-1 goes to (0x2208) for field (0x0C0F)=1 (raising (0x2209) to match) or (0x2209) for field 2 (lowering (0x2208)); when (0x2208) changed, T_F42580 with W=1 (moved down) or 0 (up).\nThen T_Blink_Stop and SequencerMedley_DrawFirstLastSong."
+  },
+  {
+   "label": "SequencerMedley_KeypadSign",
+   "mode": "insert",
+   "text": "SequencerMedley_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)\nEvidence: `ld (0x2820),0x2B / ret`; only caller is the 0x80 arm of SequencerMedley_NumberPad."
+  },
+  {
+   "label": "SequencerMedley_BlinkSelectedField",
+   "mode": "insert",
+   "text": "SequencerMedley_BlinkSelectedField -- start the field blink on the FIRST or LAST song field\nEvidence: unless (0x0DC1)=1, blink off or (0x2267)=0x0F: push BlinkArgPtrs_F81344[(0x0C0F)] (entry 1 = DL_FirstS0ngLastS0ng, the (0x12FE) record), call T_Blink_Command."
+  },
+  {
+   "label": "SequencerMedley_DrawPlayState",
+   "mode": "replace",
+   "text": "SequencerMedley_DrawPlayState -- draw or erase the NOW PLAYING line and move the START/STOP box\nEvidence: (0x0DC1)!=1: site 0xF81366 runs DL_F3C86B (op 0E ClearColumns at 0x05CC, 0x21 x 0x10); (0x0DC1)=1: T_DLHandler_IX_Text on 0xF3C873 ('N0W PLAYING S0NG ') and 0xF3C888 (' :'), (0x12F6)=(0x220A)+1 drawn by site 0xF81392 (DL_F3C89D, 3 digits), string record 0xF3C88E.\nThen layer 1: EraseRect record 0xF3C7D8 and FillRect record 0xF3C7AD on (0x1305)=(0x0DC1); box 1 (0x106,0x46)-(0x132,0x55) encloses 'START', box 0 (0x106,0x70)-(0x132,0x7F) 'STOP'.  (0x0DC1)=1 is set by T_F42BD4 (prom_b 0xF66191) and cleared by T_F42BD8 (0xF66201)."
+  },
+  {
+   "label": "SequencerMedley_DrawFieldBox",
+   "mode": "insert",
+   "text": "SequencerMedley_DrawFieldBox -- move the layer-1 highlight to the FIRST or LAST song field\nEvidence: (0x2540)=1; T_F41820 on record 0xF3C7B8 (swi 0x1B LCD_Svc_1B_EraseRect, array 0xF3C833) then T_F4181C on 0xF3C78C (swi 5 FillRect, Data_F3C7E3), both indexed by (0x1302); entries 1/2 are the FIRST S0NG box (0x0B,0x43)-(0xC2,0x62) and the LAST S0NG box (0x0B,0x8F)-(0xC2,0xAE), in opposite order in the two arrays.\n(0x1302)=(0x0C0F) is written by T_F42B7C / T_F42B80 (prom_b 0xF66246 / 0xF66251) just before both calls."
+  },
+  {
+   "label": "SequencerMedley_DrawSourceBox",
+   "mode": "replace",
+   "text": "SequencerMedley_DrawSourceBox -- highlight the selected medley source, INT / FD / HD\nEvidence: (0x2540)=1; site 0xF8140E runs DL_F3C7C3, one op-1B record = svc 0x1B EraseRect over (0x24,0xD4)-(0x98,0xE4), the span of the three SELECT boxes of DL_F3C6B3 / DL_SelectIntFd; then T_F4181C on 0xF3C797: FillRect of entry (0x1303) of Data_F3C7E3+0x18 = (0x24..0x44) INT, (0x4D..0x6D) FD, (0x78..0x98) HD.\n(0x1303) is loaded from (0x220B) (Paint_SequencerMedley 0xF810CB)."
+  },
+  {
+   "label": "SequencerMedley_DrawFileTypeBox",
+   "mode": "insert",
+   "text": "SequencerMedley_DrawFileTypeBox -- highlight NORM FILE or MIDI FILE\nEvidence: (0x2540)=1; EraseRect record 0xF3C7CD (array 0xF3C84B) then FillRect record 0xF3C7A2 (array 0xF3C813), both on (0x1304); value 0 fills (0x11C,0xCE)-(0x13D,0xE7) around 'NORM'/'FILE', value 1 fills (0xF3,0xCE)-(0x113,0xE7) around 'MIDI'/'FILE' (DL_SequencerMedleyStartFirstS0ng).  (0x1304) is loaded from (0x0E35)."
+  },
+  {
+   "label": "S0ngSelectName_PrevSong",
+   "mode": "replace",
+   "text": "S0ngSelectName_PrevSong -- SONG '<': save the current song, step (0x360A) down and load that song\nEvidence: SoftKeyCol1 arm of ScreenButtonBody_S0ngSelectName.  Unless (0x0E45)!=0 or (0x360A)=0: site 0xF81453 erases both boxes (DL_F3C367-DLTable_F3C37D, svc 0x1B), S0ngSelectName_SaveWorkspaceToBank, dec (0x360A), (0x12FC)=song+1, S0ngSelectName_LoadSongFromBank, (0x0E45)=4, S0ngSelectName_UpdateSizeValues, (0x2095),0x10.\nThe 0 bound at 0xF8143F is the one FINDINGS-memory-map.md cites for the ten song banks."
+  },
+  {
+   "label": "S0ngSelectName_UpdateSizeValues",
+   "mode": "insert",
+   "text": "S0ngSelectName_UpdateSizeValues -- compute the selected song's size and copy it to the display variables\nEvidence: (0x0E32)=(0x360A); SongStore_MeasureSongSize; (0x12FD)=(0x0E2F) and (0x12FF)=(0x0E31), the variables S0ngSelectName_DrawValues shows beside ' KB' and '%'."
+  },
+  {
+   "label": "S0ngSelectName_SaveWorkspaceToBank",
+   "mode": "insert",
+   "text": "S0ngSelectName_SaveWorkspaceToBank -- copy the 3 KiB song workspace back into its bank (0x360A)\nEvidence: (0x60341E)=(0x360C); `ld XIX,0x610000+n*0xC00 / ld XIY,0x603400 / ld BC,0x0C00 / ldir` (ldir writes (XIX+) from (XIY+)).  Same effect as prom_b BStore_Workspace_SaveToBank (0xF64BE3), written independently (instruction order differs)."
+  },
+  {
+   "label": "S0ngSelectName_NextSong",
+   "mode": "replace",
+   "text": "S0ngSelectName_NextSong -- SONG '>': save the current song, step (0x360A) up and load that song\nEvidence: SoftKeyCol2 arm of ScreenButtonBody_S0ngSelectName; identical to S0ngSelectName_PrevSong except `cp A,0x09` (0xF814D2) and `inc` -- site 0xF814E7 erases both boxes on layer 1 first."
+  },
+  {
+   "label": "S0ngSelectName_CursorLeft",
+   "mode": "replace",
+   "text": "S0ngSelectName_CursorLeft -- POSITION '<': move the name-edit cursor one character left\nEvidence: SoftKeyCol4 arm.  (0x2075),9; site 0xF8152C erases the position and character boxes (DL_F3C367-DLTable_F3C37D, svc 0x1B); (0x222D)-1 if >=0 into (0x222D)/(0x2721)/(0x1301); SongName_CharIndexAtCursor; (0x1302)=(0x21F9); fills both boxes again (records DL_F3C351/0xF3C35C, svc 5)."
+  },
+  {
+   "label": "S0ngSelectName_CursorRight",
+   "mode": "replace",
+   "text": "S0ngSelectName_CursorRight -- POSITION '>': move the name-edit cursor one character right\nEvidence: SoftKeyCol5 arm; as S0ngSelectName_CursorLeft with `inc` and `cp A,5 / jr gt` (six positions); site 0xF8158E is the erase."
+  },
+  {
+   "label": "S0ngSelectName_CharPrev",
+   "mode": "insert",
+   "text": "S0ngSelectName_CharPrev -- character '<': replace the character under the cursor with the previous one of CharSet_F81768\nEvidence: SoftKeyCol6 arm; erases the character box (record 0xF3C372), SongName_StepCharAtCursor with W=0x81, (0x1302)=(0x21F9), SongName_Draw6Chars on layer 0, fills the box (0xF3C35C)."
+  },
+  {
+   "label": "S0ngSelectName_CharNext",
+   "mode": "insert",
+   "text": "S0ngSelectName_CharNext -- character '>': replace the character under the cursor with the next one of CharSet_F81768\nEvidence: SoftKeyCol7 arm; as S0ngSelectName_CharPrev with W=0x01."
+  },
+  {
+   "label": "S0ngSelectName_ClearName",
+   "mode": "replace",
+   "text": "S0ngSelectName_ClearName -- CLR: blank the song name to '______'\nEvidence: SoftKeyCol8 arm ('CLR' in DL_S0ngSelectNameKbS0ngName); (0x2540)=1, site 0xF8167F erases the position box (DL_F3C367-0xF3C372, svc 0x1B), then SongName_ResetToUnderscores (which zeroes cursor and character index and sets (0x2071) bit 4)."
+  },
+  {
+   "label": "SongName_CharIndexAtCursor",
+   "mode": "replace",
+   "text": "SongName_CharIndexAtCursor -- (0x21F9) = index in CharSet_F81768 of the name character under the cursor (0 if absent)\nEvidence: reads the byte at 0x610000+(0x360A)*0xC00+0xCA+(0x222D) (the bank copy of the name), then compares it with each of the 37 bytes of CharSet_F81768 (`ld BC,0x25` / djnz; 0xF816C0 loads 0xF81768, '_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'); returns at once when (0x222D) is negative.\nCalled from: S0ngSelectName_CursorLeft/Right, S0ngSelectName_PrepareValues, S0ngSelectName_LoadSongFromBank."
+  },
+  {
+   "label": "SongName_StepCharAtCursor",
+   "mode": "insert",
+   "text": "SongName_StepCharAtCursor -- step the character under the name cursor: W bit 7 clear = next, set = previous\nEvidence: `bit 7,W` chooses SongName_NextCharAtCursor or SongName_PrevCharAtCursor; callers pass W=0x01 (S0ngSelectName_CharNext) and 0x81 (S0ngSelectName_CharPrev)."
+  },
+  {
+   "label": "SongName_NextCharAtCursor",
+   "mode": "insert",
+   "text": "SongName_NextCharAtCursor -- (0x21F9)+1, clamped to 0x24 (the last of 37), then store it\nEvidence: `inc 1,A / cp A,0x25 / jr lt / ld A,0x24`, then SongName_StoreCharAtCursor."
+  },
+  {
+   "label": "SongName_PrevCharAtCursor",
+   "mode": "insert",
+   "text": "SongName_PrevCharAtCursor -- (0x21F9)-1, clamped at 0, then store it\nEvidence: `dec 1,A / cp A,0xFF / jr nz / ld A,0`, then SongName_StoreCharAtCursor."
+  },
+  {
+   "label": "SongName_StoreCharAtCursor",
+   "mode": "replace",
+   "text": "SongName_StoreCharAtCursor -- write CharSet_F81768[(0x21F9)] at position (0x222D) of all three copies of the song name\nEvidence: 0xF8171C loads CharSet_F81768 ('_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') and reads entry (0x21F9); the byte is stored at (XIX+HL), HL=(0x222D), for XIX = 0x610000+(0x360A)*0xC00+0xCA (bank), 0x6034CA (workspace) and 0x12F6 (display) -- the same three copies SongName_ResetToUnderscores writes.\nCalled from: SongName_NextCharAtCursor, SongName_PrevCharAtCursor."
+  },
+  {
+   "label": "S0ngSelectName_PrepareValues",
+   "mode": "insert",
+   "text": "S0ngSelectName_PrepareValues -- set up the SONG SELECT & NAME display variables on entry\nEvidence: first call of Paint_S0ngSelectName (0xF80E32).  Unless (0x207B)=0x0D: (0x0E45)=0, T_F409AC, (0x34BB),4, cursor (0x222D)=(0x1301)=0, (0x60341E)=(0x360C).  Always: 6 bytes 0x6034CA -> 0x12F6, (0x12FC)=(0x360A)+1, SongName_CharIndexAtCursor -> (0x1302), and the KB/percent pair as S0ngSelectName_UpdateSizeValues does."
+  },
+  {
+   "label": "S0ngSelectName_Leave",
+   "mode": "insert",
+   "text": "S0ngSelectName_Leave -- the work of the S0ngSelectName Leave method\nEvidence: only caller is ScreenLeaveBody_S0ngSelectName.  Unless (0x207A)=0x0D: and (0x34BB),0xFB (undoing S0ngSelectName_PrepareValues' or), call T_F411B8, (0x0E45)=0."
+  },
+  {
+   "label": "S0ngSelectName_LoadSongFromBank",
+   "mode": "insert",
+   "text": "S0ngSelectName_LoadSongFromBank -- load song (0x360A) from its bank into the workspace and refresh the name-edit state\nEvidence: saves workspace words +0xB8/+0xBA in (0x0E2B)/(0x0E2D), ldir 0xC00 bytes 0x610000+(0x360A)*0xC00 -> 0x603400 and restores the two words (as prom_b BStore_Workspace_LoadFromBank does), (0x360C)=(0x60341E), (0x3752)=bit 0 of (0x603420), cursor 0, name -> 0x12F6, SongName_CharIndexAtCursor; then the (0x6034C6)/(0x7F4D) queue post, T_F42578, T_F409E0, T_F40AC8, (0x360B) bit 0 cleared.\nThe label sub_F81812 one instruction in is unreferenced and part of this routine."
+  },
+  {
+   "label": "SongStore_MeasureSongSize",
+   "mode": "insert",
+   "text": "SongStore_MeasureSongSize -- size of song (0x0E32): (0x0E2F) = KB, (0x0E31) = percent of the block heap\nEvidence: directory = 0x603500 when (0x0E32)=(0x360A) (the song in the workspace), else 0x610000+n*0xC00+0x100 (the bank's copy); for each 3-byte entry 0..0x30 with bit 7 set, SongStore_CountChainBlocks; (0x0E31) = blocks*100/(0x3608)+1, max 99 ((0x3608) = heap block count, BStore_FreeList_Init); (0x0E2F) = blocks/4, at least 1 (256-byte blocks).\nCallers display them beside ' KB' and '%': S0ngSelectName and prom_b Paint_SongClear (0xF7EB23) / SongClear soft keys.  (0x126E) is preserved."
+  },
+  {
+   "label": "SongStore_CountChainBlocks",
+   "mode": "insert",
+   "text": "SongStore_CountChainBlocks -- XBC3 = number of heap blocks in one directory entry's chain\nEvidence: HL = word at (XIX+DE+1) (directory entry head block, FINDINGS-prom_b-block-store.md); 0xFFFF -> 0; else count 1 and follow each block's +3 next word via SongStore_SeekBlock until 0xFFFF.  The caller adds XBC3 into XBC."
+  },
+  {
+   "label": "SongStore_SeekBlock",
+   "mode": "replace",
+   "text": "SongStore_SeekBlock -- (0x126E) = address of heap block HL (1-based)\nEvidence: `ld XIY,(0x3604) / extz XHL / dec 1,XHL / sla 8,XHL / add XIY,XHL / ld (0x126E),XIY / xor XHL,XHL`, XIY saved and restored -- the value prom_b BStore_SeekBlock computes; called only by SongStore_CountChainBlocks.\nRetraction kept from round 5: the 'MASTER TRACK CLEAR' text once credited to this label is drawn by the UNLABELLED function at 0xF81ACB (ld XIY,DL_MasterTrackClearAttention / call T_DisplayList_Run at 0xF81B21), which this routine never calls and nothing references."
+  },
+  {
+   "label": "StepRecord_DrawNibbleAsStars",
+   "mode": "insert",
+   "text": "StepRecord_DrawNibbleAsStars -- draw the low nibble of L as four 8x14 cells: '*' for a set bit, glyph 0x91 for a clear one\nEvidence: (0x2540)=0, XIY=0xF3DC7B, BC=4, svc 6 (LCD_Svc_06_DrawText8x14) with HL=L; the 64 bytes at 0xF3DC7B are 16 entries of 4 where cell k of entry n is 0x2A iff bit k of n is set (all 16 checked against the ROM).\nCaller: the unlabelled STEP RECORD painter at 0xF81D41 (gated on (0x207C)=0x0E), two nibbles per byte of 0x12C6.."
+  },
+  {
+   "label": "MainTask_Loop",
+   "mode": "insert",
+   "text": "MainTask_Loop -- CPU 1's main loop: poll the rota flags and rings for ever\nEvidence: ends with unconditional `jrl sub_F82028` (0xF821C5); entered by `jp` from MainTask_Entry (0xF8282E) and published as prom_b slot T_F40014.  `tset n,(0x88)` / `tset n,(0x98)` gate PanelHold_Tick, SC1_TxFlush, Link_ServiceTask, Blink_Tick (bit 7 at 0xF82182, FINDINGS-prom_b-field-blink.md) etc.; it services the MIDI-in rings (MidiIn_RoutePortA/B), MIDI_DrainQueue, PanelWire_Service, PanelEvent_Service, UiEventList_Publish.\nThe four instructions at 0xF8202C-0xF8203A are jumped over by the `jr` at 0xF8202A."
+  },
+  {
+   "label": "MainTask_RearmTickCountdown",
+   "mode": "insert",
+   "text": "MainTask_RearmTickCountdown -- (0xC1)=0, call T_F409C4, then reload the tick countdown (0xC2) with 10\nEvidence: `xor A / ld (0xC1),A / call T_F409C4 / ld A,0x0A / ld (0xC2),A`; INTTR4_SequencerTick decrements (0xC2) once per tick (0xF83024); MainTask_Loop calls this when (0xC2) is 0 (0xF82050) and unconditionally at the end of each pass (0xF821AE).\nT_F409C4 -> T_F40B44 -> prom_b sub_F47800 is unnamed."
+  },
+  {
+   "label": "MainTask_RunUiPassC",
+   "mode": "insert",
+   "text": "MainTask_RunUiPassC -- run UI event pass C, then empty the 0x2030 event list and the 0x2C00 queue\nEvidence: call T_UiEventList_RunPassC, call T_F40780 (unnamed), ld (0x2030),0xFF (the list PanelGroupQueue_ExpandToEvents fills), call Queue2C00_DrainPassAB; one caller, MainTask_Loop 0xF82120."
+  },
+  {
+   "label": "MainTask_PanelTimersTick",
+   "mode": "insert",
+   "text": "MainTask_PanelTimersTick -- one tick of the panel timers\nEvidence: call T_F413CC (unnamed), T_PanelTimers_Step, T_PanelHold_Tick; called from MainTask_Loop when `tset 6,(0x98)` finds bit 6 clear (0xF82142).  The 4 instructions after its `ret` (0xF821F6) are not reached from here."
+  },
+  {
+   "label": "MidiIn_RoutePortA",
+   "mode": "insert",
+   "text": "MidiIn_RoutePortA -- split pending MIDI IN port A bytes into a run of note-class messages or a run of other messages, and hand the run to its consumer\nEvidence: ring 0x600C1E (MidiIn_PumpPortA's), scanned from (ring-8) to (ring-4) mod 0x400.  Note class = status 0x8n, 0x9n, or 0xBn whose next byte is >=0x7B (cp 0x7B at 0xF8224A/0xF82280).  At the first class change it stores the position in (ring-6) and calls T_F413B4 (prom_a sub_FC80E2) for a note run, or MidiIn_PumpPortA + T_F41F14 + Queue2C00_DrainPassAB otherwise; then (ring-8)=(ring-6) and (ring-2) += bytes consumed.\nCalled from MainTask_Loop 0xF82089 when (0x89)!=0xFF and the ring is not empty."
+  },
+  {
+   "label": "MidiIn_RoutePortB",
+   "mode": "insert",
+   "text": "MidiIn_RoutePortB -- MidiIn_RoutePortA for MIDI IN port B\nEvidence: the same code on ring 0x601028; the note run goes to T_F413F8 (prom_a sub_FC8448), the rest to T_MidiIn_PumpPortB + T_F41F14 + Queue2C00_DrainPassAB (0xF8237F-0xF82391).  Called from MainTask_Loop 0xF82094."
+  },
+  {
+   "label": "MainTask_ServiceTimedEvents",
+   "mode": "insert",
+   "text": "MainTask_ServiceTimedEvents -- MainTask_Loop's call into TimedEvents_Service\nEvidence: `calr sub_F823AB` (a bare `ret`) then `calr TimedEvents_Service`; called three times per pass, 0xF820B9, 0xF82124, 0xF821B1."
+  },
+  {
+   "label": "TimedEvents_Service",
+   "mode": "insert",
+   "text": "TimedEvents_Service -- service the time-stamped event ring 0x60080A\nEvidence: (0x34D0) bit 5 set -> T_F409E4 and T_F40720 instead; otherwise (ring-4)!=(ring-8) -> TimedEvents_DrainDue, else res 6,(0x34D4).  Called from MainTask_ServiceTimedEvents and MainTask_Loop 0xF820BC/0xF82127.\nRing 0x60080A (capacity 0x200, FINDINGS-prom_a-ring-buffers.md) is filled at 0xFEA57C/0xFEA585; why its bytes are time-stamped is TimedEvents_DispatchDueRun's evidence."
+  },
+  {
+   "label": "TimedEvents_DrainDue",
+   "mode": "insert",
+   "text": "TimedEvents_DrainDue -- dispatch due runs of ring 0x60080A until it is empty or the head is not yet due\nEvidence: only when (0x34D4) bit 6 or (0x96) bit 2 is set; loop `ld WA,(XIX-4) / cp (XIX-8),WA / jr z` -> TimedEvents_DispatchDueRun -> `and IZ,IZ / jr nz`.  Also prom_b directory slot T_F4003C."
+  },
+  {
+   "label": "TimedEvents_DispatchDueRun",
+   "mode": "insert",
+   "text": "TimedEvents_DispatchDueRun -- take the next run of same-class, due events off ring 0x60080A and hand it to that class's consumer\nEvidence: finds the first status byte (bit 7), classifies it (TimedEvents_ClassifyStatus); unless (0x34D4) bit 6, a following byte <0x60 is a stamp compared with the tick (0x93) and a not-yet-due head returns IZ=0 (0xF8246C-0xF82481).  The run grows over same-class events until a class change or a not-yet-due stamp (TimedEvents_IsNotYetDue); (ring-6)=end, then class 1 -> T_F413BC, 2 -> T_F411BC, 3 -> T_F40A0C, 0 -> T_F41F10 + Queue2C00_DrainPassAB; commit (ring-8)=(ring-6), (ring-2)+=IZ.\nOut: IZ = bytes consumed.  What the classes are is not established."
+  },
+  {
+   "label": "TimedEvents_ClassifyStatus",
+   "mode": "insert",
+   "text": "TimedEvents_ClassifyStatus -- E = class of status byte A: 0x82 -> 3, 0x88 -> 2, 0x9n -> 1, anything else -> 0\nEvidence: `ld E,3 / cp A,0x82 / jr z`, `xor E,E / cp A,0x88 / ld E,2`, `and A,0xF0 / cp A,0x90 / ld E,1`; called twice by TimedEvents_DispatchDueRun."
+  },
+  {
+   "label": "TimedEvents_IsNotYetDue",
+   "mode": "insert",
+   "text": "TimedEvents_IsNotYetDue -- C set when stamp W is less than 0x30 ticks ahead of the tick counter (0x93), modulo 0x60\nEvidence: W<0x60: W -= (0x93), +0x60 unless the result is >0; then `cp W,0x30`.  W>=0x60 compares as is (not due).  (0x93) is the tick SeqBuf_AppendEvent stamps; 0x60 = 96 is the tick count the INTTR4 comment at 0xF82FDF calls one beat.\nCalled from TimedEvents_DispatchDueRun 0xF824B3."
+  },
+  {
+   "label": "SeqBuf_FlushStaged",
+   "mode": "insert",
+   "text": "SeqBuf_FlushStaged -- copy the bytes staged at 0xAE into the sequencer event ring and leave staging mode\nEvidence: with `ei 6`, for HL=0..(0xAC)-1: E=(0xAE+HL), SeqBuf_PutByte; then res 0,(0xAA) and (0xAC)=0.  SeqBuf_AppendMarker's bit-0-of-(0xAA) path writes to 0xAE+(0xAC).  prom_b directory slot T_F40024, called from 0xFAE9C7 and 0xFCAD6E."
+  },
+  {
+   "label": "SeqBuf_PutByte",
+   "mode": "insert",
+   "text": "SeqBuf_PutByte -- append byte E to the 512-byte sequencer event ring at 0x600A14\nIn: E.  Evidence: XIX=0x600A14; drops when (XIX-2) (free count, 0x600A12) is 0; else (XIX+HL)=E with HL=(XIX-4) (write index), HL+1 mod 0x200 (minc1_16 0x1FF), free count -1.  Same ring and fields as SeqBuf_AppendMarker."
+  },
+  {
+   "label": "ModuleInit_Phase0Veneer",
+   "mode": "insert",
+   "text": "ModuleInit_Phase0Veneer -- directory-callable `calr ModuleInit_RunPhase0 / ret`\nEvidence: prom_b slot T_F4002C is `jp sub_F82630`."
+  },
+  {
+   "label": "ModuleInit_Phase1Veneer",
+   "mode": "insert",
+   "text": "ModuleInit_Phase1Veneer -- directory-callable `calr ModuleInit_RunPhase1 / ret`\nEvidence: prom_b slot T_F40030 is `jp sub_F82634`."
+  },
+  {
+   "label": "ModuleInit_Phase2Veneer",
+   "mode": "insert",
+   "text": "ModuleInit_Phase2Veneer -- directory-callable `calr ModuleInit_RunPhase2 / ret`\nEvidence: prom_b slot T_F40034 is `jp sub_F82638`; called from prom_a 0xFB3DC0.  The `call T_F413B8 / ret` at 0xF8263C after it is unlabelled."
+  },
+  {
+   "label": "MainTask_Entry",
+   "mode": "append",
+   "text": "MainTask_Entry -- entry of CPU 1's first kernel task: power-on initialisation, then MainTask_Loop\nEvidence: EntryPoint_Records[0] is {0x00F4005C, 0x0060E800, 0x8800, 3} and slot T_F4005C is `jp sub_F827C8` (prom_c's record 0 is MAIN).  Body: INTET10=0x30, INTE45=0x40, INTET54=0x03; T_F40144; PowerFail_VerifySavedBlocks; Variant_SetFromPB0; ModuleInit_RunPhase0; ExtBoard_Identify; ModuleInit_RunPhaseByChecksums; ModuleInit_RunPhase3; Irq_InitLevelsTC23; waits for (0x80)>=0x384; the three power-on chords; Kernel_StartTask(2); `jp sub_F82028`."
+  },
+  {
+   "label": "ModuleInit_RunPhase0",
+   "mode": "insert",
+   "text": "ModuleInit_RunPhase0 -- run phase 0 (offset 0x00) of every module in ModuleInitDirectory_F82641\nEvidence: `ld A,0x00 / jr 0xF82846`, the walker that calls (vector + WA) for each of the 25 modules.  Callers: MainTask_Entry 0xF827DD, ModuleInit_Phase0Veneer."
+  },
+  {
+   "label": "ModuleInit_RunPhase1",
+   "mode": "insert",
+   "text": "ModuleInit_RunPhase1 -- run phase 1 (offset 0x04) of every module\nEvidence: `ld A,0x04 / jr 0xF82846`.  Callers: ModuleInit_RunPhaseByChecksums (both power-fail checksums valid), ModuleInit_Phase1Veneer."
+  },
+  {
+   "label": "ModuleInit_RunPhase2",
+   "mode": "insert",
+   "text": "ModuleInit_RunPhase2 -- run phase 2 (offset 0x08) of every module\nEvidence: `ld A,0x08 / jr 0xF82846`.  Callers: ModuleInit_RunPhaseByChecksums (a checksum failed), ModuleInit_Phase2Veneer."
+  },
+  {
+   "label": "ModuleInit_RunPhase3",
+   "mode": "insert",
+   "text": "ModuleInit_RunPhase3 -- run phase 3 (offset 0x0C) of every module\nEvidence: `ld A,0x0C / jr 0xF82846`; caller MainTask_Entry 0xF827FC.  This label's span also holds the unlabelled phase-4 entry 0xF82842 (`ld A,0x10`) and the walker 0xF82846-0xF8286F."
+  },
+  {
+   "label": "Irq_InitLevelsTC23",
+   "mode": "insert",
+   "text": "Irq_InitLevelsTC23 -- write 0xDD to INTETC23\nEvidence: `ld (0x7A),0xDD / ret`; 0x7A is INTETC23 in include/tmp95c061_sfr.inc.  One caller, MainTask_Entry 0xF827FF.  The DSP_ChannelRegs_Write8 call at 0xF82874 after the `ret` is a separate unlabelled fragment."
+  },
+  {
+   "label": "PowerOnChord_ClearRamAndReset",
+   "mode": "insert",
+   "text": "PowerOnChord_ClearRamAndReset -- unless (0x7FCA)=0x5AA5, on the FACTORY CLEAR chord zero both RAMs and restart\nEvidence: returns at once when (0x7FCA)=0x5AA5; chord: variant 1 (0x2B38)=0x07, variant 2 (0x2B38)&3=3 (FINDINGS-prom_a-boot-and-version-screen.md \u00a74).  On it: ei 7, zero 0x1FE0 longs from 0x80 and 0x20000 longs from 0x600000, (0x7FD2)=(0x7FD4)=0, (0x7FC7),0x18, (0x7FCA)=0x5AA5, (0x7FD1)=0, (0x97) bits, `jrl RESET`.  Without it: (0x7FC7) bit 4 cleared, (0x97),0x20.\nCaller: MainTask_Entry 0xF827E5."
+  },
+  {
+   "label": "PowerOnChord_ShowRevisionLeds",
+   "mode": "replace",
+   "text": "PowerOnChord_ShowRevisionLeds -- on its chord, show the prom_a and prom_c revision nibbles on panel LEDs, for ever\nEvidence: chord variant 1 (0x2B32)&7=7, variant 2 (0x2B30)&0x70=0x70; reads 11 bytes of remote 0x00FFFFF0 (0xF82974 loads BUILD_TAG, ROM text 'wsaa_822'; remotely it is prom_c's tag) into 0x2640 via T_Link_SendCommandE2 + T_Link_WaitBlockDone, (0x2648)=0xFF on failure; then loops: RomRevisions_ShowOnLeds, T_SC1_Entry_F40F18_Ret, wait 50 ticks of (0x80).  Never returns.\nCaller: MainTask_Entry 0xF8280E.  The LCD version screen is the other chord, PowerOnChord_VersionScreen."
+  },
+  {
+   "label": "RomRevisions_ShowOnLeds",
+   "mode": "insert",
+   "text": "RomRevisions_ShowOnLeds -- send the two ROM revision nibbles to two panel LED wires\nEvidence: A = LedNibblePatterns_F829F4[(0xFFFFF8)&0x0F] (prom_a's own tag) -> T_F40678 with W=0, then [(0x2648)&0x0F] (the tag read from remote 0xFFFFF0) -> W=1; on variant 2 ((0xC4)!=1) A is `srl 4` first; ends with T_SC1_TxFlush."
+  },
+  {
+   "label": "PowerOnChord_VersionScreen",
+   "mode": "insert",
+   "text": "PowerOnChord_VersionScreen -- on its chord, show the ROM VERSION screen\nEvidence: variant 1 (0x2B3A)&0xE0=0xE0, variant 2 (0x2B33)&0xE0=0xE0 -> `calr VersionScreen_Show`; caller MainTask_Entry 0xF82813."
+  },
+  {
+   "label": "PowerFail_VerifySavedBlocks",
+   "mode": "insert",
+   "text": "PowerFail_VerifySavedBlocks -- check the two 512-byte blocks the power-fail NMI check-summed; result in (0x7FD1)\nEvidence: (0x7FD1)=0; PowerFail_VerifyChecksum512 on XIY=0x7620/XIX=0x7FD2 sets bit 0 when it matches, on 0x617800/0x7FD4 bit 1 -- the same two pairs NMI_PowerFail_SaveAndHalt hands PowerFail_Checksum512 (0xF83086/0xF83093).\nCaller: MainTask_Entry 0xF827D5; ModuleInit_RunPhaseByChecksums reads the bits."
+  },
+  {
+   "label": "ModuleInit_RunPhaseByChecksums",
+   "mode": "insert",
+   "text": "ModuleInit_RunPhaseByChecksums -- run module phase 1 when both saved blocks verified, else phase 2\nEvidence: (0x7FD1) bit 0 and bit 1 set -> ModuleInit_RunPhase1; bit 0 clear -> (0x97)&0x23|0x01, bit 1 clear -> (0x97)&0x37|0x14, then ModuleInit_RunPhase2.  Caller MainTask_Entry 0xF827F0."
+  },
+  {
+   "label": "PowerFail_VerifyChecksum512",
+   "mode": "insert",
+   "text": "PowerFail_VerifyChecksum512 -- C clear when NOT(sum of 256 words at XIY) equals the word at (XIX)\nEvidence: PowerFail_Checksum512's loop (`ld BC,0x100 / add WA,(XIY+) / djnz / cpl WA`) followed by `cp (XIX),WA` and scf/rcf instead of the store.  Called twice by PowerFail_VerifySavedBlocks."
+  },
+  {
+   "label": "SoftTimer_RotateLevel3",
+   "mode": "replace",
+   "text": "SoftTimer_RotateLevel3 -- the boot software timer's callback: round-robin ready queue 3\nEvidence: its address is the +4 callback of SoftTimer_Request_Boot (kernel.s 0xF856E4, KERNEL_BOOT_TIMER_CALLBACK = 0x00F85EC2 in kernel/kernel_maincpu.inc), which SoftTimer_Register installs in software-timer slot 1; body `ld A,3 / calr Kernel_YieldRotate` (0xF85877) / `ret`.\nprom_c's same-position callback is SoftTimer_RotateLevel2 with A=2; as there, the `ret` is unreachable because Kernel_YieldRotate leaves through Kernel_Dispatch or Kernel_ResumeTask."
+  },
+  {
+   "label": "PanelWire_EntryThunks",
+   "mode": "insert",
+   "text": "PanelWire_EntryThunks -- the panel wire-to-group module's six-slot phase vector\nEvidence: ModuleInitDirectory_F82641[3] = T_F40610, whose word is .long 0xF8A000; slot 0 (phase 0) is `jp PanelWire_ModuleReset`, slots 1-5 are `ret` + 3 pad bytes.  Same layout as MidiIn_EntryThunks.  Not a routine."
+  },
+  {
+   "label": "PanelWire_Service",
+   "mode": "insert",
+   "text": "PanelWire_Service -- the panel wire module's per-loop entry\nEvidence: prom_b slot T_F40614 is `jp sub_F8A023`; MainTask_Loop calls it at 0xF8204C beside T_AnalogScan_All and T_SC1_Service; body `calr PanelWire_ThrottledPoll / ret`."
+  },
+  {
+   "label": "PanelWire_ThrottledPoll",
+   "mode": "insert",
+   "text": "PanelWire_ThrottledPoll -- run PanelWire_PollProducers on every other call, or at once after 16 idle ticks\nEvidence: inc (0x219B); inc (0x2196), phase=(0x2196)&3, forced to 0 when (0x80)-(0x2197)>=0x10; Dispatch_F8A05F[phase] = PollProducers for 0/2, the `ret` at 0xF8A05E for 1/3; (0x2197) is the (0x80) stamp PollProducers stores."
+  },
+  {
+   "label": "PanelWire_PollProducers",
+   "mode": "insert",
+   "text": "PanelWire_PollProducers -- run the three producers of the panel group queue\nEvidence: (0x2197)=(0x80); unless (0x207A)=0xDB: PanelWireQueue_DrainToGroupQueue, AssignableSwitch_Poll, PanelGroupQueue_AppendFlaggedGroups.  Reached through Dispatch_F8A05F slots 0 and 2."
+  },
+  {
+   "label": "AssignableSwitch_Poll",
+   "mode": "insert",
+   "text": "AssignableSwitch_Poll -- read the two switch inputs on P7 bits 6 and 7 (variant 1 only)\nEvidence: returns when (0xC4)=2; `ld A,(0x13)` (P7 in include/tmp95c061_sfr.inc); (0x2190)=bit 6, (0x2191)=bit 7, each XORed with bit 0 / bit 1 of (0x7F12); calls AssignableSwitch_PostChanges when either is 1 or word (0x2194) is non-zero.\nCaller: PanelWire_PollProducers."
+  },
+  {
+   "label": "AssignableSwitch_PostChanges",
+   "mode": "insert",
+   "text": "AssignableSwitch_PostChanges -- post a group event for each of the two P7 switches whose state changed (groups 0x16 and 0x17)\nEvidence: (0x219C)=0x16, incremented per input; per input it combines new (0x2190+i), old (0x2192+i) and (0x2194+i), and on a change calls PanelGroupQueue_Append with E=(0x219C), or, when (0x219A)>=7, parks the pair in (0x2185+2i) and sets (0x219D+i) bit 0 for the next call.  Groups 0x16/0x17 are what PanelAction_AssignableSwitch handles (v1, mask 01)."
+  },
+  {
+   "label": "PanelEvent_ShiftThenRunAction_DeadCopy",
+   "mode": "insert",
+   "text": "PanelEvent_ShiftThenRunAction_DeadCopy -- an older, unreachable copy of PanelEvent_ShiftThenRunAction\nEvidence: inside 0xF8A44B-0xF8A7FF, which nothing outside names (PanelGroupQueue_ExpandToEvents_DeadCopy header, check C4).  Byte diff against 0xF8A8A1 over 111 bytes: the first 37 equal, 65 positions differ; the shift/drop logic is the same and the action lookup uses the single table 0xF8AF9F with no (0xC4) select, then `jp (XBC)` or falls to PanelEvent_CommitValue_DeadCopy."
+  },
+  {
+   "label": "PanelEvent_CommitValue_DeadCopy",
+   "mode": "insert",
+   "text": "PanelEvent_CommitValue_DeadCopy -- dead twin of PanelEvent_CommitValue\nEvidence: f5 f1 52 0e (`ld (XIX+),DE / ret`) = the 4 bytes at 0xF8A90B; every caller is inside the unreachable 0xF8A44B-0xF8A7FF region."
+  },
+  {
+   "label": "PanelEvent_Drop_DeadCopy",
+   "mode": "insert",
+   "text": "PanelEvent_Drop_DeadCopy -- dead twin of PanelEvent_Drop\nEvidence: ec 6a 68 fb (`dec 2,XIX / jr` to the `ret`) = the 4 bytes at 0xF8A90F; callers are inside the unreachable region."
+  },
+  {
+   "label": "PanelEvent_Service",
+   "mode": "insert",
+   "text": "PanelEvent_Service -- expand the panel group queue into UI events, then post-process the event list\nEvidence: prom_b slot T_F40634 is `jp sub_F8A81D`, called from MainTask_Loop 0xF820F1; body `calr PanelGroupQueue_ExpandToEvents / calr sub_F8B2C4 / ret` (sub_F8B2C4 walks the 0x2030 list, class 0x20 -> Var2250_AcceptList check, class 0 -> sub_F8B307)."
+  },
+  {
+   "label": "PanelEvent_CommitValue",
+   "mode": "insert",
+   "text": "PanelEvent_CommitValue -- commit the (D,E) value pair of the current event: `ld (XIX+),DE / ret`\nEvidence: PanelEvent_ShiftThenRunAction falls into it when no action record matches (0xF8A900), and the action handlers end with `jp sub_F8A90B` (20 jump/call sites, e.g. PanelAction_AssignableController, PanelAction_Keypad_V2); PanelEvent_ShiftThenRunAction's header calls this the commit."
+  },
+  {
+   "label": "PanelEvent_Drop",
+   "mode": "insert",
+   "text": "PanelEvent_Drop -- drop the current event: `dec 2,XIX`, then return\nEvidence: backs XIX over the class/code pair PanelGroupQueue_ExpandToEvents already stored, as the shift-to-zero path at 0xF8A8C3 does; action handlers end with `jp sub_F8A90F` to discard (15 sites)."
+  },
+  {
+   "label": "PanelAction_LowestBitOneHot",
+   "mode": "insert",
+   "text": "PanelAction_LowestBitOneHot -- action handler of v1 group 0x08, mask 0x3F: keep only the lowest set bit of the value\nEvidence: PanelGroupActionListPool record 0xF8B95C ({0x08,0x3F} -> 0xF8AA24).  E=0 -> PanelEvent_Drop; else E=IndexToBitMask8(LowestSetBitIndex1Based(E)), D=0x3F; when bit 0 of byte +0x18 of RecordFieldPtrs_RAM76A2_Plus20[(0x2250)] is set, the stored code becomes 0x1A (`ld (XIX-1),0x1A`); then PanelEvent_CommitValue.\nWhich panel control group 0x08 is, and what code 0x1A means, are not established."
+  }
+ ],
+ "left_unnamed": [
+  {
+   "name": "sub_F8051E",
+   "why": "a bare `ret` that is slots 7 and 8 (SoftKeyCol8, LcdKeyRow1) of ButtonTable_N0teChange_207EZero; a do-nothing button stub, which prom_b leaves as sub_ with a slot comment"
+  },
+  {
+   "name": "sub_F80808",
+   "why": "bare `ret` hook called from Paint_MeasureC0py (0xF807D0) and after each MeasureC0py field change; it does nothing, so there is no role to name"
+  },
+  {
+   "name": "sub_F80B65",
+   "why": "bare `ret` hook, the MeasureInsert twin of sub_F80808"
+  },
+  {
+   "name": "sub_F80C04",
+   "why": "mid-routine label: the fall-through tail of MeasureInsert_DrawFieldCursor (box FillRect); no 24-bit, branch or table reference to 0xF80C04 in any image -- should become a local label"
+  },
+  {
+   "name": "sub_F80CED",
+   "why": "the `ret` that ends the slot-12 handler at 0xF80CE4 of ButtonTable_MeasureInsert_207ENonZero; only a jr target, not a routine"
+  },
+  {
+   "name": "sub_F80F3A",
+   "why": "Enter body of screen object 0xF43048 (call T_F42B70, or (0x2134),2, call T_F42BB4, (0x12A0)=0): the screen has no name (prom_b round 8: its Enter draws no display list) and T_F42B70/T_F42BB4 (prom_b 0xF65C51/0xF65C00) are unnamed"
+  },
+  {
+   "name": "sub_F80F4F",
+   "why": "Leave body of the same unnamed screen 0xF43048 (or (0x2134),2; call T_F42BB8); worklist addr says F80F55 but the label is at 0xF80F4F, whose first 6 bytes are emitted as .byte"
+  },
+  {
+   "name": "sub_F8101E",
+   "why": "Enter body SHARED by screen objects 0xF43160 and 0xF431D0 (prom_b sub_F7D2B4/sub_F7D2C6): reset callback queue, LCD redraw begin/end around T_F42EC0 (prom_b sub_F6A9CA, unnamed); no screen name can separate the two"
+  },
+  {
+   "name": "sub_F81039",
+   "why": "Leave body shared by the same two unnamed screens: call T_F42EC4 (prom_b sub_F6AE4B, unnamed) then a compare whose result is unused"
+  },
+  {
+   "name": "sub_F81812",
+   "why": "mid-routine label one instruction into S0ngSelectName_LoadSongFromBank; nothing references 0xF81812"
+  },
+  {
+   "name": "sub_F81948",
+   "why": "MISFRAMED: 0xF81948-0xF8194D is DATA, the six 0x5F ('______') SongName_ResetToUnderscores copies; the code from 0xF8194E has no label and no reference (ROM scan for 4E 19 F8 finds none)"
+  },
+  {
+   "name": "sub_F819A2",
+   "why": "called only from the unreferenced code at 0xF8194E; loops 8 times on T_F42B9C (prom_b 0xF65DD3, unnamed) and bits of (0x603454), writing 0/1/2 to 0x2650..; purpose not established"
+  },
+  {
+   "name": "sub_F81E79",
+   "why": "MISFRAMED: 0xF81E79-0xF81E7B is the ASCII 'END' LCD_DrawEndOrClear draws (plus two 0x0E); the code at 0xF81E7E has no label or reference"
+  },
+  {
+   "name": "sub_F81EF3",
+   "why": "runs the first min(max((0x0F65),(0x0F66)),4)*0x23 bytes of DL_F3D1B9, line/box records with no text; what grid it is is not established"
+  },
+  {
+   "name": "sub_F81F1A",
+   "why": "runs a slice of the record run at 0xF3D245 chosen by BC (0..2, stride 0x5A) and the counts (0x0F64..0x0F66) (stride 0x14); no text, meaning not established"
+  },
+  {
+   "name": "sub_F81F3F",
+   "why": "mid-routine label on a `jr` inside sub_F81F1A; no reference"
+  },
+  {
+   "name": "sub_F823AB",
+   "why": "bare `ret` stub called by MainTask_ServiceTimedEvents"
+  },
+  {
+   "name": "sub_F8262E",
+   "why": "bare `ret`; the default target of nine prom_b directory slots (T_F4001C, T_F40028, T_F40040-T_F40058)"
+  },
+  {
+   "name": "sub_F8262F",
+   "why": "bare `ret`; phase slots 1,3,4,5 of module 0's phase vector at 0xF82010"
+  },
+  {
+   "name": "sub_F82CE8",
+   "why": "boot-time T_Link_SendCommandE1 with pushed (0xFFF8, 1, 0x1F); what command 0xE1 means on CPU 2 is open (Link_SendCommandE1 header)"
+  },
+  {
+   "name": "sub_F831B3",
+   "why": "device 0x7F's role is still open (its header); NOTE its header's 'calling context is not established' is now outdated: the caller is Ring_InitAllFourteen, i.e. phase 0 of module 0 (ModuleInit_RunPhase0)"
+  },
+  {
+   "name": "sub_F8605C",
+   "why": "unreferenced (existing header, two-way census); runs the three screen-transition steps"
+  },
+  {
+   "name": "sub_F86093",
+   "why": "unreferenced single `ret` (existing header)"
+  },
+  {
+   "name": "sub_F8691B",
+   "why": "unreferenced single `ret` (existing header)"
+  },
+  {
+   "name": "sub_F8A027",
+   "why": "bare `ret` behind prom_b directory slot T_F40618; no caller"
+  },
+  {
+   "name": "sub_F8A49D",
+   "why": "3 nops + ret in the unreachable 0xF8A44B-0xF8A7FF region, byte-identical twin of sub_F8A89D; nothing to name"
+  },
+  {
+   "name": "sub_F8A6F3",
+   "why": "label on a `jr c` in the middle of a dead-copy handler (0xF8A6B8...); no reference"
+  },
+  {
+   "name": "sub_F8A89D",
+   "why": "3 nops + ret: the do-nothing hook PanelGroupQueue_ExpandToEvents calls on a 0xFE group byte (0xF8A888); nothing to name"
+  }
+ ],
+ "notes": "PATTERNS. (1) 0xF80000-0xF81434 is six sequencer edit screens built from one template: per screen a Paint_X (named), ScreenLeaveBody_X, DrawValues (interpreter-B list, layer 0), DrawFieldCursor (clear layer 1 with DL_F39551 = op 0E, then DLB_Handler_Array8 FillRect box on a field-index copy), and a NumberPad dispatcher on (0x2267) with Digit (Blink_SetEnable 1) / Commit (0x0F) / Sign (0x80) arms plus BlinkSelectedField (BlinkArgPtrs_* [field] -> Blink_Command). BlinkArgPtrs[k] is always the display record of the variable field k's Commit writes, which settles the open 'what the five variables select between' in the boot-block banner: (0x0DE5)/(0x0DED)/(0x0DBC)/(0x0DDA)/(0x0C0F) are the selected-field indices of AdvanceDelay/N0teChange/MeasureC0py/MeasureInsert/SequencerMedley. The many unlabelled fragments between these labels are the screens' button-table slot handlers (prom_b ButtonTable_* hold them as raw .long 0x00F8xxxx); naming them as LcdKeyRowN_/SoftKeyColN_<Screen> like prom_b would be the next step. (2) The prom_b T_F42A08..T_F42AB0 / T_F429A8..T_F42A04 thunks (prom_b 0xF7C3B2..0xF7CCCA, all sub_) are these screens' field setters: e.g. T_F42A68..74 set (0x0DE5)=(0x12FC)=1..4, T_F42A10/14 step (0x0E0C) and copy a bank name -- a prom_b lane can name them from this pack.\nMISFRAMING. sub_F80000 is not a routine: it is the second half of prom_b's LcdKeyRow1_AdvanceDelay_207EZero split by the chip boundary (prom_b ends with `jr Z,0xF80019`). sub_F81948 and sub_F81E79 label DATA ('______' and 'END') followed by unlabelled, unreferenced code (0xF8194E, 0xF81E7E). sub_F80C04, sub_F81812, sub_F81F3F, sub_F8A6F3 are unreferenced mid-routine labels; sub_F80CED is a fragment's `ret`. sub_F8A000 and the unlabelled 0xF8A800 are module phase vectors (6 x 4-byte slots), not code. The unlabelled function at 0xF81ACB (MASTER TRACK CLEAR / STEP RECORD painter, zero references) and 0xF81D41/0xF81C15/0xF81C33/0xF81C90 (more unlabelled STEP RECORD painters gated on (0x207C)=0x0E) live inside Paint_StepRecordTrackClrMeas's span.\nFINDINGS CORRECTIONS for owners of other files: (a) FINDINGS-prom_a-boot-and-version-screen.md \u00a74 calls the chord at 0xF8294C 'ROM VERSION' and 0xF82A04 'third chord', but 0xF82A04 is the one that calls VersionScreen_Show; 0xF8294C shows revision nibbles on LEDs and never returns. (b) PowerFail_Checksum512's header says the boot-time verification 'has NOT been traced' -- it is PowerFail_VerifySavedBlocks (0xF82C80) + PowerFail_VerifyChecksum512 (0xF82CD3), whose result picks module phase 1 vs 2 (ModuleInit_RunPhaseByChecksums). (c) sub_F831B3's header 'calling context not established' is outdated (Ring_InitAllFourteen = module 0 phase 0). (d) prom_c boot_and_main.s line ~160 and kernel.s comments still say 'sub_F85EC2'.\nRENAME MECHANICS: these old names are also referenced in prom_b/wsa1_prom_b.s (`call`/`jp`/.set) and must be in the pack's files list: sub_F803C8 sub_F804EC sub_F80809 sub_F80B66 sub_F80EAF sub_F80EB4 sub_F80FC0 sub_F810F0 sub_F819E9 sub_F82028 sub_F82407 sub_F82557 sub_F82630 sub_F82634 sub_F82638 sub_F827C8 sub_F8A000 sub_F8A023 sub_F8A81D. sub_F85EC2 is referenced only in comments outside prom_a (prom_c, kernel.s, notes/.image-*). Thunk labels T_F40014/T_F40024/T_F4002C/T_F40030/T_F40034/T_F4003C/T_F4005C/T_F40610/T_F40614/T_F40634 could follow as T_<NewName> in a later pass. Headers marked 'replace' are for labels whose existing header said 'SCREEN IS NOT ESTABLISHED' / 'NOT NAMED' / 'Evidence: NONE'; 'append' only for sub_F80000 and sub_F827C8 whose preceding comment is a block banner that stays true. No collision: every new name was checked as a token over all of wsa1/ (none found) and within the pack.\nLEADS: ring 0x60080A (TimedEvents_*) is filled at 0xFEA57C/0xFEA585 -- reading that writer would name the four event classes (0x9n, 0x88, 0x82, other) and their consumers T_F413BC/T_F411BC/T_F40A0C/T_F41F10. MidiIn_RoutePortA/B route note-class MIDI (0x8n/0x9n/CC>=0x7B) to the C module at 0xFC8000 (sub_FC80E2 / sub_FC8448), which is therefore a note/voice-allocation path. (0x0DC1)=1 is 'medley playing'; (0x220B) is the medley source INT/FD/HD; (0x0E35) NORM/MIDI file type. Scratch (read-only lane): /home/fsanches/compartilhado/disasm-lanes/wsa1-naming-r1/scratch/prom_a-s00/names.txt and hdr_and_xrefs.txt.",
+ "verified": false,
+ "also": [
+  "wsa1/prom_b/wsa1_prom_b.s",
+  "wsa1/prom_a/prom_a.ld",
+  "wsa1/prom_b/prom_b.ld"
+ ],
+ "rebased_from": "packs/prom_a-s00.json"
+}

@@ -1,0 +1,8 @@
+{
+ "date": "2026-10-03",
+ "reviewer": "Claude (session 53b889a2), alone, sequentially -- not the namer",
+ "read": [[0, 120]],
+ "method": "review_sheet.py prom_a-s06: each routine's instructions as they stand, the display lists and descriptors it loads (raw bytes: text such as 'SOUND' 53 4f 55 4e 44, 'ERROR', record source-variable fields such as 0x26F6 at +2), and its callers. Spot-checked against the ROM tables: PanelScreen_VtableTable_ViewB [94] = T_F426A0 and [109] = T_F41978, whose prom_b thunks jp to the claimed routines; SoundCopy_InitRequestHeader's four stores; TuneScale_UserKeyValueToByte / _ByteToValue arithmetic; the cursor drawers' bit masks (0x01 source, 0x02 destination). Every evidence line that could be read off the code matched it; none was found wrong.",
+ "rejected": {},
+ "amended": {}
+}

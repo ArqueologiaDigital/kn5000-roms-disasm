@@ -31,6 +31,8 @@ EDIT PACK FORMAT (JSON)
     "files": ["wsa1/prom_a/wsa1_prom_a.s"],     # every file the renames must be applied to
     "renames": [ {"old": "sub_F8001A", "new": "Panel_ReadKeyMatrix",
                   "evidence": "reads port 0xFFxx ... (one line, kept in the report)"} ],
+    "also": ["wsa1/prom_b/wsa1_prom_b.s"],      # optional: files the renames also reach, where OLD
+                                                # may only be a `.set OLD, <addr>` cross-ROM alias
     "headers": [ {"label": "Panel_ReadKeyMatrix",   # name AFTER renames
                   "text": "Scan the 8x8 key matrix ...\\nReader: ...",
                   "mode": "insert"} ]               # insert (default) | append | replace
@@ -101,6 +103,12 @@ def main():
         return 2
     texts = {f: read(f) for f in files}
     defs, count = index(texts)
+    # "also": files the renames reach without being their home -- another assembly unit that names
+    # the label through a cross-ROM alias (`.set sub_FA00EA, 0xFA00EA` in wsa1 prom_b for a prom_a
+    # routine) or a linker script.  An alias there is not a second definition; NEW must not occur.
+    also = [f for f in (pack.get("also") or []) if f not in files]
+    atexts = {f: read(f) for f in also}
+    adefs, acount = index(atexts)
     errors, report = [], []
 
     news = [r["new"] for r in renames]
@@ -121,6 +129,12 @@ def main():
             errors.append("OLD %s is defined %d times in the target files (need exactly 1)" % (o, ndef))
         if count.get(n):
             errors.append("NEW %s already occurs in the target files" % n)
+        if acount.get(n):
+            errors.append("NEW %s already occurs in the 'also' files" % n)
+        for f, i in adefs.get(o, []):
+            if not re.match(r"^\s*\.(?:set|equ)\s+%s\s*,\s*(?:0x[0-9A-Fa-f]+|\d+)\s*(?:;.*)?$" % re.escape(o),
+                            atexts[f].split("\n")[i]):
+                errors.append("OLD %s is defined in %s line %d other than as a `.set` alias" % (o, f, i + 1))
         refs = count.get(o, 0)
         report.append("rename %-32s -> %-40s %4d occurrence(s)  | %s" % (o, n, refs, r.get("evidence", "")))
 
@@ -173,12 +187,13 @@ def main():
                         % (re.escape(o).replace("/", "\\/"), n))
         # run twice: adjacent occurrences share a separator character, which one pass can consume
         for _ in range(2):
-            subprocess.run(["sed", "-i", "-f", sed_path] + [os.path.join(REPO, f) for f in files],
+            subprocess.run(["sed", "-i", "-f", sed_path] + [os.path.join(REPO, f) for f in files + also],
                            check=True)
         texts = {f: read(f) for f in files}
         defs, count = index(texts)
+        _, acount = index({f: read(f) for f in also})
         for o, n in after.items():
-            left = count.get(o, 0)
+            left = count.get(o, 0) + acount.get(o, 0)
             if left:
                 print("ERROR: %d occurrence(s) of %s survived the sed pass" % (left, o), file=sys.stderr)
                 return 1
