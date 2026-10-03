@@ -4360,35 +4360,32 @@ AllocCheckNoteOn_Data:
 	ld	(xsp+4), xbc
 	ld	(xsp+8), xwa
 	cp	(xsp+2), 21
-	jr	nz, NoteMap_AddEntry_Skip6
+	jr	nz, NoteMap_AddEntry_Skip7
 	ld	xwa, (xsp+8)
 	ld	bc, 0:i3
 	call	NoteMap_FindEntry
 	ld	xwa, (xsp+8)
 	call	NoteMap_FindBestVoiceSlot
 	cp	l, 0:i3
-	jr	nz, 41
+	jr	nz, NoteMap_AddEntry_Skip
 	ld	xwa, (xsp+4)
 	ld	bc, 0:i3
-	calr	5082
+	calr	NoteMap_AllocateVoice
 	ld	xwa, (xsp+4)
 	ld	bc, 1:i3
-	calr	5074
-	.byte 0xd1
-	ld	b, 206:opc
-	push	xsp
-	nop
-	nop
-	jr	z, 17
+	calr	NoteMap_AllocateVoice
+	cpw	(52770:16), 0
+	jr	z, NoteMap_AddEntry_Skip
 	call	NoteMap_FindBestMatch
 	cp	l, 255
-	jr	z, 8
+	jr	z, NoteMap_AddEntry_Skip
 	ld	xwa, (xsp+4)
 	ld	bc, 2:i3
-	calr	5049
+	calr	NoteMap_AllocateVoice
+NoteMap_AddEntry_Skip:
 	ld	wa, (0xc598:16)
 	bit	9, wa
-	jrl	z, 355
+	jrl	z, NoteMap_AddEntry_Epilogue
 	ldib_erp 251, 0
 	cp_erpb 251, 16
 	jrl	nc, NoteMap_AddEntry_Epilogue
@@ -4400,39 +4397,39 @@ NoteMap_AddEntry_Loop:
 	.byte 0xaf, 0x04, 0x80, 0x80
 	push	xsp
 	pop_a
-	jr	nz, NoteMap_AddEntry_Skip
+	jr	nz, NoteMap_AddEntry_Skip2
 	ldto_berp a, 251
 	ld c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_BuildAndEmitNoteOnEvents
-NoteMap_AddEntry_Skip:
+NoteMap_AddEntry_Skip2:
 	inc1b_erp 251
 	cp_erpb 251, 16
 	jr	c, NoteMap_AddEntry_Loop
 	jrl	NoteMap_AddEntry_Epilogue
-NoteMap_AddEntry_Skip6:
+NoteMap_AddEntry_Skip7:
 	ld	xwa, (xsp+4)
 	ld	c, (xsp+2)
 	cp	c, (xwa+182)
-	jr	nz, NoteMap_AddEntry_Skip2
+	jr	nz, NoteMap_AddEntry_Skip3
 	ld	xwa, (xsp+8)
 	ld	bc, 2:i3
 	call	NoteMap_FindEntry
 	ld	xwa, (xsp+8)
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 0:i3
-	jr	nz, NoteMap_AddEntry_Skip2
+	jr	nz, NoteMap_AddEntry_Skip3
 	call	VoiceMap_AllocateSlot
 	cp	l, 255
-	jr	z, NoteMap_AddEntry_Skip2
+	jr	z, NoteMap_AddEntry_Skip3
 	ld	xwa, (xsp+4)
 	ld	bc, 2:i3
 	calr	NoteMap_AssignVoiceParams
 	ld	xwa, (xsp+4)
 	ld	bc, 2:i3
 	calr	NoteMap_InitVoiceSlots
-NoteMap_AddEntry_Skip2:
+NoteMap_AddEntry_Skip3:
 	ld	a, (xsp+2)
 	ld	c, a
 	extz	bc
@@ -4445,13 +4442,13 @@ NoteMap_AddEntry_Skip2:
 	add	xwa, (xsp+4)
 	ld	a, (xwa)
 	cp	a, (xsp+2)
-	jr	nz, NoteMap_AddEntry_Skip3
+	jr	nz, NoteMap_AddEntry_Skip4
 	ld	a, (xsp+2)
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	NoteMap_SetChannelParam
-NoteMap_AddEntry_Skip3:
+NoteMap_AddEntry_Skip4:
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, 36
@@ -4460,7 +4457,7 @@ NoteMap_AddEntry_Skip3:
 	ld	e, (xwa)
 	ld	a, e
 	cp	a, 255
-	jr	z, NoteMap_AddEntry_Skip7
+	jr	z, NoteMap_AddEntry_Skip8
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, wa
@@ -4468,18 +4465,18 @@ NoteMap_AddEntry_Skip3:
 	add	bc, 292
 	ld	xwa, (xsp+4)
 	bit	5, (xwa+bc)
-	jr	z, NoteMap_AddEntry_Skip7
+	jr	z, NoteMap_AddEntry_Skip8
 	ld	c, e
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_ScanAndEmitMidiEvents
-NoteMap_AddEntry_Skip7:
+NoteMap_AddEntry_Skip8:
 	ld	wa, (0xc598:16)
 	bit	9, wa
-	jr	z, NoteMap_AddEntry_Skip8
+	jr	z, NoteMap_AddEntry_Skip9
 	ldib_erp 251, 0
 	cp_erpb 251, 16
-	jr	nc, NoteMap_AddEntry_Skip8
+	jr	nc, NoteMap_AddEntry_Skip9
 NoteMap_AddEntry_Loop2:
 	ldto_berp a, 251
 	extz	wa
@@ -4488,17 +4485,17 @@ NoteMap_AddEntry_Loop2:
 	add	xwa, (xsp+4)
 	ld	a, (xwa)
 	cp	a, (xsp+2)
-	jr	nz, NoteMap_AddEntry_Skip4
+	jr	nz, NoteMap_AddEntry_Skip5
 	ldto_berp a, 251
 	ld c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_BuildAndEmitNoteOnEvents
-NoteMap_AddEntry_Skip4:
+NoteMap_AddEntry_Skip5:
 	inc1b_erp 251
 	cp_erpb 251, 16
 	jr	c, NoteMap_AddEntry_Loop2
-NoteMap_AddEntry_Skip8:
+NoteMap_AddEntry_Skip9:
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, 68
@@ -4507,13 +4504,13 @@ NoteMap_AddEntry_Skip8:
 	ld	a, (xwa)
 	ldfr_berp a, 251
 	cp	a, 255
-	jr	z, NoteMap_AddEntry_Skip5
+	jr	z, NoteMap_AddEntry_Skip6
 	ldto_berp a, 251
 	ld c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	SeqPart_EmitNoteOnMessages
-NoteMap_AddEntry_Skip5:
+NoteMap_AddEntry_Skip6:
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, 100

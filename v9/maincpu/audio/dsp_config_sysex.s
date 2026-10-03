@@ -1713,13 +1713,10 @@ CompIface_SendActiveSensing_PC2:
 	pop	sr
 	ret
 
-MidiOut_RealtimeDispatch_Data:
-	.byte 0xc1, 0x80, 0xc0
-	push	xsp
-	cp	(xwa-80), iz
-	.byte 0xc1
-	jrl	pl, 16320
-	ret
+MidiOut_RealtimeDispatch_Handler:
+	cp	(SWBTWR_EVENT_TYPE:16), 152
+	ret	nz
+	cp	(SWBTWR_PAYLOAD_1:16), 14
 	ret	nz
 	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 3

@@ -48334,7 +48334,7 @@ MIDI_BroadcastCC_CommLoop 00FDB9DB
 CompIface_SendActiveSensing 00FDBA02
 CompIface_SendActiveSensing_PC1MAC 00FDBA16
 CompIface_SendActiveSensing_PC2 00FDBA28
-MidiOut_RealtimeDispatch_Data 00FDBA3A
+MidiOut_RealtimeDispatch_Handler 00FDBA3A
 MidiOut_SerializeAndSend 00FDBA5D
 MidiOut_SerializeRealtimeLoop 00FDBA68
 MidiOut_CheckStart 00FDBA9D

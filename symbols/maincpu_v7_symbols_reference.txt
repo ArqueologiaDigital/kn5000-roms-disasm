@@ -48041,7 +48041,7 @@ CompIface_SendActiveSensing 00FDB231
 CompIface_SendActiveSensing_PC1MAC 00FDB245
 BitMapOut_CopyRegion_Done 00FDB24C
 CompIface_SendActiveSensing_PC2 00FDB257
-MidiOut_RealtimeDispatch_Data 00FDB269
+MidiOut_RealtimeDispatch_Handler 00FDB269
 MidiOut_SerializeAndSend 00FDB28C
 MidiOut_SerializeRealtimeLoop 00FDB297
 MidiOut_CheckStart 00FDB2CC

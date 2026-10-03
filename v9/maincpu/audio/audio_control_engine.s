@@ -1527,32 +1527,32 @@ ExtDev_SndParam_Block98_Var40:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, 5
+	jr	z, NakaData_WidgetInit1_Code_Skip8
 	ld	(xde), 64
-	jr	3
+	jr	NakaData_WidgetInit1_Code_Join5
+NakaData_WidgetInit1_Code_Skip8:
 	ld	(xde), 0
+NakaData_WidgetInit1_Code_Join5:
 	ld	(xhl), 64
-	jrl	-3542
+	jrl	FileIO_BytecodeData
 ExtDev_SndParam_BlockA9_Var02:
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0x87
+	cp	(CURRENT_TITLE:16), 135
 	ret	nz
-	.byte 0xf1
-	swi	1
-	.byte 0x90
-	ld	(xbc-80), 169
+	set	1, (0x90f9:16)
+	ld	(xwa), 0xa9
 	ld	(xwa+1), 10
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	.byte 0x82, 0xc3
-	jr	z, 5
+	jr	z, NakaData_WidgetInit1_Code_Skip9
 	ld	(xde), 2
-	jr	3
+	jr	NakaData_WidgetInit1_Code_Join6
+NakaData_WidgetInit1_Code_Skip9:
 	ld	(xde), 0
+NakaData_WidgetInit1_Code_Join6:
 	ld	(xhl), 2
-	calr	61950
+	calr	FileIO_BytecodeData
 	ret
 ExtDev_SndParam_Block98_Var80:
 	set	1, (0x90f9:16)
@@ -6412,9 +6412,7 @@ VoiceParamCC_Done:
 
 UIState_CheckAndRenderBitmap:
 	pushw	iz
-	.byte 0xc1
-	jrl	pl, 16320
-	push	sr
+	cp	(SWBTWR_PAYLOAD_1:16), 2
 	jr	nz, UIState_CheckAndRenderBitmap_Epilogue
 	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 255

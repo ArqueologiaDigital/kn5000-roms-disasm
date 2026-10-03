@@ -6606,7 +6606,7 @@ SwbtB2_Code98_Listeners:
 	.long AccWrap_ReplayStopAlt
 	.long HdaeRom_AltCheckResult
 	.long BitMapOut_ByteData_DisplayUpdate
-	.long MidiOut_RealtimeDispatch_Data
+	.long MidiOut_RealtimeDispatch_Handler
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_TransitionSeq
 	.long DSPCfg_ProcessInput

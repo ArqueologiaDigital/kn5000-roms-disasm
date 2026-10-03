@@ -6605,7 +6605,7 @@ SwbtB2_Code98_Listeners:
 	.long AccWrap_ReplayStopAlt
 	.long SndParam_ProcessEntry + 302	; no label at this callback entry yet; v10: HdaeRom_AltCheckResult
 	.long BitMapOut_ByteData_DisplayUpdate
-	.long BitMapOut_CopyRegion_Done + 29	; no label at this callback entry yet; v10: MidiOut_RealtimeDispatch_Data
+	.long BitMapOut_CopyRegion_Done + 29	; no label at this callback entry yet; v10: MidiOut_RealtimeDispatch_Handler
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_TransitionSeq
 	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
