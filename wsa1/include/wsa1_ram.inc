@@ -251,5 +251,23 @@
 	.equ S0ngC0py_FromTrack,		0x0e0e	; the source track; 0x12 = ALL -- S0ngC0py_DrawTracks
 	.equ S0ngC0py_ToTrack,			0x0e0f	; the destination track -- S0ngC0py_DrawTracks
 
+; ---- wsa1/notes/FINDINGS-prom_a-mode-screen-state.md -- "1. The sound selection; 2. COMBINATION MODE"
+	.equ SoundSel_Group,			0x2169	; the selected group -- SoundGroup_StepSelected
+	.equ SoundSel_Bank,			0x216a	; the selected bank (R1 0, R2 1, U1 8, U2 9, RD 0x20, UD 0x28/0x29, E1 0x10, RE-MAP 0x18-0x1A) -- SoundBank_Select*, PanelLed_ShowBank
+	.equ SoundSel_Member,			0x216b	; the selected member -- SoundGroup_LoadSelectionFromPart / _FromGlobal
+	.equ GroupMembers_Page,			0x2670	; the page of members shown -- GroupMembers_ShowPageOfTwo / _OfMany
+	.equ SoundGroupMenu_Highlight,		0x2675	; the group the menu box is drawn on -- SoundGroupMenu_MoveGroupHighlight
+	.equ ModeScreen_DirtyFields,		0x2676	; page-1 value fields to redraw, a bit each -- Paint_SoundModeFields
+	.equ ModeScreen_DirtyFields2,		0x2677	; more field bits (0x18-0x1A events: bits 0-2) -- UiEvent_MarkRedrawFromClass20Block
+	.equ CombinationMode_EditRow,		0x2678	; page 2 row: bit 0 SOUND, 3 INT, 2 PAN, 1 VOL -- C0mbinati0nM0de_EditSelectedRow
+	.equ CombinationMode_DirtySound,	0x2679	; page 2: parts whose SOUND cell to redraw -- UiEvent_MarkPartRedrawBits
+	.equ CombinationMode_DirtyInt,		0x267a	; parts whose INT cell to redraw -- UiEvent_MarkPartRedrawBits
+	.equ CombinationMode_DirtyPan,		0x267b	; parts whose PAN cell to redraw -- UiEvent_MarkPartRedrawBits
+	.equ CombinationMode_DirtyVol,		0x267c	; parts whose VOL cell to redraw -- UiEvent_MarkPartRedrawBits
+	.equ CombinationMode_Solo,		0x267d	; bit 0: SOLO -- LcdKeyRow1_C0mbinati0nM0de_Page2
+	.equ CombinationMode_ShownPart,		0x267e	; the part the PART box was last drawn for -- C0mbinati0nM0de_ShowSelectedPart
+	.equ DisplayHold_Flag,			0x267f	; bit 0: DISPLAY HOLD on -- SoftKeyCol7/8_GroupSoundDisplayHold
+	.equ CombinationMode_Page,		0x2687	; 0 page 1, 1 page 2 -- PageKey_C0mbinati0nM0de
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

@@ -19183,7 +19183,7 @@ PanelOrdinalToEventValue_B_DeadCopy:
 	jr z, .LF8A702                                           ; F8A6C7  66 39
 	ld a, (0x7f04:16)                                   ; F8A6C9  c1 04 7f 21
 	and A,0x3f                                           ; F8A6CD  c9 cc 3f
-	ld w, (0x216a:16)                                   ; F8A6D0  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F8A6D0  c1 6a 21 20
 .LF8A6D4:
 	cp A,0x18                                            ; F8A6D4  c9 cf 18
 	jr c, .LF8A6F0                                           ; F8A6D7  67 17
@@ -19217,7 +19217,7 @@ sub_F8A6F3:
 	add xwa, (0x60f018:24)                           ; F8A70E  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8A713  a0 20
 	ld A,(XWA+0x1d)                                      ; F8A715  88 1d 21
-	ld w, (0x216a:16)                                   ; F8A718  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F8A718  c1 6a 21 20
 	jr .LF8A6D4                                               ; F8A71C  68 b6
 .LF8A71E:
 	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A71E  1b 00 a5 f8
@@ -19227,7 +19227,7 @@ sub_F8A6F3:
 	jrl z, .LF8A7D7                                          ; F8A728  76 ac 00
 	calr LowestSetBitIndex1Based_Copy                                          ; F8A72B  1e da fd
 	ld d, 0x3f:opc                                          ; F8A72E  24 3f
-	ld a, (0x216a:16)                                   ; F8A730  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F8A730  c1 6a 21 21
 	cp A,0x18                                            ; F8A734  c9 cf 18
 	jr c, .LF8A744                                           ; F8A737  67 0b
 	cp A,0x1a                                            ; F8A739  c9 cf 1a
@@ -19922,7 +19922,7 @@ PanelAction_BankRemap:   ; entry: PanelGroupActionListPool
 	jr z, .LF8ABD9                                           ; F8AB9E  66 39
 	ld a, (0x7f04:16)                                   ; F8ABA0  c1 04 7f 21
 	and A,0x3f                                           ; F8ABA4  c9 cc 3f
-	ld w, (0x216a:16)                                   ; F8ABA7  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F8ABA7  c1 6a 21 20
 .LF8ABAB:
 	cp A,0x18                                            ; F8ABAB  c9 cf 18
 	jr c, .LF8ABC7                                           ; F8ABAE  67 17
@@ -19955,7 +19955,7 @@ PanelAction_BankRemap:   ; entry: PanelGroupActionListPool
 	add xwa, (0x60f018:24)                           ; F8ABE5  e2 18 f0 60 80
 	ld XWA,(XWA)                                         ; F8ABEA  a0 20
 	ld A,(XWA+0x1d)                                      ; F8ABEC  88 1d 21
-	ld w, (0x216a:16)                                   ; F8ABEF  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F8ABEF  c1 6a 21 20
 	jr .LF8ABAB                                               ; F8ABF3  68 b6
 .LF8ABF5:
 	jp PanelEvent_CommitValue                                        ; F8ABF5  1b 0b a9 f8
@@ -19972,7 +19972,7 @@ PanelAction_BankButton:   ; entry: PanelGroupActionListPool
 	jrl z, .LF8ACE4                                          ; F8ABFF  76 e2 00
 	calr LowestSetBitIndex1Based                                          ; F8AC02  1e 0e fd
 	ld d, 0x3f:opc                                          ; F8AC05  24 3f
-	ld a, (0x216a:16)                                   ; F8AC07  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F8AC07  c1 6a 21 21
 	cp A,0x18                                            ; F8AC0B  c9 cf 18
 	jr c, .LF8AC1B                                           ; F8AC0E  67 0b
 	cp A,0x1a                                            ; F8AC10  c9 cf 1a
@@ -20107,7 +20107,7 @@ PanelAction_SoundSelectOrKeypad_V1_Skip:
 	cp a, 0x00:i3                                          ; F8AD1E  c9 d8
 	jr z, .LF8AD35                                           ; F8AD20  66 13
 	ld A,E                                               ; F8AD22  cd 89
-	ld w, (0x216a:16)                                   ; F8AD24  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F8AD24  c1 6a 21 20
 	ld b, 0x98:opc                                          ; F8AD28  22 98
 	call T_SoundGroup_MaxMemberIndex_GetToneCopy         ; F8AD2A  1d 34 10 f4
 	cp A,0xff                                            ; F8AD2E  c9 cf ff
@@ -20115,13 +20115,13 @@ PanelAction_SoundSelectOrKeypad_V1_Skip:
 	jr .LF8AD48                                              ; F8AD33  68 13
 .LF8AD35:
 	ld A,E                                               ; F8AD35  cd 89
-	ld w, (0x216a:16)                                   ; F8AD37  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F8AD37  c1 6a 21 20
 	ld b, (UI_PartIndex:16)                                   ; F8AD3B  c1 50 22 22
 	call T_SoundGroup_MaxMemberIndex_Get                 ; F8AD3F  1d 1c 10 f4
 	cp A,0xff                                            ; F8AD43  c9 cf ff
 	jr z, .LF8AD50                                           ; F8AD46  66 08
 .LF8AD48:
-	ld (0x2169:16), e                                   ; F8AD48  f1 69 21 45
+	ld (SoundSel_Group:16), e                                   ; F8AD48  f1 69 21 45
 	jp PanelEvent_CommitValue                                        ; F8AD4C  1b 0b a9 f8
 .LF8AD50:
 	jp PanelEvent_Drop                                        ; F8AD50  1b 0f a9 f8
@@ -22890,7 +22890,7 @@ PanelLed_ShowSoundSelect:   ; entry: DispatchTable_F8C2B2 id=0x0004
 	and8_imm_rid8 xix, 0x00, 0x00                 ; F8C494  8c 00 3c 00   and (XIX+0x00),0x00
 	bit	1, (UI_RequestBits:16)                       ; F8C498  f1 75 20 c9
 	jr nz, .LF8C4B7                               ; F8C49C  6e 19
-	ld a, (0x2169:16)                            ; F8C49E  c1 69 21 21
+	ld a, (SoundSel_Group:16)                            ; F8C49E  c1 69 21 21
 	and A,0x0f                                    ; F8C4A2  c9 cc 0f
 	sla a, 0x01                                   ; F8C4A5  c9 ec 01
 	ld XIY,BitmaskTable_F8C4B8                    ; F8C4A8  45 b8 c4 f8 00
@@ -22910,7 +22910,7 @@ PanelLed_ShowBank:   ; entry: DispatchTable_F8C2B2 id=0x0040
 	jr z, .LF8C53A                                    ; F8C4DC  66 5c
 	ld XIX,0x000020d0                             ; F8C4DE  44 d0 20 00 00
 	and (XIX+0x02),0x0f                           ; F8C4E3  8c 02 3c 0f
-	ld a, (0x216a:16)                            ; F8C4E7  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                            ; F8C4E7  c1 6a 21 21
 	and A,0x3f                                    ; F8C4EB  c9 cc 3f
 	cp A,0x18                                     ; F8C4EE  c9 cf 18
 	jr c, .LF8C50C                                ; F8C4F1  67 19
@@ -22953,7 +22953,7 @@ BucketTable_F8C536:   ; 3 entries (index 0-2) + 1 pad byte duplicating the last 
 .LF8C53A:   ; internal only -- reached by PanelLed_ShowBank's own jr z
 	ld XIX,0x000020d0                             ; F8C53A  44 d0 20 00 00
 	and8_imm_rid8 xix, 0x00, 0xf0                 ; F8C53F  8c 00 3c f0   and (XIX+0x00),0xf0
-	ld a, (0x216a:16)                            ; F8C543  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                            ; F8C543  c1 6a 21 21
 	and A,0x3f                                    ; F8C547  c9 cc 3f
 	cp A,0x18                                     ; F8C54A  c9 cf 18
 	jr c, .LF8C568                                ; F8C54D  67 19
@@ -31630,8 +31630,8 @@ Paint_SoundMode_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF909AA
 	ld XIX,0x00f28345                                    ; F90A22  44 45 83 f2 00
 	call T_DisplayList_Run                               ; F90A27  1d f0 17 f4
 .LF90A2B:
-	m_or_mi8 MB16, 0x2676, 0xff                          ; F90A2B  c1 76 26 3e ff
-	m_or_mi8 MB16, 0x2677, 0x07                          ; F90A30  c1 77 26 3e 07
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0xff                          ; F90A2B  c1 76 26 3e ff
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F90A30  c1 77 26 3e 07
 	orw	(0x2116:16), 0x0044                  ; F90A35  d1 16 21 3e 44 00
 	calr 0x02e4                                          ; F90A3B  1e e4 02
 	calr 0x0310                                          ; F90A3E  1e 10 03
@@ -31671,7 +31671,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	ld XIX,0x00f2972e                                    ; F90A95  44 2e 97 f2 00
 	call T_DisplayListB_Run                              ; F90A9A  1d f4 17 f4
 	calr 0x323f                                          ; F90A9E  1e 3f 32
-	m_bit 0, MD16, 0x2676                                ; F90AA1  f1 76 26 c8
+	m_bit 0, MD16, ModeScreen_DirtyFields                                ; F90AA1  f1 76 26 c8
 	jr z, .LF90AB9                                           ; F90AA5  66 12
 	push XIY                                             ; F90AA7  3d
 	ld A,(XIY+0x03)                                      ; F90AA8  8d 03 21
@@ -31680,7 +31680,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	call T_DLB_Handler_Decimal2Words                                        ; F90AB4  1d 0c 18 f4
 	pop XIY                                              ; F90AB8  5d
 .LF90AB9:
-	m_bit 1, MD16, 0x2676                                ; F90AB9  f1 76 26 c9
+	m_bit 1, MD16, ModeScreen_DirtyFields                                ; F90AB9  f1 76 26 c9
 	jr z, .LF90AD1                                           ; F90ABD  66 12
 	push XIY                                             ; F90ABF  3d
 	ld A,(XIY+0x08)                                      ; F90AC0  8d 08 21
@@ -31689,7 +31689,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	call T_DLB_Handler_StringTable2                      ; F90ACC  1d fc 17 f4
 	pop XIY                                              ; F90AD0  5d
 .LF90AD1:
-	m_bit 2, MD16, 0x2676                                ; F90AD1  f1 76 26 ca
+	m_bit 2, MD16, ModeScreen_DirtyFields                                ; F90AD1  f1 76 26 ca
 	jr z, .LF90AE9                                           ; F90AD5  66 12
 	push XIY                                             ; F90AD7  3d
 	ld A,(XIY+0x05)                                      ; F90AD8  8d 05 21
@@ -31698,7 +31698,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	call T_DLB_Handler_Decimal2Words                                        ; F90AE4  1d 0c 18 f4
 	pop XIY                                              ; F90AE8  5d
 .LF90AE9:
-	m_bit 3, MD16, 0x2676                                ; F90AE9  f1 76 26 cb
+	m_bit 3, MD16, ModeScreen_DirtyFields                                ; F90AE9  f1 76 26 cb
 	jr z, .LF90B01                                           ; F90AED  66 12
 	push XIY                                             ; F90AEF  3d
 	ld A,(XIY+0x07)                                      ; F90AF0  8d 07 21
@@ -31708,7 +31708,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 Paint_SoundModeFields_DeadCopy__F90B00:
 	pop XIY                                              ; F90B00  5d
 .LF90B01:
-	m_bit 4, MD16, 0x2676                                ; F90B01  f1 76 26 cc
+	m_bit 4, MD16, ModeScreen_DirtyFields                                ; F90B01  f1 76 26 cc
 	jr z, .LF90B19                                           ; F90B05  66 12
 	push XIY                                             ; F90B07  3d
 	ld A,(XIY+0x0d)                                      ; F90B08  8d 0d 21
@@ -31717,7 +31717,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	call T_DLB_Handler_StringTable2                      ; F90B14  1d fc 17 f4
 	pop XIY                                              ; F90B18  5d
 .LF90B19:
-	m_bit 5, MD16, 0x2676                                ; F90B19  f1 76 26 cd
+	m_bit 5, MD16, ModeScreen_DirtyFields                                ; F90B19  f1 76 26 cd
 	jr z, .LF90B31                                           ; F90B1D  66 12
 	push XIY                                             ; F90B1F  3d
 	ld A,(XIY+0x0d)                                      ; F90B20  8d 0d 21
@@ -31726,7 +31726,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	call T_DLB_Handler_StringTable2                      ; F90B2C  1d fc 17 f4
 	pop XIY                                              ; F90B30  5d
 .LF90B31:
-	m_bit 7, MD16, 0x2676                                ; F90B31  f1 76 26 cf
+	m_bit 7, MD16, ModeScreen_DirtyFields                                ; F90B31  f1 76 26 cf
 	jr z, .LF90B52                                           ; F90B35  66 1b
 	push XIY                                             ; F90B37  3d
 	ld A,(XIY+0x06)                                      ; F90B38  8d 06 21
@@ -31740,7 +31740,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	call T_DLB_Handler_StringTable2                      ; F90B4D  1d fc 17 f4
 	pop XIY                                              ; F90B51  5d
 .LF90B52:
-	m_bit 6, MD16, 0x2676                                ; F90B52  f1 76 26 ce
+	m_bit 6, MD16, ModeScreen_DirtyFields                                ; F90B52  f1 76 26 ce
 	jr z, .LF90B7B                                           ; F90B56  66 23
 	push XIY                                             ; F90B58  3d
 	ld XIY,0x000078b2                                    ; F90B59  45 b2 78 00 00
@@ -31757,8 +31757,8 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	pop XIY                                              ; F90B7A  5d
 .LF90B7B:
 	calr sub_F90B8E                                            ; F90B7B  1e 10 00
-	ld (0x2676:16), 0x00                                 ; F90B7E  f1 76 26 00 00
-	ld (0x2677:16), 0x00                                 ; F90B83  f1 77 26 00 00
+	ld (ModeScreen_DirtyFields:16), 0x00                                 ; F90B7E  f1 76 26 00 00
+	ld (ModeScreen_DirtyFields2:16), 0x00                                 ; F90B83  f1 77 26 00 00
 	ld c, 0x07:opc                                          ; F90B88  23 07
 	ld a, 0x0c:opc                                          ; F90B8A  21 0c
 	swi 7                                                ; F90B8C  ff
@@ -31782,7 +31782,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
 sub_F90B8E:
-	m_bit 0, MD16, 0x2677                                ; F90B8E  f1 77 26 c8
+	m_bit 0, MD16, ModeScreen_DirtyFields2                                ; F90B8E  f1 77 26 c8
 	jr z, .LF90BCD                                           ; F90B92  66 39
 	call 0xf93cf4                                        ; F90B94  1d f4 3c f9
 	ld A,(XIY+0x18)                                      ; F90B98  8d 18 21
@@ -31800,7 +31800,7 @@ sub_F90B8E:
 	ld XIX,0x00f28750                                    ; F90BC4  44 50 87 f2 00
 	call T_DisplayListB_Run                              ; F90BC9  1d f4 17 f4
 .LF90BCD:
-	m_bit 1, MD16, 0x2677                                ; F90BCD  f1 77 26 c9
+	m_bit 1, MD16, ModeScreen_DirtyFields2                                ; F90BCD  f1 77 26 c9
 	jr z, 0x76                                           ; F90BD1  66 76
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90BD3  c0 c4 3f 02
 	jr z, 0x70                                           ; F90BD7  66 70
@@ -32045,8 +32045,8 @@ Paint_SoundMode:   ; entry: named by 1 `ld` operand, first at 0xF90DB6
 	ld XIX,DL_Drawbar                                    ; F90E2E  44 4f 83 f2 00
 	call T_DisplayList_Run                               ; F90E33  1d f0 17 f4
 .LF90E37:
-	m_or_mi8 MB16, 0x2676, 0xff                          ; F90E37  c1 76 26 3e ff
-	m_or_mi8 MB16, 0x2677, 0x07                          ; F90E3C  c1 77 26 3e 07
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0xff                          ; F90E37  c1 76 26 3e ff
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F90E3C  c1 77 26 3e 07
 	orw	(0x2116:16), 0x0044                  ; F90E41  d1 16 21 3e 44 00
 	calr sub_F911B6                                      ; F90E47  1e 6c 03
 	ret                                                  ; F90E4A  0e
@@ -32087,7 +32087,7 @@ Paint_SoundModeFields:   ; entry: named by 1 `ld` operand, first at 0xF90DC8
 	ld XIX,DL_F29783                                     ; F90EA1  44 83 97 f2 00
 	call T_DisplayListB_Run                              ; F90EA6  1d f4 17 f4
 	calr PartRecord_GetPtr                                          ; F90EAA  1e 8c 36
-	m_bit 0, MD16, 0x2676                                ; F90EAD  f1 76 26 c8
+	m_bit 0, MD16, ModeScreen_DirtyFields                                ; F90EAD  f1 76 26 c8
 	jr z, .LF90EC9                                       ; F90EB1  66 16
 	push XIY                                             ; F90EB3  3d
 	ld a, (0x0710:16)                                   ; F90EB4  c1 10 07 21
@@ -32097,7 +32097,7 @@ Paint_SoundModeFields:   ; entry: named by 1 `ld` operand, first at 0xF90DC8
 	call T_DLB_Handler_DecimalSigned2Words               ; F90EC4  1d 14 18 f4
 	pop XIY                                              ; F90EC8  5d
 .LF90EC9:
-	m_bit 1, MD16, 0x2676                                ; F90EC9  f1 76 26 c9
+	m_bit 1, MD16, ModeScreen_DirtyFields                                ; F90EC9  f1 76 26 c9
 	jr z, .LF90EE2                                       ; F90ECD  66 13
 	push XIY                                             ; F90ECF  3d
 	ld a, (0x0711:16)                                   ; F90ED0  c1 11 07 21
@@ -32107,7 +32107,7 @@ sub_F90EDD:
 	call T_DLB_Handler_StringTable2                      ; F90EDD  1d fc 17 f4
 	pop XIY                                              ; F90EE1  5d
 .LF90EE2:
-	m_bit 2, MD16, 0x2676                                ; F90EE2  f1 76 26 ca
+	m_bit 2, MD16, ModeScreen_DirtyFields                                ; F90EE2  f1 76 26 ca
 	jr z, .LF90EFA                                       ; F90EE6  66 12
 	push XIY                                             ; F90EE8  3d
 	ld A,(XIY+0x05)                                      ; F90EE9  8d 05 21
@@ -32116,7 +32116,7 @@ sub_F90EDD:
 	call T_DLB_Handler_Decimal2Words                                        ; F90EF5  1d 0c 18 f4
 	pop XIY                                              ; F90EF9  5d
 .LF90EFA:
-	m_bit 3, MD16, 0x2676                                ; F90EFA  f1 76 26 cb
+	m_bit 3, MD16, ModeScreen_DirtyFields                                ; F90EFA  f1 76 26 cb
 	jr Z,.LF90F12                                        ; F90EFE  66 12
 	push XIY                                             ; F90F00  3d
 	ld A,(XIY+0x07)                                      ; F90F01  8d 07 21
@@ -32125,7 +32125,7 @@ sub_F90EDD:
 	call T_DLB_Handler_Decimal2Words                                        ; F90F0D  1d 0c 18 f4
 	pop XIY                                              ; F90F11  5d
 .LF90F12:
-	m_bit 4, MD16, 0x2676                                ; F90F12  f1 76 26 cc
+	m_bit 4, MD16, ModeScreen_DirtyFields                                ; F90F12  f1 76 26 cc
 	jr z, .LF90F2A                                       ; F90F16  66 12
 	push XIY                                             ; F90F18  3d
 	ld A,(XIY+0x0d)                                      ; F90F19  8d 0d 21
@@ -32134,7 +32134,7 @@ sub_F90EDD:
 	call T_DLB_Handler_StringTable2                      ; F90F25  1d fc 17 f4
 	pop XIY                                              ; F90F29  5d
 .LF90F2A:
-	m_bit 5, MD16, 0x2676                                ; F90F2A  f1 76 26 cd
+	m_bit 5, MD16, ModeScreen_DirtyFields                                ; F90F2A  f1 76 26 cd
 	jr z, .LF90F42                                       ; F90F2E  66 12
 	push XIY                                             ; F90F30  3d
 	ld A,(XIY+0x0d)                                      ; F90F31  8d 0d 21
@@ -32143,7 +32143,7 @@ sub_F90EDD:
 	call T_DLB_Handler_StringTable2                      ; F90F3D  1d fc 17 f4
 	pop XIY                                              ; F90F41  5d
 .LF90F42:
-	m_bit 7, MD16, 0x2676                                ; F90F42  f1 76 26 cf
+	m_bit 7, MD16, ModeScreen_DirtyFields                                ; F90F42  f1 76 26 cf
 	jr z, .LF90F63                                       ; F90F46  66 1b
 	push XIY                                             ; F90F48  3d
 	ld A,(XIY+0x06)                                      ; F90F49  8d 06 21
@@ -32157,7 +32157,7 @@ sub_F90EDD:
 	call T_DLB_Handler_StringTable2                      ; F90F5E  1d fc 17 f4
 	pop XIY                                              ; F90F62  5d
 .LF90F63:
-	m_bit 6, MD16, 0x2676                                ; F90F63  f1 76 26 ce
+	m_bit 6, MD16, ModeScreen_DirtyFields                                ; F90F63  f1 76 26 ce
 	jr z, .LF90F8C                                       ; F90F67  66 23
 	push XIY                                             ; F90F69  3d
 	ld XIY,0x000078b2                                    ; F90F6A  45 b2 78 00 00
@@ -32174,8 +32174,8 @@ sub_F90EDD:
 	pop XIY                                              ; F90F8B  5d
 .LF90F8C:
 	calr sub_F90F9F                                      ; F90F8C  1e 10 00
-	ld (0x2676:16), 0x00                                 ; F90F8F  f1 76 26 00 00
-	ld (0x2677:16), 0x00                                 ; F90F94  f1 77 26 00 00
+	ld (ModeScreen_DirtyFields:16), 0x00                                 ; F90F8F  f1 76 26 00 00
+	ld (ModeScreen_DirtyFields2:16), 0x00                                 ; F90F94  f1 77 26 00 00
 	ld c, 0x07:opc                                          ; F90F99  23 07
 	ld a, 0x0c:opc                                          ; F90F9B  21 0c
 	swi 7                                                ; F90F9D  ff
@@ -32209,7 +32209,7 @@ sub_F90EDD:
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
 sub_F90F9F:
-	m_bit 0, MD16, 0x2677                                ; F90F9F  f1 77 26 c8
+	m_bit 0, MD16, ModeScreen_DirtyFields2                                ; F90F9F  f1 77 26 c8
 	jr z, .LF90FCB                                       ; F90FA3  66 26
 	call PartRecord_GetSecondHalfPtr                                        ; F90FA5  1d 4d 45 f9
 	ld A,(XIY+0x18)                                      ; F90FA9  8d 18 21
@@ -32222,7 +32222,7 @@ sub_F90F9F:
 	call T_DisplayListB_Run                              ; F90FC5  1d f4 17 f4
 	jr .LF90FCB                                          ; F90FC9  68 00
 .LF90FCB:
-	m_bit 1, MD16, 0x2677                                ; F90FCB  f1 77 26 c9
+	m_bit 1, MD16, ModeScreen_DirtyFields2                                ; F90FCB  f1 77 26 c9
 	jr z, .LF9104B                                       ; F90FCF  66 7a
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90FD1  c0 c4 3f 02
 	jr z, .LF9104B                                       ; F90FD5  66 74
@@ -32261,7 +32261,7 @@ sub_F90F9F:
 	call T_DisplayListB_Run                              ; F91045  1d f4 17 f4
 	jr .LF9104B                                          ; F91049  68 00
 .LF9104B:
-	m_bit 2, MD16, 0x2677                                ; F9104B  f1 77 26 ca
+	m_bit 2, MD16, ModeScreen_DirtyFields2                                ; F9104B  f1 77 26 ca
 	jrl z, .LF9113E                                      ; F9104F  76 ec 00
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F91052  c0 c4 3f 02
 	jr z, .LF910CC                                       ; F91056  66 74
@@ -32854,7 +32854,7 @@ ScreenLeave_C0mbinati0nM0de:
 ;   other way round.
 ScreenButton_C0mbinati0nM0de:
 	ld XIX,DisplayListPtrs_F914FB                        ; F914E1  44 fb 14 f9 00
-	m_cp_mi8 MB16, 0x2687, 0x00                          ; F914E6  c1 87 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F914E6  c1 87 26 3f 00
 	jr z, .LF914F2                                       ; F914EB  66 05
 	ld XIX,DisplayListPtrs_F9157B                        ; F914ED  44 7b 15 f9 00
 .LF914F2:
@@ -32958,7 +32958,7 @@ InstallPainter_C0mbinati0nM0de:
 	cp (UI_ScreenId_Previous:16), a                                    ; F915FF  c1 7d 20 f9
 	jr z, .LF9163B                                       ; F91603  66 36
 	call T_CallbackQueue_ResetAndRestartTask2            ; F91605  1d 80 2e f4
-	ld (0x2687:16), 0x00                                 ; F91609  f1 87 26 00 00
+	ld (CombinationMode_Page:16), 0x00                                 ; F91609  f1 87 26 00 00
 	ld XWA,0xffffffff                                    ; F9160E  40 ff ff ff ff
 	ld (0x2666:16), xwa                                 ; F91613  f1 66 26 60
 	ld (0x266a:16), xwa                                 ; F91617  f1 6a 26 60
@@ -32973,7 +32973,7 @@ InstallPainter_C0mbinati0nM0de:
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F9163B  c1 75 20 3e 01
 	m_bit 4, MD16, 0x2095                                ; F91640  f1 95 20 cc
 	jr nz, sub_F91678_Join                                    ; F91644  6e 36
-	m_cp_mi8 MB16, 0x2687, 0x00                          ; F91646  c1 87 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F91646  c1 87 26 3f 00
 	jr nz, .LF91667                                      ; F9164B  6e 1a
 	ldw (PanelDial_DownButton:16), 0x0181                              ; F9164D  f1 9b 20 02 81 01
 	ld XWA,Paint_C0mbinati0nM0dePage1                                    ; F91653  40 7e 1c f9 00
@@ -33028,7 +33028,7 @@ sub_F91678:
 ; Unknown: what this routine is for. Its body contains ZERO display-list calls.
 ; ---------------------------------------------------------------------
 sub_F91678_Join:
-	m_cp_mi8 MB16, 0x2687, 0x00                          ; F9167C  c1 87 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F9167C  c1 87 26 3f 00
 	jr nz, .LF91697                                      ; F91681  6e 14
 	ld XWA,C0mbinati0nM0de_RepaintPage1Fields                                    ; F91683  40 f2 1c f9 00
 	push XWA                                             ; F91688  38
@@ -33056,23 +33056,23 @@ Draw_C0mbinati0nM0dePage22Sound:   ; entry: named by 1 `ld` operand, first at 0x
 	ld XIY,DL_C0mbinati0nM0dePage22Sound                 ; F916B7  45 35 91 f2 00
 	ld XIX,DL_F29672                                     ; F916BC  44 72 96 f2 00
 	call T_DisplayList_Run                               ; F916C1  1d f0 17 f4
-	ld (0x2678:16), 0x00                                 ; F916C5  f1 78 26 00 00
-	m_or_mi8 MB16, 0x2678, 0x02                          ; F916CA  c1 78 26 3e 02
+	ld (CombinationMode_EditRow:16), 0x00                                 ; F916C5  f1 78 26 00 00
+	m_or_mi8 MB16, CombinationMode_EditRow, 0x02                          ; F916CA  c1 78 26 3e 02
 	ld XIY,DL_F296CC                                     ; F916CF  45 cc 96 f2 00
 	ld XIX,0x00f296d6                                    ; F916D4  44 d6 96 f2 00
 	call T_DisplayList_Run                               ; F916D9  1d f0 17 f4
-	ld (0x267e:16), 0xff                                 ; F916DD  f1 7e 26 00 ff
+	ld (CombinationMode_ShownPart:16), 0xff                                 ; F916DD  f1 7e 26 00 ff
 	calr C0mbinati0nM0de_ShowSelectedPart                                          ; F916E2  1e 48 0f
-	ld (0x2679:16), 0xff                                 ; F916E5  f1 79 26 00 ff
-	ld (0x267a:16), 0xff                                 ; F916EA  f1 7a 26 00 ff
-	ld (0x267b:16), 0xff                                 ; F916EF  f1 7b 26 00 ff
-	ld (0x267c:16), 0xff                                 ; F916F4  f1 7c 26 00 ff
+	ld (CombinationMode_DirtySound:16), 0xff                                 ; F916E5  f1 79 26 00 ff
+	ld (CombinationMode_DirtyInt:16), 0xff                                 ; F916EA  f1 7a 26 00 ff
+	ld (CombinationMode_DirtyPan:16), 0xff                                 ; F916EF  f1 7b 26 00 ff
+	ld (CombinationMode_DirtyVol:16), 0xff                                 ; F916F4  f1 7c 26 00 ff
 	call T_F42E18                                        ; F916F9  1d 18 2e f4
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F916FD  f1 40 25 00 01
 	ld XIY,DL_F29672                                     ; F91702  45 72 96 f2 00
 	ld XIX,DL_F2967C                                     ; F91707  44 7c 96 f2 00
 	call T_DisplayList_Run                               ; F9170C  1d f0 17 f4
-	m_bit 0, MD16, 0x267d                                ; F91710  f1 7d 26 c8
+	m_bit 0, MD16, CombinationMode_Solo                                ; F91710  f1 7d 26 c8
 	jr z, .LF91724                                       ; F91714  66 0e
 	ld XIY,DL_F2967C                                     ; F91716  45 7c 96 f2 00
 	ld XIX,DL_F29686                                     ; F9171B  44 86 96 f2 00
@@ -33084,30 +33084,30 @@ Draw_C0mbinati0nM0dePage22Sound:   ; entry: named by 1 `ld` operand, first at 0x
 ;   FieldRedrawPtrs_F91865/_F91885/_F918A5/_F918C5 and masks (0x2679)/(0x267A)/(0x267B)/(0x267C) ((0x2540) layer
 ;   0,1,0,0); clears the four masks; swi 7 fn 0x0C. Posted by InstallPainter_C0mbinati0nM0deFields when (0x2687) != 0.
 Paint_C0mbinati0nM0dePage2Fields:   ; entry: named by 1 `ld` operand, first at 0xF91697
-	m_cp_mi8 MB16, 0x2679, 0x00                          ; F91725  c1 79 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_DirtySound, 0x00                          ; F91725  c1 79 26 3f 00
 	jr z, .LF9172F                                       ; F9172A  66 03
 	calr sub_F918E5                                          ; F9172C  1e b6 01
 .LF9172F:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9172F  f1 40 25 00 00
 	ld XIY,FieldRedrawPtrs_F91865                        ; F91734  45 65 18 f9 00
-	ld a, (0x2679:16)                                   ; F91739  c1 79 26 21
+	ld a, (CombinationMode_DirtySound:16)                                   ; F91739  c1 79 26 21
 	call FieldRedraw_CallPerSetBit                                      ; F9173D  1d f4 17 f9
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F91741  f1 40 25 00 01
 	ld XIY,FieldRedrawPtrs_F91885                        ; F91746  45 85 18 f9 00
-	ld a, (0x267a:16)                                   ; F9174B  c1 7a 26 21
+	ld a, (CombinationMode_DirtyInt:16)                                   ; F9174B  c1 7a 26 21
 	call FieldRedraw_CallPerSetBit                                      ; F9174F  1d f4 17 f9
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F91753  f1 40 25 00 00
 	ld XIY,FieldRedrawPtrs_F918A5                        ; F91758  45 a5 18 f9 00
-	ld a, (0x267b:16)                                   ; F9175D  c1 7b 26 21
+	ld a, (CombinationMode_DirtyPan:16)                                   ; F9175D  c1 7b 26 21
 	call FieldRedraw_CallPerSetBit                                      ; F91761  1d f4 17 f9
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F91765  f1 40 25 00 00
 	ld XIY,FieldRedrawPtrs_F918C5                        ; F9176A  45 c5 18 f9 00
-	ld a, (0x267c:16)                                   ; F9176F  c1 7c 26 21
+	ld a, (CombinationMode_DirtyVol:16)                                   ; F9176F  c1 7c 26 21
 	call FieldRedraw_CallPerSetBit                                      ; F91773  1d f4 17 f9
-	ld (0x2679:16), 0x00                                 ; F91777  f1 79 26 00 00
-	ld (0x267a:16), 0x00                                 ; F9177C  f1 7a 26 00 00
-	ld (0x267b:16), 0x00                                 ; F91781  f1 7b 26 00 00
-	ld (0x267c:16), 0x00                                 ; F91786  f1 7c 26 00 00
+	ld (CombinationMode_DirtySound:16), 0x00                                 ; F91777  f1 79 26 00 00
+	ld (CombinationMode_DirtyInt:16), 0x00                                 ; F9177C  f1 7a 26 00 00
+	ld (CombinationMode_DirtyPan:16), 0x00                                 ; F91781  f1 7b 26 00 00
+	ld (CombinationMode_DirtyVol:16), 0x00                                 ; F91786  f1 7c 26 00 00
 	ld c, 0x07:opc                                          ; F9178B  23 07
 	ld a, 0x0c:opc                                          ; F9178D  21 0c
 	swi 7                                                ; F9178F  ff
@@ -33775,8 +33775,8 @@ Paint_C0mbinati0nM0dePage1:   ; entry: named by 1 `ld` operand, first at 0xF9165
 	ld XIX,DL_C0mbinati0nM0dePage22Sound                 ; F91CD1  44 35 91 f2 00
 	call T_DisplayList_Run                               ; F91CD6  1d f0 17 f4
 .LF91CDA:
-	m_or_mi8 MB16, 0x2676, 0xff                          ; F91CDA  c1 76 26 3e ff
-	m_or_mi8 MB16, 0x2677, 0x07                          ; F91CDF  c1 77 26 3e 07
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0xff                          ; F91CDA  c1 76 26 3e ff
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F91CDF  c1 77 26 3e 07
 	orw	(0x2116:16), 0x0044                  ; F91CE4  d1 16 21 3e 44 00
 	call T_F42E18                                        ; F91CEA  1d 18 2e f4
 	calr sub_F911B6                                          ; F91CEE  1e c5 f4
@@ -33814,7 +33814,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	ld XIX,DL_F29783                                     ; F91D42  44 83 97 f2 00
 	call T_DisplayListB_Run                              ; F91D47  1d f4 17 f4
 	calr PartRecord_GetPtr                                          ; F91D4B  1e eb 27
-	m_bit 0, MD16, 0x2676                                ; F91D4E  f1 76 26 c8
+	m_bit 0, MD16, ModeScreen_DirtyFields                                ; F91D4E  f1 76 26 c8
 	jr z, .LF91D66                                       ; F91D52  66 12
 	push XIY                                             ; F91D54  3d
 	ld A,(XIY+0x03)                                      ; F91D55  8d 03 21
@@ -33823,7 +33823,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	call T_DLB_Handler_Decimal2Words                                        ; F91D61  1d 0c 18 f4
 	pop XIY                                              ; F91D65  5d
 .LF91D66:
-	m_bit 1, MD16, 0x2676                                ; F91D66  f1 76 26 c9
+	m_bit 1, MD16, ModeScreen_DirtyFields                                ; F91D66  f1 76 26 c9
 	jr z, .LF91D7E                                       ; F91D6A  66 12
 	push XIY                                             ; F91D6C  3d
 	ld A,(XIY+0x08)                                      ; F91D6D  8d 08 21
@@ -33832,7 +33832,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	call T_DLB_Handler_StringTable2                      ; F91D79  1d fc 17 f4
 	pop XIY                                              ; F91D7D  5d
 .LF91D7E:
-	m_bit 2, MD16, 0x2676                                ; F91D7E  f1 76 26 ca
+	m_bit 2, MD16, ModeScreen_DirtyFields                                ; F91D7E  f1 76 26 ca
 	jr z, .LF91D96                                       ; F91D82  66 12
 	push XIY                                             ; F91D84  3d
 	ld A,(XIY+0x05)                                      ; F91D85  8d 05 21
@@ -33841,7 +33841,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	call T_DLB_Handler_Decimal2Words                                        ; F91D91  1d 0c 18 f4
 	pop XIY                                              ; F91D95  5d
 .LF91D96:
-	m_bit 3, MD16, 0x2676                                ; F91D96  f1 76 26 cb
+	m_bit 3, MD16, ModeScreen_DirtyFields                                ; F91D96  f1 76 26 cb
 	jr z, .LF91DAE                                       ; F91D9A  66 12
 	push XIY                                             ; F91D9C  3d
 	ld A,(XIY+0x07)                                      ; F91D9D  8d 07 21
@@ -33850,7 +33850,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	call T_DLB_Handler_Decimal2Words                                        ; F91DA9  1d 0c 18 f4
 	pop XIY                                              ; F91DAD  5d
 .LF91DAE:
-	m_bit 4, MD16, 0x2676                                ; F91DAE  f1 76 26 cc
+	m_bit 4, MD16, ModeScreen_DirtyFields                                ; F91DAE  f1 76 26 cc
 	jr z, .LF91DC6                                       ; F91DB2  66 12
 	push XIY                                             ; F91DB4  3d
 	ld A,(XIY+0x0d)                                      ; F91DB5  8d 0d 21
@@ -33859,7 +33859,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	call T_DLB_Handler_StringTable2                      ; F91DC1  1d fc 17 f4
 	pop XIY                                              ; F91DC5  5d
 .LF91DC6:
-	m_bit 5, MD16, 0x2676                                ; F91DC6  f1 76 26 cd
+	m_bit 5, MD16, ModeScreen_DirtyFields                                ; F91DC6  f1 76 26 cd
 	jr z, .LF91DDF                                       ; F91DCA  66 13
 	push XIY                                             ; F91DCC  3d
 	ld a, (UI_PartIndex:16)                                   ; F91DCD  c1 50 22 21
@@ -33868,7 +33868,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	call T_DLB_Handler_StringTable2                      ; F91DDA  1d fc 17 f4
 	pop XIY                                              ; F91DDE  5d
 .LF91DDF:
-	m_bit 7, MD16, 0x2676                                ; F91DDF  f1 76 26 cf
+	m_bit 7, MD16, ModeScreen_DirtyFields                                ; F91DDF  f1 76 26 cf
 	jr z, .LF91E00                                       ; F91DE3  66 1b
 	push XIY                                             ; F91DE5  3d
 	ld A,(XIY+0x06)                                      ; F91DE6  8d 06 21
@@ -33882,7 +33882,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	call T_DLB_Handler_StringTable2                      ; F91DFB  1d fc 17 f4
 	pop XIY                                              ; F91DFF  5d
 .LF91E00:
-	m_bit 6, MD16, 0x2676                                ; F91E00  f1 76 26 ce
+	m_bit 6, MD16, ModeScreen_DirtyFields                                ; F91E00  f1 76 26 ce
 	jr z, .LF91E29                                       ; F91E04  66 23
 	push XIY                                             ; F91E06  3d
 	ld XIY,0x000078b2                                    ; F91E07  45 b2 78 00 00
@@ -33899,8 +33899,8 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	pop XIY                                              ; F91E28  5d
 .LF91E29:
 	calr sub_F90F9F                                          ; F91E29  1e 73 f1
-	ld (0x2676:16), 0x00                                 ; F91E2C  f1 76 26 00 00
-	ld (0x2677:16), 0x00                                 ; F91E31  f1 77 26 00 00
+	ld (ModeScreen_DirtyFields:16), 0x00                                 ; F91E2C  f1 76 26 00 00
+	ld (ModeScreen_DirtyFields2:16), 0x00                                 ; F91E31  f1 77 26 00 00
 	ld c, 0x07:opc                                          ; F91E36  23 07
 	ld a, 0x0c:opc                                          ; F91E38  21 0c
 	swi 7                                                ; F91E3A  ff
@@ -33909,7 +33909,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 ; Evidence: called only by sub_F914DD, the +4 slot of screen object T_InstallPainter_C0mbinati0nM0de_Entry (PanelScreen_VtableTable_ViewB entry 2, screen id 2), whose +0 Enter sub_F914D9 -> sub_F915FB installs the "C0MBINATI0N M0DE" painters.
 ; Body: `and (0x267D),0xFE`, then push 0 / call T_F411EC (sub_FC5566 clears bit 5 of (0x602498)) -- the same pair LcdKeyRow1_C0mbinati0nM0de_Page2 uses for its SOLO-off arm.
 ScreenLeaveBody_C0mbinati0nM0de:
-	m_and_mi8 MB16, 0x267d, 0xfe                         ; F91E3C  c1 7d 26 3c fe
+	m_and_mi8 MB16, CombinationMode_Solo, 0xfe                         ; F91E3C  c1 7d 26 3c fe
 	ld a, 0x00:opc                                          ; F91E41  21 00
 	push_a                                               ; F91E43  14
 	call T_F411EC                                        ; F91E44  1d ec 11 f4
@@ -34183,7 +34183,7 @@ SoftKeyCol8_C0mbinati0nM0de:   ; entry: named by 2 `.long` operands, first at 0x
 	jr z, SoftKeyCol8_C0mbinati0nM0de_Join                                     ; F920E8  66 02
 	inc 2,W                                              ; F920EA  c8 62
 SoftKeyCol8_C0mbinati0nM0de_Join:
-	m_cp_mi8 MB16, 0x2687, 0x00                          ; F920EC  c1 87 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F920EC  c1 87 26 3f 00
 	jr z, .LF92148                                       ; F920F1  66 55
 	m_cp_mi8 MB16, UI_PartIndex, 0x07                          ; F920F3  c1 50 22 3f 07
 	jr z, .LF92138                                       ; F920F8  66 3e
@@ -34238,8 +34238,8 @@ C0mbinati0nM0de_StepSelectedPart:
 	ld w, 0xff:opc                                          ; F92173  20 ff
 	call T_Queue2E00_AppendRegs                          ; F92175  1d 3c 0f f4
 	call T_F411BC                                        ; F92179  1d bc 11 f4
-	m_or_mi8 MB16, 0x2676, 0xff                          ; F9217D  c1 76 26 3e ff
-	m_or_mi8 MB16, 0x2677, 0x07                          ; F92182  c1 77 26 3e 07
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0xff                          ; F9217D  c1 76 26 3e ff
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F92182  c1 77 26 3e 07
 	call T_CallbackQueue_ResetAndRestartTask2            ; F92187  1d 80 2e f4
 	ld XWA,C0mbinati0nM0de_RepaintPage1Fields                                    ; F9218B  40 f2 1c f9 00
 	push XWA                                             ; F92190  38
@@ -34256,8 +34256,8 @@ C0mbinati0nM0de_StepSelectedPart:
 LcdKeyRow1_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF9159B
 	bit 0x07,W                                           ; F9219E  c8 33 07
 	jr z, .LF921C1                                       ; F921A1  66 1e
-	ld (0x2678:16), 0x00                                 ; F921A3  f1 78 26 00 00
-	m_or_mi8 MB16, 0x2678, 0x01                          ; F921A8  c1 78 26 3e 01
+	ld (CombinationMode_EditRow:16), 0x00                                 ; F921A3  f1 78 26 00 00
+	m_or_mi8 MB16, CombinationMode_EditRow, 0x01                          ; F921A8  c1 78 26 3e 01
 	ld XWA,C0mbinati0nM0de_HighlightSoundRow                                    ; F921AD  40 0a 22 f9 00
 	push XWA                                             ; F921B2  38
 	call T_CallbackQueue_Post                            ; F921B3  1d 84 2e f4
@@ -34266,9 +34266,9 @@ LcdKeyRow1_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first a
 	call T_Kernel_SemaSignal                             ; F921BB  1d 88 2d f4
 	jr .LF92209                                          ; F921BF  68 48
 .LF921C1:
-	m_bit 0, MD16, 0x267d                                ; F921C1  f1 7d 26 c8
+	m_bit 0, MD16, CombinationMode_Solo                                ; F921C1  f1 7d 26 c8
 	jr z, .LF921E9                                       ; F921C5  66 22
-	m_and_mi8 MB16, 0x267d, 0xfe                         ; F921C7  c1 7d 26 3c fe
+	m_and_mi8 MB16, CombinationMode_Solo, 0xfe                         ; F921C7  c1 7d 26 3c fe
 	ld a, 0x00:opc                                          ; F921CC  21 00
 	push_a                                               ; F921CE  14
 	call T_F411EC                                        ; F921CF  1d ec 11 f4
@@ -34281,7 +34281,7 @@ LcdKeyRow1_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first a
 	call T_Kernel_SemaSignal                             ; F921E3  1d 88 2d f4
 	jr .LF92209                                          ; F921E7  68 20
 .LF921E9:
-	m_or_mi8 MB16, 0x267d, 0x01                          ; F921E9  c1 7d 26 3e 01
+	m_or_mi8 MB16, CombinationMode_Solo, 0x01                          ; F921E9  c1 7d 26 3e 01
 	ld a, 0x01:opc                                          ; F921EE  21 01
 	push_a                                               ; F921F0  14
 	call T_F411EC                                        ; F921F1  1d ec 11 f4
@@ -34329,8 +34329,8 @@ C0mbinati0nM0de_SoloIndicatorOn:   ; entry: named by 1 `ld` operand, first at 0x
 LcdKeyRow2_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF9159F
 	bit 0x07,W                                           ; F9224F  c8 33 07
 	jr z, .LF92270                                       ; F92252  66 1c
-	ld (0x2678:16), 0x00                                 ; F92254  f1 78 26 00 00
-	m_or_mi8 MB16, 0x2678, 0x08                          ; F92259  c1 78 26 3e 08
+	ld (CombinationMode_EditRow:16), 0x00                                 ; F92254  f1 78 26 00 00
+	m_or_mi8 MB16, CombinationMode_EditRow, 0x08                          ; F92259  c1 78 26 3e 08
 	ld XWA,C0mbinati0nM0de_HighlightIntRow                                    ; F9225E  40 71 22 f9 00
 	push XWA                                             ; F92263  38
 	call T_CallbackQueue_Post                            ; F92264  1d 84 2e f4
@@ -34357,8 +34357,8 @@ C0mbinati0nM0de_HighlightIntRow:   ; entry: named by 1 `ld` operand, first at 0x
 LcdKeyRow3_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF915A3
 	bit 0x07,W                                           ; F92293  c8 33 07
 	jr z, .LF922B4                                       ; F92296  66 1c
-	ld (0x2678:16), 0x00                                 ; F92298  f1 78 26 00 00
-	m_or_mi8 MB16, 0x2678, 0x04                          ; F9229D  c1 78 26 3e 04
+	ld (CombinationMode_EditRow:16), 0x00                                 ; F92298  f1 78 26 00 00
+	m_or_mi8 MB16, CombinationMode_EditRow, 0x04                          ; F9229D  c1 78 26 3e 04
 	ld XWA,C0mbinati0nM0de_HighlightPanRow                                    ; F922A2  40 b5 22 f9 00
 	push XWA                                             ; F922A7  38
 	call T_CallbackQueue_Post                            ; F922A8  1d 84 2e f4
@@ -34385,8 +34385,8 @@ C0mbinati0nM0de_HighlightPanRow:   ; entry: named by 1 `ld` operand, first at 0x
 LcdKeyRow4_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF915A7
 	bit 0x07,W                                           ; F922D7  c8 33 07
 	jr z, .LF922F8                                       ; F922DA  66 1c
-	ld (0x2678:16), 0x00                                 ; F922DC  f1 78 26 00 00
-	m_or_mi8 MB16, 0x2678, 0x02                          ; F922E1  c1 78 26 3e 02
+	ld (CombinationMode_EditRow:16), 0x00                                 ; F922DC  f1 78 26 00 00
+	m_or_mi8 MB16, CombinationMode_EditRow, 0x02                          ; F922E1  c1 78 26 3e 02
 	ld XWA,C0mbinati0nM0de_HighlightVolRow                                    ; F922E6  40 f9 22 f9 00
 	push XWA                                             ; F922EB  38
 	call T_CallbackQueue_Post                            ; F922EC  1d 84 2e f4
@@ -34420,9 +34420,9 @@ ExitKey_C0mbinati0nM0de:   ; entry: named by 2 `.long` operands, first at 0xF915
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F9231E  c1 75 20 3c f7
 	bit 0x07,W                                           ; F92323  c8 33 07
 	jr nz, .LF92339                                      ; F92326  6e 11
-	m_cp_mi8 MB16, 0x2687, 0x01                          ; F92328  c1 87 26 3f 01
+	m_cp_mi8 MB16, CombinationMode_Page, 0x01                          ; F92328  c1 87 26 3f 01
 	jr nz, .LF92339                                      ; F9232D  6e 0a
-	ld (0x2687:16), 0x00                                 ; F9232F  f1 87 26 00 00
+	ld (CombinationMode_Page:16), 0x00                                 ; F9232F  f1 87 26 00 00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; F92334  c1 71 20 3e 10
 .LF92339:
 	ret                                                  ; F92339  0e
@@ -34432,15 +34432,15 @@ ExitKey_C0mbinati0nM0de:   ; entry: named by 2 `.long` operands, first at 0xF915
 PageKey_C0mbinati0nM0de:   ; entry: named by 2 `.long` operands, first at 0xF9153B
 	bit 0x07,W                                           ; F9233A  c8 33 07
 	jr nz, .LF92352                                      ; F9233D  6e 13
-	m_cp_mi8 MB16, 0x2687, 0x01                          ; F9233F  c1 87 26 3f 01
+	m_cp_mi8 MB16, CombinationMode_Page, 0x01                          ; F9233F  c1 87 26 3f 01
 	jr z, .LF92363                                       ; F92344  66 1d
-	ld (0x2687:16), 0x01                                 ; F92346  f1 87 26 00 01
+	ld (CombinationMode_Page:16), 0x01                                 ; F92346  f1 87 26 00 01
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; F9234B  c1 71 20 3e 10
 	jr .LF92363                                          ; F92350  68 11
 .LF92352:
-	m_cp_mi8 MB16, 0x2687, 0x00                          ; F92352  c1 87 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F92352  c1 87 26 3f 00
 	jr z, .LF92363                                       ; F92357  66 0a
-	ld (0x2687:16), 0x00                                 ; F92359  f1 87 26 00 00
+	ld (CombinationMode_Page:16), 0x00                                 ; F92359  f1 87 26 00 00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; F9235E  c1 71 20 3e 10
 .LF92363:
 	ret                                                  ; F92363  0e
@@ -34527,13 +34527,13 @@ C0mbinati0nM0de_EditSelectedRow:
 	sla hl, 0x02                                         ; F923F4  db ec 02
 	ld XIY,0x00f2ab50                                    ; F923F7  45 50 ab f2 00
 	mx_ld_rm MXL, ra_IY, ra_HL, r5                       ; F923FC  e3 07 f4 ec 25
-	m_bit 0, MD16, 0x2678                                ; F92401  f1 78 26 c8
+	m_bit 0, MD16, CombinationMode_EditRow                                ; F92401  f1 78 26 c8
 	jr nz, .LF9241B                                      ; F92405  6e 14
-	m_bit 3, MD16, 0x2678                                ; F92407  f1 78 26 cb
+	m_bit 3, MD16, CombinationMode_EditRow                                ; F92407  f1 78 26 cb
 	jr nz, .LF92420                                      ; F9240B  6e 13
-	m_bit 2, MD16, 0x2678                                ; F9240D  f1 78 26 ca
+	m_bit 2, MD16, CombinationMode_EditRow                                ; F9240D  f1 78 26 ca
 	jr nz, .LF92425                                      ; F92411  6e 12
-	m_bit 1, MD16, 0x2678                                ; F92413  f1 78 26 c9
+	m_bit 1, MD16, CombinationMode_EditRow                                ; F92413  f1 78 26 c9
 	jr nz, .LF9242A                                      ; F92417  6e 11
 	jr .LF9242D                                          ; F92419  68 12
 .LF9241B:
@@ -34772,7 +34772,7 @@ ValueList_F92623:
 ; Called by sub_F916AA (the page-2 painter) and sub_F918E5 (posted after a part is selected).
 C0mbinati0nM0de_ShowSelectedPart:
 	ld a, (UI_PartIndex:16)                                   ; F9262D  c1 50 22 21
-	m_cp_rm MB16, 0x267e, r1                             ; F92631  c1 7e 26 f1
+	m_cp_rm MB16, CombinationMode_ShownPart, r1                             ; F92631  c1 7e 26 f1
 	jr z, .LF92664                                       ; F92635  66 2d
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F92637  f1 40 25 00 00
 	ld XIY,0x00f296d6                                    ; F9263C  45 d6 96 f2 00
@@ -34783,7 +34783,7 @@ C0mbinati0nM0de_ShowSelectedPart:
 	ld XIY,0x00f2971a                                    ; F92653  45 1a 97 f2 00
 	call T_DLB_Handler_Array8                                        ; F92658  1d 1c 18 f4
 	ld a, (UI_PartIndex:16)                                   ; F9265C  c1 50 22 21
-	ld (0x267e:16), a                                   ; F92660  f1 7e 26 41
+	ld (CombinationMode_ShownPart:16), a                                   ; F92660  f1 7e 26 41
 .LF92664:
 	ret                                                  ; F92664  0e
 ; C0mbinati0nM0de_SetPartInt -- sets (key position 0) or clears (position 1) the INT flag, bit 5 of record +0x0D of the part in XIY, and posts the change
@@ -35061,7 +35061,7 @@ Draw_SoundGroupMenuReMap1ReMap2:   ; entry: named by 1 `ld` operand, first at 0x
 	call T_DisplayListB_Run                              ; F9284C  1d f4 17 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F92850  f1 40 25 00 00
 	ld e, 0x10:opc                                          ; F92855  25 10
-	m_cp_mi8 MB16, 0x216a, 0x10                          ; F92857  c1 6a 21 3f 10
+	m_cp_mi8 MB16, SoundSel_Bank, 0x10                          ; F92857  c1 6a 21 3f 10
 	jr nz, .LF92862                                      ; F9285C  6e 04
 	ld e, (0x08e8:16)                                   ; F9285E  c1 e8 08 25
 .LF92862:
@@ -35069,7 +35069,7 @@ Draw_SoundGroupMenuReMap1ReMap2:   ; entry: named by 1 `ld` operand, first at 0x
 .LF92864:
 	ld A,D                                               ; F92864  cc 89
 	ld b, (UI_PartIndex:16)                                   ; F92866  c1 50 22 22
-	ld w, (0x216a:16)                                   ; F9286A  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F9286A  c1 6a 21 20
 	push E                                               ; F9286E  cd 04
 	push D                                               ; F92870  cc 04
 	call T_F41018                                        ; F92872  1d 18 10 f4
@@ -35086,7 +35086,7 @@ Draw_SoundGroupMenuReMap1ReMap2:   ; entry: named by 1 `ld` operand, first at 0x
 	inc 1,D                                              ; F92892  cc 61
 	pop E                                                ; F92894  cd 05
 	djnz8 e, .LF92864                                    ; F92896  cd 1c cb
-	m_bit 3, MD16, 0x216a                                ; F92899  f1 6a 21 cb
+	m_bit 3, MD16, SoundSel_Bank                                ; F92899  f1 6a 21 cb
 	jr nz, .LF928A4                                      ; F9289D  6e 05
 	calr Draw_Ext1                                      ; F9289F  1e 39 01
 	jr .LF928A7                                          ; F928A2  68 03
@@ -35100,10 +35100,10 @@ Draw_SoundGroupMenuReMap1ReMap2:   ; entry: named by 1 `ld` operand, first at 0x
 ; Evidence: (0x2640) = (0x2675), (0x2675) = (0x2169); on layer 1 record 0xF2B42F (op 03, swi 0x1B EraseRect) uses entry (0x2640) and record 0xF2B43A (op 03, swi 0x05 FillRect) entry (0x2169) of DLTable_F2B445, 16 boxes;
 ; then swi 0x0C with C = 7. Posted by InstallPainter_SoundGroupMenu (0xF927ED) after the painter. (0x2169) is the group SoundGroup_StepSelected steps.
 SoundGroupMenu_MoveGroupHighlight:   ; entry: named by 1 `ld` operand, first at 0xF927ED
-	ld a, (0x2675:16)                                   ; F928AE  c1 75 26 21
+	ld a, (SoundGroupMenu_Highlight:16)                                   ; F928AE  c1 75 26 21
 	ld (0x2640:16), a                                   ; F928B2  f1 40 26 41
-	ld a, (0x2169:16)                                   ; F928B6  c1 69 21 21
-	ld (0x2675:16), a                                   ; F928BA  f1 75 26 41
+	ld a, (SoundSel_Group:16)                                   ; F928B6  c1 69 21 21
+	ld (SoundGroupMenu_Highlight:16), a                                   ; F928BA  f1 75 26 41
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F928BE  f1 40 25 00 01
 	ld XIY,0x00f2b42f                                    ; F928C3  45 2f b4 f2 00
 	call T_DLB_Handler_Array8_2                                        ; F928C8  1d 20 18 f4
@@ -35144,7 +35144,7 @@ Paint_Drum:
 	ld XIX,DL_F2BA50                                     ; F928EC  44 50 ba f2 00
 	call T_DisplayList_Run                               ; F928F1  1d f0 17 f4
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F928F5  f1 40 25 00 01
-	m_bit 5, MD16, 0x216a                                ; F928FA  f1 6a 21 cd
+	m_bit 5, MD16, SoundSel_Bank                                ; F928FA  f1 6a 21 cd
 	jr Z,.LF92910                                        ; F928FE  66 10
 	ld XIY,DL_F2BA50                                     ; F92900  45 50 ba f2 00
 	ld XIX,DL_F2BA5A                                     ; F92905  44 5a ba f2 00
@@ -35165,7 +35165,7 @@ BankLegend_DrawUser:
 	cp a, 0x01:i3                                          ; F92922  c9 d9
 	jrl z, .LF929C7                                      ; F92924  76 a0 00
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F92927  f1 40 25 00 00
-	ld a, (0x216a:16)                                   ; F9292C  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F9292C  c1 6a 21 21
 	bit 0x03,A                                           ; F92930  c9 33 03
 	jrl z, .LF929DA                                      ; F92933  76 a4 00
 	bit 0x00,A                                           ; F92936  c9 33 00
@@ -35174,7 +35174,7 @@ BankLegend_DrawUser:
 	ld XIX,DL_F2BD96                                     ; F92940  44 96 bd f2 00
 	call T_DisplayList_Run                               ; F92945  1d f0 17 f4
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F92949  f1 40 25 00 01
-	m_bit 5, MD16, 0x216a                                ; F9294E  f1 6a 21 cd
+	m_bit 5, MD16, SoundSel_Bank                                ; F9294E  f1 6a 21 cd
 	jr nz, .LF929A9                                      ; F92952  6e 55
 	ld XIY,DL_F2BD96                                     ; F92954  45 96 bd f2 00
 	ld XIX,DL_F2BDA0                                     ; F92959  44 a0 bd f2 00
@@ -35188,7 +35188,7 @@ BankLegend_DrawUser:
 	ld XIX,DL_F2BD48                                     ; F92977  44 48 bd f2 00
 	call T_DisplayList_Run                               ; F9297C  1d f0 17 f4
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F92980  f1 40 25 00 01
-	m_bit 5, MD16, 0x216a                                ; F92985  f1 6a 21 cd
+	m_bit 5, MD16, SoundSel_Bank                                ; F92985  f1 6a 21 cd
 	jr nz, .LF929A9                                      ; F92989  6e 1e
 	ld XIY,DL_F2BD48                                     ; F9298B  45 48 bd f2 00
 	ld XIX,DL_F2BD52                                     ; F92990  44 52 bd f2 00
@@ -35256,20 +35256,20 @@ SoundBank_SelectR1OrU1:
 	calr SoundBank_IsReMap                                          ; F92A55  1e 2f 07
 	cp a, 0x01:i3                                          ; F92A58  c9 d9
 	jr z, .LF92AA0                                       ; F92A5A  66 44
-	ld a, (0x216a:16)                                   ; F92A5C  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F92A5C  c1 6a 21 21
 	bit 0x03,A                                           ; F92A60  c9 33 03
 	jr nz, .LF92A69                                      ; F92A63  6e 04
 	ld a, 0x00:opc                                          ; F92A65  21 00
 	jr .LF92A74                                          ; F92A67  68 0b
 .LF92A69:
-	ld a, (0x216a:16)                                   ; F92A69  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F92A69  c1 6a 21 21
 	bit 0x00,A                                           ; F92A6D  c9 33 00
 	jr nz, .LF92AA0                                      ; F92A70  6e 2e
 	ld a, 0x08:opc                                          ; F92A72  21 08
 .LF92A74:
-	cp (0x216a:16), a                                    ; F92A74  c1 6a 21 f9
+	cp (SoundSel_Bank:16), a                                    ; F92A74  c1 6a 21 f9
 	jr z, .LF92AA0                                       ; F92A78  66 26
-	ld (0x216a:16), a                                   ; F92A7A  f1 6a 21 41
+	ld (SoundSel_Bank:16), a                                   ; F92A7A  f1 6a 21 41
 	ld e, 0xa8:opc                                          ; F92A7E  25 a8
 	ld d, 0x07:opc                                          ; F92A80  24 07
 	ld w, 0x3f:opc                                          ; F92A82  20 3f
@@ -35291,20 +35291,20 @@ SoundBank_SelectR2OrU2:
 	calr SoundBank_IsReMap                                          ; F92AA1  1e e3 06
 	cp a, 0x01:i3                                          ; F92AA4  c9 d9
 	jr z, .LF92AEC                                       ; F92AA6  66 44
-	ld a, (0x216a:16)                                   ; F92AA8  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F92AA8  c1 6a 21 21
 	bit 0x03,A                                           ; F92AAC  c9 33 03
 	jr nz, .LF92AB5                                      ; F92AAF  6e 04
 	ld a, 0x01:opc                                          ; F92AB1  21 01
 	jr .LF92AC0                                          ; F92AB3  68 0b
 .LF92AB5:
-	ld a, (0x216a:16)                                   ; F92AB5  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F92AB5  c1 6a 21 21
 	bit 0x00,A                                           ; F92AB9  c9 33 00
 	jr z, .LF92AEC                                       ; F92ABC  66 2e
 	ld a, 0x09:opc                                          ; F92ABE  21 09
 .LF92AC0:
-	cp (0x216a:16), a                                    ; F92AC0  c1 6a 21 f9
+	cp (SoundSel_Bank:16), a                                    ; F92AC0  c1 6a 21 f9
 	jr z, .LF92AEC                                       ; F92AC4  66 26
-	ld (0x216a:16), a                                   ; F92AC6  f1 6a 21 41
+	ld (SoundSel_Bank:16), a                                   ; F92AC6  f1 6a 21 41
 	ld e, 0xa8:opc                                          ; F92ACA  25 a8
 	ld d, 0x07:opc                                          ; F92ACC  24 07
 	ld w, 0x3f:opc                                          ; F92ACE  20 3f
@@ -35326,13 +35326,13 @@ SoundBank_SelectDrum:
 	calr SoundBank_IsReMap                                          ; F92AED  1e 97 06
 	cp a, 0x01:i3                                          ; F92AF0  c9 d9
 	jr z, .LF92B3D                                       ; F92AF2  66 49
-	ld a, (0x216a:16)                                   ; F92AF4  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F92AF4  c1 6a 21 21
 	bit 0x03,A                                           ; F92AF8  c9 33 03
 	jr nz, .LF92B01                                      ; F92AFB  6e 04
 	ld a, 0x20:opc                                          ; F92AFD  21 20
 	jr .LF92B11                                          ; F92AFF  68 10
 .LF92B01:
-	ld a, (0x216a:16)                                   ; F92B01  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F92B01  c1 6a 21 21
 	bit 0x05,A                                           ; F92B05  c9 33 05
 	jr nz, .LF92B0F                                      ; F92B08  6e 05
 	or A,0x20                                            ; F92B0A  c9 ce 20
@@ -35340,9 +35340,9 @@ SoundBank_SelectDrum:
 .LF92B0F:
 	jr .LF92B3D                                          ; F92B0F  68 2c
 .LF92B11:
-	cp (0x216a:16), a                                    ; F92B11  c1 6a 21 f9
+	cp (SoundSel_Bank:16), a                                    ; F92B11  c1 6a 21 f9
 	jr z, .LF92B3D                                       ; F92B15  66 26
-	ld (0x216a:16), a                                   ; F92B17  f1 6a 21 41
+	ld (SoundSel_Bank:16), a                                   ; F92B17  f1 6a 21 41
 	ld e, 0xa8:opc                                          ; F92B1B  25 a8
 	ld d, 0x07:opc                                          ; F92B1D  24 07
 	ld w, 0x3f:opc                                          ; F92B1F  20 3f
@@ -35364,15 +35364,15 @@ SoundBank_SelectExt:
 	calr SoundBank_IsReMap                                          ; F92B3E  1e 46 06
 	cp a, 0x01:i3                                          ; F92B41  c9 d9
 	jr z, .LF92B82                                       ; F92B43  66 3d
-	ld w, (0x216a:16)                                   ; F92B45  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F92B45  c1 6a 21 20
 	bit 0x03,W                                           ; F92B49  c8 33 03
 	jr nz, .LF92B82                                      ; F92B4C  6e 34
 	m_bit 0, MD16, 0x08ec                                ; F92B4E  f1 ec 08 c8
 	jr z, .LF92B82                                       ; F92B52  66 2e
 	ld a, 0x10:opc                                          ; F92B54  21 10
-	cp (0x216a:16), a                                    ; F92B56  c1 6a 21 f9
+	cp (SoundSel_Bank:16), a                                    ; F92B56  c1 6a 21 f9
 	jr z, .LF92B82                                       ; F92B5A  66 26
-	ld (0x216a:16), a                                   ; F92B5C  f1 6a 21 41
+	ld (SoundSel_Bank:16), a                                   ; F92B5C  f1 6a 21 41
 	ld e, 0xa8:opc                                          ; F92B60  25 a8
 	ld d, 0x07:opc                                          ; F92B62  24 07
 	ld w, 0x3f:opc                                          ; F92B64  20 3f
@@ -35392,7 +35392,7 @@ SoundBank_SelectExt:
 ; Slot [4] (SOFT KEY col 5) of DisplayListPtrs_F92726 and reached from SoftKeyCol5_GroupSoundDisplayHold.
 SoundGroup_StepSelected:
 	xor W,0x80                                           ; F92B83  c8 cd 80
-	ld a, (0x216a:16)                                   ; F92B86  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F92B86  c1 6a 21 21
 	cp A,0x28                                            ; F92B8A  c9 cf 28
 	jr z, .LF92BA0                                       ; F92B8D  66 11
 	cp A,0x29                                            ; F92B8F  c9 cf 29
@@ -35405,7 +35405,7 @@ SoundGroup_StepSelected:
 .LF92BA0:
 	jr .LF92C07                                          ; F92BA0  68 65
 .LF92BA2:
-	ld a, (0x2169:16)                                   ; F92BA2  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F92BA2  c1 69 21 21
 	bit 0x07,W                                           ; F92BA6  c8 33 07
 	jr nz, .LF92BB3                                      ; F92BA9  6e 08
 	cp a, 0x00:i3                                          ; F92BAB  c9 d8
@@ -35418,7 +35418,7 @@ SoundGroup_StepSelected:
 	jr ule, .LF92BF4                                     ; F92BB7  63 3b
 	jr .LF92C07                                          ; F92BB9  68 4c
 .LF92BBB:
-	ld a, (0x2169:16)                                   ; F92BBB  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F92BBB  c1 69 21 21
 	ld b, (0x08e8:16)                                   ; F92BBF  c1 e8 08 22
 	dec 1,B                                              ; F92BC3  ca 69
 	bit 0x07,W                                           ; F92BC5  c8 33 07
@@ -35432,7 +35432,7 @@ SoundGroup_StepSelected:
 	jr ule, .LF92BF4                                     ; F92BD6  63 1c
 	jr .LF92C07                                          ; F92BD8  68 2d
 .LF92BDA:
-	ld a, (0x2169:16)                                   ; F92BDA  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F92BDA  c1 69 21 21
 	bit 0x07,W                                           ; F92BDE  c8 33 07
 	jr nz, .LF92BEB                                      ; F92BE1  6e 08
 	cp a, 0x00:i3                                          ; F92BE3  c9 d8
@@ -35446,7 +35446,7 @@ SoundGroup_StepSelected:
 	jr .LF92C07                                          ; F92BF2  68 13
 .LF92BF4:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; F92BF4  c1 75 20 3e 08
-	ld (0x2169:16), a                                   ; F92BF9  f1 69 21 41
+	ld (SoundSel_Group:16), a                                   ; F92BF9  f1 69 21 41
 	ld e, 0xa8:opc                                          ; F92BFD  25 a8
 	ld d, 0x08:opc                                          ; F92BFF  24 08
 	ld w, 0x0f:opc                                          ; F92C01  20 0f
@@ -35721,9 +35721,9 @@ GroupSoundDisplayHold_RepaintFields:   ; entry: named by 1 `ld` operand, first a
 	calr GroupDisplayHold_ClearNameSlots                                          ; F92D79  1e b1 07
 	ld XIY,0x00f2b8f9                                    ; F92D7C  45 f9 b8 f2 00
 	call T_DLB_Handler_StringTable                       ; F92D81  1d f8 17 f4
-	ld a, (0x2169:16)                                   ; F92D85  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F92D85  c1 69 21 21
 	ld b, (UI_PartIndex:16)                                   ; F92D89  c1 50 22 22
-	ld w, (0x216a:16)                                   ; F92D8D  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F92D8D  c1 6a 21 20
 	call T_F41018                                        ; F92D91  1d 18 10 f4
 	ldw ix, 0x0129                                       ; F92D95  34 29 01
 	ldw hl, 0x00                                         ; F92D98  33 00 00
@@ -35733,7 +35733,7 @@ GroupSoundDisplayHold_RepaintFields:   ; entry: named by 1 `ld` operand, first a
 	calr GroupSoundDisplayHold_DrawNumberRange                                      ; F92DA1  1e fb 03
 	calr DisplayHold_ShowGroupNumber                                      ; F92DA4  1e 7d 03
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F92DA7  f1 40 25 00 00
-	m_bit 3, MD16, 0x216a                                ; F92DAC  f1 6a 21 cb
+	m_bit 3, MD16, SoundSel_Bank                                ; F92DAC  f1 6a 21 cb
 	jr nz, .LF92DB7                                      ; F92DB0  6e 05
 	calr Draw_Ext1                                          ; F92DB2  1e 26 fc
 	jr .LF92DBA                                          ; F92DB5  68 03
@@ -35743,9 +35743,9 @@ GroupSoundDisplayHold_RepaintFields:   ; entry: named by 1 `ld` operand, first a
 	calr Paint_Drum                                          ; F92DBA  1e 1e fb
 	calr BankLegend_DrawUser                                          ; F92DBD  1e 5f fb
 	calr DisplayHold_DrawHoldHighlight                                      ; F92DC0  1e 9a 03
-	ld a, (0x2169:16)                                   ; F92DC3  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F92DC3  c1 69 21 21
 	ld b, (UI_PartIndex:16)                                   ; F92DC7  c1 50 22 22
-	ld w, (0x216a:16)                                   ; F92DCB  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F92DCB  c1 6a 21 20
 	call T_SoundGroup_MaxMemberIndex_Get                 ; F92DCF  1d 1c 10 f4
 	ld L,A                                               ; F92DD3  c9 8f
 	cp a, 0x07:i3                                          ; F92DD5  c9 df
@@ -35765,9 +35765,9 @@ GroupSoundDisplayHold_RepaintFields:   ; entry: named by 1 `ld` operand, first a
 	xor W,W                                              ; F92DEF  c8 d0
 	cp WA,0x0008                                         ; F92DF1  d8 cf 08 00
 	jr ugt, .LF92E16                                     ; F92DF5  6b 1f
-	ld (0x2670:16), 0x00                                 ; F92DF7  f1 70 26 00 00
+	ld (GroupMembers_Page:16), 0x00                                 ; F92DF7  f1 70 26 00 00
 	calr PartRecord_GetPtr                                          ; F92DFC  1e 3a 17
-	ld l, (0x2169:16)                                   ; F92DFF  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F92DFF  c1 69 21 27
 	and L,0xff                                           ; F92E03  cf cc ff
 	ldw de, 0x00                                         ; F92E06  32 00 00
 	calr GroupSoundDisplayHold_DrawMemberNames                                          ; F92E09  1e a3 06
@@ -35796,9 +35796,9 @@ GroupSoundDisplayHold_RepaintFields:   ; entry: named by 1 `ld` operand, first a
 GroupMembers_ShowPageOfTwo:
 	cp l, 0x07:i3                                          ; F92E36  cf df
 	jr ugt, .LF92E56                                     ; F92E38  6b 1c
-	ld (0x2670:16), 0x00                                 ; F92E3A  f1 70 26 00 00
+	ld (GroupMembers_Page:16), 0x00                                 ; F92E3A  f1 70 26 00 00
 	calr PartRecord_GetPtr                                          ; F92E3F  1e f7 16
-	ld l, (0x2169:16)                                   ; F92E42  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F92E42  c1 69 21 27
 	and L,0xff                                           ; F92E46  cf cc ff
 	xor H,H                                              ; F92E49  ce d6
 	ldw de, 0x00                                         ; F92E4B  32 00 00
@@ -35806,9 +35806,9 @@ GroupMembers_ShowPageOfTwo:
 	calr GroupSoundDisplayHold_DrawMemberNames                                          ; F92E51  1e 5b 06
 	jr .LF92E6D                                          ; F92E54  68 17
 .LF92E56:
-	ld (0x2670:16), 0x01                                 ; F92E56  f1 70 26 00 01
+	ld (GroupMembers_Page:16), 0x01                                 ; F92E56  f1 70 26 00 01
 	calr PartRecord_GetPtr                                          ; F92E5B  1e db 16
-	ld l, (0x2169:16)                                   ; F92E5E  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F92E5E  c1 69 21 27
 	and L,0xff                                           ; F92E62  cf cc ff
 	xor H,H                                              ; F92E65  ce d6
 	ldw de, 0x08                                         ; F92E67  32 08 00
@@ -35825,9 +35825,9 @@ GroupMembers_ShowPageOfTwo:
 GroupMembers_ShowPageOfMany:
 	cp l, 0x07:i3                                          ; F92E76  cf df
 	jr ugt, .LF92E96                                     ; F92E78  6b 1c
-	ld (0x2670:16), 0x00                                 ; F92E7A  f1 70 26 00 00
+	ld (GroupMembers_Page:16), 0x00                                 ; F92E7A  f1 70 26 00 00
 	calr PartRecord_GetPtr                                          ; F92E7F  1e b7 16
-	ld l, (0x2169:16)                                   ; F92E82  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F92E82  c1 69 21 27
 	and L,0xff                                           ; F92E86  cf cc ff
 	xor H,H                                              ; F92E89  ce d6
 	ldw de, 0x00                                         ; F92E8B  32 00 00
@@ -35850,12 +35850,12 @@ GroupMembers_ShowPageOfMany:
 	xor W,W                                              ; F92EB0  c8 d0
 	ld l, 0x08:opc                                          ; F92EB2  27 08
 	div wa, l                                          ; F92EB4  cf 51
-	ld (0x2670:16), a                                   ; F92EB6  f1 70 26 41
+	ld (GroupMembers_Page:16), a                                   ; F92EB6  f1 70 26 41
 	calr PartRecord_GetPtr                                          ; F92EBA  1e 7c 16
-	ld l, (0x2169:16)                                   ; F92EBD  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F92EBD  c1 69 21 27
 	and L,0xff                                           ; F92EC1  cf cc ff
 	xor H,H                                              ; F92EC4  ce d6
-	ld a, (0x2670:16)                                   ; F92EC6  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F92EC6  c1 70 26 21
 	xor W,W                                              ; F92ECA  c8 d0
 	ld c, 0x08:opc                                          ; F92ECC  23 08
 	mul wa, c                                          ; F92ECE  cb 41
@@ -35870,16 +35870,16 @@ GroupMembers_ShowPageOfMany:
 	xor W,W                                              ; F92EDF  c8 d0
 	ld l, 0x08:opc                                          ; F92EE1  27 08
 	div wa, l                                          ; F92EE3  cf 51
-	ld (0x2670:16), a                                   ; F92EE5  f1 70 26 41
+	ld (GroupMembers_Page:16), a                                   ; F92EE5  f1 70 26 41
 	popw de                                              ; F92EE9  4a
 	popw wa                                              ; F92EEA  48
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F92EEB  f1 40 25 00 00
 	calr PartRecord_GetPtr                                          ; F92EF0  1e 46 16
-	ld l, (0x2169:16)                                   ; F92EF3  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F92EF3  c1 69 21 27
 	and L,0xff                                           ; F92EF7  cf cc ff
 	xor H,H                                              ; F92EFA  ce d6
 	pushw wa                                             ; F92EFC  28
-	ld a, (0x2670:16)                                   ; F92EFD  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F92EFD  c1 70 26 21
 	xor W,W                                              ; F92F01  c8 d0
 	ld c, 0x08:opc                                          ; F92F03  23 08
 	mul wa, c                                          ; F92F05  cb 41
@@ -35943,7 +35943,7 @@ SoftKeyCol6_GroupSoundDisplayHold:   ; entry: named by 2 `.long` operands, first
 ; Evidence: slots [6] and [23] of ScreenButtonHandlers_GroupSoundDisplayHold; `xor (0x267F),0x01`, then posts DisplayHold_DrawHoldHighlight. "DISPLAY" / "HOLD" are drawn at IX 0x2190 / 0x2371 (x 0x100 / 0x108, y 0xD6 / 0xE2),
 ; inside the box (0xFE,0xD4)-(0x139,0xEC) that spans columns 7 and 8 -- both keys share this body. GroupSoundDisplayHold_PickSound leaves the screen only when the bit is clear.
 SoftKeyCol7_GroupSoundDisplayHold:   ; entry: named by 2 `.long` operands, first at 0xF92C7E
-	m_xor_mi8 MB16, 0x267f, 0x01                         ; F92F4F  c1 7f 26 3d 01
+	m_xor_mi8 MB16, DisplayHold_Flag, 0x01                         ; F92F4F  c1 7f 26 3d 01
 	ld XIX,DisplayHold_DrawHoldHighlight                                    ; F92F54  44 5d 31 f9 00
 	push XIX                                             ; F92F59  3c
 	call T_CallbackQueue_Post                            ; F92F5A  1d 84 2e f4
@@ -35955,7 +35955,7 @@ SoftKeyCol7_GroupSoundDisplayHold:   ; entry: named by 2 `.long` operands, first
 ; Evidence: slots [7] and [24] of ScreenButtonHandlers_GroupSoundDisplayHold; `xor (0x267F),0x01`, then posts DisplayHold_DrawHoldHighlight. "DISPLAY" / "HOLD" are drawn at IX 0x2190 / 0x2371 (x 0x100 / 0x108, y 0xD6 / 0xE2),
 ; inside the box (0xFE,0xD4)-(0x139,0xEC) that spans columns 7 and 8 -- both keys share this body. GroupSoundDisplayHold_PickSound leaves the screen only when the bit is clear.
 SoftKeyCol8_GroupSoundDisplayHold:   ; entry: named by 2 `.long` operands, first at 0xF92C82
-	m_xor_mi8 MB16, 0x267f, 0x01                         ; F92F67  c1 7f 26 3d 01
+	m_xor_mi8 MB16, DisplayHold_Flag, 0x01                         ; F92F67  c1 7f 26 3d 01
 	ld XIX,DisplayHold_DrawHoldHighlight                                    ; F92F6C  44 5d 31 f9 00
 	push XIX                                             ; F92F71  3c
 	call T_CallbackQueue_Post                            ; F92F72  1d 84 2e f4
@@ -35969,12 +35969,12 @@ SoftKeyCol8_GroupSoundDisplayHold:   ; entry: named by 2 `.long` operands, first
 SoundGroup_SelectedMaxMemberIndex:
 	push W                                               ; F92F7F  c8 04
 	calr PartRecord_GetPtr                                          ; F92F81  1e b5 15
-	ld c, (0x2169:16)                                   ; F92F84  c1 69 21 23
+	ld c, (SoundSel_Group:16)                                   ; F92F84  c1 69 21 23
 	and C,0xff                                           ; F92F88  cb cc ff
 	ld L,C                                               ; F92F8B  cb 8f
 	ld A,L                                               ; F92F8D  cf 89
 	ld b, (UI_PartIndex:16)                                   ; F92F8F  c1 50 22 22
-	ld w, (0x216a:16)                                   ; F92F93  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F92F93  c1 6a 21 20
 	call T_SoundGroup_MaxMemberIndex_Get                 ; F92F97  1d 1c 10 f4
 	pop W                                                ; F92F9B  c8 05
 	ret                                                  ; F92F9D  0e
@@ -36077,7 +36077,7 @@ GroupMembers_ShowNextOfManyPages:   ; entry: named by 2 `ld` operands, first at 
 	calr LCD_ClearLayer0_Rows29To235                                          ; F9304F  1e 2a 04
 	calr SoundGroup_SelectedMaxMemberIndex                                      ; F93052  1e 2a ff
 	pushw wa                                             ; F93055  28
-	ld a, (0x2670:16)                                   ; F93056  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93056  c1 70 26 21
 	inc 1,A                                              ; F9305A  c9 61
 	xor W,W                                              ; F9305C  c8 d0
 	ld l, 0x08:opc                                          ; F9305E  27 08
@@ -36123,7 +36123,7 @@ NumberPadKey_GroupSoundDisplayHold:   ; entry: named by 1 `.long` operand, first
 	ld (0x2826:16), 0x02                                 ; F930A7  f1 26 28 00 02
 	call T_AsciiDigits3_ToValue                          ; F930AC  1d f0 32 f4
 	ld b, 0x10:opc                                          ; F930B0  22 10
-	ld d, (0x216a:16)                                   ; F930B2  c1 6a 21 24
+	ld d, (SoundSel_Bank:16)                                   ; F930B2  c1 6a 21 24
 	cp D,0x28                                            ; F930B6  cc cf 28
 	jr z, .LF930CC                                       ; F930B9  66 11
 	cp D,0x29                                            ; F930BB  cc cf 29
@@ -36148,7 +36148,7 @@ NumberPadKey_GroupSoundDisplayHold:   ; entry: named by 1 `.long` operand, first
 	cp A,B                                               ; F930DE  ca f1
 	jr ugt, .LF930F6                                     ; F930E0  6b 14
 	dec 1,A                                              ; F930E2  c9 69
-	ld (0x2169:16), a                                   ; F930E4  f1 69 21 41
+	ld (SoundSel_Group:16), a                                   ; F930E4  f1 69 21 41
 	ld e, 0xa8:opc                                          ; F930E8  25 a8
 	ld d, 0x08:opc                                          ; F930EA  24 08
 	ld w, 0x0f:opc                                          ; F930EC  20 0f
@@ -36182,7 +36182,7 @@ sub_F92C62_Nop:
 ; DL_F2BA64 draws 2 characters of (0x2661) at IX 0x0166 (x 0x130, y 8), right of "GROUP:" at (0x10D,0x0A) in both DISPLAY HOLD screens' lists.
 ; Callers: GroupSoundDisplayHold_RepaintFields, GroupCombiDisplayHold_PaintGroupAndNames; posted by GroupSoundDisplayHold_PickSound, GroupSoundDisplayHold_SelectMemberLastPage, GroupCombiDisplayHold_SelectMemberAtRow, GroupCombiDisplayHold_SelectMemberLastPage.
 DisplayHold_ShowGroupNumber:
-	ld a, (0x2169:16)                                   ; F93124  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F93124  c1 69 21 21
 	inc 1,A                                              ; F93128  c9 61
 	extz WA                                              ; F9312A  d8 12
 	call T_Value_ToAsciiDigits3_LeftJustified                                        ; F9312C  1d f4 1a f4
@@ -36207,7 +36207,7 @@ DisplayHold_ShowGroupNumber:
 ; callers GroupSoundDisplayHold_RepaintFields and GroupCombiDisplayHold_PaintGroupAndNames.
 DisplayHold_DrawHoldHighlight:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9315D  f1 40 25 00 01
-	m_bit 0, MD16, 0x267f                                ; F93162  f1 7f 26 c8
+	m_bit 0, MD16, DisplayHold_Flag                                ; F93162  f1 7f 26 c8
 	jr z, .LF93178                                       ; F93166  66 10
 	ld XIY,DL_F2BA0C                                     ; F93168  45 0c ba f2 00
 	ld XIX,DL_F2BA16                                     ; F9316D  44 16 ba f2 00
@@ -36224,7 +36224,7 @@ DisplayHold_DrawHoldHighlight:
 ; In those banks the selectors (SoundBank_Select*, SoundGroup_StepSelected) do nothing, Paint_Drum skips "DRUM" and BankLegend_DrawUser erases the legend row.
 SoundBank_IsReMap:
 	ld a, 0x01:opc                                          ; F93187  21 01
-	ld w, (0x216a:16)                                   ; F93189  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F93189  c1 6a 21 20
 	cp W,0x18                                            ; F9318D  c8 cf 18
 	jr z, .LF9319E                                       ; F93190  66 0c
 	cp W,0x19                                            ; F93192  c8 cf 19
@@ -36248,7 +36248,7 @@ GroupSoundDisplayHold_DrawNumberRange:
 GroupCombiDisplayHold_DrawNumberRange:
 	calr CombiGroup_MaxMemberIndexOfCurrent                                          ; F931A4  1e 8c 09
 .LF931A7:
-	ld d, (0x2169:16)                                   ; F931A7  c1 69 21 24
+	ld d, (SoundSel_Group:16)                                   ; F931A7  c1 69 21 24
 	ld l, 0x08:opc                                          ; F931AB  27 08
 	mul hl, d                                          ; F931AD  cc 47
 	inc 1,A                                              ; F931AF  c9 61
@@ -36284,14 +36284,14 @@ GroupCombiDisplayHold_DrawNumberRange:
 GroupSoundDisplayHold_PickSound:
 	cp A,0x08                                            ; F9320D  c9 cf 08
 	jr z, .LF93222                                       ; F93210  66 10
-	ld e, (0x2670:16)                                   ; F93212  c1 70 26 25
+	ld e, (GroupMembers_Page:16)                                   ; F93212  c1 70 26 25
 	m_cp_rm MB16, 0x2672, r5                             ; F93216  c1 72 26 f5
 	jr nz, .LF93222                                      ; F9321A  6e 06
 	calr GroupSoundDisplayHold_SelectMemberLastPage                                      ; F9321C  1e a7 00
 	jrl .LF932C5                                         ; F9321F  78 a3 00
 .LF93222:
 	pushw wa                                             ; F93222  28
-	ld a, (0x2670:16)                                   ; F93223  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93223  c1 70 26 21
 	xor W,W                                              ; F93227  c8 d0
 	ld e, 0x08:opc                                          ; F93229  25 08
 	mul wa, e                                          ; F9322B  cd 41
@@ -36306,16 +36306,16 @@ GroupSoundDisplayHold_PickSound:
 .LF9323D:
 	cp A,L                                               ; F9323D  cf f1
 	jrl c, .LF932C5                                      ; F9323F  77 83 00
-	ld (0x216b:16), l                                   ; F93242  f1 6b 21 47
+	ld (SoundSel_Member:16), l                                   ; F93242  f1 6b 21 47
 	ld e, (UI_PartIndex:16)                                   ; F93246  c1 50 22 25
 	ld d, 0x00:opc                                          ; F9324A  24 00
-	ld a, (0x216a:16)                                   ; F9324C  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F9324C  c1 6a 21 21
 	ld w, 0x3f:opc                                          ; F93250  20 3f
 	call T_List2030_AppendRegs                           ; F93252  1d 40 0f f4
 	ld e, (UI_PartIndex:16)                                   ; F93256  c1 50 22 25
 	ld d, 0x00:opc                                          ; F9325A  24 00
-	ld a, (0x2169:16)                                   ; F9325C  c1 69 21 21
-	ld w, (0x216b:16)                                   ; F93260  c1 6b 21 20
+	ld a, (SoundSel_Group:16)                                   ; F9325C  c1 69 21 21
+	ld w, (SoundSel_Member:16)                                   ; F93260  c1 6b 21 20
 	call T_List2030_AppendRegs                           ; F93264  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93268  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F9326D  1d 24 2e f4
@@ -36331,7 +36331,7 @@ GroupSoundDisplayHold_PickSound:
 	inc 4,XSP                                            ; F9328D  ef 64
 	ld a, 0x01:opc                                          ; F9328F  21 01
 	call T_Kernel_SemaSignal                             ; F93291  1d 88 2d f4
-	m_bit 0, MD16, 0x267f                                ; F93295  f1 7f 26 c8
+	m_bit 0, MD16, DisplayHold_Flag                                ; F93295  f1 7f 26 c8
 	jr nz, .LF932C5                                      ; F93299  6e 2a
 	m_cp_mi8 MB16, UI_ScreenId, 0xa1                          ; F9329B  c1 7c 20 3f a1
 	jr nz, .LF932AA                                      ; F932A0  6e 08
@@ -36372,7 +36372,7 @@ GroupSoundDisplayHold_SelectMemberLastPage:
 	jrl ugt, .LF93385                                    ; F932E5  7b 9d 00
 	pushw wa                                             ; F932E8  28
 	xor W,W                                              ; F932E9  c8 d0
-	ld a, (0x2670:16)                                   ; F932EB  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F932EB  c1 70 26 21
 	ld e, 0x08:opc                                          ; F932EF  25 08
 	mul wa, e                                          ; F932F1  cd 41
 	add HL,WA                                            ; F932F3  d8 83
@@ -36383,16 +36383,16 @@ GroupSoundDisplayHold_SelectMemberLastPage:
 .LF932FD:
 	cp A,L                                               ; F932FD  cf f1
 	jrl c, .LF93385                                      ; F932FF  77 83 00
-	ld (0x216b:16), l                                   ; F93302  f1 6b 21 47
+	ld (SoundSel_Member:16), l                                   ; F93302  f1 6b 21 47
 	ld e, (UI_PartIndex:16)                                   ; F93306  c1 50 22 25
 	ld d, 0x00:opc                                          ; F9330A  24 00
-	ld a, (0x216a:16)                                   ; F9330C  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F9330C  c1 6a 21 21
 	ld w, 0x3f:opc                                          ; F93310  20 3f
 	call T_List2030_AppendRegs                           ; F93312  1d 40 0f f4
 	ld e, (UI_PartIndex:16)                                   ; F93316  c1 50 22 25
 	ld d, 0x00:opc                                          ; F9331A  24 00
-	ld a, (0x2169:16)                                   ; F9331C  c1 69 21 21
-	ld w, (0x216b:16)                                   ; F93320  c1 6b 21 20
+	ld a, (SoundSel_Group:16)                                   ; F9331C  c1 69 21 21
+	ld w, (SoundSel_Member:16)                                   ; F93320  c1 6b 21 20
 	call T_List2030_AppendRegs                           ; F93324  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93328  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F9332D  1d 24 2e f4
@@ -36408,7 +36408,7 @@ GroupSoundDisplayHold_SelectMemberLastPage:
 	inc 4,XSP                                            ; F9334D  ef 64
 	ld a, 0x01:opc                                          ; F9334F  21 01
 	call T_Kernel_SemaSignal                             ; F93351  1d 88 2d f4
-	m_bit 0, MD16, 0x267f                                ; F93355  f1 7f 26 c8
+	m_bit 0, MD16, DisplayHold_Flag                                ; F93355  f1 7f 26 c8
 	jr nz, .LF93385                                      ; F93359  6e 2a
 	m_cp_mi8 MB16, UI_ScreenId, 0xa1                          ; F9335B  c1 7c 20 3f a1
 	jr nz, .LF9336A                                      ; F93360  6e 08
@@ -36464,10 +36464,10 @@ GroupSoundDisplayHold_HighlightSelected:
 	pop_a                                                ; F933BA  15
 	cp C,L                                               ; F933BB  cf f3
 	jr nz, .LF9343E                                      ; F933BD  6e 7f
-	m_cp_rm MB16, 0x216a, r0                             ; F933BF  c1 6a 21 f0
+	m_cp_rm MB16, SoundSel_Bank, r0                             ; F933BF  c1 6a 21 f0
 	jr nz, .LF9343E                                      ; F933C3  6e 79
 .LF933C5:
-	ld l, (0x216b:16)                                   ; F933C5  c1 6b 21 27
+	ld l, (SoundSel_Member:16)                                   ; F933C5  c1 6b 21 27
 	and L,0xff                                           ; F933C9  cf cc ff
 	cp a, 0x07:i3                                          ; F933CC  c9 df
 	jr nz, .LF933DF                                      ; F933CE  6e 0f
@@ -36478,7 +36478,7 @@ GroupSoundDisplayHold_HighlightSelected:
 .LF933DF:
 	xor W,W                                              ; F933DF  c8 d0
 	ld IZ,WA                                             ; F933E1  d8 8e
-	ld a, (0x2670:16)                                   ; F933E3  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F933E3  c1 70 26 21
 	xor W,W                                              ; F933E7  c8 d0
 	ld e, 0x08:opc                                          ; F933E9  25 08
 	mul wa, e                                          ; F933EB  cd 41
@@ -36494,7 +36494,7 @@ GroupSoundDisplayHold_HighlightSelected:
 	ld e, 0x08:opc                                          ; F933FF  25 08
 	div wa, e                                          ; F93401  cd 51
 	ld C,W                                               ; F93403  c8 8b
-	ld a, (0x2670:16)                                   ; F93405  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93405  c1 70 26 21
 	m_cp_rm MB16, 0x2672, r1                             ; F93409  c1 72 26 f1
 	jr nz, .LF9342F                                      ; F9340D  6e 20
 	ld WA,IZ                                             ; F9340F  de 88
@@ -36672,7 +36672,7 @@ GroupSoundDisplayHold_DrawMemberNames:
 	popw de                                              ; F934FA  4a
 	ld a, (UI_PartIndex:16)                                   ; F934FB  c1 50 22 21
 	ld (0x60f01c:24), a                                 ; F934FF  f2 1c f0 60 41
-	ld w, (0x216a:16)                                   ; F93504  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F93504  c1 6a 21 20
 	call T_F4078C                                        ; F93508  1d 8c 07 f4
 	ld W,H                                               ; F9350C  ce 88
 	ld A,L                                               ; F9350E  cf 89
@@ -36891,7 +36891,7 @@ Draw_CombinationGroupMenuReMap1:   ; entry: named by 1 `ld` operand, first at 0x
 	call T_DisplayListB_Run                              ; F9367D  1d f4 17 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F93681  f1 40 25 00 00
 	ld e, 0x10:opc                                          ; F93686  25 10
-	m_cp_mi8 MB16, 0x216a, 0x10                          ; F93688  c1 6a 21 3f 10
+	m_cp_mi8 MB16, SoundSel_Bank, 0x10                          ; F93688  c1 6a 21 3f 10
 	jr nz, .LF93693                                      ; F9368D  6e 04
 	ld e, (0x08ea:16)                                   ; F9368F  c1 ea 08 25
 .LF93693:
@@ -36899,7 +36899,7 @@ Draw_CombinationGroupMenuReMap1:   ; entry: named by 1 `ld` operand, first at 0x
 .LF93695:
 	ld A,D                                               ; F93695  cc 89
 	ld b, 0x98:opc                                          ; F93697  22 98
-	ld w, (0x216a:16)                                   ; F93699  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F93699  c1 6a 21 20
 	push E                                               ; F9369D  cd 04
 	push D                                               ; F9369F  cc 04
 	call T_F41030                                        ; F936A1  1d 30 10 f4
@@ -36916,7 +36916,7 @@ Draw_CombinationGroupMenuReMap1:   ; entry: named by 1 `ld` operand, first at 0x
 	inc 1,D                                              ; F936C1  cc 61
 	pop E                                                ; F936C3  cd 05
 	djnz8 e, .LF93695                                    ; F936C5  cd 1c cd
-	m_bit 3, MD16, 0x216a                                ; F936C8  f1 6a 21 cb
+	m_bit 3, MD16, SoundSel_Bank                                ; F936C8  f1 6a 21 cb
 	jr nz, .LF936D3                                      ; F936CC  6e 05
 	calr Draw_Ext1_2                                          ; F936CE  1e 3f f3
 	jr .LF936D6                                          ; F936D1  68 03
@@ -36930,10 +36930,10 @@ Draw_CombinationGroupMenuReMap1:   ; entry: named by 1 `ld` operand, first at 0x
 ; (interpreter-B op 03, source (0x2640), SWI7 0x1B EraseRect of DLTable_F2B445[]) then T_F4181C on 0xF2B43A (source (0x2169), SWI7 0x05 FillRect);
 ; DLTable_F2B445 is 16 boxes, two columns of 8, matching the "1.".."16." layout; ends with SWI7 0x0C C = 7.
 CombinationGroupMenu_MoveHighlight:   ; entry: named by 1 `ld` operand, first at 0xF9361E
-	ld a, (0x2675:16)                                   ; F936DA  c1 75 26 21
+	ld a, (SoundGroupMenu_Highlight:16)                                   ; F936DA  c1 75 26 21
 	ld (0x2640:16), a                                   ; F936DE  f1 40 26 41
-	ld a, (0x2169:16)                                   ; F936E2  c1 69 21 21
-	ld (0x2675:16), a                                   ; F936E6  f1 75 26 41
+	ld a, (SoundSel_Group:16)                                   ; F936E2  c1 69 21 21
+	ld (SoundGroupMenu_Highlight:16), a                                   ; F936E6  f1 75 26 41
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F936EA  f1 40 25 00 01
 	ld XIY,0x00f2b42f                                    ; F936EF  45 2f b4 f2 00
 	call T_DLB_Handler_Array8_2                                        ; F936F4  1d 20 18 f4
@@ -36951,13 +36951,13 @@ ScreenLeave_CombinationGroupMenu_Nop:
 ; Body: unless (0x216A) bit 3 is set or it is already 0: (0x216A) = 0, T_Queue2E00_AppendRegs {0xA8, 0x07 (BANK), 0x00, 0x3F}, (0x2075) &= 0xF7, then a
 ; redraw request ((0x2071) |= 0x10 on screen 0xA5, else (0x2095) |= 0x10).  Also `calr` from SoftKeyCol1_GroupCombiDisplayHold.
 SoftKeyCol1_CombinationGroupMenu:
-	ld a, (0x216a:16)                                   ; F93708  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F93708  c1 6a 21 21
 	bit 0x03,A                                           ; F9370C  c9 33 03
 	jr nz, .LF9373F                                      ; F9370F  6e 2e
 	ld a, 0x00:opc                                          ; F93711  21 00
-	cp (0x216a:16), a                                    ; F93713  c1 6a 21 f9
+	cp (SoundSel_Bank:16), a                                    ; F93713  c1 6a 21 f9
 	jr z, .LF9373F                                       ; F93717  66 26
-	ld (0x216a:16), a                                   ; F93719  f1 6a 21 41
+	ld (SoundSel_Bank:16), a                                   ; F93719  f1 6a 21 41
 	ld e, 0xa8:opc                                          ; F9371D  25 a8
 	ld d, 0x07:opc                                          ; F9371F  24 07
 	ld w, 0x3f:opc                                          ; F93721  20 3f
@@ -36981,15 +36981,15 @@ ScreenButtonHandlers_CombinationGroupMenu_Nop2:   ; entry: named by 2 `.long` op
 ; Body: SoftKeyCol1's with 0x10 and an extra `bit 1,(0x08EC)` gate; sub_FC2155 (the group-name fetch) answers banks 0x10-0x17 with the ROM string
 ; "EXT Silent Group" when that same bit is clear.  Also `calr` from SoftKeyCol4_GroupCombiDisplayHold.
 SoftKeyCol4_CombinationGroupMenu:
-	ld a, (0x216a:16)                                   ; F93742  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F93742  c1 6a 21 21
 	bit 0x03,A                                           ; F93746  c9 33 03
 	jr nz, .LF9377F                                      ; F93749  6e 34
 	m_bit 1, MD16, 0x08ec                                ; F9374B  f1 ec 08 c9
 	jr z, .LF9377F                                       ; F9374F  66 2e
 	ld a, 0x10:opc                                          ; F93751  21 10
-	cp (0x216a:16), a                                    ; F93753  c1 6a 21 f9
+	cp (SoundSel_Bank:16), a                                    ; F93753  c1 6a 21 f9
 	jr z, .LF9377F                                       ; F93757  66 26
-	ld (0x216a:16), a                                   ; F93759  f1 6a 21 41
+	ld (SoundSel_Bank:16), a                                   ; F93759  f1 6a 21 41
 	ld e, 0xa8:opc                                          ; F9375D  25 a8
 	ld d, 0x07:opc                                          ; F9375F  24 07
 	ld w, 0x3f:opc                                          ; F93761  20 3f
@@ -37011,12 +37011,12 @@ SoftKeyCol4_CombinationGroupMenu:
 ; sets (0x2075) bit 0, so PanelEvent_Code21_Dial routes the dial here as code 0x04/0x84.  Also `calr` from SoftKeyCol5_GroupCombiDisplayHold.
 SoftKeyCol5_CombinationGroupMenu:
 	xor W,0x80                                           ; F93780  c8 cd 80
-	ld a, (0x216a:16)                                   ; F93783  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F93783  c1 6a 21 21
 	cp A,0x10                                            ; F93787  c9 cf 10
 	jr z, .LF9378E                                       ; F9378A  66 02
 	jr .LF937AD                                          ; F9378C  68 1f
 .LF9378E:
-	ld a, (0x2169:16)                                   ; F9378E  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F9378E  c1 69 21 21
 	ld b, (0x08ea:16)                                   ; F93792  c1 ea 08 22
 	dec 1,B                                              ; F93796  ca 69
 	bit 0x07,W                                           ; F93798  c8 33 07
@@ -37031,7 +37031,7 @@ SoftKeyCol5_CombinationGroupMenu:
 	jr ule, .LF937C7                                     ; F937A9  63 1c
 	jr .LF937DA                                          ; F937AB  68 2d
 .LF937AD:
-	ld a, (0x2169:16)                                   ; F937AD  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F937AD  c1 69 21 21
 	bit 0x07,W                                           ; F937B1  c8 33 07
 	jr nz, .LF937BE                                      ; F937B4  6e 08
 	cp a, 0x00:i3                                          ; F937B6  c9 d8
@@ -37045,7 +37045,7 @@ SoftKeyCol5_CombinationGroupMenu:
 	jr .LF937DA                                          ; F937C5  68 13
 .LF937C7:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; F937C7  c1 75 20 3e 08
-	ld (0x2169:16), a                                   ; F937CC  f1 69 21 41
+	ld (SoundSel_Group:16), a                                   ; F937CC  f1 69 21 41
 	ld e, 0xa8:opc                                          ; F937D0  25 a8
 	ld d, 0x08:opc                                          ; F937D2  24 08
 	ld w, 0x0f:opc                                          ; F937D4  20 0f
@@ -37299,9 +37299,9 @@ GroupCombiDisplayHold_PaintGroupAndNames:   ; entry: named by 1 `ld` operand, fi
 	calr GroupDisplayHold_ClearNameSlots                                          ; F9394B  1e df fb
 	ld XIY,0x00f2b8f9                                    ; F9394E  45 f9 b8 f2 00
 	call T_DLB_Handler_StringTable                       ; F93953  1d f8 17 f4
-	ld a, (0x2169:16)                                   ; F93957  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; F93957  c1 69 21 21
 	ld b, 0x98:opc                                          ; F9395B  22 98
-	ld w, (0x216a:16)                                   ; F9395D  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F9395D  c1 6a 21 20
 	call T_F41030                                        ; F93961  1d 30 10 f4
 	ldw ix, 0x0129                                       ; F93965  34 29 01
 	ldw hl, 0x00                                         ; F93968  33 00 00
@@ -37310,7 +37310,7 @@ GroupCombiDisplayHold_PaintGroupAndNames:   ; entry: named by 1 `ld` operand, fi
 	swi 7                                                ; F93970  ff
 	calr GroupCombiDisplayHold_DrawNumberRange                                          ; F93971  1e 30 f8
 	calr DisplayHold_ShowGroupNumber                                          ; F93974  1e ad f7
-	m_bit 3, MD16, 0x216a                                ; F93977  f1 6a 21 cb
+	m_bit 3, MD16, SoundSel_Bank                                ; F93977  f1 6a 21 cb
 	jr nz, .LF93982                                      ; F9397B  6e 05
 	calr Draw_Ext1_2                                          ; F9397D  1e 90 f0
 	jr .LF93985                                          ; F93980  68 03
@@ -37319,8 +37319,8 @@ GroupCombiDisplayHold_PaintGroupAndNames:   ; entry: named by 1 `ld` operand, fi
 .LF93985:
 	calr BankLegend_DrawUser                                          ; F93985  1e 97 ef
 	calr DisplayHold_DrawHoldHighlight                                          ; F93988  1e d2 f7
-	ld a, (0x2169:16)                                   ; F9398B  c1 69 21 21
-	ld w, (0x216a:16)                                   ; F9398F  c1 6a 21 20
+	ld a, (SoundSel_Group:16)                                   ; F9398B  c1 69 21 21
+	ld w, (SoundSel_Bank:16)                                   ; F9398F  c1 6a 21 20
 	ld b, 0x98:opc                                          ; F93993  22 98
 	call T_SoundGroup_MaxMemberIndex_GetToneCopy         ; F93995  1d 34 10 f4
 	ld L,A                                               ; F93999  c9 8f
@@ -37341,9 +37341,9 @@ GroupCombiDisplayHold_PaintGroupAndNames:   ; entry: named by 1 `ld` operand, fi
 	xor W,W                                              ; F939B5  c8 d0
 	cp WA,0x0008                                         ; F939B7  d8 cf 08 00
 	jr ugt, .LF939DC                                     ; F939BB  6b 1f
-	ld (0x2670:16), 0x00                                 ; F939BD  f1 70 26 00 00
+	ld (GroupMembers_Page:16), 0x00                                 ; F939BD  f1 70 26 00 00
 	calr PartRecord_GetPtr                                          ; F939C2  1e 74 0b
-	ld l, (0x2169:16)                                   ; F939C5  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F939C5  c1 69 21 27
 	and L,0xff                                           ; F939C9  cf cc ff
 	ldw de, 0x00                                         ; F939CC  32 00 00
 	calr GroupCombiDisplayHold_DrawMemberNames                                      ; F939CF  1e 02 05
@@ -37373,9 +37373,9 @@ GroupCombiDisplayHold_PaintGroupAndNames:   ; entry: named by 1 `ld` operand, fi
 GroupCombiDisplayHold_ShowMemberPage_TwoPages:
 	cp l, 0x07:i3                                          ; F939FC  cf df
 	jr UGT,.LF93A1C                                      ; F939FE  6b 1c
-	ld (0x2670:16), 0x00                                 ; F93A00  f1 70 26 00 00
+	ld (GroupMembers_Page:16), 0x00                                 ; F93A00  f1 70 26 00 00
 	calr PartRecord_GetPtr                                          ; F93A05  1e 31 0b
-	ld l, (0x2169:16)                                   ; F93A08  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F93A08  c1 69 21 27
 	and L,0xff                                           ; F93A0C  cf cc ff
 	xor H,H                                              ; F93A0F  ce d6
 	ldw de, 0x00                                         ; F93A11  32 00 00
@@ -37383,9 +37383,9 @@ GroupCombiDisplayHold_ShowMemberPage_TwoPages:
 	calr GroupCombiDisplayHold_DrawMemberNames                                      ; F93A17  1e ba 04
 	jr .LF93A33                                          ; F93A1A  68 17
 .LF93A1C:
-	ld (0x2670:16), 0x01                                 ; F93A1C  f1 70 26 00 01
+	ld (GroupMembers_Page:16), 0x01                                 ; F93A1C  f1 70 26 00 01
 	calr PartRecord_GetPtr                                          ; F93A21  1e 15 0b
-	ld l, (0x2169:16)                                   ; F93A24  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F93A24  c1 69 21 27
 	and L,0xff                                           ; F93A28  cf cc ff
 	xor H,H                                              ; F93A2B  ce d6
 	ldw de, 0x08                                         ; F93A2D  32 08 00
@@ -37404,9 +37404,9 @@ GroupCombiDisplayHold_ShowMemberPage_TwoPages:
 GroupCombiDisplayHold_ShowMemberPage_ManyPages:
 	cp l, 0x07:i3                                          ; F93A3C  cf df
 	jr ugt, .LF93A5D                                     ; F93A3E  6b 1d
-	ld (0x2670:16), 0x00                                 ; F93A40  f1 70 26 00 00
+	ld (GroupMembers_Page:16), 0x00                                 ; F93A40  f1 70 26 00 00
 	calr PartRecord_GetPtr                                          ; F93A45  1e f1 0a
-	ld l, (0x2169:16)                                   ; F93A48  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F93A48  c1 69 21 27
 	and L,0xff                                           ; F93A4C  cf cc ff
 	xor H,H                                              ; F93A4F  ce d6
 	ldw de, 0x00                                         ; F93A51  32 00 00
@@ -37429,12 +37429,12 @@ GroupCombiDisplayHold_ShowMemberPage_ManyPages:
 	xor W,W                                              ; F93A77  c8 d0
 	ld l, 0x08:opc                                          ; F93A79  27 08
 	div wa, l                                          ; F93A7B  cf 51
-	ld (0x2670:16), a                                   ; F93A7D  f1 70 26 41
+	ld (GroupMembers_Page:16), a                                   ; F93A7D  f1 70 26 41
 	calr PartRecord_GetPtr                                          ; F93A81  1e b5 0a
-	ld l, (0x2169:16)                                   ; F93A84  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F93A84  c1 69 21 27
 	and L,0xff                                           ; F93A88  cf cc ff
 	xor H,H                                              ; F93A8B  ce d6
-	ld a, (0x2670:16)                                   ; F93A8D  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93A8D  c1 70 26 21
 	xor W,W                                              ; F93A91  c8 d0
 	ld c, 0x08:opc                                          ; F93A93  23 08
 	mul wa, c                                          ; F93A95  cb 41
@@ -37449,16 +37449,16 @@ GroupCombiDisplayHold_ShowMemberPage_ManyPages:
 	xor W,W                                              ; F93AA6  c8 d0
 	ld l, 0x08:opc                                          ; F93AA8  27 08
 	div wa, l                                          ; F93AAA  cf 51
-	ld (0x2670:16), a                                   ; F93AAC  f1 70 26 41
+	ld (GroupMembers_Page:16), a                                   ; F93AAC  f1 70 26 41
 	popw de                                              ; F93AB0  4a
 	popw wa                                              ; F93AB1  48
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F93AB2  f1 40 25 00 00
 	calr PartRecord_GetPtr                                          ; F93AB7  1e 7f 0a
-	ld l, (0x2169:16)                                   ; F93ABA  c1 69 21 27
+	ld l, (SoundSel_Group:16)                                   ; F93ABA  c1 69 21 27
 	and L,0xff                                           ; F93ABE  cf cc ff
 	xor H,H                                              ; F93AC1  ce d6
 	pushw wa                                             ; F93AC3  28
-	ld a, (0x2670:16)                                   ; F93AC4  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93AC4  c1 70 26 21
 	xor W,W                                              ; F93AC8  c8 d0
 	ld c, 0x08:opc                                          ; F93ACA  23 08
 	mul wa, c                                          ; F93ACC  cb 41
@@ -37515,7 +37515,7 @@ SoftKeyCol6_GroupCombiDisplayHold:   ; entry: named by 2 `.long` operands, first
 ; Body: `xor (0x267F),0x01`, then queues sub_F9315D, which fills (DL_F2BA0C, op 05) or erases (DL_F2BA16, op 1B) the box x 254-313, y 212-236 around the
 ; "DISPLAY" / "HOLD" legend (0x2190 / 0x2371).  (0x267F) bit 0 is what GroupCombiDisplayHold_SelectMemberAtRow tests before leaving the screen.
 SoftKeyCol7_GroupCombiDisplayHold:   ; entry: named by 2 `.long` operands, first at 0xF93851
-	m_xor_mi8 MB16, 0x267f, 0x01                         ; F93B03  c1 7f 26 3d 01
+	m_xor_mi8 MB16, DisplayHold_Flag, 0x01                         ; F93B03  c1 7f 26 3d 01
 	ld XIX,DisplayHold_DrawHoldHighlight                                    ; F93B08  44 5d 31 f9 00
 	push XIX                                             ; F93B0D  3c
 	call T_CallbackQueue_Post                            ; F93B0E  1d 84 2e f4
@@ -37529,7 +37529,7 @@ SoftKeyCol7_GroupCombiDisplayHold:   ; entry: named by 2 `.long` operands, first
 ; Body: `xor (0x267F),0x01`, then queues sub_F9315D, which fills (DL_F2BA0C, op 05) or erases (DL_F2BA16, op 1B) the box x 254-313, y 212-236 around the
 ; "DISPLAY" / "HOLD" legend (0x2190 / 0x2371).  (0x267F) bit 0 is what GroupCombiDisplayHold_SelectMemberAtRow tests before leaving the screen.
 SoftKeyCol8_GroupCombiDisplayHold:   ; entry: named by 2 `.long` operands, first at 0xF93855
-	m_xor_mi8 MB16, 0x267f, 0x01                         ; F93B1B  c1 7f 26 3d 01
+	m_xor_mi8 MB16, DisplayHold_Flag, 0x01                         ; F93B1B  c1 7f 26 3d 01
 	ld XIX,DisplayHold_DrawHoldHighlight                                    ; F93B20  44 5d 31 f9 00
 	push XIX                                             ; F93B25  3c
 	call T_CallbackQueue_Post                            ; F93B26  1d 84 2e f4
@@ -37543,12 +37543,12 @@ SoftKeyCol8_GroupCombiDisplayHold:   ; entry: named by 2 `.long` operands, first
 ; T_SoundGroup_MaxMemberIndex_Get with B = (0x2250).  Out: A = max member index (0xFF = unused group slot), C = L = group.
 CombiGroup_MaxMemberIndexOfCurrent:
 	push W                                               ; F93B33  c8 04
-	ld c, (0x2169:16)                                   ; F93B35  c1 69 21 23
+	ld c, (SoundSel_Group:16)                                   ; F93B35  c1 69 21 23
 	and C,0xff                                           ; F93B39  cb cc ff
 	ld L,C                                               ; F93B3C  cb 8f
 	ld A,L                                               ; F93B3E  cf 89
 	ld b, 0x98:opc                                          ; F93B40  22 98
-	ld w, (0x216a:16)                                   ; F93B42  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F93B42  c1 6a 21 20
 	call T_SoundGroup_MaxMemberIndex_GetToneCopy         ; F93B46  1d 34 10 f4
 	pop W                                                ; F93B4A  c8 05
 	ret                                                  ; F93B4C  0e
@@ -37640,7 +37640,7 @@ sub_F93BFE:   ; entry: named by 2 `ld` operands, first at 0xF93BB2
 	calr LCD_ClearLayer0_Rows29To235                                          ; F93BFE  1e 7b f8
 	calr CombiGroup_MaxMemberIndexOfCurrent                                      ; F93C01  1e 2f ff
 	pushw wa                                             ; F93C04  28
-	ld a, (0x2670:16)                                   ; F93C05  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93C05  c1 70 26 21
 	inc 1,A                                              ; F93C09  c9 61
 	xor W,W                                              ; F93C0B  c8 d0
 	ld l, 0x08:opc                                          ; F93C0D  27 08
@@ -37689,7 +37689,7 @@ NumberPadKey_GroupCombiDisplayHold:   ; entry: named by 1 `.long` operand, first
 	ld (0x2826:16), 0x02                                 ; F93C56  f1 26 28 00 02
 	call T_AsciiDigits3_ToValue                          ; F93C5B  1d f0 32 f4
 	ld b, 0x10:opc                                          ; F93C5F  22 10
-	ld d, (0x216a:16)                                   ; F93C61  c1 6a 21 24
+	ld d, (SoundSel_Bank:16)                                   ; F93C61  c1 6a 21 24
 	cp D,0x28                                            ; F93C65  cc cf 28
 	jr z, .LF93C7B                                       ; F93C68  66 11
 	cp D,0x29                                            ; F93C6A  cc cf 29
@@ -37714,7 +37714,7 @@ NumberPadKey_GroupCombiDisplayHold:   ; entry: named by 1 `.long` operand, first
 	cp A,B                                               ; F93C8D  ca f1
 	jr ugt, .LF93CA5                                     ; F93C8F  6b 14
 	dec 1,A                                              ; F93C91  c9 69
-	ld (0x2169:16), a                                   ; F93C93  f1 69 21 41
+	ld (SoundSel_Group:16), a                                   ; F93C93  f1 69 21 41
 	ld e, 0xa8:opc                                          ; F93C97  25 a8
 	ld d, 0x08:opc                                          ; F93C99  24 08
 	ld w, 0x0f:opc                                          ; F93C9B  20 0f
@@ -37739,14 +37739,14 @@ sub_F93CB8:
 GroupCombiDisplayHold_SelectMemberAtRow:
 	cp A,0x08                                            ; F93CB9  c9 cf 08
 	jr z, .LF93CCE                                       ; F93CBC  66 10
-	ld e, (0x2670:16)                                   ; F93CBE  c1 70 26 25
+	ld e, (GroupMembers_Page:16)                                   ; F93CBE  c1 70 26 25
 	m_cp_rm MB16, 0x2672, r5                             ; F93CC2  c1 72 26 f5
 	jr nz, .LF93CCE                                      ; F93CC6  6e 06
 	calr GroupCombiDisplayHold_SelectMemberLastPage                                      ; F93CC8  1e a2 00
 	jrl .LF93D6C                                         ; F93CCB  78 9e 00
 .LF93CCE:
 	pushw wa                                             ; F93CCE  28
-	ld a, (0x2670:16)                                   ; F93CCF  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93CCF  c1 70 26 21
 	xor W,W                                              ; F93CD3  c8 d0
 	ld e, 0x08:opc                                          ; F93CD5  25 08
 	mul wa, e                                          ; F93CD7  cd 41
@@ -37761,16 +37761,16 @@ GroupCombiDisplayHold_SelectMemberAtRow:
 .LF93CE9:
 	cp A,L                                               ; F93CE9  cf f1
 	jr c, .LF93D6C                                       ; F93CEB  67 7f
-	ld (0x216b:16), l                                   ; F93CED  f1 6b 21 47
+	ld (SoundSel_Member:16), l                                   ; F93CED  f1 6b 21 47
 	ld e, 0x98:opc                                          ; F93CF1  25 98
 	ld d, 0x01:opc                                          ; F93CF3  24 01
-	ld a, (0x216a:16)                                   ; F93CF5  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F93CF5  c1 6a 21 21
 	ld w, 0x3f:opc                                          ; F93CF9  20 3f
 	call T_List2030_AppendRegs                           ; F93CFB  1d 40 0f f4
 	ld e, 0x98:opc                                          ; F93CFF  25 98
 	ld d, 0x01:opc                                          ; F93D01  24 01
-	ld a, (0x2169:16)                                   ; F93D03  c1 69 21 21
-	ld w, (0x216b:16)                                   ; F93D07  c1 6b 21 20
+	ld a, (SoundSel_Group:16)                                   ; F93D03  c1 69 21 21
+	ld w, (SoundSel_Member:16)                                   ; F93D07  c1 6b 21 20
 	call T_List2030_AppendRegs                           ; F93D0B  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93D0F  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F93D14  1d 24 2e f4
@@ -37786,7 +37786,7 @@ GroupCombiDisplayHold_SelectMemberAtRow:
 	inc 4,XSP                                            ; F93D34  ef 64
 	ld a, 0x01:opc                                          ; F93D36  21 01
 	call T_Kernel_SemaSignal                             ; F93D38  1d 88 2d f4
-	m_bit 0, MD16, 0x267f                                ; F93D3C  f1 7f 26 c8
+	m_bit 0, MD16, DisplayHold_Flag                                ; F93D3C  f1 7f 26 c8
 	jr nz, .LF93D6C                                      ; F93D40  6e 2a
 	m_cp_mi8 MB16, UI_ScreenId, 0xa1                          ; F93D42  c1 7c 20 3f a1
 	jr nz, .LF93D51                                      ; F93D47  6e 08
@@ -37825,7 +37825,7 @@ GroupCombiDisplayHold_SelectMemberLastPage:
 	jrl ugt, .LF93E27                                    ; F93D8C  7b 98 00
 	pushw wa                                             ; F93D8F  28
 	xor W,W                                              ; F93D90  c8 d0
-	ld a, (0x2670:16)                                   ; F93D92  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93D92  c1 70 26 21
 	ld e, 0x08:opc                                          ; F93D96  25 08
 	mul wa, e                                          ; F93D98  cd 41
 	add HL,WA                                            ; F93D9A  d8 83
@@ -37836,16 +37836,16 @@ GroupCombiDisplayHold_SelectMemberLastPage:
 .LF93DA4:
 	cp A,L                                               ; F93DA4  cf f1
 	jr c, .LF93E27                                       ; F93DA6  67 7f
-	ld (0x216b:16), l                                   ; F93DA8  f1 6b 21 47
+	ld (SoundSel_Member:16), l                                   ; F93DA8  f1 6b 21 47
 	ld e, 0x98:opc                                          ; F93DAC  25 98
 	ld d, 0x01:opc                                          ; F93DAE  24 01
-	ld a, (0x216a:16)                                   ; F93DB0  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F93DB0  c1 6a 21 21
 	ld w, 0x3f:opc                                          ; F93DB4  20 3f
 	call T_List2030_AppendRegs                           ; F93DB6  1d 40 0f f4
 	ld e, 0x98:opc                                          ; F93DBA  25 98
 	ld d, 0x01:opc                                          ; F93DBC  24 01
-	ld a, (0x2169:16)                                   ; F93DBE  c1 69 21 21
-	ld w, (0x216b:16)                                   ; F93DC2  c1 6b 21 20
+	ld a, (SoundSel_Group:16)                                   ; F93DBE  c1 69 21 21
+	ld w, (SoundSel_Member:16)                                   ; F93DC2  c1 6b 21 20
 	call T_List2030_AppendRegs                           ; F93DC6  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93DCA  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F93DCF  1d 24 2e f4
@@ -37861,7 +37861,7 @@ GroupCombiDisplayHold_SelectMemberLastPage:
 	inc 4,XSP                                            ; F93DEF  ef 64
 	ld a, 0x01:opc                                          ; F93DF1  21 01
 	call T_Kernel_SemaSignal                             ; F93DF3  1d 88 2d f4
-	m_bit 0, MD16, 0x267f                                ; F93DF7  f1 7f 26 c8
+	m_bit 0, MD16, DisplayHold_Flag                                ; F93DF7  f1 7f 26 c8
 	jr nz, .LF93E27                                      ; F93DFB  6e 2a
 	m_cp_mi8 MB16, UI_ScreenId, 0xa1                          ; F93DFD  c1 7c 20 3f a1
 	jr nz, .LF93E0C                                      ; F93E02  6e 08
@@ -37896,10 +37896,10 @@ GroupCombiDisplayHold_HighlightSelected:
 	pop_a                                                ; F93E4A  15
 	cp C,L                                               ; F93E4B  cf f3
 	jr nz, .LF93ECE                                      ; F93E4D  6e 7f
-	m_cp_rm MB16, 0x216a, r0                             ; F93E4F  c1 6a 21 f0
+	m_cp_rm MB16, SoundSel_Bank, r0                             ; F93E4F  c1 6a 21 f0
 	jr nz, .LF93ECE                                      ; F93E53  6e 79
 .LF93E55:
-	ld l, (0x216b:16)                                   ; F93E55  c1 6b 21 27
+	ld l, (SoundSel_Member:16)                                   ; F93E55  c1 6b 21 27
 	and L,0xff                                           ; F93E59  cf cc ff
 	cp a, 0x07:i3                                          ; F93E5C  c9 df
 	jr nz, .LF93E6F                                      ; F93E5E  6e 0f
@@ -37910,7 +37910,7 @@ GroupCombiDisplayHold_HighlightSelected:
 .LF93E6F:
 	xor W,W                                              ; F93E6F  c8 d0
 	ld IZ,WA                                             ; F93E71  d8 8e
-	ld a, (0x2670:16)                                   ; F93E73  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93E73  c1 70 26 21
 	xor W,W                                              ; F93E77  c8 d0
 	ld e, 0x08:opc                                          ; F93E79  25 08
 	mul wa, e                                          ; F93E7B  cd 41
@@ -37926,7 +37926,7 @@ GroupCombiDisplayHold_HighlightSelected:
 	ld e, 0x08:opc                                          ; F93E8F  25 08
 	div wa, e                                          ; F93E91  cd 51
 	ld C,W                                               ; F93E93  c8 8b
-	ld a, (0x2670:16)                                   ; F93E95  c1 70 26 21
+	ld a, (GroupMembers_Page:16)                                   ; F93E95  c1 70 26 21
 	m_cp_rm MB16, 0x2672, r1                             ; F93E99  c1 72 26 f1
 	jr nz, .LF93EBF                                      ; F93E9D  6e 20
 	ld WA,IZ                                             ; F93E9F  de 88
@@ -37999,7 +37999,7 @@ GroupCombiDisplayHold_DrawMemberNames:
 	popw de                                              ; F93F1F  4a
 	ld a, 0x98:opc                                          ; F93F20  21 98
 	ld (0x60f17f:24), a                                 ; F93F22  f2 7f f1 60 41
-	ld w, (0x216a:16)                                   ; F93F27  c1 6a 21 20
+	ld w, (SoundSel_Bank:16)                                   ; F93F27  c1 6a 21 20
 	call T_F407FC                                        ; F93F2B  1d fc 07 f4
 	ld W,H                                               ; F93F2F  ce 88
 	ld A,L                                               ; F93F31  cf 89
@@ -38030,7 +38030,7 @@ UiEvent_MarkRedrawFromPartClass:
 	jr z, .LF93F69                                       ; F93F54  66 13
 	cp a, 0x02:i3                                          ; F93F56  c9 da
 	jrl nz, .LF93FF1                                     ; F93F58  7e 96 00
-	m_cp_mi8 MB16, 0x2687, 0x00                          ; F93F5B  c1 87 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F93F5B  c1 87 26 3f 00
 	jr z, .LF93F69                                       ; F93F60  66 07
 	call UiEvent_MarkPartRedrawBits                                      ; F93F62  1d 37 40 f9
 	jrl .LF93FF1                                         ; F93F66  78 88 00
@@ -38070,28 +38070,28 @@ UiEvent_MarkRedrawFromPartClass:
 	jr z, .LF93FD9                                       ; F93FB2  66 25
 	jr .LF93FF1                                          ; F93FB4  68 3b
 .LF93FB6:
-	m_or_mi8 MB16, 0x2677, 0x07                          ; F93FB6  c1 77 26 3e 07
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F93FB6  c1 77 26 3e 07
 	jr .LF93FEC                                          ; F93FBB  68 2f
 .LF93FBD:
-	m_or_mi8 MB16, 0x2676, 0x01                          ; F93FBD  c1 76 26 3e 01
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0x01                          ; F93FBD  c1 76 26 3e 01
 	jr .LF93FEC                                          ; F93FC2  68 28
 .LF93FC4:
-	m_or_mi8 MB16, 0x2676, 0x02                          ; F93FC4  c1 76 26 3e 02
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0x02                          ; F93FC4  c1 76 26 3e 02
 	jr .LF93FEC                                          ; F93FC9  68 21
 .LF93FCB:
-	m_or_mi8 MB16, 0x2676, 0x04                          ; F93FCB  c1 76 26 3e 04
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0x04                          ; F93FCB  c1 76 26 3e 04
 	jr .LF93FEC                                          ; F93FD0  68 1a
 .LF93FD2:
-	m_or_mi8 MB16, 0x2676, 0x08                          ; F93FD2  c1 76 26 3e 08
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0x08                          ; F93FD2  c1 76 26 3e 08
 	jr .LF93FEC                                          ; F93FD7  68 13
 .LF93FD9:
-	m_or_mi8 MB16, 0x2676, 0x80                          ; F93FD9  c1 76 26 3e 80
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0x80                          ; F93FD9  c1 76 26 3e 80
 	jr .LF93FEC                                          ; F93FDE  68 0c
 .LF93FE0:
-	m_or_mi8 MB16, 0x2676, 0x30                          ; F93FE0  c1 76 26 3e 30
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0x30                          ; F93FE0  c1 76 26 3e 30
 	jr .LF93FEC                                          ; F93FE5  68 05
 .LF93FE7:
-	m_or_mi8 MB16, 0x2676, 0x40                          ; F93FE7  c1 76 26 3e 40
+	m_or_mi8 MB16, ModeScreen_DirtyFields, 0x40                          ; F93FE7  c1 76 26 3e 40
 .LF93FEC:
 	m_or_mi8 MB16, 0x2095, 0x10                          ; F93FEC  c1 95 20 3e 10
 .LF93FF1:
@@ -38105,7 +38105,7 @@ UiEvent_MarkRedrawFromClass20Block:
 	jr z, .LF94007                                       ; F93FF8  66 0d
 	cp a, 0x02:i3                                          ; F93FFA  c9 da
 	jr nz, .LF94036                                      ; F93FFC  6e 38
-	m_cp_mi8 MB16, 0x2687, 0x00                          ; F93FFE  c1 87 26 3f 00
+	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F93FFE  c1 87 26 3f 00
 	jr z, .LF94007                                       ; F94003  66 02
 	jr .LF94036                                          ; F94005  68 2f
 .LF94007:
@@ -38118,13 +38118,13 @@ UiEvent_MarkRedrawFromClass20Block:
 	jr z, .LF9402A                                       ; F94018  66 10
 	jr .LF94036                                          ; F9401A  68 1a
 .LF9401C:
-	m_or_mi8 MB16, 0x2677, 0x01                          ; F9401C  c1 77 26 3e 01
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x01                          ; F9401C  c1 77 26 3e 01
 	jr .LF94031                                          ; F94021  68 0e
 .LF94023:
-	m_or_mi8 MB16, 0x2677, 0x02                          ; F94023  c1 77 26 3e 02
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x02                          ; F94023  c1 77 26 3e 02
 	jr .LF94031                                          ; F94028  68 07
 .LF9402A:
-	m_or_mi8 MB16, 0x2677, 0x04                          ; F9402A  c1 77 26 3e 04
+	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x04                          ; F9402A  c1 77 26 3e 04
 	jr .LF94031                                          ; F9402F  68 00
 .LF94031:
 	m_or_mi8 MB16, 0x2095, 0x10                          ; F94031  c1 95 20 3e 10
@@ -38149,19 +38149,19 @@ UiEvent_MarkPartRedrawBits:
 	jr .LF94076                                          ; F94053  68 21
 .LF94055:
 	scf                                                  ; F94055  11
-	stcf	a, (0x267c:16)                       ; F94056  f1 7c 26 2c
+	stcf	a, (CombinationMode_DirtyVol:16)                       ; F94056  f1 7c 26 2c
 	jr .LF94071                                          ; F9405A  68 15
 .LF9405C:
 	scf                                                  ; F9405C  11
-	stcf	a, (0x267b:16)                       ; F9405D  f1 7b 26 2c
+	stcf	a, (CombinationMode_DirtyPan:16)                       ; F9405D  f1 7b 26 2c
 	jr .LF94071                                          ; F94061  68 0e
 .LF94063:
 	scf                                                  ; F94063  11
-	stcf	a, (0x267a:16)                       ; F94064  f1 7a 26 2c
+	stcf	a, (CombinationMode_DirtyInt:16)                       ; F94064  f1 7a 26 2c
 	jr .LF94071                                          ; F94068  68 07
 .LF9406A:
 	scf                                                  ; F9406A  11
-	stcf	a, (0x2679:16)                       ; F9406B  f1 79 26 2c
+	stcf	a, (CombinationMode_DirtySound:16)                       ; F9406B  f1 79 26 2c
 	jr .LF94071                                          ; F9406F  68 00
 .LF94071:
 	m_or_mi8 MB16, 0x2095, 0x10                          ; F94071  c1 95 20 3e 10
@@ -38467,7 +38467,7 @@ UiEvent_SyncSoundSelection:
 	jrl z, .LF94339                                      ; F942CB  76 6b 00
 	ld a, (UiEvent_Byte2:16)                                   ; F942CE  c1 b9 20 21
 	and A,0x0f                                           ; F942D2  c9 cc 0f
-	ld (0x2169:16), a                                   ; F942D5  f1 69 21 41
+	ld (SoundSel_Group:16), a                                   ; F942D5  f1 69 21 41
 	jr .LF94339                                          ; F942D9  68 5e
 .LF942DB:
 	calr SoundGroup_ReloadSelection                                      ; F942DB  1e 5c 00
@@ -38476,10 +38476,10 @@ UiEvent_SyncSoundSelection:
 	jr z, .LF94339                                       ; F942E5  66 52
 	ld a, (UiEvent_Byte2:16)                                   ; F942E7  c1 b9 20 21
 	and A,0x3f                                           ; F942EB  c9 cc 3f
-	m_cp_rm MB16, 0x216a, r1                             ; F942EE  c1 6a 21 f1
+	m_cp_rm MB16, SoundSel_Bank, r1                             ; F942EE  c1 6a 21 f1
 	jr z, .LF94339                                       ; F942F2  66 45
-	ld (0x216a:16), a                                   ; F942F4  f1 6a 21 41
-	ld (0x2169:16), 0x00                                 ; F942F8  f1 69 21 00 00
+	ld (SoundSel_Bank:16), a                                   ; F942F4  f1 6a 21 41
+	ld (SoundSel_Group:16), 0x00                                 ; F942F8  f1 69 21 00 00
 	jr .LF94339                                          ; F942FD  68 3a
 .LF942FF:
 	ld a, (UiEvent_Byte1:16)                                   ; F942FF  c1 b8 20 21
@@ -38556,11 +38556,11 @@ SoundGroup_LoadSelectionFromPart:
 	and L,0xff                                           ; F94392  cf cc ff
 	ld H,(XIY+0x1c)                                      ; F94395  8d 1c 26
 	and H,0xff                                           ; F94398  ce cc ff
-	ld a, (0x216a:16)                                   ; F9439B  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F9439B  c1 6a 21 21
 	ld (0x2674:16), a                                   ; F9439F  f1 74 26 41
-	ld (0x216a:16), w                                   ; F943A3  f1 6a 21 40
-	ld (0x2169:16), l                                   ; F943A7  f1 69 21 47
-	ld (0x216b:16), h                                   ; F943AB  f1 6b 21 46
+	ld (SoundSel_Bank:16), w                                   ; F943A3  f1 6a 21 40
+	ld (SoundSel_Group:16), l                                   ; F943A7  f1 69 21 47
+	ld (SoundSel_Member:16), h                                   ; F943AB  f1 6b 21 46
 	orw	(0x2116:16), 0x0044                  ; F943AF  d1 16 21 3e 44 00
 .LF943B5:
 	ret                                                  ; F943B5  0e
@@ -38578,11 +38578,11 @@ SoundGroup_LoadSelectionFromGlobal:
 	and H,0xff                                           ; F943C9  ce cc ff
 	ld w, (0x7f0a:16)                                   ; F943CC  c1 0a 7f 20
 	and W,0xff                                           ; F943D0  c8 cc ff
-	ld a, (0x216a:16)                                   ; F943D3  c1 6a 21 21
+	ld a, (SoundSel_Bank:16)                                   ; F943D3  c1 6a 21 21
 	ld (0x2674:16), a                                   ; F943D7  f1 74 26 41
-	ld (0x216a:16), w                                   ; F943DB  f1 6a 21 40
-	ld (0x2169:16), l                                   ; F943DF  f1 69 21 47
-	ld (0x216b:16), h                                   ; F943E3  f1 6b 21 46
+	ld (SoundSel_Bank:16), w                                   ; F943DB  f1 6a 21 40
+	ld (SoundSel_Group:16), l                                   ; F943DF  f1 69 21 47
+	ld (SoundSel_Member:16), h                                   ; F943E3  f1 6b 21 46
 	orw	(0x2116:16), 0x0044                  ; F943E7  d1 16 21 3e 44 00
 .LF943ED:
 	ret                                                  ; F943ED  0e
@@ -40536,7 +40536,7 @@ Paint_SineWaveCheckMode:
 	pop XIX                                              ; F95851  5c
 	pop XHL                                              ; F95852  5b
 	pop XDE                                              ; F95853  5a
-	ld c, (0x2169:16)                                   ; F95854  c1 69 21 23
+	ld c, (SoundSel_Group:16)                                   ; F95854  c1 69 21 23
 	ld (0x2881:16), c                                   ; F95858  f1 81 28 43
 	lda xbc, (DLRec_F2C9C2:24)                           ; F9585C  f2 c2 c9 f2 31
 	push XBC                                             ; F95861  39
@@ -40722,7 +40722,7 @@ NumberPadKey_SineWaveCheckMode:   ; entry: screen button-handler table
 	jr ugt, .LF9598D                                         ; F9597F  6b 0c
 	ld C,H                                               ; F95981  ce 8b
 	dec 1,C                                              ; F95983  cb 69
-	ld (0x2169:16), c                                   ; F95985  f1 69 21 43
+	ld (SoundSel_Group:16), c                                   ; F95985  f1 69 21 43
 	m_set 4, MD16, 0x2095                                ; F95989  f1 95 20 bc
 .LF9598D:
 	popw hl                                              ; F9598D  4b
@@ -118154,7 +118154,7 @@ sub_FC8FD7:
 	ld XBC,XIX                                           ; FC8FE4  ec 89
 	inc 1,XBC                                            ; FC8FE6  e9 61
 	ld (xiz-4), xbc                                      ; FC8FE8  be fc 61
-	ld a, (0x2169:16)                                   ; FC8FEB  c1 69 21 21
+	ld a, (SoundSel_Group:16)                                   ; FC8FEB  c1 69 21 21
 	or A,0xf0                                            ; FC8FEF  c9 ce f0
 	ld (XBC),A                                           ; FC8FF2  b1 41
 	ld C,(XIZ+0x0a)                                      ; FC8FF4  8e 0a 23
@@ -120638,7 +120638,7 @@ sub_FCA738:
 	ld D,(XIZ+0x08)                                      ; FCA743  8e 08 24
 	m_cp_mi8 MB16, UI_ScreenLatch, 0xda                          ; FCA746  c1 7a 20 3f da
 	jr nz, .LFCA754                                      ; FCA74B  6e 07
-	ld d, (0x2169:16)                                   ; FCA74D  c1 69 21 24
+	ld d, (SoundSel_Group:16)                                   ; FCA74D  c1 69 21 24
 	or D,0xf0                                            ; FCA751  cc ce f0
 .LFCA754:
 	ld c, (0x7f02:16)                                   ; FCA754  c1 02 7f 23
@@ -120809,7 +120809,7 @@ sub_FCA8D4:
 	ld (xiz-6), 0x00                                     ; FCA8F5  be fa 00 00
 	m_cp_mi8 MB16, UI_ScreenLatch, 0xda                          ; FCA8F9  c1 7a 20 3f da
 	jr NZ,.LFCA90A                                       ; FCA8FE  6e 0a
-	ld w, (0x2169:16)                                   ; FCA900  c1 69 21 20
+	ld w, (SoundSel_Group:16)                                   ; FCA900  c1 69 21 20
 	or W,0xf0                                            ; FCA904  c8 ce f0
 	ld (xiz-5), w                                        ; FCA907  be fb 40
 .LFCA90A:

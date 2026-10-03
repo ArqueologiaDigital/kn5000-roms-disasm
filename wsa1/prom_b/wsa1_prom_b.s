@@ -56613,7 +56613,7 @@ DLTable_F296E7:
 ; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x267E	; +0x02 source variable, 16-bit address
+	.short CombinationMode_ShownPart	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -59297,7 +59297,7 @@ DL_SoundGroupMenuReMap1ReMap2:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F2B2F9	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x216A	; +0x02 source variable, 16-bit address
+	.short SoundSel_Bank	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -59341,7 +59341,7 @@ DL_F2B379:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long Data_F2B38F	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x216A	; +0x02 source variable, 16-bit address
+	.short SoundSel_Bank	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -59424,7 +59424,7 @@ Data_F2B38F:
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F2B445	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2169	; +0x02 source variable, 16-bit address
+	.short SoundSel_Group	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -59979,7 +59979,7 @@ DL_GroupCombiDisplayHoldGr0up:
 ; Regenerate: python3 notes/gen_prom_b_f2b8f9_fix_module.py --splice
 ; ------------------------------------------------------------------
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x216A	; +0x02 source variable, 16-bit address
+	.short SoundSel_Bank	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -60225,7 +60225,7 @@ DL_F2BB03:
 ;           The implied count and the measured extent agree with no slack.
 ; ==================================================================
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x216A	; +0x02 source variable, 16-bit address
+	.short SoundSel_Bank	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
