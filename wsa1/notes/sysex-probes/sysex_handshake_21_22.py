@@ -34,11 +34,11 @@ WHERE THE SIGNAL IS  (ROM addresses, prom_a @0xF80000, prom_b @0xF00000)
     the acknowledger sub_FB28BE.
   * the RECEIVE handlers: 0xFB28FF (cmd 0x07 = wire 0x21) and 0xFB291D
     (cmd 0x08 = wire 0x22).
-  * the TRANSMIT side sub_FB2323 (0xFB2323), reached from the SEND-button
+  * the TRANSMIT side SysExDump_Handshake (0xFB2323), reached from the SEND-button
     dispatcher sub_FB2049.
   * transmit templates prom_b 0xF4FEB4..0xF4FEE5.
   * the parse record: base 0x60FC98, pointer at 0x60FCD8.  The trie walker
-    sub_FB63D1 stores wire byte n into FIELD n+3, pinned below by its own
+    SysExRx_MatchTrie stores wire byte n into FIELD n+3, pinned below by its own
     three store sites.
 
 RUN
@@ -60,7 +60,7 @@ PASS
         by NOTHING: all 10 references to those slots and to 0x60FC90..92
         are writes;
       * the only thing that puts a model value in an outgoing message is
-        sub_FB5F65's unconditional strap patch (see sysex_model_variant.py),
+        SysExTx_PatchModelByteVariant2's unconditional strap patch (see sysex_model_variant.py),
         which writes the MACHINE's own value and never the received one.
 """
 import os
@@ -183,7 +183,7 @@ assert a(0xFB2905, 2) == bytes([0x6E, 0x15]), "jr nz -> ret, silently"
 assert a(0xFB2907, 6) == bytes([0xF2, 0x44, 0xFD, 0x60, 0x00, 0x01]), "state := 1"
 assert a(0xFB290D, 3) == bytes([0x0B, 0x07, 0x00]), "pushw 7 -- message length"
 assert a(0xFB2910, 5) == bytes([0xF2, 0xDC, 0xFE, 0xF4, 0x31]), "lda XBC,0xF4FEDC"
-assert a(0xFB2916, 4) == bytes([0x1D, 0x7F, 0x6E, 0xFB]), "call sub_FB6E7F (send)"
+assert a(0xFB2916, 4) == bytes([0x1D, 0x7F, 0x6E, 0xFB]), "call SysExTx_AppendAndSendOnF7 (send)"
 assert a(0xFB291C, 1) == bytes([0x0E]), "ret"
 REPLY_TO_21 = b(0xF4FEDC, 7)
 assert REPLY_TO_21 == bytes([0xF0, 0x50, 0x22, 0x04, 0x00, 0x11, 0xF7]), REPLY_TO_21
@@ -222,7 +222,7 @@ assert b(FULL, 5) == bytes([0xF0, 0x50, 0x2A, 0x7E, 0xF7])
 
 # ====================================================================== 4
 # THE PARSE-RECORD FIELD INDEX IS THE WIRE POSITION PLUS THREE,
-# pinned by the trie walker sub_FB63D1's own three store sites, so
+# pinned by the trie walker SysExRx_MatchTrie's own three store sites, so
 # "fields 6,7,8" above are wire bytes 3,4,5 -- the model triple `04 MD 11`.
 assert a(0xFB641F, 3) == bytes([0x0B, 0x05, 0x00]), "family byte (wire 2) -> field 5"
 assert a(0xFB6445, 3) == bytes([0x0B, 0x00, 0x00]), "command number -> field 0"
@@ -262,14 +262,14 @@ assert a(0xFB7F37, 7) == bytes([0xB4, 0x46, 0xBC, 0x01, 0x46, 0xBC, 0x02]), "wri
 # ⇒ nothing reads the model value the peer sent.  No reply can carry it.
 
 # The ONE thing that puts a model value into an outgoing message is the strap
-# patch sub_FB5F65, established by sysex_model_variant.py: it overwrites
+# patch SysExTx_PatchModelByteVariant2, established by sysex_model_variant.py: it overwrites
 # message byte 4 with a constant, from the machine's own strap.
 assert a(0xFB5FEC, 4) == bytes([0xB9, 0x04, 0x00, 0x01]), "ld (XBC+4),0x01 -- the 21/22 arm"
 
 
 # ====================================================================== 6
 # THE HANDSHAKE IS A BULK-DUMP SESSION OPENING, AND THE INSTRUMENT IS THE
-# ONE THAT SENDS 0x21.  sub_FB2323 is the mirror image of section 3.
+# ONE THAT SENDS 0x21.  SysExDump_Handshake is the mirror image of section 3.
 assert a(0xFB232A, 5) == bytes([0xF2, 0x40, 0xFD, 0x60, 0xB7]), "res 7 -- acks off"
 assert a(0xFB232F, 2) == bytes([0x26, 0x00]), "attempt counter H := 0"
 assert a(0xFB2331, 3) == bytes([0x0B, 0x07, 0x00]), "pushw 7"
@@ -365,8 +365,8 @@ CENSUS = {
         "prom_b 0xF4FEDC (the `22` template)"],
     "instructions naming those templates": [
         "0x%06X  %s" % (x, w) for x, w in (
-            (0xFB2335, "sub_FB2323 step 1 -- SENDS a `21`"),
-            (0xFB23AE, "sub_FB2323 step 2 -- SENDS a `22`"),
+            (0xFB2335, "SysExDump_Handshake step 1 -- SENDS a `21`"),
+            (0xFB23AE, "SysExDump_Handshake step 2 -- SENDS a `22`"),
             (0xFB2911, "the cmd 0x07 handler -- ANSWERS a `21` with a `22`"))],
     "instructions comparing a byte against 0x21 or 0x22 in the SysEx engine": [
         "0x%06X  cp A,0x22 -- the 34-command table bound, not a family byte" % x
@@ -427,7 +427,7 @@ print("  is sub_FB7F1F filling all six with 0xFF at reset.  NOTHING READS THEM."
 print()
 print("THE INSTRUMENT IS THE ONE THAT SENDS A `21`")
 print("  the `21` template 0xF4FED5 is named by exactly ONE instruction in the")
-print("  four images: 0x%06X, sub_FB2323 step 1." % REF21[0][1])
+print("  four images: 0x%06X, SysExDump_Handshake step 1." % REF21[0][1])
 print("  the `22` template 0xF4FEDC is named by two: 0x%06X (step 2) and"
       % REF22[0][1])
 print("  0x%06X (the reply to a received `21`)." % REF22[1][1])

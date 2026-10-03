@@ -40,9 +40,9 @@ WHERE THE SIGNAL IS
     session already open is answered -- with an acknowledgement that carries
     no model byte at all.
 
-  * THE MODEL BYTE.  The reply template is `04 00 11`.  sub_FB6E7F, the
-    transmitter the `21` handler calls, reaches sub_FB7165, whose first call
-    is sub_FB5F65 -- the patcher that rewrites message byte 4 from 00 to 01
+  * THE MODEL BYTE.  The reply template is `04 00 11`.  SysExTx_AppendAndSendOnF7, the
+    transmitter the `21` handler calls, reaches SysExTx_SendFrameMidi1, whose first call
+    is SysExTx_PatchModelByteVariant2 -- the patcher that rewrites message byte 4 from 00 to 01
     on families 0x21/0x22/0x2C/0x2D when the strap (0xC4) reads 2.  The
     reply therefore carries the machine's OWN model byte whatever the
     enquiry carried, because the enquiry's byte is never consulted.
@@ -207,7 +207,7 @@ print("  none of the three carries a model byte")
 print()
 
 # --- 5. the model byte in the reply --------------------------------------
-# sub_FB6E7F 0xFB6ED8 `calr sub_FB7165`; sub_FB7165 0xFB7174 `calr sub_FB5F65`
+# SysExTx_AppendAndSendOnF7 0xFB6ED8 `calr SysExTx_SendFrameMidi1`; SysExTx_SendFrameMidi1 0xFB7174 `calr SysExTx_PatchModelByteVariant2`
 def calr_target(addr):
     op = a(addr, 3)
     assert op[0] == 0x1E, "not a calr at 0x%06X" % addr

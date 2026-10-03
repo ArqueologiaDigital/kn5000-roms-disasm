@@ -118,7 +118,7 @@ converted code, because the source rebuilds the ROM byte-identically — finds
 | `0xFB256E` | `call sub_FB7649` | builder two calls back at `0xFB2560`, src `XIX` |
 | `0xFB26D2` | `call 0xf40ef0` | src `0x00EC0000`, count `0x0300` |
 | `0xFB2769` | `call sub_FB7722` | builder two calls back at `0xFB275B`, src `XIX` |
-| `0xFB6FD1` | `calr sub_FB7025` | **no builder anywhere on the path** |
+| `0xFB6FD1` | `calr SysExTx_AppendContHeaderIfCont` | **no builder anywhere on the path** |
 | `0xFC00BE` | `call 0xf40ef0` | src `0x00C00000`, count `0x34` |
 | `0xFC0188` | `call 0xf40ef0` | src `0x00C00000 + (0x0878)` |
 | `0xFC1C62` | `call sub_FC1C77` | builder at `0xFC1CB6`; src `0x00F80300`, `0x00EC0300` or `(0x08E4)+0x300` |
@@ -157,7 +157,7 @@ regardless of which caller ran.
 
 **What is unknown.** `0xFB6FD1` is the odd one out: it reaches the wait after
 `call sub_FB2877_Nop` — which is a bare `ret` at `0xFB7E9A`, i.e. a stub — and
-`calr sub_FB7025`, whose body (`0xFB7025-0xFB703F`) only calls `sub_FB6E7F`, a
+`calr SysExTx_AppendContHeaderIfCont`, whose body (`0xFB7025-0xFB703F`) only calls `SysExTx_AppendAndSendOnF7`, a
 RAM ring-buffer writer. Nothing on that path touches `0xF40EF0`. What transfer
 this site believes is in flight is not established. `INTTC3_LinkDmaDone`'s three
 `set` sites remain the other release candidates.

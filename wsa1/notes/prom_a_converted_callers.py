@@ -118,7 +118,7 @@ EXPECT = [
     (0xFB256E, "call sub_FB7649"),
     (0xFB26D2, "call 0xf40ef0"),
     (0xFB2769, "call sub_FB7722"),
-    (0xFB6FD1, "calr sub_FB7025"),
+    (0xFB6FD1, "calr SysExTx_AppendContHeaderIfCont"),
     (0xFC00BE, "call 0xf40ef0"),
     (0xFC0188, "call 0xf40ef0"),
     (0xFC1C62, "call sub_FC1C77"),
@@ -136,7 +136,7 @@ INTERMEDIATE = {
     "sub_FC2112": 0xFC212A,
     "sub_FC21D0": 0xFC21E8,
 }
-NO_BUILD = "sub_FB7025"   # this one does NOT reach 0xF40EF0
+NO_BUILD = "SysExTx_AppendContHeaderIfCont"   # this one does NOT reach 0xF40EF0
 
 FAILS, RAN = [], []
 
@@ -195,7 +195,7 @@ def checks():
         check("C7 %s calls the builder at 0x%06X" % (name, addr), ok,
               "" if ok else "found %r" % (insns[i][1] if i is not None else None))
 
-    # C8: sub_FB7025 does NOT, anywhere in its body
+    # C8: SysExTx_AppendContHeaderIfCont does NOT, anywhere in its body
     body = []
     started = False
     for addr, text, bs, n in insns:
@@ -205,9 +205,9 @@ def checks():
             body.append((addr, text))
             if text == "ret" and len(body) > 1:
                 break
-    check("C8 sub_FB7025 body found (ends 0xFB703F)", body and body[-1][0] == 0xFB703F,
+    check("C8 SysExTx_AppendContHeaderIfCont body found (ends 0xFB703F)", body and body[-1][0] == 0xFB703F,
           "%06X" % (body[-1][0] if body else 0))
-    check("C9 sub_FB7025 never calls 0xf40ef0",
+    check("C9 SysExTx_AppendContHeaderIfCont never calls 0xf40ef0",
           not any(t == "call 0xf40ef0" for a_, t in body), "")
 
     # C10: the modules the 15 sites fall in

@@ -86347,7 +86347,7 @@ PatchList_RecordBytes2B_Ptr:
 ;   as the immediately preceding call, two with it two calls back in the same
 ;   block (0xFB2560, 0xFB275B), three one call deeper inside sub_FC1C77 /
 ;   sub_FC2112 / sub_FC21D0.  The fifteenth, 0xFB6FD1, reaches the wait after
-;   `call sub_FB2877_Nop` (which is a bare `ret` at 0xFB7E9A) and `calr sub_FB7025`,
+;   `call sub_FB2877_Nop` (which is a bare `ret` at 0xFB7E9A) and `calr SysExTx_AppendContHeaderIfCont`,
 ;   and neither of those touches 0xF40EF0 -- so what it is waiting on is NOT
 ;   established.
 ;   And the SOURCE handed to the builder is not always remote flash: the eight
@@ -86428,7 +86428,7 @@ SoundGroup_ReloadSelection_SaveRegs:
 	pop XDE                                              ; FB2047  5a
 	ret                                                  ; FB2048  0e
 ; SysExDump_RunSendJob -- run the pending SysEx bulk-dump transmit job: when bit 7 of (0x60F802) is set, prepare, send the category selected by (0x60F802) & 7, close the dump and report the status
-; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, MidiInARing_InitIfPanelMode79, sub_FB7B0B, sub_FB2323 (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then sub_FB27AD (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.
+; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, MidiInARing_InitIfPanelMode79, sub_FB7B0B, SysExDump_Handshake (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then SysExDump_SendJobDone (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.
 ; Run by: prom_b T_SysExDump_RunSendJob after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
 SysExDump_RunSendJob:
 	ld c, (0x60f802:24)                                 ; FB2049  c2 02 f8 60 23
@@ -86437,7 +86437,7 @@ SysExDump_RunSendJob:
 	m_set 6, MD24, 0x60fd40                              ; FB2053  f2 40 fd 60 be
 	call MidiInARing_InitIfPanelMode79                                      ; FB2058  1d fd 7e fb
 	call sub_FB7B0B                                      ; FB205C  1d 0b 7b fb
-	call sub_FB2323                                      ; FB2060  1d 23 23 fb
+	call SysExDump_Handshake                                      ; FB2060  1d 23 23 fb
 	ld c, (0x60f802:24)                                 ; FB2064  c2 02 f8 60 23
 	and C,0x07                                           ; FB2069  cb cc 07
 	extz BC                                              ; FB206C  d9 12
@@ -86490,14 +86490,16 @@ sub_FB20B1:   ; entry: named by 1 `.long` operand, first at 0xFB2091
 sub_FB20B7:   ; entry: named by 1 `.long` operand, first at 0xFB2095
 	call sub_FB2314                                      ; FB20B7  1d 14 23 fb
 .LFB20BB:
-	call sub_FB27AD                                      ; FB20BB  1d ad 27 fb
+	call SysExDump_SendJobDone                                      ; FB20BB  1d ad 27 fb
 	call sub_FB7DFE                                      ; FB20BF  1d fe 7d fb
 JumpTable_FB2081_Code_Skip:
 	ld (0x60fd40:24), 0x00                             ; FB20C3  f2 40 fd 60 00 00
 	call sub_FB8156                                      ; FB20C9  1d 56 81 fb
 JumpTable_FB2081_Code_Return:
 	ret                                                  ; FB20CD  0e
-sub_FB20CE:
+; SysExRx_PollRing601646: drain ring 0x601646 through a 3-state SysEx assembler (F0, then 0x50 or 0x7E, then body up to F7) into
+;   SysExRx_AppendByte; on F7 run SysExRx_ParseDispatch_Ring601646.
+SysExRx_PollRing601646:
 	pushw hl                                             ; FB20CE  2b
 	pushw de                                             ; FB20CF  2a
 	push XIX                                             ; FB20D0  3c
@@ -86544,7 +86546,7 @@ sub_FB20CE:
 	ld C,H                                               ; FB2131  ce 8b
 	extz BC                                              ; FB2133  d9 12
 	pushw bc                                             ; FB2135  29
-	call sub_FB6165                                      ; FB2136  1d 65 61 fb
+	call SysExRx_AppendByte                                      ; FB2136  1d 65 61 fb
 .LFB213A:
 	popw bc                                              ; FB213A  49
 	jr .LFB20E3                                          ; FB213B  68 a6
@@ -86555,22 +86557,24 @@ sub_FB20CE:
 	ld C,H                                               ; FB2145  ce 8b
 	extz BC                                              ; FB2147  d9 12
 	pushw bc                                             ; FB2149  29
-	call sub_FB6165                                      ; FB214A  1d 65 61 fb
-	calr sub_FB2160                                      ; FB214E  1e 0f 00
+	call SysExRx_AppendByte                                      ; FB214A  1d 65 61 fb
+	calr SysExRx_ParseDispatch_Ring601646                                      ; FB214E  1e 0f 00
 	jr .LFB213A                                          ; FB2151  68 e7
 .LFB2153:
 	ld (XIX),0x00                                        ; FB2153  b4 00 00
-	call sub_FB80F3                                      ; FB2156  1d f3 80 fb
+	call SysExRx_ResetBuffer                                      ; FB2156  1d f3 80 fb
 	jr .LFB20E3                                          ; FB215A  68 87
 .LFB215C:
 	pop XIX                                              ; FB215C  5c
 	popw de                                              ; FB215D  4a
 	popw hl                                              ; FB215E  4b
 	ret                                                  ; FB215F  0e
-sub_FB2160:
+; SysExRx_ParseDispatch_Ring601646: SysExRx_ParseMessage; when status (field 4) is 0 and the command (field 0) is below 0x22, call
+;   PtrTable_F4F800[command].
+SysExRx_ParseDispatch_Ring601646:
 	push XIX                                             ; FB2160  3c
 	lda xix, (U8Rec16_GetField:24)                             ; FB2161  f2 d3 62 fb 34
-	call sub_FB63AF                                      ; FB2166  1d af 63 fb
+	call SysExRx_ParseMessage                                      ; FB2166  1d af 63 fb
 	pushw 0x04                                           ; FB216A  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB216D  e2 d8 fc 60 21
 	push XBC                                             ; FB2172  39
@@ -86612,7 +86616,8 @@ sub_FB2160:
 	call sub_FB8156                                      ; FB21C5  1d 56 81 fb
 	pop XIX                                              ; FB21C9  5c
 	ret                                                  ; FB21CA  0e
-sub_FB21CB:
+; SysExRx_PollRing601C6E: the same assembler on ring 0x601C6E; on F7 run SysExRx_ParseDispatch_Ring601C6E.
+SysExRx_PollRing601C6E:
 	pushw hl                                             ; FB21CB  2b
 	pushw de                                             ; FB21CC  2a
 	push XIX                                             ; FB21CD  3c
@@ -86659,7 +86664,7 @@ sub_FB21CB:
 	ld C,H                                               ; FB222E  ce 8b
 	extz BC                                              ; FB2230  d9 12
 	pushw bc                                             ; FB2232  29
-	call sub_FB6165                                      ; FB2233  1d 65 61 fb
+	call SysExRx_AppendByte                                      ; FB2233  1d 65 61 fb
 .LFB2237:
 	popw bc                                              ; FB2237  49
 	jr .LFB21E0                                          ; FB2238  68 a6
@@ -86670,22 +86675,23 @@ sub_FB21CB:
 	ld C,H                                               ; FB2242  ce 8b
 	extz BC                                              ; FB2244  d9 12
 	pushw bc                                             ; FB2246  29
-	call sub_FB6165                                      ; FB2247  1d 65 61 fb
-	calr sub_FB225D                                      ; FB224B  1e 0f 00
+	call SysExRx_AppendByte                                      ; FB2247  1d 65 61 fb
+	calr SysExRx_ParseDispatch_Ring601C6E                                      ; FB224B  1e 0f 00
 	jr .LFB2237                                          ; FB224E  68 e7
 .LFB2250:
 	ld (XIX),0x00                                        ; FB2250  b4 00 00
-	call sub_FB80F3                                      ; FB2253  1d f3 80 fb
+	call SysExRx_ResetBuffer                                      ; FB2253  1d f3 80 fb
 	jr .LFB21E0                                          ; FB2257  68 87
 .LFB2259:
 	pop XIX                                              ; FB2259  5c
 	popw de                                              ; FB225A  4a
 	popw hl                                              ; FB225B  4b
 	ret                                                  ; FB225C  0e
-sub_FB225D:
+; SysExRx_ParseDispatch_Ring601C6E: as SysExRx_ParseDispatch_Ring601646, through PtrTable_F4F888.
+SysExRx_ParseDispatch_Ring601C6E:
 	push XIX                                             ; FB225D  3c
 	lda xix, (U8Rec16_GetField:24)                             ; FB225E  f2 d3 62 fb 34
-	call sub_FB63AF                                      ; FB2263  1d af 63 fb
+	call SysExRx_ParseMessage                                      ; FB2263  1d af 63 fb
 	pushw 0x04                                           ; FB2267  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB226A  e2 d8 fc 60 21
 	push XBC                                             ; FB226F  39
@@ -86768,7 +86774,9 @@ sub_FB2314:
 	calr sub_FB2675                                      ; FB231E  1e 54 03
 	pop XBC                                              ; FB2321  59
 	ret                                                  ; FB2322  0e
-sub_FB2323:
+; SysExDump_Handshake: send F0 50 21 04 00 11 F7 and await class 8, then F0 50 22 04 00 11 F7 and await class 1, 3 tries each; success sets bit 7
+;   of (0x60FD40) (per-frame ACK on).
+SysExDump_Handshake:
 	pushw hl                                             ; FB2323  2b
 	push XIX                                             ; FB2324  3c
 	lda xix, (0x60fcd8:24)                               ; FB2325  f2 d8 fc 60 34
@@ -86778,9 +86786,9 @@ sub_FB2323:
 	pushw 0x07                                           ; FB2331  0b 07 00
 	lda xbc, (0xf4fed5:24)                               ; FB2334  f2 d5 fe f4 31
 	push XBC                                             ; FB2339  39
-	call sub_FB6E7F                                      ; FB233A  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB233A  1d 7f 6e fb
 	m_set 2, MD24, 0x60fd40                              ; FB233E  f2 40 fd 60 ba
-	call sub_FB6072                                      ; FB2343  1d 72 60 fb
+	call SysExRx_AwaitReply                                      ; FB2343  1d 72 60 fb
 	pushw 0x00                                           ; FB2347  0b 00 00
 	ld XBC,(XIX)                                         ; FB234A  a4 21
 	push XBC                                             ; FB234C  39
@@ -86824,9 +86832,9 @@ sub_FB2323:
 	pushw 0x07                                           ; FB23AA  0b 07 00
 	lda xbc, (0xf4fedc:24)                               ; FB23AD  f2 dc fe f4 31
 	push XBC                                             ; FB23B2  39
-	call sub_FB6E7F                                      ; FB23B3  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB23B3  1d 7f 6e fb
 	m_set 2, MD24, 0x60fd40                              ; FB23B7  f2 40 fd 60 ba
-	call sub_FB6072                                      ; FB23BC  1d 72 60 fb
+	call SysExRx_AwaitReply                                      ; FB23BC  1d 72 60 fb
 	pushw 0x00                                           ; FB23C0  0b 00 00
 	ld XBC,(XIX)                                         ; FB23C3  a4 21
 	push XBC                                             ; FB23C5  39
@@ -86854,7 +86862,7 @@ sub_FB23E2:
 sub_FB23EF:
 	calr sub_FB23F9                                      ; FB23EF  1e 07 00
 	calr sub_FB243E                                      ; FB23F2  1e 49 00
-	calr sub_FB277E                                      ; FB23F5  1e 86 03
+	calr SysExDump_SendCategoryDone                                      ; FB23F5  1e 86 03
 	ret                                                  ; FB23F8  0e
 sub_FB23F9:
 	pushw 0x04                                           ; FB23F9  0b 04 00
@@ -86875,8 +86883,8 @@ sub_FB23F9:
 	pushw 0x0c                                           ; FB2426  0b 0c 00
 	lda xbc, (0xf4fef8:24)                               ; FB2429  f2 f8 fe f4 31
 	push XBC                                             ; FB242E  39
-	call sub_FB6E7F                                      ; FB242F  1d 7f 6e fb
-	call sub_FB6F6B                                      ; FB2433  1d 6b 6f fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB242F  1d 7f 6e fb
+	call SysExDump_SendFrames                                      ; FB2433  1d 6b 6f fb
 	add XSP,0x00000012                                   ; FB2437  ef c8 12 00 00 00
 .LFB243D:
 	ret                                                  ; FB243D  0e
@@ -86899,14 +86907,14 @@ sub_FB243E:
 	pushw 0x0c                                           ; FB246B  0b 0c 00
 	lda xbc, (0xf4ff04:24)                               ; FB246E  f2 04 ff f4 31
 	push XBC                                             ; FB2473  39
-	call sub_FB6E7F                                      ; FB2474  1d 7f 6e fb
-	call sub_FB6F6B                                      ; FB2478  1d 6b 6f fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB2474  1d 7f 6e fb
+	call SysExDump_SendFrames                                      ; FB2478  1d 6b 6f fb
 	add XSP,0x00000012                                   ; FB247C  ef c8 12 00 00 00
 .LFB2482:
 	ret                                                  ; FB2482  0e
 sub_FB2483:
 	calr Remote_E80000_Read32Blocks                      ; FB2483  1e 66 00
-	calr sub_FB277E                                      ; FB2486  1e f5 02
+	calr SysExDump_SendCategoryDone                                      ; FB2486  1e f5 02
 	ret                                                  ; FB2489  0e
 ; ---------------------------------------------------------------------
 ; ---------------------------------------------------------------------
@@ -86956,7 +86964,7 @@ sub_FB2483:
 	pushw 0x0c                                           ; FB24B7  0b 0c 00
 	lda xbc, (0xf4ff10:24)                               ; FB24BA  f2 10 ff f4 31
 	push XBC                                             ; FB24BF  39
-	call sub_FB6E7F                                      ; FB24C0  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB24C0  1d 7f 6e fb
 	lda xbc, (0x60a000:24)                               ; FB24C4  f2 00 a0 60 31
 	push XBC                                             ; FB24C9  39
 	pushw 0x00                                           ; FB24CA  0b 00 00
@@ -86967,7 +86975,7 @@ sub_FB2483:
 	add XSP,0x0000001c                                   ; FB24DB  ef c8 1c 00 00 00
 	cp WA,0xffff                                         ; FB24E1  d8 cf ff ff
 	jr z, .LFB24EB                                       ; FB24E5  66 04
-	call sub_FB6F6B                                      ; FB24E7  1d 6b 6f fb
+	call SysExDump_SendFrames                                      ; FB24E7  1d 6b 6f fb
 .LFB24EB:
 	ret                                                  ; FB24EB  0e
 
@@ -87008,7 +87016,7 @@ Remote_E80000_Read32Blocks:
 	pushw 0x0c                                           ; FB2512  0b 0c 00
 	lda xbc, (0xf4ff1c:24)                               ; FB2515  f2 1c ff f4 31
 	push XBC                                             ; FB251A  39
-	call sub_FB6E7F                                      ; FB251B  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB251B  1d 7f 6e fb
 	ld XIX,0x00e80000                                    ; FB251F  44 00 00 e8 00
 	ld h, 0x1f:opc                                          ; FB2524  26 1f
 	inc 8,XSP                                            ; FB2526  ef 60
@@ -87022,7 +87030,7 @@ Remote_E80000_Read32Blocks:
 	lda xbc, (0x60fcf8:24)                               ; FB2538  f2 f8 fc 60 31
 	push XBC                                             ; FB253D  39
 	call sub_FB7649                                      ; FB253E  1d 49 76 fb
-	call sub_FB6FB2                                      ; FB2542  1d b2 6f fb
+	call SysExDump_SendFramesStreamed                                      ; FB2542  1d b2 6f fb
 	dec 1,H                                              ; FB2546  ce 69
 	add XIX,0x00002000                                   ; FB2548  ec c8 00 20 00 00
 	inc 8,XSP                                            ; FB254E  ef 60
@@ -87042,7 +87050,7 @@ Remote_E80000_Read32Blocks:
 	inc 6,XSP                                            ; FB2574  ef 66
 	cp WA,0xffff                                         ; FB2576  d8 cf ff ff
 	jr z, .LFB2580                                       ; FB257A  66 04
-	call sub_FB6F6B                                      ; FB257C  1d 6b 6f fb
+	call SysExDump_SendFrames                                      ; FB257C  1d 6b 6f fb
 .LFB2580:
 	pop XIX                                              ; FB2580  5c
 	popw hl                                              ; FB2581  4b
@@ -87060,7 +87068,7 @@ sub_FB2587:
 	calr sub_FB25A2                                      ; FB2595  1e 0a 00
 	calr sub_FB25E7                                      ; FB2598  1e 4c 00
 	calr sub_FB262C                                      ; FB259B  1e 8e 00
-	calr sub_FB277E                                      ; FB259E  1e dd 01
+	calr SysExDump_SendCategoryDone                                      ; FB259E  1e dd 01
 .LFB25A1:
 	ret                                                  ; FB25A1  0e
 sub_FB25A2:
@@ -87082,8 +87090,8 @@ sub_FB25A2:
 	pushw 0x0c                                           ; FB25CF  0b 0c 00
 	lda xbc, (0xf4ff28:24)                               ; FB25D2  f2 28 ff f4 31
 	push XBC                                             ; FB25D7  39
-	call sub_FB6E7F                                      ; FB25D8  1d 7f 6e fb
-	call sub_FB6F6B                                      ; FB25DC  1d 6b 6f fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB25D8  1d 7f 6e fb
+	call SysExDump_SendFrames                                      ; FB25DC  1d 6b 6f fb
 	add XSP,0x00000012                                   ; FB25E0  ef c8 12 00 00 00
 .LFB25E6:
 	ret                                                  ; FB25E6  0e
@@ -87106,8 +87114,8 @@ sub_FB25E7:
 	pushw 0x0c                                           ; FB2614  0b 0c 00
 	lda xbc, (0xf4ff34:24)                               ; FB2617  f2 34 ff f4 31
 	push XBC                                             ; FB261C  39
-	call sub_FB6E7F                                      ; FB261D  1d 7f 6e fb
-	call sub_FB6F6B                                      ; FB2621  1d 6b 6f fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB261D  1d 7f 6e fb
+	call SysExDump_SendFrames                                      ; FB2621  1d 6b 6f fb
 	add XSP,0x00000012                                   ; FB2625  ef c8 12 00 00 00
 .LFB262B:
 	ret                                                  ; FB262B  0e
@@ -87130,16 +87138,16 @@ sub_FB262C:
 	pushw 0x09                                           ; FB2659  0b 09 00
 	lda xbc, (0xf4ff40:24)                               ; FB265C  f2 40 ff f4 31
 	push XBC                                             ; FB2661  39
-	call sub_FB6E7F                                      ; FB2662  1d 7f 6e fb
-	call sub_FB6EE9                                      ; FB2666  1d e9 6e fb
-	call sub_FB6F6B                                      ; FB266A  1d 6b 6f fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB2662  1d 7f 6e fb
+	call SysExTx_AppendRemainingSize                                      ; FB2666  1d e9 6e fb
+	call SysExDump_SendFrames                                      ; FB266A  1d 6b 6f fb
 	add XSP,0x00000012                                   ; FB266E  ef c8 12 00 00 00
 .LFB2674:
 	ret                                                  ; FB2674  0e
 sub_FB2675:
 	calr sub_FB267F                                      ; FB2675  1e 07 00
 	calr sub_FB26E7                                      ; FB2678  1e 6c 00
-	calr sub_FB277E                                      ; FB267B  1e 00 01
+	calr SysExDump_SendCategoryDone                                      ; FB267B  1e 00 01
 	ret                                                  ; FB267E  0e
 sub_FB267F:
 	pushw 0x04                                           ; FB267F  0b 04 00
@@ -87160,7 +87168,7 @@ sub_FB267F:
 	pushw 0x0c                                           ; FB26AC  0b 0c 00
 	lda xbc, (0xf4ff49:24)                               ; FB26AF  f2 49 ff f4 31
 	push XBC                                             ; FB26B4  39
-	call sub_FB6E7F                                      ; FB26B5  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB26B5  1d 7f 6e fb
 	lda xbc, (0x60a000:24)                               ; FB26B9  f2 00 a0 60 31
 	sub XBC,0x00000300                                   ; FB26BE  e9 ca 00 03 00 00
 	push XBC                                             ; FB26C4  39
@@ -87172,7 +87180,7 @@ sub_FB267F:
 	add XSP,0x0000001c                                   ; FB26D6  ef c8 1c 00 00 00
 	cp WA,0xffff                                         ; FB26DC  d8 cf ff ff
 	jr z, .LFB26E6                                       ; FB26E0  66 04
-	call sub_FB6F6B                                      ; FB26E2  1d 6b 6f fb
+	call SysExDump_SendFrames                                      ; FB26E2  1d 6b 6f fb
 .LFB26E6:
 	ret                                                  ; FB26E6  0e
 sub_FB26E7:
@@ -87193,7 +87201,7 @@ sub_FB26E7:
 	pushw 0x0c                                           ; FB270D  0b 0c 00
 	lda xbc, (0xf4ff55:24)                               ; FB2710  f2 55 ff f4 31
 	push XBC                                             ; FB2715  39
-	call sub_FB6E7F                                      ; FB2716  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB2716  1d 7f 6e fb
 	ld XIX,0x00ec0300                                    ; FB271A  44 00 03 ec 00
 	ld h, 0x0f:opc                                          ; FB271F  26 0f
 	inc 8,XSP                                            ; FB2721  ef 60
@@ -87207,7 +87215,7 @@ sub_FB26E7:
 	lda xbc, (0x60fcf8:24)                               ; FB2733  f2 f8 fc 60 31
 	push XBC                                             ; FB2738  39
 	call sub_FB7722                                      ; FB2739  1d 22 77 fb
-	call sub_FB6FB2                                      ; FB273D  1d b2 6f fb
+	call SysExDump_SendFramesStreamed                                      ; FB273D  1d b2 6f fb
 	dec 1,H                                              ; FB2741  ce 69
 	add XIX,0x00001600                                   ; FB2743  ec c8 00 16 00 00
 	inc 8,XSP                                            ; FB2749  ef 60
@@ -87227,12 +87235,13 @@ sub_FB26E7:
 	inc 6,XSP                                            ; FB276F  ef 66
 	cp WA,0xffff                                         ; FB2771  d8 cf ff ff
 	jr z, .LFB277B                                       ; FB2775  66 04
-	call sub_FB6F6B                                      ; FB2777  1d 6b 6f fb
+	call SysExDump_SendFrames                                      ; FB2777  1d 6b 6f fb
 .LFB277B:
 	pop XIX                                              ; FB277B  5c
 	popw hl                                              ; FB277C  4b
 	ret                                                  ; FB277D  0e
-sub_FB277E:
+; SysExDump_SendCategoryDone: step id + 1, send F0 50 27 7E F7 (prom_b 0xF4FEBE), SysExDump_AwaitFrameAck.
+SysExDump_SendCategoryDone:
 	pushw 0x04                                           ; FB277E  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2781  e2 d8 fc 60 21
 	push XBC                                             ; FB2786  39
@@ -87245,12 +87254,13 @@ sub_FB277E:
 	pushw 0x05                                           ; FB2799  0b 05 00
 	lda xbc, (0xf4febe:24)                               ; FB279C  f2 be fe f4 31
 	push XBC                                             ; FB27A1  39
-	call sub_FB6E7F                                      ; FB27A2  1d 7f 6e fb
-	call sub_FB6026                                      ; FB27A6  1d 26 60 fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB27A2  1d 7f 6e fb
+	call SysExDump_AwaitFrameAck                                      ; FB27A6  1d 26 60 fb
 	inc 6,XSP                                            ; FB27AA  ef 66
 .LFB27AC:
 	ret                                                  ; FB27AC  0e
-sub_FB27AD:
+; SysExDump_SendJobDone: send F0 50 28 7E F7 (0xF4FEC3) and await the ACK; on status 0x18 also send F0 50 29 7E F7 (0xF4FEC8).
+SysExDump_SendJobDone:
 	push XIX                                             ; FB27AD  3c
 	lda xix, (U8Rec16_GetField:24)                             ; FB27AE  f2 d3 62 fb 34
 	pushw 0x04                                           ; FB27B3  0b 04 00
@@ -87266,8 +87276,8 @@ sub_FB27AD:
 	pushw 0x05                                           ; FB27CA  0b 05 00
 	lda xbc, (0xf4fec3:24)                               ; FB27CD  f2 c3 fe f4 31
 	push XBC                                             ; FB27D2  39
-	call sub_FB6E7F                                      ; FB27D3  1d 7f 6e fb
-	call sub_FB6026                                      ; FB27D7  1d 26 60 fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB27D3  1d 7f 6e fb
+	call SysExDump_AwaitFrameAck                                      ; FB27D7  1d 26 60 fb
 	pushw 0x04                                           ; FB27DB  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB27DE  e2 d8 fc 60 21
 	push XBC                                             ; FB27E3  39
@@ -87295,7 +87305,7 @@ sub_FB27AD:
 	pushw 0x05                                           ; FB280F  0b 05 00
 	lda xbc, (0xf4fec8:24)                               ; FB2812  f2 c8 fe f4 31
 	push XBC                                             ; FB2817  39
-	call sub_FB6E7F                                      ; FB2818  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB2818  1d 7f 6e fb
 	inc 6,XSP                                            ; FB281C  ef 66
 .LFB281E:
 	pop XIX                                              ; FB281E  5c
@@ -87327,7 +87337,7 @@ sub_FB27AD:
 	res 4,(XIX)                                          ; FB285F  b4 b4
 	jr .LFB286C                                          ; FB2861  68 09
 .LFB2863:
-	call sub_FB6072                                      ; FB2863  1d 72 60 fb
+	call SysExRx_AwaitReply                                      ; FB2863  1d 72 60 fb
 .LFB2867:
 	calr sub_FB2877                                      ; FB2867  1e 0d 00
 	jr .LFB2848                                          ; FB286A  68 dc
@@ -87371,7 +87381,7 @@ sub_FB28BE:
 	pushw hl                                             ; FB28BE  2b
 	m_bit 7, MD24, 0x60fd40                              ; FB28BF  f2 40 fd 60 cf
 	jr z, .LFB28FD                                       ; FB28C4  66 37
-	call sub_FB8081                                      ; FB28C6  1d 81 80 fb
+	call SysExTx_SwapBuffers                                      ; FB28C6  1d 81 80 fb
 	ld xbc, (0x60fcd8:24)                               ; FB28CA  e2 d8 fc 60 21
 	ld H,(XBC+0x04)                                      ; FB28CF  89 04 26
 	cp h, 0x00:i3                                          ; FB28D2  ce d8
@@ -87391,7 +87401,7 @@ sub_FB28BE:
 	lda xbc, (0xf4feb9:24)                               ; FB28F1  f2 b9 fe f4 31
 	push XBC                                             ; FB28F6  39
 .LFB28F7:
-	call sub_FB6E7F                                      ; FB28F7  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB28F7  1d 7f 6e fb
 	inc 6,XSP                                            ; FB28FB  ef 66
 .LFB28FD:
 	popw hl                                              ; FB28FD  4b
@@ -87402,7 +87412,7 @@ sub_FB28BE:
 	pushw 0x07                                           ; FB290D  0b 07 00
 	lda xbc, (0xf4fedc:24)                               ; FB2910  f2 dc fe f4 31
 	push XBC                                             ; FB2915  39
-	call sub_FB6E7F                                      ; FB2916  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB2916  1d 7f 6e fb
 	inc 6,XSP                                            ; FB291A  ef 66
 .LFB291C:
 	ret                                                  ; FB291C  0e
@@ -88516,7 +88526,7 @@ sub_FB3355:
 	pushw 0x03                                           ; FB33A1  0b 03 00
 	lda xbc, (0xf4fee3:24)                               ; FB33A4  f2 e3 fe f4 31
 	push XBC                                             ; FB33A9  39
-	call sub_FB6E7F                                      ; FB33AA  1d 7f 6e fb
+	call SysExTx_AppendAndSendOnF7                                      ; FB33AA  1d 7f 6e fb
 	ld BC,(XIX)                                          ; FB33AE  94 21
 	inc 6,XSP                                            ; FB33B0  ef 66
 	cp BC,0x0028                                         ; FB33B2  d9 cf 28 00
@@ -88539,11 +88549,11 @@ sub_FB3355:
 	pushw 0x03                                           ; FB33DD  0b 03 00
 	lda xbc, (xiz-3)                                     ; FB33E0  be fd 31
 	push XBC                                             ; FB33E3  39
-	call sub_FB6F24                                      ; FB33E4  1d 24 6f fb
+	call SysExTx_Append                                      ; FB33E4  1d 24 6f fb
 	ld xbc, (0x60fc88:24)                               ; FB33E8  e2 88 fc 60 21
 	push XBC                                             ; FB33ED  39
-	call sub_FB71BB                                      ; FB33EE  1d bb 71 fb
-	call sub_FB8081                                      ; FB33F2  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB33EE  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB33F2  1d 81 80 fb
 	inc 8,XSP                                            ; FB33F6  ef 60
 	inc 2,XSP                                            ; FB33F8  ef 62
 .LFB33FA:
@@ -88625,11 +88635,11 @@ sub_FB346B:
 	pushw 0x05                                           ; FB34AA  0b 05 00
 	lda xbc, (0xf4fec8:24)                               ; FB34AD  f2 c8 fe f4 31
 	push XBC                                             ; FB34B2  39
-	call sub_FB6F24                                      ; FB34B3  1d 24 6f fb
+	call SysExTx_Append                                      ; FB34B3  1d 24 6f fb
 	ld xbc, (0x60fc88:24)                               ; FB34B7  e2 88 fc 60 21
 	push XBC                                             ; FB34BC  39
-	call sub_FB71BB                                      ; FB34BD  1d bb 71 fb
-	call sub_FB8081                                      ; FB34C1  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB34BD  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB34C1  1d 81 80 fb
 	inc 8,XSP                                            ; FB34C5  ef 60
 	inc 2,XSP                                            ; FB34C7  ef 62
 .LFB34C9:
@@ -89769,11 +89779,11 @@ sub_FB3C34:
 	pushw 0x05                                           ; FB3EB8  0b 05 00
 	lda xbc, (0xf4fec8:24)                               ; FB3EBB  f2 c8 fe f4 31
 	push XBC                                             ; FB3EC0  39
-	call sub_FB6F24                                      ; FB3EC1  1d 24 6f fb
+	call SysExTx_Append                                      ; FB3EC1  1d 24 6f fb
 	ld xbc, (0x60fc88:24)                               ; FB3EC5  e2 88 fc 60 21
 	push XBC                                             ; FB3ECA  39
-	call sub_FB71BB                                      ; FB3ECB  1d bb 71 fb
-	call sub_FB8081                                      ; FB3ECF  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB3ECB  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB3ECF  1d 81 80 fb
 	inc 8,XSP                                            ; FB3ED3  ef 60
 	inc 2,XSP                                            ; FB3ED5  ef 62
 .LFB3ED7:
@@ -90775,7 +90785,7 @@ sub_FB44B3:
 	pushw 0x06                                           ; FB47E6  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB47E9  f2 f2 fe f4 31
 	push XBC                                             ; FB47EE  39
-	call sub_FB6F24                                      ; FB47EF  1d 24 6f fb
+	call SysExTx_Append                                      ; FB47EF  1d 24 6f fb
 	pushw 0x06                                           ; FB47F3  0b 06 00
 	lda xbc, (xiz-10)                                    ; FB47F6  be f6 31
 	push XBC                                             ; FB47F9  39
@@ -90788,7 +90798,7 @@ sub_FB44B3:
 	pushw 0x06                                           ; FB480A  0b 06 00
 	lda xbc, (xiz-10)                                    ; FB480D  be f6 31
 	push XBC                                             ; FB4810  39
-	call sub_FB6F24                                      ; FB4811  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4811  1d 24 6f fb
 	ld C,(XIX)                                           ; FB4815  84 23
 	and C,0x0f                                           ; FB4817  cb cc 0f
 	ld (XIX+0x01),C                                      ; FB481A  bc 01 43
@@ -90797,12 +90807,12 @@ sub_FB44B3:
 	ld (XIX),C                                           ; FB4822  b4 43
 	pushw 0x03                                           ; FB4824  0b 03 00
 	push XIX                                             ; FB4827  3c
-	call sub_FB6F24                                      ; FB4828  1d 24 6f fb
-	call sub_FB7111                                      ; FB482C  1d 11 71 fb
+	call SysExTx_Append                                      ; FB4828  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB482C  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB4830  e2 88 fc 60 21
 	push XBC                                             ; FB4835  39
-	call sub_FB71BB                                      ; FB4836  1d bb 71 fb
-	call sub_FB8081                                      ; FB483A  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB4836  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB483A  1d 81 80 fb
 	add XSP,0x00000020                                   ; FB483E  ef c8 20 00 00 00
 .LFB4844:
 	pop XIX                                              ; FB4844  5c
@@ -90875,7 +90885,7 @@ sub_FB44B3:
 	pushw 0x06                                           ; FB48E4  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB48E7  f2 f2 fe f4 31
 	push XBC                                             ; FB48EC  39
-	call sub_FB6F24                                      ; FB48ED  1d 24 6f fb
+	call SysExTx_Append                                      ; FB48ED  1d 24 6f fb
 	pushw 0x06                                           ; FB48F1  0b 06 00
 	lda xbc, (xiz-12)                                    ; FB48F4  be f4 31
 	push XBC                                             ; FB48F7  39
@@ -90888,7 +90898,7 @@ sub_FB44B3:
 	pushw 0x06                                           ; FB4908  0b 06 00
 	lda xbc, (xiz-12)                                    ; FB490B  be f4 31
 	push XBC                                             ; FB490E  39
-	call sub_FB6F24                                      ; FB490F  1d 24 6f fb
+	call SysExTx_Append                                      ; FB490F  1d 24 6f fb
 	ld C,(XIX)                                           ; FB4913  84 23
 	and C,0x01                                           ; FB4915  cb cc 01
 	sll c, 0x07                                          ; FB4918  cb ee 07
@@ -90911,12 +90921,12 @@ sub_FB44B3:
 	ld (XIX+0x02),C                                      ; FB4945  bc 02 43
 	pushw 0x05                                           ; FB4948  0b 05 00
 	push XIX                                             ; FB494B  3c
-	call sub_FB6F24                                      ; FB494C  1d 24 6f fb
-	call sub_FB7111                                      ; FB4950  1d 11 71 fb
+	call SysExTx_Append                                      ; FB494C  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB4950  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB4954  e2 88 fc 60 21
 	push XBC                                             ; FB4959  39
-	call sub_FB71BB                                      ; FB495A  1d bb 71 fb
-	call sub_FB8081                                      ; FB495E  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB495A  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB495E  1d 81 80 fb
 	add XSP,0x00000020                                   ; FB4962  ef c8 20 00 00 00
 .LFB4968:
 	pop XIX                                              ; FB4968  5c
@@ -91025,7 +91035,7 @@ sub_FB49AF:
 	pushw 0x06                                           ; FB4A56  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB4A59  f2 f2 fe f4 31
 	push XBC                                             ; FB4A5E  39
-	call sub_FB6F24                                      ; FB4A5F  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4A5F  1d 24 6f fb
 	pushw 0x06                                           ; FB4A63  0b 06 00
 	lda xbc, (xiz-10)                                    ; FB4A66  be f6 31
 	push XBC                                             ; FB4A69  39
@@ -91040,7 +91050,7 @@ sub_FB49AF:
 	pushw 0x06                                           ; FB4A82  0b 06 00
 	lda xbc, (xiz-10)                                    ; FB4A85  be f6 31
 	push XBC                                             ; FB4A88  39
-	call sub_FB6F24                                      ; FB4A89  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4A89  1d 24 6f fb
 	ld C,(XIX)                                           ; FB4A8D  84 23
 	and C,0x0f                                           ; FB4A8F  cb cc 0f
 	ld (XIX+0x01),C                                      ; FB4A92  bc 01 43
@@ -91049,13 +91059,13 @@ sub_FB49AF:
 	ld (XIX),C                                           ; FB4A9A  b4 43
 	pushw 0x03                                           ; FB4A9C  0b 03 00
 	push XIX                                             ; FB4A9F  3c
-	call sub_FB6F24                                      ; FB4AA0  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4AA0  1d 24 6f fb
 sub_FB4AA4:
-	call sub_FB7111                                      ; FB4AA4  1d 11 71 fb
+	call SysExTx_AppendChecksumF7                                      ; FB4AA4  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB4AA8  e2 88 fc 60 21
 	push XBC                                             ; FB4AAD  39
-	call sub_FB71BB                                      ; FB4AAE  1d bb 71 fb
-	call sub_FB8081                                      ; FB4AB2  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB4AAE  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB4AB2  1d 81 80 fb
 	add XSP,0x00000026                                   ; FB4AB6  ef c8 26 00 00 00
 .LFB4ABC:
 	pop XIX                                              ; FB4ABC  5c
@@ -91294,11 +91304,11 @@ sub_FB4CAE:
 	lda xbc, (0xf4feec:24)                               ; FB4CD5  f2 ec fe f4 31
 	push XBC                                             ; FB4CDA  39
 .LFB4CDB:
-	call sub_FB6F24                                      ; FB4CDB  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4CDB  1d 24 6f fb
 	ld xbc, (0x60fc88:24)                               ; FB4CDF  e2 88 fc 60 21
 	push XBC                                             ; FB4CE4  39
-	call sub_FB71BB                                      ; FB4CE5  1d bb 71 fb
-	call sub_FB8081                                      ; FB4CE9  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB4CE5  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB4CE9  1d 81 80 fb
 	inc 8,XSP                                            ; FB4CED  ef 60
 	inc 2,XSP                                            ; FB4CEF  ef 62
 	jr .LFB4D1B                                          ; FB4CF1  68 28
@@ -91389,11 +91399,11 @@ sub_FB4D62:
 	pushw 0x06                                           ; FB4DAC  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB4DAF  f2 f2 fe f4 31
 	push XBC                                             ; FB4DB4  39
-	call sub_FB6F24                                      ; FB4DB5  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4DB5  1d 24 6f fb
 	pushw 0x06                                           ; FB4DB9  0b 06 00
 	ld XBC,(XIX+0x04)                                    ; FB4DBC  ac 04 21
 	push XBC                                             ; FB4DBF  39
-	call sub_FB6F24                                      ; FB4DC0  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4DC0  1d 24 6f fb
 	ld XBC,(XIX+0x04)                                    ; FB4DC4  ac 04 21
 	ld (xiz-11), xbc                                     ; FB4DC7  be f5 61
 	ld H,(XBC+0x08)                                      ; FB4DCA  89 08 26
@@ -91417,12 +91427,12 @@ sub_FB4D62:
 	pushw 0x03                                           ; FB4DF8  0b 03 00
 	lda xbc, (xiz-7)                                     ; FB4DFB  be f9 31
 	push XBC                                             ; FB4DFE  39
-	call sub_FB6F24                                      ; FB4DFF  1d 24 6f fb
-	call sub_FB7111                                      ; FB4E03  1d 11 71 fb
+	call SysExTx_Append                                      ; FB4DFF  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB4E03  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB4E07  e2 88 fc 60 21
 	push XBC                                             ; FB4E0C  39
-	call sub_FB71BB                                      ; FB4E0D  1d bb 71 fb
-	call sub_FB8081                                      ; FB4E11  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB4E0D  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB4E11  1d 81 80 fb
 	add XSP,0x00000016                                   ; FB4E15  ef c8 16 00 00 00
 .LFB4E1B:
 	pop XIX                                              ; FB4E1B  5c
@@ -91459,11 +91469,11 @@ sub_FB4E20:
 	pushw 0x06                                           ; FB4E62  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB4E65  f2 f2 fe f4 31
 	push XBC                                             ; FB4E6A  39
-	call sub_FB6F24                                      ; FB4E6B  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4E6B  1d 24 6f fb
 	pushw 0x06                                           ; FB4E6F  0b 06 00
 	ld XBC,(XIX+0x04)                                    ; FB4E72  ac 04 21
 	push XBC                                             ; FB4E75  39
-	call sub_FB6F24                                      ; FB4E76  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4E76  1d 24 6f fb
 	ld XBC,(XIX)                                         ; FB4E7A  a4 21
 	ld (xiz-7), xbc                                      ; FB4E7C  be f9 61
 	ld HL,(XBC+0x04)                                     ; FB4E7F  99 04 23
@@ -91486,12 +91496,12 @@ sub_FB4E20:
 	pushw 0x03                                           ; FB4EAB  0b 03 00
 	lda xbc, (xiz-3)                                     ; FB4EAE  be fd 31
 	push XBC                                             ; FB4EB1  39
-	call sub_FB6F24                                      ; FB4EB2  1d 24 6f fb
-	call sub_FB7111                                      ; FB4EB6  1d 11 71 fb
+	call SysExTx_Append                                      ; FB4EB2  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB4EB6  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB4EBA  e2 88 fc 60 21
 	push XBC                                             ; FB4EBF  39
-	call sub_FB71BB                                      ; FB4EC0  1d bb 71 fb
-	call sub_FB8081                                      ; FB4EC4  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB4EC0  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB4EC4  1d 81 80 fb
 	add XSP,0x00000016                                   ; FB4EC8  ef c8 16 00 00 00
 .LFB4ECE:
 	pop XIX                                              ; FB4ECE  5c
@@ -91533,12 +91543,12 @@ sub_FB4ED4:
 	pushw 0x06                                           ; FB4F23  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB4F26  f2 f2 fe f4 31
 	push XBC                                             ; FB4F2B  39
-	call sub_FB6F24                                      ; FB4F2C  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4F2C  1d 24 6f fb
 	pushw 0x06                                           ; FB4F30  0b 06 00
 	ld XBC,(XIZ+0x08)                                    ; FB4F33  ae 08 21
 	ld XWA,(XBC+0x04)                                    ; FB4F36  a9 04 20
 	push XWA                                             ; FB4F39  38
-	call sub_FB6F24                                      ; FB4F3A  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4F3A  1d 24 6f fb
 	ld (XIX),0x00                                        ; FB4F3E  b4 00 00
 	ld XBC,(XIZ+0x08)                                    ; FB4F41  ae 08 21
 	ld XWA,(XBC+0x04)                                    ; FB4F44  a9 04 20
@@ -91559,12 +91569,12 @@ sub_FB4ED4:
 	ld (XIX),C                                           ; FB4F67  b4 43
 	pushw 0x03                                           ; FB4F69  0b 03 00
 	push XIX                                             ; FB4F6C  3c
-	call sub_FB6F24                                      ; FB4F6D  1d 24 6f fb
-	call sub_FB7111                                      ; FB4F71  1d 11 71 fb
+	call SysExTx_Append                                      ; FB4F6D  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB4F71  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB4F75  e2 88 fc 60 21
 	push XBC                                             ; FB4F7A  39
-	call sub_FB71BB                                      ; FB4F7B  1d bb 71 fb
-	call sub_FB8081                                      ; FB4F7F  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB4F7B  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB4F7F  1d 81 80 fb
 	inc 8,XSP                                            ; FB4F83  ef 60
 	inc 2,XSP                                            ; FB4F85  ef 62
 .LFB4F87:
@@ -91608,7 +91618,7 @@ sub_FB4F8F:
 	pushw 0x06                                           ; FB4FD9  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB4FDC  f2 f2 fe f4 31
 	push XBC                                             ; FB4FE1  39
-	call sub_FB6F24                                      ; FB4FE2  1d 24 6f fb
+	call SysExTx_Append                                      ; FB4FE2  1d 24 6f fb
 	pushw 0x06                                           ; FB4FE6  0b 06 00
 	lda xbc, (xiz-14)                                    ; FB4FE9  be f2 31
 	push XBC                                             ; FB4FEC  39
@@ -91622,7 +91632,7 @@ sub_FB4F8F:
 	pushw 0x06                                           ; FB4FFF  0b 06 00
 	lda xbc, (xiz-14)                                    ; FB5002  be f2 31
 	push XBC                                             ; FB5005  39
-	call sub_FB6F24                                      ; FB5006  1d 24 6f fb
+	call SysExTx_Append                                      ; FB5006  1d 24 6f fb
 	ld XBC,(XIX+0x04)                                    ; FB500A  ac 04 21
 	ld (xiz-18), xbc                                     ; FB500D  be ee 61
 	ld H,(XBC+0x08)                                      ; FB5010  89 08 26
@@ -91646,12 +91656,12 @@ sub_FB4F8F:
 	pushw 0x03                                           ; FB503E  0b 03 00
 	lda xbc, (xiz-7)                                     ; FB5041  be f9 31
 	push XBC                                             ; FB5044  39
-	call sub_FB6F24                                      ; FB5045  1d 24 6f fb
-	call sub_FB7111                                      ; FB5049  1d 11 71 fb
+	call SysExTx_Append                                      ; FB5045  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB5049  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB504D  e2 88 fc 60 21
 	push XBC                                             ; FB5052  39
-	call sub_FB71BB                                      ; FB5053  1d bb 71 fb
-	call sub_FB8081                                      ; FB5057  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB5053  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB5057  1d 81 80 fb
 	add XSP,0x00000020                                   ; FB505B  ef c8 20 00 00 00
 .LFB5061:
 	pop XIX                                              ; FB5061  5c
@@ -91814,11 +91824,11 @@ sub_FB5197:
 	pushw 0x05                                           ; FB51C6  0b 05 00
 	lda xbc, (0xf4fec8:24)                               ; FB51C9  f2 c8 fe f4 31
 	push XBC                                             ; FB51CE  39
-	call sub_FB6F24                                      ; FB51CF  1d 24 6f fb
+	call SysExTx_Append                                      ; FB51CF  1d 24 6f fb
 	ld xbc, (0x60fc88:24)                               ; FB51D3  e2 88 fc 60 21
 	push XBC                                             ; FB51D8  39
-	call sub_FB71BB                                      ; FB51D9  1d bb 71 fb
-	call sub_FB8081                                      ; FB51DD  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB51D9  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB51DD  1d 81 80 fb
 	inc 8,XSP                                            ; FB51E1  ef 60
 	inc 2,XSP                                            ; FB51E3  ef 62
 .LFB51E5:
@@ -91997,12 +92007,12 @@ sub_FB536D:
 	pushw 0x06                                           ; FB53BC  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB53BF  f2 f2 fe f4 31
 	push XBC                                             ; FB53C4  39
-	call sub_FB6F24                                      ; FB53C5  1d 24 6f fb
+	call SysExTx_Append                                      ; FB53C5  1d 24 6f fb
 	pushw 0x06                                           ; FB53C9  0b 06 00
 	ld XBC,(XIZ+0x08)                                    ; FB53CC  ae 08 21
 	ld XWA,(XBC+0x04)                                    ; FB53CF  a9 04 20
 	push XWA                                             ; FB53D2  38
-	call sub_FB6F24                                      ; FB53D3  1d 24 6f fb
+	call SysExTx_Append                                      ; FB53D3  1d 24 6f fb
 	ld h, (0x7f03:16)                                   ; FB53D7  c1 03 7f 26
 	ld C,H                                               ; FB53DB  ce 8b
 	res 0x07,C                                           ; FB53DD  cb 30 07
@@ -92019,12 +92029,12 @@ sub_FB536D:
 	ld (XIX+0x03),C                                      ; FB53FD  bc 03 43
 	pushw 0x05                                           ; FB5400  0b 05 00
 	push XIX                                             ; FB5403  3c
-	call sub_FB6F24                                      ; FB5404  1d 24 6f fb
-	call sub_FB7111                                      ; FB5408  1d 11 71 fb
+	call SysExTx_Append                                      ; FB5404  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB5408  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB540C  e2 88 fc 60 21
 	push XBC                                             ; FB5411  39
-	call sub_FB71BB                                      ; FB5412  1d bb 71 fb
-	call sub_FB8081                                      ; FB5416  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB5412  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB5416  1d 81 80 fb
 	add XSP,0x00000016                                   ; FB541A  ef c8 16 00 00 00
 .LFB5420:
 	pop XIX                                              ; FB5420  5c
@@ -92063,7 +92073,7 @@ sub_FB5425:
 	pushw 0x06                                           ; FB5470  0b 06 00
 	lda xbc, (0xf4fef2:24)                               ; FB5473  f2 f2 fe f4 31
 	push XBC                                             ; FB5478  39
-	call sub_FB6F24                                      ; FB5479  1d 24 6f fb
+	call SysExTx_Append                                      ; FB5479  1d 24 6f fb
 	pushw 0x06                                           ; FB547D  0b 06 00
 	lda xbc, (xiz-18)                                    ; FB5480  be ee 31
 	push XBC                                             ; FB5483  39
@@ -92079,7 +92089,7 @@ sub_FB5425:
 	pushw 0x06                                           ; FB549C  0b 06 00
 	lda xbc, (xiz-18)                                    ; FB549F  be ee 31
 	push XBC                                             ; FB54A2  39
-	call sub_FB6F24                                      ; FB54A3  1d 24 6f fb
+	call SysExTx_Append                                      ; FB54A3  1d 24 6f fb
 	ld xbc, (IndexedTable_Base:24)                               ; FB54A7  e2 18 f0 60 21
 	ld (xiz-4), xbc                                      ; FB54AC  be fc 61
 	sub XWA,XWA                                          ; FB54AF  e8 a0
@@ -92142,12 +92152,12 @@ sub_FB5425:
 	pushw 0x07                                           ; FB5546  0b 07 00
 	lda xbc, (xiz-11)                                    ; FB5549  be f5 31
 	push XBC                                             ; FB554C  39
-	call sub_FB6F24                                      ; FB554D  1d 24 6f fb
-	call sub_FB7111                                      ; FB5551  1d 11 71 fb
+	call SysExTx_Append                                      ; FB554D  1d 24 6f fb
+	call SysExTx_AppendChecksumF7                                      ; FB5551  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB5555  e2 88 fc 60 21
 	push XBC                                             ; FB555A  39
-	call sub_FB71BB                                      ; FB555B  1d bb 71 fb
-	call sub_FB8081                                      ; FB555F  1d 81 80 fb
+	call SysExTx_SendFrameBothPorts                                      ; FB555B  1d bb 71 fb
+	call SysExTx_SwapBuffers                                      ; FB555F  1d 81 80 fb
 	inc 8,XSP                                            ; FB5563  ef 60
 	inc 2,XSP                                            ; FB5565  ef 62
 .LFB5567:
@@ -93247,7 +93257,9 @@ sub_FB5F2E:
 	pop XIX                                              ; FB5F61  5c
 	unlk XIZ                                             ; FB5F62  ee 0d
 	ret                                                  ; FB5F64  0e
-sub_FB5F65:
+; SysExTx_PatchModelByteVariant2(buf): only when Variant_Flag == 2 and the command byte is 0x21/0x22/0x2C/0x2D: model byte (message +4) = 1;
+;   for 0x2C/0x2D also recompute the checksum (sysex-probes/sysex_model_variant.py).
+SysExTx_PatchModelByteVariant2:
 	link XIZ,0xfffc                                      ; FB5F65  ee 0c fc ff
 	pushw hl                                             ; FB5F69  2b
 	push XIX                                             ; FB5F6A  3c
@@ -93333,7 +93345,9 @@ sub_FB5FF5:
 	pop XIX                                              ; FB6022  5c
 	unlk XIZ                                             ; FB6023  ee 0d
 	ret                                                  ; FB6025  0e
-sub_FB6026:
+; SysExDump_AwaitFrameAck: with the handshake flag (bit 7 of (0x60FD40)): wait for class 1 (ACK); class 6 -> status 0x1F; else resend
+;   (0x60FC8C), up to 3 times, then status 0x18.  Without it: Ring601432_SpinUntilEmpty, SysEx_Wait25Ticks.
+SysExDump_AwaitFrameAck:
 	pushw hl                                             ; FB6026  2b
 	push XIX                                             ; FB6027  3c
 	lda xix, (0x60fcd8:24)                               ; FB6028  f2 d8 fc 60 34
@@ -93341,7 +93355,7 @@ sub_FB6026:
 	jr z, .LFB6069                                       ; FB6032  66 35
 	ld l, 0x00:opc                                          ; FB6034  27 00
 .LFB6036:
-	calr sub_FB6072                                      ; FB6036  1e 39 00
+	calr SysExRx_AwaitReply                                      ; FB6036  1e 39 00
 	ld XBC,(XIX)                                         ; FB6039  a4 21
 	ld H,(XBC)                                           ; FB603B  81 26
 	cp h, 0x01:i3                                          ; FB603D  ce d9
@@ -93354,7 +93368,7 @@ sub_FB6026:
 .LFB604D:
 	ld xbc, (0x60fc8c:24)                               ; FB604D  e2 8c fc 60 21
 	push XBC                                             ; FB6052  39
-	calr sub_FB7165                                          ; FB6053  1e 0f 11
+	calr SysExTx_SendFrameMidi1                                          ; FB6053  1e 0f 11
 	inc 1,L                                              ; FB6056  cf 61
 	pop XIY                                              ; FB6058  5d
 	cp l, 0x03:i3                                          ; FB6059  cf db
@@ -93366,16 +93380,17 @@ sub_FB6026:
 	jr .LFB606F                                          ; FB6067  68 06
 .LFB6069:
 	calr Ring601432_SpinUntilEmpty                                      ; FB6069  1e 18 00
-	calr sub_FB77C7                                          ; FB606C  1e 58 17
+	calr SysEx_Wait25Ticks                                          ; FB606C  1e 58 17
 .LFB606F:
 	pop XIX                                              ; FB606F  5c
 	popw hl                                              ; FB6070  4b
 	ret                                                  ; FB6071  0e
-sub_FB6072:
-	call sub_FB8028                                      ; FB6072  1d 28 80 fb
+; SysExRx_AwaitReply: SysExRx_SwapBuffers, Ring601432_SpinUntilEmpty, SysExRx_ReceiveBlocking, SysExRx_ParseMessage, MidiInARing_InitIfPanelMode79.
+SysExRx_AwaitReply:
+	call SysExRx_SwapBuffers                                      ; FB6072  1d 28 80 fb
 	calr Ring601432_SpinUntilEmpty                                      ; FB6076  1e 0b 00
-	calr sub_FB6098                                      ; FB6079  1e 1c 00
-	calr sub_FB63AF                                          ; FB607C  1e 30 03
+	calr SysExRx_ReceiveBlocking                                      ; FB6079  1e 1c 00
+	calr SysExRx_ParseMessage                                          ; FB607C  1e 30 03
 	call MidiInARing_InitIfPanelMode79                                      ; FB607F  1d fd 7e fb
 	ret                                                  ; FB6083  0e
 ; ---------------------------------------------------------------------
@@ -93390,8 +93405,8 @@ sub_FB6072:
 ;           non-zero. Ring601432_IsEmpty (0xF8483F) returns 0 only when
 ;           the read cursor (0x60142A) equals the write cursor
 ;           (0x60142E), so a non-zero result means the ring still holds
-;           data. Called by `calr` at 0xFB6069 (in sub_FB6026) and
-;           0xFB6076 (in sub_FB6072)
+;           data. Called by `calr` at 0xFB6069 (in SysExDump_AwaitFrameAck) and
+;           0xFB6076 (in SysExRx_AwaitReply)
 ; Unknown:  what the 65535-poll bound is for: the routine returns no
 ;           value, so neither caller can tell a drained ring from an
 ;           exhausted count
@@ -93410,7 +93425,8 @@ Ring601432_SpinUntilEmpty:
 .LFB6096:
 	popw hl                                              ; FB6096  4b
 	ret                                                  ; FB6097  0e
-sub_FB6098:
+; SysExRx_ReceiveBlocking: read ring 0x601646 (T_Ring601646_Get) into SysExRx_AppendByte until F7, an error status, or SysExRx_CheckReplyTimeout.
+SysExRx_ReceiveBlocking:
 	pushw hl                                             ; FB6098  2b
 	pushw de                                             ; FB6099  2a
 	pushw ix                                             ; FB609A  2c
@@ -93468,7 +93484,7 @@ sub_FB6098:
 	ld C,H                                               ; FB6110  ce 8b
 	extz BC                                              ; FB6112  d9 12
 	pushw bc                                             ; FB6114  29
-	calr sub_FB6165                                      ; FB6115  1e 4d 00
+	calr SysExRx_AppendByte                                      ; FB6115  1e 4d 00
 .LFB6118:
 	popw bc                                              ; FB6118  49
 	jr .LFB6156                                          ; FB6119  68 3b
@@ -93486,7 +93502,7 @@ sub_FB6098:
 	ld C,H                                               ; FB6133  ce 8b
 	extz BC                                              ; FB6135  d9 12
 	pushw bc                                             ; FB6137  29
-	calr sub_FB6165                                      ; FB6138  1e 2a 00
+	calr SysExRx_AppendByte                                      ; FB6138  1e 2a 00
 	m_set 5, MD24, 0x60fd40                              ; FB613B  f2 40 fd 60 bd
 	jr .LFB6118                                          ; FB6140  68 d6
 .LFB6142:
@@ -93500,9 +93516,9 @@ sub_FB6098:
 .LFB6154:
 	inc 8,XSP                                            ; FB6154  ef 60
 .LFB6156:
-	calr sub_FB775F                                          ; FB6156  1e 06 16
+	calr SysExRx_CheckMidiErrors                                          ; FB6156  1e 06 16
 	pushw de                                             ; FB6159  2a
-	calr sub_FB7785                                          ; FB615A  1e 28 16
+	calr SysExRx_CheckReplyTimeout                                          ; FB615A  1e 28 16
 	popw bc                                              ; FB615D  49
 	jrl .LFB60A5                                         ; FB615E  78 44 ff
 .LFB6161:
@@ -93510,7 +93526,8 @@ sub_FB6098:
 	popw de                                              ; FB6162  4a
 	popw hl                                              ; FB6163  4b
 	ret                                                  ; FB6164  0e
-sub_FB6165:
+; SysExRx_AppendByte(b): store b at the receive buffer cursor (0x60FC80)+0x0A, 0xFF after it; count += 1, except 0xF0 sets the count to 1.
+SysExRx_AppendByte:
 	link XIZ,0xfff8                                      ; FB6165  ee 0c f8 ff
 	pushw hl                                             ; FB6169  2b
 	push XIX                                             ; FB616A  3c
@@ -93545,7 +93562,8 @@ sub_FB6165:
 	popw hl                                              ; FB61AD  4b
 	unlk XIZ                                             ; FB61AE  ee 0d
 	ret                                                  ; FB61B0  0e
-sub_FB61B1:
+; SysExBuf_ReadByte(buf): return the byte at the read cursor buf+2 and advance it; at the 0xFF sentinel return 0xFF without advancing.
+SysExBuf_ReadByte:
 	link XIZ,0x0000                                      ; FB61B1  ee 0c 00 00
 	pushw hl                                             ; FB61B5  2b
 	push XIX                                             ; FB61B6  3c
@@ -93817,7 +93835,8 @@ U8Rec16_GetField_OutOfRange:
 	pop XIX                                              ; FB63AB  5c
 	unlk XIZ                                             ; FB63AC  ee 0d
 	ret                                                  ; FB63AE  0e
-sub_FB63AF:
+; SysExRx_ParseMessage: when the status is 0, SysExRx_MatchTrie, _CheckCommandClass, _CheckAddress, _CheckBodyLength, _VerifyChecksum.
+SysExRx_ParseMessage:
 	pushw 0x04                                           ; FB63AF  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB63B2  e2 d8 fc 60 21
 	push XBC                                             ; FB63B7  39
@@ -93825,14 +93844,16 @@ sub_FB63AF:
 	inc 6,XSP                                            ; FB63BB  ef 66
 	cp a, 0x00:i3                                          ; FB63BD  c9 d8
 	jr nz, .LFB63D0                                      ; FB63BF  6e 0f
-	calr sub_FB63D1                                      ; FB63C1  1e 0d 00
-	calr sub_FB6B87                                      ; FB63C4  1e c0 07
-	calr sub_FB6BF4                                      ; FB63C7  1e 2a 08
-	calr sub_FB6CFC                                      ; FB63CA  1e 2f 09
-	calr sub_FB6DBD                                      ; FB63CD  1e ed 09
+	calr SysExRx_MatchTrie                                      ; FB63C1  1e 0d 00
+	calr SysExRx_CheckCommandClass                                      ; FB63C4  1e c0 07
+	calr SysExRx_CheckAddress                                      ; FB63C7  1e 2a 08
+	calr SysExRx_CheckBodyLength                                      ; FB63CA  1e 2f 09
+	calr SysExRx_VerifyChecksum                                      ; FB63CD  1e ed 09
 .LFB63D0:
 	ret                                                  ; FB63D0  0e
-sub_FB63D1:
+; SysExRx_MatchTrie: skip F0 and the ID byte, walk the trie rooted at prom_b 0xF5115B; matched bytes go to record fields 5.., the command to field 0;
+;   a miss stores error 0x07/0x08/0x09/0x0A/0x10 in field 4 (sysex-probes/sysex_grammar_dump.py).
+SysExRx_MatchTrie:
 	link XIZ,0xfff6                                      ; FB63D1  ee 0c f6 ff
 	pushw hl                                             ; FB63D5  2b
 	pushw de                                             ; FB63D6  2a
@@ -93843,7 +93864,7 @@ sub_FB63D1:
 	add (XBC+0x02),XWA                                   ; FB63E1  a9 02 88
 	ld xbc, (0x60fc80:24)                               ; FB63E4  e2 80 fc 60 21
 	push XBC                                             ; FB63E9  39
-	calr sub_FB61B1                                          ; FB63EA  1e c4 fd
+	calr SysExBuf_ReadByte                                          ; FB63EA  1e c4 fd
 	ld H,A                                               ; FB63ED  c9 8e
 	ldw de, 0x00                                         ; FB63EF  32 00 00
 	ld l, 0x0f:opc                                          ; FB63F2  27 0f
@@ -93923,7 +93944,7 @@ sub_FB63D1:
 .LFB64A3:
 	ld xbc, (0x60fc80:24)                               ; FB64A3  e2 80 fc 60 21
 	push XBC                                             ; FB64A8  39
-	calr sub_FB61B1                                          ; FB64A9  1e 05 fd
+	calr SysExBuf_ReadByte                                          ; FB64A9  1e 05 fd
 	ld H,A                                               ; FB64AC  c9 8e
 	ldw de, 0x00                                         ; FB64AE  32 00 00
 	pop XIY                                              ; FB64B1  5d
@@ -94012,7 +94033,7 @@ sub_FB63D1:
 .LFB6566:
 	ld xbc, (0x60fc80:24)                               ; FB6566  e2 80 fc 60 21
 	push XBC                                             ; FB656B  39
-	calr sub_FB61B1                                          ; FB656C  1e 42 fc
+	calr SysExBuf_ReadByte                                          ; FB656C  1e 42 fc
 	ld H,A                                               ; FB656F  c9 8e
 	ldw de, 0x00                                         ; FB6571  32 00 00
 	pop XIY                                              ; FB6574  5d
@@ -94101,7 +94122,7 @@ sub_FB63D1:
 .LFB6629:
 	ld xbc, (0x60fc80:24)                               ; FB6629  e2 80 fc 60 21
 	push XBC                                             ; FB662E  39
-	calr sub_FB61B1                                          ; FB662F  1e 7f fb
+	calr SysExBuf_ReadByte                                          ; FB662F  1e 7f fb
 	ld H,A                                               ; FB6632  c9 8e
 	ldw de, 0x00                                         ; FB6634  32 00 00
 	pop XIY                                              ; FB6637  5d
@@ -94190,7 +94211,7 @@ sub_FB63D1:
 .LFB66EC:
 	ld xbc, (0x60fc80:24)                               ; FB66EC  e2 80 fc 60 21
 	push XBC                                             ; FB66F1  39
-	calr sub_FB61B1                                          ; FB66F2  1e bc fa
+	calr SysExBuf_ReadByte                                          ; FB66F2  1e bc fa
 	ld H,A                                               ; FB66F5  c9 8e
 	ldw de, 0x00                                         ; FB66F7  32 00 00
 	pop XIY                                              ; FB66FA  5d
@@ -94279,7 +94300,7 @@ sub_FB63D1:
 .LFB67AF:
 	ld xbc, (0x60fc80:24)                               ; FB67AF  e2 80 fc 60 21
 	push XBC                                             ; FB67B4  39
-	calr sub_FB61B1                                          ; FB67B5  1e f9 f9
+	calr SysExBuf_ReadByte                                          ; FB67B5  1e f9 f9
 	ld H,A                                               ; FB67B8  c9 8e
 	ldw de, 0x00                                         ; FB67BA  32 00 00
 	pop XIY                                              ; FB67BD  5d
@@ -94368,7 +94389,7 @@ sub_FB63D1:
 .LFB6872:
 	ld xbc, (0x60fc80:24)                               ; FB6872  e2 80 fc 60 21
 	push XBC                                             ; FB6877  39
-	calr sub_FB61B1                                          ; FB6878  1e 36 f9
+	calr SysExBuf_ReadByte                                          ; FB6878  1e 36 f9
 	ld H,A                                               ; FB687B  c9 8e
 	ldw de, 0x00                                         ; FB687D  32 00 00
 	pop XIY                                              ; FB6880  5d
@@ -94457,7 +94478,7 @@ sub_FB63D1:
 .LFB6935:
 	ld xbc, (0x60fc80:24)                               ; FB6935  e2 80 fc 60 21
 	push XBC                                             ; FB693A  39
-	calr sub_FB61B1                                          ; FB693B  1e 73 f8
+	calr SysExBuf_ReadByte                                          ; FB693B  1e 73 f8
 	ld H,A                                               ; FB693E  c9 8e
 	ldw de, 0x00                                         ; FB6940  32 00 00
 	pop XIY                                              ; FB6943  5d
@@ -94546,7 +94567,7 @@ sub_FB63D1:
 .LFB69F8:
 	ld xbc, (0x60fc80:24)                               ; FB69F8  e2 80 fc 60 21
 	push XBC                                             ; FB69FD  39
-	calr sub_FB61B1                                          ; FB69FE  1e b0 f7
+	calr SysExBuf_ReadByte                                          ; FB69FE  1e b0 f7
 	ld H,A                                               ; FB6A01  c9 8e
 	ldw de, 0x00                                         ; FB6A03  32 00 00
 	pop XIY                                              ; FB6A06  5d
@@ -94635,7 +94656,7 @@ sub_FB63D1:
 .LFB6ABB:
 	ld xbc, (0x60fc80:24)                               ; FB6ABB  e2 80 fc 60 21
 	push XBC                                             ; FB6AC0  39
-	calr sub_FB61B1                                          ; FB6AC1  1e ed f6
+	calr SysExBuf_ReadByte                                          ; FB6AC1  1e ed f6
 	ld H,A                                               ; FB6AC4  c9 8e
 	ldw de, 0x00                                         ; FB6AC6  32 00 00
 	pop XIY                                              ; FB6AC9  5d
@@ -94729,7 +94750,8 @@ sub_FB63D1:
 	popw hl                                              ; FB6B83  4b
 	unlk XIZ                                             ; FB6B84  ee 0d
 	ret                                                  ; FB6B86  0e
-sub_FB6B87:
+; SysExRx_CheckCommandClass: class = prom_b 0xF4FE82[command]; classes 1/2/3 need bit 1 / bit 0 / either of (0x7FD6), else error 0x21.
+SysExRx_CheckCommandClass:
 	push XIX                                             ; FB6B87  3c
 	lda xix, (0x7fd6:16)                                ; FB6B88  f1 d6 7f 34
 	pushw 0x04                                           ; FB6B8C  0b 04 00
@@ -94780,7 +94802,9 @@ sub_FB6B87:
 .LFB6BF2:
 	pop XIX                                              ; FB6BF2  5c
 	ret                                                  ; FB6BF3  0e
-sub_FB6BF4:
+; SysExRx_CheckAddress: commands 0x11/0x14: 3-septet address above 0x50C00 -> error 0x16, else to fields 12-14; commands 0x18/0x1A with field 12
+;   == 0xFF: the three bytes ORed must be 1, else error 0x0E.
+SysExRx_CheckAddress:
 	link XIZ,0xfffc                                      ; FB6BF4  ee 0c fc ff
 	pushw hl                                             ; FB6BF8  2b
 	pushw de                                             ; FB6BF9  2a
@@ -94806,15 +94830,15 @@ sub_FB6BF4:
 .LFB6C2E:
 	ld XBC,(XIX)                                         ; FB6C2E  a4 21
 	push XBC                                             ; FB6C30  39
-	calr sub_FB61B1                                          ; FB6C31  1e 7d f5
+	calr SysExBuf_ReadByte                                          ; FB6C31  1e 7d f5
 	ld D,A                                               ; FB6C34  c9 8c
 	ld XBC,(XIX)                                         ; FB6C36  a4 21
 	push XBC                                             ; FB6C38  39
-	calr sub_FB61B1                                          ; FB6C39  1e 75 f5
+	calr SysExBuf_ReadByte                                          ; FB6C39  1e 75 f5
 	ld L,A                                               ; FB6C3C  c9 8f
 	ld XBC,(XIX)                                         ; FB6C3E  a4 21
 	push XBC                                             ; FB6C40  39
-	calr sub_FB61B1                                          ; FB6C41  1e 6d f5
+	calr SysExBuf_ReadByte                                          ; FB6C41  1e 6d f5
 	ld H,A                                               ; FB6C44  c9 8e
 	extz WA                                              ; FB6C46  d8 12
 	extz XWA                                             ; FB6C48  e8 12
@@ -94873,16 +94897,16 @@ sub_FB6BF4:
 	jr nz, .LFB6CF6                                      ; FB6CC1  6e 33
 	ld XBC,(XIX)                                         ; FB6CC3  a4 21
 	push XBC                                             ; FB6CC5  39
-	calr sub_FB61B1                                          ; FB6CC6  1e e8 f4
+	calr SysExBuf_ReadByte                                          ; FB6CC6  1e e8 f4
 	ld H,A                                               ; FB6CC9  c9 8e
 	ld XBC,(XIX)                                         ; FB6CCB  a4 21
 	push XBC                                             ; FB6CCD  39
-	calr sub_FB61B1                                          ; FB6CCE  1e e0 f4
+	calr SysExBuf_ReadByte                                          ; FB6CCE  1e e0 f4
 	ld L,A                                               ; FB6CD1  c9 8f
 	or L,H                                               ; FB6CD3  ce e7
 	ld XBC,(XIX)                                         ; FB6CD5  a4 21
 	push XBC                                             ; FB6CD7  39
-	calr sub_FB61B1                                          ; FB6CD8  1e d6 f4
+	calr SysExBuf_ReadByte                                          ; FB6CD8  1e d6 f4
 	or A,L                                               ; FB6CDB  cf e1
 	inc 8,XSP                                            ; FB6CDD  ef 60
 	inc 4,XSP                                            ; FB6CDF  ef 64
@@ -94902,7 +94926,8 @@ sub_FB6BF4:
 	popw hl                                              ; FB6CF8  4b
 	unlk XIZ                                             ; FB6CF9  ee 0d
 	ret                                                  ; FB6CFB  0e
-sub_FB6CFC:
+; SysExRx_CheckBodyLength: the nibble body must end exactly 3 bytes before the write cursor (flag, checksum, F7); otherwise error 0x11.
+SysExRx_CheckBodyLength:
 	link XIZ,0xfff4                                      ; FB6CFC  ee 0c f4 ff
 	pushw hl                                             ; FB6D00  2b
 	push XIX                                             ; FB6D01  3c
@@ -94979,7 +95004,9 @@ sub_FB6CFC:
 	popw hl                                              ; FB6DB9  4b
 	unlk XIZ                                             ; FB6DBA  ee 0d
 	ret                                                  ; FB6DBC  0e
-sub_FB6DBD:
+; SysExRx_VerifyChecksum: for field 5 in 0x7E/0x2B/0x2C/0x2D: flag must be 0/1 (else 0x12, kept in field 15); (-sum) & 0x7F of bytes 1..flag must
+;   equal the checksum, else error 0x14.
+SysExRx_VerifyChecksum:
 	link XIZ,0xfffc                                      ; FB6DBD  ee 0c fc ff
 	pushw hl                                             ; FB6DC1  2b
 	push XIX                                             ; FB6DC2  3c
@@ -95008,7 +95035,7 @@ sub_FB6DBD:
 .LFB6DFD:
 	ld xbc, (0x60fc80:24)                               ; FB6DFD  e2 80 fc 60 21
 	push XBC                                             ; FB6E02  39
-	calr sub_FB61B1                                          ; FB6E03  1e ab f3
+	calr SysExBuf_ReadByte                                          ; FB6E03  1e ab f3
 	ld H,A                                               ; FB6E06  c9 8e
 	pop XIY                                              ; FB6E08  5d
 	cp a, 0x00:i3                                          ; FB6E09  c9 d8
@@ -95046,7 +95073,7 @@ sub_FB6DBD:
 	res 0x07,H                                           ; FB6E53  ce 30 07
 	ld xbc, (0x60fc80:24)                               ; FB6E56  e2 80 fc 60 21
 	push XBC                                             ; FB6E5B  39
-	calr sub_FB61B1                                          ; FB6E5C  1e 52 f3
+	calr SysExBuf_ReadByte                                          ; FB6E5C  1e 52 f3
 	pop XIY                                              ; FB6E5F  5d
 	cp H,A                                               ; FB6E60  c9 f6
 	jr z, .LFB6E7A                                       ; FB6E62  66 16
@@ -95065,7 +95092,8 @@ sub_FB6DBD:
 	popw hl                                              ; FB6E7B  4b
 	unlk XIZ                                             ; FB6E7C  ee 0d
 	ret                                                  ; FB6E7E  0e
-sub_FB6E7F:
+; SysExTx_AppendAndSendOnF7(src, n): SysExTx_Append, and when the last byte is 0xF7 send the frame (SysExTx_SendFrameMidi1), then SysExTx_SwapBuffers.
+SysExTx_AppendAndSendOnF7:
 	link XIZ,0xfffc                                      ; FB6E7F  ee 0c fc ff
 	pushw hl                                             ; FB6E83  2b
 	push XIX                                             ; FB6E84  3c
@@ -95099,16 +95127,17 @@ sub_FB6E7F:
 	jr nz, .LFB6EE4                                      ; FB6ED0  6e 12
 	ld xbc, (0x60fc88:24)                               ; FB6ED2  e2 88 fc 60 21
 	push XBC                                             ; FB6ED7  39
-	calr sub_FB7165                                      ; FB6ED8  1e 8a 02
+	calr SysExTx_SendFrameMidi1                                      ; FB6ED8  1e 8a 02
 	call sub_FB7BB9                                      ; FB6EDB  1d b9 7b fb
-	call sub_FB8081                                      ; FB6EDF  1d 81 80 fb
+	call SysExTx_SwapBuffers                                      ; FB6EDF  1d 81 80 fb
 	pop XIY                                              ; FB6EE3  5d
 .LFB6EE4:
 	pop XIX                                              ; FB6EE4  5c
 	popw hl                                              ; FB6EE5  4b
 	unlk XIZ                                             ; FB6EE6  ee 0d
 	ret                                                  ; FB6EE8  0e
-sub_FB6EE9:
+; SysExTx_AppendRemainingSize: append the remaining byte count (0x60FD00) as three 7-bit septets, most significant first.
+SysExTx_AppendRemainingSize:
 	link XIZ,0xfffc                                      ; FB6EE9  ee 0c fc ff
 	push XIX                                             ; FB6EED  3c
 	lda xix, (xiz-4)                                     ; FB6EEE  be fc 34
@@ -95125,12 +95154,13 @@ sub_FB6EE9:
 	ld (XIX+0x02),C                                      ; FB6F14  bc 02 43
 	pushw 0x03                                           ; FB6F17  0b 03 00
 	push XIX                                             ; FB6F1A  3c
-	calr sub_FB6F24                                      ; FB6F1B  1e 06 00
+	calr SysExTx_Append                                      ; FB6F1B  1e 06 00
 	inc 6,XSP                                            ; FB6F1E  ef 66
 	pop XIX                                              ; FB6F20  5c
 	unlk XIZ                                             ; FB6F21  ee 0d
 	ret                                                  ; FB6F23  0e
-sub_FB6F24:
+; SysExTx_Append(src, n): append n bytes to the transmit frame (0x60FC88): store at buf+0x0A++, count buf+0 += 1, 0xFF sentinel after (sysex-probes/decode-findings.json).
+SysExTx_Append:
 	link XIZ,0xfffc                                      ; FB6F24  ee 0c fc ff
 	pushw hl                                             ; FB6F28  2b
 	push XIX                                             ; FB6F29  3c
@@ -95160,7 +95190,8 @@ sub_FB6F24:
 	popw hl                                              ; FB6F67  4b
 	unlk XIZ                                             ; FB6F68  ee 0d
 	ret                                                  ; FB6F6A  0e
-sub_FB6F6B:
+; SysExDump_SendFrames: while the status is 0 and (0x60FD00) is not 0: header if continuing, nibbles, flag, checksum, send (MIDI 1), swap, await ACK.
+SysExDump_SendFrames:
 	ld xbc, (0x60fcd8:24)                               ; FB6F6B  e2 d8 fc 60 21
 	ld A,(XBC+0x04)                                      ; FB6F70  89 04 21
 	cp a, 0x00:i3                                          ; FB6F73  c9 d8
@@ -95171,23 +95202,25 @@ sub_FB6F6B:
 	cp a, 0x00:i3                                          ; FB6F7F  c9 d8
 	jr nz, .LFB6FB1                                      ; FB6F81  6e 2e
 	call sub_FB2877_Nop                                      ; FB6F83  1d 9a 7e fb
-	calr sub_FB7025                                      ; FB6F87  1e 9b 00
-	calr sub_FB7040                                      ; FB6F8A  1e b3 00
-	calr sub_FB70AE                                      ; FB6F8D  1e 1e 01
-	calr sub_FB7111                                      ; FB6F90  1e 7e 01
+	calr SysExTx_AppendContHeaderIfCont                                      ; FB6F87  1e 9b 00
+	calr SysExTx_AppendNibbles                                      ; FB6F8A  1e b3 00
+	calr SysExTx_AppendContFlag                                      ; FB6F8D  1e 1e 01
+	calr SysExTx_AppendChecksumF7                                      ; FB6F90  1e 7e 01
 	ld xbc, (0x60fc88:24)                               ; FB6F93  e2 88 fc 60 21
 	push XBC                                             ; FB6F98  39
-	calr sub_FB7165                                      ; FB6F99  1e c9 01
+	calr SysExTx_SendFrameMidi1                                      ; FB6F99  1e c9 01
 	call sub_FB7BB9                                      ; FB6F9C  1d b9 7b fb
-	call sub_FB8081                                      ; FB6FA0  1d 81 80 fb
-	calr sub_FB6026                                          ; FB6FA4  1e 7f f0
+	call SysExTx_SwapBuffers                                      ; FB6FA0  1d 81 80 fb
+	calr SysExDump_AwaitFrameAck                                          ; FB6FA4  1e 7f f0
 	ld xbc, (0x60fd00:24)                               ; FB6FA7  e2 00 fd 60 21
 	pop XIY                                              ; FB6FAC  5d
 	or XBC,XBC                                           ; FB6FAD  e9 e1
 	jr nz, .LFB6F77                                      ; FB6FAF  6e c6
 .LFB6FB1:
 	ret                                                  ; FB6FB1  0e
-sub_FB6FB2:
+; SysExDump_SendFramesStreamed: as SysExDump_SendFrames, with T_Link_WaitBlockDone before each frame (0xFFFF -> status 0x20 in both
+;   records) and flag 1 always.
+SysExDump_SendFramesStreamed:
 	push XIX                                             ; FB6FB2  3c
 	lda xix, (0x60fcd8:24)                               ; FB6FB3  f2 d8 fc 60 34
 	ld XBC,(XIX)                                         ; FB6FB8  a4 21
@@ -95200,19 +95233,19 @@ sub_FB6FB2:
 	cp a, 0x00:i3                                          ; FB6FC6  c9 d8
 	jr nz, .LFB7023                                      ; FB6FC8  6e 59
 	call sub_FB2877_Nop                                      ; FB6FCA  1d 9a 7e fb
-	calr sub_FB7025                                      ; FB6FCE  1e 54 00
+	calr SysExTx_AppendContHeaderIfCont                                      ; FB6FCE  1e 54 00
 	call T_Link_WaitBlockDone                            ; FB6FD1  1d 3c 12 f4
 	cp WA,0xffff                                         ; FB6FD5  d8 cf ff ff
 	jr z, .LFB6FFB                                       ; FB6FD9  66 20
-	calr sub_FB7040                                      ; FB6FDB  1e 62 00
-	calr sub_FB70E6                                      ; FB6FDE  1e 05 01
-	calr sub_FB7111                                      ; FB6FE1  1e 2d 01
+	calr SysExTx_AppendNibbles                                      ; FB6FDB  1e 62 00
+	calr SysExTx_AppendContFlagOne                                      ; FB6FDE  1e 05 01
+	calr SysExTx_AppendChecksumF7                                      ; FB6FE1  1e 2d 01
 	ld xbc, (0x60fc88:24)                               ; FB6FE4  e2 88 fc 60 21
 	push XBC                                             ; FB6FE9  39
-	calr sub_FB7165                                      ; FB6FEA  1e 78 01
+	calr SysExTx_SendFrameMidi1                                      ; FB6FEA  1e 78 01
 	call sub_FB7BB9                                      ; FB6FED  1d b9 7b fb
-	call sub_FB8081                                      ; FB6FF1  1d 81 80 fb
-	calr sub_FB6026                                          ; FB6FF5  1e 2e f0
+	call SysExTx_SwapBuffers                                      ; FB6FF1  1d 81 80 fb
+	calr SysExDump_AwaitFrameAck                                          ; FB6FF5  1e 2e f0
 	pop XIY                                              ; FB6FF8  5d
 	jr .LFB701A                                          ; FB6FF9  68 1f
 .LFB6FFB:
@@ -95235,7 +95268,8 @@ sub_FB6FB2:
 .LFB7023:
 	pop XIX                                              ; FB7023  5c
 	ret                                                  ; FB7024  0e
-sub_FB7025:
+; SysExTx_AppendContHeaderIfCont: when the previous frame's continuation flag (record (0x60FCE4) field 15) is 1, start this one with F0 50 7E (prom_b 0xF4FED2).
+SysExTx_AppendContHeaderIfCont:
 	ld xbc, (0x60fce4:24)                               ; FB7025  e2 e4 fc 60 21
 	ld A,(XBC+0x0f)                                      ; FB702A  89 0f 21
 	cp a, 0x01:i3                                          ; FB702D  c9 d9
@@ -95243,11 +95277,12 @@ sub_FB7025:
 	pushw 0x03                                           ; FB7031  0b 03 00
 	lda xwa, (0xf4fed2:24)                               ; FB7034  f2 d2 fe f4 30
 	push XWA                                             ; FB7039  38
-	calr sub_FB6E7F                                      ; FB703A  1e 42 fe
+	calr SysExTx_AppendAndSendOnF7                                      ; FB703A  1e 42 fe
 	inc 6,XSP                                            ; FB703D  ef 66
 .LFB703F:
 	ret                                                  ; FB703F  0e
-sub_FB7040:
+; SysExTx_AppendNibbles: each source byte at (0x60FCF8)++ becomes (b >> 4), (b & 0x0F); stops when (0x60FD00) reaches 0 or the frame holds 0xFC bytes.
+SysExTx_AppendNibbles:
 	link XIZ,0xfffa                                      ; FB7040  ee 0c fa ff
 	pushw hl                                             ; FB7044  2b
 	push XIX                                             ; FB7045  3c
@@ -95271,7 +95306,7 @@ sub_FB7040:
 	and (XIX+0x01),0x0f                                  ; FB7074  8c 01 3c 0f
 	pushw 0x02                                           ; FB7078  0b 02 00
 	push XIX                                             ; FB707B  3c
-	calr sub_FB6F24                                      ; FB707C  1e a5 fe
+	calr SysExTx_Append                                      ; FB707C  1e a5 fe
 	sub XBC,XBC                                          ; FB707F  e9 a1
 	inc 1,XBC                                            ; FB7081  e9 61
 	sub (0x60fcf0:24), xbc                           ; FB7083  e2 f0 fc 60 a9
@@ -95291,7 +95326,8 @@ sub_FB7040:
 	popw hl                                              ; FB70AA  4b
 	unlk XIZ                                             ; FB70AB  ee 0d
 	ret                                                  ; FB70AD  0e
-sub_FB70AE:
+; SysExTx_AppendContFlag: append 1 while (0x60FD00) bytes remain, else 0; also stored in transmit record field 15.
+SysExTx_AppendContFlag:
 	link XIZ,0xffff                                      ; FB70AE  ee 0c ff ff
 	ld (xiz-1), 0x01                                     ; FB70B2  be ff 00 01
 	ld xbc, (0x60fd00:24)                               ; FB70B6  e2 00 fd 60 21
@@ -95302,7 +95338,7 @@ sub_FB70AE:
 	pushw 0x01                                           ; FB70C3  0b 01 00
 	lda xbc, (xiz-1)                                     ; FB70C6  be ff 31
 	push XBC                                             ; FB70C9  39
-	calr sub_FB6F24                                      ; FB70CA  1e 57 fe
+	calr SysExTx_Append                                      ; FB70CA  1e 57 fe
 	ld bc, (xiz-1)                                       ; FB70CD  9e ff 21
 	extz BC                                              ; FB70D0  d9 12
 	pushw bc                                             ; FB70D2  29
@@ -95314,13 +95350,14 @@ sub_FB70AE:
 	inc 6,XSP                                            ; FB70E1  ef 66
 	unlk XIZ                                             ; FB70E3  ee 0d
 	ret                                                  ; FB70E5  0e
-sub_FB70E6:
+; SysExTx_AppendContFlagOne: append continuation flag 1 unconditionally (the streamed loop: another block always follows).
+SysExTx_AppendContFlagOne:
 	link XIZ,0xffff                                      ; FB70E6  ee 0c ff ff
 	ld (xiz-1), 0x01                                     ; FB70EA  be ff 00 01
 	pushw 0x01                                           ; FB70EE  0b 01 00
 	lda xbc, (xiz-1)                                     ; FB70F1  be ff 31
 	push XBC                                             ; FB70F4  39
-	calr sub_FB6F24                                      ; FB70F5  1e 2c fe
+	calr SysExTx_Append                                      ; FB70F5  1e 2c fe
 	ld bc, (xiz-1)                                       ; FB70F8  9e ff 21
 	extz BC                                              ; FB70FB  d9 12
 	pushw bc                                             ; FB70FD  29
@@ -95332,7 +95369,8 @@ sub_FB70E6:
 	inc 6,XSP                                            ; FB710C  ef 66
 	unlk XIZ                                             ; FB710E  ee 0d
 	ret                                                  ; FB7110  0e
-sub_FB7111:
+; SysExTx_AppendChecksumF7: append (-sum) & 0x7F of the frame from the byte after F0, then the 0xF7 (byte 1 of the 00 F7 word at prom_b 0xF4FE68).
+SysExTx_AppendChecksumF7:
 	link XIZ,0xfffa                                      ; FB7111  ee 0c fa ff
 	pushw hl                                             ; FB7115  2b
 	push XIX                                             ; FB7116  3c
@@ -95362,13 +95400,14 @@ sub_FB7111:
 	pushw 0x02                                           ; FB7154  0b 02 00
 	lda xbc, (xiz-6)                                     ; FB7157  be fa 31
 	push XBC                                             ; FB715A  39
-	calr sub_FB6F24                                      ; FB715B  1e c6 fd
+	calr SysExTx_Append                                      ; FB715B  1e c6 fd
 	inc 6,XSP                                            ; FB715E  ef 66
 	pop XIX                                              ; FB7160  5c
 	popw hl                                              ; FB7161  4b
 	unlk XIZ                                             ; FB7162  ee 0d
 	ret                                                  ; FB7164  0e
-sub_FB7165:
+; SysExTx_SendFrameMidi1(buf): SysExTx_PatchModelByteVariant2, then 0x20-byte chunks into ring 0x601432 (T_Ring601432_PutBlock + T_MIDI_PostSendWork): MIDI 1 only.
+SysExTx_SendFrameMidi1:
 	link XIZ,0x0000                                      ; FB7165  ee 0c 00 00
 	pushw hl                                             ; FB7169  2b
 	push XIX                                             ; FB716A  3c
@@ -95376,7 +95415,7 @@ sub_FB7165:
 	ld HL,(XBC)                                          ; FB716E  91 23
 	ld (0x9b:8), 0x00:io                                      ; FB7170  08 9b 00
 	push XBC                                             ; FB7173  39
-	calr sub_FB5F65                                          ; FB7174  1e ee ed
+	calr SysExTx_PatchModelByteVariant2                                          ; FB7174  1e ee ed
 	ld XIX,(XIZ+0x08)                                    ; FB7177  ae 08 24
 	add XIX,0x0000000e                                   ; FB717A  ec c8 0e 00 00 00
 	pop XIY                                              ; FB7180  5d
@@ -95406,7 +95445,8 @@ sub_FB7165:
 	popw hl                                              ; FB71B7  4b
 	unlk XIZ                                             ; FB71B8  ee 0d
 	ret                                                  ; FB71BA  0e
-sub_FB71BB:
+; SysExTx_SendFrameBothPorts(buf): as SysExTx_SendFrameMidi1, each chunk also into ring 0x60153C (T_Ring60153C_PutBlock + T_MIDI_PostSendWork_PortB).
+SysExTx_SendFrameBothPorts:
 	link XIZ,0x0000                                      ; FB71BB  ee 0c 00 00
 	pushw hl                                             ; FB71BF  2b
 	push XIX                                             ; FB71C0  3c
@@ -95414,7 +95454,7 @@ sub_FB71BB:
 	ld HL,(XBC)                                          ; FB71C4  91 23
 	ld (0x9b:8), 0x00:io                                      ; FB71C6  08 9b 00
 	push XBC                                             ; FB71C9  39
-	calr sub_FB5F65                                          ; FB71CA  1e 98 ed
+	calr SysExTx_PatchModelByteVariant2                                          ; FB71CA  1e 98 ed
 	ld XIX,(XIZ+0x08)                                    ; FB71CD  ae 08 24
 	add XIX,0x0000000e                                   ; FB71D0  ec c8 0e 00 00 00
 	pop XIY                                              ; FB71D6  5d
@@ -95990,7 +96030,8 @@ sub_FB7748:
 	m_mul MW24, 0x603452, 1                              ; FB7757  d2 52 34 60 41
 	ld XIY,XBC                                           ; FB775C  e9 8d
 	ret                                                  ; FB775E  0e
-sub_FB775F:
+; SysExRx_CheckMidiErrors: when MIDI_RX_Flags & 0x2C: Ring601646_InitIrqMasked, status 4, clear those flag bits.
+SysExRx_CheckMidiErrors:
 	ei 0x06                                              ; FB775F  06 06
 	ld	c, (MIDI_RX_Flags:8)                                      ; FB7761  c0 9e 23
 	and C,0x2c                                           ; FB7764  cb cc 2c
@@ -96006,7 +96047,8 @@ sub_FB775F:
 .LFB7782:
 	ei 0x00                                              ; FB7782  06 00
 	ret                                                  ; FB7784  0e
-sub_FB7785:
+; SysExRx_CheckReplyTimeout(start): status 5 once Tick_Count - start exceeds 2500 ticks (1000 when bit 2 of (0x60FD40) is set).
+SysExRx_CheckReplyTimeout:
 	link XIZ,0x0000                                      ; FB7785  ee 0c 00 00
 	pushw hl                                             ; FB7789  2b
 	ldw hl, 0x09c4                                       ; FB778A  33 c4 09
@@ -96040,7 +96082,8 @@ sub_FB77B6:
 	pop XHL                                              ; FB77C4  5b
 	pop XDE                                              ; FB77C5  5a
 	ret                                                  ; FB77C6  0e
-sub_FB77C7:
+; SysEx_Wait25Ticks: spin until Tick_Count has advanced 0x19 ticks (about 51 ms at 488.28 Hz).
+SysEx_Wait25Ticks:
 	pushw hl                                             ; FB77C7  2b
 	m_ld_rm MW8, Tick_Count, r3                                ; FB77C8  d0 80 23
 .LFB77CB:
@@ -96407,11 +96450,11 @@ sub_FB7AC2:
 	m_push MWD+r6, 0x0c                                  ; FB7AC6  9e 0c 04
 	ld XBC,(XIZ+0x08)                                    ; FB7AC9  ae 08 21
 	push XBC                                             ; FB7ACC  39
-	calr sub_FB6F24                                      ; FB7ACD  1e 54 f4
+	calr SysExTx_Append                                      ; FB7ACD  1e 54 f4
 	ld xbc, (0x60fc88:24)                               ; FB7AD0  e2 88 fc 60 21
 	push XBC                                             ; FB7AD5  39
-	calr sub_FB7165                                      ; FB7AD6  1e 8c f6
-	call sub_FB8081                                      ; FB7AD9  1d 81 80 fb
+	calr SysExTx_SendFrameMidi1                                      ; FB7AD6  1e 8c f6
+	call SysExTx_SwapBuffers                                      ; FB7AD9  1d 81 80 fb
 	inc 8,XSP                                            ; FB7ADD  ef 60
 	inc 2,XSP                                            ; FB7ADF  ef 62
 	unlk XIZ                                             ; FB7AE1  ee 0d
@@ -96880,7 +96923,7 @@ MidiInARing_InitIfPanelMode79:
 ;
 ; Evidence: 0xFB7F0D `ei 0x06`, 0xFB7F0F `call 0xF41E48` = prom_b slot
 ;           T_Ring601646_Init, 0xFB7F13 `ei 0x00`, 0xFB7F15 `ret`.
-;           Called by `call` at 0xFB7769, inside sub_FB775F. ★ THE
+;           Called by `call` at 0xFB7769, inside SysExRx_CheckMidiErrors. ★ THE
 ;           EXTENT HOLDS A SECOND ROUTINE THIS LABEL DOES NOT COVER:
 ;           0xFB7F16-0xFB7F1E is the same four instructions for
 ;           T_Ring601432_Init (slot 0xF41E00) and carries no label
@@ -96913,9 +96956,10 @@ sub_FB7F1F:
 	pop XIX                                              ; FB7F3F  5c
 	popw hl                                              ; FB7F40  4b
 	ret                                                  ; FB7F41  0e
-sub_FB7F42:
+; SysExBuf_InitAll: install the four buffers 0x60F820/0x60F938 (receive) and 0x60FA50/0x60FB68 (transmit) with their records 0x60FC98..0x60FCC8, and reset each.
+SysExBuf_InitAll:
 	push XIX                                             ; FB7F42  3c
-	lda xix, (sub_FB7FEB:24)                             ; FB7F43  f2 eb 7f fb 34
+	lda xix, (SysExBuf_Reset:24)                             ; FB7F43  f2 eb 7f fb 34
 	lda xbc, (0x60f820:24)                               ; FB7F48  f2 20 f8 60 31
 	ld (0x60fc80:24), xbc                               ; FB7F4D  f2 80 fc 60 61
 	lda xwa, (0x60fc98:24)                               ; FB7F52  f2 98 fc 60 30
@@ -96966,7 +97010,8 @@ sub_FB7F42:
 	add XSP,0x00000020                                   ; FB7FE3  ef c8 20 00 00 00
 	pop XIX                                              ; FB7FE9  5c
 	ret                                                  ; FB7FEA  0e
-sub_FB7FEB:
+; SysExBuf_Reset(buf, rec): count buf+0 = 0; cursors buf+2, +6, +0x0A = buf+0x0E with a 0xFF sentinel there; rec = the 16-byte template at prom_b 0xF511E9.
+SysExBuf_Reset:
 	link XIZ,0xfffc                                      ; FB7FEB  ee 0c fc ff
 	push XIX                                             ; FB7FEF  3c
 	ld XIX,(XIZ+0x08)                                    ; FB7FF0  ae 08 24
@@ -96988,7 +97033,8 @@ sub_FB7FEB:
 	pop XIX                                              ; FB8024  5c
 	unlk XIZ                                             ; FB8025  ee 0d
 	ret                                                  ; FB8027  0e
-sub_FB8028:
+; SysExRx_SwapBuffers: the receive twin of SysExTx_SwapBuffers on (0x60FCD8)/(0x60FCDC) and (0x60FC80)/(0x60FC84); then SysExRx_ResetBuffer.
+SysExRx_SwapBuffers:
 	link XIZ,0xfff8                                      ; FB8028  ee 0c f8 ff
 	push XIX                                             ; FB802C  3c
 	lda xix, (0x60fc80:24)                               ; FB802D  f2 80 fc 60 34
@@ -97014,11 +97060,13 @@ sub_FB8028:
 	ld (0x60fc84:24), xbc                               ; FB8073  f2 84 fc 60 61
 	ld (XIX),XIY                                         ; FB8078  b4 65
 .LFB807A:
-	calr sub_FB80F3                                      ; FB807A  1e 76 00
+	calr SysExRx_ResetBuffer                                      ; FB807A  1e 76 00
 	pop XIX                                              ; FB807D  5c
 	unlk XIZ                                             ; FB807E  ee 0d
 	ret                                                  ; FB8080  0e
-sub_FB8081:
+; SysExTx_SwapBuffers: when the transmit status is 0 and the frame is not empty, swap (0x60FCE0)/(0x60FCE4) and (0x60FC88)/(0x60FC8C), carry the step id
+;   (field 3) over; then SysExTx_ResetBuffer.
+SysExTx_SwapBuffers:
 	link XIZ,0xfff8                                      ; FB8081  ee 0c f8 ff
 	pushw hl                                             ; FB8085  2b
 	push XIX                                             ; FB8086  3c
@@ -97044,7 +97092,7 @@ sub_FB8081:
 	ld XBC,(XIX)                                         ; FB80CB  a4 21
 	ld (0x60fc8c:24), xbc                               ; FB80CD  f2 8c fc 60 61
 	ld (XIX),XIY                                         ; FB80D2  b4 65
-	calr sub_FB8105                                      ; FB80D4  1e 2e 00
+	calr SysExTx_ResetBuffer                                      ; FB80D4  1e 2e 00
 	ld xbc, (0x60fce4:24)                               ; FB80D7  e2 e4 fc 60 21
 	ld A,(XBC+0x03)                                      ; FB80DC  89 03 21
 	ld H,A                                               ; FB80DF  c9 8e
@@ -97052,26 +97100,28 @@ sub_FB8081:
 	ld (XWA+0x03),H                                      ; FB80E6  b8 03 46
 	jr .LFB80EE                                          ; FB80E9  68 03
 .LFB80EB:
-	calr sub_FB8105                                      ; FB80EB  1e 17 00
+	calr SysExTx_ResetBuffer                                      ; FB80EB  1e 17 00
 .LFB80EE:
 	pop XIX                                              ; FB80EE  5c
 	popw hl                                              ; FB80EF  4b
 	unlk XIZ                                             ; FB80F0  ee 0d
 	ret                                                  ; FB80F2  0e
-sub_FB80F3:
+; SysExRx_ResetBuffer: SysExBuf_Reset((0x60FC80), (0x60FCD8)).
+SysExRx_ResetBuffer:
 	ld xbc, (0x60fcd8:24)                               ; FB80F3  e2 d8 fc 60 21
 	push XBC                                             ; FB80F8  39
 	ld xwa, (0x60fc80:24)                               ; FB80F9  e2 80 fc 60 20
 	push XWA                                             ; FB80FE  38
-	calr sub_FB7FEB                                      ; FB80FF  1e e9 fe
+	calr SysExBuf_Reset                                      ; FB80FF  1e e9 fe
 	inc 8,XSP                                            ; FB8102  ef 60
 	ret                                                  ; FB8104  0e
-sub_FB8105:
+; SysExTx_ResetBuffer: SysExBuf_Reset((0x60FC88), (0x60FCE0)).
+SysExTx_ResetBuffer:
 	ld xbc, (0x60fce0:24)                               ; FB8105  e2 e0 fc 60 21
 	push XBC                                             ; FB810A  39
 	ld xwa, (0x60fc88:24)                               ; FB810B  e2 88 fc 60 20
 	push XWA                                             ; FB8110  38
-	calr sub_FB7FEB                                      ; FB8111  1e d7 fe
+	calr SysExBuf_Reset                                      ; FB8111  1e d7 fe
 	inc 8,XSP                                            ; FB8114  ef 60
 	ret                                                  ; FB8116  0e
 sub_FB8117:
@@ -97095,7 +97145,7 @@ sub_FB8117:
 	pop XIX                                              ; FB8154  5c
 	ret                                                  ; FB8155  0e
 sub_FB8156:
-	calr sub_FB7F42                                      ; FB8156  1e e9 fd
+	calr SysExBuf_InitAll                                      ; FB8156  1e e9 fd
 	calr sub_FB7F1F                                      ; FB8159  1e c3 fd
 	calr sub_FB8117                                      ; FB815C  1e b8 ff
 	ld (0x60fd40:24), 0x00                             ; FB815F  f2 40 fd 60 00 00

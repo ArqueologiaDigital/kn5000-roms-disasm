@@ -406,7 +406,7 @@ assert a(0xFB2A3B, 5) == bytes([0x44, 0x00, 0x00, 0xE8, 0x00]), "rx SOUND 0xE800
 assert a(0xFB2BF5, 5) == bytes([0x44, 0x00, 0x00, 0xEC, 0x00]), "rx COMBI 0xEC0000"
 
 # --------------------------- 8. the ONE field the firmware treats as a number
-# transmit: sub_FB6EE9 splits (0x60FD00) into septets, MOST SIGNIFICANT FIRST
+# transmit: SysExTx_AppendRemainingSize splits (0x60FD00) into septets, MOST SIGNIFICANT FIRST
 assert a(0xFB6EF6, 3) == bytes([0xE9, 0xEF, 0x0E]), "srl xbc,0x0E"
 assert a(0xFB6F03, 3) == bytes([0xE9, 0xEF, 0x07]), "srl xbc,0x07"
 assert a(0xFB6EF9, 3) == bytes([0xCB, 0x30, 0x07]), "res 7,C"

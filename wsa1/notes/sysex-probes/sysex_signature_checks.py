@@ -54,7 +54,7 @@ WHAT IT ESTABLISHES (all of it recomputed from the instruction bytes)
      0x01, and they descend to the SAME node, so reception is blind to it.
      Every ROM template holds 0x00 and no `04 01 11` literal exists in any
      of the four images -- but that does NOT mean 0x00 is what goes out.
-     `sub_FB5F65` patches byte 4 to 0x01 on the way out when the model
+     `SysExTx_PatchModelByteVariant2` patches byte 4 to 0x01 on the way out when the model
      strap (0xC4) is 2, for families 21/22/2C/2D, and recomputes the
      checksum.  See `sysex_model_variant.py`; this script asserts the
      patcher is there so nobody reads the literal count as a transmit
@@ -306,14 +306,14 @@ def main():
           % (sent, other))
     assert other == 0, other
     # ...and the 0x01 that a real rack puts on the wire is PATCHED IN:
-    # sub_FB5F65, gated on (0xC4)==2, families 21/22/2C/2D.
+    # SysExTx_PatchModelByteVariant2, gated on (0xC4)==2, families 21/22/2C/2D.
     assert rd(a, 0xFB5F6D, 4) == b"\xC0\xC4\x3F\x02"     # cp (0xC4),0x02
     for off, fam in ((0xFB5F88, 0x21), (0xFB5F8F, 0x22),
                      (0xFB5F95, 0x2C), (0xFB5F9B, 0x2D)):
         assert rd(a, off, 4) == bytes([0xD9, 0xCF, fam, 0x00]), hex(off)
     assert rd(a, 0xFB5FA6, 4) == b"\xB9\x04\x00\x01"     # (buf+4) = 0x01
     assert rd(a, 0xFB5FEC, 4) == b"\xB9\x04\x00\x01"     # (buf+4) = 0x01
-    print("  but sub_FB5F65 REWRITES byte 4 to 01 on the way out when")
+    print("  but SysExTx_PatchModelByteVariant2 REWRITES byte 4 to 01 on the way out when")
     print("  (0xC4)==2, for families 21/22/2C/2D, and recomputes the")
     print("  checksum -- so the wire value is a MODEL code, not a version.")
 
@@ -341,7 +341,7 @@ def main():
     print("  == 1 -> feature table 0xF4FE6A, all six zero (everything allowed)")
     print("  != 1 -> feature table 0xF4FE76, 0xFFFF at index 3 (SEQUENCER")
     print("          block store) and index 5 (the 25 tempo message)")
-    print("  == 2 -> sub_FB5F65 also rewrites the transmitted model byte")
+    print("  == 2 -> SysExTx_PatchModelByteVariant2 also rewrites the transmitted model byte")
     print("  It is a HARDWARE STRAP on a CPU port pin, read once at reset.")
     print("  Nothing anywhere compares a firmware or format VERSION.")
 

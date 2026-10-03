@@ -96,13 +96,13 @@ def septets(triple):
 TEMPLATES = [
     (0xF4FEB4, "ACK (reply)",              5, "0xFB28D9 sub_FB28BE"),
     (0xF4FEB9, "NAK (reply)",              5, "0xFB28F1 sub_FB28BE"),
-    (0xF4FEBE, "end of category",          5, "0xFB279C sub_FB277E"),
-    (0xF4FEC3, "end of dump",              5, "0xFB27CD sub_FB27AD"),
+    (0xF4FEBE, "end of category",          5, "0xFB279C SysExDump_SendCategoryDone"),
+    (0xF4FEC3, "end of dump",              5, "0xFB27CD SysExDump_SendJobDone"),
     (0xF4FEC8, "abort / gave up",          5, "0xFB2812, 0xFB34AD, 0xFB3EBB, 0xFB51C9"),
     (0xF4FECD, "memory-full reply",        5, "0xFB28E9 sub_FB28BE"),
-    (0xF4FED2, "continuation header",      3, "0xFB7034 sub_FB7025"),
-    (0xF4FED5, "enquiry",                  7, "0xFB2334 sub_FB2323"),
-    (0xF4FEDC, "start transfer",           7, "0xFB23AD sub_FB2323, 0xFB2910"),
+    (0xF4FED2, "continuation header",      3, "0xFB7034 SysExTx_AppendContHeaderIfCont"),
+    (0xF4FED5, "enquiry",                  7, "0xFB2334 SysExDump_Handshake"),
+    (0xF4FEDC, "start transfer",           7, "0xFB23AD SysExDump_Handshake, 0xFB2910"),
 ]
 EXPECT = {
     0xF4FEB4: "f050237ef7", 0xF4FEB9: "f050247ef7", 0xF4FEBE: "f050277ef7",
@@ -115,7 +115,7 @@ for addr, name, ln, site in TEMPLATES:
     assert got == EXPECT[addr], (hex(addr), got)
 
 # The six-septet data headers.  Each is `F0 50 2D 04 00 11` + addr + size,
-# except the last, whose size is appended at run time by sub_FB6EE9.
+# except the last, whose size is appended at run time by SysExTx_AppendRemainingSize.
 DATA_HEADERS = [
     # template  len  what it is                   step id  per-frame source
     #                                             (field3) descriptor, xN
@@ -223,7 +223,7 @@ for name, first, second in PAIRS:
 
 
 # ------------------------------------------- 4. checksum, cap, chunk size
-# sub_FB7111 (0xFB7111): H = sum of the message bytes from buffer+0x0F up to
+# SysExTx_AppendChecksumF7 (0xFB7111): H = sum of the message bytes from buffer+0x0F up to
 # the write cursor; then `sub WA,WA / sub WA,BC / res 7,A` = (0 - sum) & 0x7F.
 # The two bytes it appends come from the word at prom_b 0xF4FE68.
 assert b(0xF4FE68, 2) == bytes([0x00, 0xF7]), "checksum tail literal"
@@ -239,10 +239,10 @@ def checksum(payload):
     return (-sum(payload)) & 0x7F
 
 
-# sub_FB7040: the pack loop stops once the message byte count reaches 0xFC
+# SysExTx_AppendNibbles: the pack loop stops once the message byte count reaches 0xFC
 assert a(0xFB70A3, 4) == bytes([0xD8, 0xCF, 0xFC, 0x00]), "cp WA,0x00FC"
 BLOCK_CAP = 0xFC
-# sub_FB7165: the frame goes to MIDI-out ring 0x601432 in 0x20-byte chunks
+# SysExTx_SendFrameMidi1: the frame goes to MIDI-out ring 0x601432 in 0x20-byte chunks
 assert a(0xFB71A0, 4) == bytes([0xDB, 0xCF, 0x20, 0x00]), "cp HL,0x0020"
 CHUNK = 0x20
 # that ring is 0x100 bytes: Ring_Put_0100 wraps with `minc1_16 ix,0x00ff`

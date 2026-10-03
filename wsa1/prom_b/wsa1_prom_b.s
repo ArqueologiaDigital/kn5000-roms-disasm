@@ -837,8 +837,8 @@
 	.set	SysExModule_EntryThunks, 0xFB2000
 	.set	T_F408F8_Nop, 0xFB2022
 	.set	SysExDump_RunSendJob, 0xFB2049
-	.set	sub_FB20CE, 0xFB20CE
-	.set	sub_FB21CB, 0xFB21CB
+	.set	SysExRx_PollRing601646, 0xFB20CE
+	.set	SysExRx_PollRing601C6E, 0xFB21CB
 	.set	sub_FB2CAD, 0xFB2CAD
 	.set	sub_FB2CE7, 0xFB2CE7
 	.set	sub_FB2D21, 0xFB2D21
@@ -87803,14 +87803,14 @@ T_ParamApply_OneHotOfSix:	jp ParamApply_OneHotOfSix  ; -> prom_a 0x2D9CB   x1
 	.fill 0x40, 1, 0x0E  ; 0xF408A0: 64 x ret
 T_F408E0:	.long SysExModule_EntryThunks	; ptr -> 0xFB2000 (prom_a 0x32000)
 T_SysExDump_RunSendJob:	jp SysExDump_RunSendJob  ; -> prom_a 0x32049   x1
-T_F408E8:	jp sub_FB20CE  ; -> prom_a 0x320CE   x1
+T_F408E8:	jp SysExRx_PollRing601646  ; -> prom_a 0x320CE   x1
 T_F408EC:	jp sub_FB3355  ; -> prom_a 0x33355   x2
 T_F408F0:	jp sub_FB590A  ; -> prom_a 0x3590A
 T_F408F4:	jp sub_FB5EE9  ; -> prom_a 0x35EE9
 T_F408F8:	jp T_F408F8_Nop  ; -> prom_a 0x32022
 T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
 T_F40900:	jp sub_FB4B7D  ; -> prom_a 0x34B7D   x1
-T_F40904:	jp sub_FB21CB  ; -> prom_a 0x321CB   x1
+T_F40904:	jp SysExRx_PollRing601C6E  ; -> prom_a 0x321CB   x1
 T_F40908:	jp sub_FB585E  ; -> prom_a 0x3585E   x1
 T_F4090C:	jp sub_FB7A90  ; -> prom_a 0x37A90   x2
 T_F40910:	jp sub_FB7AC2  ; -> prom_a 0x37AC2   x1
@@ -107765,7 +107765,7 @@ PtrTable_F4FA2E:
 ; MidiSysEx_Tail3Init -- not a pointer: three bytes that prom_a's sub_FB3355 copies into its frame
 ;          (`lda xiy,(this)` / `ldw bc,3` / `ldir`, 0xFB3360-0xFB336B), the C compiler's initializer for
 ;          a 3-byte local.  The routine overwrites the first two with computed values
-;          (0xFB33CF, 0xFB33DA) and passes all three to sub_FB6F24, so the 0xF7 (MIDI
+;          (0xFB33CF, 0xFB33DA) and passes all three to SysExTx_Append, so the 0xF7 (MIDI
 ;          end-of-exclusive) stays as the last byte.  This was read as `.long 0x00F70708`,
 ;          a pointer that lands inside an instruction.
 MidiSysEx_Tail3Init:	.byte	0x08, 0x07, 0xf7	; F4FA76
@@ -108087,7 +108087,7 @@ ParamFieldInit_F4FE50:
 	.byte	0x91, 0x04, 0x00, 0xFF	; F4FE64  [5] param 0x91, field +4, value 0x00, mask 0xFF
 
 ; --------------------------------------------------------------------------
-; Word_F4FE68 -- one word, 0xF700.  Read by prom_a sub_FB7111 (0xFB7119
+; Word_F4FE68 -- one word, 0xF700.  Read by prom_a SysExTx_AppendChecksumF7 (0xFB7119
 ;   `ld BC,(0xF4FE68)`), which works on the output buffer at (0x60FC88).
 ; WordTables_F4FE6A / _F4FE76 -- two 6-entry tables of 16-bit words, read by
 ;   prom_a sub_FB5FF5: for an argument k < 6 it takes 0xF4FE6A when the strap
@@ -108108,7 +108108,7 @@ WordTable_F4FE76:
 ; --------------------------------------------------------------------------
 ; SysExRxClass_ByResult -- 34 bytes, indexed by the result code the SysEx
 ;   decode tree (SysExDecodeTree_Root) leaves in field 0: 1..33 are the codes
-;   its leaves carry.  Read by prom_a sub_FB6B87 (0xFB6BAE `add
+;   its leaves carry.  Read by prom_a SysExRx_CheckCommandClass (0xFB6BAE `add
 ;   XWA,0x00F4FE82`), which then gates the message on the byte at (0x7FD6):
 ;   class 1 needs bit 1, class 2 bit 0, class 3 either; when the bit is clear
 ;   it writes 0x21 into field 4 (the failure field), and class 0 passes.
@@ -108135,17 +108135,17 @@ ZeroBlock16_F4FEA4:
 ;   and one is not accepted.
 ; Read by: prom_a's SysEx TRANSMIT code.  Every string start is the operand of
 ;   at least one `lda XBC,(0xF4FExx:24)` / `lda XWA,...` in prom_a, in the
-;   shape `pushw n / lda XBC,<string> / push XBC / call sub_FB6E7F`;
-;   sub_FB6E7F appends n bytes to the output buffer whose descriptor is at
+;   shape `pushw n / lda XBC,<string> / push XBC / call SysExTx_AppendAndSendOnF7`;
+;   SysExTx_AppendAndSendOnF7 appends n bytes to the output buffer whose descriptor is at
 ;   (0x60FC88) (+0x0A = write pointer), writes a 0xFF after them, and when the
-;   last byte is 0xF7 hands the message on (sub_FB7165, sub_FB7BB9,
-;   sub_FB8081).  `2C 04 00 11` alone is named by nine sites: the header of a
+;   last byte is 0xF7 hands the message on (SysExTx_SendFrameMidi1, sub_FB7BB9,
+;   SysExTx_SwapBuffers).  `2C 04 00 11` alone is named by nine sites: the header of a
 ;   parameter change whose address and data the caller appends.  So these are
 ;   the messages this machine SENDS, and the decode tree accepts the same
 ;   ones on the way in.
 ; ⚠ prom_a's header at 0xFB248A calls the 12 bytes at 0xF4FF10 "one 12-byte
 ;   display list"; they are this SysEx string (F0 50 2D 04 00 11 20 00 00 00
-;   00 10), sent by the same `call sub_FB6E7F`.  (Not this lane's file.)
+;   00 10), sent by the same `call SysExTx_AppendAndSendOnF7`.  (Not this lane's file.)
 ; --------------------------------------------------------------------------
 SysExMessageStrings_F4FEB4:
 	.byte	0xF0, 0x50, 0x23, 0x7E, 0xF7	; F4FEB4  F0 50 23 7E F7 -- decode-tree result 1
@@ -108186,17 +108186,17 @@ SysExMessageStrings_F4FEB4:
 ;          ⚠ CORRECTED 2026-09-25: this line used to file what the keys mean
 ;          and where the traversal is under the open questions; both are
 ;          answered in the ANSWERED block below -- a "key" is a match byte
-;          and a result byte, and the traversal is prom_a sub_FB63D1.
+;          and a result byte, and the traversal is prom_a SysExRx_MatchTrie.
 ; --------------------------------------------------------------------------
 ; ⚠ ANSWERED 2026-09-25 (lane promb): the traversal IS located, and the
 ;   "keys" are two bytes, not one u16.  This is a SYSEX DECODE TREE.
-; Read by: prom_a sub_FB63D1 (0xFB63D1), called from sub_FB63AF (0xFB63AF)
+; Read by: prom_a SysExRx_MatchTrie (0xFB63D1), called from SysExRx_ParseMessage (0xFB63AF)
 ;   after the MIDI receiver around 0xFB20E3 has collected a System Exclusive
 ;   message -- it waits for 0xF0, accepts ID 0x50 or 0x7E, appends data bytes
 ;   to the buffer at (0x60FC80) and calls the parse on 0xF7.  The walk starts
 ;   at record 767, SysExDecodeTree_Root (0xF5115B, `add XBC,0x00F5115B` at
 ;   0xFB63FC), and descends ONE MESSAGE BYTE PER LEVEL, levels 0..9: it reads
-;   the next byte (sub_FB61B1; 0xFF ends the message), scans the current list
+;   the next byte (SysExBuf_ReadByte; 0xFF ends the message), scans the current list
 ;   of 6-byte records for +0 == byte (+0 == 0xFE matches any byte, below the
 ;   top level), stores the byte in field 5+level of the result object at
 ;   (0x60FCD8) (U8Rec16_SetField), and then
@@ -108988,7 +108988,7 @@ LinkTable_F4FF61:
 	.byte 0xff, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F51149  [764] key 0x09FF  -> rec 0
 	.byte 0x04, 0x00, 0x3d, 0x11, 0xf5, 0x00   ; F5114F  [765] key 0x0004  -> rec 762
 	.byte 0xff, 0x08, 0x61, 0xff, 0xf4, 0x00   ; F51155  [766] key 0x08FF  -> rec 0
-; SysExDecodeTree_Root -- record 767: the level-0 list prom_a sub_FB63D1
+; SysExDecodeTree_Root -- record 767: the level-0 list prom_a SysExRx_MatchTrie
 ;   starts from (14 entries and the 0xFF terminator with code 7).
 SysExDecodeTree_Root:
 	.byte 0x25, 0x09, 0x61, 0xff, 0xf4, 0x00   ; F5115B  [767] key 0x0925  -> rec 0

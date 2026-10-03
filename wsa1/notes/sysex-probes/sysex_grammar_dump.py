@@ -6,7 +6,7 @@ QUESTION THIS ANSWERS
     which internal command number does each one produce?
 
 WHERE THE SIGNAL IS
-    prom_a `sub_FB63D1` (0xFB63D1) parses a buffered SysEx message:
+    prom_a `SysExRx_MatchTrie` (0xFB63D1) parses a buffered SysEx message:
       * 0xFB63E1  advances the buffer read cursor by 2 -- F0 and the
                   manufacturer byte are SKIPPED, never re-compared;
       * 0xFB63FC  `add XBC,0x00f5115b` names the ROOT table, in prom_b;

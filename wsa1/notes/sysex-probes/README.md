@@ -110,11 +110,11 @@ Both load bases are asserted first: prom_b must hold `F0 50 23 7E F7` at
   `size x blocks == septets`), and that for every category sent in more than
   one part, `addr(part N+1) - addr(part N) == size(part N)`. Four
   independent agreements.
-* **Checksum.** `sub_FB7111` (`0xFB7111`) sums from buffer `+0x0F` — i.e.
+* **Checksum.** `SysExTx_AppendChecksumF7` (`0xFB7111`) sums from buffer `+0x0F` — i.e.
   every byte of the message except the leading `0xF0` — to the write cursor,
   then `sub WA,WA / sub WA,BC / res 7,A`, and appends that byte plus the
   `0xF7` that sits beside it in the word at `0xF4FE68` (`00 F7`).
-* **Block size.** The pack loop `sub_FB7040` stops when the message byte
+* **Block size.** The pack loop `SysExTx_AppendNibbles` stops when the message byte
   count reaches `0xFC` (`cp WA,0x00FC` at `0xFB70A3`). Each source byte
   becomes two nibbles, high first.
 
@@ -251,7 +251,7 @@ Both load bases are asserted first, as above.
   reaches a handler that calls the **same descriptor writer** the transmit
   side used. Nothing anywhere decodes the address arithmetically.
 * **The one field that IS a number** is SEQUENCER part 3's size. The
-  transmit encoder (`sub_FB6EE9`) splits it `>>14, >>7, >>0` masked to seven
+  transmit encoder (`SysExTx_AppendRemainingSize`) splits it `>>14, >>7, >>0` masked to seven
   bits; the receive decoder (`sub_FB741A`) rebuilds it `<<14, <<7, <<0` from
   parse-record fields `0x0C/0x0D/0x0E`. Both shift literals are asserted.
   The value itself is `0x10 ×` the sequencer's own memory-use counter
@@ -430,10 +430,10 @@ dumped v2 `prom_b` transmits `04 00 11` and **no `04 01 11` literal exists
 anywhere in the four WSA1 images**.
 
 ⚠ **RESOLVED by `sysex_model_variant.py`, and the earlier reading of it was
-too weak.** The `01` is written at transmit time: `sub_FB5F65` (0xFB5F65)
+too weak.** The `01` is written at transmit time: `SysExTx_PatchModelByteVariant2` (0xFB5F65)
 runs on every outgoing message, and when the model-variant strap `(0x00C4)`
 is 2 it overwrites message byte 4 with `0x01` for families `21`, `22`, `2C`
-and `2D`, then recomputes the checksum over `sub_FB7111`'s own window. So the
+and `2D`, then recomputes the checksum over `SysExTx_AppendChecksumF7`'s own window. So the
 middle byte **does** distinguish the two models on transmission — the
 capture is a strap-2 machine — even though reception is model-blind and both
 values reach the same handlers. The note that used to stand here, that the
@@ -461,7 +461,7 @@ asserts them.
   bulk-dump code, only in the `2B`/`2C` parameter handlers.
 * **Bound.** The destination extent comes from the handler's own
   descriptor writer, not from the message. The single exception is
-  SEQUENCER part 3, whose length the trie leaves free: `sub_FB6BF4`
+  SEQUENCER part 3, whose length the trie leaves free: `SysExRx_CheckAddress`
   rejects it above `0x50C00` (`cp XBC,0x00050C00` at `0xFB6C69`) with
   status `0x16`, and `0x50C00` is exactly the extent `sub_FB76B5`
   reserves — the script asserts the two agree.
@@ -646,15 +646,15 @@ occurs exactly once in either CPU-1 image, and that every compare site tests
   entries **0, 1, 2 and 4 have no reader at all**. They are `0x0000` in both
   tables, i.e. permitted, and nothing ever asks.
 * **★★ The other strap reader in the engine.** Exactly two `C0 C4 3F` sites
-  exist in `0xFB2000-0xFB8200`: the selector above and `sub_FB5F65`
+  exist in `0xFB2000-0xFB8200`: the selector above and `SysExTx_PatchModelByteVariant2`
   (`0xFB5F65`). On strap 2 only, and for families `21`, `22`, `2C` and `2D`
   only, it overwrites **message byte 4** — the middle byte of the model
   triple — with `0x01`, and for `2C`/`2D` recomputes the checksum over
   `+0x0F .. len-3`, storing `(-sum) & 0x7F` at `len-2`. The script asserts
-  that window and that arithmetic against `sub_FB7111`'s own, so a patched
+  that window and that arithmetic against `SysExTx_AppendChecksumF7`'s own, so a patched
   message checksums as if it had been built that way.
-* **It is on every transmit path.** `sub_FB5F65`'s two callers sit at the
-  head of `sub_FB7165` and `sub_FB71BB`, and those two are the only routines
+* **It is on every transmit path.** `SysExTx_PatchModelByteVariant2`'s two callers sit at the
+  head of `SysExTx_SendFrameMidi1` and `SysExTx_SendFrameBothPorts`, and those two are the only routines
   in the engine that reach the MIDI-out block write (`0xF41DF8`). All 19
   calls to them are inside the engine.
 * **Reception is model-blind.** The trie accepts model byte `00` and `01` for
@@ -687,7 +687,7 @@ machine transmits.
 
 A raw byte scan for a branch displacement matches inside other instructions —
 `0xFB71B3` is the second byte of `inc 6,XSP` and reads as a `jr Z` to
-`0xFB71BB`. Counting those makes `sub_FB71BB` look like it has 15 callers
+`0xFB71BB`. Counting those makes `SysExTx_SendFrameBothPorts` look like it has 15 callers
 instead of 14. Every candidate must be checked against an instruction
 boundary before it is believed.
 
@@ -721,8 +721,8 @@ answer is a gate, a state and a template.
   answers *every* message from the parse record's status field: 0 →
   `F0 50 23 7E F7`, `0x16` → `F0 50 2A 7E F7`, anything else →
   `F0 50 24 7E F7`. None of the three carries a model byte.
-* **The model byte.** `sub_FB6E7F` reaches `sub_FB7165`, whose first call is
-  `sub_FB5F65`, the strap-2 patcher (see `sysex_model_variant.py`); the
+* **The model byte.** `SysExTx_AppendAndSendOnF7` reaches `SysExTx_SendFrameMidi1`, whose first call is
+  `SysExTx_PatchModelByteVariant2`, the strap-2 patcher (see `sysex_model_variant.py`); the
   script follows both `calr` displacements rather than trusting the label.
   The reply is therefore `F0 50 22 04 01 11 F7` from a rack. The enquiry's
   own model byte cannot reach it: the trie's `00` and `01` records at
@@ -797,7 +797,7 @@ mismatches), so the instruction boundaries are the tree's, not a guess.
   row→job table.
 * **0x06 is below the session loop's floor**: `cp a,0x07 / jr c` at
   `0xFB283C`, and its session slot `0xFB3233` is a `ret`.
-* **`F0 50 7E` needs a flag and a checksum.** `sub_FB6CFC` sets the parity
+* **`F0 50 7E` needs a flag and a checksum.** `SysExRx_CheckBodyLength` sets the parity
   limit to *write pointer − 3* and starts from the payload cursor; the parse
   record is initialised from prom_b `0xF511E9` = `00 00 00 00 00` then eleven
   `FF`, so the count triple is never zero and the parity rule always runs for
@@ -848,7 +848,7 @@ of range, and to the sender's own prefill `08 07 F7`.
    not by its name: `sub_FB28BE_Nop` and `sub_FB753E` differ by one byte and one
    of them is the SEQUENCER's real descriptor writer.
 3. The parse record is **double buffered** (`0x60FCD8` and `0x60FCDC` swap in
-   `sub_FB8028`), which is why a data handler reads the session step out of
+   `SysExRx_SwapBuffers`), which is why a data handler reads the session step out of
    one record and writes its status into the other. Reading both out of the
    same pointer makes every step test look wrong.
 
@@ -882,7 +882,7 @@ Both load bases are asserted by content: prom_b must hold `F0 50 23 7E F7` at
 * **The model triple's middle byte**, read out of the trie at all five
   nodes that carry it: two records, `00` and `01`, both descending to the
   same node. The literal counts are `04 00 11` ×86 and `04 01 11` ×0 —
-  ⚠ which is **not** a transmit count: `sub_FB5F65` writes the `01` in at
+  ⚠ which is **not** a transmit count: `SysExTx_PatchModelByteVariant2` writes the `01` in at
   transmit time when `(0xC4) == 2`. The script asserts that patcher is
   present so the literal count can never be misread as one.
 

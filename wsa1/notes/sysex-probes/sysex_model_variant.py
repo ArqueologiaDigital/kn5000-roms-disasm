@@ -44,14 +44,14 @@ WHAT IT ESTABLISHES, AND HOW
 
   3. THE OTHER STRAP READER IN THE SYSEX ENGINE.  An exhaustive scan of
      0xFB2000-0xFB8200 for the `C0 C4 3F` compare idiom finds exactly two:
-     the feature-table selector above, and `sub_FB5F65` (0xFB5F65).
-     sub_FB5F65 runs only when the strap is 2 and, for message families
+     the feature-table selector above, and `SysExTx_PatchModelByteVariant2` (0xFB5F65).
+     SysExTx_PatchModelByteVariant2 runs only when the strap is 2 and, for message families
      0x21, 0x22, 0x2C and 0x2D only:
        * overwrites message byte 4 -- the middle byte of the three-byte model
          identifier that follows the family byte -- with 0x01;
        * for 0x2C and 0x2D, which carry a checksum, recomputes it over bytes
          1..len-3 and stores it at len-2, by the same arithmetic and over the
-         same window as the build-time checksum routine sub_FB7111.
+         same window as the build-time checksum routine SysExTx_AppendChecksumF7.
      Its two callers are found by an exhaustive relative-branch scan, and
      they are the only two routines in the SysEx engine that reach the
      MIDI-out block write -- so every outgoing SysEx message passes through
@@ -165,7 +165,7 @@ V2 = [w16(TBL_V2 + 2 * i) for i in range(NENTRIES)]
 assert V1 == [0] * NENTRIES, V1
 assert V2 == [0, 0, 0, DENIED, 0, DENIED], V2
 # the two tables are contiguous -- 12 words, 0xF4FE6A..0xF4FE81 -- and the
-# word before them is the `00 F7` checksum/EOX pair sub_FB7111 appends, so a
+# word before them is the `00 F7` checksum/EOX pair SysExTx_AppendChecksumF7 appends, so a
 # reader that walked past the end of table 1 would land in table 2.
 assert b(0xF4FE68, 2) == bytes([0x00, 0xF7]), "the 00 F7 word"
 assert TBL_V1 + 2 * NENTRIES == TBL_V2
@@ -288,7 +288,7 @@ assert a(0xFB5FD4, 2) == bytes([0xD8, 0xA0]) and a(0xFB5FD6, 2) == bytes([0xD9, 
 assert a(0xFB5FDA, 3) == bytes([0xCE, 0x30, 0x07]), "res 7,H"
 assert a(0xFB5FE3, 2) == bytes([0xE8, 0x6A]) and a(0xFB5FE5, 2) == bytes([0xB0, 0x46])
 # ... which is the SAME window and the SAME arithmetic as the build-time
-# checksum routine sub_FB7111, so a patched message checksums as if it had
+# checksum routine SysExTx_AppendChecksumF7, so a patched message checksums as if it had
 # been built with 0x01 from the start.
 assert a(0xFB7126, 6) == bytes([0xEC, 0xC8, 0x0F, 0, 0, 0]), "sum from +0x0F"
 assert a(0xFB7131, 3) == bytes([0xA8, 0x0A, 0x25]), "to the end cursor"
@@ -476,7 +476,7 @@ def main():
     print("  rewrites message byte %d (the model id's middle byte) 0x00 -> 0x%02X"
           % (MODEL_BYTE_INDEX, PATCH_VALUE))
     print("  and for 0x2C/0x2D recomputes the checksum over +0x0F..len-3,")
-    print("  storing (-sum) & 0x7F at len-2 -- sub_FB7111's own window")
+    print("  storing (-sum) & 0x7F at len-2 -- SysExTx_AppendChecksumF7's own window")
     print("  reached from both message senders: %s"
           % " ".join("0x%06X" % s for s in SENDERS))
     print()

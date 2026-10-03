@@ -41,13 +41,13 @@ WHERE THE SIGNAL IS
     becomes 0x16 -> `ERROR 21! Memory full` and the reply is
     `F0 50 2A 7E F7`.  The one message whose length the firmware does not
     know (SEQUENCER part 3) takes its length from the message, and
-    sub_FB6BF4 rejects it above 0x50C00 with the same status.
+    SysExRx_CheckAddress rejects it above 0x50C00 with the same status.
 
-  * COLLECTOR CEILING.  sub_FB6098 refuses a further body byte once the
+  * COLLECTOR CEILING.  SysExRx_ReceiveBlocking refuses a further body byte once the
     stored count reaches 0xFF, and the count starts at 1 on the F0.  The
     closing F7 bypasses the test.
 
-  * WRITE PROTECT.  sub_FB6B87 maps the command number through the byte
+  * WRITE PROTECT.  SysExRx_CheckCommandClass maps the command number through the byte
     table at prom_b 0xF4FE82 to a class, and refuses class 1 when
     (0x7FD6) bit 1 is set, class 2 when bit 0 is set and class 3 when
     either is -- with status 0x21, which sub_FB7DFE turns into screen 0xB3,
@@ -187,7 +187,7 @@ print()
 
 # --- 3. the destination bound --------------------------------------------
 # sub_FB76B5 (SEQUENCER part 3's destination) hard-codes 0x00050C00 at +8,
-# and sub_FB6BF4 rejects a larger length field with status 0x16.
+# and SysExRx_CheckAddress rejects a larger length field with status 0x16.
 assert a(0xFB76CC, 5) == bytes([0x41, 0x00, 0x0C, 0x05, 0x00]), "seq3 extent moved"
 assert a(0xFB6C69, 6) == bytes([0xE9, 0xCF, 0x00, 0x0C, 0x05, 0x00]), "seq3 ceiling moved"
 assert a(0xFB6CA1, 3) == bytes([0x0B, 0x16, 0x00]), "seq3 over-size status moved"
@@ -207,8 +207,8 @@ print("  and sub_FB28BE answers it with F0 50 2A 7E F7")
 print()
 
 # --- 4. the collector ceiling --------------------------------------------
-# sub_FB6098: 0xFB610A `cp WA,0x00FF` / `jr nc` -> status 6; the F7 path at
-# 0xFB612C appends without the test; sub_FB6165 sets the count to 1 on F0.
+# SysExRx_ReceiveBlocking: 0xFB610A `cp WA,0x00FF` / `jr nc` -> status 6; the F7 path at
+# 0xFB612C appends without the test; SysExRx_AppendByte sets the count to 1 on F0.
 assert a(0xFB610A, 4) == bytes([0xD8, 0xCF, 0xFF, 0x00]), "collector bound moved"
 assert a(0xFB611B, 3) == bytes([0x0B, 0x06, 0x00]), "collector status moved"
 assert a(0xFB6192, 4) == bytes([0x8E, 0x08, 0x3F, 0xF0]), "F0 test moved"
@@ -333,7 +333,7 @@ print("  categories whose end-of-category arrived; nothing is applied before tha
 print()
 
 # --- 7. between messages -------------------------------------------------
-# sub_FB7785: `ldw HL,0x09C4` (2500) or 0x03E8 (1000) if bit 2 of (0x60FD40)
+# SysExRx_CheckReplyTimeout: `ldw HL,0x09C4` (2500) or 0x03E8 (1000) if bit 2 of (0x60FD40)
 assert a(0xFB778A, 3) == bytes([0x33, 0xC4, 0x09]), "receive timeout moved"
 assert a(0xFB7794, 3) == bytes([0x33, 0xE8, 0x03]), "handshake timeout moved"
 assert a(0xFB77A1, 3) == bytes([0x0B, 0x05, 0x00]), "timeout status moved"

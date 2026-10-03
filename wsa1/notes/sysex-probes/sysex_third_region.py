@@ -37,7 +37,7 @@ WHERE THE SIGNAL IS
     (drum), the SAME two routines the panel's own tone editor commits through
     (notes/FINDINGS-l7a1429-field-editors.md section 1c).
   * THE REPLY, prom_b `sub_F37DB4` / `sub_F37E1C` (0xF37DB4, 0xF37E1C): header
-    `F0 50 2C 04 nn 11` (the literal is `00`, and sub_FB5F65 rewrites it to
+    `F0 50 2C 04 nn 11` (the literal is `00`, and SysExTx_PatchModelByteVariant2 rewrites it to
     `01` on the rack), the chunk's own address septets, count `00 00 n`, then
     2n nibble bytes, a `00`, the checksum and `F7`.  `cp WA,0x0078` caps n.
   * THE CROSS-CHECK, prom_c: `Part_GetPercWaveSelectRecord` (0xFB456F) computes
@@ -271,8 +271,8 @@ CEILING = le(a(0xFB610C, 2)) + 1      # the F0 is counted, the closing F7 is not
 assert WIRE <= CEILING, "a full reply would not survive reception"
 
 # ⚠ The reply's model byte is NOT a constant.  It leaves through prom_a
-# 0xFB7AC2 -> sub_FB7165, and the refusal through sub_FB71BB; both of those
-# senders call sub_FB5F65 (calr displacements -0x1212 and -0x1268), which on the
+# 0xFB7AC2 -> SysExTx_SendFrameMidi1, and the refusal through SysExTx_SendFrameBothPorts; both of those
+# senders call SysExTx_PatchModelByteVariant2 (calr displacements -0x1212 and -0x1268), which on the
 # rack variant rewrites byte 4 of a 2C to 0x01 and recomputes the checksum --
 # see sysex_model_variant.py.  So the reply header is `F0 50 2C 04 nn 11`.
 assert a(0xFB7AD6, 3) == bytes([0x1E, 0x8C, 0xF6]), "the reply sender moved"

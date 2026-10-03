@@ -50,9 +50,9 @@ WHERE THE SIGNAL IS  (prom_b at 0xF00000, prom_a at 0xF80000, prom_c at 0xF80000
     (0xF37E1C).  The header splits the CURRENT address back into septets with
     `and XBC,0x001fc000 / sra 14`, `and XBC,0x00003f80 / sra 7` and `res 7,C`
     -- the same 21-bit encoding, read off the transmit side.
-  * THE PORTS DIFFER.  The reply goes out through prom_a sub_FB7165, which
+  * THE PORTS DIFFER.  The reply goes out through prom_a SysExTx_SendFrameMidi1, which
     feeds ONE output path (0xF41DF8/0xF40724) and is the routine the bulk dump
-    uses; the refusal goes out through sub_FB71BB, which feeds TWO
+    uses; the refusal goes out through SysExTx_SendFrameBothPorts, which feeds TWO
     (0xF41DF8/0xF40724 and 0xF41E1C/0xF40730).
   * THE CHECKSUM is prom_a sub_FB7A90: `inc 1,XIX / dec 1,HL` before the sum,
     so the leading 0xF0 is skipped, then `sub WA,WA / sub WA,BC / res 7,A`.
@@ -373,10 +373,10 @@ MAX_WIRE = 2 * CHUNK_MAX + WIRE_OVERHEAD
 assert MAX_WIRE == 255
 
 # ⚠ ON A RACK the model byte is rewritten on the way out.  Both output
-# routines open with `calr sub_FB5F65` (a 16-bit RELATIVE call, which is why
+# routines open with `calr SysExTx_PatchModelByteVariant2` (a 16-bit RELATIVE call, which is why
 # no absolute reference to 0xFB5F65 exists anywhere in either image).
-assert a(0xFB7174, 3) == bytes([0x1E, 0xEE, 0xED]), "calr from sub_FB7165"
-assert a(0xFB71CA, 3) == bytes([0x1E, 0x98, 0xED]), "calr from sub_FB71BB"
+assert a(0xFB7174, 3) == bytes([0x1E, 0xEE, 0xED]), "calr from SysExTx_SendFrameMidi1"
+assert a(0xFB71CA, 3) == bytes([0x1E, 0x98, 0xED]), "calr from SysExTx_SendFrameBothPorts"
 for site, disp in ((0xFB7174, -0x1212), (0xFB71CA, -0x1268)):
     assert (site + 3 + disp) & 0xFFFFFF == 0xFB5F65, "calr target moved"
 assert a(0xFB5F6D, 4) == bytes([0xC0, 0xC4, 0x3F, 0x02]), "cp (0x00c4),2 (the strap)"
@@ -443,22 +443,22 @@ print("     (0x%06X).  Asking for the block's full %d bytes does NOT do this:"
       % (SRC_BUF, BIG_BLOCK))
 print("     that takes the capped branch and comes back as %d + %d."
       % (CHUNK_MAX, BIG_BLOCK - CHUNK_MAX))
-print("  ⚠ byte 4 is the literal 00 in the builder, but prom_a sub_FB5F65")
+print("  ⚠ byte 4 is the literal 00 in the builder, but prom_a SysExTx_PatchModelByteVariant2")
 print("     rewrites it to 01 and recomputes the checksum when the model")
 print("     strap (0x00C4) reads 2, so a rack's reply carries 04 01 11")
 print()
 
 
 # ------------------------------------------------------------ 6. which port
-# The reply path: prom_b T_F40910 -> prom_a sub_FB7AC2 -> sub_FB6F24 + sub_FB7165.
+# The reply path: prom_b T_F40910 -> prom_a sub_FB7AC2 -> SysExTx_Append + SysExTx_SendFrameMidi1.
 assert b(0xF40910, 4) == bytes([0x1B, 0xC2, 0x7A, 0xFB]), "T_F40910"
 assert b(0xF4090C, 4) == bytes([0x1B, 0x90, 0x7A, 0xFB]), "T_F4090C"
-assert a(0xFB7ACD, 3) == bytes([0x1E, 0x54, 0xF4]), "calr sub_FB6F24 from FB7AC2"
-assert a(0xFB7AD6, 3) == bytes([0x1E, 0x8C, 0xF6]), "calr sub_FB7165 from FB7AC2"
-# The refusal path: prom_a 0xFB34B3 sub_FB6F24, 0xFB34BD sub_FB71BB.
-assert a(0xFB34B3, 4) == bytes([0x1D, 0x24, 0x6F, 0xFB]), "call sub_FB6F24"
-assert a(0xFB34BD, 4) == bytes([0x1D, 0xBB, 0x71, 0xFB]), "call sub_FB71BB"
-# sub_FB7165 drives ONE output pair; sub_FB71BB drives TWO.
+assert a(0xFB7ACD, 3) == bytes([0x1E, 0x54, 0xF4]), "calr SysExTx_Append from FB7AC2"
+assert a(0xFB7AD6, 3) == bytes([0x1E, 0x8C, 0xF6]), "calr SysExTx_SendFrameMidi1 from FB7AC2"
+# The refusal path: prom_a 0xFB34B3 SysExTx_Append, 0xFB34BD SysExTx_SendFrameBothPorts.
+assert a(0xFB34B3, 4) == bytes([0x1D, 0x24, 0x6F, 0xFB]), "call SysExTx_Append"
+assert a(0xFB34BD, 4) == bytes([0x1D, 0xBB, 0x71, 0xFB]), "call SysExTx_SendFrameBothPorts"
+# SysExTx_SendFrameMidi1 drives ONE output pair; SysExTx_SendFrameBothPorts drives TWO.
 ONE = a(0xFB7165, 0x56)
 TWO = a(0xFB71BB, 0xB5)
 P1 = bytes([0x1D, 0xF8, 0x1D, 0xF4])   # call 0xf41df8
@@ -466,17 +466,17 @@ P1B = bytes([0x1D, 0x24, 0x07, 0xF4])  # call 0xf40724
 P2 = bytes([0x1D, 0x1C, 0x1E, 0xF4])   # call 0xf41e1c
 P2B = bytes([0x1D, 0x30, 0x07, 0xF4])  # call 0xf40730
 assert P1 in ONE and P1B in ONE and P2 not in ONE and P2B not in ONE, \
-    "sub_FB7165 no longer drives exactly one output path"
+    "SysExTx_SendFrameMidi1 no longer drives exactly one output path"
 assert P1 in TWO and P1B in TWO and P2 in TWO and P2B in TWO, \
-    "sub_FB71BB no longer drives two output paths"
+    "SysExTx_SendFrameBothPorts no longer drives two output paths"
 # the bulk dump uses the same single-path routine
 BULK_TX = [s for s in (0xFB6ED8, 0xFB6F99, 0xFB6FEA) if a(s, 1) == b"\x1e"]
 assert len(BULK_TX) == 3
 
 print("6. WHICH MIDI OUTPUT")
-print("  the REPLY goes out through prom_a sub_FB7165, ONE output path -- the")
+print("  the REPLY goes out through prom_a SysExTx_SendFrameMidi1, ONE output path -- the")
 print("     same routine the SYSEX BULK DUMP transmitter uses")
-print("  the REFUSAL goes out through sub_FB71BB, TWO output paths")
+print("  the REFUSAL goes out through SysExTx_SendFrameBothPorts, TWO output paths")
 print("  (the published manual says bulk dump is MIDI 1 only; the reply shares")
 print("     that routine, the refusal does not)")
 print()

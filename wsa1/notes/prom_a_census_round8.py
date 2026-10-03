@@ -1801,7 +1801,7 @@ RING_NAMES = [
      "non-zero. Ring601432_IsEmpty (0xF8483F) returns 0 only when the read "
      "cursor (0x60142A) equals the write cursor (0x60142E), so a non-zero "
      "result means the ring still holds data. Called by `calr` at 0xFB6069 "
-     "(in sub_FB6026) and 0xFB6076 (in sub_FB6072)",
+     "(in SysExDump_AwaitFrameAck) and 0xFB6076 (in SysExRx_AwaitReply)",
      "what the 65535-poll bound is for: the routine returns no value, so "
      "neither caller can tell a drained ring from an exhausted count"),
     ("sub_FC1D70", "Ring60000C_GetWithRetry",
@@ -1845,7 +1845,7 @@ RING_NAMES = [
      "re-initialises ring 0x601646 with the interrupt mask raised to 6",
      "0xFB7F0D `ei 0x06`, 0xFB7F0F `call 0xF41E48` = prom_b slot "
      "T_Ring601646_Init, 0xFB7F13 `ei 0x00`, 0xFB7F15 `ret`. Called by `call` "
-     "at 0xFB7769, inside sub_FB775F. ★ THE EXTENT HOLDS A SECOND ROUTINE "
+     "at 0xFB7769, inside SysExRx_CheckMidiErrors. ★ THE EXTENT HOLDS A SECOND ROUTINE "
      "THIS LABEL DOES NOT COVER: 0xFB7F16-0xFB7F1E is the same four "
      "instructions for T_Ring601432_Init (slot 0xF41E00) and carries no label "
      "because nothing in either image references it -- which is why it is "
