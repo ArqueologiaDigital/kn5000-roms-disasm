@@ -1145,7 +1145,6 @@
 	.set T_Dev7F_WriteSlot8_Slot3,                0x00F40010
 	.set T_Queue2C00_DrainPassAB,                 0x00F40018
 	.set T_F40024,                                0x00F40024
-	.set T_F40034,                                0x00F40034
 	.set T_Queue2C00_DrainPassB,                  0x00F40038
 	.set T_LCD_EntryThunks,                       0x00F400A0
 	.set T_SWI7_ServiceCall_Dispatch,             0x00F400A4
@@ -1887,7 +1886,6 @@
 	.set T_F42C2C,                                0x00F42C2C
 	.set T_PanelCode_ToSlotAndFlags,                                0x00F42C74
 	.set T_F42C78,                                0x00F42C78
-	.set T_F42C7C,                                0x00F42C7C
 	.set T_Queue2C00_Append4,                     0x00F42C80
 	.set T_Queue2E00_Append4,                     0x00F42C84
 	.set T_List2030_Append4,                      0x00F42C88
@@ -1936,7 +1934,6 @@
 	.set T_F42E64,                                0x00F42E64
 	.set T_F42E68,                                0x00F42E68
 	.set T_F42E6C,                                0x00F42E6C
-	.set T_CallbackQueue_ResetAndRestartTask2,    0x00F42E80
 	.set T_CallbackQueue_Post,                    0x00F42E84
 	.set T_F42E90,                                0x00F42E90
 	.set T_F42EC0,                                0x00F42EC0
@@ -2236,7 +2233,7 @@ wsa1_prom_a:
 sub_F80000:
 	m_cp_mi8 MB16, 0x0de5, 0x01                          ; F80000  c1 e5 0d 3f 01
 	jr z, .LF80019                                       ; F80005  66 12
-	calr 0xf23b                                          ; F80007  1e 3b f2
+	calr sub_F7F245                                          ; F80007  1e 3b f2
 	m_or_mi8 MB16, 0x2075, 0x01                          ; F8000A  c1 75 20 3e 01
 	call T_F42A68                                        ; F8000F  1d 68 2a f4
 	calr sub_F80086                                      ; F80013  1e 70 00
@@ -2261,7 +2258,7 @@ sub_F80000:
 ; ---------------------------------------------------------------------
 sub_F8001A:
 	ld (0x2540:16), 0x01                                 ; F8001A  f1 40 25 00 01
-	calr 0xe2b6                                          ; F8001F  1e b6 e2
+	calr sub_F7E39F_Nop                                          ; F8001F  1e b6 e2
 	ld XIY,DL_F39551                                     ; F80022  45 51 95 f3 00
 	ld XIX,Data_F39559                                   ; F80027  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F8002C  1d f0 17 f4
@@ -2272,7 +2269,7 @@ sub_F8001A:
 	jr z, .LF80058                                       ; F8003D  66 19
 	m_cp_mi8 MB16, 0x0de5, 0x02                          ; F8003F  c1 e5 0d 3f 02
 	jr z, .LF80058                                       ; F80044  66 12
-	calr 0xf1ee                                          ; F80046  1e ee f1
+	calr sub_F7F237                                          ; F80046  1e ee f1
 	m_or_mi8 MB16, 0x2075, 0x01                          ; F80049  c1 75 20 3e 01
 	call T_F42A6C                                        ; F8004E  1d 6c 2a f4
 	calr sub_F80086                                      ; F80052  1e 31 00
@@ -2283,14 +2280,14 @@ sub_F8001A:
 	jr z, .LF80079                                       ; F8005C  66 1b
 	m_cp_mi8 MB16, 0x0de5, 0x03                          ; F8005E  c1 e5 0d 3f 03
 	jr z, .LF80085                                       ; F80063  66 20
-	calr 0xf1cf                                          ; F80065  1e cf f1
+	calr sub_F7F237                                          ; F80065  1e cf f1
 	m_or_mi8 MB16, 0x2075, 0x01                          ; F80068  c1 75 20 3e 01
 	call T_F42A70                                        ; F8006D  1d 70 2a f4
 	calr sub_F80086                                      ; F80071  1e 12 00
 	calr sub_F8001A                                      ; F80074  1e a3 ff
 	jr .LF80085                                          ; F80077  68 0c
 .LF80079:
-	calr 0xf1c9                                          ; F80079  1e c9 f1
+	calr sub_F7F245                                          ; F80079  1e c9 f1
 	m_and_mi8 MB16, 0x2075, 0xf6                         ; F8007C  c1 75 20 3c f6
 	call T_F42A80                                        ; F80081  1d 80 2a f4
 .LF80085:
@@ -2313,7 +2310,7 @@ sub_F8001A:
 ; ---------------------------------------------------------------------
 sub_F80086:
 	ld (0x2540:16), 0x00                                 ; F80086  f1 40 25 00 00
-	calr 0xe24a                                          ; F8008B  1e 4a e2
+	calr sub_F7E39F_Nop                                          ; F8008B  1e 4a e2
 	ld XIY,DL_F3B379                                     ; F8008E  45 79 b3 f3 00
 	ld XIX,0x00f3b3a7                                    ; F80093  44 a7 b3 f3 00
 	call T_DisplayListB_Run                              ; F80098  1d f4 17 f4
@@ -2322,7 +2319,7 @@ sub_F80086:
 	jr z, .LF800BD                                       ; F800A0  66 1b
 	m_cp_mi8 MB16, 0x0de5, 0x04                          ; F800A2  c1 e5 0d 3f 04
 	jr z, .LF800BD                                       ; F800A7  66 14
-	calr 0xf18b                                          ; F800A9  1e 8b f1
+	calr sub_F7F237                                          ; F800A9  1e 8b f1
 	m_or_mi8 MB16, 0x2075, 0x01                          ; F800AC  c1 75 20 3e 01
 	call T_F42A74                                        ; F800B1  1d 74 2a f4
 	calr sub_F80086                                      ; F800B5  1e ce ff
@@ -2557,7 +2554,7 @@ BlinkArgPtrs_F8024D:
 ; ---------------------------------------------------------------------
 Paint_S0ngC0py:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F80261  1d 80 2e f4
-	call 0xf7e2d9                                        ; F80265  1d d9 e2 f7
+	call PromB_LCD_ScreenRedraw_Begin                                        ; F80265  1d d9 e2 f7
 	call T_F42A08                                        ; F80269  1d 08 2a f4
 	ld XIY,DL_S0ngC0pyFromToSongSongOk                   ; F8026D  45 80 bf f3 00
 	ld XIX,DL_FromToSongNoTrAllSongNoTrAll               ; F80272  44 f8 bf f3 00
@@ -2591,7 +2588,7 @@ Paint_S0ngC0py:
 	call sub_F802EC                                      ; F802DB  1d ec 02 f8
 	call sub_F80338                                      ; F802DF  1d 38 03 f8
 	call sub_F80384                                      ; F802E3  1d 84 03 f8
-	call 0xf7e2e7                                        ; F802E7  1d e7 e2 f7
+	call PromB_LCD_ScreenRedraw_End                                        ; F802E7  1d e7 e2 f7
 	ret                                                  ; F802EB  0e
 ; sub_F802EC -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -2786,12 +2783,12 @@ Paint_N0teChange:
 	jr z, .LF80478                                       ; F8046D  66 09
 	cp a, 0x05:i3                                          ; F8046F  c9 dd
 	jr z, .LF80478                                       ; F80471  66 05
-	calr 0xedcf                                          ; F80473  1e cf ed
+	calr sub_F7F245                                          ; F80473  1e cf ed
 	jr .LF8047B                                          ; F80476  68 03
 .LF80478:
-	calr 0xedbc                                          ; F80478  1e bc ed
+	calr sub_F7F237                                          ; F80478  1e bc ed
 .LF8047B:
-	calr 0xde5b                                          ; F8047B  1e 5b de
+	calr PromB_LCD_ScreenRedraw_Begin                                          ; F8047B  1e 5b de
 	ld (0x2540:16), 0x00                                 ; F8047E  f1 40 25 00 00
 	ld XIY,DL_N0teChangeTargetNoteTrack                  ; F80483  45 af ae f3 00
 	ld XIX,DL_F3AFAF                                     ; F80488  44 af af f3 00
@@ -2814,11 +2811,11 @@ Paint_N0teChange:
 	call T_DisplayList_Run                               ; F804CE  1d f0 17 f4
 .LF804D2:
 	ld (0x2540:16), 0x00                                 ; F804D2  f1 40 25 00 00
-	calr 0xddfe                                          ; F804D7  1e fe dd
+	calr sub_F7E39F_Nop                                          ; F804D7  1e fe dd
 	ld XIY,DL_F3AFE7                                     ; F804DA  45 e7 af f3 00
 	ld XIX,Data_F3B065                                   ; F804DF  44 65 b0 f3 00
 	call T_DisplayListB_Run                              ; F804E4  1d f4 17 f4
-	calr 0xddfc                                          ; F804E8  1e fc dd
+	calr PromB_LCD_ScreenRedraw_End                                          ; F804E8  1e fc dd
 	ret                                                  ; F804EB  0e
 sub_F804EC:
 	call T_F42A8C                                        ; F804EC  1d 8c 2a f4
@@ -2850,13 +2847,13 @@ ButtonTable_N0teChange_207EZero_Nop7:
 	jr z, .LF80534                                       ; F80522  66 10
 	m_cp_mi8 MB16, 0x0ded, 0x01                          ; F80524  c1 ed 0d 3f 01
 	jr z, .LF80548                                       ; F80529  66 1d
-	calr 0xed17                                          ; F8052B  1e 17 ed
+	calr sub_F7F245                                          ; F8052B  1e 17 ed
 	call T_F42A90                                        ; F8052E  1d 90 2a f4
 	jr .LF80542                                          ; F80532  68 0e
 .LF80534:
 	m_cp_mi8 MB16, 0x0ded, 0x04                          ; F80534  c1 ed 0d 3f 04
 	jr z, .LF80548                                       ; F80539  66 0d
-	calr 0xecf9                                          ; F8053B  1e f9 ec
+	calr sub_F7F237                                          ; F8053B  1e f9 ec
 	call T_F42A9C                                        ; F8053E  1d 9c 2a f4
 .LF80542:
 	calr sub_F805B8                                      ; F80542  1e 73 00
@@ -2881,7 +2878,7 @@ ButtonTable_N0teChange_207EZero_Nop7:
 ; ---------------------------------------------------------------------
 sub_F80549:
 	ld (0x2540:16), 0x01                                 ; F80549  f1 40 25 00 01
-	calr 0xdd87                                          ; F8054E  1e 87 dd
+	calr sub_F7E39F_Nop                                          ; F8054E  1e 87 dd
 	ld XIY,DL_F39551                                     ; F80551  45 51 95 f3 00
 	ld XIX,Data_F39559                                   ; F80556  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F8055B  1d f0 17 f4
@@ -2892,13 +2889,13 @@ sub_F80549:
 	jr z, .LF8057E                                       ; F8056C  66 10
 	m_cp_mi8 MB16, 0x0ded, 0x02                          ; F8056E  c1 ed 0d 3f 02
 	jr z, .LF80594                                       ; F80573  66 1f
-	calr 0xecbf                                          ; F80575  1e bf ec
+	calr sub_F7F237                                          ; F80575  1e bf ec
 	call T_F42A94                                        ; F80578  1d 94 2a f4
 	jr .LF8058C                                          ; F8057C  68 0e
 .LF8057E:
 	m_cp_mi8 MB16, 0x0ded, 0x05                          ; F8057E  c1 ed 0d 3f 05
 	jr z, .LF80594                                       ; F80583  66 0f
-	calr 0xecaf                                          ; F80585  1e af ec
+	calr sub_F7F237                                          ; F80585  1e af ec
 	call T_F42AA0                                        ; F80588  1d a0 2a f4
 .LF8058C:
 	calr sub_F805B8                                      ; F8058C  1e 29 00
@@ -2910,13 +2907,13 @@ sub_F80549:
 	jr z, .LF805B0                                       ; F80598  66 16
 	m_cp_mi8 MB16, 0x0ded, 0x03                          ; F8059A  c1 ed 0d 3f 03
 	jr z, .LF805B7                                       ; F8059F  66 16
-	calr 0xec93                                          ; F805A1  1e 93 ec
+	calr sub_F7F237                                          ; F805A1  1e 93 ec
 	call T_F42A98                                        ; F805A4  1d 98 2a f4
 	calr sub_F805B8                                      ; F805A8  1e 0d 00
 	calr sub_F80549                                      ; F805AB  1e 9b ff
 	jr .LF805B7                                          ; F805AE  68 07
 .LF805B0:
-	calr 0xec92                                          ; F805B0  1e 92 ec
+	calr sub_F7F245                                          ; F805B0  1e 92 ec
 	call T_F42AAC                                        ; F805B3  1d ac 2a f4
 .LF805B7:
 	ret                                                  ; F805B7  0e
@@ -2938,7 +2935,7 @@ sub_F80549:
 ; ---------------------------------------------------------------------
 sub_F805B8:
 	ld (0x2540:16), 0x00                                 ; F805B8  f1 40 25 00 00
-	calr 0xdd18                                          ; F805BD  1e 18 dd
+	calr sub_F7E39F_Nop                                          ; F805BD  1e 18 dd
 	ld XIY,DL_F3AFE7                                     ; F805C0  45 e7 af f3 00
 	ld XIX,0x00f3b05a                                    ; F805C5  44 5a b0 f3 00
 	call T_DisplayListB_Run                              ; F805CA  1d f4 17 f4
@@ -3144,7 +3141,7 @@ BlinkArgPtrs_F80754:
 ;          whether any other routine paints it.  Neither was searched.
 ; ---------------------------------------------------------------------
 Paint_MeasureC0py:
-	call 0xf42e80                                        ; F8076C  1d 80 2e f4
+	call T_CallbackQueue_ResetAndRestartTask2                                        ; F8076C  1d 80 2e f4
 	m_cp_mi8 MB16, 0x207e, 0x00                          ; F80770  c1 7e 20 3f 00
 	jr nz, .LF80792                                      ; F80775  6e 1b
 	call T_F429D8                                        ; F80777  1d d8 29 f4
@@ -3153,7 +3150,7 @@ Paint_MeasureC0py:
 	ldw (0x2666:16), 0xffff                              ; F80786  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F8078C  f1 6a 26 02 ff ff
 .LF80792:
-	calr 0xdb44                                          ; F80792  1e 44 db
+	calr PromB_LCD_ScreenRedraw_Begin                                          ; F80792  1e 44 db
 	ld (0x2540:16), 0x02                                 ; F80795  f1 40 25 00 02
 	ld XIY,DL_F3BCCB                                     ; F8079A  45 cb bc f3 00
 	ld XIX,DL_F3BD07                                     ; F8079F  44 07 bd f3 00
@@ -3181,7 +3178,7 @@ Paint_MeasureC0py:
 	ld XIY,DL_F3BD07                                     ; F807F6  45 07 bd f3 00
 	ld XIX,Data_F3BD58                                   ; F807FB  44 58 bd f3 00
 	call T_DisplayListB_Run                              ; F80800  1d f4 17 f4
-	calr 0xdae0                                          ; F80804  1e e0 da
+	calr PromB_LCD_ScreenRedraw_End                                          ; F80804  1e e0 da
 	ret                                                  ; F80807  0e
 Paint_MeasureC0py_Nop:
 	ret                                                  ; F80808  0e
@@ -3206,7 +3203,7 @@ sub_F80809:
 	call T_F429F8                                        ; F80831  1d f8 29 f4
 .LF80835:
 	ld (0x2540:16), 0x00                                 ; F80835  f1 40 25 00 00
-	calr 0xda9b                                          ; F8083A  1e 9b da
+	calr sub_F7E39F_Nop                                          ; F8083A  1e 9b da
 	ld XIY,DL_F3BD07                                     ; F8083D  45 07 bd f3 00
 	ld XIX,0x00f3bd4d                                    ; F80842  44 4d bd f3 00
 	call T_DisplayListB_Run                              ; F80847  1d f4 17 f4
@@ -3216,7 +3213,7 @@ sub_F80809:
 	ret                                                  ; F8084E  0e
 	bit 0x07,W                                           ; F8084F  c8 33 07
 	jr nz, .LF8085B                                      ; F80852  6e 07
-	calr 0xe9ee                                          ; F80854  1e ee e9
+	calr sub_F7F245                                          ; F80854  1e ee e9
 	call T_F42A04                                        ; F80857  1d 04 2a f4
 .LF8085B:
 	ret                                                  ; F8085B  0e
@@ -3224,13 +3221,13 @@ sub_F80809:
 	jr z, .LF80871                                       ; F8085F  66 10
 	m_cp_mi8 MB16, 0x0dbc, 0x01                          ; F80861  c1 bc 0d 3f 01
 	jr z, .LF80890                                       ; F80866  66 28
-	calr 0xe9da                                          ; F80868  1e da e9
+	calr sub_F7F245                                          ; F80868  1e da e9
 	call T_F429E0                                        ; F8086B  1d e0 29 f4
 	jr .LF8087F                                          ; F8086F  68 0e
 .LF80871:
 	m_cp_mi8 MB16, 0x0dbc, 0x04                          ; F80871  c1 bc 0d 3f 04
 	jr z, .LF80890                                       ; F80876  66 18
-	calr 0xe9ca                                          ; F80878  1e ca e9
+	calr sub_F7F245                                          ; F80878  1e ca e9
 	call T_F429EC                                        ; F8087B  1d ec 29 f4
 .LF8087F:
 	ld a, (0x0dbc:16)                                   ; F8087F  c1 bc 0d 21
@@ -3258,7 +3255,7 @@ sub_F80809:
 ; ---------------------------------------------------------------------
 sub_F80891:
 	ld (0x2540:16), 0x01                                 ; F80891  f1 40 25 00 01
-	calr 0xda3f                                          ; F80896  1e 3f da
+	calr sub_F7E39F_Nop                                          ; F80896  1e 3f da
 	ld XIY,DL_F39551                                     ; F80899  45 51 95 f3 00
 	ld XIX,Data_F39559                                   ; F8089E  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F808A3  1d f0 17 f4
@@ -3269,13 +3266,13 @@ sub_F80891:
 	jr nz, .LF808C6                                      ; F808B4  6e 10
 	m_cp_mi8 MB16, 0x0dbc, 0x05                          ; F808B6  c1 bc 0d 3f 05
 	jr z, .LF808E5                                       ; F808BB  66 28
-	calr 0xe977                                          ; F808BD  1e 77 e9
+	calr sub_F7F237                                          ; F808BD  1e 77 e9
 	call T_F429F0                                        ; F808C0  1d f0 29 f4
 	jr .LF808D4                                          ; F808C4  68 0e
 .LF808C6:
 	m_cp_mi8 MB16, 0x0dbc, 0x02                          ; F808C6  c1 bc 0d 3f 02
 	jr z, .LF808E5                                       ; F808CB  66 18
-	calr 0xe967                                          ; F808CD  1e 67 e9
+	calr sub_F7F237                                          ; F808CD  1e 67 e9
 	call T_F429E4                                        ; F808D0  1d e4 29 f4
 .LF808D4:
 	ld a, (0x0dbc:16)                                   ; F808D4  c1 bc 0d 21
@@ -3289,13 +3286,13 @@ sub_F80891:
 	jr z, .LF808FB                                       ; F808E9  66 10
 	m_cp_mi8 MB16, 0x0dbc, 0x03                          ; F808EB  c1 bc 0d 3f 03
 	jr z, .LF8091A                                       ; F808F0  66 28
-	calr 0xe942                                          ; F808F2  1e 42 e9
+	calr sub_F7F237                                          ; F808F2  1e 42 e9
 	call T_F429E8                                        ; F808F5  1d e8 29 f4
 	jr .LF80909                                          ; F808F9  68 0e
 .LF808FB:
 	m_cp_mi8 MB16, 0x0dbc, 0x06                          ; F808FB  c1 bc 0d 3f 06
 	jr z, .LF8091A                                       ; F80900  66 18
-	calr 0xe940                                          ; F80902  1e 40 e9
+	calr sub_F7F245                                          ; F80902  1e 40 e9
 	call T_F429F4                                        ; F80905  1d f4 29 f4
 .LF80909:
 	ld a, (0x0dbc:16)                                   ; F80909  c1 bc 0d 21
@@ -3330,7 +3327,7 @@ sub_F80891:
 	call T_F429F8                                        ; F8094C  1d f8 29 f4
 .LF80950:
 	ld (0x2540:16), 0x00                                 ; F80950  f1 40 25 00 00
-	calr 0xd980                                          ; F80955  1e 80 d9
+	calr sub_F7E39F_Nop                                          ; F80955  1e 80 d9
 	ld XIY,DL_F3BD07                                     ; F80958  45 07 bd f3 00
 	ld XIX,0x00f3bd4d                                    ; F8095D  44 4d bd f3 00
 	call T_DisplayListB_Run                              ; F80962  1d f4 17 f4
@@ -3540,7 +3537,7 @@ Paint_MeasureInsert:
 	ldw (0x2666:16), 0xffff                              ; F80AE3  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F80AE9  f1 6a 26 02 ff ff
 .LF80AEF:
-	calr 0xd7e7                                          ; F80AEF  1e e7 d7
+	calr PromB_LCD_ScreenRedraw_Begin                                          ; F80AEF  1e e7 d7
 	ld (0x2540:16), 0x02                                 ; F80AF2  f1 40 25 00 02
 	ld XIY,DL_F3BCCB                                     ; F80AF7  45 cb bc f3 00
 	ld XIX,DL_F3BD07                                     ; F80AFC  44 07 bd f3 00
@@ -3568,7 +3565,7 @@ Paint_MeasureInsert:
 	ld XIY,DL_F3BEF7                                     ; F80B53  45 f7 be f3 00
 	ld XIX,Data_F3BF48                                   ; F80B58  44 48 bf f3 00
 	call T_DisplayListB_Run                              ; F80B5D  1d f4 17 f4
-	calr 0xd783                                          ; F80B61  1e 83 d7
+	calr PromB_LCD_ScreenRedraw_End                                          ; F80B61  1e 83 d7
 	ret                                                  ; F80B64  0e
 Paint_MeasureInsert_Nop:
 	ret                                                  ; F80B65  0e
@@ -3593,7 +3590,7 @@ sub_F80B66:
 	call T_F429C8                                        ; F80B8E  1d c8 29 f4
 .LF80B92:
 	ld (0x2540:16), 0x00                                 ; F80B92  f1 40 25 00 00
-	calr 0xd73e                                          ; F80B97  1e 3e d7
+	calr sub_F7E39F_Nop                                          ; F80B97  1e 3e d7
 	ld XIY,DL_F3BEF7                                     ; F80B9A  45 f7 be f3 00
 	ld XIX,0x00f3bf3d                                    ; F80B9F  44 3d bf f3 00
 	call T_DisplayListB_Run                              ; F80BA4  1d f4 17 f4
@@ -3603,7 +3600,7 @@ sub_F80B66:
 	ret                                                  ; F80BAB  0e
 	bit 0x07,W                                           ; F80BAC  c8 33 07
 	jr nz, .LF80BB8                                      ; F80BAF  6e 07
-	calr 0xe691                                          ; F80BB1  1e 91 e6
+	calr sub_F7F245                                          ; F80BB1  1e 91 e6
 	call T_F429D4                                        ; F80BB4  1d d4 29 f4
 .LF80BB8:
 	ret                                                  ; F80BB8  0e
@@ -3611,13 +3608,13 @@ sub_F80B66:
 	jr z, .LF80BCE                                       ; F80BBC  66 10
 	m_cp_mi8 MB16, 0x0dda, 0x01                          ; F80BBE  c1 da 0d 3f 01
 	jr z, .LF80BED                                       ; F80BC3  66 28
-	calr 0xe67d                                          ; F80BC5  1e 7d e6
+	calr sub_F7F245                                          ; F80BC5  1e 7d e6
 	call T_F429B0                                        ; F80BC8  1d b0 29 f4
 	jr .LF80BDC                                          ; F80BCC  68 0e
 .LF80BCE:
 	m_cp_mi8 MB16, 0x0dda, 0x04                          ; F80BCE  c1 da 0d 3f 04
 	jr z, .LF80BED                                       ; F80BD3  66 18
-	calr 0xe66d                                          ; F80BD5  1e 6d e6
+	calr sub_F7F245                                          ; F80BD5  1e 6d e6
 	call T_F429BC                                        ; F80BD8  1d bc 29 f4
 .LF80BDC:
 	ld a, (0x0dda:16)                                   ; F80BDC  c1 da 0d 21
@@ -3645,7 +3642,7 @@ sub_F80B66:
 ; ---------------------------------------------------------------------
 sub_F80BEE:
 	ld (0x2540:16), 0x01                                 ; F80BEE  f1 40 25 00 01
-	calr 0xd6e2                                          ; F80BF3  1e e2 d6
+	calr sub_F7E39F_Nop                                          ; F80BF3  1e e2 d6
 	ld XIY,DL_F39551                                     ; F80BF6  45 51 95 f3 00
 	ld XIX,Data_F39559                                   ; F80BFB  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F80C00  1d f0 17 f4
@@ -3657,13 +3654,13 @@ sub_F80C04:
 	jr nz, .LF80C23                                      ; F80C11  6e 10
 	m_cp_mi8 MB16, 0x0dda, 0x05                          ; F80C13  c1 da 0d 3f 05
 	jr z, .LF80C42                                       ; F80C18  66 28
-	calr 0xe61a                                          ; F80C1A  1e 1a e6
+	calr sub_F7F237                                          ; F80C1A  1e 1a e6
 	call T_F429C0                                        ; F80C1D  1d c0 29 f4
 	jr .LF80C31                                          ; F80C21  68 0e
 .LF80C23:
 	m_cp_mi8 MB16, 0x0dda, 0x02                          ; F80C23  c1 da 0d 3f 02
 	jr z, .LF80C42                                       ; F80C28  66 18
-	calr 0xe60a                                          ; F80C2A  1e 0a e6
+	calr sub_F7F237                                          ; F80C2A  1e 0a e6
 	call T_F429B4                                        ; F80C2D  1d b4 29 f4
 .LF80C31:
 	ld a, (0x0dda:16)                                   ; F80C31  c1 da 0d 21
@@ -3677,13 +3674,13 @@ sub_F80C04:
 	jr z, .LF80C58                                       ; F80C46  66 10
 	m_cp_mi8 MB16, 0x0dda, 0x03                          ; F80C48  c1 da 0d 3f 03
 	jr z, .LF80C77                                       ; F80C4D  66 28
-	calr 0xe5e5                                          ; F80C4F  1e e5 e5
+	calr sub_F7F237                                          ; F80C4F  1e e5 e5
 	call T_F429B8                                        ; F80C52  1d b8 29 f4
 	jr .LF80C66                                          ; F80C56  68 0e
 .LF80C58:
 	m_cp_mi8 MB16, 0x0dda, 0x06                          ; F80C58  c1 da 0d 3f 06
 	jr z, .LF80C77                                       ; F80C5D  66 18
-	calr 0xe5e3                                          ; F80C5F  1e e3 e5
+	calr sub_F7F245                                          ; F80C5F  1e e3 e5
 	call T_F429C4                                        ; F80C62  1d c4 29 f4
 .LF80C66:
 	ld a, (0x0dda:16)                                   ; F80C66  c1 da 0d 21
@@ -3718,7 +3715,7 @@ sub_F80C04:
 	call T_F429C8                                        ; F80CA9  1d c8 29 f4
 .LF80CAD:
 	ld (0x2540:16), 0x00                                 ; F80CAD  f1 40 25 00 00
-	calr 0xd623                                          ; F80CB2  1e 23 d6
+	calr sub_F7E39F_Nop                                          ; F80CB2  1e 23 d6
 	ld XIY,DL_F3BEF7                                     ; F80CB5  45 f7 be f3 00
 	ld XIX,0x00f3bf3d                                    ; F80CBA  44 3d bf f3 00
 	call T_DisplayListB_Run                              ; F80CBF  1d f4 17 f4
@@ -3775,7 +3772,7 @@ sub_F80C04_Return:
 ; ---------------------------------------------------------------------
 sub_F80CFB:
 	ld (0x2540:16), 0x00                                 ; F80CFB  f1 40 25 00 00
-	calr 0xd5d5                                          ; F80D00  1e d5 d5
+	calr sub_F7E39F_Nop                                          ; F80D00  1e d5 d5
 	ld XIY,DL_F3BEF7                                     ; F80D03  45 f7 be f3 00
 	ld XIX,0x00f3bf3d                                    ; F80D08  44 3d bf f3 00
 	call T_DisplayListB_Run                              ; F80D0D  1d f4 17 f4
@@ -3928,7 +3925,7 @@ Paint_S0ngSelectName:
 	ldw (0x266a:16), 0xffff                              ; F80E47  f1 6a 26 02 ff ff
 	m_bit 4, MD16, 0x2095                                ; F80E4D  f1 95 20 cc
 	jr nz, .LF80E69                                      ; F80E51  6e 16
-	calr 0xd483                                          ; F80E53  1e 83 d4
+	calr PromB_LCD_ScreenRedraw_Begin                                          ; F80E53  1e 83 d4
 	ld (0x2540:16), 0x00                                 ; F80E56  f1 40 25 00 00
 	ld XIY,DL_S0ngSelectNameKbS0ngName                   ; F80E5B  45 ad c1 f3 00
 	ld XIX,DL_F3C31E                                     ; F80E60  44 1e c3 f3 00
@@ -3944,7 +3941,7 @@ Paint_S0ngSelectName:
 	ld XIY,0x00f3c35c                                    ; F80E88  45 5c c3 f3 00
 	ld XIX,DL_F3C367                                     ; F80E8D  44 67 c3 f3 00
 	call T_DLB_Handler_Array8                                        ; F80E92  1d 1c 18 f4
-	call 0xf7e2e7                                        ; F80E96  1d e7 e2 f7
+	call PromB_LCD_ScreenRedraw_End                                        ; F80E96  1d e7 e2 f7
 	ret                                                  ; F80E9A  0e
 ; sub_F80E9B -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -4067,7 +4064,7 @@ Paint_StepRecordPartSelect:
 	m_bit 4, MD16, 0x2095                                ; F80F5E  f1 95 20 cc
 	jr nz, .LF80F8F                                      ; F80F62  6e 2b
 	call T_F42BC4                                        ; F80F64  1d c4 2b f4
-	calr 0xd36e                                          ; F80F68  1e 6e d3
+	calr PromB_LCD_ScreenRedraw_Begin                                          ; F80F68  1e 6e d3
 	ld XIY,DL_StepRecordPartSelectPressTheUpDownButton   ; F80F6B  45 a7 c8 f3 00
 	ld XIX,DL_F3C947                                     ; F80F70  44 47 c9 f3 00
 	call T_DisplayList_Run                               ; F80F75  1d f0 17 f4
@@ -4075,10 +4072,10 @@ Paint_StepRecordPartSelect:
 	ld XIX,DL_F394E3                                     ; F80F7E  44 e3 94 f3 00
 	call T_DisplayList_Run                               ; F80F83  1d f0 17 f4
 	ld (0x2540:16), 0x02                                 ; F80F87  f1 40 25 00 02
-	calr 0xd3c5                                          ; F80F8C  1e c5 d3
+	calr sub_F7E354                                          ; F80F8C  1e c5 d3
 .LF80F8F:
 	ld (0x2540:16), 0x01                                 ; F80F8F  f1 40 25 00 01
-	calr 0xd341                                          ; F80F94  1e 41 d3
+	calr sub_F7E39F_Nop                                          ; F80F94  1e 41 d3
 	ld XIY,DL_F3A0D1                                     ; F80F97  45 d1 a0 f3 00
 	ld XIX,Data_F3A0D9                                   ; F80F9C  44 d9 a0 f3 00
 	call T_DisplayList_Run                               ; F80FA1  1d f0 17 f4
@@ -4090,7 +4087,7 @@ Paint_StepRecordPartSelect:
 	ld XIY,Data_F3A0D9                                   ; F80FB3  45 d9 a0 f3 00
 	call T_DLB_Handler_Array8                                        ; F80FB8  1d 1c 18 f4
 .LF80FBC:
-	calr 0xd328                                          ; F80FBC  1e 28 d3
+	calr PromB_LCD_ScreenRedraw_End                                          ; F80FBC  1e 28 d3
 	ret                                                  ; F80FBF  0e
 sub_F80FC0:
 	call T_F42BC8                                        ; F80FC0  1d c8 2b f4
@@ -4132,9 +4129,9 @@ sub_F8101E:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F8101E  1d 80 2e f4
 	ldw (0x2666:16), 0xffff                              ; F81022  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F81028  f1 6a 26 02 ff ff
-	calr 0xd2a8                                          ; F8102E  1e a8 d2
+	calr PromB_LCD_ScreenRedraw_Begin                                          ; F8102E  1e a8 d2
 	call T_F42EC0                                        ; F81031  1d c0 2e f4
-	calr 0xd2af                                          ; F81035  1e af d2
+	calr PromB_LCD_ScreenRedraw_End                                          ; F81035  1e af d2
 	ret                                                  ; F81038  0e
 sub_F81039:
 	call T_F42EC4                                        ; F81039  1d c4 2e f4
@@ -4175,7 +4172,7 @@ Paint_SequencerMedley:
 	call T_F42C18                                        ; F81057  1d 18 2c f4
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F8105B  c1 c1 0d 3f 01
 	jr z, .LF81065                                       ; F81060  66 03
-	calr 0xe1d2                                          ; F81062  1e d2 e1
+	calr sub_F7F237                                          ; F81062  1e d2 e1
 .LF81065:
 	m_or_mi8 MB16, 0x2094, 0x40                          ; F81065  c1 94 20 3e 40
 	m_and_mi8 MB16, 0x0dc1, 0xfe                         ; F8106A  c1 c1 0d 3c fe
@@ -4190,7 +4187,7 @@ Paint_SequencerMedley:
 	m_cp_mi8 MB16, 0x2880, 0x04                          ; F81084  c1 80 28 3f 04
 	jr ugt, .LF8108B                                     ; F81089  6b 00
 .LF8108B:
-	calr 0xd24b                                          ; F8108B  1e 4b d2
+	calr PromB_LCD_ScreenRedraw_Begin                                          ; F8108B  1e 4b d2
 	ld XIY,DL_SequencerMedleyStartFirstS0ng              ; F8108E  45 62 c5 f3 00
 	ld XIX,DL_F3C6B3                                     ; F81093  44 b3 c6 f3 00
 	call T_DisplayList_Run                               ; F81098  1d f0 17 f4
@@ -4215,7 +4212,7 @@ Paint_SequencerMedley:
 	ld XIX,DL_F3C7AD                                     ; F810DF  44 ad c7 f3 00
 	call T_DisplayListB_Run                              ; F810E4  1d f4 17 f4
 	call sub_F81350                                      ; F810E8  1d 50 13 f8
-	calr 0xd1f8                                          ; F810EC  1e f8 d1
+	calr PromB_LCD_ScreenRedraw_End                                          ; F810EC  1e f8 d1
 	ret                                                  ; F810EF  0e
 sub_F810F0:
 	m_cp_mi8 MB16, 0x207a, 0x13                          ; F810F0  c1 7a 20 3f 13
@@ -4284,7 +4281,7 @@ sub_F810F0:
 	jr nz, .LF811C8                                      ; F811A1  6e 25
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F811A3  c1 c1 0d 3f 01
 	jr z, .LF811E1                                       ; F811A8  66 37
-	calr 0xe098                                          ; F811AA  1e 98 e0
+	calr sub_F7F245                                          ; F811AA  1e 98 e0
 	call T_F42BD4                                        ; F811AD  1d d4 2b f4
 	m_cp_mi8 MB16, 0x207c, 0x13                          ; F811B1  c1 7c 20 3f 13
 	jr nz, .LF811E1                                      ; F811B6  6e 29
@@ -4298,7 +4295,7 @@ sub_F810F0:
 	jr z, .LF811E1                                       ; F811CD  66 12
 	m_cp_mi8 MB16, 0x0c0f, 0x01                          ; F811CF  c1 0f 0c 3f 01
 	jr z, .LF811E1                                       ; F811D4  66 0b
-	calr 0xe05e                                          ; F811D6  1e 5e e0
+	calr sub_F7F237                                          ; F811D6  1e 5e e0
 	call T_F42B7C                                        ; F811D9  1d 7c 2b f4
 	call sub_F813E7                                      ; F811DD  1d e7 13 f8
 .LF811E1:
@@ -4309,7 +4306,7 @@ sub_F810F0:
 	jr nz, .LF811FE                                      ; F811EC  6e 10
 	bit_dd8 0x02, 0x95                                   ; F811EE  f0 95 ca
 	jr z, .LF811FE                                       ; F811F1  66 0b
-	calr 0xe041                                          ; F811F3  1e 41 e0
+	calr sub_F7F237                                          ; F811F3  1e 41 e0
 	call T_F42BD8                                        ; F811F6  1d d8 2b f4
 	call sub_F81350                                      ; F811FA  1d 50 13 f8
 .LF811FE:
@@ -4323,7 +4320,7 @@ sub_F810F0:
 	jr z, .LF81223                                       ; F8120F  66 12
 	m_cp_mi8 MB16, 0x0c0f, 0x02                          ; F81211  c1 0f 0c 3f 02
 	jr z, .LF81223                                       ; F81216  66 0b
-	calr 0xe01c                                          ; F81218  1e 1c e0
+	calr sub_F7F237                                          ; F81218  1e 1c e0
 	call T_F42B80                                        ; F8121B  1d 80 2b f4
 	call sub_F813E7                                      ; F8121F  1d e7 13 f8
 .LF81223:
@@ -5327,15 +5324,15 @@ sub_F81AB5:
 	jrl nz, .LF81BCF                                     ; F81AD7  7e f5 00
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81ADA  c0 c6 3e 01
 	ld (0x2540:16), 0x00                                 ; F81ADE  f1 40 25 00 00
-	calr 0xc807                                          ; F81AE3  1e 07 c8
+	calr sub_F7E2ED                                          ; F81AE3  1e 07 c8
 	ld l, (0x0ef5:16)                                   ; F81AE6  c1 f5 0e 27
 	xor H,H                                              ; F81AEA  ce d6
 	cp L,0x12                                            ; F81AEC  cf cf 12
 	jr nz, .LF81B28                                      ; F81AEF  6e 37
 	ld (0x2540:16), 0x01                                 ; F81AF1  f1 40 25 00 01
-	calr 0xc7f4                                          ; F81AF6  1e f4 c7
+	calr sub_F7E2ED                                          ; F81AF6  1e f4 c7
 	ld (0x2540:16), 0x02                                 ; F81AF9  f1 40 25 00 02
-	calr 0xc7ec                                          ; F81AFE  1e ec c7
+	calr sub_F7E2ED                                          ; F81AFE  1e ec c7
 	ld (0x2540:16), 0x00                                 ; F81B01  f1 40 25 00 00
 	ld XIY,DL_F3CFC6                                     ; F81B06  45 c6 cf f3 00
 	ld XIX,DL_StepRecordTrackTrackClrMeas                ; F81B0B  44 16 d0 f3 00
@@ -5427,7 +5424,7 @@ sub_F81AB5:
 Paint_StepRecordTrackClrMeas:
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81BD4  c0 c6 3e 01
 	ld (0x2540:16), 0x00                                 ; F81BD8  f1 40 25 00 00
-	calr 0xc70d                                          ; F81BDD  1e 0d c7
+	calr sub_F7E2ED                                          ; F81BDD  1e 0d c7
 	ld XIY,DL_StepRecordTrackTrackClrMeas                ; F81BE0  45 16 d0 f3 00
 	ld XIX,StepSelectAddrTable_F3D089                    ; F81BE5  44 89 d0 f3 00
 	call T_DisplayList_Run                               ; F81BEA  1d f0 17 f4
@@ -5483,7 +5480,7 @@ Paint_StepRecordTrackClrMeas:
 	jrl nz, .LF81D3C                                     ; F81C95  7e a4 00
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81C98  c0 c6 3e 01
 	ld (0x2540:16), 0x02                                 ; F81C9C  f1 40 25 00 02
-	calr 0xc649                                          ; F81CA1  1e 49 c6
+	calr sub_F7E2ED                                          ; F81CA1  1e 49 c6
 	calr sub_F81EF3                                      ; F81CA4  1e 4c 02
 	m_cp_mi16 MW16, 0x0f5e, 0x0000                       ; F81CA7  d1 5e 0f 3f 00 00
 	jr z, .LF81CD8                                       ; F81CAD  66 29
@@ -57627,7 +57624,7 @@ JumpTable_FA09BD__FA09D5:
 	push XBC                                             ; FA09DA  39
 	lda xwa, (0x26a7:16)                                ; FA09DB  f1 a7 26 30
 	push XWA                                             ; FA09DF  38
-	call 0xf42c7c                                        ; FA09E0  1d 7c 2c f4
+	call T_F42C7C                                        ; FA09E0  1d 7c 2c f4
 	inc 8,XSP                                            ; FA09E4  ef 60
 	cp a, 0x01:i3                                          ; FA09E6  c9 d9
 	jrl nz, .LFA0A87                                     ; FA09E8  7e 9c 00
@@ -58783,7 +58780,7 @@ JumpTable_FA146F:
 	.long sub_FA14BC                                 ; FA1483  [  5]
 	.long sub_FA14C2                                 ; FA1487  [  6]
 sub_FA148B:   ; entry: jump-table target (JumpTable_FA146F[0])
-	call 0xf40034                                        ; FA148B  1d 34 00 f4
+	call T_F40034                                        ; FA148B  1d 34 00 f4
 	call T_F40A00                                        ; FA148F  1d 00 0a f4
 	call T_F43450                                        ; FA1493  1d 50 34 f4
 	jr .LFA14A7                                       ; FA1497  68 0e

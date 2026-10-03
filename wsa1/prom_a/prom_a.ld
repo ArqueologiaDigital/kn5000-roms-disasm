@@ -57,3 +57,18 @@ SECTIONS {
   .text 0xF80000 : { *(.text*) } > ROM
   /DISCARD/ : { *(.comment) *(.note*) *(.eh_frame*) }
 }
+
+/* Cross-ROM: prom_b routines prom_a reaches by number, several PC-relatively (calr / jr).
+ * A `.set` constant would be folded into the 16-bit displacement and rejected; a symbol
+ * defined here is relocated by ld.lld instead (scripts/tools/link_prom_a_to_prom_b.py,
+ * 2026-10-03).  Cross-ref: wsa1/prom_b/wsa1_prom_b.s. */
+T_F40034 = 0xF40034;
+T_F42C7C = 0xF42C7C;
+T_CallbackQueue_ResetAndRestartTask2 = 0xF42E80;
+sub_F7E39F_Nop = 0xF7E2D8;
+PromB_LCD_ScreenRedraw_Begin = 0xF7E2D9;
+PromB_LCD_ScreenRedraw_End = 0xF7E2E7;
+sub_F7E2ED = 0xF7E2ED;
+sub_F7E354 = 0xF7E354;
+sub_F7F237 = 0xF7F237;
+sub_F7F245 = 0xF7F245;
