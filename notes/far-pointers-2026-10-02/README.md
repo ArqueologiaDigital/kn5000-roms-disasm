@@ -119,3 +119,9 @@ StyleUI / SepaOut binaries -- now `<Reader>_Str_Fmt1d` ...; four are MidiSysEx_*
   `<Reader>_Code` label for a push-pair row.  The first dry run would have put three such labels
   on code (SeMenu_ApplyPartEdit_AltStore_Code, NoteEditBox_EventDispatch2_Code_2,
   AcFileSfx_DrawLoop_Code); they were reverted before anything was committed.
+
+**prom_a's numfar residue (23 on 2026-10-03) is not pointers.**  `round3/FAR_prom_a.json`: every row
+is a pair `pushw 0xff / pushw n` (n = 1, 3, 4, 0x0b) before a call such as `calr sub_FA0264` -- two
+word arguments whose concatenation 0xFF000n lands MID-INSTRUCTION in the code at 0xFF0000
+(Dev7E_IdentifyDevice_Code+1/+2/+6, sub_FC5D87_Code+1).  Nothing is labelled; the dashboard's
+numfar column, which reads text only, cannot tell and still counts them.

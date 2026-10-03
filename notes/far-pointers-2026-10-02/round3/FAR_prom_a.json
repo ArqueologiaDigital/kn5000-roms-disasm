@@ -1,0 +1,140 @@
+[
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 56736,
+  "value": "0xff0004",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x2"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 56764,
+  "value": "0xff000b",
+  "result": "inside Dev7E_IdentifyDevice_Code_2+0x6"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 97338,
+  "value": "0xff0004",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x2"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 97432,
+  "value": "0xff0004",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x2"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 113869,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 113895,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 113930,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 113948,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 114128,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 162597,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 162783,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 162952,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 162960,
+  "value": "0xff0003",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 162964,
+  "value": "0xff0004",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x2"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163094,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163102,
+  "value": "0xff0003",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163106,
+  "value": "0xff0004",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x2"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163383,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163391,
+  "value": "0xff0003",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163395,
+  "value": "0xff0004",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x2"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163422,
+  "value": "0xff0001",
+  "result": "inside sub_FC5D87_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163430,
+  "value": "0xff0003",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x1"
+ },
+ {
+  "file": "wsa1/prom_a/wsa1_prom_a.s",
+  "line": 163434,
+  "value": "0xff0004",
+  "result": "inside Dev7E_IdentifyDevice_Code+0x2"
+ }
+]
