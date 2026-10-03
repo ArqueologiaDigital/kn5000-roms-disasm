@@ -22,11 +22,15 @@ QUESTION THIS ANSWERS / JOB IT DOES
   --bytes: the same, for `.byte` lines that hold one instruction (CLAUDE.md "Native
   Instructions Over .byte"): a `.byte` line of numbers whose comment starts with a mnemonic,
   with CODE on both sides (the nearest non-blank, non-label lines before and after are
-  instructions), whose bytes unidasm reads as exactly one instruction of that mnemonic.  A
+  instructions; a run of such `.byte` lines is one unit), whose bytes unidasm reads as exactly one
+  instruction of that mnemonic.  A
   comment that only repeated the mnemonic is dropped; any other comment is kept.
+  WSA1's `; ADDR  bytes  reading` comment (BYTES_WSA1) is accepted too, when its bytes are the
+  line's; the instruction keeps `; ADDR  bytes`, which the WSA1 tools read.
 
 USAGE
   python3 scripts/converters/respell_raw_pseudos.py --tree v10/maincpu [--bytes] [--apply] [--report OUT]
+  python3 scripts/converters/respell_raw_pseudos.py --tree wsa1/prom_a --bytes [--apply]
 """
 import argparse
 import collections
@@ -47,6 +51,15 @@ REGS = set("a w b c d e h l wa bc de hl ix iy iz sp xwa xbc xde xhl xix xiy xiz 
 BYTES = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)\.byte(?P<ws>\s+)'
                    r'(?P<ops>(?:0x[0-9a-fA-F]{1,2}|\d{1,3})(?:\s*,\s*(?:0x[0-9a-fA-F]{1,2}|\d{1,3}))*)'
                    r'(?P<post>\s*;\s*(?:MAME:|unidasm:)?\s*(?P<cm>[a-z]+)\b.*)$', re.I)
+
+# WSA1 (wsa1/prom_a): `.byte 0xd2, 0x3f, ...   ; FE9652  d2 3f 1f 60 3a 01 00   sub (0x601f3f),0x0001`
+# -- address, the bytes, then unidasm's reading.  The `; ADDR  bytes` part is what every WSA1 line
+# carries and the WSA1 tools read; it is kept, the reading is dropped once the instruction is native.
+BYTES_WSA1 = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)\.byte(?P<ws>\s+)'
+                        r'(?P<ops>(?:0x[0-9a-fA-F]{1,2}|\d{1,3})(?:\s*,\s*(?:0x[0-9a-fA-F]{1,2}|\d{1,3}))*)'
+                        r'(?P<post>\s*;\s*(?P<addr>[0-9A-F]{6})\s+(?P<hex>[0-9a-f]{2}(?: [0-9a-f]{2})*)'
+                        r'\s{2,}(?P<cm>[a-z]+)\b.*)$')
+WSA1_COMMENT_COL = 53       # the column prom_a's native lines put `; ADDR  bytes` at
 
 
 def line_kind(l):
@@ -156,6 +169,16 @@ def candidates(text):
                 for w in (8, 16, 24):
                     res.append(o.replace(m3.group(0), "(%s:%d)" % (m3.group(1), w)))
             res.append(o)
+            # every `(0xNNNN)` width-tagged, not only the first: the memory-to-memory
+            # `ld (0x2250),(0x276d)` has two (wsa1 prom_a, 2026-10-03).  Appended.
+            occ = re.findall(r'\((0x[0-9a-f]+)\)', o)
+            if len(occ) > 1:
+                import itertools
+                for ws in itertools.product((16, 24, 8), repeat=len(occ)):
+                    t = o
+                    for v, w in zip(occ, ws):
+                        t = t.replace("(%s)" % v, "(%s:%d)" % (v, w), 1)
+                    res.append(t)
         return res
 
     spaced = re.sub(r',\s*', ', ', ops)
@@ -166,6 +189,12 @@ def candidates(text):
             nm = (base if mn != base else mn) + sfx
             if nm not in names:
                 names.append(nm)
+        # `sub` / `sbc`-style mnemonics end in a size letter that is not a suffix: rstrip("wbl") above
+        # made `sub` into `su` and never tried `subw` (wsa1 prom_a, 2026-10-03).  Appended, so the
+        # first match of every earlier run is unchanged.
+        for sfx in ("b", "w", "l"):
+            if mn + sfx not in names:
+                names.append(mn + sfx)
         for nm in names:
             forms.append("%s\t%s" % (nm, o) if o else nm)
     return forms
@@ -260,14 +289,22 @@ def bytes_mode(a):
         L = open(f, "rb").read().decode("latin-1").split("\n")
         texts[f] = L
         for i, l in enumerate(L):
-            m = BYTES.match(l)
+            m = BYTES.match(l) or BYTES_WSA1.match(l)
             if not m:
                 continue
+            if m.groupdict().get("addr") and \
+                    bytes(int(x, 0) for x in re.split(r'\s*,\s*', m.group("ops"))) != \
+                    bytes.fromhex(m.group("hex")):
+                continue            # the comment's bytes are not the line's: leave it for a human
+            # the nearest lines before and after that are neither blank/label nor another decoded
+            # `.byte` line: a RUN of decoded `.byte` lines (`and (0x2088),XWA` then `and (0x208c),XWA`)
+            # is one unit, and it is the run that must have code on both sides (2026-10-03)
+            dec = lambda x: bool(BYTES.match(x) or BYTES_WSA1.match(x))
             j = i - 1
-            while j >= 0 and line_kind(L[j]) == "none":
+            while j >= 0 and (line_kind(L[j]) == "none" or dec(L[j])):
                 j -= 1
             k = i + 1
-            while k < len(L) and line_kind(L[k]) == "none":
+            while k < len(L) and (line_kind(L[k]) == "none" or dec(L[k])):
                 k += 1
             if j >= 0 and k < len(L) and line_kind(L[j]) == "code" and line_kind(L[k]) == "code":
                 b = bytes(int(x, 0) for x in re.split(r'\s*,\s*', m.group("ops")))
@@ -297,8 +334,13 @@ def bytes_mode(a):
             stats["left"] += 1
             report[(cm, r)] += 1
             continue
-        tail = comment_tail(m.group("post"), m.group("cm"), best[b])
-        texts[f][i] = m.group("pre") + best[b] + tail
+        if m.groupdict().get("addr"):
+            head = m.group("pre") + best[b]
+            pad = max(1, WSA1_COMMENT_COL - len(head.expandtabs(8)))
+            texts[f][i] = head + " " * pad + "; %s  %s" % (m.group("addr"), m.group("hex"))
+        else:
+            tail = comment_tail(m.group("post"), m.group("cm"), best[b])
+            texts[f][i] = m.group("pre") + best[b] + tail
         changed[f] += 1
         stats["respelled"] += 1
     if a.apply:

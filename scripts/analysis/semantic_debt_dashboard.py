@@ -48,8 +48,9 @@ COLUMNS (each is a count of source lines or tokens; lower is better)
            only where it is (scripts/converters/split_blobs_at_far_pointers.py retires those
            that land on a string, a table or a label).
   bytecmt  `.byte` lines whose comment carries an instruction reading (`; ld a, (xwa)`,
-           `; MAME: ...`) -- code still held as bytes. An upper bound: some are data annotated
-           with a decode on purpose.
+           `; MAME: ...`, WSA1's `; F80F3E  d1 34 21 3e 02 00   or (0x2134),0x0002`) -- code still
+           held as bytes. An upper bound: some are data annotated with a decode on purpose.
+           (The WSA1 form was not counted before 2026-10-03.)
   field    `field_XXXX` / `unk_XXXX` / `pad_XXXX` member names in C sources (*.c, *.h):
            structures that compile byte-exact but whose members have no meaning yet.
   todo     comment markers that admit a gap: TODO, FIXME, "unknown", "purpose unknown", "???".
@@ -76,7 +77,7 @@ TREES = {
 
 NUMBR = re.compile(rb'^\s*(\S+:)?\s*(jr|jrl|calr|call|jp|djnz)\s+([a-z]+,\s*)?(-?[0-9]+|0x[0-9a-fA-F]+)\s*(;.*)?$', re.M)
 ADDRLBL = re.compile(rb'^(?:LABEL|Label|label|sub|SUB|loc|LOC|Unknown|UNKNOWN|Unk|UNK|unk|Data|DATA|data|byte|word|off|Sub|Loc)_(?:0x)?[0-9A-Fa-f]{4,8}:', re.M)
-BYTECMT = re.compile(rb'^\s*(\S+:)?\s*\.byte\b[^;\n]*;\s*(?:MAME:|unidasm:|=\s*)?\s*(ld|lda|ldw|ldb|push|pop|call|calr|jp|jr|jrl|ret|reti|add|sub|and|or|xor|cp|inc|dec|bit|set|res|tset|ex|mul|div|sll|srl|sla|sra|rlc|rrc|rl|rr|ldir|lddr|ldi|ldd|swi|ei|nop|halt|link|unlk|djnz|scc|neg|cpl|extz|exts|mirr|paa|incf|decf|ldf|ldc|ldx)\b', re.M | re.I)
+BYTECMT = re.compile(rb'^\s*(\S+:)?\s*\.byte\b[^;\n]*;\s*(?:MAME:|unidasm:|=\s*|[0-9A-F]{6}\s+[0-9a-f]{2}(?: [0-9a-f]{2})*\s{2,})?\s*(ld|lda|ldw|ldb|push|pop|call|calr|jp|jr|jrl|ret|reti|add|sub|and|or|xor|cp|inc|dec|bit|set|res|tset|ex|mul|div|sll|srl|sla|sra|rlc|rrc|rl|rr|ldir|lddr|ldi|ldd|swi|ei|nop|halt|link|unlk|djnz|scc|neg|cpl|extz|exts|mirr|paa|incf|decf|ldf|ldc|ldx)\b', re.M | re.I)
 NUMADDR = re.compile(rb'^\s*(?:\S+:)?\s*(?!jr\b|jrl\b|calr\b|call\b|jp\b|djnz\b|\.)([a-z_][a-z0-9_]*)\s+([^;\n]*)', re.M)
 LIT = re.compile(rb'(?<![\w.$])(0x[0-9a-fA-F]+|\d{7,})(?![\w.$])')
 COLOUR_CALL = re.compile(rb'\bcall\s+(DrawString|DrawStringCentered|DrawStringLeftJustify|'

@@ -79,7 +79,16 @@ eleven occurrences in the converted prom_b block are of these three shapes:
 | `85 3F 07` | `cp (XIY),0x07` | compare memory with an 8-bit immediate |
 
 502 of the 513 instructions in `0xF31800-0xF31D1F` did encode, so the gap is
-narrow but real. Anyone extending the TLCS-900 backend upstream has a ready-made
+narrow but real.
+
+**Status with the pinned llvm-mc (`TOOLCHAIN_VERSION`, a3a81863), checked 2026-10-03:** four of the
+five shapes now assemble to the bytes above -- `ld l, (xiy+l)`, `ld xiy, (xiy+hl)`, `ld a, (xiz+ix)`,
+`cp (xiy), 7` -- and only the variable shift by a register (`srl a, c`, `srl a, xiy`) is still
+rejected.  `scripts/converters/respell_raw_pseudos.py --tree wsa1/prom_a --bytes` turns such `.byte`
+lines into instructions where the assembler reproduces the bytes; in prom_a it respelled 150 that
+day, among them the five `sub (addr),imm` lines the 0xFEF746 module header listed (now `subw`).  What
+it leaves is printed by its dry run (bank registers like `QHL3` / `XBC3`, shifts by a register,
+`ldcf` / `stcf` with a register bit number, some forced long immediate forms). Anyone extending the TLCS-900 backend upstream has a ready-made
 five-case test list here.
 
 ## The tool
