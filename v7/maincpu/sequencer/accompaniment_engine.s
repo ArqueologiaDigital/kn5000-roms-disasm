@@ -146,7 +146,7 @@ AccStyle_DetectChanges:
 	jrl nz, AccStyle_DetectChanges_CompareParams
 	bit 1, (0x31e7:16)
 	jrl z, AccStyle_DetectChanges_CompareParams
-	bit 4, (0x0421:16)
+	bit 4, (SEQ_TRANSPORT_STATE:16)
 	jr z, .Lc_f55901
 	call NoteMap_SendAllNotesOff
 AccStyle_DetectChanges_Init:
@@ -6187,7 +6187,7 @@ AccPedal_Sustain_Normal:
 	xor a, a
 	ld (1056:16), a
 	ld (1054:16), a
-	ld (1057:16), a
+	ld (SEQ_TRANSPORT_STATE:16), a
 	ei 0
 	jr AccPedal_SustainReturn
 
@@ -7862,7 +7862,7 @@ AccAutoPlay_SubModeB_Apply:
 	jr z, AccAutoPlay_SubModeB_Return
 	and (0x0420:16), 0xf7
 	and (0x041e:16), 0xf7
-	and (0x0421:16), 0xf7
+	and (SEQ_TRANSPORT_STATE:16), 0xf7
 	and (0x33d1:16), 0xef
 	or (0x33d1:16), 0x08
 AccAutoPlay_SubModeB_Return:
@@ -7890,7 +7890,7 @@ AccAutoPlay_SeqHandoff:
 	ei 0x00
 	jr t, AccAutoPlay_SeqHandoff_Return
 AccAutoPlay_SeqHandoff_Process:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, AccAutoPlay_SeqHandoff_Return
 	bit 2, (1054:16)
 	jr z, AccAutoPlay_SeqHandoff_Finalize
@@ -8022,7 +8022,7 @@ AccPlayMode_Dispatch:
 	or l, 0x4
 
 AccPlayMode_Dispatch_Check:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, AccPlayMode_Dispatch_Select
 	or l, 0x8
 
@@ -8219,7 +8219,7 @@ AccPlayMode_StopExprB_Process:
 	calr AccSync_MidiClock
 
 AccPlayMode_StopExprB_Return:
-	ld (1057:16), 1
+	ld (SEQ_TRANSPORT_STATE:16), 1
 	calr AccTempo_ClearSubPos
 
 AccPlayMode_StartAccPlay:
@@ -8268,7 +8268,7 @@ AccPlayMode_StartPlayFull:
 	jr AccPlayMode_StartPlayFull_Return
 
 AccPlayMode_StartPlayFull_Process:
-	ld (1057:16), 1
+	ld (SEQ_TRANSPORT_STATE:16), 1
 	calr AccTempo_ClearSubPos
 	bit 0, (1056:16)
 	jr nz, AccPlayMode_StartPlayFull_Return
@@ -8295,7 +8295,7 @@ AccPlayMode_StopExprFull_Process:
 	calr AccTempo_WriteStartMarker
 
 AccPlayMode_StopExprC:
-	ld (1057:16), 12
+	ld (SEQ_TRANSPORT_STATE:16), 12
 	bit 3, (1056:16)
 	jr nz, AccPlayMode_StopExprC_Process
 	bit 2, (1056:16)
@@ -8310,7 +8310,7 @@ AccPlayMode_StopExprC_Return:
 	nop
 
 AccPlayMode_StopExprD:
-	ld (1057:16), 12
+	ld (SEQ_TRANSPORT_STATE:16), 12
 	ret
 
 AccPlayMode_StopExprD_Return:
@@ -8366,8 +8366,8 @@ AccTempo_ClearSubPos:
 	ei 6
 	bit 3, (0x28a7:16)
 	jr nz, AccTempo_ClearSubPos_Loop
-	ld (1052:16), wa
-	ld (1051:16), a
+	ld (SEQ_BEAT_COUNT:16), wa
+	ld (SEQ_BEAT_TICK:16), a
 
 AccTempo_ClearSubPos_Loop:
 	ei 0
@@ -8404,7 +8404,7 @@ AccTempo_WriteStopMarker:
 	pushw wa
 	call TempoRingBuf_WriteByte_Ext
 	inc 2, xsp
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	pushw wa
 	call TempoRingBuf_WriteByte_Ext
 	inc 2, xsp

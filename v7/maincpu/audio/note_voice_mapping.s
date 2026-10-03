@@ -18862,8 +18862,8 @@ AccWrap_PlayModeStateMachine:
 	ret	nz
 	ldw	(0xcffe:16), 30
 	ei	6
-	ldw	(1052:16), 0
-	ld	(1051:16), 0
+	ldw	(SEQ_BEAT_COUNT:16), 0
+	ld	(SEQ_BEAT_TICK:16), 0
 	ei	0
 	ret
 PlayModeStateMachine_Block:
@@ -18875,8 +18875,8 @@ PlayModeStateMachine_Block:
 	res	2, (0x28b2:16)
 	res	3, (0x28a7:16)
 	ei	6
-	ldw	(1052:16), 0
-	ld	(1051:16), 0
+	ldw	(SEQ_BEAT_COUNT:16), 0
+	ld	(SEQ_BEAT_TICK:16), 0
 	ei	0
 	jp	AccWrap_PlayModeStart
 PlayModeStateMachine_Block2:
@@ -18890,33 +18890,33 @@ PlayModeStateMachine_DoPlayMode:
 	cp	xwa, 0x7ffe
 	jr	ugt, PlayModeStateMachine_Block3
 PlayModeStateMachine_TestBit2:
-	bit	2, (1057:16)
+	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jr	nz, PlayModeStateMachine_Block3
 	inc	1, xwa
 	cp	xwa, 0x7ffe
 	jr	ule, PlayModeStateMachine_TestBit2
 PlayModeStateMachine_Block3:
 	ei	6
-	ldw	(1052:16), 0
-	ld	(1051:16), 0
+	ldw	(SEQ_BEAT_COUNT:16), 0
+	ld	(SEQ_BEAT_TICK:16), 0
 	ei	0
 	ret
 PlayModeStateMachine_DoPlayMode2:
 	call	AccWrap_PlayModeStart
 	ei	6
 	ld	xwa, (0xd008:16)
-	ld	(1052:16), wa
+	ld	(SEQ_BEAT_COUNT:16), wa
 	ld	xwa, (0xd004:16)
-	ld	(1051:16), a
+	ld	(SEQ_BEAT_TICK:16), a
 	ei	0
 	ret
 PlayModeStateMachine_Block4:
 	ei	6
-	ld	wa, (1052:16)
+	ld	wa, (SEQ_BEAT_COUNT:16)
 	extz	xwa
 	ld	(0xd008:16), xwa
 	ld	xwa, 0:i3
-	ld	a, (1051:16)
+	ld	a, (SEQ_BEAT_TICK:16)
 	ld	(0xd004:16), xwa
 	ei	0
 	call	AccWrap_PlayModeDispatch
@@ -18924,7 +18924,7 @@ PlayModeStateMachine_Block4:
 	cp	xwa, 0x7ffe
 	ret	ugt
 PlayModeStateMachine_TestBit22:
-	bit	2, (1057:16)
+	bit	2, (SEQ_TRANSPORT_STATE:16)
 	ret	nz
 	inc	1, xwa
 	cp	xwa, 0x7ffe
@@ -18939,10 +18939,10 @@ PlayModeStateMachine_Prologue:
 	ld	(xsp + 4), bc
 	ld	(xsp + 6), wa
 	ei	6
-	ld	a, (1051:16)
+	ld	a, (SEQ_BEAT_TICK:16)
 	ld	xbc, 0:i3
 	ld	c, a
-	ld	wa, (1052:16)
+	ld	wa, (SEQ_BEAT_COUNT:16)
 	mul	wa, 0x60
 	ld	xiz, xwa
 	add	xiz, xbc
@@ -18960,15 +18960,15 @@ PlayModeStateMachine_Prologue:
 	ld	xwa, xiz
 	ld	xbc, 0x60
 	call	Math_DivideU32
-	ld	(1052:16), hl
-	ld	wa, (1052:16)
+	ld	(SEQ_BEAT_COUNT:16), hl
+	ld	wa, (SEQ_BEAT_COUNT:16)
 	extz	xwa
 	ld	(0xd008:16), xwa
 	ld	xwa, xiz
 	ld	xbc, 0x60
 	call	DivMod32
 	ld	a, l
-	ld	(1051:16), a
+	ld	(SEQ_BEAT_TICK:16), a
 	ld	w, 0x0:opc
 	extz	xwa
 	ld	(0xd004:16), xwa

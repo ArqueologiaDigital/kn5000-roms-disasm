@@ -1765,15 +1765,15 @@ midi_out_en_X:
 	jp MIDI_SC0_TX_DISPATCH
 
 GetAdr_sqbtof:
-	lda xhl, (1052:16)
+	lda xhl, (SEQ_BEAT_COUNT:16)
 	ret
 
 GetAdr_sq_beadt:
-	lda xhl, (1051:16)
+	lda xhl, (SEQ_BEAT_TICK:16)
 	ret
 
 GetAdr_sqsrtc:
-	lda xhl, (1057:16)
+	lda xhl, (SEQ_TRANSPORT_STATE:16)
 	ret
 
 GetAdr_rtmcfg:

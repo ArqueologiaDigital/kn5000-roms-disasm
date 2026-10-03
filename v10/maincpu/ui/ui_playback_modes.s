@@ -892,8 +892,8 @@ CDlikeTimer_Return:
 CDlike_ResetPlaybackState:
 	ei 6
 	xor wa, wa
-	ld (1052:16), wa
-	ld (1051:16), a
+	ld (SEQ_BEAT_COUNT:16), wa
+	ld (SEQ_BEAT_TICK:16), a
 	ld (1048:16), wa
 	ld (1047:16), a
 	bit 1, (0x28a7:16)
@@ -905,7 +905,7 @@ CDlike_ResetPlaybackState:
 	ld (1077:16), 0
 
 CDlikeReset_SetTimerFlags:
-	ld (1057:16), 1
+	ld (SEQ_TRANSPORT_STATE:16), 1
 	ld (1056:16), 1
 	ei 0
 	ret

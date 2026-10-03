@@ -2854,7 +2854,7 @@ SndParam_GuardedNibbleSet_ViaReg0103:
 	cp	hl, 0:i3
 	jr nz, MidiCtrl_PopIzRet
 	andmi8	(xiz+14), 240
-	bit	2, (1057:16)
+	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jr z, MidiCtrl_PopIzRet
 	ld	xwa, 1:i3
 	call SndParam_LookupReadOnly
@@ -3735,7 +3735,7 @@ MidiChannel_ScanPending:
 	jr MidiScan_PopIzRet
 
 MidiScan_CheckBit2InAddr1057:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr nz, MidiScan_PopIzRet
 
 MidiScan_ClearAndReturn:
@@ -3743,7 +3743,7 @@ MidiScan_ClearAndReturn:
 	jr MidiScan_PopIzRet
 
 MidiScan_AltPathCheck:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr nz, MidiScan_PopIzRet
 	andmi8 (xiz + 14), 0xf0
 
@@ -8576,7 +8576,7 @@ TempoExpr_StorePartIndex:
 	ld (0x91c7:16), l
 	ei 6
 	set 0, (1113:16)
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	ld (0x91c9:16), a
 	ei 0
 	ld xix, 0x91ad
@@ -8635,7 +8635,7 @@ MIDI_SelectTempoExpressionSource:
 	jr Tempo_ExpressionStore
 
 TempoSrc_CheckAutoPlay:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, Tempo_ExpressionStore
 	ld wa, (0x28a8:16)
 	set 2, (0x90f9:16)
@@ -8696,7 +8696,7 @@ MidiStream_ProcessTempoRingBuf:
 	jrl z, TempoRing_Return
 	ei 6
 	set 0, (1113:16)
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	ld (0x91c9:16), a
 	ei 0
 	ld xix, SWBTWR_EVENT_QUEUE
@@ -8950,7 +8950,7 @@ MIDI_TransmitTempoCC:
 	jr z, TempoCC_Return
 	ei 6
 	set 0, (1113:16)
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	ld (0x91c9:16), a
 	ei 0
 	ld xix, 0x91ad
@@ -9049,7 +9049,7 @@ Audio_ProcessPartExpressions:
 	jrl z, PartExpr_Done
 	ei 6
 	set 0, (1113:16)
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	ld (0x91c9:16), a
 	ei 0
 	xor c, c

@@ -6981,7 +6981,7 @@ SerialPort_ModeHandler_0_Skip14:
 	call	MemoryConfig_Handler_Table_Target2_Sub
 SerialPort_ModeHandler_0_Join3:
 	call	ScoopParam_ValueTable_Sub_Helper2
-	bit	2, (0x0421:16)
+	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	z, SerialPort_ModeHandler_0_Entry3
 	call	Demo_PreSetupAndScan
 SerialPort_ModeHandler_0_Entry3:

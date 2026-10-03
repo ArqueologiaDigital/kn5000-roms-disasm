@@ -466,9 +466,9 @@ INTT1_CheckTickOverflow:
 	res 0, (1139:16)
 
 INTT1_CheckAltSeqOverflow:
-	bit 0, (1057:16)
+	bit 0, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTT1_CheckMidiSyncGate
-	ld (1057:16), 6
+	ld (SEQ_TRANSPORT_STATE:16), 6
 	res 0, (1139:16)
 
 INTT1_CheckMidiSyncGate:
@@ -488,9 +488,9 @@ INTT1_UpdateAlternateTimers:
 	ld (1054:16), 16
 
 INTT1_CheckAltSeqTimer:
-	bit 3, (1057:16)
+	bit 3, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTT1_CheckMetroTimer
-	ld (1057:16), 16
+	ld (SEQ_TRANSPORT_STATE:16), 16
 	ld a, (1045:16)
 	ld (1078:16), a
 	ld a, (1046:16)
@@ -705,13 +705,13 @@ INTTR4_SeqTick_CheckBeat:
 	jr	ule, INTTR4_CheckAltSeqEnable
 	ld	(1077:16), 0
 INTTR4_CheckAltSeqEnable:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTTR4_MetroPhaseSync
-	inc 1, (1051:16)
-	cp (1051:16), 96
+	inc 1, (SEQ_BEAT_TICK:16)
+	cp (SEQ_BEAT_TICK:16), 96
 	jr lt, INTTR4_MetroPhaseSync
-	ld (1051:16), 0
-	incw 1, (1052:16)
+	ld (SEQ_BEAT_TICK:16), 0
+	incw 1, (SEQ_BEAT_COUNT:16)
 	cpw (0x28aa:16), 0
 	jr z, INTTR4_MetroPhaseSync
 	calr TempoRingBuf_Write
@@ -725,9 +725,9 @@ INTTR4_MetroPhaseSync:
 	res 0, (1139:16)
 
 INTTR4_MetroSync_CheckAltSeq:
-	bit 0, (1057:16)
+	bit 0, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTTR4_MetroSync_Done
-	ld (1057:16), 6
+	ld (SEQ_TRANSPORT_STATE:16), 6
 	res 0, (1139:16)
 
 INTTR4_MetroSync_Done:
@@ -748,7 +748,7 @@ INTTR4_SeqAutoStart:
 	jr	c, INTTR4_SeqAutoStart_Skip
 	ld	a, 0x1:opc
 	ld	(1056:16), a
-	ld	(1057:16), a
+	ld	(SEQ_TRANSPORT_STATE:16), a
 	cp	(CURRENT_MODE:16), 19
 	jr	z, INTTR4_SeqAutoStart_Skip
 	bit	2, (0xfd52:16)
@@ -799,9 +799,9 @@ INTTR4_SeqBeat_Check:
 	ld (1054:16), 16
 
 INTTR4_AltSeqBeat_Check:
-	bit 3, (1057:16)
+	bit 3, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTTR4_MetroQuarter_Check
-	ld (1057:16), 16
+	ld (SEQ_TRANSPORT_STATE:16), 16
 	ld a, (1045:16)
 	ld (1078:16), a
 	ld a, (1046:16)
@@ -858,9 +858,9 @@ INTTR4_SeqAccum_Reset:
 	ld	(13018:16), a
 	ld	(1111:16), a
 INTTR4_AltSeqAccum_Update:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTTR4_FadeDelay_Check
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	bit 3, (1073:16)
 	jr z, INTTR4_AltSeqSync_Check
 	cp (1072:16), a
@@ -976,7 +976,7 @@ TempoRingBuf_WritePair:
 	ld	(xiy+hl), a
 	decm 1, (xiy - 2)
 	minc1_16 hl, 0x7ff
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	ld	(xiy+hl), a
 	minc1_16 hl, 0x7ff
 	decm 1, (xiy - 2)
@@ -993,23 +993,23 @@ TempoRingBuf_WritePair_Enqueue:
 	lda xhl, (1143:16)
 	ld ix, (1141:16)
 	ld	(xhl+ix), a
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	inc 1, ix
 	ld	(xhl+ix), a
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	inc 1, ix
 	ld (1141:16), ix
 	popw ix
 	ret
 
 INTTR4_SubTick_Mode:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTTR4_SubTick_MetroInc
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_MetroInc
-	inc 1, (1051:16)
+	inc 1, (SEQ_BEAT_TICK:16)
 
 INTTR4_SubTick_MetroInc:
 	bit 2, (1056:16)
@@ -1038,9 +1038,9 @@ INTTR4_SubTick_PhaseSync:
 	res 0, (1139:16)
 
 INTTR4_SubTick_PhaseSync_AltSeq:
-	bit 0, (1057:16)
+	bit 0, (SEQ_TRANSPORT_STATE:16)
 	jr z, INTTR4_SubTick_ToAccum
-	ld (1057:16), 6
+	ld (SEQ_TRANSPORT_STATE:16), 6
 	res 0, (1139:16)
 
 INTTR4_SubTick_ToAccum:

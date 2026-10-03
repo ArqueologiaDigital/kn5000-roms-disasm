@@ -1845,7 +1845,7 @@ CompIface_ProcessInput:
 	jrl z, CompIface_RampControl
 	bit 2, (1054:16)
 	jr z, CompIface_FilterBySource
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, CompIface_FilterBySource
 	bit 4, (0xc1f0:16)
 	jr z, CompIface_CheckUpDown
@@ -1882,7 +1882,7 @@ CompIface_FilterBySource:
 	jr CompIface_PostProcess
 
 CompIface_FromSource2:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, CompIface_PostProcess
 	bit 5, (0xc1f0:16)
 	jr z, CompIface_PostProcess

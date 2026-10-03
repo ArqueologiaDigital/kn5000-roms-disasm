@@ -2758,7 +2758,7 @@ TrAsGrid_HandleOtherEvent:
 	call SendEvent
 	or xhl, xhl
 	jrl z, TrAsGrid_ReturnZero
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jrl nz, TrAsGrid_ReturnZero
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -2882,7 +2882,7 @@ TrAsGrid_HandleOtherEvent2:
 	call SendEvent
 	or xhl, xhl
 	jrl z, TrAsGrid_ReturnZero
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jrl nz, TrAsGrid_ReturnZero
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -4713,7 +4713,7 @@ InitializeKubo:
 AutoPunchTtlRqFunc:
 	cp xbc, EVT_SW_IN
 	jr nz, IvRealRecCheck_ReturnZero
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr nz, IvRealRecCheck_ReturnZero
 	ld xwa, 0xffffffff
 	ld xbc, EVT_CHANGE_TITLE
@@ -5518,7 +5518,7 @@ IvPunchExit_CheckSendEvent:
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPunchExit_PrepareInherited
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr nz, IvPunchExit_PrepareInherited
 	ld xwa, 0xffffffff
 	ld xbc, EVT_CHANGE_TITLE
@@ -5571,7 +5571,7 @@ IvAutoPunchExit_CheckSendEvent:
 	jr z, IvAutoPunchExit_PrepareInherited
 	cpw (0x28a8:16), 0
 	jr z, IvAutoPunchExit_PostSceneEvent
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr nz, IvAutoPunchExit_PrepareInherited
 
 IvAutoPunchExit_PostSceneEvent:
@@ -7462,7 +7462,7 @@ PlaySong_ReturnZero:
 PlySngSel2Func:
 	cp xbc, EVT_SW_IN
 	jr nz, EntGrid_InitDispatch
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr nz, EntGrid_InitDispatch
 	ld xwa, 0x810012
 	ld xbc, EVT_HIDE
@@ -8780,7 +8780,7 @@ SqplyVal_UpScroll_Mode2:
 	ld xwa, (xsp + 60)
 	cp xwa, 0x2
 	jrl nz, SqplyVal_ReturnZero
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jrl nz, SqplyVal_ReturnZero
 	ld xwa, NAKA_MAINFUNC_ApPlaySyori_Kubo
 	ld xbc, EVT_INC_VAL
@@ -8842,7 +8842,7 @@ SqplyVal_DownScroll_Mode2:
 	ld xwa, (xsp + 60)
 	cp xwa, 0x2
 	jrl nz, SqplyVal_ReturnZero
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jrl nz, SqplyVal_ReturnZero
 	ld xwa, NAKA_MAINFUNC_ApPlaySyori_Kubo
 	ld xbc, EVT_DEC_VAL

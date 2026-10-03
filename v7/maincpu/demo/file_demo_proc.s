@@ -657,7 +657,7 @@ Demo_SelectEntry_ExitDispatch:
 Demo_SelectEntry_ByteTable:
 	bit	7, (0x2966:16)
 	ret	nz
-	ld	a, (1057:16)
+	ld	a, (SEQ_TRANSPORT_STATE:16)
 	and	a, 3
 	ret	nz
 	ld	a, (1115:16)

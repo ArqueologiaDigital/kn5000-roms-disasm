@@ -2568,11 +2568,11 @@ SeqStep_PlaybackStateMachine:
 
 SeqStep_PlaybackDecrCount:
 	ei 6
-	ld a, (1057:16)
+	ld a, (SEQ_TRANSPORT_STATE:16)
 	ldfr_berp A, 0xfb
 	res 1, a
 	res 4, a
-	ld (1057:16), a
+	ld (SEQ_TRANSPORT_STATE:16), a
 	ei 0
 	cpw (0x28a8:16), 0
 	jr nz, SeqStep_PlaybackCheck10408

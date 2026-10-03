@@ -309,9 +309,9 @@ ClkTick_PerClockCounters:
 	ld (1054:16), 6
 
 ClkTick_Src1FineUpdate:
-	bit 0, (1057:16)
+	bit 0, (SEQ_TRANSPORT_STATE:16)
 	jr z, ClkTick_Src1CoarseUpdate
-	ld (1057:16), 6
+	ld (SEQ_TRANSPORT_STATE:16), 6
 
 ClkTick_Src1CoarseUpdate:
 	jrl Transport_StopHandler
@@ -377,11 +377,11 @@ ClkTick_Src2ErrorWriteback:
 	ld (1120:16), wa
 
 ClkTick_Src3ClickCheck:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, Transport_StopHandler
-	and (1051:16), 252
-	inc 4, (1051:16)
-	ld a, (1051:16)
+	and (SEQ_BEAT_TICK:16), 252
+	inc 4, (SEQ_BEAT_TICK:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	bit 0, (1073:16)
 	jr z, ClkTick_Src3LowerSyncCheck
 	cp a, (1071:16)
@@ -406,10 +406,10 @@ ClkTick_Src3LowerSyncCheck:
 	calr MIDI_QUEUE_EVENT_PAIR
 
 ClkTick_Src3OverflowQueue:
-	cp (1051:16), 96
+	cp (SEQ_BEAT_TICK:16), 96
 	jr nz, Transport_Return
-	ld (1051:16), 0
-	incw 1, (1052:16)
+	ld (SEQ_BEAT_TICK:16), 0
+	incw 1, (SEQ_BEAT_COUNT:16)
 	cpw (0x28aa:16), 0
 	jr z, Transport_StopHandler
 	calr MIDI_QUEUE_TRACK_EVENT
@@ -422,7 +422,7 @@ Transport_StopHandler:
 	ld (1056:16), 16
 	bit 2, (1054:16)
 	jr z, Transport_StopSrc3Snapshot
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, Transport_StopSrc1QueueEvent
 	set 2, (0x347a:16)
 
@@ -434,9 +434,9 @@ Transport_StopSrc1QueueEvent:
 	calr MIDI_QUEUE_EVENT_PAIR
 
 Transport_StopSrc3Snapshot:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, Transport_Return
-	ld (1057:16), 16
+	ld (SEQ_TRANSPORT_STATE:16), 16
 	pushw wa
 	ld a, (1045:16)
 	ld (1078:16), a
@@ -500,9 +500,9 @@ ResetPlay_Src3Check:
 	bit 0, (0x28a7:16)
 	jr z, ResetPlay_Return
 	xor wa, wa
-	ld (1051:16), a
-	ld (1052:16), wa
-	ld (1057:16), 1
+	ld (SEQ_BEAT_TICK:16), a
+	ld (SEQ_BEAT_COUNT:16), wa
+	ld (SEQ_TRANSPORT_STATE:16), 1
 
 ResetPlay_Return:
 	ret
@@ -529,10 +529,10 @@ StartTiming_Src1Adjust:
 	add (1045:16), a
 
 StartTiming_Src2Adjust:
-	bit 0, (1057:16)
+	bit 0, (SEQ_TRANSPORT_STATE:16)
 	jr z, StartTiming_ClearAndReturn
-	ld (1057:16), 6
-	add (1051:16), a
+	ld (SEQ_TRANSPORT_STATE:16), 6
+	add (SEQ_BEAT_TICK:16), a
 
 StartTiming_ClearAndReturn:
 	ld (1108:16), 0
@@ -542,7 +542,7 @@ Continue_SetRunning:
 	ld (1056:16), 6
 	bit 0, (0x28a7:16)
 	jr z, Continue_Return
-	ld (1057:16), 6
+	ld (SEQ_TRANSPORT_STATE:16), 6
 	bit 1, (0x28a7:16)
 	jr z, Continue_Return
 	bit 0, (0x28a6:16)
@@ -573,7 +573,7 @@ AltClk_DisabledClockPath:
 	ld (1056:16), 12
 	bit 2, (1054:16)
 	jr z, AltClk_StopSrc3Snapshot
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, AltClk_StopSrc1Queue
 	set 2, (0x347a:16)
 
@@ -585,9 +585,9 @@ AltClk_StopSrc1Queue:
 	calr MIDI_QUEUE_EVENT_PAIR
 
 AltClk_StopSrc3Snapshot:
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, AltClk_Return
-	ld (1057:16), 12
+	ld (SEQ_TRANSPORT_STATE:16), 12
 	pushw wa
 	ld a, (1045:16)
 	ld (1078:16), a
@@ -665,7 +665,7 @@ MIDI_QUEUE_EVENT_PAIR:
 	ld hl, (xix - 4)
 	ld	(xix+hl), a
 	minc1_16 hl, 0x7ff
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	ld	(xix+hl), a
 	minc1_16 hl, 0x7ff
 	ld (xix - 4), hl
@@ -681,7 +681,7 @@ QueuePair_LinearBufWrite:
 	ld hl, (1141:16)
 	ld	(xix+hl), a
 	inc 1, hl
-	ld a, (1051:16)
+	ld a, (SEQ_BEAT_TICK:16)
 	ld	(xix+hl), a
 	inc 1, hl
 	ld (1141:16), hl

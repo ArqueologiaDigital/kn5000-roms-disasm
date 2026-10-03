@@ -7007,7 +7007,7 @@ PerfMode_Handler_EvtB_Helper2_Skip:
 	call	MemoryConfig_Handler_Table_Target2_Sub
 PerfMode_Handler_EvtB_Helper2_Join:
 	call	MemConfig_Handler_4_Helper5_Helper
-	bit	2, (0x0421:16)
+	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	z, PerfMode_Handler_EvtB_Helper2_Skip2
 	call	Demo_PreSetupAndScan
 PerfMode_Handler_EvtB_Helper2_Skip2:

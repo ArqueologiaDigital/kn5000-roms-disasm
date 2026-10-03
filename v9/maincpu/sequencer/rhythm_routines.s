@@ -11,7 +11,7 @@ Rhythm_CompareAndTrigger:
 	jrl z, Rhythm_SaveNoteState
 	bit 6, (0x28ac:16)
 	jr z, Rhythm_CompareAndTriggerNotes
-	bit 2, (1057:16)
+	bit 2, (SEQ_TRANSPORT_STATE:16)
 	jr z, Rhythm_CompareAndTriggerNotes
 	ld a, (0x327f:16)
 	cp a, 0x12

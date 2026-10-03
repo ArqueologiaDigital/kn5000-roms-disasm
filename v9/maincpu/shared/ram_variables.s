@@ -108,3 +108,10 @@
 ; display-subsystem.md "Change Tracking" / "Palette-Based Fade Effects"
 	.equ DISPLAY_UPDATE_FLAG,	0x3045e	; non-zero = needs refresh
 	.equ PALETTE_INDEX_PREVIOUS,	0x3efa0	; previous palette index, for partial updates
+; the song clock -- the firmware exports these three by name (GetAdr_sq_beadt / GetAdr_sqbtof / GetAdr_sqsrtc,
+; Hama Function table entries 65 / 64 / 66) for the HD-AE5000's lyric display (hdae5000-filesystem.md
+; "Lyric Files").  The timer ISR (INTTR4_CheckAltSeqEnable) and the MIDI-clock path
+; (ClkTick_Src3ClickCheck, +4 per clock = 24 ppqn) advance them while SEQ_TRANSPORT_STATE bit 2 is set.
+	.equ SEQ_BEAT_TICK,		0x041b	; sq_beadt: tick within the beat, 0..95 (96 per quarter note); wraps into SEQ_BEAT_COUNT
+	.equ SEQ_BEAT_COUNT,		0x041c	; sqbtof: beats since the start (word)
+	.equ SEQ_TRANSPORT_STATE,	0x0421	; sqsrtc, bit set: 0 start pending, 1-2 running (2 gates the clock), 3 stop requested (the ISR then writes 16), 4 stopped; 0 = idle

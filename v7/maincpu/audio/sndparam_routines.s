@@ -3158,7 +3158,7 @@ SndParam_Widget1_AppendType2_Skip10:
 SndParam_Widget1_AppendType2_Entry3:
 	.byte 0xf1, 0x21, 0x04, 0xc8
 	jr	z, SndParam_Widget1_AppendType2_Skip11
-	ld	(1057:16), 6
+	ld	(SEQ_TRANSPORT_STATE:16), 6
 SndParam_Widget1_AppendType2_Skip11:
 	jrl	SndParam_Widget1_AppendType2_Entry7
 SndParam_Widget1_AppendType2_Skip12:
@@ -3219,8 +3219,8 @@ SndParam_Widget1_AppendType2_Entry5:
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, SndParam_Widget1_AppendType2_Entry7
 	.byte 0xc1, 0x1b, 0x04, 0x3c, 0xfc
-	inc	4, (1051:16)
-	ld	a, (1051:16)
+	inc	4, (SEQ_BEAT_TICK:16)
+	ld	a, (SEQ_BEAT_TICK:16)
 	.byte 0xf1, 0x31, 0x04, 0xc8
 	jr	z, SndParam_Widget1_AppendType2_Entry6
 	cp	a, (1071:16)
@@ -3243,10 +3243,10 @@ SndParam_Widget1_AppendType2_Entry6:
 	ld	a, 134:opc
 	calr	MIDI_QUEUE_EVENT_PAIR
 SndParam_Widget1_AppendType2_Skip17:
-	cp	(1051:16), 96
+	cp	(SEQ_BEAT_TICK:16), 96
 	jr	nz, SndParam_Widget1_AppendType2_Return2
-	ld	(1051:16), 0
-	incw	1, (1052:16)
+	ld	(SEQ_BEAT_TICK:16), 0
+	incw	1, (SEQ_BEAT_COUNT:16)
 	cpw	(10410:16), 0
 	jr	z, SndParam_Widget1_AppendType2_Entry7
 	calr	MIDI_QUEUE_TRACK_EVENT
@@ -3270,7 +3270,7 @@ SndParam_Widget1_AppendType2_Skip18:
 SndParam_Widget1_AppendType2_Entry8:
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, SndParam_Widget1_AppendType2_Return2
-	ld	(1057:16), 16
+	ld	(SEQ_TRANSPORT_STATE:16), 16
 	pushw	wa
 	ld	a, (1045:16)
 	ld	(1078:16), a
