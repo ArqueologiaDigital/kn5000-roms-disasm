@@ -169,7 +169,7 @@ DrawLine_Impl_CopyStartPos:
 	lda xix, (xsp + 56)
 	ldiw
 	ldiw
-	lda xwa, (0x043c00:24)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	ld (xsp + 36), xwa
 	ld (xsp + 20), xwa
 	ld xwa, (xsp + 4)
@@ -869,7 +869,7 @@ DrawLineEx_SteepLoop:
 	add xix, xwa
 	sll xix, 6
 	ld de, (xsp + 44)
-	lda xhl, (0x043c00:24)
+	lda xhl, (OFFSCREEN_BUFFER_1:24)
 	cpw (xsp + 58), 0x205
 	jr z, DrawLineEx_SteepXorPixel
 	cp iz, 0x201
@@ -933,7 +933,7 @@ DrawLineEx_ShallowLoop:
 	ld iz, (xsp + 58)
 	ld wa, (xsp + 44)
 	ldfr_berp A, 0xf0
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	ld wa, (xde)
 	exts xwa
 	ld xhl, xwa
@@ -1109,7 +1109,7 @@ DrawBox_Impl_ClipYMax:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xix
-	ld xiy, 0x43c00
+	ld xiy, OFFSCREEN_BUFFER_1
 	add xiy, xwa
 	ld (xsp + 2), xiy
 	ld bc, (xbc)
@@ -1381,7 +1381,7 @@ DrawFrame_Impl_SolidYStepPositive:
 	cp de, (xhl)
 	jr nz, DrawFrame_Impl_SolidTwoSideCheck
 	ld xiy, (xsp + 44)
-	lda xix, (0x043c00:24)
+	lda xix, (OFFSCREEN_BUFFER_1:24)
 	ld hl, (xsp + 42)
 	ld xwa, (xsp + 38)
 	ld xde, xwa
@@ -1417,7 +1417,7 @@ DrawFrame_Impl_SolidTwoSideLoop:
 	ld xwa, (xsp + 44)
 	ld wa, (xwa)
 	lda	xde, (xhl+wa)
-	lda xwa, (0x043c00:24)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	ld (xsp + 38), xwa
 	add xwa, xde
 	ld xix, xwa
@@ -1537,7 +1537,7 @@ DrawFrame_Impl_PatternYStepPositive:
 	exts xwa
 	ld (xsp + 30), xwa
 	ld xbc, xwa
-	lda xwa, (0x043c00:24)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	ld (xsp + 34), xwa
 	ld (xsp + 38), xbc
 	ld xwa, xbc
@@ -1710,7 +1710,7 @@ DrawFrameEx_SingleRowLoop:
 	jr z, DrawFrameEx_SingleRowXorPixel
 	cp iy, 0x201
 	jrl nz, DrawFrameEx_Return
-	ld xix, 0x43c00
+	ld xix, OFFSCREEN_BUFFER_1
 	add xix, xbc
 	ld bc, (xsp + 16)
 	ld (xix), c
@@ -1723,7 +1723,7 @@ DrawFrameEx_SingleRowAdvance:
 	jrl DrawFrameEx_SetChangeRect
 
 DrawFrameEx_SingleRowXorPixel:
-	ld xix, 0x43c00
+	ld xix, OFFSCREEN_BUFFER_1
 	add xix, xbc
 	ld bc, (xsp + 16)
 	xor (xix), c
@@ -1748,7 +1748,7 @@ DrawFrameEx_TopBottomLoop:
 	jr z, DrawFrameEx_TopBottomXorPixel
 	cp iy, 0x201
 	jrl nz, DrawFrameEx_Return
-	lda xix, (0x043c00:24)
+	lda xix, (OFFSCREEN_BUFFER_1:24)
 	ld xiy, xix
 	add xiy, xbc
 	ld bc, (xsp + 16)
@@ -1801,7 +1801,7 @@ DrawFrameEx_SidesStepComputed:
 	jr DrawFrameEx_SingleColCheck
 
 DrawFrameEx_TopBottomXorPixel:
-	lda xix, (0x043c00:24)
+	lda xix, (OFFSCREEN_BUFFER_1:24)
 	ld xiy, xix
 	add xiy, xbc
 	ld bc, (xsp + 16)
@@ -1822,7 +1822,7 @@ DrawFrameEx_TopBottomXorPixel:
 
 DrawFrameEx_SingleColLoop:
 	ld bc, (xsp + 14)
-	lda xde, (0x043c00:24)
+	lda xde, (OFFSCREEN_BUFFER_1:24)
 	cpw (xsp + 14), 0x205
 	jr z, DrawFrameEx_SingleColXorPixel
 	cp bc, 0x201
@@ -1886,7 +1886,7 @@ DrawFrameEx_TwoColLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xix
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	ld xiz, xiy
 	add xiz, xbc
 	ld (xiz), e
@@ -1915,7 +1915,7 @@ DrawFrameEx_TwoColXorPixel:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xix
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	ld xiz, xiy
 	add xiz, xbc
 	xor (xiz), e
@@ -2052,7 +2052,7 @@ MovePixels_Impl_ColLoop:
 	ld bc, (xiy)
 	exts xbc
 	add xbc, xiz
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	ld xiz, xiy
 	add xiz, xbc
 	ld bc, (xde)
@@ -2142,7 +2142,7 @@ DrawWall_DoCopy:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld xiz, (0x030452:24)
-	lda xwa, (0x043c00:24)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	ld (xsp + 4), xwa
 	pushw 0x9600
 	push xiz
@@ -2275,7 +2275,7 @@ DrawBitmap_Impl_RowLoop:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	lda xiz, (0x043c00:24)
+	lda xiz, (OFFSCREEN_BUFFER_1:24)
 	ld xde, xiz
 	add xde, xwa
 	ld (xsp + 6), xde
@@ -2662,7 +2662,7 @@ DrawIcons_Impl:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	ld xhl, 0x43c00
+	ld xhl, OFFSCREEN_BUFFER_1
 	add xhl, xwa
 	ld de, 0:i3
 
@@ -2816,7 +2816,7 @@ DrawFrameSP_Impl_ColLoop:
 	ldfr_berp A, 0xee
 	cp_erpb 0xee, 0xf7
 	jr z, DrawFrameSP_Impl_PixelAdvance
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	ld xwa, (xsp + 10)
 	ld wa, (xwa)
 	exts xwa
@@ -2986,7 +2986,7 @@ DrawBitmapSP_Impl_RowLoop:
 	ld wa, (xix)
 	exts xwa
 	add xwa, xhl
-	lda xhl, (0x043c00:24)
+	lda xhl, (OFFSCREEN_BUFFER_1:24)
 	ld xiy, xhl
 	add xiy, xwa
 	ld ix, 0:i3
@@ -3345,7 +3345,7 @@ DrawBitmapSP2_Impl_RowLoop:
 	ld wa, (xiy)
 	exts xwa
 	add xwa, xix
-	lda xix, (0x043c00:24)
+	lda xix, (OFFSCREEN_BUFFER_1:24)
 	add xix, xwa
 	ld xwa, (xsp + 16)
 	ld iy, (xwa)
@@ -3731,7 +3731,7 @@ DrawBitmapFile_Impl_FillRemaining:
 	jr ge, DrawBitmapFile_Impl_CopyToVRAM
 	ld xwa, 0x140
 	add (xsp + 32), xwa
-	ld xiz, 0x56800
+	ld xiz, OFFSCREEN_BUFFER_2
 	ld xwa, (xsp + 32)
 	add xwa, 0x56800
 	ld (xsp + 28), xwa
@@ -4196,7 +4196,7 @@ DrawString_Impl_ColumnSetup:
 	ld xwa, (xsp + 32)
 	ld wa, (xwa)
 	lda	xhl, (xhl+wa)
-	lda xwa, (0x043c00:24)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	add xwa, xhl
 	ld (xsp + 28), xwa
 	ldw (xsp + 22), 0x0

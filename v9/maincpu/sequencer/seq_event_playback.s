@@ -1149,7 +1149,7 @@ AccPlay_UpdateStateFlags:
 	ld (0x7f0c:16), a
 	bit 2, (0x7f15:16)
 	jr z, AccPlay_DispatchRet
-	cp (0x8d36:16), 1
+	cp (SEQ_MASTER_STATE:16), 1
 	jr nz, AccPlay_DispatchRet
 	and (0x7f15:16), 251
 	ld (0x7f42:16), 15

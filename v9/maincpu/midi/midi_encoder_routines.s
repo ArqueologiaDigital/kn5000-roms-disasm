@@ -237,7 +237,7 @@ Encoder_ReturnDefaultConstant_End:
 ; Encoder_ApplySystemModeSettings - Select processing mode based on system state
 ; Reads mode value from 0xc07d and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
-	ld a, (0xc07d:16); Get mode selector
+	ld a, (SWBTWR_PAYLOAD_1:16); Get mode selector
 	cp a, 6:i3
 	jr z, Encoder_ConfigureRangeLimit	; Jump if mode 6
 	cp a, 5:i3
@@ -245,29 +245,29 @@ Encoder_ApplySystemModeSettings:
 	cp a, 4:i3
 	ret nz	; Return if not mode 4
 	; Mode 4: Configure breath mode
-	ld a, (0xc07f:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
 	and a, 0xf	; Mask low nibble
 	ret z	; Return if zero
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	and a, 0xf	; Mask low nibble
 	ld (ENCODER_BREATH_MODE:16), a; Set breath mode
 	ret
 
 Encoder_ConfigureVolumeMode:
-	ld a, (0xc07f:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
 	and a, 0xff	; Full byte check
 	ret z	; Return if zero
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	and a, 0xff	; Full byte
 	ld (ENCODER_VOLUME_MODE:16), a; Set volume mode
 	ret
 
 Encoder_ConfigureRangeLimit:
-	ld a, (0xc07f:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
 	res 7, a	; Clear bit 7
 	cp a, 0:i3
 	ret z	; Return if zero
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	res 7, a	; Clear bit 7
 	ld (ENCODER_RANGE_LIMIT:16), a; Set range limit
 	ret

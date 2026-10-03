@@ -32,12 +32,13 @@ import sys
 
 REPO = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
                       text=True).stdout.strip() or "."
-CONST = ["midi_encoder_constants.s", "cpanel_constants.s", "gui_constants.s", "kn5000_%s_program.s"]
+CONST = ["midi_encoder_constants.s", "cpanel_constants.s", "gui_constants.s", "kn5000_%s_program.s",
+         "shared/ram_variables.s"]
 EQU = re.compile(r'^(\s*\.equ\s+)([A-Za-z_]\w*)(\s*,\s*)(0x[0-9a-fA-F]+)(.*)$')
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')
 PTR = re.compile(r'^(\s*ld\s+x(?:ix|iy|iz|hl)\s*,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$', re.I)
 COL0 = re.compile(r'^([A-Za-z_][\w$]*):')
-LO, HI = 0x400, 0x10000
+LO, HI = 0x400, 0x100000      # internal RAM and the DRAM the code addresses (pattern buffers at 0x94800)
 
 
 def const_files(t):
@@ -183,7 +184,13 @@ def main():
                 open(cf, "wb").write("\n".join(L).encode("latin-1"))
     print("%s: %d names applied; %s%s" % (a.tree, len(addr), dict(st), "" if a.apply else " (dry run)"))
     if report:
-        unsure = {n: v for n, v in report.items() if v != "inferred" and (not v or len(v) != 1)}
+        used = set()
+        for f in files:
+            for l in open(f, "rb").read().decode("latin-1").split("\n"):
+                if not l.lstrip().startswith(".equ"):
+                    used |= set(re.findall(r'\b(%s)\b' % "|".join(map(re.escape, ref)), l.split(";")[0]))
+        # a name the tree's code already uses has nothing numeric left to vote with: not "unsure"
+        unsure = {n: v for n, v in report.items() if v != "inferred" and (not v or len(v) != 1) and n not in used}
         print("  inferred from the block's common delta: %s" % {n: report[n] for n in report if report[n] == "inferred"})
         print("  not applied (no vote, or votes disagree): %s" % unsure)
     for x in fixed:

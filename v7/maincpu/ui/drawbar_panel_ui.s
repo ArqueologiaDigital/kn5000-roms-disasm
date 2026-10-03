@@ -4448,14 +4448,14 @@ MidiSetup_ReturnZero:
 ; romslice (includes/romslices/v7_transplant_MidiPart_DataBlock.bin).
 ; =============================================================================
 MidiPart_DataBlock:
-	cp	(0xbfe4:16), 0xa8
+	cp	(SWBTWR_EVENT_TYPE:16), 0xa8
 	ret	nz
-	cp	(0xbfe1:16), 5
+	cp	(SWBTWR_PAYLOAD_1:16), 5
 	ret	nz
-	ld	c, (0xbfe3:16)
+	ld	c, (SWBTWR_PAYLOAD_3:16)
 	bit	6, c
 	ret	z
-	ld	a, (0xbfe2:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, c
 	ret	z
 	cp	(0x8c9c:16), 0xf

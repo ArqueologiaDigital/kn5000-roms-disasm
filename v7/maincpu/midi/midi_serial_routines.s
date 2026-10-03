@@ -541,7 +541,7 @@ MidiSerial_PumpLoop:
 	jr	MidiSerial_PumpLoop
 MidiSerial_PumpDone:
 	call	MidiStream_LoadAllPresets
-	ld	xix, 0xbca0
+	ld	xix, SWBTWR_EVENT_QUEUE
 	ld	hl, (0x9042:16)
 	ld	(xix+hl), 0xff
 MidiSerial_Return:

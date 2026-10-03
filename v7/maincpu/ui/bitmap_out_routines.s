@@ -71,12 +71,12 @@ BitMapOut_ByteData_RenderA:
 	call	GetTitleNow
 	cp	xhl, TITLE_TEST3
 	ret	z
-	cp	(49121:16), 0
+	cp	(SWBTWR_PAYLOAD_1:16), 0
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
 	ret	nz
-	ld	a, (49122:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	cp	a, 13
 	jr	z, BitMapOut_ByteData_RenderA_Skip
 	cp	a, 12
@@ -120,10 +120,10 @@ BitMapOut_ByteData_RenderB:
 	call	GetTitleNow
 	cp	xhl, TITLE_TEST3
 	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
-	ld	a, (49124:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	cp	a, (35998:16)
 	jrl	nz, BitMapOut_ByteData_RenderB_Epilogue
-	cp	(49121:16), 0
+	cp	(SWBTWR_PAYLOAD_1:16), 0
 	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -180,9 +180,9 @@ BitMapOut_ByteData_RenderD:
 	call	GetTitleNow
 	cp xhl, TITLE_SVARI
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
-	cp (49124:16), 144
+	cp (SWBTWR_EVENT_TYPE:16), 144
 	jr nz, BitMapOut_ByteData_RenderD_Epilogue
-	cp (49121:16), 16	; (at +1) differs from v10 here
+	cp (SWBTWR_PAYLOAD_1:16), 16	; (at +1) differs from v10 here
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	ld	a, (35998:16)
 	extz	wa
@@ -221,7 +221,7 @@ BitMapOut_ByteData_RenderD_Epilogue:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	cp (49121:16), 0	; (at +1) differs from v10 here
+	cp (SWBTWR_PAYLOAD_1:16), 0	; (at +1) differs from v10 here
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -241,9 +241,9 @@ BitMapOut_ByteData_RenderE:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	cp (49121:16), 0	; (at +1) differs from v10 here
+	cp (SWBTWR_PAYLOAD_1:16), 0	; (at +1) differs from v10 here
 	ret	nz
-	cp (49124:16), 72
+	cp (SWBTWR_EVENT_TYPE:16), 72
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -301,12 +301,12 @@ BitMapOut_ByteData_TransitionSeq:
 	call	GetTitleNow
 	cp	xhl, TITLE_NORMAL
 	ret	nz
-	cp (49124:16), 152
+	cp (SWBTWR_EVENT_TYPE:16), 152
 	ret nz
-	cp (49121:16), 11	; (at +1) differs from v10 here
+	cp (SWBTWR_PAYLOAD_1:16), 11	; (at +1) differs from v10 here
 	ret nz
-	ld	a, (49122:16)
-	and	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
+	and	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 192
 	cp	a, 64
 	jr	z, BitMapOut_ByteData_TransitionSeq_Skip
@@ -352,18 +352,18 @@ BitMapOut_ByteData_PresetCopy:
 	jr z, BitMapOut_ByteData_PresetCopy_Skip2
 	bit 3, (36010:16)
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip2
-	cp (49121:16), 1
+	cp (SWBTWR_PAYLOAD_1:16), 1
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip2
 	calr BitMapOut_GetRenderMode
 	bit 1, l
 	jr nz, BitMapOut_ByteData_PresetCopy_Join
-	ldb_d8 a, (49122)
+	ldb_d8 a, (SWBTWR_PAYLOAD_2)
 	res 7, a
 	ldfr_berp a, 251
 	cpib_erp 251, 0
 	jr z, BitMapOut_ByteData_PresetCopy_Join
 	dec1b_erp 251
-	ldb_d8 a, (49123)
+	ldb_d8 a, (SWBTWR_PAYLOAD_3)
 	res 7, a
 	cp a, 0:i3
 	jr z, BitMapOut_ByteData_PresetCopy_Join
@@ -1778,7 +1778,7 @@ BitMapOut_DetectChanges_CheckMode:
 BitMapOut_DetectChanges_UseShortList:
 .Lc_fb4e34:
 	ld hl, (0x9042:16)
-	lda xwa, (0xbca0:16)
+	lda xwa, (SWBTWR_EVENT_QUEUE:16)
 	ld (XSP+0x08),XWA
 	set 2, (0x8caa:16)
 	jr t, BitMapOut_DeltaEncode_Init
@@ -1859,7 +1859,7 @@ BitMapOut_DeltaEncode_ScanLoop:
 BitMapOut_DeltaEncode_BufferFull:
 	ld	(xbc), 255
 	ld	(36934:16), hl
-	lda	xwa, (48288:16)
+	lda	xwa, (SWBTWR_EVENT_QUEUE:16)
 	ld	(xsp+8), xwa
 	ld	hl, (36930:16)
 	ld	a, (36010:16)
@@ -3063,10 +3063,10 @@ BitMapOut_GetRenderMode_Return:
 	ret
 BitMapOut_ByteData_RenderState:
 	push	xiz
-	cp	(49121:16), 4
+	cp	(SWBTWR_PAYLOAD_1:16), 4
 	jrl	nz, BitMapOut_ByteData_RenderState_Epilogue
-	ld	a, (49122:16)
-	and	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
+	and	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 3
 	cp	a, 1:i3
 	jr	z, BitMapOut_ByteData_RenderState_Skip2
@@ -3136,10 +3136,10 @@ BitMapOut_ByteData_RenderState_Epilogue:
 	ret
 BitMapOut_ByteData_DisplayUpdate:
 	push	xiz
-	ld	a, (49121:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 1:i3
 	jr	nz, BitMapOut_ByteData_DisplayUpdate_Epilogue
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	res	7, a
 	cp	a, 0:i3
 	jr	z, BitMapOut_ByteData_DisplayUpdate_Skip

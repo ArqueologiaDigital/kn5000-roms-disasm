@@ -629,9 +629,9 @@ MidiRx_ChannelPressure_Return:
 ; screen elements that need to be redrawn.
 ; ============================================================================
 UIState_ProcessDisplayUpdate:
-	cp	(0xbfe1:16), 13
+	cp	(SWBTWR_PAYLOAD_1:16), 13
 	jr	nz, UIState_ProcessDisplayUpdate_Return
-	ld	a, (0xbfe3:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 255
 	jr	z, UIState_ProcessDisplayUpdate_Return
 	set	0, (0x95d0:16)
@@ -9357,7 +9357,7 @@ MidiPkt_ArpConfigChain_Data_Helper6_Helper:
 MidiSeq_ApplyPendingParams_Helper4:
 	push	xiz
 	ld	xiz, xwa
-	lda	xwa, (0x94800:24)
+	lda	xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld	(xiz), xwa
 	add	xwa, 0x16800
 	ld	(xiz+4), xwa
@@ -9374,7 +9374,7 @@ SeqVoice_DispatchProcess_Data_Epilogue2:
 	pop	xiz
 	ret
 MidiPkt_ArpConfigChain_Data_Helper8_Helper:
-	lda	xde, (0x94800:24)
+	lda	xde, (RHYTHM_PATTERN_BUF_A:24)
 	ld	(xwa), xde
 	lda	xbc, (0x94860:24)
 	sub	xbc, xde
@@ -9406,7 +9406,7 @@ MidiPkt_ArpConfigChain_Data_Helper10_Helper:
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
 	sub	xbc, xde
-	lda	xix, (0x94800:24)
+	lda	xix, (RHYTHM_PATTERN_BUF_A:24)
 	sub	xde, xix
 	add	xde, xbc
 	ld	xbc, (xiz)
@@ -10557,7 +10557,7 @@ MidiPkt_ArpConfigChain_Data_Join2:
 	ret
 	; --- Main: guard check, loop with bit 4 flag, multiple calls (76 bytes) ---
 MidiPkt_ArpChordHandler:
-	cp	(0x8c9a:16), 87
+	cp	(SEQ_MASTER_STATE:16), 87
 	jr	nz, ArpChord_ClearBitAndReturn
 	ld	xwa, (0xbc10:16)
 	ld	bc, 0:i3
@@ -11489,7 +11489,7 @@ SeqChan_UnhandledCmd_Join5:
 	pop	xde
 	ret
 SeqAlt_CheckInitBuffer:
-	cp	(0x8c9a:16), 87
+	cp	(SEQ_MASTER_STATE:16), 87
 	ret nz
 	ei 6
 	call	SeqMain_InitBuffer
@@ -11795,7 +11795,7 @@ SoundMode_RenderWithNotify:
 	push xix
 	push xiz
 	call	Display_SetupAndPrepareRender
-	ld	a, (0x8c9a:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp a, 0x76
 	jr	z, SoundMode_NotifyActiveVoices
 	cp a, 0x72
@@ -11850,9 +11850,9 @@ SoundMode_AlternateRender:
 	calr	SoundMode_ApplyVoiceParams
 	jrl	VoiceData_SyncAllToHardware
 MidiCtrl_ModeSwitchHandler:
-	cp	(0xbfe1:16), 3
+	cp	(SWBTWR_PAYLOAD_1:16), 3
 	ret nz
-	ld	a, (0xbfe3:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	bit 2, a
 	jr	z, MidiCtrl_CheckAltCommand
 	ld	a, (0xb752:16)
@@ -11874,17 +11874,17 @@ MidiCtrl_ModeSwitchHandler:
 	pop xhl
 	pop xde
 MidiCtrl_ApplyModeSwitch:
-	ld	a, (0xbfe2:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	extz wa
 	calr	MidiCtrl_Bit2ToChannel
-	ld	a, (0xbfe2:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	extz wa
 	calr	MidiCtrl_SendControlPacket
 	calr	MidiCtrl_FullReconfigure
 	res	0, (0xb752:16)
 	ret
 MidiCtrl_CheckAltCommand:
-	cp	(0xbfe2:16), 4
+	cp	(SWBTWR_PAYLOAD_2:16), 4
 	ret nz
 	cp a, 0:i3
 	ret nz
@@ -11904,13 +11904,13 @@ MidiCtrl_FullReconfigure:
 	pop xde
 	ld a, (0xfc5f:16)
 	ldfr_berp A, 0xfb
-	bit	2, (0xbfe2:16)
+	bit	2, (SWBTWR_PAYLOAD_2:16)
 	jr	z, MidiCtrl_RenderAndProcess
 	calr	SoundMode_RetStub_E
 	calr	SoundMode_FullRenderUpdate
 	bit 0, (4330:16)
 	jr	nz, SoundMode_ProcessToneAndParams
-	ld	a, (0x8c9a:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp a, 0x76
 	jr	ugt, MidiCtrl_DeltaAndProcess
 	cp a, 0x6c
@@ -12413,13 +12413,13 @@ MidiCtrl_ModeSwitch_Data:
 	bit	0, (0xb752:16)
 	; v7 bytes do not decode as v10's `sbc	xsp, xiz`
 	ret	nz
-	cp	(0xbfe1:16), 3
+	cp	(SWBTWR_PAYLOAD_1:16), 3
 	; v7 bytes do not decode as v10's `jrl	pl, 0x3fc0`
 	ret	nz
-	bit	2, (0xbfe3:16)
+	bit	2, (SWBTWR_PAYLOAD_3:16)
 	; v7 bytes do not decode as v10's `jrl	nc, -13632`
 	ret	z
-	ld	a, (0xbfe2:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	extz	wa
 	calr	MidiCtrl_Bit2ToChannel
 	ret
@@ -12650,7 +12650,7 @@ SeqData_DispatchLoop_Done:
 	jr	z, VoiceData_ZeroFillInner
 	bit	0, (0xb74b:16)
 	jr	nz, VoiceData_ZeroFillInner
-	cp	(0x8c9a:16), 87
+	cp	(SEQ_MASTER_STATE:16), 87
 	jr	z, VoiceData_ZeroFillInner
 	ld a, (0xfd50:16)
 	and a, 0x14
@@ -12693,7 +12693,7 @@ SeqData_FormatOutput_Dispatch:
 	call	AccWrap_ReturnZero
 	cp hl, 0xffff
 	ret z
-	cp	(0x8c9a:16), 87
+	cp	(SEQ_MASTER_STATE:16), 87
 	ret z
 	ld	a, (0xfd50:16)
 	and a, 0x14
@@ -14478,7 +14478,7 @@ MidiPkt_ProcessEventQueue:
 	jr	z, MidiPkt_ProcessEventQueue_Done
 	bit	0, (0xb74b:16)
 	jr	nz, MidiPkt_ProcessEventQueue_Done
-	lda	xbc, (0xbca0:16)
+	lda	xbc, (SWBTWR_EVENT_QUEUE:16)
 	ld	wa, (0x9044:16)
 	ld iz, wa
 	extz xiz

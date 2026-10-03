@@ -927,24 +927,24 @@ AccompSeq_ManualMidi_CheckAllNotes:
 	jr AccompSeq_ManualMidi_ClearFlags
 
 AccompSeq_ManualMidi_SaveAndCall:
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	push xwa
 	push xhl
 	call Voice_DecodeNoteParam
 	call Voice_DecodeNoteChannel
-	ld (0xc07e:16), 1
+	ld (SWBTWR_PAYLOAD_2:16), 1
 	cp h, 0:i3
 	jr z, AccompSeq_ManualMidi_SetChannel
-	ld (0xc07e:16), 2
+	ld (SWBTWR_PAYLOAD_2:16), 2
 	cp h, 1:i3
 	jr z, AccompSeq_ManualMidi_SetChannel
-	ld (0xc07e:16), 4
+	ld (SWBTWR_PAYLOAD_2:16), 4
 
 AccompSeq_ManualMidi_SetChannel:
 	pop xhl
 	call AccompSeq_ProcessAfterNote
 	pop xwa
-	ld (0xc07e:16), a
+	ld (SWBTWR_PAYLOAD_2:16), a
 
 AccompSeq_ManualMidi_ClearFlags:
 	and (0x7f15:16), 253
@@ -1070,16 +1070,16 @@ AccompSeq_ProcessAfterNote:
 AccompSeq_LargeCodeBlock2:
 	jp	AccompSeq_ClearPendingFlag
 AccompSeq_LargeCodeBlock2_Join:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 9
 	jrl	nz, AccompSeq_ProcessAfterNote_Return
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	bit	7, a
 	jr	z, AccompSeq_ProcessAfterNote_Skip2
 	calr	AccompSeq_ProcessAfterNote_Helper
 	ld	l, 127:opc
 	ld	h, 3:opc
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	bit	7, a
 	jr	z, AccompSeq_ProcessAfterNote_Skip
 	calr	AccompSeq_OutputEvent
@@ -1089,8 +1089,8 @@ AccompSeq_ProcessAfterNote_Skip2:
 	and	a, 63
 	cp	a, 0:i3
 	jr	z, AccompSeq_ProcessAfterNote_Return
-	ld	a, (0xc07e:16)
-	and	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
+	and	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 63
 	cp	a, 0:i3
 	jr	z, AccompSeq_ProcessAfterNote_Return
@@ -1384,7 +1384,7 @@ AccompSeq_InitPlay_Ch2Flag:
 
 AccompSeq_InitPlay_Store:
 	ld (0x7e24:16), a
-	ld w, (0xc07e:16)
+	ld w, (SWBTWR_PAYLOAD_2:16)
 	ld a, 0x1:opc
 	bit 0, w
 	jr nz, AccompSeq_InitPlay_Return
@@ -1433,7 +1433,7 @@ AccompSeq_HandleSpecialMode_Skip2:
 	calr	AccompSeq_ResetMidiState
 	and	l, 15
 	ld	(0x7f14:16), l
-	ld	w, (0xc07e:16)
+	ld	w, (SWBTWR_PAYLOAD_2:16)
 	ld	a, 1:opc
 	bit	0, w
 	jr	nz, AccompSeq_HandleSpecialMode_Skip3
@@ -1461,7 +1461,7 @@ AccompSeq_OutputEvent:
 	ld hl, bc
 	cpw (0x28aa:16), 0
 	jr nz, AccompSeq_Output_CheckFilter
-	cp (0x8d36:16), 138
+	cp (SEQ_MASTER_STATE:16), 138
 	jr nz, AccompSeq_Output_CheckManual
 	cp (3429:16), 2
 	jr nz, AccompSeq_Output_CheckManual
@@ -1512,7 +1512,7 @@ AccompSeq_WriteMidi_CodeBlock:
 AccompSeq_WriteMidiToBuffer_Return:
 	ret
 AccompSeq_ProcessAfterNote_Helper:
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	bit	7, a
 	jr	nz, AccompSeq_ProcessAfterNote_Helper_Skip2
 	and	(0x7e7a:16), 254
@@ -1575,11 +1575,11 @@ AccompSeq_ClearPending_Return:
 	ret
 AccompSeq_GuardedNoteOff:
 	; --- Routine 2: multi-guard, all-register push, call F99490 (61 bytes) ---
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp a, 0x1c
 	jr nz, AccompSeq_GuardedNote_Return
-	ld	a, (0xc07e:16)
-	and	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
+	and	a, (SWBTWR_PAYLOAD_3:16)
 	and a, 0x03
 	cp	a, 0:i3
 	jr z, AccompSeq_GuardedNote_Return

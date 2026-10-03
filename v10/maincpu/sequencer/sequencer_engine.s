@@ -92,7 +92,7 @@ SeqAcc_InitAndDispatch:
 ; -----------------------------------------------------------------------------
 
 SeqAcc_HandlePlaybackTick:
-	cp (0x8d36:16), 136
+	cp (SEQ_MASTER_STATE:16), 136
 	jr z, SeqAcc_HandlePlaybackTick_ClearBit2
 	bit 1, (8970:16)
 	jr z, SeqAcc_HandlePlaybackTick_ClearBit1
@@ -145,7 +145,7 @@ SeqAcc_StartPlayback:
 	jp SeqBuf_Init
 
 SeqAcc_StopPlayback:
-	cp (0x8d36:16), 136
+	cp (SEQ_MASTER_STATE:16), 136
 	jr z, SeqAcc_StopPlayback_HandleTick
 	res 0, (0xf23c:16)
 	calr SeqAcc_SetupRepeatCount
@@ -2071,7 +2071,7 @@ SeqPlay_InitializePlayback:
 	pushw_erp 0xfa
 	res 5, (0x28b3:16)
 	ld (7572:16), 0
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	jr z, SeqPlay_Init_AccMode87_88
 	cp a, 0x88
@@ -2314,7 +2314,7 @@ SeqPlay_FindSpecialVoices:
 	ldw bc, 0xf
 	call Part_FindVoiceByByte
 	ld (8996:16), l
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	jr z, SeqPlay_ClearPositionAndFlags
 	cp a, 0x88
@@ -2512,7 +2512,7 @@ SeqPlay_Prepare_SetState6:
 	ld (8956:16), 6
 
 SeqPlay_Prepare_CheckMode87:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	jr z, KeyScan_DisableComplete_Return
 	cp a, 0x88
@@ -2525,7 +2525,7 @@ KeyScan_DisableComplete_Return:
 	ret
 
 SeqPlay_HandlePlaybackEvent:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	jr z, SeqPlay_HandleEvent_AccMode
 	cp a, 0x88
@@ -2616,7 +2616,7 @@ SeqPlay_ClearFlagsRet:
 SeqPlay_ProcessVoiceAndNotes:
 	lda xsp, (xsp - 12)
 	push xiz
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	jr z, SeqPlay_ProcessVoice_AccMode
 	cp a, 0x88
@@ -4813,7 +4813,7 @@ AccPedalConfig_StoreCtrl6Vals:
 	extz wa
 	ld (0x3488:16), e
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 	jrl AccPedalConfig_ReplayAndReturnOK
 
 AccPedalConfig_StoreCtrl6ValsAlt:
@@ -4821,7 +4821,7 @@ AccPedalConfig_StoreCtrl6ValsAlt:
 	extz wa
 	ld (0x3488:16), e
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 	jrl AccPedalConfig_ReplayAndReturnOK
 
 AccPedalConfig_Ctrl5Path:
@@ -4840,7 +4840,7 @@ AccPedalConfig_Ctrl5Store:
 	ldto_berp A, 0xf0
 	ld (0x3488:16), a
 	ld (0x3475:16), l
-	ld (0x3476:16), c
+	ld (RHYTHM_VARIATION_INDEX:16), c
 	jrl AccPedalConfig_ReplayAndReturnOK
 
 AccPedalConfig_Ctrl5Bit5:
@@ -4858,7 +4858,7 @@ AccPedalConfig_Ctrl5Bit5Store:
 	ldto_berp A, 0xf0
 	ld (0x3488:16), a
 	ld (0x3475:16), l
-	ld (0x3476:16), c
+	ld (RHYTHM_VARIATION_INDEX:16), c
 	jrl AccPedalConfig_ReplayAndReturnOK
 
 AccPedalConfig_Ctrl5Bit2:
@@ -4877,7 +4877,7 @@ AccPedalConfig_Ctrl5Bit2Store:
 	extz wa
 	ld (0x3488:16), e
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 	jrl AccPedalConfig_ReplayAndReturnOK
 
 AccPedalConfig_Ctrl5Bit3:
@@ -4900,7 +4900,7 @@ AccPedalConfig_StorePedalValues:
 	extz wa
 	ld (0x3488:16), e
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 	jrl AccPedalConfig_ReplayAndReturnOK
 
 AccPedalCfg_CheckBit6:
@@ -4912,7 +4912,7 @@ AccPedalCfg_CheckBit6:
 	jrl z, AccPedalConfig_ReturnError7
 	ld (0x3488:16), e
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 	jr AccPedalConfig_ReplayAndReturnOK
 
 AccPedalCfg_CheckBit7:
@@ -4924,7 +4924,7 @@ AccPedalCfg_CheckBit7:
 AccPedalCfg_StoreValues:
 	ld (0x3488:16), e
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 	jr AccPedalConfig_ReplayAndReturnOK
 
 AccPedalCfg_CheckBit6Replay:
@@ -4955,7 +4955,7 @@ AccPedalCfg_CheckBit7Alt:
 	ldto_berp A, 0xf4
 	ld (0x3488:16), a
 	ld (0x3475:16), c
-	ld (0x3476:16), e
+	ld (RHYTHM_VARIATION_INDEX:16), e
 	jr AccPedalConfig_ReplayAndReturnOK
 
 AccPedalConfig_CheckMaskBits:
@@ -4966,7 +4966,7 @@ AccPedalConfig_CheckMaskBits:
 AccPedalCfg_StoreMaskValues:
 	ld (0x3488:16), c
 	ld (0x3475:16), l
-	ld (0x3476:16), e
+	ld (RHYTHM_VARIATION_INDEX:16), e
 
 AccPedalConfig_ReplayAndReturnOK:
 	call AccWrap_ReplaySavedPedal
@@ -6509,7 +6509,7 @@ SeqAccVoice_ShiftDoneCheck:
 	extz wa
 	ld (0x3488:16), 5
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 
 SeqAccVoice_ReplaySavedPedal:
 	call AccWrap_ReplaySavedPedal
@@ -6599,7 +6599,7 @@ SeqAccVoice_CheckPedalType6:
 	extz wa
 	ld (0x3488:16), 6
 	ld (0x3475:16), c
-	ld (0x3476:16), a
+	ld (RHYTHM_VARIATION_INDEX:16), a
 	jrl SeqAccVoice_ReplaySavedPedal
 
 SeqAccVoice_HandleNoteOn:
@@ -6993,11 +6993,11 @@ NotePool_DataBlock_8BA:
 	ret	nz
 	cp	(0x8d34:16), 14
 	ret	z
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 5:i3
 	ret	nz
-	ld	c, (0xc07e:16)
-	ld	a, (0xc07f:16)
+	ld	c, (SWBTWR_PAYLOAD_2:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	c, a
 	and	c, 64
 	ret	z
@@ -9643,7 +9643,7 @@ PartDeact_CheckSubsystem:
 	ret
 
 Accomp_UpdateModeFlag:
-	cp (0x8d36:16), 129
+	cp (SEQ_MASTER_STATE:16), 129
 	jr z, AccompMode_SetFlag
 	cpw (0xf19e:16), 0
 	jr z, AccompMode_ClearFlag
@@ -10410,7 +10410,7 @@ SeqBuffer_RemoveLast_Fixup:
 	ret
 
 SeqPlay_AllocBuffersAndInit:
-	ld c, (0x8d36:16)
+	ld c, (SEQ_MASTER_STATE:16)
 	cp c, 0x85
 	jr z, SeqPlay_AllocBuf_Mode85_86
 	cp c, 0x86
@@ -10495,7 +10495,7 @@ SeqPlay_InitStartState:
 	jr SeqInitStart_SetActiveFlag
 
 SeqInitStart_CheckPlayMode:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x85
 	jr z, SeqInitStart_Mode85_86
 	cp a, 0x86
@@ -10534,7 +10534,7 @@ SeqPlay_ResetStartState:
 	res 4, (0x28b3:16)
 	ld (7518:16), 0
 	ld (9508:16), 0
-	cp (0x8d36:16), 142
+	cp (SEQ_MASTER_STATE:16), 142
 	ret z
 	cp (0xe386:16), 1
 	jr nz, SeqResetStart_ClearActiveFlag
@@ -10808,7 +10808,7 @@ MidiEvtSize_Return1:
 
 SeqPlay_CheckRepeatActive:
 	ld l, 0x0:opc
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	ret z
 	cp a, 0x88
@@ -10991,7 +10991,7 @@ SeqNotify_DataBlock:
 SeqNotify_CheckAndClearStart:
 	bit 0, (0x28b3:16)
 	ret z
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	jr z, SeqNotify_ClearStartFlag
 	cp a, 0x88
@@ -18910,7 +18910,7 @@ SeqPlay_StateDeactivateChannel:
 
 SeqPlay_ClearFlags_Exit:
 	res 3, (0x28a7:16)
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x87
 	jr z, SeqPlay_ResetModeAndDisplay
 	cp a, 0x88
@@ -19192,7 +19192,7 @@ SeqVoice_UpdateSubBlockAssign:
 	ld (xsp), a
 	cp (0x8d34:16), 11
 	jr z, SeqUpdate_FindVoiceAndWrite
-	cp (0x8d36:16), 135
+	cp (SEQ_MASTER_STATE:16), 135
 	jr nz, Part_WriteSubBlock_Exit
 
 SeqUpdate_FindVoiceAndWrite:
@@ -19513,7 +19513,7 @@ SeqPlay_BufferUpdateBlock:
 	cp	e, c
 	ret	ugt
 	ld	wa, (9832:16)
-	cp	(36150:16), 133
+	cp	(SEQ_MASTER_STATE:16), 133
 	jr	z, SeqPlay_StopAndClearSequence_Skip4
 	cp	(36152:16), 134
 	jr	nz, SeqPlay_StopAndClearSequence_Skip5
@@ -20054,7 +20054,7 @@ SeqEvent_CaseE:
 
 ; SeqEvent main handler
 SeqEvent_MainHandler:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x91
 	jrl z, AppEvent_SubHandler0
 	cp a, 0x90
@@ -20337,7 +20337,7 @@ AppEvent_ChainDispatch1:
 ; Handles up to 32 event types (XBC 0-0x1f), used by ApDeliveryEvent system
 ; Each handler increments counters, sends notifications via CALL 0FA9E07h
 APP_EVENT_HANDLER_TABLE:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
@@ -20357,7 +20357,7 @@ AppEvtHandler_Branch_002:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AppEvtHandler_Branch_033
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
@@ -20412,13 +20412,13 @@ AppEvtHandler_Branch_005:
 	ld xde, 2:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_006:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0xa3
 	jrl z, AppEvtHandler_Branch_011
 	cp a, 0xa1
 	jrl z, AppEvtHandler_Branch_013
 	jrl AppEvent_Epilogue
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
@@ -20474,7 +20474,7 @@ AppEvtHandler_Branch_009:
 	ld xde, 1:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_010:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0xa3
 	jr nz, AppEvtHandler_Branch_012
 AppEvtHandler_Branch_011:
@@ -20912,7 +20912,7 @@ AppEvent_InlineHandler:
 	jp	t, (xix+bc)
 ; Application event sub-dispatch
 AppEvent_SubDispatch:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	extz	wa
 	sub	wa, 156
 	cp	wa, 0:i3
@@ -20932,7 +20932,7 @@ AppEvent_InlineHandler_Skip16:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jrl	AppEvent_InlineHandler_Join8
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	extz	wa
 	sub	wa, 156
 	cp	wa, 0:i3
@@ -20987,13 +20987,13 @@ AppEvent_InlineHandler_Skip18:
 	ld	xde, 2:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 163
 	jrl	z, AppEvent_InlineHandler_Skip4
 	cp	a, 161
 	jrl	z, AppEvent_InlineHandler_Skip20
 	jrl	SeqState_DispatchEntry
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	extz	wa
 	sub	wa, 156
 	cp	wa, 0:i3
@@ -21049,7 +21049,7 @@ AppEvent_InlineHandler_Skip2:
 	ld	xde, 1:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip3:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 163
 	jr	nz, AppEvent_InlineHandler_Skip5
 AppEvent_InlineHandler_Skip4:
@@ -21604,7 +21604,7 @@ AppEvent_HandleChannelEvent:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
-	ld e, (0x8d36:16)
+	ld e, (SEQ_MASTER_STATE:16)
 	cp e, 0x9a
 	jrl z, AppEvent_Handle9AToggle
 	ld c, (xsp + 4)
@@ -22074,11 +22074,11 @@ AppEvent_ReturnZeroEpilogue4:
 EffEdit_DSPConfigBlock:
 	dec	4, xsp
 	pushw	iz
-	ld	a, (0xc080:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	extz	wa
-	ld	c, (0xc07d:16)
+	ld	c, (SWBTWR_PAYLOAD_1:16)
 	extz	bc
-	ld	e, (0xc07f:16)
+	ld	e, (SWBTWR_PAYLOAD_3:16)
 	extz	de
 	lda	xhl, (xsp+2)
 	push	xhl
@@ -22627,7 +22627,7 @@ ApPlaySyori:
 	ldfr_werp WA, 0xea
 	ld a, (0x283a:16)
 	ldfr_berp A, 0xee
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	ldfr_berp A, 0xef
 	cp xbc, EVT_DEC_VAL
 	jrl z, SeqAccomp_SubChain
@@ -22637,7 +22637,7 @@ ApPlaySyori:
 	jrl nz, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
 	ld (0x2972:16), xwa
-	ld c, (0x8d36:16)
+	ld c, (SEQ_MASTER_STATE:16)
 	cp c, 0x99
 	jrl z, SeqAccomp_DispatchRhythmEvents
 	cp c, 0x96
@@ -22902,7 +22902,7 @@ ApPlaySyori_Join9:
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(36150:16), 134
+	cp	(SEQ_MASTER_STATE:16), 134
 	jr	nz, ApPlaySyori_Skip2
 	ld	wa, iy
 	cp	iy, 999
@@ -22940,7 +22940,7 @@ ApPlaySyori_Skip:
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(36150:16), 134
+	cp	(SEQ_MASTER_STATE:16), 134
 	jr	nz, ApPlaySyori_Skip3
 	ld	wa, hl
 	cp	hl, 999
@@ -23077,7 +23077,7 @@ ApPlaySyori_Join5:
 	jrl	SeqAccomp_StartHandler
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(36150:16), 134
+	cp	(SEQ_MASTER_STATE:16), 134
 	jr	nz, ApPlaySyori_Skip8
 	ld	wa, iy
 	cp	iy, 1:i3
@@ -23101,7 +23101,7 @@ ApPlaySyori_Join6:
 	jr	SeqAccomp_SubHandlerB_Code_Join
 	bit	2, (1057:16)
 	jrl	nz, AppEvent_ReturnZero
-	cp	(36150:16), 134
+	cp	(SEQ_MASTER_STATE:16), 134
 	jr	nz, ApPlaySyori_Skip9
 	ld	wa, hl
 	cp	hl, 1:i3
@@ -23195,7 +23195,7 @@ ApPlaySyori_Skip12:
 
 ; SeqAccomp start helper
 SeqAccomp_StartHelper:
-	cp (0x8d36:16), 133
+	cp (SEQ_MASTER_STATE:16), 133
 	jrl nz, SeqAccomp_HandleOtherState
 	bit 2, (1057:16)
 	jr nz, SeqAccomp_TogglePlayback
@@ -25284,10 +25284,10 @@ MainPanic_ReturnZero:
 	ret
 
 HelpLang_DispatchDataBlock:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 19
 	ret	nz
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	ld	(0x296e:16), a
 	cp a, (10608:16)
 	ret	z

@@ -26,8 +26,8 @@ FDemoText_LookupTableEntry:
 	ret
 FDemoText_ByteData_VoiceProbeA:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 20 of 23 slots byte-identical
-	ld	c, (49121:16)
-	ld	a, (49124:16)
+	ld	c, (SWBTWR_PAYLOAD_1:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	extz	wa
 	cp	c, 5:i3
 	jr	z, FDemoText_ByteData_VoiceProbeA_Skip2
@@ -45,7 +45,7 @@ FDemoText_ByteData_VoiceProbeA_Skip2:
 	inc	5, xhl
 	cp	(xhl), 0
 	ret	nz
-	ld	a, (49124:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	extz	wa
 	lda	xbc, (FDemoText_ByteData_VoiceProbeA_Data:24)
 	ld	a, (xbc+wa)
@@ -53,9 +53,9 @@ FDemoText_ByteData_VoiceProbeA_Skip2:
 	ret
 FDemoText_ByteData_VoiceProbeB:
 ; (was .incbin "includes/romslices/v7_transplant_FDemoText_ByteData_VoiceProbeB.bin")
-	cp	(0xbfe1:16), 1
+	cp	(SWBTWR_PAYLOAD_1:16), 1
 	ret	nz
-	ld	a, (0xbfe3:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	res	7, a
 	cp	a, 0:i3
 	ret	z
@@ -63,9 +63,9 @@ FDemoText_ByteData_VoiceProbeB:
 	ret
 FDemoText_ByteData_VoiceProbeC:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 31 of 44 slots byte-identical
-	ld	e, (49124:16)
+	ld	e, (SWBTWR_EVENT_TYPE:16)
 	sub	e, 68
-	ld	a, (49121:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	extz	wa
 	dec	1, wa
 	cp	wa, 0:i3
@@ -83,7 +83,7 @@ FDemoText_ByteData_VoiceProbeC_Code:
 	ld	xwa, FDemoText_ByteData_VoiceProbeC_Data
 ; differs from v10 here and llvm-objdump cannot read it
 	jr	FDemoText_ByteData_VoiceProbeC_Join
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 15
 	jr	z, FDemoText_ByteData_VoiceProbeC_Skip
 	ld	a, e
@@ -92,7 +92,7 @@ FDemoText_ByteData_VoiceProbeC_Code:
 	ld	a, (xbc+wa)
 	or	(149484:24), a
 FDemoText_ByteData_VoiceProbeC_Skip:
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 48
 	ret	z
 	ld	xwa, FDemoText_ByteData_VoiceProbeC_Data_2

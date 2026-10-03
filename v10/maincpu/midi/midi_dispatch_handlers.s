@@ -36,7 +36,7 @@ MidiSerial_PumpLoop:
 
 MidiSerial_PumpDone:
 	call MidiStream_LoadAllPresets
-	ld xix, 0xbd3c
+	ld xix, SWBTWR_EVENT_QUEUE
 	ld hl, (0x90de:16)
 	ld	(xix+hl), 0xff
 
@@ -1021,9 +1021,9 @@ MidiRx_ChannelPressure_Return:
 ; screen elements that need to be redrawn.
 ; ============================================================================
 UIState_ProcessDisplayUpdate:
-	cp	(0xc07d:16), 13
+	cp	(SWBTWR_PAYLOAD_1:16), 13
 	jr	nz, UIState_ProcessDisplayUpdate_Return
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 255
 	jr	z, UIState_ProcessDisplayUpdate_Return
 	set	0, (0x966c:16)
@@ -10109,7 +10109,7 @@ MidiPkt_ArpPopReturn_Helper4:
 MidiSeq_ClearSyncFlag_Helper4:
 	push	xiz
 	ld	xiz, xwa
-	lda	xwa, (0x94800:24)
+	lda	xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld	(xiz), xwa
 	add	xwa, 0x16800
 	ld	(xiz+4), xwa
@@ -10126,7 +10126,7 @@ SeqVoice_DispatchProcess_Data_Epilogue2:
 	pop	xiz
 	ret
 MidiPkt_ArpPopReturn_Helper5:
-	lda	xde, (0x94800:24)
+	lda	xde, (RHYTHM_PATTERN_BUF_A:24)
 	ld	(xwa), xde
 	lda	xbc, (0x94860:24)
 	sub	xbc, xde
@@ -10158,7 +10158,7 @@ MidiPkt_ArpPopReturn_Helper7:
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
 	sub	xbc, xde
-	lda	xix, (0x94800:24)
+	lda	xix, (RHYTHM_PATTERN_BUF_A:24)
 	sub	xde, xix
 	add	xde, xbc
 	ld	xbc, (xiz)
@@ -11335,7 +11335,7 @@ MidiPkt_ArpConfigChain_Data_Join2:
 	ret
 MidiPkt_ArpChordHandler:
 	; --- Main: guard check, loop with bit 4 flag, multiple calls (76 bytes) ---
-	cp	(0x8d36:16), 87
+	cp	(SEQ_MASTER_STATE:16), 87
 	jr nz, ArpChord_ClearBitAndReturn
 	ld	xwa, (0xbcac:16)
 	ld	bc, 0:i3
@@ -12227,7 +12227,7 @@ SeqChan_UnhandledCmd_Join5:
 	ret
 
 SeqAlt_CheckInitBuffer:
-	cp (0x8d36:16), 87
+	cp (SEQ_MASTER_STATE:16), 87
 	ret nz
 	ei 6
 	call SeqMain_InitBuffer
@@ -12563,7 +12563,7 @@ SoundMode_RenderWithNotify:
 	push xix
 	push xiz
 	call Display_SetupAndPrepareRender
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x76
 	jr z, SoundMode_NotifyActiveVoices
 	cp a, 0x72
@@ -12621,9 +12621,9 @@ SoundMode_AlternateRender:
 	calr SoundMode_ApplyVoiceParams
 	jrl VoiceData_SyncAllToHardware
 MidiCtrl_ModeSwitchHandler:
-	cp (0xc07d:16), 3
+	cp (SWBTWR_PAYLOAD_1:16), 3
 	ret nz
-	ld a, (0xc07f:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
 	bit 2, a
 	jr z, MidiCtrl_CheckAltCommand
 	ld a, (0xb7ee:16)
@@ -12646,10 +12646,10 @@ MidiCtrl_ModeSwitchHandler:
 	pop xde
 
 MidiCtrl_ApplyModeSwitch:
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	extz wa
 	calr MidiCtrl_Bit2ToChannel
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	extz wa
 	calr MidiCtrl_SendControlPacket
 	calr MidiCtrl_FullReconfigure
@@ -12657,7 +12657,7 @@ MidiCtrl_ApplyModeSwitch:
 	ret
 
 MidiCtrl_CheckAltCommand:
-	cp (0xc07e:16), 4
+	cp (SWBTWR_PAYLOAD_2:16), 4
 	ret nz
 	cp a, 0:i3
 	ret nz
@@ -12678,13 +12678,13 @@ MidiCtrl_FullReconfigure:
 	pop xde
 	ld a, (0xfc5f:16)
 	ldfr_berp A, 0xfb
-	bit 2, (0xc07e:16)
+	bit 2, (SWBTWR_PAYLOAD_2:16)
 	jr z, MidiCtrl_RenderAndProcess
 	calr SoundMode_RetStub_E
 	calr SoundMode_FullRenderUpdate
 	bit 0, (4330:16)
 	jr nz, SoundMode_ProcessToneAndParams
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x76
 	jr ugt, MidiCtrl_DeltaAndProcess
 	cp a, 0x6c
@@ -13256,11 +13256,11 @@ MidiBuf_FillLoop:
 MidiCtrl_ModeSwitch_Data:
 	bit	0, (0xb7ee:16)
 	ret	nz
-	cp	(0xc07d:16), 3
+	cp	(SWBTWR_PAYLOAD_1:16), 3
 	ret	nz
-	bit	2, (0xc07f:16)
+	bit	2, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	extz	wa
 	calr	MidiCtrl_Bit2ToChannel
 	ret
@@ -13514,7 +13514,7 @@ SeqData_DispatchLoop_Done:
 	jr z, ArpQueue_Flush_Return
 	bit 0, (0xb7e7:16)
 	jr nz, ArpQueue_Flush_Return
-	cp (0x8d36:16), 87
+	cp (SEQ_MASTER_STATE:16), 87
 	jr z, ArpQueue_Flush_Return
 	ld a, (0xfd50:16)
 	and a, 0x14
@@ -13558,7 +13558,7 @@ SeqData_FormatOutput_Dispatch:
 	call AccWrap_ReturnZero
 	cp hl, 0xffff
 	ret z
-	cp	(0x8d36:16), 87
+	cp	(SEQ_MASTER_STATE:16), 87
 	ret z
 	ld	a, (0xfd50:16)
 	and a, 0x14

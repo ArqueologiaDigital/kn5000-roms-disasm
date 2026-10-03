@@ -2864,7 +2864,7 @@ SndParam_WidgetDispatch:
 	jr nz, SndParam_WidgetDispatchDone
 	cpw (0x90de:16), 508
 	call nc, (SwbtWr_ReinitBothBanks:24)
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc
@@ -2881,7 +2881,7 @@ SndParam_WidgetDispatch:
 SndParam_WidgetAppendType2:
 	cpw (0x90de:16), 508
 	call nc, (SwbtWr_ReinitOutputBank:24)
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc
@@ -2935,7 +2935,7 @@ SndParam_WidgetNotifyType1:
 	jrl nz, SndParam_Widget1_Done
 	cpw (0x90de:16), 504
 	call nc, (SwbtWr_ReinitBothBanks:24)
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc
@@ -2960,7 +2960,7 @@ SndParam_WidgetNotifyType1:
 SndParam_Widget1_AppendType2:
 	cpw (0x90de:16), 504
 	call nc, (SwbtWr_ReinitOutputBank:24)
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	ld de, (0x90de:16)
 	extz xde
 	add xde, xbc

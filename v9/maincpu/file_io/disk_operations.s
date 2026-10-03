@@ -470,7 +470,7 @@ FmmFmt_InitPhase_DriveType23:
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	jr FmmFmt_InitPhase_SetActive
 
 FmmFmt_InitPhase_OtherDrive:
@@ -478,7 +478,7 @@ FmmFmt_InitPhase_OtherDrive:
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x84fe:16), 2
+	ld (MEDLEY_PLAY_FLAG:16), 2
 
 FmmFmt_InitPhase_SetActive:
 	ld (0x7f6c:16), 1
@@ -486,7 +486,7 @@ FmmFmt_InitPhase_SetActive:
 
 FmmFmt_HandleCancel:
 	calr CancelOperationCleanup
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	ld (0x7f6c:16), 0
 	jrl FmmFmt_Return
 
@@ -497,7 +497,7 @@ FmmFmt_HandleProgress:
 	extz wa
 	cp xde, 0xf
 	jrl z, FmmFmt_HandleAbortFinal
-	ld c, (0x84fe:16)
+	ld c, (MEDLEY_PLAY_FLAG:16)
 	cp xde, 0xb
 	jrl z, FmmFmt_HandleAbort
 	cp xde, 0xa
@@ -552,7 +552,7 @@ FmmFmt_FormatSuccess:
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x84fe:16), 1
+	ld (MEDLEY_PLAY_FLAG:16), 1
 	jr FmmFmt_Return
 
 FmmFmt_ExecutePhase2:
@@ -597,7 +597,7 @@ FmmFmt_HandleAbortFinal:
 	ld (0x7f6c:16), 0
 
 FmmFmt_NotifyComplete:
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 
 FmmFmt_Return:
 	ld xhl, 0:i3
@@ -627,7 +627,7 @@ FmmLoadTitleFunc:
 	jrl z, FmmLoadTtl_HandleScrollNav
 	cp xde, 0x2
 	jrl nz, FmmLoadTtl_Return
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	ldmm16 0x7f70, 0x8500
 	ld wa, 1:i3
 	calr InitializeOperationState
@@ -811,7 +811,7 @@ FmmSaveTitleFunc:
 	jrl z, FmmSaveTtl_HandleCancel
 	cp xde, 0x2
 	jrl nz, FmmSaveTtl_Return
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026

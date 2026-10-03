@@ -282,7 +282,7 @@ AssswbWr:
 	ld	hl, (0x9042:16)
 	cp	hl, 0x1fc
 	jr	nc, AssswbWr_BufferFull
-	lda	xix, (0xbca0:16)
+	lda	xix, (SWBTWR_EVENT_QUEUE:16)
 	extz	xhl
 	add	xhl, xix
 	ld	(xhl+), a
@@ -356,7 +356,7 @@ SwbtWr_SoundBankParamTable:
 	ret
 SwbtWr_ProcessAll:
 	ld	xiy, 0xbe9d
-	ld	xix, 0xbca0
+	ld	xix, SWBTWR_EVENT_QUEUE
 	ld	bc, (0x9046:16)
 	srl	bc, 1
 	cp	bc, 0:i3
@@ -374,7 +374,7 @@ SwbtWr_InitBank1:
 	ld	(0xbfe5:16), xiy
 	ld	xiy, SwbtBank1_PostCallbacks
 	ld	(0xbfe9:16), xiy
-	ld	xiy, 0xbca0
+	ld	xiy, SWBTWR_EVENT_QUEUE
 	ld	(0xbfed:16), xiy
 	calr	SwbtWr_DispatchLoop_Init
 	ret
@@ -383,7 +383,7 @@ SwbtWr_InitBank2:
 	ld	(0xbfe5:16), xiy
 	ld	xiy, SwbtBank2_PostCallbacks
 	ld	(0xbfe9:16), xiy
-	ld	xiy, 0xbca0
+	ld	xiy, SWBTWR_EVENT_QUEUE
 	ld	(0xbfed:16), xiy
 	calr	SwbtWr_DispatchLoop_Init
 	ret
@@ -406,7 +406,7 @@ SwbtWr_DispatchLoop:
 	ld	xix, (0xbfe5:16)
 	xor	hl, hl
 	ld	l, (xiy)
-	ld	(0xbfe4:16), l
+	ld	(SWBTWR_EVENT_TYPE:16), l
 	cp	l, 0xbf
 	jr	ugt, SwbtWr_DispatchLoop_NextEvent
 	sla	hl, 2
@@ -419,8 +419,8 @@ SwbtWr_DispatchLoop_ScanCallbacks:
 	cpw	(xhl + 2), 0xffff
 	jr	z, SwbtWr_DispatchLoop_NextEvent
 SwbtWr_DispatchLoop_ExecuteCallback:
-	ld	(0xbfe1:16), wa
-	ld	(0xbfe3:16), c
+	ld	(SWBTWR_PAYLOAD_1:16), wa
+	ld	(SWBTWR_PAYLOAD_3:16), c
 	push_sd16w	0xdf, 0xbf
 	push_sd16w	0xe5, 0xbf
 	push_sd16w	0xe7, 0xbf
@@ -466,7 +466,7 @@ SwbtWr_PostCallback_Done:
 SwbtWr_QueueMainEvent:
 	cpw	(0x9042:16), 507
 	jr	ugt, SwbtWr_QueueMainEvent_Done
-	ld	xhl, 0xbca0
+	ld	xhl, SWBTWR_EVENT_QUEUE
 	add	hl, (0x9042:16)
 	ld	(xhl), de
 	ld	(xhl + 2), wa
@@ -1169,12 +1169,12 @@ MidiOut_RealtimeDispatch_Data:
 	.byte	0xc1, 0xe4, 0xbf
 	push	xsp
 	cp	(xwa-80), iz
-	cp	(0xbfe1:16), 14
+	cp	(SWBTWR_PAYLOAD_1:16), 14
 	ret	nz
-	ld	a, (0xbfe3:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 3
 	ret	z
-	ld	a, (0xbfe2:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 3
 	ld	(0xc148:16), a
 	ret
@@ -1491,11 +1491,11 @@ Audio_ConfigureDSP:
 	; MidiSysEx_ApplyChannel is kept at this address only for ui_widgets/widget_dispatch.s; v10's MidiSysEx_ApplyChannel is the code at 0xFDB19A
 	jr	CompIface_WriteVolume
 DSPCfg_ProcessInput:
-	ld	c, (0xbfe4:16)
-	ld	e, (0xbfe1:16)
+	ld	c, (SWBTWR_EVENT_TYPE:16)
+	ld	e, (SWBTWR_PAYLOAD_1:16)
 	cp	c, 0x48
 	jrl	z, DSPCfg_ScaleFactor_Dispatch
-	ld	a, (0xbfe3:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	cp	c, 0x70
 	jrl	z, DSPCfg_CompressorDispatch
 	cp	c, 0x98
@@ -1509,13 +1509,13 @@ DSPCfg_ProcessInput:
 	jr	z, DSPCfg_Chorus_Active
 	bit	7, c
 	jr	z, DSPCfg_Reverb_CheckSustain
-	bit	7, (0xbfe2:16)
+	bit	7, (SWBTWR_PAYLOAD_2:16)
 	jr	nz, DSPCfg_Reverb_CheckSustain
 	res	0, (0xc154:16)
 DSPCfg_Reverb_CheckSustain:
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jrl	z, DSPCfg_UpdateOutputVolume
-	bit	6, (0xbfe2:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jrl	z, DSPCfg_UpdateOutputVolume
 	res	0, (0xc154:16)
 	jrl	DSPCfg_SetFadeBit
@@ -1524,15 +1524,15 @@ DSPCfg_Chorus_Active:
 	jr	z, DSPCfg_FadeOut_Active
 	bit	7, c
 	jr	z, DSPCfg_Chorus_CheckSustain
-	bit	7, (0xbfe2:16)
+	bit	7, (SWBTWR_PAYLOAD_2:16)
 	jr	nz, DSPCfg_Chorus_CheckSustain
 	res	2, (0xc154:16)
 	ldw	wa, 0x4d
 	call	CtrlPanel_SetIndicatorLED
 DSPCfg_Chorus_CheckSustain:
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jrl	z, DSPCfg_UpdateOutputVolume
-	bit	6, (0xbfe2:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jrl	z, DSPCfg_UpdateOutputVolume
 	res	2, (0xc154:16)
 	ldw	wa, 0x4d
@@ -1546,14 +1546,14 @@ DSPCfg_FadeOut_Active:
 	jr	z, DSPCfg_EQ_Active
 	bit	7, c
 	jr	z, DSPCfg_FadeOut_CheckSustain
-	bit	7, (0xbfe2:16)
+	bit	7, (SWBTWR_PAYLOAD_2:16)
 	jr	z, DSPCfg_FadeOut_CheckSustain
 	set	0, (0xc154:16)
 	res	1, (0xc154:16)
 DSPCfg_FadeOut_CheckSustain:
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, DSPCfg_UpdateOutputVolume
-	bit	6, (0xbfe2:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jr	nz, DSPCfg_UpdateOutputVolume
 	res	1, (0xc154:16)
 	jr	DSPCfg_UpdateOutputVolume
@@ -1562,16 +1562,16 @@ DSPCfg_EQ_Active:
 	jr	z, DSPCfg_Idle_EnableChorus
 	bit	7, c
 	jr	z, DSPCfg_EQ_CheckSustain
-	bit	7, (0xbfe2:16)
+	bit	7, (SWBTWR_PAYLOAD_2:16)
 	jr	z, DSPCfg_EQ_CheckSustain
 	set	0, (0xc154:16)
 	res	3, (0xc154:16)
 	ldw	wa, 0x4e
 	call	CtrlPanel_SetIndicatorLED
 DSPCfg_EQ_CheckSustain:
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, DSPCfg_UpdateOutputVolume
-	bit	6, (0xbfe2:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jr	nz, DSPCfg_UpdateOutputVolume
 	res	3, (0xc154:16)
 	ldw	wa, 0x4e
@@ -1580,7 +1580,7 @@ DSPCfg_EQ_CheckSustain:
 DSPCfg_Idle_EnableChorus:
 	bit	7, c
 	jr	z, DSPCfg_Idle_CheckSustain
-	bit	7, (0xbfe2:16)
+	bit	7, (SWBTWR_PAYLOAD_2:16)
 	jr	z, DSPCfg_Idle_CheckSustain
 	set	2, (0xc154:16)
 	ldw	wa, 0x4d
@@ -1590,9 +1590,9 @@ DSPCfg_Idle_EnableChorus:
 	ld	wa, 0:i3
 	calr	CompIface_WriteVolume
 DSPCfg_Idle_CheckSustain:
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, DSPCfg_UpdateOutputVolume
-	bit	6, (0xbfe2:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jr	z, DSPCfg_UpdateOutputVolume
 DSPCfg_SetFadeBit:
 	set	1, (0xc154:16)
@@ -1652,7 +1652,7 @@ DSPCfg_CompParam_SubType7:
 	and	(0xc154:16), 239
 	or	(0xc154:16), hl
 DSPCfg_CompParam_Bit1:
-	bit	1, (0xbfe3:16)
+	bit	1, (SWBTWR_PAYLOAD_3:16)
 	jr	z, DSPCfg_CompParam_Bit2
 	ld	xwa, 0x2a11
 	call	AcApcToggleProc_Helper
@@ -1661,7 +1661,7 @@ DSPCfg_CompParam_Bit1:
 	and	(0xc154:16), 223
 	or	(0xc154:16), hl
 DSPCfg_CompParam_Bit2:
-	bit	2, (0xbfe3:16)
+	bit	2, (SWBTWR_PAYLOAD_3:16)
 	ret	z
 	ld	xwa, 0x2a12
 	call	AcApcToggleProc_Helper
@@ -4924,7 +4924,7 @@ UIStateEvt_TransposeUpdate_Apply:
 	ret
 ; v10 name for this address: UIStateEvt_ParamEdit_Data -- not a label here: v7 defines that name outside this span (= 0xFDDEF1)
 	pushw	iz
-	ldb_d8	a, (0xbfe1)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	extz	wa
 	cp	wa, 0:i3
 	jrl	mi, UIStateEvt_ParamEdit_Data_Epilogue
@@ -4936,7 +4936,7 @@ UIStateEvt_TransposeUpdate_Apply:
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code:24)
 	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code:
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Entry
 	ldw_d16	wa, (0xc4fc)
@@ -4999,9 +4999,9 @@ AudioDispatch_CheckStereoMode_Code_Skip4:
 AudioDispatch_CheckStereoMode_Code_Skip5:
 	ld	(0xc504:16), 16
 UIStateEvt_ParamEdit_Data_Entry:
-	bit	3, (0xbfe3:16)
+	bit	3, (SWBTWR_PAYLOAD_3:16)
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
-	bit	3, (0xbfe2:16)
+	bit	3, (SWBTWR_PAYLOAD_2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip6
 	orw	(0xc4fa:16), 16
 	jr	AudioDispatch_CheckStereoMode_Code_Join2
@@ -5011,9 +5011,9 @@ AudioDispatch_CheckStereoMode_Code_Join2:
 	orw	(0xc4fe:16), 0x2000
 	orw	(0xc4f8:16), 4
 	jrl	UIStateEvt_ParamEdit_Data_Epilogue
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip8
-	bit	6, (0xbfe2:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip7
 	orw	(0xc4fa:16), 0x400
 	jr	AudioDispatch_CheckStereoMode_Code_Join3
@@ -5023,10 +5023,10 @@ AudioDispatch_CheckStereoMode_Code_Join3:
 	orw	(0xc4fe:16), 0x4000
 	orw	(0xc4f8:16), 4
 AudioDispatch_CheckStereoMode_Code_Skip8:
-	bit	4, (0xbfe3:16)
+	bit	4, (SWBTWR_PAYLOAD_3:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip10
 	andw	(0xc4fa:16), 0xf7ff
-	bit	4, (0xbfe2:16)
+	bit	4, (SWBTWR_PAYLOAD_2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip9
 	orw	(0xc4fa:16), 0x800
 	jr	AudioDispatch_CheckStereoMode_Code_Join4
@@ -5035,7 +5035,7 @@ AudioDispatch_CheckStereoMode_Code_Skip9:
 AudioDispatch_CheckStereoMode_Code_Join4:
 	orw	(0xc4f8:16), 4
 AudioDispatch_CheckStereoMode_Code_Skip10:
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
 	ldw_d16	wa, (0xc4fc)
@@ -5085,7 +5085,7 @@ AudioDispatch_CheckStereoMode_Code_Join5:
 AudioDispatch_CheckStereoMode_Code_Skip13:
 	ld	(0xc504:16), 16
 	jr	110
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, 30
 	bit	0, (0x31e8:16)
@@ -5097,7 +5097,7 @@ AudioDispatch_CheckStereoMode_Code_Skip13:
 	and	a, 252
 	jr	nz, 0
 	orw	(0xc4f8:16), 4
-	bit	1, (0xbfe3:16)
+	bit	1, (SWBTWR_PAYLOAD_3:16)
 	jr	z, 65
 	bit	1, (0xfc5f:16)
 	jr	z, 12
@@ -5107,7 +5107,7 @@ AudioDispatch_CheckStereoMode_Code_Skip13:
 	orw	(0xc4f8:16), 4
 	.set	UIStateEvt_PartRouting, . + 1	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
 	jr	39
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, 30
 	bit	0, (0x31e8:16)
@@ -5123,7 +5123,7 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz
 	ret
 ; v10 name for this address: UIStateEvt_VolumeMixer_Data -- not a label here: v7 defines that name outside this span (= 0xFDE15D)
-	ldb_d8	a, (0xbfe1)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	extz	wa
 	cp	wa, 0:i3
 	ret	mi
@@ -5135,11 +5135,11 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code_2:24)
 	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code_2:
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
 	jr	z, UIStateEvt_PartRouting_Code_Skip
 	and	(0xc162:16), 252
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 3
 	or	(0xc162:16), a
 	orw	(0xc4f8:16), 4
@@ -5150,10 +5150,10 @@ UIStateEvt_PartRouting_Code_Skip:
 	ld	(0xc162:16), 0
 	orw	(0xc4fe:16), 4
 	ret
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip15
-	bit	1, (0xbfe2:16)
+	bit	1, (SWBTWR_PAYLOAD_2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip14
 	orw	(0xc4fa:16), 32
 	jr	AudioDispatch_CheckStereoMode_Code_Join6
@@ -5164,7 +5164,7 @@ AudioDispatch_CheckStereoMode_Code_Skip14:
 	call	z, (0xfdee26:24)
 AudioDispatch_CheckStereoMode_Code_Join6:
 	res	2, (0xc162:16)
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 2
 	ld	c, a
 	add	a, c
@@ -5177,9 +5177,9 @@ AudioDispatch_CheckStereoMode_Code_Skip15:
 	ld	(0xc162:16), 0
 	orw	(0xc4fe:16), 4
 	ret
-	bit	0, (0xbfe3:16)
+	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
-	bit	0, (0xbfe2:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry
 	orw	(0xc4fa:16), 128
 	jr	AudioDispatch_CheckStereoMode_Code_Join7
@@ -5188,9 +5188,9 @@ UIStateEvt_VolumeMixer_Data_Entry:
 AudioDispatch_CheckStereoMode_Code_Join7:
 	orw	(0xc4f8:16), 4
 UIStateEvt_VolumeMixer_Data_Entry2:
-	bit	1, (0xbfe3:16)
+	bit	1, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	1, (0xbfe2:16)
+	bit	1, (SWBTWR_PAYLOAD_2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip16
 	orw	(0xc4fa:16), 8
 	jr	AudioDispatch_CheckStereoMode_Code_Join8
@@ -5199,7 +5199,7 @@ AudioDispatch_CheckStereoMode_Code_Skip16:
 AudioDispatch_CheckStereoMode_Code_Join8:
 	orw	(0xc4f8:16), 4
 	ret
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	ld	de, 0:i3
@@ -5219,7 +5219,7 @@ UIStateEvt_VolumeMixer_Data_Loop:
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 255
 	sub	a, 64
 	ld	(xhl), a
@@ -5241,14 +5241,14 @@ UIStateEvt_VolumeMixer_Data_Join:
 AudioDispatch_CheckStereoMode_Code_Skip18:
 	orw	(0xc4f8:16), 4
 	ret
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	orw	(0xc4f8:16), 4
 	ret
 	ret
 ; v10 name for this address: UIStateEvt_EffectSelect_Data -- not a label here: v7 defines that name outside this span (= 0xFDE2C6)
-	ldb_d8	a, (0xbfe1)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 4:i3
 	jrl	z, UIStateEvt_EffectSelect_Data_Skip4
 	cp	a, 3:i3
@@ -5259,10 +5259,10 @@ AudioDispatch_CheckStereoMode_Code_Skip18:
 	jr	z, UIStateEvt_EffectSelect_Data_Skip
 	cp	a, 0:i3
 	ret	nz
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 3
 	jr	z, AudioDispatch_CheckStereoMode_Code_Join9
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 3
 	cp	a, 3:i3
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip21
@@ -5292,14 +5292,14 @@ AudioDispatch_CheckStereoMode_Code_Join9:
 	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip:
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	res	7, a
 	cp	a, 0:i3
 	ret	z
 	ldb_d8	a, (0xfd02)
 	and	a, 3
 	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip22
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	res	7, a
 	stb_d8	(0xc506), a
 AudioDispatch_CheckStereoMode_Code_Skip22:
@@ -5307,12 +5307,12 @@ AudioDispatch_CheckStereoMode_Code_Skip22:
 	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip2:
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	bit	5, (0xfd50:16)
 	ret	z
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 255
 	extz	wa
 	lda	xbc, (EffectSelect_StepTable:24)
@@ -5339,19 +5339,19 @@ AudioDispatch_CheckStereoMode_Code_Skip23:
 	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip3:
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 255
 	stb_d8	(0xe8fa), a
 	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip4:
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 15
 	ret	z
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 15
 	stb_d8	(0xe8f8), a
 	orw	(0xc4fe:16), 0x4000
@@ -5359,9 +5359,9 @@ UIStateEvt_EffectSelect_Data_Skip4:
 	ret
 ; v10 name for this address: UIStateEvt_PlayModeGuard_Data -- not a label here: v7 defines that name outside this span (= 0xFDE3FE)
 ; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
-	cp	(0xbfe1:16), 2
+	cp	(SWBTWR_PAYLOAD_1:16), 2
 	ret	nz
-	bit	6, (0xbfe2:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_PlayModeGuard_ClearBit
 	orw	(0xc4fa:16), 0x2000
 	ret
@@ -5376,7 +5376,7 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	call	VoiceEvent_DispatchTable
 	ret
 ; v10 name for this address: UIStateEvt_ChannelConfig_Data -- not a label here: v7 defines that name outside this span (= 0xFDE434)
-	ldb_d8	a, (0xbfe1)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 11
 	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip25
 	cp	a, 12
@@ -5391,14 +5391,14 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	ret	z
 	cp	a, 0:i3
 	ret	nz
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry
 	orw	(0xc500:16), 8
 	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry:
-	bit	5, (0xbfe3:16)
+	bit	5, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	5, (0xbfe2:16)
+	bit	5, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip
 	ld	de, 0:i3
 	cp	de, 26
@@ -5446,9 +5446,9 @@ UIStateEvt_ChannelConfig_Data_Entry2:
 	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry3:
-	bit	0, (0xbfe3:16)
+	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry4
-	bit	0, (0xbfe2:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip24
 	res	4, (0xc286:16)
 	orw	(0xc500:16), 8
@@ -5459,9 +5459,9 @@ AudioDispatch_CheckStereoMode_Code_Skip24:
 AudioDispatch_CheckStereoMode_Code_Join11:
 	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry4:
-	bit	2, (0xbfe3:16)
+	bit	2, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry6
-	bit	2, (0xbfe2:16)
+	bit	2, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry5
 	set	6, (0xc2a6:16)
 	set	6, (0xc2a8:16)
@@ -5481,12 +5481,12 @@ UIStateEvt_ChannelConfig_Data_Entry5:
 AudioDispatch_CheckStereoMode_Code_Join12:
 	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry6:
-	bit	6, (0xbfe3:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry7
 	orw	(0xc500:16), 8
 	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry7:
-	bit	7, (0xbfe3:16)
+	bit	7, (SWBTWR_PAYLOAD_3:16)
 	ret	z
 	orw	(0xc500:16), 8
 	orw	(0xc4f8:16), 4
@@ -5519,12 +5519,12 @@ UIStateEvt_ChannelConfig_Data_Skip3:
 	ret
 	ret
 ; v10 name for this address: UIStateEvt_MuteToggle_Data -- not a label here: v7 defines that name outside this span (= 0xFDE5CC)
-	ldb_d8	a, (0xbfe1)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 16
 	ret	nz
-	bit	0, (0xbfe3:16)
+	bit	0, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	0, (0xbfe2:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_MuteToggle_Data_Skip
 	orw	(0xc4f8:16), 1
 	jr	UIStateEvt_MuteToggle_Data_Join

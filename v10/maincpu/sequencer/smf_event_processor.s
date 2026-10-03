@@ -10695,9 +10695,9 @@ Rhythm_TransposeTrampBlock:
 	jp	Rhythm_DispatchNote_Helper
 
 Seq_DispatcherTick:
-	cp (0x8d36:16), 16
+	cp (SEQ_MASTER_STATE:16), 16
 	jr c, Seq_DispatcherTick_Process
-	cp (0x8d36:16), 22
+	cp (SEQ_MASTER_STATE:16), 22
 	jr ugt, Seq_DispatcherTick_Process
 	jr Seq_DispatcherTickReturn
 
@@ -10977,9 +10977,9 @@ AccChord_CheckKeyOverride:
 AccChord_CheckUIState:
 	cp (0x8d34:16), 14
 	jr nz, AccChord_CheckUIStateExit
-	cp (0x8d36:16), 177
+	cp (SEQ_MASTER_STATE:16), 177
 	jr z, AccChord_CheckKeyFlags
-	cp (0x8d36:16), 176
+	cp (SEQ_MASTER_STATE:16), 176
 	jr nz, AccChord_SetDefaultKeys
 
 AccChord_CheckKeyFlags:

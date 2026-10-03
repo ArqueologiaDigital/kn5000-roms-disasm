@@ -14,6 +14,7 @@
 	.include "gui_constants.s"
 	.include "cpanel_constants.s"
 	.include "midi_encoder_constants.s"
+	.include "shared/ram_variables.s"
 
 ; --- Boot Dispatch Tables, LED Patterns & Dialog Bitmaps ---
 ; =============================================================================
@@ -1434,9 +1435,9 @@ ResInfo_GetVoiceBankRange:
 	ret
 
 ResInfo_GetToneGenRange:
-	lda xwa, (0x094800:24)
+	lda xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld (xbc), xwa
-	lda xwa, (0x094800:24)
+	lda xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld xde, xwa
 	lda xwa, (0x0ab000:24)
 	sub xwa, xde
@@ -2088,7 +2089,7 @@ Voice_FactoryPresetData_Code_Skip3:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda	xix, (277504:24)
+	lda	xix, (OFFSCREEN_BUFFER_1:24)
 	add	xix, xwa
 	cpw	(xsp+50), 245
 	jr	z, Voice_FactoryPresetData_Code_Skip4
@@ -2133,7 +2134,7 @@ Voice_FactoryPresetData_Code_Skip6:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda	xde, (277504:24)
+	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, Voice_FactoryPresetData_Code_Skip7
@@ -2146,7 +2147,7 @@ Voice_FactoryPresetData_Code_Skip8:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda	xde, (277504:24)
+	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, Voice_FactoryPresetData_Code_Skip9
@@ -2727,7 +2728,7 @@ TextRender_BitMask4_DrawPixel:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	lda xix, (0x043c00:24)
+	lda xix, (OFFSCREEN_BUFFER_1:24)
 	add xix, xwa
 	ld hl, 0:i3
 	cpw (xsp + 24), 0x0
@@ -2816,7 +2817,7 @@ TextRender_BitMask5_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	lda xiz, (0x043c00:24)
+	lda xiz, (OFFSCREEN_BUFFER_1:24)
 	add xiz, xwa
 	ld hl, 0:i3
 	cpw (xsp + 24), 0x0
@@ -3150,7 +3151,7 @@ CPanel_RX_ProcessOrInit:
 	and a, 0xc0
 	jr z, CPanel_RX_SkipToProcess
 				; if CP_Flags_A.76 != 0:
-	ld xhl, 0x200ad
+	ld xhl, CPANEL_RX_EVENT_QUEUE
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80

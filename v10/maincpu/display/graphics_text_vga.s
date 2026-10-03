@@ -8,7 +8,7 @@
 ; =============================================================================
 
 	add xwa, xbc
-	lda xiz, (0x043c00:24)
+	lda xiz, (OFFSCREEN_BUFFER_1:24)
 	add xiz, xwa
 	ld hl, 0:i3
 	cpw (xsp + 24), 0x0

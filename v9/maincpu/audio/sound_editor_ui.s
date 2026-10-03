@@ -7791,12 +7791,12 @@ SeGfx_BoundOp06:
 
 
 SeMenu_NameEditor_End:
-	cp	(0xc07d:16), 4
+	cp	(SWBTWR_PAYLOAD_1:16), 4
 	jr	nz, SeMenu_NameEditor_End_Code_Return
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 64
 	jr	z, SeMenu_NameEditor_End_Code_Return
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 64
 	sla	a, 1
 	cp	(0x8d38:16), 33
@@ -9280,7 +9280,7 @@ SeMenu_Utility_FormatNumber_Loop:
 	ret
 SeMenu_Utility_FormatNumber_End:
 	; --- Data setup: load A, store, set flag=2, language-conditional XIX (58 bytes) ---
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	ld	(1656:16), a
 	ld	(0x03efa8:24), 2
 	ld xiy, SeMenu_Utility_FormatNumber_Data_2

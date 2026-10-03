@@ -19473,7 +19473,7 @@ InitializeGraphics:
 	calr ChangePalette
 	ld wa, 0:i3
 	calr ChangeWallPalette
-	lda xwa, (0x043c00:24)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	ld xiz, xwa
 	pushw 0x9600
 	pushw 0x0
@@ -19937,7 +19937,7 @@ ModifyPixel_Calculate:
 	ldto_berp C, 0xf8
 	cpw (xsp + 2), 0x205
 	jrl z, ModifyPixelEx_Prologue
-	lda xde, (0x043c00:24)
+	lda xde, (OFFSCREEN_BUFFER_1:24)
 	cpw (xsp + 2), 0x204
 	jr z, ModifyPixel_Done
 	ld xhl, xde

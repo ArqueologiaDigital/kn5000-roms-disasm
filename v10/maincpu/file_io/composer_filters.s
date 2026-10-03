@@ -26,7 +26,7 @@ FmmComposerLoadFunc:
 	jrl z, CompLoad_HandleAbort
 	cp xde, 0x2
 	jrl nz, CompLoad_Return
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026

@@ -334,7 +334,7 @@ MidiPkt_ProcessEventQueue:
 	jr z, MidiPkt_ProcessEventQueue_Done
 	bit 0, (0xb7e7:16)
 	jr nz, MidiPkt_ProcessEventQueue_Done
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	ld wa, (0x90e0:16)
 	ld iz, wa
 	extz xiz
@@ -1216,7 +1216,7 @@ MidiPkt_DispatchData_Chan6_Join:
 	extz	wa
 	jp	SysEx_InitiateSend
 MidiPkt_DispatchData_Chan6_Join2:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 87
 	jr	z, MidiPkt_DispatchData_Chan6_Skip
 	cp	(0x8d34:16), 1
@@ -1255,7 +1255,7 @@ MidiPkt_SendBankSelect_Send:
 	ret
 
 MidiPkt_SysExValidator_Data:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 108
 	jr	c, MidiPkt_SysExValidator_Data_Skip
 	cp	a, 118
@@ -1284,7 +1284,7 @@ MidiPkt_SysExValidator_Data_Skip3:
 	pop	xiz
 	ret
 MidiPkt_SysExProcessor_Data:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 108
 	jr	c, MidiPkt_SysExProcessor_Data_Skip
 	cp	a, 118

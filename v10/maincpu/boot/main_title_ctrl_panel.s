@@ -98,8 +98,8 @@ MainTitle_PrepareAndDispatch:
 	ld xde, 0:i3
 	jrl MainTitleControl
 	push xiz
-	ld a, (0xc080:16)
-	ld e, (0xc07d:16)
+	ld a, (SWBTWR_EVENT_TYPE:16)
+	ld e, (SWBTWR_PAYLOAD_1:16)
 	cp a, 0xaa
 	jrl z, CtrlPanel_EventType_AA
 	cp a, 0xa8
@@ -112,11 +112,11 @@ MainTitle_PrepareAndDispatch:
 	ldfr_berp E, 0xf8
 	cp e, 0xe
 	jr nz, SndParam_SendDiskMenuEvents
-	ld e, (0xc07f:16)
+	ld e, (SWBTWR_PAYLOAD_3:16)
 	ld a, e
 	and a, 0x3
 	jr z, SndParam_SendDiskMenuEvents
-	ld c, (0xc07e:16)
+	ld c, (SWBTWR_PAYLOAD_2:16)
 	ld a, c
 	and a, 0x3
 	cp a, 3:i3
@@ -147,8 +147,8 @@ CtrlPanel_DispatchSndParamLookup:
 	call SndParam_LookupByKey
 
 SndParam_SendDiskMenuEvents:
-	ld c, (0xc07f:16)
-	ld a, (0xc07e:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	and a, c
 	ld xde, xiz
 	bit 1, a
@@ -195,8 +195,8 @@ CtrlPanel_CheckDiskMenuRelease:
 	and (0x02749a:24), xwa
 
 CtrlPanel_ProcessButtonPress:
-	ld c, (0xc07f:16)
-	ld a, (0xc07e:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	and a, c
 	ld xde, xiz
 	set 7, de
@@ -283,29 +283,29 @@ CtrlPanel_HandleFirmwareCheck:
 	call z, (CaptureLcd:24)
 
 CtrlPanel_HandlePortCommands:
-	cp (0xc07d:16), 32
+	cp (SWBTWR_PAYLOAD_1:16), 32
 	jr nz, CtrlPanel_HandleSerialPort
-	cp (0xc07e:16), 0
+	cp (SWBTWR_PAYLOAD_2:16), 0
 	jr z, CtrlPanel_HandleSerialPort
 	ld xwa, 0xffffffff
 	ld xbc, EVT_SW_IN_MODE
 	call DeleteEvent
 	ld xde, 0:i3
-	ld e, (0xc07e:16)
+	ld e, (SWBTWR_PAYLOAD_2:16)
 	add xde, NAKA_MODE_MD_PS
 	ld xwa, 0xffffffff
 	ld xbc, EVT_SW_IN_MODE
 	call ApPostEvent
 
 CtrlPanel_HandleSerialPort:
-	cp (0xc07d:16), 33
+	cp (SWBTWR_PAYLOAD_1:16), 33
 	jrl nz, UIEvent_Epilogue
-	cp (0xc07e:16), 0
+	cp (SWBTWR_PAYLOAD_2:16), 0
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
 	ld xbc, EVT_DIAL
 	call DeleteEvent
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	add a, 0x10
 	exts wa
 	sla wa, 2
@@ -318,9 +318,9 @@ CtrlPanel_HandleSerialPort:
 CtrlPanel_EventType_A8:
 	cp e, 3:i3
 	jrl nz, CtrlPanel_AA_Epilogue
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	bit 0, a
 	jr z, CtrlPanel_A8_CheckRelease
 	ld xwa, 0xffffffff
@@ -339,9 +339,9 @@ CtrlPanel_A8_CheckRelease:
 CtrlPanel_EventType_AA:
 	cp e, 0x11
 	jrl z, CtrlPanel_AA_PanelEvent_11
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	cp e, 1:i3
 	jrl z, CtrlPanel_AA_PanelEvent_01_Bit1
 	cp e, 0x15
@@ -356,8 +356,8 @@ CtrlPanel_EventType_AA:
 	jr z, CtrlPanel_AA_PanelEvent_0F
 	cp e, 5:i3
 	jrl nz, UIEvent_Epilogue
-	ld a, (0xc07f:16)
-	and a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	bit 0, a
 	jrl z, UIEvent_Epilogue
 	bit 1, a
@@ -427,9 +427,9 @@ CtrlPanel_AA_0E_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_0E_Bit2:
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	bit 2, a
 	jr z, CtrlPanel_AA_0E_Bit2Release
 	ld xwa, 0xffffffff
@@ -448,9 +448,9 @@ CtrlPanel_AA_0E_Bit2Post:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_0E_Bit4:
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	bit 4, a
 	jr z, CtrlPanel_AA_0E_Bit4Release
 	ld xwa, 0xffffffff
@@ -485,9 +485,9 @@ CtrlPanel_AA_04_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_04_Bit5:
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	bit 5, a
 	jr z, CtrlPanel_AA_04_Bit5Release
 	ld xwa, 0xffffffff
@@ -556,9 +556,9 @@ CtrlPanel_AA_01_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_01_Bit5:
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	bit 5, a
 	jr z, CtrlPanel_AA_01_Bit5Release
 	ld xwa, 0xffffffff
@@ -577,9 +577,9 @@ CtrlPanel_AA_01_Bit5Post:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_01_Bit6:
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	bit 6, a
 	jr z, CtrlPanel_AA_01_Bit6Release
 	ld xwa, 0xffffffff
@@ -596,9 +596,9 @@ CtrlPanel_AA_01_Bit6Release:
 	jr UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_PanelEvent_11:
-	ld c, (0xc07f:16)
+	ld c, (SWBTWR_PAYLOAD_3:16)
 	ld a, c
-	and a, (0xc07e:16)
+	and a, (SWBTWR_PAYLOAD_2:16)
 	jr z, CtrlPanel_AA_11_Release
 	ld xwa, 0xffffffff
 	ld xbc, EVT_EASY_SET_ON

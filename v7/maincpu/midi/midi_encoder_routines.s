@@ -233,25 +233,25 @@ Encoder_ReturnDefaultConstant_End:
 ; Encoder_ApplySystemModeSettings - Select processing mode based on system state
 ; Reads mode value from 0xc07d and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
-	ld	a, (49121:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 6:i3
 	jr	z, Encoder_ConfigureRangeLimit
 	cp	a, 5:i3
 	jr	z, Encoder_ConfigureVolumeMode
 	cp	a, 4:i3
 	ret	nz
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 15
 	ret	z
-	ld	a, (49122:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 15
 	ld	(ENCODER_BREATH_MODE:16), a
 	ret
 Encoder_ConfigureVolumeMode:
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 255
 	ret	z
-	ld	a, (49122:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 255
 	ld	(ENCODER_VOLUME_MODE:16), a
 	ret
@@ -261,11 +261,11 @@ Encoder_ConfigureRangeLimit:
 	; Encoder_ConfigureRangeLimit instruction-for-instruction (ldb_d8 a,(..) /
 	; res 7,a / cps a,0 / ret z / ...); only the two register addresses differ
 	; from v9/v10's 0xc07f/0xc07e, a real cross-revision shift.
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	res	7, a
 	cp	a, 0:i3
 	ret	z
-	ld	a, (49122:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	res	7, a
 	ld	(ENCODER_RANGE_LIMIT:16), a
 	ret

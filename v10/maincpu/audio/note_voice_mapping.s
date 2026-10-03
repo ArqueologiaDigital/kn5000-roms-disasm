@@ -9502,7 +9502,7 @@ NoteMap_ResetEntryTimers:
 	pushw_erp 0xfa
 	ld (xsp + 16), e
 	ld (xsp + 18), xwa
-	cp (0x8d36:16), 152
+	cp (SEQ_MASTER_STATE:16), 152
 	jr nz, ResetTimers_Return
 	ldw (xsp + 2), 0x0
 	jr ResetTimers_CheckCount
@@ -10621,7 +10621,7 @@ SelectTone_Continue_Return:
 
 SelectTone_Continue_Prologue:
 	dec 6, xsp
-	cp (0x8d36:16), 246
+	cp (SEQ_MASTER_STATE:16), 246
 	jr nz, SelectTone_Continue_LoadReg
 	ld wa, 0:i3
 	ld bc, 0:i3
@@ -13431,7 +13431,7 @@ ProcessEventDispatch_LoadParam:
 	ld de, (xsp + 10)
 	ldw bc, 0x20
 	call SndParam_NotifyAndReturn
-	cp (0x8d36:16), 220
+	cp (SEQ_MASTER_STATE:16), 220
 	jr z, ProcessEventDispatch_InitVal
 	ld wa, (xsp + 4)
 	pushw 0x3
@@ -13461,7 +13461,7 @@ ProcessEventDispatch_LoadParam2:
 	ld de, (xsp + 12)
 	ldw bc, 0x5e
 	call SndParam_NotifyAndReturn
-	cp (0x8d36:16), 220
+	cp (SEQ_MASTER_STATE:16), 220
 	jr z, ProcessEventDispatch_LoadParam3
 	ld wa, (xsp + 4)
 	pushw 0x3
@@ -17146,10 +17146,10 @@ SndParam_Init:
 ; ============================================================================
 UIState_ProcessKeyEvent:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	extz	wa
 	cp	wa, 0:i3
@@ -17352,10 +17352,10 @@ SndParam_ProcessEntry_Epilogue:
 	ret
 HdaeRom_Entry:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 1:i3
 	jr	nz, HdaeRom_Entry_Epilogue
@@ -17396,10 +17396,10 @@ HdaeRom_Entry_Epilogue:
 	ret
 HdaeRom_ProcessBlock:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
 	jr	ugt, HdaeRom_ProcessBlock_Epilogue
@@ -17423,10 +17423,10 @@ HdaeRom_ProcessBlock_Epilogue:
 HdaeRom_ReadParam:
 	ret
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
 	jr	ugt, HdaeRom_ReadParam_Epilogue
@@ -17449,10 +17449,10 @@ HdaeRom_ReadParam_Epilogue:
 	ret
 HdaeRom_WriteParam:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
 	jr	ugt, HdaeRom_WriteParam_Epilogue
@@ -17475,10 +17475,10 @@ HdaeRom_WriteParam_Epilogue:
 	ret
 HdaeRom_CheckResult:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
 	jr	ugt, HdaeRom_CheckResult_Epilogue
@@ -17501,10 +17501,10 @@ HdaeRom_CheckResult_Epilogue:
 	ret
 HdaeRom_FinishBlock:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
 	jr	ugt, HdaeRom_FinishBlock_Epilogue
@@ -17533,10 +17533,10 @@ HdaeRom_TableEntry1:
 	ret
 HdaeRom_TableEntry2:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	extz	wa
 	cp	wa, 0:i3
@@ -17599,10 +17599,10 @@ HdaeRom_AltEntry:
 	ret
 UIStateEvt_ProcessHandler:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 3:i3
 	jr	z, UIStateEvt_ProcessHandler_Skip2
@@ -17653,10 +17653,10 @@ UIStateEvt_ProcessHandler_Epilogue:
 	ret
 HdaeRom_AltProcessBlock:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 13
 	jr	ugt, HdaeRom_AltProcessBlock_Epilogue
@@ -17696,10 +17696,10 @@ HdaeRom_AltProcessBlock_Epilogue:
 	ret
 HdaeRom_AltReadParam:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 4:i3
 	jr	z, HdaeRom_AltReadParam_Epilogue
@@ -17739,10 +17739,10 @@ HdaeRom_AltReadParam_Epilogue:
 	ret
 HdaeRom_AltCheckResult:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 4:i3
 	jr	z, HdaeRom_AltCheckResult_Skip3
@@ -17787,10 +17787,10 @@ HdaeRom_AltCheckResult_Epilogue:
 	inc	4, xsp
 	ret
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 19
 	jr	ugt, HdaeRom_AltCheckResult_Epilogue2
@@ -17828,10 +17828,10 @@ HdaeRom_AltCheckResult_Epilogue2:
 	ret
 HdaeRom_AltTableEntry0:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -17844,10 +17844,10 @@ HdaeRom_AltTableEntry0:
 	ret
 HdaeRom_AltTableEntry1:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 3:i3
 	jr	z, HdaeRom_AltTableEntry1_Skip2
@@ -17885,10 +17885,10 @@ HdaeRom_AltTableEntry1_Epilogue:
 	ret
 HdaeRom_AltTableEntry2:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -17901,10 +17901,10 @@ HdaeRom_AltTableEntry2:
 	ret
 HdaeRom_AltTableEntry3:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -17917,10 +17917,10 @@ HdaeRom_AltTableEntry3:
 	ret
 HdaeRom_AltTableEntry4:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	cp	(xsp+0x1), 16
 	jr	c, HdaeRom_AltTableEntry4_Skip
 	cp	(xsp+0x1), 20
@@ -17939,10 +17939,10 @@ HdaeRom_AltTableEntry4_Epilogue:
 	ret
 HdaeRom_AltTableEntry5:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -17955,10 +17955,10 @@ HdaeRom_AltTableEntry5:
 	ret
 HdaeRom_AltTableEntry6:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -17975,10 +17975,10 @@ HdaeRom_AltTableEntry8:
 	ret
 HdaeRom_AltTableEntry9:
 	dec	4, xsp
-	ld	(xsp+0:8), (0xc080)
-	ld	(xsp+0x1), (0xc07d)
-	ld	(xsp+0x2), (0xc07e)
-	ld	(xsp+0x3), (0xc07f)
+	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
+	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
+	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
+	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 1:i3
 	jr	z, HdaeRom_AltTableEntry9_Skip2
@@ -23960,14 +23960,14 @@ CharMap_ActivePreamble:
 	ld bc, 2:i3
 	jp sendCOMM
 CharMap_ActivePreamb_LoadDRAM:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 0:i3
 	ret	nz
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 15
 	ret	z
 	ld	(0xe144:16), 1
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 15
 	ld	(0xe145:16), a
 	ld	xde, 0xe144

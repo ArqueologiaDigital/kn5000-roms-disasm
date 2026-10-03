@@ -24,8 +24,8 @@
 ; Call this to initialize display state or force a full refresh.
 ;=============================================================================
 Display_ResetDirtyFlags:
-	ldw (0x0205e6:24), 0x0000
-	ldw (0x0205e4:24), 0x0000
+	ldw (DISPLAY_ENABLE_FLAG:24), 0x0000
+	ldw (DISPLAY_DIRTY_FLAGS:24), 0x0000
 	ret
 
 ;=============================================================================
@@ -40,8 +40,8 @@ Display_ResetDirtyFlags:
 ;   0x205e6 - DISPLAY_ENABLE_FLAG: Update enable flag
 ;=============================================================================
 Display_UpdateDirtyRegions:
-	ld (0x0205e6:24), 0x01
-	cpw (0x0205e4:24), 0
+	ld (DISPLAY_ENABLE_FLAG:24), 0x01
+	cpw (DISPLAY_DIRTY_FLAGS:24), 0
 	jr z, Display_MarkClean
 	call Display_UpdateRegion0	; Status bar area
 	call Display_UpdateRegion5	; Menu area
@@ -56,15 +56,15 @@ Display_UpdateDirtyRegions:
 	call Display_UpdateRegion2	; Selection highlight
 
 Display_MarkClean:
-	ldw (0x0205e4:24), 0xffff
+	ldw (DISPLAY_DIRTY_FLAGS:24), 0xffff
 	ret
 
 ; Undisassembled data block (18 bytes) - possibly lookup table
 Display_Data_ScoopInit:
 	ld	a, 255:opc
-	ld	(0x0205ea:24), a
-	ld	(0x0205e8:24), a
-	ld	(0x0205ec:24), a
+	ld	(DISPLAY_CACHED_VAL2:24), a
+	ld	(DISPLAY_CACHED_VAL1:24), a
+	ld	(DISPLAY_CACHED_VAL3:24), a
 	ret
 
 ;-----------------------------------------------------------------------------
@@ -74,23 +74,23 @@ Display_Data_ScoopInit:
 ; If changed, calls the status bar redraw routine.
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion0:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion0_Check
-	set 0, (0x0205e4:24)
+	set 0, (DISPLAY_DIRTY_FLAGS:24)
 	ret
 
 Display_UpdateRegion0_Check:
-	bit 0, (0x0205e4:24)
+	bit 0, (DISPLAY_DIRTY_FLAGS:24)
 	jr z, Display_UpdateRegion0_Done
 	pushw wa
 	ld a, (3429:16)
-	cp a, (0x0205ea:24)
+	cp a, (DISPLAY_CACHED_VAL2:24)
 	jr nz, Display_UpdateRegion0_Changed
 	ld a, (3567:16)
-	cp a, (0x0205e8:24)
+	cp a, (DISPLAY_CACHED_VAL1:24)
 	jr nz, Display_UpdateRegion0_Changed
 	ld a, (3424:16)
-	cp a, (0x0205ec:24)
+	cp a, (DISPLAY_CACHED_VAL3:24)
 	jr z, Display_UpdateRegion0_NoChange
 
 Display_UpdateRegion0_Changed:
@@ -98,11 +98,11 @@ Display_UpdateRegion0_Changed:
 	jrl nz, Display_UpdateRegion0_NoChange
 	call Display_RedrawStatusBar
 	ld a, (3429:16)
-	ld (0x0205ea:24), a
+	ld (DISPLAY_CACHED_VAL2:24), a
 	ld a, (3567:16)
-	ld (0x0205e8:24), a
+	ld (DISPLAY_CACHED_VAL1:24), a
 	ld a, (3424:16)
-	ld (0x0205ec:24), a
+	ld (DISPLAY_CACHED_VAL3:24), a
 
 Display_UpdateRegion0_NoChange:
 	popw wa
@@ -114,13 +114,13 @@ Display_UpdateRegion0_Done:
 ; Display_UpdateRegion1 - Update title bar region (bit 1)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion1:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion1_Check
-	set 1, (0x0205e4:24)
+	set 1, (DISPLAY_DIRTY_FLAGS:24)
 	ret
 
 Display_UpdateRegion1_Check:
-	bit 1, (0x0205e4:24)
+	bit 1, (DISPLAY_DIRTY_FLAGS:24)
 	jr z, Display_UpdateRegion1_Done
 	call Display_RedrawTitleBar
 
@@ -135,13 +135,13 @@ Display_UpdateRegion1_Alt:
 ; Display_UpdateRegion3 - Update main content area (bit 3)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion3:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion3_Check
-	set 3, (0x0205e4:24)
+	set 3, (DISPLAY_DIRTY_FLAGS:24)
 	ret
 
 Display_UpdateRegion3_Check:
-	bit 3, (0x0205e4:24)
+	bit 3, (DISPLAY_DIRTY_FLAGS:24)
 	jr z, Display_UpdateRegion3_Done
 	call Display_RedrawMainContent
 
@@ -152,13 +152,13 @@ Display_UpdateRegion3_Done:
 ; Display_UpdateRegion2 - Update selection highlight (bit 4)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion2:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion2_Check
-	set 4, (0x0205e4:24)
+	set 4, (DISPLAY_DIRTY_FLAGS:24)
 	ret
 
 Display_UpdateRegion2_Check:
-	bit 4, (0x0205e4:24)
+	bit 4, (DISPLAY_DIRTY_FLAGS:24)
 	jr z, Display_UpdateRegion2_Done
 	call Display_RedrawSelection
 
@@ -169,13 +169,13 @@ Display_UpdateRegion2_Done:
 ; Display_UpdateRegion4 - Update side panel (bit 5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion4:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion4_Check
-	set 5, (0x0205e4:24)
+	set 5, (DISPLAY_DIRTY_FLAGS:24)
 	ret
 
 Display_UpdateRegion4_Check:
-	bit 5, (0x0205e4:24)
+	bit 5, (DISPLAY_DIRTY_FLAGS:24)
 	jr z, Display_UpdateRegion4_Done
 	call Display_RedrawSidePanel
 
@@ -186,13 +186,13 @@ Display_UpdateRegion4_Done:
 ; Display_UpdateRegion5 - Update menu area (bit 6)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion5:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion5_Check
-	set 6, (0x0205e4:24)
+	set 6, (DISPLAY_DIRTY_FLAGS:24)
 	ret
 
 Display_UpdateRegion5_Check:
-	bit 6, (0x0205e4:24)
+	bit 6, (DISPLAY_DIRTY_FLAGS:24)
 	jr z, Display_UpdateRegion5_Done
 	call Display_RedrawMenu
 
@@ -203,13 +203,13 @@ Display_UpdateRegion5_Done:
 ; Display_UpdateRegion6 - Update button labels (bit 7)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion6:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion6_Check
-	set 7, (0x0205e4:24)
+	set 7, (DISPLAY_DIRTY_FLAGS:24)
 	ret
 
 Display_UpdateRegion6_Check:
-	bit 7, (0x0205e4:24)
+	bit 7, (DISPLAY_DIRTY_FLAGS:24)
 	jr z, Display_UpdateRegion6_Done
 	call Display_RedrawButtonLabels
 
@@ -220,7 +220,7 @@ Display_UpdateRegion6_Done:
 ; Display_UpdateRegion7 - Update parameter display (bit 0 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion7:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion7_Check
 	set 0, (0x0205e5:24)
 	ret
@@ -237,7 +237,7 @@ Display_UpdateRegion7_Done:
 ; Display_UpdateRegion8 - Update value display (bit 1 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion8:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion8_Check
 	set 1, (0x0205e5:24)
 	ret
@@ -254,7 +254,7 @@ Display_UpdateRegion8_Done:
 ; Display_UpdateRegion9 - Update indicator area (bit 2 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion9:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion9_Check
 	set 2, (0x0205e5:24)
 	ret
@@ -271,7 +271,7 @@ Display_UpdateRegion9_Done:
 ; Display_UpdateRegion10 - Update footer area (bit 3 of 0x205e5)
 ;-----------------------------------------------------------------------------
 Display_UpdateRegion10:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Display_UpdateRegion10_Check
 	set 3, (0x0205e5:24)
 	ret
@@ -285,7 +285,7 @@ Display_UpdateRegion10_Done:
 	ret
 
 UIRender_SingleTable:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, UIRender_SingleTable_Body
 	ret
 
@@ -298,7 +298,7 @@ UIRender_SingleTable_Body:
 ; Render UI element from two ROM descriptor tables (general renderer)
 ; Input: XIY = descriptor table 1, XIX = descriptor table 2
 UIRender_TwoTableGeneral:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, UIRender_TwoTableGeneral_Body
 	ret
 
@@ -319,7 +319,7 @@ UIRender_TwoTableGeneral_Body:
 ; -----------------------------------------------------------------------------
 
 GraphicsRender_TwoTable:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, GraphicsRender_TwoTable_Body
 	ret
 
@@ -334,7 +334,7 @@ GraphicsRender_TwoTable_Body:
 	ret
 
 GraphicsRender_TwoTable_Alt:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, GraphicsRender_TwoTable_Alt_Body
 	ret
 
@@ -349,7 +349,7 @@ GraphicsRender_TwoTable_Alt_Body:
 	ret
 
 UIRender_TwoTableEvtCheck:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, UIRender_TwoTableEvtCheck_Body
 	ret
 
@@ -361,7 +361,7 @@ UIRender_TwoTableEvtCheck_Body:
 	ret
 
 UIRender_ConditionalDrawInit:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, UIRender_ConditionalDrawInit_Body
 	ret
 
@@ -373,7 +373,7 @@ UIRender_ConditionalDrawInit_Body:
 	ret
 
 Scoop_ConditionalCurveUpdate:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Scoop_ConditionalCurveUpdate_Body
 	ret
 
@@ -392,7 +392,7 @@ Scoop_CurveUpdate_Direct:
 	ret
 
 Scoop_ConditionalGlideSetup:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, Scoop_ConditionalGlideSetup_Body
 	ret
 
@@ -404,7 +404,7 @@ Scoop_ConditionalGlideSetup_Body:
 	ret
 
 UIRender_ConditionalFBCall:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, UIRender_ConditionalFBCall_Body
 	ret
 
@@ -416,7 +416,7 @@ UIRender_ConditionalFBCall_Body:
 	ret
 
 GraphicsRender_EventCheck:
-	bit 0, (0x0205e6:24)
+	bit 0, (DISPLAY_ENABLE_FLAG:24)
 	jr nz, GraphicsRender_EventCheck_Body
 	ret
 
@@ -720,7 +720,7 @@ Display_CallMenuInit:
 Display_ConditionalCompare:
 	; --- Conditional handler: call EF6047, compare mem, ret ---
 	call Display_CallMenuConfig
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, (0x8d37:16)
 	jr z, Display_ConditionalCompare_Ret
 Display_ConditionalCompare_Ret:
@@ -2664,22 +2664,22 @@ PerfMode_Handler_EvtB_Return:
 	jrl	nz, PerfMode_Handler_EvtB_Epilogue
 	cp	(0x0def:16), 18
 	jrl	z, PerfMode_Handler_EvtB_Epilogue
-	cp	(0xc07d:16), 11
+	cp	(SWBTWR_PAYLOAD_1:16), 11
 	jrl	nz, PerfMode_Handler_EvtB_Skip3
 	push	xhl
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	ld	(3519:16), a
 	call	SysEx_BytecodeDispatcher
 	ld	(3519:16), 0
 	pop	xhl
-	ld	wa, (0xc07e:16)
+	ld	wa, (SWBTWR_PAYLOAD_2:16)
 	xor	a, w
 	jrl	z, PerfMode_Handler_EvtB_Skip
 	push	xhl
 	call	Interrupt_FlagSetBytecode
 	pop	xhl
 PerfMode_Handler_EvtB_Skip:
-	ld	wa, (0xc07e:16)
+	ld	wa, (SWBTWR_PAYLOAD_2:16)
 	cpl	a
 	and	a, w
 	jrl	z, PerfMode_Handler_EvtB_Epilogue
@@ -2688,7 +2688,7 @@ PerfMode_Handler_EvtB_Skip:
 	call	Display_UpdateRegion3
 	jp	PerfMode_Handler_EvtB_Epilogue
 PerfMode_Handler_EvtB_Skip3:
-	cp	(0xc07d:16), 12
+	cp	(SWBTWR_PAYLOAD_1:16), 12
 	jrl	nz, PerfMode_Handler_EvtB_Epilogue
 	call	PerfMode_Handler_EvtB_Helper
 PerfMode_Handler_EvtB_Epilogue:
@@ -2722,13 +2722,13 @@ PerfMode_Handler_EvtB_Skip5:
 PerfMode_Handler_EvtB_Return2:
 	ret
 PerfMode_Handler_EvtB_Helper:
-	ld	a, (0xc07e:16)
-	and	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
+	and	a, (SWBTWR_PAYLOAD_3:16)
 	ldfr_berp a, 60
 	and a, 3
 	ldto_berp a, 60
 	jrl	nz, PerfMode_Handler_EvtB_Skip6
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	xor	c, c
 	ldfr_berp a, 60
 	ldfr_berp a, 61
@@ -2747,14 +2747,14 @@ PerfMode_Handler_EvtB_Helper:
 	.byte	0xc7, 0x3d, 0x2c	; stcf A,RH3
 	ldto_berp a, 60
 	ldto_berp a, 61
-	and	a, (0xc07f:16)
+	and	a, (SWBTWR_PAYLOAD_3:16)
 	ld	(3520:16), a
 	push	xhl
 	call	SysEx_BytecodeDispatcher
 	pop	xhl
 PerfMode_Handler_EvtB_Skip6:
 	ld	(3520:16), 0
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 3
 	jrl	z, PerfMode_Handler_EvtB_Skip2
 	push	xhl
@@ -2763,18 +2763,18 @@ PerfMode_Handler_EvtB_Skip6:
 	ld	xhl, 3412
 	bitm	3, (xhl)
 	jrl	z, PerfMode_Handler_EvtB_Skip7
-	ld	(0x0205e8:24), 255
-	ld	(0x0205ec:24), 255
-	ld	(0x0205ea:24), 255
+	ld	(DISPLAY_CACHED_VAL1:24), 255
+	ld	(DISPLAY_CACHED_VAL3:24), 255
+	ld	(DISPLAY_CACHED_VAL2:24), 255
 	ld	a, (3822:16)
 	ld	(0x2877:16), a
 	call	Scoop_SpecialMode_ParamCheckBound
 	res	7, (0x0d54:16)
 	ld	(3434:16), 0
 	call	SerialPort_ModeHandler_0_Sub
-	ld	(0x0205e8:24), 255
-	ld	(0x0205ec:24), 255
-	ld	(0x0205ea:24), 255
+	ld	(DISPLAY_CACHED_VAL1:24), 255
+	ld	(DISPLAY_CACHED_VAL3:24), 255
+	ld	(DISPLAY_CACHED_VAL2:24), 255
 PerfMode_Handler_EvtB_Skip7:
 	pushw	wa
 	ld	w, 118:opc
@@ -2782,10 +2782,10 @@ PerfMode_Handler_EvtB_Skip7:
 	popw	wa
 	pop	xhl
 PerfMode_Handler_EvtB_Skip2:
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 24
 	srl	a, 1
-	ld	w, (0xc07f:16)
+	ld	w, (SWBTWR_PAYLOAD_3:16)
 	and	w, 24
 	srl	w, 3
 	or	a, w
@@ -2804,7 +2804,7 @@ PerfMode_Handler_EvtB_Skip2:
 	ld	xiy, (xhl+iy)
 	pop	xhl
 	call	(xiy)
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 63
 	cp	a, 0:i3
 	jrl	nz, PerfMode_Handler_EvtB_Return3
@@ -6857,7 +6857,7 @@ SerialPort_ModeHandler_0_Data2:
 	.byte	0x03, 0x03, 0x03, 0x04
 Display_CallMenuInit_Helper:
 	ld	(4346:16), 0
-	ld	a, (36150:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, (36151:16)
 	jrl	z, ScoopParam_ValueTable_Entry3_Code_Skip
 	ld	(10430:16), 255
@@ -7247,9 +7247,9 @@ PortConfig_Handler_1:
 PortConfig_Handler_3:
 	; --- Init: call FB1536, set 3 flags, call 6 handlers, call FB155F (51 bytes) ---
 	call Display_DeferOrDrawWall
-	ld	(0x0205e8:24), 255
-	ld	(0x0205ec:24), 255
-	ld	(0x0205ea:24), 255
+	ld	(DISPLAY_CACHED_VAL1:24), 255
+	ld	(DISPLAY_CACHED_VAL3:24), 255
+	ld	(DISPLAY_CACHED_VAL2:24), 255
 	call DisplayMode_Handler_3_Helper13
 	call DMA_Channel3_CallAndInit_Helper
 	call ToneParam_Evt09_BytecodeHandler_Helper3
@@ -7262,9 +7262,9 @@ PortConfig_Handler_3:
 
 PortConfig_Handler_0:
 	call	Display_DeferOrDrawWall
-	ld	(0x0205e8:24), 255
-	ld	(0x0205ec:24), 255
-	ld	(0x0205ea:24), 255
+	ld	(DISPLAY_CACHED_VAL1:24), 255
+	ld	(DISPLAY_CACHED_VAL3:24), 255
+	ld	(DISPLAY_CACHED_VAL2:24), 255
 	call	PortConfig_Handler_0_Helper8
 	call	Display_UpdateRegion0
 	call	PortConfig_Handler_0_Helper9
@@ -7575,7 +7575,7 @@ Display_CallMenuConfig_Helper:
 	and	(0x0f57:16), 254
 	ld	(3382:16), 0
 	ld	a, (0x8d37:16)
-	cp	(0x8d36:16), a
+	cp	(SEQ_MASTER_STATE:16), a
 	jrl	z, ScoopParam_ValueTable_Helper6_Return2
 	and	(0x0d53:16), 254
 	bit	0, (0x0f54:16)
@@ -7724,7 +7724,7 @@ SysEx_ModeChangeCheck:
 	jrl nz, ControllerMode_UpdateFlags
 
 ControllerMode_UpdateFlags:
-	cp (0x8d36:16), 138
+	cp (SEQ_MASTER_STATE:16), 138
 	jrl nz, SysEx_FlagClearAndCompare
 	cp (3429:16), 3
 	jrl nz, SysEx_FlagClearAndCompare
@@ -7733,9 +7733,9 @@ ControllerMode_UpdateFlags:
 
 SysEx_FlagClearAndCompare:
 	and (3926:16), 253
-	cp (0x8d36:16), 129
+	cp (SEQ_MASTER_STATE:16), 129
 	jrl z, SysEx_DecrementCounter
-	cp (0x8d36:16), 142
+	cp (SEQ_MASTER_STATE:16), 142
 	jrl nz, SubCPU_CmdCountdownRet
 
 SysEx_DecrementCounter:
@@ -12842,7 +12842,7 @@ PerfMode_ParamHandler_11_Return5:
 SubCPU_ToneParamRet_Helper3:
 	cp	(0x8d38:16), 138
 	jrl	nz, PerfMode_ParamHandler_11_Return6
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 0:i3
 	jrl	nz, PerfMode_ParamHandler_11_Return6
 	ld	a, (3429:16)
@@ -12851,8 +12851,8 @@ SubCPU_ToneParamRet_Helper3:
 	cp	a, 2:i3
 	jrl	nz, PerfMode_ParamHandler_11_Return6
 PerfMode_ParamHandler_11_Skip17:
-	ld	w, (0xc07e:16)
-	ld	a, (0xc07f:16)
+	ld	w, (SWBTWR_PAYLOAD_2:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	cp	w, 0:i3
 	jrl	nz, PerfMode_ParamHandler_11_Return6
 	and	a, 3

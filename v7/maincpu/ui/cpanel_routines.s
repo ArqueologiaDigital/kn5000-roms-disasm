@@ -420,7 +420,7 @@ CPanel_ReadAllButtons:
 	calr CPanel_RX_Process
 	ret
 CPanel_PollStartup:
-	ld xhl, 0x200ad
+	ld xhl, CPANEL_RX_EVENT_QUEUE
 
 	ldw (xhl - 4), 0x0
 
@@ -1077,7 +1077,7 @@ CPanel_RX_Process:
 CPanel_RX_DispatchLoop:
 	ld	xde, 36101
 	ld	iy, (CPANEL_RX_READ_PTR:16)
-	ld	xiz, 131245
+	ld	xiz, CPANEL_RX_EVENT_QUEUE
 	ld	ix, (xiz-4)
 CPanel_RX_ParseNext:
 	cpw (xiz-2), 4
@@ -1302,7 +1302,7 @@ CPanel_RX_Done:
 CPanel_UpdateLEDs:
 	ld	iy, (CPANEL_LED_WRITE_PTR:16)
 	ld	xde, 36197
-	ld	xiz, 131383
+	ld	xiz, CPANEL_LED_EVENT_QUEUE
 	ld	ix, (xiz-8)
 CPanel_UpdateLEDs__check_next:
 	ld wa, (xiz - 4)

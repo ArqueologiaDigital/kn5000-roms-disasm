@@ -33,7 +33,7 @@ FmmSeqSongNameFunc:
 	cp XBC,EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SeqName_ReturnZero
 	ld (0x8238:16), xde
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr nz, SeqName_SendCurrentIndex
 	ldw (0x823c:16), 0x0000
 SeqName_SendCurrentIndex:
@@ -66,7 +66,7 @@ SeqName_HandleNavigation:
 	ld	iz, hl
 	or	xde, xde
 	jr	nz, SeqName_HandlePlayAction
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, SeqName_HandlePlayAction
 	cp	xbc, EVT_INDEXSW_DOWN
 	jr	nz, SeqName_CheckPrevKey
@@ -88,7 +88,7 @@ SeqName_UpdateIndex:
 SeqName_HandlePlayAction:
 	cp	xde, 0x4
 	jrl	nz, SeqName_HandleAction32
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	nz, SeqName_HandleAction32
 	call	CheckSongSlotHasData
 	cp	l, 0:i3
@@ -197,7 +197,7 @@ SeqName_UpdateDisplay:
 	ld	xbc, EVT_PARA_DRAW
 	jr	SeqName_PostEventExit
 SeqName_SetIndexPlaying:
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl z, SeqName_ReturnZero
 	ld IZ,HL
 	ld (0x823c:16), de
@@ -315,9 +315,9 @@ FmmIntMedleyFunc:
 	cp (0x8c9b:16), 0x7a
 	jr z, IntMed_CheckPlaying
 	call CDlike_InitModeAndLoadBank
-	ld (0x8462:16), 0x00
-	ld (0x8800:16), 0x00
-	ld (0x87fe:16), 0x00
+	ld (MEDLEY_PLAY_FLAG:16), 0x00
+	ld (MEDLEY_CURRENT_INDEX:16), 0x00
+	ld (MEDLEY_SONG_COUNT:16), 0x00
 	ld iz, 0:i3
 IntMed_CheckSlotLoop:
 	ld_erpb_rr a, 0xf8
@@ -325,15 +325,15 @@ IntMed_CheckSlotLoop:
 	call SongBank_ScanActiveVoices
 	cp l, 0:i3
 	jr z, IntMed_MarkSlotEmpty
-	lda xwa, (0x87f4:16)
+	lda xwa, (MEDLEY_ORDER_ARRAY:16)
 	ld BC,IZ
 	extz XBC
 	add XBC,XWA
 	ldmi16	(xbc), 0x87fe
-	inc	1, (0x87fe:16)
+	inc	1, (MEDLEY_SONG_COUNT:16)
 	jr	IntMed_NextSlot
 IntMed_MarkSlotEmpty:
-	lda	xwa, (34804:16)
+	lda	xwa, (MEDLEY_ORDER_ARRAY:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -349,12 +349,12 @@ IntMed_CheckPlaying:
 	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
 	jrl	nz, IntMed_HandleError
-	ld	(33890:16), 1
-	ld	a, (34816:16)
-	cp	a, (34814:16)
+	ld	(MEDLEY_PLAY_FLAG:16), 1
+	ld	a, (MEDLEY_CURRENT_INDEX:16)
+	cp	a, (MEDLEY_SONG_COUNT:16)
 	jr	nc, IntMed_CheckRepeat
 	ld	iz, 0:i3
-	lda	xbc, (34804:16)
+	lda	xbc, (MEDLEY_ORDER_ARRAY:16)
 IntMed_FindCurrentSong:
 	ld	de, iz
 	extz	xde
@@ -369,7 +369,7 @@ IntMed_FindCurrentSong:
 	ldto_berp	a, 248
 	extz	wa
 	call	SongBank_SwitchAndUpdateTempo
-	inc	1, (34816:16)
+	inc	1, (MEDLEY_CURRENT_INDEX:16)
 	ld	xwa, (33346:16)
 	or	xwa, xwa
 	jrl	z, IntMed_Exit
@@ -382,11 +382,11 @@ IntMed_NextSongSearch:
 	jr c, IntMed_FindCurrentSong
 	jrl IntMed_Exit
 IntMed_CheckRepeat:
-	cp	(34818:16), 0
+	cp	(MEDLEY_REPEAT_FLAG:16), 0
 	jr	z, IntMed_ClearPlayFlag
-	ld	(34816:16), 0
+	ld	(MEDLEY_CURRENT_INDEX:16), 0
 	ld	iz, 0:i3
-	lda	xwa, (34804:16)
+	lda	xwa, (MEDLEY_ORDER_ARRAY:16)
 IntMed_PlayFromStart:
 	ld	bc, iz
 	extz	xbc
@@ -401,7 +401,7 @@ IntMed_PlayFromStart:
 	ldto_berp	a, 248
 	extz	wa
 	call	SongBank_SwitchAndUpdateTempo
-	inc	1, (34816:16)
+	inc	1, (MEDLEY_CURRENT_INDEX:16)
 	ld	xwa, (33346:16)
 	or	xwa, xwa
 	jrl	z, IntMed_Exit
@@ -418,11 +418,11 @@ IntMed_NextSongLoop:
 	jrl IntMed_Exit
 
 IntMed_ClearPlayFlag:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	IntMed_Exit
 IntMed_HandleError:
 	call	Medley_GetPlaybackStatus
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	cp	l, 0:i3
 	jrl	z, IntMed_Exit
 	ld	(32422:16), 14
@@ -430,10 +430,10 @@ IntMed_HandleError:
 	call	SoundCtrl_SendCommand
 	jrl	IntMed_Exit
 IntMed_HandleStop:
-	cp (0x8c9a:16), 0x7a
+	cp (SEQ_MASTER_STATE:16), 0x7a
 	jrl z, IntMed_Exit
 	call CDlike_ExitModeAndRestore
-	ld (0x8462:16), 0x00
+	ld (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl t, IntMed_Exit
 
 
@@ -450,7 +450,7 @@ IntMed_FormatSlotLoop:
 	lda	xbc, (33350:16)
 	extz	xwa
 	add	xwa, xbc
-	lda	xbc, (34804:16)
+	lda	xbc, (MEDLEY_ORDER_ARRAY:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -471,10 +471,10 @@ IntMed_FormatSlotLoop:
 	jr	c, IntMed_FormatSlotLoop
 	jrl	IntMed_Exit
 IntMed_HandleNavToggle:
-	lda xwa, (0x87f4:16)
+	lda xwa, (MEDLEY_ORDER_ARRAY:16)
 	cp XDE,0x0000000a
 	jrl nz, IntMed_HandleSelectToggle
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl nz, IntMed_HandleSelectToggle
 	ld iz, 0:i3
 IntMed_FindMarkedSlot:
@@ -493,16 +493,16 @@ IntMed_CheckAllMarked:
 	ld iz, 0:i3
 
 IntMed_AssignOrderLoop:
-	lda	xwa, (34804:16)
+	lda	xwa, (MEDLEY_ORDER_ARRAY:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
 	ld	a, (xbc)
 	cp	a, 254
 	jr	nz, IntMed_NextAssignSlot
-	ld	a, (34814:16)
+	ld	a, (MEDLEY_SONG_COUNT:16)
 	ld	(xbc), a
-	inc	1, (34814:16)
+	inc	1, (MEDLEY_SONG_COUNT:16)
 	ld	wa, iz
 	sll	wa, 3
 	lda	xde, (33350:16)
@@ -530,7 +530,7 @@ IntMed_RemoveOrderLoop:
 	ld iz, 0:i3
 
 IntMed_UnmarkSlotLoop:
-	lda	xwa, (34804:16)
+	lda	xwa, (MEDLEY_ORDER_ARRAY:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -538,7 +538,7 @@ IntMed_UnmarkSlotLoop:
 	cp	a, 253
 	jr	ugt, IntMed_NextUnmark
 	ld	(xbc), 254
-	dec	1, (34814:16)
+	dec	1, (MEDLEY_SONG_COUNT:16)
 	ld	wa, iz
 	sll	wa, 3
 	lda	xde, (33350:16)
@@ -565,14 +565,14 @@ IntMed_NextUnmark:
 IntMed_HandleSelectToggle:
 	cp XDE,0x0000000b
 	jrl nz, IntMed_HandleRepeatToggle
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl nz, IntMed_HandleRepeatToggle
 	ld XWA,(XSP+0x06)
 	ld XBC,EVT_GET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	calr FmmSeqSongNameFunc
 	ld IZ,HL
-	lda xwa, (0x87f4:16)
+	lda xwa, (MEDLEY_ORDER_ARRAY:16)
 	ld DE,IZ
 	extz XDE
 	add XDE,XWA
@@ -584,9 +584,9 @@ IntMed_HandleSelectToggle:
 	ld C,(XDE)
 	cp C,0xfe
 	jr nz, .Lc_f91c70
-	ld c, (0x87fe:16)
+	ld c, (MEDLEY_SONG_COUNT:16)
 	ld (XDE),C
-	inc 1, (0x87fe:16)
+	inc 1, (MEDLEY_SONG_COUNT:16)
 	ld C,(XDE)
 	extz BC
 	ld DE,IZ
@@ -606,7 +606,7 @@ IntMed_RemoveFromOrder:
 	jrl ugt, IntMed_Exit
 	ld (XSP+0x04),C
 	ld (XDE),0xfe
-	dec 1, (0x87fe:16)
+	dec 1, (MEDLEY_SONG_COUNT:16)
 	ld C,(XDE)
 	extz BC
 	ld DE,IZ
@@ -621,12 +621,12 @@ IntMed_RemoveFromOrder:
 	call ApPostEvent
 	ldw (XSP+0x02), 0x0000
 	ld iz, 0:i3
-	ld a, (0x87fe:16)
+	ld a, (MEDLEY_SONG_COUNT:16)
 	extz WA
 	cp wa, 0:i3
 	jrl ule, IntMed_Exit
 IntMed_ReorderLoop:
-	lda xwa, (0x87f4:16)
+	lda xwa, (MEDLEY_ORDER_ARRAY:16)
 	ld DE,IZ
 	extz XDE
 	add XDE,XWA
@@ -656,7 +656,7 @@ IntMed_ReorderLoop:
 	call	ApPostEvent
 IntMed_NextReorder:
 	inc	1, iz
-	ld	a, (34814:16)
+	ld	a, (MEDLEY_SONG_COUNT:16)
 	extz	wa
 	cp	(xsp+2), wa
 	jr	c, IntMed_ReorderLoop
@@ -666,17 +666,17 @@ IntMed_HandleRepeatToggle:
 	jr	nz, IntMed_HandlePlay
 	cp	xbc, EVT_INDEXSW_UP
 	jr	nz, IntMed_SetRepeatOff
-	ld	(34818:16), 1
+	ld	(MEDLEY_REPEAT_FLAG:16), 1
 	jrl	IntMed_Exit
 IntMed_SetRepeatOff:
-	ld	(34818:16), 0
+	ld	(MEDLEY_REPEAT_FLAG:16), 0
 	jrl	IntMed_Exit
 IntMed_HandlePlay:
 	cp	xde, 13
 	jrl	nz, IntMed_Exit
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, IntMed_Exit
-	ld	(34816:16), 0
+	ld	(MEDLEY_CURRENT_INDEX:16), 0
 	ld	iz, 0:i3
 IntMed_StartPlayLoop:
 	ld	bc, iz
@@ -684,7 +684,7 @@ IntMed_StartPlayLoop:
 	add	xbc, xwa
 	cp	(xbc), 0
 	jr	nz, IntMed_NextPlaySlot
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+6)
@@ -693,7 +693,7 @@ IntMed_StartPlayLoop:
 	ldto_berp	a, 248
 	extz	wa
 	call	SongBank_SwitchAndUpdateTempo
-	inc	1, (34816:16)
+	inc	1, (MEDLEY_CURRENT_INDEX:16)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
@@ -711,7 +711,7 @@ IntMed_StoreDelayFlag:
 	ld	(33346:16), xwa
 	jr	IntMed_Exit
 IntMed_CheckContinue:
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr z, IntMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,EVT_SET_HOLD
@@ -821,13 +821,13 @@ DiskMed_PlayNextHelper:
 	jrl z, DiskMed_ReturnZero
 	cp XDE,0x00000002
 	jrl nz, DiskMed_ReturnZero
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl z, DiskMed_ReturnZero
-	ld a, (0x8800:16)
-	cp a, (0x87fe:16)
+	ld a, (MEDLEY_CURRENT_INDEX:16)
+	cp a, (MEDLEY_SONG_COUNT:16)
 	jr nc, DiskMed_ReturnFinished
 	ld iz, 0:i3
-	lda xbc, (0x87f4:16)
+	lda xbc, (MEDLEY_ORDER_ARRAY:16)
 DiskMed_FindSongLoop:
 	ld de, iz
 	extz xde
@@ -851,15 +851,15 @@ DiskMed_ReturnFinished:
 DiskMed_InitPlayOrder:
 	cp	xde, 13
 	jrl	nz, DiskMed_ReturnZero
-	ld	(34816:16), 0
-	ld	(34814:16), 0
-	ld	(34818:16), 0
+	ld	(MEDLEY_CURRENT_INDEX:16), 0
+	ld	(MEDLEY_SONG_COUNT:16), 0
+	ld	(MEDLEY_REPEAT_FLAG:16), 0
 	ld	iz, 0:i3
 DiskMed_CheckSlotLoop:
 	ldto_berp	a, 248
 	extz	wa
 	call	SongBank_ScanActiveVoices
-	lda	xbc, (34804:16)
+	lda	xbc, (MEDLEY_ORDER_ARRAY:16)
 	ld	wa, iz
 	extz	xwa
 	add	xwa, xbc
@@ -876,7 +876,7 @@ DiskMed_NextSlotCheck:
 	jr	c, DiskMed_CheckSlotLoop
 	cp	(0x88a4:16), 0
 	jr	z, DiskMed_SingleSlotCheck
-	lda	xhl, (0x87f4:16)
+	lda	xhl, (MEDLEY_ORDER_ARRAY:16)
 	ld	xbc, xhl
 	lda	xde, (xhl + 10)
 DiskMed_AssignOrder:
@@ -884,7 +884,7 @@ DiskMed_AssignOrder:
 	cp	a, 0xfe
 	jr	nz, DiskMed_NextAssign
 	ldmi16	(xbc), 0x87fe
-	inc	1, (0x87fe:16)
+	inc	1, (MEDLEY_SONG_COUNT:16)
 DiskMed_NextAssign:
 	inc 1, xbc
 	cp xbc, xde
@@ -896,7 +896,7 @@ DiskMed_FindFirstSong:
 	extz	xwa
 	add	xwa, xhl
 	ld	a, (xwa)
-	cp	a, (34816:16)
+	cp	a, (MEDLEY_CURRENT_INDEX:16)
 	jr	nz, DiskMed_NextFirst
 	ldto_berp	a, 248
 	extz	wa
@@ -908,11 +908,11 @@ DiskMed_NextFirst:
 	jr DiskMed_ReturnZero
 
 DiskMed_SingleSlotCheck:
-	lda	xbc, (0x87f4:16)
+	lda	xbc, (MEDLEY_ORDER_ARRAY:16)
 	cp	(xbc), 0xfe
 	jr	nz, DiskMed_SingleSlotInit
 	ldmi16	(xbc), 0x87fe
-	inc	1, (0x87fe:16)
+	inc	1, (MEDLEY_SONG_COUNT:16)
 DiskMed_SingleSlotInit:
 	ld iz, 0:i3
 
@@ -921,13 +921,13 @@ DiskMed_FindFirstLoop:
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
-	cp	a, (34816:16)
+	cp	a, (MEDLEY_CURRENT_INDEX:16)
 	jr	nz, DiskMed_NextFindFirst	; -> 0xF91FA6
 	ldto_berp	a, 248
 	extz	wa
 DiskMed_PlaySong:
 	call	SongBank_SwitchAndUpdateTempo
-	inc	1, (34816:16)
+	inc	1, (MEDLEY_CURRENT_INDEX:16)
 	ld	xhl, 1:i3
 	jr	DiskMed_HelperExit
 DiskMed_NextFindFirst:
@@ -996,7 +996,7 @@ FmmDiskMedleySelectFunc:
 	call ApPostEvent
 	calr SignalProgressUpdate
 DiskSel_InitState:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ld	(34976:16), 0
 	ld	(34974:16), 0
 	ld	iz, 0:i3
@@ -1031,7 +1031,7 @@ DiskSel_CheckPlaying:
 	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
 	jrl	nz, DiskSel_HandleError
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	ld	xwa, (xsp+14)
 	ld	xbc, (xsp+10)
 	ld	xde, (xsp+6)
@@ -1133,7 +1133,7 @@ DiskSel_SendFileInfo:
 	call	ApPostEvent
 	cp	qiz, 0
 	jr	ge, DiskSel_PlayNext
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ldw	wa, 96
 	call	UI_PostModeChangeEvent
 	ld	wa, qiz
@@ -1163,7 +1163,7 @@ DiskSel_NextSongLoop:
 	jrl lt, DiskSel_FindSongLoop
 
 DiskSel_ClearPlaying:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	DiskSel_Exit
 DiskSel_CheckRepeat:
 	cp	(34978:16), 0
@@ -1240,7 +1240,7 @@ DiskSel_RepeatSendInfo:
 	call	ApPostEvent
 	cp	qiz, 0
 	jr	ge, DiskSel_RepeatPlayNext
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ldw	wa, 96
 	call	UI_PostModeChangeEvent
 	ld	wa, qiz
@@ -1274,7 +1274,7 @@ DiskSel_RepeatNext:
 
 DiskSel_HandleError:
 	call	Medley_GetPlaybackStatus
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	cp	l, 0:i3
 	jr	nz, DiskSel_ShowError
 	ld	xwa, 4294967295
@@ -1295,10 +1295,10 @@ DiskSel_ShowError:
 	ldw	wa, 238
 	jrl	DiskSel_ShowErrorAndExit
 DiskSel_HandleStopEvent:
-	cp (0x8c9a:16), 0x78
+	cp (SEQ_MASTER_STATE:16), 0x78
 	jr z, DiskSel_PostStopEvent
 	call CDlike_ExitModeAndRestore
-	ld (0x8462:16), 0x00
+	ld (MEDLEY_PLAY_FLAG:16), 0x00
 DiskSel_PostStopEvent:
 	calr CancelOperationCleanup
 	ld xwa, 0xffffffff
@@ -1387,7 +1387,7 @@ DiskSel_HandleNavigation:
 	ld XWA,(XSP+0x06)
 	or XWA,XWA
 	jr nz, DiskSel_CheckPage
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr nz, DiskSel_CheckPage
 	ld XWA,XBC
 	cp XBC,EVT_INDEXSW_DOWN
@@ -1408,7 +1408,7 @@ DiskSel_CheckPage:
 	ld	xwa, (xsp + 6)
 	cp	xwa, 0x1
 	jr	nz, DiskSel_CheckPageDown
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DiskSel_CheckPageDown
 	cp	de, 0xa
 	jrl	lt, DiskSel_GetCurrentIndex
@@ -1418,7 +1418,7 @@ DiskSel_CheckPageDown:
 	ld	xwa, (xsp + 6)
 	cp	xwa, 0x2
 	jr	nz, DiskSel_HandleToggle
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DiskSel_HandleToggle
 	ld	wa, de
 	add	wa, 0xa
@@ -1433,7 +1433,7 @@ DiskSel_HandleToggle:
 	ld	xwa, (xsp+6)
 	cp	xwa, 10
 	jr	nz, DiskSel_HandleSelect
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DiskSel_HandleSelect
 	ld	iz, 0:i3
 DiskSel_FindMarkedLoop:
@@ -1485,7 +1485,7 @@ DiskSel_HandleSelect:
 	ld	xwa, (xsp + 6)
 	cp	xwa, 0xb
 	jr	nz, DiskSel_HandleRepeat
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DiskSel_HandleRepeat
 	ld	xix, xhl
 	lda	xbc, (xhl+de)
@@ -1552,7 +1552,7 @@ DiskSel_HandlePlayStart:
 ; jrl nz, DiskSel_HandleAllCheck (v7 displacement)
 	jrl	nz, DiskSel_HandleAllCheck
 ; cpdi8 (0x84fe), 0 (v7 patched)
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 ; jrl nz, DiskSel_HandleAllCheck (v7 displacement)
 	jrl	nz, DiskSel_HandleAllCheck
 ; stdi8 (0x893c), 0 (v7 patched)
@@ -1601,7 +1601,7 @@ DiskSel_PlayFindLoop:
 	call ApPostEvent
 	cp QIZ,0
 	jr ge, DiskSel_PlayNextSong
-	ld (0x8462:16), 0x00
+	ld (MEDLEY_PLAY_FLAG:16), 0x00
 	ldw WA, 0x0060
 	call UI_PostModeChangeEvent
 	ld WA,QIZ
@@ -1912,7 +1912,7 @@ FmmSmfMedleyFunc:
 	cp	a, 114
 	jr	nz, SmfMed_CheckPlayMode
 SmfMed_CheckNotPlaying:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	call	Medley_GetPlaybackStatus
 	cp	l, 4:i3
 	jr	z, SmfMed_Error3F
@@ -1965,7 +1965,7 @@ SmfMed_ShowPlayError:
 	call	SoundCtrl_SendCommand
 	inc	1, (33696:16)
 SmfMed_SetPlaying:
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	ld	a, (34950:16)
 	cp	a, (34948:16)
 	jr	nc, SmfMed_CheckRepeat	; -> 0xF92B0B
@@ -2055,7 +2055,7 @@ SmfMed_CheckNotPlayError:
 	jrl nz, SmfMed_Exit
 
 SmfMed_ClearPlaying:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	SmfMed_Exit
 SmfMed_InitFromDisk:
 	ld xde, 0:i3
@@ -2083,7 +2083,7 @@ SmfMed_InitFromDisk:
 	call ApPostEvent
 	calr SignalProgressUpdate
 SmfMed_InitState:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ld	(34950:16), 0
 	ld	(34948:16), 0
 	ldw	bc, 128
@@ -2111,7 +2111,7 @@ SmfMed_FinishInit:
 	ld	(33688:16), xwa
 	jrl	SmfMed_Exit
 SmfMed_HandleStop:
-	ld	a, (35994:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 111
 	jrl	z, SmfMed_Exit
 	cp	a, 114
@@ -2122,7 +2122,7 @@ SmfMed_HandleStop:
 	jrl	z, SmfMed_Exit
 	call	CDlike_ExitModeAndRestore
 	calr	CancelOperationCleanup
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	SmfMed_Exit
 SmfMed_StoreWindowPtr:
 	ld	(33684:16), xwa
@@ -2135,7 +2135,7 @@ SmfMed_HandleNavToggle:
 	lda xwa, (0x8804:16)
 	cp XDE,0x0000000a
 	jr nz, SmfMed_HandleSelectToggle
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr nz, SmfMed_HandleSelectToggle
 	ld iz, 0:i3
 	ld DE,BC
@@ -2197,7 +2197,7 @@ SmfMed_RefreshAfterToggle:
 SmfMed_HandleSelectToggle:
 	cp	xde, 0xb
 	jr	nz, SmfMed_HandleRepeat
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, SmfMed_HandleRepeat
 	ld	xwa, (xsp + 2)
 	ld	xbc, EVT_GET_SELECTED_FILE_NUMBER
@@ -2265,7 +2265,7 @@ SmfMed_SetRepeatOff:
 SmfMed_HandlePlay:
 	cp	xde, 13
 	jrl	nz, SmfMed_Exit
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	nz, SmfMed_Exit
 	ld	(34950:16), 0
 	ld	(33696:16), 0
@@ -2279,7 +2279,7 @@ SmfMed_PlayFindLoop:
 	add	xde, xwa
 	cp	(xde), 0
 	jr	nz, SmfMed_PlayNextLoop
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+2)
@@ -2301,7 +2301,7 @@ SmfMed_PlayNextLoop:
 	jr c, SmfMed_PlayFindLoop
 
 SmfMed_CheckAutoPlay:
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, SmfMed_Exit
 	ld	xwa, (xsp+2)
 	ld	xbc, EVT_GET_SELECTED_FILE_NUMBER
@@ -2320,7 +2320,7 @@ SmfMed_StoreDelayFlag:
 	ld	(33688:16), xwa
 	jr	SmfMed_Exit
 SmfMed_CheckContinue:
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr z, SmfMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,EVT_SET_HOLD
@@ -2431,7 +2431,7 @@ PdName_ReturnZero:
 PdName_HandleNavigation:
 	or	xde, xde
 	jr	nz, PdName_CheckPageUp
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, PdName_CheckPageUp
 	cp	xbc, EVT_INDEXSW_DOWN
 	jr	nz, PdName_CheckPrevKey
@@ -2452,7 +2452,7 @@ PdName_CheckPrevKey:
 PdName_CheckPageUp:
 	cp	xde, 0x1
 	jr	nz, PdName_CheckPageDown
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, PdName_CheckPageDown
 	cp	wa, 0xa
 	jr	lt, PdName_GetCurrentIndex
@@ -2461,7 +2461,7 @@ PdName_CheckPageUp:
 PdName_CheckPageDown:
 	cp	xde, 0x2
 	jr	nz, PdName_GetCurrentIndex
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, PdName_GetCurrentIndex
 	ld	bc, wa
 	add	bc, 0xa
@@ -2543,7 +2543,7 @@ PdName_RefreshPage:
 	jrl PdName_ReturnZero
 
 PdName_SetIndexPlaying:
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl z, PdName_ReturnZero
 	ld (0x83a6:16), de
 
@@ -2695,7 +2695,7 @@ FmmPdMedleyFunc:
 	ld	a, (35995:16)
 	cp	a, 113
 	jr	nz, PdMed_CheckPlayMode
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	call	Medley_GetPlaybackStatus
 	cp	l, 2:i3
 	jrl	c, PdMed_Exit
@@ -2708,7 +2708,7 @@ PdMed_CheckPlayMode:
 	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
 	jrl	nz, PdMed_HandleError	; -> 0xF93315
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	ld	c, (34950:16)
 	lda	xwa, (34820:16)
 	cp	c, (34948:16)
@@ -2783,11 +2783,11 @@ PdMed_RepeatNext:
 	jrl PdMed_Exit
 
 PdMed_ClearPlaying:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	PdMed_Exit
 PdMed_HandleError:
 	call	Medley_GetPlaybackStatus
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	cp	l, 0:i3
 	jrl	z, PdMed_Exit
 	ld	(32422:16), 1
@@ -2815,7 +2815,7 @@ PdMed_InitFromDisk:
 	call	ApPostEvent
 	call	SignalProgressUpdate
 PdMed_InitState:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ld	(34950:16), 0
 	ld	(34948:16), 0
 	ldw	bc, 128
@@ -2843,14 +2843,14 @@ PdMed_FinishInit:
 	ld	(33788:16), xwa
 	jrl	PdMed_Exit
 PdMed_HandleStop:
-	ld	a, (35994:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 113
 	jrl	z, PdMed_Exit
 	cp	a, 117
 	jrl	z, PdMed_Exit
 	call	CDlike_ExitModeAndRestore
 	call	CancelOperationCleanup
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	PdMed_Exit
 PdMed_StoreWindowPtr:
 	ld	(33784:16), xwa
@@ -2862,7 +2862,7 @@ PdMed_RefreshDisplay:
 PdMed_HandleNavToggle:
 	cp XHL,0x0000000a
 	jrl nz, PdMed_HandleSelectToggle
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr nz, PdMed_HandleSelectToggle
 	ld hl, 0:i3
 	ld WA,BC
@@ -2925,7 +2925,7 @@ PdMed_RefreshAfterToggle:
 PdMed_HandleSelectToggle:
 	cp XHL,0x0000000b
 	jr nz, PdMed_HandleRepeat
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr nz, PdMed_HandleRepeat
 	ld XWA,XIZ
 	ld XBC,EVT_GET_SELECTED_FILE_NUMBER
@@ -2991,7 +2991,7 @@ PdMed_SetRepeatOff:
 PdMed_HandlePlay:
 	cp	xhl, 13
 	jrl	nz, PdMed_Exit
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	nz, PdMed_Exit
 	ld	(34950:16), 0
 	ld	hl, 0:i3
@@ -3005,7 +3005,7 @@ PdMed_PlayFindLoop:
 	add	xde, xbc
 	cp	(xde), 0
 	jr	nz, PdMed_PlayNextLoop
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	extz	xhl
 	ld	xwa, xiz
 	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
@@ -3025,7 +3025,7 @@ PdMed_PlayNextLoop:
 	jr c, PdMed_PlayFindLoop
 
 PdMed_CheckAutoPlay:
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, PdMed_Exit
 	ld	xwa, 4294967295
 	ld	xbc, EVT_SET_HOLD
@@ -3037,7 +3037,7 @@ PdMed_StoreDelayFlag:
 	ld	(33788:16), xwa
 	jr	PdMed_Exit
 PdMed_CheckContinue:
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr z, PdMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,EVT_SET_HOLD
@@ -3198,7 +3198,7 @@ DocName_ReturnZero:
 DocName_HandleNavigation:
 	or	xde, xde
 	jr	nz, DocName_CheckPageUp
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DocName_CheckPageUp
 	cp	xbc, EVT_INDEXSW_DOWN
 	jr	nz, DocName_CheckPrevKey
@@ -3219,7 +3219,7 @@ DocName_CheckPrevKey:
 DocName_CheckPageUp:
 	cp	xde, 0x1
 	jr	nz, DocName_CheckPageDown
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DocName_CheckPageDown
 	cp	wa, 0xa
 	jr	lt, DocName_GetCurrentIndex
@@ -3228,7 +3228,7 @@ DocName_CheckPageUp:
 DocName_CheckPageDown:
 	cp	xde, 0x2
 	jr	nz, DocName_GetCurrentIndex
-	cp	(0x8462:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DocName_GetCurrentIndex
 	ld	bc, wa
 	add	bc, 0xa
@@ -3310,7 +3310,7 @@ DocName_RefreshPage:
 	jrl DocName_ReturnZero
 
 DocName_SetIndexPlaying:
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl z, DocName_ReturnZero
 	ld (0x8406:16), de
 
@@ -3461,7 +3461,7 @@ FmmDocMedleyFunc:
 	ld	a, (35995:16)
 	cp	a, 112
 	jr	nz, DocMed_CheckPlayMode
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	call	Medley_GetPlaybackStatus
 	cp	l, 2:i3
 	jrl	c, DocMed_Exit
@@ -3474,7 +3474,7 @@ DocMed_CheckPlayMode:
 	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
 	jrl	nz, DocMed_HandleError	; -> 0xF93AC0
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	ld	c, (34950:16)
 	lda	xwa, (34820:16)
 	cp	c, (34948:16)
@@ -3549,11 +3549,11 @@ DocMed_RepeatNext:
 	jrl DocMed_Exit
 
 DocMed_ClearPlaying:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	DocMed_Exit
 DocMed_HandleError:
 	call	Medley_GetPlaybackStatus
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	cp	l, 0:i3
 	jrl	z, DocMed_Exit
 	ld	(32422:16), 1
@@ -3585,7 +3585,7 @@ DocMed_InitFromDisk:
 	call	ApPostEvent
 	call	SignalProgressUpdate
 DocMed_InitState:
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ld	(34950:16), 0
 	ld	(34948:16), 0
 	ldw	bc, 128
@@ -3613,14 +3613,14 @@ DocMed_FinishInit:
 	ld	(33884:16), xwa
 	jrl	DocMed_Exit
 DocMed_HandleStop:
-	ld	a, (35994:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 112
 	jrl	z, DocMed_Exit
 	cp	a, 116
 	jrl	z, DocMed_Exit
 	call	CDlike_ExitModeAndRestore
 	call	CancelOperationCleanup
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	DocMed_Exit
 DocMed_StoreWindowPtr:
 	ld	(33880:16), xwa
@@ -3632,7 +3632,7 @@ DocMed_RefreshDisplay:
 DocMed_HandleNavToggle:
 	cp XHL,0x0000000a
 	jrl nz, DocMed_HandleSelectToggle
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr nz, DocMed_HandleSelectToggle
 	ld hl, 0:i3
 	ld WA,BC
@@ -3695,7 +3695,7 @@ DocMed_RefreshAfterToggle:
 DocMed_HandleSelectToggle:
 	cp XHL,0x0000000b
 	jr nz, DocMed_HandleRepeat
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr nz, DocMed_HandleRepeat
 	ld XWA,XIZ
 	ld XBC,EVT_GET_SELECTED_FILE_NUMBER
@@ -3761,7 +3761,7 @@ DocMed_SetRepeatOff:
 DocMed_HandlePlay:
 	cp	xhl, 13
 	jrl	nz, DocMed_Exit
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jrl	nz, DocMed_Exit
 	ld	(34950:16), 0
 	ld	hl, 0:i3
@@ -3775,7 +3775,7 @@ DocMed_PlayFindLoop:
 	add	xde, xbc
 	cp	(xde), 0
 	jr	nz, DocMed_PlayNextLoop
-	ld	(33890:16), 1
+	ld	(MEDLEY_PLAY_FLAG:16), 1
 	extz	xhl
 	ld	xwa, xiz
 	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
@@ -3795,7 +3795,7 @@ DocMed_PlayNextLoop:
 	jr c, DocMed_PlayFindLoop
 
 DocMed_CheckAutoPlay:
-	cp	(33890:16), 0
+	cp	(MEDLEY_PLAY_FLAG:16), 0
 	jr	nz, DocMed_Exit
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_SELECTED_FILE_NUMBER
@@ -3811,7 +3811,7 @@ DocMed_StoreDelayFlag:
 	ld	(33884:16), xwa
 	jr	DocMed_Exit
 DocMed_CheckContinue:
-	cp (0x8462:16), 0x00
+	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jr z, DocMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,EVT_SET_HOLD

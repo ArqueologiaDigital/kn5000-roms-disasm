@@ -62,7 +62,7 @@ AccPedal_LoadFlagFromStyleMem:
 	pushw wa
 	push xiy
 	and (0x32c7:16), 0xfe
-	ld xiy, 0x00094800
+	ld xiy, RHYTHM_PATTERN_BUF_A
 	add xiy, 16
 	ld a, (xiy)
 	bit 0, a

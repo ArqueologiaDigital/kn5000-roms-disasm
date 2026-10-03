@@ -2429,7 +2429,7 @@ SndParam_NotifyQuick_Data_Helper2:
 	jr	nz, SndParam_NotifyQuick_Data_Epilogue
 	cpw	(0x9042:16), 508
 	call	nc, (SwbtWr_ReinitBothBanks:24)
-	lda_d16	xbc, (0xbca0)
+	lda_d16	xbc, (SWBTWR_EVENT_QUEUE)
 	ldw_d16	de, (0x9042)
 	extz	xde
 	add	xde, xbc
@@ -2445,7 +2445,7 @@ SndParam_NotifyQuick_Data_Helper2:
 SndParam_NotifyQuick_Data_Skip14:
 	cpw	(0x9042:16), 508
 	call	nc, (SwbtWr_ReinitOutputBank:24)
-	lda_d16	xbc, (0xbca0)
+	lda_d16	xbc, (SWBTWR_EVENT_QUEUE)
 	ldw_d16	de, (0x9042)
 	extz	xde
 	add	xde, xbc
@@ -2495,7 +2495,7 @@ Audio_ResetAfterPayloadError_Helper_Helper2:
 	.set	SndParam_EncodeFieldDirect_Data, . + 2
 	cpw	(0x9042:16), 504
 	call	nc, (SwbtWr_ReinitBothBanks:24)
-	lda_d16	xbc, (0xbca0)
+	lda_d16	xbc, (SWBTWR_EVENT_QUEUE)
 	ldw_d16	de, (0x9042)
 	extz	xde
 	add	xde, xbc
@@ -2520,7 +2520,7 @@ Audio_ResetAfterPayloadError_Helper_Helper2:
 SndParam_NotifyQuick_Data_Skip17:
 	cpw	(0x9042:16), 504
 	call	nc, (SwbtWr_ReinitOutputBank:24)
-	lda_d16	xbc, (0xbca0)
+	lda_d16	xbc, (SWBTWR_EVENT_QUEUE)
 	ldw_d16	de, (0x9042)
 	extz	xde
 	add	xde, xbc

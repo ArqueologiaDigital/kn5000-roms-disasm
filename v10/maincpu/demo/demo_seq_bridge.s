@@ -634,7 +634,7 @@ PlayMode_SendStopEvent:
 
 ; SqTrSelTtl case G
 SqTrSel_CaseG:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	extz wa
 	sub wa, 0x6f
 	cp wa, 0:i3
@@ -699,7 +699,7 @@ SqTrSel_CaseG_Thunk4:
 
 
 PlayMode_CheckAndAbort:
-	cp (0x8d36:16), 114
+	cp (SEQ_MASTER_STATE:16), 114
 	ret z
 	call SeqState_GetFlags
 	bit 0, hl

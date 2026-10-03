@@ -142,12 +142,12 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 ; [v10] Handles MIDI events (note on/off, control change, etc.) within the UI
 ; [v10] state machine, updating relevant display elements.
 ; [v10] ============================================================================
-	cp	(0xbfe4:16), 24
+	cp	(SWBTWR_EVENT_TYPE:16), 24
 	ret	ugt
-	ld	l, (0xbfe4:16)
-	ld	h, (0xbfe1:16)
-	ld	e, (0xbfe3:16)
-	ld	d, (0xbfe2:16)
+	ld	l, (SWBTWR_EVENT_TYPE:16)
+	ld	h, (SWBTWR_PAYLOAD_1:16)
+	ld	e, (SWBTWR_PAYLOAD_3:16)
+	ld	d, (SWBTWR_PAYLOAD_2:16)
 	ld	a, l
 	extz	wa
 	sla	wa, 2

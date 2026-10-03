@@ -541,7 +541,7 @@ FileIO_BytecodeData_Code_Epilogue9:
 	jrl	nz, FileIO_BytecodeData_Code_Epilogue10
 	cp	a, 14
 	jr	nz, FileIO_BytecodeData_Code_Skip38
-	ld	a, (36150:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 184
 	jr	z, FileIO_BytecodeData_Code_Skip38
 	cp	a, 180
@@ -580,7 +580,7 @@ FileIO_BytecodeData_Code_Skip40:
 	ld	xwa, FileIO_BytecodeData_Data_11
 	jr	FileIO_BytecodeData_Code_Join8
 FileIO_BytecodeData_Code_Skip41:
-	cp	(36150:16), 184
+	cp	(SEQ_MASTER_STATE:16), 184
 	jr	nz, FileIO_BytecodeData_Code_Skip42
 	cp	c, 14
 	jr	z, FileIO_BytecodeData_Code_Epilogue10
@@ -778,7 +778,7 @@ FileIO_BytecodeData_Code_Epilogue15:
 	jr	z, FileIO_BytecodeData_Code_Skip54
 	cp	c, 19
 	jr	z, FileIO_BytecodeData_Code_Skip54
-	cp	(36150:16), 81
+	cp	(SEQ_MASTER_STATE:16), 81
 	jr	nz, FileIO_BytecodeData_Code_Entry6
 FileIO_BytecodeData_Code_Skip54:
 	jr	FileIO_BytecodeData_Code_Epilogue16
@@ -1534,7 +1534,7 @@ ExtDev_SndParam_Block98_Var40:
 	ld	(xhl), 64
 	jrl	-3542
 ExtDev_SndParam_BlockA9_Var02:
-	cp	(36150:16), 135
+	cp	(SEQ_MASTER_STATE:16), 135
 	ret	nz
 	.byte 0xf1
 	swi	1
@@ -1950,7 +1950,7 @@ Encoder_IncrementAndDispatch:
 
 Audio_PeriodicUpdate:
 	ldmm16 0x8ec2, 1033
-	cp (0x8d36:16), 247
+	cp (SEQ_MASTER_STATE:16), 247
 	ret z
 	calr Audio_ProcessVoiceQueue
 	calr MIDI_ProcessVoiceAssignment
@@ -2153,7 +2153,7 @@ Voice_SetupFromData:
 	lda xde, (0x8e94:16)
 	exts xwa
 	add xwa, xde
-	cp (0x8d36:16), 251
+	cp (SEQ_MASTER_STATE:16), 251
 	jrl nz, MidiCC_ReturnClean
 	cp (xiz), 0x3
 	jr nz, MidiCC_ValidateRange
@@ -2452,7 +2452,7 @@ Audio_UpdateLEDsAndChannels:
 	ret
 
 MIDI_ProcessChangedChannels:
-	cp (0x8d36:16), 251
+	cp (SEQ_MASTER_STATE:16), 251
 	ret z
 	calr Audio_CheckAndFlagChanges
 	ld wa, (0x8f3c:16)
@@ -2492,7 +2492,7 @@ MidiChanged_ProcessGroup4:
 	ret
 
 MidiChannel_DispatchChanged:
-	cp (0x8d36:16), 251
+	cp (SEQ_MASTER_STATE:16), 251
 	ret z
 	ld wa, (0x8f3c:16)
 	cp wa, 0:i3
@@ -2599,7 +2599,7 @@ CtrlPanel_UpdateLEDState:
 	ld (xsp + 2), xwa
 	lda xwa, (0x8f28:16)
 	ld (xsp + 6), xwa
-	cp (0x8d36:16), 247
+	cp (SEQ_MASTER_STATE:16), 247
 	jr z, LEDUpdate_Cleanup
 	ldib_erp 0xfb, 0
 
@@ -3760,7 +3760,7 @@ MidiScan_PopIzRet:
 ; active and which input modes are enabled.
 ; ============================================================================
 UIState_UpdateControlBits:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 5:i3
 	jr	z, UIState_UpdateControlBits_Entry2
 	cp	a, 4:i3
@@ -3790,7 +3790,7 @@ UIState_UpdateControlBits_Entry2:
 	ret
 UIState_SwitchOnDisplayMode:
 	; --- Switch on A = (0xc07d): or bits into (0x8f3a)/(0x8f42) (53 bytes) ---
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 4:i3
 	jr z, UIState_Mode4
 	cp	a, 3:i3
@@ -3815,7 +3815,7 @@ UIState_Mode4:
 
 
 UIState_ProcessExtendedMode:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	extz	wa
 	cp	wa, 0:i3
 	ret	mi
@@ -3846,7 +3846,7 @@ UIStateEvt_NullHandler:
 	ret
 UIState_SwitchForMidiFlags:
 	; --- Switch on A = (0xc07d): or bits into (0x8f42) (51 bytes) ---
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp a, 0x14
 	jr z, UIState_MidiMode14
 	cp	a, 4:i3
@@ -3872,7 +3872,7 @@ UIState_NullReturn:
 
 
 UIState_ProcessAltMode:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 11
 	jr	z, UIState_ProcessAltMode_Entry2
 	cp	a, 3:i3
@@ -3891,7 +3891,7 @@ UIState_ProcessAltMode_Entry2:
 	ld	xde, 0x60003e8f
 	ret
 UIState_ProcessSimpleMode:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 1:i3
 	ret	nz
 	.byte 0xd1
@@ -3925,7 +3925,7 @@ FindBit_ShiftLoop:
 
 Audio_InitAllDefaults:
 	ld (0xc039:16), 255
-	ld (0xbd3c:16), 255
+	ld (SWBTWR_EVENT_QUEUE:16), 255
 	ldw (0x90de:16), 0
 	ldw (0x90e0:16), 0
 	ld (0xbf39:16), 255
@@ -3956,7 +3956,7 @@ Audio_ResetAfterPayloadError:
 	call SubCPU_Payload_GetErrorFlag
 	cp hl, 0xffff
 	jr nz, Audio_ReinitToneGen
-	cp (0x8d36:16), 65
+	cp (SEQ_MASTER_STATE:16), 65
 	jr nz, Audio_ReinitDisplay
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
@@ -4696,7 +4696,7 @@ MIDI_WriteCommandToBuffer:
 	ld ix, hl
 	inc 1, hl
 	ld (0x90de:16), hl
-	lda xhl, (0xbd3c:16)
+	lda xhl, (SWBTWR_EVENT_QUEUE:16)
 	extz xix
 	add xix, xhl
 	ld (xix), a
@@ -4846,7 +4846,7 @@ FileIO_ProcessRemainingOps:
 	add xwa, xbc
 	cp (xwa), 0xff
 	jr nz, FileIO_OperationDispatch
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	ld wa, (0x90de:16)
 	extz xwa
 	add xwa, xbc
@@ -5392,7 +5392,7 @@ MIDI_WriteResetSequence:
 	ld de, wa
 	inc 1, wa
 	ld (0x90de:16), wa
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	extz xde
 	add xde, xbc
 	ld (xde), 0x90
@@ -6437,12 +6437,12 @@ VoiceParamCC_Done:
 
 UIState_CheckAndRenderBitmap:
 	pushw	iz
-	cp	(49277:16), 2
+	cp	(SWBTWR_PAYLOAD_1:16), 2
 	jr	nz, UIState_CheckAndRenderBitmap_Epilogue
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 255
 	jr	z, UIState_CheckAndRenderBitmap_Epilogue
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 255
 	cp	a, 183
 	jr	z, UIState_CheckAndRenderBitmap_Skip
@@ -6468,43 +6468,43 @@ UIState_CheckAndRenderBitmap_Epilogue:
 	popw	iz
 	ret
 UIState_RenderBitmapData:
-	cp	(49277:16), 5
+	cp	(SWBTWR_PAYLOAD_1:16), 5
 	jr	nz, UIState_RenderBitmapData_Skip
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	res	7, a
 	cp	a, 0:i3
 	jr	z, UIState_RenderBitmapData_Skip
-	ld	c, (0xc07e:16)
+	ld	c, (SWBTWR_PAYLOAD_2:16)
 	res	7, c
 	cp	c, 0:i3
 	jr	z, UIState_RenderBitmapData_Skip
-	ld	a, (0xc080:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	extz	wa
 	lda	xde, (0x918d:16)
 	extz	xwa
 	add	xwa, xde
 	ld	(xwa), c
 UIState_RenderBitmapData_Skip:
-	cp	(0xc07d:16), 12
+	cp	(SWBTWR_PAYLOAD_1:16), 12
 	jr	nz, UIState_RenderBitmapData_Skip2
-	bit	4, (0xc07f:16)
+	bit	4, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIState_RenderBitmapData_Skip2
-	bit	4, (0xc07e:16)
+	bit	4, (SWBTWR_PAYLOAD_2:16)
 	jr	nz, UIState_RenderBitmapData_Skip2
-	ldb_d8	a, (0xc080)
+	ldb_d8	a, (SWBTWR_EVENT_TYPE)
 	extz	wa
 	pushw	3
 	ldw	bc, 0x1b2
 	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
 UIState_RenderBitmapData_Skip2:
-	cp	(0xc07d:16), 4
+	cp	(SWBTWR_PAYLOAD_1:16), 4
 	ret	nz
-	bit	5, (0xc07f:16)
+	bit	5, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	5, (0xc07e:16)
+	bit	5, (SWBTWR_PAYLOAD_2:16)
 	ret	nz
-	ldb_d8	a, (0xc080)
+	ldb_d8	a, (SWBTWR_EVENT_TYPE)
 	extz	wa
 	pushw	3
 	ldw	bc, 11
@@ -6896,9 +6896,9 @@ ToneGen_DispatchStartVoice:
 	retd 0x2
 	dec 6, xsp
 	pushw_erp 0xfa
-	cp (0xc07d:16), 3
+	cp (SWBTWR_PAYLOAD_1:16), 3
 	jr nz, ToneGen_Dispatch_Return
-	bit 0, (0xc07f:16)
+	bit 0, (SWBTWR_PAYLOAD_3:16)
 	jr z, ToneGen_Dispatch_Return
 	ldw wa, 0x90
 	calr VoiceData_LookupPtrByIndex
@@ -6965,14 +6965,14 @@ BankFlush_CheckChannel1:
 	calr SwbtWr_FlushAndAppendParams
 	ret
 UIWidget_MidiStreamControl:
-	cp	(0xc07d:16), 0
+	cp	(SWBTWR_PAYLOAD_1:16), 0
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 3
 	call	nz, (0xfc9a6c:24)
-	bit	2, (0xc07f:16)
+	bit	2, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	2, (0xc07e:16)
+	bit	2, (SWBTWR_PAYLOAD_2:16)
 	ret	nz
 	set	4, (0x90f9:16)
 	call	SeqTimer_UpdateTempoReg
@@ -7341,7 +7341,7 @@ SwbtWr_AppendFixedParamBlock:
 	ld de, wa
 	inc 1, wa
 	ld (0x90de:16), wa
-	lda xbc, (0xbd3c:16)
+	lda xbc, (SWBTWR_EVENT_QUEUE:16)
 	extz xde
 	add xde, xbc
 	ldmi16 (xde), 0x9127
@@ -8296,7 +8296,7 @@ MidiStream_ProcessEventBuffer:
 	ld a, (1045:16)
 	ld (0x91c9:16), a
 	ei 0
-	ld xix, 0xbd3c
+	ld xix, SWBTWR_EVENT_QUEUE
 	extz xwa
 	ld wa, (0x90e0:16)
 	add xix, xwa
@@ -8452,7 +8452,7 @@ MidiStream_ProcessHandler_4:
 
 MidiStream_ProcessSeqBuffer:
 	push xiz
-	cp (0x8d36:16), 201
+	cp (SEQ_MASTER_STATE:16), 201
 	jrl nz, MidiSeqBuf_Return
 	cp (0x7f0b:16), 0
 	jrl z, MidiSeqBuf_Return
@@ -8461,7 +8461,7 @@ MidiStream_ProcessSeqBuffer:
 	ld a, (1130:16)
 	ld (0x91c9:16), a
 	ei 0
-	ld xix, 0xbd3c
+	ld xix, SWBTWR_EVENT_QUEUE
 	extz xwa
 	ld wa, (0x90e0:16)
 	add xix, xwa
@@ -8626,7 +8626,7 @@ MIDI_SelectTempoExpressionSource:
 	jr z, TempoSrc_CheckAutoPlay
 	cp e, 0xd
 	jr z, TempoSrc_DirectTempoMode
-	ld d, (0x8d36:16)
+	ld d, (SEQ_MASTER_STATE:16)
 	cp d, 0x87
 	jr z, Tempo_Expression_Bypass
 	cp d, 0x88
@@ -8663,7 +8663,7 @@ Mod_SelectExpressionSource:
 	jr z, ModExpr_CheckAutoPlay
 	cp e, 0xd
 	jr z, ModExpr_DirectMode
-	ld d, (0x8d36:16)
+	ld d, (SEQ_MASTER_STATE:16)
 	cp d, 0x87
 	jr z, Tempo_Expression_Bypass
 	cp d, 0x88
@@ -8699,7 +8699,7 @@ MidiStream_ProcessTempoRingBuf:
 	ld a, (1051:16)
 	ld (0x91c9:16), a
 	ei 0
-	ld xix, 0xbd3c
+	ld xix, SWBTWR_EVENT_QUEUE
 	extz xwa
 	ld wa, (0x90e0:16)
 	add xix, xwa
@@ -9284,7 +9284,7 @@ VoiceMode_ParamHandler_1:
 	ret
 
 AudioSeq_FlushAndTerminate:
-	ld xix, 0xbd3c
+	ld xix, SWBTWR_EVENT_QUEUE
 	ld hl, (0x90de:16)
 	ld	(xix+hl), 0xff
 	ret

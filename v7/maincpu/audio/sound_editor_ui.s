@@ -7779,12 +7779,12 @@ SeGfx_BoundOp06:
 
 
 SeMenu_NameEditor_End:
-	cp	(0xbfe1:16), 4
+	cp	(SWBTWR_PAYLOAD_1:16), 4
 	jr	nz, SeMenu_NameEditor_End_Return
-	ldb_d8	a, (0xbfe3)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 64
 	jr	z, SeMenu_NameEditor_End_Return
-	ldb_d8	a, (0xbfe2)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 64
 	sla	a, 1
 	cp	(0x8c9c:16), 33
@@ -9241,7 +9241,7 @@ SeMenu_Utility_FormatNumber_Loop:
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_Utility_FormatNumber_End:
-	ld a, (0x8c9a:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	ld (0x0678:16), a
 	ld (0x03efa8:24), 0x02
 	ld XIY,SeScreenData_0x175E

@@ -763,7 +763,7 @@ AssswbWr:
 	ld hl, (0x90de:16)
 	cp hl, 0x1fc
 	jr nc, AssswbWr_BufferFull
-	lda xix, (0xbd3c:16)
+	lda xix, (SWBTWR_EVENT_QUEUE:16)
 	extz xhl
 	add xhl, xix
 	ld (xhl+), a
@@ -846,7 +846,7 @@ SwbtWr_SoundBankParamTable:
 
 SwbtWr_ProcessAll:
 	ld xiy, 0xbf39
-	ld xix, 0xbd3c
+	ld xix, SWBTWR_EVENT_QUEUE
 	ld bc, (0x90e2:16)
 	srl bc, 1
 	cp bc, 0:i3
@@ -866,7 +866,7 @@ SwbtWr_InitBank1:
 	ld (0xc081:16), xiy
 	ld xiy, SwbtBank1_PostCallbacks
 	ld (0xc085:16), xiy
-	ld xiy, 0xbd3c
+	ld xiy, SWBTWR_EVENT_QUEUE
 	ld (0xc089:16), xiy
 	calr SwbtWr_DispatchLoop_Init
 	ret
@@ -876,7 +876,7 @@ SwbtWr_InitBank2:
 	ld (0xc081:16), xiy
 	ld xiy, SwbtBank2_PostCallbacks
 	ld (0xc085:16), xiy
-	ld xiy, 0xbd3c
+	ld xiy, SWBTWR_EVENT_QUEUE
 	ld (0xc089:16), xiy
 	calr SwbtWr_DispatchLoop_Init
 	ret
@@ -902,7 +902,7 @@ SwbtWr_DispatchLoop:
 	ld xix, (0xc081:16)
 	xor hl, hl
 	ld l, (xiy)
-	ld (0xc080:16), l
+	ld (SWBTWR_EVENT_TYPE:16), l
 	cp l, 0xbf
 	jr ugt, SwbtWr_DispatchLoop_NextEvent
 	sla hl, 2
@@ -917,8 +917,8 @@ SwbtWr_DispatchLoop_ScanCallbacks:
 	jr z, SwbtWr_DispatchLoop_NextEvent
 
 SwbtWr_DispatchLoop_ExecuteCallback:
-	ld (0xc07d:16), wa
-	ld (0xc07f:16), c
+	ld (SWBTWR_PAYLOAD_1:16), wa
+	ld (SWBTWR_PAYLOAD_3:16), c
 	push_sd16w 0x7b, 0xc0
 	push_sd16w 0x81, 0xc0
 	push_sd16w 0x83, 0xc0
@@ -969,7 +969,7 @@ SwbtWr_PostCallback_Done:
 SwbtWr_QueueMainEvent:
 	cpw (0x90de:16), 507
 	jr ugt, SwbtWr_QueueMainEvent_Done
-	ld xhl, 0xbd3c
+	ld xhl, SWBTWR_EVENT_QUEUE
 	add hl, (0x90de:16)
 	ld (xhl), de
 	ld (xhl + 2), wa
@@ -1726,12 +1726,12 @@ MidiOut_RealtimeDispatch_Data:
 	.byte 0xc1, 0x80, 0xc0
 	push	xsp
 	cp	(xwa-80), iz
-	cp	(49277:16), 14
+	cp	(SWBTWR_PAYLOAD_1:16), 14
 	ret	nz
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 3
 	ret	z
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 3
 	ld	(0xc1e4:16), a
 	ret
@@ -2078,11 +2078,11 @@ Audio_ConfigureDSP:
 	ldw wa, 0x7f
 	jr CompIface_WriteVolume
 DSPCfg_ProcessInput:
-	ld c, (0xc080:16)
-	ld e, (0xc07d:16)
+	ld c, (SWBTWR_EVENT_TYPE:16)
+	ld e, (SWBTWR_PAYLOAD_1:16)
 	cp c, 0x48
 	jrl z, DSPCfg_ScaleFactor_Dispatch
-	ld a, (0xc07f:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
 	cp c, 0x70
 	jrl z, DSPCfg_CompressorDispatch
 	cp c, 0x98
@@ -2096,14 +2096,14 @@ DSPCfg_ProcessInput:
 	jr z, DSPCfg_Chorus_Active
 	bit 7, c
 	jr z, DSPCfg_Reverb_CheckSustain
-	bit 7, (0xc07e:16)
+	bit 7, (SWBTWR_PAYLOAD_2:16)
 	jr nz, DSPCfg_Reverb_CheckSustain
 	res 0, (0xc1f0:16)
 
 DSPCfg_Reverb_CheckSustain:
-	bit 6, (0xc07f:16)
+	bit 6, (SWBTWR_PAYLOAD_3:16)
 	jrl z, DSPCfg_UpdateOutputVolume
-	bit 6, (0xc07e:16)
+	bit 6, (SWBTWR_PAYLOAD_2:16)
 	jrl z, DSPCfg_UpdateOutputVolume
 	res 0, (0xc1f0:16)
 	jrl DSPCfg_SetFadeBit
@@ -2113,16 +2113,16 @@ DSPCfg_Chorus_Active:
 	jr z, DSPCfg_FadeOut_Active
 	bit 7, c
 	jr z, DSPCfg_Chorus_CheckSustain
-	bit 7, (0xc07e:16)
+	bit 7, (SWBTWR_PAYLOAD_2:16)
 	jr nz, DSPCfg_Chorus_CheckSustain
 	res 2, (0xc1f0:16)
 	ldw wa, 0x4d
 	call CtrlPanel_SetIndicatorLED
 
 DSPCfg_Chorus_CheckSustain:
-	bit 6, (0xc07f:16)
+	bit 6, (SWBTWR_PAYLOAD_3:16)
 	jrl z, DSPCfg_UpdateOutputVolume
-	bit 6, (0xc07e:16)
+	bit 6, (SWBTWR_PAYLOAD_2:16)
 	jrl z, DSPCfg_UpdateOutputVolume
 	res 2, (0xc1f0:16)
 	ldw wa, 0x4d
@@ -2137,15 +2137,15 @@ DSPCfg_FadeOut_Active:
 	jr z, DSPCfg_EQ_Active
 	bit 7, c
 	jr z, DSPCfg_FadeOut_CheckSustain
-	bit 7, (0xc07e:16)
+	bit 7, (SWBTWR_PAYLOAD_2:16)
 	jr z, DSPCfg_FadeOut_CheckSustain
 	set 0, (0xc1f0:16)
 	res 1, (0xc1f0:16)
 
 DSPCfg_FadeOut_CheckSustain:
-	bit 6, (0xc07f:16)
+	bit 6, (SWBTWR_PAYLOAD_3:16)
 	jr z, DSPCfg_UpdateOutputVolume
-	bit 6, (0xc07e:16)
+	bit 6, (SWBTWR_PAYLOAD_2:16)
 	jr nz, DSPCfg_UpdateOutputVolume
 	res 1, (0xc1f0:16)
 	jr DSPCfg_UpdateOutputVolume
@@ -2155,7 +2155,7 @@ DSPCfg_EQ_Active:
 	jr z, DSPCfg_Idle_EnableChorus
 	bit 7, c
 	jr z, DSPCfg_EQ_CheckSustain
-	bit 7, (0xc07e:16)
+	bit 7, (SWBTWR_PAYLOAD_2:16)
 	jr z, DSPCfg_EQ_CheckSustain
 	set 0, (0xc1f0:16)
 	res 3, (0xc1f0:16)
@@ -2163,9 +2163,9 @@ DSPCfg_EQ_Active:
 	call CtrlPanel_SetIndicatorLED
 
 DSPCfg_EQ_CheckSustain:
-	bit 6, (0xc07f:16)
+	bit 6, (SWBTWR_PAYLOAD_3:16)
 	jr z, DSPCfg_UpdateOutputVolume
-	bit 6, (0xc07e:16)
+	bit 6, (SWBTWR_PAYLOAD_2:16)
 	jr nz, DSPCfg_UpdateOutputVolume
 	res 3, (0xc1f0:16)
 	ldw wa, 0x4e
@@ -2175,7 +2175,7 @@ DSPCfg_EQ_CheckSustain:
 DSPCfg_Idle_EnableChorus:
 	bit 7, c
 	jr z, DSPCfg_Idle_CheckSustain
-	bit 7, (0xc07e:16)
+	bit 7, (SWBTWR_PAYLOAD_2:16)
 	jr z, DSPCfg_Idle_CheckSustain
 	set 2, (0xc1f0:16)
 	ldw wa, 0x4d
@@ -2186,9 +2186,9 @@ DSPCfg_Idle_EnableChorus:
 	calr CompIface_WriteVolume
 
 DSPCfg_Idle_CheckSustain:
-	bit 6, (0xc07f:16)
+	bit 6, (SWBTWR_PAYLOAD_3:16)
 	jr z, DSPCfg_UpdateOutputVolume
-	bit 6, (0xc07e:16)
+	bit 6, (SWBTWR_PAYLOAD_2:16)
 	jr z, DSPCfg_UpdateOutputVolume
 
 DSPCfg_SetFadeBit:
@@ -2255,7 +2255,7 @@ DSPCfg_CompParam_SubType7:
 	or (0xc1f0:16), hl
 
 DSPCfg_CompParam_Bit1:
-	bit 1, (0xc07f:16)
+	bit 1, (SWBTWR_PAYLOAD_3:16)
 	jr z, DSPCfg_CompParam_Bit2
 	ld xwa, 0x2a11
 	call SndParam_LookupReadOnly
@@ -2265,7 +2265,7 @@ DSPCfg_CompParam_Bit1:
 	or (0xc1f0:16), hl
 
 DSPCfg_CompParam_Bit2:
-	bit 2, (0xc07f:16)
+	bit 2, (SWBTWR_PAYLOAD_3:16)
 	ret z
 	ld xwa, 0x2a12
 	call SndParam_LookupReadOnly
@@ -5547,12 +5547,12 @@ AudioMode_ConfigExternal_Apply:
 ; state machine, updating relevant display elements.
 ; ============================================================================
 UIState_ProcessMidiEvent:
-	cp (0xc080:16), 24
+	cp (SWBTWR_EVENT_TYPE:16), 24
 	ret ugt
-	ld l, (0xc080:16)
-	ld h, (0xc07d:16)
-	ld e, (0xc07f:16)
-	ld d, (0xc07e:16)
+	ld l, (SWBTWR_EVENT_TYPE:16)
+	ld h, (SWBTWR_PAYLOAD_1:16)
+	ld e, (SWBTWR_PAYLOAD_3:16)
+	ld d, (SWBTWR_PAYLOAD_2:16)
 	ld a, l
 	extz wa
 	sla wa, 2
@@ -5748,7 +5748,7 @@ UIStateEvt_TransposeUpdate_Apply:
 	ret
 UIStateEvt_ParamEdit_Data:
 	pushw	iz
-	ldb_d8	a, (0xc07d)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	extz	wa
 	cp	wa, 0:i3
 	jrl	mi, UIStateEvt_ParamEdit_Data_Epilogue
@@ -5760,7 +5760,7 @@ UIStateEvt_ParamEdit_Data:
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code:24)
 	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code:
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Entry
 	ldw_d16	wa, (0xc598)
@@ -5823,9 +5823,9 @@ UIStateEvt_ParamEdit_Data_Skip4:
 UIStateEvt_ParamEdit_Data_Skip5:
 	ld	(0xc5a0:16), 16
 UIStateEvt_ParamEdit_Data_Entry:
-	bit	3, (0xc07f:16)
+	bit	3, (SWBTWR_PAYLOAD_3:16)
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
-	bit	3, (0xc07e:16)
+	bit	3, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip6
 	orw	(0xc596:16), 16
 	jr	UIStateEvt_ParamEdit_Data_Join2
@@ -5835,9 +5835,9 @@ UIStateEvt_ParamEdit_Data_Join2:
 	orw	(0xc59a:16), 0x2000
 	orw	(0xc594:16), 4
 	jrl	UIStateEvt_ParamEdit_Data_Epilogue
-	bit	6, (0xc07f:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip8
-	bit	6, (0xc07e:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip7
 	orw	(0xc596:16), 0x400
 	jr	UIStateEvt_ParamEdit_Data_Join3
@@ -5847,10 +5847,10 @@ UIStateEvt_ParamEdit_Data_Join3:
 	orw	(0xc59a:16), 0x4000
 	orw	(0xc594:16), 4
 UIStateEvt_ParamEdit_Data_Skip8:
-	bit	4, (0xc07f:16)
+	bit	4, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip10
 	andw	(0xc596:16), 0xf7ff
-	bit	4, (0xc07e:16)
+	bit	4, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip9
 	orw	(0xc596:16), 0x800
 	jr	UIStateEvt_ParamEdit_Data_Join4
@@ -5859,7 +5859,7 @@ UIStateEvt_ParamEdit_Data_Skip9:
 UIStateEvt_ParamEdit_Data_Join4:
 	orw	(0xc594:16), 4
 UIStateEvt_ParamEdit_Data_Skip10:
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
 	ldw_d16	wa, (0xc598)
@@ -5909,7 +5909,7 @@ UIStateEvt_ParamEdit_Data_Join5:
 UIStateEvt_ParamEdit_Data_Skip13:
 	ld	(0xc5a0:16), 16
 	jr	110
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, 30
 	bit	0, (0x3284:16)
@@ -5921,7 +5921,7 @@ UIStateEvt_ParamEdit_Data_Skip13:
 	and	a, 252
 	jr	nz, 0
 	orw	(0xc594:16), 4
-	bit	1, (0xc07f:16)
+	bit	1, (SWBTWR_PAYLOAD_3:16)
 	jr	z, 65
 	bit	1, (0xfc5f:16)
 	jr	z, 12
@@ -5930,7 +5930,7 @@ UIStateEvt_ParamEdit_Data_Skip13:
 	call	z, (0xfdf5f5:24)
 	orw	(0xc594:16), 4
 	jr	39
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, 30
 	bit	0, (0x3284:16)
@@ -5946,7 +5946,7 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz
 	ret
 UIStateEvt_VolumeMixer_Data:
-	ldb_d8	a, (0xc07d)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	extz	wa
 	cp	wa, 0:i3
 	ret	mi
@@ -5958,11 +5958,11 @@ UIStateEvt_VolumeMixer_Data:
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code_2:24)
 	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code_2:
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip
 	and	(0xc1fe:16), 252
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 3
 	or	(0xc1fe:16), a
 	orw	(0xc594:16), 4
@@ -5973,10 +5973,10 @@ UIStateEvt_VolumeMixer_Data_Skip:
 	ld	(0xc1fe:16), 0
 	orw	(0xc59a:16), 4
 	ret
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip3
-	bit	1, (0xc07e:16)
+	bit	1, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip2
 	orw	(0xc596:16), 32
 	jr	UIStateEvt_VolumeMixer_Data_Join2
@@ -5987,7 +5987,7 @@ UIStateEvt_VolumeMixer_Data_Skip2:
 	call	z, (0xfdf5f5:24)
 UIStateEvt_VolumeMixer_Data_Join2:
 	res	2, (0xc1fe:16)
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 2
 	ld	c, a
 	add	a, c
@@ -6000,9 +6000,9 @@ UIStateEvt_VolumeMixer_Data_Skip3:
 	ld	(0xc1fe:16), 0
 	orw	(0xc59a:16), 4
 	ret
-	bit	0, (0xc07f:16)
+	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
-	bit	0, (0xc07e:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry
 	orw	(0xc596:16), 128
 	jr	UIStateEvt_VolumeMixer_Data_Join3
@@ -6011,9 +6011,9 @@ UIStateEvt_VolumeMixer_Data_Entry:
 UIStateEvt_VolumeMixer_Data_Join3:
 	orw	(0xc594:16), 4
 UIStateEvt_VolumeMixer_Data_Entry2:
-	bit	1, (0xc07f:16)
+	bit	1, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	1, (0xc07e:16)
+	bit	1, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip4
 	orw	(0xc596:16), 8
 	jr	UIStateEvt_VolumeMixer_Data_Join4
@@ -6022,7 +6022,7 @@ UIStateEvt_VolumeMixer_Data_Skip4:
 UIStateEvt_VolumeMixer_Data_Join4:
 	orw	(0xc594:16), 4
 	ret
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	ld	de, 0:i3
@@ -6042,7 +6042,7 @@ UIStateEvt_VolumeMixer_Data_Loop:
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 255
 	sub	a, 64
 	ld	(xhl), a
@@ -6062,14 +6062,14 @@ UIStateEvt_VolumeMixer_Data_Join:
 UIStateEvt_VolumeMixer_Data_Skip6:
 	orw	(0xc594:16), 4
 	ret
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	orw	(0xc594:16), 4
 	ret
 	ret
 UIStateEvt_EffectSelect_Data:
-	ldb_d8	a, (0xc07d)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 4:i3
 	jrl	z, UIStateEvt_EffectSelect_Data_Skip4
 	cp	a, 3:i3
@@ -6080,10 +6080,10 @@ UIStateEvt_EffectSelect_Data:
 	jr	z, UIStateEvt_EffectSelect_Data_Skip
 	cp	a, 0:i3
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 3
 	jr	z, UIStateEvt_EffectSelect_Data_Join
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 3
 	cp	a, 3:i3
 	jr	z, UIStateEvt_EffectSelect_Data_Skip7
@@ -6113,14 +6113,14 @@ UIStateEvt_EffectSelect_Data_Join:
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip:
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	res	7, a
 	cp	a, 0:i3
 	ret	z
 	ldb_d8	a, (0xfd02)
 	and	a, 3
 	jr	nz, UIStateEvt_EffectSelect_Data_Skip8
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	res	7, a
 	stb_d8	(0xc5a2), a
 UIStateEvt_EffectSelect_Data_Skip8:
@@ -6128,12 +6128,12 @@ UIStateEvt_EffectSelect_Data_Skip8:
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip2:
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	bit	5, (0xfd50:16)
 	ret	z
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 255
 	extz	wa
 	lda	xbc, (EffectSelect_StepTable:24)
@@ -6160,19 +6160,19 @@ UIStateEvt_EffectSelect_Data_Skip9:
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip3:
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 255
 	stb_d8	(0xe9c0), a
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip4:
-	ldb_d8	a, (0xc07f)
+	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 15
 	ret	z
-	ldb_d8	a, (0xc07e)
+	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 15
 	stb_d8	(0xe9be), a
 	orw	(0xc59a:16), 0x4000
@@ -6180,9 +6180,9 @@ UIStateEvt_EffectSelect_Data_Skip4:
 	ret
 ; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
 UIStateEvt_PlayModeGuard_Data:
-	cp	(0xc07d:16), 2
+	cp	(SWBTWR_PAYLOAD_1:16), 2
 	ret	nz
-	bit	6, (0xc07e:16)
+	bit	6, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_PlayModeGuard_ClearBit
 	orw	(0xc596:16), 0x2000
 	ret
@@ -6197,7 +6197,7 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	call	VoiceEvent_DispatchTable
 	ret
 UIStateEvt_ChannelConfig_Data:
-	ldb_d8	a, (0xc07d)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 11
 	jrl	z, UIStateEvt_ChannelConfig_Data_Skip5
 	cp	a, 12
@@ -6212,14 +6212,14 @@ UIStateEvt_ChannelConfig_Data:
 	ret	z
 	cp	a, 0:i3
 	ret	nz
-	bit	6, (0xc07f:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry
 	orw	(0xc59c:16), 8
 	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry:
-	bit	5, (0xc07f:16)
+	bit	5, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	5, (0xc07e:16)
+	bit	5, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip
 	ld	de, 0:i3
 	cp	de, 26
@@ -6267,9 +6267,9 @@ UIStateEvt_ChannelConfig_Data_Entry2:
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry3:
-	bit	0, (0xc07f:16)
+	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry4
-	bit	0, (0xc07e:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip4
 	res	4, (0xc322:16)
 	orw	(0xc59c:16), 8
@@ -6280,9 +6280,9 @@ UIStateEvt_ChannelConfig_Data_Skip4:
 UIStateEvt_ChannelConfig_Data_Join2:
 	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry4:
-	bit	2, (0xc07f:16)
+	bit	2, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry6
-	bit	2, (0xc07e:16)
+	bit	2, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry5
 	set	6, (0xc342:16)
 	set	6, (0xc344:16)
@@ -6302,12 +6302,12 @@ UIStateEvt_ChannelConfig_Data_Entry5:
 UIStateEvt_ChannelConfig_Data_Join3:
 	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry6:
-	bit	6, (0xc07f:16)
+	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry7
 	orw	(0xc59c:16), 8
 	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry7:
-	bit	7, (0xc07f:16)
+	bit	7, (SWBTWR_PAYLOAD_3:16)
 	ret	z
 	orw	(0xc59c:16), 8
 	orw	(0xc594:16), 4
@@ -6340,12 +6340,12 @@ UIStateEvt_StubReturn:
 	ret
 	ret
 UIStateEvt_MuteToggle_Data:
-	ldb_d8	a, (0xc07d)
+	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 16
 	ret	nz
-	bit	0, (0xc07f:16)
+	bit	0, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	bit	0, (0xc07e:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_MuteToggle_Data_Skip
 	orw	(0xc594:16), 1
 	jr	UIStateEvt_MuteToggle_Data_Join

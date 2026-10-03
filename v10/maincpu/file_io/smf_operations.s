@@ -23,7 +23,7 @@ FmmSmfLoadTitleFunc:
 	jrl z, SmfLoad_CancelCleanup
 	cp xde, 0x2
 	jrl nz, SmfLoad_Return
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -167,7 +167,7 @@ FmmSmfSaveTitleFunc:
 	jr z, SmfSave_CancelCleanup
 	cp xde, 0x2
 	jr nz, SmfSave_Return
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -567,7 +567,7 @@ SmfFN_JumpTable:
 	ld	xwa, 0:i3
 	ld	(0x81a4:16), xwa
 	ld	(0x81a8:16), xwa
-	cp	(0x8d36:16), 107
+	cp	(SEQ_MASTER_STATE:16), 107
 	jr	z, FmmSmfFileNameFunc_Skip
 	call	GetFirstPageBase
 	ld	(0x81ac:16), hl
@@ -612,14 +612,14 @@ SmfFN_NavSetup:
 	ld (xsp + 4), ix
 	or xiz, xiz
 	jr nz, SmfFN_PageUp
-	cp (0x84fe:16), 0
+	cp (MEDLEY_PLAY_FLAG:16), 0
 	jr nz, SmfFN_PageUp
 	ld xwa, (xsp + 28)
 	cp xwa, EVT_INDEXSW_DOWN
 	jr nz, SmfFN_NavUp
 	ld bc, ix
 	inc 1, bc
-	cp (0x8d36:16), 107
+	cp (SEQ_MASTER_STATE:16), 107
 	jr z, SmfFN_NavDown_WrapCheck
 	cp bc, (0x8504:16)
 	jr lt, SmfFN_NavDown_Apply
@@ -646,7 +646,7 @@ SmfFN_NavUp:
 SmfFN_PageUp:
 	cp xiz, 0x1
 	jr nz, SmfFN_PageDown
-	cp (0x84fe:16), 0
+	cp (MEDLEY_PLAY_FLAG:16), 0
 	jr nz, SmfFN_PageDown
 	cp ix, 0xa
 	jrl lt, SmfFN_UpdateDisplay
@@ -656,7 +656,7 @@ SmfFN_PageUp:
 SmfFN_PageDown:
 	cp xiz, 0x2
 	jrl nz, SmfFN_HandleSave
-	cp (0x84fe:16), 0
+	cp (MEDLEY_PLAY_FLAG:16), 0
 	jr nz, SmfFN_HandleSave
 	ld iy, ix
 	add iy, 0xa
@@ -664,7 +664,7 @@ SmfFN_PageDown:
 	ld de, ix
 	exts xde
 	divs de, 0xa
-	cp (0x8d36:16), 107
+	cp (SEQ_MASTER_STATE:16), 107
 	jr z, SmfFN_PageDown_WrapCheck
 	ld hl, bc
 	cp iy, bc
@@ -1004,7 +1004,7 @@ SmfFN_IgnoredEvents:
 	jrl z, SmfFN_UpdateDisplay
 	cp xiz, 0x14
 	jr nz, SmfFN_HandleScrollFlag1
-	cp (0x84fe:16), 0
+	cp (MEDLEY_PLAY_FLAG:16), 0
 	jr nz, SmfFN_HandleScrollFlag1
 	ld xwa, (xsp + 28)
 	cp xwa, EVT_INDEXSW_UP
@@ -1206,7 +1206,7 @@ SmfFN_RefreshIfChanged:
 SmfFN_RedrawPage:
 	muls bc, 0xa
 	calr DisplaySmfFileList
-	cp (0x8d36:16), 108
+	cp (SEQ_MASTER_STATE:16), 108
 	jr nz, SmfFN_UpdateFilenameField
 	ld xwa, (xsp + 32)
 	ld xbc, EVT_PAINT
@@ -1214,7 +1214,7 @@ SmfFN_RedrawPage:
 	calr FmmSmfMedleyFunc
 
 SmfFN_UpdateFilenameField:
-	cp (0x8d36:16), 107
+	cp (SEQ_MASTER_STATE:16), 107
 	jr nz, SmfFN_SendOkState
 	lda xiz, (0x8850:16)
 	ld wa, (0x81ac:16)
@@ -1254,7 +1254,7 @@ SmfFN_SendOkState:
 	jrl SmfFN_ReturnZero
 	ld (0x81ae:16), iz
 	jrl SmfFN_ReturnZero
-	cp (0x84fe:16), 0
+	cp (MEDLEY_PLAY_FLAG:16), 0
 	jrl z, SmfFN_ReturnZero
 	ld wa, iz
 	ld (0x81ac:16), wa

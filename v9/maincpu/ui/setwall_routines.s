@@ -1962,9 +1962,9 @@ MiddleFuncCall_DispatchData_Helper2:
 	ld	xiy, 4441
 	ldw	bc, 16
 	ldir85
-	cp (36150:16), 143
+	cp (SEQ_MASTER_STATE:16), 143
 	jr	z, SetWall_MiscDataAndCode_Skip
-	cp (36150:16), 167
+	cp (SEQ_MASTER_STATE:16), 167
 	jr	z, SetWall_MiscDataAndCode_Skip2
 SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc

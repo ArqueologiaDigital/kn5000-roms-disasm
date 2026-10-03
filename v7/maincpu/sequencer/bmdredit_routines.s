@@ -1844,7 +1844,7 @@ BmDrEdit_InitCommon:
 	jr nz, BmDrEdit_InitCommon_CheckSongActive
 	ldw (0x2792:16), 48
 BmDrEdit_InitCommon_CheckSongActive:
-	ld	a, (35994:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, (35995:16)
 	jr	nz, BmDrEdit_InitCommon_SetupDisplay
 	ld	a, (35996:16)
@@ -1991,7 +1991,7 @@ BmDrEdit_CleanupDrumMode:
 	push XWA
 	call Free
 	inc 4,XSP
-	cp (0x8c9a:16), 0x98
+	cp (SEQ_MASTER_STATE:16), 0x98
 	jr z, BmDrEdit_SkipPartSelect
 	res 0, (0x26e2:16)
 	call PartSelect_UpdateDisplayState
@@ -1999,7 +1999,7 @@ BmDrEdit_SkipPartSelect:
 	jr BmDrEdit_CleanupCommon
 
 BmDrEdit_CleanupMelodicMode:
-	cp (0x8c9a:16), 0x95
+	cp (SEQ_MASTER_STATE:16), 0x95
 	jr z, BmDrEdit_SkipMelodicPartSelect
 	res 0, (0x26e2:16)
 	call PartSelect_UpdateDisplayState
@@ -4516,7 +4516,7 @@ BmDrEdit_SecondaryNote_PopIzReturn:
 	ret
 
 BmDrEdit_EnterPlayMode:
-	ld a, (0x8c9a:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, (0x8c9b:16)
 	ret Z
 	ld a, (0x28b1:16)
@@ -4546,7 +4546,7 @@ BmDrEdit_EnterPlay_AllocAndInit:
 	jp SeqPlay_AllocBuffersAndInit
 
 BmDrEdit_ExitPlayMode:
-	ld a, (0x8c9a:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, (0x8c9b:16)
 	ret Z
 	ldmm8 0x28b1, 0x283c

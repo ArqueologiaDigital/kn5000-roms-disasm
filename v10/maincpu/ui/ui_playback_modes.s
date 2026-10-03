@@ -8,7 +8,7 @@
 ; =============================================================================
 
 UIStateEvt_VoiceParamHandler:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 142
 	jr	z, UIStateEvt_VoiceParamHandler_Skip
 	cp	a, 100
@@ -22,11 +22,11 @@ UIStateEvt_VoiceParamHandler_Skip:
 	ld	(4330:16), 0
 	jrl	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip2:
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 3:i3
 	jp nz, (15860660:24)
-	ldb_d8 a, (49278)
-	ld	w, (0xc07f:16)
+	ldb_d8 a, (SWBTWR_PAYLOAD_2)
+	ld	w, (SWBTWR_PAYLOAD_3:16)
 	cp	w, 255
 	jr	nz, UIStateEvt_VoiceParamHandler_Skip4
 	and (4330:16), 254
@@ -281,35 +281,35 @@ PlaybackDispatch_NullRet:
 PlaybackMode_DispatchByType:
 	bit 0, (3381:16)
 	jrl z, DispatchHandler_ClearActiveFlag
-	cp (0x8d36:16), 122
+	cp (SEQ_MASTER_STATE:16), 122
 	jr z, PlaybackDisp_Type122_Play
-	cp (0x8d36:16), 120
+	cp (SEQ_MASTER_STATE:16), 120
 	jr z, PlaybackDisp_Type120_Play
-	cp (0x8d36:16), 115
+	cp (SEQ_MASTER_STATE:16), 115
 	jr z, PlaybackDisp_Type115_Stop
-	cp (0x8d36:16), 118
+	cp (SEQ_MASTER_STATE:16), 118
 	jr z, PlaybackDisp_Type118_Stop
-	cp (0x8d36:16), 116
+	cp (SEQ_MASTER_STATE:16), 116
 	jr z, PlaybackDisp_Type116_Song
-	cp (0x8d36:16), 117
+	cp (SEQ_MASTER_STATE:16), 117
 	jrl z, PlaybackDisp_Type117_PartFmt
-	cp (0x8d36:16), 111
+	cp (SEQ_MASTER_STATE:16), 111
 	jr z, PlaybackDisp_Type111_CDSong
-	cp (0x8d36:16), 114
+	cp (SEQ_MASTER_STATE:16), 114
 	jr z, PlaybackDisp_Type114_CDSong
-	cp (0x8d36:16), 112
+	cp (SEQ_MASTER_STATE:16), 112
 	jr z, PlaybackDisp_Type112_CDDoc
-	cp (0x8d36:16), 113
+	cp (SEQ_MASTER_STATE:16), 113
 	jrl z, PlaybackDisp_Type113_CDPd
-	cp (0x8d36:16), 121
+	cp (SEQ_MASTER_STATE:16), 121
 	jr z, Part_ValidateCallAndClear
-	cp (0x8d36:16), 119
+	cp (SEQ_MASTER_STATE:16), 119
 	jr z, Part_ValidateCallAndClear
-	cp (0x8d36:16), 108
+	cp (SEQ_MASTER_STATE:16), 108
 	jr z, Part_ValidateCallAndClear
-	cp (0x8d36:16), 109
+	cp (SEQ_MASTER_STATE:16), 109
 	jr z, Part_ValidateCallAndClear
-	cp (0x8d36:16), 110
+	cp (SEQ_MASTER_STATE:16), 110
 	jr z, Part_ValidateCallAndClear
 	jp DispatchHandler_ClearActiveFlag
 
@@ -418,9 +418,9 @@ PlayMode_CheckAndDispatch:
 
 PlayMode_SendModeCommand:
 	ld (4437:16), 0
-	cp (0x8d36:16), 122
+	cp (SEQ_MASTER_STATE:16), 122
 	jr z, PlayCheck_PostMode79
-	cp (0x8d36:16), 120
+	cp (SEQ_MASTER_STATE:16), 120
 	jr z, PlayCheck_PostMode77
 
 PlayCheck_PostMode79:
@@ -449,9 +449,9 @@ PlayMode_StartAndSendCommand:
 	jr nz, SongMode_PostEvtRetZero
 	call PlayMode_DispatchAndClearBit2
 	ld (4437:16), 1
-	cp (0x8d36:16), 122
+	cp (SEQ_MASTER_STATE:16), 122
 	jr z, PlayStart_PostMode79
-	cp (0x8d36:16), 120
+	cp (SEQ_MASTER_STATE:16), 120
 	jr z, PlayStart_PostMode77
 
 PlayStart_PostMode79:
@@ -498,9 +498,9 @@ SeqRestart_SendPlaybackNotify:
 	bit 2, (0x28ac:16)
 	jr z, SeqNotify_Return
 	ld (4437:16), 1
-	cp (0x8d36:16), 122
+	cp (SEQ_MASTER_STATE:16), 122
 	jr z, SeqNotify_PostMode79
-	cp (0x8d36:16), 120
+	cp (SEQ_MASTER_STATE:16), 120
 	jr z, SeqNotify_PostMode77
 
 SeqNotify_PostMode79:
@@ -602,40 +602,40 @@ VoiceState_SetStatus4:
 
 VoiceState_SetStatus1AndDispatch:
 	ld (4437:16), 1
-	cp (0x8d36:16), 116
+	cp (SEQ_MASTER_STATE:16), 116
 	jr z, PartFormat_PostMode6D
-	cp (0x8d36:16), 112
+	cp (SEQ_MASTER_STATE:16), 112
 	jrl z, VoiceState_SqTrSelCaseD
-	cp (0x8d36:16), 117
+	cp (SEQ_MASTER_STATE:16), 117
 	jr z, PartFormat_PostMode6E
-	cp (0x8d36:16), 113
+	cp (SEQ_MASTER_STATE:16), 113
 	jrl z, VoiceState_SqTrSelCaseF
-	cp (0x8d36:16), 115
+	cp (SEQ_MASTER_STATE:16), 115
 	jr z, PartFormat_SendPlaybackCmd
-	cp (0x8d36:16), 111
+	cp (SEQ_MASTER_STATE:16), 111
 	jr z, VoiceState_SqTrSelCaseE
-	cp (0x8d36:16), 118
+	cp (SEQ_MASTER_STATE:16), 118
 	jr z, PartFormat_SendPlaybackCmd
-	cp (0x8d36:16), 114
+	cp (SEQ_MASTER_STATE:16), 114
 	jr z, VoiceState_SqTrSelCaseE
 	jp PartFormat_NullRet
 
 PartFormat_PartTypeDisp:
-	cp (0x8d36:16), 116
+	cp (SEQ_MASTER_STATE:16), 116
 	jr z, PartFormat_PostMode6D
-	cp (0x8d36:16), 112
+	cp (SEQ_MASTER_STATE:16), 112
 	jr z, PartFormat_PostMode6D
-	cp (0x8d36:16), 117
+	cp (SEQ_MASTER_STATE:16), 117
 	jr z, PartFormat_PostMode6E
-	cp (0x8d36:16), 113
+	cp (SEQ_MASTER_STATE:16), 113
 	jr z, PartFormat_PostMode6E
-	cp (0x8d36:16), 115
+	cp (SEQ_MASTER_STATE:16), 115
 	jr z, PartFormat_SendPlaybackCmd
-	cp (0x8d36:16), 111
+	cp (SEQ_MASTER_STATE:16), 111
 	jr z, PartFormat_SendPlaybackCmd
-	cp (0x8d36:16), 118
+	cp (SEQ_MASTER_STATE:16), 118
 	jr z, PartFormat_SendPlaybackCmd
-	cp (0x8d36:16), 114
+	cp (SEQ_MASTER_STATE:16), 114
 	jr z, PartFormat_SendPlaybackCmd
 	jp PartFormat_NullRet
 
@@ -755,7 +755,7 @@ PlayModeStop_InitFlagBlock_Helper2:
 	ld	(4420:16), 10
 	ret
 DpMdlySmfTtl_Dispatch_Helper2:
-	cp (36150:16), 108
+	cp (SEQ_MASTER_STATE:16), 108
 	jr nz, PartFormat_StartPlayback_Return3
 	ld	(3380:16), 0
 PartFormat_StartPlayback_Return3:
@@ -806,7 +806,7 @@ PlayModeStop_ClearFlagBlock:
 DpMdlySmfLyrTtl_Dispatch_Helper:
 	ret
 DpMdlySmfLyrTtl_Dispatch_Helper2:
-	cp (36150:16), 108
+	cp (SEQ_MASTER_STATE:16), 108
 	jr nz, PlayMode_SendCommand6C_Return
 	ld	(3380:16), 0
 PlayMode_SendCommand6C_Return:
@@ -829,9 +829,9 @@ CDlikeSwitch_PlaybackTimer:
 	dec 1, w
 	cp w, 5:i3
 	jr nz, CDlikeTimer_CheckZeroCount
-	cp (0x8d36:16), 122
+	cp (SEQ_MASTER_STATE:16), 122
 	jr z, CDlikeTimer_ResetAccompaniment
-	cp (0x8d36:16), 120
+	cp (SEQ_MASTER_STATE:16), 120
 	jr z, CDlikeTimer_ResetAccompaniment
 	jr CDlikeSwTtl_StorePlaybackMode
 
@@ -846,17 +846,17 @@ CDlikeTimer_ResetAccompaniment:
 CDlikeTimer_CheckZeroCount:
 	cp w, 0:i3
 	jr nz, CDlikeSwTtl_StorePlaybackMode
-	cp (0x8d36:16), 122
+	cp (SEQ_MASTER_STATE:16), 122
 	jr z, CDlikeTimer_InitResetState
-	cp (0x8d36:16), 120
+	cp (SEQ_MASTER_STATE:16), 120
 	jr z, CDlikeTimer_InitResetState
-	cp (0x8d36:16), 116
+	cp (SEQ_MASTER_STATE:16), 116
 	jr z, CDlikeTimer_ShowDocTitle
-	cp (0x8d36:16), 117
+	cp (SEQ_MASTER_STATE:16), 117
 	jr z, CDlikeTimer_ShowPdTitle
-	cp (0x8d36:16), 115
+	cp (SEQ_MASTER_STATE:16), 115
 	jr z, CDlikeTimer_ShowSongTitle
-	cp (0x8d36:16), 118
+	cp (SEQ_MASTER_STATE:16), 118
 	jr z, CDlikeTimer_ShowSongTitle
 	jr CDlikeSwTtl_StorePlaybackMode
 
@@ -917,13 +917,13 @@ CDlike_InitModeAndLoadBank:
 	ld (3380:16), 0
 	ld (4420:16), 0
 	call CDlike_LoadSongBankData
-	cp (0x8d36:16), 119
+	cp (SEQ_MASTER_STATE:16), 119
 	jr z, CDlikeSw_NullRet
-	cp (0x8d36:16), 120
+	cp (SEQ_MASTER_STATE:16), 120
 	jr z, CDlikeSw_NullRet
-	cp (0x8d36:16), 121
+	cp (SEQ_MASTER_STATE:16), 121
 	jr z, CDlikeSw_NullRet
-	cp (0x8d36:16), 122
+	cp (SEQ_MASTER_STATE:16), 122
 	jr z, CDlikeSw_NullRet
 	call SqTrAs_InitWall
 	ld wa, (0xf19e:16)
@@ -1228,7 +1228,7 @@ SQTR_DISPATCH_TABLE_2_CASE1:
 	call CtrlPanel_SetIndicatorBit
 	jr CDlikeSwTtl_ReturnZero2
 SQTR_DISPATCH_TABLE_2_CASE2:
-	cp (0x8d36:16), 139
+	cp (SEQ_MASTER_STATE:16), 139
 	jr nz, CDlikeSwTtl_ReturnZero2
 	cp (0x7f42:16), 35
 	scc16 z, bc
@@ -1427,7 +1427,7 @@ SetWall_ReturnZero:
 
 ; SqTrAsPsTtl case F
 SqTrAsPsTtl_CaseF:
-	ld	a, (0x8d36:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	extz	wa
 	sub	wa, 108
 	cp	wa, 0:i3
@@ -1631,7 +1631,7 @@ DkMdlyPly_CheckState:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), wa
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x6f
 	jr z, Snd_ParamLookupSetupWerp
 	cp a, 0x72
@@ -1684,7 +1684,7 @@ DkMdlyPly_Finalize:
 	ret
 
 DisplayMode_DispatchEvents:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	extz wa
 	sub wa, 0x6f
 	cp wa, 0:i3
@@ -3131,7 +3131,7 @@ DpSmfTtl_Dispatch:
 	calr	DisplayMode_DispatchEvents
 	calr	CDlikeSwTtl_ShowSongTitle
 	jrl	DpSmfTtl_ReturnZero
-	cp	(0x8d36:16), 114
+	cp	(SEQ_MASTER_STATE:16), 114
 	jrl	z, DpSmfTtl_ReturnZero
 	call	SeqState_GetFlags
 	bit	0, hl

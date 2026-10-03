@@ -1970,18 +1970,18 @@ UIState_KeyScan_Dispatch:
 	cpw (xix), 65534
 	jr nz, KeyScan_CheckEmptyMarker
 	ld xde, 0:i3
-	ldb_d8 e, (49124)
+	ldb_d8 e, (SWBTWR_EVENT_TYPE)
 	sll xde, 8
 	ld xwa, 0:i3
-	ldb_d8 a, (49121)
+	ldb_d8 a, (SWBTWR_PAYLOAD_1)
 	add xde, xwa
 	sll xde, 8
 	ld xwa, 0:i3
-	ldb_d8 a, (49122)
+	ldb_d8 a, (SWBTWR_PAYLOAD_2)
 	add xde, xwa
 	sll xde, 8
 	ld xwa, 0:i3
-	ldb_d8 a, (49123)
+	ldb_d8 a, (SWBTWR_PAYLOAD_3)
 	add xde, xwa
 	ld xwa, 4294967295
 	ld xbc, EVT_ASSSWB
@@ -1993,13 +1993,13 @@ KeyScan_CheckEmptyMarker:
 
 	; --- Normal scan: search array for matching (chain<<8)|param ---
 
-	ld a, (49121:16)
+	ld a, (SWBTWR_PAYLOAD_1:16)
 
 	ld l, a
 
 	extz hl
 
-	ld e, (49124:16)
+	ld e, (SWBTWR_EVENT_TYPE:16)
 
 	ld c, e
 
@@ -2020,11 +2020,11 @@ KeyScan_ScanLoop:
 	add	xde, xwa
 	sll	xde, 8
 	ld	xwa, 0:i3
-	ld	a, (49122:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	add	xde, xwa
 	sll	xde, 8
 	ld	xwa, 0:i3
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	add	xde, xwa
 	ld	xwa, 4294967295
 	ld	xbc, EVT_ASSSWB
@@ -2043,12 +2043,12 @@ KeyScan_AdvanceEntry:
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
 CtrlPanel_HandleKeyInput:
-	ld	a, (49121:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 16
 	jr	z, CtrlPanel_HandleKey10
 	cp	a, 0:i3
 	ret	nz
-	ld	a, (49123:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 3
 	ret	z
 	ld	a, (9954:16)
@@ -2790,7 +2790,7 @@ MainTitleControl:
 	jrl	z, MainTitleCtrl_HandleBA
 	cp	xbc, EVT_OTHER_PART_LED
 	jrl	z, MainTitleCtrl_HandleAB
-	ld	a, (35994:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	xbc, EVT_ACTIVATE_STATE
 	jrl	z, SeqState_DemoModeHandler
 	cp	xbc, EVT_RETURN_TITLE
@@ -2813,7 +2813,7 @@ MainTitleControl:
 SeqState_TransitionMode:
 	ld	(35995:16), a
 	ldmm8 35997, 35996
-	ld	(35994:16), l
+	ld	(SEQ_MASTER_STATE:16), l
 	ld	(35996:16), l
 	ldw	wa, 97
 	jr	MainTitleCtrl_SetIndicatorAndClear
@@ -2982,7 +2982,7 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ld a, (35994:16)
+	ld a, (SEQ_MASTER_STATE:16)
 
 	cp a, (35996:16)
 

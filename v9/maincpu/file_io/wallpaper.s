@@ -28,7 +28,7 @@ FmmWallpaperLoadFunc:
 	jrl z, WPLoad_HandleAbort
 	cp xwa, 0x2
 	jrl nz, WPLoad_Return
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026

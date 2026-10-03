@@ -84,15 +84,15 @@ EffectMode_ByteData_Block1:
 	ldw	(36028:16), 65535
 	jrl	EffectMode_CheckTransposeChanged
 EffectMode_ByteData_Block2:
-	cp	(0xbfe1:16), 2
+	cp	(SWBTWR_PAYLOAD_1:16), 2
 	ret	nz
-	ld	a, (0xbfe2:16)
-	and	a, (0xbfe3:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
+	and	a, (SWBTWR_PAYLOAD_3:16)
 	bit	0, a
 	jrl	z, EffectMode_ByteData_Block2_Skip5
 	cp	(0x8c98:16), 1
 	jr	z, EffectMode_ByteData_Block2_Skip3
-	ld	a, (0x8c9a:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 192
 	jr	z, EffectMode_ByteData_Block2_Skip2
 	cp	a, 193
@@ -152,16 +152,16 @@ EffectMode_ByteData_Block2_Join2:
 	ld	(0x8cb2:16), 0
 	ret
 EffectMode_ByteData_Block3:
-	ld	a, (0xbfe1:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 0:i3
 	jr	nz, EffectMode_ByteData_Block3_Skip3
-	cp	(0xbfe3:16), 0
+	cp	(SWBTWR_PAYLOAD_3:16), 0
 	jr	z, EffectMode_ByteData_Block3_Join
-	bit	7, (0xbfe2:16)
+	bit	7, (SWBTWR_PAYLOAD_2:16)
 	jr	nz, EffectMode_ByteData_Block3_Join
 	bit	4, (0x8cb6:16)
 	jr	nz, EffectMode_ByteData_Block3_Join
-	cp	(0x8c9a:16), 0xc0
+	cp	(SEQ_MASTER_STATE:16), 0xc0
 	jr	nz, EffectMode_ByteData_Block3_Skip
 	call	UI_PostTimerResetEvent
 	jr	EffectMode_ByteData_Block3_Join
@@ -213,9 +213,9 @@ EffectMode_ByteData_Block3_Skip5:
 	and	(0x8cb6:16), 0xd7
 	ret
 EffectMode_ByteData_Block4:
-	cp	(0xbfe1:16), 3
+	cp	(SWBTWR_PAYLOAD_1:16), 3
 	jr	nz, EffectMode_ByteData_Block4_Skip2
-	ld	a, (0xbfe2:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 7
 	jr	z, EffectMode_ByteData_Block4_Skip2
 	ld	a, (0x8cb6:16)
@@ -242,7 +242,7 @@ EffectMode_ByteData_Block4_Skip2:
 	ret
 EffectMode_ApplyTranspose:
 	calr	EffectMode_ProcessPresetChange
-	cp	(0x8c9a:16), 0xc0
+	cp	(SEQ_MASTER_STATE:16), 0xc0
 	jr	nz, EffectMode_ApplyTranspose_StoreTimer
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_SET_HOLD
@@ -308,7 +308,7 @@ EffectMode_TimerCountdown:
 	pop	xhl
 	pop	xde
 EffectMode_TimerCountdown_CheckMode:
-	ld	a, (35994:16)
+	ld	a, (SEQ_MASTER_STATE:16)
 	cp	a, 197
 	jr	z, EffectMode_TimerCountdown_ResBit7
 	cp	a, 194
@@ -943,7 +943,7 @@ EffectMode_ReinitWithFlag:
 
 
 EffectMode_CheckModeAndReinit:
-	ld	c, (35994:16)
+	ld	c, (SEQ_MASTER_STATE:16)
 	cp	c, 120
 	jr	z, SndOutput_ReinitByMode
 	cp	c, 122
@@ -1742,7 +1742,7 @@ SelfTest_PopCount_ShiftNext:
 	ret
 
 EffectMode_CheckAndDispatch:
-	cp (0x8c9a:16), 0xfb
+	cp (SEQ_MASTER_STATE:16), 0xfb
 	jr nz, EffectMode_DispatchUpdate
 	ld a, (0x8ce6:16)
 	cp a, 2:i3
@@ -1779,11 +1779,11 @@ EffectMode_ResetDiagMode:
 	calr	LED_SetAll_WithBlank
 	calr	EffectMode_RestoreSwbWr_NormalMode
 EffectMode_DispatchUpdate:
-	cp	(0x8c9a:16), 0xf8
+	cp	(SEQ_MASTER_STATE:16), 0xf8
 	call	z, (EffectMode_HandleTimerEvents:24)
-	cp	(0x8c9a:16), 0xf7
+	cp	(SEQ_MASTER_STATE:16), 0xf7
 	call	z, (EffectMode_ModeChangeTransition:24)
-	cp	(0x8c9a:16), 0xfb
+	cp	(SEQ_MASTER_STATE:16), 0xfb
 	ret	nz
 	calr	EffectMode_RunDiagSequence
 	ret
@@ -2071,7 +2071,7 @@ EffectMode_ByteData_DiagEvents_Join:
 	ret
 TEST3FUNC_Helper:
 	ld	a, (0x8c9b:16)
-	cp	a, (0x8c9a:16)
+	cp	a, (SEQ_MASTER_STATE:16)
 	ret	z
 	ld	xwa, 16386
 	ldw	bc, 128
@@ -2080,7 +2080,7 @@ TEST3FUNC_Helper:
 	call	Voice_InitializeAll
 	ret
 Voice_EmitNoteWithVelocity:
-	cp	(0x8c9a:16), 0xf6
+	cp	(SEQ_MASTER_STATE:16), 0xf6
 	ret	nz
 	ld	(0x8ce8:16), a
 	ld	(0x8cea:16), c
@@ -2091,7 +2091,7 @@ Voice_EmitNoteWithVelocity:
 	ret
 EffectMode_ModeChangeTransition:
 	ld a, (0x8c9b:16)
-	cp a, (0x8c9a:16)
+	cp a, (SEQ_MASTER_STATE:16)
 	jrl z, EffectMode_MidiParseLoop
 	calr EffectMode_SetAllLEDs
 	push XDE
@@ -2363,10 +2363,10 @@ BitmapFinpic_ByteData:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	ld	a, (49124:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	cp	a, (35998:16)
 	ret	nz
-	cp	(49121:16), 0
+	cp	(SWBTWR_PAYLOAD_1:16), 0
 	ret	nz
 	call	GetTitleNow
 	cp	xhl, TITLE_TEST3

@@ -88,7 +88,7 @@ FmmUtilityTitleFunc:
 	jrl	z, FmmUtility_HandleAbort
 	cp	xde, 2
 	jrl	nz, FmmUtility_Return
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ld	wa, 1:i3
 	calr	InitializeOperationState
 	ld	xwa, 8060947
@@ -213,7 +213,7 @@ FmmSmfUtilityTitleFunc:
 	jrl	z, FmmSmfUtility_HandleAbort
 	cp	xde, 2
 	jrl	nz, FmmSmfUtility_Return
-	ld	(33890:16), 0
+	ld	(MEDLEY_PLAY_FLAG:16), 0
 	ld	wa, 1:i3
 	calr	InitializeOperationState
 	ld	xwa, 8060970

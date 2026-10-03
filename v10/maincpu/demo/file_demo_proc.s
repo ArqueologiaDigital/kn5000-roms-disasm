@@ -601,12 +601,12 @@ Demo_SelectionEntryHandler:
 	ldw wa, 0x22
 	call CtrlPanel_SetIndicatorLED
 	jrl Banner_Loop_Check
-	cp (0xc07d:16), 32
+	cp (SWBTWR_PAYLOAD_1:16), 32
 	ret nz
-	ld a, (0xc07f:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
 	and a, 0x13
 	ret z
-	ld a, (0xc07e:16)
+	ld a, (SWBTWR_PAYLOAD_2:16)
 	and a, 0x13
 	jr z, Demo_SelectEntry_NoNewButton
 	ld (3379:16), 16
@@ -633,7 +633,7 @@ Demo_SelectEntry_PreSaveCheck:
 	jr Demo_SelectEntry_ExitDispatch
 
 Demo_SelectEntry_CheckVoiceKeys:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x72
 	jr z, Demo_SelectEntry_SaveVoice
 	cp a, 0x70
@@ -661,11 +661,11 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	cp	(3375:16), 0
 	ret	nz
-	cp	(0xc07d:16), 1
+	cp	(SWBTWR_PAYLOAD_1:16), 1
 	ret	nz
 	cp	(0x8d34:16), 19
 	ret	nz
-	bit	0, (0xc07e:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	ret	z
 	cpw	(0x28b4:16), 0
 	jr	nz, Demo_SelectEntry_ByteTable_Skip
@@ -2130,7 +2130,7 @@ LoadRegion3_OpenSuccess:
 	cp hl, 0:i3
 	jr z, LoadRegion3_AltPath
 	call cmp_ld_mae
-	lda xwa, (0x094800:24)
+	lda xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld xde, xwa
 	lda xbc, (0x0ab000:24)
 	sub xbc, xde
@@ -8418,7 +8418,7 @@ ResetProgressIndication:
 	ret
 
 FileIO_DiskInserted:
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	calr ResetProgressIndication
 	jp FileIO_ValidateRecord_Return
 
@@ -8429,7 +8429,7 @@ FileIO_DiskInserted_Stub2:
 	ret
 
 FileIO_DiskRemoved:
-	ld (0x84fe:16), 0
+	ld (MEDLEY_PLAY_FLAG:16), 0
 	calr ResetProgressIndication
 	call FileIO_ValidateRecord_Return
 	call GetAprStatus_Entry
@@ -8787,17 +8787,17 @@ FileIO_ErrorCodeByteBlock:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	cp	(0xc07d:16), 65
+	cp	(SWBTWR_PAYLOAD_1:16), 65
 	ret	nz
-	bit	0, (0xc07f:16)
+	bit	0, (SWBTWR_PAYLOAD_3:16)
 	ret	z
-	ld	c, (0x8d36:16)
+	ld	c, (SEQ_MASTER_STATE:16)
 	cp	c, 16
 	jr	c, FileIO_ErrorCodeByteBlock_Entry
 	cp	c, 22
 	ret	ule
 FileIO_ErrorCodeByteBlock_Entry:
-	bit	0, (0xc07e:16)
+	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, FileIO_ErrorCodeByteBlock_Skip4
 	cp	(0x8d34:16), 6
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip
@@ -8922,7 +8922,7 @@ FileIO_ErrorCodeByteBlock_Skip10:
 	jp	FDemo_LoadRegsAndPostEvent
 
 FileIO_MedleyDispatchByMode:
-	ld a, (0x8d36:16)
+	ld a, (SEQ_MASTER_STATE:16)
 	cp a, 0x79
 	jr nz, MedleyDisp_ModeSmf
 	ld xwa, 0:i3

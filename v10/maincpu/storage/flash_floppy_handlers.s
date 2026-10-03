@@ -1234,7 +1234,7 @@ Flash_InitExtMemAddrs:
 	ld xbc, xwa
 	add xbc, 0xb0000
 	ld (3218:16), xbc
-	lda xwa, (0x094800:24)
+	lda xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld (3182:16), xwa
 	lda xwa, (0x069800:24)
 	ld (3186:16), xwa
@@ -4820,7 +4820,7 @@ FloppyCtrl_PopIzStoreRet:
 ToneParam_ExtendedOpsBlock:
 	pushw	iz
 	call	cmp_ld_mae
-	lda	xwa, (0x94800:24)
+	lda	xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld	xde, xwa
 	lda	xbc, (0xab000:24)
 	sub	xbc, xde

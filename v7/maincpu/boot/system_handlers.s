@@ -1391,11 +1391,11 @@ SeqEvtTick_Return:
 ; Calls SwbtWr_InitBank1 and SwbtWr_InitBank2 to reinitialize voice
 ; parameter transfers to the tone generator.
 SwbtWr_ReinitBothBanks:
-	cp (0xbca0:16), 0xff
+	cp (SWBTWR_EVENT_QUEUE:16), 0xff
 	jr z, SwbtWr_ReinitBothBanks_Return
 	call SwbtWr_InitBank1
 	call SwbtWr_InitBank2
-	ld (0xbca0:16), 0xff
+	ld (SWBTWR_EVENT_QUEUE:16), 0xff
 	ldw (0x9042:16), 0x0000
 SwbtWr_ReinitBothBanks_Return:
 	ret
@@ -1403,10 +1403,10 @@ SwbtWr_ReinitBothBanks_Return:
 ; Original Matsushita debug symbol: "assswb_out" (assign sound write bank - output)
 ; Calls only SwbtWr_InitBank2 (the output bank).
 SwbtWr_ReinitOutputBank:
-	cp (0xbca0:16), 0xff
+	cp (SWBTWR_EVENT_QUEUE:16), 0xff
 	jr z, SwbtWr_ReinitOutputBank_Return
 	call SwbtWr_InitBank2
-	ld (0xbca0:16), 0xff
+	ld (SWBTWR_EVENT_QUEUE:16), 0xff
 	ldw (0x9042:16), 0x0000
 SwbtWr_ReinitOutputBank_Return:
 	ret
@@ -4314,7 +4314,7 @@ SeqBuf_DspSysEx_CopyPointers:
 Seq_DataHandler:
 	pushw ix
 	push xde
-	lda xde, (0x0200ad:24)
+	lda xde, (CPANEL_RX_EVENT_QUEUE:24)
 	calr RingBuf128_CheckEmpty
 	pop xde
 	popw ix
@@ -4326,7 +4326,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
-	lda	xde, (0x200ad:24)
+	lda	xde, (CPANEL_RX_EVENT_QUEUE:24)
 	calr	RingBuf128_WriteByte_CheckFull
 	pop	xde
 	popw	ix
@@ -4338,7 +4338,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda	xde, (0x200ad:24)
+	lda	xde, (CPANEL_RX_EVENT_QUEUE:24)
 	ld	a, (xiy)
 	calr	RingBuf128_WriteByte_CheckFull
 	inc	1, xiy
@@ -4359,7 +4359,7 @@ Seq_DataHandler_Return:
 	ret
 	pushw	ix
 	push	xde
-	lda	xde, (0x200ad:24)
+	lda	xde, (CPANEL_RX_EVENT_QUEUE:24)
 	call	RingBuf_InitStructFields
 	pop	xde
 	popw	ix
@@ -4371,14 +4371,14 @@ Seq_DataHandler_Return:
 	ret
 	pushw	ix
 	push	xde
-	lda	xde, (0x200ad:24)
+	lda	xde, (CPANEL_RX_EVENT_QUEUE:24)
 	call	RingBuf128_ReadAlt_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda	xde, (0x200ad:24)
+	lda	xde, (CPANEL_RX_EVENT_QUEUE:24)
 	call	RingBuf128_ReadAlt2_CheckEmpty
 	pop	xde
 	popw	ix
@@ -4395,7 +4395,7 @@ Seq_DataHandler_Return:
 	ret
 	pushw	ix
 	push	xde
-	lda	xde, (0x20137:24)
+	lda	xde, (CPANEL_LED_EVENT_QUEUE:24)
 	calr	RingBuf128_CheckEmpty
 	pop	xde
 	popw	ix
@@ -4407,7 +4407,7 @@ Seq_TimerEventLoop:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda xde, (0x020137:24)
+	lda xde, (CPANEL_LED_EVENT_QUEUE:24)
 	calr RingBuf128_WriteByte_CheckFull
 	pop xde
 	popw ix
@@ -4422,7 +4422,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	push	xde
 	ld	bc, (xiz+8)
 	ld	xiy, (xiz+10)
-	lda	xde, (0x20137:24)
+	lda	xde, (CPANEL_LED_EVENT_QUEUE:24)
 	ld	a, (xiy)
 	calr	RingBuf128_WriteByte_CheckFull
 	inc	1, xiy
@@ -4443,7 +4443,7 @@ Seq_TimerEventLoop_Return:
 	ret
 	pushw	ix
 	push	xde
-	lda	xde, (0x20137:24)
+	lda	xde, (CPANEL_LED_EVENT_QUEUE:24)
 	call	RingBuf_InitStructFields
 	pop	xde
 	popw	ix
@@ -4455,14 +4455,14 @@ Seq_TimerEventLoop_Return:
 	ret
 	pushw	ix
 	push	xde
-	lda	xde, (0x20137:24)
+	lda	xde, (CPANEL_LED_EVENT_QUEUE:24)
 	call	RingBuf128_ReadAlt_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
-	lda	xde, (0x20137:24)
+	lda	xde, (CPANEL_LED_EVENT_QUEUE:24)
 	call	RingBuf128_ReadAlt2_CheckEmpty
 	pop	xde
 	popw	ix
@@ -4482,7 +4482,7 @@ Seq_TimerEventLoop_Return:
 SeqBuf_VoiceMap_ReadByte:
 	pushw ix
 	push xde
-	lda xde, (0x0201c1:24)
+	lda xde, (SEQ_ALT3_RINGBUF_BASE:24)
 	calr Seq_RingBuf_ReadByte
 	pop xde
 	popw ix
@@ -4494,7 +4494,7 @@ SeqBuf_VoiceMap_WriteByte:
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
-	lda xde, (0x0201c1:24)
+	lda xde, (SEQ_ALT3_RINGBUF_BASE:24)
 	calr Seq_RingBuf_WriteByte_Small
 	pop xde
 	popw ix
@@ -4509,7 +4509,7 @@ SeqBuf_VoiceMap_WriteBlock:
 	push xde
 	ld bc, (xiz + 8)
 	ld xiy, (xiz + 10)
-	lda xde, (0x0201c1:24)
+	lda xde, (SEQ_ALT3_RINGBUF_BASE:24)
 
 SeqBuf_VoiceMap_WriteBlock_Loop:
 	ld a, (xiy)
@@ -4541,7 +4541,7 @@ SeqBuf_VoiceMap_GetWritePos:
 SeqBuf_VoiceMap_Flush:
 	pushw ix
 	push xde
-	lda xde, (0x0201c1:24)
+	lda xde, (SEQ_ALT3_RINGBUF_BASE:24)
 	call Seq_RingBuf_Init_256
 	pop xde
 	popw ix
@@ -4558,7 +4558,7 @@ SeqBuf_VoiceMap_CommitWrite:
 	; --- Sub 2: call EF2FA1 with XDE=0x0201c1 (14 bytes) ---
 	pushw ix
 	push xde
-	lda	xde, (0x201c1:24)
+	lda	xde, (SEQ_ALT3_RINGBUF_BASE:24)
 	call Seq_RingBuf_ReadByte_Large
 	pop xde
 	popw ix
@@ -4567,7 +4567,7 @@ SeqBuf_VoiceMap_RollbackWrite:
 	; --- Sub 3: call EF2FBC with XDE=0x0201c1 (14 bytes) ---
 	pushw ix
 	push xde
-	lda	xde, (0x201c1:24)
+	lda	xde, (SEQ_ALT3_RINGBUF_BASE:24)
 	call Seq_RingBuf_ReadByte_Small
 	pop xde
 	popw ix
@@ -8779,7 +8779,7 @@ DrawBitmap_BitLoop:
 	ldfr_berp	A, 0xf2
 	ld	de, ix
 	extz	xde
-	lda	xbc, (0x043c00:24)	; [v10] aparentemente isso é um buffer offscreen
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)	; [v10] aparentemente isso é um buffer offscreen
 Set_XWA_to_320_times_XDE:
 	ld xwa, xde
 	sll xwa, 2		; XWA = Y * 4

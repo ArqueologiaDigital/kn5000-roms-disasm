@@ -557,7 +557,7 @@ DSPCfg_SyncBitmapData:
 	push	xiz
 	ld	(xsp+18), xbc
 	ld	xiz, xwa
-	lda	xwa, (0xbd3c:16)
+	lda	xwa, (SWBTWR_EVENT_QUEUE:16)
 	ld	(xsp+14), xwa
 	ld	(xsp+10), xwa
 	ld	bc, (0x90de:16)
@@ -708,7 +708,7 @@ ToneGen_DiffScanAndUpdate:
 	lda xsp, (xsp - 14)
 	pushw iz
 	ld bc, (0x90de:16)
-	lda xwa, (0xbd3c:16)
+	lda xwa, (SWBTWR_EVENT_QUEUE:16)
 	ld (xsp + 12), xwa
 	ld (xsp + 8), xwa
 	ld iz, 0:i3

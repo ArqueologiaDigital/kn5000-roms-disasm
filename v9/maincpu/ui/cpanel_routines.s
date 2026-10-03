@@ -73,12 +73,12 @@ CPanel_ScanButtons:
 
 
 CPanel_InitHardware:
-	ld xhl, 0x200ad
+	ld xhl, CPANEL_RX_EVENT_QUEUE
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 
-	ld xhl, 0x20137
+	ld xhl, CPANEL_LED_EVENT_QUEUE
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
@@ -458,7 +458,7 @@ PanelDet_Return:
 
 
 CPanel_ReadAllButtons:
-	ld xhl, 0x200ad
+	ld xhl, CPANEL_RX_EVENT_QUEUE
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
@@ -503,7 +503,7 @@ CPanel_ReadAllButtons:
 
 
 CPanel_PollStartup:
-	ld xhl, 0x200ad
+	ld xhl, CPANEL_RX_EVENT_QUEUE
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
@@ -535,7 +535,7 @@ CPanel_EncoderCheck:
 	ld (0x8e6a:16), w
 	jr nz, CPanel_ButtonPollLoop
 	ld (0x8e6a:16), w
-	ld xhl, 0x200ad
+	ld xhl, CPANEL_RX_EVENT_QUEUE
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
@@ -550,7 +550,7 @@ CPanel_EncoderCheck:
 
 
 CPanel_InitButtonState:	; do that
-	ld xhl, 0x200ad
+	ld xhl, CPANEL_RX_EVENT_QUEUE
 	ldw (xhl - 4), 0x0
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
@@ -1189,7 +1189,7 @@ CPanel_RX_Process:
 CPanel_RX_DispatchLoop:
 	ld xde, 0x8da1
 	ld iy, (CPANEL_RX_READ_PTR:16)
-	ld xiz, 0x200ad
+	ld xiz, CPANEL_RX_EVENT_QUEUE
 	ld ix, (xiz - 4)
 
 CPanel_RX_ParseNext:
@@ -1423,7 +1423,7 @@ CPanel_RX_Done:
 CPanel_UpdateLEDs:	; do this
 	ld iy, (CPANEL_LED_WRITE_PTR:16)
 	ld xde, 0x8e01
-	ld xiz, 0x20137
+	ld xiz, CPANEL_LED_EVENT_QUEUE
 	ld ix, (xiz - 8)
 
 CPanel_UpdateLEDs__check_next:

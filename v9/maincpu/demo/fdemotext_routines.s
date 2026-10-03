@@ -26,8 +26,8 @@ FDemoText_LookupTableEntry:
 	ret
 
 FDemoText_ByteData_VoiceProbeA:
-	ld	c, (0xc07d:16)
-	ld	a, (0xc080:16)
+	ld	c, (SWBTWR_PAYLOAD_1:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	extz	wa
 	cp	c, 5:i3
 	jr	z, FDemoText_ByteData_VoiceProbeA_Skip2
@@ -45,25 +45,25 @@ FDemoText_ByteData_VoiceProbeA_Skip2:
 	inc	5, xhl
 	cp	(xhl), 0
 	ret	nz
-	ld	a, (0xc080:16)
+	ld	a, (SWBTWR_EVENT_TYPE:16)
 	extz	wa
 	lda	xbc, (FDemoText_ByteData_VoiceProbeA_Data:24)
 	ld	a, (xbc+wa)
 	or (149490:24), a
 	ret
 FDemoText_ByteData_VoiceProbeB:
-	cp	(0xc07d:16), 1
+	cp	(SWBTWR_PAYLOAD_1:16), 1
 	ret	nz
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	res	7, a
 	cp	a, 0:i3
 	ret	z
 	set	6, (0x247ee:24)
 	ret
 FDemoText_ByteData_VoiceProbeC:
-	ld	e, (0xc080:16)
+	ld	e, (SWBTWR_EVENT_TYPE:16)
 	sub	e, 68
-	ld	a, (0xc07d:16)
+	ld	a, (SWBTWR_PAYLOAD_1:16)
 	extz	wa
 	dec	1, wa
 	cp	wa, 0:i3
@@ -80,7 +80,7 @@ FDemoText_ByteData_VoiceProbeC_Code:
 	ret
 	ld	xwa, FDemoText_ByteData_VoiceProbeC_Data
 	jr	FDemoText_ByteData_VoiceProbeC_Join
-	ld	a, (0xc07f:16)
+	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 15
 	jr	z, FDemoText_ByteData_VoiceProbeC_Skip
 	ld	a, e
@@ -89,7 +89,7 @@ FDemoText_ByteData_VoiceProbeC_Code:
 	ld	a, (xbc+wa)
 	or (149484:24), a
 FDemoText_ByteData_VoiceProbeC_Skip:
-	ld a, (49279:16)
+	ld a, (SWBTWR_PAYLOAD_3:16)
 	and a, 48
 	ret z
 	ld	xwa, FDemoText_ByteData_VoiceProbeC_Data_2

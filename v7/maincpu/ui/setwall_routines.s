@@ -2032,9 +2032,9 @@ MiddleFuncCall_DispatchData_Code_Helper5:
 	ld	xiy, 4441
 	ldw	bc, 16
 	ldir85
-	cp	(35994:16), 143
+	cp	(SEQ_MASTER_STATE:16), 143
 	jr	z, SetWall_MiscDataAndCode_Skip
-	cp	(35994:16), 167
+	cp	(SEQ_MASTER_STATE:16), 167
 	jr	z, SetWall_MiscDataAndCode_Skip2
 SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc

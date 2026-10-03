@@ -4310,7 +4310,7 @@ ClampColorToRange_Skip13:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xhl
-	ld	xhl, 277504
+	ld	xhl, OFFSCREEN_BUFFER_1
 	add	xhl, xwa
 	ld	wa, (xsp+46)
 	ld	(xhl), a
@@ -4369,7 +4369,7 @@ ClampColorToRange_Skip16:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xix
-	ld	xix, 277504
+	ld	xix, OFFSCREEN_BUFFER_1
 	add	xix, xwa
 	ld	wa, (xsp+46)
 	ld	(xix), a
@@ -6181,7 +6181,7 @@ DrawDesignBox_Impl_Loop:
 	ld	bc, (xwa)
 	exts	xbc
 	add	xbc, xde
-	lda	xde, (0x043c00:24)
+	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	ld	xiz, xde
 	add	xiz, xbc
 	ld	iy, (xwa)
@@ -7147,7 +7147,7 @@ CaptureLcd_WriteRowLoop:
 	sll xbc, 2
 	add xbc, xwa
 	sll xbc, 6
-	lda xwa, (0x043c00:24)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	add xwa, xbc
 	ld xbc, 0x140
 	call FileIO_WriteByte_Impl
@@ -7390,7 +7390,7 @@ PaletteBankRotate_Code:
 
 PaletteBankRotate_Impl:
 	push	xiz
-	lda	xwa, (277504:24)
+	lda	xwa, (OFFSCREEN_BUFFER_1:24)
 	ld	xiz, xwa
 	pushw	38400
 	push	xwa
@@ -7404,7 +7404,7 @@ PaletteBankRotate_Impl:
 	push	xwa
 	call	Mem_Copy
 	lda	xsp, (xsp+20)
-	lda	xwa, (277504:24)
+	lda	xwa, (OFFSCREEN_BUFFER_1:24)
 	ld	xbc, xwa
 	ld	de, 0:i3
 PaletteBankRotate_RowLoop:
@@ -7529,7 +7529,7 @@ ClipBlit_Replace_CalcVRAMAddr:
 	add xbc, xde
 	sll xbc, 6
 	lda_rrq xhl, xbc, qiz
-	lda	xwa, (0x043c00:24)
+	lda	xwa, (OFFSCREEN_BUFFER_1:24)
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00056800
@@ -7672,7 +7672,7 @@ ClipBlit_Direct_CalcVRAMAddr:
 	sll xbc, 6
 	ld wa, (xsp + 2)
 	lda	xhl, (xbc+wa)
-	lda	xwa, (0x043c00:24)
+	lda	xwa, (OFFSCREEN_BUFFER_1:24)
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00069800
@@ -7825,7 +7825,7 @@ ColorBlit_Mode0_RowLoop:
 	ld de, (xwa)
 	exts xde
 	add xde, xix
-	lda xiz, (0x043c00:24)
+	lda xiz, (OFFSCREEN_BUFFER_1:24)
 	add xiz, xde
 	ld ix, (xwa)
 	ld xde, (xsp + 8)
@@ -7875,7 +7875,7 @@ ColorBlit_ModeF5_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	add xiy, xbc
 	ld bc, (xwa)
 	exts xbc
@@ -7931,7 +7931,7 @@ ColorBlit_Mode1_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda xde, (0x043c00:24)
+	lda xde, (OFFSCREEN_BUFFER_1:24)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -7977,7 +7977,7 @@ ColorBlit_Mode2_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda xde, (0x043c00:24)
+	lda xde, (OFFSCREEN_BUFFER_1:24)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -8121,7 +8121,7 @@ ColorBlit2_Mode0_RowLoop:
 	ld de, (xwa)
 	exts xde
 	add xde, xix
-	lda xiz, (0x043c00:24)
+	lda xiz, (OFFSCREEN_BUFFER_1:24)
 	add xiz, xde
 	ld ix, (xwa)
 	ld xde, (xsp + 8)
@@ -8171,7 +8171,7 @@ ColorBlit2_ModeF5_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	add xiy, xbc
 	ld bc, (xwa)
 	exts xbc
@@ -8224,7 +8224,7 @@ ColorBlit2_Mode1_RowLoop:
 	sll xde, 2
 	add xde, xbc
 	sll xde, 6
-	lda xiy, (0x043c00:24)
+	lda xiy, (OFFSCREEN_BUFFER_1:24)
 	add xiy, xde
 	ld bc, (xwa)
 	lda	xiy, (xiy+bc)
@@ -8269,7 +8269,7 @@ ColorBlit2_Mode2_Entry:
 	sub bc, (xwa)
 	cp bc, 0x13f
 	jr nz, ColorBlit2_Mode2_ClippedEntry
-	lda xbc, (0x043c00:24)
+	lda xbc, (OFFSCREEN_BUFFER_1:24)
 	ld xde, 0:i3
 
 ColorBlit2_Mode2_FullscreenLoop:
@@ -8303,7 +8303,7 @@ ColorBlit2_Mode2_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda xde, (0x043c00:24)
+	lda xde, (OFFSCREEN_BUFFER_1:24)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -8472,7 +8472,7 @@ DrawMonoBitmap_Impl_Loop3:
 	sll	xde, 2
 	add	xde, xwa
 	sll	xde, 6
-	lda	xbc, (0x043c00:24)
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)
 	bit	7, (xsp+2)
 	jr	z, DrawMonoBitmap_Impl_Skip3
 	ld	xiy, (xsp+10)
@@ -8615,7 +8615,7 @@ DrawMonoBitmap_Impl_Loop5:
 	ld	(xsp+2), a
 	ld	(xsp+4), 0
 DrawMonoBitmap_Impl_Loop6:
-	lda	xix, (0x043c00:24)
+	lda	xix, (OFFSCREEN_BUFFER_1:24)
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xbc, xwa
@@ -8703,7 +8703,7 @@ DrawMonoBitmap_Impl_Loop9:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
-	lda	xbc, (0x043c00:24)
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)
 	add	xbc, xwa
 	bit	7, (xbc)
 	jr	nz, DrawMonoBitmap_Impl_Skip9
@@ -8712,7 +8712,7 @@ DrawMonoBitmap_Impl_Skip8:
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
-	lda	xbc, (0x043c00:24)
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)
 	add	xbc, xwa
 	bit	7, (xbc)
 	jr	z, DrawMonoBitmap_Impl_Skip9
@@ -8918,7 +8918,7 @@ DrawLineWithMode_Impl_Skip5:
 	ldiw
 	ld	a, (0x03efaa:24)
 	ld	(xsp+20), a
-	lda	xwa, (0x043c00:24)
+	lda	xwa, (OFFSCREEN_BUFFER_1:24)
 	ld	(xsp+38), xwa
 	ld	(xsp+30), xwa
 	ld	xwa, (xsp+8)
@@ -9783,7 +9783,7 @@ DrawDottedLineWithMode_Impl_Skip6:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda	xhl, (0x043c00:24)
+	lda	xhl, (OFFSCREEN_BUFFER_1:24)
 	add	xhl, xwa
 	cpw	(xsp+50), 245
 	jr	z, DrawDottedLineWithMode_Impl_Skip7
@@ -9835,7 +9835,7 @@ DrawDottedLineWithMode_Impl_Skip9:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda	xbc, (0x043c00:24)
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)
 	add	xbc, xwa
 	bit	7, (xbc)
 	jr	z, DrawDottedLineWithMode_Impl_Skip10
@@ -9855,7 +9855,7 @@ DrawDottedLineWithMode_Impl_Skip11:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda	xbc, (0x043c00:24)
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)
 	add	xbc, xwa
 	bit	7, (xbc)
 	jr	z, DrawDottedLineWithMode_Impl_Skip12
@@ -9910,7 +9910,7 @@ DrawDottedLineWithMode_Impl_Skip14:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda	xhl, (0x043c00:24)
+	lda	xhl, (OFFSCREEN_BUFFER_1:24)
 	add	xhl, xwa
 	cpw	(xsp+50), 245
 	jr	z, DrawDottedLineWithMode_Impl_Skip15
@@ -9962,7 +9962,7 @@ DrawDottedLineWithMode_Impl_Skip17:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda	xbc, (0x043c00:24)
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)
 	add	xbc, xwa
 	bit	7, (xbc)
 	jr	z, DrawDottedLineWithMode_Impl_Skip18
@@ -9982,7 +9982,7 @@ DrawDottedLineWithMode_Impl_Skip19:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xde
-	lda	xbc, (0x043c00:24)
+	lda	xbc, (OFFSCREEN_BUFFER_1:24)
 	add	xbc, xwa
 	bit	7, (xbc)
 	jr	z, DrawDottedLineWithMode_Impl_Skip20
@@ -10046,7 +10046,7 @@ DrawDottedLineWithMode_Impl_Skip22:
 	sll	xhl, 2
 	add	xhl, xwa
 	sll	xhl, 6
-	lda	xde, (0x043c00:24)
+	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	cpib_erp	240, 2	; cp ixl, 2
 	jrl	z, DrawDottedLineWithMode_Impl_Skip27
 	cpib_erp	240, 1	; cp ixl, 1

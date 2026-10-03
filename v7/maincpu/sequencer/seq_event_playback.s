@@ -1148,7 +1148,7 @@ AccPlay_UpdateStateFlags:
 	stb_d8	(32368), a
 	bit	2, (32377:16)
 	jr	z, AccPlay_DispatchRet
-	cp	(35994:16), 1
+	cp	(SEQ_MASTER_STATE:16), 1
 	jr	nz, AccPlay_DispatchRet
 	and	(32377:16), 251
 	ld	(32422:16), 15

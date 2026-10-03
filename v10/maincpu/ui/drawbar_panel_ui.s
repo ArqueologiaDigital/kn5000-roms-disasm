@@ -4483,14 +4483,14 @@ MidiSetup_ReturnZero:
 ; in v7 and misframed code in v9/v10 until 2026-09-25.
 ; =============================================================================
 MidiPart_DataBlock:
-	cp	(0xc080:16), 0xa8
+	cp	(SWBTWR_EVENT_TYPE:16), 0xa8
 	ret	nz
-	cp	(0xc07d:16), 5
+	cp	(SWBTWR_PAYLOAD_1:16), 5
 	ret	nz
-	ld	c, (0xc07f:16)
+	ld	c, (SWBTWR_PAYLOAD_3:16)
 	bit	6, c
 	ret	z
-	ld	a, (0xc07e:16)
+	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, c
 	ret	z
 	cp	(0x8d38:16), 0xf
