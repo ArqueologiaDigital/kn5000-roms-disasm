@@ -1929,13 +1929,11 @@ FDemoText_TextDispatch_Skip3:
 	pushw	0x4882
 	call	Free_Compare2
 	lda	xsp, (xsp+28)
-	.byte	0x40
-	.long	Pad_AfterNakaData_ExternalBase
+	ld	xwa, NAKA_VIEW_Demofeature1
 	ld	xbc, EVT_HIDE
 	ld	xde, 5:i3
 	call	SendEvent
-	.byte	0x40
-	.long	Pad_NakaExternal_Block1
+	ld	xwa, NAKA_VIEW_Demofeature2
 	ld	xbc, EVT_HIDE
 	ld	xde, 5:i3
 	call	SendEvent

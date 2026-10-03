@@ -21,7 +21,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
       and entry n is below S + 0x300's count;
     * the view argument (the fifth) of RegTitle, when numeric and a view id -- and in v7, which
       expands the macro, the `ld xde, N` right before `call RegisterTitle`;
-  defines `.equ NAKA_VIEW_<name>, 0x00SSnnnn` (the ResName string; `_<SS>` added when two views
+  (`ld xwa, X` written as data -- `.byte 0x40` then `.long X` -- counts too, and becomes the
+  instruction); defines `.equ NAKA_VIEW_<name>, 0x00SSnnnn` (the ResName string; `_<SS>` added when two views
   share it) in the tree's shared/event_codes.s, and rewrites those operands.  A label that loses
   its last use and is one a symbolizer made (`*_Data`, `*_Code`, `*_Data_N`, `*_Code_N`) is
   retired: the name goes, the line's directive stays.  Same bytes: make gate-all.
@@ -99,20 +100,31 @@ def main():
                 return any(CALL.match(y) for y in text[f2][k + 1:k + 7])
         return False
     sites, ids = [], {}
+
+    def site(L, i):
+        """(prefix, token, suffix, how, extra_line) of a view-id use at line i, or None"""
+        g = LDXWA.match(L[i])
+        if g and posts(L, i):
+            return g.group(1), g.group(2), g.group(3), "event target", False
+        if re.match(r'^\s*\.byte\s+0x40\s*(?:;.*)?$', L[i]) and i + 1 < len(L):
+            # `ld xwa, imm32` written as data: `.byte 0x40` + `.long X` (opcode 0x40 = ld XWA,#32)
+            g = re.match(r'^\s*\.long\s+([A-Za-z_][\w.$]*|0x[0-9a-fA-F]+)\s*(?:;.*)?$', L[i + 1])
+            if g and posts(L, i + 1):
+                return "\tld\txwa, ", g.group(1), "", "event target written as .byte 0x40 / .long", True
+        g = REGTITLE.match(L[i])
+        if g:
+            return g.group(1), g.group(2), g.group(3), "RegTitle view", False
+        g = LDXDE.match(L[i])
+        if g and any(REGCALL.match(x) for x in L[i + 1:i + 3]):
+            return g.group(1), g.group(2), g.group(3), "RegisterTitle view (expanded, v7)", False
+        return None
+
     for f, L in text.items():
-        for i, l in enumerate(L):
-            g, how = LDXWA.match(l), "event target"
-            if g and not posts(L, i):
-                g = None
-            if not g:
-                g, how = REGTITLE.match(l), "RegTitle view"
-            if not g:
-                g, how = LDXDE.match(l), "RegisterTitle view (expanded, v7)"
-                if g and not any(REGCALL.match(x) for x in L[i + 1:i + 3]):
-                    g = None
-            if not g:
+        for i in range(len(L)):
+            hit = site(L, i)
+            if not hit:
                 continue
-            tok = g.group(2)
+            pre, tok, post, how, extra = hit
             if re.match(r'^(0x[0-9a-fA-F]+|\d+)$', tok):
                 val = int(tok, 0)
             elif tok in addr and addr[tok][1] in "tT" and not tok.startswith(("EVT_", "NAKA_", "TITLE_")):
@@ -123,7 +135,7 @@ def main():
             if not nm:
                 continue
             ids[val] = nm
-            sites.append((f, i, g, val, tok, how))
+            sites.append((f, i, pre, tok, post, val, how, extra))
     byname = collections.defaultdict(set)
     for val, nm in ids.items():
         byname[re.sub(r'\W', '_', nm)].add(val)
@@ -131,15 +143,19 @@ def main():
     for base, vals in byname.items():
         for val in vals:
             const[val] = "NAKA_VIEW_%s" % base if len(vals) == 1 else "NAKA_VIEW_%s_%02X" % (base, (val >> 16) & 0xFF)
-    st = collections.Counter(("numeric" if re.match(r'^(0x|\d)', s[4]) else "ROM label") + ", " + s[5] for s in sites)
-    replaced_labels = collections.Counter(s[4] for s in sites if not re.match(r'^(0x|\d)', s[4]))
+    st = collections.Counter(("numeric" if re.match(r'^(0x|\d)', s[3]) else "ROM label") + ", " + s[6] for s in sites)
+    replaced_labels = collections.Counter(s[3] for s in sites if not re.match(r'^(0x|\d)', s[3]))
     print("%s: %d sites, %d distinct view ids; %s" % (a.tree, len(sites), len(ids), dict(st)))
     if not a.apply:
         for val in sorted(ids):
             print("  0x%06x %-40s %s" % (val, const[val], ids[val]))
         return 0
-    for f, i, g, val, tok, how in sites:
-        text[f][i] = g.group(1) + const[val] + g.group(3)
+    for f, i, pre, tok, post, val, how, extra in sites:
+        text[f][i] = pre + const[val] + post
+        if extra:
+            text[f][i + 1] = None
+    for f in text:
+        text[f] = [x for x in text[f] if x is not None]
     # retire symbolizer-made labels that lost their last use
     uses = collections.Counter()
     for L in text.values():
