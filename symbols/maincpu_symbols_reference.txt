@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,678
-#   semantic names ........... 50,865 (98.4%)
+#   symbols .................. 51,679
+#   semantic names ........... 50,866 (98.4%)
 #   positional names ......... 813
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -31236,8 +31236,9 @@ AccAutoPlay_ModeAvail_Check 00F5AAB1
 AccAutoPlay_ModeAvail_Process 00F5AAB3
 AccAutoPlay_ModeAvail_SetMode 00F5AAC1
 AccAutoPlay_ModeAvail_Return 00F5AACA
-AccAutoPlay_ModeAvail_Extended 00F5AACB
-AccAutoPlay_ModeAvail_Extended_Code 00F5AACD
+AccAutoPlay_ModeAvail_Values 00F5AACD
+AccAutoPlay_ConfigureIfPending 00F5AAD2
+AccAutoPlay_ConfigureIfPending_Return 00F5AAFA
 AccAutoPlay_SetConfig 00F5AAFB
 AccAutoPlay_SetConfig_Apply 00F5AB2F
 AccAutoPlay_SetConfig_Return 00F5AB34

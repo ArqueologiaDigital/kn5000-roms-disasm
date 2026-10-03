@@ -167,3 +167,18 @@ v7 (0xF6A085, lines 32993-33271): `port_islands.py ... --whole 32993-33271 --del
 536 of 592 B, identical after round 0. The pointer table came out half `.byte`, because the handler labels
 did not exist in v7 yet, so `accdraw_v7_postport.py` writes it as 20 `.long`. The symbolizer then rewrote 2
 more v7 operands (PASS).
+
+### `accautoplay_modeavail_<tree>.json` (2026-10-03)
+
+v10/v9 0xF5AACB-0xF5AAFB (R3 cluster at 0xF5AACB):
+
+- `AccAutoPlay_ModeAvail_Values` (renamed from `AccAutoPlay_ModeAvail_Extended_Code` by
+  `scripts/renaming/rename_accautoplay_modeavail_values.sed`, all three trees) is 5 bytes:
+  `AccAutoPlay_ModeAvail_Process` reads [(0xFD02) & 3], and the fifth byte pads to an even address.
+- The two bytes before it are padding, and their unreferenced label `AccAutoPlay_ModeAvail_Extended`
+  is removed.
+- `AccAutoPlay_ConfigureIfPending` (0xF5AAD2) is dead code with five branches, now decoded and named.
+
+`accautoplay_postedit.py <tree>` handles the padding label and the stale note. v7 (0xF5A6C7, a `.byte`
+run) was written by hand from its bytes, with v7's RAM addresses (0x33D2/0x33FC/0x33FD), and checked by
+the byte gate.

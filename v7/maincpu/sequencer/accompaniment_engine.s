@@ -7657,7 +7657,7 @@ AccAutoPlay_ModeAvail_Process:
 	push l
 	ld xhl, 0:i3
 	pop l
-	add xhl, AccAutoPlay_ModeAvail_Extended_Code
+	add xhl, AccAutoPlay_ModeAvail_Values
 	ld l, (xhl)
 
 AccAutoPlay_ModeAvail_SetMode:
@@ -7667,14 +7667,29 @@ AccAutoPlay_ModeAvail_SetMode:
 AccAutoPlay_ModeAvail_Return:
 	ret
 
-AccAutoPlay_ModeAvail_Extended:
-	.byte	0x00, 0x00
-AccAutoPlay_ModeAvail_Extended_Code:	.byte	0x3b, 0x36, 0x3b, 0x42, 0x47, 0xf1
-	.byte 0x1e, 0x04, 0xca, 0x6e, 0x22, 0xf1, 0xd2, 0x33
-	.byte 0xc9, 0x66, 0x1c, 0xf1, 0xfc, 0x33, 0xc8, 0x66
-	.byte 0x16, 0xf1, 0xfd, 0x33, 0xc8, 0x6e, 0x10, 0x1e
-	.byte 0x48, 0x00, 0xc1, 0xfc, 0x33, 0x21, 0xf1, 0xfd
-	.byte 0x33, 0x41, 0xc1, 0xfc, 0x33, 0x3e, 0x01, 0x0e
+	.byte	0x00, 0x00	; padding
+AccAutoPlay_ModeAvail_Values:
+	; AccAutoPlay_ModeAvail_Process: L := this[(0xFD02) & 3] for (0xFD02) & 3 = 1..3; the fifth
+	; byte pads the code below to an even address.
+	.byte	0x3b, 0x36, 0x3b, 0x42, 0x47
+	; No reference found.  Returns unless bit 2 of (0x041E) is clear, bit 1 of (0x33D2) set, bit 0
+	; of (0x33FC) set and bit 0 of (0x33FD) clear; then calls AccAutoPlay_Configure, copies (0x33FC)
+	; to (0x33FD) and sets bit 0 of (0x33FC).  Was a `.byte` run until 2026-10-03.
+AccAutoPlay_ConfigureIfPending:
+	bit	2, (0x041e:16)
+	jr	nz, AccAutoPlay_ConfigureIfPending_Return
+	bit	1, (0x33d2:16)
+	jr	z, AccAutoPlay_ConfigureIfPending_Return
+	bit	0, (0x33fc:16)
+	jr	z, AccAutoPlay_ConfigureIfPending_Return
+	bit	0, (0x33fd:16)
+	jr	nz, AccAutoPlay_ConfigureIfPending_Return
+	calr	AccAutoPlay_Configure
+	ld	a, (0x33fc:16)
+	ld	(0x33fd:16), a
+	or	(0x33fc:16), 1
+AccAutoPlay_ConfigureIfPending_Return:
+	ret
 AccAutoPlay_SetConfig:
 	cpw (0x28a8:16), 0x0000
 	jr nz, AccAutoPlay_SetConfig_Apply

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,407
-#   semantic names ........... 50,505 (98.2%)
+#   symbols .................. 51,408
+#   semantic names ........... 50,506 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -30970,8 +30970,9 @@ AccAutoPlay_ModeAvail_Check 00F5A6AD
 AccAutoPlay_ModeAvail_Process 00F5A6AF
 AccAutoPlay_ModeAvail_SetMode 00F5A6BD
 AccAutoPlay_ModeAvail_Return 00F5A6C6
-AccAutoPlay_ModeAvail_Extended 00F5A6C7
-AccAutoPlay_ModeAvail_Extended_Code 00F5A6C9
+AccAutoPlay_ModeAvail_Values 00F5A6C9
+AccAutoPlay_ConfigureIfPending 00F5A6CE
+AccAutoPlay_ConfigureIfPending_Return 00F5A6F6
 AccAutoPlay_SetConfig 00F5A6F7
 AccAutoPlay_SetConfig_Apply 00F5A72B
 AccAutoPlay_SetConfig_Return 00F5A730

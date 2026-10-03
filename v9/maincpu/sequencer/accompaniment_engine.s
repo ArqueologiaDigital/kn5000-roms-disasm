@@ -8009,7 +8009,7 @@ AccAutoPlay_ModeAvail_Process:
 	push l
 	ld xhl, 0:i3
 	pop l
-	add xhl, AccAutoPlay_ModeAvail_Extended_Code
+	add xhl, AccAutoPlay_ModeAvail_Values
 	ld l, (xhl)
 
 AccAutoPlay_ModeAvail_SetMode:
@@ -8020,25 +8020,28 @@ AccAutoPlay_ModeAvail_SetMode:
 AccAutoPlay_ModeAvail_Return:
 	ret
 
-AccAutoPlay_ModeAvail_Extended:
-	nop
-	nop
-AccAutoPlay_ModeAvail_Extended_Code:
-	push	xhl
-	ldw	iz, 0x423b
-	ld	xsp, 0xca041ef1
-	jr	nz, 34
+	.byte	0x00, 0x00	; padding
+AccAutoPlay_ModeAvail_Values:
+	; AccAutoPlay_ModeAvail_Process: L := this[(0xFD02) & 3] for (0xFD02) & 3 = 1..3; the fifth
+	; byte pads the code below to an even address.  Was decoded as `push xhl / ld iz, 0x423b ...`.
+	.byte	0x3b, 0x36, 0x3b, 0x42, 0x47
+	; No reference found.  Returns unless bit 2 of (0x041E) is clear, bit 1 of (0x346E) set, bit 0
+	; of (0x3498) set and bit 0 of (0x3499) clear; then calls AccAutoPlay_Configure, copies (0x3498)
+	; to (0x3499) and sets bit 0 of (0x3498).
+AccAutoPlay_ConfigureIfPending:
+	bit	2, (0x041e:16)
+	jr	nz, AccAutoPlay_ConfigureIfPending_Return
 	bit	1, (0x346e:16)
-	jr	z, 28
+	jr	z, AccAutoPlay_ConfigureIfPending_Return
 	bit	0, (0x3498:16)
-	jr	z, 22
+	jr	z, AccAutoPlay_ConfigureIfPending_Return
 	bit	0, (0x3499:16)
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5AAE5-0xF5AAF5 (16 B), unreached CODE-territory, was disassembled as 5 plausible-but-dead instruction lines; per=67% dist=13 near AccAutoPlay_ModeAvail_Extended_Code+24
-	jr	nz, 16
-	calr	72
+	jr	nz, AccAutoPlay_ConfigureIfPending_Return
+	calr	AccAutoPlay_Configure
 	ld	a, (0x3498:16)
 	ld	(0x3499:16), a
 	or	(0x3498:16), 1
+AccAutoPlay_ConfigureIfPending_Return:
 	ret
 
 AccAutoPlay_SetConfig:

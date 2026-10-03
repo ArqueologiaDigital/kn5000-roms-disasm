@@ -1,0 +1,43 @@
+[
+ {
+  "file": "v9/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF5AACB",
+  "end": "0xF5AAFB",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "byte",
+    "len": 2
+   },
+   {
+    "kind": "byte",
+    "len": 5
+   },
+   {
+    "kind": "code",
+    "len": 41
+   }
+  ],
+  "drop_labels": [
+   "AccAutoPlay_ModeAvail_Extended"
+  ],
+  "labels": {
+   "0xF5AAD2": "AccAutoPlay_ConfigureIfPending",
+   "0xF5AAFA": "AccAutoPlay_ConfigureIfPending_Return"
+  },
+  "comments": {
+   "0xF5AACB": [
+    "padding"
+   ],
+   "0xF5AACD": [
+    "AccAutoPlay_ModeAvail_Process: L := this[(0xFD02) & 3] for (0xFD02) & 3 = 1..3; the fifth",
+    "byte pads the code below to an even address.  Was decoded as `push xhl / ld iz, 0x423b ...`."
+   ],
+   "0xF5AAD2": [
+    "No reference found.  Returns unless bit 2 of (0x041E) is clear, bit 1 of (0x346E) set, bit 0",
+    "of (0x3498) set and bit 0 of (0x3499) clear; then calls AccAutoPlay_Configure, copies (0x3498)",
+    "to (0x3499) and sets bit 0 of (0x3498)."
+   ]
+  }
+ }
+]
