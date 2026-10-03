@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,603
-#   semantic names ........... 50,754 (98.4%)
+#   symbols .................. 51,604
+#   semantic names ........... 50,755 (98.4%)
 #   positional names ......... 849
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -588,6 +588,7 @@ SOUND_DATA_DIGITAL_DRAWBAR 00E0B3E2
 SOUND_DATA_ACCORDION_REG 00E0B3F4
 SOUND_DATA_GM_SPECIAL 00E0B406
 SOUND_DATA_DRUM_KITS 00E0B418
+Scoop_CallDisplayHelper_SingleTableList 00E0B42A
 Scoop_CallDisplayHelper_DisplayList_Data 00E0B432
 Scoop_SetPartIndexAndDisplay_Data 00E0B452
 StyleUI_ParamBlock_BAL 00E0B4ED

@@ -16541,7 +16541,7 @@ Scoop_DrawButtonLayout2:
 Scoop_CallDisplayHelper_DisplayList:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x32, 0x00, 0x10, 0x01, 0x42, 0x00
 Scoop_CallDisplayHelper_DisplayList_Code:
-	ld	xiy, 0xe0b42a
+	ld	xiy, Scoop_CallDisplayHelper_SingleTableList
 	ld	xix, Scoop_CallDisplayHelper_DisplayList_Data
 	call	UIRender_SingleTable
 	ret
