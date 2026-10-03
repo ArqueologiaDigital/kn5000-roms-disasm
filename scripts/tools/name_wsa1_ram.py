@@ -209,6 +209,14 @@ GROUPS = [
         (0x605AF1, ("Fdc_LastCylinderPlus1", "last cylinder + 1, derived from the geometry", "Fdc_Op0_ResetAndIdentifyMedia")),
         (0x605AF7, ("Fdc_SectorsPerTrackPlus1", "sectors per track + 1, derived from the geometry", "Fdc_Op0_ResetAndIdentifyMedia")),
     ] + [(0x605A50 + k, ("Fdc_ResultBuf+%d" % k, "", "")) for k in range(1, 8)])),
+    ("wsa1/notes/FINDINGS-prom_b-smf-writer.md", "Why the MTrk length is zero; It really is a MIDI writer; with FINDINGS-prom_b-for-the-mame-driver.md (the 8.3 name)", dict([
+        (0x126C, ("SmfOut_WindowsFlushed", "how many 1,024-byte output windows the SMF writer has flushed", "the MTrk length computation at 0xF7789A")),
+        (0x10C4, ("SmfOut_TrackLength", "the MTrk chunk length, most significant byte first (4 bytes)", "0xF7789A stores it; copy A writes it into the file")),
+        (0x10C5, ("SmfOut_TrackLength+1", "", "")), (0x10C6, ("SmfOut_TrackLength+2", "", "")), (0x10C7, ("SmfOut_TrackLength+3", "", "")),
+        (0x108C, ("SmfOut_Tempo", "the 24-bit Set Tempo value (FF 51 03), emitted +2, +1, +0", "0xF77918; staged by 0xF778D2")),
+        (0x108D, ("SmfOut_Tempo+1", "", "")), (0x108E, ("SmfOut_Tempo+2", "", "")),
+        (0x21C8, ("Disk_FileName", "an 8.3 file name: 8 characters, extension at +8..+10 (default MID)", "the SMF reader writes M I D to 0x21D0-0x21D2; the writer's track name takes the 8")),
+    ] + [(0x21C8 + k, ("Disk_FileName+%d" % k, "", "")) for k in range(1, 11)])),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')

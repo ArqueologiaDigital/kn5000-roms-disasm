@@ -97845,7 +97845,7 @@ sub_F48F19:
 	link XIZ,0xfffc	; F48F19  link XIZ,0xfffc
 	pushw	hl	; F48F1D  push HL
 	push	xix	; F48F1E  push XIX
-	lda	xix, (8648:16)	; F48F1F  lda XIX,0x21c8
+	lda	xix, (Disk_FileName:16)	; F48F1F  lda XIX,0x21c8
 	m_or_mi8 MB16, Disk_Flags, 0xa0	; F48F23  or (0x21e7),0xa0
 	m_cp_mi8 MB16, UI_ScreenId, 0x54	; F48F28  cp (0x207c),0x54
 	jr	nz, sub_F48F19_Skip	; F48F2D  jr NZ,0xf48f3f
@@ -163992,7 +163992,7 @@ Smf_ReadFile_Skip4:
 	jrl	Smf_ReadFile_Join4	; F6F66E  jrl T,0xf6f7dd
 Smf_ReadFile_Skip5:
 	djnz16	bc, -23	; F6F671  djnz BC,0xf6f65d
-	ld	xix, 4292	; F6F674  ld XIX,0x000010c4
+	ld	xix, SmfOut_TrackLength	; F6F674  ld XIX,0x000010c4
 	ldw	bc, 4	; F6F679  ld BC,0x0004
 	pushw	bc	; F6F67C  push BC
 	push	xix	; F6F67D  push XIX
@@ -164782,7 +164782,7 @@ sub_F6FB51_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6FC10:
-	ld	(4238:16), 0	; F6FC10  ld (0x108e),0x00
+	ld	(SmfOut_Tempo+2:16), 0	; F6FC10  ld (0x108e),0x00
 	ld	(4239:16), a	; F6FC15  ld (0x108f),A
 	calr	InputStream_GetByte	; F6FC19  calr 0xf7138f
 	ld	w, (InputStream_Status:16)	; F6FC1C  ld W,(0x124a)
@@ -164791,7 +164791,7 @@ sub_F6FC10:
 	cp	w, 253	; F6FC24  cp W,0xfd
 	jrl	nz, sub_F6FC10_Return	; F6FC27  jrl NZ,0xf6fd79
 sub_F6FC10_Skip:
-	ld	(4236:16), a	; F6FC2A  ld (0x108c),A
+	ld	(SmfOut_Tempo:16), a	; F6FC2A  ld (0x108c),A
 	calr	InputStream_GetByte	; F6FC2E  calr 0xf7138f
 	ld	w, (InputStream_Status:16)	; F6FC31  ld W,(0x124a)
 	cp	w, 1:i3	; F6FC35  cp W,1
@@ -164799,9 +164799,9 @@ sub_F6FC10_Skip:
 	cp	w, 253	; F6FC39  cp W,0xfd
 	jrl	nz, sub_F6FC10_Return	; F6FC3C  jrl NZ,0xf6fd79
 sub_F6FC10_Skip2:
-	ld	(4237:16), a	; F6FC3F  ld (0x108d),A
+	ld	(SmfOut_Tempo+1:16), a	; F6FC3F  ld (0x108d),A
 	ld	h, (4239:16)	; F6FC43  ld H,(0x108f)
-	ld	l, (4236:16)	; F6FC47  ld L,(0x108c)
+	ld	l, (SmfOut_Tempo:16)	; F6FC47  ld L,(0x108c)
 	ldw	wa, 37767	; F6FC4B  ld WA,0x9387
 	ldw	de, 3	; F6FC4E  ld DE,0x0003
 	ld	qwa, de	; F6FC51  ld QWA,DE
@@ -169309,7 +169309,7 @@ sub_F71BEA_Skip:
 	jrl	sub_F71BEA_Return	; F71C1D  jrl T,0xf71d4e
 sub_F71BEA_Skip2:
 	djnz16	bc, -49	; F71C20  djnz BC,0xf71bf2
-	ld	xix, 4292	; F71C23  ld XIX,0x000010c4
+	ld	xix, SmfOut_TrackLength	; F71C23  ld XIX,0x000010c4
 	ldw	bc, 4	; F71C28  ld BC,0x0004
 	pushw	bc	; F71C2B  push BC
 	push	xix	; F71C2C  push XIX
@@ -173305,7 +173305,7 @@ Smf_WriteFile_Skip:
 	m_or_mi8 MB16, 0x21e8, 0x80	; F73875  or (0x21e8),0x80
 	xor	wa, wa	; F7387A  xor WA,WA
 	ld	(4529:16), a	; F7387C  ld (0x11b1),A
-	ld	(4716:16), wa	; F73880  ld (0x126c),WA
+	ld	(SmfOut_WindowsFlushed:16), wa	; F73880  ld (0x126c),WA
 	ld	(4712:16), a	; F73884  ld (0x1268),A
 	m_cp_mi16 MW16, 0x360c, 0x0000	; F73888  cp (0x360c),0x0000
 	jr	z, Smf_WriteFile_Skip4	; F7388E  jr Z,0xf738d8
@@ -173367,7 +173367,7 @@ Smf_WriteFile_Join:
 	pop	xiy	; F73918  pop XIY
 	pop	xix	; F73919  pop XIX
 	ld	xiy, Data_F73844 + 0x10	; F7391A  ld XIY,0x00f73854
-	ld	xix, 8648	; F7391F  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F7391F  ld XIX,0x000021c8
 	ldw	bc, 11	; F73924  ld BC,0x000b
 	ldir85	; F73927  ldir
 	ld	(10021:16), 1	; F73929  ld (0x2725),0x01
@@ -173389,21 +173389,21 @@ Smf_WriteFile_Join:
 	sla	wa, 3	; F7395F  sla 0x03,WA
 	extz	xwa	; F73962  extz XWA
 	add	xiy, xwa	; F73964  add XIY,XWA
-	m_push MW16, 0x21c8	; F73966  pushw (0x21c8)
-	m_push MW16, 0x21ca	; F7396A  pushw (0x21ca)
-	m_push MW16, 0x21cc	; F7396E  pushw (0x21cc)
-	m_push MW16, 0x21ce	; F73972  pushw (0x21ce)
-	ld	xix, 8648	; F73976  ld XIX,0x000021c8
+	m_push MW16, Disk_FileName	; F73966  pushw (0x21c8)
+	m_push MW16, Disk_FileName+2	; F7396A  pushw (0x21ca)
+	m_push MW16, Disk_FileName+4	; F7396E  pushw (0x21cc)
+	m_push MW16, Disk_FileName+6	; F73972  pushw (0x21ce)
+	ld	xix, Disk_FileName	; F73976  ld XIX,0x000021c8
 	ldw	bc, 4	; F7397B  ld BC,0x0004
 	ldirw	; F7397E  ldirw
-	ld	(8656:16), 77	; F73980  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F73985  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F7398A  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F73980  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F73985  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F7398A  ld (0x21d2),0x44
 	call	T_F425B0	; F7398F  call 0xf425b0
-	m_popw MD16, 0x21ce	; F73993  popw (0x21ce)
-	m_popw MD16, 0x21cc	; F73997  popw (0x21cc)
-	m_popw MD16, 0x21ca	; F7399B  popw (0x21ca)
-	m_popw MD16, 0x21c8	; F7399F  popw (0x21c8)
+	m_popw MD16, Disk_FileName+6	; F73993  popw (0x21ce)
+	m_popw MD16, Disk_FileName+4	; F73997  popw (0x21cc)
+	m_popw MD16, Disk_FileName+2	; F7399B  popw (0x21ca)
+	m_popw MD16, Disk_FileName	; F7399F  popw (0x21c8)
 Smf_WriteFile_Skip6:
 	ld	wa, (13836:16)	; F739A3  ld WA,(0x360c)
 	ld	(4678:16), wa	; F739A7  ld (0x1246),WA
@@ -173420,7 +173420,7 @@ Smf_WriteFile_Skip7:
 	calr	sub_F75685	; F739CE  calr 0xf75685
 	calr	sub_F74EAE	; F739D1  calr 0xf74eae
 	xor	wa, wa	; F739D4  xor WA,WA
-	ld	(4716:16), wa	; F739D6  ld (0x126c),WA
+	ld	(SmfOut_WindowsFlushed:16), wa	; F739D6  ld (0x126c),WA
 	ld	(4529:16), a	; F739DA  ld (0x11b1),A
 	ld	(4712:16), a	; F739DE  ld (0x1268),A
 	xor	hl, hl	; F739E2  xor HL,HL
@@ -173453,16 +173453,16 @@ Smf_WriteFile_Skip8:
 	ld	xiy, SmfFileTemplate_F7493F + 0xE	; F73A32  ld XIY,0x00f7494d
 	ldw	bc, 4	; F73A37  ld BC,0x0004
 	ldir85	; F73A3A  ldir
-	ld	wa, (4292:16)	; F73A3C  ld WA,(0x10c4)
+	ld	wa, (SmfOut_TrackLength:16)	; F73A3C  ld WA,(0x10c4)
 	ld	(xix+), wa	; F73A40  ld (XIX+),WA
-	ld	wa, (4294:16)	; F73A43  ld WA,(0x10c6)
+	ld	wa, (SmfOut_TrackLength+2:16)	; F73A43  ld WA,(0x10c6)
 	ld	(xix+), wa	; F73A47  ld (XIX+),WA
 	ld	(InputStream_Cursor:16), xix	; F73A4A  ld (0x1088),XIX
 	ld	xix, (InputStream_Cursor:16)	; F73A4E  ld XIX,(0x1088)
 	ld	xiy, SmfFileTemplate_F7493F + 0x16	; F73A52  ld XIY,0x00f74955
 	ldw	bc, 11	; F73A57  ld BC,0x000b
 	ldir85	; F73A5A  ldir
-	ld	xiy, 8648	; F73A5C  ld XIY,0x000021c8
+	ld	xiy, Disk_FileName	; F73A5C  ld XIY,0x000021c8
 	ldw	bc, 8	; F73A61  ld BC,0x0008
 	ldir85	; F73A64  ldir
 	ld	(InputStream_Cursor:16), xix	; F73A66  ld (0x1088),XIX
@@ -174676,7 +174676,7 @@ Smf_WriteFile_Skip55:
 	calr	sub_F74AC5	; F74750  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74753  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74758  jrl NZ,0xf747dc
-	m_cp_mi16 MW16, 0x126c, 0x0000	; F7475B  cp (0x126c),0x0000
+	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F7475B  cp (0x126c),0x0000
 	jr	nz, Smf_WriteFile_Skip56	; F74761  jr NZ,0xf74772
 	call	sub_F765E6	; F74763  call 0xf765e6
 	ld	w, a	; F74767  ld W,A
@@ -174697,12 +174697,12 @@ Smf_WriteFile_Join9:
 	m_cp_mi8 MB16, UI_StatusCode, 0x02	; F74790  cp (0x2880),0x02
 	jr	z, Smf_WriteFile_Skip57	; F74795  jr Z,0xf747c3
 	ld	xiy, Data_F73844 + 0x10	; F74797  ld XIY,0x00f73854
-	ld	xix, 8648	; F7479C  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F7479C  ld XIX,0x000021c8
 	ldw	bc, 8	; F747A1  ld BC,0x0008
 	ldir85	; F747A4  ldir
-	ld	(8656:16), 63	; F747A6  ld (0x21d0),0x3f
-	ld	(8657:16), 63	; F747AB  ld (0x21d1),0x3f
-	ld	(8658:16), 63	; F747B0  ld (0x21d2),0x3f
+	ld	(Disk_FileName+8:16), 63	; F747A6  ld (0x21d0),0x3f
+	ld	(Disk_FileName+9:16), 63	; F747AB  ld (0x21d1),0x3f
+	ld	(Disk_FileName+10:16), 63	; F747B0  ld (0x21d2),0x3f
 	ld	l, (UI_StatusCode:16)	; F747B5  ld L,(0x2880)
 	pushw	hl	; F747B9  push HL
 	call	T_F425B0	; F747BA  call 0xf425b0
@@ -174894,7 +174894,7 @@ sub_F748AD_Loop:
 	ld	hl, bc	; F748BA  ld HL,BC
 	sla	hl, 3	; F748BC  sla 0x03,HL
 	mx_lda32 MXD, ra_IX, ra_HL, 4	; F748BF  lda XIX,XIX+HL
-	ld	xiy, 8648	; F748C4  ld XIY,0x000021c8
+	ld	xiy, Disk_FileName	; F748C4  ld XIY,0x000021c8
 	xor	hl, hl	; F748C9  xor HL,HL
 sub_F748AD_Loop2:
 	ld	a, (xiy+)	; F748CB  ld A,(XIY+)
@@ -174934,14 +174934,14 @@ sub_F748AD_Epilogue:
 ; --------------------------------------------------------------------------
 sub_F748F0:
 	ld	xiy, Data_F73844 + 0x10	; F748F0  ld XIY,0x00f73854
-	ld	xix, 8648	; F748F5  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F748F5  ld XIX,0x000021c8
 	ldw	bc, 11	; F748FA  ld BC,0x000b
 	ldir85	; F748FD  ldir
 	ld	(10021:16), 1	; F748FF  ld (0x2725),0x01
 	call	T_F425C8	; F74904  call 0xf425c8
-	ld	(8656:16), 63	; F74908  ld (0x21d0),0x3f
-	ld	(8657:16), 63	; F7490D  ld (0x21d1),0x3f
-	ld	(8658:16), 63	; F74912  ld (0x21d2),0x3f
+	ld	(Disk_FileName+8:16), 63	; F74908  ld (0x21d0),0x3f
+	ld	(Disk_FileName+9:16), 63	; F7490D  ld (0x21d1),0x3f
+	ld	(Disk_FileName+10:16), 63	; F74912  ld (0x21d2),0x3f
 	call	T_F425B0	; F74917  call 0xf425b0
 	calr	sub_F7491F	; F7491B  calr 0xf7491f
 	ret	; F7491E  ret
@@ -174960,7 +174960,7 @@ sub_F748F0:
 ; --------------------------------------------------------------------------
 sub_F7491F:
 	ld	xiy, 4666	; F7491F  ld XIY,0x0000123a
-	ld	xix, 8648	; F74924  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F74924  ld XIX,0x000021c8
 	ldw	bc, 4	; F74929  ld BC,0x0004
 	ldirw	; F7492C  ldirw
 	ret	; F7492E  ret
@@ -174978,7 +174978,7 @@ sub_F7491F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7492F:
-	ld	xiy, 8648	; F7492F  ld XIY,0x000021c8
+	ld	xiy, Disk_FileName	; F7492F  ld XIY,0x000021c8
 	ld	xix, 4666	; F74934  ld XIX,0x0000123a
 	ldw	bc, 4	; F74939  ld BC,0x0004
 	ldirw	; F7493C  ldirw
@@ -175064,8 +175064,8 @@ sub_F749A2:
 	extz	xwa	; F749B5  extz XWA
 	muls	xwa, hl	; F749B7  muls XWA,HL
 	ld	de, qwa	; F749B9  ld DE,QWA
-	ld	(4236:16), wa	; F749BC  ld (0x108c),WA
-	ld	(4238:16), de	; F749C0  ld (0x108e),DE
+	ld	(SmfOut_Tempo:16), wa	; F749BC  ld (0x108c),WA
+	ld	(SmfOut_Tempo+2:16), de	; F749C0  ld (0x108e),DE
 	ret	; F749C4  ret
 
 ; --------------------------------------------------------------------------
@@ -175115,19 +175115,19 @@ sub_F749C5_Loop:
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A1B  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A20  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A22  ld XIX,(0x1088)
-	ld	a, (4238:16)	; F74A26  ld A,(0x108e)
+	ld	a, (SmfOut_Tempo+2:16)	; F74A26  ld A,(0x108e)
 	ld	(xix+), a	; F74A2A  ld (XIX+),A
 	calr	sub_F74B3A	; F74A2D  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A30  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A35  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A37  ld XIX,(0x1088)
-	ld	a, (4237:16)	; F74A3B  ld A,(0x108d)
+	ld	a, (SmfOut_Tempo+1:16)	; F74A3B  ld A,(0x108d)
 	ld	(xix+), a	; F74A3F  ld (XIX+),A
 	calr	sub_F74B3A	; F74A42  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A45  cp (0x1238),0x03
 	jr	nz, sub_F749C5_Return	; F74A4A  jr NZ,0xf74a65
 	ld	xix, (InputStream_Cursor:16)	; F74A4C  ld XIX,(0x1088)
-	ld	a, (4236:16)	; F74A50  ld A,(0x108c)
+	ld	a, (SmfOut_Tempo:16)	; F74A50  ld A,(0x108c)
 	ld	(xix+), a	; F74A54  ld (XIX+),A
 	calr	sub_F74B3A	; F74A57  calr 0xf74b3a
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74A5A  cp (0x1238),0x03
@@ -175296,7 +175296,7 @@ sub_F74B3A:
 	ld	(InputStream_Cursor:16), xix	; F74B49  ld (0x1088),XIX
 	jr	sub_F74B3A_Epilogue	; F74B4D  jr T,0xf74bb4
 sub_F74B3A_Skip:
-	m_cp_mi16 MW16, 0x126c, 0x0000	; F74B4F  cp (0x126c),0x0000
+	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F74B4F  cp (0x126c),0x0000
 	jr	nz, sub_F74B3A_Skip2	; F74B55  jr NZ,0xf74b6b
 	ld	c, a	; F74B57  ld C,A
 	pushw	bc	; F74B59  push BC
@@ -175338,7 +175338,7 @@ sub_F74B3A_Skip3:
 	cp	w, 3:i3	; F74B9F  cp W,3
 	jr	nz, sub_F74B3A_Epilogue	; F74BA1  jr NZ,0xf74bb4
 sub_F74B3A_Join:
-	incw	1, (4716:16)	; F74BA3  incw 1,(0x126c)
+	incw	1, (SmfOut_WindowsFlushed:16)	; F74BA3  incw 1,(0x126c)
 	ld	xwa, 6334208	; F74BA7  ld XWA,0x0060a700
 	ld	(InputStream_Cursor:16), xwa	; F74BAC  ld (0x1088),XWA
 	ld	xix, xwa	; F74BB0  ld XIX,XWA
@@ -175357,12 +175357,12 @@ sub_F74B3A_Epilogue:
 	xor	h, h	; F74BC7  xor H,H
 	sla	hl, 3	; F74BC9  sla 0x03,HL
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F74BCC  lda XIY,XIY+HL
-	ld	xix, 8648	; F74BD1  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F74BD1  ld XIX,0x000021c8
 	ldw	bc, 4	; F74BD6  ld BC,0x0004
 	ldirw	; F74BD9  ldirw
-	ld	(8656:16), 63	; F74BDB  ld (0x21d0),0x3f
-	ld	(8657:16), 63	; F74BE0  ld (0x21d1),0x3f
-	ld	(8658:16), 63	; F74BE5  ld (0x21d2),0x3f
+	ld	(Disk_FileName+8:16), 63	; F74BDB  ld (0x21d0),0x3f
+	ld	(Disk_FileName+9:16), 63	; F74BE0  ld (0x21d1),0x3f
+	ld	(Disk_FileName+10:16), 63	; F74BE5  ld (0x21d2),0x3f
 	call	T_F425B0	; F74BEA  call 0xf425b0
 	calr	sub_F7491F	; F74BEE  calr 0xf7491f
 	pop	xbc	; F74BF1  pop XBC
@@ -176263,7 +176263,7 @@ sub_F75685_Skip:
 	ld	xiy, SmfFileTemplate_F760BF + 0x16	; F756E7  ld XIY,0x00f760d5
 	ldw	bc, 11	; F756EC  ld BC,0x000b
 	ldir85	; F756EF  ldir
-	ld	xiy, 8648	; F756F1  ld XIY,0x000021c8
+	ld	xiy, Disk_FileName	; F756F1  ld XIY,0x000021c8
 	ldw	bc, 8	; F756F6  ld BC,0x0008
 	ldir85	; F756F9  ldir
 	ld	(InputStream_Cursor:16), xix	; F756FB  ld (0x1088),XIX
@@ -176616,7 +176616,7 @@ sub_F75685_Skip5:
 sub_F75685_Join4:
 	cp	xix, 6335231	; F75A74  cp XIX,0x0060aaff
 	jr	ule, sub_F75685_Skip6	; F75A7A  jr ULE,0xf75a88
-	incw	1, (4716:16)	; F75A7C  incw 1,(0x126c)
+	incw	1, (SmfOut_WindowsFlushed:16)	; F75A7C  incw 1,(0x126c)
 	sub	xix, 1024	; F75A80  sub XIX,0x00000400
 	jr	sub_F75685_Join4	; F75A86  jr T,0xf75a74
 sub_F75685_Skip6:
@@ -177331,19 +177331,19 @@ sub_F75685_Nop:
 ; --------------------------------------------------------------------------
 sub_F76123:
 	xor	wa, wa	; F76123  xor WA,WA
-	ld	(4292:16), wa	; F76125  ld (0x10c4),WA
-	ld	(4294:16), wa	; F76129  ld (0x10c6),WA
-	ld	wa, (4716:16)	; F7612D  ld WA,(0x126c)
+	ld	(SmfOut_TrackLength:16), wa	; F76125  ld (0x10c4),WA
+	ld	(SmfOut_TrackLength+2:16), wa	; F76129  ld (0x10c6),WA
+	ld	wa, (SmfOut_WindowsFlushed:16)	; F7612D  ld WA,(0x126c)
 	mul	wa, 1024	; F76131  mul WA,0x0400
 	ld	xhl, (InputStream_Cursor:16)	; F76135  ld XHL,(0x1088)
 	sub	xhl, 6334208	; F76139  sub XHL,0x0060a700
 	add	xwa, xhl	; F7613F  add XWA,XHL
 	sub	xwa, 22	; F76141  sub XWA,0x00000016
 	ld	de, qwa	; F76147  ld DE,QWA
-	ld	(4292:16), d	; F7614A  ld (0x10c4),D
-	ld	(4293:16), e	; F7614E  ld (0x10c5),E
-	ld	(4294:16), w	; F76152  ld (0x10c6),W
-	ld	(4295:16), a	; F76156  ld (0x10c7),A
+	ld	(SmfOut_TrackLength:16), d	; F7614A  ld (0x10c4),D
+	ld	(SmfOut_TrackLength+1:16), e	; F7614E  ld (0x10c5),E
+	ld	(SmfOut_TrackLength+2:16), w	; F76152  ld (0x10c6),W
+	ld	(SmfOut_TrackLength+3:16), a	; F76156  ld (0x10c7),A
 	ret	; F7615A  ret
 
 ; --------------------------------------------------------------------------
@@ -177363,14 +177363,14 @@ sub_F7615B:
 	extz	xwa	; F7615E  extz XWA
 	mul	xwa, hl	; F76160  mul XWA,HL
 	ld	de, qwa	; F76162  ld DE,QWA
-	ld	(4236:16), wa	; F76165  ld (0x108c),WA
-	ld	(4238:16), de	; F76169  ld (0x108e),DE
+	ld	(SmfOut_Tempo:16), wa	; F76165  ld (0x108c),WA
+	ld	(SmfOut_Tempo+2:16), de	; F76169  ld (0x108e),DE
 	ldw	wa, 40000	; F7616D  ld WA,0x9c40
 	extz	xwa	; F76170  extz XWA
 	mul	xwa, hl	; F76172  mul XWA,HL
 	ld	de, qwa	; F76174  ld DE,QWA
-	m_add_rm MW16, 0x108c, 0	; F76177  add WA,(0x108c)
-	adc	de, (0x108e:16)	; F7617B  adc DE,(0x108e)
+	m_add_rm MW16, SmfOut_Tempo, 0	; F76177  add WA,(0x108c)
+	adc	de, (SmfOut_Tempo+2:16)	; F7617B  adc DE,(0x108e)
 	ldw	hl, 24000	; F7617F  ld HL,0x5dc0
 	ld	qwa, de	; F76182  ld QWA,DE
 	div	xwa, hl	; F76185  div XWA,HL
@@ -177382,8 +177382,8 @@ sub_F7615B_Skip:
 	ldw	hl, 1000	; F76190  ld HL,0x03e8
 	mul	xwa, hl	; F76193  mul XWA,HL
 	ld	de, qwa	; F76195  ld DE,QWA
-	ld	(4236:16), wa	; F76198  ld (0x108c),WA
-	ld	(4238:16), de	; F7619C  ld (0x108e),DE
+	ld	(SmfOut_Tempo:16), wa	; F76198  ld (0x108c),WA
+	ld	(SmfOut_Tempo+2:16), de	; F7619C  ld (0x108e),DE
 	ret	; F761A0  ret
 
 ; --------------------------------------------------------------------------
@@ -177421,15 +177421,15 @@ sub_F761A1_Loop:
 	ld	(xix+), a	; F761D6  ld (XIX+),A
 	calr	sub_F762BD	; F761D9  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761DC  ld XIX,(0x1088)
-	ld	a, (4238:16)	; F761E0  ld A,(0x108e)
+	ld	a, (SmfOut_Tempo+2:16)	; F761E0  ld A,(0x108e)
 	ld	(xix+), a	; F761E4  ld (XIX+),A
 	calr	sub_F762BD	; F761E7  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761EA  ld XIX,(0x1088)
-	ld	a, (4237:16)	; F761EE  ld A,(0x108d)
+	ld	a, (SmfOut_Tempo+1:16)	; F761EE  ld A,(0x108d)
 	ld	(xix+), a	; F761F2  ld (XIX+),A
 	calr	sub_F762BD	; F761F5  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F761F8  ld XIX,(0x1088)
-	ld	a, (4236:16)	; F761FC  ld A,(0x108c)
+	ld	a, (SmfOut_Tempo:16)	; F761FC  ld A,(0x108c)
 	ld	(xix+), a	; F76200  ld (XIX+),A
 	calr	sub_F762BD	; F76203  calr 0xf762bd
 	ld	xix, (InputStream_Cursor:16)	; F76206  ld XIX,(0x1088)
@@ -177570,7 +177570,7 @@ sub_F762BD:
 	pushw	bc	; F762BE  push BC
 	cp	xix, 6335231	; F762BF  cp XIX,0x0060aaff
 	jr	ule, sub_F762BD_Skip	; F762C5  jr ULE,0xf762d8
-	incw	1, (4716:16)	; F762C7  incw 1,(0x126c)
+	incw	1, (SmfOut_WindowsFlushed:16)	; F762C7  incw 1,(0x126c)
 	ld	xwa, 6334208	; F762CB  ld XWA,0x0060a700
 	ld	(InputStream_Cursor:16), xwa	; F762D0  ld (0x1088),XWA
 	ld	xix, xwa	; F762D4  ld XIX,XWA
@@ -177974,9 +177974,9 @@ sub_F7659B:
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F7659B  or (0x21e7),0x80
 	cp	l, 1:i3	; F765A0  cp L,1
 	jr	z, sub_F7659B_Skip	; F765A2  jr Z,0xf765b3
-	ld	(8656:16), 77	; F765A4  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F765A9  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F765AE  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F765A4  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F765A9  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F765AE  ld (0x21d2),0x44
 sub_F7659B_Skip:
 	ld	xwa, 6334208	; F765B3  ld XWA,0x0060a700
 	ld	(8659:16), xwa	; F765B8  ld (0x21d3),XWA
@@ -178056,9 +178056,9 @@ InputStream_RefillDone:
 ; --------------------------------------------------------------------------
 sub_F765E6:
 	xor	de, de	; F765E6  xor DE,DE
-	ld	d, (4293:16)	; F765E8  ld D,(0x10c5)
-	ld	w, (4294:16)	; F765EC  ld W,(0x10c6)
-	ld	a, (4295:16)	; F765F0  ld A,(0x10c7)
+	ld	d, (SmfOut_TrackLength+1:16)	; F765E8  ld D,(0x10c5)
+	ld	w, (SmfOut_TrackLength+2:16)	; F765EC  ld W,(0x10c6)
+	ld	a, (SmfOut_TrackLength+3:16)	; F765F0  ld A,(0x10c7)
 	add	wa, 22	; F765F4  add WA,0x0016
 	jr	nov, sub_F765E6_Skip	; F765F8  jr PO/NOV,0xf765fc
 
@@ -178080,14 +178080,14 @@ sub_F765E6_Skip:
 	ld	w, (Disk_LastError:16)	; F76616  ld W,(0x2243)
 	cp	w, 0:i3	; F7661A  cp W,0
 	jr	nz, sub_F765E6_Return	; F7661C  jr NZ,0xf7664d
-	ld	(8656:16), 77	; F7661E  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F76623  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F76628  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F7661E  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F76623  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F76628  ld (0x21d2),0x44
 	call	T_F425B0	; F7662D  call 0xf425b0
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F76631  or (0x21e7),0x80
-	ld	(8656:16), 77	; F76636  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F7663B  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F76640  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F76636  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F7663B  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F76640  ld (0x21d2),0x44
 	call	sub_F7668A	; F76645  call 0xf7668a
 	call	sub_F7664E	; F76649  call 0xf7664e
 sub_F765E6_Return:
@@ -178147,7 +178147,7 @@ sub_F76661:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7666F:
-	m_cp_mi16 MW16, 0x126c, 0x0000	; F7666F  cp (0x126c),0x0000
+	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F7666F  cp (0x126c),0x0000
 	jr	z, sub_F7666F_Skip	; F76675  jr Z,0xf76680
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F76677  or (0x21e7),0x02
 	call	T_F425AC	; F7667C  call 0xf425ac
@@ -178226,7 +178226,7 @@ sub_F7669D_Code_Join:
 	calr	sub_F76A6A	; F76701  calr 0xf76a6a
 	cp	(0x1238:16), 3	; F76704  cp (0x1238),0x03
 	jrl	nz, sub_F7669D_Code_Entry	; F76709  jrl NZ,0xf7678d
-	cpw	(0x126c:16), 0	; F7670C  cp (0x126c),0x0000
+	cpw	(SmfOut_WindowsFlushed:16), 0	; F7670C  cp (0x126c),0x0000
 	jr	nz, sub_F7669D_Code_Skip3	; F76712  jr NZ,0xf76723
 	call	sub_F77D4B	; F76714  call 0xf77d4b
 	ld	w, a	; F76718  ld W,A
@@ -178245,12 +178245,12 @@ sub_F7669D_Code_Skip3:
 	cp	(UI_StatusCode:16), 2	; F76741  cp (0x2880),0x02
 	jr	z, sub_F7669D_Code_Skip4	; F76746  jr Z,0xf76774
 	ld	xiy, 16210338	; F76748  ld XIY,0x00f759a2
-	ld	xix, 8648	; F7674D  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F7674D  ld XIX,0x000021c8
 	ldw	bc, 8	; F76752  ld BC,0x0008
 	.byte 0x85, 0x11	; F76755  ldir   [llvm-mc cannot encode this]
-	ld	(8656:16), 63	; F76757  ld (0x21d0),0x3f
-	ld	(8657:16), 63	; F7675C  ld (0x21d1),0x3f
-	ld	(8658:16), 63	; F76761  ld (0x21d2),0x3f
+	ld	(Disk_FileName+8:16), 63	; F76757  ld (0x21d0),0x3f
+	ld	(Disk_FileName+9:16), 63	; F7675C  ld (0x21d1),0x3f
+	ld	(Disk_FileName+10:16), 63	; F76761  ld (0x21d2),0x3f
 	ld	l, (UI_StatusCode:16)	; F76766  ld L,(0x2880)
 	pushw	hl	; F7676A  push HL
 	call	T_F425B0	; F7676B  call 0xf425b0
@@ -178418,7 +178418,7 @@ sub_F76836_Loop:
 	ld	hl, bc	; F7686B  ld HL,BC
 	sla	hl, 3	; F7686D  sla 0x03,HL
 	lda	xix, (xix+hl)	; F76870  lda XIX,XIX+HL
-	ld	xiy, 8648	; F76875  ld XIY,0x000021c8
+	ld	xiy, Disk_FileName	; F76875  ld XIY,0x000021c8
 	xor	hl, hl	; F7687A  xor HL,HL
 sub_F76836_Loop2:
 	ld	a, (xiy+)	; F7687C  ld A,(XIY+)
@@ -178453,14 +178453,14 @@ sub_F76836_Epilogue2:
 ; --------------------------------------------------------------------------
 sub_F768A1:
 	ld	xiy, 16210338	; F768A1  ld XIY,0x00f759a2
-	ld	xix, 8648	; F768A6  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F768A6  ld XIX,0x000021c8
 	ldw	bc, 11	; F768AB  ld BC,0x000b
 	.byte 0x85, 0x11	; F768AE  ldir   [llvm-mc cannot encode this]
 	ld	(10021:16), 1	; F768B0  ld (0x2725),0x01
 	call	T_F425C8	; F768B5  call 0xf425c8
-	ld	(8656:16), 63	; F768B9  ld (0x21d0),0x3f
-	ld	(8657:16), 63	; F768BE  ld (0x21d1),0x3f
-	ld	(8658:16), 63	; F768C3  ld (0x21d2),0x3f
+	ld	(Disk_FileName+8:16), 63	; F768B9  ld (0x21d0),0x3f
+	ld	(Disk_FileName+9:16), 63	; F768BE  ld (0x21d1),0x3f
+	ld	(Disk_FileName+10:16), 63	; F768C3  ld (0x21d2),0x3f
 	call	T_F425B0	; F768C8  call 0xf425b0
 	calr	sub_F768D0	; F768CC  calr 0xf768d0
 	ret	; F768CF  ret
@@ -178475,7 +178475,7 @@ sub_F768A1:
 ; --------------------------------------------------------------------------
 sub_F768D0:
 	ld	xiy, 4666	; F768D0  ld XIY,0x0000123a
-	ld	xix, 8648	; F768D5  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F768D5  ld XIX,0x000021c8
 	ldw	bc, 4	; F768DA  ld BC,0x0004
 	ldirw	; F768DD  ldirw
 	ret	; F768DF  ret
@@ -178489,7 +178489,7 @@ sub_F768D0:
 ;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
 sub_F768E0:
-	ld	xiy, 8648	; F768E0  ld XIY,0x000021c8
+	ld	xiy, Disk_FileName	; F768E0  ld XIY,0x000021c8
 	ld	xix, 4666	; F768E5  ld XIX,0x0000123a
 	ldw	bc, 4	; F768EA  ld BC,0x0004
 	ldirw	; F768ED  ldirw
@@ -178567,8 +178567,8 @@ sub_F76953:
 	extz	xwa	; F76966  extz XWA
 	muls	xwa, hl	; F76968  muls XWA,HL
 	ld	de, qwa	; F7696A  ld DE,QWA
-	ld	(4236:16), wa	; F7696D  ld (0x108c),WA
-	ld	(4238:16), de	; F76971  ld (0x108e),DE
+	ld	(SmfOut_Tempo:16), wa	; F7696D  ld (0x108c),WA
+	ld	(SmfOut_Tempo+2:16), de	; F76971  ld (0x108e),DE
 	ret	; F76975  ret
 	ld	xiy, 4499	; F76976  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F7697B  ld XIX,(0x1088)
@@ -178603,19 +178603,19 @@ sub_F76953_Loop:
 	cp	(0x1238:16), 3	; F769CC  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769D1  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769D3  ld XIX,(0x1088)
-	ld	a, (4238:16)	; F769D7  ld A,(0x108e)
+	ld	a, (SmfOut_Tempo+2:16)	; F769D7  ld A,(0x108e)
 	ld	(xix+), a	; F769DB  ld (XIX+),A
 	calr	sub_F76ADF	; F769DE  calr 0xf76adf
 	cp	(0x1238:16), 3	; F769E1  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769E6  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769E8  ld XIX,(0x1088)
-	ld	a, (4237:16)	; F769EC  ld A,(0x108d)
+	ld	a, (SmfOut_Tempo+1:16)	; F769EC  ld A,(0x108d)
 	ld	(xix+), a	; F769F0  ld (XIX+),A
 	calr	sub_F76ADF	; F769F3  calr 0xf76adf
 	cp	(0x1238:16), 3	; F769F6  cp (0x1238),0x03
 	jr	nz, sub_F76953_Return	; F769FB  jr NZ,0xf76a16
 	ld	xix, (InputStream_Cursor:16)	; F769FD  ld XIX,(0x1088)
-	ld	a, (4236:16)	; F76A01  ld A,(0x108c)
+	ld	a, (SmfOut_Tempo:16)	; F76A01  ld A,(0x108c)
 	ld	(xix+), a	; F76A05  ld (XIX+),A
 	calr	sub_F76ADF	; F76A08  calr 0xf76adf
 	cp	(0x1238:16), 3	; F76A0B  cp (0x1238),0x03
@@ -178746,7 +178746,7 @@ sub_F76ADF:
 	ld	(InputStream_Cursor:16), xix	; F76AEE  ld (0x1088),XIX
 	jr	sub_F76ADF_Epilogue	; F76AF2  jr T,0xf76b59
 sub_F76ADF_Entry:
-	cpw	(0x126c:16), 0	; F76AF4  cp (0x126c),0x0000
+	cpw	(SmfOut_WindowsFlushed:16), 0	; F76AF4  cp (0x126c),0x0000
 	jr	nz, sub_F76ADF_Skip	; F76AFA  jr NZ,0xf76b10
 	ld	c, a	; F76AFC  ld C,A
 	pushw	bc	; F76AFE  push BC
@@ -178788,7 +178788,7 @@ sub_F76ADF_Skip2:
 	cp	w, 3:i3	; F76B44  cp W,3
 	jr	nz, sub_F76ADF_Epilogue	; F76B46  jr NZ,0xf76b59
 sub_F76ADF_Join:
-	incw	1, (4716:16)	; F76B48  incw 1,(0x126c)
+	incw	1, (SmfOut_WindowsFlushed:16)	; F76B48  incw 1,(0x126c)
 	ld	xwa, 6334208	; F76B4C  ld XWA,0x0060a700
 	ld	(InputStream_Cursor:16), xwa	; F76B51  ld (0x1088),XWA
 	ld	xix, xwa	; F76B55  ld XIX,XWA
@@ -178807,12 +178807,12 @@ sub_F76ADF_Epilogue:
 	xor	h, h	; F76B6C  xor H,H
 	sla	hl, 3	; F76B6E  sla 0x03,HL
 	lda	xiy, (xiy+hl)	; F76B71  lda XIY,XIY+HL
-	ld	xix, 8648	; F76B76  ld XIX,0x000021c8
+	ld	xix, Disk_FileName	; F76B76  ld XIX,0x000021c8
 	ldw	bc, 4	; F76B7B  ld BC,0x0004
 	ldirw	; F76B7E  ldirw
-	ld	(8656:16), 63	; F76B80  ld (0x21d0),0x3f
-	ld	(8657:16), 63	; F76B85  ld (0x21d1),0x3f
-	ld	(8658:16), 63	; F76B8A  ld (0x21d2),0x3f
+	ld	(Disk_FileName+8:16), 63	; F76B80  ld (0x21d0),0x3f
+	ld	(Disk_FileName+9:16), 63	; F76B85  ld (0x21d1),0x3f
+	ld	(Disk_FileName+10:16), 63	; F76B8A  ld (0x21d2),0x3f
 	call	T_F425B0	; F76B8F  call 0xf425b0
 	calr	sub_F768D0	; F76B93  calr 0xf768d0
 	pop	xbc	; F76B96  pop XBC
@@ -179211,7 +179211,7 @@ sub_F76E74_Skip:
 	ld	xiy, SmfFileTemplate_F77836 + 0x16	; F76ED6  ld XIY,0x00f7784c
 	ldw	bc, 11	; F76EDB  ld BC,0x000b
 	.byte 0x85, 0x11	; F76EDE  ldir   [llvm-mc cannot encode this]
-	ld	xiy, 8648	; F76EE0  ld XIY,0x000021c8
+	ld	xiy, Disk_FileName	; F76EE0  ld XIY,0x000021c8
 	ldw	bc, 8	; F76EE5  ld BC,0x0008
 	.byte 0x85, 0x11	; F76EE8  ldir   [llvm-mc cannot encode this]
 	ld	(InputStream_Cursor:16), xix	; F76EEA  ld (0x1088),XIX
@@ -180228,19 +180228,19 @@ sub_F76E74_Nop:
 ; --------------------------------------------------------------------------
 sub_F7789A:
 	xor	wa, wa	; F7789A  xor WA,WA
-	ld	(4292:16), wa	; F7789C  ld (0x10c4),WA
-	ld	(4294:16), wa	; F778A0  ld (0x10c6),WA
-	ld	wa, (4716:16)	; F778A4  ld WA,(0x126c)
+	ld	(SmfOut_TrackLength:16), wa	; F7789C  ld (0x10c4),WA
+	ld	(SmfOut_TrackLength+2:16), wa	; F778A0  ld (0x10c6),WA
+	ld	wa, (SmfOut_WindowsFlushed:16)	; F778A4  ld WA,(0x126c)
 	mul	wa, 1024	; F778A8  mul WA,0x0400
 	ld	xhl, (InputStream_Cursor:16)	; F778AC  ld XHL,(0x1088)
 	sub	xhl, 6334208	; F778B0  sub XHL,0x0060a700
 	add	xwa, xhl	; F778B6  add XWA,XHL
 	sub	xwa, 22	; F778B8  sub XWA,0x00000016
 	ld	de, qwa	; F778BE  ld DE,QWA
-	ld	(4292:16), d	; F778C1  ld (0x10c4),D
-	ld	(4293:16), e	; F778C5  ld (0x10c5),E
-	ld	(4294:16), w	; F778C9  ld (0x10c6),W
-	ld	(4295:16), a	; F778CD  ld (0x10c7),A
+	ld	(SmfOut_TrackLength:16), d	; F778C1  ld (0x10c4),D
+	ld	(SmfOut_TrackLength+1:16), e	; F778C5  ld (0x10c5),E
+	ld	(SmfOut_TrackLength+2:16), w	; F778C9  ld (0x10c6),W
+	ld	(SmfOut_TrackLength+3:16), a	; F778CD  ld (0x10c7),A
 	ret	; F778D1  ret
 
 ; --------------------------------------------------------------------------
@@ -180256,14 +180256,14 @@ sub_F778D2:
 	extz	xwa	; F778D5  extz XWA
 	mul	xwa, hl	; F778D7  mul XWA,HL
 	ld	de, qwa	; F778D9  ld DE,QWA
-	ld	(4236:16), wa	; F778DC  ld (0x108c),WA
-	ld	(4238:16), de	; F778E0  ld (0x108e),DE
+	ld	(SmfOut_Tempo:16), wa	; F778DC  ld (0x108c),WA
+	ld	(SmfOut_Tempo+2:16), de	; F778E0  ld (0x108e),DE
 	ldw	wa, 40000	; F778E4  ld WA,0x9c40
 	extz	xwa	; F778E7  extz XWA
 	mul	xwa, hl	; F778E9  mul XWA,HL
 	ld	de, qwa	; F778EB  ld DE,QWA
-	add	wa, (4236:16)	; F778EE  add WA,(0x108c)
-	adc	de, (0x108e:16)	; F778F2  adc DE,(0x108e)
+	add	wa, (SmfOut_Tempo:16)	; F778EE  add WA,(0x108c)
+	adc	de, (SmfOut_Tempo+2:16)	; F778F2  adc DE,(0x108e)
 	ldw	hl, 24000	; F778F6  ld HL,0x5dc0
 	ld	qwa, de	; F778F9  ld QWA,DE
 	div	xwa, hl	; F778FC  div XWA,HL
@@ -180275,8 +180275,8 @@ sub_F778D2_Skip:
 	ldw	hl, 1000	; F77907  ld HL,0x03e8
 	mul	xwa, hl	; F7790A  mul XWA,HL
 	ld	de, qwa	; F7790C  ld DE,QWA
-	ld	(4236:16), wa	; F7790F  ld (0x108c),WA
-	ld	(4238:16), de	; F77913  ld (0x108e),DE
+	ld	(SmfOut_Tempo:16), wa	; F7790F  ld (0x108c),WA
+	ld	(SmfOut_Tempo+2:16), de	; F77913  ld (0x108e),DE
 	ret	; F77917  ret
 
 ; --------------------------------------------------------------------------
@@ -180309,15 +180309,15 @@ sub_F77918_Loop:
 	ld	(xix+), a	; F7794D  ld (XIX+),A
 	calr	sub_F77A28	; F77950  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F77953  ld XIX,(0x1088)
-	ld	a, (4238:16)	; F77957  ld A,(0x108e)
+	ld	a, (SmfOut_Tempo+2:16)	; F77957  ld A,(0x108e)
 	ld	(xix+), a	; F7795B  ld (XIX+),A
 	calr	sub_F77A28	; F7795E  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F77961  ld XIX,(0x1088)
-	ld	a, (4237:16)	; F77965  ld A,(0x108d)
+	ld	a, (SmfOut_Tempo+1:16)	; F77965  ld A,(0x108d)
 	ld	(xix+), a	; F77969  ld (XIX+),A
 	calr	sub_F77A28	; F7796C  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F7796F  ld XIX,(0x1088)
-	ld	a, (4236:16)	; F77973  ld A,(0x108c)
+	ld	a, (SmfOut_Tempo:16)	; F77973  ld A,(0x108c)
 	ld	(xix+), a	; F77977  ld (XIX+),A
 	calr	sub_F77A28	; F7797A  calr 0xf77a28
 	ld	xix, (InputStream_Cursor:16)	; F7797D  ld XIX,(0x1088)
@@ -180446,7 +180446,7 @@ sub_F77A28:
 	pushw	bc	; F77A29  push BC
 	cp	xix, 6335231	; F77A2A  cp XIX,0x0060aaff
 	jr	ule, sub_F77A28_Skip	; F77A30  jr ULE,0xf77a43
-	incw	1, (4716:16)	; F77A32  incw 1,(0x126c)
+	incw	1, (SmfOut_WindowsFlushed:16)	; F77A32  incw 1,(0x126c)
 	ld	xwa, 6334208	; F77A36  ld XWA,0x0060a700
 	ld	(InputStream_Cursor:16), xwa	; F77A3B  ld (0x1088),XWA
 	ld	xix, xwa	; F77A3F  ld XIX,XWA
@@ -180793,9 +180793,9 @@ sub_F77D00:
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77D00  or (0x21e7),0x80
 	cp	l, 1:i3	; F77D05  cp L,1
 	jr	z, sub_F77D00_Skip	; F77D07  jr Z,0xf77d18
-	ld	(8656:16), 77	; F77D09  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F77D0E  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F77D13  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F77D09  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F77D0E  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F77D13  ld (0x21d2),0x44
 sub_F77D00_Skip:
 	ld	xwa, 6334208	; F77D18  ld XWA,0x0060a700
 	ld	(8659:16), xwa	; F77D1D  ld (0x21d3),XWA
@@ -180842,9 +180842,9 @@ sub_F77D43:
 	ret	; F77D4A  ret
 sub_F77D4B:
 	xor	de, de	; F77D4B  xor DE,DE
-	ld	d, (4293:16)	; F77D4D  ld D,(0x10c5)
-	ld	w, (4294:16)	; F77D51  ld W,(0x10c6)
-	ld	a, (4295:16)	; F77D55  ld A,(0x10c7)
+	ld	d, (SmfOut_TrackLength+1:16)	; F77D4D  ld D,(0x10c5)
+	ld	w, (SmfOut_TrackLength+2:16)	; F77D51  ld W,(0x10c6)
+	ld	a, (SmfOut_TrackLength+3:16)	; F77D55  ld A,(0x10c7)
 	add	wa, 22	; F77D59  add WA,0x0016
 	jr	nov, sub_F77D4B_Skip	; F77D5D  jr PO/NOV,0xf77d61
 
@@ -180866,14 +180866,14 @@ sub_F77D4B_Skip:
 	ld	w, (Disk_LastError:16)	; F77D7B  ld W,(0x2243)
 	cp	w, 0:i3	; F77D7F  cp W,0
 	jr	nz, sub_F77D4B_Return	; F77D81  jr NZ,0xf77db2
-	ld	(8656:16), 77	; F77D83  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F77D88  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F77D8D  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F77D83  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F77D88  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F77D8D  ld (0x21d2),0x44
 	call	T_F425B0	; F77D92  call 0xf425b0
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77D96  or (0x21e7),0x80
-	ld	(8656:16), 77	; F77D9B  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F77DA0  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F77DA5  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F77D9B  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F77DA0  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F77DA5  ld (0x21d2),0x44
 	call	sub_F77DEF	; F77DAA  call 0xf77def
 	call	sub_F77DB3	; F77DAE  call 0xf77db3
 sub_F77D4B_Return:
@@ -180905,7 +180905,7 @@ sub_F77DC6:
 	ld	a, (Disk_LastError:16)	; F77DCF  ld A,(0x2243)
 	ret	; F77DD3  ret
 sub_F77DD4:
-	m_cp_mi16 MW16, 0x126c, 0x0000	; F77DD4  cp (0x126c),0x0000
+	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F77DD4  cp (0x126c),0x0000
 	jr	z, sub_F77DB3_Skip	; F77DDA  jr Z,0xf77de5
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77DDC  or (0x21e7),0x02
 	call	T_F425AC	; F77DE1  call 0xf425ac
@@ -181038,9 +181038,9 @@ sub_F77EE7:
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77EE7  or (0x21e7),0x80
 	cp	l, 1:i3	; F77EEC  cp L,1
 	jr	z, sub_F77EE7_Skip	; F77EEE  jr Z,0xf77eff
-	ld	(8656:16), 77	; F77EF0  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F77EF5  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F77EFA  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F77EF0  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F77EF5  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F77EFA  ld (0x21d2),0x44
 sub_F77EE7_Skip:
 	ld	xwa, 6334208	; F77EFF  ld XWA,0x0060a700
 	ld	(8659:16), xwa	; F77F04  ld (0x21d3),XWA
@@ -181088,9 +181088,9 @@ sub_F77F2A:
 	ld	w, 1:opc	; F77F2F  ld W,0x01
 	ret	; F77F31  ret
 	xor	de, de	; F77F32  xor DE,DE
-	ld	d, (4293:16)	; F77F34  ld D,(0x10c5)
-	ld	w, (4294:16)	; F77F38  ld W,(0x10c6)
-	ld	a, (4295:16)	; F77F3C  ld A,(0x10c7)
+	ld	d, (SmfOut_TrackLength+1:16)	; F77F34  ld D,(0x10c5)
+	ld	w, (SmfOut_TrackLength+2:16)	; F77F38  ld W,(0x10c6)
+	ld	a, (SmfOut_TrackLength+3:16)	; F77F3C  ld A,(0x10c7)
 	add	wa, 22	; F77F40  add WA,0x0016
 	jr	nov, sub_F77F2A_Skip	; F77F44  jr PO/NOV,0xf77f48
 	inc	1, d	; F77F46  inc 1,D
@@ -181106,14 +181106,14 @@ sub_F77F2A_Skip:
 	ld	w, (Disk_LastError:16)	; F77F62  ld W,(0x2243)
 	cp	w, 0:i3	; F77F66  cp W,0
 	jr	nz, sub_F77F2A_Return	; F77F68  jr NZ,0xf77f99
-	ld	(8656:16), 77	; F77F6A  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F77F6F  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F77F74  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F77F6A  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F77F6F  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F77F74  ld (0x21d2),0x44
 	call	T_F425B0	; F77F79  call 0xf425b0
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77F7D  or (0x21e7),0x80
-	ld	(8656:16), 77	; F77F82  ld (0x21d0),0x4d
-	ld	(8657:16), 73	; F77F87  ld (0x21d1),0x49
-	ld	(8658:16), 68	; F77F8C  ld (0x21d2),0x44
+	ld	(Disk_FileName+8:16), 77	; F77F82  ld (0x21d0),0x4d
+	ld	(Disk_FileName+9:16), 73	; F77F87  ld (0x21d1),0x49
+	ld	(Disk_FileName+10:16), 68	; F77F8C  ld (0x21d2),0x44
 	call	sub_F77FD6	; F77F91  call 0xf77fd6
 	call	sub_F77F9A	; F77F95  call 0xf77f9a
 sub_F77F2A_Return:
@@ -181143,7 +181143,7 @@ sub_F77F9A:
 	call	T_F425AC	; F77FB2  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F77FB6  ld A,(0x2243)
 	ret	; F77FBA  ret
-	m_cp_mi16 MW16, 0x126c, 0x0000	; F77FBB  cp (0x126c),0x0000
+	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F77FBB  cp (0x126c),0x0000
 	jr	z, sub_F77F9A_Skip	; F77FC1  jr Z,0xf77fcc
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77FC3  or (0x21e7),0x02
 	call	T_F425AC	; F77FC8  call 0xf425ac

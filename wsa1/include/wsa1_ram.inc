@@ -162,3 +162,9 @@
 	.equ Fdc_CurrentCylinder,	0x605aee	; the cylinder the head is on; SEEK is skipped when it already matches -- Fdc_Op2_SeekToCylinder
 	.equ Fdc_LastCylinderPlus1,	0x605af1	; last cylinder + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia
 	.equ Fdc_SectorsPerTrackPlus1,	0x605af7	; sectors per track + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia
+
+; ---- wsa1/notes/FINDINGS-prom_b-smf-writer.md -- "Why the MTrk length is zero; It really is a MIDI writer; with FINDINGS-prom_b-for-the-mame-driver.md (the 8.3 name)"
+	.equ SmfOut_Tempo,		0x108c	; the 24-bit Set Tempo value (FF 51 03), emitted +2, +1, +0 -- 0xF77918; staged by 0xF778D2
+	.equ SmfOut_TrackLength,	0x10c4	; the MTrk chunk length, most significant byte first (4 bytes) -- 0xF7789A stores it; copy A writes it into the file
+	.equ SmfOut_WindowsFlushed,	0x126c	; how many 1,024-byte output windows the SMF writer has flushed -- the MTrk length computation at 0xF7789A
+	.equ Disk_FileName,		0x21c8	; an 8.3 file name: 8 characters, extension at +8..+10 (default MID) -- the SMF reader writes M I D to 0x21D0-0x21D2; the writer's track name takes the 8

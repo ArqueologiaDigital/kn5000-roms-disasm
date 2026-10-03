@@ -74,6 +74,12 @@ BC=4 — copying `MTrk` **only** — and then writes `(0x10C4)` and `(0x10C6)` i
 the file, in the placeholder's four bytes. Copies B and D run `ldirw` with BC=4
 and ship the zeros.
 
+[Named in the source 2026-10-03 (`wsa1/include/wsa1_ram.inc`): `SmfOut_WindowsFlushed` (0x126C),
+`SmfOut_TrackLength` (0x10C4..0x10C7), `SmfOut_Tempo` (0x108C..0x108E) and, from
+FINDINGS-prom_b-for-the-mame-driver.md, `Disk_FileName` (the 8.3 field 0x21C8..0x21D2) -- 245 operands.
+`(0x119A)` stays a number: one use builds a Control Change status from it, but others compare it with
+0x7F and write it as a word.]
+
 ## It really is a MIDI writer
 
 * `0xF77918` emits a variable-length delta time from `(0x1193)` and then
