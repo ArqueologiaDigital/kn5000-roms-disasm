@@ -60,3 +60,15 @@
 ; 113 readers do `ld xwa,(this) / cp xwa,xbc / jr lt, ..._FileUnderflow` -- fewer bytes than they need.
 ; SMF_WriteByte also stores 2 here (not explained)
 	.equ FILEIO_BLOCK_BYTES,	0x1a2d	; bytes the last block read returned (32-bit)
+; custom-data-flash.md "Section Pointer Table": Flash_InitExtMemAddrs computes the eight section pointers
+; of the Custom Data Flash (0x300000 + 0, 0x19800, 0x30000 ...) and stores them here; it also points
+; RHYTHM_PATTERN_BUF_PTR at RHYTHM_PATTERN_BUF_A
+	.equ FLASH_SECTION_PTR_0,	0x0c76	; section 0: custom accompaniment styles
+	.equ FLASH_SECTION_PTR_1,	0x0c7a	; section 1: custom accompaniment styles
+	.equ FLASH_SECTION_PTR_2,	0x0c7e	; section 2: custom accompaniment styles
+	.equ FLASH_SECTION_PTR_3,	0x0c82	; section 3: custom accompaniment styles
+	.equ FLASH_SECTION_PTR_4,	0x0c86	; section 4: custom accompaniment styles
+	.equ FLASH_SECTION_PTR_5,	0x0c8a	; section 5: custom accompaniment styles
+	.equ FLASH_SECTION_PTR_6,	0x0c8e	; section 6: custom accompaniment styles
+	.equ FLASH_SECTION_PTR_7,	0x0c92	; section 7: sub-CPU performance data
+	.equ RHYTHM_PATTERN_BUF_PTR,	0x0c6e	; set to RHYTHM_PATTERN_BUF_A by Flash_InitExtMemAddrs

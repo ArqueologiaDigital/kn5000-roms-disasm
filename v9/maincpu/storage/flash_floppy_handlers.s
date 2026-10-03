@@ -1210,30 +1210,30 @@ NoteEvent_CopySlotData_Body:
 
 Flash_InitExtMemAddrs:
 	lda xwa, (0x300000:24)
-	ld (3190:16), xwa
+	ld (FLASH_SECTION_PTR_0:16), xwa
 	ld xbc, xwa
 	add xbc, 0x19800
-	ld (3194:16), xbc
+	ld (FLASH_SECTION_PTR_1:16), xbc
 	ld xbc, xwa
 	add xbc, 0x30000
-	ld (3198:16), xbc
+	ld (FLASH_SECTION_PTR_2:16), xbc
 	ld xbc, xwa
 	add xbc, 0x49800
-	ld (3202:16), xbc
+	ld (FLASH_SECTION_PTR_3:16), xbc
 	ld xbc, xwa
 	add xbc, 0x60000
-	ld (3206:16), xbc
+	ld (FLASH_SECTION_PTR_4:16), xbc
 	ld xbc, xwa
 	add xbc, 0x79800
-	ld (3210:16), xbc
+	ld (FLASH_SECTION_PTR_5:16), xbc
 	ld xbc, xwa
 	add xbc, 0x90000
-	ld (3214:16), xbc
+	ld (FLASH_SECTION_PTR_6:16), xbc
 	ld xbc, xwa
 	add xbc, 0xb0000
-	ld (3218:16), xbc
+	ld (FLASH_SECTION_PTR_7:16), xbc
 	lda xwa, (RHYTHM_PATTERN_BUF_A:24)
-	ld (3182:16), xwa
+	ld (RHYTHM_PATTERN_BUF_PTR:16), xwa
 	lda xwa, (0x069800:24)
 	ld (3186:16), xwa
 	ld (3222:16), xwa
@@ -1285,7 +1285,7 @@ Flash_InitBytecodeBlock_Loop:
 	inc1b_erp 251
 	cp_erpb 251, 10
 	jr c, Flash_InitBytecodeBlock_Loop
-	ld	xwa, (3182:16)
+	ld	xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x39ae:16), xwa
 	ld	xwa, (3186:16)
 	ld	(0x39b2:16), xwa
@@ -1376,7 +1376,7 @@ Flash_InitBytecodeBlock_Skip7:
 	extz	wa
 	calr	DualVoice_ScanAllColumnsAlt
 	ld	xix, (3186:16)
-	ld	xiy, (3182:16)
+	ld	xiy, (RHYTHM_PATTERN_BUF_PTR:16)
 	ldw	bc, 0xb400
 	ldirw
 	ld	a, (xsp+12)
@@ -1446,7 +1446,7 @@ Flash_InitBytecodeBlock_Join5:
 	jr	nz, Flash_InitBytecodeBlock_Skip9
 	cpw	(xwa+0x2), 0xffff
 	jr	nz, Flash_InitBytecodeBlock_Skip9
-	ld	xix, (3182:16)
+	ld	xix, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	xiy, (3186:16)
 	ldw	bc, 0xb400
 	ldirw
@@ -1521,7 +1521,7 @@ Flash_InitBytecodeBlock_Skip2:
 
 ; PartGrid column dispatch (7-entry, table 0xe1611a)
 PartGrid_ColumnDispatch:
-	ld xhl, (3182:16)
+	ld xhl, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld xbc, (3186:16)
 	cp a, 0x1e
 	jr nc, PartGrid_CopyHLtoBC
@@ -1542,19 +1542,19 @@ PartGrid_ColumnDispatch:
 	jp	t, (xix+wa)
 
 PartGrid_ColumnJumpTable:
-	ld	xhl, (3190:16)
+	ld	xhl, (FLASH_SECTION_PTR_0:16)
 	jr	PartGrid_ColumnDispatch_Return
-	ld	xhl, (3194:16)
+	ld	xhl, (FLASH_SECTION_PTR_1:16)
 	jr	PartGrid_ColumnDispatch_Return
-	ld	xhl, (3198:16)
+	ld	xhl, (FLASH_SECTION_PTR_2:16)
 	jr	PartGrid_ColumnDispatch_Return
-	ld	xhl, (3202:16)
+	ld	xhl, (FLASH_SECTION_PTR_3:16)
 	jr	PartGrid_ColumnDispatch_Return
-	ld	xhl, (3206:16)
+	ld	xhl, (FLASH_SECTION_PTR_4:16)
 	jr	PartGrid_ColumnDispatch_Return
-	ld	xhl, (3210:16)
+	ld	xhl, (FLASH_SECTION_PTR_5:16)
 	jr	PartGrid_ColumnDispatch_Return
-	ld	xhl, (3214:16)
+	ld	xhl, (FLASH_SECTION_PTR_6:16)
 	jr	t, PartGrid_ColumnDispatch_Return
 
 PartGrid_CopyHLtoBC:
@@ -1882,19 +1882,19 @@ NoteEventBuffer_CopyToSlot:
 ; Selects destination buffer pointer based on case, then copies 46080 bytes
 ; Offset table at 0xe16128
 NOTE_EVENT_DISPATCH_1:
-	ld xbc, (3190:16); Case 0: Load dest pointer
+	ld xbc, (FLASH_SECTION_PTR_0:16); Case 0: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ld xbc, (3194:16); Case 1: Load dest pointer
+	ld xbc, (FLASH_SECTION_PTR_1:16); Case 1: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ld xbc, (3198:16); Case 2: Load dest pointer
+	ld xbc, (FLASH_SECTION_PTR_2:16); Case 2: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ld xbc, (3202:16); Case 3: Load dest pointer
+	ld xbc, (FLASH_SECTION_PTR_3:16); Case 3: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ld xbc, (3206:16); Case 4: Load dest pointer
+	ld xbc, (FLASH_SECTION_PTR_4:16); Case 4: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ld xbc, (3210:16); Case 5: Load dest pointer
+	ld xbc, (FLASH_SECTION_PTR_5:16); Case 5: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ld xbc, (3214:16); Case 6: Load dest pointer (falls through)
+	ld xbc, (FLASH_SECTION_PTR_6:16); Case 6: Load dest pointer (falls through)
 NOTE_EVENT_COPY_COMMON:	; F1717D - Common handler
 	ld	xiy, xbc	; XIY = destination pointer
 	ld	xix, xwa	; XIX = source pointer
@@ -1928,11 +1928,11 @@ NoteEventBuffer_Store:
 ; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xe16136
 NOTE_EVENT_DISPATCH_2:
-	ld xwa, (3190:16)
+	ld xwa, (FLASH_SECTION_PTR_0:16)
 	ld (xsp + 4), xwa
 	jrl Flash_WriteSectorWithMirrorCopy
 NOTE_EVENT_DISPATCH_2b:
-	ld xwa, (3194:16)
+	ld xwa, (FLASH_SECTION_PTR_1:16)
 	ld (xsp + 4), xwa
 
 Flash_SectorWriteExecute:
@@ -1964,19 +1964,19 @@ Flash_CopyMirrorLoop:
 	sub xde, 0x9800
 	ld wa, 1:i3
 	jr Flash_EraseAndWriteFinal
-	ld xwa, (3198:16)
+	ld xwa, (FLASH_SECTION_PTR_2:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
-	ld xwa, (3202:16)
+	ld xwa, (FLASH_SECTION_PTR_3:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
-	ld xwa, (3206:16)
+	ld xwa, (FLASH_SECTION_PTR_4:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
-	ld xwa, (3210:16)
+	ld xwa, (FLASH_SECTION_PTR_5:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
-	ld xwa, (3214:16)
+	ld xwa, (FLASH_SECTION_PTR_6:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
 
@@ -2047,7 +2047,7 @@ Flash_StoreBaseAndInitAccPatch_Loop:
 	muls	wa, 96
 	ld	iy, wa
 	add	iy, ix
-	ld	xwa, (3182:16)
+	ld	xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	lda	xwa, (xwa+iy)
 	ld	a, (xwa+160)
 	ld (xiz+160), a
@@ -2067,7 +2067,7 @@ Flash_StoreBaseAndInitAccPatch_Loop2:
 	muls	wa, 96
 	ld	iy, wa
 	add	iy, ix
-	ld	xwa, (3182:16)
+	ld	xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	lda	xiz, (xwa+iy)
 	ld a, l
 	exts	wa
@@ -2085,7 +2085,7 @@ Flash_StoreBaseAndInitAccPatch_Loop2:
 Flash_StoreBaseAndInitAccPatch_Epilogue:
 	pop	xiz
 	ret
-	ld	xbc, (3182:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	lda	xhl, (xbc+16)
 	add	e, 32
 	extz	de
@@ -2110,7 +2110,7 @@ Flash_InitBytecodeBlock_Helper:
 	cpw	(xix), 0xffff
 	jr	z, Flash_InitBytecodeBlock_Helper_Join
 	ld	l, 0:opc
-	ld	xbc, (3218:16)
+	ld	xbc, (FLASH_SECTION_PTR_7:16)
 Flash_InitBytecodeBlock_Helper_Loop:
 	ld	a, l
 	extz	wa
@@ -2150,7 +2150,7 @@ Flash_InitBytecodeBlock_Helper_Loop3:
 	ld	e, l
 	extz	de
 	add	de, 16
-	ld	xwa, (3218:16)
+	ld	xwa, (FLASH_SECTION_PTR_7:16)
 	ld	a, (xwa+de)
 	cp a, 0:i3
 	jr z, Flash_InitBytecodeBlock_Helper_Skip3
@@ -2444,7 +2444,7 @@ Flash_StoreBaseAndInitAccPatch_Sub_Epilogue:
 	ret
 Flash_InitBytecodeBlock_Helper2:
 	ld	xix, (3222:16)
-	ld	xiy, (3218:16)
+	ld	xiy, (FLASH_SECTION_PTR_7:16)
 	ldw	bc, 0x8000
 	ldirw
 	lda	xhl, (1952:16)
@@ -2539,14 +2539,14 @@ Flash_StoreBaseAndInitAccPatch_Skip10:
 	jr	ule, Flash_StoreBaseAndInitAccPatch_Loop9
 Flash_StoreBaseAndInitAccPatch_Skip11:
 	ld	xbc, (3222:16)
-	ld	xde, (3218:16)
+	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
 Flash_InitBytecodeBlock_Helper3:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xix, (3222:16)
-	ld	xiy, (3218:16)
+	ld	xiy, (FLASH_SECTION_PTR_7:16)
 	ldw	bc, 0x8000
 	ldirw
 	lda_d16	xwa, (0x7a0)
@@ -2659,7 +2659,7 @@ Flash_InitBytecodeBlock_Helper3_Skip:
 	jrl	c, Flash_InitBytecodeBlock_Helper3_Loop2
 Flash_StoreBaseAndInitAccPatch_Skip13:
 	ld	xbc, (3222:16)
-	ld	xde, (3218:16)
+	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	call	Flash_EraseSectorAndWrite
 	pop	xiz
@@ -2792,7 +2792,7 @@ Flash_InitBytecodeBlock_Helper4:
 	ld	d, 0:opc
 	ld	b, 0:opc
 	ld	c, 0:opc
-	ld	xhl, (3218:16)
+	ld	xhl, (FLASH_SECTION_PTR_7:16)
 	ld	ix, 0:i3
 Flash_StoreBaseAndInitAccPatch_Loop10:
 	ld	wa, ix
@@ -2846,7 +2846,7 @@ Flash_StoreBaseAndInitAccPatch_Loop11:
 	extz	wa
 	ld	ix, wa
 	add	ix, 16
-	ld	xwa, (3218:16)
+	ld	xwa, (FLASH_SECTION_PTR_7:16)
 	ld	w, (xwa+ix)
 	cp w, 0:i3
 	jr z, Flash_StoreBaseAndInitAccPatch_Skip16
@@ -2894,7 +2894,7 @@ Flash_InitBytecodeBlock_Helper4_Loop2:
 	jr	z, Flash_InitBytecodeBlock_Helper4_Skip4
 	ld	iy, wa
 	add	iy, 16
-	ld	xwa, (3218:16)
+	ld	xwa, (FLASH_SECTION_PTR_7:16)
 	ld	w, (xwa+iy)
 	cp w, b
 	jr	ule, Flash_InitBytecodeBlock_Helper4_Skip4
@@ -3302,7 +3302,7 @@ Flash_InitBytecodeBlock_Helper7_Loop:
 	ret
 Flash_StoreBaseAndInitAccPatch_Join5:
 	ld	xix, (3222:16)
-	ld	xiy, (3218:16)
+	ld	xiy, (FLASH_SECTION_PTR_7:16)
 	ldw	bc, 0x8000
 	ldirw
 	ld	xix, (3222:16)
@@ -3320,12 +3320,12 @@ Flash_StoreBaseAndInitAccPatch_Join5:
 	ldw	bc, 8
 	ldirw
 	ld	xbc, (3222:16)
-	ld	xde, (3218:16)
+	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	jp	Flash_EraseSectorAndWrite
 Flash_SlotUpdateOpsBlock_Helper:
 	ld	l, 0:opc
-	ld	xde, (3218:16)
+	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	b, 0:opc
 	cp	a, 0:i3
 	jr	nz, Flash_InitBytecodeBlock_Helper7_Skip4
@@ -3718,7 +3718,7 @@ SlotTable_Insert1850_Next:
 Flash_WriteBackSlotTable:
 	pushw_erp 0xfa
 	ld xix, (3222:16)
-	ld xiy, (3218:16)
+	ld xiy, (FLASH_SECTION_PTR_7:16)
 	ldw bc, 0x8000
 	ldirw
 	lda xwa, (1850:16)
@@ -3753,7 +3753,7 @@ Flash_WriteBackSlot_Loop:
 
 Flash_WriteBackSlot_Erase:
 	ld xbc, (3222:16)
-	ld xde, (3218:16)
+	ld xde, (FLASH_SECTION_PTR_7:16)
 	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
 	popw_erp 0xfa
@@ -4019,7 +4019,7 @@ Flash_InitBytecodeBlock_Helper9:
 	extz	de
 	ld	wa, de
 	calr	Flash_StoreBaseAndInitAccPatch_Sub
-	ld	xix, (3182:16)
+	ld	xix, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	xiy, (3186:16)
 	ldw	bc, 0xb400
 	ldirw
@@ -4063,7 +4063,7 @@ Flash_WriteBackSlotTable_Skip4:
 	ld	a, (xsp)
 	extz	wa
 	calr	Flash_StoreBaseAndInitAccPatch_Sub
-	ld	xix, (3182:16)
+	ld	xix, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	xiy, (3186:16)
 	ldw	bc, 0xb400
 	ldirw
@@ -4158,7 +4158,7 @@ LoadRegion6_OpenSuccess_Helper:
 	ld	wa, 7:i3
 	calr	NoteEventBuffer_Store
 	ld	xix, (3222:16)
-	ld	xiy, (3218:16)
+	ld	xiy, (FLASH_SECTION_PTR_7:16)
 	ldw	bc, 0x8000
 	ldirw
 	ld	xwa, (3222:16)
@@ -4169,7 +4169,7 @@ LoadRegion6_OpenSuccess_Helper:
 	cp	iz, 0:i3
 	jr	lt, Flash_WriteBackSlotTable_Skip5
 	ld	xbc, (3222:16)
-	ld	xde, (3218:16)
+	ld	xde, (FLASH_SECTION_PTR_7:16)
 	ld	wa, 1:i3
 	call	Flash_EraseSectorAndWrite
 	call	TmFlash_CopyToExtMem
@@ -4190,7 +4190,7 @@ SaveRegion6_OpenSuccess_Helper:
 	lda	xix, (xsp+16)
 	ldw	bc, 512
 	ldirw
-	ld	xbc, (3190:16)
+	ld	xbc, (FLASH_SECTION_PTR_0:16)
 	ld	xhl, 0:i3
 	ld	l, (xbc+46)
 	ld	a, (xbc+47)
@@ -4204,7 +4204,7 @@ SaveRegion6_OpenSuccess_Helper:
 	sll	xix, 4
 	ld	xwa, (xsp+12)
 	ld	(xwa), xix
-	ld	xde, (3194:16)
+	ld	xde, (FLASH_SECTION_PTR_1:16)
 	ld	xhl, 0:i3
 	ld	l, (xde+46)
 	ld	a, (xde+47)
@@ -4217,7 +4217,7 @@ SaveRegion6_OpenSuccess_Helper:
 	sll	xix, 4
 	ld	xwa, (xsp+8)
 	ld	(xwa), xix
-	ld	xde, (3198:16)
+	ld	xde, (FLASH_SECTION_PTR_2:16)
 	ld	xhl, 0:i3
 	ld	l, (xde+46)
 	ld	a, (xde+47)
@@ -4230,7 +4230,7 @@ SaveRegion6_OpenSuccess_Helper:
 	sll	xix, 4
 	ld	xwa, (xsp+4)
 	ld	(xwa), xix
-	ld	xde, (3202:16)
+	ld	xde, (FLASH_SECTION_PTR_3:16)
 	ld	xhl, 0:i3
 	ld	l, (xde+46)
 	ld	a, (xde+47)
@@ -4241,7 +4241,7 @@ SaveRegion6_OpenSuccess_Helper:
 	add	xix, xhl
 	sll	xix, 4
 	ld	(xde), xix
-	ld	xix, (3206:16)
+	ld	xix, (FLASH_SECTION_PTR_4:16)
 	ld	xhl, 0:i3
 	ld	l, (xix+46)
 	ld	a, (xix+47)
@@ -4252,7 +4252,7 @@ SaveRegion6_OpenSuccess_Helper:
 	add	xix, xhl
 	sll	xix, 4
 	ld	(xiy), xix
-	ld	xix, (3210:16)
+	ld	xix, (FLASH_SECTION_PTR_5:16)
 	ld	xhl, 0:i3
 	ld	l, (xix+46)
 	ld	a, (xix+47)
@@ -4263,7 +4263,7 @@ SaveRegion6_OpenSuccess_Helper:
 	add	xix, xhl
 	sll	xix, 4
 	ld	(xiz), xix
-	ld	xix, (3214:16)
+	ld	xix, (FLASH_SECTION_PTR_6:16)
 	ld	xhl, 0:i3
 	ld	l, (xix+46)
 	ld	a, (xix+47)
@@ -4407,7 +4407,7 @@ Flash_WriteBackSlotTable_Skip7:
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
 	jr	lt, Flash_WriteBackSlotTable_Skip8
-	ld	xwa, (3218:16)
+	ld	xwa, (FLASH_SECTION_PTR_7:16)
 	ld	xbc, 0xf400
 	call	FileIO_WriteByte_Impl
 Flash_WriteBackSlotTable_Skip8:
@@ -4525,7 +4525,7 @@ FloppyDisk_LoadNoteEvents:
 	ld wa, 7:i3
 	calr NoteEventBuffer_Store
 	ld xix, (3222:16)
-	ld xiy, (3218:16)
+	ld xiy, (FLASH_SECTION_PTR_7:16)
 	ldw bc, 0x8000
 	ldirw
 	ld xwa, (3222:16)
@@ -4538,7 +4538,7 @@ FloppyDisk_LoadNoteEvents:
 	cp iz, 0:i3
 	jr lt, FloppyCtrl_LoadIzAndContinue
 	ld xbc, (3222:16)
-	ld xde, (3218:16)
+	ld xde, (FLASH_SECTION_PTR_7:16)
 	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
 	call TmFlash_CopyToExtMem
@@ -4567,7 +4567,7 @@ FloppyDisk_ComputeToneParams:
 	lda xix, (xsp + 16)
 	ldw bc, 0x200
 	ldirw
-	ld xbc, (3190:16)
+	ld xbc, (FLASH_SECTION_PTR_0:16)
 	ld xhl, 0:i3
 	ld l, (xbc + 46)
 	ld a, (xbc + 47)
@@ -4581,7 +4581,7 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld xwa, (xsp + 12)
 	ld (xwa), xix
-	ld xde, (3194:16)
+	ld xde, (FLASH_SECTION_PTR_1:16)
 	ld xhl, 0:i3
 	ld l, (xde + 46)
 	ld a, (xde + 47)
@@ -4594,7 +4594,7 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld xwa, (xsp + 8)
 	ld (xwa), xix
-	ld xde, (3198:16)
+	ld xde, (FLASH_SECTION_PTR_2:16)
 	ld xhl, 0:i3
 	ld l, (xde + 46)
 	ld a, (xde + 47)
@@ -4607,7 +4607,7 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld xwa, (xsp + 4)
 	ld (xwa), xix
-	ld xde, (3202:16)
+	ld xde, (FLASH_SECTION_PTR_3:16)
 	ld xhl, 0:i3
 	ld l, (xde + 46)
 	ld a, (xde + 47)
@@ -4618,7 +4618,7 @@ FloppyDisk_ComputeToneParams:
 	add xix, xhl
 	sll xix, 4
 	ld (xde), xix
-	ld xix, (3206:16)
+	ld xix, (FLASH_SECTION_PTR_4:16)
 	ld xhl, 0:i3
 	ld l, (xix + 46)
 	ld a, (xix + 47)
@@ -4629,7 +4629,7 @@ FloppyDisk_ComputeToneParams:
 	add xix, xhl
 	sll xix, 4
 	ld (xiy), xix
-	ld xix, (3210:16)
+	ld xix, (FLASH_SECTION_PTR_5:16)
 	ld xhl, 0:i3
 	ld l, (xix + 46)
 	ld a, (xix + 47)
@@ -4640,7 +4640,7 @@ FloppyDisk_ComputeToneParams:
 	add xix, xhl
 	sll xix, 4
 	ld (xiz), xix
-	ld xix, (3214:16)
+	ld xix, (FLASH_SECTION_PTR_6:16)
 	ld xhl, 0:i3
 	ld l, (xix + 46)
 	ld a, (xix + 47)
@@ -4803,7 +4803,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cp hl, 0:i3
 	jr lt, FloppyCtrl_PopIzStoreRet
-	ld xwa, (3218:16)
+	ld xwa, (FLASH_SECTION_PTR_7:16)
 	ld XIX, (xsp + 0x0414)
 	ld xbc, 0xf400
 	call (xix)
@@ -4843,7 +4843,7 @@ ToneParam_ExtendedOpsBlock_Helper:
 	pushw	iz
 	ld	iz, 0:i3
 	calr	Flash_InitExtMemAddrs
-	ld	xde, (3182:16)
+	ld	xde, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	a, (xde)
 	ldfr_berp	a, 238
 	lda	xwa, (xde+1)
@@ -4921,7 +4921,7 @@ ToneParam_ExtendedOpsBlock_Skip11:
 ToneParam_ExtendedOpsBlock_Helper2:
 	dec	6, xsp
 	ldw	(xsp+0x4), 0
-	ld	xhl, (3182:16)
+	ld	xhl, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	xde, (3186:16)
 	ld	a, (xhl+16)
 	ld	(xde+16), a
@@ -4938,7 +4938,7 @@ ToneParam_ExtendedOpsBlock_Helper2:
 	call	cmp_ld_mae
 	ld	xwa, (3186:16)
 	ld	(0x39ae:16), xwa
-	ld	xwa, (3182:16)
+	ld	xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x39b2:16), xwa
 	ld	xwa, 0:i3
 	ld	(xsp), xwa
@@ -5111,17 +5111,17 @@ ToneParam_ExtendedOpsBlock_Helper_Helper:
 ToneParam_ExtendedOpsBlock_Helper3_Loop:
 	ld	wa, de
 	add	wa, 96
-	ld	xbc, (3182:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	lda	xbc, (xbc+wa)
 	ld (xbc+34), 64
 	ld bc, wa
-	ld xwa, (3182:16)
+	ld xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	lda	xwa, (xwa+bc)
 	ld (xwa+42), 12
-	ld	xwa, (3182:16)
+	ld	xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	lda	xwa, (xwa+bc)
 	ld (xwa+50), 116
-	ld xwa, (3182:16)
+	ld xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	lda	xwa, (xwa+bc)
 	ld (xwa+58), 64
 	inc 1, l
@@ -5138,9 +5138,9 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	ldfr_berp c, 250
 	ld	c, (0x34ef:16)
 	ldfr_berp	c, 249
-	ld	xbc, (0xc6e:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x34ed), (xbc+0x70)
-	ld	xbc, (0xc6e:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x34ee), (xbc+0x71)
 	ld	(0x34ef:16), 4
 	ld	(0x34d6:16), 12
@@ -5166,9 +5166,9 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	ld	(0x34d6:16), 15
 	ld	wa, hl
 	calr	ToneParam_ExtendedOpsBlock_Helper4
-	ld	xbc, (3182:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x34ed), (xbc+0x1f0)
-	ld	xbc, (0xc6e:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x34ee), (xbc+0x1f1)
 	ld	(0x34ef:16), 4
 	ld	(0x34d6:16), 18
@@ -5194,9 +5194,9 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	ld	(0x34d6:16), 21
 	ld	wa, hl
 	calr	ToneParam_ExtendedOpsBlock_Helper4
-	ld	xbc, (3182:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x34ed), (xbc+0x370)
-	ld	xbc, (0xc6e:16)
+	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld	(0x34ee), (xbc+0x371)
 	ld	(0x34ef:16), 4
 	ld	(0x34d6:16), 24
@@ -5254,7 +5254,7 @@ DualVoice_LoadAndScan:
 	ld (xsp + 4), 0x0
 	ld (xsp + 10), 0x0
 	calr Flash_InitExtMemAddrs
-	ld (3182:16), xiz
+	ld (RHYTHM_PATTERN_BUF_PTR:16), xiz
 	cp (xsp + 14), 0xa
 	jrl nc, DualVoice_LoadDoneRetVal
 	ld a, (xsp + 14)
@@ -5294,7 +5294,7 @@ DualVoice_AccPatchLoop:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0a
 	jr c, DualVoice_AccPatchLoop
-	ld xwa, (3182:16)
+	ld xwa, (RHYTHM_PATTERN_BUF_PTR:16)
 	ld (0x39ae:16), xwa
 	ld xwa, (3186:16)
 	ld (0x39b2:16), xwa
