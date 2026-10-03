@@ -28,6 +28,7 @@ import sys
 REPO = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
                       text=True).stdout.strip() or "."
 sys.path.insert(0, os.path.join(REPO, "scripts", "converters"))
+sys.path.insert(0, os.path.join(REPO, "scripts", "tools"))
 import scoop_reframe as SR  # noqa: E402
 
 NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
@@ -39,6 +40,7 @@ ap.add_argument("--image", required=True, choices=("v10", "v9", "v7"))
 ap.add_argument("--file", required=True)
 ap.add_argument("--report", required=True)
 ap.add_argument("--out", required=True)
+ap.add_argument("--rich", action="store_true", help="also enter at .long code labels and consistent compiled-switch targets")
 a = ap.parse_args()
 addr = {}
 for l in subprocess.run([NM, "--defined-only", os.path.join(REPO, "rebuilt_ROMs/kn5000_%s_program.llvm.elf" % a.image)],
@@ -55,7 +57,31 @@ for f in glob.glob(os.path.join(REPO, a.image, "maincpu", "**", "*.s"), recursiv
         m = CALL.match(l.split(";")[0])
         if m and m.group(1) in addr:
             called.add(addr[m.group(1)])
-ents = sorted(x for x in called if lo <= x < hi)
+ents = set(called)
+if a.rich:
+    # the re-framer's entries too: code labels a `.long` table holds, and the case targets of the
+    # compiled switches that agree with a call-entered whole-image trace (reframe_traced.py)
+    import reframe_traced as RT
+    import place_labels as PL
+    pl = PL.Planner(a.image)
+    for f in glob.glob(os.path.join(REPO, a.image, "maincpu", "**", "*.s"), recursive=True):
+        for l in open(f, "rb").read().decode("latin-1").split("\n"):
+            m = RT.LONG.match(l.split(";")[0])
+            if m:
+                for it in m.group(1).split(","):
+                    it = it.strip()
+                    if it in addr:
+                        w = pl.where(addr[it])
+                        if w and w[0] == addr[it] and PL.snb.drc.classify_line(pl.lines(w[1])[w[2]], pl.macros)[0] == "code":
+                            ents.add(addr[it])
+    base, _, _ = SR.trace(a.image, 0xE00000, 0x1000000, sorted(ents))
+    inside = set()
+    for x, (ln, _) in base.items():
+        inside.update(range(x + 1, x + ln))
+    for sw in RT.switch_targets(a.image, addr, per_switch=True):
+        if not any(x in inside for x in sw):
+            ents |= sw
+ents = sorted(x for x in ents if lo <= x < hi)
 insns, ext, conflicts = SR.trace(a.image, lo, hi, ents)
 r3 = json.load(open(a.report))["report"].get("R3", [])
 ok = [y["src_addr"] for y in r3 if a.file in y["src"] and int(y["src_addr"], 16) in insns and int(y["target"], 16) in insns]
