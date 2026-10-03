@@ -156,6 +156,14 @@ Related RAM the driver may want in a comment:
 | `0x2661-0x2663` | three ASCII digits, output of prom_a's `Value_ToAsciiDigits3` |
 | `0x2555` | the LCD layer base that `swi 7` adds to a record's cursor |
 
+**Named in the source (2026-10-03).** These, with the screen-request pair and the status byte that
+FINDINGS-prom_b-song-store.md and FINDINGS-prom_a-panel-control-map.md establish, are symbols in
+`wsa1/include/wsa1_ram.inc`: `UI_Screen0E_SubScreen` (0x0EF5), `UI_Request` / `UI_Request_Hi`
+(0x2070 / 0x2071), `UI_RequestBits` (0x2075), `UI_ScreenId` (0x207C), `Value_AsciiDigits`
+(0x2661, `+1`, `+2`), `UI_StatusCode` (0x2880; 0x2555 was already `LCD_CurrentLayerBase`) --
+1,684 operands in prom_a and prom_b (`python3 scripts/tools/name_wsa1_ram_count.py`).
+`(0x207E)` stays a number: what it means is recorded as not established.
+
 ## 4. `swi 7` function 6: what `HL` is — an answer to a stated Unknown
 
 prom_a's `LCD_Svc_06_DrawText8x14` header says

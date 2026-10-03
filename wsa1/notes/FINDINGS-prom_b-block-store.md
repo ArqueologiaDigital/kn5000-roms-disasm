@@ -112,6 +112,14 @@ Two things make this the interesting part:
 ⚠ That abutment is *consistency between two derivations*, not proof that the two
 regions were laid out as one object. It would survive a coincidence of 12 bits.
 
+**Named in the source (2026-10-03).** The module's variables are symbols in
+`wsa1/include/wsa1_ram.inc`: `BStore_CursorBlockAddr` (0x126E), `BStore_CursorBlock` (0x345C),
+`BStore_BlockLimit` (0x0CA4), `BStore_HeapBase` (0x3604), `BStore_BlockCount` (0x3608),
+`BStore_AllocHeapBase` (0x12A2), `BStore_FreeHead` / `BStore_FreeCount` (0x6034B8 / 0x6034BA),
+`BStore_DirEntry` (0x1008) and `BStore_ErrorCode` (0x0D4A) -- 1,541 operands in prom_a and prom_b
+(`python3 scripts/tools/name_wsa1_ram_count.py`).  The `BStore` prefix keeps this note's caution:
+it names the module, not what the module is FOR.
+
 ## The cursor
 
 `((0x126E) = block address, IY = byte offset)`, with `(0x345C)` carrying the

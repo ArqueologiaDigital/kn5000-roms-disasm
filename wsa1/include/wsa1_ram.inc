@@ -55,3 +55,24 @@
 	.equ Blink_Phase,		0x28d1	; the 8-phase blink counter -- inc 1,(0x28d1); and C,0x07
 	.equ Blink_State,		0x28d2	; 0 stopped, 2 blinking, 1 unexplained -- Blink_Tick proceeds only on 2
 	.equ Blink_PostToRing,		0x28d3	; 0: draw inline; non-0: post to the ring buffer -- Blink_Command, from a stack-address test
+
+; ---- wsa1/notes/FINDINGS-prom_b-for-the-mame-driver.md -- "Related RAM the driver may want in a comment; with FINDINGS-prom_b-song-store.md and FINDINGS-prom_a-panel-control-map.md"
+	.equ UI_Screen0E_SubScreen,	0x0ef5	; which sub-screen of screen 0x0E is showing -- FINDINGS-prom_b-for-the-mame-driver.md
+	.equ UI_Request,		0x2070	; 16-bit message code; high byte 0x80 = go to the screen id in the low byte -- the panel row handlers; song-store.md: `(0x2070)` takes a 16-bit message code
+	.equ UI_Request_Hi,		0x2071	; UI_Request's high byte: 0x80 with a screen id -- panel-control-map.md: the screen-request pair
+	.equ UI_RequestBits,		0x2075	; request bits, set by `or` and cleared by `and`; several owners (bit 1 = blink enable) -- song-store.md; field-blink.md
+	.equ UI_ScreenId,		0x207c	; the screen id; indexes the 256-entry table at prom_b 0xF2D000 -- ld L,(0x207C) / xor H,H / sla 0x02,HL
+	.equ Value_AsciiDigits,		0x2661	; three ASCII digits, the output of prom_a's Value_ToAsciiDigits3 -- FINDINGS-prom_b-for-the-mame-driver.md
+	.equ UI_StatusCode,		0x2880	; a status/error byte: eleven literal values; the block store's error table feeds it -- song-store.md; f6d002-module.md
+
+; ---- wsa1/notes/FINDINGS-prom_b-block-store.md -- "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table"
+	.equ BStore_BlockLimit,		0x0ca4	; what BStore_CursorAdvance range-checks a followed block number against -- BStore_CursorAdvance
+	.equ BStore_ErrorCode,		0x0d4a	; the block store's error code; BStore_ErrorToStatusByte maps it to UI_StatusCode -- BStore_ErrorToStatusByte
+	.equ BStore_DirEntry,		0x1008	; the directory entry BStore_AppendBytes appends to -- BStore_AppendBytes
+	.equ BStore_CursorBlockAddr,	0x126e	; the cursor's block address (0x617800 + (n-1)*0x100) -- BStore_SeekBlock
+	.equ BStore_AllocHeapBase,	0x12a2	; the allocator's own copy of the heap base -- BStore_LatchHeapBase
+	.equ BStore_CursorBlock,	0x345c	; the cursor's 1-based block number -- the block-store cursor section
+	.equ BStore_HeapBase,		0x3604	; the heap base, 0x00617800 -- BStore_SeekBlock and its two inverses
+	.equ BStore_BlockCount,		0x3608	; how many blocks BStore_FreeList_Init threads onto the free list -- BStore_FreeList_Init
+	.equ BStore_FreeHead,		0x6034b8	; head of the free list; 0xFFFF = empty -- BStore_AllocBlock
+	.equ BStore_FreeCount,		0x6034ba	; number of blocks on the free list -- BStore_FreeChain

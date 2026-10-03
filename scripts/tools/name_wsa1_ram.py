@@ -6,7 +6,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
   `ld (9536:16), 0` (prom_b spells addresses in decimal), `m_add_rm MW16, 0x2555, r4`.  Where a
   wsa1/notes FINDINGS table establishes what an address holds -- with the routine or service that
   establishes it -- the address gets a name in wsa1/include/wsa1_ram.inc (generated here from GROUPS:
-  the LCD drawing state, the inter-processor link block, prom_b's field-blink control block),
+  the LCD drawing state, the inter-processor link block, prom_b's field-blink control block, the
+  UI request / screen state, the block store),
   and the memory operands and the macro address arguments that spell it become the name.
   Only memory operands `(N)` / `(N:16)` / `(N:24)`, the address argument of the m_* macros
   (`MB16|MW16|MD16|MB24|MW24|MD24, N`), the last argument of the memory-to-memory macros
@@ -93,14 +94,40 @@ GROUPS = [
         0x28D2: ("Blink_State", "0 stopped, 2 blinking, 1 unexplained", "Blink_Tick proceeds only on 2"),
         0x28D3: ("Blink_PostToRing", "0: draw inline; non-0: post to the ring buffer", "Blink_Command, from a stack-address test"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-for-the-mame-driver.md", "Related RAM the driver may want in a comment; with FINDINGS-prom_b-song-store.md and FINDINGS-prom_a-panel-control-map.md", {
+        0x0EF5: ("UI_Screen0E_SubScreen", "which sub-screen of screen 0x0E is showing", "FINDINGS-prom_b-for-the-mame-driver.md"),
+        0x2070: ("UI_Request", "16-bit message code; high byte 0x80 = go to the screen id in the low byte", "the panel row handlers; song-store.md: `(0x2070)` takes a 16-bit message code"),
+        0x2071: ("UI_Request_Hi", "UI_Request's high byte: 0x80 with a screen id", "panel-control-map.md: the screen-request pair"),
+        0x2075: ("UI_RequestBits", "request bits, set by `or` and cleared by `and`; several owners (bit 1 = blink enable)", "song-store.md; field-blink.md"),
+        0x207C: ("UI_ScreenId", "the screen id; indexes the 256-entry table at prom_b 0xF2D000", "ld L,(0x207C) / xor H,H / sla 0x02,HL"),
+        0x2661: ("Value_AsciiDigits", "three ASCII digits, the output of prom_a's Value_ToAsciiDigits3", "FINDINGS-prom_b-for-the-mame-driver.md"),
+        0x2662: ("Value_AsciiDigits+1", "", ""),
+        0x2663: ("Value_AsciiDigits+2", "", ""),
+        0x2880: ("UI_StatusCode", "a status/error byte: eleven literal values; the block store's error table feeds it", "song-store.md; f6d002-module.md"),
+    }),
+    ("wsa1/notes/FINDINGS-prom_b-block-store.md", "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table", {
+        0x0CA4: ("BStore_BlockLimit", "what BStore_CursorAdvance range-checks a followed block number against", "BStore_CursorAdvance"),
+        0x0D4A: ("BStore_ErrorCode", "the block store's error code; BStore_ErrorToStatusByte maps it to UI_StatusCode", "BStore_ErrorToStatusByte"),
+        0x1008: ("BStore_DirEntry", "the directory entry BStore_AppendBytes appends to", "BStore_AppendBytes"),
+        0x126E: ("BStore_CursorBlockAddr", "the cursor's block address (0x617800 + (n-1)*0x100)", "BStore_SeekBlock"),
+        0x12A2: ("BStore_AllocHeapBase", "the allocator's own copy of the heap base", "BStore_LatchHeapBase"),
+        0x345C: ("BStore_CursorBlock", "the cursor's 1-based block number", "the block-store cursor section"),
+        0x3604: ("BStore_HeapBase", "the heap base, 0x00617800", "BStore_SeekBlock and its two inverses"),
+        0x3608: ("BStore_BlockCount", "how many blocks BStore_FreeList_Init threads onto the free list", "BStore_FreeList_Init"),
+        0x6034B8: ("BStore_FreeHead", "head of the free list; 0xFFFF = empty", "BStore_AllocBlock"),
+        0x6034BA: ("BStore_FreeCount", "number of blocks on the free list", "BStore_FreeChain"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')
 MAC = re.compile(r'\b(MB16|MW16|MD16|MB24|MW24|MD24),(\s*)(0x[0-9a-fA-F]+|\d+)\b')
 # memory-to-memory macros: the LAST argument is the other 16-bit memory address
 MM = re.compile(r'^(\s*m_(?:ld_mm16|ldw_mm16|ld_m16m)\s+[^,]+,[^,]+,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$')
-# an immediate is renamed only when it is 24-bit (>= 0x10000): there it can only be an address
+# an immediate is renamed when it is 24-bit (>= 0x10000: there it can only be an address), or when
+# it is loaded into a 16/32-bit register (`ld xiy, 9825`, `ldw bc, 0x2661` -- then used as a
+# pointer: `add bc,hl / extz xbc / ld A,(XBC)`) and is a named address >= 0x100
 IMM = re.compile(r'(?<![\w(])(0x[0-9a-fA-F]{5,8})\b(?!\s*[:)])')
+REGIMM = re.compile(r'^(\s*(?:ld|ldw|lda)\s+(?:x?(?:wa|bc|de|hl|ix|iy|iz|sp))\s*,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$', re.I)
 
 
 def inc_text():
@@ -169,11 +196,18 @@ def main():
                 v = int(m.group(2), 0)
                 return m.group(1) + NAMES[v][0] + m.group(3) if v in NAMES else m.group(0)
 
+            def regimm(m):
+                v = int(m.group(2), 0)
+                return m.group(1) + NAMES[v][0] + m.group(3) if v in NAMES and v >= 0x100 else m.group(0)
+
             stage = MAC.sub(mac, MEM.sub(mem, code))
-            new = MM.sub(mm, IMM.sub(imm, stage))
+            stage2 = IMM.sub(imm, stage)
+            new = REGIMM.sub(regimm, MM.sub(mm, stage2))
             if new != code:
-                g = MM.match(IMM.sub(imm, stage))
+                g = MM.match(stage2)
                 n += 1 if g and int(g.group(2), 0) in NAMES else 0
+                g = REGIMM.match(MM.sub(mm, stage2))
+                n += 1 if g and int(g.group(2), 0) in NAMES and int(g.group(2), 0) >= 0x100 else 0
                 n += len([1 for x in MEM.finditer(code) if int(x.group(1), 0) in NAMES]) + \
                     len([1 for x in MAC.finditer(code) if int(x.group(3), 0) in NAMES]) + \
                     len([1 for x in IMM.finditer(MAC.sub(mac, MEM.sub(mem, code))) if int(x.group(1), 0) in NAMES])
