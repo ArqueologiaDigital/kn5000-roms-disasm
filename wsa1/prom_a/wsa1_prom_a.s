@@ -180407,7 +180407,7 @@ sub_FEF907:
 sub_FEF926:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF926  f1 40 25 00 00
 	calr sub_FEF938                                      ; FEF92B  1e 0a 00
-	calr sub_FEF9A6                                            ; FEF92E  1e 75 00
+	calr EditScreen_DrawMeasureNumbers                                            ; FEF92E  1e 75 00
 	calr sub_FF0841                                          ; FEF931  1e 0d 0f
 	calr sub_FF07C5                                          ; FEF934  1e 8e 0e
 	ret                                                  ; FEF937  0e
@@ -180465,7 +180465,10 @@ sub_FEF938:
 
 Digits_FEF999:
 	.byte 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x2a, 0x2a, 0x2a  ; FEF999
-sub_FEF9A6:
+; EditScreen_DrawMeasureNumbers: for E = 0..(0x601F75) and each non-zero beat count at 0x601F5F[E], draws
+;   measure number BC (from (0x601F5D), +1 each) through ScreenDrawPtrs_FEF9FA[E] (NOTE EDIT) or _FEFA2A[E]
+;   (DRUM EDIT, EditScreen_Mode bit 0).
+EditScreen_DrawMeasureNumbers:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF9A6  f1 40 25 00 00
 	ld XIX,0x00601f5f                                    ; FEF9AB  44 5f 1f 60 00
 	xor E,E                                              ; FEF9B0  cd d5
@@ -180513,18 +180516,18 @@ sub_FEF9A6:
 ; ---------------------------------------------------------------------
 
 ScreenDrawPtrs_FEF9FA:
-	.long sub_FEFA4E                                 ; FEF9FA  [  0]
-	.long sub_FEFA93                                 ; FEF9FE  [  1]
-	.long sub_FEFAD8                                 ; FEFA02  [  2]
-	.long sub_FEFB1D                                 ; FEFA06  [  3]
-	.long sub_FEFBA7                                 ; FEFA0A  [  4]
-	.long sub_FEFBEC                                 ; FEFA0E  [  5]
-	.long sub_FEFC31                                 ; FEFA12  [  6]
-	.long sub_FEFC76                                 ; FEFA16  [  7]
-	.long sub_FEFCBB                                 ; FEFA1A  [  8]
-	.long sub_FEFD00                                 ; FEFA1E  [  9]
-	.long sub_FEFD45                                 ; FEFA22  [ 10]
-	.long sub_FEFA4E                                 ; FEFA26  [ 11]
+	.long EditScreen_MeasureNumberAt0                                 ; FEF9FA  [  0]
+	.long EditScreen_MeasureNumberAt1                                 ; FEF9FE  [  1]
+	.long EditScreen_MeasureNumberAt2                                 ; FEFA02  [  2]
+	.long EditScreen_MeasureNumberAt3                                 ; FEFA06  [  3]
+	.long EditScreen_MeasureNumberAt5                                 ; FEFA0A  [  4]
+	.long EditScreen_MeasureNumberAt6                                 ; FEFA0E  [  5]
+	.long EditScreen_MeasureNumberAt7                                 ; FEFA12  [  6]
+	.long EditScreen_MeasureNumberAt8                                 ; FEFA16  [  7]
+	.long EditScreen_MeasureNumberAt9                                 ; FEFA1A  [  8]
+	.long EditScreen_MeasureNumberAt10                                 ; FEFA1E  [  9]
+	.long EditScreen_MeasureNumberAt11                                 ; FEFA22  [ 10]
+	.long EditScreen_MeasureNumberAt0                                 ; FEFA26  [ 11]
 ; ---------------------------------------------------------------------
 ; ScreenDrawPtrs_FEFA2A -- 9 pointers, the other arm of the same read
 ; Called from: 0xFEF9C9 `ld XIY,0x00FEFA2A`, taken when bit 0 of
@@ -180536,16 +180539,18 @@ ScreenDrawPtrs_FEF9FA:
 ; ---------------------------------------------------------------------
 
 ScreenDrawPtrs_FEFA2A:
-	.long sub_FEFB62                                 ; FEFA2A  [  0]
-	.long sub_FEFBA7                                 ; FEFA2E  [  1]
-	.long sub_FEFBEC                                 ; FEFA32  [  2]
-	.long sub_FEFC31                                 ; FEFA36  [  3]
-	.long sub_FEFC76                                 ; FEFA3A  [  4]
-	.long sub_FEFCBB                                 ; FEFA3E  [  5]
-	.long sub_FEFD00                                 ; FEFA42  [  6]
-	.long sub_FEFD45                                 ; FEFA46  [  7]
-	.long sub_FEFA4E                                 ; FEFA4A  [  8]
-sub_FEFA4E:   ; entry: named by 3 `.long` operands, first at 0xFEF9FA
+	.long EditScreen_MeasureNumberAt4                                 ; FEFA2A  [  0]
+	.long EditScreen_MeasureNumberAt5                                 ; FEFA2E  [  1]
+	.long EditScreen_MeasureNumberAt6                                 ; FEFA32  [  2]
+	.long EditScreen_MeasureNumberAt7                                 ; FEFA36  [  3]
+	.long EditScreen_MeasureNumberAt8                                 ; FEFA3A  [  4]
+	.long EditScreen_MeasureNumberAt9                                 ; FEFA3E  [  5]
+	.long EditScreen_MeasureNumberAt10                                 ; FEFA42  [  6]
+	.long EditScreen_MeasureNumberAt11                                 ; FEFA46  [  7]
+	.long EditScreen_MeasureNumberAt0                                 ; FEFA4A  [  8]
+; EditScreen_MeasureNumberAt0: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 0 of 12 in address order; NOTE EDIT slot 0, NOTE EDIT slot 11, DRUM EDIT slot 8 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt0:   ; entry: named by 3 `.long` operands, first at 0xFEF9FA
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFA4E  d1 b0 26 3f e7 03
 	jr ule, .LFEFA6B                                     ; FEFA54  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFA56  f1 b0 26 02 00 00
@@ -180555,7 +180560,7 @@ sub_FEFA4E:   ; entry: named by 3 `.long` operands, first at 0xFEF9FA
 	ret                                                  ; FEFA6A  0e
 .LFEFA6B:
 	ld XIY,DisplayList_FEFA89                            ; FEFA6B  45 89 fa fe 00
-	ld XIX,sub_FEFA93                                    ; FEFA70  44 93 fa fe 00
+	ld XIX,EditScreen_MeasureNumberAt1                                    ; FEFA70  44 93 fa fe 00
 	call T_DisplayListB_Run                              ; FEFA75  1d f4 17 f4
 	ret                                                  ; FEFA79  0e
 
@@ -180572,7 +180577,9 @@ DisplayList_FEFA89:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFA8B
 	.ascii "  "                                 ; FEFA8F
 	.byte 0x03, 0x03                   ; FEFA91
-sub_FEFA93:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEF9FE
+; EditScreen_MeasureNumberAt1: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 1 of 12 in address order; NOTE EDIT slot 1 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt1:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEF9FE
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFA93  d1 b0 26 3f e7 03
 	jr ule, .LFEFAB0                                     ; FEFA99  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFA9B  f1 b0 26 02 00 00
@@ -180582,7 +180589,7 @@ sub_FEFA93:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEF9FE
 	ret                                                  ; FEFAAF  0e
 .LFEFAB0:
 	ld XIY,DisplayList_FEFACE                            ; FEFAB0  45 ce fa fe 00
-	ld XIX,sub_FEFAD8                                    ; FEFAB5  44 d8 fa fe 00
+	ld XIX,EditScreen_MeasureNumberAt2                                    ; FEFAB5  44 d8 fa fe 00
 	call T_DisplayListB_Run                              ; FEFABA  1d f4 17 f4
 	ret                                                  ; FEFABE  0e
 
@@ -180599,7 +180606,9 @@ DisplayList_FEFACE:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFAD0
 	.ascii " $"                                 ; FEFAD4
 	.byte 0x03, 0x02                   ; FEFAD6
-sub_FEFAD8:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA02
+; EditScreen_MeasureNumberAt2: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 2 of 12 in address order; NOTE EDIT slot 2 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt2:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA02
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFAD8  d1 b0 26 3f e7 03
 	jr ule, .LFEFAF5                                     ; FEFADE  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFAE0  f1 b0 26 02 00 00
@@ -180609,7 +180618,7 @@ sub_FEFAD8:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA02
 	ret                                                  ; FEFAF4  0e
 .LFEFAF5:
 	ld XIY,DisplayList_FEFB13                            ; FEFAF5  45 13 fb fe 00
-	ld XIX,sub_FEFB1D                                    ; FEFAFA  44 1d fb fe 00
+	ld XIX,EditScreen_MeasureNumberAt3                                    ; FEFAFA  44 1d fb fe 00
 	call T_DisplayListB_Run                              ; FEFAFF  1d f4 17 f4
 	ret                                                  ; FEFB03  0e
 
@@ -180626,7 +180635,9 @@ DisplayList_FEFB13:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFB15
 	.ascii " '"                                 ; FEFB19
 	.byte 0x03, 0x02                   ; FEFB1B
-sub_FEFB1D:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA06
+; EditScreen_MeasureNumberAt3: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 3 of 12 in address order; NOTE EDIT slot 3 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt3:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA06
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFB1D  d1 b0 26 3f e7 03
 	jr ule, .LFEFB3A                                     ; FEFB23  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFB25  f1 b0 26 02 00 00
@@ -180636,7 +180647,7 @@ sub_FEFB1D:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA06
 	ret                                                  ; FEFB39  0e
 .LFEFB3A:
 	ld XIY,DisplayList_FEFB58                            ; FEFB3A  45 58 fb fe 00
-	ld XIX,sub_FEFB62                                    ; FEFB3F  44 62 fb fe 00
+	ld XIX,EditScreen_MeasureNumberAt4                                    ; FEFB3F  44 62 fb fe 00
 	call T_DisplayListB_Run                              ; FEFB44  1d f4 17 f4
 	ret                                                  ; FEFB48  0e
 
@@ -180653,7 +180664,9 @@ DisplayList_FEFB58:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFB5A
 	.ascii " *"                                 ; FEFB5E
 	.byte 0x03, 0x02                   ; FEFB60
-sub_FEFB62:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA2A
+; EditScreen_MeasureNumberAt4: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 4 of 12 in address order; DRUM EDIT slot 0 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt4:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA2A
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFB62  d1 b0 26 3f e7 03
 	jr ule, .LFEFB7F                                     ; FEFB68  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFB6A  f1 b0 26 02 00 00
@@ -180663,7 +180676,7 @@ sub_FEFB62:   ; entry: named by 2 `.long`/`ld` operands, first at 0xFEFA2A
 	ret                                                  ; FEFB7E  0e
 .LFEFB7F:
 	ld XIY,DisplayList_FEFB9D                            ; FEFB7F  45 9d fb fe 00
-	ld XIX,sub_FEFBA7                                    ; FEFB84  44 a7 fb fe 00
+	ld XIX,EditScreen_MeasureNumberAt5                                    ; FEFB84  44 a7 fb fe 00
 	call T_DisplayListB_Run                              ; FEFB89  1d f4 17 f4
 	ret                                                  ; FEFB8D  0e
 
@@ -180680,7 +180693,9 @@ DisplayList_FEFB9D:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFB9F
 	.ascii " )"                                 ; FEFBA3
 	.byte 0x03, 0x03                   ; FEFBA5
-sub_FEFBA7:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA0A
+; EditScreen_MeasureNumberAt5: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 5 of 12 in address order; NOTE EDIT slot 4, DRUM EDIT slot 1 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt5:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA0A
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFBA7  d1 b0 26 3f e7 03
 	jr ule, .LFEFBC4                                     ; FEFBAD  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFBAF  f1 b0 26 02 00 00
@@ -180690,7 +180705,7 @@ sub_FEFBA7:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA0A
 	ret                                                  ; FEFBC3  0e
 .LFEFBC4:
 	ld XIY,DisplayList_FEFBE2                            ; FEFBC4  45 e2 fb fe 00
-	ld XIX,sub_FEFBEC                                    ; FEFBC9  44 ec fb fe 00
+	ld XIX,EditScreen_MeasureNumberAt6                                    ; FEFBC9  44 ec fb fe 00
 	call T_DisplayListB_Run                              ; FEFBCE  1d f4 17 f4
 	ret                                                  ; FEFBD2  0e
 
@@ -180707,7 +180722,9 @@ DisplayList_FEFBE2:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFBE4
 	.ascii " -"                                 ; FEFBE8
 	.byte 0x03, 0x02                   ; FEFBEA
-sub_FEFBEC:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA0E
+; EditScreen_MeasureNumberAt6: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 6 of 12 in address order; NOTE EDIT slot 5, DRUM EDIT slot 2 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt6:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA0E
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFBEC  d1 b0 26 3f e7 03
 	jr ule, .LFEFC09                                     ; FEFBF2  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFBF4  f1 b0 26 02 00 00
@@ -180717,7 +180734,7 @@ sub_FEFBEC:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA0E
 	ret                                                  ; FEFC08  0e
 .LFEFC09:
 	ld XIY,DisplayList_FEFC27                            ; FEFC09  45 27 fc fe 00
-	ld XIX,sub_FEFC31                                    ; FEFC0E  44 31 fc fe 00
+	ld XIX,EditScreen_MeasureNumberAt7                                    ; FEFC0E  44 31 fc fe 00
 	call T_DisplayListB_Run                              ; FEFC13  1d f4 17 f4
 	ret                                                  ; FEFC17  0e
 
@@ -180734,7 +180751,9 @@ DisplayList_FEFC27:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFC29
 	.ascii " 0"                                 ; FEFC2D
 	.byte 0x03, 0x02                   ; FEFC2F
-sub_FEFC31:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA12
+; EditScreen_MeasureNumberAt7: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 7 of 12 in address order; NOTE EDIT slot 6, DRUM EDIT slot 3 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt7:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA12
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFC31  d1 b0 26 3f e7 03
 	jr ule, .LFEFC4E                                     ; FEFC37  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFC39  f1 b0 26 02 00 00
@@ -180744,7 +180763,7 @@ sub_FEFC31:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA12
 	ret                                                  ; FEFC4D  0e
 .LFEFC4E:
 	ld XIY,DisplayList_FEFC6C                            ; FEFC4E  45 6c fc fe 00
-	ld XIX,sub_FEFC76                                    ; FEFC53  44 76 fc fe 00
+	ld XIX,EditScreen_MeasureNumberAt8                                    ; FEFC53  44 76 fc fe 00
 	call T_DisplayListB_Run                              ; FEFC58  1d f4 17 f4
 	ret                                                  ; FEFC5C  0e
 
@@ -180761,7 +180780,9 @@ DisplayList_FEFC6C:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFC6E
 	.ascii " 3"                                 ; FEFC72
 	.byte 0x03, 0x02                   ; FEFC74
-sub_FEFC76:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA16
+; EditScreen_MeasureNumberAt8: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 8 of 12 in address order; NOTE EDIT slot 7, DRUM EDIT slot 4 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt8:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA16
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFC76  d1 b0 26 3f e7 03
 	jr ule, .LFEFC93                                     ; FEFC7C  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFC7E  f1 b0 26 02 00 00
@@ -180771,7 +180792,7 @@ sub_FEFC76:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA16
 	ret                                                  ; FEFC92  0e
 .LFEFC93:
 	ld XIY,DisplayList_FEFCB1                            ; FEFC93  45 b1 fc fe 00
-	ld XIX,sub_FEFCBB                                    ; FEFC98  44 bb fc fe 00
+	ld XIX,EditScreen_MeasureNumberAt9                                    ; FEFC98  44 bb fc fe 00
 	call T_DisplayListB_Run                              ; FEFC9D  1d f4 17 f4
 	ret                                                  ; FEFCA1  0e
 
@@ -180788,7 +180809,9 @@ DisplayList_FEFCB1:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFCB3
 	.ascii " 6"                                 ; FEFCB7
 	.byte 0x03, 0x02                   ; FEFCB9
-sub_FEFCBB:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA1A
+; EditScreen_MeasureNumberAt9: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 9 of 12 in address order; NOTE EDIT slot 8, DRUM EDIT slot 5 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt9:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA1A
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFCBB  d1 b0 26 3f e7 03
 	jr ule, .LFEFCD8                                     ; FEFCC1  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFCC3  f1 b0 26 02 00 00
@@ -180798,7 +180821,7 @@ sub_FEFCBB:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA1A
 	ret                                                  ; FEFCD7  0e
 .LFEFCD8:
 	ld XIY,DisplayList_FEFCF6                            ; FEFCD8  45 f6 fc fe 00
-	ld XIX,sub_FEFD00                                    ; FEFCDD  44 00 fd fe 00
+	ld XIX,EditScreen_MeasureNumberAt10                                    ; FEFCDD  44 00 fd fe 00
 	call T_DisplayListB_Run                              ; FEFCE2  1d f4 17 f4
 	ret                                                  ; FEFCE6  0e
 
@@ -180815,7 +180838,9 @@ DisplayList_FEFCF6:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFCF8
 	.ascii " 9"                                 ; FEFCFC
 	.byte 0x03, 0x02                   ; FEFCFE
-sub_FEFD00:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA1E
+; EditScreen_MeasureNumberAt10: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 10 of 12 in address order; NOTE EDIT slot 9, DRUM EDIT slot 6 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt10:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA1E
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFD00  d1 b0 26 3f e7 03
 	jr ule, .LFEFD1D                                     ; FEFD06  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFD08  f1 b0 26 02 00 00
@@ -180825,7 +180850,7 @@ sub_FEFD00:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA1E
 	ret                                                  ; FEFD1C  0e
 .LFEFD1D:
 	ld XIY,DisplayList_FEFD3B                            ; FEFD1D  45 3b fd fe 00
-	ld XIX,sub_FEFD45                                    ; FEFD22  44 45 fd fe 00
+	ld XIX,EditScreen_MeasureNumberAt11                                    ; FEFD22  44 45 fd fe 00
 	call T_DisplayListB_Run                              ; FEFD27  1d f4 17 f4
 	ret                                                  ; FEFD2B  0e
 
@@ -180842,7 +180867,9 @@ DisplayList_FEFD3B:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFD3D
 	.ascii " <"                                 ; FEFD41
 	.byte 0x03, 0x02                   ; FEFD43
-sub_FEFD45:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA22
+; EditScreen_MeasureNumberAt11: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the
+;   edit screen; place 11 of 12 in address order; NOTE EDIT slot 10, DRUM EDIT slot 7 (notes/prom_a_edit_screen_measure_numbers.py).
+EditScreen_MeasureNumberAt11:   ; entry: named by 3 `.long`/`ld` operands, first at 0xFEFA22
 	m_cp_mi16 MW16, 0x26b0, 0x03e7                       ; FEFD45  d1 b0 26 3f e7 03
 	jr ule, .LFEFD62                                     ; FEFD4B  63 15
 	ldw (0x26b0:16), 0x00                                ; FEFD4D  f1 b0 26 02 00 00

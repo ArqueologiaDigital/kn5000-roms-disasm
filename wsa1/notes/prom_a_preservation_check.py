@@ -2113,6 +2113,19 @@ RENAMES = {
     "sub_F5D77F": "SoundEditController_PaintHeader_Copy",
     "sub_F6F476": "OldCopy_BStore_Workspace_SaveToBank",
     "sub_F71D4F": "ClearRam10D3_34Bytes_Copy",
+    "sub_FEFA4E": "EditScreen_MeasureNumberAt0",
+    "sub_FEFA93": "EditScreen_MeasureNumberAt1",
+    "sub_FEFAD8": "EditScreen_MeasureNumberAt2",
+    "sub_FEFB1D": "EditScreen_MeasureNumberAt3",
+    "sub_FEFB62": "EditScreen_MeasureNumberAt4",
+    "sub_FEFBA7": "EditScreen_MeasureNumberAt5",
+    "sub_FEFBEC": "EditScreen_MeasureNumberAt6",
+    "sub_FEFC31": "EditScreen_MeasureNumberAt7",
+    "sub_FEFC76": "EditScreen_MeasureNumberAt8",
+    "sub_FEFCBB": "EditScreen_MeasureNumberAt9",
+    "sub_FEFD00": "EditScreen_MeasureNumberAt10",
+    "sub_FEFD45": "EditScreen_MeasureNumberAt11",
+    "sub_FEF9A6": "EditScreen_DrawMeasureNumbers",
 }
 
 
