@@ -4822,7 +4822,7 @@ ToneParam_ExtendedOpsBlock:
 	call	cmp_ld_mae
 	lda	xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld	xde, xwa
-	lda	xbc, (0xab000:24)
+	lda	xbc, (SEQ_SONG_SLOTS:24)
 	sub	xbc, xde
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError

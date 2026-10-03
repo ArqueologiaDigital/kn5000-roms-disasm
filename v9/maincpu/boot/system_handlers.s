@@ -193,26 +193,26 @@ Vga_SetupMultiPlaneDisplay:
 	ldw de, 0x400
 	call Copy_DE_words_from_XBC_to_XWA
 	ld xwa, 0x1b4800
-	ld xbc, 0xab000
+	ld xbc, SEQ_SONG_SLOTS
 	ld xde, 0x5c00
 	call Copy_DE_words_from_XBC_to_XWA
 	ld wa, 1:i3
 	calr Vga_SelectWritePlane
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, 0xb800
 	ld xwa, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	ld wa, 2:i3
 	calr Vga_SelectWritePlane
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, 0x2b800
 	ld xwa, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	ld wa, 3:i3
 	calr Vga_SelectWritePlane
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, 0x4b800
 	ld xwa, 0x1a0000
 	ldw de, 0x4c00
@@ -227,27 +227,27 @@ Vga_RestoreMultiPlaneDisplay:
 	ld xbc, 0x1b4000
 	ldw de, 0x400
 	call Copy_DE_words_from_XBC_to_XWA
-	ld xwa, 0xab000
+	ld xwa, SEQ_SONG_SLOTS
 	ld xbc, 0x1b4800
 	ld xde, 0x5c00
 	call Copy_DE_words_from_XBC_to_XWA
 	ld wa, 1:i3
 	calr Vga_SelectWritePlane
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	add xwa, 0xb800
 	ld xbc, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	ld wa, 2:i3
 	calr Vga_SelectWritePlane
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	add xwa, 0x2b800
 	ld xbc, 0x1a0000
 	ld xde, 0x10000
 	call Copy_DE_words_from_XBC_to_XWA
 	ld wa, 3:i3
 	calr Vga_SelectWritePlane
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	add xwa, 0x4b800
 	ld xbc, 0x1a0000
 	ldw de, 0x4c00

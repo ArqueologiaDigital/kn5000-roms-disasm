@@ -15355,7 +15355,7 @@ SeqData_CopyBlockToBuffer:
 	ld w, 0x0:opc
 	extz xwa
 	sll xwa, 11
-	lda xde, (0x0ab000:24)
+	lda xde, (SEQ_SONG_SLOTS:24)
 	add xde, xwa
 	ld xiy, 0xf180
 	ld xix, xde
@@ -15367,7 +15367,7 @@ VoicePreset_LoadAndInitPan:
 	ld w, 0x0:opc
 	extz xwa
 	sll xwa, 11
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, xwa
 	ld xiy, xbc
 	ld xix, 0xf180
@@ -15442,7 +15442,7 @@ PartCopy16_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa+256)
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 	add xhl, xwa
 
 PartCopy16_TransferLoop:
@@ -15468,7 +15468,7 @@ PartCopyBuf_ComputeSrcAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa+736)
-	lda xde, (0x0ab000:24)
+	lda xde, (SEQ_SONG_SLOTS:24)
 	add xde, xwa
 
 PartCopyBuf_SetupDst:
@@ -15483,7 +15483,7 @@ PartCopyBuf_ComputeDstAddr:
 	extz xbc
 	sll xbc, 11
 	lda xwa, (xbc+736)
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, xwa
 
 PartCopyBuf_InitCounter:
@@ -15522,7 +15522,7 @@ Part_WriteByte_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	add xwa, xbc
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, xwa
 
 Part_WriteByte_DoWrite:
@@ -15553,7 +15553,7 @@ Part_WriteWord_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	add xwa, xbc
-	ld xbc, 0xab000
+	ld xbc, SEQ_SONG_SLOTS
 	add xbc, xwa
 
 Part_WriteWord_DoWrite:
@@ -15575,7 +15575,7 @@ Part_ReadByteDirect_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	add xwa, xbc
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, xwa
 
 Part_ReadByteDirect_DoRead:
@@ -15597,7 +15597,7 @@ Part_ReadWord_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	add xwa, xbc
-	ld xbc, 0xab000
+	ld xbc, SEQ_SONG_SLOTS
 	add xbc, xwa
 
 Part_ReadWord_DoRead:
@@ -15746,7 +15746,7 @@ PartSubBlk_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa + 32)
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 	add xhl, xwa
 
 PartSubBlk_WriteAndCheck:
@@ -15766,7 +15766,7 @@ PartSubBlkRd_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa + 32)
-	lda xde, (0x0ab000:24)
+	lda xde, (SEQ_SONG_SLOTS:24)
 	add xde, xwa
 
 PartSubBlkRd_ReadAndReturn:
@@ -15787,7 +15787,7 @@ PartSubBlk48_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa + 48)
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 	add xhl, xwa
 
 PartSubBlk48_WriteAndCheck:
@@ -15806,7 +15806,7 @@ Part_WriteSubBlock48_Skip:
 	extz	xwa
 	sll	xwa, 11
 	lda	xwa, (xwa+48)
-	lda	xde, (0x0ab000:24)
+	lda	xde, (SEQ_SONG_SLOTS:24)
 	add	xde, xwa
 Part_WriteSubBlock48_Join:
 	extz	bc
@@ -16133,7 +16133,7 @@ SeqCopy2K_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa+256)
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 	add xhl, xwa
 
 SeqCopy2K_SetupTransfer:
@@ -26362,7 +26362,7 @@ SeqSave_WriteBlockToFile:
 	ld b, 0x0:opc
 	extz xbc
 	sll xbc, 11
-	ld xwa, 0xab000
+	ld xwa, SEQ_SONG_SLOTS
 	add xwa, xbc
 	ld xbc, 0x800
 	jp FileIO_WriteByte_Impl

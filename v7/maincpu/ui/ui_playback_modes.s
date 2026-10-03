@@ -936,7 +936,7 @@ CDlikeBankLoad_CheckSavedState:
 	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	ld xiy, 0xf180
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ld a, (0x00ffe3:24)
 	sla xwa, 11
@@ -999,7 +999,7 @@ SongBank_LoadToWorkArea:
 	xor xwa, xwa
 	ld a, (0x00ffe3:24)
 	sla xwa, 11
-	ld xiy, 0xab000
+	ld xiy, SEQ_SONG_SLOTS
 	add xiy, xwa
 	ld xix, 0xf180
 	ldw bc, 0x800

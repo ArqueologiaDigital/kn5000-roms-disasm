@@ -131,7 +131,7 @@ SongBank_ComputeTableOfs:
 	push xiz
 	ld hl, bc
 	ld (xsp + 4), wa
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	ld wa, (xsp + 4)
 	extz xwa
 	sll xwa, 11

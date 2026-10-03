@@ -420,7 +420,7 @@ SetWall_WriteSingleSlot:
 	sla l, 4
 	ld xde, SetWall_SlotOrderTable
 	lda	xiy, (xde+hl)
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ld a, (3391:16)
 	sla xwa, 11
@@ -437,7 +437,7 @@ SetWall_WriteSingleSlot:
 	ld a, 0xff:opc
 
 SetWall_WriteSingle_SetMode:
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 
 	xor xhl, xhl
 
@@ -459,7 +459,7 @@ SetWall_WriteSingle_SetMode:
 
 	pop xhl
 
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 
 	xor xwa, xwa
 
@@ -507,7 +507,7 @@ SetWall_WriteAllSlots:
 	ldib_erp 0x34, 0
 
 SetWall_WriteAll_Loop:
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ldto_berp A, 0x34
 	sla xwa, 11
@@ -517,7 +517,7 @@ SetWall_WriteAll_Loop:
 	lda	xiy, (xde+hl)
 	ldw bc, 0x10
 	ldir85
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ldto_berp A, 0x34
 	sla xwa, 11
@@ -531,7 +531,7 @@ SetWall_WriteAll_Loop:
 
 SetWall_WriteAll_ModeSet:
 	ld	(xix), a
-	ld	xix, 700416
+	ld	xix, SEQ_SONG_SLOTS
 	xor	xwa, xwa
 	ldto_berp	a, 52
 	sla	xwa, 11
@@ -584,7 +584,7 @@ SetWall_LocalWriteAll:
 	ldib_erp 0x34, 0
 
 SetWall_LocalWriteAll_Loop:
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ldto_berp A, 0x34
 	sla xwa, 11
@@ -594,7 +594,7 @@ SetWall_LocalWriteAll_Loop:
 	lda	xiy, (xde+hl)
 	ldw bc, 0x10
 	ldir85
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ldto_berp A, 0x34
 	sla xwa, 11
@@ -608,7 +608,7 @@ SetWall_LocalWriteAll_Loop:
 
 SetWall_LocalWriteAll_Mode:
 	ld	(xix), a
-	ld	xix, 700416
+	ld	xix, SEQ_SONG_SLOTS
 	xor	xwa, xwa
 	ldto_berp	a, 52
 	sla	xwa, 11
@@ -1277,7 +1277,7 @@ SetWall_EventOutput:
 	ld xde, 0xf1f8
 	ld	(xde+hl), wa
 	xor xwa, xwa
-	ld xiz, 0xab000
+	ld xiz, SEQ_SONG_SLOTS
 	ld a, (0x00ffe3:24)
 	sla xwa, 11
 	add xiz, xwa
@@ -1467,7 +1467,7 @@ SetWall_FullReset:
 
 SetWall_FullReset_SlotLoop:
 	pushw bc
-	ld xde, 0xab000
+	ld xde, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ld wa, bc
 	sla xwa, 11
@@ -2025,7 +2025,7 @@ MiddleFuncCall_DispatchData_Code_Helper5:
 	xor	xwa, xwa
 	ld	a, (65507:24)
 	sla	xwa, 11
-	ld	xix, 700416
+	ld	xix, SEQ_SONG_SLOTS
 	add	xix, xwa
 	ld	xwa, 256
 	add	xix, xwa
@@ -2055,7 +2055,7 @@ SetWall_InlineCodeBlock3_Helper:
 	ld	xix, 62032
 	jr	SetWall_MiscDataAndCode_Join
 SetWall_MiscDataAndCode_Skip3:
-	ld	xix, 700416
+	ld	xix, SEQ_SONG_SLOTS
 	sla	xwa, 11
 	add	xix, xwa
 	add	xix, 208
@@ -2143,7 +2143,7 @@ SetWall_SyncToneGenToDRAM:
 	xor xwa, xwa
 	ld a, (0x00ffe3:24)
 	sla xwa, 11
-	ld xiy, 0xab000
+	ld xiy, SEQ_SONG_SLOTS
 	add xiy, xwa
 	ld xix, 0xf180
 	ldw bc, 0x800
@@ -2204,7 +2204,7 @@ SetWall_Sync_FinalUpdate:
 SetWall_LoadBankToToneGen:
 	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xhl, xhl
 	ld l, (0x00ffe3:24)
 	sla xhl, 11

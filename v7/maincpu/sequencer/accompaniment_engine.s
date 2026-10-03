@@ -37262,7 +37262,7 @@ AccStyle_TableDataEntry_0x90:
 	ldw	bc, 15
 	ldirw
 	lda	xde, (RHYTHM_PATTERN_BUF_A:24)
-	lda	xbc, (0xab000:24)
+	lda	xbc, (SEQ_SONG_SLOTS:24)
 	sub	xbc, xde
 	ld	xwa, 432128
 	call	FileIO_ReadBlock

@@ -4038,7 +4038,7 @@ DocMed_Exit:
 SetSongSlotValue:
 	cp wa, 0xa
 	ret nc
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 	ld de, wa
 	sll de, 11
 	extz xde
@@ -4058,7 +4058,7 @@ GetSongSlotValue:
 	ld hl, 0:i3
 	cp wa, 0xa
 	ret nc
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	sll wa, 11
 	extz xwa
 	add xbc, xwa

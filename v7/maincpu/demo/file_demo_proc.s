@@ -121,11 +121,11 @@ FDemo_DisplayResourceData_Skip6:
 	lda	xsp, (xsp+0x124)
 	ret
 FDemo_DisplayResourceData_Helper:
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	ld (0x025b7e:24), xwa
 	ret
 Seq_LoadNamedResource_Helper:
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 	lda xbc, (0x0fd800:24)
 	sub XBC,XHL
 	ld XIX,XBC
@@ -1121,7 +1121,7 @@ Demo_GetPresetBaseForPart:
 	jr Demo_GetPresetBase_StoreAndRet
 
 Demo_GetPresetBase_Default:
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 
 Demo_GetPresetBase_StoreAndRet:
 	lda xhl, (xhl+2048)
@@ -1139,7 +1139,7 @@ Demo_GetPresetBaseForPartAlt:
 	jr Demo_GetPresetBaseAlt_StoreAndRet
 
 Demo_GetPresetBaseAlt_Default:
-	lda xhl, (0x0ab000:24)
+	lda xhl, (SEQ_SONG_SLOTS:24)
 
 Demo_GetPresetBaseAlt_StoreAndRet:
 	lda xhl, (xhl+768)
@@ -1157,7 +1157,7 @@ Demo_GetPresetBaseForPartExt:
 	jr Demo_GetPresetBaseExt_StoreAndRet
 
 Demo_GetPresetBaseExt_Default:
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 
 Demo_GetPresetBaseExt_StoreAndRet:
 	lda xhl, (xwa+208:16)
@@ -1175,7 +1175,7 @@ Voice_GetPresetFieldWord:
 	jr Voice_GetPresetField_Compute
 
 Voice_GetPresetField_Default:
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 
 Voice_GetPresetField_Compute:
 	lda xwa, (xwa + 30)
@@ -1194,7 +1194,7 @@ Voice_GetPresetFieldAddr:
 	jr Voice_GetPresetFieldAddr_Compute
 
 Voice_GetPresetFieldAddr_Default:
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 
 Voice_GetPresetFieldAddr_Compute:
 	lda xhl, (xwa + 32)
@@ -1930,7 +1930,7 @@ LoadRegion2_OpenSuccess:
 	cp hl, 0:i3
 	jr z, LoadRegion2_AltSeqInit
 	call SeqLoadPre				; primary ext memory init
-	ld xwa, 0x000ab000			; ext memory base
+	ld xwa, SEQ_SONG_SLOTS			; ext memory base
 	ld xbc, 0x00005000			; size = 0x5000
 	call FileIO_ReadBlock
 	lda xwa, (0x0b0000:24); ext memory region 2
@@ -1945,7 +1945,7 @@ LoadRegion2_OpenSuccess:
 	jr LoadRegion2_Finalize
 LoadRegion2_AltSeqInit:
 	call SeqLoad_JumpInitFromPreset				; alternate ext memory init
-	ld xwa, 0x000ab000
+	ld xwa, SEQ_SONG_SLOTS
 	ld xbc, 0x00000800			; smaller size
 	call FileIO_ReadBlock
 	lda xwa, (0x0b0000:24)
@@ -2014,7 +2014,7 @@ FileIO_LoadSongRegion8:
 	cp hl, 1:i3
 	jrl nz, .Lc_f87434
 	call SeqLoad_JmpLoadPre
-	ld XWA,0x000ab000
+	ld XWA,SEQ_SONG_SLOTS
 	ld XBC,0x00005000
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2058,7 +2058,7 @@ FileIO_LoadSongRegion8:
 	jr t, .Lc_f87434
 .Lc_f873bf:
 	call SeqLoad_JmpInitPreset
-	ld XWA,0x000ab000
+	ld XWA,SEQ_SONG_SLOTS
 	ld XBC,0x00000800
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2128,7 +2128,7 @@ LoadRegion3_OpenSuccess:
 	call cmp_ld_mae
 	lda xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld xde, xwa
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	sub xbc, xde
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2606,7 +2606,7 @@ SaveRegion2_SpaceOk:
 	call FileIO_ReturnError
 	jr SaveRegion2_Return
 SaveRegion2_OpenSuccess:
-	ld xwa, 0x000ab000			; ext mem base
+	ld xwa, SEQ_SONG_SLOTS			; ext mem base
 	ld xbc, 0x00005000			; fixed range
 	call FileIO_WriteByte_Impl
 	ld xwa, 0x000b0000			; second range base
@@ -3327,7 +3327,7 @@ FileIO_ByteBlock_DemoProc1_Skip9:
 	ld	bc, (xsp+32)
 	extz	xbc
 	sll	xbc, 11
-	lda	xwa, (700416:24)
+	lda	xwa, (SEQ_SONG_SLOTS:24)
 	add	xwa, xbc
 	ld	xbc, 2048
 	call	FileIO_ReadBlock

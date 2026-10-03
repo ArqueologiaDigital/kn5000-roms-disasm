@@ -3697,7 +3697,7 @@ BuildSlotLabel:
 	push XIZ
 	ld HL,BC
 	ld (XSP+0x04),WA
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	ld WA,(XSP+0x04)
 	extz XWA
 	sll XWA, 0x0b

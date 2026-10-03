@@ -1757,7 +1757,7 @@ SMF_LoadSongBank:
 	ld a, (4394:16)
 	cp a, 0:i3
 	jr z, SMF_LoadBank_Return
-	ld xde, 0xab000
+	ld xde, SEQ_SONG_SLOTS
 	lda xde, (xde+199:16)
 	cp (4394:16), 1
 	jr nz, SMF_LoadBank_ReadEntries
@@ -1769,7 +1769,7 @@ SMF_LoadBank_ReadEntries:
 	ld c, a
 	ld xhl, xbc
 	mul hl, 0x800
-	add xhl, 0xab000
+	add xhl, SEQ_SONG_SLOTS
 	push xhl
 	ldw de, 0xaf
 	ld	wa, (xhl+de)
@@ -2342,7 +2342,7 @@ SMF_ConfigSlot_Epilogue:
 
 SMF_DetectFormat:
 	ld (4394:16), 0
-	ld xde, 0xab000
+	ld xde, SEQ_SONG_SLOTS
 	lda xde, (xde + 4)
 	ld a, (xde + 1)
 	ld w, (xde + 2)
@@ -3388,7 +3388,7 @@ SMF_SetupRead_Finalize:
 SMF_SetupRead_Return:
 	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xhl, xhl
 	ld l, (0x00ffe3:24)
 	sla xhl, 11

@@ -1408,7 +1408,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Skip:
 	sla	bc, 11
 	ld	de, bc
 	exts	xde
-	lda	xbc, (0xab000:24)
+	lda	xbc, (SEQ_SONG_SLOTS:24)
 	add	xbc, xde
 	add	xbc, 0x2e0
 SysEx_DispatchByChannel_49_Entry_Code_Join:

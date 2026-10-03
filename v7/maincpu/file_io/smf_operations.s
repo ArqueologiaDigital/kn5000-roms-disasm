@@ -719,7 +719,7 @@ SmfFN_Save_WriteSlot:
 	lda	xwa, (xsp+8)
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
-	lda	xwa, (700416:24)
+	lda	xwa, (SEQ_SONG_SLOTS:24)
 	ld	xbc, 0:i3
 	ld	c, (34988:16)
 	sll	xbc, 11

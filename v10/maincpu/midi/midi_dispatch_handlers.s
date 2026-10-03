@@ -3129,7 +3129,7 @@ FileData_LoadFromSlot:
 	ld c, (xsp)
 	extz bc
 	sla bc, 11
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	lda	xwa, (xwa+bc)
 	calr DataBuf_CheckSubFormat
 	ld (0xb7ea:16), hl
@@ -3507,7 +3507,7 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	ld c, (xsp + 20)
 	extz bc
 	sla bc, 11
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	lda	xwa, (xwa+bc)
 	push xwa
 	ld xwa, (xsp + 12)
@@ -3524,7 +3524,7 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	ld c, (xsp + 18)
 	extz bc
 	sla bc, 11
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	lda	xwa, (xwa+bc)
 	ld (xsp + 14), xwa
 	ld xwa, 0x2e0
@@ -5905,7 +5905,7 @@ FileData_LoadAndParseType3_Continue:
 	ld c, (xsp + 20)
 	extz bc
 	sla bc, 11
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	lda	xwa, (xwa+bc)
 	push xwa
 	ld xwa, (xsp + 12)
@@ -5922,7 +5922,7 @@ FileData_LoadAndParseType3_Continue:
 	ld c, (xsp + 18)
 	extz bc
 	sla bc, 11
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	lda	xwa, (xwa+bc)
 	ld (xsp + 14), xwa
 	ld xwa, 0x2e0
@@ -7180,7 +7180,7 @@ DataBuf_InitSlotFromPreset_Alt:
 	dec 1, bc
 	extz xbc
 	sll xbc, 11
-	ld xde, 0xab000
+	ld xde, SEQ_SONG_SLOTS
 	add xde, xbc
 	add xde, 0x2e0
 	pushw 0x20
@@ -7191,7 +7191,7 @@ DataBuf_InitSlotFromPreset_Alt:
 	dec 1, wa
 	extz xwa
 	sll xwa, 11
-	ld xbc, 0xab000
+	ld xbc, SEQ_SONG_SLOTS
 	add xbc, xwa
 	add xbc, 0x300
 	lda xwa, (0xfda2:16)
@@ -7651,7 +7651,7 @@ SndParam_UpdateChan_CopyMemory:
 	ld xbc, 0:i3
 	ld c, (xsp + 6)
 	sll xbc, 11
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	add xwa, xbc
 	ld (xsp), xwa
 	ld xwa, 0x2e0
@@ -10200,7 +10200,7 @@ MidiPkt_ArpPopReturn_Helper8:
 	ld	(xwa+8), xbc
 	ret
 MidiPkt_ArpPopReturn_Helper9:
-	lda	xbc, (0xab000:24)
+	lda	xbc, (SEQ_SONG_SLOTS:24)
 	ld	(xwa), xbc
 	lda	xbc, (xbc+20480)
 	ld	(xwa+4), xbc

@@ -332,7 +332,7 @@ SysEx_ValidateRolandHeader_NonZeroChan:
 	sla bc, 11
 	ld de, bc
 	exts xde
-	lda xbc, (0x0ab000:24)
+	lda xbc, (SEQ_SONG_SLOTS:24)
 	add xbc, xde
 	add xbc, 0x2e0
 

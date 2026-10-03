@@ -675,7 +675,7 @@ Display_CopyToneTableToRAM:
 	push xbc
 	push xix
 	push xiy
-	ld xix, 0xab000
+	ld xix, SEQ_SONG_SLOTS
 	xor xhl, xhl
 	ld l, (0x00ffe3:24)
 	sla xhl, 11

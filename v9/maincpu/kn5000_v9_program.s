@@ -1418,7 +1418,7 @@ ResInfo_GetTableDataInfo:
 	ret
 
 ResInfo_GetSndParamRange:
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	ld (xbc), xwa
 	ld xwa, 0x5000
 	ld (xbc + 4), xwa
@@ -1439,7 +1439,7 @@ ResInfo_GetToneGenRange:
 	ld (xbc), xwa
 	lda xwa, (RHYTHM_PATTERN_BUF_A:24)
 	ld xde, xwa
-	lda xwa, (0x0ab000:24)
+	lda xwa, (SEQ_SONG_SLOTS:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret

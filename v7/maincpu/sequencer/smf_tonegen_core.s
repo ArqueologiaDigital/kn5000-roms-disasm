@@ -1017,7 +1017,7 @@ SeqPlay_InitChannelParams_Loop:
 	ret
 
 FloppyIO_ComputeSwitchboardAddr:
-	ld xhl, 0xab000
+	ld xhl, SEQ_SONG_SLOTS
 	xor xwa, xwa
 	ld a, (0x00ffe3:24)
 	sla xwa, 11
