@@ -5901,39 +5901,43 @@ UIStateEvt_ParamEdit_Data_Join5:
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
 UIStateEvt_ParamEdit_Data_Skip13:
 	ld	(0xc5a0:16), 16
-	jr	110
+	jr	UIStateEvt_ParamEdit_Data_Epilogue
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
-	jr	z, 30
+	jr	z, UIStateEvt_ParamEdit_Data_Skip15
 	bit	0, (0x3284:16)
-	jr	nz, 18
+	jr	nz, UIStateEvt_ParamEdit_Data_Skip14
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
-	jr	z, 9
+	jr	z, UIStateEvt_ParamEdit_Data_Skip14
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
-	jr	nz, 0
+	jr	nz, UIStateEvt_ParamEdit_Data_Skip14
+UIStateEvt_ParamEdit_Data_Skip14:
 	orw	(0xc594:16), 4
+UIStateEvt_ParamEdit_Data_Skip15:
 	bit	1, (SWBTWR_PAYLOAD_3:16)
-	jr	z, 65
+	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
 	bit	1, (0xfc5f:16)
-	jr	z, 12
+	jr	z, UIStateEvt_ParamEdit_Data_Skip16
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
 	call	z, (0xfdf5f5:24)
+UIStateEvt_ParamEdit_Data_Skip16:
 	orw	(0xc594:16), 4
-	jr	39
+	jr	UIStateEvt_ParamEdit_Data_Epilogue
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
-	jr	z, 30
+	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
 	bit	0, (0x3284:16)
-	jr	nz, 18
+	jr	nz, UIStateEvt_ParamEdit_Data_Skip17
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
-	jr	z, 9
+	jr	z, UIStateEvt_ParamEdit_Data_Skip17
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
-	jr	nz, 0
+	jr	nz, UIStateEvt_ParamEdit_Data_Skip17
+UIStateEvt_ParamEdit_Data_Skip17:
 	orw	(0xc594:16), 4
 UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz

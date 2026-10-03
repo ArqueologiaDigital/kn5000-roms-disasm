@@ -45,3 +45,9 @@ before it.  Not seeded:
 
 v7's seeds are v10's mapped through the nearest label that both trees have, kept only when v7's instruction at
 the mapped address has the same mnemonic.  Seven did not map, because v7 still holds those blocks as `.byte`.
+
+## `--rich` beyond accompaniment_engine.s (2026-10-03)
+
+`trusted_dsp_config_sysex_<tree>.json`: all 12 R3 sites of audio/dsp_config_sysex.s, in each tree, are in
+UIStateEvt_ParamEdit_Data.  That is a handler reached only through widget_dispatch.s's `.long` table, so only
+`--rich` enters it.  12 / 12 / 12 traced, 0 conflicts; 12 operands and 4 labels applied per tree, `--verify` PASS.

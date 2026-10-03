@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,311
-#   semantic names ........... 50,386 (98.2%)
+#   symbols .................. 51,315
+#   semantic names ........... 50,390 (98.2%)
 #   positional names ......... 925
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -48238,7 +48238,11 @@ AudioDispatch_CheckStereoMode_Code_Skip11 00FDDC74
 AudioDispatch_CheckStereoMode_Code_Skip12 00FDDC96
 AudioDispatch_CheckStereoMode_Code_Join5 00FDDCAB
 AudioDispatch_CheckStereoMode_Code_Skip13 00FDDCCC
+AudioDispatch_CheckStereoMode_Code_Skip27 00FDDCF4
+AudioDispatch_CheckStereoMode_Code_Skip28 00FDDCFA
+AudioDispatch_CheckStereoMode_Code_Skip29 00FDDD12
 UIStateEvt_PartRouting 00FDDD19
+AudioDispatch_CheckStereoMode_Code_Skip30 00FDDD3B
 UIStateEvt_ParamEdit_Data_Epilogue 00FDDD41
 UIStateEvt_TransposeUpdate_Apply_Code_2 00FDDD67
 UIStateEvt_PartRouting_Code_Skip 00FDDD86

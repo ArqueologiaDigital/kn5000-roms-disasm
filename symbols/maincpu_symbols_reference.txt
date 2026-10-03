@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,634
-#   semantic names ........... 50,796 (98.4%)
+#   symbols .................. 51,638
+#   semantic names ........... 50,800 (98.4%)
 #   positional names ......... 838
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -48618,6 +48618,10 @@ UIStateEvt_ParamEdit_Data_Skip11 00FDE445
 UIStateEvt_ParamEdit_Data_Skip12 00FDE467
 UIStateEvt_ParamEdit_Data_Join5 00FDE47C
 UIStateEvt_ParamEdit_Data_Skip13 00FDE49D
+UIStateEvt_ParamEdit_Data_Skip14 00FDE4C5
+UIStateEvt_ParamEdit_Data_Skip15 00FDE4CB
+UIStateEvt_ParamEdit_Data_Skip16 00FDE4E3
+UIStateEvt_ParamEdit_Data_Skip17 00FDE50C
 UIStateEvt_ParamEdit_Data_Epilogue 00FDE512
 UIStateEvt_VolumeMixer_Data 00FDE514
 UIStateEvt_TransposeUpdate_Apply_Code_2 00FDE538

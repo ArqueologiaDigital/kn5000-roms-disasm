@@ -5084,40 +5084,44 @@ AudioDispatch_CheckStereoMode_Code_Join5:
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
 AudioDispatch_CheckStereoMode_Code_Skip13:
 	ld	(0xc504:16), 16
-	jr	110
+	jr	UIStateEvt_ParamEdit_Data_Epilogue
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
-	jr	z, 30
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip28
 	bit	0, (0x31e8:16)
-	jr	nz, 18
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip27
 	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
-	jr	z, 9
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip27
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
-	jr	nz, 0
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip27
+AudioDispatch_CheckStereoMode_Code_Skip27:
 	orw	(0xc4f8:16), 4
+AudioDispatch_CheckStereoMode_Code_Skip28:
 	bit	1, (SWBTWR_PAYLOAD_3:16)
-	jr	z, 65
+	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
 	bit	1, (0xfc5f:16)
-	jr	z, 12
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip29
 	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
 	call	z, (0xfdee26:24)
+AudioDispatch_CheckStereoMode_Code_Skip29:
 	orw	(0xc4f8:16), 4
 	.set	UIStateEvt_PartRouting, . + 1	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
-	jr	39
+	jr	UIStateEvt_ParamEdit_Data_Epilogue
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
-	jr	z, 30
+	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
 	bit	0, (0x31e8:16)
-	jr	nz, 18
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip30
 	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
-	jr	z, 9
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip30
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
-	jr	nz, 0
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip30
+AudioDispatch_CheckStereoMode_Code_Skip30:
 	orw	(0xc4f8:16), 4
 UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz
