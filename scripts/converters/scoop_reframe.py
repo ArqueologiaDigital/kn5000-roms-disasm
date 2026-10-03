@@ -796,8 +796,9 @@ def splice(img, spec, amap, a2n, rombytes, lines):
             c = strip_comment(lines[idx])[0].strip()
             while LABEL_RE.match(c):
                 c = c[LABEL_RE.match(c).end():].strip()
-            # a numeric relative branch (`jr nz, 58`) is not kept: the render may name it
-            if re.match(r'^(jr|jrl|calr|djnz)\b.*,?\s*-?(0x[0-9a-fA-F]+|\d+)\s*$', c) and \
+            # a branch or call with a numeric target (`jr nz, 58`, `call 16146861`) is not
+            # kept: the render may name it
+            if re.match(r'^(jr|jrl|calr|djnz|call|jp)\b.*,?\s*-?(0x[0-9a-fA-F]+|\d+)\s*$', c) and \
                     re.match(r'^\S+\s+(?:\w+\s*,\s*)?-?(0x[0-9a-fA-F]+|\d+)\s*$', c):
                 continue
             if c and not c.startswith(".") and addrs[idx] is not None and ext[idx] > 0:

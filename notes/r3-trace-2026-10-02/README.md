@@ -194,3 +194,27 @@ the byte gate.
   right. Its three branches were numeric because nothing references the block. It now has labels, and
   the unreferenced positional label `RhythmVoice_WriteBuf_Clamp_Code` on the two padding bytes before it
   is gone.
+
+### `cmpsetttl_cases_<tree>.json` (2026-10-03)
+
+Six R5/R6/mid-line refusals at v10/v9 0xF67F9D-0xF67FE5. `CmpSetTtl_Dispatch2` is the base of
+`jp t, (xix+de)` over `CmpSetTtl_DynamicLookup_CaseTable`, whose 12 offsets reach six 16-byte case bodies.
+A lane had typed them as text: `":;<> "` is `push xde / push xhl / push xix / push xiz / ld w, ...`.
+
+- Their targets are labelled: `CmpSetTtl_Dispatch2_Helper2` (0xF6616F) and `CmpSetTtl_Dispatch2_Helper3`
+  (0xF661AD, mid-line in `ldw de, 15930` before).
+- `TimeSig_SlotEntryByte2Offsets` (renamed from `TimeSig_DisplayStrings_Code5` by
+  `scripts/renaming/rename_timesig_slot_entry_byte2.sed`) is `34, 42, 50, 58`: byte +2 of the slot
+  record's four 8-byte entries, alongside `TimeSig_SlotFieldOffsets` (byte +5).
+- The calls the render left numeric (labels defined in another span of the same spec) were named by hand.
+
+`scoop_reframe.py keep_original_code` now also re-renders a `call` / `jp` whose target is a bare number.
+
+v7: `port_islands.py --line 25637` (the `.byte` island at 0xF65CD2: 352 of 360 B, 17 labels) and
+`--whole 29307-29368 --delta 0x404` (the case bodies, 94 B). `cmpsetttl_v7_postport.py` then:
+
+- labels the two offset tables;
+- names `ld xix, 0xf65da5` / `0xf65de3` and `call 16145895` (`S2cTtl_InitOnTitleChange`);
+- restates the carried comments with v7's RAM: v10 0x39AA = v7 0x390E, and v10 0x3989/0x398A..0x3995 =
+  v7 0x38ED/0x38EE..0x38F9;
+- drops the unreferenced mid-body label `CmpSetTtl_Dispatch2_Code`.

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,411
-#   semantic names ........... 50,509 (98.2%)
+#   symbols .................. 51,434
+#   semantic names ........... 50,532 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33012,8 +33012,27 @@ DrumVoice_NotifyEE_Entry4 00F65CAD
 DrumVoice_NotifyEE_Return10 00F65CBC
 CmEsyTtl_Dispatch2_Helper 00F65CCB
 DrumVoice_NotifyEE_Entry4_Data 00F65CD2
+TimeSig_DisplayStrings_Code_Helper4 00F65CE4
+TimeSig_DisplayStrings_Code_Helper4_Return 00F65D15
+TimeSig_DisplayStrings_Code_Return8 00F65D47
+CmpSetTtl_Dispatch2_Helper 00F65D48
+TimeSig_DisplayStrings_Helper4 00F65D4F
+TimeSig_DisplayStrings_Code_Skip35 00F65D60
+TimeSig_DisplayStrings_Code_Join7 00F65D66
 TimeSig_DisplayStrings_Code_Return9 00F65D6A
+CmpSetTtl_Dispatch2_Helper2 00F65D6B
 TimeSig_DisplayStrings_Helper5 00F65D72
+TimeSig_DisplayStrings_Code_Skip36 00F65D99
+TimeSig_DisplayStrings_Code_Join8 00F65D9F
+TimeSig_DisplayStrings_Code_Return10 00F65DA4
+TimeSig_SlotEntryByte2Offsets 00F65DA5
+CmpSetTtl_Dispatch2_Helper3 00F65DA9
+TimeSig_DisplayStrings_Helper6 00F65DB0
+TimeSig_DisplayStrings_Code_Skip37 00F65DD7
+TimeSig_DisplayStrings_Code_Join9 00F65DDD
+TimeSig_DisplayStrings_Code_Return11 00F65DE2
+TimeSig_SlotFieldOffsets 00F65DE3
+S2cTtl_InitOnTitleChange 00F65DE7
 TimeSig_CallProc 00F65E3A
 Tempo_AdjustStartMeasure 00F65E5F
 Tempo_StartMeasureDec 00F65E84
@@ -33421,7 +33440,11 @@ CmpSetTtl_DrumVoice1 00F67B3B
 CmpSetTtl_SecondaryDispatch 00F67B4C
 CmpSetTtl_DynamicLookup 00F67B75
 CmpSetTtl_Dispatch2 00F67B89
-CmpSetTtl_Dispatch2_Code 00F67B8F
+CmpSetTtl_Case_EntryIndexDown 00F67B99
+CmpSetTtl_Case_EntryByte2Up 00F67BA9
+CmpSetTtl_Case_EntryByte2Down 00F67BB9
+CmpSetTtl_Case_EntryByte5Up 00F67BC9
+CmpSetTtl_Case_EntryByte5Down 00F67BD9
 CmpReal_ReturnZero 00F67BE7
 CmpRealTtlFunc 00F67BEA
 CmpRealTtl_Dispatch 00F67C23

@@ -1,0 +1,71 @@
+[
+ {
+  "file": "v10/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF6616F",
+  "end": "0xF66176",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 7
+   }
+  ],
+  "labels": {
+   "0xF6616F": "CmpSetTtl_Dispatch2_Helper2"
+  }
+ },
+ {
+  "file": "v10/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF661A9",
+  "end": "0xF661B4",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "byte",
+    "len": 4,
+    "decimal": true
+   },
+   {
+    "kind": "code",
+    "len": 7
+   }
+  ],
+  "labels": {
+   "0xF661AD": "CmpSetTtl_Dispatch2_Helper3"
+  },
+  "comments": {
+   "0xF661A9": [
+    "Offsets in the current slot record (AccPatch_GetCurrentSlotAddr) of byte +2 of its four 8-byte",
+    "entries, indexed by (0x39AA); TimeSig_SlotFieldOffsets are the same entries' byte +5.",
+    "TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.  Was `ld b, 42 / ldw de, 15930`."
+   ]
+  }
+ },
+ {
+  "file": "v10/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF67F8D",
+  "end": "0xF67FEB",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 94
+   }
+  ],
+  "labels": {
+   "0xF67F9D": "CmpSetTtl_Case_EntryIndexDown",
+   "0xF67FAD": "CmpSetTtl_Case_EntryByte2Up",
+   "0xF67FBD": "CmpSetTtl_Case_EntryByte2Down",
+   "0xF67FCD": "CmpSetTtl_Case_EntryByte5Up",
+   "0xF67FDD": "CmpSetTtl_Case_EntryByte5Down"
+  },
+  "comments": {
+   "0xF67F8D": [
+    "Six 16-byte case bodies, CmpSetTtl_Dispatch2 + CmpSetTtl_DynamicLookup_CaseTable[k]: save XDE/XHL/",
+    "XIX/XIZ, W := 0x00 (up) or 0x80 (down), call the stepper of the entry index (0x39AA), of",
+    "entry byte +2 or of entry byte +5, restore, return 0 (CmpReal_ReturnZero).  The first body",
+    "is entry-index-up.  Were typed as text (\":;<> \", \"^\\\\[Zh\" are the pushes and pops)."
+   ]
+  }
+ }
+]

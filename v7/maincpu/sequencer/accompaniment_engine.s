@@ -25634,53 +25634,149 @@ CmEsyTtl_Dispatch2_Helper:
 	pop XIZ
 	ret
 DrumVoice_NotifyEE_Entry4_Data:
-	.byte 0x1e, 0x0f, 0x00, 0x1e, 0x86, 0xeb, 0x1d, 0x1e
-	.byte 0xd7, 0xfd, 0x1d, 0xd6, 0xd7, 0xfd, 0x1e, 0x2d
-	.byte 0xed, 0x0e, 0xf1, 0xff, 0x36, 0x00, 0x01, 0xf1
-	.byte 0x2d, 0x37, 0xcc, 0x6e, 0x26, 0xf1, 0xff, 0x36
-	.byte 0x00, 0x02, 0xf1, 0x2d, 0x37, 0xcd, 0x6e, 0x1b
-	.byte 0xf1, 0xff, 0x36, 0x00, 0x04, 0xf1, 0x2d, 0x37
-	.byte 0xce, 0x6e, 0x10, 0xf1, 0xff, 0x36, 0x00, 0x08
-	.byte 0xf1, 0x2d, 0x37, 0xcb, 0x6e, 0x05, 0xf1, 0xff
-	.byte 0x36, 0x00, 0x10, 0x0e, 0xf1, 0x2d, 0x37, 0x00
-	.byte 0x10, 0xf1, 0xff, 0x36, 0xc8, 0x6e, 0x26, 0xf1
-	.byte 0x2d, 0x37, 0x00, 0x20, 0xf1, 0xff, 0x36, 0xc9
-	.byte 0x6e, 0x1b, 0xf1, 0x2d, 0x37, 0x00, 0x40, 0xf1
-	.byte 0xff, 0x36, 0xca, 0x6e, 0x10, 0xf1, 0x2d, 0x37
-	.byte 0x00, 0x08, 0xf1, 0xff, 0x36, 0xcb, 0x6e, 0x05
-	.byte 0xf1, 0x2d, 0x37, 0x00, 0x01, 0x0e, 0x3e, 0x1d
-	.byte 0x4f, 0x5d, 0xf6, 0x5e, 0x0e, 0xc1, 0x0e, 0x39
-	.byte 0x21, 0xc8, 0x33, 0x07, 0x6e, 0x08, 0xc9, 0xdb
-	.byte 0x66, 0x0e, 0xc9, 0x61, 0x68, 0x06, 0xc9, 0xd8
-	.byte 0x66, 0x06, 0xc9, 0x69, 0xf1, 0x0e, 0x39, 0x41
+	calr	TimeSig_DisplayStrings_Code_Helper4
+	calr	DrumKit_UpdateStatusFlags
+	call	AudioInit_SelectAndDispatch
+	call	DkMdlyPly_CheckState_Helper2
+	calr	RhythmPatInit_LoadParams
+	ret
+TimeSig_DisplayStrings_Code_Helper4:
+	ld	(0x36ff:16), 1
+	bit	4, (0x372d:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Helper4_Return
+	ld	(0x36ff:16), 2
+	bit	5, (0x372d:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Helper4_Return
+	ld	(0x36ff:16), 4
+	bit	6, (0x372d:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Helper4_Return
+	ld	(0x36ff:16), 8
+	bit	3, (0x372d:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Helper4_Return
+	ld	(0x36ff:16), 16
+TimeSig_DisplayStrings_Code_Helper4_Return:
+	ret
+	ld	(0x372d:16), 16
+	bit	0, (0x36ff:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Return8
+	ld	(0x372d:16), 32
+	bit	1, (0x36ff:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Return8
+	ld	(0x372d:16), 64
+	bit	2, (0x36ff:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Return8
+	ld	(0x372d:16), 8
+	bit	3, (0x36ff:16)
+	jr	nz, TimeSig_DisplayStrings_Code_Return8
+	ld	(0x372d:16), 1
+TimeSig_DisplayStrings_Code_Return8:
+	ret
+CmpSetTtl_Dispatch2_Helper:
+	push	xiz
+	call	TimeSig_DisplayStrings_Helper4
+	pop	xiz
+	ret
+TimeSig_DisplayStrings_Helper4:
+	ld	a, (0x390e:16)
+	bit	7, w
+	jr	nz, TimeSig_DisplayStrings_Code_Skip35
+	cp	a, 3:i3
+	jr	z, TimeSig_DisplayStrings_Code_Return9
+	inc	1, a
+	jr	TimeSig_DisplayStrings_Code_Join7
+TimeSig_DisplayStrings_Code_Skip35:
+	cp	a, 0:i3
+	jr	z, TimeSig_DisplayStrings_Code_Return9
+	dec	1, a
+TimeSig_DisplayStrings_Code_Join7:
+	ld	(0x390e:16), a
 TimeSig_DisplayStrings_Code_Return9:
-	.byte 0x0e, 0x3e, 0x1d, 0x72, 0x5d, 0xf6, 0x5e, 0x0e
+	ret
+CmpSetTtl_Dispatch2_Helper2:
+	push	xiz
+	call	TimeSig_DisplayStrings_Helper5
+	pop	xiz
+	ret
 TimeSig_DisplayStrings_Helper5:
-	.byte 0x28, 0x1d, 0x86, 0xe9, 0xf5, 0x48, 0x44, 0xa5
-	.byte 0x5d, 0xf6, 0x00, 0xc1, 0x0e, 0x39, 0x21, 0xc3
-	.byte 0x03, 0xf0, 0xe0, 0x21, 0xc3, 0x03, 0xf4, 0xe0
-	.byte 0x27, 0xc8, 0x33, 0x07, 0x6e, 0x09, 0xcf, 0xcf
-	.byte 0x7f, 0x66, 0x0f, 0xcf, 0x61, 0x68, 0x06, 0xcf
-	.byte 0xd8, 0x66, 0x07, 0xcf, 0x69, 0xf3, 0x03, 0xf4
-	.byte 0xe0, 0x47, 0x0e, 0x22, 0x2a, 0x32, 0x3a, 0x3e
-	.byte 0x1d, 0xb0, 0x5d, 0xf6, 0x5e, 0x0e, 0x28, 0x1d
-	.byte 0x86, 0xe9, 0xf5, 0x48, 0x44, 0xe3, 0x5d, 0xf6
-	.byte 0x00, 0xc1, 0x0e, 0x39, 0x21, 0xc3, 0x03, 0xf0
-	.byte 0xe0, 0x21, 0xc3, 0x03, 0xf4, 0xe0, 0x27, 0xc8
-	.byte 0x33, 0x07, 0x6e, 0x09, 0xcf, 0xcf, 0x0b, 0x66
-	.byte 0x0f, 0xcf, 0x61, 0x68, 0x06, 0xcf, 0xd8, 0x66
-	.byte 0x07, 0xcf, 0x69, 0xf3, 0x03, 0xf4, 0xe0, 0x47
-	.byte 0x0e, 0x25, 0x2d, 0x35, 0x3d, 0xc1, 0x9a, 0x8c
-	.byte 0x21, 0xc1, 0x9b, 0x8c, 0xf1, 0xb0, 0xf6, 0xc2
-	.byte 0xe3, 0xff, 0x00, 0x21, 0xc9, 0x61, 0xf1, 0xed
-	.byte 0x38, 0x41, 0xd1, 0xee, 0x38, 0x20, 0xd8, 0xd8
-	.byte 0xb0, 0xfe, 0xf1, 0xee, 0x38, 0x02, 0x01, 0x00
-	.byte 0xf1, 0xf0, 0x38, 0x02, 0x01, 0x00, 0xf1, 0xf2
-	.byte 0x38, 0x00, 0x19, 0xf1, 0xf3, 0x38, 0x00, 0x00
-	.byte 0xf1, 0xf4, 0x38, 0x00, 0x00, 0xf1, 0xf5, 0x38
-	.byte 0x00, 0x00, 0xf1, 0xf6, 0x38, 0x00, 0x00, 0xf1
-	.byte 0xf7, 0x38, 0x00, 0x00, 0xf1, 0xf8, 0x38, 0x00
-	.byte 0x00, 0xf1, 0xf9, 0x38, 0x00, 0x00, 0x0e, 0x0e
+	pushw	wa
+	call	AccPatch_GetCurrentSlotAddr
+	popw	wa
+	ld	xix, TimeSig_SlotEntryByte2Offsets
+	ld	a, (0x390e:16)
+	ld	a, (xix+a)
+	ld	l, (xiy+a)
+	bit	7, w
+	jr	nz, TimeSig_DisplayStrings_Code_Skip36
+	cp	l, 127
+	jr	z, TimeSig_DisplayStrings_Code_Return10
+	inc	1, l
+	jr	TimeSig_DisplayStrings_Code_Join8
+TimeSig_DisplayStrings_Code_Skip36:
+	cp	l, 0:i3
+	jr	z, TimeSig_DisplayStrings_Code_Return10
+	dec	1, l
+TimeSig_DisplayStrings_Code_Join8:
+	ld	(xiy+a), l
+TimeSig_DisplayStrings_Code_Return10:
+	ret
+TimeSig_SlotEntryByte2Offsets:
+	; Offsets in the current slot record (AccPatch_GetCurrentSlotAddr) of byte +2 of its four 8-byte
+	; entries, indexed by (0x390E); TimeSig_SlotFieldOffsets are the same entries' byte +5.
+	; TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.
+	.byte	34, 42, 50, 58
+CmpSetTtl_Dispatch2_Helper3:
+	push	xiz
+	call	TimeSig_DisplayStrings_Helper6
+	pop	xiz
+	ret
+TimeSig_DisplayStrings_Helper6:
+	pushw	wa
+	call	AccPatch_GetCurrentSlotAddr
+	popw	wa
+	ld	xix, TimeSig_SlotFieldOffsets
+	ld	a, (0x390e:16)
+	ld	a, (xix+a)
+	ld	l, (xiy+a)
+	bit	7, w
+	jr	nz, TimeSig_DisplayStrings_Code_Skip37
+	cp	l, 11
+	jr	z, TimeSig_DisplayStrings_Code_Return11
+	inc	1, l
+	jr	TimeSig_DisplayStrings_Code_Join9
+TimeSig_DisplayStrings_Code_Skip37:
+	cp	l, 0:i3
+	jr	z, TimeSig_DisplayStrings_Code_Return11
+	dec	1, l
+TimeSig_DisplayStrings_Code_Join9:
+	ld	(xiy+a), l
+TimeSig_DisplayStrings_Code_Return11:
+	ret
+; TimeSig_SlotFieldOffsets -- offsets into the current slot record (AccPatch_GetCurrentSlotAddr), indexed by (0x390E)
+TimeSig_SlotFieldOffsets:	.byte	37, 45, 53, 61
+; S2cTtl_InitOnTitleChange -- when CURRENT_TITLE differs from PREVIOUS_TITLE: (0x38ED) := (0xFFE3) + 1, and if (0x38EE)
+;          is 0, seed 0x38EE-0x38F9.  Called from S2cTtl_Dispatch.  Was part of a `.byte` run until 2026-10-03.
+S2cTtl_InitOnTitleChange:
+	ld	a, (CURRENT_TITLE:16)
+	cp	a, (PREVIOUS_TITLE:16)
+	ret	z
+	ld	a, (0xffe3:24)
+	inc	1, a
+	ld	(0x38ed:16), a
+	ld	wa, (0x38ee:16)
+	cp	wa, 0:i3
+	ret	nz
+	ldw	(0x38ee:16), 1
+	ldw	(0x38f0:16), 1
+	ld	(0x38f2:16), 25
+	ld	(0x38f3:16), 0
+	ld	(0x38f4:16), 0
+	ld	(0x38f5:16), 0
+	ld	(0x38f6:16), 0
+	ld	(0x38f7:16), 0
+	ld	(0x38f8:16), 0
+	ld	(0x38f9:16), 0
+	ret
+	ret
 ; TimeSig_CallProc -- WA = index 0..23 (`cp de, 23 / ret ugt`), BC bit 7 = a flag
 ; passed on in A; calls TimeSig_ProcTable[index] (`ld xde, TimeSig_ProcTable / add
 ; xde, xbc / ld xhl, (xde) / call (xhl)`).
@@ -29212,64 +29308,76 @@ CmpSetTtl_DynamicLookup:
 	jp	t, (xix+de)
 ; CmpSetTtlFunc title dispatch 2
 CmpSetTtl_Dispatch2:
-	.asciz ":;<> "
-CmpSetTtl_Dispatch2_Code:
-	call	16145736
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	jr	CmpReal_ReturnZero
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	ld	w, 128:opc
-	call	16145736
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	jr	62
+	; Six 16-byte case bodies, CmpSetTtl_Dispatch2 + CmpSetTtl_DynamicLookup_CaseTable[k]: save XDE/XHL/
+	; XIX/XIZ, W := 0x00 (up) or 0x80 (down), call the stepper of the entry index (0x390E), of
+	; entry byte +2 or of entry byte +5, restore, return 0 (CmpReal_ReturnZero).  The first body
+	; is entry-index-up.  Were spelled partly as text (":;<> ") and with numeric calls.
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	16145771
-	pop	xiz
-	pop	xix
-	pop	xhl
-	pop	xde
-	jr	46
-	push	xde
-	push	xhl
-	push	xix
-	push	xiz
-	ld	w, 128:opc
-	call	16145771
+	call	CmpSetTtl_Dispatch2_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
 	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryIndexDown:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 128:opc
+	call	CmpSetTtl_Dispatch2_Helper
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte2Up:
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	16145833
+	call	CmpSetTtl_Dispatch2_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
 	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte2Down:
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	16145833
+	call	CmpSetTtl_Dispatch2_Helper2
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte5Up:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 0:opc
+	call	CmpSetTtl_Dispatch2_Helper3
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte5Down:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 128:opc
+	call	CmpSetTtl_Dispatch2_Helper3
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30751,7 +30859,7 @@ S2cTtl_Dispatch:
 	ld	xde, 4294901762
 	call	ApDeliveryEvent
 S2cTtl_Dispatch_Code_Skip:
-	call	16145895
+	call	S2cTtl_InitOnTitleChange
 	jrl	CstmCp_ReturnZero
 	ld	a, (14811:16)
 	cp	a, 2:i3

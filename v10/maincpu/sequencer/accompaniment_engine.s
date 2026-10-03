@@ -26802,6 +26802,7 @@ TimeSig_DisplayStrings_Code_Join7:
 	ld	(0x39aa:16), a
 TimeSig_DisplayStrings_Code_Return9:
 	ret
+CmpSetTtl_Dispatch2_Helper2:
 	push	xiz
 	call	TimeSig_DisplayStrings_Helper5
 	pop	xiz
@@ -26810,7 +26811,7 @@ TimeSig_DisplayStrings_Helper5:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
-	ld	xix, TimeSig_DisplayStrings_Code5
+	ld	xix, TimeSig_SlotEntryByte2Offsets
 	ld	a, (0x39aa:16)
 	ld	a, (xix+a)
 	ld	l, (xiy+a)
@@ -26828,9 +26829,13 @@ TimeSig_DisplayStrings_Code_Join8:
 	ld	(xiy+a), l
 TimeSig_DisplayStrings_Code_Return10:
 	ret
-TimeSig_DisplayStrings_Code5:
-	ld b, 42:opc
-	ldw de, 15930
+TimeSig_SlotEntryByte2Offsets:
+	; Offsets in the current slot record (AccPatch_GetCurrentSlotAddr) of byte +2 of its four 8-byte
+	; entries, indexed by (0x39AA); TimeSig_SlotFieldOffsets are the same entries' byte +5.
+	; TimeSig_DisplayStrings_Helper5 steps the byte within 0..127.  Was `ld b, 42 / ldw de, 15930`.
+	.byte	34, 42, 50, 58
+CmpSetTtl_Dispatch2_Helper3:
+	push	xiz
 	call	TimeSig_DisplayStrings_Helper6
 	pop	xiz
 	ret
@@ -30352,28 +30357,80 @@ CmpSetTtl_DynamicLookup:
 	jp	t, (xix+de)
 ; CmpSetTtlFunc title dispatch 2
 CmpSetTtl_Dispatch2:
-	.asciz ":;<> "
+	; Six 16-byte case bodies, CmpSetTtl_Dispatch2 + CmpSetTtl_DynamicLookup_CaseTable[k]: save XDE/XHL/
+	; XIX/XIZ, W := 0x00 (up) or 0x80 (down), call the stepper of the entry index (0x39AA), of
+	; entry byte +2 or of entry byte +5, restore, return 0 (CmpReal_ReturnZero).  The first body
+	; is entry-index-up.  Were typed as text (":;<> ", "^\\[Zh" are the pushes and pops).
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 0:opc
 	call	CmpSetTtl_Dispatch2_Helper
-	.ascii "^\\[ZhN:;<> "
-	.byte 0x80, 0x1d
-	popw ix
-	jr	lt, 0xf6
-	.asciz "^\\[Zh>:;<> "
-	.byte 0x1d, 0x6f
-	jr	lt, 0xf6
-	.ascii "^\\[Zh.:;<> "
-	.byte 0x80, 0x1d, 0x6f
-	jr	lt, 0xf6
-	.ascii "^\\[Zh"
-	.byte 0x1e
-	.asciz ":;<> "
-	call 16146861
-	.ascii "^\\[Zh"
-	ret
-	.ascii ":;<> "
-	.byte 0x80, 0x1d, 0xad
-	jr	lt, 0xf6
-	.ascii "^\\[Z"
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryIndexDown:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 128:opc
+	call	CmpSetTtl_Dispatch2_Helper
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte2Up:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 0:opc
+	call	CmpSetTtl_Dispatch2_Helper2
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte2Down:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 128:opc
+	call	CmpSetTtl_Dispatch2_Helper2
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte5Up:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 0:opc
+	call	CmpSetTtl_Dispatch2_Helper3
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	CmpReal_ReturnZero
+CmpSetTtl_Case_EntryByte5Down:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 128:opc
+	call	CmpSetTtl_Dispatch2_Helper3
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
 
 CmpReal_ReturnZero:
 	ld xhl, 0:i3

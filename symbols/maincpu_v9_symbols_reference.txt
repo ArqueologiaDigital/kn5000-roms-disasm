@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,667
-#   semantic names ........... 50,853 (98.4%)
+#   symbols .................. 51,674
+#   semantic names ........... 50,860 (98.4%)
 #   positional names ......... 814
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33343,11 +33343,13 @@ TimeSig_DisplayStrings_Helper4 00F66153
 TimeSig_DisplayStrings_Code_Skip35 00F66164
 TimeSig_DisplayStrings_Code_Join7 00F6616A
 TimeSig_DisplayStrings_Code_Return9 00F6616E
+CmpSetTtl_Dispatch2_Helper2 00F6616F
 TimeSig_DisplayStrings_Helper5 00F66176
 TimeSig_DisplayStrings_Code_Skip36 00F6619D
 TimeSig_DisplayStrings_Code_Join8 00F661A3
 TimeSig_DisplayStrings_Code_Return10 00F661A8
-TimeSig_DisplayStrings_Code5 00F661A9
+TimeSig_SlotEntryByte2Offsets 00F661A9
+CmpSetTtl_Dispatch2_Helper3 00F661AD
 TimeSig_DisplayStrings_Helper6 00F661B4
 TimeSig_DisplayStrings_Code_Skip37 00F661DB
 TimeSig_DisplayStrings_Code_Join9 00F661E1
@@ -33760,6 +33762,11 @@ CmpSetTtl_DrumVoice1 00F67F3F
 CmpSetTtl_SecondaryDispatch 00F67F50
 CmpSetTtl_DynamicLookup 00F67F79
 CmpSetTtl_Dispatch2 00F67F8D
+CmpSetTtl_Case_EntryIndexDown 00F67F9D
+CmpSetTtl_Case_EntryByte2Up 00F67FAD
+CmpSetTtl_Case_EntryByte2Down 00F67FBD
+CmpSetTtl_Case_EntryByte5Up 00F67FCD
+CmpSetTtl_Case_EntryByte5Down 00F67FDD
 CmpReal_ReturnZero 00F67FEB
 CmpRealTtlFunc 00F67FEE
 CmpRealTtl_Dispatch 00F68027
