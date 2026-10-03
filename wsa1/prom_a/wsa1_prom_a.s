@@ -5607,11 +5607,11 @@ MainTask_Loop:
 	calr MainTask_RearmTickCountdown                                      ; F82056  1e 6f 01
 .LF82059:
 	ei 0x06                                              ; F82059  06 06
-	ld	a, (0x9e:8)                                      ; F8205B  c0 9e 21
+	ld	a, (MIDI_RX_Flags:8)                                      ; F8205B  c0 9e 21
 	and A,0x2c                                           ; F8205E  c9 cc 2c
 	jr z, .LF82075                                       ; F82061  66 12
 	call T_MidiInARing_Init                               ; F82063  1d b8 1d f4
-	m_and_mi8 MB8, 0x9e, 0xd3                            ; F82067  c0 9e 3c d3
+	m_and_mi8 MB8, MIDI_RX_Flags, 0xd3                            ; F82067  c0 9e 3c d3
 	ei 0x00                                              ; F8206B  06 00
 	call T_F413C0                                        ; F8206D  1d c0 13 f4
 	call T_F40894                                        ; F82071  1d 94 08 f4
@@ -7498,7 +7498,7 @@ INTT1_Tick:
 	incw 0x01, (Fdc_TickCount:24)                   ; F82D14  d2 00 5a 60 61
 	push SR                                       ; F82D19  02
 	ei 0x06                                       ; F82D1A  06 06
-	ld	a, (0x9e:8)                               ; F82D1C  c0 9e 21
+	ld	a, (MIDI_RX_Flags:8)                               ; F82D1C  c0 9e 21
 	ld	w, (0x9d:8)                               ; F82D1F  c0 9d 20
 	bit 0x07,A                                    ; F82D22  c9 33 07
 	jr Z,.LF82D36                                 ; F82D25  66 0f
@@ -7516,7 +7516,7 @@ INTT1_Tick:
 	call T_MIDI_PostSendWork                      ; F82D43  1d 24 07 f4
 .LF82D47:
 	ld	(0x9d:8), w                               ; F82D47  f0 9d 40
-	ld	(0x9e:8), a                               ; F82D4A  f0 9e 41
+	ld	(MIDI_RX_Flags:8), a                               ; F82D4A  f0 9e 41
 	pop SR                                        ; F82D4D  03
 	ld	a, (0xa1:8)                               ; F82D4E  c0 a1 21
 	cp A,0xf1                                     ; F82D51  c9 cf f1
@@ -18796,7 +18796,7 @@ PanelGroupQueue_Append:
 	push XIX                                             ; F8A413  3c
 	push XIY                                             ; F8A414  3d
 	push XIZ                                             ; F8A415  3e
-	m_or_mi8 MB8, 0x9e, 0x08                             ; F8A416  c0 9e 3e 08
+	m_or_mi8 MB8, MIDI_RX_Flags, 0x08                             ; F8A416  c0 9e 3e 08
 	call T_MIDI_SendAllNotesOff_AllChannels              ; F8A41A  1d 34 07 f4
 	call T_Ram3800_InitDataImage                         ; F8A41E  1d d0 13 f4
 	call T_F4100C                                        ; F8A422  1d 0c 10 f4
@@ -65693,11 +65693,11 @@ MIDI_EntryThunks:
 MIDI_RX_ErrorReset:
 	pushw wa                                      ; FA5418  28
 	ld_sd8b a, SC0BUF                               ; FA5419  c0 50 21   read SC0BUF to clear the error
-	ld (0x9a:8), 0x00:io                               ; FA541C  08 9a 00
-	m_and_mi8 MB8, 0x9e, 0xbd                     ; FA541F  c0 9e 3c bd
-	set	3, (0x9e:8)                            ; FA5423  f0 9e bb   (0x9E) bit 3 = 'the link had an error'
-	ld (0xa9:8), 0x00:io                               ; FA5426  08 a9 00
-	inc 0x01, (0x0931:16)                         ; FA5429  c1 31 09 61   (0x0931) = an 8-BIT receive-error counter
+	ld (MIDI_RX_RunningStatus:8), 0x00:io                               ; FA541C  08 9a 00
+	m_and_mi8 MB8, MIDI_RX_Flags, 0xbd                     ; FA541F  c0 9e 3c bd
+	set	3, (MIDI_RX_Flags:8)                            ; FA5423  f0 9e bb   (0x9E) bit 3 = 'the link had an error'
+	ld (MIDI_RX_SysExState:8), 0x00:io                               ; FA5426  08 a9 00
+	inc 0x01, (MIDI_RX_ErrorCount:16)                         ; FA5429  c1 31 09 61   (0x0931) = an 8-BIT receive-error counter
 	popw wa                                       ; FA542D  48
 	reti                                          ; FA542E  07
 
@@ -65837,27 +65837,27 @@ MIDI_RX_Byte:
 	calr MIDI_RT_Received                                     ; FA54BB  1e 46 00   -> MIDI_RT_Received (0xFA5504)
 	jr .LFA54F9                                   ; FA54BE  68 39
 .LFA54C0:
-	ld	(0x9a:8), a                               ; FA54C0  f0 9a 41   (0x9A) = running status
-	m_and_mi8 MB8, 0x9e, 0xbd                     ; FA54C3  c0 9e 3c bd
-	bit	0, (0xa9:8)                            ; FA54C7  f0 a9 c8
+	ld	(MIDI_RX_RunningStatus:8), a                               ; FA54C0  f0 9a 41   (0x9A) = running status
+	m_and_mi8 MB8, MIDI_RX_Flags, 0xbd                     ; FA54C3  c0 9e 3c bd
+	bit	0, (MIDI_RX_SysExState:8)                            ; FA54C7  f0 a9 c8
 	jr z, .LFA54F9                                ; FA54CA  66 2d
-	bit	1, (0xa9:8)                            ; FA54CC  f0 a9 c9
+	bit	1, (MIDI_RX_SysExState:8)                            ; FA54CC  f0 a9 c9
 	jr z, .LFA54E5                                ; FA54CF  66 14
 	cp A,0xf7                                     ; FA54D1  c9 cf f7
 	jr nz, .LFA54EE                               ; FA54D4  6e 18
-	bit	5, (0xa9:8)                            ; FA54D6  f0 a9 cd
+	bit	5, (MIDI_RX_SysExState:8)                            ; FA54D6  f0 a9 cd
 	jr nz, .LFA54E5                               ; FA54D9  6e 0a
 	pushw wa                                      ; FA54DB  28
 	call T_Ring601646_Put                         ; FA54DC  1d 3c 1e f4
 	inc 2,XSP                                     ; FA54E0  ef 62
-	ld (0xa9:8), 0x04:io                               ; FA54E2  08 a9 04
+	ld (MIDI_RX_SysExState:8), 0x04:io                               ; FA54E2  08 a9 04
 .LFA54E5:
-	ld (0x9a:8), 0x00:io                               ; FA54E5  08 9a 00
-	m_and_mi8 MB8, 0xa9, 0xcc                     ; FA54E8  c0 a9 3c cc
+	ld (MIDI_RX_RunningStatus:8), 0x00:io                               ; FA54E5  08 9a 00
+	m_and_mi8 MB8, MIDI_RX_SysExState, 0xcc                     ; FA54E8  c0 a9 3c cc
 	jr .LFA54F9                                   ; FA54EC  68 0b
 .LFA54EE:
-	ld (0xa9:8), 0x10:io                               ; FA54EE  08 a9 10
-	ld (0x9a:8), 0x00:io                               ; FA54F1  08 9a 00
+	ld (MIDI_RX_SysExState:8), 0x10:io                               ; FA54EE  08 a9 10
+	ld (MIDI_RX_RunningStatus:8), 0x00:io                               ; FA54F1  08 9a 00
 	jr .LFA54F9                                   ; FA54F4  68 03
 .LFA54F6:
 	calr MIDI_RX_DataByte                                   ; FA54F6  1e 6a 02   -> MIDI_RX_DataByte (0xFA5763)
@@ -65930,7 +65930,7 @@ MIDI_RX_Byte:
 MIDI_RT_Received:
 	cp A,0xfe                                     ; FA5504  c9 cf fe   0xFE ACTIVE SENSING: arm the receive-inactivity timeout
 	jr nz, MIDI_RT_NotSensing                               ; FA5507  6e 04
-	set	7, (0x9e:8)                            ; FA5509  f0 9e bf   (0x9E) bit 7 -- INTT1_Tick counts (0x9C) while this is set
+	set	7, (MIDI_RX_Flags:8)                            ; FA5509  f0 9e bf   (0x9E) bit 7 -- INTT1_Tick counts (0x9C) while this is set
 MIDI_RT_Ignore:
 	ret                                           ; FA550C  0e
 MIDI_RT_NotSensing:
@@ -65941,7 +65941,7 @@ MIDI_RT_NotSensing:
 	m_bit 6, MD16, 0x2094                         ; FA5518  f1 94 20 ce
 	jr nz, MIDI_RT_Ignore                               ; FA551C  6e ee
 	ld D,A                                        ; FA551E  c9 8c   D = the real-time byte
-	ld	a, (0xa9:8)                               ; FA5520  c0 a9 21
+	ld	a, (MIDI_RX_SysExState:8)                               ; FA5520  c0 a9 21
 	and A,0x03                                    ; FA5523  c9 cc 03
 	jr nz, MIDI_RT_Ignore                               ; FA5526  6e e4
 	m_bit 2, MD16, MidiCfg_ModeBits                         ; FA5528  f1 32 7f ca   the same mode bit INTTR4_SequencerTick branches on
@@ -66317,11 +66317,11 @@ SeqBuf_AppendEvent_XIX__trace:
 ; ---------------------------------------------------------------------
 MIDI_RX_DataByte:
 	ld E,A                                        ; FA5763  c9 8d   E = the data byte
-	ld	a, (0x9a:8)                               ; FA5765  c0 9a 21   A = running status
+	ld	a, (MIDI_RX_RunningStatus:8)                               ; FA5765  c0 9a 21   A = running status
 	ld D,A                                        ; FA5768  c9 8c   D = running status
-	bit	0, (0xa9:8)                            ; FA576A  f0 a9 c8   a SysEx is armed?
+	bit	0, (MIDI_RX_SysExState:8)                            ; FA576A  f0 a9 c8   a SysEx is armed?
 	jrl nz, MIDI_RX_SysExData                     ; FA576D  7e fe 00
-	bit	6, (0x9e:8)                            ; FA5770  f0 9e ce   a first data byte is already pending?
+	bit	6, (MIDI_RX_Flags:8)                            ; FA5770  f0 9e ce   a first data byte is already pending?
 	jr nz, MIDI_RX_SecondDataByte                 ; FA5773  6e 69
 	cp a, 0x00:i3                                   ; FA5775  c9 d8   no running status at all?
 	jr z, MIDI_RX_Drop                            ; FA5777  66 35   then the byte has nowhere to go
@@ -66424,7 +66424,7 @@ MIDI_RX_DeliverTwo:
 	inc 2,XSP                                     ; FA57CD  ef 62
 	ret                                           ; FA57CF  0e
 MIDI_RX_QueueFull2:
-	set	2, (0x9e:8)                            ; FA57D0  f0 9e ba   (0x9E) bit 2 = the input queue overflowed
+	set	2, (MIDI_RX_Flags:8)                            ; FA57D0  f0 9e ba   (0x9E) bit 2 = the input queue overflowed
 	inc 0x01, (0x0932:16)                         ; FA57D3  c1 32 09 61   8-bit overflow counter
 	ret                                           ; FA57D7  0e
 
@@ -66443,7 +66443,7 @@ MIDI_RX_QueueFull2:
 ;          facts.
 ; ---------------------------------------------------------------------
 MIDI_RX_AwaitSecondByte:
-	set	6, (0x9e:8)                            ; FA57D8  f0 9e be
+	set	6, (MIDI_RX_Flags:8)                            ; FA57D8  f0 9e be
 	ld C,E                                        ; FA57DB  cd 8b
 	ret                                           ; FA57DD  0e
 
@@ -66472,7 +66472,7 @@ MIDI_RX_AwaitSecondByte:
 ; ---------------------------------------------------------------------
 MIDI_RX_SecondDataByte:
 	m_set 0, MD16, 0x216f                         ; FA57DE  f1 6f 21 b8   MIDI activity
-	bit	1, (0x9e:8)                            ; FA57E2  f0 9e c9   a Song Position Pointer?
+	bit	1, (MIDI_RX_Flags:8)                            ; FA57E2  f0 9e c9   a Song Position Pointer?
 	jr z, .LFA57E9                                ; FA57E5  66 02
 	ld d, 0xf2:opc                                   ; FA57E7  24 f2   restore the status the F2 handler cleared
 .LFA57E9:
@@ -66500,11 +66500,11 @@ MIDI_RX_DeliverThree:
 	pushw de                                      ; FA581C  2a
 	call T_MidiInARing_Put                         ; FA581D  1d ac 1d f4   second data byte
 	inc 2,XSP                                     ; FA5821  ef 62
-	m_and_mi8 MB8, 0x9e, 0xbd                     ; FA5823  c0 9e 3c bd   clear bits 6 and 1
+	m_and_mi8 MB8, MIDI_RX_Flags, 0xbd                     ; FA5823  c0 9e 3c bd   clear bits 6 and 1
 MIDI_RX_Return:
 	ret                                           ; FA5827  0e
 MIDI_RX_QueueFull3:
-	set	2, (0x9e:8)                            ; FA5828  f0 9e ba
+	set	2, (MIDI_RX_Flags:8)                            ; FA5828  f0 9e ba
 	inc 0x01, (0x0932:16)                         ; FA582B  c1 32 09 61
 	ret                                           ; FA582F  0e
 
@@ -66525,7 +66525,7 @@ MIDI_RX_QueueFull3:
 ;          before the dispatch, so it applies to the ignored ones too.
 ; ---------------------------------------------------------------------
 MIDI_RX_SystemCommon:
-	ld (0x9a:8), 0x00:io                               ; FA5830  08 9a 00   System Common cancels running status
+	ld (MIDI_RX_RunningStatus:8), 0x00:io                               ; FA5830  08 9a 00   System Common cancels running status
 	cp D,0xf0                                     ; FA5833  cc cf f0
 	jr z, MIDI_RX_SysExStart                      ; FA5836  66 15
 	cp D,0xf2                                     ; FA5838  cc cf f2
@@ -66534,7 +66534,7 @@ MIDI_RX_SystemCommon:
 	jr z, MIDI_RX_SongSelect                      ; FA5840  66 08
 	ret                                           ; FA5842  0e
 MIDI_RX_SongPosition:
-	m_or_mi8 MB8, 0x9e, 0x42                      ; FA5843  c0 9e 3e 42   bit 6 = a byte is pending, bit 1 = it is an SPP
+	m_or_mi8 MB8, MIDI_RX_Flags, 0x42                      ; FA5843  c0 9e 3e 42   bit 6 = a byte is pending, bit 1 = it is an SPP
 	ld C,E                                        ; FA5847  cd 8b
 	ret                                           ; FA5849  0e
 MIDI_RX_SongSelect:
@@ -66562,13 +66562,13 @@ MIDI_RX_SongSelect:
 ;          converted code.
 ; ---------------------------------------------------------------------
 MIDI_RX_SysExStart:
-	ld (0xa9:8), 0x01:io                               ; FA584D  08 a9 01   armed
+	ld (MIDI_RX_SysExState:8), 0x01:io                               ; FA584D  08 a9 01   armed
 	cp E,0x50                                     ; FA5850  cd cf 50
 	jr z, MIDI_SysEx_Accept                       ; FA5853  66 05
 	cp E,0x7e                                     ; FA5855  cd cf 7e   Universal Non-Real Time
 	jr nz, MIDI_SysEx_Ignore                      ; FA5858  6e 13
 MIDI_SysEx_Accept:
-	set	1, (0xa9:8)                            ; FA585A  f0 a9 b9   in-message
+	set	1, (MIDI_RX_SysExState:8)                            ; FA585A  f0 a9 b9   in-message
 	ld A,D                                        ; FA585D  cc 89
 	pushw wa                                      ; FA585F  28
 	call T_Ring601646_Put                         ; FA5860  1d 3c 1e f4   forward the 0xF0
@@ -66590,9 +66590,9 @@ MIDI_SysEx_Ignore:
 ;          from an unrecognised maker is armed but never forwarded.
 ; ---------------------------------------------------------------------
 MIDI_RX_SysExData:
-	bit	1, (0xa9:8)                            ; FA586E  f0 a9 c9   was the identifier accepted?
+	bit	1, (MIDI_RX_SysExState:8)                            ; FA586E  f0 a9 c9   was the identifier accepted?
 	jr z, MIDI_SysEx_DataDone                     ; FA5871  66 10
-	bit	5, (0xa9:8)                            ; FA5873  f0 a9 cd
+	bit	5, (MIDI_RX_SysExState:8)                            ; FA5873  f0 a9 cd
 	jr nz, MIDI_SysEx_DataDone                    ; FA5876  6e 0b
 	m_set 0, MD16, 0x216f                         ; FA5878  f1 6f 21 b8   MIDI activity
 	pushw de                                      ; FA587C  2a
@@ -66873,11 +66873,11 @@ MIDI_DrainQueue__next:
 	calr MIDI_Fg_RealTime                         ; FA5961  1e 47 00
 	jr MIDI_DrainQueue__pop                       ; FA5964  68 3f
 MIDI_DrainQueue__status:
-	ld (0x0960:16), h                            ; FA5966  f1 60 09 46   the foreground running status
-	m_and_mi8 MB16, 0x0963, 0xbd                  ; FA596A  c1 63 09 3c bd   clear bits 6 and 1
-	m_bit 0, MD16, 0x0964                         ; FA596F  f1 64 09 c8   a SysEx armed?
+	ld (MIDI_Fg_RunningStatus:16), h                            ; FA5966  f1 60 09 46   the foreground running status
+	m_and_mi8 MB16, MIDI_Fg_Flags, 0xbd                  ; FA596A  c1 63 09 3c bd   clear bits 6 and 1
+	m_bit 0, MD16, MIDI_Fg_SysExState                         ; FA596F  f1 64 09 c8   a SysEx armed?
 	jr z, MIDI_DrainQueue__next                   ; FA5973  66 cf
-	m_bit 1, MD16, 0x0964                         ; FA5975  f1 64 09 c9   and accepted?
+	m_bit 1, MD16, MIDI_Fg_SysExState                         ; FA5975  f1 64 09 c9   and accepted?
 	jr z, MIDI_DrainQueue__next                   ; FA5979  66 c9
 	cp H,0xf7                                     ; FA597B  ce cf f7   END OF EXCLUSIVE?
 	jr nz, MIDI_DrainQueue__abandon               ; FA597E  6e 11
@@ -66885,13 +66885,13 @@ MIDI_DrainQueue__status:
 	extz BC                                       ; FA5982  d9 12
 	pushw bc                                      ; FA5984  29
 	call T_Ring601C6E_Put                         ; FA5985  1d a8 1e f4   close the SysEx
-	ld (0x0964:16), 0x04                          ; FA5989  f1 64 09 00 04
+	ld (MIDI_Fg_SysExState:16), 0x04                          ; FA5989  f1 64 09 00 04
 	popw bc                                       ; FA598E  49
 	jr MIDI_DrainQueue__clearstatus               ; FA598F  68 05
 MIDI_DrainQueue__abandon:
-	ld (0x0964:16), 0x00                          ; FA5991  f1 64 09 00 00   any other status abandons it
+	ld (MIDI_Fg_SysExState:16), 0x00                          ; FA5991  f1 64 09 00 00   any other status abandons it
 MIDI_DrainQueue__clearstatus:
-	ld (0x0960:16), 0x00                          ; FA5996  f1 60 09 00 00
+	ld (MIDI_Fg_RunningStatus:16), 0x00                          ; FA5996  f1 60 09 00 00
 	jr MIDI_DrainQueue__next                      ; FA599B  68 a7
 MIDI_DrainQueue__data:
 	ld C,H                                        ; FA599D  ce 8b
@@ -66968,7 +66968,7 @@ MIDI_Fg_RealTime__post:
 	inc 8,XSP                                     ; FA59EE  ef 60
 	jr MIDI_Fg_RealTime__ret                      ; FA59F0  68 03
 MIDI_Fg_RealTime__reset:
-	set	5, (0x9e:8)                            ; FA59F2  f0 9e bd   see the ★ note above
+	set	5, (MIDI_RX_Flags:8)                            ; FA59F2  f0 9e bd   see the ★ note above
 MIDI_Fg_RealTime__ret:
 	pop XIX                                       ; FA59F5  5c
 	popw hl                                       ; FA59F6  4b
@@ -66995,7 +66995,7 @@ MIDI_Fg_DataByte:
 	link XIZ,0x0000                               ; FA59FA  ee 0c 00 00
 	pushw hl                                      ; FA59FE  2b
 	ld H,(XIZ+0x08)                               ; FA59FF  8e 08 26
-	m_bit 0, MD16, 0x0964                         ; FA5A02  f1 64 09 c8   inside a SysEx?
+	m_bit 0, MD16, MIDI_Fg_SysExState                         ; FA5A02  f1 64 09 c8   inside a SysEx?
 	jr z, .LFA5A12                                ; FA5A06  66 0a
 	ld C,H                                        ; FA5A08  ce 8b
 	extz BC                                       ; FA5A0A  d9 12
@@ -67003,7 +67003,7 @@ MIDI_Fg_DataByte:
 	calr MIDI_Fg_SysExData                    ; FA5A0D  1e 2d 01   MIDI_Fg_SysExData
 	jr MIDI_Fg_DataByte__pop                      ; FA5A10  68 5e
 .LFA5A12:
-	m_bit 6, MD16, 0x0963                         ; FA5A12  f1 63 09 ce   a first data byte pending?
+	m_bit 6, MD16, MIDI_Fg_Flags                         ; FA5A12  f1 63 09 ce   a first data byte pending?
 	jr z, .LFA5A22                                ; FA5A16  66 0a
 	ld C,H                                        ; FA5A18  ce 8b
 	extz BC                                       ; FA5A1A  d9 12
@@ -67011,9 +67011,9 @@ MIDI_Fg_DataByte:
 	calr MIDI_Fg_Deliver3                         ; FA5A1D  1e 9e 00
 	jr MIDI_Fg_DataByte__pop                      ; FA5A20  68 4e
 .LFA5A22:
-	m_cp_mi8 MB16, 0x0960, 0x00                   ; FA5A22  c1 60 09 3f 00   no running status?
+	m_cp_mi8 MB16, MIDI_Fg_RunningStatus, 0x00                   ; FA5A22  c1 60 09 3f 00   no running status?
 	jr z, MIDI_Fg_DataByte__ret                   ; FA5A27  66 5e
-	ld c, (0x0960:16)                            ; FA5A29  c1 60 09 23
+	ld c, (MIDI_Fg_RunningStatus:16)                            ; FA5A29  c1 60 09 23
 	and C,0x70                                    ; FA5A2D  cb cc 70
 	srl c, 0x04                                   ; FA5A30  cb ef 04   the status nibble, 0..7
 	extz BC                                       ; FA5A33  d9 12
@@ -67100,7 +67100,7 @@ MIDI_Fg_Deliver2:
 	push XIX                                      ; FA5A8F  3c
 	lda xix, (xiz-2)                              ; FA5A90  be fe 34
 	calr sub_FA5935                    ; FA5A93  1e 9f fe   sub_FA5935
-	m_ld_mm16 MDI+r4, 0, 0x0960                   ; FA5A96  b4 14 60 09   buffer[0] = running status
+	m_ld_mm16 MDI+r4, 0, MIDI_Fg_RunningStatus                   ; FA5A96  b4 14 60 09   buffer[0] = running status
 	ld C,(XIZ+0x08)                               ; FA5A9A  8e 08 23
 	ld (XIX+0x01),C                               ; FA5A9D  bc 01 43   buffer[1] = the data byte
 	push XIX                                      ; FA5AA0  3c
@@ -67130,8 +67130,8 @@ MIDI_Fg_Deliver2:
 ; ---------------------------------------------------------------------
 MIDI_Fg_StashFirstData:
 	link XIZ,0x0000                               ; FA5AAE  ee 0c 00 00
-	m_set 6, MD16, 0x0963                         ; FA5AB2  f1 63 09 be
-	ld (0x0961),(xiz+0x08)                        ; FA5AB6  8e 08 19 61 09   ld (0x0961),(XIZ+0x08)
+	m_set 6, MD16, MIDI_Fg_Flags                         ; FA5AB2  f1 63 09 be
+	ld (MIDI_Fg_FirstData),(xiz+0x08)                        ; FA5AB6  8e 08 19 61 09   ld (0x0961),(XIZ+0x08)
 	unlk XIZ                                      ; FA5ABB  ee 0d
 	ret                                           ; FA5ABD  0e
 
@@ -67153,14 +67153,14 @@ MIDI_Fg_Deliver3:
 	push XIX                                      ; FA5AC2  3c
 	lda xix, (xiz-4)                              ; FA5AC3  be fc 34
 	calr sub_FA5935                    ; FA5AC6  1e 6c fe   sub_FA5935
-	m_ld_mm16 MDI+r4, 0, 0x0960                   ; FA5AC9  b4 14 60 09   buffer[0] = status
-	m_ld_mm16 MDD+r4, 0x01, 0x0961                ; FA5ACD  bc 01 14 61 09   buffer[1] = first data byte
+	m_ld_mm16 MDI+r4, 0, MIDI_Fg_RunningStatus                   ; FA5AC9  b4 14 60 09   buffer[0] = status
+	m_ld_mm16 MDD+r4, 0x01, MIDI_Fg_FirstData                ; FA5ACD  bc 01 14 61 09   buffer[1] = first data byte
 	ld C,(XIZ+0x08)                               ; FA5AD2  8e 08 23
 	ld (XIX+0x02),C                               ; FA5AD5  bc 02 43   buffer[2] = second data byte
 	push XIX                                      ; FA5AD8  3c
 	pushw 0x03                                    ; FA5AD9  0b 03 00   length 3
 	call T_MidiInBRing_PutBlock                    ; FA5ADC  1d d4 1d f4
-	m_and_mi8 MB16, 0x0963, 0xbd                  ; FA5AE0  c1 63 09 3c bd
+	m_and_mi8 MB16, MIDI_Fg_Flags, 0xbd                  ; FA5AE0  c1 63 09 3c bd
 	inc 6,XSP                                     ; FA5AE5  ef 66
 	pop XIX                                       ; FA5AE7  5c
 	unlk XIZ                                      ; FA5AE8  ee 0d
@@ -67208,7 +67208,7 @@ MIDI_Fg_SystemCommon:
 	ld H,(XIZ+0x08)                               ; FA5AF0  8e 08 26
 	ld bc, (MIDI_SysExHeader:24)                         ; FA5AF3  d2 b8 5c fa 21   ld BC,(0xfa5cb8)
 	ld (xiz-2), bc                                ; FA5AF8  be fe 51   ld (XIZ+0xfe),BC
-	ld wa, (0x0960:16)                          ; FA5AFB  d1 60 09 20   ld WA,(0x0960)
+	ld wa, (MIDI_Fg_RunningStatus:16)                          ; FA5AFB  d1 60 09 20   ld WA,(0x0960)
 	extz WA                                       ; FA5AFF  d8 12
 	cp WA,0x00f0                                  ; FA5B01  d8 cf f0 00
 	jr z, .LFA5B15                                ; FA5B05  66 0e
@@ -67223,7 +67223,7 @@ MIDI_Fg_SystemCommon:
 	cp H,0x7e                                     ; FA5B1A  ce cf 7e
 	jr nz, .LFA5B34                               ; FA5B1D  6e 15
 .LFA5B1F:
-	ld (0x0964:16), 0x03                          ; FA5B1F  f1 64 09 00 03   ld (0x0964),0x03
+	ld (MIDI_Fg_SysExState:16), 0x03                          ; FA5B1F  f1 64 09 00 03   ld (0x0964),0x03
 	ld (xiz-1), h                                 ; FA5B24  be ff 46   ld (XIZ+0xff),H
 	lda xbc, (xiz-2)                              ; FA5B27  be fe 31   lda XBC,XIZ+0xfe
 	push XBC                                      ; FA5B2A  39
@@ -67231,7 +67231,7 @@ MIDI_Fg_SystemCommon:
 	call T_Ring601C6E_PutBlock                    ; FA5B2E  1d ac 1e f4
 	inc 6,XSP                                     ; FA5B32  ef 66
 .LFA5B34:
-	ld (0x0960:16), 0x00                          ; FA5B34  f1 60 09 00 00   ld (0x0960),0x00
+	ld (MIDI_Fg_RunningStatus:16), 0x00                          ; FA5B34  f1 60 09 00 00   ld (0x0960),0x00
 	popw hl                                       ; FA5B39  4b   pop HL
 	unlk XIZ                                      ; FA5B3A  ee 0d
 	ret                                           ; FA5B3C  0e
@@ -67251,9 +67251,9 @@ MIDI_Fg_SystemCommon:
 ; ---------------------------------------------------------------------
 MIDI_Fg_SysExData:
 	link XIZ,0x0000                               ; FA5B3D  ee 0c 00 00
-	m_bit 1, MD16, 0x0964                         ; FA5B41  f1 64 09 c9   bit 1,(0x0964)
+	m_bit 1, MD16, MIDI_Fg_SysExState                         ; FA5B41  f1 64 09 c9   bit 1,(0x0964)
 	jr z, .LFA5B5C                                ; FA5B45  66 15
-	m_bit 5, MD16, 0x0964                         ; FA5B47  f1 64 09 cd   bit 5,(0x0964)
+	m_bit 5, MD16, MIDI_Fg_SysExState                         ; FA5B47  f1 64 09 cd   bit 5,(0x0964)
 	jr nz, .LFA5B5C                               ; FA5B4B  6e 0f
 	m_set 0, MD16, 0x216f                         ; FA5B4D  f1 6f 21 b8   set 0,(0x216f)
 	ld BC,(XIZ+0x08)                              ; FA5B51  9e 08 21
@@ -72063,7 +72063,7 @@ MidiOut_PostStagedMessage:   ; entry: call from 0xFA721E, 0xFA75D3, 0xFA75E1, 0x
 	pop XIX                                       ; FA7D45  5c
 	ret                                           ; FA7D46  0e
 .LFA7D47:
-	set	0, (0x9e:8)                            ; FA7D47  f0 9e b8   set 0,(0x9e)
+	set	0, (MIDI_RX_Flags:8)                            ; FA7D47  f0 9e b8   set 0,(0x9e)
 	ld (0xa2:8), 0x00:io                               ; FA7D4A  08 a2 00   ld (0xa2),0x00
 .LFA7D4D:
 	m_inc 1, MB8, 0xa2                            ; FA7D4D  c0 a2 61   inc 1,(0xa2)
@@ -93508,7 +93508,7 @@ sub_FB6098:
 	ld xbc, (0x60fcd8:24)                               ; FB6148  e2 d8 fc 60 21
 	push XBC                                             ; FB614D  39
 	calr sub_FB6219                                      ; FB614E  1e c8 00
-	set	5, (0xa9:8)                                   ; FB6151  f0 a9 bd
+	set	5, (MIDI_RX_SysExState:8)                                   ; FB6151  f0 a9 bd
 .LFB6154:
 	inc 8,XSP                                            ; FB6154  ef 60
 .LFB6156:
@@ -96000,7 +96000,7 @@ sub_FB7748:
 	ret                                                  ; FB775E  0e
 sub_FB775F:
 	ei 0x06                                              ; FB775F  06 06
-	ld	c, (0x9e:8)                                      ; FB7761  c0 9e 23
+	ld	c, (MIDI_RX_Flags:8)                                      ; FB7761  c0 9e 23
 	and C,0x2c                                           ; FB7764  cb cc 2c
 	jr z, .LFB7782                                       ; FB7767  66 19
 	call Ring601646_InitIrqMasked                                      ; FB7769  1d 0d 7f fb
@@ -96009,7 +96009,7 @@ sub_FB775F:
 	ld xbc, (0x60fcd8:24)                               ; FB7773  e2 d8 fc 60 21
 	push XBC                                             ; FB7778  39
 	calr sub_FB6219                                          ; FB7779  1e 9d ea
-	m_and_mi8 MB8, 0x9e, 0xd3                            ; FB777C  c0 9e 3c d3
+	m_and_mi8 MB8, MIDI_RX_Flags, 0xd3                            ; FB777C  c0 9e 3c d3
 	inc 8,XSP                                            ; FB7780  ef 60
 .LFB7782:
 	ei 0x00                                              ; FB7782  06 00
@@ -98642,7 +98642,7 @@ sub_FB99AB:
 	extz BC                                              ; FB99C6  d9 12
 	cp HL,BC                                             ; FB99C8  d9 f3
 	jr z, .LFB99F3                                       ; FB99CA  66 27
-	ld	h, (0xa9:8)                                      ; FB99CC  c0 a9 26
+	ld	h, (MIDI_RX_SysExState:8)                                      ; FB99CC  c0 a9 26
 	and H,0x01                                           ; FB99CF  ce cc 01
 .LFB99D2:
 	cp h, 0x00:i3                                          ; FB99D2  ce d8
@@ -98751,7 +98751,7 @@ sub_FB99F5:
 	ld c, (0x60514e:24)                                 ; FB9AED  c2 4e 51 60 23
 	cp C,0x50                                            ; FB9AF2  cb cf 50
 	jr nz, .LFB9B23                                      ; FB9AF5  6e 2c
-	ld	h, (0xa9:8)                                      ; FB9AF7  c0 a9 26
+	ld	h, (MIDI_RX_SysExState:8)                                      ; FB9AF7  c0 a9 26
 	and H,0x01                                           ; FB9AFA  ce cc 01
 .LFB9AFD:
 	cp h, 0x00:i3                                          ; FB9AFD  ce d8

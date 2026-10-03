@@ -408,6 +408,16 @@ GROUPS = [
         0x20A7: ("PanelHold_Timer", "ticks before a held event requests its screen (0x40 / 0x30)", "PanelEvent_Code01/20_ArmHold, PanelHold_Tick"),
         0x2096: ("PanelHold_Index", "16-bit index into PanelHold_ScreenRequest", "PanelHold_Tick"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-midi-parser-state.md", "the state bytes of the two MIDI parsers", {
+        0x009A: ("MIDI_RX_RunningStatus", "the interrupt-time parser's running status", "the 0xFA5942 banner; MIDI_RX_Byte"),
+        0x009E: ("MIDI_RX_Flags", "its flags; bit 6 = first data byte pending (cleared with bit 1 by and 0xBD)", "the 0xFA5942 banner"),
+        0x00A9: ("MIDI_RX_SysExState", "its SysEx state", "the 0xFA5942 banner; MIDI_RX_SysEx*"),
+        0x0960: ("MIDI_Fg_RunningStatus", "the foreground consumer's running status", "the 0xFA5942 banner"),
+        0x0961: ("MIDI_Fg_FirstData", "the first data byte of a pending two-byte message", "MIDI_Fg_StashFirstData"),
+        0x0963: ("MIDI_Fg_Flags", "bit 6 = first data byte pending", "MIDI_Fg_StashFirstData, MIDI_Fg_DataByte"),
+        0x0964: ("MIDI_Fg_SysExState", "bit 0 = SysEx open, bit 1 = system-common gate; 4 = closed, 0 = abandoned", "MIDI_DrainQueue__status, MIDI_Fg_SysExData"),
+        0x0931: ("MIDI_RX_ErrorCount", "8-bit receive-error counter", "MIDI_RX_ErrorReset"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
