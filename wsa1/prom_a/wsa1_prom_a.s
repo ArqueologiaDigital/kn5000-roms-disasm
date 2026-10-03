@@ -173910,7 +173910,9 @@ BStore_CursorSlot_Restore:
 	ld wa, (0x601f0d:24)                                ; FE8D32  d2 0d 1f 60 20
 	ld (BStore_CursorOffset:16), wa                                  ; FE8D37  f1 5e 34 50
 	ret                                                  ; FE8D3B  0e
-sub_FE8D3C:
+; NoteEdit_DrawKeyboardRuler: NOTE EDIT: layer 2, ScreenDispatch_FE8D6B[(0x601F53)], (0x601F53) being the ruler's
+;   scroll position 0..9 that NoteEdit_LcdKeyRow2 / _LcdKeyRow3 step; DRUM EDIT: only 0xFEAFB7.
+NoteEdit_DrawKeyboardRuler:
 	m_bit 0, MD24, EditScreen_Mode                              ; FE8D3C  f2 70 1f 60 c8
 	jr nz, .LFE8D5E                                      ; FE8D41  6e 1b
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FE8D43  f1 40 25 00 02
@@ -173943,64 +173945,84 @@ sub_FE8D3C:
 ; ---------------------------------------------------------------------
 
 ScreenDispatch_FE8D6B:
-	.long sub_FE8D9B                                 ; FE8D6B  [  0]
-	.long sub_FE8DAA                                 ; FE8D6F  [  1]
-	.long sub_FE8DB9                                 ; FE8D73  [  2]
-	.long sub_FE8DC8                                 ; FE8D77  [  3]
-	.long sub_FE8DD7                                 ; FE8D7B  [  4]
-	.long sub_FE8DE6                                 ; FE8D7F  [  5]
-	.long sub_FE8DF5                                 ; FE8D83  [  6]
-	.long sub_FE8E04                                 ; FE8D87  [  7]
-	.long sub_FE8E13                                 ; FE8D8B  [  8]
-	.long sub_FE8E22                                 ; FE8D8F  [  9]
-	.long sub_FE8E22                                 ; FE8D93  [ 10]
-	.long sub_FE8E22                                 ; FE8D97  [ 11]
-sub_FE8D9B:   ; entry: named by 1 `.long` operand, first at 0xFE8D6B
+	.long KeyboardRuler_DrawStrip0                                 ; FE8D6B  [  0]
+	.long KeyboardRuler_DrawStrip1                                 ; FE8D6F  [  1]
+	.long KeyboardRuler_DrawStrip2                                 ; FE8D73  [  2]
+	.long KeyboardRuler_DrawStrip3                                 ; FE8D77  [  3]
+	.long KeyboardRuler_DrawStrip4                                 ; FE8D7B  [  4]
+	.long KeyboardRuler_DrawStrip5                                 ; FE8D7F  [  5]
+	.long KeyboardRuler_DrawStrip6                                 ; FE8D83  [  6]
+	.long KeyboardRuler_DrawStrip7                                 ; FE8D87  [  7]
+	.long KeyboardRuler_DrawStrip8                                 ; FE8D8B  [  8]
+	.long KeyboardRuler_DrawStrip9                                 ; FE8D8F  [  9]
+	.long KeyboardRuler_DrawStrip9                                 ; FE8D93  [ 10]
+	.long KeyboardRuler_DrawStrip9                                 ; FE8D97  [ 11]
+; KeyboardRuler_DrawStrip0: NOTE EDIT's keyboard ruler at scroll position 0 --
+;   ScreenDispatch_FE8D6B[0]; draws KeyboardRuler_Strip0 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip0:   ; entry: named by 1 `.long` operand, first at 0xFE8D6B
 	ld XIY,DisplayList_FE8E31                            ; FE8D9B  45 31 8e fe 00
 	ld XIX,DisplayList_FE8E3D                            ; FE8DA0  44 3d 8e fe 00
 	call T_DisplayList_Run                               ; FE8DA5  1d f0 17 f4
 	ret                                                  ; FE8DA9  0e
-sub_FE8DAA:   ; entry: named by 1 `.long` operand, first at 0xFE8D6F
+; KeyboardRuler_DrawStrip1: NOTE EDIT's keyboard ruler at scroll position 1 --
+;   ScreenDispatch_FE8D6B[1]; draws KeyboardRuler_Strip1 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip1:   ; entry: named by 1 `.long` operand, first at 0xFE8D6F
 	ld XIY,DisplayList_FE8E3D                            ; FE8DAA  45 3d 8e fe 00
 	ld XIX,DisplayList_FE8E49                            ; FE8DAF  44 49 8e fe 00
 	call T_DisplayList_Run                               ; FE8DB4  1d f0 17 f4
 	ret                                                  ; FE8DB8  0e
-sub_FE8DB9:   ; entry: named by 1 `.long` operand, first at 0xFE8D73
+; KeyboardRuler_DrawStrip2: NOTE EDIT's keyboard ruler at scroll position 2 --
+;   ScreenDispatch_FE8D6B[2]; draws KeyboardRuler_Strip2 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip2:   ; entry: named by 1 `.long` operand, first at 0xFE8D73
 	ld XIY,DisplayList_FE8E49                            ; FE8DB9  45 49 8e fe 00
 	ld XIX,DisplayList_FE8E55                            ; FE8DBE  44 55 8e fe 00
 	call T_DisplayList_Run                               ; FE8DC3  1d f0 17 f4
 	ret                                                  ; FE8DC7  0e
-sub_FE8DC8:   ; entry: named by 1 `.long` operand, first at 0xFE8D77
+; KeyboardRuler_DrawStrip3: NOTE EDIT's keyboard ruler at scroll position 3 --
+;   ScreenDispatch_FE8D6B[3]; draws KeyboardRuler_Strip3 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip3:   ; entry: named by 1 `.long` operand, first at 0xFE8D77
 	ld XIY,DisplayList_FE8E55                            ; FE8DC8  45 55 8e fe 00
 	ld XIX,DisplayList_FE8E61                            ; FE8DCD  44 61 8e fe 00
 	call T_DisplayList_Run                               ; FE8DD2  1d f0 17 f4
 	ret                                                  ; FE8DD6  0e
-sub_FE8DD7:   ; entry: named by 1 `.long` operand, first at 0xFE8D7B
+; KeyboardRuler_DrawStrip4: NOTE EDIT's keyboard ruler at scroll position 4 --
+;   ScreenDispatch_FE8D6B[4]; draws KeyboardRuler_Strip4 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip4:   ; entry: named by 1 `.long` operand, first at 0xFE8D7B
 	ld XIY,DisplayList_FE8E61                            ; FE8DD7  45 61 8e fe 00
 	ld XIX,DisplayList_FE8E6D                            ; FE8DDC  44 6d 8e fe 00
 	call T_DisplayList_Run                               ; FE8DE1  1d f0 17 f4
 	ret                                                  ; FE8DE5  0e
-sub_FE8DE6:   ; entry: named by 1 `.long` operand, first at 0xFE8D7F
+; KeyboardRuler_DrawStrip5: NOTE EDIT's keyboard ruler at scroll position 5 --
+;   ScreenDispatch_FE8D6B[5]; draws KeyboardRuler_Strip5 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip5:   ; entry: named by 1 `.long` operand, first at 0xFE8D7F
 	ld XIY,DisplayList_FE8E6D                            ; FE8DE6  45 6d 8e fe 00
 	ld XIX,DisplayList_FE8E79                            ; FE8DEB  44 79 8e fe 00
 	call T_DisplayList_Run                               ; FE8DF0  1d f0 17 f4
 	ret                                                  ; FE8DF4  0e
-sub_FE8DF5:   ; entry: named by 1 `.long` operand, first at 0xFE8D83
+; KeyboardRuler_DrawStrip6: NOTE EDIT's keyboard ruler at scroll position 6 --
+;   ScreenDispatch_FE8D6B[6]; draws KeyboardRuler_Strip6 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip6:   ; entry: named by 1 `.long` operand, first at 0xFE8D83
 	ld XIY,DisplayList_FE8E79                            ; FE8DF5  45 79 8e fe 00
 	ld XIX,DisplayList_FE8E85                            ; FE8DFA  44 85 8e fe 00
 	call T_DisplayList_Run                               ; FE8DFF  1d f0 17 f4
 	ret                                                  ; FE8E03  0e
-sub_FE8E04:   ; entry: named by 1 `.long` operand, first at 0xFE8D87
+; KeyboardRuler_DrawStrip7: NOTE EDIT's keyboard ruler at scroll position 7 --
+;   ScreenDispatch_FE8D6B[7]; draws KeyboardRuler_Strip7 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip7:   ; entry: named by 1 `.long` operand, first at 0xFE8D87
 	ld XIY,DisplayList_FE8E85                            ; FE8E04  45 85 8e fe 00
 	ld XIX,DisplayList_FE8E91                            ; FE8E09  44 91 8e fe 00
 	call T_DisplayList_Run                               ; FE8E0E  1d f0 17 f4
 	ret                                                  ; FE8E12  0e
-sub_FE8E13:   ; entry: named by 1 `.long` operand, first at 0xFE8D8B
+; KeyboardRuler_DrawStrip8: NOTE EDIT's keyboard ruler at scroll position 8 --
+;   ScreenDispatch_FE8D6B[8]; draws KeyboardRuler_Strip8 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip8:   ; entry: named by 1 `.long` operand, first at 0xFE8D8B
 	ld XIY,DisplayList_FE8E91                            ; FE8E13  45 91 8e fe 00
 	ld XIX,DisplayList_FE8E9D                            ; FE8E18  44 9d 8e fe 00
 	call T_DisplayList_Run                               ; FE8E1D  1d f0 17 f4
 	ret                                                  ; FE8E21  0e
-sub_FE8E22:   ; entry: named by 3 `.long` operands, first at 0xFE8D8F
+; KeyboardRuler_DrawStrip9: NOTE EDIT's keyboard ruler at scroll position 9 --
+;   ScreenDispatch_FE8D6B[9] (and [10], [11]); draws KeyboardRuler_Strip9 (notes/prom_a_note_edit_keyboard_ruler.py).
+KeyboardRuler_DrawStrip9:   ; entry: named by 3 `.long` operands, first at 0xFE8D8F
 	ld XIY,DisplayList_FE8E9D                            ; FE8E22  45 9d 8e fe 00
 	ld XIX,sub_FE8EA9                                    ; FE8E27  44 a9 8e fe 00
 	call T_DisplayList_Run                               ; FE8E2C  1d f0 17 f4
@@ -174169,7 +174191,7 @@ sub_FE8F97:
 	ld a, (0x601f6e:24)                                 ; FE8FB8  c2 6e 1f 60 21
 	m_cp_rm MB24, 0x601f53, r1                           ; FE8FBD  c2 53 1f 60 f1
 	jr z, .LFE8FDC                                       ; FE8FC2  66 18
-	calr sub_FE8D3C                                          ; FE8FC4  1e 75 fd
+	calr NoteEdit_DrawKeyboardRuler                                          ; FE8FC4  1e 75 fd
 	ld (0x601f58:24), 0x81                             ; FE8FC7  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FE8FCD  f2 59 1f 60 00 04
 	calr sub_FEF7D2                                          ; FE8FD3  1e fc 67
@@ -176777,7 +176799,7 @@ NoteEdit_LcdKeyRow2:
 	ret                                                  ; FEA9C2  0e
 .LFEA9C3:
 	m_add_mi8 MB24, 0x601f53, 0x01                       ; FEA9C3  c2 53 1f 60 38 01
-	calr sub_FE8D3C                                          ; FEA9C9  1e 70 e3
+	calr NoteEdit_DrawKeyboardRuler                                          ; FEA9C9  1e 70 e3
 	ld (0x601f58:24), 0x81                             ; FEA9CC  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FEA9D2  f2 59 1f 60 00 04
 	calr sub_FEF7D2                                          ; FEA9D8  1e f7 4d
@@ -176801,7 +176823,7 @@ NoteEdit_LcdKeyRow3:
 	ret                                                  ; FEAA02  0e
 .LFEAA03:
 	sub	(0x601f53:24), 0x01                  ; FEAA03  c2 53 1f 60 3a 01
-	calr sub_FE8D3C                                          ; FEAA09  1e 30 e3
+	calr NoteEdit_DrawKeyboardRuler                                          ; FEAA09  1e 30 e3
 	ld (0x601f58:24), 0x81                             ; FEAA0C  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FEAA12  f2 59 1f 60 00 04
 	calr sub_FEF7D2                                          ; FEAA18  1e b7 4d
@@ -181631,7 +181653,7 @@ DisplayList_FF03A9:
 sub_FF03B3:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF03B3  f1 40 25 00 02
 	calr sub_FF07C5                                          ; FF03B8  1e 0a 04
-	calr sub_FE8D3C                                          ; FF03BB  1e 7e 89
+	calr NoteEdit_DrawKeyboardRuler                                          ; FF03BB  1e 7e 89
 	calr Screen_DrawKitCategoryLegend                    ; FF03BE  1e 01 00
 	ret                                                  ; FF03C1  0e
 ; ---------------------------------------------------------------------

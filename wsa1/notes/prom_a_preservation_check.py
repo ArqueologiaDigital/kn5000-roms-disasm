@@ -2126,6 +2126,17 @@ RENAMES = {
     "sub_FEFD00": "EditScreen_MeasureNumberAt10",
     "sub_FEFD45": "EditScreen_MeasureNumberAt11",
     "sub_FEF9A6": "EditScreen_DrawMeasureNumbers",
+    "sub_FE8D9B": "KeyboardRuler_DrawStrip0",
+    "sub_FE8DAA": "KeyboardRuler_DrawStrip1",
+    "sub_FE8DB9": "KeyboardRuler_DrawStrip2",
+    "sub_FE8DC8": "KeyboardRuler_DrawStrip3",
+    "sub_FE8DD7": "KeyboardRuler_DrawStrip4",
+    "sub_FE8DE6": "KeyboardRuler_DrawStrip5",
+    "sub_FE8DF5": "KeyboardRuler_DrawStrip6",
+    "sub_FE8E04": "KeyboardRuler_DrawStrip7",
+    "sub_FE8E13": "KeyboardRuler_DrawStrip8",
+    "sub_FE8E22": "KeyboardRuler_DrawStrip9",
+    "sub_FE8D3C": "NoteEdit_DrawKeyboardRuler",
 }
 
 
