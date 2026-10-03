@@ -130,7 +130,7 @@ the instructions do; **[INFERENCE]** = a reading, with the falsifier stated.
 | `91` | `0xFDA8` (`0x0A`) | `+3` is a panel-control bit (12 R, 6 RMW) touched by `SetWall_*`, `SongBank_CheckAccompanimentMode`, `NMI_HANDLER`; `+4` is written by `DrumVoice_Handler7` | **[CODE]** |
 | `92` | `0xFD1A` (`0x0E`) | ⚠ **corrected 2026-08-23: a 15-parameter UI record whose ids tile all FOURTEEN payload bytes** — was described as 13 consecutive bytes read one at a time by `SendEpilogue_Data` | **[CODE]** |
 | `93` | `0xFDB4` (`0x22`) | 9 scalar params (`+0` 0..9 def 6, `+2`/`+3` 0..127 def 127, `+4` 0..12 def 2, `+5` 0..10 def 5, `+6`/`+8` 1..127 def 1, `+7` 0..3) then **16 bytes each defaulting to `0x40`** — **[INFERENCE]** a 16-way pan/balance array | **[CODE]** descriptor list `0xED8F12` |
-| `98` | `0xFD94` (`0x12`) | mixed: `+1` 0..80, `+3` 16..48 def 32 (mask `0x70`), `+0A` 0..99 def 90, `+0E` 0..2 | **[NAME]** subscribers `UIStateEvt_PlayModeGuard_Data`, `MidiOut_RealtimeDispatch_Data`, `DSPCfg_ProcessInput`; `AccDir_*` read `+3` |
+| `98` | `0xFD94` (`0x12`) | mixed: `+1` 0..80, `+3` 16..48 def 32 (mask `0x70`), `+0A` 0..99 def 90, `+0E` 0..2 | **[NAME]** subscribers `UIStateEvt_PlayModeGuard_Data`, `MidiOut_RealtimeDispatch_Handler`, `DSPCfg_ProcessInput`; `AccDir_*` read `+3` |
 | `99` | `0xFD2E` (`0x1E`) | 5-bit field `+1`, 3 plain bytes at `+1B..+1D`; `+2` read by `Audio_ReinitToneGenAndOutput` and `MIDI_DispatchVoiceParamCC` | **[NAME]** |
 | `9A` | `0xFFA2` (`0x1A`) | 10 plain bytes at `+0..+3` and `+14..+19`; **nothing but the generic init touches it** | **[CODE]** |
 
