@@ -58399,7 +58399,7 @@ T_F41934_Nop:
 	ld c, (0x78a2:16)                                   ; FA0112  c1 a2 78 23
 	cp C,0x80                                            ; FA0116  cb cf 80
 	jr nz, .LFA0143                                      ; FA0119  6e 28
-	lda xbc, (ByteTable18_FA1E52:24)                     ; FA011B  f2 52 1e fa 31
+	lda xbc, (Descriptor9_FA1E52:24)                     ; FA011B  f2 52 1e fa 31
 	push XBC                                             ; FA0120  39
 	lda xwa, (TuneScale_ItemCursor:16)                                ; FA0121  f1 90 26 30
 	push XWA                                             ; FA0125  38
@@ -58765,7 +58765,7 @@ TuneScale_MoveItemCursor:
 	ret                                                  ; FA0469  0e
 ; TuneScale_AdjustSelectedItem -- steps the TUNE & SCALE item under the cursor ((0x2690) & 7) through the 5-entry LE32 table at 0xFA0487
 ; Evidence: 0: (0x2691) with the descriptor at 0xFA1E5B + TuneScale_StoreMasterTune; 1: IndexedParam_AdjustField(0x79, Descriptor9_FA1E64) (KEY TRANSPOSE); 2: (0x92, Descriptor9_FA1E6D) mask 0x80 (KEY SCALING MODE TOTAL/SOUND); 3: (0x2692) + TuneScale_StoreKeyScalingType; 4: (0x92, Descriptor9_FA1E7F) mask 0x0F (KEY SCALING SHIFT).
-; Note: the listing decodes the table 0xFA0487-0xFA049A and the `lda XBC,0xFA1E5B` at 0xFA049B as instructions (0xFA0497 swallows the F2 byte). Callers: HandlerTable23_FA1BF0 slots 10/11.
+; The case table is TuneScale_AdjustSelectedItem_Cases (until 2026-10-03 the listing decoded it as instructions). Callers: HandlerTable23_FA1BF0 slots 10/11.
 TuneScale_AdjustSelectedItem:
 	ld c, (TuneScale_ItemCursor:16)                                   ; FA046A  c1 90 26 23
 	and C,0x07                                           ; FA046E  cb cc 07
@@ -58774,23 +58774,19 @@ TuneScale_AdjustSelectedItem:
 	cp bc, 0x04:i3                                         ; FA0475  d9 dc
 	jrl ugt, .LFA04F1                                    ; FA0477  7b 77 00
 	sll bc, 0x02                                         ; FA047A  d9 ee 02
-	add XBC,TuneScale_AdjustSelectedItem__FA0487                                   ; FA047D  e9 c8 87 04 fa 00
+	add XBC,TuneScale_AdjustSelectedItem_Cases                                    ; FA047D  e9 c8 87 04 fa 00
 	ld XBC,(XBC)                                         ; FA0483  a1 21
 	jp (xbc)                                             ; FA0485  b1 d8
-TuneScale_AdjustSelectedItem__FA0487:
-	cp (XHL+0x04),DE                                     ; FA0487  9b 04 fa
-	nop                                                  ; FA048A  00
-	m_pop MDI+r5, 0                                      ; FA048B  b5 04
-	swi 2                                                ; FA048D  fa
-	nop                                                  ; FA048E  00
-	m_cp_mr MB8, 0x04, r2                                ; FA048F  c0 04 fa
-	nop                                                  ; FA0492  00
-	push W                                               ; FA0493  c8 04
-	swi 2                                                ; FA0495  fa
-	nop                                                  ; FA0496  00
-	m_cp_rm ML24, 0x00fa04, r2                           ; FA0497  e2 04 fa 00 f2
-	pop XHL                                              ; FA049C  5b
-	calr 0x31fa                                          ; FA049D  1e fa 31
+; TuneScale_AdjustSelectedItem_Cases -- the five case targets, LE32, indexed by TuneScale_ItemCursor & 7 (the
+;          `cp bc,4` above).  Was decoded as instructions, the last swallowing case 0's first byte.
+TuneScale_AdjustSelectedItem_Cases:
+	.long .LFA049B                                   ; FA0487  [0]
+	.long .LFA04B5                                   ; FA048B  [1]
+	.long .LFA04C0                                   ; FA048F  [2]
+	.long .LFA04C8                                   ; FA0493  [3]
+	.long .LFA04E2                                   ; FA0497  [4]
+.LFA049B:
+	lda xbc, (Descriptor9_FA1E5B:24)                     ; FA049B  f2 5b 1e fa 31
 	push XBC                                             ; FA04A0  39
 	lda xwa, (TuneScale_MasterTuneIndex:16)                                ; FA04A1  f1 91 26 30
 	push XWA                                             ; FA04A5  38
@@ -58800,13 +58796,16 @@ TuneScale_AdjustSelectedItem__FA0487:
 	jr nz, .LFA04F1                                      ; FA04AE  6e 41
 	calr TuneScale_StoreMasterTune                                      ; FA04B0  1e 32 fe
 	jr .LFA04F1                                          ; FA04B3  68 3c
+.LFA04B5:
 	lda xbc, (Descriptor9_FA1E64:24)                     ; FA04B5  f2 64 1e fa 31
 	push XBC                                             ; FA04BA  39
 	pushw 0x79                                           ; FA04BB  0b 79 00
 	jr .LFA04EB                                          ; FA04BE  68 2b
+.LFA04C0:
 	lda xbc, (Descriptor9_FA1E6D:24)                     ; FA04C0  f2 6d 1e fa 31
 	push XBC                                             ; FA04C5  39
 	jr .LFA04E8                                          ; FA04C6  68 20
+.LFA04C8:
 	lda xbc, (Descriptor9_FA1E76:24)                     ; FA04C8  f2 76 1e fa 31
 	push XBC                                             ; FA04CD  39
 	lda xwa, (TuneScale_KeyScalingIndex:16)                                ; FA04CE  f1 92 26 30
@@ -58817,6 +58816,7 @@ TuneScale_AdjustSelectedItem__FA0487:
 	jr nz, .LFA04F1                                      ; FA04DB  6e 14
 	calr TuneScale_StoreKeyScalingType                                      ; FA04DD  1e 5b fe
 	jr .LFA04F1                                          ; FA04E0  68 0f
+.LFA04E2:
 	lda xbc, (Descriptor9_FA1E7F:24)                     ; FA04E2  f2 7f 1e fa 31
 	push XBC                                             ; FA04E7  39
 .LFA04E8:
@@ -61953,7 +61953,7 @@ HandlerTable23_FA1DED:
 Descriptor9_FA1E49:
 	.byte 0x00, 0x07, 0x00, 0x04, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1E49
 ; ---------------------------------------------------------------------
-; ByteTable18_FA1E52 -- 18 bytes, kind=byte_table_18
+; Descriptor9_FA1E52 -- 9 bytes, kind=descriptor_9 (was ByteTable18_FA1E52, 18 bytes: see Descriptor9_FA1E5B)
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): named at 0xFA011B
@@ -61963,9 +61963,13 @@ Descriptor9_FA1E49:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-ByteTable18_FA1E52:
-	.byte 0x00, 0x10, 0x04, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0xff, 0x00, 0x4e, 0x01, 0x04, 0x0a  ; FA1E52
-	.byte 0x00, 0x00                                                          ; FA1E62
+Descriptor9_FA1E52:
+	.byte 0x00, 0x10, 0x04, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1E52
+; Descriptor9_FA1E5B -- 9 bytes, the descriptor TuneScale_AdjustSelectedItem's case 0 passes with (0x2691).
+;          Was the second half of an 18-byte "ByteTable18_FA1E52": its reader, the `lda` at 0xFA049B, was hidden
+;          inside the case table decoded as code, so the layout tool saw one object here.
+Descriptor9_FA1E5B:
+	.byte 0x00, 0xff, 0x00, 0x4e, 0x01, 0x04, 0x0a, 0x00, 0x00                ; FA1E5B
 ; ---------------------------------------------------------------------
 ; Descriptor9_FA1E64 -- 9 bytes, kind=descriptor_9
 ;
@@ -157877,28 +157881,25 @@ sub_FE152E:
 	cp bc, 0x04:i3                                         ; FE153F  d9 dc
 	jrl ugt, .LFE15ED                                        ; FE1541  7b a9 00
 	sll bc, 0x02                                         ; FE1544  d9 ee 02
-	add XBC,sub_FE152E__FE1551                                   ; FE1547  e9 c8 51 15 fe 00
+	add XBC,sub_FE152E_Cases                                      ; FE1547  e9 c8 51 15 fe 00
 	ld XBC,(XBC)                                         ; FE154D  a1 21
 	jp (xbc)                                             ; FE154F  b1 d8
-sub_FE152E__FE1551:
-	jr mi, .LFE1568                                          ; FE1551  65 15
-	swi 6                                                ; FE1553  fe
-	nop                                                  ; FE1554  00
-	cp (xbc1+:2), xiz                                 ; FE1555  e5 15 fe
-	nop                                                  ; FE1558  00
-	jrl pl, -491                                         ; FE1559  7d 15 fe
-	nop                                                  ; FE155C  00
-	jrl pl, -491                                         ; FE155D  7d 15 fe
-	nop                                                  ; FE1560  00
-	jrl pl, -491                                         ; FE1561  7d 15 fe
-	nop                                                  ; FE1564  00
+; sub_FE152E_Cases -- the five case targets, LE32, indexed by (0x0E36) (the `cp bc,4` above); cases 2-4 share
+;          one target.  Was decoded as instructions (`jr mi`, `swi 6`, three `jrl pl,-491`).
+sub_FE152E_Cases:
+	.long .LFE1565                                   ; FE1551  [0]
+	.long .LFE15E5                                   ; FE1555  [1]
+	.long .LFE157D                                   ; FE1559  [2]
+	.long .LFE157D                                   ; FE155D  [3]
+	.long .LFE157D                                   ; FE1561  [4]
+.LFE1565:
 	m_or_mi8 MBI+r4, 0, 0x04                             ; FE1565  84 3e 04
-.LFE1568:
 	m_cp_mi8 MB16, Medley_Source, 0x00                          ; FE1568  c1 0b 22 3f 00
 	jrl z, .LFE15F1                                          ; FE156D  76 81 00
 	ld (0x2215:16), 0x00                                 ; FE1570  f1 15 22 00 00
 	ld c, (Medley_FirstSong:16)                                   ; FE1575  c1 08 22 23
 	ld (0x2724:16), c                                   ; FE1579  f1 24 27 43
+.LFE157D:
 	ld (UI_StatusCode:16), 0x00                                 ; FE157D  f1 80 28 00 00
 	ld (0x272b:16), 0x00                                 ; FE1582  f1 2b 27 00 00
 	ld (0x2725:16), 0x00                                 ; FE1587  f1 25 27 00 00
@@ -157939,6 +157940,7 @@ sub_FE152E__FE1551:
 	m_set 4, MD16, UI_Request_Hi                                ; FE15DC  f1 71 20 bc
 	calr Disk_PortA3_Release                                          ; FE15E0  1e 14 03
 	jr .LFE15F1                                              ; FE15E3  68 0c
+.LFE15E5:
 	calr Disk_PortA3_Release                                          ; FE15E5  1e 0f 03
 	and (XIX),0xfb                                       ; FE15E8  84 3c fb
 	jr .LFE15F1                                              ; FE15EB  68 04
