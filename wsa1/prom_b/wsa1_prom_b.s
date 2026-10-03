@@ -212,6 +212,8 @@
 ; it does NOT protect a NAME.  After any prom_a rename run
 ;     python3 scripts/converters/symbolize_wsa1_rom_addresses.py --check-equates
 ; Never edit by hand: re-run the tool with --apply, which rewrites this block.
+	.set	AdvanceDelay_SelectField1_Ret, 0xF80019
+	.set	AdvanceDelay_DrawValues, 0xF80086
 	.set	Paint_S0ngC0py, 0xF80261
 	.set	ScreenLeave_S0ngC0py_Nop, 0xF803C8
 	.set	Paint_N0teChange, 0xF80439
@@ -233,6 +235,14 @@
 	.set	Paint_SequencerMedley, 0xF81048
 	.set	ScreenLeaveBody_SequencerMedley, 0xF810F0
 	.set	SongStore_MeasureSongSize, 0xF819E9
+	.set	sub_F81ACB, 0xF81ACB
+	.set	Paint_StepRecordTrackClrMeas, 0xF81BD4
+	.set	sub_F81C15, 0xF81C15
+	.set	sub_F81C33, 0xF81C33
+	.set	sub_F81C90, 0xF81C90
+	.set	sub_F81D41, 0xF81D41
+	.set	sub_F81E7C_Nop, 0xF81E7C
+	.set	sub_F81E7E, 0xF81E7E
 	.set	MainTask_Loop, 0xF82028
 	.set	Queue2C00_DrainPassAB, 0xF823AC
 	.set	Queue2C00_DrainPassB, 0xF823C8
@@ -189316,37 +189326,39 @@ sub_F7CE04_Return:
 ;           260 instructions, 246 encoded, 14 left as .byte.
 ; Unknown:  what any individual stub selects.  This label now covers only the
 ;           8 `jrl` veneers; the other 96 entry points carry their own labels.
+;           The veneers are written `jrl Target - next_pc`: llvm-mc takes a relative operand to a
+;           symbol of the other image (an absolute `.set`) only as a constant displacement.
 ; ---------------------------------------------------------------------
 StubBlock_F7D000:
-	jrl	19144	; F7D000  jrl T,0xf81acb
+	jrl	sub_F81ACB - 0xF7D003	; F7D000  jrl T,0xf81acb
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81BD4.  Named for the destination only.  [round7-entrypoints]
 Veneer_Paint_StepRecordTrackClrMeas:
-	jrl	19406	; F7D003  jrl T,0xf81bd4
+	jrl	Paint_StepRecordTrackClrMeas - 0xF7D006	; F7D003  jrl T,0xf81bd4
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81C15.  Named for the destination only.  [round7-entrypoints]
 Veneer_F81C15:
-	jrl	19468	; F7D006  jrl T,0xf81c15
+	jrl	sub_F81C15 - 0xF7D009	; F7D006  jrl T,0xf81c15
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81E7C.  Named for the destination only.  [round7-entrypoints]
 Veneer_F81E7C:
-	jrl	20080	; F7D009  jrl T,0xf81e7c
+	jrl	sub_F81E7C_Nop - 0xF7D00C	; F7D009  jrl T,0xf81e7c
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81D41.  Named for the destination only.  [round7-entrypoints]
 Veneer_F81D41:
-	jrl	19762	; F7D00C  jrl T,0xf81d41
+	jrl	sub_F81D41 - 0xF7D00F	; F7D00C  jrl T,0xf81d41
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81C33.  Named for the destination only.  [round7-entrypoints]
 Veneer_F81C33:
-	jrl	19489	; F7D00F  jrl T,0xf81c33
+	jrl	sub_F81C33 - 0xF7D012	; F7D00F  jrl T,0xf81c33
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81C90.  Named for the destination only.  [round7-entrypoints]
 Veneer_F81C90:
-	jrl	19579	; F7D012  jrl T,0xf81c90
+	jrl	sub_F81C90 - 0xF7D015	; F7D012  jrl T,0xf81c90
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81E7E.  Named for the destination only.  [round7-entrypoints]
 Veneer_F81E7E:
-	jrl	20070	; F7D015  jrl T,0xf81e7e
+	jrl	sub_F81E7E - 0xF7D018	; F7D015  jrl T,0xf81e7e
 ; Evidence: the +0 word of screen object F43040, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86EDD.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
 sub_F7D018:
@@ -200025,7 +200037,7 @@ SoftKeyCol5_AdvanceDelay_StageZero_Skip:
 SoftKeyCol5_AdvanceDelay_StageZero_Skip2:
 	call	T_F42A78	; F7FFF0  call 0xf42a78
 SoftKeyCol5_AdvanceDelay_StageZero_Skip3:
-	calr	143	; F7FFF4  calr 0xf80086
+	calr	AdvanceDelay_DrawValues - 0xF7FFF7	; F7FFF4  calr 0xf80086
 	ret	; F7FFF7  ret
 ButtonTable_AdvanceDelay_StageZero_Nop5:
 	ret	; F7FFF8  ret   <- button table 0xF7DCD8 entry 5 (ADVANCE/DELAY)
@@ -200072,7 +200084,7 @@ ButtonTable_AdvanceDelay_StageZero_Nop7:
 ; ---------------------------------------------------------------------
 LcdKeyRow1_AdvanceDelay_StageZero:
 	bit	7, w	; F7FFFB  bit 0x07,W
-	jr	z, 25	; F7FFFE  jr Z,0xf80019
+	jr	z, AdvanceDelay_SelectField1_Ret - 0xF80000	; F7FFFE  jr Z,0xf80019
 
 ; ★ RENAMED 2026-08-30 from `end`.  It is an end-of-image marker -- the
 ; address one past the last byte -- and nothing in this tree references it,

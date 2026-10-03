@@ -2238,13 +2238,13 @@ wsa1_prom_a:
 ; Rows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_StageZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_F42A6C/70/74.
 AdvanceDelay_SelectField1:
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x01                          ; F80000  c1 e5 0d 3f 01
-	jr z, .LF80019                                       ; F80005  66 12
+	jr z, AdvanceDelay_SelectField1_Ret                                       ; F80005  66 12
 	calr sub_F7F245                                          ; F80007  1e 3b f2
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F8000A  c1 75 20 3e 01
 	call T_F42A68                                        ; F8000F  1d 68 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F80013  1e 70 00
 	calr AdvanceDelay_DrawFieldCursor                                      ; F80016  1e 01 00
-.LF80019:
+AdvanceDelay_SelectField1_Ret:
 	ret                                                  ; F80019  0e
 ; AdvanceDelay_DrawFieldCursor -- clear LCD layer 1, then fill the box of the ADVANCE/DELAY field (0x12FC) selects
 ; Evidence: (0x2540)=1; site 0xF8002C runs DL_F39551-0xF39559 (interpreter A), one op-0E record = svc 0x0E LCD_Svc_0E_ClearColumns with IY=0, BC=0x28, HL=0xF0 (40 columns x 240 rows); then T_F4181C (jp DLB_Handler_Array8) on the op-03 record 0xF3B3A7: (0x12FC)&7 indexes DLBoxes_F3B3B2, swi 5 = LCD_Svc_05_FillRect.
@@ -5113,6 +5113,7 @@ SongStore_SeekBlock:
 	xor XHL,XHL                                          ; F81AC7  eb d3
 	pop XIY                                              ; F81AC9  5d
 	ret                                                  ; F81ACA  0e
+sub_F81ACB:
 	m_bit 0, MD16, 0x1071                                ; F81ACB  f1 71 10 c8
 	jrl nz, .LF81BCF                                     ; F81ACF  7e fd 00
 	m_cp_mi8 MB16, UI_ScreenId, 0x0e                          ; F81AD2  c1 7c 20 3f 0e
@@ -5233,6 +5234,7 @@ Paint_StepRecordTrackClrMeas:
 	call T_DLB_Handler_StringTable                       ; F81C0C  1d f8 17 f4
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81C10  c0 c6 3c fe
 	ret                                                  ; F81C14  0e
+sub_F81C15:
 	m_cp_mi8 MB16, UI_ScreenId, 0x0e                          ; F81C15  c1 7c 20 3f 0e
 	jr nz, .LF81C2E                                      ; F81C1A  6e 12
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81C1C  c0 c6 3e 01
@@ -5242,6 +5244,7 @@ Paint_StepRecordTrackClrMeas:
 .LF81C2E:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81C2E  c0 c6 3c fe
 	ret                                                  ; F81C32  0e
+sub_F81C33:
 	m_cp_mi8 MB16, UI_ScreenId, 0x0e                          ; F81C33  c1 7c 20 3f 0e
 	jr nz, .LF81C8F                                      ; F81C38  6e 55
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81C3A  c0 c6 3e 01
@@ -5271,6 +5274,7 @@ Paint_StepRecordTrackClrMeas:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81C8B  c0 c6 3c fe
 .LF81C8F:
 	ret                                                  ; F81C8F  0e
+sub_F81C90:
 	m_cp_mi8 MB16, UI_ScreenId, 0x0e                          ; F81C90  c1 7c 20 3f 0e
 	jrl nz, .LF81D3C                                     ; F81C95  7e a4 00
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81C98  c0 c6 3e 01
@@ -5324,6 +5328,7 @@ Paint_StepRecordTrackClrMeas:
 .LF81D3C:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81D3C  c0 c6 3c fe
 	ret                                                  ; F81D40  0e
+sub_F81D41:
 	m_bit 0, MD16, 0x1071                                ; F81D41  f1 71 10 c8
 	jrl nz, .LF81DF9                                     ; F81D45  7e b1 00
 	m_cp_mi8 MB16, UI_ScreenId, 0x0e                          ; F81D48  c1 7c 20 3f 0e
@@ -5435,7 +5440,7 @@ LCD_DrawEndOrClear:
 	jr z, .LF81E51                                       ; F81E39  66 16
 	add XIX,XWA                                          ; F81E3B  e8 84
 	ld (LCD_CurrentLayer:16), 0x02                                 ; F81E3D  f1 40 25 00 02
-	ld XIY,sub_F81E79                                    ; F81E42  45 79 1e f8 00
+	ld XIY,Str_End                                       ; F81E42  45 79 1e f8 00
 	ldw bc, 0x03                                         ; F81E47  31 03 00
 	xor HL,HL                                            ; F81E4A  db d3
 	ld a, 0x06:opc                                          ; F81E4C  21 06
@@ -5468,8 +5473,14 @@ LCD_ClearLayer2_32Cols10Rows:
 	ld a, 0x0e:opc                                          ; F81E75  21 0e
 	swi 7                                                ; F81E77  ff
 	ret                                                  ; F81E78  0e
-sub_F81E79:   ; entry: named by 1 `ld` operand, first at 0xF81E42
-	ld XIY,0x0e0e444e                                    ; F81E79  45 4e 44 0e 0e
+; Str_End -- three characters for LCD service 6: the reader at 0xF81E42 loads it into XIY with BC = 3 and
+;          `swi 7`.  Was decoded as `ld XIY,0x0e0e444e`, swallowing the two `ret`s after it.
+Str_End:	.ascii	"END"	; F81E79
+; sub_F81E7C_Nop -- a bare `ret`, the target of prom_b's veneer at 0xF7D009
+sub_F81E7C_Nop:
+	ret                                                  ; F81E7C  0e
+	ret                                                  ; F81E7D  0e
+sub_F81E7E:
 	m_cp_mi8 MB16, UI_ScreenId, 0x0e                          ; F81E7E  c1 7c 20 3f 0e
 	jr nz, .LF81EEE                                      ; F81E83  6e 69
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81E85  c0 c6 3e 01
