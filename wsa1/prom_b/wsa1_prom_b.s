@@ -87837,7 +87837,10 @@ T_F40A24:	jp sub_F456EC  ; -> prom_b 0x456EC   x2
 T_F40A28:	jp sub_F45D09  ; -> prom_b 0x45D09   x1
 T_F40A2C:	jp sub_F45D19  ; -> prom_b 0x45D19
 T_F40A30:	jp sub_F45D80  ; -> prom_b 0x45D80
-	.fill 0x8, 1, 0x00  ; 0xF40A34: 8 x nop
+; T_F40A34_Zeroed -- two slots of 0x00 (nop), not a thunk.  prom_a calls 0xF40A34 three times (0xFBACAC,
+;          0xFBB2C4, 0xFE0161), and such a call runs these eight nops into T_F40A3C, i.e. reaches sub_F45E58.
+;          Nothing here says whether that is the intent or a slot left empty after its callers were built.
+T_F40A34_Zeroed:	.fill 0x8, 1, 0x00  ; 0xF40A34: 8 x nop
 T_F40A3C:	jp sub_F45E58  ; -> prom_b 0x45E58   x1
 T_F40A40:	jp sub_F46031  ; -> prom_b 0x46031   x2
 T_F40A44:	jp sub_F4402D  ; -> prom_b 0x4402D

@@ -1301,6 +1301,7 @@
 	.set T_F40A18,                                                                      0x00F40A18
 	.set T_F40A24,                                                                      0x00F40A24
 	.set T_F40A28,                                                                      0x00F40A28
+	.set T_F40A34_Zeroed,                                                               0x00F40A34	; prom_b: 8 zero bytes (nop) that run into T_F40A3C
 	.set T_F40A3C,                                                                      0x00F40A3C
 	.set T_F40A70,                                                                      0x00F40A70
 	.set T_F40AC8,                                                                      0x00F40AC8
@@ -99544,7 +99545,7 @@ sub_FBAC00:
 	jr nz, .LFBACD2                                      ; FBACA5  6e 2b
 	ld (0x3552:16), 0x01                                 ; FBACA7  f1 52 35 00 01
 .LFBACAC:
-	call 0xf40a34                                        ; FBACAC  1d 34 0a f4
+	call	T_F40A34_Zeroed                                ; FBACAC  1d 34 0a f4
 	call T_F409CC                                        ; FBACB0  1d cc 09 f4
 	ld xwa, (0x60341e:24)                               ; FBACB4  e2 1e 34 60 20
 	ld (0x360c:16), xwa                                 ; FBACB9  f1 0c 36 60
@@ -100093,7 +100094,7 @@ sub_FBB20B:
 	ld (0x60341e:24), xwa                               ; FBB2BB  f2 1e 34 60 60
 	call sub_FBACF3                                      ; FBB2C0  1d f3 ac fb
 .LFBB2C4:
-	call 0xf40a34                                        ; FBB2C4  1d 34 0a f4
+	call	T_F40A34_Zeroed                                ; FBB2C4  1d 34 0a f4
 	call T_F409CC                                        ; FBB2C8  1d cc 09 f4
 .LFBB2CC:
 	ld a, (Disk_LastError:16)                                   ; FBB2CC  c1 43 22 21
@@ -131993,7 +131994,6 @@ sub_FD4039:
 	pushw bc                                             ; FD40AE  29
 	call sub_FD65D3                                      ; FD40AF  1d d3 65 fd
 	pushw 0x10                                           ; FD40B3  0b 10 00
-sub_FD40B6:
 	pushw 0x01                                           ; FD40B6  0b 01 00
 	ld bc, (xiz-2)                                       ; FD40B9  9e fe 21
 	extz BC                                              ; FD40BC  d9 12
@@ -134599,13 +134599,13 @@ ToneEditPage_ToggleRowFocus_Call_2:
 sub_FD546F:
 	link XIZ,0x0000                                      ; FD546F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5473  8e 08 3f 00
-	jr nz, sub_FD5486                                    ; FD5477  6e 0d
+	jr nz, .LFD5486                                    ; FD5477  6e 0d
 	pushw 0x00                                           ; FD5479  0b 00 00
 	pushw 0x82                                           ; FD547C  0b 82 00
 	call PanelScreen_PostRequest                                      ; FD547F  1d 8b 60 fd
 	pop XIY                                              ; FD5483  5d
 	jr .LFD548A                                          ; FD5484  68 04
-sub_FD5486:
+.LFD5486:
 	call sub_FD6E90                                      ; FD5486  1d 90 6e fd
 .LFD548A:
 	unlk XIZ                                             ; FD548A  ee 0d
@@ -137481,7 +137481,6 @@ sub_FD6B2E:
 	jr c, .LFD6B44                                       ; FD6B38  67 0a
 	cp h, 0x04:i3                                          ; FD6B3A  ce dc
 	jr ugt, .LFD6B44                                     ; FD6B3C  6b 06
-sub_FD6B3E:
 	ld (0x27a3:16), h                                   ; FD6B3E  f1 a3 27 46
 	jr .LFD6B49                                          ; FD6B42  68 05
 .LFD6B44:
@@ -155128,13 +155127,26 @@ sub_FDFEC2:
 .LFDFEDF:
 	unlk XIZ                                      ; FDFEDF  ee 0d
 	ret                                           ; FDFEE1  0e
-	decf                                          ; FDFEE2  0d
+; ---------------------------------------------------------------------
+; 0xFDFEE2-0xFDFFDE -- STALE COPIES of PanelOpTable_FCF72B-style handlers, from older builds.  Nothing
+;          references them: no label, and no 24-bit value in the four images equals one of their
+;          entries.  Their calls hold the old addresses.  Each old
+;          address is paired with a live routine through a live TWIN -- a handler elsewhere in prom_a
+;          with the same bytes except the call operands (wsa1/notes/prom_a_stale_twins.py; record in
+;          wsa1/notes/FINDINGS-prom_a-fdfee2-stale-handlers.md) -- and written as that routine +/- the
+;          delta.  Two layers: up to 0xFDFF82 every target is 0x15E above the live one; from 0xFDFF83 every
+;          target is 0x1FD5 or 0x2028 below it, an older layout still.  0xFDFEE2 stays a byte: the stale
+;          handler it belongs to is cut off at the front by the live code before it.
+; ---------------------------------------------------------------------
+	.byte	0x0d                                    ; FDFEE2  0d
 	pushw 0x00                                    ; FDFEE3  0b 00 00
 	pushw 0x97                                    ; FDFEE6  0b 97 00
-	call 0xfd61e9                                 ; FDFEE9  1d e9 61 fd
+; stale, 0x15E above: the same old address the twin-paired 0xFDFF07 calls
+	call	PanelScreen_PostRequest + 0x15e         ; FDFEE9  1d e9 61 fd
 	pop XIY                                       ; FDFEED  5d
 	jr .LFDFEF4                                   ; FDFEEE  68 04
-	call 0xfd6fee                                 ; FDFEF0  1d ee 6f fd
+; stale, 0x15E above: no twin (the handler is cut off at the front); the block's delta lands on the entry sub_FD6E90
+	call	sub_FD6E90 + 0x15e                      ; FDFEF0  1d ee 6f fd
 .LFDFEF4:
 	unlk XIZ                                      ; FDFEF4  ee 0d
 	ret                                           ; FDFEF6  0e
@@ -155143,12 +155155,14 @@ sub_FDFEC2:
 	jr nz, .LFDFF0D                               ; FDFEFF  6e 0c
 	pushw 0x00                                    ; FDFF01  0b 00 00
 	pushw 0x90                                    ; FDFF04  0b 90 00
-	call 0xfd61e9                                 ; FDFF07  1d e9 61 fd
+; stale, 0x15E above: the live twin sub_FDFE56 calls PanelScreen_PostRequest
+	call	PanelScreen_PostRequest + 0x15e         ; FDFF07  1d e9 61 fd
 	jr .LFDFF17                                   ; FDFF0B  68 0a
 .LFDFF0D:
 	pushw 0x01                                    ; FDFF0D  0b 01 00
 	pushw 0x02                                    ; FDFF10  0b 02 00
-	call 0xfd763e                                 ; FDFF13  1d 3e 76 fd
+; stale, 0x15E above: the live twin sub_FDFE56 calls sub_FD74E0
+	call	sub_FD74E0 + 0x15e                      ; FDFF13  1d 3e 76 fd
 .LFDFF17:
 	pop XIY                                       ; FDFF17  5d
 	unlk XIZ                                      ; FDFF18  ee 0d
@@ -155158,7 +155172,8 @@ sub_FDFEC2:
 	jr z, .LFDFF30                                ; FDFF23  66 0b
 	pushw 0x02                                    ; FDFF25  0b 02 00
 	pushw 0x02                                    ; FDFF28  0b 02 00
-	call 0xfd763e                                 ; FDFF2B  1d 3e 76 fd
+; stale, 0x15E above: the live twin sub_FDFE7A calls sub_FD74E0
+	call	sub_FD74E0 + 0x15e                      ; FDFF2B  1d 3e 76 fd
 	pop XIY                                       ; FDFF2F  5d
 .LFDFF30:
 	unlk XIZ                                      ; FDFF30  ee 0d
@@ -155168,7 +155183,8 @@ sub_FDFEC2:
 	jr z, .LFDFF48                                ; FDFF3B  66 0b
 	pushw 0x03                                    ; FDFF3D  0b 03 00
 	pushw 0x02                                    ; FDFF40  0b 02 00
-	call 0xfd763e                                 ; FDFF43  1d 3e 76 fd
+; stale, 0x15E above: the live twin sub_FDFE92 calls sub_FD74E0
+	call	sub_FD74E0 + 0x15e                      ; FDFF43  1d 3e 76 fd
 	pop XIY                                       ; FDFF47  5d
 .LFDFF48:
 	unlk XIZ                                      ; FDFF48  ee 0d
@@ -155178,7 +155194,8 @@ sub_FDFEC2:
 	jr z, .LFDFF60                                ; FDFF53  66 0b
 	pushw 0x04                                    ; FDFF55  0b 04 00
 	pushw 0x02                                    ; FDFF58  0b 02 00
-	call 0xfd763e                                 ; FDFF5B  1d 3e 76 fd
+; stale, 0x15E above: the live twin sub_FDFEAA calls sub_FD74E0
+	call	sub_FD74E0 + 0x15e                      ; FDFF5B  1d 3e 76 fd
 	pop XIY                                       ; FDFF5F  5d
 .LFDFF60:
 	unlk XIZ                                      ; FDFF60  ee 0d
@@ -155187,10 +155204,12 @@ sub_FDFEC2:
 	cp (XIZ+0x08),0x00                            ; FDFF67  8e 08 3f 00
 	jr nz, .LFDFF80                               ; FDFF6B  6e 13
 	pushw 0x00                                    ; FDFF6D  0b 00 00
-	call sub_FD6B3E                                 ; FDFF70  1d 3e 6b fd
+; stale, 0x15E above: its ten live twins (sub_FDFEC2 among them) call sub_FD69E0
+	call	sub_FD69E0 + 0x15e                      ; FDFF70  1d 3e 6b fd
 	pushw 0x00                                    ; FDFF74  0b 00 00
 	pushw 0x80                                    ; FDFF77  0b 80 00
-	call 0xfd61e9                                 ; FDFF7A  1d e9 61 fd
+; stale, 0x15E above: the same ten twins call PanelScreen_PostRequest
+	call	PanelScreen_PostRequest + 0x15e         ; FDFF7A  1d e9 61 fd
 	inc 6,XSP                                     ; FDFF7E  ef 66
 .LFDFF80:
 	unlk XIZ                                      ; FDFF80  ee 0d
@@ -155199,14 +155218,16 @@ sub_FDFEC2:
 	pushw 0xc5                                    ; FDFF84  0b c5 00
 	jr .LFDFF9B                                   ; FDFF87  68 12
 	pushw 0x03                                    ; FDFF89  0b 03 00
-	call sub_FD5486                                 ; FDFF8C  1d 86 54 fd
+; stale, older layout: the same old address the twin-paired 0xFDFFB0 calls
+	call	sub_FD74AE - 0x2028                     ; FDFF8C  1d 86 54 fd
 	popw bc                                       ; FDFF90  49
 	cp a, 0x00:i3                                   ; FDFF91  c9 d8
 	jr z, .LFDFFA0                                ; FDFF93  66 0b
 	pushw 0x01                                    ; FDFF95  0b 01 00
 	pushw 0x86                                    ; FDFF98  0b 86 00
 .LFDFF9B:
-	call sub_FD40B6                                 ; FDFF9B  1d b6 40 fd
+; stale, older layout: the same old address the twin-paired 0xFDFFD7 calls
+	call	PanelScreen_PostRequest - 0x1fd5        ; FDFF9B  1d b6 40 fd
 	pop XIY                                       ; FDFF9F  5d
 .LFDFFA0:
 	unlk XIZ                                      ; FDFFA0  ee 0d
@@ -155215,13 +155236,15 @@ sub_FDFEC2:
 	cp (XIZ+0x08),0x00                            ; FDFFA7  8e 08 3f 00
 	jr z, .LFDFFC4                                ; FDFFAB  66 17
 	pushw 0x04                                    ; FDFFAD  0b 04 00
-	call sub_FD5486                                 ; FDFFB0  1d 86 54 fd
+; stale, older layout: the live twin at 0xFD1FD7 calls sub_FD74AE
+	call	sub_FD74AE - 0x2028                     ; FDFFB0  1d 86 54 fd
 	popw bc                                       ; FDFFB4  49
 	cp a, 0x00:i3                                   ; FDFFB5  c9 d8
 	jr z, .LFDFFC4                                ; FDFFB7  66 0b
 	pushw 0x01                                    ; FDFFB9  0b 01 00
 	pushw 0x86                                    ; FDFFBC  0b 86 00
-	call sub_FD40B6                                 ; FDFFBF  1d b6 40 fd
+; stale, older layout: the live twin at 0xFD1FD7 calls PanelScreen_PostRequest
+	call	PanelScreen_PostRequest - 0x1fd5        ; FDFFBF  1d b6 40 fd
 	pop XIY                                       ; FDFFC3  5d
 .LFDFFC4:
 	unlk XIZ                                      ; FDFFC4  ee 0d
@@ -155231,7 +155254,8 @@ sub_FDFEC2:
 	jr nz, .LFDFFDC                               ; FDFFCF  6e 0b
 	pushw 0x00                                    ; FDFFD1  0b 00 00
 	pushw 0xc0                                    ; FDFFD4  0b c0 00
-	call sub_FD40B6                                 ; FDFFD7  1d b6 40 fd
+; stale, older layout: its seven live twins (0xFD1010 among them) call PanelScreen_PostRequest
+	call	PanelScreen_PostRequest - 0x1fd5        ; FDFFD7  1d b6 40 fd
 	pop XIY                                       ; FDFFDB  5d
 .LFDFFDC:
 	unlk XIZ                                      ; FDFFDC  ee 0d
@@ -155685,7 +155709,7 @@ sub_FE0150:
 	push XHL                                             ; FE015E  3b
 	push XIX                                             ; FE015F  3c
 	push XIZ                                             ; FE0160  3e
-	call 0xf40a34                                        ; FE0161  1d 34 0a f4
+	call	T_F40A34_Zeroed                                ; FE0161  1d 34 0a f4
 	pop XIZ                                              ; FE0165  5e
 	pop XIX                                              ; FE0166  5c
 	pop XHL                                              ; FE0167  5b
