@@ -40136,7 +40136,7 @@ MainPmanCtrl_LoadPartSelect 00F992D7
 MainPmanCtrl_CompareAndUpdate 00F992DB
 MainTitle_SendEventDone 00F992EF
 MainTitleControl 00F992F5
-SeqState_TransitionMode 00F9936D
+MainTitleCtrl_ChangeTitle 00F9936D
 MainTitleCtrl_SaveAndTransition 00F99384
 MainTitleCtrl_SetIndicatorAndClear 00F99391
 SeqState_DemoModeHandler 00F993AD

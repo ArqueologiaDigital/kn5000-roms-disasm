@@ -2750,7 +2750,7 @@ MainTitleControl:
 	cp xbc, EVT_INTERRUPT_TITLE
 	jr z, MainTitleCtrl_SaveAndTransition
 	cp xbc, EVT_CHANGE_TITLE
-	jr z, SeqState_TransitionMode
+	jr z, MainTitleCtrl_ChangeTitle
 	cp xbc, EVT_CHANGE_MODE
 	jrl nz, UIWidget_ReturnZero
 	ldmm8 PREVIOUS_MODE, CURRENT_MODE
@@ -2764,7 +2764,7 @@ MainTitleControl:
 	jrl UIWidget_ReturnZero
 
 ; =============================================================================
-; SeqState_TransitionMode - Screen transition state handler
+; MainTitleCtrl_ChangeTitle - Screen transition state handler
 ;
 ; Manages state transitions for the sequencer/demo screen mode changes.
 ; Saves current display state bytes (SFR 36150-36153) and clears animation
@@ -2777,7 +2777,7 @@ MainTitleControl:
 ;   0x0274a2 - Transition type/flags
 ;   0x0274a8-0x0274ae - Additional transition parameters
 ; =============================================================================
-SeqState_TransitionMode:
+MainTitleCtrl_ChangeTitle:
 	ld (PREVIOUS_TITLE:16), a
 	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
 	ld (CURRENT_TITLE:16), l

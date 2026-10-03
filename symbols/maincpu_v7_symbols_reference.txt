@@ -39713,7 +39713,7 @@ MainPmanCtrl_LoadPartSelect 00F98ECA
 MainPmanCtrl_CompareAndUpdate 00F98ECE
 MainTitle_SendEventDone 00F98EE2
 MainTitleControl 00F98EE8
-SeqState_TransitionMode 00F98F60
+MainTitleCtrl_ChangeTitle 00F98F60
 MainTitleCtrl_SaveAndTransition 00F98F77
 MainTitleCtrl_SetIndicatorAndClear 00F98F84
 SeqState_DemoModeHandler 00F98FA0

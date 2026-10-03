@@ -2798,7 +2798,7 @@ MainTitleControl:
 	cp	xbc, EVT_INTERRUPT_TITLE
 	jr	z, MainTitleCtrl_SaveAndTransition
 	cp	xbc, EVT_CHANGE_TITLE
-	jr	z, SeqState_TransitionMode
+	jr	z, MainTitleCtrl_ChangeTitle
 	cp	xbc, EVT_CHANGE_MODE
 	jrl	nz, UIWidget_ReturnZero
 	ldmm8 PREVIOUS_MODE, CURRENT_MODE
@@ -2810,7 +2810,7 @@ MainTitleControl:
 	ld	(TRANSITION_TIMER:24), xwa
 	ld	(TRANSITION_PROGRESS:24), xwa
 	jrl	UIWidget_ReturnZero
-SeqState_TransitionMode:
+MainTitleCtrl_ChangeTitle:
 	ld	(PREVIOUS_TITLE:16), a
 	ldmm8 ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE
 	ld	(CURRENT_TITLE:16), l

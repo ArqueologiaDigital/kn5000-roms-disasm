@@ -5,7 +5,7 @@
 ; RHYTHM_PATTERN_TYPE, RHYTHM_PATTERN_BUF_B).  Each line cites the page that establishes the variable.
 
 ; MainTitleControl (the title / mode object) -- EVT_CHANGE_MODE: `ldmm8 PREVIOUS_MODE, CURRENT_MODE / ld (CURRENT_MODE), l`;
-; EVT_CHANGE_TITLE -> SeqState_TransitionMode: PREVIOUS_TITLE := CURRENT_TITLE, CURRENT_TITLE := l.  sequencer.md
+; EVT_CHANGE_TITLE -> MainTitleCtrl_ChangeTitle: PREVIOUS_TITLE := CURRENT_TITLE, CURRENT_TITLE := l.  sequencer.md
 ; called 0x8D36 the "master sequencer state": its skip range 0x10-0x16 is exactly the TT_STYLCNV* titles
 	.equ CURRENT_MODE,		0x8c98	; the current mode id (NAKA_MODE_* - 0x1800000), set by EVT_CHANGE_MODE
 	.equ PREVIOUS_MODE,		0x8c99	; the mode before the last EVT_CHANGE_MODE
@@ -37,7 +37,7 @@
 	.equ MIDISEQ_ACTIVE_BLOCK_PTR,	0xbbb8	; the second pair's active pointer (its +10 / +14 words are compared)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xbc54
 	.equ MIDISEQ_SPARE_BLOCK_PTR,	0xbbbc	; and its spare	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xbc58
 ; the ACTIVE title: EVT_CHANGE_TITLE, EVT_RETURN_TITLE and EVT_INTERRUPT_TITLE all set it (`ldmm8
-; ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE / ld (ACTIVE_TITLE), l`); SeqState_TransitionMode's header names the
+; ACTIVE_TITLE_PREVIOUS, ACTIVE_TITLE / ld (ACTIVE_TITLE), l`); MainTitleCtrl_ChangeTitle's header names the
 ; transition variables
 	.equ ACTIVE_TITLE,	0x8c9c	; the title on screen: CURRENT_TITLE, or an interrupting / returned-to one	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d38
 	.equ ACTIVE_TITLE_PREVIOUS,	0x8c9d	; its previous value, saved before each change	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d39
