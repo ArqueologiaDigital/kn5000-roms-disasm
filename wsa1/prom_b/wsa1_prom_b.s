@@ -17746,7 +17746,7 @@ sub_F09C63_Return:
 	ret	; F09CA8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F09CA9
+; ScreenCode80_RepaintField
 ; Called from: table 0xF5B9F8[0]
 ; Touches: (0x2540)  |  0xFC517E 0xFC51B1 0xFC51D3 0xFC51F9 0xFC521B 0xFC524D
 ;          +4 more
@@ -17761,7 +17761,8 @@ sub_F09C63_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F09CA9:
+; ScreenCode80_RepaintField: DispatchTable_F5B9F8[code 0x80] -- Dispatch_Code80, the partial repaint.
+ScreenCode80_RepaintField:
 	cp	a, 0:i3	; F09CA9  cp A,0
 	jr	z, sub_F09C63_Skip3	; F09CAB  jr Z,0xf09ce6
 	cp	a, 1:i3	; F09CAD  cp A,1
@@ -127012,50 +127013,50 @@ SC1_Entry_F40F24_Body_Ret_Join:
 ; --- 0xF5B8F8: 48 entries, one per selector 0x80..0xAF.  Ends exactly on the
 ;     next routine's first byte.  Entries for 0xC0.. re-use 0xA0.. ------------
 DispatchTable_F5B8F8:
-	.long sub_F5BF27	; [0x80]
+	.long ScreenCode80_Paint	; [0x80]
 	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
 	.long Draw_ToneTemplateLevelKeyTune	; [0x82]
-	.long sub_F5D40E	; [0x83]
-	.long sub_F5D4C3	; [0x84]
-	.long sub_F5D519	; [0x85]
+	.long ScreenCode83_Paint	; [0x83]
+	.long ScreenCode84_Paint	; [0x84]
+	.long ScreenCode85_Paint	; [0x85]
 	.long Draw_DriverDriverWaveformReso	; [0x86]
 	.long Draw_KeyDeToneKeyScalingShift	; [0x87]
 	.long Draw_StartPitchStopPitchTotal	; [0x88]
-	.long sub_F5D57A	; [0x89]
-	.long sub_F5C513	; [0x8A]
+	.long ScreenCode89_Paint	; [0x89]
+	.long ScreenCode8A_Paint	; [0x8A]
 	.long Draw_Page12LevelTouchCurveLevel	; [0x8B]
 	.long Draw_Page22KeyFollowSlopeRange	; [0x8C]
-	.long sub_F5C79E	; [0x8D]
+	.long ScreenCode8D_Paint	; [0x8D]
 	.long Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; [0x8E]
-	.long sub_F5D622	; [0x8F]
-	.long sub_F5C8CB	; [0x90]
-	.long sub_F5C983	; [0x91]
-	.long sub_F5C9CE	; [0x92]
-	.long sub_F5CA19	; [0x93]
+	.long ScreenCode8F_Paint	; [0x8F]
+	.long ScreenCode90_Paint	; [0x90]
+	.long ScreenCode91_Paint	; [0x91]
+	.long ScreenCode92_Paint	; [0x92]
+	.long ScreenCode93_Paint	; [0x93]
 	.long Draw_FilterBandPassLowHighCutoff	; [0x94]
 	.long Draw_Through	; [0x95]
-	.long sub_F5D583	; [0x96]
+	.long ScreenCode96_Paint	; [0x96]
 	.long Draw_StartPointStopPointCutoff	; [0x97]
-	.long sub_F5D5C4	; [0x98]
-	.long sub_F5D619	; [0x99]
+	.long ScreenCode98_Paint	; [0x98]
+	.long ScreenCode99_Paint	; [0x99]
 	.long SoundEditDigitalEffect_Paint	; [0x9A]
 	.long SoundEditController_PaintPage2	; [0x9B]
 	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_Paint	; [0x9D]
 	.long Draw_Mem0ryWriteSoundEditName	; [0x9E]
 	.long Draw_Write	; [0x9F]
-	.long sub_F5BFC7	; [0xA0]  <- also selector 0xC0
+	.long ToneEditPage_A0_Paint	; [0xA0]  <- also selector 0xC0
 	.long Draw_ToneTemplateLevelKeyTune	; [0xA1]  <- also selector 0xC1
 	.long Draw_DriverDriverWaveformReso	; [0xA2]  <- also selector 0xC2
-	.long sub_F5C09E	; [0xA3]  <- also selector 0xC3
-	.long sub_F5C0D4	; [0xA4]  <- also selector 0xC4
-	.long sub_F5C10A	; [0xA5]  <- also selector 0xC5
-	.long sub_F5C172	; [0xA6]  <- also selector 0xC6
-	.long sub_F5C1AC	; [0xA7]  <- also selector 0xC7
+	.long ToneEditPage_A3_Paint	; [0xA3]  <- also selector 0xC3
+	.long ToneEditPage_A4_Paint	; [0xA4]  <- also selector 0xC4
+	.long ToneEditPage_A5_Paint	; [0xA5]  <- also selector 0xC5
+	.long ToneEditPage_A6_Paint	; [0xA6]  <- also selector 0xC6
+	.long ToneEditPage_A7_Paint	; [0xA7]  <- also selector 0xC7
 	.long Draw_Serial	; [0xA8]  <- also selector 0xC8
 	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
 	.long DispatchTable_F5B8F8_Nop42	; [0xAA]  <- also selector 0xCA
-	.long sub_F5D29B	; [0xAB]  <- also selector 0xCB
+	.long ScreenCodeAB_Paint	; [0xAB]  <- also selector 0xCB
 	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_PaintPage1	; [0xAD]  <- also selector 0xCD
 	.long sub_F5BE5A + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
@@ -127109,50 +127110,50 @@ Dispatch_Code80_Join:
 
 ; --- 0xF5B9F8: 48 entries, one per selector 0x80..0xAF ---------------------
 DispatchTable_F5B9F8:
-	.long sub_F09CA9	; [0x80]
+	.long ScreenCode80_RepaintField	; [0x80]
 	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
-	.long sub_F5CE65	; [0x82]
-	.long sub_F5D62B	; [0x83]
-	.long sub_F5D6AC	; [0x84]
-	.long sub_F5D6D4	; [0x85]
-	.long sub_F5CC3D	; [0x86]
-	.long sub_F5CEB2	; [0x87]
-	.long sub_F5D126	; [0x88]
-	.long sub_F5D6FC	; [0x89]
-	.long sub_F5CEF6	; [0x8A]
-	.long sub_F5CFD7	; [0x8B]
-	.long sub_F5D05B	; [0x8C]
-	.long sub_F5D06A	; [0x8D]
-	.long sub_F5D09F	; [0x8E]
-	.long sub_F5CEF6	; [0x8F]
+	.long ScreenCode82_RepaintField	; [0x82]
+	.long ScreenCode83_RepaintField	; [0x83]
+	.long ScreenCode84_RepaintField	; [0x84]
+	.long ScreenCode85_RepaintField	; [0x85]
+	.long ScreenCode86_RepaintField	; [0x86]
+	.long ScreenCode87_RepaintField	; [0x87]
+	.long ScreenCode88_RepaintField	; [0x88]
+	.long ScreenCode89_RepaintField	; [0x89]
+	.long ScreenCode8A_RepaintField	; [0x8A]
+	.long ScreenCode8B_RepaintField	; [0x8B]
+	.long ScreenCode8C_RepaintField	; [0x8C]
+	.long ScreenCode8D_RepaintField	; [0x8D]
+	.long ScreenCode8E_RepaintField	; [0x8E]
+	.long ScreenCode8A_RepaintField	; [0x8F]
 	.long Draw_LowHigh	; [0x90]
 	.long Draw_LowHigh_2	; [0x91]
-	.long sub_F5D0F9	; [0x92]
-	.long sub_F5D108	; [0x93]
-	.long sub_F5D117	; [0x94]
+	.long ScreenCode92_RepaintField	; [0x92]
+	.long ScreenCode93_RepaintField	; [0x93]
+	.long ScreenCode94_RepaintField	; [0x94]
 	.long sub_F5BE5A + 0xBD	; [0x95]   (default `ret`)
-	.long sub_F5D05B	; [0x96]
-	.long sub_F5D126	; [0x97]
-	.long sub_F5D6FC	; [0x98]
-	.long sub_F5CEF6	; [0x99]
+	.long ScreenCode8C_RepaintField	; [0x96]
+	.long ScreenCode88_RepaintField	; [0x97]
+	.long ScreenCode89_RepaintField	; [0x98]
+	.long ScreenCode8A_RepaintField	; [0x99]
 	.long SoundEditDigitalEffect_RepaintField	; [0x9A]
 	.long SoundEditController_RepaintFieldPage2	; [0x9B]
 	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_RepaintField	; [0x9D]
-	.long sub_F5D2E9	; [0x9E]
-	.long sub_F5D313	; [0x9F]
-	.long sub_F5CB1E	; [0xA0]  <- also selector 0xC0
-	.long sub_F5CE65	; [0xA1]  <- also selector 0xC1
-	.long sub_F5CC3D	; [0xA2]  <- also selector 0xC2
-	.long sub_F5CCF6	; [0xA3]  <- also selector 0xC3
-	.long sub_F5CD1E	; [0xA4]  <- also selector 0xC4
-	.long sub_F5CD46	; [0xA5]  <- also selector 0xC5
-	.long sub_F5CDA8	; [0xA6]  <- also selector 0xC6
-	.long sub_F5CDD4	; [0xA7]  <- also selector 0xC7
-	.long sub_F5CE00	; [0xA8]  <- also selector 0xC8
+	.long ScreenCode9E_RepaintField	; [0x9E]
+	.long ScreenCode9F_RepaintField	; [0x9F]
+	.long ToneEditPage_A0_RepaintField	; [0xA0]  <- also selector 0xC0
+	.long ScreenCode82_RepaintField	; [0xA1]  <- also selector 0xC1
+	.long ScreenCode86_RepaintField	; [0xA2]  <- also selector 0xC2
+	.long ToneEditPage_A3_RepaintField	; [0xA3]  <- also selector 0xC3
+	.long ToneEditPage_A4_RepaintField	; [0xA4]  <- also selector 0xC4
+	.long ToneEditPage_A5_RepaintField	; [0xA5]  <- also selector 0xC5
+	.long ToneEditPage_A6_RepaintField	; [0xA6]  <- also selector 0xC6
+	.long ToneEditPage_A7_RepaintField	; [0xA7]  <- also selector 0xC7
+	.long ScreenCodeA8_RepaintField	; [0xA8]  <- also selector 0xC8
 	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
 	.long DispatchTable_F5B9F8_Nop42	; [0xAA]  <- also selector 0xCA
-	.long sub_F5D2D5	; [0xAB]  <- also selector 0xCB
+	.long ScreenCodeAB_RepaintField	; [0xAB]  <- also selector 0xCB
 	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_RepaintFieldPage1	; [0xAD]  <- also selector 0xCD
 	.long sub_F5BE5A + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
@@ -127855,7 +127856,8 @@ sub_F5BF21:
 	ld	a, 12:opc	; F5BF23  ld A,0x0c
 	swi	7	; F5BF25  swi 7
 	ret	; F5BF26  ret
-sub_F5BF27:
+; ScreenCode80_Paint: DispatchTable_F5B8F8[code 0x80] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode80_Paint:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BF27  cp (0x27f5),0x01
 	jr	z, sub_F5BE5A_Skip2	; F5BF2C  jr Z,0xf5bf51
 	ld	(LCD_CurrentLayer:16), 0	; F5BF2E  ld (0x2540),0x00
@@ -127949,7 +127951,8 @@ sub_F5BFBD:
 	ld	(LCD_CurrentLayer:16), 0	; F5BFBD  ld (0x2540),0x00
 	call	T_F42E18	; F5BFC2  call 0xf42e18
 	ret	; F5BFC6  ret
-sub_F5BFC7:
+; ToneEditPage_A0_Paint: DispatchTable_F5B8F8[code 0xA0] -- Dispatch_Code80_Bracketed, the full paint.
+ToneEditPage_A0_Paint:
 	call	Draw_M0delingSoundEditToneDriver	; F5BFC7  call 0xf5c338
 	call	Draw_ToneDriverResonator	; F5BFCB  call 0xf5c360
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BFCF  cp (0x27f5),0x01
@@ -128011,7 +128014,8 @@ Draw_DriverDriverWaveformReso:
 	call	T_DisplayListB_Run	; F5C095  call 0xf417f4
 	call	sub_F5CC64	; F5C099  call 0xf5cc64
 	ret	; F5C09D  ret
-sub_F5C09E:
+; ToneEditPage_A3_Paint: DispatchTable_F5B8F8[code 0xA3] -- Dispatch_Code80_Bracketed, the full paint.
+ToneEditPage_A3_Paint:
 	call	Draw_M0delingSoundEditToneDriver	; F5C09E  call 0xf5c338
 	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0A2  call 0xf5c374
 	ld	xiy, DL_Page12P0siti0nParameterP0siti0n	; F5C0A6  ld XIY,0x00f02671
@@ -128025,7 +128029,8 @@ sub_F5C09E:
 	ld	xix, DLText_FixMove	; F5C0CA  ld XIX,0x00f03478
 	call	T_DisplayListB_Run	; F5C0CF  call 0xf417f4
 	ret	; F5C0D3  ret
-sub_F5C0D4:
+; ToneEditPage_A4_Paint: DispatchTable_F5B8F8[code 0xA4] -- Dispatch_Code80_Bracketed, the full paint.
+ToneEditPage_A4_Paint:
 	call	Draw_M0delingSoundEditToneDriver	; F5C0D4  call 0xf5c338
 	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0D8  call 0xf5c374
 	ld	xiy, DL_Page22P0siti0nM0vementWidth	; F5C0DC  ld XIY,0x00f02942
@@ -128039,7 +128044,8 @@ sub_F5C0D4:
 	ld	xix, DLBRecordPtrs_F034C6	; F5C100  ld XIX,0x00f034c6
 	call	T_DisplayListB_Run	; F5C105  call 0xf417f4
 	ret	; F5C109  ret
-sub_F5C10A:
+; ToneEditPage_A5_Paint: DispatchTable_F5B8F8[code 0xA5] -- Dispatch_Code80_Bracketed, the full paint.
+ToneEditPage_A5_Paint:
 	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C10A  call 0xf5c34c
 	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C10E  call 0xf5c388
 	ld	xiy, DL_Page13FitMutKeyDeResoTing	; F5C112  ld XIY,0x00f02a46
@@ -128082,7 +128088,8 @@ sub_F5C144:
 	call	T_DisplayListB_Run	; F5C16D  call 0xf417f4
 sub_F5C144_Return:
 	ret	; F5C171  ret
-sub_F5C172:
+; ToneEditPage_A6_Paint: DispatchTable_F5B8F8[code 0xA6] -- Dispatch_Code80_Bracketed, the full paint.
+ToneEditPage_A6_Paint:
 	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C172  call 0xf5c34c
 	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C176  call 0xf5c388
 	ld	xiy, DL_Page23TouchDepthSubFittingMutingSubGain	; F5C17A  ld XIY,0x00f02d08
@@ -128097,7 +128104,8 @@ sub_F5C172:
 	call	T_DisplayListB_Run	; F5C1A3  call 0xf417f4
 	call	sub_F5C144	; F5C1A7  call 0xf5c144
 	ret	; F5C1AB  ret
-sub_F5C1AC:
+; ToneEditPage_A7_Paint: DispatchTable_F5B8F8[code 0xA7] -- Dispatch_Code80_Bracketed, the full paint.
+ToneEditPage_A7_Paint:
 	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C1AC  call 0xf5c34c
 	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C1B0  call 0xf5c388
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C1B4  cp (0x27f5),0x01
@@ -128493,7 +128501,8 @@ Draw_PitchSoundEditEnvPitchLf0:
 	ld	xix, DL_F03D4A	; F5C509  ld XIX,0x00f03d4a
 	call	T_DisplayList_Run	; F5C50E  call 0xf417f0
 	ret	; F5C512  ret
-sub_F5C513:
+; ScreenCode8A_Paint: DispatchTable_F5B8F8[code 0x8A] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode8A_Paint:
 	call	Draw_PitchSoundEditEnvPitchLf0	; F5C513  call 0xf5c4ff
 
 ; --------------------------------------------------------------------------
@@ -128764,7 +128773,8 @@ sub_F5C772:
 	ld	xix, DLRecordPtrs_F0509B	; F5C794  ld XIX,0x00f0509b
 	call	T_DisplayListB_Run	; F5C799  call 0xf417f4
 	ret	; F5C79D  ret
-sub_F5C79E:
+; ScreenCode8D_Paint: DispatchTable_F5B8F8[code 0x8D] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode8D_Paint:
 	call	sub_F5C727	; F5C79E  call 0xf5c727
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C7A2  cp (0x27f5),0x01
 	jr	z, sub_F5C772_Skip	; F5C7A7  jr Z,0xf5c7d0
@@ -128859,7 +128869,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	ld	xix, DLText_AttackDecayRelease	; F5C8C1  ld XIX,0x00f05182
 	call	T_DisplayListB_Run	; F5C8C6  call 0xf417f4
 	ret	; F5C8CA  ret
-sub_F5C8CB:
+; ScreenCode90_Paint: DispatchTable_F5B8F8[code 0x90] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode90_Paint:
 	call	sub_F5C929	; F5C8CB  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C8CF  ld XIY,0x00f0467d
 	ld	xix, DL_HighPass12db	; F5C8D4  ld XIX,0x00f047ca
@@ -128955,7 +128966,8 @@ sub_F5C94B_Join:
 	ld	xiy, DL_F04D10	; F5C979  ld XIY,0x00f04d10
 	call	T_DisplayListB_RunOne	; F5C97E  call 0xf41830
 	ret	; F5C982  ret
-sub_F5C983:
+; ScreenCode91_Paint: DispatchTable_F5B8F8[code 0x91] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode91_Paint:
 	call	sub_F5C929	; F5C983  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C987  ld XIY,0x00f0467d
 	ld	xix, DL_HighPass12db	; F5C98C  ld XIX,0x00f047ca
@@ -128975,7 +128987,8 @@ sub_F5C94B_Skip2:
 	ld	xix, DLBRecordPtrs_F04DA3	; F5C9C4  ld XIX,0x00f04da3
 	call	T_DisplayListB_Run	; F5C9C9  call 0xf417f4
 	ret	; F5C9CD  ret
-sub_F5C9CE:
+; ScreenCode92_Paint: DispatchTable_F5B8F8[code 0x92] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode92_Paint:
 	call	sub_F5C929	; F5C9CE  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5C9D2  ld XIY,0x00f047f3
 	ld	xix, DL_LowPass24db	; F5C9D7  ld XIX,0x00f04889
@@ -128995,7 +129008,8 @@ sub_F5C94B_Skip3:
 	ld	xix, Data_F04E32	; F5CA0F  ld XIX,0x00f04e32
 	call	T_DisplayListB_Run	; F5CA14  call 0xf417f4
 	ret	; F5CA18  ret
-sub_F5CA19:
+; ScreenCode93_Paint: DispatchTable_F5B8F8[code 0x93] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode93_Paint:
 	call	sub_F5C929	; F5CA19  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5CA1D  ld XIY,0x00f047f3
 	ld	xix, DL_LowPass24db	; F5CA22  ld XIX,0x00f04889
@@ -129081,7 +129095,8 @@ Draw_Page12EnvelopeKeyoffCurSor:
 	ld	xix, Data_F04F20	; F5CB14  ld XIX,0x00f04f20
 	call	T_DisplayListB_Run	; F5CB19  call 0xf417f4
 	ret	; F5CB1D  ret
-sub_F5CB1E:
+; ToneEditPage_A0_RepaintField: DispatchTable_F5B9F8[code 0xA0] -- Dispatch_Code80, the partial repaint.
+ToneEditPage_A0_RepaintField:
 	cp	a, 0:i3	; F5CB1E  cp A,0
 	jr	z, Draw_Page12EnvelopeKeyoffCurSor_Skip2	; F5CB20  jr Z,0xf5cb63
 	cp	a, 1:i3	; F5CB22  cp A,1
@@ -129194,7 +129209,8 @@ sub_F5CBD9_Join:
 	ld	(LCD_CurrentLayer:16), 0	; F5CC37  ld (0x2540),0x00
 sub_F5CBD9_Return:
 	ret	; F5CC3C  ret
-sub_F5CC3D:
+; ScreenCode86_RepaintField: DispatchTable_F5B9F8[code 0x86] (also codes 0xA2) -- Dispatch_Code80, the partial repaint.
+ScreenCode86_RepaintField:
 	cp	a, 0:i3	; F5CC3D  cp A,0
 	jr	z, sub_F5CBD9_Skip4	; F5CC3F  jr Z,0xf5cc47
 	call	sub_F5CC64	; F5CC41  call 0xf5cc64
@@ -129273,7 +129289,8 @@ sub_F5CC64_Join:
 	cp	c, 3:i3	; F5CCF1  cp C,3
 	jr	nz, sub_F5CC64_Loop	; F5CCF3  jr NZ,0xf5cc8c
 	ret	; F5CCF5  ret
-sub_F5CCF6:
+; ToneEditPage_A3_RepaintField: DispatchTable_F5B9F8[code 0xA3] -- Dispatch_Code80, the partial repaint.
+ToneEditPage_A3_RepaintField:
 	cp	a, 1:i3	; F5CCF6  cp A,1
 	jr	nz, sub_F5CC64_Skip2	; F5CCF8  jr NZ,0xf5cd0f
 	ld	(LCD_CurrentLayer:16), 0	; F5CCFA  ld (0x2540),0x00
@@ -129287,7 +129304,8 @@ sub_F5CC64_Skip2:
 	call	RunDisplayListBFromPointerArray	; F5CD19  call 0xf09ae1
 sub_F5CC64_Return:
 	ret	; F5CD1D  ret
-sub_F5CD1E:
+; ToneEditPage_A4_RepaintField: DispatchTable_F5B9F8[code 0xA4] -- Dispatch_Code80, the partial repaint.
+ToneEditPage_A4_RepaintField:
 	cp	a, 2:i3	; F5CD1E  cp A,2
 	jr	nz, sub_F5CC64_Skip3	; F5CD20  jr NZ,0xf5cd37
 	ld	(LCD_CurrentLayer:16), 0	; F5CD22  ld (0x2540),0x00
@@ -129301,7 +129319,8 @@ sub_F5CC64_Skip3:
 	call	RunDisplayListBFromPointerArray	; F5CD41  call 0xf09ae1
 sub_F5CC64_Return2:
 	ret	; F5CD45  ret
-sub_F5CD46:
+; ToneEditPage_A5_RepaintField: DispatchTable_F5B9F8[code 0xA5] -- Dispatch_Code80, the partial repaint.
+ToneEditPage_A5_RepaintField:
 	cp	a, 0:i3	; F5CD46  cp A,0
 	jr	z, sub_F5CC64_Skip4	; F5CD48  jr Z,0xf5cd54
 	cp	a, 2:i3	; F5CD4A  cp A,2
@@ -129335,7 +129354,8 @@ sub_F5CC64_Join2:
 	call	RunDisplayListBFromPointerArray	; F5CDA3  call 0xf09ae1
 sub_F5CC64_Return3:
 	ret	; F5CDA7  ret
-sub_F5CDA8:
+; ToneEditPage_A6_RepaintField: DispatchTable_F5B9F8[code 0xA6] -- Dispatch_Code80, the partial repaint.
+ToneEditPage_A6_RepaintField:
 	cp	a, 0:i3	; F5CDA8  cp A,0
 	jr	nz, sub_F5CC64_Skip7	; F5CDAA  jr NZ,0xf5cdc5
 	ld	(LCD_CurrentLayer:16), 1	; F5CDAC  ld (0x2540),0x01
@@ -129349,7 +129369,8 @@ sub_F5CC64_Skip7:
 	ld	xiy, Data_F03617	; F5CDCA  ld XIY,0x00f03617
 	call	RunDisplayListBFromPointerArray	; F5CDCF  call 0xf09ae1
 	ret	; F5CDD3  ret
-sub_F5CDD4:
+; ToneEditPage_A7_RepaintField: DispatchTable_F5B9F8[code 0xA7] -- Dispatch_Code80, the partial repaint.
+ToneEditPage_A7_RepaintField:
 	cp	a, 0:i3	; F5CDD4  cp A,0
 	jr	nz, sub_F5CC64_Skip8	; F5CDD6  jr NZ,0xf5cdf1
 	ld	(LCD_CurrentLayer:16), 1	; F5CDD8  ld (0x2540),0x01
@@ -129363,7 +129384,8 @@ sub_F5CC64_Skip8:
 	ld	xiy, DLRecordPtrs_F036C2	; F5CDF6  ld XIY,0x00f036c2
 	call	RunDisplayListBFromPointerArray	; F5CDFB  call 0xf09ae1
 	ret	; F5CDFF  ret
-sub_F5CE00:
+; ScreenCodeA8_RepaintField: DispatchTable_F5B9F8[code 0xA8] -- Dispatch_Code80, the partial repaint.
+ScreenCodeA8_RepaintField:
 	cp	a, 3:i3	; F5CE00  cp A,3
 	jr	z, sub_F5CC64_Skip10	; F5CE02  jr Z,0xf5ce24
 	cp	a, 2:i3	; F5CE04  cp A,2
@@ -129397,7 +129419,8 @@ sub_F5CC64_Skip11:
 	call	sub_F5C27D	; F5CE60  call 0xf5c27d
 sub_F5CC64_Return4:
 	ret	; F5CE64  ret
-sub_F5CE65:
+; ScreenCode82_RepaintField: DispatchTable_F5B9F8[code 0x82] (also codes 0xA1) -- Dispatch_Code80, the partial repaint.
+ScreenCode82_RepaintField:
 	cp	a, 0:i3	; F5CE65  cp A,0
 	jr	z, sub_F5CC64_Skip12	; F5CE67  jr Z,0xf5ce8e
 	cp	a, 14	; F5CE69  cp A,0x0e
@@ -129425,7 +129448,8 @@ sub_F5CC64_Skip13:
 	call	RunDisplayListBFromPointerArray	; F5CEAD  call 0xf09ae1
 sub_F5CC64_Return5:
 	ret	; F5CEB1  ret
-sub_F5CEB2:
+; ScreenCode87_RepaintField: DispatchTable_F5B9F8[code 0x87] -- Dispatch_Code80, the partial repaint.
+ScreenCode87_RepaintField:
 	cp	a, 13	; F5CEB2  cp A,0x0d
 	jr	z, sub_F5CC64_Skip14	; F5CEB5  jr Z,0xf5ced2
 	cp	a, 0:i3	; F5CEB7  cp A,0
@@ -129447,7 +129471,8 @@ sub_F5CC64_Join4:
 	ld	xiy, Data_F05372	; F5CEEC  ld XIY,0x00f05372
 	call	RunDisplayListBFromPointerArray	; F5CEF1  call 0xf09ae1
 	ret	; F5CEF5  ret
-sub_F5CEF6:
+; ScreenCode8A_RepaintField: DispatchTable_F5B9F8[code 0x8A] (also codes 0x8F, 0x99) -- Dispatch_Code80, the partial repaint.
+ScreenCode8A_RepaintField:
 	cp	a, 0:i3	; F5CEF6  cp A,0
 	jr	z, sub_F5CC64_Skip15	; F5CEF8  jr Z,0xf5cf0e
 	cp	a, 3:i3	; F5CEFA  cp A,3
@@ -129529,7 +129554,8 @@ sub_F5CFA4:
 	add	xix, 20	; F5CFCC  add XIX,0x00000014
 	call	T_DisplayList_Run	; F5CFD2  call 0xf417f0
 	ret	; F5CFD6  ret
-sub_F5CFD7:
+; ScreenCode8B_RepaintField: DispatchTable_F5B9F8[code 0x8B] -- Dispatch_Code80, the partial repaint.
+ScreenCode8B_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CFD7  cp (0x27f5),0x01
 	jr	nz, sub_F5CFA4_Skip	; F5CFDC  jr NZ,0xf5cfe8
 	cp	a, 6:i3	; F5CFDE  cp A,6
@@ -129581,12 +129607,14 @@ sub_F5CFA4_Join4:
 	call	RunDisplayListBFromPointerArray	; F5D056  call 0xf09ae1
 sub_F5CFA4_Return:
 	ret	; F5D05A  ret
-sub_F5D05B:
+; ScreenCode8C_RepaintField: DispatchTable_F5B9F8[code 0x8C] (also codes 0x96) -- Dispatch_Code80, the partial repaint.
+ScreenCode8C_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D05B  ld (0x2540),0x00
 	ld	xiy, DLRecordPtrs_F0509B	; F5D060  ld XIY,0x00f0509b
 	call	RunDisplayListBFromPointerArray	; F5D065  call 0xf09ae1
 	ret	; F5D069  ret
-sub_F5D06A:
+; ScreenCode8D_RepaintField: DispatchTable_F5B9F8[code 0x8D] -- Dispatch_Code80, the partial repaint.
+ScreenCode8D_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D06A  cp (0x27f5),0x01
 	jr	z, sub_F5CFA4_Skip6	; F5D06F  jr Z,0xf5d078
 	ld	xiy, Data_F050F1	; F5D071  ld XIY,0x00f050f1
@@ -129606,7 +129634,8 @@ sub_F5CFA4_Join5:
 	call	RunDisplayListBFromPointerArray	; F5D09A  call 0xf09ae1
 sub_F5CFA4_Return2:
 	ret	; F5D09E  ret
-sub_F5D09F:
+; ScreenCode8E_RepaintField: DispatchTable_F5B9F8[code 0x8E] -- Dispatch_Code80, the partial repaint.
+ScreenCode8E_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D09F  ld (0x2540),0x00
 	ld	xiy, DLBRecordPtrs_F0519A	; F5D0A4  ld XIY,0x00f0519a
 	call	RunDisplayListBFromPointerArray	; F5D0A9  call 0xf09ae1
@@ -129638,22 +129667,26 @@ sub_F5CFA4_Skip9:
 	call	RunDisplayListBFromPointerArray	; F5D0F4  call 0xf09ae1
 sub_F5CFA4_Return4:
 	ret	; F5D0F8  ret
-sub_F5D0F9:
+; ScreenCode92_RepaintField: DispatchTable_F5B9F8[code 0x92] -- Dispatch_Code80, the partial repaint.
+ScreenCode92_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D0F9  ld (0x2540),0x00
 	ld	xiy, Data_F04E32	; F5D0FE  ld XIY,0x00f04e32
 	call	RunDisplayListBFromPointerArray	; F5D103  call 0xf09ae1
 	ret	; F5D107  ret
-sub_F5D108:
+; ScreenCode93_RepaintField: DispatchTable_F5B9F8[code 0x93] -- Dispatch_Code80, the partial repaint.
+ScreenCode93_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D108  ld (0x2540),0x00
 	ld	xiy, Data_F04E32	; F5D10D  ld XIY,0x00f04e32
 	call	RunDisplayListBFromPointerArray	; F5D112  call 0xf09ae1
 	ret	; F5D116  ret
-sub_F5D117:
+; ScreenCode94_RepaintField: DispatchTable_F5B9F8[code 0x94] -- Dispatch_Code80, the partial repaint.
+ScreenCode94_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D117  ld (0x2540),0x00
 	ld	xiy, DLRecordPtrs_F04E93	; F5D11C  ld XIY,0x00f04e93
 	call	RunDisplayListBFromPointerArray	; F5D121  call 0xf09ae1
 	ret	; F5D125  ret
-sub_F5D126:
+; ScreenCode88_RepaintField: DispatchTable_F5B9F8[code 0x88] (also codes 0x97) -- Dispatch_Code80, the partial repaint.
+ScreenCode88_RepaintField:
 	cp	a, 0:i3	; F5D126  cp A,0
 	jr	nz, sub_F5CFA4_Skip10	; F5D128  jr NZ,0xf5d13f
 	ld	(LCD_CurrentLayer:16), 1	; F5D12A  ld (0x2540),0x01
@@ -129787,7 +129820,8 @@ sub_F5D199_Return:
 	ret	; F5D299  ret
 DispatchTable_F5B8F8_Nop42:
 	ret	; F5D29A  ret
-sub_F5D29B:
+; ScreenCodeAB_Paint: DispatchTable_F5B8F8[code 0xAB] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCodeAB_Paint:
 	ld	(LCD_CurrentLayer:16), 0	; F5D29B  ld (0x2540),0x00
 	ld	xiy, DL_SoundEditWriteCopy	; F5D2A0  ld XIY,0x00f01800
 	ld	xix, DL_ToneLayerDspEffectPitchDigital	; F5D2A5  ld XIX,0x00f01873
@@ -129801,13 +129835,15 @@ sub_F5D29B:
 	ld	xix, Data_F3356B	; F5D2CB  ld XIX,0x00f3356b
 	call	T_DisplayListB_Run	; F5D2D0  call 0xf417f4
 	ret	; F5D2D4  ret
-sub_F5D2D5:
+; ScreenCodeAB_RepaintField: DispatchTable_F5B9F8[code 0xAB] -- Dispatch_Code80, the partial repaint.
+ScreenCodeAB_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D2D5  ld (0x2540),0x00
 	ld	xiy, DL_F33538	; F5D2DA  ld XIY,0x00f33538
 	ld	xix, Data_F3356B	; F5D2DF  ld XIX,0x00f3356b
 	call	T_DisplayListB_Run	; F5D2E4  call 0xf417f4
 	ret	; F5D2E8  ret
-sub_F5D2E9:
+; ScreenCode9E_RepaintField: DispatchTable_F5B9F8[code 0x9E] -- Dispatch_Code80, the partial repaint.
+ScreenCode9E_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D2E9  cp (0x27f5),0x01
 	jr	z, sub_F5D199_Skip7	; F5D2EE  jr Z,0xf5d300
 	ld	xiy, DL_F057C0	; F5D2F0  ld XIY,0x00f057c0
@@ -129821,7 +129857,8 @@ sub_F5D199_Skip7:
 sub_F5D199_Join3:
 	call	sub_F5D199	; F5D30E  call 0xf5d199
 	ret	; F5D312  ret
-sub_F5D313:
+; ScreenCode9F_RepaintField: DispatchTable_F5B9F8[code 0x9F] -- Dispatch_Code80, the partial repaint.
+ScreenCode9F_RepaintField:
 	cp	a, 0:i3	; F5D313  cp A,0
 	jr	z, sub_F5D199_Skip11	; F5D315  jr Z,0xf5d362
 	cp	a, 1:i3	; F5D317  cp A,1
@@ -129918,7 +129955,8 @@ sub_F5D3C6:
 	ret	; F5D40C  ret
 DispatchTable_F5B9F8_Nop42:
 	ret	; F5D40D  ret
-sub_F5D40E:
+; ScreenCode83_Paint: DispatchTable_F5B8F8[code 0x83] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode83_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer	; F5D40E  call 0xf5c49f
 	ldw	bc, ModelingPage_Fields+16	; F5D412  ld BC,0x27b6
 	ld	d, (xbc)	; F5D415  ld D,(XBC)
@@ -130040,7 +130078,8 @@ sub_F5D4A7:
 	call	RunDisplayListBFromPointerArray	; F5D4BE  call 0xf09ae1
 sub_F5D4A7_Return:
 	ret	; F5D4C2  ret
-sub_F5D4C3:
+; ScreenCode84_Paint: DispatchTable_F5B8F8[code 0x84] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode84_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D4C3  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D4C7  ld (0x2540),0x00
 	ld	xiy, DL_F060E4	; F5D4CC  ld XIY,0x00f060e4
@@ -130060,7 +130099,8 @@ sub_F5D4C3:
 	ld	xix, Data_F32B1E	; F5D50F  ld XIX,0x00f32b1e
 	call	T_DisplayListB_Run	; F5D514  call 0xf417f4
 	ret	; F5D518  ret
-sub_F5D519:
+; ScreenCode85_Paint: DispatchTable_F5B8F8[code 0x85] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode85_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D519  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D51D  ld (0x2540),0x00
 	ld	xiy, DL_F06154	; F5D522  ld XIY,0x00f06154
@@ -130085,11 +130125,13 @@ Draw_StartPitchStopPitchTotal:
 	call	sub_F5BFBD	; F5D571  call 0xf5bfbd
 	call	Draw_Page12EnvelopeKeyoffCurSor	; F5D575  call 0xf5cadd
 	ret	; F5D579  ret
-sub_F5D57A:
+; ScreenCode89_Paint: DispatchTable_F5B8F8[code 0x89] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode89_Paint:
 	call	Draw_PitchSoundEditEnvPitchLf0	; F5D57A  call 0xf5c4ff
 	call	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack	; F5D57E  call 0xf5d5c8
 	ret	; F5D582  ret
-sub_F5D583:
+; ScreenCode96_Paint: DispatchTable_F5B8F8[code 0x96] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode96_Paint:
 	call	sub_F5C929	; F5D583  call 0xf5c929
 	ld	xiy, DL_Page22KeyFollowSlopeRange	; F5D587  ld XIY,0x00f0426b
 	ld	xix, DL_Page22KeyFollowSlopeRange + 0xB8	; F5D58C  ld XIX,0x00f04323
@@ -130105,7 +130147,8 @@ sub_F5D583:
 	call	sub_F5BFBD	; F5D5BB  call 0xf5bfbd
 	call	sub_F5C772	; F5D5BF  call 0xf5c772
 	ret	; F5D5C3  ret
-sub_F5D5C4:
+; ScreenCode98_Paint: DispatchTable_F5B8F8[code 0x98] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode98_Paint:
 	call	sub_F5C929	; F5D5C4  call 0xf5c929
 
 ; --------------------------------------------------------------------------
@@ -130142,15 +130185,18 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ld	xix, Data_F32C02	; F5D60F  ld XIX,0x00f32c02
 	call	T_DisplayListB_Run	; F5D614  call 0xf417f4
 	ret	; F5D618  ret
-sub_F5D619:
+; ScreenCode99_Paint: DispatchTable_F5B8F8[code 0x99] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode99_Paint:
 	call	sub_F5C929	; F5D619  call 0xf5c929
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D61D  call 0xf5c517
 	ret	; F5D621  ret
-sub_F5D622:
+; ScreenCode8F_Paint: DispatchTable_F5B8F8[code 0x8F] -- Dispatch_Code80_Bracketed, the full paint.
+ScreenCode8F_Paint:
 	call	sub_F5C727	; F5D622  call 0xf5c727
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D626  call 0xf5c517
 	ret	; F5D62A  ret
-sub_F5D62B:
+; ScreenCode83_RepaintField: DispatchTable_F5B9F8[code 0x83] -- Dispatch_Code80, the partial repaint.
+ScreenCode83_RepaintField:
 	cp	a, 0:i3	; F5D62B  cp A,0
 	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2	; F5D62D  jr Z,0xf5d66a
 	cp	a, 1:i3	; F5D62F  cp A,1
@@ -130191,7 +130237,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3:
 	call	RunDisplayListBFromPointerArray	; F5D6A7  call 0xf09ae1
 Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return:
 	ret	; F5D6AB  ret
-sub_F5D6AC:
+; ScreenCode84_RepaintField: DispatchTable_F5B9F8[code 0x84] -- Dispatch_Code80, the partial repaint.
+ScreenCode84_RepaintField:
 	cp	a, 0:i3	; F5D6AC  cp A,0
 	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4	; F5D6AE  jr NZ,0xf5d6c5
 	ld	(LCD_CurrentLayer:16), 1	; F5D6B0  ld (0x2540),0x01
@@ -130204,7 +130251,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4:
 	ld	xiy, Data_F32B1E	; F5D6CA  ld XIY,0x00f32b1e
 	call	RunDisplayListBFromPointerArray	; F5D6CF  call 0xf09ae1
 	ret	; F5D6D3  ret
-sub_F5D6D4:
+; ScreenCode85_RepaintField: DispatchTable_F5B9F8[code 0x85] -- Dispatch_Code80, the partial repaint.
+ScreenCode85_RepaintField:
 	cp	a, 0:i3	; F5D6D4  cp A,0
 	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5	; F5D6D6  jr NZ,0xf5d6ed
 	ld	(LCD_CurrentLayer:16), 1	; F5D6D8  ld (0x2540),0x01
@@ -130217,7 +130265,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5:
 	ld	xiy, DLRecordPtrs_F32B97	; F5D6F2  ld XIY,0x00f32b97
 	call	RunDisplayListBFromPointerArray	; F5D6F7  call 0xf09ae1
 	ret	; F5D6FB  ret
-sub_F5D6FC:
+; ScreenCode89_RepaintField: DispatchTable_F5B9F8[code 0x89] (also codes 0x98) -- Dispatch_Code80, the partial repaint.
+ScreenCode89_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D6FC  ld (0x2540),0x00
 	ld	xiy, Data_F32C02	; F5D701  ld XIY,0x00f32c02
 	call	RunDisplayListBFromPointerArray	; F5D706  call 0xf09ae1

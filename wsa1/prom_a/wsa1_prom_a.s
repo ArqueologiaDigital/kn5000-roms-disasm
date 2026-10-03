@@ -113492,7 +113492,7 @@ sub_FC25BF:
 ; search could find them:
 ;   SoundEditDigitalEffect_Paint 0xF099F5, SoundEditDigitalEffect_RepaintField
 ;   0xF09AA5, sub_F09AF1 0xF09AF1 (via PtrTable_F09B7B), SoundEditCopy_Paint
-;   0xF09B9B, SoundEditCopy_RepaintField 0xF09C08, sub_F09CA9 0xF09CA9
+;   0xF09B9B, SoundEditCopy_RepaintField 0xF09C08, ScreenCode80_RepaintField 0xF09CA9
 ;   (DispatchTable_F5B9F8[0]) with prom_b 0xF5BF6D, and Draw_Page12EnvelopeKeyoffCurSor at 0xF5CBAD.
 ; The DIGITAL EFFECT type is (0x27B6) = (0x27A6) & 0x0F; every per-type array
 ; below is indexed by it, and 12 entries is the extent every one of them shares.
@@ -114994,7 +114994,7 @@ SegmentBounds_FC516E:
 	.long DisplayList_FC5110_End                ; FC517A  [ 3]
 
 ; DisplayList_FC517E -- display list, 17 record(s), 252 bytes, interpreter B
-; Read by: sub_F09CA9 (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09D07 and 0xF09D69, and prom_b 0xF5BF6D, whole; its inner sub-lists 0xFC51B1-0xFC51D3 (0xF09D28), 0xFC51F9-0xFC521B (0xF09D3D), 0xFC524D-0xFC526F (0xF09CD1).
+; Read by: ScreenCode80_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09D07 and 0xF09D69, and prom_b 0xF5BF6D, whole; its inner sub-lists 0xFC51B1-0xFC51D3 (0xF09D28), 0xFC51F9-0xFC521B (0xF09D3D), 0xFC524D-0xFC526F (0xF09CD1).
 ; Framing: the length bytes walk from 0xFC517E and land exactly on 0xFC527A.
 DisplayList_FC517E:
 	.byte 0x07, 0x11                             ; FC517E  op 07, 17 bytes, handler 0xF31B39
@@ -115110,7 +115110,7 @@ Rects_FC5292:
 	.short 0x000D, 0x008E, 0x0117, 0x00A8      ; FC52A2  [2]
 
 ; DisplayList_FC52AA -- display list, 1 record(s), 10 bytes, interpreter A
-; Read by: sub_F09CA9 (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CEB and 0xF09D52 (layer 1).
+; Read by: ScreenCode80_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CEB and 0xF09D52 (layer 1).
 ; Framing: the length bytes walk from 0xFC52AA and land exactly on 0xFC52B4.
 DisplayList_FC52AA:
 	.byte 0x1B, 0x0A                             ; FC52AA  op 1B, 10 bytes, handler 0xF31A75
@@ -115118,7 +115118,7 @@ DisplayList_FC52AA:
 	.set DisplayList_FC52AA_End, .            ; FC52B4  end marker: the byte after the last record
 
 ; DisplayRecordPtrs_FC52B4 -- 17 pointers, 68 bytes
-; Read by: sub_F09CA9 (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CFB and 0xF09D82, prom_b 0xF09E11 and 0xF09E76: XIY = this, then RunDisplayListBFromPointerArray / 0xF09AB0 with A = the field.
+; Read by: ScreenCode80_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CFB and 0xF09D82, prom_b 0xF09E11 and 0xF09E76: XIY = this, then RunDisplayListBFromPointerArray / 0xF09AB0 with A = the field.
 ; COUNT 17 is the extent to the next object of this framing; every entry lands
 ; on a list or record boundary (gen_fc4000_pages.py checks each one).
 DisplayRecordPtrs_FC52B4:
