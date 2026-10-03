@@ -511,7 +511,7 @@ CDlikeSwTtl_SetRecordAndNotify:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_2
+	ld xwa, NAKA_VIEW_DemoMed3
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jp ApPostEvent
@@ -526,7 +526,7 @@ SeqInit_PostEventSequence:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_2
+	ld xwa, NAKA_VIEW_DemoMed3
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jp ApPostEvent

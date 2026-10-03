@@ -45,8 +45,8 @@ import nakarest_objtab_map as M  # noqa: E402
 
 NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
 VIEWABLE = 0x1600010
-CALL = re.compile(r'^\s*call\s+(SendEvent|ApPostEvent|PostEvent|MainPostEvent|SeMenu_SendEvent|'
-                  r'SwbtWr_QueuePostEvent)\b')
+CALL = re.compile(r'^\s*(?:call|jp|jr|jrl)\s+(SendEvent|ApPostEvent|PostEvent|MainPostEvent|SeMenu_SendEvent|'
+                  r'SwbtWr_QueuePostEvent)\b')     # a tail jump (`jp ApPostEvent`) posts too
 LDXWA = re.compile(r'^(\s*ld\s+xwa\s*,\s*)([A-Za-z_][\w.$]*|0x[0-9a-fA-F]+|\d+)(\s*(?:;.*)?)$', re.I)
 LDXDE = re.compile(r'^(\s*ld\s+xde\s*,\s*)(0x[0-9a-fA-F]+|\d+)(\s*(?:;.*)?)$', re.I)
 REGCALL = re.compile(r'^\s*call\s+RegisterTitle\b')

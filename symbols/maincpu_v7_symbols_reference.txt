@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,325
-#   semantic names ........... 50,397 (98.2%)
+#   symbols .................. 51,324
+#   semantic names ........... 50,396 (98.2%)
 #   positional names ......... 928
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -5165,7 +5165,6 @@ NakaData_EffectsBlock_Byte2 00E30002
 NakaData_EffectsBlock_Byte3 00E30003
 NakaData_EffectsBlock_Byte5 00E30005
 NakaData_EffectsStringPtrs 00E30006
-CDlikeSwTtl_SetRecordAndNotify_Data_2 00E3000B
 InitializeKubo_PtrTable_70 00E3000E
 InitializeKubo_PtrTable_71 00E3009E
 Naka_Help_563_E300C0 00E300C0

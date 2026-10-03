@@ -2036,6 +2036,7 @@
 .equ NAKA_VIEW_DemoMed1, 0xe1000b	; view "DemoMed1": Viewable slot 0xE1 entry 11
 .equ NAKA_VIEW_DemoSound, 0xe20000	; view "DemoSound": Viewable slot 0xE2 entry 0
 .equ NAKA_VIEW_DemoMed2, 0xe2000b	; view "DemoMed2": Viewable slot 0xE2 entry 11
+.equ NAKA_VIEW_DemoMed3, 0xe3000b	; view "DemoMed3": Viewable slot 0xE3 entry 11
 .equ NAKA_VIEW_Demofeature, 0xe40000	; view "Demofeature": Viewable slot 0xE4 entry 0
 .equ NAKA_VIEW_Demofeature1, 0xe40002	; view "Demofeature1": Viewable slot 0xE4 entry 2
 .equ NAKA_VIEW_Demofeature2, 0xe40005	; view "Demofeature2": Viewable slot 0xE4 entry 5

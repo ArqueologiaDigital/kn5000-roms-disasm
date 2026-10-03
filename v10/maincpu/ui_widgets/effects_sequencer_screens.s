@@ -2362,7 +2362,7 @@ NakaData_EffectsStringPtrs:	.incbin "includes/generated/naka_effects_seq.bin", 0
 ; [nakarest] name strings, entries 0-1 of ResName slot 0x3ab (table 0xe2fffc, 2 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xab): "", "".
 	.incbin "includes/generated/naka_effects_seq.bin", 0x8066, 0x1
-CDlikeSwTtl_SetRecordAndNotify_Data_2:	.incbin "includes/generated/naka_effects_seq.bin", 0x8067, 0x3
+	.incbin "includes/generated/naka_effects_seq.bin", 0x8067, 0x3
 ; [nakarest] naka_effects_seq+0x806a  +0x806a..+0x80ac (0xe3000e, 66 B)
 ; [nakarest] the table itself: ResName slot 0x3d6 (table 0xe3000e, 15 entries, InitializeKubo),
 ; [nakarest] 15 entry pointers x 4 bytes.
