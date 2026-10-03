@@ -171806,7 +171806,7 @@ sub_FE88AA:
 	ret                                                  ; FE8A57  0e
 .LFE8A58:
 	ldw (0x601f54:24), 0x00                             ; FE8A58  f2 54 1f 60 02 00 00
-	calr sub_FE8BF8                                      ; FE8A5F  1e 96 01
+	calr BStore_CursorSlot_RestoreMark                                      ; FE8A5F  1e 96 01
 	calr sub_FEAFB7                                          ; FE8A62  1e 52 25
 	calr sub_FE8CB4                                      ; FE8A65  1e 4c 02
 	calr sub_FE8A9B                                      ; FE8A68  1e 30 00
@@ -171866,7 +171866,7 @@ sub_FE8AB3:
 	ld a, 0xff:opc                                          ; FE8AE6  21 ff
 	ret                                                  ; FE8AE8  0e
 sub_FE8AE9:
-	calr sub_FE8CEE                                      ; FE8AE9  1e 02 02
+	calr BStore_CursorSlot_Save                                      ; FE8AE9  1e 02 02
 	ld wa, (EditCursor_Measure:24)                                ; FE8AEC  d2 3f 1f 60 20
 	ld (0x601f5d:24), wa                                ; FE8AF1  f2 5d 1f 60 50
 	ld (0x0c90:16), wa                                  ; FE8AF6  f1 90 0c 50
@@ -171908,7 +171908,7 @@ sub_FE8AE9:
 	cp XIX,XHL                                           ; FE8B4B  eb f4
 	jr c, .LFE8B2E                                       ; FE8B4D  67 df
 .LFE8B4F:
-	calr sub_FE8D15                                      ; FE8B4F  1e c3 01
+	calr BStore_CursorSlot_Restore                                      ; FE8B4F  1e c3 01
 	ret                                                  ; FE8B52  0e
 .LFE8B53:
 	m_add_mi16 MW16, 0x0c90, 0x0001                      ; FE8B53  d1 90 0c 38 01 00
@@ -171968,7 +171968,8 @@ sub_FE8BE3:
 	add XIX,0x00000003                                   ; FE8BEE  ec c8 03 00 00 00
 	djnz8 c, .LFE8BEC                                    ; FE8BF4  cb 1c f5
 	ret                                                  ; FE8BF7  0e
-sub_FE8BF8:
+; BStore_CursorSlot_RestoreMark: the same restore from the 0x601F0F slot, which the code at 0xFE8EB9 fills (a mark).
+BStore_CursorSlot_RestoreMark:
 	ld wa, (0x601f0f:24)                                ; FE8BF8  d2 0f 1f 60 20
 	ld (0x601f05:24), wa                                ; FE8BFD  f2 05 1f 60 50
 	ld a, (0x601f11:24)                                 ; FE8C02  c2 11 1f 60 21
@@ -172029,7 +172030,7 @@ sub_FE8CA7:
 T_F402D8_Nop:
 	ret                                                  ; FE8CB3  0e
 sub_FE8CB4:
-	calr sub_FE8CEE                                      ; FE8CB4  1e 37 00
+	calr BStore_CursorSlot_Save                                      ; FE8CB4  1e 37 00
 .LFE8CB7:
 	call BStoreCursor_ReadByte                                        ; FE8CB7  1d 32 22 ff
 	cp A,0x81                                            ; FE8CBB  c9 cf 81
@@ -172052,9 +172053,10 @@ sub_FE8CB4:
 	call BStoreCursor_SeekNextTag                                        ; FE8CE4  1d f6 21 ff
 	jr .LFE8CB7                                          ; FE8CE8  68 cd
 .LFE8CEA:
-	calr sub_FE8D15                                      ; FE8CEA  1e 28 00
+	calr BStore_CursorSlot_Restore                                      ; FE8CEA  1e 28 00
 	ret                                                  ; FE8CED  0e
-sub_FE8CEE:
+; BStore_CursorSlot_Save: copies (0x601F05..0x601F07), BStore_CursorBlock and BStore_CursorOffset to the save slot at 0x601F08..0x601F0E.
+BStore_CursorSlot_Save:
 	ld wa, (0x601f05:24)                                ; FE8CEE  d2 05 1f 60 20
 	ld (0x601f08:24), wa                                ; FE8CF3  f2 08 1f 60 50
 	ld a, (0x601f07:24)                                 ; FE8CF8  c2 07 1f 60 21
@@ -172064,7 +172066,8 @@ sub_FE8CEE:
 	ld wa, (BStore_CursorOffset:16)                                 ; FE8D0B  d1 5e 34 20
 	ld (0x601f0d:24), wa                                ; FE8D0F  f2 0d 1f 60 50
 	ret                                                  ; FE8D14  0e
-sub_FE8D15:
+; BStore_CursorSlot_Restore: the reverse, from the 0x601F08 slot back to (0x601F05..07), BStore_CursorBlock, BStore_CursorOffset.
+BStore_CursorSlot_Restore:
 	ld wa, (0x601f08:24)                                ; FE8D15  d2 08 1f 60 20
 	ld (0x601f05:24), wa                                ; FE8D1A  f2 05 1f 60 50
 	ld a, (0x601f0a:24)                                 ; FE8D1F  c2 0a 1f 60 21
@@ -172567,7 +172570,7 @@ sub_FE91D2:
 	call T_BStore_AppendBytes_Veneer                     ; FE921E  1d 94 28 f4
 	ret                                                  ; FE9222  0e
 sub_FE9223:
-	calr sub_FE8BF8                                          ; FE9223  1e d2 f9
+	calr BStore_CursorSlot_RestoreMark                                          ; FE9223  1e d2 f9
 	m_cp_mi16 MW24, 0x601f54, 0x0000                     ; FE9226  d2 54 1f 60 3f 00 00
 	jr z, .LFE9275                                       ; FE922D  66 46
 .LFE922F:
@@ -172708,7 +172711,7 @@ sub_FE933F:   ; entry: named by 2 `.long` operands, first at 0xFE9311
 	ret                                                  ; FE935E  0e
 .LFE935F:
 	calr sub_FE8AE9                                          ; FE935F  1e 87 f7
-	calr sub_FE8BF8                                          ; FE9362  1e 93 f8
+	calr BStore_CursorSlot_RestoreMark                                          ; FE9362  1e 93 f8
 	calr sub_FE938E                                      ; FE9365  1e 26 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9368  c1 4a 0d 3f 00
 	jr nz, .LFE935B                                      ; FE936D  6e ec
@@ -172725,7 +172728,7 @@ sub_FE933F:   ; entry: named by 2 `.long` operands, first at 0xFE9311
 	ret                                                  ; FE938D  0e
 sub_FE938E:
 	ld (BStore_ErrorCode:16), 0x00                                 ; FE938E  f1 4a 0d 00 00
-	calr sub_FE8CEE                                          ; FE9393  1e 58 f9
+	calr BStore_CursorSlot_Save                                          ; FE9393  1e 58 f9
 	calr sub_FEA6B4                                          ; FE9396  1e 1b 13
 	m_cp_mi8 MB24, 0x601f6c, 0x00                        ; FE9399  c2 6c 1f 60 3f 00
 	jr nz, .LFE93C6                                      ; FE939F  6e 25
@@ -172742,7 +172745,7 @@ sub_FE938E:
 	decw 0x01, (0x601f6c:24)                          ; FE93BF  d2 6c 1f 60 69
 	jr .LFE93A7                                          ; FE93C4  68 e1
 .LFE93C6:
-	calr sub_FE8D15                                          ; FE93C6  1e 4c f9
+	calr BStore_CursorSlot_Restore                                          ; FE93C6  1e 4c f9
 	ret                                                  ; FE93C9  0e
 sub_FE93CA:
 	xor XWA,XWA                                          ; FE93CA  e8 d0
@@ -172852,7 +172855,7 @@ sub_FE94FB:
 	calr sub_FE8BD4                                          ; FE9514  1e bd f6
 	ret                                                  ; FE9517  0e
 .LFE9518:
-	calr sub_FE8BF8                                          ; FE9518  1e dd f6
+	calr BStore_CursorSlot_RestoreMark                                          ; FE9518  1e dd f6
 	calr sub_FE960B                                      ; FE951B  1e ed 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE951E  c1 4a 0d 3f 00
 	jr z, .LFE9531                                       ; FE9523  66 0c
@@ -172861,7 +172864,7 @@ sub_FE94FB:
 	jr z, .LFE9531                                       ; FE952D  66 02
 	jr .LFE9514                                          ; FE952F  68 e3
 .LFE9531:
-	calr sub_FE8BF8                                          ; FE9531  1e c4 f6
+	calr BStore_CursorSlot_RestoreMark                                          ; FE9531  1e c4 f6
 	calr sub_FE8AE9                                          ; FE9534  1e b2 f5
 	calr sub_FE98E7                                      ; FE9537  1e ad 03
 	calr sub_FE8F11                                          ; FE953A  1e d4 f9
@@ -172891,7 +172894,7 @@ sub_FE955D:
 	calr sub_FE8BD4                                          ; FE9579  1e 58 f6
 	ret                                                  ; FE957C  0e
 .LFE957D:
-	calr sub_FE8BF8                                          ; FE957D  1e 78 f6
+	calr BStore_CursorSlot_RestoreMark                                          ; FE957D  1e 78 f6
 	calr sub_FE960B                                      ; FE9580  1e 88 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9583  c1 4a 0d 3f 00
 	jr z, .LFE9596                                       ; FE9588  66 0c
@@ -172900,7 +172903,7 @@ sub_FE955D:
 	jr z, .LFE9596                                       ; FE9592  66 02
 	jr .LFE9579                                          ; FE9594  68 e3
 .LFE9596:
-	calr sub_FE8BF8                                          ; FE9596  1e 5f f6
+	calr BStore_CursorSlot_RestoreMark                                          ; FE9596  1e 5f f6
 	calr sub_FE8AE9                                          ; FE9599  1e 4d f5
 	calr sub_FE98E7                                      ; FE959C  1e 48 03
 	calr sub_FE8CB4                                          ; FE959F  1e 12 f7
@@ -172972,7 +172975,7 @@ sub_FE9648:
 .LFE9652:
 	subw	(EditCursor_Measure:24), 0x0001                ; FE9652  d2 3f 1f 60 3a 01 00
 	calr sub_FE8EA9                                          ; FE9659  1e 4d f8
-	calr sub_FE8BF8                                          ; FE965C  1e 99 f5
+	calr BStore_CursorSlot_RestoreMark                                          ; FE965C  1e 99 f5
 	calr sub_FE8AE9                                          ; FE965F  1e 87 f4
 	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE9662  d2 3f 1f 60 38 01 00
 	xor WA,WA                                            ; FE9669  d8 d0
@@ -172996,7 +172999,7 @@ sub_FE9694:
 .LFE969E:
 	subw	(EditCursor_Measure:24), 0x0001                ; FE969E  d2 3f 1f 60 3a 01 00
 	calr sub_FE8EA9                                          ; FE96A5  1e 01 f8
-	calr sub_FE8BF8                                          ; FE96A8  1e 4d f5
+	calr BStore_CursorSlot_RestoreMark                                          ; FE96A8  1e 4d f5
 	calr sub_FE8AE9                                          ; FE96AB  1e 3b f4
 	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE96AE  d2 3f 1f 60 38 01 00
 	xor WA,WA                                            ; FE96B5  d8 d0
@@ -173104,7 +173107,7 @@ sub_FE9762:
 	ret                                                  ; FE97DE  0e
 sub_FE97DF:
 	ld (BStore_ErrorCode:16), 0x00                                 ; FE97DF  f1 4a 0d 00 00
-	calr sub_FE8CEE                                          ; FE97E4  1e 07 f5
+	calr BStore_CursorSlot_Save                                          ; FE97E4  1e 07 f5
 	calr sub_FE9830                                      ; FE97E7  1e 46 00
 	inc 1,WA                                             ; FE97EA  d8 61
 	pushw wa                                             ; FE97EC  28
@@ -173128,7 +173131,7 @@ sub_FE97DF:
 	decw 0x01, (0x601f6c:24)                          ; FE981E  d2 6c 1f 60 69
 	jr .LFE9806                                          ; FE9823  68 e1
 .LFE9825:
-	calr sub_FE8D15                                          ; FE9825  1e ed f4
+	calr BStore_CursorSlot_Restore                                          ; FE9825  1e ed f4
 	ret                                                  ; FE9828  0e
 .LFE9829:
 	ld (BStore_ErrorCode:16), 0xff                                 ; FE9829  f1 4a 0d 00 ff
@@ -173258,7 +173261,7 @@ sub_FE9983:
 	call T_F42F04                                        ; FE9992  1d 04 2f f4
 	ret                                                  ; FE9996  0e
 sub_FE9997:
-	calr sub_FE8CEE                                          ; FE9997  1e 54 f3
+	calr BStore_CursorSlot_Save                                          ; FE9997  1e 54 f3
 	call BStoreCursor_ReadByte                                        ; FE999A  1d 32 22 ff
 	and A,0xf0                                           ; FE999E  c9 cc f0
 	cp A,0x90                                            ; FE99A1  c9 cf 90
@@ -173269,11 +173272,11 @@ sub_FE9997:
 	call BStoreCursor_Step                                        ; FE99AB  1d 04 22 ff
 	ld a, (0x601f44:24)                                 ; FE99AF  c2 44 1f 60 21
 	call BStoreCursor_WriteByte                                        ; FE99B4  1d 4d 22 ff
-	calr sub_FE8D15                                          ; FE99B8  1e 5a f3
+	calr BStore_CursorSlot_Restore                                          ; FE99B8  1e 5a f3
 	calr sub_FEA535                                          ; FE99BB  1e 77 0b
 	ret                                                  ; FE99BE  0e
 sub_FE99BF:
-	calr sub_FE8CEE                                          ; FE99BF  1e 2c f3
+	calr BStore_CursorSlot_Save                                          ; FE99BF  1e 2c f3
 	call BStoreCursor_ReadByte                                        ; FE99C2  1d 32 22 ff
 	and A,0xf0                                           ; FE99C6  c9 cc f0
 	cp A,0x90                                            ; FE99C9  c9 cf 90
@@ -173294,10 +173297,10 @@ sub_FE99BF:
 	div A,0x60                                           ; FE99F9  c9 0a 60
 	and A,0x7f                                           ; FE99FC  c9 cc 7f
 	call BStoreCursor_WriteByte                                        ; FE99FF  1d 4d 22 ff
-	calr sub_FE8D15                                          ; FE9A03  1e 0f f3
+	calr BStore_CursorSlot_Restore                                          ; FE9A03  1e 0f f3
 	ret                                                  ; FE9A06  0e
 sub_FE9A07:
-	calr sub_FE8CEE                                          ; FE9A07  1e e4 f2
+	calr BStore_CursorSlot_Save                                          ; FE9A07  1e e4 f2
 	call BStoreCursor_ReadByte                                        ; FE9A0A  1d 32 22 ff
 	and A,0xf0                                           ; FE9A0E  c9 cc f0
 	cp A,0x90                                            ; FE9A11  c9 cf 90
@@ -173309,7 +173312,7 @@ sub_FE9A07:
 	call BStoreCursor_Step                                        ; FE9A1F  1d 04 22 ff
 	ld a, (0x601f45:24)                                 ; FE9A23  c2 45 1f 60 21
 	call BStoreCursor_WriteByte                                        ; FE9A28  1d 4d 22 ff
-	calr sub_FE8D15                                          ; FE9A2C  1e e6 f2
+	calr BStore_CursorSlot_Restore                                          ; FE9A2C  1e e6 f2
 	calr sub_FEA535                                          ; FE9A2F  1e 03 0b
 	ret                                                  ; FE9A32  0e
 sub_FE9A33:
@@ -173745,9 +173748,9 @@ sub_FE9E04:
 	calr sub_FF0A52                                          ; FE9E68  1e e7 6b
 	calr sub_FF0A04                                          ; FE9E6B  1e 96 6b
 	calr sub_FE9EBB                                      ; FE9E6E  1e 4a 00
-	calr sub_FE8CEE                                          ; FE9E71  1e 7a ee
+	calr BStore_CursorSlot_Save                                          ; FE9E71  1e 7a ee
 	calr sub_FE984B                                          ; FE9E74  1e d4 f9
-	calr sub_FE8D15                                          ; FE9E77  1e 9b ee
+	calr BStore_CursorSlot_Restore                                          ; FE9E77  1e 9b ee
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9E7A  c1 4a 0d 3f 00
 	jr nz, .LFE9E85                                      ; FE9E7F  6e 04
 	calr sub_FEA082                                      ; FE9E81  1e fe 01
@@ -173763,9 +173766,9 @@ sub_FE9E04:
 	calr sub_FF0A52                                          ; FE9E9E  1e b1 6b
 	calr sub_FF0A04                                          ; FE9EA1  1e 60 6b
 	calr sub_FE9EBB                                      ; FE9EA4  1e 14 00
-	calr sub_FE8CEE                                          ; FE9EA7  1e 44 ee
+	calr BStore_CursorSlot_Save                                          ; FE9EA7  1e 44 ee
 	calr sub_FE984B                                          ; FE9EAA  1e 9e f9
-	calr sub_FE8D15                                          ; FE9EAD  1e 65 ee
+	calr BStore_CursorSlot_Restore                                          ; FE9EAD  1e 65 ee
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9EB0  c1 4a 0d 3f 00
 	jr nz, .LFE9E85                                      ; FE9EB5  6e ce
 	calr sub_FEA082                                      ; FE9EB7  1e c8 01
@@ -174240,7 +174243,7 @@ sub_FEA36C:
 	ret                                                  ; FEA373  0e
 .LFEA374:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA374  c1 75 20 3e 08
-	calr sub_FE8CEE                                          ; FEA379  1e 72 e9
+	calr BStore_CursorSlot_Save                                          ; FEA379  1e 72 e9
 	ld wa, (0x601f54:24)                                ; FEA37C  d2 54 1f 60 20
 	ld (0x601f56:24), wa                                ; FEA381  f2 56 1f 60 50
 	calr sub_FEA709                                      ; FEA386  1e 80 03
@@ -174323,7 +174326,7 @@ sub_FEA36C:
 	ld C,A                                               ; FEA445  c9 8b
 	jr .LFEA41D                                          ; FEA447  68 d4
 sub_FEA449:
-	calr sub_FE8BF8                                          ; FEA449  1e ac e7
+	calr BStore_CursorSlot_RestoreMark                                          ; FEA449  1e ac e7
 	calr sub_FE8A9B                                          ; FEA44C  1e 4c e6
 	call BStoreCursor_ReadByte                                        ; FEA44F  1d 32 22 ff
 	and A,0xf0                                           ; FEA453  c9 cc f0
@@ -174368,10 +174371,10 @@ sub_FEA47F:
 	m_cp_mi8 MB24, 0x601f07, 0x00                        ; FEA4AC  c2 07 1f 60 3f 00
 	jr nz, .LFEA4D5                                      ; FEA4B2  6e 21
 .LFEA4B4:
-	calr sub_FE8BF8                                          ; FEA4B4  1e 41 e7
+	calr BStore_CursorSlot_RestoreMark                                          ; FEA4B4  1e 41 e7
 	calr sub_FE8A9B                                          ; FEA4B7  1e e1 e5
 .LFEA4BA:
-	calr sub_FE8CEE                                          ; FEA4BA  1e 31 e8
+	calr BStore_CursorSlot_Save                                          ; FEA4BA  1e 31 e8
 	calr sub_FEA7E7                                      ; FEA4BD  1e 27 03
 	calr sub_FEA628                                      ; FEA4C0  1e 65 01
 	sub XWA,XBC                                          ; FEA4C3  e9 a0
@@ -174379,7 +174382,7 @@ sub_FEA47F:
 	ld hl, (0x601f56:24)                                ; FEA4C7  d2 56 1f 60 23
 	cp XWA,XHL                                           ; FEA4CC  eb f0
 	jr c, .LFEA4BA                                       ; FEA4CE  67 ea
-	calr sub_FE8D15                                          ; FEA4D0  1e 42 e8
+	calr BStore_CursorSlot_Restore                                          ; FEA4D0  1e 42 e8
 	jr .LFEA4DB                                          ; FEA4D3  68 06
 .LFEA4D5:
 	m_or_mi8 MB24, 0x601f5b, 0x08                        ; FEA4D5  c2 5b 1f 60 3e 08
@@ -174412,7 +174415,7 @@ sub_FEA50C:
 	ret                                                  ; FEA51E  0e
 .LFEA51F:
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEA51F  c2 5b 1f 60 3c fe
-	calr sub_FE8D15                                          ; FEA525  1e ed e7
+	calr BStore_CursorSlot_Restore                                          ; FEA525  1e ed e7
 	calr sub_FEFD8A                                          ; FEA528  1e 5f 58
 	calr sub_FEA743                                      ; FEA52B  1e 15 02
 	calr sub_FEF778                                          ; FEA52E  1e 47 52
@@ -174563,7 +174566,7 @@ sub_FEA64D:
 	ld (BStore_CursorOffset:16), bc                                  ; FEA6AC  f1 5e 34 51
 	ret                                                  ; FEA6B0  0e
 sub_FEA6B1:
-	calr sub_FE8BF8                                          ; FEA6B1  1e 44 e5
+	calr BStore_CursorSlot_RestoreMark                                          ; FEA6B1  1e 44 e5
 sub_FEA6B4:
 	ldw (0x601f6c:24), 0x00                             ; FEA6B4  f2 6c 1f 60 02 00 00
 .LFEA6BB:
@@ -174581,7 +174584,7 @@ sub_FEA6B4:
 .LFEA6D6:
 	ret                                                  ; FEA6D6  0e
 sub_FEA6D7:
-	calr sub_FE8BF8                                          ; FEA6D7  1e 1e e5
+	calr BStore_CursorSlot_RestoreMark                                          ; FEA6D7  1e 1e e5
 	ldw (0x601f6c:24), 0x00                             ; FEA6DA  f2 6c 1f 60 02 00 00
 .LFEA6E1:
 	call BStoreCursor_ReadByte                                        ; FEA6E1  1d 32 22 ff
@@ -174741,7 +174744,7 @@ sub_FEA86F:
 	ret                                                  ; FEA876  0e
 .LFEA877:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA877  c1 75 20 3e 08
-	calr sub_FE8CEE                                          ; FEA87C  1e 6f e4
+	calr BStore_CursorSlot_Save                                          ; FEA87C  1e 6f e4
 	ld wa, (0x601f54:24)                                ; FEA87F  d2 54 1f 60 20
 	ld (0x601f56:24), wa                                ; FEA884  f2 56 1f 60 50
 	calr sub_FEA71F                                      ; FEA889  1e 93 fe
@@ -175296,9 +175299,9 @@ sub_FEADFB:
 	cp (0x601f54:24), bc                             ; FEAE2C  d2 54 1f 60 f9
 	jr nc, .LFEAE54                                      ; FEAE31  6f 21
 	calr sub_FEA743                                      ; FEAE33  1e 0d f9
-	calr sub_FE8CEE                                          ; FEAE36  1e b5 de
+	calr BStore_CursorSlot_Save                                          ; FEAE36  1e b5 de
 	calr sub_FE984B                                          ; FEAE39  1e 0f ea
-	calr sub_FE8D15                                          ; FEAE3C  1e d6 de
+	calr BStore_CursorSlot_Restore                                          ; FEAE3C  1e d6 de
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FEAE3F  c1 4a 0d 3f 00
 	jr nz, .LFEAE50                                      ; FEAE44  6e 0a
 	calr sub_FEF778                                          ; FEAE46  1e 2f 49
@@ -179115,8 +179118,8 @@ LCD_DrawVRuleRight_Layer1:
 	swi 7                                                ; FEFEBD  ff
 	ret                                                  ; FEFEBE  0e
 sub_FEFEBF:
-	calr sub_FE8CEE                                          ; FEFEBF  1e 2c 8e
-	calr sub_FE8BF8                                          ; FEFEC2  1e 33 8d
+	calr BStore_CursorSlot_Save                                          ; FEFEBF  1e 2c 8e
+	calr BStore_CursorSlot_RestoreMark                                          ; FEFEC2  1e 33 8d
 	ldw (0x601f6c:24), 0x00                             ; FEFEC5  f2 6c 1f 60 02 00 00
 .LFEFECC:
 	calr BStoreCursor_ReadByte                                          ; FEFECC  1e 63 23
@@ -179155,11 +179158,11 @@ sub_FEFEBF:
 	jr nc, .LFEFF29                                      ; FEFF25  6f 02
 	jr .LFEFEE1                                          ; FEFF27  68 b8
 .LFEFF29:
-	calr sub_FE8D15                                          ; FEFF29  1e e9 8d
+	calr BStore_CursorSlot_Restore                                          ; FEFF29  1e e9 8d
 	ret                                                  ; FEFF2C  0e
 sub_FEFF2D:
-	calr sub_FE8CEE                                          ; FEFF2D  1e be 8d
-	calr sub_FE8BF8                                          ; FEFF30  1e c5 8c
+	calr BStore_CursorSlot_Save                                          ; FEFF2D  1e be 8d
+	calr BStore_CursorSlot_RestoreMark                                          ; FEFF30  1e c5 8c
 	ldw (0x601f6c:24), 0x00                             ; FEFF33  f2 6c 1f 60 02 00 00
 .LFEFF3A:
 	calr BStoreCursor_ReadByte                                          ; FEFF3A  1e f5 22
@@ -179206,7 +179209,7 @@ sub_FEFF2D:
 	jr nc, .LFEFFB0                                      ; FEFFAC  6f 02
 	jr .LFEFF50                                          ; FEFFAE  68 a0
 .LFEFFB0:
-	calr sub_FE8D15                                          ; FEFFB0  1e 62 8d
+	calr BStore_CursorSlot_Restore                                          ; FEFFB0  1e 62 8d
 	ret                                                  ; FEFFB3  0e
 sub_FEFFB4:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEFFB4  f2 70 1f 60 c8
@@ -179321,7 +179324,7 @@ CoordTable_FF00D1:
 sub_FF00ED:
 	m_bit 0, MD24, 0x601f5b                              ; FF00ED  f2 5b 1f 60 c8
 	jr z, .LFF013E                                       ; FF00F2  66 4a
-	calr sub_FE8CEE                                          ; FF00F4  1e f7 8b
+	calr BStore_CursorSlot_Save                                          ; FF00F4  1e f7 8b
 	calr BStoreCursor_ReadByte                                          ; FF00F7  1e 38 21
 	and A,0xf0                                           ; FF00FA  c9 cc f0
 	cp A,0x90                                            ; FF00FD  c9 cf 90
@@ -179350,7 +179353,7 @@ sub_FF00ED:
 .LFF0138:
 	calr sub_FF013F                                      ; FF0138  1e 04 00
 .LFF013B:
-	calr sub_FE8D15                                          ; FF013B  1e d7 8b
+	calr BStore_CursorSlot_Restore                                          ; FF013B  1e d7 8b
 .LFF013E:
 	ret                                                  ; FF013E  0e
 sub_FF013F:
@@ -179390,7 +179393,7 @@ sub_FF0178:
 sub_FF019D:
 	m_bit 0, MD24, 0x601f5b                              ; FF019D  f2 5b 1f 60 c8
 	jr z, .LFF01F1                                       ; FF01A2  66 4d
-	calr sub_FE8CEE                                          ; FF01A4  1e 47 8b
+	calr BStore_CursorSlot_Save                                          ; FF01A4  1e 47 8b
 	calr BStoreCursor_ReadByte                                          ; FF01A7  1e 88 20
 	and A,0xf0                                           ; FF01AA  c9 cc f0
 	cp A,0x90                                            ; FF01AD  c9 cf 90
@@ -179421,7 +179424,7 @@ sub_FF019D:
 	ld a, 0x05:opc                                          ; FF01EB  21 05
 	swi 7                                                ; FF01ED  ff
 .LFF01EE:
-	calr sub_FE8D15                                          ; FF01EE  1e 24 8b
+	calr BStore_CursorSlot_Restore                                          ; FF01EE  1e 24 8b
 .LFF01F1:
 	ret                                                  ; FF01F1  0e
 ; ---------------------------------------------------------------------

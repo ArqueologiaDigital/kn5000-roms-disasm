@@ -378,6 +378,9 @@ RENAMES = {
     "sub_FD649A": "ToneMsg80_Id04",
     "sub_FEAA86": "UI_GotoScreen24",
     "sub_FEAA8D": "UI_GotoScreen27",
+    "sub_FE8CEE": "BStore_CursorSlot_Save",
+    "sub_FE8D15": "BStore_CursorSlot_Restore",
+    "sub_FE8BF8": "BStore_CursorSlot_RestoreMark",
 }
 
 

@@ -321,4 +321,7 @@ RENAMES = [
     ("sub_FEAA86", "UI_GotoScreen24"),
     ("sub_FEAA8D", "UI_GotoScreen27"),
     ("sub_F6BFF2", "MsgLine_PartVolume_Call"),
+    ("sub_FE8CEE", "BStore_CursorSlot_Save"),
+    ("sub_FE8D15", "BStore_CursorSlot_Restore"),
+    ("sub_FE8BF8", "BStore_CursorSlot_RestoreMark"),
 ]
