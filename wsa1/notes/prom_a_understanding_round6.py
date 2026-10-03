@@ -773,8 +773,9 @@ NAMES = [
      "`xor C,C` + service 0x0C, service 0x10, then `calr Paint_NoteEditPartSelect`\n"
      "-- a name this tree already carries -- and finally `ld C,0x07` + service\n"
      "0x0C.  The bracket is LCD_ScreenRedraw_Begin's and _End's, written out\n"
-     "inline.  ⚠ It also clears bit 0 of (0x601F70); what that bit selects is not\n"
-     "established, and ShowScreen_DrumEditPartSelect SETS the same bit."),
+     "inline.  It also clears bit 0 of (0x601F70), EditScreen_Mode: 0 = NOTE EDIT,\n"
+     "1 = DRUM EDIT -- ShowScreen_DrumEditPartSelect SETS it (FINDINGS-prom_a-\n"
+     "screen-module.md section 8)."),
     ("sub_FE83A3", "ShowScreen_DrumEditPartSelect",
      "the same sequence around the DRUM EDIT part-select painter",
      "identical in shape to ShowScreen_NoteEditPartSelect, calling\n"

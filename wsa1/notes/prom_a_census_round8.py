@@ -538,6 +538,24 @@ MEM_PAREN = re.compile(r'\((0x[0-9a-fA-F]{3,6})\)')
 MEM_MACRO = re.compile(r'\bM[BWDL](?:8|16|24)\s*,\s*(0x[0-9a-fA-F]+)')
 IMM32 = re.compile(r'(?<![\w.])0x([0-9a-fA-F]{6,8})(?![\w.])')
 
+
+def _ram_names():
+    """include/wsa1_ram.inc's `.equ Name, value` rows.  Since 2026-09 scripts/tools/name_wsa1_ram.py
+    spells named RAM operands by name, so a census that saw only numbers drifted with every naming
+    commit (two leaf routines moved into S6 "no memory reference" when 0x601F70 was named,
+    2026-10-03).  A name -- or `Name+N` -- counts as the address it stands for."""
+    out = {}
+    for ln in open(os.path.join(ROOT, "include", "wsa1_ram.inc"), encoding="latin-1"):
+        m = re.match(r'^\s*\.equ\s+([A-Za-z_]\w*)\s*,\s*(0x[0-9a-fA-F]+)', ln)
+        if m:
+            out[m.group(1)] = int(m.group(2), 16)
+    return out
+
+
+RAM_NAMES = _ram_names()
+RAM_NAME_REF = re.compile(r'(?<![\w.])(%s)(?:\+(0x[0-9a-fA-F]+|\d+))?(?![\w.])' %
+                          "|".join(sorted(map(re.escape, RAM_NAMES), key=len, reverse=True)))
+
 _C = {}
 OK = FAIL = 0
 
@@ -755,6 +773,9 @@ def build():
                 classify_addr(r, v, txt, cobj)
             for m2 in IMM32.finditer(txt):
                 classify_addr(r, int(m2.group(1), 16), txt, cobj)
+            for m2 in RAM_NAME_REF.finditer(txt):
+                classify_addr(r, RAM_NAMES[m2.group(1)] + (int(m2.group(2), 0) if m2.group(2) else 0),
+                              txt, cobj)
         recs.append(r)
     # --- who reaches it -----------------------------------------------------
     refs, _cnt = R6.references()
@@ -2944,8 +2965,10 @@ OTHER_NAMES = [
      "LCD_DrawVRuleRight_Layer1` and 0xFEFE65 `calr LCD_DrawVRuleLeft_Layer1`, "
      "both already named in this listing, and there is nothing else in the "
      "routine. Seven callers",
-     "what bit 0 of (0x601F70) selects. Screen_DrawKitCategoryLegend reads the "
-     "same bit and its header records the same gap"),
+     "nothing about the bit any more: (0x601F70) bit 0 is EditScreen_Mode's DRUM "
+     "EDIT bit (FINDINGS-prom_a-screen-module.md section 8, 2026-10-03).  ⚠ The "
+     "evidence above is wrong: the SET arm returns at 0xFEFE60 and the calr at "
+     "0xFEFE61 is never reached; the source header was corrected the same day"),
 ]
 
 

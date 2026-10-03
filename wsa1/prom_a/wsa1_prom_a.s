@@ -169537,15 +169537,16 @@ sub_FE833F:
 ; Evidence: `xor C,C` + service 0x0C, service 0x10, then `calr Paint_NoteEditPartSelect`
 ;           -- a name this tree already carries -- and finally `ld C,0x07` + service
 ;           0x0C.  The bracket is LCD_ScreenRedraw_Begin's and _End's, written out
-;           inline.  ⚠ It also clears bit 0 of (0x601F70); what that bit selects is not
-;           established, and ShowScreen_DrumEditPartSelect SETS the same bit.
+;           inline.  It also clears bit 0 of (0x601F70), EditScreen_Mode: 0 = NOTE EDIT,
+;           1 = DRUM EDIT -- ShowScreen_DrumEditPartSelect SETS it (FINDINGS-prom_a-
+;           screen-module.md section 8).
 ; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
 ;          is blind to this name, --verify reads it back.
 ; ---------------------------------------------------------------------
 ShowScreen_NoteEditPartSelect:
 	m_or_mi8 MB16, 0x34bb, 0x04                          ; FE836F  c1 bb 34 3e 04
 	call T_CallbackQueue_ResetAndRestartTask2            ; FE8374  1d 80 2e f4
-	m_res 0, MD24, 0x601f70                              ; FE8378  f2 70 1f 60 b0
+	m_res 0, MD24, EditScreen_Mode                              ; FE8378  f2 70 1f 60 b0
 	xor C,C                                              ; FE837D  cb d3
 	ld a, 0x0c:opc                                          ; FE837F  21 0c
 	swi 7                                                ; FE8381  ff
@@ -169603,7 +169604,7 @@ ShowScreen_DrumEditPartSelect:
 	m_res 0, MD24, 0x601f77                              ; FE83A3  f2 77 1f 60 b0
 	m_or_mi8 MB16, 0x34bb, 0x04                          ; FE83A8  c1 bb 34 3e 04
 	call T_CallbackQueue_ResetAndRestartTask2            ; FE83AD  1d 80 2e f4
-	m_set 0, MD24, 0x601f70                              ; FE83B1  f2 70 1f 60 b8
+	m_set 0, MD24, EditScreen_Mode                              ; FE83B1  f2 70 1f 60 b8
 	xor C,C                                              ; FE83B6  cb d3
 	ld a, 0x0c:opc                                          ; FE83B8  21 0c
 	swi 7                                                ; FE83BA  ff
@@ -170026,7 +170027,7 @@ sub_FE8773:
 	xor XWA,XWA                                          ; FE8780  e8 d0
 	mx_ld_rm MXW, ra_IX, ra_BC, r0                       ; FE8782  d3 07 f0 e4 20
 	ld (0x1336:16), xwa                                 ; FE8787  f1 36 13 60
-	m_bit 0, MD24, 0x601f70                              ; FE878B  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE878B  f2 70 1f 60 c8
 	jr z, .LFE87A5                                       ; FE8790  66 13
 	ldw (UI_Request:16), 0x8028                              ; FE8792  f1 70 20 02 28 80
 	ld xwa, (0x1336:16)                                 ; FE8798  e1 36 13 20
@@ -170128,7 +170129,7 @@ sub_FE8868:
 	ldw (0x601f49:24), 0x0a                             ; FE8886  f2 49 1f 60 02 0a 00
 	ld wa, (0x601f51:24)                                ; FE888D  d2 51 1f 60 20
 	ld (0x601f4d:24), wa                                ; FE8892  f2 4d 1f 60 50
-	m_set 0, MD24, 0x601f70                              ; FE8897  f2 70 1f 60 b8
+	m_set 0, MD24, EditScreen_Mode                              ; FE8897  f2 70 1f 60 b8
 	ld (0x601f75:24), 0x07                             ; FE889C  f2 75 1f 60 00 07
 	ld (0x601f76:24), 0x08                             ; FE88A2  f2 76 1f 60 00 08
 	jr .LFE88D3                                          ; FE88A8  68 29
@@ -170138,7 +170139,7 @@ sub_FE88AA:
 	ld (0x601f4d:24), wa                                ; FE88B3  f2 4d 1f 60 50
 	ld wa, (0x601f4b:24)                                ; FE88B8  d2 4b 1f 60 20
 	ld (0x601f49:24), wa                                ; FE88BD  f2 49 1f 60 50
-	m_res 0, MD24, 0x601f70                              ; FE88C2  f2 70 1f 60 b0
+	m_res 0, MD24, EditScreen_Mode                              ; FE88C2  f2 70 1f 60 b0
 	ld (0x601f75:24), 0x0a                             ; FE88C7  f2 75 1f 60 00 0a
 	ld (0x601f76:24), 0x0b                             ; FE88CD  f2 76 1f 60 00 0b
 .LFE88D3:
@@ -170181,7 +170182,7 @@ sub_FE88AA:
 	jr z, .LFE8980                                       ; FE8960  66 1e
 	m_cp_mi8 MB16, 0x207d, 0x27                          ; FE8962  c1 7d 20 3f 27
 	jr z, .LFE8980                                       ; FE8967  66 17
-	m_bit 0, MD24, 0x601f70                              ; FE8969  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE8969  f2 70 1f 60 c8
 	jrl z, .LFE8A7E                                      ; FE896E  76 0d 01
 	m_bit 0, MD24, 0x601f77                              ; FE8971  f2 77 1f 60 c8
 	jrl z, .LFE8A7E                                      ; FE8976  76 05 01
@@ -170237,7 +170238,7 @@ sub_FE88AA:
 	jr .LFE8A28                                          ; FE8A1D  68 09
 .LFE8A1F:
 	ld wa, (0x3552:16)                                 ; FE8A1F  d1 52 35 20
-	ld (0x601f3f:24), wa                                ; FE8A23  f2 3f 1f 60 50
+	ld (EditCursor_Measure:24), wa                                ; FE8A23  f2 3f 1f 60 50
 .LFE8A28:
 	calr sub_FEA54F                                          ; FE8A28  1e 24 1b
 	call T_F40A10                                        ; FE8A2B  1d 10 0a f4
@@ -170247,7 +170248,7 @@ sub_FE88AA:
 	calr sub_FE8EA9                                          ; FE8A39  1e 6d 04
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE8A3C  c1 4a 0d 3f 00
 	jr z, .LFE8A58                                       ; FE8A41  66 15
-	ldw (0x601f3f:24), 0x01                             ; FE8A43  f2 3f 1f 60 02 01 00
+	ldw (EditCursor_Measure:24), 0x01                             ; FE8A43  f2 3f 1f 60 02 01 00
 	calr sub_FE8EA9                                          ; FE8A4A  1e 5c 04
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE8A4D  c1 4a 0d 3f 00
 	jr z, .LFE8A58                                       ; FE8A52  66 04
@@ -170261,8 +170262,8 @@ sub_FE88AA:
 	calr sub_FE8CB4                                      ; FE8A65  1e 4c 02
 	calr sub_FE8A9B                                      ; FE8A68  1e 30 00
 	calr sub_FE8F11                                          ; FE8A6B  1e a3 04
-	ldw (0x601f41:24), 0x00                             ; FE8A6E  f2 41 1f 60 02 00 00
-	ld (0x601f43:24), 0x00                             ; FE8A75  f2 43 1f 60 00 00
+	ldw (EditCursor_Beat:24), 0x00                             ; FE8A6E  f2 41 1f 60 02 00 00
+	ld (EditCursor_Tick:24), 0x00                             ; FE8A75  f2 43 1f 60 00 00
 	calr sub_FE8AE9                                      ; FE8A7B  1e 6b 00
 .LFE8A7E:
 	calr sub_FE8040                                          ; FE8A7E  1e bf f5
@@ -170293,7 +170294,7 @@ sub_FE8A9B:
 .LFE8AB2:
 	ret                                                  ; FE8AB2  0e
 sub_FE8AB3:
-	m_bit 0, MD24, 0x601f70                              ; FE8AB3  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE8AB3  f2 70 1f 60 c8
 	jr z, .LFE8AE3                                       ; FE8AB8  66 29
 	ld wa, (BStore_CursorBlock:16)                                 ; FE8ABA  d1 5c 34 20
 	ld bc, (BStore_CursorOffset:16)                                 ; FE8ABE  d1 5e 34 21
@@ -170317,7 +170318,7 @@ sub_FE8AB3:
 	ret                                                  ; FE8AE8  0e
 sub_FE8AE9:
 	calr sub_FE8CEE                                      ; FE8AE9  1e 02 02
-	ld wa, (0x601f3f:24)                                ; FE8AEC  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE8AEC  d2 3f 1f 60 20
 	ld (0x601f5d:24), wa                                ; FE8AF1  f2 5d 1f 60 50
 	ld (0x0c90:16), wa                                  ; FE8AF6  f1 90 0c 50
 	ld XIX,0x00601f5f                                    ; FE8AFA  44 5f 1f 60 00
@@ -170457,7 +170458,7 @@ sub_FE8C3A:
 	xor XWA,XWA                                          ; FE8C77  e8 d0
 	ld (0x1336:16), xwa                                 ; FE8C79  f1 36 13 60
 	ld (0x133a:16), xwa                                 ; FE8C7D  f1 3a 13 60
-	ld wa, (0x601f3f:24)                                ; FE8C81  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE8C81  d2 3f 1f 60 20
 	ld (0x3552:16), wa                                  ; FE8C86  f1 52 35 50
 	m_and_mi8 MB16, UI_RequestBits, 0xfe                         ; FE8C8A  c1 75 20 3c fe
 	call sub_FE8040                                      ; FE8C8F  1d 40 80 fe
@@ -170525,7 +170526,7 @@ sub_FE8D15:
 	ld (BStore_CursorOffset:16), wa                                  ; FE8D37  f1 5e 34 50
 	ret                                                  ; FE8D3B  0e
 sub_FE8D3C:
-	m_bit 0, MD24, 0x601f70                              ; FE8D3C  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE8D3C  f2 70 1f 60 c8
 	jr nz, .LFE8D5E                                      ; FE8D41  6e 1b
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FE8D43  f1 40 25 00 02
 	ld XIX,ScreenDispatch_FE8D6B                         ; FE8D48  44 6b 8d fe 00
@@ -170714,7 +170715,7 @@ sub_FE8ED3:
 	ld (BStore_CursorOffset:16), iy                                  ; FE8EEE  f1 5e 34 55
 	ret                                                  ; FE8EF2  0e
 sub_FE8EF3:
-	ld wa, (0x601f3f:24)                                ; FE8EF3  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE8EF3  d2 3f 1f 60 20
 	ld (0x0c90:16), wa                                  ; FE8EF8  f1 90 0c 50
 	calr sub_FE8F0C                                      ; FE8EFC  1e 0d 00
 	ld a, (0x601f00:24)                                 ; FE8EFF  c2 00 1f 60 21
@@ -170769,7 +170770,7 @@ sub_FE8F11:
 .LFE8F96:
 	ret                                                  ; FE8F96  0e
 sub_FE8F97:
-	m_bit 0, MD24, 0x601f70                              ; FE8F97  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE8F97  f2 70 1f 60 c8
 	jr nz, .LFE8FDC                                      ; FE8F9C  6e 3e
 	ld a, (0x601f53:24)                                 ; FE8F9E  c2 53 1f 60 21
 	ld (0x601f6e:24), a                                 ; FE8FA3  f2 6e 1f 60 41
@@ -170874,7 +170875,7 @@ sub_FE8FFD:
 	ret                                                  ; FE90B7  0e
 sub_FE90B8:
 	ld c, 0x08:opc                                          ; FE90B8  23 08
-	m_bit 0, MD24, 0x601f70                              ; FE90BA  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE90BA  f2 70 1f 60 c8
 	jr z, .LFE90C3                                       ; FE90BF  66 02
 	ld c, 0x01:opc                                          ; FE90C1  23 01
 .LFE90C3:
@@ -170898,7 +170899,7 @@ sub_FE90B8:
 	ret                                                  ; FE90F7  0e
 sub_FE90F8:
 	ld c, 0x08:opc                                          ; FE90F8  23 08
-	m_bit 0, MD24, 0x601f70                              ; FE90FA  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE90FA  f2 70 1f 60 c8
 	jr z, .LFE9103                                       ; FE90FF  66 02
 	ld c, 0x01:opc                                          ; FE9101  23 01
 .LFE9103:
@@ -170944,7 +170945,7 @@ sub_FE9148:
 	djnz8 c, .LFE9151                                    ; FE9159  cb 1c f5
 	ret                                                  ; FE915C  0e
 sub_FE915D:
-	m_bit 0, MD24, 0x601f70                              ; FE915D  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FE915D  f2 70 1f 60 c8
 	jr z, .LFE917E                                       ; FE9162  66 1a
 	ld a, (0x601f44:24)                                 ; FE9164  c2 44 1f 60 21
 	ld (0x601f34:24), a                                 ; FE9169  f2 34 1f 60 41
@@ -171212,7 +171213,7 @@ sub_FE93CA:
 	calr sub_FE9430                                      ; FE93F8  1e 35 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE93FB  c1 4a 0d 3f 00
 	jr nz, .LFE942B                                      ; FE9400  6e 29
-	ld wa, (0x601f41:24)                                ; FE9402  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE9402  d2 41 1f 60 20
 	add A,0x02                                           ; FE9407  c9 c8 02
 	ld (0x601f6c:24), wa                                ; FE940A  f2 6c 1f 60 50
 .LFE940F:
@@ -171235,7 +171236,7 @@ sub_FE9430:
 .LFE943E:
 	calr sub_FE8F0C                                          ; FE943E  1e cb fa
 	call T_F40C60                                        ; FE9441  1d 60 0c f4
-	cp (0x601f3f:24), de                             ; FE9445  d2 3f 1f 60 fa
+	cp (EditCursor_Measure:24), de                             ; FE9445  d2 3f 1f 60 fa
 	jr z, .LFE9491                                       ; FE944A  66 45
 	cp c, 0x00:i3                                          ; FE944C  cb d8
 	jr z, .LFE9456                                       ; FE944E  66 06
@@ -171264,10 +171265,10 @@ sub_FE9430:
 	ret                                                  ; FE9491  0e
 sub_FE9492:
 	calr sub_FE95C8                                      ; FE9492  1e 33 01
-	ld wa, (0x601f41:24)                                ; FE9495  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE9495  d2 41 1f 60 20
 	mul WA,0x0060                                        ; FE949A  d8 08 60 00
 	xor DE,DE                                            ; FE949E  da d2
-	ld e, (0x601f43:24)                                 ; FE94A0  c2 43 1f 60 25
+	ld e, (EditCursor_Tick:24)                                 ; FE94A0  c2 43 1f 60 25
 	add WA,DE                                            ; FE94A5  da 80
 	ld (0x601f54:24), wa                                ; FE94A7  f2 54 1f 60 50
 	ret                                                  ; FE94AC  0e
@@ -171378,21 +171379,21 @@ sub_FE95C8:
 	jr nz, .LFE95DF                                      ; FE95DB  6e 02
 	jr .LFE9602                                          ; FE95DD  68 23
 .LFE95DF:
-	m_add_mi16 MW24, 0x601f3f, 0x0001                    ; FE95DF  d2 3f 1f 60 38 01 00
-	ldw (0x601f41:24), 0x00                             ; FE95E6  f2 41 1f 60 02 00 00
+	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE95DF  d2 3f 1f 60 38 01 00
+	ldw (EditCursor_Beat:24), 0x00                             ; FE95E6  f2 41 1f 60 02 00 00
 .LFE95ED:
 	ld wa, (0x601f54:24)                                ; FE95ED  d2 54 1f 60 20
 	ld c, (0x601f75:24)                                 ; FE95F2  c2 75 1f 60 23
 	mul C,0x60                                           ; FE95F7  cb 08 60
 	sub WA,BC                                            ; FE95FA  d9 a0
-	ld (0x601f43:24), a                                 ; FE95FC  f2 43 1f 60 41
+	ld (EditCursor_Tick:24), a                                 ; FE95FC  f2 43 1f 60 41
 	ret                                                  ; FE9601  0e
 .LFE9602:
-	m_add_mi16 MW24, 0x601f41, 0x0001                    ; FE9602  d2 41 1f 60 38 01 00
+	m_add_mi16 MW24, EditCursor_Beat, 0x0001                    ; FE9602  d2 41 1f 60 38 01 00
 	jr .LFE95ED                                          ; FE9609  68 e2
 sub_FE960B:
 	ld (BStore_ErrorCode:16), 0x00                                 ; FE960B  f1 4a 0d 00 00
-	ld wa, (0x601f41:24)                                ; FE9610  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE9610  d2 41 1f 60 20
 	cp wa, 0x00:i3                                         ; FE9615  d8 d8
 	jr nz, .LFE961A                                      ; FE9617  6e 01
 	ret                                                  ; FE9619  0e
@@ -171416,7 +171417,7 @@ sub_FE960B:
 	ld (BStore_ErrorCode:16), 0xff                                 ; FE9642  f1 4a 0d 00 ff
 	ret                                                  ; FE9647  0e
 sub_FE9648:
-	m_cp_mi16 MW24, 0x601f3f, 0x0001                     ; FE9648  d2 3f 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditCursor_Measure, 0x0001                     ; FE9648  d2 3f 1f 60 3f 01 00
 	jr ugt, .LFE9652                                     ; FE964F  6b 01
 	ret                                                  ; FE9651  0e
 .LFE9652:
@@ -171424,10 +171425,10 @@ sub_FE9648:
 	calr sub_FE8EA9                                          ; FE9659  1e 4d f8
 	calr sub_FE8BF8                                          ; FE965C  1e 99 f5
 	calr sub_FE8AE9                                          ; FE965F  1e 87 f4
-	m_add_mi16 MW24, 0x601f3f, 0x0001                    ; FE9662  d2 3f 1f 60 38 01 00
+	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE9662  d2 3f 1f 60 38 01 00
 	xor WA,WA                                            ; FE9669  d8 d0
-	ld (0x601f41:24), wa                                ; FE966B  f2 41 1f 60 50
-	ld (0x601f43:24), a                                 ; FE9670  f2 43 1f 60 41
+	ld (EditCursor_Beat:24), wa                                ; FE966B  f2 41 1f 60 50
+	ld (EditCursor_Tick:24), a                                 ; FE9670  f2 43 1f 60 41
 	calr sub_FE8ED3                                          ; FE9675  1e 5b f8
 	calr sub_FE9EDA                                          ; FE9678  1e 5f 08
 	calr sub_FE8F11                                          ; FE967B  1e 93 f8
@@ -171440,7 +171441,7 @@ sub_FE9648:
 	calr sub_FEF8D6                                          ; FE9690  1e 43 62
 	ret                                                  ; FE9693  0e
 sub_FE9694:
-	m_cp_mi16 MW24, 0x601f3f, 0x0001                     ; FE9694  d2 3f 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditCursor_Measure, 0x0001                     ; FE9694  d2 3f 1f 60 3f 01 00
 	jr ugt, .LFE969E                                     ; FE969B  6b 01
 	ret                                                  ; FE969D  0e
 .LFE969E:
@@ -171448,10 +171449,10 @@ sub_FE9694:
 	calr sub_FE8EA9                                          ; FE96A5  1e 01 f8
 	calr sub_FE8BF8                                          ; FE96A8  1e 4d f5
 	calr sub_FE8AE9                                          ; FE96AB  1e 3b f4
-	m_add_mi16 MW24, 0x601f3f, 0x0001                    ; FE96AE  d2 3f 1f 60 38 01 00
+	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE96AE  d2 3f 1f 60 38 01 00
 	xor WA,WA                                            ; FE96B5  d8 d0
-	ld (0x601f41:24), wa                                ; FE96B7  f2 41 1f 60 50
-	ld (0x601f43:24), a                                 ; FE96BC  f2 43 1f 60 41
+	ld (EditCursor_Beat:24), wa                                ; FE96B7  f2 41 1f 60 50
+	ld (EditCursor_Tick:24), a                                 ; FE96BC  f2 43 1f 60 41
 	calr sub_FE8ED3                                          ; FE96C1  1e 0f f8
 	calr sub_FE9EDA                                          ; FE96C4  1e 13 08
 	calr sub_FE98E7                                      ; FE96C7  1e 1d 02
@@ -171537,7 +171538,7 @@ sub_FE9762:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE97A3  c1 4a 0d 3f 00
 	jr nz, .LFE97DB                                      ; FE97A8  6e 31
 	ld (0x601f16:24), 0x90                             ; FE97AA  f2 16 1f 60 00 90
-	ld a, (0x601f43:24)                                 ; FE97B0  c2 43 1f 60 21
+	ld a, (EditCursor_Tick:24)                                 ; FE97B0  c2 43 1f 60 21
 	ld (0x601f17:24), a                                 ; FE97B5  f2 17 1f 60 41
 	calr sub_FE8BA8                                          ; FE97BA  1e eb f3
 	ld a, (0x601f00:24)                                 ; FE97BD  c2 00 1f 60 21
@@ -171605,7 +171606,7 @@ sub_FE984B:
 	ld (0x601f05:24), ix                                ; FE9863  f2 05 1f 60 54
 	ld (0x601f07:24), 0x00                             ; FE9868  f2 07 1f 60 00 00
 	ld (BStore_CursorOffset:16), iy                                  ; FE986E  f1 5e 34 55
-	m_cp_mi16 MW24, 0x601f41, 0x0000                     ; FE9872  d2 41 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditCursor_Beat, 0x0000                     ; FE9872  d2 41 1f 60 3f 00 00
 	jr z, .LFE98AF                                       ; FE9879  66 34
 	ldw (0x601f6c:24), 0x00                             ; FE987B  f2 6c 1f 60 02 00 00
 .LFE9882:
@@ -171619,7 +171620,7 @@ sub_FE984B:
 	jr .LFE9882                                          ; FE9894  68 ec
 .LFE9896:
 	m_add_mi16 MW24, 0x601f6c, 0x0001                    ; FE9896  d2 6c 1f 60 38 01 00
-	ld wa, (0x601f41:24)                                ; FE989D  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE989D  d2 41 1f 60 20
 	cp (0x601f6c:24), wa                             ; FE98A2  d2 6c 1f 60 f8
 	jr nc, .LFE98AB                                      ; FE98A7  6f 02
 	jr .LFE9890                                          ; FE98A9  68 e5
@@ -171635,13 +171636,13 @@ sub_FE984B:
 .LFE98BF:
 	call BStoreCursor_Step                                        ; FE98BF  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE98C3  1d 32 22 ff
-	m_cp_rm MB24, 0x601f43, r1                           ; FE98C7  c2 43 1f 60 f1
+	m_cp_rm MB24, EditCursor_Tick, r1                           ; FE98C7  c2 43 1f 60 f1
 	jr ule, .LFE98AB                                     ; FE98CC  63 dd
 	calr BStoreCursor_SeekPrevTag                                          ; FE98CE  1e 1a ea
 .LFE98D1:
-	ld wa, (0x601f41:24)                                ; FE98D1  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE98D1  d2 41 1f 60 20
 	add (0x601f05:24), wa                            ; FE98D6  d2 05 1f 60 88
-	ld a, (0x601f43:24)                                 ; FE98DB  c2 43 1f 60 21
+	ld a, (EditCursor_Tick:24)                                 ; FE98DB  c2 43 1f 60 21
 	ld (0x601f07:24), a                                 ; FE98E0  f2 07 1f 60 41
 	ret                                                  ; FE98E5  0e
 .LFE98E6:
@@ -171659,7 +171660,7 @@ sub_FE98E7:
 	ld (0x601f05:24), ix                                ; FE98FF  f2 05 1f 60 54
 	ld (0x601f07:24), 0x00                             ; FE9904  f2 07 1f 60 00 00
 	ld (BStore_CursorOffset:16), iy                                  ; FE990A  f1 5e 34 55
-	m_cp_mi16 MW24, 0x601f41, 0x0000                     ; FE990E  d2 41 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditCursor_Beat, 0x0000                     ; FE990E  d2 41 1f 60 3f 00 00
 	jr z, .LFE994B                                       ; FE9915  66 34
 	ldw (0x601f6c:24), 0x00                             ; FE9917  f2 6c 1f 60 02 00 00
 .LFE991E:
@@ -171673,7 +171674,7 @@ sub_FE98E7:
 	jr .LFE991E                                          ; FE9930  68 ec
 .LFE9932:
 	m_add_mi16 MW24, 0x601f6c, 0x0001                    ; FE9932  d2 6c 1f 60 38 01 00
-	ld wa, (0x601f41:24)                                ; FE9939  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE9939  d2 41 1f 60 20
 	cp (0x601f6c:24), wa                             ; FE993E  d2 6c 1f 60 f8
 	jr nc, .LFE9947                                      ; FE9943  6f 02
 	jr .LFE992C                                          ; FE9945  68 e5
@@ -171689,13 +171690,13 @@ sub_FE98E7:
 .LFE995B:
 	call BStoreCursor_Step                                        ; FE995B  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE995F  1d 32 22 ff
-	m_cp_rm MB24, 0x601f43, r1                           ; FE9963  c2 43 1f 60 f1
+	m_cp_rm MB24, EditCursor_Tick, r1                           ; FE9963  c2 43 1f 60 f1
 	jr c, .LFE9947                                       ; FE9968  67 dd
 	calr BStoreCursor_SeekPrevTag                                          ; FE996A  1e 7e e9
 .LFE996D:
-	ld wa, (0x601f41:24)                                ; FE996D  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE996D  d2 41 1f 60 20
 	add (0x601f05:24), wa                            ; FE9972  d2 05 1f 60 88
-	ld a, (0x601f43:24)                                 ; FE9977  c2 43 1f 60 21
+	ld a, (EditCursor_Tick:24)                                 ; FE9977  c2 43 1f 60 21
 	ld (0x601f07:24), a                                 ; FE997C  f2 07 1f 60 41
 	ret                                                  ; FE9981  0e
 .LFE9982:
@@ -172064,17 +172065,17 @@ sub_FE9CDA:
 	calr sub_FE9D16                                      ; FE9CF8  1e 1b 00
 	ret                                                  ; FE9CFB  0e
 sub_FE9CFC:
-	ld wa, (0x601f3f:24)                                ; FE9CFC  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE9CFC  d2 3f 1f 60 20
 	cp WA,0x03e7                                         ; FE9D01  d8 cf e7 03
 	jr ugt, .LFE9D12                                     ; FE9D05  6b 0b
-	m_add_mi16 MW24, 0x601f3f, 0x0001                    ; FE9D07  d2 3f 1f 60 38 01 00
+	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE9D07  d2 3f 1f 60 38 01 00
 	calr sub_FE9D2E                                      ; FE9D0E  1e 1d 00
 	ret                                                  ; FE9D11  0e
 .LFE9D12:
 	calr sub_FE9CFC_Nop                                          ; FE9D12  1e 2a e3
 	ret                                                  ; FE9D15  0e
 sub_FE9D16:
-	ld wa, (0x601f3f:24)                                ; FE9D16  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE9D16  d2 3f 1f 60 20
 	cp wa, 0x01:i3                                         ; FE9D1B  d8 d9
 	jr z, .LFE9D2A                                       ; FE9D1D  66 0b
 	.byte 0xd2, 0x3f, 0x1f, 0x60, 0x3a, 0x01, 0x00       ; FE9D1F  d2 3f 1f 60 3a 01 00   sub (0x601f3f),0x0001
@@ -172092,8 +172093,8 @@ sub_FE9D2E:
 	calr sub_FEF7D2                                          ; FE9D41  1e 8e 5a
 	calr sub_FEF859                                          ; FE9D44  1e 12 5b
 	xor WA,WA                                            ; FE9D47  d8 d0
-	ld (0x601f41:24), wa                                ; FE9D49  f2 41 1f 60 50
-	ld (0x601f43:24), a                                 ; FE9D4E  f2 43 1f 60 41
+	ld (EditCursor_Beat:24), wa                                ; FE9D49  f2 41 1f 60 50
+	ld (EditCursor_Tick:24), a                                 ; FE9D4E  f2 43 1f 60 41
 	ld (0x601f58:24), 0x82                             ; FE9D53  f2 58 1f 60 00 82
 	ld (0x601f59:24), 0x00                             ; FE9D59  f2 59 1f 60 00 00
 	ret                                                  ; FE9D5F  0e
@@ -172106,8 +172107,8 @@ sub_FE9D60:
 	calr sub_FEF7D2                                          ; FE9D73  1e 5c 5a
 	calr sub_FEF859                                          ; FE9D76  1e e0 5a
 	xor WA,WA                                            ; FE9D79  d8 d0
-	ld (0x601f41:24), wa                                ; FE9D7B  f2 41 1f 60 50
-	ld (0x601f43:24), a                                 ; FE9D80  f2 43 1f 60 41
+	ld (EditCursor_Beat:24), wa                                ; FE9D7B  f2 41 1f 60 50
+	ld (EditCursor_Tick:24), a                                 ; FE9D80  f2 43 1f 60 41
 	ld (0x601f58:24), 0x81                             ; FE9D85  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x00                             ; FE9D8B  f2 59 1f 60 00 00
 	ret                                                  ; FE9D91  0e
@@ -172127,31 +172128,31 @@ sub_FE9D92:
 	calr sub_FE9F74                                      ; FE9DB0  1e c1 01
 	ret                                                  ; FE9DB3  0e
 sub_FE9DB4:
-	m_cp_mi8 MB24, 0x601f43, 0x5f                        ; FE9DB4  c2 43 1f 60 3f 5f
+	m_cp_mi8 MB24, EditCursor_Tick, 0x5f                        ; FE9DB4  c2 43 1f 60 3f 5f
 	jr nc, .LFE9DBE                                      ; FE9DBA  6f 02
 	jr .LFE9DC2                                          ; FE9DBC  68 04
 .LFE9DBE:
 	calr sub_FE9E04                                      ; FE9DBE  1e 43 00
 	ret                                                  ; FE9DC1  0e
 .LFE9DC2:
-	m_add_mi8 MB24, 0x601f43, 0x01                       ; FE9DC2  c2 43 1f 60 38 01
+	m_add_mi8 MB24, EditCursor_Tick, 0x01                       ; FE9DC2  c2 43 1f 60 38 01
 	calr sub_FF0A52                                          ; FE9DC8  1e 87 6c
 	calr sub_FE9EBB                                      ; FE9DCB  1e ed 00
 	calr sub_FF0205                                          ; FE9DCE  1e 34 64
 	calr sub_FEA082                                      ; FE9DD1  1e ae 02
 	ret                                                  ; FE9DD4  0e
 sub_FE9DD5:
-	m_cp_mi8 MB24, 0x601f43, 0x5f                        ; FE9DD5  c2 43 1f 60 3f 5f
+	m_cp_mi8 MB24, EditCursor_Tick, 0x5f                        ; FE9DD5  c2 43 1f 60 3f 5f
 	jr nc, .LFE9DDF                                      ; FE9DDB  6f 02
 	jr .LFE9DE3                                          ; FE9DDD  68 04
 .LFE9DDF:
 	calr sub_FE9E04                                      ; FE9DDF  1e 22 00
 	ret                                                  ; FE9DE2  0e
 .LFE9DE3:
-	m_add_mi8 MB24, 0x601f43, 0x05                       ; FE9DE3  c2 43 1f 60 38 05
-	m_cp_mi8 MB24, 0x601f43, 0x5f                        ; FE9DE9  c2 43 1f 60 3f 5f
+	m_add_mi8 MB24, EditCursor_Tick, 0x05                       ; FE9DE3  c2 43 1f 60 38 05
+	m_cp_mi8 MB24, EditCursor_Tick, 0x5f                        ; FE9DE9  c2 43 1f 60 3f 5f
 	jr ule, .LFE9DF7                                     ; FE9DEF  63 06
-	ld (0x601f43:24), 0x5f                             ; FE9DF1  f2 43 1f 60 00 5f
+	ld (EditCursor_Tick:24), 0x5f                             ; FE9DF1  f2 43 1f 60 00 5f
 .LFE9DF7:
 	calr sub_FF0A52                                          ; FE9DF7  1e 58 6c
 	calr sub_FE9EBB                                      ; FE9DFA  1e be 00
@@ -172187,11 +172188,11 @@ sub_FE9E04:
 	calr sub_FE9F23                                      ; FE9E4C  1e d4 00
 	cp A,0xff                                            ; FE9E4F  c9 cf ff
 	jr z, .LFE9E5B                                       ; FE9E52  66 07
-	cp (0x601f41:24), a                               ; FE9E54  c2 41 1f 60 f9
+	cp (EditCursor_Beat:24), a                               ; FE9E54  c2 41 1f 60 f9
 	jr nc, .LFE9E89                                      ; FE9E59  6f 2e
 .LFE9E5B:
-	ld (0x601f43:24), 0x00                             ; FE9E5B  f2 43 1f 60 00 00
-	m_add_mi16 MW24, 0x601f41, 0x0001                    ; FE9E61  d2 41 1f 60 38 01 00
+	ld (EditCursor_Tick:24), 0x00                             ; FE9E5B  f2 43 1f 60 00 00
+	m_add_mi16 MW24, EditCursor_Beat, 0x0001                    ; FE9E61  d2 41 1f 60 38 01 00
 	calr sub_FF0A52                                          ; FE9E68  1e e7 6b
 	calr sub_FF0A04                                          ; FE9E6B  1e 96 6b
 	calr sub_FE9EBB                                      ; FE9E6E  1e 4a 00
@@ -172206,9 +172207,9 @@ sub_FE9E04:
 	calr sub_FE8BD4                                          ; FE9E85  1e 4c ed
 	ret                                                  ; FE9E88  0e
 .LFE9E89:
-	ldw (0x601f41:24), 0x00                             ; FE9E89  f2 41 1f 60 02 00 00
-	incw 0x01, (0x601f3f:24)                          ; FE9E90  d2 3f 1f 60 61
-	ld (0x601f43:24), 0x00                             ; FE9E95  f2 43 1f 60 00 00
+	ldw (EditCursor_Beat:24), 0x00                             ; FE9E89  f2 41 1f 60 02 00 00
+	incw 0x01, (EditCursor_Measure:24)                          ; FE9E90  d2 3f 1f 60 61
+	ld (EditCursor_Tick:24), 0x00                             ; FE9E95  f2 43 1f 60 00 00
 	calr sub_FF0989                                          ; FE9E9B  1e eb 6a
 	calr sub_FF0A52                                          ; FE9E9E  1e b1 6b
 	calr sub_FF0A04                                          ; FE9EA1  1e 60 6b
@@ -172233,7 +172234,7 @@ sub_FE9EBB:
 .LFE9ED9:
 	ret                                                  ; FE9ED9  0e
 sub_FE9EDA:
-	ld wa, (0x601f3f:24)                                ; FE9EDA  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE9EDA  d2 3f 1f 60 20
 	sub wa, (0x601f5d:24)                            ; FE9EDF  d2 5d 1f 60 a0
 	add A,0x01                                           ; FE9EE4  c9 c8 01
 	ld E,A                                               ; FE9EE7  c9 8d
@@ -172251,16 +172252,16 @@ sub_FE9EDA:
 	cp XIX,XHL                                           ; FE9F06  eb f4
 	jr c, .LFE9EF0                                       ; FE9F08  67 e6
 .LFE9F0A:
-	ld wa, (0x601f41:24)                                ; FE9F0A  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FE9F0A  d2 41 1f 60 20
 	add WA,BC                                            ; FE9F0F  d9 80
 	mul A,0x60                                           ; FE9F11  c9 08 60
 	xor HL,HL                                            ; FE9F14  db d3
-	ld l, (0x601f43:24)                                 ; FE9F16  c2 43 1f 60 27
+	ld l, (EditCursor_Tick:24)                                 ; FE9F16  c2 43 1f 60 27
 	add WA,HL                                            ; FE9F1B  db 80
 	ld (0x601f54:24), wa                                ; FE9F1D  f2 54 1f 60 50
 	ret                                                  ; FE9F22  0e
 sub_FE9F23:
-	ld wa, (0x601f3f:24)                                ; FE9F23  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE9F23  d2 3f 1f 60 20
 	sub wa, (0x601f5d:24)                            ; FE9F28  d2 5d 1f 60 a0
 	inc 1,WA                                             ; FE9F2D  d8 61
 	ld XIX,0x00601f5f                                    ; FE9F2F  44 5f 1f 60 00
@@ -172295,7 +172296,7 @@ sub_FE9F23:
 .LFE9F73:
 	ret                                                  ; FE9F73  0e
 sub_FE9F74:
-	m_cp_mi8 MB24, 0x601f43, 0x00                        ; FE9F74  c2 43 1f 60 3f 00
+	m_cp_mi8 MB24, EditCursor_Tick, 0x00                        ; FE9F74  c2 43 1f 60 3f 00
 	jr z, .LFE9F7E                                       ; FE9F7A  66 02
 	jr .LFE9F82                                          ; FE9F7C  68 04
 .LFE9F7E:
@@ -172309,17 +172310,17 @@ sub_FE9F74:
 	calr sub_FEA082                                      ; FE9F91  1e ee 00
 	ret                                                  ; FE9F94  0e
 sub_FE9F95:
-	m_cp_mi8 MB24, 0x601f43, 0x00                        ; FE9F95  c2 43 1f 60 3f 00
+	m_cp_mi8 MB24, EditCursor_Tick, 0x00                        ; FE9F95  c2 43 1f 60 3f 00
 	jr z, .LFE9F9F                                       ; FE9F9B  66 02
 	jr .LFE9FA3                                          ; FE9F9D  68 04
 .LFE9F9F:
 	calr sub_FE9FC7                                      ; FE9F9F  1e 25 00
 	ret                                                  ; FE9FA2  0e
 .LFE9FA3:
-	ld a, (0x601f43:24)                                 ; FE9FA3  c2 43 1f 60 21
+	ld a, (EditCursor_Tick:24)                                 ; FE9FA3  c2 43 1f 60 21
 	sub A,0x05                                           ; FE9FA8  c9 ca 05
 	jr c, .LFE9FBF                                       ; FE9FAB  67 12
-	ld (0x601f43:24), a                                 ; FE9FAD  f2 43 1f 60 41
+	ld (EditCursor_Tick:24), a                                 ; FE9FAD  f2 43 1f 60 41
 .LFE9FB2:
 	calr sub_FF0A52                                          ; FE9FB2  1e 9d 6a
 	calr sub_FE9EBB                                      ; FE9FB5  1e 03 ff
@@ -172327,12 +172328,12 @@ sub_FE9F95:
 	calr sub_FEA082                                      ; FE9FBB  1e c4 00
 	ret                                                  ; FE9FBE  0e
 .LFE9FBF:
-	ld (0x601f43:24), 0x00                             ; FE9FBF  f2 43 1f 60 00 00
+	ld (EditCursor_Tick:24), 0x00                             ; FE9FBF  f2 43 1f 60 00 00
 	jr .LFE9FB2                                          ; FE9FC5  68 eb
 sub_FE9FC7:
-	m_cp_mi16 MW24, 0x601f41, 0x0000                     ; FE9FC7  d2 41 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditCursor_Beat, 0x0000                     ; FE9FC7  d2 41 1f 60 3f 00 00
 	jr z, .LFE9FEA                                       ; FE9FCE  66 1a
-	ld (0x601f43:24), 0x5f                             ; FE9FD0  f2 43 1f 60 00 5f
+	ld (EditCursor_Tick:24), 0x5f                             ; FE9FD0  f2 43 1f 60 00 5f
 	.byte 0xd2, 0x41, 0x1f, 0x60, 0x3a, 0x01, 0x00       ; FE9FD6  d2 41 1f 60 3a 01 00   sub (0x601f41),0x0001
 	calr sub_FF0A52                                          ; FE9FDD  1e 72 6a
 	calr sub_FF0A04                                          ; FE9FE0  1e 21 6a
@@ -172340,12 +172341,12 @@ sub_FE9FC7:
 	calr sub_FEA082                                      ; FE9FE6  1e 99 00
 	ret                                                  ; FE9FE9  0e
 .LFE9FEA:
-	ld wa, (0x601f3f:24)                                ; FE9FEA  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FE9FEA  d2 3f 1f 60 20
 	m_cp_rm MW24, 0x601f5d, r0                           ; FE9FEF  d2 5d 1f 60 f0
 	jr nz, .LFEA017                                      ; FE9FF4  6e 21
 	m_bit 0, MD24, 0x601f5b                              ; FE9FF6  f2 5b 1f 60 c8
 	jr z, .LFEA013                                       ; FE9FFB  66 16
-	m_cp_mi16 MW24, 0x601f3f, 0x0001                     ; FE9FFD  d2 3f 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditCursor_Measure, 0x0001                     ; FE9FFD  d2 3f 1f 60 3f 01 00
 	jr z, .LFEA012                                       ; FEA004  66 0c
 	ld (0x601f58:24), 0x00                             ; FEA006  f2 58 1f 60 00 00
 	calr sub_FE9762                                          ; FEA00C  1e 53 f7
@@ -172358,7 +172359,7 @@ sub_FE9FC7:
 .LFEA017:
 	calr sub_FEA037                                      ; FEA017  1e 1d 00
 	.byte 0xd2, 0x3f, 0x1f, 0x60, 0x3a, 0x01, 0x00       ; FEA01A  d2 3f 1f 60 3a 01 00   sub (0x601f3f),0x0001
-	ld (0x601f43:24), 0x5f                             ; FEA021  f2 43 1f 60 00 5f
+	ld (EditCursor_Tick:24), 0x5f                             ; FEA021  f2 43 1f 60 00 5f
 	calr sub_FF0989                                          ; FEA027  1e 5f 69
 	calr sub_FF0A52                                          ; FEA02A  1e 25 6a
 	calr sub_FF0A04                                          ; FEA02D  1e d4 69
@@ -172366,7 +172367,7 @@ sub_FE9FC7:
 	calr sub_FEA082                                      ; FEA033  1e 4c 00
 	ret                                                  ; FEA036  0e
 sub_FEA037:
-	ld wa, (0x601f3f:24)                                ; FEA037  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FEA037  d2 3f 1f 60 20
 	sub wa, (0x601f5d:24)                            ; FEA03C  d2 5d 1f 60 a0
 	inc 1,WA                                             ; FEA041  d8 61
 	ld XIX,0x00601f5f                                    ; FEA043  44 5f 1f 60 00
@@ -172394,7 +172395,7 @@ sub_FEA037:
 	cp XIX,0x00601f5f                                    ; FEA074  ec cf 5f 1f 60 00
 	jr nc, .LFEA06B                                      ; FEA07A  6f ef
 .LFEA07C:
-	ld (0x601f41:24), wa                                ; FEA07C  f2 41 1f 60 50
+	ld (EditCursor_Beat:24), wa                                ; FEA07C  f2 41 1f 60 50
 	ret                                                  ; FEA081  0e
 sub_FEA082:
 	m_bit 0, MD24, 0x601f5b                              ; FEA082  f2 5b 1f 60 c8
@@ -172416,7 +172417,7 @@ sub_FEA097:
 	jr nz, .LFEA0B4                                      ; FEA0B1  6e 01
 	ret                                                  ; FEA0B3  0e
 .LFEA0B4:
-	m_bit 0, MD24, 0x601f70                              ; FEA0B4  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEA0B4  f2 70 1f 60 c8
 	jr z, .LFEA0C2                                       ; FEA0B9  66 07
 	bit 0x07,W                                           ; FEA0BB  c8 33 07
 	jr z, .LFEA0CB                                       ; FEA0BE  66 0b
@@ -172436,7 +172437,7 @@ sub_FEA0CF:
 	ret                                                  ; FEA0D7  0e
 .LFEA0D8:
 	m_add_mi8 MB24, 0x601f44, 0x01                       ; FEA0D8  c2 44 1f 60 38 01
-	m_bit 0, MD24, 0x601f70                              ; FEA0DE  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEA0DE  f2 70 1f 60 c8
 	jr z, .LFEA0E8                                       ; FEA0E3  66 03
 	calr sub_FEAEBC                                      ; FEA0E5  1e d4 0d
 .LFEA0E8:
@@ -172452,7 +172453,7 @@ sub_FEA0FE:
 	ret                                                  ; FEA106  0e
 .LFEA107:
 	.byte 0xc2, 0x44, 0x1f, 0x60, 0x3a, 0x01             ; FEA107  c2 44 1f 60 3a 01   sub (0x601f44),0x01
-	m_bit 0, MD24, 0x601f70                              ; FEA10D  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEA10D  f2 70 1f 60 c8
 	jr z, .LFEA117                                       ; FEA112  66 03
 	calr sub_FEAF4A                                      ; FEA114  1e 33 0e
 .LFEA117:
@@ -172485,7 +172486,7 @@ sub_FEA14E:
 .LFEA15B:
 	m_bit 0, MD24, 0x601f5b                              ; FEA15B  f2 5b 1f 60 c8
 	jr nz, .LFEA176                                      ; FEA160  6e 14
-	m_bit 0, MD24, 0x601f70                              ; FEA162  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEA162  f2 70 1f 60 c8
 	jr z, .LFEA15A                                       ; FEA167  66 f1
 	bit 0x07,W                                           ; FEA169  c8 33 07
 	jr nz, .LFEA172                                      ; FEA16C  6e 04
@@ -172745,7 +172746,7 @@ sub_FEA36C:
 .LFEA404:
 	calr sub_FEA50C                                      ; FEA404  1e 05 01
 	ret                                                  ; FEA407  0e
-	m_cp_mi16 MW24, 0x601f3f, 0x03e7                     ; FEA408  d2 3f 1f 60 3f e7 03
+	m_cp_mi16 MW24, EditCursor_Measure, 0x03e7                     ; FEA408  d2 3f 1f 60 3f e7 03
 	jr c, .LFEA412                                       ; FEA40F  67 01
 	ret                                                  ; FEA411  0e
 .LFEA412:
@@ -172766,7 +172767,7 @@ sub_FEA36C:
 	xor B,B                                              ; FEA433  ca d2
 	ld wa, (0x601f5d:24)                                ; FEA435  d2 5d 1f 60 20
 	add WA,BC                                            ; FEA43A  d9 80
-	ld (0x601f3f:24), wa                                ; FEA43C  f2 3f 1f 60 50
+	ld (EditCursor_Measure:24), wa                                ; FEA43C  f2 3f 1f 60 50
 	calr sub_FE9D60                                      ; FEA441  1e 1c f9
 	ret                                                  ; FEA444  0e
 .LFEA445:
@@ -173100,10 +173101,10 @@ sub_FEA743:
 	add E,0x01                                           ; FEA780  cd c8 01
 	jr .LFEA75F                                          ; FEA783  68 da
 .LFEA785:
-	ld (0x601f41:24), e                                 ; FEA785  f2 41 1f 60 45
+	ld (EditCursor_Beat:24), e                                 ; FEA785  f2 41 1f 60 45
 	ld wa, (0x601f54:24)                                ; FEA78A  d2 54 1f 60 20
 	div A,0x60                                           ; FEA78F  c9 0a 60
-	ld (0x601f43:24), w                                 ; FEA792  f2 43 1f 60 40
+	ld (EditCursor_Tick:24), w                                 ; FEA792  f2 43 1f 60 40
 	calr sub_FEA79B                                      ; FEA797  1e 01 00
 	ret                                                  ; FEA79A  0e
 sub_FEA79B:
@@ -173132,7 +173133,7 @@ sub_FEA79B:
 	ld wa, (0x601f5d:24)                                ; FEA7D8  d2 5d 1f 60 20
 	xor D,D                                              ; FEA7DD  cc d4
 	add WA,DE                                            ; FEA7DF  da 80
-	ld (0x601f3f:24), wa                                ; FEA7E1  f2 3f 1f 60 50
+	ld (EditCursor_Measure:24), wa                                ; FEA7E1  f2 3f 1f 60 50
 	ret                                                  ; FEA7E6  0e
 sub_FEA7E7:
 	m_and_mi8 MB24, 0x601f5b, 0xed                       ; FEA7E7  c2 5b 1f 60 3c ed
@@ -173245,7 +173246,7 @@ sub_FEA86F:
 	calr sub_FEA50C                                      ; FEA909  1e 00 fc
 	ret                                                  ; FEA90C  0e
 .LFEA90D:
-	m_cp_mi16 MW24, 0x601f3f, 0x0001                     ; FEA90D  d2 3f 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditCursor_Measure, 0x0001                     ; FEA90D  d2 3f 1f 60 3f 01 00
 	jr z, .LFEA909                                       ; FEA914  66 f3
 	m_cp_mi16 MW24, 0x601f56, 0x0000                     ; FEA916  d2 56 1f 60 3f 00 00
 	jr nz, .LFEA909                                      ; FEA91D  6e ea
@@ -173411,13 +173412,13 @@ sub_FEAA94:
 	calr sub_FEAAE0                                      ; FEAAB2  1e 2b 00
 	ret                                                  ; FEAAB5  0e
 sub_FEAAB6:
-	ld wa, (0x601f3f:24)                                ; FEAAB6  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FEAAB6  d2 3f 1f 60 20
 	cp WA,0x03e7                                         ; FEAABB  d8 cf e7 03
 	jr ugt, .LFEAADC                                     ; FEAABF  6b 1b
-	m_add_mi16 MW24, 0x601f3f, 0x000a                    ; FEAAC1  d2 3f 1f 60 38 0a 00
-	m_cp_mi16 MW24, 0x601f3f, 0x03e7                     ; FEAAC8  d2 3f 1f 60 3f e7 03
+	m_add_mi16 MW24, EditCursor_Measure, 0x000a                    ; FEAAC1  d2 3f 1f 60 38 0a 00
+	m_cp_mi16 MW24, EditCursor_Measure, 0x03e7                     ; FEAAC8  d2 3f 1f 60 3f e7 03
 	jr ule, .LFEAAD8                                     ; FEAACF  63 07
-	ldw (0x601f3f:24), 0x03e7                           ; FEAAD1  f2 3f 1f 60 02 e7 03
+	ldw (EditCursor_Measure:24), 0x03e7                           ; FEAAD1  f2 3f 1f 60 02 e7 03
 .LFEAAD8:
 	calr sub_FE9D2E                                      ; FEAAD8  1e 53 f2
 sub_FEAADB:
@@ -173426,20 +173427,20 @@ sub_FEAADB:
 	calr sub_FE9CFC_Nop                                          ; FEAADC  1e 60 d5
 	ret                                                  ; FEAADF  0e
 sub_FEAAE0:
-	ld wa, (0x601f3f:24)                                ; FEAAE0  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FEAAE0  d2 3f 1f 60 20
 	cp wa, 0x01:i3                                         ; FEAAE5  d8 d9
 	jr z, .LFEAB0A                                       ; FEAAE7  66 21
-	ld wa, (0x601f3f:24)                                ; FEAAE9  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FEAAE9  d2 3f 1f 60 20
 	sub WA,0x000a                                        ; FEAAEE  d8 ca 0a 00
 	jr c, .LFEAB01                                       ; FEAAF2  67 0d
 	cp wa, 0x01:i3                                         ; FEAAF4  d8 d9
 	jr c, .LFEAB01                                       ; FEAAF6  67 09
-	ld (0x601f3f:24), wa                                ; FEAAF8  f2 3f 1f 60 50
+	ld (EditCursor_Measure:24), wa                                ; FEAAF8  f2 3f 1f 60 50
 .LFEAAFD:
 	calr sub_FE9D2E                                      ; FEAAFD  1e 2e f2
 	ret                                                  ; FEAB00  0e
 .LFEAB01:
-	ldw (0x601f3f:24), 0x01                             ; FEAB01  f2 3f 1f 60 02 01 00
+	ldw (EditCursor_Measure:24), 0x01                             ; FEAB01  f2 3f 1f 60 02 01 00
 	jr .LFEAAFD                                          ; FEAB08  68 f3
 .LFEAB0A:
 	calr sub_FE9CFC_Nop                                          ; FEAB0A  1e 32 d5
@@ -173471,7 +173472,7 @@ sub_FEAB30:
 	jr nz, .LFEAB4D                                      ; FEAB4A  6e 01
 	ret                                                  ; FEAB4C  0e
 .LFEAB4D:
-	m_bit 0, MD24, 0x601f70                              ; FEAB4D  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEAB4D  f2 70 1f 60 c8
 	jr z, .LFEAB5B                                       ; FEAB52  66 07
 	bit 0x07,W                                           ; FEAB54  c8 33 07
 	jr z, .LFEAB64                                       ; FEAB57  66 0b
@@ -173495,7 +173496,7 @@ sub_FEAB68:
 	jr ule, .LFEAB85                                     ; FEAB7D  63 06
 	ld (0x601f44:24), 0x7f                             ; FEAB7F  f2 44 1f 60 00 7f
 .LFEAB85:
-	m_bit 0, MD24, 0x601f70                              ; FEAB85  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEAB85  f2 70 1f 60 c8
 	jr z, .LFEAB8F                                       ; FEAB8A  66 03
 	calr sub_FEAEBC                                      ; FEAB8C  1e 2d 03
 .LFEAB8F:
@@ -173517,7 +173518,7 @@ sub_FEABA5:
 	jr c, .LFEABE1                                       ; FEABBA  67 25
 	ld (0x601f44:24), a                                 ; FEABBC  f2 44 1f 60 41
 .LFEABC1:
-	m_bit 0, MD24, 0x601f70                              ; FEABC1  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEABC1  f2 70 1f 60 c8
 	jr z, .LFEABCB                                       ; FEABC6  66 03
 	calr sub_FEAF4A                                      ; FEABC8  1e 7f 03
 .LFEABCB:
@@ -173539,7 +173540,7 @@ sub_FEABE9:
 .LFEABF6:
 	m_bit 0, MD24, 0x601f5b                              ; FEABF6  f2 5b 1f 60 c8
 	jr nz, .LFEAC11                                      ; FEABFB  6e 14
-	m_bit 0, MD24, 0x601f70                              ; FEABFD  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEABFD  f2 70 1f 60 c8
 	jr z, .LFEABF5                                       ; FEAC02  66 f1
 	bit 0x07,W                                           ; FEAC04  c8 33 07
 	jr nz, .LFEAC0D                                      ; FEAC07  6e 04
@@ -173881,7 +173882,7 @@ sub_FEAF4A:
 .LFEAFB6:
 	ret                                                  ; FEAFB6  0e
 sub_FEAFB7:
-	m_bit 0, MD24, 0x601f70                              ; FEAFB7  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEAFB7  f2 70 1f 60 c8
 	jr z, .LFEAFCF                                       ; FEAFBC  66 11
 	ld wa, (0x601f71:24)                                ; FEAFBE  d2 71 1f 60 20
 	ld de, (0x601f73:24)                                ; FEAFC3  d2 73 1f 60 22
@@ -173944,7 +173945,7 @@ sub_FEB03D:
 	swi 7                                                ; FEB067  ff
 	ret                                                  ; FEB068  0e
 sub_FEB069:
-	m_bit 0, MD24, 0x601f70                              ; FEB069  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEB069  f2 70 1f 60 c8
 	jr z, .LFEB079                                       ; FEB06E  66 09
 	calr sub_FEF88B                                          ; FEB070  1e 18 48
 	calr sub_FEB07A                                      ; FEB073  1e 04 00
@@ -176557,12 +176558,12 @@ DrumKitNames_Block12:
 ; ★ TWENTY-TWO `bit 0,(0x601F70)` tests sit in this module -- the byte pattern
 ;   F2 70 1F 60 C8, counted over the span -- and most of them pick a different
 ;   display list either way; ScreenDrawPtrs_FEF9FA / ScreenDrawPtrs_FEFA2A are
-;   two whole pointer tables selected by the same bit.  Whatever that bit is, it
-;   switches the machine between two screen layouts.  It is NOT established
-;   here what it means.
+;   two whole pointer tables selected by the same bit.  It switches the machine
+;   between two screen layouts: EditScreen_Mode bit 0, 0 = NOTE EDIT and 1 =
+;   DRUM EDIT (FINDINGS-prom_a-screen-module.md section 8, 2026-10-03).
 ;
 ; ⚠ WHAT IS NOT ESTABLISHED.  Which screen each list belongs to; what
-;   (0x601F00), (0x601F3A), (0x601F53), (0x601F70) and (0x601F75) are; and what
+;   (0x601F00), (0x601F3A), (0x601F53) and (0x601F75) are; and what
 ;   Data_FF17E2 is.  Every routine is `sub_XXXXXX` except the three that the
 ;   kit-category legend pins.
 ;
@@ -176694,7 +176695,7 @@ DisplayList_FEF7C8:
 	.byte 0x1B, 0x0A                               ; FEF7C8  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x14, 0x00, 0x08, 0x01, 0x1F, 0x00  ; FEF7CA
 sub_FEF7D2:
-	m_bit 0, MD24, 0x601f70                              ; FEF7D2  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEF7D2  f2 70 1f 60 c8
 	jr z, .LFEF7DD                                       ; FEF7D7  66 04
 	calr sub_FEF7FF                                            ; FEF7D9  1e 23 00
 	ret                                                  ; FEF7DC  0e
@@ -176817,7 +176818,7 @@ DisplayList_FEF84F:
 	.byte 0xA0, 0x00, 0xB2, 0x00, 0xC8, 0x00, 0xC0, 0x00  ; FEF851
 sub_FEF859:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEF859  f1 40 25 00 01
-	m_bit 0, MD24, 0x601f70                              ; FEF85E  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEF85E  f2 70 1f 60 c8
 	jr z, .LFEF869                                       ; FEF863  66 04
 	calr sub_FEF804                                          ; FEF865  1e 9c ff
 	ret                                                  ; FEF868  0e
@@ -176901,7 +176902,7 @@ sub_FEF8CA:
 	calr sub_FF03B3                                          ; FEF8D2  1e de 0a
 	ret                                                  ; FEF8D5  0e
 sub_FEF8D6:
-	m_bit 0, MD24, 0x601f70                              ; FEF8D6  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEF8D6  f2 70 1f 60 c8
 	jr z, .LFEF8E1                                       ; FEF8DB  66 04
 	calr sub_FEF907                                      ; FEF8DD  1e 27 00
 	ret                                                  ; FEF8E0  0e
@@ -176960,7 +176961,7 @@ sub_FEF938:
 	xor WA,WA                                            ; FEF951  d8 d0
 	ld A,E                                               ; FEF953  cd 89
 	mul A,0x18                                           ; FEF955  c9 08 18
-	m_bit 0, MD24, 0x601f70                              ; FEF958  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEF958  f2 70 1f 60 c8
 	jr z, .LFEF965                                       ; FEF95D  66 06
 	add WA,0x0055                                        ; FEF95F  d8 c8 55 00
 	jr .LFEF969                                          ; FEF963  68 04
@@ -177008,7 +177009,7 @@ sub_FEF9A6:
 	cp a, 0x00:i3                                          ; FEF9B9  c9 d8
 	jr z, .LFEF9E9                                       ; FEF9BB  66 2c
 	ld XIY,ScreenDrawPtrs_FEF9FA                         ; FEF9BD  45 fa f9 fe 00
-	m_bit 0, MD24, 0x601f70                              ; FEF9C2  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEF9C2  f2 70 1f 60 c8
 	jr z, .LFEF9CE                                       ; FEF9C7  66 05
 	ld XIY,ScreenDrawPtrs_FEFA2A                         ; FEF9C9  45 2a fa fe 00
 .LFEF9CE:
@@ -177420,7 +177421,7 @@ sub_FEFDAC:
 	ld wa, (0x601f54:24)                                ; FEFDB1  d2 54 1f 60 20
 	div A,0x04                                           ; FEFDB6  c9 0a 04
 	xor W,W                                              ; FEFDB9  c8 d0
-	m_bit 0, MD24, 0x601f70                              ; FEFDBB  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEFDBB  f2 70 1f 60 c8
 	jr z, .LFEFDC8                                       ; FEFDC0  66 06
 	add WA,0x0056                                        ; FEFDC2  d8 c8 56 00
 	jr .LFEFDCC                                          ; FEFDC6  68 04
@@ -177469,7 +177470,7 @@ sub_FEFDE5:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEFE22  f1 40 25 00 01
 	ld wa, (0x601f6c:24)                                ; FEFE27  d2 6c 1f 60 20
 	mul A,0x18                                           ; FEFE2C  c9 08 18
-	m_bit 0, MD24, 0x601f70                              ; FEFE2F  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEFE2F  f2 70 1f 60 c8
 	jr z, .LFEFE3C                                       ; FEFE34  66 06
 	add WA,0x0056                                        ; FEFE36  d8 c8 56 00
 	jr .LFEFE40                                          ; FEFE3A  68 04
@@ -177493,21 +177494,19 @@ sub_FEFDE5:
 Glyph_FEFE58:
 	.byte 0xaf                                                                ; FEFE58
 ; ---------------------------------------------------------------------
-; LCD_DrawVRuleLeft_OrNothing -- draws the left or the right vertical rule according to bit
-;                              0 of (0x601F70)
+; LCD_DrawVRuleLeft_OrNothing -- in NOTE EDIT draws the left vertical rule; in DRUM EDIT nothing
 ;
-; Evidence: 0xFEFE59 `bit 0,(0x601f70)` chooses between 0xFEFE61 `calr
-;           LCD_DrawVRuleRight_Layer1` and 0xFEFE65 `calr
-;           LCD_DrawVRuleLeft_Layer1`, both already named in this
-;           listing, and there is nothing else in the routine. Seven
-;           callers
-; Unknown:  what bit 0 of (0x601F70) selects.
-;           Screen_DrawKitCategoryLegend reads the same bit and its
-;           header records the same gap
+; Evidence: 0xFEFE59 `bit 0,(EditScreen_Mode)`: SET (DRUM EDIT,
+;           FINDINGS-prom_a-screen-module.md section 8) returns at
+;           0xFEFE60; CLEAR (NOTE EDIT) jumps to 0xFEFE65 `calr
+;           LCD_DrawVRuleLeft_Layer1`.  The `calr LCD_DrawVRuleRight_Layer1`
+;           at 0xFEFE61 follows that `ret` and carries no label: nothing
+;           reaches it (this header said 2026-10-03 that the bit chose
+;           between the two calls).  Seven callers.
 ; Was `sub_FEFE59`, named by notes/prom_a_census_round8.py (bucket round 10).
 ; ---------------------------------------------------------------------
 LCD_DrawVRuleLeft_OrNothing:
-	m_bit 0, MD24, 0x601f70                              ; FEFE59  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEFE59  f2 70 1f 60 c8
 	jr z, .LFEFE65                                       ; FEFE5E  66 05
 	ret                                                  ; FEFE60  0e
 	calr LCD_DrawVRuleRight_Layer1                                      ; FEFE61  1e 30 00
@@ -177544,6 +177543,8 @@ LCD_DrawVRuleLeft_Layer1:
 ; LCD_DrawVRuleRight_Layer1 -- the companion vertical rule, 73 pixels to the right
 ;
 ; Called from: prom_a LCD_DrawVRuleLeft_OrNothing (`calr`) at 0xFEFE61
+; ⚠ That call follows a `ret` (0xFEFE60) and carries no label, and it is the only reference:
+;   as the code stands nothing reaches this routine (2026-10-03).
 ; Issues:  SWI7 service 0x02 at 0xFEFEBD -- LCD_Svc_02_DrawVLine, a solid vertical run of pixels
 ; Evidence: the same nine instructions as LCD_DrawVRuleLeft_Layer1 with three
 ;           immediates changed: Y0 0x2A, Y1 0xA1, and X = (0x601F54)/4 + 0x59.  0x59 -
@@ -177659,7 +177660,7 @@ sub_FEFF2D:
 	calr sub_FE8D15                                          ; FEFFB0  1e 62 8d
 	ret                                                  ; FEFFB3  0e
 sub_FEFFB4:
-	m_bit 0, MD24, 0x601f70                              ; FEFFB4  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEFFB4  f2 70 1f 60 c8
 	jr z, .LFEFFC6                                       ; FEFFB9  66 0b
 	ld wa, (0x601f71:24)                                ; FEFFBB  d2 71 1f 60 20
 	ld W,A                                               ; FEFFC0  c9 88
@@ -177690,7 +177691,7 @@ WordTable_FEFFDD:
 sub_FEFFF3:
 	calr sub_FF0294                                          ; FEFFF3  1e 9e 02
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEFFF6  f1 40 25 00 00
-	m_bit 0, MD24, 0x601f70                              ; FEFFFB  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FEFFFB  f2 70 1f 60 c8
 sub_FC5D87_Code:
 	jr z, .LFF0007                                       ; FF0000  66 05
 Dev7E_IdentifyDevice_Code:
@@ -177796,7 +177797,7 @@ sub_FF00ED:
 	jr ugt, .LFF013B                                     ; FF0122  6b 17
 	calr sub_FF0294                                      ; FF0124  1e 6d 01
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF0127  f1 40 25 00 01
-	m_bit 0, MD24, 0x601f70                              ; FF012C  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF012C  f2 70 1f 60 c8
 	jr z, .LFF0138                                       ; FF0131  66 05
 	calr sub_FF0178                                      ; FF0133  1e 42 00
 	jr .LFF013B                                          ; FF0136  68 03
@@ -177865,7 +177866,7 @@ sub_FF019D:
 	jr ugt, .LFF01EE                                     ; FF01D2  6b 1a
 	calr sub_FF0294                                      ; FF01D4  1e bd 00
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF01D7  f1 40 25 00 01
-	m_bit 0, MD24, 0x601f70                              ; FF01DC  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF01DC  f2 70 1f 60 c8
 	jr z, .LFF01E8                                       ; FF01E1  66 05
 	calr LCD_FillRect_Grown2Rows                                      ; FF01E3  1e 0c 00
 	jr .LFF01EE                                          ; FF01E6  68 06
@@ -177931,7 +177932,7 @@ sub_FF0243:
 	calr sub_FF02F5                                      ; FF0252  1e a0 00
 	ld wa, (0x601f54:24)                                ; FF0255  d2 54 1f 60 20
 	ld (0x601f38:24), wa                                ; FF025A  f2 38 1f 60 50
-	m_bit 0, MD24, 0x601f70                              ; FF025F  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF025F  f2 70 1f 60 c8
 	jr z, .LFF026F                                       ; FF0264  66 09
 	ldw (0x601f3b:24), 0x02                             ; FF0266  f2 3b 1f 60 02 02 00
 	jr .LFF0279                                          ; FF026D  68 0a
@@ -177941,7 +177942,7 @@ sub_FF0243:
 .LFF0279:
 	calr sub_FF02D5                                      ; FF0279  1e 59 00
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF027C  f1 40 25 00 01
-	m_bit 0, MD24, 0x601f70                              ; FF0281  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF0281  f2 70 1f 60 c8
 	jr z, .LFF028D                                       ; FF0286  66 05
 	calr LCD_FillRect_Grown2Rows                                      ; FF0288  1e 67 ff
 	jr .LFF0293                                          ; FF028B  68 06
@@ -177990,7 +177991,7 @@ sub_FF02D5:
 .LFF02F4:
 	ret                                                  ; FF02F4  0e
 sub_FF02F5:
-	m_bit 0, MD24, 0x601f70                              ; FF02F5  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF02F5  f2 70 1f 60 c8
 	jr z, .LFF0309                                       ; FF02FA  66 0d
 	sub L,A                                              ; FF02FC  c9 a7
 	ld h, 0x0b:opc                                          ; FF02FE  26 0b
@@ -178007,7 +178008,7 @@ sub_FF02F5:
 	ret                                                  ; FF031E  0e
 sub_FF031F:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF031F  f1 40 25 00 02
-	m_bit 0, MD24, 0x601f70                              ; FF0324  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF0324  f2 70 1f 60 c8
 	jr z, .LFF0330                                       ; FF0329  66 05
 	calr Paint_DrumEdit                                      ; FF032B  1e 21 00
 	jr .LFF0333                                          ; FF032E  68 03
@@ -178155,10 +178156,12 @@ sub_FF03B3:
 ;          `ld BC,0x0006 / ld A,0x17 / swi 7` at 0xFF03E2-0xFF03E7.
 ;          ★ BC is the entry WIDTH: it is the same register the whole module
 ;          uses for it, 1 for Digits_FEF999 and 6 here.
-; Unknown:  which screen this is drawn on.
+; Drawn on: DRUM EDIT only -- bit 0 of (0x601F70) is EditScreen_Mode's DRUM EDIT
+;          bit (FINDINGS-prom_a-screen-module.md section 8), and a drum-kit
+;          category legend has no place in NOTE EDIT.
 ; ---------------------------------------------------------------------
 Screen_DrawKitCategoryLegend:
-	m_bit 0, MD24, 0x601f70                              ; FF03C2  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF03C2  f2 70 1f 60 c8
 	jr z, .LFF03E8                                       ; FF03C7  66 1f
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF03C9  f1 40 25 00 02
 	calr KitCategoryLegend_Index                         ; FF03CE  1e 6b 00
@@ -178518,7 +178521,7 @@ sub_FF07C5:
 	ld A,(XIX)                                           ; FF07D1  84 21
 	cp a, 0x00:i3                                          ; FF07D3  c9 d8
 	jr z, .LFF0825                                       ; FF07D5  66 4e
-	m_bit 0, MD24, 0x601f70                              ; FF07D7  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF07D7  f2 70 1f 60 c8
 	jr z, .LFF07FF                                       ; FF07DC  66 21
 	ldw (LCD_Y0:16), 0x2a                                ; FF07DE  f1 32 25 02 2a 00
 	ldw (LCD_Y1:16), 0xa1                                ; FF07E4  f1 36 25 02 a1 00
@@ -178556,7 +178559,7 @@ sub_FF07C5:
 	jr c, .LFF07D1                                       ; FF083E  67 91
 	ret                                                  ; FF0840  0e
 sub_FF0841:
-	m_bit 0, MD24, 0x601f70                              ; FF0841  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF0841  f2 70 1f 60 c8
 	jr z, .LFF084C                                       ; FF0846  66 04
 	calr sub_FF08AA                                      ; FF0848  1e 5f 00
 	ret                                                  ; FF084B  0e
@@ -178638,7 +178641,7 @@ sub_FF08E5:
 	ret                                                  ; FF090A  0e
 sub_FF090B:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF090B  f1 40 25 00 02
-	m_bit 0, MD24, 0x601f70                              ; FF0910  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF0910  f2 70 1f 60 c8
 	jr z, .LFF091B                                       ; FF0915  66 04
 	calr sub_FF0954                                      ; FF0917  1e 3a 00
 	ret                                                  ; FF091A  0e
@@ -178721,7 +178724,7 @@ sub_FF096C:
 ; ---------------------------------------------------------------------
 sub_FF0989:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0989  f1 40 25 00 00
-	m_cp_mi16 MW24, 0x601f3f, 0x03e8                     ; FF098E  d2 3f 1f 60 3f e8 03
+	m_cp_mi16 MW24, EditCursor_Measure, 0x03e8                     ; FF098E  d2 3f 1f 60 3f e8 03
 	jr c, .LFF09AC                                       ; FF0995  67 15
 	ldw (0x26b0:16), 0x00                                ; FF0997  f1 b0 26 02 00 00
 	ld XIY,DisplayList_FF09D8                            ; FF099D  45 d8 09 ff 00
@@ -178729,7 +178732,7 @@ sub_FF0989:
 	call T_DisplayListB_Run                              ; FF09A7  1d f4 17 f4
 	ret                                                  ; FF09AB  0e
 .LFF09AC:
-	ld wa, (0x601f3f:24)                                ; FF09AC  d2 3f 1f 60 20
+	ld wa, (EditCursor_Measure:24)                                ; FF09AC  d2 3f 1f 60 20
 	ld (0x26b0:16), wa                                  ; FF09B1  f1 b0 26 50
 	ld XIY,DisplayList_FF09EB                            ; FF09B5  45 eb 09 ff 00
 	ld XIX,DisplayList_FF09F5                            ; FF09BA  44 f5 09 ff 00
@@ -178782,7 +178785,7 @@ DisplayList_FF09F5:
 sub_FF0A04:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0A04  f1 40 25 00 00
 	xor WA,WA                                            ; FF0A09  d8 d0
-	ld wa, (0x601f41:24)                                ; FF0A0B  d2 41 1f 60 20
+	ld wa, (EditCursor_Beat:24)                                ; FF0A0B  d2 41 1f 60 20
 	inc 1,WA                                             ; FF0A10  d8 61
 	ld (0x26b0:16), wa                                  ; FF0A12  f1 b0 26 50
 	ld XIY,DisplayList_FF0A39                            ; FF0A16  45 39 0a ff 00
@@ -178824,7 +178827,7 @@ DisplayList_FF0A43:
 sub_FF0A52:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0A52  f1 40 25 00 00
 	xor WA,WA                                            ; FF0A57  d8 d0
-	ld a, (0x601f43:24)                                 ; FF0A59  c2 43 1f 60 21
+	ld a, (EditCursor_Tick:24)                                 ; FF0A59  c2 43 1f 60 21
 	ld (0x26b0:16), wa                                  ; FF0A5E  f1 b0 26 50
 	ld XIY,DisplayList_FF0A71                            ; FF0A62  45 71 0a ff 00
 	ld XIX,sub_FF0A7B                                    ; FF0A67  44 7b 0a ff 00
@@ -178838,7 +178841,7 @@ DisplayList_FF0A71:
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xFF, 0x1B, 0x02  ; FF0A73
 sub_FF0A7B:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0A7B  f1 40 25 00 00
-	m_bit 0, MD24, 0x601f70                              ; FF0A80  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF0A80  f2 70 1f 60 c8
 	jr z, .LFF0A8B                                       ; FF0A85  66 04
 	calr sub_FF0A8F                                      ; FF0A87  1e 05 00
 	ret                                                  ; FF0A8A  0e
@@ -179129,7 +179132,7 @@ sub_FF0C9B:
 	ret                                                  ; FF0D02  0e
 sub_FF0D03:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0D03  f1 40 25 00 00
-	m_bit 0, MD24, 0x601f70                              ; FF0D08  f2 70 1f 60 c8
+	m_bit 0, MD24, EditScreen_Mode                              ; FF0D08  f2 70 1f 60 c8
 	jr z, .LFF0D13                                       ; FF0D0D  66 04
 	calr sub_FF0D3E                                            ; FF0D0F  1e 2c 00
 	ret                                                  ; FF0D12  0e

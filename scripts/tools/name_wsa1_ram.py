@@ -217,6 +217,12 @@ GROUPS = [
         (0x108D, ("SmfOut_Tempo+1", "", "")), (0x108E, ("SmfOut_Tempo+2", "", "")),
         (0x21C8, ("Disk_FileName", "an 8.3 file name: 8 characters, extension at +8..+10 (default MID)", "the SMF reader writes M I D to 0x21D0-0x21D2; the writer's track name takes the 8")),
     ] + [(0x21C8 + k, ("Disk_FileName+%d" % k, "", "")) for k in range(1, 11)])),
+    ("wsa1/notes/FINDINGS-prom_a-screen-module.md", "8. The NOTE / DRUM EDIT state in work DRAM", {
+        0x601F3F: ("EditCursor_Measure", "the NOTE / DRUM EDIT cursor's measure, 1..999 (word)", "sub_FEAAB6 / sub_FEAAE0 clamp it; sub_FE9E04 carries the beat into it"),
+        0x601F41: ("EditCursor_Beat", "the cursor's beat within the measure, from 0 (word)", "sub_FE9E04 wraps it at sub_FE9F23's beat count"),
+        0x601F43: ("EditCursor_Tick", "the cursor's tick within the beat, 0..95", "sub_FE9DB4 / sub_FE9DD5 step it and clamp to 0x5F"),
+        0x601F70: ("EditScreen_Mode", "bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A", "ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
