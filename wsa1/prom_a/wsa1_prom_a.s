@@ -22946,7 +22946,7 @@ CmdList_F8C046:
 ; PanelLed_OnClass20Event -- pass-B handler (classes 0x20-0x3F): request the six-way-select LEDs on codes 0x18-0x1A
 ; Evidence: T_PanelLed_OnClass20Event is in UiListB_Class20..3F; CmdList_F8C05B holds keys 0x18/0x19/0x1A -> (0x213A) |= 0x0080, the id
 ;   DispatchTable_F8C2B2 maps to PanelLed_ShowSixWaySelect.  Codes 0x19/0x1A come from v1 group 0x08's [0x20,0x19]
-;   events (sub_F8AA24 may make it 0x1A; PanelEvent_StampPartIntoClass20 adds the part), 0x18 from sub_F91407.
+;   events (sub_F8AA24 may make it 0x1A; PanelEvent_StampPartIntoClass20 adds the part), 0x18 from LcdKeyRow4_SoundModeOrC0mbinati0nM0de.
 PanelLed_OnClass20Event:   ; entry: prom_b routine directory
 	ld a, (UiEvent_Byte1:16)                                   ; F8C04E  c1 b8 20 21
 	ld XIY,CmdList_F8C05B                                ; F8C052  45 5b c0 f8 00
@@ -32498,10 +32498,10 @@ DisplayListPtrs_F90CD8:
 	.long SoftKeyCol6_Rev                                 ; F90CEC  [  5]
 	.long SoftKeyCol7_Int                                 ; F90CF0  [  6]
 	.long SoftKeyCol8_Midi                                 ; F90CF4  [  7]
-	.long sub_F913FB                                 ; F90CF8  [  8]
+	.long LcdKeyRow1_SoundMode                                 ; F90CF8  [  8]
 	.long DisplayListPtrs_F90CD8_Nop9                                 ; F90CFC  [  9]
 	.long DisplayListPtrs_F90CD8_Nop10                                 ; F90D00  [ 10]
-	.long sub_F91407                                 ; F90D04  [ 11]
+	.long LcdKeyRow4_SoundModeOrC0mbinati0nM0de                                 ; F90D04  [ 11]
 	.long DisplayListPtrs_F90CD8_Nop12                                 ; F90D08  [ 12]
 	.long DisplayListPtrs_F90CD8_Nop13                                 ; F90D0C  [ 13]
 	.long DisplayListPtrs_F90CD8_Nop14                                 ; F90D10  [ 14]
@@ -33230,7 +33230,8 @@ SoftKeyCol8_Midi_Join:
 	call T_Queue2E00_AppendRegs                          ; F913F6  1d 3c 0f f4
 .LF913FA:
 	ret                                                  ; F913FA  0e
-sub_F913FB:   ; entry: named by 1 `.long` operand, first at 0xF90CF8
+; LcdKeyRow1_SoundMode: slot 8 (LCD key row 1) of DisplayListPtrs_F90CD8, the SOUND MODE button table ScreenButton_SoundMode reads; when W bit 7 is set, T_F42E68.
+LcdKeyRow1_SoundMode:   ; entry: named by 1 `.long` operand, first at 0xF90CF8
 	bit 0x07,W                                           ; F913FB  c8 33 07
 	jr Z,.LF91404                                        ; F913FE  66 04
 	call T_F42E68                                        ; F91400  1d 68 2e f4
@@ -33240,7 +33241,9 @@ DisplayListPtrs_F90CD8_Nop9:   ; entry: named by 1 `.long` operand, first at 0xF
 	ret                                                  ; F91405  0e
 DisplayListPtrs_F90CD8_Nop10:   ; entry: named by 1 `.long` operand, first at 0xF90D00
 	ret                                                  ; F91406  0e
-sub_F91407:   ; entry: named by 2 `.long` operands, first at 0xF90D04
+; LcdKeyRow4_SoundModeOrC0mbinati0nM0de: slot 11 (LCD key row 4) of both DisplayListPtrs_F90CD8 (SOUND MODE) and DisplayListPtrs_F914FB
+;   (COMBINATION MODE page 1).
+LcdKeyRow4_SoundModeOrC0mbinati0nM0de:   ; entry: named by 2 `.long` operands, first at 0xF90D04
 	call PartRecord_GetSecondHalfPtr                                        ; F91407  1d 4d 45 f9
 	ld A,(XIY+0x18)                                      ; F9140B  8d 18 21
 	bit 0x07,W                                           ; F9140E  c8 33 07
@@ -33442,7 +33445,7 @@ DisplayListPtrs_F914FB:
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F9151B  [  8]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F9151F  [  9]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F91523  [ 10]
-	.long sub_F91407                                 ; F91527  [ 11]
+	.long LcdKeyRow4_SoundModeOrC0mbinati0nM0de                                 ; F91527  [ 11]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F9152B  [ 12]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F9152F  [ 13]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F91533  [ 14]
@@ -33455,7 +33458,7 @@ DisplayListPtrs_F914FB:
 	.long SoftKeyCol5_Eff2_AltCode                                 ; F9154F  [ 21]
 	.long SoftKeyCol6_Rev_AltCode                                 ; F91553  [ 22]
 	.long SoftKeyCol7_Int_AltCode                                 ; F91557  [ 23]
-	.long sub_F923D4                                 ; F9155B  [ 24]
+	.long C0mbinati0nM0de_Button24                                 ; F9155B  [ 24]
 	.long DisplayListPtrs_F90CD8_Nop25                                 ; F9155F  [ 25]
 	.long DisplayListPtrs_F914FB_Nop26                                 ; F91563  [ 26]
 	.long DisplayListPtrs_F914FB_Nop27                                 ; F91567  [ 27]
@@ -33487,14 +33490,14 @@ DisplayListPtrs_F9157B:
 	.long DisplayListPtrs_F9157B_Nop14                                 ; F915B3  [ 14]
 	.long ExitKey_C0mbinati0nM0de                                 ; F915B7  [ 15]
 	.long PageKey_C0mbinati0nM0de                                 ; F915BB  [ 16]
-	.long sub_F92364                                 ; F915BF  [ 17]
-	.long sub_F92374                                 ; F915C3  [ 18]
-	.long sub_F92384                                 ; F915C7  [ 19]
-	.long sub_F92394                                 ; F915CB  [ 20]
-	.long sub_F923A4                                 ; F915CF  [ 21]
-	.long sub_F923B4                                 ; F915D3  [ 22]
-	.long sub_F923C4                                 ; F915D7  [ 23]
-	.long sub_F923D4                                 ; F915DB  [ 24]
+	.long C0mbinati0nM0de_Page2_Button17                                 ; F915BF  [ 17]
+	.long C0mbinati0nM0de_Page2_Button18                                 ; F915C3  [ 18]
+	.long C0mbinati0nM0de_Page2_Button19                                 ; F915C7  [ 19]
+	.long C0mbinati0nM0de_Page2_Button20                                 ; F915CB  [ 20]
+	.long C0mbinati0nM0de_Page2_Button21                                 ; F915CF  [ 21]
+	.long C0mbinati0nM0de_Page2_Button22                                 ; F915D3  [ 22]
+	.long C0mbinati0nM0de_Page2_Button23                                 ; F915D7  [ 23]
+	.long C0mbinati0nM0de_Button24                                 ; F915DB  [ 24]
 	.long DisplayListPtrs_F9157B_Nop25                                 ; F915DF  [ 25]
 	.long DisplayListPtrs_F914FB_Nop26                                 ; F915E3  [ 26]
 	.long DisplayListPtrs_F914FB_Nop27                                 ; F915E7  [ 27]
@@ -34998,56 +35001,72 @@ PageKey_C0mbinati0nM0de:   ; entry: named by 2 `.long` operands, first at 0xF915
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; F9235E  c1 71 20 3e 10
 .LF92363:
 	ret                                                  ; F92363  0e
-sub_F92364:   ; entry: named by 1 `.long` operand, first at 0xF915BF
+; C0mbinati0nM0de_Page2_Button17 -- DisplayListPtrs_F9157B slot 0x11, NOT NAMED: slot 0x11 is only the VARIANT-1 already-held rewrite of base code 0x00 (SoftKeyCol1); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Page2_Button17:   ; entry: named by 1 `.long` operand, first at 0xF915BF
 	add W,0x01                                           ; F92364  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F92367  f1 75 20 ca
 	jr z, .LF92370                                       ; F9236B  66 03
 	add W,0x06                                           ; F9236D  c8 c8 06
 .LF92370:
 	jp SoftKeyCol1_C0mbinati0nM0de_Page2_Join                                        ; F92370  1b 55 1e f9
-sub_F92374:   ; entry: named by 1 `.long` operand, first at 0xF915C3
+; C0mbinati0nM0de_Page2_Button18 -- DisplayListPtrs_F9157B slot 0x12, NOT NAMED: slot 0x12 is only the VARIANT-1 already-held rewrite of base code 0x01 (SoftKeyCol2); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Page2_Button18:   ; entry: named by 1 `.long` operand, first at 0xF915C3
 	add W,0x01                                           ; F92374  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F92377  f1 75 20 ca
 	jr z, .LF92380                                       ; F9237B  66 03
 	add W,0x06                                           ; F9237D  c8 c8 06
 .LF92380:
 	jp SoftKeyCol2_C0mbinati0nM0de_Page2_Join                                        ; F92380  1b b3 1e f9
-sub_F92384:   ; entry: named by 1 `.long` operand, first at 0xF915C7
+; C0mbinati0nM0de_Page2_Button19 -- DisplayListPtrs_F9157B slot 0x13, NOT NAMED: slot 0x13 is only the VARIANT-1 already-held rewrite of base code 0x02 (SoftKeyCol3); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Page2_Button19:   ; entry: named by 1 `.long` operand, first at 0xF915C7
 	add W,0x01                                           ; F92384  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F92387  f1 75 20 ca
 	jr z, .LF92390                                       ; F9238B  66 03
 	add W,0x06                                           ; F9238D  c8 c8 06
 .LF92390:
 	jp SoftKeyCol3_C0mbinati0nM0de_Page2_Join                                        ; F92390  1b 11 1f f9
-sub_F92394:   ; entry: named by 1 `.long` operand, first at 0xF915CB
+; C0mbinati0nM0de_Page2_Button20 -- DisplayListPtrs_F9157B slot 0x14, NOT NAMED: slot 0x14 is only the VARIANT-1 already-held rewrite of base code 0x03 (SoftKeyCol4); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Page2_Button20:   ; entry: named by 1 `.long` operand, first at 0xF915CB
 	add W,0x01                                           ; F92394  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F92397  f1 75 20 ca
 	jr z, .LF923A0                                       ; F9239B  66 03
 	add W,0x06                                           ; F9239D  c8 c8 06
 .LF923A0:
 	jp SoftKeyCol4_C0mbinati0nM0de_Page2_Join                                        ; F923A0  1b 70 1f f9
-sub_F923A4:   ; entry: named by 1 `.long` operand, first at 0xF915CF
+; C0mbinati0nM0de_Page2_Button21 -- DisplayListPtrs_F9157B slot 0x15, NOT NAMED: slot 0x15 is only the VARIANT-1 already-held rewrite of base code 0x04 (SoftKeyCol5); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Page2_Button21:   ; entry: named by 1 `.long` operand, first at 0xF915CF
 	add W,0x01                                           ; F923A4  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F923A7  f1 75 20 ca
 	jr z, .LF923B0                                       ; F923AB  66 03
 	add W,0x06                                           ; F923AD  c8 c8 06
 .LF923B0:
 	jp SoftKeyCol5_C0mbinati0nM0de_Page2_Join                                        ; F923B0  1b cf 1f f9
-sub_F923B4:   ; entry: named by 1 `.long` operand, first at 0xF915D3
+; C0mbinati0nM0de_Page2_Button22 -- DisplayListPtrs_F9157B slot 0x16, NOT NAMED: slot 0x16 is only the VARIANT-1 already-held rewrite of base code 0x05 (SoftKeyCol6); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Page2_Button22:   ; entry: named by 1 `.long` operand, first at 0xF915D3
 	add W,0x01                                           ; F923B4  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F923B7  f1 75 20 ca
 	jr z, .LF923C0                                       ; F923BB  66 03
 	add W,0x06                                           ; F923BD  c8 c8 06
 .LF923C0:
 	jp SoftKeyCol6_C0mbinati0nM0de_Page2_Join                                        ; F923C0  1b 2e 20 f9
-sub_F923C4:   ; entry: named by 1 `.long` operand, first at 0xF915D7
+; C0mbinati0nM0de_Page2_Button23 -- DisplayListPtrs_F9157B slot 0x17, NOT NAMED: slot 0x17 is only the VARIANT-1 already-held rewrite of base code 0x06 (SoftKeyCol7); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Page2_Button23:   ; entry: named by 1 `.long` operand, first at 0xF915D7
 	add W,0x01                                           ; F923C4  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F923C7  f1 75 20 ca
 	jr z, .LF923D0                                       ; F923CB  66 03
 	add W,0x06                                           ; F923CD  c8 c8 06
 .LF923D0:
 	jp SoftKeyCol7_C0mbinati0nM0de_Page2_Join                                        ; F923D0  1b 8d 20 f9
-sub_F923D4:   ; entry: named by 2 `.long` operands, first at 0xF9155B
+; C0mbinati0nM0de_Button24 -- slot 0x18 of both DisplayListPtrs_F914FB and _F9157B (COMBINATION MODE pages 1 and 2), NOT NAMED: slot 0x18 is only the VARIANT-1 already-held rewrite of base code 0x07 (SoftKeyCol8); it adjusts W and joins that
+;   handler.  The SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+C0mbinati0nM0de_Button24:   ; entry: named by 2 `.long` operands, first at 0xF9155B
 	add W,0x01                                           ; F923D4  c8 c8 01
 	m_bit 2, MD16, UI_RequestBits                                ; F923D7  f1 75 20 ca
 	jr z, .LF923E0                                       ; F923DB  66 03
