@@ -9,11 +9,11 @@
 InitializeYoko:
 	lda xsp, (xsp - 14)
 
-	RegObjTable NAKA_CLASS_Class, ClassProc, Yoko_ClassCount_167, 0xe208ec, 0x167
+	RegObjTable NAKA_CLASS_Class, ClassProc, Yoko_ClassCount_167, Yoko_ClassTable_167, 0x167
 	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, Yoko_ResEventCount_1C7, EvtName_PtrTable, 0x1c7
 	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, Yoko_ResMethodCount_1E7, MtName_PtrTable, 0x1e7
-	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2e, 0xe20260, 0x127
-	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2e, 0xe2031c, 0x427
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2e, Yoko_ApFunctionTable_127, 0x127
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2e, Yoko_ApFunctionTable_427, 0x427
 	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x1, Yoko_FunctionTable_107, 0x107
 	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x1, Yoko_FunctionTable_407, 0x407
 	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x1f, Yoko_MainFuncTable_147, 0x147

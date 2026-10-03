@@ -19587,12 +19587,12 @@ Scoop_EventLoop_12Entry_Alt_End:
 InitializeScoop:
 	lda xsp, (xsp - 14)
 
-	RegObjTable NAKA_CLASS_Class, ClassProc, 0xe0cdac, 0xe0cd94, 0x166
-	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, 0xe0cdb2, Scoop_ResEventTable_1C6, 0x1c6
-	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, 0xe0cdb8, 0xe0cdb4, 0x1e6
-	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x0, 0xe0cd8a, 0x126
+	RegObjTable NAKA_CLASS_Class, ClassProc, Scoop_ClassCount_166, Scoop_ClassTable_166, 0x166
+	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, Scoop_ResEventCount_1C6, Scoop_ResEventTable_1C6, 0x1c6
+	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, Scoop_ResMethodCount_1E6, Scoop_ResMethodTable_1E6, 0x1e6
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x0, Scoop_ApFunctionTable_126, 0x126
 	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x0, Scoop_ApFunctionTable_426, 0x426
-	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, 0xe0cdba, 0x106
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, Scoop_FunctionTable_106, 0x106
 	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, Scoop_FunctionTable_406, 0x406
 	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x21, GUI_DisplayStructData_0x750, 0x146
 	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x21, GUI_DisplayStructData_0x7D8, 0x446

@@ -60,7 +60,9 @@ DemoRhyTtlFunc_Data:				.incbin "includes/generated/sepaout_config.bin", 0x1F6, 
 MiddleFuncCall_Data:				.incbin "includes/generated/sepaout_config.bin", 0x202, 0x1A
 SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct:	.incbin "includes/generated/sepaout_config.bin", 0x21C, 0x6
 SeqInit_LookupDispatchEntry_Data:		.incbin "includes/generated/sepaout_config.bin", 0x222, 0x48
-PlayMode_SendStopEvent_Data:			.incbin "includes/generated/sepaout_config.bin", 0x26A, 0xD0
+PlayMode_SendStopEvent_Data:			.incbin "includes/generated/sepaout_config.bin", 0x26A, 0x10
+Yoko_ApFunctionTable_127:			.incbin "includes/generated/sepaout_config.bin", 0x27A, 0xBC
+Yoko_ApFunctionTable_427:			.incbin "includes/generated/sepaout_config.bin", 0x336, 0x4
 
 ; SepaOut_FormatData_Tail is at offset 263 within the C data blob
 ; (referenced by extensions/extension_data.s)

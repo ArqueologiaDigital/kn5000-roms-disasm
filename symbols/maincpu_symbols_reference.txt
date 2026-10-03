@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,641
-#   semantic names ........... 50,790 (98.4%)
+#   symbols .................. 51,650
+#   semantic names ........... 50,799 (98.4%)
 #   positional names ......... 851
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -677,7 +677,13 @@ Scoop_EventLoop_12Entry_Alt_Data 00E0CD5A
 Scoop_ApFunctionTable_126 00E0CD8A
 Scoop_ApFunctionTable_426 00E0CD8E
 Scoop_ApFunctionTable_426_EndName 00E0CD92
+Scoop_ClassTable_166 00E0CD94
+Scoop_ClassCount_166 00E0CDAC
 Scoop_ResEventTable_1C6 00E0CDAE
+Scoop_ResEventCount_1C6 00E0CDB2
+Scoop_ResMethodTable_1E6 00E0CDB4
+Scoop_ResMethodCount_1E6 00E0CDB8
+Scoop_FunctionTable_106 00E0CDBA
 Scoop_FunctionTable_406 00E0CDBE
 NakaWidget_semenu 00E0CDC4
 NakaWidget_seeasy 00E0CDE6
@@ -3565,6 +3571,8 @@ MiddleFuncCall_Data 00E201E8
 SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct 00E20202
 SeqInit_LookupDispatchEntry_Data 00E20208
 PlayMode_SendStopEvent_Data 00E20250
+Yoko_ApFunctionTable_127 00E20260
+Yoko_ApFunctionTable_427 00E2031C
 DbgStr_NakaProcName_Table 00E20320
 DbgStr_EmptyProc 00E203D8
 DbgStr_IvExitModeTrSelProc 00E203DA
@@ -3687,6 +3695,7 @@ NakaPropTbl_IvExitModeTrSel 00E208E0
 NakaPropStr_IvExitModeTrSel_0 00E208E4
 NakaPropTbl_IvExitModeTrSelEnd 00E208E6
 NakaPropStr_IvExitModeTrSelEnd_0 00E208EA
+Yoko_ClassTable_167 00E208EC
 NakaWidgetList_AcModeBoxes 00E208F8
 NakaBoxData_IvExitModeTrSel 00E20B14
 NakaBoxName_IvExitModeTrSel 00E20B16
