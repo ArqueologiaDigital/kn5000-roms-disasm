@@ -1352,7 +1352,7 @@ DiskSel_GetFileName:
 	jr DiskSel_FormatEntry
 
 DiskSel_EmptyFileName:
-	lda xbc, (Data_SaveLoadMenuTable_0x64:24)
+	lda xbc, (Str_EmptyFileName_DiskSel:24)
 
 DiskSel_FormatEntry:
 	ld	de, iz

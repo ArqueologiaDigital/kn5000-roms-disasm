@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 51,321
-#   semantic names ........... 50,405 (98.2%)
-#   positional names ......... 916
+#   semantic names ........... 50,406 (98.2%)
+#   positional names ......... 915
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -8467,8 +8467,8 @@ SLDstBankList_FuncBody_Data_7 00EA0A14
 SLDst_HandleShow_PtrTable 00EA0A16
 CmpSrc_HandleShow_PtrTable 00EA0A2A
 CmpDst_HandleShow_PtrTable 00EA0A3E
-CmpFile_ShowDefault_Data 00EA0A52
-Data_SaveLoadMenuTable_0x64 00EA0A54
+Str_EmptyFileName_Cmp 00EA0A52
+Str_EmptyFileName_DiskSel 00EA0A54
 InitializeCheap_PtrTable_9 00EA0A56
 PtrTbl_DiskFuncNames 00EA0ACE
 Data_DiskFuncPtrTbl_EA0B00 00EA0B00

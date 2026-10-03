@@ -6595,8 +6595,10 @@ CmpSrc_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings
 ; [nakarest] (file_io/single_load.s: `lda xde, (CmpDst_HandleShow_PtrTable:24)`), 4 more.
 CmpDst_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAF0, 0x10	; 5 x 32-bit pointer
 	.long CmpDst_HandleShow_PtrTable_Target0
-CmpFile_ShowDefault_Data:
-	.long 0xFF00FF00
+; two empty file names (NUL + 0xFF pad), drawn when there is no file: CmpFile_ShowDefault and
+; DiskSel_EmptyFileName point XIZ / XBC at them (the second was the positional alias Data_SaveLoadMenuTable + 0x64)
+Str_EmptyFileName_Cmp:		.byte	0, 0xff
+Str_EmptyFileName_DiskSel:	.byte	0, 0xff
 InitializeCheap_PtrTable:	.long InsertOptionText
 	.long TypePriorityText
 	.long JumpInsertFunc

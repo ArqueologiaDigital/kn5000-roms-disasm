@@ -3,7 +3,6 @@
 	; CDlikeSwTtl_SendStartEvtArg1 / _0x6 are real routines now (demo/
 	; demo_seq_bridge.s); these two aliases remain only for ui/setwall_routines.s,
 	; which should call CDlikeSwTtl_SendStartEvtArg1 / CDlikeSwTtl_SendEvt4.
-	.set Data_SaveLoadMenuTable_0x64, Data_SaveLoadMenuTable + 100
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096
 	.set SeBitmap_EnvCurve5_0x4B0, SeBitmap_EnvCurve5 + 1200
 	.set TuningSystem_Handler_Table_0x117D, TuningSystem_Handler_Table + 4477

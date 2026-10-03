@@ -3560,7 +3560,7 @@ CmpFile_HandleShow:
 	jr CmpFile_ShowDraw
 
 CmpFile_ShowDefault:
-	lda xiz, (CmpFile_ShowDefault_Data:24)
+	lda xiz, (Str_EmptyFileName_Cmp:24)
 
 CmpFile_ShowDraw:
 	lda xwa, (0x8871:16)
@@ -3606,7 +3606,7 @@ CmpFile_ScrollRedraw:
 	jr z, CmpFile_Return
 	call NotifyUIOfSelectionChange
 	ld (0x8870:16), 0
-	lda xiz, (CmpFile_ShowDefault_Data:24)
+	lda xiz, (Str_EmptyFileName_Cmp:24)
 	ld (0x89f8:16), 4
 	ld wa, 3:i3
 	call FileIO_CheckRecordValid
