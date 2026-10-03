@@ -58159,7 +58159,7 @@ SoundCopy_RefreshPartsUsingSound:
 	unlk XIZ                                             ; F9FE85  ee 0d
 	ret                                                  ; F9FE87  0e
 ; CombinationCopy_RefreshIfCurrentCombi -- after a combination was overwritten, re-triggers T_F43454 if the copied slot is the combination currently selected
-; Evidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_F40804 (sub_FAB779) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_F43454` (prom_a sub_FAC80F).
+; Evidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_F40804 (sub_FAB779) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_F43454` (prom_a Queue2E00_PostParam98Fields).
 ; In: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from CombinationCopy_Execute.
 CombinationCopy_RefreshIfCurrentCombi:
 	link XIZ,0x0000                                      ; F9FE88  ee 0c 00 00
@@ -76366,7 +76366,7 @@ sub_FAA882:
 	pushw 0x7f                                           ; FAA8B5  0b 7f 00
 	ld L,H                                               ; FAA8B8  ce 8f
 	pushw hl                                             ; FAA8BA  2b
-	calr sub_FAC8AA                                          ; FAA8BB  1e ec 1f
+	calr ParamNumber_GetRecordPtr                                          ; FAA8BB  1e ec 1f
 	ld C,(XIY+0x01)                                      ; FAA8BE  8d 01 23
 	popw wa                                              ; FAA8C1  48
 	pushw bc                                             ; FAA8C2  29
@@ -76376,7 +76376,7 @@ sub_FAA882:
 	inc 8,XSP                                            ; FAA8CB  ef 60
 	pushw 0xff                                           ; FAA8CD  0b ff 00
 	pushw hl                                             ; FAA8D0  2b
-	calr sub_FAC8AA                                          ; FAA8D1  1e d6 1f
+	calr ParamNumber_GetRecordPtr                                          ; FAA8D1  1e d6 1f
 	ld C,(XIY)                                           ; FAA8D4  85 23
 	popw wa                                              ; FAA8D6  48
 	pushw bc                                             ; FAA8D7  29
@@ -76415,7 +76415,7 @@ sub_FAA8F0:
 	pushw 0x7f                                           ; FAA917  0b 7f 00
 	ld L,H                                               ; FAA91A  ce 8f
 	pushw hl                                             ; FAA91C  2b
-	calr sub_FAC8AA                                          ; FAA91D  1e 8a 1f
+	calr ParamNumber_GetRecordPtr                                          ; FAA91D  1e 8a 1f
 	ld C,(XIY+0x01)                                      ; FAA920  8d 01 23
 	popw wa                                              ; FAA923  48
 	pushw bc                                             ; FAA924  29
@@ -76425,7 +76425,7 @@ sub_FAA8F0:
 	inc 8,XSP                                            ; FAA92D  ef 60
 	pushw 0xff                                           ; FAA92F  0b ff 00
 	pushw hl                                             ; FAA932  2b
-	calr sub_FAC8AA                                          ; FAA933  1e 74 1f
+	calr ParamNumber_GetRecordPtr                                          ; FAA933  1e 74 1f
 	ld C,(XIY)                                           ; FAA936  85 23
 	popw wa                                              ; FAA938  48
 	pushw bc                                             ; FAA939  29
@@ -76473,7 +76473,7 @@ sub_FAA967:
 	ldw de, 0x00                                         ; FAA99B  32 00 00
 .LFAA99E:
 	pushw hl                                             ; FAA99E  2b
-	calr sub_FAC8AA                                          ; FAA99F  1e 08 1f
+	calr ParamNumber_GetRecordPtr                                          ; FAA99F  1e 08 1f
 	ld XIX,XIY                                           ; FAA9A2  ed 8c
 	ld BC,DE                                             ; FAA9A4  da 89
 	extz XBC                                             ; FAA9A6  e9 12
@@ -76970,7 +76970,7 @@ sub_FAAE2A:
 	m_ld_mi16 MDD+r6, 0xf6, 0x0020                       ; FAAE36  be f6 02 20 00
 .LFAAE3B:
 	pushw hl                                             ; FAAE3B  2b
-	calr sub_FAC8AA                                          ; FAAE3C  1e 6b 1a
+	calr ParamNumber_GetRecordPtr                                          ; FAAE3C  1e 6b 1a
 	ld (xiz-14), xiy                                     ; FAAE3F  be f2 65
 	ld BC,DE                                             ; FAAE42  da 89
 	extz XBC                                             ; FAAE44  e9 12
@@ -77012,7 +77012,7 @@ sub_FAAE2A:
 	calr sub_FAAC0F                                      ; FAAE96  1e 76 fd
 	ld c, (xiz-10)                                       ; FAAE99  8e f6 23
 	pushw bc                                             ; FAAE9C  29
-	calr sub_FAC8AA                                          ; FAAE9D  1e 0a 1a
+	calr ParamNumber_GetRecordPtr                                          ; FAAE9D  1e 0a 1a
 	ld (xiz-14), xiy                                     ; FAAEA0  be f2 65
 	ld BC,DE                                             ; FAAEA3  da 89
 	extz XBC                                             ; FAAEA5  e9 12
@@ -77164,7 +77164,7 @@ sub_FAAF91:
 	add XBC,ByteTable_FAD38A                             ; FAAFCE  e9 c8 8a d3 fa 00
 	ld A,(XBC)                                           ; FAAFD4  81 21
 	pushw wa                                             ; FAAFD6  28
-	calr sub_FAC8AA                                          ; FAAFD7  1e d0 18
+	calr ParamNumber_GetRecordPtr                                          ; FAAFD7  1e d0 18
 	ld XIX,XIY                                           ; FAAFDA  ed 8c
 	ld BC,DE                                             ; FAAFDC  da 89
 	extz XBC                                             ; FAAFDE  e9 12
@@ -77335,7 +77335,7 @@ sub_FAAF91:
 ;          module's working cells and step the cursor over it.
 ; Called from: List2030_TranslateToQueue2C00 (`calr` at 0xFAB844).
 ; Body:    byte 0, the parameter NUMBER -> (0x60F080), and
-;          ParamNumber_RecordPtrs[number] (via sub_FAC8AA) -> (0x60F084);
+;          ParamNumber_RecordPtrs[number] (via ParamNumber_GetRecordPtr) -> (0x60F084);
 ;          byte 1, the CLASS -> (0x60F088) and (0x60F081); byte 2, the
 ;          VALUE -> (0x60F089); byte 3, the MASK -> (0x60F08A); (0x60F082)
 ;          and (0x60F083) zeroed.  (0x60F080..0x60F083) is the staged record
@@ -77355,7 +77355,7 @@ List2030_LoadRecord:
 	ld (0x60f080:24), h                                 ; FAB175  f2 80 f0 60 46
 	push 0x00                                            ; FAB17A  09 00
 	push H                                               ; FAB17C  ce 04
-	calr sub_FAC8AA                                          ; FAB17E  1e 29 17
+	calr ParamNumber_GetRecordPtr                                          ; FAB17E  1e 29 17
 	ld (0x60f084:24), xiy                               ; FAB181  f2 84 f0 60 65
 	incw 0x01, (xix)                                     ; FAB186  94 61
 	ld BC,(XIX)                                          ; FAB188  94 21
@@ -77391,7 +77391,7 @@ sub_FAB1D8:
 	push XIX                                             ; FAB1DC  3c
 	push 0x00                                            ; FAB1DD  09 00
 	m_push MB24, 0x60f080                                ; FAB1DF  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB1E4  1e c3 16
+	calr ParamNumber_GetRecordPtr                                          ; FAB1E4  1e c3 16
 	ld XIX,XIY                                           ; FAB1E7  ed 8c
 	sub XBC,XBC                                          ; FAB1E9  e9 a1
 	dec 1,XBC                                            ; FAB1EB  e9 69
@@ -77466,7 +77466,7 @@ sub_FAB253:
 	jr z, .LFAB2C2                                       ; FAB26D  66 53
 	push 0x00                                            ; FAB26F  09 00
 	m_push MB24, 0x60f080                                ; FAB271  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB276  1e 31 16
+	calr ParamNumber_GetRecordPtr                                          ; FAB276  1e 31 16
 	ld XIX,XIY                                           ; FAB279  ed 8c
 	sub XBC,XBC                                          ; FAB27B  e9 a1
 	dec 1,XBC                                            ; FAB27D  e9 69
@@ -77509,7 +77509,7 @@ sub_FAB253:
 	jr z, .LFAB331                                       ; FAB2E1  66 4e
 	push 0x00                                            ; FAB2E3  09 00
 	m_push MB24, 0x60f080                                ; FAB2E5  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB2EA  1e bd 15
+	calr ParamNumber_GetRecordPtr                                          ; FAB2EA  1e bd 15
 	ld XIX,XIY                                           ; FAB2ED  ed 8c
 	sub XBC,XBC                                          ; FAB2EF  e9 a1
 	dec 1,XBC                                            ; FAB2F1  e9 69
@@ -77552,7 +77552,7 @@ sub_FAB337:
 	jr z, .LFAB398                                       ; FAB348  66 4e
 	push 0x00                                            ; FAB34A  09 00
 	m_push MB24, 0x60f080                                ; FAB34C  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB351  1e 56 15
+	calr ParamNumber_GetRecordPtr                                          ; FAB351  1e 56 15
 	ld XIX,XIY                                           ; FAB354  ed 8c
 	sub XBC,XBC                                          ; FAB356  e9 a1
 	dec 1,XBC                                            ; FAB358  e9 69
@@ -77597,7 +77597,7 @@ sub_FAB337:
 	jr z, .LFAB40A                                       ; FAB3B8  66 50
 	push 0x00                                            ; FAB3BA  09 00
 	m_push MB24, 0x60f080                                ; FAB3BC  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB3C1  1e e6 14
+	calr ParamNumber_GetRecordPtr                                          ; FAB3C1  1e e6 14
 	ld XIX,XIY                                           ; FAB3C4  ed 8c
 	sub XBC,XBC                                          ; FAB3C6  e9 a1
 	dec 1,XBC                                            ; FAB3C8  e9 69
@@ -77645,7 +77645,7 @@ sub_FAB410:
 	jr z, .LFAB495                                       ; FAB42D  66 66
 	push 0x00                                            ; FAB42F  09 00
 	m_push MB24, 0x60f080                                ; FAB431  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB436  1e 71 14
+	calr ParamNumber_GetRecordPtr                                          ; FAB436  1e 71 14
 	ld XIX,XIY                                           ; FAB439  ed 8c
 	sub XBC,XBC                                          ; FAB43B  e9 a1
 	dec 1,XBC                                            ; FAB43D  e9 69
@@ -77699,7 +77699,7 @@ sub_FAB49B:
 	jr z, .LFAB4FE                                       ; FAB4AC  66 50
 	push 0x00                                            ; FAB4AE  09 00
 	m_push MB24, 0x60f080                                ; FAB4B0  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB4B5  1e f2 13
+	calr ParamNumber_GetRecordPtr                                          ; FAB4B5  1e f2 13
 	ld XIX,XIY                                           ; FAB4B8  ed 8c
 	sub XBC,XBC                                          ; FAB4BA  e9 a1
 	dec 1,XBC                                            ; FAB4BC  e9 69
@@ -77742,7 +77742,7 @@ sub_FAB49B:
 	jr z, .LFAB570                                       ; FAB510  66 5e
 	push 0x00                                            ; FAB512  09 00
 	m_push MBD+r6, 0x08                                  ; FAB514  8e 08 04
-	calr sub_FAC8AA                                          ; FAB517  1e 90 13
+	calr ParamNumber_GetRecordPtr                                          ; FAB517  1e 90 13
 	ld XIX,XIY                                           ; FAB51A  ed 8c
 	sub XBC,XBC                                          ; FAB51C  e9 a1
 	dec 1,XBC                                            ; FAB51E  e9 69
@@ -77791,7 +77791,7 @@ sub_FAB49B:
 	jr z, .LFAB5E3                                       ; FAB582  66 5f
 	push 0x00                                            ; FAB584  09 00
 	m_push MBD+r6, 0x08                                  ; FAB586  8e 08 04
-	calr sub_FAC8AA                                          ; FAB589  1e 1e 13
+	calr ParamNumber_GetRecordPtr                                          ; FAB589  1e 1e 13
 	ld XIX,XIY                                           ; FAB58C  ed 8c
 	sub XBC,XBC                                          ; FAB58E  e9 a1
 	dec 1,XBC                                            ; FAB590  e9 69
@@ -78171,31 +78171,31 @@ sub_FAB8E4:   ; entry: JumpTable_FAB8B4[0], class 0
 	calr sub_FAB915                                      ; FAB8E4  1e 2e 00
 	jr .LFAB914                                          ; FAB8E7  68 2b
 sub_FAB8E9:   ; entry: named by 1 `.long` operand, first at 0xFAB8C0
-	calr sub_FAB9FD                                      ; FAB8E9  1e 11 01
+	calr List2030_PartVolume_Apply                                      ; FAB8E9  1e 11 01
 	jr .LFAB914                                          ; FAB8EC  68 26
 sub_FAB8EE:   ; entry: named by 1 `.long` operand, first at 0xFAB8C4
 	calr sub_FABA08                                      ; FAB8EE  1e 17 01
 	jr .LFAB914                                          ; FAB8F1  68 21
 sub_FAB8F3:   ; entry: named by 1 `.long` operand, first at 0xFAB8C8
-	calr sub_FABAB0                                      ; FAB8F3  1e ba 01
+	calr List2030_PartEffect3Depth_Apply                                      ; FAB8F3  1e ba 01
 	jr .LFAB914                                          ; FAB8F6  68 1c
 sub_FAB8F8:   ; entry: named by 1 `.long` operand, first at 0xFAB8CC
-	calr sub_FABABB                                      ; FAB8F8  1e c0 01
+	calr List2030_PartEffect4Depth_Apply                                      ; FAB8F8  1e c0 01
 	jr .LFAB914                                          ; FAB8FB  68 17
 sub_FAB8FD:   ; entry: named by 1 `.long` operand, first at 0xFAB8D0
-	calr sub_FABAC6                                      ; FAB8FD  1e c6 01
+	calr List2030_PartEffect1Depth_Apply                                      ; FAB8FD  1e c6 01
 	jr .LFAB914                                          ; FAB900  68 12
 sub_FAB902:   ; entry: named by 1 `.long` operand, first at 0xFAB8D4
-	calr sub_FABAD1                                      ; FAB902  1e cc 01
+	calr List2030_PartPan_Apply                                      ; FAB902  1e cc 01
 	jr .LFAB914                                          ; FAB905  68 0d
 sub_FAB907:   ; entry: named by 1 `.long` operand, first at 0xFAB8D8
-	calr sub_FABADC                                      ; FAB907  1e d2 01
+	calr List2030_PartCoarseTune_Apply                                      ; FAB907  1e d2 01
 	jr .LFAB914                                          ; FAB90A  68 08
 sub_FAB90C:   ; entry: named by 1 `.long` operand, first at 0xFAB8DC
-	calr sub_FABAE7                                      ; FAB90C  1e d8 01
+	calr List2030_PartFineTune_Apply                                      ; FAB90C  1e d8 01
 	jr .LFAB914                                          ; FAB90F  68 03
 sub_FAB911:   ; entry: named by 1 `.long` operand, first at 0xFAB8E0
-	calr sub_FABAF2                                      ; FAB911  1e de 01
+	calr List2030_PartBendRange_Apply                                      ; FAB911  1e de 01
 .LFAB914:
 	ret                                                  ; FAB914  0e
 sub_FAB915:
@@ -78222,7 +78222,7 @@ sub_FAB915:
 	calr sub_FAB658                                          ; FAB964  1e f1 fc
 	push 0x00                                            ; FAB967  09 00
 	m_push MB24, 0x60f080                                ; FAB969  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FAB96E  1e 39 0f
+	calr ParamNumber_GetRecordPtr                                          ; FAB96E  1e 39 0f
 	ld XIX,XIY                                           ; FAB971  ed 8c
 	sub XBC,XBC                                          ; FAB973  e9 a1
 	dec 1,XBC                                            ; FAB975  e9 69
@@ -78244,7 +78244,7 @@ sub_FAB915:
 	ld c, (0x60f080:24)                                 ; FAB99F  c2 80 f0 60 23
 	set 0x05,C                                           ; FAB9A4  cb 31 05
 	pushw bc                                             ; FAB9A7  29
-	calr sub_FAC8AA                                          ; FAB9A8  1e ff 0e
+	calr ParamNumber_GetRecordPtr                                          ; FAB9A8  1e ff 0e
 	ld XIX,XIY                                           ; FAB9AB  ed 8c
 	ld c, (0x60f089:24)                                 ; FAB9AD  c2 89 f0 60 23
 	ld (XIY+0x1b),C                                      ; FAB9B2  bd 1b 43
@@ -78268,7 +78268,11 @@ sub_FAB915:
 	popw hl                                              ; FAB9F9  4b
 	unlk XIZ                                             ; FAB9FA  ee 0d
 	ret                                                  ; FAB9FC  0e
-sub_FAB9FD:
+; List2030_PartVolume_Apply -- class 3 of a part (number 0x00-0x1F) record in the RAM 0x2030 list: write the 7-bit value into byte 3 of that part's record when it changed, and queue the change to 0x2C00
+; Evidence: JumpTable_FAB8B4[3] (reached by `calr` at 0xFAB8E9), which is indexed by the record CLASS (0x60F088); MidiOut_ParamClassTable[3], indexed by the same class byte of the same 4-byte record, is MidiOut_CC07_Volume.
+; Body: `pushw 0x7f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending` (0xFAB9FD-0xFABA03).  sub_FAB337 merges (0x60F089) under the pushed mask into ParamNumber_RecordPtrs[(0x60F080)] + class, compares with the old byte (0x60F08B) and only then stores, stages and ORs the mask into (0x60F083).
+; The six siblings 0xFABAB0-0xFABAF2 are byte-identical except for the pushed mask.
+List2030_PartVolume_Apply:
 	pushw 0x7f                                           ; FAB9FD  0b 7f 00
 	calr sub_FAB337                                          ; FABA00  1e 34 f9
 	calr Queue2C00_AppendStagedIfPending                                          ; FABA03  1e 05 f8
@@ -78337,49 +78341,66 @@ sub_FABA08:
 	popw hl                                              ; FABAAC  4b
 	unlk XIZ                                             ; FABAAD  ee 0d
 	ret                                                  ; FABAAF  0e
-sub_FABAB0:
+; List2030_PartEffect3Depth_Apply -- class 5 of a part record in the 0x2030 list: write the 7-bit value into byte 5 of the part's record when it changed, and queue it to 0x2C00
+; Evidence: JumpTable_FAB8B4[5] (calr at 0xFAB8F3); MidiOut_ParamClassTable[5] on the same class byte is MidiOut_CC5D_Effect3Depth.  Body `pushw 0x7f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`, as List2030_PartVolume_Apply.
+List2030_PartEffect3Depth_Apply:
 	pushw 0x7f                                           ; FABAB0  0b 7f 00
 	calr sub_FAB337                                          ; FABAB3  1e 81 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAB6  1e 52 f7
 	popw bc                                              ; FABAB9  49
 	ret                                                  ; FABABA  0e
-sub_FABABB:
+; List2030_PartEffect4Depth_Apply -- class 6 of a part record in the 0x2030 list: write the 7-bit value into byte 6 when it changed, and queue it to 0x2C00
+; Evidence: JumpTable_FAB8B4[6] (calr at 0xFAB8F8); MidiOut_ParamClassTable[6] is MidiOut_CC5E_Effect4Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
+List2030_PartEffect4Depth_Apply:
 	pushw 0x7f                                           ; FABABB  0b 7f 00
 	calr sub_FAB337                                          ; FABABE  1e 76 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAC1  1e 47 f7
 	popw bc                                              ; FABAC4  49
 	ret                                                  ; FABAC5  0e
-sub_FABAC6:
+; List2030_PartEffect1Depth_Apply -- class 7 of a part record in the 0x2030 list: write the 7-bit value into byte 7 when it changed, and queue it to 0x2C00
+; Evidence: JumpTable_FAB8B4[7] (calr at 0xFAB8FD); MidiOut_ParamClassTable[7] is MidiOut_CC5B_Effect1Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
+List2030_PartEffect1Depth_Apply:
 	pushw 0x7f                                           ; FABAC6  0b 7f 00
 	calr sub_FAB337                                          ; FABAC9  1e 6b f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABACC  1e 3c f7
 	popw bc                                              ; FABACF  49
 	ret                                                  ; FABAD0  0e
-sub_FABAD1:
+; List2030_PartPan_Apply -- class 8 of a part record in the 0x2030 list: write the 7-bit value into byte 8 when it changed, and queue it to 0x2C00
+; Evidence: JumpTable_FAB8B4[8] (calr at 0xFAB902); MidiOut_ParamClassTable[8] is MidiOut_CC0A_Pan.  Body as List2030_PartVolume_Apply, mask 0x7F.
+List2030_PartPan_Apply:
 	pushw 0x7f                                           ; FABAD1  0b 7f 00
 	calr sub_FAB337                                          ; FABAD4  1e 60 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAD7  1e 31 f7
 	popw bc                                              ; FABADA  49
 	ret                                                  ; FABADB  0e
-sub_FABADC:
+; List2030_PartCoarseTune_Apply -- class 9 of a part record in the 0x2030 list: write the 7-bit value into byte 9 when it changed, and queue it to 0x2C00
+; Evidence: JumpTable_FAB8B4[9] (calr at 0xFAB907); MidiOut_ParamClassTable[9] is MidiOut_Rpn02_CoarseTune.  Body as List2030_PartVolume_Apply, mask 0x7F.
+List2030_PartCoarseTune_Apply:
 	pushw 0x7f                                           ; FABADC  0b 7f 00
 	calr sub_FAB337                                          ; FABADF  1e 55 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAE2  1e 26 f7
 	popw bc                                              ; FABAE5  49
 	ret                                                  ; FABAE6  0e
-sub_FABAE7:
+; List2030_PartFineTune_Apply -- class 10 of a part record in the 0x2030 list: write the full 8-bit value into byte 0x0A when it changed, and queue it to 0x2C00
+; Evidence: JumpTable_FAB8B4[10] (calr at 0xFAB90C); MidiOut_ParamClassTable[10] is MidiOut_Rpn01_FineTune.  It is the ONLY sibling that pushes mask 0x00FF (0xFABAE7), matching MidiOut_Rpn01_FineTune's `and A,0xff` on the staged mask and the 0xFF mask KeyValueList_A00 gives key {part, 0x0A}.
+List2030_PartFineTune_Apply:
 	pushw 0xff                                           ; FABAE7  0b ff 00
 	calr sub_FAB337                                          ; FABAEA  1e 4a f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAED  1e 1b f7
 	popw bc                                              ; FABAF0  49
 	ret                                                  ; FABAF1  0e
-sub_FABAF2:
+; List2030_PartBendRange_Apply -- class 11 of a part record in the 0x2030 list: write the 7-bit value into byte 0x0B when it changed, and queue it to 0x2C00
+; Evidence: JumpTable_FAB8B4[11] (calr at 0xFAB911); MidiOut_ParamClassTable[11] is MidiOut_Rpn00_PitchBendRange.  Body as List2030_PartVolume_Apply, mask 0x7F.
+List2030_PartBendRange_Apply:
 	pushw 0x7f                                           ; FABAF2  0b 7f 00
 	calr sub_FAB337                                          ; FABAF5  1e 3f f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAF8  1e 10 f7
 	popw bc                                              ; FABAFB  49
 	ret                                                  ; FABAFC  0e
-sub_FABAFD:   ; entry: named by 32 `.long` operands, first at 0xFAC96A
+; List2030_Part20to3F_Dispatch -- 0x2030-list handler for parameter numbers 0x20-0x3F, the second 0x20-byte half of each part record: dispatch classes 0x18, 0x19, 0x1A
+; Evidence: Dispatch_By_60F080 entries 32-63 all hold it; ParamNumber_RecordPtrs[0x20+i] == [i] + 0x20 (that table's pin 3).  Body: calr sub_FAB1D8 (old byte -> (0x60F08B)), then `cp BC,0x18/0x19/0x1A` at 0xFABB07-0xFABB13 -> List2030_Field18_SetAllParts / List2030_PartField19_Apply / List2030_PartField1A_Apply; other classes do nothing.
+; Evt2030_Class20to3F accepts exactly the same three classes.
+List2030_Part20to3F_Dispatch:   ; entry: named by 32 `.long` operands, first at 0xFAC96A
 	calr sub_FAB1D8                                          ; FABAFD  1e d8 f6
 	ld bc, (0x60f088:24)                                ; FABB00  d2 88 f0 60 21
 	extz BC                                              ; FABB05  d9 12
@@ -78391,16 +78412,19 @@ sub_FABAFD:   ; entry: named by 32 `.long` operands, first at 0xFAC96A
 	jr z, .LFABB25                                       ; FABB17  66 0c
 	jr .LFABB28                                          ; FABB19  68 0d
 .LFABB1B:
-	calr sub_FABB29                                      ; FABB1B  1e 0b 00
+	calr List2030_Field18_SetAllParts                                      ; FABB1B  1e 0b 00
 	jr .LFABB28                                          ; FABB1E  68 08
 .LFABB20:
-	calr sub_FABB47                                      ; FABB20  1e 24 00
+	calr List2030_PartField19_Apply                                      ; FABB20  1e 24 00
 	jr .LFABB28                                          ; FABB23  68 03
 .LFABB25:
-	calr sub_FABB52                                      ; FABB25  1e 2a 00
+	calr List2030_PartField1A_Apply                                      ; FABB25  1e 2a 00
 .LFABB28:
 	ret                                                  ; FABB28  0e
-sub_FABB29:
+; List2030_Field18_SetAllParts -- class 0x18 of a second-half part record: apply the record's bit 0 to byte 0x18 of ALL 32 second-half records (numbers 0x20-0x3F), queuing each change to 0x2C00
+; Evidence: loop `ld H,0x20` .. `cp H,0x3f / jr ule` at 0xFABB2A-0xFABB43, each pass storing H to (0x60F080), then sub_FAB1D8, sub_FAB337 with mask 0x0001 and Queue2C00_AppendStagedIfPending.
+; KeyValueList_A/B give key {0x20+i, 0x18} mask 0x01; ParamRecord_SetPartsField18Bit0 performs the same sweep from a stack argument.  Evt2030_Class20to3F's tail uses bit 0 of +0x18 to choose between fields +0x19 and +0x1A.
+List2030_Field18_SetAllParts:
 	pushw hl                                             ; FABB29  2b
 	ld h, 0x20:opc                                          ; FABB2A  26 20
 .LFABB2C:
@@ -78415,13 +78439,17 @@ sub_FABB29:
 	jr ule, .LFABB2C                                     ; FABB43  63 e7
 	popw hl                                              ; FABB45  4b
 	ret                                                  ; FABB46  0e
-sub_FABB47:
+; List2030_PartField19_Apply -- class 0x19 of a second-half part record: write the 6-bit value into byte 0x19 when it changed, and queue it to 0x2C00
+; Evidence: called only by List2030_Part20to3F_Dispatch for class 0x19 (`cp BC,0x0019` at 0xFABB0D); body `pushw 0x3f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x19} mask 0x3F, and Evt2030_Class20to3F reads (XIX+0x19) & 0x3F through BitMaskToOrdinal6, i.e. a one-hot of six.
+List2030_PartField19_Apply:
 	pushw 0x3f                                           ; FABB47  0b 3f 00
 	calr sub_FAB337                                          ; FABB4A  1e ea f7
 	calr Queue2C00_AppendStagedIfPending                                          ; FABB4D  1e bb f6
 	popw bc                                              ; FABB50  49
 	ret                                                  ; FABB51  0e
-sub_FABB52:
+; List2030_PartField1A_Apply -- class 0x1A of a second-half part record: write the 6-bit value into byte 0x1A when it changed, and queue it to 0x2C00
+; Evidence: called only by List2030_Part20to3F_Dispatch for class 0x1A (`cp BC,0x001a` at 0xFABB13); body `pushw 0x3f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x1A} mask 0x3F; Evt2030_Class20to3F reads (XIX+0x1a) & 0x3F when bit 0 of +0x18 is set.
+List2030_PartField1A_Apply:
 	pushw 0x3f                                           ; FABB52  0b 3f 00
 	calr sub_FAB337                                          ; FABB55  1e df f7
 	calr Queue2C00_AppendStagedIfPending                                          ; FABB58  1e b0 f6
@@ -78433,7 +78461,9 @@ Dispatch_By_60F080_Nop68:   ; entry: named by 3 `.long` operands, first at 0xFAC
 	ret                                                  ; FABB5F  0e
 Dispatch_By_60F080_Nop72:   ; entry: named by 1 `.long` operand, first at 0xFACA0A
 	ret                                                  ; FABB60  0e
-sub_FABB61:   ; entry: named by 1 `.long` operand, first at 0xFACAD2
+; List2030_Tempo_Dispatch -- 0x2030-list handler for parameter 0x7A, the tempo: class 0 goes to List2030_Tempo_Apply, any other class is ignored
+; Evidence: Dispatch_By_60F080[122] (0xFACAD2) is its only reference; `cp bc,0 / jr z` at 0xFABB6B after calr sub_FAB1D8.  Parameter 0x7A's record is RAM 0x7EE2 (ParamNumber_RecordPtrs[122]), whose 9-bit value sub_FAA742 clamps to 0x28..0x12C with default 0x78 (40..300 BPM, 120) -- the tempo notes/sysex-probes/README.md pins three ways.
+List2030_Tempo_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFACAD2
 	calr sub_FAB1D8                                          ; FABB61  1e 74 f6
 	ld bc, (0x60f088:24)                                ; FABB64  d2 88 f0 60 21
 	extz BC                                              ; FABB69  d9 12
@@ -78441,10 +78471,13 @@ sub_FABB61:   ; entry: named by 1 `.long` operand, first at 0xFACAD2
 	jr z, .LFABB71                                       ; FABB6D  66 02
 	jr .LFABB74                                          ; FABB6F  68 03
 .LFABB71:
-	calr sub_FABB75                                      ; FABB71  1e 01 00
+	calr List2030_Tempo_Apply                                      ; FABB71  1e 01 00
 .LFABB74:
 	ret                                                  ; FABB74  0e
-sub_FABB75:
+; List2030_Tempo_Apply -- store a new tempo into parameter 0x7A's record (RAM 0x7EE2) when it differs, queue both bytes to 0x2C00 and reprogram the tempo timer
+; Evidence: `lda XIX,0x7ee2` at 0xFABB76; compares (0x60F089)/(0x60F08A) with (XIX)/(XIX+1) at 0xFABB7C/0xFABB88 and returns when both match; otherwise stores both, stages {0x7A,0,rec[0],0xFF} and {0x7A,1,rec[1],0x01} (0xFABBA4-0xFABBC6) and calls sub_FAA742 at 0xFABBC9.
+; sub_FAA742 reads (0x7EE2)&0x1FF, clamps it to 40..300 (default 120) and writes 0x08583B00/(tempo*64) to TREG5 (`st_dd8w DE,0x32`; 0x32 = TREG5L in tmp95c061_sfr.inc) unless bit 2 of (0x7F32), the external-clock bit, is set.
+List2030_Tempo_Apply:
 	push XIX                                             ; FABB75  3c
 	lda xix, (0x7ee2:16)                                ; FABB76  f1 e2 7e 34
 	ld C,(XIX)                                           ; FABB7A  84 23
@@ -78488,7 +78521,9 @@ Dispatch_By_60F080_Nop114:   ; entry: named by 1 `.long` operand, first at 0xFAC
 	ret                                                  ; FABBD5  0e
 T_F407F0_Nop:
 	ret                                                  ; FABBD6  0e
-sub_FABBD7:   ; entry: named by 1 `.long` operand, first at 0xFACB4A
+; List2030_Param98_Dispatch -- 0x2030-list handler for parameter 0x98: class 1 goes to List2030_Param98_ApplyProgram, other classes are ignored
+; Evidence: Dispatch_By_60F080[152] (0xFACB4A) is its only reference; `cp bc,1 / jr z` at 0xFABBE1 after calr sub_FAB1D8.  Parameter 0x98's record is RAM 0x7F02 (ParamNumber_RecordPtrs[152]).
+List2030_Param98_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFACB4A
 	calr sub_FAB1D8                                          ; FABBD7  1e fe f5
 	ld bc, (0x60f088:24)                                ; FABBDA  d2 88 f0 60 21
 	extz BC                                              ; FABBDF  d9 12
@@ -78496,10 +78531,13 @@ sub_FABBD7:   ; entry: named by 1 `.long` operand, first at 0xFACB4A
 	jr z, .LFABBE7                                       ; FABBE3  66 02
 	jr .LFABBEA                                          ; FABBE5  68 03
 .LFABBE7:
-	calr sub_FABBEB                                      ; FABBE7  1e 01 00
+	calr List2030_Param98_ApplyProgram                                      ; FABBE7  1e 01 00
 .LFABBEA:
 	ret                                                  ; FABBEA  0e
-sub_FABBEB:
+; List2030_Param98_ApplyProgram -- the parameter-0x98 twin of the part program-change handler sub_FAB915: stash the first value, then on the second pass write record 0x7F02's program fields and queue them to 0x2C00
+; Evidence: same two-pass gate as sub_FAB915 (bit 4 of (0x60F021) at 0xFABBF1: pass 1 saves (0x60F089) to (0x60F0D0) and sets it, pass 2 clears it); then sub_FAB779 (sub_FAB658 in the part twin), ParamNumber_GetRecordPtr compared with 0x7F02 (0xFABC49-0xFABC51), and stores (XIX+1)&0x80|(0x60F185), (XIX+2)&0xC0|(0x60F186), (XIX+6..8) = value/mask/(0x60F0D0).
+; Queues {0x98,2,(0x60F186),0x3F} and {0x98,1,(0x60F185),0x7F} (0xFABC9E-0xFABCCD).  Program reading: sub_FAB915 is JumpTable_FAB8B4[0], class 0, whose outbound twin is MidiOut_ParamClassTable[0] = MidiOut_ProgramChange; and the Evt2030 handler of 0x98 class 1 runs only when SINGLE CH PROG CHANGE is COMBI (bit 3 of (0x7F32)).
+List2030_Param98_ApplyProgram:
 	link XIZ,0xfff8                                      ; FABBEB  ee 0c f8 ff
 	pushw hl                                             ; FABBEF  2b
 	push XIX                                             ; FABBF0  3c
@@ -78523,7 +78561,7 @@ sub_FABBEB:
 	calr sub_FAB779                                          ; FABC3A  1e 3c fb
 	push 0x00                                            ; FABC3D  09 00
 	m_push MB24, 0x60f080                                ; FABC3F  c2 80 f0 60 04
-	calr sub_FAC8AA                                          ; FABC44  1e 63 0c
+	calr ParamNumber_GetRecordPtr                                          ; FABC44  1e 63 0c
 	ld XIX,XIY                                           ; FABC47  ed 8c
 	lda xbc, (0x7f02:16)                                ; FABC49  f1 02 7f 31
 	ld (xiz-4), xbc                                      ; FABC4D  be fc 61
@@ -78571,24 +78609,30 @@ sub_FABBEB:
 	ret                                                  ; FABCD4  0e
 	ret                                                  ; FABCD5  0e
 	ret                                                  ; FABCD6  0e
-sub_FABCD7:   ; entry: named by 1 `.long` operand, first at 0xFACB8A
+; List2030_ParamA8_PassThrough -- 0x2030-list handler for parameter 0xA8: copy the record's value and mask into the staged record unchanged and queue it to 0x2C00, with no record write
+; Evidence: Dispatch_By_60F080[168] (0xFACB8A) is its only reference; `ld (0x60f082),(0x60f089) / ld (0x60f083),(0x60f08a) / calr Queue2C00_AppendStagedIfPending` at 0xFABCD7-0xFABCEB.  ParamNumber_RecordPtrs[0xA8] is empty.
+List2030_ParamA8_PassThrough:   ; entry: named by 1 `.long` operand, first at 0xFACB8A
 	ld c, (0x60f089:24)                                 ; FABCD7  c2 89 f0 60 23
 	ld (0x60f082:24), c                                 ; FABCDC  f2 82 f0 60 43
 	ld a, (0x60f08a:24)                                 ; FABCE1  c2 8a f0 60 21
 	ld (0x60f083:24), a                                 ; FABCE6  f2 83 f0 60 41
 	calr Queue2C00_AppendStagedIfPending                                          ; FABCEB  1e 1d f5
 	ret                                                  ; FABCEE  0e
-sub_FABCEF:   ; entry: named by 1 `.long` operand, first at 0xFACBAA
+; List2030_ParamB0_Dispatch -- 0x2030-list handler for parameter 0xB0: class 0 goes to List2030_ParamB0_Apply, other classes are ignored
+; Evidence: Dispatch_By_60F080[176] (0xFACBAA) is its only reference; `cp bc,0 / jr z` at 0xFABCF6.  What parameter 0xB0 is stays open: MidiOut_ParamNumberTable[0xB0] is a bare `ret` (ParamShadow_SetExpression's note).
+List2030_ParamB0_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFACBAA
 	ld bc, (0x60f088:24)                                ; FABCEF  d2 88 f0 60 21
 	extz BC                                              ; FABCF4  d9 12
 	cp bc, 0x00:i3                                         ; FABCF6  d9 d8
 	jr z, .LFABCFC                                       ; FABCF8  66 02
 	jr .LFABCFF                                          ; FABCFA  68 03
 .LFABCFC:
-	calr sub_FABD00                                      ; FABCFC  1e 01 00
+	calr List2030_ParamB0_Apply                                      ; FABCFC  1e 01 00
 .LFABCFF:
 	ret                                                  ; FABCFF  0e
-sub_FABD00:
+; List2030_ParamB0_Apply -- set (0x24F1) to the cooked control value (0x24F3) with bit 7 as pending flag, queue the pending 0xB0 bytes, then stage {0xB0,0,value,mask} at (0x60F177) and hand it to ParamChange_Notify
+; Evidence: `ld C,(0x24f3) / set 7,C / ld (0x24f1),C` at 0xFABD00-0xFABD07; calr sub_FAB5EB (queues {0xB0,0,(0x24F1),0x7F} and {0xB0,1,(0x24F0),0x7F} for whichever has bit 7); stores to 0x60F177..0x60F17A and `call sub_FAA7C4` (BC/DE from 0x60F177 -> ParamChange_Notify) at 0xFABD2E.  (0x24F3) is cooked slot 3.3 of Ctrl_Normalise's RAM bank.
+List2030_ParamB0_Apply:
 	ld c, (0x24f3:16)                                   ; FABD00  c1 f3 24 23
 	set 0x07,C                                           ; FABD04  cb 31 07
 	ld (0x24f1:16), c                                   ; FABD07  f1 f1 24 43
@@ -78821,7 +78865,10 @@ Queue2C00_FanOutToPartMask_Publish:
 	popw hl                                              ; FABEB0  4b
 	unlk XIZ                                             ; FABEB1  ee 0d
 	ret                                                  ; FABEB3  0e
-sub_FABEB4:
+; Queue2E00_FanOutToPartMask -- Queue2C00_FanOutToPartMask's twin for the PENDING queue 0x2E00: for each set bit H of the 32-bit mask at (XIZ+8), append {(0x60F080), H, (0x60F089), (0x60F08A)}
+; Evidence: the same H=0..0x1F / `srl 1,XIY` loop as Queue2C00_FanOutToPartMask (0xFABEBD-0xFABEF4); the append is `call T_F41B18` at 0xFABEE2, i.e. prom_b `jp sub_F8BC08` -> `calr sub_F8BF07`, which loads E/D/A/W from (XIZ+0x0C/0x0E/0x10/0x12) and calls T_Queue2E00_AppendRegs.
+; Called from: the eleven ParamMsg_ResyncParts_* arms of JumpTable_FAC3BF.
+Queue2E00_FanOutToPartMask:
 	link XIZ,0x0000                                      ; FABEB4  ee 0c 00 00
 	pushw hl                                             ; FABEB8  2b
 	push XIX                                             ; FABEB9  3c
@@ -78994,11 +79041,14 @@ MidiIn_ControlRecordHandlers_Code_Skip:
 	popw hl                                              ; FABFDE  4b
 	unlk XIZ                                             ; FABFDF  ee 0d
 	ret                                                  ; FABFE1  0e
-sub_FABFE2:
+; ParamMsg_RefreshPartMasks -- recompute the eleven per-controller part masks and make MIDI out / MIDI in catch up
+; Evidence: `or (0x60f0c6),1` at 0xFABFE8, calr ParamMsg_ComputePartMasks, `and (XIX),0xfe`, then `call T_F40760` at 0xFABFF5 -- prom_a sub_FA7E0C, the MidiOut 'send everything again' entry that ends in MidiIn_RebuildPartLists.
+; Called from: prom_b directory slot T_F40798 (call at 0xFC6198) and ParamMsg_RefreshMasksOnCtrlFieldChange (0xFAC7BF).
+ParamMsg_RefreshPartMasks:
 	push XIX                                             ; FABFE2  3c
 	lda xix, (0x60f0c6:24)                               ; FABFE3  f2 c6 f0 60 34
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FABFE8  84 3e 01
-	calr sub_FAC0FA                                      ; FABFEB  1e 0c 01
+	calr ParamMsg_ComputePartMasks                                      ; FABFEB  1e 0c 01
 	and (XIX),0xfe                                       ; FABFEE  84 3c fe
 	push XDE                                             ; FABFF1  3a
 	push XHL                                             ; FABFF2  3b
@@ -79011,7 +79061,10 @@ sub_FABFE2:
 	pop XDE                                              ; FABFFC  5a
 	pop XIX                                              ; FABFFD  5c
 	ret                                                  ; FABFFE  0e
-sub_FABFFF:
+; ParamMsg_ResendTwoAssignedCtrls -- re-dispatch the current values of cooked control slots (0x2503) and (0x2504) as control records for the controllers assigned in (0x7F27) and (0x7F28)
+; Evidence: the 4-byte local record is initialised from Gap_FAC8E6 (`ld XBC,(0xfac8e6)` at 0xFAC007, bytes {0,0,0,0x7F}); byte 0 := ParamMsg_NumberForController((0x7F27)), byte 2 := (0x2503) & 0x7F, then MidiIn_ControlRecord_Dispatch (0xFAC024); again with (0x7F28)/(0x2504) at 0xFAC027-0xFAC03C.
+; MidiOut's sub_FA7E37 pairs the same two cells with the same two assignment bytes.  Called from: prom_b directory slot T_F43448; no converted caller found.
+ParamMsg_ResendTwoAssignedCtrls:
 	link XIZ,0xfffc                                      ; FABFFF  ee 0c fc ff
 	push XIX                                             ; FAC003  3c
 	lda xix, (xiz-4)                                     ; FAC004  be fc 34
@@ -79019,7 +79072,7 @@ sub_FABFFF:
 	ld (xiz-4), xbc                                      ; FAC00C  be fc 61
 	ld a, (0x7f27:16)                                   ; FAC00F  c1 27 7f 21
 	pushw wa                                             ; FAC013  28
-	calr sub_FAC28B                                      ; FAC014  1e 74 02
+	calr ParamMsg_NumberForController                                      ; FAC014  1e 74 02
 	ld (XIX),A                                           ; FAC017  b4 41
 	ld c, (0x2503:16)                                   ; FAC019  c1 03 25 23
 	res 0x07,C                                           ; FAC01D  cb 30 07
@@ -79028,7 +79081,7 @@ sub_FABFFF:
 	calr MidiIn_ControlRecord_Dispatch                                          ; FAC024  1e d4 fe
 	ld c, (0x7f28:16)                                   ; FAC027  c1 28 7f 23
 	pushw bc                                             ; FAC02B  29
-	calr sub_FAC28B                                      ; FAC02C  1e 5c 02
+	calr ParamMsg_NumberForController                                      ; FAC02C  1e 5c 02
 	ld (XIX),A                                           ; FAC02F  b4 41
 	ld c, (0x2504:16)                                   ; FAC031  c1 04 25 23
 	res 0x07,C                                           ; FAC035  cb 30 07
@@ -79050,12 +79103,12 @@ sub_FABFFF:
 	jp (xix)                                             ; FAC05B  b4 d8
 .LFAC05D:
 	pushw 0xb2                                           ; FAC05D  0b b2 00
-	calr sub_FAC303                                      ; FAC060  1e a0 02
+	calr Ctrl_CookedCellForNumber                                      ; FAC060  1e a0 02
 	inc 8,XSP                                            ; FAC063  ef 60
 	push XIY                                             ; FAC065  3d
 	ld c, (0x7f23:16)                                   ; FAC066  c1 23 7f 23
 	pushw bc                                             ; FAC06A  29
-	calr sub_FAC28B                                      ; FAC06B  1e 1d 02
+	calr ParamMsg_NumberForController                                      ; FAC06B  1e 1d 02
 	popw bc                                              ; FAC06E  49
 	pushw wa                                             ; FAC06F  28
 	lda xiy, (.LFAC078:24)                               ; FAC070  f2 78 c0 fa 35
@@ -79063,12 +79116,12 @@ sub_FABFFF:
 	jp (xix)                                             ; FAC076  b4 d8
 .LFAC078:
 	pushw 0xbc                                           ; FAC078  0b bc 00
-	calr sub_FAC303                                      ; FAC07B  1e 85 02
+	calr Ctrl_CookedCellForNumber                                      ; FAC07B  1e 85 02
 	inc 8,XSP                                            ; FAC07E  ef 60
 	push XIY                                             ; FAC080  3d
 	ld c, (0x7f24:16)                                   ; FAC081  c1 24 7f 23
 	pushw bc                                             ; FAC085  29
-	calr sub_FAC28B                                      ; FAC086  1e 02 02
+	calr ParamMsg_NumberForController                                      ; FAC086  1e 02 02
 	popw bc                                              ; FAC089  49
 	pushw wa                                             ; FAC08A  28
 	lda xiy, (.LFAC093:24)                               ; FAC08B  f2 93 c0 fa 35
@@ -79076,12 +79129,12 @@ sub_FABFFF:
 	jp (xix)                                             ; FAC091  b4 d8
 .LFAC093:
 	pushw 0xba                                           ; FAC093  0b ba 00
-	calr sub_FAC303                                      ; FAC096  1e 6a 02
+	calr Ctrl_CookedCellForNumber                                      ; FAC096  1e 6a 02
 	inc 8,XSP                                            ; FAC099  ef 60
 	push XIY                                             ; FAC09B  3d
 	ld c, (0x7f29:16)                                   ; FAC09C  c1 29 7f 23
 	pushw bc                                             ; FAC0A0  29
-	calr sub_FAC28B                                      ; FAC0A1  1e e7 01
+	calr ParamMsg_NumberForController                                      ; FAC0A1  1e e7 01
 	popw bc                                              ; FAC0A4  49
 	pushw wa                                             ; FAC0A5  28
 	lda xiy, (.LFAC0AE:24)                               ; FAC0A6  f2 ae c0 fa 35
@@ -79089,12 +79142,12 @@ sub_FABFFF:
 	jp (xix)                                             ; FAC0AC  b4 d8
 .LFAC0AE:
 	pushw 0xbb                                           ; FAC0AE  0b bb 00
-	calr sub_FAC303                                      ; FAC0B1  1e 4f 02
+	calr Ctrl_CookedCellForNumber                                      ; FAC0B1  1e 4f 02
 	inc 8,XSP                                            ; FAC0B4  ef 60
 	push XIY                                             ; FAC0B6  3d
 	ld c, (0x7f2a:16)                                   ; FAC0B7  c1 2a 7f 23
 	pushw bc                                             ; FAC0BB  29
-	calr sub_FAC28B                                      ; FAC0BC  1e cc 01
+	calr ParamMsg_NumberForController                                      ; FAC0BC  1e cc 01
 	popw bc                                              ; FAC0BF  49
 	pushw wa                                             ; FAC0C0  28
 	lda xiy, (.LFAC0C9:24)                               ; FAC0C1  f2 c9 c0 fa 35
@@ -79109,13 +79162,13 @@ sub_FABFFF:
 	jp (xix)                                             ; FAC0D7  b4 d8
 .LFAC0D9:
 	pushw 0xbd                                           ; FAC0D9  0b bd 00
-	calr sub_FAC303                                      ; FAC0DC  1e 24 02
+	calr Ctrl_CookedCellForNumber                                      ; FAC0DC  1e 24 02
 	inc 8,XSP                                            ; FAC0DF  ef 60
 	inc 6,XSP                                            ; FAC0E1  ef 66
 	push XIY                                             ; FAC0E3  3d
 	ld c, (0x7f14:16)                                   ; FAC0E4  c1 14 7f 23
 	pushw bc                                             ; FAC0E8  29
-	calr sub_FAC28B                                      ; FAC0E9  1e 9f 01
+	calr ParamMsg_NumberForController                                      ; FAC0E9  1e 9f 01
 	popw bc                                              ; FAC0EC  49
 	pushw wa                                             ; FAC0ED  28
 	lda xiy, (.LFAC0F6:24)                               ; FAC0EE  f2 f6 c0 fa 35
@@ -79125,7 +79178,11 @@ sub_FABFFF:
 	inc 6,XSP                                            ; FAC0F6  ef 66
 	pop XIX                                              ; FAC0F8  5c
 	ret                                                  ; FAC0F9  0e
-sub_FAC0FA:
+; ParamMsg_ComputePartMasks -- save the eleven 32-bit per-controller part masks at 0x60F280..0x60F2A8 to 0x60F2AC.., clear them and rebuild them from the part records
+; Evidence: copy-and-zero loop 0xFAC100-0xFAC12F (XIX up to 0x60F2A8); then for each part H with bit H of (0x4C06) set and bit 5 of first-half byte +0x0D clear, BitMask32_Table[H] is ORed into a cell per bit of the second-half record (ParamNumber_GetRecordPtr(H|0x20)):
+; +0x0B b6 -> F280 (B1), +0x0C b1 -> F284 (B2), +0x0E b4 -> F288 (BC), +0x0B b5 -> F28C (B4), +0x0E b5 -> F290 (BD), +0x0C b0 -> F294 (B5), +0x0E b0..b3 -> F298..F2A4 (B8..BB), and F2A8 (B3) unconditionally (0xFAC13F-0xFAC283).
+; Cell -> number: the table in ParamMsg_B1_PitchBend's header.  Called only from ParamMsg_RefreshPartMasks.
+ParamMsg_ComputePartMasks:
 	link XIZ,0xfff4                                      ; FAC0FA  ee 0c f4 ff
 	pushw hl                                             ; FAC0FE  2b
 	push XIX                                             ; FAC0FF  3c
@@ -79159,12 +79216,12 @@ sub_FAC0FA:
 	jrl z, .LFAC273                                      ; FAC148  76 28 01
 	push 0x00                                            ; FAC14B  09 00
 	push H                                               ; FAC14D  ce 04
-	calr sub_FAC8AA                                          ; FAC14F  1e 58 07
+	calr ParamNumber_GetRecordPtr                                          ; FAC14F  1e 58 07
 	ld (xiz-12), xiy                                     ; FAC152  be f4 65
 	ld C,H                                               ; FAC155  ce 8b
 	set 0x05,C                                           ; FAC157  cb 31 05
 	pushw bc                                             ; FAC15A  29
-	calr sub_FAC8AA                                          ; FAC15B  1e 4c 07
+	calr ParamNumber_GetRecordPtr                                          ; FAC15B  1e 4c 07
 	ld (xiz-4), xiy                                      ; FAC15E  be fc 65
 	ld xbc, (xiz-12)                                     ; FAC161  ae f4 21
 	ld A,(XBC+0x0d)                                      ; FAC164  89 0d 21
@@ -79276,7 +79333,10 @@ sub_FAC0FA:
 	popw hl                                              ; FAC287  4b
 	unlk XIZ                                             ; FAC288  ee 0d
 	ret                                                  ; FAC28A  0e
-sub_FAC28B:
+; ParamMsg_NumberForController -- map a controller number (stack word) to its parameter number in A: 1->0xB2, 2->0xBC, 4->0xBD, 0x0B->0xB3, 0x10..0x13->0xB8..0xBB, 0x40->0xB5, 0x81->0xB4, 0x82->0xB1, anything else 0xFF
+; Evidence: the compare chain at 0xFAC294-0xFAC2CA and the `ld A,0xbN` arms at 0xFAC2D2-0xFAC2FE.  Every pair agrees with the controller already named on ParamMsg_B1..ParamMsg_BD (e.g. ParamMsg_BA_CC12_RTCtrlX for 0x12); 0x81/0x82 are this table's pseudo-numbers for channel pressure and pitch bend.
+; Called from: ParamMsg_ResendTwoAssignedCtrls and the unlabelled routine at 0xFAC047.
+ParamMsg_NumberForController:
 	link XIZ,0x0000                                      ; FAC28B  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FAC28F  9e 08 21
 	extz BC                                              ; FAC292  d9 12
@@ -79341,7 +79401,10 @@ sub_FAC28B:
 .LFAC300:
 	unlk XIZ                                             ; FAC300  ee 0d
 	ret                                                  ; FAC302  0e
-sub_FAC303:
+; Ctrl_CookedCellForNumber -- return in XIY the address of the cooked control value (Ctrl_Normalise's RAM bank) that feeds parameter number (XIZ+8), 0xB1..0xBD
+; Evidence: `sub BC,0x00b1 / cp BC,0x000c` at 0xFAC30E-0xFAC312 then JumpTable_FAC326; the arms load 0x24F4 (B1), 0x24FF (B4), 0x2503..0x2506 (B8..BB), 0x24F6 (BC), 0x24F2 (BD), and the default arm 0x24F5 (B2, B3, B5..B7).  All ten are listed as cooked values in Ctrl_Normalise's header.
+; Used by the unlabelled routine at 0xFAC047, which hands each cell to the JumpTable_FAC3BF dispatcher at 0xFAC391.
+Ctrl_CookedCellForNumber:
 	link XIZ,0x0000                                      ; FAC303  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FAC307  9e 08 21
 	extz BC                                              ; FAC30A  d9 12
@@ -79371,41 +79434,57 @@ sub_FAC303:
 ;          notes/prom_a_jumptables.py (whose selftest is this table).
 ; ---------------------------------------------------------------------
 JumpTable_FAC326:
-	.long sub_FAC35A                                 ; FAC326  [  0]
+	.long Ctrl_CookedCellFor_B1                                 ; FAC326  [  0]
 	.long JumpTable_FAC326_Code_Skip                 ; FAC32A  [  1]
 	.long JumpTable_FAC326_Code_Skip                 ; FAC32E  [  2]
-	.long sub_FAC384                                 ; FAC332  [  3]
+	.long Ctrl_CookedCellFor_B4                                 ; FAC332  [  3]
 	.long JumpTable_FAC326_Code_Skip                 ; FAC336  [  4]
 	.long JumpTable_FAC326_Code_Skip                 ; FAC33A  [  5]
 	.long JumpTable_FAC326_Code_Skip                 ; FAC33E  [  6]
-	.long sub_FAC36C                                 ; FAC342  [  7]
-	.long sub_FAC372                                 ; FAC346  [  8]
-	.long sub_FAC378                                 ; FAC34A  [  9]
-	.long sub_FAC37E                                 ; FAC34E  [ 10]
-	.long sub_FAC360                                 ; FAC352  [ 11]
-	.long sub_FAC366                                 ; FAC356  [ 12]
-sub_FAC35A:   ; entry: named by 1 `.long` operand, first at 0xFAC326
+	.long Ctrl_CookedCellFor_B8                                 ; FAC342  [  7]
+	.long Ctrl_CookedCellFor_B9                                 ; FAC346  [  8]
+	.long Ctrl_CookedCellFor_BA                                 ; FAC34A  [  9]
+	.long Ctrl_CookedCellFor_BB                                 ; FAC34E  [ 10]
+	.long Ctrl_CookedCellFor_BC                                 ; FAC352  [ 11]
+	.long Ctrl_CookedCellFor_BD                                 ; FAC356  [ 12]
+; Ctrl_CookedCellFor_B1 -- JumpTable_FAC326[0] (number 0xB1): XIY = 0x24F4, then the shared `unlk/ret` of Ctrl_CookedCellForNumber
+; Evidence: `lda XIY,0x24f4` at 0xFAC35A; 0x24F4 is cooked slot 3.1 (curve 0xF89CB4, idle 0x80) in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_B1:   ; entry: named by 1 `.long` operand, first at 0xFAC326
 	lda xiy, (0x24f4:16)                                ; FAC35A  f1 f4 24 35
 	jr .LFAC38E                                          ; FAC35E  68 2e
-sub_FAC360:   ; entry: named by 1 `.long` operand, first at 0xFAC352
+; Ctrl_CookedCellFor_BC -- JumpTable_FAC326[11] (number 0xBC): XIY = 0x24F6, then the shared `unlk/ret`
+; Evidence: `lda XIY,0x24f6` at 0xFAC360; 0x24F6 is cooked slot 3.2 in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_BC:   ; entry: named by 1 `.long` operand, first at 0xFAC352
 	lda xiy, (0x24f6:16)                                ; FAC360  f1 f6 24 35
 	jr .LFAC38E                                          ; FAC364  68 28
-sub_FAC366:   ; entry: named by 1 `.long` operand, first at 0xFAC356
+; Ctrl_CookedCellFor_BD -- JumpTable_FAC326[12] (number 0xBD): XIY = 0x24F2, then the shared `unlk/ret`
+; Evidence: `lda XIY,0x24f2` at 0xFAC366; 0x24F2 is cooked slot 0.3 (the inverted raw byte) in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_BD:   ; entry: named by 1 `.long` operand, first at 0xFAC356
 	lda xiy, (0x24f2:16)                                ; FAC366  f1 f2 24 35
 	jr .LFAC38E                                          ; FAC36A  68 22
-sub_FAC36C:   ; entry: named by 1 `.long` operand, first at 0xFAC342
+; Ctrl_CookedCellFor_B8 -- JumpTable_FAC326[7] (number 0xB8): XIY = 0x2503, then the shared `unlk/ret`
+; Evidence: `lda XIY,0x2503` at 0xFAC36C; 0x2503 is cooked slot 0.4 in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_B8:   ; entry: named by 1 `.long` operand, first at 0xFAC342
 	lda xiy, (0x2503:16)                                ; FAC36C  f1 03 25 35
 	jr .LFAC38E                                          ; FAC370  68 1c
-sub_FAC372:   ; entry: named by 1 `.long` operand, first at 0xFAC346
+; Ctrl_CookedCellFor_B9 -- JumpTable_FAC326[8] (number 0xB9): XIY = 0x2504, then the shared `unlk/ret`
+; Evidence: `lda XIY,0x2504` at 0xFAC372; 0x2504 is cooked slot 0.5 in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_B9:   ; entry: named by 1 `.long` operand, first at 0xFAC346
 	lda xiy, (0x2504:16)                                ; FAC372  f1 04 25 35
 	jr .LFAC38E                                          ; FAC376  68 16
-sub_FAC378:   ; entry: named by 1 `.long` operand, first at 0xFAC34A
+; Ctrl_CookedCellFor_BA -- JumpTable_FAC326[9] (number 0xBA): XIY = 0x2505, then the shared `unlk/ret`
+; Evidence: `lda XIY,0x2505` at 0xFAC378; 0x2505 is cooked slot 0.0 in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_BA:   ; entry: named by 1 `.long` operand, first at 0xFAC34A
 	lda xiy, (0x2505:16)                                ; FAC378  f1 05 25 35
 	jr .LFAC38E                                          ; FAC37C  68 10
-sub_FAC37E:   ; entry: named by 1 `.long` operand, first at 0xFAC34E
+; Ctrl_CookedCellFor_BB -- JumpTable_FAC326[10] (number 0xBB): XIY = 0x2506, then the shared `unlk/ret`
+; Evidence: `lda XIY,0x2506` at 0xFAC37E; 0x2506 is cooked slot 0.1 in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_BB:   ; entry: named by 1 `.long` operand, first at 0xFAC34E
 	lda xiy, (0x2506:16)                                ; FAC37E  f1 06 25 35
 	jr .LFAC38E                                          ; FAC382  68 0a
-sub_FAC384:   ; entry: named by 1 `.long` operand, first at 0xFAC332
+; Ctrl_CookedCellFor_B4 -- JumpTable_FAC326[3] (number 0xB4): XIY = 0x24FF, then the shared `unlk/ret`
+; Evidence: `lda XIY,0x24ff` at 0xFAC384; 0x24FF is cooked slot 0.2, the calibrated channel, in Ctrl_Normalise's slot table.
+Ctrl_CookedCellFor_B4:   ; entry: named by 1 `.long` operand, first at 0xFAC332
 	lda xiy, (0x24ff:16)                                ; FAC384  f1 ff 24 35
 	jr .LFAC38E                                          ; FAC388  68 04
 JumpTable_FAC326_Code_Skip:
@@ -79446,20 +79525,23 @@ JumpTable_FAC326_Code_Skip:
 ;          re-derived by notes/prom_a_byte_checks.py.
 ; ---------------------------------------------------------------------
 JumpTable_FAC3BF:
-	.long sub_FAC3F3                                 ; FAC3BF  [  0]
-	.long sub_FAC48A                                 ; FAC3C3  [  1]
-	.long sub_FAC734                                 ; FAC3C7  [  2]
-	.long sub_FAC652                                 ; FAC3CB  [  3]
-	.long sub_FAC6EA                                 ; FAC3CF  [  4]
+	.long ParamMsg_ResyncParts_B1_PitchBend                                 ; FAC3BF  [  0]
+	.long ParamMsg_ResyncParts_B2_CC01_Modulation                                 ; FAC3C3  [  1]
+	.long ParamMsg_ResyncParts_B3_CC0B_Expression                                 ; FAC3C7  [  2]
+	.long ParamMsg_ResyncParts_B4_ChannelPressure                                 ; FAC3CB  [  3]
+	.long ParamMsg_ResyncParts_B5_CC40_Hold                                 ; FAC3CF  [  4]
 	.long .LFAC780                                   ; FAC3D3  [  5]
 	.long .LFAC780                                   ; FAC3D7  [  6]
-	.long sub_FAC522                                 ; FAC3DB  [  7]
-	.long sub_FAC56E                                 ; FAC3DF  [  8]
-	.long sub_FAC5BA                                 ; FAC3E3  [  9]
-	.long sub_FAC606                                 ; FAC3E7  [ 10]
-	.long sub_FAC4D6                                 ; FAC3EB  [ 11]
-	.long sub_FAC69E                                 ; FAC3EF  [ 12]
-sub_FAC3F3:   ; entry: named by 1 `.long` operand, first at 0xFAC3BF
+	.long ParamMsg_ResyncParts_B8_CC10_RTCreatX                                 ; FAC3DB  [  7]
+	.long ParamMsg_ResyncParts_B9_CC11_RTCreatY                                 ; FAC3DF  [  8]
+	.long ParamMsg_ResyncParts_BA_CC12_RTCtrlX                                 ; FAC3E3  [  9]
+	.long ParamMsg_ResyncParts_BB_CC13_RTCtrlY                                 ; FAC3E7  [ 10]
+	.long ParamMsg_ResyncParts_BC_CC02_Modulation2                                 ; FAC3EB  [ 11]
+	.long ParamMsg_ResyncParts_BD_CC04_CtrlPedal                                 ; FAC3EF  [ 12]
+; ParamMsg_ResyncParts_B1_PitchBend -- JumpTable_FAC3BF[0] (number 0xB1), run after the part masks were recomputed: post the pitch-bend centre to parts that LOST 0xB1 and the current value to parts that GAINED it, both into the 0x2E00 queue
+; Evidence: lost = (new ^ old) & old over (0x60F280)/(0x60F2AC) at 0xFAC3F3-0xFAC3FF, posted with value 0x00 / mask 0x40 (LE 0x4000, the centre MidiOut_ChangeRecord_PitchBend also uses) through Queue2E00_FanOutToPartMask; gained = (old ^ new) & new at 0xFAC414-0xFAC41E, value from the cooked cell at (XIZ+0x0A) split into LSB/MSB, clamped to 0x7F/0x7F at 0xFAC445.
+; (0x60F280) is ParamMsg_B1_PitchBend's part-mask cell.
+ParamMsg_ResyncParts_B1_PitchBend:   ; entry: named by 1 `.long` operand, first at 0xFAC3BF
 	ld xix, (0x60f280:24)                               ; FAC3F3  e2 80 f2 60 24
 	ld xbc, (0x60f2ac:24)                               ; FAC3F8  e2 ac f2 60 21
 	xor XIX,XBC                                          ; FAC3FD  e9 d4
@@ -79468,7 +79550,7 @@ sub_FAC3F3:   ; entry: named by 1 `.long` operand, first at 0xFAC3BF
 	ld (0x60f089:24), 0x00                             ; FAC403  f2 89 f0 60 00 00
 	ld (0x60f08a:24), 0x40                             ; FAC409  f2 8a f0 60 00 40
 	push XIX                                             ; FAC40F  3c
-	calr sub_FABEB4                                          ; FAC410  1e a1 fa
+	calr Queue2E00_FanOutToPartMask                                          ; FAC410  1e a1 fa
 	pop XIY                                              ; FAC413  5d
 .LFAC414:
 	ld xbc, (0x60f2ac:24)                               ; FAC414  e2 ac f2 60 21
@@ -79509,7 +79591,9 @@ sub_FAC3F3:   ; entry: named by 1 `.long` operand, first at 0xFAC3BF
 	m_and_rm ML24, 0x60f280, r1                          ; FAC481  e2 80 f2 60 c1
 	push XBC                                             ; FAC486  39
 	jrl .LFAC77C                                         ; FAC487  78 f2 02
-sub_FAC48A:   ; entry: named by 1 `.long` operand, first at 0xFAC3C3
+; ParamMsg_ResyncParts_B2_CC01_Modulation -- JumpTable_FAC3BF[1] (number 0xB2): post 0 to parts that lost 0xB2 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F284)/(0x60F2B0) at 0xFAC48A-0xFAC4B5, reset value 0x00 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F284) is ParamMsg_B2_CC01_Modulation's cell.
+ParamMsg_ResyncParts_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xFAC3C3
 	ld xix, (0x60f284:24)                               ; FAC48A  e2 84 f2 60 24
 	ld xbc, (0x60f2b0:24)                               ; FAC48F  e2 b0 f2 60 21
 	xor XIX,XBC                                          ; FAC494  e9 d4
@@ -79518,7 +79602,7 @@ sub_FAC48A:   ; entry: named by 1 `.long` operand, first at 0xFAC3C3
 	ld (0x60f089:24), 0x00                             ; FAC49A  f2 89 f0 60 00 00
 	ld (0x60f08a:24), 0x7f                             ; FAC4A0  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC4A6  3c
-	calr sub_FABEB4                                          ; FAC4A7  1e 0a fa
+	calr Queue2E00_FanOutToPartMask                                          ; FAC4A7  1e 0a fa
 	pop XIY                                              ; FAC4AA  5d
 .LFAC4AB:
 	ld xbc, (0x60f2b0:24)                               ; FAC4AB  e2 b0 f2 60 21
@@ -79533,7 +79617,9 @@ sub_FAC48A:   ; entry: named by 1 `.long` operand, first at 0xFAC3C3
 	ld (0x60f08a:24), 0x7f                             ; FAC4CC  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC4D2  3c
 	jrl .LFAC77C                                         ; FAC4D3  78 a6 02
-sub_FAC4D6:   ; entry: named by 1 `.long` operand, first at 0xFAC3EB
+; ParamMsg_ResyncParts_BC_CC02_Modulation2 -- JumpTable_FAC3BF[11] (number 0xBC): post 0x40 to parts that lost 0xBC and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F288)/(0x60F2B4) at 0xFAC4D6-0xFAC501, reset value 0x40 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F288) is ParamMsg_BC_CC02_Modulation2's cell.
+ParamMsg_ResyncParts_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0xFAC3EB
 	ld xix, (0x60f288:24)                               ; FAC4D6  e2 88 f2 60 24
 	ld xbc, (0x60f2b4:24)                               ; FAC4DB  e2 b4 f2 60 21
 	xor XIX,XBC                                          ; FAC4E0  e9 d4
@@ -79542,7 +79628,7 @@ sub_FAC4D6:   ; entry: named by 1 `.long` operand, first at 0xFAC3EB
 	ld (0x60f089:24), 0x40                             ; FAC4E6  f2 89 f0 60 00 40
 	ld (0x60f08a:24), 0x7f                             ; FAC4EC  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC4F2  3c
-	calr sub_FABEB4                                          ; FAC4F3  1e be f9
+	calr Queue2E00_FanOutToPartMask                                          ; FAC4F3  1e be f9
 	pop XIY                                              ; FAC4F6  5d
 .LFAC4F7:
 	ld xbc, (0x60f2b4:24)                               ; FAC4F7  e2 b4 f2 60 21
@@ -79557,7 +79643,9 @@ sub_FAC4D6:   ; entry: named by 1 `.long` operand, first at 0xFAC3EB
 	ld (0x60f08a:24), 0x7f                             ; FAC518  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC51E  3c
 	jrl .LFAC77C                                         ; FAC51F  78 5a 02
-sub_FAC522:   ; entry: named by 1 `.long` operand, first at 0xFAC3DB
+; ParamMsg_ResyncParts_B8_CC10_RTCreatX -- JumpTable_FAC3BF[7] (number 0xB8): post 0x40 to parts that lost 0xB8 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F298)/(0x60F2C4) at 0xFAC522-0xFAC54D, reset 0x40 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F298) is ParamMsg_B8_CC10_RTCreatX's cell.
+ParamMsg_ResyncParts_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFAC3DB
 	ld xix, (0x60f298:24)                               ; FAC522  e2 98 f2 60 24
 	ld xbc, (0x60f2c4:24)                               ; FAC527  e2 c4 f2 60 21
 	xor XIX,XBC                                          ; FAC52C  e9 d4
@@ -79566,7 +79654,7 @@ sub_FAC522:   ; entry: named by 1 `.long` operand, first at 0xFAC3DB
 	ld (0x60f089:24), 0x40                             ; FAC532  f2 89 f0 60 00 40
 	ld (0x60f08a:24), 0x7f                             ; FAC538  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC53E  3c
-	calr sub_FABEB4                                          ; FAC53F  1e 72 f9
+	calr Queue2E00_FanOutToPartMask                                          ; FAC53F  1e 72 f9
 	pop XIY                                              ; FAC542  5d
 .LFAC543:
 	ld xbc, (0x60f2c4:24)                               ; FAC543  e2 c4 f2 60 21
@@ -79581,7 +79669,9 @@ sub_FAC522:   ; entry: named by 1 `.long` operand, first at 0xFAC3DB
 	ld (0x60f08a:24), 0x7f                             ; FAC564  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC56A  3c
 	jrl .LFAC77C                                         ; FAC56B  78 0e 02
-sub_FAC56E:   ; entry: named by 1 `.long` operand, first at 0xFAC3DF
+; ParamMsg_ResyncParts_B9_CC11_RTCreatY -- JumpTable_FAC3BF[8] (number 0xB9): post 0x40 to parts that lost 0xB9 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F29C)/(0x60F2C8) at 0xFAC56E-0xFAC599, reset 0x40 mask 0x7F; (0x60F29C) is ParamMsg_B9_CC11_RTCreatY's cell.
+ParamMsg_ResyncParts_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFAC3DF
 	ld xix, (0x60f29c:24)                               ; FAC56E  e2 9c f2 60 24
 	ld xbc, (0x60f2c8:24)                               ; FAC573  e2 c8 f2 60 21
 	xor XIX,XBC                                          ; FAC578  e9 d4
@@ -79590,7 +79680,7 @@ sub_FAC56E:   ; entry: named by 1 `.long` operand, first at 0xFAC3DF
 	ld (0x60f089:24), 0x40                             ; FAC57E  f2 89 f0 60 00 40
 	ld (0x60f08a:24), 0x7f                             ; FAC584  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC58A  3c
-	calr sub_FABEB4                                          ; FAC58B  1e 26 f9
+	calr Queue2E00_FanOutToPartMask                                          ; FAC58B  1e 26 f9
 	pop XIY                                              ; FAC58E  5d
 .LFAC58F:
 	ld xbc, (0x60f2c8:24)                               ; FAC58F  e2 c8 f2 60 21
@@ -79605,7 +79695,9 @@ sub_FAC56E:   ; entry: named by 1 `.long` operand, first at 0xFAC3DF
 	ld (0x60f08a:24), 0x7f                             ; FAC5B0  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC5B6  3c
 	jrl .LFAC77C                                         ; FAC5B7  78 c2 01
-sub_FAC5BA:   ; entry: named by 1 `.long` operand, first at 0xFAC3E3
+; ParamMsg_ResyncParts_BA_CC12_RTCtrlX -- JumpTable_FAC3BF[9] (number 0xBA): post 0x40 to parts that lost 0xBA and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F2A0)/(0x60F2CC) at 0xFAC5BA-0xFAC5E5, reset 0x40 mask 0x7F; (0x60F2A0) is ParamMsg_BA_CC12_RTCtrlX's cell.
+ParamMsg_ResyncParts_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFAC3E3
 	ld xix, (0x60f2a0:24)                               ; FAC5BA  e2 a0 f2 60 24
 	ld xbc, (0x60f2cc:24)                               ; FAC5BF  e2 cc f2 60 21
 	xor XIX,XBC                                          ; FAC5C4  e9 d4
@@ -79614,7 +79706,7 @@ sub_FAC5BA:   ; entry: named by 1 `.long` operand, first at 0xFAC3E3
 	ld (0x60f089:24), 0x40                             ; FAC5CA  f2 89 f0 60 00 40
 	ld (0x60f08a:24), 0x7f                             ; FAC5D0  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC5D6  3c
-	calr sub_FABEB4                                          ; FAC5D7  1e da f8
+	calr Queue2E00_FanOutToPartMask                                          ; FAC5D7  1e da f8
 	pop XIY                                              ; FAC5DA  5d
 .LFAC5DB:
 	ld xbc, (0x60f2cc:24)                               ; FAC5DB  e2 cc f2 60 21
@@ -79629,7 +79721,9 @@ sub_FAC5BA:   ; entry: named by 1 `.long` operand, first at 0xFAC3E3
 	ld (0x60f08a:24), 0x7f                             ; FAC5FC  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC602  3c
 	jrl .LFAC77C                                         ; FAC603  78 76 01
-sub_FAC606:   ; entry: named by 1 `.long` operand, first at 0xFAC3E7
+; ParamMsg_ResyncParts_BB_CC13_RTCtrlY -- JumpTable_FAC3BF[10] (number 0xBB): post 0x40 to parts that lost 0xBB and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F2A4)/(0x60F2D0) at 0xFAC606-0xFAC631, reset 0x40 mask 0x7F; (0x60F2A4) is ParamMsg_BB_CC13_RTCtrlY's cell.
+ParamMsg_ResyncParts_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFAC3E7
 	ld xix, (0x60f2a4:24)                               ; FAC606  e2 a4 f2 60 24
 	ld xbc, (0x60f2d0:24)                               ; FAC60B  e2 d0 f2 60 21
 	xor XIX,XBC                                          ; FAC610  e9 d4
@@ -79638,7 +79732,7 @@ sub_FAC606:   ; entry: named by 1 `.long` operand, first at 0xFAC3E7
 	ld (0x60f089:24), 0x40                             ; FAC616  f2 89 f0 60 00 40
 	ld (0x60f08a:24), 0x7f                             ; FAC61C  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC622  3c
-	calr sub_FABEB4                                          ; FAC623  1e 8e f8
+	calr Queue2E00_FanOutToPartMask                                          ; FAC623  1e 8e f8
 	pop XIY                                              ; FAC626  5d
 .LFAC627:
 	ld xbc, (0x60f2d0:24)                               ; FAC627  e2 d0 f2 60 21
@@ -79653,7 +79747,9 @@ sub_FAC606:   ; entry: named by 1 `.long` operand, first at 0xFAC3E7
 	ld (0x60f08a:24), 0x7f                             ; FAC648  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC64E  3c
 	jrl .LFAC77C                                         ; FAC64F  78 2a 01
-sub_FAC652:   ; entry: named by 1 `.long` operand, first at 0xFAC3CB
+; ParamMsg_ResyncParts_B4_ChannelPressure -- JumpTable_FAC3BF[3] (number 0xB4): post 0 to parts that lost 0xB4 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F28C)/(0x60F2B8) at 0xFAC652-0xFAC67D, reset 0x00 mask 0x7F; (0x60F28C) is ParamMsg_B4_ChannelPressure's cell.
+ParamMsg_ResyncParts_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xFAC3CB
 	ld xix, (0x60f28c:24)                               ; FAC652  e2 8c f2 60 24
 	ld xbc, (0x60f2b8:24)                               ; FAC657  e2 b8 f2 60 21
 	xor XIX,XBC                                          ; FAC65C  e9 d4
@@ -79662,7 +79758,7 @@ sub_FAC652:   ; entry: named by 1 `.long` operand, first at 0xFAC3CB
 	ld (0x60f089:24), 0x00                             ; FAC662  f2 89 f0 60 00 00
 	ld (0x60f08a:24), 0x7f                             ; FAC668  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC66E  3c
-	calr sub_FABEB4                                          ; FAC66F  1e 42 f8
+	calr Queue2E00_FanOutToPartMask                                          ; FAC66F  1e 42 f8
 	pop XIY                                              ; FAC672  5d
 .LFAC673:
 	ld xbc, (0x60f2b8:24)                               ; FAC673  e2 b8 f2 60 21
@@ -79677,7 +79773,9 @@ sub_FAC652:   ; entry: named by 1 `.long` operand, first at 0xFAC3CB
 	ld (0x60f08a:24), 0x7f                             ; FAC694  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC69A  3c
 	jrl .LFAC77C                                         ; FAC69B  78 de 00
-sub_FAC69E:   ; entry: named by 1 `.long` operand, first at 0xFAC3EF
+; ParamMsg_ResyncParts_BD_CC04_CtrlPedal -- JumpTable_FAC3BF[12] (number 0xBD): post 0 to parts that lost 0xBD and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F290)/(0x60F2BC) at 0xFAC69E-0xFAC6C9, reset 0x00 mask 0x7F; (0x60F290) is ParamMsg_BD_CC04_CtrlPedal's cell.
+ParamMsg_ResyncParts_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFAC3EF
 	ld xix, (0x60f290:24)                               ; FAC69E  e2 90 f2 60 24
 	ld xbc, (0x60f2bc:24)                               ; FAC6A3  e2 bc f2 60 21
 	xor XIX,XBC                                          ; FAC6A8  e9 d4
@@ -79686,7 +79784,7 @@ sub_FAC69E:   ; entry: named by 1 `.long` operand, first at 0xFAC3EF
 	ld (0x60f089:24), 0x00                             ; FAC6AE  f2 89 f0 60 00 00
 	ld (0x60f08a:24), 0x7f                             ; FAC6B4  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC6BA  3c
-	calr sub_FABEB4                                          ; FAC6BB  1e f6 f7
+	calr Queue2E00_FanOutToPartMask                                          ; FAC6BB  1e f6 f7
 	pop XIY                                              ; FAC6BE  5d
 .LFAC6BF:
 	ld xbc, (0x60f2bc:24)                               ; FAC6BF  e2 bc f2 60 21
@@ -79701,7 +79799,9 @@ sub_FAC69E:   ; entry: named by 1 `.long` operand, first at 0xFAC3EF
 	ld (0x60f08a:24), 0x7f                             ; FAC6E0  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC6E6  3c
 	jrl .LFAC77C                                         ; FAC6E7  78 92 00
-sub_FAC6EA:   ; entry: named by 1 `.long` operand, first at 0xFAC3CF
+; ParamMsg_ResyncParts_B5_CC40_Hold -- JumpTable_FAC3BF[4] (number 0xB5): post 0 to parts that lost 0xB5 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F294)/(0x60F2C0) at 0xFAC6EA-0xFAC715, reset 0x00 mask 0x7F; (0x60F294) is ParamMsg_B5_CC40_Hold's cell.
+ParamMsg_ResyncParts_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFAC3CF
 	ld xix, (0x60f294:24)                               ; FAC6EA  e2 94 f2 60 24
 	ld xbc, (0x60f2c0:24)                               ; FAC6EF  e2 c0 f2 60 21
 	xor XIX,XBC                                          ; FAC6F4  e9 d4
@@ -79710,7 +79810,7 @@ sub_FAC6EA:   ; entry: named by 1 `.long` operand, first at 0xFAC3CF
 	ld (0x60f089:24), 0x00                             ; FAC6FA  f2 89 f0 60 00 00
 	ld (0x60f08a:24), 0x7f                             ; FAC700  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC706  3c
-	calr sub_FABEB4                                          ; FAC707  1e aa f7
+	calr Queue2E00_FanOutToPartMask                                          ; FAC707  1e aa f7
 	pop XIY                                              ; FAC70A  5d
 .LFAC70B:
 	ld xbc, (0x60f2c0:24)                               ; FAC70B  e2 c0 f2 60 21
@@ -79725,7 +79825,9 @@ sub_FAC6EA:   ; entry: named by 1 `.long` operand, first at 0xFAC3CF
 	ld (0x60f08a:24), 0x7f                             ; FAC72B  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC731  3c
 	jr .LFAC77C                                          ; FAC732  68 48
-sub_FAC734:   ; entry: named by 1 `.long` operand, first at 0xFAC3C7
+; ParamMsg_ResyncParts_B3_CC0B_Expression -- JumpTable_FAC3BF[2] (number 0xB3): post 0x7F to parts that lost 0xB3 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue
+; Evidence: lost/gained from (0x60F2A8)/(0x60F2D4) at 0xFAC734-0xFAC75F, reset value 0x7F mask 0x7F (`ld H,0x7f` at 0xFAC744); (0x60F2A8) is ParamMsg_B3_CC0B_Expression's cell.  The label sub_FAC74B sits inside this arm.
+ParamMsg_ResyncParts_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, first at 0xFAC3C7
 	ld xix, (0x60f2a8:24)                               ; FAC734  e2 a8 f2 60 24
 	ld xbc, (0x60f2d4:24)                               ; FAC739  e2 d4 f2 60 21
 	xor XIX,XBC                                          ; FAC73E  e9 d4
@@ -79736,7 +79838,7 @@ sub_FAC734:   ; entry: named by 1 `.long` operand, first at 0xFAC3C7
 sub_FAC74B:
 	ld (0x60f08a:24), h                                 ; FAC74B  f2 8a f0 60 46
 	push XIX                                             ; FAC750  3c
-	calr sub_FABEB4                                          ; FAC751  1e 60 f7
+	calr Queue2E00_FanOutToPartMask                                          ; FAC751  1e 60 f7
 	pop XIY                                              ; FAC754  5d
 .LFAC755:
 	ld xbc, (0x60f2d4:24)                               ; FAC755  e2 d4 f2 60 21
@@ -79751,7 +79853,7 @@ sub_FAC74B:
 	ld (0x60f08a:24), 0x7f                             ; FAC775  f2 8a f0 60 00 7f
 	push XIX                                             ; FAC77B  3c
 .LFAC77C:
-	calr sub_FABEB4                                          ; FAC77C  1e 35 f7
+	calr Queue2E00_FanOutToPartMask                                          ; FAC77C  1e 35 f7
 	pop XIY                                              ; FAC77F  5d
 .LFAC780:
 	pop XIX                                              ; FAC780  5c
@@ -79759,7 +79861,10 @@ sub_FAC74B:
 	popw hl                                              ; FAC782  4b
 	unlk XIZ                                             ; FAC783  ee 0d
 	ret                                                  ; FAC785  0e
-sub_FAC786:
+; ParamMsg_RefreshMasksOnCtrlFieldChange -- UiEventList handler: run ParamMsg_RefreshPartMasks when the posted change touches a part-record field that ParamMsg_ComputePartMasks reads
+; Evidence: L = (0x20BB) (record byte 0, the number) and H = (0x20B8) (byte 1, the class), per the UiEventList payload layout; numbers 0x00-0x1F need class 0x0D and bit 5 of the mask (0x20BA), numbers 0x20-0x3F need class 0x0B..0x0E and a non-zero mask (0xFAC787-0xFAC7BD) -- the same bits ParamMsg_ComputePartMasks tests.
+; Called from: directory slot T_F40810, named in the handler lists at 0xF881B2, 0xF881DA, 0xF881FE, 0xF88222, 0xF88246, 0xF8826A.
+ParamMsg_RefreshMasksOnCtrlFieldChange:
 	pushw hl                                             ; FAC786  2b
 	ld l, (UiEvent_Class:16)                                   ; FAC787  c1 bb 20 27
 	ld h, (UiEvent_Byte1:16)                                   ; FAC78B  c1 b8 20 26
@@ -79783,11 +79888,14 @@ sub_FAC786:
 	m_cp_mi8 MB16, UiEvent_Byte3, 0x00                          ; FAC7B8  c1 ba 20 3f 00
 	jr z, .LFAC7C2                                       ; FAC7BD  66 03
 .LFAC7BF:
-	calr sub_FABFE2                                          ; FAC7BF  1e 20 f8
+	calr ParamMsg_RefreshPartMasks                                          ; FAC7BF  1e 20 f8
 .LFAC7C2:
 	popw hl                                              ; FAC7C2  4b
 	ret                                                  ; FAC7C3  0e
-sub_FAC7C4:
+; ParamRecord_SetPartsField18Bit0 -- set bit 0 of byte 0x18 of every second-half part record (numbers 0x20-0x3F) to bit 0 of the stack argument, queuing each to 0x2C00
+; Evidence: loop L = 0x20..0x3F at 0xFAC7CA-0xFAC808: XIX = ParamNumber_GetRecordPtr(L) + 0x18, `and (XIX),0xfe / or C,H`, stage {L,0x18,(XIX),0x01}, Queue2C00_AppendStagedIfPending.  Same field and mask as List2030_Field18_SetAllParts.
+; Called from: directory slot T_F4344C (three PanelOpTable_FCF773 handlers, 0xFD06EE, 0xFD074A, 0xFD07AF).
+ParamRecord_SetPartsField18Bit0:
 	link XIZ,0x0000                                      ; FAC7C4  ee 0c 00 00
 	pushw hl                                             ; FAC7C8  2b
 	push XIX                                             ; FAC7C9  3c
@@ -79796,7 +79904,7 @@ sub_FAC7C4:
 	and H,0x01                                           ; FAC7CF  ce cc 01
 .LFAC7D2:
 	pushw hl                                             ; FAC7D2  2b
-	calr sub_FAC8AA                                      ; FAC7D3  1e d4 00
+	calr ParamNumber_GetRecordPtr                                      ; FAC7D3  1e d4 00
 	ld XIX,XIY                                           ; FAC7D6  ed 8c
 	add XIX,0x00000018                                   ; FAC7D8  ec c8 18 00 00 00
 	and (XIX),0xfe                                       ; FAC7DE  84 3c fe
@@ -79817,7 +79925,10 @@ sub_FAC7C4:
 	popw hl                                              ; FAC80B  4b
 	unlk XIZ                                             ; FAC80C  ee 0d
 	ret                                                  ; FAC80E  0e
-sub_FAC80F:
+; Queue2E00_PostParam98Fields -- if bit 4 of parameter 0x98's record byte (0x7F02) is set, append {0x98,2,(0x7F04),0x3F} and {0x98,1,(0x7F03),0x7F} to the pending queue 0x2E00
+; Evidence: `and C,0x10` on (0x7F02) at 0xFAC816; two `call T_F41B18` (the Queue2E00 stack veneer) at 0xFAC82A and 0xFAC83B.  Evt2030_Param98Tech_Notify reads the same two bytes with the same masks.
+; Called from: directory slot T_F43454 (0xF9FEC8, 0xFE20D4, prom_b 0xF48F09).
+Queue2E00_PostParam98Fields:
 	push XIX                                             ; FAC80F  3c
 	lda xix, (0x7f02:16)                                ; FAC810  f1 02 7f 34
 	ld C,(XIX)                                           ; FAC814  84 23
@@ -79888,7 +79999,10 @@ Queue2C00_AppendStaged:
 	pop XDE                                              ; FAC8A7  5a
 	pop XHL                                              ; FAC8A8  5b
 	ret                                                  ; FAC8A9  0e
-sub_FAC8AA:
+; ParamNumber_GetRecordPtr -- XIY = ParamNumber_RecordPtrs[(XIZ+8)], 0xFFFFFFFF when the parameter number has no record
+; Evidence: `ld C,0x04 / mul BC,(XIZ+0x08) / add XBC,ParamNumber_RecordPtrs / ld XBC,(XBC) / ld XIY,XBC` at 0xFAC8AE-0xFAC8BD.  15 callers, among them List2030_LoadRecord, sub_FAB337 and ParamMsg_ComputePartMasks; each compares the result with 0xFFFFFFFF.
+; Note: the unlabelled routine at 0xFAC8C2 that follows returns 0x60F0E0 + 4*n for n <= 0x1F and -1 otherwise.
+ParamNumber_GetRecordPtr:
 	link XIZ,0x0000                                      ; FAC8AA  ee 0c 00 00
 	ld c, 0x04:opc                                          ; FAC8AE  23 04
 	m_mul MBD+r6, 0x08, 3                                ; FAC8B0  8e 08 43
@@ -79971,7 +80085,7 @@ Gap_FAC8E6:
 ;          MidiOut_ParamNumberTable.  What the populated entries serve:
 ;   0x00-0x1F  sub_FAB894 -- part parameters (number = the part); it
 ;              dispatches again on the record's CLASS, JumpTable_FAB8B4
-;   0x20-0x3F  sub_FABAFD -- the other half of each part record
+;   0x20-0x3F  List2030_Part20to3F_Dispatch -- the other half of each part record
 ;              (ParamNumber_RecordPtrs, pin 3)
 ;   0x7A, 0x98, 0xA8, 0xB0 -- one handler each (0xFABB61, 0xFABBD7, 0xFABCD7,
 ;              0xFABCEF), not decoded here
@@ -80016,38 +80130,38 @@ Dispatch_By_60F080:
 	.long sub_FAB894                                 ; FAC95E  [ 29]
 	.long sub_FAB894                                 ; FAC962  [ 30]
 	.long sub_FAB894                                 ; FAC966  [ 31]
-	.long sub_FABAFD                                 ; FAC96A  [ 32]
-	.long sub_FABAFD                                 ; FAC96E  [ 33]
-	.long sub_FABAFD                                 ; FAC972  [ 34]
-	.long sub_FABAFD                                 ; FAC976  [ 35]
-	.long sub_FABAFD                                 ; FAC97A  [ 36]
-	.long sub_FABAFD                                 ; FAC97E  [ 37]
-	.long sub_FABAFD                                 ; FAC982  [ 38]
-	.long sub_FABAFD                                 ; FAC986  [ 39]
-	.long sub_FABAFD                                 ; FAC98A  [ 40]
-	.long sub_FABAFD                                 ; FAC98E  [ 41]
-	.long sub_FABAFD                                 ; FAC992  [ 42]
-	.long sub_FABAFD                                 ; FAC996  [ 43]
-	.long sub_FABAFD                                 ; FAC99A  [ 44]
-	.long sub_FABAFD                                 ; FAC99E  [ 45]
-	.long sub_FABAFD                                 ; FAC9A2  [ 46]
-	.long sub_FABAFD                                 ; FAC9A6  [ 47]
-	.long sub_FABAFD                                 ; FAC9AA  [ 48]
-	.long sub_FABAFD                                 ; FAC9AE  [ 49]
-	.long sub_FABAFD                                 ; FAC9B2  [ 50]
-	.long sub_FABAFD                                 ; FAC9B6  [ 51]
-	.long sub_FABAFD                                 ; FAC9BA  [ 52]
-	.long sub_FABAFD                                 ; FAC9BE  [ 53]
-	.long sub_FABAFD                                 ; FAC9C2  [ 54]
-	.long sub_FABAFD                                 ; FAC9C6  [ 55]
-	.long sub_FABAFD                                 ; FAC9CA  [ 56]
-	.long sub_FABAFD                                 ; FAC9CE  [ 57]
-	.long sub_FABAFD                                 ; FAC9D2  [ 58]
-	.long sub_FABAFD                                 ; FAC9D6  [ 59]
-	.long sub_FABAFD                                 ; FAC9DA  [ 60]
-	.long sub_FABAFD                                 ; FAC9DE  [ 61]
-	.long sub_FABAFD                                 ; FAC9E2  [ 62]
-	.long sub_FABAFD                                 ; FAC9E6  [ 63]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC96A  [ 32]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC96E  [ 33]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC972  [ 34]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC976  [ 35]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC97A  [ 36]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC97E  [ 37]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC982  [ 38]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC986  [ 39]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC98A  [ 40]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC98E  [ 41]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC992  [ 42]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC996  [ 43]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC99A  [ 44]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC99E  [ 45]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9A2  [ 46]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9A6  [ 47]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9AA  [ 48]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9AE  [ 49]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9B2  [ 50]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9B6  [ 51]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9BA  [ 52]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9BE  [ 53]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9C2  [ 54]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9C6  [ 55]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9CA  [ 56]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9CE  [ 57]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9D2  [ 58]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9D6  [ 59]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9DA  [ 60]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9DE  [ 61]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9E2  [ 62]
+	.long List2030_Part20to3F_Dispatch                                 ; FAC9E6  [ 63]
 	.long Dispatch_By_60F080_Nop64                                 ; FAC9EA  [ 64]
 	.long Dispatch_By_60F080_Nop64                                 ; FAC9EE  [ 65]
 	.long Dispatch_By_60F080_Nop64                                 ; FAC9F2  [ 66]
@@ -80106,7 +80220,7 @@ Dispatch_By_60F080:
 	.long Dispatch_By_60F080_Nop64                                 ; FACAC6  [119]
 	.long Dispatch_By_60F080_Nop64                                 ; FACACA  [120]
 	.long Dispatch_By_60F080_Nop64                                 ; FACACE  [121]
-	.long sub_FABB61                                 ; FACAD2  [122]
+	.long List2030_Tempo_Dispatch                                 ; FACAD2  [122]
 	.long Dispatch_By_60F080_Nop64                                 ; FACAD6  [123]
 	.long Dispatch_By_60F080_Nop64                                 ; FACADA  [124]
 	.long Dispatch_By_60F080_Nop64                                 ; FACADE  [125]
@@ -80136,7 +80250,7 @@ Dispatch_By_60F080:
 	.long Dispatch_By_60F080_Nop64                                 ; FACB3E  [149]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB42  [150]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB46  [151]
-	.long sub_FABBD7                                 ; FACB4A  [152]
+	.long List2030_Param98_Dispatch                                 ; FACB4A  [152]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB4E  [153]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB52  [154]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB56  [155]
@@ -80152,7 +80266,7 @@ Dispatch_By_60F080:
 	.long Dispatch_By_60F080_Nop64                                 ; FACB7E  [165]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB82  [166]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB86  [167]
-	.long sub_FABCD7                                 ; FACB8A  [168]
+	.long List2030_ParamA8_PassThrough                                 ; FACB8A  [168]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB8E  [169]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB92  [170]
 	.long Dispatch_By_60F080_Nop64                                 ; FACB96  [171]
@@ -80160,7 +80274,7 @@ Dispatch_By_60F080:
 	.long Dispatch_By_60F080_Nop64                                 ; FACB9E  [173]
 	.long Dispatch_By_60F080_Nop64                                 ; FACBA2  [174]
 	.long Dispatch_By_60F080_Nop64                                 ; FACBA6  [175]
-	.long sub_FABCEF                                 ; FACBAA  [176]
+	.long List2030_ParamB0_Dispatch                                 ; FACBAA  [176]
 	.long ParamMsg_B1_PitchBend                                 ; FACBAE  [177]
 	.long ParamMsg_B2_CC01_Modulation                                 ; FACBB2  [178]
 	.long ParamMsg_B3_CC0B_Expression                                 ; FACBB6  [179]
@@ -81575,24 +81689,11 @@ Evt2030_Class00to1F_JumpTable_FADBA9:
 ; ---------------------------------------------------------------------
 Evt2030_Class00to1F_Op01:   ; entry: pointer-table entry
 	ret
-; ---------------------------------------------------------------------
-; sub_FADBDA -- arm 3 of the 4-entry jump table at 0xFAE30E
-;
-; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   Evt2030_Class00to1F_Op00.
-; Body:    starts `cp C,0x48`.
-; Evidence: the LE32 word at 0xFAE31A reads 0x00FADBDA, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FADBDA:   ; entry: pointer-table entry
+; Evt2030_ProgChgMode3_Notify -- PROG CHANGE MODE value 3 (no caption) of Evt2030_Class00to1F_Op00, a part's program change (class 0): map the part's sound bytes through T_F41008 and notify bank select (param 0x81) and program (class 0)
+; Evidence: arm 3 of the 4-entry table at 0xFAE30E -- the LE32 word at 0xFAE31A reads 0x00FADBDA; reader `ld XIX,0x00fae30e` at 0xFAE301, index (0x7F32) & 3.
+; (0x7F32) & 3 is PROG CHANGE MODE: sub_F9A4B0 copies it to (0x2740) and draws it with DL_NormalTechRemap at screen offset 0x15F8, right after the 18-char "PROG CHANGE MODE: " text at 0x15E6 of DL_TotalModeMidiMidiInputMode; DLTable_NormalTechRemap holds only NORMAL/TECH/REMAP.
+; Body: unless C == 0x48, (0x60F010) = word at ParamNumber_RecordPtrs[C], (0x60F012) = C, `call T_F41008` (sub_FC2526), then ParamChange_NotifyClearSource {0x81, part, (0x60F014..15)} and {part, 0, (0x60F016), 0xFF}.  MidiOut_ParamNumberTable[129] is MidiOut_BankSelect_Pair; class 0 is MidiOut_ProgramChange.
+Evt2030_ProgChgMode3_Notify:   ; entry: pointer-table entry
 	cp C,0x48
 	jr z, .LFADC1F
 	extz HL
@@ -81993,28 +82094,14 @@ Evt2030_Class98_Op01:   ; entry: pointer-table entry
 	jp (xix)
 ; --- 0xFADDF1-0xFADE01  pointer table (16 bytes) ---
 Evt2030_Class98_Op01_JumpTable_FADDF1:
-	.long sub_FADE01   ; -> sub_FADE01   ; FADDF1
-	.long sub_FADE2F   ; -> sub_FADE2F   ; FADDF5
+	.long Evt2030_Param98Normal_Notify   ; -> Evt2030_Param98Normal_Notify   ; FADDF1
+	.long Evt2030_Param98Tech_Notify   ; -> Evt2030_Param98Tech_Notify   ; FADDF5
 	.long Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; -> Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; FADDF9
 	.long Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; -> Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; FADDFD
-; ---------------------------------------------------------------------
-; sub_FADE01 -- arm 0 of the 4-entry jump table at 0xFADDF1
-;
-; Called from: the reader `ld XIX,0x00faddf1` at 0xFADDE5, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   Evt2030_Class98_Op01.
-; Body:    starts `ld BC,0x0298`.
-; Evidence: the LE32 word at 0xFADDF1 reads 0x00FADE01, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FADE01:   ; entry: pointer-table entry
+; Evt2030_Param98Normal_Notify -- PROG CHANGE MODE NORMAL arm of Evt2030_Class98_Op01: notify parameter 0x98's class 2 and class 1 values from record bytes 0x7F08..0x7F0A
+; Evidence: arm 0 of the 4-entry table at 0xFADDF1 -- the LE32 word at 0xFADDF1 reads 0x00FADE01; reader `ld XIX,0x00faddf1` at 0xFADDE5, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = "NORMAL").
+; Body: ParamChange_NotifyClearSource {0x98, 2, (0x7F0A) split into two 7-bit halves} then {0x98, 1, ((0x7F08)<<3)|((0x7F09)&7), 0xFF}; ends in the shared `ret` 0xFADE55.  The owner runs only when bit 3 of (0x7F32), SINGLE CH PROG CHANGE = COMBI, is set.
+Evt2030_Param98Normal_Notify:   ; entry: pointer-table entry
 	ldw bc, 0x0298
 	extz DE
 	ld e, (0x7f0a:16)
@@ -82030,24 +82117,10 @@ sub_FADE01:   ; entry: pointer-table entry
 	ld d, 0xff:opc
 	call T_ParamChange_NotifyClearSource
 	jr .LFADE55
-; ---------------------------------------------------------------------
-; sub_FADE2F -- arm 1 of the 4-entry jump table at 0xFADDF1
-;
-; Called from: the reader `ld XIX,0x00faddf1` at 0xFADDE5, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   Evt2030_Class98_Op01.
-; Body:    starts `extz DE`.
-; Evidence: the LE32 word at 0xFADDF5 reads 0x00FADE2F, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FADE2F:   ; entry: pointer-table entry
+; Evt2030_Param98Tech_Notify -- PROG CHANGE MODE TECH arm of Evt2030_Class98_Op01: notify parameter 0x98's class 2 and class 1 values from record bytes 0x7F04 and 0x7F03
+; Evidence: arm 1 of the 4-entry table at 0xFADDF1 -- the LE32 word at 0xFADDF5 reads 0x00FADE2F; reader `ld XIX,0x00faddf1` at 0xFADDE5, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = "TECH").
+; Body: ParamChange_NotifyClearSource {0x98, 2, (0x7F04)&0x3F split} then {0x98, 1, (0x7F03)&0x7F, 0xFF}; the same two bytes and masks Queue2E00_PostParam98Fields posts.
+Evt2030_Param98Tech_Notify:   ; entry: pointer-table entry
 	extz DE
 	ld e, (0x7f04:16)
 	and E,0x3f
@@ -82433,28 +82506,14 @@ ParamApply_ByModeOfParam80:
 	jp (xix)
 ; --- 0xFADF77-0xFADF87  pointer table (16 bytes) ---
 ParamApply_ByModeOfParam80_JumpTable_FADF77:
-	.long sub_FADF87   ; -> sub_FADF87   ; FADF77
-	.long sub_FADFD9   ; -> sub_FADFD9   ; FADF7B
+	.long ParamApply_Param98Normal   ; -> ParamApply_Param98Normal   ; FADF77
+	.long ParamApply_Param98Tech   ; -> ParamApply_Param98Tech   ; FADF7B
 	.long ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; -> ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; FADF7F
 	.long ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; -> ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; FADF83
-; ---------------------------------------------------------------------
-; sub_FADF87 -- arm 0 of the 4-entry jump table at 0xFADF77
-;
-; Called from: the reader `ld XIX,0x00fadf77` at 0xFADF6B, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   ParamApply_ByModeOfParam80.
-; Body:    starts `ld XIX,0x00007f02`.
-; Evidence: the LE32 word at 0xFADF77 reads 0x00FADF87, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FADF87:   ; entry: pointer-table entry
+; ParamApply_Param98Normal -- PROG CHANGE MODE NORMAL arm of ParamApply_ByModeOfParam80 for C == 0x98: store the packed value into record 0x7F02's bytes +6..+8, map it through T_F41024, and write+publish {0x98,2,..,0x3F} and {0x98,1,..,0x7F}
+; Evidence: arm 0 of the 4-entry table at 0xFADF77 -- the LE32 word at 0xFADF77 reads 0x00FADF87; reader `ld XIX,0x00fadf77` at 0xFADF6B, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = "NORMAL").
+; Body: (0x7F0A)=(0x60F013)=A, (0x7F09)=(0x60F011)=E&7, (0x7F08)=(0x60F010)=E>>3, (0x60F012)=0x98; call T_F41024 (sub_FC239B); T_ParamRecord_WriteFieldAndStage + T_Queue2C00_PublishStagedIfPending with (0x60F015)/0x3F and (0x60F014)/0x7F; falls into the shared `ret` 0xFAE02D.
+ParamApply_Param98Normal:   ; entry: pointer-table entry
 	ld XIX,0x00007f02
 	ld XIY,0x0060f010
 	ld (XIX+0x08),A
@@ -82479,24 +82538,10 @@ sub_FADF87:   ; entry: pointer-table entry
 	call T_ParamRecord_WriteFieldAndStage
 	call T_Queue2C00_PublishStagedIfPending
 	jr .LFAE02D
-; ---------------------------------------------------------------------
-; sub_FADFD9 -- arm 1 of the 4-entry jump table at 0xFADF77
-;
-; Called from: the reader `ld XIX,0x00fadf77` at 0xFADF6B, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   ParamApply_ByModeOfParam80.
-; Body:    starts `ld BC,0x0298`.
-; Evidence: the LE32 word at 0xFADF7B reads 0x00FADFD9, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FADFD9:   ; entry: pointer-table entry
+; ParamApply_Param98Tech -- PROG CHANGE MODE TECH arm of ParamApply_ByModeOfParam80 for C == 0x98: write+publish {0x98,2,A,0x3F} and the MIDI-in record (0x1950), map through T_F41028 and copy the result to 0x7F08..0x7F0A
+; Evidence: arm 1 of the 4-entry table at 0xFADF77 -- the LE32 word at 0xFADF7B reads 0x00FADFD9; reader `ld XIX,0x00fadf77` at 0xFADF6B, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = "TECH").
+; Body: `ldw BC,0x0298` + T_ParamRecord_WriteFieldAndStage/T_Queue2C00_PublishStagedIfPending; again with BC/DE = (0x1950)/(0x1952); (0x60F010)=(0x1952), (0x60F011)=E, (0x60F012)=0x98, `call T_F41028` (sub_FC24E3); (0x60F014..16) -> (0x7F08..0x7F0A).
+ParamApply_Param98Tech:   ; entry: pointer-table entry
 	ldw bc, 0x0298
 	ld E,A
 	ld d, 0x3f:opc
@@ -82553,28 +82598,14 @@ Dev7F_WriteAllFourSlots_Skip:
 	ret
 ; --- 0xFAE04D-0xFAE05D  pointer table (16 bytes) ---
 Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D:
-	.long sub_FAE05D   ; -> sub_FAE05D   ; FAE04D
-	.long sub_FAE0FC   ; -> sub_FAE0FC   ; FAE051
+	.long ParamApply_PartProgNormal   ; -> ParamApply_PartProgNormal   ; FAE04D
+	.long ParamApply_PartProgTech   ; -> ParamApply_PartProgTech   ; FAE051
 	.long Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2   ; -> Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2   ; FAE055
-	.long sub_FAE189   ; -> sub_FAE189   ; FAE059
-; ---------------------------------------------------------------------
-; sub_FAE05D -- arm 0 of the 4-entry jump table at 0xFAE04D
-;
-; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   the tail of ParamApply_ByModeOfParam80.
-; Body:    starts `ld BC,(0x1950)`.
-; Evidence: the LE32 word at 0xFAE04D reads 0x00FAE05D, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE05D:   ; entry: pointer-table entry
+	.long ParamApply_PartProgMode3   ; -> ParamApply_PartProgMode3   ; FAE059
+; ParamApply_PartProgNormal -- PROG CHANGE MODE NORMAL arm of ParamApply_ByModeOfParam80 for a part: apply the program in the MIDI-in record (0x1950) to part C's record and publish class 1 and class 0
+; Evidence: arm 0 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE04D reads 0x00FAE05D; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = "NORMAL").
+; Body: with GM mode on (bit 2 of (0x7F4D)) parts 9 and 0x19 take the TECH arm; else W = (0x60F570)[C], L = (E&0x7F)>>3, H = E&7 stored at second-half +0x1B/+0x1C/+0x1D, T_F4078C, rec[0] = L, rec[1] = H, publish {C,1,H,0x7F} and {C,0,L,0xFF}.
+ParamApply_PartProgNormal:   ; entry: pointer-table entry
 	ld bc, (0x1950:16)
 	ld de, (0x1952:16)
 	m_bit 2, MD16, 0x7f4d
@@ -82626,24 +82657,10 @@ sub_FAE05D:   ; entry: pointer-table entry
 .LFAE0FB:
 	ret
 .LFAE0FC:
-; ---------------------------------------------------------------------
-; sub_FAE0FC -- arm 1 of the 4-entry jump table at 0xFAE04D
-;
-; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   the tail of ParamApply_ByModeOfParam80.
-; Body:    starts `ld BC,(0x1950)`.
-; Evidence: the LE32 word at 0xFAE051 reads 0x00FAE0FC, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE0FC:   ; entry: pointer-table entry
+; ParamApply_PartProgTech -- PROG CHANGE MODE TECH arm of ParamApply_ByModeOfParam80 for a part: write the received program byte and bank byte straight into part C's record and publish class 1 and class 0
+; Evidence: arm 1 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE051 reads 0x00FAE0FC; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = "TECH").
+; Body: BC/DE = (0x1950)/(0x1952); bit 7 of D moves to E; rec[0] = E, rec[1] = (rec[1]&0x80)|D; T_F40790 then second-half +0x1B..+0x1D; publish {C,1,D,0x7F} and {C,0,E,0xFF}.  Also the GM drum-part branch target of ParamApply_PartProgNormal.
+ParamApply_PartProgTech:   ; entry: pointer-table entry
 	ld bc, (0x1950:16)
 	ld de, (0x1952:16)
 	ld (0x60f01d:24), c
@@ -82708,24 +82725,10 @@ sub_FAE0FC:   ; entry: pointer-table entry
 ; ---------------------------------------------------------------------
 Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2:   ; entry: pointer-table entry
 	ret
-; ---------------------------------------------------------------------
-; sub_FAE189 -- arm 3 of the 4-entry jump table at 0xFAE04D
-;
-; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   the tail of ParamApply_ByModeOfParam80.
-; Body:    starts `ld BC,(0x1950)`.
-; Evidence: the LE32 word at 0xFAE059 reads 0x00FAE189, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE189:   ; entry: pointer-table entry
+; ParamApply_PartProgMode3 -- PROG CHANGE MODE value 3 (no caption) of ParamApply_ByModeOfParam80 for a part: map the stored bank pair through T_F41004 and apply the result as part C's program
+; Evidence: arm 3 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE059 reads 0x00FAE189; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3; DLTable_NormalTechRemap has no entry 3.
+; Body: (0x60F010) = (0x60F530)[2*C], (0x60F012) = DE, `call T_F41004` (sub_FC24EB), (0x60F014..15) -> rec[0]/rec[1], T_F40790 then second-half +0x1B..+0x1D, publish {C,1,D,0x7F} and {C,0,E,0xFF}.
+ParamApply_PartProgMode3:   ; entry: pointer-table entry
 	ld bc, (0x1950:16)
 	ld de, (0x1952:16)
 	xor H,H
@@ -82827,47 +82830,19 @@ ParamApply_StorePairAndDerive:
 	jp (xiy)
 ; --- 0xFAE28F-0xFAE29F  pointer table (16 bytes) ---
 ParamApply_StorePairAndDerive_JumpTable_FAE28F:
-	.long sub_FAE29F   ; -> sub_FAE29F   ; FAE28F
-	.long sub_FAE2A1   ; -> sub_FAE2A1   ; FAE293
-	.long sub_FAE2D3   ; -> sub_FAE2D3   ; FAE297
-	.long sub_FAE2D5   ; -> sub_FAE2D5   ; FAE29B
-; ---------------------------------------------------------------------
-; sub_FAE29F -- arm 0 of the 4-entry jump table at 0xFAE28F
-;
-; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   ParamApply_StorePairAndDerive.
-; Body:    starts `jr T,0xfae2aa`.
-; Evidence: the LE32 word at 0xFAE28F reads 0x00FAE29F, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE29F:   ; entry: pointer-table entry
+	.long ParamApply_DeriveNormal   ; -> ParamApply_DeriveNormal   ; FAE28F
+	.long ParamApply_DeriveTech   ; -> ParamApply_DeriveTech   ; FAE293
+	.long ParamApply_DeriveRemap   ; -> ParamApply_DeriveRemap   ; FAE297
+	.long ParamApply_DeriveMode3   ; -> ParamApply_DeriveMode3   ; FAE29B
+; ParamApply_DeriveNormal -- PROG CHANGE MODE NORMAL arm of ParamApply_StorePairAndDerive: derive the stored byte from the 7F7F pair as ((A>>4)&7)|(W<<3), W&7 with 7 -> 4
+; Evidence: arm 0 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE28F reads 0x00FAE29F; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0]).
+; Body: `jr 0xFAE2AA`, i.e. into ParamApply_DeriveTech past its W 3 -> 0 step; result stored at (XIZ+C) (0x60F570, or 0x60F654 for C == 0x98).
+ParamApply_DeriveNormal:   ; entry: pointer-table entry
 	jr .LFAE2AA
-; ---------------------------------------------------------------------
-; sub_FAE2A1 -- arm 1 of the 4-entry jump table at 0xFAE28F
-;
-; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   ParamApply_StorePairAndDerive.
-; Body:    starts `and W,0x07`.
-; Evidence: the LE32 word at 0xFAE293 reads 0x00FAE2A1, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE2A1:   ; entry: pointer-table entry
+; ParamApply_DeriveTech -- PROG CHANGE MODE TECH arm of ParamApply_StorePairAndDerive: derive the stored byte from the pair as ((A>>4)&7)|(W<<3), with W&7 mapped 3 -> 0 and 7 -> 4
+; Evidence: arm 1 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE293 reads 0x00FAE2A1; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3 (DLTable_NormalTechRemap[1]).
+; Body: `cp W,3 / xor W,W`, `cp W,7 / ld W,4`, pack, clear bits 3-4 when they read 0x10 and bit 0 of (0x08EC) is clear; stored at (XIZ+C) by the shared tail 0xFAE2D8.
+ParamApply_DeriveTech:   ; entry: pointer-table entry
 	and W,0x07
 	cp w, 0x03:i3
 	jr nz, .LFAE2AA
@@ -82892,43 +82867,13 @@ sub_FAE2A1:   ; entry: pointer-table entry
 	and A,0xe7
 .LFAE2D1:
 	jr .LFAE2D8
-; ---------------------------------------------------------------------
-; sub_FAE2D3 -- arm 2 of the 4-entry jump table at 0xFAE28F
-;
-; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   ParamApply_StorePairAndDerive.
-; Body:    starts `jr T,0xfae2d8`.
-; Evidence: the LE32 word at 0xFAE297 reads 0x00FAE2D3, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE2D3:   ; entry: pointer-table entry
+; ParamApply_DeriveRemap -- PROG CHANGE MODE REMAP arm of ParamApply_StorePairAndDerive: store the pair's low byte A unchanged
+; Evidence: arm 2 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE297 reads 0x00FAE2D3; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3, DLTable_NormalTechRemap[2] = "REMAP".  Body: `jr 0xFAE2D8`, the shared `ld (XIZ+HL),A`.
+ParamApply_DeriveRemap:   ; entry: pointer-table entry
 	jr .LFAE2D8
-; ---------------------------------------------------------------------
-; sub_FAE2D5 -- arm 3 of the 4-entry jump table at 0xFAE28F
-;
-; Called from: the reader `ld XIY,0x00fae28f` at 0xFAE283, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   ParamApply_StorePairAndDerive.
-; Body:    starts `srl 0x08,WA`.
-; Evidence: the LE32 word at 0xFAE29B reads 0x00FAE2D5, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE2D5:   ; entry: pointer-table entry
+; ParamApply_DeriveMode3 -- PROG CHANGE MODE value 3 (no caption) of ParamApply_StorePairAndDerive: store the pair's high byte W
+; Evidence: arm 3 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE29B reads 0x00FAE2D5; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3.  Body: `srl 0x08,WA` then the shared `ld (XIZ+HL),A` at 0xFAE2D8.
+ParamApply_DeriveMode3:   ; entry: pointer-table entry
 	srl wa, 0x08
 .LFAE2D8:
 	mx_st_mr8 MXD, ra_IZ, ra_HL, r1
@@ -82977,28 +82922,14 @@ sub_FAE30D_JumpTable_FAE30E_Nop2:   ; entry: pointer-table entry
 	ret
 ; --- 0xFAE30E-0xFAE31E  pointer table (16 bytes) ---
 sub_FAE30D_JumpTable_FAE30E:
-	.long sub_FAE31E   ; -> sub_FAE31E   ; FAE30E
-	.long sub_FAE36C   ; -> sub_FAE36C   ; FAE312
+	.long Evt2030_ProgChgNormal_Notify   ; -> Evt2030_ProgChgNormal_Notify   ; FAE30E
+	.long Evt2030_ProgChgTech_Notify   ; -> Evt2030_ProgChgTech_Notify   ; FAE312
 	.long sub_FAE30D_JumpTable_FAE30E_Nop2   ; -> sub_FAE30D_JumpTable_FAE30E_Nop2   ; FAE316
-	.long sub_FADBDA   ; -> sub_FADBDA   ; FAE31A
-; ---------------------------------------------------------------------
-; sub_FAE31E -- arm 0 of the 4-entry jump table at 0xFAE30E
-;
-; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   Evt2030_Class00to1F_Op00.
-; Body:    starts `bit 2,(0x7f4d)`.
-; Evidence: the LE32 word at 0xFAE30E reads 0x00FAE31E, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE31E:   ; entry: pointer-table entry
+	.long Evt2030_ProgChgMode3_Notify   ; -> Evt2030_ProgChgMode3_Notify   ; FAE31A
+; Evt2030_ProgChgNormal_Notify -- PROG CHANGE MODE NORMAL arm of Evt2030_Class00to1F_Op00: notify bank select (param 0x81) and program (class 0) from the part's second-half bytes +0x1B..+0x1D
+; Evidence: arm 0 of the 4-entry table at 0xFAE30E -- the LE32 word at 0xFAE30E reads 0x00FAE31E; reader `ld XIX,0x00fae30e` at 0xFAE301, index (0x7F32) & 3, and DLTable_NormalTechRemap[0] is "NORMAL" (see Evt2030_ProgChgMode3_Notify).
+; Body: with GM mode on (bit 2 of (0x7F4D), notes/sysex-probes/sysex_general_midi.py) parts 9 and 0x19 take the TECH arm; else XIX = ParamNumber_RecordPtrs[C|0x20], notify {0x81, part, (XIX+0x1D) split into two 7-bit halves} and {part, 0, ((XIX+0x1B)<<3)|((XIX+0x1C)&7), 0xFF} -- the bytes ParamApply_PartProgNormal stores.
+Evt2030_ProgChgNormal_Notify:   ; entry: pointer-table entry
 	m_bit 2, MD16, 0x7f4d
 	jr z, .LFAE32E
 	cp C,0x09
@@ -83030,24 +82961,10 @@ sub_FAE31E:   ; entry: pointer-table entry
 	call T_ParamChange_NotifyClearSource
 	ret
 .LFAE36C:
-; ---------------------------------------------------------------------
-; sub_FAE36C -- arm 1 of the 4-entry jump table at 0xFAE30E
-;
-; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   Evt2030_Class00to1F_Op00.
-; Body:    starts `extz HL`.
-; Evidence: the LE32 word at 0xFAE312 reads 0x00FAE36C, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAE36C:   ; entry: pointer-table entry
+; Evt2030_ProgChgTech_Notify -- PROG CHANGE MODE TECH arm of Evt2030_Class00to1F_Op00: notify bank select (param 0x81) from record byte 1 and program (class 0) from record byte 0
+; Evidence: arm 1 of the 4-entry table at 0xFAE30E -- the LE32 word at 0xFAE312 reads 0x00FAE36C; reader `ld XIX,0x00fae30e` at 0xFAE301, index (0x7F32) & 3; DLTable_NormalTechRemap[1] is "TECH".
+; Body: XIX = ParamNumber_RecordPtrs[C]; notify {0x81, part, (XIX+1)&0x3F split} and {part, 0, (XIX)&0x7F, 0xFF}.  Also the target of Evt2030_ProgChgNormal_Notify's GM drum-part branch.
+Evt2030_ProgChgTech_Notify:   ; entry: pointer-table entry
 	extz HL
 	ld L,C
 	sll hl, 0x02
@@ -83411,11 +83328,11 @@ sub_FAE800_Nop4:   ; entry: pointer-table entry
 T_F41F3C_Nop:
 	ret
 ; --- 0xFAE82A-0xFAE84A  pointer table (32 bytes) ---
-	.long sub_FAEA12   ; -> sub_FAEA12   ; FAE82A
-	.long sub_FAEA6B   ; -> sub_FAEA6B   ; FAE82E
-	.long sub_FAEAC5   ; -> sub_FAEAC5   ; FAE832
-	.long sub_FAEAF4   ; -> sub_FAEAF4   ; FAE836
-	.long sub_FAEB1D   ; -> sub_FAEB1D   ; FAE83A
+	.long SeqBuf_PutProgramEvent   ; -> SeqBuf_PutProgramEvent   ; FAE82A
+	.long SeqBuf_PutParamEvent   ; -> SeqBuf_PutParamEvent   ; FAE82E
+	.long SeqBuf_PutPitchBendEvent   ; -> SeqBuf_PutPitchBendEvent   ; FAE832
+	.long SeqBuf_PutModulationEvent   ; -> SeqBuf_PutModulationEvent   ; FAE836
+	.long SeqBuf_PutExpressionEvent   ; -> SeqBuf_PutExpressionEvent   ; FAE83A
 	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE83E
 	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE842
 	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE846
@@ -83536,7 +83453,7 @@ sub_FAE829_Nop5:   ; entry: pointer-table entry
 	ld (0x60f312:24), wa
 	ld (0x60f31c:24), 0x00
 .LFAE972:
-	calr sub_FAEBBC
+	calr SeqBuf_LoadSlotKeyList
 	ld bc, (0x60f310:24)
 	ld d, (0x60f313:24)
 	ld XIX,0x0060f330
@@ -83575,13 +83492,13 @@ sub_FAE829_Nop5:   ; entry: pointer-table entry
 	.byte 0x00   ; FAE9CF
 ; --- 0xFAE9D0-0xFAEA10  pointer table (64 bytes) ---
 sub_FAE84A_JumpTable_FAE9D0:
-	.long sub_FAEA12   ; -> sub_FAEA12   ; FAE9D0
-	.long sub_FAEA6B   ; -> sub_FAEA6B   ; FAE9D4
-	.long sub_FAEB75   ; -> sub_FAEB75   ; FAE9D8
-	.long sub_FAEAC5   ; -> sub_FAEAC5   ; FAE9DC
-	.long sub_FAEAF4   ; -> sub_FAEAF4   ; FAE9E0
-	.long sub_FAEB1D   ; -> sub_FAEB1D   ; FAE9E4
-	.long sub_FAEB46   ; -> sub_FAEB46   ; FAE9E8
+	.long SeqBuf_PutProgramEvent   ; -> SeqBuf_PutProgramEvent   ; FAE9D0
+	.long SeqBuf_PutParamEvent   ; -> SeqBuf_PutParamEvent   ; FAE9D4
+	.long SeqBuf_PutTempoEvent   ; -> SeqBuf_PutTempoEvent   ; FAE9D8
+	.long SeqBuf_PutPitchBendEvent   ; -> SeqBuf_PutPitchBendEvent   ; FAE9DC
+	.long SeqBuf_PutModulationEvent   ; -> SeqBuf_PutModulationEvent   ; FAE9E0
+	.long SeqBuf_PutExpressionEvent   ; -> SeqBuf_PutExpressionEvent   ; FAE9E4
+	.long SeqBuf_PutChanPressureEvent   ; -> SeqBuf_PutChanPressureEvent   ; FAE9E8
 	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9EC
 	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9F0
 	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9F4
@@ -83606,19 +83523,10 @@ sub_FAE84A_JumpTable_FAE9D0:
 sub_FAE84A_JumpTable_FAE9D0_Nop7:   ; entry: pointer-table entry
 	ret
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEA12 -- arm 0 of the 16-entry jump table at 0xFAE9D0
-;
-; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
-;          Index: W & 0x0F.
-; Owner:   the routine at 0xFAE921.
-; Body:    starts `ld XIX,0x0060f300`.
-; Evidence: the LE32 word at 0xFAE9D0 reads 0x00FAEA12, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names W & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEA12:   ; entry: pointer-table entry
+; SeqBuf_PutProgramEvent -- event type 0 of the 0x2C00-queue encoder at 0xFAE921: encode a part program change as a 7-byte 0xC0-tagged event and append it to the sequencer event ring 0x600A14
+; Evidence: the LE32 word at 0xFAE9D0 reads 0x00FAEA12 (index 0); reader `ld XIX,0x00fae9d0` at 0xFAE9A6, index W & 0x0F where W is the high byte of the value word SeqBuf_LoadSlotKeyList copied from KeyValueList_A; in every A list type 0 belongs to exactly one key, {part, class 0} (program; MidiOut_ParamClassTable[0] = MidiOut_ProgramChange).
+; Body: builds {0xC0, tick (0x60F31E) = (0x93), number, class, rec[0], rec[1], slot (0x60F31C)} at 0x60F300, bit 7 of rec[0]/rec[1] folded into status bits 0/1; length (0x60F31F) = 7; the tail 0xFAEC0F appends it with T_Ring600A14_PutBlock.  0x600A14 is the sequencer event ring of SeqBuf_AppendEvent (tag byte, then tick (0x93)).
+SeqBuf_PutProgramEvent:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ld a, 0xc0:opc
 	ld w, (0x60f31e:24)
@@ -83647,19 +83555,10 @@ sub_FAEA12:   ; entry: pointer-table entry
 	ld (0x60f31f:24), 0x07
 	calr .LFAEC0F
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEA6B -- arm 1 of the 16-entry jump table at 0xFAE9D0
-;
-; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
-;          Index: W & 0x0F.
-; Owner:   the routine at 0xFAE921.
-; Body:    starts `ld XIX,0x0060f300`.
-; Evidence: the LE32 word at 0xFAE9D4 reads 0x00FAEA6B, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names W & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEA6B:   ; entry: pointer-table entry
+; SeqBuf_PutParamEvent -- event type 1 of the encoder at 0xFAE921: encode a parameter change as a 7-byte 0xB0-tagged event {0xB0, tick, number, class, value, mask, slot} and append it to ring 0x600A14
+; Evidence: the LE32 word at 0xFAE9D4 reads 0x00FAEA6B (index 1); reader `ld XIX,0x00fae9d0` at 0xFAE9A6.  KeyValueList_A type 1 covers part classes 3-0x0B, second-half classes 0x18-0x1A and numbers 0xAD, 0xAE, 0xB5-0xBD.
+; Body: bit 7 of number / value / mask folded into status bits 2 / 0 / 1 (0xFAEA7A-0xFAEAA9), length 7, tail 0xFAEC0F.  SeqEvt_LookupParamType undoes the folding.
+SeqBuf_PutParamEvent:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ld a, 0xb0:opc
 	ld w, (0x60f31e:24)
@@ -83689,19 +83588,10 @@ sub_FAEA6B:   ; entry: pointer-table entry
 	ld (0x60f31f:24), 0x07
 	calr .LFAEC0F
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEAC5 -- arm 3 of the 16-entry jump table at 0xFAE9D0
-;
-; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
-;          Index: W & 0x0F.
-; Owner:   the routine at 0xFAE921.
-; Body:    starts `ld XIX,0x0060f300`.
-; Evidence: the LE32 word at 0xFAE9DC reads 0x00FAEAC5, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names W & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEAC5:   ; entry: pointer-table entry
+; SeqBuf_PutPitchBendEvent -- event type 3 of the encoder at 0xFAE921: encode a pitch-bend change as {0xD2, tick, LSB, MSB, slot} and append it to ring 0x600A14
+; Evidence: the LE32 word at 0xFAE9DC reads 0x00FAEAC5 (index 3); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 3 belongs only to key 0xB1 (ParamMsg_B1_PitchBend).  Body: `ld A,0xd2`, (0x60F312) & 0x7F7F, (0x60F31F) = 0x25 (length 5; 0x20 is the overflow flag the tail ORs into (0x34B8) when the ring is full).
+; SeqEvt_ShadowPitchBend handles the same 0xD2 code on the playback side.
+SeqBuf_PutPitchBendEvent:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ld a, 0xd2:opc
 	ld w, (0x60f31e:24)
@@ -83715,19 +83605,9 @@ sub_FAEAC5:   ; entry: pointer-table entry
 	ld (0x60f31f:24), 0x25
 	calr .LFAEC0F
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEAF4 -- arm 4 of the 16-entry jump table at 0xFAE9D0
-;
-; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
-;          Index: W & 0x0F.
-; Owner:   the routine at 0xFAE921.
-; Body:    starts `ld XIX,0x0060f300`.
-; Evidence: the LE32 word at 0xFAE9E0 reads 0x00FAEAF4, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names W & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEAF4:   ; entry: pointer-table entry
+; SeqBuf_PutModulationEvent -- event type 4 of the encoder at 0xFAE921: encode a modulation change as {0xD1, tick, value, slot} and append it to ring 0x600A14
+; Evidence: the LE32 word at 0xFAE9E0 reads 0x00FAEAF4 (index 4); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 4 belongs only to key 0xB2 (ParamMsg_B2_CC01_Modulation).  Body: `ld A,0xd1`, (0x60F31F) = 0x14 (length 4, overflow flag 0x10).  SeqEvt_ShadowModulation handles 0xD1 on playback.
+SeqBuf_PutModulationEvent:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ld a, 0xd1:opc
 	ld w, (0x60f31e:24)
@@ -83739,19 +83619,9 @@ sub_FAEAF4:   ; entry: pointer-table entry
 	ld (0x60f31f:24), 0x14
 	calr .LFAEC0F
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEB1D -- arm 5 of the 16-entry jump table at 0xFAE9D0
-;
-; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
-;          Index: W & 0x0F.
-; Owner:   the routine at 0xFAE921.
-; Body:    starts `ld XIX,0x0060f300`.
-; Evidence: the LE32 word at 0xFAE9E4 reads 0x00FAEB1D, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names W & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEB1D:   ; entry: pointer-table entry
+; SeqBuf_PutExpressionEvent -- event type 5 of the encoder at 0xFAE921: encode an expression change as {0xD3, tick, value, slot} and append it to ring 0x600A14
+; Evidence: the LE32 word at 0xFAE9E4 reads 0x00FAEB1D (index 5); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 5 belongs only to key 0xB3 (ParamMsg_B3_CC0B_Expression).  Body: `ld A,0xd3`, (0x60F31F) = 4.  SeqEvt_ShadowExpression handles 0xD3 on playback.
+SeqBuf_PutExpressionEvent:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ld a, 0xd3:opc
 	ld w, (0x60f31e:24)
@@ -83763,19 +83633,9 @@ sub_FAEB1D:   ; entry: pointer-table entry
 	ld (0x60f31f:24), 0x04
 	calr .LFAEC0F
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEB46 -- arm 6 of the 16-entry jump table at 0xFAE9D0
-;
-; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
-;          Index: W & 0x0F.
-; Owner:   the routine at 0xFAE921.
-; Body:    starts `bit 0,(0x7fc2)`.
-; Evidence: the LE32 word at 0xFAE9E8 reads 0x00FAEB46, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names W & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEB46:   ; entry: pointer-table entry
+; SeqBuf_PutChanPressureEvent -- event type 6 of the encoder at 0xFAE921: when bit 0 of (0x7FC2) is set, encode a channel-pressure change as {0xD0, tick, value, slot} and append it to ring 0x600A14
+; Evidence: the LE32 word at 0xFAE9E8 reads 0x00FAEB46 (index 6); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 6 belongs only to key 0xB4 (ParamMsg_B4_ChannelPressure).  Body: `bit 0,(0x7fc2) / jr z` gate, `ld A,0xd0`, (0x60F31F) = 4.  What bit 0 of (0x7FC2) is, is not established.
+SeqBuf_PutChanPressureEvent:   ; entry: pointer-table entry
 	m_bit 0, MD16, 0x7fc2
 	jr z, .LFAEB74
 	ld XIX,0x0060f300
@@ -83790,19 +83650,9 @@ sub_FAEB46:   ; entry: pointer-table entry
 	calr .LFAEC0F
 .LFAEB74:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEB75 -- arm 2 of the 16-entry jump table at 0xFAE9D0
-;
-; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
-;          Index: W & 0x0F.
-; Owner:   the routine at 0xFAE921.
-; Body:    starts `ld XIX,0x0060f300`.
-; Evidence: the LE32 word at 0xFAE9D8 reads 0x00FAEB75, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names W & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEB75:   ; entry: pointer-table entry
+; SeqBuf_PutTempoEvent -- event type 2 of the encoder at 0xFAE921: encode the current tempo (parameter 0x7A, RAM 0x7EE2) as {0x80, tick, tempo&0x7F, tempo>>7} and append it to ring 0x600A14
+; Evidence: the LE32 word at 0xFAE9D8 reads 0x00FAEB75 (index 2); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 2 belongs only to key 0x7A (KeyValueList_A32).  Body: `ld A,0x80`, `ld WA,(0x7ee2) / and WA,0x01ff`, 7-bit split, (0x60F31F) = 4.  SeqEvt_ApplyTempo decodes the same 0x80 code.
+SeqBuf_PutTempoEvent:   ; entry: pointer-table entry
 	ld XIX,0x0060f300
 	ld a, 0x80:opc
 	ld w, (0x60f31e:24)
@@ -83826,7 +83676,10 @@ sub_FAEB75:   ; entry: pointer-table entry
 	call T_Dev7F_WriteSlot8_Slot2
 	call T_Dev7F_WriteSlot8_Slot3
 	ret
-sub_FAEBBC:
+; SeqBuf_LoadSlotKeyList -- if slot (0x60F31C) is enabled in the slot mask (0x60F318), copy KeyValueList_A for the slot's part (0x603422)[slot] to RAM 0x60F330; otherwise leave 0x60F330 empty (0xFF)
+; Evidence: `ld (0x60f330),0xff`, shift loop on (0x60F318) at 0xFAEBC9-0xFAEBD6, `ld XIX,KeyValueListPtrs_A` read (the reader KeyValueListPtrs_A's header cites) and the word-copy loop 0xFAEBFB-0xFAEC0E.
+; (0x60F318) is set by the unlabelled 0xFAE872 (directory T_F41F30) from (0x3000), (0x3004) or (0x1336) by the mode bytes (0x2078)/(0x207A).  Called per slot 0..16 by the 0x2C00 encoder at 0xFAE921.
+SeqBuf_LoadSlotKeyList:
 	ld (0x60f330:24), 0xff
 	xor XWA,XWA
 	ld c, (0x60f31c:24)
@@ -83877,9 +83730,9 @@ sub_FAEBBC:
 	ei 0x00
 	m_cp_mi8 MB24, 0x60f01e, 0xff
 	jr nz, .LFAEC71
-	call sub_FAF579
+	call Regs_SaveAllScratch
 	call T_F40A24
-	call sub_FAF59D
+	call Regs_RestoreAllScratch
 	jr .LFAEC71
 .LFAEC5E:
 	ld a, (0x60f31f:24)
@@ -83923,7 +83776,7 @@ sub_FAEBBC:
 	inc 0x01, (0x60f31d:24)
 	m_cp_mi8 MB24, 0x60f31d, 0x11
 	jr c, .LFAEC90
-	calr sub_FAF491
+	calr SeqEvt_FlushShadows
 	calr sub_FAF772
 	call T_Queue2C00_DrainPassB
 	ret
@@ -83937,7 +83790,7 @@ sub_FAEBBC:
 	ld a, (0x60f31d:24)
 	ld w, 0xff:opc
 	ld (XIX),WA
-	calr sub_FAF148
+	calr SeqEvt_ApplyCtrlEvent
 	ret
 .LFAECFF:
 	ld XIX,0x0060f308
@@ -83947,7 +83800,7 @@ sub_FAEBBC:
 	ld w, (0x60f31d:24)
 	ld (xix+), wa
 	ld (XIX),0xff
-	calr sub_FAF148
+	calr SeqEvt_ApplyCtrlEvent
 	ret
 .LFAED1B:
 	ld XIX,0x0060f308
@@ -83957,7 +83810,7 @@ sub_FAEBBC:
 	ld w, (0x60f31d:24)
 	ld (xix+), wa
 	ld (XIX),0xff
-	calr sub_FAF148
+	calr SeqEvt_ApplyCtrlEvent
 	ret
 .LFAED37:
 	ld XIX,0x0060f308
@@ -83976,12 +83829,12 @@ sub_FAEBBC:
 	ld a, (0x60f31d:24)
 	ld w, 0xff:opc
 	ld (XIX),WA
-	calr sub_FAEE36
+	calr SeqEvt_ApplyParamEvent
 	ret
 .LFAED75:
 	ret
 	calr .LFAED8E
-	calr sub_FAF491
+	calr SeqEvt_FlushShadows
 	ret
 	call T_Dev7F_WriteSlot8_Slot0
 	call T_Dev7F_WriteSlot8_Slot1
@@ -84015,24 +83868,24 @@ sub_FAEBBC:
 	ld l, (0x60f308:24)
 	and L,0x70
 	srl hl, 0x02
-	ld XIY,sub_FAEBBC_JumpTable_FAEDF0
+	ld XIY,SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0
 	mx_ld_rm MXL, ra_IY, ra_HL, r5
 	call (xiy)
 	jr .LFAED9C
 ; --- 0xFAEDEF-0xFAEDF0  align (1 bytes) ---
 	.byte 0x00   ; FAEDEF
 ; --- 0xFAEDF0-0xFAEE10  pointer table (32 bytes) ---
-sub_FAEBBC_JumpTable_FAEDF0:
-	.long sub_FAF0FE   ; -> sub_FAF0FE   ; FAEDF0
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEDF4
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEDF8
-	.long sub_FAEE36   ; -> sub_FAEE36   ; FAEDFC
-	.long sub_FAF5C1   ; -> sub_FAF5C1   ; FAEE00
-	.long sub_FAF148   ; -> sub_FAF148   ; FAEE04
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE08
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE0C
+SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0:
+	.long SeqEvt_ApplyTempo   ; -> SeqEvt_ApplyTempo   ; FAEDF0
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEDF4
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEDF8
+	.long SeqEvt_ApplyParamEvent   ; -> SeqEvt_ApplyParamEvent   ; FAEDFC
+	.long SeqEvt_ApplyProgramEvent   ; -> SeqEvt_ApplyProgramEvent   ; FAEE00
+	.long SeqEvt_ApplyCtrlEvent   ; -> SeqEvt_ApplyCtrlEvent   ; FAEE04
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE08
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE0C
 ; ---------------------------------------------------------------------
-; sub_FAEBBC_JumpTable_FAEDF0_Nop1 -- arm 1, 2, 6, 7 of the 8-entry jump table at 0xFAEDF0
+; SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1 -- arm 1, 2, 6, 7 of the 8-entry jump table at 0xFAEDF0
 ;
 ; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
 ;          Index: ((0x60F308) & 0x70) >> 2.
@@ -84043,14 +83896,16 @@ sub_FAEBBC_JumpTable_FAEDF0:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEBBC_JumpTable_FAEDF0_Nop1:   ; entry: pointer-table entry
+SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1:   ; entry: pointer-table entry
 	ret
 Evt2030_ClassHandlers_Code_Skip:
 	ld XIX,0x00002c00
 	ld hl, (0x60f000:24)
 	mx_ld_mi8 MXD, ra_IX, ra_HL, 0xff
 	ret
-sub_FAEE22:
+; SeqEvt_UnpackProgramBit7 -- restore bit 7 of the two sound bytes of a 0xC0 event in the buffer 0x60F308: status bit 0 -> bit 7 of byte +4, status bit 1 -> bit 7 of byte +5
+; Evidence: `bit 0,(XIX) / set 7,(XIX+0x04)` and `bit 1,(XIX) / set 7,(XIX+0x05)` at 0xFAEE22-0xFAEE33 with XIX = 0x60F308 -- the inverse of SeqBuf_PutProgramEvent's `res 7` + `set 0/1,(0x60f300)`.  Called only by SeqEvt_ApplyProgramEvent.
+SeqEvt_UnpackProgramBit7:
 	ld XIX,0x0060f308
 	bit 0,(XIX)
 	jr z, .LFAEE2E
@@ -84061,27 +83916,18 @@ sub_FAEE22:
 	set 7,(XIX+0x05)
 .LFAEE35:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEE36 -- arm 3 of the 8-entry jump table at 0xFAEDF0
-;
-; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
-;          Index: ((0x60F308) & 0x70) >> 2.
-; Owner:   the routine at 0xFAED76.
-; Body:    starts `calr 0xfaf055`.
-; Evidence: the LE32 word at 0xFAEDFC reads 0x00FAEE36, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEE36:   ; entry: pointer-table entry
-	calr sub_FAF055
+; SeqEvt_ApplyParamEvent -- playback of a 0xBn sequencer event: look its {number, class} up in the slot's KeyValueList_B and dispatch on the event type found
+; Evidence: the LE32 word at 0xFAEDFC reads 0x00FAEE36 (entry 3 of the table at 0xFAEDF0, read by `ld XIY,0x00faedf0` at 0xFAEDE1, index (status & 0x70) >> 4); body calr SeqEvt_LookupParamType, then `ld L,(0x60f327) / and L,0x0f` and the 16-entry table at 0xFAEE5C (reader at 0xFAEE4E).
+; KeyValueList_B uses only types 3 (key 0xAD), 4 (0xAE, 0xB5-0xBD), 5 ({part,3}) and 6 (part classes 5-0x0B, 0x18-0x1A), read straight from KeyValueList_B00..B32.
+SeqEvt_ApplyParamEvent:   ; entry: pointer-table entry
+	calr SeqEvt_LookupParamType
 	m_cp_mi8 MB24, 0x60f308, 0xff
 	jr z, .LFAEE5A
 	extz HL
 	ld l, (0x60f327:24)
 	and L,0x0f
 	sll hl, 0x02
-	ld XIX,sub_FAEE36_JumpTable_FAEE5C
+	ld XIX,SeqEvt_ApplyParamEvent_JumpTable_FAEE5C
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	call (xix)
 .LFAEE5A:
@@ -84089,25 +83935,25 @@ sub_FAEE36:   ; entry: pointer-table entry
 ; --- 0xFAEE5B-0xFAEE5C  align (1 bytes) ---
 	.byte 0x00   ; FAEE5B
 ; --- 0xFAEE5C-0xFAEE9C  pointer table (64 bytes) ---
-sub_FAEE36_JumpTable_FAEE5C:
-	.long sub_FAEE36_JumpTable_FAEE5C_Nop0   ; -> sub_FAEE36_JumpTable_FAEE5C_Nop0   ; FAEE5C
-	.long sub_FAEE36_JumpTable_FAEE5C_Nop1   ; -> sub_FAEE36_JumpTable_FAEE5C_Nop1   ; FAEE60
-	.long sub_FAEE36_JumpTable_FAEE5C_Nop2   ; -> sub_FAEE36_JumpTable_FAEE5C_Nop2   ; FAEE64
-	.long sub_FAEFB3   ; -> sub_FAEFB3   ; FAEE68
-	.long sub_FAF00A   ; -> sub_FAF00A   ; FAEE6C
-	.long sub_FAEF24   ; -> sub_FAEF24   ; FAEE70
-	.long sub_FAEE9D   ; -> sub_FAEE9D   ; FAEE74
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE78
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE7C
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE80
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE84
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE88
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE8C
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE90
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE94
-	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE98
+SeqEvt_ApplyParamEvent_JumpTable_FAEE5C:
+	.long SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop0   ; -> SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop0   ; FAEE5C
+	.long SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop1   ; -> SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop1   ; FAEE60
+	.long SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop2   ; -> SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop2   ; FAEE64
+	.long SeqEvt_ApplyParamAD   ; -> SeqEvt_ApplyParamAD   ; FAEE68
+	.long SeqEvt_PublishParam   ; -> SeqEvt_PublishParam   ; FAEE6C
+	.long SeqEvt_ShadowPartVolume   ; -> SeqEvt_ShadowPartVolume   ; FAEE70
+	.long SeqEvt_WriteRecordField   ; -> SeqEvt_WriteRecordField   ; FAEE74
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE78
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE7C
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE80
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE84
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE88
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE8C
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE90
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE94
+	.long SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; -> SeqBuf_LoadSlotKeyList_JumpTable_FAEDF0_Nop1   ; FAEE98
 ; ---------------------------------------------------------------------
-; sub_FAEE36_JumpTable_FAEE5C_Nop0 -- arm 0 of the 16-entry jump table at 0xFAEE5C
+; SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop0 -- arm 0 of the 16-entry jump table at 0xFAEE5C
 ;
 ; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
 ;          Index: (0x60F327) & 0x0F.
@@ -84118,22 +83964,13 @@ sub_FAEE36_JumpTable_FAEE5C:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEE36_JumpTable_FAEE5C_Nop0:   ; entry: pointer-table entry
+SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop0:   ; entry: pointer-table entry
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEE9D -- arm 6 of the 16-entry jump table at 0xFAEE5C
-;
-; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
-;          Index: (0x60F327) & 0x0F.
-; Owner:   the routine at 0xFAEE10.
-; Body:    starts `call 0xfaf562`.
-; Evidence: the LE32 word at 0xFAEE74 reads 0x00FAEE9D, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEE9D:   ; entry: pointer-table entry
-	call sub_FAF562
+; SeqEvt_WriteRecordField -- type 6 of a played-back 0xBn event: masked write of {number, class, value, mask} into ParamNumber_RecordPtrs[number] + class and publish it when the slot's apply bit is set, then notify MIDI out unless the slot's output byte is 0x20
+; Evidence: the LE32 word at 0xFAEE74 reads 0x00FAEE9D (index 6 of 0xFAEE5C, reader at 0xFAEE4E, index (0x60F327) & 0x0F); KeyValueList_B type 6 = part classes 5-0x0B and 0x18-0x1A.
+; Body: SeqEvt_SlotApplyBit gate, `ld W,D / xor W,0xff / and A,W / and E,D / or E,A` store, T_Queue2C00_PublishStagedIfPending; then (0x60F007) = (0x603433)[slot] | 0x80 and T_ParamChange_Notify.
+SeqEvt_WriteRecordField:   ; entry: pointer-table entry
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAEEED
 	ld bc, (0x60f30a:24)
 	ld de, (0x60f30c:24)
@@ -84172,19 +84009,9 @@ sub_FAEE9D:   ; entry: pointer-table entry
 	call T_ParamChange_Notify
 .LFAEF23:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEF24 -- arm 5 of the 16-entry jump table at 0xFAEE5C
-;
-; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
-;          Index: (0x60F327) & 0x0F.
-; Owner:   the routine at 0xFAEE10.
-; Body:    starts `ld E,(0x60f30c)`.
-; Evidence: the LE32 word at 0xFAEE70 reads 0x00FAEF24, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEF24:   ; entry: pointer-table entry
+; SeqEvt_ShadowPartVolume -- type 5 of a played-back 0xBn event: defer a part-volume value, (0x60F610)[slot] = value | 0x80, for SeqEvt_FlushShadows
+; Evidence: the LE32 word at 0xFAEE70 reads 0x00FAEF24 (index 5 of 0xFAEE5C, reader at 0xFAEE4E); KeyValueList_B type 5 belongs only to key {part, class 3}, and class 3 is volume (MidiOut_ParamClassTable[3] = MidiOut_CC07_Volume).  Body: `set 7,E / ld XIX,0x0060f610 / ld (XIX+HL),E`; SeqEvt_FlushShadows posts the array through SeqEvt_PostPartVolume with B = 3.
+SeqEvt_ShadowPartVolume:   ; entry: pointer-table entry
 	ld e, (0x60f30c:24)
 	extz HL
 	ld l, (0x60f31d:24)
@@ -84193,7 +84020,9 @@ sub_FAEF24:   ; entry: pointer-table entry
 	ld XIX,0x0060f610
 	mx_st_mr8 MXD, ra_IX, ra_HL, r5
 	ret
-sub_FAEF43:
+; SeqEvt_PostPartVolume -- post a deferred part volume for sequencer slot (0x60F31D): {part, 3, E, 0x7F} written into the part record and published when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20
+; Evidence: part = IdentityMap32_FAF7A6[(0x603422)[slot]], `ld B,0x03 / ld D,0x7f`, SeqEvt_SlotApplyBit, T_ParamRecord_WriteFieldAndStage + T_Queue2C00_PublishStagedIfPending, then T_ParamChange_Notify (0xFAEF43-0xFAEFB0).  Class 3 is volume (MidiOut_ParamClassTable[3] = MidiOut_CC07_Volume).  Called from SeqEvt_FlushShadows' 0x60F610 sweep.
+SeqEvt_PostPartVolume:
 	extz HL
 	ld l, (0x60f31d:24)
 	ld XIX,0x00603422
@@ -84204,7 +84033,7 @@ sub_FAEF43:
 	ld (0x60f0bc:24), bc
 	ld d, 0x7f:opc
 	ld (0x60f0be:24), de
-	call sub_FAF562
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAEF7A
 	call T_ParamRecord_WriteFieldAndStage
 	call T_Queue2C00_PublishStagedIfPending
@@ -84225,7 +84054,7 @@ sub_FAEF43:
 .LFAEFB0:
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAEE36_JumpTable_FAEE5C_Nop1 -- arm 1 of the 16-entry jump table at 0xFAEE5C
+; SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop1 -- arm 1 of the 16-entry jump table at 0xFAEE5C
 ;
 ; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
 ;          Index: (0x60F327) & 0x0F.
@@ -84236,10 +84065,10 @@ sub_FAEF43:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEE36_JumpTable_FAEE5C_Nop1:   ; entry: pointer-table entry
+SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop1:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAEE36_JumpTable_FAEE5C_Nop2 -- arm 2 of the 16-entry jump table at 0xFAEE5C
+; SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop2 -- arm 2 of the 16-entry jump table at 0xFAEE5C
 ;
 ; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
 ;          Index: (0x60F327) & 0x0F.
@@ -84250,22 +84079,12 @@ sub_FAEE36_JumpTable_FAEE5C_Nop1:   ; entry: pointer-table entry
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEE36_JumpTable_FAEE5C_Nop2:   ; entry: pointer-table entry
+SeqEvt_ApplyParamEvent_JumpTable_FAEE5C_Nop2:   ; entry: pointer-table entry
 	ret
-; ---------------------------------------------------------------------
-; sub_FAEFB3 -- arm 3 of the 16-entry jump table at 0xFAEE5C
-;
-; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
-;          Index: (0x60F327) & 0x0F.
-; Owner:   the routine at 0xFAEE10.
-; Body:    starts `call 0xfaf562`.
-; Evidence: the LE32 word at 0xFAEE68 reads 0x00FAEFB3, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAEFB3:   ; entry: pointer-table entry
-	call sub_FAF562
+; SeqEvt_ApplyParamAD -- type 3 of a played-back 0xBn event (used only by key 0xAD): load the event into the MIDI-in record (0x1950) with value/mask 0x7F00 and run ParamApply_PublishStagedAndPostSeven, then notify MIDI out
+; Evidence: the LE32 word at 0xFAEE68 reads 0x00FAEFB3 (index 3 of 0xFAEE5C, reader at 0xFAEE4E); KeyValueList_B type 3 holds only key 0xAD.  Body: SeqEvt_SlotApplyBit gate, `ld (0x1950),WA` from (0x60F30A), `ldw WA,0x7f00 / ld (0x1952),WA`, `call T_F4087C` (ParamApply_PublishStagedAndPostSeven, which also posts the B1/B4/B2/B3/B5/B6/B7 reset values), (0x60F01E) := (0x60F309); then T_ParamChange_Notify.
+SeqEvt_ApplyParamAD:   ; entry: pointer-table entry
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAEFDD
 	ld a, 0x00:opc
 	ld (0x1950:16), a
@@ -84290,20 +84109,10 @@ sub_FAEFB3:   ; entry: pointer-table entry
 	call T_ParamChange_Notify
 .LFAF009:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAF00A -- arm 4 of the 16-entry jump table at 0xFAEE5C
-;
-; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
-;          Index: (0x60F327) & 0x0F.
-; Owner:   the routine at 0xFAEE10.
-; Body:    starts `call 0xfaf562`.
-; Evidence: the LE32 word at 0xFAEE6C reads 0x00FAF00A, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF00A:   ; entry: pointer-table entry
-	call sub_FAF562
+; SeqEvt_PublishParam -- type 4 of a played-back 0xBn event: publish the event's four bytes unchanged to 0x2C00 (no record write) when the slot's apply bit is set, then notify MIDI out
+; Evidence: the LE32 word at 0xFAEE6C reads 0x00FAF00A (index 4 of 0xFAEE5C, reader at 0xFAEE4E); KeyValueList_B type 4 = keys 0xAE and 0xB5-0xBD, numbers with no record.  Body: SeqEvt_SlotApplyBit gate, (0x60F080..83) := (0x60F30A..0D), T_Queue2C00_PublishStagedIfPending; T_ParamChange_Notify unless (0x603433)[slot] == 0x20.
+SeqEvt_PublishParam:   ; entry: pointer-table entry
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAF028
 	ld wa, (0x60f30a:24)
 	ld (0x60f080:24), wa
@@ -84324,7 +84133,10 @@ sub_FAF00A:   ; entry: pointer-table entry
 	call T_ParamChange_Notify
 .LFAF054:
 	ret
-sub_FAF055:
+; SeqEvt_LookupParamType -- for the 0xBn event in 0x60F308: take the slot from byte +6, load the slot's KeyValueList_B into 0x60F330, restore bit 7 of number/value/mask from status bits 2/0/1, find the {number, class} key and leave its type in (0x60F327), or invalidate the event ((0x60F308) = 0xFF) when there is no key or its mask misses the event's mask
+; Evidence: `ld A,(0x60f30e) / ld (0x60f31d),A` at 0xFAF055; .LFAF0C1 copies KeyValueListPtrs_B[(0x603422)[slot]] (reader at 0xFAF0DB, cited by that table's header); flag restore 0xFAF075-0xFAF08F; key search 0xFAF099-0xFAF0BB.
+; The inverse of SeqBuf_PutParamEvent's flag folding.  Called only by SeqEvt_ApplyParamEvent.
+SeqEvt_LookupParamType:
 	ld a, (0x60f30e:24)
 	ld (0x60f31d:24), a
 	calr .LFAF0C1
@@ -84389,24 +84201,15 @@ sub_FAF055:
 	jr .LFAF0EA
 .LFAF0FD:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAF0FE -- arm 0 of the 8-entry jump table at 0xFAEDF0
-;
-; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
-;          Index: ((0x60F308) & 0x70) >> 2.
-; Owner:   the routine at 0xFAED76.
-; Body:    starts `cp (0x60f308),0x80`.
-; Evidence: the LE32 word at 0xFAEDF0 reads 0x00FAF0FE, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF0FE:   ; entry: pointer-table entry
+; SeqEvt_ApplyTempo -- playback of a 0x80 sequencer event: write its 9-bit tempo into parameter 0x7A's record (RAM 0x7EE2), reprogram the tempo timer and publish {0x7A, 0, tempo, 0xFF} when the slot's apply bit is set
+; Evidence: the LE32 word at 0xFAEDF0 reads 0x00FAF0FE (entry 0 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); `cp (0x60f308),0x80`; `ld XIX,0x00007ee2 / and (XIX),0xfe00 / or (XIX),WA`; `call T_F40794` (sub_FAA742, the 40..300 BPM clamp that loads TREG5); `ldw (0x60f080),0x7a` + T_Queue2C00_PublishStagedIfPending.
+; The decode side of SeqBuf_PutTempoEvent.
+SeqEvt_ApplyTempo:   ; entry: pointer-table entry
 	m_cp_mi8 MB24, 0x60f308, 0x80
 	jr nz, .LFAF147
 	ld a, (0x60f30c:24)
 	ld (0x60f31d:24), a
-	call sub_FAF562
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAF147
 	ld wa, (0x60f30a:24)
 	srl w, 0x01
@@ -84424,26 +84227,17 @@ sub_FAF0FE:   ; entry: pointer-table entry
 	call T_Queue2C00_PublishStagedIfPending
 .LFAF147:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAF148 -- arm 5 of the 8-entry jump table at 0xFAEDF0
-;
-; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
-;          Index: ((0x60F308) & 0x70) >> 2.
-; Owner:   the routine at 0xFAED76.
-; Body:    starts `calr 0xfaf3f9`.
-; Evidence: the LE32 word at 0xFAEE04 reads 0x00FAF148, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF148:   ; entry: pointer-table entry
-	calr sub_FAF3F9
+; SeqEvt_ApplyCtrlEvent -- playback of a 0xDn sequencer event: validate its slot, then dispatch on status & 3 -- D0 channel pressure, D1 modulation, D2 pitch bend, D3 expression
+; Evidence: the LE32 word at 0xFAEE04 reads 0x00FAF148 (entry 5 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); body calr SeqEvt_SelectCtrlEventSlot, `and A,0x03` and the 4-entry table at 0xFAF16C.
+; The four codes are the ones SeqBuf_PutChanPressureEvent / PutModulationEvent / PutPitchBendEvent / PutExpressionEvent emit for keys 0xB4 / 0xB2 / 0xB1 / 0xB3.  Also called by the slot-reset routine at 0xFAEC8A (directory T_F41F18) with synthesised D0/D1/D2 events.
+SeqEvt_ApplyCtrlEvent:   ; entry: pointer-table entry
+	calr SeqEvt_SelectCtrlEventSlot
 	m_cp_mi8 MB24, 0x60f308, 0xff
 	jr z, .LFAF16A
 	ld a, (0x60f308:24)
 	and A,0x03
 	sll a, 0x02
-	ld XIX,sub_FAF148_JumpTable_FAF16C
+	ld XIX,SeqEvt_ApplyCtrlEvent_JumpTable_FAF16C
 	mx8_ld_rm MXL, ra_IX, rb_A, r4
 	call (xix)
 .LFAF16A:
@@ -84451,24 +84245,14 @@ sub_FAF148:   ; entry: pointer-table entry
 ; --- 0xFAF16B-0xFAF16C  align (1 bytes) ---
 	.byte 0x00   ; FAF16B
 ; --- 0xFAF16C-0xFAF17C  pointer table (16 bytes) ---
-sub_FAF148_JumpTable_FAF16C:
-	.long sub_FAF17C   ; -> sub_FAF17C   ; FAF16C
-	.long sub_FAF20B   ; -> sub_FAF20B   ; FAF170
-	.long sub_FAF29A   ; -> sub_FAF29A   ; FAF174
-	.long sub_FAF332   ; -> sub_FAF332   ; FAF178
-; ---------------------------------------------------------------------
-; sub_FAF17C -- arm 0 of the 4-entry jump table at 0xFAF16C
-;
-; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
-;          Index: (0x60F308) & 3.
-; Owner:   the routine at 0xFAF148.
-; Body:    starts `extz HL`.
-; Evidence: the LE32 word at 0xFAF16C reads 0x00FAF17C, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF17C:   ; entry: pointer-table entry
+SeqEvt_ApplyCtrlEvent_JumpTable_FAF16C:
+	.long SeqEvt_ShadowChanPressure   ; -> SeqEvt_ShadowChanPressure   ; FAF16C
+	.long SeqEvt_ShadowModulation   ; -> SeqEvt_ShadowModulation   ; FAF170
+	.long SeqEvt_ShadowPitchBend   ; -> SeqEvt_ShadowPitchBend   ; FAF174
+	.long SeqEvt_ShadowExpression   ; -> SeqEvt_ShadowExpression   ; FAF178
+; SeqEvt_ShadowChanPressure -- 0xD0 arm of SeqEvt_ApplyCtrlEvent: defer a channel-pressure value, (0x60F630)[slot] = value | 0x80
+; Evidence: arm 0 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF16C reads 0x00FAF17C; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  SeqEvt_FlushShadows posts 0x60F630 through SeqEvt_PostChanPressure (`ld C,0xb4`).
+SeqEvt_ShadowChanPressure:   ; entry: pointer-table entry
 	extz HL
 	ld l, (0x60f31d:24)
 	ld XIX,0x0060f630
@@ -84476,7 +84260,9 @@ sub_FAF17C:   ; entry: pointer-table entry
 	set 0x07,A
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1
 	ret
-sub_FAF196:
+; SeqEvt_PostChanPressure -- post a deferred channel pressure for sequencer slot (0x60F31D): {0xB4, part, E, 0x7F} published to 0x2C00 when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20
+; Evidence: `ld C,0xb4`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedIfPending, T_ParamChange_Notify (0xFAF196-0xFAF20A).  0xB4 is ParamMsg_B4_ChannelPressure.  Called from SeqEvt_FlushShadows' 0x60F630 sweep.
+SeqEvt_PostChanPressure:
 	ld c, 0xb4:opc
 	ld XIX,0x00603422
 	ld l, (0x60f31d:24)
@@ -84486,7 +84272,7 @@ sub_FAF196:
 	ld (0x60f0bc:24), bc
 	ld d, 0x7f:opc
 	ld (0x60f0be:24), de
-	call sub_FAF562
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAF1DB
 	ld wa, (0x60f0bc:24)
 	ld (0x60f080:24), wa
@@ -84507,19 +84293,9 @@ sub_FAF196:
 	call T_ParamChange_Notify
 .LFAF20A:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAF20B -- arm 1 of the 4-entry jump table at 0xFAF16C
-;
-; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
-;          Index: (0x60F308) & 3.
-; Owner:   the routine at 0xFAF148.
-; Body:    starts `extz HL`.
-; Evidence: the LE32 word at 0xFAF170 reads 0x00FAF20B, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF20B:   ; entry: pointer-table entry
+; SeqEvt_ShadowModulation -- 0xD1 arm of SeqEvt_ApplyCtrlEvent: defer a modulation value, (0x60F5B0)[slot] = value | 0x80
+; Evidence: arm 1 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF170 reads 0x00FAF20B; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  SeqEvt_FlushShadows posts 0x60F5B0 through SeqEvt_PostModulation (`ld C,0xb2`); ParamShadow_FlushAll walks the same array with W = 0xB2.
+SeqEvt_ShadowModulation:   ; entry: pointer-table entry
 	extz HL
 	ld l, (0x60f31d:24)
 	ld XIX,0x0060f5b0
@@ -84527,7 +84303,9 @@ sub_FAF20B:   ; entry: pointer-table entry
 	set 0x07,A
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1
 	ret
-sub_FAF225:
+; SeqEvt_PostModulation -- post a deferred modulation value for sequencer slot (0x60F31D): {0xB2, part, E, 0x7F} published when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20
+; Evidence: `ld C,0xb2`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedIfPending, T_ParamChange_Notify (0xFAF225-0xFAF299).  0xB2 is ParamMsg_B2_CC01_Modulation.  Called from SeqEvt_FlushShadows' 0x60F5B0 sweep.
+SeqEvt_PostModulation:
 	ld c, 0xb2:opc
 	ld XIX,0x00603422
 	ld l, (0x60f31d:24)
@@ -84537,7 +84315,7 @@ sub_FAF225:
 	ld (0x60f0bc:24), bc
 	ld d, 0x7f:opc
 	ld (0x60f0be:24), de
-	call sub_FAF562
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAF26A
 	ld wa, (0x60f0bc:24)
 	ld (0x60f080:24), wa
@@ -84558,19 +84336,9 @@ sub_FAF225:
 	call T_ParamChange_Notify
 .LFAF299:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAF29A -- arm 2 of the 4-entry jump table at 0xFAF16C
-;
-; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
-;          Index: (0x60F308) & 3.
-; Owner:   the routine at 0xFAF148.
-; Body:    starts `extz HL`.
-; Evidence: the LE32 word at 0xFAF174 reads 0x00FAF29A, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF29A:   ; entry: pointer-table entry
+; SeqEvt_ShadowPitchBend -- 0xD2 arm of SeqEvt_ApplyCtrlEvent: defer a pitch-bend pair, 16-bit (0x60F5D0)[2*slot] = (word & 0x7F7F) with bit 7 of the low byte as pending flag
+; Evidence: arm 2 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF174 reads 0x00FAF29A; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  SeqEvt_FlushShadows posts 0x60F5D0 through SeqEvt_PostPitchBend (`ld C,0xb1`); 0x60F5D0 is ParamShadow_SetPitchBend's 16-bit array.
+SeqEvt_ShadowPitchBend:   ; entry: pointer-table entry
 	extz HL
 	ld l, (0x60f31d:24)
 	sll l, 0x01
@@ -84580,7 +84348,9 @@ sub_FAF29A:   ; entry: pointer-table entry
 	set 0x07,A
 	mx_st_mr16 MXD, ra_IX, ra_HL, r0
 	ret
-sub_FAF2BB:
+; SeqEvt_PostPitchBend -- post a deferred pitch bend for sequencer slot (0x60F31D): {0xB1, part, LSB, MSB} published through T_Queue2C00_PublishStagedDrainPassB when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20
+; Evidence: `ld C,0xb1`, `and DE,0x7f7f`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedDrainPassB, T_ParamChange_Notify (0xFAF2BB-0xFAF331).  0xB1 is ParamMsg_B1_PitchBend.  Called from SeqEvt_FlushShadows' 0x60F5D0 sweep.
+SeqEvt_PostPitchBend:
 	ld c, 0xb1:opc
 	ld XIX,0x00603422
 	ld l, (0x60f31d:24)
@@ -84590,7 +84360,7 @@ sub_FAF2BB:
 	ld (0x60f0bc:24), bc
 	and DE,0x7f7f
 	ld (0x60f0be:24), de
-	call sub_FAF562
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAF302
 	ld wa, (0x60f0bc:24)
 	ld (0x60f080:24), wa
@@ -84611,19 +84381,9 @@ sub_FAF2BB:
 	call T_ParamChange_Notify
 .LFAF331:
 	ret
-; ---------------------------------------------------------------------
-; sub_FAF332 -- arm 3 of the 4-entry jump table at 0xFAF16C
-;
-; Called from: the reader `ld XIX,0x00faf16c` at 0xFAF15E, through XIX/XIY.
-;          Index: (0x60F308) & 3.
-; Owner:   the routine at 0xFAF148.
-; Body:    starts `ld E,(0x60f30a)`.
-; Evidence: the LE32 word at 0xFAF178 reads 0x00FAF332, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF332:   ; entry: pointer-table entry
+; SeqEvt_ShadowExpression -- 0xD3 arm of SeqEvt_ApplyCtrlEvent: defer an expression value, (0x60F590)[slot] = value | 0x80, unless bit 7 of (0x34D1) is set, in which case post {0xB3, part, value, 0x7F} at once
+; Evidence: arm 3 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF178 reads 0x00FAF332; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  `bit 7,(0x34d1)` gate; the immediate path at 0xFAF352 loads `ld C,0xb3` and publishes/notifies like SeqEvt_PostModulation; 0x60F590 is ParamShadow_SetExpression's array.  SeqEvt_FlushShadows calls 0xFAF352 for this array.
+SeqEvt_ShadowExpression:   ; entry: pointer-table entry
 	ld e, (0x60f30a:24)
 	extz HL
 	ld l, (0x60f31d:24)
@@ -84645,7 +84405,7 @@ sub_FAF332:   ; entry: pointer-table entry
 	ld (0x60f0bc:24), bc
 	ld d, 0x7f:opc
 	ld (0x60f0be:24), de
-	call sub_FAF562
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAF3CC
 	m_cp_mi8 MB24, 0x60f0bc, 0xb0
 	jr z, .LFAF3A6
@@ -84682,15 +84442,17 @@ sub_FAF332:   ; entry: pointer-table entry
 	call T_ParamChange_Notify
 .LFAF3F8:
 	ret
-sub_FAF3F9:
+; SeqEvt_SelectCtrlEventSlot -- for a 0xDn playback event, take the slot from byte +3 (byte +4 for D2, which has two data bytes) into (0x60F31D) and accept it only if the slot's part (0x603422)[slot] is in IdentityMap32_FAF7C7 (0..0x1F); otherwise invalidate the event ((0x60F308) = 0xFF)
+; Evidence: `and L,0x03` dispatch through the 4-entry table at 0xFAF410 (reader at 0xFAF404); the arms 0xFAF420/0xFAF431/0xFAF453 load L = (0x60F30B), 0xFAF442 loads L = (0x60F30C); shared search loop 0xFAF462-0xFAF48E (`djnz16` over 0x20 entries).  Called only by SeqEvt_ApplyCtrlEvent.
+SeqEvt_SelectCtrlEventSlot:
 	ld l, (0x60f308:24)
 	and L,0x03
 	sll l, 0x02
-	ld XIX,sub_FAF3F9_JumpTable_FAF410
+	ld XIX,SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	jp (xix)
 ; --- 0xFAF410-0xFAF420  pointer table (16 bytes) ---
-sub_FAF3F9_JumpTable_FAF410:
+SeqEvt_SelectCtrlEventSlot_JumpTable_FAF410:
 	.long sub_FAF420   ; -> sub_FAF420   ; FAF410
 	.long sub_FAF431   ; -> sub_FAF431   ; FAF414
 	.long sub_FAF442   ; -> sub_FAF442   ; FAF418
@@ -84780,7 +84542,10 @@ sub_FAF453:   ; entry: pointer-table entry
 	ret
 	ret
 	ret
-sub_FAF491:
+; SeqEvt_FlushShadows -- for each of the 17 sequencer slots, post every deferred value (bit 7 set) and clear its flag: 0x60F630 -> SeqEvt_PostChanPressure, 0x60F5B0 -> SeqEvt_PostModulation, 0x60F5D0 (16-bit) -> SeqEvt_PostPitchBend, 0x60F590 -> the expression post at 0xFAF352, 0x60F610 -> SeqEvt_PostPartVolume
+; Evidence: five `ldw BC,0x11` sweeps with `bit 7,(XIY) / res 7,(XIY)` at 0xFAF491-0xFAF55C, each setting (0x60F31D) to the slot index before the call.
+; Called from: the playback entry 0xFAED76 (directory T_F41F10) and the slot-reset routine 0xFAEC8A (T_F41F18).
+SeqEvt_FlushShadows:
 	ld XIY,0x0060f630
 	ldw bc, 0x11
 .LFAF499:
@@ -84793,7 +84558,7 @@ sub_FAF491:
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY
-	calr sub_FAF196
+	calr SeqEvt_PostChanPressure
 	pop XIY
 	popw bc
 .LFAF4B5:
@@ -84811,7 +84576,7 @@ sub_FAF491:
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY
-	calr sub_FAF225
+	calr SeqEvt_PostModulation
 	pop XIY
 	popw bc
 .LFAF4DE:
@@ -84830,7 +84595,7 @@ sub_FAF491:
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY
-	calr sub_FAF2BB
+	calr SeqEvt_PostPitchBend
 	pop XIY
 	popw bc
 .LFAF50A:
@@ -84866,14 +84631,16 @@ sub_FAF491:
 	ld (0x60f31d:24), l
 	pushw bc
 	push XIY
-	calr sub_FAEF43
+	calr SeqEvt_PostPartVolume
 	pop XIY
 	popw bc
 .LFAF55C:
 	inc 1,XIY
 	djnz16 bc, .LFAF540
 	ret
-sub_FAF562:
+; SeqEvt_SlotApplyBit -- carry = bit (0x60F31D) of the 32-bit slot mask (0x603454)
+; Evidence: `ld XWA,(0x603454) / ld C,(0x60f31d) / inc 1,C / srl 0x01,XWA / djnz8` at 0xFAF562-0xFAF574, registers saved around it.  All ten callers (the SeqEvt_* handlers) `jr nc` past the record write / publish and still send the MIDI-out notify, so the bit gates the internal application only.
+SeqEvt_SlotApplyBit:
 	push XWA
 	pushw bc
 	ld xwa, (0x603454:24)
@@ -84885,7 +84652,9 @@ sub_FAF562:
 	popw bc
 	pop XWA
 	ret
-sub_FAF579:
+; Regs_SaveAllScratch -- store XWA, XBC, XDE, XHL, XIX, XIY and XIZ to RAM 0x60F090..0x60F0AB
+; Evidence: seven `ld (0x60f090/94/98/9c/a0/a4/a8),Xrr` at 0xFAF579-0xFAF59C.  Called only from the SeqBuf append tail at 0xFAEC0F, before `call T_F40A24` when (0x60F01E) == 0xFF; Regs_RestoreAllScratch undoes it.
+Regs_SaveAllScratch:
 	ld (0x60f090:24), xwa
 	ld (0x60f094:24), xbc
 	ld (0x60f098:24), xde
@@ -84894,7 +84663,9 @@ sub_FAF579:
 	ld (0x60f0a4:24), xiy
 	ld (0x60f0a8:24), xiz
 	ret
-sub_FAF59D:
+; Regs_RestoreAllScratch -- reload XWA, XBC, XDE, XHL, XIX, XIY and XIZ from RAM 0x60F090..0x60F0AB
+; Evidence: seven `ld Xrr,(0x60f090..0x60f0a8)` at 0xFAF59D-0xFAF5C0, the inverse of Regs_SaveAllScratch; called only after `call T_F40A24` in the SeqBuf append tail.
+Regs_RestoreAllScratch:
 	ld xwa, (0x60f090:24)
 	ld xbc, (0x60f094:24)
 	ld xde, (0x60f098:24)
@@ -84903,22 +84674,13 @@ sub_FAF59D:
 	ld xiy, (0x60f0a4:24)
 	ld xiz, (0x60f0a8:24)
 	ret
-; ---------------------------------------------------------------------
-; sub_FAF5C1 -- arm 4 of the 8-entry jump table at 0xFAEDF0
-;
-; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
-;          Index: ((0x60F308) & 0x70) >> 2.
-; Owner:   the routine at 0xFAED76.
-; Body:    starts `calr 0xfaee22`.
-; Evidence: the LE32 word at 0xFAEE00 reads 0x00FAF5C1, and no other
-;          entry of that table does.
-; Unknown:  what the selector means.  Nothing in the tree
-;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
-; ---------------------------------------------------------------------
-sub_FAF5C1:   ; entry: pointer-table entry
-	calr sub_FAEE22
+; SeqEvt_ApplyProgramEvent -- playback of a 0xCn sequencer event: apply the recorded sound bytes to the event's part (record bytes 0/1 and second-half +0x1B..+0x1D), publish class 1 and class 0 when the slot's apply bit is set, then notify bank select / program by PROG CHANGE MODE
+; Evidence: the LE32 word at 0xFAEE00 reads 0x00FAF5C1 (entry 4 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); SeqEvt_UnpackProgramBit7; `ld (XIX+0x3b),L / (XIX+0x3c),H / (XIX+0x3d),W` after T_F40790; stages {num,1,..,0x7F} and {num,0,..,0xFF}.
+; Then `ld L,(0x7f32) / and L,0x03` through the 4-entry table at 0xFAF6B8: SeqEvt_ProgChgNormal_Notify, SeqEvt_ProgChgTech_Notify, nothing (REMAP and value 3).  The decode side of SeqBuf_PutProgramEvent.
+SeqEvt_ApplyProgramEvent:   ; entry: pointer-table entry
+	calr SeqEvt_UnpackProgramBit7
 	m_cp_mi8 MB24, 0x60f308, 0xff
-	jrl z, sub_FAF5C1_JumpTable_FAF6B8_Nop2
+	jrl z, SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2
 	ld XIX,0x0060f30a
 	ld bc, (xix+)
 	ld de, (xix+)
@@ -84930,7 +84692,7 @@ sub_FAF5C1:   ; entry: pointer-table entry
 	ld xix, (0x60f018:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	cp XIX,0xffffffff
-	jrl z, sub_FAF5C1_JumpTable_FAF6B8_Nop2
+	jrl z, SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2
 	ld (0x60f0bc:24), bc
 	ld (0x60f0be:24), de
 	ld (0x60f01d:24), c
@@ -84938,7 +84700,7 @@ sub_FAF5C1:   ; entry: pointer-table entry
 	call T_F40790
 	ld (0x60f324:24), hl
 	ld (0x60f326:24), w
-	call sub_FAF562
+	call SeqEvt_SlotApplyBit
 	jr nc, .LFAF676
 	ld (XIX+0x3b),L
 	ld (XIX+0x3c),H
@@ -84971,42 +84733,28 @@ sub_FAF5C1:   ; entry: pointer-table entry
 	ld XIX,0x00603433
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
 	cp A,0x20
-	jrl z, sub_FAF5C1_JumpTable_FAF6B8_Nop2
+	jrl z, SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2
 	set 0x07,A
 	ld (0x60f007:24), a
 	extz HL
 	ld l, (0x7f32:16)
 	and L,0x03
 	sll hl, 0x02
-	ld XIX,sub_FAF5C1_JumpTable_FAF6B8
+	ld XIX,SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFAF6B7-0xFAF6B8  align (1 bytes) ---
 	.byte 0x00   ; FAF6B7
 ; --- 0xFAF6B8-0xFAF6C8  pointer table (16 bytes) ---
-sub_FAF5C1_JumpTable_FAF6B8:
-	.long sub_FAF6C8   ; -> sub_FAF6C8   ; FAF6B8
-	.long sub_FAF728   ; -> sub_FAF728   ; FAF6BC
-	.long sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; -> sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; FAF6C0
-	.long sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; -> sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; FAF6C4
-; ---------------------------------------------------------------------
-; sub_FAF6C8 -- arm 0 of the 4-entry jump table at 0xFAF6B8
-;
-; Called from: the reader `ld XIX,0x00faf6b8` at 0xFAF6AB, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   the routine at 0xFAF5C1.
-; Body:    starts `bit 2,(0x7f4d)`.
-; Evidence: the LE32 word at 0xFAF6B8 reads 0x00FAF6C8, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAF6C8:   ; entry: pointer-table entry
+SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8:
+	.long SeqEvt_ProgChgNormal_Notify   ; -> SeqEvt_ProgChgNormal_Notify   ; FAF6B8
+	.long SeqEvt_ProgChgTech_Notify   ; -> SeqEvt_ProgChgTech_Notify   ; FAF6BC
+	.long SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2   ; -> SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2   ; FAF6C0
+	.long SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2   ; -> SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2   ; FAF6C4
+; SeqEvt_ProgChgNormal_Notify -- PROG CHANGE MODE NORMAL arm of SeqEvt_ApplyProgramEvent: notify bank select (param 0x81) and program (class 0) to MIDI out from the bytes just written to +0x3B..+0x3D
+; Evidence: arm 0 of the 4-entry table at 0xFAF6B8 -- the LE32 word at 0xFAF6B8 reads 0x00FAF6C8; reader `ld XIX,0x00faf6b8` at 0xFAF6AB, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = "NORMAL").
+; Body: GM drum parts 9/0x19 take the TECH arm; else T_ParamChange_Notify {0x81, part, (0x60F326) split} and {part, 0, ((0x60F324)<<3)|((0x60F325)&7), 0xFF}, with (0x60F007) = (0x603433)[slot] | 0x80.
+SeqEvt_ProgChgNormal_Notify:   ; entry: pointer-table entry
 	m_bit 2, MD16, 0x7f4d
 	jr z, .LFAF6D8
 	cp C,0x09
@@ -85037,24 +84785,10 @@ sub_FAF6C8:   ; entry: pointer-table entry
 	call T_ParamChange_Notify
 	jr .LFAF771
 .LFAF728:
-; ---------------------------------------------------------------------
-; sub_FAF728 -- arm 1 of the 4-entry jump table at 0xFAF6B8
-;
-; Called from: the reader `ld XIX,0x00faf6b8` at 0xFAF6AB, through XIX/XIY.
-;          Index: (0x7F32) & 3.
-; Owner:   the routine at 0xFAF5C1.
-; Body:    starts `ld B,(0x60f0bc)`.
-; Evidence: the LE32 word at 0xFAF6BC reads 0x00FAF728, and no other
-;          entry of that table does.
-; Unknown:  ⚠ WHAT THE FOUR VALUES OF (0x7F32) & 3 SELECT.
-;          SIX tables in this span are indexed by that same
-;          2-bit field; prom_b 0xF6F858 copies it from
-;          (0x1380) & 3 and posts it as {0x80, 0, v, 0x03}.
-;          That names the producer, not the meaning, so this
-;          label stays sub_XXXXXX.  A stated gap beats a
-;          plausible guess.
-; ---------------------------------------------------------------------
-sub_FAF728:   ; entry: pointer-table entry
+; SeqEvt_ProgChgTech_Notify -- PROG CHANGE MODE TECH arm of SeqEvt_ApplyProgramEvent: notify bank select (param 0x81) from the event's byte +1 and program (class 0) from byte +0
+; Evidence: arm 1 of the 4-entry table at 0xFAF6B8 -- the LE32 word at 0xFAF6BC reads 0x00FAF728; reader `ld XIX,0x00faf6b8` at 0xFAF6AB, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = "TECH").
+; Body: T_ParamChange_Notify {0x81, part, (0x60F0BF)&0x3F split} and {part, 0, (0x60F0BE)&0x7F, 0xFF}; falls into the shared `ret` 0xFAF771.
+SeqEvt_ProgChgTech_Notify:   ; entry: pointer-table entry
 	ld b, (0x60f0bc:24)
 	ld c, 0x81:opc
 	extz DE
@@ -85077,7 +84811,7 @@ sub_FAF728:   ; entry: pointer-table entry
 	call T_ParamChange_Notify
 .LFAF771:
 ; ---------------------------------------------------------------------
-; sub_FAF5C1_JumpTable_FAF6B8_Nop2 -- arm 2, 3 of the 4-entry jump table at 0xFAF6B8
+; SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2 -- arm 2, 3 of the 4-entry jump table at 0xFAF6B8
 ;
 ; Called from: the reader `ld XIX,0x00faf6b8` at 0xFAF6AB, through XIX/XIY.
 ;          Index: (0x7F32) & 3.
@@ -85093,7 +84827,7 @@ sub_FAF728:   ; entry: pointer-table entry
 ;          label stays sub_XXXXXX.  A stated gap beats a
 ;          plausible guess.
 ; ---------------------------------------------------------------------
-sub_FAF5C1_JumpTable_FAF6B8_Nop2:   ; entry: pointer-table entry
+SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8_Nop2:   ; entry: pointer-table entry
 	ret
 sub_FAF772:
 	m_cp_mi8 MB16, 0x7642, 0x35
@@ -85122,11 +84856,11 @@ sub_FAF772:
 ; This stretch sat under the local label `.LFAF7A5`, the `ret` before it, and its
 ; pointer entries were annotated `-> sub_FAF86C` as if they named routines.  They
 ; name record LISTS that code copies and searches:
-;   sub_FAEBBC (0xFAEBEC): L = RAM(0x603422 + (0x60F31C)); XIY =
+;   SeqBuf_LoadSlotKeyList (0xFAEBEC): L = RAM(0x603422 + (0x60F31C)); XIY =
 ;     KeyValueListPtrs_A[L]; copies LE16 words to RAM 0x60F330 until a word
 ;     whose low byte is 0xFF.  .LFAF0C1 does the same with (0x60F31D) and
 ;     KeyValueListPtrs_B (0xFAF0DB).
-;   sub_FAF055 (0xFAF094-0xFAF0A9) walks the copy two words at a time,
+;   SeqEvt_LookupParamType (0xFAF094-0xFAF0A9) walks the copy two words at a time,
 ;     compares the FIRST word with BC (from (0x60F30A), bit 7 of C/E/D set from
 ;     bits 2/0/1 of (0x60F308)) and on a match takes the SECOND.
 ; So a record is (key LE16, value LE16), and a list ends with a record whose
@@ -85158,7 +84892,7 @@ IdentityMap32_FAF7C7:
 	.byte 0x00                                    ; FAF7E7  one byte of alignment slack
 
 ; KeyValueListPtrs_A -- 33 pointers to the key/value record lists below.
-; Read by: sub_FAEBBC at 0xFAEBEC `ld XIX,0x00FAF7E8`; index L = RAM(0x603422 + the slot byte).
+; Read by: SeqBuf_LoadSlotKeyList at 0xFAEBEC `ld XIX,0x00FAF7E8`; index L = RAM(0x603422 + the slot byte).
 ; COUNT 33 is the extent to the first list, and every target is a list start.
 KeyValueListPtrs_A:
 	.long KeyValueList_A00                      ; FAF7E8  [ 0]
@@ -86643,8 +86377,11 @@ PatchList_RecordBytes2B_Ptr:
 ;
 ; Routines whose meaning is not established are `sub_XXXXXX` on purpose.
 ; ==============================================================================
-sub_FB2000:
-	jp sub_FB2000_Join                                        ; FB2000  1b 18 20 fb
+; SysExModule_EntryThunks -- module 10 of ModuleInitDirectory_F82641: the 4-byte phase slots the boot walker calls; slot 0 is `jp SysExModule_Phase0_ResetState`, slot 3 (0xFB200C) is `jp SysExModule_Phase3_GmNormalReset`, the others are `ret` + three `nop`
+; Evidence: ModuleInitDirectory_F82641[10] = T_F408E0, which in prom_b is `.long 0xFB2000`; the walker at 0xF82846 adds the phase 0x00/04/08/0C/10 to that base and calls it -- the same slot idiom as MIDI_EntryThunks.
+; The module 0xFB2000-0xFB8CA5 holds SysExDump_RunSendJob (0xFB2049), the SysEx decode-tree walker at 0xFB63FC and the status reporter 0xFB7DFE (notes/sysex-probes/README.md), as well as the remote-flash reader.
+SysExModule_EntryThunks:
+	jp SysExModule_EntryThunks_Join                                        ; FB2000  1b 18 20 fb
 	ret                                                  ; FB2004  0e
 	nop                                                  ; FB2005  00
 	nop                                                  ; FB2006  00
@@ -86653,7 +86390,7 @@ sub_FB2000:
 	nop                                                  ; FB2009  00
 	nop                                                  ; FB200A  00
 	nop                                                  ; FB200B  00
-	jp sub_FB201D                                        ; FB200C  1b 1d 20 fb
+	jp SysExModule_Phase3_GmNormalReset                                        ; FB200C  1b 1d 20 fb
 	ret                                                  ; FB2010  0e
 	nop                                                  ; FB2011  00
 	nop                                                  ; FB2012  00
@@ -86662,11 +86399,13 @@ sub_FB2000:
 	nop                                                  ; FB2015  00
 	nop                                                  ; FB2016  00
 	nop                                                  ; FB2017  00
-sub_FB2000_Join:
+SysExModule_EntryThunks_Join:
 	call sub_FB818A                                      ; FB2018  1d 8a 81 fb
 	ret                                                  ; FB201C  0e
-sub_FB201D:
-	call sub_FB2026                                      ; FB201D  1d 26 20 fb
+; SysExModule_Phase3_GmNormalReset -- phase-3 boot slot of the SysEx module: `call ParamApply_ResetPairTablesIfGmNormal / ret`
+; Evidence: 0xFB201D, reached only by `jp 0xFB201D` at 0xFB200C, slot 3 of SysExModule_EntryThunks -- the walker pass with WA = 0x0C that boot runs through sub_F8283E (0xF827FC).
+SysExModule_Phase3_GmNormalReset:
+	call ParamApply_ResetPairTablesIfGmNormal                                      ; FB201D  1d 26 20 fb
 	ret                                                  ; FB2021  0e
 T_F408F8_Nop:
 	ret                                                  ; FB2022  0e
@@ -86675,7 +86414,10 @@ sub_FB3C34_Nop:
 sub_FB3C34_Nop2:
 	ret                                                  ; FB2024  0e
 	ret                                                  ; FB2025  0e
-sub_FB2026:
+; ParamApply_ResetPairTablesIfGmNormal -- when GM mode is on and PROG CHANGE MODE is NORMAL, refill ParamApply_StorePairAndDerive's per-part tables through sub_FB56D3
+; Evidence: `bit 2,(0x7f4d)` at 0xFB2026 (GM mode, notes/sysex-probes/sysex_general_midi.py), `ld A,(0x7f32) / and A,0x03 / cp A,0` at 0xFB202C-0xFB2033 (0 = NORMAL, DLTable_NormalTechRemap[0]), `call sub_FB56D3` at 0xFB2037.
+; sub_FB56D3 fills the pair table 0x60F530 with {0x00,0x1A} and the byte table 0x60F570 with 0x1A, then parts 9 and 0x19 with {0x00,0x20} / 0x20 (0xFB56DA-0xFB5769) -- the two tables ParamApply_StorePairAndDerive writes.
+ParamApply_ResetPairTablesIfGmNormal:
 	m_bit 2, MD16, 0x7f4d                                ; FB2026  f1 4d 7f ca
 	jr z, .LFB203B                                       ; FB202A  66 0f
 	ld a, (0x7f32:16)                                   ; FB202C  c1 32 7f 21
@@ -86696,7 +86438,10 @@ sub_FB203C:
 	pop XHL                                              ; FB2046  5b
 	pop XDE                                              ; FB2047  5a
 	ret                                                  ; FB2048  0e
-sub_FB2049:
+; SysExDump_RunSendJob -- run the pending SysEx bulk-dump transmit job: when bit 7 of (0x60F802) is set, prepare, send the category selected by (0x60F802) & 7, close the dump and report the status
+; Evidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, Ring600C1E_InitIfPanelMode79, sub_FB7B0B, sub_FB2323 (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then sub_FB27AD (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.
+; Run by: prom_b T_F408E4 after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py.
+SysExDump_RunSendJob:
 	ld c, (0x60f802:24)                                 ; FB2049  c2 02 f8 60 23
 	and C,0x80                                           ; FB204E  cb cc 80
 	jr z, JumpTable_FB2081_Code_Skip                                           ; FB2051  66 70
@@ -92036,7 +91781,7 @@ sub_FB5154:
 	pop XIX                                              ; FB5162  5c
 	pop XHL                                              ; FB5163  5b
 	pop XDE                                              ; FB5164  5a
-	call sub_FB2049                                      ; FB5165  1d 49 20 fb
+	call SysExDump_RunSendJob                                      ; FB5165  1d 49 20 fb
 	ret                                                  ; FB5169  0e
 sub_FB516A:
 	m_cp_mi8 MB16, 0x207a, 0x79                          ; FB516A  c1 7a 20 3f 79

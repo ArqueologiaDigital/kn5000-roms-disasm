@@ -2763,7 +2763,7 @@ Voice_RestageReg0080_ForList__FADE29:
 	unlk32 xiz                                 ; FADE2C  unlk XIZ
 	ret                                        ; FADE2E  ret
 ; --------------------------------------------------------------------------
-; sub_FADE2F -- 0xFADE2F..0xFADEAB (125 bytes)
+; Evt2030_Param98Tech_Notify -- 0xFADE2F..0xFADEAB (125 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -2781,7 +2781,7 @@ Voice_RestageReg0080_ForList__FADE29:
 ; REFUSED (round 10): this is one of the six voice-list walkers
 ;          notes/prom_c_record68_round10.py --restage selects, and THREE of the six
 ;          end in the SAME register pair 0x0840/0x0880 --
-;          sub_FADE2F through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
+;          Evt2030_Param98Tech_Notify through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
 ;          0xFADE9B), sub_FAE013 and sub_FAE0A1 through ..._dup (`calr 0xfacf78`,
 ;          0xFAE092 and 0xFAE0F8), and the tree's own name for the second says it
 ;          writes the same two registers.  So `Voice_RestageRegs0840_0880_ForList`
@@ -2791,7 +2791,7 @@ Voice_RestageReg0080_ForList__FADE29:
 ;          neither has an established meaning in this tree.  So it keeps its
 ;          address, and this is the reason rather than a shrug.
 ; --------------------------------------------------------------------------
-sub_FADE2F:
+Evt2030_Param98Tech_Notify:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADE2F  link XIZ,0x0000
 	push	xhl                                   ; FADE33  push XHL
 	pushw	de                                   ; FADE34  push DE
@@ -3090,7 +3090,7 @@ Voice_RestageRegs0100_0140_ForList__FAE00D:
 ; REFUSED (round 10): this is one of the six voice-list walkers
 ;          notes/prom_c_record68_round10.py --restage selects, and THREE of the six
 ;          end in the SAME register pair 0x0840/0x0880 --
-;          sub_FADE2F through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
+;          Evt2030_Param98Tech_Notify through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
 ;          0xFADE9B), sub_FAE013 and sub_FAE0A1 through ..._dup (`calr 0xfacf78`,
 ;          0xFAE092 and 0xFAE0F8), and the tree's own name for the second says it
 ;          writes the same two registers.  So `Voice_RestageRegs0840_0880_ForList`
@@ -3187,7 +3187,7 @@ sub_FAE013__FAE09B:
 ; REFUSED (round 10): this is one of the six voice-list walkers
 ;          notes/prom_c_record68_round10.py --restage selects, and THREE of the six
 ;          end in the SAME register pair 0x0840/0x0880 --
-;          sub_FADE2F through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
+;          Evt2030_Param98Tech_Notify through Dev10C_SetChanReg_0840_0880 (`calr 0xfacea2`,
 ;          0xFADE9B), sub_FAE013 and sub_FAE0A1 through ..._dup (`calr 0xfacf78`,
 ;          0xFAE092 and 0xFAE0F8), and the tree's own name for the second says it
 ;          writes the same two registers.  So `Voice_RestageRegs0840_0880_ForList`
@@ -5462,7 +5462,7 @@ PartRec_ApplyParam_002D:
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD203 = PartRec_SetOrClearParamBits_x4, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
-;          0xFADE2F = sub_FADE2F, 0xFB3C8B = VoiceQuery_Tag40_Part
+;          0xFADE2F = Evt2030_Param98Tech_Notify, 0xFB3C8B = VoiceQuery_Tag40_Part
 ; Evidence: the listing below is the byte-identical round-trip of 0xFAEED0-0xFAEF23
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -5514,7 +5514,7 @@ PartRec_ApplyParam_002F:
 	push	h                                     ; FAEF0F  push H
 	call	VoiceQuery_Tag40_Part                              ; FAEF11  call 0xfb3c8b
 	push	xiy                                   ; FAEF15  push XIY
-	calr sub_FADE2F                 ; FAEF16  calr 0xfade2f
+	calr Evt2030_Param98Tech_Notify                 ; FAEF16  calr 0xfade2f
 	add	xsp, 20                                ; FAEF19  add XSP,0x00000014
 	popw	de                                    ; FAEF1F  pop DE
 	popw	hl                                    ; FAEF20  pop HL

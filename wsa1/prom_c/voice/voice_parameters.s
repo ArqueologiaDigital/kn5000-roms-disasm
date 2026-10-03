@@ -6429,7 +6429,7 @@ Voice_StageRegs_0840_0880_AB__FAA966:
 ;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
 ;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
 ;          VoiceRegs_Stage_*), immediately before the call.
-;          Called from: VoiceRegs_Stage_C, VoiceRegs_Stage_D, sub_FADE2F, sub_FAE0A1.
+;          Called from: VoiceRegs_Stage_C, VoiceRegs_Stage_D, Evt2030_Param98Tech_Notify, sub_FAE0A1.
 ;          Evidence: the write addresses above are instruction operands, listed by
 ;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
 ;          this routine writes EXACTLY the register block(s) its name claims and no other.
@@ -6738,7 +6738,7 @@ Voice_StageRegs_0800_CD__FAABFA:
 ;          Argument: the caller pushes XDE, the 68-byte VOICE RECORD at 0x003BCF + 0x44*voice
 ;          (`ld C,0x44 / mul BC,(XIZ+0x08) / ld <r>,0x3bcf` at the top of every
 ;          VoiceRegs_Stage_*), immediately before the call.
-;          Called from: VoiceRegs_Stage_C, VoiceRegs_Stage_D, sub_FADE2F, sub_FAE013, sub_FAE0A1.
+;          Called from: VoiceRegs_Stage_C, VoiceRegs_Stage_D, Evt2030_Param98Tech_Notify, sub_FAE013, sub_FAE0A1.
 ;          Evidence: the write addresses above are instruction operands, listed by
 ;          `python3 notes/prom_c_understanding_round6.py --staging`, which also asserts that
 ;          this routine writes EXACTLY the register block(s) its name claims and no other.

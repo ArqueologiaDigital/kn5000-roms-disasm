@@ -782,11 +782,11 @@
 	.set	T_F407F0_Nop, 0xFABBD6
 	.set	sub_FABD33, 0xFABD33
 	.set	MidiIn_ControlRecord_Dispatch, 0xFABEFB
-	.set	sub_FABFE2, 0xFABFE2
-	.set	sub_FABFFF, 0xFABFFF
-	.set	sub_FAC786, 0xFAC786
-	.set	sub_FAC7C4, 0xFAC7C4
-	.set	sub_FAC80F, 0xFAC80F
+	.set	ParamMsg_RefreshPartMasks, 0xFABFE2
+	.set	ParamMsg_ResendTwoAssignedCtrls, 0xFABFFF
+	.set	ParamMsg_RefreshMasksOnCtrlFieldChange, 0xFAC786
+	.set	ParamRecord_SetPartsField18Bit0, 0xFAC7C4
+	.set	Queue2E00_PostParam98Fields, 0xFAC80F
 	.set	ParamApply_MaskedWriteAndPublish, 0xFAD80A
 	.set	ParamShadow_SetField3, 0xFAD81D
 	.set	ParamShadow_SetExpression, 0xFAD84A
@@ -807,9 +807,9 @@
 	.set	ParamApply_StorePairAndDerive, 0xFAE223
 	.set	T_F41F2C_Nop, 0xFAE800
 	.set	T_F41F3C_Nop, 0xFAE829
-	.set	sub_FB2000, 0xFB2000
+	.set	SysExModule_EntryThunks, 0xFB2000
 	.set	T_F408F8_Nop, 0xFB2022
-	.set	sub_FB2049, 0xFB2049
+	.set	SysExDump_RunSendJob, 0xFB2049
 	.set	sub_FB20CE, 0xFB20CE
 	.set	sub_FB21CB, 0xFB21CB
 	.set	sub_FB2CAD, 0xFB2CAD
@@ -87703,7 +87703,7 @@ T_F40784:	jp sub_FABD33  ; -> prom_a 0x2BD33   x2
 T_F4078C:	jp sub_FAA418  ; -> prom_a 0x2A418   x2
 T_F40790:	jp sub_FAA43A  ; -> prom_a 0x2A43A   x6
 T_F40794:	jp sub_FAA742  ; -> prom_a 0x2A742   x13
-T_F40798:	jp sub_FABFE2  ; -> prom_a 0x2BFE2   x1
+T_F40798:	jp ParamMsg_RefreshPartMasks  ; -> prom_a 0x2BFE2   x1
 T_F4079C:	jp sub_FAB643  ; -> prom_a 0x2B643
 T_F407A0:	jp T_F407A0_Nop  ; -> prom_a 0x2B5EA   x4
 T_F407A4:	jp T_F407A4_Nop  ; -> prom_a 0x2A7AB   x6
@@ -87745,7 +87745,7 @@ T_F40800:	jp sub_FAA47E  ; -> prom_a 0x2A47E
 T_F40804:	jp sub_FAB779  ; -> prom_a 0x2B779   x3
 T_F40808:	jp sub_FAB728  ; -> prom_a 0x2B728   x3
 T_MidiIn_ControlRecord_Dispatch:	jp MidiIn_ControlRecord_Dispatch  ; -> prom_a 0x2BEFB   x21
-T_F40810:	jp sub_FAC786  ; -> prom_a 0x2C786
+T_F40810:	jp ParamMsg_RefreshMasksOnCtrlFieldChange  ; -> prom_a 0x2C786
 	.fill 0x2C, 1, 0x0E  ; 0xF40814: 44 x ret
 T_F40840:	jp 0xFB1800  ; -> prom_a 0x31800   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40844: 12 x ret
@@ -87770,8 +87770,8 @@ T_F40894:	jp sub_FADF08  ; -> prom_a 0x2DF08   x1
 T_ParamShadow_FlushAll:	jp ParamShadow_FlushAll  ; -> prom_a 0x2DA26   x3
 T_ParamApply_OneHotOfSix:	jp ParamApply_OneHotOfSix  ; -> prom_a 0x2D9CB   x1
 	.fill 0x40, 1, 0x0E  ; 0xF408A0: 64 x ret
-T_F408E0:	.long sub_FB2000	; ptr -> 0xFB2000 (prom_a 0x32000)
-T_F408E4:	jp sub_FB2049  ; -> prom_a 0x32049   x1
+T_F408E0:	.long SysExModule_EntryThunks	; ptr -> 0xFB2000 (prom_a 0x32000)
+T_F408E4:	jp SysExDump_RunSendJob  ; -> prom_a 0x32049   x1
 T_F408E8:	jp sub_FB20CE  ; -> prom_a 0x320CE   x1
 T_F408EC:	jp sub_FB3355  ; -> prom_a 0x33355   x2
 T_F408F0:	jp sub_FB590A  ; -> prom_a 0x3590A
@@ -90326,10 +90326,10 @@ T_DiskFile_CheckSignature:	jp DiskFile_CheckSignature  ; -> prom_b 0x48C1A   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43434: 12 x ret
 T_F43440:	jp sub_FAAE2A  ; -> prom_a 0x2AE2A   x2
 T_F43444:	jp sub_FAAF91  ; -> prom_a 0x2AF91   x2
-T_F43448:	jp sub_FABFFF  ; -> prom_a 0x2BFFF
-T_F4344C:	jp sub_FAC7C4  ; -> prom_a 0x2C7C4   x3
+T_F43448:	jp ParamMsg_ResendTwoAssignedCtrls  ; -> prom_a 0x2BFFF
+T_F4344C:	jp ParamRecord_SetPartsField18Bit0  ; -> prom_a 0x2C7C4   x3
 T_F43450:	jp sub_FAABB3  ; -> prom_a 0x2ABB3   x1
-T_F43454:	jp sub_FAC80F  ; -> prom_a 0x2C80F   x3
+T_F43454:	jp Queue2E00_PostParam98Fields  ; -> prom_a 0x2C80F   x3
 	.fill 0x8, 1, 0x0E  ; 0xF43458: 8 x ret
 ; Evidence: slot 0xF43460 is `jp 0xFE7200`; prom_a 0xFE7200 carries the label
 ;           Disk_FormatSelectedMedia, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
