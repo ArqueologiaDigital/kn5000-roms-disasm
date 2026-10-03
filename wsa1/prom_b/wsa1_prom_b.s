@@ -839,6 +839,23 @@
 	.set	SysExDump_RunSendJob, 0xFB2049
 	.set	SysExRx_PollRing601646, 0xFB20CE
 	.set	SysExRx_PollRing601C6E, 0xFB21CB
+	.set	SysExCmd_ResetSession, 0xFB22C8
+	.set	SysExSession_Run, 0xFB2820
+	.set	SysExSession_Enquiry, 0xFB28FF
+	.set	SysExSession_StartTransfer, 0xFB291D
+	.set	SysExSession_RecvSystemPart1, 0xFB2978
+	.set	SysExSession_RecvSystemPart2, 0xFB29BB
+	.set	SysExSession_RecvSoundOrphan, 0xFB29F1
+	.set	SysExSession_RecvSound, 0xFB2A27
+	.set	SysExSession_RecvStub0F, 0xFB2A7B
+	.set	SysExSession_RecvStub10, 0xFB2ABE
+	.set	SysExSession_RecvStub11, 0xFB2AF5
+	.set	SysExSession_RecvSequencerPart1, 0xFB2B30
+	.set	SysExSession_RecvSequencerPart2, 0xFB2B6F
+	.set	SysExSession_RecvSequencerPart3, 0xFB2BA6
+	.set	SysExSession_RecvCombinationPart1, 0xFB2BE1
+	.set	SysExSession_RecvCombinationPart2, 0xFB2C35
+	.set	SysExSession_Continuation, 0xFB2C6C
 	.set	sub_FB2CAD, 0xFB2CAD
 	.set	sub_FB2CE7, 0xFB2CE7
 	.set	sub_FB2D21, 0xFB2D21
@@ -850,11 +867,30 @@
 	.set	sub_FB2EB2, 0xFB2EB2
 	.set	sub_FB2EFB, 0xFB2EFB
 	.set	sub_FB2F35, 0xFB2F35
+	.set	SysExSession_CategoryEnd, 0xFB3041
+	.set	SysExSession_DumpEnd, 0xFB30F7
+	.set	SysExSession_Ignore, 0xFB3230
+	.set	SysExSession_Cmd01_Nop, 0xFB3231
+	.set	SysExSession_Cmd02_Nop, 0xFB3232
+	.set	SysExSession_Cmd06_Nop, 0xFB3233
+	.set	SysExSession_Abort, 0xFB3244
 	.set	sub_FB328D, 0xFB328D
 	.set	sub_FB3355, 0xFB3355
+	.set	SysExCmd_TempoReceive, 0xFB33FE
+	.set	SysExCmd_ThirdRegionWrite, 0xFB3483
+	.set	SysExCmd_ThirdRegionRequest, 0xFB3495
+	.set	SysExCmd_ParamWrite, 0xFB34CA
+	.set	SysExParam_Request_DispatchGroup, 0xFB42AB
 	.set	sub_FB4B7D, 0xFB4B7D
 	.set	sub_FB4CAE, 0xFB4CAE
 	.set	sub_FB50EE, 0xFB50EE
+	.set	SysExCmd_DumpRequest_SystemPartMidi, 0xFB5122
+	.set	SysExCmd_DumpRequest_Sound, 0xFB512C
+	.set	SysExCmd_DumpRequest_Job1, 0xFB5136
+	.set	SysExCmd_DumpRequest_Sequencer, 0xFB5140
+	.set	SysExCmd_DumpRequest_Combination, 0xFB514A
+	.set	SysExCmd_GmSystemOn, 0xFB51E7
+	.set	SysExCmd_GmSystemOff, 0xFB520C
 	.set	sub_FB585E, 0xFB585E
 	.set	sub_FB590A, 0xFB590A
 	.set	sub_FB5EE9, 0xFB5EE9
@@ -1116,7 +1152,50 @@
 	.set	sub_FC2526, 0xFC2526
 	.set	sub_FC25A2, 0xFC25A2
 	.set	sub_FC25A8, 0xFC25A8
-	.set	DisplayList_FC4000, 0xFC4000
+	.set	DigitalEffect_Frame, 0xFC4000
+	.set	DigitalEffect_Frame_End, 0xFC40B4
+	.set	DLRec_FC40D2, 0xFC40D2
+	.set	DigitalEffect_Header, 0xFC40F0
+	.set	DLRec_FC410F, 0xFC410F
+	.set	DigitalEffect_Header_End, 0xFC420F
+	.set	DigitalEffect_ParamLabelLists, 0xFC4532
+	.set	DigitalEffect_Values, 0xFC4592
+	.set	DLRec_FC45A1, 0xFC45A1
+	.set	DLRec_FC45BF, 0xFC45BF
+	.set	DLRec_FC45CA, 0xFC45CA
+	.set	DigitalEffect_ParamValueLists, 0xFC45D5
+	.set	DigitalEffect_FieldRecords_FC46BD, 0xFC46BD
+	.set	DigitalEffect_FieldRecordArrays, 0xFC47CF
+	.set	DigitalEffect_FrameEnds, 0xFC47FF
+	.set	Widget_FC48D7, 0xFC48D7
+	.set	Widget_FC4931, 0xFC4931
+	.set	Widget_FC498B, 0xFC498B
+	.set	Widget_FC49E5, 0xFC49E5
+	.set	Widget_FC4A3F, 0xFC4A3F
+	.set	Widget_FC4A99, 0xFC4A99
+	.set	Widget_FC4AF3, 0xFC4AF3
+	.set	Widget_FC4B4D, 0xFC4B4D
+	.set	SoundEditCopy_Frame, 0xFC4BA7
+	.set	SoundEditCopy_Frame_End, 0xFC4D77
+	.set	SoundEditCopy_DrumLabels, 0xFC4DEB
+	.set	SoundEditCopy_DrumLabels_End, 0xFC4E54
+	.set	SoundEditCopy_DrumValues, 0xFC4E8C
+	.set	SoundEditCopy_DrumValues_End, 0xFC4EC4
+	.set	SoundEditCopy_Field2Box, 0xFC4EE2
+	.set	SoundEditCopy_Field2Box_End, 0xFC4EEC
+	.set	SoundEditCopy_ToneFieldRecords, 0xFC4FA6
+	.set	SoundEditCopy_DrumFieldRecords, 0xFC4FB6
+	.set	DisplayList_FC5110_End, 0xFC512E
+	.set	DisplayList_FC517E, 0xFC517E
+	.set	DLRec_FC51B1, 0xFC51B1
+	.set	DLRec_FC51D3, 0xFC51D3
+	.set	DLRec_FC51F9, 0xFC51F9
+	.set	DLRec_FC521B, 0xFC521B
+	.set	DLRec_FC524D, 0xFC524D
+	.set	DLRec_FC526F, 0xFC526F
+	.set	DisplayList_FC517E_End, 0xFC527A
+	.set	DisplayList_FC52AA, 0xFC52AA
+	.set	DisplayList_FC52AA_End, 0xFC52B4
 	.set	sub_FC5400, 0xFC5400
 	.set	sub_FC546A, 0xFC546A
 	.set	sub_FC54C6, 0xFC54C6
@@ -1154,6 +1233,19 @@
 	.set	sub_FC9016, 0xFC9016
 	.set	sub_FCAD7C, 0xFCAD7C
 	.set	sub_FCB2F0, 0xFCB2F0
+	.set	PanelOpTable_FCF383, 0xFCF383
+	.set	PanelOpTable_FCF3CB, 0xFCF3CB
+	.set	PanelOpTable_FCF413, 0xFCF413
+	.set	PanelOpTable_FCF45B, 0xFCF45B
+	.set	PanelOpTable_FCFB6C, 0xFCFB6C
+	.set	PanelOpTable_FCFBB4, 0xFCFBB4
+	.set	PanelOpTable_FCFBFC, 0xFCFBFC
+	.set	PanelOpTable_FCFC44, 0xFCFC44
+	.set	PanelOpTable_FCFC8C, 0xFCFC8C
+	.set	IndexMap_FCFCD4, 0xFCFCD4
+	.set	StepValues_FCFCD8, 0xFCFCD8
+	.set	StepValues_FCFCDF, 0xFCFCDF
+	.set	StepValues_FCFCE1, 0xFCFCE1
 	.set	ScreenButton_Code80, 0xFCFDA7
 	.set	ScreenButton_CodeCD, 0xFD053D
 	.set	ScreenButton_Code9B, 0xFD058E
@@ -1555,6 +1647,7 @@
 	.set	T_F42428_Nop, 0xFF7083
 	.set	sub_FF70B6, 0xFF70B6
 	.set	sub_FF70D8, 0xFF70D8
+	.set	MIDI_UART_Configure_Data, 0xFFFFF8
 ; <<< END prom_a ADDRESS EQUATES
 .equ KERNEL_MEM_OPS_PROVIDED, 1	; records "already provided"; this image does not include the kernel
 
@@ -17136,24 +17229,24 @@ SoundEditDigitalEffect_Paint:
 	ld	(ModelingPage_Fields+16:16), a	; F099FC  ld (0x27b6),A
 	cp	a, 10	; F09A00  cp A,0x0a
 	jr	nz, sub_F099C7_Skip2	; F09A03  jr NZ,0xf09a0c
-	ld	xiy, 16531727	; F09A05  ld XIY,0x00fc410f
+	ld	xiy, DLRec_FC410F	; F09A05  ld XIY,0x00fc410f
 	jr	sub_F099C7_Join	; F09A0A  jr T,0xf09a11
 sub_F099C7_Skip2:
-	ld	xiy, 16531696	; F09A0C  ld XIY,0x00fc40f0
+	ld	xiy, DigitalEffect_Header	; F09A0C  ld XIY,0x00fc40f0
 sub_F099C7_Join:
-	ld	xix, 16531983	; F09A11  ld XIX,0x00fc420f
+	ld	xix, DigitalEffect_Header_End	; F09A11  ld XIX,0x00fc420f
 	call	T_DisplayList_Run	; F09A16  call 0xf417f0
 	xor	xwa, xwa	; F09A1A  xor XWA,XWA
 	ld	a, (ModelingPage_Fields+16:16)	; F09A1C  ld A,(0x27b6)
 	sla	wa, 3	; F09A20  sla 0x03,WA
-	ld	xiz, 16532786	; F09A23  ld XIZ,0x00fc4532
+	ld	xiz, DigitalEffect_ParamLabelLists	; F09A23  ld XIZ,0x00fc4532
 	add	xiz, xwa	; F09A28  add XIZ,XWA
 	ld	xiy, (xiz)	; F09A2A  ld XIY,(XIZ)
 	ld	xix, (xiz+4)	; F09A2C  ld XIX,(XIZ+0x04)
 	call	T_DisplayList_Run	; F09A2F  call 0xf417f0
-	ld	xiy, DisplayList_FC4000	; F09A33  ld XIY,0x00fc4000
+	ld	xiy, DigitalEffect_Frame	; F09A33  ld XIY,0x00fc4000
 	xor	xbc, xbc	; F09A38  xor XBC,XBC
-	ld	xiz, 16533503	; F09A3A  ld XIZ,0x00fc47ff
+	ld	xiz, DigitalEffect_FrameEnds	; F09A3A  ld XIZ,0x00fc47ff
 	ld	c, (ModelingPage_Fields+16:16)	; F09A3F  ld C,(0x27b6)
 	sla	bc, 2	; F09A43  sla 0x02,BC
 	mx_ld_rm MXL, ra_IZ, ra_BC, 4	; F09A46  ld XIX,(XIZ+BC)
@@ -17161,27 +17254,27 @@ sub_F099C7_Join:
 	ld	a, (ModelingPage_Fields+16:16)	; F09A4F  ld A,(0x27b6)
 	cp	a, 10	; F09A53  cp A,0x0a
 	jr	nz, sub_F099C7_Skip3	; F09A56  jr NZ,0xf09a5f
-	ld	xiy, 16531666	; F09A58  ld XIY,0x00fc40d2
+	ld	xiy, DLRec_FC40D2	; F09A58  ld XIY,0x00fc40d2
 	jr	sub_F099C7_Join2	; F09A5D  jr T,0xf09a64
 sub_F099C7_Skip3:
-	ld	xiy, 16531636	; F09A5F  ld XIY,0x00fc40b4
+	ld	xiy, DigitalEffect_Frame_End	; F09A5F  ld XIY,0x00fc40b4
 sub_F099C7_Join2:
-	ld	xix, 16531696	; F09A64  ld XIX,0x00fc40f0
+	ld	xix, DigitalEffect_Header	; F09A64  ld XIX,0x00fc40f0
 	call	T_DisplayList_Run	; F09A69  call 0xf417f0
-	ld	xiy, 16532882	; F09A6D  ld XIY,0x00fc4592
+	ld	xiy, DigitalEffect_Values	; F09A6D  ld XIY,0x00fc4592
 	ld	a, (ModelingPage_Fields+16:16)	; F09A72  ld A,(0x27b6)
 	cp	a, 10	; F09A76  cp A,0x0a
 	jr	nz, sub_F099C7_Skip4	; F09A79  jr NZ,0xf09a82
-	ld	xix, 16532938	; F09A7B  ld XIX,0x00fc45ca
+	ld	xix, DLRec_FC45CA	; F09A7B  ld XIX,0x00fc45ca
 	jr	sub_F099C7_Join3	; F09A80  jr T,0xf09a87
 sub_F099C7_Skip4:
-	ld	xix, 16532949	; F09A82  ld XIX,0x00fc45d5
+	ld	xix, DigitalEffect_ParamValueLists	; F09A82  ld XIX,0x00fc45d5
 sub_F099C7_Join3:
 	call	T_DisplayListB_Run	; F09A87  call 0xf417f4
 	xor	xwa, xwa	; F09A8B  xor XWA,XWA
 	ld	a, (ModelingPage_Fields+16:16)	; F09A8D  ld A,(0x27b6)
 	sla	wa, 3	; F09A91  sla 0x03,WA
-	ld	xiz, 16532949	; F09A94  ld XIZ,0x00fc45d5
+	ld	xiz, DigitalEffect_ParamValueLists	; F09A94  ld XIZ,0x00fc45d5
 	add	xiz, xwa	; F09A99  add XIZ,XWA
 	ld	xiy, (xiz)	; F09A9B  ld XIY,(XIZ)
 	ld	xix, (xiz+4)	; F09A9D  ld XIX,(XIZ+0x04)
@@ -17205,18 +17298,18 @@ SoundEditDigitalEffect_RepaintField:
 	cp	a, 7:i3	; F09AA9  cp A,7
 	jr	nc, sub_F099C7_Skip6	; F09AAB  jr NC,0xf09ad2
 	xor	xbc, xbc	; F09AAD  xor XBC,XBC
-	ld	xiz, 16533455	; F09AAF  ld XIZ,0x00fc47cf
+	ld	xiz, DigitalEffect_FieldRecordArrays	; F09AAF  ld XIZ,0x00fc47cf
 	ld	c, (ModelingPage_Fields+16:16)	; F09AB4  ld C,(0x27b6)
 	sla	bc, 2	; F09AB8  sla 0x02,BC
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F09ABB  ld XIY,(XIZ+BC)
 	jr	sub_F099C7_Join4	; F09AC0  jr T,0xf09ad7
 sub_F099C7_Skip5:
-	ld	xiy, 16532897	; F09AC2  ld XIY,0x00fc45a1
-	ld	xix, 16532927	; F09AC7  ld XIX,0x00fc45bf
+	ld	xiy, DLRec_FC45A1	; F09AC2  ld XIY,0x00fc45a1
+	ld	xix, DLRec_FC45BF	; F09AC7  ld XIX,0x00fc45bf
 	call	T_DisplayListB_Run	; F09ACC  call 0xf417f4
 	jr	sub_F099C7_Return	; F09AD0  jr T,0xf09ae0
 sub_F099C7_Skip6:
-	ld	xiy, 16533181	; F09AD2  ld XIY,0x00fc46bd
+	ld	xiy, DigitalEffect_FieldRecords_FC46BD	; F09AD2  ld XIY,0x00fc46bd
 sub_F099C7_Join4:
 	ld	(LCD_CurrentLayer:16), 0	; F09AD7  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F09ADC  call 0xf09ae1
@@ -17317,14 +17410,14 @@ IndexMap_F09B3B:
 ;          address, and the gap is stated.
 ; --------------------------------------------------------------------------
 PtrTable_F09B7B:
-	.long	0x00FC48D7	; F09B7B  [0]  +0x00
-	.long	0x00FC4931	; F09B7F  [1]  +0x5A
-	.long	0x00FC498B	; F09B83  [2]  +0x5A
-	.long	0x00FC49E5	; F09B87  [3]  +0x5A
-	.long	0x00FC4A3F	; F09B8B  [4]  +0x5A
-	.long	0x00FC4A99	; F09B8F  [5]  +0x5A
-	.long	0x00FC4AF3	; F09B93  [6]  +0x5A
-	.long	0x00FC4B4D	; F09B97  [7]  +0x5A
+	.long	Widget_FC48D7	; F09B7B  [0]  +0x00
+	.long	Widget_FC4931	; F09B7F  [1]  +0x5A
+	.long	Widget_FC498B	; F09B83  [2]  +0x5A
+	.long	Widget_FC49E5	; F09B87  [3]  +0x5A
+	.long	Widget_FC4A3F	; F09B8B  [4]  +0x5A
+	.long	Widget_FC4A99	; F09B8F  [5]  +0x5A
+	.long	Widget_FC4AF3	; F09B93  [6]  +0x5A
+	.long	Widget_FC4B4D	; F09B97  [7]  +0x5A
 
 
 ; --------------------------------------------------------------------------
@@ -17346,28 +17439,28 @@ PtrTable_F09B7B:
 ; --------------------------------------------------------------------------
 SoundEditCopy_Paint:
 	ld	(LCD_CurrentLayer:16), 0	; F09B9B  ld (0x2540),0x00
-	ld	xiy, 16534439	; F09BA0  ld XIY,0x00fc4ba7
-	ld	xix, 16534903	; F09BA5  ld XIX,0x00fc4d77
+	ld	xiy, SoundEditCopy_Frame	; F09BA0  ld XIY,0x00fc4ba7
+	ld	xix, SoundEditCopy_Frame_End	; F09BA5  ld XIX,0x00fc4d77
 	call	T_DisplayList_Run	; F09BAA  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F09BAE  cp (0x27f5),0x01
 	jr	z, SoundEditCopy_Paint_Skip	; F09BB3  jr Z,0xf09bdd
 	ld	(LCD_CurrentLayer:16), 0	; F09BB5  ld (0x2540),0x00
-	ld	xiy, 16534903	; F09BBA  ld XIY,0x00fc4d77
-	ld	xix, 16535019	; F09BBF  ld XIX,0x00fc4deb
+	ld	xiy, SoundEditCopy_Frame_End	; F09BBA  ld XIY,0x00fc4d77
+	ld	xix, SoundEditCopy_DrumLabels	; F09BBF  ld XIX,0x00fc4deb
 	call	T_DisplayList_Run	; F09BC4  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F09BC8  ld (0x2540),0x00
-	ld	xiy, 16535124	; F09BCD  ld XIY,0x00fc4e54
-	ld	xix, 16535180	; F09BD2  ld XIX,0x00fc4e8c
+	ld	xiy, SoundEditCopy_DrumLabels_End	; F09BCD  ld XIY,0x00fc4e54
+	ld	xix, SoundEditCopy_DrumValues	; F09BD2  ld XIX,0x00fc4e8c
 	call	T_DisplayListB_Run	; F09BD7  call 0xf417f4
 	jr	SoundEditCopy_Paint_Join	; F09BDB  jr T,0xf09c03
 SoundEditCopy_Paint_Skip:
 	ld	(LCD_CurrentLayer:16), 0	; F09BDD  ld (0x2540),0x00
-	ld	xiy, 16535019	; F09BE2  ld XIY,0x00fc4deb
-	ld	xix, 16535124	; F09BE7  ld XIX,0x00fc4e54
+	ld	xiy, SoundEditCopy_DrumLabels	; F09BE2  ld XIY,0x00fc4deb
+	ld	xix, SoundEditCopy_DrumLabels_End	; F09BE7  ld XIX,0x00fc4e54
 	call	T_DisplayList_Run	; F09BEC  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F09BF0  ld (0x2540),0x00
-	ld	xiy, 16535180	; F09BF5  ld XIY,0x00fc4e8c
-	ld	xix, 16535236	; F09BFA  ld XIX,0x00fc4ec4
+	ld	xiy, SoundEditCopy_DrumValues	; F09BF5  ld XIY,0x00fc4e8c
+	ld	xix, SoundEditCopy_DrumValues_End	; F09BFA  ld XIX,0x00fc4ec4
 	call	T_DisplayListB_Run	; F09BFF  call 0xf417f4
 SoundEditCopy_Paint_Join:
 	call	sub_F09C63	; F09C03  call 0xf09c63
@@ -17391,8 +17484,8 @@ SoundEditCopy_RepaintField:
 	cp	a, 2:i3	; F09C10  cp A,2
 	jr	nz, SoundEditCopy_RepaintField_Join	; F09C12  jr NZ,0xf09c46
 	ld	(LCD_CurrentLayer:16), 1	; F09C14  ld (0x2540),0x01
-	ld	xiy, 16535266	; F09C19  ld XIY,0x00fc4ee2
-	ld	xix, 16535276	; F09C1E  ld XIX,0x00fc4eec
+	ld	xiy, SoundEditCopy_Field2Box	; F09C19  ld XIY,0x00fc4ee2
+	ld	xix, SoundEditCopy_Field2Box_End	; F09C1E  ld XIX,0x00fc4eec
 	call	T_DisplayList_Run	; F09C23  call 0xf417f0
 	ld	a, 2:opc	; F09C27  ld A,0x02
 	jr	SoundEditCopy_RepaintField_Join	; F09C29  jr T,0xf09c46
@@ -17401,17 +17494,17 @@ SoundEditCopy_RepaintField_Skip:
 	jr	SoundEditCopy_RepaintField_Return	; F09C2F  jr T,0xf09c62
 SoundEditCopy_RepaintField_Skip2:
 	ld	(LCD_CurrentLayer:16), 0	; F09C31  ld (0x2540),0x00
-	ld	xiy, 16535236	; F09C36  ld XIY,0x00fc4ec4
-	ld	xix, 16535266	; F09C3B  ld XIX,0x00fc4ee2
+	ld	xiy, SoundEditCopy_DrumValues_End	; F09C36  ld XIY,0x00fc4ec4
+	ld	xix, SoundEditCopy_Field2Box	; F09C3B  ld XIX,0x00fc4ee2
 	call	T_DisplayListB_Run	; F09C40  call 0xf417f4
 	jr	SoundEditCopy_RepaintField_Return	; F09C44  jr T,0xf09c62
 SoundEditCopy_RepaintField_Join:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F09C46  cp (0x27f5),0x01
 	jr	z, SoundEditCopy_RepaintField_Skip3	; F09C4B  jr Z,0xf09c54
-	ld	xiy, 16535462	; F09C4D  ld XIY,0x00fc4fa6
+	ld	xiy, SoundEditCopy_ToneFieldRecords	; F09C4D  ld XIY,0x00fc4fa6
 	jr	SoundEditCopy_RepaintField_Join2	; F09C52  jr T,0xf09c59
 SoundEditCopy_RepaintField_Skip3:
-	ld	xiy, 16535478	; F09C54  ld XIY,0x00fc4fb6
+	ld	xiy, SoundEditCopy_DrumFieldRecords	; F09C54  ld XIY,0x00fc4fb6
 SoundEditCopy_RepaintField_Join2:
 	ld	(LCD_CurrentLayer:16), 0	; F09C59  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F09C5E  call 0xf09ae1
@@ -17490,23 +17583,23 @@ sub_F09CA9:
 	cp	a, 13	; F09CC6  cp A,0x0d
 	jrl	c, sub_F09C63_Skip9	; F09CC9  jrl C,0xf09d82
 	ld	(LCD_CurrentLayer:16), 0	; F09CCC  ld (0x2540),0x00
-	ld	xiy, 16536141	; F09CD1  ld XIY,0x00fc524d
-	ld	xix, 16536175	; F09CD6  ld XIX,0x00fc526f
+	ld	xiy, DLRec_FC524D	; F09CD1  ld XIY,0x00fc524d
+	ld	xix, DLRec_FC526F	; F09CD6  ld XIX,0x00fc526f
 	call	T_DisplayListB_Run	; F09CDB  call 0xf417f4
 	call	sub_F09DED	; F09CDF  call 0xf09ded
 	jrl	sub_F09C63_Return2	; F09CE3  jrl T,0xf09d90
 sub_F09C63_Skip3:
 	ld	(LCD_CurrentLayer:16), 1	; F09CE6  ld (0x2540),0x01
-	ld	xiy, 16536234	; F09CEB  ld XIY,0x00fc52aa
-	ld	xix, 16536244	; F09CF0  ld XIX,0x00fc52b4
+	ld	xiy, DisplayList_FC52AA	; F09CEB  ld XIY,0x00fc52aa
+	ld	xix, DisplayList_FC52AA_End	; F09CF0  ld XIX,0x00fc52b4
 	call	T_DisplayList_Run	; F09CF5  call 0xf417f0
 	ld	a, 0:opc	; F09CF9  ld A,0x00
-	ld	xiy, 16536244	; F09CFB  ld XIY,0x00fc52b4
+	ld	xiy, DisplayList_FC52AA_End	; F09CFB  ld XIY,0x00fc52b4
 	call	RunDisplayListBFromPointerArray	; F09D00  call 0xf09ae1
 	jrl	sub_F09C63_Return2	; F09D04  jrl T,0xf09d90
 sub_F09C63_Skip4:
-	ld	xiy, 16535934	; F09D07  ld XIY,0x00fc517e
-	ld	xix, 16536186	; F09D0C  ld XIX,0x00fc527a
+	ld	xiy, DisplayList_FC517E	; F09D07  ld XIY,0x00fc517e
+	ld	xix, DisplayList_FC517E_End	; F09D0C  ld XIX,0x00fc527a
 	call	T_DisplayListB_Run	; F09D11  call 0xf417f4
 	call	sub_F5BF8A	; F09D15  call 0xf5bf8a
 	jrl	sub_F09C63_Return2	; F09D19  jrl T,0xf09d90
@@ -17515,31 +17608,31 @@ sub_F09C63_Skip5:
 	jrl	sub_F09C63_Return2	; F09D20  jrl T,0xf09d90
 sub_F09C63_Skip6:
 	ld	(LCD_CurrentLayer:16), 0	; F09D23  ld (0x2540),0x00
-	ld	xiy, 16535985	; F09D28  ld XIY,0x00fc51b1
-	ld	xix, 16536019	; F09D2D  ld XIX,0x00fc51d3
+	ld	xiy, DLRec_FC51B1	; F09D28  ld XIY,0x00fc51b1
+	ld	xix, DLRec_FC51D3	; F09D2D  ld XIX,0x00fc51d3
 	call	T_DisplayListB_Run	; F09D32  call 0xf417f4
 	jr	sub_F09C63_Return2	; F09D36  jr T,0xf09d90
 sub_F09C63_Skip7:
 	ld	(LCD_CurrentLayer:16), 0	; F09D38  ld (0x2540),0x00
-	ld	xiy, 16536057	; F09D3D  ld XIY,0x00fc51f9
-	ld	xix, 16536091	; F09D42  ld XIX,0x00fc521b
+	ld	xiy, DLRec_FC51F9	; F09D3D  ld XIY,0x00fc51f9
+	ld	xix, DLRec_FC521B	; F09D42  ld XIX,0x00fc521b
 	call	T_DisplayListB_Run	; F09D47  call 0xf417f4
 	jr	sub_F09C63_Return2	; F09D4B  jr T,0xf09d90
 sub_F09C63_Skip8:
 	ld	(LCD_CurrentLayer:16), 1	; F09D4D  ld (0x2540),0x01
-	ld	xiy, 16536234	; F09D52  ld XIY,0x00fc52aa
-	ld	xix, 16536244	; F09D57  ld XIX,0x00fc52b4
+	ld	xiy, DisplayList_FC52AA	; F09D52  ld XIY,0x00fc52aa
+	ld	xix, DisplayList_FC52AA_End	; F09D57  ld XIX,0x00fc52b4
 	call	T_DisplayList_Run	; F09D5C  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F09D60  ld (0x2540),0x00
 	call	sub_F09D91	; F09D65  call 0xf09d91
-	ld	xiy, 16535934	; F09D69  ld XIY,0x00fc517e
-	ld	xix, 16536186	; F09D6E  ld XIX,0x00fc527a
+	ld	xiy, DisplayList_FC517E	; F09D69  ld XIY,0x00fc517e
+	ld	xix, DisplayList_FC517E_End	; F09D6E  ld XIX,0x00fc527a
 	call	T_DisplayListB_Run	; F09D73  call 0xf417f4
 	ld	(LCD_CurrentLayer:16), 0	; F09D77  ld (0x2540),0x00
 	call	sub_F09DED	; F09D7C  call 0xf09ded
 	jr	sub_F09C63_Return2	; F09D80  jr T,0xf09d90
 sub_F09C63_Skip9:
-	ld	xiy, 16536244	; F09D82  ld XIY,0x00fc52b4
+	ld	xiy, DisplayList_FC52AA_End	; F09D82  ld XIY,0x00fc52b4
 	ld	(LCD_CurrentLayer:16), 0	; F09D87  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F09D8C  call 0xf09ae1
 sub_F09C63_Return2:
@@ -17628,7 +17721,7 @@ sub_F09E02:
 	ld	d, (xbc)	; F09E0B  ld D,(XBC)
 	cp	d, 0:i3	; F09E0D  cp D,0
 	jr	z, sub_F09E02_Return	; F09E0F  jr Z,0xf09e1f
-	ld	xiy, 16536244	; F09E11  ld XIY,0x00fc52b4
+	ld	xiy, DisplayList_FC52AA_End	; F09E11  ld XIY,0x00fc52b4
 	ld	(LCD_CurrentLayer:16), 0	; F09E16  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F09E1B  call 0xf09ae1
 sub_F09E02_Return:
@@ -17688,7 +17781,7 @@ sub_F09E67:
 	ld	d, (xbc)	; F09E70  ld D,(XBC)
 	cp	d, 0:i3	; F09E72  cp D,0
 	jr	z, sub_F09E67_Return	; F09E74  jr Z,0xf09e84
-	ld	xiy, 16536244	; F09E76  ld XIY,0x00fc52b4
+	ld	xiy, DisplayList_FC52AA_End	; F09E76  ld XIY,0x00fc52b4
 	ld	(LCD_CurrentLayer:16), 0	; F09E7B  ld (0x2540),0x00
 ; stale: sub_F09E67 is reached only from the unlabelled loop at 0xF09E52, an older copy of sub_F09DED.  Its live
 ; twin sub_F09E02 has the same bytes except this operand, and calls RunDisplayListBFromPointerArray 0x31 higher.
@@ -17780,7 +17873,7 @@ sub_F0A000:		; <- T_F42004
 	ld	c, 4:opc	; F0A026  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0A028  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0A02B  extz XBC
-	add	xbc, 16577411	; F0A02D  add XBC,0x00fcf383
+	add	xbc, PanelOpTable_FCF383	; F0A02D  add XBC,0x00fcf383
 	ld	xbc, (xbc)	; F0A033  ld XBC,(XBC)
 	lda	xiy, (sub_F0A000_Resume:24)	; F0A035  lda XIY,0xf0a03d
 	push	xiy	; F0A03A  push XIY
@@ -17829,7 +17922,7 @@ sub_F0A051:		; <- T_F42014
 	ld	c, 4:opc	; F0A07E  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0A080  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0A083  extz XBC
-	add	xbc, 16577483	; F0A085  add XBC,0x00fcf3cb
+	add	xbc, PanelOpTable_FCF3CB	; F0A085  add XBC,0x00fcf3cb
 	ld	xbc, (xbc)	; F0A08B  ld XBC,(XBC)
 	lda	xiy, (sub_F0A051_Resume:24)	; F0A08D  lda XIY,0xf0a095
 	push	xiy	; F0A092  push XIY
@@ -17880,7 +17973,7 @@ sub_F0A0B1:		; <- T_F42024
 	ld	c, 4:opc	; F0A0DE  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0A0E0  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0A0E3  extz XBC
-	add	xbc, 16577555	; F0A0E5  add XBC,0x00fcf413
+	add	xbc, PanelOpTable_FCF413	; F0A0E5  add XBC,0x00fcf413
 	ld	xbc, (xbc)	; F0A0EB  ld XBC,(XBC)
 	lda	xiy, (sub_F0A0B1_Resume:24)	; F0A0ED  lda XIY,0xf0a0f5
 	push	xiy	; F0A0F2  push XIY
@@ -17929,7 +18022,7 @@ sub_F0A111:		; <- T_F42034
 	ld	c, 4:opc	; F0A137  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0A139  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0A13C  extz XBC
-	add	xbc, 16577627	; F0A13E  add XBC,0x00fcf45b
+	add	xbc, PanelOpTable_FCF45B	; F0A13E  add XBC,0x00fcf45b
 	ld	xbc, (xbc)	; F0A144  ld XBC,(XBC)
 	lda	xiy, (sub_F0A111_Resume:24)	; F0A146  lda XIY,0xf0a14e
 	push	xiy	; F0A14B  push XIY
@@ -19428,7 +19521,7 @@ sub_F0A90E:		; <- T_F42358
 	ld	c, 4:opc	; F0A934  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0A936  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0A939  extz XBC
-	add	xbc, 16579652	; F0A93B  add XBC,0x00fcfc44
+	add	xbc, PanelOpTable_FCFC44	; F0A93B  add XBC,0x00fcfc44
 	ld	xbc, (xbc)	; F0A941  ld XBC,(XBC)
 	lda	xiy, (sub_F0A90E_Resume:24)	; F0A943  lda XIY,0xf0a94b
 	push	xiy	; F0A948  push XIY
@@ -19477,7 +19570,7 @@ sub_F0A95F:		; <- T_F42368
 	ld	c, 4:opc	; F0A98C  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0A98E  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0A991  extz XBC
-	add	xbc, 16579436	; F0A993  add XBC,0x00fcfb6c
+	add	xbc, PanelOpTable_FCFB6C	; F0A993  add XBC,0x00fcfb6c
 	ld	xbc, (xbc)	; F0A999  ld XBC,(XBC)
 	lda	xiy, (sub_F0A95F_Resume:24)	; F0A99B  lda XIY,0xf0a9a3
 	push	xiy	; F0A9A0  push XIY
@@ -19526,7 +19619,7 @@ sub_F0A9BF:		; <- T_F42378
 	ld	c, 4:opc	; F0A9E5  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0A9E7  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0A9EA  extz XBC
-	add	xbc, 16579508	; F0A9EC  add XBC,0x00fcfbb4
+	add	xbc, PanelOpTable_FCFBB4	; F0A9EC  add XBC,0x00fcfbb4
 	ld	xbc, (xbc)	; F0A9F2  ld XBC,(XBC)
 	lda	xiy, (sub_F0A9BF_Resume:24)	; F0A9F4  lda XIY,0xf0a9fc
 	push	xiy	; F0A9F9  push XIY
@@ -19573,7 +19666,7 @@ sub_F0AA10:		; <- T_F433D8
 	ld	c, 4:opc	; F0AA36  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0AA38  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0AA3B  extz XBC
-	add	xbc, 16579580	; F0AA3D  add XBC,0x00fcfbfc
+	add	xbc, PanelOpTable_FCFBFC	; F0AA3D  add XBC,0x00fcfbfc
 	ld	xbc, (xbc)	; F0AA43  ld XBC,(XBC)
 	lda	xiy, (sub_F0AA10_Resume:24)	; F0AA45  lda XIY,0xf0aa4d
 	push	xiy	; F0AA4A  push XIY
@@ -19620,7 +19713,7 @@ sub_F0AA61:		; <- T_F420B4
 	ld	c, 4:opc	; F0AA87  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0AA89  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0AA8C  extz XBC
-	add	xbc, 16579580	; F0AA8E  add XBC,0x00fcfbfc
+	add	xbc, PanelOpTable_FCFBFC	; F0AA8E  add XBC,0x00fcfbfc
 	ld	xbc, (xbc)	; F0AA94  ld XBC,(XBC)
 	lda	xiy, (sub_F0AA61_Resume:24)	; F0AA96  lda XIY,0xf0aa9e
 	push	xiy	; F0AA9B  push XIY
@@ -19720,7 +19813,7 @@ sub_F0AAF9:		; <- T_F42338
 	ld	c, 4:opc	; F0AB1F  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F0AB21  mul BC,(XIZ+0xfc)
 	extz	xbc	; F0AB24  extz XBC
-	add	xbc, 16579724	; F0AB26  add XBC,0x00fcfc8c
+	add	xbc, PanelOpTable_FCFC8C	; F0AB26  add XBC,0x00fcfc8c
 	ld	xbc, (xbc)	; F0AB2C  ld XBC,(XBC)
 	lda	xiy, (sub_F0AAF9_Resume:24)	; F0AB2E  lda XIY,0xf0ab36
 	push	xiy	; F0AB33  push XIY
@@ -23137,7 +23230,7 @@ sub_F0C291:
 	ld	bc, (xiz-2)	; F0C2A8  ld BC,(XIZ+0xfe)
 	extz	bc	; F0C2AB  extz BC
 	extz	xbc	; F0C2AD  extz XBC
-	add	xbc, 16579796	; F0C2AF  add XBC,0x00fcfcd4
+	add	xbc, IndexMap_FCFCD4	; F0C2AF  add XBC,0x00fcfcd4
 	ld	a, (xbc)	; F0C2B5  ld A,(XBC)
 	ld	(xiz-2), a	; F0C2B7  ld (XIZ+0xfe),A
 	lda	xbc, (xiz-4)	; F0C2BA  lda XBC,XIZ+0xfc
@@ -23392,18 +23485,18 @@ sub_F0C47B:
 	m_cp_mi8 MBD+r6, 0xfc, 0x04	; F0C49F  cp (XIZ+0xfc),0x04
 	jr	z, sub_F0C291_Skip10	; F0C4A3  jr Z,0xf0c4b4
 	ld	l, 6:opc	; F0C4A5  ld L,0x06
-	lda	xix, (16579800:24)	; F0C4A7  lda XIX,0xfcfcd8
+	lda	xix, (StepValues_FCFCD8:24)	; F0C4A7  lda XIX,0xfcfcd8
 	jr	sub_F0C291_Join5	; F0C4AC  jr T,0xf0c4c4
 sub_F0C291_Skip9:
 	m_cp_mi8 MBD+r6, 0xfc, 0x02	; F0C4AE  cp (XIZ+0xfc),0x02
 	jr	nz, sub_F0C291_Skip11	; F0C4B2  jr NZ,0xf0c4bd
 sub_F0C291_Skip10:
 	ld	l, 1:opc	; F0C4B4  ld L,0x01
-	lda	xix, (16579807:24)	; F0C4B6  lda XIX,0xfcfcdf
+	lda	xix, (StepValues_FCFCDF:24)	; F0C4B6  lda XIX,0xfcfcdf
 	jr	sub_F0C291_Join5	; F0C4BB  jr T,0xf0c4c4
 sub_F0C291_Skip11:
 	ld	l, 5:opc	; F0C4BD  ld L,0x05
-	lda	xix, (16579809:24)	; F0C4BF  lda XIX,0xfcfce1
+	lda	xix, (StepValues_FCFCE1:24)	; F0C4BF  lda XIX,0xfcfce1
 sub_F0C291_Join5:
 	ld	d, (xiz+8)	; F0C4C4  ld D,(XIZ+0x08)
 	res	7, d	; F0C4C7  res 0x07,D
@@ -96066,7 +96159,7 @@ sub_F47C7C_Join3:
 	ld	(14064:16), a	; F47D5B  ld (0x36f0),A
 	popw	wa	; F47D5F  pop WA
 	ld	(14140:16), de	; F47D60  ld (0x373c),DE
-	ld	xiy, 16777208	; F47D64  ld XIY,0x00fffff8
+	ld	xiy, MIDI_UART_Configure_Data	; F47D64  ld XIY,0x00fffff8
 	m_cp_mi8 MBI+r5, 0, 0x10	; F47D69  cp (XIY),0x10
 	jr	c, sub_F47C7C_Skip5	; F47D6C  jr C,0xf47d71
 	calr	sub_F4812F	; F47D6E  calr 0xf4812f
@@ -98947,7 +99040,7 @@ sub_F49A3D_Skip9:
 	calr	sub_F49BFA	; F49B2D  calr 0xf49bfa
 sub_F49A3D_Skip10:
 	ld	(13496:16), 0	; F49B30  ld (0x34b8),0x00
-	ld	xiy, 16777208	; F49B35  ld XIY,0x00fffff8
+	ld	xiy, MIDI_UART_Configure_Data	; F49B35  ld XIY,0x00fffff8
 	m_cp_mi8 MBI+r5, 0, 0x10	; F49B3A  cp (XIY),0x10
 	jr	c, sub_F49A3D_Return2	; F49B3D  jr C,0xf49b42
 	calr	sub_F49861	; F49B3F  calr 0xf49861
@@ -107534,40 +107627,40 @@ sub_F4F2DE_Return:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F4F800:
-	.long 0x00FB22C8                       ; F4F800  [0]   -> prom_a 0xFB22C8
-	.long 0x00FB2820                       ; F4F804  [1]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F808  [2]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F80C  [3]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F810  [4]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F814  [5]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F818  [6]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F81C  [7]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F820  [8]   -> prom_a 0xFB2820
-	.long 0x00FB33FE                       ; F4F824  [9]   -> prom_a 0xFB33FE
-	.long 0x00FB2820                       ; F4F828  [10]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F82C  [11]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F830  [12]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F834  [13]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F838  [14]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F83C  [15]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F840  [16]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F844  [17]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F848  [18]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F84C  [19]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F850  [20]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F854  [21]   -> prom_a 0xFB2820
-	.long 0x00FB2820                       ; F4F858  [22]   -> prom_a 0xFB2820
-	.long 0x00FB3483                       ; F4F85C  [23]   -> prom_a 0xFB3483
-	.long 0x00FB34CA                       ; F4F860  [24]   -> prom_a 0xFB34CA
-	.long 0x00FB3495                       ; F4F864  [25]   -> prom_a 0xFB3495
-	.long 0x00FB42AB                       ; F4F868  [26]   -> prom_a 0xFB42AB
-	.long 0x00FB5122                       ; F4F86C  [27]   -> prom_a 0xFB5122
-	.long 0x00FB512C                       ; F4F870  [28]   -> prom_a 0xFB512C
-	.long 0x00FB5136                       ; F4F874  [29]   -> prom_a 0xFB5136
-	.long 0x00FB5140                       ; F4F878  [30]   -> prom_a 0xFB5140
-	.long 0x00FB514A                       ; F4F87C  [31]   -> prom_a 0xFB514A
-	.long 0x00FB51E7                       ; F4F880  [32]   -> prom_a 0xFB51E7
-	.long 0x00FB520C                       ; F4F884  [33]   -> prom_a 0xFB520C
+	.long SysExCmd_ResetSession                       ; F4F800  [0]   -> prom_a 0xFB22C8
+	.long SysExSession_Run                       ; F4F804  [1]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F808  [2]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F80C  [3]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F810  [4]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F814  [5]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F818  [6]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F81C  [7]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F820  [8]   -> prom_a 0xFB2820
+	.long SysExCmd_TempoReceive                       ; F4F824  [9]   -> prom_a 0xFB33FE
+	.long SysExSession_Run                       ; F4F828  [10]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F82C  [11]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F830  [12]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F834  [13]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F838  [14]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F83C  [15]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F840  [16]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F844  [17]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F848  [18]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F84C  [19]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F850  [20]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F854  [21]   -> prom_a 0xFB2820
+	.long SysExSession_Run                       ; F4F858  [22]   -> prom_a 0xFB2820
+	.long SysExCmd_ThirdRegionWrite                       ; F4F85C  [23]   -> prom_a 0xFB3483
+	.long SysExCmd_ParamWrite                       ; F4F860  [24]   -> prom_a 0xFB34CA
+	.long SysExCmd_ThirdRegionRequest                       ; F4F864  [25]   -> prom_a 0xFB3495
+	.long SysExParam_Request_DispatchGroup                       ; F4F868  [26]   -> prom_a 0xFB42AB
+	.long SysExCmd_DumpRequest_SystemPartMidi                       ; F4F86C  [27]   -> prom_a 0xFB5122
+	.long SysExCmd_DumpRequest_Sound                       ; F4F870  [28]   -> prom_a 0xFB512C
+	.long SysExCmd_DumpRequest_Job1                       ; F4F874  [29]   -> prom_a 0xFB5136
+	.long SysExCmd_DumpRequest_Sequencer                       ; F4F878  [30]   -> prom_a 0xFB5140
+	.long SysExCmd_DumpRequest_Combination                       ; F4F87C  [31]   -> prom_a 0xFB514A
+	.long SysExCmd_GmSystemOn                       ; F4F880  [32]   -> prom_a 0xFB51E7
+	.long SysExCmd_GmSystemOff                       ; F4F884  [33]   -> prom_a 0xFB520C
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F4F888 -- 34 32-bit pointers, 34 into prom_a and 0 into prom_b
@@ -107581,40 +107674,40 @@ PtrTable_F4F800:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F4F888:
-	.long 0x00FB22C8                       ; F4F888  [0]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F88C  [1]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F890  [2]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F894  [3]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F898  [4]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F89C  [5]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8A0  [6]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8A4  [7]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8A8  [8]   -> prom_a 0xFB22C8
-	.long 0x00FB33FE                       ; F4F8AC  [9]   -> prom_a 0xFB33FE
-	.long 0x00FB22C8                       ; F4F8B0  [10]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8B4  [11]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8B8  [12]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8BC  [13]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8C0  [14]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8C4  [15]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8C8  [16]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8CC  [17]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8D0  [18]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8D4  [19]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8D8  [20]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8DC  [21]   -> prom_a 0xFB22C8
-	.long 0x00FB22C8                       ; F4F8E0  [22]   -> prom_a 0xFB22C8
-	.long 0x00FB3483                       ; F4F8E4  [23]   -> prom_a 0xFB3483
-	.long 0x00FB34CA                       ; F4F8E8  [24]   -> prom_a 0xFB34CA
-	.long 0x00FB3495                       ; F4F8EC  [25]   -> prom_a 0xFB3495
-	.long 0x00FB42AB                       ; F4F8F0  [26]   -> prom_a 0xFB42AB
-	.long 0x00FB5122                       ; F4F8F4  [27]   -> prom_a 0xFB5122
-	.long 0x00FB512C                       ; F4F8F8  [28]   -> prom_a 0xFB512C
-	.long 0x00FB5136                       ; F4F8FC  [29]   -> prom_a 0xFB5136
-	.long 0x00FB5140                       ; F4F900  [30]   -> prom_a 0xFB5140
-	.long 0x00FB514A                       ; F4F904  [31]   -> prom_a 0xFB514A
-	.long 0x00FB51E7                       ; F4F908  [32]   -> prom_a 0xFB51E7
-	.long 0x00FB520C                       ; F4F90C  [33]   -> prom_a 0xFB520C
+	.long SysExCmd_ResetSession                       ; F4F888  [0]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F88C  [1]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F890  [2]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F894  [3]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F898  [4]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F89C  [5]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8A0  [6]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8A4  [7]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8A8  [8]   -> prom_a 0xFB22C8
+	.long SysExCmd_TempoReceive                       ; F4F8AC  [9]   -> prom_a 0xFB33FE
+	.long SysExCmd_ResetSession                       ; F4F8B0  [10]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8B4  [11]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8B8  [12]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8BC  [13]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8C0  [14]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8C4  [15]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8C8  [16]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8CC  [17]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8D0  [18]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8D4  [19]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8D8  [20]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8DC  [21]   -> prom_a 0xFB22C8
+	.long SysExCmd_ResetSession                       ; F4F8E0  [22]   -> prom_a 0xFB22C8
+	.long SysExCmd_ThirdRegionWrite                       ; F4F8E4  [23]   -> prom_a 0xFB3483
+	.long SysExCmd_ParamWrite                       ; F4F8E8  [24]   -> prom_a 0xFB34CA
+	.long SysExCmd_ThirdRegionRequest                       ; F4F8EC  [25]   -> prom_a 0xFB3495
+	.long SysExParam_Request_DispatchGroup                       ; F4F8F0  [26]   -> prom_a 0xFB42AB
+	.long SysExCmd_DumpRequest_SystemPartMidi                       ; F4F8F4  [27]   -> prom_a 0xFB5122
+	.long SysExCmd_DumpRequest_Sound                       ; F4F8F8  [28]   -> prom_a 0xFB512C
+	.long SysExCmd_DumpRequest_Job1                       ; F4F8FC  [29]   -> prom_a 0xFB5136
+	.long SysExCmd_DumpRequest_Sequencer                       ; F4F900  [30]   -> prom_a 0xFB5140
+	.long SysExCmd_DumpRequest_Combination                       ; F4F904  [31]   -> prom_a 0xFB514A
+	.long SysExCmd_GmSystemOn                       ; F4F908  [32]   -> prom_a 0xFB51E7
+	.long SysExCmd_GmSystemOff                       ; F4F90C  [33]   -> prom_a 0xFB520C
 
 ; --- 0xF4F910-0xF4F915  data (6 bytes) ---
 	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00   ; F4F910  ......
@@ -107633,40 +107726,40 @@ PtrTable_F4F888:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F4F916:
-	.long 0x00FB3230                       ; F4F916  [0]   -> prom_a 0xFB3230
-	.long 0x00FB3231                       ; F4F91A  [1]   -> prom_a 0xFB3231
-	.long 0x00FB3232                       ; F4F91E  [2]   -> prom_a 0xFB3232
-	.long 0x00FB3041                       ; F4F922  [3]   -> prom_a 0xFB3041
-	.long 0x00FB30F7                       ; F4F926  [4]   -> prom_a 0xFB30F7
-	.long 0x00FB3244                       ; F4F92A  [5]   -> prom_a 0xFB3244
-	.long 0x00FB3233                       ; F4F92E  [6]   -> prom_a 0xFB3233
-	.long 0x00FB28FF                       ; F4F932  [7]   -> prom_a 0xFB28FF
-	.long 0x00FB291D                       ; F4F936  [8]   -> prom_a 0xFB291D
-	.long 0x00FB3230                       ; F4F93A  [9]   -> prom_a 0xFB3230
-	.long 0x00FB2C6C                       ; F4F93E  [10]   -> prom_a 0xFB2C6C
-	.long 0x00FB2978                       ; F4F942  [11]   -> prom_a 0xFB2978
-	.long 0x00FB29BB                       ; F4F946  [12]   -> prom_a 0xFB29BB
-	.long 0x00FB29F1                       ; F4F94A  [13]   -> prom_a 0xFB29F1
-	.long 0x00FB2A27                       ; F4F94E  [14]   -> prom_a 0xFB2A27
-	.long 0x00FB2A7B                       ; F4F952  [15]   -> prom_a 0xFB2A7B
-	.long 0x00FB2ABE                       ; F4F956  [16]   -> prom_a 0xFB2ABE
-	.long 0x00FB2AF5                       ; F4F95A  [17]   -> prom_a 0xFB2AF5
-	.long 0x00FB2B30                       ; F4F95E  [18]   -> prom_a 0xFB2B30
-	.long 0x00FB2B6F                       ; F4F962  [19]   -> prom_a 0xFB2B6F
-	.long 0x00FB2BA6                       ; F4F966  [20]   -> prom_a 0xFB2BA6
-	.long 0x00FB2BE1                       ; F4F96A  [21]   -> prom_a 0xFB2BE1
-	.long 0x00FB2C35                       ; F4F96E  [22]   -> prom_a 0xFB2C35
-	.long 0x00FB3230                       ; F4F972  [23]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F976  [24]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F97A  [25]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F97E  [26]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F982  [27]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F986  [28]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F98A  [29]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F98E  [30]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F992  [31]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F996  [32]   -> prom_a 0xFB3230
-	.long 0x00FB3230                       ; F4F99A  [33]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F916  [0]   -> prom_a 0xFB3230
+	.long SysExSession_Cmd01_Nop                       ; F4F91A  [1]   -> prom_a 0xFB3231
+	.long SysExSession_Cmd02_Nop                       ; F4F91E  [2]   -> prom_a 0xFB3232
+	.long SysExSession_CategoryEnd                       ; F4F922  [3]   -> prom_a 0xFB3041
+	.long SysExSession_DumpEnd                       ; F4F926  [4]   -> prom_a 0xFB30F7
+	.long SysExSession_Abort                       ; F4F92A  [5]   -> prom_a 0xFB3244
+	.long SysExSession_Cmd06_Nop                       ; F4F92E  [6]   -> prom_a 0xFB3233
+	.long SysExSession_Enquiry                       ; F4F932  [7]   -> prom_a 0xFB28FF
+	.long SysExSession_StartTransfer                       ; F4F936  [8]   -> prom_a 0xFB291D
+	.long SysExSession_Ignore                       ; F4F93A  [9]   -> prom_a 0xFB3230
+	.long SysExSession_Continuation                       ; F4F93E  [10]   -> prom_a 0xFB2C6C
+	.long SysExSession_RecvSystemPart1                       ; F4F942  [11]   -> prom_a 0xFB2978
+	.long SysExSession_RecvSystemPart2                       ; F4F946  [12]   -> prom_a 0xFB29BB
+	.long SysExSession_RecvSoundOrphan                       ; F4F94A  [13]   -> prom_a 0xFB29F1
+	.long SysExSession_RecvSound                       ; F4F94E  [14]   -> prom_a 0xFB2A27
+	.long SysExSession_RecvStub0F                       ; F4F952  [15]   -> prom_a 0xFB2A7B
+	.long SysExSession_RecvStub10                       ; F4F956  [16]   -> prom_a 0xFB2ABE
+	.long SysExSession_RecvStub11                       ; F4F95A  [17]   -> prom_a 0xFB2AF5
+	.long SysExSession_RecvSequencerPart1                       ; F4F95E  [18]   -> prom_a 0xFB2B30
+	.long SysExSession_RecvSequencerPart2                       ; F4F962  [19]   -> prom_a 0xFB2B6F
+	.long SysExSession_RecvSequencerPart3                       ; F4F966  [20]   -> prom_a 0xFB2BA6
+	.long SysExSession_RecvCombinationPart1                       ; F4F96A  [21]   -> prom_a 0xFB2BE1
+	.long SysExSession_RecvCombinationPart2                       ; F4F96E  [22]   -> prom_a 0xFB2C35
+	.long SysExSession_Ignore                       ; F4F972  [23]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F976  [24]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F97A  [25]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F97E  [26]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F982  [27]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F986  [28]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F98A  [29]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F98E  [30]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F992  [31]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F996  [32]   -> prom_a 0xFB3230
+	.long SysExSession_Ignore                       ; F4F99A  [33]   -> prom_a 0xFB3230
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F4F99E -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
@@ -127586,8 +127679,8 @@ sub_F5BE5A_Skip2:
 	call	T_DisplayList_Run	; F5BF60  call 0xf417f0
 	ld	(LCD_CurrentLayer:16), 0	; F5BF64  ld (0x2540),0x00
 	call	sub_F09D91	; F5BF69  call 0xf09d91
-	ld	xiy, 16535934	; F5BF6D  ld XIY,0x00fc517e
-	ld	xix, 16536186	; F5BF72  ld XIX,0x00fc527a
+	ld	xiy, DisplayList_FC517E	; F5BF6D  ld XIY,0x00fc517e
+	ld	xix, DisplayList_FC517E_End	; F5BF72  ld XIX,0x00fc527a
 	call	T_DisplayListB_Run	; F5BF77  call 0xf417f4
 	ld	(LCD_CurrentLayer:16), 0	; F5BF7B  ld (0x2540),0x00
 	call	sub_F09DED	; F5BF80  call 0xf09ded
@@ -128846,7 +128939,7 @@ Draw_Page12EnvelopeKeyoffCurSor_Skip5:
 	cp	b, 0:i3	; F5CBA4  cp B,0
 	jr	z, Draw_Page12EnvelopeKeyoffCurSor_Return	; F5CBA6  jr Z,0xf5cbd8
 	ld	(LCD_CurrentLayer:16), 0	; F5CBA8  ld (0x2540),0x00
-	ld	xix, 16535854	; F5CBAD  ld XIX,0x00fc512e
+	ld	xix, DisplayList_FC5110_End	; F5CBAD  ld XIX,0x00fc512e
 	sla	a, 2	; F5CBB2  sla 0x02,A
 	mx8_ld_rm MXL, ra_IX, rb_A, 6	; F5CBB5  ld XIZ,(XIX+A)
 	ld	xiy, (xiz)	; F5CBBA  ld XIY,(XIZ)

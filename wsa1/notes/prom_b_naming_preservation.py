@@ -146,7 +146,31 @@ def main():
     stripped = "\n".join(l.strip().lstrip(";").strip() for l in new)
     flat = re.sub(r"\s+", " ", stripped)
 
-    kept = renamed = retitled = quoted = converted = deleted = 0
+    # a code line whose one NUMBER became the NAME of an equate with exactly that value
+    # (scripts/converters/symbolize_wsa1_rom_addresses.py --apply): `.long 0x00FB22C8` ->
+    # `.long SysExCmd_ResetSession`, `ld xiy, 16531727` -> `ld xiy, DLRec_FC410F`,
+    # `lda xix, (16579800:24)` -> `lda xix, (StepValues_FCFCD8:24)`.  The equate is read from the
+    # working tree's own `.set NAME, VALUE` lines; the byte gate checks the value is the encoded one.
+    EQU = re.compile(r"^\s*\.set\s+([A-Za-z_]\w*)\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*(?:;.*)?$")
+    byval = collections.defaultdict(list)
+    for l in new:
+        m = EQU.match(l)
+        if m:
+            byval[int(m.group(2), 0)].append(m.group(1))
+    NUM = re.compile(r"(?<![\w.$])(0x[0-9A-Fa-f]+|\d+)(?![\w.$])")
+
+    def symbolized(line):
+        if line.lstrip().startswith(";") or EQU.match(line):
+            return None
+        code, sep, rest = line.partition(";")
+        for m in NUM.finditer(code):
+            for name in byval.get(int(m.group(1), 0), ()):
+                cand = code[:m.start()] + name + code[m.end():] + sep + rest
+                if have[cand] > 0:
+                    return cand
+        return None
+
+    kept = renamed = retitled = quoted = converted = deleted = symbolic = 0
     missing = []
     for ln in old:
         if have[ln] > 0:
@@ -178,6 +202,11 @@ def main():
         if CONVERTED.match(ln):
             converted += 1
             continue
+        c = symbolized(ln)
+        if c is not None:
+            have[c] -= 1
+            symbolic += 1
+            continue
         # a comment line whose TEXT is quoted verbatim inside a replacement
         body = re.sub(r"\s+", " ", ln.strip().lstrip(";").strip())
         if ln.lstrip().startswith(";") and len(body) > 12 and body in flat:
@@ -200,6 +229,7 @@ def main():
     print(f"  header title rewritten as `; <name> -- 0x<addr>` {retitled}")
     print(f"  stanza REPLACED, its text quoted verbatim in the replacement {quoted}")
     print(f"  `.incbin` line CONVERTED to assembly (byte gate is the proof) {converted}")
+    print(f"  number -> equate of the same value (symbolize_wsa1_rom_addresses.py) {symbolic}")
     print(f"  ADDED                  {added}")
     print(f"  UNACCOUNTED FOR        {deleted}")
     print(f"  labels lost (not renamed either): {len(lost)}  {lost[:8]}")

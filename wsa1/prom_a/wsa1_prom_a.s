@@ -86736,6 +86736,9 @@ SysExRx_ParseDispatch_Ring601C6E:
 	call SysEx_ResetSession                                      ; FB22C2  1d 56 81 fb
 	pop XIX                                              ; FB22C6  5c
 	ret                                                  ; FB22C7  0e
+; SysExCmd_ResetSession: the foreground table's (PtrTable_F4F888) default -- SysEx_ResetSession and nothing else
+;   (sysex-probes/sysex_handshake_gate.py --tables).
+SysExCmd_ResetSession:
 	call SysEx_ResetSession                                      ; FB22C8  1d 56 81 fb
 	ret                                                  ; FB22CC  0e
 ; SysExJob_TotalKeyboard: bit 3 of (0x60FD40) around SysExXfer_SetJobTotal_TotalKeyboard and SysExDump_SendAllCategories.
@@ -87330,6 +87333,9 @@ SysExDump_SendJobDone:
 .LFB281E:
 	pop XIX                                              ; FB281E  5c
 	ret                                                  ; FB281F  0e
+; SysExSession_Run: the interrupt table's (PtrTable_F4F800) default, the bulk-transfer session loop.  Only on the SYSEX BULK DUMP
+;   screen (UI_ScreenLatch == 0x79) and for commands >= 7; each received message goes to SysExSession_DispatchCommand.
+SysExSession_Run:
 	push XIX                                             ; FB2820  3c
 	lda xix, (0x60fd40:24)                               ; FB2821  f2 40 fd 60 34
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB2826  c1 7a 20 3f 79
@@ -87427,6 +87433,8 @@ sub_FB28BE:
 .LFB28FD:
 	popw hl                                              ; FB28FD  4b
 	ret                                                  ; FB28FE  0e
+; SysExSession_Enquiry: command 0x07, F0 50 21 04 dd 11 F7: handshake state (0x60FD44) 0 -> 1, answer F0 50 22 04 00 11 F7.
+SysExSession_Enquiry:
 	m_cp_mi8 MB24, 0x60fd44, 0x00                        ; FB28FF  c2 44 fd 60 3f 00
 	jr nz, .LFB291C                                      ; FB2905  6e 15
 	ld (0x60fd44:24), 0x01                             ; FB2907  f2 44 fd 60 00 01
@@ -87437,6 +87445,8 @@ sub_FB28BE:
 	inc 6,XSP                                            ; FB291A  ef 66
 .LFB291C:
 	ret                                                  ; FB291C  0e
+; SysExSession_StartTransfer: command 0x08, F0 50 22 04 dd 11 F7: state 1 -> 2 and bit 7 of (0x60FD40) set; else status 0x18.
+SysExSession_StartTransfer:
 	push XIX                                             ; FB291D  3c
 	lda xix, (0x60fcd8:24)                               ; FB291E  f2 d8 fc 60 34
 	m_cp_mi8 MB24, 0x60fd44, 0x01                        ; FB2923  c2 44 fd 60 3f 01
@@ -87467,6 +87477,8 @@ sub_FB28BE:
 .LFB2976:
 	pop XIX                                              ; FB2976  5c
 	ret                                                  ; FB2977  0e
+; SysExSession_RecvSystemPart1: command 0x0B, 2D header 40 00 00 / 00 00 20.
+SysExSession_RecvSystemPart1:
 	pushw 0x03                                           ; FB2978  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB297B  e2 dc fc 60 21
 	push XBC                                             ; FB2980  39
@@ -87492,6 +87504,8 @@ sub_FB28BE:
 .LFB29B8:
 	inc 8,XSP                                            ; FB29B8  ef 60
 	ret                                                  ; FB29BA  0e
+; SysExSession_RecvSystemPart2: command 0x0C, 2D header 40 00 20 / 00 12 60.
+SysExSession_RecvSystemPart2:
 	pushw 0x03                                           ; FB29BB  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB29BE  e2 dc fc 60 21
 	push XBC                                             ; FB29C3  39
@@ -87514,6 +87528,8 @@ sub_FB28BE:
 	inc 8,XSP                                            ; FB29EE  ef 60
 .LFB29F0:
 	ret                                                  ; FB29F0  0e
+; SysExSession_RecvSoundOrphan: command 0x0D, receive half of the uncalled 0xFB248A; no wire sequence reaches it.
+SysExSession_RecvSoundOrphan:
 	pushw 0x03                                           ; FB29F1  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB29F4  e2 dc fc 60 21
 	push XBC                                             ; FB29F9  39
@@ -87536,6 +87552,8 @@ sub_FB28BE:
 	inc 8,XSP                                            ; FB2A24  ef 60
 .LFB2A26:
 	ret                                                  ; FB2A26  0e
+; SysExSession_RecvSound: command 0x0E, 2D header 20 00 00 / 10 00 00.
+SysExSession_RecvSound:
 	push XIX                                             ; FB2A27  3c
 	pushw 0x03                                           ; FB2A28  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2A2B  e2 dc fc 60 21
@@ -87569,6 +87587,8 @@ sub_FB28BE:
 .LFB2A79:
 	pop XIX                                              ; FB2A79  5c
 	ret                                                  ; FB2A7A  0e
+; SysExSession_RecvStub0F: command 0x0F, one of the three stubbed-out category handlers (steps 0/8/9); unreachable.
+SysExSession_RecvStub0F:
 	pushw 0x03                                           ; FB2A7B  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2A7E  e2 dc fc 60 21
 	push XBC                                             ; FB2A83  39
@@ -87594,6 +87614,8 @@ sub_FB28BE:
 .LFB2ABB:
 	inc 8,XSP                                            ; FB2ABB  ef 60
 	ret                                                  ; FB2ABD  0e
+; SysExSession_RecvStub10: command 0x10, as SysExSession_RecvStub0F.
+SysExSession_RecvStub10:
 	pushw 0x03                                           ; FB2ABE  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2AC1  e2 dc fc 60 21
 	push XBC                                             ; FB2AC6  39
@@ -87616,6 +87638,8 @@ sub_FB28BE:
 	inc 8,XSP                                            ; FB2AF2  ef 60
 .LFB2AF4:
 	ret                                                  ; FB2AF4  0e
+; SysExSession_RecvStub11: command 0x11, as SysExSession_RecvStub0F.
+SysExSession_RecvStub11:
 	pushw 0x03                                           ; FB2AF5  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2AF8  e2 dc fc 60 21
 	push XBC                                             ; FB2AFD  39
@@ -87639,6 +87663,8 @@ sub_FB28BE:
 	inc 8,XSP                                            ; FB2B2D  ef 60
 .LFB2B2F:
 	ret                                                  ; FB2B2F  0e
+; SysExSession_RecvSequencerPart1: command 0x12, 2D header 60 00 00 / 00 18 00.
+SysExSession_RecvSequencerPart1:
 	pushw 0x03                                           ; FB2B30  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2B33  e2 dc fc 60 21
 	push XBC                                             ; FB2B38  39
@@ -87663,6 +87689,8 @@ sub_FB28BE:
 .LFB2B6C:
 	inc 8,XSP                                            ; FB2B6C  ef 60
 	ret                                                  ; FB2B6E  0e
+; SysExSession_RecvSequencerPart2: command 0x13, 2D header 60 18 00 / 01 70 00.
+SysExSession_RecvSequencerPart2:
 	pushw 0x03                                           ; FB2B6F  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2B72  e2 dc fc 60 21
 	push XBC                                             ; FB2B77  39
@@ -87685,6 +87713,8 @@ sub_FB28BE:
 	inc 8,XSP                                            ; FB2BA3  ef 60
 .LFB2BA5:
 	ret                                                  ; FB2BA5  0e
+; SysExSession_RecvSequencerPart3: command 0x14, 2D header 62 08 00 / run-time size.
+SysExSession_RecvSequencerPart3:
 	pushw 0x03                                           ; FB2BA6  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2BA9  e2 dc fc 60 21
 	push XBC                                             ; FB2BAE  39
@@ -87708,6 +87738,8 @@ sub_FB28BE:
 	inc 8,XSP                                            ; FB2BDE  ef 60
 .LFB2BE0:
 	ret                                                  ; FB2BE0  0e
+; SysExSession_RecvCombinationPart1: command 0x15, 2D header 50 00 00 / 00 06 00.
+SysExSession_RecvCombinationPart1:
 	push XIX                                             ; FB2BE1  3c
 	pushw 0x03                                           ; FB2BE2  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2BE5  e2 dc fc 60 21
@@ -87741,6 +87773,8 @@ sub_FB28BE:
 .LFB2C33:
 	pop XIX                                              ; FB2C33  5c
 	ret                                                  ; FB2C34  0e
+; SysExSession_RecvCombinationPart2: command 0x16, 2D header 50 06 00 / 05 40 00.
+SysExSession_RecvCombinationPart2:
 	pushw 0x03                                           ; FB2C35  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2C38  e2 dc fc 60 21
 	push XBC                                             ; FB2C3D  39
@@ -87763,6 +87797,8 @@ sub_FB28BE:
 	inc 8,XSP                                            ; FB2C69  ef 60
 .LFB2C6B:
 	ret                                                  ; FB2C6B  0e
+; SysExSession_Continuation: command 0x0A, F0 50 7E: continue the transfer of step id (field 3 < 0x12).
+SysExSession_Continuation:
 	pushw hl                                             ; FB2C6C  2b
 	pushw 0x03                                           ; FB2C6D  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2C70  e2 dc fc 60 21
@@ -88180,6 +88216,8 @@ sub_FB2F35:
 	popw hl                                              ; FB303D  4b
 	unlk XIZ                                             ; FB303E  ee 0d
 	ret                                                  ; FB3040  0e
+; SysExSession_CategoryEnd: command 0x03, F0 50 27 7E F7: by the step id (field 3 < 0x12) through PtrTable_F4F9E6.
+SysExSession_CategoryEnd:
 	pushw hl                                             ; FB3041  2b
 	ld xbc, (0x60fcdc:24)                               ; FB3042  e2 dc fc 60 21
 	ld H,(XBC+0x03)                                      ; FB3047  89 03 26
@@ -88245,6 +88283,8 @@ sub_FB2F35:
 	m_set 3, MD24, 0x60fd41                              ; FB30EF  f2 41 fd 60 bb
 	inc 8,XSP                                            ; FB30F4  ef 60
 	ret                                                  ; FB30F6  0e
+; SysExSession_DumpEnd: command 0x04, F0 50 28 7E F7 (end of dump) or 2A 7E (memory full): status 0, end the session.
+SysExSession_DumpEnd:
 	pushw 0x00                                           ; FB30F7  0b 00 00
 	pushw 0x03                                           ; FB30FA  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30FD  e2 d8 fc 60 21
@@ -88398,9 +88438,14 @@ sub_FB3223:
 	m_res 3, MD24, 0x60fd41                              ; FB322A  f2 41 fd 60 b3
 .LFB322F:
 	ret                                                  ; FB322F  0e
+; SysExSession_Ignore: the in-session table's (PtrTable_F4F916) default, a bare ret.
+SysExSession_Ignore:
 	ret                                                  ; FB3230  0e
+SysExSession_Cmd01_Nop:
 	ret                                                  ; FB3231  0e
+SysExSession_Cmd02_Nop:
 	ret                                                  ; FB3232  0e
+SysExSession_Cmd06_Nop:
 	ret                                                  ; FB3233  0e
 sub_FB3234:
 	ld xbc, (0x60fcd8:24)                               ; FB3234  e2 d8 fc 60 21
@@ -88410,6 +88455,8 @@ sub_FB3234:
 	calr sub_FB3251                                      ; FB3240  1e 0e 00
 .LFB3243:
 	ret                                                  ; FB3243  0e
+; SysExSession_Abort: command 0x05, F0 50 29 7E F7: status 0x17, then sub_FB3251.
+SysExSession_Abort:
 	ld xbc, (0x60fcd8:24)                               ; FB3244  e2 d8 fc 60 21
 	ld (XBC+0x04),0x17                                   ; FB3249  b9 04 00 17
 	calr sub_FB3251                                      ; FB324D  1e 01 00
@@ -88581,6 +88628,8 @@ sub_FB3355:
 	pop XIX                                              ; FB33FA  5c
 	unlk XIZ                                             ; FB33FB  ee 0d
 	ret                                                  ; FB33FD  0e
+; SysExCmd_TempoReceive: command 0x09, F0 50 25 (tempo; sysex-probes/sysex_command_map.py), gated by SysEx_FeatureWordForVariant(5).
+SysExCmd_TempoReceive:
 	pushw hl                                             ; FB33FE  2b
 	pushw de                                             ; FB33FF  2a
 	pushw 0x05                                           ; FB3400  0b 05 00
@@ -88640,12 +88689,16 @@ sub_FB346B:
 	pop XHL                                              ; FB3480  5b
 	pop XDE                                              ; FB3481  5a
 	ret                                                  ; FB3482  0e
+; SysExCmd_ThirdRegionWrite: command 0x17, a 2C write to address byte 6 = 10/18/19 (sysex-probes/sysex_param_space.py: prom_b sub_F379AB).
+SysExCmd_ThirdRegionWrite:
 	ld xbc, (0x60fc80:24)                               ; FB3483  e2 80 fc 60 21
 	add XBC,0x0000000e                                   ; FB3488  e9 c8 0e 00 00 00
 	push XBC                                             ; FB348E  39
 	call T_F41258                                        ; FB348F  1d 58 12 f4
 	pop XBC                                              ; FB3493  59
 	ret                                                  ; FB3494  0e
+; SysExCmd_ThirdRegionRequest: command 0x19, the 2B request twin of SysExCmd_ThirdRegionWrite (prom_b sub_F36F8C).
+SysExCmd_ThirdRegionRequest:
 	ld xbc, (0x60fc80:24)                               ; FB3495  e2 80 fc 60 21
 	add XBC,0x0000000e                                   ; FB349A  e9 c8 0e 00 00 00
 	push XBC                                             ; FB34A0  39
@@ -88665,6 +88718,8 @@ sub_FB346B:
 	inc 2,XSP                                            ; FB34C7  ef 62
 .LFB34C9:
 	ret                                                  ; FB34C9  0e
+; SysExCmd_ParamWrite: command 0x18, F0 50 2C one-parameter write: SysExParam_Set_DispatchGroup, then the (0x60F000) follow-up.
+SysExCmd_ParamWrite:
 	calr SysExParam_Set_DispatchGroup                                      ; FB34CA  1e 24 00
 	m_cp_mi16 MW24, 0x60f000, 0x0000                     ; FB34CD  d2 00 f0 60 3f 00 00
 	jr z, .LFB34F0                                       ; FB34D4  66 1a
@@ -90216,6 +90271,9 @@ sub_FB3C34:
 	popw hl                                              ; FB42A7  4b
 	unlk XIZ                                             ; FB42A8  ee 0d
 	ret                                                  ; FB42AA  0e
+; SysExParam_Request_DispatchGroup: command 0x1A, F0 50 2B one-parameter request: group = parse field 1, 1..7, through
+;   SysExParam_Request_GroupTable.
+SysExParam_Request_DispatchGroup:
 	pushw 0x01                                           ; FB42AB  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB42AE  e2 d8 fc 60 21
 	push XBC                                             ; FB42B3  39
@@ -91792,18 +91850,28 @@ sub_FB50EE:
 	pop XIX                                              ; FB511E  5c
 	unlk XIZ                                             ; FB511F  ee 0d
 	ret                                                  ; FB5121  0e
+; SysExCmd_DumpRequest_SystemPartMidi: command 0x1B (2B, area 40): send job 4.
+SysExCmd_DumpRequest_SystemPartMidi:
 	ld (0x60f802:24), 0x04                             ; FB5122  f2 02 f8 60 00 04
 	calr sub_FB516A                                      ; FB5128  1e 3f 00
 	ret                                                  ; FB512B  0e
+; SysExCmd_DumpRequest_Sound: command 0x1C (2B, area 20): send job 3.
+SysExCmd_DumpRequest_Sound:
 	ld (0x60f802:24), 0x03                             ; FB512C  f2 02 f8 60 00 03
 	calr sub_FB516A                                      ; FB5132  1e 35 00
 	ret                                                  ; FB5135  0e
+; SysExCmd_DumpRequest_Job1: command 0x1D, job 1 (SysExDump_Job1_None); no wire sequence reaches it.
+SysExCmd_DumpRequest_Job1:
 	ld (0x60f802:24), 0x01                             ; FB5136  f2 02 f8 60 00 01
 	calr sub_FB516A                                      ; FB513C  1e 2b 00
 	ret                                                  ; FB513F  0e
+; SysExCmd_DumpRequest_Sequencer: command 0x1E (2B, area 60): send job 2.
+SysExCmd_DumpRequest_Sequencer:
 	ld (0x60f802:24), 0x02                             ; FB5140  f2 02 f8 60 00 02
 	calr sub_FB516A                                      ; FB5146  1e 21 00
 	ret                                                  ; FB5149  0e
+; SysExCmd_DumpRequest_Combination: command 0x1F (2B, area 50): send job 5.
+SysExCmd_DumpRequest_Combination:
 	ld (0x60f802:24), 0x05                             ; FB514A  f2 02 f8 60 00 05
 	calr sub_FB516A                                      ; FB5150  1e 17 00
 	ret                                                  ; FB5153  0e
@@ -91872,6 +91940,9 @@ sub_FB5197:
 .LFB51E5:
 	popw hl                                              ; FB51E5  4b
 	ret                                                  ; FB51E6  0e
+; SysExCmd_GmSystemOn: command 0x20, F0 7E 7F 09 01 F7: set bit 7 of (0x60F020), set bit 2 (GENERAL MIDI MODE) of (0x7F4D),
+;   post {0x91, 3, (0x7F4D), 4} (sysex-probes/decode-findings.json).
+SysExCmd_GmSystemOn:
 	pushw hl                                             ; FB51E7  2b
 	m_set 7, MD24, 0x60f020                              ; FB51E8  f2 20 f0 60 bf
 	m_or_mi8 MB16, 0x7f4d, 0x04                          ; FB51ED  c1 4d 7f 3e 04
@@ -91886,6 +91957,8 @@ sub_FB5197:
 	inc 8,XSP                                            ; FB5208  ef 60
 	popw hl                                              ; FB520A  4b
 	ret                                                  ; FB520B  0e
+; SysExCmd_GmSystemOff: command 0x21, F0 7E 7F 09 02 F7: when bit 2 of (0x7F4D) is set, clear it and post the same record.
+SysExCmd_GmSystemOff:
 	pushw hl                                             ; FB520C  2b
 	push XIX                                             ; FB520D  3c
 	lda xix, (0x7f4a:16)                                ; FB520E  f1 4a 7f 34

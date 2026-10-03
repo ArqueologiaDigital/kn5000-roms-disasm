@@ -475,4 +475,5 @@ RENAMES = [
     ("sub_FB445F", "SysExParam_Request_PartGroup6"),
     ("sub_FB44B3", "SysExParam_Request_Area60"),
     ("sub_FB5066", "SysExParam_CheckConditions"),
+    ("DisplayList_FC4000", "DigitalEffect_Frame"),   # a stale prom_a equate: prom_a renamed 0xFC4000 on 2026-09-25 (0522f390)
 ]
