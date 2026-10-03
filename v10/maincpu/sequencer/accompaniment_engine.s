@@ -29150,8 +29150,7 @@ CmEsyTtl_Dispatch2_Helper2:
 	pop	xiz
 	ret
 ExtVoice_ProcessList_Data:
-	.byte 0xf1
-	calr	51716
+	bit	2, (0x041e:16)
 	jr	nz, DrumParam_ReadMaxCount_Return
 	or	(0x34cd:16), 128
 	call	Seq_DispatcherEntry
@@ -29268,7 +29267,7 @@ DrumParam_ReadMaxCount_Helper5_Skip4:
 DrumParam_ReadMaxCount_Helper5_Skip5:
 	ld	(0x37c9:16), 1
 	calr	AccVoice_SetupStyleSlots
-	calr	828
+	calr	AccVoice_SetupSlots_Apply
 DrumParam_ReadMaxCount_Helper5_Return:
 	ret
 
@@ -29652,19 +29651,24 @@ AccPatch_ResolveEntryAddr_Helper10:
 	calr	Rhythm_MapChannelToDrumIndex
 	sll	bc, 2
 	add	xbc, 0x3898
-	ld	xwa, AccVoice_SetupSlots_DataBlock_Code2
+	ld	xwa, Rhythm_EndPattern
 	ld	(xbc), xwa
 	ld	c, 1:opc
 	calr	AccPatch_ResolveEntryAddr_Helper8
 	ret
-AccVoice_SetupSlots_DataBlock_Code2:
-	ld	a, (xhl)
-	normal
+Rhythm_EndPattern:
+	; A pattern stream that is only its end code 0x83 (RhythmVoice_WriteToBuffer stops at 0x83);
+	; AccPatch_ResolveEntryAddr_Helper10 stores its address in a slot of 0x3898.  Was `ld a, (xhl)`.
+	.byte	0x83
+	; (0x37C9) := 1, then AccPatch_ResolveEntryAddr_Helper, _Helper10_Helper, _Helper2 and
+	; AccVoice_SetupSlots_ForEachSlot.
+AccVoice_SetupSlots_Apply:
+	ld	a, 1:opc
 	ld	(0x37c9:16), a
 	calr	AccPatch_ResolveEntryAddr_Helper
 	calr	AccPatch_ResolveEntryAddr_Helper10_Helper
 	calr	AccPatch_ResolveEntryAddr_Helper2
-	calr	124
+	calr	AccVoice_SetupSlots_ForEachSlot
 	ret
 AccPatch_ResolveEntryAddr_Helper10_Helper:
 	calr	AccVoice_SetupStyleSlots_Helper2
@@ -29693,15 +29697,19 @@ AccPatch_ResolveEntryAddr_Helper10_Helper:
 	ld	w, (xiy+c)
 	ld a, 17:opc
 	ld	(xix+a), w
-	ld xiy, AccVoice_SetupSlots_DataBlock_Data
+	ld xiy, AccVoice_SlotName_Easy
 	add	xix, 64
 	ld	xbc, 0:i3
 	ldw	bc, 16
-	.byte 0x85
-	scf
+	ldir85
 	ret
-AccVoice_SetupSlots_DataBlock_Data:
-	aligned_string "Easy            #"
+AccVoice_SlotName_Easy:
+	; The slot name the routine above copies (ldir85, BC = 16) to the slot at +64.  Was
+	; `aligned_string "Easy            #"`, which took the next instruction's 23 00 as "#\0".
+	.ascii	"Easy            "
+	; (0x38D1) := 0, then while (0x38D1) < (0x34D7) + 1: ...
+AccVoice_SetupSlots_ForEachSlot:
+	ld	c, 0:opc
 	ld	(0x38d1:16), c
 	ld	c, (0x34d7:16)
 	add	c, 1
@@ -29835,7 +29843,7 @@ AccPatch_ResolveEntryAddr_Skip14:
 	ld	xwa, Rhythm_EmptyPattern
 	ld	(xbc), xwa
 AccPatch_ResolveEntryAddr_Join7:
-	calr	92
+	calr	AccVoice_SetupSlots_CheckStream
 	ret
 AccPatch_ResolveEntryAddr_Helper14:
 	ld	a, 1:opc
@@ -29871,15 +29879,16 @@ AccPatch_ResolveEntryAddr_Helper16:
 	ld	xhl, 0:i3
 	pop	l
 	and	l, 7
-	add	xhl, AccVoice_SetupSlots_DataBlock_Code3
+	add	xhl, AccPatch_IndexBitMask8
 	ld	l, (xhl)
 	ret
-AccVoice_SetupSlots_DataBlock_Code3:
-	normal
-	push	sr
-	max
-	ld	(P4:8), 32:io
-	ld	xwa, 0xf4eb1e40
+AccPatch_IndexBitMask8:
+	; L & 7 -> the bit AccPatch_ResolveEntryAddr_Helper16 returns; 6 and 7 share bit 6.  Was
+	; `normal / push sr / max / ld (P4:8), 32 / ld xwa, 0xf4eb1e40`.
+	.byte	0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x40
+	; Reads the slot's stream pointer (0x3898 + 4 * index) and compares its first byte with 0x90 / 0x91.
+AccVoice_SetupSlots_CheckStream:
+	calr	Rhythm_MapChannelToDrumIndex
 	push	xbc
 	add	xbc, 0x342d
 	ld	xix, xbc

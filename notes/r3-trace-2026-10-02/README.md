@@ -228,3 +228,23 @@ for addresses in the span are three `1e 29 f6` byte runs inside `calr` instructi
 (BmDrEdit_DelayAction_SetupAndWalk+11, Part_CheckAndReallocVoices_Join+2, AccPatch_ChIdx1_Bank1+51). The
 region is now `.byte` with a comment, and the unreferenced positional label `ToneGen_Stereo_WriteParam_Code`
 is removed.
+
+### `accvoice_setupslots_<tree>.json` (2026-10-03)
+
+Four v10 refusals: R5 at 0xF674FD, and `calr 828` / `calr 124` / `calr 92`, whose targets were mid-line.
+The fixes, renamed by `scripts/renaming/rename_accvoice_setupslots_data.sed` in all three trees:
+
+- 0xF674FC: `bit 2, (0x041e:16)`, was `.byte 0xf1 / calr 51716`.
+- `Rhythm_EndPattern` (0xF67983, was `AccVoice_SetupSlots_DataBlock_Code2`): the one-byte pattern stream
+  0x83. The code after it is now `AccVoice_SetupSlots_Apply` (0xF67984).
+- `ldir85` (was `.byte 0x85 / scf`). `AccVoice_SlotName_Easy` (was `AccVoice_SetupSlots_DataBlock_Data`)
+  is 16 characters; the old `aligned_string "Easy            #"` took the next instruction's `23 00`.
+  `AccVoice_SetupSlots_ForEachSlot` starts at 0xF67A12.
+- `AccPatch_IndexBitMask8` (0xF67BC9, was `AccVoice_SetupSlots_DataBlock_Code3`) is `01 02 04 08 10 20 40 40`.
+  `AccVoice_SetupSlots_CheckStream` starts at 0xF67BD1.
+
+`symbolize_numeric_branches.py --apply --verify` then named the three `calr`s (PASS).
+
+v7: four `port_islands.py --whole ... --delta 0x404` runs (11, 21, 20 and 4 B), then
+`accvoice_v7_postport.py`. It restates the comments with v7's names and RAM (0x372D/0x37FC/0x3835/0x343B)
+and drops the 17 old "v10 does not spell this byte either" notes of the name and its two following bytes.

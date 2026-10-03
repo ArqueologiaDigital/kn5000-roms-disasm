@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,673
-#   semantic names ........... 50,859 (98.4%)
+#   symbols .................. 51,676
+#   semantic names ........... 50,862 (98.4%)
 #   positional names ......... 814
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33686,9 +33686,11 @@ AccPatch_ResolveEntryAddr_Helper9_Skip 00F6792C
 AccPatch_ResolveEntryAddr_Skip9 00F6795E
 AccPatch_ResolveEntryAddr_Return5 00F67969
 AccPatch_ResolveEntryAddr_Helper10 00F6796A
-AccVoice_SetupSlots_DataBlock_Code2 00F67983
+Rhythm_EndPattern 00F67983
+AccVoice_SetupSlots_Apply 00F67984
 AccPatch_ResolveEntryAddr_Helper10_Helper 00F67997
-AccVoice_SetupSlots_DataBlock_Data 00F67A02
+AccVoice_SlotName_Easy 00F67A02
+AccVoice_SetupSlots_ForEachSlot 00F67A12
 AccPatch_ResolveEntryAddr_Join5 00F67A1F
 AccPatch_ResolveEntryAddr_Skip10 00F67A38
 AccPatch_ResolveEntryAddr_Helper11 00F67A3C
@@ -33707,7 +33709,8 @@ AccPatch_ResolveEntryAddr_Skip15 00F67BA4
 AccPatch_ResolveEntryAddr_Return8 00F67BA6
 AccPatch_ResolveEntryAddr_Helper15 00F67BA7
 AccPatch_ResolveEntryAddr_Helper16 00F67BB7
-AccVoice_SetupSlots_DataBlock_Code3 00F67BC9
+AccPatch_IndexBitMask8 00F67BC9
+AccVoice_SetupSlots_CheckStream 00F67BD1
 AccPatch_ResolveEntryAddr_Skip16 00F67C07
 AccPatch_ResolveEntryAddr_Skip17 00F67C09
 AccPatch_ResolveEntryAddr_Return9 00F67C11

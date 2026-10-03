@@ -1,0 +1,103 @@
+[
+ {
+  "file": "v9/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF674FC",
+  "end": "0xF67500",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 4
+   }
+  ]
+ },
+ {
+  "file": "v9/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF67983",
+  "end": "0xF67997",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "byte",
+    "len": 1
+   },
+   {
+    "kind": "code",
+    "len": 19
+   }
+  ],
+  "labels": {
+   "0xF67984": "AccVoice_SetupSlots_Apply"
+  },
+  "comments": {
+   "0xF67983": [
+    "A pattern stream that is only its end code 0x83 (RhythmVoice_WriteToBuffer stops at 0x83);",
+    "AccPatch_ResolveEntryAddr_Helper10 stores its address in a slot of 0x3898.  Was `ld a, (xhl)`."
+   ],
+   "0xF67984": [
+    "(0x37C9) := 1, then AccPatch_ResolveEntryAddr_Helper, _Helper10_Helper, _Helper2 and",
+    "AccVoice_SetupSlots_ForEachSlot."
+   ]
+  }
+ },
+ {
+  "file": "v9/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF679FF",
+  "end": "0xF67A14",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 3
+   },
+   {
+    "kind": "ascii",
+    "len": 16
+   },
+   {
+    "kind": "code",
+    "len": 2
+   }
+  ],
+  "labels": {
+   "0xF67A12": "AccVoice_SetupSlots_ForEachSlot"
+  },
+  "comments": {
+   "0xF67A02": [
+    "The slot name the routine above copies (ldir85, BC = 16) to the slot at +64.  Was",
+    "`aligned_string \"Easy            #\"`, which took the next instruction's 23 00 as \"#\\0\"."
+   ],
+   "0xF67A12": [
+    "(0x38D1) := 0, then while (0x38D1) < (0x34D7) + 1: ..."
+   ]
+  }
+ },
+ {
+  "file": "v9/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF67BC9",
+  "end": "0xF67BD4",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "byte",
+    "len": 8
+   },
+   {
+    "kind": "code",
+    "len": 3
+   }
+  ],
+  "labels": {
+   "0xF67BD1": "AccVoice_SetupSlots_CheckStream"
+  },
+  "comments": {
+   "0xF67BC9": [
+    "L & 7 -> the bit AccPatch_ResolveEntryAddr_Helper16 returns; 6 and 7 share bit 6.  Was",
+    "`normal / push sr / max / ld (P4:8), 32 / ld xwa, 0xf4eb1e40`."
+   ],
+   "0xF67BD1": [
+    "Reads the slot's stream pointer (0x3898 + 4 * index) and compares its first byte with 0x90 / 0x91."
+   ]
+  }
+ }
+]

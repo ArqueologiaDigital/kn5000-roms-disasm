@@ -28042,7 +28042,7 @@ CmEsyTtl_Dispatch2_Helper2:
 	pop XIZ
 	ret
 ExtVoice_ProcessList_Data:
-	.byte 0xf1, 0x1e, 0x04, 0xca
+	bit	2, (0x041e:16)
 	jr	nz, DrumParam_ReadMaxCount_Return
 	or	(0x3431:16), 128
 	call	Seq_DispatcherEntry
@@ -28559,15 +28559,20 @@ AccVoice_SetupSlots_DataBlock_Helper10:
 	calr	Rhythm_MapChannelToDrumIndex
 	sll	bc, 2
 	add	xbc, 14332
-	ld	xwa, AccVoice_SetupSlots_DataBlock_Code2
+	ld	xwa, Rhythm_EndPattern
 	ld	(xbc), xwa
 	ld	c, 1:opc
 	calr	AccVoice_SetupSlots_DataBlock_Helper8
 	ret
-AccVoice_SetupSlots_DataBlock_Code2:
-	ld	a, (xhl)
-	normal
-	ld	(14125:16), a
+Rhythm_EndPattern:
+	; A pattern stream that is only its end code 0x83 (RhythmVoice_WriteToBuffer stops at 0x83);
+	; AccVoice_SetupSlots_DataBlock_Helper10 stores its address in a slot of 0x37FC.  Was `ld a, (xhl)`.
+	.byte	0x83
+AccVoice_SetupSlots_Apply:
+	; (0x372D) := 1, then AccVoice_SetupSlots_DataBlock_Helper, _Helper10_Helper, _Helper2 and
+	; AccVoice_SetupSlots_DataBlock_Helper10_Helper2 (v10/v9: AccVoice_SetupSlots_ForEachSlot).
+	ld	a, 1:opc
+	ld	(0x372d:16), a
 	calr	AccVoice_SetupSlots_DataBlock_Helper
 	calr	AccVoice_SetupSlots_DataBlock_Helper10_Helper
 	calr	AccVoice_SetupSlots_DataBlock_Helper2
@@ -28614,33 +28619,21 @@ AccVoice_SetupSlots_DataBlock_Helper10_Helper:
 	ld	w, (xiy+c)
 	ld	a, 17:opc
 	ld	(xix+a), w
-	ld	xiy, AccVoice_SetupSlots_DataBlock_Data
+	ld	xiy, AccVoice_SlotName_Easy
 	add	xix, 64
 	ld	xbc, 0:i3
 	ldw	bc, 16
 	; v10 does not spell this byte either
 	ldir85
 	ret
-AccVoice_SetupSlots_DataBlock_Data:
-	.byte 0x45	; v10 does not spell this byte either
-	.byte 0x61	; v10 does not spell this byte either
-	.byte 0x73	; v10 does not spell this byte either
-	.byte 0x79	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
+; v10 does not spell this byte either
+AccVoice_SlotName_Easy:
+	; The slot name the routine above copies (ldir85, BC = 16) to the slot at +64.  Was one
+	; `.byte` per character, with the next instruction's 23 00 among them.
+	.ascii	"Easy            "
 AccVoice_SetupSlots_DataBlock_Helper10_Helper2:
-	.byte 0x23	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	; (0x3835) := 0, then while (0x3835) < (0x343B) + 1: ...
+	ld	c, 0:opc
 	ld	(14389:16), c
 	ld	c, (13371:16)
 	add	c, 1
@@ -28810,15 +28803,16 @@ AccVoice_SetupSlots_DataBlock_Helper16:
 	ld	xhl, 0:i3
 	pop	l
 	and	l, 7
-	add	xhl, AccVoice_SetupSlots_DataBlock_Code3
+	add	xhl, AccPatch_IndexBitMask8
 	ld	l, (xhl)
 	ret
-AccVoice_SetupSlots_DataBlock_Code3:
-	normal
-	push	sr
-	max
-	ld	(P4:8), 32:io
-	ld	xwa, 4109049408
+AccPatch_IndexBitMask8:
+	; L & 7 -> the bit AccVoice_SetupSlots_DataBlock_Helper16 returns; 6 and 7 share bit 6.  Was
+	; `normal / push sr / max / ld (P4:8), 32 / ld xwa, 4109049408`.
+	.byte	0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x40
+AccVoice_SetupSlots_CheckStream:
+	; Reads the slot's stream pointer (0x37FC + 4 * index) and compares its first byte with 0x90 / 0x91.
+	calr	Rhythm_MapChannelToDrumIndex
 	push	xbc
 	add	xbc, 13201
 	ld	xix, xbc
