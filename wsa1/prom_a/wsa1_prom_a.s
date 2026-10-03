@@ -57567,6 +57567,14 @@ UserSoundBank_RemoteSoundAddr:
 	popw hl                                              ; F9F90C  4b
 	unlk XIZ                                             ; F9F90D  ee 0d
 	ret                                                  ; F9F90F  0e
+; prom_c (CPU 2) addresses these two routines compute for remote reads over the link.  prom_c is mapped at
+; 0xF80000 on its own CPU, over the same numbers as this image, so they are NOT prom_a labels; the names
+; are prom_c's (wsa1/prom_c/data_tables/preset_bank.s).
+	.equ PromC_PresetBank_CategoryNames, 0x00F80200	; 16 x 16-byte bank names
+	.equ PromC_PresetBank_Records, 0x00F80300	; the 0x2C0-byte combination records, 0x1600 per bank
+	.equ PromC_PresetBank_Sizeable_Orch, 0x00F8F500	; = PresetBank_Records + 11 * 0x1600
+	.equ PromC_PresetBank_Guitar_Synth, 0x00F90B00	; = PresetBank_Records + 12 * 0x1600
+
 ; CombiBank_RemoteGroupNameAddr -- returns in XIY the far-side address of the 16-byte name of combination group H (ROM: 0xF80200, USER: 0xEC0200, EXT: 0xC00200 + a base read from 0xC0001C), or 0xFFFFFFFF
 ; Evidence: three arms on bank code 0/8/0x10; the EXT arm first does Link_ReadRemoteBlock(0xC0001C, 4, 0x60F170); used by CombinationGroupNaming_StoreGroupName and CombinationCopy_Execute as the remote address.
 CombiBank_RemoteGroupNameAddr:
@@ -57586,7 +57594,7 @@ CombiBank_RemoteGroupNameAddr:
 	ld c, 0x10:opc                                          ; F9F92F  23 10
 	mul bc, h                                          ; F9F931  ce 43
 	extz XBC                                             ; F9F933  e9 12
-	add XBC,0x00f80200                                   ; F9F935  e9 c8 00 02 f8 00
+	add XBC,PromC_PresetBank_CategoryNames               ; F9F935  e9 c8 00 02 f8 00
 	ld XIY,XBC                                           ; F9F93B  e9 8d
 	jr .LF9F980                                          ; F9F93D  68 41
 .LF9F93F:
@@ -57653,14 +57661,14 @@ CombiBank_RemoteCombiAddr:
 	extz WA                                              ; F9F9C4  d8 12
 	mul WA,0x1600                                        ; F9F9C6  d8 08 00 16
 	add XWA,XBC                                          ; F9F9CA  e9 80
-	add XWA,.LF80300                                   ; F9F9CC  e8 c8 00 03 f8 00
+	add XWA,PromC_PresetBank_Records                   ; F9F9CC  e8 c8 00 03 f8 00
 	ld XIY,XWA                                           ; F9F9D2  e8 8d
 	jrl .LF9FABC                                         ; F9F9D4  78 e5 00
 .LF9F9D7:
 	ld C,L                                               ; F9F9D7  cf 8b
 	extz BC                                              ; F9F9D9  d9 12
 	mul BC,0x02c0                                        ; F9F9DB  d9 08 c0 02
-	add XBC,0x00f8f500                                   ; F9F9DF  e9 c8 00 f5 f8 00
+	add XBC,PromC_PresetBank_Sizeable_Orch               ; F9F9DF  e9 c8 00 f5 f8 00
 	ld XIY,XBC                                           ; F9F9E5  e9 8d
 	jrl .LF9FABC                                         ; F9F9E7  78 d2 00
 .LF9F9EA:
@@ -57675,7 +57683,7 @@ CombiBank_RemoteCombiAddr:
 	extz WA                                              ; F9FA00  d8 12
 	mul WA,0x02c0                                        ; F9FA02  d8 08 c0 02
 	add XBC,XWA                                          ; F9FA06  e8 81
-	add XBC,Paint_SoundModeFields_DeadCopy__F90B00                                   ; F9FA08  e9 c8 00 0b f9 00
+	add XBC,PromC_PresetBank_Guitar_Synth                ; F9FA08  e9 c8 00 0b f9 00
 	ld XIY,XBC                                           ; F9FA0E  e9 8d
 	jrl .LF9FABC                                         ; F9FA10  78 a9 00
 .LF9FA13:
