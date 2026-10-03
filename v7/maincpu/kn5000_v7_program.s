@@ -446,210 +446,210 @@ GUI_DisplayStructData_0xCC8:
 GUI_DisplayStructData_0xCD8:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0x2E
-	.long Scoop_SoundEditorData_0xEB+0xDC
-	.long Scoop_SoundEditorData_0xEB+0x18F
+	.long Scoop_SoundEditorData_Join59+0x5C
+	.long Scoop_SoundEditorData_Skip3+0xA
+	.long Scoop_SoundEditorData_Join4+0x25
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0x201
-	.long Scoop_SoundEditorData_0xEB+0x211
-	.long Scoop_SoundEditorData_0xEB+0x221
-	.long Scoop_SoundEditorData_0xEB+0x250
-	.long Scoop_SoundEditorData_0xEB+0x274
+	.long Scoop_SoundEditorData_Join4+0x97
+	.long Scoop_SoundEditorData_Join4+0xA7
+	.long Scoop_SoundEditorData_Join4+0xB7
+	.long Scoop_SoundEditorData_Join4+0xE6
+	.long Scoop_SoundEditorData_Join4+0x10A
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0x2BA
-	.long Scoop_SoundEditorData_0xEB+0x298
+	.long Scoop_SoundEditorData_Join4+0x150
+	.long Scoop_SoundEditorData_Join4+0x12E
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join57+0x1E (0xF03DD5) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xD20:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0x2E9
-	.long Scoop_SoundEditorData_0xEB+0x35C
-	.long Scoop_SoundEditorData_0xEB+0x3C0
-	.long Scoop_SoundEditorData_0xEB+0x434
+	.long Scoop_SoundEditorData_Epilogue6+0x3
+	.long Scoop_SoundEditorData_Skip8+0xA
+	.long Scoop_SoundEditorData_Skip9+0x9
+	.long Scoop_SoundEditorData_Skip10+0xA
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0x498
-	.long Scoop_SoundEditorData_0xEB+0x4A8
-	.long Scoop_SoundEditorData_0xEB+0x4C0
-	.long Scoop_SoundEditorData_0xEB+0x4DF
-	.long Scoop_SoundEditorData_0xEB+0x4F7
+	.long Scoop_SoundEditorData_Skip11+0x9
+	.long Scoop_SoundEditorData_Skip11+0x19
+	.long Scoop_SoundEditorData_Skip11+0x31
+	.long Scoop_SoundEditorData_Join6+0x5
+	.long Scoop_SoundEditorData_Join6+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0x51D
-	.long Scoop_SoundEditorData_0xEB+0x50F
+	.long Scoop_SoundEditorData_Join6+0x43
+	.long Scoop_SoundEditorData_Join6+0x35
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join58+0x1E (0xF03E03) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xD68:
-	.long Scoop_SoundEditorData_0xEB+0x531
-	.long Scoop_SoundEditorData_0xEB+0x5C2
-	.long Scoop_SoundEditorData_0xEB+0x662
-	.long Scoop_SoundEditorData_0xEB+0x702
-	.long Scoop_SoundEditorData_0xEB+0x7A2
-	.long Scoop_SoundEditorData_0xEB+0x859
-	.long Scoop_SoundEditorData_0xEB+0x910
-	.long Scoop_SoundEditorData_0xEB+0x973
-	.long Scoop_SoundEditorData_0xEB+0x9E3
-	.long Scoop_SoundEditorData_0xEB+0x9EC
-	.long Scoop_SoundEditorData_0xEB+0xA0B
-	.long Scoop_SoundEditorData_0xEB+0xA3E
-	.long Scoop_SoundEditorData_0xEB+0xA6A
+	.long Scoop_SoundEditorData_Join6+0x57
+	.long Scoop_SoundEditorData_Join7+0x29
+	.long Scoop_SoundEditorData_Join8+0x29
+	.long Scoop_SoundEditorData_Join9+0x29
+	.long Scoop_SoundEditorData_Join10+0x29
+	.long Scoop_SoundEditorData_Join12+0x29
+	.long Scoop_SoundEditorData_Join14+0x29
+	.long Scoop_SoundEditorData_Join14+0x8C
+	.long Scoop_SoundEditorData_Join14+0xFC
+	.long Scoop_SoundEditorData_Join14+0x105
+	.long Scoop_SoundEditorData_Join15+0x5
+	.long Scoop_SoundEditorData_Epilogue11+0x3
+	.long Scoop_SoundEditorData_Epilogue12+0x3
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0xAF6
-	.long Scoop_SoundEditorData_0xEB+0xAD4
+	.long Scoop_SoundEditorData_Epilogue14+0x3
+	.long Scoop_SoundEditorData_Epilogue13+0x3
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join59+0x1E (0xF03E31) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xDB0:
-	.long Scoop_SoundEditorData_0xEB+0xB25
-	.long Scoop_SoundEditorData_0xEB+0xBB9
-	.long Scoop_SoundEditorData_0xEB+0xC4D
-	.long Scoop_SoundEditorData_0xEB+0xCE1
-	.long Scoop_SoundEditorData_0xEB+0xD45
-	.long Scoop_SoundEditorData_0xEB+0xDB9
-	.long Scoop_SoundEditorData_0xEB+0xE1D
-	.long Scoop_SoundEditorData_0xEB+0xE6F
-	.long Scoop_SoundEditorData_0xEB+0xEC2
-	.long Scoop_SoundEditorData_0xEB+0xECB
-	.long Scoop_SoundEditorData_0xEB+0xEEA
-	.long Scoop_SoundEditorData_0xEB+0xF09
-	.long Scoop_SoundEditorData_0xEB+0xF21
+	.long Scoop_SoundEditorData_Epilogue15+0x3
+	.long Scoop_SoundEditorData_Skip29+0xA
+	.long Scoop_SoundEditorData_Skip30+0xA
+	.long Scoop_SoundEditorData_Skip31+0xA
+	.long Scoop_SoundEditorData_Skip32+0x9
+	.long Scoop_SoundEditorData_Skip33+0xA
+	.long Scoop_SoundEditorData_Skip34+0x9
+	.long Scoop_SoundEditorData_Skip34+0x5B
+	.long Scoop_SoundEditorData_Skip34+0xAE
+	.long Scoop_SoundEditorData_Skip34+0xB7
+	.long Scoop_SoundEditorData_Join19+0x5
+	.long Scoop_SoundEditorData_Join20+0x5
+	.long Scoop_SoundEditorData_Join20+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0xF47
-	.long Scoop_SoundEditorData_0xEB+0xF39
+	.long Scoop_SoundEditorData_Join20+0x43
+	.long Scoop_SoundEditorData_Join20+0x35
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
-; evidence: Scoop_SoundEditorData_0xEB+0x1E (0xF03E5F) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+; evidence: SeAmpLfo1_DisplayDispatch+0x1E (0xF03E5F) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xDF8:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0xF5B
-	.long Scoop_SoundEditorData_0xEB+0xF63
-	.long Scoop_SoundEditorData_0xEB+0xF6B
-	.long Scoop_SoundEditorData_0xEB+0xF73
-	.long Scoop_SoundEditorData_0xEB+0xF7B
-	.long Scoop_SoundEditorData_0xEB+0xF83
-	.long Scoop_SoundEditorData_0xEB+0xF8B
-	.long Scoop_SoundEditorData_0xEB+0xF93
-	.long Scoop_SoundEditorData_0xEB+0xFA3
-	.long Scoop_SoundEditorData_0xEB+0xFB8
-	.long Scoop_SoundEditorData_0xEB+0xFC5
-	.long Scoop_SoundEditorData_0xEB+0xFD2
+	.long Scoop_SoundEditorData_Join20+0x57
+	.long Scoop_SoundEditorData_Join20+0x5F
+	.long Scoop_SoundEditorData_Join20+0x67
+	.long Scoop_SoundEditorData_Join20+0x6F
+	.long Scoop_SoundEditorData_Join20+0x77
+	.long Scoop_SoundEditorData_Join20+0x7F
+	.long Scoop_SoundEditorData_Join20+0x87
+	.long Scoop_SoundEditorData_Join20+0x8F
+	.long Scoop_SoundEditorData_Join20+0x9F
+	.long Scoop_SoundEditorData_Skip37+0x8
+	.long Scoop_SoundEditorData_Skip37+0x15
+	.long Scoop_SoundEditorData_Skip37+0x22
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0xEB+0xFDF
+	.long Scoop_SoundEditorData_Skip37+0x2F
 	.long SeMenu_BitShift_Stub
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join60+0x1E (0xF04E52) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xE40:
-	.long Scoop_SoundEditorData_0x127C+0x2E
-	.long Scoop_SoundEditorData_0x127C+0xC7
-	.long Scoop_SoundEditorData_0x127C+0x160
-	.long Scoop_SoundEditorData_0x127C+0x1F0
+	.long Scoop_SoundEditorData_Join68+0x5C
+	.long Scoop_SoundEditorData_Helper2+0x87
+	.long Scoop_SoundEditorData_Helper3+0x87
+	.long Scoop_SoundEditorData_Join21+0x87
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x280
-	.long Scoop_SoundEditorData_0x127C+0x307
-	.long Scoop_SoundEditorData_0x127C+0x388
-	.long Scoop_SoundEditorData_0x127C+0x40A
-	.long Scoop_SoundEditorData_0x127C+0x432
-	.long Scoop_SoundEditorData_0x127C+0x44A
-	.long Scoop_SoundEditorData_0x127C+0x47D
-	.long Scoop_SoundEditorData_0x127C+0x4C9
+	.long Scoop_SoundEditorData_Join23
+	.long Scoop_SoundEditorData_Join24
+	.long Scoop_SoundEditorData_Join25
+	.long Scoop_SoundEditorData_Join26
+	.long Scoop_SoundEditorData_Join27
+	.long Scoop_SoundEditorData_Join28
+	.long Scoop_SoundEditorData_Join28+0x33
+	.long Scoop_SoundEditorData_Join30
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x517
-	.long Scoop_SoundEditorData_0x127C+0x4F5
+	.long Scoop_SoundEditorData_Join30+0x4E
+	.long Scoop_SoundEditorData_Join30+0x2C
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join61+0x1E (0xF04E80) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xE88:
-	.long Scoop_SoundEditorData_0x127C+0x546
-	.long Scoop_SoundEditorData_0x127C+0x558
-	.long Scoop_SoundEditorData_0x127C+0x56A
-	.long Scoop_SoundEditorData_0x127C+0x574
+	.long Scoop_SoundEditorData_Epilogue19+0x3
+	.long Scoop_SoundEditorData_Epilogue19+0x15
+	.long Scoop_SoundEditorData_Epilogue19+0x27
+	.long Scoop_SoundEditorData_Epilogue19+0x31
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x57E
-	.long Scoop_SoundEditorData_0x127C+0x583
-	.long Scoop_SoundEditorData_0x127C+0x588
-	.long Scoop_SoundEditorData_0x127C+0x58D
-	.long Scoop_SoundEditorData_0x127C+0x592
-	.long Scoop_SoundEditorData_0x127C+0x597
-	.long Scoop_SoundEditorData_0x127C+0x59C
-	.long Scoop_SoundEditorData_0x127C+0x5E9
+	.long Scoop_SoundEditorData_Epilogue19+0x3B
+	.long Scoop_SoundEditorData_Epilogue19+0x40
+	.long Scoop_SoundEditorData_Epilogue19+0x45
+	.long Scoop_SoundEditorData_Epilogue19+0x4A
+	.long Scoop_SoundEditorData_Epilogue19+0x4F
+	.long Scoop_SoundEditorData_Epilogue19+0x54
+	.long Scoop_SoundEditorData_Epilogue19+0x59
+	.long Scoop_SoundEditorData_Epilogue20+0x3
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x610
-	.long Scoop_SoundEditorData_0x127C+0x5EE
+	.long Scoop_SoundEditorData_Epilogue21+0x3
+	.long Scoop_SoundEditorData_Epilogue20+0x8
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join62+0x1E (0xF04EAE) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xED0:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x63F
-	.long Scoop_SoundEditorData_0x127C+0x651
-	.long Scoop_SoundEditorData_0x127C+0x663
-	.long Scoop_SoundEditorData_0x127C+0x66D
+	.long Scoop_SoundEditorData_Epilogue22+0x3
+	.long Scoop_SoundEditorData_Epilogue22+0x15
+	.long Scoop_SoundEditorData_Epilogue22+0x27
+	.long Scoop_SoundEditorData_Epilogue22+0x31
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x677
-	.long Scoop_SoundEditorData_0x127C+0x69F
-	.long Scoop_SoundEditorData_0x127C+0x6B7
-	.long Scoop_SoundEditorData_0x127C+0x6EA
-	.long Scoop_SoundEditorData_0x127C+0x736
+	.long Scoop_SoundEditorData_Join33
+	.long Scoop_SoundEditorData_Join34
+	.long Scoop_SoundEditorData_Join35
+	.long Scoop_SoundEditorData_Epilogue24+0x3
+	.long Scoop_SoundEditorData_Join38
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x784
-	.long Scoop_SoundEditorData_0x127C+0x762
+	.long Scoop_SoundEditorData_Epilogue27+0x3
+	.long Scoop_SoundEditorData_Epilogue26+0x3
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join63+0x1E (0xF04EDC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xF18:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x7B3
-	.long Scoop_SoundEditorData_0x127C+0x7C5
-	.long Scoop_SoundEditorData_0x127C+0x7D7
-	.long Scoop_SoundEditorData_0x127C+0x7E1
+	.long Scoop_SoundEditorData_Epilogue28+0x3
+	.long Scoop_SoundEditorData_Epilogue28+0x15
+	.long Scoop_SoundEditorData_Epilogue28+0x27
+	.long Scoop_SoundEditorData_Epilogue28+0x31
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x7EB
-	.long Scoop_SoundEditorData_0x127C+0x7F0
-	.long Scoop_SoundEditorData_0x127C+0x7F5
-	.long Scoop_SoundEditorData_0x127C+0x7FA
-	.long Scoop_SoundEditorData_0x127C+0x847
+	.long Scoop_SoundEditorData_Epilogue28+0x3B
+	.long Scoop_SoundEditorData_Epilogue28+0x40
+	.long Scoop_SoundEditorData_Epilogue28+0x45
+	.long Scoop_SoundEditorData_Epilogue28+0x4A
+	.long Scoop_SoundEditorData_Epilogue28+0x97
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x86E
-	.long Scoop_SoundEditorData_0x127C+0x84C
+	.long Scoop_SoundEditorData_Epilogue28+0xBE
+	.long Scoop_SoundEditorData_Epilogue28+0x9C
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join64+0x1E (0xF04F0A) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xF60:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x89D
-	.long Scoop_SoundEditorData_0x127C+0x928
-	.long Scoop_SoundEditorData_0x127C+0x936
-	.long Scoop_SoundEditorData_0x127C+0x9C5
-	.long Scoop_SoundEditorData_0x127C+0xA47
-	.long Scoop_SoundEditorData_0x127C+0xA51
+	.long Scoop_SoundEditorData_Epilogue31+0x3
+	.long Scoop_SoundEditorData_Join42+0x23
+	.long Scoop_SoundEditorData_Join42+0x31
+	.long Scoop_SoundEditorData_Join43+0x12
+	.long Scoop_SoundEditorData_Join44+0x12
+	.long Scoop_SoundEditorData_Join44+0x1C
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xA5B
-	.long Scoop_SoundEditorData_0x127C+0xA83
-	.long Scoop_SoundEditorData_0x127C+0xA9B
-	.long Scoop_SoundEditorData_0x127C+0xACE
-	.long Scoop_SoundEditorData_0x127C+0xB17
+	.long Scoop_SoundEditorData_Join44+0x26
+	.long Scoop_SoundEditorData_Epilogue32+0x3
+	.long Scoop_SoundEditorData_Epilogue32+0x1B
+	.long Scoop_SoundEditorData_Epilogue33+0x3
+	.long Scoop_SoundEditorData_Epilogue34+0x3
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xB65
-	.long Scoop_SoundEditorData_0x127C+0xB43
+	.long Scoop_SoundEditorData_Epilogue36+0x3
+	.long Scoop_SoundEditorData_Epilogue35+0x3
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join65+0x1E (0xF04F38) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
@@ -662,95 +662,95 @@ GUI_DisplayStructData_0xFA8:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xB94
-	.long Scoop_SoundEditorData_0x127C+0xBBC
-	.long Scoop_SoundEditorData_0x127C+0xBD4
-	.long Scoop_SoundEditorData_0x127C+0xC07
-	.long Scoop_SoundEditorData_0x127C+0xC53
+	.long Scoop_SoundEditorData_Epilogue37+0x3
+	.long Scoop_SoundEditorData_Epilogue38+0x3
+	.long Scoop_SoundEditorData_Epilogue38+0x1B
+	.long Scoop_SoundEditorData_Epilogue39+0x3
+	.long Scoop_SoundEditorData_Epilogue40+0x3
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xCA1
-	.long Scoop_SoundEditorData_0x127C+0xC7F
+	.long Scoop_SoundEditorData_Epilogue42+0x3
+	.long Scoop_SoundEditorData_Epilogue41+0x3
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join66+0x1E (0xF04F66) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0xFF0:
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xCD0
-	.long Scoop_SoundEditorData_0x127C+0xD43
-	.long Scoop_SoundEditorData_0x127C+0xDA7
-	.long Scoop_SoundEditorData_0x127C+0xE1B
+	.long Scoop_SoundEditorData_Epilogue43+0x3
+	.long Scoop_SoundEditorData_Skip59+0xA
+	.long Scoop_SoundEditorData_Skip60+0x9
+	.long Scoop_SoundEditorData_Skip61+0xA
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xE7F
-	.long Scoop_SoundEditorData_0x127C+0xE8F
-	.long Scoop_SoundEditorData_0x127C+0xEA7
-	.long Scoop_SoundEditorData_0x127C+0xEC6
-	.long Scoop_SoundEditorData_0x127C+0xEDE
+	.long Scoop_SoundEditorData_Skip62+0x9
+	.long Scoop_SoundEditorData_Skip62+0x19
+	.long Scoop_SoundEditorData_Skip62+0x31
+	.long Scoop_SoundEditorData_Join51+0x5
+	.long Scoop_SoundEditorData_Join51+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xF04
-	.long Scoop_SoundEditorData_0x127C+0xEF6
+	.long Scoop_SoundEditorData_Join51+0x43
+	.long Scoop_SoundEditorData_Join51+0x35
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join67+0x1E (0xF04F94) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0x1038:
-	.long Scoop_SoundEditorData_0x127C+0xF18
-	.long Scoop_SoundEditorData_0x127C+0xF23
-	.long Scoop_SoundEditorData_0x127C+0xF2E
-	.long Scoop_SoundEditorData_0x127C+0xF3A
-	.long Scoop_SoundEditorData_0x127C+0xF45
-	.long Scoop_SoundEditorData_0x127C+0xF51
-	.long Scoop_SoundEditorData_0x127C+0xF5C
+	.long Scoop_SoundEditorData_Join51+0x57
+	.long Scoop_SoundEditorData_Join51+0x62
+	.long Scoop_SoundEditorData_Join51+0x6D
+	.long Scoop_SoundEditorData_Join51+0x79
+	.long Scoop_SoundEditorData_Join51+0x84
+	.long Scoop_SoundEditorData_Join51+0x90
+	.long Scoop_SoundEditorData_Join51+0x9B
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xF68
-	.long Scoop_SoundEditorData_0x127C+0xF71
-	.long Scoop_SoundEditorData_0x127C+0xF90
-	.long Scoop_SoundEditorData_0x127C+0xFAF
-	.long Scoop_SoundEditorData_0x127C+0xFCD
+	.long Scoop_SoundEditorData_Join51+0xA7
+	.long Scoop_SoundEditorData_Join51+0xB0
+	.long Scoop_SoundEditorData_Join52+0x5
+	.long Scoop_SoundEditorData_Join53+0x5
+	.long Scoop_SoundEditorData_Skip66+0x14
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0xFF9
-	.long Scoop_SoundEditorData_0x127C+0xFEB
+	.long Scoop_SoundEditorData_Skip67+0x22
+	.long Scoop_SoundEditorData_Skip67+0x14
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Join68+0x1E (0xF04FC2) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0x1080:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x100D
-	.long Scoop_SoundEditorData_0x127C+0x1016
-	.long Scoop_SoundEditorData_0x127C+0x101F
-	.long Scoop_SoundEditorData_0x127C+0x1028
+	.long Scoop_SoundEditorData_Skip67+0x36
+	.long Scoop_SoundEditorData_Skip67+0x3F
+	.long Scoop_SoundEditorData_Skip67+0x48
+	.long Scoop_SoundEditorData_Skip67+0x51
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x1031
-	.long Scoop_SoundEditorData_0x127C+0x103A
-	.long Scoop_SoundEditorData_0x127C+0x1043
-	.long Scoop_SoundEditorData_0x127C+0x104C
-	.long Scoop_SoundEditorData_0x127C+0x106B
-	.long Scoop_SoundEditorData_0x127C+0x108A
-	.long Scoop_SoundEditorData_0x127C+0x10A2
+	.long Scoop_SoundEditorData_Skip67+0x5A
+	.long Scoop_SoundEditorData_Skip67+0x63
+	.long Scoop_SoundEditorData_Skip67+0x6C
+	.long Scoop_SoundEditorData_Skip67+0x75
+	.long Scoop_SoundEditorData_Join54+0x5
+	.long Scoop_SoundEditorData_Join55+0x5
+	.long Scoop_SoundEditorData_Join55+0x1D
 	.long SeMenu_BitShift_Stub
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x10C8
-	.long Scoop_SoundEditorData_0x127C+0x10BA
+	.long Scoop_SoundEditorData_Join55+0x43
+	.long Scoop_SoundEditorData_Join55+0x35
 	.long 0x00000000
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
-; evidence: Scoop_SoundEditorData_0x127C+0x1E (0xF04FF0) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+; evidence: SeFilLfo1_DisplayDispatch+0x1E (0xF04FF0) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0x10C8:
 	.long SeMenu_BitShift_Stub
-	.long Scoop_SoundEditorData_0x127C+0x10DC
-	.long Scoop_SoundEditorData_0x127C+0x10E4
-	.long Scoop_SoundEditorData_0x127C+0x10EC
-	.long Scoop_SoundEditorData_0x127C+0x10F4
-	.long Scoop_SoundEditorData_0x127C+0x10FC
-	.long Scoop_SoundEditorData_0x127C+0x1104
-	.long Scoop_SoundEditorData_0x127C+0x110C
-	.long Scoop_SoundEditorData_0x127C+0x1114
-	.long Scoop_SoundEditorData_0x127C+0x1124
-	.long Scoop_SoundEditorData_0x127C+0x1139
-	.long Scoop_SoundEditorData_0x127C+0x1146
-	.long Scoop_SoundEditorData_0x127C+0x1153
+	.long Scoop_SoundEditorData_Join55+0x57
+	.long Scoop_SoundEditorData_Join55+0x5F
+	.long Scoop_SoundEditorData_Join55+0x67
+	.long Scoop_SoundEditorData_Join55+0x6F
+	.long Scoop_SoundEditorData_Join55+0x77
+	.long Scoop_SoundEditorData_Join55+0x7F
+	.long Scoop_SoundEditorData_Join55+0x87
+	.long Scoop_SoundEditorData_Join55+0x8F
+	.long Scoop_SoundEditorData_Join55+0x9F
+	.long Scoop_SoundEditorData_Skip70+0x8
+	.long Scoop_SoundEditorData_Skip70+0x15
+	.long Scoop_SoundEditorData_Skip70+0x22
 	.long SeMenu_BitShift_Stub
 ; the rest of the code-pointer table at GUI_DisplayStructData_0x10C8, from entry 14 on;
 ; the table runs across this boundary (file slice)

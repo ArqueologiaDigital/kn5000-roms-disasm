@@ -1342,8 +1342,8 @@ SeqChan_StepCmdHandlers:
 	.long MidiPkt_ArpConfigChain_Data + 791
 	.long MidiPkt_ArpConfigChain_Data + 835
 	.long MidiPkt_ArpConfigChain_Data + 778
-	.long MidiPkt_ArpConfigChain_Data_0x34C + 35
-	.long MidiPkt_ArpConfigChain_Data_0x34C + 79
+	.long SeqChan_StepCmd_Field4to5
+	.long SeqChan_StepCmd_Field5to6
 	.long MidiPkt_ArpConfigChain_Data + 778
 	.long ArpChord_CheckPlaybackDone + 16
 	.long MidiTable_DispatchHelper + 16
@@ -1901,11 +1901,11 @@ SysEx_Msg_359A:
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35A0:
 	.byte 0xf0, 0x50, 0x27, 0x7e, 0xf7, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD76A2): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by the code at MidiPkt_ArpConfigChain_Data + 0x34C (0xFD76A2): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35A6:
 	.byte 0xf0, 0x50, 0x28, 0x7e, 0xf7, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD76A2): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by the code at MidiPkt_ArpConfigChain_Data + 0x34C (0xFD76A2): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35AC:
 	.byte 0xf0, 0x50, 0x29, 0x7e, 0xf7, 0xff

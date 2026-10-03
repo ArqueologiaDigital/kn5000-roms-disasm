@@ -8071,30 +8071,30 @@ SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_FilterEdit_DataBlock3
 	.long SeMenu_BankEdit_Dispatch
 	.long SeMenu_DrumKit_Dispatch
-	.long Data_UnknownBlock_0x6E + 382
+	.long SeMenu_DataBlock_10
 	.long SeMenu_FilterEdit_DataBlock4
 	.long Data_UnknownBlock
-	.long Data_UnknownBlock_0x6E + 52
-	.long Data_UnknownBlock_0x6E + 163
-	.long Data_UnknownBlock_0x6E + 179
-	.long Data_UnknownBlock_0x6E + 234
+	.long SeMenu_DataBlock_01
+	.long SeMenu_DataBlock_02
+	.long SeMenu_DataBlock_03
+	.long SeMenu_DataBlock_04
 	.long Data_UnknownBlock
-	.long Data_UnknownBlock_0x6E + 250
-	.long Data_UnknownBlock_0x6E + 292
-	.long Data_UnknownBlock_0x6E + 334
-	.long Data_UnknownBlock_0x6E + 350
-	.long Data_UnknownBlock_0x6E + 366
+	.long SeMenu_DataBlock_05
+	.long SeMenu_DataBlock_06
+	.long SeMenu_DataBlock_07
+	.long SeMenu_DataBlock_08
+	.long SeMenu_DataBlock_09
 	.long SeMenu_WaveformSelect_End
-	.long Data_UnknownBlock_0x6E + 163
-	.long Data_UnknownBlock_0x6E + 382
+	.long SeMenu_DataBlock_02
+	.long SeMenu_DataBlock_10
 	.long SeMenu_FilterEdit_DataBlock4
 	.long Data_UnknownBlock
 	.long SeMenu_PatchEdit_DataBlock
 	.long SeMenu_EqEdit_Dispatch
 	.long SeMenu_EqEdit_DrawInit
 	.long SeMenu_WaveformSelect_End
-	.long Data_UnknownBlock_0x23D + 317
-	.long Data_UnknownBlock_0x23D + 336
+	.long SeMenu_DataBlock_13
+	.long SeMenu_DataBlock_14
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
@@ -8907,7 +8907,7 @@ SeMenu_FilterEdit_DataBlock1_Helper:
 	call SeMenu_PresetBrowser_Select_Helper
 	call SeMenu_PresetManager_Data_Helper
 	call SeMenu_PresetBrowser_Select_Helper2
-	call Data_UnknownBlock_0x6E
+	call SeMenu_PresetBrowser_Select_Helper3
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x287D
 	ld	xix, SeScreenData_0x28CE
@@ -9641,7 +9641,7 @@ Data_UnknownBlock_Skip:
 	ld	xiy, SeScreenData_0x2964
 	ld	xix, SeScreenData_0x296E
 	call	SeGfx_DrawStaticList
-	call	Data_UnknownBlock_0x6E
+	call	SeMenu_PresetBrowser_Select_Helper3
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip2:
 	ld	(COLORBLIT_MODE:24), 0
@@ -9664,6 +9664,7 @@ Data_UnknownBlock_Join:
 	call	SeMenu_PatchEdit_Dispatch_Helper
 Data_UnknownBlock_Return:
 	ret
+SeMenu_PresetBrowser_Select_Helper3:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld XIY,SeScreenData_0x29B4
 	ld XIX,SeScreenData_0x29BE
@@ -9813,8 +9814,9 @@ SeMenu_DataBlock_11:
 	ld	xiy, SeScreenData_0x2C0A
 	ld	xix, SeScreenData_0x2C32
 	call	SeGfx_DrawBoundList
-	call	Data_UnknownBlock_0x23D
+	call	SeMenu_DataBlock_11_Helper
 	ret
+SeMenu_DataBlock_11_Helper:
 	ldb_d8	l, (0x660)
 	cp	l, 1:i3
 	jr	z, Data_UnknownBlock_Skip14
@@ -9920,7 +9922,7 @@ SeMenu_DataBlock_13:
 	ld	xiy, SeScreenData_0x2C0A
 	ld	xix, SeScreenData_0x2C32
 	call	SeGfx_DrawBoundList
-	call	Data_UnknownBlock_0x23D
+	call	SeMenu_DataBlock_11_Helper
 	ret
 SeMenu_DataBlock_14:
 	cp	a, 0:i3

@@ -137,6 +137,7 @@ Scoop_SoundEditorData_Join59:
 .Lc_f03e3e:
 	inc 4,XSP
 	ret
+SeAmpLfo1_DisplayDispatch:
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)
@@ -1877,6 +1878,7 @@ Scoop_SoundEditorData_Join68:
 .Lc_f04fcf:
 	inc 4,XSP
 	ret
+SeFilLfo1_DisplayDispatch:
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)

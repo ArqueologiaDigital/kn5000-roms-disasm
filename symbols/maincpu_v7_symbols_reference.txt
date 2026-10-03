@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,464
-#   semantic names ........... 50,562 (98.2%)
-#   positional names ......... 902
+#   symbols .................. 51,463
+#   semantic names ........... 50,566 (98.3%)
+#   positional names ......... 897
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -18465,7 +18465,7 @@ Scoop_SoundEditorData_Join56 00F03D89
 Scoop_SoundEditorData_Join57 00F03DB7
 Scoop_SoundEditorData_Join58 00F03DE5
 Scoop_SoundEditorData_Join59 00F03E13
-Scoop_SoundEditorData_0xEB 00F03E41
+SeAmpLfo1_DisplayDispatch 00F03E41
 Scoop_SoundEditorData_Skip2 00F03EC2
 Scoop_SoundEditorData_Join2 00F03EE4
 Scoop_SoundEditorData_Skip3 00F03F13
@@ -18545,7 +18545,7 @@ Scoop_SoundEditorData_Join65 00F04F1A
 Scoop_SoundEditorData_Join66 00F04F48
 Scoop_SoundEditorData_Join67 00F04F76
 Scoop_SoundEditorData_Join68 00F04FA4
-Scoop_SoundEditorData_0x127C 00F04FD2
+SeFilLfo1_DisplayDispatch 00F04FD2
 Scoop_SoundEditorData_Helper2 00F05012
 Scoop_SoundEditorData_Helper3 00F050AB
 Scoop_SoundEditorData_Join21 00F0513B
@@ -19962,7 +19962,7 @@ Data_UnknownBlock_Skip3 00F10314
 Data_UnknownBlock_Skip4 00F1032A
 Data_UnknownBlock_Join 00F10330
 Data_UnknownBlock_Return 00F1033F
-Data_UnknownBlock_0x6E 00F10340
+SeMenu_PresetBrowser_Select_Helper3 00F10340
 SeMenu_DataBlock_01 00F10374
 Data_UnknownBlock_Skip5 00F10381
 Data_UnknownBlock_Join2 00F10386
@@ -19991,7 +19991,7 @@ SeMenu_DataBlock_09 00F104AE
 SeMenu_DataBlock_10 00F104BE
 Data_UnknownBlock_Skip13 00F104D8
 SeMenu_DataBlock_11 00F104E8
-Data_UnknownBlock_0x23D 00F1050F
+SeMenu_DataBlock_11_Helper 00F1050F
 Data_UnknownBlock_Skip14 00F1051B
 Data_UnknownBlock_Join7 00F1051D
 Data_UnknownBlock_Join8 00F10563
@@ -47457,7 +47457,6 @@ MidiPkt_ArpExtHandler_N_Data 00FD763F
 SeqChan_ProcessStepCmd 00FD7660
 MidiPkt_ArpConfigChain_Data_Helper18_Join 00FD766D
 SeqChan_StepCmd_Field2to3 00FD7699
-MidiPkt_ArpConfigChain_Data_0x34C 00FD76A2
 SeqChan_StepCmd_Field4to5 00FD76C5
 SeqChan_StepCmd_Field5to6 00FD76F1
 ArpChord_CheckPlaybackDone 00FD7711

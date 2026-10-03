@@ -283,3 +283,26 @@ Run on `v7_report_2026-10-03.json`, the report as it stood: 35 of 46 named, gate
 11 has its reason in the tool's output. 0xFDD7C0 has no v7 label where v10 has
 `AudioMode_SetStereoFlags`, two v10 counterparts are not line starts, and so on. Before this run,
 `symbolize_numeric_branches.py --image v7 --apply --verify` converted 3 sites that its own rules accept.
+
+## v7 positional aliases retired (2026-10-03)
+
+`v7/maincpu/shared/positional_labels.s` held five `.set X_0xNN, X + NN` aliases
+(`Data_UnknownBlock_0x23D/_0x6E`, `MidiPkt_ArpConfigChain_Data_0x34C`, `Scoop_SoundEditorData_0x127C/_0xEB`),
+used in about 210 places, nearly all `.long Alias + N` table entries.
+
+`scripts/tools/v7_table_entries_from_v10.py` rewrote them in two passes.
+
+1. It takes v10's operand for the same table entry, at the same shared label plus offset. That operand
+   is either a plain label, or v10's own `Label + off` when that evaluates to exactly the same address in
+   v7. 82 entries.
+2. `--nearest`: for each remaining `.long`, the nearest real v7 label at or below the target plus the
+   offset, the form v10 itself uses for these tables. 121 entries.
+
+The last three code uses were done by hand:
+
+- `jp` into the two display dispatchers, now `SeAmpLfo1_DisplayDispatch` / `SeFilLfo1_DisplayDispatch`
+  in all three trees. v10/v9 had them as `Scoop_SoundEditorData_Join52/62`;
+  `scripts/renaming/rename_selfo_display_dispatch.sed`.
+- `call SeMenu_PresetBrowser_Select_Helper3`, a label v7 already had at that address.
+
+The file now matches v10's. Every rewrite keeps the value, and the byte gate PASSed after each pass.

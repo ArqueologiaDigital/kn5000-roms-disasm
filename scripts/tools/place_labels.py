@@ -175,4 +175,7 @@ class Planner:
             p = os.path.join(self.srcroot, rel)
             t = "\n".join(L)
             if t != open(p, "rb").read().decode("latin-1"):
-                open(p, "wb").write(t.encode("latin-1"))
+                data = t.encode("latin-1")          # encode BEFORE open() truncates the file
+                with open(p + ".tmp-placelabels", "wb") as fh:
+                    fh.write(data)
+                os.replace(p + ".tmp-placelabels", p)

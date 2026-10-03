@@ -387,7 +387,7 @@ SeAmpLfo1TitleFunc_DisplayData:
 	jp	SeMenu_CopyWriteUpdate_Step3_Join13
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_Join52
+	jp	SeAmpLfo1_DisplayDispatch
 	jp	SeMenu_CopyWriteUpdate_Step3_Return10
 
 SeFilLpq1TitleFunc:
@@ -597,7 +597,7 @@ SeFilLfo1TitleFunc_DisplayData:
 	jp	SeMenu_CopyWriteUpdate_Step3_Join30
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_Join62
+	jp	SeFilLfo1_DisplayDispatch
 	jp	SeMenu_CopyWriteUpdate_Step3_Return27
 
 SeDigEffTitleFunc:

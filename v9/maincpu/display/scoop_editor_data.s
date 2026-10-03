@@ -132,7 +132,7 @@ Scoop_SoundEditorData_Join51:
 Scoop_SoundEditorData_Epilogue4:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join52:
+SeAmpLfo1_DisplayDispatch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
@@ -1873,7 +1873,7 @@ Scoop_SoundEditorData_Join61:
 Scoop_SoundEditorData_Epilogue18:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join62:
+SeFilLfo1_DisplayDispatch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
