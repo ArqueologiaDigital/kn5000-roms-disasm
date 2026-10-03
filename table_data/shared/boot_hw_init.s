@@ -32,9 +32,9 @@
 	ld (0x3C:8), 0x00:io
 	ld (0x3F:8), 0x73:io	; Control panel enabled / MIDI disabled
 	ld (0x3E:8), 0x15:io
-	and_sd8b_im 0x2C, 0xF0
-	res_dd8 3, 0x20
-	res_dd8 2, 0x3C
+	and	(0x2c:8), 0xf0
+	res	3, (0x20:8)
+	res	2, (0x3c:8)
 
 	; === Data Bus Ports Setup (P2, P3, P7) ===
 	ld (0x0B:8), 0xFF:io
@@ -70,7 +70,7 @@
 	ld (0x88:8), 0x0A:io
 	ld (0x89:8), 0x10:io
 	ld (0x81:8), 0x00:io
-	set_dd8 1, 0x80
+	set	1, (0x80:8)
 
 	; === 16-bit Timer 4/5 Setup ===
 	ld (0x98:8), 0x05:io
@@ -78,8 +78,8 @@
 	ld (0x9F:8), 0x00:io
 	ldw (0x90:8), 0x0001:io	; LDW (TREG4L:24), 0001h (ASL unsupported)
 	ldw (0x92:8), 0x3D09:io	; LDW (TREG5L:24), 3d09h (ASL unsupported)
-	set_dd8 7, 0x9E
-	set_dd8 0, 0x9E
+	set	7, (0x9e:8)
+	set	0, (0x9e:8)
 
 	; === Memory Controller: Start Address Registers ===
 	ld (323:16), 30; Block 0 @ 0x1E0000

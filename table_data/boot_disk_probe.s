@@ -30,10 +30,10 @@
 ;          not identified yet; TODO: identify what PD0 drives.
 ; -----------------------------------------------------------------------------
 Boot_PulsePD0:
-	set_dd8	0, 0x34			; PD0 = 1
+	set	0, (0x34:8)			; PD0 = 1
 	ldw	wa, 10
 	calr	Boot_Delay
-	res_dd8	0, 0x34			; PD0 = 0
+	res	0, (0x34:8)			; PD0 = 0
 	ldw	wa, 10
 	jrl	t, Boot_Delay		; tail call: second 10-tick delay
 
@@ -60,7 +60,7 @@ Boot_PulsePD0:
 ; -----------------------------------------------------------------------------
 FDC_ProbeDiskFormat:
 	ld	(0x47:8), 0x1e:io		; PHFC = 0x1e
-	bit_dd8	6, 0x34			; PD6: disk-change/no-disk strap
+	bit	6, (0x34:8)			; PD6: disk-change/no-disk strap
 	ret	nz			; no disk -> abort probe
 	ld	a, 0:opc
 	; --- request 1: recalibrate (cmd 0) ---
@@ -148,7 +148,7 @@ FDC_ProbeDiskFormat__recal_done:
 ; samples the same active-low Port D bit 6 line.
 ; -----------------------------------------------------------------------------
 Boot_CheckDiskPresent:
-	bit_dd8	6, 0x34			; PD6
+	bit	6, (0x34:8)			; PD6
 	jr	z, Boot_CheckDiskPresent__present
 	ld	l, 0:opc
 	ret

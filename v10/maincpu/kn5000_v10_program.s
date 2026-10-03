@@ -953,8 +953,8 @@ RESET_HANDLER:
 	; End of shared boot code (315 bytes)
 	ld (0xd2:8), 0x29:io
 	ld (0xd1:8), 0x00:io
-	and_sd8b_im 0xd3, 0xcf
-	and_sd8b_im 0xd3, 0xf0
+	and	(0xd3:8), 0xcf
+	and	(0xd3:8), 0xf0
 
 Boot_InitIOPorts:
 	ld (304:16), 255
@@ -987,12 +987,12 @@ Boot_PostSelfTest:
 	ld (1024:16), 3
 Boot_InitPeripherals:
 	calr Boot_ClearConfigFlag7
-	lda_dd8l XBC, (0xe4)
+	lda	xbc, (0xe4:8)
 	ld a, (xbc)
 	and a, 0x8f
 	or a, 0x30
 	ld (xbc), a
-	lda_dd8l XBC, (0xe6)
+	lda	xbc, (0xe6:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x3
@@ -1008,7 +1008,7 @@ Boot_InitPeripherals:
 
 Boot_FlashAndExtensions:
 	call Flash_InitAllBanks
-	bit_dd8	0, 0x38	;  Is the optional HD-AE5000 board present?
+	bit	0, (0x38:8)	;  Is the optional HD-AE5000 board present?
 	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code
 	cp l, 4:i3
@@ -1067,7 +1067,7 @@ User_didnt_request_flash_mem_update:
 	extz wa
 	calr	Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
 	ldw (0x00ffca:24), 0x0000
-	set_dd8	0, 0x28	; Release Sub-CPU from reset
+	set	0, (0x28:8)	; Release Sub-CPU from reset
 	call	SubCPU_Init_DMA_Channels	; Initialize DMA for inter-CPU comm
 	ei 0
 	calr	SubCPU_Send_Payload	; Transfer 192KB Sub-CPU firmware

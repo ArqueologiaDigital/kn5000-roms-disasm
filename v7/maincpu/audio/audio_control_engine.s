@@ -2082,13 +2082,13 @@ MidiParseThreeByte_Done:
 	inc	2, xsp
 	ret
 MIDI_ProcessVoiceAssignment:
-	ld_sd8b	A, 0x40
+	ld	a, (0x40:8)
 	and	a, 0xc
 	srl	a, 2
 	ld	c, a
 	ld	xwa, 0x8e1a
 	calr	MIDI_WriteParamByte
-	ld_sd8b	A, 0x40
+	ld	a, (0x40:8)
 	and	a, 0xf0
 	srl	a, 4
 	cp	a, 0xf
@@ -2099,13 +2099,13 @@ MIDI_ValidateParam:
 	cpw	(0x8e2c:16), 0
 	jr	nz, MIDI_WriteSecondByte
 	lda	xwa, (0x8e1e:16)
-	ld_sd8b	C, 0x40
+	ld	c, (0x40:8)
 	and	c, 0xf0
 	srl	c, 4
 	calr	MIDI_WriteParamByte
 MIDI_WriteSecondByte:
 	lda	xwa, (0x8e22:16)
-	ldcf_dd8	6, 0x34
+	ldcf	6, (0x34:8)
 	scc8	c, c
 	jr	MIDI_WriteParamByte
 MIDI_WriteParamByte:

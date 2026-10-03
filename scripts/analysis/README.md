@@ -424,6 +424,12 @@ reading the port.  Counting either as port access inflates the census.  The real
 SFR families are `*_dd8` and `*_sd8b`.
 Result at the time of writing: v10/maincpu 31 read sites over P7, PC, PD, PE,
 PF, PG, PH, PZ; v142+subcpu 20 over PC, PD, PG, PH.
+Re-measured 2026-10-03, with the same ports: v10/maincpu 33, v142+subcpu 23.  The census
+had been missing three spellings.  It required a `0x` operand, so `bit_dd8 1, 104` was
+skipped.  It skipped SFR names, so v142's `bit_dd8 4, PD` was skipped too, after
+symbolize_v142_sfr_operands.py: v142 had fallen to 2 sites, silently.  And it skipped the
+native forms respell_raw_pseudos.py writes (`bit 1, (0x68:8)`, `ld a, (104:16)`).  It now
+reads all three.
 
 ### `error_number_table.py`
 **Question:** what does "ERROR 08" mean — does the number identify where the

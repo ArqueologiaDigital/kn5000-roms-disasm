@@ -1018,8 +1018,8 @@ SndOutput_ReinitByMode_CheckBit3:
 	ld	(36022:16), a
 	ret
 MainCPU_self_test_routines:
-	set_dd8 1, 0x30
-	bit_dd8 0, 0x30
+	set	1, (0x30:8)
+	bit	0, (0x30:8)
 	ret nz
 	ld wa, 0:i3
 	calr Test_DRAM_IC10_and_IC9
@@ -1056,7 +1056,7 @@ Report_test_result_by_blinking_LED:
 	ld l, 0x0:opc
 
 Report_BlinkLoop:
-	res_dd8 1, 0x30
+	res	1, (0x30:8)
 	ldw bc, 0x4000
 	bit 0, a
 	jr z, Report_BlinkLoop_ShortFlash
@@ -1077,7 +1077,7 @@ Report_BlinkLoop_FlashDelay:
 	djnz16 bc, Report_BlinkLoop_FlashOn
 
 Report_BlinkLoop_FlashOff:
-	set_dd8 1, 0x30
+	set	1, (0x30:8)
 	ldw bc, 0x4000
 
 Report_BlinkLoop_OffDelay:

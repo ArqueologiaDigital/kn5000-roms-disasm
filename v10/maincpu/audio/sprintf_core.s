@@ -1047,7 +1047,7 @@ Sprintf_FormatFloat_Entry:
 	jr z, Sprintf_FormatFloat_ShortArg
 	ld xwa, xbc
 	ld xde, (xsp + 86)
-	lda_dd8l XBC, (0x0a)
+	lda	xbc, (0x0a:8)
 	add (xde), xbc
 	ld xbc, (xde)
 	lda xbc, (xbc - 10)
@@ -1057,7 +1057,7 @@ Sprintf_FormatFloat_Entry:
 Sprintf_FormatFloat_ShortArg:
 	ld xwa, xbc
 	ld xde, (xsp + 86)
-	lda_dd8l XBC, (0x08)
+	lda	xbc, (0x08:8)
 	add (xde), xbc
 	ld xbc, (xde)
 	dec 8, xbc
@@ -1111,13 +1111,13 @@ Sprintf_IntToStr_DivLoop:
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
-	lda_dd8l XBC, (0x0a)
+	lda	xbc, (0x0a:8)
 	call DivMod32
 	add xhl, 0x30
 	ld xwa, (xsp + 4)
 	ld (xwa), l
 	ld xwa, xiz
-	lda_dd8l XBC, (0x0a)
+	lda	xbc, (0x0a:8)
 	call Math_DivideU32
 	ld xiz, xhl
 	or xiz, xiz
@@ -1139,13 +1139,13 @@ Sprintf_UIntToStr_DivLoop:
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
-	lda_dd8l XBC, (0x0a)
+	lda	xbc, (0x0a:8)
 	call DivMod32
 	add xhl, 0x30
 	ld xwa, (xsp + 4)
 	ld (xwa), l
 	ld xwa, xiz
-	lda_dd8l XBC, (0x0a)
+	lda	xbc, (0x0a:8)
 	call Math_DivideU32
 	ld xiz, xhl
 	or xiz, xiz

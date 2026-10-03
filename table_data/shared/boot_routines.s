@@ -37,9 +37,9 @@
 ; Exit:  (REGION_CODE_VAR) = 1-4
 ; -----------------------------------------------------------------------------
 Detect_Region_Code:
-	bit_dd8 2, 0x44
+	bit	2, (0x44:8)
 	jr z, Detect_Region_Code__check_bit1_only
-	bit_dd8 1, 0x44
+	bit	1, (0x44:8)
 	jr z, Detect_Region_Code__mode2
 	ld (3078:16), 1; Region 1
 	ret
@@ -47,7 +47,7 @@ Detect_Region_Code__mode2:
 	ld (3078:16), 2; Region 2
 	ret
 Detect_Region_Code__check_bit1_only:
-	bit_dd8 1, 0x44
+	bit	1, (0x44:8)
 	jr z, Detect_Region_Code__mode4
 	ld (3078:16), 3; Region 3
 	ret

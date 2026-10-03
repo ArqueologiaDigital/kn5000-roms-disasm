@@ -9,7 +9,9 @@ QUESTION THIS ANSWERS / JOB IT DOES
   Instructions Over .byte" and the encoding-quirks table want the real spelling.
 
   For every line whose mnemonic is such a pseudo (`*_sri*`, `*_dri*`, `*_ind`, `*_sril*`, and the
-  direct-page `*_dd8*` / `*_sd8*` -- `st_dd8b a, 0xc2` is `ld (0xc2:8), a`):
+  direct-page `*_dd8*` / `*_sd8*` -- `st_dd8b a, 0xc2` is `ld (0xc2:8), a` -- and the bare
+  byte pseudos `extpfx<N> b1, .., bN`, `link32 b1, .., b4` and `unlk32 r` that WSA1 prom_c was
+  transcribed with -- `extpfx3 0x8E, 0x08, 0x43` is `mul bc, (xiz+8)`):
     1. assemble it with the pinned llvm-mc -> its bytes;
     2. read the bytes with MAME's unidasm (the project's reference decoder);
     3. translate that reading into this assembler's syntax, as a short list of candidates
@@ -82,7 +84,7 @@ def line_kind(l):
     return "data" if c.startswith(".") else "code"
 
 
-LINE = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)(?P<mn>[a-z]\w*_(?:sri|dri|ind|sril|dd8|sd8)\w*)'
+LINE = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)(?P<mn>[a-z]\w*_(?:sri|dri|ind|sril|dd8|sd8)\w*|extpfx\d+|link32|unlk32)'
                   r'(?P<ws>\s+)(?P<ops>[^;]*?)(?P<post>\s*(?:;.*)?)$', re.I)
 
 

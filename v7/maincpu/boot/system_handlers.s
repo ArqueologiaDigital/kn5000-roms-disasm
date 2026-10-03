@@ -30,7 +30,7 @@ NMI_SetPowerOffCode_A5A5:
 NMI_ClearGuardAndHalt:
 	ld (1024:16), 0
 	res 7, (354:16)
-	set_dd8 2, 0x3c
+	set	2, (0x3c:8)
 	halt
 NMI_HaltLoop:
 	jr	t, 0xfd
@@ -1768,7 +1768,7 @@ Seq_InitStub_Nop3:
 	ret
 
 AudioMix_Init:
-	link32 0xee, 0x0c, 0xf8, 0xff
+	link	xiz, 0xfff8
 	xor xwa, xwa
 	ld xwa, 0x5a5a5a5a
 	ld (xiz - 8), xwa
@@ -1799,7 +1799,7 @@ AudioMix_EnableChannels_Loop:
 	ld (xbc), xwa
 	add a, 0x20
 	djnz8 d, AudioMix_EnableChannels_Loop
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 AudioMix_WriteChannelGroup:
@@ -2116,10 +2116,10 @@ TaskSched_PostInit:
 	call TaskTimer_Register
 	calr Stop_and_Clear_8bit_Timer_3
 	ld (0x8b:8), 0x07:io
-	ld_sd8b A, 0xe5
+	ld	a, (0xe5:8)
 	and a, 0xf
 	or a, 0x20
-	st_dd8b A, 0xe5
+	ld	(0xe5:8), a
 	calr Start_8bit_Timer_3
 	ld a, 0x1:opc
 	calr Show_ScreenGroup
@@ -3322,11 +3322,11 @@ TaskSched_DelayTicks_SpinLoop:
 	ret
 
 Start_8bit_Timer_3:
-	set_dd8 3, 0x80
+	set	3, (0x80:8)
 	ret
 
 Stop_and_Clear_8bit_Timer_3:
-	res_dd8 3, 0x80
+	res	3, (0x80:8)
 	ret
 
 SeqBuf_BytecodeSnippet:
@@ -3344,7 +3344,7 @@ SeqBuf_ReadByte:
 	ret
 
 SeqBuf_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -3352,11 +3352,11 @@ SeqBuf_WriteByte:
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -3372,7 +3372,7 @@ SeqBuf_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf_InlineBytecode:
@@ -3444,7 +3444,7 @@ TempoRingBuf_ReadByte:
 	ret
 
 TempoRingBuf_WriteByte_Ext:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -3452,11 +3452,11 @@ TempoRingBuf_WriteByte_Ext:
 	calr Seq_RingBuf_WriteByte_Check
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 TempoRingBuf_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -3472,7 +3472,7 @@ TempoRingBuf_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 TempoRingBuf_CheckEmpty:
@@ -3543,7 +3543,7 @@ TempoRingBuf_SaveWritePos:
 	ret
 
 RhythmBuf_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -3551,7 +3551,7 @@ RhythmBuf_WriteByte:
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 RhythmBuf_InlineBytecode:
@@ -3648,7 +3648,7 @@ RhythmBuf_InlineBytecode2:
 	ret
 
 AltEvtBuf_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -3664,7 +3664,7 @@ AltEvtBuf_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 AltEvtBuf_InlineBytecode:
@@ -3726,7 +3726,7 @@ AltEvtBuf_Helpers:
 	ret
 
 SeqEvtBuf_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -3734,7 +3734,7 @@ SeqEvtBuf_WriteByte:
 	calr Seq_RingBuf_WriteByte_Small
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqEvtBuf_InlineBytecode:
@@ -3823,7 +3823,7 @@ SeqMain_ReadByte_1024:
 
 
 SeqMain_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -3831,11 +3831,11 @@ SeqMain_WriteByte:
 	calr Seq_RingBuf_WriteByte
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqMain_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -3851,7 +3851,7 @@ SeqMain_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 Seq_CheckSongEnd:
@@ -3922,7 +3922,7 @@ SeqBuf_MidiOut_ReadByte:
 	ret
 
 SeqBuf_MidiOut_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -3930,11 +3930,11 @@ SeqBuf_MidiOut_WriteByte:
 	calr Seq_RingBuf_WriteByte_Small
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf_MidiOut_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -3950,7 +3950,7 @@ SeqBuf_MidiOut_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf_MidiOut_CheckEmpty:
@@ -4027,7 +4027,7 @@ SeqBuf2_ReadByte:
 	ret
 
 SeqBuf2_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -4035,11 +4035,11 @@ SeqBuf2_WriteByte:
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf2_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -4055,7 +4055,7 @@ SeqBuf2_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf2_InlineBytecode:
@@ -4129,7 +4129,7 @@ SeqBuf3_ReadByte:
 	ret
 
 SeqBuf3_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -4137,11 +4137,11 @@ SeqBuf3_WriteByte:
 	calr Seq_RingBuf_WriteByte_512
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf3_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -4157,7 +4157,7 @@ SeqBuf3_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf3_InlineBytecode:
@@ -4224,7 +4224,7 @@ SeqBuf_DspSysEx_ReadByte:
 
 
 SeqBuf_DspSysEx_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -4232,11 +4232,11 @@ SeqBuf_DspSysEx_WriteByte:
 	calr Seq_RingBuf_WriteByte
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf_DspSysEx_WriteBytes:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -4252,7 +4252,7 @@ SeqBuf_DspSysEx_WriteBytes_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 
@@ -4403,7 +4403,7 @@ Seq_DataHandler_Return:
 
 
 Seq_TimerEventLoop:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -4411,7 +4411,7 @@ Seq_TimerEventLoop:
 	calr RingBuf128_WriteByte_CheckFull
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 
@@ -4490,7 +4490,7 @@ SeqBuf_VoiceMap_ReadByte:
 
 
 SeqBuf_VoiceMap_WriteByte:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	pushw ix
 	push xde
 	ld a, (xiz + 8)
@@ -4498,12 +4498,12 @@ SeqBuf_VoiceMap_WriteByte:
 	calr Seq_RingBuf_WriteByte_Small
 	pop xde
 	popw ix
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 
 SeqBuf_VoiceMap_WriteBlock:
-	link32 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0x0000
 	push xiy
 	push xix
 	push xde
@@ -4519,7 +4519,7 @@ SeqBuf_VoiceMap_WriteBlock_Loop:
 	pop xde
 	pop xix
 	pop xiy
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 SeqBuf_VoiceMap_CheckEmpty:
@@ -5364,19 +5364,19 @@ SeqDMA_WriteMidi_NoteOn_Done:
 ;        Called during boot after Sub-CPU is released from reset
 ; ===========================================================================
 SubCPU_Init_DMA_Channels:
-	and_sd8b_im 0xe5, 0xf8
-	res_dd8 2, 0x80
-	lda_dd8l XBC, (0xec)
+	and	(0xe5:8), 0xf8
+	res	2, (0x80:8)
+	lda	xbc, (0xec:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x5
 	ld (xbc), a
-	lda_dd8l XBC, (0xed)
+	lda	xbc, (0xed:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x5
 	ld (xbc), a
-	lda_dd8l XBC, (0xf0)
+	lda	xbc, (0xf0:8)
 	ld a, (xbc)
 	and a, 0xf8
 	set 0, a
@@ -5461,9 +5461,9 @@ InterCPU_Send_Data_Block:
 	ld ix, 0:i3
 
 InterCPU_Send_WaitReady:
-	bit_dd8 3, 0x68	; SSTAT1 - test if Sub CPU is ready
+	bit	3, (0x68:8)	; SSTAT1 - test if Sub CPU is ready
 	jr z, InterCPU_Send_TimeoutLoop
-	res_dd8 0, 0x68	; MSTAT0 - clear to initiate handshake with Sub CPU
+	res	0, (0x68:8)	; MSTAT0 - clear to initiate handshake with Sub CPU
 	ld (1504:16), 1
 	ld l, c
 	dec 1, l
@@ -5473,9 +5473,9 @@ InterCPU_Send_WaitReady:
 	ld ix, 0:i3
 
 InterCPU_Send_WaitAck:
-	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
+	bit	3, (0x68:8)	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	jr nz, InterCPU_Send_AckTimeoutLoop
-	set_dd8 0, 0x68	; MSTAT0 - set to signal DMA data transfer starting
+	set	0, (0x68:8)	; MSTAT0 - set to signal DMA data transfer starting
 	ld (1498:16), xde
 	extz bc
 	ld (1502:16), bc
@@ -5501,7 +5501,7 @@ InterCPU_Send_AckTimeoutLoop:
 	inc 1, ix
 	cp wa, 0xea60
 	jr ule, InterCPU_Send_WaitAck
-	set_dd8 0, 0x68	; MSTAT0 - timeout recovery: force ready state
+	set	0, (0x68:8)	; MSTAT0 - timeout recovery: force ready state
 	ret
 
 ; ===========================================================================
@@ -5532,15 +5532,15 @@ InterCPU_E2_WaitIdle:
 	jr nz, InterCPU_E2_WaitIdle
 
 InterCPU_E2_ClearAndSend:
-	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E2 command handshake
+	res	0, (0x68:8)	; MSTAT0 - clear to initiate E2 command handshake
 	ld (1504:16), 1
 	ld (0x140000:24), 0xe2
 	ld ix, 0:i3
 
 InterCPU_E2_WaitAck:
-	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
+	bit	3, (0x68:8)	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	jr nz, InterCPU_E2_TimeoutLoop
-	set_dd8 0, 0x68	; MSTAT0 - set to signal E2 header data ready
+	set	0, (0x68:8)	; MSTAT0 - set to signal E2 header data ready
 	lda xhl, (1478:16)
 	ld (xhl), xwa
 	ld (xhl + 4), xde
@@ -5563,7 +5563,7 @@ InterCPU_E2_TimeoutLoop:
 	inc 1, ix
 	cp hl, 0xea60
 	jr ule, InterCPU_E2_WaitAck
-	set_dd8 0, 0x68	; MSTAT0 - timeout recovery: force ready state
+	set	0, (0x68:8)	; MSTAT0 - timeout recovery: force ready state
 	ret
 
 ; ===========================================================================
@@ -5655,17 +5655,17 @@ E1Bulk_ReadyCheck:
 	ld iz, 0:i3
 
 E1Bulk_WaitSubCPU_Ready:
-	bit_dd8 3, 0x68	; SSTAT1 - test if Sub CPU is ready for E1 transfer
+	bit	3, (0x68:8)	; SSTAT1 - test if Sub CPU is ready for E1 transfer
 	jrl z, E1Bulk_ReadyTimeout_Loop
-	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E1 bulk transfer
+	res	0, (0x68:8)	; MSTAT0 - clear to initiate E1 bulk transfer
 	ld (1504:16), 2
 	ld (0x140000:24), 0xe1
 	ld iz, 0:i3
 
 E1Bulk_WaitAck:
-	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
+	bit	3, (0x68:8)	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
 	jrl nz, E1Bulk_AckTimeout_Loop
-	set_dd8 0, 0x68	; MSTAT0 - set to signal 6-byte header data ready
+	set	0, (0x68:8)	; MSTAT0 - set to signal 6-byte header data ready
 	lda xhl, (1544:16)
 	ld (xhl), xwa
 	lda xwa, (1488:16)
@@ -5729,7 +5729,7 @@ E1Bulk_AckTimeout_Loop:
 	inc 1, iz
 	cp hl, 0xea60
 	jrl ule, E1Bulk_WaitAck
-	set_dd8 0, 0x68	; MSTAT0 - timeout recovery: force ready state
+	set	0, (0x68:8)	; MSTAT0 - timeout recovery: force ready state
 
 FlashBufferIO_Exit:
 	popw iz
@@ -5844,7 +5844,7 @@ FlashBufferIO_Exit:
 ; targets that address, so whether it ever runs is unknown.
 ; =============================================================================
 INT0_HANDLER:
-	bit_dd8 1, 0x68	; MSTAT1 (PZ.1, our own output read back): HIGH = no receive
+	bit	1, (0x68:8)	; MSTAT1 (PZ.1, our own output read back): HIGH = no receive
 			; in progress, so this /INT0 carries a HEADER byte
 	jr nz, INT0_ProcessCommand
 	ld (265:16), 1	; MSTAT1 LOW = a receive is running, so this /INT0 carries a
@@ -5860,7 +5860,7 @@ INT0_ProcessCommand:
 	reti
 
 INT0_ReadLatch:
-	bit_dd8 2, 0x68	; SSTAT0 - test Sub CPU handshake status
+	bit	2, (0x68:8)	; SSTAT0 - test Sub CPU handshake status
 	ret nz
 	push xwa
 	push xbc
@@ -5878,7 +5878,7 @@ INT0_ReadLatch:
 	ldc_cr32 xwa, 0x20
 	ld wa, 6:i3
 	ldc_cr16 wa, 0x40
-	lda_dd8l XBC, (0xf0)
+	lda	xbc, (0xf0:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
@@ -5894,7 +5894,7 @@ INT0_CheckE2Command:
 	ldc_cr32 xwa, 0x20
 	ldw wa, 0xa
 	ldc_cr16 wa, 0x40
-	lda_dd8l XBC, (0xf0)
+	lda	xbc, (0xf0:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
@@ -5911,14 +5911,14 @@ INT0_HandleDataCommand:
 	inc 1, a
 	extz wa
 	ldc_cr16 wa, 0x40
-	lda_dd8l XBC, (0xf0)
+	lda	xbc, (0xf0:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
 	ld (xbc), a
 
 INT0_AckAndReturn:
-	res_dd8 1, 0x68	; MSTAT1 - clear to acknowledge command from Sub CPU.
+	res	1, (0x68:8)	; MSTAT1 - clear to acknowledge command from Sub CPU.
 			; This doubles as the RELEASE of the mutual-exclusion flag
 			; tested at the top of INT0_HANDLER, and it happens only
 			; here, at the very end of the parse -- which is what makes
@@ -5933,7 +5933,7 @@ INT0_AckAndReturn:
 	ret
 
 INTTC2_HANDLER:
-	res_dd8 2, 0x80
+	res	2, (0x80:8)
 	cp (1504:16), 1
 	jr nz, INTTC2_CheckPhase2
 	ld (1504:16), 0
@@ -5955,7 +5955,7 @@ INTTC0_HANDLER:
 	push xde
 	push xbc
 	push xwa
-	lda_dd8l XBC, (0xf0)
+	lda	xbc, (0xf0:8)
 	ld a, (xbc)
 	and a, 0xf8
 	set 0, a
@@ -5992,7 +5992,7 @@ E1DMA_TransferSetup:
 	ldc_cr32 xbc, 0x20
 	ld wa, (xwa + 4)
 	ldc_cr16 wa, 0x40
-	lda_dd8l XBC, (0xf0)
+	lda	xbc, (0xf0:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
@@ -6003,7 +6003,7 @@ E1DMA_TransferSetup:
 INTTC0_E2_Complete:
 	ld (1510:16), 255
 	ld (1506:16), 0
-	set_dd8 1, 0x68	; MSTAT1 - set to signal E2 command complete
+	set	1, (0x68:8)	; MSTAT1 - set to signal E2 command complete
 	set 7, (1566:16)
 	jr E1DMA_ISR_Epilogue
 
@@ -6012,7 +6012,7 @@ INTTC0_E1_Phase2_Complete:
 	res 7, (1568:16)
 
 INTTC0_SetTransferDone:
-	set_dd8 1, 0x68	; MSTAT1 - set to signal E1 transfer complete
+	set	1, (0x68:8)	; MSTAT1 - set to signal E1 transfer complete
 
 E1DMA_ISR_Epilogue:
 	pop xwa
@@ -6038,7 +6038,7 @@ E1DMA_ISR_BytecodeBlock:
 	calr	InterCPU_E1_Bulk_Transfer
 INTTC0_HANDLER_Skip3:
 	ei	0
-	bit_dd8	1, 104
+	bit	1, (0x68:8)
 	jr	nz, INTTC0_HANDLER_Skip2
 ; v10 does not spell this byte either
 	.byte	0xd8, 0x2f, 0x40	; ldc WA,unknown
@@ -6060,7 +6060,7 @@ INTTC0_HANDLER_Join2:
 	ldw	(58052:16), 0
 	ld	(256:16), 0
 	ld	(1506:16), 0
-	set_dd8	1, 104
+	set	1, (0x68:8)
 	inc	1, (58050:16)
 	ret
 	ld	de, (SYSTEM_TIMESTAMP:16)
@@ -6077,7 +6077,7 @@ INTTC0_HANDLER_Skip4:
 	jr	le, INTTC0_HANDLER_Entry
 	ld	(256:16), 0
 	ld	(1506:16), 0
-	set_dd8	1, 104
+	set	1, (0x68:8)
 	res	7, (0x620:16)
 	inc	1, (58056:16)
 	ldw	hl, 65535
@@ -6093,7 +6093,7 @@ Flash_IdentifyChip_UseBank1:
 	ld xiz, xbc
 
 Flash_IdentifyChip_WaitReady:
-	bit_dd8 5, 0x1c
+	bit	5, (0x1c:8)
 	jr z, Flash_IdentifyChip_WaitReady
 	ei 6
 	ld xwa, xiz
@@ -6186,7 +6186,7 @@ Flash_ProgramWord:
 	jr z, Flash_ProgramWord_Done
 
 Flash_ProgramWord_WaitReady:
-	bit_dd8 5, 0x1c
+	bit	5, (0x1c:8)
 	jr z, Flash_ProgramWord_WaitReady
 	cp a, 1:i3
 	jr nz, Flash_ProgramWord_UseBank1
@@ -6411,7 +6411,7 @@ FlashOp_Epilogue10:
 	ret
 
 Flash_CheckReady:
-	bit_dd8 5, 0x1c
+	bit	5, (0x1c:8)
 	jr z, Flash_CheckReady_NotReady
 	ld hl, 0:i3
 	ret
@@ -6637,7 +6637,7 @@ TableDataROM_IdentifyChip:
 	ld xde, 0x800000
 
 TableDataROM_IdentifyChip_WaitReady:
-	bit_dd8	5, 28
+	bit	5, (0x1c:8)
 	jr	z, TableDataROM_IdentifyChip_WaitReady
 	ld	xbc, xde
 	add	xbc, 87380
@@ -6703,7 +6703,7 @@ Flash_ProgramByte:
 	jr z, Flash_ProgramByte_Done
 
 Flash_ProgramByte_WaitReady:
-	bit_dd8 5, 0x1c
+	bit	5, (0x1c:8)
 	jr z, Flash_ProgramByte_WaitReady
 	ei 6
 	ld xwa, 0xaa00aa
@@ -6884,7 +6884,7 @@ HDAE5000_Flash_Erase_AllSectors:
 ;        Used to poll expansion board during data transfers
 ; ===========================================================================
 HDAE5000_Status_Check:
-	bit_dd8 5, 0x1c
+	bit	5, (0x1c:8)
 	jr z, HDAE5000_Status_NotPresent
 	ld hl, 0:i3
 	ret

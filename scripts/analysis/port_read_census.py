@@ -42,7 +42,17 @@ PORTS = {0x00: 'P0', 0x04: 'P1', 0x08: 'P2', 0x0c: 'P3', 0x10: 'P4', 0x14: 'P5',
 # the address, not the contents.
 READ_MN = re.compile(r'^(bit_dd8|ldcf_dd8|ld_sd8b|cp_dd8|and_dd8|or_dd8|xor_dd8|'
                      r'tset_dd8|ldb_sd8b|ldw_sd8b)$')
-LINE = re.compile(r'^\s*([a-z][a-z0-9_]*)\s+(.*)$')
+# The same reads in native spelling, which respell_raw_pseudos.py writes (2026-10-03: `bit_dd8 5,
+# 0x1c` -> `bit 5, (0x1c:8)`, `ld_sd8b A, 0x40` -> `ld a, (0x40:8)`), and with the address by its
+# SFR name once symbolised (`(P7:8)`).  Before this was added the census silently reported 0 sites
+# for every native line -- v142's payload had been respelled earlier, so its count was already
+# only the boot ROM's 2.  A native line is a read when the port is a SOURCE: the memory operand
+# of bit/ldcf/tset/cp, or the second operand of ld/and/or/xor (`and (P7:8), 0xfe` is a
+# read-modify-write, which the pseudo census did not count either).
+NATIVE_MN = re.compile(r'^(bit|ldcf|tset|cp|cpw|ld|ldw|and|or|xor)$', re.I)
+MEMOP = re.compile(r'^\((0x[0-9a-fA-F]+|\d+|[A-Za-z_]\w*)(?::(?:8|16|24))?\)$')
+PORT_BY_NAME = {v: k for k, v in PORTS.items()}
+LINE = re.compile(r'^\s*(?:[A-Za-z_][A-Za-z0-9_.]*:)?\s*([a-z][a-z0-9_]*)\s+(.*)$')
 HEX  = re.compile(r'0x[0-9a-fA-F]+')
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_.]*):')
 
@@ -62,6 +72,23 @@ def main():
                         label = m.group(1)
                     body = line.split(';', 1)[0]
                     lm = LINE.match(body)
+                    if lm and NATIVE_MN.match(lm.group(1)):
+                        ops = [o.strip() for o in lm.group(2).split(',')]
+                        mn = lm.group(1).lower()
+                        src = [1] if mn in ('ld', 'ldw', 'and', 'or', 'xor') else range(len(ops))
+                        for i in src:
+                            mm = MEMOP.match(ops[i]) if i < len(ops) else None
+                            if not mm:
+                                continue
+                            t = mm.group(1)
+                            a = PORT_BY_NAME.get(t) if t[0].isalpha() else int(t, 0)
+                            if a in PORTS:
+                                bit = None
+                                if mn in ('bit', 'ldcf', 'tset') and ops[0].isdigit() and int(ops[0]) <= 7:
+                                    bit = int(ops[0])
+                                hits[PORTS[a]].append((p, ln, bit, label, line.rstrip()))
+                                break
+                        continue
                     if not lm or not READ_MN.match(lm.group(1)):
                         continue
                     ops = [o.strip() for o in lm.group(2).split(',')]
@@ -73,6 +100,13 @@ def main():
                             vals.append(None)
                     # the SFR address is the operand equal to a known port register;
                     # for the bit forms the OTHER numeric operand is the bit number.
+                    # the port operand may also be the SFR name: symbolize_v142_sfr_operands.py
+                    # turned v142's `bit_dd8 4, 0x34` into `bit_dd8 4, PD`, and the census, which
+                    # required `0x`, fell from 20 sites to 2 without a word (found 2026-10-03)
+                    for i, o in enumerate(ops):
+                        if o in PORT_BY_NAME:
+                            vals[i] = PORT_BY_NAME[o]
+                            ops[i] = '0x%02x' % vals[i]
                     for i, v in enumerate(vals):
                         if v in PORTS and ops[i].lower().startswith('0x'):
                             bit = next((w for j, w in enumerate(vals)

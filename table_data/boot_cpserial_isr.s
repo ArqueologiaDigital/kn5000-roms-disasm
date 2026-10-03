@@ -64,12 +64,12 @@ Handler_INTA:
 	jr	nz, Handler_INTA__rx_pacing
 	and	(0x0f66:16), 0x9f		; PFCR shadow: SC1 pins to RX mode
 	ld	a, (0x0f66:16)
-	st_dd8b	a, 0x3e			; PFCR
-	or_sd8b_im 0xd5, 0x01		; SC1CR bit 0 high
-	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
+	ld	(0x3e:8), a			; PFCR
+	or	(0xd5:8), 0x01		; SC1CR bit 0 high
+	and	(0xd5:8), 0xfd		; SC1CR bit 1 low
 	ld	(0xe3:8), 0x05:io		; INTEAB
 	ld	(0xeb:8), 0x0d:io		; INTES1: RX enabled
-	or_sd8b_im 0xd6, 0x20		; SC1MOD bit 5
+	or	(0xd6:8), 0x20		; SC1MOD bit 5
 	ld	(0x0f62:16), 0x20		; state 0x20: RX first byte
 	or	(0x0f64:16), 0x01		; RX-active flag
 	jr	t, Handler_INTA__exit

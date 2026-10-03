@@ -86,16 +86,16 @@ CPanel_InitHardware:
 	ld a, 0x3:opc	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
 	and a, 0xaf	; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RXD1 (Control Panel)
 	ld (PFFC_VALUE:16), a
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	ld a, 0x15:opc
 	and a, 0x8f
 	ld (PFCR_VALUE:16), a
-	st_dd8b A, 0x3e
-	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
+	ld	(0x3e:8), a
+	and	(0x3c:8), 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
 	ld a, 0x0:opc
-	st_dd8b A, 0x3b
+	ld	(0x3b:8), a
 	ld a, 0x46:opc
-	st_dd8b A, 0x3a
+	ld	(0x3a:8), a
 	ld (0xd6:8), 0x00:io	; serial clk: TO2 trigger
 	                  ; serial transfer mode: I/O  transfer mode
 	                  ; wake-up function: disable
@@ -114,8 +114,8 @@ CPanel_InitHardware:
 	ld (0xeb:8), 0xff:io
 	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
-	or_sd8b_im 0xc8, 0x10
-	and_sd8b_im 0xc8, 0xf7
+	or	(0xc8:8), 0x10
+	and	(0xc8:8), 0xf7
 	ld (CPANEL_UNUSED_1:16), 125; This looks pointless...
 
 	or (CPANEL_TX_RX_FLAGS:16), 64	; CP_Flags_A.6 = 1
@@ -180,7 +180,7 @@ CPanel_SendInitSequence:
 	ld (0xeb:8), 0xff:io
 	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
+	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: receive disable
 	ld (0xf8:8), 0x12:io	; INTA Pin
 	ld (0xe3:8), 0x05:io
 	ldw (CPANEL_RX_READ_PTR:16), 0
@@ -194,30 +194,30 @@ CPanel_InitLEDBuffer:
 	ld (CPANEL_LED_TX_BUFFER:16), wa
 	and (PFFC_VALUE:16), 191
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	ld (0xeb:8), 0xff:io
 	ld (0xf8:8), 0x22:io
 	ld (0xf8:8), 0x23:io
 	ld (0xe3:8), 0x07:io
 	ld (0xf8:8), 0x12:io
-	and_sd8b_im 0x3c, 0xbf
+	and	(0x3c:8), 0xbf
 	or (PFCR_VALUE:16), 64
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	and (PFCR_VALUE:16), 191
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	or (PFFC_VALUE:16), 80
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	or (PFCR_VALUE:16), 80
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
-	and_sd8b_im 0xd5, 0xfe
+	ld	(0x3e:8), a
+	and	(0xd5:8), 0xfe
 	ld (0xeb:8), 0xff:io
 	ld (0xf8:8), 0x22:io
 	ld (0xf8:8), 0x23:io
@@ -225,24 +225,24 @@ CPanel_InitLEDBuffer:
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	incw 1, (CPANEL_LED_READ_PTR:16)
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	ld xiy, CPANEL_LED_TX_BUFFER
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	incw 1, (CPANEL_LED_READ_PTR:16)
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	or_sd8b_im 0xd5, 0x01
-	and_sd8b_im 0xd5, 0xfd
+	or	(0xd5:8), 0x01
+	and	(0xd5:8), 0xfd
 	and (PFCR_VALUE:16), 175
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	and (PFFC_VALUE:16), 175
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	ret
 
 
@@ -602,9 +602,9 @@ CPanel_WaitTXReady:
 
 CPanel_WaitTXReady_Poll:
 	ei 6
-	bit_dd8 6, 0x3c	; PF.6 = state of SCLK1 pin == 1, (resting at pull-up)
+	bit	6, (0x3c:8)	; PF.6 = state of SCLK1 pin == 1, (resting at pull-up)
 	jr z, CPanel_WaitTXReady_Timeout
-	bit_dd8 5, 0x38	; PE.5 = state of INTA pin == 0
+	bit	5, (0x38:8)	; PE.5 = state of INTA pin == 0
 	jr nz, CPanel_WaitTXReady_Timeout
 	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, CPanel_WaitTXReady_Timeout
@@ -632,7 +632,7 @@ WaitTX_ConfigAndReturn:
 	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	ld (0xeb:8), 0xdd:io
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
+	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: receive disable
 	or (CPANEL_PROTOCOL_FLAGS:16), 128	; CP_Flags_B.7 = 1
 	ei 0
 	ret
@@ -652,19 +652,19 @@ CPanel_SendCommand:
 	                 ; fc = 16MHz, so fc/64/8 = 31250
 	and (PFFC_VALUE:16), 191; disable CPanel serial ckl
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
-	and_sd8b_im 0x3c, 0xbf	; PF bit 6: SCLK1 = 0
+	ld	(0x3f:8), a
+	and	(0x3c:8), 0xbf	; PF bit 6: SCLK1 = 0
 	or (PFCR_VALUE:16), 64
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	ld (0xe3:8), 0x07:io
 	ld (0xf8:8), 0x12:io	; INTA Pin
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: CPanel receive disable
-	and_sd8b_im 0xd5, 0xfe	; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator
+	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: CPanel receive disable
+	and	(0xd5:8), 0xfe	; IOC (bit 0) = 0: I/O interface input clock select = Baud rate generator
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	ld (0xeb:8), 0xdf:io
 	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 	ei 0
 	nop
 	ret
@@ -678,12 +678,12 @@ INTA_HANDLER:
 
 	and (PFCR_VALUE:16), 159
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
-	or_sd8b_im 0xd5, 0x01	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
-	and_sd8b_im 0xd5, 0xfd	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
+	ld	(0x3e:8), a
+	or	(0xd5:8), 0x01	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
+	and	(0xd5:8), 0xfd	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0x0d:io
-	or_sd8b_im 0xd6, 0x20	; parity addition: enable
+	or	(0xd6:8), 0x20	; parity addition: enable
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 32;		ROUTINE_7
 	or (CPANEL_TX_RX_FLAGS:16), 1	; CP_Flags_A.0 = 1
 	jr INTA_HANDLER_END
@@ -770,18 +770,18 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the control panel... (?)
 	and (PFCR_VALUE:16), 191
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 	ld (0xe3:8), 0x07:io	; INTTRA(TREGA): M=7
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
-	and_sd8b_im 0xd5, 0xfe
-	st_dd8b A, 0xd4
+	and	(0xd5:8), 0xfe
+	ld	(0xd4:8), a
 	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next = ROUTINE_2
 	mul a, 0x1
 	mul a, 0x1
-	bit_dd8 6, 0x3c	; PF.6 = state of SCLK1 pin
+	bit	6, (0x3c:8)	; PF.6 = state of SCLK1 pin
 	jr nz, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -802,16 +802,16 @@ CPanel_SM_TXDelay1:
 	calr DELAY_10_LOOPS
 	and (PFCR_VALUE:16), 175
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	and (PFFC_VALUE:16), 175; disable CPanel serial clk and TX pin.
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
-	and_sd8b_im 0xd5, 0xfe
-	st_dd8b A, 0xd4
+	and	(0xd5:8), 0xfe
+	ld	(0xd4:8), a
 	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
@@ -820,18 +820,18 @@ CPanel_SM_TXDelay2:
 	calr DELAY_10_LOOPS
 	and (PFCR_VALUE:16), 175
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	and (PFFC_VALUE:16), 175; disable CPanel serial clk and TX pin.
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
-	and_sd8b_im 0xd5, 0xfe
-	st_dd8b A, 0xd4
+	and	(0xd5:8), 0xfe
+	ld	(0xd4:8), a
 	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
@@ -842,17 +842,17 @@ CPanel_SM_SendByte1:
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
 	or (PFFC_VALUE:16), 80	; Enable CPanel serial clk and TX pin.
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	or (PFCR_VALUE:16), 80
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
-	and_sd8b_im 0xd5, 0xfe
+	ld	(0x3e:8), a
+	and	(0xd5:8), 0xfe
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
 	ld xiy, CPANEL_LED_TX_BUFFER
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 	incw 1, (CPANEL_LED_READ_PTR:16)
 	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByte1_InspectByte
@@ -879,17 +879,17 @@ CPanel_SM_SendByteN:
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
 	or (PFFC_VALUE:16), 80	; Enable CPanel serial clk and TX pin.
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	or (PFCR_VALUE:16), 80
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
-	and_sd8b_im 0xd5, 0xfe
+	ld	(0x3e:8), a
+	and	(0xd5:8), 0xfe
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
 	ld xiy, CPANEL_LED_TX_BUFFER
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 	incw 1, (CPANEL_LED_READ_PTR:16)
 	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByteN_CheckDone
@@ -919,28 +919,28 @@ CPanel_SM_TXComplete:
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 4; ROUTINE_1
 	and (PFFC_VALUE:16), 191; disable CPanel serial clk
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
-	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
+	ld	(0x3f:8), a
+	and	(0x3c:8), 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
 	or (PFCR_VALUE:16), 64
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	ld (0xd7:8), 0x28:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
 	ld (0xe3:8), 0x07:io
-	and_sd8b_im 0xd5, 0xfe
+	and	(0xd5:8), 0xfe
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 	or (CPANEL_TX_RX_FLAGS:16), 2	; CP_Flags_A.1 = 1
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 TXComplete_BufferEmpty:
 	and (PFCR_VALUE:16), 191
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	and (PFFC_VALUE:16), 191; disable CPanel serial clk
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xff:io	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
@@ -953,12 +953,12 @@ TXComplete_BufferEmpty:
 CPanel_SM_RXByte1:
 	and (PFCR_VALUE:16), 159
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
-	or_sd8b_im 0xd5, 0x01
-	and_sd8b_im 0xd5, 0xfd
+	ld	(0x3e:8), a
+	or	(0xd5:8), 0x01
+	and	(0xd5:8), 0xfd
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0x0d:io
-	ld_sd8b A, 0xd4
+	ld	a, (0xd4:8)
 	ld xiy, CPANEL_RX_RING_BUFFER
 	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
@@ -1001,7 +1001,7 @@ RXByte1_AdvanceState:
 
 
 CPanel_SM_RXByteN:
-	ld_sd8b A, 0xd4
+	ld	a, (0xd4:8)
 	ld xiy, CPANEL_RX_RING_BUFFER
 	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
@@ -1021,21 +1021,21 @@ RXByteN_CheckDone:
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 0; ROUTINE_0
 	and (PFCR_VALUE:16), 159
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	and (PFFC_VALUE:16), 191; disable CPanel serial clk
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
+	ld	(0x3f:8), a
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0x0d:io
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
+	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: receive disable
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 RXByteN_ContinueRX:
 	and (PFCR_VALUE:16), 159
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
-	or_sd8b_im 0xd5, 0x01
-	and_sd8b_im 0xd5, 0xfd
+	ld	(0x3e:8), a
+	or	(0xd5:8), 0x01
+	and	(0xd5:8), 0xfd
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0x0d:io
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
@@ -1049,7 +1049,7 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 						; CP_Flags_A.1 = 0
 	or (CPANEL_PROTOCOL_FLAGS:16), 4	; CP_Flags_B.2 = 1  : UNUSED
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
+	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: receive disable
 	ld (0xeb:8), 0x0f:io
 	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 	ld (0xe3:8), 0x07:io
@@ -1116,9 +1116,9 @@ PollLoop_DoLEDUpdate:
 				; }
 PollLoop_CheckTXReady:
 	ei 6
-	bit_dd8 6, 0x3c	; PF.6 = state of SCLK1 pin
+	bit	6, (0x3c:8)	; PF.6 = state of SCLK1 pin
 	jr z, PollLoop_BusyRetry
-	bit_dd8 5, 0x38	; PE.5 = state of INTA pin
+	bit	5, (0x38:8)	; PE.5 = state of INTA pin
 	jr nz, PollLoop_BusyRetry
 	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, PollLoop_BusyRetry
@@ -1141,21 +1141,21 @@ PollLoop_StartTX:
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 4; ROUTINE_1
 	and (PFFC_VALUE:16), 191; disable CPanel serial clk
 	ld a, (PFFC_VALUE:16)
-	st_dd8b A, 0x3f
-	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
+	ld	(0x3f:8), a
+	and	(0x3c:8), 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
 	or (PFCR_VALUE:16), 64
 	ld a, (PFCR_VALUE:16)
-	st_dd8b A, 0x3e
+	ld	(0x3e:8), a
 	ld (0xd7:8), 0x28:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: CPanel receive disable
-	and_sd8b_im 0xd5, 0xfe
+	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: CPanel receive disable
+	and	(0xd5:8), 0xfe
 	ld (0xe3:8), 0x07:io
 	ld (0xf8:8), 0x12:io	; INTA Pin
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	ld (0xeb:8), 0xd0:io
-	st_dd8b A, 0xd4
+	ld	(0xd4:8), a
 
 PollLoop_Return:
 	ei 0

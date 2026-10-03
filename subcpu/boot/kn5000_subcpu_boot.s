@@ -660,17 +660,17 @@ BOOT_INIT__clock_done:
 	; Initialize serial/DMA registers
 	ld (SER0_MOD:8), 0x01:io
 	ld (SER0_CR:8), 0x00:io
-	and_sd8b_im 0xD3, 0xCF
-	and_sd8b_im 0xD3, 0xF0
+	and	(0xd3:8), 0xcf
+	and	(0xd3:8), 0xf0
 	ld (SER1_MOD:8), 0x29:io
-	lda_dd8l XBC, (0xD6)
+	lda	xbc, (0xd6:8)
 	ld a, (xbc)
 	and a, 0xFC
 	set 0, a
 	ld (xbc), a
 	ld (SER1_CR:8), 0x00:io
-	and_sd8b_im 0xD7, 0xCF
-	and_sd8b_im 0xD7, 0xF0
+	and	(0xd7:8), 0xcf
+	and	(0xd7:8), 0xf0
 
 	; Initialize DRAM refresh
 	ld (357:16), 113
@@ -732,13 +732,13 @@ MAIN_LOOP__wait_loop:
 	call PAYLOAD_ENTRY	; Call payload at 0x0400 (4-byte encoding)
 MAIN_LOOP__check_status:
 	; Read serial status and update control
-	ldcf_dd8 1, 0x30
+	ldcf	1, (0x30:8)
 	scc8 c, a
 	cpl a
 	and a, 0x1
 	sla a, 1
-	and_sd8b_im 0x30, 0xFD
-	or_sd8b_mr A, 0x30
+	and	(0x30:8), 0xfd
+	or	(0x30:8), a
 	jr MAIN_LOOP__wait_loop
 
 ; ==============================================================================
@@ -857,7 +857,7 @@ CmdHandler_Stub_Cmd5:
 ; ==============================================================================
 
 INIT_TONE_GEN:
-	link32 0xEE, 0x0C, 0xF8, 0xFF	; Reserve 8 bytes on stack
+	link	xiz, 0xfff8	; Reserve 8 bytes on stack
 	xor xwa, xwa
 	ld xwa, 0x5A5A5A5A	; Test pattern
 	ld (xiz - 8), xwa
@@ -889,7 +889,7 @@ INIT_TONE_GEN__init_loop:
 	ld (xbc), xwa
 	add a, 0x20
 	djnz8 d, INIT_TONE_GEN__init_loop
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 ; ==============================================================================
@@ -1048,19 +1048,19 @@ CmdHandler_Stub_Cmd6And7:
 ; ==============================================================================
 
 INIT_DMA_SERIAL:
-	and_sd8b_im 0xE5, 0xF8	; Clear E5 bits
+	and	(0xe5:8), 0xf8	; Clear E5 bits
 	res_dd8 2, T8RUN	; Watchdog mode
-	lda_dd8l XBC, (0xEC)
+	lda	xbc, (0xec:8)
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	lda_dd8l XBC, (0xED)
+	lda	xbc, (0xed:8)
 	ld a, (xbc)
 	and a, 0xF8
 	or a, 0x5
 	ld (xbc), a
-	lda_dd8l XBC, (0xF0)
+	lda	xbc, (0xf0:8)
 	ld a, (xbc)
 	and a, 0xF8
 	set 0, a
@@ -1144,7 +1144,7 @@ SendData_Chunked:
 	jr ule, SendData_Chunked__send_final	; Yes - send final chunk directly
 SendData_Chunked__chunk_loop:
 	mrdb3 0x8F, 0x06, 0x21	; A = channel/command
-	extpfx2 0xD8, 0x12	; Zero-extend A to WA
+	extz	wa	; Zero-extend A to WA
 	ldw bc, 0x20	; BC = 32 (chunk size)
 	mrdl3 0xAF, 0x02, 0x22	; XDE = current source address
 	calr SendData_Block	; Send 32-byte chunk
@@ -1155,9 +1155,9 @@ SendData_Chunked__chunk_loop:
 	jr ugt, SendData_Chunked__chunk_loop	; Yes - continue chunking
 SendData_Chunked__send_final:
 	mrdb3 0x8F, 0x06, 0x21	; A = channel/command
-	extpfx2 0xD8, 0x12	; Zero-extend A to WA
+	extz	wa	; Zero-extend A to WA
 	ldto_berp C, 0xF8	; C = remaining count (low byte)
-	extpfx2 0xD9, 0x12	; Zero-extend C to BC
+	extz	bc	; Zero-extend C to BC
 	mrdl3 0xAF, 0x02, 0x22	; XDE = current source address
 	calr SendData_Block	; Send final chunk
 	popw iz	; Restore IZ
@@ -1201,7 +1201,7 @@ SendData_Block__wait_ready2:
 	jr nz, SendData_Block__timeout2	; Main CPU responded - check timeout
 	set_dd8 0, PD	; Set our ready flag
 	ldc_cr32 xde, 0x08	; DMA source = XDE
-	extpfx2 0xD9, 0x12	; Zero-extend BC (count)
+	extz	bc	; Zero-extend BC (count)
 	ldc_cr16 bc, 0x48	; DMA count = BC
 	ld (258:16), 22; Set DMA mode
 	set_dd8 2, T8RUN	; Start DMA transfer
@@ -1678,8 +1678,8 @@ CMD_Dispatch_Handler__exit:
 
 INIT_MEMORY_TEST:
 	ld (1366:16), 0
-	set_dd8 1, 0x30
-	bit_dd8 0, 0x30
+	set	1, (0x30:8)
+	bit	0, (0x30:8)
 	ret nz	; Return if bit set
 
 	ld wa, 0:i3
@@ -1734,7 +1734,7 @@ INIT_MEMORY_TEST__serial_loop:
 DELAY_ROUTINE:
 	ld l, 0x0:opc	; ld L, 00h (TMP94C241 encoding)
 DELAY_ROUTINE__outer_loop:
-	res_dd8 1, 0x30
+	res	1, (0x30:8)
 	ldw bc, 0x4000	; Default count
 	bit 0, a	; Check current bit
 	jr z, DELAY_ROUTINE__skip_long
@@ -1751,7 +1751,7 @@ DELAY_ROUTINE__inner_loop:
 	jr c, DELAY_ROUTINE__inner_loop
 	djnz16 bc, DELAY_ROUTINE__delay_loop
 DELAY_ROUTINE__next_bit:
-	set_dd8 1, 0x30
+	set	1, (0x30:8)
 	ldw bc, 0x4000
 DELAY_ROUTINE__delay2_outer:
 	ld e, 0x0:opc	; ld E, 00h (TMP94C241 encoding)
@@ -1965,10 +1965,10 @@ SERIAL_INIT__check_loop:
 	jr c, SERIAL_INIT__check_loop
 	cpib_erp 0xFB, 0
 	jr z, SERIAL_INIT__no_error
-	res_dd8 1, 0x30	; A key is held: PC.1 low = CN12 LED ON
+	res	1, (0x30:8)	; A key is held: PC.1 low = CN12 LED ON
 	jr SERIAL_INIT__done
 SERIAL_INIT__no_error:
-	set_dd8 1, 0x30	; No key held: PC.1 high = CN12 LED OFF
+	set	1, (0x30:8)	; No key held: PC.1 high = CN12 LED OFF
 SERIAL_INIT__done:
 	popw_erp 0xFA
 	ret

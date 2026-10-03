@@ -466,7 +466,7 @@ AudioCmd_40_5F_Done:
 ;        Memory-mapped DSP register space at 0x00130000
 ; ----------------------------------------------------------------------------
 DSP_Init_Channels:	; 01FC95h
-	link32 0xEE, 0x0C, 0xF8, 0xFF
+	link	xiz, 0xfff8
 	xor xwa, xwa
 	ld xwa, 0x5A5A5A5A	; Test pattern
 	ld (xiz - 8), xwa	; Local buffer[0-3]
@@ -497,7 +497,7 @@ DSP_Init_Channels_Loop:
 	ld (xbc), xwa	; Write to DSP register
 	add a, 0x20	; Next channel (0x20 spacing)
 	djnz8 d, DSP_Init_Channels_Loop
-	unlk32 xiz
+	unlk	xiz
 	ret
 
 ; ----------------------------------------------------------------------------
@@ -2184,7 +2184,7 @@ FIFO1K_Put:
 	calr	FIFO_Engine1K_Put
 	pop	xde
 	popw	ix
-	unlk32	xiz
+	unlk	xiz
 	ret
 ; Push BC bytes from (XIY) onto the 1 KB FIFO; both taken from the stack frame
 ; ((XIZ+8) = count, (XIZ+0x0A) = source pointer). Loops over the engine's PUT; note it does
@@ -2207,7 +2207,7 @@ FIFO1K_Put_Block:
 	pop	xde
 	pop	xix
 	pop	xiy
-	unlk32	xiz
+	unlk	xiz
 	ret
 ; HL = 0xFFFF when write index (0x040C2A) == read index (0x040C26), else 0.
 FIFO1K_Is_Empty:
@@ -2296,7 +2296,7 @@ FIFO256_Put:
 	calr	FIFO_Engine256_Put
 	pop	xde
 	popw	ix
-	unlk32	xiz
+	unlk	xiz
 	ret
 ; Stack-arg push of a count/pointer block onto the 256-byte FIFO.
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
@@ -2317,7 +2317,7 @@ FIFO256_Put_Block:
 	pop	xde
 	pop	xix
 	pop	xiy
-	unlk32	xiz
+	unlk	xiz
 	ret
 ; HL = 0xFFFF when write index (0x041034) == read index (0x041030).
 FIFO256_Is_Empty:
@@ -2403,7 +2403,7 @@ FIFO512_Put:
 	calr	FIFO_Engine512_Put
 	pop	xde
 	popw	ix
-	unlk32	xiz
+	unlk	xiz
 	ret
 ; Stack-arg push of a count/pointer block onto the 512-byte FIFO.
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
@@ -2424,7 +2424,7 @@ FIFO512_Put_Block:
 	pop	xde
 	pop	xix
 	pop	xiy
-	unlk32	xiz
+	unlk	xiz
 	ret
 ; HL = 0xFFFF when write index (0x04113E) == read index (0x04113A).
 FIFO512_Is_Empty:
@@ -6829,7 +6829,7 @@ PitchBend_Scale_Multiply:
 	ld	l, (xbc+wa)
 	exts hl
 	ld wa, hl
-	extpfx2 0xDC, 0x48
+	muls	xwa, ix
 	ld hl, wa
 	ld a, e
 	and a, 0xF
@@ -6920,7 +6920,7 @@ Pan_ScaleWithVelocity_Multiply:
 	ld l, (xsp + 4)
 	exts hl
 	ld wa, hl
-	extpfx2 0xDA, 0x48
+	muls	xwa, de
 	ld hl, wa
 	sra hl, 5
 	retd 0x4
@@ -6980,7 +6980,7 @@ TVF_Calc_Cutoff:
 	ldfr_berp E, 0xF4
 	exts iy
 	ld de, hl
-	extpfx2 0xDD, 0x4A
+	muls	xde, iy
 	ld hl, de
 	sra hl, 5
 	add bc, hl
@@ -7018,7 +7018,7 @@ TVF_Calc_Cutoff_Multiply:
 	sub de, wa
 	ld a, (xsp + 4)
 	exts wa
-	extpfx2 0xDA, 0x48
+	muls	xwa, de
 	sra wa, 5
 	add bc, wa
 
@@ -7057,7 +7057,7 @@ TVF_Calc_Cutoff_NoKeyFollow:
 	ld e, a
 	exts de
 	ld wa, hl
-	extpfx2 0xDA, 0x48
+	muls	xwa, de
 	ld hl, wa
 	sra hl, 5
 	ld wa, hl
@@ -7803,7 +7803,7 @@ Voice_Colour_InterpolateDelta:
 	ld l, (xsp + 4)
 	exts hl
 	ld wa, hl
-	extpfx2 0xDA, 0x48
+	muls	xwa, de
 	ld hl, wa
 	sra hl, 5
 	retd 0x4
