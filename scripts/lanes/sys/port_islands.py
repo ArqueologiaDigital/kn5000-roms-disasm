@@ -62,7 +62,7 @@ import address_line_map as alm  # noqa: E402
 
 BASE = 0xE00000
 MC, NM, OBJCOPY, LLD = alm.MC, alm.NM, alm.OBJCOPY, alm.LLD
-SCRATCH = os.environ.get("PORT_SCRATCH", "/tmp/claude-1000/lane-sys/port")
+SCRATCH = os.environ.get("PORT_SCRATCH", os.path.join(os.environ.get("TMPDIR", "/tmp"), "lane-sys-port"))  # TMPDIR: /tmp is a small tmpfs here
 REL = {"jr", "jrl", "calr", "djnz", "djnz16", "djnz8"}
 REL_W = {"jr": 1, "djnz": 1, "djnz8": 1, "jrl": 2, "calr": 2, "djnz16": 2}
 RESERVED = set("""a w b c d e h l wa bc de hl ix iy iz sp xwa xbc xde xhl xix xiy xiz xsp

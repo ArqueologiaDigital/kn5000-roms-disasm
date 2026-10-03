@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,313
-#   semantic names ........... 50,411 (98.2%)
+#   symbols .................. 51,368
+#   semantic names ........... 50,466 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -32837,6 +32837,61 @@ DrumVoice_Handler6 00F6507A
 DrumVoice_Handler6_Code 00F65084
 DrumVoice_Handler6_Return 00F650AB
 DrumVoice_Handler7 00F650AC
+DrumVoice_Handler7_Return 00F650D7
+DrumVoice_Handler7_Epilogue 00F650E9
+DrumVoice_Handler7_Helper 00F650EB
+DrumVoice_Handler7_Code_Return 00F65111
+CmpNcpTtl_Dispatch_Helper 00F65121
+DrumVoice_Handler7_Data 00F65128
+DrumVoice_Handler7_Data_Code_Skip 00F65145
+DrumVoice_Handler7_Code_Helper 00F6514F
+DrumVoice_Handler7_Code_Return2 00F6518D
+CmpNcp_ProgramGroupBase 00F6518E
+DrumVoice_Handler7_Data_2_Sub 00F6519A
+DrumVoice_Handler7_Data_3 00F651A1
+DrumVoice_Handler7_Code_Return3 00F651AB
+CmpNcpTtl_Dispatch2_Helper 00F651AC
+DrumVoice_Handler7_Data_3_Helper 00F651B3
+DrumVoice_Handler7_Code_Skip 00F651C4
+DrumVoice_Handler7_Code_Join 00F651CA
+DrumVoice_Handler7_Code_Return4 00F651CE
+CmpNcpTtl_Dispatch2_Helper2 00F651CF
+DrumVoice_Handler7_Data_3_Helper2 00F651D6
+CmpNcp_ItemA_HandlerIndex 00F651EC
+DrumVoice_Handler7_Data_3_Sub 00F651F2
+DrumVoice_Handler7_Data_3_Helper3 00F651F9
+DrumVoice_Handler7_Data_3_Helper3_Skip 00F6520A
+DrumVoice_Handler7_Code_Join2 00F65210
+DrumVoice_Handler7_Code_Return5 00F65214
+CmpNcpTtl_Dispatch2_Helper3 00F65215
+DrumVoice_Handler7_Data_3_Helper4 00F6521C
+CmpNcp_ItemB_HandlerIndex 00F65232
+DrumVoice_Handler7_Data_3_Helper5 00F6523D
+CmpNcp_ItemHandlerTable 00F65253
+CmpNcp_ItemHandler0 00F6526F
+CmpNcp_ItemHandler1 00F6528C
+CmpNcp_ItemHandler2 00F652A6
+CmpNcp_ItemHandler3 00F652BA
+CmpNcp_ItemHandler4 00F652C9
+DrumVoice_Handler7_Data_4 00F652E4
+DrumVoice_Handler7_Code_Entry 00F6530C
+DrumVoice_Handler7_Code_Entry_Data 00F6531B
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry 00F65327
+DrumVoice_Handler7_Code_Entry_Data_Join 00F6532E
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Skip 00F65351
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Join 00F6535A
+DrumVoice_Handler7_Code_Return6 00F6536C
+DrumVoice_Handler6_Helper 00F65377
+DrumVoice_Handler7_Code_Skip2 00F653A3
+DrumVoice_Handler7_Code_Join3 00F653AC
+RhythmVariation_Select_Helper 00F653CF
+DrumVoice_Handler7_Code_Join4 00F6540E
+DrumVoice_Handler7_Helper2 00F65418
+DrumVoice_Handler7_Code_Skip3 00F65453
+DrumVoice_Handler7_Code_Join5 00F6545C
+DrumVoice_Handler7_Helper_Helper 00F65481
+DrumVoice_Handler7_Code_Skip4 00F654DF
+DrumVoice_Handler7_Code_Return7 00F654ED
 DrumVoice_NotifyEE 00F654EE
 TimeSig_DisplayStrings 00F65505
 TimeSig_DisplayStrings_Code_Sub2 00F655D1

@@ -89,5 +89,17 @@ decodes them cleanly. The specs set `keep_original_code`, so an instruction line
 its bytes keeps its text, with its RAM names and its choice among aliases: 266 of the 289 lines in each
 tree. Labels renamed by `scripts/renaming/rename_cmpncp_item_tables.sed` first.
 
-v7 holds the same code as the romslice `includes/romslices/v7_transplant_DrumVoice_Handler7.bin`
-(0xF650AC-0xF654EE) and is not covered here.
+v7 held the same code as the romslice `includes/romslices/v7_transplant_DrumVoice_Handler7.bin`
+(0xF650AC-0xF654EE, v10 address - 0x404). It is ported from v10 and the bin is removed:
+
+    python3 scripts/lanes/sys/port_islands.py --src v10 --dst v7 \
+        --file sequencer/accompaniment_engine.s --line 24399 --apply
+    python3 notes/r3-trace-2026-10-02/reframe-specs/cmpncp_v7_postport.py
+
+The port covers 1054 of the 1090 bytes in 357 lines, with 53 labels, and is identical after round 0.
+The post-port step names the two tables the port left as `.byte` / numbers (`CmpNcp_ProgramGroupBase`,
+`CmpNcp_ItemHandlerTable`). It also restates the carried `[v10]` comments with v7's RAM addresses:
+(0x390B) / (0x390C) for v10's (0x39A7) / (0x39A8), and (0xE31C) / (0xE31E) for (0xE3E2) / (0xE3E4).
+Eight `calr`s of the block stay numeric in v7. Their targets lie past the island, in v7 source that is
+itself misframed (`.byte 0xc8, 0x04` for `push w` ...). In v10, five of them are numeric too: unnamed
+routines after a `ret`, one of them (0xF65CF1) not even a line start.

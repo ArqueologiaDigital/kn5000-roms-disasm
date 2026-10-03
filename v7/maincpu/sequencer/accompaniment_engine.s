@@ -24396,7 +24396,440 @@ DrumVoice_Handler6_Code:
 DrumVoice_Handler6_Return:
 	ret	
 DrumVoice_Handler7:
-	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler7.bin"
+; (was .incbin "includes/romslices/v7_transplant_DrumVoice_Handler7.bin")
+	or	(0xe31c:16), 8
+	or	(0xe31c:16), 1
+	ldw	(0xe31e:16), 1927
+	ld	xiy, RHYTHM_PATTERN_BUF_A
+	add	xiy, 16
+	ld	a, (xiy)
+	bit	0, a
+	jr	nz, DrumVoice_Handler7_Return
+	calr	DrumVoice_Handler7_Helper2
+	calr	DrumKit_PostMidiEvents
+	calr	RhythmVariation_Select_Helper
+DrumVoice_Handler7_Return:
+	ret
+	push	xiz
+	bit	0, (0x3437:16)
+	jr	nz, DrumVoice_Handler7_Epilogue
+	cp	(0x343a:16), 12
+	jr	nc, DrumVoice_Handler7_Epilogue
+	calr	DrumVoice_Handler7_Helper
+DrumVoice_Handler7_Epilogue:
+	pop	xiz
+	ret
+DrumVoice_Handler7_Helper:
+	or	(0x8cec:16), 1
+	and	(0xe31c:16), 247
+	ld	xiy, RHYTHM_PATTERN_BUF_A
+	add	xiy, 16
+	ld	a, (xiy)
+	bit	0, a
+	jr	nz, DrumVoice_Handler7_Code_Return
+	cp	(0x343a:16), 12
+	jr	nc, DrumVoice_Handler7_Code_Return
+	calr	DrumVoice_Handler7_Helper_Helper
+DrumVoice_Handler7_Code_Return:
+	ret
+	ret
+	ret
+	ret
+	ret
+	ret
+	ret
+	ret
+	ret
+	ret
+	and	(0xe31c:16), 254
+	ret
+CmpNcpTtl_Dispatch_Helper:
+	push	xiz
+	call	DrumVoice_Handler7_Data
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data:
+	cp	(PREVIOUS_TITLE:16), 184	; TT_CMPNCP
+	jr	z, DrumVoice_Handler7_Data_Code_Skip
+	calr	1565
+	ld	l, (0x3451:16)
+	ld	h, (0x3452:16)
+	calr	1168
+	calr	DrumKit_PostMidiEvents
+	and	(0x3431:16), 191
+DrumVoice_Handler7_Data_Code_Skip:
+	calr	TimeSig_DisplayStrings_Code_Sub
+	calr	DrumVoice_Handler7_Code_Helper
+	calr	1537
+	ret
+DrumVoice_Handler7_Code_Helper:
+	ld	a, (0xfc5a:16)
+	and	a, 255
+	cp	a, 128
+	jr	c, DrumVoice_Handler7_Code_Return2
+	cp	a, 128
+	jr	z, DrumVoice_Handler7_Code_Return2
+	cp	a, 132
+	jr	z, DrumVoice_Handler7_Code_Return2
+	cp	a, 136
+	jr	z, DrumVoice_Handler7_Code_Return2
+	and	a, 127
+	ld	xix, CmpNcp_ProgramGroupBase
+	ld	a, (xix+a)
+	ld	(64602:16), a
+	ld	(0x3451:16), a
+	and	a, 127
+	ld	(0xffa1:16), a
+	ld	(0xffbf:16), a
+	calr	DrumKit_PostMidiEvents
+DrumVoice_Handler7_Code_Return2:
+	ret
+CmpNcp_ProgramGroupBase:
+	; (0xFC5A) & 0x7F -> the first program of its group of four: 0x81..0x83 -> 0x80, 0x85..0x87 ->
+	; 0x84, 0x89..0x8B -> 0x88.  DrumVoice_Handler7_Code_Helper returns before the lookup for
+	; values below 0x80 and for 0x80, 0x84 and 0x88 themselves.
+	.byte	0x80, 0x80, 0x80, 0x80, 0x84, 0x84, 0x84, 0x84, 0x88, 0x88, 0x88, 0x88
+DrumVoice_Handler7_Data_2_Sub:
+	push	xiz
+	call	DrumVoice_Handler7_Data_3
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data_3:
+	cp	(CURRENT_TITLE:16), 184	; TT_CMPNCP
+	jr	z, DrumVoice_Handler7_Code_Return3
+	calr	DrumKit_SendProgramChange
+DrumVoice_Handler7_Code_Return3:
+	ret
+CmpNcpTtl_Dispatch2_Helper:
+	push	xiz
+	call	DrumVoice_Handler7_Data_3_Helper
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data_3_Helper:
+	ld	a, (0x390b:16)
+	bit	7, w
+	jr	z, DrumVoice_Handler7_Code_Skip
+	cp	a, 2:i3
+	jr	z, DrumVoice_Handler7_Code_Return4
+	inc	1, a
+	jr	DrumVoice_Handler7_Code_Join
+DrumVoice_Handler7_Code_Skip:
+	cp	a, 0:i3
+	jr	z, DrumVoice_Handler7_Code_Return4
+	dec	1, a
+DrumVoice_Handler7_Code_Join:
+	ld	(0x390b:16), a
+DrumVoice_Handler7_Code_Return4:
+	ret
+CmpNcpTtl_Dispatch2_Helper2:
+	push	xiz
+	call	DrumVoice_Handler7_Data_3_Helper2
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data_3_Helper2:
+	ld	a, (0x390b:16)
+	sll	a, 1
+	ld	xix, CmpNcp_ItemA_HandlerIndex
+	ld	hl, (xix+a)
+	call	DrumVoice_Handler7_Data_3_Helper5
+	ret
+CmpNcp_ItemA_HandlerIndex:
+	; (0x390B), stepped between 0 and 2 by DrumVoice_Handler7_Data_3_Helper -> the
+	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper2 dispatches.
+	; Reached through CmpNcpTtl_Dispatch2_Helper / _Helper2.
+	.short	0, 1, 2
+DrumVoice_Handler7_Data_3_Sub:
+	push	xiz
+	call	DrumVoice_Handler7_Data_3_Helper3
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data_3_Helper3:
+	ld	a, (0x390c:16)
+	bit	7, w
+	jr	z, DrumVoice_Handler7_Data_3_Helper3_Skip
+	cp	a, 1:i3
+	jr	z, DrumVoice_Handler7_Code_Return5
+	inc	1, a
+	jr	DrumVoice_Handler7_Code_Join2
+DrumVoice_Handler7_Data_3_Helper3_Skip:
+	cp	a, 0:i3
+	jr	z, DrumVoice_Handler7_Code_Return5
+	dec	1, a
+DrumVoice_Handler7_Code_Join2:
+	ld	(0x390c:16), a
+DrumVoice_Handler7_Code_Return5:
+	ret
+CmpNcpTtl_Dispatch2_Helper3:
+	push	xiz
+	call	DrumVoice_Handler7_Data_3_Helper4
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data_3_Helper4:
+	ld	a, (0x390c:16)
+	sll	a, 1
+	ld	xix, CmpNcp_ItemB_HandlerIndex
+	ld	hl, (xix+a)
+	call	DrumVoice_Handler7_Data_3_Helper5
+	ret
+CmpNcp_ItemB_HandlerIndex:
+	; (0x390C), stepped between 0 and 1 by DrumVoice_Handler7_Data_3_Helper3 -> the
+	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper4 dispatches.
+	; Reached through CmpNcpTtl_Dispatch2_Helper3.
+	.short	3, 4
+	push	xiz
+	call	DrumVoice_Handler7_Data_3_Helper5
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data_3_Helper5:
+	pushw	hl
+	ld	xhl, 0:i3
+	popw	hl
+	and	hl, 7
+	sll	hl, 2
+	add	xhl, CmpNcp_ItemHandlerTable
+	ld	xhl, (xhl)
+	call	(xhl)
+	ret
+CmpNcp_ItemHandlerTable:
+	; DrumVoice_Handler7_Data_3_Helper5 calls entry (HL & 7).  DrumVoice_Handler7_Data_3_Helper2
+	; and _Helper4 pass 0..4 from the two tables above; the wrapper just before
+	; DrumVoice_Handler7_Data_3_Helper5 passes its caller's HL.  5 and 6 are DrumVoice_NullHandler;
+	; an index of 7 would read the first four bytes of CmpNcp_ItemHandler0.  Each handler sets bits
+	; of (0xE31C) and stores its own word in (0xE31E): 0x0080, 0x0181, 0x0282, 0x8505, 0x0686.
+	.long	CmpNcp_ItemHandler0
+	.long	CmpNcp_ItemHandler1
+	.long	CmpNcp_ItemHandler2
+	.long	CmpNcp_ItemHandler3
+	.long	CmpNcp_ItemHandler4
+	.long	DrumVoice_NullHandler
+	.long	DrumVoice_NullHandler
+CmpNcp_ItemHandler0:
+	or	(0xe31c:16), 8
+	or	(0xe31c:16), 1
+	ldw	(0xe31e:16), 0x0080
+	calr	889
+	calr	DrumKit_PostMidiEvents
+	calr	TimeSig_DisplayStrings_Code_Sub
+	calr	AccPatch_CallParamLookup_Helper7
+	ret
+CmpNcp_ItemHandler1:
+	or	(0xe31c:16), 8
+	or	(0xe31c:16), 1
+	ldw	(0xe31e:16), 0x0181
+	calr	1010
+	calr	DrumKit_PostMidiEvents
+	calr	TimeSig_DisplayStrings_Code_Sub
+	ret
+CmpNcp_ItemHandler2:
+	or	(0xe31c:16), 8
+	or	(0xe31c:16), 1
+	ldw	(0xe31e:16), 0x0282
+	calr	1359
+	ret
+CmpNcp_ItemHandler3:
+	or	(0xe31c:16), 1
+	ldw	(0xe31e:16), 0x8505
+	calr	1573
+	ret
+CmpNcp_ItemHandler4:
+	or	(0xe31c:16), 8
+	or	(0xe31c:16), 1
+	ldw	(0xe31e:16), 0x0686
+	calr	1668
+	ret
+	push	xiz
+	call	DrumVoice_Handler7_Data_4
+	pop	xiz
+	ret
+DrumVoice_Handler7_Data_4:
+	cp	(PREVIOUS_TITLE:16), 189	; TT_CMMODE
+	jr	z, DrumVoice_Handler7_Code_Entry
+	and	(0x3431:16), 191
+	ld	xix, RHYTHM_PATTERN_BUF_A
+	add	xix, 16
+	ld	a, (xix)
+	and	(0x3437:16), 254
+	bit	0, a
+	jr	z, DrumVoice_Handler7_Code_Entry
+	or	(0x3437:16), 1
+DrumVoice_Handler7_Code_Entry:
+	and	(0xe31c:16), 222
+	ret
+	ret
+	ret
+	push	xiz
+	call	DrumVoice_Handler7_Code_Entry_Data
+	pop	xiz
+	ret
+DrumVoice_Handler7_Code_Entry_Data:
+	cp	(PREVIOUS_TITLE:16), 187	; TT_CMBEND
+	jr	z, DrumVoice_Handler7_Code_Entry_Data_Code_Entry
+	and	(0x3431:16), 191
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry:
+	cp	(ACTIVE_TITLE_PREVIOUS:16), 187	; TT_CMBEND
+	jr	z, DrumVoice_Handler7_Code_Entry_Data_Join
+DrumVoice_Handler7_Code_Entry_Data_Join:
+	and	(0xe31c:16), 254
+	ret
+	or	(0xe31c:16), 8
+	ld	a, (0xfdba:16)
+	and	a, 15
+	ld	w, a
+	cp	hl, 0:i3
+	jr	nz, DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Skip
+	inc	1, a
+	cp	a, 13
+	jr	c, DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Join
+	ld	a, 12:opc
+	jr	DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Join
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Skip:
+	dec	1, a
+	cp	a, 255
+	jr	nz, DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Join
+	ld	a, 0:opc
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Join:
+	ld	(0xfdba:16), a
+	cp	a, w
+	jr	z, DrumVoice_Handler7_Code_Return6
+	ld	w, 15:opc
+	ld	e, 145:opc
+	ld	d, 4:opc
+	call	SwbtWr_QueuePostEvent
+DrumVoice_Handler7_Code_Return6:
+	ret
+	ret
+	ld	(0x343a:16), 0
+	calr	DrumKit_SendProgramChange
+	ret
+DrumVoice_Handler6_Helper:
+	push	w
+	ld	l, (0xfc5a:16)
+	and	l, 255
+	ld	h, (0xfc5b:16)
+	and	h, 127
+	ld	a, 72:opc
+	ld	(0x905b:16), a
+	call	PartCtrl_WriteProgramChange
+	pop	w
+	bit	7, w
+	jr	nz, DrumVoice_Handler7_Code_Skip2
+	inc	1, l
+	cp	l, 14
+	jr	c, DrumVoice_Handler7_Code_Join3
+	ld	l, 13:opc
+	jr	DrumVoice_Handler7_Code_Join3
+DrumVoice_Handler7_Code_Skip2:
+	dec	1, l
+	cp	l, 255
+	jr	nz, DrumVoice_Handler7_Code_Join3
+	ld	l, 0:opc
+DrumVoice_Handler7_Code_Join3:
+	ld	xix, 0xff92
+	ld	h, (xix+l)
+	ld	a, 72:opc
+	ld	(0x905a:16), a
+	call	SndParam_ApplyProgramChange_Safe
+	and	l, 255
+	ld	(0xfc5a:16), l
+	and	h, 127
+	ld	(0xfc5b:16), h
+	ret
+RhythmVariation_Select_Helper:
+	ld	l, (0xfc5a:16)
+	and	l, 255
+	ld	h, (0xfc5b:16)
+	and	h, 127
+	sll	l, 1
+	sll	hl, 1
+	ld	xiy, RhythmROM_BankProgramLocators
+	ld	wa, (xiy+hl)
+	add	hl, 2
+	ld	xde, 0:i3
+	ld	de, (xiy+hl)
+	ld	w, a
+	and	xwa, 65280
+	sll	xwa, 8
+	ld	xix, 0x400000
+	add	xix, xwa
+	add	xix, xde
+	jr	DrumVoice_Handler7_Code_Join4
+DrumVoice_Handler7_Code_Join4:
+	ld	a, (xix+976)
+	ld	(0x3454:16), a
+	ret
+DrumVoice_Handler7_Helper2:
+	push	w
+	ld	l, (0xfc5a:16)
+	and	l, 255
+	ld	h, (0xfc5b:16)
+	and	h, 127
+	ld	a, 72:opc
+	ld	(0x905b:16), a
+	call	PartCtrl_WriteProgramChange
+	ld	a, h
+	pushw	hl
+	call	AccVoice_GetChannelCount_Direct
+	ld	(0x3391:16), l
+	popw	hl
+	pop	w
+	bit	7, w
+	jr	nz, DrumVoice_Handler7_Code_Skip3
+	inc	1, a
+	cp	a, (0x3391:16)
+	jr	ule, DrumVoice_Handler7_Code_Join5
+	ld	a, (0x3391:16)
+	jr	DrumVoice_Handler7_Code_Join5
+DrumVoice_Handler7_Code_Skip3:
+	dec	1, a
+	cp	a, 255
+	jr	nz, DrumVoice_Handler7_Code_Join5
+	ld	a, 0:opc
+DrumVoice_Handler7_Code_Join5:
+	ld	h, a
+	ld	xwa, 0xff92
+	ld	(xwa+l), h
+	ld	a, 72:opc
+	ld	(0x905a:16), a
+	call	SndParam_ApplyProgramChange_Safe
+	and	l, 255
+	ld	(0xfc5a:16), l
+	and	h, 127
+	ld	(0xfc5b:16), h
+	ret
+DrumVoice_Handler7_Helper_Helper:
+	ld	l, (0x3454:16)
+	and	l, 31
+	xor	h, h
+	sll	hl, 3
+	ld	xbc, TimeSig_DisplayStrings
+	add	xbc, 7
+	ld	w, (xbc+hl)
+	ld	l, (0x343c:16)
+	and	l, 31
+	xor	h, h
+	sll	hl, 3
+	ld	xbc, TimeSig_DisplayStrings
+	add	xbc, 7
+	ld	a, (xbc+hl)
+	cp	a, w
+	jr	nz, DrumVoice_Handler7_Code_Skip4
+	call	AccPatch_GetCurrentSlotAddr
+	ld	a, (0xfc5a:16)
+	and	a, 255
+	ld	(xiy+16), a
+	ld	a, (0xfc5b:16)
+	and	a, 127
+	ld	(xiy+17), a
+	ld	(GLOBAL_ERROR_CODE:16), 21
+	calr	DrumVoice_NotifyEE
+	jr	DrumVoice_Handler7_Code_Return7
+DrumVoice_Handler7_Code_Skip4:
+	ld	(GLOBAL_ERROR_CODE:16), 22
+	calr	DrumVoice_NotifyEE
+	ld	a, 8:opc
+	call	MIDI_SendSysExCmd
+DrumVoice_Handler7_Code_Return7:
+	ret
 DrumVoice_NotifyEE:
 	push xwa
 	push xhl
