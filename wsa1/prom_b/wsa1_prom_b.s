@@ -89594,40 +89594,40 @@ T_F42900:	jp sub_F7BEF4  ; -> prom_b 0x7BEF4   x2
 T_F42904:	jp sub_F7BDC0  ; -> prom_b 0x7BDC0
 T_F42908:	jp sub_F7BFEA  ; -> prom_b 0x7BFEA   x1
 T_F4290C:	jp sub_F7C0AF  ; -> prom_b 0x7C0AF   x1
-T_F42910:	jp sub_F7C0BB  ; -> prom_b 0x7C0BB   x1
-T_F42914:	jp sub_F7C0C6  ; -> prom_b 0x7C0C6   x1
-T_F42918:	jp sub_F7C0D6  ; -> prom_b 0x7C0D6   x1
-T_F4291C:	jp sub_F7C0E6  ; -> prom_b 0x7C0E6   x1
-T_F42920:	jp sub_F7C310  ; -> prom_b 0x7C310   x1
-T_F42924:	jp sub_F7C31B  ; -> prom_b 0x7C31B   x1
+T_F42910:	jp Quantize_SelectField1  ; -> prom_b 0x7C0BB   x1
+T_F42914:	jp Quantize_SelectField2  ; -> prom_b 0x7C0C6   x1
+T_F42918:	jp Quantize_SelectField3  ; -> prom_b 0x7C0D6   x1
+T_F4291C:	jp Quantize_SelectField4  ; -> prom_b 0x7C0E6   x1
+T_F42920:	jp Quantize_SelectField5  ; -> prom_b 0x7C310   x1
+T_F42924:	jp Quantize_SelectField6  ; -> prom_b 0x7C31B   x1
 T_F42928:	jp sub_F7C0F1  ; -> prom_b 0x7C0F1   x4
 T_F4292C:	jp sub_F7C17D  ; -> prom_b 0x7C17D   x2
 T_F42930:	jp sub_F7C326  ; -> prom_b 0x7C326   x2
 T_F42934:	jp sub_F7C13E  ; -> prom_b 0x7C13E
 T_F42938:	jp sub_F7AC9D  ; -> prom_b 0x7AC9D   x1
 T_F4293C:	jp sub_F7ACA6  ; -> prom_b 0x7ACA6   x1
-T_F42940:	jp sub_F7ACC5  ; -> prom_b 0x7ACC5   x1
-T_F42944:	jp sub_F7ACD0  ; -> prom_b 0x7ACD0   x1
-T_F42948:	jp sub_F7ACDB  ; -> prom_b 0x7ACDB   x1
+T_F42940:	jp TrackMerge_SelectField1  ; -> prom_b 0x7ACC5   x1
+T_F42944:	jp TrackMerge_SelectField2  ; -> prom_b 0x7ACD0   x1
+T_F42948:	jp TrackMerge_SelectField3  ; -> prom_b 0x7ACDB   x1
 T_F4294C:	jp sub_F7ACE6  ; -> prom_b 0x7ACE6   x1
 T_F42950:	jp sub_F7AD14  ; -> prom_b 0x7AD14   x1
 T_F42954:	jp sub_F7ADF5  ; -> prom_b 0x7ADF5   x2
 T_F42958:	jp sub_F7AE0C  ; -> prom_b 0x7AE0C   x2
 T_F4295C:	jp sub_F7B000  ; -> prom_b 0x7B000   x1
 T_F42960:	jp sub_F7B00E  ; -> prom_b 0x7B00E   x1
-T_F42964:	jp sub_F7B01A  ; -> prom_b 0x7B01A   x1
-T_F42968:	jp sub_F7B025  ; -> prom_b 0x7B025   x1
-T_F4296C:	jp sub_F7B035  ; -> prom_b 0x7B035   x1
+T_F42964:	jp MeasureDelete_SelectField1  ; -> prom_b 0x7B01A   x1
+T_F42968:	jp MeasureDelete_SelectField2  ; -> prom_b 0x7B025   x1
+T_F4296C:	jp MeasureDelete_SelectField3  ; -> prom_b 0x7B035   x1
 T_F42970:	jp sub_F7B045  ; -> prom_b 0x7B045   x4
 T_F42974:	jp sub_F7B08B  ; -> prom_b 0x7B08B   x2
 T_F42978:	jp sub_F7B162  ; -> prom_b 0x7B162   x2
 T_F4297C:	jp sub_F7B07A  ; -> prom_b 0x7B07A
 T_F42980:	jp sub_F7B22C  ; -> prom_b 0x7B22C   x1
 T_F42984:	jp sub_F7B23A  ; -> prom_b 0x7B23A   x1
-T_F42988:	jp sub_F7B246  ; -> prom_b 0x7B246   x1
-T_F4298C:	jp sub_F7B251  ; -> prom_b 0x7B251   x1
-T_F42990:	jp sub_F7B261  ; -> prom_b 0x7B261   x1
-T_F42994:	jp sub_F7B271  ; -> prom_b 0x7B271   x1
+T_F42988:	jp MeasureErase_SelectField1  ; -> prom_b 0x7B246   x1
+T_F4298C:	jp MeasureErase_SelectField2  ; -> prom_b 0x7B251   x1
+T_F42990:	jp MeasureErase_SelectField3  ; -> prom_b 0x7B261   x1
+T_F42994:	jp MeasureErase_SelectField4  ; -> prom_b 0x7B271   x1
 T_F42998:	jp sub_F7B27C  ; -> prom_b 0x7B27C   x4
 T_F4299C:	jp sub_F7B2CE  ; -> prom_b 0x7B2CE   x2
 T_F429A0:	jp sub_F7B3E0  ; -> prom_b 0x7B3E0   x2
@@ -89670,20 +89670,20 @@ T_F42A30:	jp sub_F7C555  ; -> prom_b 0x7C555   x2
 T_F42A34:	jp sub_F7C5C0  ; -> prom_b 0x7C5C0   x2
 T_F42A38:	jp sub_F7C606  ; -> prom_b 0x7C606   x1
 T_F42A3C:	jp sub_F7C666  ; -> prom_b 0x7C666   x1
-T_F42A40:	jp sub_F7C672  ; -> prom_b 0x7C672   x1
-T_F42A44:	jp sub_F7C682  ; -> prom_b 0x7C682   x1
-T_F42A48:	jp sub_F7C692  ; -> prom_b 0x7C692   x1
-T_F42A4C:	jp sub_F7C6A2  ; -> prom_b 0x7C6A2   x1
+T_F42A40:	jp Transp0se_SelectField1  ; -> prom_b 0x7C672   x1
+T_F42A44:	jp Transp0se_SelectField2  ; -> prom_b 0x7C682   x1
+T_F42A48:	jp Transp0se_SelectField3  ; -> prom_b 0x7C692   x1
+T_F42A4C:	jp Transp0se_SelectField4  ; -> prom_b 0x7C6A2   x1
 T_F42A50:	jp sub_F7C6B2  ; -> prom_b 0x7C6B2   x2
 T_F42A54:	jp sub_F7C6FB  ; -> prom_b 0x7C6FB   x2
 T_F42A58:	jp sub_F7C7F0  ; -> prom_b 0x7C7F0   x2
 T_F42A5C:	jp sub_F7C843  ; -> prom_b 0x7C843   x2
 T_F42A60:	jp sub_F7CAD2  ; -> prom_b 0x7CAD2   x1
 T_F42A64:	jp sub_F7CB12  ; -> prom_b 0x7CB12   x1
-T_F42A68:	jp sub_F7CB1E  ; -> prom_b 0x7CB1E   x1
-T_F42A6C:	jp sub_F7CB29  ; -> prom_b 0x7CB29   x1
-T_F42A70:	jp sub_F7CB34  ; -> prom_b 0x7CB34   x1
-T_F42A74:	jp sub_F7CB3F  ; -> prom_b 0x7CB3F   x1
+T_F42A68:	jp AdvanceDelay_SelectField1  ; -> prom_b 0x7CB1E   x1
+T_F42A6C:	jp AdvanceDelay_SelectField2  ; -> prom_b 0x7CB29   x1
+T_F42A70:	jp AdvanceDelay_SelectField3  ; -> prom_b 0x7CB34   x1
+T_F42A74:	jp AdvanceDelay_SelectField4  ; -> prom_b 0x7CB3F   x1
 T_F42A78:	jp sub_F7CB4A  ; -> prom_b 0x7CB4A   x2
 T_F42A7C:	jp sub_F7CB90  ; -> prom_b 0x7CB90   x2
 T_F42A80:	jp sub_F7CC7C  ; -> prom_b 0x7CC7C   x2
@@ -89707,8 +89707,8 @@ T_F42ABC:	jp sub_F7C5F6  ; -> prom_b 0x7C5F6   x1
 T_F42B70:	jp sub_F65C51  ; -> prom_b 0x65C51   x1
 T_F42B74:	jp sub_F6609C  ; -> prom_b 0x6609C
 T_F42B78:	jp T_F42B78_Nop  ; -> prom_b 0x660EC
-T_F42B7C:	jp sub_F66246  ; -> prom_b 0x66246   x2
-T_F42B80:	jp sub_F66251  ; -> prom_b 0x66251   x1
+T_F42B7C:	jp Medley_SelectField1  ; -> prom_b 0x66246   x2
+T_F42B80:	jp Medley_SelectField2  ; -> prom_b 0x66251   x1
 T_F42B84:	jp sub_F6625C  ; -> prom_b 0x6625C   x1
 T_F42B88:	jp sub_F66278  ; -> prom_b 0x66278   x1
 T_F42B8C:	jp sub_F65C5E  ; -> prom_b 0x65C5E   x1
@@ -143132,34 +143132,28 @@ sub_F66201_Return:
 	ret	; F66245  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66246
+; Medley_SelectField1
 ; Called from: T_F42B7C (x2)
 ; Touches: (0x0C0F) (0x1302)
-; Evidence: thunk slot T_F42B7C holds `jp 0x00F66246`, and 0xF66246 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into Medley_Field and requests a redraw (UI_RequestBits);
+;           Medley_Field is the Medley screen's field cell (named in wsa1_ram.inc).
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F66246:		; <- T_F42B7C
+Medley_SelectField1:		; <- T_F42B7C
 	ld	a, 1:opc	; F66246  ld A,0x01
 	ld	(Medley_Field:16), a	; F66248  ld (0x0c0f),A
 	ld	(DisplayListB_Stage+12:16), a	; F6624C  ld (0x1302),A
 	ret	; F66250  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66251
+; Medley_SelectField2
 ; Called from: T_F42B80 (x1)
 ; Touches: (0x0C0F) (0x1302)
-; Evidence: thunk slot T_F42B80 holds `jp 0x00F66251`, and 0xF66251 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into Medley_Field and requests a redraw (UI_RequestBits);
+;           Medley_Field is the Medley screen's field cell (named in wsa1_ram.inc).
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F66251:		; <- T_F42B80
+Medley_SelectField2:		; <- T_F42B80
 	ld	a, 2:opc	; F66251  ld A,0x02
 	ld	(Medley_Field:16), a	; F66253  ld (0x0c0f),A
 	ld	(DisplayListB_Stage+12:16), a	; F66257  ld (0x1302),A
@@ -163208,9 +163202,9 @@ sub_F6EC6A_Return:
 ;   unrelated.  notes/promb-2026-09-25/old_module_copy_f6f000.py checks all of
 ;   it.
 ; ==========================================================================
-OldCopy_sub_F7AA00:
+OldCopy_BStore_AppendBytes_Join3_Veneer:
 	jr	OldCopy_F7AA04	; F6F000  jr T,0xf6f004
-OldCopy_sub_F7AA02:
+OldCopy_BStore_AppendBytes_Join4_Veneer:
 	jr	OldCopy_F7AA1F	; F6F002  jr T,0xf6f01f
 OldCopy_F7AA04:
 	call	T_F409F8	; F6F004  call 0xf409f8
@@ -163527,15 +163521,15 @@ OldCopy_sub_F7ACA6:
 	call	T_F409E0	; F6F2C0  call 0xf409e0
 OldCopy_F7ACC4:
 	ret	; F6F2C4  ret
-OldCopy_sub_F7ACC5:
+OldCopy_TrackMerge_SelectField1:
 	ld	(3514:16), 1	; F6F2C5  ld (0x0dba),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F2CA  or (0x2075),0x09
 	ret	; F6F2CF  ret
-OldCopy_sub_F7ACD0:
+OldCopy_TrackMerge_SelectField2:
 	ld	(3514:16), 2	; F6F2D0  ld (0x0dba),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F2D5  or (0x2075),0x09
 	ret	; F6F2DA  ret
-OldCopy_sub_F7ACDB:
+OldCopy_TrackMerge_SelectField3:
 	ld	(3514:16), 3	; F6F2DB  ld (0x0dba),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F6F2E0  or (0x2075),0x09
 	ret	; F6F2E5  ret
@@ -183835,49 +183829,40 @@ sub_F7AB3F_Return6:
 	ret	; F7ACC4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7ACC5
+; TrackMerge_SelectField1
 ; Called from: T_F42940 (x1)
 ; Touches: (0x0DBA) (0x2075)
-; Evidence: thunk slot T_F42940 holds `jp 0x00F7ACC5`, and 0xF7ACC5 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into (0x0DBA) and requests a redraw (UI_RequestBits);
+;           (0x0DBA) is read by LcdKeyRow2/3/4_TrackMerge_StageZero, so it is the TrackMerge screen's field cell.
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7ACC5:		; <- T_F42940
+TrackMerge_SelectField1:		; <- T_F42940
 	ld	(3514:16), 1	; F7ACC5  ld (0x0dba),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7ACCA  or (0x2075),0x09
 	ret	; F7ACCF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7ACD0
+; TrackMerge_SelectField2
 ; Called from: T_F42944 (x1)
 ; Touches: (0x0DBA) (0x2075)
-; Evidence: thunk slot T_F42944 holds `jp 0x00F7ACD0`, and 0xF7ACD0 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into (0x0DBA) and requests a redraw (UI_RequestBits);
+;           (0x0DBA) is read by LcdKeyRow2/3/4_TrackMerge_StageZero, so it is the TrackMerge screen's field cell.
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7ACD0:		; <- T_F42944
+TrackMerge_SelectField2:		; <- T_F42944
 	ld	(3514:16), 2	; F7ACD0  ld (0x0dba),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7ACD5  or (0x2075),0x09
 	ret	; F7ACDA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7ACDB
+; TrackMerge_SelectField3
 ; Called from: T_F42948 (x1)
 ; Touches: (0x0DBA) (0x2075)
-; Evidence: thunk slot T_F42948 holds `jp 0x00F7ACDB`, and 0xF7ACDB is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 3 into (0x0DBA) and requests a redraw (UI_RequestBits);
+;           (0x0DBA) is read by LcdKeyRow2/3/4_TrackMerge_StageZero, so it is the TrackMerge screen's field cell.
+; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7ACDB:		; <- T_F42948
+TrackMerge_SelectField3:		; <- T_F42948
 	ld	(3514:16), 3	; F7ACDB  ld (0x0dba),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7ACE0  or (0x2075),0x09
 	ret	; F7ACE5  ret
@@ -184311,50 +184296,41 @@ sub_F7AFD8_Return:
 	ret	; F7B019  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B01A
+; MeasureDelete_SelectField1
 ; Called from: T_F42964 (x1)
 ; Touches: (0x0DD4) (0x2075)
-; Evidence: thunk slot T_F42964 holds `jp 0x00F7B01A`, and 0xF7B01A is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into (0x0DD4) and requests a redraw (UI_RequestBits);
+;           (0x0DD4) is read by LcdKeyRow2/3/4_MeasureDelete_StageZero, so it is the MeasureDelete screen's field cell.
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7B01A:		; <- T_F42964
+MeasureDelete_SelectField1:		; <- T_F42964
 	ld	(3540:16), 1	; F7B01A  ld (0x0dd4),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B01F  or (0x2075),0x09
 	ret	; F7B024  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B025
+; MeasureDelete_SelectField2
 ; Called from: T_F42968 (x1)
 ; Touches: (0x0DD4) (0x2075)
-; Evidence: thunk slot T_F42968 holds `jp 0x00F7B025`, and 0xF7B025 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into (0x0DD4) and requests a redraw (UI_RequestBits);
+;           (0x0DD4) is read by LcdKeyRow2/3/4_MeasureDelete_StageZero, so it is the MeasureDelete screen's field cell.
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7B025:		; <- T_F42968
+MeasureDelete_SelectField2:		; <- T_F42968
 	ld	(3540:16), 2	; F7B025  ld (0x0dd4),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B02A  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B02F  or (0x2075),0x01
 	ret	; F7B034  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B035
+; MeasureDelete_SelectField3
 ; Called from: T_F4296C (x1)
 ; Touches: (0x0DD4) (0x2075)
-; Evidence: thunk slot T_F4296C holds `jp 0x00F7B035`, and 0xF7B035 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 3 into (0x0DD4) and requests a redraw (UI_RequestBits);
+;           (0x0DD4) is read by LcdKeyRow2/3/4_MeasureDelete_StageZero, so it is the MeasureDelete screen's field cell.
+; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7B035:		; <- T_F4296C
+MeasureDelete_SelectField3:		; <- T_F4296C
 	ld	(3540:16), 3	; F7B035  ld (0x0dd4),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B03A  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B03F  or (0x2075),0x01
@@ -184657,67 +184633,55 @@ sub_F7B1D1_Return2:
 	ret	; F7B245  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B246
+; MeasureErase_SelectField1
 ; Called from: T_F42988 (x1)
 ; Touches: (0x0DBB) (0x2075)
-; Evidence: thunk slot T_F42988 holds `jp 0x00F7B246`, and 0xF7B246 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into (0x0DBB) and requests a redraw (UI_RequestBits);
+;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7B246:		; <- T_F42988
+MeasureErase_SelectField1:		; <- T_F42988
 	ld	(3515:16), 1	; F7B246  ld (0x0dbb),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B24B  or (0x2075),0x09
 	ret	; F7B250  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B251
+; MeasureErase_SelectField2
 ; Called from: T_F4298C (x1)
 ; Touches: (0x0DBB) (0x2075)
-; Evidence: thunk slot T_F4298C holds `jp 0x00F7B251`, and 0xF7B251 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into (0x0DBB) and requests a redraw (UI_RequestBits);
+;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7B251:		; <- T_F4298C
+MeasureErase_SelectField2:		; <- T_F4298C
 	ld	(3515:16), 2	; F7B251  ld (0x0dbb),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B256  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B25B  or (0x2075),0x01
 	ret	; F7B260  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B261
+; MeasureErase_SelectField3
 ; Called from: T_F42990 (x1)
 ; Touches: (0x0DBB) (0x2075)
-; Evidence: thunk slot T_F42990 holds `jp 0x00F7B261`, and 0xF7B261 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 3 into (0x0DBB) and requests a redraw (UI_RequestBits);
+;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
+; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7B261:		; <- T_F42990
+MeasureErase_SelectField3:		; <- T_F42990
 	ld	(3515:16), 3	; F7B261  ld (0x0dbb),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B266  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B26B  or (0x2075),0x01
 	ret	; F7B270  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B271
+; MeasureErase_SelectField4
 ; Called from: T_F42994 (x1)
 ; Touches: (0x0DBB) (0x2075)
-; Evidence: thunk slot T_F42994 holds `jp 0x00F7B271`, and 0xF7B271 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 4 into (0x0DBB) and requests a redraw (UI_RequestBits);
+;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
+; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7B271:		; <- T_F42994
+MeasureErase_SelectField4:		; <- T_F42994
 	ld	(3515:16), 4	; F7B271  ld (0x0dbb),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B276  or (0x2075),0x09
 	ret	; F7B27B  ret
@@ -186719,67 +186683,55 @@ sub_F7BF74_Return3:
 	ret	; F7C0BA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C0BB
+; Quantize_SelectField1
 ; Called from: T_F42910 (x1)
 ; Touches: (0x0DB9) (0x2075)
-; Evidence: thunk slot T_F42910 holds `jp 0x00F7C0BB`, and 0xF7C0BB is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into (0x0DB9) and requests a redraw (UI_RequestBits);
+;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C0BB:		; <- T_F42910
+Quantize_SelectField1:		; <- T_F42910
 	ld	(3513:16), 1	; F7C0BB  ld (0x0db9),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C0C0  or (0x2075),0x09
 	ret	; F7C0C5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C0C6
+; Quantize_SelectField2
 ; Called from: T_F42914 (x1)
 ; Touches: (0x0DB9) (0x2075)
-; Evidence: thunk slot T_F42914 holds `jp 0x00F7C0C6`, and 0xF7C0C6 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into (0x0DB9) and requests a redraw (UI_RequestBits);
+;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C0C6:		; <- T_F42914
+Quantize_SelectField2:		; <- T_F42914
 	ld	(3513:16), 2	; F7C0C6  ld (0x0db9),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C0CB  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C0D0  or (0x2075),0x01
 	ret	; F7C0D5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C0D6
+; Quantize_SelectField3
 ; Called from: T_F42918 (x1)
 ; Touches: (0x0DB9) (0x2075)
-; Evidence: thunk slot T_F42918 holds `jp 0x00F7C0D6`, and 0xF7C0D6 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 3 into (0x0DB9) and requests a redraw (UI_RequestBits);
+;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
+; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C0D6:		; <- T_F42918
+Quantize_SelectField3:		; <- T_F42918
 	ld	(3513:16), 3	; F7C0D6  ld (0x0db9),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C0DB  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C0E0  or (0x2075),0x01
 	ret	; F7C0E5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C0E6
+; Quantize_SelectField4
 ; Called from: T_F4291C (x1)
 ; Touches: (0x0DB9) (0x2075)
-; Evidence: thunk slot T_F4291C holds `jp 0x00F7C0E6`, and 0xF7C0E6 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 4 into (0x0DB9) and requests a redraw (UI_RequestBits);
+;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
+; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C0E6:		; <- T_F4291C
+Quantize_SelectField4:		; <- T_F4291C
 	ld	(3513:16), 4	; F7C0E6  ld (0x0db9),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C0EB  or (0x2075),0x09
 	ret	; F7C0F0  ret
@@ -187137,33 +187089,27 @@ sub_F7C30B:
 	ret	; F7C30F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C310
+; Quantize_SelectField5
 ; Called from: T_F42920 (x1)
 ; Touches: (0x0DB9) (0x2075)
-; Evidence: thunk slot T_F42920 holds `jp 0x00F7C310`, and 0xF7C310 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 5 into (0x0DB9) and requests a redraw (UI_RequestBits);
+;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
+; Unknown: what field 5 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C310:		; <- T_F42920
+Quantize_SelectField5:		; <- T_F42920
 	ld	(UI_RequestBits:16), 9	; F7C310  ld (0x2075),0x09
 	ld	(3513:16), 5	; F7C315  ld (0x0db9),0x05
 	ret	; F7C31A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C31B
+; Quantize_SelectField6
 ; Called from: T_F42924 (x1)
 ; Touches: (0x0DB9) (0x2075)
-; Evidence: thunk slot T_F42924 holds `jp 0x00F7C31B`, and 0xF7C31B is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 6 into (0x0DB9) and requests a redraw (UI_RequestBits);
+;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
+; Unknown: what field 6 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C31B:		; <- T_F42924
+Quantize_SelectField6:		; <- T_F42924
 	ld	(UI_RequestBits:16), 9	; F7C31B  ld (0x2075),0x09
 	ld	(3513:16), 6	; F7C320  ld (0x0db9),0x06
 	ret	; F7C325  ret
@@ -187720,17 +187666,14 @@ sub_F7C62D_Return:
 	ret	; F7C671  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C672
+; Transp0se_SelectField1
 ; Called from: T_F42A40 (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F42A40 holds `jp 0x00F7C672`, and 0xF7C672 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into (0x0DF6) and requests a redraw (UI_RequestBits);
+;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C672:		; <- T_F42A40
+Transp0se_SelectField1:		; <- T_F42A40
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C672  or (0x2075),0x01
 	ld	a, 1:opc	; F7C677  ld A,0x01
 	ld	(3574:16), a	; F7C679  ld (0x0df6),A
@@ -187738,17 +187681,14 @@ sub_F7C672:		; <- T_F42A40
 	ret	; F7C681  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C682
+; Transp0se_SelectField2
 ; Called from: T_F42A44 (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F42A44 holds `jp 0x00F7C682`, and 0xF7C682 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into (0x0DF6) and requests a redraw (UI_RequestBits);
+;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C682:		; <- T_F42A44
+Transp0se_SelectField2:		; <- T_F42A44
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C682  or (0x2075),0x01
 	ld	a, 2:opc	; F7C687  ld A,0x02
 	ld	(3574:16), a	; F7C689  ld (0x0df6),A
@@ -187756,17 +187696,14 @@ sub_F7C682:		; <- T_F42A44
 	ret	; F7C691  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C692
+; Transp0se_SelectField3
 ; Called from: T_F42A48 (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F42A48 holds `jp 0x00F7C692`, and 0xF7C692 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 3 into (0x0DF6) and requests a redraw (UI_RequestBits);
+;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
+; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C692:		; <- T_F42A48
+Transp0se_SelectField3:		; <- T_F42A48
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C692  or (0x2075),0x01
 	ld	a, 3:opc	; F7C697  ld A,0x03
 	ld	(3574:16), a	; F7C699  ld (0x0df6),A
@@ -187774,17 +187711,14 @@ sub_F7C692:		; <- T_F42A48
 	ret	; F7C6A1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C6A2
+; Transp0se_SelectField4
 ; Called from: T_F42A4C (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F42A4C holds `jp 0x00F7C6A2`, and 0xF7C6A2 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 4 into (0x0DF6) and requests a redraw (UI_RequestBits);
+;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
+; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7C6A2:		; <- T_F42A4C
+Transp0se_SelectField4:		; <- T_F42A4C
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C6A2  or (0x2075),0x01
 	ld	a, 4:opc	; F7C6A7  ld A,0x04
 	ld	(3574:16), a	; F7C6A9  ld (0x0df6),A
@@ -188654,68 +188588,56 @@ sub_F7CB12_Return:
 	ret	; F7CB1D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CB1E
+; AdvanceDelay_SelectField1
 ; Called from: T_F42A68 (x1)
 ; Touches: (0x0DE5) (0x12FC)
-; Evidence: thunk slot T_F42A68 holds `jp 0x00F7CB1E`, and 0xF7CB1E is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into AdvanceDelay_Field and requests a redraw (UI_RequestBits);
+;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7CB1E:		; <- T_F42A68
+AdvanceDelay_SelectField1:		; <- T_F42A68
 	ld	a, 1:opc	; F7CB1E  ld A,0x01
 	ld	(AdvanceDelay_Field:16), a	; F7CB20  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB24  ld (0x12fc),A
 	ret	; F7CB28  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CB29
+; AdvanceDelay_SelectField2
 ; Called from: T_F42A6C (x1)
 ; Touches: (0x0DE5) (0x12FC)
-; Evidence: thunk slot T_F42A6C holds `jp 0x00F7CB29`, and 0xF7CB29 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into AdvanceDelay_Field and requests a redraw (UI_RequestBits);
+;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7CB29:		; <- T_F42A6C
+AdvanceDelay_SelectField2:		; <- T_F42A6C
 	ld	a, 2:opc	; F7CB29  ld A,0x02
 	ld	(AdvanceDelay_Field:16), a	; F7CB2B  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB2F  ld (0x12fc),A
 	ret	; F7CB33  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CB34
+; AdvanceDelay_SelectField3
 ; Called from: T_F42A70 (x1)
 ; Touches: (0x0DE5) (0x12FC)
-; Evidence: thunk slot T_F42A70 holds `jp 0x00F7CB34`, and 0xF7CB34 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 3 into AdvanceDelay_Field and requests a redraw (UI_RequestBits);
+;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
+; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7CB34:		; <- T_F42A70
+AdvanceDelay_SelectField3:		; <- T_F42A70
 	ld	a, 3:opc	; F7CB34  ld A,0x03
 	ld	(AdvanceDelay_Field:16), a	; F7CB36  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB3A  ld (0x12fc),A
 	ret	; F7CB3E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CB3F
+; AdvanceDelay_SelectField4
 ; Called from: T_F42A74 (x1)
 ; Touches: (0x0DE5) (0x12FC)
-; Evidence: thunk slot T_F42A74 holds `jp 0x00F7CB3F`, and 0xF7CB3F is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 4 into AdvanceDelay_Field and requests a redraw (UI_RequestBits);
+;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
+; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F7CB3F:		; <- T_F42A74
+AdvanceDelay_SelectField4:		; <- T_F42A74
 	ld	a, 4:opc	; F7CB3F  ld A,0x04
 	ld	(AdvanceDelay_Field:16), a	; F7CB41  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB45  ld (0x12fc),A
