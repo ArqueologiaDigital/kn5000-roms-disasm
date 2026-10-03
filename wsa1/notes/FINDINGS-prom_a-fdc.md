@@ -186,6 +186,14 @@ is an upper bound (see the script's own caveat), so the claim made here is that
 unit 1 *is* this device, not that any particular register is touched by any
 particular operation.
 
+[Named in the source 2026-10-03 (`wsa1/include/wsa1_ram.inc`, `scripts/tools/name_wsa1_ram.py`): the
+request copy at `0x605A30` as `Fdc_ReqOp` / `Fdc_ReqUnit` / `Fdc_ReqHead` / `Fdc_ReqTrack` / `Fdc_ReqSector`
+/ `Fdc_ReqCount` / `Fdc_ReqBuffer` (the `0x605A3E` slot the PIO path walks is `Fdc_ReqBuffer+2`),
+`Fdc_ReqCopy` (`0x605A40`), `Fdc_TickCount`, `Fdc_ReentryGuard`, `Fdc_DmaCount`, `Fdc_ErrorCode`,
+`Fdc_CommandByte`, `Fdc_ResultBuf`, `Fdc_CurrentCylinder`, `Fdc_LastCylinderPlus1`,
+`Fdc_SectorsPerTrackPlus1` -- 178 operands in prom_a.  `(0x605A59)` and `(0x605AEC)`, written and never
+read, stay numbers.]
+
 ## 7. Errors
 
 `Fdc_SetError` (`0xFE5E84`) keeps the **first** code; every operation clears

@@ -143,3 +143,22 @@
 
 ; ---- wsa1/notes/FINDINGS-prom_b-message-line.md -- "2. 0x00000FE4 is one line of on-screen text: record 0xF3D38A draws 30 characters from it"
 	.equ MsgLine_Text,		0x0fe4	; the 30 characters (to 0x1001) of the bottom text line the panel draws (y = 180) -- record 0xF3D38A; MsgLine_Clear blanks exactly 30
+
+; ---- wsa1/notes/FINDINGS-prom_a-fdc.md -- "6. The API (the 16-byte request block); 7. Errors; with FINDINGS-dev7b-and-int5.md"
+	.equ Fdc_TickCount,		0x605a00	; 16-bit INTT1 tick counter; INTT1_Tick its only writer; the 500-tick timeouts -- prom_a_addr_census.py 0x605A00
+	.equ Fdc_ReentryGuard,		0x605a09	; 0xA5 while a request runs; a second entry returns error 0xFB -- Fdc_Request
+	.equ Fdc_DmaCount,		0x605a0e	; the count Dev7A_StartDma loads into DMAC0 -- Dev7A_StartDma
+	.equ Fdc_ErrorCode,		0x605a15	; the request's error code; Fdc_SetError keeps the first, every operation clears it -- Fdc_SetError
+	.equ Fdc_CommandByte,		0x605a18	; the uPD765 command byte Dev7A_StartDma's compare chain reads -- Dev7A_StartDma
+	.equ Fdc_ReqOp,			0x605a30	; the request block Fdc_Request copies here: +0 word operation 0..11 -- Fdc_Request
+	.equ Fdc_ReqUnit,		0x605a32	; request +2: unit 0 or 1, which selects the back end -- every operation begins cp (0x605A32),1
+	.equ Fdc_ReqHead,		0x605a34	; request +4: head -- Fdc_Request
+	.equ Fdc_ReqTrack,		0x605a36	; request +6: track, or the media descriptor byte for operation 0 -- Fdc_Request
+	.equ Fdc_ReqSector,		0x605a38	; request +8: first sector -- Fdc_Request
+	.equ Fdc_ReqCount,		0x605a3a	; request +0x0A: sector count -- Fdc_Request
+	.equ Fdc_ReqBuffer,		0x605a3c	; request +0x0C: buffer address, the pointer the DMA path walks -- Fdc_Request; Dev7A_Dma_*
+	.equ Fdc_ReqCopy,		0x605a40	; the second copy of the request block (why two: not established) -- Fdc_Request
+	.equ Fdc_ResultBuf,		0x605a50	; INT5 / the drain store result bytes at +1.., and INT5 zeroes +0 on exit -- INT5_Dev7B_Receive; Fdc_WaitReadyForCommandByte
+	.equ Fdc_CurrentCylinder,	0x605aee	; the cylinder the head is on; SEEK is skipped when it already matches -- Fdc_Op2_SeekToCylinder
+	.equ Fdc_LastCylinderPlus1,	0x605af1	; last cylinder + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia
+	.equ Fdc_SectorsPerTrackPlus1,	0x605af7	; sectors per track + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia

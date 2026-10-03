@@ -189,6 +189,26 @@ GROUPS = [
     ("wsa1/notes/FINDINGS-prom_b-message-line.md", "2. 0x00000FE4 is one line of on-screen text: record 0xF3D38A draws 30 characters from it", dict(
         [(0x0FE4, ("MsgLine_Text", "the 30 characters (to 0x1001) of the bottom text line the panel draws (y = 180)", "record 0xF3D38A; MsgLine_Clear blanks exactly 30"))] +
         [(0x0FE4 + k, ("MsgLine_Text+%d" % k, "", "")) for k in range(1, 30)])),
+    ("wsa1/notes/FINDINGS-prom_a-fdc.md", "6. The API (the 16-byte request block); 7. Errors; with FINDINGS-dev7b-and-int5.md", dict([
+        (0x605A00, ("Fdc_TickCount", "16-bit INTT1 tick counter; INTT1_Tick its only writer; the 500-tick timeouts", "prom_a_addr_census.py 0x605A00")),
+        (0x605A09, ("Fdc_ReentryGuard", "0xA5 while a request runs; a second entry returns error 0xFB", "Fdc_Request")),
+        (0x605A0E, ("Fdc_DmaCount", "the count Dev7A_StartDma loads into DMAC0", "Dev7A_StartDma")),
+        (0x605A15, ("Fdc_ErrorCode", "the request's error code; Fdc_SetError keeps the first, every operation clears it", "Fdc_SetError")),
+        (0x605A18, ("Fdc_CommandByte", "the uPD765 command byte Dev7A_StartDma's compare chain reads", "Dev7A_StartDma")),
+        (0x605A30, ("Fdc_ReqOp", "the request block Fdc_Request copies here: +0 word operation 0..11", "Fdc_Request")),
+        (0x605A32, ("Fdc_ReqUnit", "request +2: unit 0 or 1, which selects the back end", "every operation begins cp (0x605A32),1")),
+        (0x605A34, ("Fdc_ReqHead", "request +4: head", "Fdc_Request")),
+        (0x605A36, ("Fdc_ReqTrack", "request +6: track, or the media descriptor byte for operation 0", "Fdc_Request")),
+        (0x605A38, ("Fdc_ReqSector", "request +8: first sector", "Fdc_Request")),
+        (0x605A3A, ("Fdc_ReqCount", "request +0x0A: sector count", "Fdc_Request")),
+        (0x605A3C, ("Fdc_ReqBuffer", "request +0x0C: buffer address, the pointer the DMA path walks", "Fdc_Request; Dev7A_Dma_*")),
+        (0x605A3E, ("Fdc_ReqBuffer+2", "", "")),
+        (0x605A40, ("Fdc_ReqCopy", "the second copy of the request block (why two: not established)", "Fdc_Request")),
+        (0x605A50, ("Fdc_ResultBuf", "INT5 / the drain store result bytes at +1.., and INT5 zeroes +0 on exit", "INT5_Dev7B_Receive; Fdc_WaitReadyForCommandByte")),
+        (0x605AEE, ("Fdc_CurrentCylinder", "the cylinder the head is on; SEEK is skipped when it already matches", "Fdc_Op2_SeekToCylinder")),
+        (0x605AF1, ("Fdc_LastCylinderPlus1", "last cylinder + 1, derived from the geometry", "Fdc_Op0_ResetAndIdentifyMedia")),
+        (0x605AF7, ("Fdc_SectorsPerTrackPlus1", "sectors per track + 1, derived from the geometry", "Fdc_Op0_ResetAndIdentifyMedia")),
+    ] + [(0x605A50 + k, ("Fdc_ResultBuf+%d" % k, "", "")) for k in range(1, 8)])),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')

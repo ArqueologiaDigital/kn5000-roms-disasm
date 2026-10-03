@@ -7646,7 +7646,7 @@ INTT1_Tick:
 	xor XHL,XHL                                   ; F82D0D  eb d3
 	inc 1,XHL                                     ; F82D0F  eb 61
 	m_add_mr ML8, 0x80, r3                        ; F82D11  e0 80 8b
-	incw 0x01, (0x605a00:24)                   ; F82D14  d2 00 5a 60 61
+	incw 0x01, (Fdc_TickCount:24)                   ; F82D14  d2 00 5a 60 61
 	push SR                                       ; F82D19  02
 	ei 0x06                                       ; F82D1A  06 06
 	ld_sd8b a, 0x9e                               ; F82D1C  c0 9e 21
@@ -162554,10 +162554,10 @@ Dev7E_SpinDelay:
 ; ---------------------------------------------------------------------
 Dev7E_WaitNotBusy:
 	push XIZ                                             ; FE4D1F  3e
-	ld iz, (0x605a00:24)                                ; FE4D20  d2 00 5a 60 26
+	ld iz, (Fdc_TickCount:24)                                ; FE4D20  d2 00 5a 60 26
 	ldw qiz, 0x80                                        ; FE4D25  d7 fa 03 80 00
 .LFE4D2A:
-	ld bc, (0x605a00:24)                                ; FE4D2A  d2 00 5a 60 21
+	ld bc, (Fdc_TickCount:24)                                ; FE4D2A  d2 00 5a 60 21
 	ld WA,IZ                                             ; FE4D2F  de 88
 	sub BC,WA                                            ; FE4D31  d8 a1
 	cp BC,0x01f4                                         ; FE4D33  d9 cf f4 01
@@ -163691,7 +163691,7 @@ Dev7B_WriteData:
 ; ---------------------------------------------------------------------
 Fdc_WaitControllerIdle:
 	push XIZ                                      ; FE54EC  3e
-	ld iz, (0x605a00:24)                         ; FE54ED  d2 00 5a 60 26
+	ld iz, (Fdc_TickCount:24)                         ; FE54ED  d2 00 5a 60 26
 	ldw qiz, 0x80                                 ; FE54F2  d7 fa 03 80 00
 .LFE54F7:
 	calr Dev7B_ReadStatus                                   ; FE54F7  1e bc ff
@@ -163702,7 +163702,7 @@ Fdc_WaitControllerIdle:
 	jr nz, .LFE5509                               ; FE5504  6e 03
 	ld QIZ,0                                      ; FE5506  d7 fa a8
 .LFE5509:
-	ld wa, (0x605a00:24)                         ; FE5509  d2 00 5a 60 20
+	ld wa, (Fdc_TickCount:24)                         ; FE5509  d2 00 5a 60 20
 	sub WA,IZ                                     ; FE550E  de a0
 	cp WA,0x01f4                                  ; FE5510  d8 cf f4 01
 	jr ule, .LFE551D                              ; FE5514  63 07
@@ -163736,7 +163736,7 @@ Fdc_WaitControllerIdle:
 ; ---------------------------------------------------------------------
 Fdc_WaitRqmAndCommandBusy:
 	push XIZ                                      ; FE5533  3e
-	ld iz, (0x605a00:24)                         ; FE5534  d2 00 5a 60 26
+	ld iz, (Fdc_TickCount:24)                         ; FE5534  d2 00 5a 60 26
 	ldw qiz, 0x80                                 ; FE5539  d7 fa 03 80 00
 .LFE553E:
 	calr Dev7B_ReadStatus                                   ; FE553E  1e 75 ff
@@ -163745,7 +163745,7 @@ Fdc_WaitRqmAndCommandBusy:
 	jr nz, .LFE554C                               ; FE5547  6e 03
 	ld QIZ,0                                      ; FE5549  d7 fa a8
 .LFE554C:
-	ld wa, (0x605a00:24)                         ; FE554C  d2 00 5a 60 20
+	ld wa, (Fdc_TickCount:24)                         ; FE554C  d2 00 5a 60 20
 	sub WA,IZ                                     ; FE5551  de a0
 	cp WA,0x01f4                                  ; FE5553  d8 cf f4 01
 	jr ule, .LFE5560                              ; FE5557  63 07
@@ -163788,7 +163788,7 @@ Fdc_PulseControlReset:
 	pushw 0x02                                    ; FE557C  0b 02 00
 	calr Fdc_DelayTicks                                   ; FE557F  1e 71 09
 	inc 4,XSP                                     ; FE5582  ef 64
-	ld (0x605aee:24), 0xff                      ; FE5584  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE5584  f2 ee 5a 60 00 ff
 	ret                                           ; FE558A  0e
 
 ; ---------------------------------------------------------------------
@@ -163818,7 +163818,7 @@ Fdc_PulseControlReset:
 ; ---------------------------------------------------------------------
 Fdc_ResetAndIdentifyMedia:
 	push XIZ                                      ; FE558B  3e
-	m_cp_mi16 MW24, 0x605a32, 0x0001              ; FE558C  d2 32 5a 60 3f 01 00
+	m_cp_mi16 MW24, Fdc_ReqUnit, 0x0001              ; FE558C  d2 32 5a 60 3f 01 00
 	jr nz, .LFE559B                               ; FE5593  6e 06
 	calr Unit1_Op0_SoftResetAndSetFeatures                                   ; FE5595  1e 51 fb
 	jrl .LFE56D5                                  ; FE5598  78 3a 01
@@ -163830,7 +163830,7 @@ Fdc_ResetAndIdentifyMedia:
 	calr Fdc_RequestIsOp0WithCountFFFF                                   ; FE55A7  1e be 08
 	cp HL,0xffff                                  ; FE55AA  db cf ff ff
 	jr z, .LFE55B6                                ; FE55AE  66 06
-	ld (0x605aee:24), 0xff                      ; FE55B0  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE55B0  f2 ee 5a 60 00 ff
 .LFE55B6:
 	m_cp_mi8 MB24, 0x605a12, 0xff                 ; FE55B6  c2 12 5a 60 3f ff
 	jrl z, .LFE56D5                               ; FE55BC  76 16 01
@@ -163848,7 +163848,7 @@ Fdc_ResetAndIdentifyMedia:
 	jr z, .LFE564A                                ; FE55E3  66 65
 	calr Fdc_ClearError                                   ; FE55E5  1e d0 08
 	calr .LFE56D7                                 ; FE55E8  1e ec 00
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE55EB  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE55EB  c2 15 5a 60 3f 00
 	jrl nz, .LFE56CF                              ; FE55F1  7e db 00
 .LFE55F4:
 	calr Dev7B_ReadStatus                                   ; FE55F4  1e bf fe
@@ -163866,7 +163866,7 @@ Fdc_ResetAndIdentifyMedia:
 	calr Dev7B_WriteData                                   ; FE5612  1e ce fe
 	inc 2,XSP                                     ; FE5615  ef 62
 .LFE5617:
-	lda xiz, (0x605a50:24)                        ; FE5617  f2 50 5a 60 36
+	lda xiz, (Fdc_ResultBuf:24)                        ; FE5617  f2 50 5a 60 36
 	inc 1,XIZ                                     ; FE561C  ee 61
 .LFE561E:
 	calr Dev7B_WaitStatus_8x_Cx                                   ; FE561E  1e d2 03
@@ -163880,7 +163880,7 @@ Fdc_ResetAndIdentifyMedia:
 	bit 0x06,L                                    ; FE5632  cf 33 06
 	jr nz, .LFE561E                               ; FE5635  6e e7
 	calr Fdc_ClassifyResultStatus                                   ; FE5637  1e 24 05
-	m_cp_mi8 MB24, 0x605a51, 0x80                 ; FE563A  c2 51 5a 60 3f 80
+	m_cp_mi8 MB24, Fdc_ResultBuf+1, 0x80                 ; FE563A  c2 51 5a 60 3f 80
 	jr nz, .LFE55F4                               ; FE5640  6e b2
 	pushw 0x13                                    ; FE5642  0b 13 00
 	calr Fdc_IssueCommand                                   ; FE5645  1e c2 05
@@ -163889,7 +163889,7 @@ Fdc_ResetAndIdentifyMedia:
 	pushw 0x03                                    ; FE564A  0b 03 00
 	calr Fdc_IssueCommand                                   ; FE564D  1e ba 05
 	inc 2,XSP                                     ; FE5650  ef 62
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5652  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5652  c2 15 5a 60 3f 00
 	jr nz, .LFE56CF                               ; FE5658  6e 75
 	ld a, (0x605a5b:24)                          ; FE565A  c2 5b 5a 60 21
 	and A,0x0f                                    ; FE565F  c9 cc 0f
@@ -163924,7 +163924,7 @@ Fdc_ResetAndIdentifyMedia:
 	calr Dev7B_WriteControl_Shadowed                                   ; FE56BC  1e 0c fe
 	inc 2,XSP                                     ; FE56BF  ef 62
 	calr Fdc_Op6_PortA3_Off                                   ; FE56C1  1e 2b 0f
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE56C4  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE56C4  c2 15 5a 60 3f 00
 	jr nz, .LFE56CF                               ; FE56CA  6e 03
 	calr Fdc_Op1_Recalibrate                                   ; FE56CC  1e 75 08
 .LFE56CF:
@@ -163948,7 +163948,7 @@ Fdc_ResetAndIdentifyMedia:
 ; ---------------------------------------------------------------------
 Fdc_Op10_TestControllerPresent:
 .LFE56D7:
-	m_cp_mi16 MW24, 0x605a32, 0x0001              ; FE56D7  d2 32 5a 60 3f 01 00
+	m_cp_mi16 MW24, Fdc_ReqUnit, 0x0001              ; FE56D7  d2 32 5a 60 3f 01 00
 	jr nz, .LFE56F5                               ; FE56DE  6e 15
 	calr Dev7E_ReadStatus                                   ; FE56E0  1e 1e f6
 	cp HL,0x00ff                                  ; FE56E3  db cf ff 00
@@ -163990,7 +163990,7 @@ Fdc_Op10_TestControllerPresent:
 ; Unknown:  why geometry 4 admits sector 0xFF.
 ; ---------------------------------------------------------------------
 Fdc_ValidateRequest:
-	lda xwa, (0x605a30:24)                        ; FE5716  f2 30 5a 60 30
+	lda xwa, (Fdc_ReqOp:24)                        ; FE5716  f2 30 5a 60 30
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                ; FE571B  98 02 3f 01 00
 	jr z, .LFE5780                                ; FE5720  66 5e
 	ld (0x605a1a:24), 0x00                      ; FE5722  f2 1a 5a 60 00 00
@@ -164007,8 +164007,8 @@ Fdc_ValidateRequest:
 	jrl .LFE57F9                                  ; FE5749  78 ad 00
 	calr .LFE5936                                 ; FE574C  1e e7 01
 .LFE574F:
-	lda xde, (0x605a18:24)                        ; FE574F  f2 18 5a 60 32
-	lda xbc, (0x605a30:24)                        ; FE5754  f2 30 5a 60 31
+	lda xde, (Fdc_CommandByte:24)                        ; FE574F  f2 18 5a 60 32
+	lda xbc, (Fdc_ReqOp:24)                        ; FE5754  f2 30 5a 60 31
 	ld WA,(XBC+0x02)                              ; FE5759  99 02 20
 	ld (XDE+0x02),A                               ; FE575C  ba 02 41
 	cp a, 0x01:i3                                   ; FE575F  c9 d9
@@ -164037,7 +164037,7 @@ Fdc_ValidateRequest:
 	ld (XDE+0x03),A                               ; FE578B  ba 03 41
 	ld (XDE+0x0e),A                               ; FE578E  ba 0e 41
 	extz WA                                       ; FE5791  d8 12
-	m_cp_rm MW24, 0x605af1, r0                    ; FE5793  d2 f1 5a 60 f0
+	m_cp_rm MW24, Fdc_LastCylinderPlus1, r0                    ; FE5793  d2 f1 5a 60 f0
 	jr nc, .LFE57ED                               ; FE5798  6f 53
 	m_cp_mi16 MWI+r1, 0, 0x0002                   ; FE579A  91 3f 02 00
 	jr z, .LFE57F6                                ; FE579E  66 56
@@ -164084,7 +164084,7 @@ Fdc_ValidateRequest:
 .LFE57F6:
 	calr .LFE5914                                 ; FE57F6  1e 1b 01
 .LFE57F9:
-	ld l, (0x605a15:24)                          ; FE57F9  c2 15 5a 60 27
+	ld l, (Fdc_ErrorCode:24)                          ; FE57F9  c2 15 5a 60 27
 	ret                                           ; FE57FE  0e
 
 ; ---------------------------------------------------------------------
@@ -164115,12 +164115,12 @@ Fdc_ValidateRequest:
 Fdc_SelectFormatParameters:
 .LFE57FF:
 	pushw iz                                      ; FE57FF  2e
-	ld wa, (0x605a36:24)                         ; FE5800  d2 36 5a 60 20
+	ld wa, (Fdc_ReqTrack:24)                         ; FE5800  d2 36 5a 60 20
 	ld (0x605a5b:24), a                          ; FE5805  f2 5b 5a 60 41
 	and A,0x0f                                    ; FE580A  c9 cc 0f
 	ldfr_berp a, 0xf8                               ; FE580D  c7 f8 99   ld IZL,A
 	extz IZ                                       ; FE5810  de 12
-	lda xhl, (0x605a18:24)                        ; FE5812  f2 18 5a 60 33
+	lda xhl, (Fdc_CommandByte:24)                        ; FE5812  f2 18 5a 60 33
 	lda xwa, (xhl+0x06)                           ; FE5817  bb 06 30
 	lda xbc, (xhl+0x07)                           ; FE581A  bb 07 31
 	lda xde, (xhl+0x08)                           ; FE581D  bb 08 32
@@ -164145,9 +164145,9 @@ Fdc_SelectFormatParameters:
 	ld (XDE),0x1b                                 ; FE584A  b2 00 1b
 	ld (XIX),0x54                                 ; FE584D  b4 00 54
 	ldw (0x605aef:24), 0x4f                      ; FE5850  f2 ef 5a 60 02 4f 00
-	ldw (0x605af1:24), 0x50                      ; FE5857  f2 f1 5a 60 02 50 00
+	ldw (Fdc_LastCylinderPlus1:24), 0x50                      ; FE5857  f2 f1 5a 60 02 50 00
 	ldw (0x605af5:24), 0x09                      ; FE585E  f2 f5 5a 60 02 09 00
-	ldw (0x605af7:24), 0x0a                      ; FE5865  f2 f7 5a 60 02 0a 00
+	ldw (Fdc_SectorsPerTrackPlus1:24), 0x0a                      ; FE5865  f2 f7 5a 60 02 0a 00
 	jr .LFE58D7                                   ; FE586C  68 69
 .LFE586E:
 	ld (XWA),0x03                                 ; FE586E  b0 00 03
@@ -164157,9 +164157,9 @@ Fdc_SelectFormatParameters:
 	ld (XDE),0x53                                 ; FE587A  b2 00 53
 	ld (XIX),0x74                                 ; FE587D  b4 00 74
 	ldw (0x605aef:24), 0x4c                      ; FE5880  f2 ef 5a 60 02 4c 00
-	ldw (0x605af1:24), 0x4d                      ; FE5887  f2 f1 5a 60 02 4d 00
+	ldw (Fdc_LastCylinderPlus1:24), 0x4d                      ; FE5887  f2 f1 5a 60 02 4d 00
 	ldw (0x605af5:24), 0x08                      ; FE588E  f2 f5 5a 60 02 08 00
-	ldw (0x605af7:24), 0x09                      ; FE5895  f2 f7 5a 60 02 09 00
+	ldw (Fdc_SectorsPerTrackPlus1:24), 0x09                      ; FE5895  f2 f7 5a 60 02 09 00
 	jr .LFE58D7                                   ; FE589C  68 39
 .LFE589E:
 	ld (XWA),0x02                                 ; FE589E  b0 00 02
@@ -164169,16 +164169,16 @@ Fdc_SelectFormatParameters:
 	ld (XDE),0x1b                                 ; FE58AB  b2 00 1b
 	ld (XIX),0x6c                                 ; FE58AE  b4 00 6c
 	ldw (0x605aef:24), 0x4f                      ; FE58B1  f2 ef 5a 60 02 4f 00
-	ldw (0x605af1:24), 0x50                      ; FE58B8  f2 f1 5a 60 02 50 00
+	ldw (Fdc_LastCylinderPlus1:24), 0x50                      ; FE58B8  f2 f1 5a 60 02 50 00
 	ldw (0x605af5:24), 0x12                      ; FE58BF  f2 f5 5a 60 02 12 00
-	ldw (0x605af7:24), 0x13                      ; FE58C6  f2 f7 5a 60 02 13 00
+	ldw (Fdc_SectorsPerTrackPlus1:24), 0x13                      ; FE58C6  f2 f7 5a 60 02 13 00
 	jr .LFE58D7                                   ; FE58CD  68 08
 .LFE58CF:
 	pushw 0xfe                                    ; FE58CF  0b fe 00
 	calr Fdc_SetError                                   ; FE58D2  1e af 05
 	inc 2,XSP                                     ; FE58D5  ef 62
 .LFE58D7:
-	lda xbc, (0x605a18:24)                        ; FE58D7  f2 18 5a 60 31
+	lda xbc, (Fdc_CommandByte:24)                        ; FE58D7  f2 18 5a 60 31
 	ld a, (0x605a5b:24)                          ; FE58DC  c2 5b 5a 60 21
 	srl a, 0x04                                   ; FE58E1  c9 ef 04
 	and A,0x0f                                    ; FE58E4  c9 cc 0f
@@ -164211,8 +164211,8 @@ Fdc_SelectFormatParameters:
 ; ---------------------------------------------------------------------
 Fdc_SetHeadFromRequest:
 .LFE5914:
-	lda xbc, (0x605a18:24)                        ; FE5914  f2 18 5a 60 31
-	ld wa, (0x605a34:24)                         ; FE5919  d2 34 5a 60 20
+	lda xbc, (Fdc_CommandByte:24)                        ; FE5914  f2 18 5a 60 31
+	ld wa, (Fdc_ReqHead:24)                         ; FE5919  d2 34 5a 60 20
 	ld (XBC+0x04),A                               ; FE591E  b9 04 41
 	ld (XBC+0x01),A                               ; FE5921  b9 01 41
 	cp a, 0x00:i3                                   ; FE5924  c9 d8
@@ -164254,7 +164254,7 @@ Fdc_ValidateHead_Nop:
 ; ---------------------------------------------------------------------
 Fdc_ValidateHead:
 .LFE5936:
-	ld wa, (0x605a34:24)                         ; FE5936  d2 34 5a 60 20
+	ld wa, (Fdc_ReqHead:24)                         ; FE5936  d2 34 5a 60 20
 	cp wa, 0x00:i3                                  ; FE593B  d8 d8
 	jr z, .LFE594B                                ; FE593D  66 0c
 	cp wa, 0x01:i3                                  ; FE593F  d8 d9
@@ -164411,9 +164411,9 @@ uDMA0_ArmOnINT7:
 ; Unknown:  who calls this; what sets (0x605A18) and (0x605A0E).
 ; ---------------------------------------------------------------------
 Dev7A_StartDma:
-	ld bc, (0x605a0e:24)                         ; FE596A  d2 0e 5a 60 21   the byte count
+	ld bc, (Fdc_DmaCount:24)                         ; FE596A  d2 0e 5a 60 21   the byte count
 	m_ldc_cr_reg RW+r1, CR_DMAC0                  ; FE596F  d9 2e 20
-	ld a, (0x605a18:24)                          ; FE5972  c2 18 5a 60 21   the command code
+	ld a, (Fdc_CommandByte:24)                          ; FE5972  c2 18 5a 60 21   the command code
 	extz WA                                       ; FE5977  d8 12
 	cp WA,0x004d                                  ; FE5979  d8 cf 4d 00
 	jr z, Dev7A_StartDma__write                   ; FE597D  66 38
@@ -164458,7 +164458,7 @@ Dev7A_StartDma__ret:
 Dev7A_Dma_DeviceToRam:
 	ld XHL,0x007a0000                             ; FE59BB  43 00 00 7a 00
 	m_ldc_cr_reg RL+r3, CR_DMAS0                  ; FE59C0  eb 2e 00   source = the data port, FIXED
-	ld xhl, (0x605a3c:24)                        ; FE59C3  e2 3c 5a 60 23
+	ld xhl, (Fdc_ReqBuffer:24)                        ; FE59C3  e2 3c 5a 60 23
 	m_ldc_cr_reg RL+r3, CR_DMAD0                  ; FE59C8  eb 2e 10   destination = RAM, walking
 	ld a, 0x00:opc                                   ; FE59CB  21 00
 	m_ldc_cr_reg RB+r1, CR_DMAM0                  ; FE59CD  c9 2e 22   mode 0x00 = byte, DST++
@@ -164476,7 +164476,7 @@ Dev7A_Dma_DeviceToRam:
 ;          the two control registers exchanged.
 ; ---------------------------------------------------------------------
 Dev7A_Dma_RamToDevice:
-	ld xhl, (0x605a3c:24)                        ; FE59D2  e2 3c 5a 60 23
+	ld xhl, (Fdc_ReqBuffer:24)                        ; FE59D2  e2 3c 5a 60 23
 	m_ldc_cr_reg RL+r3, CR_DMAS0                  ; FE59D7  eb 2e 00   source = RAM, walking
 	ld XHL,0x007a0000                             ; FE59DA  43 00 00 7a 00
 	m_ldc_cr_reg RL+r3, CR_DMAD0                  ; FE59DF  eb 2e 10   destination = the data port, FIXED
@@ -164491,7 +164491,7 @@ Dev7A_Dma_RamToDevice:
 ; Evidence: the same two instructions Dev7A_StartDma opens with, on their own.
 ; ---------------------------------------------------------------------
 uDMA0_SetCount:
-	ld bc, (0x605a0e:24)                         ; FE59EA  d2 0e 5a 60 21
+	ld bc, (Fdc_DmaCount:24)                         ; FE59EA  d2 0e 5a 60 21
 	m_ldc_cr_reg RW+r1, CR_DMAC0                  ; FE59EF  d9 2e 20
 	ret                                           ; FE59F2  0e
 
@@ -164521,7 +164521,7 @@ uDMA0_SetCount:
 ; ---------------------------------------------------------------------
 Dev7B_WaitStatus_8x_Cx:
 	push XIZ                                      ; FE59F3  3e
-	ld iz, (0x605a00:24)                         ; FE59F4  d2 00 5a 60 26   the tick at entry
+	ld iz, (Fdc_TickCount:24)                         ; FE59F4  d2 00 5a 60 26   the tick at entry
 	ldw qiz, 0x80                                 ; FE59F9  d7 fa 03 80 00   state = waiting
 Dev7B_WaitStatus_8x_Cx__poll:
 	calr Dev7B_ReadStatus                         ; FE59FE  1e b5 fa
@@ -164534,7 +164534,7 @@ Dev7B_WaitStatus_8x_Cx__poll:
 	jr nz, Dev7B_WaitStatus_8x_Cx__timecheck      ; FE5A12  6e 03
 	ld QIZ,0                                      ; FE5A14  d7 fa a8   state = ready
 Dev7B_WaitStatus_8x_Cx__timecheck:
-	ld wa, (0x605a00:24)                         ; FE5A17  d2 00 5a 60 20
+	ld wa, (Fdc_TickCount:24)                         ; FE5A17  d2 00 5a 60 20
 	sub WA,IZ                                     ; FE5A1C  de a0
 	cp WA,0x01f4                                  ; FE5A1E  d8 cf f4 01   500 ticks
 	jr ule, Dev7B_WaitStatus_8x_Cx__again         ; FE5A22  63 07
@@ -164578,7 +164578,7 @@ Dev7B_WaitStatus_8x_Cx__ret:
 ; ---------------------------------------------------------------------
 Fdc_WaitRqm:
 	push XIZ                                      ; FE5A41  3e
-	ld iz, (0x605a00:24)                         ; FE5A42  d2 00 5a 60 26
+	ld iz, (Fdc_TickCount:24)                         ; FE5A42  d2 00 5a 60 26
 	ldw qiz, 0x80                                 ; FE5A47  d7 fa 03 80 00
 .LFE5A4C:
 	calr Dev7B_ReadStatus                                   ; FE5A4C  1e 67 fa
@@ -164591,7 +164591,7 @@ Fdc_WaitRqm:
 	jr nz, .LFE5A65                               ; FE5A60  6e 03
 	ld QIZ,0                                      ; FE5A62  d7 fa a8
 .LFE5A65:
-	ld wa, (0x605a00:24)                         ; FE5A65  d2 00 5a 60 20
+	ld wa, (Fdc_TickCount:24)                         ; FE5A65  d2 00 5a 60 20
 	sub WA,IZ                                     ; FE5A6A  de a0
 	cp WA,0x01f4                                  ; FE5A6C  d8 cf f4 01
 	jr ule, .LFE5A79                              ; FE5A70  63 07
@@ -164630,7 +164630,7 @@ Fdc_WaitRqm:
 Fdc_WaitReadyForCommandByte:
 .LFE5A8F:
 	push XIZ                                      ; FE5A8F  3e
-	ld iz, (0x605a00:24)                         ; FE5A90  d2 00 5a 60 26
+	ld iz, (Fdc_TickCount:24)                         ; FE5A90  d2 00 5a 60 26
 	ldw qiz, 0x80                                 ; FE5A95  d7 fa 03 80 00
 .LFE5A9A:
 	calr Dev7B_ReadStatus                                   ; FE5A9A  1e 19 fa
@@ -164649,14 +164649,14 @@ Fdc_WaitReadyForCommandByte:
 	calr Dev7B_ReadData                                   ; FE5AB7  1e 02 fa
 	ld WA,IZ                                      ; FE5ABA  de 88
 	extz XWA                                      ; FE5ABC  e8 12
-	ld XBC,0x00605a50                             ; FE5ABE  41 50 5a 60 00
+	ld XBC,Fdc_ResultBuf                             ; FE5ABE  41 50 5a 60 00
 	add XBC,XWA                                   ; FE5AC3  e8 81
 	ld (XBC),L                                    ; FE5AC5  b1 47
 	calr Dev7B_ReadStatus                                   ; FE5AC7  1e ec f9
 	inc 1,IZ                                      ; FE5ACA  de 61
 	jr .LFE5AB7                                   ; FE5ACC  68 e9
 .LFE5ACE:
-	ld wa, (0x605a00:24)                         ; FE5ACE  d2 00 5a 60 20
+	ld wa, (Fdc_TickCount:24)                         ; FE5ACE  d2 00 5a 60 20
 	sub WA,IZ                                     ; FE5AD3  de a0
 	cp WA,0x01f4                                  ; FE5AD5  d8 cf f4 01
 	jr ule, .LFE5AE2                              ; FE5AD9  63 07
@@ -164751,7 +164751,7 @@ Fdc_WriteControlRegister:
 ; ---------------------------------------------------------------------
 Fdc_WriteControlRegister_IfNoError:
 	calr .LFE5A8F                                 ; FE5B25  1e 67 ff
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5B28  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5B28  c2 15 5a 60 3f 00
 	jr nz, .LFE5B3B                               ; FE5B2E  6e 0b
 	ld A,(XSP+0x04)                               ; FE5B30  8f 04 21
 	extz WA                                       ; FE5B33  d8 12
@@ -164776,7 +164776,7 @@ Fdc_WriteControlRegister_IfNoError:
 ; ---------------------------------------------------------------------
 Fdc_WriteControlRegister_AndReadResult:
 	calr .LFE5A8F                                 ; FE5B3C  1e 50 ff
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5B3F  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5B3F  c2 15 5a 60 3f 00
 	jr nz, .LFE5B5D                               ; FE5B45  6e 16
 	ld A,(XSP+0x04)                               ; FE5B47  8f 04 21
 	extz WA                                       ; FE5B4A  d8 12
@@ -164785,7 +164785,7 @@ Fdc_WriteControlRegister_AndReadResult:
 	inc 2,XSP                                     ; FE5B50  ef 62
 	calr Dev7B_WaitStatus_8x_Cx                                   ; FE5B52  1e 9e fe
 	calr Dev7B_ReadData                                   ; FE5B55  1e 64 f9
-	ld (0x605a51:24), l                          ; FE5B58  f2 51 5a 60 47
+	ld (Fdc_ResultBuf+1:24), l                          ; FE5B58  f2 51 5a 60 47
 .LFE5B5D:
 	ret                                           ; FE5B5D  0e
 
@@ -164821,7 +164821,7 @@ Fdc_WriteControlRegister_AndReadResult:
 ;          0x605AEC finds two writes and no read in prom_a + prom_b.
 ; ---------------------------------------------------------------------
 Fdc_ClassifyResultStatus:
-	lda xbc, (0x605a50:24)                        ; FE5B5E  f2 50 5a 60 31
+	lda xbc, (Fdc_ResultBuf:24)                        ; FE5B5E  f2 50 5a 60 31
 	ld XWA,XBC                                    ; FE5B63  e9 88
 	ld E,(XBC+0x01)                               ; FE5B65  89 01 25
 	ld A,E                                        ; FE5B68  cd 89
@@ -164964,10 +164964,10 @@ Fdc_IssueCommand:
 .LFE5C0A:
 	dec 8,XSP                                     ; FE5C0A  ef 68
 	calr Fdc_WaitControllerIdle                                   ; FE5C0C  1e dd f8
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5C0F  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5C0F  c2 15 5a 60 3f 00
 	jrl nz, .LFE5CE5                              ; FE5C15  7e cd 00
 	ld A,(XSP+0x0c)                               ; FE5C18  8f 0c 21
-	ld (0x605a18:24), a                          ; FE5C1B  f2 18 5a 60 41
+	ld (Fdc_CommandByte:24), a                          ; FE5C1B  f2 18 5a 60 41
 	calr .LFE5CE8                                 ; FE5C20  1e c5 00
 	ld (XSP+0x06),L                               ; FE5C23  bf 06 47
 	cp (XSP+0x06),0x00                            ; FE5C26  8f 06 3f 00
@@ -164989,7 +164989,7 @@ Fdc_IssueCommand:
 	inc 6,XSP                                     ; FE5C54  ef 66
 	jrl .LFE5CE5                                  ; FE5C56  78 8c 00
 .LFE5C59:
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5C59  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5C59  c2 15 5a 60 3f 00
 	jrl nz, .LFE5CE5                              ; FE5C5F  7e 83 00
 	cp (XSP+0x0c),0x08                            ; FE5C62  8f 0c 3f 08
 	jr z, .LFE5CE5                                ; FE5C66  66 7d
@@ -164998,7 +164998,7 @@ Fdc_IssueCommand:
 	calr .LFE5D41                                 ; FE5C6E  1e d0 00
 	jr .LFE5CE5                                   ; FE5C71  68 72
 .LFE5C73:
-	lda xwa, (0x605a18:24)                        ; FE5C73  f2 18 5a 60 30
+	lda xwa, (Fdc_CommandByte:24)                        ; FE5C73  f2 18 5a 60 30
 	ld (XSP+0x02),XWA                             ; FE5C78  bf 02 60
 	ld A,(XWA+0x01)                               ; FE5C7B  88 01 21
 	ld (XSP+0x06),A                               ; FE5C7E  bf 06 41
@@ -165085,7 +165085,7 @@ Fdc_IssueCommand:
 ; ---------------------------------------------------------------------
 Fdc_ClassifyCommandOpcode:
 .LFE5CE8:
-	ld a, (0x605a18:24)                          ; FE5CE8  c2 18 5a 60 21
+	ld a, (Fdc_CommandByte:24)                          ; FE5CE8  c2 18 5a 60 21
 	and A,0x1f                                    ; FE5CED  c9 cc 1f
 	extz WA                                       ; FE5CF0  d8 12
 	cp WA,0x001d                                  ; FE5CF2  d8 cf 1d 00
@@ -165152,7 +165152,7 @@ Fdc_SendScanStepByte:
 ; ---------------------------------------------------------------------
 Fdc_SendSpecifyParams:
 .LFE5D41:
-	lda xbc, (0x605a18:24)                        ; FE5D41  f2 18 5a 60 31
+	lda xbc, (Fdc_CommandByte:24)                        ; FE5D41  f2 18 5a 60 31
 	ld A,(XBC+0x0f)                               ; FE5D46  89 0f 21
 	sll a, 0x04                                   ; FE5D49  c9 ee 04
 	ld C,(XBC+0x10)                               ; FE5D4C  89 10 23
@@ -165161,7 +165161,7 @@ Fdc_SendSpecifyParams:
 	extz WA                                       ; FE5D54  d8 12
 	pushw wa                                      ; FE5D56  28
 	calr .LFE5B07                                 ; FE5D57  1e ad fd
-	lda xbc, (0x605a18:24)                        ; FE5D5A  f2 18 5a 60 31
+	lda xbc, (Fdc_CommandByte:24)                        ; FE5D5A  f2 18 5a 60 31
 	ld A,(XBC+0x11)                               ; FE5D5F  89 11 21
 	sll a, 0x01                                   ; FE5D62  c9 ee 01
 	ld C,(XBC+0x12)                               ; FE5D65  89 12 23
@@ -165287,7 +165287,7 @@ Fdc_SendSectorIdParams:
 	pushw wa                                      ; FE5DFA  28
 	calr .LFE5B07                                 ; FE5DFB  1e 09 fd
 	lda xsp, (xsp+0x0c)                           ; FE5DFE  bf 0c 37
-	lda xbc, (0x605a18:24)                        ; FE5E01  f2 18 5a 60 31
+	lda xbc, (Fdc_CommandByte:24)                        ; FE5E01  f2 18 5a 60 31
 	ld A,(XBC)                                    ; FE5E06  81 21
 	extz WA                                       ; FE5E08  d8 12
 	cp WA,0x00dd                                  ; FE5E0A  d8 cf dd 00
@@ -165320,7 +165320,7 @@ Fdc_SendSectorIdParams:
 ; ---------------------------------------------------------------------
 Fdc_RequestIsTrack0SectorProbe:
 .LFE5E2B:
-	lda xwa, (0x605a30:24)                        ; FE5E2B  f2 30 5a 60 30
+	lda xwa, (Fdc_ReqOp:24)                        ; FE5E2B  f2 30 5a 60 30
 	m_cp_mi16 MWD+r0, 0x06, 0x0000                ; FE5E30  98 06 3f 00 00
 	jr nz, .LFE5E65                               ; FE5E35  6e 2e
 	m_cp_mi16 MWD+r0, 0x04, 0x0000                ; FE5E37  98 04 3f 00 00
@@ -165353,7 +165353,7 @@ Fdc_RequestIsTrack0SectorProbe:
 ; Outputs: HL = 0xFFFF or 0; XWA and BC clobbered.
 ; ---------------------------------------------------------------------
 Fdc_RequestIsOp0WithCountFFFF:
-	lda xwa, (0x605a30:24)                        ; FE5E68  f2 30 5a 60 30
+	lda xwa, (Fdc_ReqOp:24)                        ; FE5E68  f2 30 5a 60 30
 	ld BC,(XWA+0x0a)                              ; FE5E6D  98 0a 21
 	cp BC,0xffff                                  ; FE5E70  d9 cf ff ff
 	jr nz, .LFE5E7C                               ; FE5E74  6e 06
@@ -165414,10 +165414,10 @@ Fdc_Nop_Ret:
 ; ---------------------------------------------------------------------
 Fdc_SetError:
 .LFE5E84:
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5E84  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5E84  c2 15 5a 60 3f 00
 	jr nz, .LFE5EB1                               ; FE5E8A  6e 25
 	ld A,(XSP+0x04)                               ; FE5E8C  8f 04 21
-	ld (0x605a15:24), a                          ; FE5E8F  f2 15 5a 60 41
+	ld (Fdc_ErrorCode:24), a                          ; FE5E8F  f2 15 5a 60 41
 	extz WA                                       ; FE5E94  d8 12
 	cp WA,0x0036                                  ; FE5E96  d8 cf 36 00
 	jr z, .LFE5EAE                                ; FE5E9A  66 12
@@ -165437,7 +165437,7 @@ Fdc_SetError:
 	nop                                           ; FE5EB1  00
 Fdc_SetError__return_current:
 .LFE5EB2:
-	ld l, (0x605a15:24)                          ; FE5EB2  c2 15 5a 60 27
+	ld l, (Fdc_ErrorCode:24)                          ; FE5EB2  c2 15 5a 60 27
 	ret                                           ; FE5EB7  0e
 
 ; ---------------------------------------------------------------------
@@ -165450,7 +165450,7 @@ Fdc_SetError__return_current:
 ; Unknown:  nothing here.
 ; ---------------------------------------------------------------------
 Fdc_ClearError:
-	ld (0x605a15:24), 0x00                      ; FE5EB8  f2 15 5a 60 00 00
+	ld (Fdc_ErrorCode:24), 0x00                      ; FE5EB8  f2 15 5a 60 00 00
 	ret                                           ; FE5EBE  0e
 
 ; ---------------------------------------------------------------------
@@ -165465,7 +165465,7 @@ Fdc_ClearError:
 ; ---------------------------------------------------------------------
 Fdc_MarkResultPending:
 .LFE5EBF:
-	ld (0x605a50:24), 0xff                      ; FE5EBF  f2 50 5a 60 00 ff
+	ld (Fdc_ResultBuf:24), 0xff                      ; FE5EBF  f2 50 5a 60 00 ff
 	ret                                           ; FE5EC5  0e
 
 ; ---------------------------------------------------------------------
@@ -165479,14 +165479,14 @@ Fdc_MarkResultPending:
 ; ---------------------------------------------------------------------
 Fdc_WaitResultFromInt5:
 .LFE5EC6:
-	ld bc, (0x605a00:24)                         ; FE5EC6  d2 00 5a 60 21
+	ld bc, (Fdc_TickCount:24)                         ; FE5EC6  d2 00 5a 60 21
 	ld de, 0x00:i3                                  ; FE5ECB  da a8
 .LFE5ECD:
-	m_cp_mi8 MB24, 0x605a50, 0xff                 ; FE5ECD  c2 50 5a 60 3f ff
+	m_cp_mi8 MB24, Fdc_ResultBuf, 0xff                 ; FE5ECD  c2 50 5a 60 3f ff
 	jr z, .LFE5ED8                                ; FE5ED3  66 03
 	ldw de, 0xffff                                ; FE5ED5  32 ff ff
 .LFE5ED8:
-	ld wa, (0x605a00:24)                         ; FE5ED8  d2 00 5a 60 20
+	ld wa, (Fdc_TickCount:24)                         ; FE5ED8  d2 00 5a 60 20
 	sub WA,BC                                     ; FE5EDD  d9 a0
 	cp WA,0x01f4                                  ; FE5EDF  d8 cf f4 01
 	jr ule, .LFE5EEE                              ; FE5EE3  63 09
@@ -165515,10 +165515,10 @@ Fdc_DelayTicks:
 .LFE5EF3:
 	ld BC,(XSP+0x04)                              ; FE5EF3  9f 04 21
 	srl bc, 0x01                                  ; FE5EF6  d9 ef 01
-	ld de, (0x605a00:24)                         ; FE5EF9  d2 00 5a 60 22
+	ld de, (Fdc_TickCount:24)                         ; FE5EF9  d2 00 5a 60 22
 	ld hl, 0x00:i3                                  ; FE5EFE  db a8
 .LFE5F00:
-	ld wa, (0x605a00:24)                         ; FE5F00  d2 00 5a 60 20
+	ld wa, (Fdc_TickCount:24)                         ; FE5F00  d2 00 5a 60 20
 	sub WA,DE                                     ; FE5F05  da a0
 	cp WA,BC                                      ; FE5F07  d9 f0
 	jr ugt, .LFE5F13                              ; FE5F09  6b 08
@@ -165565,7 +165565,7 @@ Fdc_Delay20Ticks:
 ; ---------------------------------------------------------------------
 Fdc_Op0_ResetAndIdentifyMedia:
 .LFE5F1D:
-	m_cp_mi16 MW24, 0x605a32, 0x0001              ; FE5F1D  d2 32 5a 60 3f 01 00
+	m_cp_mi16 MW24, Fdc_ReqUnit, 0x0001              ; FE5F1D  d2 32 5a 60 3f 01 00
 	jr nz, .LFE5F29                               ; FE5F24  6e 03
 	jrl .LFE65EF                                  ; FE5F26  78 c6 06
 .LFE5F29:
@@ -165595,23 +165595,23 @@ Fdc_Op0_ResetAndIdentifyMedia:
 Fdc_Op1_Recalibrate:
 .LFE5F44:
 	pushw iz                                      ; FE5F44  2e
-	m_cp_mi16 MW24, 0x605a32, 0x0001              ; FE5F45  d2 32 5a 60 3f 01 00
+	m_cp_mi16 MW24, Fdc_ReqUnit, 0x0001              ; FE5F45  d2 32 5a 60 3f 01 00
 	jr z, .LFE5F96                                ; FE5F4C  66 48
 	lda xbc, (0x605a26:24)                        ; FE5F4E  f2 26 5a 60 31
 	ld A,(XBC)                                    ; FE5F53  81 21
 	ldfr_berp a, 0xf9                               ; FE5F55  c7 f9 99   ld IZH,A
 	ld (XBC),0x05                                 ; FE5F58  b1 00 05
-	ld (0x605aee:24), 0xff                      ; FE5F5B  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE5F5B  f2 ee 5a 60 00 ff
 	calr .LFE5F98                                 ; FE5F61  1e 34 00
-	ld (0x605aee:24), 0x00                      ; FE5F64  f2 ee 5a 60 00 00
+	ld (Fdc_CurrentCylinder:24), 0x00                      ; FE5F64  f2 ee 5a 60 00 00
 	calr .LFE5EBF                                 ; FE5F6A  1e 52 ff
 	pushw 0x07                                    ; FE5F6D  0b 07 00
 	calr .LFE5C0A                                 ; FE5F70  1e 97 fc
 	inc 2,XSP                                     ; FE5F73  ef 62
 	calr .LFE5EC6                                 ; FE5F75  1e 4e ff
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5F78  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5F78  c2 15 5a 60 3f 00
 	jr z, .LFE5F86                                ; FE5F7E  66 06
-	ld (0x605aee:24), 0xff                      ; FE5F80  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE5F80  f2 ee 5a 60 00 ff
 .LFE5F86:
 	ld_erpb_rr a, 0xf9                            ; FE5F86  c7 f9 89   ld A,IZH
 	ld (0x605a26:24), a                          ; FE5F89  f2 26 5a 60 41
@@ -165634,12 +165634,12 @@ Fdc_Op1_Recalibrate:
 ; ---------------------------------------------------------------------
 Fdc_Op2_SeekToCylinder:
 .LFE5F98:
-	m_cp_mi16 MW24, 0x605a32, 0x0001              ; FE5F98  d2 32 5a 60 3f 01 00
+	m_cp_mi16 MW24, Fdc_ReqUnit, 0x0001              ; FE5F98  d2 32 5a 60 3f 01 00
 	ret Z                                         ; FE5F9F  b0 f6
 	ld a, (0x605a26:24)                          ; FE5FA1  c2 26 5a 60 21
-	m_cp_rm MB24, 0x605aee, r1                    ; FE5FA6  c2 ee 5a 60 f1
+	m_cp_rm MB24, Fdc_CurrentCylinder, r1                    ; FE5FA6  c2 ee 5a 60 f1
 	ret Z                                         ; FE5FAB  b0 f6
-	ld (0x605aee:24), a                          ; FE5FAD  f2 ee 5a 60 41
+	ld (Fdc_CurrentCylinder:24), a                          ; FE5FAD  f2 ee 5a 60 41
 	pushw 0x02                                    ; FE5FB2  0b 02 00
 	calr .LFE5EF3                                 ; FE5FB5  1e 3b ff
 	inc 2,XSP                                     ; FE5FB8  ef 62
@@ -165648,9 +165648,9 @@ Fdc_Op2_SeekToCylinder:
 	calr .LFE5C0A                                 ; FE5FC0  1e 47 fc
 	inc 2,XSP                                     ; FE5FC3  ef 62
 	calr .LFE5EC6                                 ; FE5FC5  1e fe fe
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5FC8  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5FC8  c2 15 5a 60 3f 00
 	jr z, .LFE5FD6                                ; FE5FCE  66 06
-	ld (0x605aee:24), 0xff                      ; FE5FD0  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE5FD0  f2 ee 5a 60 00 ff
 .LFE5FD6:
 	pushw 0x10                                    ; FE5FD6  0b 10 00
 	calr .LFE5EF3                                 ; FE5FD9  1e 17 ff
@@ -165678,13 +165678,13 @@ Fdc_Op2_SeekToCylinder:
 ; ---------------------------------------------------------------------
 Fdc_IssueReadData:
 .LFE5FDF:
-	ld (0x605a18:24), 0xc6                      ; FE5FDF  f2 18 5a 60 00 c6
+	ld (Fdc_CommandByte:24), 0xc6                      ; FE5FDF  f2 18 5a 60 00 c6
 	calr Dev7A_StartDma                                   ; FE5FE5  1e 82 f9
 	calr .LFE5EBF                                 ; FE5FE8  1e d4 fe
 	pushw 0xc6                                    ; FE5FEB  0b c6 00
 	calr .LFE5C0A                                 ; FE5FEE  1e 19 fc
 	inc 2,XSP                                     ; FE5FF1  ef 62
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE5FF3  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE5FF3  c2 15 5a 60 3f 00
 	ret NZ                                        ; FE5FF9  b0 fe
 	jrl .LFE5EC6                                  ; FE5FFB  78 c8 fe
 
@@ -165709,7 +165709,7 @@ Fdc_IssueReadData:
 Fdc_Op3_ReadSectors:
 .LFE5FFE:
 	pushw iz                                      ; FE5FFE  2e
-	lda xwa, (0x605a30:24)                        ; FE5FFF  f2 30 5a 60 30
+	lda xwa, (Fdc_ReqOp:24)                        ; FE5FFF  f2 30 5a 60 30
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                ; FE6004  98 02 3f 01 00
 	jr nz, .LFE6028                               ; FE6009  6e 1d
 	ld IX,(XWA+0x06)                              ; FE600B  98 06 24
@@ -165736,28 +165736,28 @@ Fdc_Op3_ReadSectors:
 	jrl .LFE6175                                  ; FE603E  78 34 01
 Fdc_Op3_ReadSectors__attempt:
 .LFE6041:
-	ld (0x605a15:24), 0x00                      ; FE6041  f2 15 5a 60 00 00
+	ld (Fdc_ErrorCode:24), 0x00                      ; FE6041  f2 15 5a 60 00 00
 	calr .LFE5F98                                 ; FE6047  1e 4e ff
-	ld a, (0x605a15:24)                          ; FE604A  c2 15 5a 60 21
+	ld a, (Fdc_ErrorCode:24)                          ; FE604A  c2 15 5a 60 21
 	cp a, 0x00:i3                                   ; FE604F  c9 d8
 	jr z, .LFE6066                                ; FE6051  66 13
 	ldfr_berp a, 0xf8                               ; FE6053  c7 f8 99   ld IZL,A
 	exts IZ                                       ; FE6056  de 13
 	calr Fdc_ResetAndIdentifyMedia                                   ; FE6058  1e 30 f5
 	.byte 0xc7, 0xf8, 0x04                        ; FE605B  c7 f8 04
-	m_pop MD24, 0x605a15                          ; FE605E  f2 15 5a 60 04
+	m_pop MD24, Fdc_ErrorCode                          ; FE605E  f2 15 5a 60 04
 	jrl .LFE617F                                  ; FE6063  78 19 01
 .LFE6066:
-	lda xde, (0x605a30:24)                        ; FE6066  f2 30 5a 60 32
+	lda xde, (Fdc_ReqOp:24)                        ; FE6066  f2 30 5a 60 32
 	lda xbc, (xde+0x08)                           ; FE606B  ba 08 31
 	ld WA,(XBC)                                   ; FE606E  91 20
-	m_cp_rm MW24, 0x605af7, r0                    ; FE6070  d2 f7 5a 60 f0
+	m_cp_rm MW24, Fdc_SectorsPerTrackPlus1, r0                    ; FE6070  d2 f7 5a 60 f0
 	jr ule, .LFE607B                              ; FE6075  63 04
 	m_ld_mi16 MDI+r1, 0, 0x0001                   ; FE6077  b1 02 01 00
 .LFE607B:
 	ld WA,(XBC)                                   ; FE607B  91 20
 	ld (0x605af3:24), wa                         ; FE607D  f2 f3 5a 60 50
-	ldw (0x605a0e:24), 0x00                      ; FE6082  f2 0e 5a 60 02 00 00
+	ldw (Fdc_DmaCount:24), 0x00                      ; FE6082  f2 0e 5a 60 02 00 00
 	m_cp_mi8 MB24, 0x605a5a, 0x02                 ; FE6089  c2 5a 5a 60 3f 02
 	jr nz, .LFE609A                               ; FE608F  6e 09
 	ldw (0x605a10:24), 0x0400                    ; FE6091  f2 10 5a 60 02 00 04
@@ -165771,7 +165771,7 @@ Fdc_Op3_ReadSectors__attempt:
 	ld iz, 0x01:i3                                  ; FE60AB  de a9
 .LFE60AD:
 	ld wa, (0x605a10:24)                         ; FE60AD  d2 10 5a 60 20
-	add (0x605a0e:24), wa                     ; FE60B2  d2 0e 5a 60 88
+	add (Fdc_DmaCount:24), wa                     ; FE60B2  d2 0e 5a 60 88
 	ld WA,(XDE)                                   ; FE60B7  92 20
 	dec 1,WA                                      ; FE60B9  d8 69
 	ld (XDE),WA                                   ; FE60BB  b2 50
@@ -165779,7 +165779,7 @@ Fdc_Op3_ReadSectors__attempt:
 	jr z, .LFE60D0                                ; FE60BF  66 0f
 	incw 0x01, (xbc)                              ; FE60C1  91 61
 	ld WA,(XBC)                                   ; FE60C3  91 20
-	m_cp_rm MW24, 0x605af7, r0                    ; FE60C5  d2 f7 5a 60 f0
+	m_cp_rm MW24, Fdc_SectorsPerTrackPlus1, r0                    ; FE60C5  d2 f7 5a 60 f0
 	jr ugt, .LFE60D0                              ; FE60CA  6b 04
 	inc 1,IZ                                      ; FE60CC  de 61
 	jr .LFE60AD                                   ; FE60CE  68 dd
@@ -165788,7 +165788,7 @@ Fdc_Op3_ReadSectors__attempt:
 	ld wa, (0x605af3:24)                         ; FE60D2  d2 f3 5a 60 20
 	ld (XBC),WA                                   ; FE60D7  b1 50
 	calr .LFE5FDF                                 ; FE60D9  1e 03 ff
-	ld a, (0x605a15:24)                          ; FE60DC  c2 15 5a 60 21
+	ld a, (Fdc_ErrorCode:24)                          ; FE60DC  c2 15 5a 60 21
 	cp a, 0x00:i3                                   ; FE60E1  c9 d8
 	jr z, .LFE6127                                ; FE60E3  66 42
 	cp A,0x09                                     ; FE60E5  c9 cf 09
@@ -165800,33 +165800,33 @@ Fdc_Op3_ReadSectors__attempt:
 	cp HL,0xffff                                  ; FE60F3  db cf ff ff
 	jr z, .LFE6105                                ; FE60F7  66 0c
 	calr Fdc_ResetAndIdentifyMedia                                   ; FE60F9  1e 8f f4
-	ld (0x605aee:24), 0xff                      ; FE60FC  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE60FC  f2 ee 5a 60 00 ff
 	calr .LFE5F98                                 ; FE6102  1e 93 fe
 .LFE6105:
 	ld wa, (0x605afb:24)                         ; FE6105  d2 fb 5a 60 20
-	ld (0x605a3a:24), wa                         ; FE610A  f2 3a 5a 60 50
+	ld (Fdc_ReqCount:24), wa                         ; FE610A  f2 3a 5a 60 50
 	ld a, (0x605a58:24)                          ; FE610F  c2 58 5a 60 21
 	dec 1,A                                       ; FE6114  c9 69
 	ld (0x605a58:24), a                          ; FE6116  f2 58 5a 60 41
 	cp a, 0x00:i3                                   ; FE611B  c9 d8
 	jr nz, .LFE6175                               ; FE611D  6e 56
-	ld (0x605a15:24), 0x10                      ; FE611F  f2 15 5a 60 00 10
+	ld (Fdc_ErrorCode:24), 0x10                      ; FE611F  f2 15 5a 60 00 10
 	jr .LFE617F                                   ; FE6125  68 58
 .LFE6127:
-	lda xbc, (0x605a30:24)                        ; FE6127  f2 30 5a 60 31
+	lda xbc, (Fdc_ReqOp:24)                        ; FE6127  f2 30 5a 60 31
 	ld wa, (0x605afb:24)                         ; FE612C  d2 fb 5a 60 20
 	sub WA,IZ                                     ; FE6131  de a0
 	ld (XBC+0x0a),WA                              ; FE6133  b9 0a 50
 	cp wa, 0x00:i3                                  ; FE6136  d8 d8
 	jr z, .LFE6175                                ; FE6138  66 3b
-	ld hl, (0x605a0e:24)                         ; FE613A  d2 0e 5a 60 23
+	ld hl, (Fdc_DmaCount:24)                         ; FE613A  d2 0e 5a 60 23
 	extz XHL                                      ; FE613F  eb 12
 	lda xde, (xbc+0x0c)                           ; FE6141  b9 0c 32
 	ld XWA,(XDE)                                  ; FE6144  a2 20
 	add XWA,XHL                                   ; FE6146  eb 80
 	ld (XDE),XWA                                  ; FE6148  b2 60
 	m_ld_mi16 MDD+r1, 0x08, 0x0001                ; FE614A  b9 08 02 01 00
-	lda xde, (0x605a18:24)                        ; FE614F  f2 18 5a 60 32
+	lda xde, (Fdc_CommandByte:24)                        ; FE614F  f2 18 5a 60 32
 	ld (XDE+0x05),0x01                            ; FE6154  ba 05 00 01
 	lda xbc, (xde+0x01)                           ; FE6158  ba 01 31
 	ld A,(XBC)                                    ; FE615B  81 21
@@ -165841,7 +165841,7 @@ Fdc_Op3_ReadSectors__attempt:
 	ld (XBC),A                                    ; FE6170  b1 41
 	ld (XDE+0x0e),A                               ; FE6172  ba 0e 41
 .LFE6175:
-	m_cp_mi16 MW24, 0x605a3a, 0x0000              ; FE6175  d2 3a 5a 60 3f 00 00
+	m_cp_mi16 MW24, Fdc_ReqCount, 0x0000              ; FE6175  d2 3a 5a 60 3f 00 00
 	jrl nz, .LFE6041                              ; FE617C  7e c2 fe
 .LFE617F:
 	popw iz                                       ; FE617F  4e
@@ -165868,7 +165868,7 @@ Fdc_Op3_ReadSectors__attempt:
 Fdc_Op4_WriteSectors:
 .LFE6181:
 	push XIZ                                      ; FE6181  3e
-	lda xwa, (0x605a30:24)                        ; FE6182  f2 30 5a 60 30
+	lda xwa, (Fdc_ReqOp:24)                        ; FE6182  f2 30 5a 60 30
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                ; FE6187  98 02 3f 01 00
 	jr nz, .LFE61AB                               ; FE618C  6e 1d
 	ld IX,(XWA+0x06)                              ; FE618E  98 06 24
@@ -165889,28 +165889,28 @@ Fdc_Op4_WriteSectors:
 	jrl .LFE62EE                                  ; FE61B1  78 3a 01
 Fdc_Op4_WriteSectors__attempt:
 .LFE61B4:
-	ld (0x605a15:24), 0x00                      ; FE61B4  f2 15 5a 60 00 00
+	ld (Fdc_ErrorCode:24), 0x00                      ; FE61B4  f2 15 5a 60 00 00
 	calr .LFE5F98                                 ; FE61BA  1e db fd
-	ld a, (0x605a15:24)                          ; FE61BD  c2 15 5a 60 21
+	ld a, (Fdc_ErrorCode:24)                          ; FE61BD  c2 15 5a 60 21
 	cp a, 0x00:i3                                   ; FE61C2  c9 d8
 	jr z, .LFE61D9                                ; FE61C4  66 13
 	ldfr_berp a, 0xf8                               ; FE61C6  c7 f8 99   ld IZL,A
 	exts IZ                                       ; FE61C9  de 13
 	calr Fdc_ResetAndIdentifyMedia                                   ; FE61CB  1e bd f3
 	.byte 0xc7, 0xf8, 0x04                        ; FE61CE  c7 f8 04
-	m_pop MD24, 0x605a15                          ; FE61D1  f2 15 5a 60 04
+	m_pop MD24, Fdc_ErrorCode                          ; FE61D1  f2 15 5a 60 04
 	jrl .LFE62F8                                  ; FE61D6  78 1f 01
 .LFE61D9:
-	lda xde, (0x605a30:24)                        ; FE61D9  f2 30 5a 60 32
+	lda xde, (Fdc_ReqOp:24)                        ; FE61D9  f2 30 5a 60 32
 	lda xbc, (xde+0x08)                           ; FE61DE  ba 08 31
 	ld WA,(XBC)                                   ; FE61E1  91 20
-	m_cp_rm MW24, 0x605af7, r0                    ; FE61E3  d2 f7 5a 60 f0
+	m_cp_rm MW24, Fdc_SectorsPerTrackPlus1, r0                    ; FE61E3  d2 f7 5a 60 f0
 	jr ule, .LFE61EE                              ; FE61E8  63 04
 	m_ld_mi16 MDI+r1, 0, 0x0001                   ; FE61EA  b1 02 01 00
 .LFE61EE:
 	ld WA,(XBC)                                   ; FE61EE  91 20
 	ld (0x605af3:24), wa                         ; FE61F0  f2 f3 5a 60 50
-	ldw (0x605a0e:24), 0x00                      ; FE61F5  f2 0e 5a 60 02 00 00
+	ldw (Fdc_DmaCount:24), 0x00                      ; FE61F5  f2 0e 5a 60 02 00 00
 	m_cp_mi8 MB24, 0x605a5a, 0x02                 ; FE61FC  c2 5a 5a 60 3f 02
 	jr nz, .LFE620D                               ; FE6202  6e 09
 	ldw (0x605a10:24), 0x0400                    ; FE6204  f2 10 5a 60 02 00 04
@@ -165924,7 +165924,7 @@ Fdc_Op4_WriteSectors__attempt:
 	ld iz, 0x01:i3                                  ; FE621E  de a9
 .LFE6220:
 	ld wa, (0x605a10:24)                         ; FE6220  d2 10 5a 60 20
-	add (0x605a0e:24), wa                     ; FE6225  d2 0e 5a 60 88
+	add (Fdc_DmaCount:24), wa                     ; FE6225  d2 0e 5a 60 88
 	ld WA,(XDE)                                   ; FE622A  92 20
 	dec 1,WA                                      ; FE622C  d8 69
 	ld (XDE),WA                                   ; FE622E  b2 50
@@ -165932,7 +165932,7 @@ Fdc_Op4_WriteSectors__attempt:
 	jr z, .LFE6243                                ; FE6232  66 0f
 	incw 0x01, (xbc)                              ; FE6234  91 61
 	ld WA,(XBC)                                   ; FE6236  91 20
-	m_cp_rm MW24, 0x605af7, r0                    ; FE6238  d2 f7 5a 60 f0
+	m_cp_rm MW24, Fdc_SectorsPerTrackPlus1, r0                    ; FE6238  d2 f7 5a 60 f0
 	jr ugt, .LFE6243                              ; FE623D  6b 04
 	inc 1,IZ                                      ; FE623F  de 61
 	jr .LFE6220                                   ; FE6241  68 dd
@@ -165941,7 +165941,7 @@ Fdc_Op4_WriteSectors__attempt:
 	ld wa, (0x605af3:24)                         ; FE6245  d2 f3 5a 60 20
 	ld (XBC),WA                                   ; FE624A  b1 50
 	calr .LFE62FA                                 ; FE624C  1e ab 00
-	ld a, (0x605a15:24)                          ; FE624F  c2 15 5a 60 21
+	ld a, (Fdc_ErrorCode:24)                          ; FE624F  c2 15 5a 60 21
 	ldfr_berp a, 0xfb                               ; FE6254  c7 fb 99   ld QIZH,A
 	.byte 0xc7, 0xfb, 0xd8                        ; FE6257  c7 fb d8
 	jr z, .LFE62A0                                ; FE625A  66 44
@@ -165954,32 +165954,32 @@ Fdc_Op4_WriteSectors__attempt:
 	calr Fdc_ResetAndIdentifyMedia                                   ; FE626B  1e 1d f3
 	.byte 0xc7, 0xfb, 0xcf, 0x2f                  ; FE626E  c7 fb cf 2f
 	jrl z, .LFE62F8                               ; FE6272  76 83 00
-	ld (0x605aee:24), 0xff                      ; FE6275  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE6275  f2 ee 5a 60 00 ff
 	calr .LFE5F98                                 ; FE627B  1e 1a fd
 	ld wa, (0x605afb:24)                         ; FE627E  d2 fb 5a 60 20
-	ld (0x605a3a:24), wa                         ; FE6283  f2 3a 5a 60 50
+	ld (Fdc_ReqCount:24), wa                         ; FE6283  f2 3a 5a 60 50
 	ld a, (0x605a58:24)                          ; FE6288  c2 58 5a 60 21
 	dec 1,A                                       ; FE628D  c9 69
 	ld (0x605a58:24), a                          ; FE628F  f2 58 5a 60 41
 	cp a, 0x00:i3                                   ; FE6294  c9 d8
 	jr nz, .LFE62EE                               ; FE6296  6e 56
-	ld (0x605a15:24), 0x20                      ; FE6298  f2 15 5a 60 00 20
+	ld (Fdc_ErrorCode:24), 0x20                      ; FE6298  f2 15 5a 60 00 20
 	jr .LFE62F8                                   ; FE629E  68 58
 .LFE62A0:
-	lda xbc, (0x605a30:24)                        ; FE62A0  f2 30 5a 60 31
+	lda xbc, (Fdc_ReqOp:24)                        ; FE62A0  f2 30 5a 60 31
 	ld wa, (0x605afb:24)                         ; FE62A5  d2 fb 5a 60 20
 	sub WA,IZ                                     ; FE62AA  de a0
 	ld (XBC+0x0a),WA                              ; FE62AC  b9 0a 50
 	cp wa, 0x00:i3                                  ; FE62AF  d8 d8
 	jr z, .LFE62EE                                ; FE62B1  66 3b
-	ld hl, (0x605a0e:24)                         ; FE62B3  d2 0e 5a 60 23
+	ld hl, (Fdc_DmaCount:24)                         ; FE62B3  d2 0e 5a 60 23
 	extz XHL                                      ; FE62B8  eb 12
 	lda xde, (xbc+0x0c)                           ; FE62BA  b9 0c 32
 	ld XWA,(XDE)                                  ; FE62BD  a2 20
 	add XWA,XHL                                   ; FE62BF  eb 80
 	ld (XDE),XWA                                  ; FE62C1  b2 60
 	m_ld_mi16 MDD+r1, 0x08, 0x0001                ; FE62C3  b9 08 02 01 00
-	lda xde, (0x605a18:24)                        ; FE62C8  f2 18 5a 60 32
+	lda xde, (Fdc_CommandByte:24)                        ; FE62C8  f2 18 5a 60 32
 	ld (XDE+0x05),0x01                            ; FE62CD  ba 05 00 01
 	lda xbc, (xde+0x01)                           ; FE62D1  ba 01 31
 	ld A,(XBC)                                    ; FE62D4  81 21
@@ -165994,7 +165994,7 @@ Fdc_Op4_WriteSectors__attempt:
 	ld (XBC),A                                    ; FE62E9  b1 41
 	ld (XDE+0x0e),A                               ; FE62EB  ba 0e 41
 .LFE62EE:
-	m_cp_mi16 MW24, 0x605a3a, 0x0000              ; FE62EE  d2 3a 5a 60 3f 00 00
+	m_cp_mi16 MW24, Fdc_ReqCount, 0x0000              ; FE62EE  d2 3a 5a 60 3f 00 00
 	jrl nz, .LFE61B4                              ; FE62F5  7e bc fe
 .LFE62F8:
 	pop XIZ                                       ; FE62F8  5e
@@ -166018,13 +166018,13 @@ Fdc_Op4_WriteSectors__attempt:
 ; ---------------------------------------------------------------------
 Fdc_IssueWriteData:
 .LFE62FA:
-	ld (0x605a18:24), 0xc5                      ; FE62FA  f2 18 5a 60 00 c5
+	ld (Fdc_CommandByte:24), 0xc5                      ; FE62FA  f2 18 5a 60 00 c5
 	calr Dev7A_StartDma                                   ; FE6300  1e 67 f6
 	calr .LFE5EBF                                 ; FE6303  1e b9 fb
 	pushw 0xc5                                    ; FE6306  0b c5 00
 	calr .LFE5C0A                                 ; FE6309  1e fe f8
 	inc 2,XSP                                     ; FE630C  ef 62
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE630E  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE630E  c2 15 5a 60 3f 00
 	ret NZ                                        ; FE6314  b0 fe
 	jrl .LFE5EC6                                  ; FE6316  78 ad fb
 
@@ -166047,7 +166047,7 @@ Fdc_IssueWriteData:
 ; ---------------------------------------------------------------------
 Fdc_Op5_FormatDisk:
 .LFE6319:
-	lda xwa, (0x605a30:24)                        ; FE6319  f2 30 5a 60 30
+	lda xwa, (Fdc_ReqOp:24)                        ; FE6319  f2 30 5a 60 30
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                ; FE631E  98 02 3f 01 00
 	jr nz, .LFE632F                               ; FE6323  6e 0a
 	ld WA,(XWA+0x06)                              ; FE6325  98 06 20
@@ -166057,17 +166057,17 @@ Fdc_Op5_FormatDisk:
 	ret                                           ; FE632E  0e
 .LFE632F:
 	calr .LFE5E83                                 ; FE632F  1e 51 fb
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE6332  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE6332  c2 15 5a 60 3f 00
 	jrl nz, .LFE63F1                              ; FE6338  7e b6 00
 	calr .LFE6668                                 ; FE633B  1e 2a 03
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE633E  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE633E  c2 15 5a 60 3f 00
 	jrl nz, .LFE63F1                              ; FE6344  7e aa 00
 	calr .LFE5F44                                 ; FE6347  1e fa fb
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE634A  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE634A  c2 15 5a 60 3f 00
 	jrl nz, .LFE63F1                              ; FE6350  7e 9e 00
 	ld e, (0x605a5a:24)                          ; FE6353  c2 5a 5a 60 25
 	exts DE                                       ; FE6358  da 13
-	lda xbc, (0x605a18:24)                        ; FE635A  f2 18 5a 60 31
+	lda xbc, (Fdc_CommandByte:24)                        ; FE635A  f2 18 5a 60 31
 	lda xwa, (xbc+0x06)                           ; FE635F  b9 06 30
 	lda xbc, (xbc+0x0b)                           ; FE6362  b9 0b 31
 	cp de, 0x02:i3                                  ; FE6365  da da
@@ -166092,7 +166092,7 @@ Fdc_Op5_FormatDisk:
 	ld (XWA),0x03                                 ; FE6389  b0 00 03
 	ld (XBC),0x74                                 ; FE638C  b1 00 74
 .LFE638F:
-	lda xwa, (0x605a18:24)                        ; FE638F  f2 18 5a 60 30
+	lda xwa, (Fdc_CommandByte:24)                        ; FE638F  f2 18 5a 60 30
 	ld (XWA+0x0e),0x00                            ; FE6394  b8 0e 00 00
 	ld (XWA+0x03),0x00                            ; FE6398  b8 03 00 00
 	ld (XWA+0x0c),0xe5                            ; FE639C  b8 0c 00 e5
@@ -166102,9 +166102,9 @@ Fdc_Op5_FormatDisk:
 .LFE63AA:
 	ld (0x605a04:24), a                          ; FE63AA  f2 04 5a 60 41
 	calr .LFE6406                                 ; FE63AF  1e 54 00
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE63B2  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE63B2  c2 15 5a 60 3f 00
 	jr nz, .LFE63F1                               ; FE63B8  6e 37
-	lda xde, (0x605a18:24)                        ; FE63BA  f2 18 5a 60 32
+	lda xde, (Fdc_CommandByte:24)                        ; FE63BA  f2 18 5a 60 32
 	lda xbc, (xde+0x01)                           ; FE63BF  ba 01 31
 	ld A,(XBC)                                    ; FE63C2  81 21
 	xor A,0x01                                    ; FE63C4  c9 cd 01
@@ -166122,15 +166122,15 @@ Fdc_Op5_FormatDisk:
 	ld a, (0x605a26:24)                          ; FE63E1  c2 26 5a 60 21
 	ld C,A                                        ; FE63E6  c9 8b
 	extz BC                                       ; FE63E8  d9 12
-	m_cp_rm MW24, 0x605af1, r1                    ; FE63EA  d2 f1 5a 60 f1
+	m_cp_rm MW24, Fdc_LastCylinderPlus1, r1                    ; FE63EA  d2 f1 5a 60 f1
 	jr ule, .LFE63AA                              ; FE63EF  63 b9
 .LFE63F1:
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE63F1  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE63F1  c2 15 5a 60 3f 00
 	jr z, .LFE63FC                                ; FE63F7  66 03
 	calr Fdc_ResetAndIdentifyMedia                                   ; FE63F9  1e 8f f1
 .LFE63FC:
 	calr .LFE5F44                                 ; FE63FC  1e 45 fb
-	ld (0x605aee:24), 0xff                      ; FE63FF  f2 ee 5a 60 00 ff
+	ld (Fdc_CurrentCylinder:24), 0xff                      ; FE63FF  f2 ee 5a 60 00 ff
 	ret                                           ; FE6405  0e
 
 ; ---------------------------------------------------------------------
@@ -166148,14 +166148,14 @@ Fdc_Op5_FormatDisk:
 Fdc_FormatOneTrack:
 .LFE6406:
 	calr .LFE5F98                                 ; FE6406  1e 8f fb
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE6409  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE6409  c2 15 5a 60 3f 00
 	jr z, .LFE6414                                ; FE640F  66 03
 	jrl Fdc_ResetAndIdentifyMedia                                     ; FE6411  78 77 f1
 .LFE6414:
 	calr .LFE6430                                 ; FE6414  1e 19 00
-	ld (0x605a18:24), 0x4d                      ; FE6417  f2 18 5a 60 00 4d
+	ld (Fdc_CommandByte:24), 0x4d                      ; FE6417  f2 18 5a 60 00 4d
 	lda xwa, (0x605a5c:24)                        ; FE641D  f2 5c 5a 60 30
-	ld (0x605a3c:24), xwa                        ; FE6422  f2 3c 5a 60 60
+	ld (Fdc_ReqBuffer:24), xwa                        ; FE6422  f2 3c 5a 60 60
 	calr Dev7A_StartDma                                   ; FE6427  1e 40 f5
 	calr uDMA0_SetCount                                   ; FE642A  1e bd f5
 	jrl .LFE65D0                                  ; FE642D  78 a0 01
@@ -166182,11 +166182,11 @@ Fdc_BuildFormatIdTable:
 .LFE6430:
 	lda xsp, (xsp-12)                             ; FE6430  bf f4 37
 	push XIZ                                      ; FE6433  3e
-	lda xwa, (0x605a18:24)                        ; FE6434  f2 18 5a 60 30
+	lda xwa, (Fdc_CommandByte:24)                        ; FE6434  f2 18 5a 60 30
 	ld (XSP+0x0c),XWA                             ; FE6439  bf 0c 60
 	lda xbc, (xwa+0x05)                           ; FE643C  b8 05 31
 	ld (XBC),0x01                                 ; FE643F  b1 00 01
-	ldw (0x605a0e:24), 0x00                      ; FE6442  f2 0e 5a 60 02 00 00
+	ldw (Fdc_DmaCount:24), 0x00                      ; FE6442  f2 0e 5a 60 02 00 00
 	ld wa, (0x605af5:24)                         ; FE6449  d2 f5 5a 60 20
 	srl wa, 0x01                                  ; FE644E  d8 ef 01
 	ld (XSP+0x06),WA                              ; FE6451  bf 06 50
@@ -166201,7 +166201,7 @@ Fdc_BuildFormatIdTable:
 	lda xiy, (xwa+0x04)                           ; FE6471  b8 04 35
 	ld XWA,(XSP+0x0c)                             ; FE6474  af 0c 20
 	lda xiz, (xwa+0x06)                           ; FE6477  b8 06 36
-	lda xwa, (0x605a36:24)                        ; FE647A  f2 36 5a 60 30
+	lda xwa, (Fdc_ReqTrack:24)                        ; FE647A  f2 36 5a 60 30
 	ld (XSP+0x08),XWA                             ; FE647F  bf 08 60
 .LFE6482:
 	ld A,L                                        ; FE6482  cf 89
@@ -166210,42 +166210,42 @@ Fdc_BuildFormatIdTable:
 	ld QWA,WA                                     ; FE6488  d7 e2 98
 	ld A,(XIX)                                    ; FE648B  84 21
 	ld (xde+qwa),a                                ; FE648D  f3 07 e8 e2 41   ld (XDE+QWA),A
-	incw 0x01, (0x605a0e:24)                   ; FE6492  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE6492  d2 0e 5a 60 61
 	ld A,L                                        ; FE6497  cf 89
 	inc 1,L                                       ; FE6499  cf 61
 	extz WA                                       ; FE649B  d8 12
 	ld QWA,WA                                     ; FE649D  d7 e2 98
 	ld A,(XIY)                                    ; FE64A0  85 21
 	ld (xde+qwa),a                                ; FE64A2  f3 07 e8 e2 41   ld (XDE+QWA),A
-	incw 0x01, (0x605a0e:24)                   ; FE64A7  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE64A7  d2 0e 5a 60 61
 	ld A,L                                        ; FE64AC  cf 89
 	inc 1,L                                       ; FE64AE  cf 61
 	extz WA                                       ; FE64B0  d8 12
 	ld QWA,WA                                     ; FE64B2  d7 e2 98
 	ld A,(XBC)                                    ; FE64B5  81 21
 	ld (xde+qwa),a                                ; FE64B7  f3 07 e8 e2 41   ld (XDE+QWA),A
-	incw 0x01, (0x605a0e:24)                   ; FE64BC  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE64BC  d2 0e 5a 60 61
 	ld A,L                                        ; FE64C1  cf 89
 	inc 1,L                                       ; FE64C3  cf 61
 	extz WA                                       ; FE64C5  d8 12
 	ld QWA,WA                                     ; FE64C7  d7 e2 98
 	ld A,(XIZ)                                    ; FE64CA  86 21
 	ld (xde+qwa),a                                ; FE64CC  f3 07 e8 e2 41   ld (XDE+QWA),A
-	incw 0x01, (0x605a0e:24)                   ; FE64D1  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE64D1  d2 0e 5a 60 61
 	ld A,L                                        ; FE64D6  cf 89
 	inc 1,L                                       ; FE64D8  cf 61
 	extz WA                                       ; FE64DA  d8 12
 	ld QWA,WA                                     ; FE64DC  d7 e2 98
 	ld A,(XIX)                                    ; FE64DF  84 21
 	ld (xde+qwa),a                                ; FE64E1  f3 07 e8 e2 41   ld (XDE+QWA),A
-	incw 0x01, (0x605a0e:24)                   ; FE64E6  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE64E6  d2 0e 5a 60 61
 	ld A,L                                        ; FE64EB  cf 89
 	inc 1,L                                       ; FE64ED  cf 61
 	extz WA                                       ; FE64EF  d8 12
 	ld QWA,WA                                     ; FE64F1  d7 e2 98
 	ld A,(XIY)                                    ; FE64F4  85 21
 	ld (xde+qwa),a                                ; FE64F6  f3 07 e8 e2 41   ld (XDE+QWA),A
-	incw 0x01, (0x605a0e:24)                   ; FE64FB  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE64FB  d2 0e 5a 60 61
 	ld XWA,(XSP+0x08)                             ; FE6500  af 08 20
 	m_cp_mi16 MWI+r0, 0, 0x0000                   ; FE6503  90 3f 00 00
 	jr nz, .LFE6523                               ; FE6507  6e 1a
@@ -166272,14 +166272,14 @@ Fdc_BuildFormatIdTable:
 	ld A,H                                        ; FE6538  ce 89
 	ld (xde+qwa),a                                ; FE653A  f3 07 e8 e2 41   ld (XDE+QWA),A
 .LFE653F:
-	incw 0x01, (0x605a0e:24)                   ; FE653F  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE653F  d2 0e 5a 60 61
 	ld A,L                                        ; FE6544  cf 89
 	inc 1,L                                       ; FE6546  cf 61
 	extz WA                                       ; FE6548  d8 12
 	ld QWA,WA                                     ; FE654A  d7 e2 98
 	ld A,(XIZ)                                    ; FE654D  86 21
 	ld (xde+qwa),a                                ; FE654F  f3 07 e8 e2 41   ld (XDE+QWA),A
-	incw 0x01, (0x605a0e:24)                   ; FE6554  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE6554  d2 0e 5a 60 61
 	incm8 0x01, (xbc)                             ; FE6559  81 61
 	incw 0x01, (xsp+0x04)                         ; FE655B  9f 04 61
 	ld WA,(XSP+0x04)                              ; FE655E  9f 04 20
@@ -166296,26 +166296,26 @@ Fdc_BuildFormatIdTable:
 	ld XWA,(XSP+0x0c)                             ; FE657C  af 0c 20
 	ld A,(XWA+0x03)                               ; FE657F  88 03 21
 	mx_st_mr8 MXD, ra_BC, ra_DE, r1               ; FE6582  f3 07 e4 e8 41
-	incw 0x01, (0x605a0e:24)                   ; FE6587  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE6587  d2 0e 5a 60 61
 	ld E,L                                        ; FE658C  cf 8d
 	inc 1,L                                       ; FE658E  cf 61
 	extz DE                                       ; FE6590  da 12
 	ld XWA,(XSP+0x0c)                             ; FE6592  af 0c 20
 	ld A,(XWA+0x04)                               ; FE6595  88 04 21
 	mx_st_mr8 MXD, ra_BC, ra_DE, r1               ; FE6598  f3 07 e4 e8 41
-	incw 0x01, (0x605a0e:24)                   ; FE659D  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE659D  d2 0e 5a 60 61
 	ld E,L                                        ; FE65A2  cf 8d
 	inc 1,L                                       ; FE65A4  cf 61
 	extz DE                                       ; FE65A6  da 12
 	ld wa, (0x605af5:24)                         ; FE65A8  d2 f5 5a 60 20
 	mx_st_mr8 MXD, ra_BC, ra_DE, r1               ; FE65AD  f3 07 e4 e8 41
-	incw 0x01, (0x605a0e:24)                   ; FE65B2  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE65B2  d2 0e 5a 60 61
 	ld E,L                                        ; FE65B7  cf 8d
 	extz DE                                       ; FE65B9  da 12
 	ld XWA,(XSP+0x0c)                             ; FE65BB  af 0c 20
 	ld A,(XWA+0x06)                               ; FE65BE  88 06 21
 	mx_st_mr8 MXD, ra_BC, ra_DE, r1               ; FE65C1  f3 07 e4 e8 41
-	incw 0x01, (0x605a0e:24)                   ; FE65C6  d2 0e 5a 60 61
+	incw 0x01, (Fdc_DmaCount:24)                   ; FE65C6  d2 0e 5a 60 61
 .LFE65CB:
 	pop XIZ                                       ; FE65CB  5e
 	lda xsp, (xsp+0x0c)                           ; FE65CC  bf 0c 37
@@ -166336,13 +166336,13 @@ Fdc_BuildFormatIdTable:
 ; ---------------------------------------------------------------------
 Fdc_IssueFormatTrack:
 .LFE65D0:
-	ld (0x605a18:24), 0x4d                      ; FE65D0  f2 18 5a 60 00 4d
+	ld (Fdc_CommandByte:24), 0x4d                      ; FE65D0  f2 18 5a 60 00 4d
 	calr Dev7A_StartDma                                   ; FE65D6  1e 91 f3
 	calr .LFE5EBF                                 ; FE65D9  1e e3 f8
 	pushw 0x4d                                    ; FE65DC  0b 4d 00
 	calr .LFE5C0A                                 ; FE65DF  1e 28 f6
 	inc 2,XSP                                     ; FE65E2  ef 62
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE65E4  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE65E4  c2 15 5a 60 3f 00
 	ret NZ                                        ; FE65EA  b0 fe
 	jrl .LFE5EC6                                  ; FE65EC  78 d7 f8
 
@@ -166379,7 +166379,7 @@ Fdc_IssueFormatTrack:
 Fdc_Op6_PortA3_Off:
 .LFE65EF:
 	pushw iz                                      ; FE65EF  2e
-	lda xwa, (0x605a30:24)                        ; FE65F0  f2 30 5a 60 30
+	lda xwa, (Fdc_ReqOp:24)                        ; FE65F0  f2 30 5a 60 30
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                ; FE65F5  98 02 3f 01 00
 	jr nz, .LFE6607                               ; FE65FA  6e 0b
 	ld WA,(XWA+0x06)                              ; FE65FC  98 06 20
@@ -166419,7 +166419,7 @@ Fdc_Op6_PortA3_Off:
 ; ---------------------------------------------------------------------
 Fdc_Op7_PortA3_On:
 .LFE661F:
-	m_cp_mi16 MW24, 0x605a32, 0x0001              ; FE661F  d2 32 5a 60 3f 01 00
+	m_cp_mi16 MW24, Fdc_ReqUnit, 0x0001              ; FE661F  d2 32 5a 60 3f 01 00
 	jr nz, .LFE662B                               ; FE6626  6e 03
 	jrl Unit1_Op6_IssueCommandAndWaitReady_Join                                     ; FE6628  78 22 ee
 .LFE662B:
@@ -166441,7 +166441,7 @@ Fdc_Op7_PortA3_On:
 Fdc_Op8_GetSavedError:
 .LFE6635:
 	ld a, (0x605a16:24)                          ; FE6635  c2 16 5a 60 21
-	ld (0x605a15:24), a                          ; FE663A  f2 15 5a 60 41
+	ld (Fdc_ErrorCode:24), a                          ; FE663A  f2 15 5a 60 41
 	ret                                           ; FE663F  0e
 
 ; ---------------------------------------------------------------------
@@ -166460,7 +166460,7 @@ Fdc_Op8_GetSavedError:
 ; ---------------------------------------------------------------------
 Fdc_Op9_SetFlag605A59:
 .LFE6640:
-	ld wa, (0x605a34:24)                         ; FE6640  d2 34 5a 60 20
+	ld wa, (Fdc_ReqHead:24)                         ; FE6640  d2 34 5a 60 20
 	cp wa, 0x01:i3                                  ; FE6645  d8 d9
 	jr z, .LFE664F                                ; FE6647  66 06
 	cp wa, 0x00:i3                                  ; FE6649  d8 d8
@@ -166504,17 +166504,17 @@ Fdc_Op9_SetFlag605A59:
 Fdc_Op11_SenseDriveStatus:
 .LFE6668:
 	pushw iz                                      ; FE6668  2e
-	m_cp_mi16 MW24, 0x605a32, 0x0001              ; FE6669  d2 32 5a 60 3f 01 00
+	m_cp_mi16 MW24, Fdc_ReqUnit, 0x0001              ; FE6669  d2 32 5a 60 3f 01 00
 	jr z, .LFE66C5                                ; FE6670  66 53
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE6672  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE6672  c2 15 5a 60 3f 00
 	jr nz, .LFE66C5                               ; FE6678  6e 4b
 	pushw 0x04                                    ; FE667A  0b 04 00
 	calr .LFE5C0A                                 ; FE667D  1e 8a f5
 	inc 2,XSP                                     ; FE6680  ef 62
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE6682  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE6682  c2 15 5a 60 3f 00
 	jr nz, .LFE66C5                               ; FE6688  6e 3b
 	calr Dev7B_WaitStatus_8x_Cx                                   ; FE668A  1e 66 f3
-	m_cp_mi8 MB24, 0x605a15, 0x00                 ; FE668D  c2 15 5a 60 3f 00
+	m_cp_mi8 MB24, Fdc_ErrorCode, 0x00                 ; FE668D  c2 15 5a 60 3f 00
 	jr nz, .LFE66C5                               ; FE6693  6e 30
 	calr Dev7B_ReadData                                   ; FE6695  1e 24 ee
 	ldfr_berp l, 0xf9                               ; FE6698  c7 f9 9f   ld IZH,L
@@ -166577,10 +166577,10 @@ Fdc_Request:
 	ld XIZ,(XSP+0x10)                             ; FE66CA  af 10 26
 	m_cp_mi16 MWI+r6, 0, 0x0000                   ; FE66CD  96 3f 00 00
 	jr nz, .LFE66D9                               ; FE66D1  6e 06
-	ld (0x605a09:24), 0x00                      ; FE66D3  f2 09 5a 60 00 00
+	ld (Fdc_ReentryGuard:24), 0x00                      ; FE66D3  f2 09 5a 60 00 00
 .LFE66D9:
 	ei 0x06                                       ; FE66D9  06 06
-	m_cp_mi8 MB24, 0x605a09, 0xa5                 ; FE66DB  c2 09 5a 60 3f a5
+	m_cp_mi8 MB24, Fdc_ReentryGuard, 0xa5                 ; FE66DB  c2 09 5a 60 3f a5
 	jr nz, .LFE66F2                               ; FE66E1  6e 0f
 	ei 0x00                                       ; FE66E3  06 00
 	pushw 0xfb                                    ; FE66E5  0b fb 00
@@ -166589,9 +166589,9 @@ Fdc_Request:
 	extz HL                                       ; FE66ED  db 12
 	jrl .LFE67F5                                  ; FE66EF  78 03 01
 .LFE66F2:
-	ld (0x605a09:24), 0xa5                      ; FE66F2  f2 09 5a 60 00 a5
+	ld (Fdc_ReentryGuard:24), 0xa5                      ; FE66F2  f2 09 5a 60 00 a5
 	ei 0x00                                       ; FE66F8  06 00
-	lda xbc, (0x605a30:24)                        ; FE66FA  f2 30 5a 60 31
+	lda xbc, (Fdc_ReqOp:24)                        ; FE66FA  f2 30 5a 60 31
 	ld WA,(XIZ)                                   ; FE66FF  96 20
 	ld (XBC),WA                                   ; FE6701  b1 50
 	lda xwa, (xiz+0x02)                           ; FE6703  be 02 30
@@ -166614,7 +166614,7 @@ Fdc_Request:
 	lda xiy, (xiz+0x0c)                           ; FE6731  be 0c 35
 	ld XWA,(XIY)                                  ; FE6734  a5 20
 	ld (XBC+0x0c),XWA                             ; FE6736  b9 0c 60
-	lda xbc, (0x605a40:24)                        ; FE6739  f2 40 5a 60 31
+	lda xbc, (Fdc_ReqCopy:24)                        ; FE6739  f2 40 5a 60 31
 	ld WA,(XIZ)                                   ; FE673E  96 20
 	ld (XBC),WA                                   ; FE6740  b1 50
 	ld XWA,(XSP+0x08)                             ; FE6742  af 08 20
@@ -166632,13 +166632,13 @@ Fdc_Request:
 	ld XWA,(XIY)                                  ; FE6761  a5 20
 	ld (XBC+0x0c),XWA                             ; FE6763  b9 0c 60
 	ld (0x605a12:24), 0x00                      ; FE6766  f2 12 5a 60 00 00
-	ld a, (0x605a15:24)                          ; FE676C  c2 15 5a 60 21
+	ld a, (Fdc_ErrorCode:24)                          ; FE676C  c2 15 5a 60 21
 	ld (0x605a16:24), a                          ; FE6771  f2 16 5a 60 41
-	ld (0x605a15:24), 0x00                      ; FE6776  f2 15 5a 60 00 00
+	ld (Fdc_ErrorCode:24), 0x00                      ; FE6776  f2 15 5a 60 00 00
 	calr Fdc_ValidateRequest                                   ; FE677C  1e 97 ef
 	cp l, 0x00:i3                                   ; FE677F  cf d8
 	jr nz, .LFE67E8                               ; FE6781  6e 65
-	ld wa, (0x605a30:24)                         ; FE6783  d2 30 5a 60 20
+	ld wa, (Fdc_ReqOp:24)                         ; FE6783  d2 30 5a 60 20
 	cp WA,0x000b                                  ; FE6788  d8 cf 0b 00
 	jr ugt, .LFE67E0                              ; FE678C  6b 52
 	add WA,WA                                     ; FE678E  d8 80
@@ -166676,8 +166676,8 @@ Fdc_Request__dispatch:
 	calr .LFE5E84                                 ; FE67E3  1e 9e f6
 	inc 2,XSP                                     ; FE67E6  ef 62
 .LFE67E8:
-	ld (0x605a09:24), 0x5a                      ; FE67E8  f2 09 5a 60 00 5a
-	ld l, (0x605a15:24)                          ; FE67EE  c2 15 5a 60 27
+	ld (Fdc_ReentryGuard:24), 0x5a                      ; FE67E8  f2 09 5a 60 00 5a
+	ld l, (Fdc_ErrorCode:24)                          ; FE67EE  c2 15 5a 60 27
 	exts HL                                       ; FE67F3  db 13
 .LFE67F5:
 	pop XIZ                                       ; FE67F5  5e
@@ -166709,32 +166709,32 @@ Fdc_Request__dispatch:
 ;          about intent.
 ; ---------------------------------------------------------------------
 Fdc_ServiceDataByte:
-	m_cp_mi16 MW24, 0x605a0e, 0x0000              ; FE67F9  d2 0e 5a 60 3f 00 00
+	m_cp_mi16 MW24, Fdc_DmaCount, 0x0000              ; FE67F9  d2 0e 5a 60 3f 00 00
 	ret Z                                         ; FE6800  b0 f6
-	ld wa, (0x605a30:24)                         ; FE6802  d2 30 5a 60 20
+	ld wa, (Fdc_ReqOp:24)                         ; FE6802  d2 30 5a 60 20
 	cp wa, 0x04:i3                                  ; FE6807  d8 dc
 	jr z, .LFE6824                                ; FE6809  66 19
 	cp wa, 0x03:i3                                  ; FE680B  d8 db
 	jr nz, .LFE6839                               ; FE680D  6e 2a
 	ld c, (0x7a0000:24)                          ; FE680F  c2 00 00 7a 23
-	ld xhl, (0x605a3e:24)                        ; FE6814  e2 3e 5a 60 23
+	ld xhl, (Fdc_ReqBuffer+2:24)                        ; FE6814  e2 3e 5a 60 23
 	ld (XHL),C                                    ; FE6819  b3 43
 	inc 1,XHL                                     ; FE681B  eb 61
-	ld (0x605a3e:24), xhl                        ; FE681D  f2 3e 5a 60 63
+	ld (Fdc_ReqBuffer+2:24), xhl                        ; FE681D  f2 3e 5a 60 63
 	jr .LFE683A                                   ; FE6822  68 16
 .LFE6824:
-	ld xhl, (0x605a3e:24)                        ; FE6824  e2 3e 5a 60 23
+	ld xhl, (Fdc_ReqBuffer+2:24)                        ; FE6824  e2 3e 5a 60 23
 	ld C,(XHL)                                    ; FE6829  83 23
 	ld (0x7a0000:24), c                          ; FE682B  f2 00 00 7a 43
 	inc 1,XHL                                     ; FE6830  eb 61
-	ld (0x605a3e:24), xhl                        ; FE6832  f2 3e 5a 60 63
+	ld (Fdc_ReqBuffer+2:24), xhl                        ; FE6832  f2 3e 5a 60 63
 	jr .LFE683A                                   ; FE6837  68 01
 .LFE6839:
 	ret                                           ; FE6839  0e
 .LFE683A:
-	ld wa, (0x605a0e:24)                         ; FE683A  d2 0e 5a 60 20
+	ld wa, (Fdc_DmaCount:24)                         ; FE683A  d2 0e 5a 60 20
 	dec 1,WA                                      ; FE683F  d8 69
-	ld (0x605a0e:24), wa                         ; FE6841  f2 0e 5a 60 50
+	ld (Fdc_DmaCount:24), wa                         ; FE6841  f2 0e 5a 60 50
 	cp wa, 0x00:i3                                  ; FE6846  d8 d8
 	jr nz, .LFE6850                               ; FE6848  6e 06
 	calr PortB3_Pulse                                   ; FE684A  1e ff f0
@@ -166884,7 +166884,7 @@ INT5_Dev7B__wait_8x:
 	calr Dev7B_WriteData                    ; FE689F  1e 41 ec   Dev7B_WriteData(0x08)
 	inc 2,XSP                                     ; FE68A2  ef 62   the caller cleans up the argument
 INT5_Dev7B__read_loop:
-	lda xiz, (0x605a50:24)                        ; FE68A4  f2 50 5a 60 36
+	lda xiz, (Fdc_ResultBuf:24)                        ; FE68A4  f2 50 5a 60 36
 	inc 1,XIZ                                     ; FE68A9  ee 61   the packet starts at 0x605A51
 INT5_Dev7B__byte:
 	calr Fdc_WaitRqm                    ; FE68AB  1e 93 f1   Fdc_WaitRqm, converted abovd
@@ -166898,10 +166898,10 @@ INT5_Dev7B__wait_ready:
 	bit 0x06,L                                    ; FE68BF  cf 33 06
 	jr nz, INT5_Dev7B__byte                       ; FE68C2  6e e7   more bytes in this packet
 	calr Fdc_ClassifyResultStatus                    ; FE68C4  1e 97 f2   Fdc_ClassifyResultStatus, converted
-	m_cp_mi8 MB24, 0x605a51, 0x80                 ; FE68C7  c2 51 5a 60 3f 80
+	m_cp_mi8 MB24, Fdc_ResultBuf+1, 0x80                 ; FE68C7  c2 51 5a 60 3f 80
 	jr nz, INT5_Dev7B__packet                     ; FE68CD  6e b2   0x80 in byte 1 ends the exchange
 INT5_Dev7B__giveup:
-	ld (0x605a50:24), 0x00                      ; FE68CF  f2 50 5a 60 00 00
+	ld (Fdc_ResultBuf:24), 0x00                      ; FE68CF  f2 50 5a 60 00 00
 	pop XWA                                       ; FE68D5  58
 	pop XBC                                       ; FE68D6  59
 	pop XDE                                       ; FE68D7  5a
