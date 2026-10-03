@@ -1610,18 +1610,24 @@ AccentData_ComparePart5:
 AccentData_Part5_Done:
 	ret
 
+; The 12 bytes RhythmROM_ValidateHeader requires at the start of the Rhythm Data ROM
+; (RHYTHM_DATA_ROM__BASE_ADDR, 0x400000), as the three little-endian words it compares:
+; 00 01 04 05 83 00 01 04 05 83 00 01.  A match leaves RHYTHM_ROM_BASE = 0, any difference -1.
+.equ RHYTHMROM_SIG_0, 0x05040100
+.equ RHYTHMROM_SIG_1, 0x04010083
+.equ RHYTHMROM_SIG_2, 0x01008305
 RhythmROM_ValidateHeader:
 	xor xwa, xwa
 	ld (RHYTHM_ROM_BASE:16), xwa
-	ld xix, 0x400000
+	ld xix, RHYTHM_DATA_ROM__BASE_ADDR
 	ld xwa, (xix)
-	cp xwa, 0x5040100
+	cp xwa, RHYTHMROM_SIG_0
 	jr nz, AccChord_CheckFailed
 	ld xwa, (xix + 4)
-	cp xwa, 0x4010083
+	cp xwa, RHYTHMROM_SIG_1
 	jr nz, AccChord_CheckFailed
 	ld xwa, (xix + 8)
-	cp xwa, 0x1008305
+	cp xwa, RHYTHMROM_SIG_2
 	jr nz, AccChord_CheckFailed
 	jr RhythmROM_HeaderValid
 
