@@ -70314,7 +70314,7 @@ MidiOut_CC51_General6_JumpTable_FA7520:
 	.long MidiIn_NullHandler                    ; FA752C  [235]   -> MidiIn_NullHandler
 MidiOut_CC51_General6_JumpTable_FA7520_Nop1:   ; entry: 0xFA7520[1]
 	ret                                           ; FA7530  0e
-sub_FA7531:   ; entry: MidiOut_ParamNumberTable[112]
+MidiOut_Param70:   ; entry: MidiOut_ParamNumberTable[112]
 	ld XIY,sub_FA7531_JumpTable_FA753C                             ; FA7531  45 3c 75 fa 00
 	ld a, 0x03:opc                                   ; FA7536  21 03   ld A,0x03
 	calr MidiOut_DispatchByClass                                     ; FA7538  1e 11 00   calr 0xfa754c
@@ -70371,7 +70371,7 @@ MidiOut_BankSelect_Pair:   ; entry: MidiOut_ParamNumberTable[129]
 	calr .LFA7C95                                 ; FA7580  1e 12 07
 .LFA7583:
 	ret                                           ; FA7583  0e
-sub_FA7584:   ; entry: MidiOut_ParamNumberTable[152]
+MidiOut_Param98:   ; entry: MidiOut_ParamNumberTable[152]
 	ld a, (MidiCfg_InOutMode:16)                            ; FA7584  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA7588  c9 cc f0
 	cp a, 0x00:i3                                   ; FA758B  c9 d8   cp A,0
@@ -73737,7 +73737,7 @@ MidiOut_ParamNumberTable:
 	.long MidiOut_Param_Ignore                  ; FA8E7C  [109]
 	.long MidiOut_Param_Ignore                  ; FA8E80  [110]
 	.long MidiOut_Param_Ignore                  ; FA8E84  [111]
-	.long sub_FA7531                            ; FA8E88  [112]
+	.long MidiOut_Param70                            ; FA8E88  [112]
 	.long MidiOut_Param_Ignore                  ; FA8E8C  [113]
 	.long MidiOut_Param_Ignore                  ; FA8E90  [114]
 	.long MidiOut_Param_Ignore                  ; FA8E94  [115]
@@ -73777,7 +73777,7 @@ MidiOut_ParamNumberTable:
 	.long MidiOut_Param_Ignore                  ; FA8F1C  [149]
 	.long MidiOut_Param_Ignore                  ; FA8F20  [150]
 	.long MidiOut_Param_Ignore                  ; FA8F24  [151]
-	.long sub_FA7584                            ; FA8F28  [152]
+	.long MidiOut_Param98                            ; FA8F28  [152]
 	.long MidiOut_Param_Ignore                  ; FA8F2C  [153]
 	.long MidiOut_Param_Ignore                  ; FA8F30  [154]
 	.long MidiOut_Param_Ignore                  ; FA8F34  [155]
@@ -124200,22 +124200,22 @@ PanelOpTable_FCF92C:
 ; panel operation 0..16; see the block header for the reader shape.
 ; Read by: ToneEditPage_A0_KeyDispatch at 0xFD3DD4.
 ToneEditPage_A0_OpTable:
-	.long sub_FD3FE0                              ; FCF974  [ 0]
-	.long sub_FD4039                              ; FCF978  [ 1]
-	.long sub_FD40D4                              ; FCF97C  [ 2]
+	.long ToneEditPage_A0_Op0                              ; FCF974  [ 0]
+	.long ToneEditPage_A0_Op1                              ; FCF978  [ 1]
+	.long ToneEditPage_A0_Op2                              ; FCF97C  [ 2]
 	.long PanelOp_Nop                             ; FCF980  [ 3]
 	.long PanelOp_Nop                             ; FCF984  [ 4]
 	.long ToneEditField_A0_ResonatorType          ; FCF988  [ 5]
 	.long ToneEditField_A0_Group                  ; FCF98C  [ 6]
 	.long PanelOp_Nop                             ; FCF990  [ 7]
-	.long sub_FD43C6                              ; FCF994  [ 8]
-	.long sub_FD43E4                              ; FCF998  [ 9]
-	.long sub_FD440A                              ; FCF99C  [10]
-	.long sub_FD4430                              ; FCF9A0  [11]
-	.long sub_FD4468                              ; FCF9A4  [12]
+	.long ToneEditPage_A0_Op8                              ; FCF994  [ 8]
+	.long ToneEditPage_A0_Op9                              ; FCF998  [ 9]
+	.long ToneEditPage_A0_Op10                              ; FCF99C  [10]
+	.long ToneEditPage_A0_Op11                              ; FCF9A0  [11]
+	.long ToneEditPage_A0_Op12                              ; FCF9A4  [12]
 	.long PanelOp_Nop                             ; FCF9A8  [13]
 	.long PanelOp_Nop                             ; FCF9AC  [14]
-	.long sub_FD4493                              ; FCF9B0  [15]
+	.long ToneEditPage_A0_Op15                              ; FCF9B0  [15]
 	.long PanelOp_Nop                             ; FCF9B4  [16]
 	.long 0x00000000                              ; FCF9B8  [17] zero
 
@@ -124231,15 +124231,15 @@ ToneEditPage_A3_OpTable:
 	.long ToneEditField_A3_InteractionGain        ; FCF9D0  [ 5]
 	.long PanelOp_Nop                             ; FCF9D4  [ 6]
 	.long PanelOp_Nop                             ; FCF9D8  [ 7]
-	.long sub_FD4712                              ; FCF9DC  [ 8]
-	.long sub_FD4730                              ; FCF9E0  [ 9]
-	.long sub_FD475C                              ; FCF9E4  [10]
-	.long sub_FD4780                              ; FCF9E8  [11]
-	.long sub_FD47AC                              ; FCF9EC  [12]
+	.long ToneEditPage_A3_Op8                              ; FCF9DC  [ 8]
+	.long ToneEditPage_A3_Op9                              ; FCF9E0  [ 9]
+	.long ToneEditPage_A3_Op10                              ; FCF9E4  [10]
+	.long ToneEditPage_A3_Op11                              ; FCF9E8  [11]
+	.long ToneEditPage_A3_Op12                              ; FCF9EC  [12]
 	.long PanelOp_Nop                             ; FCF9F0  [13]
 	.long PanelOp_Nop                             ; FCF9F4  [14]
-	.long sub_FD47E8                              ; FCF9F8  [15]
-	.long sub_FD47D0                              ; FCF9FC  [16]
+	.long ToneEditPage_A3_Op15                              ; FCF9F8  [15]
+	.long ToneEditPage_A3_Op16                              ; FCF9FC  [16]
 	.long 0x00000000                              ; FCFA00  [17] zero
 
 ; ToneEditPage_A4_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124254,15 +124254,15 @@ ToneEditPage_A4_OpTable:
 	.long ToneEditField_A4_Touch                  ; FCFA18  [ 5]
 	.long PanelOp_Nop                             ; FCFA1C  [ 6]
 	.long PanelOp_Nop                             ; FCFA20  [ 7]
-	.long sub_FD49D8                              ; FCFA24  [ 8]
-	.long sub_FD49F6                              ; FCFA28  [ 9]
-	.long sub_FD4A22                              ; FCFA2C  [10]
-	.long sub_FD4A46                              ; FCFA30  [11]
-	.long sub_FD4A72                              ; FCFA34  [12]
+	.long ToneEditPage_A4_Op8                              ; FCFA24  [ 8]
+	.long ToneEditPage_A4_Op9                              ; FCFA28  [ 9]
+	.long ToneEditPage_A4_Op10                              ; FCFA2C  [10]
+	.long ToneEditPage_A4_Op11                              ; FCFA30  [11]
+	.long ToneEditPage_A4_Op12                              ; FCFA34  [12]
 	.long PanelOp_Nop                             ; FCFA38  [13]
 	.long PanelOp_Nop                             ; FCFA3C  [14]
-	.long sub_FD4AAE                              ; FCFA40  [15]
-	.long sub_FD4A96                              ; FCFA44  [16]
+	.long ToneEditPage_A4_Op15                              ; FCFA40  [15]
+	.long ToneEditPage_A4_Op16                              ; FCFA44  [16]
 	.long 0x00000000                              ; FCFA48  [17] zero
 
 ; ToneEditPage_A5_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124277,15 +124277,15 @@ ToneEditPage_A5_OpTable:
 	.long ToneEditField_A5_ResoScale              ; FCFA60  [ 5]
 	.long ToneEditPage_ToggleRowFocus_Call                              ; FCFA64  [ 6]
 	.long PanelOp_Nop                             ; FCFA68  [ 7]
-	.long sub_FD501D                              ; FCFA6C  [ 8]
-	.long sub_FD503B                              ; FCFA70  [ 9]
-	.long sub_FD5067                              ; FCFA74  [10]
-	.long sub_FD5093                              ; FCFA78  [11]
-	.long sub_FD5114                              ; FCFA7C  [12]
+	.long ToneEditPage_A5_Op8                              ; FCFA6C  [ 8]
+	.long ToneEditPage_A5_Op9                              ; FCFA70  [ 9]
+	.long ToneEditPage_A5_Op10                              ; FCFA74  [10]
+	.long ToneEditPage_A5_Op11                              ; FCFA78  [11]
+	.long ToneEditPage_A5_Op12                              ; FCFA7C  [12]
 	.long PanelOp_Nop                             ; FCFA80  [13]
 	.long PanelOp_Nop                             ; FCFA84  [14]
-	.long sub_FD5159                              ; FCFA88  [15]
-	.long sub_FD5141                              ; FCFA8C  [16]
+	.long ToneEditPage_A5_Op15                              ; FCFA88  [15]
+	.long ToneEditPage_A5_Op16                              ; FCFA8C  [16]
 	.long 0x00000000                              ; FCFA90  [17] zero
 
 ; ToneEditPage_A6_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124300,15 +124300,15 @@ ToneEditPage_A6_OpTable:
 	.long ToneEditField_A6_SubGain                ; FCFAA8  [ 5]
 	.long ToneEditPage_ToggleRowFocus_Call_2                              ; FCFAAC  [ 6]
 	.long PanelOp_Nop                             ; FCFAB0  [ 7]
-	.long sub_FD546F                              ; FCFAB4  [ 8]
-	.long sub_FD548D                              ; FCFAB8  [ 9]
-	.long sub_FD54B9                              ; FCFABC  [10]
-	.long sub_FD54E5                              ; FCFAC0  [11]
-	.long sub_FD5512                              ; FCFAC4  [12]
+	.long ToneEditPage_A6_Op8                              ; FCFAB4  [ 8]
+	.long ToneEditPage_A6_Op9                              ; FCFAB8  [ 9]
+	.long ToneEditPage_A6_Op10                              ; FCFABC  [10]
+	.long ToneEditPage_A6_Op11                              ; FCFAC0  [11]
+	.long ToneEditPage_A6_Op12                              ; FCFAC4  [12]
 	.long PanelOp_Nop                             ; FCFAC8  [13]
 	.long PanelOp_Nop                             ; FCFACC  [14]
-	.long sub_FD555C                              ; FCFAD0  [15]
-	.long sub_FD553F                              ; FCFAD4  [16]
+	.long ToneEditPage_A6_Op15                              ; FCFAD0  [15]
+	.long ToneEditPage_A6_Op16                              ; FCFAD4  [16]
 	.long 0x00000000                              ; FCFAD8  [17] zero
 
 ; ToneEditPage_A7_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124323,15 +124323,15 @@ ToneEditPage_A7_OpTable:
 	.long ToneEditField_A7_KeyFollowHigh          ; FCFAF0  [ 5]
 	.long ToneEditPage_ToggleRowFocus_Call_3                              ; FCFAF4  [ 6]
 	.long PanelOp_Nop                             ; FCFAF8  [ 7]
-	.long sub_FD5B63                              ; FCFAFC  [ 8]
-	.long sub_FD5B81                              ; FCFB00  [ 9]
-	.long sub_FD5BAD                              ; FCFB04  [10]
-	.long sub_FD5BD9                              ; FCFB08  [11]
-	.long sub_FD5C06                              ; FCFB0C  [12]
+	.long ToneEditPage_A7_Op8                              ; FCFAFC  [ 8]
+	.long ToneEditPage_A7_Op9                              ; FCFB00  [ 9]
+	.long ToneEditPage_A7_Op10                              ; FCFB04  [10]
+	.long ToneEditPage_A7_Op11                              ; FCFB08  [11]
+	.long ToneEditPage_A7_Op12                              ; FCFB0C  [12]
 	.long PanelOp_Nop                             ; FCFB10  [13]
 	.long PanelOp_Nop                             ; FCFB14  [14]
-	.long sub_FD5C4B                              ; FCFB18  [15]
-	.long sub_FD5C33                              ; FCFB1C  [16]
+	.long ToneEditPage_A7_Op15                              ; FCFB18  [15]
+	.long ToneEditPage_A7_Op16                              ; FCFB1C  [16]
 	.long 0x00000000                              ; FCFB20  [17] zero
 
 ; ToneEditPage_A8_OpTable -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124339,13 +124339,13 @@ ToneEditPage_A7_OpTable:
 ; Read by: ToneEditPage_A8_KeyDispatch at 0xFD3FBC.
 ToneEditPage_A8_OpTable:
 	.long PanelOp_Nop                             ; FCFB24  [ 0]
-	.long sub_FD5C63                              ; FCFB28  [ 1]
-	.long sub_FD5CB8                              ; FCFB2C  [ 2]
-	.long sub_FD5D01                              ; FCFB30  [ 3]
-	.long sub_FD5D56                              ; FCFB34  [ 4]
-	.long sub_FD5DA3                              ; FCFB38  [ 5]
-	.long sub_FD5F3E                              ; FCFB3C  [ 6]
-	.long sub_FD6043                              ; FCFB40  [ 7]
+	.long ToneEditPage_A8_Op1                              ; FCFB28  [ 1]
+	.long ToneEditPage_A8_Op2                              ; FCFB2C  [ 2]
+	.long ToneEditPage_A8_Op3                              ; FCFB30  [ 3]
+	.long ToneEditPage_A8_Op4                              ; FCFB34  [ 4]
+	.long ToneEditPage_A8_Op5                              ; FCFB38  [ 5]
+	.long ToneEditPage_A8_Op6                              ; FCFB3C  [ 6]
+	.long ToneEditPage_A8_Op7                              ; FCFB40  [ 7]
 	.long PanelOp_Nop                             ; FCFB44  [ 8]
 	.long PanelOp_Nop                             ; FCFB48  [ 9]
 	.long PanelOp_Nop                             ; FCFB4C  [10]
@@ -124353,7 +124353,7 @@ ToneEditPage_A8_OpTable:
 	.long PanelOp_Nop                             ; FCFB54  [12]
 	.long PanelOp_Nop                             ; FCFB58  [13]
 	.long PanelOp_Nop                             ; FCFB5C  [14]
-	.long sub_FD6057                              ; FCFB60  [15]
+	.long ToneEditPage_A8_Op15                              ; FCFB60  [15]
 	.long PanelOp_Nop                             ; FCFB64  [16]
 	.long 0x00000000                              ; FCFB68  [17] zero
 
@@ -124508,38 +124508,38 @@ StepValues_FCFCE1:
 ;          sub XBC,0x200 / add XBC,0x00FCFCE7 / ld XBC,(XBC) / push <ret> /
 ;          jp (XBC)`.  COUNT 32 is that bound.  (0x207C) holds the screen code.
 ScreenCode80_Handlers:
-	.long sub_FDAD44                              ; FCFCE7  [ 0]
+	.long ScreenCode80_Handler                              ; FCFCE7  [ 0]
 	.long ScreenCode_Nop                          ; FCFCEB  [ 1]
-	.long sub_FDC5B5                              ; FCFCEF  [ 2]
-	.long sub_FDC84C                              ; FCFCF3  [ 3]
-	.long sub_FDC95B                              ; FCFCF7  [ 4]
-	.long sub_FDCA77                              ; FCFCFB  [ 5]
-	.long sub_FDCB93                              ; FCFCFF  [ 6]
-	.long sub_FDB22F                              ; FCFD03  [ 7]
-	.long sub_FDB38C                              ; FCFD07  [ 8]
-	.long sub_FDB44D                              ; FCFD0B  [ 9]
-	.long sub_FDB529                              ; FCFD0F  [10]
-	.long sub_FDB693                              ; FCFD13  [11]
-	.long sub_FDB8D9                              ; FCFD17  [12]
-	.long sub_FDB9AB                              ; FCFD1B  [13]
-	.long sub_FDBAE7                              ; FCFD1F  [14]
-	.long sub_FDBBC3                              ; FCFD23  [15]
-	.long sub_FDC0ED                              ; FCFD27  [16]
-	.long sub_FDC27B                              ; FCFD2B  [17]
-	.long sub_FDC2A7                              ; FCFD2F  [18]
-	.long sub_FDC2CF                              ; FCFD33  [19]
-	.long sub_FDC2F7                              ; FCFD37  [20]
-	.long sub_FDC317                              ; FCFD3B  [21]
-	.long sub_FDC333                              ; FCFD3F  [22]
-	.long sub_FDC405                              ; FCFD43  [23]
-	.long sub_FDC4C6                              ; FCFD47  [24]
-	.long sub_FDC5A2                              ; FCFD4B  [25]
+	.long ScreenCode82_Handler                              ; FCFCEF  [ 2]
+	.long ScreenCode83_Handler                              ; FCFCF3  [ 3]
+	.long ScreenCode84_Handler                              ; FCFCF7  [ 4]
+	.long ScreenCode85_Handler                              ; FCFCFB  [ 5]
+	.long ScreenCode86_Handler                              ; FCFCFF  [ 6]
+	.long ScreenCode87_Handler                              ; FCFD03  [ 7]
+	.long ScreenCode88_Handler                              ; FCFD07  [ 8]
+	.long ScreenCode89_Handler                              ; FCFD0B  [ 9]
+	.long ScreenCode8A_Handler                              ; FCFD0F  [10]
+	.long ScreenCode8B_Handler                              ; FCFD13  [11]
+	.long ScreenCode8C_Handler                              ; FCFD17  [12]
+	.long ScreenCode8D_Handler                              ; FCFD1B  [13]
+	.long ScreenCode8E_Handler                              ; FCFD1F  [14]
+	.long ScreenCode8F_Handler                              ; FCFD23  [15]
+	.long ScreenCode90_Handler                              ; FCFD27  [16]
+	.long ScreenCode91_Handler                              ; FCFD2B  [17]
+	.long ScreenCode92_Handler                              ; FCFD2F  [18]
+	.long ScreenCode93_Handler                              ; FCFD33  [19]
+	.long ScreenCode94_Handler                              ; FCFD37  [20]
+	.long ScreenCode95_Handler                              ; FCFD3B  [21]
+	.long ScreenCode96_Handler                              ; FCFD3F  [22]
+	.long ScreenCode97_Handler                              ; FCFD43  [23]
+	.long ScreenCode98_Handler                              ; FCFD47  [24]
+	.long ScreenCode99_Handler                              ; FCFD4B  [25]
 	.long ScreenCode_Nop                          ; FCFD4F  [26]
-	.long sub_FDBEDE                              ; FCFD53  [27]
-	.long sub_FDC0E1                              ; FCFD57  [28]
-	.long sub_FDD0D4                              ; FCFD5B  [29]
-	.long sub_FDCDE0                              ; FCFD5F  [30]
-	.long sub_FDCFEB                              ; FCFD63  [31]
+	.long ScreenCode9B_Handler                              ; FCFD53  [27]
+	.long ScreenCode9C_Handler                              ; FCFD57  [28]
+	.long ScreenCode9D_Handler                              ; FCFD5B  [29]
+	.long ScreenCode9E_Handler                              ; FCFD5F  [30]
+	.long ScreenCode9F_Handler                              ; FCFD63  [31]
 
 ; ScreenCodeC0_Handlers -- 16 handler addresses for screen codes 0xC0-0xCF.
 ; Read by: sub_FD2014 at 0xFD21B4; sub_FD21E9 at 0xFD2315; sub_FD21E9 at 0xFD24E1: the same shape as ScreenCode80_Handlers with
@@ -124547,7 +124547,7 @@ ScreenCode80_Handlers:
 ;          Entry 3 is ToneEditPage_A3_PositionParameter, whose own header
 ;          says Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k.
 ScreenCodeC0_Handlers:
-	.long sub_FDD437                              ; FCFD67  [ 0]
+	.long ScreenCodeC0_Handler                              ; FCFD67  [ 0]
 	.long T_F41F7C_Nop                              ; FCFD6B  [ 1]
 	.long T_F41F8C_Nop                              ; FCFD6F  [ 2]
 	.long ToneEditPage_A3_PositionParameter       ; FCFD73  [ 3]
@@ -124555,12 +124555,12 @@ ScreenCodeC0_Handlers:
 	.long ToneEditPage_A5_FittingMutingTuning     ; FCFD7B  [ 5]
 	.long ToneEditPage_A6_TouchDepth              ; FCFD7F  [ 6]
 	.long ToneEditPage_A7_ResoModeKeyFollow       ; FCFD83  [ 7]
-	.long sub_FDDF36                              ; FCFD87  [ 8]
+	.long ScreenCodeC8_Handler                              ; FCFD87  [ 8]
 	.long ScreenCode_Nop                          ; FCFD8B  [ 9]
-	.long sub_FDD272                              ; FCFD8F  [10]
-	.long sub_FDD27F                              ; FCFD93  [11]
+	.long ScreenCodeCA_Handler                              ; FCFD8F  [10]
+	.long ScreenCodeCB_Handler                              ; FCFD93  [11]
 	.long T_F42340_Nop                              ; FCFD97  [12]
-	.long sub_FDBBD6                              ; FCFD9B  [13]
+	.long ScreenCodeCD_Handler                              ; FCFD9B  [13]
 	.long ScreenCode_Nop                          ; FCFD9F  [14]
 	.long ScreenCode_Nop                          ; FCFDA3  [15]
 
@@ -128676,7 +128676,7 @@ sub_FD21E9:
 	ld h, (0x2335:16)                                   ; FD2286  c1 35 23 26
 	cp H,0x82                                            ; FD228A  ce cf 82
 	jr nz, .LFD2296                                      ; FD228D  6e 07
-	call sub_FDC5B5                                      ; FD228F  1d b5 c5 fd
+	call ScreenCode82_Handler                                      ; FD228F  1d b5 c5 fd
 	jrl .LFD24FE                                         ; FD2293  78 68 02
 .LFD2296:
 	cp H,0x10                                            ; FD2296  ce cf 10
@@ -128735,12 +128735,12 @@ sub_FD21E9:
 	jr nz, .LFD234A                                      ; FD232B  6e 1d
 	m_cp_mi8 MB16, UI_ScreenId, 0x80                          ; FD232D  c1 7c 20 3f 80
 	jr nz, .LFD233B                                      ; FD2332  6e 07
-	call sub_FDAD44                                      ; FD2334  1d 44 ad fd
+	call ScreenCode80_Handler                                      ; FD2334  1d 44 ad fd
 	jrl .LFD24FE                                         ; FD2338  78 c3 01
 .LFD233B:
 	m_cp_mi8 MB16, UI_ScreenId, 0xcb                          ; FD233B  c1 7c 20 3f cb
 	jrl nz, .LFD24FE                                     ; FD2340  7e bb 01
-	call sub_FDD27F                                      ; FD2343  1d 7f d2 fd
+	call ScreenCodeCB_Handler                                      ; FD2343  1d 7f d2 fd
 	jrl .LFD24FE                                         ; FD2347  78 b4 01
 .LFD234A:
 	cp H,0x12                                            ; FD234A  ce cf 12
@@ -128750,7 +128750,7 @@ sub_FD21E9:
 	ld c, (0x2335:16)                                   ; FD2356  c1 35 23 23
 	cp C,0x80                                            ; FD235A  cb cf 80
 	jr nz, .LFD2379                                      ; FD235D  6e 1a
-	call sub_FDAD44                                      ; FD235F  1d 44 ad fd
+	call ScreenCode80_Handler                                      ; FD235F  1d 44 ad fd
 	jr .LFD2379                                          ; FD2363  68 14
 .LFD2365:
 	m_cp_mi8 MB16, UI_ScreenId, 0x82                          ; FD2365  c1 7c 20 3f 82
@@ -128758,7 +128758,7 @@ sub_FD21E9:
 	ld c, (0x2335:16)                                   ; FD236C  c1 35 23 23
 	cp C,0x82                                            ; FD2370  cb cf 82
 	jr nz, .LFD2379                                      ; FD2373  6e 04
-	call sub_FDC5B5                                      ; FD2375  1d b5 c5 fd
+	call ScreenCode82_Handler                                      ; FD2375  1d b5 c5 fd
 .LFD2379:
 	ld c, (0x2335:16)                                   ; FD2379  c1 35 23 23
 	cp C,0x10                                            ; FD237D  cb cf 10
@@ -131883,8 +131883,8 @@ ToneEditPage_A8_KeyDispatch:
 .LFD3FDD:
 	unlk XIZ                                             ; FD3FDD  ee 0d
 	ret                                                  ; FD3FDF  0e
-; sub_FD3FE0 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD3FE0:
+; ToneEditPage_A0_Op0 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op0:
 	link XIZ,0xfffe                                      ; FD3FE0  ee 0c fe ff
 	pushw hl                                             ; FD3FE4  2b
 	lda xbc, (xiz-2)                                     ; FD3FE5  be fe 31
@@ -131925,8 +131925,8 @@ sub_FD400D:
 	popw hl                                              ; FD4035  4b
 	unlk XIZ                                             ; FD4036  ee 0d
 	ret                                                  ; FD4038  0e
-; sub_FD4039 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD4039:
+; ToneEditPage_A0_Op1 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op1:
 	link XIZ,0xfff8                                      ; FD4039  ee 0c f8 ff
 	pushw hl                                             ; FD403D  2b
 	lda xbc, (xiz-2)                                     ; FD403E  be fe 31
@@ -131989,8 +131989,8 @@ sub_FD4039:
 	popw hl                                              ; FD40D0  4b
 	unlk XIZ                                             ; FD40D1  ee 0d
 	ret                                                  ; FD40D3  0e
-; sub_FD40D4 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD40D4:
+; ToneEditPage_A0_Op2 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op2:
 	link XIZ,0xfffa                                      ; FD40D4  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD40D8  be fe 31
 	push XBC                                             ; FD40DB  39
@@ -132357,8 +132357,8 @@ sub_FD42A5:
 	popw hl                                              ; FD43C2  4b
 	unlk XIZ                                             ; FD43C3  ee 0d
 	ret                                                  ; FD43C5  0e
-; sub_FD43C6 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD43C6:
+; ToneEditPage_A0_Op8 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op8:
 	link XIZ,0x0000                                      ; FD43C6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD43CA  8e 08 3f 00
 	jr nz, .LFD43DD                                      ; FD43CE  6e 0d
@@ -132372,8 +132372,8 @@ sub_FD43C6:
 .LFD43E1:
 	unlk XIZ                                             ; FD43E1  ee 0d
 	ret                                                  ; FD43E3  0e
-; sub_FD43E4 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD43E4:
+; ToneEditPage_A0_Op9 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op9:
 	link XIZ,0x0000                                      ; FD43E4  ee 0c 00 00
 	pushw 0x00                                           ; FD43E8  0b 00 00
 	cp (XIZ+0x08),0x00                                   ; FD43EB  8e 08 3f 00
@@ -132390,8 +132390,8 @@ sub_FD43E4:
 .LFD4407:
 	unlk XIZ                                             ; FD4407  ee 0d
 	ret                                                  ; FD4409  0e
-; sub_FD440A -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD440A:
+; ToneEditPage_A0_Op10 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op10:
 	link XIZ,0x0000                                      ; FD440A  ee 0c 00 00
 	pushw 0x00                                           ; FD440E  0b 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4411  8e 08 3f 00
@@ -132408,8 +132408,8 @@ sub_FD440A:
 .LFD442D:
 	unlk XIZ                                             ; FD442D  ee 0d
 	ret                                                  ; FD442F  0e
-; sub_FD4430 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD4430:
+; ToneEditPage_A0_Op11 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op11:
 	link XIZ,0xfffe                                      ; FD4430  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD4434  8e 08 3f 00
 	jr nz, .LFD4447                                      ; FD4438  6e 0d
@@ -132433,8 +132433,8 @@ sub_FD4430:
 .LFD4465:
 	unlk XIZ                                             ; FD4465  ee 0d
 	ret                                                  ; FD4467  0e
-; sub_FD4468 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD4468:
+; ToneEditPage_A0_Op12 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op12:
 	link XIZ,0xfffe                                      ; FD4468  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD446C  8e 08 3f 00
 	jr z, .LFD4490                                       ; FD4470  66 1e
@@ -132452,8 +132452,8 @@ sub_FD4468:
 .LFD4490:
 	unlk XIZ                                             ; FD4490  ee 0d
 	ret                                                  ; FD4492  0e
-; sub_FD4493 -- a handler: an entry of ToneEditPage_A0_OpTable
-sub_FD4493:
+; ToneEditPage_A0_Op15 -- a handler: an entry of ToneEditPage_A0_OpTable
+ToneEditPage_A0_Op15:
 	link XIZ,0xfffe                                      ; FD4493  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD4497  8e 08 3f 00
 	jr nz, .LFD44C4                                      ; FD449B  6e 27
@@ -132790,8 +132790,8 @@ ToneEditField_A3_InteractionGain:
 	pop XIX                                              ; FD470E  5c
 	unlk XIZ                                             ; FD470F  ee 0d
 	ret                                                  ; FD4711  0e
-; sub_FD4712 -- a handler: an entry of ToneEditPage_A3_OpTable
-sub_FD4712:
+; ToneEditPage_A3_Op8 -- a handler: an entry of ToneEditPage_A3_OpTable
+ToneEditPage_A3_Op8:
 	link XIZ,0x0000                                      ; FD4712  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4716  8e 08 3f 00
 	jr nz, .LFD4729                                      ; FD471A  6e 0d
@@ -132805,8 +132805,8 @@ sub_FD4712:
 .LFD472D:
 	unlk XIZ                                             ; FD472D  ee 0d
 	ret                                                  ; FD472F  0e
-; sub_FD4730 -- a handler: an entry of ToneEditPage_A3_OpTable
-sub_FD4730:
+; ToneEditPage_A3_Op9 -- a handler: an entry of ToneEditPage_A3_OpTable
+ToneEditPage_A3_Op9:
 	link XIZ,0x0000                                      ; FD4730  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4734  8e 08 3f 00
 	jr nz, .LFD4742                                      ; FD4738  6e 08
@@ -132827,8 +132827,8 @@ sub_FD4730:
 .LFD4759:
 	unlk XIZ                                             ; FD4759  ee 0d
 	ret                                                  ; FD475B  0e
-; sub_FD475C -- a handler: an entry of ToneEditPage_A3_OpTable
-sub_FD475C:
+; ToneEditPage_A3_Op10 -- a handler: an entry of ToneEditPage_A3_OpTable
+ToneEditPage_A3_Op10:
 	link XIZ,0x0000                                      ; FD475C  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4760  8e 08 3f 00
 	jr z, .LFD477D                                       ; FD4764  66 17
@@ -132844,8 +132844,8 @@ sub_FD475C:
 .LFD477D:
 	unlk XIZ                                             ; FD477D  ee 0d
 	ret                                                  ; FD477F  0e
-; sub_FD4780 -- a handler: an entry of ToneEditPage_A3_OpTable
-sub_FD4780:
+; ToneEditPage_A3_Op11 -- a handler: an entry of ToneEditPage_A3_OpTable
+ToneEditPage_A3_Op11:
 	link XIZ,0x0000                                      ; FD4780  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4784  8e 08 3f 00
 	jr nz, .LFD4792                                      ; FD4788  6e 08
@@ -132866,8 +132866,8 @@ sub_FD4780:
 .LFD47A9:
 	unlk XIZ                                             ; FD47A9  ee 0d
 	ret                                                  ; FD47AB  0e
-; sub_FD47AC -- a handler: an entry of ToneEditPage_A3_OpTable
-sub_FD47AC:
+; ToneEditPage_A3_Op12 -- a handler: an entry of ToneEditPage_A3_OpTable
+ToneEditPage_A3_Op12:
 	link XIZ,0x0000                                      ; FD47AC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD47B0  8e 08 3f 00
 	jr z, .LFD47CD                                       ; FD47B4  66 17
@@ -132883,8 +132883,8 @@ sub_FD47AC:
 .LFD47CD:
 	unlk XIZ                                             ; FD47CD  ee 0d
 	ret                                                  ; FD47CF  0e
-; sub_FD47D0 -- a handler: an entry of ToneEditPage_A3_OpTable
-sub_FD47D0:
+; ToneEditPage_A3_Op16 -- a handler: an entry of ToneEditPage_A3_OpTable
+ToneEditPage_A3_Op16:
 	link XIZ,0x0000                                      ; FD47D0  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD47D4  8e 08 3f 00
 	jr nz, .LFD47E5                                      ; FD47D8  6e 0b
@@ -132895,8 +132895,8 @@ sub_FD47D0:
 .LFD47E5:
 	unlk XIZ                                             ; FD47E5  ee 0d
 	ret                                                  ; FD47E7  0e
-; sub_FD47E8 -- a handler: an entry of ToneEditPage_A3_OpTable
-sub_FD47E8:
+; ToneEditPage_A3_Op15 -- a handler: an entry of ToneEditPage_A3_OpTable
+ToneEditPage_A3_Op15:
 	link XIZ,0x0000                                      ; FD47E8  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD47EC  8e 08 3f 00
 	jr nz, .LFD47FD                                      ; FD47F0  6e 0b
@@ -133167,8 +133167,8 @@ ToneEditField_A4_Touch:
 	pop XIX                                              ; FD49D4  5c
 	unlk XIZ                                             ; FD49D5  ee 0d
 	ret                                                  ; FD49D7  0e
-; sub_FD49D8 -- a handler: an entry of ToneEditPage_A4_OpTable
-sub_FD49D8:
+; ToneEditPage_A4_Op8 -- a handler: an entry of ToneEditPage_A4_OpTable
+ToneEditPage_A4_Op8:
 	link XIZ,0x0000                                      ; FD49D8  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD49DC  8e 08 3f 00
 	jr nz, .LFD49EF                                      ; FD49E0  6e 0d
@@ -133182,8 +133182,8 @@ sub_FD49D8:
 .LFD49F3:
 	unlk XIZ                                             ; FD49F3  ee 0d
 	ret                                                  ; FD49F5  0e
-; sub_FD49F6 -- a handler: an entry of ToneEditPage_A4_OpTable
-sub_FD49F6:
+; ToneEditPage_A4_Op9 -- a handler: an entry of ToneEditPage_A4_OpTable
+ToneEditPage_A4_Op9:
 	link XIZ,0x0000                                      ; FD49F6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD49FA  8e 08 3f 00
 	jr NZ,.LFD4A08                                       ; FD49FE  6e 08
@@ -133204,8 +133204,8 @@ sub_FD49F6:
 .LFD4A1F:
 	unlk XIZ                                             ; FD4A1F  ee 0d
 	ret                                                  ; FD4A21  0e
-; sub_FD4A22 -- a handler: an entry of ToneEditPage_A4_OpTable
-sub_FD4A22:
+; ToneEditPage_A4_Op10 -- a handler: an entry of ToneEditPage_A4_OpTable
+ToneEditPage_A4_Op10:
 	link XIZ,0x0000                                      ; FD4A22  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A26  8e 08 3f 00
 	jr z, .LFD4A43                                       ; FD4A2A  66 17
@@ -133221,8 +133221,8 @@ sub_FD4A22:
 .LFD4A43:
 	unlk XIZ                                             ; FD4A43  ee 0d
 	ret                                                  ; FD4A45  0e
-; sub_FD4A46 -- a handler: an entry of ToneEditPage_A4_OpTable
-sub_FD4A46:
+; ToneEditPage_A4_Op11 -- a handler: an entry of ToneEditPage_A4_OpTable
+ToneEditPage_A4_Op11:
 	link XIZ,0x0000                                      ; FD4A46  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A4A  8e 08 3f 00
 	jr nz, .LFD4A58                                      ; FD4A4E  6e 08
@@ -133243,8 +133243,8 @@ sub_FD4A46:
 .LFD4A6F:
 	unlk XIZ                                             ; FD4A6F  ee 0d
 	ret                                                  ; FD4A71  0e
-; sub_FD4A72 -- a handler: an entry of ToneEditPage_A4_OpTable
-sub_FD4A72:
+; ToneEditPage_A4_Op12 -- a handler: an entry of ToneEditPage_A4_OpTable
+ToneEditPage_A4_Op12:
 	link XIZ,0x0000                                      ; FD4A72  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A76  8e 08 3f 00
 	jr z, .LFD4A93                                       ; FD4A7A  66 17
@@ -133260,8 +133260,8 @@ sub_FD4A72:
 .LFD4A93:
 	unlk XIZ                                             ; FD4A93  ee 0d
 	ret                                                  ; FD4A95  0e
-; sub_FD4A96 -- a handler: an entry of ToneEditPage_A4_OpTable
-sub_FD4A96:
+; ToneEditPage_A4_Op16 -- a handler: an entry of ToneEditPage_A4_OpTable
+ToneEditPage_A4_Op16:
 	link XIZ,0x0000                                      ; FD4A96  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4A9A  8e 08 3f 00
 	jr z, .LFD4AAB                                       ; FD4A9E  66 0b
@@ -133272,8 +133272,8 @@ sub_FD4A96:
 .LFD4AAB:
 	unlk XIZ                                             ; FD4AAB  ee 0d
 	ret                                                  ; FD4AAD  0e
-; sub_FD4AAE -- a handler: an entry of ToneEditPage_A4_OpTable
-sub_FD4AAE:
+; ToneEditPage_A4_Op15 -- a handler: an entry of ToneEditPage_A4_OpTable
+ToneEditPage_A4_Op15:
 	link XIZ,0x0000                                      ; FD4AAE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD4AB2  8e 08 3f 00
 	jr nz, .LFD4AC3                                      ; FD4AB6  6e 0b
@@ -134004,8 +134004,8 @@ ToneEditPage_ToggleRowFocus:
 	inc 8,XSP                                            ; FD5018  ef 60
 	unlk XIZ                                             ; FD501A  ee 0d
 	ret                                                  ; FD501C  0e
-; sub_FD501D -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD501D:
+; ToneEditPage_A5_Op8 -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_A5_Op8:
 	link XIZ,0x0000                                      ; FD501D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5021  8e 08 3f 00
 	jr nz, .LFD5034                                      ; FD5025  6e 0d
@@ -134019,8 +134019,8 @@ sub_FD501D:
 .LFD5038:
 	unlk XIZ                                             ; FD5038  ee 0d
 	ret                                                  ; FD503A  0e
-; sub_FD503B -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD503B:
+; ToneEditPage_A5_Op9 -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_A5_Op9:
 	link XIZ,0x0000                                      ; FD503B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD503F  8e 08 3f 00
 	jr nz, .LFD504D                                      ; FD5043  6e 08
@@ -134041,8 +134041,8 @@ sub_FD503B:
 .LFD5064:
 	unlk XIZ                                             ; FD5064  ee 0d
 	ret                                                  ; FD5066  0e
-; sub_FD5067 -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD5067:
+; ToneEditPage_A5_Op10 -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_A5_Op10:
 	link XIZ,0x0000                                      ; FD5067  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD506B  8e 08 3f 00
 	jr nz, .LFD5079                                      ; FD506F  6e 08
@@ -134063,8 +134063,8 @@ sub_FD5067:
 .LFD5090:
 	unlk XIZ                                             ; FD5090  ee 0d
 	ret                                                  ; FD5092  0e
-; sub_FD5093 -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD5093:
+; ToneEditPage_A5_Op11 -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_A5_Op11:
 	link XIZ,0x0000                                      ; FD5093  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5097  8e 08 3f 00
 	jr nz, .LFD50A6                                      ; FD509B  6e 09
@@ -134119,8 +134119,8 @@ sub_FD50C0:
 .LFD5111:
 	unlk XIZ                                             ; FD5111  ee 0d
 	ret                                                  ; FD5113  0e
-; sub_FD5114 -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD5114:
+; ToneEditPage_A5_Op12 -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_A5_Op12:
 	link XIZ,0x0000                                      ; FD5114  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5118  8e 08 3f 00
 	jr nz, .LFD5127                                      ; FD511C  6e 09
@@ -134141,8 +134141,8 @@ sub_FD5114:
 .LFD513E:
 	unlk XIZ                                             ; FD513E  ee 0d
 	ret                                                  ; FD5140  0e
-; sub_FD5141 -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD5141:
+; ToneEditPage_A5_Op16 -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_A5_Op16:
 	link XIZ,0x0000                                      ; FD5141  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5145  8e 08 3f 00
 	jr nz, .LFD5156                                      ; FD5149  6e 0b
@@ -134153,8 +134153,8 @@ sub_FD5141:
 .LFD5156:
 	unlk XIZ                                             ; FD5156  ee 0d
 	ret                                                  ; FD5158  0e
-; sub_FD5159 -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD5159:
+; ToneEditPage_A5_Op15 -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_A5_Op15:
 	link XIZ,0x0000                                      ; FD5159  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD515D  8e 08 3f 00
 	jr nz, .LFD516E                                      ; FD5161  6e 0b
@@ -134578,8 +134578,8 @@ ToneEditField_A6_SubGain:
 ToneEditPage_ToggleRowFocus_Call_2:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD546B  1e 72 fb
 	ret                                                  ; FD546E  0e
-; sub_FD546F -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD546F:
+; ToneEditPage_A6_Op8 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_A6_Op8:
 	link XIZ,0x0000                                      ; FD546F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5473  8e 08 3f 00
 	jr nz, .LFD5486                                    ; FD5477  6e 0d
@@ -134593,8 +134593,8 @@ sub_FD546F:
 .LFD548A:
 	unlk XIZ                                             ; FD548A  ee 0d
 	ret                                                  ; FD548C  0e
-; sub_FD548D -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD548D:
+; ToneEditPage_A6_Op9 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_A6_Op9:
 	link XIZ,0x0000                                      ; FD548D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5491  8e 08 3f 00
 	jr nz, .LFD549F                                      ; FD5495  6e 08
@@ -134615,8 +134615,8 @@ sub_FD548D:
 .LFD54B6:
 	unlk XIZ                                             ; FD54B6  ee 0d
 	ret                                                  ; FD54B8  0e
-; sub_FD54B9 -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD54B9:
+; ToneEditPage_A6_Op10 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_A6_Op10:
 	link XIZ,0x0000                                      ; FD54B9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD54BD  8e 08 3f 00
 	jr nz, .LFD54CB                                      ; FD54C1  6e 08
@@ -134637,8 +134637,8 @@ sub_FD54B9:
 .LFD54E2:
 	unlk XIZ                                             ; FD54E2  ee 0d
 	ret                                                  ; FD54E4  0e
-; sub_FD54E5 -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD54E5:
+; ToneEditPage_A6_Op11 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_A6_Op11:
 	link XIZ,0x0000                                      ; FD54E5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD54E9  8e 08 3f 00
 	jr nz, .LFD54F8                                      ; FD54ED  6e 09
@@ -134659,8 +134659,8 @@ sub_FD54E5:
 .LFD550F:
 	unlk XIZ                                             ; FD550F  ee 0d
 	ret                                                  ; FD5511  0e
-; sub_FD5512 -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD5512:
+; ToneEditPage_A6_Op12 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_A6_Op12:
 	link XIZ,0x0000                                      ; FD5512  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5516  8e 08 3f 00
 	jr nz, .LFD5525                                      ; FD551A  6e 09
@@ -134681,8 +134681,8 @@ sub_FD5512:
 .LFD553C:
 	unlk XIZ                                             ; FD553C  ee 0d
 	ret                                                  ; FD553E  0e
-; sub_FD553F -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD553F:
+; ToneEditPage_A6_Op16 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_A6_Op16:
 	link XIZ,0x0000                                      ; FD553F  ee 0c 00 00
 	pushw 0x00                                           ; FD5543  0b 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5546  8e 08 3f 00
@@ -134696,8 +134696,8 @@ sub_FD553F:
 	pop XBC                                              ; FD5558  59
 	unlk XIZ                                             ; FD5559  ee 0d
 	ret                                                  ; FD555B  0e
-; sub_FD555C -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD555C:
+; ToneEditPage_A6_Op15 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_A6_Op15:
 	link XIZ,0x0000                                      ; FD555C  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5560  8e 08 3f 00
 	jr nz, .LFD5571                                      ; FD5564  6e 0b
@@ -135526,8 +135526,8 @@ ToneEditField_A7_KeyFollowHigh:
 ToneEditPage_ToggleRowFocus_Call_3:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD5B5F  1e 7e f4
 	ret                                                  ; FD5B62  0e
-; sub_FD5B63 -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5B63:
+; ToneEditPage_A7_Op8 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_A7_Op8:
 	link XIZ,0x0000                                      ; FD5B63  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5B67  8e 08 3f 00
 	jr nz, .LFD5B7A                                      ; FD5B6B  6e 0d
@@ -135541,8 +135541,8 @@ sub_FD5B63:
 .LFD5B7E:
 	unlk XIZ                                             ; FD5B7E  ee 0d
 	ret                                                  ; FD5B80  0e
-; sub_FD5B81 -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5B81:
+; ToneEditPage_A7_Op9 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_A7_Op9:
 	link XIZ,0x0000                                      ; FD5B81  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5B85  8e 08 3f 00
 	jr nz, .LFD5B93                                      ; FD5B89  6e 08
@@ -135563,8 +135563,8 @@ sub_FD5B81:
 .LFD5BAA:
 	unlk XIZ                                             ; FD5BAA  ee 0d
 	ret                                                  ; FD5BAC  0e
-; sub_FD5BAD -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5BAD:
+; ToneEditPage_A7_Op10 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_A7_Op10:
 	link XIZ,0x0000                                      ; FD5BAD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5BB1  8e 08 3f 00
 	jr nz, .LFD5BBF                                      ; FD5BB5  6e 08
@@ -135585,8 +135585,8 @@ sub_FD5BAD:
 .LFD5BD6:
 	unlk XIZ                                             ; FD5BD6  ee 0d
 	ret                                                  ; FD5BD8  0e
-; sub_FD5BD9 -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5BD9:
+; ToneEditPage_A7_Op11 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_A7_Op11:
 	link XIZ,0x0000                                      ; FD5BD9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5BDD  8e 08 3f 00
 	jr nz, .LFD5BEC                                      ; FD5BE1  6e 09
@@ -135607,8 +135607,8 @@ sub_FD5BD9:
 .LFD5C03:
 	unlk XIZ                                             ; FD5C03  ee 0d
 	ret                                                  ; FD5C05  0e
-; sub_FD5C06 -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5C06:
+; ToneEditPage_A7_Op12 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_A7_Op12:
 	link XIZ,0x0000                                      ; FD5C06  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5C0A  8e 08 3f 00
 	jr nz, .LFD5C19                                      ; FD5C0E  6e 09
@@ -135629,8 +135629,8 @@ sub_FD5C06:
 .LFD5C30:
 	unlk XIZ                                             ; FD5C30  ee 0d
 	ret                                                  ; FD5C32  0e
-; sub_FD5C33 -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5C33:
+; ToneEditPage_A7_Op16 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_A7_Op16:
 	link XIZ,0x0000                                      ; FD5C33  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5C37  8e 08 3f 00
 	jr z, .LFD5C48                                       ; FD5C3B  66 0b
@@ -135641,8 +135641,8 @@ sub_FD5C33:
 .LFD5C48:
 	unlk XIZ                                             ; FD5C48  ee 0d
 	ret                                                  ; FD5C4A  0e
-; sub_FD5C4B -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5C4B:
+; ToneEditPage_A7_Op15 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_A7_Op15:
 	link XIZ,0x0000                                      ; FD5C4B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD5C4F  8e 08 3f 00
 	jr nz, .LFD5C60                                      ; FD5C53  6e 0b
@@ -135653,8 +135653,8 @@ sub_FD5C4B:
 .LFD5C60:
 	unlk XIZ                                             ; FD5C60  ee 0d
 	ret                                                  ; FD5C62  0e
-; sub_FD5C63 -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD5C63:
+; ToneEditPage_A8_Op1 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op1:
 	link XIZ,0xfff4                                      ; FD5C63  ee 0c f4 ff
 	push XIX                                             ; FD5C67  3c
 	lda xix, (xiz-12)                                    ; FD5C68  be f4 34
@@ -135684,8 +135684,8 @@ sub_FD5C63:
 	pop XIX                                              ; FD5CB4  5c
 	unlk XIZ                                             ; FD5CB5  ee 0d
 	ret                                                  ; FD5CB7  0e
-; sub_FD5CB8 -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD5CB8:
+; ToneEditPage_A8_Op2 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op2:
 	link XIZ,0xfffe                                      ; FD5CB8  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD5CBC  be fe 31
 	push XBC                                             ; FD5CBF  39
@@ -135715,8 +135715,8 @@ sub_FD5CB8:
 .LFD5CFE:
 	unlk XIZ                                             ; FD5CFE  ee 0d
 	ret                                                  ; FD5D00  0e
-; sub_FD5D01 -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD5D01:
+; ToneEditPage_A8_Op3 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op3:
 	link XIZ,0xfff4                                      ; FD5D01  ee 0c f4 ff
 	push XIX                                             ; FD5D05  3c
 	lda xix, (xiz-12)                                    ; FD5D06  be f4 34
@@ -135746,8 +135746,8 @@ sub_FD5D01:
 	pop XIX                                              ; FD5D52  5c
 	unlk XIZ                                             ; FD5D53  ee 0d
 	ret                                                  ; FD5D55  0e
-; sub_FD5D56 -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD5D56:
+; ToneEditPage_A8_Op4 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op4:
 	link XIZ,0xfffe                                      ; FD5D56  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD5D5A  be fe 31
 	push XBC                                             ; FD5D5D  39
@@ -135779,8 +135779,8 @@ sub_FD5D56:
 .LFD5DA0:
 	unlk XIZ                                             ; FD5DA0  ee 0d
 	ret                                                  ; FD5DA2  0e
-; sub_FD5DA3 -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD5DA3:
+; ToneEditPage_A8_Op5 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op5:
 	link XIZ,0xfffe                                      ; FD5DA3  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD5DA7  be fe 31
 	push XBC                                             ; FD5DAA  39
@@ -135944,8 +135944,8 @@ sub_FD5E06:
 	pop XIX                                              ; FD5F3A  5c
 	unlk XIZ                                             ; FD5F3B  ee 0d
 	ret                                                  ; FD5F3D  0e
-; sub_FD5F3E -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD5F3E:
+; ToneEditPage_A8_Op6 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op6:
 	link XIZ,0x0000                                      ; FD5F3E  ee 0c 00 00
 	pushw 0x01                                           ; FD5F42  0b 01 00
 	ld BC,(XIZ+0x08)                                     ; FD5F45  9e 08 21
@@ -136060,8 +136060,8 @@ sub_FD5F52:
 	popw hl                                              ; FD603F  4b
 	unlk XIZ                                             ; FD6040  ee 0d
 	ret                                                  ; FD6042  0e
-; sub_FD6043 -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD6043:
+; ToneEditPage_A8_Op7 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op7:
 	link XIZ,0x0000                                      ; FD6043  ee 0c 00 00
 	pushw 0x02                                           ; FD6047  0b 02 00
 	ld BC,(XIZ+0x08)                                     ; FD604A  9e 08 21
@@ -136071,8 +136071,8 @@ sub_FD6043:
 	pop XBC                                              ; FD6053  59
 	unlk XIZ                                             ; FD6054  ee 0d
 	ret                                                  ; FD6056  0e
-; sub_FD6057 -- a handler: an entry of ToneEditPage_A8_OpTable
-sub_FD6057:
+; ToneEditPage_A8_Op15 -- a handler: an entry of ToneEditPage_A8_OpTable
+ToneEditPage_A8_Op15:
 	link XIZ,0xfffe                                      ; FD6057  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD605B  8e 08 3f 00
 	jr nz, .LFD6088                                      ; FD605F  6e 27
@@ -145820,7 +145820,7 @@ sub_FDACBD:
 .LFDAD41:
 	unlk XIZ                                             ; FDAD41  ee 0d
 	ret                                                  ; FDAD43  0e
-sub_FDAD44:
+ScreenCode80_Handler:
 	link XIZ,0xffea                                      ; FDAD44  ee 0c ea ff
 	push XIX                                             ; FDAD48  3c
 	lda xix, (xiz-22)                                    ; FDAD49  be ea 34
@@ -146322,7 +146322,7 @@ sub_FDAF07:
 	popw hl                                              ; FDB22B  4b
 	unlk XIZ                                             ; FDB22C  ee 0d
 	ret                                                  ; FDB22E  0e
-sub_FDB22F:
+ScreenCode87_Handler:
 	link XIZ,0xfff2                                      ; FDB22F  ee 0c f2 ff
 	pushw hl                                             ; FDB233  2b
 	pushw de                                             ; FDB234  2a
@@ -146463,7 +146463,7 @@ sub_FDB30B:
 	popw hl                                              ; FDB388  4b
 	unlk XIZ                                             ; FDB389  ee 0d
 	ret                                                  ; FDB38B  0e
-sub_FDB38C:
+ScreenCode88_Handler:
 	link XIZ,0xfff6                                      ; FDB38C  ee 0c f6 ff
 	pushw hl                                             ; FDB390  2b
 	pushw de                                             ; FDB391  2a
@@ -146542,7 +146542,7 @@ sub_FDB38C:
 	popw hl                                              ; FDB449  4b
 	unlk XIZ                                             ; FDB44A  ee 0d
 	ret                                                  ; FDB44C  0e
-sub_FDB44D:
+ScreenCode89_Handler:
 	link XIZ,0xfff4                                      ; FDB44D  ee 0c f4 ff
 	pushw hl                                             ; FDB451  2b
 	pushw de                                             ; FDB452  2a
@@ -146631,7 +146631,7 @@ sub_FDB4B0:
 	popw hl                                              ; FDB525  4b
 	unlk XIZ                                             ; FDB526  ee 0d
 	ret                                                  ; FDB528  0e
-sub_FDB529:
+ScreenCode8A_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDB529  1d 80 2e f4
 	pushw 0x8a                                           ; FDB52D  0b 8a 00
 	calr sub_FDB53C                                      ; FDB530  1e 09 00
@@ -146797,7 +146797,7 @@ sub_FDB53C:
 	popw hl                                              ; FDB68F  4b
 	unlk XIZ                                             ; FDB690  ee 0d
 	ret                                                  ; FDB692  0e
-sub_FDB693:
+ScreenCode8B_Handler:
 	link XIZ,0xfff2                                      ; FDB693  ee 0c f2 ff
 	push XIX                                             ; FDB697  3c
 	lda xix, (xiz-14)                                    ; FDB698  be f2 34
@@ -147046,7 +147046,7 @@ sub_FDB8D1:
 	popw hl                                              ; FDB8D5  4b
 	unlk XIZ                                             ; FDB8D6  ee 0d
 	ret                                                  ; FDB8D8  0e
-sub_FDB8D9:
+ScreenCode8C_Handler:
 	link XIZ,0xfff4                                      ; FDB8D9  ee 0c f4 ff
 	pushw hl                                             ; FDB8DD  2b
 	pushw de                                             ; FDB8DE  2a
@@ -147131,7 +147131,7 @@ sub_FDB8D9:
 	popw hl                                              ; FDB9A7  4b
 	unlk XIZ                                             ; FDB9A8  ee 0d
 	ret                                                  ; FDB9AA  0e
-sub_FDB9AB:
+ScreenCode8D_Handler:
 	link XIZ,0xfff6                                      ; FDB9AB  ee 0c f6 ff
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDB9AF  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB9B3  be fe 31
@@ -147272,7 +147272,7 @@ sub_FDBAE3:
 	popw hl                                              ; FDBAE3  4b
 	unlk XIZ                                             ; FDBAE4  ee 0d
 	ret                                                  ; FDBAE6  0e
-sub_FDBAE7:
+ScreenCode8E_Handler:
 	link XIZ,0xfff4                                      ; FDBAE7  ee 0c f4 ff
 	pushw hl                                             ; FDBAEB  2b
 	pushw de                                             ; FDBAEC  2a
@@ -147360,7 +147360,7 @@ sub_FDBAE7:
 	popw hl                                              ; FDBBBF  4b
 	unlk XIZ                                             ; FDBBC0  ee 0d
 	ret                                                  ; FDBBC2  0e
-sub_FDBBC3:
+ScreenCode8F_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDBBC3  1d 80 2e f4
 	pushw 0x8f                                           ; FDBBC7  0b 8f 00
 	calr sub_FDB53C                                      ; FDBBCA  1e 6f f9
@@ -147368,7 +147368,7 @@ sub_FDBBC3:
 	call ToneMsg80_Id00                                      ; FDBBD0  1d 47 64 fd
 	pop XBC                                              ; FDBBD4  59
 	ret                                                  ; FDBBD5  0e
-sub_FDBBD6:
+ScreenCodeCD_Handler:
 	link XIZ,0xffdc                                      ; FDBBD6  ee 0c dc ff
 	pushw hl                                             ; FDBBDA  2b
 	pushw de                                             ; FDBBDB  2a
@@ -147689,7 +147689,7 @@ sub_FDBE90:
 	popw hl                                              ; FDBEDA  4b
 	unlk XIZ                                             ; FDBEDB  ee 0d
 	ret                                                  ; FDBEDD  0e
-sub_FDBEDE:
+ScreenCode9B_Handler:
 	link XIZ,0xffee                                      ; FDBEDE  ee 0c ee ff
 	pushw hl                                             ; FDBEE2  2b
 	pushw de                                             ; FDBEE3  2a
@@ -147896,13 +147896,13 @@ sub_FDBF5E:
 	popw hl                                              ; FDC0DD  4b
 	unlk XIZ                                             ; FDC0DE  ee 0d
 	ret                                                  ; FDC0E0  0e
-sub_FDC0E1:
+ScreenCode9C_Handler:
 	calr sub_FDD02D                                      ; FDC0E1  1e 49 0f
 	pushw 0x10                                           ; FDC0E4  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC0E7  1d 47 64 fd
 	popw bc                                              ; FDC0EB  49
 	ret                                                  ; FDC0EC  0e
-sub_FDC0ED:
+ScreenCode90_Handler:
 	link XIZ,0xfff6                                      ; FDC0ED  ee 0c f6 ff
 	pushw hl                                             ; FDC0F1  2b
 	push XIX                                             ; FDC0F2  3c
@@ -148086,7 +148086,7 @@ sub_FDC276:
 	popw hl                                              ; FDC277  4b
 	unlk XIZ                                             ; FDC278  ee 0d
 	ret                                                  ; FDC27A  0e
-sub_FDC27B:
+ScreenCode91_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC27B  1d 80 2e f4
 	pushw 0x91                                           ; FDC27F  0b 91 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC282  1d d0 1e f4
@@ -148102,7 +148102,7 @@ sub_FDC2A2:
 	inc 8,XSP                                            ; FDC2A2  ef 60
 	inc 2,XSP                                            ; FDC2A4  ef 62
 	ret                                                  ; FDC2A6  0e
-sub_FDC2A7:
+ScreenCode92_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC2A7  1d 80 2e f4
 	pushw 0x92                                           ; FDC2AB  0b 92 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC2AE  1d d0 1e f4
@@ -148116,7 +148116,7 @@ sub_FDC2A7:
 	inc 8,XSP                                            ; FDC2CA  ef 60
 	inc 2,XSP                                            ; FDC2CC  ef 62
 	ret                                                  ; FDC2CE  0e
-sub_FDC2CF:
+ScreenCode93_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC2CF  1d 80 2e f4
 	pushw 0x93                                           ; FDC2D3  0b 93 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC2D6  1d d0 1e f4
@@ -148130,7 +148130,7 @@ sub_FDC2CF:
 	inc 8,XSP                                            ; FDC2F2  ef 60
 	inc 2,XSP                                            ; FDC2F4  ef 62
 	ret                                                  ; FDC2F6  0e
-sub_FDC2F7:
+ScreenCode94_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC2F7  1d 80 2e f4
 	pushw 0x94                                           ; FDC2FB  0b 94 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC2FE  1d d0 1e f4
@@ -148141,7 +148141,7 @@ sub_FDC2F7:
 	call ToneMsg80_Id00                                      ; FDC310  1d 47 64 fd
 	inc 6,XSP                                            ; FDC314  ef 66
 	ret                                                  ; FDC316  0e
-sub_FDC317:
+ScreenCode95_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC317  1d 80 2e f4
 	pushw 0x95                                           ; FDC31B  0b 95 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC31E  1d d0 1e f4
@@ -148151,7 +148151,7 @@ sub_FDC317:
 	call ToneMsg80_Id00                                      ; FDC32C  1d 47 64 fd
 	inc 6,XSP                                            ; FDC330  ef 66
 	ret                                                  ; FDC332  0e
-sub_FDC333:
+ScreenCode96_Handler:
 	link XIZ,0xfff4                                      ; FDC333  ee 0c f4 ff
 	pushw hl                                             ; FDC337  2b
 	pushw de                                             ; FDC338  2a
@@ -148237,7 +148237,7 @@ sub_FDC3F9:
 	popw hl                                              ; FDC401  4b
 	unlk XIZ                                             ; FDC402  ee 0d
 	ret                                                  ; FDC404  0e
-sub_FDC405:
+ScreenCode97_Handler:
 	link XIZ,0xfff6                                      ; FDC405  ee 0c f6 ff
 	pushw hl                                             ; FDC409  2b
 	pushw de                                             ; FDC40A  2a
@@ -148318,7 +148318,7 @@ sub_FDC438:
 	popw hl                                              ; FDC4C2  4b
 	unlk XIZ                                             ; FDC4C3  ee 0d
 	ret                                                  ; FDC4C5  0e
-sub_FDC4C6:
+ScreenCode98_Handler:
 	link XIZ,0xfff4                                      ; FDC4C6  ee 0c f4 ff
 	pushw hl                                             ; FDC4CA  2b
 	pushw de                                             ; FDC4CB  2a
@@ -148406,7 +148406,7 @@ sub_FDC4C6:
 	popw hl                                              ; FDC59E  4b
 	unlk XIZ                                             ; FDC59F  ee 0d
 	ret                                                  ; FDC5A1  0e
-sub_FDC5A2:
+ScreenCode99_Handler:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC5A2  1d 80 2e f4
 	pushw 0x99                                           ; FDC5A6  0b 99 00
 	calr sub_FDB53C                                      ; FDC5A9  1e 90 ef
@@ -148414,7 +148414,7 @@ sub_FDC5A2:
 	call ToneMsg80_Id00                                      ; FDC5AF  1d 47 64 fd
 	pop XBC                                              ; FDC5B3  59
 	ret                                                  ; FDC5B4  0e
-sub_FDC5B5:
+ScreenCode82_Handler:
 	link XIZ,0xffc4                                      ; FDC5B5  ee 0c c4 ff
 	pushw hl                                             ; FDC5B9  2b
 	pushw de                                             ; FDC5BA  2a
@@ -148679,7 +148679,7 @@ sub_FDC6CB:
 	popw hl                                              ; FDC848  4b
 	unlk XIZ                                             ; FDC849  ee 0d
 	ret                                                  ; FDC84B  0e
-sub_FDC84C:
+ScreenCode83_Handler:
 	link XIZ,0xfff6                                      ; FDC84C  ee 0c f6 ff
 	pushw hl                                             ; FDC850  2b
 	push XIX                                             ; FDC851  3c
@@ -148796,7 +148796,7 @@ sub_FDC87E:
 	popw hl                                              ; FDC957  4b
 	unlk XIZ                                             ; FDC958  ee 0d
 	ret                                                  ; FDC95A  0e
-sub_FDC95B:
+ScreenCode84_Handler:
 	link XIZ,0xfff6                                      ; FDC95B  ee 0c f6 ff
 	pushw hl                                             ; FDC95F  2b
 	pushw de                                             ; FDC960  2a
@@ -148917,7 +148917,7 @@ sub_FDCA4E:
 	popw hl                                              ; FDCA73  4b
 	unlk XIZ                                             ; FDCA74  ee 0d
 	ret                                                  ; FDCA76  0e
-sub_FDCA77:
+ScreenCode85_Handler:
 	link XIZ,0xfff6                                      ; FDCA77  ee 0c f6 ff
 	pushw hl                                             ; FDCA7B  2b
 	pushw de                                             ; FDCA7C  2a
@@ -149036,7 +149036,7 @@ sub_FDCA77:
 	popw hl                                              ; FDCB8F  4b
 	unlk XIZ                                             ; FDCB90  ee 0d
 	ret                                                  ; FDCB92  0e
-sub_FDCB93:
+ScreenCode86_Handler:
 	link XIZ,0xffd6                                      ; FDCB93  ee 0c d6 ff
 	pushw hl                                             ; FDCB97  2b
 	push XIX                                             ; FDCB98  3c
@@ -149295,7 +149295,7 @@ sub_FDCD22:
 	pop XIX                                              ; FDCDDC  5c
 	unlk XIZ                                             ; FDCDDD  ee 0d
 	ret                                                  ; FDCDDF  0e
-sub_FDCDE0:
+ScreenCode9E_Handler:
 	link XIZ,0xffd4                                      ; FDCDE0  ee 0c d4 ff
 	pushw hl                                             ; FDCDE4  2b
 	push XIX                                             ; FDCDE5  3c
@@ -149509,7 +149509,7 @@ sub_FDCFCB:
 	popw hl                                              ; FDCFE7  4b
 	unlk XIZ                                             ; FDCFE8  ee 0d
 	ret                                                  ; FDCFEA  0e
-sub_FDCFEB:
+ScreenCode9F_Handler:
 	link XIZ,0xfffc                                      ; FDCFEB  ee 0c fc ff
 	pushw hl                                             ; FDCFEF  2b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDCFF0  1d 80 2e f4
@@ -149611,7 +149611,7 @@ sub_FDD02D:
 	popw hl                                              ; FDD0D0  4b
 	unlk XIZ                                             ; FDD0D1  ee 0d
 	ret                                                  ; FDD0D3  0e
-sub_FDD0D4:
+ScreenCode9D_Handler:
 	link XIZ,0xfff0                                      ; FDD0D4  ee 0c f0 ff
 	pushw hl                                             ; FDD0D8  2b
 	push XIX                                             ; FDD0D9  3c
@@ -149794,13 +149794,13 @@ sub_FDD168:
 	popw hl                                              ; FDD26E  4b
 	unlk XIZ                                             ; FDD26F  ee 0d
 	ret                                                  ; FDD271  0e
-sub_FDD272:
+ScreenCodeCA_Handler:
 	call T_F42F4C                                        ; FDD272  1d 4c 2f f4
 	pushw 0x10                                           ; FDD276  0b 10 00
 	call ToneMsg80_Id00                                      ; FDD279  1d 47 64 fd
 	popw bc                                              ; FDD27D  49
 	ret                                                  ; FDD27E  0e
-sub_FDD27F:
+ScreenCodeCB_Handler:
 	link XIZ,0xffe8                                      ; FDD27F  ee 0c e8 ff
 	pushw hl                                             ; FDD283  2b
 	pushw de                                             ; FDD284  2a
@@ -149976,7 +149976,7 @@ sub_FDD420:
 	ret                                                  ; FDD435  0e
 T_F42340_Nop:
 	ret                                                  ; FDD436  0e
-sub_FDD437:
+ScreenCodeC0_Handler:
 	link XIZ,0xffec                                      ; FDD437  ee 0c ec ff
 	pushw hl                                             ; FDD43B  2b
 	pushw de                                             ; FDD43C  2a
@@ -151284,7 +151284,7 @@ sub_FDDEFB:
 	popw hl                                              ; FDDF32  4b
 	unlk XIZ                                             ; FDDF33  ee 0d
 	ret                                                  ; FDDF35  0e
-sub_FDDF36:
+ScreenCodeC8_Handler:
 	link XIZ,0xffe6                                      ; FDDF36  ee 0c e6 ff
 	pushw hl                                             ; FDDF3A  2b
 	pushw de                                             ; FDDF3B  2a

@@ -1263,55 +1263,55 @@
 	.set	sub_FDAC5B, 0xFDAC5B
 	.set	sub_FDAC6B, 0xFDAC6B
 	.set	sub_FDACBD, 0xFDACBD
-	.set	sub_FDAD44, 0xFDAD44
-	.set	sub_FDB22F, 0xFDB22F
+	.set	ScreenCode80_Handler, 0xFDAD44
+	.set	ScreenCode87_Handler, 0xFDB22F
 	.set	sub_FDB30B, 0xFDB30B
-	.set	sub_FDB38C, 0xFDB38C
-	.set	sub_FDB44D, 0xFDB44D
-	.set	sub_FDB529, 0xFDB529
-	.set	sub_FDB693, 0xFDB693
+	.set	ScreenCode88_Handler, 0xFDB38C
+	.set	ScreenCode89_Handler, 0xFDB44D
+	.set	ScreenCode8A_Handler, 0xFDB529
+	.set	ScreenCode8B_Handler, 0xFDB693
 	.set	sub_FDB858, 0xFDB858
 	.set	sub_FDB8D1, 0xFDB8D1
-	.set	sub_FDB8D9, 0xFDB8D9
-	.set	sub_FDB9AB, 0xFDB9AB
-	.set	sub_FDBAE7, 0xFDBAE7
-	.set	sub_FDBBC3, 0xFDBBC3
-	.set	sub_FDBBD6, 0xFDBBD6
-	.set	sub_FDBEDE, 0xFDBEDE
-	.set	sub_FDC0E1, 0xFDC0E1
-	.set	sub_FDC0ED, 0xFDC0ED
+	.set	ScreenCode8C_Handler, 0xFDB8D9
+	.set	ScreenCode8D_Handler, 0xFDB9AB
+	.set	ScreenCode8E_Handler, 0xFDBAE7
+	.set	ScreenCode8F_Handler, 0xFDBBC3
+	.set	ScreenCodeCD_Handler, 0xFDBBD6
+	.set	ScreenCode9B_Handler, 0xFDBEDE
+	.set	ScreenCode9C_Handler, 0xFDC0E1
+	.set	ScreenCode90_Handler, 0xFDC0ED
 	.set	sub_FDC0FD, 0xFDC0FD
 	.set	sub_FDC22F, 0xFDC22F
-	.set	sub_FDC27B, 0xFDC27B
+	.set	ScreenCode91_Handler, 0xFDC27B
 	.set	sub_FDC2A2, 0xFDC2A2
-	.set	sub_FDC2A7, 0xFDC2A7
-	.set	sub_FDC2CF, 0xFDC2CF
-	.set	sub_FDC2F7, 0xFDC2F7
-	.set	sub_FDC317, 0xFDC317
-	.set	sub_FDC333, 0xFDC333
+	.set	ScreenCode92_Handler, 0xFDC2A7
+	.set	ScreenCode93_Handler, 0xFDC2CF
+	.set	ScreenCode94_Handler, 0xFDC2F7
+	.set	ScreenCode95_Handler, 0xFDC317
+	.set	ScreenCode96_Handler, 0xFDC333
 	.set	sub_FDC3F9, 0xFDC3F9
-	.set	sub_FDC405, 0xFDC405
+	.set	ScreenCode97_Handler, 0xFDC405
 	.set	sub_FDC438, 0xFDC438
-	.set	sub_FDC4C6, 0xFDC4C6
-	.set	sub_FDC5A2, 0xFDC5A2
-	.set	sub_FDC5B5, 0xFDC5B5
+	.set	ScreenCode98_Handler, 0xFDC4C6
+	.set	ScreenCode99_Handler, 0xFDC5A2
+	.set	ScreenCode82_Handler, 0xFDC5B5
 	.set	sub_FDC5BB, 0xFDC5BB
 	.set	sub_FDC62E, 0xFDC62E
 	.set	sub_FDC6CB, 0xFDC6CB
-	.set	sub_FDC84C, 0xFDC84C
+	.set	ScreenCode83_Handler, 0xFDC84C
 	.set	sub_FDC87E, 0xFDC87E
-	.set	sub_FDC95B, 0xFDC95B
+	.set	ScreenCode84_Handler, 0xFDC95B
 	.set	sub_FDC9C4, 0xFDC9C4
-	.set	sub_FDCA77, 0xFDCA77
-	.set	sub_FDCB93, 0xFDCB93
-	.set	sub_FDCDE0, 0xFDCDE0
-	.set	sub_FDCFEB, 0xFDCFEB
+	.set	ScreenCode85_Handler, 0xFDCA77
+	.set	ScreenCode86_Handler, 0xFDCB93
+	.set	ScreenCode9E_Handler, 0xFDCDE0
+	.set	ScreenCode9F_Handler, 0xFDCFEB
 	.set	sub_FDD02D, 0xFDD02D
-	.set	sub_FDD0D4, 0xFDD0D4
-	.set	sub_FDD272, 0xFDD272
-	.set	sub_FDD27F, 0xFDD27F
+	.set	ScreenCode9D_Handler, 0xFDD0D4
+	.set	ScreenCodeCA_Handler, 0xFDD272
+	.set	ScreenCodeCB_Handler, 0xFDD27F
 	.set	T_F42340_Nop, 0xFDD436
-	.set	sub_FDD437, 0xFDD437
+	.set	ScreenCodeC0_Handler, 0xFDD437
 	.set	T_F41F7C_Nop, 0xFDD7F7
 	.set	T_F41F8C_Nop, 0xFDD7F8
 	.set	ToneEditPage_A3_PositionParameter, 0xFDD7F9
@@ -1319,7 +1319,7 @@
 	.set	ToneEditPage_A5_FittingMutingTuning, 0xFDDA1C
 	.set	ToneEditPage_A6_TouchDepth, 0xFDDC3A
 	.set	ToneEditPage_A7_ResoModeKeyFollow, 0xFDDDAA
-	.set	sub_FDDF36, 0xFDDF36
+	.set	ScreenCodeC8_Handler, 0xFDDF36
 	.set	T_F433E0_Nop, 0xFDE151
 	.set	sub_FDE152, 0xFDE152
 	.set	T_F41F68_Nop, 0xFDE15F
@@ -89112,11 +89112,11 @@ T_F41F3C:	jp T_F41F3C_Nop  ; -> prom_a 0x2E829
 	.fill 0x4, 1, 0x00  ; 0xF41F50: 4 x nop
 T_F41F54:	jp sub_FDAC6B  ; -> prom_a 0x5AC6B
 T_F41F58:	jp sub_FDACBD  ; -> prom_a 0x5ACBD
-T_F41F5C:	jp sub_FDAD44  ; -> prom_a 0x5AD44
+T_F41F5C:	jp ScreenCode80_Handler  ; -> prom_a 0x5AD44
 T_F41F60:	jp sub_FDE152  ; -> prom_a 0x5E152
 T_F41F64:	jp sub_FCFDA7  ; -> prom_a 0x4FDA7
 T_F41F68:	jp T_F41F68_Nop  ; -> prom_a 0x5E15F
-T_F41F6C:	jp sub_FDD437  ; -> prom_a 0x5D437
+T_F41F6C:	jp ScreenCodeC0_Handler  ; -> prom_a 0x5D437
 T_F41F70:	jp sub_FDE332  ; -> prom_a 0x5E332
 T_ToneEditPage_A0_KeyDispatch:	jp ToneEditPage_A0_KeyDispatch  ; -> prom_a 0x53DA7
 T_F41F78:	jp T_F41F78_Nop  ; -> prom_a 0x5E33F
@@ -89148,115 +89148,115 @@ T_ToneEditPage_A7_ResoModeKeyFollow:	jp ToneEditPage_A7_ResoModeKeyFollow  ; -> 
 T_ToneEditPage_A7_Leave:	jp ToneEditPage_A7_Leave  ; -> prom_a 0x5E394
 T_ToneEditPage_A7_KeyDispatch:	jp ToneEditPage_A7_KeyDispatch  ; -> prom_a 0x53F3E
 T_F41FE8:	jp T_F41FE8_Nop  ; -> prom_a 0x5E3A1
-T_F41FEC:	jp sub_FDDF36  ; -> prom_a 0x5DF36
+T_F41FEC:	jp ScreenCodeC8_Handler  ; -> prom_a 0x5DF36
 T_F41FF0:	jp sub_FDE3A2  ; -> prom_a 0x5E3A2
 T_ToneEditPage_A8_KeyDispatch:	jp ToneEditPage_A8_KeyDispatch  ; -> prom_a 0x53F8F
 T_F41FF8:	jp T_F41FF8_Nop  ; -> prom_a 0x5E3AF
-T_F41FFC:	jp sub_FDB22F  ; -> prom_a 0x5B22F
+T_F41FFC:	jp ScreenCode87_Handler  ; -> prom_a 0x5B22F
 T_F42000:	jp sub_FDE160  ; -> prom_a 0x5E160
 T_F42004:	jp sub_F0A000  ; -> prom_b 0x0A000
 T_F42008:	jp T_F42008_Nop  ; -> prom_a 0x5E16D
-T_F4200C:	jp sub_FDB38C  ; -> prom_a 0x5B38C
+T_F4200C:	jp ScreenCode88_Handler  ; -> prom_a 0x5B38C
 T_F42010:	jp sub_FDE16E  ; -> prom_a 0x5E16E
 T_F42014:	jp sub_F0A051  ; -> prom_b 0x0A051
 T_F42018:	jp T_F42018_Nop  ; -> prom_a 0x5E17B
-T_F4201C:	jp sub_FDB44D  ; -> prom_a 0x5B44D
+T_F4201C:	jp ScreenCode89_Handler  ; -> prom_a 0x5B44D
 T_F42020:	jp sub_FDE17C  ; -> prom_a 0x5E17C
 T_F42024:	jp sub_F0A0B1  ; -> prom_b 0x0A0B1
 T_F42028:	jp T_F42028_Nop  ; -> prom_a 0x5E189
-T_F4202C:	jp sub_FDB529  ; -> prom_a 0x5B529
+T_F4202C:	jp ScreenCode8A_Handler  ; -> prom_a 0x5B529
 T_F42030:	jp sub_FDE18A  ; -> prom_a 0x5E18A
 T_F42034:	jp sub_F0A111  ; -> prom_b 0x0A111
 T_F42038:	jp T_F42038_Nop  ; -> prom_a 0x5E197
-T_F4203C:	jp sub_FDB693  ; -> prom_a 0x5B693
+T_F4203C:	jp ScreenCode8B_Handler  ; -> prom_a 0x5B693
 T_F42040:	jp sub_FDE198  ; -> prom_a 0x5E198
 T_F42044:	jp sub_FD2751  ; -> prom_a 0x52751
 T_F42048:	jp T_F42048_Nop  ; -> prom_a 0x5E1A5
-T_F4204C:	jp sub_FDB8D9  ; -> prom_a 0x5B8D9
+T_F4204C:	jp ScreenCode8C_Handler  ; -> prom_a 0x5B8D9
 T_F42050:	jp sub_FDE1A6  ; -> prom_a 0x5E1A6
 T_F42054:	jp sub_FD27A2  ; -> prom_a 0x527A2
 T_F42058:	jp T_F42058_Nop  ; -> prom_a 0x5E1B3
-T_F4205C:	jp sub_FDB9AB  ; -> prom_a 0x5B9AB
+T_F4205C:	jp ScreenCode8D_Handler  ; -> prom_a 0x5B9AB
 T_F42060:	jp sub_FDE1B4  ; -> prom_a 0x5E1B4
 T_F42064:	jp sub_FD27F2  ; -> prom_a 0x527F2
 T_F42068:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
-T_F4206C:	jp sub_FDBAE7  ; -> prom_a 0x5BAE7
+T_F4206C:	jp ScreenCode8E_Handler  ; -> prom_a 0x5BAE7
 T_F42070:	jp sub_FDE1C2  ; -> prom_a 0x5E1C2
 T_F42074:	jp sub_FD2852  ; -> prom_a 0x52852
 T_F42078:	jp T_F42078_Nop  ; -> prom_a 0x5E1CF
-T_F4207C:	jp sub_FDBBC3  ; -> prom_a 0x5BBC3
+T_F4207C:	jp ScreenCode8F_Handler  ; -> prom_a 0x5BBC3
 T_F42080:	jp sub_FDE1D0  ; -> prom_a 0x5E1D0
 T_F42084:	jp sub_FD28B2  ; -> prom_a 0x528B2
 T_F42088:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
-T_F4208C:	jp sub_FDBBD6  ; -> prom_a 0x5BBD6
+T_F4208C:	jp ScreenCodeCD_Handler  ; -> prom_a 0x5BBD6
 T_F42090:	jp sub_FDE1DE  ; -> prom_a 0x5E1DE
 T_F42094:	jp sub_FD053D  ; -> prom_a 0x5053D
 T_F42098:	jp T_F42098_Nop  ; -> prom_a 0x5E1EB
-T_F4209C:	jp sub_FDBEDE  ; -> prom_a 0x5BEDE
+T_F4209C:	jp ScreenCode9B_Handler  ; -> prom_a 0x5BEDE
 T_F420A0:	jp sub_FDE1EC  ; -> prom_a 0x5E1EC
 T_F420A4:	jp sub_FD058E  ; -> prom_a 0x5058E
 T_F420A8:	jp T_F420A8_Nop  ; -> prom_a 0x5E1F9
-T_F420AC:	jp sub_FDC0E1  ; -> prom_a 0x5C0E1
+T_F420AC:	jp ScreenCode9C_Handler  ; -> prom_a 0x5C0E1
 T_F420B0:	jp sub_FDE1FA  ; -> prom_a 0x5E1FA
 T_F420B4:	jp sub_F0AA61  ; -> prom_b 0x0AA61
 T_F420B8:	jp T_F420B8_Nop  ; -> prom_a 0x5E207
-T_F420BC:	jp sub_FDC0ED  ; -> prom_a 0x5C0ED
+T_F420BC:	jp ScreenCode90_Handler  ; -> prom_a 0x5C0ED
 T_F420C0:	jp sub_FDE24E  ; -> prom_a 0x5E24E
 T_F420C4:	jp sub_FDE3BE  ; -> prom_a 0x5E3BE
 T_F420C8:	jp T_F420C8_Nop  ; -> prom_a 0x5E25B
-T_F420CC:	jp sub_FDC27B  ; -> prom_a 0x5C27B
+T_F420CC:	jp ScreenCode91_Handler  ; -> prom_a 0x5C27B
 T_F420D0:	jp sub_FDE25C  ; -> prom_a 0x5E25C
 T_F420D4:	jp sub_FDE41E  ; -> prom_a 0x5E41E
 T_F420D8:	jp T_F420D8_Nop  ; -> prom_a 0x5E269
-T_F420DC:	jp sub_FDC2A7  ; -> prom_a 0x5C2A7
+T_F420DC:	jp ScreenCode92_Handler  ; -> prom_a 0x5C2A7
 T_F420E0:	jp sub_FDE26A  ; -> prom_a 0x5E26A
 T_F420E4:	jp sub_FDE47E  ; -> prom_a 0x5E47E
 T_F420E8:	jp T_F420E8_Nop  ; -> prom_a 0x5E277
-T_F420EC:	jp sub_FDC2CF  ; -> prom_a 0x5C2CF
+T_F420EC:	jp ScreenCode93_Handler  ; -> prom_a 0x5C2CF
 T_F420F0:	jp sub_FDE278  ; -> prom_a 0x5E278
 T_F420F4:	jp sub_FDE4DE  ; -> prom_a 0x5E4DE
 T_F420F8:	jp T_F420F8_Nop  ; -> prom_a 0x5E285
-T_F420FC:	jp sub_FDC2F7  ; -> prom_a 0x5C2F7
+T_F420FC:	jp ScreenCode94_Handler  ; -> prom_a 0x5C2F7
 T_F42100:	jp sub_FDE286  ; -> prom_a 0x5E286
 T_F42104:	jp sub_FDE53E  ; -> prom_a 0x5E53E
 T_F42108:	jp T_F42108_Nop  ; -> prom_a 0x5E293
-T_F4210C:	jp sub_FDC317  ; -> prom_a 0x5C317
+T_F4210C:	jp ScreenCode95_Handler  ; -> prom_a 0x5C317
 T_F42110:	jp sub_FDE294  ; -> prom_a 0x5E294
 T_F42114:	jp sub_FDE59E  ; -> prom_a 0x5E59E
 T_F42118:	jp T_F42118_Nop  ; -> prom_a 0x5E2A1
-T_F4211C:	jp sub_FDC333  ; -> prom_a 0x5C333
+T_F4211C:	jp ScreenCode96_Handler  ; -> prom_a 0x5C333
 T_F42120:	jp sub_FDE2A2  ; -> prom_a 0x5E2A2
 T_F42124:	jp sub_FDE5EF  ; -> prom_a 0x5E5EF
 T_F42128:	jp T_F42128_Nop  ; -> prom_a 0x5E2AF
-T_F4212C:	jp sub_FDC405  ; -> prom_a 0x5C405
+T_F4212C:	jp ScreenCode97_Handler  ; -> prom_a 0x5C405
 T_F42130:	jp sub_FDE2B0  ; -> prom_a 0x5E2B0
 T_F42134:	jp sub_FDE64F  ; -> prom_a 0x5E64F
 T_F42138:	jp T_F42138_Nop  ; -> prom_a 0x5E2BD
-T_F4213C:	jp sub_FDC4C6  ; -> prom_a 0x5C4C6
+T_F4213C:	jp ScreenCode98_Handler  ; -> prom_a 0x5C4C6
 T_F42140:	jp sub_FDE2BE  ; -> prom_a 0x5E2BE
 T_F42144:	jp sub_FDE6AF  ; -> prom_a 0x5E6AF
 T_F42148:	jp T_F42148_Nop  ; -> prom_a 0x5E2CB
-T_F4214C:	jp sub_FDC5A2  ; -> prom_a 0x5C5A2
+T_F4214C:	jp ScreenCode99_Handler  ; -> prom_a 0x5C5A2
 T_F42150:	jp sub_FDE2CC  ; -> prom_a 0x5E2CC
 T_F42154:	jp sub_FDE70F  ; -> prom_a 0x5E70F
 T_F42158:	jp T_F42158_Nop  ; -> prom_a 0x5E2D9
-T_F4215C:	jp sub_FDC5B5  ; -> prom_a 0x5C5B5
+T_F4215C:	jp ScreenCode82_Handler  ; -> prom_a 0x5C5B5
 T_F42160:	jp sub_FDE208  ; -> prom_a 0x5E208
 T_F42164:	jp sub_FD0AA5  ; -> prom_a 0x50AA5
 T_F42168:	jp T_F42168_Nop  ; -> prom_a 0x5E215
-T_F4216C:	jp sub_FDC84C  ; -> prom_a 0x5C84C
+T_F4216C:	jp ScreenCode83_Handler  ; -> prom_a 0x5C84C
 T_F42170:	jp sub_FDE216  ; -> prom_a 0x5E216
 T_F42174:	jp sub_FD0AF6  ; -> prom_a 0x50AF6
 T_F42178:	jp T_F42178_Nop  ; -> prom_a 0x5E223
-T_F4217C:	jp sub_FDC95B  ; -> prom_a 0x5C95B
+T_F4217C:	jp ScreenCode84_Handler  ; -> prom_a 0x5C95B
 T_F42180:	jp sub_FDE224  ; -> prom_a 0x5E224
 T_F42184:	jp sub_FD0B47  ; -> prom_a 0x50B47
 T_F42188:	jp T_F42188_Nop  ; -> prom_a 0x5E231
-T_F4218C:	jp sub_FDCA77  ; -> prom_a 0x5CA77
+T_F4218C:	jp ScreenCode85_Handler  ; -> prom_a 0x5CA77
 T_F42190:	jp sub_FDE232  ; -> prom_a 0x5E232
 T_F42194:	jp sub_FD0BA7  ; -> prom_a 0x50BA7
 T_F42198:	jp T_F42198_Nop  ; -> prom_a 0x5E23F
-T_F4219C:	jp sub_FDCB93  ; -> prom_a 0x5CB93
+T_F4219C:	jp ScreenCode86_Handler  ; -> prom_a 0x5CB93
 T_F421A0:	jp sub_FDE240  ; -> prom_a 0x5E240
 T_F421A4:	jp sub_FD0C07  ; -> prom_a 0x50C07
 T_F421A8:	jp T_F421A8_Nop  ; -> prom_a 0x5E24D
@@ -89277,11 +89277,11 @@ T_ScreenLeave_MidiFileDirectPlay:	jp ScreenLeave_MidiFileDirectPlay  ; -> prom_a
 T_PanelButtonDispatch_MidiFileDirectPlay:	jp PanelButtonDispatch_MidiFileDirectPlay  ; -> prom_a 0x74596
 T_F42280:	jp T_F42280_Nop  ; -> prom_a 0x7475B
 	.fill 0x9C, 1, 0x0E  ; 0xF42284: 156 x ret
-T_F42320:	jp sub_FDD272  ; -> prom_a 0x5D272
+T_F42320:	jp ScreenCodeCA_Handler  ; -> prom_a 0x5D272
 T_F42324:	jp sub_FDE308  ; -> prom_a 0x5E308
 T_F42328:	jp sub_F0AAB3  ; -> prom_b 0x0AAB3
 T_F4232C:	jp T_F4232C_Nop  ; -> prom_a 0x5E315
-T_F42330:	jp sub_FDD27F  ; -> prom_a 0x5D27F
+T_F42330:	jp ScreenCodeCB_Handler  ; -> prom_a 0x5D27F
 T_F42334:	jp sub_FDE316  ; -> prom_a 0x5E316
 T_F42338:	jp sub_F0AAF9  ; -> prom_b 0x0AAF9
 T_F4233C:	jp T_F4233C_Nop  ; -> prom_a 0x5E323
@@ -89289,15 +89289,15 @@ T_F42340:	jp T_F42340_Nop  ; -> prom_a 0x5D436
 T_F42344:	jp sub_FDE324  ; -> prom_a 0x5E324
 T_F42348:	jp T_F42348_Nop  ; -> prom_b 0x0AB4A
 T_F4234C:	jp T_F4234C_Nop  ; -> prom_a 0x5E331
-T_F42350:	jp sub_FDD0D4  ; -> prom_a 0x5D0D4
+T_F42350:	jp ScreenCode9D_Handler  ; -> prom_a 0x5D0D4
 T_F42354:	jp sub_FDE2FA  ; -> prom_a 0x5E2FA
 T_F42358:	jp sub_F0A90E  ; -> prom_b 0x0A90E
 T_F4235C:	jp T_F4235C_Nop  ; -> prom_a 0x5E307
-T_F42360:	jp sub_FDCDE0  ; -> prom_a 0x5CDE0
+T_F42360:	jp ScreenCode9E_Handler  ; -> prom_a 0x5CDE0
 T_F42364:	jp T_F42364_Nop  ; -> prom_a 0x5E2DA
 T_F42368:	jp sub_F0A95F  ; -> prom_b 0x0A95F
 T_F4236C:	jp T_F4236C_Nop  ; -> prom_a 0x5E2DB
-T_F42370:	jp sub_FDCFEB  ; -> prom_a 0x5CFEB
+T_F42370:	jp ScreenCode9F_Handler  ; -> prom_a 0x5CFEB
 T_F42374:	jp T_F42374_Nop  ; -> prom_a 0x5E2DC
 T_F42378:	jp sub_F0A9BF  ; -> prom_b 0x0A9BF
 T_F4237C:	jp T_F4237C_Nop  ; -> prom_a 0x5E2DD
@@ -187849,10 +187849,10 @@ sub_F7C6B2_Code:
 ;          are sub_XXXXXX below.
 SongStore_DispatchA_1:
 	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
-	.long	sub_F7C743	; [1] -> sub_F7C743
-	.long	sub_F7C75C	; [2] -> sub_F7C75C
-	.long	sub_F7C78C	; [3] -> sub_F7C78C
-	.long	sub_F7C7BC	; [4] -> sub_F7C7BC
+	.long	SongStore_DispatchA_Case1	; [1] -> SongStore_DispatchA_Case1
+	.long	SongStore_DispatchA_Case2	; [2] -> SongStore_DispatchA_Case2
+	.long	SongStore_DispatchA_Case3	; [3] -> SongStore_DispatchA_Case3
+	.long	SongStore_DispatchA_Case4	; [4] -> SongStore_DispatchA_Case4
 
 
 ; --------------------------------------------------------------------------
@@ -187930,14 +187930,14 @@ sub_F7C6FB_Code:
 ;          are sub_XXXXXX below.
 SongStore_DispatchA_2:
 	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
-	.long	sub_F7C743	; [1] -> sub_F7C743
-	.long	sub_F7C75C	; [2] -> sub_F7C75C
-	.long	sub_F7C78C	; [3] -> sub_F7C78C
-	.long	sub_F7C7BC	; [4] -> sub_F7C7BC
+	.long	SongStore_DispatchA_Case1	; [1] -> SongStore_DispatchA_Case1
+	.long	SongStore_DispatchA_Case2	; [2] -> SongStore_DispatchA_Case2
+	.long	SongStore_DispatchA_Case3	; [3] -> SongStore_DispatchA_Case3
+	.long	SongStore_DispatchA_Case4	; [4] -> SongStore_DispatchA_Case4
 
 
 ; --------------------------------------------------------------------------
-; sub_F7C743
+; SongStore_DispatchA_Case1
 ; Called from: dispatch entry SongStore_DispatchA_1[1],
 ;              SongStore_DispatchA_2[1]
 ; Touches: (0x0DF7) (0x12F6) (0x2075)
@@ -187949,7 +187949,7 @@ SongStore_DispatchA_2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C743:
+SongStore_DispatchA_Case1:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C743  or (0x2075),0x09
 	ld	a, (3575:16)	; F7C748  ld A,(0x0df7)
 	ld	l, 1:opc	; F7C74C  ld L,0x01
@@ -187960,7 +187960,7 @@ sub_F7C743:
 	ret	; F7C75B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C75C
+; SongStore_DispatchA_Case2
 ; Called from: dispatch entry SongStore_DispatchA_1[2],
 ;              SongStore_DispatchA_2[2]
 ; Touches: (0x0DF8) (0x0DFA) (0x0E00) (0x0E08) (0x12F7) (0x12F9)
@@ -187972,7 +187972,7 @@ sub_F7C743:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C75C:
+SongStore_DispatchA_Case2:
 	ld	wa, (3576:16)	; F7C75C  ld WA,(0x0df8)
 	calr	sub_F7CD5F	; F7C760  calr 0xf7cd5f
 	ld	(3576:16), wa	; F7C763  ld (0x0df8),WA
@@ -187990,7 +187990,7 @@ sub_F7C75C_Skip:
 	ret	; F7C78B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C78C
+; SongStore_DispatchA_Case3
 ; Called from: dispatch entry SongStore_DispatchA_1[3],
 ;              SongStore_DispatchA_2[3]
 ; Touches: (0x0DF8) (0x0DFA) (0x0E00) (0x0E08) (0x12F7) (0x12F9)
@@ -188002,7 +188002,7 @@ sub_F7C75C_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C78C:
+SongStore_DispatchA_Case3:
 	ld	wa, (3578:16)	; F7C78C  ld WA,(0x0dfa)
 	calr	sub_F7CD5F	; F7C790  calr 0xf7cd5f
 	ld	(3578:16), wa	; F7C793  ld (0x0dfa),WA
@@ -188020,7 +188020,7 @@ sub_F7C78C_Skip:
 	ret	; F7C7BB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C7BC
+; SongStore_DispatchA_Case4
 ; Called from: dispatch entry SongStore_DispatchA_1[4],
 ;              SongStore_DispatchA_2[4]
 ; Touches: (0x0C4F) (0x0DFC) (0x129C) (0x12FB) (0x2075)
@@ -188031,7 +188031,7 @@ sub_F7C78C_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C7BC:
+SongStore_DispatchA_Case4:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C7BC  or (0x2075),0x09
 	ld	a, (3580:16)	; F7C7C1  ld A,(0x0dfc)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7C7C5  cp (0x0c4f),0x80
@@ -188336,11 +188336,11 @@ sub_F7C918_Code:
 ;          are sub_XXXXXX below.
 SongStore_DispatchB_1:
 	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
-	.long	sub_F7C9B0	; [1] -> sub_F7C9B0
-	.long	sub_F7C9C9	; [2] -> sub_F7C9C9
-	.long	sub_F7C9F5	; [3] -> sub_F7C9F5
-	.long	sub_F7CA21	; [4] -> sub_F7CA21
-	.long	sub_F7CA48	; [5] -> sub_F7CA48
+	.long	SongStore_DispatchB_Case1	; [1] -> SongStore_DispatchB_Case1
+	.long	SongStore_DispatchB_Case2	; [2] -> SongStore_DispatchB_Case2
+	.long	SongStore_DispatchB_Case3	; [3] -> SongStore_DispatchB_Case3
+	.long	SongStore_DispatchB_Case4	; [4] -> SongStore_DispatchB_Case4
+	.long	SongStore_DispatchB_Case5	; [5] -> SongStore_DispatchB_Case5
 
 
 ; --------------------------------------------------------------------------
@@ -188401,15 +188401,15 @@ sub_F7C964_Code:
 ;          are sub_XXXXXX below.
 SongStore_DispatchB_2:
 	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
-	.long	sub_F7C9B0	; [1] -> sub_F7C9B0
-	.long	sub_F7C9C9	; [2] -> sub_F7C9C9
-	.long	sub_F7C9F5	; [3] -> sub_F7C9F5
-	.long	sub_F7CA21	; [4] -> sub_F7CA21
-	.long	sub_F7CA48	; [5] -> sub_F7CA48
+	.long	SongStore_DispatchB_Case1	; [1] -> SongStore_DispatchB_Case1
+	.long	SongStore_DispatchB_Case2	; [2] -> SongStore_DispatchB_Case2
+	.long	SongStore_DispatchB_Case3	; [3] -> SongStore_DispatchB_Case3
+	.long	SongStore_DispatchB_Case4	; [4] -> SongStore_DispatchB_Case4
+	.long	SongStore_DispatchB_Case5	; [5] -> SongStore_DispatchB_Case5
 
 
 ; --------------------------------------------------------------------------
-; sub_F7C9B0
+; SongStore_DispatchB_Case1
 ; Called from: dispatch entry SongStore_DispatchB_1[1],
 ;              SongStore_DispatchB_2[1]
 ; Touches: (0x0DEE) (0x12F6) (0x2075)
@@ -188421,7 +188421,7 @@ SongStore_DispatchB_2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C9B0:
+SongStore_DispatchB_Case1:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C9B0  or (0x2075),0x09
 	ld	a, (3566:16)	; F7C9B5  ld A,(0x0dee)
 	ld	l, 1:opc	; F7C9B9  ld L,0x01
@@ -188432,7 +188432,7 @@ sub_F7C9B0:
 	ret	; F7C9C8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C9C9
+; SongStore_DispatchB_Case2
 ; Called from: dispatch entry SongStore_DispatchB_1[2],
 ;              SongStore_DispatchB_2[2]
 ; Touches: (0x0DF0) (0x0DF2) (0x129E) (0x12FC) (0x12FF)
@@ -188444,7 +188444,7 @@ sub_F7C9B0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C9C9:
+SongStore_DispatchB_Case2:
 	ld	wa, (N0teChange_FromMeasure:16)	; F7C9C9  ld WA,(0x0df0)
 	calr	sub_F7CD5F	; F7C9CD  calr 0xf7cd5f
 	ld	(N0teChange_FromMeasure:16), wa	; F7C9D0  ld (0x0df0),WA
@@ -188461,7 +188461,7 @@ sub_F7C9C9_Skip:
 	ret	; F7C9F4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C9F5
+; SongStore_DispatchB_Case3
 ; Called from: dispatch entry SongStore_DispatchB_1[3],
 ;              SongStore_DispatchB_2[3]
 ; Touches: (0x0DF0) (0x0DF2) (0x129E) (0x12FC) (0x12FF)
@@ -188473,7 +188473,7 @@ sub_F7C9C9_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C9F5:
+SongStore_DispatchB_Case3:
 	ld	wa, (N0teChange_ToMeasure:16)	; F7C9F5  ld WA,(0x0df2)
 	calr	sub_F7CD5F	; F7C9F9  calr 0xf7cd5f
 	ld	(N0teChange_ToMeasure:16), wa	; F7C9FC  ld (0x0df2),WA
@@ -188490,7 +188490,7 @@ sub_F7C9F5_Skip:
 	ret	; F7CA20  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CA21
+; SongStore_DispatchB_Case4
 ; Called from: dispatch entry SongStore_DispatchB_1[4],
 ;              SongStore_DispatchB_2[4]
 ; Touches: (0x0DF4) (0x12F7) (0x12F8) (0x12FB) (0x2075)
@@ -188502,7 +188502,7 @@ sub_F7C9F5_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CA21:
+SongStore_DispatchB_Case4:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7CA21  or (0x2075),0x09
 	ld	a, (N0teChange_FromNote:16)	; F7CA26  ld A,(0x0df4)
 	ld	l, 0:opc	; F7CA2A  ld L,0x00
@@ -188518,7 +188518,7 @@ sub_F7CA21:
 	ret	; F7CA47  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CA48
+; SongStore_DispatchB_Case5
 ; Called from: dispatch entry SongStore_DispatchB_1[5],
 ;              SongStore_DispatchB_2[5]
 ; Touches: (0x0DF5) (0x12F9) (0x12FA) (0x12FE) (0x2075)
@@ -188530,7 +188530,7 @@ sub_F7CA21:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CA48:
+SongStore_DispatchB_Case5:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7CA48  or (0x2075),0x09
 	ld	a, (N0teChange_ToNote:16)	; F7CA4D  ld A,(0x0df5)
 	ld	l, 0:opc	; F7CA51  ld L,0x00
@@ -188778,10 +188778,10 @@ sub_F7CB4A_Code:
 ;          are sub_XXXXXX below.
 SongStore_DispatchC_1:
 	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
-	.long	sub_F7CBE1	; [1] -> sub_F7CBE1
-	.long	sub_F7CBFA	; [2] -> sub_F7CBFA
-	.long	sub_F7CC27	; [3] -> sub_F7CC27
-	.long	sub_F7CC54	; [4] -> sub_F7CC54
+	.long	SongStore_DispatchC_Case1	; [1] -> SongStore_DispatchC_Case1
+	.long	SongStore_DispatchC_Case2	; [2] -> SongStore_DispatchC_Case2
+	.long	SongStore_DispatchC_Case3	; [3] -> SongStore_DispatchC_Case3
+	.long	SongStore_DispatchC_Case4	; [4] -> SongStore_DispatchC_Case4
 
 
 ; --------------------------------------------------------------------------
@@ -188844,14 +188844,14 @@ sub_F7CB90_Code:
 ;          are sub_XXXXXX below.
 SongStore_DispatchC_2:
 	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
-	.long	sub_F7CBE1	; [1] -> sub_F7CBE1
-	.long	sub_F7CBFA	; [2] -> sub_F7CBFA
-	.long	sub_F7CC27	; [3] -> sub_F7CC27
-	.long	sub_F7CC54	; [4] -> sub_F7CC54
+	.long	SongStore_DispatchC_Case1	; [1] -> SongStore_DispatchC_Case1
+	.long	SongStore_DispatchC_Case2	; [2] -> SongStore_DispatchC_Case2
+	.long	SongStore_DispatchC_Case3	; [3] -> SongStore_DispatchC_Case3
+	.long	SongStore_DispatchC_Case4	; [4] -> SongStore_DispatchC_Case4
 
 
 ; --------------------------------------------------------------------------
-; sub_F7CBE1
+; SongStore_DispatchC_Case1
 ; Called from: dispatch entry SongStore_DispatchC_1[1],
 ;              SongStore_DispatchC_2[1]
 ; Touches: (0x0DE6) (0x12F6) (0x2075)
@@ -188863,7 +188863,7 @@ SongStore_DispatchC_2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CBE1:
+SongStore_DispatchC_Case1:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7CBE1  or (0x2075),0x09
 	ld	a, (3558:16)	; F7CBE6  ld A,(0x0de6)
 	ld	l, 1:opc	; F7CBEA  ld L,0x01
@@ -188874,7 +188874,7 @@ sub_F7CBE1:
 	ret	; F7CBF9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CBFA
+; SongStore_DispatchC_Case2
 ; Called from: dispatch entry SongStore_DispatchC_1[2],
 ;              SongStore_DispatchC_2[2]
 ; Touches: (0x0DE8) (0x0DEA) (0x0E06) (0x12F7) (0x12F9)
@@ -188886,7 +188886,7 @@ sub_F7CBE1:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CBFA:
+SongStore_DispatchC_Case2:
 	ld	wa, (3560:16)	; F7CBFA  ld WA,(0x0de8)
 	call	sub_F7CD5F	; F7CBFE  call 0xf7cd5f
 	ld	(3560:16), wa	; F7CC02  ld (0x0de8),WA
@@ -188903,7 +188903,7 @@ sub_F7CBFA_Skip:
 	ret	; F7CC26  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CC27
+; SongStore_DispatchC_Case3
 ; Called from: dispatch entry SongStore_DispatchC_1[3],
 ;              SongStore_DispatchC_2[3]
 ; Touches: (0x0DE8) (0x0DEA) (0x0E06) (0x12F7) (0x12F9)
@@ -188915,7 +188915,7 @@ sub_F7CBFA_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CC27:
+SongStore_DispatchC_Case3:
 	ld	wa, (3562:16)	; F7CC27  ld WA,(0x0dea)
 	call	sub_F7CD5F	; F7CC2B  call 0xf7cd5f
 	ld	(3562:16), wa	; F7CC2F  ld (0x0dea),WA
@@ -188932,7 +188932,7 @@ sub_F7CC27_Skip:
 	ret	; F7CC53  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CC54
+; SongStore_DispatchC_Case4
 ; Called from: dispatch entry SongStore_DispatchC_1[4],
 ;              SongStore_DispatchC_2[4]
 ; Touches: (0x0DEC) (0x12FB)
@@ -188943,7 +188943,7 @@ sub_F7CC27_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CC54:
+SongStore_DispatchC_Case4:
 	ld	a, (3564:16)	; F7CC54  ld A,(0x0dec)
 	ld	l, 160:opc	; F7CC58  ld L,0xa0
 	ld	h, 96:opc	; F7CC5A  ld H,0x60
@@ -190994,7 +190994,7 @@ ButtonTable_MeasureDelete_StageZero:
 	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [18]
 	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [19]
 	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [20]
-	.long sub_F7F0E7	; [21]
+	.long MeasureDelete_StageZero_Button21	; [21]
 	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [22]
 	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [23]
 	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [24]
@@ -191086,7 +191086,7 @@ ButtonTable_MeasureErase_StageZero:
 	.long ButtonTable_MeasureErase_StageZero_Nop16	; [18]
 	.long ButtonTable_MeasureErase_StageZero_Nop16	; [19]
 	.long ButtonTable_MeasureErase_StageZero_Nop16	; [20]
-	.long sub_F7F3E2	; [21]
+	.long MeasureErase_StageZero_Button21	; [21]
 	.long ButtonTable_MeasureErase_StageZero_Nop22	; [22]
 	.long ButtonTable_MeasureErase_StageZero_Nop22	; [23]
 	.long ButtonTable_MeasureErase_StageZero_Nop22	; [24]
@@ -191178,7 +191178,7 @@ ButtonTable_Quantize_StageZero:
 	.long ButtonTable_Quantize_StageZero_Nop16	; [18]
 	.long ButtonTable_Quantize_StageZero_Nop16	; [19]
 	.long ButtonTable_Quantize_StageZero_Nop16	; [20]
-	.long sub_F7F74E	; [21]
+	.long Quantize_StageZero_Button21	; [21]
 	.long ButtonTable_Quantize_StageZero_Nop22	; [22]
 	.long ButtonTable_Quantize_StageZero_Nop22	; [23]
 	.long ButtonTable_Quantize_StageZero_Nop22	; [24]
@@ -191270,7 +191270,7 @@ ButtonTable_Vel0cityChange_StageZero:
 	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [18]
 	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [19]
 	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [20]
-	.long sub_F7FA43	; [21]
+	.long Vel0cityChange_StageZero_Button21	; [21]
 	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [22]
 	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [23]
 	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [24]
@@ -191362,7 +191362,7 @@ ButtonTable_Transp0se_StageZero:
 	.long ButtonTable_Transp0se_StageZero_Nop16	; [18]
 	.long ButtonTable_Transp0se_StageZero_Nop16	; [19]
 	.long ButtonTable_Transp0se_StageZero_Nop16	; [20]
-	.long sub_F7FD8A	; [21]
+	.long Transp0se_StageZero_Button21	; [21]
 	.long ButtonTable_Transp0se_StageZero_Nop22	; [22]
 	.long ButtonTable_Transp0se_StageZero_Nop22	; [23]
 	.long ButtonTable_Transp0se_StageZero_Nop22	; [24]
@@ -196497,7 +196497,7 @@ ButtonTable_MeasureDelete_StageZero_Nop16:
 	ret	; F7F0E6  ret   <- button table 0xF7D7D8 entry 16 (MEASURE DELETE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7F0E7 -- panel button slot 0x15 of MeasureDelete_StageZero, NOT NAMED
+; MeasureDelete_StageZero_Button21 -- panel button slot 0x15 of MeasureDelete_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -196513,7 +196513,7 @@ ButtonTable_MeasureDelete_StageZero_Nop16:
 ;           notes/prom_b_panel_names_round12.py --0x0d (slot 0x0D) and --plan
 ;           (the rest).
 ; ---------------------------------------------------------------------
-sub_F7F0E7:
+MeasureDelete_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits	; F7F0E7  bit 1,(0x2075)
 	jr	z, ScreenLeaveBody_MeasureDelete_Skip5	; F7F0EB  jr Z,0xf7f0f1
 	call	T_Blink_Stop	; F7F0ED  call 0xf42e24
@@ -197241,7 +197241,7 @@ ButtonTable_MeasureErase_StageZero_Nop16:
 	ret	; F7F3E1  ret   <- button table 0xF7D8D8 entry 16 (MEASURE ERASE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7F3E2 -- panel button slot 0x15 of MeasureErase_StageZero, NOT NAMED
+; MeasureErase_StageZero_Button21 -- panel button slot 0x15 of MeasureErase_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -197257,7 +197257,7 @@ ButtonTable_MeasureErase_StageZero_Nop16:
 ;           notes/prom_b_panel_names_round12.py --0x0d (slot 0x0D) and --plan
 ;           (the rest).
 ; ---------------------------------------------------------------------
-sub_F7F3E2:
+MeasureErase_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits	; F7F3E2  bit 1,(0x2075)
 	jr	z, sub_F7F397_Skip2	; F7F3E6  jr Z,0xf7f3ec
 	call	T_Blink_Stop	; F7F3E8  call 0xf42e24
@@ -198059,7 +198059,7 @@ ButtonTable_Quantize_StageZero_Nop16:
 	ret	; F7F74D  ret   <- button table 0xF7D9D8 entry 16 (QUANTIZE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7F74E -- panel button slot 0x15 of Quantize_StageZero, NOT NAMED
+; Quantize_StageZero_Button21 -- panel button slot 0x15 of Quantize_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -198075,7 +198075,7 @@ ButtonTable_Quantize_StageZero_Nop16:
 ;           notes/prom_b_panel_names_round12.py --0x0d (slot 0x0D) and --plan
 ;           (the rest).
 ; ---------------------------------------------------------------------
-sub_F7F74E:
+Quantize_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits	; F7F74E  bit 1,(0x2075)
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip3	; F7F752  jr Z,0xf7f758
 	call	T_Blink_Stop	; F7F754  call 0xf42e24
@@ -198798,7 +198798,7 @@ ButtonTable_Vel0cityChange_StageZero_Nop16:
 	ret	; F7FA42  ret   <- button table 0xF7DAD8 entry 16 (VEL0CITY CHANGE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7FA43 -- panel button slot 0x15 of Vel0cityChange_StageZero, NOT NAMED
+; Vel0cityChange_StageZero_Button21 -- panel button slot 0x15 of Vel0cityChange_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -198814,7 +198814,7 @@ ButtonTable_Vel0cityChange_StageZero_Nop16:
 ;           notes/prom_b_panel_names_round12.py --0x0d (slot 0x0D) and --plan
 ;           (the rest).
 ; ---------------------------------------------------------------------
-sub_F7FA43:
+Vel0cityChange_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits	; F7FA43  bit 1,(0x2075)
 	jr	z, sub_F7F9FB_Skip2	; F7FA47  jr Z,0xf7fa4d
 	call	T_Blink_Stop	; F7FA49  call 0xf42e24
@@ -199567,7 +199567,7 @@ ButtonTable_Transp0se_StageZero_Nop16:
 	ret	; F7FD89  ret   <- button table 0xF7DBD8 entry 16 (TRANSP0SE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7FD8A -- panel button slot 0x15 of Transp0se_StageZero, NOT NAMED
+; Transp0se_StageZero_Button21 -- panel button slot 0x15 of Transp0se_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -199583,7 +199583,7 @@ ButtonTable_Transp0se_StageZero_Nop16:
 ;           notes/prom_b_panel_names_round12.py --0x0d (slot 0x0D) and --plan
 ;           (the rest).
 ; ---------------------------------------------------------------------
-sub_F7FD8A:
+Transp0se_StageZero_Button21:
 	m_bit 1, MD16, UI_RequestBits	; F7FD8A  bit 1,(0x2075)
 	jr	z, sub_F7FD45_Skip2	; F7FD8E  jr Z,0xf7fd94
 	call	T_Blink_Stop	; F7FD90  call 0xf42e24
