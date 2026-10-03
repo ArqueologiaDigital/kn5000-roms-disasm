@@ -486,6 +486,7 @@
 	.set	Link_WaitBlockDone, 0xF8E66D
 	.set	LCD_EntryThunks, 0xF8E800
 	.set	SWI7_ServiceCall_Dispatch, 0xF8E9A5
+	.set	ModeEnter_Sound, 0xF90C00
 	.set	T_F41504_Nop, 0xF90C12
 	.set	ModeEnter_Combination, 0xF90C13
 	.set	T_F4150C_Nop, 0xF90C20
@@ -88315,7 +88316,7 @@ T_F414BC:	jp sub_F4CA2A  ; -> prom_b 0x4CA2A   x1
 T_F414C0:	jp sub_F4CADA  ; -> prom_b 0x4CADA   x1
 T_F414C4:	jp sub_F4CA92  ; -> prom_b 0x4CA92   x1
 	.fill 0x38, 1, 0x0E  ; 0xF414C8: 56 x ret
-T_F41500:	jp 0xF90C00  ; -> prom_a 0x10C00
+T_ModeEnter_Sound:	jp ModeEnter_Sound  ; F41500 (was T_F41500) -> prom_a 0x10C00
 T_F41504:	jp T_F41504_Nop  ; -> prom_a 0x10C12
 T_ModeEnter_Combination:	jp ModeEnter_Combination  ; -> prom_a 0x10C13
 T_F4150C:	jp T_F4150C_Nop  ; -> prom_a 0x10C20

@@ -23,7 +23,7 @@ more in `0xF92C62-0xF96017`: `T_F40144-T_F40174` (rank 17) and
 `T_F400D0-T_F4013C` (rank 18).
 
 After both spans landed, the run count is **31 → 22**: nine runs closed
-outright, and rank 3 (`T_F41500-T_F415C8`) fell from 51 unconverted slots over
+outright, and rank 3 (the slots 0xF41500-0xF415C8; 0xF41500 is now `T_ModeEnter_Sound`) fell from 51 unconverted slots over
 14,848 bytes to 22 over 8,280.
 
 **The round's frontier delta, reconciled rather than remembered.**

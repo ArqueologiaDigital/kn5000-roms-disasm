@@ -1494,7 +1494,7 @@
 	.set T_F414BC,                                                                      0x00F414BC
 	.set T_F414C0,                                                                      0x00F414C0
 	.set T_F414C4,                                                                      0x00F414C4
-	.set T_F41500,                                                                      0x00F41500
+	.set T_ModeEnter_Sound,                                                             0x00F41500
 	.set T_ModeEnter_Combination,                                                       0x00F41508
 	.set T_ScreenEnter_PowerOnSplash,                                                   0x00F41510
 	.set T_InstallPainter_SoundMode_Entry,                                              0x00F41520
@@ -13222,7 +13222,7 @@ PanelMode_ToScreenIdMap:
 ; ---------------------------------------------------------------------
 PanelScreen_VtableTable:
 	.long PanelScreen_NullVtable                ; F86EC1  [0]   -> PanelScreen_NullVtable
-	.long T_F41500                              ; F86EC5  [1]   -> 0xF41500
+	.long T_ModeEnter_Sound                      ; F86EC5  [1]   -> 0xF41500
 	.long T_ModeEnter_Combination                              ; F86EC9  [2]   -> 0xF41508
 	.long T_F402A4                              ; F86ECD  [3]   -> 0xF402A4
 	.long PanelScreen_NullVtable                ; F86ED1  [4]   -> PanelScreen_NullVtable
@@ -31640,8 +31640,10 @@ Paint_SoundMode_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF909AA
 	m_or_mi8 MB16, ModeScreen_DirtyFields, 0xff                          ; F90A2B  c1 76 26 3e ff
 	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F90A30  c1 77 26 3e 07
 	orw	(0x2116:16), 0x0044                  ; F90A35  d1 16 21 3e 44 00
-	calr 0x02e4                                          ; F90A3B  1e e4 02
-	calr 0x0310                                          ; F90A3E  1e 10 03
+; stale: the live twin at +0x40C calls sub_F911B6
+	calr	sub_F911B6 - 0x494                              ; F90A3B  1e e4 02
+; stale, old target 0xF90D51; the live twin is a `ret`, so no live counterpart
+	calr	0x0310                                          ; F90A3E  1e 10 03
 	ret                                                  ; F90A41  0e
 ; Paint_SoundModeFields_DeadCopy -- never-called older copy of Paint_SoundModeFields (0xF90E4B)
 ; Evidence: aligns with 0xF90E4E-0xF90F9F (the live routine after its `calr Paint_Drawbar`) at 309 of 332 bytes; the
@@ -31649,7 +31651,8 @@ Paint_SoundMode_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF909AA
 ;   reads (0x0710)/(0x0711).  Named only by sub_F90989 (`ld XWA` at 0xF909BC), which nothing references.
 Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF909BC
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F90A42  f1 40 25 00 00
-	calr 0x3296                                          ; F90A47  1e 96 32
+; stale: the live twin calls PartRecord_GetPtr
+	calr	PartRecord_GetPtr - 0x859                       ; F90A47  1e 96 32
 	ld A,(XIY)                                           ; F90A4A  85 21
 	ld W,(XIY+0x01)                                      ; F90A4C  8d 01 20
 	and W,0x7f                                           ; F90A4F  c8 cc 7f
@@ -31660,7 +31663,8 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	ldw ix, 0x09b4                                       ; F90A5F  34 b4 09
 	ld a, 0x21:opc                                          ; F90A62  21 21
 	swi 7                                                ; F90A64  ff
-	calr 0x328c                                          ; F90A65  1e 8c 32
+; stale: the live twin calls PartRecord_GetSecondHalfPtr
+	calr	PartRecord_GetSecondHalfPtr - 0x859             ; F90A65  1e 8c 32
 	ld A,(XIY+0x1d)                                      ; F90A68  8d 1d 21
 	and A,0xff                                           ; F90A6B  c9 cc ff
 	ld (UI_DrawScratch:16), a                                   ; F90A6E  f1 40 26 41
@@ -31677,7 +31681,8 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	ld XIY,0x00f29710                                    ; F90A90  45 10 97 f2 00
 	ld XIX,0x00f2972e                                    ; F90A95  44 2e 97 f2 00
 	call T_DisplayListB_Run                              ; F90A9A  1d f4 17 f4
-	calr 0x323f                                          ; F90A9E  1e 3f 32
+; stale: the live twin calls PartRecord_GetPtr
+	calr	PartRecord_GetPtr - 0x859                       ; F90A9E  1e 3f 32
 	m_bit 0, MD16, ModeScreen_DirtyFields                                ; F90AA1  f1 76 26 c8
 	jr z, .LF90AB9                                           ; F90AA5  66 12
 	push XIY                                             ; F90AA7  3d
@@ -31791,7 +31796,8 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 sub_F90B8E:
 	m_bit 0, MD16, ModeScreen_DirtyFields2                                ; F90B8E  f1 77 26 c8
 	jr z, .LF90BCD                                           ; F90B92  66 39
-	call 0xf93cf4                                        ; F90B94  1d f4 3c f9
+; stale: 0xF93CF4, the old address the twin-paired call at 0xF90A65 names
+	call	PartRecord_GetSecondHalfPtr - 0x859             ; F90B94  1d f4 3c f9
 	ld A,(XIY+0x18)                                      ; F90B98  8d 18 21
 	ld (UI_DrawScratch:16), a                                   ; F90B9B  f1 40 26 41
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90B9F  c0 c4 3f 02
@@ -31808,23 +31814,32 @@ sub_F90B8E:
 	call T_DisplayListB_Run                              ; F90BC9  1d f4 17 f4
 .LF90BCD:
 	m_bit 1, MD16, ModeScreen_DirtyFields2                                ; F90BCD  f1 77 26 c9
-	jr z, 0x76                                           ; F90BD1  66 76
+; stale: old target 0xF90C49, inside the block the module at 0xF90C00 overwrote
+	jr	z, 0x76                                           ; F90BD1  66 76
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90BD3  c0 c4 3f 02
-	jr z, 0x70                                           ; F90BD7  66 70
+; stale: old target 0xF90C49, as above
+	jr	z, 0x70                                           ; F90BD7  66 70
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F90BD9  f1 40 25 00 01
 	ld XIY,DLTable_F287C1                                ; F90BDE  45 c1 87 f2 00
 	ld XIX,0x00f287cb                                    ; F90BE3  44 cb 87 f2 00
 	call T_DisplayList_Run                               ; F90BE8  1d f0 17 f4
-	call 0xf93cf4                                        ; F90BEC  1d f4 3c f9
+; stale: as at 0xF90B94
+	call	PartRecord_GetSecondHalfPtr - 0x859             ; F90BEC  1d f4 3c f9
 	ld A,(XIY+0x19)                                      ; F90BF0  8d 19 21
-	calr 0x3129                                          ; F90BF3  1e 29 31
+; stale, old target 0xF93D1F; no live twin to pair it with
+	calr	0x3129                                          ; F90BF3  1e 29 31
 	dec 1,A                                              ; F90BF6  c9 69
 	ld (UI_DrawScratch:16), a                                   ; F90BF8  f1 40 26 41
 	push XIY                                             ; F90BFC  3d
-	ld XIY,0x34d187d5                                    ; F90BFD  45 d5 87 d1 34
-	ld a, 0x3e:opc                                          ; F90C02  21 3e
-	push SR                                              ; F90C04  02
-	nop                                                  ; F90C05  00
+; The stale block ends here, cut off by the module at 0xF90C00: the first three bytes of an `ld XIY,imm32`.
+	.byte	0x45, 0xd5, 0x87                                ; F90BFD  45 d5 87
+; ModeEnter_Sound -- ENTER method of mode 1 (sound mode)
+; Evidence: PanelScreen_VtableTable entry 1 -> T_ModeEnter_Sound (`jp 0xF90C00`, +4 T_F41504 = T_F41504_Nop).  `or
+;   (0x2134),0x0002` requests PanelLed_ShowModeMenu (id 0x0002), as ModeEnter_Combination does; then UI_PartIndex := 0,
+;   `calr Mode_SwitchToSound` and SoundGroup_LoadSelectionFromPart.  It was hidden by the stale block's cut-off
+;   instruction above, decoded as `ld XIY,0x34d187d5` running into it.
+ModeEnter_Sound:
+	orw	(0x2134:16), 0x0002                              ; F90C00  d1 34 21 3e 02 00
 	ld (UI_PartIndex:16), 0x00                                 ; F90C06  f1 50 22 00 00
 	calr Mode_SwitchToSound                                            ; F90C0B  1e 64 00
 	calr SoundGroup_LoadSelectionFromPart                                          ; F90C0E  1e 6d 37
@@ -31875,7 +31890,7 @@ Mode_SwitchToCombination:
 ; Mode_SwitchToSound -- switch the part block back to sound-mode contents
 ; Evidence: the mirror of Mode_SwitchToCombination: no-op when (0x7F02) & 0xF0 == 0; else nibble 0x00, Queue2C00
 ;   record {0x98,0x00,0x00,0xF0}, 0x7620 -> 0x7300 (save), T_ParamImage_SnapshotCombination_Entry, 0x7000 -> 0x7620 (load), T_ParamImage_QueueDiffCombination, pass-B drain.
-;   Called by mode 1's Enter at 0xF90C00 (`calr` at 0xF90C0B) and published T_Mode_SwitchToSound (4 refs).
+;   Called by mode 1's Enter, ModeEnter_Sound (`calr` at 0xF90C0B), and published T_Mode_SwitchToSound (4 refs).
 Mode_SwitchToSound:
 	ld a, (0x7f02:16)                                   ; F90C72  c1 02 7f 21
 	and A,0xf0                                           ; F90C76  c9 cc f0
@@ -75167,12 +75182,14 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; neither of those is traced to a source here.  Routine labels are therefore
 ; sub_XXXXXX except where a header below states its evidence.
 ; =====================================================================
+; The stale vector: each slot holds the live slot's target (ParamModule_PhaseVector) minus how far that
+; routine moved -- 0x400, the distance between the copies, for slots 0 and 2.
 sub_FAA000:
-	jp	sub_FAA82A - 0x400                                ; FAA000  1b 2a a4 fa   stale: slot 0; the live slot holds +0x400, the distance between the copies
-	jp	sub_FAA8F0 - 0x439                                ; FAA004  1b b7 a4 fa   stale: slot 1
-	jp	sub_FAA882 - 0x400                                ; FAA008  1b 82 a4 fa   stale: slot 2
-	jp	sub_FAA94E - 0x477                                ; FAA00C  1b d7 a4 fa   stale: slot 3
-	jp	sub_FAA8EC - 0x439                                ; FAA010  1b b3 a4 fa   stale: slot 4
+	jp	sub_FAA82A - 0x400                                ; FAA000  1b 2a a4 fa
+	jp	sub_FAA8F0 - 0x439                                ; FAA004  1b b7 a4 fa
+	jp	sub_FAA882 - 0x400                                ; FAA008  1b 82 a4 fa
+	jp	sub_FAA94E - 0x477                                ; FAA00C  1b d7 a4 fa
+	jp	sub_FAA8EC - 0x439                                ; FAA010  1b b3 a4 fa
 	ret                                                  ; FAA014  0e
 	nop                                                  ; FAA015  00
 	nop                                                  ; FAA016  00
@@ -75186,7 +75203,8 @@ sub_FAA000:
 	push XIX                                             ; FAA026  3c
 	push XIY                                             ; FAA027  3d
 	push XIZ                                             ; FAA028  3e
-	call	sub_FAB658 - 0x896                              ; FAA029  1d c2 ad fa   stale: the live twin at +0x400 calls sub_FAB658
+; stale: the live twin at +0x400 calls sub_FAB658
+	call	sub_FAB658 - 0x896                              ; FAA029  1d c2 ad fa
 	pop XIZ                                              ; FAA02D  5e
 	pop XIY                                              ; FAA02E  5d
 	pop XIX                                              ; FAA02F  5c
@@ -75205,7 +75223,8 @@ sub_FAA03A:
 	push XIX                                             ; FAA043  3c
 	push XIY                                             ; FAA044  3d
 	push XIZ                                             ; FAA045  3e
-	call	sub_FAB6D7 - 0x896                              ; FAA046  1d 41 ae fa   stale: the live twin calls sub_FAB6D7
+; stale: the live twin calls sub_FAB6D7
+	call	sub_FAB6D7 - 0x896                              ; FAA046  1d 41 ae fa
 	pop XIZ                                              ; FAA04A  5e
 	pop XIY                                              ; FAA04B  5d
 	pop XIX                                              ; FAA04C  5c
@@ -75225,7 +75244,8 @@ sub_FAA03A:
 	push XIX                                             ; FAA06A  3c
 	push XIY                                             ; FAA06B  3d
 	push XIZ                                             ; FAA06C  3e
-	call	sub_FAB779 - 0x896                              ; FAA06D  1d e3 ae fa   stale: the live twin calls sub_FAB779
+; stale: the live twin calls sub_FAB779
+	call	sub_FAB779 - 0x896                              ; FAA06D  1d e3 ae fa
 	pop XIZ                                              ; FAA071  5e
 	pop XIY                                              ; FAA072  5d
 	pop XIX                                              ; FAA073  5c
@@ -75243,7 +75263,8 @@ sub_FAA03A:
 	push XIX                                             ; FAA087  3c
 	push XIY                                             ; FAA088  3d
 	push XIZ                                             ; FAA089  3e
-	call	sub_FAB728 - 0x896                              ; FAA08A  1d 92 ae fa   stale: the live twin calls sub_FAB728
+; stale: the live twin calls sub_FAB728
+	call	sub_FAB728 - 0x896                              ; FAA08A  1d 92 ae fa
 	pop XIZ                                              ; FAA08E  5e
 	pop XIY                                              ; FAA08F  5d
 	pop XIX                                              ; FAA090  5c
@@ -75669,7 +75690,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 ;          Was decoded as `tset 0,(0x2a1b76)` + `swi 2`, the copy's cut-off instruction run on into it.
 ; ---------------------------------------------------------------------
 ParamModule_PhaseVector:
-	jp	sub_FAA82A                                        ; FAA400  1b 2a a8 fa   slot 0
+	jp	sub_FAA82A                                        ; FAA400  1b 2a a8 fa
 	jp sub_FAA8F0                                        ; FAA404  1b f0 a8 fa
 	jp sub_FAA882                                        ; FAA408  1b 82 a8 fa
 	jp sub_FAA94E                                        ; FAA40C  1b 4e a9 fa
