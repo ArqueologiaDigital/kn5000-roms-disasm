@@ -24373,7 +24373,7 @@ DL_RealtimeCommandsClock:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B7F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x7F32	; +0x02 source variable, 16-bit address
+	.short MidiCfg_ModeBits	; +0x02 source variable, 16-bit address
 	.byte 0x04	; +0x04 AND mask
 	.byte 0x82	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -76280,7 +76280,7 @@ sub_F38AEC_Resume:
 	m_cp_mi8 MBD+r6, 0xff, 0x00	; F38B10  cp (XIZ+0xff),0x00
 	jr	nz, sub_F38A79_Loop2	; F38B14  jr NZ,0xf38adb
 	pushw	11	; F38B16  push 0x000b
-	pushw	32562	; F38B19  push 0x7f32
+	pushw	MidiCfg_ModeBits	; F38B19  push 0x7f32
 	lda	xiy, (sub_F38AFD_Resume:24)	; F38B1C  lda XIY,0xf38b24
 	push	xiy	; F38B21  push XIY
 	jp	(xix)	; F38B22  jp T,XIX
@@ -76403,7 +76403,7 @@ sub_F38C01_Resume:
 	m_cp_mi8 MBD+r6, 0xff, 0x00	; F38C25  cp (XIZ+0xff),0x00
 	jr	nz, sub_F38B8E_Loop2	; F38C29  jr NZ,0xf38bf0
 	pushw	11	; F38C2B  push 0x000b
-	pushw	32562	; F38C2E  push 0x7f32
+	pushw	MidiCfg_ModeBits	; F38C2E  push 0x7f32
 	lda	xiy, (sub_F38C12_Resume:24)	; F38C31  lda XIY,0xf38c39
 	push	xiy	; F38C36  push XIY
 	jp	(xix)	; F38C37  jp T,XIX
@@ -91278,7 +91278,7 @@ sub_F44516_Skip3:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F4459F  cp (0x207a),0x08
 	jr	nz, sub_F44516_Skip5	; F445A4  jr NZ,0xf445bc
 sub_F44516_Skip4:
-	m_bit 2, MD16, 0x7f32	; F445A6  bit 2,(0x7f32)
+	m_bit 2, MD16, MidiCfg_ModeBits	; F445A6  bit 2,(0x7f32)
 	jr	z, sub_F44516_Skip5	; F445AA  jr Z,0xf445bc
 	m_bit 0, MD16, 0x34d9	; F445AC  bit 0,(0x34d9)
 	jr	z, sub_F44516_Skip5	; F445B0  jr Z,0xf445bc
@@ -93654,7 +93654,7 @@ sub_F456F0_Skip:
 	ld	(147:8), 0:io	; F4574E  ld (0x93),0x00
 	ei	0	; F45751  ei 0x00
 	call	T_F409B4	; F45753  call 0xf409b4
-	m_bit 2, MD16, 0x7f32	; F45757  bit 2,(0x7f32)
+	m_bit 2, MD16, MidiCfg_ModeBits	; F45757  bit 2,(0x7f32)
 	jr	z, sub_F456F0_Return	; F4575B  jr Z,0xf45760
 	calr	sub_F458EA	; F4575D  calr 0xf458ea
 sub_F456F0_Return:
@@ -116663,7 +116663,7 @@ sub_F56058_Skip4:
 	call	T_Queue2E00_AppendRegs	; F560D3  call 0xf40f3c
 	call	T_F411BC	; F560D7  call 0xf411bc
 sub_F56058_Skip5:
-	m_bit 2, MD16, 0x7f32	; F560DB  bit 2,(0x7f32)
+	m_bit 2, MD16, MidiCfg_ModeBits	; F560DB  bit 2,(0x7f32)
 	jr	z, sub_F56058_Skip6	; F560DF  jr Z,0xf560e6
 	m_and_mi8 MB16, 0x34d9, 0xfe	; F560E1  and (0x34d9),0xfe
 sub_F56058_Skip6:
@@ -117243,7 +117243,7 @@ sub_F56342:
 	jr	nz, sub_F56129_Skip20	; F56345  jr NZ,0xf56380
 	m_bit 0, MD16, 0x34d9	; F56347  bit 0,(0x34d9)
 	jr	nz, sub_F56129_Skip18	; F5634B  jr NZ,0xf56356
-	m_bit 2, MD16, 0x7f32	; F5634D  bit 2,(0x7f32)
+	m_bit 2, MD16, MidiCfg_ModeBits	; F5634D  bit 2,(0x7f32)
 	jr	z, sub_F56129_Skip18	; F56351  jr Z,0xf56356
 	jrl	sub_F56129_Return2	; F56353  jrl T,0xf563dc
 sub_F56129_Skip18:
@@ -117768,7 +117768,7 @@ sub_F5664A_Skip3:
 	m_and_mi8 MB16, 0x34d1, 0xef	; F5669F  and (0x34d1),0xef
 	m_and_mi8 MB16, 0x3614, 0xfe	; F566A4  and (0x3614),0xfe
 sub_F5664A_Skip4:
-	m_bit 2, MD16, 0x7f32	; F566A9  bit 2,(0x7f32)
+	m_bit 2, MD16, MidiCfg_ModeBits	; F566A9  bit 2,(0x7f32)
 	jr	z, sub_F5664A_Skip5	; F566AD  jr Z,0xf566b4
 	m_and_mi8 MB16, 0x34d9, 0xfe	; F566AF  and (0x34d9),0xfe
 sub_F5664A_Skip5:
@@ -117876,7 +117876,7 @@ sub_F5672B:
 	jr	nz, sub_F5670C_Return2	; F5672E  jr NZ,0xf56751
 	m_bit 0, MD16, 0x34d9	; F56730  bit 0,(0x34d9)
 	jr	nz, sub_F5670C_Skip2	; F56734  jr NZ,0xf5673e
-	m_bit 2, MD16, 0x7f32	; F56736  bit 2,(0x7f32)
+	m_bit 2, MD16, MidiCfg_ModeBits	; F56736  bit 2,(0x7f32)
 	jr	z, sub_F5670C_Skip2	; F5673A  jr Z,0xf5673e
 	jr	sub_F5670C_Return2	; F5673C  jr T,0xf56751
 sub_F5670C_Skip2:
@@ -164162,11 +164162,11 @@ Smf_ReadFile_Skip20:
 	m_cp_mi8 MB16, 0x1380, 0xff	; F6F841  cp (0x1380),0xff
 	jr	z, Smf_ReadFile_Skip21	; F6F846  jr Z,0xf6f866
 	ld	a, (4992:16)	; F6F848  ld A,(0x1380)
-	ld	w, (32562:16)	; F6F84C  ld W,(0x7f32)
+	ld	w, (MidiCfg_ModeBits:16)	; F6F84C  ld W,(0x7f32)
 	and	a, 3	; F6F850  and A,0x03
 	and	w, 252	; F6F853  and W,0xfc
 	or	a, w	; F6F856  or A,W
-	ld	(32562:16), a	; F6F858  ld (0x7f32),A
+	ld	(MidiCfg_ModeBits:16), a	; F6F858  ld (0x7f32),A
 	ld	e, 128:opc	; F6F85C  ld E,0x80
 	ld	d, 0:opc	; F6F85E  ld D,0x00
 	ld	w, 3:opc	; F6F860  ld W,0x03

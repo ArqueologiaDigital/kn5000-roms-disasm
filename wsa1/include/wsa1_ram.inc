@@ -279,5 +279,15 @@
 	.equ AnalogScan_HystState,		0x28e0	; two hysteresis bytes per A/D channel 0-3 -- AnalogScan_AdChannel0..3
 	.equ AnalogScan_Cooked,			0x28ec	; six cooked controller values, bit 7 = changed: +0/+1 channels 4/5, +2..+5 A/D 0-3 -- AnalogScan_*, PanelGroupQueue_AppendFlaggedGroups
 
+; ---- wsa1/notes/FINDINGS-prom_a-midi-settings.md -- "the MIDI settings bytes 0x7F32-0x7F3B"
+	.equ MidiCfg_ModeBits,			0x7f32	; bits 0-1 PROG CHANGE MODE, bit 3 SINGLE CH PROG CHANGE; read by the clock code too -- MidiTotalMode_EditProgChangeMode
+	.equ MidiFilter_SongSelect,		0x7f33	; bit 3: SONG SELECT filter -- MidiInputOutputFilter_EditSongSelect
+	.equ MidiCfg_InOutMode,			0x7f35	; bits 0-3 INPUT MODE, 4-7 OUTPUT MODE -- MidiTotalMode_EditInputMode
+	.equ MidiCfg_SingleChannel,		0x7f36	; bits 0-3 SINGLE CHANNEL, bit 5 LOCAL TOTAL off -- MidiTotalMode_EditSingleChannel
+	.equ MidiFilter_Exclusive,		0x7f38	; bits 0-3 EXCLUSIVE -- MidiInputOutputFilter_EditExclusive
+	.equ MidiFilter_ChannelMsgs,		0x7f39	; bit 3 CC, 4 PC, 5 CHANNEL PRESSURE, 6 PITCH BEND -- MidiInputOutputFilter_Edit*
+	.equ MidiFilter_BankSelect,		0x7f3a	; bit 7 BANK SELECT -- MidiInputOutputFilter_EditBankSelect
+	.equ MidiFilter_ResetAllCtrl,		0x7f3b	; bit 0 RESET ALL CTRL -- MidiInputOutputFilter_EditResetAllCtrl
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

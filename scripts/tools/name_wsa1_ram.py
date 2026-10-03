@@ -331,6 +331,16 @@ GROUPS = [
         **{0x28E0 + k: ("AnalogScan_HystState+%d" % k, "", "") for k in range(1, 8)},
         **{0x28EC + k: ("AnalogScan_Cooked+%d" % k, "", "") for k in range(1, 6)},
     }),
+    ("wsa1/notes/FINDINGS-prom_a-midi-settings.md", "the MIDI settings bytes 0x7F32-0x7F3B", {
+        0x7F32: ("MidiCfg_ModeBits", "bits 0-1 PROG CHANGE MODE, bit 3 SINGLE CH PROG CHANGE; read by the clock code too", "MidiTotalMode_EditProgChangeMode"),
+        0x7F33: ("MidiFilter_SongSelect", "bit 3: SONG SELECT filter", "MidiInputOutputFilter_EditSongSelect"),
+        0x7F35: ("MidiCfg_InOutMode", "bits 0-3 INPUT MODE, 4-7 OUTPUT MODE", "MidiTotalMode_EditInputMode"),
+        0x7F36: ("MidiCfg_SingleChannel", "bits 0-3 SINGLE CHANNEL, bit 5 LOCAL TOTAL off", "MidiTotalMode_EditSingleChannel"),
+        0x7F38: ("MidiFilter_Exclusive", "bits 0-3 EXCLUSIVE", "MidiInputOutputFilter_EditExclusive"),
+        0x7F39: ("MidiFilter_ChannelMsgs", "bit 3 CC, 4 PC, 5 CHANNEL PRESSURE, 6 PITCH BEND", "MidiInputOutputFilter_Edit*"),
+        0x7F3A: ("MidiFilter_BankSelect", "bit 7 BANK SELECT", "MidiInputOutputFilter_EditBankSelect"),
+        0x7F3B: ("MidiFilter_ResetAllCtrl", "bit 0 RESET ALL CTRL", "MidiInputOutputFilter_EditResetAllCtrl"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),

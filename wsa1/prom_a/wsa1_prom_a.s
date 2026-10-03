@@ -7524,7 +7524,7 @@ INTT1_Tick:
 	inc 1,A                                       ; F82D56  c9 61
 .LF82D58:
 	st_dd8b a, 0xa1                               ; F82D58  f0 a1 41
-	m_bit 2, MD16, 0x7f32                         ; F82D5B  f1 32 7f ca
+	m_bit 2, MD16, MidiCfg_ModeBits                         ; F82D5B  f1 32 7f ca
 	jr NZ,.LF82DCB                                ; F82D5F  6e 6a
 	m_inc 1, MB8, 0x90                            ; F82D61  c0 90 61
 	bit_dd8 0x00, 0x95                            ; F82D64  f0 95 c8
@@ -7542,7 +7542,7 @@ INTT1_Tick:
 	jr Z,.LF82D9B                                 ; F82D81  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82D83  f1 34 7f ca
 	jr Z,.LF82D9B                                 ; F82D87  66 12
-	m_bit 2, MD16, 0x7f32                         ; F82D89  f1 32 7f ca
+	m_bit 2, MD16, MidiCfg_ModeBits                         ; F82D89  f1 32 7f ca
 	jr NZ,.LF82D9B                                ; F82D8D  6e 0c
 	push SR                                       ; F82D8F  02
 	ei 0x06                                       ; F82D90  06 06
@@ -7774,7 +7774,7 @@ INTTR4_SequencerTick:
 	jr c, .LF82EB9                                ; F82EB4  67 03
 	ld (XHL),0x00                                 ; F82EB6  b3 00 00
 .LF82EB9:
-	m_bit 2, MD16, 0x7f32                         ; F82EB9  f1 32 7f ca   whatever (0x7F32) bit 2 selects, it swaps the whole handler out
+	m_bit 2, MD16, MidiCfg_ModeBits                         ; F82EB9  f1 32 7f ca   whatever (0x7F32) bit 2 selects, it swaps the whole handler out
 	jr z, .LF82EC3                                ; F82EBD  66 04
 	jp INTTR4_SequencerTick_Alt                                   ; F82EBF  1b 20 31 f8
 .LF82EC3:
@@ -7847,7 +7847,7 @@ INTTR4_SequencerTick:
 	jr z, .LF82F86                                ; F82F6C  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82F6E  f1 34 7f ca
 	jr z, .LF82F86                                ; F82F72  66 12
-	m_bit 2, MD16, 0x7f32                         ; F82F74  f1 32 7f ca
+	m_bit 2, MD16, MidiCfg_ModeBits                         ; F82F74  f1 32 7f ca
 	jr nz, .LF82F86                               ; F82F78  6e 0c
 	push SR                                       ; F82F7A  02
 	ei 0x06                                       ; F82F7B  06 06
@@ -7877,7 +7877,7 @@ INTTR4_SequencerTick:
 	jr z, .LF82FCA                                ; F82FB0  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82FB2  f1 34 7f ca
 	jr z, .LF82FCA                                ; F82FB6  66 12
-	m_bit 2, MD16, 0x7f32                         ; F82FB8  f1 32 7f ca
+	m_bit 2, MD16, MidiCfg_ModeBits                         ; F82FB8  f1 32 7f ca
 	jr nz, .LF82FCA                               ; F82FBC  6e 0c
 	push SR                                       ; F82FBE  02
 	ei 0x06                                       ; F82FBF  06 06
@@ -38896,7 +38896,7 @@ PanelDial_DrawValueDigits:   ; entry: named by 1 `ld` operand, first at 0xF94609
 	jr .LF94649                                          ; F94647  68 00
 .LF94649:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F94649  f1 40 25 00 00
-	m_bit 2, MD16, 0x7f32                                ; F9464E  f1 32 7f ca
+	m_bit 2, MD16, MidiCfg_ModeBits                                ; F9464E  f1 32 7f ca
 	jr z, .LF9465F                                       ; F94652  66 0b
 	ldw (Value_AsciiDigits:16), 0x2d2d                              ; F94654  f1 61 26 02 2d 2d
 	ld (Value_AsciiDigits+2:16), 0x2d                                 ; F9465A  f1 63 26 00 2d
@@ -43972,7 +43972,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld C,H                                               ; F97F6A  ce 8b
 	extz BC                                              ; F97F6C  d9 12
 	ld IX,BC                                             ; F97F6E  d9 8c
-	ldw wa, 0x7f32                                       ; F97F70  30 32 7f
+	ldw wa, MidiCfg_ModeBits                                       ; F97F70  30 32 7f
 	add WA,BC                                            ; F97F73  d9 80
 	ld (xiz-4), wa                                       ; F97F75  be fc 50
 	ld IX,WA                                             ; F97F78  d8 8c
@@ -48100,7 +48100,7 @@ JumpTable_F9A3C7_Code_Skip:
 	unlk XIZ                                             ; F9A415  ee 0d
 	ret                                                  ; F9A417  0e
 Draw_MultiSingleOmni:
-	ld c, (0x7f35:16)                                   ; F9A418  c1 35 7f 23
+	ld c, (MidiCfg_InOutMode:16)                                   ; F9A418  c1 35 7f 23
 	and C,0x0f                                           ; F9A41C  cb cc 0f
 	ld (0x2740:16), c                                   ; F9A41F  f1 40 27 43
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9A423  f1 40 25 00 00
@@ -48112,7 +48112,7 @@ Draw_MultiSingleOmni:
 	inc 8,XSP                                            ; F9A438  ef 60
 	ret                                                  ; F9A43A  0e
 Draw_MultiSingle:
-	ld c, (0x7f35:16)                                   ; F9A43B  c1 35 7f 23
+	ld c, (MidiCfg_InOutMode:16)                                   ; F9A43B  c1 35 7f 23
 	and C,0xf0                                           ; F9A43F  cb cc f0
 	srl c, 0x04                                          ; F9A442  cb ef 04
 	ld (0x2740:16), c                                   ; F9A445  f1 40 27 43
@@ -48130,7 +48130,7 @@ Draw_MultiSingle:
 ;   0x0E66) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and
 ;   MidiTotalMode_EditSingleChannel.
 MidiTotalMode_PaintSingleChannel:
-	ld c, (0x7f36:16)                                   ; F9A461  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; F9A461  c1 36 7f 23
 	and C,0x0f                                           ; F9A465  cb cc 0f
 	ld (0x2740:16), c                                   ; F9A468  f1 40 27 43
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9A46C  f1 40 25 00 00
@@ -48149,7 +48149,7 @@ MidiTotalMode_PaintSingleChannel:
 MidiTotalMode_PaintLocalTotal:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F9A484  c0 c4 3f 02
 	jr z, .LF9A4AF                                       ; F9A488  66 25
-	ld c, (0x7f36:16)                                   ; F9A48A  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; F9A48A  c1 36 7f 23
 	and C,0x20                                           ; F9A48E  cb cc 20
 	srl c, 0x05                                          ; F9A491  cb ef 05
 	ld (0x2740:16), c                                   ; F9A494  f1 40 27 43
@@ -48164,7 +48164,7 @@ sub_F9A4A8:
 .LF9A4AF:
 	ret                                                  ; F9A4AF  0e
 Draw_NormalTechRemap:
-	ld c, (0x7f32:16)                                   ; F9A4B0  c1 32 7f 23
+	ld c, (MidiCfg_ModeBits:16)                                   ; F9A4B0  c1 32 7f 23
 	and C,0x03                                           ; F9A4B4  cb cc 03
 	ld (0x2740:16), c                                   ; F9A4B7  f1 40 27 43
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9A4BB  f1 40 25 00 00
@@ -48181,7 +48181,7 @@ Draw_NormalTechRemap:
 ;   (IX 0x19A6) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and
 ;   MidiTotalMode_EditSingleChProgChange.
 MidiTotalMode_PaintSingleChProgChange:
-	ld c, (0x7f32:16)                                   ; F9A4D3  c1 32 7f 23
+	ld c, (MidiCfg_ModeBits:16)                                   ; F9A4D3  c1 32 7f 23
 	and C,0x08                                           ; F9A4D7  cb cc 08
 	srl c, 0x03                                          ; F9A4DA  cb ef 03
 	ld (0x2740:16), c                                   ; F9A4DD  f1 40 27 43
@@ -48201,7 +48201,7 @@ MidiTotalMode_EditInputMode:
 	link XIZ,0x0000                                      ; F9A4F9  ee 0c 00 00
 	pushw hl                                             ; F9A4FD  2b
 	push XIX                                             ; F9A4FE  3c
-	lda xix, (0x7f35:16)                                ; F9A4FF  f1 35 7f 34
+	lda xix, (MidiCfg_InOutMode:16)                                ; F9A4FF  f1 35 7f 34
 	ld C,(XIX)                                           ; F9A503  84 23
 	ld L,C                                               ; F9A505  cb 8f
 	and L,0x0f                                           ; F9A507  cf cc 0f
@@ -48239,7 +48239,7 @@ MidiTotalMode_EditOutputMode:
 	link XIZ,0x0000                                      ; F9A544  ee 0c 00 00
 	pushw hl                                             ; F9A548  2b
 	push XIX                                             ; F9A549  3c
-	lda xix, (0x7f35:16)                                ; F9A54A  f1 35 7f 34
+	lda xix, (MidiCfg_InOutMode:16)                                ; F9A54A  f1 35 7f 34
 	ld C,(XIX)                                           ; F9A54E  84 23
 	and C,0xf0                                           ; F9A550  cb cc f0
 	ld L,C                                               ; F9A553  cb 8f
@@ -48281,7 +48281,7 @@ MidiTotalMode_EditSingleChannel:
 	link XIZ,0x0000                                      ; F9A59A  ee 0c 00 00
 	pushw hl                                             ; F9A59E  2b
 	push XIX                                             ; F9A59F  3c
-	lda xix, (0x7f36:16)                                ; F9A5A0  f1 36 7f 34
+	lda xix, (MidiCfg_SingleChannel:16)                                ; F9A5A0  f1 36 7f 34
 	ld C,(XIX)                                           ; F9A5A4  84 23
 	ld L,C                                               ; F9A5A6  cb 8f
 	and L,0x0f                                           ; F9A5A8  cf cc 0f
@@ -48319,7 +48319,7 @@ MidiTotalMode_EditLocalTotal:
 	link XIZ,0x0000                                      ; F9A5E5  ee 0c 00 00
 	pushw hl                                             ; F9A5E9  2b
 	push XIX                                             ; F9A5EA  3c
-	lda xix, (0x7f36:16)                                ; F9A5EB  f1 36 7f 34
+	lda xix, (MidiCfg_SingleChannel:16)                                ; F9A5EB  f1 36 7f 34
 	cp (XIZ+0x08),0x00                                   ; F9A5EF  8e 08 3f 00
 	jr nz, .LF9A601                                      ; F9A5F3  6e 0c
 	ld C,(XIX)                                           ; F9A5F5  84 23
@@ -48357,7 +48357,7 @@ MidiTotalMode_EditProgChangeMode:
 	link XIZ,0x0000                                      ; F9A62D  ee 0c 00 00
 	pushw hl                                             ; F9A631  2b
 	push XIX                                             ; F9A632  3c
-	lda xix, (0x7f32:16)                                ; F9A633  f1 32 7f 34
+	lda xix, (MidiCfg_ModeBits:16)                                ; F9A633  f1 32 7f 34
 	ld C,(XIX)                                           ; F9A637  84 23
 	ld L,C                                               ; F9A639  cb 8f
 	and L,0x03                                           ; F9A63B  cf cc 03
@@ -48396,7 +48396,7 @@ MidiTotalMode_EditSingleChProgChange:
 	link XIZ,0x0000                                      ; F9A678  ee 0c 00 00
 	pushw hl                                             ; F9A67C  2b
 	push XIX                                             ; F9A67D  3c
-	lda xix, (0x7f32:16)                                ; F9A67E  f1 32 7f 34
+	lda xix, (MidiCfg_ModeBits:16)                                ; F9A67E  f1 32 7f 34
 	cp (XIZ+0x08),0x00                                   ; F9A682  8e 08 3f 00
 	jr nz, .LF9A694                                      ; F9A686  6e 0c
 	ld C,(XIX)                                           ; F9A688  84 23
@@ -48699,7 +48699,7 @@ IgnoredKeys_MidiRealtimeMessages:   ; entry: named by 28 `.long` operands, first
 Draw_RealtimeCommandsClock:
 	link XIZ,0x0000                                      ; F9A83A  ee 0c 00 00
 	push XIX                                             ; F9A83E  3c
-	lda xix, (0x7f32:16)                                ; F9A83F  f1 32 7f 34
+	lda xix, (MidiCfg_ModeBits:16)                                ; F9A83F  f1 32 7f 34
 	cp (XIZ+0x08),0x00                                   ; F9A843  8e 08 3f 00
 	jr nz, .LF9A8A9                                      ; F9A847  6e 60
 	m_cp_mi8 MB16, UI_ScreenItem, 0x00                          ; F9A849  c1 20 27 3f 00
@@ -48759,7 +48759,7 @@ Draw_RealtimeCommandsClock:
 Draw_RealtimeCommandsClock_2:
 	link XIZ,0x0000                                      ; F9A8E4  ee 0c 00 00
 	push XIX                                             ; F9A8E8  3c
-	lda xix, (0x7f32:16)                                ; F9A8E9  f1 32 7f 34
+	lda xix, (MidiCfg_ModeBits:16)                                ; F9A8E9  f1 32 7f 34
 	cp (XIZ+0x08),0x00                                   ; F9A8ED  8e 08 3f 00
 	jr nz, .LF9A950                                      ; F9A8F1  6e 5d
 	m_cp_mi8 MB16, UI_ScreenItem, 0x00                          ; F9A8F3  c1 20 27 3f 00
@@ -49210,7 +49210,7 @@ JumpTable_F9AB84_Code_Skip:
 ; Evidence: DL_F0CDE7 reads (0x2740) and draws at IX 0x074C, the text row of "PR0GRAM CHANGE   :" (IX 0x0739);
 ;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditProgramChange.
 MidiInputOutputFilter_PaintProgramChange:
-	ld c, (0x7f39:16)                                   ; F9ABEF  c1 39 7f 23
+	ld c, (MidiFilter_ChannelMsgs:16)                                   ; F9ABEF  c1 39 7f 23
 	and C,0x10                                           ; F9ABF3  cb cc 10
 	srl c, 0x04                                          ; F9ABF6  cb ef 04
 	ld (0x2740:16), c                                   ; F9ABF9  f1 40 27 43
@@ -49227,7 +49227,7 @@ MidiInputOutputFilter_PaintProgramChange:
 ; Evidence: DL_F0CDF6 reads (0x2740) and draws at IX 0x0A1C, the text row of "BANK SELECT      :" (IX 0x0A09);
 ;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditBankSelect.
 MidiInputOutputFilter_PaintBankSelect:
-	ld c, (0x7f3a:16)                                   ; F9AC15  c1 3a 7f 23
+	ld c, (MidiFilter_BankSelect:16)                                   ; F9AC15  c1 3a 7f 23
 	and C,0x80                                           ; F9AC19  cb cc 80
 	srl c, 0x07                                          ; F9AC1C  cb ef 07
 	ld (0x2740:16), c                                   ; F9AC1F  f1 40 27 43
@@ -49244,7 +49244,7 @@ MidiInputOutputFilter_PaintBankSelect:
 ; Evidence: DL_F0CE05 reads (0x2740) and draws at IX 0x0CEC, the text row of "PITCH BEND       :" (IX 0x0CD9);
 ;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditPitchBend.
 MidiInputOutputFilter_PaintPitchBend:
-	ld c, (0x7f39:16)                                   ; F9AC3B  c1 39 7f 23
+	ld c, (MidiFilter_ChannelMsgs:16)                                   ; F9AC3B  c1 39 7f 23
 	and C,0x40                                           ; F9AC3F  cb cc 40
 	srl c, 0x06                                          ; F9AC42  cb ef 06
 	ld (0x2740:16), c                                   ; F9AC45  f1 40 27 43
@@ -49261,7 +49261,7 @@ MidiInputOutputFilter_PaintPitchBend:
 ; Evidence: DL_F0CE14 reads (0x2740) and draws at IX 0x0FBC, the text row of "C0NTR0L CHANGE   :" (IX 0x0FA9);
 ;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditControlChange.
 MidiInputOutputFilter_PaintControlChange:
-	ld c, (0x7f39:16)                                   ; F9AC61  c1 39 7f 23
+	ld c, (MidiFilter_ChannelMsgs:16)                                   ; F9AC61  c1 39 7f 23
 	and C,0x08                                           ; F9AC65  cb cc 08
 	srl c, 0x03                                          ; F9AC68  cb ef 03
 	ld (0x2740:16), c                                   ; F9AC6B  f1 40 27 43
@@ -49278,7 +49278,7 @@ MidiInputOutputFilter_PaintControlChange:
 ; Evidence: DL_F0CE23 reads (0x2740) and draws at IX 0x128C, the text row of "RESET ALL CTRL" (IX 0x1279); called by
 ;   Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditResetAllCtrl.
 MidiInputOutputFilter_PaintResetAllCtrl:
-	ld c, (0x7f3b:16)                                   ; F9AC87  c1 3b 7f 23
+	ld c, (MidiFilter_ResetAllCtrl:16)                                   ; F9AC87  c1 3b 7f 23
 	and C,0x01                                           ; F9AC8B  cb cc 01
 	ld (0x2740:16), c                                   ; F9AC8E  f1 40 27 43
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9AC92  f1 40 25 00 00
@@ -49294,7 +49294,7 @@ MidiInputOutputFilter_PaintResetAllCtrl:
 ; Evidence: DL_F0CE32 reads (0x2740) and draws at IX 0x155C, the text row of "CHANNEL PRESSURE :" (IX 0x1549);
 ;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditChannelPressure.
 MidiInputOutputFilter_PaintChannelPressure:
-	ld c, (0x7f39:16)                                   ; F9ACAA  c1 39 7f 23
+	ld c, (MidiFilter_ChannelMsgs:16)                                   ; F9ACAA  c1 39 7f 23
 	and C,0x20                                           ; F9ACAE  cb cc 20
 	srl c, 0x05                                          ; F9ACB1  cb ef 05
 	ld (0x2740:16), c                                   ; F9ACB4  f1 40 27 43
@@ -49311,7 +49311,7 @@ MidiInputOutputFilter_PaintChannelPressure:
 ; Evidence: DL_F0CE41 reads (0x2740) and draws at IX 0x182C, the text row of "S0NG SELECT      :" (IX 0x1819);
 ;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditSongSelect.
 MidiInputOutputFilter_PaintSongSelect:
-	ld c, (0x7f33:16)                                   ; F9ACD0  c1 33 7f 23
+	ld c, (MidiFilter_SongSelect:16)                                   ; F9ACD0  c1 33 7f 23
 	and C,0x08                                           ; F9ACD4  cb cc 08
 	srl c, 0x03                                          ; F9ACD7  cb ef 03
 	ld (0x2740:16), c                                   ; F9ACDA  f1 40 27 43
@@ -49329,7 +49329,7 @@ MidiInputOutputFilter_PaintSongSelect:
 ;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditExclusive.
 MidiInputOutputFilter_PaintExclusive:
 	ld (0x2740:16), 0x01                                 ; F9ACF6  f1 40 27 00 01
-	ld c, (0x7f38:16)                                   ; F9ACFB  c1 38 7f 23
+	ld c, (MidiFilter_Exclusive:16)                                   ; F9ACFB  c1 38 7f 23
 	and C,0x0f                                           ; F9ACFF  cb cc 0f
 	jr nz, .LF9AD09                                      ; F9AD02  6e 05
 	ld (0x2740:16), 0x00                                 ; F9AD04  f1 40 27 00 00
@@ -49359,7 +49359,7 @@ MidiInputOutputFilter_EditProgramChange:
 	ld h, 0x00:opc                                          ; F9AD31  26 00
 .LF9AD33:
 	pushw 0x10                                           ; F9AD33  0b 10 00
-	lda xbc, (0x7f39:16)                                ; F9AD36  f1 39 7f 31
+	lda xbc, (MidiFilter_ChannelMsgs:16)                                ; F9AD36  f1 39 7f 31
 	push XBC                                             ; F9AD3A  39
 	push 0x00                                            ; F9AD3B  09 00
 	push H                                               ; F9AD3D  ce 04
@@ -49367,7 +49367,7 @@ MidiInputOutputFilter_EditProgramChange:
 	inc 8,XSP                                            ; F9AD42  ef 60
 	cp a, 0x00:i3                                          ; F9AD44  c9 d8
 	jr nz, .LF9AD65                                      ; F9AD46  6e 1d
-	ld h, (0x7f39:16)                                   ; F9AD48  c1 39 7f 26
+	ld h, (MidiFilter_ChannelMsgs:16)                                   ; F9AD48  c1 39 7f 26
 	and H,0x10                                           ; F9AD4C  ce cc 10
 	pushw 0x10                                           ; F9AD4F  0b 10 00
 	push 0x00                                            ; F9AD52  09 00
@@ -49397,7 +49397,7 @@ MidiInputOutputFilter_EditBankSelect:
 	ld h, 0x00:opc                                          ; F9AD79  26 00
 .LF9AD7B:
 	pushw 0x80                                           ; F9AD7B  0b 80 00
-	lda xbc, (0x7f3a:16)                                ; F9AD7E  f1 3a 7f 31
+	lda xbc, (MidiFilter_BankSelect:16)                                ; F9AD7E  f1 3a 7f 31
 	push XBC                                             ; F9AD82  39
 	push 0x00                                            ; F9AD83  09 00
 	push H                                               ; F9AD85  ce 04
@@ -49406,7 +49406,7 @@ MidiInputOutputFilter_EditBankSelect:
 sub_F9AD8C:
 	cp a, 0x00:i3                                          ; F9AD8C  c9 d8
 	jr nz, .LF9ADAD                                      ; F9AD8E  6e 1d
-	ld h, (0x7f3a:16)                                   ; F9AD90  c1 3a 7f 26
+	ld h, (MidiFilter_BankSelect:16)                                   ; F9AD90  c1 3a 7f 26
 	and H,0x80                                           ; F9AD94  ce cc 80
 	pushw 0x80                                           ; F9AD97  0b 80 00
 	push 0x00                                            ; F9AD9A  09 00
@@ -49436,7 +49436,7 @@ MidiInputOutputFilter_EditPitchBend:
 	ld h, 0x00:opc                                          ; F9ADC1  26 00
 .LF9ADC3:
 	pushw 0x40                                           ; F9ADC3  0b 40 00
-	lda xbc, (0x7f39:16)                                ; F9ADC6  f1 39 7f 31
+	lda xbc, (MidiFilter_ChannelMsgs:16)                                ; F9ADC6  f1 39 7f 31
 	push XBC                                             ; F9ADCA  39
 	push 0x00                                            ; F9ADCB  09 00
 	push H                                               ; F9ADCD  ce 04
@@ -49444,7 +49444,7 @@ MidiInputOutputFilter_EditPitchBend:
 	inc 8,XSP                                            ; F9ADD2  ef 60
 	cp a, 0x00:i3                                          ; F9ADD4  c9 d8
 	jr nz, .LF9ADF5                                      ; F9ADD6  6e 1d
-	ld h, (0x7f39:16)                                   ; F9ADD8  c1 39 7f 26
+	ld h, (MidiFilter_ChannelMsgs:16)                                   ; F9ADD8  c1 39 7f 26
 	and H,0x40                                           ; F9ADDC  ce cc 40
 	pushw 0x40                                           ; F9ADDF  0b 40 00
 	push 0x00                                            ; F9ADE2  09 00
@@ -49475,7 +49475,7 @@ MidiInputOutputFilter_EditControlChange:
 	ld h, 0x00:opc                                          ; F9AE09  26 00
 .LF9AE0B:
 	pushw 0x08                                           ; F9AE0B  0b 08 00
-	lda xbc, (0x7f39:16)                                ; F9AE0E  f1 39 7f 31
+	lda xbc, (MidiFilter_ChannelMsgs:16)                                ; F9AE0E  f1 39 7f 31
 	push XBC                                             ; F9AE12  39
 	push 0x00                                            ; F9AE13  09 00
 	push H                                               ; F9AE15  ce 04
@@ -49483,7 +49483,7 @@ MidiInputOutputFilter_EditControlChange:
 	inc 8,XSP                                            ; F9AE1A  ef 60
 	cp a, 0x00:i3                                          ; F9AE1C  c9 d8
 	jr nz, .LF9AE3D                                      ; F9AE1E  6e 1d
-	ld h, (0x7f39:16)                                   ; F9AE20  c1 39 7f 26
+	ld h, (MidiFilter_ChannelMsgs:16)                                   ; F9AE20  c1 39 7f 26
 	and H,0x08                                           ; F9AE24  ce cc 08
 	pushw 0x08                                           ; F9AE27  0b 08 00
 	push 0x00                                            ; F9AE2A  09 00
@@ -49514,7 +49514,7 @@ MidiInputOutputFilter_EditResetAllCtrl:
 	ld h, 0x00:opc                                          ; F9AE51  26 00
 .LF9AE53:
 	pushw 0x01                                           ; F9AE53  0b 01 00
-	lda xbc, (0x7f3b:16)                                ; F9AE56  f1 3b 7f 31
+	lda xbc, (MidiFilter_ResetAllCtrl:16)                                ; F9AE56  f1 3b 7f 31
 	push XBC                                             ; F9AE5A  39
 	push 0x00                                            ; F9AE5B  09 00
 	push H                                               ; F9AE5D  ce 04
@@ -49522,7 +49522,7 @@ MidiInputOutputFilter_EditResetAllCtrl:
 	inc 8,XSP                                            ; F9AE62  ef 60
 	cp a, 0x00:i3                                          ; F9AE64  c9 d8
 	jr nz, .LF9AE85                                      ; F9AE66  6e 1d
-	ld h, (0x7f3b:16)                                   ; F9AE68  c1 3b 7f 26
+	ld h, (MidiFilter_ResetAllCtrl:16)                                   ; F9AE68  c1 3b 7f 26
 	and H,0x01                                           ; F9AE6C  ce cc 01
 	pushw 0x01                                           ; F9AE6F  0b 01 00
 	push 0x00                                            ; F9AE72  09 00
@@ -49554,7 +49554,7 @@ MidiInputOutputFilter_EditChannelPressure:
 	ld h, 0x00:opc                                          ; F9AE99  26 00
 .LF9AE9B:
 	pushw 0x20                                           ; F9AE9B  0b 20 00
-	lda xbc, (0x7f39:16)                                ; F9AE9E  f1 39 7f 31
+	lda xbc, (MidiFilter_ChannelMsgs:16)                                ; F9AE9E  f1 39 7f 31
 	push XBC                                             ; F9AEA2  39
 	push 0x00                                            ; F9AEA3  09 00
 	push H                                               ; F9AEA5  ce 04
@@ -49562,7 +49562,7 @@ MidiInputOutputFilter_EditChannelPressure:
 	inc 8,XSP                                            ; F9AEAA  ef 60
 	cp a, 0x00:i3                                          ; F9AEAC  c9 d8
 	jr nz, .LF9AECD                                      ; F9AEAE  6e 1d
-	ld h, (0x7f3b:16)                                   ; F9AEB0  c1 3b 7f 26
+	ld h, (MidiFilter_ResetAllCtrl:16)                                   ; F9AEB0  c1 3b 7f 26
 	and H,0x20                                           ; F9AEB4  ce cc 20
 	pushw 0x20                                           ; F9AEB7  0b 20 00
 	push 0x00                                            ; F9AEBA  09 00
@@ -49592,7 +49592,7 @@ MidiInputOutputFilter_EditSongSelect:
 	ld h, 0x00:opc                                          ; F9AEE1  26 00
 .LF9AEE3:
 	pushw 0x08                                           ; F9AEE3  0b 08 00
-	lda xbc, (0x7f33:16)                                ; F9AEE6  f1 33 7f 31
+	lda xbc, (MidiFilter_SongSelect:16)                                ; F9AEE6  f1 33 7f 31
 	push XBC                                             ; F9AEEA  39
 	push 0x00                                            ; F9AEEB  09 00
 	push H                                               ; F9AEED  ce 04
@@ -49600,7 +49600,7 @@ MidiInputOutputFilter_EditSongSelect:
 	inc 8,XSP                                            ; F9AEF2  ef 60
 	cp a, 0x00:i3                                          ; F9AEF4  c9 d8
 	jr nz, .LF9AF15                                      ; F9AEF6  6e 1d
-	ld h, (0x7f33:16)                                   ; F9AEF8  c1 33 7f 26
+	ld h, (MidiFilter_SongSelect:16)                                   ; F9AEF8  c1 33 7f 26
 	and H,0x08                                           ; F9AEFC  ce cc 08
 	pushw 0x08                                           ; F9AEFF  0b 08 00
 	push 0x00                                            ; F9AF02  09 00
@@ -49631,7 +49631,7 @@ MidiInputOutputFilter_EditExclusive:
 	ld h, 0x00:opc                                          ; F9AF29  26 00
 .LF9AF2B:
 	pushw 0x0f                                           ; F9AF2B  0b 0f 00
-	lda xbc, (0x7f38:16)                                ; F9AF2E  f1 38 7f 31
+	lda xbc, (MidiFilter_Exclusive:16)                                ; F9AF2E  f1 38 7f 31
 	push XBC                                             ; F9AF32  39
 	push 0x00                                            ; F9AF33  09 00
 	push H                                               ; F9AF35  ce 04
@@ -49639,7 +49639,7 @@ MidiInputOutputFilter_EditExclusive:
 	inc 8,XSP                                            ; F9AF3A  ef 60
 	cp a, 0x00:i3                                          ; F9AF3C  c9 d8
 	jr nz, .LF9AF5D                                      ; F9AF3E  6e 1d
-	ld h, (0x7f38:16)                                   ; F9AF40  c1 38 7f 26
+	ld h, (MidiFilter_Exclusive:16)                                   ; F9AF40  c1 38 7f 26
 	and H,0x0f                                           ; F9AF44  ce cc 0f
 	pushw 0x0f                                           ; F9AF47  0b 0f 00
 	push 0x00                                            ; F9AF4A  09 00
@@ -65943,7 +65943,7 @@ MIDI_RT_NotSensing:
 	ld_sd8b a, 0xa9                               ; FA5520  c0 a9 21
 	and A,0x03                                    ; FA5523  c9 cc 03
 	jr nz, MIDI_RT_Ignore                               ; FA5526  6e e4
-	m_bit 2, MD16, 0x7f32                         ; FA5528  f1 32 7f ca   the same mode bit INTTR4_SequencerTick branches on
+	m_bit 2, MD16, MidiCfg_ModeBits                         ; FA5528  f1 32 7f ca   the same mode bit INTTR4_SequencerTick branches on
 	jrl z, MIDI_RT_ExternalOff                               ; FA552C  76 45 01
 	cp D,0xf8                                     ; FA552F  cc cf f8   0xF8 TIMING CLOCK
 	jr nz, MIDI_RT_NotClock                               ; FA5532  6e 2e
@@ -67795,7 +67795,7 @@ MidiIn_SongPosition:   ; entry: MidiIn_SystemSubTable[2]
 ; ---------------------------------------------------------------------
 MidiIn_SongSelect:   ; entry: MidiIn_SystemSubTable[3]
 	ld a, (0x1941:16)                            ; FA61B8  c1 41 19 21   ld A,(0x1941)
-	m_bit 3, MD16, 0x7f33                         ; FA61BC  f1 33 7f cb   bit 3,(0x7f33)
+	m_bit 3, MD16, MidiFilter_SongSelect                         ; FA61BC  f1 33 7f cb   bit 3,(0x7f33)
 	jr z, .LFA61C5                                ; FA61C0  66 03
 	set 0x07,A                                    ; FA61C2  c9 31 07
 .LFA61C5:
@@ -67929,7 +67929,7 @@ MidiIn_ControlChange:   ; entry: MidiIn_ChannelStatusTable[3]
 	mx_ld_rm MXW, ra_IX, ra_WA, r0                ; FA6288  d3 07 f0 e0 20   ld WA,(XIX+WA)
 	cp WA,0xffff                                  ; FA628D  d8 cf ff ff
 	jr z, .LFA62A1                                ; FA6291  66 0e
-	ld XIX,0x00007f39                             ; FA6293  44 39 7f 00 00
+	ld XIX,MidiFilter_ChannelMsgs                             ; FA6293  44 39 7f 00 00
 	mx8_ld_rm MXB, ra_IX, rb_W, r3                ; FA6298  c3 03 f0 e1 23   ld C,(XIX+W)
 	and C,A                                       ; FA629D  c9 c3
 	jr z, .LFA62B6                                ; FA629F  66 15
@@ -68199,7 +68199,7 @@ MidiIn_CC40_Hold:   ; entry: MidiIn_ControllerHandlerTable[0]
 	jr nz, .LFA64E0                               ; FA64B7  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA64B9  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA64D2                               ; FA64BD  6e 13
-	ld a, (0x7f35:16)                            ; FA64BF  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA64BF  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA64C3  c9 d9   cp A,1
 	jr nz, .LFA64D2                               ; FA64C5  6e 0b
 	ld (0x1958:16), bc                           ; FA64C7  f1 58 19 51   ld (0x1958),BC
@@ -68328,7 +68328,7 @@ MidiIn_CC01_Modulation:   ; entry: MidiIn_ControllerHandlerTable[1]
 	jr nz, .LFA65EC                               ; FA65C3  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA65C5  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA65DE                               ; FA65C9  6e 13
-	ld a, (0x7f35:16)                            ; FA65CB  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA65CB  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA65CF  c9 d9   cp A,1
 	jr nz, .LFA65DE                               ; FA65D1  6e 0b
 	ld (0x1958:16), bc                           ; FA65D3  f1 58 19 51   ld (0x1958),BC
@@ -68435,7 +68435,7 @@ MidiIn_CC0B_Expression:   ; entry: MidiIn_ControllerHandlerTable[3]
 	jr nz, .LFA66D5                               ; FA66AC  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA66AE  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA66C7                               ; FA66B2  6e 13
-	ld a, (0x7f35:16)                            ; FA66B4  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA66B4  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA66B8  c9 d9   cp A,1
 	jr nz, .LFA66C7                               ; FA66BA  6e 0b
 	ld (0x1958:16), bc                           ; FA66BC  f1 58 19 51   ld (0x1958),BC
@@ -68657,7 +68657,7 @@ MidiIn_CC02_Modulation2:   ; entry: MidiIn_ControllerHandlerTable[10]
 	jr nz, .LFA686D                               ; FA6844  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6846  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA685F                               ; FA684A  6e 13
-	ld a, (0x7f35:16)                            ; FA684C  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA684C  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA6850  c9 d9   cp A,1
 	jr nz, .LFA685F                               ; FA6852  6e 0b
 	ld (0x1958:16), bc                           ; FA6854  f1 58 19 51   ld (0x1958),BC
@@ -68734,7 +68734,7 @@ MidiIn_CC04_CtrlPedal:   ; entry: MidiIn_ControllerHandlerTable[11]
 	jr nz, .LFA68F7                               ; FA68CE  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA68D0  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA68E9                               ; FA68D4  6e 13
-	ld a, (0x7f35:16)                            ; FA68D6  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA68D6  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA68DA  c9 d9   cp A,1
 	jr nz, .LFA68E9                               ; FA68DC  6e 0b
 	ld (0x1958:16), bc                           ; FA68DE  f1 58 19 51   ld (0x1958),BC
@@ -68811,7 +68811,7 @@ MidiIn_CC10_RTCreatX:   ; entry: MidiIn_ControllerHandlerTable[12]
 	jr nz, .LFA6981                               ; FA6958  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA695A  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6973                               ; FA695E  6e 13
-	ld a, (0x7f35:16)                            ; FA6960  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA6960  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA6964  c9 d9   cp A,1
 	jr nz, .LFA6973                               ; FA6966  6e 0b
 	ld (0x1958:16), bc                           ; FA6968  f1 58 19 51   ld (0x1958),BC
@@ -68888,7 +68888,7 @@ MidiIn_CC11_RTCreatY:   ; entry: MidiIn_ControllerHandlerTable[13]
 	jr nz, .LFA6A0B                               ; FA69E2  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA69E4  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA69FD                               ; FA69E8  6e 13
-	ld a, (0x7f35:16)                            ; FA69EA  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA69EA  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA69EE  c9 d9   cp A,1
 	jr nz, .LFA69FD                               ; FA69F0  6e 0b
 	ld (0x1958:16), bc                           ; FA69F2  f1 58 19 51   ld (0x1958),BC
@@ -68965,7 +68965,7 @@ MidiIn_CC12_RTCtrlX:   ; entry: MidiIn_ControllerHandlerTable[14]
 	jr nz, .LFA6A95                               ; FA6A6C  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6A6E  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6A87                               ; FA6A72  6e 13
-	ld a, (0x7f35:16)                            ; FA6A74  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA6A74  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA6A78  c9 d9   cp A,1
 	jr nz, .LFA6A87                               ; FA6A7A  6e 0b
 	ld (0x1958:16), bc                           ; FA6A7C  f1 58 19 51   ld (0x1958),BC
@@ -69042,7 +69042,7 @@ MidiIn_CC13_RTCtrlY:   ; entry: MidiIn_ControllerHandlerTable[15]
 	jr nz, .LFA6B1F                               ; FA6AF6  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6AF8  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6B11                               ; FA6AFC  6e 13
-	ld a, (0x7f35:16)                            ; FA6AFE  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA6AFE  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA6B02  c9 d9   cp A,1
 	jr nz, .LFA6B11                               ; FA6B04  6e 0b
 	ld (0x1958:16), bc                           ; FA6B06  f1 58 19 51   ld (0x1958),BC
@@ -69357,16 +69357,16 @@ sub_FA6D27:   ; entry: call from 0xFA67E4
 ;          neighbour at 0xFA8BA8.
 ; ---------------------------------------------------------------------
 MidiIn_ProgramChange:   ; entry: MidiIn_ChannelStatusTable[4]
-	m_bit 4, MD16, 0x7f39                         ; FA6D58  f1 39 7f cc   bit 4,(0x7f39)
+	m_bit 4, MD16, MidiFilter_ChannelMsgs                         ; FA6D58  f1 39 7f cc   bit 4,(0x7f39)
 	jrl z, .LFA6DE2                               ; FA6D5C  76 83 00
 	ld a, (0x1976:16)                            ; FA6D5F  c1 76 19 21   ld A,(0x1976)
 	cp A,0xff                                     ; FA6D63  c9 cf ff
 	jr nz, .LFA6D91                               ; FA6D66  6e 29
-	ld a, (0x7f35:16)                            ; FA6D68  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA6D68  c1 35 7f 21   ld A,(0x7f35)
 	and A,0x0f                                    ; FA6D6C  c9 cc 0f
 	cp a, 0x00:i3                                   ; FA6D6F  c9 d8   cp A,0
 	jr z, .LFA6DE2                                ; FA6D71  66 6f
-	m_bit 3, MD16, 0x7f32                         ; FA6D73  f1 32 7f cb   bit 3,(0x7f32)
+	m_bit 3, MD16, MidiCfg_ModeBits                         ; FA6D73  f1 32 7f cb   bit 3,(0x7f32)
 	jr z, .LFA6DE2                                ; FA6D77  66 69
 	ld a, (0x7f02:16)                            ; FA6D79  c1 02 7f 21   ld A,(0x7f02)
 	and A,0xf0                                    ; FA6D7D  c9 cc f0
@@ -69428,7 +69428,7 @@ MidiIn_PitchBend:   ; entry: MidiIn_ChannelStatusTable[6]
 .LFA6E02:
 	cp A,0x1f                                     ; FA6E02  c9 cf 1f
 	jr ugt, .LFA6E69                              ; FA6E05  6b 62
-	m_bit 6, MD16, 0x7f39                         ; FA6E07  f1 39 7f ce   bit 6,(0x7f39)
+	m_bit 6, MD16, MidiFilter_ChannelMsgs                         ; FA6E07  f1 39 7f ce   bit 6,(0x7f39)
 	jr z, .LFA6E69                                ; FA6E0B  66 5c
 	sll a, 0x01                                   ; FA6E0D  c9 ee 01   sll 0x01,A
 	ld XIX,MidiIn_PitchBend_ParamTable            ; FA6E10  44 e8 8b fa 00
@@ -69445,7 +69445,7 @@ MidiIn_PitchBend:   ; entry: MidiIn_ChannelStatusTable[6]
 	jr nz, .LFA6E65                               ; FA6E3C  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6E3E  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6E57                               ; FA6E42  6e 13
-	ld a, (0x7f35:16)                            ; FA6E44  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA6E44  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA6E48  c9 d9   cp A,1
 	jr nz, .LFA6E57                               ; FA6E4A  6e 0b
 	ld (0x1958:16), bc                           ; FA6E4C  f1 58 19 51   ld (0x1958),BC
@@ -69485,7 +69485,7 @@ MidiIn_ChannelPressure:   ; entry: MidiIn_ChannelStatusTable[5]
 .LFA6E89:
 	cp A,0x1f                                     ; FA6E89  c9 cf 1f
 	jr ugt, .LFA6EEE                              ; FA6E8C  6b 60
-	m_bit 5, MD16, 0x7f39                         ; FA6E8E  f1 39 7f cd   bit 5,(0x7f39)
+	m_bit 5, MD16, MidiFilter_ChannelMsgs                         ; FA6E8E  f1 39 7f cd   bit 5,(0x7f39)
 	jr z, .LFA6EEE                                ; FA6E92  66 5a
 	sll a, 0x01                                   ; FA6E94  c9 ee 01   sll 0x01,A
 	ld XIX,MidiIn_ChannelPressure_ParamTable      ; FA6E97  44 28 8c fa 00
@@ -69502,7 +69502,7 @@ MidiIn_ChannelPressure:   ; entry: MidiIn_ChannelStatusTable[5]
 	jr nz, .LFA6EEA                               ; FA6EC1  6e 27
 	m_cp_mi8 MB8, Variant_Flag, 0x02                      ; FA6EC3  c0 c4 3f 02   cp (0xc4),0x02
 	jr nz, .LFA6EDC                               ; FA6EC7  6e 13
-	ld a, (0x7f35:16)                            ; FA6EC9  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA6EC9  c1 35 7f 21   ld A,(0x7f35)
 	cp a, 0x01:i3                                   ; FA6ECD  c9 d9   cp A,1
 	jr nz, .LFA6EDC                               ; FA6ECF  6e 0b
 	ld (0x1958:16), bc                           ; FA6ED1  f1 58 19 51   ld (0x1958),BC
@@ -69615,7 +69615,7 @@ MidiIn_BuildChannelRouteTable:   ; entry: call from 0xFA6F1A
 	ld XHL,0x00000001                             ; FA6F80  43 01 00 00 00
 	ld (0x197b:16), 0x00                          ; FA6F85  f1 7b 19 00 00   ld (0x197b),0x00
 	ld (0x197c:16), 0x00                          ; FA6F8A  f1 7c 19 00 00   ld (0x197c),0x00
-	ld d, (0x7f35:16)                            ; FA6F8F  c1 35 7f 24   ld D,(0x7f35)
+	ld d, (MidiCfg_InOutMode:16)                            ; FA6F8F  c1 35 7f 24   ld D,(0x7f35)
 	and D,0x0f                                    ; FA6F93  cc cc 0f
 	cp d, 0x01:i3                                   ; FA6F96  cc d9   cp D,1
 	jr nz, .LFA6F9F                               ; FA6F98  6e 05
@@ -69626,7 +69626,7 @@ MidiIn_BuildChannelRouteTable:   ; entry: call from 0xFA6F1A
 	ld e, (0x197c:16)                            ; FA6FA6  c1 7c 19 25   ld E,(0x197c)
 	cp E,0xff                                     ; FA6FAA  cd cf ff
 	jr nz, .LFA6FB8                               ; FA6FAD  6e 09
-	ld a, (0x7f36:16)                            ; FA6FAF  c1 36 7f 21   ld A,(0x7f36)
+	ld a, (MidiCfg_SingleChannel:16)                            ; FA6FAF  c1 36 7f 21   ld A,(0x7f36)
 	and A,0x1f                                    ; FA6FB3  c9 cc 1f
 	jr .LFA6FCB                                   ; FA6FB6  68 13
 .LFA6FB8:
@@ -69668,7 +69668,7 @@ MidiIn_BuildChannelRouteTable:   ; entry: call from 0xFA6F1A
 	ret                                           ; FA701B  0e
 .LFA701C:
 MidiIn_AfterRebuild:   ; entry: call from 0xFA6F1D
-	ld a, (0x7f35:16)                            ; FA701C  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA701C  c1 35 7f 21   ld A,(0x7f35)
 	and A,0x0f                                    ; FA7020  c9 cc 0f
 	sll a, 0x02                                   ; FA7023  c9 ee 02   sll 0x02,A
 	ld XIX,MidiIn_AfterRebuildTable               ; FA7026  44 34 70 fa 00
@@ -69714,7 +69714,7 @@ MidiIn_AfterRebuildTable_Nop1:   ; entry: MidiIn_AfterRebuildTable[1]
 	ret                                           ; FA7075  0e
 	ld XIX,0x00001800                             ; FA7076  44 00 18 00 00
 	xor XHL,XHL                                   ; FA707B  eb d3
-	m_ld_rm MB16, 0x7f36, r7                      ; FA707D  c1 36 7f 27   ld L,(0x7f36)
+	m_ld_rm MB16, MidiCfg_SingleChannel, r7                      ; FA707D  c1 36 7f 27   ld L,(0x7f36)
 	and L,0x1f                                    ; FA7081  cf cc 1f
 	add XIX,XHL                                   ; FA7084  eb 84
 	inc 1,XIX                                     ; FA7086  ec 61
@@ -69913,7 +69913,7 @@ MidiOut_ParamClassTable:
 ;          that gates MidiIn_ProgramChange on the inbound side.
 ; ---------------------------------------------------------------------
 MidiOut_ProgramChange:   ; entry: MidiOut_ParamClassTable[0]
-	m_bit 4, MD16, 0x7f39                         ; FA71C4  f1 39 7f cc   bit 4,(0x7f39)
+	m_bit 4, MD16, MidiFilter_ChannelMsgs                         ; FA71C4  f1 39 7f cc   bit 4,(0x7f39)
 	jr z, .LFA7221                                ; FA71C8  66 57
 	ld l, (0x1958:16)                            ; FA71CA  c1 58 19 27   ld L,(0x1958)
 	cp L,0x1f                                     ; FA71CE  cf cf 1f
@@ -69970,7 +69970,7 @@ MidiOut_CC07_Volume:   ; entry: MidiOut_ParamClassTable[3]
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA723E  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	cp XIX,0xffffffff                             ; FA7243  ec cf ff ff ff ff
 	jr z, .LFA725F                                ; FA7249  66 14
-	m_bit 3, MD16, 0x7f39                         ; FA724B  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA724B  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA725F                                ; FA724F  66 0e
 	bit 2,(XIX+0x27)                              ; FA7251  bc 27 ca
 	jr z, .LFA725F                                ; FA7254  66 09
@@ -70003,7 +70003,7 @@ MidiOut_CC5D_Effect3Depth:   ; entry: MidiOut_ParamClassTable[5]
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA727C  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	cp XIX,0xffffffff                             ; FA7281  ec cf ff ff ff ff
 	jr z, .LFA729D                                ; FA7287  66 14
-	m_bit 3, MD16, 0x7f39                         ; FA7289  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7289  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA729D                                ; FA728D  66 0e
 	bit 5,(XIX+0x27)                              ; FA728F  bc 27 cd
 	jr z, .LFA729D                                ; FA7292  66 09
@@ -70036,7 +70036,7 @@ MidiOut_CC5E_Effect4Depth:   ; entry: MidiOut_ParamClassTable[6]
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA72BA  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	cp XIX,0xffffffff                             ; FA72BF  ec cf ff ff ff ff
 	jr z, .LFA72D6                                ; FA72C5  66 0f
-	m_bit 3, MD16, 0x7f39                         ; FA72C7  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA72C7  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA72D6                                ; FA72CB  66 09
 	ld e, (0x195a:16)                            ; FA72CD  c1 5a 19 25   ld E,(0x195a)
 	ld w, 0x06:opc                                   ; FA72D1  20 06   ld W,0x06
@@ -70067,7 +70067,7 @@ MidiOut_CC5B_Effect1Depth:   ; entry: MidiOut_ParamClassTable[7]
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA72F3  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	cp XIX,0xffffffff                             ; FA72F8  ec cf ff ff ff ff
 	jr Z,.LFA7314                                 ; FA72FE  66 14
-	m_bit 3, MD16, 0x7f39                         ; FA7300  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7300  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7314                                ; FA7304  66 0e
 	bit 5,(XIX+0x27)                              ; FA7306  bc 27 cd
 	jr z, .LFA7314                                ; FA7309  66 09
@@ -70100,7 +70100,7 @@ MidiOut_CC0A_Pan:   ; entry: MidiOut_ParamClassTable[8]
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA7331  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	cp XIX,0xffffffff                             ; FA7336  ec cf ff ff ff ff
 	jr z, .LFA7352                                ; FA733C  66 14
-	m_bit 3, MD16, 0x7f39                         ; FA733E  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA733E  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7352                                ; FA7342  66 0e
 	bit 4,(XIX+0x27)                              ; FA7344  bc 27 cc
 	jr z, .LFA7352                                ; FA7347  66 09
@@ -70122,7 +70122,7 @@ MidiOut_CC0A_Pan:   ; entry: MidiOut_ParamClassTable[8]
 ;          Gated on bit 3 of (0x7F39).
 ; ---------------------------------------------------------------------
 MidiOut_Rpn02_CoarseTune:   ; entry: MidiOut_ParamClassTable[9]
-	m_bit 3, MD16, 0x7f39                         ; FA7353  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7353  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA738E                                ; FA7357  66 35
 	ld a, (0x195b:16)                            ; FA7359  c1 5b 19 21   ld A,(0x195b)
 	and A,0x7f                                    ; FA735D  c9 cc 7f
@@ -70155,7 +70155,7 @@ MidiOut_Rpn02_CoarseTune:   ; entry: MidiOut_ParamClassTable[9]
 ;          Gated on bit 3 of (0x7F39).
 ; ---------------------------------------------------------------------
 MidiOut_Rpn01_FineTune:   ; entry: MidiOut_ParamClassTable[10]
-	m_bit 3, MD16, 0x7f39                         ; FA738F  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA738F  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA73D0                                ; FA7393  66 3b
 	ld a, (0x195b:16)                            ; FA7395  c1 5b 19 21   ld A,(0x195b)
 	and A,0xff                                    ; FA7399  c9 cc ff
@@ -70190,7 +70190,7 @@ MidiOut_Rpn01_FineTune:   ; entry: MidiOut_ParamClassTable[10]
 ;          Gated on bit 3 of (0x7F39).
 ; ---------------------------------------------------------------------
 MidiOut_Rpn00_PitchBendRange:   ; entry: MidiOut_ParamClassTable[11]
-	m_bit 3, MD16, 0x7f39                         ; FA73D1  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA73D1  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA740C                                ; FA73D5  66 35
 	ld a, (0x195b:16)                            ; FA73D7  c1 5b 19 21   ld A,(0x195b)
 	and A,0x7f                                    ; FA73DB  c9 cc 7f
@@ -70317,7 +70317,7 @@ MidiOut_BankSelect_Packed:   ; entry: MidiOut_ParamClassTable[1]
 ;          the inbound handler's controller number wherever one calls it.
 ; ---------------------------------------------------------------------
 MidiOut_CC51_General6:   ; entry: MidiOut_ParamNumberTable[32-63]
-	m_bit 3, MD16, 0x7f39                         ; FA74D0  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA74D0  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7509                                ; FA74D4  66 33
 	m_cp_mi8 MB16, 0x1959, 0x18                   ; FA74D6  c1 59 19 3f 18   cp (0x1959),0x18
 	jr nz, .LFA7509                               ; FA74DB  6e 2c
@@ -70420,18 +70420,18 @@ MidiOut_BankSelect_Pair:   ; entry: MidiOut_ParamNumberTable[129]
 .LFA7583:
 	ret                                           ; FA7583  0e
 sub_FA7584:   ; entry: MidiOut_ParamNumberTable[152]
-	ld a, (0x7f35:16)                            ; FA7584  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7584  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA7588  c9 cc f0
 	cp a, 0x00:i3                                   ; FA758B  c9 d8   cp A,0
 	jrl z, .LFA7620                               ; FA758D  76 90 00
 	cp b, 0x02:i3                                   ; FA7590  ca da   cp B,2
 	jr nz, .LFA75E6                               ; FA7592  6e 52
-	m_bit 7, MD16, 0x7f3a                         ; FA7594  f1 3a 7f cf   bit 7,(0x7f3a)
+	m_bit 7, MD16, MidiFilter_BankSelect                         ; FA7594  f1 3a 7f cf   bit 7,(0x7f3a)
 	jrl z, .LFA7620                               ; FA7598  76 85 00
 	ld a, (0x60f007:24)                          ; FA759B  c2 07 f0 60 21   ld A,(0x60f007)
 	m_bit 7, MD24, 0x60f007                       ; FA75A0  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA75B0                               ; FA75A5  6e 09
-	ld a, (0x7f36:16)                            ; FA75A7  c1 36 7f 21   ld A,(0x7f36)
+	ld a, (MidiCfg_SingleChannel:16)                            ; FA75A7  c1 36 7f 21   ld A,(0x7f36)
 	bit 0x06,A                                    ; FA75AB  c9 33 06
 	jr nz, .LFA7620                               ; FA75AE  6e 70
 .LFA75B0:
@@ -70456,12 +70456,12 @@ sub_FA7584:   ; entry: MidiOut_ParamNumberTable[152]
 	calr .LFA7CE8                                 ; FA75E1  1e 04 07
 	jr .LFA7620                                   ; FA75E4  68 3a
 .LFA75E6:
-	m_bit 4, MD16, 0x7f39                         ; FA75E6  f1 39 7f cc   bit 4,(0x7f39)
+	m_bit 4, MD16, MidiFilter_ChannelMsgs                         ; FA75E6  f1 39 7f cc   bit 4,(0x7f39)
 	jr z, .LFA7620                                ; FA75EA  66 34
 	ld a, (0x60f007:24)                          ; FA75EC  c2 07 f0 60 21   ld A,(0x60f007)
 	m_bit 7, MD24, 0x60f007                       ; FA75F1  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7601                               ; FA75F6  6e 09
-	ld a, (0x7f36:16)                            ; FA75F8  c1 36 7f 21   ld A,(0x7f36)
+	ld a, (MidiCfg_SingleChannel:16)                            ; FA75F8  c1 36 7f 21   ld A,(0x7f36)
 	bit 0x06,A                                    ; FA75FC  c9 33 06
 	jr nz, .LFA7620                               ; FA75FF  6e 1f
 .LFA7601:
@@ -70490,7 +70490,7 @@ sub_FA7584:   ; entry: MidiOut_ParamNumberTable[152]
 ;          the inbound handler's controller number wherever one calls it.
 ; ---------------------------------------------------------------------
 MidiOut_CC79_ResetAllCtrl:   ; entry: MidiOut_ParamNumberTable[173]
-	m_bit 3, MD16, 0x7f39                         ; FA7621  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7621  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA764E                                ; FA7625  66 27
 	ld l, (0x1959:16)                            ; FA7627  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA762B  cf cf 1f
@@ -70518,7 +70518,7 @@ MidiOut_CC79_ResetAllCtrl:   ; entry: MidiOut_ParamNumberTable[173]
 ;          the inbound handler's controller number wherever one calls it.
 ; ---------------------------------------------------------------------
 MidiOut_CC78_AllSoundOff:   ; entry: MidiOut_ParamNumberTable[174]
-	m_bit 3, MD16, 0x7f39                         ; FA764F  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA764F  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA764E                                ; FA7653  66 f9
 	ld l, (0x1959:16)                            ; FA7655  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7659  cf cf 1f
@@ -70575,13 +70575,13 @@ MidiOut_PitchBend:   ; entry: MidiOut_ParamNumberTable[177]; call from 0xFA6E54,
 	jr nz, .LFA76BD                               ; FA7680  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7682  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA76BD                               ; FA7687  6e 34
-	ld a, (0x7f35:16)                            ; FA7689  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7689  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA768D  c9 cc f0
 	cp a, 0x00:i3                                   ; FA7690  c9 d8   cp A,0
 	jr z, .LFA76A4                                ; FA7692  66 10
-	m_bit 6, MD16, 0x7f39                         ; FA7694  f1 39 7f ce   bit 6,(0x7f39)
+	m_bit 6, MD16, MidiFilter_ChannelMsgs                         ; FA7694  f1 39 7f ce   bit 6,(0x7f39)
 	jr z, .LFA76BC                                ; FA7698  66 22
-	ld XIX,0x00007f36                             ; FA769A  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA769A  44 36 7f 00 00
 	calr .LFA76EE                                 ; FA769F  1e 4c 00
 	jr .LFA76BC                                   ; FA76A2  68 18
 .LFA76A4:
@@ -70682,13 +70682,13 @@ MidiOut_CC01_Modulation:   ; entry: MidiOut_ParamNumberTable[178]; call from 0xF
 	jr nz, .LFA775C                               ; FA771F  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7721  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA775C                               ; FA7726  6e 34
-	ld a, (0x7f35:16)                            ; FA7728  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7728  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA772C  c9 cc f0
 	cp a, 0x00:i3                                   ; FA772F  c9 d8   cp A,0
 	jr z, .LFA7743                                ; FA7731  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA7733  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7733  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA775B                                ; FA7737  66 22
-	ld XIX,0x00007f36                             ; FA7739  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA7739  44 36 7f 00 00
 	calr .LFA7781                                 ; FA773E  1e 40 00
 	jr .LFA775B                                   ; FA7741  68 18
 .LFA7743:
@@ -70767,13 +70767,13 @@ MidiOut_CC0B_Expression:   ; entry: MidiOut_ParamNumberTable[179]; call from 0xF
 	jr nz, .LFA77CA                               ; FA778D  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA778F  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA77CA                               ; FA7794  6e 34
-	ld a, (0x7f35:16)                            ; FA7796  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7796  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA779A  c9 cc f0
 	cp a, 0x00:i3                                   ; FA779D  c9 d8   cp A,0
 	jr z, .LFA77B1                                ; FA779F  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA77A1  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA77A1  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA77C9                                ; FA77A5  66 22
-	ld XIX,0x00007f36                             ; FA77A7  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA77A7  44 36 7f 00 00
 	calr .LFA77F0                                 ; FA77AC  1e 41 00
 	jr .LFA77C9                                   ; FA77AF  68 18
 .LFA77B1:
@@ -70816,7 +70816,7 @@ MidiOut_CC0B_Expression__partgate:   ; entry: call from 0xFA77C3
 	mx_ld_rm MXL, ra_IX, ra_HL, r4                ; FA77DD  e3 07 f0 ec 24   ld XIX,(XIX+HL)
 	cp XIX,0xffffffff                             ; FA77E2  ec cf ff ff ff ff
 	jr z, .LFA77F9                                ; FA77E8  66 0f
-	m_bit 3, MD16, 0x7f39                         ; FA77EA  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA77EA  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA77F9                                ; FA77EE  66 09
 .LFA77F0:
 
@@ -70874,13 +70874,13 @@ MidiOut_ChannelPressure:   ; entry: MidiOut_ParamNumberTable[180]; call from 0xF
 	jr nz, .LFA7839                               ; FA77FC  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA77FE  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7839                               ; FA7803  6e 34
-	ld a, (0x7f35:16)                            ; FA7805  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7805  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA7809  c9 cc f0
 	cp a, 0x00:i3                                   ; FA780C  c9 d8   cp A,0
 	jr z, .LFA7820                                ; FA780E  66 10
-	m_bit 5, MD16, 0x7f39                         ; FA7810  f1 39 7f cd   bit 5,(0x7f39)
+	m_bit 5, MD16, MidiFilter_ChannelMsgs                         ; FA7810  f1 39 7f cd   bit 5,(0x7f39)
 	jr z, .LFA7838                                ; FA7814  66 22
-	ld XIX,0x00007f36                             ; FA7816  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA7816  44 36 7f 00 00
 	calr .LFA786A                                 ; FA781B  1e 4c 00
 	jr .LFA7838                                   ; FA781E  68 18
 .LFA7820:
@@ -70993,13 +70993,13 @@ MidiOut_CC40_Hold:   ; entry: MidiOut_ParamNumberTable[181]; call from 0xFA64CF
 	jr nz, .LFA78D0                               ; FA7893  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7895  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA78D0                               ; FA789A  6e 34
-	ld a, (0x7f35:16)                            ; FA789C  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA789C  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA78A0  c9 cc f0
 	cp a, 0x00:i3                                   ; FA78A3  c9 d8   cp A,0
 	jr z, .LFA78B7                                ; FA78A5  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA78A7  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA78A7  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA78CF                                ; FA78AB  66 22
-	ld XIX,0x00007f36                             ; FA78AD  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA78AD  44 36 7f 00 00
 	calr .LFA78F5                                 ; FA78B2  1e 40 00
 	jr .LFA78CF                                   ; FA78B5  68 18
 .LFA78B7:
@@ -71117,7 +71117,7 @@ MidiOut_CC40_Hold__emit:   ; entry: call from 0xFA78B2
 ; ---------------------------------------------------------------------
 
 sub_FA78FF:
-	m_bit 3, MD16, 0x7f39                         ; FA78FF  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA78FF  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA792E                                ; FA7903  66 29
 	ld l, (0x1959:16)                            ; FA7905  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7909  cf cf 1f
@@ -71163,7 +71163,7 @@ sub_FA78FF:
 ; ---------------------------------------------------------------------
 
 sub_FA792F:
-	m_bit 3, MD16, 0x7f39                         ; FA792F  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA792F  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA795E                                ; FA7933  66 29
 	ld l, (0x1959:16)                            ; FA7935  c1 59 19 27   ld L,(0x1959)
 	cp L,0x1f                                     ; FA7939  cf cf 1f
@@ -71209,13 +71209,13 @@ MidiOut_CC10_RTCreatX:   ; entry: MidiOut_ParamNumberTable[184]; call from 0xFA6
 	jr nz, .LFA799E                               ; FA7961  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7963  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA799E                               ; FA7968  6e 34
-	ld a, (0x7f35:16)                            ; FA796A  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA796A  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA796E  c9 cc f0
 	cp a, 0x00:i3                                   ; FA7971  c9 d8   cp A,0
 	jr z, .LFA7985                                ; FA7973  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA7975  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7975  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA799D                                ; FA7979  66 22
-	ld XIX,0x00007f36                             ; FA797B  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA797B  44 36 7f 00 00
 	calr .LFA79C3                                 ; FA7980  1e 40 00
 	jr .LFA799D                                   ; FA7983  68 18
 .LFA7985:
@@ -71322,13 +71322,13 @@ MidiOut_CC11_RTCreatY:   ; entry: MidiOut_ParamNumberTable[185]; call from 0xFA6
 	jr nz, .LFA7A0C                               ; FA79CF  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA79D1  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7A0C                               ; FA79D6  6e 34
-	ld a, (0x7f35:16)                            ; FA79D8  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA79D8  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA79DC  c9 cc f0
 	cp a, 0x00:i3                                   ; FA79DF  c9 d8   cp A,0
 	jr z, .LFA79F3                                ; FA79E1  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA79E3  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA79E3  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7A0B                                ; FA79E7  66 22
-	ld XIX,0x00007f36                             ; FA79E9  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA79E9  44 36 7f 00 00
 	calr .LFA7A31                                 ; FA79EE  1e 40 00
 	jr .LFA7A0B                                   ; FA79F1  68 18
 .LFA79F3:
@@ -71435,13 +71435,13 @@ MidiOut_CC12_RTCtrlX:   ; entry: MidiOut_ParamNumberTable[186]; call from 0xFA6A
 	jr nz, .LFA7A7A                               ; FA7A3D  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7A3F  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7A7A                               ; FA7A44  6e 34
-	ld a, (0x7f35:16)                            ; FA7A46  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7A46  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA7A4A  c9 cc f0
 	cp a, 0x00:i3                                   ; FA7A4D  c9 d8   cp A,0
 	jr z, .LFA7A61                                ; FA7A4F  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA7A51  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7A51  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7A79                                ; FA7A55  66 22
-	ld XIX,0x00007f36                             ; FA7A57  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA7A57  44 36 7f 00 00
 	calr .LFA7A9F                                 ; FA7A5C  1e 40 00
 	jr .LFA7A79                                   ; FA7A5F  68 18
 .LFA7A61:
@@ -71548,13 +71548,13 @@ MidiOut_CC13_RTCtrlY:   ; entry: MidiOut_ParamNumberTable[187]; call from 0xFA6B
 	jr nz, .LFA7AE8                               ; FA7AAB  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7AAD  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7AE8                               ; FA7AB2  6e 34
-	ld a, (0x7f35:16)                            ; FA7AB4  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7AB4  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA7AB8  c9 cc f0
 	cp a, 0x00:i3                                   ; FA7ABB  c9 d8   cp A,0
 	jr z, .LFA7ACF                                ; FA7ABD  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA7ABF  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7ABF  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7AE7                                ; FA7AC3  66 22
-	ld XIX,0x00007f36                             ; FA7AC5  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA7AC5  44 36 7f 00 00
 	calr .LFA7B0D                                 ; FA7ACA  1e 40 00
 	jr .LFA7AE7                                   ; FA7ACD  68 18
 .LFA7ACF:
@@ -71661,13 +71661,13 @@ MidiOut_CC02_Modulation2:   ; entry: MidiOut_ParamNumberTable[188]; call from 0x
 	jr nz, .LFA7B56                               ; FA7B19  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7B1B  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7B56                               ; FA7B20  6e 34
-	ld a, (0x7f35:16)                            ; FA7B22  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7B22  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA7B26  c9 cc f0
 	cp a, 0x00:i3                                   ; FA7B29  c9 d8   cp A,0
 	jr z, .LFA7B3D                                ; FA7B2B  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA7B2D  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7B2D  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7B55                                ; FA7B31  66 22
-	ld XIX,0x00007f36                             ; FA7B33  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA7B33  44 36 7f 00 00
 	calr .LFA7B7B                                 ; FA7B38  1e 40 00
 	jr .LFA7B55                                   ; FA7B3B  68 18
 .LFA7B3D:
@@ -71774,13 +71774,13 @@ MidiOut_CC04_CtrlPedal:   ; entry: MidiOut_ParamNumberTable[189]; call from 0xFA
 	jr nz, .LFA7BC4                               ; FA7B87  6e 3b
 	m_bit 7, MD24, 0x60f007                       ; FA7B89  f2 07 f0 60 cf   bit 7,(0x60f007)
 	jr nz, .LFA7BC4                               ; FA7B8E  6e 34
-	ld a, (0x7f35:16)                            ; FA7B90  c1 35 7f 21   ld A,(0x7f35)
+	ld a, (MidiCfg_InOutMode:16)                            ; FA7B90  c1 35 7f 21   ld A,(0x7f35)
 	and A,0xf0                                    ; FA7B94  c9 cc f0
 	cp a, 0x00:i3                                   ; FA7B97  c9 d8   cp A,0
 	jr z, .LFA7BAB                                ; FA7B99  66 10
-	m_bit 3, MD16, 0x7f39                         ; FA7B9B  f1 39 7f cb   bit 3,(0x7f39)
+	m_bit 3, MD16, MidiFilter_ChannelMsgs                         ; FA7B9B  f1 39 7f cb   bit 3,(0x7f39)
 	jr z, .LFA7BC3                                ; FA7B9F  66 22
-	ld XIX,0x00007f36                             ; FA7BA1  44 36 7f 00 00
+	ld XIX,MidiCfg_SingleChannel                             ; FA7BA1  44 36 7f 00 00
 	calr .LFA7BE9                                 ; FA7BA6  1e 40 00
 	jr .LFA7BC3                                   ; FA7BA9  68 18
 .LFA7BAB:
@@ -71967,7 +71967,7 @@ MidiOut_SendRpn:   ; entry: call from 0xFA738B, 0xFA73CD, 0xFA7409
 ;          Gated on bit 7 of (0x7F3A) and bit 7 of the part record's +0x27.
 ; ---------------------------------------------------------------------
 MidiOut_SendBankSelect:   ; entry: call from 0xFA7448, 0xFA7490, 0xFA74CC, 0xFA7580
-	m_bit 7, MD16, 0x7f3a                         ; FA7C95  f1 3a 7f cf   bit 7,(0x7f3a)
+	m_bit 7, MD16, MidiFilter_BankSelect                         ; FA7C95  f1 3a 7f cf   bit 7,(0x7f3a)
 	jr z, .LFA7CE7                                ; FA7C99  66 4c
 	bit 7,(XIX+0x27)                              ; FA7C9B  bc 27 cf
 	jr z, .LFA7CE7                                ; FA7C9E  66 47
@@ -72952,7 +72952,7 @@ MidiIn_BuildList_CC0BExpression:   ; entry: call from 0xFA81F8
 ; ---------------------------------------------------------------------
 MidiIn_BuildPartList:   ; entry: call from 0xFA8207, 0xFA8216, 0xFA8225, 0xFA8234, 0xFA8243, 0xFA8252, +5 more
 	ld (XIX),0xff                                 ; FA82A1  b4 00 ff
-	ld XIY,0x00007f39                             ; FA82A4  45 39 7f 00 00
+	ld XIY,MidiFilter_ChannelMsgs                             ; FA82A4  45 39 7f 00 00
 	mx8_ld_rm MXB, ra_IY, rb_E, r6                ; FA82A9  c3 03 f4 e8 26   ld H,(XIY+E)
 	and H,D                                       ; FA82AE  cc c6
 	jr z, .LFA82DD                                ; FA82B0  66 2b
@@ -75595,7 +75595,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 .LFAA340:
 	popw de                                              ; FAA340  4a
 	ret                                                  ; FAA341  0e
-	m_bit 2, MD16, 0x7f32                                ; FAA342  f1 32 7f ca
+	m_bit 2, MD16, MidiCfg_ModeBits                                ; FAA342  f1 32 7f ca
 	jr nz, .LFAA3AA                                      ; FAA346  6e 62
 	push XWA                                             ; FAA348  38
 	push XBC                                             ; FAA349  39
@@ -75625,7 +75625,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	inc 1,DE                                             ; FAA38B  da 61
 .LFAA38D:
 	st_dd8w de, 0x32                                     ; FAA38D  f0 32 52
-	m_bit 4, MD16, 0x7f32                                ; FAA390  f1 32 7f cc
+	m_bit 4, MD16, MidiCfg_ModeBits                                ; FAA390  f1 32 7f cc
 	jr nz, .LFAA3A1                                      ; FAA394  6e 0b
 	m_bit 4, MD24, 0x60f020                              ; FAA396  f2 20 f0 60 cc
 	jr nz, .LFAA3A1                                      ; FAA39B  6e 04
@@ -76210,7 +76210,7 @@ sub_FAA71F:
 	popw de                                              ; FAA740  4a
 	ret                                                  ; FAA741  0e
 sub_FAA742:
-	m_bit 2, MD16, 0x7f32                                ; FAA742  f1 32 7f ca
+	m_bit 2, MD16, MidiCfg_ModeBits                                ; FAA742  f1 32 7f ca
 	jr nz, .LFAA7AA                                      ; FAA746  6e 62
 	push XWA                                             ; FAA748  38
 	push XBC                                             ; FAA749  39
@@ -76240,7 +76240,7 @@ sub_FAA742:
 	inc 1,DE                                             ; FAA78B  da 61
 .LFAA78D:
 	st_dd8w de, 0x32                                     ; FAA78D  f0 32 52
-	m_bit 4, MD16, 0x7f32                                ; FAA790  f1 32 7f cc
+	m_bit 4, MD16, MidiCfg_ModeBits                                ; FAA790  f1 32 7f cc
 	jr nz, .LFAA7A1                                      ; FAA794  6e 0b
 	m_bit 4, MD24, 0x60f020                              ; FAA796  f2 20 f0 60 cc
 	jr nz, .LFAA7A1                                      ; FAA79B  6e 04
@@ -76528,7 +76528,7 @@ sub_FAA967:
 	jr .LFAA9FE                                          ; FAAA1B  68 e1
 .LFAAA1D:
 	m_set 1, MD16, 0x7fc0                                ; FAAA1D  f1 c0 7f b9
-	lda xix, (0x7f32:16)                                ; FAAA21  f1 32 7f 34
+	lda xix, (MidiCfg_ModeBits:16)                                ; FAAA21  f1 32 7f 34
 	ld h, 0x00:opc                                          ; FAAA25  26 00
 .LFAAA27:
 	lda xbc, (0x7f48:16)                                ; FAAA27  f1 48 7f 31
@@ -76550,17 +76550,17 @@ sub_FAA967:
 .LFAAA4C:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; FAAA4C  c0 c4 3f 02
 	jr nz, .LFAAA7D                                      ; FAAA50  6e 2b
-	ld (0x7f35:16), 0x00                                 ; FAAA52  f1 35 7f 00 00
+	ld (MidiCfg_InOutMode:16), 0x00                                 ; FAAA52  f1 35 7f 00 00
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x6a                          ; FAAA57  c1 7a 20 3f 6a
 	jr nz, .LFAAA65                                      ; FAAA5C  6e 07
-	ld (0x7f35:16), 0x01                                 ; FAAA5E  f1 35 7f 00 01
+	ld (MidiCfg_InOutMode:16), 0x01                                 ; FAAA5E  f1 35 7f 00 01
 	jr .LFAAA69                                          ; FAAA63  68 04
 .LFAAA65:
-	m_set 1, MD16, 0x7f35                                ; FAAA65  f1 35 7f b9
+	m_set 1, MD16, MidiCfg_InOutMode                                ; FAAA65  f1 35 7f b9
 .LFAAA69:
 	pushw 0xff                                           ; FAAA69  0b ff 00
 	push 0x00                                            ; FAAA6C  09 00
-	m_push MB16, 0x7f35                                  ; FAAA6E  c1 35 7f 04
+	m_push MB16, MidiCfg_InOutMode                                  ; FAAA6E  c1 35 7f 04
 	pushw 0x03                                           ; FAAA72  0b 03 00
 	pushw 0x80                                           ; FAAA75  0b 80 00
 	calr sub_FAACC0                                      ; FAAA78  1e 45 02
@@ -76685,13 +76685,13 @@ sub_FAAB28:
 .LFAAB5C:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; FAAB5C  c0 c4 3f 02
 	jr nz, .LFAAB79                                      ; FAAB60  6e 17
-	ld (0x7f35:16), 0x00                                 ; FAAB62  f1 35 7f 00 00
+	ld (MidiCfg_InOutMode:16), 0x00                                 ; FAAB62  f1 35 7f 00 00
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x6a                          ; FAAB67  c1 7a 20 3f 6a
 	jr nz, .LFAAB75                                      ; FAAB6C  6e 07
-	ld (0x7f35:16), 0x01                                 ; FAAB6E  f1 35 7f 00 01
+	ld (MidiCfg_InOutMode:16), 0x01                                 ; FAAB6E  f1 35 7f 00 01
 	jr .LFAAB79                                          ; FAAB73  68 04
 .LFAAB75:
-	m_set 1, MD16, 0x7f35                                ; FAAB75  f1 35 7f b9
+	m_set 1, MD16, MidiCfg_InOutMode                                ; FAAB75  f1 35 7f b9
 .LFAAB79:
 	m_res 0, MD16, 0x7fc2                                ; FAAB79  f1 c2 7f b0
 	m_set 1, MD16, 0x7fc0                                ; FAAB7D  f1 c0 7f b9
@@ -77242,17 +77242,17 @@ sub_FAAF91:
 	jrl c, .LFAAFC8                                      ; FAB080  77 45 ff
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; FAB083  c0 c4 3f 02
 	jr nz, .LFAB0B4                                      ; FAB087  6e 2b
-	ld (0x7f35:16), 0x00                                 ; FAB089  f1 35 7f 00 00
+	ld (MidiCfg_InOutMode:16), 0x00                                 ; FAB089  f1 35 7f 00 00
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x6a                          ; FAB08E  c1 7a 20 3f 6a
 	jr nz, .LFAB09C                                      ; FAB093  6e 07
-	ld (0x7f35:16), 0x01                                 ; FAB095  f1 35 7f 00 01
+	ld (MidiCfg_InOutMode:16), 0x01                                 ; FAB095  f1 35 7f 00 01
 	jr .LFAB0A0                                          ; FAB09A  68 04
 .LFAB09C:
-	m_set 1, MD16, 0x7f35                                ; FAB09C  f1 35 7f b9
+	m_set 1, MD16, MidiCfg_InOutMode                                ; FAB09C  f1 35 7f b9
 .LFAB0A0:
 	pushw 0xff                                           ; FAB0A0  0b ff 00
 	push 0x00                                            ; FAB0A3  09 00
-	m_push MB16, 0x7f35                                  ; FAB0A5  c1 35 7f 04
+	m_push MB16, MidiCfg_InOutMode                                  ; FAB0A5  c1 35 7f 04
 	pushw 0x03                                           ; FAB0A9  0b 03 00
 	pushw 0x80                                           ; FAB0AC  0b 80 00
 	calr sub_FAACC0                                      ; FAB0AF  1e 0e fc
@@ -78677,7 +78677,7 @@ sub_FABD33:
 ; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
 ; ---------------------------------------------------------------------
 ParamMsg_B1_PitchBend:   ; entry: named by 1 `.long` operand, first at 0xFACBAE
-	ld c, (0x7f36:16)                                   ; FABD3B  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD3B  c1 36 7f 23
 	and C,0x20                                           ; FABD3F  cb cc 20
 	jr nz, .LFABD4E                                      ; FABD42  6e 0a
 	ld xbc, (0x60f280:24)                               ; FABD44  e2 80 f2 60 21
@@ -78687,7 +78687,7 @@ ParamMsg_B1_PitchBend:   ; entry: named by 1 `.long` operand, first at 0xFACBAE
 .LFABD4E:
 	ret                                                  ; FABD4E  0e
 ParamMsg_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xFACBB2
-	ld c, (0x7f36:16)                                   ; FABD4F  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD4F  c1 36 7f 23
 	and C,0x20                                           ; FABD53  cb cc 20
 	jr nz, .LFABD62                                      ; FABD56  6e 0a
 	ld xbc, (0x60f284:24)                               ; FABD58  e2 84 f2 60 21
@@ -78697,7 +78697,7 @@ ParamMsg_B2_CC01_Modulation:   ; entry: named by 1 `.long` operand, first at 0xF
 .LFABD62:
 	ret                                                  ; FABD62  0e
 ParamMsg_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0xFACBDA
-	ld c, (0x7f36:16)                                   ; FABD63  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD63  c1 36 7f 23
 	and C,0x20                                           ; FABD67  cb cc 20
 	jr nz, .LFABD76                                      ; FABD6A  6e 0a
 	ld xbc, (0x60f288:24)                               ; FABD6C  e2 88 f2 60 21
@@ -78707,7 +78707,7 @@ ParamMsg_BC_CC02_Modulation2:   ; entry: named by 1 `.long` operand, first at 0x
 .LFABD76:
 	ret                                                  ; FABD76  0e
 ParamMsg_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xFACBBA
-	ld c, (0x7f36:16)                                   ; FABD77  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD77  c1 36 7f 23
 	and C,0x20                                           ; FABD7B  cb cc 20
 	jr nz, .LFABD8A                                      ; FABD7E  6e 0a
 	ld xbc, (0x60f28c:24)                               ; FABD80  e2 8c f2 60 21
@@ -78717,7 +78717,7 @@ ParamMsg_B4_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xF
 .LFABD8A:
 	ret                                                  ; FABD8A  0e
 ParamMsg_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFACBDE
-	ld c, (0x7f36:16)                                   ; FABD8B  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD8B  c1 36 7f 23
 	and C,0x20                                           ; FABD8F  cb cc 20
 	jr nz, .LFABD9E                                      ; FABD92  6e 0a
 	ld xbc, (0x60f290:24)                               ; FABD94  e2 90 f2 60 21
@@ -78727,7 +78727,7 @@ ParamMsg_BD_CC04_CtrlPedal:   ; entry: named by 1 `.long` operand, first at 0xFA
 .LFABD9E:
 	ret                                                  ; FABD9E  0e
 ParamMsg_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFACBBE
-	ld c, (0x7f36:16)                                   ; FABD9F  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABD9F  c1 36 7f 23
 	and C,0x20                                           ; FABDA3  cb cc 20
 	jr nz, .LFABDBC                                      ; FABDA6  6e 14
 	ld xbc, (0x60f294:24)                               ; FABDA8  e2 94 f2 60 21
@@ -78739,7 +78739,7 @@ ParamMsg_B5_CC40_Hold:   ; entry: named by 1 `.long` operand, first at 0xFACBBE
 .LFABDBC:
 	ret                                                  ; FABDBC  0e
 ParamMsg_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFACBCA
-	ld c, (0x7f36:16)                                   ; FABDBD  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDBD  c1 36 7f 23
 	and C,0x20                                           ; FABDC1  cb cc 20
 	jr nz, .LFABDD0                                      ; FABDC4  6e 0a
 	ld xbc, (0x60f298:24)                               ; FABDC6  e2 98 f2 60 21
@@ -78749,7 +78749,7 @@ ParamMsg_B8_CC10_RTCreatX:   ; entry: named by 1 `.long` operand, first at 0xFAC
 .LFABDD0:
 	ret                                                  ; FABDD0  0e
 ParamMsg_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFACBCE
-	ld c, (0x7f36:16)                                   ; FABDD1  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDD1  c1 36 7f 23
 	and C,0x20                                           ; FABDD5  cb cc 20
 	jr nz, .LFABDE4                                      ; FABDD8  6e 0a
 	ld xbc, (0x60f29c:24)                               ; FABDDA  e2 9c f2 60 21
@@ -78759,7 +78759,7 @@ ParamMsg_B9_CC11_RTCreatY:   ; entry: named by 1 `.long` operand, first at 0xFAC
 .LFABDE4:
 	ret                                                  ; FABDE4  0e
 ParamMsg_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFACBD2
-	ld c, (0x7f36:16)                                   ; FABDE5  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDE5  c1 36 7f 23
 	and C,0x20                                           ; FABDE9  cb cc 20
 	jr nz, .LFABDF8                                      ; FABDEC  6e 0a
 	ld xbc, (0x60f2a0:24)                               ; FABDEE  e2 a0 f2 60 21
@@ -78769,7 +78769,7 @@ ParamMsg_BA_CC12_RTCtrlX:   ; entry: named by 1 `.long` operand, first at 0xFACB
 .LFABDF8:
 	ret                                                  ; FABDF8  0e
 ParamMsg_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFACBD6
-	ld c, (0x7f36:16)                                   ; FABDF9  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABDF9  c1 36 7f 23
 	and C,0x20                                           ; FABDFD  cb cc 20
 	jr nz, .LFABE0C                                      ; FABE00  6e 0a
 	ld xbc, (0x60f2a4:24)                               ; FABE02  e2 a4 f2 60 21
@@ -78779,7 +78779,7 @@ ParamMsg_BB_CC13_RTCtrlY:   ; entry: named by 1 `.long` operand, first at 0xFACB
 .LFABE0C:
 	ret                                                  ; FABE0C  0e
 ParamMsg_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, first at 0xFACBB6
-	ld c, (0x7f36:16)                                   ; FABE0D  c1 36 7f 23
+	ld c, (MidiCfg_SingleChannel:16)                                   ; FABE0D  c1 36 7f 23
 	and C,0x20                                           ; FABE11  cb cc 20
 	jr nz, .LFABE2A                                      ; FABE14  6e 14
 	ld xbc, (0x60f2a8:24)                               ; FABE16  e2 a8 f2 60 21
@@ -82081,12 +82081,12 @@ Evt2030_Class98_Op00:   ; entry: pointer-table entry
 ; Unknown:  what bit 3 of (0x7F32) is, and what (0x1965) counts.
 ; ---------------------------------------------------------------------
 Evt2030_Class98_Op01:   ; entry: pointer-table entry
-	m_bit 3, MD16, 0x7f32
+	m_bit 3, MD16, MidiCfg_ModeBits
 	jrl z, Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2
 	inc 0x01, (0x1965:16)
 	m_bit 0, MD16, 0x1965
 	jr nz, Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2
-	ld l, (0x7f32:16)
+	ld l, (MidiCfg_ModeBits:16)
 	and L,0x03
 	sll l, 0x02
 	ld XIX,Evt2030_Class98_Op01_JumpTable_FADDF1
@@ -82498,7 +82498,7 @@ ParamApply_ByModeOfParam80:
 	jr nz, .LFADF61
 	and A,0xe7
 .LFADF61:
-	ld l, (0x7f32:16)
+	ld l, (MidiCfg_ModeBits:16)
 	and L,0x03
 	sll l, 0x02
 	ld XIX,ParamApply_ByModeOfParam80_JumpTable_FADF77
@@ -82587,7 +82587,7 @@ ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2:   ; entry: pointer-table entry
 	calr Dev7F_WriteAllFourSlots
 	ret
 Dev7F_WriteAllFourSlots_Skip:
-	ld l, (0x7f32:16)
+	ld l, (MidiCfg_ModeBits:16)
 	and L,0x03
 	sla l, 0x02
 	ld XIX,Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D
@@ -82822,7 +82822,7 @@ ParamApply_StorePairAndDerive:
 	and WA,0x7f7f
 	mx_st_mr16 MXD, ra_IX, ra_HL, r0
 	srl l, 0x01
-	ld b, (0x7f32:16)
+	ld b, (MidiCfg_ModeBits:16)
 	and B,0x03
 	sll b, 0x02
 	ld XIY,ParamApply_StorePairAndDerive_JumpTable_FAE28F
@@ -82894,7 +82894,7 @@ Evt2030_Class00to1F_Op00:   ; entry: pointer-table entry
 	ld (0x1966:16), wa
 	jr .LFAE30D
 .LFAE2F7:
-	ld l, (0x7f32:16)
+	ld l, (MidiCfg_ModeBits:16)
 	and L,0x03
 	sll l, 0x02
 	ld XIX,sub_FAE30D_JumpTable_FAE30E
@@ -84737,7 +84737,7 @@ SeqEvt_ApplyProgramEvent:   ; entry: pointer-table entry
 	set 0x07,A
 	ld (0x60f007:24), a
 	extz HL
-	ld l, (0x7f32:16)
+	ld l, (MidiCfg_ModeBits:16)
 	and L,0x03
 	sll hl, 0x02
 	ld XIX,SeqEvt_ApplyProgramEvent_JumpTable_FAF6B8
@@ -86420,7 +86420,7 @@ sub_FB3C34_Nop2:
 ParamApply_ResetPairTablesIfGmNormal:
 	m_bit 2, MD16, 0x7f4d                                ; FB2026  f1 4d 7f ca
 	jr z, .LFB203B                                       ; FB202A  66 0f
-	ld a, (0x7f32:16)                                   ; FB202C  c1 32 7f 21
+	ld a, (MidiCfg_ModeBits:16)                                   ; FB202C  c1 32 7f 21
 	and A,0x03                                           ; FB2030  c9 cc 03
 	cp a, 0x00:i3                                          ; FB2033  c9 d8
 	jr nz, .LFB203B                                      ; FB2035  6e 04
@@ -88518,10 +88518,10 @@ sub_FB3355:
 	jrl nz, .LFB33FA                                     ; FB3384  7e 73 00
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB3387  c1 7a 20 3f 79
 	jrl z, .LFB33FA                                      ; FB338C  76 6b 00
-	ld c, (0x7f32:16)                                   ; FB338F  c1 32 7f 23
+	ld c, (MidiCfg_ModeBits:16)                                   ; FB338F  c1 32 7f 23
 	and C,0x04                                           ; FB3393  cb cc 04
 	jr nz, .LFB33FA                                      ; FB3396  6e 62
-	ld c, (0x7f38:16)                                   ; FB3398  c1 38 7f 23
+	ld c, (MidiFilter_Exclusive:16)                                   ; FB3398  c1 38 7f 23
 	and C,0x08                                           ; FB339C  cb cc 08
 	jr z, .LFB33FA                                       ; FB339F  66 59
 	pushw 0x03                                           ; FB33A1  0b 03 00
@@ -88570,10 +88570,10 @@ sub_FB3355:
 	jr z, .LFB3468                                       ; FB340C  66 5a
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB340E  c1 7a 20 3f 79
 	jr z, .LFB3468                                       ; FB3413  66 53
-	ld c, (0x7f32:16)                                   ; FB3415  c1 32 7f 23
+	ld c, (MidiCfg_ModeBits:16)                                   ; FB3415  c1 32 7f 23
 	and C,0x04                                           ; FB3419  cb cc 04
 	jr nz, .LFB3468                                      ; FB341C  6e 4a
-	ld c, (0x7f38:16)                                   ; FB341E  c1 38 7f 23
+	ld c, (MidiFilter_Exclusive:16)                                   ; FB341E  c1 38 7f 23
 	and C,0x08                                           ; FB3422  cb cc 08
 	jr z, .LFB3468                                       ; FB3425  66 41
 	ld xbc, (0x60fc80:24)                               ; FB3427  e2 80 fc 60 21
@@ -91150,7 +91150,7 @@ sub_FB4AA4:
 sub_FB4B7D:
 	pushw hl                                             ; FB4B7D  2b
 	push XIX                                             ; FB4B7E  3c
-	ld c, (0x7f38:16)                                   ; FB4B7F  c1 38 7f 23
+	ld c, (MidiFilter_Exclusive:16)                                   ; FB4B7F  c1 38 7f 23
 	and C,0x08                                           ; FB4B83  cb cc 08
 	jr z, .LFB4BDA                                       ; FB4B86  66 52
 	ld c, (0x0922:16)                                   ; FB4B88  c1 22 09 23
@@ -92411,7 +92411,7 @@ sub_FB5774:
 	inc 1,DE                                             ; FB57DF  da 61
 	jr .LFB57D6                                          ; FB57E1  68 f3
 .LFB57E3:
-	m_set 7, MD16, 0x7f3a                                ; FB57E3  f1 3a 7f bf
+	m_set 7, MD16, MidiFilter_BankSelect                                ; FB57E3  f1 3a 7f bf
 	pop XIX                                              ; FB57E7  5c
 	popw de                                              ; FB57E8  4a
 	popw hl                                              ; FB57E9  4b
@@ -92423,7 +92423,7 @@ sub_FB57ED:
 	pushw de                                             ; FB57F2  2a
 	push XIX                                             ; FB57F3  3c
 	lda xix, (0x7ee2:16)                                ; FB57F4  f1 e2 7e 34
-	ld c, (0x7f32:16)                                   ; FB57F8  c1 32 7f 23
+	ld c, (MidiCfg_ModeBits:16)                                   ; FB57F8  c1 32 7f 23
 	and C,0x10                                           ; FB57FC  cb cc 10
 	jr nz, .LFB5858                                      ; FB57FF  6e 57
 	ld HL,(XIZ+0x08)                                     ; FB5801  9e 08 23
@@ -99020,7 +99020,7 @@ sub_FB9D5A:
 	popw hl                                              ; FB9D86  4b
 	ret                                                  ; FB9D87  0e
 sub_FB9D88:
-	m_and_mi8 MB16, 0x7f35, 0xf0                         ; FB9D88  c1 35 7f 3c f0
+	m_and_mi8 MB16, MidiCfg_InOutMode, 0xf0                         ; FB9D88  c1 35 7f 3c f0
 	pushw 0x0f                                           ; FB9D8D  0b 0f 00
 	pushw 0x00                                           ; FB9D90  0b 00 00
 	pushw 0x03                                           ; FB9D93  0b 03 00
@@ -157868,7 +157868,7 @@ sub_FE14E9:
 	link XIZ,0xfffe                                      ; FE14E9  ee 0c fe ff
 	ld bc, (sub_FE6F89_Data_FE7006:24)                                ; FE14ED  d2 06 70 fe 21
 	ld (xiz-2), bc                                       ; FE14F2  be fe 51
-	ld a, (0x7f33:16)                                   ; FE14F5  c1 33 7f 21
+	ld a, (MidiFilter_SongSelect:16)                                   ; FE14F5  c1 33 7f 21
 	and A,0x08                                           ; FE14F9  c9 cc 08
 	jr z, .LFE151F                                           ; FE14FC  66 21
 	ld A,(XIZ+0x08)                                      ; FE14FE  8e 08 21
@@ -159109,7 +159109,7 @@ sub_FE1EF1:
 	cp h, 0x00:i3                                          ; FE1F86  ce d8
 	jr nz, .LFE1F5C                                           ; FE1F88  6e d2
 	pushw 0x0b                                           ; FE1F8A  0b 0b 00
-	pushw 0x7f32                                         ; FE1F8D  0b 32 7f
+	pushw MidiCfg_ModeBits                                         ; FE1F8D  0b 32 7f
 	calr sub_FE1FAB                                            ; FE1F90  1e 18 00
 	pushw 0x01                                           ; FE1F93  0b 01 00
 	pushw 0x7f4d                                         ; FE1F96  0b 4d 7f
@@ -160034,7 +160034,7 @@ sub_FE2736:
 	m_cp_mi8 MBD+r6, 0xff, 0x00                          ; FE27CD  8e ff 3f 00
 	jr nz, .LFE2798                                           ; FE27D1  6e c5
 	pushw 0x0b                                           ; FE27D3  0b 0b 00
-	pushw 0x7f32                                         ; FE27D6  0b 32 7f
+	pushw MidiCfg_ModeBits                                         ; FE27D6  0b 32 7f
 	lda xiy, (.LFE27E1:24)                               ; FE27D9  f2 e1 27 fe 35
 	push XIY                                             ; FE27DE  3d
 	jp (xix)                                             ; FE27DF  b4 d8
