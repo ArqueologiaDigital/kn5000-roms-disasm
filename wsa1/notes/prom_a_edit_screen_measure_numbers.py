@@ -73,8 +73,8 @@ def plan():
         where = ", ".join(["NOTE EDIT slot %d" % s for s, x in note if x == t] + ["DRUM EDIT slot %d" % s for s, x in drum if x == t])
         rows.append((t, new, "%s: draws the measure number in (0x26B0) -- cleared if above 999 -- at one fixed place of the\\n"
                      "  edit screen; place %d of 12 in address order; %s (notes/prom_a_edit_screen_measure_numbers.py)." % (new, k, where)))
-    if "EditScreen_DrawMeasureNumbers" in IDX:
-        rows.append(("EditScreen_DrawMeasureNumbers", "EditScreen_DrawMeasureNumbers",
+    if "sub_FEF9A6" in IDX:               # (applied 2026-10-04: now EditScreen_DrawMeasureNumbers)
+        rows.append(("sub_FEF9A6", "EditScreen_DrawMeasureNumbers",
                      "EditScreen_DrawMeasureNumbers: for E = 0..(0x601F75) and each non-zero beat count at 0x601F5F[E], draws\\n"
                      "  measure number BC (from (0x601F5D), +1 each) through ScreenDrawPtrs_FEF9FA[E] (NOTE EDIT) or _FEFA2A[E]\\n"
                      "  (DRUM EDIT, EditScreen_Mode bit 0)."))
