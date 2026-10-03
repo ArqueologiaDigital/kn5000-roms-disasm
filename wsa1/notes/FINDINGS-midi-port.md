@@ -335,7 +335,7 @@ at `0xFA5504` already deals with them.
 
 ## ⚠ A note on "nothing calls it"
 
-`sub_FA5935`'s header was written in this same session saying no caller had been
+`PanelLed_ToggleActivityLed_SaveRegs`'s header was written in this same session saying no caller had been
 found, citing `notes/prom_a_xref.py`. Converting the next 425 bytes turned up
 **two** callers, `MIDI_Fg_Deliver2` at `0xFA5A93` and `MIDI_Fg_Deliver3` at
 `0xFA5AC6` — both `calr`, which that tool cannot see because it searches for
@@ -363,7 +363,7 @@ absolute reference", never "nothing calls it".**
   of the input and output queues. Another lane's territory, and the reason the
   queue's own structure at `0x00600C1E` is still only "a 16-bit free count at
   `+0xFE`".
-* `sub_FA5926` and `sub_FA5935` are deliberately **not** named: `(0xC4)`,
+* `sub_FA5926` and `PanelLed_ToggleActivityLed_SaveRegs` are deliberately **not** named: `(0xC4)`,
   `(0x0925)` and `0xF406A0` are unidentified, so any name would be a guess.
 * `(0xA9)` bit 5 is tested by `MIDI_RX_SysExData` and **set nowhere** in the
   converted code.

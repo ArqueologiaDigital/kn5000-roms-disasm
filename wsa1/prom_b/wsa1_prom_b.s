@@ -1427,7 +1427,7 @@
 	.set	sub_FE04BE, 0xFE04BE
 	.set	sub_FE144E, 0xFE144E
 	.set	sub_FE152E, 0xFE152E
-	.set	sub_FE1BCA, 0xFE1BCA
+	.set	SysPartMidi_ResetBlock1Default_Call, 0xFE1BCA
 	.set	sub_FE1BCE, 0xFE1BCE
 	.set	sub_FE1BDE, 0xFE1BDE
 	.set	sub_FE1BEB, 0xFE1BEB
@@ -87889,7 +87889,7 @@ T_F40A80:	jp sub_F44021  ; -> prom_b 0x44021   x1
 T_F40A84:	jp sub_F44024  ; -> prom_b 0x44024
 T_F40A88:	jp sub_F44027  ; -> prom_b 0x44027
 T_F40A8C:	jp sub_F44367  ; -> prom_b 0x44367   x1
-T_F40A90:	jp sub_F44039  ; -> prom_b 0x44039   x1
+T_F40A90:	jp Nop_CallsEmptyDirectorySlot_Veneer  ; -> prom_b 0x44039   x1
 T_F40A94:	jp sub_F4403C  ; -> prom_b 0x4403C
 T_F40A98:	jp sub_F44018  ; -> prom_b 0x44018   x1
 T_F40A9C:	jp sub_F45CC4  ; -> prom_b 0x45CC4   x3
@@ -89415,7 +89415,7 @@ T_F425AC:	jp sub_FE1C4D  ; -> prom_a 0x61C4D   x14
 T_F425B0:	jp sub_FE1C55  ; -> prom_a 0x61C55   x11
 T_F425B4:	jp sub_FE1C5D  ; -> prom_a 0x61C5D   x3
 T_F425B8:	jp sub_FE1C67  ; -> prom_a 0x61C67   x2
-T_F425BC:	jp sub_FE1BCA  ; -> prom_a 0x61BCA
+T_F425BC:	jp SysPartMidi_ResetBlock1Default_Call  ; -> prom_a 0x61BCA
 T_F425C0:	jp sub_FE1C71  ; -> prom_a 0x61C71
 T_F425C4:	jp sub_FE1C75  ; -> prom_a 0x61C75   x1
 T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
@@ -89565,13 +89565,13 @@ T_F42880:	jp sub_F7A400  ; -> prom_b 0x7A400   x2
 T_F42884:	jp sub_F7A402  ; -> prom_b 0x7A402   x17
 T_F42888:	jp sub_F7A404  ; -> prom_b 0x7A404   x7
 T_F4288C:	jp sub_F7A406  ; -> prom_b 0x7A406
-T_F42890:	jp sub_F7A408  ; -> prom_b 0x7A408   x1
+T_F42890:	jp BStore_LatchHeapBase_Veneer  ; -> prom_b 0x7A408   x1
 ; Evidence: slot 0xF42894 is `jp 0xF7A613`; prom_b 0xF7A613 carries the label
 ;           BStore_AppendBytes_Veneer, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_BStore_AppendBytes_Veneer:	jp BStore_AppendBytes_Veneer  ; F42894 (was T_F42894) -> prom_b 0x7A613   x8
 	.fill 0x18, 1, 0x0E  ; 0xF42898: 24 x ret
-T_F428B0:	jp sub_F7AA00  ; -> prom_b 0x7AA00   x1
-T_F428B4:	jp sub_F7AA02  ; -> prom_b 0x7AA02   x1
+T_F428B0:	jp BStore_AppendBytes_Join3_Veneer  ; -> prom_b 0x7AA00   x1
+T_F428B4:	jp BStore_AppendBytes_Join4_Veneer  ; -> prom_b 0x7AA02   x1
 T_F428B8:	jp sub_F7AA29  ; -> prom_b 0x7AA29   x1
 T_F428BC:	jp T_F428BC_Nop  ; -> prom_b 0x7AA88   x1
 T_F428C0:	jp sub_F7AA89  ; -> prom_b 0x7AA89   x1
@@ -90611,7 +90611,7 @@ sub_F44036:		; <- T_F40A48
 	jrl	sub_F45B6E	; F44036  jrl T,0xf45b6e
 
 ; --------------------------------------------------------------------------
-; sub_F44039
+; Nop_CallsEmptyDirectorySlot_Veneer
 ; Called from: T_F40A90 (x1); in-module: 0xF44773
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F40A90 holds `jp 0x00F44039`, and 0xF44039 is an
@@ -90621,7 +90621,7 @@ sub_F44036:		; <- T_F40A48
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44039:		; <- T_F40A90
+Nop_CallsEmptyDirectorySlot_Veneer:		; <- T_F40A90
 	jrl	Nop_CallsEmptyDirectorySlot	; F44039  jrl T,0xf45d04
 
 ; --------------------------------------------------------------------------
@@ -91411,7 +91411,7 @@ sub_F44623_Return:
 ; Touches: (0x0C55) (0x0D4A) (0x207C) (0x3456) (0x3458) (0x345E) (0x349A)
 ;          (0x349C) (0x349F) (0x34BB) +3 more  |  0x000000
 ; Calls:   sub_F44033 sub_F455E6 T_F40C90 sub_F45FE5 sub_F4477F T_F40B54
-;          sub_F44030 sub_F44039
+;          sub_F44030 Nop_CallsEmptyDirectorySlot_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4466D is an instruction boundary.
 ;           The name IS the address.
@@ -91507,7 +91507,7 @@ sub_F4466D_Skip5:
 	m_or_mi8 MB16, 0x34bb, 0x08	; F44765  or (0x34bb),0x08
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4476A  or (0x34d4),0x10
 	call	sub_F44030	; F4476F  call 0xf44030
-	call	sub_F44039	; F44773  call 0xf44039
+	call	Nop_CallsEmptyDirectorySlot_Veneer	; F44773  call 0xf44039
 sub_F4466D_Skip6:
 	ld	(168:8), 0:io	; F44777  ld (0xa8),0x00
 sub_F4466D_Join2:
@@ -144525,7 +144525,7 @@ sub_F6744C:
 	jp	sub_F6DA9A	; F6744C  jp 0xf6da9a
 
 ; --------------------------------------------------------------------------
-; sub_F67450
+; MsgLine_PartVolume_Veneer
 ; Called from: in-module: 0xF6809C 0xF6BFF2
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -144534,11 +144534,11 @@ sub_F6744C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F67450:
+MsgLine_PartVolume_Veneer:
 	jp	MsgLine_PartVolume	; F67450  jp 0xf6ddb7
 
 ; --------------------------------------------------------------------------
-; sub_F67454
+; MsgLine_PartEffect_Veneer
 ; Called from: in-module: 0xF6C00C
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -144547,11 +144547,11 @@ sub_F67450:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F67454:
+MsgLine_PartEffect_Veneer:
 	jp	MsgLine_PartEffect	; F67454  jp 0xf6e1b1
 
 ; --------------------------------------------------------------------------
-; sub_F67458
+; MsgLine_NoteName_Veneer
 ; Called from: in-module: 0xF6BF65
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -144560,7 +144560,7 @@ sub_F67454:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F67458:
+MsgLine_NoteName_Veneer:
 	jp	MsgLine_NoteName	; F67458  jp 0xf6e463
 
 ; --------------------------------------------------------------------------
@@ -144603,7 +144603,7 @@ sub_F67464:
 	jp	sub_F67464_Nop	; F67464  jp 0xf6e627
 
 ; --------------------------------------------------------------------------
-; sub_F67468
+; MsgLine_TotalReverb_Veneer
 ; Called from: in-module: 0xF6BF73
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -144612,7 +144612,7 @@ sub_F67464:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F67468:
+MsgLine_TotalReverb_Veneer:
 	jp	MsgLine_TotalReverb	; F67468  jp 0xf6e62a
 
 ; --------------------------------------------------------------------------
@@ -146349,7 +146349,7 @@ sub_F68016_Skip:
 	ld	(4698:16), a	; F68090  ld (0x125a),A
 	ld	(3835:16), 4	; F68094  ld (0x0efb),0x04
 	calr	sub_F6820F	; F68099  calr 0xf6820f
-	calr	sub_F67450	; F6809C  calr 0xf67450
+	calr	MsgLine_PartVolume_Veneer	; F6809C  calr 0xf67450
 	jrl	sub_F68016_Join	; F6809F  jrl T,0xf68205
 sub_F68016_Skip2:
 	ld	a, (4698:16)	; F680A2  ld A,(0x125a)
@@ -155293,12 +155293,12 @@ sub_F6BC89_Skip33:
 	calr	sub_F6745C	; F6BF61  calr 0xf6745c
 	ret	; F6BF64  ret
 sub_F6BC89_Skip34:
-	calr	sub_F67458	; F6BF65  calr 0xf67458
+	calr	MsgLine_NoteName_Veneer	; F6BF65  calr 0xf67458
 	ret	; F6BF68  ret
 	jrl	sub_F6BC89_Loop2	; F6BF69  jrl T,0xf6be09
 	m_bit 7, MD16, 0x1264	; F6BF6C  bit 7,(0x1264)
 	jrl	z, sub_F6BC89_Loop2	; F6BF70  jrl Z,0xf6be09
-	call	sub_F67468	; F6BF73  call 0xf67468
+	call	MsgLine_TotalReverb_Veneer	; F6BF73  call 0xf67468
 	ret	; F6BF77  ret
 sub_F6BC89_Skip35:
 	m_cp_mi8 MB16, 0x1258, 0x98	; F6BF78  cp (0x1258),0x98
@@ -155356,7 +155356,7 @@ sub_F6BC89_Skip39:
 ; Called from: in-module: 0xF6C082
 ; Touches: (0x0E63) (0x0EF5) (0x100C) (0x1259) (0x125A) (0x1264) (0x12B8)
 ;          (0x12B9) (0x12EB)
-; Calls:   sub_F67450 0xF6E091 0xF6E152 sub_F67454 T_F431B0 0xF6E212
+; Calls:   MsgLine_PartVolume_Veneer 0xF6E091 0xF6E152 MsgLine_PartEffect_Veneer T_F431B0 0xF6E212
 ;          0xF6E2BA 0xF6E261 0xF6E678 0xF6DEF7 0xF6DF57 0xF6DFC4 +18 more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6BFF2 is an instruction
@@ -155365,7 +155365,7 @@ sub_F6BC89_Skip39:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6BFF2:
-	calr	sub_F67450	; F6BFF2  calr 0xf67450
+	calr	MsgLine_PartVolume_Veneer	; F6BFF2  calr 0xf67450
 	ret	; F6BFF5  ret
 sub_F6BFF2_Skip:
 	ld	a, (4708:16)	; F6BFF6  ld A,(0x1264)
@@ -155377,7 +155377,7 @@ sub_F6BFF2_Skip:
 	call	MsgLine_PartDspEffect	; F6C007  call 0xf6e152
 	ret	; F6C00B  ret
 sub_F6BFF2_Skip2:
-	call	sub_F67454	; F6C00C  call 0xf67454
+	call	MsgLine_PartEffect_Veneer	; F6C00C  call 0xf67454
 	ret	; F6C010  ret
 sub_F6BFF2_Skip3:
 	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6C011  cp (0x0ef5),0x0a
@@ -163190,7 +163190,7 @@ sub_F6EC6A_Return:
 ; ==========================================================================
 ; 0xF6F000-0xF6F3FF -- AN OLDER BUILD'S COPY OF THE MODULE AT 0xF7AA00-0xF7ADFF
 ;   Byte for byte the live module this build enters through the routine-
-;   directory slots T_F428B0.. (sub_F7AA00, sub_F7AA02, sub_F7AA29,
+;   directory slots T_F428B0.. (BStore_AppendBytes_Join3_Veneer, BStore_AppendBytes_Join4_Veneer, sub_F7AA29,
 ;   SongStore_LoadSongHeaderToDisplay, sub_F7AB3F, sub_F7AB9C ...), 0xBA00
 ;   lower, except at the nine bytes relocation changes: four `call`s inside
 ;   the block read the live target - 0xBA00, and the `calr` at 0xF6F3E4 calls
@@ -163736,7 +163736,7 @@ sub_F6F408_Skip:
 ; sub_F6F440
 ; Called from: in-module: 0xF6F404
 ; Touches: (0x272B) (0x360A)
-; Calls:   sub_F6F476 sub_F6F4A3 sub_F6F4F2 T_F40AC8 sub_F73840 T_Ring601850_Init
+; Calls:   sub_F6F476 sub_F6F4A3 sub_F6F4F2 T_F40AC8 Smf_WriteFile_Veneer T_Ring601850_Init
 ;          T_SeqBufRing_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
@@ -163762,7 +163762,7 @@ sub_F6F440:
 	calr	sub_F6F4F2	; F6F45E  calr 0xf6f4f2
 	call	T_F40AC8	; F6F461  call 0xf40ac8
 sub_F6F440_Skip:
-	call	sub_F73840	; F6F465  call 0xf73840
+	call	Smf_WriteFile_Veneer	; F6F465  call 0xf73840
 	call	T_Ring601850_Init	; F6F469  call 0xf41e6c
 	call	T_SeqBufRing_Init	; F6F46D  call 0xf41d94
 	pop	xde	; F6F471  pop XDE
@@ -173283,7 +173283,7 @@ sub_F73827:
 	ret	; F7383F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F73840
+; Smf_WriteFile_Veneer
 ; Called from: in-module: 0xF6F465
 ; Touches: nothing with an absolute address
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -173295,7 +173295,7 @@ sub_F73827:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F73840:
+Smf_WriteFile_Veneer:
 	jp	Smf_WriteFile	; F73840  jp 0xf7385f
 
 ; --------------------------------------------------------------------------
@@ -182828,7 +182828,7 @@ sub_F7A406:		; <- T_F4288C
 	jr	sub_F7A408_Join3	; F7A406  jr T,0xf7a416
 
 ; --------------------------------------------------------------------------
-; sub_F7A408
+; BStore_LatchHeapBase_Veneer
 ; Called from: T_F42890 (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   BStore_FreeList_Init BStore_AllocBlock BStore_FreeChain
@@ -182840,7 +182840,7 @@ sub_F7A406:		; <- T_F4288C
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7A408:		; <- T_F42890
+BStore_LatchHeapBase_Veneer:		; <- T_F42890
 	jr	BStore_LatchHeapBase	; F7A408  jr T,0xf7a41a
 sub_F7A400_Skip:
 	calr	BStore_FreeList_Init	; F7A40A  calr 0xf7a428
@@ -183368,7 +183368,7 @@ BStore_AppendBytes_Skip3:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7AA00
+; BStore_AppendBytes_Join3_Veneer
 ; Called from: T_F428B0 (x1)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F428B0 holds `jp 0x00F7AA00`, and 0xF7AA00 is an
@@ -183378,11 +183378,11 @@ BStore_AppendBytes_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AA00:		; <- T_F428B0
+BStore_AppendBytes_Join3_Veneer:		; <- T_F428B0
 	jr	BStore_AppendBytes_Join3	; F7AA00  jr T,0xf7aa04
 
 ; --------------------------------------------------------------------------
-; sub_F7AA02
+; BStore_AppendBytes_Join4_Veneer
 ; Called from: T_F428B4 (x1)
 ; Touches: (0x207E) (0x212E) (0x215E) (0x34BB)
 ; Calls:   T_F409F8 T_F409F4
@@ -183393,7 +183393,7 @@ sub_F7AA00:		; <- T_F428B0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AA02:		; <- T_F428B4
+BStore_AppendBytes_Join4_Veneer:		; <- T_F428B4
 	jr	BStore_AppendBytes_Join4	; F7AA02  jr T,0xf7aa1f
 BStore_AppendBytes_Join3:
 	call	T_F409F8	; F7AA04  call 0xf409f8

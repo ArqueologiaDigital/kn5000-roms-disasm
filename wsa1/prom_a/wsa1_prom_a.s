@@ -22810,8 +22810,8 @@ PanelLed_Refresh:   ; entry: prom_b routine directory
 ; PanelLed_ToggleActivityLed -- flip LED byte 6 bit 3 and send it immediately (not on variant 1)
 ; Evidence: `cp (0xC4),0x01 / jr z,ret`; (0x2170) counter; `xor (0x20D6),0x08`, (0x20F6) = (0x20D6) so
 ;   PanelLed_SendChangedBytes will not resend it, W = 6 and `calr .LF8C84A`, then T_SC1_TxFlush.  Published as
-;   T_PanelLed_ToggleActivityLed; callers sub_FA5935 (called inside the foreground MIDI consumer 0xFA5942-0xFA5AEA before a MIDI message
-;   is built) and sub_FB7AFE.  ⚠ sub_FA5935's header guesses "buffer initialiser"; this is what it really calls.
+;   T_PanelLed_ToggleActivityLed; callers PanelLed_ToggleActivityLed_SaveRegs (called inside the foreground MIDI consumer 0xFA5942-0xFA5AEA before a MIDI message
+;   is built) and PanelLed_ToggleActivityLed_SaveRegs2.  ⚠ PanelLed_ToggleActivityLed_SaveRegs's header guesses "buffer initialiser"; this is what it really calls.
 PanelLed_ToggleActivityLed:   ; entry: prom_b routine directory
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; F8C3FB  c0 c4 3f 01
 	jr z, .LF8C427                                       ; F8C3FF  66 26
@@ -66716,7 +66716,7 @@ sub_FA5926:
 	ret                                           ; FA5934  0e
 
 ; ---------------------------------------------------------------------
-; sub_FA5935 -- call prom_b 0xF406A0 with four registers preserved
+; PanelLed_ToggleActivityLed_SaveRegs -- call prom_b 0xF406A0 with four registers preserved
 ;
 ; Called from: MIDI_Fg_Deliver2 (0xFA5A93) and MIDI_Fg_Deliver3 (0xFA5AC6),
 ;          both `calr`.  ⚠ An earlier version of this header said no caller had
@@ -66735,7 +66735,7 @@ sub_FA5926:
 ;          two call sites, not a fact about 0xF406A0, which is a prom_b thunk
 ;          this tree has not resolved.
 ; ---------------------------------------------------------------------
-sub_FA5935:
+PanelLed_ToggleActivityLed_SaveRegs:
 	push XDE                                      ; FA5935  3a
 	push XHL                                      ; FA5936  3b
 	push XIX                                      ; FA5937  3c
@@ -67041,7 +67041,7 @@ MIDI_Fg_DataByte__ret:
 ; Evidence: `link XIZ,0xfffe` reserves exactly TWO bytes and `push 0x0002` is
 ;          the length passed -- the frame size and the length argument agree,
 ;          which is what makes this a message builder rather than a copy.
-; Notes:   ★ it calls sub_FA5935 (0xFA5935) on the buffer address before filling
+; Notes:   ★ it calls PanelLed_ToggleActivityLed_SaveRegs (0xFA5935) on the buffer address before filling
 ;          it.  That routine's header used to say no caller had been found; this
 ;          site and 0xFA5AC6 are its two callers, both `calr`, which is why
 ;          notes/prom_a_xref.py could not see them.
@@ -67050,7 +67050,7 @@ MIDI_Fg_Deliver2:
 	link XIZ,0xfffe                               ; FA5A8B  ee 0c fe ff   two bytes of frame
 	push XIX                                      ; FA5A8F  3c
 	lda xix, (xiz-2)                              ; FA5A90  be fe 34
-	calr sub_FA5935                    ; FA5A93  1e 9f fe   sub_FA5935
+	calr PanelLed_ToggleActivityLed_SaveRegs                    ; FA5A93  1e 9f fe   PanelLed_ToggleActivityLed_SaveRegs
 	m_ld_mm16 MDI+r4, 0, MIDI_Fg_RunningStatus                   ; FA5A96  b4 14 60 09   buffer[0] = running status
 	ld C,(XIZ+0x08)                               ; FA5A9A  8e 08 23
 	ld (XIX+0x01),C                               ; FA5A9D  bc 01 43   buffer[1] = the data byte
@@ -67103,7 +67103,7 @@ MIDI_Fg_Deliver3:
 	link XIZ,0xfffc                               ; FA5ABE  ee 0c fc ff
 	push XIX                                      ; FA5AC2  3c
 	lda xix, (xiz-4)                              ; FA5AC3  be fc 34
-	calr sub_FA5935                    ; FA5AC6  1e 6c fe   sub_FA5935
+	calr PanelLed_ToggleActivityLed_SaveRegs                    ; FA5AC6  1e 6c fe   PanelLed_ToggleActivityLed_SaveRegs
 	m_ld_mm16 MDI+r4, 0, MIDI_Fg_RunningStatus                   ; FA5AC9  b4 14 60 09   buffer[0] = status
 	m_ld_mm16 MDD+r4, 0x01, MIDI_Fg_FirstData                ; FA5ACD  bc 01 14 61 09   buffer[1] = first data byte
 	ld C,(XIZ+0x08)                               ; FA5AD2  8e 08 23
@@ -76437,7 +76437,7 @@ sub_FAA967:
 	pushw 0x91                                           ; FAA989  0b 91 00
 	calr sub_FAACC0                                      ; FAA98C  1e 31 03
 	m_set 5, MD24, 0x60f021                              ; FAA98F  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAA994  1e 84 01
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAA994  1e 84 01
 	inc 8,XSP                                            ; FAA997  ef 60
 .LFAA999:
 	ld l, 0x00:opc                                          ; FAA999  27 00
@@ -76582,7 +76582,7 @@ sub_FAAAB5:
 	pushw 0x91                                           ; FAAAC6  0b 91 00
 	calr sub_FAACC0                                      ; FAAAC9  1e f4 01
 	m_set 5, MD24, 0x60f021                              ; FAAACC  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAAAD1  1e 47 00
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAAD1  1e 47 00
 	lda xix, (0x7620:16)                                ; FAAAD4  f1 20 76 34
 	inc 8,XSP                                            ; FAAAD8  ef 60
 .LFAAADA:
@@ -76615,12 +76615,12 @@ sub_FAAAE7:
 	jr .LFAAADA                                          ; FAAB0C  68 cc
 .LFAAB0E:
 	m_set 5, MD24, 0x60f021                              ; FAAB0E  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAAB13  1e 05 00
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAB13  1e 05 00
 	pop XIX                                              ; FAAB16  5c
 	popw hl                                              ; FAAB17  4b
 	unlk XIZ                                             ; FAAB18  ee 0d
 	ret                                                  ; FAAB1A  0e
-sub_FAAB1B:
+Queue2C00_DrainPassB_SaveRegs2:
 	push XDE                                             ; FAAB1B  3a
 	push XHL                                             ; FAAB1C  3b
 	push XIX                                             ; FAAB1D  3c
@@ -76850,7 +76850,7 @@ sub_FAACC0:
 	cp BC,0x01fc                                         ; FAAD02  d9 cf fc 01
 	jr c, .LFAAD14                                       ; FAAD06  67 0c
 	m_set 5, MD24, 0x60f021                              ; FAAD08  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAAD0D  1e 0b fe
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAD0D  1e 0b fe
 	m_ld_mi16 MDI+r4, 0, 0x0000                          ; FAAD10  b4 02 00 00
 .LFAAD14:
 	pop XIX                                              ; FAAD14  5c
@@ -76926,7 +76926,7 @@ sub_FAAD19:
 	cp H,0x1f                                            ; FAAE18  ce cf 1f
 	jrl ule, .LFAAD23                                    ; FAAE1B  73 05 ff
 	m_set 5, MD24, 0x60f021                              ; FAAE1E  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAAE23  1e f5 fc
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAE23  1e f5 fc
 	pop XIX                                              ; FAAE26  5c
 	popw de                                              ; FAAE27  4a
 	popw hl                                              ; FAAE28  4b
@@ -77030,7 +77030,7 @@ sub_FAAE2A:
 	cp L,0x1f                                            ; FAAF02  cf cf 1f
 	jrl ule, .LFAAE3B                                    ; FAAF05  73 33 ff
 	m_set 5, MD24, 0x60f021                              ; FAAF08  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAAF0D  1e 0b fc
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAF0D  1e 0b fc
 	lda xbc, (0x76a0:16)                                ; FAAF10  f1 a0 76 31
 	ld (xiz-14), xbc                                     ; FAAF14  be f2 61
 	ldw hl, 0x7620                                       ; FAAF17  33 20 76
@@ -77122,7 +77122,7 @@ sub_FAAF91:
 	pushw 0x91                                           ; FAAFB3  0b 91 00
 	calr sub_FAACC0                                      ; FAAFB6  1e 07 fd
 	m_set 5, MD24, 0x60f021                              ; FAAFB9  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAAFBE  1e 5a fb
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAFBE  1e 5a fb
 	inc 8,XSP                                            ; FAAFC1  ef 60
 .LFAAFC3:
 	ld h, 0x00:opc                                          ; FAAFC3  26 00
@@ -77232,7 +77232,7 @@ sub_FAAF91:
 	m_set 1, MD16, 0x7fc0                                ; FAB0B8  f1 c0 7f b9
 	m_and_mi8 MB16, 0x7fd6, 0xfc                         ; FAB0BC  c1 d6 7f 3c fc
 	m_set 5, MD24, 0x60f021                              ; FAB0C1  f2 21 f0 60 bd
-	calr sub_FAAB1B                                      ; FAB0C6  1e 52 fa
+	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAB0C6  1e 52 fa
 	calr sub_FAAD19                                      ; FAB0C9  1e 4d fc
 	call sub_FAA742                                      ; FAB0CC  1d 42 a7 fa
 	lda xix, (0x7620:16)                                ; FAB0D0  f1 20 76 34
@@ -78136,7 +78136,7 @@ JumpTable_FAB8B4:
 	.long sub_FAB902                                 ; FAB8D4  [  8]
 	.long sub_FAB907                                 ; FAB8D8  [  9]
 	.long sub_FAB90C                                 ; FAB8DC  [ 10]
-	.long sub_FAB911                                 ; FAB8E0  [ 11]
+	.long List2030_PartBendRange_Apply_Call                                 ; FAB8E0  [ 11]
 sub_FAB8E4:   ; entry: JumpTable_FAB8B4[0], class 0
 	calr sub_FAB915                                      ; FAB8E4  1e 2e 00
 	jr .LFAB914                                          ; FAB8E7  68 2b
@@ -78164,7 +78164,7 @@ sub_FAB907:   ; entry: named by 1 `.long` operand, first at 0xFAB8D8
 sub_FAB90C:   ; entry: named by 1 `.long` operand, first at 0xFAB8DC
 	calr List2030_PartFineTune_Apply                                      ; FAB90C  1e d8 01
 	jr .LFAB914                                          ; FAB90F  68 03
-sub_FAB911:   ; entry: named by 1 `.long` operand, first at 0xFAB8E0
+List2030_PartBendRange_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8E0
 	calr List2030_PartBendRange_Apply                                      ; FAB911  1e de 01
 .LFAB914:
 	ret                                                  ; FAB914  0e
@@ -86414,7 +86414,7 @@ ParamApply_ResetPairTablesIfGmNormal:
 	call sub_FB56D3                                      ; FB2037  1d d3 56 fb
 .LFB203B:
 	ret                                                  ; FB203B  0e
-sub_FB203C:
+SoundGroup_ReloadSelection_SaveRegs:
 	push XDE                                             ; FB203C  3a
 	push XHL                                             ; FB203D  3b
 	push XIX                                             ; FB203E  3c
@@ -87361,7 +87361,7 @@ sub_FB2877:
 .LFB28B1:
 	calr sub_FB28BE                                      ; FB28B1  1e 0a 00
 	call sub_FB7BB9                                      ; FB28B4  1d b9 7b fb
-	call sub_FB7AFE                                      ; FB28B8  1d fe 7a fb
+	call PanelLed_ToggleActivityLed_SaveRegs2                                      ; FB28B8  1d fe 7a fb
 .LFB28BC:
 	popw hl                                              ; FB28BC  4b
 	ret                                                  ; FB28BD  0e
@@ -88240,7 +88240,7 @@ sub_FB311E:
 	pop XHL                                              ; FB3139  5b
 	pop XDE                                              ; FB313A  5a
 	ret                                                  ; FB313B  0e
-sub_FB313C:
+ParamImage_QueueDiffAll_SaveRegs:
 	push XDE                                             ; FB313C  3a
 	push XHL                                             ; FB313D  3b
 	push XIX                                             ; FB313E  3c
@@ -88288,7 +88288,7 @@ sub_FB317E:
 	push XIY                                             ; FB3193  3d
 	jp (xix)                                             ; FB3194  b4 d8
 .LFB3196:
-	calr sub_FB313C                                      ; FB3196  1e a3 ff
+	calr ParamImage_QueueDiffAll_SaveRegs                                      ; FB3196  1e a3 ff
 	lda xiy, (.LFB31A1:24)                               ; FB3199  f2 a1 31 fb 35
 	push XIY                                             ; FB319E  3d
 	jp (xix)                                             ; FB319F  b4 d8
@@ -89733,7 +89733,7 @@ sub_FB3C34:
 	cp a, 0x07:i3                                          ; FB3E68  c9 df
 	jr nc, .LFB3EA1                                      ; FB3E6A  6f 35
 	ld (UI_StatusCode:16), 0x25                                 ; FB3E6C  f1 80 28 00 25
-	call sub_FB7E9B                                      ; FB3E71  1d 9b 7e fb
+	call MessageScreen_Paint_SaveRegs                                      ; FB3E71  1d 9b 7e fb
 	push XDE                                             ; FB3E75  3a
 	push XHL                                             ; FB3E76  3b
 	push XIX                                             ; FB3E77  3c
@@ -90151,10 +90151,10 @@ sub_FB3C34:
 	jr z, .LFB427A                                       ; FB4270  66 08
 	jr .LFB427E                                          ; FB4272  68 0a
 .LFB4274:
-	call sub_FB7AF1                                      ; FB4274  1d f1 7a fb
+	call Mode_SwitchToSound_SaveRegs                                      ; FB4274  1d f1 7a fb
 	jr .LFB427E                                          ; FB4278  68 04
 .LFB427A:
-	call sub_FB7AE4                                      ; FB427A  1d e4 7a fb
+	call Mode_SwitchToCombination_SaveRegs                                      ; FB427A  1d e4 7a fb
 .LFB427E:
 	ld C,(XIX+0x0e)                                      ; FB427E  8c 0e 23
 	mul C,0x06                                           ; FB4281  cb 08 06
@@ -91879,7 +91879,7 @@ sub_FB5197:
 	cp A,W                                               ; FB526F  c8 f1
 	jrl ugt, .LFB5368                                    ; FB5271  7b f4 00
 	ld (UI_StatusCode:16), 0x25                                 ; FB5274  f1 80 28 00 25
-	call sub_FB7E9B                                      ; FB5279  1d 9b 7e fb
+	call MessageScreen_Paint_SaveRegs                                      ; FB5279  1d 9b 7e fb
 	ld (0x7659:16), 0x00                                 ; FB527D  f1 59 76 00 00
 	ld (0x7679:16), 0x00                                 ; FB5282  f1 79 76 00 00
 	ld (0x7699:16), 0x00                                 ; FB5287  f1 99 76 00 00
@@ -91951,7 +91951,7 @@ sub_FB5197:
 	pop XDE                                              ; FB534D  5a
 	m_or_mi8 MB16, UI_Request_Hi, 0x12                          ; FB534E  c1 71 20 3e 12
 	ld (UI_Request:16), 0x02                                 ; FB5353  f1 70 20 00 02
-	call sub_FB203C                                      ; FB5358  1d 3c 20 fb
+	call SoundGroup_ReloadSelection_SaveRegs                                      ; FB5358  1d 3c 20 fb
 	add XSP,0x00000026                                   ; FB535C  ef c8 26 00 00 00
 	jr .LFB5368                                          ; FB5362  68 04
 .LFB5364:
@@ -92159,7 +92159,7 @@ sub_FB556D:
 	and C,0xf0                                           ; FB5571  cb cc f0
 	cp C,0x10                                            ; FB5574  cb cf 10
 	jr nz, .LFB558E                                      ; FB5577  6e 15
-	call sub_FB7AF1                                      ; FB5579  1d f1 7a fb
+	call Mode_SwitchToSound_SaveRegs                                      ; FB5579  1d f1 7a fb
 	m_cp_mi8 MB16, PanelMode, 0x02                          ; FB557D  c1 78 20 3f 02
 	jr nz, .LFB558E                                      ; FB5582  6e 0a
 	m_or_mi8 MB16, UI_Request_Hi, 0x12                          ; FB5584  c1 71 20 3e 12
@@ -96414,7 +96414,7 @@ sub_FB7AC2:
 	inc 2,XSP                                            ; FB7ADF  ef 62
 	unlk XIZ                                             ; FB7AE1  ee 0d
 	ret                                                  ; FB7AE3  0e
-sub_FB7AE4:
+Mode_SwitchToCombination_SaveRegs:
 	push XDE                                             ; FB7AE4  3a
 	push XHL                                             ; FB7AE5  3b
 	push XIX                                             ; FB7AE6  3c
@@ -96425,7 +96425,7 @@ sub_FB7AE4:
 	pop XHL                                              ; FB7AEE  5b
 	pop XDE                                              ; FB7AEF  5a
 	ret                                                  ; FB7AF0  0e
-sub_FB7AF1:
+Mode_SwitchToSound_SaveRegs:
 	push XDE                                             ; FB7AF1  3a
 	push XHL                                             ; FB7AF2  3b
 	push XIX                                             ; FB7AF3  3c
@@ -96436,7 +96436,7 @@ sub_FB7AF1:
 	pop XHL                                              ; FB7AFB  5b
 	pop XDE                                              ; FB7AFC  5a
 	ret                                                  ; FB7AFD  0e
-sub_FB7AFE:
+PanelLed_ToggleActivityLed_SaveRegs2:
 	push XDE                                             ; FB7AFE  3a
 	push XHL                                             ; FB7AFF  3b
 	push XIX                                             ; FB7B00  3c
@@ -96784,7 +96784,7 @@ sub_FB7E7C:
 	ret                                                  ; FB7E99  0e
 sub_FB2877_Nop:
 	ret                                                  ; FB7E9A  0e
-sub_FB7E9B:
+MessageScreen_Paint_SaveRegs:
 	push XDE                                             ; FB7E9B  3a
 	push XHL                                             ; FB7E9C  3b
 	push XIX                                             ; FB7E9D  3c
@@ -155482,7 +155482,7 @@ sub_FE0053:
 	pop XHL                                              ; FE005D  5b
 	pop XDE                                              ; FE005E  5a
 	ret                                                  ; FE005F  0e
-sub_FE0060:
+ParamImage_WriteRecordHeaders_Entry_SaveRegs:
 	push XDE                                             ; FE0060  3a
 	push XHL                                             ; FE0061  3b
 	push XIX                                             ; FE0062  3c
@@ -155513,7 +155513,7 @@ sub_FE006D:
 	pop XHL                                              ; FE0080  5b
 	pop XDE                                              ; FE0081  5a
 	ret                                                  ; FE0082  0e
-sub_FE0083:
+ParamImage_SanitizeAllAndHook_Entry_SaveRegs:
 	push XDE                                             ; FE0083  3a
 	push XHL                                             ; FE0084  3b
 	push XIX                                             ; FE0085  3c
@@ -155535,7 +155535,7 @@ sub_FE0090:
 	pop XHL                                              ; FE009A  5b
 	pop XDE                                              ; FE009B  5a
 	ret                                                  ; FE009C  0e
-sub_FE009D:
+ParamImage_QueueDiffAll_SaveRegs2:
 	push XDE                                             ; FE009D  3a
 	push XHL                                             ; FE009E  3b
 	push XIX                                             ; FE009F  3c
@@ -155568,7 +155568,7 @@ sub_FE00B7:
 	pop XHL                                              ; FE00C1  5b
 	pop XDE                                              ; FE00C2  5a
 	ret                                                  ; FE00C3  0e
-sub_FE00C4:
+Queue2C00_DrainPassB_SaveRegs3:
 	push XDE                                             ; FE00C4  3a
 	push XHL                                             ; FE00C5  3b
 	push XIX                                             ; FE00C6  3c
@@ -155859,7 +155859,7 @@ sub_FE01D3:
 	pop XHL                                              ; FE01F7  5b
 	pop XDE                                              ; FE01F8  5a
 	ret                                                  ; FE01F9  0e
-sub_FE01FA:
+MessageScreen_Paint_SaveRegs2:
 	push XDE                                             ; FE01FA  3a
 	push XHL                                             ; FE01FB  3b
 	push XIX                                             ; FE01FC  3c
@@ -157898,7 +157898,7 @@ sub_FE1456:
 	jr lt, .LFE149C                                           ; FE14B1  61 e9
 	calr sub_FE0250                                          ; FE14B3  1e 9a ed
 	calr sub_FE05AE                                          ; FE14B6  1e f5 f0
-	calr sub_FE00C4                                          ; FE14B9  1e 08 ec
+	calr Queue2C00_DrainPassB_SaveRegs3                                          ; FE14B9  1e 08 ec
 	calr sub_FE2FE7                                          ; FE14BC  1e 28 1b
 	cp a, 0x00:i3                                          ; FE14BF  c9 d8
 	jr z, .LFE14C6                                           ; FE14C1  66 03
@@ -158255,7 +158255,7 @@ sub_FE179D:
 	pop XIX                                              ; FE1836  5c
 	ret                                                  ; FE1837  0e
 ; StatusMsg_ShowByIndex(index) -- UI_StatusCode := UiStatus_CodeByIndex[index]; then, unless bit 7 of (0x21E8)
-;          is set, paint the message screen (sub_FE01FA -> T_MessageScreen_Paint) and hold it with sub_FE2FC8
+;          is set, paint the message screen (MessageScreen_Paint_SaveRegs2 -> T_MessageScreen_Paint) and hold it with sub_FE2FC8
 ;          (Delay_Ticks 1500 for status 0, 500 for status 0x2B, no wait for any other).  22 `calr` sites, and the 24-bit pointer loaded at 0xFE0976.
 StatusMsg_ShowByIndex:
 	link XIZ,0x0000                                      ; FE1838  ee 0c 00 00
@@ -158268,7 +158268,7 @@ StatusMsg_ShowByIndex:
 	ld b, (0x21e8:16)                                   ; FE184F  c1 e8 21 22
 	and B,0x80                                           ; FE1853  ca cc 80
 	jr nz, .LFE185E                                          ; FE1856  6e 06
-	calr sub_FE01FA                                          ; FE1858  1e 9f e9
+	calr MessageScreen_Paint_SaveRegs2                                          ; FE1858  1e 9f e9
 	calr sub_FE2FC8                                          ; FE185B  1e 6a 17
 .LFE185E:
 	unlk XIZ                                             ; FE185E  ee 0d
@@ -158633,7 +158633,7 @@ sub_FE1B65:
 	calr sub_FE055B                                          ; FE1BC4  1e 94 e9
 	unlk XIZ                                             ; FE1BC7  ee 0d
 	ret                                                  ; FE1BC9  0e
-sub_FE1BCA:
+SysPartMidi_ResetBlock1Default_Call:
 	calr SysPartMidi_ResetBlock1Default                                          ; FE1BCA  1e e2 12
 	ret                                                  ; FE1BCD  0e
 sub_FE1BCE:
@@ -158908,7 +158908,7 @@ sub_FE1D52:
 	pushw hl                                             ; FE1D52  2b
 	push XIX                                             ; FE1D53  3c
 	lda xix, (0x2725:16)                                ; FE1D54  f1 25 27 34
-	calr sub_FE0060                                          ; FE1D58  1e 05 e3
+	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE1D58  1e 05 e3
 	calr sub_FE2FB9                                          ; FE1D5B  1e 5b 12
 	ld C,(XIX)                                           ; FE1D5E  84 23
 	cp c, 0x00:i3                                          ; FE1D60  cb d8
@@ -159216,17 +159216,17 @@ sub_FE1FFF:
 	push XIX                                             ; FE1FFF  3c
 	lda xix, (Disk_Flags:16)                                ; FE2000  f1 e7 21 34
 	m_or_mi8 MBI+r4, 0, 0x18                             ; FE2004  84 3e 18
-	calr sub_FE0060                                          ; FE2007  1e 56 e0
-	calr sub_FE0083                                          ; FE200A  1e 76 e0
+	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE2007  1e 56 e0
+	calr ParamImage_SanitizeAllAndHook_Entry_SaveRegs                                          ; FE200A  1e 76 e0
 	calr sub_FE0090                                          ; FE200D  1e 80 e0
-	calr sub_FE009D                                          ; FE2010  1e 8a e0
+	calr ParamImage_QueueDiffAll_SaveRegs2                                          ; FE2010  1e 8a e0
 	calr sub_FE00AA                                          ; FE2013  1e 94 e0
 	calr sub_FE00B7                                          ; FE2016  1e 9e e0
-	calr sub_FE00C4                                          ; FE2019  1e a8 e0
+	calr Queue2C00_DrainPassB_SaveRegs3                                          ; FE2019  1e a8 e0
 	calr sub_FE01D3                                          ; FE201C  1e b4 e1
 	calr MidiIn_ServiceDeferred_Veneer                                          ; FE201F  1e af e0
 	calr UiEventList_Publish_Veneer                                          ; FE2022  1e b9 e0
-	calr sub_FE00C4                                          ; FE2025  1e 9c e0
+	calr Queue2C00_DrainPassB_SaveRegs3                                          ; FE2025  1e 9c e0
 	and (XIX),0xe7                                       ; FE2028  84 3c e7
 	ld a, 0x01:opc                                          ; FE202B  21 01
 	pop XIX                                              ; FE202D  5c
@@ -159783,7 +159783,7 @@ sub_FE2531:
 	push XIX                                             ; FE2532  3c
 	lda xix, (0x2725:16)                                ; FE2533  f1 25 27 34
 	calr SysPartMidi_ResetBlock1Default                                          ; FE2537  1e 75 09
-	calr sub_FE0060                                          ; FE253A  1e 23 db
+	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE253A  1e 23 db
 	calr sub_FE2699                                          ; FE253D  1e 59 01
 	calr sub_FE2FB9                                          ; FE2540  1e 76 0a
 	ld C,(XIX)                                           ; FE2543  84 23

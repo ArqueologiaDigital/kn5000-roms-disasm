@@ -252,11 +252,11 @@ for name, addr, link, length, push_at in (
           a(push_at, 3) == bytes([0x0B, length, 0x00]), a(push_at, 3).hex(" "))
     check("MIDI_Fg_%s: hands the buffer to prom_b 0xF41DD4" % name,
           a(push_at + 3, 4) == bytes([0x1D, 0xD4, 0x1D, 0xF4]))
-# and both call sub_FA5935 on the buffer first -- the two calr callers whose
+# and both call PanelLed_ToggleActivityLed_SaveRegs on the buffer first -- the two calr callers whose
 # absence prom_a_xref.py wrongly implied
 for site, nxt in ((0xFA5A93, 0xFA5A96), (0xFA5AC6, 0xFA5AC9)):
     d = int.from_bytes(a(site + 1, 2), "little")
-    check("sub_FA5935: `calr` at 0x%06X resolves to it" % site,
+    check("PanelLed_ToggleActivityLed_SaveRegs: `calr` at 0x%06X resolves to it" % site,
           a(site, 1) == b"\x1e" and (nxt + d - 0x10000) == 0xFA5935,
           "target 0x%06X" % (nxt + d - 0x10000))
 
@@ -292,7 +292,7 @@ for label in ("MIDI_RX_DataByte", "MIDI_StatusDispatch_Table", "MIDI_RX_Drop",
               "MIDI_Fg_RealTime", "MIDI_Fg_DataByte", "MIDI_Fg_LengthTable",
               "MIDI_Fg_Emit2", "MIDI_Fg_Await", "MIDI_Fg_System",
               "MIDI_Fg_Deliver2", "MIDI_Fg_StashFirstData",
-              "MIDI_Fg_Deliver3", "sub_FA5935"):
+              "MIDI_Fg_Deliver3", "PanelLed_ToggleActivityLed_SaveRegs"):
     check("source defines %s" % label,
           re.search(r"^%s:" % label, src, re.M) is not None)
 
