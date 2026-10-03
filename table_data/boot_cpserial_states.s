@@ -988,8 +988,11 @@ AudioMix_Init:
 	ld	bc, 3:i3
 	calr	AudioMix_WriteChannelGroup
 	pop	xwa
+	; The loop below sets W := A and writes XWA (32 bits) per channel: the mode register number
+	; twice, then the constant upper half 0x0101; A starts at 0x1F and steps by 0x20.
+.equ AudioMix_ChannelModeInitWord, 0x0101001f
 	ld	xbc, 0x150000		; peripheral base (subcpu twin: 0x130000)
-	ld	xwa, 0x101001f		; A = first reg 0x1f, W = data 0x01
+	ld	xwa, AudioMix_ChannelModeInitWord
 	ld	d, 4:opc
 AudioMix_Init__mode_loop:
 	ld	w, a

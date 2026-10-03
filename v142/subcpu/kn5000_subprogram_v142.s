@@ -488,8 +488,11 @@ DSP_Init_Channels:	; 01FC95h
 	ld bc, 3:i3	; Channel 3
 	calr DSP_Write_Channel
 	pop xwa
+	; The loop below sets W := A and writes XWA (32 bits) per channel: the mode register number
+	; twice, then the constant upper half 0x0101; A starts at 0x1F and steps by 0x20.
+.equ DSP_ChannelModeInitWord, 0x0101001f
 	ld xbc, 0x130000	; DSP register base
-	ld xwa, 0x101001F	; Initial channel config
+	ld xwa, DSP_ChannelModeInitWord
 	ld d, 0x4:opc	; 4 channels
 
 DSP_Init_Channels_Loop:

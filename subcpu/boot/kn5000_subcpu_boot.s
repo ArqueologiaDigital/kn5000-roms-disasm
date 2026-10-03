@@ -881,8 +881,11 @@ INIT_TONE_GEN:
 	pop xwa
 
 	; Initialize tone generator registers
+	; The loop below sets W := A and writes XWA (32 bits) per channel: the mode register number
+	; twice, then the constant upper half 0x0101; A starts at 0x1F and steps by 0x20.
+.equ ToneGen_ChannelModeInitWord, 0x0101001f
 	ld xbc, 0x130000
-	ld xwa, 0x101001F
+	ld xwa, ToneGen_ChannelModeInitWord
 	ld d, 0x4:opc	; TMP94C241 encoding (24 04)
 INIT_TONE_GEN__init_loop:
 	ld w, a
