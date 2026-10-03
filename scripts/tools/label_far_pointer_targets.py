@@ -47,7 +47,7 @@ COL0 = re.compile(r'^([A-Za-z_][\w.$]*):')
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tree", required=True, choices=("v10", "v9", "v7", "hdae5000"))
+    ap.add_argument("--tree", required=True, choices=("v10", "v9", "v7", "hdae5000", "prom_a", "prom_b"))
     ap.add_argument("report")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
@@ -68,8 +68,9 @@ def main():
             cache[path] = open(os.path.join(REPO, path), "rb").read().decode("latin-1").split("\n")
         for l in reversed(cache[path][:line]):
             m = COL0.match(l)
-            if m and not fp.STRUCT.search(m.group(1)) and not m.group(1).startswith("__"):
-                return m.group(1)
+            if m and not m.group(1).startswith("__") and (not fp.STRUCT.search(m.group(1)) or
+                                                          re.match(r'^sub_[0-9A-F]{6}$', m.group(1))):
+                return m.group(1)               # WSA1: sub_<ADDR> IS the routine's name
         return None
     for x in sorted(rows, key=lambda x: (x["file"], x["line"])):
         v = int(x["value"], 16)
