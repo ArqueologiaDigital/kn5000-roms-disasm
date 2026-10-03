@@ -40129,7 +40129,6 @@ sub_F95AD1:   ; entry: screen button-handler table
 	ld C,(XIX)                                           ; F95B00  84 23
 	extz BC                                              ; F95B02  d9 12
 	sll bc, 0x0c                                         ; F95B04  d9 ee 0c
-sub_F95AD1__F95B07:
 	extz XBC                                             ; F95B07  e9 12
 	ld (xiz-4), xbc                                      ; F95B09  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95B0C  e1 46 28 20
@@ -40197,7 +40196,6 @@ sub_F95B77:   ; entry: screen button-handler table
 	ld xwa, (0x2846:16)                                 ; F95BB2  e1 46 28 20
 	and XWA,0x00ffff0f                                   ; F95BB6  e8 cc 0f ff ff 00
 	or XBC,XWA                                           ; F95BBC  e8 e1
-sub_F95B77__F95BBE:
 	ld (0x2846:16), xbc                                 ; F95BBE  f1 46 28 61
 	calr sub_F95C2D                                            ; F95BC2  1e 68 00
 	pop XIX                                              ; F95BC5  5c
@@ -40231,7 +40229,6 @@ sub_F95BCA:   ; entry: screen button-handler table
 	calr sub_F95C2D                                            ; F95C0C  1e 1e 00
 	pop XIX                                              ; F95C0F  5c
 	popw hl                                              ; F95C10  4b
-sub_F95BCA__F95C11:
 	unlk XIZ                                             ; F95C11  ee 0d
 	ret                                                  ; F95C13  0e
 T_F4013C_Nop:
@@ -40272,7 +40269,6 @@ sub_F95C2D__F95C60:
 	normal                                               ; F95C60  01
 	normal                                               ; F95C61  01
 	sub XBC,(XWA)                                        ; F95C62  a0 a1
-sub_F95C2D__F95C64:
 	ld XBC,0xff060271                                    ; F95C64  41 71 02 06 ff
 	nop                                                  ; F95C69  00
 	swi 7                                                ; F95C6A  ff
@@ -40417,8 +40413,14 @@ ScreenObjF40130_ButtonHandlers:
 ;   words 27..58  = the second table, every value + 0xED (check K3).
 ; Its default, 0xF95D19, lies INSIDE ScreenObjF40130_ButtonHandlers -- data
 ;          in this image -- and no address in this span is named in either
-;          CPU-1 image (check K5): nothing reads it.  Values stay numeric on
-;          purpose: they are the other build's addresses.
+;          CPU-1 image (check K5): nothing reads it.  They are the other
+;          build's addresses, so words 27..58 are written as the LIVE target
+;          plus 0xED (`sub_F95A1A + 0xed` ...): all 32 land exactly on a label
+;          at value - 0xED (scripts/tools/respell_stale_table.py, 2026-10-03),
+;          which also retired four labels an earlier pass had put mid-routine
+;          to spell them as this image's addresses (sub_F95AD1__F95B07 ...).
+;          Words 0..26 keep their spellings: at value - 0xED only the default
+;          and one handler resolve, three handler values do not.
 ; ★ This answers the old header's closing question about the third table
 ;          and the stray byte; that line is replaced, the rest of the old
 ;          header follows verbatim.
@@ -40483,38 +40485,38 @@ ScreenButtonHandlers_StaleCopy:
 	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DF6  [24]
 	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DFA  [25]
 	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DFE  [26]
-	.long sub_F95AD1__F95B07                                 ; F95E02  [27]
-	.long 0x00f95b67                                 ; F95E06  [28]
-	.long sub_F95B77__F95BBE                                 ; F95E0A  [29]
-	.long sub_F95BCA__F95C11                                 ; F95E0E  [30]
-	.long sub_F95C2D__F95C64                                 ; F95E12  [31]
-	.long ScreenButtonHandlers_SineWaveCheckMode+34                                 ; F95E16  [32]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E1A  [33]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E1E  [34]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E22  [35]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E26  [36]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E2A  [37]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E2E  [38]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E32  [39]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E36  [40]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E3A  [41]
-	.long ScreenButtonHandlers_SineWaveCheckMode+109                                 ; F95E3E  [42]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E42  [43]
-	.long sub_F95AD1__F95B07                                 ; F95E46  [44]
-	.long 0x00f95b67                                 ; F95E4A  [45]
-	.long sub_F95B77__F95BBE                                 ; F95E4E  [46]
-	.long sub_F95BCA__F95C11                                 ; F95E52  [47]
-	.long sub_F95C2D__F95C64                                 ; F95E56  [48]
-	.long ScreenButtonHandlers_SineWaveCheckMode+34                                 ; F95E5A  [49]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E5E  [50]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E62  [51]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E66  [52]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E6A  [53]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E6E  [54]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E72  [55]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E76  [56]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E7A  [57]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E7E  [58]
+	.long sub_F95A1A + 0xed                                 ; F95E02  [27]
+	.long sub_F95A7A + 0xed                                 ; F95E06  [28]
+	.long sub_F95AD1 + 0xed                                 ; F95E0A  [29]
+	.long sub_F95B24 + 0xed                                 ; F95E0E  [30]
+	.long sub_F95B77 + 0xed                                 ; F95E12  [31]
+	.long sub_F95BCA + 0xed                                 ; F95E16  [32]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E1A  [33]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E1E  [34]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E22  [35]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E26  [36]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E2A  [37]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E2E  [38]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E32  [39]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E36  [40]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E3A  [41]
+	.long sub_F95C15 + 0xed                                 ; F95E3E  [42]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E42  [43]
+	.long sub_F95A1A + 0xed                                 ; F95E46  [44]
+	.long sub_F95A7A + 0xed                                 ; F95E4A  [45]
+	.long sub_F95AD1 + 0xed                                 ; F95E4E  [46]
+	.long sub_F95B24 + 0xed                                 ; F95E52  [47]
+	.long sub_F95B77 + 0xed                                 ; F95E56  [48]
+	.long sub_F95BCA + 0xed                                 ; F95E5A  [49]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E5E  [50]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E62  [51]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E66  [52]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E6A  [53]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E6E  [54]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E72  [55]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E76  [56]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E7A  [57]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                                 ; F95E7E  [58]
 	ret                                                  ; F95E82  0e
 
 ; 0xF95E83-0xF96000 -- 382 bytes of 0x0E (RET), module padding.
@@ -44533,51 +44535,55 @@ MessageScreenStale_ListPairsB:
 ; ---------------------------------------------------------------------
 ; MessageScreenStale_ArgHandlers -- 32 LE32, the older build's
 ;          MessageScreen_ArgHandlers: every value is the live one - 0x400
-;          (check T2).  Left numeric on purpose: 0xF98D20 and 0xF98C85 are
-;          not instruction starts in THIS image (check T4).
+;          (check T2).  0xF98D20 and 0xF98C85 are not instruction starts in
+;          THIS image (check T4), so each entry is written as the LIVE target
+;          minus 0x400 -- `MessageScreen_ArgIgnore - 0x400` -- the relation T2
+;          establishes, not a reference into this image's code
+;          (scripts/tools/respell_stale_table.py, 2026-10-03).
 ; ---------------------------------------------------------------------
 MessageScreenStale_ArgHandlers:
-	.long 0x00f98d20   ; F98F31  [ 83] prom_a local
-	.long 0x00f98d20   ; F98F35  [ 84] prom_a local
-	.long 0x00f98d20   ; F98F39  [ 85] prom_a local
-	.long 0x00f98d20   ; F98F3D  [ 86] prom_a local
-	.long 0x00f98d20   ; F98F41  [ 87] prom_a local
-	.long 0x00f98d20   ; F98F45  [ 88] prom_a local
-	.long 0x00f98d20   ; F98F49  [ 89] prom_a local
-	.long 0x00f98d20   ; F98F4D  [ 90] prom_a local
-	.long 0x00f98d20   ; F98F51  [ 91] prom_a local
-	.long 0x00f98d20   ; F98F55  [ 92] prom_a local
-	.long 0x00f98d20   ; F98F59  [ 93] prom_a local
-	.long 0x00f98d20   ; F98F5D  [ 94] prom_a local
-	.long 0x00f98d20   ; F98F61  [ 95] prom_a local
-	.long 0x00f98d20   ; F98F65  [ 96] prom_a local
-	.long 0x00f98d20   ; F98F69  [ 97] prom_a local
-	.long 0x00f98c85   ; F98F6D  [ 98] prom_a local
-	.long 0x00f98d20   ; F98F71  [ 99] prom_a local
-	.long 0x00f98d20   ; F98F75  [100] prom_a local
-	.long 0x00f98d20   ; F98F79  [101] prom_a local
-	.long 0x00f98d20   ; F98F7D  [102] prom_a local
-	.long 0x00f98d20   ; F98F81  [103] prom_a local
-	.long 0x00f98d20   ; F98F85  [104] prom_a local
-	.long 0x00f98d20   ; F98F89  [105] prom_a local
-	.long 0x00f98d20   ; F98F8D  [106] prom_a local
-	.long 0x00f98d20   ; F98F91  [107] prom_a local
-	.long 0x00f98d20   ; F98F95  [108] prom_a local
-	.long 0x00f98d20   ; F98F99  [109] prom_a local
-	.long 0x00f98d20   ; F98F9D  [110] prom_a local
-	.long 0x00f98d20   ; F98FA1  [111] prom_a local
-	.long 0x00f98d20   ; F98FA5  [112] prom_a local
-	.long 0x00f98d20   ; F98FA9  [113] prom_a local
-	.long 0x00f98d20   ; F98FAD  [114] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F31  [ 83] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F35  [ 84] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F39  [ 85] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F3D  [ 86] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F41  [ 87] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F45  [ 88] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F49  [ 89] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F4D  [ 90] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F51  [ 91] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F55  [ 92] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F59  [ 93] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F5D  [ 94] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F61  [ 95] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F65  [ 96] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F69  [ 97] prom_a local
+	.long sub_F99085 - 0x400   ; F98F6D  [ 98] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F71  [ 99] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F75  [100] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F79  [101] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F7D  [102] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F81  [103] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F85  [104] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F89  [105] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F8D  [106] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F91  [107] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F95  [108] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F99  [109] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98F9D  [110] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98FA1  [111] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98FA5  [112] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98FA9  [113] prom_a local
+	.long MessageScreen_ArgIgnore - 0x400   ; F98FAD  [114] prom_a local
 ; ---------------------------------------------------------------------
 ; MessageScreenStale_PairTableByLanguage -- 3 x 0xF98D21, the older build's
-;          pair-table base (live 0xF99121 - 0x400; check T3).  Numeric for
-;          the same reason: 0xF98D21 is mid-instruction here.
+;          pair-table base (live 0xF99121 - 0x400; check T3).  0xF98D21 is
+;          mid-instruction here, so the entries read
+;          `MessageScreen_ListPairs - 0x400`, the relation T3 establishes.
 ; ---------------------------------------------------------------------
 MessageScreenStale_PairTableByLanguage:
-	.long 0x00f98d21   ; F98FB1  [115] prom_a local
-	.long 0x00f98d21   ; F98FB5  [116] prom_a local
-	.long 0x00f98d21   ; F98FB9  [117] prom_a local
+	.long MessageScreen_ListPairs - 0x400   ; F98FB1  [115] prom_a local
+	.long MessageScreen_ListPairs - 0x400   ; F98FB5  [116] prom_a local
+	.long MessageScreen_ListPairs - 0x400   ; F98FB9  [117] prom_a local
 ; ---------------------------------------------------------------------
 ; MessageScreenStale_ExtraListPairs -- (start,end) words the live layout does
 ;          not have, naming prom_b's German-language lists; the last word
