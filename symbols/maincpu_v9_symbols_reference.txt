@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,594
-#   semantic names ........... 50,736 (98.3%)
+#   symbols .................. 51,595
+#   semantic names ........... 50,737 (98.3%)
 #   positional names ......... 858
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -660,6 +660,7 @@ Scoop_EventLoop_36Entry_Branch3_Data_2 00E0CD52
 Scoop_EventLoop_12Entry_Alt_Data 00E0CD5A
 Scoop_ApFunctionTable_126 00E0CD8A
 Scoop_ApFunctionTable_426 00E0CD8E
+Scoop_ApFunctionTable_426_EndName 00E0CD92
 Scoop_ClassTable_166 00E0CD94
 Scoop_ClassCount_166 00E0CDAC
 Scoop_ResEventTable_1C6 00E0CDAE

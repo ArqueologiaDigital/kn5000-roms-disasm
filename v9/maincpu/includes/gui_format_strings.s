@@ -1,27 +1,46 @@
 ; GUI_FormatStrings: GUI format string data
 ; Total: 704 bytes
 ; Source: e0cd1e_e0cfdd.bin
-; Format: Raw data (structure not yet fully decoded)
+; Format: a 4-byte CELL GRID at the head (0xE0CD1E-0xE0CD92, 29 cells:
+;   13 pointers, 9 inline format strings, 4 zero cells and 3 bounds words) followed by
+;   34-byte NAKA records, which do not fit a 4-byte grid and are left as
+;   `.byte`.  The grid's PHASE is measured, not assumed: over the whole
+;   704-byte region phase 0 explains 50.0% of cells against 19.4/32.6/17.1%
+;   for phases 1/2/3.  See scripts/converters/gui_format_strings_cells.py
+;   (v10).  That script counted the bounds word 0x00EF013F as a 16th pointer;
+;   it is the pair 319, 239 after a zero pair, the 320x240 screen's corners,
+;   now `.short 0, 0, 319, 239`.  v9 and v7 were given the same form by
+;   scripts/tools/sync_gui_format_strings_head.py (2026-10-03).
 
-	.byte	0x00, 0x00, 0x00, 0x00, 0x3f, 0x01, 0xef, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d:	.byte	0x25, 0x31, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d:	.byte	0x25, 0x32, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d:	.byte	0x25, 0x33, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2:	.byte	0x25, 0x32, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3:	.byte	0x25, 0x33, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d:	.byte	0x25, 0x34, 0x64, 0x00
+	.short	0, 0, 319, 239	; copied as 4 words by Scoop_EventLoop_12Entry_Alt_Data_Target10: the 320x240 screen's corners
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d:	.asciz "%1d"
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d:	.asciz "%2d"
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d:	.asciz "%3d"
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2:	.asciz "%2d"
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3:	.asciz "%3d"
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d:	.asciz "%4d"
 Scoop_EventLoop_36Entry_Branch3_Data:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x3f, 0x01, 0xef, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2:	.byte	0x25, 0x31, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3:	.byte	0x25, 0x32, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2:	.byte	0x25, 0x33, 0x64, 0x00
-Scoop_EventLoop_36Entry_Branch3_Data_2:	.byte	0x00, 0x00, 0x00, 0x00, 0x3f, 0x01, 0xef, 0x00
-Scoop_EventLoop_12Entry_Alt_Data:	.byte	0x84, 0x21, 0xf0, 0x00
-	.byte 0xd6, 0x20, 0xf0, 0x00, 0x46, 0x1a, 0xf0, 0x00, 0xcb, 0x24, 0xfb, 0x00, 0x69, 0x1b, 0xf0, 0x00
-	.byte 0x6a, 0x22, 0xf0, 0x00, 0xcf, 0x23, 0xf0, 0x00, 0xd1, 0x27, 0xf0, 0x00, 0xd7, 0x1b, 0xf0, 0x00
-	.byte	0x03, 0x25, 0xf0, 0x00, 0x20, 0x27, 0xf0, 0x00, 0xd2, 0x25, 0xf0, 0x00
-Scoop_ApFunctionTable_126:	.byte	0x00, 0x00, 0x00, 0x00
-Scoop_ApFunctionTable_426:	.byte	0x92, 0xcd, 0xe0, 0x00, 0x00, 0xff
+	.short	0, 0, 319, 239	; copied as 4 words by Scoop_EventLoop_12Entry_Alt_Data_Target10: the 320x240 screen's corners
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2:	.asciz "%1d"
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3:	.asciz "%2d"
+Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2:	.asciz "%3d"
+Scoop_EventLoop_36Entry_Branch3_Data_2:	.short	0, 0, 319, 239	; copied as 4 words by Scoop_EventLoop_12Entry_Alt_Data_Target10: the 320x240 screen's corners
+Scoop_EventLoop_12Entry_Alt_Data:	.long Scoop_EnvProcessor_Data
+	.long Scoop_Dispatch_Nop
+	.long Scoop_EnvelopeCalc_Data
+	.long ColorBlit_WithPaletteSave
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target4
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target5
+	.long Scoop_EventLoop_36Entry
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target7
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target8
+	.long Scoop_EventLoop_36Entry_Data
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target10
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target11
+Scoop_ApFunctionTable_126:	.long 0x00000000
+Scoop_ApFunctionTable_426:	.long Scoop_ApFunctionTable_426_EndName
+Scoop_ApFunctionTable_426_EndName:
+	.byte	0x00, 0xff
 Scoop_ClassTable_166:	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 Scoop_ClassCount_166:	.byte	0x00, 0x00

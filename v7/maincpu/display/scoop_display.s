@@ -18822,6 +18822,7 @@ Scoop_EventLoop_12Entry_Join:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target5:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
