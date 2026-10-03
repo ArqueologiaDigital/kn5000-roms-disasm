@@ -38795,7 +38795,7 @@ DisplayListPtrs_F9408E:
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F940BE  [ 12]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F940C2  [ 13]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F940C6  [ 14]
-	.long sub_F94261__F94262                                 ; F940CA  [ 15]
+	.long ExitKey_PowerOnSplash                                 ; F940CA  [ 15]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F940CE  [ 16]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F940D2  [ 17]
 	.long DisplayListPtrs_F914FB_Nop8                                 ; F940D6  [ 18]
@@ -38991,7 +38991,9 @@ LCD_DrawAllInitialSettingMessage__F9422C:
 	ret                                                  ; F94260  0e
 ScreenLeave_PowerOnSplash_Nop:
 	ret                                                  ; F94261  0e
-sub_F94261__F94262:
+; ExitKey_PowerOnSplash: slot 15 (EXIT) of DisplayListPtrs_F9408E, the POWER ON SPLASH button table; UI_Request = 0x0201 when
+;   (0x7F02) & 0xF0 is 0, else 0x0202.
+ExitKey_PowerOnSplash:
 	ld a, (0x7f02:16)                                   ; F94262  c1 02 7f 21
 	and A,0xf0                                           ; F94266  c9 cc f0
 	cp a, 0x00:i3                                          ; F94269  c9 d8
