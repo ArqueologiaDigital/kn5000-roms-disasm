@@ -14,7 +14,7 @@ field, but located per-field editors for only six of them, and said so:
      not find."
 
 The reason it missed them is a shape, not an absence.  The six it found write
-the tone message INLINE (`sub_FD6CE1` then `sub_FD616A`/`sub_FD6704`).  The
+the tone message INLINE (`sub_FD6CE1` then `ToneMsg_SendParam`/`ToneMsg8D_SendParam`).  The
 others hand the same work to a SHARED COMMIT ROUTINE, `sub_FD7435`, which takes
 the RAM index and the parameter number as ARGUMENTS -- so a census keyed on the
 inline shape sees nothing.  And no editor is reached by a `call`: every one of
@@ -62,8 +62,8 @@ WHAT IT ESTABLISHES, AND HOW
    script's answer for a field's limits and step granularity.
 
 4. THE COMMIT.  `sub_FD7435(screen, ramIndex, layer, param, D)` calls
-   `sub_FD6CE1(D)`, and on a change sends `sub_FD616A(layer, param, &D[3],
-   mask<<shift)` (melodic) or `sub_FD6704(...)` (drum kit), stores D[3] at
+   `sub_FD6CE1(D)`, and on a change sends `ToneMsg_SendParam(layer, param, &D[3],
+   mask<<shift)` (melodic) or `ToneMsg8D_SendParam(...)` (drum kit), stores D[3] at
    `((u8 *)0x27A6)[ramIndex]` and repaints `screen`.  The screen code it is
    handed is a LITERAL in the editor, which is what binds an editor to a page
    -- no adjacency is used anywhere below.

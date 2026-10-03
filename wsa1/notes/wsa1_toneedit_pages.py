@@ -256,7 +256,7 @@ SELPUSH = bytes.fromhex("9efa21d91229")   # ld BC,(XIZ-6) / extz BC / pushw BC
 
 
 def _is_send(a, o):
-    """`call sub_FD61CF`, or the `lda XIY,<ret> / push XIY / jp (XIX)` trampoline
+    """`call ToneMsg80_SendParam`, or the `lda XIY,<ret> / push XIY / jp (XIX)` trampoline
     the compiler emits when the callee address is already in XIX."""
     return a.slice(o, 4) == b"\x1d\xcf\x61\xfd" or a[o] == 0xF2
 
@@ -348,7 +348,7 @@ def decode_editor(a, at):
 def cmd_prom_a(a):
     print("=== 5. prom_a: the ordered read-back run of each page's ENTER routine")
     print("    Each request is `pushw <tag> / pushw <count> / pushw <param> /")
-    print("    pushw <selector> / call sub_FD61CF`.  The reply handler stores reply")
+    print("    pushw <selector> / call ToneMsg80_SendParam`.  The reply handler stores reply")
     print("    n at ((u8*)0x27A6)[n], so request order IS the RAM index.")
     print()
     order = {}
@@ -393,7 +393,7 @@ def cmd_editors(a, order):
 def senders(a):
     """The tone-message BUILDERS, derived from the ROM: every `calr` (0x1E,
     3 bytes, PC-relative from the next instruction) whose target is
-    sub_FD6132 -- the routine that posts a built message -- then the
+    ToneMsg_Send -- the routine that posts a built message -- then the
     `link XIZ,imm16` (0xEE 0x0C) that opens the routine containing it."""
     POST = 0xFD6132
     out = []
@@ -436,7 +436,7 @@ def cmd_senders(a):
     print()
     print("=== 7. is p15 (wave-select byte +0x0F) an editor parameter AT ALL?")
     print("    prom_a's tone-message builders, derived from the ROM as the")
-    print("    routines containing a `calr sub_FD6132`: %d of them," % len(S))
+    print("    routines containing a `calr ToneMsg_Send`: %d of them," % len(S))
     print("    %s" % " ".join("0x%06X" % x for x in S))
     for imm, what in ((0x0F, "p15"), (0x0D, "p13 -- the positive control"),
                       (0x13, "p19 -- the positive control")):

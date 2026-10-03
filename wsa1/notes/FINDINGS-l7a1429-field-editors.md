@@ -59,7 +59,7 @@ sentinel -- 30 of 30 sentinels present.  Seven consecutive tables,
 `0xFCF974 + 0x48*k` for k = 0..6, belong to the tone editor's MODELING screens.
 
 **And most editors do not write the tone message themselves.**  The six the old
-pass found expand `ToneEdit_ApplyStep` + `sub_FD616A`/`sub_FD6704` inline.
+pass found expand `ToneEdit_ApplyStep` + `ToneMsg_SendParam`/`ToneMsg8D_SendParam` inline.
 Eighteen of the others hand the identical work to **one shared routine**,
 `ToneEdit_CommitField` (`0xFD7435`), which takes the RAM index and the
 parameter number as ARGUMENTS.  Three more use a second shared routine,
@@ -150,8 +150,8 @@ trace the panel scan that produces the event code.
 ```
     if (!ToneEdit_ApplyStep(D)) return 0;
     m = U8_ShiftLeft(D[6], D[7]);                    // mask << shift
-    (0x27F5) ? sub_FD6704(layer, param, &D[3], m)  // drum kit
-             : sub_FD616A(layer, param, &D[3], m); // melodic
+    (0x27F5) ? ToneMsg8D_SendParam(layer, param, &D[3], m)  // drum kit
+             : ToneMsg_SendParam(layer, param, &D[3], m); // melodic
     Arr27A6_Set(ramIndex, D[3]);
     T_Dispatch_Code80(screen, ramIndex);
     return 1;

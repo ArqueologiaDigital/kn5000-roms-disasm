@@ -124625,7 +124625,7 @@ sub_FCFDA7:
 	cp a, 0x00:i3                                          ; FCFE33  c9 d8
 	jr nz, .LFCFE3F                                      ; FCFE35  6e 08
 	pushw 0x10                                           ; FCFE37  0b 10 00
-	call sub_FD6447                                      ; FCFE3A  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FCFE3A  1d 47 64 fd
 	popw bc                                              ; FCFE3E  49
 .LFCFE3F:
 	unlk XIZ                                             ; FCFE3F  ee 0d
@@ -124729,12 +124729,12 @@ sub_FCFEA1:
 	ld bc, (xiz-4)                                       ; FCFF1E  9e fc 21
 	extz BC                                              ; FCFF21  d9 12
 	pushw bc                                             ; FCFF23  29
-	call sub_FD655D                                      ; FCFF24  1d 5d 65 fd
+	call ToneMsg88_Id15                                      ; FCFF24  1d 5d 65 fd
 	pushw 0x10                                           ; FCFF28  0b 10 00
 	ld bc, (xiz-4)                                       ; FCFF2B  9e fc 21
 	extz BC                                              ; FCFF2E  d9 12
 	pushw bc                                             ; FCFF30  29
-	call sub_FD62B4                                      ; FCFF31  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FCFF31  1d b4 62 fd
 	pushw 0x02                                           ; FCFF35  0b 02 00
 	call PanelDial_ActAsButton                                      ; FCFF38  1d 01 7c fd
 	add XSP,0x00000012                                   ; FCFF3C  ef c8 12 00 00 00
@@ -124785,12 +124785,12 @@ sub_FCFF46:
 	ld bc, (xiz-4)                                       ; FCFFA5  9e fc 21
 	extz BC                                              ; FCFFA8  d9 12
 	pushw bc                                             ; FCFFAA  29
-	call sub_FD655D                                      ; FCFFAB  1d 5d 65 fd
+	call ToneMsg88_Id15                                      ; FCFFAB  1d 5d 65 fd
 	pushw 0x10                                           ; FCFFAF  0b 10 00
 	ld bc, (xiz-4)                                       ; FCFFB2  9e fc 21
 	extz BC                                              ; FCFFB5  d9 12
 	pushw bc                                             ; FCFFB7  29
-	call sub_FD62B4                                      ; FCFFB8  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FCFFB8  1d b4 62 fd
 	pushw 0x03                                           ; FCFFBC  0b 03 00
 	call PanelDial_ActAsButton                                      ; FCFFBF  1d 01 7c fd
 	inc 8,XSP                                            ; FCFFC3  ef 60
@@ -125063,7 +125063,7 @@ sub_FD017D:
 	extz WA                                              ; FD0230  d8 12
 	pushw wa                                             ; FD0232  28
 	pushw 0x00                                           ; FD0233  0b 00 00
-	call sub_FD6704                                      ; FD0236  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD0236  1d 04 67 fd
 	ld bc, (xiz-4)                                       ; FD023A  9e fc 21
 	extz BC                                              ; FD023D  d9 12
 	pushw bc                                             ; FD023F  29
@@ -125161,7 +125161,7 @@ sub_FD02CB:
 	jr nc, .LFD0370                                      ; FD0320  6f 4e
 	incw 0x01, (xiz-4)                                   ; FD0322  9e fc 61
 	m_push MWD+r6, 0xfc                                  ; FD0325  9e fc 04
-	call sub_FD66A6                                      ; FD0328  1d a6 66 fd
+	call ToneMsg88_Id14                                      ; FD0328  1d a6 66 fd
 	jr .LFD035C                                          ; FD032C  68 2e
 .LFD032E:
 	call sub_FDA194                                      ; FD032E  1d 94 a1 fd
@@ -125229,7 +125229,7 @@ sub_FD0374:
 	jr z, .LFD0405                                       ; FD03B5  66 4e
 	decm 0x01, (xiz-4)                                   ; FD03B7  9e fc 69
 	m_push MWD+r6, 0xfc                                  ; FD03BA  9e fc 04
-	call sub_FD66A6                                      ; FD03BD  1d a6 66 fd
+	call ToneMsg88_Id14                                      ; FD03BD  1d a6 66 fd
 	jr .LFD03F1                                          ; FD03C1  68 2e
 .LFD03C3:
 	call sub_FDA194                                      ; FD03C3  1d 94 a1 fd
@@ -125430,7 +125430,7 @@ sub_FD053D:
 	cp a, 0x00:i3                                          ; FD057F  c9 d8
 	jr nz, .LFD058B                                      ; FD0581  6e 08
 	pushw 0x10                                           ; FD0583  0b 10 00
-	call sub_FD6447                                      ; FD0586  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD0586  1d 47 64 fd
 	popw bc                                              ; FD058A  49
 .LFD058B:
 	unlk XIZ                                             ; FD058B  ee 0d
@@ -125480,7 +125480,7 @@ sub_FD058E:
 	cp a, 0x00:i3                                          ; FD05F3  c9 d8
 	jr nz, .LFD05FF                                      ; FD05F5  6e 08
 	pushw 0x10                                           ; FD05F7  0b 10 00
-	call sub_FD6447                                      ; FD05FA  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD05FA  1d 47 64 fd
 	popw bc                                              ; FD05FE  49
 .LFD05FF:
 	unlk XIZ                                             ; FD05FF  ee 0d
@@ -125731,11 +125731,11 @@ sub_FD0767:
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD07FC  8e fe 3f 00
 	jr nz, .LFD080B                                      ; FD0800  6e 09
 	pushw 0x00                                           ; FD0802  0b 00 00
-	call sub_FD616A                                      ; FD0805  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD0805  1d 6a 61 fd
 	jr .LFD0812                                          ; FD0809  68 07
 .LFD080B:
 	pushw 0x03                                           ; FD080B  0b 03 00
-	call sub_FD6704                                      ; FD080E  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD080E  1d 04 67 fd
 .LFD0812:
 	inc 8,XSP                                            ; FD0812  ef 60
 	inc 2,XSP                                            ; FD0814  ef 62
@@ -126071,7 +126071,7 @@ sub_FD0AA5:
 	cp a, 0x00:i3                                          ; FD0AE7  c9 d8
 	jr nz, .LFD0AF3                                      ; FD0AE9  6e 08
 	pushw 0x10                                           ; FD0AEB  0b 10 00
-	call sub_FD6447                                      ; FD0AEE  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD0AEE  1d 47 64 fd
 	popw bc                                              ; FD0AF2  49
 .LFD0AF3:
 	unlk XIZ                                             ; FD0AF3  ee 0d
@@ -126106,7 +126106,7 @@ sub_FD0AF6:
 	cp a, 0x00:i3                                          ; FD0B38  c9 d8
 	jr nz, .LFD0B44                                      ; FD0B3A  6e 08
 	pushw 0x10                                           ; FD0B3C  0b 10 00
-	call sub_FD6447                                      ; FD0B3F  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD0B3F  1d 47 64 fd
 	popw bc                                              ; FD0B43  49
 .LFD0B44:
 	unlk XIZ                                             ; FD0B44  ee 0d
@@ -126145,7 +126145,7 @@ sub_FD0B47:
 	cp a, 0x00:i3                                          ; FD0B98  c9 d8
 	jr nz, .LFD0BA4                                      ; FD0B9A  6e 08
 	pushw 0x10                                           ; FD0B9C  0b 10 00
-	call sub_FD6447                                      ; FD0B9F  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD0B9F  1d 47 64 fd
 	popw bc                                              ; FD0BA3  49
 .LFD0BA4:
 	unlk XIZ                                             ; FD0BA4  ee 0d
@@ -126184,7 +126184,7 @@ sub_FD0BA7:
 	cp a, 0x00:i3                                          ; FD0BF8  c9 d8
 	jr nz, .LFD0C04                                      ; FD0BFA  6e 08
 	pushw 0x10                                           ; FD0BFC  0b 10 00
-	call sub_FD6447                                      ; FD0BFF  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD0BFF  1d 47 64 fd
 	popw bc                                              ; FD0C03  49
 .LFD0C04:
 	unlk XIZ                                             ; FD0C04  ee 0d
@@ -126219,7 +126219,7 @@ sub_FD0C07:
 	cp a, 0x00:i3                                          ; FD0C49  c9 d8
 	jr nz, .LFD0C55                                      ; FD0C4B  6e 08
 	pushw 0x10                                           ; FD0C4D  0b 10 00
-	call sub_FD6447                                      ; FD0C50  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD0C50  1d 47 64 fd
 	popw bc                                              ; FD0C54  49
 .LFD0C55:
 	unlk XIZ                                             ; FD0C55  ee 0d
@@ -126273,12 +126273,12 @@ sub_FD0C58:
 	ld bc, (xiz-2)                                       ; FD0CC5  9e fe 21
 	extz BC                                              ; FD0CC8  d9 12
 	pushw bc                                             ; FD0CCA  29
-	call sub_FD655D                                      ; FD0CCB  1d 5d 65 fd
+	call ToneMsg88_Id15                                      ; FD0CCB  1d 5d 65 fd
 	pushw 0x10                                           ; FD0CCF  0b 10 00
 	ld bc, (xiz-2)                                       ; FD0CD2  9e fe 21
 	extz BC                                              ; FD0CD5  d9 12
 	pushw bc                                             ; FD0CD7  29
-	call sub_FD62B4                                      ; FD0CD8  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FD0CD8  1d b4 62 fd
 	pushw 0x02                                           ; FD0CDC  0b 02 00
 	call PanelDial_ActAsButton                                      ; FD0CDF  1d 01 7c fd
 	add XSP,0x00000012                                   ; FD0CE3  ef c8 12 00 00 00
@@ -126323,12 +126323,12 @@ sub_FD0CED:
 	ld bc, (xiz-2)                                       ; FD0D3C  9e fe 21
 	extz BC                                              ; FD0D3F  d9 12
 	pushw bc                                             ; FD0D41  29
-	call sub_FD655D                                      ; FD0D42  1d 5d 65 fd
+	call ToneMsg88_Id15                                      ; FD0D42  1d 5d 65 fd
 	pushw 0x10                                           ; FD0D46  0b 10 00
 	ld bc, (xiz-2)                                       ; FD0D49  9e fe 21
 	extz BC                                              ; FD0D4C  d9 12
 	pushw bc                                             ; FD0D4E  29
-	call sub_FD62B4                                      ; FD0D4F  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FD0D4F  1d b4 62 fd
 	pushw 0x03                                           ; FD0D53  0b 03 00
 	call PanelDial_ActAsButton                                      ; FD0D56  1d 01 7c fd
 	inc 8,XSP                                            ; FD0D5A  ef 60
@@ -126754,7 +126754,7 @@ sub_FD1028:
 	ld wa, (xiz-4)                                       ; FD1101  9e fc 20
 	extz WA                                              ; FD1104  d8 12
 	pushw wa                                             ; FD1106  28
-	call sub_FD616A                                      ; FD1107  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD1107  1d 6a 61 fd
 	ld C,L                                               ; FD110B  cf 8b
 	extz BC                                              ; FD110D  d9 12
 	pushw bc                                             ; FD110F  29
@@ -126762,7 +126762,7 @@ sub_FD1028:
 	push XBC                                             ; FD1113  39
 	pushw 0x12                                           ; FD1114  0b 12 00
 	pushw 0x00                                           ; FD1117  0b 00 00
-	call sub_FD616A                                      ; FD111A  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD111A  1d 6a 61 fd
 	ld bc, (xiz-8)                                       ; FD111E  9e f8 21
 	extz BC                                              ; FD1121  d9 12
 	pushw bc                                             ; FD1123  29
@@ -126913,7 +126913,7 @@ sub_FD1221:
 	ld wa, (xiz-4)                                       ; FD127A  9e fc 20
 	extz WA                                              ; FD127D  d8 12
 	pushw wa                                             ; FD127F  28
-	call sub_FD616A                                      ; FD1280  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD1280  1d 6a 61 fd
 	ld bc, (xiz-4)                                       ; FD1284  9e fc 21
 	extz BC                                              ; FD1287  d9 12
 	pushw bc                                             ; FD1289  29
@@ -127086,7 +127086,7 @@ sub_FD13C1:
 	ld wa, (xiz-4)                                       ; FD140E  9e fc 20
 	extz WA                                              ; FD1411  d8 12
 	pushw wa                                             ; FD1413  28
-	call sub_FD616A                                      ; FD1414  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD1414  1d 6a 61 fd
 	pushw 0x02                                           ; FD1418  0b 02 00
 	pushw 0x84                                           ; FD141B  0b 84 00
 	call T_Dispatch_Code80                               ; FD141E  1d d4 1e f4
@@ -127155,7 +127155,7 @@ sub_FD1443:
 	ld wa, (xiz-6)                                       ; FD14B5  9e fa 20
 	extz WA                                              ; FD14B8  d8 12
 	pushw wa                                             ; FD14BA  28
-	call sub_FD616A                                      ; FD14BB  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD14BB  1d 6a 61 fd
 	pushw 0x01                                           ; FD14BF  0b 01 00
 	pushw 0x84                                           ; FD14C2  0b 84 00
 	call T_Dispatch_Code80                               ; FD14C5  1d d4 1e f4
@@ -127225,7 +127225,7 @@ sub_FD14EB:
 	ld wa, (xiz-6)                                       ; FD155D  9e fa 20
 	extz WA                                              ; FD1560  d8 12
 	pushw wa                                             ; FD1562  28
-	call sub_FD616A                                      ; FD1563  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD1563  1d 6a 61 fd
 	pushw 0x03                                           ; FD1567  0b 03 00
 	pushw 0x84                                           ; FD156A  0b 84 00
 	call T_Dispatch_Code80                               ; FD156D  1d d4 1e f4
@@ -127278,7 +127278,7 @@ sub_FD1593:
 	ld wa, (xiz-4)                                       ; FD15E0  9e fc 20
 	extz WA                                              ; FD15E3  d8 12
 	pushw wa                                             ; FD15E5  28
-	call sub_FD616A                                      ; FD15E6  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD15E6  1d 6a 61 fd
 	pushw 0x04                                           ; FD15EA  0b 04 00
 	pushw 0x84                                           ; FD15ED  0b 84 00
 	call T_Dispatch_Code80                               ; FD15F0  1d d4 1e f4
@@ -127857,7 +127857,7 @@ sub_FD1AA5:
 	ld bc, (xiz-4)                                       ; FD1B2A  9e fc 21
 	extz BC                                              ; FD1B2D  d9 12
 	pushw bc                                             ; FD1B2F  29
-	call sub_FD6316                                      ; FD1B30  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FD1B30  1d 16 63 fd
 	pushw 0x02                                           ; FD1B34  0b 02 00
 	call PanelDial_ActAsButton                                      ; FD1B37  1d 01 7c fd
 	add XSP,0x00000016                                   ; FD1B3B  ef c8 16 00 00 00
@@ -127915,7 +127915,7 @@ sub_FD1B45:
 	ld bc, (xiz-4)                                       ; FD1BB7  9e fc 21
 	extz BC                                              ; FD1BBA  d9 12
 	pushw bc                                             ; FD1BBC  29
-	call sub_FD6316                                      ; FD1BBD  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FD1BBD  1d 16 63 fd
 	pushw 0x03                                           ; FD1BC1  0b 03 00
 	call PanelDial_ActAsButton                                      ; FD1BC4  1d 01 7c fd
 	inc 8,XSP                                            ; FD1BC8  ef 60
@@ -128260,7 +128260,7 @@ sub_FD1C35:
 	ld wa, (xiz-18)                                      ; FD1ED1  9e ee 20
 	extz WA                                              ; FD1ED4  d8 12
 	pushw wa                                             ; FD1ED6  28
-	call sub_FD616A                                      ; FD1ED7  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD1ED7  1d 6a 61 fd
 	incm8 0x01, (xiz-14)                                 ; FD1EDB  8e f2 61
 	inc 8,XSP                                            ; FD1EDE  ef 60
 	inc 8,XSP                                            ; FD1EE0  ef 60
@@ -128287,7 +128287,7 @@ sub_FD1C35:
 	ld wa, (xiz-18)                                      ; FD1F0D  9e ee 20
 	extz WA                                              ; FD1F10  d8 12
 	pushw wa                                             ; FD1F12  28
-	call sub_FD6704                                      ; FD1F13  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD1F13  1d 04 67 fd
 	incm8 0x01, (xiz-14)                                 ; FD1F17  8e f2 61
 	inc 8,XSP                                            ; FD1F1A  ef 60
 	inc 8,XSP                                            ; FD1F1C  ef 60
@@ -128548,7 +128548,7 @@ sub_FD2014:
 	ld bc, (xiz-12)                                      ; FD2145  9e f4 21
 	extz BC                                              ; FD2148  d9 12
 	pushw bc                                             ; FD214A  29
-	call sub_FD64D1                                      ; FD214B  1d d1 64 fd
+	call ToneMsg80_Id15_Part0                                      ; FD214B  1d d1 64 fd
 	inc 8,XSP                                            ; FD214F  ef 60
 	inc 2,XSP                                            ; FD2151  ef 62
 	jrl .LFD24FE                                         ; FD2153  78 a8 03
@@ -128970,7 +128970,7 @@ sub_FD2512:
 .LFD2559:
 	call T_Dispatch_Code80                               ; FD2559  1d d4 1e f4
 	pushw 0x10                                           ; FD255D  0b 10 00
-	call sub_FD6447                                      ; FD2560  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD2560  1d 47 64 fd
 	inc 6,XSP                                            ; FD2564  ef 66
 	unlk XIZ                                             ; FD2566  ee 0d
 	ret                                                  ; FD2568  0e
@@ -128996,7 +128996,7 @@ sub_FD2569:
 	pushw bc                                             ; FD2597  29
 	call T_Dispatch_Code80                               ; FD2598  1d d4 1e f4
 	pushw 0x10                                           ; FD259C  0b 10 00
-	call sub_FD6447                                      ; FD259F  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD259F  1d 47 64 fd
 	add XSP,0x00000012                                   ; FD25A3  ef c8 12 00 00 00
 	unlk XIZ                                             ; FD25A9  ee 0d
 	ret                                                  ; FD25AB  0e
@@ -129014,7 +129014,7 @@ sub_FD25AC:
 	pushw 0x9d                                           ; FD25C9  0b 9d 00
 	call T_Dispatch_Code80                               ; FD25CC  1d d4 1e f4
 	pushw 0x08                                           ; FD25D0  0b 08 00
-	call sub_FD6447                                      ; FD25D3  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD25D3  1d 47 64 fd
 	add XSP,0x00000012                                   ; FD25D7  ef c8 12 00 00 00
 	unlk XIZ                                             ; FD25DD  ee 0d
 	ret                                                  ; FD25DF  0e
@@ -129215,7 +129215,7 @@ sub_FD2751:
 	cp a, 0x00:i3                                          ; FD2793  c9 d8
 	jr nz, .LFD279F                                      ; FD2795  6e 08
 	pushw 0x10                                           ; FD2797  0b 10 00
-	call sub_FD6447                                      ; FD279A  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD279A  1d 47 64 fd
 	popw bc                                              ; FD279E  49
 .LFD279F:
 	unlk XIZ                                             ; FD279F  ee 0d
@@ -129288,7 +129288,7 @@ sub_FD27F2:
 	cp a, 0x00:i3                                          ; FD2843  c9 d8
 	jr nz, .LFD284F                                      ; FD2845  6e 08
 	pushw 0x10                                           ; FD2847  0b 10 00
-	call sub_FD6447                                      ; FD284A  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD284A  1d 47 64 fd
 	popw bc                                              ; FD284E  49
 .LFD284F:
 	unlk XIZ                                             ; FD284F  ee 0d
@@ -129328,7 +129328,7 @@ sub_FD2864:
 	cp a, 0x00:i3                                          ; FD28A3  c9 d8
 	jr nz, .LFD28AF                                      ; FD28A5  6e 08
 	pushw 0x10                                           ; FD28A7  0b 10 00
-	call sub_FD6447                                      ; FD28AA  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD28AA  1d 47 64 fd
 	popw bc                                              ; FD28AE  49
 .LFD28AF:
 	unlk XIZ                                             ; FD28AF  ee 0d
@@ -129364,7 +129364,7 @@ sub_FD28B2:
 	jr nz, .LFD2900                                      ; FD28F6  6e 08
 sub_FD28F8:
 	pushw 0x10                                           ; FD28F8  0b 10 00
-	call sub_FD6447                                      ; FD28FB  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD28FB  1d 47 64 fd
 	popw bc                                              ; FD28FF  49
 .LFD2900:
 	unlk XIZ                                             ; FD2900  ee 0d
@@ -129942,7 +129942,7 @@ sub_FD2DEA:
 	ld wa, (xiz-4)                                       ; FD2E37  9e fc 20
 	extz WA                                              ; FD2E3A  d8 12
 	pushw wa                                             ; FD2E3C  28
-	call sub_FD616A                                      ; FD2E3D  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD2E3D  1d 6a 61 fd
 	pushw 0x01                                           ; FD2E41  0b 01 00
 	pushw 0x8c                                           ; FD2E44  0b 8c 00
 	call T_Dispatch_Code80                               ; FD2E47  1d d4 1e f4
@@ -130008,7 +130008,7 @@ sub_FD2E66:
 	ld wa, (xiz-6)                                       ; FD2ED8  9e fa 20
 	extz WA                                              ; FD2EDB  d8 12
 	pushw wa                                             ; FD2EDD  28
-	call sub_FD616A                                      ; FD2EDE  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD2EDE  1d 6a 61 fd
 	pushw 0x00                                           ; FD2EE2  0b 00 00
 	pushw 0x8c                                           ; FD2EE5  0b 8c 00
 	call T_Dispatch_Code80                               ; FD2EE8  1d d4 1e f4
@@ -130058,7 +130058,7 @@ sub_FD2F08:
 	ld wa, (xiz-4)                                       ; FD2F55  9e fc 20
 	extz WA                                              ; FD2F58  d8 12
 	pushw wa                                             ; FD2F5A  28
-	call sub_FD616A                                      ; FD2F5B  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD2F5B  1d 6a 61 fd
 	pushw 0x02                                           ; FD2F5F  0b 02 00
 	pushw 0x8c                                           ; FD2F62  0b 8c 00
 	call T_Dispatch_Code80                               ; FD2F65  1d d4 1e f4
@@ -130885,7 +130885,7 @@ sub_FD3649:
 	push XBC                                             ; FD36B6  39
 	pushw 0x0d                                           ; FD36B7  0b 0d 00
 	pushw 0x00                                           ; FD36BA  0b 00 00
-	call sub_FD6704                                      ; FD36BD  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD36BD  1d 04 67 fd
 	call sub_FD89FA                                      ; FD36C1  1d fa 89 fd
 	add XSP,0x00000012                                   ; FD36C5  ef c8 12 00 00 00
 .LFD36CB:
@@ -131159,7 +131159,7 @@ sub_FD3955:
 	ld wa, (xiz-4)                                       ; FD3974  9e fc 20
 	extz WA                                              ; FD3977  d8 12
 	pushw wa                                             ; FD3979  28
-	call sub_FD616A                                      ; FD397A  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD397A  1d 6a 61 fd
 	pushw 0x03                                           ; FD397E  0b 03 00
 	pushw 0x8e                                           ; FD3981  0b 8e 00
 	call T_Dispatch_Code80                               ; FD3984  1d d4 1e f4
@@ -131225,7 +131225,7 @@ sub_FD39A3:
 	ld wa, (xiz-6)                                       ; FD3A15  9e fa 20
 	extz WA                                              ; FD3A18  d8 12
 	pushw wa                                             ; FD3A1A  28
-	call sub_FD616A                                      ; FD3A1B  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD3A1B  1d 6a 61 fd
 	pushw 0x02                                           ; FD3A1F  0b 02 00
 	pushw 0x8e                                           ; FD3A22  0b 8e 00
 	call T_Dispatch_Code80                               ; FD3A25  1d d4 1e f4
@@ -131276,7 +131276,7 @@ sub_FD3A45:
 	ld wa, (xiz-4)                                       ; FD3A92  9e fc 20
 	extz WA                                              ; FD3A95  d8 12
 	pushw wa                                             ; FD3A97  28
-	call sub_FD616A                                      ; FD3A98  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD3A98  1d 6a 61 fd
 	pushw 0x04                                           ; FD3A9C  0b 04 00
 	pushw 0x8e                                           ; FD3A9F  0b 8e 00
 	call T_Dispatch_Code80                               ; FD3AA2  1d d4 1e f4
@@ -131664,7 +131664,7 @@ ToneEditPage_A0_KeyDispatch:
 	cp a, 0x00:i3                                          ; FD3DE9  c9 d8
 	jr nz, .LFD3DF5                                      ; FD3DEB  6e 08
 	pushw 0x10                                           ; FD3DED  0b 10 00
-	call sub_FD6447                                      ; FD3DF0  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD3DF0  1d 47 64 fd
 	popw bc                                              ; FD3DF4  49
 .LFD3DF5:
 	unlk XIZ                                             ; FD3DF5  ee 0d
@@ -131703,7 +131703,7 @@ ToneEditPage_A3_KeyDispatch:
 	cp a, 0x00:i3                                          ; FD3E3C  c9 d8
 	jr nz, .LFD3E48                                      ; FD3E3E  6e 08
 	pushw 0x10                                           ; FD3E40  0b 10 00
-	call sub_FD6447                                      ; FD3E43  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD3E43  1d 47 64 fd
 	popw bc                                              ; FD3E47  49
 .LFD3E48:
 	unlk XIZ                                             ; FD3E48  ee 0d
@@ -131738,7 +131738,7 @@ ToneEditPage_A4_KeyDispatch:
 	cp a, 0x00:i3                                          ; FD3E8D  c9 d8
 	jr nz, .LFD3E99                                      ; FD3E8F  6e 08
 	pushw 0x10                                           ; FD3E91  0b 10 00
-	call sub_FD6447                                      ; FD3E94  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD3E94  1d 47 64 fd
 	popw bc                                              ; FD3E98  49
 .LFD3E99:
 	unlk XIZ                                             ; FD3E99  ee 0d
@@ -131773,7 +131773,7 @@ ToneEditPage_A5_KeyDispatch:
 	cp a, 0x00:i3                                          ; FD3EDE  c9 d8
 	jr nz, .LFD3EEA                                      ; FD3EE0  6e 08
 	pushw 0x10                                           ; FD3EE2  0b 10 00
-	call sub_FD6447                                      ; FD3EE5  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD3EE5  1d 47 64 fd
 	popw bc                                              ; FD3EE9  49
 .LFD3EEA:
 	unlk XIZ                                             ; FD3EEA  ee 0d
@@ -131808,7 +131808,7 @@ ToneEditPage_A6_KeyDispatch:
 	cp a, 0x00:i3                                          ; FD3F2F  c9 d8
 	jr nz, .LFD3F3B                                      ; FD3F31  6e 08
 	pushw 0x10                                           ; FD3F33  0b 10 00
-	call sub_FD6447                                      ; FD3F36  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD3F36  1d 47 64 fd
 	popw bc                                              ; FD3F3A  49
 .LFD3F3B:
 	unlk XIZ                                             ; FD3F3B  ee 0d
@@ -131843,7 +131843,7 @@ ToneEditPage_A7_KeyDispatch:
 	cp a, 0x00:i3                                          ; FD3F80  c9 d8
 	jr nz, .LFD3F8C                                      ; FD3F82  6e 08
 	pushw 0x10                                           ; FD3F84  0b 10 00
-	call sub_FD6447                                      ; FD3F87  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD3F87  1d 47 64 fd
 	popw bc                                              ; FD3F8B  49
 .LFD3F8C:
 	unlk XIZ                                             ; FD3F8C  ee 0d
@@ -131878,7 +131878,7 @@ ToneEditPage_A8_KeyDispatch:
 	cp a, 0x00:i3                                          ; FD3FD1  c9 d8
 	jr nz, .LFD3FDD                                      ; FD3FD3  6e 08
 	pushw 0x10                                           ; FD3FD5  0b 10 00
-	call sub_FD6447                                      ; FD3FD8  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FD3FD8  1d 47 64 fd
 	popw bc                                              ; FD3FDC  49
 .LFD3FDD:
 	unlk XIZ                                             ; FD3FDD  ee 0d
@@ -131981,7 +131981,7 @@ sub_FD4039:
 	ld bc, (xiz-2)                                       ; FD40B9  9e fe 21
 	extz BC                                              ; FD40BC  d9 12
 	pushw bc                                             ; FD40BE  29
-	call sub_FD6316                                      ; FD40BF  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FD40BF  1d 16 63 fd
 	pushw 0x02                                           ; FD40C3  0b 02 00
 	call PanelDial_ActAsButton                                      ; FD40C6  1d 01 7c fd
 	add XSP,0x00000016                                   ; FD40CA  ef c8 16 00 00 00
@@ -132033,7 +132033,7 @@ sub_FD40D4:
 	ld bc, (xiz-2)                                       ; FD4136  9e fe 21
 	extz BC                                              ; FD4139  d9 12
 	pushw bc                                             ; FD413B  29
-	call sub_FD6316                                      ; FD413C  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FD413C  1d 16 63 fd
 	pushw 0x03                                           ; FD4140  0b 03 00
 	call PanelDial_ActAsButton                                      ; FD4143  1d 01 7c fd
 	inc 8,XSP                                            ; FD4147  ef 60
@@ -132117,12 +132117,12 @@ ToneEditField_A0_ResonatorType:
 	extz BC                                              ; FD41CF  d9 12
 	ld DE,BC                                             ; FD41D1  d9 8a
 	pushw bc                                             ; FD41D3  29
-	call sub_FD616A                                      ; FD41D4  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD41D4  1d 6a 61 fd
 	pushw 0x11                                           ; FD41D8  0b 11 00
 	pushw 0x02                                           ; FD41DB  0b 02 00
 	pushw 0x0b                                           ; FD41DE  0b 0b 00
 	pushw de                                             ; FD41E1  2a
-	call sub_FD61CF                                      ; FD41E2  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FD41E2  1d cf 61 fd
 	jr .LFD4210                                          ; FD41E6  68 28
 .LFD41E8:
 	pushw 0x3f                                           ; FD41E8  0b 3f 00
@@ -132133,14 +132133,14 @@ ToneEditField_A0_ResonatorType:
 	ld bc, (xiz-2)                                       ; FD41F3  9e fe 21
 	extz BC                                              ; FD41F6  d9 12
 	pushw bc                                             ; FD41F8  29
-	call sub_FD6704                                      ; FD41F9  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD41F9  1d 04 67 fd
 	pushw 0x11                                           ; FD41FD  0b 11 00
 	pushw 0x02                                           ; FD4200  0b 02 00
 	pushw 0x0b                                           ; FD4203  0b 0b 00
 	ld bc, (xiz-2)                                       ; FD4206  9e fe 21
 	extz BC                                              ; FD4209  d9 12
 	pushw bc                                             ; FD420B  29
-	call sub_FD63D7                                      ; FD420C  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FD420C  1d d7 63 fd
 .LFD4210:
 	add XSP,0x00000012                                   ; FD4210  ef c8 12 00 00 00
 	pushw 0x01                                           ; FD4216  0b 01 00
@@ -132304,7 +132304,7 @@ sub_FD42A5:
 	ld C,E                                               ; FD4348  cd 8b
 	extz BC                                              ; FD434A  d9 12
 	pushw bc                                             ; FD434C  29
-	call sub_FD616A                                      ; FD434D  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD434D  1d 6a 61 fd
 	add D,0x10                                           ; FD4351  cc c8 10
 	add L,0x10                                           ; FD4354  cf c8 10
 	ld ix, (xiz-16)                                      ; FD4357  9e f0 24
@@ -132337,7 +132337,7 @@ sub_FD42A5:
 	pushw 0x0b                                           ; FD4394  0b 0b 00
 	ld (xiz-18), ix                                      ; FD4397  be ee 54
 	m_push MWD+r6, 0xee                                  ; FD439A  9e ee 04
-	call sub_FD6704                                      ; FD439D  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD439D  1d 04 67 fd
 	ld de, (xiz-16)                                      ; FD43A1  9e f0 22
 	inc 1,DE                                             ; FD43A4  da 61
 	ld ix, (xiz-18)                                      ; FD43A6  9e ee 24
@@ -132544,7 +132544,7 @@ ToneEditField_A3_Position:
 	ld bc, (xiz-4)                                       ; FD4538  9e fc 21
 	extz BC                                              ; FD453B  d9 12
 	pushw bc                                             ; FD453D  29
-	call sub_FD616A                                      ; FD453E  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD453E  1d 6a 61 fd
 	jr .LFD4559                                          ; FD4542  68 15
 .LFD4544:
 	call Var27A3_GetValidSlot                                      ; FD4544  1d 4d 6b fd
@@ -132554,7 +132554,7 @@ ToneEditField_A3_Position:
 	ld bc, (xiz-4)                                       ; FD454F  9e fc 21
 	extz BC                                              ; FD4552  d9 12
 	pushw bc                                             ; FD4554  29
-	call sub_FD6704                                      ; FD4555  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD4555  1d 04 67 fd
 .LFD4559:
 	inc 8,XSP                                            ; FD4559  ef 60
 	inc 6,XSP                                            ; FD455B  ef 66
@@ -133516,10 +133516,10 @@ ToneEditField_A5_Muting:
 	pushw bc                                             ; FD4C69  29
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4C6A  8e fe 3f 00
 	jr nz, .LFD4C76                                      ; FD4C6E  6e 06
-	call sub_FD616A                                      ; FD4C70  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD4C70  1d 6a 61 fd
 	jr .LFD4C7A                                          ; FD4C74  68 04
 .LFD4C76:
-	call sub_FD6704                                      ; FD4C76  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD4C76  1d 04 67 fd
 .LFD4C7A:
 	inc 8,XSP                                            ; FD4C7A  ef 60
 	inc 2,XSP                                            ; FD4C7C  ef 62
@@ -133578,10 +133578,10 @@ sub_FD4CBB:
 	pushw bc                                             ; FD4CF1  29
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD4CF2  8e fe 3f 00
 	jr nz, .LFD4CFE                                      ; FD4CF6  6e 06
-	call sub_FD616A                                      ; FD4CF8  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD4CF8  1d 6a 61 fd
 	jr .LFD4D02                                          ; FD4CFC  68 04
 .LFD4CFE:
-	call sub_FD6704                                      ; FD4CFE  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD4CFE  1d 04 67 fd
 .LFD4D02:
 	inc 8,XSP                                            ; FD4D02  ef 60
 	inc 2,XSP                                            ; FD4D04  ef 62
@@ -135064,7 +135064,7 @@ ToneEditField_A7_KeyFollowLow:
 	ld wa, (xiz-4)                                       ; FD57E9  9e fc 20
 	extz WA                                              ; FD57EC  d8 12
 	pushw wa                                             ; FD57EE  28
-	call sub_FD616A                                      ; FD57EF  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD57EF  1d 6a 61 fd
 	add XSP,0x00000014                                   ; FD57F3  ef c8 14 00 00 00
 .LFD57F9:
 	lda xbc, (xiz-2)                                     ; FD57F9  be fe 31
@@ -135120,7 +135120,7 @@ ToneEditField_A7_KeyFollowLow:
 	ld wa, (xiz-4)                                       ; FD5865  9e fc 20
 	extz WA                                              ; FD5868  d8 12
 	pushw wa                                             ; FD586A  28
-	call sub_FD616A                                      ; FD586B  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD586B  1d 6a 61 fd
 	add XSP,0x00000014                                   ; FD586F  ef c8 14 00 00 00
 .LFD5875:
 	pushw 0x04                                           ; FD5875  0b 04 00
@@ -135261,7 +135261,7 @@ ToneEditField_A7_KeyFollowBreak:
 	ld wa, (xiz-4)                                       ; FD595D  9e fc 20
 	extz WA                                              ; FD5960  d8 12
 	pushw wa                                             ; FD5962  28
-	call sub_FD616A                                      ; FD5963  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD5963  1d 6a 61 fd
 	add XSP,0x00000014                                   ; FD5967  ef c8 14 00 00 00
 .LFD596D:
 	lda xbc, (xiz-2)                                     ; FD596D  be fe 31
@@ -135327,7 +135327,7 @@ ToneEditField_A7_KeyFollowBreak:
 	ld wa, (xiz-4)                                       ; FD59F0  9e fc 20
 	extz WA                                              ; FD59F3  d8 12
 	pushw wa                                             ; FD59F5  28
-	call sub_FD616A                                      ; FD59F6  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD59F6  1d 6a 61 fd
 	add XSP,0x00000014                                   ; FD59FA  ef c8 14 00 00 00
 .LFD5A00:
 	pushw 0x05                                           ; FD5A00  0b 05 00
@@ -135454,7 +135454,7 @@ ToneEditField_A7_KeyFollowHigh:
 	ld wa, (xiz-4)                                       ; FD5AC5  9e fc 20
 	extz WA                                              ; FD5AC8  d8 12
 	pushw wa                                             ; FD5ACA  28
-	call sub_FD616A                                      ; FD5ACB  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD5ACB  1d 6a 61 fd
 	add XSP,0x00000014                                   ; FD5ACF  ef c8 14 00 00 00
 .LFD5AD5:
 	lda xbc, (xiz-2)                                     ; FD5AD5  be fe 31
@@ -135510,7 +135510,7 @@ ToneEditField_A7_KeyFollowHigh:
 	ld wa, (xiz-4)                                       ; FD5B41  9e fc 20
 	extz WA                                              ; FD5B44  d8 12
 	pushw wa                                             ; FD5B46  28
-	call sub_FD616A                                      ; FD5B47  1d 6a 61 fd
+	call ToneMsg_SendParam                                      ; FD5B47  1d 6a 61 fd
 	add XSP,0x00000014                                   ; FD5B4B  ef c8 14 00 00 00
 .LFD5B51:
 	pushw 0x06                                           ; FD5B51  0b 06 00
@@ -135930,7 +135930,7 @@ sub_FD5E06:
 	push XBC                                             ; FD5F0B  39
 	pushw 0x0f                                           ; FD5F0C  0b 0f 00
 	pushw 0x00                                           ; FD5F0F  0b 00 00
-	call sub_FD6704                                      ; FD5F12  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD5F12  1d 04 67 fd
 	pushw 0x02                                           ; FD5F16  0b 02 00
 	pushw 0xc8                                           ; FD5F19  0b c8 00
 	call T_Dispatch_Code80                               ; FD5F1C  1d d4 1e f4
@@ -136039,7 +136039,7 @@ sub_FD5F52:
 	extz WA                                              ; FD600F  d8 12
 	pushw wa                                             ; FD6011  28
 	pushw 0x00                                           ; FD6012  0b 00 00
-	call sub_FD6704                                      ; FD6015  1d 04 67 fd
+	call ToneMsg8D_SendParam                                      ; FD6015  1d 04 67 fd
 	ld C,E                                               ; FD6019  cd 8b
 	extz BC                                              ; FD601B  d9 12
 	pushw bc                                             ; FD601D  29
@@ -136266,7 +136266,9 @@ Var2250_Get:
 	ld (XBC),A                                           ; FD612D  b1 41
 	unlk XIZ                                             ; FD612F  ee 0d
 	ret                                                  ; FD6131  0e
-sub_FD6132:
+; ToneMsg_Send(u8 *msg): copies the 9-byte tone message to RAM 0x27E0..0x27E8 (the last one sent) and
+;   sends it with T_Link_SendBlockIn32ByteChunks(0, 6, msg).  Its twenty callers are the builders below.
+ToneMsg_Send:
 	link XIZ,0x0000                                      ; FD6132  ee 0c 00 00
 	pushw hl                                             ; FD6136  2b
 	ld h, 0x00:opc                                          ; FD6137  26 00
@@ -136292,7 +136294,9 @@ sub_FD6132:
 	popw hl                                              ; FD6166  4b
 	unlk XIZ                                             ; FD6167  ee 0d
 	ret                                                  ; FD6169  0e
-sub_FD616A:
+; ToneMsg_SendParam: byte[0] 0x88 | arm, [1] UI_PartIndex, [2] the parameter, [3] 0x01, [4] the value,
+;   [5] a mask; the arm and element come from ToneMsg_ApplySelector.  29 call sites push the parameter.
+ToneMsg_SendParam:
 	link XIZ,0xfff4                                      ; FD616A  ee 0c f4 ff
 	pushw hl                                             ; FD616E  2b
 	push XIX                                             ; FD616F  3c
@@ -136328,9 +136332,9 @@ sub_FD616A:
 	ld BC,(XIZ+0x08)                                     ; FD61B7  9e 08 21
 	extz BC                                              ; FD61BA  d9 12
 	pushw bc                                             ; FD61BC  29
-	calr sub_FD6917                                      ; FD61BD  1e 57 07
+	calr ToneMsg_ApplySelector                                      ; FD61BD  1e 57 07
 	push XIX                                             ; FD61C0  3c
-	calr sub_FD6132                                      ; FD61C1  1e 6e ff
+	calr ToneMsg_Send                                      ; FD61C1  1e 6e ff
 	inc 8,XSP                                            ; FD61C4  ef 60
 	inc 6,XSP                                            ; FD61C6  ef 66
 	sub WA,WA                                            ; FD61C8  d8 a0
@@ -136338,7 +136342,8 @@ sub_FD616A:
 	popw hl                                              ; FD61CB  4b
 	unlk XIZ                                             ; FD61CC  ee 0d
 	ret                                                  ; FD61CE  0e
-sub_FD61CF:
+; ToneMsg80_SendParam: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=UI_PartIndex [2]=arg2 [3]=arg3 [4]=0x01 [5]=arg4.
+ToneMsg80_SendParam:
 	link XIZ,0xfff4                                      ; FD61CF  ee 0c f4 ff
 	pushw hl                                             ; FD61D3  2b
 	push XIX                                             ; FD61D4  3c
@@ -136370,9 +136375,9 @@ sub_FD61CF:
 	ld BC,(XIZ+0x08)                                     ; FD6213  9e 08 21
 	extz BC                                              ; FD6216  d9 12
 	pushw bc                                             ; FD6218  29
-	calr sub_FD6917                                      ; FD6219  1e fb 06
+	calr ToneMsg_ApplySelector                                      ; FD6219  1e fb 06
 	push XIX                                             ; FD621C  3c
-	calr sub_FD6132                                      ; FD621D  1e 12 ff
+	calr ToneMsg_Send                                      ; FD621D  1e 12 ff
 	inc 8,XSP                                            ; FD6220  ef 60
 	inc 6,XSP                                            ; FD6222  ef 66
 	sub WA,WA                                            ; FD6224  d8 a0
@@ -136380,7 +136385,8 @@ sub_FD61CF:
 	popw hl                                              ; FD6227  4b
 	unlk XIZ                                             ; FD6228  ee 0d
 	ret                                                  ; FD622A  0e
-sub_FD622B:
+; ToneMsg80_Id01: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [2]=0x01 [4]=0x01 [5]=arg2.
+ToneMsg80_Id01:
 	link XIZ,0xfff4                                      ; FD622B  ee 0c f4 ff
 	pushw hl                                             ; FD622F  2b
 	pushw de                                             ; FD6230  2a
@@ -136432,7 +136438,7 @@ sub_FD622B:
 	ld C,(XIZ+0x0a)                                      ; FD6294  8e 0a 23
 	ld (XIX+0x05),C                                      ; FD6297  bc 05 43
 	push XIX                                             ; FD629A  3c
-	calr sub_FD6132                                      ; FD629B  1e 94 fe
+	calr ToneMsg_Send                                      ; FD629B  1e 94 fe
 	pop XIY                                              ; FD629E  5d
 	cp (XIZ+0x0a),0x30                                   ; FD629F  8e 0a 3f 30
 	jr nz, .LFD62AC                                      ; FD62A3  6e 07
@@ -136447,7 +136453,8 @@ sub_FD622B:
 	popw hl                                              ; FD62B0  4b
 	unlk XIZ                                             ; FD62B1  ee 0d
 	ret                                                  ; FD62B3  0e
-sub_FD62B4:
+; ToneMsg80_Id12: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=UI_PartIndex [2]=0x12 [3]=arg1 [4]=0x01 [5]=arg2.
+ToneMsg80_Id12:
 	link XIZ,0xfff2                                      ; FD62B4  ee 0c f2 ff
 	pushw hl                                             ; FD62B8  2b
 	push XIX                                             ; FD62B9  3c
@@ -136487,13 +136494,14 @@ sub_FD62B4:
 	ld C,(XIZ+0x0a)                                      ; FD6306  8e 0a 23
 	ld (XIX+0x05),C                                      ; FD6309  bc 05 43
 	push XIX                                             ; FD630C  3c
-	calr sub_FD6132                                      ; FD630D  1e 22 fe
+	calr ToneMsg_Send                                      ; FD630D  1e 22 fe
 	pop XBC                                              ; FD6310  59
 	pop XIX                                              ; FD6311  5c
 	popw hl                                              ; FD6312  4b
 	unlk XIZ                                             ; FD6313  ee 0d
 	ret                                                  ; FD6315  0e
-sub_FD6316:
+; ToneMsg80_Id13: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=UI_PartIndex [2]=0x13 [3]=arg1 [4]=0x01 [5]=arg3.
+ToneMsg80_Id13:
 	link XIZ,0xfff2                                      ; FD6316  ee 0c f2 ff
 	pushw hl                                             ; FD631A  2b
 	push XIX                                             ; FD631B  3c
@@ -136540,13 +136548,14 @@ sub_FD6316:
 	ld C,(XIZ+0x0c)                                      ; FD637B  8e 0c 23
 	ld (XIX+0x05),C                                      ; FD637E  bc 05 43
 	push XIX                                             ; FD6381  3c
-	calr sub_FD6132                                      ; FD6382  1e ad fd
+	calr ToneMsg_Send                                      ; FD6382  1e ad fd
 	pop XBC                                              ; FD6385  59
 	pop XIX                                              ; FD6386  5c
 	popw hl                                              ; FD6387  4b
 	unlk XIZ                                             ; FD6388  ee 0d
 	ret                                                  ; FD638A  0e
-sub_FD638B:
+; ToneMsg80_Id10: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=UI_PartIndex [2]=0x10 [3]=arg1 [4]=0x01 [5]=arg2.
+ToneMsg80_Id10:
 	link XIZ,0xfff4                                      ; FD638B  ee 0c f4 ff
 	pushw hl                                             ; FD638F  2b
 	push XIX                                             ; FD6390  3c
@@ -136574,14 +136583,15 @@ sub_FD638B:
 	ld C,(XIZ+0x0a)                                      ; FD63C6  8e 0a 23
 	ld (XIX+0x05),C                                      ; FD63C9  bc 05 43
 	push XIX                                             ; FD63CC  3c
-	calr sub_FD6132                                      ; FD63CD  1e 62 fd
+	calr ToneMsg_Send                                      ; FD63CD  1e 62 fd
 	inc 8,XSP                                            ; FD63D0  ef 60
 sub_FD63D2:
 	pop XIX                                              ; FD63D2  5c
 	popw hl                                              ; FD63D3  4b
 	unlk XIZ                                             ; FD63D4  ee 0d
 	ret                                                  ; FD63D6  0e
-sub_FD63D7:
+; ToneMsg85_SendParam: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x85 [1]=UI_PartIndex [2]=arg2 [3]=arg3 [4]=0x01 [5]=arg4.
+ToneMsg85_SendParam:
 	link XIZ,0xfff4                                      ; FD63D7  ee 0c f4 ff
 	pushw hl                                             ; FD63DB  2b
 	push XIX                                             ; FD63DC  3c
@@ -136629,17 +136639,17 @@ sub_FD63D7:
 	ld C,(XIZ+0x0e)                                      ; FD6437  8e 0e 23
 	ld (XIX+0x05),C                                      ; FD643A  bc 05 43
 	push XIX                                             ; FD643D  3c
-	calr sub_FD6132                                      ; FD643E  1e f1 fc
+	calr ToneMsg_Send                                      ; FD643E  1e f1 fc
 	pop XBC                                              ; FD6441  59
 	pop XIX                                              ; FD6442  5c
 	popw hl                                              ; FD6443  4b
 	unlk XIZ                                             ; FD6444  ee 0d
 	ret                                                  ; FD6446  0e
-sub_FD6447:
+; ToneMsg80_Id00: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=UI_PartIndex [3]=0x00 [4]=0x01 [5]=arg1.
+ToneMsg80_Id00:
 	link XIZ,0xfff4                                      ; FD6447  ee 0c f4 ff
 	pushw hl                                             ; FD644B  2b
 	push XIX                                             ; FD644C  3c
-sub_FD644D:
 	lda xix, (xiz-12)                                    ; FD644D  be f4 34
 	ld h, 0x00:opc                                          ; FD6450  26 00
 .LFD6452:
@@ -136662,13 +136672,14 @@ sub_FD644D:
 	ld C,(XIZ+0x08)                                      ; FD647C  8e 08 23
 	ld (XIX+0x05),C                                      ; FD647F  bc 05 43
 	push XIX                                             ; FD6482  3c
-	calr sub_FD6132                                      ; FD6483  1e ac fc
+	calr ToneMsg_Send                                      ; FD6483  1e ac fc
 	inc 8,XSP                                            ; FD6486  ef 60
 	pop XIX                                              ; FD6488  5c
 	popw hl                                              ; FD6489  4b
 	unlk XIZ                                             ; FD648A  ee 0d
 	ret                                                  ; FD648C  0e
-sub_FD648D:
+; ToneMsg80_Id04: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=arg1 [2]=0x04 [3]=arg2 [4]=0x01 [5]=arg3.
+ToneMsg80_Id04:
 	link XIZ,0xfff6                                      ; FD648D  ee 0c f6 ff
 	pushw hl                                             ; FD6491  2b
 	push XIX                                             ; FD6492  3c
@@ -136676,7 +136687,6 @@ sub_FD648D:
 	ld h, 0x00:opc                                          ; FD6496  26 00
 .LFD6498:
 	ld C,H                                               ; FD6498  ce 8b
-sub_FD649A:
 	extz BC                                              ; FD649A  d9 12
 	extz XBC                                             ; FD649C  e9 12
 	add XBC,XIX                                          ; FD649E  ec 81
@@ -136694,13 +136704,14 @@ sub_FD649A:
 	ld C,(XIZ+0x0c)                                      ; FD64C1  8e 0c 23
 	ld (XIX+0x05),C                                      ; FD64C4  bc 05 43
 	push XIX                                             ; FD64C7  3c
-	calr sub_FD6132                                      ; FD64C8  1e 67 fc
+	calr ToneMsg_Send                                      ; FD64C8  1e 67 fc
 	pop XBC                                              ; FD64CB  59
 	pop XIX                                              ; FD64CC  5c
 	popw hl                                              ; FD64CD  4b
 	unlk XIZ                                             ; FD64CE  ee 0d
 	ret                                                  ; FD64D0  0e
-sub_FD64D1:
+; ToneMsg80_Id15_Part0: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=0x00 [2]=0x15 [3]=arg1 [4]=0x01 [5]=arg2.
+ToneMsg80_Id15_Part0:
 	link XIZ,0xfff6                                      ; FD64D1  ee 0c f6 ff
 	pushw hl                                             ; FD64D5  2b
 	push XIX                                             ; FD64D6  3c
@@ -136724,13 +136735,14 @@ sub_FD64D1:
 	ld C,(XIZ+0x0a)                                      ; FD6503  8e 0a 23
 	ld (XIX+0x05),C                                      ; FD6506  bc 05 43
 	push XIX                                             ; FD6509  3c
-	calr sub_FD6132                                      ; FD650A  1e 25 fc
+	calr ToneMsg_Send                                      ; FD650A  1e 25 fc
 	pop XBC                                              ; FD650D  59
 	pop XIX                                              ; FD650E  5c
 	popw hl                                              ; FD650F  4b
 	unlk XIZ                                             ; FD6510  ee 0d
 	ret                                                  ; FD6512  0e
-sub_FD6513:
+; ToneMsg80_Id16: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=UI_PartIndex [2]=0x16 [3]=arg1 [4]=0x01 [5]=0x00.
+ToneMsg80_Id16:
 	link XIZ,0xfff4                                      ; FD6513  ee 0c f4 ff
 	pushw hl                                             ; FD6517  2b
 	push XIX                                             ; FD6518  3c
@@ -136757,13 +136769,14 @@ sub_FD6513:
 	ld (XIX+0x04),0x01                                   ; FD654A  bc 04 00 01
 	ld (XIX+0x05),0x00                                   ; FD654E  bc 05 00 00
 	push XIX                                             ; FD6552  3c
-	calr sub_FD6132                                      ; FD6553  1e dc fb
+	calr ToneMsg_Send                                      ; FD6553  1e dc fb
 	inc 8,XSP                                            ; FD6556  ef 60
 	pop XIX                                              ; FD6558  5c
 	popw hl                                              ; FD6559  4b
 	unlk XIZ                                             ; FD655A  ee 0d
 	ret                                                  ; FD655C  0e
-sub_FD655D:
+; ToneMsg88_Id15: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x15 [3]=(computed) [4]=(computed) [5]=arg1.
+ToneMsg88_Id15:
 	link XIZ,0xffee                                      ; FD655D  ee 0c ee ff
 	pushw hl                                             ; FD6561  2b
 	push XIX                                             ; FD6562  3c
@@ -136810,7 +136823,7 @@ sub_FD655D:
 	dec 1,C                                              ; FD65C4  cb 69
 	ld (XIX+0x05),C                                      ; FD65C6  bc 05 43
 	push XIX                                             ; FD65C9  3c
-	calr sub_FD6132                                      ; FD65CA  1e 65 fb
+	calr ToneMsg_Send                                      ; FD65CA  1e 65 fb
 	pop XBC                                              ; FD65CD  59
 	pop XIX                                              ; FD65CE  5c
 	popw hl                                              ; FD65CF  4b
@@ -136819,7 +136832,8 @@ sub_FD655D:
 sub_FD65D3:
 	link XIZ,0xffee                                      ; FD65D3  ee 0c ee ff
 	pushw hl                                             ; FD65D7  2b
-sub_FD65D8:
+; ToneMsg88_Id16: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x16 [3]=(computed) [4]=(computed) [5]=arg1.
+ToneMsg88_Id16:
 	push XIX                                             ; FD65D8  3c
 	lda xix, (xiz-18)                                    ; FD65D9  be ee 34
 	lda xbc, (xiz-2)                                     ; FD65DC  be fe 31
@@ -136871,7 +136885,7 @@ sub_FD65D8:
 	add C,0xff                                           ; FD664C  cb c8 ff
 	ld (XIX+0x05),C                                      ; FD664F  bc 05 43
 	push XIX                                             ; FD6652  3c
-	calr sub_FD6132                                      ; FD6653  1e dc fa
+	calr ToneMsg_Send                                      ; FD6653  1e dc fa
 	pop XBC                                              ; FD6656  59
 	pop XIX                                              ; FD6657  5c
 	popw hl                                              ; FD6658  4b
@@ -136885,7 +136899,8 @@ sub_FD665C:
 	ld h, 0x00:opc                                          ; FD6665  26 00
 .LFD6667:
 	ld C,H                                               ; FD6667  ce 8b
-sub_FD6669:
+; ToneMsg88_Id13: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x13 [3]=0x00 [4]=arg1 [5]=0x00.
+ToneMsg88_Id13:
 	extz BC                                              ; FD6669  d9 12
 	extz XBC                                             ; FD666B  e9 12
 	add XBC,XIX                                          ; FD666D  ec 81
@@ -136905,13 +136920,14 @@ sub_FD6669:
 	ld (XIX+0x04),C                                      ; FD6694  bc 04 43
 	ld (XIX+0x05),0x00                                   ; FD6697  bc 05 00 00
 	push XIX                                             ; FD669B  3c
-	calr sub_FD6132                                      ; FD669C  1e 93 fa
+	calr ToneMsg_Send                                      ; FD669C  1e 93 fa
 	inc 8,XSP                                            ; FD669F  ef 60
 	pop XIX                                              ; FD66A1  5c
 	popw hl                                              ; FD66A2  4b
 	unlk XIZ                                             ; FD66A3  ee 0d
 	ret                                                  ; FD66A5  0e
-sub_FD66A6:
+; ToneMsg88_Id14: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x14 [3]=(computed) [4]=(computed) [5]=0x00.
+ToneMsg88_Id14:
 	link XIZ,0xfff0                                      ; FD66A6  ee 0c f0 ff
 	pushw hl                                             ; FD66AA  2b
 	push XIX                                             ; FD66AB  3c
@@ -136945,13 +136961,14 @@ sub_FD66A6:
 	ld (XIX+0x04),C                                      ; FD66F2  bc 04 43
 	ld (XIX+0x05),0x00                                   ; FD66F5  bc 05 00 00
 	push XIX                                             ; FD66F9  3c
-	calr sub_FD6132                                      ; FD66FA  1e 35 fa
+	calr ToneMsg_Send                                      ; FD66FA  1e 35 fa
 	inc 8,XSP                                            ; FD66FD  ef 60
 	pop XIX                                              ; FD66FF  5c
 	popw hl                                              ; FD6700  4b
 	unlk XIZ                                             ; FD6701  ee 0d
 	ret                                                  ; FD6703  0e
-sub_FD6704:
+; ToneMsg8D_SendParam: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x8d [1]=UI_PartIndex [2]=(computed) [3]=(computed) [5]=arg5.
+ToneMsg8D_SendParam:
 	link XIZ,0xfff4                                      ; FD6704  ee 0c f4 ff
 	pushw hl                                             ; FD6708  2b
 	push XIX                                             ; FD6709  3c
@@ -137003,13 +137020,14 @@ sub_FD6704:
 	ld C,(XIZ+0x10)                                      ; FD676F  8e 10 23
 	ld (XIX+0x05),C                                      ; FD6772  bc 05 43
 	push XIX                                             ; FD6775  3c
-	calr sub_FD6132                                      ; FD6776  1e b9 f9
+	calr ToneMsg_Send                                      ; FD6776  1e b9 f9
 	pop XBC                                              ; FD6779  59
 	pop XIX                                              ; FD677A  5c
 	popw hl                                              ; FD677B  4b
 	unlk XIZ                                             ; FD677C  ee 0d
 	ret                                                  ; FD677E  0e
-sub_FD677F:
+; ToneMsg88_Id00: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x00 [3]=0x00 [4]=arg1 [5]=0x00.
+ToneMsg88_Id00:
 	link XIZ,0xfff4                                      ; FD677F  ee 0c f4 ff
 	pushw hl                                             ; FD6783  2b
 	push XIX                                             ; FD6784  3c
@@ -137036,13 +137054,14 @@ sub_FD677F:
 	ld (XIX+0x04),C                                      ; FD67B7  bc 04 43
 	ld (XIX+0x05),0x00                                   ; FD67BA  bc 05 00 00
 	push XIX                                             ; FD67BE  3c
-	calr sub_FD6132                                      ; FD67BF  1e 70 f9
+	calr ToneMsg_Send                                      ; FD67BF  1e 70 f9
 	inc 8,XSP                                            ; FD67C2  ef 60
 	pop XIX                                              ; FD67C4  5c
 	popw hl                                              ; FD67C5  4b
 	unlk XIZ                                             ; FD67C6  ee 0d
 	ret                                                  ; FD67C8  0e
-sub_FD67C9:
+; ToneMsg88_Id0D: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x0d [3]=0x00 [4]=0x00 [5]=0x00.
+ToneMsg88_Id0D:
 	link XIZ,0xfff4                                      ; FD67C9  ee 0c f4 ff
 	pushw hl                                             ; FD67CD  2b
 	push XIX                                             ; FD67CE  3c
@@ -137068,13 +137087,14 @@ sub_FD67C9:
 	ld (XIX+0x04),0x00                                   ; FD67FE  bc 04 00 00
 	ld (XIX+0x05),0x00                                   ; FD6802  bc 05 00 00
 	push XIX                                             ; FD6806  3c
-	calr sub_FD6132                                      ; FD6807  1e 28 f9
+	calr ToneMsg_Send                                      ; FD6807  1e 28 f9
 	inc 8,XSP                                            ; FD680A  ef 60
 	pop XIX                                              ; FD680C  5c
 	popw hl                                              ; FD680D  4b
 	unlk XIZ                                             ; FD680E  ee 0d
 	ret                                                  ; FD6810  0e
-sub_FD6811:
+; ToneMsg88_Id1A: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=arg1 [2]=0x1a [3]=arg2 [4]=arg3 [5]=arg4.
+ToneMsg88_Id1A:
 	link XIZ,0xfff4                                      ; FD6811  ee 0c f4 ff
 	pushw hl                                             ; FD6815  2b
 	push XIX                                             ; FD6816  3c
@@ -137110,13 +137130,14 @@ sub_FD6811:
 	ld C,(XIZ+0x0e)                                      ; FD685B  8e 0e 23
 	ld (XIX+0x05),C                                      ; FD685E  bc 05 43
 	push XIX                                             ; FD6861  3c
-	calr sub_FD6132                                      ; FD6862  1e cd f8
+	calr ToneMsg_Send                                      ; FD6862  1e cd f8
 	pop XBC                                              ; FD6865  59
 	pop XIX                                              ; FD6866  5c
 	popw hl                                              ; FD6867  4b
 	unlk XIZ                                             ; FD6868  ee 0d
 	ret                                                  ; FD686A  0e
-sub_FD686B:
+; ToneMsg80_Id0B_Part0: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x80 [1]=0x00 [2]=0x0b [3]=arg1 [4]=0x01 [5]=arg2.
+ToneMsg80_Id0B_Part0:
 	link XIZ,0xfff6                                      ; FD686B  ee 0c f6 ff
 	pushw hl                                             ; FD686F  2b
 	push XIX                                             ; FD6870  3c
@@ -137140,7 +137161,7 @@ sub_FD686B:
 	ld C,(XIZ+0x0a)                                      ; FD689D  8e 0a 23
 	ld (XIX+0x05),C                                      ; FD68A0  bc 05 43
 	push XIX                                             ; FD68A3  3c
-	calr sub_FD6132                                      ; FD68A4  1e 8b f8
+	calr ToneMsg_Send                                      ; FD68A4  1e 8b f8
 	pop XBC                                              ; FD68A7  59
 	pop XIX                                              ; FD68A8  5c
 	popw hl                                              ; FD68A9  4b
@@ -137203,7 +137224,9 @@ sub_FD68AD:
 	popw hl                                              ; FD6913  4b
 	unlk XIZ                                             ; FD6914  ee 0d
 	ret                                                  ; FD6916  0e
-sub_FD6917:
+; ToneMsg_ApplySelector(msg, selector): ORs the arm into byte[0] and element << 6 into byte[2]
+;   (selector 0 = arm 1; 1..4 = arms 2/3; 0x11..0x44 = arm 4, element 0..3); FINDINGS-l7a1429-parameter-names.md 2c.
+ToneMsg_ApplySelector:
 	link XIZ,0x0000                                      ; FD6917  ee 0c 00 00
 	push XIX                                             ; FD691B  3c
 	ld XIX,(XIZ+0x0a)                                    ; FD691C  ae 0a 24
@@ -137385,7 +137408,7 @@ sub_FD69E0:
 	pushw 0x17                                           ; FD6AA6  0b 17 00
 	ld (xiz-14), hl                                      ; FD6AA9  be f2 53
 	m_push MWD+r6, 0xf2                                  ; FD6AAC  9e f2 04
-	calr sub_FD616A                                      ; FD6AAF  1e b8 f6
+	calr ToneMsg_SendParam                                      ; FD6AAF  1e b8 f6
 	ld hl, (xiz-14)                                      ; FD6AB2  9e f2 23
 	inc 1,HL                                             ; FD6AB5  db 61
 	inc 1,D                                              ; FD6AB7  cc 61
@@ -137413,7 +137436,7 @@ sub_FD69E0:
 	extz BC                                              ; FD6AE7  d9 12
 	pushw bc                                             ; FD6AE9  29
 	pushw 0x00                                           ; FD6AEA  0b 00 00
-	calr sub_FD6704                                      ; FD6AED  1e 14 fc
+	calr ToneMsg8D_SendParam                                      ; FD6AED  1e 14 fc
 	ld hl, (xiz-18)                                      ; FD6AF0  9e ee 23
 	add HL,0x0017                                        ; FD6AF3  db c8 17 00
 	inc 1,D                                              ; FD6AF7  cc 61
@@ -137588,12 +137611,12 @@ sub_FD6BC6:
 	jr nz, .LFD6C22                                      ; FD6C15  6e 0b
 	pushw 0x11                                           ; FD6C17  0b 11 00
 	pushw 0x00                                           ; FD6C1A  0b 00 00
-	calr sub_FD616A                                      ; FD6C1D  1e 4a f5
+	calr ToneMsg_SendParam                                      ; FD6C1D  1e 4a f5
 	jr .LFD6C2B                                          ; FD6C20  68 09
 .LFD6C22:
 	pushw 0x0d                                           ; FD6C22  0b 0d 00
 	pushw 0x00                                           ; FD6C25  0b 00 00
-	calr sub_FD6704                                      ; FD6C28  1e d9 fa
+	calr ToneMsg8D_SendParam                                      ; FD6C28  1e d9 fa
 .LFD6C2B:
 	inc 8,XSP                                            ; FD6C2B  ef 60
 	inc 2,XSP                                            ; FD6C2D  ef 62
@@ -137989,7 +138012,7 @@ sub_FD6EC4:
 	ld wa, (xiz-2)                                       ; FD6EE9  9e fe 20
 	extz WA                                              ; FD6EEC  d8 12
 	pushw wa                                             ; FD6EEE  28
-	calr sub_FD616A                                      ; FD6EEF  1e 78 f2
+	calr ToneMsg_SendParam                                      ; FD6EEF  1e 78 f2
 	jr .LFD6F11                                          ; FD6EF2  68 1d
 .LFD6EF4:
 	ld XIX,0x00000000                                    ; FD6EF4  44 00 00 00 00
@@ -138001,7 +138024,7 @@ sub_FD6EC4:
 	extz BC                                              ; FD6F08  d9 12
 	pushw bc                                             ; FD6F0A  29
 	pushw 0x00                                           ; FD6F0B  0b 00 00
-	calr sub_FD6704                                      ; FD6F0E  1e f3 f7
+	calr ToneMsg8D_SendParam                                      ; FD6F0E  1e f3 f7
 .LFD6F11:
 	inc 8,XSP                                            ; FD6F11  ef 60
 	inc 2,XSP                                            ; FD6F13  ef 62
@@ -138402,11 +138425,11 @@ sub_FD71B9:
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD7216  8e fe 3f 00
 	jr nz, .LFD7224                                      ; FD721A  6e 08
 	pushw 0x00                                           ; FD721C  0b 00 00
-	calr sub_FD616A                                          ; FD721F  1e 48 ef
+	calr ToneMsg_SendParam                                          ; FD721F  1e 48 ef
 	jr .LFD722A                                          ; FD7222  68 06
 .LFD7224:
 	pushw 0x03                                           ; FD7224  0b 03 00
-	calr sub_FD6704                                          ; FD7227  1e da f4
+	calr ToneMsg8D_SendParam                                          ; FD7227  1e da f4
 .LFD722A:
 	inc 8,XSP                                            ; FD722A  ef 60
 	inc 2,XSP                                            ; FD722C  ef 62
@@ -138698,10 +138721,10 @@ ToneEdit_CommitField:
 	pushw bc                                             ; FD7478  29
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD7479  8e fe 3f 00
 	jr nz, .LFD7484                                      ; FD747D  6e 05
-	calr sub_FD616A                                          ; FD747F  1e e8 ec
+	calr ToneMsg_SendParam                                          ; FD747F  1e e8 ec
 	jr .LFD7487                                          ; FD7482  68 03
 .LFD7484:
-	calr sub_FD6704                                          ; FD7484  1e 7d f2
+	calr ToneMsg8D_SendParam                                          ; FD7484  1e 7d f2
 .LFD7487:
 	inc 8,XSP                                            ; FD7487  ef 60
 	inc 2,XSP                                            ; FD7489  ef 62
@@ -138827,7 +138850,7 @@ sub_FD74E0:
 	ld C,D                                               ; FD756C  cc 8b
 	extz BC                                              ; FD756E  d9 12
 	pushw bc                                             ; FD7570  29
-	calr sub_FD616A                                          ; FD7571  1e f6 eb
+	calr ToneMsg_SendParam                                          ; FD7571  1e f6 eb
 	ld C,(XIX)                                           ; FD7574  84 23
 	extz BC                                              ; FD7576  d9 12
 	pushw bc                                             ; FD7578  29
@@ -138933,11 +138956,11 @@ sub_FD7626:
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD7646  8e fe 3f 00
 	jr nz, .LFD7654                                      ; FD764A  6e 08
 	pushw 0x00                                           ; FD764C  0b 00 00
-	calr sub_FD616A                                          ; FD764F  1e 18 eb
+	calr ToneMsg_SendParam                                          ; FD764F  1e 18 eb
 	jr .LFD765A                                          ; FD7652  68 06
 .LFD7654:
 	pushw 0x03                                           ; FD7654  0b 03 00
-	calr sub_FD6704                                          ; FD7657  1e aa f0
+	calr ToneMsg8D_SendParam                                          ; FD7657  1e aa f0
 .LFD765A:
 	inc 8,XSP                                            ; FD765A  ef 60
 	inc 2,XSP                                            ; FD765C  ef 62
@@ -139434,9 +139457,9 @@ PanelEvent_ToFieldIndex:
 .LFD79B1:
 	pushw 0x01                                           ; FD79B1  0b 01 00
 .LFD79B4:
-	calr sub_FD677F                                          ; FD79B4  1e c8 ed
+	calr ToneMsg88_Id00                                          ; FD79B4  1e c8 ed
 	pushw 0x09                                           ; FD79B7  0b 09 00
-	calr sub_FD6447                                          ; FD79BA  1e 8a ea
+	calr ToneMsg80_Id00                                          ; FD79BA  1e 8a ea
 	pushw 0x01                                           ; FD79BD  0b 01 00
 	calr Var2805_Set                                      ; FD79C0  1e cf 2d
 	inc 6,XSP                                            ; FD79C3  ef 66
@@ -140980,7 +141003,7 @@ sub_FD86E1:
 	ld wa, (xiz-2)                                       ; FD871B  9e fe 20
 	extz WA                                              ; FD871E  d8 12
 	pushw wa                                             ; FD8720  28
-	calr sub_FD616A                                          ; FD8721  1e 46 da
+	calr ToneMsg_SendParam                                          ; FD8721  1e 46 da
 	pushw 0x02                                           ; FD8724  0b 02 00
 	pushw 0x89                                           ; FD8727  0b 89 00
 	call T_Dispatch_Code80                               ; FD872A  1d d4 1e f4
@@ -141215,11 +141238,11 @@ sub_FD884C:
 	m_cp_mi8 MBD+r6, 0xfa, 0x00                          ; FD8935  8e fa 3f 00
 	jr nz, .LFD8943                                      ; FD8939  6e 08
 	pushw 0x00                                           ; FD893B  0b 00 00
-	calr sub_FD616A                                          ; FD893E  1e 29 d8
+	calr ToneMsg_SendParam                                          ; FD893E  1e 29 d8
 	jr .LFD8949                                          ; FD8941  68 06
 .LFD8943:
 	pushw 0x03                                           ; FD8943  0b 03 00
-	calr sub_FD6704                                          ; FD8946  1e bb dd
+	calr ToneMsg8D_SendParam                                          ; FD8946  1e bb dd
 .LFD8949:
 	inc 8,XSP                                            ; FD8949  ef 60
 	inc 2,XSP                                            ; FD894B  ef 62
@@ -144201,7 +144224,7 @@ sub_FDA282:
 	pushw 0x0d                                           ; FDA296  0b 0d 00
 	pushw 0x00                                           ; FDA299  0b 00 00
 	pushw 0x00                                           ; FDA29C  0b 00 00
-	calr sub_FD63D7                                          ; FDA29F  1e 35 c1
+	calr ToneMsg85_SendParam                                          ; FDA29F  1e 35 c1
 	pushw 0x01                                           ; FDA2A2  0b 01 00
 	calr Var27DA_Set                                      ; FDA2A5  1e 5d d4
 	inc 8,XSP                                            ; FDA2A8  ef 60
@@ -144242,7 +144265,7 @@ sub_FDA282:
 	pushw 0x0d                                           ; FDA2F3  0b 0d 00
 	pushw 0x00                                           ; FDA2F6  0b 00 00
 	pushw 0x00                                           ; FDA2F9  0b 00 00
-	calr sub_FD63D7                                          ; FDA2FC  1e d8 c0
+	calr ToneMsg85_SendParam                                          ; FDA2FC  1e d8 c0
 	inc 8,XSP                                            ; FDA2FF  ef 60
 	inc 6,XSP                                            ; FDA301  ef 66
 	jr .LFDA32D                                          ; FDA303  68 28
@@ -145267,12 +145290,12 @@ sub_FDA911:
 	jr nz, .LFDA93D                                      ; FDA930  6e 0b
 	pushw 0x52                                           ; FDA932  0b 52 00
 	pushw 0x03                                           ; FDA935  0b 03 00
-	calr sub_FD6704                                          ; FDA938  1e c9 bd
+	calr ToneMsg8D_SendParam                                          ; FDA938  1e c9 bd
 	jr .LFDA946                                          ; FDA93B  68 09
 .LFDA93D:
 	pushw 0x8a                                           ; FDA93D  0b 8a 00
 	pushw 0x00                                           ; FDA940  0b 00 00
-	calr sub_FD616A                                          ; FDA943  1e 24 b8
+	calr ToneMsg_SendParam                                          ; FDA943  1e 24 b8
 .LFDA946:
 	inc 8,XSP                                            ; FDA946  ef 60
 	inc 2,XSP                                            ; FDA948  ef 62
@@ -145289,12 +145312,12 @@ sub_FDA911:
 	jr nz, .LFDA970                                      ; FDA963  6e 0b
 	pushw 0x53                                           ; FDA965  0b 53 00
 	pushw 0x03                                           ; FDA968  0b 03 00
-	calr sub_FD6704                                          ; FDA96B  1e 96 bd
+	calr ToneMsg8D_SendParam                                          ; FDA96B  1e 96 bd
 	jr .LFDA979                                          ; FDA96E  68 09
 .LFDA970:
 	pushw 0x8b                                           ; FDA970  0b 8b 00
 	pushw 0x00                                           ; FDA973  0b 00 00
-	calr sub_FD616A                                          ; FDA976  1e f1 b7
+	calr ToneMsg_SendParam                                          ; FDA976  1e f1 b7
 .LFDA979:
 	inc 8,XSP                                            ; FDA979  ef 60
 	inc 2,XSP                                            ; FDA97B  ef 62
@@ -145319,7 +145342,7 @@ sub_FDA911:
 	ld (xiz-42), hl                                      ; FDA9A5  be d6 53
 	m_push MWD+r6, 0xd6                                  ; FDA9A8  9e d6 04
 	pushw 0x03                                           ; FDA9AB  0b 03 00
-	calr sub_FD6704                                          ; FDA9AE  1e 53 bd
+	calr ToneMsg8D_SendParam                                          ; FDA9AE  1e 53 bd
 	ld hl, (xiz-42)                                      ; FDA9B1  9e d6 23
 	inc 1,HL                                             ; FDA9B4  db 61
 	inc 1,D                                              ; FDA9B6  cc 61
@@ -145340,7 +145363,7 @@ sub_FDA911:
 	ld (xiz-42), hl                                      ; FDA9D2  be d6 53
 	m_push MWD+r6, 0xd6                                  ; FDA9D5  9e d6 04
 	pushw 0x00                                           ; FDA9D8  0b 00 00
-	calr sub_FD616A                                          ; FDA9DB  1e 8c b7
+	calr ToneMsg_SendParam                                          ; FDA9DB  1e 8c b7
 	ld hl, (xiz-42)                                      ; FDA9DE  9e d6 23
 	inc 1,HL                                             ; FDA9E1  db 61
 	inc 1,D                                              ; FDA9E3  cc 61
@@ -145370,7 +145393,7 @@ sub_FDA911:
 	ld (xiz-42), hl                                      ; FDAA16  be d6 53
 	m_push MWD+r6, 0xd6                                  ; FDAA19  9e d6 04
 	pushw 0x03                                           ; FDAA1C  0b 03 00
-	calr sub_FD6704                                          ; FDAA1F  1e e2 bc
+	calr ToneMsg8D_SendParam                                          ; FDAA1F  1e e2 bc
 	ld hl, (xiz-42)                                      ; FDAA22  9e d6 23
 	inc 1,HL                                             ; FDAA25  db 61
 	inc 1,D                                              ; FDAA27  cc 61
@@ -145391,7 +145414,7 @@ sub_FDA911:
 	ld (xiz-42), hl                                      ; FDAA43  be d6 53
 	m_push MWD+r6, 0xd6                                  ; FDAA46  9e d6 04
 	pushw 0x00                                           ; FDAA49  0b 00 00
-	calr sub_FD616A                                          ; FDAA4C  1e 1b b7
+	calr ToneMsg_SendParam                                          ; FDAA4C  1e 1b b7
 	ld hl, (xiz-42)                                      ; FDAA4F  9e d6 23
 sub_FDAA52:
 	inc 1,HL                                             ; FDAA52  db 61
@@ -145422,7 +145445,7 @@ sub_FDAA52:
 	ld (xiz-42), hl                                      ; FDAA87  be d6 53
 	m_push MWD+r6, 0xd6                                  ; FDAA8A  9e d6 04
 	pushw 0x03                                           ; FDAA8D  0b 03 00
-	calr sub_FD6704                                          ; FDAA90  1e 71 bc
+	calr ToneMsg8D_SendParam                                          ; FDAA90  1e 71 bc
 	ld hl, (xiz-42)                                      ; FDAA93  9e d6 23
 	inc 1,HL                                             ; FDAA96  db 61
 	inc 1,D                                              ; FDAA98  cc 61
@@ -145436,7 +145459,7 @@ sub_FDAA52:
 	push XBC                                             ; FDAAAE  39
 	pushw 0x97                                           ; FDAAAF  0b 97 00
 	pushw 0x03                                           ; FDAAB2  0b 03 00
-	calr sub_FD6704                                          ; FDAAB5  1e 4c bc
+	calr ToneMsg8D_SendParam                                          ; FDAAB5  1e 4c bc
 	jr .LFDAAFA                                          ; FDAAB8  68 40
 .LFDAABA:
 	ldw hl, 0xba                                         ; FDAABA  33 ba 00
@@ -145450,7 +145473,7 @@ sub_FDAA52:
 	ld (xiz-42), hl                                      ; FDAAC9  be d6 53
 	m_push MWD+r6, 0xd6                                  ; FDAACC  9e d6 04
 	pushw 0x00                                           ; FDAACF  0b 00 00
-	calr sub_FD616A                                          ; FDAAD2  1e 95 b6
+	calr ToneMsg_SendParam                                          ; FDAAD2  1e 95 b6
 	ld hl, (xiz-42)                                      ; FDAAD5  9e d6 23
 	inc 1,HL                                             ; FDAAD8  db 61
 	inc 1,D                                              ; FDAADA  cc 61
@@ -145464,7 +145487,7 @@ sub_FDAA52:
 	push XBC                                             ; FDAAF0  39
 	pushw 0xcf                                           ; FDAAF1  0b cf 00
 	pushw 0x00                                           ; FDAAF4  0b 00 00
-	calr sub_FD616A                                          ; FDAAF7  1e 70 b6
+	calr ToneMsg_SendParam                                          ; FDAAF7  1e 70 b6
 .LFDAAFA:
 	inc 8,XSP                                            ; FDAAFA  ef 60
 	inc 2,XSP                                            ; FDAAFC  ef 62
@@ -145479,7 +145502,7 @@ sub_FDAA52:
 	push XIX                                             ; FDAB15  3c
 	pushw 0x88                                           ; FDAB16  0b 88 00
 	pushw 0x00                                           ; FDAB19  0b 00 00
-	calr sub_FD616A                                          ; FDAB1C  1e 4b b6
+	calr ToneMsg_SendParam                                          ; FDAB1C  1e 4b b6
 	push XIX                                             ; FDAB1F  3c
 	pushw 0x01                                           ; FDAB20  0b 01 00
 	pushw 0x07                                           ; FDAB23  0b 07 00
@@ -145489,7 +145512,7 @@ sub_FDAA52:
 	push XIX                                             ; FDAB2F  3c
 	pushw 0x89                                           ; FDAB30  0b 89 00
 	pushw 0x00                                           ; FDAB33  0b 00 00
-	calr sub_FD616A                                          ; FDAB36  1e 31 b6
+	calr ToneMsg_SendParam                                          ; FDAB36  1e 31 b6
 	lda xbc, (xiz-4)                                     ; FDAB39  be fc 31
 	push XBC                                             ; FDAB3C  39
 	pushw 0x01                                           ; FDAB3D  0b 01 00
@@ -145542,7 +145565,7 @@ sub_FDAA52:
 	push XBC                                             ; FDABBF  39
 	pushw 0x87                                           ; FDABC0  0b 87 00
 	pushw 0x00                                           ; FDABC3  0b 00 00
-	calr sub_FD616A                                          ; FDABC6  1e a1 b5
+	calr ToneMsg_SendParam                                          ; FDABC6  1e a1 b5
 	inc 8,XSP                                            ; FDABC9  ef 60
 	inc 2,XSP                                            ; FDABCB  ef 62
 .LFDABCD:
@@ -145732,7 +145755,7 @@ sub_FDAC6B:
 	call sub_FDA43D                                      ; FDAC79  1d 3d a4 fd
 	pushw 0x01                                           ; FDAC7D  0b 01 00
 	call sub_FDA459                                      ; FDAC80  1d 59 a4 fd
-	call sub_FD67C9                                      ; FDAC84  1d c9 67 fd
+	call ToneMsg88_Id0D                                      ; FDAC84  1d c9 67 fd
 	pushw 0x00                                           ; FDAC88  0b 00 00
 	call Var2806_Set                                      ; FDAC8B  1d d2 a4 fd
 	call T_Mode_SwitchToSound                                        ; FDAC8F  1d c4 15 f4
@@ -145790,9 +145813,9 @@ sub_FDACBD:
 	m_cp_mi8 MBD+r6, 0xfa, 0x01                          ; FDAD2C  8e fa 3f 01
 	jr z, .LFDAD41                                       ; FDAD30  66 0f
 	pushw 0x01                                           ; FDAD32  0b 01 00
-	call sub_FD677F                                      ; FDAD35  1d 7f 67 fd
+	call ToneMsg88_Id00                                      ; FDAD35  1d 7f 67 fd
 	pushw 0x07                                           ; FDAD39  0b 07 00
-	call sub_FD6447                                      ; FDAD3C  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDAD3C  1d 47 64 fd
 	pop XIY                                              ; FDAD40  5d
 .LFDAD41:
 	unlk XIZ                                             ; FDAD41  ee 0d
@@ -145814,7 +145837,7 @@ sub_FDAD44:
 	pushw 0x01                                           ; FDAD69  0b 01 00
 	pushw 0x10                                           ; FDAD6C  0b 10 00
 	pushw 0x00                                           ; FDAD6F  0b 00 00
-	call sub_FD61CF                                      ; FDAD72  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDAD72  1d cf 61 fd
 	pushw 0x01                                           ; FDAD76  0b 01 00
 	call Var27DA_Set                                      ; FDAD79  1d 05 77 fd
 	jr .LFDADB9                                          ; FDAD7D  68 3a
@@ -145900,7 +145923,7 @@ sub_FDAE1F:
 	pushw 0x01                                           ; FDAE3A  0b 01 00
 	pushw 0x11                                           ; FDAE3D  0b 11 00
 	pushw 0x00                                           ; FDAE40  0b 00 00
-	call sub_FD61CF                                      ; FDAE43  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDAE43  1d cf 61 fd
 	inc 8,XSP                                            ; FDAE47  ef 60
 	pushw 0x03                                           ; FDAE49  0b 03 00
 	jr .LFDAE6E                                          ; FDAE4C  68 20
@@ -145914,7 +145937,7 @@ sub_FDAE1F:
 	pushw bc                                             ; FDAE5D  29
 	call Var27A4_Set                                      ; FDAE5E  1d a8 6b fd
 	pushw 0x80                                           ; FDAE62  0b 80 00
-	call sub_FD6447                                      ; FDAE65  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDAE65  1d 47 64 fd
 	inc 8,XSP                                            ; FDAE69  ef 60
 	pushw 0x04                                           ; FDAE6B  0b 04 00
 .LFDAE6E:
@@ -145942,7 +145965,7 @@ sub_FDAE1F:
 	ld C,H                                               ; FDAE9D  ce 8b
 	extz BC                                              ; FDAE9F  d9 12
 	pushw bc                                             ; FDAEA1  29
-	call sub_FD61CF                                      ; FDAEA2  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDAEA2  1d cf 61 fd
 	inc 1,H                                              ; FDAEA6  ce 61
 	inc 8,XSP                                            ; FDAEA8  ef 60
 	cp h, 0x04:i3                                          ; FDAEAA  ce dc
@@ -145976,7 +145999,7 @@ sub_FDAE1F:
 	call Var27DA_Set                                      ; FDAEF1  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDAEF5  1d 13 77 fd
 	pushw 0x10                                           ; FDAEF9  0b 10 00
-	call sub_FD6447                                      ; FDAEFC  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDAEFC  1d 47 64 fd
 	inc 6,XSP                                            ; FDAF00  ef 66
 .LFDAF02:
 	pop XIX                                              ; FDAF02  5c
@@ -146024,7 +146047,7 @@ sub_FDAF07:
 	pushw 0x10                                           ; FDAF67  0b 10 00
 	pushw 0x00                                           ; FDAF6A  0b 00 00
 	pushw 0x03                                           ; FDAF6D  0b 03 00
-	call sub_FD63D7                                      ; FDAF70  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDAF70  1d d7 63 fd
 	add XSP,0x0000001c                                   ; FDAF74  ef c8 1c 00 00 00
 	jrl .LFDB229                                         ; FDAF7A  78 ac 02
 .LFDAF7D:
@@ -146062,7 +146085,7 @@ sub_FDAF07:
 	pushw 0x01                                           ; FDAFC0  0b 01 00
 	pushw 0x0d                                           ; FDAFC3  0b 0d 00
 	pushw 0x00                                           ; FDAFC6  0b 00 00
-	call sub_FD63D7                                      ; FDAFC9  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDAFC9  1d d7 63 fd
 	ldw hl, 0x00                                         ; FDAFCD  33 00 00
 	ld d, 0x02:opc                                          ; FDAFD0  24 02
 	inc 8,XSP                                            ; FDAFD2  ef 60
@@ -146080,7 +146103,7 @@ sub_FDAF07:
 	extz BC                                              ; FDAFF1  d9 12
 	pushw bc                                             ; FDAFF3  29
 	pushw 0x00                                           ; FDAFF4  0b 00 00
-	call sub_FD63D7                                      ; FDAFF7  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDAFF7  1d d7 63 fd
 	ld hl, (xiz-38)                                      ; FDAFFB  9e da 23
 	add HL,0x0017                                        ; FDAFFE  db c8 17 00
 	dec 1,D                                              ; FDB002  cc 69
@@ -146102,7 +146125,7 @@ sub_FDAF07:
 	extz BC                                              ; FDB02A  d9 12
 	pushw bc                                             ; FDB02C  29
 	pushw 0x00                                           ; FDB02D  0b 00 00
-	call sub_FD63D7                                      ; FDB030  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDB030  1d d7 63 fd
 	ld hl, (xiz-38)                                      ; FDB034  9e da 23
 	add HL,0x0017                                        ; FDB037  db c8 17 00
 	dec 1,D                                              ; FDB03B  cc 69
@@ -146124,7 +146147,7 @@ sub_FDAF07:
 	extz BC                                              ; FDB063  d9 12
 	pushw bc                                             ; FDB065  29
 	pushw 0x00                                           ; FDB066  0b 00 00
-	call sub_FD63D7                                      ; FDB069  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDB069  1d d7 63 fd
 	ld hl, (xiz-38)                                      ; FDB06D  9e da 23
 	add HL,0x0017                                        ; FDB070  db c8 17 00
 	dec 1,D                                              ; FDB074  cc 69
@@ -146146,7 +146169,7 @@ sub_FDAF07:
 	extz BC                                              ; FDB09C  d9 12
 	pushw bc                                             ; FDB09E  29
 	pushw 0x00                                           ; FDB09F  0b 00 00
-	call sub_FD63D7                                      ; FDB0A2  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDB0A2  1d d7 63 fd
 	ld hl, (xiz-38)                                      ; FDB0A6  9e da 23
 	add HL,0x0017                                        ; FDB0A9  db c8 17 00
 	dec 1,D                                              ; FDB0AD  cc 69
@@ -146157,7 +146180,7 @@ sub_FDAF07:
 	pushw 0x01                                           ; FDB0B8  0b 01 00
 	pushw 0x11                                           ; FDB0BB  0b 11 00
 	pushw 0x00                                           ; FDB0BE  0b 00 00
-	call sub_FD63D7                                      ; FDB0C1  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDB0C1  1d d7 63 fd
 	pushw 0x04                                           ; FDB0C5  0b 04 00
 	call Var27DA_Set                                      ; FDB0C8  1d 05 77 fd
 	call Var27DB_Increment                                      ; FDB0CC  1d 19 77 fd
@@ -146215,7 +146238,7 @@ sub_FDAF07:
 	call Arr2800_Set1                                      ; FDB153  1d 8c a4 fd
 	pushw 0x80                                           ; FDB157  0b 80 00
 	pushw 0x01                                           ; FDB15A  0b 01 00
-	call sub_FD62B4                                      ; FDB15D  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FDB15D  1d b4 62 fd
 	add XSP,0x00000024                                   ; FDB161  ef c8 24 00 00 00
 	pushw 0x05                                           ; FDB167  0b 05 00
 	jrl .LFDB1EC                                         ; FDB16A  78 7f 00
@@ -146226,7 +146249,7 @@ sub_FDAF07:
 	call sub_FD9EB7                                      ; FDB176  1d b7 9e fd
 	pushw 0x80                                           ; FDB17A  0b 80 00
 	pushw 0x02                                           ; FDB17D  0b 02 00
-	call sub_FD62B4                                      ; FDB180  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FDB180  1d b4 62 fd
 	inc 6,XSP                                            ; FDB184  ef 66
 	pushw 0x06                                           ; FDB186  0b 06 00
 	jr .LFDB1EC                                          ; FDB189  68 61
@@ -146242,7 +146265,7 @@ sub_FDAF07:
 	ld bc, (xiz-8)                                       ; FDB1A3  9e f8 21
 	extz BC                                              ; FDB1A6  d9 12
 	pushw bc                                             ; FDB1A8  29
-	call sub_FD638B                                      ; FDB1A9  1d 8b 63 fd
+	call ToneMsg80_Id10                                      ; FDB1A9  1d 8b 63 fd
 	inc 8,XSP                                            ; FDB1AD  ef 60
 	inc 2,XSP                                            ; FDB1AF  ef 62
 	pushw 0x07                                           ; FDB1B1  0b 07 00
@@ -146253,7 +146276,7 @@ sub_FDAF07:
 	call sub_FD9F42                                      ; FDB1BC  1d 42 9f fd
 	pushw 0x80                                           ; FDB1C0  0b 80 00
 	pushw 0x03                                           ; FDB1C3  0b 03 00
-	call sub_FD686B                                      ; FDB1C6  1d 6b 68 fd
+	call ToneMsg80_Id0B_Part0                                      ; FDB1C6  1d 6b 68 fd
 	pop XIY                                              ; FDB1CA  5d
 	pushw 0x08                                           ; FDB1CB  0b 08 00
 	jr .LFDB1EC                                          ; FDB1CE  68 1c
@@ -146264,7 +146287,7 @@ sub_FDAF07:
 	call sub_FD9D6C                                      ; FDB1D9  1d 6c 9d fd
 	pushw 0x80                                           ; FDB1DD  0b 80 00
 	pushw 0x02                                           ; FDB1E0  0b 02 00
-	call sub_FD686B                                      ; FDB1E3  1d 6b 68 fd
+	call ToneMsg80_Id0B_Part0                                      ; FDB1E3  1d 6b 68 fd
 	inc 6,XSP                                            ; FDB1E7  ef 66
 	pushw 0x09                                           ; FDB1E9  0b 09 00
 .LFDB1EC:
@@ -146291,7 +146314,7 @@ sub_FDAF07:
 	call Var27DA_Set                                      ; FDB219  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB21D  1d 13 77 fd
 	pushw 0x10                                           ; FDB221  0b 10 00
-	call sub_FD6447                                      ; FDB224  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDB224  1d 47 64 fd
 	pop XIY                                              ; FDB228  5d
 .LFDB229:
 	pop XIX                                              ; FDB229  5c
@@ -146327,7 +146350,7 @@ sub_FDB22F:
 	ld C,L                                               ; FDB268  cf 8b
 	extz BC                                              ; FDB26A  d9 12
 	pushw bc                                             ; FDB26C  29
-	call sub_FD61CF                                      ; FDB26D  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB26D  1d cf 61 fd
 	ld de, (xiz-14)                                      ; FDB271  9e f2 22
 	inc 1,DE                                             ; FDB274  da 61
 	dec 1,H                                              ; FDB276  ce 69
@@ -146341,12 +146364,12 @@ sub_FDB22F:
 	pushw 0x01                                           ; FDB287  0b 01 00
 	pushw 0x13                                           ; FDB28A  0b 13 00
 	pushw 0x00                                           ; FDB28D  0b 00 00
-	call sub_FD61CF                                      ; FDB290  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB290  1d cf 61 fd
 	pushw 0x87                                           ; FDB294  0b 87 00
 	pushw 0x01                                           ; FDB297  0b 01 00
 	pushw 0x55                                           ; FDB29A  0b 55 00
 	pushw 0x00                                           ; FDB29D  0b 00 00
-	call sub_FD61CF                                      ; FDB2A0  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB2A0  1d cf 61 fd
 	pushw 0x01                                           ; FDB2A4  0b 01 00
 	call Var27DA_Set                                      ; FDB2A7  1d 05 77 fd
 	call Var27DB_Increment                                      ; FDB2AB  1d 19 77 fd
@@ -146431,7 +146454,7 @@ sub_FDB30B:
 	call Var27DA_Set                                      ; FDB373  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB377  1d 13 77 fd
 	pushw 0x10                                           ; FDB37B  0b 10 00
-	call sub_FD6447                                      ; FDB37E  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDB37E  1d 47 64 fd
 	inc 8,XSP                                            ; FDB382  ef 60
 	inc 4,XSP                                            ; FDB384  ef 64
 .LFDB386:
@@ -146468,7 +146491,7 @@ sub_FDB38C:
 	ld bc, (xiz-4)                                       ; FDB3C5  9e fc 21
 	extz BC                                              ; FDB3C8  d9 12
 	pushw bc                                             ; FDB3CA  29
-	call sub_FD61CF                                      ; FDB3CB  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB3CB  1d cf 61 fd
 	ld DE,IX                                             ; FDB3CF  dc 8a
 	inc 1,DE                                             ; FDB3D1  da 61
 	dec 1,H                                              ; FDB3D3  ce 69
@@ -146511,7 +146534,7 @@ sub_FDB38C:
 	call Var27DA_Set                                      ; FDB436  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB43A  1d 13 77 fd
 	pushw 0x10                                           ; FDB43E  0b 10 00
-	call sub_FD6447                                      ; FDB441  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDB441  1d 47 64 fd
 	inc 8,XSP                                            ; FDB445  ef 60
 .LFDB447:
 	popw ix                                              ; FDB447  4c
@@ -146548,7 +146571,7 @@ sub_FDB44D:
 	ld bc, (xiz-4)                                       ; FDB48C  9e fc 21
 	extz BC                                              ; FDB48F  d9 12
 	pushw bc                                             ; FDB491  29
-	call sub_FD61CF                                      ; FDB492  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB492  1d cf 61 fd
 	ld de, (xiz-12)                                      ; FDB496  9e f4 22
 	inc 1,DE                                             ; FDB499  da 61
 	dec 1,H                                              ; FDB49B  ce 69
@@ -146600,7 +146623,7 @@ sub_FDB4B0:
 	call Var27DA_Set                                      ; FDB50E  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB512  1d 13 77 fd
 	pushw 0x10                                           ; FDB516  0b 10 00
-	call sub_FD6447                                      ; FDB519  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDB519  1d 47 64 fd
 	add XSP,0x0000001a                                   ; FDB51D  ef c8 1a 00 00 00
 .LFDB523:
 	pop XIX                                              ; FDB523  5c
@@ -146613,7 +146636,7 @@ sub_FDB529:
 	pushw 0x8a                                           ; FDB52D  0b 8a 00
 	calr sub_FDB53C                                      ; FDB530  1e 09 00
 	pushw 0x10                                           ; FDB533  0b 10 00
-	call sub_FD6447                                      ; FDB536  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDB536  1d 47 64 fd
 	pop XBC                                              ; FDB53A  59
 	ret                                                  ; FDB53B  0e
 sub_FDB53C:
@@ -146674,7 +146697,7 @@ sub_FDB53C:
 	add WA,BC                                            ; FDB5AE  d9 80
 	pushw wa                                             ; FDB5B0  28
 	pushw 0x00                                           ; FDB5B1  0b 00 00
-	call sub_FD61CF                                      ; FDB5B4  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB5B4  1d cf 61 fd
 	inc 1,H                                              ; FDB5B8  ce 61
 	inc 8,XSP                                            ; FDB5BA  ef 60
 	cp h, 0x04:i3                                          ; FDB5BC  ce dc
@@ -146698,7 +146721,7 @@ sub_FDB53C:
 	ld C,H                                               ; FDB5DF  ce 8b
 	extz BC                                              ; FDB5E1  d9 12
 	pushw bc                                             ; FDB5E3  29
-	call sub_FD61CF                                      ; FDB5E4  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB5E4  1d cf 61 fd
 	inc 1,H                                              ; FDB5E8  ce 61
 	inc 8,XSP                                            ; FDB5EA  ef 60
 	cp h, 0x04:i3                                          ; FDB5EC  ce dc
@@ -146910,7 +146933,7 @@ sub_FDB693:
 	call Var27DA_Set                                      ; FDB7DE  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB7E2  1d 13 77 fd
 	pushw 0x10                                           ; FDB7E6  0b 10 00
-	call sub_FD6447                                      ; FDB7E9  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDB7E9  1d 47 64 fd
 	inc 8,XSP                                            ; FDB7ED  ef 60
 .LFDB7EF:
 	pop XIX                                              ; FDB7EF  5c
@@ -146930,7 +146953,7 @@ sub_FDB7F3:
 	ld C,D                                               ; FDB803  cc 8b
 	extz BC                                              ; FDB805  d9 12
 	pushw bc                                             ; FDB807  29
-	call sub_FD61CF                                      ; FDB808  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB808  1d cf 61 fd
 	inc 1,D                                              ; FDB80C  cc 61
 	inc 8,XSP                                            ; FDB80E  ef 60
 	cp d, 0x04:i3                                          ; FDB810  cc dc
@@ -146947,7 +146970,7 @@ sub_FDB81F:
 	pushw hl                                             ; FDB823  2b
 	pushw de                                             ; FDB824  2a
 	push XIX                                             ; FDB825  3c
-	lda xix, (sub_FD63D7:24)                             ; FDB826  f2 d7 63 fd 34
+	lda xix, (ToneMsg85_SendParam:24)                             ; FDB826  f2 d7 63 fd 34
 	pushw 0x8b                                           ; FDB82B  0b 8b 00
 	pushw 0x01                                           ; FDB82E  0b 01 00
 	pushw 0x0e                                           ; FDB831  0b 0e 00
@@ -147052,7 +147075,7 @@ sub_FDB8D9:
 	ld bc, (xiz-4)                                       ; FDB918  9e fc 21
 	extz BC                                              ; FDB91B  d9 12
 	pushw bc                                             ; FDB91D  29
-	call sub_FD61CF                                      ; FDB91E  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDB91E  1d cf 61 fd
 	ld de, (xiz-12)                                      ; FDB922  9e f4 22
 	inc 1,DE                                             ; FDB925  da 61
 	dec 1,H                                              ; FDB927  ce 69
@@ -147100,7 +147123,7 @@ sub_FDB8D9:
 	call Var27DA_Set                                      ; FDB990  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDB994  1d 13 77 fd
 	pushw 0x10                                           ; FDB998  0b 10 00
-	call sub_FD6447                                      ; FDB99B  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDB99B  1d 47 64 fd
 	add XSP,0x00000016                                   ; FDB99F  ef c8 16 00 00 00
 .LFDB9A5:
 	pop XIX                                              ; FDB9A5  5c
@@ -147170,7 +147193,7 @@ sub_FDB9AB:
 	call sub_FD69E0                                      ; FDBA3D  1d e0 69 fd
 	call Var27DB_Clear                                      ; FDBA41  1d 13 77 fd
 	pushw 0x10                                           ; FDBA45  0b 10 00
-	call sub_FD6447                                      ; FDBA48  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDBA48  1d 47 64 fd
 	inc 8,XSP                                            ; FDBA4C  ef 60
 .LFDBA4E:
 	unlk XIZ                                             ; FDBA4E  ee 0d
@@ -147194,7 +147217,7 @@ sub_FDBA51:
 	ld bc, (xiz-2)                                       ; FDBA6F  9e fe 21
 	extz BC                                              ; FDBA72  d9 12
 	pushw bc                                             ; FDBA74  29
-	call sub_FD61CF                                      ; FDBA75  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBA75  1d cf 61 fd
 	ld DE,IX                                             ; FDBA79  dc 8a
 	inc 1,DE                                             ; FDBA7B  da 61
 	dec 1,H                                              ; FDBA7D  ce 69
@@ -147218,7 +147241,7 @@ sub_FDBA8B:
 	pushw 0x01                                           ; FDBA9D  0b 01 00
 	pushw 0x0d                                           ; FDBAA0  0b 0d 00
 	pushw 0x00                                           ; FDBAA3  0b 00 00
-	call sub_FD63D7                                      ; FDBAA6  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBAA6  1d d7 63 fd
 	ld h, 0x00:opc                                          ; FDBAAA  26 00
 	inc 8,XSP                                            ; FDBAAC  ef 60
 	inc 4,XSP                                            ; FDBAAE  ef 64
@@ -147238,7 +147261,7 @@ sub_FDBA8B:
 	add BC,WA                                            ; FDBACE  d8 81
 	pushw bc                                             ; FDBAD0  29
 	pushw 0x00                                           ; FDBAD1  0b 00 00
-	call sub_FD63D7                                      ; FDBAD4  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBAD4  1d d7 63 fd
 	inc 1,H                                              ; FDBAD8  ce 61
 	inc 8,XSP                                            ; FDBADA  ef 60
 	cp H,0x08                                            ; FDBADC  ce cf 08
@@ -147278,7 +147301,7 @@ sub_FDBAE7:
 	ld bc, (xiz-4)                                       ; FDBB26  9e fc 21
 	extz BC                                              ; FDBB29  d9 12
 	pushw bc                                             ; FDBB2B  29
-	call sub_FD61CF                                      ; FDBB2C  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBB2C  1d cf 61 fd
 	ld de, (xiz-12)                                      ; FDBB30  9e f4 22
 	inc 1,DE                                             ; FDBB33  da 61
 	dec 1,H                                              ; FDBB35  ce 69
@@ -147329,7 +147352,7 @@ sub_FDBAE7:
 	call Var27DA_Set                                      ; FDBBA8  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDBBAC  1d 13 77 fd
 	pushw 0x10                                           ; FDBBB0  0b 10 00
-	call sub_FD6447                                      ; FDBBB3  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDBBB3  1d 47 64 fd
 	add XSP,0x0000001a                                   ; FDBBB7  ef c8 1a 00 00 00
 .LFDBBBD:
 	pop XIX                                              ; FDBBBD  5c
@@ -147342,7 +147365,7 @@ sub_FDBBC3:
 	pushw 0x8f                                           ; FDBBC7  0b 8f 00
 	calr sub_FDB53C                                      ; FDBBCA  1e 6f f9
 	pushw 0x10                                           ; FDBBCD  0b 10 00
-	call sub_FD6447                                      ; FDBBD0  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDBBD0  1d 47 64 fd
 	pop XBC                                              ; FDBBD4  59
 	ret                                                  ; FDBBD5  0e
 sub_FDBBD6:
@@ -147416,42 +147439,42 @@ sub_FDBBD6:
 	jr nz, .LFDBCC7                                      ; FDBC89  6e 3c
 	pushw 0x24                                           ; FDBC8B  0b 24 00
 	pushw 0x00                                           ; FDBC8E  0b 00 00
-	call sub_FD61CF                                      ; FDBC91  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBC91  1d cf 61 fd
 	pushw 0xcd                                           ; FDBC95  0b cd 00
 	pushw 0x01                                           ; FDBC98  0b 01 00
 	pushw 0x23                                           ; FDBC9B  0b 23 00
 	pushw 0x00                                           ; FDBC9E  0b 00 00
-	call sub_FD61CF                                      ; FDBCA1  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBCA1  1d cf 61 fd
 	pushw 0xcd                                           ; FDBCA5  0b cd 00
 	pushw 0x12                                           ; FDBCA8  0b 12 00
 	pushw 0x31                                           ; FDBCAB  0b 31 00
 	pushw 0x00                                           ; FDBCAE  0b 00 00
-	call sub_FD61CF                                      ; FDBCB1  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBCB1  1d cf 61 fd
 	pushw 0xcd                                           ; FDBCB5  0b cd 00
 	pushw 0x12                                           ; FDBCB8  0b 12 00
 	pushw 0x43                                           ; FDBCBB  0b 43 00
 	pushw 0x00                                           ; FDBCBE  0b 00 00
-	call sub_FD61CF                                      ; FDBCC1  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBCC1  1d cf 61 fd
 	jr .LFDBD01                                          ; FDBCC5  68 3a
 .LFDBCC7:
 	pushw 0x21                                           ; FDBCC7  0b 21 00
 	pushw 0x03                                           ; FDBCCA  0b 03 00
-	call sub_FD63D7                                      ; FDBCCD  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBCCD  1d d7 63 fd
 	pushw 0xcd                                           ; FDBCD1  0b cd 00
 	pushw 0x01                                           ; FDBCD4  0b 01 00
 	pushw 0x20                                           ; FDBCD7  0b 20 00
 	pushw 0x03                                           ; FDBCDA  0b 03 00
-	call sub_FD63D7                                      ; FDBCDD  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBCDD  1d d7 63 fd
 	pushw 0xcd                                           ; FDBCE1  0b cd 00
 	pushw 0x12                                           ; FDBCE4  0b 12 00
 	pushw 0x2e                                           ; FDBCE7  0b 2e 00
 	pushw 0x03                                           ; FDBCEA  0b 03 00
-	call sub_FD63D7                                      ; FDBCED  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBCED  1d d7 63 fd
 	pushw 0xcd                                           ; FDBCF1  0b cd 00
 	pushw 0x12                                           ; FDBCF4  0b 12 00
 	pushw 0x40                                           ; FDBCF7  0b 40 00
 	pushw 0x03                                           ; FDBCFA  0b 03 00
-	call sub_FD63D7                                      ; FDBCFD  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBCFD  1d d7 63 fd
 .LFDBD01:
 	add XSP,0x00000020                                   ; FDBD01  ef c8 20 00 00 00
 	pushw 0x01                                           ; FDBD07  0b 01 00
@@ -147616,7 +147639,7 @@ sub_FDBBD6:
 	popw bc                                              ; FDBE6E  49
 .LFDBE6F:
 	pushw 0x10                                           ; FDBE6F  0b 10 00
-	call sub_FD6447                                      ; FDBE72  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDBE72  1d 47 64 fd
 	popw bc                                              ; FDBE76  49
 .LFDBE77:
 	pushw 0x00                                           ; FDBE77  0b 00 00
@@ -147705,7 +147728,7 @@ sub_FDBEDE:
 	ld (xiz-18), hl                                      ; FDBF3C  be ee 53
 	m_push MWD+r6, 0xee                                  ; FDBF3F  9e ee 04
 	pushw 0x00                                           ; FDBF42  0b 00 00
-	call sub_FD61CF                                      ; FDBF45  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBF45  1d cf 61 fd
 	ld hl, (xiz-18)                                      ; FDBF49  9e ee 23
 	inc 3,HL                                             ; FDBF4C  db 63
 	dec 1,D                                              ; FDBF4E  cc 69
@@ -147721,7 +147744,7 @@ sub_FDBF5E:
 	ld (xiz-18), hl                                      ; FDBF61  be ee 53
 	m_push MWD+r6, 0xee                                  ; FDBF64  9e ee 04
 	pushw 0x00                                           ; FDBF67  0b 00 00
-	call sub_FD61CF                                      ; FDBF6A  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBF6A  1d cf 61 fd
 	ld hl, (xiz-18)                                      ; FDBF6E  9e ee 23
 	inc 3,HL                                             ; FDBF71  db 63
 	dec 1,D                                              ; FDBF73  cc 69
@@ -147735,14 +147758,14 @@ sub_FDBF5E:
 	inc 2,BC                                             ; FDBF86  d9 62
 	pushw bc                                             ; FDBF88  29
 	pushw 0x00                                           ; FDBF89  0b 00 00
-	call sub_FD61CF                                      ; FDBF8C  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBF8C  1d cf 61 fd
 	pushw 0x9b                                           ; FDBF90  0b 9b 00
 	pushw 0x01                                           ; FDBF93  0b 01 00
 	ld bc, (xiz-6)                                       ; FDBF96  9e fa 21
 	extz BC                                              ; FDBF99  d9 12
 	pushw bc                                             ; FDBF9B  29
 	pushw 0x00                                           ; FDBF9C  0b 00 00
-	call sub_FD61CF                                      ; FDBF9F  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDBF9F  1d cf 61 fd
 	jrl .LFDC018                                         ; FDBFA3  78 72 00
 .LFDBFA6:
 	ldw hl, 0x12                                         ; FDBFA6  33 12 00
@@ -147753,7 +147776,7 @@ sub_FDBF5E:
 	ld (xiz-18), hl                                      ; FDBFB1  be ee 53
 	m_push MWD+r6, 0xee                                  ; FDBFB4  9e ee 04
 	pushw 0x03                                           ; FDBFB7  0b 03 00
-	call sub_FD63D7                                      ; FDBFBA  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBFBA  1d d7 63 fd
 	ld hl, (xiz-18)                                      ; FDBFBE  9e ee 23
 	inc 3,HL                                             ; FDBFC1  db 63
 	dec 1,D                                              ; FDBFC3  cc 69
@@ -147768,7 +147791,7 @@ sub_FDBF5E:
 	ld (xiz-18), hl                                      ; FDBFD6  be ee 53
 	m_push MWD+r6, 0xee                                  ; FDBFD9  9e ee 04
 	pushw 0x03                                           ; FDBFDC  0b 03 00
-	call sub_FD63D7                                      ; FDBFDF  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDBFDF  1d d7 63 fd
 	ld hl, (xiz-18)                                      ; FDBFE3  9e ee 23
 	inc 3,HL                                             ; FDBFE6  db 63
 	dec 1,D                                              ; FDBFE8  cc 69
@@ -147782,14 +147805,14 @@ sub_FDBF5E:
 	inc 2,BC                                             ; FDBFFB  d9 62
 	pushw bc                                             ; FDBFFD  29
 	pushw 0x03                                           ; FDBFFE  0b 03 00
-	call sub_FD63D7                                      ; FDC001  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDC001  1d d7 63 fd
 	pushw 0x9b                                           ; FDC005  0b 9b 00
 	pushw 0x01                                           ; FDC008  0b 01 00
 	ld bc, (xiz-6)                                       ; FDC00B  9e fa 21
 	extz BC                                              ; FDC00E  d9 12
 	pushw bc                                             ; FDC010  29
 	pushw 0x03                                           ; FDC011  0b 03 00
-	call sub_FD63D7                                      ; FDC014  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDC014  1d d7 63 fd
 .LFDC018:
 	inc 8,XSP                                            ; FDC018  ef 60
 	inc 8,XSP                                            ; FDC01A  ef 60
@@ -147865,7 +147888,7 @@ sub_FDBF5E:
 	call Var27DA_Set                                      ; FDC0CB  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC0CF  1d 13 77 fd
 	pushw 0x10                                           ; FDC0D3  0b 10 00
-	call sub_FD6447                                      ; FDC0D6  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC0D6  1d 47 64 fd
 	pop XIY                                              ; FDC0DA  5d
 .LFDC0DB:
 	pop XIX                                              ; FDC0DB  5c
@@ -147876,7 +147899,7 @@ sub_FDBF5E:
 sub_FDC0E1:
 	calr sub_FDD02D                                      ; FDC0E1  1e 49 0f
 	pushw 0x10                                           ; FDC0E4  0b 10 00
-	call sub_FD6447                                      ; FDC0E7  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC0E7  1d 47 64 fd
 	popw bc                                              ; FDC0EB  49
 	ret                                                  ; FDC0EC  0e
 sub_FDC0ED:
@@ -147969,7 +147992,7 @@ sub_FDC0FD:
 	pushw 0x01                                           ; FDC1BA  0b 01 00
 	call sub_FD69E0                                      ; FDC1BD  1d e0 69 fd
 	pushw 0x10                                           ; FDC1C1  0b 10 00
-	call sub_FD6447                                      ; FDC1C4  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC1C4  1d 47 64 fd
 	inc 8,XSP                                            ; FDC1C8  ef 60
 	inc 2,XSP                                            ; FDC1CA  ef 62
 .LFDC1CC:
@@ -147996,7 +148019,7 @@ sub_FDC1D1:
 	ld bc, (xiz-2)                                       ; FDC1EF  9e fe 21
 	extz BC                                              ; FDC1F2  d9 12
 	pushw bc                                             ; FDC1F4  29
-	call sub_FD61CF                                      ; FDC1F5  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC1F5  1d cf 61 fd
 	ld HL,IX                                             ; FDC1F9  dc 8b
 	inc 1,HL                                             ; FDC1FB  db 61
 	dec 1,D                                              ; FDC1FD  cc 69
@@ -148013,7 +148036,7 @@ sub_FDC1D1:
 	ld bc, (xiz-2)                                       ; FDC213  9e fe 21
 	extz BC                                              ; FDC216  d9 12
 	pushw bc                                             ; FDC218  29
-	call sub_FD61CF                                      ; FDC219  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC219  1d cf 61 fd
 	ld HL,IX                                             ; FDC21D  dc 8b
 	inc 1,HL                                             ; FDC21F  db 61
 	dec 1,D                                              ; FDC221  cc 69
@@ -148052,7 +148075,7 @@ sub_FDC239:
 	add BC,WA                                            ; FDC263  d8 81
 	pushw bc                                             ; FDC265  29
 	pushw 0x00                                           ; FDC266  0b 00 00
-	call sub_FD63D7                                      ; FDC269  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDC269  1d d7 63 fd
 	inc 1,H                                              ; FDC26D  ce 61
 	inc 8,XSP                                            ; FDC26F  ef 60
 	cp h, 0x06:i3                                          ; FDC271  ce de
@@ -148074,7 +148097,7 @@ sub_FDC27B:
 	pushw 0x01                                           ; FDC294  0b 01 00
 	call sub_FD69E0                                      ; FDC297  1d e0 69 fd
 	pushw 0x10                                           ; FDC29B  0b 10 00
-	call sub_FD6447                                      ; FDC29E  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC29E  1d 47 64 fd
 sub_FDC2A2:
 	inc 8,XSP                                            ; FDC2A2  ef 60
 	inc 2,XSP                                            ; FDC2A4  ef 62
@@ -148089,7 +148112,7 @@ sub_FDC2A7:
 	pushw 0x01                                           ; FDC2BC  0b 01 00
 	call sub_FD69E0                                      ; FDC2BF  1d e0 69 fd
 	pushw 0x10                                           ; FDC2C3  0b 10 00
-	call sub_FD6447                                      ; FDC2C6  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC2C6  1d 47 64 fd
 	inc 8,XSP                                            ; FDC2CA  ef 60
 	inc 2,XSP                                            ; FDC2CC  ef 62
 	ret                                                  ; FDC2CE  0e
@@ -148103,7 +148126,7 @@ sub_FDC2CF:
 	pushw 0x01                                           ; FDC2E4  0b 01 00
 	call sub_FD69E0                                      ; FDC2E7  1d e0 69 fd
 	pushw 0x10                                           ; FDC2EB  0b 10 00
-	call sub_FD6447                                      ; FDC2EE  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC2EE  1d 47 64 fd
 	inc 8,XSP                                            ; FDC2F2  ef 60
 	inc 2,XSP                                            ; FDC2F4  ef 62
 	ret                                                  ; FDC2F6  0e
@@ -148115,7 +148138,7 @@ sub_FDC2F7:
 	pushw 0x01                                           ; FDC306  0b 01 00
 	call sub_FD69E0                                      ; FDC309  1d e0 69 fd
 	pushw 0x10                                           ; FDC30D  0b 10 00
-	call sub_FD6447                                      ; FDC310  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC310  1d 47 64 fd
 	inc 6,XSP                                            ; FDC314  ef 66
 	ret                                                  ; FDC316  0e
 sub_FDC317:
@@ -148125,7 +148148,7 @@ sub_FDC317:
 	pushw 0x01                                           ; FDC322  0b 01 00
 	call sub_FD69E0                                      ; FDC325  1d e0 69 fd
 	pushw 0x10                                           ; FDC329  0b 10 00
-	call sub_FD6447                                      ; FDC32C  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC32C  1d 47 64 fd
 	inc 6,XSP                                            ; FDC330  ef 66
 	ret                                                  ; FDC332  0e
 sub_FDC333:
@@ -148157,7 +148180,7 @@ sub_FDC333:
 	ld bc, (xiz-4)                                       ; FDC372  9e fc 21
 	extz BC                                              ; FDC375  d9 12
 	pushw bc                                             ; FDC377  29
-	call sub_FD61CF                                      ; FDC378  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC378  1d cf 61 fd
 	ld de, (xiz-12)                                      ; FDC37C  9e f4 22
 	inc 1,DE                                             ; FDC37F  da 61
 	dec 1,H                                              ; FDC381  ce 69
@@ -148205,7 +148228,7 @@ sub_FDC333:
 	call Var27DA_Set                                      ; FDC3EA  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC3EE  1d 13 77 fd
 	pushw 0x10                                           ; FDC3F2  0b 10 00
-	call sub_FD6447                                      ; FDC3F5  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC3F5  1d 47 64 fd
 sub_FDC3F9:
 	add XSP,0x00000016                                   ; FDC3F9  ef c8 16 00 00 00
 .LFDC3FF:
@@ -148244,7 +148267,7 @@ sub_FDC438:
 	ld bc, (xiz-4)                                       ; FDC43E  9e fc 21
 	extz BC                                              ; FDC441  d9 12
 	pushw bc                                             ; FDC443  29
-	call sub_FD61CF                                      ; FDC444  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC444  1d cf 61 fd
 	ld DE,IX                                             ; FDC448  dc 8a
 	inc 1,DE                                             ; FDC44A  da 61
 	dec 1,H                                              ; FDC44C  ce 69
@@ -148287,7 +148310,7 @@ sub_FDC438:
 	call Var27DA_Set                                      ; FDC4AF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC4B3  1d 13 77 fd
 	pushw 0x10                                           ; FDC4B7  0b 10 00
-	call sub_FD6447                                      ; FDC4BA  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC4BA  1d 47 64 fd
 	inc 8,XSP                                            ; FDC4BE  ef 60
 .LFDC4C0:
 	popw ix                                              ; FDC4C0  4c
@@ -148324,7 +148347,7 @@ sub_FDC4C6:
 	ld bc, (xiz-4)                                       ; FDC505  9e fc 21
 	extz BC                                              ; FDC508  d9 12
 	pushw bc                                             ; FDC50A  29
-	call sub_FD61CF                                      ; FDC50B  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC50B  1d cf 61 fd
 	ld de, (xiz-12)                                      ; FDC50F  9e f4 22
 	inc 1,DE                                             ; FDC512  da 61
 	dec 1,H                                              ; FDC514  ce 69
@@ -148375,7 +148398,7 @@ sub_FDC4C6:
 	call Var27DA_Set                                      ; FDC587  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC58B  1d 13 77 fd
 	pushw 0x10                                           ; FDC58F  0b 10 00
-	call sub_FD6447                                      ; FDC592  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC592  1d 47 64 fd
 	add XSP,0x0000001a                                   ; FDC596  ef c8 1a 00 00 00
 .LFDC59C:
 	pop XIX                                              ; FDC59C  5c
@@ -148388,7 +148411,7 @@ sub_FDC5A2:
 	pushw 0x99                                           ; FDC5A6  0b 99 00
 	calr sub_FDB53C                                      ; FDC5A9  1e 90 ef
 	pushw 0x10                                           ; FDC5AC  0b 10 00
-	call sub_FD6447                                      ; FDC5AF  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC5AF  1d 47 64 fd
 	pop XBC                                              ; FDC5B3  59
 	ret                                                  ; FDC5B4  0e
 sub_FDC5B5:
@@ -148422,17 +148445,17 @@ sub_FDC5BB:
 	extz BC                                              ; FDC5F7  d9 12
 	ld DE,BC                                             ; FDC5F9  d9 8a
 	pushw bc                                             ; FDC5FB  29
-	call sub_FD61CF                                      ; FDC5FC  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC5FC  1d cf 61 fd
 	pushw 0x82                                           ; FDC600  0b 82 00
 	pushw 0x01                                           ; FDC603  0b 01 00
 	pushw 0x04                                           ; FDC606  0b 04 00
 	pushw de                                             ; FDC609  2a
-	call sub_FD61CF                                      ; FDC60A  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC60A  1d cf 61 fd
 	pushw 0x82                                           ; FDC60E  0b 82 00
 	pushw 0x01                                           ; FDC611  0b 01 00
 	pushw 0x05                                           ; FDC614  0b 05 00
 	pushw de                                             ; FDC617  2a
-	call sub_FD61CF                                      ; FDC618  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC618  1d cf 61 fd
 	inc 1,H                                              ; FDC61C  ce 61
 	add XSP,0x00000018                                   ; FDC61E  ef c8 18 00 00 00
 	cp h, 0x04:i3                                          ; FDC624  ce dc
@@ -148456,7 +148479,7 @@ sub_FDC62E:
 	extz BC                                              ; FDC64E  d9 12
 	pushw bc                                             ; FDC650  29
 	pushw 0x00                                           ; FDC651  0b 00 00
-	call sub_FD63D7                                      ; FDC654  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDC654  1d d7 63 fd
 	pushw 0x82                                           ; FDC658  0b 82 00
 	pushw 0x01                                           ; FDC65B  0b 01 00
 	sub XBC,XBC                                          ; FDC65E  e9 a1
@@ -148467,7 +148490,7 @@ sub_FDC62E:
 	extz BC                                              ; FDC66E  d9 12
 	pushw bc                                             ; FDC670  29
 	pushw 0x00                                           ; FDC671  0b 00 00
-	call sub_FD63D7                                      ; FDC674  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDC674  1d d7 63 fd
 	pushw 0x82                                           ; FDC678  0b 82 00
 	pushw 0x01                                           ; FDC67B  0b 01 00
 	sub XBC,XBC                                          ; FDC67E  e9 a1
@@ -148478,7 +148501,7 @@ sub_FDC62E:
 	extz BC                                              ; FDC68E  d9 12
 	pushw bc                                             ; FDC690  29
 	pushw 0x00                                           ; FDC691  0b 00 00
-	call sub_FD63D7                                      ; FDC694  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDC694  1d d7 63 fd
 	ld de, (xiz-48)                                      ; FDC698  9e d0 22
 	add DE,0x0017                                        ; FDC69B  da c8 17 00
 	dec 1,H                                              ; FDC69F  ce 69
@@ -148539,7 +148562,7 @@ sub_FDC6CB:
 	ld bc, (xiz-8)                                       ; FDC72A  9e f8 21
 	extz BC                                              ; FDC72D  d9 12
 	pushw bc                                             ; FDC72F  29
-	call sub_FD62B4                                      ; FDC730  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FDC730  1d b4 62 fd
 	inc 8,XSP                                            ; FDC734  ef 60
 	pushw 0x02                                           ; FDC736  0b 02 00
 	jr .LFDC798                                          ; FDC739  68 5d
@@ -148569,7 +148592,7 @@ sub_FDC6CB:
 	ld bc, (xiz-8)                                       ; FDC772  9e f8 21
 	extz BC                                              ; FDC775  d9 12
 	pushw bc                                             ; FDC777  29
-	call sub_FD62B4                                      ; FDC778  1d b4 62 fd
+	call ToneMsg80_Id12                                      ; FDC778  1d b4 62 fd
 	jrl .LFDC844                                         ; FDC77C  78 c5 00
 .LFDC77F:
 	pushw 0x82                                           ; FDC77F  0b 82 00
@@ -148580,7 +148603,7 @@ sub_FDC6CB:
 .LFDC78D:
 	pushw 0x03                                           ; FDC78D  0b 03 00
 .LFDC790:
-	call sub_FD686B                                      ; FDC790  1d 6b 68 fd
+	call ToneMsg80_Id0B_Part0                                      ; FDC790  1d 6b 68 fd
 	pop XIY                                              ; FDC794  5d
 	pushw 0x03                                           ; FDC795  0b 03 00
 .LFDC798:
@@ -148647,7 +148670,7 @@ sub_FDC6CB:
 	call Var27DA_Set                                      ; FDC835  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC839  1d 13 77 fd
 	pushw 0x10                                           ; FDC83D  0b 10 00
-	call sub_FD6447                                      ; FDC840  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC840  1d 47 64 fd
 .LFDC844:
 	inc 8,XSP                                            ; FDC844  ef 60
 .LFDC846:
@@ -148660,7 +148683,7 @@ sub_FDC84C:
 	link XIZ,0xfff6                                      ; FDC84C  ee 0c f6 ff
 	pushw hl                                             ; FDC850  2b
 	push XIX                                             ; FDC851  3c
-	lda xix, (sub_FD61CF:24)                             ; FDC852  f2 cf 61 fd 34
+	lda xix, (ToneMsg80_SendParam:24)                             ; FDC852  f2 cf 61 fd 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC857  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDC85B  be fe 31
 	push XBC                                             ; FDC85E  39
@@ -148764,7 +148787,7 @@ sub_FDC87E:
 	pushw 0x03                                           ; FDC944  0b 03 00
 	call PanelDial_ActAsButton                                      ; FDC947  1d 01 7c fd
 	pushw 0x10                                           ; FDC94B  0b 10 00
-	call sub_FD6447                                      ; FDC94E  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDC94E  1d 47 64 fd
 .LFDC952:
 	inc 8,XSP                                            ; FDC952  ef 60
 	inc 2,XSP                                            ; FDC954  ef 62
@@ -148801,7 +148824,7 @@ sub_FDC95B:
 	ld bc, (xiz-4)                                       ; FDC997  9e fc 21
 	extz BC                                              ; FDC99A  d9 12
 	pushw bc                                             ; FDC99C  29
-	call sub_FD61CF                                      ; FDC99D  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC99D  1d cf 61 fd
 	ld HL,DE                                             ; FDC9A1  da 8b
 	inc 1,HL                                             ; FDC9A3  db 61
 	decm8 0x01, (xiz-5)                                  ; FDC9A5  8e fb 69
@@ -148821,7 +148844,7 @@ sub_FDC95B:
 sub_FDC9C4:
 	extz BC                                              ; FDC9C4  d9 12
 	pushw bc                                             ; FDC9C6  29
-	call sub_FD61CF                                      ; FDC9C7  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDC9C7  1d cf 61 fd
 	ld DE,IX                                             ; FDC9CB  dc 8a
 	inc 1,DE                                             ; FDC9CD  da 61
 	decm8 0x01, (xiz-5)                                  ; FDC9CF  8e fb 69
@@ -148885,7 +148908,7 @@ sub_FDCA4E:
 	call Var27DA_Set                                      ; FDCA60  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDCA64  1d 13 77 fd
 	pushw 0x10                                           ; FDCA68  0b 10 00
-	call sub_FD6447                                      ; FDCA6B  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDCA6B  1d 47 64 fd
 .LFDCA6F:
 	inc 6,XSP                                            ; FDCA6F  ef 66
 .LFDCA71:
@@ -148922,7 +148945,7 @@ sub_FDCA77:
 	ld bc, (xiz-4)                                       ; FDCAB3  9e fc 21
 	extz BC                                              ; FDCAB6  d9 12
 	pushw bc                                             ; FDCAB8  29
-	call sub_FD61CF                                      ; FDCAB9  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDCAB9  1d cf 61 fd
 	ld HL,DE                                             ; FDCABD  da 8b
 	inc 1,HL                                             ; FDCABF  db 61
 	decm8 0x01, (xiz-5)                                  ; FDCAC1  8e fb 69
@@ -148941,7 +148964,7 @@ sub_FDCA77:
 	ld C,H                                               ; FDCADE  ce 8b
 	extz BC                                              ; FDCAE0  d9 12
 	pushw bc                                             ; FDCAE2  29
-	call sub_FD61CF                                      ; FDCAE3  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDCAE3  1d cf 61 fd
 	ld DE,IX                                             ; FDCAE7  dc 8a
 	inc 1,DE                                             ; FDCAE9  da 61
 	decm8 0x01, (xiz-5)                                  ; FDCAEB  8e fb 69
@@ -149004,7 +149027,7 @@ sub_FDCA77:
 	call Var27DA_Set                                      ; FDCB7C  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDCB80  1d 13 77 fd
 	pushw 0x10                                           ; FDCB84  0b 10 00
-	call sub_FD6447                                      ; FDCB87  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDCB87  1d 47 64 fd
 .LFDCB8B:
 	inc 6,XSP                                            ; FDCB8B  ef 66
 .LFDCB8D:
@@ -149050,7 +149073,7 @@ sub_FDCB93:
 	ld bc, (xiz-8)                                       ; FDCBE7  9e f8 21
 	extz BC                                              ; FDCBEA  d9 12
 	pushw bc                                             ; FDCBEC  29
-	call sub_FD61CF                                      ; FDCBED  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDCBED  1d cf 61 fd
 	inc 1,H                                              ; FDCBF1  ce 61
 	inc 8,XSP                                            ; FDCBF3  ef 60
 	cp h, 0x03:i3                                          ; FDCBF5  ce db
@@ -149065,7 +149088,7 @@ sub_FDCB93:
 	ld bc, (xiz-4)                                       ; FDCC06  9e fc 21
 	extz BC                                              ; FDCC09  d9 12
 	pushw bc                                             ; FDCC0B  29
-	call sub_FD63D7                                      ; FDCC0C  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDCC0C  1d d7 63 fd
 	inc 1,H                                              ; FDCC10  ce 61
 	inc 8,XSP                                            ; FDCC12  ef 60
 	cp h, 0x03:i3                                          ; FDCC14  ce db
@@ -149110,7 +149133,7 @@ sub_FDCB93:
 	ld bc, (xiz-4)                                       ; FDCC78  9e fc 21
 	extz BC                                              ; FDCC7B  d9 12
 	pushw bc                                             ; FDCC7D  29
-	call sub_FD6316                                      ; FDCC7E  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FDCC7E  1d 16 63 fd
 	inc 8,XSP                                            ; FDCC82  ef 60
 	inc 2,XSP                                            ; FDCC84  ef 62
 	pushw 0x02                                           ; FDCC86  0b 02 00
@@ -149137,7 +149160,7 @@ sub_FDCB93:
 	ld bc, (xiz-4)                                       ; FDCCB8  9e fc 21
 	extz BC                                              ; FDCCBB  d9 12
 	pushw bc                                             ; FDCCBD  29
-	call sub_FD6316                                      ; FDCCBE  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FDCCBE  1d 16 63 fd
 	jr .LFDCD19                                          ; FDCCC2  68 55
 .LFDCCC4:
 	pushw 0x86                                           ; FDCCC4  0b 86 00
@@ -149148,7 +149171,7 @@ sub_FDCB93:
 .LFDCCD2:
 	pushw 0x04                                           ; FDCCD2  0b 04 00
 .LFDCCD5:
-	call sub_FD686B                                      ; FDCCD5  1d 6b 68 fd
+	call ToneMsg80_Id0B_Part0                                      ; FDCCD5  1d 6b 68 fd
 	pop XIY                                              ; FDCCD9  5d
 	pushw 0x03                                           ; FDCCDA  0b 03 00
 .LFDCCDD:
@@ -149173,7 +149196,7 @@ sub_FDCB93:
 	call Var27DA_Set                                      ; FDCD0A  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDCD0E  1d 13 77 fd
 	pushw 0x10                                           ; FDCD12  0b 10 00
-	call sub_FD6447                                      ; FDCD15  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDCD15  1d 47 64 fd
 .LFDCD19:
 	inc 8,XSP                                            ; FDCD19  ef 60
 	inc 2,XSP                                            ; FDCD1B  ef 62
@@ -149300,7 +149323,7 @@ sub_FDCDE0:
 	ld bc, (xiz-8)                                       ; FDCE21  9e f8 21
 	extz BC                                              ; FDCE24  d9 12
 	pushw bc                                             ; FDCE26  29
-	call sub_FD622B                                      ; FDCE27  1d 2b 62 fd
+	call ToneMsg80_Id01                                      ; FDCE27  1d 2b 62 fd
 	pushw 0x23                                           ; FDCE2B  0b 23 00
 	pushw 0xab                                           ; FDCE2E  0b ab 00
 	call PanelScreen_PostRequestBit6                                      ; FDCE31  1d d9 60 fd
@@ -149362,12 +149385,12 @@ sub_FDCE7B:
 	m_cp_mi8 MBD+r6, 0xfc, 0x01                          ; FDCEC2  8e fc 3f 01
 	jr nz, .LFDCED1                                      ; FDCEC6  6e 09
 	pushw 0x03                                           ; FDCEC8  0b 03 00
-	call sub_FD63D7                                      ; FDCECB  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDCECB  1d d7 63 fd
 sub_FDCECF:
 	jr .LFDCED8                                          ; FDCECF  68 07
 .LFDCED1:
 	pushw 0x00                                           ; FDCED1  0b 00 00
-	call sub_FD61CF                                      ; FDCED4  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDCED4  1d cf 61 fd
 .LFDCED8:
 	inc 8,XSP                                            ; FDCED8  ef 60
 .LFDCEDA:
@@ -149479,7 +149502,7 @@ sub_FDCFCB:
 	call Arr27A6_Set                                      ; FDCFD1  1d 65 6c fd
 	call Var27DB_Clear                                      ; FDCFD5  1d 13 77 fd
 	pushw 0x10                                           ; FDCFD9  0b 10 00
-	call sub_FD6447                                      ; FDCFDC  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDCFDC  1d 47 64 fd
 	add XSP,0x0000002c                                   ; FDCFE0  ef c8 2c 00 00 00
 .LFDCFE6:
 	pop XIX                                              ; FDCFE6  5c
@@ -149512,7 +149535,7 @@ sub_FDCFEB:
 	pushw bc                                             ; FDD01C  29
 	call sub_F0B91C                                      ; FDD01D  1d 1c b9 f0
 	pushw 0x10                                           ; FDD021  0b 10 00
-	call sub_FD6447                                      ; FDD024  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDD024  1d 47 64 fd
 	pop XBC                                              ; FDD028  59
 	popw hl                                              ; FDD029  4b
 	unlk XIZ                                             ; FDD02A  ee 0d
@@ -149533,7 +149556,7 @@ sub_FDD02D:
 	pushw 0x09                                           ; FDD04F  0b 09 00
 	pushw 0xd0                                           ; FDD052  0b d0 00
 	pushw 0x00                                           ; FDD055  0b 00 00
-	call sub_FD61CF                                      ; FDD058  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD058  1d cf 61 fd
 	pushw 0x01                                           ; FDD05C  0b 01 00
 	call Var27DA_Set                                      ; FDD05F  1d 05 77 fd
 	inc 8,XSP                                            ; FDD063  ef 60
@@ -149758,13 +149781,13 @@ sub_FDD168:
 	ld bc, (xiz-6)                                       ; FDD257  9e fa 21
 	extz BC                                              ; FDD25A  d9 12
 	pushw bc                                             ; FDD25C  29
-	call sub_FD648D                                      ; FDD25D  1d 8d 64 fd
+	call ToneMsg80_Id04                                      ; FDD25D  1d 8d 64 fd
 	inc 6,XSP                                            ; FDD261  ef 66
 	jr .LFDD26D                                          ; FDD263  68 08
 .LFDD265:
 	pushw 0x08                                           ; FDD265  0b 08 00
 .LFDD268:
-	call sub_FD6447                                      ; FDD268  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDD268  1d 47 64 fd
 	popw bc                                              ; FDD26C  49
 .LFDD26D:
 	pop XIX                                              ; FDD26D  5c
@@ -149774,7 +149797,7 @@ sub_FDD168:
 sub_FDD272:
 	call T_F42F4C                                        ; FDD272  1d 4c 2f f4
 	pushw 0x10                                           ; FDD276  0b 10 00
-	call sub_FD6447                                      ; FDD279  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDD279  1d 47 64 fd
 	popw bc                                              ; FDD27D  49
 	ret                                                  ; FDD27E  0e
 sub_FDD27F:
@@ -149822,7 +149845,7 @@ sub_FDD27F:
 	pushw 0x01                                           ; FDD2ED  0b 01 00
 	pushw 0x0d                                           ; FDD2F0  0b 0d 00
 	pushw 0x00                                           ; FDD2F3  0b 00 00
-	call sub_FD63D7                                      ; FDD2F6  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD2F6  1d d7 63 fd
 	ldw de, 0x00                                         ; FDD2FA  32 00 00
 	ld h, 0x02:opc                                          ; FDD2FD  26 02
 	inc 8,XSP                                            ; FDD2FF  ef 60
@@ -149839,7 +149862,7 @@ sub_FDD27F:
 	extz BC                                              ; FDD31C  d9 12
 	pushw bc                                             ; FDD31E  29
 	pushw 0x00                                           ; FDD31F  0b 00 00
-	call sub_FD63D7                                      ; FDD322  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD322  1d d7 63 fd
 	ld de, (xiz-24)                                      ; FDD326  9e e8 22
 	add DE,0x0017                                        ; FDD329  da c8 17 00
 	dec 1,H                                              ; FDD32D  ce 69
@@ -149901,7 +149924,7 @@ sub_FDD27F:
 	ld bc, (xiz-6)                                       ; FDD3BB  9e fa 21
 	extz BC                                              ; FDD3BE  d9 12
 	pushw bc                                             ; FDD3C0  29
-	call sub_FD638B                                      ; FDD3C1  1d 8b 63 fd
+	call ToneMsg80_Id10                                      ; FDD3C1  1d 8b 63 fd
 	add XSP,0x00000024                                   ; FDD3C5  ef c8 24 00 00 00
 	pushw 0x03                                           ; FDD3CB  0b 03 00
 	jr .LFDD3E8                                          ; FDD3CE  68 18
@@ -149911,7 +149934,7 @@ sub_FDD27F:
 	call sub_FD9F42                                      ; FDD3D6  1d 42 9f fd
 	pushw 0xcb                                           ; FDD3DA  0b cb 00
 	pushw 0x02                                           ; FDD3DD  0b 02 00
-	call sub_FD686B                                      ; FDD3E0  1d 6b 68 fd
+	call ToneMsg80_Id0B_Part0                                      ; FDD3E0  1d 6b 68 fd
 	pop XIY                                              ; FDD3E4  5d
 	pushw 0x04                                           ; FDD3E5  0b 04 00
 .LFDD3E8:
@@ -149943,7 +149966,7 @@ sub_FDD420:
 	call Var27DA_Set                                      ; FDD420  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDD424  1d 13 77 fd
 	pushw 0x10                                           ; FDD428  0b 10 00
-	call sub_FD6447                                      ; FDD42B  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDD42B  1d 47 64 fd
 	pop XIY                                              ; FDD42F  5d
 .LFDD430:
 	pop XIX                                              ; FDD430  5c
@@ -149977,12 +150000,12 @@ sub_FDD437:
 	jr nz, .LFDD47A                                      ; FDD46C  6e 0c
 	pushw 0x11                                           ; FDD46E  0b 11 00
 	pushw 0x00                                           ; FDD471  0b 00 00
-	call sub_FD61CF                                      ; FDD474  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD474  1d cf 61 fd
 	jr .LFDD484                                          ; FDD478  68 0a
 .LFDD47A:
 	pushw 0x0d                                           ; FDD47A  0b 0d 00
 	pushw 0x00                                           ; FDD47D  0b 00 00
-	call sub_FD63D7                                      ; FDD480  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD480  1d d7 63 fd
 .LFDD484:
 	inc 8,XSP                                            ; FDD484  ef 60
 	pushw 0x01                                           ; FDD486  0b 01 00
@@ -150011,7 +150034,7 @@ sub_FDD437:
 	ld C,D                                               ; FDD4BD  cc 8b
 	extz BC                                              ; FDD4BF  d9 12
 	pushw bc                                             ; FDD4C1  29
-	call sub_FD61CF                                      ; FDD4C2  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD4C2  1d cf 61 fd
 	add H,0x10                                           ; FDD4C6  ce c8 10
 	ld L,D                                               ; FDD4C9  cc 8f
 	add L,0x10                                           ; FDD4CB  cf c8 10
@@ -150026,7 +150049,7 @@ sub_FDD437:
 	ld C,H                                               ; FDD4E0  ce 8b
 	extz BC                                              ; FDD4E2  d9 12
 	pushw bc                                             ; FDD4E4  29
-	call sub_FD63D7                                      ; FDD4E5  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD4E5  1d d7 63 fd
 	inc 1,H                                              ; FDD4E9  ce 61
 	inc 8,XSP                                            ; FDD4EB  ef 60
 	cp h, 0x02:i3                                          ; FDD4ED  ce da
@@ -150096,7 +150119,7 @@ sub_FDD437:
 	ld C,D                                               ; FDD578  cc 8b
 	extz BC                                              ; FDD57A  d9 12
 	pushw bc                                             ; FDD57C  29
-	call sub_FD61CF                                      ; FDD57D  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD57D  1d cf 61 fd
 	add H,0x10                                           ; FDD581  ce c8 10
 	ld L,D                                               ; FDD584  cc 8f
 	add L,0x10                                           ; FDD586  cf c8 10
@@ -150111,7 +150134,7 @@ sub_FDD437:
 	ld C,H                                               ; FDD59B  ce 8b
 	extz BC                                              ; FDD59D  d9 12
 	pushw bc                                             ; FDD59F  29
-	call sub_FD63D7                                      ; FDD5A0  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD5A0  1d d7 63 fd
 	inc 1,H                                              ; FDD5A4  ce 61
 	inc 8,XSP                                            ; FDD5A6  ef 60
 	cp h, 0x02:i3                                          ; FDD5A8  ce da
@@ -150262,7 +150285,7 @@ sub_FDD437:
 	ld bc, (xiz-14)                                      ; FDD6FB  9e f2 21
 	extz BC                                              ; FDD6FE  d9 12
 	pushw bc                                             ; FDD700  29
-	call sub_FD6316                                      ; FDD701  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FDD701  1d 16 63 fd
 	inc 8,XSP                                            ; FDD705  ef 60
 	inc 2,XSP                                            ; FDD707  ef 62
 	pushw 0x04                                           ; FDD709  0b 04 00
@@ -150289,7 +150312,7 @@ sub_FDD437:
 	ld bc, (xiz-14)                                      ; FDD73E  9e f2 21
 	extz BC                                              ; FDD741  d9 12
 	pushw bc                                             ; FDD743  29
-	call sub_FD6316                                      ; FDD744  1d 16 63 fd
+	call ToneMsg80_Id13                                      ; FDD744  1d 16 63 fd
 	jrl .LFDD7ED                                         ; FDD748  78 a2 00
 .LFDD74B:
 	pushw 0xc0                                           ; FDD74B  0b c0 00
@@ -150300,7 +150323,7 @@ sub_FDD437:
 .LFDD759:
 	pushw 0x04                                           ; FDD759  0b 04 00
 .LFDD75C:
-	call sub_FD686B                                      ; FDD75C  1d 6b 68 fd
+	call ToneMsg80_Id0B_Part0                                      ; FDD75C  1d 6b 68 fd
 	pop XIY                                              ; FDD760  5d
 	pushw 0x05                                           ; FDD761  0b 05 00
 .LFDD764:
@@ -150361,7 +150384,7 @@ sub_FDD437:
 	pushw 0x01                                           ; FDD7DF  0b 01 00
 	call sub_FD69E0                                      ; FDD7E2  1d e0 69 fd
 	pushw 0x10                                           ; FDD7E6  0b 10 00
-	call sub_FD6447                                      ; FDD7E9  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDD7E9  1d 47 64 fd
 .LFDD7ED:
 	inc 8,XSP                                            ; FDD7ED  ef 60
 	inc 2,XSP                                            ; FDD7EF  ef 62
@@ -150380,8 +150403,8 @@ T_F41F8C_Nop:
 ; screen dispatch code is 0xA3: it asks CPU 2 for the page's fields and
 ; repaints when the last reply lands.
 ;
-; Shape:   arg1 == 0 -> send 3 read-back request(s) (sub_FD61CF when
-;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+; Shape:   arg1 == 0 -> send 3 read-back request(s) (ToneMsg80_SendParam when
+;          (0x27F5) == 0, the melodic path; ToneMsg85_SendParam when it is not, the
 ;          percussion path), each tagged 0xC3, then Var27DA_Set(1).
 ;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
 ;          and once the count reaches 3 repaint through T_Dispatch_Code80_Bracketed
@@ -150428,21 +150451,21 @@ ToneEditPage_A3_PositionParameter:
 	ld bc, (xiz-6)                                       ; FDD83E  9e fa 21
 	extz BC                                              ; FDD841  d9 12
 	pushw bc                                             ; FDD843  29
-	call sub_FD61CF                                      ; FDD844  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD844  1d cf 61 fd
 	pushw 0xc3                                           ; FDD848  0b c3 00
 	pushw 0x01                                           ; FDD84B  0b 01 00
 	pushw 0x0e                                           ; FDD84E  0b 0e 00
 	ld bc, (xiz-6)                                       ; FDD851  9e fa 21
 	extz BC                                              ; FDD854  d9 12
 	pushw bc                                             ; FDD856  29
-	call sub_FD61CF                                      ; FDD857  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD857  1d cf 61 fd
 	pushw 0xc3                                           ; FDD85B  0b c3 00
 	pushw 0x01                                           ; FDD85E  0b 01 00
 	pushw 0x13                                           ; FDD861  0b 13 00
 	ld bc, (xiz-6)                                       ; FDD864  9e fa 21
 	extz BC                                              ; FDD867  d9 12
 	pushw bc                                             ; FDD869  29
-	call sub_FD61CF                                      ; FDD86A  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD86A  1d cf 61 fd
 	jr .LFDD8B1                                          ; FDD86E  68 41
 .LFDD870:
 	lda xbc, (xiz-8)                                     ; FDD870  be f8 31
@@ -150454,21 +150477,21 @@ ToneEditPage_A3_PositionParameter:
 	ld bc, (xiz-8)                                       ; FDD881  9e f8 21
 	extz BC                                              ; FDD884  d9 12
 	pushw bc                                             ; FDD886  29
-	call sub_FD63D7                                      ; FDD887  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD887  1d d7 63 fd
 	pushw 0xc3                                           ; FDD88B  0b c3 00
 	pushw 0x01                                           ; FDD88E  0b 01 00
 	pushw 0x0e                                           ; FDD891  0b 0e 00
 	ld bc, (xiz-8)                                       ; FDD894  9e f8 21
 	extz BC                                              ; FDD897  d9 12
 	pushw bc                                             ; FDD899  29
-	call sub_FD63D7                                      ; FDD89A  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD89A  1d d7 63 fd
 	pushw 0xc3                                           ; FDD89E  0b c3 00
 	pushw 0x01                                           ; FDD8A1  0b 01 00
 	pushw 0x13                                           ; FDD8A4  0b 13 00
 	ld bc, (xiz-8)                                       ; FDD8A7  9e f8 21
 	extz BC                                              ; FDD8AA  d9 12
 	pushw bc                                             ; FDD8AC  29
-	call sub_FD63D7                                      ; FDD8AD  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD8AD  1d d7 63 fd
 .LFDD8B1:
 	add XSP,0x0000001c                                   ; FDD8B1  ef c8 1c 00 00 00
 	pushw 0x01                                           ; FDD8B7  0b 01 00
@@ -150527,7 +150550,7 @@ ToneEditPage_A3_PositionParameter:
 	pushw 0x01                                           ; FDD93F  0b 01 00
 	call sub_FD69E0                                      ; FDD942  1d e0 69 fd
 	pushw 0x10                                           ; FDD946  0b 10 00
-	call sub_FD6447                                      ; FDD949  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDD949  1d 47 64 fd
 	add XSP,0x00000016                                   ; FDD94D  ef c8 16 00 00 00
 .LFDD953:
 	pop XIX                                              ; FDD953  5c
@@ -150539,8 +150562,8 @@ ToneEditPage_A3_PositionParameter:
 ; screen dispatch code is 0xA4: it asks CPU 2 for the page's fields and
 ; repaints when the last reply lands.
 ;
-; Shape:   arg1 == 0 -> send 3 read-back request(s) (sub_FD61CF when
-;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+; Shape:   arg1 == 0 -> send 3 read-back request(s) (ToneMsg80_SendParam when
+;          (0x27F5) == 0, the melodic path; ToneMsg85_SendParam when it is not, the
 ;          percussion path), each tagged 0xC4, then Var27DA_Set(1).
 ;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
 ;          and once the count reaches 3 repaint through T_Dispatch_Code80_Bracketed
@@ -150587,7 +150610,7 @@ ToneEditPage_A4_PositionMovement:
 	ld bc, (xiz-6)                                       ; FDD998  9e fa 21
 	extz BC                                              ; FDD99B  d9 12
 	pushw bc                                             ; FDD99D  29
-	call sub_FD61CF                                      ; FDD99E  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDD99E  1d cf 61 fd
 	jr .LFDD9BF                                          ; FDD9A2  68 1b
 .LFDD9A4:
 	lda xbc, (xiz-8)                                     ; FDD9A4  be f8 31
@@ -150599,7 +150622,7 @@ ToneEditPage_A4_PositionMovement:
 	ld bc, (xiz-8)                                       ; FDD9B5  9e f8 21
 	extz BC                                              ; FDD9B8  d9 12
 	pushw bc                                             ; FDD9BA  29
-	call sub_FD63D7                                      ; FDD9BB  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDD9BB  1d d7 63 fd
 .LFDD9BF:
 	inc 8,XSP                                            ; FDD9BF  ef 60
 	inc 4,XSP                                            ; FDD9C1  ef 64
@@ -150637,7 +150660,7 @@ ToneEditPage_A4_PositionMovement:
 	pushw 0x01                                           ; FDDA08  0b 01 00
 	call sub_FD69E0                                      ; FDDA0B  1d e0 69 fd
 	pushw 0x10                                           ; FDDA0F  0b 10 00
-	call sub_FD6447                                      ; FDDA12  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDDA12  1d 47 64 fd
 	inc 8,XSP                                            ; FDDA16  ef 60
 .LFDDA18:
 	popw hl                                              ; FDDA18  4b
@@ -150648,8 +150671,8 @@ ToneEditPage_A4_PositionMovement:
 ; screen dispatch code is 0xA5: it asks CPU 2 for the page's fields and
 ; repaints when the last reply lands.
 ;
-; Shape:   arg1 == 0 -> send 8 read-back request(s) (sub_FD61CF when
-;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+; Shape:   arg1 == 0 -> send 8 read-back request(s) (ToneMsg80_SendParam when
+;          (0x27F5) == 0, the melodic path; ToneMsg85_SendParam when it is not, the
 ;          percussion path), each tagged 0xC5, then Var27DA_Set(1).
 ;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
 ;          and once the count reaches 8 repaint through T_Dispatch_Code80_Bracketed
@@ -150704,56 +150727,56 @@ ToneEditPage_A5_FittingMutingTuning:
 	ld bc, (xiz-6)                                       ; FDDA63  9e fa 21
 	extz BC                                              ; FDDA66  d9 12
 	pushw bc                                             ; FDDA68  29
-	call sub_FD61CF                                      ; FDDA69  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDA69  1d cf 61 fd
 	pushw hl                                             ; FDDA6D  2b
 	pushw 0x01                                           ; FDDA6E  0b 01 00
 	pushw 0x16                                           ; FDDA71  0b 16 00
 	ld bc, (xiz-6)                                       ; FDDA74  9e fa 21
 	extz BC                                              ; FDDA77  d9 12
 	pushw bc                                             ; FDDA79  29
-	call sub_FD61CF                                      ; FDDA7A  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDA7A  1d cf 61 fd
 	pushw hl                                             ; FDDA7E  2b
 	pushw 0x01                                           ; FDDA7F  0b 01 00
 	pushw 0x1d                                           ; FDDA82  0b 1d 00
 	ld bc, (xiz-6)                                       ; FDDA85  9e fa 21
 	extz BC                                              ; FDDA88  d9 12
 	pushw bc                                             ; FDDA8A  29
-	call sub_FD61CF                                      ; FDDA8B  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDA8B  1d cf 61 fd
 	pushw hl                                             ; FDDA8F  2b
 	pushw 0x01                                           ; FDDA90  0b 01 00
 	pushw 0x1e                                           ; FDDA93  0b 1e 00
 	ld bc, (xiz-6)                                       ; FDDA96  9e fa 21
 	extz BC                                              ; FDDA99  d9 12
 	pushw bc                                             ; FDDA9B  29
-	call sub_FD61CF                                      ; FDDA9C  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDA9C  1d cf 61 fd
 	pushw hl                                             ; FDDAA0  2b
 	pushw 0x01                                           ; FDDAA1  0b 01 00
 	pushw 0x1f                                           ; FDDAA4  0b 1f 00
 	ld bc, (xiz-6)                                       ; FDDAA7  9e fa 21
 	extz BC                                              ; FDDAAA  d9 12
 	pushw bc                                             ; FDDAAC  29
-	call sub_FD61CF                                      ; FDDAAD  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDAAD  1d cf 61 fd
 	pushw hl                                             ; FDDAB1  2b
 	pushw 0x01                                           ; FDDAB2  0b 01 00
 	pushw 0x20                                           ; FDDAB5  0b 20 00
 	ld bc, (xiz-6)                                       ; FDDAB8  9e fa 21
 	extz BC                                              ; FDDABB  d9 12
 	pushw bc                                             ; FDDABD  29
-	call sub_FD61CF                                      ; FDDABE  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDABE  1d cf 61 fd
 	pushw hl                                             ; FDDAC2  2b
 	pushw 0x01                                           ; FDDAC3  0b 01 00
 	pushw 0x29                                           ; FDDAC6  0b 29 00
 	ld bc, (xiz-6)                                       ; FDDAC9  9e fa 21
 	extz BC                                              ; FDDACC  d9 12
 	pushw bc                                             ; FDDACE  29
-	call sub_FD61CF                                      ; FDDACF  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDACF  1d cf 61 fd
 	pushw hl                                             ; FDDAD3  2b
 	pushw 0x01                                           ; FDDAD4  0b 01 00
 	pushw 0x2a                                           ; FDDAD7  0b 2a 00
 	ld bc, (xiz-6)                                       ; FDDADA  9e fa 21
 	extz BC                                              ; FDDADD  d9 12
 	pushw bc                                             ; FDDADF  29
-	call sub_FD61CF                                      ; FDDAE0  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDAE0  1d cf 61 fd
 	jrl .LFDDB7A                                         ; FDDAE4  78 93 00
 .LFDDAE7:
 	lda xbc, (xiz-8)                                     ; FDDAE7  be f8 31
@@ -150766,56 +150789,56 @@ ToneEditPage_A5_FittingMutingTuning:
 	ld bc, (xiz-8)                                       ; FDDAF9  9e f8 21
 	extz BC                                              ; FDDAFC  d9 12
 	pushw bc                                             ; FDDAFE  29
-	call sub_FD63D7                                      ; FDDAFF  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDAFF  1d d7 63 fd
 	pushw hl                                             ; FDDB03  2b
 	pushw 0x01                                           ; FDDB04  0b 01 00
 	pushw 0x16                                           ; FDDB07  0b 16 00
 	ld bc, (xiz-8)                                       ; FDDB0A  9e f8 21
 	extz BC                                              ; FDDB0D  d9 12
 	pushw bc                                             ; FDDB0F  29
-	call sub_FD63D7                                      ; FDDB10  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDB10  1d d7 63 fd
 	pushw hl                                             ; FDDB14  2b
 	pushw 0x01                                           ; FDDB15  0b 01 00
 	pushw 0x1d                                           ; FDDB18  0b 1d 00
 	ld bc, (xiz-8)                                       ; FDDB1B  9e f8 21
 	extz BC                                              ; FDDB1E  d9 12
 	pushw bc                                             ; FDDB20  29
-	call sub_FD63D7                                      ; FDDB21  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDB21  1d d7 63 fd
 	pushw hl                                             ; FDDB25  2b
 	pushw 0x01                                           ; FDDB26  0b 01 00
 	pushw 0x1e                                           ; FDDB29  0b 1e 00
 	ld bc, (xiz-8)                                       ; FDDB2C  9e f8 21
 	extz BC                                              ; FDDB2F  d9 12
 	pushw bc                                             ; FDDB31  29
-	call sub_FD63D7                                      ; FDDB32  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDB32  1d d7 63 fd
 	pushw hl                                             ; FDDB36  2b
 	pushw 0x01                                           ; FDDB37  0b 01 00
 	pushw 0x1f                                           ; FDDB3A  0b 1f 00
 	ld bc, (xiz-8)                                       ; FDDB3D  9e f8 21
 	extz BC                                              ; FDDB40  d9 12
 	pushw bc                                             ; FDDB42  29
-	call sub_FD63D7                                      ; FDDB43  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDB43  1d d7 63 fd
 	pushw hl                                             ; FDDB47  2b
 	pushw 0x01                                           ; FDDB48  0b 01 00
 	pushw 0x20                                           ; FDDB4B  0b 20 00
 	ld bc, (xiz-8)                                       ; FDDB4E  9e f8 21
 	extz BC                                              ; FDDB51  d9 12
 	pushw bc                                             ; FDDB53  29
-	call sub_FD63D7                                      ; FDDB54  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDB54  1d d7 63 fd
 	pushw hl                                             ; FDDB58  2b
 	pushw 0x01                                           ; FDDB59  0b 01 00
 	pushw 0x29                                           ; FDDB5C  0b 29 00
 	ld bc, (xiz-8)                                       ; FDDB5F  9e f8 21
 	extz BC                                              ; FDDB62  d9 12
 	pushw bc                                             ; FDDB64  29
-	call sub_FD63D7                                      ; FDDB65  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDB65  1d d7 63 fd
 	pushw hl                                             ; FDDB69  2b
 	pushw 0x01                                           ; FDDB6A  0b 01 00
 	pushw 0x2a                                           ; FDDB6D  0b 2a 00
 	ld bc, (xiz-8)                                       ; FDDB70  9e f8 21
 	extz BC                                              ; FDDB73  d9 12
 	pushw bc                                             ; FDDB75  29
-	call sub_FD63D7                                      ; FDDB76  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDB76  1d d7 63 fd
 .LFDDB7A:
 	add XSP,0x00000044                                   ; FDDB7A  ef c8 44 00 00 00
 	pushw 0x01                                           ; FDDB80  0b 01 00
@@ -150882,7 +150905,7 @@ ToneEditPage_A5_FittingMutingTuning:
 	pushw 0x01                                           ; FDDC21  0b 01 00
 	call sub_FD69E0                                      ; FDDC24  1d e0 69 fd
 	pushw 0x10                                           ; FDDC28  0b 10 00
-	call sub_FD6447                                      ; FDDC2B  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDDC2B  1d 47 64 fd
 	add XSP,0x0000001c                                   ; FDDC2F  ef c8 1c 00 00 00
 .LFDDC35:
 	pop XIX                                              ; FDDC35  5c
@@ -150894,8 +150917,8 @@ ToneEditPage_A5_FittingMutingTuning:
 ; screen dispatch code is 0xA6: it asks CPU 2 for the page's fields and
 ; repaints when the last reply lands.
 ;
-; Shape:   arg1 == 0 -> send 6 read-back request(s) (sub_FD61CF when
-;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+; Shape:   arg1 == 0 -> send 6 read-back request(s) (ToneMsg80_SendParam when
+;          (0x27F5) == 0, the melodic path; ToneMsg85_SendParam when it is not, the
 ;          percussion path), each tagged 0xC6, then Var27DA_Set(1).
 ;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
 ;          and once the count reaches 6 repaint through T_Dispatch_Code80_Bracketed
@@ -150950,7 +150973,7 @@ ToneEditPage_A6_TouchDepth:
 	ld bc, (xiz-6)                                       ; FDDC8B  9e fa 21
 	extz BC                                              ; FDDC8E  d9 12
 	pushw bc                                             ; FDDC90  29
-	call sub_FD61CF                                      ; FDDC91  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDC91  1d cf 61 fd
 	ld hl, (xiz-28)                                      ; FDDC95  9e e4 23
 	inc 1,HL                                             ; FDDC98  db 61
 	dec 1,D                                              ; FDDC9A  cc 69
@@ -150968,7 +150991,7 @@ ToneEditPage_A6_TouchDepth:
 	extz BC                                              ; FDDCB6  d9 12
 	pushw bc                                             ; FDDCB8  29
 sub_FDDCB9:
-	call sub_FD61CF                                      ; FDDCB9  1d cf 61 fd
+	call ToneMsg80_SendParam                                      ; FDDCB9  1d cf 61 fd
 	ld hl, (xiz-28)                                      ; FDDCBD  9e e4 23
 	inc 1,HL                                             ; FDDCC0  db 61
 	dec 1,D                                              ; FDDCC2  cc 69
@@ -150991,7 +151014,7 @@ sub_FDDCB9:
 	ld bc, (xiz-8)                                       ; FDDCE6  9e f8 21
 	extz BC                                              ; FDDCE9  d9 12
 	pushw bc                                             ; FDDCEB  29
-	call sub_FD63D7                                      ; FDDCEC  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDCEC  1d d7 63 fd
 	ld hl, (xiz-28)                                      ; FDDCF0  9e e4 23
 	inc 1,HL                                             ; FDDCF3  db 61
 	dec 1,D                                              ; FDDCF5  cc 69
@@ -151008,7 +151031,7 @@ sub_FDDCB9:
 	ld bc, (xiz-8)                                       ; FDDD0E  9e f8 21
 	extz BC                                              ; FDDD11  d9 12
 	pushw bc                                             ; FDDD13  29
-	call sub_FD63D7                                      ; FDDD14  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDD14  1d d7 63 fd
 	ld hl, (xiz-28)                                      ; FDDD18  9e e4 23
 	inc 1,HL                                             ; FDDD1B  db 61
 	dec 1,D                                              ; FDDD1D  cc 69
@@ -151064,7 +151087,7 @@ sub_FDDCB9:
 	pushw 0x01                                           ; FDDD94  0b 01 00
 	call sub_FD69E0                                      ; FDDD97  1d e0 69 fd
 	pushw 0x10                                           ; FDDD9B  0b 10 00
-	call sub_FD6447                                      ; FDDD9E  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDDD9E  1d 47 64 fd
 	inc 8,XSP                                            ; FDDDA2  ef 60
 .LFDDDA4:
 	pop XIX                                              ; FDDDA4  5c
@@ -151077,8 +151100,8 @@ sub_FDDCB9:
 ; screen dispatch code is 0xA7: it asks CPU 2 for the page's fields and
 ; repaints when the last reply lands.
 ;
-; Shape:   arg1 == 0 -> send 10 read-back request(s) (sub_FD61CF when
-;          (0x27F5) == 0, the melodic path; sub_FD63D7 when it is not, the
+; Shape:   arg1 == 0 -> send 10 read-back request(s) (ToneMsg80_SendParam when
+;          (0x27F5) == 0, the melodic path; ToneMsg85_SendParam when it is not, the
 ;          percussion path), each tagged 0xC7, then Var27DA_Set(1).
 ;          arg1 != 0 -> a reply arrived: store it at ((u8 *)0x27A6)[(0x27DB)],
 ;          and once the count reaches 10 repaint through T_Dispatch_Code80_Bracketed
@@ -151104,7 +151127,7 @@ ToneEditPage_A7_ResoModeKeyFollow:
 	pushw hl                                             ; FDDDAE  2b
 	pushw de                                             ; FDDDAF  2a
 	push XIX                                             ; FDDDB0  3c
-	lda xix, (sub_FD61CF:24)                             ; FDDDB1  f2 cf 61 fd 34
+	lda xix, (ToneMsg80_SendParam:24)                             ; FDDDB1  f2 cf 61 fd 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDDDB6  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDDDBA  be fe 31
 	push XBC                                             ; FDDDBD  39
@@ -151195,14 +151218,14 @@ ToneEditPage_A7_ResoModeKeyFollow:
 	ld bc, (xiz-8)                                       ; FDDE89  9e f8 21
 	extz BC                                              ; FDDE8C  d9 12
 	pushw bc                                             ; FDDE8E  29
-	call sub_FD63D7                                      ; FDDE8F  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDE8F  1d d7 63 fd
 	pushw 0xc7                                           ; FDDE93  0b c7 00
 	pushw 0x01                                           ; FDDE96  0b 01 00
 	pushw 0x1f                                           ; FDDE99  0b 1f 00
 	ld bc, (xiz-8)                                       ; FDDE9C  9e f8 21
 	extz BC                                              ; FDDE9F  d9 12
 	pushw bc                                             ; FDDEA1  29
-	call sub_FD63D7                                      ; FDDEA2  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDEA2  1d d7 63 fd
 	add XSP,0x00000014                                   ; FDDEA6  ef c8 14 00 00 00
 .LFDDEAC:
 	pushw 0x01                                           ; FDDEAC  0b 01 00
@@ -151253,7 +151276,7 @@ sub_FDDEFB:
 	pushw 0x01                                           ; FDDF20  0b 01 00
 	call sub_FD69E0                                      ; FDDF23  1d e0 69 fd
 	pushw 0x10                                           ; FDDF27  0b 10 00
-	call sub_FD6447                                      ; FDDF2A  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDDF2A  1d 47 64 fd
 	inc 8,XSP                                            ; FDDF2E  ef 60
 .LFDDF30:
 	pop XIX                                              ; FDDF30  5c
@@ -151292,7 +151315,7 @@ sub_FDDF36:
 	extz BC                                              ; FDDF7E  d9 12
 	pushw bc                                             ; FDDF80  29
 	pushw 0x00                                           ; FDDF81  0b 00 00
-	call sub_FD63D7                                      ; FDDF84  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDF84  1d d7 63 fd
 	ld de, (xiz-26)                                      ; FDDF88  9e e6 22
 	add DE,0x0017                                        ; FDDF8B  da c8 17 00
 	dec 1,H                                              ; FDDF8F  ce 69
@@ -151307,7 +151330,7 @@ sub_FDDF36:
 	ld (xiz-22), de                                      ; FDDFA2  be ea 52
 	m_push MWD+r6, 0xea                                  ; FDDFA5  9e ea 04
 	pushw 0x00                                           ; FDDFA8  0b 00 00
-	call sub_FD63D7                                      ; FDDFAB  1d d7 63 fd
+	call ToneMsg85_SendParam                                      ; FDDFAB  1d d7 63 fd
 	ld de, (xiz-22)                                      ; FDDFAF  9e ea 22
 	inc 1,DE                                             ; FDDFB2  da 61
 	dec 1,H                                              ; FDDFB4  ce 69
@@ -151484,7 +151507,7 @@ sub_FDE0F7:
 	call Var27DA_Set                                      ; FDE136  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE13A  1d 13 77 fd
 	pushw 0x10                                           ; FDE13E  0b 10 00
-	call sub_FD6447                                      ; FDE141  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE141  1d 47 64 fd
 	add XSP,0x0000002e                                   ; FDE145  ef c8 2e 00 00 00
 .LFDE14B:
 	pop XIX                                              ; FDE14B  5c
@@ -151988,7 +152011,7 @@ sub_FDE3BE:
 	cp a, 0x00:i3                                          ; FDE40F  c9 d8
 	jr nz, .LFDE41B                                      ; FDE411  6e 08
 	pushw 0x10                                           ; FDE413  0b 10 00
-	call sub_FD6447                                      ; FDE416  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE416  1d 47 64 fd
 	popw bc                                              ; FDE41A  49
 .LFDE41B:
 	unlk XIZ                                             ; FDE41B  ee 0d
@@ -152027,7 +152050,7 @@ sub_FDE41E:
 	cp a, 0x00:i3                                          ; FDE46F  c9 d8
 	jr nz, .LFDE47B                                      ; FDE471  6e 08
 	pushw 0x10                                           ; FDE473  0b 10 00
-	call sub_FD6447                                      ; FDE476  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE476  1d 47 64 fd
 	popw bc                                              ; FDE47A  49
 .LFDE47B:
 	unlk XIZ                                             ; FDE47B  ee 0d
@@ -152066,7 +152089,7 @@ sub_FDE47E:
 	cp a, 0x00:i3                                          ; FDE4CF  c9 d8
 	jr nz, .LFDE4DB                                      ; FDE4D1  6e 08
 	pushw 0x10                                           ; FDE4D3  0b 10 00
-	call sub_FD6447                                      ; FDE4D6  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE4D6  1d 47 64 fd
 	popw bc                                              ; FDE4DA  49
 .LFDE4DB:
 	unlk XIZ                                             ; FDE4DB  ee 0d
@@ -152106,7 +152129,7 @@ sub_FDE529:
 	cp a, 0x00:i3                                          ; FDE52F  c9 d8
 	jr nz, .LFDE53B                                      ; FDE531  6e 08
 	pushw 0x10                                           ; FDE533  0b 10 00
-	call sub_FD6447                                      ; FDE536  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE536  1d 47 64 fd
 	popw bc                                              ; FDE53A  49
 .LFDE53B:
 	unlk XIZ                                             ; FDE53B  ee 0d
@@ -152145,7 +152168,7 @@ sub_FDE53E:
 	cp a, 0x00:i3                                          ; FDE58F  c9 d8
 	jr nz, .LFDE59B                                      ; FDE591  6e 08
 	pushw 0x10                                           ; FDE593  0b 10 00
-	call sub_FD6447                                      ; FDE596  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE596  1d 47 64 fd
 	popw bc                                              ; FDE59A  49
 .LFDE59B:
 	unlk XIZ                                             ; FDE59B  ee 0d
@@ -152180,7 +152203,7 @@ sub_FDE59E:
 	cp a, 0x00:i3                                          ; FDE5E0  c9 d8
 	jr nz, .LFDE5EC                                      ; FDE5E2  6e 08
 	pushw 0x10                                           ; FDE5E4  0b 10 00
-	call sub_FD6447                                      ; FDE5E7  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE5E7  1d 47 64 fd
 	popw bc                                              ; FDE5EB  49
 .LFDE5EC:
 	unlk XIZ                                             ; FDE5EC  ee 0d
@@ -152219,7 +152242,7 @@ sub_FDE5EF:
 	cp a, 0x00:i3                                          ; FDE640  c9 d8
 	jr nz, .LFDE64C                                      ; FDE642  6e 08
 	pushw 0x10                                           ; FDE644  0b 10 00
-	call sub_FD6447                                      ; FDE647  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE647  1d 47 64 fd
 	popw bc                                              ; FDE64B  49
 .LFDE64C:
 	unlk XIZ                                             ; FDE64C  ee 0d
@@ -152258,7 +152281,7 @@ sub_FDE64F:
 	cp a, 0x00:i3                                          ; FDE6A0  c9 d8
 	jr nz, .LFDE6AC                                      ; FDE6A2  6e 08
 	pushw 0x10                                           ; FDE6A4  0b 10 00
-	call sub_FD6447                                      ; FDE6A7  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE6A7  1d 47 64 fd
 	popw bc                                              ; FDE6AB  49
 .LFDE6AC:
 	unlk XIZ                                             ; FDE6AC  ee 0d
@@ -152297,7 +152320,7 @@ sub_FDE6AF:
 	cp a, 0x00:i3                                          ; FDE700  c9 d8
 	jr nz, .LFDE70C                                      ; FDE702  6e 08
 	pushw 0x10                                           ; FDE704  0b 10 00
-	call sub_FD6447                                      ; FDE707  1d 47 64 fd
+	call ToneMsg80_Id00                                      ; FDE707  1d 47 64 fd
 	popw bc                                              ; FDE70B  49
 .LFDE70C:
 	unlk XIZ                                             ; FDE70C  ee 0d
@@ -152356,7 +152379,7 @@ sub_FDE74C:
 	cp a, 0x00:i3                                   ; FDE751  c9 d8
 	jr nz, sub_FDE74C_Skip                                   ; FDE753  6e 08
 	pushw 0x10                                    ; FDE755  0b 10 00
-	call sub_FD6447                                 ; FDE758  1d 47 64 fd
+	call ToneMsg80_Id00                                 ; FDE758  1d 47 64 fd
 	popw bc                                       ; FDE75C  49
 ; ---------------------------------------------------------------------
 ; sub_FDE74C_Skip -- an epilogue: `unlk XIZ / ret`, three bytes.
@@ -154338,7 +154361,7 @@ sub_FDF80A:
 	ld wa, (xiz-4)                                ; FDF857  9e fc 20
 	extz WA                                       ; FDF85A  d8 12
 	pushw wa                                      ; FDF85C  28
-	call sub_FD616A                                 ; FDF85D  1d 6a 61 fd
+	call ToneMsg_SendParam                                 ; FDF85D  1d 6a 61 fd
 	pushw 0x01                                    ; FDF861  0b 01 00
 	pushw 0x96                                    ; FDF864  0b 96 00
 	call T_Dispatch_Code80                        ; FDF867  1d d4 1e f4
@@ -154404,7 +154427,7 @@ sub_FDF886:
 	ld wa, (xiz-6)                                ; FDF8F8  9e fa 20
 	extz WA                                       ; FDF8FB  d8 12
 	pushw wa                                      ; FDF8FD  28
-	call sub_FD616A                                 ; FDF8FE  1d 6a 61 fd
+	call ToneMsg_SendParam                                 ; FDF8FE  1d 6a 61 fd
 	pushw 0x00                                    ; FDF902  0b 00 00
 	pushw 0x96                                    ; FDF905  0b 96 00
 	call T_Dispatch_Code80                        ; FDF908  1d d4 1e f4
@@ -154454,7 +154477,7 @@ sub_FDF928:
 	ld wa, (xiz-4)                                ; FDF975  9e fc 20
 	extz WA                                       ; FDF978  d8 12
 	pushw wa                                      ; FDF97A  28
-	call sub_FD616A                                 ; FDF97B  1d 6a 61 fd
+	call ToneMsg_SendParam                                 ; FDF97B  1d 6a 61 fd
 	pushw 0x02                                    ; FDF97F  0b 02 00
 	pushw 0x96                                    ; FDF982  0b 96 00
 	call T_Dispatch_Code80                        ; FDF985  1d d4 1e f4

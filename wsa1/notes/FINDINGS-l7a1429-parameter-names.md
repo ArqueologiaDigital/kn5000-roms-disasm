@@ -100,7 +100,7 @@ does not.
 goes to a second 8-arm table at `0xFC27EA` whose arms first copy the six message
 bytes to CPU-2 RAM `0x00D945` and then read part-record fields — the read-back
 family. prom_a builds `0x88` for writes (`ld (XIX),0x80` at `0xFD618E` then
-`set 3,C` at `0xFD6191-0xFD6196`) and `0x80` for queries (`sub_FD6704`). So
+`set 3,C` at `0xFD6191-0xFD6196`) and `0x80` for queries (`ToneMsg8D_SendParam`). So
 arm 4 on the wire is `0x8C`.
 
 ---
@@ -178,9 +178,9 @@ of arm 4, with no indirection in between.** All of those bytes are asserted by
 
 [Named 2026-10-03: `(0x2250)` is `UI_PartIndex` in `wsa1/include/wsa1_ram.inc`, 127 operands.]
 
-prom_a `sub_FD616A` (`0xFD616A`) builds the six bytes — byte[0] `0x88`, byte[1]
+prom_a `ToneMsg_SendParam` (`0xFD616A`) builds the six bytes — byte[0] `0x88`, byte[1]
 the part index from `(0x2250)`, byte[2] the **parameter**, byte[3] `0x01`,
-byte[4] the **value**, byte[5] a mask — and `sub_FD6917` (`0xFD6917`) ORs the arm
+byte[4] the **value**, byte[5] a mask — and `ToneMsg_ApplySelector` (`0xFD6917`) ORs the arm
 into byte[0] and the element into byte[2]:
 
 | selector | bytes | effect |
@@ -198,7 +198,7 @@ receiver decodes. Every byte above was re-read from the ROM and is asserted by
 `--selftest`.
 
 ⚠ **The parameter number is a `pushw` immediate at each of the 29 call sites of
-`sub_FD616A`, not a table.** There is no `(screen, field) -> parameter` array
+`ToneMsg_SendParam`, not a table.** There is no `(screen, field) -> parameter` array
 anywhere in either image, and an exhaustive search for one failed. That is why
 §4's grades are STRONG rather than PROVEN.
 
@@ -481,7 +481,7 @@ that **p15 has no editor field at all**, so the ROM cannot name them.  And `0x00
 ## 7. What would settle the rest
 
 1. **One hop on the CPU 1 side.** The parameter number is a `pushw` immediate at
-   each of `sub_FD616A`'s 29 call sites, and the page handler that owns a given
+   each of `ToneMsg_SendParam`'s 29 call sites, and the page handler that owns a given
    call site is reached through prom_a's own dispatch — `DispatchTable_FCF000`
    (17 LE32 entries at `0xFCF000`, read by a computed call at `0xFCFE1D`) and a
    pointer run near `0xFCFD41` whose base alignment is not established

@@ -263,13 +263,13 @@ def cmd_wave():
     print("      of hits under the null is %.1f." % ((hit + miss) * len(key) / 65536.0))
 
 
-# prom_a's tone-message sender, as bytes.  sub_FD6917 (0xFD6917) ORs the arm
-# index into message byte[0] and the element index into byte[2]; sub_FD616A's
+# prom_a's tone-message sender, as bytes.  ToneMsg_ApplySelector (0xFD6917) ORs the arm
+# index into message byte[0] and the element index into byte[2]; ToneMsg_SendParam's
 # call sites push the PARAMETER NUMBER as a `pushw` immediate.  `84 3e NN` is
 # `or (XIX),NN`; `8c 02 3e NN` is `or (XIX+0x02),NN`; `0b NN 00` is
 # `pushw 0x00NN`; `1d 6a 61 fd` is `call 0x00FD616A`.
 SENDER = [
-    (0xFD69A5, "843e01", "sub_FD6917 selector 0x00 -> arm 1"),
+    (0xFD69A5, "843e01", "ToneMsg_ApplySelector selector 0x00 -> arm 1"),
     (0xFD69AA, "843e02", "selector 0x01/0x02 -> arm 2"),
     (0xFD69B4, "843e03", "selector 0x03/0x04 -> arm 3"),
     (0xFD69BE, "843e04", "selector 0x11..0x44 -> ARM 4 (the wave-select record)"),
@@ -278,10 +278,10 @@ SENDER = [
     (0xFD69D8, "8c023ec0", "element 3 -> byte[2] |= 0xC0"),
     (0xFD41C2, "0b3f00", "resonator-type site: pushw mask 0x3F"),
     (0xFD41CA, "0b0b00", "resonator-type site: pushw PARAMETER 0x0B"),
-    (0xFD41D4, "1d6a61fd", "resonator-type site: call sub_FD616A"),
+    (0xFD41D4, "1d6a61fd", "resonator-type site: call ToneMsg_SendParam"),
     (0xFD4531, "0bff00", "parameter 0x0D site: pushw mask 0xFF"),
     (0xFD4535, "0b0d00", "parameter 0x0D site: pushw PARAMETER 0x0D"),
-    (0xFD453E, "1d6a61fd", "parameter 0x0D site: call sub_FD616A"),
+    (0xFD453E, "1d6a61fd", "parameter 0x0D site: call ToneMsg_SendParam"),
 ]
 
 

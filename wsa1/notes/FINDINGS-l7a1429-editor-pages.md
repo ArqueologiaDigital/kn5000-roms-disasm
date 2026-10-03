@@ -148,7 +148,7 @@ proportional-text record in the MODELING block carries is **310**.
 ### 2b. Request order IS the RAM index -- PROVEN, and independently controlled
 
 Each page's ENTER routine in prom_a fires a run of read-back requests
-(`sub_FD61CF`, message class `0x80 | arm`, i.e. bit 3 clear).  Its reply handler is
+(`ToneMsg80_SendParam`, message class `0x80 | arm`, i.e. bit 3 clear).  Its reply handler is
 
 ```
     Var27DB_Get(&n);  sub_FD7744(&v);  Arr27A6_Set(n, v);  if (++count > N) redraw
@@ -397,7 +397,7 @@ row is graded by its principal name.
 `p15` = `Q[+0x0F]` is clamped to 44..96 and indexes both curve tables
 (`0xFC4964`-`0xFC49A4`).  **No sender in prom_a ever passes parameter `0x0F` with
 an arm-4 selector.**  prom_a has twenty tone-message builders (the twenty callers
-of `sub_FD6132`, `0xFD616A` through `0xFD686B`); across every call site of all
+of `ToneMsg_Send`, `0xFD616A` through `0xFD686B`); across every call site of all
 twenty, exactly ONE pushes `0x0F` in the parameter slot -- `0xFD5F12`, with
 selector `0x00`, which is the 300-byte part record on a different screen.
 
@@ -574,7 +574,7 @@ consumers); **PROVEN** for the arithmetic.
   weaken anything above -- the read-back order is the map, and it is controlled
   eight times -- but it is a hole in the coverage and is stated rather than papered
   over.
-* **`sub_FD61CF`'s byte 3 is a COUNT** (3 on `PAGE2/2`, 1 elsewhere, 2 and 3 on the
+* **`ToneMsg80_SendParam`'s byte 3 is a COUNT** (3 on `PAGE2/2`, 1 elsewhere, 2 and 3 on the
   MODELING top).  That reading is what makes `PAGE2/2`'s single request return
   p16/p17/p18; the reply's own layout on the CPU 2 side was not read, so
   `PAGE2/2`'s three-way split is graded **STRONG**, not PROVEN.

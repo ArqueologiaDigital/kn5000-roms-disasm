@@ -1182,18 +1182,18 @@
 	.set	PanelScreen_PostRequestBit6, 0xFD60D9
 	.set	Var27DF_Set, 0xFD6104
 	.set	Var2250_Get, 0xFD6122
-	.set	sub_FD616A, 0xFD616A
-	.set	sub_FD61CF, 0xFD61CF
-	.set	sub_FD622B, 0xFD622B
-	.set	sub_FD63D7, 0xFD63D7
-	.set	sub_FD6447, 0xFD6447
-	.set	sub_FD648D, 0xFD648D
-	.set	sub_FD64D1, 0xFD64D1
-	.set	sub_FD6513, 0xFD6513
+	.set	ToneMsg_SendParam, 0xFD616A
+	.set	ToneMsg80_SendParam, 0xFD61CF
+	.set	ToneMsg80_Id01, 0xFD622B
+	.set	ToneMsg85_SendParam, 0xFD63D7
+	.set	ToneMsg80_Id00, 0xFD6447
+	.set	ToneMsg80_Id04, 0xFD648D
+	.set	ToneMsg80_Id15_Part0, 0xFD64D1
+	.set	ToneMsg80_Id16, 0xFD6513
 	.set	sub_FD665C, 0xFD665C
-	.set	sub_FD66A6, 0xFD66A6
-	.set	sub_FD6704, 0xFD6704
-	.set	sub_FD6811, 0xFD6811
+	.set	ToneMsg88_Id14, 0xFD66A6
+	.set	ToneMsg8D_SendParam, 0xFD6704
+	.set	ToneMsg88_Id1A, 0xFD6811
 	.set	sub_FD69E0, 0xFD69E0
 	.set	Var27A3_GetValidSlot, 0xFD6B4D
 	.set	Arr27A6_Set, 0xFD6C65
@@ -17790,7 +17790,7 @@ sub_F0A000_Resume:
 	cp	a, 0:i3	; F0A042  cp A,0
 	jr	nz, sub_F0A000_Skip	; F0A044  jr NZ,0xf0a04e
 	pushw	16	; F0A046  push 0x0010
-	call	sub_FD6447	; F0A049  call 0xfd6447
+	call	ToneMsg80_Id00	; F0A049  call 0xfd6447
 	popw	bc	; F0A04D  pop BC
 sub_F0A000_Skip:
 	unlk XIZ	; F0A04E  unlk XIZ
@@ -17841,7 +17841,7 @@ sub_F0A051_Resume:
 	cp	a, 0:i3	; F0A0A2  cp A,0
 	jr	nz, sub_F0A051_Skip	; F0A0A4  jr NZ,0xf0a0ae
 	pushw	16	; F0A0A6  push 0x0010
-	call	sub_FD6447	; F0A0A9  call 0xfd6447
+	call	ToneMsg80_Id00	; F0A0A9  call 0xfd6447
 	popw	bc	; F0A0AD  pop BC
 sub_F0A051_Skip:
 	unlk XIZ	; F0A0AE  unlk XIZ
@@ -17892,7 +17892,7 @@ sub_F0A0B1_Resume:
 	cp	a, 0:i3	; F0A102  cp A,0
 	jr	nz, sub_F0A0B1_Skip	; F0A104  jr NZ,0xf0a10e
 	pushw	16	; F0A106  push 0x0010
-	call	sub_FD6447	; F0A109  call 0xfd6447
+	call	ToneMsg80_Id00	; F0A109  call 0xfd6447
 	popw	bc	; F0A10D  pop BC
 sub_F0A0B1_Skip:
 	unlk XIZ	; F0A10E  unlk XIZ
@@ -17939,7 +17939,7 @@ sub_F0A111_Resume:
 	cp	a, 0:i3	; F0A153  cp A,0
 	jr	nz, sub_F0A111_Skip	; F0A155  jr NZ,0xf0a15f
 	pushw	16	; F0A157  push 0x0010
-	call	sub_FD6447	; F0A15A  call 0xfd6447
+	call	ToneMsg80_Id00	; F0A15A  call 0xfd6447
 	popw	bc	; F0A15E  pop BC
 sub_F0A111_Skip:
 	unlk XIZ	; F0A15F  unlk XIZ
@@ -18185,7 +18185,7 @@ sub_F0A2AB:
 	push	xbc	; F0A336  push XBC
 	pushw	19	; F0A337  push 0x0013
 	pushw	0	; F0A33A  push 0x0000
-	call	sub_FD616A	; F0A33D  call 0xfd616a
+	call	ToneMsg_SendParam	; F0A33D  call 0xfd616a
 	pushw	16	; F0A341  push 0x0010
 	pushw	135	; F0A344  push 0x0087
 	call	T_Dispatch_Code80	; F0A347  call 0xf41ed4
@@ -19438,7 +19438,7 @@ sub_F0A90E_Resume:
 	cp	a, 0:i3	; F0A950  cp A,0
 	jr	nz, sub_F0A90E_Skip	; F0A952  jr NZ,0xf0a95c
 	pushw	16	; F0A954  push 0x0010
-	call	sub_FD6447	; F0A957  call 0xfd6447
+	call	ToneMsg80_Id00	; F0A957  call 0xfd6447
 	popw	bc	; F0A95B  pop BC
 sub_F0A90E_Skip:
 	unlk XIZ	; F0A95C  unlk XIZ
@@ -19489,7 +19489,7 @@ sub_F0A95F_Resume:
 	cp	a, 0:i3	; F0A9B0  cp A,0
 	jr	nz, sub_F0A95F_Skip	; F0A9B2  jr NZ,0xf0a9bc
 	pushw	16	; F0A9B4  push 0x0010
-	call	sub_FD6447	; F0A9B7  call 0xfd6447
+	call	ToneMsg80_Id00	; F0A9B7  call 0xfd6447
 	popw	bc	; F0A9BB  pop BC
 sub_F0A95F_Skip:
 	unlk XIZ	; F0A9BC  unlk XIZ
@@ -19536,7 +19536,7 @@ sub_F0A9BF_Resume:
 	cp	a, 0:i3	; F0AA01  cp A,0
 	jr	nz, sub_F0A9BF_Skip	; F0AA03  jr NZ,0xf0aa0d
 	pushw	16	; F0AA05  push 0x0010
-	call	sub_FD6447	; F0AA08  call 0xfd6447
+	call	ToneMsg80_Id00	; F0AA08  call 0xfd6447
 	popw	bc	; F0AA0C  pop BC
 sub_F0A9BF_Skip:
 	unlk XIZ	; F0AA0D  unlk XIZ
@@ -19583,7 +19583,7 @@ sub_F0AA10_Resume:
 	cp	a, 0:i3	; F0AA52  cp A,0
 	jr	nz, sub_F0AA10_Skip	; F0AA54  jr NZ,0xf0aa5e
 	pushw	16	; F0AA56  push 0x0010
-	call	sub_FD6447	; F0AA59  call 0xfd6447
+	call	ToneMsg80_Id00	; F0AA59  call 0xfd6447
 	popw	bc	; F0AA5D  pop BC
 sub_F0AA10_Skip:
 	unlk XIZ	; F0AA5E  unlk XIZ
@@ -19630,7 +19630,7 @@ sub_F0AA61_Resume:
 	cp	a, 0:i3	; F0AAA3  cp A,0
 	jr	nz, sub_F0AA61_Skip	; F0AAA5  jr NZ,0xf0aaaf
 	pushw	16	; F0AAA7  push 0x0010
-	call	sub_FD6447	; F0AAAA  call 0xfd6447
+	call	ToneMsg80_Id00	; F0AAAA  call 0xfd6447
 	popw	bc	; F0AAAE  pop BC
 sub_F0AA61_Skip:
 	unlk XIZ	; F0AAAF  unlk XIZ
@@ -19683,7 +19683,7 @@ sub_F0AAB3:		; <- T_F42328
 	cp	a, 0:i3	; F0AAEA  cp A,0
 	jr	nz, sub_F0AAB3_Skip	; F0AAEC  jr NZ,0xf0aaf6
 	pushw	16	; F0AAEE  push 0x0010
-	call	sub_FD6447	; F0AAF1  call 0xfd6447
+	call	ToneMsg80_Id00	; F0AAF1  call 0xfd6447
 	popw	bc	; F0AAF5  pop BC
 sub_F0AAB3_Skip:
 	unlk XIZ	; F0AAF6  unlk XIZ
@@ -19730,7 +19730,7 @@ sub_F0AAF9_Resume:
 	cp	a, 0:i3	; F0AB3B  cp A,0
 	jr	nz, sub_F0AAF9_Skip	; F0AB3D  jr NZ,0xf0ab47
 	pushw	16	; F0AB3F  push 0x0010
-	call	sub_FD6447	; F0AB42  call 0xfd6447
+	call	ToneMsg80_Id00	; F0AB42  call 0xfd6447
 	popw	bc	; F0AB46  pop BC
 sub_F0AAF9_Skip:
 	unlk XIZ	; F0AB47  unlk XIZ
@@ -19868,7 +19868,7 @@ sub_F0ABB9_Join:
 	pushw	2	; F0AC1C  push 0x0002
 	call	sub_FDA002	; F0AC1F  call 0xfda002
 	m_push MWD+r6, 0xf8	; F0AC23  pushw (XIZ+0xf8)
-	call	sub_FD66A6	; F0AC26  call 0xfd66a6
+	call	ToneMsg88_Id14	; F0AC26  call 0xfd66a6
 	pushw	1	; F0AC2A  push 0x0001
 	pushw	203	; F0AC2D  push 0x00cb
 	call	PanelScreen_PostRequest	; F0AC30  call 0xfd608b
@@ -19927,7 +19927,7 @@ sub_F0AC43_Skip:
 	decm	1, (xiz-4)	; F0AC91  decw 1,(XIZ+0xfc)
 sub_F0AC43_Join:
 	m_push MWD+r6, 0xfc	; F0AC94  pushw (XIZ+0xfc)
-	call	sub_FD66A6	; F0AC97  call 0xfd66a6
+	call	ToneMsg88_Id14	; F0AC97  call 0xfd66a6
 	pushw	1	; F0AC9B  push 0x0001
 	pushw	203	; F0AC9E  push 0x00cb
 	call	PanelScreen_PostRequest	; F0ACA1  call 0xfd608b
@@ -21149,7 +21149,7 @@ sub_F0B39C:
 	push	xix	; F0B3E6  push XIX
 	pushw	208	; F0B3E7  push 0x00d0
 	pushw	0	; F0B3EA  push 0x0000
-	call	sub_FD616A	; F0B3ED  call 0xfd616a
+	call	ToneMsg_SendParam	; F0B3ED  call 0xfd616a
 	pushw	1	; F0B3F1  push 0x0001
 	pushw	156	; F0B3F4  push 0x009c
 	call	PanelScreen_PostRequest	; F0B3F7  call 0xfd608b
@@ -21182,7 +21182,7 @@ sub_F0B39C_Join:
 	push	xix	; F0B43A  push XIX
 	pushw	208	; F0B43B  push 0x00d0
 	pushw	0	; F0B43E  push 0x0000
-	call	sub_FD616A	; F0B441  call 0xfd616a
+	call	ToneMsg_SendParam	; F0B441  call 0xfd616a
 	pushw	0	; F0B445  push 0x0000
 	pushw	154	; F0B448  push 0x009a
 	call	T_Dispatch_Code80	; F0B44B  call 0xf41ed4
@@ -21239,7 +21239,7 @@ sub_F0B462:
 	push	xix	; F0B4A9  push XIX
 	pushw	208	; F0B4AA  push 0x00d0
 	pushw	0	; F0B4AD  push 0x0000
-	call	sub_FD616A	; F0B4B0  call 0xfd616a
+	call	ToneMsg_SendParam	; F0B4B0  call 0xfd616a
 	pushw	1	; F0B4B4  push 0x0001
 	pushw	156	; F0B4B7  push 0x009c
 	call	PanelScreen_PostRequest	; F0B4BA  call 0xfd608b
@@ -21268,7 +21268,7 @@ sub_F0B462_Join:
 	push	xix	; F0B4F3  push XIX
 	pushw	208	; F0B4F4  push 0x00d0
 	pushw	0	; F0B4F7  push 0x0000
-	call	sub_FD616A	; F0B4FA  call 0xfd616a
+	call	ToneMsg_SendParam	; F0B4FA  call 0xfd616a
 	pushw	0	; F0B4FE  push 0x0000
 	pushw	154	; F0B501  push 0x009a
 	call	T_Dispatch_Code80	; F0B504  call 0xf41ed4
@@ -21755,7 +21755,7 @@ sub_F0B74B_Loop:
 	extz	bc	; F0B7A6  extz BC
 	pushw	bc	; F0B7A8  push BC
 	pushw	3	; F0B7A9  push 0x0003
-	call	sub_FD6704	; F0B7AC  call 0xfd6704
+	call	ToneMsg8D_SendParam	; F0B7AC  call 0xfd6704
 	inc	1, h	; F0B7B0  inc 1,H
 	inc	8, xsp	; F0B7B2  inc 0,XSP
 	inc	2, xsp	; F0B7B4  inc 2,XSP
@@ -21782,7 +21782,7 @@ sub_F0B74B_Loop2:
 	extz	wa	; F0B7E0  extz WA
 	pushw	wa	; F0B7E2  push WA
 	pushw	0	; F0B7E3  push 0x0000
-	call	sub_FD616A	; F0B7E6  call 0xfd616a
+	call	ToneMsg_SendParam	; F0B7E6  call 0xfd616a
 	inc	1, h	; F0B7EA  inc 1,H
 	inc	8, xsp	; F0B7EC  inc 0,XSP
 	inc	8, xsp	; F0B7EE  inc 0,XSP
@@ -21872,7 +21872,7 @@ sub_F0B81D_Loop:
 	extz	bc	; F0B870  extz BC
 	pushw	bc	; F0B872  push BC
 	pushw	0	; F0B873  push 0x0000
-	call	sub_FD6704	; F0B876  call 0xfd6704
+	call	ToneMsg8D_SendParam	; F0B876  call 0xfd6704
 	inc	1, h	; F0B87A  inc 1,H
 	inc	8, xsp	; F0B87C  inc 0,XSP
 	inc	2, xsp	; F0B87E  inc 2,XSP
@@ -21892,7 +21892,7 @@ sub_F0B81D_Loop2:
 	extz	bc	; F0B89B  extz BC
 	pushw	bc	; F0B89D  push BC
 	pushw	3	; F0B89E  push 0x0003
-	call	sub_FD6704	; F0B8A1  call 0xfd6704
+	call	ToneMsg8D_SendParam	; F0B8A1  call 0xfd6704
 	inc	1, h	; F0B8A5  inc 1,H
 	inc	8, xsp	; F0B8A7  inc 0,XSP
 	inc	2, xsp	; F0B8A9  inc 2,XSP
@@ -21929,7 +21929,7 @@ sub_F0B81D_Loop3:
 	extz	wa	; F0B8EF  extz WA
 	pushw	wa	; F0B8F1  push WA
 	pushw	0	; F0B8F2  push 0x0000
-	call	sub_FD616A	; F0B8F5  call 0xfd616a
+	call	ToneMsg_SendParam	; F0B8F5  call 0xfd616a
 	inc	1, h	; F0B8F9  inc 1,H
 	inc	8, xsp	; F0B8FB  inc 0,XSP
 	inc	8, xsp	; F0B8FD  inc 0,XSP
@@ -23100,7 +23100,7 @@ sub_F0C245_Resume:
 	ld	bc, (xiz-12)	; F0C273  ld BC,(XIZ+0xf4)
 	extz	bc	; F0C276  extz BC
 	pushw	bc	; F0C278  push BC
-	call	sub_FD648D	; F0C279  call 0xfd648d
+	call	ToneMsg80_Id04	; F0C279  call 0xfd648d
 	add	xsp, 40	; F0C27D  add XSP,0x00000028
 sub_F0BF04_Skip10:
 	pushw	1	; F0C283  push 0x0001
@@ -23281,7 +23281,7 @@ sub_F0C291_Skip3:
 	ld	bc, (xiz-4)	; F0C3E2  ld BC,(XIZ+0xfc)
 	extz	bc	; F0C3E5  extz BC
 	pushw	bc	; F0C3E7  push BC
-	call	sub_FD64D1	; F0C3E8  call 0xfd64d1
+	call	ToneMsg80_Id15_Part0	; F0C3E8  call 0xfd64d1
 	inc	8, xsp	; F0C3EC  inc 0,XSP
 sub_F0C291_Join3:
 	pushw	2	; F0C3EE  push 0x0002
@@ -23677,7 +23677,7 @@ sub_F0C291_Join12:
 	ld	bc, (xiz-4)	; F0C6E4  ld BC,(XIZ+0xfc)
 	extz	bc	; F0C6E7  extz BC
 	pushw	bc	; F0C6E9  push BC
-	call	sub_FD6811	; F0C6EA  call 0xfd6811
+	call	ToneMsg88_Id1A	; F0C6EA  call 0xfd6811
 	pushw	35	; F0C6EE  push 0x0023
 	pushw	171	; F0C6F1  push 0x00ab
 	call	PanelScreen_PostRequestBit6	; F0C6F4  call 0xfd60d9
@@ -90374,14 +90374,14 @@ T_Queue2E00_PostParam98Fields:	jp Queue2E00_PostParam98Fields  ; -> prom_a 0x2C8
 ;           Disk_FormatSelectedMedia, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Disk_FormatSelectedMedia:	jp Disk_FormatSelectedMedia  ; F43460 (was T_F43460) -> prom_a 0x67200   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43464: 12 x ret
-T_F43470:	jp sub_FD616A  ; -> prom_a 0x5616A   x1
-T_F43474:	jp sub_FD61CF  ; -> prom_a 0x561CF   x1
-T_F43478:	jp sub_FD6704  ; -> prom_a 0x56704   x1
-T_F4347C:	jp sub_FD63D7  ; -> prom_a 0x563D7   x1
-T_F43480:	jp sub_FD622B  ; -> prom_a 0x5622B   x1
+T_F43470:	jp ToneMsg_SendParam  ; -> prom_a 0x5616A   x1
+T_F43474:	jp ToneMsg80_SendParam  ; -> prom_a 0x561CF   x1
+T_F43478:	jp ToneMsg8D_SendParam  ; -> prom_a 0x56704   x1
+T_F4347C:	jp ToneMsg85_SendParam  ; -> prom_a 0x563D7   x1
+T_F43480:	jp ToneMsg80_Id01  ; -> prom_a 0x5622B   x1
 T_F43484:	jp sub_FDA911  ; -> prom_a 0x5A911   x1
 T_F43488:	jp sub_FD665C  ; -> prom_a 0x5665C   x2
-T_F4348C:	jp sub_FD6513  ; -> prom_a 0x56513   x1
+T_F4348C:	jp ToneMsg80_Id16  ; -> prom_a 0x56513   x1
 	.fill 0x10, 1, 0x0E  ; 0xF43490: 16 x ret
 T_DspParam_WriteByNumber:	jp DspParam_WriteByNumber  ; -> prom_b 0x11C30   x2
 T_DspParam_ReadByNumber:	jp DspParam_ReadByNumber  ; -> prom_b 0x1220B   x2

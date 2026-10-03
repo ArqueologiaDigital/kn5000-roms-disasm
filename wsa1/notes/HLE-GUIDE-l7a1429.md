@@ -754,7 +754,7 @@ valuable missing number.  ★ **The hop the closing paragraph asks for HAS BEEN 
 a dozen named fields live; and `(0x00E093)`, which has writers and no located reader.
 
 ★ **The cheapest thing that would close most of §8 is not the instrument.**  The parameter-names
-lane names it: **one hop on the CPU 1 side** — correlate `sub_FD616A`'s 29 call sites with the
+lane names it: **one hop on the CPU 1 side** — correlate `ToneMsg_SendParam`'s 29 call sites with the
 screen id in `(0x207C)` and the cursor in `(0x27A5)` through prom_a's `DispatchTable_FCF000`.
 That turns every WEAK row in §5 into PROVEN, removes both points of failure in §3.3, and finds
 `SCALE`.  ⚠ A hardware sweep would settle §8.1 and §8.2 and nothing here proposes one: the

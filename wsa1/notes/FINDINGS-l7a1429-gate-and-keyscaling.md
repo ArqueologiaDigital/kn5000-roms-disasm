@@ -586,7 +586,7 @@ until it is found, `RESO SCALE` is a named control with no traced effect.
    known to (a) set the gate, (b) compute register `0x0300`'s own value, (c) fill the
    `0x00E093` block, and (d) call `sub_FC4269`'s trigonometry.  (d) is the only part still
    opaque.  A routine that takes sines and cosines of a mode parameter is worth reading.
-3. **One hop on the CPU 1 side**, unchanged from wave 19 §7: correlate `sub_FD616A`'s 29 call
+3. **One hop on the CPU 1 side**, unchanged from wave 19 §7: correlate `ToneMsg_SendParam`'s 29 call
    sites with the screen id in `(0x207C)` through prom_a's `DispatchTable_FCF000`.  That is
    what would turn `INTERACTION GAIN` from WEAK to PROVEN, and it would also tell us what the
    `RESO MODE` values 1 and 2 are called on the screen.
