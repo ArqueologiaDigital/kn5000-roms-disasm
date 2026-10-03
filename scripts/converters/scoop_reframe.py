@@ -418,6 +418,10 @@ def symbolize_code(text, addr, n, raw, a2n, rom_lo=0xE00000, rom_hi=0x1000000, l
             disp = int(parts[-1], 0)
         except ValueError:
             return text, None
+        # the decoder may print the field unsigned (`calr 63352`): sign-extend it
+        bits = 8 if mn in ("jr", "djnz") else 16
+        if disp >= 1 << (bits - 1):
+            disp -= 1 << bits
         tgt = addr + n + disp
         nm = name_at(tgt)
         if nm:
@@ -782,10 +786,32 @@ def splice(img, spec, amap, a2n, rombytes, lines):
         raise SystemExit("segments sum to %d, span is %d" % (sum(s["len"] for s in segs), b - a))
     rendered = []   # (addr, text)
     off = 0
+    # keep_original_code: an original INSTRUCTION line that covers exactly the bytes
+    # of a rendered instruction already spells them (the image is byte-identical),
+    # so its text is kept -- with its RAM symbols and its choice among aliases.
+    # Only the lines whose framing changes are re-rendered.
+    orig_insn = {}
+    if spec.get("keep_original_code"):
+        for idx in range(first, last):
+            c = strip_comment(lines[idx])[0].strip()
+            while LABEL_RE.match(c):
+                c = c[LABEL_RE.match(c).end():].strip()
+            if c and not c.startswith(".") and addrs[idx] is not None and ext[idx] > 0:
+                orig_insn[addrs[idx]] = (ext[idx], "\t" + c)
+    kept = 0
     for s in segs:
-        for o, t in render_segment(img, s, a + off, data[off:off + s["len"]], a2n, local):
-            rendered.append((a + off + o, t))
+        part = render_segment(img, s, a + off, data[off:off + s["len"]], a2n, local)
+        for k, (o, t) in enumerate(part):
+            ad = a + off + o
+            if s["kind"] == "code" and ad in orig_insn:
+                nxt = part[k + 1][0] if k + 1 < len(part) else s["len"]
+                if orig_insn[ad][0] == nxt - o:
+                    t = orig_insn[ad][1]
+                    kept += 1
+            rendered.append((ad, t))
         off += s["len"]
+    if spec.get("keep_original_code"):
+        print("keep_original_code: %d instruction line(s) kept as written" % kept)
     starts = {ad for ad, _ in rendered}
     # a carried label that falls INSIDE a rendered line (a name other files
     # point into the middle of an instruction) becomes `.set NAME, . + k`
@@ -1534,9 +1560,17 @@ def cmd_apply(args):
             open(d, "w", encoding="latin-1").write(newtext[f])
             print("dry-run render written to", d)
         return
+    enc = {f: newtext[f].encode("latin-1") for f in files}   # encode BEFORE truncating anything
     for f in files:
-        open(os.path.join(ROOT, f), "w", encoding="latin-1").write(newtext[f])
-    ok, _, data = build(img)
+        open(os.path.join(ROOT, f), "wb").write(enc[f])
+    try:
+        ok, _, data = build(img)
+    except BaseException:
+        # a link error raises inside build(): restore before propagating
+        for f in files:
+            open(os.path.join(ROOT, f), "wb").write(backups[f])
+        print("build raised; all edits rolled back")
+        raise
     if not ok or data != rb:
         for f in files:
             open(os.path.join(ROOT, f), "wb").write(backups[f])

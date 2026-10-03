@@ -64,3 +64,30 @@ files are the non-empty lists, as applied:
 | v7 | fdc_routines 2/2, audio_control_engine 7/7, sound_editor_ui 7/7, cpanel_routines 4/4, midi_serial_routines 4/4, smf_event_processor 2/2, system_handlers 2/0 |
 
 Every trace reported 0 conflicts, and every apply passed `--verify`.
+
+## Data decoded as code: `reframe-specs/` (2026-10-03)
+
+Some R3 clusters are not missed code but data that an early pass decoded as instructions. Seeds cannot
+fix those, so each is re-spelled with `scripts/converters/scoop_reframe.py apply --spec <file>`. That
+command proves byte identity and rolls back on any difference.
+
+| spec (v10 / v9) | span | what it was | post-edit |
+|---|---|---|---|
+| `cmpncp_itemhandlers_<tree>.json` | 0xF6541A-0xF6577B, accompaniment_engine.s | `CmpNcp_ItemHandlerTable` (7 `.long`), `CmpNcp_ItemA/B_HandlerIndex` (`.short`), `CmpNcp_ProgramGroupBase` (12 bytes) and the five handlers they reach, plus ten title-hook fragments spelled `.byte 0xc1, ... / push xiz` | `cmpncp_postedit.py <tree>`: title RAM operands by name (`PREVIOUS_TITLE` ...), the obsolete misframing note removed |
+
+How the span was laid out:
+
+    python3 scripts/converters/scoop_reframe.py plan --image v10 \
+        --file v10/maincpu/sequencer/accompaniment_engine.s --lo 0xF6541A --hi 0xF6577B \
+        --entry 0xF65516 ... --entry 0xF65771 --exclude 0xF656EB --out <plan.json>
+
+The 17 `--entry` values were 0xF65516-0xF6551F (one-`ret` stubs and `and (0xe3e2),0xfe; ret`),
+0xF656E1, 0xF656E8, 0xF65716, 0xF65717, 0xF65718, 0xF6571F and 0xF65771. 0xF656EB, which the planner's
+phase D picked, is excluded because it lies inside the `cp` at 0xF656E8. No `.long` in any image points
+at the stubs or wrappers. They have the shapes the dispatch tables of this module call, and unidasm
+decodes them cleanly. The specs set `keep_original_code`, so an instruction line that already spelled
+its bytes keeps its text, with its RAM names and its choice among aliases: 266 of the 289 lines in each
+tree. Labels renamed by `scripts/renaming/rename_cmpncp_item_tables.sed` first.
+
+v7 holds the same code as the romslice `includes/romslices/v7_transplant_DrumVoice_Handler7.bin`
+(0xF650AC-0xF654EE) and is not covered here.

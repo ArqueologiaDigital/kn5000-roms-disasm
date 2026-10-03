@@ -25438,11 +25438,9 @@ DrumVoice_Handler4_Code_Entry:
 	or	(0x34d2:16), 4
 DrumVoice_Handler4_Return:
 	ret
-	.byte 0xc1, 0xe2, 0xe3
-	push	xiz
-	ld	(TREGAH:8), 234:io
-	ldw	ix, 0xc921
-	inc	8, d
+	or	(0xe3e2:16), 8
+	ld	a, (0x34ea:16)
+	and	a, 96
 	bit	7, w
 	jr	nz, DrumVoice_Handler4_Code_Skip4
 	cp	a, 0:i3
@@ -25549,9 +25547,7 @@ DrumVoice_Handler7_Code_Return:
 	ret
 	ret
 	ret
-	.byte 0xc1, 0xe2, 0xe3
-	push	xix
-	swi	6
+	and	(0xe3e2:16), 254
 	ret
 CmpNcpTtl_Dispatch_Helper:
 	push	xiz
@@ -25559,9 +25555,7 @@ CmpNcpTtl_Dispatch_Helper:
 	pop	xiz
 	ret
 DrumVoice_Handler7_Data:
-	.byte 0xc1, 0x37, 0x8d
-	push	xsp
-	.byte 0xb8
+	cp	(PREVIOUS_TITLE:16), 184	; TT_CMPNCP
 	jr	z, DrumVoice_Handler7_Data_Code_Skip
 	calr	DrumVoice_Handler7_Code_Helper2
 	ld	l, (0x34ed:16)
@@ -25586,7 +25580,7 @@ DrumVoice_Handler7_Code_Helper:
 	cp	a, 136
 	jr	z, DrumVoice_Handler7_Code_Return2
 	and	a, 127
-	ld	xix, DrumVoice_Handler7_Data_2
+	ld	xix, CmpNcp_ProgramGroupBase
 	ld	a, (xix+a)
 	ld (64602:16), a
 	ld (13549:16), a
@@ -25596,19 +25590,18 @@ DrumVoice_Handler7_Code_Helper:
 	calr	DrumKit_PostMidiEvents
 DrumVoice_Handler7_Code_Return2:
 	ret
-DrumVoice_Handler7_Data_2:
-	.byte 0x80, 0x80, 0x80, 0x80, 0x84, 0x84, 0x84
-	add	(xix), w
-	add	(xwa-120), w
+CmpNcp_ProgramGroupBase:
+	; (0xFC5A) & 0x7F -> the first program of its group of four: 0x81..0x83 -> 0x80, 0x85..0x87 ->
+	; 0x84, 0x89..0x8B -> 0x88.  DrumVoice_Handler7_Code_Helper returns before the lookup for
+	; values below 0x80 and for 0x80, 0x84 and 0x88 themselves.
+	.byte	0x80, 0x80, 0x80, 0x80, 0x84, 0x84, 0x84, 0x84, 0x88, 0x88, 0x88, 0x88
 DrumVoice_Handler7_Data_2_Sub:
 	push	xiz
 	call	DrumVoice_Handler7_Data_3
 	pop	xiz
 	ret
 DrumVoice_Handler7_Data_3:
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0xb8
+	cp	(CURRENT_TITLE:16), 184	; TT_CMPNCP
 	jr	z, DrumVoice_Handler7_Code_Return3
 	calr	DrumKit_SendProgramChange
 DrumVoice_Handler7_Code_Return3:
@@ -25642,17 +25635,15 @@ CmpNcpTtl_Dispatch2_Helper2:
 DrumVoice_Handler7_Data_3_Helper2:
 	ld	a, (0x39a7:16)
 	sll	a, 1
-	ld	xix, DrumVoice_Handler7_Data_3_Code
+	ld	xix, CmpNcp_ItemA_HandlerIndex
 	ld	hl, (xix+a)
 	call	DrumVoice_Handler7_Data_3_Helper5
 	ret
-DrumVoice_Handler7_Data_3_Code:
-	nop
-	nop
-	normal
-	nop
-	push	sr
-	nop
+CmpNcp_ItemA_HandlerIndex:
+	; (0x39A7), stepped between 0 and 2 by DrumVoice_Handler7_Data_3_Helper -> the
+	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper2 dispatches.
+	; Reached through CmpNcpTtl_Dispatch2_Helper / _Helper2.
+	.short	0, 1, 2
 DrumVoice_Handler7_Data_3_Sub:
 	push	xiz
 	call	DrumVoice_Handler7_Data_3_Helper3
@@ -25682,15 +25673,15 @@ CmpNcpTtl_Dispatch2_Helper3:
 DrumVoice_Handler7_Data_3_Helper4:
 	ld	a, (0x39a8:16)
 	sll	a, 1
-	ld	xix, DrumVoice_Handler7_Data_3_Code2
+	ld	xix, CmpNcp_ItemB_HandlerIndex
 	ld	hl, (xix+a)
 	call	DrumVoice_Handler7_Data_3_Helper5
 	ret
-DrumVoice_Handler7_Data_3_Code2:
-	pop	sr
-	nop
-	max
-	nop
+CmpNcp_ItemB_HandlerIndex:
+	; (0x39A8), stepped between 0 and 1 by DrumVoice_Handler7_Data_3_Helper3 -> the
+	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper4 dispatches.
+	; Reached through CmpNcpTtl_Dispatch2_Helper3.
+	.short	3, 4
 	push	xiz
 	call	DrumVoice_Handler7_Data_3_Helper5
 	pop	xiz
@@ -25701,72 +25692,57 @@ DrumVoice_Handler7_Data_3_Helper5:
 	popw	hl
 	and	hl, 7
 	sll	hl, 2
-	add	xhl, DrumVoice_Handler7_Data_3_Code3
+	add	xhl, CmpNcp_ItemHandlerTable
 	ld	xhl, (xhl)
 	call	(xhl)
 	ret
-DrumVoice_Handler7_Data_3_Code3:
-	jrl	ule, -2474
-	nop
-	.byte 0x90, 0x56, 0xf6
-	nop
-	.byte 0xaa, 0x56, 0xf6
-	nop
-	.byte 0xbe, 0x56, 0xf6
-	nop
-	.byte 0xcd, 0x56	; data, not code: part of the 4-byte pointer table
-				; misframed around it (LE .long 0x00f656xx). Was spelled
-				; `div8rr h, e`, a byte divide whose even register field
-				; names no result pair (MAME: div ??,E) -- no spelling.
-	.byte 0xf6
-	nop
-	ldx
-	.byte 0x52, 0xf6
-	nop
-	ldx
-	.byte 0x52, 0xf6
-	nop
+CmpNcp_ItemHandlerTable:
+	; DrumVoice_Handler7_Data_3_Helper5 calls entry (HL & 7).  DrumVoice_Handler7_Data_3_Helper2
+	; and _Helper4 pass 0..4 from the two tables above; the wrapper just before
+	; DrumVoice_Handler7_Data_3_Helper5 passes its caller's HL.  5 and 6 are DrumVoice_NullHandler;
+	; an index of 7 would read the first four bytes of CmpNcp_ItemHandler0.  Each handler sets bits
+	; of (0xE3E2) and stores its own word in (0xE3E4): 0x0080, 0x0181, 0x0282, 0x8505, 0x0686.
+	; This table and the five handlers were decoded as code (`jrl ule, ...`, `.byte 0xc1, 0xe2,
+	; 0xe3 / push xiz` ...) until 2026-10-03.
+	.long	CmpNcp_ItemHandler0
+	.long	CmpNcp_ItemHandler1
+	.long	CmpNcp_ItemHandler2
+	.long	CmpNcp_ItemHandler3
+	.long	CmpNcp_ItemHandler4
+	.long	DrumVoice_NullHandler
+	.long	DrumVoice_NullHandler
+CmpNcp_ItemHandler0:
 	or	(0xe3e2:16), 8
 	or	(0xe3e2:16), 1
-	ldw	(0xe3e4:16), 128
+	ldw	(0xe3e4:16), 0x0080
 	calr	889
 	calr	62875
 	calr	1200
 	calr	1384
 	ret
-	.byte 0xc1, 0xe2, 0xe3
-	push	xiz
-	ld	(TREGAH:8), 226:io
-	.byte 0xe3
-	push	xiz
-	normal
-	ldw	(0xe3e4:16), 385
+CmpNcp_ItemHandler1:
+	or	(0xe3e2:16), 8
+	or	(0xe3e2:16), 1
+	ldw	(0xe3e4:16), 0x0181
 	calr	1010
 	calr	62846
 	calr	1171
 	ret
-	.byte 0xc1, 0xe2, 0xe3
-	push	xiz
-	ld	(TREGAH:8), 226:io
-	.byte 0xe3
-	push	xiz
-	normal
-	ldw	(0xe3e4:16), 642
+CmpNcp_ItemHandler2:
+	or	(0xe3e2:16), 8
+	or	(0xe3e2:16), 1
+	ldw	(0xe3e4:16), 0x0282
 	calr	1359
 	ret
-	.byte 0xc1, 0xe2, 0xe3
-	push	xiz
-	.byte 0x01
+CmpNcp_ItemHandler3:
+	or	(0xe3e2:16), 1
 	ldw	(0xe3e4:16), 0x8505
 	calr	1573
 	ret
-	.byte 0xc1, 0xe2, 0xe3
-	push	xiz
-	ld	(TREGAH:8), 226:io
-	.byte 0xe3
-	push	xiz
-	normal
-	ldw	(0xe3e4:16), 1670
+CmpNcp_ItemHandler4:
+	or	(0xe3e2:16), 8
+	or	(0xe3e2:16), 1
+	ldw	(0xe3e4:16), 0x0686
 	calr	1668
 	ret
 	push	xiz
@@ -25774,9 +25750,7 @@ DrumVoice_Handler7_Data_3_Code3:
 	pop	xiz
 	ret
 DrumVoice_Handler7_Data_4:
-	.byte 0xc1, 0x37, 0x8d
-	push	xsp
-	.byte 0xbd
+	cp	(PREVIOUS_TITLE:16), 189	; TT_CMMODE
 	jr	z, DrumVoice_Handler7_Code_Entry
 	and	(0x34cd:16), 191
 	ld	xix, RHYTHM_PATTERN_BUF_A
@@ -25796,29 +25770,19 @@ DrumVoice_Handler7_Code_Entry:
 	pop	xiz
 	ret
 DrumVoice_Handler7_Code_Entry_Data:
-	.byte 0xc1, 0x37, 0x8d
-	push	xsp
-	.byte 0xbb
+	cp	(PREVIOUS_TITLE:16), 187	; TT_CMBEND
 	jr	z, DrumVoice_Handler7_Code_Entry_Data_Code_Entry
-	.byte 0xc1, 0xcd
-	ldw	ix, 0xbf3c
+	and	(0x34cd:16), 191
 DrumVoice_Handler7_Code_Entry_Data_Code_Entry:
-	.byte 0xc1
-	push	xbc
-	.byte 0x8d
-	push	xsp
-	ld	(xhl+102), 193
-	.byte 0xe2, 0xe3
-	push	xix
-	swi	6
+	cp	(ACTIVE_TITLE_PREVIOUS:16), 187	; TT_CMBEND
+	jr	z, DrumVoice_Handler7_Code_Entry_Data_Join
+DrumVoice_Handler7_Code_Entry_Data_Join:
+	and	(0xe3e2:16), 254
 	ret
-	.byte 0xc1, 0xe2, 0xe3
-	push	xiz
-	ld	(TREGAH:8), 186:io
-	swi	5
-	ld	a, 201:opc
-	.byte 0xcc
-	retd	0x88c9
+	or	(0xe3e2:16), 8
+	ld	a, (0xfdba:16)
+	and	a, 15
+	ld	w, a
 	cp	hl, 0:i3
 	jr	nz, DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Skip
 	inc	1, a

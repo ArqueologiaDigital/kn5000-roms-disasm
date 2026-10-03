@@ -1,0 +1,83 @@
+[
+ {
+  "file": "v10/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF6541A",
+  "end": "0xF6577B",
+  "segments": [
+   {
+    "kind": "code",
+    "len": 376
+   },
+   {
+    "kind": "byte",
+    "len": 12,
+    "per_line": 12
+   },
+   {
+    "kind": "code",
+    "len": 82
+   },
+   {
+    "kind": "word",
+    "len": 6,
+    "per_line": 3,
+    "decimal": true
+   },
+   {
+    "kind": "code",
+    "len": 64
+   },
+   {
+    "kind": "word",
+    "len": 4,
+    "per_line": 2,
+    "decimal": true
+   },
+   {
+    "kind": "code",
+    "len": 29
+   },
+   {
+    "kind": "long",
+    "len": 28
+   },
+   {
+    "kind": "code",
+    "len": 264
+   }
+  ],
+  "labels": {
+   "0xF65673": "CmpNcp_ItemHandler0",
+   "0xF65690": "CmpNcp_ItemHandler1",
+   "0xF656AA": "CmpNcp_ItemHandler2",
+   "0xF656BE": "CmpNcp_ItemHandler3",
+   "0xF656CD": "CmpNcp_ItemHandler4",
+   "0xF65732": "DrumVoice_Handler7_Code_Entry_Data_Join"
+  },
+  "comments": {
+   "0xF65592": [
+    "(0xFC5A) & 0x7F -> the first program of its group of four: 0x81..0x83 -> 0x80, 0x85..0x87 ->",
+    "0x84, 0x89..0x8B -> 0x88.  DrumVoice_Handler7_Code_Helper returns before the lookup for",
+    "values below 0x80 and for 0x80, 0x84 and 0x88 themselves."
+   ],
+   "0xF655F0": [
+    "(0x39A7), stepped between 0 and 2 by DrumVoice_Handler7_Data_3_Helper -> the",
+    "CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper2 dispatches.",
+    "Reached through CmpNcpTtl_Dispatch2_Helper / _Helper2."
+   ],
+   "0xF65636": [
+    "(0x39A8), stepped between 0 and 1 by DrumVoice_Handler7_Data_3_Helper3 -> the",
+    "CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper4 dispatches.",
+    "Reached through CmpNcpTtl_Dispatch2_Helper3."
+   ],
+   "0xF65657": [
+    "DrumVoice_Handler7_Data_3_Helper5 calls entry (HL & 7).  Indexes 0..4 come from the two",
+    "tables above; 5 and 6 are DrumVoice_NullHandler, and nothing found stores 7.  Each handler",
+    "sets bits of (0xE3E2) and stores its own word in (0xE3E4): 0x0080, 0x0181, 0x0282, 0x8505,",
+    "0x0686.  This table and the five handlers were decoded as code (`jrl ule, ...`, `.byte",
+    "0xc1, 0xe2, 0xe3 / push xiz` ...) until 2026-10-03."
+   ]
+  },
+  "keep_original_code": true
+ }
+]
