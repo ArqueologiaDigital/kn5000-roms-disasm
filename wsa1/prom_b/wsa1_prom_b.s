@@ -727,6 +727,7 @@
 	.set	MIDI_RX_ErrorReset, 0xFA5418
 	.set	MIDI_TX_Ready, 0xFA542F
 	.set	MIDI_RX_Byte, 0xFA5496
+	.set	MIDI_Clock_CatchUpIfAnySlot, 0xFA55F4
 	.set	MIDI_PostSendWork, 0xFA590F
 	.set	MIDI_DrainQueue, 0xFA5942
 	.set	MIDI_SendBankAndProgram, 0xFA5B5F
@@ -790,6 +791,8 @@
 	.set	ParamMsg_RefreshMasksOnCtrlFieldChange, 0xFAC786
 	.set	ParamRecord_SetPartsField18Bit0, 0xFAC7C4
 	.set	Queue2E00_PostParam98Fields, 0xFAC80F
+	.set	T_F40860_Nop, 0xFAD800
+	.set	T_F4085C_Nop, 0xFAD805
 	.set	ParamApply_MaskedWriteAndPublish, 0xFAD80A
 	.set	ParamShadow_SetField3, 0xFAD81D
 	.set	ParamShadow_SetExpression, 0xFAD84A
@@ -810,6 +813,17 @@
 	.set	ParamApply_StorePairAndDerive, 0xFAE223
 	.set	T_F41F2C_Nop, 0xFAE800
 	.set	T_F41F3C_Nop, 0xFAE829
+	.set	T_F41F38_Nop, 0xFAE84C
+	.set	sub_FAE84D, 0xFAE84D
+	.set	sub_FAE872, 0xFAE872
+	.set	SeqBuf_EncodeQueue2C00, 0xFAE921
+	.set	T_F41F24_Nop, 0xFAEBAA
+	.set	T_F41F1C_Nop, 0xFAEC78
+	.set	sub_FAEC8A, 0xFAEC8A
+	.set	sub_FAED76, 0xFAED76
+	.set	T_F41F20_Nop, 0xFAF48F
+	.set	T_F41F28_Nop, 0xFAF490
+	.set	PatchLists_ApplyAll, 0xFB1800
 	.set	SysExModule_EntryThunks, 0xFB2000
 	.set	T_F408F8_Nop, 0xFB2022
 	.set	SysExDump_RunSendJob, 0xFB2049
@@ -87654,7 +87668,7 @@ T_MIDI_TX_Ready:	jp MIDI_TX_Ready  ; F40718 (was T_F40718) -> prom_a 0x2542F
 ; Evidence: slot 0xF4071C is `jp 0xFA5418`; prom_a 0xFA5418 carries the label
 ;           MIDI_RX_ErrorReset, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MIDI_RX_ErrorReset:	jp MIDI_RX_ErrorReset  ; F4071C (was T_F4071C) -> prom_a 0x25418
-T_F40720:	jp 0xFA55F4  ; -> prom_a 0x255F4   x1
+T_F40720:	jp MIDI_Clock_CatchUpIfAnySlot  ; -> prom_a 0x255F4   x1
 ; Evidence: slot 0xF40724 is `jp 0xFA590F`; prom_a 0xFA590F carries the label
 ;           MIDI_PostSendWork, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MIDI_PostSendWork:	jp MIDI_PostSendWork  ; F40724 (was T_F40724) -> prom_a 0x2590F   x15
@@ -87750,13 +87764,13 @@ T_F40808:	jp sub_FAB728  ; -> prom_a 0x2B728   x3
 T_MidiIn_ControlRecord_Dispatch:	jp MidiIn_ControlRecord_Dispatch  ; -> prom_a 0x2BEFB   x21
 T_ParamMsg_RefreshMasksOnCtrlFieldChange:	jp ParamMsg_RefreshMasksOnCtrlFieldChange  ; -> prom_a 0x2C786
 	.fill 0x2C, 1, 0x0E  ; 0xF40814: 44 x ret
-T_F40840:	jp 0xFB1800  ; -> prom_a 0x31800   x1
+T_F40840:	jp PatchLists_ApplyAll  ; -> prom_a 0x31800   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40844: 12 x ret
 T_Evt2030_RunList:	jp Evt2030_RunList  ; -> prom_a 0x2DB2C   x1
 T_ParamApply_ByModeOfParam80:	jp ParamApply_ByModeOfParam80  ; -> prom_a 0x2DF1E   x1
 T_ParamApply_MaskedWriteAndPublish:	jp ParamApply_MaskedWriteAndPublish  ; -> prom_a 0x2D80A   x1
-T_F4085C:	jp 0xFAD805  ; -> prom_a 0x2D805
-T_F40860:	jp 0xFAD800  ; -> prom_a 0x2D800
+T_F4085C:	jp T_F4085C_Nop  ; -> prom_a 0x2D805
+T_F40860:	jp T_F40860_Nop  ; -> prom_a 0x2D800
 T_ParamShadow_SetPitchBend:	jp ParamShadow_SetPitchBend  ; -> prom_a 0x2D870   x1
 T_ParamShadow_SetModulation1:	jp ParamShadow_SetModulation1  ; -> prom_a 0x2D88A   x1
 T_ParamShadow_SetExpression:	jp ParamShadow_SetExpression  ; -> prom_a 0x2D84A   x1
@@ -89063,17 +89077,17 @@ T_F41EFC:	jp sub_FBAE5A  ; -> prom_a 0x3AE5A   x1
 T_F41F00:	jp sub_FBB392  ; -> prom_a 0x3B392   x1
 T_F41F04:	jp sub_FBB3DC  ; -> prom_a 0x3B3DC   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41F08: 8 x ret
-T_F41F10:	jp 0xFAED76  ; -> prom_a 0x2ED76   x1
-T_F41F14:	jp 0xFAE84D  ; -> prom_a 0x2E84D   x5
-T_F41F18:	jp 0xFAEC8A  ; -> prom_a 0x2EC8A   x9
-T_F41F1C:	jp 0xFAEC78  ; -> prom_a 0x2EC78
-T_F41F20:	jp 0xFAF48F  ; -> prom_a 0x2F48F
-T_F41F24:	jp 0xFAEBAA  ; -> prom_a 0x2EBAA
-T_F41F28:	jp 0xFAF490  ; -> prom_a 0x2F490
+T_F41F10:	jp sub_FAED76  ; -> prom_a 0x2ED76   x1
+T_F41F14:	jp sub_FAE84D  ; -> prom_a 0x2E84D   x5
+T_F41F18:	jp sub_FAEC8A  ; -> prom_a 0x2EC8A   x9
+T_F41F1C:	jp T_F41F1C_Nop  ; -> prom_a 0x2EC78
+T_F41F20:	jp T_F41F20_Nop  ; -> prom_a 0x2F48F
+T_F41F24:	jp T_F41F24_Nop  ; -> prom_a 0x2EBAA
+T_F41F28:	jp T_F41F28_Nop  ; -> prom_a 0x2F490
 T_F41F2C:	jp T_F41F2C_Nop  ; -> prom_a 0x2E800
-T_F41F30:	jp 0xFAE872  ; -> prom_a 0x2E872   x1
-T_F41F34:	jp 0xFAE921  ; -> prom_a 0x2E921   x1
-T_F41F38:	jp 0xFAE84C  ; -> prom_a 0x2E84C
+T_F41F30:	jp sub_FAE872  ; -> prom_a 0x2E872   x1
+T_F41F34:	jp SeqBuf_EncodeQueue2C00  ; -> prom_a 0x2E921   x1
+T_F41F38:	jp T_F41F38_Nop  ; -> prom_a 0x2E84C
 T_F41F3C:	jp T_F41F3C_Nop  ; -> prom_a 0x2E829
 	.fill 0x10, 1, 0x0E  ; 0xF41F40: 16 x ret
 	.fill 0x4, 1, 0x00  ; 0xF41F50: 4 x nop

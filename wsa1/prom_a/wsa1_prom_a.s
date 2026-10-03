@@ -65967,6 +65967,10 @@ MIDI_RT_NotClock:
 	jrl z, MIDI_RT_Continue                               ; FA55F0  76 74 00
 .LFA55F3:
 	ret                                           ; FA55F3  0e
+; MIDI_Clock_CatchUpIfAnySlot -- when the slot mask (0x60341E) is non-zero: MIDI_RT_Start_ResetCounters and
+;          MIDI_Clock_CatchUp at interrupt level 6.  prom_b directory slot T_F40720; MainTask's timed-event
+;          service calls it when bit 5 of (0x34D0) is set (0xF823EC).
+MIDI_Clock_CatchUpIfAnySlot:
 	push XWA                                      ; FA55F4  38
 	xor XWA,XWA                                   ; FA55F5  e8 d0
 	cp (0x60341e:24), xwa                     ; FA55F7  e2 1e 34 60 f8
@@ -80989,9 +80993,11 @@ DuplicateTail_FAD3EB:
 ; ==== 0xFAD800-0xFB2000 -- emitted by notes/gen_prom_a_fad800_module.py ====
 ; Layout from notes/prom_a_fad800_layout.py (--selftest: 64 checks).
 ; This text was assembled and byte-compared with the ROM before printing.
+T_F40860_Nop:
 	ret
 	calr Dev7F_WriteAllFourSlots
 	ret
+T_F4085C_Nop:
 	ret
 	calr Dev7F_WriteAllFourSlots
 	ret
@@ -83304,18 +83310,21 @@ T_F41F3C_Nop:
 sub_FAE829_Nop5:   ; entry: pointer-table entry
 	ret
 	ret
+T_F41F38_Nop:
 	ret
+sub_FAE84D:
 	ldw (0x60f002:24), 0x00
 	calr T_F41F2C_Nop
 	calr T_F41F3C_Nop
 	calr .LFAE8CB
-	calr .LFAE921
+	calr SeqBuf_EncodeQueue2C00
 	ret
 	call T_Dev7F_WriteSlot8_Slot0
 	call T_Dev7F_WriteSlot8_Slot1
 	call T_Dev7F_WriteSlot8_Slot2
 	call T_Dev7F_WriteSlot8_Slot3
 	ret
+sub_FAE872:
 	xor XWA,XWA
 	ld e, (PanelMode:16)
 	cp e, 0x05:i3
@@ -83381,7 +83390,10 @@ sub_FAE829_Nop5:   ; entry: pointer-table entry
 	and XWA,0x0001ffff
 	ld (0x60f318:24), xwa
 	ret
-.LFAE921:
+; SeqBuf_EncodeQueue2C00 -- the 0x2C00-queue encoder its event-type arms (SeqBuf_Put*Event) name: walk the queue's
+;          records from 0x2C00 + (0x60F002) up to the 0xFF end mark and append each as a sequencer event to ring
+;          0x600A14.  prom_b directory slot T_F41F34; also reached from sub_FAE84D.
+SeqBuf_EncodeQueue2C00:
 	xor XWA,XWA
 	cp (0x60f318:24), xwa
 	jrl z, .LFAE9CE
@@ -83623,6 +83635,7 @@ SeqBuf_PutTempoEvent:   ; entry: pointer-table entry
 	ld (0x60f31f:24), 0x04
 	calr .LFAEC0F
 	ret
+T_F41F24_Nop:
 	ret
 	call T_Dev7F_WriteSlot8_Slot0
 	call T_Dev7F_WriteSlot8_Slot1
@@ -83631,7 +83644,7 @@ SeqBuf_PutTempoEvent:   ; entry: pointer-table entry
 	ret
 ; SeqBuf_LoadSlotKeyList -- if slot (0x60F31C) is enabled in the slot mask (0x60F318), copy KeyValueList_A for the slot's part (0x603422)[slot] to RAM 0x60F330; otherwise leave 0x60F330 empty (0xFF)
 ; Evidence: `ld (0x60f330),0xff`, shift loop on (0x60F318) at 0xFAEBC9-0xFAEBD6, `ld XIX,KeyValueListPtrs_A` read (the reader KeyValueListPtrs_A's header cites) and the word-copy loop 0xFAEBFB-0xFAEC0E.
-; (0x60F318) is set by the unlabelled 0xFAE872 (directory T_F41F30) from (0x3000), (0x3004) or (0x1336) by the mode bytes (0x2078)/(0x207A).  Called per slot 0..16 by the 0x2C00 encoder at 0xFAE921.
+; (0x60F318) is set by sub_FAE872 (directory T_F41F30) from (0x3000), (0x3004) or (0x1336) by the mode bytes (0x2078)/(0x207A).  Called per slot 0..16 by the 0x2C00 encoder at 0xFAE921.
 SeqBuf_LoadSlotKeyList:
 	ld (0x60f330:24), 0xff
 	xor XWA,XWA
@@ -83699,12 +83712,14 @@ SeqBuf_LoadSlotKeyList:
 	ld (0x60f31f:24), 0x00
 .LFAEC77:
 	ret
+T_F41F1C_Nop:
 	ret
 	call T_Dev7F_WriteSlot8_Slot0
 	call T_Dev7F_WriteSlot8_Slot1
 	call T_Dev7F_WriteSlot8_Slot2
 	call T_Dev7F_WriteSlot8_Slot3
 	ret
+sub_FAEC8A:
 	ld (0x60f31d:24), 0x00
 .LFAEC90:
 	xor XWA,XWA
@@ -83786,6 +83801,7 @@ SeqBuf_LoadSlotKeyList:
 	ret
 .LFAED75:
 	ret
+sub_FAED76:
 	calr .LFAED8E
 	calr SeqEvt_FlushShadows
 	ret
@@ -84493,11 +84509,13 @@ sub_FAF453:   ; entry: pointer-table entry
 	ld (0x60f308:24), 0xff
 .LFAF48E:
 	ret
+T_F41F20_Nop:
 	ret
+T_F41F28_Nop:
 	ret
 ; SeqEvt_FlushShadows -- for each of the 17 sequencer slots, post every deferred value (bit 7 set) and clear its flag: 0x60F630 -> SeqEvt_PostChanPressure, 0x60F5B0 -> SeqEvt_PostModulation, 0x60F5D0 (16-bit) -> SeqEvt_PostPitchBend, 0x60F590 -> the expression post at 0xFAF352, 0x60F610 -> SeqEvt_PostPartVolume
 ; Evidence: five `ldw BC,0x11` sweeps with `bit 7,(XIY) / res 7,(XIY)` at 0xFAF491-0xFAF55C, each setting (0x60F31D) to the slot index before the call.
-; Called from: the playback entry 0xFAED76 (directory T_F41F10) and the slot-reset routine 0xFAEC8A (T_F41F18).
+; Called from: the playback entry sub_FAED76 (directory T_F41F10) and the slot-reset routine sub_FAEC8A (T_F41F18).
 SeqEvt_FlushShadows:
 	ld XIY,SeqEvt_PressureShadow
 	ldw bc, 0x11
@@ -85678,6 +85696,9 @@ KeyValueList_B32:
 ; 0xFB1790-0xFB17FF -- 112 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte: notes/proma-2026-09-25/gen_kvlists.py asserts the run.
 	.fill 112, 1, 0x0E                                ; FB1790
+; PatchLists_ApplyAll -- "the T_F40840 entry routine" the PatchList_Apply* headers name: when (0x2744) is 0,
+;          snapshot the parameter image and apply each patch list for index 0.
+PatchLists_ApplyAll:
 	push XIX
 	lda xix, (0x2744:16)
 	ld C,(XIX)
