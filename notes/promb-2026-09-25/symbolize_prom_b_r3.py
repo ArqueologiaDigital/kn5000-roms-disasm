@@ -31,7 +31,7 @@ QUESTION THIS ANSWERS
         `ld`), and a nop run between two ordinary instructions -- sub_F6498D
         0xF649E2 has thirteen `nop`s between `ld (0x0cae),WA` and `xor DE,DE`,
         patched-out code in the middle of a routine.
-    `normal` (sub_F5D77F's dead tail at 0xF5D7C2) still refuses, as does any
+    `normal` (Draw_C0ntr0llerSoundEditDepth's dead tail at 0xF5D7C2) still refuses, as does any
     marker next to a `.byte` line or a `swi`.
 
     AND R5 RE-SYNCHRONISED (see _resync_agrees): when the committed LINEAR

@@ -9986,7 +9986,7 @@ DL_F04038:
 ; DL_TouchCurve_0..5 -- 0xF04042-0xF0413D, six interpreter-A lists of 42 bytes
 ;   (4 records each): the captions TOUCH and CURVE (op 0x17), a box (op 0x22)
 ;   and a line (op 0x01), the same picture at six places.  Run one at a time
-;   by sub_F5BDBB through TouchCurve_ListPtrs / TouchCurve_ListPtrs3 (`ld
+;   by Draw_TouchCurve through TouchCurve_ListPtrs / TouchCurve_ListPtrs3 (`ld
 ;   XIY,(XIZ) / ld XIX,XIY / add XIX,42 / call T_DisplayList_Run` at
 ;   0xF5BE4B-0xF5BE55).  0xF04042 is also the END of the list before it (`ld
 ;   XIX,0x00F04042` at 0xF5BDCC).
@@ -35753,7 +35753,7 @@ sub_F1195A_Skip40:
 	and	a, 8	; F122FA  and A,0x08
 	jr	nz, sub_F1195A_Skip41	; F122FD  jr NZ,0xf12315
 	m_or_mi8 MBI+r4, 0, 0x08	; F122FF  or (XIX),0x08
-	lda	xbc, (sub_F123C2:24)	; F12302  lda XBC,0xf123c2
+	lda	xbc, (Draw_MainOutEqualizer:24)	; F12302  lda XBC,0xf123c2
 	push	xbc	; F12307  push XBC
 	call	T_CallbackQueue_Post	; F12308  call 0xf42e84
 	pushw	1	; F1230C  push 0x0001
@@ -35928,7 +35928,7 @@ sub_F123AD:
 	ld	(8348:16), 5	; F123BB  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F123C0  pop XBC
 	ret	; F123C1  ret
-sub_F123C2:
+Draw_MainOutEqualizer:
 	m_res 3, MD16, 0x2799	; F123C2  res 3,(0x2799)
 	call	T_F42E10	; F123C6  call 0xf42e10
 	ld	(9536:16), 0	; F123CA  ld (0x2540),0x00
@@ -116182,7 +116182,7 @@ sub_F55C44_Join:
 	call	T_DLB_Handler_StringTable	; F55C5C  call 0xf417f8
 sub_F55C44_Return:
 	ret	; F55C60  ret
-sub_F55C61:
+Draw_SequencerPlayS0ngCycleMeasure:
 	calr	sub_F55C2F	; F55C61  calr 0xf55c2f
 	ld	xiy, DL_SequencerPlayS0ngCycleMeasure	; F55C64  ld XIY,0x00f349c7
 	ld	xix, Data_F34C6E	; F55C69  ld XIX,0x00f34c6e
@@ -116194,7 +116194,7 @@ sub_F55C61:
 	calr	sub_F55D67	; F55C85  calr 0xf55d67
 	calr	sub_F55D90	; F55C88  calr 0xf55d90
 	ret	; F55C8B  ret
-sub_F55C8C:
+Draw_CycleMasterS0ngMeasureTimeSig:
 	calr	SeqPlayScreen_StageValues	; F55C8C  calr 0xf57453
 	ld	(9536:16), 2	; F55C8F  ld (0x2540),0x02
 	ld	xiy, DL_CycleMasterS0ngMeasureTimeSig	; F55C94  ld XIY,0x00f34970
@@ -116206,7 +116206,7 @@ sub_F55C8C:
 	call	T_F415BC	; F55CAE  call 0xf415bc
 	calr	sub_F55C3D	; F55CB2  calr 0xf55c3d
 	ret	; F55CB5  ret
-sub_F55CB6:
+Draw_MetronomeBalance:
 	calr	sub_F55C2F	; F55CB6  calr 0xf55c2f
 	ld	xiy, DL_MetronomeBalance	; F55CB9  ld XIY,0x00f35342
 	ld	xix, DL_F3539F	; F55CBE  ld XIX,0x00f3539f
@@ -116221,7 +116221,7 @@ sub_F55CC8:
 	call	T_DisplayListB_Run	; F55CDF  call 0xf417f4
 	calr	sub_F55C3D	; F55CE3  calr 0xf55c3d
 	ret	; F55CE6  ret
-sub_F55CE7:
+Draw_RealtimeRecordSongMeasureQuantiTimeSigMasterClear:
 	calr	sub_F55C2F	; F55CE7  calr 0xf55c2f
 	ld	xiy, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear	; F55CEA  ld XIY,0x00f34681
 	ld	xix, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear + 0x2E7	; F55CEF  ld XIX,0x00f34968
@@ -116415,7 +116415,7 @@ sub_F55E20_Join:
 sub_F55E20_Join2:
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55E78  and (0xc6),0xfe
 	ret	; F55E7C  ret
-sub_F55E7D:
+Draw_CyclePlayCurrentMeasureEdit:
 	calr	sub_F55C2F	; F55E7D  calr 0xf55c2f
 	ld	xiy, DL_CyclePlayCurrentMeasureEdit	; F55E80  ld XIY,0x00f35208
 	ld	xix, DL_F352F9	; F55E85  ld XIX,0x00f352f9
@@ -116440,7 +116440,7 @@ sub_F55E8F:
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55ED0  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55ED4  calr 0xf55c3d
 	ret	; F55ED7  ret
-sub_F55ED8:
+Draw_CyclePlayCurrentMeasureCycle:
 	calr	sub_F55C2F	; F55ED8  calr 0xf55c2f
 	ld	xiy, DL_CyclePlayCurrentMeasureCycle	; F55EDB  ld XIY,0x00f34ee8
 	ld	xix, DL_F34FF2	; F55EE0  ld XIX,0x00f34ff2
@@ -116465,7 +116465,7 @@ sub_F55EEA:
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F2B  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55F2F  calr 0xf55c3d
 	ret	; F55F32  ret
-sub_F55F33:
+Draw_CycleRecordCurrentMeasure:
 	calr	sub_F55C2F	; F55F33  calr 0xf55c2f
 	ld	xiy, DL_CycleRecordCurrentMeasure	; F55F36  ld XIY,0x00f3505b
 	ld	xix, DL_F351A7	; F55F3B  ld XIX,0x00f351a7
@@ -116648,7 +116648,7 @@ sub_F56058_Skip6:
 	call	T_Kernel_SemaSignal	; F560FA  call 0xf42d88
 	jr	sub_F56058_Join	; F560FE  jr T,0xf56112
 sub_F56058_Skip7:
-	ld	xwa, sub_F55CE7	; F56100  ld XWA,0x00f55ce7
+	ld	xwa, Draw_RealtimeRecordSongMeasureQuantiTimeSigMasterClear	; F56100  ld XWA,0x00f55ce7
 	push	xwa	; F56105  push XWA
 	call	T_CallbackQueue_Post	; F56106  call 0xf42e84
 	inc	4, xsp	; F5610A  inc 4,XSP
@@ -117544,7 +117544,7 @@ sub_F5658C:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F5658C  call 0xf42e80
 	ld	a, (32517:16)	; F56590  ld A,(0x7f05)
 	ld	(14163:16), a	; F56594  ld (0x3753),A
-	ld	xwa, sub_F55CB6	; F56598  ld XWA,0x00f55cb6
+	ld	xwa, Draw_MetronomeBalance	; F56598  ld XWA,0x00f55cb6
 	push	xwa	; F5659D  push XWA
 	call	T_CallbackQueue_Post	; F5659E  call 0xf42e84
 	inc	4, xsp	; F565A2  inc 4,XSP
@@ -117743,7 +117743,7 @@ sub_F5664A_Skip4:
 	jr	z, sub_F5664A_Skip5	; F566AD  jr Z,0xf566b4
 	m_and_mi8 MB16, 0x34d9, 0xfe	; F566AF  and (0x34d9),0xfe
 sub_F5664A_Skip5:
-	ld	xwa, sub_F55F33	; F566B4  ld XWA,0x00f55f33
+	ld	xwa, Draw_CycleRecordCurrentMeasure	; F566B4  ld XWA,0x00f55f33
 	push	xwa	; F566B9  push XWA
 	call	T_CallbackQueue_Post	; F566BA  call 0xf42e84
 	inc	4, xsp	; F566BE  inc 4,XSP
@@ -118711,7 +118711,7 @@ sub_F56B95_Skip3:
 	call	T_Queue2E00_AppendRegs	; F56C04  call 0xf40f3c
 	call	T_F411BC	; F56C08  call 0xf411bc
 sub_F56B95_Skip4:
-	ld	xwa, sub_F55C61	; F56C0C  ld XWA,0x00f55c61
+	ld	xwa, Draw_SequencerPlayS0ngCycleMeasure	; F56C0C  ld XWA,0x00f55c61
 	push	xwa	; F56C11  push XWA
 	call	T_CallbackQueue_Post	; F56C12  call 0xf42e84
 	inc	4, xsp	; F56C16  inc 4,XSP
@@ -118719,7 +118719,7 @@ sub_F56B95_Skip4:
 	call	T_Kernel_SemaSignal	; F56C1A  call 0xf42d88
 sub_F56B95_Skip5:
 	call	T_F42704	; F56C1E  call 0xf42704
-	ld	xwa, sub_F55C8C	; F56C22  ld XWA,0x00f55c8c
+	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56C22  ld XWA,0x00f55c8c
 	push	xwa	; F56C27  push XWA
 	call	T_CallbackQueue_Post	; F56C28  call 0xf42e84
 	inc	4, xsp	; F56C2C  inc 4,XSP
@@ -118787,7 +118787,7 @@ sub_F56C35_Skip3:
 	ld	a, (13835:16)	; F56C91  ld A,(0x360b)
 	and	a, 1	; F56C95  and A,0x01
 	ld	(9799:16), a	; F56C98  ld (0x2647),A
-	ld	xwa, sub_F55C8C	; F56C9C  ld XWA,0x00f55c8c
+	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56C9C  ld XWA,0x00f55c8c
 	push	xwa	; F56CA1  push XWA
 	call	T_CallbackQueue_Post	; F56CA2  call 0xf42e84
 	inc	4, xsp	; F56CA6  inc 4,XSP
@@ -118799,7 +118799,7 @@ sub_F56C35_Skip4:
 	ldw	(8347:16), 34953	; F56CB5  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_F40D0C	; F56CBB  call 0xf40d0c
 	call	T_F42704	; F56CBF  call 0xf42704
-	ld	xwa, sub_F55C8C	; F56CC3  ld XWA,0x00f55c8c
+	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56CC3  ld XWA,0x00f55c8c
 	push	xwa	; F56CC8  push XWA
 	call	T_CallbackQueue_Post	; F56CC9  call 0xf42e84
 	inc	4, xsp	; F56CCD  inc 4,XSP
@@ -118835,7 +118835,7 @@ sub_F56C35_Skip5:
 	ldw	(8347:16), 34953	; F56CFC  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_F40D10	; F56D02  call 0xf40d10
 	call	T_F42704	; F56D06  call 0xf42704
-	ld	xwa, sub_F55C8C	; F56D0A  ld XWA,0x00f55c8c
+	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56D0A  ld XWA,0x00f55c8c
 	push	xwa	; F56D0F  push XWA
 	call	T_CallbackQueue_Post	; F56D10  call 0xf42e84
 	inc	4, xsp	; F56D14  inc 4,XSP
@@ -118892,7 +118892,7 @@ sub_F56D46:
 sub_F56D46_Skip:
 	calr	sub_F56DA8	; F56D52  calr 0xf56da8
 sub_F56D46_Join:
-	ld	xwa, sub_F55C8C	; F56D55  ld XWA,0x00f55c8c
+	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56D55  ld XWA,0x00f55c8c
 	push	xwa	; F56D5A  push XWA
 	call	T_CallbackQueue_Post	; F56D5B  call 0xf42e84
 	inc	4, xsp	; F56D5F  inc 4,XSP
@@ -119060,7 +119060,7 @@ sub_F56DF1_Skip3:
 	call	T_F40B5C	; F56E36  call 0xf40b5c
 	call	T_F40AC4	; F56E3A  call 0xf40ac4
 sub_F56DF1_Skip4:
-	ld	xwa, sub_F55ED8	; F56E3E  ld XWA,0x00f55ed8
+	ld	xwa, Draw_CyclePlayCurrentMeasureCycle	; F56E3E  ld XWA,0x00f55ed8
 	push	xwa	; F56E43  push XWA
 	call	T_CallbackQueue_Post	; F56E44  call 0xf42e84
 	inc	4, xsp	; F56E48  inc 4,XSP
@@ -119915,7 +119915,7 @@ sub_F57286_Skip4:
 	call	T_F40B5C	; F572E1  call 0xf40b5c
 	call	T_F40AC4	; F572E5  call 0xf40ac4
 sub_F57286_Skip5:
-	ld	xwa, sub_F55E7D	; F572E9  ld XWA,0x00f55e7d
+	ld	xwa, Draw_CyclePlayCurrentMeasureEdit	; F572E9  ld XWA,0x00f55e7d
 	push	xwa	; F572EE  push XWA
 	call	T_CallbackQueue_Post	; F572EF  call 0xf42e84
 	inc	4, xsp	; F572F3  inc 4,XSP
@@ -126656,25 +126656,25 @@ DispatchTable_F5B8F8:
 	.long sub_F5BF27	; [0x80]
 	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
 	.long sub_F5C2A8	; [0x82]
-	.long sub_F5D40E	; [0x83]
+	.long Draw_PanningPanning	; [0x83]
 	.long sub_F5D4C3	; [0x84]
-	.long sub_F5D519	; [0x85]
+	.long Draw_EffectBlockEff1Eff2RevMain	; [0x85]
 	.long sub_F5C06C	; [0x86]
 	.long sub_F5C4D1	; [0x87]
-	.long sub_F5D55F	; [0x88]
+	.long Draw_StartPitchStopPitchTotal	; [0x88]
 	.long sub_F5D57A	; [0x89]
 	.long sub_F5C513	; [0x8A]
 	.long sub_F5C6BE	; [0x8B]
 	.long sub_F5C749	; [0x8C]
 	.long sub_F5C79E	; [0x8D]
-	.long sub_F5C876	; [0x8E]
+	.long Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; [0x8E]
 	.long sub_F5D622	; [0x8F]
 	.long sub_F5C8CB	; [0x90]
 	.long sub_F5C983	; [0x91]
 	.long sub_F5C9CE	; [0x92]
 	.long sub_F5CA19	; [0x93]
 	.long sub_F5CA64	; [0x94]
-	.long sub_F5CAA1	; [0x95]
+	.long Draw_Through	; [0x95]
 	.long sub_F5D583	; [0x96]
 	.long sub_F5CACB	; [0x97]
 	.long sub_F5D5C4	; [0x98]
@@ -126685,14 +126685,14 @@ DispatchTable_F5B8F8:
 	.long SoundEditCopy_Paint	; [0x9D]
 	.long sub_F5D14E	; [0x9E]
 	.long sub_F5D1E8	; [0x9F]
-	.long sub_F5BFC7	; [0xA0]  <- also selector 0xC0
+	.long Draw_ResonatorDriverOnOffGroup	; [0xA0]  <- also selector 0xC0
 	.long sub_F5C2A8	; [0xA1]  <- also selector 0xC1
 	.long sub_F5C06C	; [0xA2]  <- also selector 0xC2
 	.long sub_F5C09E	; [0xA3]  <- also selector 0xC3
 	.long sub_F5C0D4	; [0xA4]  <- also selector 0xC4
 	.long sub_F5C10A	; [0xA5]  <- also selector 0xC5
 	.long sub_F5C172	; [0xA6]  <- also selector 0xC6
-	.long sub_F5C1AC	; [0xA7]  <- also selector 0xC7
+	.long Draw_MutingKeyFollowSlopeRange	; [0xA7]  <- also selector 0xC7
 	.long sub_F5C210	; [0xA8]  <- also selector 0xC8
 	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
 	.long DispatchTable_F5B8F8_Nop42	; [0xAA]  <- also selector 0xCA
@@ -126766,8 +126766,8 @@ DispatchTable_F5B9F8:
 	.long sub_F5D06A	; [0x8D]
 	.long sub_F5D09F	; [0x8E]
 	.long sub_F5CEF6	; [0x8F]
-	.long sub_F5D0AE	; [0x90]
-	.long sub_F5D0D1	; [0x91]
+	.long Draw_LowHigh	; [0x90]
+	.long Draw_LowHigh_2	; [0x91]
 	.long sub_F5D0F9	; [0x92]
 	.long sub_F5D108	; [0x93]
 	.long sub_F5D117	; [0x94]
@@ -126780,7 +126780,7 @@ DispatchTable_F5B9F8:
 	.long SoundEditController_RepaintFieldPage2	; [0x9B]
 	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_RepaintField	; [0x9D]
-	.long sub_F5D2E9	; [0x9E]
+	.long Draw_MemoryBank	; [0x9E]
 	.long sub_F5D313	; [0x9F]
 	.long sub_F5CB1E	; [0xA0]  <- also selector 0xC0
 	.long sub_F5CE65	; [0xA1]  <- also selector 0xC1
@@ -127332,7 +127332,7 @@ OctaveIcon_BlackKeyX:
 	.short	23, 25	; F5BDB7  [4]
 
 ; --------------------------------------------------------------------------
-; sub_F5BDBB
+; Draw_TouchCurve
 ; Called from: in-module: 0xF5C6F3 0xF5CFEE 0xF5CFF9
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27A3) (0x27F5)  |  0x00002A
 ;          0x0027AB 0x0027AE 0xF0402E 0xF04038 0xF04042 +4 more
@@ -127343,30 +127343,30 @@ OctaveIcon_BlackKeyX:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5BDBB:
+Draw_TouchCurve:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BDBB  cp (0x27f5),0x01
-	jr	nz, sub_F5BDBB_Skip4	; F5BDC0  jr NZ,0xf5bdd7
+	jr	nz, Draw_TouchCurve_Skip4	; F5BDC0  jr NZ,0xf5bdd7
 	ld	(9536:16), 0	; F5BDC2  ld (0x2540),0x00
 	ld	xiy, DL_F04038	; F5BDC7  ld XIY,0x00f04038
 	ld	xix, DL_TouchCurve_0	; F5BDCC  ld XIX,0x00f04042
 	call	T_DisplayList_Run	; F5BDD1  call 0xf417f0
-	jr	sub_F5BDBB_Join	; F5BDD5  jr T,0xf5bdea
-sub_F5BDBB_Skip4:
+	jr	Draw_TouchCurve_Join	; F5BDD5  jr T,0xf5bdea
+Draw_TouchCurve_Skip4:
 	ld	(9536:16), 0	; F5BDD7  ld (0x2540),0x00
 	ld	xiy, DL_F0402E	; F5BDDC  ld XIY,0x00f0402e
 	ld	xix, DL_F04038	; F5BDE1  ld XIX,0x00f04038
 	call	T_DisplayList_Run	; F5BDE6  call 0xf417f0
-sub_F5BDBB_Join:
+Draw_TouchCurve_Join:
 	xor	xwa, xwa	; F5BDEA  xor XWA,XWA
 	ld	a, (10147:16)	; F5BDEC  ld A,(0x27a3)
 	sla	wa, 2	; F5BDF0  sla 0x02,WA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BDF3  cp (0x27f5),0x01
-	jr	nz, sub_F5BDBB_Skip	; F5BDF8  jr NZ,0xf5be01
+	jr	nz, Draw_TouchCurve_Skip	; F5BDF8  jr NZ,0xf5be01
 	ld	xiz, TouchCurve_BoxOrigins3	; F5BDFA  ld XIZ,0x00f04172
-	jr	sub_F5BDBB_Join2	; F5BDFF  jr T,0xf5be06
-sub_F5BDBB_Skip:
+	jr	Draw_TouchCurve_Join2	; F5BDFF  jr T,0xf5be06
+Draw_TouchCurve_Skip:
 	ld	xiz, TouchCurve_BoxOrigins	; F5BE01  ld XIZ,0x00f0415e
-sub_F5BDBB_Join2:
+Draw_TouchCurve_Join2:
 	push	xwa	; F5BE06  push XWA
 	add	xiz, xwa	; F5BE07  add XIZ,XWA
 	ld	wa, (xiz)	; F5BE09  ld WA,(XIZ)
@@ -127374,24 +127374,24 @@ sub_F5BDBB_Join2:
 	ld	wa, (xiz+2)	; F5BE0F  ld WA,(XIZ+0x02)
 	ld	(9042:16), wa	; F5BE12  ld (0x2352),WA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BE16  cp (0x27f5),0x01
-	jr	nz, sub_F5BDBB_Skip2	; F5BE1B  jr NZ,0xf5be24
+	jr	nz, Draw_TouchCurve_Skip2	; F5BE1B  jr NZ,0xf5be24
 	ld	xiz, 10155	; F5BE1D  ld XIZ,0x000027ab
-	jr	sub_F5BDBB_Join3	; F5BE22  jr T,0xf5be29
-sub_F5BDBB_Skip2:
+	jr	Draw_TouchCurve_Join3	; F5BE22  jr T,0xf5be29
+Draw_TouchCurve_Skip2:
 	ld	xiz, 10158	; F5BE24  ld XIZ,0x000027ae
-sub_F5BDBB_Join3:
+Draw_TouchCurve_Join3:
 	xor	xwa, xwa	; F5BE29  xor XWA,XWA
 	ld	a, (10147:16)	; F5BE2B  ld A,(0x27a3)
 	add	xiz, xwa	; F5BE2F  add XIZ,XWA
 	call	sub_F5BE5A	; F5BE31  call 0xf5be5a
 	pop	xwa	; F5BE35  pop XWA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BE36  cp (0x27f5),0x01
-	jr	nz, sub_F5BDBB_Skip3	; F5BE3B  jr NZ,0xf5be44
+	jr	nz, Draw_TouchCurve_Skip3	; F5BE3B  jr NZ,0xf5be44
 	ld	xiz, TouchCurve_ListPtrs3	; F5BE3D  ld XIZ,0x00f04152
-	jr	sub_F5BDBB_Join4	; F5BE42  jr T,0xf5be49
-sub_F5BDBB_Skip3:
+	jr	Draw_TouchCurve_Join4	; F5BE42  jr T,0xf5be49
+Draw_TouchCurve_Skip3:
 	ld	xiz, TouchCurve_ListPtrs	; F5BE44  ld XIZ,0x00f0413e
-sub_F5BDBB_Join4:
+Draw_TouchCurve_Join4:
 	add	xiz, xwa	; F5BE49  add XIZ,XWA
 	ld	xiy, (xiz)	; F5BE4B  ld XIY,(XIZ)
 	ld	xix, xiy	; F5BE4D  ld XIX,XIY
@@ -127577,7 +127577,7 @@ sub_F5BF9F_Return:
 ;              0xF5C6C9 0xF5C74D 0xF5C89B +5 more
 ; Touches: (0x2540) (0x27F5)  |  0xF02064 0xF020AA 0xF021E4 0xF02469
 ;          0xF02671 0xF027AF +17 more
-; Calls:   T_F42E18 sub_F5C338 sub_F5C360 T_DisplayList_Run T_DisplayListB_Run 0xF09AF1
+; Calls:   T_F42E18 Draw_M0delingSoundEditToneDriver Draw_ToneDriverResonator T_DisplayList_Run T_DisplayListB_Run 0xF09AF1
 ;          0xF5BAB8 sub_F5C424 sub_F5CBD9 0xF5BB00 sub_F5CC64 DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth +4
 ;          more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -127590,9 +127590,9 @@ sub_F5BFBD:
 	ld	(9536:16), 0	; F5BFBD  ld (0x2540),0x00
 	call	T_F42E18	; F5BFC2  call 0xf42e18
 	ret	; F5BFC6  ret
-sub_F5BFC7:
-	call	sub_F5C338	; F5BFC7  call 0xf5c338
-	call	sub_F5C360	; F5BFCB  call 0xf5c360
+Draw_ResonatorDriverOnOffGroup:
+	call	Draw_M0delingSoundEditToneDriver	; F5BFC7  call 0xf5c338
+	call	Draw_ToneDriverResonator	; F5BFCB  call 0xf5c360
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BFCF  cp (0x27f5),0x01
 	jr	z, sub_F5BFBD_Skip	; F5BFD4  jr Z,0xf5bfe4
 	ld	xiy, DL_F02064	; F5BFD6  ld XIY,0x00f02064
@@ -127640,7 +127640,7 @@ sub_F5BFBD_Join:
 	call	sub_F5CBD9	; F5C067  call 0xf5cbd9
 	ret	; F5C06B  ret
 sub_F5C06C:
-	call	sub_F5C338	; F5C06C  call 0xf5c338
+	call	Draw_M0delingSoundEditToneDriver	; F5C06C  call 0xf5c338
 	ld	xiy, DL_DriverDriverWaveformReso	; F5C070  ld XIY,0x00f02469
 	ld	xix, DL_Page12P0siti0nParameterP0siti0n	; F5C075  ld XIX,0x00f02671
 	call	T_DisplayList_Run	; F5C07A  call 0xf417f0
@@ -127653,7 +127653,7 @@ sub_F5C06C:
 	call	sub_F5CC64	; F5C099  call 0xf5cc64
 	ret	; F5C09D  ret
 sub_F5C09E:
-	call	sub_F5C338	; F5C09E  call 0xf5c338
+	call	Draw_M0delingSoundEditToneDriver	; F5C09E  call 0xf5c338
 	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0A2  call 0xf5c374
 	ld	xiy, DL_Page12P0siti0nParameterP0siti0n	; F5C0A6  ld XIY,0x00f02671
 	ld	xix, DL_ResoDriverNatorPositionMovement	; F5C0AB  ld XIX,0x00f027af
@@ -127667,7 +127667,7 @@ sub_F5C09E:
 	call	T_DisplayListB_Run	; F5C0CF  call 0xf417f4
 	ret	; F5C0D3  ret
 sub_F5C0D4:
-	call	sub_F5C338	; F5C0D4  call 0xf5c338
+	call	Draw_M0delingSoundEditToneDriver	; F5C0D4  call 0xf5c338
 	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0D8  call 0xf5c374
 	ld	xiy, DL_Page22P0siti0nM0vementWidth	; F5C0DC  ld XIY,0x00f02942
 	ld	xix, DL_Page13FitMutKeyDeResoTing	; F5C0E1  ld XIX,0x00f02a46
@@ -127703,7 +127703,7 @@ sub_F5C10A:
 ; Touches: (0x2540) (0x27B5) (0x27F5)  |  0xF02D08 0xF02DFB 0xF02EF9
 ;          0xF02F22 0xF03595 0xF0359F +15 more
 ; Calls:   T_DisplayList_Run T_DisplayListB_Run DisplayList_Run_M0delingSoundEditToneDriver DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain sub_F5BFBD 0xF5BAB8
-;          0xF5BB00 sub_F5C144 sub_F5C27D sub_F5BF8A
+;          0xF5BB00 sub_F5C144 Draw_Serial sub_F5BF8A
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C144 is an instruction boundary.
 ;           The name IS the address.
@@ -127738,7 +127738,7 @@ sub_F5C172:
 	call	T_DisplayListB_Run	; F5C1A3  call 0xf417f4
 	call	sub_F5C144	; F5C1A7  call 0xf5c144
 	ret	; F5C1AB  ret
-sub_F5C1AC:
+Draw_MutingKeyFollowSlopeRange:
 	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C1AC  call 0xf5c34c
 	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C1B0  call 0xf5c388
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C1B4  cp (0x27f5),0x01
@@ -127792,44 +127792,44 @@ sub_F5C144_Join2:
 	ld	xiy, DL_F064E5	; F5C266  ld XIY,0x00f064e5
 	ld	xix, Data_F06562	; F5C26B  ld XIX,0x00f06562
 	call	T_DisplayListB_Run	; F5C270  call 0xf417f4
-	call	sub_F5C27D	; F5C274  call 0xf5c27d
+	call	Draw_Serial	; F5C274  call 0xf5c27d
 	call	sub_F5BF8A	; F5C278  call 0xf5bf8a
 	ret	; F5C27C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C27D
+; Draw_Serial
 ; Called from: in-module: 0xF5C274 0xF5CE60
 ; Touches: (0x2540) (0x27AB) (0x27F5)  |  0xF022F7 0xF02329 0xF0245F
 ;          0xF02469 0xF06481 0xF06495 +7 more
-; Calls:   T_DisplayList_Run sub_F5C338 sub_F5C360 0xF5BAB8 sub_F5C39C T_DisplayListB_Run
+; Calls:   T_DisplayList_Run Draw_M0delingSoundEditToneDriver Draw_ToneDriverResonator 0xF5BAB8 sub_F5C39C T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C27D is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C27D:
+Draw_Serial:
 	ld	(9536:16), 0	; F5C27D  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x27ab, 0x01	; F5C282  cp (0x27ab),0x01
-	jr	z, sub_F5C27D_Skip	; F5C287  jr Z,0xf5c299
+	jr	z, Draw_Serial_Skip	; F5C287  jr Z,0xf5c299
 	ld	xiy, DL_F06481	; F5C289  ld XIY,0x00f06481
 	ld	xix, DL_F06495	; F5C28E  ld XIX,0x00f06495
 	call	T_DisplayList_Run	; F5C293  call 0xf417f0
-	jr	sub_F5C27D_Return	; F5C297  jr T,0xf5c2a7
-sub_F5C27D_Skip:
+	jr	Draw_Serial_Return	; F5C297  jr T,0xf5c2a7
+Draw_Serial_Skip:
 	ld	xiy, DL_F06495	; F5C299  ld XIY,0x00f06495
 	ld	xix, DL_Serial	; F5C29E  ld XIX,0x00f064a9
 	call	T_DisplayList_Run	; F5C2A3  call 0xf417f0
-sub_F5C27D_Return:
+Draw_Serial_Return:
 	ret	; F5C2A7  ret
 sub_F5C2A8:
-	call	sub_F5C338	; F5C2A8  call 0xf5c338
-	call	sub_F5C360	; F5C2AC  call 0xf5c360
+	call	Draw_M0delingSoundEditToneDriver	; F5C2A8  call 0xf5c338
+	call	Draw_ToneDriverResonator	; F5C2AC  call 0xf5c360
 	ld	xiy, DL_ToneTemplateLevelKeyTune	; F5C2B0  ld XIY,0x00f02329
 	ld	xix, DL_F0245F	; F5C2B5  ld XIX,0x00f0245f
 	call	T_DisplayList_Run	; F5C2BA  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C2BE  cp (0x27f5),0x01
-	jr	z, sub_F5C27D_Skip2	; F5C2C3  jr Z,0xf5c2e6
+	jr	z, Draw_Serial_Skip2	; F5C2C3  jr Z,0xf5c2e6
 	ld	(9536:16), 0	; F5C2C5  ld (0x2540),0x00
 	ld	xiy, DL_F0245F	; F5C2CA  ld XIY,0x00f0245f
 	ld	xix, DL_DriverDriverWaveformReso	; F5C2CF  ld XIX,0x00f02469
@@ -127837,16 +127837,16 @@ sub_F5C2A8:
 	ld	xiy, DL_F022F7	; F5C2D8  ld XIY,0x00f022f7
 	ld	xix, DL_ToneTemplateLevelKeyTune	; F5C2DD  ld XIX,0x00f02329
 	call	T_DisplayList_Run	; F5C2E2  call 0xf417f0
-sub_F5C27D_Skip2:
+Draw_Serial_Skip2:
 	call	UiPaint_Solo	; F5C2E6  call 0xf5bab8
 	call	sub_F5C39C	; F5C2EA  call 0xf5c39c
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C2EE  cp (0x27f5),0x01
-	jr	z, sub_F5C27D_Skip3	; F5C2F3  jr Z,0xf5c308
+	jr	z, Draw_Serial_Skip3	; F5C2F3  jr Z,0xf5c308
 	ld	(9536:16), 0	; F5C2F5  ld (0x2540),0x00
 	ld	xiy, DL_F33A71	; F5C2FA  ld XIY,0x00f33a71
 	ld	xix, Data_F33B8C	; F5C2FF  ld XIX,0x00f33b8c
 	call	T_DisplayListB_Run	; F5C304  call 0xf417f4
-sub_F5C27D_Skip3:
+Draw_Serial_Skip3:
 	ld	(9536:16), 0	; F5C308  ld (0x2540),0x00
 	ld	xiy, DL_F33A71	; F5C30D  ld XIY,0x00f33a71
 	ld	xix, DL_F33A71 + 0x4C	; F5C312  ld XIX,0x00f33abd
@@ -127860,7 +127860,7 @@ sub_F5C27D_Skip3:
 	ret	; F5C337  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C338
+; Draw_M0delingSoundEditToneDriver
 ; Called from: in-module: 0xF5BFC7 0xF5C06C 0xF5C09E 0xF5C0D4 0xF5C2A8
 ; Touches: (0x2540)  |  0xF01F96 0xF02064
 ; Calls:   T_DisplayList_Run
@@ -127870,7 +127870,7 @@ sub_F5C27D_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C338:
+Draw_M0delingSoundEditToneDriver:
 	ld	(9536:16), 0	; F5C338  ld (0x2540),0x00
 	ld	xiy, DL_M0delingSoundEditToneDriver	; F5C33D  ld XIY,0x00f01f96
 	ld	xix, DL_F02064	; F5C342  ld XIX,0x00f02064
@@ -127896,7 +127896,7 @@ DisplayList_Run_M0delingSoundEditToneDriver:
 	ret	; F5C35F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C360
+; Draw_ToneDriverResonator
 ; Called from: in-module: 0xF5BFCB 0xF5C2AC
 ; Touches: (0x2540)  |  0xF021E4 0xF02295
 ; Calls:   T_DisplayList_Run
@@ -127906,7 +127906,7 @@ DisplayList_Run_M0delingSoundEditToneDriver:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C360:
+Draw_ToneDriverResonator:
 	ld	(9536:16), 0	; F5C360  ld (0x2540),0x00
 	ld	xiy, DL_ToneDriverResonator	; F5C365  ld XIY,0x00f021e4
 	ld	xix, DL_F02295	; F5C36A  ld XIX,0x00f02295
@@ -128087,7 +128087,7 @@ DisplayList_Run_T0neLayerSoundEditTrigGer:
 ; Called from: in-module: 0xF5D4C3 0xF5D519
 ; Touches: (0x2540)  |  0xF03892 0xF039A9 0xF03D68 0xF03F31 0xF051C2
 ;          0xF05286
-; Calls:   T_DisplayList_Run sub_F5C4FF 0xF5BAB8 sub_F5C39C T_DisplayListB_Run
+; Calls:   T_DisplayList_Run Draw_PitchSoundEditEnvPitchLf0 0xF5BAB8 sub_F5C39C T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C4B8 is an instruction boundary.
 ;           The name IS the address.
@@ -128102,7 +128102,7 @@ DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit:
 	ld	(9536:16), 0	; F5C4CB  ld (0x2540),0x00
 	ret	; F5C4D0  ret
 sub_F5C4D1:
-	call	sub_F5C4FF	; F5C4D1  call 0xf5c4ff
+	call	Draw_PitchSoundEditEnvPitchLf0	; F5C4D1  call 0xf5c4ff
 	ld	xiy, DL_KeyDeToneKeyScalingShift	; F5C4D5  ld XIY,0x00f03d68
 	ld	xix, DL_StartPitchStopPitchTotal	; F5C4DA  ld XIX,0x00f03f31
 	call	T_DisplayList_Run	; F5C4DF  call 0xf417f0
@@ -128115,27 +128115,27 @@ sub_F5C4D1:
 	ret	; F5C4FE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C4FF
+; Draw_PitchSoundEditEnvPitchLf0
 ; Called from: in-module: 0xF5C4D1 0xF5C513 0xF5D55F 0xF5D57A
 ; Touches: (0x2540)  |  0xF03C95 0xF03D4A
-; Calls:   T_DisplayList_Run sub_F5C4FF
+; Calls:   T_DisplayList_Run Draw_PitchSoundEditEnvPitchLf0
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C4FF is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C4FF:
+Draw_PitchSoundEditEnvPitchLf0:
 	ld	(9536:16), 0	; F5C4FF  ld (0x2540),0x00
 	ld	xiy, DL_PitchSoundEditEnvPitchLf0	; F5C504  ld XIY,0x00f03c95
 	ld	xix, DL_F03D4A	; F5C509  ld XIX,0x00f03d4a
 	call	T_DisplayList_Run	; F5C50E  call 0xf417f0
 	ret	; F5C512  ret
 sub_F5C513:
-	call	sub_F5C4FF	; F5C513  call 0xf5c4ff
+	call	Draw_PitchSoundEditEnvPitchLf0	; F5C513  call 0xf5c4ff
 
 ; --------------------------------------------------------------------------
-; sub_F5C517
+; Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay
 ; Called from: in-module: 0xF5D61D 0xF5D626
 ; Touches: (0x2540)  |  0xF053B6 0xF05407 0xF06601 0xF067A6
 ; Calls:   T_DisplayList_Run sub_F5C549 0xF5BAB8 sub_F5C5A5 sub_F5CFA4 T_DisplayListB_Run
@@ -128145,7 +128145,7 @@ sub_F5C513:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C517:
+Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay:
 	ld	xiy, DL_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5C517  ld XIY,0x00f06601
 	ld	xix, DL_Lf01Lf02Lf03Lf04Lf0WaveDelay + 0x1A5	; F5C51C  ld XIX,0x00f067a6
 	call	T_DisplayList_Run	; F5C521  call 0xf417f0
@@ -128209,7 +128209,7 @@ sub_F5C549_Join:
 ; Touches: (0x2540) (0x27F5)  |  0x000001 0x000007 0x00000A 0x000014
 ;          0x0027AB 0xF0417E +17 more
 ; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C727 sub_F5BFBD 0xF5BAB8 sub_F5C39C
-;          sub_F5BDBB T_DisplayListB_Run
+;          Draw_TouchCurve T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C5A5 is an instruction boundary.
 ;           The name IS the address.
@@ -128326,7 +128326,7 @@ sub_F5C5A5_Skip2:
 sub_F5C5A5_Join:
 	call	UiPaint_Solo	; F5C6EB  call 0xf5bab8
 	call	sub_F5C39C	; F5C6EF  call 0xf5c39c
-	call	sub_F5BDBB	; F5C6F3  call 0xf5bdbb
+	call	Draw_TouchCurve	; F5C6F3  call 0xf5bdbb
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C6F7  cp (0x27f5),0x01
 	jr	z, sub_F5C5A5_Skip3	; F5C6FC  jr Z,0xf5c713
 	ld	(9536:16), 0	; F5C6FE  ld (0x2540),0x00
@@ -128383,7 +128383,7 @@ sub_F5C749:
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04358 0xF04370
 ;          0xF04415 0xF049DD 0xF049E7 0xF05063 +7 more
 ; Calls:   sub_F5BBE7 0xF5BAB8 0xF5BB00 T_DisplayListB_Run sub_F5C727 T_DisplayList_Run
-;          sub_F5C916 sub_F5C823
+;          Draw_FilterCutoffEqualizerFreq sub_F5C823
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C772 is an instruction boundary.
 ;           The name IS the address.
@@ -128408,7 +128408,7 @@ sub_F5C79E:
 	ld	xiy, DL_EnvelopeKeyoffAtkPeakDecay1	; F5C7A9  ld XIY,0x00f04358
 	ld	xix, DL_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; F5C7AE  ld XIX,0x00f04415
 	call	T_DisplayList_Run	; F5C7B3  call 0xf417f0
-	call	sub_F5C916	; F5C7B7  call 0xf5c916
+	call	Draw_FilterCutoffEqualizerFreq	; F5C7B7  call 0xf5c916
 	ld	(9536:16), 2	; F5C7BB  ld (0x2540),0x02
 	ld	xiy, DL_Keyoff	; F5C7C0  ld XIY,0x00f049dd
 	ld	xix, DL_Keyoff + 0xA	; F5C7C5  ld XIX,0x00f049e7
@@ -128445,7 +128445,7 @@ sub_F5C772_Return:
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27A6) (0x27F5)  |  0xF04415
 ;          0xF04560 0xF04574 0xF0467D 0xF047CA 0xF047DF +11 more
 ; Calls:   T_DisplayListB_Run T_DisplayList_Run sub_F5C727 sub_F5BFBD sub_F5BBE7 0xF5BAB8
-;          0xF5BB00 sub_F5C929 sub_F5C916 sub_F5C94B
+;          0xF5BB00 sub_F5C929 Draw_FilterCutoffEqualizerFreq sub_F5C94B
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C823 is an instruction boundary.
 ;           The name IS the address.
@@ -128475,7 +128475,7 @@ sub_F5C823_Skip:
 	call	T_DisplayList_Run	; F5C871  call 0xf417f0
 sub_F5C823_Return:
 	ret	; F5C875  ret
-sub_F5C876:
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	call	sub_F5C727	; F5C876  call 0xf5c727
 	ld	xiy, DL_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; F5C87A  ld XIY,0x00f04415
 	ld	xix, DL_F04560	; F5C87F  ld XIX,0x00f04560
@@ -128505,7 +128505,7 @@ sub_F5C8CB:
 	call	T_DisplayList_Run	; F5C8E7  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C8EB  cp (0x27f5),0x01
 	jr	z, sub_F5C823_Skip2	; F5C8F0  jr Z,0xf5c8f6
-	call	sub_F5C916	; F5C8F2  call 0xf5c916
+	call	Draw_FilterCutoffEqualizerFreq	; F5C8F2  call 0xf5c916
 sub_F5C823_Skip2:
 	call	UiPaint_Solo	; F5C8F6  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C8FA  call 0xf5bb00
@@ -128517,7 +128517,7 @@ sub_F5C823_Skip2:
 	ret	; F5C915  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C916
+; Draw_FilterCutoffEqualizerFreq
 ; Called from: in-module: 0xF5C7B7 0xF5C8F2 0xF5C9AA 0xF5C9F5 0xF5CA40
 ;              0xF5CA7D 0xF5CABA
 ; Touches:   |  0xF04672 0xF0467D
@@ -128528,7 +128528,7 @@ sub_F5C823_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C916:
+Draw_FilterCutoffEqualizerFreq:
 	ld	xiy, DL_F04672	; F5C916  ld XIY,0x00f04672
 	ld	xix, DL_FilterCutoffEqualizerFreq	; F5C91B  ld XIX,0x00f0467d
 	call	T_DisplayList_Run	; F5C920  call 0xf417f0
@@ -128566,7 +128566,7 @@ sub_F5C929_Join:
 ;              0xF5CAC6
 ; Touches: (0x207A) (0x2540) (0x27BE) (0x27F5)  |  0xF04650 0xF04668
 ;          0xF04672 0xF0467D 0xF047CA 0xF047DF +15 more
-; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C929 sub_F5C916 0xF5BAB8 0xF5BB00
+; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C929 Draw_FilterCutoffEqualizerFreq 0xF5BAB8 0xF5BB00
 ;          sub_F5C94B T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C94B is an instruction boundary.
@@ -128601,7 +128601,7 @@ sub_F5C983:
 	call	T_DisplayList_Run	; F5C99F  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C9A3  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip2	; F5C9A8  jr Z,0xf5c9ae
-	call	sub_F5C916	; F5C9AA  call 0xf5c916
+	call	Draw_FilterCutoffEqualizerFreq	; F5C9AA  call 0xf5c916
 sub_F5C94B_Skip2:
 	call	UiPaint_Solo	; F5C9AE  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C9B2  call 0xf5bb00
@@ -128621,7 +128621,7 @@ sub_F5C9CE:
 	call	T_DisplayList_Run	; F5C9EA  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C9EE  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip3	; F5C9F3  jr Z,0xf5c9f9
-	call	sub_F5C916	; F5C9F5  call 0xf5c916
+	call	Draw_FilterCutoffEqualizerFreq	; F5C9F5  call 0xf5c916
 sub_F5C94B_Skip3:
 	call	UiPaint_Solo	; F5C9F9  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C9FD  call 0xf5bb00
@@ -128641,7 +128641,7 @@ sub_F5CA19:
 	call	T_DisplayList_Run	; F5CA35  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CA39  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip4	; F5CA3E  jr Z,0xf5ca44
-	call	sub_F5C916	; F5CA40  call 0xf5c916
+	call	Draw_FilterCutoffEqualizerFreq	; F5CA40  call 0xf5c916
 sub_F5C94B_Skip4:
 	call	UiPaint_Solo	; F5CA44  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CA48  call 0xf5bb00
@@ -128658,7 +128658,7 @@ sub_F5CA64:
 	call	T_DisplayList_Run	; F5CA72  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CA76  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip5	; F5CA7B  jr Z,0xf5ca81
-	call	sub_F5C916	; F5CA7D  call 0xf5c916
+	call	Draw_FilterCutoffEqualizerFreq	; F5CA7D  call 0xf5c916
 sub_F5C94B_Skip5:
 	call	UiPaint_Solo	; F5CA81  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CA85  call 0xf5bb00
@@ -128668,14 +128668,14 @@ sub_F5C94B_Skip5:
 	ld	xix, DLRecordPtrs_F04E93	; F5CA97  ld XIX,0x00f04e93
 	call	T_DisplayListB_Run	; F5CA9C  call 0xf417f4
 	ret	; F5CAA0  ret
-sub_F5CAA1:
+Draw_Through:
 	call	sub_F5C929	; F5CAA1  call 0xf5c929
 	ld	xiy, DL_Through	; F5CAA5  ld XIY,0x00f049bc
 	ld	xix, DL_F049D3	; F5CAAA  ld XIX,0x00f049d3
 	call	T_DisplayList_Run	; F5CAAF  call 0xf417f0
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CAB3  cp (0x27f5),0x01
 	jr	z, sub_F5C94B_Skip6	; F5CAB8  jr Z,0xf5cabe
-	call	sub_F5C916	; F5CABA  call 0xf5c916
+	call	Draw_FilterCutoffEqualizerFreq	; F5CABA  call 0xf5c916
 sub_F5C94B_Skip6:
 	call	UiPaint_Solo	; F5CABE  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CAC2  call 0xf5bb00
@@ -128849,7 +128849,7 @@ sub_F5CBD9_Return2:
 ; Called from: in-module: 0xF5C099 0xF5CC41
 ; Touches: (0x2540)  |  0x000001 0x000005 0x000014 0x000032 0x0027AA
 ;          0xF03455 +40 more
-; Calls:   T_DisplayList_Run T_DisplayListB_Run 0xF09AE1 sub_F5C144 sub_F5BF8A sub_F5C27D
+; Calls:   T_DisplayList_Run T_DisplayListB_Run 0xF09AE1 sub_F5C144 sub_F5BF8A Draw_Serial
 ;          sub_F5CFA4 sub_F5C5A5 sub_F5C549 0xF5BAB8
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CC64 is an instruction boundary.
@@ -129029,7 +129029,7 @@ sub_F5CC64_Skip11:
 	ld	(9536:16), 0	; F5CE52  ld (0x2540),0x00
 	ld	xiy, DLBRecordPtrs_F065AC	; F5CE57  ld XIY,0x00f065ac
 	call	RunDisplayListBFromPointerArray	; F5CE5C  call 0xf09ae1
-	call	sub_F5C27D	; F5CE60  call 0xf5c27d
+	call	Draw_Serial	; F5CE60  call 0xf5c27d
 sub_F5CC64_Return4:
 	ret	; F5CE64  ret
 sub_F5CE65:
@@ -129143,7 +129143,7 @@ sub_F5CC64_Return6:
 ; Called from: in-module: 0xF5C531 0xF5CF21 0xF5CF7C
 ; Touches: (0x2540) (0x27A6) (0x27F5)  |  0x000014 0xF04D85 0xF04DA3
 ;          0xF04E32 0xF04E93 0xF04F32 +22 more
-; Calls:   T_DisplayList_Run sub_F5BDBB T_DisplayListB_Run 0xF09AE1 sub_F5C823 sub_F5D199
+; Calls:   T_DisplayList_Run Draw_TouchCurve T_DisplayListB_Run 0xF09AE1 sub_F5C823 sub_F5D199
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CFA4 is an instruction boundary.
 ;           The name IS the address.
@@ -129177,13 +129177,13 @@ sub_F5CFA4_Skip:
 	jr	c, sub_F5CFA4_Join	; F5CFEB  jr C,0xf5cff5
 sub_F5CFA4_Skip2:
 	push_a	; F5CFED  push A
-	call	sub_F5BDBB	; F5CFEE  call 0xf5bdbb
+	call	Draw_TouchCurve	; F5CFEE  call 0xf5bdbb
 	pop_a	; F5CFF2  pop A
 	jr	sub_F5CFA4_Join3	; F5CFF3  jr T,0xf5d02a
 sub_F5CFA4_Join:
 	cp	a, 0:i3	; F5CFF5  cp A,0
 	jr	nz, sub_F5CFA4_Join3	; F5CFF7  jr NZ,0xf5d02a
-	call	sub_F5BDBB	; F5CFF9  call 0xf5bdbb
+	call	Draw_TouchCurve	; F5CFF9  call 0xf5bdbb
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CFFD  cp (0x27f5),0x01
 	jr	z, sub_F5CFA4_Skip3	; F5D002  jr Z,0xf5d015
 	ld	(9536:16), 1	; F5D004  ld (0x2540),0x01
@@ -129246,7 +129246,7 @@ sub_F5D09F:
 	ld	xiy, DLBRecordPtrs_F0519A	; F5D0A4  ld XIY,0x00f0519a
 	call	RunDisplayListBFromPointerArray	; F5D0A9  call 0xf09ae1
 	ret	; F5D0AD  ret
-sub_F5D0AE:
+Draw_LowHigh:
 	cp	a, 5:i3	; F5D0AE  cp A,5
 	jr	nz, sub_F5CFA4_Skip8	; F5D0B0  jr NZ,0xf5d0c2
 	ld	xiy, DL_LowHigh	; F5D0B2  ld XIY,0x00f04d85
@@ -129259,7 +129259,7 @@ sub_F5CFA4_Skip8:
 	call	RunDisplayListBFromPointerArray	; F5D0CC  call 0xf09ae1
 sub_F5CFA4_Return3:
 	ret	; F5D0D0  ret
-sub_F5D0D1:
+Draw_LowHigh_2:
 	cp	a, 5:i3	; F5D0D1  cp A,5
 	jr	nz, sub_F5CFA4_Skip9	; F5D0D3  jr NZ,0xf5d0ea
 	ld	(9536:16), 0	; F5D0D5  ld (0x2540),0x00
@@ -129442,7 +129442,7 @@ sub_F5D2D5:
 	ld	xix, Data_F3356B	; F5D2DF  ld XIX,0x00f3356b
 	call	T_DisplayListB_Run	; F5D2E4  call 0xf417f4
 	ret	; F5D2E8  ret
-sub_F5D2E9:
+Draw_MemoryBank:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D2E9  cp (0x27f5),0x01
 	jr	z, sub_F5D199_Skip7	; F5D2EE  jr Z,0xf5d300
 	ld	xiy, DL_F057C0	; F5D2F0  ld XIY,0x00f057c0
@@ -129553,7 +129553,7 @@ sub_F5D3C6:
 	ret	; F5D40C  ret
 DispatchTable_F5B9F8_Nop42:
 	ret	; F5D40D  ret
-sub_F5D40E:
+Draw_PanningPanning:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer	; F5D40E  call 0xf5c49f
 	ldw	bc, 10166	; F5D412  ld BC,0x27b6
 	ld	d, (xbc)	; F5D415  ld D,(XBC)
@@ -129655,7 +129655,7 @@ sub_F5D497_Loop:
 ; Touches: (0x2350) (0x2352) (0x2540)  |  0xF03F31 0xF03F77 0xF0426B
 ;          0xF04323 0xF04344 0xF04358 +11 more
 ; Calls:   0xF09AE1 DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit T_DisplayList_Run sub_F5BBE7 0xF5BAB8 0xF5BB00
-;          T_DisplayListB_Run sub_F5C4FF sub_F5BFBD sub_F5CADD sub_F5D5C8 sub_F5C929
+;          T_DisplayListB_Run Draw_PitchSoundEditEnvPitchLf0 sub_F5BFBD sub_F5CADD Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack sub_F5C929
 ;          +1 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D4A7 is an instruction boundary.
@@ -129695,7 +129695,7 @@ sub_F5D4C3:
 	ld	xix, Data_F32B1E	; F5D50F  ld XIX,0x00f32b1e
 	call	T_DisplayListB_Run	; F5D514  call 0xf417f4
 	ret	; F5D518  ret
-sub_F5D519:
+Draw_EffectBlockEff1Eff2RevMain:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D519  call 0xf5c4b8
 	ld	(9536:16), 0	; F5D51D  ld (0x2540),0x00
 	ld	xiy, DL_F06154	; F5D522  ld XIY,0x00f06154
@@ -129712,8 +129712,8 @@ sub_F5D519:
 	ld	xix, DLRecordPtrs_F32B97	; F5D555  ld XIX,0x00f32b97
 	call	T_DisplayListB_Run	; F5D55A  call 0xf417f4
 	ret	; F5D55E  ret
-sub_F5D55F:
-	call	sub_F5C4FF	; F5D55F  call 0xf5c4ff
+Draw_StartPitchStopPitchTotal:
+	call	Draw_PitchSoundEditEnvPitchLf0	; F5D55F  call 0xf5c4ff
 	ld	xiy, DL_StartPitchStopPitchTotal	; F5D563  ld XIY,0x00f03f31
 	ld	xix, DL_F03F77	; F5D568  ld XIX,0x00f03f77
 	call	T_DisplayList_Run	; F5D56D  call 0xf417f0
@@ -129721,8 +129721,8 @@ sub_F5D55F:
 	call	sub_F5CADD	; F5D575  call 0xf5cadd
 	ret	; F5D579  ret
 sub_F5D57A:
-	call	sub_F5C4FF	; F5D57A  call 0xf5c4ff
-	call	sub_F5D5C8	; F5D57E  call 0xf5d5c8
+	call	Draw_PitchSoundEditEnvPitchLf0	; F5D57A  call 0xf5c4ff
+	call	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack	; F5D57E  call 0xf5d5c8
 	ret	; F5D582  ret
 sub_F5D583:
 	call	sub_F5C929	; F5D583  call 0xf5c929
@@ -129744,12 +129744,12 @@ sub_F5D5C4:
 	call	sub_F5C929	; F5D5C4  call 0xf5c929
 
 ; --------------------------------------------------------------------------
-; sub_F5D5C8
+; Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack
 ; Called from: in-module: 0xF5D57E
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04B6C 0xF04CA9
 ;          0xF04CBD 0xF328DC 0xF32918 0xF3294B +18 more
 ; Calls:   T_DisplayList_Run sub_F5BFBD sub_F5BBE7 0xF5BAB8 0xF5BB00 T_DisplayListB_Run
-;          sub_F5C929 sub_F5C517 sub_F5C727 sub_F5D497 sub_F5D46B 0xF09AE1
+;          sub_F5C929 Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay sub_F5C727 sub_F5D497 sub_F5D46B 0xF09AE1
 ;          +2 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D5C8 is an instruction boundary.
@@ -129757,7 +129757,7 @@ sub_F5D5C4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5D5C8:
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ld	xiy, DL_Page22KeyFollowEnvelopeKeyFollowTouchAttack	; F5D5C8  ld XIY,0x00f04b6c
 	ld	xix, DL_F04CA9	; F5D5CD  ld XIX,0x00f04ca9
 	call	T_DisplayList_Run	; F5D5D2  call 0xf417f0
@@ -129778,33 +129778,33 @@ sub_F5D5C8:
 	ret	; F5D618  ret
 sub_F5D619:
 	call	sub_F5C929	; F5D619  call 0xf5c929
-	call	sub_F5C517	; F5D61D  call 0xf5c517
+	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D61D  call 0xf5c517
 	ret	; F5D621  ret
 sub_F5D622:
 	call	sub_F5C727	; F5D622  call 0xf5c727
-	call	sub_F5C517	; F5D626  call 0xf5c517
+	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D626  call 0xf5c517
 	ret	; F5D62A  ret
 sub_F5D62B:
 	cp	a, 0:i3	; F5D62B  cp A,0
-	jr	z, sub_F5D5C8_Skip2	; F5D62D  jr Z,0xf5d66a
+	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2	; F5D62D  jr Z,0xf5d66a
 	cp	a, 1:i3	; F5D62F  cp A,1
-	jr	z, sub_F5D5C8_Skip	; F5D631  jr Z,0xf5d651
+	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip	; F5D631  jr Z,0xf5d651
 	cp	a, 11	; F5D633  cp A,0x0b
-	jr	c, sub_F5D5C8_Skip3	; F5D636  jr C,0xf5d69d
+	jr	c, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3	; F5D636  jr C,0xf5d69d
 	ld	(9536:16), 0	; F5D638  ld (0x2540),0x00
 	ld	xiy, DL_F3294B	; F5D63D  ld XIY,0x00f3294b
 	ld	xix, DL_F32987	; F5D642  ld XIX,0x00f32987
 	call	T_DisplayListB_Run	; F5D647  call 0xf417f4
 	call	sub_F5D497	; F5D64B  call 0xf5d497
-	jr	sub_F5D5C8_Return	; F5D64F  jr T,0xf5d6ab
-sub_F5D5C8_Skip:
+	jr	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return	; F5D64F  jr T,0xf5d6ab
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip:
 	ld	(9536:16), 0	; F5D651  ld (0x2540),0x00
 	ld	xiy, DL_F328DC	; F5D656  ld XIY,0x00f328dc
 	ld	xix, DL_F328DC + 0x3C	; F5D65B  ld XIX,0x00f32918
 	call	T_DisplayListB_Run	; F5D660  call 0xf417f4
 	call	sub_F5D46B	; F5D664  call 0xf5d46b
-	jr	sub_F5D5C8_Return	; F5D668  jr T,0xf5d6ab
-sub_F5D5C8_Skip2:
+	jr	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return	; F5D668  jr T,0xf5d6ab
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2:
 	ld	(9536:16), 1	; F5D66A  ld (0x2540),0x01
 	ld	xiy, DL_F32A7D	; F5D66F  ld XIY,0x00f32a7d
 	ld	xix, DLBoxes_F32A87	; F5D674  ld XIX,0x00f32a87
@@ -129813,40 +129813,40 @@ sub_F5D5C8_Skip2:
 	ldw	bc, 10166	; F5D67F  ld BC,0x27b6
 	ld	d, (xbc)	; F5D682  ld D,(XBC)
 	cp	d, 0:i3	; F5D684  cp D,0
-	jr	z, sub_F5D5C8_Skip3	; F5D686  jr Z,0xf5d69d
+	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3	; F5D686  jr Z,0xf5d69d
 	ld	(9536:16), 0	; F5D688  ld (0x2540),0x00
 	ld	xiy, DL_F32987	; F5D68D  ld XIY,0x00f32987
 	ld	xix, Data_F32992	; F5D692  ld XIX,0x00f32992
 	call	T_DisplayListB_Run	; F5D697  call 0xf417f4
-	jr	sub_F5D5C8_Return	; F5D69B  jr T,0xf5d6ab
-sub_F5D5C8_Skip3:
+	jr	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return	; F5D69B  jr T,0xf5d6ab
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3:
 	ld	xiy, Data_F32992 + 0x28	; F5D69D  ld XIY,0x00f329ba
 	ld	(9536:16), 0	; F5D6A2  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F5D6A7  call 0xf09ae1
-sub_F5D5C8_Return:
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return:
 	ret	; F5D6AB  ret
 sub_F5D6AC:
 	cp	a, 0:i3	; F5D6AC  cp A,0
-	jr	nz, sub_F5D5C8_Skip4	; F5D6AE  jr NZ,0xf5d6c5
+	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4	; F5D6AE  jr NZ,0xf5d6c5
 	ld	(9536:16), 1	; F5D6B0  ld (0x2540),0x01
 	ld	xiy, DL_F32B32	; F5D6B5  ld XIY,0x00f32b32
 	ld	xix, Data_F32B3C	; F5D6BA  ld XIX,0x00f32b3c
 	call	T_DisplayList_Run	; F5D6BF  call 0xf417f0
 	ld	a, 0:opc	; F5D6C3  ld A,0x00
-sub_F5D5C8_Skip4:
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4:
 	ld	(9536:16), 0	; F5D6C5  ld (0x2540),0x00
 	ld	xiy, Data_F32B1E	; F5D6CA  ld XIY,0x00f32b1e
 	call	RunDisplayListBFromPointerArray	; F5D6CF  call 0xf09ae1
 	ret	; F5D6D3  ret
 sub_F5D6D4:
 	cp	a, 0:i3	; F5D6D4  cp A,0
-	jr	nz, sub_F5D5C8_Skip5	; F5D6D6  jr NZ,0xf5d6ed
+	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5	; F5D6D6  jr NZ,0xf5d6ed
 	ld	(9536:16), 1	; F5D6D8  ld (0x2540),0x01
 	ld	xiy, DL_F32B32	; F5D6DD  ld XIY,0x00f32b32
 	ld	xix, Data_F32B3C	; F5D6E2  ld XIX,0x00f32b3c
 	call	T_DisplayList_Run	; F5D6E7  call 0xf417f0
 	ld	a, 0:opc	; F5D6EB  ld A,0x00
-sub_F5D5C8_Skip5:
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5:
 	ld	(9536:16), 0	; F5D6ED  ld (0x2540),0x00
 	ld	xiy, DLRecordPtrs_F32B97	; F5D6F2  ld XIY,0x00f32b97
 	call	RunDisplayListBFromPointerArray	; F5D6F7  call 0xf09ae1
@@ -129862,7 +129862,7 @@ sub_F5D6FC:
 	ld	xix, DL_F32FC8	; F5D719  ld XIX,0x00f32fc8
 	call	T_DisplayListB_Run	; F5D71E  call 0xf417f4
 	ret	; F5D722  ret
-	call	sub_F5D77F	; F5D723  call 0xf5d77f
+	call	Draw_C0ntr0llerSoundEditDepth	; F5D723  call 0xf5d77f
 	call	T_F42E18	; F5D727  call 0xf42e18
 	ld	(9536:16), 0	; F5D72B  ld (0x2540),0x00
 	ld	xiy, DL_Page22AfterTouchCtrlPedal	; F5D730  ld XIY,0x00f32e71
@@ -129873,12 +129873,12 @@ sub_F5D6FC:
 	ld	xix, DLBoxes_F334AE	; F5D748  ld XIX,0x00f334ae
 	call	T_DisplayListB_Run	; F5D74D  call 0xf417f4
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D751  cp (0x27f5),0x01
-	jr	z, sub_F5D5C8_Skip6	; F5D756  jr Z,0xf5d76b
+	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip6	; F5D756  jr Z,0xf5d76b
 	ld	(9536:16), 0	; F5D758  ld (0x2540),0x00
 	ld	xiy, DL_F32FC8	; F5D75D  ld XIY,0x00f32fc8
 	ld	xix, SoundEditController_HeaderRecords	; F5D762  ld XIX,0x00f32fe6
 	call	T_DisplayListB_Run	; F5D767  call 0xf417f4
-sub_F5D5C8_Skip6:
+Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip6:
 	ld	(9536:16), 0	; F5D76B  ld (0x2540),0x00
 	ld	xiy, DL_F32FA0	; F5D770  ld XIY,0x00f32fa0
 	ld	xix, DL_F32FC8	; F5D775  ld XIX,0x00f32fc8
@@ -129886,7 +129886,7 @@ sub_F5D5C8_Skip6:
 	ret	; F5D77E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5D77F
+; Draw_C0ntr0llerSoundEditDepth
 ; Called from: in-module: 0xF5D723
 ; Touches: (0x2540) (0x27F5)  |  0xF32C2A 0xF32CC8 0xF32D03 0xF32D2C
 ;          0xF32FA0 0xF32FC8 +1 more
@@ -129897,15 +129897,15 @@ sub_F5D5C8_Skip6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5D77F:
+Draw_C0ntr0llerSoundEditDepth:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D77F  cp (0x27f5),0x01
-	jr	z, sub_F5D77F_Skip	; F5D784  jr Z,0xf5d79b
+	jr	z, Draw_C0ntr0llerSoundEditDepth_Skip	; F5D784  jr Z,0xf5d79b
 	ld	(9536:16), 0	; F5D786  ld (0x2540),0x00
 	ld	xiy, DL_C0ntr0llerSoundEditDepth	; F5D78B  ld XIY,0x00f32c2a
 	ld	xix, DL_1st2nd	; F5D790  ld XIX,0x00f32d03
 	call	T_DisplayList_Run	; F5D795  call 0xf417f0
 	jr	38	; F5D799  jr T,0xf5d7c1
-sub_F5D77F_Skip:
+Draw_C0ntr0llerSoundEditDepth_Skip:
 	ld	(9536:16), 0	; F5D79B  ld (0x2540),0x00
 	ld	xiy, DL_C0ntr0llerSoundEditDepth	; F5D7A0  ld XIY,0x00f32c2a
 	ld	xix, DL_C0ntr0llerSoundEditDepth + 0x9E	; F5D7A5  ld XIX,0x00f32cc8
@@ -189925,7 +189925,7 @@ sub_F7CE04_Skip11:
 	call	sub_F7E430	; F7D1B4  call 0xf7e430
 	ld	a, (32706:16)	; F7D1B8  ld A,(0x7fc2)
 	ld	(4854:16), a	; F7D1BC  ld (0x12f6),A
-	call	sub_F7E421	; F7D1C0  call 0xf7e421
+	call	Draw_AfterTouchRecord	; F7D1C0  call 0xf7e421
 	jr	sub_F7CE04_Return2	; F7D1C4  jr T,0xf7d1d3
 sub_F7CE04_Skip12:
 	bit	7, w	; F7D1C6  bit 0x07,W
@@ -191973,32 +191973,32 @@ sub_F7E2FC_Return:
 
 ; Evidence: reached from call from prom_b 0xF7EC9C; call from prom_b
 ;           0xF7ECD5, and from nothing else the scans see.
-sub_F7E354:
+Draw_TrackAssignPresetsTechnicsSetUp1116:
 	ld	xiy, 6304802	; F7E354  ld XIY,0x00603422
 	ld	xix, 4854	; F7E359  ld XIX,0x000012f6
 	ld	c, 16:opc	; F7E35E  ld C,0x10
-sub_F7E354_Join:
+Draw_TrackAssignPresetsTechnicsSetUp1116_Join:
 	ld	a, (xiy)	; F7E360  ld A,(XIY)
 	ld	e, (8316:16)	; F7E362  ld E,(0x207c)
 	cp	e, 18	; F7E366  cp E,0x12
-	jr	z, sub_F7E354_Join2	; F7E369  jr Z,0xf7e37e
+	jr	z, Draw_TrackAssignPresetsTechnicsSetUp1116_Join2	; F7E369  jr Z,0xf7e37e
 	cp	e, 28	; F7E36B  cp E,0x1c
-	jr	z, sub_F7E354_Join2	; F7E36E  jr Z,0xf7e37e
+	jr	z, Draw_TrackAssignPresetsTechnicsSetUp1116_Join2	; F7E36E  jr Z,0xf7e37e
 	cp	e, 15	; F7E370  cp E,0x0f
-	jr	nz, sub_F7E354_Skip	; F7E373  jr NZ,0xf7e377
-	jr	sub_F7E354_Join2	; F7E375  jr T,0xf7e37e
-sub_F7E354_Skip:
+	jr	nz, Draw_TrackAssignPresetsTechnicsSetUp1116_Skip	; F7E373  jr NZ,0xf7e377
+	jr	Draw_TrackAssignPresetsTechnicsSetUp1116_Join2	; F7E375  jr T,0xf7e37e
+Draw_TrackAssignPresetsTechnicsSetUp1116_Skip:
 	cp	a, 13	; F7E377  cp A,0x0d
-	jr	nz, sub_F7E354_Join2	; F7E37A  jr NZ,0xf7e37e
+	jr	nz, Draw_TrackAssignPresetsTechnicsSetUp1116_Join2	; F7E37A  jr NZ,0xf7e37e
 	inc	1, a	; F7E37C  inc 1,A
-sub_F7E354_Join2:
+Draw_TrackAssignPresetsTechnicsSetUp1116_Join2:
 	ld	(xix), a	; F7E37E  ld (XIX),A
 	dec	1, c	; F7E380  dec 1,C
-	jr	z, sub_F7E354_Skip2	; F7E382  jr Z,0xf7e38a
+	jr	z, Draw_TrackAssignPresetsTechnicsSetUp1116_Skip2	; F7E382  jr Z,0xf7e38a
 	inc	1, xiy	; F7E384  inc 1,XIY
 	inc	1, xix	; F7E386  inc 1,XIX
-	jr	sub_F7E354_Join	; F7E388  jr T,0xf7e360
-sub_F7E354_Skip2:
+	jr	Draw_TrackAssignPresetsTechnicsSetUp1116_Join	; F7E388  jr T,0xf7e360
+Draw_TrackAssignPresetsTechnicsSetUp1116_Skip2:
 	ld	xiy, DL_F3A1CF	; F7E38A  ld XIY,0x00f3a1cf
 	ld	xix, DL_TrackAssignPresetsTechnicsSetUp1116	; F7E38F  ld XIX,0x00f3a2bf
 	call	T_DisplayListB_Run	; F7E394  call 0xf417f4
@@ -192075,13 +192075,13 @@ Paint_AfterT0uchSetting:
 	call	T_DisplayList_Run	; F7E40C  call 0xf417f0
 	ld	a, (32706:16)	; F7E410  ld A,(0x7fc2)
 	ld	(4854:16), a	; F7E414  ld (0x12f6),A
-	call	sub_F7E421	; F7E418  call 0xf7e421
+	call	Draw_AfterTouchRecord	; F7E418  call 0xf7e421
 	call	LCD_ScreenRedraw_End	; F7E41C  call 0xf7e2e7
 	ret	; F7E420  ret
 
 ; Evidence: reached from call from prom_b 0xF7D1C0; call from prom_b
 ;           0xF7E418, and from nothing else the scans see.
-sub_F7E421:
+Draw_AfterTouchRecord:
 	ld	xiy, DL_AfterTouchRecord	; F7E421  ld XIY,0x00f3bb7e
 	ld	xix, DL_F3BB8D	; F7E426  ld XIX,0x00f3bb8d
 	call	T_DisplayListB_Run	; F7E42B  call 0xf417f4
@@ -194810,7 +194810,7 @@ Paint_TrackClear:
 	ld	xiy, DL_TrackClearPressTheUpDown	; F7EC8E  ld XIY,0x00f39f8a
 	ld	xix, Data_F3A0A5	; F7EC93  ld XIX,0x00f3a0a5
 	call	T_DisplayList_Run	; F7EC98  call 0xf417f0
-	call	sub_F7E354	; F7EC9C  call 0xf7e354
+	call	Draw_TrackAssignPresetsTechnicsSetUp1116	; F7EC9C  call 0xf7e354
 	ld	(9536:16), 0	; F7ECA0  ld (0x2540),0x00
 	ld	xiy, DL_F3934C	; F7ECA5  ld XIY,0x00f3934c
 	ld	xix, DL_F394E3	; F7ECAA  ld XIX,0x00f394e3
@@ -194826,7 +194826,7 @@ Paint_TrackClear_Skip2:
 	ld	xiy, DL_TrackClearAttenti0nUsing	; F7ECC7  ld XIY,0x00f39c35
 	ld	xix, DL_EditSeqN0teEditS0ngClear	; F7ECCC  ld XIX,0x00f39d3e
 	call	T_DisplayList_Run	; F7ECD1  call 0xf417f0
-	call	sub_F7E354	; F7ECD5  call 0xf7e354
+	call	Draw_TrackAssignPresetsTechnicsSetUp1116	; F7ECD5  call 0xf7e354
 	ld	(9536:16), 0	; F7ECD9  ld (0x2540),0x00
 	ld	xiy, DL_F3934C	; F7ECDE  ld XIY,0x00f3934c
 	ld	xix, DL_F394E3	; F7ECE3  ld XIX,0x00f394e3
@@ -196032,7 +196032,7 @@ Paint_MeasureDelete_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7F082; calr from prom_b
 ;           0xF7F0A6, and from nothing else the scans see.
-sub_F7EFFA:
+Draw_LastMeasure:
 	calr	sub_F7E39F_Nop	; F7EFFA  calr 0xf7e2d8
 	ld	(9536:16), 1	; F7EFFD  ld (0x2540),0x01
 	ld	xiy, DL_F39551	; F7F002  ld XIY,0x00f39551
@@ -196044,7 +196044,7 @@ sub_F7EFFA:
 
 ; Evidence: reached from calr from prom_b 0xF7F05D; calr from prom_b
 ;           0xF7F07F, and from nothing else the scans see.
-sub_F7F01A:
+Draw_LastMeasure_2:
 	calr	sub_F7E39F_Nop	; F7F01A  calr 0xf7e2d8
 	ld	(9536:16), 0	; F7F01D  ld (0x2540),0x00
 	ld	xiy, DL_LastMeasure	; F7F022  ld XIY,0x00f3a6ab
@@ -196131,7 +196131,7 @@ ScreenLeaveBody_MeasureDelete_Skip:
 ScreenLeaveBody_MeasureDelete_Skip2:
 	call	T_F42970	; F7F059  call 0xf42970
 ScreenLeaveBody_MeasureDelete_Join:
-	calr	sub_F7F01A	; F7F05D  calr 0xf7f01a
+	calr	Draw_LastMeasure_2	; F7F05D  calr 0xf7f01a
 	ret	; F7F060  ret
 ButtonTable_MeasureDelete_207EZero_Nop5:
 	ret	; F7F061  ret   <- button table 0xF7D7D8 entry 5 (MEASURE DELETE)
@@ -196185,8 +196185,8 @@ LcdKeyRow2_MeasureDelete_207EZero:
 	call	T_F42964	; F7F073  call 0xf42964
 	ld	a, (3540:16)	; F7F077  ld A,(0x0dd4)
 	ld	(4859:16), a	; F7F07B  ld (0x12fb),A
-	calr	sub_F7F01A	; F7F07F  calr 0xf7f01a
-	calr	sub_F7EFFA	; F7F082  calr 0xf7effa
+	calr	Draw_LastMeasure_2	; F7F07F  calr 0xf7f01a
+	calr	Draw_LastMeasure	; F7F082  calr 0xf7effa
 	jr	ScreenLeaveBody_MeasureDelete_Return	; F7F085  jr T,0xf7f087
 ScreenLeaveBody_MeasureDelete_Return:
 	ret	; F7F087  ret
@@ -196236,8 +196236,8 @@ LcdKeyRow3_MeasureDelete_207EZero:
 	call	T_F42968	; F7F097  call 0xf42968
 	ld	a, (3540:16)	; F7F09B  ld A,(0x0dd4)
 	ld	(4859:16), a	; F7F09F  ld (0x12fb),A
-	calr	sub_F7F01A	; F7F0A3  calr 0xf7f01a
-	calr	sub_F7EFFA	; F7F0A6  calr 0xf7effa
+	calr	Draw_LastMeasure_2	; F7F0A3  calr 0xf7f01a
+	calr	Draw_LastMeasure	; F7F0A6  calr 0xf7effa
 	jr	ScreenLeaveBody_MeasureDelete_Return2	; F7F0A9  jr T,0xf7f0b2
 ScreenLeaveBody_MeasureDelete_Skip3:
 	calr	sub_F7F245	; F7F0AB  calr 0xf7f245
@@ -196290,8 +196290,8 @@ LcdKeyRow4_MeasureDelete_207EZero:
 	call	T_F4296C	; F7F0C2  call 0xf4296c
 	ld	a, (3540:16)	; F7F0C6  ld A,(0x0dd4)
 	ld	(4859:16), a	; F7F0CA  ld (0x12fb),A
-	calr	sub_F7F01A	; F7F0CE  calr 0xf7f01a
-	calr	sub_F7EFFA	; F7F0D1  calr 0xf7effa
+	calr	Draw_LastMeasure_2	; F7F0CE  calr 0xf7f01a
+	calr	Draw_LastMeasure	; F7F0D1  calr 0xf7effa
 ScreenLeaveBody_MeasureDelete_Return3:
 	ret	; F7F0D4  ret
 ButtonTable_MeasureDelete_207EZero_Nop12:
@@ -196363,7 +196363,7 @@ ScreenLeaveBody_MeasureDelete_Skip5:
 ScreenLeaveBody_MeasureDelete_Skip6:
 	call	T_F42970	; F7F106  call 0xf42970
 ScreenLeaveBody_MeasureDelete_Join2:
-	calr	sub_F7F01A	; F7F10A  calr 0xf7f01a
+	calr	Draw_LastMeasure_2	; F7F10A  calr 0xf7f01a
 	ret	; F7F10D  ret
 ButtonTable_MeasureDelete_207EZero_Nop22:
 	ret	; F7F10E  ret   <- button table 0xF7D7D8 entry 22 (MEASURE DELETE) and 4 more slot(s)
@@ -196468,7 +196468,7 @@ sub_F7F144_Join:
 	inc	1, wa	; F7F1B3  inc 1,WA
 	ld	(6304863:24), wa	; F7F1B5  ld (0x60345f),WA
 	call	T_Blink_Stop	; F7F1BA  call 0xf42e24
-	calr	sub_F7F01A	; F7F1BE  calr 0xf7f01a
+	calr	Draw_LastMeasure_2	; F7F1BE  calr 0xf7f01a
 sub_F7F144_Return:
 	ret	; F7F1C1  ret
 
@@ -197599,7 +197599,7 @@ ScreenLeaveBody_Quantize_Skip:
 ScreenLeaveBody_Quantize_Skip2:
 	call	T_F42928	; F7F62B  call 0xf42928
 ScreenLeaveBody_Quantize_Join:
-	calr	sub_F7F6E5	; F7F62F  calr 0xf7f6e5
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2	; F7F62F  calr 0xf7f6e5
 	ret	; F7F632  ret
 ButtonTable_Quantize_207EZero_Nop5:
 	ret	; F7F633  ret   <- button table 0xF7D9D8 entry 5 (QUANTIZE)
@@ -197660,14 +197660,14 @@ ScreenLeaveBody_Quantize_Skip3:
 ScreenLeaveBody_Quantize_Join2:
 	ld	a, (3513:16)	; F7F659  ld A,(0x0db9)
 	ld	(4862:16), a	; F7F65D  ld (0x12fe),A
-	calr	sub_F7F6E5	; F7F661  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F664  calr 0xf7f668
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2	; F7F661  calr 0xf7f6e5
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F664  calr 0xf7f668
 ScreenLeaveBody_Quantize_Return:
 	ret	; F7F667  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F664; calr from prom_b
 ;           0xF7F6B6, and from nothing else the scans see.
-sub_F7F668:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	ld	(9536:16), 1	; F7F668  ld (0x2540),0x01
 	calr	sub_F7E39F_Nop	; F7F66D  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F670  ld XIY,0x00f39551
@@ -197715,23 +197715,23 @@ sub_F7F668:
 ; ---------------------------------------------------------------------
 LcdKeyRow2_Quantize_207EZero:
 	bit	7, w	; F7F688  bit 0x07,W
-	jr	z, sub_F7F668_Skip	; F7F68B  jr Z,0xf7f69d
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip	; F7F68B  jr Z,0xf7f69d
 	m_cp_mi8 MB16, 0x0db9, 0x02	; F7F68D  cp (0x0db9),0x02
-	jr	z, sub_F7F668_Return	; F7F692  jr Z,0xf7f6b9
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return	; F7F692  jr Z,0xf7f6b9
 	calr	sub_F7F237	; F7F694  calr 0xf7f237
 	call	T_F42914	; F7F697  call 0xf42914
-	jr	sub_F7F668_Join	; F7F69B  jr T,0xf7f6ab
-sub_F7F668_Skip:
+	jr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Join	; F7F69B  jr T,0xf7f6ab
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip:
 	m_cp_mi8 MB16, 0x0db9, 0x06	; F7F69D  cp (0x0db9),0x06
-	jr	z, sub_F7F668_Return	; F7F6A2  jr Z,0xf7f6b9
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return	; F7F6A2  jr Z,0xf7f6b9
 	calr	sub_F7F245	; F7F6A4  calr 0xf7f245
 	call	T_F42924	; F7F6A7  call 0xf42924
-sub_F7F668_Join:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Join:
 	ld	a, (3513:16)	; F7F6AB  ld A,(0x0db9)
 	ld	(4862:16), a	; F7F6AF  ld (0x12fe),A
-	calr	sub_F7F6E5	; F7F6B3  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F6B6  calr 0xf7f668
-sub_F7F668_Return:
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2	; F7F6B3  calr 0xf7f6e5
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6B6  calr 0xf7f668
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return:
 	ret	; F7F6B9  ret
 
 ; ---------------------------------------------------------------------
@@ -197772,25 +197772,25 @@ sub_F7F668_Return:
 ; ---------------------------------------------------------------------
 LcdKeyRow3_Quantize_207EZero:
 	bit	7, w	; F7F6BA  bit 0x07,W
-	jr	z, sub_F7F668_Skip2	; F7F6BD  jr Z,0xf7f6dd
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip2	; F7F6BD  jr Z,0xf7f6dd
 	m_cp_mi8 MB16, 0x0db9, 0x03	; F7F6BF  cp (0x0db9),0x03
-	jr	z, sub_F7F668_Return2	; F7F6C4  jr Z,0xf7f6e4
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return2	; F7F6C4  jr Z,0xf7f6e4
 	calr	sub_F7F237	; F7F6C6  calr 0xf7f237
 	call	T_F42918	; F7F6C9  call 0xf42918
 	ld	a, (3513:16)	; F7F6CD  ld A,(0x0db9)
 	ld	(4862:16), a	; F7F6D1  ld (0x12fe),A
-	calr	sub_F7F6E5	; F7F6D5  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F6D8  calr 0xf7f668
-	jr	sub_F7F668_Return2	; F7F6DB  jr T,0xf7f6e4
-sub_F7F668_Skip2:
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2	; F7F6D5  calr 0xf7f6e5
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6D8  calr 0xf7f668
+	jr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return2	; F7F6DB  jr T,0xf7f6e4
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip2:
 	calr	sub_F7F245	; F7F6DD  calr 0xf7f245
 	call	T_F42930	; F7F6E0  call 0xf42930
-sub_F7F668_Return2:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return2:
 	ret	; F7F6E4  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F62F; calr from prom_b
 ;           0xF7F661, and from nothing else the scans see.
-sub_F7F6E5:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2:
 	ld	(9536:16), 0	; F7F6E5  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7F6EA  calr 0xf7e2d8
 	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6ED  ld XIY,0x00f3acf0
@@ -197836,16 +197836,16 @@ sub_F7F6E5:
 ; ---------------------------------------------------------------------
 LcdKeyRow4_Quantize_207EZero:
 	bit	7, w	; F7F6FC  bit 0x07,W
-	jr	z, sub_F7F6E5_Return	; F7F6FF  jr Z,0xf7f71d
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return	; F7F6FF  jr Z,0xf7f71d
 	m_cp_mi8 MB16, 0x0db9, 0x04	; F7F701  cp (0x0db9),0x04
-	jr	z, sub_F7F6E5_Return	; F7F706  jr Z,0xf7f71d
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return	; F7F706  jr Z,0xf7f71d
 	calr	sub_F7F245	; F7F708  calr 0xf7f245
 	call	T_F4291C	; F7F70B  call 0xf4291c
 	ld	a, (3513:16)	; F7F70F  ld A,(0x0db9)
 	ld	(4862:16), a	; F7F713  ld (0x12fe),A
-	calr	sub_F7F6E5	; F7F717  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F71A  calr 0xf7f668
-sub_F7F6E5_Return:
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2	; F7F717  calr 0xf7f6e5
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F71A  calr 0xf7f668
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return:
 	ret	; F7F71D  ret
 ButtonTable_Quantize_207EZero_Nop12:
 	ret	; F7F71E  ret   <- button table 0xF7D9D8 entry 12 (QUANTIZE)
@@ -197875,21 +197875,21 @@ ButtonTable_Quantize_207EZero_Nop14:
 ; ---------------------------------------------------------------------
 ExitKey_Quantize_207EZero:
 	bit	7, w	; F7F721  bit 0x07,W
-	jr	z, sub_F7F6E5_Skip	; F7F724  jr Z,0xf7f728
-	jr	sub_F7F6E5_Return2	; F7F726  jr T,0xf7f74c
-sub_F7F6E5_Skip:
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip	; F7F724  jr Z,0xf7f728
+	jr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return2	; F7F726  jr T,0xf7f74c
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip:
 	m_cp_mi8 MB16, 0x133f, 0x1a	; F7F728  cp (0x133f),0x1a
-	jr	z, sub_F7F6E5_Skip2	; F7F72D  jr Z,0xf7f746
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip2	; F7F72D  jr Z,0xf7f746
 	bit_dd8	2, 150	; F7F72F  bit 2,(0x96)
-	jr	nz, sub_F7F6E5_Return2	; F7F732  jr NZ,0xf7f74c
+	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return2	; F7F732  jr NZ,0xf7f74c
 	xor	xwa, xwa	; F7F734  xor XWA,XWA
 	ld	(12296:16), xwa	; F7F736  ld (0x3008),XWA
 	ld	(12300:16), xwa	; F7F73A  ld (0x300c),XWA
 	ldw	(8304:16), 32774	; F7F73E  ld (0x2070),0x8006
-	jr	sub_F7F6E5_Return2	; F7F744  jr T,0xf7f74c
-sub_F7F6E5_Skip2:
+	jr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return2	; F7F744  jr T,0xf7f74c
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip2:
 	ldw	(8304:16), 32794	; F7F746  ld (0x2070),0x801a
-sub_F7F6E5_Return2:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return2:
 	ret	; F7F74C  ret
 ButtonTable_Quantize_207EZero_Nop16:
 	ret	; F7F74D  ret   <- button table 0xF7D9D8 entry 16 (QUANTIZE) and 4 more slot(s)
@@ -197913,19 +197913,19 @@ ButtonTable_Quantize_207EZero_Nop16:
 ; ---------------------------------------------------------------------
 sub_F7F74E:
 	m_bit 1, MD16, 0x2075	; F7F74E  bit 1,(0x2075)
-	jr	z, sub_F7F6E5_Skip3	; F7F752  jr Z,0xf7f758
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip3	; F7F752  jr Z,0xf7f758
 	call	T_Blink_Stop	; F7F754  call 0xf42e24
-sub_F7F6E5_Skip3:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip3:
 	m_or_mi8 MB16, 0x2075, 0x08	; F7F758  or (0x2075),0x08
 	ld	(3608:16), 4	; F7F75D  ld (0x0e18),0x04
 	bit	7, w	; F7F762  bit 0x07,W
-	jr	z, sub_F7F6E5_Skip4	; F7F765  jr Z,0xf7f76d
+	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip4	; F7F765  jr Z,0xf7f76d
 	call	T_F4292C	; F7F767  call 0xf4292c
-	jr	sub_F7F6E5_Join	; F7F76B  jr T,0xf7f771
-sub_F7F6E5_Skip4:
+	jr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Join	; F7F76B  jr T,0xf7f771
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Skip4:
 	call	T_F42928	; F7F76D  call 0xf42928
-sub_F7F6E5_Join:
-	calr	sub_F7F6E5	; F7F771  calr 0xf7f6e5
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Join:
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2	; F7F771  calr 0xf7f6e5
 	ret	; F7F774  ret
 ButtonTable_Quantize_207EZero_Nop22:
 	ret	; F7F775  ret   <- button table 0xF7D9D8 entry 22 (QUANTIZE) and 4 more slot(s)
@@ -198013,10 +198013,10 @@ ButtonTable_Quantize_207ENonZero_Nop8:
 ; ---------------------------------------------------------------------
 LcdKeyRow3_Quantize_207ENonZero:
 	bit	7, w	; F7F784  bit 0x07,W
-	jr	nz, sub_F7F6E5_Return3	; F7F787  jr NZ,0xf7f792
+	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return3	; F7F787  jr NZ,0xf7f792
 	m_and_mi8 MB16, 0x2075, 0x6f	; F7F789  and (0x2075),0x6f
 	call	T_F42930	; F7F78E  call 0xf42930
-sub_F7F6E5_Return3:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return3:
 	ret	; F7F792  ret
 
 ; ---------------------------------------------------------------------
@@ -198057,9 +198057,9 @@ sub_F7F6E5_Return3:
 ; ---------------------------------------------------------------------
 LcdKeyRow4_Quantize_207ENonZero:
 	bit	7, w	; F7F793  bit 0x07,W
-	jr	nz, sub_F7F6E5_Return4	; F7F796  jr NZ,0xf7f79c
+	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return4	; F7F796  jr NZ,0xf7f79c
 	call	T_F42928	; F7F798  call 0xf42928
-sub_F7F6E5_Return4:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return4:
 	ret	; F7F79C  ret
 ButtonTable_Quantize_207ENonZero_Nop12:
 	ret	; F7F79D  ret   <- button table 0xF7DA58 entry 12 (QUANTIZE)
@@ -198090,9 +198090,9 @@ ButtonTable_Quantize_207ENonZero_Nop14:
 ; ---------------------------------------------------------------------
 ExitKey_Quantize_207ENonZero:
 	bit	7, w	; F7F7A0  bit 0x07,W
-	jr	nz, sub_F7F6E5_Return5	; F7F7A3  jr NZ,0xf7f7a9
+	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return5	; F7F7A3  jr NZ,0xf7f7a9
 	call	T_F42928	; F7F7A5  call 0xf42928
-sub_F7F6E5_Return5:
+Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2_Return5:
 	ret	; F7F7A9  ret
 ButtonTable_Quantize_207ENonZero_Nop16:
 	ret	; F7F7AA  ret   <- button table 0xF7DA58 entry 16 (QUANTIZE) and 15 more slot(s)
@@ -198171,7 +198171,7 @@ sub_F7F7DC_Join:
 	inc	1, wa	; F7F84B  inc 1,WA
 	ld	(6304890:24), wa	; F7F84D  ld (0x60347a),WA
 	call	T_Blink_Stop	; F7F852  call 0xf42e24
-	calr	sub_F7F6E5	; F7F856  calr 0xf7f6e5
+	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_2	; F7F856  calr 0xf7f6e5
 sub_F7F7DC_Return:
 	ret	; F7F859  ret
 

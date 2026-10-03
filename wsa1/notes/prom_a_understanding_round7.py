@@ -671,7 +671,7 @@ REFUSALS = {
                   "two apart",
     "sub_F9A724": "the only text it draws is `ON` / `OFF`, a two-state field and "
                   "not a screen",
-    "sub_F9B2E2": "the caption belongs to its SECOND list; its first draws `---`, "
+    "Draw_OffOff": "the caption belongs to its SECOND list; its first draws `---`, "
                   "so a name taken from the text would name the wrong list",
 }
 

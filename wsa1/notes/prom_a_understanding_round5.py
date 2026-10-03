@@ -421,9 +421,9 @@ REFUSED = {
                   'does not already say',
     "sub_F9291F": 'its two named lists read "USR2" and "USR1", four-character field '
                   'labels, and seven of its NINE display lists are unnamed',
-    "sub_F929DB": 'runs the same list as 0xF92A10 (0xF2BA73, "R0M1"/"EXT1"/"R0M2"), so '
+    "Draw_Ext1": 'runs the same list as 0xF92A10 (0xF2BA73, "R0M1"/"EXT1"/"R0M2"), so '
                   'the proposed name is not unique file-wide',
-    "sub_F92A10": 'runs the same list as 0xF929DB (0xF2BA73), so the proposed name is '
+    "Draw_Ext1_2": 'runs the same list as 0xF929DB (0xF2BA73), so the proposed name is '
                   'not unique file-wide',
 }
 TWIN_NAMES = {"sub_FB81CE": ("MemCopyWords_Copy", "MemCopyWords", 0xF8E6E2, 24)}

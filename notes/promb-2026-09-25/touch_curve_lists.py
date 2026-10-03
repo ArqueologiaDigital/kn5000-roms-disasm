@@ -3,7 +3,7 @@ r"""prom_b 0xF04042-0xF0417D (ex `Data_F04042`, 316 bytes): six 42-byte display 
 
 QUESTION THIS ANSWERS
     `Data_F04042` was a coverage-walk object ("EMITTED AS DATA", the walk's
-    extent).  Its readers are one routine, sub_F5BDBB, and they fix its layout:
+    extent).  Its readers are one routine, Draw_TouchCurve, and they fix its layout:
 
       0xF04042  six interpreter-A lists of 42 bytes (4 records each: `TOUCH`
                 and `CURVE` captions (op 0x17), a box (op 0x22), a line (op
@@ -102,7 +102,7 @@ def emit(d):
     out = ["; " + "-" * 74]
     out += wrap("DL_TouchCurve_0..5 -- 0xF04042-0xF0413D, six interpreter-A lists of 42 bytes (4 "
                 "records each): the captions TOUCH and CURVE (op 0x17), a box (op 0x22) and a line "
-                "(op 0x01), the same picture at six places.  Run one at a time by sub_F5BDBB through "
+                "(op 0x01), the same picture at six places.  Run one at a time by Draw_TouchCurve through "
                 "TouchCurve_ListPtrs / TouchCurve_ListPtrs3 (`ld XIY,(XIZ) / ld XIX,XIY / add XIX,42 / "
                 "call T_DisplayList_Run` at 0xF5BE4B-0xF5BE55).  0xF04042 is also the END of the list "
                 "before it (`ld XIX,0x00F04042` at 0xF5BDCC).  notes/promb-2026-09-25/"

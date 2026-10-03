@@ -2586,7 +2586,7 @@ Paint_S0ngC0py:
 	call T_DisplayList_Run                               ; F802D7  1d f0 17 f4
 .LF802DB:
 	call sub_F802EC                                      ; F802DB  1d ec 02 f8
-	call sub_F80338                                      ; F802DF  1d 38 03 f8
+	call Draw_S0ngSelectNameKbS0ngName                                      ; F802DF  1d 38 03 f8
 	call sub_F80384                                      ; F802E3  1d 84 03 f8
 	call PromB_LCD_ScreenRedraw_End                                        ; F802E7  1d e7 e2 f7
 	ret                                                  ; F802EB  0e
@@ -2632,7 +2632,7 @@ sub_F802EC:
 	ld XIX,DL_F3C16C                                     ; F8032E  44 6c c1 f3 00
 	call T_DisplayListB_Run                              ; F80333  1d f4 17 f4
 	ret                                                  ; F80337  0e
-; sub_F80338 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; Draw_S0ngSelectNameKbS0ngName -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 23
 ; instructions to its first `ret`:
@@ -2649,7 +2649,7 @@ sub_F802EC:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_F80338:
+Draw_S0ngSelectNameKbS0ngName:
 	xor XWA,XWA                                          ; F80338  e8 d0
 	ld a, (0x0e0d:16)                                   ; F8033A  c1 0d 0e 21
 	ld (0x12f7:16), a                                   ; F8033E  f1 f7 12 41
@@ -2708,10 +2708,10 @@ ScreenLeave_S0ngC0py_Nop:
 	call sub_F80384                                      ; F803E8  1d 84 03 f8
 	ret                                                  ; F803EC  0e
 	call T_F42A24                                        ; F803ED  1d 24 2a f4
-	call sub_F80338                                      ; F803F1  1d 38 03 f8
+	call Draw_S0ngSelectNameKbS0ngName                                      ; F803F1  1d 38 03 f8
 	ret                                                  ; F803F5  0e
 	call T_F42A20                                        ; F803F6  1d 20 2a f4
-	call sub_F80338                                      ; F803FA  1d 38 03 f8
+	call Draw_S0ngSelectNameKbS0ngName                                      ; F803FA  1d 38 03 f8
 	ret                                                  ; F803FE  0e
 	call T_F42A2C                                        ; F803FF  1d 2c 2a f4
 	call sub_F80384                                      ; F80403  1d 84 03 f8
@@ -4072,7 +4072,7 @@ Paint_StepRecordPartSelect:
 	ld XIX,DL_F394E3                                     ; F80F7E  44 e3 94 f3 00
 	call T_DisplayList_Run                               ; F80F83  1d f0 17 f4
 	ld (0x2540:16), 0x02                                 ; F80F87  f1 40 25 00 02
-	calr sub_F7E354                                          ; F80F8C  1e c5 d3
+	calr Draw_TrackAssignPresetsTechnicsSetUp1116                                          ; F80F8C  1e c5 d3
 .LF80F8F:
 	ld (0x2540:16), 0x01                                 ; F80F8F  f1 40 25 00 01
 	calr sub_F7E39F_Nop                                          ; F80F94  1e 41 d3
@@ -4211,7 +4211,7 @@ Paint_SequencerMedley:
 	ld XIY,DL_FirstS0ngLastS0ng                          ; F810DA  45 78 c7 f3 00
 	ld XIX,DL_F3C7AD                                     ; F810DF  44 ad c7 f3 00
 	call T_DisplayListB_Run                              ; F810E4  1d f4 17 f4
-	call sub_F81350                                      ; F810E8  1d 50 13 f8
+	call Draw_StepRecordPartSelectPressTheUpDownButton                                      ; F810E8  1d 50 13 f8
 	calr PromB_LCD_ScreenRedraw_End                                          ; F810EC  1e f8 d1
 	ret                                                  ; F810EF  0e
 sub_F810F0:
@@ -4226,7 +4226,7 @@ sub_F810F0:
 	jr z, .LF8111D                                       ; F81107  66 14
 	call T_Blink_Stop                                    ; F81109  1d 24 2e f4
 	call T_F42C18                                        ; F8110D  1d 18 2c f4
-	call sub_F813BF                                      ; F81111  1d bf 13 f8
+	call Draw_FirstS0ngLastS0ng                                      ; F81111  1d bf 13 f8
 	call sub_F813FF                                      ; F81115  1d ff 13 f8
 	call sub_F8141C                                      ; F81119  1d 1c 14 f8
 .LF8111D:
@@ -4235,7 +4235,7 @@ sub_F810F0:
 	jr z, .LF81135                                       ; F81123  66 10
 	call T_Blink_Stop                                    ; F81125  1d 24 2e f4
 	call T_F42C1C                                        ; F81129  1d 1c 2c f4
-	call sub_F813BF                                      ; F8112D  1d bf 13 f8
+	call Draw_FirstS0ngLastS0ng                                      ; F8112D  1d bf 13 f8
 	call sub_F813FF                                      ; F81131  1d ff 13 f8
 .LF81135:
 	ret                                                  ; F81135  0e
@@ -4255,7 +4255,7 @@ sub_F810F0:
 	ld (0x12fe:16), a                                   ; F81154  f1 fe 12 41
 	ld a, (0x2209:16)                                   ; F81158  c1 09 22 21
 	ld (0x1300:16), a                                   ; F8115C  f1 00 13 41
-	call sub_F813BF                                      ; F81160  1d bf 13 f8
+	call Draw_FirstS0ngLastS0ng                                      ; F81160  1d bf 13 f8
 	ret                                                  ; F81164  0e
 	ret                                                  ; F81165  0e
 	m_cp_mi8 MB16, 0x220b, 0x01                          ; F81166  c1 0b 22 3f 01
@@ -4264,7 +4264,7 @@ sub_F810F0:
 	jr z, .LF81184                                       ; F81172  66 10
 	call T_Blink_Stop                                    ; F81174  1d 24 2e f4
 	call T_F42C24                                        ; F81178  1d 24 2c f4
-	call sub_F813BF                                      ; F8117C  1d bf 13 f8
+	call Draw_FirstS0ngLastS0ng                                      ; F8117C  1d bf 13 f8
 	call sub_F8141C                                      ; F81180  1d 1c 14 f8
 .LF81184:
 	ret                                                  ; F81184  0e
@@ -4272,7 +4272,7 @@ sub_F810F0:
 	jr z, .LF8119C                                       ; F8118A  66 10
 	call T_Blink_Stop                                    ; F8118C  1d 24 2e f4
 	call T_F42C28                                        ; F81190  1d 28 2c f4
-	call sub_F813BF                                      ; F81194  1d bf 13 f8
+	call Draw_FirstS0ngLastS0ng                                      ; F81194  1d bf 13 f8
 	call sub_F8141C                                      ; F81198  1d 1c 14 f8
 .LF8119C:
 	ret                                                  ; F8119C  0e
@@ -4287,8 +4287,8 @@ sub_F810F0:
 	jr nz, .LF811E1                                      ; F811B6  6e 29
 	m_cp_mi8 MB16, 0x220b, 0x00                          ; F811B8  c1 0b 22 3f 00
 	jr nz, .LF811E1                                      ; F811BD  6e 22
-	calr sub_F813BF                                          ; F811BF  1e fd 01
-	call sub_F81350                                      ; F811C2  1d 50 13 f8
+	calr Draw_FirstS0ngLastS0ng                                          ; F811BF  1e fd 01
+	call Draw_StepRecordPartSelectPressTheUpDownButton                                      ; F811C2  1d 50 13 f8
 	jr .LF811E1                                          ; F811C6  68 19
 .LF811C8:
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F811C8  c1 c1 0d 3f 01
@@ -4308,7 +4308,7 @@ sub_F810F0:
 	jr z, .LF811FE                                       ; F811F1  66 0b
 	calr sub_F7F237                                          ; F811F3  1e 41 e0
 	call T_F42BD8                                        ; F811F6  1d d8 2b f4
-	call sub_F81350                                      ; F811FA  1d 50 13 f8
+	call Draw_StepRecordPartSelectPressTheUpDownButton                                      ; F811FA  1d 50 13 f8
 .LF811FE:
 	ret                                                  ; F811FE  0e
 	bit 0x07,W                                           ; F811FF  c8 33 07
@@ -4419,7 +4419,7 @@ sub_F8126D:
 	call T_F42580                                        ; F812FE  1d 80 25 f4
 .LF81302:
 	call T_Blink_Stop                                    ; F81302  1d 24 2e f4
-	calr sub_F813BF                                            ; F81306  1e b6 00
+	calr Draw_FirstS0ngLastS0ng                                            ; F81306  1e b6 00
 .LF81309:
 	ret                                                  ; F81309  0e
 sub_F8130A:
@@ -4461,7 +4461,7 @@ BlinkArgPtrs_F81344:
 	.long 0x00000000                                 ; F81344  [  0]
 	.long DL_FirstS0ngLastS0ng                       ; F81348  [  1]
 	.long 0x00f3c782                                 ; F8134C  [  2]
-; sub_F81350 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; Draw_StepRecordPartSelectPressTheUpDownButton -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 27
 ; instructions to its first `ret`:
@@ -4478,7 +4478,7 @@ BlinkArgPtrs_F81344:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_F81350:
+Draw_StepRecordPartSelectPressTheUpDownButton:
 	ld (0x2540:16), 0x00                                 ; F81350  f1 40 25 00 00
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81355  c1 c1 0d 3f 01
 	jr z, .LF8136C                                       ; F8135A  66 10
@@ -4508,7 +4508,7 @@ sub_F81350:
 	ld XIY,DL_F3C7AD                                     ; F813B5  45 ad c7 f3 00
 	call T_DLB_Handler_Array8                                        ; F813BA  1d 1c 18 f4
 	ret                                                  ; F813BE  0e
-sub_F813BF:
+Draw_FirstS0ngLastS0ng:
 	ld (0x2540:16), 0x00                                 ; F813BF  f1 40 25 00 00
 	ld a, (0x2208:16)                                   ; F813C4  c1 08 22 21
 	inc 1,A                                              ; F813C8  c9 61
@@ -31855,7 +31855,7 @@ sub_F90D58:
 	m_bit 4, MD16, 0x2095                                ; F90DAB  f1 95 20 cc
 	jr nz, .LF90DC8                                      ; F90DAF  6e 17
 	m_and_mi8 MB16, 0x2688, 0xfc                         ; F90DB1  c1 88 26 3c fc
-	ld XWA,sub_F90DDB                                    ; F90DB6  40 db 0d f9 00
+	ld XWA,Draw_Drawbar                                    ; F90DB6  40 db 0d f9 00
 	push XWA                                             ; F90DBB  38
 	call T_CallbackQueue_Post                            ; F90DBC  1d 84 2e f4
 	inc 4,XSP                                            ; F90DC0  ef 64
@@ -31869,7 +31869,7 @@ sub_F90D58:
 	ld a, 0x01:opc                                          ; F90DD4  21 01
 	call T_Kernel_SemaSignal                             ; F90DD6  1d 88 2d f4
 	ret                                                  ; F90DDA  0e
-sub_F90DDB:   ; entry: named by 1 `ld` operand, first at 0xF90DB6
+Draw_Drawbar:   ; entry: named by 1 `ld` operand, first at 0xF90DB6
 	xor C,C                                              ; F90DDB  cb d3
 	ld a, 0x0c:opc                                          ; F90DDD  21 0c
 	swi 7                                                ; F90DDF  ff
@@ -32729,7 +32729,7 @@ sub_F915FB:
 	m_cp_mi8 MB16, 0x2687, 0x00                          ; F91646  c1 87 26 3f 00
 	jr nz, .LF91667                                      ; F9164B  6e 1a
 	ldw (0x209b:16), 0x0181                              ; F9164D  f1 9b 20 02 81 01
-	ld XWA,sub_F91C7E                                    ; F91653  40 7e 1c f9 00
+	ld XWA,Draw_C0mbinati0nM0dePage22Sound_2                                    ; F91653  40 7e 1c f9 00
 	push XWA                                             ; F91658  38
 	call T_CallbackQueue_Post                            ; F91659  1d 84 2e f4
 	inc 4,XSP                                            ; F9165D  ef 64
@@ -32738,7 +32738,7 @@ sub_F915FB:
 	jr sub_F91678_Join                                        ; F91665  68 15
 .LF91667:
 	calr sub_F91791                                      ; F91667  1e 27 01
-	ld XWA,sub_F916AA                                    ; F9166A  40 aa 16 f9 00
+	ld XWA,Draw_C0mbinati0nM0dePage22Sound                                    ; F9166A  40 aa 16 f9 00
 	push XWA                                             ; F9166F  38
 	call T_CallbackQueue_Post                            ; F91670  1d 84 2e f4
 	inc 4,XSP                                            ; F91674  ef 64
@@ -32799,7 +32799,7 @@ sub_F91678_Join:
 	call T_Kernel_SemaSignal                             ; F916A5  1d 88 2d f4
 .LF916A9:
 	ret                                                  ; F916A9  0e
-sub_F916AA:   ; entry: named by 1 `ld` operand, first at 0xF9166A
+Draw_C0mbinati0nM0dePage22Sound:   ; entry: named by 1 `ld` operand, first at 0xF9166A
 	xor C,C                                              ; F916AA  cb d3
 	ld a, 0x0c:opc                                          ; F916AC  21 0c
 	swi 7                                                ; F916AE  ff
@@ -33357,7 +33357,7 @@ sub_F91C64:   ; entry: named by 1 `.long` operand, first at 0xF918E1
 	ldw ix, 0x1bcb                                       ; F91C76  34 cb 1b
 	call sub_F9458C                                        ; F91C79  1d 8c 45 f9
 	ret                                                  ; F91C7D  0e
-sub_F91C7E:   ; entry: named by 1 `ld` operand, first at 0xF91653
+Draw_C0mbinati0nM0dePage22Sound_2:   ; entry: named by 1 `ld` operand, first at 0xF91653
 	xor C,C                                              ; F91C7E  cb d3
 	ld a, 0x0c:opc                                          ; F91C80  21 0c
 	swi 7                                                ; F91C82  ff
@@ -34528,7 +34528,7 @@ InstallPainter_SoundGroupMenu:
 	m_bit 4, MD16, 0x2095                                ; F927D1  f1 95 20 cc
 	jr nz, .LF927ED                                      ; F927D5  6e 16
 	call T_CallbackQueue_ResetAndRestartTask2            ; F927D7  1d 80 2e f4
-	ld XWA,sub_F92800                                    ; F927DB  40 00 28 f9 00
+	ld XWA,Draw_SoundGroupMenuReMap1ReMap2                                    ; F927DB  40 00 28 f9 00
 	push XWA                                             ; F927E0  38
 	call T_CallbackQueue_Post                            ; F927E1  1d 84 2e f4
 	inc 4,XSP                                            ; F927E5  ef 64
@@ -34542,7 +34542,7 @@ InstallPainter_SoundGroupMenu:
 	ld a, 0x01:opc                                          ; F927F9  21 01
 	call T_Kernel_SemaSignal                             ; F927FB  1d 88 2d f4
 	ret                                                  ; F927FF  0e
-sub_F92800:   ; entry: named by 1 `ld` operand, first at 0xF927DB
+Draw_SoundGroupMenuReMap1ReMap2:   ; entry: named by 1 `ld` operand, first at 0xF927DB
 	ld a, 0x0f:opc                                          ; F92800  21 0f
 	swi 7                                                ; F92802  ff
 	xor C,C                                              ; F92803  cb d3
@@ -34597,7 +34597,7 @@ sub_F92800:   ; entry: named by 1 `ld` operand, first at 0xF927DB
 	djnz8 e, .LF92864                                    ; F92896  cd 1c cb
 	m_bit 3, MD16, 0x216a                                ; F92899  f1 6a 21 cb
 	jr nz, .LF928A4                                      ; F9289D  6e 05
-	calr sub_F929DB                                      ; F9289F  1e 39 01
+	calr Draw_Ext1                                      ; F9289F  1e 39 01
 	jr .LF928A7                                          ; F928A2  68 03
 .LF928A4:
 	calr sub_F92A40                                      ; F928A4  1e 99 01
@@ -34714,7 +34714,7 @@ sub_F9291F:
 	call T_DisplayList_Run                               ; F929D6  1d f0 17 f4
 .LF929DA:
 	ret                                                  ; F929DA  0e
-sub_F929DB:
+Draw_Ext1:
 	ld (0x2540:16), 0x00                                 ; F929DB  f1 40 25 00 00
 	ld XIY,DL_Ext1                                       ; F929E0  45 73 ba f2 00
 	ld XIX,DL_F2BB03                                     ; F929E5  44 03 bb f2 00
@@ -34727,7 +34727,7 @@ sub_F929DB:
 	ld XIY,0x00f2bb0d                                    ; F92A06  45 0d bb f2 00
 	call T_DLB_Handler_Array8                                        ; F92A0B  1d 1c 18 f4
 	ret                                                  ; F92A0F  0e
-sub_F92A10:
+Draw_Ext1_2:
 	ld (0x2540:16), 0x00                                 ; F92A10  f1 40 25 00 00
 	ld XIY,DL_Ext1                                       ; F92A15  45 73 ba f2 00
 	ld XIX,0x00f2bad3                                    ; F92A1A  44 d3 ba f2 00
@@ -35210,18 +35210,18 @@ sub_F92D70:   ; entry: named by 1 `ld` operand, first at 0xF92D3C
 	ld a, 0x06:opc                                          ; F92D9E  21 06
 	swi 7                                                ; F92DA0  ff
 	calr sub_F9319F                                      ; F92DA1  1e fb 03
-	calr sub_F93124                                      ; F92DA4  1e 7d 03
+	calr Draw_Ext1_3                                      ; F92DA4  1e 7d 03
 	ld (0x2540:16), 0x00                                 ; F92DA7  f1 40 25 00 00
 	m_bit 3, MD16, 0x216a                                ; F92DAC  f1 6a 21 cb
 	jr nz, .LF92DB7                                      ; F92DB0  6e 05
-	calr sub_F929DB                                          ; F92DB2  1e 26 fc
+	calr Draw_Ext1                                          ; F92DB2  1e 26 fc
 	jr .LF92DBA                                          ; F92DB5  68 03
 .LF92DB7:
 	calr sub_F92A40                                          ; F92DB7  1e 86 fc
 .LF92DBA:
 	calr Paint_Drum                                          ; F92DBA  1e 1e fb
 	calr sub_F9291F                                          ; F92DBD  1e 5f fb
-	calr sub_F9315D                                      ; F92DC0  1e 9a 03
+	calr Draw_Drum                                      ; F92DC0  1e 9a 03
 	ld a, (0x2169:16)                                   ; F92DC3  c1 69 21 21
 	ld b, (0x2250:16)                                   ; F92DC7  c1 50 22 22
 	ld w, (0x216a:16)                                   ; F92DCB  c1 6a 21 20
@@ -35398,7 +35398,7 @@ sub_F92F38:   ; entry: named by 2 `.long` operands, first at 0xF92C7A
 	ret                                                  ; F92F4E  0e
 sub_F92F4F:   ; entry: named by 2 `.long` operands, first at 0xF92C7E
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F92F4F  c1 7f 26 3d 01
-	ld XIX,sub_F9315D                                    ; F92F54  44 5d 31 f9 00
+	ld XIX,Draw_Drum                                    ; F92F54  44 5d 31 f9 00
 	push XIX                                             ; F92F59  3c
 	call T_CallbackQueue_Post                            ; F92F5A  1d 84 2e f4
 	inc 4,XSP                                            ; F92F5E  ef 64
@@ -35407,7 +35407,7 @@ sub_F92F4F:   ; entry: named by 2 `.long` operands, first at 0xF92C7E
 	ret                                                  ; F92F66  0e
 sub_F92F67:   ; entry: named by 2 `.long` operands, first at 0xF92C82
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F92F67  c1 7f 26 3d 01
-	ld XIX,sub_F9315D                                    ; F92F6C  44 5d 31 f9 00
+	ld XIX,Draw_Drum                                    ; F92F6C  44 5d 31 f9 00
 	push XIX                                             ; F92F71  3c
 	call T_CallbackQueue_Post                            ; F92F72  1d 84 2e f4
 	inc 4,XSP                                            ; F92F76  ef 64
@@ -35595,7 +35595,7 @@ sub_F93109:   ; entry: named by 2 `ld` operands, first at 0xF930F6
 	ret                                                  ; F93122  0e
 sub_F92C62_Nop:
 	ret                                                  ; F93123  0e
-; sub_F93124 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; Draw_Ext1_3 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 17
 ; instructions to its first `ret`:
@@ -35611,7 +35611,7 @@ sub_F92C62_Nop:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_F93124:
+Draw_Ext1_3:
 	ld a, (0x2169:16)                                   ; F93124  c1 69 21 21
 	inc 1,A                                              ; F93128  c9 61
 	extz WA                                              ; F9312A  d8 12
@@ -35631,7 +35631,7 @@ sub_F93124:
 	inc 4,XSP                                            ; F9315A  ef 64
 .LF9315C:
 	ret                                                  ; F9315C  0e
-; sub_F9315D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; Draw_Drum -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 11
 ; instructions to its first `ret`:
@@ -35648,7 +35648,7 @@ sub_F93124:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_F9315D:
+Draw_Drum:
 	ld (0x2540:16), 0x01                                 ; F9315D  f1 40 25 00 01
 	m_bit 0, MD16, 0x267f                                ; F93162  f1 7f 26 c8
 	jr z, .LF93178                                       ; F93166  66 10
@@ -35764,7 +35764,7 @@ sub_F9320D:
 	call T_List2030_AppendRegs                           ; F93264  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93268  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F9326D  1d 24 2e f4
-	ld XWA,sub_F93124                                    ; F93271  40 24 31 f9 00
+	ld XWA,Draw_Ext1_3                                    ; F93271  40 24 31 f9 00
 	push XWA                                             ; F93276  38
 	call T_CallbackQueue_Post                            ; F93277  1d 84 2e f4
 	inc 4,XSP                                            ; F9327B  ef 64
@@ -35835,7 +35835,7 @@ sub_F932C6:
 	call T_List2030_AppendRegs                           ; F93324  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93328  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F9332D  1d 24 2e f4
-	ld XWA,sub_F93124                                    ; F93331  40 24 31 f9 00
+	ld XWA,Draw_Ext1_3                                    ; F93331  40 24 31 f9 00
 	push XWA                                             ; F93336  38
 	call T_CallbackQueue_Post                            ; F93337  1d 84 2e f4
 	inc 4,XSP                                            ; F9333B  ef 64
@@ -36290,7 +36290,7 @@ InstallPainter_CombinationGroupMenu:
 	m_bit 4, MD16, 0x2095                                ; F93602  f1 95 20 cc
 	jr nz, .LF9361E                                      ; F93606  6e 16
 	call T_CallbackQueue_ResetAndRestartTask2            ; F93608  1d 80 2e f4
-	ld XWA,sub_F93631                                    ; F9360C  40 31 36 f9 00
+	ld XWA,Draw_CombinationGroupMenuReMap1                                    ; F9360C  40 31 36 f9 00
 	push XWA                                             ; F93611  38
 	call T_CallbackQueue_Post                            ; F93612  1d 84 2e f4
 	inc 4,XSP                                            ; F93616  ef 64
@@ -36304,7 +36304,7 @@ InstallPainter_CombinationGroupMenu:
 	ld a, 0x01:opc                                          ; F9362A  21 01
 	call T_Kernel_SemaSignal                             ; F9362C  1d 88 2d f4
 	ret                                                  ; F93630  0e
-sub_F93631:   ; entry: named by 1 `ld` operand, first at 0xF9360C
+Draw_CombinationGroupMenuReMap1:   ; entry: named by 1 `ld` operand, first at 0xF9360C
 	ld a, 0x0f:opc                                          ; F93631  21 0f
 	swi 7                                                ; F93633  ff
 	xor C,C                                              ; F93634  cb d3
@@ -36359,7 +36359,7 @@ sub_F93631:   ; entry: named by 1 `ld` operand, first at 0xF9360C
 	djnz8 e, .LF93695                                    ; F936C5  cd 1c cd
 	m_bit 3, MD16, 0x216a                                ; F936C8  f1 6a 21 cb
 	jr nz, .LF936D3                                      ; F936CC  6e 05
-	calr sub_F92A10                                          ; F936CE  1e 3f f3
+	calr Draw_Ext1_2                                          ; F936CE  1e 3f f3
 	jr .LF936D6                                          ; F936D1  68 03
 .LF936D3:
 	calr sub_F92A40                                          ; F936D3  1e 6a f3
@@ -36668,7 +36668,7 @@ InstallPainter_GroupCombiDisplayHold:
 	m_bit 4, MD16, 0x2095                                ; F938F1  f1 95 20 cc
 	jr nz, .LF9390E                                      ; F938F5  6e 17
 	m_or_mi8 MB16, 0x2673, 0x80                          ; F938F7  c1 73 26 3e 80
-	ld XIX,sub_F93921                                    ; F938FC  44 21 39 f9 00
+	ld XIX,Draw_GroupCombiDisplayHoldGr0up                                    ; F938FC  44 21 39 f9 00
 	push XIX                                             ; F93901  3c
 	call T_CallbackQueue_Post                            ; F93902  1d 84 2e f4
 	inc 4,XSP                                            ; F93906  ef 64
@@ -36682,7 +36682,7 @@ InstallPainter_GroupCombiDisplayHold:
 	ld a, 0x01:opc                                          ; F9391A  21 01
 	call T_Kernel_SemaSignal                             ; F9391C  1d 88 2d f4
 	ret                                                  ; F93920  0e
-sub_F93921:   ; entry: named by 1 `ld` operand, first at 0xF938FC
+Draw_GroupCombiDisplayHoldGr0up:   ; entry: named by 1 `ld` operand, first at 0xF938FC
 	ld a, 0x0f:opc                                          ; F93921  21 0f
 	swi 7                                                ; F93923  ff
 	xor C,C                                              ; F93924  cb d3
@@ -36710,16 +36710,16 @@ sub_F93942:   ; entry: named by 1 `ld` operand, first at 0xF9390E
 	ld a, 0x06:opc                                          ; F9396E  21 06
 	swi 7                                                ; F93970  ff
 	calr sub_F931A4                                          ; F93971  1e 30 f8
-	calr sub_F93124                                          ; F93974  1e ad f7
+	calr Draw_Ext1_3                                          ; F93974  1e ad f7
 	m_bit 3, MD16, 0x216a                                ; F93977  f1 6a 21 cb
 	jr nz, .LF93982                                      ; F9397B  6e 05
-	calr sub_F92A10                                          ; F9397D  1e 90 f0
+	calr Draw_Ext1_2                                          ; F9397D  1e 90 f0
 	jr .LF93985                                          ; F93980  68 03
 .LF93982:
 	calr sub_F92A40                                          ; F93982  1e bb f0
 .LF93985:
 	calr sub_F9291F                                          ; F93985  1e 97 ef
-	calr sub_F9315D                                          ; F93988  1e d2 f7
+	calr Draw_Drum                                          ; F93988  1e d2 f7
 	ld a, (0x2169:16)                                   ; F9398B  c1 69 21 21
 	ld w, (0x216a:16)                                   ; F9398F  c1 6a 21 20
 	ld b, 0x98:opc                                          ; F93993  22 98
@@ -36888,7 +36888,7 @@ sub_F93AEC:   ; entry: named by 2 `.long` operands, first at 0xF9384D
 	ret                                                  ; F93B02  0e
 sub_F93B03:   ; entry: named by 2 `.long` operands, first at 0xF93851
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F93B03  c1 7f 26 3d 01
-	ld XIX,sub_F9315D                                    ; F93B08  44 5d 31 f9 00
+	ld XIX,Draw_Drum                                    ; F93B08  44 5d 31 f9 00
 	push XIX                                             ; F93B0D  3c
 	call T_CallbackQueue_Post                            ; F93B0E  1d 84 2e f4
 	inc 4,XSP                                            ; F93B12  ef 64
@@ -36897,7 +36897,7 @@ sub_F93B03:   ; entry: named by 2 `.long` operands, first at 0xF93851
 	ret                                                  ; F93B1A  0e
 sub_F93B1B:   ; entry: named by 2 `.long` operands, first at 0xF93855
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F93B1B  c1 7f 26 3d 01
-	ld XIX,sub_F9315D                                    ; F93B20  44 5d 31 f9 00
+	ld XIX,Draw_Drum                                    ; F93B20  44 5d 31 f9 00
 	push XIX                                             ; F93B25  3c
 	call T_CallbackQueue_Post                            ; F93B26  1d 84 2e f4
 	inc 4,XSP                                            ; F93B2A  ef 64
@@ -37113,7 +37113,7 @@ sub_F93CB9:
 	call T_List2030_AppendRegs                           ; F93D0B  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93D0F  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F93D14  1d 24 2e f4
-	ld XWA,sub_F93124                                    ; F93D18  40 24 31 f9 00
+	ld XWA,Draw_Ext1_3                                    ; F93D18  40 24 31 f9 00
 	push XWA                                             ; F93D1D  38
 	call T_CallbackQueue_Post                            ; F93D1E  1d 84 2e f4
 	inc 4,XSP                                            ; F93D22  ef 64
@@ -37184,7 +37184,7 @@ sub_F93D6D:
 	call T_List2030_AppendRegs                           ; F93DC6  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93DCA  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F93DCF  1d 24 2e f4
-	ld XWA,sub_F93124                                    ; F93DD3  40 24 31 f9 00
+	ld XWA,Draw_Ext1_3                                    ; F93DD3  40 24 31 f9 00
 	push XWA                                             ; F93DD8  38
 	call T_CallbackQueue_Post                            ; F93DD9  1d 84 2e f4
 	inc 4,XSP                                            ; F93DDD  ef 64
@@ -46578,10 +46578,10 @@ Paint_MidiTotalMode:
 	inc 8,XSP                                            ; F9A232  ef 60
 .LF9A234:
 	calr sub_F9A418                                          ; F9A234  1e e1 01
-	calr sub_F9A43B                                          ; F9A237  1e 01 02
+	calr Draw_MultiSingle                                          ; F9A237  1e 01 02
 	calr sub_F9A461                                          ; F9A23A  1e 24 02
 	calr sub_F9A484                                          ; F9A23D  1e 44 02
-	calr sub_F9A4B0                                          ; F9A240  1e 6d 02
+	calr Draw_NormalTechRemap                                          ; F9A240  1e 6d 02
 	calr sub_F9A4D3                                          ; F9A243  1e 8d 02
 	ld (0x2540:16), 0x01                                 ; F9A246  f1 40 25 00 01
 	lda xbc, (DLTable_MultiSingleOmni:24)                ; F9A24B  f2 9f ca f0 31
@@ -46863,7 +46863,7 @@ sub_F9A418:
 	call T_DisplayListB_Run_Stack                        ; F9A434  1d 04 2e f4
 	inc 8,XSP                                            ; F9A438  ef 60
 	ret                                                  ; F9A43A  0e
-sub_F9A43B:
+Draw_MultiSingle:
 	ld c, (0x7f35:16)                                   ; F9A43B  c1 35 7f 23
 	and C,0xf0                                           ; F9A43F  cb cc f0
 	srl c, 0x04                                          ; F9A442  cb ef 04
@@ -46905,7 +46905,7 @@ sub_F9A4A8:
 	inc 8,XSP                                            ; F9A4AD  ef 60
 .LF9A4AF:
 	ret                                                  ; F9A4AF  0e
-sub_F9A4B0:
+Draw_NormalTechRemap:
 	ld c, (0x7f32:16)                                   ; F9A4B0  c1 32 7f 23
 	and C,0x03                                           ; F9A4B4  cb cc 03
 	ld (0x2740:16), c                                   ; F9A4B7  f1 40 27 43
@@ -46995,7 +46995,7 @@ sub_F9A544:
 	pushw 0x03                                           ; F9A586  0b 03 00
 	pushw 0x80                                           ; F9A589  0b 80 00
 	call T_F41B18                                        ; F9A58C  1d 18 1b f4
-	calr sub_F9A43B                                      ; F9A590  1e a8 fe
+	calr Draw_MultiSingle                                      ; F9A590  1e a8 fe
 	inc 8,XSP                                            ; F9A593  ef 60
 .LF9A595:
 	pop XIX                                              ; F9A595  5c
@@ -47097,7 +47097,7 @@ sub_F9A62D:
 	pushw 0x00                                           ; F9A664  0b 00 00
 	pushw 0x80                                           ; F9A667  0b 80 00
 	call T_F41B18                                        ; F9A66A  1d 18 1b f4
-	calr sub_F9A4B0                                      ; F9A66E  1e 3f fe
+	calr Draw_NormalTechRemap                                      ; F9A66E  1e 3f fe
 	inc 8,XSP                                            ; F9A671  ef 60
 .LF9A673:
 	pop XIX                                              ; F9A673  5c
@@ -47199,7 +47199,7 @@ Paint_MidiRealtimeMessages:
 	calr DisplayList_Run_Stack_Wrap                                      ; F9A716  1e 0b 00
 	jr .LF9A71E                                          ; F9A719  68 03
 .LF9A71B:
-	calr sub_F9A73C                                      ; F9A71B  1e 1e 00
+	calr Draw_OnOff                                      ; F9A71B  1e 1e 00
 .LF9A71E:
 	call T_F42E14                                        ; F9A71E  1d 14 2e f4
 	pop XIX                                              ; F9A722  5c
@@ -47228,7 +47228,7 @@ DisplayList_Run_Stack_Wrap:
 	call T_DisplayList_Run_Stack                         ; F9A735  1d 00 2e f4
 	inc 8,XSP                                            ; F9A739  ef 60
 	ret                                                  ; F9A73B  0e
-sub_F9A73C:
+Draw_OnOff:
 	ld (0x2540:16), 0x02                                 ; F9A73C  f1 40 25 00 02
 	lda xbc, (DL_OnOff:24)                               ; F9A741  f2 83 cc f0 31
 	push XBC                                             ; F9A746  39
@@ -47360,12 +47360,12 @@ ScreenButtonHandlers_MidiRealtimeMessages:
 sub_F9A80E:   ; entry: named by 1 `.long` operand, first at 0xF9A7B2
 	push 0x00                                            ; F9A80E  09 00
 	push H                                               ; F9A810  ce 04
-	calr sub_F9A83A                                      ; F9A812  1e 25 00
+	calr Draw_RealtimeCommandsClock                                      ; F9A812  1e 25 00
 	jr .LF9A830                                          ; F9A815  68 19
 sub_F9A817:   ; entry: named by 1 `.long` operand, first at 0xF9A7B6
 	push 0x00                                            ; F9A817  09 00
 	push H                                               ; F9A819  ce 04
-	calr sub_F9A8E4                                      ; F9A81B  1e c6 00
+	calr Draw_RealtimeCommandsClock_2                                      ; F9A81B  1e c6 00
 	jr .LF9A830                                          ; F9A81E  68 10
 sub_F9A820:   ; entry: named by 1 `.long` operand, first at 0xF9A7BA
 	push 0x00                                            ; F9A820  09 00
@@ -47385,7 +47385,7 @@ sub_F9A833:   ; entry: named by 28 `.long` operands, first at 0xF9A78E
 	popw hl                                              ; F9A836  4b
 	unlk XIZ                                             ; F9A837  ee 0d
 	ret                                                  ; F9A839  0e
-sub_F9A83A:
+Draw_RealtimeCommandsClock:
 	link XIZ,0x0000                                      ; F9A83A  ee 0c 00 00
 	push XIX                                             ; F9A83E  3c
 	lda xix, (0x7f32:16)                                ; F9A83F  f1 32 7f 34
@@ -47445,7 +47445,7 @@ sub_F9A83A:
 	pop XIX                                              ; F9A8E0  5c
 	unlk XIZ                                             ; F9A8E1  ee 0d
 	ret                                                  ; F9A8E3  0e
-sub_F9A8E4:
+Draw_RealtimeCommandsClock_2:
 	link XIZ,0x0000                                      ; F9A8E4  ee 0c 00 00
 	push XIX                                             ; F9A8E8  3c
 	lda xix, (0x7f32:16)                                ; F9A8E9  f1 32 7f 34
@@ -47458,8 +47458,8 @@ sub_F9A8E4:
 	jr z, .LF9A950                                       ; F9A901  66 4d
 	m_res 2, MD16, 0x7f34                                ; F9A903  f1 34 7f b2
 	pushw 0x04                                           ; F9A907  0b 04 00
-	pushw sub_F9A8E4_Data_2@hi16                                           ; F9A90A  0b fb 00
-	pushw sub_F9A8E4_Data_2@lo16                                           ; F9A90D  0b 02 00
+	pushw Draw_RealtimeCommandsClock_2_Data_2@hi16                                           ; F9A90A  0b fb 00
+	pushw Draw_RealtimeCommandsClock_2_Data_2@lo16                                           ; F9A90D  0b 02 00
 	pushw 0x80                                           ; F9A910  0b 80 00
 	call T_F41B18                                        ; F9A913  1d 18 1b f4
 	jr .LF9A937                                          ; F9A917  68 1e
@@ -47469,8 +47469,8 @@ sub_F9A8E4:
 	jr z, .LF9A950                                       ; F9A91E  66 30
 	and (XIX),0xfb                                       ; F9A920  84 3c fb
 	pushw 0x04                                           ; F9A923  0b 04 00
-	pushw sub_F9A8E4_Data@hi16                                           ; F9A926  0b fb 00
-	pushw sub_F9A8E4_Data@lo16                                           ; F9A929  0b 00 00
+	pushw Draw_RealtimeCommandsClock_2_Data@hi16                                           ; F9A926  0b fb 00
+	pushw Draw_RealtimeCommandsClock_2_Data@lo16                                           ; F9A929  0b 00 00
 	pushw 0x80                                           ; F9A92C  0b 80 00
 	call T_F41B18                                        ; F9A92F  1d 18 1b f4
 	call T_F40794                                        ; F9A933  1d 94 07 f4
@@ -47504,7 +47504,7 @@ sub_F9A954:
 	lda xwa, (DL_F0CCAF:24)                              ; F9A984  f2 af cc f0 30
 	push XWA                                             ; F9A989  38
 	call T_DisplayListB_Run_Stack                        ; F9A98A  1d 04 2e f4
-	calr sub_F9A73C                                          ; F9A98E  1e ab fd
+	calr Draw_OnOff                                          ; F9A98E  1e ab fd
 	inc 8,XSP                                            ; F9A991  ef 60
 	inc 4,XSP                                            ; F9A993  ef 64
 .LF9A995:
@@ -48319,7 +48319,7 @@ Paint_MidiOutProgramChange:
 	calr sub_F9B280                                          ; F9B020  1e 5d 02
 	calr sub_F9B2A2                                          ; F9B023  1e 7c 02
 	calr sub_F9B2C2                                          ; F9B026  1e 99 02
-	calr sub_F9B2E2                                          ; F9B029  1e b6 02
+	calr Draw_OffOff                                          ; F9B029  1e b6 02
 	ld (0x2540:16), 0x01                                 ; F9B02C  f1 40 25 00 01
 	lda xbc, (Data_F0D061:24)                            ; F9B031  f2 61 d0 f0 31
 	push XBC                                             ; F9B036  39
@@ -48662,7 +48662,7 @@ sub_F9B2C2:
 	inc 8,XSP                                            ; F9B2DF  ef 60
 	ret                                                  ; F9B2E1  0e
 ; ---------------------------------------------------------------------
-; sub_F9B2E2 -- a screen painter this round REFUSED to name.
+; Draw_OffOff -- a screen painter this round REFUSED to name.
 ;
 ; It hands 2 display list(s) to the interpreter ON THE STACK.
 ;     site 0xF9B30B  list 0xF0D02D-0xF0D036 (9 B, leaves by call)
@@ -48679,7 +48679,7 @@ sub_F9B2C2:
 ;          sub_XXXXXX and states the gap.
 ; Recorded by notes/prom_a_understanding_round7.py --apply.
 ; ---------------------------------------------------------------------
-sub_F9B2E2:
+Draw_OffOff:
 	link XIZ,0xffe9                                      ; F9B2E2  ee 0c e9 ff
 	pushw hl                                             ; F9B2E6  2b
 	pushw de                                             ; F9B2E7  2a
@@ -48820,7 +48820,7 @@ sub_F9B3EF:
 	ld (0x274a:16), bc                                  ; F9B426  f1 4a 27 51
 	call T_Blink_Stop                                    ; F9B42A  1d 24 2e f4
 	calr sub_F9B2A2                                      ; F9B42E  1e 71 fe
-	calr sub_F9B2E2                                      ; F9B431  1e ae fe
+	calr Draw_OffOff                                      ; F9B431  1e ae fe
 	inc 8,XSP                                            ; F9B434  ef 60
 .LF9B436:
 	popw de                                              ; F9B436  4a
@@ -48868,7 +48868,7 @@ sub_F9B43B:
 	call T_Blink_Stop                                    ; F9B48F  1d 24 2e f4
 	calr sub_F9B2A2                                      ; F9B493  1e 0c fe
 	calr sub_F9B2C2                                      ; F9B496  1e 29 fe
-	calr sub_F9B2E2                                      ; F9B499  1e 46 fe
+	calr Draw_OffOff                                      ; F9B499  1e 46 fe
 	pop XIX                                              ; F9B49C  5c
 	popw hl                                              ; F9B49D  4b
 	unlk XIZ                                             ; F9B49E  ee 0d
@@ -48957,7 +48957,7 @@ sub_F9B51B:
 	sll bc, 0x07                                         ; F9B574  d9 ee 07
 	add BC,DE                                            ; F9B577  da 81
 	ld (0x274a:16), bc                                  ; F9B579  f1 4a 27 51
-	calr sub_F9B2E2                                      ; F9B57D  1e 62 fd
+	calr Draw_OffOff                                      ; F9B57D  1e 62 fd
 .LF9B580:
 	call T_Blink_Stop                                    ; F9B580  1d 24 2e f4
 .LF9B584:
@@ -49020,7 +49020,7 @@ sub_F9B59E:
 	jr z, .LF9B61C                                       ; F9B614  66 06
 .LF9B616:
 	calr sub_F9B2A2                                      ; F9B616  1e 89 fc
-	calr sub_F9B2E2                                      ; F9B619  1e c6 fc
+	calr Draw_OffOff                                      ; F9B619  1e c6 fc
 .LF9B61C:
 	ld C,(XIX)                                           ; F9B61C  84 23
 	ld (0x2740:16), c                                   ; F9B61E  f1 40 27 43
@@ -83603,8 +83603,8 @@ KeyValueList_A16:
 	.short 0x10bb, 0x017f, 0x0010, 0x00ff, 0x0310, 0x017f, 0x0510, 0x017f  ; FAFFDC
 	.short 0x0610, 0x017f, 0x0710, 0x017f, 0x0810, 0x017f, 0x0b10, 0x017f  ; FAFFEC
 	.short	0x0a10, 0x01ff  ; FAFFFC
-sub_F9A8E4_Data:	.short	0x0910
-sub_F9A8E4_Data_2:	.short	0x017f, 0x1830, 0x0101, 0x1a30, 0x013f
+Draw_RealtimeCommandsClock_2_Data:	.short	0x0910
+Draw_RealtimeCommandsClock_2_Data_2:	.short	0x017f, 0x1830, 0x0101, 0x1a30, 0x013f
 	.short 0x1930, 0x013f, 0x10ad, 0x017f, 0x10ae, 0x017f  ; FB000C
 	.short 0xffff, 0xffff, 0xffff, 0xffff            ; FB0018  terminator
 
@@ -104713,7 +104713,7 @@ Screen_CombinationNaming_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBEF6A  1d 80 2e f4
 	calr Paint_CombinationNaming                                      ; FBEF6E  1e 7d 01
 .LFBEF71:
-	calr sub_FBF10A                                      ; FBEF71  1e 96 01
+	calr Draw_CombinationNaming                                      ; FBEF71  1e 96 01
 .LFBEF74:
 	ret                                                  ; FBEF74  0e
 ; ---------------------------------------------------------------------
@@ -104944,7 +104944,7 @@ Paint_CombinationNaming:
 	call T_DisplayList_Run_Stack                         ; FBF103  1d 00 2e f4
 	inc 8,XSP                                            ; FBF107  ef 60
 	ret                                                  ; FBF109  0e
-sub_FBF10A:
+Draw_CombinationNaming:
 	link XIZ,0xfffc                                      ; FBF10A  ee 0c fc ff
 	pushw hl                                             ; FBF10E  2b
 	push XIX                                             ; FBF10F  3c
@@ -180740,7 +180740,7 @@ Dispatch_FF3980:
 ;          reader multiplies (0x2229) by 4 and nothing else.
 ; ---------------------------------------------------------------------
 Dispatch_FF3A00:
-	.long sub_FF54AA                                 ; FF3A00  [  0]
+	.long Draw_DiskSaveFileNaming                                 ; FF3A00  [  0]
 	.long sub_FF5546                                 ; FF3A04  [  1]
 	.long sub_FF55BE                                 ; FF3A08  [  2]
 	.long sub_FF5621                                 ; FF3A0C  [  3]
@@ -184384,7 +184384,7 @@ PageDispatch_DiskSaveFile:
 	jp (xbc)                                             ; FF54A7  b1 d8
 .LFF54A9:
 	ret                                                  ; FF54A9  0e
-sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
+Draw_DiskSaveFileNaming:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 	push XHL                                             ; FF54AA  3b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF54AB  1d 80 2e f4
 	ld c, (0x207a:16)                                   ; FF54AF  c1 7a 20 23

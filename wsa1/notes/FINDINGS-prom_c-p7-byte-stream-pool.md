@@ -209,7 +209,7 @@ of emulated boot.
 |---|---|---|---|
 | `P7Byte_SendCmd` | `sub_F9A163` | `\n\r[XX]\n\r` | a record's first byte; holds P5 bit 3 low |
 | `P7Byte_SendData` | `sub_F9A31A` | `XX ` | payload |
-| `P7Byte_SendArg` | `sub_F9A4B0` | `[XX] ` | a record's header arguments |
+| `P7Byte_SendArg` | `Draw_NormalTechRemap` | `[XX] ` | a record's header arguments |
 
 `P7Byte_SendData` and `P7Byte_SendArg` are **406 bytes each and differ in exactly TWO
 bytes** — the `calr` displacement at `0xF9A331` against `0xF9A4C7` — so they are the same
