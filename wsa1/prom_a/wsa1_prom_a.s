@@ -172444,7 +172444,9 @@ sub_FE8830:
 .LFE8865:
 	ld a, 0xff:opc                                          ; FE8865  21 ff
 	ret                                                  ; FE8867  0e
-sub_FE8868:
+; EditScreen_EnterDrumEdit: unless refused by sub_FE8830, set EditScreen_Mode bit 0 (DRUM EDIT), (0x601F4D) = (0x601F51),
+;   (0x601F49) = 10, (0x601F75) = 7, (0x601F76) = 8; then the shared tail.
+EditScreen_EnterDrumEdit:
 	m_bit 0, MD24, 0x601f77                              ; FE8868  f2 77 1f 60 c8
 	jr z, .LFE8871                                       ; FE886D  66 02
 	jr .LFE8882                                          ; FE886F  68 11
@@ -172464,7 +172466,9 @@ sub_FE8868:
 	ld (0x601f75:24), 0x07                             ; FE889C  f2 75 1f 60 00 07
 	ld (0x601f76:24), 0x08                             ; FE88A2  f2 76 1f 60 00 08
 	jr .LFE88D3                                          ; FE88A8  68 29
-sub_FE88AA:
+; EditScreen_EnterNoteEdit: clear EditScreen_Mode bit 0 (NOTE EDIT), (0x601F4D) = (0x601F4F), (0x601F49) = (0x601F4B), (0x601F75) = 10,
+;   (0x601F76) = 11; then the tail shared with EditScreen_EnterDrumEdit (FINDINGS-prom_a-screen-module.md section 8).
+EditScreen_EnterNoteEdit:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FE88AA  1d 80 2e f4
 	ld wa, (0x601f4f:24)                                ; FE88AE  d2 4f 1f 60 20
 	ld (0x601f4d:24), wa                                ; FE88B3  f2 4d 1f 60 50
@@ -174456,17 +174460,18 @@ sub_FE9D92:
 .LFE9DA7:
 	bit 0x07,W                                           ; FE9DA7  c8 33 07
 	jr nz, .LFE9DB0                                      ; FE9DAA  6e 04
-	calr sub_FE9DB4                                      ; FE9DAC  1e 05 00
+	calr EditCursor_TickPlus1                                      ; FE9DAC  1e 05 00
 	ret                                                  ; FE9DAF  0e
 .LFE9DB0:
 	calr sub_FE9F74                                      ; FE9DB0  1e c1 01
 	ret                                                  ; FE9DB3  0e
-sub_FE9DB4:
+; EditCursor_TickPlus1: EditCursor_Tick + 1; at 0x5F, EditCursor_NextBeat instead.
+EditCursor_TickPlus1:
 	m_cp_mi8 MB24, EditCursor_Tick, 0x5f                        ; FE9DB4  c2 43 1f 60 3f 5f
 	jr nc, .LFE9DBE                                      ; FE9DBA  6f 02
 	jr .LFE9DC2                                          ; FE9DBC  68 04
 .LFE9DBE:
-	calr sub_FE9E04                                      ; FE9DBE  1e 43 00
+	calr EditCursor_NextBeat                                      ; FE9DBE  1e 43 00
 	ret                                                  ; FE9DC1  0e
 .LFE9DC2:
 	m_add_mi8 MB24, EditCursor_Tick, 0x01                       ; FE9DC2  c2 43 1f 60 38 01
@@ -174475,12 +174480,13 @@ sub_FE9DB4:
 	calr sub_FF0205                                          ; FE9DCE  1e 34 64
 	calr sub_FEA082                                      ; FE9DD1  1e ae 02
 	ret                                                  ; FE9DD4  0e
-sub_FE9DD5:
+; EditCursor_TickPlus5: EditCursor_Tick + 5, clamped to 0x5F; at 0x5F, EditCursor_NextBeat instead.
+EditCursor_TickPlus5:
 	m_cp_mi8 MB24, EditCursor_Tick, 0x5f                        ; FE9DD5  c2 43 1f 60 3f 5f
 	jr nc, .LFE9DDF                                      ; FE9DDB  6f 02
 	jr .LFE9DE3                                          ; FE9DDD  68 04
 .LFE9DDF:
-	calr sub_FE9E04                                      ; FE9DDF  1e 22 00
+	calr EditCursor_NextBeat                                      ; FE9DDF  1e 22 00
 	ret                                                  ; FE9DE2  0e
 .LFE9DE3:
 	m_add_mi8 MB24, EditCursor_Tick, 0x05                       ; FE9DE3  c2 43 1f 60 38 05
@@ -174494,7 +174500,9 @@ sub_FE9DD5:
 sub_FE9E00:
 	calr sub_FEA082                                      ; FE9E00  1e 7f 02
 	ret                                                  ; FE9E03  0e
-sub_FE9E04:
+; EditCursor_NextBeat: tick 0 and beat + 1, or beat 0 and measure + 1 once the beat reaches EditCursor_BeatsInMeasure;
+;   first, when (0x601F54) reaches (0x601F75) * 0x60 - 1, it scrolls instead.
+EditCursor_NextBeat:
 	ld c, (0x601f75:24)                                 ; FE9E04  c2 75 1f 60 23
 	mul C,0x60                                           ; FE9E09  cb 08 60
 	dec 1,BC                                             ; FE9E0C  d9 69
@@ -174519,7 +174527,7 @@ sub_FE9E04:
 	calr sub_FE955D                                          ; FE9E48  1e 12 f7
 	ret                                                  ; FE9E4B  0e
 .LFE9E4C:
-	calr sub_FE9F23                                      ; FE9E4C  1e d4 00
+	calr EditCursor_BeatsInMeasure                                      ; FE9E4C  1e d4 00
 	cp A,0xff                                            ; FE9E4F  c9 cf ff
 	jr z, .LFE9E5B                                       ; FE9E52  66 07
 	cp (EditCursor_Beat:24), a                               ; FE9E54  c2 41 1f 60 f9
@@ -174594,7 +174602,9 @@ sub_FE9EDA:
 	add WA,HL                                            ; FE9F1B  db 80
 	ld (0x601f54:24), wa                                ; FE9F1D  f2 54 1f 60 50
 	ret                                                  ; FE9F22  0e
-sub_FE9F23:
+; EditCursor_BeatsInMeasure: A = the beat count of EditCursor_Measure, looked up in the table at 0x601F5F
+;   ((0x601F76) entries, from measure (0x601F5D)); 0xFF when not found.
+EditCursor_BeatsInMeasure:
 	ld wa, (EditCursor_Measure:24)                                ; FE9F23  d2 3f 1f 60 20
 	sub wa, (0x601f5d:24)                            ; FE9F28  d2 5d 1f 60 a0
 	inc 1,WA                                             ; FE9F2D  d8 61
@@ -175740,12 +175750,13 @@ sub_FEAA94:
 .LFEAAA9:
 	bit 0x07,W                                           ; FEAAA9  c8 33 07
 	jr nz, .LFEAAB2                                      ; FEAAAC  6e 04
-	calr sub_FEAAB6                                      ; FEAAAE  1e 05 00
+	calr EditCursor_MeasurePlus10                                      ; FEAAAE  1e 05 00
 	ret                                                  ; FEAAB1  0e
 .LFEAAB2:
-	calr sub_FEAAE0                                      ; FEAAB2  1e 2b 00
+	calr EditCursor_MeasureMinus10                                      ; FEAAB2  1e 2b 00
 	ret                                                  ; FEAAB5  0e
-sub_FEAAB6:
+; EditCursor_MeasurePlus10: EditCursor_Measure + 10, clamped to 999.
+EditCursor_MeasurePlus10:
 	ld wa, (EditCursor_Measure:24)                                ; FEAAB6  d2 3f 1f 60 20
 	cp WA,0x03e7                                         ; FEAABB  d8 cf e7 03
 	jr ugt, .LFEAADC                                     ; FEAABF  6b 1b
@@ -175760,7 +175771,8 @@ sub_FEAADB:
 .LFEAADC:
 	calr sub_FE9CFC_Nop                                          ; FEAADC  1e 60 d5
 	ret                                                  ; FEAADF  0e
-sub_FEAAE0:
+; EditCursor_MeasureMinus10: EditCursor_Measure - 10, floored at 1.
+EditCursor_MeasureMinus10:
 	ld wa, (EditCursor_Measure:24)                                ; FEAAE0  d2 3f 1f 60 20
 	cp wa, 0x01:i3                                         ; FEAAE5  d8 d9
 	jr z, .LFEAB0A                                       ; FEAAE7  66 21
@@ -175789,7 +175801,7 @@ sub_FEAB0E:
 .LFEAB23:
 	bit 0x07,W                                           ; FEAB23  c8 33 07
 	jr nz, .LFEAB2C                                      ; FEAB26  6e 04
-	calr sub_FE9DD5                                      ; FEAB28  1e aa f2
+	calr EditCursor_TickPlus5                                      ; FEAB28  1e aa f2
 	ret                                                  ; FEAB2B  0e
 .LFEAB2C:
 	calr sub_FE9F95                                      ; FEAB2C  1e 66 f4

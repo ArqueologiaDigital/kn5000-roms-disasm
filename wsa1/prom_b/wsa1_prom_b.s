@@ -1787,8 +1787,8 @@
 	.set	ShowScreen_DrumEditPartSelect, 0xFE83A3
 	.set	ScreenLeave_NoteEditPartSelect, 0xFE8564
 	.set	sub_FE8565, 0xFE8565
-	.set	sub_FE8868, 0xFE8868
-	.set	sub_FE88AA, 0xFE88AA
+	.set	EditScreen_EnterDrumEdit, 0xFE8868
+	.set	EditScreen_EnterNoteEdit, 0xFE88AA
 	.set	sub_FE8C1F, 0xFE8C1F
 	.set	sub_FE8C3A, 0xFE8C3A
 	.set	T_F402D8_Nop, 0xFE8CB3
@@ -87905,7 +87905,7 @@ T_ShowScreen_NoteEditPartSelect:	jp ShowScreen_NoteEditPartSelect  ; F402BC (was
 T_ScreenLeave_NoteEditPartSelect:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
 T_F402C4:	jp sub_FE8565  ; -> prom_a 0x68565
 T_ScreenLeave_NoteEditPartSelect_2:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
-T_F402CC:	jp sub_FE88AA  ; -> prom_a 0x688AA
+T_F402CC:	jp EditScreen_EnterNoteEdit  ; -> prom_a 0x688AA
 T_F402D0:	jp sub_FE8C3A  ; -> prom_a 0x68C3A
 T_F402D4:	jp sub_FE9A33  ; -> prom_a 0x69A33
 T_F402D8:	jp T_F402D8_Nop  ; -> prom_a 0x68CB3
@@ -87915,7 +87915,7 @@ T_ShowScreen_DrumEditPartSelect:	jp ShowScreen_DrumEditPartSelect  ; F402DC (was
 T_ScreenLeave_DrumEditPartSelect:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402E4:	jp sub_FE8565  ; -> prom_a 0x68565
 T_ScreenLeave_DrumEditPartSelect_2:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
-T_F402EC:	jp sub_FE8868  ; -> prom_a 0x68868
+T_F402EC:	jp EditScreen_EnterDrumEdit  ; -> prom_a 0x68868
 T_F402F0:	jp sub_FE8C1F  ; -> prom_a 0x68C1F
 T_F402F4:	jp sub_FE9B8D  ; -> prom_a 0x69B8D
 T_ScreenLeave_DrumEditPartSelect_3:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045

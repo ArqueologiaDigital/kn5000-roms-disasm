@@ -501,4 +501,12 @@ RENAMES = [
     ("sub_FB741A", "SysExRx_SetRunTimeSize"),
     ("sub_FB4B7D", "SysExTx_EmitStagedParams"),
     ("sub_FB7270", "StagedQueue_ReadRecord"),
+    ("sub_FE88AA", "EditScreen_EnterNoteEdit"),
+    ("sub_FE8868", "EditScreen_EnterDrumEdit"),
+    ("sub_FE9DB4", "EditCursor_TickPlus1"),
+    ("sub_FE9DD5", "EditCursor_TickPlus5"),
+    ("sub_FE9E04", "EditCursor_NextBeat"),
+    ("sub_FE9F23", "EditCursor_BeatsInMeasure"),
+    ("sub_FEAAB6", "EditCursor_MeasurePlus10"),
+    ("sub_FEAAE0", "EditCursor_MeasureMinus10"),
 ]

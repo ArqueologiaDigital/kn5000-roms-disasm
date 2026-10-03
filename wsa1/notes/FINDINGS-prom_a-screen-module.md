@@ -217,10 +217,10 @@ the variant strap.  Its only four writers (two `set 0`, two `res 0`; the other 4
 |---|---|---|
 | `ShowScreen_NoteEditPartSelect` (0xFE836F) | cleared | paints `DisplayList_NoteEditPartSelect` ("NOTE EDIT ... PART SELECT") |
 | `ShowScreen_DrumEditPartSelect` (0xFE83A3) | set | paints the DRUM EDIT part-select list |
-| `sub_FE88AA` | cleared | loads (0x601F4D) from (0x601F4F), (0x601F49) from (0x601F4B), (0x601F75) = 10, (0x601F76) = 11 |
-| `sub_FE8868` | set | loads (0x601F4D) from (0x601F51), (0x601F49) = 10, (0x601F75) = 7, (0x601F76) = 8 |
+| `EditScreen_EnterNoteEdit` | cleared | loads (0x601F4D) from (0x601F4F), (0x601F49) from (0x601F4B), (0x601F75) = 10, (0x601F76) = 11 |
+| `EditScreen_EnterDrumEdit` | set | loads (0x601F4D) from (0x601F51), (0x601F49) = 10, (0x601F75) = 7, (0x601F76) = 8 |
 
-`sub_FE88AA` and `sub_FE8868` then share the tail at 0xFE88D3, which (among much else) positions
+`EditScreen_EnterNoteEdit` and `EditScreen_EnterDrumEdit` then share the tail at 0xFE88D3, which (among much else) positions
 the cursor below: the measure from (0x3552) when (0x207D) is 0x26 or 0x29 (otherwise kept), measure 1 if loading that
 position fails (`BStore_ErrorCode` non-zero), then beat 0 and tick 0.  So the two pointer tables that bit
 selects (`ScreenDrawPtrs_FEF9FA` / `_FEFA2A`) are the note-edit and drum-edit layouts of one editor.
@@ -230,15 +230,15 @@ NOTE EDIT text would show:
 
 | address | width | holds | evidence |
 |---|---|---|---|
-| 0x601F3F | word | measure, 1..999 | `sub_FEAAB6` adds 10 and clamps to 0x3E7; `sub_FEAAE0` subtracts 10 and floors at 1; `sub_FE9E04` increments it when the beat wraps |
-| 0x601F41 | word | beat within the measure, from 0 | `sub_FE9E04`: compared with the measure's beat count from `sub_FE9F23` (a lookup in the table at 0x601F5F); below it, +1; otherwise 0 and the measure +1 |
-| 0x601F43 | byte | tick within the beat, 0..95 | `sub_FE9DB4` adds 1 and `sub_FE9DD5` adds 5 and clamps to 0x5F; at 0x5F either one calls `sub_FE9E04`, which sets it to 0 and moves the beat on |
+| 0x601F3F | word | measure, 1..999 | `EditCursor_MeasurePlus10` adds 10 and clamps to 0x3E7; `EditCursor_MeasureMinus10` subtracts 10 and floors at 1; `EditCursor_NextBeat` increments it when the beat wraps |
+| 0x601F41 | word | beat within the measure, from 0 | `EditCursor_NextBeat`: compared with the measure's beat count from `EditCursor_BeatsInMeasure` (a lookup in the table at 0x601F5F); below it, +1; otherwise 0 and the measure +1 |
+| 0x601F43 | byte | tick within the beat, 0..95 | `EditCursor_TickPlus1` adds 1 and `EditCursor_TickPlus5` adds 5 and clamps to 0x5F; at 0x5F either one calls `EditCursor_NextBeat`, which sets it to 0 and moves the beat on |
 
 96 ticks per beat is the KN5000's song-clock resolution as well (`SEQ_BEAT_TICK`,
 `../../technics-docs/hdae5000-filesystem.md`).  **Not established:** what (0x601F75) / (0x601F76)
-count (10 / 11 in note edit, 7 / 8 in drum edit; `sub_FE9E04` multiplies (0x601F75) by 0x60, so it
+count (10 / 11 in note edit, 7 / 8 in drum edit; `EditCursor_NextBeat` multiplies (0x601F75) by 0x60, so it
 is a span in beats), what (0x601F49)-(0x601F51) hold, and what `sub_FE8830`'s track types 0x28 /
-0x29 / 0x30 mean when `sub_FE8868` checks them before entering drum edit.
+0x29 / 0x30 mean when `EditScreen_EnterDrumEdit` checks them before entering drum edit.
 
 Census of every 0x601F00-0x601F7D operand with its form and routine:
 `python3 notes/wsa1_601f_census.py` (in the repository's wsa1/ directory).
