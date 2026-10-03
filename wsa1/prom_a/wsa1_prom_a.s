@@ -40820,6 +40820,14 @@ ScreenLeave_PanelSwLedCheck:
 ; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
 ;          on button, and the slot exists to keep the three-method shape.
 ; Was `sub_F959BE`.
+; The DEBUG MONITOR's address editor clears one hex digit of the 24-bit dump address before ORing
+; in the stepped digit (SoftKeyCol2..6_DebugMonitor): bits 16-19, 12-15, 8-11, 4-7, 0-3.
+	.equ MASK_CLEAR_BITS16_19, 0x00F0FFFF
+	.equ MASK_CLEAR_BITS12_15, 0x00FF0FFF
+	.equ MASK_CLEAR_BITS8_11, 0x00FFF0FF
+	.equ MASK_CLEAR_BITS4_7, 0x00FFFF0F
+	.equ MASK_CLEAR_BITS0_3, 0x00FFFFF0	; SoftKeyCol6; was spelled BUILD_TAG, the label that sits at 0xFFFFF0
+
 ; ---------------------------------------------------------------------
 ScreenButton_PanelSwLedCheck:
 	ret                                                  ; F959BE  0e
@@ -40954,7 +40962,7 @@ SoftKeyCol2_DebugMonitor:   ; entry: screen button-handler table
 	extz XBC                                             ; F95AAD  e9 12
 	ld (xiz-4), xbc                                      ; F95AAF  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95AB2  e1 46 28 20
-	and XWA,0x00f0ffff                                   ; F95AB6  e8 cc ff ff f0 00
+	and XWA,MASK_CLEAR_BITS16_19                                   ; F95AB6  e8 cc ff ff f0 00
 	ld (xiz-8), xwa                                      ; F95ABC  be f8 60
 	sll xbc, 16                                        ; F95ABF  e9 ee 00
 	m_or_rm MLD+r6, 0xf8, r1                             ; F95AC2  ae f8 e1
@@ -40991,7 +40999,7 @@ SoftKeyCol3_DebugMonitor:   ; entry: screen button-handler table
 	extz XBC                                             ; F95B07  e9 12
 	ld (xiz-4), xbc                                      ; F95B09  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95B0C  e1 46 28 20
-	and XWA,SoftKeyCol3_DebugMonitor_Data                                   ; F95B10  e8 cc ff 0f ff 00
+	and XWA,MASK_CLEAR_BITS12_15                                   ; F95B10  e8 cc ff 0f ff 00
 	or XBC,XWA                                           ; F95B16  e8 e1
 	ld (0x2846:16), xbc                                 ; F95B18  f1 46 28 61
 	calr DebugMonitor_PrintDumpPage                                          ; F95B1C  1e 0e 01
@@ -41026,7 +41034,7 @@ SoftKeyCol4_DebugMonitor:   ; entry: screen button-handler table
 	extz XBC                                             ; F95B5A  e9 12
 	ld (xiz-4), xbc                                      ; F95B5C  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95B5F  e1 46 28 20
-	and XWA,0x00fff0ff                                   ; F95B63  e8 cc ff f0 ff 00
+	and XWA,MASK_CLEAR_BITS8_11                                   ; F95B63  e8 cc ff f0 ff 00
 	or XBC,XWA                                           ; F95B69  e8 e1
 	ld (0x2846:16), xbc                                 ; F95B6B  f1 46 28 61
 	calr DebugMonitor_PrintDumpPage                                            ; F95B6F  1e bb 00
@@ -41061,7 +41069,7 @@ SoftKeyCol5_DebugMonitor:   ; entry: screen button-handler table
 	extz XBC                                             ; F95BAD  e9 12
 	ld (xiz-4), xbc                                      ; F95BAF  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95BB2  e1 46 28 20
-	and XWA,0x00ffff0f                                   ; F95BB6  e8 cc 0f ff ff 00
+	and XWA,MASK_CLEAR_BITS4_7                                   ; F95BB6  e8 cc 0f ff ff 00
 	or XBC,XWA                                           ; F95BBC  e8 e1
 	ld (0x2846:16), xbc                                 ; F95BBE  f1 46 28 61
 	calr DebugMonitor_PrintDumpPage                                            ; F95BC2  1e 68 00
@@ -41094,7 +41102,7 @@ SoftKeyCol6_DebugMonitor:   ; entry: screen button-handler table
 	extz XBC                                             ; F95BF7  e9 12
 	ld (xiz-4), xbc                                      ; F95BF9  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95BFC  e1 46 28 20
-	and XWA,BUILD_TAG                                   ; F95C00  e8 cc f0 ff ff 00
+	and XWA,MASK_CLEAR_BITS0_3                          ; F95C00  e8 cc f0 ff ff 00
 	or XBC,XWA                                           ; F95C06  e8 e1
 	ld (0x2846:16), xbc                                 ; F95C08  f1 46 28 61
 	calr DebugMonitor_PrintDumpPage                                            ; F95C0C  1e 1e 00
@@ -180960,7 +180968,7 @@ DisplayList_NoteEditTrackSong:
 	.byte 0x05, 0x00, 0xD4, 0x00, 0x22, 0x00, 0xEC, 0x00  ; FF0FF2
 	.byte 0x0A, 0x0A                               ; FF0FFA  op 0A, 10 bytes, handler 0xF31A75
 	.byte	0x2D, 0x00, 0xD4  ; FF0FFC
-SoftKeyCol3_DebugMonitor_Data:	.byte	0x00, 0x4A, 0x00, 0xEC, 0x00
+	.byte	0x00, 0x4A, 0x00, 0xEC, 0x00
 	.byte 0x0A, 0x0A                               ; FF1004  op 0A, 10 bytes, handler 0xF31A75
 	.byte 0x55, 0x00, 0xD4, 0x00, 0x72, 0x00, 0xEC, 0x00  ; FF1006
 	.byte 0x0A, 0x0A                               ; FF100E  op 0A, 10 bytes, handler 0xF31A75
