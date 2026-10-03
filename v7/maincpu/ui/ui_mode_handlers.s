@@ -2364,7 +2364,7 @@ BitmapFinpic_ByteData:
 	cp	hl, 0:i3
 	ret	z
 	ld	a, (SWBTWR_EVENT_TYPE:16)
-	cp	a, (35998:16)
+	cp	a, (PART_SELECT:16)
 	ret	nz
 	cp	(SWBTWR_PAYLOAD_1:16), 0
 	ret	nz
@@ -11991,18 +11991,18 @@ VariScreen_HandleShow:
 	ld	(xsp+24), xhl
 	ld	xwa, (xsp+24)
 	ld	(xsp+4), xwa
-	ld	a, (35998:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+31), l
-	ld	a, (35998:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
-	ld	(xwa+2), (35998)	; differs from v10 here and llvm-objdump cannot read it
+	ld	(xwa+2), (PART_SELECT)	; differs from v10 here and llvm-objdump cannot read it
 	call	SndParam_FetchOscTableEntry
 	ld	xhl, (xsp+24)
 	ld	xde, (xhl+56)
@@ -12092,18 +12092,18 @@ VariScreen_HandlePaint:
 	pushw	247
 	ld	xde, VariScreen_HandlePaint_Str_SOUND
 	call	DrawString
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+31), l
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
-	ld	(xwa+2), (35998)
+	ld	(xwa+2), (PART_SELECT)
 	call	SndParam_FetchOscTableEntry
 	ld	a, (xsp+28)
 	extz	wa

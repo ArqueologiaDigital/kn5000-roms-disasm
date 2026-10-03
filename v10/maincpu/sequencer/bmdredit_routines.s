@@ -697,7 +697,7 @@ BmDrEdit_SaveSeqState_Apply:
 	call UI_PostModeChangeEvent
 	ldmm16 0x2963, 3407
 	call SeqVoice_FindSingleActive
-	ldmm8 7512, 0x8d3a
+	ldmm8 7512, PART_SELECT
 	ret
 
 BmDrEdit_CheckScrollBusy:

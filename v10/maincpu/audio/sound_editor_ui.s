@@ -9881,7 +9881,7 @@ Data_UnknownBlock_Join:
 	ld	h, (1633:16)
 	dec	1, h
 	ld	(0x90eb:16), h
-	ld	a, (0x8d3a:16)
+	ld	a, (PART_SELECT:16)
 	ld	(0x90ec:16), a
 	ld	xwa, 0x90ea
 	call	SndParam_ApplyProgramChange

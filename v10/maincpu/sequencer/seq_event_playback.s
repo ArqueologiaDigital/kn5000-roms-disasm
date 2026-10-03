@@ -1471,7 +1471,7 @@ Voice_SlotTemplateData:
 
 AccPlay_SetupSoundParams:
 	ld a, 0x17:opc
-	ld (0x8d3a:16), a
+	ld (PART_SELECT:16), a
 	ld e, 0x90:opc
 	ld d, 0x10:opc
 	ld a, 0x17:opc

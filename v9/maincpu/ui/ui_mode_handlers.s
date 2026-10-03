@@ -2334,7 +2334,7 @@ BitmapFinpic_ByteData:
 	cp	hl, 0:i3
 	ret	z
 	ld	a, (SWBTWR_EVENT_TYPE:16)
-	cp a, (36154:16)
+	cp a, (PART_SELECT:16)
 	ret	nz
 	cp	(SWBTWR_PAYLOAD_1:16), 0
 	ret	nz
@@ -11934,12 +11934,12 @@ VariScreen_HandleShow:
 	ld (xsp + 24), xhl
 	ld xwa, (xsp + 24)
 	ld (xsp + 4), xwa
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ld (xsp + 31), l
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode
@@ -12036,12 +12036,12 @@ VariScreen_HandlePaint:
 	pushw 0xf7
 	ld xde, VariScreen_HandlePaint_Str_SOUND
 	call DrawString
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ld (xsp + 31), l
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode

@@ -1796,7 +1796,7 @@ PerfMode_Evt04_VolumeHandler:
 	ld	xhl, (xix+hl)
 	ld	(xhl), a
 	pop	xix
-	ldb_d8	e, (0x8c9e)
+	ldb_d8	e, (PART_SELECT)
 	ld	d, 3:opc
 	ld	w, 127:opc
 	pushw	de
@@ -6921,7 +6921,7 @@ PerfMode_Handler_EvtB_Helper2:
 	ld (0x367a:16), 0x01
 	call PerfMode_Handler_EvtB_Helper2_Helper4
 	call PortConfig_Handler_0_Helper4
-	ld a, (0x8c9e:16)
+	ld a, (PART_SELECT:16)
 	ld (0x0d66:16), a
 	call PerfMode_Handler_EvtB_Helper2_Helper3
 	call PerfMode_Handler_EvtB_Helper2_Helper5
@@ -7447,7 +7447,7 @@ PerfMode_Handler_EvtB_Helper2_Helper3:
 	cp A,0xff
 	jrl z, .Lc_efa734
 PortConfig_DataTable_A_Sub:
-	ld (0x8c9e:16), a
+	ld (PART_SELECT:16), a
 	ld E,A
 	ld D, 0xff:opc
 	ldw WA, 0x1090
@@ -12329,7 +12329,7 @@ SubCPU_ToneParamDisplay_Skip:
 SubCPU_ToneParamDisplay_Skip2:
 	ld	a, (3415:16)
 	ld	(xix+1), a
-	ld	a, (35998:16)
+	ld	a, (PART_SELECT:16)
 	ld	(xix+2), a
 	ld	l, (4380:16)
 	exts	hl

@@ -121,7 +121,7 @@ BitMapOut_ByteData_RenderB:
 	cp	xhl, TITLE_TEST3
 	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (SWBTWR_EVENT_TYPE:16)
-	cp	a, (35998:16)
+	cp	a, (PART_SELECT:16)
 	jrl	nz, BitMapOut_ByteData_RenderB_Epilogue
 	cp	(SWBTWR_PAYLOAD_1:16), 0
 	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
@@ -131,18 +131,18 @@ BitMapOut_ByteData_RenderB:
 	call	GetTitleNow
 	cp	xhl, TITLE_SVARI
 	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
-	ld	a, (35998:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+3), l
-	ld	a, (35998:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
-	ld (xwa+2), (35998)
+	ld (xwa+2), (PART_SELECT)
 	call	SndParam_ResolveVoiceEntry
 	ld	a, (xsp+0:8)
 	cp	a, 13
@@ -184,18 +184,18 @@ BitMapOut_ByteData_RenderD:
 	jr nz, BitMapOut_ByteData_RenderD_Epilogue
 	cp (SWBTWR_PAYLOAD_1:16), 16	; (at +1) differs from v10 here
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
-	ld	a, (35998:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+3), l
-	ld	a, (35998:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
-	ld (xwa+2), (35998)	; (at +3) differs from v10 here
+	ld (xwa+2), (PART_SELECT)	; (at +3) differs from v10 here
 	call	SndParam_ResolveVoiceEntry
 	ld	a, (xsp+0:8)
 	cp	a, 13

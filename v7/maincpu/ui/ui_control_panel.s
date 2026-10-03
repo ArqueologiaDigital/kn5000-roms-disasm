@@ -2058,7 +2058,7 @@ CtrlPanel_HandleKeyInput:
 CtrlPanel_HandleKey10:
 	call	DkMdlyPly_CheckState_Helper2
 	ld	xde, 0:i3
-	ld	e, (35998:16)
+	ld	e, (PART_SELECT:16)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_PART_SELECT
 	call	ApPostEvent
@@ -2068,7 +2068,7 @@ PartSelect_UpdateDisplayState:
 	and	a, 1
 	cp	a, 0:i3
 	scc8	z, e
-	ld	(35998:16), e
+	ld	(PART_SELECT:16), e
 	extz	de
 	pushw	255
 	ldw	wa, 144
@@ -2742,7 +2742,7 @@ MainBitControl_Code_Join:
 	jr MainTitle_SendEventDone
 
 MainPmanCtrl_HandleA0:
-	ld (xsp+6), (35998)
+	ld (xsp+6), (PART_SELECT)
 	cp xde, 16
 	jr c, MainPmanCtrl_StorePartSelect
 	cp xde, 21
@@ -2750,7 +2750,7 @@ MainPmanCtrl_HandleA0:
 	cp xde, 22
 	jr nz, MainPmanCtrl_CheckSoundParam
 MainPmanCtrl_StorePartSelect:
-	ld	(35998:16), e
+	ld	(PART_SELECT:16), e
 	jr	MainPmanCtrl_LoadPartSelect
 MainPmanCtrl_CheckSoundParam:
 	ld	xwa, 16640
@@ -2760,13 +2760,13 @@ MainPmanCtrl_CheckSoundParam:
 	cp	l, 5:i3
 	jr	nz, MainPmanCtrl_SetPartSelectZero
 MainPmanCtrl_SetPartSelectOne:
-	ld	(35998:16), 1
+	ld	(PART_SELECT:16), 1
 	ld	e, 1:opc
 	jr	MainPmanCtrl_CompareAndUpdate
 MainPmanCtrl_SetPartSelectZero:
-	ld	(35998:16), 0
+	ld	(PART_SELECT:16), 0
 MainPmanCtrl_LoadPartSelect:
-	ld	e, (35998:16)
+	ld	e, (PART_SELECT:16)
 MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp+6)
 	jr z, MainTitle_SendEventDone
@@ -2905,11 +2905,11 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ld	l, (35998:16)
+	ld	l, (PART_SELECT:16)
 	extz	hl
 	ret
 GetCurrentPartSelect:
-	ld	l, (35998:16)
+	ld	l, (PART_SELECT:16)
 	ret
 UI_PostPartChangeEvent:
 	dec 2, xsp

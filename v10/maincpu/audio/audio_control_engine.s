@@ -792,7 +792,7 @@ FileIO_BytecodeData_Code_Entry6:
 	lda	xbc, (FileIO_BytecodeData_Data_12:24)
 	ld	a, (xbc+hl)
 	ld	(xiz+2), a
-	ld	(36154:16), a
+	ld	(PART_SELECT:16), a
 	ld	(xiz+3), 255
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
@@ -851,7 +851,7 @@ FileIO_BytecodeData_Code_Epilogue18:
 	jr	z, FileIO_BytecodeData_Code_Skip55
 	cp	a, 19
 	jr	z, FileIO_BytecodeData_Code_Skip55
-	ld	a, (36154:16)
+	ld	a, (PART_SELECT:16)
 	cp	a, 15
 	jr	ule, FileIO_BytecodeData_Code_Skip56
 FileIO_BytecodeData_Code_Skip55:
@@ -862,7 +862,7 @@ FileIO_BytecodeData_Code_Skip56:
 	cp	a, 0:i3
 	jr	z, FileIO_BytecodeData_Code_Entry7
 	.byte 0xf1, 0x92, 0x8e, 0xbd
-	ld	a, (36154:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 93
 	call	SndParam_LookupViaEncode
@@ -874,7 +874,7 @@ FileIO_BytecodeData_Code_Skip56:
 	ld	(xbc), 0
 	jr	FileIO_BytecodeData_Code_Join10
 FileIO_BytecodeData_Code_Skip57:
-	ld	a, (36154:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xhl, (37261:16)
 	extz	xwa
@@ -1227,12 +1227,12 @@ FileIO_BytecodeData_Code_Helper2:
 	ret
 FileIO_BytecodeData_Code_Helper3:
 	dec	6, xsp
-	ld	a, (36154:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
 	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
-	ld	a, (36154:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
 	call	SndParam_LookupViaEncode
@@ -1494,7 +1494,7 @@ NakaData_WidgetInit1_Code_Join:
 ExtDev_SndParam_Write98_Block:
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8d3a:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 1539
 	call	SndParam_LookupViaEncode
@@ -1591,16 +1591,16 @@ ExtDev_SndParam_ConfigAndWrite:
 	and	a, (xiz+2)
 	jr	z, NakaData_WidgetInit1_Code_Epilogue5
 	set	1, (37113:16)
-	ld	(xiz), (0x8d3a)
+	ld	(xiz), (PART_SELECT)
 	ld	(xiz+1), 5
-	ld	a, (0x8d3a:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 93
 	call	SndParam_LookupViaEncode
 	lda	xbc, (xiz+2)
 	cp	hl, 0:i3
 	jr	nz, NakaData_WidgetInit1_Code_Skip6
-	ld	a, (0x8d3a:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xde, (0x918d:16)
 	extz	xwa

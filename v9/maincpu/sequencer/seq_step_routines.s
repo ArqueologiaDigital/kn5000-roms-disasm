@@ -2578,7 +2578,7 @@ SeqStep_PlaybackDecrCount:
 	jr nz, SeqStep_PlaybackCheck10408
 	bit_erpb 0xfb, 0x04
 	jr z, SeqStep_PlaybackCheckFill
-	cpw (0x28b4:16), 0
+	cpw (SEQ_ACTIVE_PARTS:16), 0
 	jr nz, SeqStep_PlaybackCallFill
 
 SeqStep_PlaybackCheckFill:
@@ -2598,7 +2598,7 @@ SeqStep_PlaybackCheckBeat:
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackCheckPattern:
-	cpw (0x28b4:16), 0
+	cpw (SEQ_ACTIVE_PARTS:16), 0
 	jr z, SeqStep_PlaybackNoAction
 	call SeqNote_ProcessNoteOn
 	jr SeqStep_PlaybackResultDispatch
@@ -2642,7 +2642,7 @@ SeqStep_PlaybackCheckBeat2:
 SeqStep_PlaybackCheckTiming:
 	cpw (0x28aa:16), 0
 	jr nz, SeqStep_PlaybackCallPattern
-	cpw (0x28b4:16), 0
+	cpw (SEQ_ACTIVE_PARTS:16), 0
 	jr z, SeqStep_PlaybackNoAction
 	bit 0, (0x28c5:16)
 	jr z, SeqStep_PlaybackNoAction

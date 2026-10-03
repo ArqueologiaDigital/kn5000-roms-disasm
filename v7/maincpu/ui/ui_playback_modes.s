@@ -1629,7 +1629,7 @@ DkMdlyPly_HandleResult:
 	add	wa, wa
 	lda	xbc, (DkMdlyPly_HandleResult_Data:24)
 	ld	wa, (xbc+wa)
-	ld	(35998:16), a
+	ld	(PART_SELECT:16), a
 	ld	e, a
 	extz	de
 	pushw	255

@@ -8,14 +8,14 @@
 ; =============================================================================
 
 AudioInit_ConfigStereoVoice:
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	lda xbc, (AudioInit_ChannelMapA:24)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x3
 	jrl c, AudioInit_VoiceNotConfigured
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	lda xbc, (AudioInit_ChannelMapA:24)
 	extz xwa
@@ -206,7 +206,7 @@ AudioInit_CheckSoundGroup:
 	jr nz, AudioInit_GroupFallbackDefault
 
 AudioInit_LoadGroupVoice:
-	ld c, (0x8d3a:16)
+	ld c, (PART_SELECT:16)
 	extz bc
 	lda xde, (AudioInit_ChannelMapA:24)
 	ld	c, (xde+bc)
@@ -259,7 +259,7 @@ AudioInit_GroupFallbackDefault:
 AudioInit_CheckSoundGroup51:
 	cp (CURRENT_TITLE:16), 81
 	jr nz, AudioInit_G51FallbackDefault
-	ld c, (0x8d3a:16)
+	ld c, (PART_SELECT:16)
 	extz bc
 	lda xde, (AudioInit_ChannelMapB:24)
 	ld	c, (xde+bc)
@@ -321,7 +321,7 @@ AudioInit_CheckMixMode:
 	jr nz, AudioInit_MixFallbackDefault
 
 AudioInit_LoadAndConfigure:
-	ld c, (0x8d3a:16); LD C, (238D3Ah) - 24-bit addressing mode
+	ld c, (PART_SELECT:16); LD C, (238D3Ah) - 24-bit addressing mode
 	extz bc
 	lda xde, (AudioInit_ChannelMapB:24)
 	ld	c, (xde+bc)

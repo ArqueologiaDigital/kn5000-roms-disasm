@@ -701,7 +701,7 @@ BmDrEdit_SaveSeqState_Apply:
 
 	ldmm16 0x2963, 3407
 	call SeqVoice_FindSingleActive	; call SeqVoice_FindSingleActive (v7 addr)
-	ldmm8 0x1d58, 0x8c9e	; ldmm8 7512, 0x8d3a (v7 patched)
+	ldmm8 0x1d58, PART_SELECT	; ldmm8 7512, 0x8d3a (v7 patched)
 
 
 

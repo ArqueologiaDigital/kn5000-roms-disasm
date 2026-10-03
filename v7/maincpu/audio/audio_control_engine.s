@@ -792,7 +792,7 @@ FileIO_BytecodeData_Code_Entry6:
 	lda	xbc, (FileIO_BytecodeData_Data_12:24)
 	ld	a, (xbc+hl)
 	ld	(xiz+2), a
-	ld	(0x8c9e:16), a
+	ld	(PART_SELECT:16), a
 	ld	(xiz+3), 255
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
@@ -851,7 +851,7 @@ FileIO_BytecodeData_Code_Epilogue18:
 	jr	z, FileIO_BytecodeData_Code_Skip55
 	cp	a, 19
 	jr	z, FileIO_BytecodeData_Code_Skip55
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	cp	a, 15
 	jr	ule, FileIO_BytecodeData_Code_Skip56
 FileIO_BytecodeData_Code_Skip55:
@@ -862,7 +862,7 @@ FileIO_BytecodeData_Code_Skip56:
 	cp	a, 0:i3
 	jr	z, FileIO_BytecodeData_Code_Entry7
 	.byte	0xf1, 0xf6, 0x8d, 0xbd
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 93
 	call	DkMdlyPly_CheckState_Helper
@@ -874,7 +874,7 @@ FileIO_BytecodeData_Code_Skip56:
 	ld	(xbc), 0
 	jr	FileIO_BytecodeData_Code_Join10
 FileIO_BytecodeData_Code_Skip57:
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xhl, (0x90f1:16)
 	extz	xwa
@@ -1227,12 +1227,12 @@ FileIO_BytecodeData_Code_Helper2:
 	ret
 FileIO_BytecodeData_Code_Helper3:
 	dec	6, xsp
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+3), l
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
@@ -1502,7 +1502,7 @@ FileIO_BytecodeData_Code_Helper4_Join:
 ExtDev_SndParam_Write98_Block:
 	push	xiz
 	ld	xiz, xwa
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 1539
 	call	DkMdlyPly_CheckState_Helper
@@ -1619,20 +1619,20 @@ ExtDev_SndParam_ConfigAndWrite:
 	; v10 does not spell this byte either
 	; (pre-port v7 note about the bytes at 0xFC5F05:)
 	; v10 does not spell this byte either
-	ld	(xiz), (0x8c9e)
+	ld	(xiz), (PART_SELECT)
 	; (pre-port v7 note about the bytes at 0xFC5F07:)
 	; differs from v10 here and llvm-objdump cannot read it
 	; (pre-port v7 note about the bytes at 0xFC5F08:)
 	; v10 does not spell this byte either
 	ld	(xiz+1), 5
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 93
 	call	DkMdlyPly_CheckState_Helper
 	lda	xbc, (xiz+2)
 	cp	hl, 0:i3
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip5
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xde, (0x90f1:16)
 	extz	xwa

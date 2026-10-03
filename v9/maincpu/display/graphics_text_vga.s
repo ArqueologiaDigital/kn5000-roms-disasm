@@ -4787,12 +4787,12 @@ MainSvariIni:
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ld (xiz + 3), l
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode
@@ -4863,12 +4863,12 @@ MainGetSndGrpName:
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ld bc, 0:i3
 	call SndParam_LookupViaEncode
 	ld (xsp + 7), l
-	ld a, (0x8d3a:16)
+	ld a, (PART_SELECT:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode

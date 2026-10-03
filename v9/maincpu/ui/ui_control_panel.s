@@ -2030,7 +2030,7 @@ CtrlPanel_HandleKeyInput:
 CtrlPanel_HandleKey10:
 	call AudioMode_ResetVoiceState				; handler for key 0x10
 	ld	xde, 0:i3
-	ld e, (0x8d3a:16); load current state
+	ld e, (PART_SELECT:16); load current state
 	ld xwa, 0xffffffff			; broadcast target
 	ld xbc, EVT_PART_SELECT			; key event code (different from main handler)
 	call ApPostEvent				; dispatch event
@@ -2041,7 +2041,7 @@ PartSelect_UpdateDisplayState:
 	and a, 0x1
 	cp a, 0:i3
 	scc8 z, e
-	ld (0x8d3a:16), e
+	ld (PART_SELECT:16), e
 	extz de
 	pushw 0xff
 	ldw wa, 0x90
@@ -2695,7 +2695,7 @@ MainPmanCtrl_HandleA0:
 	jr nz, MainPmanCtrl_CheckSoundParam
 
 MainPmanCtrl_StorePartSelect:
-	ld (0x8d3a:16), e
+	ld (PART_SELECT:16), e
 	jr MainPmanCtrl_LoadPartSelect
 
 MainPmanCtrl_CheckSoundParam:
@@ -2707,15 +2707,15 @@ MainPmanCtrl_CheckSoundParam:
 	jr nz, MainPmanCtrl_SetPartSelectZero
 
 MainPmanCtrl_SetPartSelectOne:
-	ld (0x8d3a:16), 1
+	ld (PART_SELECT:16), 1
 	ld e, 0x1:opc
 	jr MainPmanCtrl_CompareAndUpdate
 
 MainPmanCtrl_SetPartSelectZero:
-	ld (0x8d3a:16), 0
+	ld (PART_SELECT:16), 0
 
 MainPmanCtrl_LoadPartSelect:
-	ld e, (0x8d3a:16)
+	ld e, (PART_SELECT:16)
 
 MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp + 6)
@@ -2876,12 +2876,12 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ld l, (0x8d3a:16)
+	ld l, (PART_SELECT:16)
 	extz hl
 	ret
 
 GetCurrentPartSelect:
-	ld l, (0x8d3a:16)
+	ld l, (PART_SELECT:16)
 	ret
 
 UI_PostPartChangeEvent:

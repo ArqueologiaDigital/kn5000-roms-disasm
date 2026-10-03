@@ -329,7 +329,7 @@ FDemo_MultiGuardCheck:
 	; --- Routine 1: multi-guard check, return HL=1 or 0 (30 bytes) ---
 	cp	(ACTIVE_TITLE:16), 228
 	jr nz, Banner_ReturnZero
-	cpw	(0x28b4:16), 0
+	cpw	(SEQ_ACTIVE_PARTS:16), 0
 	jr nz, Banner_ReturnZero
 	cp	(DEMO_TIMER_COUNTDOWN:16), 0
 	jr nz, Banner_ReturnZero
@@ -667,7 +667,7 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	bit	0, (SWBTWR_PAYLOAD_2:16)
 	ret	z
-	cpw	(0x28b4:16), 0
+	cpw	(SEQ_ACTIVE_PARTS:16), 0
 	jr	nz, Demo_SelectEntry_ByteTable_Skip
 	bit	0, (0x3283:16)
 	jr	z, Demo_SelectEntry_ByteTable_Skip2
@@ -697,7 +697,7 @@ Demo_SelectEntry_ByteTable_Join:
 	jrl	t, Demo_SelectEntry_AfterSongLoad
 
 Demo_SelectEntry_ProcessSongList:
-	cpw (0x28b4:16), 0
+	cpw (SEQ_ACTIVE_PARTS:16), 0
 	jr z, Demo_SelectEntry_ToCountdown
 	bit 3, (DEMO_CONTROL_FLAGS:16)
 	jr z, Demo_SelectEntry_ManualSelect

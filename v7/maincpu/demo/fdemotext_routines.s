@@ -492,7 +492,7 @@ FDemoText_CheckTimer_Done:
 FDemoText_ParseControlMessage:
 	lda xbc, (0x020c33:24)
 	ld A,(XBC+0x01)
-	cp a, (0x8c9e:16)
+	cp a, (PART_SELECT:16)
 	ret NZ
 	cp	(ACTIVE_TITLE:16), 234
 	ret	nz

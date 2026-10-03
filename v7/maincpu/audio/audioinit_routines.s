@@ -8,14 +8,14 @@
 ; simple stereo (type < 3) or extended routing with panning configuration.
 ; ============================================================================
 AudioInit_VoiceNotConfigured_Code_Helper:
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xbc, (AudioInit_ChannelMapA:24)
 	extz	xwa
 	add	xwa, xbc
 	cp	(xwa), 0x3
 	.byte 0x67, 0x78
-	ld	a, (0x8c9e:16)
+	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xbc, (AudioInit_ChannelMapA:24)
 	extz	xwa
@@ -173,7 +173,7 @@ AudioInit_RestoreStack:
 	cp	(CURRENT_TITLE:16), 8
 	jr	nz, AudioInit_GroupFallbackDefault
 AudioInit_LoadGroupVoice:
-	ld	c, (0x8c9e:16)
+	ld	c, (PART_SELECT:16)
 	extz	bc
 	lda	xde, (AudioInit_ChannelMapA:24)
 	ld	c, (xde+bc)
@@ -218,7 +218,7 @@ AudioInit_GroupFallbackDefault:
 ; v10 name for this address: AudioInit_CheckSoundGroup51 -- not a label here: v7 defines that name outside this span (= 0xFDE84A)
 	cp	(CURRENT_TITLE:16), 81
 	jr	nz, AudioInit_G51FallbackDefault
-	ld	c, (0x8c9e:16)
+	ld	c, (PART_SELECT:16)
 	extz	bc
 	lda	xde, (AudioInit_ChannelMapB:24)
 	ld	c, (xde+bc)
@@ -271,7 +271,7 @@ AudioInit_G51FallbackDefault:
 	cp	c, 0x6f
 	jr	nz, AudioInit_VoiceNotConfigured_Code_Skip
 AudioInit_LoadAndConfigure:
-	ld	c, (0x8c9e:16)	; LD C, (238D3Ah) - 24-bit addressing mode
+	ld	c, (PART_SELECT:16)	; LD C, (238D3Ah) - 24-bit addressing mode
 	extz	bc
 	lda	xde, (AudioInit_ChannelMapB:24)
 	ld	c, (xde+bc)

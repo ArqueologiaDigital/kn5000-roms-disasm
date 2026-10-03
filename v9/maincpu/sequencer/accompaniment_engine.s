@@ -5378,7 +5378,7 @@ AccState_CollectAcc4_Loop:
 	jr c, AccState_CollectAcc4_Loop
 	bit 7, a
 	jr nz, AccState_CollectReturn
-	cpw (0x28b4:16), 0
+	cpw (SEQ_ACTIVE_PARTS:16), 0
 	jr nz, AccState_CollectAcc4_Active
 	cpw (0x28a8:16), 0
 	jr nz, AccState_CollectAcc4_Active
@@ -10945,9 +10945,9 @@ AccStyle_IndexedLookup:
 	extz hl
 	ld xwa, AccStyle_IndexedLookup_Data
 	ld	a, (xwa+hl)
-	cp	(0x8d3a:16), a
+	cp	(PART_SELECT:16), a
 	jr z, AccStyle_IndexedLookup_Ret
-	ld	(0x8d3a:16), a
+	ld	(PART_SELECT:16), a
 	ld e, 0x90:opc
 	ld d, 0x10:opc
 	ld w, 0xff:opc
@@ -11106,7 +11106,7 @@ AccStyle_InlinedBlock_Skip2:
 	calr	AccVoiceReg_WritePart5
 	ld	(0x338e:16), 1
 	ld	a, 20:opc
-	ld	(0x8d3a:16), a
+	ld	(PART_SELECT:16), a
 	ld	e, 144:opc
 	ld	d, 16:opc
 	ld	w, 255:opc
@@ -15189,7 +15189,7 @@ AccPatch_PartChanges_MapLookup:
 	ld l, a
 	add xhl, AccPatch_PartNumberTable
 	ld a, (xhl)
-	ld (0x8d3a:16), a
+	ld (PART_SELECT:16), a
 	ld e, a
 	ld a, (0x379b:16)
 	ld w, (0x3510:16)
@@ -33732,7 +33732,7 @@ SndArgNm_HandleEvent24:
 	ld xwa, (xsp + 2)
 	add xwa, xde
 	mrib4 0x80, 0x19, 0x3a, 0x8d
-	ld e, (0x8d3a:16)
+	ld e, (PART_SELECT:16)
 	extz de
 	pushw 0xff
 	ldw wa, 0x90

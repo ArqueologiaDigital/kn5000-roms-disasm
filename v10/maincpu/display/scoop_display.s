@@ -1782,7 +1782,7 @@ PerfMode_Evt04_VolumeHandler:
 	ld	xhl, (xix+hl)
 	ld (xhl), a
 	pop xix
-	ld e, (36154:16)
+	ld e, (PART_SELECT:16)
 	ld d, 3:opc
 	ld	w, 127:opc
 	pushw	de
@@ -6895,7 +6895,7 @@ SerialPort_ModeHandler_0_Sub:
 	ld	(14102:16), 1
 	call	PortConfig_Handler_0_Helper3
 	call	PortConfig_Handler_0_Helper2
-	ld	a, (36154:16)
+	ld	a, (PART_SELECT:16)
 	ld	(3430:16), a
 	call	PortConfig_Handler_0_Sub
 	call	PortConfig_Handler_0_Helper5
@@ -7428,7 +7428,7 @@ PortConfig_Handler_0_Sub:
 	cp	a, 255
 	jrl	z, PortConfig_DataTable_A_Sub_Return
 PortConfig_DataTable_A_Sub:
-	ld	(0x8d3a:16), a
+	ld	(PART_SELECT:16), a
 	ld	e, a
 	ld	d, 255:opc
 	ldw	wa, 4240
@@ -12314,7 +12314,7 @@ SubCPU_ToneParamDisplay_Skip:
 SubCPU_ToneParamDisplay_Skip2:
 	ld	a, (3415:16)
 	ld	(xix+1), a
-	ld	a, (0x8d3a:16)
+	ld	a, (PART_SELECT:16)
 	ld	(xix+2), a
 	ld	l, (4380:16)
 	exts	hl

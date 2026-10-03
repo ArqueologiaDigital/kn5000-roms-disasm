@@ -4785,24 +4785,24 @@ MainSvariIni:
 	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
-	ldb_d8	a, (0x8c9e)
+	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xiz+3), l
-	ldb_d8	a, (0x8c9e)
+	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xiz+4), l
-	ld	(xiz+2), (0x8c9e)
+	ld	(xiz+2), (PART_SELECT)
 	ld	xwa, xiz
 	call	SndParam_FetchOscTableEntry
 	ld	a, (xiz)
 	extz	wa
 	call	CharMap_ActivePreamb_Prologue2
 	ld	(xiz+3), l
-	ld	(xiz+4), (0x8c9e)
+	ld	(xiz+4), (PART_SELECT)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_SVARI_SET
 	ld	xde, xiz
@@ -4859,18 +4859,18 @@ MainGetSndGrpName:
 	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
-	ldb_d8	a, (0x8c9e)
+	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+7), l
-	ldb_d8	a, (0x8c9e)
+	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
-	ld	(xwa+2), (0x8c9e)
+	ld	(xwa+2), (PART_SELECT)
 	call	SndParam_FetchOscTableEntry
 	ld	a, (xsp+4)
 	extz	wa

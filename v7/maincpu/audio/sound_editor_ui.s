@@ -9825,7 +9825,7 @@ Data_UnknownBlock_Join7:
 	ldb_d8	h, (0x661)
 	dec	1, h
 	stb_d8	(0x904f), h
-	ldb_d8	a, (0x8c9e)
+	ldb_d8	a, (PART_SELECT)
 	stb_d8	(0x9050), a
 	ld	xwa, 36942
 	call	SndParam_ApplyProgramChange

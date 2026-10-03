@@ -5133,7 +5133,7 @@ AccState_CollectAcc4_Loop:
 	jr c, AccState_CollectAcc4_Loop
 	bit 7, a
 	jr nz, AccState_CollectReturn
-	cpw (0x28b4:16), 0
+	cpw (SEQ_ACTIVE_PARTS:16), 0
 	jr nz, AccState_CollectAcc4_Active
 	cpw (0x28a8:16), 0
 	jr nz, AccState_CollectAcc4_Active
@@ -10566,9 +10566,9 @@ AccStyle_IndexedLookup:
 	extz HL
 	ld XWA,AccStyle_IndexedLookup_Data
 	ld	a, (xwa+hl)
-	cp	(35998:16), a
+	cp	(PART_SELECT:16), a
 	jr	z, AccStyle_IndexedLookup_Ret
-	ld	(35998:16), a
+	ld	(PART_SELECT:16), a
 	ld	e, 144:opc
 	ld	d, 16:opc
 	ld	w, 255:opc
@@ -14347,7 +14347,7 @@ AccPatch_PartChanges_MapLookup:
 	ld	l, a
 	add	xhl, AccPatch_PartNumberTable
 	ld	a, (xhl)
-	ld	(35998:16), a
+	ld	(PART_SELECT:16), a
 	ld	e, a
 	ld	a, (14079:16)
 	ld	w, (13428:16)
@@ -32422,8 +32422,8 @@ SndArgNm_DeliverAndReturn:
 SndArgNm_HandleEvent24:
 	ld	xwa, (xsp+2)
 	add	xwa, xde
-	ld	(35998), (xwa)
-	ld	e, (0x8c9e:16)
+	ld	(PART_SELECT), (xwa)
+	ld	e, (PART_SELECT:16)
 	extz	de
 	pushw	255
 	ldw	wa, 144

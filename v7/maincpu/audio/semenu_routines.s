@@ -53,7 +53,7 @@ SeMenu_LoadObjectPtr_Data:
 	ret
 
 SeMenu_LoadMasterPtr:
-	ld	c, (35998:24)
+	ld	c, (PART_SELECT:24)
 	ld	(xwa), c
 	ret
 SeMenu_FlushDisplayObj:

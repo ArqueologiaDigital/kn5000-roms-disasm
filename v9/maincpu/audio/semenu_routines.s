@@ -50,7 +50,7 @@ SeMenu_LoadObjectPtr_Data:
 	ret
 
 SeMenu_LoadMasterPtr:
-	ld c, (0x008d3a:24)
+	ld c, (PART_SELECT:24)
 	ld (xwa), c
 	ret
 

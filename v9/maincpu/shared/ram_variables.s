@@ -115,3 +115,10 @@
 	.equ SEQ_BEAT_TICK,		0x041b	; sq_beadt: tick within the beat, 0..95 (96 per quarter note); wraps into SEQ_BEAT_COUNT
 	.equ SEQ_BEAT_COUNT,		0x041c	; sqbtof: beats since the start (word)
 	.equ SEQ_TRANSPORT_STATE,	0x0421	; sqsrtc, bit set: 0 start pending, 1-2 running (2 gates the clock), 3 stop requested (the ISR then writes 16), 4 stopped; 0 = idle
+; ssf-presentation.md "Part select index" -- and the code: GetPartSelect / GetCurrentPartSelect read it,
+; MainPmanCtrl_StorePartSelect / _SetPartSelectOne write it
+	.equ PART_SELECT,		0x8d3a	; the selected part
+; code only (feature-demo-investigation.md calls 0x28B4 a "song list pointer"; the code does not agree):
+; SeqReassign_OrPartBits ORs part bits in, SeqCh_ClearActive_ShiftDone and PartDeact_* clear them, and
+; the playback and demo handlers test it with `cpw (..),0`
+	.equ SEQ_ACTIVE_PARTS,		0x28b4	; word: one bit per sequencer part that is playing
