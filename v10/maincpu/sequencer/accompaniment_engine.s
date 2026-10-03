@@ -14947,7 +14947,7 @@ AccPatch_WriteRhythmInit:
 	ld xhl, 0:i3
 	ld l, (0x342e:16)
 	sll hl, 1
-	add xhl, AccPatch_ChannelToParamTable_0x10
+	add xhl, AccPatch_ChannelToRecordPtr
 	ld xhl, (xhl)
 	ld iy, (xhl + 4)
 	ld (xhl + 6), iy
@@ -14955,12 +14955,11 @@ AccPatch_WriteRhythmInit:
 AccPatch_WriteRhythm_Done:
 	ret
 
-AccPatch_ChannelToParamTable:
-	.byte 0x00, 0x00, 0x00, 0x00, 0xd7, 0x00, 0xd4, 0x00
-	.byte 0xd5, 0x00, 0xd6, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x94, 0x2c, 0x00, 0x00, 0x94, 0x2d, 0x00, 0x00
-	.byte 0x94, 0x2e, 0x00, 0x00, 0x94, 0x2f, 0x00, 0x00
+; Two tables indexed by the channel in (0x342E) -- 4, 6, 8 or 10 here.  AccPatch_ChannelToParamTable is read as a byte
+;          at +channel (0xD7, 0xD4, 0xD5, 0xD6); AccPatch_ChannelToRecordPtr as a long at +channel*2, the RAM records
+;          0x2C94-0x2F94, 0x100 apart (was the positional alias AccPatch_ChannelToParamTable + 16).
+AccPatch_ChannelToParamTable:	.byte	0, 0, 0, 0, 0xd7, 0, 0xd4, 0, 0xd5, 0, 0xd6, 0, 0, 0, 0, 0
+AccPatch_ChannelToRecordPtr:	.long	0, 0, 0x2c94, 0x2d94, 0x2e94, 0x2f94
 
 AccPatch_WriteRhythmParams:
 	calr AccPatch_FetchVolumeForChannel

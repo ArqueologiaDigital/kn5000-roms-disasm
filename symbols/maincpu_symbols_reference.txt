@@ -22,8 +22,8 @@
 # =====================================================
 #
 #   symbols .................. 51,643
-#   semantic names ........... 50,808 (98.4%)
-#   positional names ......... 835
+#   semantic names ........... 50,809 (98.4%)
+#   positional names ......... 834
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -31996,7 +31996,7 @@ AccPatch_SeqPosition_Store_Data 00F5F2BF
 AccPatch_WriteRhythmInit 00F5F2D7
 AccPatch_WriteRhythm_Done 00F5F30F
 AccPatch_ChannelToParamTable 00F5F310
-AccPatch_ChannelToParamTable_0x10 00F5F320
+AccPatch_ChannelToRecordPtr 00F5F320
 AccPatch_WriteRhythmParams 00F5F338
 AccPatch_WriteRhythmParam_Loop 00F5F341
 AccPatch_WriteRhythmParam_Push 00F5F37F
