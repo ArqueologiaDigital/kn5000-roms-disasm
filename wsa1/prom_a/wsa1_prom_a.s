@@ -156142,7 +156142,7 @@ sub_FE04BE:
 sub_FE0514:
 	ld (UI_StatusCode:16), 0x25                                 ; FE0514  f1 80 28 00 25
 	pushw 0x09                                           ; FE0519  0b 09 00
-	calr sub_FE1838                                          ; FE051C  1e 19 13
+	calr StatusMsg_ShowByIndex                                          ; FE051C  1e 19 13
 	calr Disk_PortA3_Release_Call                                          ; FE051F  1e 3d 04
 	calr sub_FE16FE                                          ; FE0522  1e d9 11
 	popw bc                                              ; FE0525  49
@@ -156150,7 +156150,7 @@ sub_FE0514:
 sub_FE0527:
 	pushw hl                                             ; FE0527  2b
 	pushw 0x09                                           ; FE0528  0b 09 00
-	calr sub_FE1838                                          ; FE052B  1e 0a 13
+	calr StatusMsg_ShowByIndex                                          ; FE052B  1e 0a 13
 	calr sub_FE08BD                                          ; FE052E  1e 8c 03
 	ld H,A                                               ; FE0531  c9 8e
 	ld (0x1735:24), a                                   ; FE0533  f2 35 17 00 41
@@ -156174,7 +156174,7 @@ sub_FE0527:
 sub_FE055B:
 	pushw hl                                             ; FE055B  2b
 	pushw 0x09                                           ; FE055C  0b 09 00
-	calr sub_FE1838                                          ; FE055F  1e d6 12
+	calr StatusMsg_ShowByIndex                                          ; FE055F  1e d6 12
 	calr sub_FE08BD                                          ; FE0562  1e 58 03
 	ld H,A                                               ; FE0565  c9 8e
 	ld (0x1735:24), a                                   ; FE0567  f2 35 17 00 41
@@ -156212,13 +156212,13 @@ sub_FE05AE:
 	lda xix, (UI_Request_Hi:16)                                ; FE05B0  f1 71 20 34
 	calr sub_FE2E96                                          ; FE05B4  1e df 28
 	pushw 0x0a                                           ; FE05B7  0b 0a 00
-	calr sub_FE1838                                          ; FE05BA  1e 7b 12
+	calr StatusMsg_ShowByIndex                                          ; FE05BA  1e 7b 12
 	calr sub_FE1D52                                          ; FE05BD  1e 92 17
 	ld H,A                                               ; FE05C0  c9 8e
 	ld (Disk_LastError:16), a                                   ; FE05C2  f1 43 22 41
 	push 0x00                                            ; FE05C6  09 00
 	push H                                               ; FE05C8  ce 04
-	calr sub_FE1838                                          ; FE05CA  1e 6b 12
+	calr StatusMsg_ShowByIndex                                          ; FE05CA  1e 6b 12
 	pop XIY                                              ; FE05CD  5d
 	cp h, 0x01:i3                                          ; FE05CE  ce d9
 	jr z, .LFE05DE                                           ; FE05D0  66 0c
@@ -156269,7 +156269,7 @@ sub_FE05EC:
 .LFE062B:
 	ld C,(XIX)                                           ; FE062B  84 23
 	pushw bc                                             ; FE062D  29
-	calr sub_FE1838                                          ; FE062E  1e 07 12
+	calr StatusMsg_ShowByIndex                                          ; FE062E  1e 07 12
 	calr sub_FE1907                                          ; FE0631  1e d3 12
 	pushw 0x01f4                                         ; FE0634  0b f4 01
 	calr Delay_Ticks                                          ; FE0637  1e e7 0d
@@ -156318,14 +156318,14 @@ sub_FE066C:
 .LFE069A:
 	ld C,(XIX)                                           ; FE069A  84 23
 	pushw bc                                             ; FE069C  29
-	calr sub_FE1838                                          ; FE069D  1e 98 11
+	calr StatusMsg_ShowByIndex                                          ; FE069D  1e 98 11
 	calr sub_FE1907                                          ; FE06A0  1e 64 12
 	pushw 0x05dc                                         ; FE06A3  0b dc 05
 	calr Delay_Ticks                                          ; FE06A6  1e 78 0d
 	jr .LFE06C5                                              ; FE06A9  68 1a
 .LFE06AB:
 	pushw 0x0b                                           ; FE06AB  0b 0b 00
-	calr sub_FE1838                                          ; FE06AE  1e 87 11
+	calr StatusMsg_ShowByIndex                                          ; FE06AE  1e 87 11
 	calr sub_FE2FB9                                          ; FE06B1  1e 05 29
 	calr sub_FE06EA                                            ; FE06B4  1e 33 00
 	calr sub_FE2531                                          ; FE06B7  1e 77 1e
@@ -156372,7 +156372,7 @@ sub_FE070C:
 	jr nz, .LFE072E                                          ; FE0716  6e 16
 	push 0x00                                            ; FE0718  09 00
 	push H                                               ; FE071A  ce 04
-	calr sub_FE1838                                          ; FE071C  1e 19 11
+	calr StatusMsg_ShowByIndex                                          ; FE071C  1e 19 11
 	calr Delay_500Ticks                                          ; FE071F  1e f7 0c
 	ld (0x220f:16), 0x00                                 ; FE0722  f1 0f 22 00 00
 	ld (0x220c:16), 0x00                                 ; FE0727  f1 0c 22 00 00
@@ -156384,7 +156384,7 @@ sub_FE070C:
 .LFE0734:
 	push 0x00                                            ; FE0734  09 00
 	push H                                               ; FE0736  ce 04
-	calr sub_FE1838                                          ; FE0738  1e fd 10
+	calr StatusMsg_ShowByIndex                                          ; FE0738  1e fd 10
 	calr sub_FE1907                                          ; FE073B  1e c9 11
 	ld c, (0x21e8:16)                                   ; FE073E  c1 e8 21 23
 	and C,0x80                                           ; FE0742  cb cc 80
@@ -156478,7 +156478,7 @@ sub_FE07E0:
 	cp a, 0x00:i3                                          ; FE07E3  c9 d8
 	jr z, .LFE0803                                           ; FE07E5  66 1c
 	pushw 0x11                                           ; FE07E7  0b 11 00
-	calr sub_FE1838                                          ; FE07EA  1e 4b 10
+	calr StatusMsg_ShowByIndex                                          ; FE07EA  1e 4b 10
 	calr sub_FE1907                                          ; FE07ED  1e 17 11
 	pushw 0x01f4                                         ; FE07F0  0b f4 01
 	calr Delay_Ticks                                          ; FE07F3  1e 2b 0c
@@ -156488,7 +156488,7 @@ sub_FE07E0:
 	jr .LFE0810                                              ; FE0801  68 0d
 .LFE0803:
 	pushw 0x12                                           ; FE0803  0b 12 00
-	calr sub_FE1838                                          ; FE0806  1e 2f 10
+	calr StatusMsg_ShowByIndex                                          ; FE0806  1e 2f 10
 	calr Delay_500Ticks                                          ; FE0809  1e 0d 0c
 	calr sub_FE0648                                          ; FE080C  1e 39 fe
 	popw bc                                              ; FE080F  49
@@ -156663,7 +156663,7 @@ sub_FE0970:
 	link XIZ,0x0000                                      ; FE0970  ee 0c 00 00
 	pushw hl                                             ; FE0974  2b
 	push XIX                                             ; FE0975  3c
-	lda xix, (sub_FE1838:24)                             ; FE0976  f2 38 18 fe 34
+	lda xix, (StatusMsg_ShowByIndex:24)                             ; FE0976  f2 38 18 fe 34
 	ld H,(XIZ+0x08)                                      ; FE097B  8e 08 26
 	cp h, 0x01:i3                                          ; FE097E  ce d9
 	jr nz, .LFE0991                                          ; FE0980  6e 0f
@@ -156708,7 +156708,7 @@ sub_FE09BE:
 	calr sub_FE2E96                                          ; FE09C4  1e cf 24
 	calr Disk_PortA3_Release_Call                                          ; FE09C7  1e 95 ff
 	pushw 0x09                                           ; FE09CA  0b 09 00
-	calr sub_FE1838                                          ; FE09CD  1e 68 0e
+	calr StatusMsg_ShowByIndex                                          ; FE09CD  1e 68 0e
 	calr sub_FE08BD                                          ; FE09D0  1e ea fe
 	ld H,A                                               ; FE09D3  c9 8e
 	popw bc                                              ; FE09D5  49
@@ -156733,7 +156733,7 @@ sub_FE09BE:
 	jrl .LFE0A73                                             ; FE0A05  78 6b 00
 .LFE0A08:
 	pushw 0x0e                                           ; FE0A08  0b 0e 00
-	calr sub_FE1838                                          ; FE0A0B  1e 2a 0e
+	calr StatusMsg_ShowByIndex                                          ; FE0A0B  1e 2a 0e
 	and (XIX),0xbf                                       ; FE0A0E  84 3c bf
 	ld c, (0x21e8:16)                                   ; FE0A11  c1 e8 21 23
 	and C,0x08                                           ; FE0A15  cb cc 08
@@ -156772,7 +156772,7 @@ sub_FE09BE:
 	ld (0x1736:24), 0x14                               ; FE0A6A  f2 36 17 00 00 14
 	pushw 0x14                                           ; FE0A70  0b 14 00
 .LFE0A73:
-	calr sub_FE1838                                          ; FE0A73  1e c2 0d
+	calr StatusMsg_ShowByIndex                                          ; FE0A73  1e c2 0d
 	calr sub_FE1907                                          ; FE0A76  1e 8e 0e
 	pushw 0x05dc                                         ; FE0A79  0b dc 05
 	calr Delay_Ticks                                          ; FE0A7C  1e a2 09
@@ -156781,7 +156781,7 @@ sub_FE09BE:
 .LFE0A82:
 	push 0x00                                            ; FE0A82  09 00
 	m_push MB24, 0x001736                                ; FE0A84  c2 36 17 00 04
-	calr sub_FE1838                                          ; FE0A89  1e ac 0d
+	calr StatusMsg_ShowByIndex                                          ; FE0A89  1e ac 0d
 	calr Delay_500Ticks                                          ; FE0A8C  1e 8a 09
 	popw bc                                              ; FE0A8F  49
 .LFE0A90:
@@ -156949,8 +156949,8 @@ sub_FE0B43:
 	popw hl                                              ; FE0BF1  4b
 	unlk XIZ                                             ; FE0BF2  ee 0d
 	ret                                                  ; FE0BF4  0e
-sub_FE0BF5:
-	lda xbc, (sub_FE6F89_Data_FE7000:24)                               ; FE0BF5  f2 00 70 fe 31
+Link_SendAfterSoundRamLoadMsg:
+	lda xbc, (LinkMsg_AfterSoundRamLoad:24)                               ; FE0BF5  f2 00 70 fe 31
 	push XBC                                             ; FE0BFA  39
 	pushw 0x06                                           ; FE0BFB  0b 06 00
 	pushw 0x00                                           ; FE0BFE  0b 00 00
@@ -157842,7 +157842,7 @@ sub_FE1456:
 	ret                                                  ; FE14E8  0e
 sub_FE14E9:
 	link XIZ,0xfffe                                      ; FE14E9  ee 0c fe ff
-	ld bc, (sub_FE6F89_Data_FE7006:24)                                ; FE14ED  d2 06 70 fe 21
+	ld bc, (MidiOut_SongSelectTemplate:24)                                ; FE14ED  d2 06 70 fe 21
 	ld (xiz-2), bc                                       ; FE14F2  be fe 51
 	ld a, (MidiFilter_SongSelect:16)                                   ; FE14F5  c1 33 7f 21
 	and A,0x08                                           ; FE14F9  c9 cc 08
@@ -157907,7 +157907,7 @@ sub_FE152E__FE1551:
 	ld (0x272b:16), 0x00                                 ; FE1582  f1 2b 27 00 00
 	ld (0x2725:16), 0x00                                 ; FE1587  f1 25 27 00 00
 	pushw 0x09                                           ; FE158C  0b 09 00
-	calr sub_FE1838                                          ; FE158F  1e a6 02
+	calr StatusMsg_ShowByIndex                                          ; FE158F  1e a6 02
 	sub XBC,XBC                                          ; FE1592  e9 a1
 	ld (0x60341e:24), xbc                               ; FE1594  f2 1e 34 60 61
 	calr sub_FE011B                                          ; FE1599  1e 7f eb
@@ -157925,7 +157925,7 @@ sub_FE152E__FE1551:
 	cp a, 0x00:i3                                          ; FE15BA  c9 d8
 	jr z, .LFE15C9                                           ; FE15BC  66 0b
 	pushw wa                                             ; FE15BE  28
-	calr sub_FE1838                                          ; FE15BF  1e 76 02
+	calr StatusMsg_ShowByIndex                                          ; FE15BF  1e 76 02
 	pushw 0x03e8                                         ; FE15C2  0b e8 03
 	calr Delay_Ticks                                          ; FE15C5  1e 59 fe
 	pop XIY                                              ; FE15C8  5d
@@ -157981,7 +157981,7 @@ sub_FE15F4:
 	cp HL,0x0008                                         ; FE1638  db cf 08 00
 	jr lt, .LFE1626                                           ; FE163C  61 e8
 	pushw 0x0a                                           ; FE163E  0b 0a 00
-	calr sub_FE1838                                          ; FE1641  1e f4 01
+	calr StatusMsg_ShowByIndex                                          ; FE1641  1e f4 01
 	calr sub_FE0250                                          ; FE1644  1e 09 ec
 	calr sub_FE1D52                                          ; FE1647  1e 08 07
 	ld H,A                                               ; FE164A  c9 8e
@@ -158177,12 +158177,15 @@ sub_FE179D:
 	ld (XIX+0x24),0x39                                   ; FE1832  bc 24 00 39
 	pop XIX                                              ; FE1836  5c
 	ret                                                  ; FE1837  0e
-sub_FE1838:
+; StatusMsg_ShowByIndex(index) -- UI_StatusCode := UiStatus_CodeByIndex[index]; then, unless bit 7 of (0x21E8)
+;          is set, paint the message screen (sub_FE01FA -> T_MessageScreen_Paint) and hold it with sub_FE2FC8
+;          (Delay_Ticks 1500 for status 0, 500 for status 0x2B, no wait for any other).  22 `calr` sites, and the 24-bit pointer loaded at 0xFE0976.
+StatusMsg_ShowByIndex:
 	link XIZ,0x0000                                      ; FE1838  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FE183C  9e 08 21
 	extz BC                                              ; FE183F  d9 12
 	extz XBC                                             ; FE1841  e9 12
-	add XBC,.LFE6FFB+13                                   ; FE1843  e9 c8 08 70 fe 00
+	add XBC,UiStatus_CodeByIndex                          ; FE1843  e9 c8 08 70 fe 00
 	ld A,(XBC)                                           ; FE1849  81 21
 	ld (UI_StatusCode:16), a                                   ; FE184B  f1 80 28 41
 	ld b, (0x21e8:16)                                   ; FE184F  c1 e8 21 22
@@ -158554,10 +158557,10 @@ sub_FE1B65:
 	unlk XIZ                                             ; FE1BC7  ee 0d
 	ret                                                  ; FE1BC9  0e
 sub_FE1BCA:
-	calr sub_FE2EAF                                          ; FE1BCA  1e e2 12
+	calr SysPartMidi_ResetBlock1Default                                          ; FE1BCA  1e e2 12
 	ret                                                  ; FE1BCD  0e
 sub_FE1BCE:
-	calr sub_FE2EAF                                          ; FE1BCE  1e de 12
+	calr SysPartMidi_ResetBlock1Default                                          ; FE1BCE  1e de 12
 	push XDE                                             ; FE1BD1  3a
 	push XHL                                             ; FE1BD2  3b
 	push XIX                                             ; FE1BD3  3c
@@ -158747,22 +158750,16 @@ sub_FE1CE4:
 	ret                                                  ; FE1CE7  0e
 	ret                                                  ; FE1CE8  0e
 ; ---------------------------------------------------------------------
-; sub_FE1CE9 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; DiskLoad_CheckSoundRamTag -- is the file just read a WSA sound-RAM file?  A := 0 when the 16 bytes at
+;          0x609400 equal Str_SoundRamTag_Wsa ("WSA SOUND RAM S0", all 16 compared), 0xFF at the first byte
+;          that differs.
 ;
-; Called from: prom_a sub_FE202F (`calr`) at 0xFE204F
-;
-;     0xFE1CFF loads 0xFE7027, where the ROM reads:
-;        "WSA SOUND RAM S0"
-; Evidence: the immediate at the cited instruction, and the bytes
-;          at that address in original_ROMs/, read as printable
-;          ASCII until the first non-printable byte.
-; NOT NAMED because the text says what the routine READS, not what it DOES
-;          with it; a name taken from it would claim a role nothing here
-;          establishes. The string is recorded so the next round starts
-;          from evidence instead of a search.
-; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
+; Called from: prom_a sub_FE202F (`calr`) at 0xFE204F, which answers a non-zero A with `ld a,0x10`
+;          before any transfer (wsa1/notes/sysex-probes/sysex_signature_checks.py asserts this site).
+; Renamed from "NOT NAMED" (round 7 recorded only the string) on 2026-10-03, when 0xFE7000-0xFE706D
+;          was re-framed as data.
 ; ---------------------------------------------------------------------
-sub_FE1CE9:
+DiskLoad_CheckSoundRamTag:
 	link XIZ,0xfffc                                      ; FE1CE9  ee 0c fc ff
 	pushw hl                                             ; FE1CED  2b
 	push XIX                                             ; FE1CEE  3c
@@ -158773,7 +158770,7 @@ sub_FE1CE9:
 	extz BC                                              ; FE1CF8  d9 12
 	extz XBC                                             ; FE1CFA  e9 12
 	ld (xiz-4), xbc                                      ; FE1CFC  be fc 61
-	add XBC,sub_FE6F89_Data_FE7027                                   ; FE1CFF  e9 c8 27 70 fe 00
+	add XBC,Str_SoundRamTag_Wsa                                   ; FE1CFF  e9 c8 27 70 fe 00
 	ld L,(XBC)                                           ; FE1D05  81 27
 	ld XBC,XIX                                           ; FE1D07  ec 89
 	m_add_rm MLD+r6, 0xfc, r1                            ; FE1D09  ae fc 81
@@ -159170,7 +159167,7 @@ sub_FE202F:
 	ld H,A                                               ; FE2049  c9 8e
 	cp a, 0x01:i3                                          ; FE204B  c9 d9
 	jr nz, .LFE208D                                          ; FE204D  6e 3e
-	calr sub_FE1CE9                                          ; FE204F  1e 97 fc
+	calr DiskLoad_CheckSoundRamTag                                          ; FE204F  1e 97 fc
 	cp a, 0x00:i3                                          ; FE2052  c9 d8
 	jr z, .LFE205A                                           ; FE2054  66 04
 	ld a, 0x10:opc                                          ; FE2056  21 10
@@ -159187,7 +159184,7 @@ sub_FE202F:
 	inc 2,XSP                                            ; FE2070  ef 62
 	cp a, 0x01:i3                                          ; FE2072  c9 d9
 	jr nz, .LFE207B                                          ; FE2074  6e 05
-	calr sub_FE0BF5                                          ; FE2076  1e 7c eb
+	calr Link_SendAfterSoundRamLoadMsg                                          ; FE2076  1e 7c eb
 	jr .LFE207E                                              ; FE2079  68 03
 .LFE207B:
 	calr sub_FE00EB                                          ; FE207B  1e 6d e0
@@ -159218,7 +159215,7 @@ sub_FE2092:
 	ld H,A                                               ; FE20AF  c9 8e
 	cp a, 0x01:i3                                          ; FE20B1  c9 d9
 	jr nz, .LFE20DC                                          ; FE20B3  6e 27
-	calr sub_FE2E3D                                          ; FE20B5  1e 85 0d
+	calr DiskLoad_CheckCombiTag                                          ; FE20B5  1e 85 0d
 	cp a, 0x00:i3                                          ; FE20B8  c9 d8
 	jr z, .LFE20C0                                           ; FE20BA  66 04
 	ld a, 0x10:opc                                          ; FE20BC  21 10
@@ -159708,7 +159705,7 @@ sub_FE2531:
 	pushw hl                                             ; FE2531  2b
 	push XIX                                             ; FE2532  3c
 	lda xix, (0x2725:16)                                ; FE2533  f1 25 27 34
-	calr sub_FE2EAF                                          ; FE2537  1e 75 09
+	calr SysPartMidi_ResetBlock1Default                                          ; FE2537  1e 75 09
 	calr sub_FE0060                                          ; FE253A  1e 23 db
 	calr sub_FE2699                                          ; FE253D  1e 59 01
 	calr sub_FE2FB9                                          ; FE2540  1e 76 0a
@@ -159826,7 +159823,7 @@ sub_FE2610:
 	ld (0x1736:24), a                                   ; FE261D  f2 36 17 00 41
 	push 0x00                                            ; FE2622  09 00
 	push H                                               ; FE2624  ce 04
-	calr sub_FE1838                                          ; FE2626  1e 0f f2
+	calr StatusMsg_ShowByIndex                                          ; FE2626  1e 0f f2
 	ld c, (0x21e8:16)                                   ; FE2629  c1 e8 21 23
 	and C,0x80                                           ; FE262D  cb cc 80
 	popw wa                                              ; FE2630  48
@@ -159848,7 +159845,7 @@ sub_FE2642:
 sub_FE264C:
 	ld (0x1736:24), 0x0c                               ; FE264C  f2 36 17 00 00 0c
 	pushw 0x0c                                           ; FE2652  0b 0c 00
-	calr sub_FE1838                                          ; FE2655  1e e0 f1
+	calr StatusMsg_ShowByIndex                                          ; FE2655  1e e0 f1
 	calr sub_FE1907                                          ; FE2658  1e ac f2
 	pushw 0x05dc                                         ; FE265B  0b dc 05
 	calr Delay_Ticks                                          ; FE265E  1e c0 ed
@@ -159865,7 +159862,7 @@ sub_FE2667:
 	calr sub_FE2699                                            ; FE2676  1e 20 00
 	ld (0x1736:24), 0x19                               ; FE2679  f2 36 17 00 00 19
 	pushw 0x19                                           ; FE267F  0b 19 00
-	calr sub_FE1838                                          ; FE2682  1e b3 f1
+	calr StatusMsg_ShowByIndex                                          ; FE2682  1e b3 f1
 	calr Delay_500Ticks                                          ; FE2685  1e 91 ed
 	ld (0x2229:16), 0x00                                 ; FE2688  f1 29 22 00 00
 	m_set 4, MD16, UI_Request_Hi                                ; FE268D  f1 71 20 bc
@@ -160498,7 +160495,7 @@ sub_FE2CC7:
 	push XIX                                             ; FE2CC7  3c
 	lda xix, (Disk_Flags:16)                                ; FE2CC8  f1 e7 21 34
 	calr sub_FE2CC7_Nop                                          ; FE2CCC  1e 1b 03
-	calr sub_FE2EAF                                          ; FE2CCF  1e dd 01
+	calr SysPartMidi_ResetBlock1Default                                          ; FE2CCF  1e dd 01
 	calr sub_FE2F86                                          ; FE2CD2  1e b1 02
 	ld (Disk_FileName+8:16), 0x53                                 ; FE2CD5  f1 d0 21 00 53
 	ld (Disk_FileName+9:16), 0x51                                 ; FE2CDA  f1 d1 21 00 51
@@ -160644,7 +160641,10 @@ sub_FE2DDD:
 	sub A,A                                              ; FE2E3A  c9 a1
 .LFE2E3C:
 	ret                                                  ; FE2E3C  0e
-sub_FE2E3D:
+; DiskLoad_CheckCombiTag -- is the file just read a WSA1 combination file?  A := 0 when the 4 bytes at 0x60A086
+;          equal Str_CombiTag_Wsa1 ("WSA1"), or are all 0xFF; A := 0xFF otherwise.  Called once, at 0xFE20B5,
+;          whose caller answers a non-zero A with `ld a,0x10`.
+DiskLoad_CheckCombiTag:
 	link XIZ,0xfffc                                      ; FE2E3D  ee 0c fc ff
 	pushw hl                                             ; FE2E41  2b
 	push XIX                                             ; FE2E42  3c
@@ -160655,7 +160655,7 @@ sub_FE2E3D:
 	extz BC                                              ; FE2E4C  d9 12
 	extz XBC                                             ; FE2E4E  e9 12
 	ld (xiz-4), xbc                                      ; FE2E50  be fc 61
-	add XBC,sub_FE6F89_Data_FE7049                                   ; FE2E53  e9 c8 49 70 fe 00
+	add XBC,Str_CombiTag_Wsa1                                   ; FE2E53  e9 c8 49 70 fe 00
 	ld L,(XBC)                                           ; FE2E59  81 27
 	ld XBC,XIX                                           ; FE2E5B  ec 89
 	m_add_rm MLD+r6, 0xfc, r1                            ; FE2E5D  ae fc 81
@@ -160704,14 +160704,15 @@ sub_FE2E96:
 	and (XIX),0xbf                                       ; FE2EAA  84 3c bf
 	pop XIX                                              ; FE2EAD  5c
 	ret                                                  ; FE2EAE  0e
-sub_FE2EAF:
+; SysPartMidi_ResetBlock1Default -- copy the 32-byte SysPartMidi_Block1Default to RAM 0x7600 and to 0x603600.
+SysPartMidi_ResetBlock1Default:
 	push XHL                                             ; FE2EAF  3b
 	push XIX                                             ; FE2EB0  3c
 	ldw hl, 0x00                                         ; FE2EB1  33 00 00
 .LFE2EB4:
 	ld BC,HL                                             ; FE2EB4  db 89
 	exts XBC                                             ; FE2EB6  e9 13
-	add XBC,0x00fe704e                                   ; FE2EB8  e9 c8 4e 70 fe 00
+	add XBC,SysPartMidi_Block1Default                    ; FE2EB8  e9 c8 4e 70 fe 00
 	ld A,(XBC)                                           ; FE2EBE  81 21
 	extz XHL                                             ; FE2EC0  eb 12
 	ld (XHL+0x7600),A                                    ; FE2EC2  f3 ed 00 76 41
@@ -160724,7 +160725,7 @@ sub_FE2EAF:
 	ld C,H                                               ; FE2ED6  ce 8b
 	exts BC                                              ; FE2ED8  d9 13
 	exts XBC                                             ; FE2EDA  e9 13
-	add XBC,0x00fe704e                                   ; FE2EDC  e9 c8 4e 70 fe 00
+	add XBC,SysPartMidi_Block1Default                    ; FE2EDC  e9 c8 4e 70 fe 00
 	ld A,(XBC)                                           ; FE2EE2  81 21
 	ld (XIX),A                                           ; FE2EE4  b4 41
 	inc 1,H                                              ; FE2EE6  ce 61
@@ -169161,77 +169162,38 @@ sub_FE6F89:
 .LFE6FFB:
 	inc 1,D                                              ; FE6FFB  cc 61
 	cp D,0x10                                            ; FE6FFD  cc cf 10
-sub_FE6F89_Data_FE7000:
-	.byte 0x88, 0x00, 0x18                               ; FE7000  88 00 18
-	nop                                                  ; FE7003  00
-	nop                                                  ; FE7004  00
-	nop                                                  ; FE7005  00
-sub_FE6F89_Data_FE7006:
-	.byte 0xf3, 0x00, 0xff                               ; FE7006  f3 00 ff
-	ld c, 0x23:opc                                          ; FE7009  23 23
-	ld c, 0x03:opc                                          ; FE700B  23 03
-	normal                                               ; FE700D  01
-	halt                                                 ; FE700E  05
-	reti                                                 ; FE700F  07
-	push SR                                              ; FE7010  02
-	ld e, 0x26:opc                                          ; FE7011  25 26
-	ld l, 0x06:opc                                          ; FE7013  27 06
-	max                                                  ; FE7015  04
-	pushw wa                                             ; FE7016  28
-	ld c, 0x00:opc                                          ; FE7017  23 00
-	pushw 0x0929                                         ; FE7019  0b 29 09
-	ld (0xff:8), 0xff:io                                      ; FE701C  08 ff ff
-	ldw (0xff:8), 0xff23:io                                   ; FE701F  0a ff 23 ff
-	pushw hl                                             ; FE7023  2b
-	swi 7                                                ; FE7024  ff
-	swi 7                                                ; FE7025  ff
-	push XIY                                             ; FE7026  3d
-sub_FE6F89_Data_FE7027:
-	.byte 0x57                                           ; FE7027  57
-	.byte 0x53                                           ; FE7028  53
-	ld XBC,0x554f5320                                    ; FE7029  41 20 53 4f 55
-	popw iz                                              ; FE702E  4e
-	ld XIX,0x4d415220                                    ; FE702F  44 20 52 41 4d
-	ld w, 0x53:opc                                          ; FE7034  20 53
-	ldw wa, 0x4b00                                       ; FE7036  30 00 4b
-	popw iz                                              ; FE7039  4e
-	ldw hl, 0x3030                                       ; FE703A  33 30 30
-	ldw wa, 0x5320                                       ; FE703D  30 20 53
-	popw sp                                              ; FE7040  4f
-	.byte 0x55                                           ; FE7041  55
-	popw iz                                              ; FE7042  4e
-	ld XIX,0x4d415220                                    ; FE7043  44 20 52 41 4d
-	nop                                                  ; FE7048  00
-sub_FE6F89_Data_FE7049:
-	.byte 0x57                                           ; FE7049  57
-	.byte 0x53                                           ; FE704A  53
-	ld XBC,0x5a5a0031                                    ; FE704B  41 31 00 5a 5a
-	normal                                               ; FE7050  01
-	nop                                                  ; FE7051  00
-	.byte 0x57                                           ; FE7052  57
-	ld XBC,0x00000030                                    ; FE7053  41 30 00 00 00
-	nop                                                  ; FE7058  00
-	nop                                                  ; FE7059  00
-	nop                                                  ; FE705A  00
-	nop                                                  ; FE705B  00
-	nop                                                  ; FE705C  00
-	nop                                                  ; FE705D  00
-	nop                                                  ; FE705E  00
-	nop                                                  ; FE705F  00
-	nop                                                  ; FE7060  00
-	nop                                                  ; FE7061  00
-	nop                                                  ; FE7062  00
-	nop                                                  ; FE7063  00
-	nop                                                  ; FE7064  00
-	nop                                                  ; FE7065  00
-	nop                                                  ; FE7066  00
-	nop                                                  ; FE7067  00
-	nop                                                  ; FE7068  00
-	nop                                                  ; FE7069  00
-	nop                                                  ; FE706A  00
-	nop                                                  ; FE706B  00
-	nop                                                  ; FE706C  00
-	nop                                                  ; FE706D  00
+; ---------------------------------------------------------------------
+; 0xFE7000-0xFE706D -- data, not code.  sub_FE6F89 above stops at `cp D,0x10` with no
+; branch after it and nothing calls it: it is a fragment, and the bytes from here on were
+; decoded as its continuation.  Each item below is named by the routine that reads it,
+; through the single 24-bit pointer to it that prom_a holds (prom_b holds none).
+; ---------------------------------------------------------------------
+; LinkMsg_AfterSoundRamLoad -- six bytes Link_SendAfterSoundRamLoadMsg sends with T_Link_SendBlockIn32ByteChunks
+;          from the disk load at 0xFE202F, once DiskLoad_CheckSoundRamTag has accepted the file and sub_FE20E1
+;          (passed 0x40000, 0xE80000 and 0x100) has returned 1.  prom_b's Table_F48C00 holds the same six after
+;          "WSA SOUND RAM S0" and "WSA1".  What link command 0x88 does is not established.
+LinkMsg_AfterSoundRamLoad:	.byte	0x88, 0x00, 0x18, 0x00, 0x00, 0x00	; FE7000
+; MidiOut_SongSelectTemplate -- a MIDI Song Select message.  sub_FE14E9 copies the word to its frame, stores the
+;          song number (bit 7 cleared) over the 0x00 and queues the two bytes with T_Ring601432_PutBlock
+MidiOut_SongSelectTemplate:	.byte	0xf3, 0x00	; FE7006
+; UiStatus_CodeByIndex -- the UI_StatusCode StatusMsg_ShowByIndex stores for each index 0-30 it is passed
+;          (index 9 -> 0x25, which sub_FE0514 also stores itself just before passing 9)
+UiStatus_CodeByIndex:	.byte	0xff, 0x23, 0x23, 0x23, 0x03, 0x01, 0x05, 0x07, 0x02, 0x25, 0x26, 0x27, 0x06, 0x04, 0x28, 0x23	; FE7008
+	.byte	0x00, 0x0b, 0x29, 0x09, 0x08, 0xff, 0xff, 0x0a, 0xff, 0x23, 0xff, 0x2b, 0xff, 0xff, 0x3d	; FE7018
+; The three disk-file tags.  DiskLoad_CheckSoundRamTag compares all 16 characters of the first with the 16 bytes at
+; 0x609400; DiskLoad_CheckCombiTag compares the 4 of "WSA1" with the 4 bytes at 0x60A086.  No reader of
+; "KN3000 SOUND RAM" was found: no 24-bit pointer to 0xFE7038 exists in prom_a or prom_b.
+Str_SoundRamTag_Wsa:	.asciz	"WSA SOUND RAM S0"	; FE7027
+	.asciz	"KN3000 SOUND RAM"	; FE7038
+Str_CombiTag_Wsa1:	.asciz	"WSA1"	; FE7049
+; SysPartMidi_Block1Default -- the 32-byte block 1 of the SYSTEM,PART & MIDI bulk dump: the 5A 5A signature,
+;          01 00, "WA0", then 24 zeros.  SysPartMidi_ResetBlock1Default copies it to RAM 0x7600 (the block itself)
+;          and to 0x603600; nothing compares against it (wsa1/notes/sysex-probes/sysex_block_signatures.py)
+SysPartMidi_Block1Default:	.byte	0x5a, 0x5a, 0x01, 0x00	; FE704E
+	.asciz	"WA0"	; FE7052
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; FE7056
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; FE705E
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; FE7066
 sub_FE6F89__FE706E:
 	pushw iz                                             ; FE706E  2e
 	pop XIX                                              ; FE706F  5c

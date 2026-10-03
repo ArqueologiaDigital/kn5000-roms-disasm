@@ -40,7 +40,7 @@ parts list now agree, and MAME's `upd765` family covers it.
 * The driver is at `0xFE54EC-0xFE6850`, with four jump tables at
   `0xFE6E3A-0xFE6E83`, and the disk-format module at `0xFE69BF-0xFE7732`
   carries four filesystem templates — including the ASCII `"FAT16"` at
-  `0xFE69EA` and the volume labels `"WSA SOUND RAM S0"` (`0xFE7026`),
+  `0xFE69EA` and the volume labels `"WSA SOUND RAM S0"` (`0xFE7027`; 0xFE7026 is the last byte of `UiStatus_CodeByIndex`),
   `"KN3000 SOUND RAM"` (`0xFE7038`) and `"WSA1"` (`0xFE7049`).
 
 **Also unmapped and real:** `0x7E0008-0x7E0017`, which the driver maps one word
