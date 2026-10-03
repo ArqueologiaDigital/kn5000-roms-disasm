@@ -1097,7 +1097,7 @@
 	.set	sub_FB9D2C, 0xFB9D2C
 	.set	sub_FB9D43, 0xFB9D43
 	.set	sub_FB9DA0, 0xFB9DA0
-	.set	sub_FB9DFE, 0xFB9DFE
+	.set	MidiFileDirectPlay_LcdKeyRow1, 0xFB9DFE
 	.set	sub_FB9E79, 0xFB9E79
 	.set	sub_FBAC00, 0xFBAC00
 	.set	sub_FBAE5A, 0xFBAE5A
@@ -1733,14 +1733,14 @@
 	.set	sub_FE1C3A, 0xFE1C3A
 	.set	sub_FE1C4D, 0xFE1C4D
 	.set	sub_FE1C55, 0xFE1C55
-	.set	sub_FE1C59, 0xFE1C59
+	.set	MidiFileSave_Page3_LcdKeyRow3, 0xFE1C59
 	.set	sub_FE1C5D, 0xFE1C5D
 	.set	sub_FE1C67, 0xFE1C67
 	.set	sub_FE1C71, 0xFE1C71
 	.set	sub_FE1C75, 0xFE1C75
 	.set	sub_FE1C79, 0xFE1C79
 	.set	sub_FE1C80, 0xFE1C80
-	.set	sub_FE1C98, 0xFE1C98
+	.set	MidiFileSave_Page5_LcdKeyRow3, 0xFE1C98
 	.set	sub_FE1C9F, 0xFE1C9F
 	.set	sub_FE1CA3, 0xFE1CA3
 	.set	sub_FE1CA7, 0xFE1CA7
@@ -1749,7 +1749,7 @@
 	.set	sub_FE1CB3, 0xFE1CB3
 	.set	sub_FE1CC0, 0xFE1CC0
 	.set	Disk_PortA3_Release_Entry, 0xFE1CC4
-	.set	sub_FE1CC8, 0xFE1CC8
+	.set	DiskSaveFile_Page5_LcdKeyRow3, 0xFE1CC8
 	.set	sub_FE1CCC, 0xFE1CCC
 	.set	sub_FE1CD0, 0xFE1CD0
 	.set	Var2216_SetW145C_Call, 0xFE1CD4
@@ -88379,7 +88379,7 @@ T_F4090C:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
 T_F40910:	jp SysExTx_SendBytes  ; -> prom_a 0x37AC2   x1
 	.fill 0x3C, 1, 0x0E  ; 0xF40914: 60 x ret
 T_F40950:	jp sub_FB9E79  ; -> prom_a 0x39E79   x1
-T_F40954:	jp sub_FB9DFE  ; -> prom_a 0x39DFE   x1
+T_F40954:	jp MidiFileDirectPlay_LcdKeyRow1  ; -> prom_a 0x39DFE   x1
 T_F40958:	jp sub_FB9B41  ; -> prom_a 0x39B41   x1
 T_F4095C:	jp sub_FB9B73  ; -> prom_a 0x39B73   x1
 T_F40960:	jp sub_FB9BA4  ; -> prom_a 0x39BA4
@@ -89984,7 +89984,7 @@ T_F425C0:	jp sub_FE1C71  ; -> prom_a 0x61C71
 T_F425C4:	jp sub_FE1C75  ; -> prom_a 0x61C75   x1
 T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
 T_F425CC:	jp sub_FE1C80  ; -> prom_a 0x61C80   x3
-T_F425D0:	jp sub_FE1C98  ; -> prom_a 0x61C98   x1
+T_F425D0:	jp MidiFileSave_Page5_LcdKeyRow3  ; -> prom_a 0x61C98   x1
 T_F425D4:	jp sub_FE1C9F  ; -> prom_a 0x61C9F   x2
 T_F425D8:	jp sub_FE1CA3  ; -> prom_a 0x61CA3   x3
 T_F425DC:	jp sub_FE1CA7  ; -> prom_a 0x61CA7   x3
@@ -89993,7 +89993,7 @@ T_F425E4:	jp sub_FE1CAF  ; -> prom_a 0x61CAF   x5
 T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
 T_F425EC:	jp sub_FE1CC0  ; -> prom_a 0x61CC0
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
-T_F425F4:	jp sub_FE1CC8  ; -> prom_a 0x61CC8   x1
+T_F425F4:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
 T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
 T_F425FC:	jp sub_FE1CD0  ; -> prom_a 0x61CD0
 T_F42600:	jp Var2216_SetW145C_Call  ; -> prom_a 0x61CD4   x2
@@ -90009,7 +90009,7 @@ T_F42624:	jp sub_FE1BEB  ; -> prom_a 0x61BEB   x1
 T_F42628:	jp sub_FE1BF3  ; -> prom_a 0x61BF3   x1
 T_F4262C:	jp sub_FE1BFB  ; -> prom_a 0x61BFB   x1
 T_F42630:	jp sub_FE1C03  ; -> prom_a 0x61C03
-T_F42634:	jp sub_FE1C59  ; -> prom_a 0x61C59   x1
+T_F42634:	jp MidiFileSave_Page3_LcdKeyRow3  ; -> prom_a 0x61C59   x1
 	.fill 0x28, 1, 0x0E  ; 0xF42638: 40 x ret
 T_F42660:	jp sub_F38800  ; -> prom_b 0x38800   x1
 T_F42664:	jp sub_F38843  ; -> prom_b 0x38843   x1
@@ -90138,20 +90138,20 @@ T_F428B0:	jp BStore_AppendBytes_Join3_Veneer  ; -> prom_b 0x7AA00   x1
 T_F428B4:	jp BStore_AppendBytes_Join4_Veneer  ; -> prom_b 0x7AA02   x1
 T_F428B8:	jp sub_F7AA29  ; -> prom_b 0x7AA29   x1
 T_F428BC:	jp T_F428BC_Nop  ; -> prom_b 0x7AA88   x1
-T_F428C0:	jp sub_F7AA89  ; -> prom_b 0x7AA89   x1
-T_F428C4:	jp sub_F7AAAF  ; -> prom_b 0x7AAAF   x1
-T_F428C8:	jp sub_F7AADD  ; -> prom_b 0x7AADD   x1
-T_F428CC:	jp sub_F7AAF0  ; -> prom_b 0x7AAF0   x1
+T_F428C0:	jp SongClear_SoftKeyCol4  ; -> prom_b 0x7AA89   x1
+T_F428C4:	jp SongClear_SoftKeyCol3  ; -> prom_b 0x7AAAF   x1
+T_F428C8:	jp SongClear_LcdKeyRow5  ; -> prom_b 0x7AADD   x1
+T_F428CC:	jp SongClear_LcdKeyRow4  ; -> prom_b 0x7AAF0   x1
 T_F428D0:	jp sub_F7AB9C  ; -> prom_b 0x7AB9C   x1
 T_F428D4:	jp sub_F7ABB9  ; -> prom_b 0x7ABB9   x1
 T_F428D8:	jp sub_F7ABDC  ; -> prom_b 0x7ABDC   x2
-T_F428DC:	jp sub_F7AC07  ; -> prom_b 0x7AC07   x2
+T_F428DC:	jp TrackClear_LcdKeyRow2  ; -> prom_b 0x7AC07   x2
 T_F428E0:	jp sub_F7BCFD  ; -> prom_b 0x7BCFD   x1
 T_F428E4:	jp sub_F7BD24  ; -> prom_b 0x7BD24   x1
-T_F428E8:	jp sub_F7BD30  ; -> prom_b 0x7BD30   x1
-T_F428EC:	jp sub_F7BD40  ; -> prom_b 0x7BD40   x1
-T_F428F0:	jp sub_F7BD55  ; -> prom_b 0x7BD55   x1
-T_F428F4:	jp sub_F7BD6A  ; -> prom_b 0x7BD6A   x1
+T_F428E8:	jp Vel0cityChange_StageZero_LcdKeyRow1  ; -> prom_b 0x7BD30   x1
+T_F428EC:	jp Vel0cityChange_StageZero_LcdKeyRow2  ; -> prom_b 0x7BD40   x1
+T_F428F0:	jp Vel0cityChange_StageZero_LcdKeyRow3  ; -> prom_b 0x7BD55   x1
+T_F428F4:	jp Vel0cityChange_StageZero_LcdKeyRow4  ; -> prom_b 0x7BD6A   x1
 T_F428F8:	jp sub_F7BD7F  ; -> prom_b 0x7BD7F   x4
 T_F428FC:	jp sub_F7BDD4  ; -> prom_b 0x7BDD4   x2
 T_F42900:	jp sub_F7BEF4  ; -> prom_b 0x7BEF4   x2
@@ -90174,7 +90174,7 @@ T_F42940:	jp TrackMerge_SelectField1  ; -> prom_b 0x7ACC5   x1
 T_F42944:	jp TrackMerge_SelectField2  ; -> prom_b 0x7ACD0   x1
 T_F42948:	jp TrackMerge_SelectField3  ; -> prom_b 0x7ACDB   x1
 T_F4294C:	jp sub_F7ACE6  ; -> prom_b 0x7ACE6   x1
-T_F42950:	jp sub_F7AD14  ; -> prom_b 0x7AD14   x1
+T_F42950:	jp TrackMerge_StageZero_SoftKeyCol5  ; -> prom_b 0x7AD14   x1
 T_F42954:	jp sub_F7ADF5  ; -> prom_b 0x7ADF5   x2
 T_F42958:	jp sub_F7AE0C  ; -> prom_b 0x7AE0C   x2
 T_F4295C:	jp sub_F7B000  ; -> prom_b 0x7B000   x1
@@ -90198,39 +90198,39 @@ T_F429A0:	jp sub_F7B3E0  ; -> prom_b 0x7B3E0   x2
 T_F429A4:	jp sub_F7B2BD  ; -> prom_b 0x7B2BD
 T_F429A8:	jp sub_F7B4BF  ; -> prom_b 0x7B4BF   x1
 T_F429AC:	jp sub_F7B4CD  ; -> prom_b 0x7B4CD   x1
-T_F429B0:	jp sub_F7B4EC  ; -> prom_b 0x7B4EC   x1
-T_F429B4:	jp sub_F7B4F7  ; -> prom_b 0x7B4F7   x1
-T_F429B8:	jp sub_F7B507  ; -> prom_b 0x7B507   x1
-T_F429BC:	jp sub_F7B517  ; -> prom_b 0x7B517   x1
-T_F429C0:	jp sub_F7B522  ; -> prom_b 0x7B522   x1
-T_F429C4:	jp sub_F7B532  ; -> prom_b 0x7B532   x1
+T_F429B0:	jp MeasureInsert_SelectField1  ; -> prom_b 0x7B4EC   x1
+T_F429B4:	jp MeasureInsert_SelectField2  ; -> prom_b 0x7B4F7   x1
+T_F429B8:	jp MeasureInsert_SelectField3  ; -> prom_b 0x7B507   x1
+T_F429BC:	jp MeasureInsert_SelectField4  ; -> prom_b 0x7B517   x1
+T_F429C0:	jp MeasureInsert_SelectField5  ; -> prom_b 0x7B522   x1
+T_F429C4:	jp MeasureInsert_SelectField6  ; -> prom_b 0x7B532   x1
 T_F429C8:	jp sub_F7B53D  ; -> prom_b 0x7B53D   x2
 T_F429CC:	jp sub_F7B58C  ; -> prom_b 0x7B58C   x2
 T_F429D0:	jp sub_F7B761  ; -> prom_b 0x7B761   x2
-T_F429D4:	jp sub_F7B771  ; -> prom_b 0x7B771   x2
+T_F429D4:	jp MeasureInsert_LcdKeyRow1  ; -> prom_b 0x7B771   x2
 T_F429D8:	jp sub_F7B8DC  ; -> prom_b 0x7B8DC   x1
 T_F429DC:	jp sub_F7B8EA  ; -> prom_b 0x7B8EA   x1
-T_F429E0:	jp sub_F7B909  ; -> prom_b 0x7B909   x1
-T_F429E4:	jp sub_F7B914  ; -> prom_b 0x7B914   x1
-T_F429E8:	jp sub_F7B924  ; -> prom_b 0x7B924   x1
-T_F429EC:	jp sub_F7B934  ; -> prom_b 0x7B934   x1
-T_F429F0:	jp sub_F7B93F  ; -> prom_b 0x7B93F   x1
-T_F429F4:	jp sub_F7B94F  ; -> prom_b 0x7B94F   x1
+T_F429E0:	jp MeasureC0py_SelectField1  ; -> prom_b 0x7B909   x1
+T_F429E4:	jp MeasureC0py_SelectField2  ; -> prom_b 0x7B914   x1
+T_F429E8:	jp MeasureC0py_SelectField3  ; -> prom_b 0x7B924   x1
+T_F429EC:	jp MeasureC0py_SelectField4  ; -> prom_b 0x7B934   x1
+T_F429F0:	jp MeasureC0py_SelectField5  ; -> prom_b 0x7B93F   x1
+T_F429F4:	jp MeasureC0py_SelectField6  ; -> prom_b 0x7B94F   x1
 T_F429F8:	jp sub_F7B95A  ; -> prom_b 0x7B95A   x2
 T_F429FC:	jp sub_F7B9AB  ; -> prom_b 0x7B9AB   x2
 T_F42A00:	jp sub_F7BB82  ; -> prom_b 0x7BB82   x2
-T_F42A04:	jp sub_F7BB92  ; -> prom_b 0x7BB92   x2
+T_F42A04:	jp MeasureC0py_LcdKeyRow1  ; -> prom_b 0x7BB92   x2
 T_F42A08:	jp sub_F7C3B2  ; -> prom_b 0x7C3B2   x1
 T_F42A0C:	jp sub_F7C3EE  ; -> prom_b 0x7C3EE
-T_F42A10:	jp sub_F7C41D  ; -> prom_b 0x7C41D   x1
-T_F42A14:	jp sub_F7C3FA  ; -> prom_b 0x7C3FA   x1
-T_F42A18:	jp sub_F7C48C  ; -> prom_b 0x7C48C   x1
-T_F42A1C:	jp sub_F7C463  ; -> prom_b 0x7C463   x1
-T_F42A20:	jp sub_F7C4DC  ; -> prom_b 0x7C4DC   x1
-T_F42A24:	jp sub_F7C4B9  ; -> prom_b 0x7C4B9   x1
-T_F42A28:	jp sub_F7C528  ; -> prom_b 0x7C528   x1
-T_F42A2C:	jp sub_F7C4FF  ; -> prom_b 0x7C4FF   x1
-T_F42A30:	jp sub_F7C555  ; -> prom_b 0x7C555   x2
+T_F42A10:	jp S0ngC0py_StageZero_SoftKeyCol2  ; -> prom_b 0x7C41D   x1
+T_F42A14:	jp S0ngC0py_StageZero_SoftKeyCol1  ; -> prom_b 0x7C3FA   x1
+T_F42A18:	jp S0ngC0py_StageZero_SoftKeyCol4  ; -> prom_b 0x7C48C   x1
+T_F42A1C:	jp S0ngC0py_StageZero_SoftKeyCol3  ; -> prom_b 0x7C463   x1
+T_F42A20:	jp S0ngC0py_StageZero_SoftKeyCol6  ; -> prom_b 0x7C4DC   x1
+T_F42A24:	jp S0ngC0py_StageZero_SoftKeyCol5  ; -> prom_b 0x7C4B9   x1
+T_F42A28:	jp S0ngC0py_StageZero_SoftKeyCol8  ; -> prom_b 0x7C528   x1
+T_F42A2C:	jp S0ngC0py_StageZero_SoftKeyCol7  ; -> prom_b 0x7C4FF   x1
+T_F42A30:	jp S0ngC0py_LcdKeyRow2  ; -> prom_b 0x7C555   x2
 T_F42A34:	jp sub_F7C5C0  ; -> prom_b 0x7C5C0   x2
 T_F42A38:	jp sub_F7C606  ; -> prom_b 0x7C606   x1
 T_F42A3C:	jp sub_F7C666  ; -> prom_b 0x7C666   x1
@@ -90250,18 +90250,18 @@ T_F42A70:	jp AdvanceDelay_SelectField3  ; -> prom_b 0x7CB34   x1
 T_F42A74:	jp AdvanceDelay_SelectField4  ; -> prom_b 0x7CB3F   x1
 T_F42A78:	jp sub_F7CB4A  ; -> prom_b 0x7CB4A   x2
 T_F42A7C:	jp sub_F7CB90  ; -> prom_b 0x7CB90   x2
-T_F42A80:	jp sub_F7CC7C  ; -> prom_b 0x7CC7C   x2
+T_F42A80:	jp AdvanceDelay_LcdKeyRow3  ; -> prom_b 0x7CC7C   x2
 T_F42A84:	jp sub_F7CCCA  ; -> prom_b 0x7CCCA   x2
 T_F42A88:	jp sub_F7C853  ; -> prom_b 0x7C853   x1
 T_F42A8C:	jp sub_F7C8BC  ; -> prom_b 0x7C8BC   x1
-T_F42A90:	jp sub_F7C8C8  ; -> prom_b 0x7C8C8   x1
-T_F42A94:	jp sub_F7C8D8  ; -> prom_b 0x7C8D8   x1
-T_F42A98:	jp sub_F7C8E8  ; -> prom_b 0x7C8E8   x1
-T_F42A9C:	jp sub_F7C8F8  ; -> prom_b 0x7C8F8   x1
-T_F42AA0:	jp sub_F7C908  ; -> prom_b 0x7C908   x1
+T_F42A90:	jp N0teChange_SelectField1  ; -> prom_b 0x7C8C8   x1
+T_F42A94:	jp N0teChange_SelectField2  ; -> prom_b 0x7C8D8   x1
+T_F42A98:	jp N0teChange_SelectField3  ; -> prom_b 0x7C8E8   x1
+T_F42A9C:	jp N0teChange_SelectField4  ; -> prom_b 0x7C8F8   x1
+T_F42AA0:	jp N0teChange_SelectField5  ; -> prom_b 0x7C908   x1
 T_F42AA4:	jp sub_F7C918  ; -> prom_b 0x7C918   x2
 T_F42AA8:	jp sub_F7C964  ; -> prom_b 0x7C964   x2
-T_F42AAC:	jp sub_F7CA6F  ; -> prom_b 0x7CA6F   x2
+T_F42AAC:	jp N0teChange_LcdKeyRow4  ; -> prom_b 0x7CA6F   x2
 T_F42AB0:	jp sub_F7CAC2  ; -> prom_b 0x7CAC2   x2
 T_F42AB4:	jp sub_F7C5CB  ; -> prom_b 0x7C5CB   x1
 T_F42AB8:	jp sub_F7C5EA  ; -> prom_b 0x7C5EA
@@ -90275,16 +90275,16 @@ T_F42B7C:	jp Medley_SelectField1  ; -> prom_b 0x66246   x2
 T_F42B80:	jp Medley_SelectField2  ; -> prom_b 0x66251   x1
 T_F42B84:	jp sub_F6625C  ; -> prom_b 0x6625C   x1
 T_F42B88:	jp sub_F66278  ; -> prom_b 0x66278   x1
-T_F42B8C:	jp sub_F65C5E  ; -> prom_b 0x65C5E   x1
-T_F42B90:	jp sub_F65C9A  ; -> prom_b 0x65C9A   x1
+T_F42B8C:	jp TrackAssign_StageZero_LcdKeyRow2  ; -> prom_b 0x65C5E   x1
+T_F42B90:	jp TrackAssign_StageZero_LcdKeyRow1  ; -> prom_b 0x65C9A   x1
 T_F42B94:	jp sub_F65CD6  ; -> prom_b 0x65CD6   x2
 T_F42B98:	jp sub_F65DAE  ; -> prom_b 0x65DAE   x1
 T_F42B9C:	jp sub_F65DD3  ; -> prom_b 0x65DD3   x2
 T_F42BA0:	jp sub_F65DF8  ; -> prom_b 0x65DF8   x1
-T_F42BA4:	jp sub_F65E94  ; -> prom_b 0x65E94   x1
-T_F42BA8:	jp sub_F65F7C  ; -> prom_b 0x65F7C   x1
-T_F42BAC:	jp sub_F65FDD  ; -> prom_b 0x65FDD   x1
-T_F42BB0:	jp sub_F66020  ; -> prom_b 0x66020   x1
+T_F42BA4:	jp TrackAssign_StageZero_LcdKeyRow3  ; -> prom_b 0x65E94   x1
+T_F42BA8:	jp TrackAssign_StageZero_SoftKeyCol5  ; -> prom_b 0x65F7C   x1
+T_F42BAC:	jp TrackAssign_StageZero_SoftKeyCol7  ; -> prom_b 0x65FDD   x1
+T_F42BB0:	jp TrackAssign_StageNonZero_LcdKeyRow2  ; -> prom_b 0x66020   x1
 T_F42BB4:	jp sub_F65C00  ; -> prom_b 0x65C00   x1
 T_F42BB8:	jp sub_F65C0D  ; -> prom_b 0x65C0D   x1
 T_F42BBC:	jp sub_F664AE  ; -> prom_b 0x664AE   x8
@@ -90293,7 +90293,7 @@ T_F42BC4:	jp sub_F664D5  ; -> prom_b 0x664D5   x1
 T_F42BC8:	jp sub_F6650F  ; -> prom_b 0x6650F   x1
 T_F42BCC:	jp sub_F660ED  ; -> prom_b 0x660ED   x1
 T_F42BD0:	jp sub_F6614E  ; -> prom_b 0x6614E   x1
-T_F42BD4:	jp sub_F66191  ; -> prom_b 0x66191   x1
+T_F42BD4:	jp SequencerMedley_LcdKeyRow2  ; -> prom_b 0x66191   x1
 T_F42BD8:	jp sub_F66201  ; -> prom_b 0x66201   x1
 T_F42BDC:	jp sub_F66522  ; -> prom_b 0x66522
 T_F42BE0:	jp T_F42BE0_Nop  ; -> prom_b 0x6656D
@@ -90301,7 +90301,7 @@ T_F42BE4:	jp sub_F66522_Join  ; -> prom_b 0x6652C   x1
 T_F42BE8:	jp sub_F6655D  ; -> prom_b 0x6655D   x1
 T_F42BEC:	jp sub_F6657A  ; -> prom_b 0x6657A   x1
 T_F42BF0:	jp sub_F66598  ; -> prom_b 0x66598
-T_F42BF4:	jp sub_F6656E  ; -> prom_b 0x6656E   x1
+T_F42BF4:	jp TrackAssign_StageZero_LcdKeyRow5  ; -> prom_b 0x6656E   x1
 T_F42BF8:	jp sub_F665B4  ; -> prom_b 0x665B4   x1
 T_F42BFC:	jp T_F42BFC_Nop  ; -> prom_b 0x665F1
 T_F42C00:	jp TrackAssignPresets_SelectField1  ; -> prom_b 0x665F2   x1
@@ -90311,11 +90311,11 @@ T_F42C0C:	jp sub_F66619  ; -> prom_b 0x66619   x1
 T_F42C10:	jp sub_F66639  ; -> prom_b 0x66639   x1
 T_F42C14:	jp sub_F66658  ; -> prom_b 0x66658   x1
 T_F42C18:	jp sub_F6633A  ; -> prom_b 0x6633A   x2
-T_F42C1C:	jp sub_F66382  ; -> prom_b 0x66382   x1
+T_F42C1C:	jp SequencerMedley_SoftKeyCol3  ; -> prom_b 0x66382   x1
 T_F42C20:	jp T_F42C20_Nop  ; -> prom_b 0x663D6
-T_F42C24:	jp sub_F66415  ; -> prom_b 0x66415   x1
-T_F42C28:	jp sub_F663D7  ; -> prom_b 0x663D7   x1
-T_F42C2C:	jp sub_F6645A  ; -> prom_b 0x6645A   x1
+T_F42C24:	jp SequencerMedley_SoftKeyCol7  ; -> prom_b 0x66415   x1
+T_F42C28:	jp SequencerMedley_SoftKeyCol8  ; -> prom_b 0x663D7   x1
+T_F42C2C:	jp SequencerMedley_LcdKeyRow4  ; -> prom_b 0x6645A   x1
 	.fill 0x40, 1, 0x0E  ; 0xF42C30: 64 x ret
 T_F42C70:	jp Stub_Ret_F55018  ; -> prom_b 0x55018   never CALLED, but the 4 bytes
 				; `70 2C F4 00` occur 397 times in prom_a+prom_b
@@ -90901,7 +90901,7 @@ T_MidiIn_ReqRebuild_Msg03_0A:	jp MidiIn_ReqRebuild_Msg03_0A  ; F43354 (was T_F43
 ;           MidiIn_PumpPortB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MidiIn_PumpPortB:	jp MidiIn_PumpPortB  ; F43358 (was T_F43358) -> prom_a 0x260C2   x1
 	.fill 0x24, 1, 0x0E  ; 0xF4335C: 36 x ret
-T_F43380:	jp sub_F6F400  ; -> prom_b 0x6F400   x1
+T_F43380:	jp MidiFileL0ad_LcdKeyRow1  ; -> prom_b 0x6F400   x1
 T_F43384:	jp sub_F6F404  ; -> prom_b 0x6F404   x2
 	.fill 0x38, 1, 0x0E  ; 0xF43388: 56 x ret
 T_F433C0:	jp sub_FE02AB  ; -> prom_a 0x602AB
@@ -142988,7 +142988,7 @@ sub_F65C51:		; <- T_F42B70
 	ret	; F65C5D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65C5E
+; TrackAssign_StageZero_LcdKeyRow2
 ; Called from: T_F42B8C (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0C07) (0x0DC0)  |  0x603422
 ; Calls:   sub_F65D26
@@ -142999,7 +142999,8 @@ sub_F65C51:		; <- T_F42B70
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65C5E:		; <- T_F42B8C
+; TrackAssign_StageZero_LcdKeyRow2: the LcdKeyRow2 action of TrackAssign_StageZero -- called only by LcdKeyRow2_TrackAssign_StageZero.
+TrackAssign_StageZero_LcdKeyRow2:		; <- T_F42B8C
 	calr	sub_F65D26	; F65C5E  calr 0xf65d26
 	ld	(3520:16), 0	; F65C61  ld (0x0dc0),0x00
 	ld	a, (3075:16)	; F65C66  ld A,(0x0c03)
@@ -143024,7 +143025,7 @@ sub_F65C5E_Join:
 	ret	; F65C99  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65C9A
+; TrackAssign_StageZero_LcdKeyRow1
 ; Called from: T_F42B90 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0C07) (0x0DC0)  |  0x603422
 ; Calls:   sub_F65D26
@@ -143035,7 +143036,8 @@ sub_F65C5E_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65C9A:		; <- T_F42B90
+; TrackAssign_StageZero_LcdKeyRow1: the LcdKeyRow1 action of TrackAssign_StageZero -- called only by LcdKeyRow1_TrackAssign_StageZero.
+TrackAssign_StageZero_LcdKeyRow1:		; <- T_F42B90
 	calr	sub_F65D26	; F65C9A  calr 0xf65d26
 	ld	(3520:16), 0	; F65C9D  ld (0x0dc0),0x00
 	ld	a, (3075:16)	; F65CA2  ld A,(0x0c03)
@@ -143315,7 +143317,7 @@ ClampInc_0to31:
 
 
 ; --------------------------------------------------------------------------
-; sub_F65E94
+; TrackAssign_StageZero_LcdKeyRow3
 ; Called from: T_F42BA4 (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F65E98
@@ -143326,7 +143328,8 @@ ClampInc_0to31:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65E94:		; <- T_F42BA4
+; TrackAssign_StageZero_LcdKeyRow3: the LcdKeyRow3 action of TrackAssign_StageZero -- called only by LcdKeyRow3_TrackAssign_StageZero.
+TrackAssign_StageZero_LcdKeyRow3:		; <- T_F42BA4
 	calr	sub_F65E98	; F65E94  calr 0xf65e98
 	ret	; F65E97  ret
 
@@ -143416,7 +143419,7 @@ sub_F65E98_Join:
 ;   AND is zero only if one looked-up byte is zero, which no entry is -- so in
 ;   this build the table admits everything.
 ; Entry count: 32, the range ClampDec_0to31 / ClampInc_0to31 keep (0x0C06)
-;   in; the table ends where sub_F65F7C, a thunk target, begins.
+;   in; the table ends where TrackAssign_StageZero_SoftKeyCol5, a thunk target, begins.
 ; Unknown: what a zero entry would have excluded, and why 0x603422's byte
 ;   (which can be 0x20, per ByteMap_F6F985) would index past entry 31.
 ; --------------------------------------------------------------------------
@@ -143425,7 +143428,7 @@ MaskTable_F65F5C:
 	.byte	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF	; F65F6C  [16..31]
 
 ; --------------------------------------------------------------------------
-; sub_F65F7C
+; TrackAssign_StageZero_SoftKeyCol5
 ; Called from: T_F42BA8 (x1)
 ; Touches: (0x0C03) (0x2075)
 ; Calls:   T_F411B8
@@ -143436,7 +143439,8 @@ MaskTable_F65F5C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65F7C:		; <- T_F42BA8
+; TrackAssign_StageZero_SoftKeyCol5: the SoftKeyCol5 action of TrackAssign_StageZero -- called only by SoftKeyCol5_TrackAssign_StageZero.
+TrackAssign_StageZero_SoftKeyCol5:		; <- T_F42BA8
 	bit	2, (0x96:8)	; F65F7C  bit 2,(0x96)
 	jr	nz, sub_F65F7C_Return	; F65F7F  jr NZ,0xf65fdc
 	ld	c, (3075:16)	; F65F81  ld C,(0x0c03)
@@ -143475,7 +143479,7 @@ sub_F65F7C_Return:
 	ret	; F65FDC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65FDD
+; TrackAssign_StageZero_SoftKeyCol7
 ; Called from: T_F42BAC (x1)
 ; Touches: (0x0C03) (0x2075)  |  0x603433
 ; Calls:   T_F411B8
@@ -143486,7 +143490,8 @@ sub_F65F7C_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65FDD:		; <- T_F42BAC
+; TrackAssign_StageZero_SoftKeyCol7: the SoftKeyCol7 action of TrackAssign_StageZero -- called only by SoftKeyCol7_TrackAssign_StageZero.
+TrackAssign_StageZero_SoftKeyCol7:		; <- T_F42BAC
 	bit	2, (0x96:8)	; F65FDD  bit 2,(0x96)
 	jr	nz, sub_F65FDD_Return	; F65FE0  jr NZ,0xf6601f
 	ld	xhl, 6304819	; F65FE2  ld XHL,0x00603433
@@ -143516,7 +143521,7 @@ sub_F65FDD_Return:
 	ret	; F6601F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66020
+; TrackAssign_StageNonZero_LcdKeyRow2
 ; Called from: T_F42BB0 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0C70) (0x0DC0) (0x2071) (0x2075) (0x207E)
 ;          (0x212E) (0x215E) (0x3010)  |  0x603422
@@ -143528,7 +143533,8 @@ sub_F65FDD_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66020:		; <- T_F42BB0
+; TrackAssign_StageNonZero_LcdKeyRow2: the LcdKeyRow2 action of TrackAssign_StageNonZero -- called only by LcdKeyRow2_TrackAssign_StageNonZero.
+TrackAssign_StageNonZero_LcdKeyRow2:		; <- T_F42BB0
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66020  and (0x2075),0xf7
 	bit	2, (0x95:8)	; F66025  bit 2,(0x95)
 	jr	z, sub_F66020_Skip	; F66028  jr Z,0xf6602b
@@ -143746,7 +143752,7 @@ sub_F66123_Return:
 	ret	; F66190  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66191
+; SequencerMedley_LcdKeyRow2
 ; Called from: T_F42BD4 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x2071) (0x2075) (0x220B) (0x2880)
 ; Calls:   T_F4302C T_F42E94 T_F4257C sub_F661F3
@@ -143757,7 +143763,8 @@ sub_F66123_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66191:		; <- T_F42BD4
+; SequencerMedley_LcdKeyRow2: the LcdKeyRow2 action of SequencerMedley -- called only by LcdKeyRow2_SequencerMedley.
+SequencerMedley_LcdKeyRow2:		; <- T_F42BD4
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66191  cp (0x0dc1),0x00
 	jr	nz, sub_F66123_Return2	; F66196  jr NZ,0xf661f2
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66198  and (0x2075),0xf7
@@ -144090,7 +144097,7 @@ sub_F662F7_Return:
 	ret	; F66381  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66382
+; SequencerMedley_SoftKeyCol3
 ; Called from: T_F42C1C (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1303) (0x2208) (0x2209)
 ;          (0x220B)
@@ -144101,7 +144108,8 @@ sub_F662F7_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66382:		; <- T_F42C1C
+; SequencerMedley_SoftKeyCol3: the SoftKeyCol3 action of SequencerMedley -- called only by SoftKeyCol3_SequencerMedley.
+SequencerMedley_SoftKeyCol3:		; <- T_F42C1C
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66382  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return2	; F66387  jr NZ,0xf663d5
 	ld	a, 1:opc	; F66389  ld A,0x01
@@ -144151,7 +144159,7 @@ T_F42C20_Nop:		; <- T_F42C20
 	ret	; F663D6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F663D7
+; SequencerMedley_SoftKeyCol8
 ; Called from: T_F42C28 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1304) (0x2208) (0x2209)
 ; Evidence: thunk slot T_F42C28 holds `jp 0x00F663D7`, and 0xF663D7 is an
@@ -144161,7 +144169,8 @@ T_F42C20_Nop:		; <- T_F42C20
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F663D7:		; <- T_F42C28
+; SequencerMedley_SoftKeyCol8: the SoftKeyCol8 action of SequencerMedley -- called only by SoftKeyCol8_SequencerMedley.
+SequencerMedley_SoftKeyCol8:		; <- T_F42C28
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F663D7  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return3	; F663DC  jr NZ,0xf66414
 	ld	a, 0:opc	; F663DE  ld A,0x00
@@ -144185,7 +144194,7 @@ sub_F662F7_Return3:
 	ret	; F66414  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66415
+; SequencerMedley_SoftKeyCol7
 ; Called from: T_F42C24 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1304) (0x2208) (0x2209)
 ;          (0x220B)
@@ -144196,7 +144205,8 @@ sub_F662F7_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66415:		; <- T_F42C24
+; SequencerMedley_SoftKeyCol7: the SoftKeyCol7 action of SequencerMedley -- called only by SoftKeyCol7_SequencerMedley.
+SequencerMedley_SoftKeyCol7:		; <- T_F42C24
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66415  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return4	; F6641A  jr NZ,0xf66459
 	m_cp_mi8 MB16, Medley_Source, 0x01	; F6641C  cp (0x220b),0x01
@@ -144222,7 +144232,7 @@ sub_F662F7_Return4:
 	ret	; F66459  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6645A
+; SequencerMedley_LcdKeyRow4
 ; Called from: T_F42C2C (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x2071) (0x220B) (0x22D0) (0x2880)
 ; Calls:   T_F43034 T_F42E94 T_F4257C
@@ -144233,7 +144243,8 @@ sub_F662F7_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6645A:		; <- T_F42C2C
+; SequencerMedley_LcdKeyRow4: the LcdKeyRow4 action of SequencerMedley -- called only by LcdKeyRow4_SequencerMedley.
+SequencerMedley_LcdKeyRow4:		; <- T_F42C2C
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F6645A  cp (0x0dc1),0x01
 	jr	nz, sub_F662F7_Return5	; F6645F  jr NZ,0xf664ad
 	ld	a, (Medley_Source:16)	; F66461  ld A,(0x220b)
@@ -144413,7 +144424,7 @@ T_F42BE0_Nop:		; <- T_F42BE0
 	ret	; F6656D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6656E
+; TrackAssign_StageZero_LcdKeyRow5
 ; Called from: T_F42BF4 (x1)
 ; Touches: (0x2070)
 ; Evidence: thunk slot T_F42BF4 holds `jp 0x00F6656E`, and 0xF6656E is an
@@ -144423,7 +144434,8 @@ T_F42BE0_Nop:		; <- T_F42BE0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6656E:		; <- T_F42BF4
+; TrackAssign_StageZero_LcdKeyRow5: the LcdKeyRow5 action of TrackAssign_StageZero -- called only by LcdKeyRow5_TrackAssign_StageZero.
+TrackAssign_StageZero_LcdKeyRow5:		; <- T_F42BF4
 	bit	7, w	; F6656E  bit 0x07,W
 	jr	z, sub_F662F7_Return8	; F66571  jr Z,0xf66579
 	ldw	(UI_Request:16), 32785	; F66573  ld (0x2070),0x8011
@@ -164015,7 +164027,7 @@ sub_F6EC6A_Return:
 ;   0xF7127B where the live copy calls sub_F7CCDB (0xBA60 higher -- that
 ;   routine moved 0x60 further between the builds).  It starts on the 4 KB
 ;   boundary after 0x0E fill (the live copy is preceded by fill too) and ends
-;   on the 1 KB boundary 0xF6F400, where this build's sub_F6F400 cuts the old
+;   on the 1 KB boundary 0xF6F400, where this build's MidiFileL0ad_LcdKeyRow1 cuts the old
 ;   copy's last instruction after 4 of its 5 bytes.  Nothing outside these
 ;   1,024 bytes names an address in them: DEAD in this build.  The same
 ;   phenomenon as OldBuild_DLHandlerTables_Tail (0xF0ED50) and
@@ -164473,11 +164485,11 @@ OldCopy_sub_F7ADDC:
 OldCopy_sub_F7ADF5:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F3F5  cp (0x207e),0x01
 	jr	nz, sub_F7ADDC_Return - 0xBA00	; F6F3FA  jr NZ,0xf6f40b
-	.byte	0xC1, 0x75, 0x20, 0x3C	; F6F3FC  the first 4 of the 5 bytes of `and (0x2075),0xf6` (live 0xF7ADFC); this build's sub_F6F400 begins at 0xF6F400
+	.byte	0xC1, 0x75, 0x20, 0x3C	; F6F3FC  the first 4 of the 5 bytes of `and (0x2075),0xf6` (live 0xF7ADFC); this build's MidiFileL0ad_LcdKeyRow1 begins at 0xF6F400
 
 
 ; --------------------------------------------------------------------------
-; sub_F6F400
+; MidiFileL0ad_LcdKeyRow1
 ; Called from: T_F43380 (x1)
 ; Touches: nothing with an absolute address
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
@@ -164491,7 +164503,8 @@ OldCopy_sub_F7ADF5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6F400:		; <- T_F43380
+; MidiFileL0ad_LcdKeyRow1: the LcdKeyRow1 action of MidiFileL0ad -- called only by LcdKeyRow1_MidiFileL0ad.
+MidiFileL0ad_LcdKeyRow1:		; <- T_F43380
 	jp	sub_F6F408	; F6F400  jp 0xf6f408
 
 ; --------------------------------------------------------------------------
@@ -184307,7 +184320,7 @@ T_F428BC_Nop:		; <- T_F428BC
 	ret	; F7AA88  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AA89
+; SongClear_SoftKeyCol4
 ; Called from: T_F428C0 (x1)
 ; Touches: (0x0E02) (0x12F6) (0x2075) (0x207E)
 ; Calls:   SongStore_LoadSongHeaderToDisplay
@@ -184318,7 +184331,8 @@ T_F428BC_Nop:		; <- T_F428BC
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AA89:		; <- T_F428C0
+; SongClear_SoftKeyCol4: the SoftKeyCol4 action of SongClear -- called only by SoftKeyCol4_SongClear.
+SongClear_SoftKeyCol4:		; <- T_F428C0
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AA89  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Return	; F7AA8E  jr Z,0xf7aaae
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AA90  or (0x2075),0x09
@@ -184334,7 +184348,7 @@ SongStore_LoadSongHeaderToDisplay_Return:
 	ret	; F7AAAE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AAAF
+; SongClear_SoftKeyCol3
 ; Called from: T_F428C4 (x1)
 ; Touches: (0x0E02) (0x12F6) (0x2075) (0x207E)
 ; Calls:   SongStore_LoadSongHeaderToDisplay
@@ -184345,7 +184359,8 @@ SongStore_LoadSongHeaderToDisplay_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AAAF:		; <- T_F428C4
+; SongClear_SoftKeyCol3: the SoftKeyCol3 action of SongClear -- called only by SoftKeyCol3_SongClear.
+SongClear_SoftKeyCol3:		; <- T_F428C4
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AAAF  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Return2	; F7AAB4  jr Z,0xf7aadc
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AAB6  or (0x2075),0x09
@@ -184367,7 +184382,7 @@ SongStore_LoadSongHeaderToDisplay_Return2:
 	ret	; F7AADC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AADD
+; SongClear_LcdKeyRow5
 ; Called from: T_F428C8 (x1)
 ; Touches: (0x2070) (0x207E)
 ; Evidence: thunk slot T_F428C8 holds `jp 0x00F7AADD`, and 0xF7AADD is an
@@ -184377,7 +184392,8 @@ SongStore_LoadSongHeaderToDisplay_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AADD:		; <- T_F428C8
+; SongClear_LcdKeyRow5: the LcdKeyRow5 action of SongClear -- called only by LcdKeyRow5_SongClear.
+SongClear_LcdKeyRow5:		; <- T_F428C8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AADD  cp (0x207e),0x01
 	jr	nz, SongStore_LoadSongHeaderToDisplay_Return3	; F7AAE2  jr NZ,0xf7aaef
 	ld	(UI_ScreenStage:16), 0	; F7AAE4  ld (0x207e),0x00
@@ -184386,7 +184402,7 @@ SongStore_LoadSongHeaderToDisplay_Return3:
 	ret	; F7AAEF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AAF0
+; SongClear_LcdKeyRow4
 ; Called from: T_F428CC (x1)
 ; Touches: (0x0D4A) (0x0E02) (0x2070) (0x2071) (0x2075) (0x207E) (0x2880)
 ;          (0x3010) (0x360A) (0x360C)
@@ -184398,7 +184414,8 @@ SongStore_LoadSongHeaderToDisplay_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AAF0:		; <- T_F428CC
+; SongClear_LcdKeyRow4: the LcdKeyRow4 action of SongClear -- called only by LcdKeyRow4_SongClear.
+SongClear_LcdKeyRow4:		; <- T_F428CC
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AAF0  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AAF5  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Skip2	; F7AAFA  jr Z,0xf7ab08
@@ -184548,7 +184565,7 @@ sub_F7AB3F_Return4:
 	ret	; F7AC06  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AC07
+; TrackClear_LcdKeyRow2
 ; Called from: T_F428DC (x2)
 ; Touches: (0x0C70) (0x0D4A) (0x0DBE) (0x0E46) (0x2070) (0x2071) (0x2075)
 ;          (0x207E) (0x212E) (0x215E) +2 more
@@ -184560,7 +184577,8 @@ sub_F7AB3F_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AC07:		; <- T_F428DC
+; TrackClear_LcdKeyRow2: the LcdKeyRow2 action of TrackClear_StageNonZero, TrackClear_StageZero -- called only by LcdKeyRow2_TrackClear_StageNonZero, LcdKeyRow2_TrackClear_StageZero.
+TrackClear_LcdKeyRow2:		; <- T_F428DC
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AC07  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AC0C  cp (0x207e),0x01
 	jr	z, sub_F7AB3F_Skip3	; F7AC11  jr Z,0xf7ac1e
@@ -184745,7 +184763,7 @@ sub_F7AB3F_Return7:
 	ret	; F7AD13  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AD14
+; TrackMerge_StageZero_SoftKeyCol5
 ; Called from: T_F42950 (x1)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DBA)
 ; Calls:   sub_F7AD42 sub_F7AD8F sub_F7ADDC
@@ -184756,7 +184774,8 @@ sub_F7AB3F_Return7:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AD14:		; <- T_F42950
+; TrackMerge_StageZero_SoftKeyCol5: the SoftKeyCol5 action of TrackMerge_StageZero -- called only by SoftKeyCol5_TrackMerge_StageZero.
+TrackMerge_StageZero_SoftKeyCol5:		; <- T_F42950
 	ld	(3150:16), w	; F7AD14  ld (0x0c4e),W
 	and	w, 128	; F7AD18  and W,0x80
 	ld	(3151:16), w	; F7AD1B  ld (0x0c4f),W
@@ -185931,7 +185950,7 @@ sub_F7B457_Return2:
 	ret	; F7B4EB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B4EC
+; MeasureInsert_SelectField1
 ; Called from: T_F429B0 (x1)
 ; Touches: (0x0DDA) (0x2075)
 ; Evidence: thunk slot T_F429B0 holds `jp 0x00F7B4EC`, and 0xF7B4EC is an
@@ -185941,13 +185960,15 @@ sub_F7B457_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B4EC:		; <- T_F429B0
+; MeasureInsert_SelectField1: moves the MeasureInsert screen's cursor to field 1 -- stores 1 into MeasureInsert_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureInsert_SelectField1:		; <- T_F429B0
 	ld	(MeasureInsert_Field:16), 1	; F7B4EC  ld (0x0dda),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B4F1  or (0x2075),0x09
 	ret	; F7B4F6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B4F7
+; MeasureInsert_SelectField2
 ; Called from: T_F429B4 (x1)
 ; Touches: (0x0DDA) (0x2075)
 ; Evidence: thunk slot T_F429B4 holds `jp 0x00F7B4F7`, and 0xF7B4F7 is an
@@ -185957,14 +185978,16 @@ sub_F7B4EC:		; <- T_F429B0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B4F7:		; <- T_F429B4
+; MeasureInsert_SelectField2: moves the MeasureInsert screen's cursor to field 2 -- stores 2 into MeasureInsert_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureInsert_SelectField2:		; <- T_F429B4
 	ld	(MeasureInsert_Field:16), 2	; F7B4F7  ld (0x0dda),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B4FC  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B501  or (0x2075),0x01
 	ret	; F7B506  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B507
+; MeasureInsert_SelectField3
 ; Called from: T_F429B8 (x1)
 ; Touches: (0x0DDA) (0x2075)
 ; Evidence: thunk slot T_F429B8 holds `jp 0x00F7B507`, and 0xF7B507 is an
@@ -185974,14 +185997,16 @@ sub_F7B4F7:		; <- T_F429B4
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B507:		; <- T_F429B8
+; MeasureInsert_SelectField3: moves the MeasureInsert screen's cursor to field 3 -- stores 3 into MeasureInsert_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureInsert_SelectField3:		; <- T_F429B8
 	ld	(MeasureInsert_Field:16), 3	; F7B507  ld (0x0dda),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B50C  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B511  or (0x2075),0x01
 	ret	; F7B516  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B517
+; MeasureInsert_SelectField4
 ; Called from: T_F429BC (x1)
 ; Touches: (0x0DDA) (0x2075)
 ; Evidence: thunk slot T_F429BC holds `jp 0x00F7B517`, and 0xF7B517 is an
@@ -185991,13 +186016,15 @@ sub_F7B507:		; <- T_F429B8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B517:		; <- T_F429BC
+; MeasureInsert_SelectField4: moves the MeasureInsert screen's cursor to field 4 -- stores 4 into MeasureInsert_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureInsert_SelectField4:		; <- T_F429BC
 	ld	(MeasureInsert_Field:16), 4	; F7B517  ld (0x0dda),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B51C  or (0x2075),0x09
 	ret	; F7B521  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B522
+; MeasureInsert_SelectField5
 ; Called from: T_F429C0 (x1)
 ; Touches: (0x0DDA) (0x2075)
 ; Evidence: thunk slot T_F429C0 holds `jp 0x00F7B522`, and 0xF7B522 is an
@@ -186007,14 +186034,16 @@ sub_F7B517:		; <- T_F429BC
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B522:		; <- T_F429C0
+; MeasureInsert_SelectField5: moves the MeasureInsert screen's cursor to field 5 -- stores 5 into MeasureInsert_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureInsert_SelectField5:		; <- T_F429C0
 	ld	(MeasureInsert_Field:16), 5	; F7B522  ld (0x0dda),0x05
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B527  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B52C  or (0x2075),0x01
 	ret	; F7B531  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B532
+; MeasureInsert_SelectField6
 ; Called from: T_F429C4 (x1)
 ; Touches: (0x0DDA) (0x2075)
 ; Evidence: thunk slot T_F429C4 holds `jp 0x00F7B532`, and 0xF7B532 is an
@@ -186024,7 +186053,9 @@ sub_F7B522:		; <- T_F429C0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B532:		; <- T_F429C4
+; MeasureInsert_SelectField6: moves the MeasureInsert screen's cursor to field 6 -- stores 6 into MeasureInsert_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureInsert_SelectField6:		; <- T_F429C4
 	ld	(MeasureInsert_Field:16), 6	; F7B532  ld (0x0dda),0x06
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B537  or (0x2075),0x09
 	ret	; F7B53C  ret
@@ -186334,7 +186365,7 @@ sub_F7B761:		; <- T_F429D0
 	ret	; F7B770  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B771
+; MeasureInsert_LcdKeyRow1
 ; Called from: T_F429D4 (x2)
 ; Touches: (0x0C13) (0x0C14) (0x0C18) (0x0C1A) (0x0C1C) (0x0C35) (0x0C70)
 ;          (0x0C71) (0x0C73) (0x0C75) +11 more
@@ -186346,7 +186377,8 @@ sub_F7B761:		; <- T_F429D0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B771:		; <- T_F429D4
+; MeasureInsert_LcdKeyRow1: the LcdKeyRow1 action of MeasureInsert_StageNonZero, MeasureInsert_StageZero -- called only by LcdKeyRow1_MeasureInsert_StageNonZero, LcdKeyRow1_MeasureInsert_StageZero.
+MeasureInsert_LcdKeyRow1:		; <- T_F429D4
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B771  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B776  cp (0x207e),0x01
 	jr	z, sub_F7B74C_Skip	; F7B77B  jr Z,0xf7b78a
@@ -186514,7 +186546,7 @@ sub_F7B852_Return2:
 	ret	; F7B908  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B909
+; MeasureC0py_SelectField1
 ; Called from: T_F429E0 (x1)
 ; Touches: (0x0DBC) (0x2075)
 ; Evidence: thunk slot T_F429E0 holds `jp 0x00F7B909`, and 0xF7B909 is an
@@ -186524,13 +186556,15 @@ sub_F7B852_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B909:		; <- T_F429E0
+; MeasureC0py_SelectField1: moves the MeasureC0py screen's cursor to field 1 -- stores 1 into MeasureC0py_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureC0py_SelectField1:		; <- T_F429E0
 	ld	(MeasureC0py_Field:16), 1	; F7B909  ld (0x0dbc),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B90E  or (0x2075),0x09
 	ret	; F7B913  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B914
+; MeasureC0py_SelectField2
 ; Called from: T_F429E4 (x1)
 ; Touches: (0x0DBC) (0x2075)
 ; Evidence: thunk slot T_F429E4 holds `jp 0x00F7B914`, and 0xF7B914 is an
@@ -186540,14 +186574,16 @@ sub_F7B909:		; <- T_F429E0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B914:		; <- T_F429E4
+; MeasureC0py_SelectField2: moves the MeasureC0py screen's cursor to field 2 -- stores 2 into MeasureC0py_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureC0py_SelectField2:		; <- T_F429E4
 	ld	(MeasureC0py_Field:16), 2	; F7B914  ld (0x0dbc),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B919  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B91E  or (0x2075),0x01
 	ret	; F7B923  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B924
+; MeasureC0py_SelectField3
 ; Called from: T_F429E8 (x1)
 ; Touches: (0x0DBC) (0x2075)
 ; Evidence: thunk slot T_F429E8 holds `jp 0x00F7B924`, and 0xF7B924 is an
@@ -186557,14 +186593,16 @@ sub_F7B914:		; <- T_F429E4
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B924:		; <- T_F429E8
+; MeasureC0py_SelectField3: moves the MeasureC0py screen's cursor to field 3 -- stores 3 into MeasureC0py_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureC0py_SelectField3:		; <- T_F429E8
 	ld	(MeasureC0py_Field:16), 3	; F7B924  ld (0x0dbc),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B929  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B92E  or (0x2075),0x01
 	ret	; F7B933  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B934
+; MeasureC0py_SelectField4
 ; Called from: T_F429EC (x1)
 ; Touches: (0x0DBC) (0x2075)
 ; Evidence: thunk slot T_F429EC holds `jp 0x00F7B934`, and 0xF7B934 is an
@@ -186574,13 +186612,15 @@ sub_F7B924:		; <- T_F429E8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B934:		; <- T_F429EC
+; MeasureC0py_SelectField4: moves the MeasureC0py screen's cursor to field 4 -- stores 4 into MeasureC0py_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureC0py_SelectField4:		; <- T_F429EC
 	ld	(MeasureC0py_Field:16), 4	; F7B934  ld (0x0dbc),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B939  or (0x2075),0x09
 	ret	; F7B93E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B93F
+; MeasureC0py_SelectField5
 ; Called from: T_F429F0 (x1)
 ; Touches: (0x0DBC) (0x2075)
 ; Evidence: thunk slot T_F429F0 holds `jp 0x00F7B93F`, and 0xF7B93F is an
@@ -186590,14 +186630,16 @@ sub_F7B934:		; <- T_F429EC
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B93F:		; <- T_F429F0
+; MeasureC0py_SelectField5: moves the MeasureC0py screen's cursor to field 5 -- stores 5 into MeasureC0py_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureC0py_SelectField5:		; <- T_F429F0
 	ld	(MeasureC0py_Field:16), 5	; F7B93F  ld (0x0dbc),0x05
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B944  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B949  or (0x2075),0x01
 	ret	; F7B94E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B94F
+; MeasureC0py_SelectField6
 ; Called from: T_F429F4 (x1)
 ; Touches: (0x0DBC) (0x2075)
 ; Evidence: thunk slot T_F429F4 holds `jp 0x00F7B94F`, and 0xF7B94F is an
@@ -186607,7 +186649,9 @@ sub_F7B93F:		; <- T_F429F0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B94F:		; <- T_F429F4
+; MeasureC0py_SelectField6: moves the MeasureC0py screen's cursor to field 6 -- stores 6 into MeasureC0py_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+MeasureC0py_SelectField6:		; <- T_F429F4
 	ld	(MeasureC0py_Field:16), 6	; F7B94F  ld (0x0dbc),0x06
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B954  or (0x2075),0x09
 	ret	; F7B959  ret
@@ -186919,7 +186963,7 @@ sub_F7BB82:		; <- T_F42A00
 	ret	; F7BB91  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BB92
+; MeasureC0py_LcdKeyRow1
 ; Called from: T_F42A04 (x2)
 ; Touches: (0x0C13) (0x0C14) (0x0C18) (0x0C1A) (0x0C1C) (0x0C30) (0x0C32)
 ;          (0x0C35) (0x0C70) (0x0C71) +11 more
@@ -186931,7 +186975,8 @@ sub_F7BB82:		; <- T_F42A00
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BB92:		; <- T_F42A04
+; MeasureC0py_LcdKeyRow1: the LcdKeyRow1 action of MeasureC0py_StageNonZero, MeasureC0py_StageZero -- called only by LcdKeyRow1_MeasureC0py_StageNonZero, LcdKeyRow1_MeasureC0py_StageZero.
+MeasureC0py_LcdKeyRow1:		; <- T_F42A04
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BB92  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BB97  cp (0x207e),0x01
 	jr	z, sub_F7BB6D_Skip	; F7BB9C  jr Z,0xf7bbab
@@ -187099,7 +187144,7 @@ sub_F7BC73_Return2:
 	ret	; F7BD2F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BD30
+; Vel0cityChange_StageZero_LcdKeyRow1
 ; Called from: T_F428E8 (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
 ; Evidence: thunk slot T_F428E8 holds `jp 0x00F7BD30`, and 0xF7BD30 is an
@@ -187109,14 +187154,15 @@ sub_F7BC73_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BD30:		; <- T_F428E8
+; Vel0cityChange_StageZero_LcdKeyRow1: the LcdKeyRow1 action of Vel0cityChange_StageZero -- called only by LcdKeyRow1_Vel0cityChange_StageZero.
+Vel0cityChange_StageZero_LcdKeyRow1:		; <- T_F428E8
 	ld	(3512:16), 1	; F7BD30  ld (0x0db8),0x01
 	ld	(DisplayListB_Stage+6:16), 1	; F7BD35  ld (0x12fc),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7BD3A  or (0x2075),0x09
 	ret	; F7BD3F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BD40
+; Vel0cityChange_StageZero_LcdKeyRow2
 ; Called from: T_F428EC (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
 ; Evidence: thunk slot T_F428EC holds `jp 0x00F7BD40`, and 0xF7BD40 is an
@@ -187126,7 +187172,8 @@ sub_F7BD30:		; <- T_F428E8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BD40:		; <- T_F428EC
+; Vel0cityChange_StageZero_LcdKeyRow2: the LcdKeyRow2 action of Vel0cityChange_StageZero -- called only by LcdKeyRow2_Vel0cityChange_StageZero.
+Vel0cityChange_StageZero_LcdKeyRow2:		; <- T_F428EC
 	ld	(3512:16), 2	; F7BD40  ld (0x0db8),0x02
 	ld	(DisplayListB_Stage+6:16), 2	; F7BD45  ld (0x12fc),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD4A  or (0x2075),0x08
@@ -187134,7 +187181,7 @@ sub_F7BD40:		; <- T_F428EC
 	ret	; F7BD54  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BD55
+; Vel0cityChange_StageZero_LcdKeyRow3
 ; Called from: T_F428F0 (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
 ; Evidence: thunk slot T_F428F0 holds `jp 0x00F7BD55`, and 0xF7BD55 is an
@@ -187144,7 +187191,8 @@ sub_F7BD40:		; <- T_F428EC
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BD55:		; <- T_F428F0
+; Vel0cityChange_StageZero_LcdKeyRow3: the LcdKeyRow3 action of Vel0cityChange_StageZero -- called only by LcdKeyRow3_Vel0cityChange_StageZero.
+Vel0cityChange_StageZero_LcdKeyRow3:		; <- T_F428F0
 	ld	(3512:16), 3	; F7BD55  ld (0x0db8),0x03
 	ld	(DisplayListB_Stage+6:16), 3	; F7BD5A  ld (0x12fc),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD5F  or (0x2075),0x08
@@ -187152,7 +187200,7 @@ sub_F7BD55:		; <- T_F428F0
 	ret	; F7BD69  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BD6A
+; Vel0cityChange_StageZero_LcdKeyRow4
 ; Called from: T_F428F4 (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
 ; Evidence: thunk slot T_F428F4 holds `jp 0x00F7BD6A`, and 0xF7BD6A is an
@@ -187162,7 +187210,8 @@ sub_F7BD55:		; <- T_F428F0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BD6A:		; <- T_F428F4
+; Vel0cityChange_StageZero_LcdKeyRow4: the LcdKeyRow4 action of Vel0cityChange_StageZero -- called only by LcdKeyRow4_Vel0cityChange_StageZero.
+Vel0cityChange_StageZero_LcdKeyRow4:		; <- T_F428F4
 	ld	(3512:16), 4	; F7BD6A  ld (0x0db8),0x04
 	ld	(DisplayListB_Stage+6:16), 4	; F7BD6F  ld (0x12fc),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD74  or (0x2075),0x08
@@ -188158,7 +188207,7 @@ sub_F7C3EE_Return:
 	ret	; F7C3F9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C3FA
+; S0ngC0py_StageZero_SoftKeyCol1
 ; Called from: T_F42A14 (x1)
 ; Touches: (0x0E0C) (0x12F6) (0x2075)  |  0x0012F8
 ; Calls:   sub_F7C440
@@ -188169,7 +188218,8 @@ sub_F7C3EE_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C3FA:		; <- T_F42A14
+; S0ngC0py_StageZero_SoftKeyCol1: the SoftKeyCol1 action of S0ngC0py_StageZero -- called only by SoftKeyCol1_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol1:		; <- T_F42A14
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C3FA  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromSong:16)	; F7C3FF  ld A,(0x0e0c)
 	ld	l, 1:opc	; F7C403  ld L,0x01
@@ -188184,7 +188234,7 @@ sub_F7C3FA_Return:
 	ret	; F7C41C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C41D
+; S0ngC0py_StageZero_SoftKeyCol2
 ; Called from: T_F42A10 (x1)
 ; Touches: (0x0E0C) (0x12F6) (0x2075)  |  0x0012F8
 ; Calls:   sub_F7C440
@@ -188195,7 +188245,8 @@ sub_F7C3FA_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C41D:		; <- T_F42A10
+; S0ngC0py_StageZero_SoftKeyCol2: the SoftKeyCol2 action of S0ngC0py_StageZero -- called only by SoftKeyCol2_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol2:		; <- T_F42A10
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C41D  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromSong:16)	; F7C422  ld A,(0x0e0c)
 	ld	l, 10:opc	; F7C426  ld L,0x0a
@@ -188236,7 +188287,7 @@ sub_F7C440:
 	ret	; F7C462  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C463
+; S0ngC0py_StageZero_SoftKeyCol3
 ; Called from: T_F42A1C (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
 ; Evidence: thunk slot T_F42A1C holds `jp 0x00F7C463`, and 0xF7C463 is an
@@ -188246,7 +188297,8 @@ sub_F7C440:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C463:		; <- T_F42A1C
+; S0ngC0py_StageZero_SoftKeyCol3: the SoftKeyCol3 action of S0ngC0py_StageZero -- called only by SoftKeyCol3_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol3:		; <- T_F42A1C
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C463  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromTrack:16)	; F7C468  ld A,(0x0e0e)
 	ld	l, 1:opc	; F7C46C  ld L,0x01
@@ -188263,7 +188315,7 @@ sub_F7C440_Return:
 	ret	; F7C48B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C48C
+; S0ngC0py_StageZero_SoftKeyCol4
 ; Called from: T_F42A18 (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
 ; Evidence: thunk slot T_F42A18 holds `jp 0x00F7C48C`, and 0xF7C48C is an
@@ -188273,7 +188325,8 @@ sub_F7C440_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C48C:		; <- T_F42A18
+; S0ngC0py_StageZero_SoftKeyCol4: the SoftKeyCol4 action of S0ngC0py_StageZero -- called only by SoftKeyCol4_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol4:		; <- T_F42A18
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C48C  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromTrack:16)	; F7C491  ld A,(0x0e0e)
 	ld	l, 18:opc	; F7C495  ld L,0x12
@@ -188292,7 +188345,7 @@ sub_F7C440_Return2:
 	ret	; F7C4B8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C4B9
+; S0ngC0py_StageZero_SoftKeyCol5
 ; Called from: T_F42A24 (x1)
 ; Touches: (0x0E0D) (0x12F7) (0x2075)  |  0x0012FE
 ; Calls:   sub_F7C440
@@ -188303,7 +188356,8 @@ sub_F7C440_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C4B9:		; <- T_F42A24
+; S0ngC0py_StageZero_SoftKeyCol5: the SoftKeyCol5 action of S0ngC0py_StageZero -- called only by SoftKeyCol5_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol5:		; <- T_F42A24
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C4B9  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToSong:16)	; F7C4BE  ld A,(0x0e0d)
 	ld	l, 1:opc	; F7C4C2  ld L,0x01
@@ -188318,7 +188372,7 @@ sub_F7C440_Return3:
 	ret	; F7C4DB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C4DC
+; S0ngC0py_StageZero_SoftKeyCol6
 ; Called from: T_F42A20 (x1)
 ; Touches: (0x0E0D) (0x12F7) (0x2075)  |  0x0012FE
 ; Calls:   sub_F7C440
@@ -188329,7 +188383,8 @@ sub_F7C440_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C4DC:		; <- T_F42A20
+; S0ngC0py_StageZero_SoftKeyCol6: the SoftKeyCol6 action of S0ngC0py_StageZero -- called only by SoftKeyCol6_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol6:		; <- T_F42A20
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C4DC  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToSong:16)	; F7C4E1  ld A,(0x0e0d)
 	ld	l, 10:opc	; F7C4E5  ld L,0x0a
@@ -188344,7 +188399,7 @@ sub_F7C440_Return4:
 	ret	; F7C4FE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C4FF
+; S0ngC0py_StageZero_SoftKeyCol7
 ; Called from: T_F42A2C (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
 ; Evidence: thunk slot T_F42A2C holds `jp 0x00F7C4FF`, and 0xF7C4FF is an
@@ -188354,7 +188409,8 @@ sub_F7C440_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C4FF:		; <- T_F42A2C
+; S0ngC0py_StageZero_SoftKeyCol7: the SoftKeyCol7 action of S0ngC0py_StageZero -- called only by SoftKeyCol7_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol7:		; <- T_F42A2C
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C4FF  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToTrack:16)	; F7C504  ld A,(0x0e0f)
 	ld	l, 1:opc	; F7C508  ld L,0x01
@@ -188371,7 +188427,7 @@ sub_F7C440_Return5:
 	ret	; F7C527  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C528
+; S0ngC0py_StageZero_SoftKeyCol8
 ; Called from: T_F42A28 (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
 ; Evidence: thunk slot T_F42A28 holds `jp 0x00F7C528`, and 0xF7C528 is an
@@ -188381,7 +188437,8 @@ sub_F7C440_Return5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C528:		; <- T_F42A28
+; S0ngC0py_StageZero_SoftKeyCol8: the SoftKeyCol8 action of S0ngC0py_StageZero -- called only by SoftKeyCol8_S0ngC0py_StageZero.
+S0ngC0py_StageZero_SoftKeyCol8:		; <- T_F42A28
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C528  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToTrack:16)	; F7C52D  ld A,(0x0e0f)
 	ld	l, 18:opc	; F7C531  ld L,0x12
@@ -188400,7 +188457,7 @@ sub_F7C440_Return6:
 	ret	; F7C554  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C555
+; S0ngC0py_LcdKeyRow2
 ; Called from: T_F42A30 (x2)
 ; Touches: (0x0E0C) (0x0E0D) (0x0E0E) (0x0E34) (0x2070) (0x2071) (0x207E)  |
 ;          0x000022 0x610000
@@ -188412,7 +188469,8 @@ sub_F7C440_Return6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C555:		; <- T_F42A30
+; S0ngC0py_LcdKeyRow2: the LcdKeyRow2 action of S0ngC0py_StageNonZero, S0ngC0py_StageZero -- called only by LcdKeyRow2_S0ngC0py_StageNonZero, LcdKeyRow2_S0ngC0py_StageZero.
+S0ngC0py_LcdKeyRow2:		; <- T_F42A30
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7C555  cp (0x207e),0x00
 	jrl	nz, sub_F7C440_Skip2	; F7C55A  jrl NZ,0xf7c5b0
 	ld	(3636:16), 0	; F7C55D  ld (0x0e34),0x00
@@ -189087,7 +189145,7 @@ sub_F7C869_Return:
 	ret	; F7C8C7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C8C8
+; N0teChange_SelectField1
 ; Called from: T_F42A90 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
 ; Evidence: thunk slot T_F42A90 holds `jp 0x00F7C8C8`, and 0xF7C8C8 is an
@@ -189097,7 +189155,9 @@ sub_F7C869_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C8C8:		; <- T_F42A90
+; N0teChange_SelectField1: moves the N0teChange screen's cursor to field 1 -- stores 1 into N0teChange_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+N0teChange_SelectField1:		; <- T_F42A90
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8C8  or (0x2075),0x09
 	ld	a, 1:opc	; F7C8CD  ld A,0x01
 	ld	(N0teChange_Field:16), a	; F7C8CF  ld (0x0ded),A
@@ -189105,7 +189165,7 @@ sub_F7C8C8:		; <- T_F42A90
 	ret	; F7C8D7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C8D8
+; N0teChange_SelectField2
 ; Called from: T_F42A94 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
 ; Evidence: thunk slot T_F42A94 holds `jp 0x00F7C8D8`, and 0xF7C8D8 is an
@@ -189115,7 +189175,9 @@ sub_F7C8C8:		; <- T_F42A90
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C8D8:		; <- T_F42A94
+; N0teChange_SelectField2: moves the N0teChange screen's cursor to field 2 -- stores 2 into N0teChange_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+N0teChange_SelectField2:		; <- T_F42A94
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8D8  or (0x2075),0x09
 	ld	a, 2:opc	; F7C8DD  ld A,0x02
 	ld	(N0teChange_Field:16), a	; F7C8DF  ld (0x0ded),A
@@ -189123,7 +189185,7 @@ sub_F7C8D8:		; <- T_F42A94
 	ret	; F7C8E7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C8E8
+; N0teChange_SelectField3
 ; Called from: T_F42A98 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
 ; Evidence: thunk slot T_F42A98 holds `jp 0x00F7C8E8`, and 0xF7C8E8 is an
@@ -189133,7 +189195,9 @@ sub_F7C8D8:		; <- T_F42A94
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C8E8:		; <- T_F42A98
+; N0teChange_SelectField3: moves the N0teChange screen's cursor to field 3 -- stores 3 into N0teChange_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+N0teChange_SelectField3:		; <- T_F42A98
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8E8  or (0x2075),0x09
 	ld	a, 3:opc	; F7C8ED  ld A,0x03
 	ld	(N0teChange_Field:16), a	; F7C8EF  ld (0x0ded),A
@@ -189141,7 +189205,7 @@ sub_F7C8E8:		; <- T_F42A98
 	ret	; F7C8F7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C8F8
+; N0teChange_SelectField4
 ; Called from: T_F42A9C (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
 ; Evidence: thunk slot T_F42A9C holds `jp 0x00F7C8F8`, and 0xF7C8F8 is an
@@ -189151,7 +189215,9 @@ sub_F7C8E8:		; <- T_F42A98
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C8F8:		; <- T_F42A9C
+; N0teChange_SelectField4: moves the N0teChange screen's cursor to field 4 -- stores 4 into N0teChange_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+N0teChange_SelectField4:		; <- T_F42A9C
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8F8  or (0x2075),0x09
 	ld	a, 4:opc	; F7C8FD  ld A,0x04
 	ld	(N0teChange_Field:16), a	; F7C8FF  ld (0x0ded),A
@@ -189159,7 +189225,7 @@ sub_F7C8F8:		; <- T_F42A9C
 	ret	; F7C907  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C908
+; N0teChange_SelectField5
 ; Called from: T_F42AA0 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
 ; Evidence: thunk slot T_F42AA0 holds `jp 0x00F7C908`, and 0xF7C908 is an
@@ -189169,7 +189235,9 @@ sub_F7C8F8:		; <- T_F42A9C
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C908:		; <- T_F42AA0
+; N0teChange_SelectField5: moves the N0teChange screen's cursor to field 5 -- stores 5 into N0teChange_Field
+;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
+N0teChange_SelectField5:		; <- T_F42AA0
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C908  or (0x2075),0x09
 	ld	a, 5:opc	; F7C90D  ld A,0x05
 	ld	(N0teChange_Field:16), a	; F7C90F  ld (0x0ded),A
@@ -189444,7 +189512,7 @@ SongStore_DispatchB_Case5:
 	ret	; F7CA6E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CA6F
+; N0teChange_LcdKeyRow4
 ; Called from: T_F42AAC (x2)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0DEE) (0x0DF0) (0x129E) (0x2070)
 ;          (0x2071) (0x2075) (0x207E) +1 more
@@ -189456,7 +189524,8 @@ SongStore_DispatchB_Case5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CA6F:		; <- T_F42AAC
+; N0teChange_LcdKeyRow4: the LcdKeyRow4 action of N0teChange_StageNonZero, N0teChange_StageZero -- called only by LcdKeyRow4_N0teChange_StageNonZero, LcdKeyRow4_N0teChange_StageZero.
+N0teChange_LcdKeyRow4:		; <- T_F42AAC
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7CA6F  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7CA74  cp (0x207e),0x01
 	jr	z, sub_F7CA6F_Skip	; F7CA79  jr Z,0xf7ca87
@@ -189879,7 +189948,7 @@ sub_F7CC54_Join:
 	ret	; F7CC7B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CC7C
+; AdvanceDelay_LcdKeyRow3
 ; Called from: T_F42A80 (x2)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0DE6) (0x0DE8) (0x0E06) (0x2070)
 ;          (0x2071) (0x207E) (0x2880)
@@ -189891,7 +189960,8 @@ sub_F7CC54_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CC7C:		; <- T_F42A80
+; AdvanceDelay_LcdKeyRow3: the LcdKeyRow3 action of AdvanceDelay_StageNonZero, AdvanceDelay_StageZero -- called only by LcdKeyRow3_AdvanceDelay_StageNonZero, LcdKeyRow3_AdvanceDelay_StageZero.
+AdvanceDelay_LcdKeyRow3:		; <- T_F42A80
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7CC7C  cp (0x207e),0x01
 	jr	z, sub_F7CC7C_Skip	; F7CC81  jr Z,0xf7cc8f
 	ld	(UI_ScreenStage:16), 1	; F7CC83  ld (0x207e),0x01

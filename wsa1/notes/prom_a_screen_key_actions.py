@@ -32,6 +32,11 @@ LABELS = set(re.findall(r'^([A-Za-z_][\w$]*):', A + "\n" + B, re.M))
 TABLED = set(re.findall(r'^\s*(?:[A-Za-z_][\w$]*:)?\s*\.long\s+(sub_F[0-9A-F]{5})\b', A + "\n" + B, re.M))
 
 
+# prom_b's thunk directory: a call to T_F4xxxx reaches its `jp` target (2026-10-04: the planner used to
+# see only direct `call sub_`, so the targets prom_b's own handlers reach through the directory were missed)
+THUNK = {m.group(1): m.group(2) for m in re.finditer(r'^(T_F4[0-9A-F]{4}\w*):\s*jp\s+(sub_F[0-9A-F]{5})\b', B, re.M)}
+
+
 def callers():
     out = collections.defaultdict(set)
     for text in (A, B):
@@ -41,8 +46,10 @@ def callers():
             if m:
                 cur = m.group(1)
                 continue
-            for t in re.findall(r'\b(?:call|calr|jp|jr|jrl)\s+(?:\w+,\s*)?(sub_F[0-9A-F]{5})\b', l.split(";")[0], re.I):
-                out[t].add(cur)
+            for t in re.findall(r'\b(?:call|calr|jp|jr|jrl)\s+(?:\w+,\s*)?((?:sub_F[0-9A-F]{5}|T_F4[0-9A-F]{4}\w*))\b', l.split(";")[0], re.I):
+                t = THUNK.get(t, t)
+                if t.startswith("sub_"):
+                    out[t].add(cur)
     return out
 
 
@@ -53,6 +60,15 @@ def words(n):
 def group(screens):
     if len(screens) == 1:
         return screens[0]
+    if all("_" in s for s in screens):
+        # TrackClear_StageZero + TrackClear_StageNonZero -> TrackClear: the common `_` parts only (2026-10-04;
+        # the CamelCase rule below had made that TrackClearStageZero, a stage the routine is not limited to)
+        pre = []
+        for t in zip(*[s.split("_") for s in screens]):
+            if len(set(t)) != 1:
+                break
+            pre.append(t[0])
+        return "_".join(pre)
     ws = [words(s) for s in screens]
     pre = []
     for t in zip(*ws):

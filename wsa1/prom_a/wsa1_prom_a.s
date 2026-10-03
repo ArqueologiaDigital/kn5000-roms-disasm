@@ -99863,7 +99863,8 @@ sub_FB9DA0:
 .LFB9DFC:
 	pop XIX                                              ; FB9DFC  5c
 	ret                                                  ; FB9DFD  0e
-sub_FB9DFE:
+; MidiFileDirectPlay_LcdKeyRow1: the LcdKeyRow1 action of MidiFileDirectPlay -- called only by LcdKeyRow1_MidiFileDirectPlay.
+MidiFileDirectPlay_LcdKeyRow1:
 	push XIX                                             ; FB9DFE  3c
 	lda xix, (0x605147:24)                               ; FB9DFF  f2 47 51 60 34
 	ld (XIX),0x00                                        ; FB9E04  b4 00 00
@@ -160515,7 +160516,8 @@ sub_FE1C4D:
 sub_FE1C55:
 	calr sub_FE0CA2                                          ; FE1C55  1e 4a f0
 	ret                                                  ; FE1C58  0e
-sub_FE1C59:
+; MidiFileSave_Page3_LcdKeyRow3: the LcdKeyRow3 action of MidiFileSave_Page3 -- called only by LcdKeyRow3_MidiFileSave_Page3.
+MidiFileSave_Page3_LcdKeyRow3:
 	calr sub_FE2610                                          ; FE1C59  1e b4 09
 	ret                                                  ; FE1C5C  0e
 sub_FE1C5D:
@@ -160549,7 +160551,8 @@ sub_FE1C80:
 .LFE1C94:
 	calr Ring_InitTenOfFourteen                                            ; FE1C94  1e 92 00
 	ret                                                  ; FE1C97  0e
-sub_FE1C98:
+; MidiFileSave_Page5_LcdKeyRow3: the LcdKeyRow3 action of MidiFileSave_Page5 -- called only by LcdKeyRow3_MidiFileSave_Page5.
+MidiFileSave_Page5_LcdKeyRow3:
 	calr sub_FE09BE                                          ; FE1C98  1e 23 ed
 	calr Ring_InitTenOfFourteen                                            ; FE1C9B  1e 8b 00
 	ret                                                  ; FE1C9E  0e
@@ -160592,7 +160595,8 @@ sub_FE1CC0:
 Disk_PortA3_Release_Entry:
 	calr Disk_PortA3_Release                                          ; FE1CC4  1e 30 fc
 	ret                                                  ; FE1CC7  0e
-sub_FE1CC8:
+; DiskSaveFile_Page5_LcdKeyRow3: the LcdKeyRow3 action of DiskSaveFile_Page5 -- called only by LcdKeyRow3_DiskSaveFile_Page5.
+DiskSaveFile_Page5_LcdKeyRow3:
 	calr sub_FE2667                                          ; FE1CC8  1e 9c 09
 	ret                                                  ; FE1CCB  0e
 sub_FE1CCC:
