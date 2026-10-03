@@ -213,23 +213,28 @@ IRQ_INTTC3:				; vector 0x80
 ; addresses finds none, and no vector points here.  What calls them is NOT
 ; ESTABLISHED; they may simply be dead.
 ;
-; ★ AND TWO OF THEM COULD NOT WORK IF THEY WERE REACHED.  Now that
-; 0xF9816B-0xF989EE is converted, `call 0xF98610` and `jp 0xF9854E` can be
-; checked against real instruction boundaries, and neither is one: 0xF98610 is
-; the second byte of `cp (XWA),0x00` at 0xF9860F, inside Kernel_SemaWait, and
-; 0xF9854E is the second byte of `ld WA,(XIX+0x00)` at 0xF9854C, inside
-; Kernel_SemaSignal.  A transfer to the middle of an instruction is not a call
-; site anyone wrote; that is independent evidence this block is dead.
+; ★ NONE OF THEM COULD WORK IF IT WERE REACHED.  Every target is inside an
+; instruction of the code now at that address (checked 2026-10-03 against the prom_c
+; line map, scripts/tools/place_labels.Planner("prom_c").where):
+;   0xF98610  2nd byte of `cp (XWA),0x00` at 0xF9860F, in Kernel_SemaWait
+;   0xF98EFE  3rd byte of `ld (xiz-8), xbc` at 0xF98EFC, in Link_Ch1_WriteParamBlock__F98EE9
+;   0xF99133  2nd byte of `jr nc` at 0xF99132, in Dev108000_Preload_80toBF__test
+;   0xF9854E  3rd byte of `ld WA,(XIX+0x00)` at 0xF9854C, in Kernel_SemaSignal__wake
+;   0xF99016  2nd byte of `jr` at 0xF99015, in Link_Ch2_ForwardBytes__F99015
+;   0xF99038  2nd byte of `extz wa` at 0xF99037, in Link_Ch3_SetTouchControl__F99031
+; A transfer into the middle of an instruction is not a call site anyone wrote:
+; these are leftovers whose targets moved.  Each operand is written as the nearest
+; label + offset, which is where it lands now, with the address alongside.
 ; ------------------------------------------------------------------------------
 UNREFERENCED_TRAMPOLINES:
 	ei 0x07
-	call 0xF98610
+	call Kernel_SemaWait+21			; 0xF98610
 	jrl RESET
-	jp 0xF98EFE
-	jp 0xF99133
-	jp 0xF9854E
-	jp 0xF99016
-	jp 0xF99038
+	jp Link_Ch1_WriteParamBlock__F98EE9+21	; 0xF98EFE
+	jp Dev108000_Preload_80toBF__test+5	; 0xF99133
+	jp Kernel_SemaSignal__wake+8		; 0xF9854E
+	jp Link_Ch2_ForwardBytes__F99015+1	; 0xF99016
+	jp Link_Ch3_SetTouchControl__F99031+7	; 0xF99038
 
 ; ==============================================================================
 ; 0xFFF0E5-0xFFFEFF -- padding
