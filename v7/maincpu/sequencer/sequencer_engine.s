@@ -1925,7 +1925,7 @@ SeqCh_AllocSlotAndDispatch:
 SeqPlay_IterateCh_NotControlChange:
 	cp e, 0xd3
 	jr nz, SeqCh_DispatchMidiEvent
-	set 6, (0x28ad:16)
+	set 6, (DEMO_CONTROL_FLAGS:16)
 
 SeqCh_DispatchMidiEvent:
 	ld a, (xsp + 2)
@@ -2013,7 +2013,7 @@ SeqPlay_InitFromDemoRecord:
 	res 1, (0x28a7:16)
 	calr SeqPlay_InitDemo_LoadVoiceData
 	calr SeqPlay_IterateAllChannels
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	extz wa
 	call Demo_ProcessRecordEntry
 	cp l, 0:i3
@@ -2033,7 +2033,7 @@ SeqPlay_InitDemo_SyncAndProcess:
 SeqPlay_InitDemo_LoadVoiceData:
 	dec 4, xsp
 	pushw_erp 0xfa
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	ldfr_berp A, 0xfb
 	extz wa
 	call Demo_GetPresetBaseForPart
@@ -9733,7 +9733,7 @@ PartDeact_ClearShiftDone:
 	cpw (0xf19e:16), 0
 	jr nz, PartDeact_CheckSubsystem
 	ldw (0x28b4:16), 0
-	res 7, (0x28ad:16)
+	res 7, (DEMO_CONTROL_FLAGS:16)
 	call SeqBuf_Init
 
 AccWrap_ClearPositionAndReset:
@@ -9854,7 +9854,7 @@ Seq_PopIzSkip8Ret:
 	ret
 
 Seq_CheckChordVoiceAndSetFlag:
-	bit 6, (0x28ad:16)
+	bit 6, (DEMO_CONTROL_FLAGS:16)
 	ret z
 	ld wa, 0:i3
 	ldw bc, 0xf
@@ -11126,7 +11126,7 @@ SeqModeTransit_DemoPath:
 	ret
 
 SeqModeTransit_GetPresetWord:
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	extz wa
 	jp Voice_GetPresetFieldWord
 
@@ -19041,7 +19041,7 @@ SeqPlay_SoloCheckAutoChord:
 	ld a, (xsp)
 	cp a, (8996:16)
 	jr nz, Chan_ActivateAndNotify
-	bit 6, (0x28ad:16)
+	bit 6, (DEMO_CONTROL_FLAGS:16)
 	jr z, Chan_ActivateAndNotify
 	ld a, (9828:16)
 	ld (0x28ae:16), a
@@ -19959,7 +19959,7 @@ SeqTimer_BarReturn:
 	push QIZ
 	cp (CURRENT_MODE:16), 0x13
 	jr nz, SeqTimer_BarChangeProcess
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	st_erpb_rr a, 0xfb
 	extz WA
 	call Voice_GetPresetFieldWord
@@ -20050,7 +20050,7 @@ SeqTimer_CheckPlaybackCountdown:
 	ei	0x06
 	ldw	(1052:16), 0
 	ld	(1051:16), 0
-	ld	a, (10404:16)
+	ld	a, (DEMO_ACTIVE_ENTRY:16)
 	extz	wa
 	call	Demo_ProcessRecordEntry
 	cp	l, 0:i3
@@ -24171,7 +24171,7 @@ SeqErec_ClearPlayFlags:
 	call CtrlPanel_SetIndicatorBit
 	res 2, (0x28a7:16)
 	res 0, (9834:16)
-	res 4, (0x28ad:16)
+	res 4, (DEMO_CONTROL_FLAGS:16)
 
 SeqErecMode_ReturnZero:
 	ld xhl, 0:i3

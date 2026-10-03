@@ -18788,7 +18788,7 @@ PresBox_OK:
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 46)
-	ld (0x28a4:16), a
+	ld (DEMO_ACTIVE_ENTRY:16), a
 	call Demo_SelectEntry_ProcessSongList
 	ld xwa, NAKA_APFUNC_ApTaskControl
 	ld xbc, EVT_WAKE_UP_MAIN_TASK

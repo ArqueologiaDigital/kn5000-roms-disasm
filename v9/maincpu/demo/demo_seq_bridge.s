@@ -24,7 +24,7 @@ MiddleFuncCall:
 	jp	t, (xix+wa)
 
 MiddleFuncCall_DispatchData:
-	stb_d8	(0x28a4), e
+	stb_d8	(DEMO_ACTIVE_ENTRY), e
 	push	xde
 	push	xhl
 	push	xix
@@ -548,7 +548,7 @@ SeqInit_LookupDispatchEntry:
 	ret
 
 SeqInit_PostDispatchEvent:
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	extz wa
 	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl

@@ -70,3 +70,21 @@
 	.equ FLASH_SECTION_PTR_6,	0x0c8e	; section 6: custom accompaniment styles
 	.equ FLASH_SECTION_PTR_7,	0x0c92	; section 7: sub-CPU performance data
 	.equ RHYTHM_PATTERN_BUF_PTR,	0x0c6e	; set to RHYTHM_PATTERN_BUF_A by Flash_InitExtMemAddrs
+; FDC state (fdc-subsystem.md "FDC Memory Map", taken only where the code agrees -- the page and
+; reverse-engineering.md disagree about 0x8A2B-0x8A4A)
+	.equ FDC_SECTOR_COUNT,		0x8980	; cleared per command, incremented per sector	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8a1c
+	.equ FDC_ERROR_CODE,		0x8988	; cleared at command start, set by FDC_Set_Status; 32 compares	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8a24
+	.equ FDC_TARGET_TRACK,		0x899a	; the caller's target track (fdc_routines.s's own comment)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8a36
+	.equ FDC_COMMAND_INDEX,		0x89a4	; the command FDC dispatches on, 0..11 (12 handlers)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8a40
+; control-panel-protocol.md "MIDI Message Format (at 0x9127-0x912A)": one MIDI message staged before it is
+; sent -- statuses 0xB0..0xB3 written, word stores of status + first data byte
+	.equ MIDI_MSG_STATUS,		0x908b	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x9127
+	.equ MIDI_MSG_DATA1,		0x908c	; e.g. the controller number	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x9128
+	.equ MIDI_MSG_DATA2,		0x908d	; e.g. the value	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x9129
+	.equ MIDI_MSG_DATA3,		0x908e	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x912a
+; feature-demo.md / ssf-presentation.md "Key DRAM Addresses" -- the demo selection's own writers agree
+	.equ DEMO_TIMER_COUNTDOWN,	0x0d2f	; Demo_ResetCountdownTimer sets 15, Demo_SelectEntry_TimerTick counts
+	.equ DEMO_TARGET_SONG,		0x1157	; target song index
+	.equ DEMO_CURRENT_SONG,		0x1158	; current song index (Demo_SelectEntry_*, clamped to 18)
+	.equ DEMO_ACTIVE_ENTRY,		0x28a4	; active demo entry index
+	.equ DEMO_CONTROL_FLAGS,	0x28ad	; demo control flags, bit 3 = auto-play

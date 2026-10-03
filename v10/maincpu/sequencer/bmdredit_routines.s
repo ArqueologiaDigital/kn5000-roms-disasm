@@ -661,7 +661,7 @@ BmDrEdit_RefreshDisplayState:
 	res 0, (0x8d88:16)
 	ldw wa, 0xf
 	call SoundCtrl_SaveAndSendCmd_EE
-	set 4, (0x28ad:16)
+	set 4, (DEMO_CONTROL_FLAGS:16)
 	ret
 
 BmDrEdit_CheckNoteType:
@@ -1844,11 +1844,11 @@ BmDrEdit_InitCommon_CheckSongActive:
 	ld a, (ACTIVE_TITLE:16)
 	cp a, (ACTIVE_TITLE_PREVIOUS:16)
 	jr z, BmDrEdit_InitCommon_SetupDisplay
-	bit 4, (0x28ad:16)
+	bit 4, (DEMO_CONTROL_FLAGS:16)
 	jr z, BmDrEdit_InitCommon_SetupDisplay
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
-	res 4, (0x28ad:16)
+	res 4, (DEMO_CONTROL_FLAGS:16)
 	res 0, (9834:16)
 	jrl BmDrEdit_PopIzAndReturn
 

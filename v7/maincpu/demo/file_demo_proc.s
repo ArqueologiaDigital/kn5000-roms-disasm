@@ -192,7 +192,7 @@ FDemo_DisplayCtrlJumpHandler:
 FDemo_DispatchEventPost:
 	call ApPostEvent				; dispatch event
 	jr MainPreControl_ReturnNull		; return null
-	ld	(0x28a4:16), 19
+	ld	(DEMO_ACTIVE_ENTRY:16), 19
 	call Demo_SelectEntry_ProcessSongList			; additional handler
 	jr MainPreControl_ReturnNull
 	cpw	(0x251d8:24), 0
@@ -339,9 +339,9 @@ FDemo_MultiGuardCheck:
 	jr	nz, Banner_ReturnZero
 	cpw	(0x28b4:16), 0
 	jr	nz, Banner_ReturnZero
-	cp	(3375:16), 0
+	cp	(DEMO_TIMER_COUNTDOWN:16), 0
 	jr	nz, Banner_ReturnZero
-	bit	3, (0x28ad:16)
+	bit	3, (DEMO_CONTROL_FLAGS:16)
 	jr	nz, Banner_ReturnZero
 	ld	hl, 1:i3
 	ret
@@ -549,7 +549,7 @@ DemoMode_Main_Operation:
 	calr Timer7_DisableInterrupt
 	call PerfMode_Handler_EvtB_Helper2_Helper11
 	set 6, (0xb746:16)
-	res 3, (0x28ad:16)
+	res 3, (DEMO_CONTROL_FLAGS:16)
 	call SeqInit_PostEventSequence
 	call SeqInit_FinalEvent
 	jp Seq_StartMainControl
@@ -564,13 +564,13 @@ DemoMode_Initialize:
 	calr	Demo_PreSetup
 	ld	(0x2966:16), 0
 	ld	(3379:16), 0
-	ld	(3375:16), 0
+	ld	(DEMO_TIMER_COUNTDOWN:16), 0
 	res	7, (0x28ae:16)
 	call	MidiChannel_ResetAndConfigure
 	calr	Audio_WaitForReady
 	call	SeqStep_PlaybackStateMachine
 	calr	Voice_SavePreset
-	res	3, (0x28ad:16)
+	res	3, (DEMO_CONTROL_FLAGS:16)
 	call	SeqInit_PostEventSequence
 	call	ToneGen_FileIO_RestoreFromBackup
 	call	SeqTimer_UpdateTempoReg
@@ -599,10 +599,10 @@ Demo_SelectionEntryHandler:
 	calr Demo_PreSetup
 	ld (0x2966:16), 0x00
 	ld (0x0d33:16), 0x00
-	ld (0x0d2f:16), 0x00
+	ld (DEMO_TIMER_COUNTDOWN:16), 0x00
 	calr Audio_WaitForReady
 	call SeqStep_PlaybackStateMachine
-	res 3, (0x28ad:16)
+	res 3, (DEMO_CONTROL_FLAGS:16)
 	call SeqInit_PostEventSequence
 	call TempoRingBuf_Init
 	call SeqBuf_Init
@@ -663,7 +663,7 @@ Demo_SelectEntry_ByteTable:
 	ld	a, (1115:16)
 	and	a, 3
 	ret	nz
-	cp	(3375:16), 0
+	cp	(DEMO_TIMER_COUNTDOWN:16), 0
 	ret	nz
 	cp	(SWBTWR_PAYLOAD_1:16), 1
 	ret	nz
@@ -676,7 +676,7 @@ Demo_SelectEntry_ByteTable:
 	bit	0, (0x31e7:16)
 	jr	z, Demo_SelectEntry_ByteTable_Code_Entry2
 Demo_SelectEntry_ByteTable_Code_Entry:
-	res	3, (0x28ad:16)
+	res	3, (DEMO_CONTROL_FLAGS:16)
 	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (0xf229c7:24)
 	calr	Demo_PreSetupAndScan
@@ -685,27 +685,27 @@ Demo_SelectEntry_ByteTable_Code_Entry:
 	ld	(36530:16), 4
 	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (0xf22a23:24)
-	ld	a, (10404:16)
+	ld	a, (DEMO_ACTIVE_ENTRY:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
 Demo_SelectEntry_ByteTable_Code_Entry2:
-	set	3, (0x28ad:16)
+	set	3, (DEMO_CONTROL_FLAGS:16)
 	cp	(ACTIVE_TITLE:16), 228
 	jr	z, Demo_SelectEntry_ByteTable_Skip3
 	call	CDlikeSwTtl_SetRecordAndNotify
-	ld	(4440:16), 0
+	ld	(DEMO_CURRENT_SONG:16), 0
 	jr	Demo_SelectEntry_ByteTable_Join
 Demo_SelectEntry_ByteTable_Skip3:
-	ld	(4440:16), 18
+	ld	(DEMO_CURRENT_SONG:16), 18
 Demo_SelectEntry_ByteTable_Join:
 	jrl	Demo_SelectEntry_AfterSongLoad
 Demo_SelectEntry_ProcessSongList:
 	cpw (0x28b4:16), 0x0000
 	jr z, Demo_SelectEntry_ToCountdown
-	bit 3, (0x28ad:16)
+	bit 3, (DEMO_CONTROL_FLAGS:16)
 	jr z, Demo_SelectEntry_ManualSelect
-	ld a, (0x28a4:16)
-	cp a, (0x1157:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
+	cp a, (DEMO_TARGET_SONG:16)
 	ret NZ
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
@@ -717,8 +717,8 @@ Demo_SelectEntry_ManualSelect:
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	calr	Banner_Loop_Check
-	ld	a, (0x28a4:16)
-	cp	a, (4439:16)
+	ld	a, (DEMO_ACTIVE_ENTRY:16)
+	cp	a, (DEMO_TARGET_SONG:16)
 	jr	z, Demo_SelectEntry_StartAutoPlay
 	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (SeqInit_FinalEvent:24)
@@ -729,7 +729,7 @@ Demo_SelectEntry_StartAutoPlay:
 	ld	(0x8eb2:16), 4
 	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (SeqInit_FinalEvent:24)
-	ld	a, (0x28a4:16)
+	ld	a, (DEMO_ACTIVE_ENTRY:16)
 	extz	wa
 	call	Seq_DispatchEventType6
 	ret
@@ -737,20 +737,20 @@ Demo_SelectEntry_TimerTick:
 	calr Demo_SelectEntry_CheckCPanel
 	cpw (0x25b84:24), 0
 	call nz, (Banner_Loop_Check:24)
-	ld a, (3375:16)
+	ld a, (DEMO_TIMER_COUNTDOWN:16)
 	cp a, 0:i3
 	ret z
 	dec 1, a
-	ld (3375:16), a
+	ld (DEMO_TIMER_COUNTDOWN:16), a
 	cp a, 0xa
 	jr nz, Demo_SelectEntry_CheckCountdown
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	extz wa
 	calr Demo_ParseSlideHeader
 	jrl Demo_SelectEntry_PlaySong
 
 Demo_SelectEntry_CheckCountdown:
-	ld a, (3375:16)
+	ld a, (DEMO_TIMER_COUNTDOWN:16)
 	cp a, 3:i3
 	jrl z, Demo_SelectEntry_StartPlayback
 	cp a, 1:i3
@@ -773,7 +773,7 @@ Demo_SelectEntry_Debounce:
 	ld	(3379:16), a
 	cp	a, 0:i3
 	ret	nz
-	set	3, (0x28ad:16)
+	set	3, (DEMO_CONTROL_FLAGS:16)
 	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (CDlikeSwTtl_SetRecordAndNotify:24)
 	pushw	0x1
@@ -785,50 +785,50 @@ Demo_SelectEntry_Debounce:
 Demo_SelectEntry_AfterSongLoad:
 	cp	(ACTIVE_TITLE:16), 228
 	call	nz, (SeqInit_FinalEvent:24)
-	ld	a, (10404:16)
+	ld	a, (DEMO_ACTIVE_ENTRY:16)
 	extz	wa
 	call	Seq_DispatchEventType6
 	ld	(36530:16), 4
-	bit	3, (0x28ad:16)
+	bit	3, (DEMO_CONTROL_FLAGS:16)
 	ret	z
 	cp	(ACTIVE_TITLE:16), 228
 	jr	z, Demo_SelectEntry_CheckSongCount
-	cp	(4440:16), 18
+	cp	(DEMO_CURRENT_SONG:16), 18
 	jr	c, Demo_SelectEntry_UpdateDisplay
-	ld	(4440:16), 0
+	ld	(DEMO_CURRENT_SONG:16), 0
 	jr	Demo_SelectEntry_UpdateDisplay
 Demo_SelectEntry_CheckSongCount:
 	call Seq_IsMelodyActive
 	cp hl, 0:i3
 	jr z, Demo_SelectEntry_CheckLimit18
-	cp (4440:16), 19
+	cp (DEMO_CURRENT_SONG:16), 19
 	jr ugt, Demo_SelectEntry_ClampSongIdx
 	jr Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_CheckLimit18:
-	cp (4440:16), 18
+	cp (DEMO_CURRENT_SONG:16), 18
 	jr ule, Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_ClampSongIdx:
-	ld (4440:16), 18
+	ld (DEMO_CURRENT_SONG:16), 18
 
 Demo_SelectEntry_UpdateDisplay:
 	calr Demo_SelectEntry_LoadPattern
 	calr Demo_SelectEntry_DrawSecondary
 	calr Demo_ResetCountdownTimer
-	inc 1, (4440:16)
+	inc 1, (DEMO_CURRENT_SONG:16)
 	ret
 
 Demo_SelectEntry_LoadPattern:
-	ld a, (4440:16)
+	ld a, (DEMO_CURRENT_SONG:16)
 	extz wa
 	add wa, wa
 	lda xbc, (Demo_SelectEntry_LoadPattern_Data:24)
-	ld	(0x28a4:16), (xbc+wa)
+	ld	(DEMO_ACTIVE_ENTRY:16), (xbc+wa)
 	ret
 
 Demo_SelectEntry_DrawSecondary:
-	bit 3, (0x28ad:16)
+	bit 3, (DEMO_CONTROL_FLAGS:16)
 
 	ret z
 
@@ -837,7 +837,7 @@ Demo_SelectEntry_DrawSecondary:
 
 	ret z
 
-	ld a, (4440:16)
+	ld a, (DEMO_CURRENT_SONG:16)
 
 	extz wa
 
@@ -857,7 +857,7 @@ Demo_SelectEntry_DrawSecondary:
 Demo_SelectEntry_PlaySong:
 	cp (CURRENT_MODE:16), 0x13
 	ret NZ
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	extz WA
 	calr Demo_GetPresetBaseForPartAlt
 	ld XWA,XHL
@@ -878,7 +878,7 @@ Demo_SelectEntry_PlaySong:
 	pop XDE
 	call SeqTimer_UpdateTempoReg
 	ld (0x8eb2:16), 0x06
-	ld a, (0x28a4:16)
+	ld a, (DEMO_ACTIVE_ENTRY:16)
 	extz WA
 	call Seq_DispatchEventType5
 	ret
@@ -887,7 +887,7 @@ Demo_SelectEntry_StartPlayback:
 	ret NZ
 	call Seq_ResetAndRestartAccompaniment
 	call PerfMode_Handler_EvtB_Helper2_Helper11
-	ldmm8 0x1157, 0x28a4
+	ldmm8 DEMO_TARGET_SONG, DEMO_ACTIVE_ENTRY
 	cp (ACTIVE_TITLE:16), 0xe4
 	ret Z
 	call SeqInit_PostDispatchEvent
@@ -915,7 +915,7 @@ Audio_WaitForReady_Dispatch:
 	pop	xde
 	ret
 Demo_ResetCountdownTimer:
-	ld (3375:16), 15
+	ld (DEMO_TIMER_COUNTDOWN:16), 15
 	ret
 
 Timer7_DisableInterrupt:

@@ -11682,14 +11682,14 @@ SoundMode_SysExConfig_Data:
 	srl	wa, 8
 	or	c, a
 	ld	(xde), c
-	ld	(0x908b:16), 72
-	ld	(0x908c:16), 8
-	ld	(0x908d:16), l
+	ld	(MIDI_MSG_STATUS:16), 72
+	ld	(MIDI_MSG_DATA1:16), 8
+	ld	(MIDI_MSG_DATA2:16), l
 ; v7 NAME DISPLACED: `MidiSysEx_ProcessBlock` (0xFD7D80) falls inside the line above in the
 ; correct framing (v10 0xFD8551).  Kept as an alias because another v7
 ; file references this address by this name.
 	.set MidiSysEx_ProcessBlock, SoundMode_SysExConfig_Data + 47
-	ld	(0x908e:16), 255
+	ld	(MIDI_MSG_DATA3:16), 255
 	push	xde
 	push	xhl
 	push	xix
@@ -12290,11 +12290,11 @@ TGReg_WriteCC12_Check:
 	inc 4, xsp
 	ret
 MidiCtrl_FullReconfigure_Helper:
-	ld	(0x908b:16), 177
-	ld	(0x908d:16), 0
-	ld	(0x908c:16), 0
+	ld	(MIDI_MSG_STATUS:16), 177
+	ld	(MIDI_MSG_DATA2:16), 0
+	ld	(MIDI_MSG_DATA1:16), 0
 TGReg_WriteCC12_Assign_Loop:
-	ld	(0x908e:16), 64
+	ld	(MIDI_MSG_DATA3:16), 64
 	push xde
 	push xhl
 	push xix
@@ -12304,20 +12304,20 @@ TGReg_WriteCC12_Assign_Loop:
 	pop xix
 	pop xhl
 	pop xde
-	ld	a, (0x908c:16)
+	ld	a, (MIDI_MSG_DATA1:16)
 	inc 1, a
-	ld	(0x908c:16), a
+	ld	(MIDI_MSG_DATA1:16), a
 	cp a, 0xf
 	jr	ule, TGReg_WriteCC12_Assign_Loop
 	ret
 SwbtWr_WriteLoop_CC_B1_Ret:
 	ret
 SwbtWr_InitAndWrite_CC_B2:
-	ld	(0x908b:16), 178
-	ld	(0x908d:16), 0
-	ld	(0x908c:16), 0
+	ld	(MIDI_MSG_STATUS:16), 178
+	ld	(MIDI_MSG_DATA2:16), 0
+	ld	(MIDI_MSG_DATA1:16), 0
 SwbtWr_InitAndWrite_CC_B2_Loop:
-	ld	(0x908e:16), 127
+	ld	(MIDI_MSG_DATA3:16), 127
 	push xde
 	push xhl
 	push xix
@@ -12327,18 +12327,18 @@ SwbtWr_InitAndWrite_CC_B2_Loop:
 	pop xix
 	pop xhl
 	pop xde
-	ld	a, (0x908c:16)
+	ld	a, (MIDI_MSG_DATA1:16)
 	inc 1, a
-	ld	(0x908c:16), a
+	ld	(MIDI_MSG_DATA1:16), a
 	cp a, 0xf
 	jr	ule, SwbtWr_InitAndWrite_CC_B2_Loop
 	ret
 SwbtWr_InitAndWriteAllBlocks:
-	ld	(0x908b:16), 179
-	ld	(0x908d:16), 127
-	ld	(0x908c:16), 0
+	ld	(MIDI_MSG_STATUS:16), 179
+	ld	(MIDI_MSG_DATA2:16), 127
+	ld	(MIDI_MSG_DATA1:16), 0
 SwbtWr_WriteLoop_CC_B3:
-	ld	(0x908e:16), 127
+	ld	(MIDI_MSG_DATA3:16), 127
 	push xde
 	push xhl
 	push xix
@@ -12348,9 +12348,9 @@ SwbtWr_WriteLoop_CC_B3:
 	pop xix
 	pop xhl
 	pop xde
-	ld	a, (0x908c:16)
+	ld	a, (MIDI_MSG_DATA1:16)
 	inc 1, a
-	ld	(0x908c:16), a
+	ld	(MIDI_MSG_DATA1:16), a
 	cp a, 0xf
 	jr	ule, SwbtWr_WriteLoop_CC_B3
 	ret
@@ -12361,12 +12361,12 @@ SwbtWr_StubRet_B:
 SwbtWr_StubRet_C:
 	ret
 SwbtWr_WriteBankSelect:
-	ld	(0x908b:16), 176
-	ld	(0x908c:16), 0
+	ld	(MIDI_MSG_STATUS:16), 176
+	ld	(MIDI_MSG_DATA1:16), 0
 	ld	a, (MIDI_CC_EXPRESSION_VALUE:16)
 	res 7, a
-	ld	(0x908d:16), a
-	ld	(0x908e:16), 127
+	ld	(MIDI_MSG_DATA2:16), a
+	ld	(MIDI_MSG_DATA3:16), 127
 	push xde
 	push xhl
 	push xix
@@ -12376,12 +12376,12 @@ SwbtWr_WriteBankSelect:
 	pop xix
 	pop xhl
 	pop xde
-	ld	(0x908b:16), 176
-	ld	(0x908c:16), 1
+	ld	(MIDI_MSG_STATUS:16), 176
+	ld	(MIDI_MSG_DATA1:16), 1
 	ld	a, (MIDI_CC_MODWHEEL_VALUE:16)
 	res 7, a
-	ld	(0x908d:16), a
-	ld	(0x908e:16), 127
+	ld	(MIDI_MSG_DATA2:16), a
+	ld	(MIDI_MSG_DATA3:16), 127
 	push xde
 	push xhl
 	push xix

@@ -2132,7 +2132,7 @@ FDC_CommandAndPostEvent:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ld	a, (0x8a24:16)
+	ld	a, (FDC_ERROR_CODE:16)
 	cp a, 0xfc
 	jr nz, FDC_PostEvent_Error
 	ld xwa, 0xffffffff

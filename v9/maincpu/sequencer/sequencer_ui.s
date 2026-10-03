@@ -3413,11 +3413,11 @@ AcDemoSong_HandleResize:
 	jr nz, AcDemoSong_DefaultHandler
 	ld xwa, (xsp + 8)
 	calr VoiceConfig_ScreenTypeDispatch
-	cp (3375:16), 0
+	cp (DEMO_TIMER_COUNTDOWN:16), 0
 	jr nz, AcCurrentSongBox_RetZero
-	bit 3, (0x28ad:16)
+	bit 3, (DEMO_CONTROL_FLAGS:16)
 	jr z, AcDemoSong_SetupDisplay
-	cp (4439:16), l
+	cp (DEMO_TARGET_SONG:16), l
 	jr nz, AcCurrentSongBox_RetZero
 
 AcDemoSong_SetupDisplay:

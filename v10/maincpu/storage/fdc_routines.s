@@ -143,7 +143,7 @@ FDC_CMD_EXEC_Helper2_Skip:
 	jr	z, FDC_CMD_EXEC_Helper2_Skip2
 	calr	FDC_ClearStatus_InitTimer
 	calr	FDC_CMD_DISPATCH_SUB
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_WaitReady_Loop3
 	ld	(0x8a20:16), 0
 	jrl	FDC_WaitReady_Epilogue3
@@ -185,14 +185,14 @@ FDC_WaitReady_Loop6:
 FDC_CMD_EXEC_Helper2_Skip2:
 	ld	wa, 3:i3
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_WaitReady_Skip9
 	ld	(0x8a20:16), 0
 	jrl	FDC_WaitReady_Epilogue3
 FDC_WaitReady_Skip9:
 	ldw	wa, 79
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_WaitReady_Skip10
 	ld	(0x8a20:16), 0
 	jrl	FDC_WaitReady_Epilogue3
@@ -257,13 +257,13 @@ FDC_WaitReady_Join:
 	or a, 11
 	extz wa
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_WaitReady_Skip12
 	ld	(0x8a20:16), 0
 	jr	FDC_WaitReady_Epilogue3
 FDC_WaitReady_Skip12:
 	calr	FDC_CMD_ENABLE
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_WaitReady_Skip13
 	ld	(0x8a20:16), 0
 	jr	FDC_WaitReady_Epilogue3
@@ -292,7 +292,7 @@ FDC_WaitReady_Skip14:
 ; Uses offset table at 0xea98b2
 FDC_COMMAND_DISPATCHER:
 	ld (0x8a2a:16), 0
-	ld wa, (0x8a40:16)
+	ld wa, (FDC_COMMAND_INDEX:16)
 	cp wa, 0xb
 	jr ugt, FDC_CheckDriveCount
 	add wa, wa
@@ -303,7 +303,7 @@ FDC_COMMAND_DISPATCHER:
 ; FDC command handler base - entry point for command 0
 FDC_CMD_HANDLER_BASE:
 	calr FDC_SetupFormatParams
-	ld l, (0x8a24:16)
+	ld l, (FDC_ERROR_CODE:16)
 	ret
 
 FDC_ReturnZero:
@@ -322,7 +322,7 @@ FDC_CheckDriveCount:
 	jrl FDC_Set_Status
 
 FDC_ValidateCommand:
-	ld wa, (0x8a40:16)
+	ld wa, (FDC_COMMAND_INDEX:16)
 	cp wa, 4:i3
 	jr z, FDC_ValidateTrack
 	cp wa, 3:i3
@@ -342,13 +342,13 @@ FDC_NoOpReturn:
 
 FDC_Command5Handler:
 	calr FDC_Command5_Epilogue
-	ld l, (0x8a24:16)
+	ld l, (FDC_ERROR_CODE:16)
 	ret
 
 FDC_ValidateTrack:
 	ld wa, (0x8a46:16)
 	ld (0x8a2b:16), a
-	ld (0x8a36:16), a
+	ld (FDC_TARGET_TRACK:16), a
 	extz wa
 	cp wa, (0x8b08:16)
 	jr c, FDC_HandleCmd2
@@ -356,10 +356,10 @@ FDC_ValidateTrack:
 	jrl FDC_Set_Status
 
 FDC_HandleCmd2:
-	cpw (0x8a40:16), 2
+	cpw (FDC_COMMAND_INDEX:16), 2
 	jr nz, FDC_CheckSectorCount
 	calr FDC_CheckHead
-	ld l, (0x8a24:16)
+	ld l, (FDC_ERROR_CODE:16)
 	ret
 
 FDC_CheckSectorCount:
@@ -403,7 +403,7 @@ FDC_FormatType4:
 	cp (0x8a2d:16), 255
 	jr nz, FDC_Format4Check
 	calr FDC_CheckHead
-	ld l, (0x8a24:16)
+	ld l, (FDC_ERROR_CODE:16)
 	ret
 
 FDC_Format4Check:
@@ -424,7 +424,7 @@ FDC_ErrorInvalid:
 
 FDC_ValidExecute:
 	calr FDC_CheckHead
-	ld l, (0x8a24:16)
+	ld l, (FDC_ERROR_CODE:16)
 	ret
 
 FDC_SetupFormatParams:
@@ -573,7 +573,7 @@ FDC_Port_Reset_Or_Noop:
 
 
 FDC_Setup_DMA_Mode:
-	ld bc, (0x8a1c:16)
+	ld bc, (FDC_SECTOR_COUNT:16)
 	ldc_cr16 bc, 0x4c
 	ld a, (0x8a28:16)
 	cp a, 0x4d
@@ -624,7 +624,7 @@ FDC_Setup_DMA_Src_Ack:
 	ldc_cr8 a, 0x4e
 	jr FDC_Port_Reset_Or_Noop
 FDC_MC_EXIT_Code_Helper:
-	ld bc, (0x8a1c:16)
+	ld bc, (FDC_SECTOR_COUNT:16)
 	ldc_cr16 bc, 0x4c
 	ret
 
@@ -796,7 +796,7 @@ FDC_HardwareSetup_Helper3:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_ResultPhase_Read_Epilogue
 	ld	a, (xsp)
 	extz	wa
@@ -808,7 +808,7 @@ FDC_HardwareSetup_Helper4:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_ResultPhase_Read
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_ResultPhase_Read_Epilogue2
 	ld	a, (xsp)
 	extz	wa
@@ -941,7 +941,7 @@ FDC_CMD_SEND:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_WaitReady
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
 	ld	(0x8a28:16), a
@@ -996,7 +996,7 @@ FDC_HardwareSetup_Skip6:
 	ld	a, (xsp)
 	extz	wa
 	calr	FDC_HardwareSetup_Helper
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_HardwareSetup_Epilogue
 	cp	(xsp), 8
 	jr	z, FDC_HardwareSetup_Epilogue
@@ -1121,7 +1121,7 @@ FDC_HardwareSetup_Helper7:
 	extz	wa
 	jrl	FDC_HardwareSetup_Helper2
 FDC_HardwareSetup_Helper8:
-	ld	a, (0x8a36:16)
+	ld	a, (FDC_TARGET_TRACK:16)
 	extz	wa
 	jrl	FDC_HardwareSetup_Helper2
 FDC_HardwareSetup_Helper9:
@@ -1170,7 +1170,7 @@ FDC_HardwareSetup_Entry:
 	ld	hl, 0:i3
 	ret
 FDC_CMD_EXEC_Helper3_Skip:
-	cpw	(0x8a40:16), 3
+	cpw	(FDC_COMMAND_INDEX:16), 3
 	jr	z, FDC_CMD_EXEC_Helper3_Skip2
 	ld	hl, 0:i3
 	ret
@@ -1203,7 +1203,7 @@ FDC_CMD_EXEC_Helper4_Skip:
 	ld	hl, 0:i3
 	ret
 FDC_CMD_EXEC_Helper4_Skip2:
-	cpw	(0x8a40:16), 3
+	cpw	(FDC_COMMAND_INDEX:16), 3
 	jr	z, FDC_CMD_EXEC_Helper4_Skip3
 	ld	hl, 0:i3
 	ret
@@ -1234,7 +1234,7 @@ FDC_DRIVE_STATUS:
 	ld	hl, 0:i3
 	ret
 FDC_CMD_EXEC_Helper4_Skip8:
-	cpw	(0x8a40:16), 0
+	cpw	(FDC_COMMAND_INDEX:16), 0
 	jr	z, FDC_CMD_EXEC_Helper4_Skip9
 	ld	hl, 0:i3
 	ret
@@ -1245,9 +1245,9 @@ FDC_PRE_OP_CHECK:
 	ret
 
 FDC_Set_Status:
-	cp (0x8a24:16), 0
+	cp (FDC_ERROR_CODE:16), 0
 	jr nz, FDC_SetStatus_AlreadySet
-	ld (0x8a24:16), a
+	ld (FDC_ERROR_CODE:16), a
 	cp a, 0x36
 	jr z, FDC_SetStatus_DataFieldErr
 	cp a, 0x35
@@ -1269,7 +1269,7 @@ FDC_SetStatus_AlreadySet:
 	nop
 
 FDC_SetStatus_Return:
-	ld l, (0x8a24:16)
+	ld l, (FDC_ERROR_CODE:16)
 	ret
 
 
@@ -1279,7 +1279,7 @@ FDC_SetStatus_Return:
 ; Polls with cps bc, 0 for completion signal.
 ; Uses prevbank (D7 FA) for timer state management.
 FDC_ClearStatus_InitTimer:
-	ld	(0x8a24:16), 0
+	ld	(FDC_ERROR_CODE:16), 0
 	ret
 FDC_TIMING_DELAY:
 	ld	(0x8a60:16), 255
@@ -1358,9 +1358,9 @@ FDC_InitSequence_Full:
 ; not re-checked in this pass.
 FDC_CmdRecalibrate:
 	push	qiz
-	ld	a, (0x8a36:16)
+	ld	a, (FDC_TARGET_TRACK:16)
 	ldfr_berp a, 251
-	ld	(0x8a36:16), 5
+	ld	(FDC_TARGET_TRACK:16), 5
 	ld	(0x8b04:16), 255
 	calr	FDC_CmdSeek
 	ld	(0x8b04:16), 0
@@ -1368,28 +1368,28 @@ FDC_CmdRecalibrate:
 	ld	wa, 7:i3
 	calr	FDC_CMD_SEND
 	calr	FDC_POST_OP
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CmdRecalibrate_Skip
 	ld	(0x8b04:16), 255
 FDC_CmdRecalibrate_Skip:
 	ldto_berp a, 251
-	ld	(0x8a36:16), a
+	ld	(FDC_TARGET_TRACK:16), a
 	ldw	wa, 16
 	calr	SOME_DELAY
 	pop qiz
 	ret
 FDC_CmdSeek:
-	ld	a, (0x8a36:16)
+	ld	a, (FDC_TARGET_TRACK:16)
 	cp	a, (35588:16)
 	ret	z
-	ldmm8	0x8b04, 0x8a36
+	ldmm8	0x8b04, FDC_TARGET_TRACK
 	ld	wa, 2:i3
 	calr	SOME_DELAY
 	calr	FDC_TIMING_DELAY
 	ldw	wa, 15
 	calr	FDC_CMD_SEND
 	calr	FDC_POST_OP
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Helper5_Skip
 	ld	(0x8b04:16), 255
 FDC_CMD_EXEC_Helper5_Skip:
@@ -1401,7 +1401,7 @@ FDC_CMD_EXEC_Helper6:
 	calr	FDC_TIMING_DELAY
 	ldw	wa, 198
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	ret	nz
 	jrl	FDC_POST_OP
 ; --- FDC_CMD_EXEC: Main FDC command execution engine ---
@@ -1434,16 +1434,16 @@ FDC_CMD_EXEC_Skip2:
 	ld	(0x8a68:16), 1
 	jrl	FDC_CE_DISPATCH
 FDC_CMD_EXEC_Loop:
-	ld	(0x8a24:16), 0
+	ld	(FDC_ERROR_CODE:16), 0
 	calr	FDC_CmdSeek
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip3
-	ld	a, (0x8a24:16)
+	ld	a, (FDC_ERROR_CODE:16)
 	ldfr_berp a, 248
 	exts	iz
 	calr	FDC_CONFIG_VERIFY
 	ldto_berp	a, 248
-	stb_d8	(0x8a24), a
+	stb_d8	(FDC_ERROR_CODE), a
 	jrl	FDC_CE_EXIT
 FDC_CMD_EXEC_Skip3:
 	ldw_d16	wa, (0x8a48)
@@ -1452,7 +1452,7 @@ FDC_CMD_EXEC_Skip3:
 	ldw	(0x8a48:16), 1
 FDC_CMD_EXEC_Skip4:
 	ldmm16	0x8b10, 0x8a48
-	ldw	(0x8a1c:16), 0
+	ldw	(FDC_SECTOR_COUNT:16), 0
 	cp	(0x8a6c:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip5
 	ldw	(0x8a1e:16), 1024
@@ -1464,7 +1464,7 @@ FDC_CMD_EXEC_Join:
 	ld	iz, 1:i3
 FDC_CMD_EXEC_Join2:
 	ld	wa, (0x8a1e:16)
-	add	(35356:16), wa
+	add	(FDC_SECTOR_COUNT:16), wa
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
@@ -1481,9 +1481,9 @@ FDC_CMD_EXEC_Skip6:
 	ld	(0x8a4a:16), iz
 	ldmm16	0x8a48, 0x8b10
 	calr	FDC_CMD_EXEC_Helper6
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip8
-	cp	(0x8a24:16), 9
+	cp	(FDC_ERROR_CODE:16), 9
 	jr	nz, FDC_CMD_EXEC_Skip7
 	calr	FDC_INIT
 	jrl	FDC_CE_EXIT
@@ -1500,7 +1500,7 @@ FDC_CMD_EXEC_Entry:
 	ldb_d8	a, (0x8a68)
 	cp	a, 0:i3
 	jr	nz, FDC_CE_DISPATCH
-	ld	(0x8a24:16), 16
+	ld	(FDC_ERROR_CODE:16), 16
 	jr	FDC_CE_EXIT
 FDC_CMD_EXEC_Skip8:
 	ld	wa, (0x8b12:16)
@@ -1509,7 +1509,7 @@ FDC_CMD_EXEC_Skip8:
 	cpw	(0x8a4a:16), 0
 	jr	z, FDC_CE_DISPATCH
 	lda	xbc, (0x8a4c:16)
-	ld	wa, (0x8a1c:16)
+	ld	wa, (FDC_SECTOR_COUNT:16)
 	extz	xwa
 	add	xwa, (xbc)
 	ld	(xbc), xwa
@@ -1524,7 +1524,7 @@ FDC_CMD_EXEC_Skip8:
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
-	ld	(0x8a36:16), a
+	ld	(FDC_TARGET_TRACK:16), a
 FDC_CE_DISPATCH:
 	cpw	(0x8a4a:16), 0
 	jrl	nz, FDC_CMD_EXEC_Loop
@@ -1536,16 +1536,16 @@ FDC_SECTOR_XFER:
 	ld	(0x8a68:16), 8
 	jrl	FDC_CMD_EXEC_Join5
 FDC_CMD_EXEC_Loop2:
-	ld	(0x8a24:16), 0
+	ld	(FDC_ERROR_CODE:16), 0
 	calr	FDC_CmdSeek
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip9
-	ld	a, (0x8a24:16)
+	ld	a, (FDC_ERROR_CODE:16)
 	ldfr_berp a, 248
 	exts	iz
 	calr	FDC_CONFIG_VERIFY
 	ldto_berp	a, 248
-	stb_d8	(0x8a24), a
+	stb_d8	(FDC_ERROR_CODE), a
 	jrl	FDC_CMD_EXEC_Epilogue2
 FDC_CMD_EXEC_Skip9:
 	ldw_d16	wa, (0x8a48)
@@ -1554,7 +1554,7 @@ FDC_CMD_EXEC_Skip9:
 	ldw	(0x8a48:16), 1
 FDC_CMD_EXEC_Skip10:
 	ldmm16	0x8b10, 0x8a48
-	ldw	(0x8a1c:16), 0
+	ldw	(FDC_SECTOR_COUNT:16), 0
 	cp	(0x8a6c:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip11
 	ldw	(0x8a1e:16), 1024
@@ -1566,7 +1566,7 @@ FDC_CMD_EXEC_Join3:
 	ld	iz, 1:i3
 FDC_CMD_EXEC_Join4:
 	ld	wa, (0x8a1e:16)
-	add	(35356:16), wa
+	add	(FDC_SECTOR_COUNT:16), wa
 	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
@@ -1583,15 +1583,15 @@ FDC_CMD_EXEC_Skip12:
 	ld	(0x8a4a:16), iz
 	ldmm16	0x8a48, 0x8b10
 	calr	FDC_CMD_EXEC_Helper7
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_CMD_EXEC_Skip14
-	cp	(0x8a24:16), 9
+	cp	(FDC_ERROR_CODE:16), 9
 	jr	nz, FDC_CMD_EXEC_Skip13
 	calr	FDC_INIT
 	calr	FDC_CONFIG_VERIFY
 	jrl	FDC_CMD_EXEC_Epilogue2
 FDC_CMD_EXEC_Skip13:
-	cp	(0x8a24:16), 47
+	cp	(FDC_ERROR_CODE:16), 47
 	jr	z, FDC_CMD_EXEC_Epilogue2
 	calr	FDC_CONFIG_VERIFY
 	ld	(0x8b04:16), 255
@@ -1601,7 +1601,7 @@ FDC_CMD_EXEC_Skip13:
 	ldb_d8	a, (0x8a68)
 	cp	a, 0:i3
 	jr	nz, FDC_CMD_EXEC_Join5
-	ld	(0x8a24:16), 32
+	ld	(FDC_ERROR_CODE:16), 32
 	jr	FDC_CMD_EXEC_Epilogue2
 FDC_CMD_EXEC_Skip14:
 	ld	wa, (0x8b12:16)
@@ -1610,7 +1610,7 @@ FDC_CMD_EXEC_Skip14:
 	cpw	(0x8a4a:16), 0
 	jr	z, FDC_CMD_EXEC_Join5
 	lda	xbc, (0x8a4c:16)
-	ld	wa, (0x8a1c:16)
+	ld	wa, (FDC_SECTOR_COUNT:16)
 	extz	xwa
 	add	xwa, (xbc)
 	ld	(xbc), xwa
@@ -1625,7 +1625,7 @@ FDC_CMD_EXEC_Skip14:
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
-	ld	(0x8a36:16), a
+	ld	(FDC_TARGET_TRACK:16), a
 FDC_CMD_EXEC_Join5:
 	cpw	(0x8a4a:16), 0
 	jrl	nz, FDC_CMD_EXEC_Loop2
@@ -1638,7 +1638,7 @@ FDC_CMD_EXEC_Helper7:
 	calr	FDC_TIMING_DELAY
 	ldw	wa, 197
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	ret	nz
 	jrl	FDC_POST_OP
 ; --- FDC_MODE_CONFIG: Configure FDC format parameters by disk type ---
@@ -1653,13 +1653,13 @@ FDC_CMD_EXEC_Helper7:
 ; Uses (R+d16) addressing for all state variables. 184 bytes.
 FDC_MODE_CONFIG:
 	calr	FDC_PRE_OP_CHECK
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jrl	nz, FDC_MC_EXIT
 	calr	FDC_INTERRUPT_HANDLER
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jrl	nz, FDC_MC_EXIT
 	calr	FDC_CmdRecalibrate
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jrl	nz, FDC_MC_EXIT
 	ld	a, (0x8a6c:16)
 	cp	a, 2:i3
@@ -1684,16 +1684,16 @@ FDC_MODE_CONFIG_Skip3:
 	ld	(0x8a2e:16), 3
 	ld	(0x8a33:16), 116
 FDC_MODE_CONFIG_Join:
-	ld	(0x8a36:16), 0
+	ld	(FDC_TARGET_TRACK:16), 0
 	ld	(0x8a2b:16), 0
 	ld	(0x8a34:16), 229
 	ld	(0x8a2c:16), 0
 	ld	(0x8a29:16), 0
 	jr	FDC_MODE_CONFIG_Join2
 FDC_MODE_CONFIG_Entry:
-	ldmm8	0x8a12, 0x8a36
+	ldmm8	0x8a12, FDC_TARGET_TRACK
 	calr	FDC_MODE_CONFIG_Helper2
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_MC_EXIT
 	ld	a, (0x8a29:16)
 	xor	a, 1
@@ -1704,10 +1704,10 @@ FDC_MODE_CONFIG_Entry:
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
-	ld	(0x8a36:16), a
+	ld	(FDC_TARGET_TRACK:16), a
 	ld	(0x8a12:16), a
 FDC_MODE_CONFIG_Join2:
-	ld	a, (0x8a36:16)
+	ld	a, (FDC_TARGET_TRACK:16)
 	extz	wa
 	cp wa, (35592:16)
 	jr	ule, FDC_MODE_CONFIG_Entry
@@ -1721,14 +1721,14 @@ FDC_MODE_CONFIG_Join2:
 ; Tail: DMA transfer initiation and multi-sector retry logic.
 ; Uses (R+d16) addressing for buffer and state access. 536 bytes.
 FDC_MC_EXIT:
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	call	nz, (0xf96bd0:24)
 	calr	FDC_CmdRecalibrate
 	ld	(0x8b04:16), 255
 	ret
 FDC_MODE_CONFIG_Helper2:
 	calr	FDC_CmdSeek
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jrl	nz, FDC_CONFIG_VERIFY
 	calr	FDC_MC_EXIT_Code_Helper2
 	ld	(0x8a28:16), 77
@@ -1739,7 +1739,7 @@ FDC_MODE_CONFIG_Helper2:
 	jrl	FDC_MC_EXIT_Code_Join2
 FDC_MC_EXIT_Code_Helper2:
 	ld	(0x8a2d:16), 1
-	ldw	(0x8a1c:16), 0
+	ldw	(FDC_SECTOR_COUNT:16), 0
 	ld	ix, (0x8b0a:16)
 	srl	ix, 1
 	ld	e, 0:opc
@@ -1756,7 +1756,7 @@ FDC_MC_EXIT_Code_Loop:
 	add	xhl, xbc
 	ld	a, (0x8a2b:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1766,7 +1766,7 @@ FDC_MC_EXIT_Code_Loop:
 	add	xhl, xbc
 	ld	a, (0x8a2c:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1776,7 +1776,7 @@ FDC_MC_EXIT_Code_Loop:
 	add	xhl, xbc
 	ld	a, (0x8a2d:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1786,7 +1786,7 @@ FDC_MC_EXIT_Code_Loop:
 	add	xhl, xbc
 	ld	a, (0x8a2e:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1796,7 +1796,7 @@ FDC_MC_EXIT_Code_Loop:
 	add	xhl, xbc
 	ld	a, (0x8a2b:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1806,7 +1806,7 @@ FDC_MC_EXIT_Code_Loop:
 	add	xhl, xbc
 	ld	a, (0x8a2c:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	cpw	(0x8a46:16), 0
 	jr	nz, FDC_MC_EXIT_Code_Skip
 	inc	1, (0x8a2d:16)
@@ -1833,7 +1833,7 @@ FDC_MC_EXIT_Code_Skip:
 	add	xwa, xbc
 	ld	(xwa), l
 FDC_MC_EXIT_Code_Join:
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1843,7 +1843,7 @@ FDC_MC_EXIT_Code_Join:
 	add	xhl, xbc
 	ld	a, (0x8a2e:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	inc	1, (0x8a2d:16)
 	inc	1, iy
 	cp	iy, ix
@@ -1861,7 +1861,7 @@ FDC_MC_EXIT_Code_Skip2:
 	add	xhl, xbc
 	ld	a, (0x8a2b:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1871,7 +1871,7 @@ FDC_MC_EXIT_Code_Skip2:
 	add	xhl, xbc
 	ld	a, (0x8a2c:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1881,7 +1881,7 @@ FDC_MC_EXIT_Code_Skip2:
 	add	xhl, xbc
 	ld	wa, (0x8b0a:16)
 	ld	(xhl), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1891,7 +1891,7 @@ FDC_MC_EXIT_Code_Skip2:
 	add	xde, xbc
 	ld	a, (0x8a2e:16)
 	ld	(xde), a
-	incw	1, (0x8a1c:16)
+	incw	1, (FDC_SECTOR_COUNT:16)
 	ret
 FDC_MC_EXIT_Code_Join2:
 	ld	(0x8a28:16), 77
@@ -1899,7 +1899,7 @@ FDC_MC_EXIT_Code_Join2:
 	calr	FDC_TIMING_DELAY
 	ldw	wa, 77
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	ret	nz
 	jrl	FDC_POST_OP
 FDC_CMD_ENABLE:
@@ -1907,7 +1907,7 @@ FDC_CMD_ENABLE:
 	set_dd8 3, 40
 	ldw	wa, 254
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	z, FDC_MC_EXIT_Code_Skip3
 	ldw	wa, 49
 	calr	FDC_Set_Status
@@ -1932,7 +1932,7 @@ FDC_CMD_DISABLE:
 ; Three exit paths with disk-changed flag (35434) management:
 ;   Set flag (35434=255) or clear flag (35434=0).
 FDC_STATUS_COPY:
-	ldmm8	0x8a24, 0x8a26
+	ldmm8	FDC_ERROR_CODE, 0x8a26
 	ret
 FDC_OUTPUT_CTRL:
 	ld	wa, (0x8a44:16)
@@ -1960,14 +1960,14 @@ FDC_STATUS_COPY_Join:
 ; Disables interrupts (D7 FA 05 = di 4) before return.
 FDC_INTERRUPT_HANDLER:
 	push	qiz
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	ld	wa, 4:i3
 	calr	FDC_CMD_SEND
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	calr	FDC_Wait_Ready_Timeout
-	cp	(0x8a24:16), 0
+	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	calr	FDC_Read_Data
 	ldfr_berp l, 251
@@ -2010,7 +2010,7 @@ FDC_CommandEntry_CopyParams:
 	ld (0x8a16:16), 165
 	ei 0
 	ld wa, (xiz)
-	ld (0x8a40:16), wa
+	ld (FDC_COMMAND_INDEX:16), wa
 	ld wa, (xiz + 2)
 	ld (0x8a42:16), wa
 	ld wa, (xiz + 4)
@@ -2038,12 +2038,12 @@ FDC_CommandEntry_CopyParams:
 	ld xwa, (xiz + 12)
 	ld (0x8a5c:16), xwa
 	ld (0x8a20:16), 0
-	ldmm8 0x8a26, 0x8a24
-	ld (0x8a24:16), 0
+	ldmm8 0x8a26, FDC_ERROR_CODE
+	ld (FDC_ERROR_CODE:16), 0
 	calr FDC_COMMAND_DISPATCHER
 	cp l, 0:i3
 	jr	nz, FDC_Handler_ExitStatus
-	ld wa, (0x8a40:16)
+	ld wa, (FDC_COMMAND_INDEX:16)
 	cp wa, 0xb
 	jr	ugt, FDC_Handler_InvalidCommand
 	add wa, wa
@@ -2151,7 +2151,7 @@ FDC_Handler_InvalidCommand:
 
 FDC_Handler_ExitStatus:
 	ld (0x8a16:16), 90
-	ld l, (0x8a24:16)
+	ld l, (FDC_ERROR_CODE:16)
 	exts hl
 
 FDC_Handler_Return:
@@ -2167,9 +2167,9 @@ FDC_Handler_Return:
 ; Increments buffer pointer (35406) after each byte.
 ; Falls through to transfer completion handlers.
 FDC_ByteTransfer_PIO:
-	cpw	(0x8a1c:16), 0
+	cpw	(FDC_SECTOR_COUNT:16), 0
 	ret	z
-	ld	wa, (0x8a40:16)
+	ld	wa, (FDC_COMMAND_INDEX:16)
 	cp	wa, 4:i3
 	jr	z, FDC_CommandEntry_Skip
 	cp	wa, 3:i3
@@ -2180,7 +2180,7 @@ FDC_ByteTransfer_PIO:
 	inc	1, xhl
 	ld	(0x8a4e:16), xhl
 FDC_CommandEntry_Join:
-	subw	(0x8a1c:16), 1
+	subw	(FDC_SECTOR_COUNT:16), 1
 	ret	nz
 	calr	FDC_Pulse_PH0
 	calr	FDC_Port_Reset_Or_Noop

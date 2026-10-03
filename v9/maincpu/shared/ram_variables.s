@@ -70,3 +70,21 @@
 	.equ FLASH_SECTION_PTR_6,	0x0c8e	; section 6: custom accompaniment styles
 	.equ FLASH_SECTION_PTR_7,	0x0c92	; section 7: sub-CPU performance data
 	.equ RHYTHM_PATTERN_BUF_PTR,	0x0c6e	; set to RHYTHM_PATTERN_BUF_A by Flash_InitExtMemAddrs
+; FDC state (fdc-subsystem.md "FDC Memory Map", taken only where the code agrees -- the page and
+; reverse-engineering.md disagree about 0x8A2B-0x8A4A)
+	.equ FDC_SECTOR_COUNT,		0x8a1c	; cleared per command, incremented per sector
+	.equ FDC_ERROR_CODE,		0x8a24	; cleared at command start, set by FDC_Set_Status; 32 compares
+	.equ FDC_TARGET_TRACK,		0x8a36	; the caller's target track (fdc_routines.s's own comment)
+	.equ FDC_COMMAND_INDEX,		0x8a40	; the command FDC dispatches on, 0..11 (12 handlers)
+; control-panel-protocol.md "MIDI Message Format (at 0x9127-0x912A)": one MIDI message staged before it is
+; sent -- statuses 0xB0..0xB3 written, word stores of status + first data byte
+	.equ MIDI_MSG_STATUS,		0x9127
+	.equ MIDI_MSG_DATA1,		0x9128	; e.g. the controller number
+	.equ MIDI_MSG_DATA2,		0x9129	; e.g. the value
+	.equ MIDI_MSG_DATA3,		0x912a
+; feature-demo.md / ssf-presentation.md "Key DRAM Addresses" -- the demo selection's own writers agree
+	.equ DEMO_TIMER_COUNTDOWN,	0x0d2f	; Demo_ResetCountdownTimer sets 15, Demo_SelectEntry_TimerTick counts
+	.equ DEMO_TARGET_SONG,		0x1157	; target song index
+	.equ DEMO_CURRENT_SONG,		0x1158	; current song index (Demo_SelectEntry_*, clamped to 18)
+	.equ DEMO_ACTIVE_ENTRY,		0x28a4	; active demo entry index
+	.equ DEMO_CONTROL_FLAGS,	0x28ad	; demo control flags, bit 3 = auto-play
