@@ -1,0 +1,61 @@
+[
+ {
+  "file": "v9/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF659D1",
+  "end": "0xF65B24",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 339
+   }
+  ],
+  "labels": {
+   "0xF659FF": "CmpNcp_ItemStep0",
+   "0xF65A95": "CmpNcp_ItemStep1"
+  }
+ },
+ {
+  "file": "v9/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF65B3C",
+  "end": "0xF65D64",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 371
+   },
+   {
+    "kind": "byte",
+    "len": 33,
+    "per_line": 12,
+    "decimal": true
+   },
+   {
+    "kind": "byte",
+    "len": 33,
+    "per_line": 12,
+    "decimal": true
+   },
+   {
+    "kind": "code",
+    "len": 115
+   }
+  ],
+  "labels": {
+   "0xF65C0C": "CmpNcp_ItemStep2",
+   "0xF65CF1": "CmpNcp_ItemStep3",
+   "0xF65D30": "CmpNcp_ItemStep3_Down",
+   "0xF65D12": "CmpNcp_ItemStep3_UpTestBit4",
+   "0xF65D1A": "CmpNcp_ItemStep3_UpBit4Set"
+  },
+  "comments": {
+   "0xF65CAF": [
+    "The two 33-entry remaps of (0x34D6) used by CmpNcp_ItemStep2 when the position in (0x34EF)",
+    "crosses 26: a down step below (0x342F) sets 26 and (0x34D6) := TimeSig_StepDownTable26[(0x34D6)];",
+    "an up step from 26 sets (0x342F) and (0x34D6) := TimeSig_StepUpTable26[(0x34D6)].  Were decoded",
+    "as `calr 7710 / ... / max / ld (P2:8), 8` code."
+   ]
+  }
+ }
+]

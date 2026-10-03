@@ -26014,7 +26014,7 @@ TimeSig_DisplayStrings:
 	.ascii "(16/8)+0 "
 	.byte 8
 DrumVoice_Handler7_Data_Code_Helper:
-	call	16069349
+	call	VoiceParam_ClampAndValidate_Tramp
 TimeSig_DisplayStrings_Code_Sub2:
 	ld	(0xfc5a:16), l
 	and	h, 127
@@ -26030,6 +26030,8 @@ TimeSig_DisplayStrings_Code_Sub2:
 TimeSig_DisplayStrings_Code_Join10:
 	ld	(xhl), w
 	ret
+; Called by CmpNcp_ItemHandler0.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep0:
 	push	w
 	ld	l, (0xfc5a:16)
 	and	l, 255
@@ -26087,6 +26089,8 @@ TimeSig_DisplayStrings_Code_Entry4:
 	ld	(0x34ef:16), 0
 TimeSig_DisplayStrings_Code_Return12:
 	ret
+; Called by CmpNcp_ItemHandler1.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep1:
 	push	w
 	ld	l, (0xfc5a:16)
 	and	l, 255
@@ -26221,14 +26225,15 @@ TimeSig_DisplayStrings_Code_Return:
 	ret
 AccPatch_ComplexDataBlock_Helper2:
 	ret
-	.byte 0xc1, 0xed
-	ldw	ix, 0x803f
+	cp	(0x34ed:16), 128
 	jr	c, TimeSig_DisplayStrings_Code_Return2
 	cp	(0x34ef:16), 10
 	jr	c, TimeSig_DisplayStrings_Code_Return2
 	ld	(0x34ef:16), 0
 TimeSig_DisplayStrings_Code_Return2:
 	ret
+; Called by CmpNcp_ItemHandler2.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep2:
 	push	w
 	ld	l, (0xfc5a:16)
 	and	l, 255
@@ -26259,7 +26264,7 @@ TimeSig_DisplayStrings_Code_Join3:
 	jr	nz, TimeSig_DisplayStrings_Code_Skip13
 	push	xix
 	ld	a, (0x34d6:16)
-	ld	xix, TimeSig_DisplayStrings_Code3
+	ld	xix, TimeSig_StepUpTable26
 	ld	a, (xix+a)
 	ld	(0x34d6:16), a
 	pop	xix
@@ -26279,70 +26284,49 @@ TimeSig_DisplayStrings_Code_Skip14:
 	jr ge, TimeSig_DisplayStrings_Code_Skip15
 	push	xix
 	ld	a, (0x34d6:16)
-	ld	xix, TimeSig_DisplayStrings_Code2
+	ld	xix, TimeSig_StepDownTable26
 	ld	a, (xix+a)
 	ld (13526:16), a
 	pop xix
 	ld	a, 26:opc
-	jr	0
+	jr	TimeSig_DisplayStrings_Code_Skip15
 TimeSig_DisplayStrings_Code_Skip15:
 	ld	(0x34ef:16), a
 	ret
-TimeSig_DisplayStrings_Code2:
-	calr	7710
-	calr	7967
-	.byte 0x1f, 0x1f
-	ld	w, 32:opc
-	ld	w, 32:opc
-	calr	7710
-	calr	7710
-	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f
-	ld	w, 32:opc
-	.ascii "    "
-	calr	8223
-TimeSig_DisplayStrings_Code3:
-	nop
-	nop
-	nop
-	nop
-	max
-	max
-	max
-	max
-	ld	(P2:8), 8:io
-	ld	(P0:8), 0:io
-	nop
-	nop
-	nop
-	nop
-	max
-	max
-	max
-	max
-	max
-	max
-	ld	(P2:8), 8:io
-	ld	(P2:8), 8:io
-	nop
-	max
-	ld	(TAMOD:8), 51:io
-	reti
-	jr	nz, 58
+TimeSig_StepDownTable26:
+	; The two 33-entry remaps of (0x34D6) used by CmpNcp_ItemStep2 when the position in (0x34EF)
+	; crosses 26: a down step below (0x342F) sets 26 and (0x34D6) := TimeSig_StepDownTable26[(0x34D6)];
+	; an up step from 26 sets (0x342F) and (0x34D6) := TimeSig_StepUpTable26[(0x34D6)].  Were decoded
+	; as `calr 7710 / ... / max / ld (P2:8), 8` code.
+	.byte	30, 30, 30, 30, 31, 31, 31, 31, 32, 32, 32, 32
+	.byte	30, 30, 30, 30, 30, 30, 31, 31, 31, 31, 31, 31
+	.byte	32, 32, 32, 32, 32, 32, 30, 31, 32
+TimeSig_StepUpTable26:
+	.byte	0, 0, 0, 0, 4, 4, 4, 4, 8, 8, 8, 8
+	.byte	0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4
+	.byte	8, 8, 8, 8, 8, 8, 0, 4, 8
+; Called by CmpNcp_ItemHandler3.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep3:
+	bit	7, w
+	jr	nz, CmpNcp_ItemStep3_Down
 	bit	5, (0x34cd:16)
-	jr	z, 22
+	jr	z, CmpNcp_ItemStep3_UpTestBit4
 	and	(0x34cd:16), 207
 	or	(0x34cd:16), 16
 	ld	(0x34d6:16), 32
 	ld	(0x34ef:16), 26
-	jr	81
+	jr	TimeSig_DisplayStrings_Code_Return3
+CmpNcp_ItemStep3_UpTestBit4:
 	bit	4, (0x34cd:16)
-	jr	z, 2
-	jr	73
+	jr	z, CmpNcp_ItemStep3_UpBit4Set
+	jr	TimeSig_DisplayStrings_Code_Return3
+CmpNcp_ItemStep3_UpBit4Set:
 	and	(0x34cd:16), 207
 	or	(0x34cd:16), 32
 	ld	(0x34d6:16), 31
 	ld	(0x34ef:16), 26
 	jr	TimeSig_DisplayStrings_Code_Return3
+CmpNcp_ItemStep3_Down:
 	bit	5, (0x34cd:16)
 	jr	z, DrumVoice_Handler7_Code_Helper2_Entry
 	and	(0x34cd:16), 207
@@ -26359,6 +26343,8 @@ DrumVoice_Handler7_Code_Helper2_Entry:
 	jr	TimeSig_DisplayStrings_Code_Return3
 TimeSig_DisplayStrings_Code_Return3:
 	ret
+; Called by CmpNcp_ItemHandler4.  Steps (0x34D6) through one of three helpers chosen by bits 4/5 of (0x34CD).
+CmpNcp_ItemStep4:
 	ld	a, (0x34d6:16)
 	bit	4, (0x34cd:16)
 	jr	z, DrumVoice_Handler7_Code_Helper2_Skip

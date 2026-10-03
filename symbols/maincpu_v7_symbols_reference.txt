@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,368
-#   semantic names ........... 50,466 (98.2%)
+#   symbols .................. 51,379
+#   semantic names ........... 50,477 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -32894,14 +32894,17 @@ DrumVoice_Handler7_Code_Skip4 00F654DF
 DrumVoice_Handler7_Code_Return7 00F654ED
 DrumVoice_NotifyEE 00F654EE
 TimeSig_DisplayStrings 00F65505
+DrumVoice_Handler7_Data_Code_Helper 00F655CD
 TimeSig_DisplayStrings_Code_Sub2 00F655D1
 TimeSig_DisplayStrings_Code_Join10 00F655F8
+CmpNcp_ItemStep0 00F655FB
 TimeSig_DisplayStrings_Code_Skip 00F65627
 TimeSig_DisplayStrings_Code_Skip2 00F65630
 TimeSig_DisplayStrings_Code_Skip3 00F6563B
 TimeSig_DisplayStrings_Code_Join 00F65642
 DrumVoice_NotifyEE_Skip4 00F65684
 TimeSig_DisplayStrings_Code_Return12 00F65690
+CmpNcp_ItemStep1 00F65691
 DrumVoice_NotifyEE_Skip5 00F656D1
 TimeSig_DisplayStrings_Code_Skip4 00F656DF
 TimeSig_DisplayStrings_Code_Skip5 00F656F2
@@ -32909,6 +32912,8 @@ TimeSig_DisplayStrings_Code_Join2 00F656FB
 TimeSig_StepUpTable15 00F65720
 TimeSig_StepDownTable15 00F6572C
 TimeSig_DisplayStrings_Code_Sub 00F65738
+DrumVoice_Handler7_Code_Helper2 00F6574F
+DrumVoice_Handler7_Code_Helper2_Skip5 00F65766
 DrumVoice_NotifyEE_Skip8 00F6577B
 DrumVoice_NotifyEE_Join4 00F6578C
 DrumVoice_NotifyEE_Skip9 00F657AA
@@ -32921,15 +32926,21 @@ DrumVoice_NotifyEE_Skip15 00F657F0
 DrumVoice_NotifyEE_Return2 00F657F2
 AccPatch_CallParamLookup_Helper7 00F657F3
 TimeSig_DisplayStrings_Code_Return2 00F65807
+CmpNcp_ItemStep2 00F65808
 DrumVoice_NotifyEE_Skip16 00F6583F
 DrumVoice_NotifyEE_Join5 00F65849
 DrumVoice_NotifyEE_Skip17 00F65873
 TimeSig_DisplayStrings_Code_Skip14 00F65881
 DrumVoice_NotifyEE_Join6 00F658A6
-TimeSig_DisplayStrings_Code2 00F658AB
-TimeSig_DisplayStrings_Code3 00F658CC
+TimeSig_StepDownTable26 00F658AB
+TimeSig_StepUpTable26 00F658CC
+CmpNcp_ItemStep3 00F658ED
+CmpNcp_ItemStep3_UpTestBit4 00F6590E
+CmpNcp_ItemStep3_UpBit4Set 00F65916
+CmpNcp_ItemStep3_Down 00F6592C
 AccPatch_CallParamLookup_Helper7_Entry 00F65943
 DrumVoice_NotifyEE_Return4 00F6595F
+CmpNcp_ItemStep4 00F65960
 DrumVoice_NotifyEE_Entry 00F6596F
 DrumVoice_NotifyEE_Skip19 00F6597A
 DrumVoice_NotifyEE_Join7 00F6597D

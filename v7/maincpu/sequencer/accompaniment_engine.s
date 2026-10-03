@@ -14953,7 +14953,7 @@ AccPatch_CallParamLookup_Helper:
 	ld	a, (xiy+16)
 	bit	0, a
 	jr	nz, AccPatch_CallParamLookup_Skip
-	call	16143311
+	call	RhythmVariation_Select_Helper
 	ld	(13476:16), 7
 AccPatch_CallParamLookup_Skip:
 	ld	a, (SWBTWR_PAYLOAD_1:16)
@@ -14966,7 +14966,7 @@ AccPatch_CallParamLookup_Skip:
 	jr	nz, AccPatch_CallParamLookup_Return2
 	call	TimeSig_DisplayStrings_Code_Sub
 	call	AccPatch_CallParamLookup_Helper7
-	call	16143311
+	call	RhythmVariation_Select_Helper
 AccPatch_CallParamLookup_Return2:
 	ret
 AccDemo_InitDone_Helper:
@@ -24114,7 +24114,7 @@ RhythmVariation_Select_Code_Helper6:
 	calr	TimeSig_DisplayStrings_Code_Sub2
 	calr	DrumKit_PostMidiEvents
 RhythmVariation_Select_Code_Skip4:
-	calr	1435
+	calr	RhythmVariation_Select_Helper
 	ret
 RhythmConfig_ReturnStub:
 	ret
@@ -24389,10 +24389,10 @@ DrumVoice_Handler6_Code:
 	add	xiy, 16
 	ld	a, (xiy)
 	bit	0, a
-	jr	nz, 9
-	calr	722
-	calr	63352
-	calr	804
+	jr	nz, DrumVoice_Handler6_Return
+	calr	DrumVoice_Handler6_Helper
+	calr	DrumKit_PostMidiEvents
+	calr	RhythmVariation_Select_Helper
 DrumVoice_Handler6_Return:
 	ret	
 DrumVoice_Handler7:
@@ -24451,16 +24451,16 @@ CmpNcpTtl_Dispatch_Helper:
 DrumVoice_Handler7_Data:
 	cp	(PREVIOUS_TITLE:16), 184	; TT_CMPNCP
 	jr	z, DrumVoice_Handler7_Data_Code_Skip
-	calr	1565
+	calr	DrumVoice_Handler7_Code_Helper2
 	ld	l, (0x3451:16)
 	ld	h, (0x3452:16)
-	calr	1168
+	calr	DrumVoice_Handler7_Data_Code_Helper
 	calr	DrumKit_PostMidiEvents
 	and	(0x3431:16), 191
 DrumVoice_Handler7_Data_Code_Skip:
 	calr	TimeSig_DisplayStrings_Code_Sub
 	calr	DrumVoice_Handler7_Code_Helper
-	calr	1537
+	calr	DrumVoice_Handler7_Code_Helper2
 	ret
 DrumVoice_Handler7_Code_Helper:
 	ld	a, (0xfc5a:16)
@@ -24607,7 +24607,7 @@ CmpNcp_ItemHandler0:
 	or	(0xe31c:16), 8
 	or	(0xe31c:16), 1
 	ldw	(0xe31e:16), 0x0080
-	calr	889
+	calr	CmpNcp_ItemStep0
 	calr	DrumKit_PostMidiEvents
 	calr	TimeSig_DisplayStrings_Code_Sub
 	calr	AccPatch_CallParamLookup_Helper7
@@ -24616,7 +24616,7 @@ CmpNcp_ItemHandler1:
 	or	(0xe31c:16), 8
 	or	(0xe31c:16), 1
 	ldw	(0xe31e:16), 0x0181
-	calr	1010
+	calr	CmpNcp_ItemStep1
 	calr	DrumKit_PostMidiEvents
 	calr	TimeSig_DisplayStrings_Code_Sub
 	ret
@@ -24624,18 +24624,18 @@ CmpNcp_ItemHandler2:
 	or	(0xe31c:16), 8
 	or	(0xe31c:16), 1
 	ldw	(0xe31e:16), 0x0282
-	calr	1359
+	calr	CmpNcp_ItemStep2
 	ret
 CmpNcp_ItemHandler3:
 	or	(0xe31c:16), 1
 	ldw	(0xe31e:16), 0x8505
-	calr	1573
+	calr	CmpNcp_ItemStep3
 	ret
 CmpNcp_ItemHandler4:
 	or	(0xe31c:16), 8
 	or	(0xe31c:16), 1
 	ldw	(0xe31e:16), 0x0686
-	calr	1668
+	calr	CmpNcp_ItemStep4
 	ret
 	push	xiz
 	call	DrumVoice_Handler7_Data_4
@@ -24905,31 +24905,34 @@ TimeSig_DisplayStrings:
 	.byte 7
 	.ascii "(16/8)+0 "
 	.byte 8
+DrumVoice_Handler7_Data_Code_Helper:
 	call	VoiceParam_ClampAndValidate_Tramp
 TimeSig_DisplayStrings_Code_Sub2:
-	ld	(64602:16), l
+	ld	(0xfc5a:16), l
 	and	h, 127
 	and	(0xfc5b:16), 128
 	or	(0xfc5b:16), h
-	ld	(36955:16), 72
+	ld	(0x905b:16), 72
 	call	PartCtrl_WriteProgramChange
 	ld	w, h
 	extz	hl
 	extz	xhl
-	add	xhl, 65426
+	add	xhl, 0xff92
 	jr	TimeSig_DisplayStrings_Code_Join10
 TimeSig_DisplayStrings_Code_Join10:
 	ld	(xhl), w
 	ret
-	.byte 0xc8, 0x04
-	ld	l, (64602:16)
+; Called by CmpNcp_ItemHandler0.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep0:
+	push	w
+	ld	l, (0xfc5a:16)
 	and	l, 255
-	ld	h, (64603:16)
+	ld	h, (0xfc5b:16)
 	and	h, 127
 	ld	a, 72:opc
-	ld	(36955:16), a
+	ld	(0x905b:16), a
 	call	PartCtrl_WriteProgramChange
-	pop w
+	pop	w
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip2
 	inc	1, l
@@ -24954,44 +24957,46 @@ TimeSig_DisplayStrings_Code_Skip3:
 	ld	l, 0:opc
 TimeSig_DisplayStrings_Code_Join:
 	ld	a, l
-	ld	xix, 65426
+	ld	xix, 0xff92
 	ld	h, (xix+l)
 	ld	l, a
 	ld	a, 72:opc
-	ld	(36954:16), a
+	ld	(0x905a:16), a
 	call	SndParam_ApplyProgramChange_Safe
 	and	l, 255
-	ld	(64602:16), l
+	ld	(0xfc5a:16), l
 	and	h, 127
-	ld	(64603:16), h
-	cp	(13395:16), 26
+	ld	(0xfc5b:16), h
+	cp	(0x3453:16), 26
 	jr	z, TimeSig_DisplayStrings_Code_Return12
-	cp	(64602:16), 128
+	cp	(0xfc5a:16), 128
 	jr	c, DrumVoice_NotifyEE_Skip4
-	cp	(13395:16), 16
+	cp	(0x3453:16), 16
 	jr	nc, TimeSig_DisplayStrings_Code_Return12
-	ld	(13395:16), 16
+	ld	(0x3453:16), 16
 	jr	TimeSig_DisplayStrings_Code_Return12
 DrumVoice_NotifyEE_Skip4:
-	cp	(13395:16), 16
+	cp	(0x3453:16), 16
 	jr	c, TimeSig_DisplayStrings_Code_Return12
-	ld	(13395:16), 0
+	ld	(0x3453:16), 0
 TimeSig_DisplayStrings_Code_Return12:
 	ret
-	.byte 0xc8, 0x04
-	ld	l, (64602:16)
+; Called by CmpNcp_ItemHandler1.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep1:
+	push	w
+	ld	l, (0xfc5a:16)
 	and	l, 255
-	ld	h, (64603:16)
+	ld	h, (0xfc5b:16)
 	and	h, 127
 	ld	a, 72:opc
-	ld	(36955:16), a
+	ld	(0x905b:16), a
 	call	PartCtrl_WriteProgramChange
 	ld	a, h
 	pushw	hl
 	call	AccVoice_GetChannelCount_Direct
-	ld	(13201:16), l
+	ld	(0x3391:16), l
 	popw	hl
-	pop w
+	pop	w
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip4
 	cp	l, 15
@@ -25003,9 +25008,9 @@ TimeSig_DisplayStrings_Code_Return12:
 	jr	TimeSig_DisplayStrings_Code_Join2
 DrumVoice_NotifyEE_Skip5:
 	inc	1, a
-	cp	a, (13201:16)
+	cp	a, (0x3391:16)
 	jr	ule, TimeSig_DisplayStrings_Code_Join2
-	ld	a, (13201:16)
+	ld	a, (0x3391:16)
 	jr	TimeSig_DisplayStrings_Code_Join2
 TimeSig_DisplayStrings_Code_Skip4:
 	cp	l, 15
@@ -25022,232 +25027,218 @@ TimeSig_DisplayStrings_Code_Skip5:
 	ld	a, 0:opc
 TimeSig_DisplayStrings_Code_Join2:
 	ld	h, a
-	ld	xwa, 65426
+	ld	xwa, 0xff92
 	ld	(xwa+l), h
 	ld	a, 72:opc
-	ld	(36954:16), a
-	call	16554433
+	ld	(0x905a:16), a
+	call	SndParam_ApplyProgramChange_Safe
 	and	l, 255
-	ld	(64602:16), l
+	ld	(0xfc5a:16), l
 	and	h, 127
-	ld	(64603:16), h
+	ld	(0xfc5b:16), h
 	ret
-; Two 12-entry step tables for (0x342D) when AccVoice_GetChannelCount_Direct returns 15: the routine above
+; Two 12-entry step tables for (0x3391) when AccVoice_GetChannelCount_Direct returns 15: the routine above
 ; takes A := TimeSig_StepUpTable15[A] on an up step and A := TimeSig_StepDownTable15[A] on a down step
 ; (bit 7 of W).  Were decoded as `max ... / ld (P2:8),8 ...` code; the second was the positional alias
 ; TimeSig_DisplayStrings + 0x227.
-TimeSig_StepUpTable15:		.byte	4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8
-TimeSig_StepDownTable15:	.byte	0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4
+TimeSig_StepUpTable15:
+	.byte	4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8
+TimeSig_StepDownTable15:
+	.byte	0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4
 TimeSig_DisplayStrings_Code_Sub:
-	ld	a, (64602:16)
+	ld	a, (0xfc5a:16)
 	and	a, 255
-	ld	w, (64603:16)
+	ld	w, (0xfc5b:16)
 	and	w, 127
-	ld	(13393:16), a
-	ld	(13394:16), w
+	ld	(0x3451:16), a
+	ld	(0x3452:16), w
 	ret
-	ld	l, (13393:16)
+DrumVoice_Handler7_Code_Helper2:
+	ld	l, (0x3451:16)
 	and	l, 255
 	cp	l, 240
-	jr	c, 11
+	jr	c, DrumVoice_Handler7_Code_Helper2_Skip5
 	ld	l, 128:opc
-	ld	(13393:16), l
-	ld	(13394:16), 0
+	ld	(0x3451:16), l
+	ld	(0x3452:16), 0
+DrumVoice_Handler7_Code_Helper2_Skip5:
 	cp	l, 128
 	jr	c, DrumVoice_NotifyEE_Skip8
-	ld	a, (13394:16)
+	ld	a, (0x3452:16)
 	and	a, 127
 	cp	a, 0:i3
 	jr	z, DrumVoice_NotifyEE_Skip8
-	ld	(13394:16), 0
+	ld	(0x3452:16), 0
 DrumVoice_NotifyEE_Skip8:
 	cp	l, 128
 	jr	c, DrumVoice_NotifyEE_Skip14
-	cp	(13395:16), 16
+	cp	(0x3453:16), 16
 	jr	nc, DrumVoice_NotifyEE_Join4
-	ld	(13395:16), 26
+	ld	(0x3453:16), 26
 DrumVoice_NotifyEE_Join4:
-	cp	(13395:16), 26
+	cp	(0x3453:16), 26
 	jr	nz, DrumVoice_NotifyEE_Skip11
-	ld	a, (13361:16)
+	ld	a, (0x3431:16)
 	and	a, 48
 	cp	a, 0:i3
 	jr	z, DrumVoice_NotifyEE_Skip9
 	cp	a, 32
 	jr	z, DrumVoice_NotifyEE_Skip10
-	ld	(13370:16), 32
+	ld	(0x343a:16), 32
 	jr	DrumVoice_NotifyEE_Return2
 DrumVoice_NotifyEE_Skip9:
-	ld	(13370:16), 30
+	ld	(0x343a:16), 30
 	jr	DrumVoice_NotifyEE_Return2
 DrumVoice_NotifyEE_Skip10:
-	ld	(13370:16), 31
+	ld	(0x343a:16), 31
 	jr	DrumVoice_NotifyEE_Return2
 DrumVoice_NotifyEE_Skip11:
-	cp	(13370:16), 30
+	cp	(0x343a:16), 30
 	jr	c, DrumVoice_NotifyEE_Return2
-	ld	a, (13361:16)
+	ld	a, (0x3431:16)
 	and	a, 48
 	cp	a, 0:i3
 	jr	z, DrumVoice_NotifyEE_Skip13
 	cp	a, 32
 	jr	z, DrumVoice_NotifyEE_Skip12
-	ld	(13370:16), 8
+	ld	(0x343a:16), 8
 	jr	DrumVoice_NotifyEE_Return2
 DrumVoice_NotifyEE_Skip12:
-	ld	(13370:16), 4
+	ld	(0x343a:16), 4
 	jr	DrumVoice_NotifyEE_Return2
 DrumVoice_NotifyEE_Skip13:
-	ld	(13370:16), 0
+	ld	(0x343a:16), 0
 	jr	DrumVoice_NotifyEE_Return2
 DrumVoice_NotifyEE_Skip14:
-	cp	(13395:16), 16
+	cp	(0x3453:16), 16
 	jr	c, DrumVoice_NotifyEE_Skip15
-	ld	(13395:16), 26
+	ld	(0x3453:16), 26
 DrumVoice_NotifyEE_Skip15:
 	jr	DrumVoice_NotifyEE_Join4
 DrumVoice_NotifyEE_Return2:
 	ret
 AccPatch_CallParamLookup_Helper7:
 	ret
-	cp	(13393:16), 128
+	cp	(0x3451:16), 128
 	jr	c, TimeSig_DisplayStrings_Code_Return2
-	cp	(13395:16), 10
+	cp	(0x3453:16), 10
 	jr	c, TimeSig_DisplayStrings_Code_Return2
-	ld	(13395:16), 0
+	ld	(0x3453:16), 0
 TimeSig_DisplayStrings_Code_Return2:
 	ret
-	.byte 0xc8, 0x04
-	ld	l, (64602:16)
+; Called by CmpNcp_ItemHandler2.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep2:
+	push	w
+	ld	l, (0xfc5a:16)
 	and	l, 255
-	ld	h, (64603:16)
+	ld	h, (0xfc5b:16)
 	and	h, 127
 	ld	a, 72:opc
-	ld	(36955:16), a
+	ld	(0x905b:16), a
 	call	PartCtrl_WriteProgramChange
 	pushw	hl
 	call	AccVoice_GetChannelCount_Direct
-	ld	(13201:16), h
+	ld	(0x3391:16), h
 	popw	hl
 	ld	a, l
 	cp	a, 15
 	jr	lt, DrumVoice_NotifyEE_Skip16
-	ld	(13202:16), 25
-	ld	(13203:16), 16
+	ld	(0x3392:16), 25
+	ld	(0x3393:16), 16
 	jr	DrumVoice_NotifyEE_Join5
 DrumVoice_NotifyEE_Skip16:
-	ld	(13202:16), 15
-	ld	(13203:16), 0
+	ld	(0x3392:16), 15
+	ld	(0x3393:16), 0
 DrumVoice_NotifyEE_Join5:
-	ld	a, (13395:16)
-	pop w
+	ld	a, (0x3453:16)
+	pop	w
 	bit	7, w
 	jr	nz, TimeSig_DisplayStrings_Code_Skip14
 	cp	a, 26
 	jr	nz, DrumVoice_NotifyEE_Skip17
 	push	xix
-	ld	a, (13370:16)
-	ld	xix, TimeSig_DisplayStrings_Code3
+	ld	a, (0x343a:16)
+	ld	xix, TimeSig_StepUpTable26
 	ld	a, (xix+a)
-	ld	(13370:16), a
+	ld	(0x343a:16), a
 	pop	xix
-	ld	a, (13203:16)
+	ld	a, (0x3393:16)
 	jr	DrumVoice_NotifyEE_Join6
 DrumVoice_NotifyEE_Skip17:
 	inc	1, a
-	cp	a, (13202:16)
+	cp	a, (0x3392:16)
 	jr	ule, DrumVoice_NotifyEE_Join6
-	ld	a, (13202:16)
+	ld	a, (0x3392:16)
 	jr	DrumVoice_NotifyEE_Join6
 TimeSig_DisplayStrings_Code_Skip14:
 	cp	a, 26
 	jr	z, DrumVoice_NotifyEE_Join6
 	dec	1, a
-	cp	a, (13203:16)
+	cp	a, (0x3393:16)
 	jr	ge, DrumVoice_NotifyEE_Join6
 	push	xix
-	ld	a, (13370:16)
-	ld	xix, TimeSig_DisplayStrings_Code2
+	ld	a, (0x343a:16)
+	ld	xix, TimeSig_StepDownTable26
 	ld	a, (xix+a)
-	ld	(13370:16), a
+	ld	(0x343a:16), a
 	pop	xix
 	ld	a, 26:opc
 	jr	DrumVoice_NotifyEE_Join6
 DrumVoice_NotifyEE_Join6:
-	ld	(13395:16), a
+	ld	(0x3453:16), a
 	ret
-TimeSig_DisplayStrings_Code2:
-	calr	7710
-	calr	7967
-	.byte 0x1f, 0x1f
-	ld	w, 32:opc
-	ld	w, 32:opc
-	calr	7710
-	calr	7710
-	.byte 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f
-	ld	w, 32:opc
-	ld	w, 32:opc
-	ld	w, 32:opc
-	calr	8223
-TimeSig_DisplayStrings_Code3:
-	nop
-	nop
-	nop
-	nop
-	max
-	max
-	max
-	max
-	ld	(P2:8), 8:io
-	ld	(P0:8), 0:io
-	nop
-	nop
-	nop
-	nop
-	max
-	max
-	max
-	max
-	max
-	max
-	ld	(P2:8), 8:io
-	ld	(P2:8), 8:io
-	nop
-	max
-	ld	(TAMOD:8), 51:io
-	reti
-	jr	nz, 58
+TimeSig_StepDownTable26:
+	; The two 33-entry remaps of (0x343A) used by CmpNcp_ItemStep2 when the position in (0x3453)
+	; crosses 26: a down step below (0x3393) sets 26 and (0x343A) := TimeSig_StepDownTable26[(0x343A)];
+	; an up step from 26 sets (0x3393) and (0x343A) := TimeSig_StepUpTable26[(0x343A)].  Were decoded
+	; as `calr` / `max` / `ld (P2:8), 8` code.
+	.byte	30, 30, 30, 30, 31, 31, 31, 31, 32, 32, 32, 32
+	.byte	30, 30, 30, 30, 30, 30, 31, 31, 31, 31, 31, 31
+	.byte	32, 32, 32, 32, 32, 32, 30, 31, 32
+TimeSig_StepUpTable26:
+	.byte	0, 0, 0, 0, 4, 4, 4, 4, 8, 8, 8, 8
+	.byte	0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4
+	.byte	8, 8, 8, 8, 8, 8, 0, 4, 8
+; Called by CmpNcp_ItemHandler3.  Bit 7 of W set = step down, clear = step up.
+CmpNcp_ItemStep3:
+	bit	7, w
+	jr	nz, CmpNcp_ItemStep3_Down
 	bit	5, (0x3431:16)
-	jr	z, 22
+	jr	z, CmpNcp_ItemStep3_UpTestBit4
 	and	(0x3431:16), 207
 	or	(0x3431:16), 16
-	ld	(13370:16), 32
-	ld	(13395:16), 26
-	jr	81
+	ld	(0x343a:16), 32
+	ld	(0x3453:16), 26
+	jr	DrumVoice_NotifyEE_Return4
+CmpNcp_ItemStep3_UpTestBit4:
 	bit	4, (0x3431:16)
-	jr	z, 2
-	jr	73
+	jr	z, CmpNcp_ItemStep3_UpBit4Set
+	jr	DrumVoice_NotifyEE_Return4
+CmpNcp_ItemStep3_UpBit4Set:
 	and	(0x3431:16), 207
 	or	(0x3431:16), 32
-	ld	(13370:16), 31
-	ld	(13395:16), 26
+	ld	(0x343a:16), 31
+	ld	(0x3453:16), 26
 	jr	DrumVoice_NotifyEE_Return4
+CmpNcp_ItemStep3_Down:
 	bit	5, (0x3431:16)
 	jr	z, AccPatch_CallParamLookup_Helper7_Entry
 	and	(0x3431:16), 207
-	ld	(13370:16), 30
-	ld	(13395:16), 26
+	ld	(0x343a:16), 30
+	ld	(0x3453:16), 26
 	jr	DrumVoice_NotifyEE_Return4
 AccPatch_CallParamLookup_Helper7_Entry:
 	bit	4, (0x3431:16)
 	jr	z, DrumVoice_NotifyEE_Return4
 	and	(0x3431:16), 207
 	or	(0x3431:16), 32
-	ld	(13370:16), 31
-	ld	(13395:16), 26
+	ld	(0x343a:16), 31
+	ld	(0x3453:16), 26
 	jr	DrumVoice_NotifyEE_Return4
 DrumVoice_NotifyEE_Return4:
 	ret
+; Called by CmpNcp_ItemHandler4.  Steps (0x343A) through one of three helpers chosen by bits 4/5 of (0x3431).
+CmpNcp_ItemStep4:
 	ld	a, (13370:16)
 	bit	4, (0x3431:16)
 	jr	z, DrumVoice_NotifyEE_Entry
@@ -29988,7 +29979,7 @@ CmpNcpTtlFunc:
 CmpNcpTtl_Dispatch:
 	.ascii ":;<>"
 CmpNcpTtl_Dispatch_Code:
-	call	16142625
+	call	CmpNcpTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30017,7 +30008,7 @@ CmpNcpTtl_Dispatch_Code_Skip:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16142746
+	call	DrumVoice_Handler7_Data_2_Sub
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30027,7 +30018,7 @@ CmpNcpTtl_Dispatch_Code_Skip:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16142625
+	call	CmpNcpTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30078,7 +30069,7 @@ CmpNcpTtl_Dispatch2:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	16142764
+	call	CmpNcpTtl_Dispatch2_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30128,7 +30119,7 @@ CmpNcpTtl_Dispatch_Code_Skip3:
 	; v10 does not spell this byte either
 	ld	w, 128:opc
 	; v10 does not spell this byte either
-	call	16142764
+	call	CmpNcpTtl_Dispatch2_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30180,7 +30171,7 @@ CmpNcpTtl_Dispatch_Code_Skip4:
 	; v10 does not spell this byte either
 	ld	w, 0:opc
 	; v10 does not spell this byte either
-	call	16142799
+	call	CmpNcpTtl_Dispatch2_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30255,7 +30246,7 @@ CmpNcpTtl_Dispatch_Code_Skip7:
 	; v10 does not spell this byte either
 	ld	w, 128:opc
 	; v10 does not spell this byte either
-	call	16142799
+	call	CmpNcpTtl_Dispatch2_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30322,7 +30313,7 @@ CmpNcpTtl_Dispatch_Code_Skip10:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	16142834
+	call	DrumVoice_Handler7_Data_3_Sub
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30365,7 +30356,7 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	.byte 0x3e	; v10 does not spell this byte either
 	.byte 0x20	; v10 does not spell this byte either
 	.byte 0x80	; v10 does not spell this byte either
-	call	16142834
+	call	DrumVoice_Handler7_Data_3_Sub
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30409,7 +30400,7 @@ CmpNcpTtl_Dispatch_Code_Skip14:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	16142869
+	call	CmpNcpTtl_Dispatch2_Helper3
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -30479,7 +30470,7 @@ CmpNcpTtl_Dispatch_Code_Skip11:
 	; v10 does not spell this byte either
 	ld	w, 128:opc
 	; v10 does not spell this byte either
-	call	16142869
+	call	CmpNcpTtl_Dispatch2_Helper3
 	pop	xiz
 	pop	xix
 	pop	xhl

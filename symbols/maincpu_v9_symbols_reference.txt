@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,625
-#   semantic names ........... 50,811 (98.4%)
+#   symbols .................. 51,633
+#   semantic names ........... 50,819 (98.4%)
 #   positional names ......... 814
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33217,12 +33217,14 @@ TimeSig_DisplayStrings 00F65909
 DrumVoice_Handler7_Data_Code_Helper 00F659D1
 TimeSig_DisplayStrings_Code_Sub2 00F659D5
 TimeSig_DisplayStrings_Code_Join10 00F659FC
+CmpNcp_ItemStep0 00F659FF
 TimeSig_DisplayStrings_Code_Skip 00F65A2B
 TimeSig_DisplayStrings_Code_Skip2 00F65A34
 TimeSig_DisplayStrings_Code_Skip3 00F65A3F
 TimeSig_DisplayStrings_Code_Join 00F65A46
 TimeSig_DisplayStrings_Code_Entry4 00F65A88
 TimeSig_DisplayStrings_Code_Return12 00F65A94
+CmpNcp_ItemStep1 00F65A95
 TimeSig_DisplayStrings_Code_Skip38 00F65AD5
 TimeSig_DisplayStrings_Code_Skip4 00F65AE3
 TimeSig_DisplayStrings_Code_Skip5 00F65AF6
@@ -33244,15 +33246,21 @@ TimeSig_DisplayStrings_Code_Skip11 00F65BF4
 TimeSig_DisplayStrings_Code_Return 00F65BF6
 AccPatch_ComplexDataBlock_Helper2 00F65BF7
 TimeSig_DisplayStrings_Code_Return2 00F65C0B
+CmpNcp_ItemStep2 00F65C0C
 TimeSig_DisplayStrings_Code_Skip12 00F65C43
 TimeSig_DisplayStrings_Code_Join3 00F65C4D
 TimeSig_DisplayStrings_Code_Skip13 00F65C77
 TimeSig_DisplayStrings_Code_Skip14 00F65C85
 TimeSig_DisplayStrings_Code_Skip15 00F65CAA
-TimeSig_DisplayStrings_Code2 00F65CAF
-TimeSig_DisplayStrings_Code3 00F65CD0
+TimeSig_StepDownTable26 00F65CAF
+TimeSig_StepUpTable26 00F65CD0
+CmpNcp_ItemStep3 00F65CF1
+CmpNcp_ItemStep3_UpTestBit4 00F65D12
+CmpNcp_ItemStep3_UpBit4Set 00F65D1A
+CmpNcp_ItemStep3_Down 00F65D30
 DrumVoice_Handler7_Code_Helper2_Entry 00F65D47
 TimeSig_DisplayStrings_Code_Return3 00F65D63
+CmpNcp_ItemStep4 00F65D64
 DrumVoice_Handler7_Code_Helper2_Skip 00F65D73
 DrumVoice_Handler7_Code_Helper2_Skip2 00F65D7E
 DrumVoice_Handler7_Code_Helper2_Join 00F65D81

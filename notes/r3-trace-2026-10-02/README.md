@@ -103,3 +103,34 @@ The post-port step names the two tables the port left as `.byte` / numbers (`Cmp
 Eight `calr`s of the block stay numeric in v7. Their targets lie past the island, in v7 source that is
 itself misframed (`.byte 0xc8, 0x04` for `push w` ...). In v10, five of them are numeric too: unnamed
 routines after a `ret`, one of them (0xF65CF1) not even a line start.
+
+### `cmpncp_itemsteps_<tree>.json`: the step routines the item handlers call (2026-10-03)
+
+Two spans of v10/v9 accompaniment_engine.s: 0xF659D1-0xF65B24 and 0xF65B3C-0xF65D64. The first span
+starts after `TimeSig_DisplayStrings`, whose 20 ten-byte records end at 0xF659D1. The planner's auto
+entry 0xF659A9 falls inside them and was not used. The tables `TimeSig_StepUpTable15` /
+`StepDownTable15` in between were typed already. Results:
+
+- `CmpNcp_ItemStep0`..`3` are labelled (the `calr` targets of `CmpNcp_ItemHandler0..3`).
+- `TimeSig_StepDownTable26` / `TimeSig_StepUpTable26` (33 bytes each) were `calr 7710` / `max` /
+  `ld (P2:8), 8` and are now typed. `scripts/renaming/rename_timesig_step_tables26.sed`, all three
+  trees.
+- `cp (0x34ed:16), 128` was `.byte 0xc1, 0xed / ldw ix, 0x803f`.
+- `CmpNcp_ItemStep3` (0xF65CF1) is decoded from its first byte, with its three local labels.
+
+`keep_original_code` no longer keeps a numeric relative branch, so the render can name its target.
+`cmpncp_steps_postedit.py <tree>` labels `CmpNcp_ItemStep4` (0xF65D64, the span's end) and heads the five
+routines.
+
+v7: `port_islands.py --src v10 --dst v7 --file sequencer/accompaniment_engine.s --whole 24908-25250
+--delta 0x404 --apply` ported all 915 B (v7 0xF655CD-0xF65960, 274 lines, 10 labels); identical after
+round 0. `cmpncp_steps_v7_postport.py` restates the carried comments for v7's RAM:
+v10 0x342D/0x342E/0x342F/0x34CD/0x34D6/0x34EF = v7 0x3391/0x3392/0x3393/0x3431/0x343A/0x3453.
+The v7 comment on the 15-tables had quoted v10's (0x342D) since 257bd204; it now says (0x3391).
+With the targets labelled, `symbolize_numeric_branches.py --image v7 --only sequencer/accompaniment_engine.s
+--apply --verify` rewrote 26 operands (PASS), the island's eight `calr`s among them.
+
+`call VoiceParam_ClampAndValidate_Tramp` at `DrumVoice_Handler7_Data_Code_Helper`: v10/v9 had it as
+`call 16069349`, refused as an R2 fragment because it follows the TimeSig table, and the v7 port copied
+the number. It is named in all three trees.
+
