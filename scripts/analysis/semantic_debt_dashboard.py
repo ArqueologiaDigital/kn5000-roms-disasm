@@ -83,6 +83,14 @@ LIT = re.compile(rb'(?<![\w.$])(0x[0-9a-fA-F]+|\d{7,})(?![\w.$])')
 COLOUR_CALL = re.compile(rb'\bcall\s+(DrawString|DrawStringCentered|DrawStringLeftJustify|'
                          rb'DrawStringRightJustify|DrawStringAlignment|DrawStringReverse)\b')
 PUSHW = re.compile(rb'^\s*(?:[A-Za-z_.$][\w.$]*:)?\s*pushw\s+(0x[0-9a-fA-F]+|\d+)\s*(?:;.*)?$')
+# Calls whose stacked words are VALUES, so a `pushw <=0xff / pushw w` pair before them is not a far pointer
+# (2026-10-03; an earlier pass had labelled six such "targets" mid-table and mid-routine in WSA1 prom_a):
+#   Dev7E_WriteByte (value, ATA command-block register); T_[Pending]EventQueue_AppendStackArgs (four
+#   stacked words = one 0x2C00/0x2E00 queue record); T_Gfx_EraseRect (four coordinates, prom_b's header);
+#   TuneScale_AdjustUserKey (a key pair, 0xFF = no key); sub_FC5CDA ((0xFF, 0/1, 7/8) -- 0x00FF000x would
+#   land inside sub_FEFFF3).
+VALUE_ARG_CALL = re.compile(rb'\b(?:call|calr)\s+(Dev7E_WriteByte|T_PendingEventQueue_AppendStackArgs|'
+                            rb'T_EventQueue_AppendStackArgs|T_Gfx_EraseRect|TuneScale_AdjustUserKey|sub_FC5CDA)\b')
 REGMAC = re.compile(rb'^\s+(RegObjTable|RegObjTabl|RegModeHiLo|RegTitleHiLo|RegMode|RegTitle|'
                     rb'RegObjTableHama|RegObjTablHama|RegTitleHama)\s+([^;\n]*)', re.M)
 REG_ADDR_ARGS = {b"RegObjTable": (1, 2, 3), b"RegObjTabl": (1, 3), b"RegObjTableHama": (1, 2, 3),
@@ -141,6 +149,8 @@ def numfar(data, rng):
         m1, m2 = PUSHW.match(lines[i]), PUSHW.match(lines[i + 1])
         if m1 and m2 and COLOUR_CALL.search(b" ".join(x.split(b";")[0] for x in lines[i + 2:i + 8])):
             continue        # a DrawString* colour pair, not a far pointer (2026-10-03)
+        if m1 and m2 and VALUE_ARG_CALL.search(b" ".join(x.split(b";")[0] for x in lines[i + 2:i + 8])):
+            continue        # value arguments of a callee listed above, not a far pointer (2026-10-03)
         if m1 and m2:
             h, l = int(m1.group(1), 0), int(m2.group(1), 0)
             if h <= 0xff and l <= 0xffff and lo <= (h << 16 | l) <= hi and \

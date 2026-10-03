@@ -48766,8 +48766,8 @@ Draw_RealtimeCommandsClock_2:
 	jr z, .LF9A950                                       ; F9A901  66 4d
 	m_res 2, MD16, 0x7f34                                ; F9A903  f1 34 7f b2
 	pushw 0x04                                           ; F9A907  0b 04 00
-	pushw Draw_RealtimeCommandsClock_2_Data_2@hi16                                           ; F9A90A  0b fb 00
-	pushw Draw_RealtimeCommandsClock_2_Data_2@lo16                                           ; F9A90D  0b 02 00
+	pushw 0xfb                                           ; F9A90A  0b fb 00
+	pushw 0x02                                           ; F9A90D  0b 02 00
 	pushw 0x80                                           ; F9A910  0b 80 00
 	call T_PendingEventQueue_AppendStackArgs                                        ; F9A913  1d 18 1b f4
 	jr .LF9A937                                          ; F9A917  68 1e
@@ -48777,8 +48777,8 @@ Draw_RealtimeCommandsClock_2:
 	jr z, .LF9A950                                       ; F9A91E  66 30
 	and (XIX),0xfb                                       ; F9A920  84 3c fb
 	pushw 0x04                                           ; F9A923  0b 04 00
-	pushw Draw_RealtimeCommandsClock_2_Data@hi16                                           ; F9A926  0b fb 00
-	pushw Draw_RealtimeCommandsClock_2_Data@lo16                                           ; F9A929  0b 00 00
+	pushw 0xfb                                           ; F9A926  0b fb 00
+	pushw 0x00                                           ; F9A929  0b 00 00
 	pushw 0x80                                           ; F9A92C  0b 80 00
 	call T_PendingEventQueue_AppendStackArgs                                        ; F9A92F  1d 18 1b f4
 	call T_F40794                                        ; F9A933  1d 94 07 f4
@@ -85114,8 +85114,8 @@ KeyValueList_A16:
 	.short 0x10bb, 0x017f, 0x0010, 0x00ff, 0x0310, 0x017f, 0x0510, 0x017f  ; FAFFDC
 	.short 0x0610, 0x017f, 0x0710, 0x017f, 0x0810, 0x017f, 0x0b10, 0x017f  ; FAFFEC
 	.short	0x0a10, 0x01ff  ; FAFFFC
-Draw_RealtimeCommandsClock_2_Data:	.short	0x0910
-Draw_RealtimeCommandsClock_2_Data_2:	.short	0x017f, 0x1830, 0x0101, 0x1a30, 0x013f
+	.short	0x0910
+	.short	0x017f, 0x1830, 0x0101, 0x1a30, 0x013f
 	.short 0x1930, 0x013f, 0x10ad, 0x017f, 0x10ae, 0x017f  ; FB000C
 	.short 0xffff, 0xffff, 0xffff, 0xffff            ; FB0018  terminator
 
@@ -115396,8 +115396,8 @@ sub_FC5D87:
 .LFC5D96:
 	ld C,L                                               ; FC5D96  cf 8b
 	pushw bc                                             ; FC5D98  29
-	pushw sub_FC5D87_Code@hi16                                           ; FC5D99  0b ff 00
-	pushw sub_FC5D87_Code@lo16                                           ; FC5D9C  0b 00 00
+	pushw 0xff                                           ; FC5D99  0b ff 00
+	pushw 0x00                                           ; FC5D9C  0b 00 00
 .LFC5D9F:
 	pushw 0x07                                           ; FC5D9F  0b 07 00
 	calr sub_FC5CDA                                      ; FC5DA2  1e 35 ff
@@ -115437,8 +115437,8 @@ sub_FC5D87:
 	jr nz, .LFC5E06                                      ; FC5DF6  6e 0e
 	ld c, (0x602892:24)                                 ; FC5DF8  c2 92 28 60 23
 	pushw bc                                             ; FC5DFD  29
-	pushw sub_FC5D87_Code@hi16                                           ; FC5DFE  0b ff 00
-	pushw sub_FC5D87_Code@lo16                                           ; FC5E01  0b 00 00
+	pushw 0xff                                           ; FC5DFE  0b ff 00
+	pushw 0x00                                           ; FC5E01  0b 00 00
 	jr .LFC5E2B                                          ; FC5E04  68 25
 .LFC5E06:
 	ld c, (0x602493:24)                                 ; FC5E06  c2 93 24 60 23
@@ -115475,8 +115475,8 @@ sub_FC5D87:
 	calr sub_FC5CDA                                      ; FC5E5D  1e 7a fe
 	ld c, (0x602492:24)                                 ; FC5E60  c2 92 24 60 23
 	pushw bc                                             ; FC5E65  29
-	pushw sub_FC5D87_Code@hi16                                           ; FC5E66  0b ff 00
-	pushw sub_FC5D87_Code@lo16                                           ; FC5E69  0b 00 00
+	pushw 0xff                                           ; FC5E66  0b ff 00
+	pushw 0x00                                           ; FC5E69  0b 00 00
 	pushw 0x07                                           ; FC5E6C  0b 07 00
 	calr sub_FC5CDA                                      ; FC5E6F  1e 68 fe
 	inc 8,XSP                                            ; FC5E72  ef 60
@@ -115630,8 +115630,8 @@ sub_FC5FAC:
 	jr nz, .LFC5FEB                                      ; FC5FDB  6e 0e
 	ld C,(XIX+0x0292)                                    ; FC5FDD  c3 f1 92 02 23
 	pushw bc                                             ; FC5FE2  29
-	pushw sub_FC5D87_Code@hi16                                           ; FC5FE3  0b ff 00
-	pushw sub_FC5D87_Code@lo16                                           ; FC5FE6  0b 00 00
+	pushw 0xff                                           ; FC5FE3  0b ff 00
+	pushw 0x00                                           ; FC5FE6  0b 00 00
 	jr .LFC601C                                          ; FC5FE9  68 31
 .LFC5FEB:
 	m_bit 5, MD24, 0x602493                              ; FC5FEB  f2 93 24 60 cd
@@ -142447,8 +142447,8 @@ sub_FD946B:
 	pushw de                                             ; FD9470  2a
 	pushw ix                                             ; FD9471  2c
 	pushw 0x79                                           ; FD9472  0b 79 00
-	pushw sub_FD946B_Code@hi16                                           ; FD9475  0b fe 00
-	pushw sub_FD946B_Code@lo16                                           ; FD9478  0b 49 00
+	pushw 0xfe                                           ; FD9475  0b fe 00
+	pushw 0x49                                           ; FD9478  0b 49 00
 	pushw 0x30                                           ; FD947B  0b 30 00
 	call T_Gfx_EraseRect                                 ; FD947E  1d e0 1e f4
 	lda xbc, (xiz-6)                                     ; FD9482  be fa 31
@@ -155420,7 +155420,6 @@ sub_FE0046:
 sub_FE0047:
 	push XHL                                             ; FE0047  3b
 	push XIX                                             ; FE0048  3c
-sub_FD946B_Code:
 	push XIZ                                             ; FE0049  3e
 	call T_F41EFC                                        ; FE004A  1d fc 1e f4
 	pop XIZ                                              ; FE004E  5e
@@ -164501,8 +164500,8 @@ Dev7E_IdentifyDevice:
 	pushw 0x01                                           ; FE502B  0b 01 00
 	pushw 0x00                                           ; FE502E  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE5031  1e 3f fc
-	pushw Dev7E_IdentifyDevice_Code@hi16                                           ; FE5034  0b ff 00
-	pushw Dev7E_IdentifyDevice_Code@lo16                                           ; FE5037  0b 02 00
+	pushw 0xff                                           ; FE5034  0b ff 00
+	pushw 0x02                                           ; FE5037  0b 02 00
 	pushw 0x00                                           ; FE503A  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE503D  1e 33 fc
 	pushw 0xff                                           ; FE5040  0b ff 00
@@ -164513,8 +164512,8 @@ Dev7E_IdentifyDevice:
 	pushw 0x04                                           ; FE504F  0b 04 00
 	pushw 0x00                                           ; FE5052  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE5055  1e 1b fc
-	pushw Dev7E_IdentifyDevice_Code_2@hi16                                           ; FE5058  0b ff 00
-	pushw Dev7E_IdentifyDevice_Code_2@lo16                                           ; FE505B  0b 05 00
+	pushw 0xff                                           ; FE5058  0b ff 00
+	pushw 0x05                                           ; FE505B  0b 05 00
 	pushw 0x00                                           ; FE505E  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE5061  1e 0f fc
 	lda xsp, (xsp+0x1e)                                  ; FE5064  bf 1e 37
@@ -164655,8 +164654,8 @@ Dev7E_SetDeviceParams:
 	pushw 0x04                                           ; FE515F  0b 04 00
 	pushw 0x00                                           ; FE5162  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE5165  1e 0b fb
-	pushw Dev7E_IdentifyDevice_Code_2@hi16                                           ; FE5168  0b ff 00
-	pushw Dev7E_IdentifyDevice_Code_2@lo16                                           ; FE516B  0b 05 00
+	pushw 0xff                                           ; FE5168  0b ff 00
+	pushw 0x05                                           ; FE516B  0b 05 00
 	pushw 0x00                                           ; FE516E  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE5171  1e ff fa
 	lda xsp, (xsp+0x1e)                                  ; FE5174  bf 1e 37
@@ -164944,8 +164943,8 @@ Unit1_Op6_IssueCommandAndWaitReady:
 	pushw 0x04                                           ; FE540B  0b 04 00
 	pushw 0x00                                           ; FE540E  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE5411  1e 5f f8
-	pushw Dev7E_IdentifyDevice_Code_2@hi16                                           ; FE5414  0b ff 00
-	pushw Dev7E_IdentifyDevice_Code_2@lo16                                           ; FE5417  0b 05 00
+	pushw 0xff                                           ; FE5414  0b ff 00
+	pushw 0x05                                           ; FE5417  0b 05 00
 	pushw 0x00                                           ; FE541A  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE541D  1e 53 f8
 	lda xsp, (xsp+0x1e)                                  ; FE5420  bf 1e 37
@@ -164983,8 +164982,8 @@ Unit1_Op6_IssueCommandAndWaitReady_Join:
 	pushw 0x04                                           ; FE5474  0b 04 00
 	pushw 0x00                                           ; FE5477  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE547A  1e f6 f7
-	pushw Dev7E_IdentifyDevice_Code_2@hi16                                           ; FE547D  0b ff 00
-	pushw Dev7E_IdentifyDevice_Code_2@lo16                                           ; FE5480  0b 05 00
+	pushw 0xff                                           ; FE547D  0b ff 00
+	pushw 0x05                                           ; FE5480  0b 05 00
 	pushw 0x00                                           ; FE5483  0b 00 00
 	calr Dev7E_WriteByte                                          ; FE5486  1e ea f7
 	lda xsp, (xsp+0x1e)                                  ; FE5489  bf 1e 37
@@ -179198,11 +179197,8 @@ sub_FEFFF3:
 	calr sub_FF0294                                          ; FEFFF3  1e 9e 02
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEFFF6  f1 40 25 00 00
 	m_bit 0, MD24, EditScreen_Mode                              ; FEFFFB  f2 70 1f 60 c8
-sub_FC5D87_Code:
 	jr z, .LFF0007                                       ; FF0000  66 05
-Dev7E_IdentifyDevice_Code:
 	calr sub_FF0092                                            ; FF0002  1e 8d 00
-Dev7E_IdentifyDevice_Code_2:
 	jr .LFF000A                                          ; FF0005  68 03
 .LFF0007:
 	calr sub_FF000E                                      ; FF0007  1e 04 00
