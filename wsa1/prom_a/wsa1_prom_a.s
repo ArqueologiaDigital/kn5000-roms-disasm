@@ -6957,7 +6957,7 @@ ExtBoard_Identify:
 ExtBoardMagic_Wsa1Extbd:
 	.byte 0x57, 0x53, 0x41, 0x31, 0x20, 0x45, 0x58, 0x54, 0x42, 0x44          ; F828C7
 ; PowerOnChord_ClearRamAndReset -- unless (0x7FCA)=0x5AA5, on the FACTORY CLEAR chord zero both RAMs and restart
-; Evidence: returns at once when (0x7FCA)=0x5AA5; chord: variant 1 (0x2B38)=0x07, variant 2 (0x2B38)&3=3 (FINDINGS-prom_a-boot-and-version-screen.md ง4).  On it: ei 7, zero 0x1FE0 longs from 0x80 and 0x20000 longs from 0x600000, (0x7FD2)=(0x7FD4)=0, (0x7FC7),0x18, (0x7FCA)=0x5AA5, (0x7FD1)=0, (0x97) bits, `jrl RESET`.  Without it: (0x7FC7) bit 4 cleared, (0x97),0x20.
+; Evidence: returns at once when (0x7FCA)=0x5AA5; chord: variant 1 (0x2B38)=0x07, variant 2 (0x2B38)&3=3 (FINDINGS-prom_a-boot-and-version-screen.md ยง4).  On it: ei 7, zero 0x1FE0 longs from 0x80 and 0x20000 longs from 0x600000, (0x7FD2)=(0x7FD4)=0, (0x7FC7),0x18, (0x7FCA)=0x5AA5, (0x7FD1)=0, (0x97) bits, `jrl RESET`.  Without it: (0x7FC7) bit 4 cleared, (0x97),0x20.
 ; Caller: MainTask_Entry 0xF827E5.
 PowerOnChord_ClearRamAndReset:
 	m_cp_mi16 MW16, 0x7fca, 0x5aa5                       ; F828D1  d1 ca 7f 3f a5 5a

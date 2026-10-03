@@ -66,8 +66,14 @@ def read(path):
 
 
 def write(path, text):
-    with open(os.path.join(REPO, path), "wb") as f:
-        f.write(text.encode("latin-1"))
+    # encode BEFORE opening: open(..., "wb") truncates, and an encode error after that left
+    # wsa1_prom_a.s empty on 2026-10-03 (a header held a character latin-1 cannot hold).
+    # Written to a temporary file and renamed into place, so a failure leaves the old file.
+    data = text.encode("latin-1")
+    tmp = os.path.join(REPO, path) + ".apply_label_edits.tmp"
+    with open(tmp, "wb") as f:
+        f.write(data)
+    os.replace(tmp, os.path.join(REPO, path))
 
 
 DEF = re.compile(r"^(?:([A-Za-z_.$][A-Za-z0-9_.$@]*):|\s*\.(?:set|equ|equiv)\s+([A-Za-z_.$][A-Za-z0-9_.$@]*)\s*,)")
@@ -209,7 +215,11 @@ def main():
         start = i
         while start > 0 and lines[start - 1].lstrip().startswith(";"):
             start -= 1
-        body = ["; " + ln if ln else ";" for ln in h["text"].rstrip("\n").split("\n")]
+        # the sources are handled as latin-1 bytes; header prose may hold any character (the
+        # namers write a warning sign, U+26A0), stored as its UTF-8 bytes like the comments
+        # already in the files
+        body = [("; " + ln if ln else ";").encode("utf-8").decode("latin-1")
+                for ln in h["text"].rstrip("\n").split("\n")]
         if mode == "replace":
             lines[start:i] = body
         else:   # insert (no block above) or append (after the existing block)
