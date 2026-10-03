@@ -4080,18 +4080,18 @@ Paint_SequencerMedley:
 	jr z, .LF81073                                       ; F81051  66 20
 	call T_Disk_PortA3_Release_Call_Call                                        ; F81053  1d 90 25 f4
 	call T_F42C18                                        ; F81057  1d 18 2c f4
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F8105B  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F8105B  c1 c1 0d 3f 01
 	jr z, .LF81065                                       ; F81060  66 03
 	calr sub_F7F237                                          ; F81062  1e d2 e1
 .LF81065:
 	m_or_mi8 MB16, 0x2094, 0x40                          ; F81065  c1 94 20 3e 40
-	m_and_mi8 MB16, 0x0dc1, 0xfe                         ; F8106A  c1 c1 0d 3c fe
+	m_and_mi8 MB16, Medley_Playing, 0xfe                         ; F8106A  c1 c1 0d 3c fe
 	call T_F42B7C                                        ; F8106F  1d 7c 2b f4
 .LF81073:
 	call T_F42BCC                                        ; F81073  1d cc 2b f4
 	m_bit 4, MD16, 0x2095                                ; F81077  f1 95 20 cc
 	jr z, .LF81084                                       ; F8107B  66 07
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; F8107D  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; F8107D  c1 0b 22 3f 01
 	jr nz, .LF810AA                                      ; F81082  6e 26
 .LF81084:
 	m_cp_mi8 MB16, UI_StatusCode, 0x04                          ; F81084  c1 80 28 3f 04
@@ -4106,15 +4106,15 @@ Paint_SequencerMedley:
 	call T_DisplayList_Run                               ; F810A6  1d f0 17 f4
 .LF810AA:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F810AA  f1 40 25 00 00
-	ld a, (0x2208:16)                                   ; F810AF  c1 08 22 21
+	ld a, (Medley_FirstSong:16)                                   ; F810AF  c1 08 22 21
 	inc 1,A                                              ; F810B3  c9 61
 	ld (0x12fe:16), a                                   ; F810B5  f1 fe 12 41
-	ld a, (0x2209:16)                                   ; F810B9  c1 09 22 21
+	ld a, (Medley_LastSong:16)                                   ; F810B9  c1 09 22 21
 	inc 1,A                                              ; F810BD  c9 61
 	ld (0x1300:16), a                                   ; F810BF  f1 00 13 41
-	ld a, (0x0e35:16)                                   ; F810C3  c1 35 0e 21
+	ld a, (Medley_FileType:16)                                   ; F810C3  c1 35 0e 21
 	ld (0x1304:16), a                                   ; F810C7  f1 04 13 41
-	ld a, (0x220b:16)                                   ; F810CB  c1 0b 22 21
+	ld a, (Medley_Source:16)                                   ; F810CB  c1 0b 22 21
 	ld (0x1303:16), a                                   ; F810CF  f1 03 13 41
 	ld_sd8b a, 0x01                                      ; F810D3  c0 01 21
 	ld (0x1305:16), a                                   ; F810D6  f1 05 13 41
@@ -4134,7 +4134,7 @@ ScreenLeaveBody_SequencerMedley:
 	call T_F42BD0                                        ; F810FC  1d d0 2b f4
 	ret                                                  ; F81100  0e
 	ret                                                  ; F81101  0e
-	m_cp_mi8 MB16, 0x220b, 0x00                          ; F81102  c1 0b 22 3f 00
+	m_cp_mi8 MB16, Medley_Source, 0x00                          ; F81102  c1 0b 22 3f 00
 	jr z, .LF8111D                                       ; F81107  66 14
 	call T_Blink_Stop                                    ; F81109  1d 24 2e f4
 	call T_F42C18                                        ; F8110D  1d 18 2c f4
@@ -4143,7 +4143,7 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawFileTypeBox                                      ; F81119  1d 1c 14 f8
 .LF8111D:
 	ret                                                  ; F8111D  0e
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; F8111E  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; F8111E  c1 0b 22 3f 01
 	jr z, .LF81135                                       ; F81123  66 10
 	call T_Blink_Stop                                    ; F81125  1d 24 2e f4
 	call T_F42C1C                                        ; F81129  1d 1c 2c f4
@@ -4163,16 +4163,16 @@ ScreenLeaveBody_SequencerMedley:
 .LF8114C:
 	call T_F42B88                                        ; F8114C  1d 88 2b f4
 .LF81150:
-	ld a, (0x2208:16)                                   ; F81150  c1 08 22 21
+	ld a, (Medley_FirstSong:16)                                   ; F81150  c1 08 22 21
 	ld (0x12fe:16), a                                   ; F81154  f1 fe 12 41
-	ld a, (0x2209:16)                                   ; F81158  c1 09 22 21
+	ld a, (Medley_LastSong:16)                                   ; F81158  c1 09 22 21
 	ld (0x1300:16), a                                   ; F8115C  f1 00 13 41
 	call Draw_FirstS0ngLastS0ng                                      ; F81160  1d bf 13 f8
 	ret                                                  ; F81164  0e
 	ret                                                  ; F81165  0e
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; F81166  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; F81166  c1 0b 22 3f 01
 	jr nz, .LF81184                                      ; F8116B  6e 17
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; F8116D  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; F8116D  c1 35 0e 3f 01
 	jr z, .LF81184                                       ; F81172  66 10
 	call T_Blink_Stop                                    ; F81174  1d 24 2e f4
 	call T_F42C24                                        ; F81178  1d 24 2c f4
@@ -4180,7 +4180,7 @@ ScreenLeaveBody_SequencerMedley:
 	call SequencerMedley_DrawFileTypeBox                                      ; F81180  1d 1c 14 f8
 .LF81184:
 	ret                                                  ; F81184  0e
-	m_cp_mi8 MB16, 0x0e35, 0x00                          ; F81185  c1 35 0e 3f 00
+	m_cp_mi8 MB16, Medley_FileType, 0x00                          ; F81185  c1 35 0e 3f 00
 	jr z, .LF8119C                                       ; F8118A  66 10
 	call T_Blink_Stop                                    ; F8118C  1d 24 2e f4
 	call T_F42C28                                        ; F81190  1d 28 2c f4
@@ -4191,21 +4191,21 @@ ScreenLeaveBody_SequencerMedley:
 	ret                                                  ; F8119D  0e
 	bit 0x07,W                                           ; F8119E  c8 33 07
 	jr nz, .LF811C8                                      ; F811A1  6e 25
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F811A3  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811A3  c1 c1 0d 3f 01
 	jr z, .LF811E1                                       ; F811A8  66 37
 	calr sub_F7F245                                          ; F811AA  1e 98 e0
 	call T_F42BD4                                        ; F811AD  1d d4 2b f4
 	m_cp_mi8 MB16, UI_ScreenId, 0x13                          ; F811B1  c1 7c 20 3f 13
 	jr nz, .LF811E1                                      ; F811B6  6e 29
-	m_cp_mi8 MB16, 0x220b, 0x00                          ; F811B8  c1 0b 22 3f 00
+	m_cp_mi8 MB16, Medley_Source, 0x00                          ; F811B8  c1 0b 22 3f 00
 	jr nz, .LF811E1                                      ; F811BD  6e 22
 	calr Draw_FirstS0ngLastS0ng                                          ; F811BF  1e fd 01
 	call SequencerMedley_DrawPlayState                                      ; F811C2  1d 50 13 f8
 	jr .LF811E1                                          ; F811C6  68 19
 .LF811C8:
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F811C8  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811C8  c1 c1 0d 3f 01
 	jr z, .LF811E1                                       ; F811CD  66 12
-	m_cp_mi8 MB16, 0x0c0f, 0x01                          ; F811CF  c1 0f 0c 3f 01
+	m_cp_mi8 MB16, Medley_Field, 0x01                          ; F811CF  c1 0f 0c 3f 01
 	jr z, .LF811E1                                       ; F811D4  66 0b
 	calr sub_F7F237                                          ; F811D6  1e 5e e0
 	call T_F42B7C                                        ; F811D9  1d 7c 2b f4
@@ -4214,7 +4214,7 @@ ScreenLeaveBody_SequencerMedley:
 	ret                                                  ; F811E1  0e
 	bit 0x07,W                                           ; F811E2  c8 33 07
 	jr nz, .LF811FE                                      ; F811E5  6e 17
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F811E7  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811E7  c1 c1 0d 3f 01
 	jr nz, .LF811FE                                      ; F811EC  6e 10
 	bit_dd8 0x02, 0x95                                   ; F811EE  f0 95 ca
 	jr z, .LF811FE                                       ; F811F1  66 0b
@@ -4228,9 +4228,9 @@ ScreenLeaveBody_SequencerMedley:
 	call T_F42C2C                                        ; F81204  1d 2c 2c f4
 	jr .LF81223                                          ; F81208  68 19
 .LF8120A:
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F8120A  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F8120A  c1 c1 0d 3f 01
 	jr z, .LF81223                                       ; F8120F  66 12
-	m_cp_mi8 MB16, 0x0c0f, 0x02                          ; F81211  c1 0f 0c 3f 02
+	m_cp_mi8 MB16, Medley_Field, 0x02                          ; F81211  c1 0f 0c 3f 02
 	jr z, .LF81223                                       ; F81216  66 0b
 	calr sub_F7F237                                          ; F81218  1e 1c e0
 	call T_F42B80                                        ; F8121B  1d 80 2b f4
@@ -4249,7 +4249,7 @@ ScreenLeaveBody_SequencerMedley:
 ; SequencerMedley_NumberPad -- NUMBER PAD key on the SEQUENCER MEDLEY screen: dispatch on (0x2267)
 ; Evidence: reached only by `calr` at 0xF81231, slot 27 of ButtonTable_SequencerMedley; returns at once while (0x0DC1)=1 (set by the START arm through T_F42BD4); digit / 0x0F / 0x80 arms then SequencerMedley_BlinkSelectedField.
 SequencerMedley_NumberPad:
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81236  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F81236  c1 c1 0d 3f 01
 	jr z, .LF8125F                                       ; F8123B  66 22
 	ld a, (0x2267:16)                                   ; F8123D  c1 67 22 21
 	cp A,0x0f                                            ; F81241  c9 cf 0f
@@ -4284,32 +4284,32 @@ SequencerMedley_KeypadCommit:
 	cp wa, 0x01:i3                                         ; F81276  d8 d9
 	jrl c, .LF81309                                      ; F81278  77 8e 00
 	ldw hl, 0x0a                                         ; F8127B  33 0a 00
-	m_cp_mi8 MB16, 0x220b, 0x00                          ; F8127E  c1 0b 22 3f 00
+	m_cp_mi8 MB16, Medley_Source, 0x00                          ; F8127E  c1 0b 22 3f 00
 	jr z, .LF81292                                       ; F81283  66 0d
 	ldw hl, 0x14                                         ; F81285  33 14 00
-	m_cp_mi8 MB16, 0x0e35, 0x00                          ; F81288  c1 35 0e 3f 00
+	m_cp_mi8 MB16, Medley_FileType, 0x00                          ; F81288  c1 35 0e 3f 00
 	jr z, .LF81292                                       ; F8128D  66 03
 	ldw hl, 0x64                                         ; F8128F  33 64 00
 .LF81292:
 	cp WA,HL                                             ; F81292  db f0
 	jr ugt, .LF81309                                     ; F81294  6b 73
 	dec 1,WA                                             ; F81296  d8 69
-	m_cp_mi8 MB16, 0x0c0f, 0x01                          ; F81298  c1 0f 0c 3f 01
+	m_cp_mi8 MB16, Medley_Field, 0x01                          ; F81298  c1 0f 0c 3f 01
 	jr z, .LF812A8                                       ; F8129D  66 09
-	m_cp_mi8 MB16, 0x0c0f, 0x02                          ; F8129F  c1 0f 0c 3f 02
+	m_cp_mi8 MB16, Medley_Field, 0x02                          ; F8129F  c1 0f 0c 3f 02
 	jr z, .LF812D8                                       ; F812A4  66 32
 	jr .LF81309                                          ; F812A6  68 61
 .LF812A8:
-	ld c, (0x2208:16)                                   ; F812A8  c1 08 22 23
-	ld (0x2208:16), a                                   ; F812AC  f1 08 22 41
-	ld w, (0x2209:16)                                   ; F812B0  c1 09 22 20
+	ld c, (Medley_FirstSong:16)                                   ; F812A8  c1 08 22 23
+	ld (Medley_FirstSong:16), a                                   ; F812AC  f1 08 22 41
+	ld w, (Medley_LastSong:16)                                   ; F812B0  c1 09 22 20
 	cp A,W                                               ; F812B4  c8 f1
 	jr ule, .LF812BC                                     ; F812B6  63 04
-	ld (0x2209:16), a                                   ; F812B8  f1 09 22 41
+	ld (Medley_LastSong:16), a                                   ; F812B8  f1 09 22 41
 .LF812BC:
-	m_cp_rm MB16, 0x2208, r3                             ; F812BC  c1 08 22 f3
+	m_cp_rm MB16, Medley_FirstSong, r3                             ; F812BC  c1 08 22 f3
 	jr z, .LF81302                                       ; F812C0  66 40
-	cp (0x2208:16), c                                    ; F812C2  c1 08 22 fb
+	cp (Medley_FirstSong:16), c                                    ; F812C2  c1 08 22 fb
 	jr ugt, .LF812D0                                     ; F812C6  6b 08
 	ld w, 0x01:opc                                          ; F812C8  20 01
 	call T_F42580                                        ; F812CA  1d 80 25 f4
@@ -4319,14 +4319,14 @@ SequencerMedley_KeypadCommit:
 	call T_F42580                                        ; F812D2  1d 80 25 f4
 	jr .LF81302                                          ; F812D6  68 2a
 .LF812D8:
-	ld c, (0x2208:16)                                   ; F812D8  c1 08 22 23
-	ld (0x2209:16), a                                   ; F812DC  f1 09 22 41
+	ld c, (Medley_FirstSong:16)                                   ; F812D8  c1 08 22 23
+	ld (Medley_LastSong:16), a                                   ; F812DC  f1 09 22 41
 	cp C,A                                               ; F812E0  c9 f3
 	jr ule, .LF81302                                     ; F812E2  63 1e
-	ld (0x2208:16), a                                   ; F812E4  f1 08 22 41
-	m_cp_rm MB16, 0x2208, r3                             ; F812E8  c1 08 22 f3
+	ld (Medley_FirstSong:16), a                                   ; F812E4  f1 08 22 41
+	m_cp_rm MB16, Medley_FirstSong, r3                             ; F812E8  c1 08 22 f3
 	jr z, .LF81302                                       ; F812EC  66 14
-	cp (0x2208:16), c                                    ; F812EE  c1 08 22 fb
+	cp (Medley_FirstSong:16), c                                    ; F812EE  c1 08 22 fb
 	jr ugt, .LF812FC                                     ; F812F2  6b 08
 	ld w, 0x01:opc                                          ; F812F4  20 01
 	call T_F42580                                        ; F812F6  1d 80 25 f4
@@ -4347,14 +4347,14 @@ SequencerMedley_KeypadSign:
 ; SequencerMedley_BlinkSelectedField -- start the field blink on the FIRST or LAST song field
 ; Evidence: unless (0x0DC1)=1, blink off or (0x2267)=0x0F: push BlinkArgPtrs_F81344[(0x0C0F)] (entry 1 = DL_FirstS0ngLastS0ng, the (0x12FE) record), call T_Blink_Command.
 SequencerMedley_BlinkSelectedField:
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81310  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F81310  c1 c1 0d 3f 01
 	jr z, .LF81343                                       ; F81315  66 2c
 	m_bit 1, MD16, UI_RequestBits                                ; F81317  f1 75 20 c9
 	jr z, .LF81343                                       ; F8131B  66 26
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F8131D  c1 67 22 3f 0f
 	jr z, .LF81343                                       ; F81322  66 1f
 	xor XWA,XWA                                          ; F81324  e8 d0
-	ld a, (0x0c0f:16)                                   ; F81326  c1 0f 0c 21
+	ld a, (Medley_Field:16)                                   ; F81326  c1 0f 0c 21
 	sla xwa, 0x02                                        ; F8132A  e8 ec 02
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F8132D  f1 40 25 00 00
 	ld XIY,BlinkArgPtrs_F81344                           ; F81332  45 44 13 f8 00
@@ -4387,7 +4387,7 @@ BlinkArgPtrs_F81344:
 ; Then layer 1: EraseRect record 0xF3C7D8 and FillRect record 0xF3C7AD on (0x1305)=(0x0DC1); box 1 (0x106,0x46)-(0x132,0x55) encloses 'START', box 0 (0x106,0x70)-(0x132,0x7F) 'STOP'.  (0x0DC1)=1 is set by T_F42BD4 (prom_b 0xF66191) and cleared by T_F42BD8 (0xF66201).
 SequencerMedley_DrawPlayState:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F81350  f1 40 25 00 00
-	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81355  c1 c1 0d 3f 01
+	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F81355  c1 c1 0d 3f 01
 	jr z, .LF8136C                                       ; F8135A  66 10
 	ld XIY,DL_F3C86B                                     ; F8135C  45 6b c8 f3 00
 	ld XIX,DL_F3C873                                     ; F81361  44 73 c8 f3 00
@@ -4398,7 +4398,7 @@ SequencerMedley_DrawPlayState:
 	call T_DLHandler_IX_Text                             ; F81371  1d 2c 18 f4
 	ld XIY,0x00f3c888                                    ; F81375  45 88 c8 f3 00
 	call T_DLHandler_IX_Text                             ; F8137A  1d 2c 18 f4
-	ld a, (0x220a:16)                                   ; F8137E  c1 0a 22 21
+	ld a, (Medley_PlayingSong:16)                                   ; F8137E  c1 0a 22 21
 	inc 1,A                                              ; F81382  c9 61
 	ld (0x12f6:16), a                                   ; F81384  f1 f6 12 41
 	ld XIY,DL_F3C89D                                     ; F81388  45 9d c8 f3 00
@@ -4408,7 +4408,7 @@ SequencerMedley_DrawPlayState:
 	call T_DLB_Handler_StringTable                       ; F8139B  1d f8 17 f4
 .LF8139F:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8139F  f1 40 25 00 01
-	ld a, (0x0dc1:16)                                   ; F813A4  c1 c1 0d 21
+	ld a, (Medley_Playing:16)                                   ; F813A4  c1 c1 0d 21
 	ld (0x1305:16), a                                   ; F813A8  f1 05 13 41
 	ld XIY,0x00f3c7d8                                    ; F813AC  45 d8 c7 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F813B1  1d 20 18 f4
@@ -4417,10 +4417,10 @@ SequencerMedley_DrawPlayState:
 	ret                                                  ; F813BE  0e
 Draw_FirstS0ngLastS0ng:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F813BF  f1 40 25 00 00
-	ld a, (0x2208:16)                                   ; F813C4  c1 08 22 21
+	ld a, (Medley_FirstSong:16)                                   ; F813C4  c1 08 22 21
 	inc 1,A                                              ; F813C8  c9 61
 	ld (0x12fe:16), a                                   ; F813CA  f1 fe 12 41
-	ld a, (0x2209:16)                                   ; F813CE  c1 09 22 21
+	ld a, (Medley_LastSong:16)                                   ; F813CE  c1 09 22 21
 	inc 1,A                                              ; F813D2  c9 61
 	ld (0x1300:16), a                                   ; F813D4  f1 00 13 41
 	ld XIY,DL_FirstS0ngLastS0ng                          ; F813D8  45 78 c7 f3 00
@@ -4551,15 +4551,15 @@ S0ngSelectName_CursorLeft:
 	ld XIY,DL_F3C367                                     ; F81522  45 67 c3 f3 00
 	ld XIX,DLTable_F3C37D                                ; F81527  44 7d c3 f3 00
 	call T_DisplayListB_Run                              ; F8152C  1d f4 17 f4
-	ld a, (0x222d:16)                                   ; F81530  c1 2d 22 21
+	ld a, (NameEdit_CursorPos:16)                                   ; F81530  c1 2d 22 21
 	dec 1,A                                              ; F81534  c9 69
 	cp a, 0x00:i3                                          ; F81536  c9 d8
 	jr lt, .LF81552                                      ; F81538  61 18
-	ld (0x222d:16), a                                   ; F8153A  f1 2d 22 41
+	ld (NameEdit_CursorPos:16), a                                   ; F8153A  f1 2d 22 41
 	ld (0x2721:16), a                                   ; F8153E  f1 21 27 41
 	ld (0x1301:16), a                                   ; F81542  f1 01 13 41
 	call SongName_CharIndexAtCursor                                      ; F81546  1d 88 16 f8
-	ld a, (0x21f9:16)                                   ; F8154A  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F8154A  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F8154E  f1 02 13 41
 .LF81552:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F81552  f1 40 25 00 01
@@ -4579,15 +4579,15 @@ S0ngSelectName_CursorRight:
 	ld XIY,DL_F3C367                                     ; F81584  45 67 c3 f3 00
 	ld XIX,DLTable_F3C37D                                ; F81589  44 7d c3 f3 00
 	call T_DisplayListB_Run                              ; F8158E  1d f4 17 f4
-	ld a, (0x222d:16)                                   ; F81592  c1 2d 22 21
+	ld a, (NameEdit_CursorPos:16)                                   ; F81592  c1 2d 22 21
 	inc 1,A                                              ; F81596  c9 61
 	cp a, 0x05:i3                                          ; F81598  c9 dd
 	jr gt, .LF815B4                                      ; F8159A  6a 18
-	ld (0x222d:16), a                                   ; F8159C  f1 2d 22 41
+	ld (NameEdit_CursorPos:16), a                                   ; F8159C  f1 2d 22 41
 	ld (0x2721:16), a                                   ; F815A0  f1 21 27 41
 	ld (0x1301:16), a                                   ; F815A4  f1 01 13 41
 	call SongName_CharIndexAtCursor                                      ; F815A8  1d 88 16 f8
-	ld a, (0x21f9:16)                                   ; F815AC  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F815AC  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F815B0  f1 02 13 41
 .LF815B4:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F815B4  f1 40 25 00 01
@@ -4608,7 +4608,7 @@ S0ngSelectName_CharPrev:
 	call T_DLB_Handler_Array8_2                                        ; F815EB  1d 20 18 f4
 	ld w, 0x81:opc                                          ; F815EF  20 81
 	call SongName_StepCharAtCursor                                      ; F815F1  1d da 16 f8
-	ld a, (0x21f9:16)                                   ; F815F5  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F815F5  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F815F9  f1 02 13 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F815FD  f1 40 25 00 00
 	call SongName_Draw6Chars                                      ; F81602  1d 5e 16 f8
@@ -4627,7 +4627,7 @@ S0ngSelectName_CharNext:
 	call T_DLB_Handler_Array8_2                                        ; F8162F  1d 20 18 f4
 	ld w, 0x01:opc                                          ; F81633  20 01
 	call SongName_StepCharAtCursor                                      ; F81635  1d da 16 f8
-	ld a, (0x21f9:16)                                   ; F81639  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F81639  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F8163D  f1 02 13 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F81641  f1 40 25 00 00
 	call SongName_Draw6Chars                                      ; F81646  1d 5e 16 f8
@@ -4674,7 +4674,7 @@ S0ngSelectName_ClearName:
 ; Evidence: reads the byte at 0x610000+(0x360A)*0xC00+0xCA+(0x222D) (the bank copy of the name), then compares it with each of the 37 bytes of CharSet_F81768 (`ld BC,0x25` / djnz; 0xF816C0 loads 0xF81768, '_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'); returns at once when (0x222D) is negative.
 ; Called from: S0ngSelectName_CursorLeft/Right, S0ngSelectName_PrepareValues, S0ngSelectName_LoadSongFromBank.
 SongName_CharIndexAtCursor:
-	ld l, (0x222d:16)                                   ; F81688  c1 2d 22 27
+	ld l, (NameEdit_CursorPos:16)                                   ; F81688  c1 2d 22 27
 	cp l, 0x00:i3                                          ; F8168C  cf d8
 	jr lt, .LF816D9                                      ; F8168E  61 49
 	xor H,H                                              ; F81690  ce d6
@@ -4703,7 +4703,7 @@ SongName_CharIndexAtCursor:
 	djnz16 bc, .LF816C5                                  ; F816D0  d9 1c f2
 	ld l, 0x00:opc                                          ; F816D3  27 00
 .LF816D5:
-	ld (0x21f9:16), l                                   ; F816D5  f1 f9 21 47
+	ld (NameEdit_CharIndex:16), l                                   ; F816D5  f1 f9 21 47
 .LF816D9:
 	ret                                                  ; F816D9  0e
 ; SongName_StepCharAtCursor -- step the character under the name cursor: W bit 7 clear = next, set = previous
@@ -4720,36 +4720,36 @@ SongName_StepCharAtCursor:
 ; SongName_NextCharAtCursor -- (0x21F9)+1, clamped to 0x24 (the last of 37), then store it
 ; Evidence: `inc 1,A / cp A,0x25 / jr lt / ld A,0x24`, then SongName_StoreCharAtCursor.
 SongName_NextCharAtCursor:
-	ld a, (0x21f9:16)                                   ; F816EA  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F816EA  c1 f9 21 21
 	inc 1,A                                              ; F816EE  c9 61
 	cp A,0x25                                            ; F816F0  c9 cf 25
 	jr lt, .LF816F7                                      ; F816F3  61 02
 	ld a, 0x24:opc                                          ; F816F5  21 24
 .LF816F7:
-	ld (0x21f9:16), a                                   ; F816F7  f1 f9 21 41
+	ld (NameEdit_CharIndex:16), a                                   ; F816F7  f1 f9 21 41
 	call SongName_StoreCharAtCursor                                      ; F816FB  1d 16 17 f8
 	ret                                                  ; F816FF  0e
 ; SongName_PrevCharAtCursor -- (0x21F9)-1, clamped at 0, then store it
 ; Evidence: `dec 1,A / cp A,0xFF / jr nz / ld A,0`, then SongName_StoreCharAtCursor.
 SongName_PrevCharAtCursor:
-	ld a, (0x21f9:16)                                   ; F81700  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F81700  c1 f9 21 21
 	dec 1,A                                              ; F81704  c9 69
 	cp A,0xff                                            ; F81706  c9 cf ff
 	jr nz, .LF8170D                                      ; F81709  6e 02
 	ld a, 0x00:opc                                          ; F8170B  21 00
 .LF8170D:
-	ld (0x21f9:16), a                                   ; F8170D  f1 f9 21 41
+	ld (NameEdit_CharIndex:16), a                                   ; F8170D  f1 f9 21 41
 	call SongName_StoreCharAtCursor                                      ; F81711  1d 16 17 f8
 	ret                                                  ; F81715  0e
 ; SongName_StoreCharAtCursor -- write CharSet_F81768[(0x21F9)] at position (0x222D) of all three copies of the song name
 ; Evidence: 0xF8171C loads CharSet_F81768 ('_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') and reads entry (0x21F9); the byte is stored at (XIX+HL), HL=(0x222D), for XIX = 0x610000+(0x360A)*0xC00+0xCA (bank), 0x6034CA (workspace) and 0x12F6 (display) -- the same three copies SongName_ResetToUnderscores writes.
 ; Called from: SongName_NextCharAtCursor, SongName_PrevCharAtCursor.
 SongName_StoreCharAtCursor:
-	ld l, (0x21f9:16)                                   ; F81716  c1 f9 21 27
+	ld l, (NameEdit_CharIndex:16)                                   ; F81716  c1 f9 21 27
 	xor H,H                                              ; F8171A  ce d6
 	ld XIX,CharSet_F81768                                ; F8171C  44 68 17 f8 00
 	mx_ld_rm MXB, ra_IX, ra_HL, r1                       ; F81721  c3 07 f0 ec 21
-	ld l, (0x222d:16)                                   ; F81726  c1 2d 22 27
+	ld l, (NameEdit_CursorPos:16)                                   ; F81726  c1 2d 22 27
 	sub L,0x00                                           ; F8172A  cf ca 00
 	ld XIX,0x00610000                                    ; F8172D  44 00 00 61 00
 	push XBC                                             ; F81732  39
@@ -4796,7 +4796,7 @@ S0ngSelectName_PrepareValues:
 	call T_F409AC                                        ; F81799  1d ac 09 f4
 	m_or_mi8 MB16, 0x34bb, 0x04                          ; F8179D  c1 bb 34 3e 04
 	xor A,A                                              ; F817A2  c9 d1
-	ld (0x222d:16), a                                   ; F817A4  f1 2d 22 41
+	ld (NameEdit_CursorPos:16), a                                   ; F817A4  f1 2d 22 41
 	ld (0x1301:16), a                                   ; F817A8  f1 01 13 41
 	ld xwa, (0x360c:16)                                 ; F817AC  e1 0c 36 20
 	ld (0x60341e:24), xwa                               ; F817B0  f2 1e 34 60 60
@@ -4809,7 +4809,7 @@ S0ngSelectName_PrepareValues:
 	inc 1,A                                              ; F817C8  c9 61
 	ld (0x12fc:16), a                                   ; F817CA  f1 fc 12 41
 	call SongName_CharIndexAtCursor                                      ; F817CE  1d 88 16 f8
-	ld a, (0x21f9:16)                                   ; F817D2  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F817D2  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F817D6  f1 02 13 41
 	ld a, (BStore_CurrentBank:16)                                   ; F817DA  c1 0a 36 21
 	ld (0x0e32:16), a                                   ; F817DE  f1 32 0e 41
@@ -4865,14 +4865,14 @@ sub_F81812:
 	m_and_mi8 MB16, 0x34bb, 0xf7                         ; F8186E  c1 bb 34 3c f7
 	call T_F409E0                                        ; F81873  1d e0 09 f4
 	xor A,A                                              ; F81877  c9 d1
-	ld (0x222d:16), a                                   ; F81879  f1 2d 22 41
+	ld (NameEdit_CursorPos:16), a                                   ; F81879  f1 2d 22 41
 	ld (0x1301:16), a                                   ; F8187D  f1 01 13 41
 	ld XIX,0x000012f6                                    ; F81881  44 f6 12 00 00
 	ld XIY,0x006034ca                                    ; F81886  45 ca 34 60 00
 	ldw bc, 0x06                                         ; F8188B  31 06 00
 	ldir85                                               ; F8188E  85 11
 	call SongName_CharIndexAtCursor                                      ; F81890  1d 88 16 f8
-	ld a, (0x21f9:16)                                   ; F81894  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; F81894  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F81898  f1 02 13 41
 	m_cp_mi8 MB24, 0x6034c6, 0xff                        ; F8189C  c2 c6 34 60 3f ff
 	jr z, .LF818B3                                       ; F818A2  66 0f
@@ -4935,9 +4935,9 @@ SongName_ResetToUnderscores:
 	ldw bc, 0x06                                         ; F8192B  31 06 00
 	ldir85                                               ; F8192E  85 11
 	xor A,A                                              ; F81930  c9 d1
-	ld (0x222d:16), a                                   ; F81932  f1 2d 22 41
+	ld (NameEdit_CursorPos:16), a                                   ; F81932  f1 2d 22 41
 	ld (0x1301:16), a                                   ; F81936  f1 01 13 41
-	ld (0x21f9:16), a                                   ; F8193A  f1 f9 21 41
+	ld (NameEdit_CharIndex:16), a                                   ; F8193A  f1 f9 21 41
 	ld (0x1302:16), a                                   ; F8193E  f1 02 13 41
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; F81942  c1 71 20 3e 10
 	ret                                                  ; F81947  0e
@@ -98975,18 +98975,18 @@ sub_FB9D07:
 .LFB9D2B:
 	ret                                                  ; FB9D2B  0e
 sub_FB9D2C:
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; FB9D2C  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; FB9D2C  c1 0b 22 3f 01
 	jr nz, .LFB9D42                                      ; FB9D31  6e 0f
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FB9D33  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FB9D33  c1 35 0e 3f 01
 	jr nz, .LFB9D42                                      ; FB9D38  6e 08
 	calr sub_FB9BA4                                      ; FB9D3A  1e 67 fe
 	m_set 7, MD24, 0x605069                              ; FB9D3D  f2 69 50 60 bf
 .LFB9D42:
 	ret                                                  ; FB9D42  0e
 sub_FB9D43:
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; FB9D43  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; FB9D43  c1 0b 22 3f 01
 	jr nz, .LFB9D59                                      ; FB9D48  6e 0f
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FB9D4A  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FB9D4A  c1 35 0e 3f 01
 	jr nz, .LFB9D59                                      ; FB9D4F  6e 08
 	calr sub_FB9C52                                      ; FB9D51  1e fe fe
 	m_res 7, MD24, 0x605069                              ; FB9D54  f2 69 50 60 b7
@@ -99131,9 +99131,9 @@ sub_FB9E96:
 	push XIX                                             ; FB9E9B  3c
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x13                          ; FB9E9C  c1 7a 20 3f 13
 	jrl nz, .LFB9FDC                                     ; FB9EA1  7e 38 01
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; FB9EA4  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; FB9EA4  c1 0b 22 3f 01
 	jrl nz, .LFB9FDC                                     ; FB9EA9  7e 30 01
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FB9EAC  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FB9EAC  c1 35 0e 3f 01
 	jrl nz, .LFB9FDC                                     ; FB9EB1  7e 28 01
 	ld c, (0x60505e:24)                                 ; FB9EB4  c2 5e 50 60 23
 	and C,0x02                                           ; FB9EB9  cb cc 02
@@ -156559,7 +156559,7 @@ sub_FE0811:
 	ret                                                  ; FE085A  0e
 sub_FE085B:
 	ld (0x222a:16), 0xfa                                 ; FE085B  f1 2a 22 00 fa
-	ld (0x222d:16), 0x00                                 ; FE0860  f1 2d 22 00 00
+	ld (NameEdit_CursorPos:16), 0x00                                 ; FE0860  f1 2d 22 00 00
 	ld (0x2229:16), 0x04                                 ; FE0865  f1 29 22 00 04
 	ld (UI_Request_Hi:16), 0x10                                 ; FE086A  f1 71 20 00 10
 	ret                                                  ; FE086F  0e
@@ -157643,7 +157643,7 @@ sub_FE1337:
 	lda xix, (0x1737:24)                                 ; FE1339  f2 37 17 00 34
 	ld c, (0x272c:16)                                   ; FE133E  c1 2c 27 23
 	ld (0x1736:24), c                                   ; FE1342  f2 36 17 00 43
-	ld a, (0x222d:16)                                   ; FE1347  c1 2d 22 21
+	ld a, (NameEdit_CursorPos:16)                                   ; FE1347  c1 2d 22 21
 	ld (XIX),A                                           ; FE134B  b4 41
 	ld xbc, (0x208c:16)                                 ; FE134D  e1 8c 20 21
 	and XBC,0x00000001                                   ; FE1351  e9 cc 01 00 00 00
@@ -157675,7 +157675,7 @@ sub_FE1337:
 	ld (XIX),0x08                                        ; FE138E  b4 00 08
 .LFE1391:
 	ld C,(XIX)                                           ; FE1391  84 23
-	ld (0x222d:16), c                                   ; FE1393  f1 2d 22 43
+	ld (NameEdit_CursorPos:16), c                                   ; FE1393  f1 2d 22 43
 	calr sub_FE139D                                            ; FE1397  1e 03 00
 	pop XIX                                              ; FE139A  5c
 	pop XHL                                              ; FE139B  5b
@@ -157684,7 +157684,7 @@ sub_FE139D:
 	pushw hl                                             ; FE139D  2b
 	push XIX                                             ; FE139E  3c
 	lda xix, (0x1737:24)                                 ; FE139F  f2 37 17 00 34
-	ld h, (0x222d:16)                                   ; FE13A4  c1 2d 22 26
+	ld h, (NameEdit_CursorPos:16)                                   ; FE13A4  c1 2d 22 26
 	ld c, (0x272c:16)                                   ; FE13A8  c1 2c 27 23
 	ld (0x1736:24), c                                   ; FE13AC  f2 36 17 00 43
 	ld (XIX),H                                           ; FE13B1  b4 46
@@ -157711,7 +157711,7 @@ sub_FE139D:
 	cp A,L                                               ; FE13EF  cf f1
 	jr nz, .LFE13FB                                          ; FE13F1  6e 08
 	ld B,(XIX)                                           ; FE13F3  84 22
-	ld (0x21f9:16), b                                   ; FE13F5  f1 f9 21 42
+	ld (NameEdit_CharIndex:16), b                                   ; FE13F5  f1 f9 21 42
 	jr .LFE140E                                              ; FE13F9  68 13
 .LFE13FB:
 	incm8 0x01, (xix)                                    ; FE13FB  84 61
@@ -157922,10 +157922,10 @@ sub_FE152E__FE1551:
 	nop                                                  ; FE1564  00
 	m_or_mi8 MBI+r4, 0, 0x04                             ; FE1565  84 3e 04
 .LFE1568:
-	m_cp_mi8 MB16, 0x220b, 0x00                          ; FE1568  c1 0b 22 3f 00
+	m_cp_mi8 MB16, Medley_Source, 0x00                          ; FE1568  c1 0b 22 3f 00
 	jrl z, .LFE15F1                                          ; FE156D  76 81 00
 	ld (0x2215:16), 0x00                                 ; FE1570  f1 15 22 00 00
-	ld c, (0x2208:16)                                   ; FE1575  c1 08 22 23
+	ld c, (Medley_FirstSong:16)                                   ; FE1575  c1 08 22 23
 	ld (0x2724:16), c                                   ; FE1579  f1 24 27 43
 	ld (UI_StatusCode:16), 0x00                                 ; FE157D  f1 80 28 00 00
 	ld (0x272b:16), 0x00                                 ; FE1582  f1 2b 27 00 00
@@ -157936,7 +157936,7 @@ sub_FE152E__FE1551:
 	ld (0x60341e:24), xbc                               ; FE1594  f2 1e 34 60 61
 	calr sub_FE011B                                          ; FE1599  1e 7f eb
 	popw bc                                              ; FE159C  49
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; FE159D  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; FE159D  c1 0b 22 3f 01
 	jr nz, .LFE15DC                                          ; FE15A2  6e 38
 	ld (0x21fa:16), 0x00                                 ; FE15A4  f1 fa 21 00 00
 	calr Disk_PortA3_Release_Call                                          ; FE15A9  1e b3 f3
@@ -158079,12 +158079,12 @@ sub_FE16D6:
 	push XIX                                             ; FE16D6  3c
 	lda xix, (0x2724:16)                                ; FE16D7  f1 24 27 34
 	ld C,(XIX)                                           ; FE16DB  84 23
-	ld (0x220a:16), c                                   ; FE16DD  f1 0a 22 43
+	ld (Medley_PlayingSong:16), c                                   ; FE16DD  f1 0a 22 43
 	incm8 0x01, (xix)                                    ; FE16E1  84 61
 	ld C,(XIX)                                           ; FE16E3  84 23
-	m_cp_rm MB16, 0x2209, r3                             ; FE16E5  c1 09 22 f3
+	m_cp_rm MB16, Medley_LastSong, r3                             ; FE16E5  c1 09 22 f3
 	jr ule, .LFE16F1                                         ; FE16E9  63 06
-	ld c, (0x2208:16)                                   ; FE16EB  c1 08 22 23
+	ld c, (Medley_FirstSong:16)                                   ; FE16EB  c1 08 22 23
 	ld (XIX),C                                           ; FE16EF  b4 43
 .LFE16F1:
 	pop XIX                                              ; FE16F1  5c
@@ -158230,7 +158230,7 @@ sub_FE1863:
 	ld c, (0x1736:24)                                   ; FE1876  c2 36 17 00 23
 	and C,0x80                                           ; FE187B  cb cc 80
 	jr nz, .LFE1896                                          ; FE187E  6e 16
-	ld h, (0x21f9:16)                                   ; FE1880  c1 f9 21 26
+	ld h, (NameEdit_CharIndex:16)                                   ; FE1880  c1 f9 21 26
 	ld (XIX),H                                           ; FE1884  b4 46
 	ld L,H                                               ; FE1886  ce 8f
 	inc 1,L                                              ; FE1888  cf 61
@@ -158240,7 +158240,7 @@ sub_FE1863:
 	ld (XIX),0x24                                        ; FE1891  b4 00 24
 	jr .LFE18AA                                              ; FE1894  68 14
 .LFE1896:
-	ld h, (0x21f9:16)                                   ; FE1896  c1 f9 21 26
+	ld h, (NameEdit_CharIndex:16)                                   ; FE1896  c1 f9 21 26
 	ld (XIX),H                                           ; FE189A  b4 46
 	ld L,H                                               ; FE189C  ce 8f
 	dec 1,L                                              ; FE189E  cf 69
@@ -158250,7 +158250,7 @@ sub_FE1863:
 	ld (XIX),0x00                                        ; FE18A7  b4 00 00
 .LFE18AA:
 	ld C,(XIX)                                           ; FE18AA  84 23
-	ld (0x21f9:16), c                                   ; FE18AC  f1 f9 21 43
+	ld (NameEdit_CharIndex:16), c                                   ; FE18AC  f1 f9 21 43
 	ld H,(XIX)                                           ; FE18B0  84 26
 	ld (0x1737:24), h                                   ; FE18B2  f2 37 17 00 46
 	ld C,H                                               ; FE18B7  ce 8b
@@ -158259,9 +158259,9 @@ sub_FE1863:
 	add XBC,0x00001753                                   ; FE18BD  e9 c8 53 17 00 00
 	ld H,(XBC)                                           ; FE18C3  81 26
 	ld (XIX),H                                           ; FE18C5  b4 46
-	ld c, (0x222d:16)                                   ; FE18C7  c1 2d 22 23
+	ld c, (NameEdit_CursorPos:16)                                   ; FE18C7  c1 2d 22 23
 	ld (0x1737:24), c                                   ; FE18CB  f2 37 17 00 43
-	ld l, (0x222d:16)                                   ; FE18D0  c1 2d 22 27
+	ld l, (NameEdit_CursorPos:16)                                   ; FE18D0  c1 2d 22 27
 	dec 1,L                                              ; FE18D4  cf 69
 	ld (0x1737:24), l                                   ; FE18D6  f2 37 17 00 47
 	ld C,L                                               ; FE18DB  cf 8b
@@ -170041,25 +170041,25 @@ FatId_Floppy1440K:
 	.fill 205, 1, 0x0E
 
 sub_FE7800:
-	ld a, (0x220b:16)                                   ; FE7800  c1 0b 22 21
+	ld a, (Medley_Source:16)                                   ; FE7800  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE7804  c9 d8
 	jr nz, .LFE7815                                      ; FE7806  6e 0d
-	ld a, (0x2208:16)                                   ; FE7808  c1 08 22 21
-	ld (0x220a:16), a                                   ; FE780C  f1 0a 22 41
+	ld a, (Medley_FirstSong:16)                                   ; FE7808  c1 08 22 21
+	ld (Medley_PlayingSong:16), a                                   ; FE780C  f1 0a 22 41
 	calr sub_FE7864                                      ; FE7810  1e 51 00
 	jr .LFE782B                                          ; FE7813  68 16
 .LFE7815:
 	cp a, 0x01:i3                                          ; FE7815  c9 d9
 	jr nz, .LFE782B                                      ; FE7817  6e 12
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FE7819  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE7819  c1 35 0e 3f 01
 	jr nz, .LFE782B                                      ; FE781E  6e 0b
-	ld a, (0x2208:16)                                   ; FE7820  c1 08 22 21
-	ld (0x220a:16), a                                   ; FE7824  f1 0a 22 41
+	ld a, (Medley_FirstSong:16)                                   ; FE7820  c1 08 22 21
+	ld (Medley_PlayingSong:16), a                                   ; FE7824  f1 0a 22 41
 	calr sub_FE79B7                                      ; FE7828  1e 8c 01
 .LFE782B:
 	ret                                                  ; FE782B  0e
 sub_FE782C:
-	ld a, (0x220b:16)                                   ; FE782C  c1 0b 22 21
+	ld a, (Medley_Source:16)                                   ; FE782C  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE7830  c9 d8
 	jr nz, .LFE7839                                      ; FE7832  6e 05
 	calr sub_FE78FB                                      ; FE7834  1e c4 00
@@ -170067,13 +170067,13 @@ sub_FE782C:
 .LFE7839:
 	cp a, 0x01:i3                                          ; FE7839  c9 d9
 	jr nz, .LFE7847                                      ; FE783B  6e 0a
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FE783D  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE783D  c1 35 0e 3f 01
 	jr nz, .LFE7847                                      ; FE7842  6e 03
 	calr sub_FE7A30                                      ; FE7844  1e e9 01
 .LFE7847:
 	ret                                                  ; FE7847  0e
 sub_FE7848:
-	ld a, (0x220b:16)                                   ; FE7848  c1 0b 22 21
+	ld a, (Medley_Source:16)                                   ; FE7848  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE784C  c9 d8
 	jr nz, .LFE7855                                      ; FE784E  6e 05
 	calr sub_FE7908                                      ; FE7850  1e b5 00
@@ -170081,14 +170081,14 @@ sub_FE7848:
 .LFE7855:
 	cp a, 0x01:i3                                          ; FE7855  c9 d9
 	jr nz, .LFE7863                                      ; FE7857  6e 0a
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FE7859  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE7859  c1 35 0e 3f 01
 	jr nz, .LFE7863                                      ; FE785E  6e 03
 	calr sub_FE7A40                                      ; FE7860  1e dd 01
 .LFE7863:
 	ret                                                  ; FE7863  0e
 sub_FE7864:
-	ld a, (0x220a:16)                                   ; FE7864  c1 0a 22 21
-	m_cp_rm MB16, 0x2209, r1                             ; FE7868  c1 09 22 f1
+	ld a, (Medley_PlayingSong:16)                                   ; FE7864  c1 0a 22 21
+	m_cp_rm MB16, Medley_LastSong, r1                             ; FE7868  c1 09 22 f1
 	jrl ugt, .LFE78FA                                    ; FE786C  7b 8b 00
 	ld c, 0x00:opc                                          ; FE786F  23 00
 .LFE7871:
@@ -170111,22 +170111,22 @@ sub_FE7864:
 	add XHL,0x00000c00                                   ; FE7895  eb c8 00 0c 00 00
 	inc 1,A                                              ; FE789B  c9 61
 	inc 1,C                                              ; FE789D  cb 61
-	m_cp_rm MB16, 0x2209, r1                             ; FE789F  c1 09 22 f1
+	m_cp_rm MB16, Medley_LastSong, r1                             ; FE789F  c1 09 22 f1
 	jr ule, .LFE787F                                     ; FE78A3  63 da
-	ld e, (0x2209:16)                                   ; FE78A5  c1 09 22 25
-	sub e, (0x2208:16)                                   ; FE78A9  c1 08 22 a5
+	ld e, (Medley_LastSong:16)                                   ; FE78A5  c1 09 22 25
+	sub e, (Medley_FirstSong:16)                                   ; FE78A9  c1 08 22 a5
 	inc 1,E                                              ; FE78AD  cd 61
 	cp C,E                                               ; FE78AF  cd f3
 	jr c, .LFE78C5                                       ; FE78B1  67 12
 	ld (UI_StatusCode:16), 0x2f                                 ; FE78B3  f1 80 28 00 2f
 	ldw (UI_Request:16), 0x40ab                              ; FE78B8  f1 70 20 02 ab 40
-	ld (0x0dc1:16), 0x00                                 ; FE78BE  f1 c1 0d 00 00
+	ld (Medley_Playing:16), 0x00                                 ; FE78BE  f1 c1 0d 00 00
 	jr .LFE78FA                                          ; FE78C3  68 35
 .LFE78C5:
-	ld a, (0x2208:16)                                   ; FE78C5  c1 08 22 21
+	ld a, (Medley_FirstSong:16)                                   ; FE78C5  c1 08 22 21
 	jr .LFE7871                                          ; FE78C9  68 a6
 .LFE78CB:
-	ld (0x220a:16), a                                   ; FE78CB  f1 0a 22 41
+	ld (Medley_PlayingSong:16), a                                   ; FE78CB  f1 0a 22 41
 	ld (BStore_CurrentBank:16), a                                   ; FE78CF  f1 0a 36 41
 	call T_F4282C                                        ; FE78D3  1d 2c 28 f4
 	m_or_mi8 MB16, 0x34d0, 0x04                          ; FE78D7  c1 d0 34 3e 04
@@ -170149,29 +170149,29 @@ sub_FE78FB:
 	ret                                                  ; FE7907  0e
 sub_FE7908:
 	calr sub_FE78FB                                      ; FE7908  1e f0 ff
-	ld a, (0x220a:16)                                   ; FE790B  c1 0a 22 21
-	m_cp_rm MB16, 0x2209, r1                             ; FE790F  c1 09 22 f1
+	ld a, (Medley_PlayingSong:16)                                   ; FE790B  c1 0a 22 21
+	m_cp_rm MB16, Medley_LastSong, r1                             ; FE790F  c1 09 22 f1
 	jr c, .LFE791F                                       ; FE7913  67 0a
-	ld a, (0x2208:16)                                   ; FE7915  c1 08 22 21
+	ld a, (Medley_FirstSong:16)                                   ; FE7915  c1 08 22 21
 	dec 1,A                                              ; FE7919  c9 69
-	ld (0x220a:16), a                                   ; FE791B  f1 0a 22 41
+	ld (Medley_PlayingSong:16), a                                   ; FE791B  f1 0a 22 41
 .LFE791F:
-	inc 0x01, (0x220a:16)                                ; FE791F  c1 0a 22 61
+	inc 0x01, (Medley_PlayingSong:16)                                ; FE791F  c1 0a 22 61
 	calr sub_FE7864                                      ; FE7923  1e 3e ff
 	ret                                                  ; FE7926  0e
 sub_FE7927:
-	m_cp_mi8 MB16, 0x220b, 0x00                          ; FE7927  c1 0b 22 3f 00
+	m_cp_mi8 MB16, Medley_Source, 0x00                          ; FE7927  c1 0b 22 3f 00
 	jr nz, .LFE794F                                      ; FE792C  6e 21
 	m_bit 2, MD16, 0x34d0                                ; FE792E  f1 d0 34 ca
 	jr z, .LFE794F                                       ; FE7932  66 1b
-	ld a, (0x220a:16)                                   ; FE7934  c1 0a 22 21
-	m_cp_rm MB16, 0x2209, r1                             ; FE7938  c1 09 22 f1
+	ld a, (Medley_PlayingSong:16)                                   ; FE7934  c1 0a 22 21
+	m_cp_rm MB16, Medley_LastSong, r1                             ; FE7938  c1 09 22 f1
 	jr c, .LFE7948                                       ; FE793C  67 0a
-	ld a, (0x2208:16)                                   ; FE793E  c1 08 22 21
+	ld a, (Medley_FirstSong:16)                                   ; FE793E  c1 08 22 21
 	dec 1,A                                              ; FE7942  c9 69
-	ld (0x220a:16), a                                   ; FE7944  f1 0a 22 41
+	ld (Medley_PlayingSong:16), a                                   ; FE7944  f1 0a 22 41
 .LFE7948:
-	inc 0x01, (0x220a:16)                                ; FE7948  c1 0a 22 61
+	inc 0x01, (Medley_PlayingSong:16)                                ; FE7948  c1 0a 22 61
 	calr sub_FE7864                                      ; FE794C  1e 15 ff
 .LFE794F:
 	ret                                                  ; FE794F  0e
@@ -170182,7 +170182,7 @@ sub_FE7950:
 	dec 1,W                                              ; FE7958  c8 69
 	cp w, 0x05:i3                                          ; FE795A  c8 dd
 	jr nz, .LFE7978                                      ; FE795C  6e 1a
-	ld a, (0x220b:16)                                   ; FE795E  c1 0b 22 21
+	ld a, (Medley_Source:16)                                   ; FE795E  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE7962  c9 d8
 	jr nz, .LFE79B2                                      ; FE7964  6e 4c
 	pushw wa                                             ; FE7966  28
@@ -170194,19 +170194,19 @@ sub_FE7950:
 .LFE7978:
 	cp w, 0x00:i3                                          ; FE7978  c8 d8
 	jr nz, .LFE79B2                                      ; FE797A  6e 36
-	ld a, (0x220b:16)                                   ; FE797C  c1 0b 22 21
+	ld a, (Medley_Source:16)                                   ; FE797C  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE7980  c9 d8
 	jr z, .LFE79AC                                       ; FE7982  66 28
 	cp a, 0x01:i3                                          ; FE7984  c9 d9
 	jr nz, .LFE79B2                                      ; FE7986  6e 2a
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FE7988  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE7988  c1 35 0e 3f 01
 	jr nz, .LFE79B2                                      ; FE798D  6e 23
-	ld a, (0x2209:16)                                   ; FE798F  c1 09 22 21
-	inc 0x01, (0x220a:16)                                ; FE7993  c1 0a 22 61
-	cp (0x220a:16), a                                    ; FE7997  c1 0a 22 f9
+	ld a, (Medley_LastSong:16)                                   ; FE798F  c1 09 22 21
+	inc 0x01, (Medley_PlayingSong:16)                                ; FE7993  c1 0a 22 61
+	cp (Medley_PlayingSong:16), a                                    ; FE7997  c1 0a 22 f9
 	jr ule, .LFE79A5                                     ; FE799B  63 08
-	ld a, (0x2208:16)                                   ; FE799D  c1 08 22 21
-	ld (0x220a:16), a                                   ; FE79A1  f1 0a 22 41
+	ld a, (Medley_FirstSong:16)                                   ; FE799D  c1 08 22 21
+	ld (Medley_PlayingSong:16), a                                   ; FE79A1  f1 0a 22 41
 .LFE79A5:
 	pushw wa                                             ; FE79A5  28
 	calr sub_FE79B7                                      ; FE79A6  1e 0e 00
@@ -170224,7 +170224,7 @@ sub_FE79B7:
 	m_or_mi8 MB16, 0x34d0, 0x04                          ; FE79B7  c1 d0 34 3e 04
 	call T_F42614                                        ; FE79BC  1d 14 26 f4
 .LFE79C0:
-	ld a, (0x220a:16)                                   ; FE79C0  c1 0a 22 21
+	ld a, (Medley_PlayingSong:16)                                   ; FE79C0  c1 0a 22 21
 	mul A,0x08                                           ; FE79C4  c9 08 08
 	extz XWA                                             ; FE79C7  e8 12
 	add XWA,0x0060a480                                   ; FE79C9  e8 c8 80 a4 60 00
@@ -170234,15 +170234,15 @@ sub_FE79B7:
 	jr nz, .LFE7A09                                      ; FE79D8  6e 2f
 	inc 1,C                                              ; FE79DA  cb 61
 	djnz8 b, .LFE79D2                                    ; FE79DC  ca 1c f3
-	ld c, (0x2208:16)                                   ; FE79DF  c1 08 22 23
-	m_cp_rm MB16, 0x220a, r3                             ; FE79E3  c1 0a 22 f3
+	ld c, (Medley_FirstSong:16)                                   ; FE79DF  c1 08 22 23
+	m_cp_rm MB16, Medley_PlayingSong, r3                             ; FE79E3  c1 0a 22 f3
 	jr z, .LFE79EF                                       ; FE79E7  66 06
-	ld (0x220a:16), c                                   ; FE79E9  f1 0a 22 43
+	ld (Medley_PlayingSong:16), c                                   ; FE79E9  f1 0a 22 43
 	jr .LFE79C0                                          ; FE79ED  68 d1
 .LFE79EF:
 	calr sub_FE7A30                                      ; FE79EF  1e 3e 00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; FE79F2  c1 71 20 3e 10
-	m_and_mi8 MB16, 0x0dc1, 0xfe                         ; FE79F7  c1 c1 0d 3c fe
+	m_and_mi8 MB16, Medley_Playing, 0xfe                         ; FE79F7  c1 c1 0d 3c fe
 	ld (UI_StatusCode:16), 0x03                                 ; FE79FC  f1 80 28 00 03
 	ldw (UI_Request:16), 0x40ab                              ; FE7A01  f1 70 20 02 ab 40
 	jr .LFE7A2F                                          ; FE7A07  68 26
@@ -170274,9 +170274,9 @@ sub_FE7A40:
 	ld (0x22d0:16), 0x0a                                 ; FE7A43  f1 d0 22 00 0a
 	ret                                                  ; FE7A48  0e
 sub_FE7A49:
-	m_cp_mi8 MB16, 0x220b, 0x01                          ; FE7A49  c1 0b 22 3f 01
+	m_cp_mi8 MB16, Medley_Source, 0x01                          ; FE7A49  c1 0b 22 3f 01
 	jr nz, .LFE7A62                                      ; FE7A4E  6e 12
-	m_cp_mi8 MB16, 0x0e35, 0x01                          ; FE7A50  c1 35 0e 3f 01
+	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE7A50  c1 35 0e 3f 01
 	jr nz, .LFE7A62                                      ; FE7A55  6e 0b
 	m_bit 2, MD16, 0x34d0                                ; FE7A57  f1 d0 34 ca
 	jr z, .LFE7A62                                       ; FE7A5B  66 05
@@ -185948,7 +185948,7 @@ sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 	cp HL,0x0008                                         ; FF54DE  db cf 08 00
 	jr lt, .LFF54C8                                      ; FF54E2  61 e4
 .LFF54E4:
-	ld (0x222d:16), 0x03                                 ; FF54E4  f1 2d 22 00 03
+	ld (NameEdit_CursorPos:16), 0x03                                 ; FF54E4  f1 2d 22 00 03
 	ld (0x2721:16), 0x02                                 ; FF54E9  f1 21 27 00 02
 	call T_F425F8                                        ; FF54EE  1d f8 25 f4
 	m_cp_mi8 MB16, 0x2724, 0x13                          ; FF54F2  c1 24 27 3f 13
@@ -185958,7 +185958,7 @@ sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 	pushw 0x03                                           ; FF54FE  0b 03 00
 	pushw 0x04                                           ; FF5501  0b 04 00
 	calr sub_FF712A                                      ; FF5504  1e 23 1c
-	ld c, (0x21f9:16)                                   ; FF5507  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5507  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF550B  f1 29 27 43
 	call sub_FF7604                                      ; FF550F  1d 04 76 ff
 	pushw 0x00                                           ; FF5513  0b 00 00
@@ -186250,7 +186250,7 @@ sub_FF5768:   ; entry: named by 2 `.long` operands, first at 0xFF3A29
 	pushw 0x04                                           ; FF576B  0b 04 00
 	calr sub_FF712A                                      ; FF576E  1e b9 19
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF5771  f1 40 25 00 01
-	ld c, (0x21f9:16)                                   ; FF5776  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5776  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF577A  f1 29 27 43
 	lda xbc, (CharPalette_F587B2:24)                     ; FF577E  f2 b2 87 f5 31
 	push XBC                                             ; FF5783  39
@@ -186259,10 +186259,10 @@ sub_FF5768:   ; entry: named by 2 `.long` operands, first at 0xFF3A29
 	call T_DisplayListB_Run_Stack                        ; FF578A  1d 04 2e f4
 	ld (0x272c:16), 0x81                                 ; FF578E  f1 2c 27 00 81
 	call T_F425D4                                        ; FF5793  1d d4 25 f4
-	ld c, (0x222d:16)                                   ; FF5797  c1 2d 22 23
+	ld c, (NameEdit_CursorPos:16)                                   ; FF5797  c1 2d 22 23
 	dec 1,C                                              ; FF579B  cb 69
 	ld (0x2721:16), c                                   ; FF579D  f1 21 27 43
-	ld a, (0x21f9:16)                                   ; FF57A1  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; FF57A1  c1 f9 21 21
 	ld (0x2729:16), a                                   ; FF57A5  f1 29 27 41
 	lda xbc, (DL_F5879C:24)                              ; FF57A9  f2 9c 87 f5 31
 	push XBC                                             ; FF57AE  39
@@ -186276,7 +186276,7 @@ sub_FF57C0:   ; entry: named by 2 `.long` operands, first at 0xFF3A2D
 	pushw 0x04                                           ; FF57C3  0b 04 00
 	calr sub_FF712A                                      ; FF57C6  1e 61 19
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF57C9  f1 40 25 00 01
-	ld c, (0x21f9:16)                                   ; FF57CE  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF57CE  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF57D2  f1 29 27 43
 	lda xbc, (CharPalette_F587B2:24)                     ; FF57D6  f2 b2 87 f5 31
 	push XBC                                             ; FF57DB  39
@@ -186285,10 +186285,10 @@ sub_FF57C0:   ; entry: named by 2 `.long` operands, first at 0xFF3A2D
 	call T_DisplayListB_Run_Stack                        ; FF57E2  1d 04 2e f4
 	ld (0x272c:16), 0x01                                 ; FF57E6  f1 2c 27 00 01
 	call T_F425D4                                        ; FF57EB  1d d4 25 f4
-	ld c, (0x222d:16)                                   ; FF57EF  c1 2d 22 23
+	ld c, (NameEdit_CursorPos:16)                                   ; FF57EF  c1 2d 22 23
 	dec 1,C                                              ; FF57F3  cb 69
 	ld (0x2721:16), c                                   ; FF57F5  f1 21 27 43
-	ld a, (0x21f9:16)                                   ; FF57F9  c1 f9 21 21
+	ld a, (NameEdit_CharIndex:16)                                   ; FF57F9  c1 f9 21 21
 	ld (0x2729:16), a                                   ; FF57FD  f1 29 27 41
 	lda xbc, (DL_F5879C:24)                              ; FF5801  f2 9c 87 f5 31
 	push XBC                                             ; FF5806  39
@@ -186301,7 +186301,7 @@ sub_FF5818:   ; entry: named by 2 `.long` operands, first at 0xFF3A35
 	pushw 0x03                                           ; FF5818  0b 03 00
 	pushw 0x04                                           ; FF581B  0b 04 00
 	calr sub_FF712A                                      ; FF581E  1e 09 19
-	ld c, (0x21f9:16)                                   ; FF5821  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5821  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5825  f1 29 27 43
 	lda xbc, (0xf587a7:24)                               ; FF5829  f2 a7 87 f5 31
 	push XBC                                             ; FF582E  39
@@ -186310,7 +186310,7 @@ sub_FF5818:   ; entry: named by 2 `.long` operands, first at 0xFF3A35
 	call T_F425D8                                        ; FF5838  1d d8 25 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF583C  f1 40 25 00 00
 	call sub_FF770F                                      ; FF5841  1d 0f 77 ff
-	ld c, (0x21f9:16)                                   ; FF5845  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5845  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5849  f1 29 27 43
 	lda xbc, (0xf58791:24)                               ; FF584D  f2 91 87 f5 31
 	push XBC                                             ; FF5852  39
@@ -186322,7 +186322,7 @@ sub_FF585C:   ; entry: named by 2 `.long` operands, first at 0xFF3A39
 	pushw 0x03                                           ; FF585C  0b 03 00
 	pushw 0x04                                           ; FF585F  0b 04 00
 	calr sub_FF712A                                      ; FF5862  1e c5 18
-	ld c, (0x21f9:16)                                   ; FF5865  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5865  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5869  f1 29 27 43
 	lda xbc, (0xf587a7:24)                               ; FF586D  f2 a7 87 f5 31
 	push XBC                                             ; FF5872  39
@@ -186331,7 +186331,7 @@ sub_FF585C:   ; entry: named by 2 `.long` operands, first at 0xFF3A39
 	call T_F425D8                                        ; FF587C  1d d8 25 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF5880  f1 40 25 00 00
 	call sub_FF770F                                      ; FF5885  1d 0f 77 ff
-	ld c, (0x21f9:16)                                   ; FF5889  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5889  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF588D  f1 29 27 43
 	lda xbc, (0xf58791:24)                               ; FF5891  f2 91 87 f5 31
 	push XBC                                             ; FF5896  39
@@ -186343,7 +186343,7 @@ sub_FF58A0:   ; entry: named by 2 `.long` operands, first at 0xFF3A41
 	pushw hl                                             ; FF58A0  2b
 	pushw de                                             ; FF58A1  2a
 	push XIX                                             ; FF58A2  3c
-	ld c, (0x21f9:16)                                   ; FF58A3  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF58A3  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF58A7  f1 29 27 43
 	pushw 0x03                                           ; FF58AB  0b 03 00
 	pushw 0x04                                           ; FF58AE  0b 04 00
@@ -186368,8 +186368,8 @@ sub_FF58A0:   ; entry: named by 2 `.long` operands, first at 0xFF3A41
 	cp h, 0x00:i3                                          ; FF58E2  ce d8
 	jr nz, .LFF58D2                                      ; FF58E4  6e ec
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF58E6  f1 40 25 00 00
-	ld (0x222d:16), 0x03                                 ; FF58EB  f1 2d 22 00 03
-	ld (0x21f9:16), 0x00                                 ; FF58F0  f1 f9 21 00 00
+	ld (NameEdit_CursorPos:16), 0x03                                 ; FF58EB  f1 2d 22 00 03
+	ld (NameEdit_CharIndex:16), 0x00                                 ; FF58F0  f1 f9 21 00 00
 	ld (0x2729:16), 0x00                                 ; FF58F5  f1 29 27 00 00
 	call sub_FF770F                                      ; FF58FA  1d 0f 77 ff
 	ld (0x2721:16), 0x02                                 ; FF58FE  f1 21 27 00 02
@@ -187207,7 +187207,7 @@ sub_FF5C5E:   ; entry: named by 1 `.long` operand, first at 0xFF3D29
 	ld (0x2724:16), 0x00                                 ; FF5CB4  f1 24 27 00 00
 	ld (0x272d:16), 0x00                                 ; FF5CB9  f1 2d 27 00 00
 .LFF5CBE:
-	ld (0x222d:16), 0x01                                 ; FF5CBE  f1 2d 22 00 01
+	ld (NameEdit_CursorPos:16), 0x01                                 ; FF5CBE  f1 2d 22 00 01
 	ld (0x2721:16), 0x01                                 ; FF5CC3  f1 21 27 00 01
 	call T_F425F8                                        ; FF5CC8  1d f8 25 f4
 	pushw 0x03                                           ; FF5CCC  0b 03 00
@@ -187227,7 +187227,7 @@ sub_FF5C5E:   ; entry: named by 1 `.long` operand, first at 0xFF3D29
 	push XWA                                             ; FF5CFA  38
 	call sub_FF75D3                                      ; FF5CFB  1d d3 75 ff
 	call sub_FF7729                                      ; FF5CFF  1d 29 77 ff
-	ld c, (0x21f9:16)                                   ; FF5D03  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5D03  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5D07  f1 29 27 43
 	lda xbc, (DL_F5879C:24)                              ; FF5D0B  f2 9c 87 f5 31
 	push XBC                                             ; FF5D10  39
@@ -187468,8 +187468,8 @@ sub_FF5F13:   ; entry: named by 2 `.long` operands, first at 0xFF3D3D
 sub_FF5F1B:
 	link XIZ,0x0000                                      ; FF5F1B  ee 0c 00 00
 	push XIX                                             ; FF5F1F  3c
-	lda xix, (0x222d:16)                                ; FF5F20  f1 2d 22 34
-	ld c, (0x21f9:16)                                   ; FF5F24  c1 f9 21 23
+	lda xix, (NameEdit_CursorPos:16)                                ; FF5F20  f1 2d 22 34
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5F24  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5F28  f1 29 27 43
 	pushw 0x03                                           ; FF5F2C  0b 03 00
 	pushw 0x04                                           ; FF5F2F  0b 04 00
@@ -187499,7 +187499,7 @@ sub_FF5F32:
 	ld C,(XIX)                                           ; FF5F68  84 23
 	ld (0x2721:16), c                                   ; FF5F6A  f1 21 27 43
 	call T_F425F8                                        ; FF5F6E  1d f8 25 f4
-	ld c, (0x21f9:16)                                   ; FF5F72  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5F72  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5F76  f1 29 27 43
 	lda xbc, (DL_F5879C:24)                              ; FF5F7A  f2 9c 87 f5 31
 	push XBC                                             ; FF5F7F  39
@@ -187523,7 +187523,7 @@ sub_FF5F9B:
 	ret                                                  ; FF5F9F  0e
 sub_FF5FA0:
 	link XIZ,0x0000                                      ; FF5FA0  ee 0c 00 00
-	ld c, (0x21f9:16)                                   ; FF5FA4  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5FA4  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5FA8  f1 29 27 43
 	pushw 0x03                                           ; FF5FAC  0b 03 00
 	pushw 0x04                                           ; FF5FAF  0b 04 00
@@ -187539,7 +187539,7 @@ sub_FF5FA0:
 	call T_F425D8                                        ; FF5FD1  1d d8 25 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF5FD5  f1 40 25 00 00
 	call sub_FF7729                                      ; FF5FDA  1d 29 77 ff
-	ld c, (0x21f9:16)                                   ; FF5FDE  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF5FDE  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5FE2  f1 29 27 43
 	lda xbc, (DL_F5879C:24)                              ; FF5FE6  f2 9c 87 f5 31
 	push XBC                                             ; FF5FEB  39
@@ -187554,7 +187554,7 @@ sub_FF5FFF:   ; entry: named by 2 `.long` operands, first at 0xFF3D51
 	pushw 0x03                                           ; FF6000  0b 03 00
 	pushw 0x04                                           ; FF6003  0b 04 00
 	calr sub_FF712A                                      ; FF6006  1e 21 11
-	ld c, (0x21f9:16)                                   ; FF6009  c1 f9 21 23
+	ld c, (NameEdit_CharIndex:16)                                   ; FF6009  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF600D  f1 29 27 43
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF6011  f1 40 25 00 01
 	lda xbc, (CharPalette_F587B2:24)                     ; FF6016  f2 b2 87 f5 31
@@ -187572,8 +187572,8 @@ sub_FF5FFF:   ; entry: named by 2 `.long` operands, first at 0xFF3D51
 	cp HL,0x0008                                         ; FF6037  db cf 08 00
 	jr lt, .LFF602D                                      ; FF603B  61 f0
 	ld (0x2721:16), 0x01                                 ; FF603D  f1 21 27 00 01
-	ld (0x222d:16), 0x01                                 ; FF6042  f1 2d 22 00 01
-	ld (0x21f9:16), 0x00                                 ; FF6047  f1 f9 21 00 00
+	ld (NameEdit_CursorPos:16), 0x01                                 ; FF6042  f1 2d 22 00 01
+	ld (NameEdit_CharIndex:16), 0x00                                 ; FF6047  f1 f9 21 00 00
 	ld (0x2729:16), 0x00                                 ; FF604C  f1 29 27 00 00
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF6051  f1 40 25 00 00
 	call sub_FF7729                                      ; FF6056  1d 29 77 ff

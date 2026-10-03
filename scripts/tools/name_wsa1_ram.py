@@ -274,6 +274,17 @@ GROUPS = [
         0x2749: ("MidiOutPgm_BankLsb", "bank select LSB", "MidiOutProgramChange_EditBankLsb"),
         0x274A: ("MidiOutPgm_BankSelect", "word MSB*128+LSB, 0xFFFF = OFF", "MidiOutProgramChange_ResetState / _EditBankLsb"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-medley-and-name-edit-state.md", "1. SEQUENCER MEDLEY; 2. The name editor", {
+        0x2208: ("Medley_FirstSong", "the first song of the medley (index; shown + 1)", "SequencerMedley_KeypadCommit"),
+        0x2209: ("Medley_LastSong", "the last song", "SequencerMedley_KeypadCommit"),
+        0x220A: ("Medley_PlayingSong", "the song now playing", "SequencerMedley_DrawPlayState"),
+        0x220B: ("Medley_Source", "0 INT, 1 FD, 2 HD", "SequencerMedley_DrawSourceBox"),
+        0x0E35: ("Medley_FileType", "0 NORM FILE, 1 MIDI FILE", "SequencerMedley_DrawFileTypeBox"),
+        0x0DC1: ("Medley_Playing", "1 while the medley plays", "SequencerMedley_NumberPad / _DrawPlayState"),
+        0x0C0F: ("Medley_Field", "the selected field, 1 FIRST S0NG / 2 LAST S0NG", "SequencerMedley_KeypadCommit"),
+        0x222D: ("NameEdit_CursorPos", "the character position of the name cursor", "S0ngSelectName_CursorLeft / _CursorRight"),
+        0x21F9: ("NameEdit_CharIndex", "the character-set index of the character at the cursor", "SongName_CharIndexAtCursor"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),

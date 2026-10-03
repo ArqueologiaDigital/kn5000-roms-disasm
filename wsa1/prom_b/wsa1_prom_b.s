@@ -91883,9 +91883,9 @@ sub_F44A3B_Skip2:
 	calr	sub_F44CEA	; F44A6E  calr 0xf44cea
 	m_bit 2, MD16, 0x34d0	; F44A71  bit 2,(0x34d0)
 	jr	z, sub_F44A3B_Skip3	; F44A75  jr Z,0xf44a98
-	m_cp_mi8 MB16, 0x220b, 0x01	; F44A77  cp (0x220b),0x01
+	m_cp_mi8 MB16, Medley_Source, 0x01	; F44A77  cp (0x220b),0x01
 	jr	nz, sub_F44A3B_Skip3	; F44A7C  jr NZ,0xf44a98
-	m_cp_mi8 MB16, 0x0e35, 0x00	; F44A7E  cp (0x0e35),0x00
+	m_cp_mi8 MB16, Medley_FileType, 0x00	; F44A7E  cp (0x0e35),0x00
 	jr	nz, sub_F44A3B_Skip3	; F44A83  jr NZ,0xf44a98
 	m_cp_mi8 MB16, 0x2215, 0x00	; F44A85  cp (0x2215),0x00
 	jr	z, sub_F44A3B_Skip3	; F44A8A  jr Z,0xf44a98
@@ -91909,9 +91909,9 @@ sub_F44A3B_Skip3:
 	nop	; F44ABB  nop
 	djnz16	bc, -11	; F44ABC  djnz BC,0xf44ab4
 sub_F44A3B_Skip4:
-	m_cp_mi8 MB16, 0x220b, 0x01	; F44ABF  cp (0x220b),0x01
+	m_cp_mi8 MB16, Medley_Source, 0x01	; F44ABF  cp (0x220b),0x01
 	jr	nz, sub_F44A3B_Return	; F44AC4  jr NZ,0xf44ad9
-	m_cp_mi8 MB16, 0x0e35, 0x00	; F44AC6  cp (0x0e35),0x00
+	m_cp_mi8 MB16, Medley_FileType, 0x00	; F44AC6  cp (0x0e35),0x00
 	jr	nz, sub_F44A3B_Return	; F44ACB  jr NZ,0xf44ad9
 	ld	w, 3:opc	; F44ACD  ld W,0x03
 	ld	(3638:16), w	; F44ACF  ld (0x0e36),W
@@ -92737,7 +92737,7 @@ sub_F45119:
 	call	T_F42578	; F45132  call 0xf42578
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F45136  cp (0x207a),0x13
 	jr	nz, sub_F45119_Skip	; F4513B  jr NZ,0xf45147
-	m_cp_mi8 MB16, 0x220b, 0x00	; F4513D  cp (0x220b),0x00
+	m_cp_mi8 MB16, Medley_Source, 0x00	; F4513D  cp (0x220b),0x00
 	jr	nz, sub_F45119_Skip	; F45142  jr NZ,0xf45147
 	calr	sub_F448A3	; F45144  calr 0xf448a3
 sub_F45119_Skip:
@@ -142854,34 +142854,34 @@ sub_F6609C:		; <- T_F42B74
 ; --------------------------------------------------------------------------
 sub_F660A0:
 	pushw	hl	; F660A0  push HL
-	ld	a, (8712:16)	; F660A1  ld A,(0x2208)
+	ld	a, (Medley_FirstSong:16)	; F660A1  ld A,(0x2208)
 	ld	l, 9:opc	; F660A5  ld L,0x09
-	m_cp_mi8 MB16, 0x220b, 0x00	; F660A7  cp (0x220b),0x00
+	m_cp_mi8 MB16, Medley_Source, 0x00	; F660A7  cp (0x220b),0x00
 	jr	z, sub_F660A0_Skip	; F660AC  jr Z,0xf660b9
 	ld	l, 19:opc	; F660AE  ld L,0x13
-	m_cp_mi8 MB16, 0x0e35, 0x00	; F660B0  cp (0x0e35),0x00
+	m_cp_mi8 MB16, Medley_FileType, 0x00	; F660B0  cp (0x0e35),0x00
 	jr	z, sub_F660A0_Skip	; F660B5  jr Z,0xf660b9
 	ld	l, 99:opc	; F660B7  ld L,0x63
 sub_F660A0_Skip:
 	cp	a, l	; F660B9  cp A,L
 	jr	ule, sub_F660A0_Skip2	; F660BB  jr ULE,0xf660c1
-	ld	(8712:16), l	; F660BD  ld (0x2208),L
+	ld	(Medley_FirstSong:16), l	; F660BD  ld (0x2208),L
 sub_F660A0_Skip2:
-	ld	a, (8713:16)	; F660C1  ld A,(0x2209)
+	ld	a, (Medley_LastSong:16)	; F660C1  ld A,(0x2209)
 	cp	a, l	; F660C5  cp A,L
 	jr	ule, sub_F660A0_Skip3	; F660C7  jr ULE,0xf660ce
-	ld	(8713:16), 0	; F660C9  ld (0x2209),0x00
+	ld	(Medley_LastSong:16), 0	; F660C9  ld (0x2209),0x00
 sub_F660A0_Skip3:
-	ld	a, (8712:16)	; F660CE  ld A,(0x2208)
-	m_cp_rm MB16, 0x2209, 1	; F660D2  cp A,(0x2209)
+	ld	a, (Medley_FirstSong:16)	; F660CE  ld A,(0x2208)
+	m_cp_rm MB16, Medley_LastSong, 1	; F660D2  cp A,(0x2209)
 	jr	ule, sub_F660A0_Epilogue	; F660D6  jr ULE,0xf660ea
 	cp	a, c	; F660D8  cp A,C
 	jr	z, sub_F660A0_Skip4	; F660DA  jr Z,0xf660e2
-	ld	(8713:16), a	; F660DC  ld (0x2209),A
+	ld	(Medley_LastSong:16), a	; F660DC  ld (0x2209),A
 	jr	sub_F660A0_Epilogue	; F660E0  jr T,0xf660ea
 sub_F660A0_Skip4:
-	ld	a, (8713:16)	; F660E2  ld A,(0x2209)
-	ld	(8712:16), a	; F660E6  ld (0x2208),A
+	ld	a, (Medley_LastSong:16)	; F660E2  ld A,(0x2209)
+	ld	(Medley_FirstSong:16), a	; F660E6  ld (0x2208),A
 sub_F660A0_Epilogue:
 	popw	hl	; F660EA  pop HL
 	ret	; F660EB  ret
@@ -142919,13 +142919,13 @@ sub_F660ED:		; <- T_F42BCC
 	ld	a, (32589:16)	; F660F7  ld A,(0x7f4d)
 	ld	(3656:16), a	; F660FB  ld (0x0e48),A
 	xor	a, a	; F660FF  xor A,A
-	ld	(3521:16), a	; F66101  ld (0x0dc1),A
+	ld	(Medley_Playing:16), a	; F66101  ld (0x0dc1),A
 	ld	(8912:16), a	; F66105  ld (0x22d0),A
 	m_or_mi16 MW24, 0x605068, 0x8000	; F66109  or (0x605068),0x8000
 	call	sub_F66123	; F66110  call 0xf66123
 	call	T_F42410	; F66114  call 0xf42410
 sub_F660A0_Skip5:
-	m_cp_mi8 MB16, 0x0dc1, 0x01	; F66118  cp (0x0dc1),0x01
+	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66118  cp (0x0dc1),0x01
 	jr	z, sub_F660A0_Return	; F6611D  jr Z,0xf66122
 	calr	sub_F661F3	; F6611F  calr 0xf661f3
 sub_F660A0_Return:
@@ -142986,7 +142986,7 @@ sub_F66123_Skip:
 	call	T_F42E98	; F6617F  call 0xf42e98
 sub_F66123_Join:
 	call	T_F42414	; F66183  call 0xf42414
-	ld	(3521:16), 0	; F66187  ld (0x0dc1),0x00
+	ld	(Medley_Playing:16), 0	; F66187  ld (0x0dc1),0x00
 	call	T_F411B8	; F6618C  call 0xf411b8
 sub_F66123_Return:
 	ret	; F66190  ret
@@ -143004,20 +143004,20 @@ sub_F66123_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66191:		; <- T_F42BD4
-	m_cp_mi8 MB16, 0x0dc1, 0x00	; F66191  cp (0x0dc1),0x00
+	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66191  cp (0x0dc1),0x00
 	jr	nz, sub_F66123_Return2	; F66196  jr NZ,0xf661f2
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66198  and (0x2075),0xf7
 	ld	(UI_StatusCode:16), 255	; F6619D  ld (0x2880),0xff
-	ld	a, (8715:16)	; F661A2  ld A,(0x220b)
+	ld	a, (Medley_Source:16)	; F661A2  ld A,(0x220b)
 	cp	a, 0:i3	; F661A6  cp A,0
 	jr	z, sub_F66123_Skip2	; F661A8  jr Z,0xf661b5
 	cp	a, 1:i3	; F661AA  cp A,1
 	jr	nz, sub_F66123_Skip3	; F661AC  jr NZ,0xf661d5
-	m_cp_mi8 MB16, 0x0e35, 0x01	; F661AE  cp (0x0e35),0x01
+	m_cp_mi8 MB16, Medley_FileType, 0x01	; F661AE  cp (0x0e35),0x01
 	jr	nz, sub_F66123_Skip3	; F661B3  jr NZ,0xf661d5
 sub_F66123_Skip2:
 	ld	(UI_StatusCode:16), 35	; F661B5  ld (0x2880),0x23
-	ld	(3521:16), 1	; F661BA  ld (0x0dc1),0x01
+	ld	(Medley_Playing:16), 1	; F661BA  ld (0x0dc1),0x01
 	call	T_F4302C	; F661BF  call 0xf4302c
 	call	T_F42E94	; F661C3  call 0xf42e94
 	m_cp_mi8 MB16, UI_StatusCode, 0x04	; F661C7  cp (0x2880),0x04
@@ -143025,14 +143025,14 @@ sub_F66123_Skip2:
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F661CE  or (0x2071),0x10
 	jr	sub_F66123_Join2	; F661D3  jr T,0xf661e3
 sub_F66123_Skip3:
-	ld	(3521:16), 1	; F661D5  ld (0x0dc1),0x01
+	ld	(Medley_Playing:16), 1	; F661D5  ld (0x0dc1),0x01
 	ld	(3638:16), 0	; F661DA  ld (0x0e36),0x00
 	call	T_F4257C	; F661DF  call 0xf4257c
 sub_F66123_Join2:
 	m_cp_mi8 MB16, UI_StatusCode, 0x04	; F661E3  cp (0x2880),0x04
 	jr	ugt, sub_F66123_Return2	; F661E8  jr UGT,0xf661f2
 	calr	sub_F661F3	; F661EA  calr 0xf661f3
-	ld	(3521:16), 0	; F661ED  ld (0x0dc1),0x00
+	ld	(Medley_Playing:16), 0	; F661ED  ld (0x0dc1),0x00
 sub_F66123_Return2:
 	ret	; F661F2  ret
 
@@ -143067,18 +143067,18 @@ sub_F661F3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66201:		; <- T_F42BD8
-	m_cp_mi8 MB16, 0x0dc1, 0x01	; F66201  cp (0x0dc1),0x01
+	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66201  cp (0x0dc1),0x01
 	jr	nz, sub_F66201_Return	; F66206  jr NZ,0xf66245
-	ld	(3521:16), 0	; F66208  ld (0x0dc1),0x00
-	ld	a, (8715:16)	; F6620D  ld A,(0x220b)
+	ld	(Medley_Playing:16), 0	; F66208  ld (0x0dc1),0x00
+	ld	a, (Medley_Source:16)	; F6620D  ld A,(0x220b)
 	cp	a, 0:i3	; F66211  cp A,0
 	jr	z, sub_F66201_Skip	; F66213  jr Z,0xf66220
 	cp	a, 1:i3	; F66215  cp A,1
 	jr	nz, sub_F66201_Skip3	; F66217  jr NZ,0xf6623c
-	m_cp_mi8 MB16, 0x0e35, 0x01	; F66219  cp (0x0e35),0x01
+	m_cp_mi8 MB16, Medley_FileType, 0x01	; F66219  cp (0x0e35),0x01
 	jr	nz, sub_F66201_Skip3	; F6621E  jr NZ,0xf6623c
 sub_F66201_Skip:
-	ld	(3521:16), 0	; F66220  ld (0x0dc1),0x00
+	ld	(Medley_Playing:16), 0	; F66220  ld (0x0dc1),0x00
 	ld	(8912:16), 0	; F66225  ld (0x22d0),0x00
 	call	T_F43030	; F6622A  call 0xf43030
 	m_bit 2, MD16, 0x0e48	; F6622E  bit 2,(0x0e48)
@@ -143106,7 +143106,7 @@ sub_F66201_Return:
 ; --------------------------------------------------------------------------
 sub_F66246:		; <- T_F42B7C
 	ld	a, 1:opc	; F66246  ld A,0x01
-	ld	(3087:16), a	; F66248  ld (0x0c0f),A
+	ld	(Medley_Field:16), a	; F66248  ld (0x0c0f),A
 	ld	(4866:16), a	; F6624C  ld (0x1302),A
 	ret	; F66250  ret
 
@@ -143123,7 +143123,7 @@ sub_F66246:		; <- T_F42B7C
 ; --------------------------------------------------------------------------
 sub_F66251:		; <- T_F42B80
 	ld	a, 2:opc	; F66251  ld A,0x02
-	ld	(3087:16), a	; F66253  ld (0x0c0f),A
+	ld	(Medley_Field:16), a	; F66253  ld (0x0c0f),A
 	ld	(4866:16), a	; F66257  ld (0x1302),A
 	ret	; F6625B  ret
 
@@ -143141,9 +143141,9 @@ sub_F66251:		; <- T_F42B80
 ; --------------------------------------------------------------------------
 sub_F6625C:		; <- T_F42B84
 	and	w, 127	; F6625C  and W,0x7f
-	m_cp_mi8 MB16, 0x0c0f, 0x01	; F6625F  cp (0x0c0f),0x01
+	m_cp_mi8 MB16, Medley_Field, 0x01	; F6625F  cp (0x0c0f),0x01
 	jr	z, sub_F66201_Skip4	; F66264  jr Z,0xf6626f
-	m_cp_mi8 MB16, 0x0c0f, 0x02	; F66266  cp (0x0c0f),0x02
+	m_cp_mi8 MB16, Medley_Field, 0x02	; F66266  cp (0x0c0f),0x02
 	jr	z, sub_F66201_Skip5	; F6626B  jr Z,0xf66274
 	jr	sub_F66201_Return2	; F6626D  jr T,0xf66277
 sub_F66201_Skip4:
@@ -143168,9 +143168,9 @@ sub_F66201_Return2:
 ; --------------------------------------------------------------------------
 sub_F66278:		; <- T_F42B88
 	or	w, 128	; F66278  or W,0x80
-	m_cp_mi8 MB16, 0x0c0f, 0x01	; F6627B  cp (0x0c0f),0x01
+	m_cp_mi8 MB16, Medley_Field, 0x01	; F6627B  cp (0x0c0f),0x01
 	jr	z, sub_F66201_Skip6	; F66280  jr Z,0xf6628b
-	m_cp_mi8 MB16, 0x0c0f, 0x02	; F66282  cp (0x0c0f),0x02
+	m_cp_mi8 MB16, Medley_Field, 0x02	; F66282  cp (0x0c0f),0x02
 	jr	z, sub_F66201_Skip7	; F66287  jr Z,0xf66290
 	jr	sub_F66201_Return3	; F66289  jr T,0xf66293
 sub_F66201_Skip6:
@@ -143197,25 +143197,25 @@ sub_F66294:
 	jr	z, sub_F66294_Skip	; F66297  jr Z,0xf6629a
 	ret	; F66299  ret
 sub_F66294_Skip:
-	ld	c, (8712:16)	; F6629A  ld C,(0x2208)
+	ld	c, (Medley_FirstSong:16)	; F6629A  ld C,(0x2208)
 	bit	7, w	; F6629E  bit 0x07,W
 	jr	z, sub_F66294_Skip2	; F662A1  jr Z,0xf662b0
-	m_cp_mi8 MB16, 0x2208, 0x00	; F662A3  cp (0x2208),0x00
+	m_cp_mi8 MB16, Medley_FirstSong, 0x00	; F662A3  cp (0x2208),0x00
 	jr	z, sub_F66294_Join	; F662A8  jr Z,0xf662ce
-	dec	1, (8712:16)	; F662AA  dec 1,(0x2208)
+	dec	1, (Medley_FirstSong:16)	; F662AA  dec 1,(0x2208)
 	jr	sub_F66294_Join	; F662AE  jr T,0xf662ce
 sub_F66294_Skip2:
 	ld	a, 9:opc	; F662B0  ld A,0x09
-	m_cp_mi8 MB16, 0x220b, 0x00	; F662B2  cp (0x220b),0x00
+	m_cp_mi8 MB16, Medley_Source, 0x00	; F662B2  cp (0x220b),0x00
 	jr	z, sub_F66294_Skip3	; F662B7  jr Z,0xf662c4
 	ld	a, 19:opc	; F662B9  ld A,0x13
-	m_cp_mi8 MB16, 0x0e35, 0x00	; F662BB  cp (0x0e35),0x00
+	m_cp_mi8 MB16, Medley_FileType, 0x00	; F662BB  cp (0x0e35),0x00
 	jr	z, sub_F66294_Skip3	; F662C0  jr Z,0xf662c4
 	ld	a, 99:opc	; F662C2  ld A,0x63
 sub_F66294_Skip3:
-	cp	(8712:16), a	; F662C4  cp (0x2208),A
+	cp	(Medley_FirstSong:16), a	; F662C4  cp (0x2208),A
 	jr	z, sub_F66294_Join	; F662C8  jr Z,0xf662ce
-	inc	1, (8712:16)	; F662CA  inc 1,(0x2208)
+	inc	1, (Medley_FirstSong:16)	; F662CA  inc 1,(0x2208)
 sub_F66294_Join:
 	calr	sub_F662D7	; F662CE  calr 0xf662d7
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F662D1  or (0x2075),0x08
@@ -143236,9 +143236,9 @@ sub_F662D7:
 	pushw	bc	; F662D7  push BC
 	calr	sub_F660A0	; F662D8  calr 0xf660a0
 	popw	bc	; F662DB  pop BC
-	m_cp_rm MB16, 0x2208, 3	; F662DC  cp C,(0x2208)
+	m_cp_rm MB16, Medley_FirstSong, 3	; F662DC  cp C,(0x2208)
 	jr	z, sub_F662D7_Return	; F662E0  jr Z,0xf662f6
-	cp	(8712:16), c	; F662E2  cp (0x2208),C
+	cp	(Medley_FirstSong:16), c	; F662E2  cp (0x2208),C
 	jr	ugt, sub_F662D7_Skip	; F662E6  jr UGT,0xf662f0
 	ld	w, 1:opc	; F662E8  ld W,0x01
 	call	T_F42580	; F662EA  call 0xf42580
@@ -143265,25 +143265,25 @@ sub_F662F7:
 	jr	z, sub_F662F7_Skip	; F662FA  jr Z,0xf662fd
 	ret	; F662FC  ret
 sub_F662F7_Skip:
-	ld	c, (8712:16)	; F662FD  ld C,(0x2208)
+	ld	c, (Medley_FirstSong:16)	; F662FD  ld C,(0x2208)
 	bit	7, w	; F66301  bit 0x07,W
 	jr	z, sub_F662F7_Skip2	; F66304  jr Z,0xf66313
-	m_cp_mi8 MB16, 0x2209, 0x00	; F66306  cp (0x2209),0x00
+	m_cp_mi8 MB16, Medley_LastSong, 0x00	; F66306  cp (0x2209),0x00
 	jr	z, sub_F662F7_Join	; F6630B  jr Z,0xf66331
-	dec	1, (8713:16)	; F6630D  dec 1,(0x2209)
+	dec	1, (Medley_LastSong:16)	; F6630D  dec 1,(0x2209)
 	jr	sub_F662F7_Join	; F66311  jr T,0xf66331
 sub_F662F7_Skip2:
 	ld	a, 9:opc	; F66313  ld A,0x09
-	m_cp_mi8 MB16, 0x220b, 0x00	; F66315  cp (0x220b),0x00
+	m_cp_mi8 MB16, Medley_Source, 0x00	; F66315  cp (0x220b),0x00
 	jr	z, sub_F662F7_Skip3	; F6631A  jr Z,0xf66327
 	ld	a, 19:opc	; F6631C  ld A,0x13
-	m_cp_mi8 MB16, 0x0e35, 0x00	; F6631E  cp (0x0e35),0x00
+	m_cp_mi8 MB16, Medley_FileType, 0x00	; F6631E  cp (0x0e35),0x00
 	jr	z, sub_F662F7_Skip3	; F66323  jr Z,0xf66327
 	ld	a, 99:opc	; F66325  ld A,0x63
 sub_F662F7_Skip3:
-	cp	(8713:16), a	; F66327  cp (0x2209),A
+	cp	(Medley_LastSong:16), a	; F66327  cp (0x2209),A
 	jr	z, sub_F662F7_Join	; F6632B  jr Z,0xf66331
-	inc	1, (8713:16)	; F6632D  inc 1,(0x2209)
+	inc	1, (Medley_LastSong:16)	; F6632D  inc 1,(0x2209)
 sub_F662F7_Join:
 	calr	sub_F662D7	; F66331  calr 0xf662d7
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F66334  or (0x2075),0x08
@@ -143302,26 +143302,26 @@ sub_F662F7_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6633A:		; <- T_F42C18
-	m_cp_mi8 MB16, 0x0dc1, 0x00	; F6633A  cp (0x0dc1),0x00
+	m_cp_mi8 MB16, Medley_Playing, 0x00	; F6633A  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return	; F6633F  jr NZ,0xf66381
 	ld	a, 0:opc	; F66341  ld A,0x00
-	ld	(8715:16), a	; F66343  ld (0x220b),A
+	ld	(Medley_Source:16), a	; F66343  ld (0x220b),A
 	ld	(4867:16), a	; F66347  ld (0x1303),A
 	ld	a, 0:opc	; F6634B  ld A,0x00
-	ld	(3637:16), a	; F6634D  ld (0x0e35),A
+	ld	(Medley_FileType:16), a	; F6634D  ld (0x0e35),A
 	ld	(4868:16), a	; F66351  ld (0x1304),A
-	m_cp_mi8 MB16, 0x2208, 0x0a	; F66355  cp (0x2208),0x0a
+	m_cp_mi8 MB16, Medley_FirstSong, 0x0a	; F66355  cp (0x2208),0x0a
 	jr	c, sub_F662F7_Skip4	; F6635A  jr C,0xf66361
-	ld	(8712:16), 9	; F6635C  ld (0x2208),0x09
+	ld	(Medley_FirstSong:16), 9	; F6635C  ld (0x2208),0x09
 sub_F662F7_Skip4:
-	ld	a, (8712:16)	; F66361  ld A,(0x2208)
+	ld	a, (Medley_FirstSong:16)	; F66361  ld A,(0x2208)
 	inc	1, a	; F66365  inc 1,A
 	ld	(4862:16), a	; F66367  ld (0x12fe),A
-	m_cp_mi8 MB16, 0x2209, 0x0a	; F6636B  cp (0x2209),0x0a
+	m_cp_mi8 MB16, Medley_LastSong, 0x0a	; F6636B  cp (0x2209),0x0a
 	jr	c, sub_F662F7_Skip5	; F66370  jr C,0xf66377
-	ld	(8713:16), 9	; F66372  ld (0x2209),0x09
+	ld	(Medley_LastSong:16), 9	; F66372  ld (0x2209),0x09
 sub_F662F7_Skip5:
-	ld	a, (8713:16)	; F66377  ld A,(0x2209)
+	ld	a, (Medley_LastSong:16)	; F66377  ld A,(0x2209)
 	inc	1, a	; F6637B  inc 1,A
 	ld	(4864:16), a	; F6637D  ld (0x1300),A
 sub_F662F7_Return:
@@ -143340,35 +143340,35 @@ sub_F662F7_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66382:		; <- T_F42C1C
-	m_cp_mi8 MB16, 0x0dc1, 0x00	; F66382  cp (0x0dc1),0x00
+	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66382  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return2	; F66387  jr NZ,0xf663d5
 	ld	a, 1:opc	; F66389  ld A,0x01
-	ld	(8715:16), a	; F6638B  ld (0x220b),A
+	ld	(Medley_Source:16), a	; F6638B  ld (0x220b),A
 	ld	(4867:16), a	; F6638F  ld (0x1303),A
 	ld	a, 20:opc	; F66393  ld A,0x14
-	m_cp_mi8 MB16, 0x0e35, 0x00	; F66395  cp (0x0e35),0x00
+	m_cp_mi8 MB16, Medley_FileType, 0x00	; F66395  cp (0x0e35),0x00
 	jr	z, sub_F662F7_Skip6	; F6639A  jr Z,0xf6639e
 	ld	a, 100:opc	; F6639C  ld A,0x64
 sub_F662F7_Skip6:
-	cp	(8712:16), a	; F6639E  cp (0x2208),A
+	cp	(Medley_FirstSong:16), a	; F6639E  cp (0x2208),A
 	jr	c, sub_F662F7_Skip7	; F663A2  jr C,0xf663aa
 	dec	1, a	; F663A4  dec 1,A
-	ld	(8712:16), a	; F663A6  ld (0x2208),A
+	ld	(Medley_FirstSong:16), a	; F663A6  ld (0x2208),A
 sub_F662F7_Skip7:
-	ld	a, (8712:16)	; F663AA  ld A,(0x2208)
+	ld	a, (Medley_FirstSong:16)	; F663AA  ld A,(0x2208)
 	inc	1, a	; F663AE  inc 1,A
 	ld	(4862:16), a	; F663B0  ld (0x12fe),A
 	ld	a, 20:opc	; F663B4  ld A,0x14
-	m_cp_mi8 MB16, 0x0e35, 0x00	; F663B6  cp (0x0e35),0x00
+	m_cp_mi8 MB16, Medley_FileType, 0x00	; F663B6  cp (0x0e35),0x00
 	jr	z, sub_F662F7_Skip8	; F663BB  jr Z,0xf663bf
 	ld	a, 100:opc	; F663BD  ld A,0x64
 sub_F662F7_Skip8:
-	cp	(8713:16), a	; F663BF  cp (0x2209),A
+	cp	(Medley_LastSong:16), a	; F663BF  cp (0x2209),A
 	jr	c, sub_F662F7_Skip9	; F663C3  jr C,0xf663cb
 	dec	1, a	; F663C5  dec 1,A
-	ld	(8713:16), a	; F663C7  ld (0x2209),A
+	ld	(Medley_LastSong:16), a	; F663C7  ld (0x2209),A
 sub_F662F7_Skip9:
-	ld	a, (8713:16)	; F663CB  ld A,(0x2209)
+	ld	a, (Medley_LastSong:16)	; F663CB  ld A,(0x2209)
 	inc	1, a	; F663CF  inc 1,A
 	ld	(4864:16), a	; F663D1  ld (0x1300),A
 sub_F662F7_Return2:
@@ -143400,23 +143400,23 @@ T_F42C20_Nop:		; <- T_F42C20
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F663D7:		; <- T_F42C28
-	m_cp_mi8 MB16, 0x0dc1, 0x00	; F663D7  cp (0x0dc1),0x00
+	m_cp_mi8 MB16, Medley_Playing, 0x00	; F663D7  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return3	; F663DC  jr NZ,0xf66414
 	ld	a, 0:opc	; F663DE  ld A,0x00
-	ld	(3637:16), a	; F663E0  ld (0x0e35),A
+	ld	(Medley_FileType:16), a	; F663E0  ld (0x0e35),A
 	ld	(4868:16), a	; F663E4  ld (0x1304),A
-	m_cp_mi8 MB16, 0x2208, 0x14	; F663E8  cp (0x2208),0x14
+	m_cp_mi8 MB16, Medley_FirstSong, 0x14	; F663E8  cp (0x2208),0x14
 	jr	c, sub_F662F7_Skip10	; F663ED  jr C,0xf663f4
-	ld	(8712:16), 19	; F663EF  ld (0x2208),0x13
+	ld	(Medley_FirstSong:16), 19	; F663EF  ld (0x2208),0x13
 sub_F662F7_Skip10:
-	ld	a, (8712:16)	; F663F4  ld A,(0x2208)
+	ld	a, (Medley_FirstSong:16)	; F663F4  ld A,(0x2208)
 	inc	1, a	; F663F8  inc 1,A
 	ld	(4862:16), a	; F663FA  ld (0x12fe),A
-	m_cp_mi8 MB16, 0x2209, 0x14	; F663FE  cp (0x2209),0x14
+	m_cp_mi8 MB16, Medley_LastSong, 0x14	; F663FE  cp (0x2209),0x14
 	jr	c, sub_F662F7_Skip11	; F66403  jr C,0xf6640a
-	ld	(8713:16), 19	; F66405  ld (0x2209),0x13
+	ld	(Medley_LastSong:16), 19	; F66405  ld (0x2209),0x13
 sub_F662F7_Skip11:
-	ld	a, (8713:16)	; F6640A  ld A,(0x2209)
+	ld	a, (Medley_LastSong:16)	; F6640A  ld A,(0x2209)
 	inc	1, a	; F6640E  inc 1,A
 	ld	(4864:16), a	; F66410  ld (0x1300),A
 sub_F662F7_Return3:
@@ -143435,25 +143435,25 @@ sub_F662F7_Return3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66415:		; <- T_F42C24
-	m_cp_mi8 MB16, 0x0dc1, 0x00	; F66415  cp (0x0dc1),0x00
+	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66415  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return4	; F6641A  jr NZ,0xf66459
-	m_cp_mi8 MB16, 0x220b, 0x01	; F6641C  cp (0x220b),0x01
+	m_cp_mi8 MB16, Medley_Source, 0x01	; F6641C  cp (0x220b),0x01
 	jr	nz, sub_F662F7_Return4	; F66421  jr NZ,0xf66459
 	ld	a, 1:opc	; F66423  ld A,0x01
-	ld	(3637:16), a	; F66425  ld (0x0e35),A
+	ld	(Medley_FileType:16), a	; F66425  ld (0x0e35),A
 	ld	(4868:16), a	; F66429  ld (0x1304),A
-	m_cp_mi8 MB16, 0x2208, 0x64	; F6642D  cp (0x2208),0x64
+	m_cp_mi8 MB16, Medley_FirstSong, 0x64	; F6642D  cp (0x2208),0x64
 	jr	c, sub_F662F7_Skip12	; F66432  jr C,0xf66439
-	ld	(8712:16), 99	; F66434  ld (0x2208),0x63
+	ld	(Medley_FirstSong:16), 99	; F66434  ld (0x2208),0x63
 sub_F662F7_Skip12:
-	ld	a, (8712:16)	; F66439  ld A,(0x2208)
+	ld	a, (Medley_FirstSong:16)	; F66439  ld A,(0x2208)
 	inc	1, a	; F6643D  inc 1,A
 	ld	(4862:16), a	; F6643F  ld (0x12fe),A
-	m_cp_mi8 MB16, 0x2209, 0x64	; F66443  cp (0x2209),0x64
+	m_cp_mi8 MB16, Medley_LastSong, 0x64	; F66443  cp (0x2209),0x64
 	jr	c, sub_F662F7_Skip13	; F66448  jr C,0xf6644f
-	ld	(8713:16), 99	; F6644A  ld (0x2209),0x63
+	ld	(Medley_LastSong:16), 99	; F6644A  ld (0x2209),0x63
 sub_F662F7_Skip13:
-	ld	a, (8713:16)	; F6644F  ld A,(0x2209)
+	ld	a, (Medley_LastSong:16)	; F6644F  ld A,(0x2209)
 	inc	1, a	; F66453  inc 1,A
 	ld	(4864:16), a	; F66455  ld (0x1300),A
 sub_F662F7_Return4:
@@ -143472,14 +143472,14 @@ sub_F662F7_Return4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6645A:		; <- T_F42C2C
-	m_cp_mi8 MB16, 0x0dc1, 0x01	; F6645A  cp (0x0dc1),0x01
+	m_cp_mi8 MB16, Medley_Playing, 0x01	; F6645A  cp (0x0dc1),0x01
 	jr	nz, sub_F662F7_Return5	; F6645F  jr NZ,0xf664ad
-	ld	a, (8715:16)	; F66461  ld A,(0x220b)
+	ld	a, (Medley_Source:16)	; F66461  ld A,(0x220b)
 	cp	a, 0:i3	; F66465  cp A,0
 	jr	z, sub_F662F7_Skip14	; F66467  jr Z,0xf66474
 	cp	a, 1:i3	; F66469  cp A,1
 	jr	nz, sub_F662F7_Skip15	; F6646B  jr NZ,0xf66498
-	m_cp_mi8 MB16, 0x0e35, 0x01	; F6646D  cp (0x0e35),0x01
+	m_cp_mi8 MB16, Medley_FileType, 0x01	; F6646D  cp (0x0e35),0x01
 	jr	nz, sub_F662F7_Skip15	; F66472  jr NZ,0xf66498
 sub_F662F7_Skip14:
 	m_cp_mi8 MB16, 0x22d0, 0x00	; F66474  cp (0x22d0),0x00
@@ -143498,7 +143498,7 @@ sub_F662F7_Skip15:
 sub_F662F7_Join2:
 	m_cp_mi8 MB16, UI_StatusCode, 0x04	; F664A1  cp (0x2880),0x04
 	jr	ugt, sub_F662F7_Return5	; F664A6  jr UGT,0xf664ad
-	ld	(3521:16), 0	; F664A8  ld (0x0dc1),0x00
+	ld	(Medley_Playing:16), 0	; F664A8  ld (0x0dc1),0x00
 sub_F662F7_Return5:
 	ret	; F664AD  ret
 
