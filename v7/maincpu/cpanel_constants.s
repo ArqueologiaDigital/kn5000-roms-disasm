@@ -16,44 +16,44 @@
 ; Control Panel State Machine Variables (RAM at 0x8dxxh)
 ; =============================================================================
 
-.equ CPANEL_STATE_MACHINE_INDEX, 0x8d8a	; (byte)
-.equ CPANEL_PACKET_BYTE_COUNT, 0x8d8b	; (byte) // range 0-17
+.equ CPANEL_STATE_MACHINE_INDEX, 0x8cee	; (byte)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d8a
+.equ CPANEL_PACKET_BYTE_COUNT, 0x8cef	; (byte) // range 0-17	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d8b
 				   ;          (0, 1 or 2 + nibble)
-.equ CPANEL_TX_RX_FLAGS, 0x8d8c	; (8 bits)
+.equ CPANEL_TX_RX_FLAGS, 0x8cf0	; (8 bits)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d8c
 			;   8D8Dh: unused byte?
-.equ PFCR_VALUE, 0x8d8e	; (byte)
-.equ PFFC_VALUE, 0x8d8f	; (byte)
+.equ PFCR_VALUE, 0x8cf2	; (byte)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d8e
+.equ PFFC_VALUE, 0x8cf3	; (byte)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d8f
 			;   8D90h: unused byte?
-.equ CPANEL_UNUSED_1, 0x8d91	; (byte) // This one looks pointless...
-.equ CPANEL_PROTOCOL_FLAGS, 0x8d92	; (8 bits)
-.equ CPANEL_PANEL_DETECT_FLAGS, 0x8d93	; (8 bits)
-.equ CPANEL_RX_PACKET_BYTE_1, 0x8d94	; (byte) First byte from incoming panel packets
+.equ CPANEL_UNUSED_1, 0x8cf5	; (byte) // This one looks pointless...	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d91
+.equ CPANEL_PROTOCOL_FLAGS, 0x8cf6	; (8 bits)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d92
+.equ CPANEL_PANEL_DETECT_FLAGS, 0x8cf7	; (8 bits)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d93
+.equ CPANEL_RX_PACKET_BYTE_1, 0x8cf8	; (byte) First byte from incoming panel packets	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d94
 				   ; (1st Value saved to
 				   ;  XIZ + IX(mod 080h) array)
-.equ CPANEL_RX_PACKET_BYTE_2, 0x8d95	; (byte) Second byte from incoming panel packets
+.equ CPANEL_RX_PACKET_BYTE_2, 0x8cf9	; (byte) Second byte from incoming panel packets	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d95
 				   ; (2nd Value saved to
 				   ;  XIZ + IX(mod 080h) array)
-.equ CPANEL_LAST_EVENT_VALUE, 0x8d96	; (byte) Last processed event value (stored to event queue)
-.equ CPANEL_COUNTER_DOWN_FROM_200, 0x8d97	; (byte) counts down
+.equ CPANEL_LAST_EVENT_VALUE, 0x8cfa	; (byte) Last processed event value (stored to event queue)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d96
+.equ CPANEL_COUNTER_DOWN_FROM_200, 0x8cfb	; (byte) counts down	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d97
 				   ; from 0c8h (=200) to zero.
-.equ CPANEL_COUNTER_UP_TO_20, 0x8d98	; (byte) counts up to 014h (=20).
+.equ CPANEL_COUNTER_UP_TO_20, 0x8cfc	; (byte) counts up to 014h (=20).	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d98
 			;   8D99h: unused byte?
-.equ CPANEL_COUNTER_UP_TO_42, 0x8d9a	; (byte) counts up to 02ah (=42).
-.equ TIMESTAMP_FOR_DELAY, 0x8d9b	; (word)
+.equ CPANEL_COUNTER_UP_TO_42, 0x8cfe	; (byte) counts up to 02ah (=42).	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d9a
+.equ TIMESTAMP_FOR_DELAY, 0x8cff	; (word)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d9b
 
 ; =============================================================================
 ; Control Panel RX/TX Buffers (RAM at 0x8dxxh-0x8exxh)
 ; =============================================================================
 
-.equ CPANEL_RX_READ_PTR, 0x8d9d	; (word) NOTE: Used as index IY for
+.equ CPANEL_RX_READ_PTR, 0x8d01	; (word) NOTE: Used as index IY for	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d9d
 				   ;         CPANEL_RX_RING_BUFFER[IY MOD 05Ch]
 				   ; in code near CPanel_RX_ProcessWithFlag and CPanel_RX_SyncPacket
-.equ CPANEL_RX_WRITE_PTR, 0x8d9f	; (word)
-.equ CPANEL_RX_RING_BUFFER, 0x8da1	; 05ch (=92) bytes
-.equ CPANEL_LED_READ_PTR, 0x8dfd	; (word)
-.equ CPANEL_LED_WRITE_PTR, 0x8dff	; (word)
+.equ CPANEL_RX_WRITE_PTR, 0x8d03	; (word)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8d9f
+.equ CPANEL_RX_RING_BUFFER, 0x8d05	; 05ch (=92) bytes	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8da1
+.equ CPANEL_LED_READ_PTR, 0x8d61	; (word)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8dfd
+.equ CPANEL_LED_WRITE_PTR, 0x8d63	; (word)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8dff
 			;   8E00h: unused byte?
-.equ CPANEL_LED_TX_BUFFER, 0x8e01	; 03ch (=60) bytes
+.equ CPANEL_LED_TX_BUFFER, 0x8d65	; 03ch (=60) bytes	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8e01
 	;		... ? 8E3Dh
 
 ; =============================================================================
@@ -101,7 +101,7 @@
 ;   SEG10: bit0=LEFT 2, bit1=LEFT 1, bit2=HELP, bit3=OTHER PARTS/TR,
 ;          bit4=DOWN 1, bit5=UP 1, bit6=DOWN 2, bit7=UP 2
 ; =============================================================================
-.equ STATE_OF_CPANEL_BUTTONS, 0x8e4a	; NOTE: 8E4Ah=Right / 8E5Ah=Left
+.equ STATE_OF_CPANEL_BUTTONS, 0x8dae	; NOTE: 8E4Ah=Right / 8E5Ah=Left	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8e4a
 	STATE_OF_CPANEL_BUTTONS_RIGHT = STATE_OF_CPANEL_BUTTONS + 0
 	STATE_OF_CPANEL_BUTTONS_LEFT = STATE_OF_CPANEL_BUTTONS + 16
 
@@ -139,7 +139,7 @@
 ;             bit4=SPLIT POINT(L), bit5=SPLIT POINT(C), bit6=SPLIT POINT(R), bit7=TEMPO/PROGRAM
 ;   Row 0xc8: bit0=OTHER PARTS/TR
 ; =============================================================================
-.equ CPANEL_LEDS__ROW_AND_PATTERN_BYTES, 0x8f38	; (word) 8F38h=row_select 8F39h=pattern
+.equ CPANEL_LEDS__ROW_AND_PATTERN_BYTES, 0x8e9c	; (word) 8F38h=row_select 8F39h=pattern	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x8f38
 
 ; =============================================================================
 ; Control Panel Event Queues (RAM at 0x200xxxh)

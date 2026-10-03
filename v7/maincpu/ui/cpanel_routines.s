@@ -83,11 +83,11 @@ CPanel_InitHardware:
 	ldw (xhl-2), 128
 	ld a, 3:opc
 	and a, 175
-	stb_d8 (36083), a
+	stb_d8 (PFFC_VALUE), a
 	st_dd8b a, 63
 	ld a, 21:opc
 	and a, 143
-	stb_d8 (36082), a
+	stb_d8 (PFCR_VALUE), a
 	st_dd8b a, 62
 	and_sd8b_im 60, 191
 	ld a, 0:opc
@@ -104,20 +104,20 @@ CPanel_InitHardware:
 	ld (248:8), 35:io
 	or_sd8b_im 200, 16
 	and_sd8b_im 200, 247
-	ld (36085:16), 125
-	or (36080:16), 64
-	ld (36079:16), 0
-	and (36080:16), 252
-	ldw (36193:16), 0
-	ldw (36195:16), 0
-	ldw (36097:16), 0
-	ldw (36099:16), 0
+	ld (CPANEL_UNUSED_1:16), 125
+	or (CPANEL_TX_RX_FLAGS:16), 64
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	and (CPANEL_TX_RX_FLAGS:16), 252
+	ldw (CPANEL_LED_READ_PTR:16), 0
+	ldw (CPANEL_LED_WRITE_PTR:16), 0
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
 	calr DELAY_6_TICKS
 	ld a, 31:opc
 	ld w, 218:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
-	ldw (36193:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 	calr CPanel_SendInitSequence
 	ret
@@ -126,20 +126,20 @@ CPanel_SendInitSequence:
 	ld w, 26:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
-	ldw (36193:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 	ld a, 29:opc
 	ld w, 0:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
-	ldw (36193:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 	ld a, 221:opc
 	ld w, 3:opc
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
-	ldw (36193:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 	ld a, 30:opc
@@ -155,15 +155,15 @@ CPanel_SendInitSequence:
 	and_sd8b_im 214, 223
 	ld (248:8), 18:io
 	ld (227:8), 5:io
-	ldw (36097:16), 0
-	ldw (36099:16), 0
-	or (36086:16), 1
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1
 	ei	0
 	ret
 CPanel_InitLEDBuffer:
-	ld (36197:16), wa
-	and (36083:16), 191
-	ldb_d8 a, (36083)
+	ld (CPANEL_LED_TX_BUFFER:16), wa
+	and (PFFC_VALUE:16), 191
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	ld (235:8), 255:io
 	ld (248:8), 34:io
@@ -171,47 +171,47 @@ CPanel_InitLEDBuffer:
 	ld (227:8), 7:io
 	ld (248:8), 18:io
 	and_sd8b_im 60, 191
-	or (36082:16), 64
-	ldb_d8 a, (36082)
+	or (PFCR_VALUE:16), 64
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	and (36082:16), 191
-	ldb_d8 a, (36082)
+	and (PFCR_VALUE:16), 191
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	or (36083:16), 80
-	ldb_d8 a, (36083)
+	or (PFFC_VALUE:16), 80
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
-	or (36082:16), 80
-	ldb_d8 a, (36082)
+	or (PFCR_VALUE:16), 80
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	and_sd8b_im 213, 254
 	ld (235:8), 255:io
 	ld (248:8), 34:io
 	ld (248:8), 35:io
-	ld xiy, 36197
-	add iy, (36193:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	incw 1, (36193:16)
+	incw 1, (CPANEL_LED_READ_PTR:16)
 	st_dd8b a, 212
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	ld xiy, 36197
-	add iy, (36193:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	incw 1, (36193:16)
+	incw 1, (CPANEL_LED_READ_PTR:16)
 	st_dd8b a, 212
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	or_sd8b_im 213, 1
 	and_sd8b_im 213, 253
-	and (36082:16), 175
-	ldb_d8 a, (36082)
+	and (PFCR_VALUE:16), 175
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
-	and (36083:16), 175
-	ldb_d8 a, (36083)
+	and (PFFC_VALUE:16), 175
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	ret
 DELAY_2_LOOPS:
@@ -293,29 +293,29 @@ Delay3000L_Done:
 
 
 DELAY_2_TICKS:
-	ld	wa, (1033:16)
-	ld	(36095:16), wa
+	ld	wa, (SYSTEM_TIMESTAMP:16)
+	ld	(TIMESTAMP_FOR_DELAY:16), wa
 DELAY_2_TICKS__loop:
-	ldw_d16 wa, (1033)
-	sub wa, (36095:16)
+	ldw_d16 wa, (SYSTEM_TIMESTAMP)
+	sub wa, (TIMESTAMP_FOR_DELAY:16)
 	cp wa, 2:i3
 	jr lt, DELAY_2_TICKS__loop
 	ret
 DELAY_6_TICKS:
-	ld	wa, (1033:16)
-	ld	(36095:16), wa
+	ld	wa, (SYSTEM_TIMESTAMP:16)
+	ld	(TIMESTAMP_FOR_DELAY:16), wa
 Delay6T_Loop:
-	ldw_d16 wa, (1033)
-	sub wa, (36095:16)
+	ldw_d16 wa, (SYSTEM_TIMESTAMP)
+	sub wa, (TIMESTAMP_FOR_DELAY:16)
 	cp wa, 6:i3
 	jr lt, Delay6T_Loop
 	ret
 DELAY_51_TICKS:
-	ld	wa, (1033:16)
-	ld	(36095:16), wa
+	ld	wa, (SYSTEM_TIMESTAMP:16)
+	ld	(TIMESTAMP_FOR_DELAY:16), wa
 Delay51T_Loop:
-	ldw_d16 wa, (1033)
-	sub wa, (36095:16)
+	ldw_d16 wa, (SYSTEM_TIMESTAMP)
+	sub wa, (TIMESTAMP_FOR_DELAY:16)
 	cp wa, 51
 	jr lt, Delay51T_Loop
 	ret
@@ -350,37 +350,37 @@ CPanel_CheckSpecialCombos_Return:
 
 
 CPanel_PanelDetection:
-	ld (0x8cf7:16), 0x00
+	ld (CPANEL_PANEL_DETECT_FLAGS:16), 0x00
 	calr CPanel_WaitTXReady
 	ei 0x06
-	ldw (0x8d01:16), 0x0000
-	ldw (0x8d03:16), 0x0000
-	or (0x8cf6:16), 0x01
+	ldw (CPANEL_RX_READ_PTR:16), 0x0000
+	ldw (CPANEL_RX_WRITE_PTR:16), 0x0000
+	or (CPANEL_PROTOCOL_FLAGS:16), 0x01
 	ei 0x00
 	ld A, 0x20:opc
 	ld W, 0x00:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpw (0x8d03:16), 0x0000
+	cpw (CPANEL_RX_WRITE_PTR:16), 0x0000
 	jr z, .Lc_fc39fd
-	or (0x8cf7:16), 0x01
+	or (CPANEL_PANEL_DETECT_FLAGS:16), 0x01
 PanelDet_ProbeRight:
 .Lc_fc39fd:
 	calr CPanel_WaitTXReady
 	ei 0x06
-	ldw (0x8d01:16), 0x0000
-	ldw (0x8d03:16), 0x0000
-	or (0x8cf6:16), 0x01
+	ldw (CPANEL_RX_READ_PTR:16), 0x0000
+	ldw (CPANEL_RX_WRITE_PTR:16), 0x0000
+	or (CPANEL_PROTOCOL_FLAGS:16), 0x01
 	ei 0x00
 	ld A, 0xe0:opc
 	ld W, 0x00:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpw (0x8d03:16), 0x0000
+	cpw (CPANEL_RX_WRITE_PTR:16), 0x0000
 	jr z, PanelDet_Return
-	or (0x8cf7:16), 0x08
+	or (CPANEL_PANEL_DETECT_FLAGS:16), 0x08
 PanelDet_Return:
-	ld	a, (36087:16)
+	ld	a, (CPANEL_PANEL_DETECT_FLAGS:16)
 	ret
 CPanel_ReadAllButtons:
 	ld xhl, CPANEL_RX_EVENT_QUEUE
@@ -388,9 +388,9 @@ CPanel_ReadAllButtons:
 	ldw (xhl-8), 0
 	ldw (xhl-2), 128
 	ei 6
-	ldw_d16 wa, (36097)
-	ld (36099:16), wa
-	or (36086:16), 1
+	ldw_d16 wa, (CPANEL_RX_READ_PTR)
+	ld (CPANEL_RX_WRITE_PTR:16), wa
+	or (CPANEL_PROTOCOL_FLAGS:16), 1
 	ei	0
 	call CPanel_WaitTXReady
 	ld a, 37:opc
@@ -430,11 +430,11 @@ CPanel_PollStartup:
 
 	ei 6
 
-	ldw	(36097:16), 0	; stdi16 (0x8d9d), 0 (v7 patched)
+	ldw	(CPANEL_RX_READ_PTR:16), 0	; stdi16 (0x8d9d), 0 (v7 patched)
 
-	ldw	(36099:16), 0	; stdi16 (0x8d9f), 0 (v7 patched)
+	ldw	(CPANEL_RX_WRITE_PTR:16), 0	; stdi16 (0x8d9f), 0 (v7 patched)
 
-	or	(36086:16), 1	; ordi8 0x8d92, 1	; CP_Flags_B.0 = 1 (v7 patched)
+	or	(CPANEL_PROTOCOL_FLAGS:16), 1	; ordi8 0x8d92, 1	; CP_Flags_B.0 = 1 (v7 patched)
 
 	ei 0
 
@@ -465,11 +465,11 @@ CPanel_EncoderCheck:
 	ldw (xhl-8), 0
 	ldw (xhl-2), 128
 	ei 6
-	ldw (36193:16), 0
-	ldw (36195:16), 0
-	ldw (36097:16), 0
-	ldw (36099:16), 0
-	or (36086:16), 1
+	ldw (CPANEL_LED_READ_PTR:16), 0
+	ldw (CPANEL_LED_WRITE_PTR:16), 0
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1
 	ei	0
 	ret
 CPanel_InitButtonState:
@@ -478,9 +478,9 @@ CPanel_InitButtonState:
 	ldw (xhl-8), 0
 	ldw (xhl-2), 128
 	ei 6
-	ld (36097:16), 0
-	ld (36099:16), 0
-	or (36086:16), 1
+	ld (CPANEL_RX_READ_PTR:16), 0
+	ld (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1
 	ei	0
 	calr CPanel_WaitTXReady
 	ld a, 43:opc
@@ -514,28 +514,28 @@ CPanel_InitButtonState:
 	calr CPanel_RX_ProcessWithFlag
 	ret
 CPanel_WaitTXReady:
-	ld	(36091:16), 200
+	ld	(CPANEL_COUNTER_DOWN_FROM_200:16), 200
 CPanel_WaitTXReady_Poll:
 	ei 6
 	bit_dd8 6, 60
 	jr z, CPanel_WaitTXReady_Timeout
 	bit_dd8 5, 56
 	jr nz, CPanel_WaitTXReady_Timeout
-	bit 1, (36080:16)
+	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, CPanel_WaitTXReady_Timeout
-	bit 0, (36080:16)
+	bit 0, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 	jr CPanel_WaitTXReady_BufferCheck
 CPanel_WaitTXReady_Timeout:
-	dec 1, (36091:16)
-	cp (36091:16), 0
+	dec 1, (CPANEL_COUNTER_DOWN_FROM_200:16)
+	cp (CPANEL_COUNTER_DOWN_FROM_200:16), 0
 	jr z, WaitTX_ConfigAndReturn
 	ei	0
 	calr DELAY_1500_LOOPS
 	jr CPanel_WaitTXReady_Poll
 CPanel_WaitTXReady_BufferCheck:
-	ldw_d16 wa, (36195)
-	cp wa, (36193:16)
+	ldw_d16 wa, (CPANEL_LED_WRITE_PTR)
+	cp wa, (CPANEL_LED_READ_PTR:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 WaitTX_ConfigAndReturn:
 	ei 6
@@ -548,7 +548,7 @@ WaitTX_ConfigAndReturn:
 
 	and_sd8b_im	0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 
-	or	(36086:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
+	or	(CPANEL_PROTOCOL_FLAGS:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
 
 	ei 0
 
@@ -560,20 +560,20 @@ WaitTX_ConfigAndReturn:
 
 CPanel_SendCommand:
 	ei 0x06
-	ldw (0x8d61:16), 0x0000
-	ldw (0x8d63:16), 0x0000
-	ld (0x8d65:16), wa
-	addw (0x8d63:16), 0x0002
-	or (0x8cf0:16), 0x02
-	and (0x8cf0:16), 0xfe
-	ld (0x8cee:16), 0x04
+	ldw (CPANEL_LED_READ_PTR:16), 0x0000
+	ldw (CPANEL_LED_WRITE_PTR:16), 0x0000
+	ld (CPANEL_LED_TX_BUFFER:16), wa
+	addw (CPANEL_LED_WRITE_PTR:16), 0x0002
+	or (CPANEL_TX_RX_FLAGS:16), 0x02
+	and (CPANEL_TX_RX_FLAGS:16), 0xfe
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 0x04
 	ld (215:8), 40:io
-	and (36083:16), 191
-	ldb_d8 a, (36083)
+	and (PFFC_VALUE:16), 191
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	and_sd8b_im 60, 191
-	or (36082:16), 64
-	ldb_d8 a, (36082)
+	or (PFCR_VALUE:16), 64
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	ld (227:8), 7:io
 	ld (248:8), 18:io
@@ -587,31 +587,31 @@ CPanel_SendCommand:
 	nop
 	ret
 INTA_HANDLER:
-	ld (36092:16), 0
+	ld (CPANEL_COUNTER_UP_TO_20:16), 0
 	push xwa
-	cp (36079:16), 0
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 0
 	jr nz, INTA_HandleCountdown
-	and (36082:16), 159
-	ldb_d8 a, (36082)
+	and (PFCR_VALUE:16), 159
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	or_sd8b_im 213, 1
 	and_sd8b_im 213, 253
 	ld (227:8), 5:io
 	ld (235:8), 13:io
 	or_sd8b_im 214, 32
-	ld (36078:16), 32
-	or (36080:16), 1
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 32
+	or (CPANEL_TX_RX_FLAGS:16), 1
 	jr 28
 INTA_HandleCountdown:
-	cpw (36099:16), 0
+	cpw (CPANEL_RX_WRITE_PTR:16), 0
 	jr nz, 6
-	ldw (36099:16), 92
+	ldw (CPANEL_RX_WRITE_PTR:16), 92
 INTA_DecrementRXCount:
-	decw	1, (36099:16)	; decdi16 1, 0x8d9f (v7 patched)
+	decw	1, (CPANEL_RX_WRITE_PTR:16)	; decdi16 1, 0x8d9f (v7 patched)
 
-	or	(36086:16), 64	; ordi8 0x8d92, 64	; CP_Flags_B.6 = 1  ; UNUSED (v7 patched)
+	or	(CPANEL_PROTOCOL_FLAGS:16), 64	; ordi8 0x8d92, 64	; CP_Flags_B.6 = 1  ; UNUSED (v7 patched)
 
-	and	(36080:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
+	and	(CPANEL_TX_RX_FLAGS:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
 
 
 
@@ -644,7 +644,7 @@ INTTX1_HANDLER:
 	push	xwa
 	push	xhl
 	push	xiy
-	ld	l, (36078:16)
+	ld	l, (CPANEL_STATE_MACHINE_INDEX:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, CPANEL_STATE_MACHINE_TABLE
@@ -664,7 +664,7 @@ INTRX1_HANDLER:
 	push	xwa
 	push	xhl
 	push	xiy
-	ld	l, (36078:16)
+	ld	l, (CPANEL_STATE_MACHINE_INDEX:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, CPANEL_STATE_MACHINE_TABLE
@@ -681,48 +681,48 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 
 
 CPanel_SM_StartTX:
-	and (36082:16), 191
-	ldb_d8 a, (36082)
+	and (PFCR_VALUE:16), 191
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	ld (215:8), 36:io
 	ld (227:8), 7:io
 	ld (235:8), 208:io
 	and_sd8b_im 213, 254
 	st_dd8b a, 212
-	inc 4, (36078:16)
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16)
 	mul a, 1
 	mul a, 1
 	bit_dd8 6, 60
 	jr nz, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
-	ld (36079:16), 0
-	ld (36078:16), 0
-	or (36086:16), 2
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 2
 	ld (227:8), 5:io
 	ld (235:8), 255:io
 	ld (215:8), 36:io
-	and (36080:16), 253
+	and (CPANEL_TX_RX_FLAGS:16), 253
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_TXDelay1:
 	calr DELAY_10_LOOPS
-	and (36082:16), 175
-	ldb_d8 a, (36082)
+	and (PFCR_VALUE:16), 175
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
-	and (36083:16), 175
-	ldb_d8 a, (36083)
+	and (PFFC_VALUE:16), 175
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	ld (215:8), 36:io
 	ld (235:8), 208:io
 	and_sd8b_im 213, 254
 	st_dd8b a, 212
-	inc 4, (36078:16)
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_TXDelay2:
 	calr DELAY_10_LOOPS
-	and (36082:16), 175
-	ldb_d8 a, (36082)
+	and (PFCR_VALUE:16), 175
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
-	and (36083:16), 175
-	ldb_d8 a, (36083)
+	and (PFFC_VALUE:16), 175
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	ld (215:8), 36:io
 	st_dd8b a, 212
@@ -730,101 +730,101 @@ CPanel_SM_TXDelay2:
 	ld (235:8), 208:io
 	and_sd8b_im 213, 254
 	st_dd8b a, 212
-	inc 4, (36078:16)
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_SendByte1:
 	ld (215:8), 20:io
-	or (36083:16), 80
-	ldb_d8 a, (36083)
+	or (PFFC_VALUE:16), 80
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
-	or (36082:16), 80
-	ldb_d8 a, (36082)
+	or (PFCR_VALUE:16), 80
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	and_sd8b_im 213, 254
 	ld (227:8), 5:io
 	ld (235:8), 208:io
-	ld xiy, 36197
-	add iy, (36193:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	st_dd8b a, 212
-	incw 1, (36193:16)
-	cpw (36193:16), 60
+	incw 1, (CPANEL_LED_READ_PTR:16)
+	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByte1_InspectByte
-	ldw (36193:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 SendByte1_InspectByte:
-	ld	(36079:16), 2
+	ld	(CPANEL_PACKET_BYTE_COUNT:16), 2
 	ld	a, (xiy)
 	and	a, 63
 	cp	a, 48
 	jr	c, SendByte1_AdvanceState
 	and	a, 15
 	add	a, 3
-	ld	(36079:16), a
+	ld	(CPANEL_PACKET_BYTE_COUNT:16), a
 SendByte1_AdvanceState:
-	inc	4, (36078:16)
+	inc	4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl	MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_SendByteN:
 	ld (215:8), 20:io
-	or (36083:16), 80
-	ldb_d8 a, (36083)
+	or (PFFC_VALUE:16), 80
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
-	or (36082:16), 80
-	ldb_d8 a, (36082)
+	or (PFCR_VALUE:16), 80
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	and_sd8b_im 213, 254
 	ld (227:8), 5:io
 	ld (235:8), 208:io
-	ld xiy, 36197
-	add iy, (36193:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	st_dd8b a, 212
-	incw 1, (36193:16)
-	cpw (36193:16), 60
+	incw 1, (CPANEL_LED_READ_PTR:16)
+	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByteN_CheckDone
-	ldw (36193:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 SendByteN_CheckDone:
-	dec 1, (36079:16)
-	cp (36079:16), 1
+	dec 1, (CPANEL_PACKET_BYTE_COUNT:16)
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 1
 	jr z, SendByteN_AdvanceState
-	cp (36079:16), 0
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 0
 	jr z, SendByteN_AdvanceState
-	dec 4, (36078:16)
+	dec 4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 SendByteN_AdvanceState:
-	inc	4, (36078:16)
+	inc	4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl	MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_TXComplete:
-	ld (36079:16), 0
-	ld (36078:16), 0
-	ldw_d16 wa, (36195)
-	sub wa, (36193:16)
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 0
+	ldw_d16 wa, (CPANEL_LED_WRITE_PTR)
+	sub wa, (CPANEL_LED_READ_PTR:16)
 	cp wa, 2:i3
 	jr c, TXComplete_BufferEmpty
-	ld (36078:16), 4
-	and (36083:16), 191
-	ldb_d8 a, (36083)
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 4
+	and (PFFC_VALUE:16), 191
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	and_sd8b_im 60, 191
-	or (36082:16), 64
-	ldb_d8 a, (36082)
+	or (PFCR_VALUE:16), 64
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	ld (215:8), 40:io
 	ld (227:8), 7:io
 	and_sd8b_im 213, 254
 	ld (235:8), 208:io
 	st_dd8b a, 212
-	or (36080:16), 2
+	or (CPANEL_TX_RX_FLAGS:16), 2
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 TXComplete_BufferEmpty:
-	and	(36082:16), 191	; anddi8 (0x8d8e), 191 (v7 patched)
+	and	(PFCR_VALUE:16), 191	; anddi8 (0x8d8e), 191 (v7 patched)
 
-	ldb_d8	a, (36082)	; ldb_d8 a, (0x8d8e) (v7 patched)
+	ldb_d8	a, (PFCR_VALUE)	; ldb_d8 a, (0x8d8e) (v7 patched)
 
 	st_dd8b A, 0x3e
 
-	and	(36083:16), 191	; anddi8 (0x8d8f), 191; disable CPanel serial clk (v7 patched)
+	and	(PFFC_VALUE:16), 191	; anddi8 (0x8d8f), 191; disable CPanel serial clk (v7 patched)
 
-	ldb_d8	a, (36083)	; ldb_d8 a, (0x8d8f) (v7 patched)
+	ldb_d8	a, (PFFC_VALUE)	; ldb_d8 a, (0x8d8f) (v7 patched)
 
 	st_dd8b A, 0x3f
 
@@ -838,7 +838,7 @@ TXComplete_BufferEmpty:
 
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 
-	and	(36080:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
+	and	(CPANEL_TX_RX_FLAGS:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
 
 	jrl	MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES	; jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
@@ -847,19 +847,19 @@ TXComplete_BufferEmpty:
 
 
 CPanel_SM_RXByte1:
-	and (36082:16), 159
-	ldb_d8 a, (36082)
+	and (PFCR_VALUE:16), 159
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	or_sd8b_im 213, 1
 	and_sd8b_im 213, 253
 	ld (227:8), 5:io
 	ld (235:8), 13:io
 	ld_sd8b a, 212
-	ld xiy, 36101
-	add iy, (36099:16)
+	ld xiy, CPANEL_RX_RING_BUFFER
+	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
-	ldw_d16 hl, (36099)
-	sub hl, (36097:16)
+	ldw_d16 hl, (CPANEL_RX_WRITE_PTR)
+	sub hl, (CPANEL_RX_READ_PTR:16)
 	jr nc, RXByte1_ForwardDist
 	neg hl
 	ld iy, hl
@@ -871,57 +871,57 @@ RXByte1_ForwardDist:
 RXByte1_CheckThreshold:
 	cp iy, 3:i3
 	jr nc, RXByte1_AdvanceWritePtr
-	or (36086:16), 1
+	or (CPANEL_PROTOCOL_FLAGS:16), 1
 	jr RXByte1_InspectByte
 RXByte1_AdvanceWritePtr:
-	and (36086:16), 254
-	incw 1, (36099:16)
-	cpw (36099:16), 92
+	and (CPANEL_PROTOCOL_FLAGS:16), 254
+	incw 1, (CPANEL_RX_WRITE_PTR:16)
+	cpw (CPANEL_RX_WRITE_PTR:16), 92
 	jr c, RXByte1_InspectByte
-	ldw (36099:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
 RXByte1_InspectByte:
-	ld	(36079:16), 2
+	ld	(CPANEL_PACKET_BYTE_COUNT:16), 2
 	and	a, 63
 	cp	a, 48
 	jr	c, RXByte1_AdvanceState
 	and	a, 15
 	add	a, 3
-	ld	(36079:16), a
+	ld	(CPANEL_PACKET_BYTE_COUNT:16), a
 RXByte1_AdvanceState:
-	inc	4, (36078:16)
+	inc	4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl	LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_RXByteN:
 	ld_sd8b a, 212
-	ld xiy, 36101
-	add iy, (36099:16)
+	ld xiy, CPANEL_RX_RING_BUFFER
+	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
-	bit 0, (36086:16)
+	bit 0, (CPANEL_PROTOCOL_FLAGS:16)
 	jr nz, RXByteN_CheckDone
-	incw 1, (36099:16)
-	cpw (36099:16), 92
+	incw 1, (CPANEL_RX_WRITE_PTR:16)
+	cpw (CPANEL_RX_WRITE_PTR:16), 92
 	jr c, RXByteN_CheckDone
-	ldw (36099:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
 RXByteN_CheckDone:
-	dec 1, (36079:16)
-	cp (36079:16), 1
+	dec 1, (CPANEL_PACKET_BYTE_COUNT:16)
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 1
 	jr nz, RXByteN_ContinueRX
-	ld (36079:16), 0
-	and (36080:16), 254
-	ld (36078:16), 0
-	and (36082:16), 159
-	ldb_d8 a, (36082)
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	and (CPANEL_TX_RX_FLAGS:16), 254
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 0
+	and (PFCR_VALUE:16), 159
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
-	and (36083:16), 191
-	ldb_d8 a, (36083)
+	and (PFFC_VALUE:16), 191
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	ld (227:8), 5:io
 	ld (235:8), 13:io
 	and_sd8b_im 214, 223
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 RXByteN_ContinueRX:
-	and	(36082:16), 159	; anddi8 (0x8d8e), 159 (v7 patched)
+	and	(PFCR_VALUE:16), 159	; anddi8 (0x8d8e), 159 (v7 patched)
 
-	ldb_d8	a, (36082)	; ldb_d8 a, (0x8d8e) (v7 patched)
+	ldb_d8	a, (PFCR_VALUE)	; ldb_d8 a, (0x8d8e) (v7 patched)
 
 	st_dd8b A, 0x3e
 
@@ -940,17 +940,17 @@ RXByteN_ContinueRX:
 
 
 CPanel_SM_Idle:
-	or	(36086:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
+	or	(CPANEL_PROTOCOL_FLAGS:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
 
 	jrl	-773	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
 
 
-	and	(36080:16), 252	; anddi8 (0x8d8c), 252; CP_Flags_A.0 = 0 (v7 patched)
+	and	(CPANEL_TX_RX_FLAGS:16), 252	; anddi8 (0x8d8c), 252; CP_Flags_A.0 = 0 (v7 patched)
 
 						; CP_Flags_A.1 = 0
 
-	or	(36086:16), 4	; ordi8 0x8d92, 4	; CP_Flags_B.2 = 1  : UNUSED (v7 patched)
+	or	(CPANEL_PROTOCOL_FLAGS:16), 4	; ordi8 0x8d92, 4	; CP_Flags_B.2 = 1  : UNUSED (v7 patched)
 
 	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
 
@@ -971,12 +971,12 @@ CPanel_SM_Idle:
 
 
 CPanel_InterruptPoll_MainLoop:
-	inc 1, (0x8cfe:16)
-	cp (0x8cfe:16), 0x2a
+	inc 1, (CPANEL_COUNTER_UP_TO_42:16)
+	cp (CPANEL_COUNTER_UP_TO_42:16), 0x2a
 	jr ule, PollLoop_DispatchWork
 	ei 0x06
-	ld wa, (0x8d63:16)
-	sub wa, (36193:16)
+	ld wa, (CPANEL_LED_WRITE_PTR:16)
+	sub wa, (CPANEL_LED_READ_PTR:16)
 	jr nc, PollLoop_TXForwardDist
 	neg wa
 	ld hl, wa
@@ -988,23 +988,23 @@ PollLoop_TXForwardDist:
 PollLoop_TXCheckThreshold:
 	cp	hl, 3:i3
 	jr	c, PollLoop_DispatchWork	; -> 0xFC4090
-	ld	(36094:16), 0
+	ld	(CPANEL_COUNTER_UP_TO_42:16), 0
 	ld	w, 224:opc
 	ld	a, 19:opc
-	ld	iy, (36195:16)
+	ld	iy, (CPANEL_LED_WRITE_PTR:16)
 	ld	xde, 36197
 	ld	(xde+iy), w
 	calr	CPanel_IncLEDPtr
 	ld	(xde+iy), a
 	calr	CPanel_IncLEDPtr
-	ld	(36195:16), iy
+	ld	(CPANEL_LED_WRITE_PTR:16), iy
 PollLoop_DispatchWork:
 	ei	0
-	ldb_d8 a, (36080)
+	ldb_d8 a, (CPANEL_TX_RX_FLAGS)
 	and a, 192
 	cp a, 0:i3
 	jr z, PollLoop_DoLEDUpdate
-	add (36080:16), 64
+	add (CPANEL_TX_RX_FLAGS:16), 64
 	cp a, 192
 	jr nz, PollLoop_DoLEDUpdate
 	calr CPanel_InitButtonState
@@ -1018,12 +1018,12 @@ PollLoop_CheckTXReady:
 	jr z, PollLoop_BusyRetry
 	bit_dd8 5, 56
 	jr nz, PollLoop_BusyRetry
-	bit 1, (36080:16)
+	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, PollLoop_BusyRetry
-	bit 0, (36080:16)
+	bit 0, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, PollLoop_BusyRetry
-	ldw_d16 wa, (36195)
-	sub wa, (36193:16)
+	ldw_d16 wa, (CPANEL_LED_WRITE_PTR)
+	sub wa, (CPANEL_LED_READ_PTR:16)
 	jr nc, PollLoop_StartTX
 	neg wa
 	ex8 a, w
@@ -1032,14 +1032,14 @@ PollLoop_CheckTXReady:
 PollLoop_StartTX:
 	cp a, 2:i3
 	jr c, PollLoop_Return
-	or (36080:16), 2
-	ld (36078:16), 4
-	and (36083:16), 191
-	ldb_d8 a, (36083)
+	or (CPANEL_TX_RX_FLAGS:16), 2
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 4
+	and (PFFC_VALUE:16), 191
+	ldb_d8 a, (PFFC_VALUE)
 	st_dd8b a, 63
 	and_sd8b_im 60, 191
-	or (36082:16), 64
-	ldb_d8 a, (36082)
+	or (PFCR_VALUE:16), 64
+	ldb_d8 a, (PFCR_VALUE)
 	st_dd8b a, 62
 	ld (215:8), 40:io
 	and_sd8b_im 214, 223
@@ -1055,8 +1055,8 @@ PollLoop_Return:
 
 
 PollLoop_BusyRetry:
-	inc 1, (36092:16)
-	cp (36092:16), 20
+	inc 1, (CPANEL_COUNTER_UP_TO_20:16)
+	cp (CPANEL_COUNTER_UP_TO_20:16), 20
 	jr ule, PollLoop_Return
 	ei 6
 	ld (248:8), 34:io
@@ -1064,26 +1064,26 @@ PollLoop_BusyRetry:
 	ld (235:8), 221:io
 	ld (248:8), 18:io
 	ld (227:8), 5:io
-	or (36086:16), 128
+	or (CPANEL_PROTOCOL_FLAGS:16), 128
 	jr PollLoop_Return
 CPanel_RX_ProcessWithFlag:
-	or (0x8cf0:16), 0x04
+	or (CPANEL_TX_RX_FLAGS:16), 0x04
 	jr t, CPanel_RX_DispatchLoop
 CPanel_RX_Process:
-	and (0x8cf0:16), 0xfb
+	and (CPANEL_TX_RX_FLAGS:16), 0xfb
 
 
 
 CPanel_RX_DispatchLoop:
 	ld	xde, 36101
-	ld	iy, (36097:16)
+	ld	iy, (CPANEL_RX_READ_PTR:16)
 	ld	xiz, 131245
 	ld	ix, (xiz-4)
 CPanel_RX_ParseNext:
 	cpw (xiz-2), 4
 	jrl c, CPanel_RX_Done
-	ldw_d16 wa, (36099)
-	sub wa, (36097:16)
+	ldw_d16 wa, (CPANEL_RX_WRITE_PTR)
+	sub wa, (CPANEL_RX_READ_PTR:16)
 	jr nc, CPanel_RX_PacketSizeCheck
 	neg wa
 	ex8 a, w
@@ -1120,14 +1120,14 @@ CPanel_RX_ButtonPacket:
 	calr	CPanel_IncRXPtr
 	ld	(xiz+ix), w
 	calr	CPanel_IncEventPtr
-	ld	(36088:16), w
+	ld	(CPANEL_RX_PACKET_BYTE_1:16), w
 	ld	a, (xde+iy)
 	calr	CPanel_IncRXPtr
 	ld	(xiz+ix), a
 	calr	CPanel_IncEventPtr
-	ld	(36089:16), a
+	ld	(CPANEL_RX_PACKET_BYTE_2:16), a
 	and	w, 79
-	ld	xhl, 36270
+	ld	xhl, STATE_OF_CPANEL_BUTTONS
 	bit	6, w
 	jr	z, BtnPkt_AddOffset	; -> 0xFC41F2
 	sub	w, 48
@@ -1141,36 +1141,36 @@ BtnPkt_XORLookup:
 	xor a, (xhl)
 	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
-	stb_d8 (36090), a
+	stb_d8 (CPANEL_LAST_EVENT_VALUE), a
 	ld (xiz-4), ix
 	decm 3, (xiz-2)
-	ld (36097:16), iy
+	ld (CPANEL_RX_READ_PTR:16), iy
 	jrl CPanel_RX_ParseNext
 CPanel_RX_EncoderPacket:
 	ld	w, (xde+iy)
 	calr	CPanel_IncRXPtr
 	ld	(xiz+ix), w
 	calr	CPanel_IncEventPtr
-	ld	(36088:16), w
+	ld	(CPANEL_RX_PACKET_BYTE_1:16), w
 	ld	a, (xde+iy)
 	calr	CPanel_IncRXPtr
-	ld	(36089:16), a
+	ld	(CPANEL_RX_PACKET_BYTE_2:16), a
 	ld	c, w
 	calr	EncPkt_DispatchThunk
 	cp	hl, 65535
 	jr	nz, EncPkt_WriteEvent	; -> 0xFC4249
 	calr	CPanel_DecEventPtr
-	ld	(36097:16), iy
+	ld	(CPANEL_RX_READ_PTR:16), iy
 	jr	EncPkt_ParseNext	; -> 0xFC4268
 EncPkt_WriteEvent:
 	ld	(xiz+ix), l
 	calr	CPanel_IncEventPtr
-	ld	(36090:16), l
+	ld	(CPANEL_LAST_EVENT_VALUE:16), l
 	ld	(xiz+ix), 0xff
 	calr	CPanel_IncEventPtr
 	ld	(xiz-4), ix
 	decw	3, (xiz-2)
-	ld	(36097:16), iy
+	ld	(CPANEL_RX_READ_PTR:16), iy
 EncPkt_ParseNext:
 	jrl CPanel_RX_ParseNext
 
@@ -1229,17 +1229,17 @@ MBytePkt_LoopBody:
 	calr EncPkt_DispatchThunk
 	popw wa
 	cp HL,0xffff
-	ld (0x8cfa:16), l
+	ld (CPANEL_LAST_EVENT_VALUE:16), l
 	popw hl
 	popw bc
 	jr nz, MBytePkt_EncWriteResult
 	jr t, MBytePkt_EncNoEvent
 MBytePkt_EncNoEvent:
 	calr	CPanel_DecEventPtr
-	ld	(36097:16), iy
+	ld	(CPANEL_RX_READ_PTR:16), iy
 	jrl	MBytePkt_LoopTail
 MBytePkt_EncWriteResult:
-	ld	a, (36090:16)
+	ld	a, (CPANEL_LAST_EVENT_VALUE:16)
 MBytePkt_WriteEventByte:
 
 c:
@@ -1250,7 +1250,7 @@ c:
 	ex (xhl), a
 	xor a, (xhl)
 	inc 1, hl
-	bit 4, (36080:16)
+	bit 4, (CPANEL_TX_RX_FLAGS:16)
 	jr z, MBytePkt_CommitAndContinue
 	cp a, 0:i3
 	jr nz, MBytePkt_CommitAndContinue
@@ -1270,7 +1270,7 @@ MBytePkt_CommitAndContinue:
 	decm 1, (xiz - 2)
 
 MBytePkt_CommitRXPtr:
-	ld	(36097:16), iy
+	ld	(CPANEL_RX_READ_PTR:16), iy
 MBytePkt_LoopTail:
 	inc 1, w
 	dec 1, b
@@ -1287,9 +1287,9 @@ CPanel_RX_SyncPacket:
 
 	calr	CPanel_IncRXPtr	; calr CPanel_IncRXPtr (v7 displacement)
 
-	ld	(36097:16), iy	; stda16 (0x8d9d), xiy (v7 patched)
+	ld	(CPANEL_RX_READ_PTR:16), iy	; stda16 (0x8d9d), xiy (v7 patched)
 
-	or	(36086:16), 8	; ordi8 0x8d92, 8	; CP_Flags_B.3 = 1  ; UNUSED (v7 patched)
+	or	(CPANEL_PROTOCOL_FLAGS:16), 8	; ordi8 0x8d92, 8	; CP_Flags_B.3 = 1  ; UNUSED (v7 patched)
 
 	jrl	CPanel_RX_ParseNext	; jrl CPanel_RX_ParseNext (v7 displacement)
 
@@ -1300,7 +1300,7 @@ CPanel_RX_Done:
 
 
 CPanel_UpdateLEDs:
-	ld	iy, (36195:16)
+	ld	iy, (CPANEL_LED_WRITE_PTR:16)
 	ld	xde, 36197
 	ld	xiz, 131383
 	ld	ix, (xiz-8)
@@ -1312,8 +1312,8 @@ CPanel_UpdateLEDs__check_next:
 	jrl nz, LEDs_Return
 
 LEDs_CheckTXSpace:
-	ld	wa, (36195:16)
-	sub	wa, (36193:16)
+	ld	wa, (CPANEL_LED_WRITE_PTR:16)
+	sub	wa, (CPANEL_LED_READ_PTR:16)
 	jr	nc, LEDs_TXForwardDist	; -> 0xFC4393
 	neg	wa
 	ld	hl, wa
@@ -1369,7 +1369,7 @@ CPanel_LED_HandlePacket2:
 
 	incw 1, (xiz - 2)		; increment pending LED byte count (+2 total)
 
-	ld	(36195:16), iy	; stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR (v7 patched)
+	ld	(CPANEL_LED_WRITE_PTR:16), iy	; stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR (v7 patched)
 
 	jrl	CPanel_UpdateLEDs__check_next	; jrl CPanel_UpdateLEDs__check_next	; check for more events (v7 displacement)
 
@@ -1397,7 +1397,7 @@ CPanel_LED_HandlePacketN__loop:
 	calr	CPanel_IncLEDPtr
 	ld	(xiz-8), ix
 	incw	1, (xiz-2)
-	ld	(36195:16), iy
+	ld	(CPANEL_LED_WRITE_PTR:16), iy
 	dec	1, b
 	cp	b, 0:i3
 	jr	nz, CPanel_LED_HandlePacketN__loop

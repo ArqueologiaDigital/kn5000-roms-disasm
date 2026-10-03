@@ -8465,7 +8465,7 @@ PartVoiceStatus_ShiftDone:
 	ld (xbc), 0xd3
 	ld (xbc + 1), 0x0
 	lda xde, (xbc + 2)
-	ld a, (0x8ee4:16)
+	ld a, (MIDI_CC_MODWHEEL_VALUE:16)
 	ld (xde), a
 	res 7, a
 	ld (xde), a

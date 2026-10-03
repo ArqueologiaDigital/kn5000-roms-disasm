@@ -41,7 +41,7 @@
 .equ MSP_SETTINGS, 0xc9a	; 1500h = 5376 bytes
 					; next free address: 0219Ah
 
-.equ COM_SELECT, 0xb7e0	; (byte)
+.equ COM_SELECT, 0xb744	; (byte)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xb7e0
 
 .equ SEQ_ALT3_RINGBUF_BASE, 0x201c1
 
@@ -983,7 +983,7 @@ We_seem_to_be_running_boot_ROM_code:
 
 Boot_PostSelfTest:
 	ld xwa, 0:i3
-	ld (1033:16), xwa
+	ld (SYSTEM_TIMESTAMP:16), xwa
 	ld (1024:16), 2
 	call TaskSched_Init
 	ld (1024:16), 3
@@ -3120,7 +3120,7 @@ EmptyRoutine_02:
 
 
 CPanel_RX_ProcessOrInit:
-	ld a, (0x8cf0:16)
+	ld a, (CPANEL_TX_RX_FLAGS:16)
 	and A,0xc0
 	jr z, CPanel_RX_SkipToProcess
 	ld XHL,0x000200ad
@@ -3128,9 +3128,9 @@ CPanel_RX_ProcessOrInit:
 	ldw	(xhl - 8), 0x0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	ldw	(0x8d01:16), 0
-	ldw	(0x8d03:16), 0
-	or	(0x8cf6:16), 1	; [v10] CP_Flags_B.0 = 1
+	ldw	(CPANEL_RX_READ_PTR:16), 0
+	ldw	(CPANEL_RX_WRITE_PTR:16), 0
+	or	(CPANEL_PROTOCOL_FLAGS:16), 1	; [v10] CP_Flags_B.0 = 1
 	ei	0
 	jr	CPanel_RX_Return
 CPanel_RX_SkipToProcess:

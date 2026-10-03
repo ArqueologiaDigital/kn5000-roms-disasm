@@ -52,7 +52,7 @@ FDC_Write_Data:
 ; Uses (R+d16) addressing extensively for FDC port and state variable access.
 FDC_WaitReady:
 	push	xiz
-	ld	iz, (1033:16)
+	ld	iz, (SYSTEM_TIMESTAMP:16)
 	ldw qiz, 128
 	cpw	qiz, 128
 	jr	nz, FDC_WaitReady_Skip3
@@ -65,7 +65,7 @@ FDC_WaitReady_Loop:
 	jr	nz, FDC_WaitReady_Skip
 	ld qiz, 0
 FDC_WaitReady_Skip:
-	ld	wa, (1033:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	sub	wa, iz
 	cp	wa, 500
 	jr	ule, FDC_WaitReady_Skip2
@@ -83,7 +83,7 @@ FDC_WaitReady_Epilogue:
 	ret
 FDC_ResultPhase_Read_Helper:
 	push	xiz
-	ld	iz, (1033:16)
+	ld	iz, (SYSTEM_TIMESTAMP:16)
 	ldw qiz, 128
 	cpw	qiz, 128
 	jr	nz, FDC_WaitReady_Skip6
@@ -94,7 +94,7 @@ FDC_WaitReady_Loop2:
 	jr	nz, FDC_WaitReady_Skip4
 	ld qiz, 0
 FDC_WaitReady_Skip4:
-	ld	wa, (1033:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	sub	wa, iz
 	cp	wa, 500
 	jr	ule, FDC_WaitReady_Skip5
@@ -630,7 +630,7 @@ FDC_MC_EXIT_Code_Helper:
 
 FDC_Wait_Ready_Timeout:
 	push xiz
-	ld iz, (1033:16)
+	ld iz, (SYSTEM_TIMESTAMP:16)
 	ldi_erpw 0xfa, 0x80, 0x00
 	cp_erpw 0xfa, 0x80, 0x00
 	jr nz, FDC_WaitReady_TimedOut
@@ -646,7 +646,7 @@ FDC_WaitReady_StatusLoop:
 	ldiw_erp 0xfa, 0
 
 FDC_WaitReady_TimeoutCheck:
-	ld wa, (1033:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
 	sub wa, iz
 	cp wa, 0x1f4
 	jr ule, FDC_WaitReady_LoopContinue
@@ -669,7 +669,7 @@ FDC_WaitReady_Complete:
 
 FDC_Wait_Status_Timeout:
 	push xiz
-	ld iz, (1033:16)
+	ld iz, (SYSTEM_TIMESTAMP:16)
 	ldi_erpw 0xfa, 0x80, 0x00
 	cp_erpw 0xfa, 0x80, 0x00
 	jr nz, FDC_WaitStatus_TimedOut
@@ -684,7 +684,7 @@ FDC_WaitStatus_StatusLoop:
 	ldiw_erp 0xfa, 0
 
 FDC_WaitStatus_CheckTimeout:
-	ld wa, (1033:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
 	sub wa, iz
 	cp wa, 0x1f4
 	jr ule, FDC_WaitStatus_TimeoutCheck
@@ -717,7 +717,7 @@ FDC_WaitStatus_Complete:
 FDC_ResultPhase_Read:
 	dec	2, xsp
 	push	xiz
-	ldw	(xsp+0x4), (0x409)
+	ldw	(xsp+0x4), (SYSTEM_TIMESTAMP)
 	ldw qiz, 128
 	cpw qiz, 128
 	jr	nz, FDC_ResultPhase_Read_Skip2
@@ -748,7 +748,7 @@ FDC_ResultPhase_Read_Loop2:
 	cp qiz, 0
 	jr z, FDC_ResultPhase_Read_Loop2
 FDC_ResultPhase_Read_Join:
-	ld	wa, (1033:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	sub	wa, (xsp+0x4)
 	cp	wa, 0x1f4
 	jr	ule, FDC_ResultPhase_Read_Skip3
@@ -1287,14 +1287,14 @@ FDC_TIMING_DELAY:
 FDC_POST_OP:
 	push	xiz
 	ldw	qiz, 0x1f4
-	ldw_d16	iz, (0x409)
+	ldw_d16	iz, (SYSTEM_TIMESTAMP)
 	ld	bc, 0:i3
 FDC_ClearStatus_InitTimer_Join_Loop:
 	cp	(0x8a60:16), 255
 	jr	z, FDC_ClearStatus_InitTimer_Join_Skip
 	ldw	bc, 0xffff
 FDC_ClearStatus_InitTimer_Join_Skip:
-	ld	wa, (1033:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	sub	wa, iz
 	cp wa, qiz
 	jr	ule, FDC_ClearStatus_InitTimer_Join_Skip2
@@ -1310,13 +1310,13 @@ FDC_ClearStatus_InitTimer_Join_Skip2:
 
 SOME_DELAY:
 	srl wa, 1
-	ld de, (1033:16)
+	ld de, (SYSTEM_TIMESTAMP:16)
 	ld hl, 0:i3
 	cp hl, 0xffff
 	ret nc
 
 SOME_DELAY_Loop:
-	ld bc, (1033:16)
+	ld bc, (SYSTEM_TIMESTAMP:16)
 	sub bc, de
 	cp bc, wa
 	ret ugt

@@ -58,16 +58,16 @@ Encoder_ProcessModwheel:
 	ldw	hl, 65535
 	cpl	a
 	ld	c, a
-	ld	(36398:16), c
+	ld	(ENCODER_RAW_MODWHEEL:16), c
 	srl	a, 1
 	extz	wa
 	lda	xbc, (ENCODER_LUT_MODWHEEL:24)
 	ld	a, (xbc+wa)
-	ld	c, (36424:16)
+	ld	c, (MIDI_CC_MODWHEEL_VALUE:16)
 	res	7, c
 	cp	c, a
 	ret	z
-	ld	(36424:16), a
+	ld	(MIDI_CC_MODWHEEL_VALUE:16), a
 	ld	l, a
 	extz	hl
 	ret
@@ -79,15 +79,15 @@ Encoder_ProcessModwheel_End:
 Encoder_ProcessVolume:
 	pushw	iz
 	ldw	iz, 65535
-	ld	(36400:16), a
+	ld	(ENCODER_RAW_VOLUME:16), a
 	extz	wa
 	lda	xbc, (ENCODER_LUT_VOLUME:24)
 	ld	a, (xbc+wa)
 	calr	Encoder_ClampScaleAndNormalize
 	ld	a, l
-	cp	a, (36440:16)
+	cp	a, (MIDI_CC_VOLUME_VALUE:16)
 	jr	z, Encoder_ProcessVolume_NoChange	; -> 0xFC650B
-	ld	(36440:16), a
+	ld	(MIDI_CC_VOLUME_VALUE:16), a
 	ldfr_berp	a, 248
 	extz	iz
 Encoder_ProcessVolume_NoChange:
@@ -100,7 +100,7 @@ Encoder_ProcessVolume_NoChange:
 ; Output: HL = clamped and scaled value
 Encoder_ClampScaleAndNormalize:
 	ld	l, a
-	ld	c, (36418:16)
+	ld	c, (ENCODER_RANGE_LIMIT:16)
 	cp	l, c
 	jr	nc, Encoder_PerformScaling
 	ld	l, c
@@ -112,7 +112,7 @@ Encoder_PerformScaling:
 	ld	xwa, xhl
 	ld	xbc, 236
 	call	Math_DivideU32
-	ld	a, (36416:16)
+	ld	a, (ENCODER_VOLUME_MODE:16)
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ENCODER_LUT_BREATH_INDEX:24)
@@ -135,7 +135,7 @@ Encoder_ClampScaleAndNormalize_End:
 Encoder_ProcessBreath:
 	ldw	hl, 0xffff
 	cpl	a
-	ld	(0x8e38:16), a
+	ld	(ENCODER_RAW_BREATH:16), a
 	extz	wa
 	lda	xbc, (ENCODER_LUT_BREATH_VALUE:24)
 	ld	a, (xbc+wa)
@@ -145,7 +145,7 @@ Encoder_ProcessBreath:
 	cp	(0x7e6f:16), 0
 	jr	z, Encoder_ProcessBreath_SimplePassthrough
 Encoder_ProcessBreath_WithModeAdjustment:
-	ld	c, (0x8e3e:16)
+	ld	c, (ENCODER_BREATH_MODE:16)
 	cp	c, 0:i3
 	ret	z
 	srl	a, 1
@@ -164,13 +164,13 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	srl	hl, 8
 	add	hl, hl
 	ld	a, l
-	ld	(0x8e4c:16), a
+	ld	(MIDI_CC_BREATH_VALUE:16), a
 	; -> 0xFC65D3
 	jr	Encoder_ProcessBreath_Return
 Encoder_ProcessBreath_SimplePassthrough:
-	cp	(0x8e4c:16), a
+	cp	(MIDI_CC_BREATH_VALUE:16), a
 	ret	z
-	ld	(0x8e4c:16), a
+	ld	(MIDI_CC_BREATH_VALUE:16), a
 	ld	l, a
 	extz	hl
 Encoder_ProcessBreath_Return:
@@ -182,16 +182,16 @@ Encoder_ProcessBreath_End:
 ; Output: HL = processed MIDI CC value, or 0xffff if unchanged
 Encoder_ProcessFoot:
 	ldw	hl, 65535
-	ld	(36410:16), a
+	ld	(ENCODER_RAW_FOOT:16), a
 	srl	a, 1
 	extz	wa
 	lda	xbc, (ENCODER_LUT_FOOT:24)
 	ld	a, (xbc+wa)
-	ld	c, (36430:16)
+	ld	c, (MIDI_CC_FOOT_VALUE:16)
 	res	7, c
 	cp	c, a
 	ret	z
-	ld	(36430:16), a
+	ld	(MIDI_CC_FOOT_VALUE:16), a
 	ld	l, a
 	extz	hl
 	ret
@@ -203,12 +203,12 @@ Encoder_ProcessFoot_End:
 Encoder_ProcessExpression:
 	cpl	a
 	ld	c, a
-	ld	(36412:16), c
+	ld	(ENCODER_RAW_EXPRESSION:16), c
 	srl	a, 1
 	extz	wa
 	lda	xbc, (ENCODER_LUT_EXPRESSION:24)
 	ld	a, (xbc+wa)
-	ld	(36426:16), a
+	ld	(MIDI_CC_EXPRESSION_VALUE:16), a
 	extz	wa
 	ld	hl, wa
 	ret
@@ -245,7 +245,7 @@ Encoder_ApplySystemModeSettings:
 	ret	z
 	ld	a, (49122:16)
 	and	a, 15
-	ld	(36414:16), a
+	ld	(ENCODER_BREATH_MODE:16), a
 	ret
 Encoder_ConfigureVolumeMode:
 	ld	a, (49123:16)
@@ -253,7 +253,7 @@ Encoder_ConfigureVolumeMode:
 	ret	z
 	ld	a, (49122:16)
 	and	a, 255
-	ld	(36416:16), a
+	ld	(ENCODER_VOLUME_MODE:16), a
 	ret
 Encoder_ConfigureRangeLimit:
 	; Disassembled from the committed romslice (no source of any kind existed):
@@ -267,5 +267,5 @@ Encoder_ConfigureRangeLimit:
 	ret	z
 	ld	a, (49122:16)
 	res	7, a
-	ld	(36418:16), a
+	ld	(ENCODER_RANGE_LIMIT:16), a
 	ret

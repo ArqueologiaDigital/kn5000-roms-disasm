@@ -10843,7 +10843,7 @@ Rhythm_QueuePartChangeEvent:
 	ret
 Seq_ReadTempoLookup:
 	xor	xhl, xhl
-	ld	wa, (1033:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	ld	l, a
 	add	xhl, Seq_TempoByteMap
 	ld	a, (xhl)

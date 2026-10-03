@@ -1379,7 +1379,7 @@ SeqOut_WriteTimedBytes:
 	push xiz
 	ld iz, (xsp + 8)
 	ei 6
-	cp (0xb7e0:16), 0; zero means MIDI
+	cp (COM_SELECT:16), 0; zero means MIDI
 	jr nz, SeqOut_WriteTimedBytes_CompIface
 	call SeqBuf_MidiOut_GetTimingValue
 	cp hl, iz
@@ -1433,7 +1433,7 @@ MidiSeq_ReceiveAndForward:
 	pushw iz
 	ldw iz, 0xffff
 	ei 6
-	cp (0xb7e0:16), 0; zero means MIDI
+	cp (COM_SELECT:16), 0; zero means MIDI
 	jr nz, MidiSeq_ReceiveAndForward_CompIface
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
@@ -1481,7 +1481,7 @@ MidiSeq_SendMultiByteWithTiming:
 	dec 2, xsp
 	pushw iz
 	ei 6
-	cp (0xb7e0:16), 0; zero means MIDI
+	cp (COM_SELECT:16), 0; zero means MIDI
 	jr nz, MidiSeq_SendMultiByte_CompIface
 	call SeqMain_GetTimingValue
 	ld (xsp + 2), hl
@@ -1692,7 +1692,7 @@ MIDI_BroadcastCC_CommLoop:
 	ret
 
 CompIface_SendActiveSensing:
-	ld a, (0xb7e0:16)
+	ld a, (COM_SELECT:16)
 	cp	a, 0:i3	; MIDI
 	ret z
 	cp	a, 3:i3	;  PC2
@@ -1739,7 +1739,7 @@ MidiOut_RealtimeDispatch_Data:
 MidiOut_SerializeAndSend:
 	pushw iz
 	ld iz, 0:i3
-	cp (0xb7e0:16), 0; zero means MIDI
+	cp (COM_SELECT:16), 0; zero means MIDI
 	jrl z, MidiOut_SerializeAndSend_Exit
 
 MidiOut_SerializeRealtimeLoop:
@@ -1837,7 +1837,7 @@ MidiThru_Enable:
 	ret
 
 GET_COMPUTER_INTERFACE_SELECTION:
-	ld l, (0xb7e0:16)
+	ld l, (COM_SELECT:16)
 	ret
 
 CompIface_ProcessInput:
@@ -1909,7 +1909,7 @@ CompIface_PostProcess:
 	call AccompSeq_StopSequence
 	bit 6, (0xc1f0:16)
 	ret z
-	ld wa, (1033:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
 	sub wa, (0xc1ea:16)
 	cp wa, (0xc1fc:16)
 	ret ule
@@ -1923,7 +1923,7 @@ CompIface_PostProcess:
 	ret
 
 CompIface_RampControl:
-	ld wa, (1033:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
 	ld bc, wa
 	sub bc, (0xc1ea:16)
 	bit 0, (0xc1f0:16)

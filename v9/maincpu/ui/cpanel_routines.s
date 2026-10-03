@@ -85,11 +85,11 @@ CPanel_InitHardware:
 
 	ld a, 0x3:opc	; PF2=SCK0 Disabled, PF0=TxD0 and PF1=RXD0 (MIDI)
 	and a, 0xaf	; PF6=SCK1 Disabled, PF4=TxD1 and PF5=RXD1 (Control Panel)
-	ld (0x8d8f:16), a
+	ld (PFFC_VALUE:16), a
 	st_dd8b A, 0x3f
 	ld a, 0x15:opc
 	and a, 0x8f
-	ld (0x8d8e:16), a
+	ld (PFCR_VALUE:16), a
 	st_dd8b A, 0x3e
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
 	ld a, 0x0:opc
@@ -116,15 +116,15 @@ CPanel_InitHardware:
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	or_sd8b_im 0xc8, 0x10
 	and_sd8b_im 0xc8, 0xf7
-	ld (0x8d91:16), 125; This looks pointless...
+	ld (CPANEL_UNUSED_1:16), 125; This looks pointless...
 
-	or (0x8d8c:16), 64	; CP_Flags_A.6 = 1
-	ld (0x8d8b:16), 0
-	and (0x8d8c:16), 252; CP_Flags_A.10 = 00
-	ldw (0x8dfd:16), 0
-	ldw (0x8dff:16), 0
-	ldw (0x8d9d:16), 0
-	ldw (0x8d9f:16), 0
+	or (CPANEL_TX_RX_FLAGS:16), 64	; CP_Flags_A.6 = 1
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	and (CPANEL_TX_RX_FLAGS:16), 252; CP_Flags_A.10 = 00
+	ldw (CPANEL_LED_READ_PTR:16), 0
+	ldw (CPANEL_LED_WRITE_PTR:16), 0
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
 
 	calr DELAY_6_TICKS
 
@@ -133,7 +133,7 @@ CPanel_InitHardware:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	ldw (0x8dfd:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 
 	calr CPanel_SendInitSequence
@@ -148,7 +148,7 @@ CPanel_SendInitSequence:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	ldw (0x8dfd:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 
 	ld a, 0x1d:opc
@@ -156,7 +156,7 @@ CPanel_SendInitSequence:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	ldw (0x8dfd:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 
@@ -165,7 +165,7 @@ CPanel_SendInitSequence:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	ldw (0x8dfd:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 
@@ -183,17 +183,17 @@ CPanel_SendInitSequence:
 	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 	ld (0xf8:8), 0x12:io	; INTA Pin
 	ld (0xe3:8), 0x05:io
-	ldw (0x8d9d:16), 0
-	ldw (0x8d9f:16), 0
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 	ret
 
 
 CPanel_InitLEDBuffer:
-	ld (0x8e01:16), wa
-	and (0x8d8f:16), 191
-	ld a, (0x8d8f:16)
+	ld (CPANEL_LED_TX_BUFFER:16), wa
+	and (PFFC_VALUE:16), 191
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	ld (0xeb:8), 0xff:io
 	ld (0xf8:8), 0x22:io
@@ -201,47 +201,47 @@ CPanel_InitLEDBuffer:
 	ld (0xe3:8), 0x07:io
 	ld (0xf8:8), 0x12:io
 	and_sd8b_im 0x3c, 0xbf
-	or (0x8d8e:16), 64
-	ld a, (0x8d8e:16)
+	or (PFCR_VALUE:16), 64
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	and (0x8d8e:16), 191
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 191
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	or (0x8d8f:16), 80
-	ld a, (0x8d8f:16)
+	or (PFFC_VALUE:16), 80
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
-	or (0x8d8e:16), 80
-	ld a, (0x8d8e:16)
+	or (PFCR_VALUE:16), 80
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	and_sd8b_im 0xd5, 0xfe
 	ld (0xeb:8), 0xff:io
 	ld (0xf8:8), 0x22:io
 	ld (0xf8:8), 0x23:io
-	ld xiy, 0x8e01
-	add iy, (0x8dfd:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	incw 1, (0x8dfd:16)
+	incw 1, (CPANEL_LED_READ_PTR:16)
 	st_dd8b A, 0xd4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	ld xiy, 0x8e01
-	add iy, (0x8dfd:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	incw 1, (0x8dfd:16)
+	incw 1, (CPANEL_LED_READ_PTR:16)
 	st_dd8b A, 0xd4
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	or_sd8b_im 0xd5, 0x01
 	and_sd8b_im 0xd5, 0xfd
-	and (0x8d8e:16), 175
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 175
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
-	and (0x8d8f:16), 175
-	ld a, (0x8d8f:16)
+	and (PFFC_VALUE:16), 175
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	ret
 
@@ -332,36 +332,36 @@ Delay3000L_Done:
 
 
 DELAY_2_TICKS:	; FC4124 - Wait for 2 system timer ticks
-	ld wa, (1033:16)
-	ld (0x8d9b:16), wa
+	ld wa, (SYSTEM_TIMESTAMP:16)
+	ld (TIMESTAMP_FOR_DELAY:16), wa
 
 DELAY_2_TICKS__loop:
-	ld wa, (1033:16)
-	sub wa, (0x8d9b:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
+	sub wa, (TIMESTAMP_FOR_DELAY:16)
 	cp wa, 2:i3
 	jr lt, DELAY_2_TICKS__loop
 	ret
 
 
 DELAY_6_TICKS:
-	ld wa, (1033:16)
-	ld (0x8d9b:16), wa
+	ld wa, (SYSTEM_TIMESTAMP:16)
+	ld (TIMESTAMP_FOR_DELAY:16), wa
 
 Delay6T_Loop:
-	ld wa, (1033:16)
-	sub wa, (0x8d9b:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
+	sub wa, (TIMESTAMP_FOR_DELAY:16)
 	cp wa, 6:i3
 	jr lt, Delay6T_Loop
 	ret
 
 
 DELAY_51_TICKS:
-	ld wa, (1033:16)
-	ld (0x8d9b:16), wa
+	ld wa, (SYSTEM_TIMESTAMP:16)
+	ld (TIMESTAMP_FOR_DELAY:16), wa
 
 Delay51T_Loop:
-	ld wa, (1033:16)
-	sub wa, (0x8d9b:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
+	sub wa, (TIMESTAMP_FOR_DELAY:16)
 	cp wa, 0x33
 	jr lt, Delay51T_Loop
 	ret
@@ -420,40 +420,40 @@ CPanel_CheckSpecialCombos_Return:
 
 
 CPanel_PanelDetection:
-	ld (0x8d93:16), 0
+	ld (CPANEL_PANEL_DETECT_FLAGS:16), 0
 	calr CPanel_WaitTXReady
 	ei 6
-	ldw (0x8d9d:16), 0
-	ldw (0x8d9f:16), 0
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 	ld a, 0x20:opc	; my guess: 20 = 001 00000 where 001 = left-panel mcu
 	ld w, 0x0:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpw (0x8d9f:16), 0
+	cpw (CPANEL_RX_WRITE_PTR:16), 0
 	jr z, PanelDet_ProbeRight
-	or (0x8d93:16), 1	; my guess: CP_Flags_C.0
+	or (CPANEL_PANEL_DETECT_FLAGS:16), 1	; my guess: CP_Flags_C.0
 					  ; = Got response from left-panel MCU
 
 PanelDet_ProbeRight:
 	calr CPanel_WaitTXReady
 	ei 6
-	ldw (0x8d9d:16), 0
-	ldw (0x8d9f:16), 0
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 	ld a, 0xe0:opc	; my guess: E0 = 111 00000 where 111 = right-panel mcu
 	ld w, 0x0:opc
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpw (0x8d9f:16), 0
+	cpw (CPANEL_RX_WRITE_PTR:16), 0
 	jr z, PanelDet_Return
-	or (0x8d93:16), 8	; my guess: CP_Flags_C.4
+	or (CPANEL_PANEL_DETECT_FLAGS:16), 8	; my guess: CP_Flags_C.4
 					 ; = Got response from right-panel MCU
 
 PanelDet_Return:
-	ld a, (0x8d93:16)
+	ld a, (CPANEL_PANEL_DETECT_FLAGS:16)
 	ret
 
 
@@ -464,9 +464,9 @@ CPanel_ReadAllButtons:
 	ldw (xhl - 2), 0x80
 
 	ei 6
-	ld wa, (0x8d9d:16)
-	ld (0x8d9f:16), wa
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	ld wa, (CPANEL_RX_READ_PTR:16)
+	ld (CPANEL_RX_WRITE_PTR:16), wa
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 
 	call CPanel_WaitTXReady
@@ -508,9 +508,9 @@ CPanel_PollStartup:
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 	ei 6
-	ldw (0x8d9d:16), 0
-	ldw (0x8d9f:16), 0
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 
 CPanel_ButtonPollLoop:
@@ -540,11 +540,11 @@ CPanel_EncoderCheck:
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 	ei 6
-	ldw (0x8dfd:16), 0
-	ldw (0x8dff:16), 0
-	ldw (0x8d9d:16), 0
-	ldw (0x8d9f:16), 0
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	ldw (CPANEL_LED_READ_PTR:16), 0
+	ldw (CPANEL_LED_WRITE_PTR:16), 0
+	ldw (CPANEL_RX_READ_PTR:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 	ret
 
@@ -556,9 +556,9 @@ CPanel_InitButtonState:	; do that
 	ldw (xhl - 2), 0x80
 
 	ei 6
-	ld (0x8d9d:16), 0
-	ld (0x8d9f:16), 0
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	ld (CPANEL_RX_READ_PTR:16), 0
+	ld (CPANEL_RX_WRITE_PTR:16), 0
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 
 	calr CPanel_WaitTXReady
@@ -598,7 +598,7 @@ CPanel_InitButtonState:	; do that
 
 
 CPanel_WaitTXReady:
-	ld (0x8d97:16), 200; =200
+	ld (CPANEL_COUNTER_DOWN_FROM_200:16), 200; =200
 
 CPanel_WaitTXReady_Poll:
 	ei 6
@@ -606,15 +606,15 @@ CPanel_WaitTXReady_Poll:
 	jr z, CPanel_WaitTXReady_Timeout
 	bit_dd8 5, 0x38	; PE.5 = state of INTA pin == 0
 	jr nz, CPanel_WaitTXReady_Timeout
-	bit 1, (0x8d8c:16)
+	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, CPanel_WaitTXReady_Timeout
-	bit 0, (0x8d8c:16)
+	bit 0, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 	jr CPanel_WaitTXReady_BufferCheck
 
 CPanel_WaitTXReady_Timeout:
-	dec 1, (0x8d97:16)
-	cp (0x8d97:16), 0
+	dec 1, (CPANEL_COUNTER_DOWN_FROM_200:16)
+	cp (CPANEL_COUNTER_DOWN_FROM_200:16), 0
 	jr z, WaitTX_ConfigAndReturn
 	ei 0
 	calr DELAY_1500_LOOPS
@@ -623,8 +623,8 @@ CPanel_WaitTXReady_Timeout:
 CPanel_WaitTXReady_BufferCheck:
 	; Only reaches here when CP_Flags_A.10 == 00, and I think only CPanel_SM_Idle sets that value...
 
-	ld wa, (0x8dff:16)
-	cp wa, (0x8dfd:16)
+	ld wa, (CPANEL_LED_WRITE_PTR:16)
+	cp wa, (CPANEL_LED_READ_PTR:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 
 WaitTX_ConfigAndReturn:
@@ -633,29 +633,29 @@ WaitTX_ConfigAndReturn:
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	ld (0xeb:8), 0xdd:io
 	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
-	or (0x8d92:16), 128	; CP_Flags_B.7 = 1
+	or (CPANEL_PROTOCOL_FLAGS:16), 128	; CP_Flags_B.7 = 1
 	ei 0
 	ret
 
 
 CPanel_SendCommand:
 	ei 6
-	ldw (0x8dfd:16), 0
-	ldw (0x8dff:16), 0
-	ld (0x8e01:16), wa
-	addw (0x8dff:16), 2
-	or (0x8d8c:16), 2
-	and (0x8d8c:16), 254; CP_Flags_A.10 = 2
-	ld (0x8d8a:16), 4; ROUTINE_1
+	ldw (CPANEL_LED_READ_PTR:16), 0
+	ldw (CPANEL_LED_WRITE_PTR:16), 0
+	ld (CPANEL_LED_TX_BUFFER:16), wa
+	addw (CPANEL_LED_WRITE_PTR:16), 2
+	or (CPANEL_TX_RX_FLAGS:16), 2
+	and (CPANEL_TX_RX_FLAGS:16), 254; CP_Flags_A.10 = 2
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 4; ROUTINE_1
 	ld (0xd7:8), 0x28:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	and (0x8d8f:16), 191; disable CPanel serial ckl
-	ld a, (0x8d8f:16)
+	and (PFFC_VALUE:16), 191; disable CPanel serial ckl
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6: SCLK1 = 0
-	or (0x8d8e:16), 64
-	ld a, (0x8d8e:16)
+	or (PFCR_VALUE:16), 64
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	ld (0xe3:8), 0x07:io
 	ld (0xf8:8), 0x12:io	; INTA Pin
@@ -671,33 +671,33 @@ CPanel_SendCommand:
 
 
 INTA_HANDLER:
-	ld (0x8d98:16), 0
+	ld (CPANEL_COUNTER_UP_TO_20:16), 0
 	push xwa
-	cp (0x8d8b:16), 0
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 0
 	jr nz, INTA_HandleCountdown
 
-	and (0x8d8e:16), 159
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 159
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	or_sd8b_im 0xd5, 0x01	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
 	and_sd8b_im 0xd5, 0xfd	; SCLKS (bit 1) = 0: Data transmit/receive at SCLK1 rising edge.
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0x0d:io
 	or_sd8b_im 0xd6, 0x20	; parity addition: enable
-	ld (0x8d8a:16), 32;		ROUTINE_7
-	or (0x8d8c:16), 1	; CP_Flags_A.0 = 1
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 32;		ROUTINE_7
+	or (CPANEL_TX_RX_FLAGS:16), 1	; CP_Flags_A.0 = 1
 	jr INTA_HANDLER_END
 
 INTA_HandleCountdown:
-	cpw (0x8d9f:16), 0
+	cpw (CPANEL_RX_WRITE_PTR:16), 0
 	jr nz, INTA_DecrementRXCount
 
-	ldw (0x8d9f:16), 92
+	ldw (CPANEL_RX_WRITE_PTR:16), 92
 
 INTA_DecrementRXCount:
-	decw 1, (0x8d9f:16)
-	or (0x8d92:16), 64	; CP_Flags_B.6 = 1  ; UNUSED
-	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
+	decw 1, (CPANEL_RX_WRITE_PTR:16)
+	or (CPANEL_PROTOCOL_FLAGS:16), 64	; CP_Flags_B.6 = 1  ; UNUSED
+	and (CPANEL_TX_RX_FLAGS:16), 253; CP_Flags_A.1 = 0
 
 INTA_HANDLER_END:
 	pop xwa
@@ -728,7 +728,7 @@ INTTX1_HANDLER:
 	push xwa
 	push xhl
 	push xiy
-	ld l, (0x8d8a:16)
+	ld l, (CPANEL_STATE_MACHINE_INDEX:16)
 	xor h, h
 	extz xhl
 	add xhl, CPANEL_STATE_MACHINE_TABLE
@@ -750,7 +750,7 @@ INTRX1_HANDLER:
 	push xwa
 	push xhl
 	push xiy
-	ld l, (0x8d8a:16)
+	ld l, (CPANEL_STATE_MACHINE_INDEX:16)
 	xor h, h
 	extz xhl
 	add xhl, CPANEL_STATE_MACHINE_TABLE
@@ -768,8 +768,8 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 
 
 CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the control panel... (?)
-	and (0x8d8e:16), 191
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 191
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
@@ -778,7 +778,7 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	inc 4, (0x8d8a:16); next = ROUTINE_2
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next = ROUTINE_2
 	mul a, 0x1
 	mul a, 0x1
 	bit_dd8 6, 0x3c	; PF.6 = state of SCLK1 pin
@@ -786,25 +786,25 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 
 
 						; If we receive a SCLK1 LOW, does it mean CPANEL is trying to spreak and we revert to IDLE state (ROUTINE_0) ?
-	ld (0x8d8b:16), 0
-	ld (0x8d8a:16), 0; ROUTINE_0
-	or (0x8d92:16), 2	; CP_Flags_B.1 = 1  ; UNUSED
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 0; ROUTINE_0
+	or (CPANEL_PROTOCOL_FLAGS:16), 2	; CP_Flags_B.1 = 1  ; UNUSED
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xff:io
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
+	and (CPANEL_TX_RX_FLAGS:16), 253; CP_Flags_A.1 = 0
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_TXDelay1:
 	calr DELAY_10_LOOPS
-	and (0x8d8e:16), 175
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 175
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
-	and (0x8d8f:16), 175; disable CPanel serial clk and TX pin.
-	ld a, (0x8d8f:16)
+	and (PFFC_VALUE:16), 175; disable CPanel serial clk and TX pin.
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
@@ -812,17 +812,17 @@ CPanel_SM_TXDelay1:
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	inc 4, (0x8d8a:16); next routine
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_TXDelay2:
 	calr DELAY_10_LOOPS
-	and (0x8d8e:16), 175
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 175
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
-	and (0x8d8f:16), 175; disable CPanel serial clk and TX pin.
-	ld a, (0x8d8f:16)
+	and (PFFC_VALUE:16), 175; disable CPanel serial clk and TX pin.
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
@@ -832,7 +832,7 @@ CPanel_SM_TXDelay2:
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
 	and_sd8b_im 0xd5, 0xfe
 	st_dd8b A, 0xd4
-	inc 4, (0x8d8a:16); next routine
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -840,36 +840,36 @@ CPanel_SM_SendByte1:
 	ld (0xd7:8), 0x14:io	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
-	or (0x8d8f:16), 80	; Enable CPanel serial clk and TX pin.
-	ld a, (0x8d8f:16)
+	or (PFFC_VALUE:16), 80	; Enable CPanel serial clk and TX pin.
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
-	or (0x8d8e:16), 80
-	ld a, (0x8d8e:16)
+	or (PFCR_VALUE:16), 80
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	and_sd8b_im 0xd5, 0xfe
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
-	ld xiy, 0x8e01
-	add iy, (0x8dfd:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	st_dd8b A, 0xd4
-	incw 1, (0x8dfd:16)
-	cpw (0x8dfd:16), 60
+	incw 1, (CPANEL_LED_READ_PTR:16)
+	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByte1_InspectByte
-	ldw (0x8dfd:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 
 SendByte1_InspectByte:
-	ld (0x8d8b:16), 2
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 2
 	ld a, (xiy)
 	and a, 0x3f
 	cp a, 0x30
 	jr c, SendByte1_AdvanceState
 	and a, 0xf
 	add a, 0x3
-	ld (0x8d8b:16), a
+	ld (CPANEL_PACKET_BYTE_COUNT:16), a
 
 SendByte1_AdvanceState:
-	inc 4, (0x8d8a:16); next = ROUTINE_3
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next = ROUTINE_3
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
@@ -877,52 +877,52 @@ CPanel_SM_SendByteN:
 	ld (0xd7:8), 0x14:io	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
-	or (0x8d8f:16), 80	; Enable CPanel serial clk and TX pin.
-	ld a, (0x8d8f:16)
+	or (PFFC_VALUE:16), 80	; Enable CPanel serial clk and TX pin.
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
-	or (0x8d8e:16), 80
-	ld a, (0x8d8e:16)
+	or (PFCR_VALUE:16), 80
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	and_sd8b_im 0xd5, 0xfe
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
-	ld xiy, 0x8e01
-	add iy, (0x8dfd:16)
+	ld xiy, CPANEL_LED_TX_BUFFER
+	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	st_dd8b A, 0xd4
-	incw 1, (0x8dfd:16)
-	cpw (0x8dfd:16), 60
+	incw 1, (CPANEL_LED_READ_PTR:16)
+	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByteN_CheckDone
-	ldw (0x8dfd:16), 0
+	ldw (CPANEL_LED_READ_PTR:16), 0
 
 SendByteN_CheckDone:
-	dec 1, (0x8d8b:16)
-	cp (0x8d8b:16), 1
+	dec 1, (CPANEL_PACKET_BYTE_COUNT:16)
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 1
 	jr z, SendByteN_AdvanceState
-	cp (0x8d8b:16), 0
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 0
 	jr z, SendByteN_AdvanceState
-	dec 4, (0x8d8a:16)	; previous routine
+	dec 4, (CPANEL_STATE_MACHINE_INDEX:16)	; previous routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 SendByteN_AdvanceState:
-	inc 4, (0x8d8a:16); next routine
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_TXComplete:
-	ld (0x8d8b:16), 0
-	ld (0x8d8a:16), 0; ROUTINE_0
-	ld wa, (0x8dff:16)
-	sub wa, (0x8dfd:16)
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 0; ROUTINE_0
+	ld wa, (CPANEL_LED_WRITE_PTR:16)
+	sub wa, (CPANEL_LED_READ_PTR:16)
 	cp wa, 2:i3
 	jr c, TXComplete_BufferEmpty
-	ld (0x8d8a:16), 4; ROUTINE_1
-	and (0x8d8f:16), 191; disable CPanel serial clk
-	ld a, (0x8d8f:16)
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 4; ROUTINE_1
+	and (PFFC_VALUE:16), 191; disable CPanel serial clk
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
-	or (0x8d8e:16), 64
-	ld a, (0x8d8e:16)
+	or (PFCR_VALUE:16), 64
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	ld (0xd7:8), 0x28:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
@@ -931,39 +931,39 @@ CPanel_SM_TXComplete:
 	and_sd8b_im 0xd5, 0xfe
 	ld (0xeb:8), 0xd0:io	; INTTX1: M=5
 	st_dd8b A, 0xd4
-	or (0x8d8c:16), 2	; CP_Flags_A.1 = 1
+	or (CPANEL_TX_RX_FLAGS:16), 2	; CP_Flags_A.1 = 1
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 TXComplete_BufferEmpty:
-	and (0x8d8e:16), 191
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 191
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
-	and (0x8d8f:16), 191; disable CPanel serial clk
-	ld a, (0x8d8f:16)
+	and (PFFC_VALUE:16), 191; disable CPanel serial clk
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0xff:io	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
 	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
+	and (CPANEL_TX_RX_FLAGS:16), 253; CP_Flags_A.1 = 0
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_RXByte1:
-	and (0x8d8e:16), 159
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 159
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	or_sd8b_im 0xd5, 0x01
 	and_sd8b_im 0xd5, 0xfd
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0x0d:io
 	ld_sd8b A, 0xd4
-	ld xiy, 0x8da1
-	add iy, (0x8d9f:16)
+	ld xiy, CPANEL_RX_RING_BUFFER
+	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
-	ld hl, (0x8d9f:16)
-	sub hl, (0x8d9d:16)
+	ld hl, (CPANEL_RX_WRITE_PTR:16)
+	sub hl, (CPANEL_RX_READ_PTR:16)
 	jr nc, RXByte1_ForwardDist
 	neg hl
 	ld iy, hl
@@ -976,54 +976,54 @@ RXByte1_ForwardDist:
 RXByte1_CheckThreshold:
 	cp iy, 3:i3
 	jr nc, RXByte1_AdvanceWritePtr
-	or (0x8d92:16), 1	; CP_Flags_B.0 = 1
+	or (CPANEL_PROTOCOL_FLAGS:16), 1	; CP_Flags_B.0 = 1
 	jr RXByte1_InspectByte
 
 RXByte1_AdvanceWritePtr:
-	and (0x8d92:16), 254; CP_Flags_B.0 = 0
-	incw 1, (0x8d9f:16)
-	cpw (0x8d9f:16), 92
+	and (CPANEL_PROTOCOL_FLAGS:16), 254; CP_Flags_B.0 = 0
+	incw 1, (CPANEL_RX_WRITE_PTR:16)
+	cpw (CPANEL_RX_WRITE_PTR:16), 92
 	jr c, RXByte1_InspectByte
-	ldw (0x8d9f:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
 
 RXByte1_InspectByte:
-	ld (0x8d8b:16), 2
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 2
 	and a, 0x3f
 	cp a, 0x30
 	jr c, RXByte1_AdvanceState
 	and a, 0xf
 	add a, 0x3
-	ld (0x8d8b:16), a
+	ld (CPANEL_PACKET_BYTE_COUNT:16), a
 
 RXByte1_AdvanceState:
-	inc 4, (0x8d8a:16); next routine
+	inc 4, (CPANEL_STATE_MACHINE_INDEX:16); next routine
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_RXByteN:
 	ld_sd8b A, 0xd4
-	ld xiy, 0x8da1
-	add iy, (0x8d9f:16)
+	ld xiy, CPANEL_RX_RING_BUFFER
+	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
-	bit 0, (0x8d92:16); CP_Flags_B.0
+	bit 0, (CPANEL_PROTOCOL_FLAGS:16); CP_Flags_B.0
 	jr nz, RXByteN_CheckDone
-	incw 1, (0x8d9f:16)
-	cpw (0x8d9f:16), 92
+	incw 1, (CPANEL_RX_WRITE_PTR:16)
+	cpw (CPANEL_RX_WRITE_PTR:16), 92
 	jr c, RXByteN_CheckDone
-	ldw (0x8d9f:16), 0
+	ldw (CPANEL_RX_WRITE_PTR:16), 0
 
 RXByteN_CheckDone:
-	dec 1, (0x8d8b:16)
-	cp (0x8d8b:16), 1
+	dec 1, (CPANEL_PACKET_BYTE_COUNT:16)
+	cp (CPANEL_PACKET_BYTE_COUNT:16), 1
 	jr nz, RXByteN_ContinueRX
-	ld (0x8d8b:16), 0
-	and (0x8d8c:16), 254; CP_Flags_A.0 = 0
-	ld (0x8d8a:16), 0; ROUTINE_0
-	and (0x8d8e:16), 159
-	ld a, (0x8d8e:16)
+	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
+	and (CPANEL_TX_RX_FLAGS:16), 254; CP_Flags_A.0 = 0
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 0; ROUTINE_0
+	and (PFCR_VALUE:16), 159
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
-	and (0x8d8f:16), 191; disable CPanel serial clk
-	ld a, (0x8d8f:16)
+	and (PFFC_VALUE:16), 191; disable CPanel serial clk
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	ld (0xe3:8), 0x05:io
 	ld (0xeb:8), 0x0d:io
@@ -1031,8 +1031,8 @@ RXByteN_CheckDone:
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 RXByteN_ContinueRX:
-	and (0x8d8e:16), 159
-	ld a, (0x8d8e:16)
+	and (PFCR_VALUE:16), 159
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	or_sd8b_im 0xd5, 0x01
 	and_sd8b_im 0xd5, 0xfd
@@ -1042,12 +1042,12 @@ RXByteN_ContinueRX:
 
 
 CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
-	or (0x8d92:16), 128	; CP_Flags_B.7 = 1
+	or (CPANEL_PROTOCOL_FLAGS:16), 128	; CP_Flags_B.7 = 1
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
-	and (0x8d8c:16), 252; CP_Flags_A.0 = 0
+	and (CPANEL_TX_RX_FLAGS:16), 252; CP_Flags_A.0 = 0
 						; CP_Flags_A.1 = 0
-	or (0x8d92:16), 4	; CP_Flags_B.2 = 1  : UNUSED
+	or (CPANEL_PROTOCOL_FLAGS:16), 4	; CP_Flags_B.2 = 1  : UNUSED
 	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 	ld (0xeb:8), 0x0f:io
@@ -1058,12 +1058,12 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 
 
 CPanel_InterruptPoll_MainLoop:
-	inc 1, (0x8d9a:16)
-	cp (0x8d9a:16), 42; =42 ;-)
+	inc 1, (CPANEL_COUNTER_UP_TO_42:16)
+	cp (CPANEL_COUNTER_UP_TO_42:16), 42; =42 ;-)
 	jr ule, PollLoop_DispatchWork
 	ei 6
-	ld wa, (0x8dff:16)
-	sub wa, (0x8dfd:16)
+	ld wa, (CPANEL_LED_WRITE_PTR:16)
+	sub wa, (CPANEL_LED_READ_PTR:16)
 	jr nc, PollLoop_TXForwardDist
 	neg wa
 	ld hl, wa
@@ -1076,16 +1076,16 @@ PollLoop_TXForwardDist:
 PollLoop_TXCheckThreshold:
 	cp hl, 3:i3
 	jr c, PollLoop_DispatchWork
-	ld (0x8d9a:16), 0
+	ld (CPANEL_COUNTER_UP_TO_42:16), 0
 	ld w, 0xe0:opc
 	ld a, 0x13:opc
-	ld iy, (0x8dff:16)
+	ld iy, (CPANEL_LED_WRITE_PTR:16)
 	ld xde, 0x8e01
 	ld	(xde+iy), w
 	calr CPanel_IncLEDPtr
 	ld	(xde+iy), a
 	calr CPanel_IncLEDPtr
-	ld (0x8dff:16), iy
+	ld (CPANEL_LED_WRITE_PTR:16), iy
 
 
 ; 0 => 0 do_this
@@ -1095,14 +1095,14 @@ PollLoop_TXCheckThreshold:
 
 PollLoop_DispatchWork:
 	ei 0
-	ld a, (0x8d8c:16)
+	ld a, (CPANEL_TX_RX_FLAGS:16)
 	and a, 0xc0
 	cp a, 0:i3	; if (CP_Flags_A.76 == 0) {
 	jr z, PollLoop_DoLEDUpdate	; 	goto PollLoop_DoLEDUpdate; ; do this
 						; }
 
 
-	add (0x8d8c:16), 64
+	add (CPANEL_TX_RX_FLAGS:16), 64
 	cp a, 0xc0
 	jr nz, PollLoop_DoLEDUpdate	; if (CP_Flags_A.76++ == 3) {
 
@@ -1120,14 +1120,14 @@ PollLoop_CheckTXReady:
 	jr z, PollLoop_BusyRetry
 	bit_dd8 5, 0x38	; PE.5 = state of INTA pin
 	jr nz, PollLoop_BusyRetry
-	bit 1, (0x8d8c:16)
+	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, PollLoop_BusyRetry
-	bit 0, (0x8d8c:16)
+	bit 0, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, PollLoop_BusyRetry
 
 	; Only reaches here when (CPANEL_TX_RX_FLAGS), CP_Flags_A.10 == 00:
-	ld wa, (0x8dff:16)
-	sub wa, (0x8dfd:16)
+	ld wa, (CPANEL_LED_WRITE_PTR:16)
+	sub wa, (CPANEL_LED_READ_PTR:16)
 	jr nc, PollLoop_StartTX
 	neg wa
 	ex8 a, w
@@ -1137,14 +1137,14 @@ PollLoop_CheckTXReady:
 PollLoop_StartTX:
 	cp a, 2:i3
 	jr c, PollLoop_Return
-	or (0x8d8c:16), 2	; CP_Flags_A.1 = 1
-	ld (0x8d8a:16), 4; ROUTINE_1
-	and (0x8d8f:16), 191; disable CPanel serial clk
-	ld a, (0x8d8f:16)
+	or (CPANEL_TX_RX_FLAGS:16), 2	; CP_Flags_A.1 = 1
+	ld (CPANEL_STATE_MACHINE_INDEX:16), 4; ROUTINE_1
+	and (PFFC_VALUE:16), 191; disable CPanel serial clk
+	ld a, (PFFC_VALUE:16)
 	st_dd8b A, 0x3f
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
-	or (0x8d8e:16), 64
-	ld a, (0x8d8e:16)
+	or (PFCR_VALUE:16), 64
+	ld a, (PFCR_VALUE:16)
 	st_dd8b A, 0x3e
 	ld (0xd7:8), 0x28:io	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
@@ -1163,8 +1163,8 @@ PollLoop_Return:
 
 
 PollLoop_BusyRetry:
-	inc 1, (0x8d98:16)
-	cp (0x8d98:16), 20
+	inc 1, (CPANEL_COUNTER_UP_TO_20:16)
+	cp (CPANEL_COUNTER_UP_TO_20:16), 20
 	jr ule, PollLoop_Return
 
 	ei 6
@@ -1173,22 +1173,22 @@ PollLoop_BusyRetry:
 	ld (0xeb:8), 0xdd:io
 	ld (0xf8:8), 0x12:io	; INTA Pin
 	ld (0xe3:8), 0x05:io
-	or (0x8d92:16), 128	; CP_Flags_B.7 = 1
+	or (CPANEL_PROTOCOL_FLAGS:16), 128	; CP_Flags_B.7 = 1
 	jr PollLoop_Return
 
 
 
 
 CPanel_RX_ProcessWithFlag:
-	or (0x8d8c:16), 4	; CP_Flags_A.2 = 1  ; UNUSED?
+	or (CPANEL_TX_RX_FLAGS:16), 4	; CP_Flags_A.2 = 1  ; UNUSED?
 	jr CPanel_RX_DispatchLoop
 
 CPanel_RX_Process:
-	and (0x8d8c:16), 251; CP_Flags_A.2 = 0  ; UNUSED?
+	and (CPANEL_TX_RX_FLAGS:16), 251; CP_Flags_A.2 = 0  ; UNUSED?
 
 CPanel_RX_DispatchLoop:
 	ld xde, 0x8da1
-	ld iy, (0x8d9d:16)
+	ld iy, (CPANEL_RX_READ_PTR:16)
 	ld xiz, 0x200ad
 	ld ix, (xiz - 4)
 
@@ -1196,8 +1196,8 @@ CPanel_RX_ParseNext:
 	cpw (xiz - 2), 0x4
 	jrl c, CPanel_RX_Done
 
-	ld wa, (0x8d9f:16)
-	sub wa, (0x8d9d:16)
+	ld wa, (CPANEL_RX_WRITE_PTR:16)
+	sub wa, (CPANEL_RX_READ_PTR:16)
 	jr nc, CPanel_RX_PacketSizeCheck
 	neg wa
 	ex8 a, w
@@ -1235,16 +1235,16 @@ CPanel_RX_ButtonPacket:
 	calr CPanel_IncRXPtr
 	ld	(xiz+ix), w
 	calr CPanel_IncEventPtr
-	ld (0x8d94:16), w
+	ld (CPANEL_RX_PACKET_BYTE_1:16), w
 
 	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
 	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
-	ld (0x8d95:16), a
+	ld (CPANEL_RX_PACKET_BYTE_2:16), a
 
 	and w, 0x4f
-	ld xhl, 0x8e4a
+	ld xhl, STATE_OF_CPANEL_BUTTONS
 	bit 6, w
 	jr z, BtnPkt_AddOffset
 	sub w, 0x30
@@ -1261,10 +1261,10 @@ BtnPkt_XORLookup:
 	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 
-	ld (0x8d96:16), a
+	ld (CPANEL_LAST_EVENT_VALUE:16), a
 	ld (xiz - 4), ix
 	decm 3, (xiz - 2)
-	ld (0x8d9d:16), iy
+	ld (CPANEL_RX_READ_PTR:16), iy
 	jrl CPanel_RX_ParseNext
 
 CPanel_RX_EncoderPacket:
@@ -1272,27 +1272,27 @@ CPanel_RX_EncoderPacket:
 	calr CPanel_IncRXPtr
 	ld	(xiz+ix), w
 	calr CPanel_IncEventPtr
-	ld (0x8d94:16), w
+	ld (CPANEL_RX_PACKET_BYTE_1:16), w
 	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
-	ld (0x8d95:16), a
+	ld (CPANEL_RX_PACKET_BYTE_2:16), a
 	ld c, w
 	calr EncPkt_DispatchThunk
 	cp hl, 0xffff
 	jr nz, EncPkt_WriteEvent
 	calr CPanel_DecEventPtr
-	ld (0x8d9d:16), iy
+	ld (CPANEL_RX_READ_PTR:16), iy
 	jr EncPkt_ParseNext
 
 EncPkt_WriteEvent:
 	ld	(xiz+ix), l
 	calr CPanel_IncEventPtr
-	ld (0x8d96:16), l
+	ld (CPANEL_LAST_EVENT_VALUE:16), l
 	ld	(xiz+ix), 0xff
 	calr CPanel_IncEventPtr
 	ld (xiz - 4), ix
 	decm 3, (xiz - 2)
-	ld (0x8d9d:16), iy
+	ld (CPANEL_RX_READ_PTR:16), iy
 
 EncPkt_ParseNext:
 	jrl CPanel_RX_ParseNext
@@ -1353,7 +1353,7 @@ MBytePkt_LoopBody:
 	calr EncPkt_DispatchThunk
 	popw wa
 	cp hl, 0xffff
-	ld (0x8d96:16), l
+	ld (CPANEL_LAST_EVENT_VALUE:16), l
 	popw hl
 	popw bc
 	jr nz, MBytePkt_EncWriteResult
@@ -1361,11 +1361,11 @@ MBytePkt_LoopBody:
 
 MBytePkt_EncNoEvent:
 	calr CPanel_DecEventPtr
-	ld (0x8d9d:16), iy
+	ld (CPANEL_RX_READ_PTR:16), iy
 	jrl MBytePkt_LoopTail
 
 MBytePkt_EncWriteResult:
-	ld a, (0x8d96:16)
+	ld a, (CPANEL_LAST_EVENT_VALUE:16)
 MBytePkt_WriteEventByte:
 
 c:
@@ -1376,7 +1376,7 @@ c:
 	mrib2 0x83, 0x31
 	xor a, (xhl)
 	inc 1, hl
-	bit 4, (0x8d8c:16); This is never set ?!
+	bit 4, (CPANEL_TX_RX_FLAGS:16); This is never set ?!
 	jr z, MBytePkt_CommitAndContinue
 	cp a, 0:i3
 	jr nz, MBytePkt_CommitAndContinue
@@ -1398,7 +1398,7 @@ MBytePkt_CommitAndContinue:
 	decm 1, (xiz - 2)
 
 MBytePkt_CommitRXPtr:
-	ld (0x8d9d:16), iy
+	ld (CPANEL_RX_READ_PTR:16), iy
 
 MBytePkt_LoopTail:
 	inc 1, w
@@ -1412,8 +1412,8 @@ CPanel_RX_SyncPacket:
 	calr CPanel_IncRXPtr
 	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
-	ld (0x8d9d:16), iy
-	or (0x8d92:16), 8	; CP_Flags_B.3 = 1  ; UNUSED
+	ld (CPANEL_RX_READ_PTR:16), iy
+	or (CPANEL_PROTOCOL_FLAGS:16), 8	; CP_Flags_B.3 = 1  ; UNUSED
 	jrl CPanel_RX_ParseNext
 
 CPanel_RX_Done:
@@ -1421,7 +1421,7 @@ CPanel_RX_Done:
 
 
 CPanel_UpdateLEDs:	; do this
-	ld iy, (0x8dff:16)
+	ld iy, (CPANEL_LED_WRITE_PTR:16)
 	ld xde, 0x8e01
 	ld xiz, 0x20137
 	ld ix, (xiz - 8)
@@ -1434,8 +1434,8 @@ CPanel_UpdateLEDs__check_next:
 	jrl nz, LEDs_Return
 
 LEDs_CheckTXSpace:
-	ld wa, (0x8dff:16)
-	sub wa, (0x8dfd:16)
+	ld wa, (CPANEL_LED_WRITE_PTR:16)
+	sub wa, (CPANEL_LED_READ_PTR:16)
 	jr nc, LEDs_TXForwardDist
 	neg wa
 	ld hl, wa
@@ -1483,7 +1483,7 @@ CPanel_LED_HandlePacket2:	; FC4B95 -- LED handler for packet types 0, 1, 2
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 	incw 1, (xiz - 2)		; increment pending LED byte count
 	incw 1, (xiz - 2)		; increment pending LED byte count (+2 total)
-	ld (0x8dff:16), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
+	ld (CPANEL_LED_WRITE_PTR:16), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
 	jrl CPanel_UpdateLEDs__check_next	; check for more events
 
 CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
@@ -1508,7 +1508,7 @@ CPanel_LED_HandlePacketN__loop:	; FC4BE4 -- loop: transfer remaining bytes
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 	incw 1, (xiz - 2)		; increment pending LED byte count
-	ld (0x8dff:16), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
+	ld (CPANEL_LED_WRITE_PTR:16), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
 	dec 1, b			; decrement loop counter
 	cp b, 0:i3			; check if counter reached zero
 	jr nz, CPanel_LED_HandlePacketN__loop	; continue loop if bytes remain

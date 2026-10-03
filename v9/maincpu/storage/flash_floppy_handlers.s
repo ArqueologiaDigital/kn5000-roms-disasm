@@ -5369,7 +5369,7 @@ LoadRegion5_AltPath_Helper:
 
 FileHdr_ValidateSignature:
 	calr FileHdr_InitBasePointer
-	ld xwa, (3226:16)
+	ld xwa, (MSP_SETTINGS:16)
 	ld l, (xwa)
 	ld e, (xwa + 1)
 	ld c, (xwa + 2)
@@ -5412,11 +5412,11 @@ FileHdr_CopyDataLoop:
 
 FileHdr_InitBasePointer:
 	lda xwa, (0x1e8800:24)
-	ld (3226:16), xwa
+	ld (MSP_SETTINGS:16), xwa
 	ret
 
 ToneData_SetupCopyPointers:
-	ld xbc, (3226:16)
+	ld xbc, (MSP_SETTINGS:16)
 	lda xbc, (xbc+256)
 	ld xwa, xbc
 	lda xbc, (xbc+512)
@@ -5428,7 +5428,7 @@ ToneData_ZeroFillLoop:
 
 	lda xwa, (Composer_SettingsBlock:24)
 	ld xbc, xwa
-	ld xde, (3226:16)
+	ld xde, (MSP_SETTINGS:16)
 	lda xhl, (xwa + 6)
 
 ToneData_CopyBlock1_Loop:
@@ -5438,7 +5438,7 @@ ToneData_CopyBlock1_Loop:
 	jr c, ToneData_CopyBlock1_Loop
 	lda xhl, (ToneData_ZeroFillLoop_Data:24)
 	ld xbc, xhl
-	ld xwa, (3226:16)
+	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa + 16)
 	lda xhl, (xhl + 16)
 
@@ -5449,7 +5449,7 @@ ToneData_CopyBlock2_Loop:
 	jr c, ToneData_CopyBlock2_Loop
 	lda xhl, (MSP_Default_PartBankMap:24)
 	ld xbc, xhl
-	ld xwa, (3226:16)
+	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa+512)
 	lda xhl, (xhl + 64)
 
@@ -5460,7 +5460,7 @@ ToneData_CopyBlock3_Loop:
 	jr c, ToneData_CopyBlock3_Loop
 	lda xhl, (ToneData_ZeroFillLoop_Data_2:24)
 	ld xbc, xhl
-	ld xwa, (3226:16)
+	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa+576)
 	lda xhl, (xhl + 64)
 
@@ -5471,7 +5471,7 @@ ToneData_CopyBlock4_Loop:
 	jr c, ToneData_CopyBlock4_Loop
 	lda xhl, (ToneData_ZeroFillLoop_Data_3:24)
 	ld xbc, xhl
-	ld xwa, (3226:16)
+	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa+640)
 	lda xhl, (xhl + 64)
 
@@ -5480,7 +5480,7 @@ ToneData_CopyBlock5_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock5_Loop
-	ld xwa, (3226:16)
+	ld xwa, (MSP_SETTINGS:16)
 	lda xbc, (xwa + 32)
 	ld xde, 0:i3
 
@@ -5489,7 +5489,7 @@ ToneData_ScanRegionLoop:
 	jr nz, ToneData_AdvanceRegion
 	lda xiy, (ToneData_ScanRegionLoop_Data:24)
 	ld xhl, xiy
-	ld xwa, (3226:16)
+	ld xwa, (MSP_SETTINGS:16)
 	lda xwa, (xwa + 32)
 	ld xix, xde
 	add xix, xwa

@@ -393,7 +393,7 @@ INTT1_HANDLER:
 	push xhl
 	xor xhl, xhl
 	inc 1, xhl
-	add (1033:16), xhl
+	add (SYSTEM_TIMESTAMP:16), xhl
 	incw 1, (1037:16)
 	push	sr
 	ei 6
@@ -3314,10 +3314,10 @@ TaskSched_TCBTemplate:
 
 TaskSched_DelayTicks:
 	srl wa, 1
-	add wa, (1033:16)
+	add wa, (SYSTEM_TIMESTAMP:16)
 
 TaskSched_DelayTicks_SpinLoop:
-	cp wa, (1033:16)
+	cp wa, (SYSTEM_TIMESTAMP:16)
 	jr gt, TaskSched_DelayTicks_SpinLoop
 	ret
 
@@ -6063,7 +6063,7 @@ INTTC0_HANDLER_Join2:
 	set_dd8	1, 104
 	inc	1, (58050:16)
 	ret
-	ld	de, (1033:16)
+	ld	de, (SYSTEM_TIMESTAMP:16)
 INTTC0_HANDLER_Entry:
 	bit	7, (0x620:16)
 	jr	nz, INTTC0_HANDLER_Skip4
@@ -6071,7 +6071,7 @@ INTTC0_HANDLER_Entry:
 	ret
 INTTC0_HANDLER_Skip4:
 	ld	wa, de
-	ld	bc, (1033:16)
+	ld	bc, (SYSTEM_TIMESTAMP:16)
 	sub	bc, wa
 	cp	bc, 250
 	jr	le, INTTC0_HANDLER_Entry
@@ -7785,14 +7785,14 @@ Flash_BurnWithProgress:
 	pushw iz
 	ldw iz, 0x32
 	ld xwa, 0:i3
-	ld (1033:16), xwa
+	ld (SYSTEM_TIMESTAMP:16), xwa
 	call HDAE5000_Flash_Verify
 	call HDAE5000_Status_Check
 	cp hl, 0xffff
 	jr nz, FlashBurn_Done
 
 FlashBurn_ProgressLoop:
-	ld xwa, (1033:16)
+	ld xwa, (SYSTEM_TIMESTAMP:16)
 	cp xwa, 0x1f4
 	jr ule, FlashBurn_CheckDone
 	inc 8, iz
@@ -7801,7 +7801,7 @@ FlashBurn_ProgressLoop:
 	ld de, 5:i3
 	call VRAM_FillRect
 	ld xwa, 0:i3
-	ld (1033:16), xwa
+	ld (SYSTEM_TIMESTAMP:16), xwa
 
 FlashBurn_CheckDone:
 	call HDAE5000_Status_Check

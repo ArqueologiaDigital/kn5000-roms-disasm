@@ -8476,12 +8476,12 @@ AccReplay_Restart_Return:
 AccTiming_AlignTo8Tick:
 	pushw hl
 	ldw bc, 0x8
-	ld wa, (1033:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
 	add wa, bc
 
 AccTiming_Align_Compute:
 	ld hl, wa
-	sub hl, (1033:16)
+	sub hl, (SYSTEM_TIMESTAMP:16)
 	cp hl, 0:i3
 	jr le, AccTiming_Align_Return
 	jr AccTiming_Align_Compute
@@ -9999,14 +9999,14 @@ AccProcess_InlinedCode:
 	bit	0, (0x33f4:16)
 	; v10 does not spell this byte either
 	jr	nz, AccProcess_Entry_Skip5
-	ld	wa, (0x409:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	ld	(0x33f2:16), wa
 	; v10 does not spell this byte either
 	or	(0x33f4:16), 1
 	; v10 does not spell this byte either
 	jr	AccProcess_Entry_Return
 AccProcess_Entry_Skip5:
-	ld	wa, (1033:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	ld	bc, (13298:16)
 	cp	wa, bc
 	jr	c, AccProcess_Entry_Skip6
@@ -10037,7 +10037,7 @@ AccProcess_Entry_Skip2:
 	ld	hl, (13302:16)
 	ld	(13304:16), hl
 	ld	(13302:16), wa
-	ld	wa, (1033:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	ld	(13298:16), wa
 AccProcess_Entry_Return:
 	ret
@@ -10066,7 +10066,7 @@ AccProcess_Entry_Join:
 AccProcess_TimerCompare:
 	bit	0, (0x33f4:16)
 	jr	z, AccProcess_Timer_Ret
-	ld	wa, (0x409:16)
+	ld	wa, (SYSTEM_TIMESTAMP:16)
 	ld	bc, (0x33f2:16)
 	cp	wa, bc
 	jr	c, AccProcess_Timer_WrapCase

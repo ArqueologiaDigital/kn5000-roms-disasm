@@ -901,7 +901,7 @@ READ_COM_SELECT_SWITCH:
 	srl a, 4
 	ld xix, MidiSerial_OffsetTable
 	ld	a, (xix+a)
-	ld (0xb7e0:16), a
+	ld (COM_SELECT:16), a
 	ret
 
 ; Input: Active-low "COM_SELECT"
@@ -972,7 +972,7 @@ MIDI_SC0_TX_DISPATCH:
 	push xix
 	push xiy
 	push xiz
-	cp (0xb7e0:16), 0; 000h means MIDI
+	cp (COM_SELECT:16), 0; 000h means MIDI
 	jr nz, SC0TxDisp_NonMidiPath
 	calr MIDI_SC0_ENABLE_TX
 	jr SC0TxDisp_RestoreAndReturn

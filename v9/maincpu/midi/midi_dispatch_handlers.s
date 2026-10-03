@@ -2109,7 +2109,7 @@ Periodic_TimestampCheck:
 Periodic_TimestampCompare:
 	pushw wa
 	pushw de
-	ld wa, (1033:16)
+	ld wa, (SYSTEM_TIMESTAMP:16)
 	ld de, wa
 	sub wa, (0xb7e3:16)
 	cp wa, 0x96
@@ -8260,7 +8260,7 @@ MidiChan_ParseVoiceData:
 	push xiz
 	ldib_erp 0xfb, 0
 	res 5, (0xbd18:16)
-	ld iz, (1033:16)
+	ld iz, (SYSTEM_TIMESTAMP:16)
 	jrl MidiChan_CheckSysExFlag
 
 MidiChan_ReadNextByte:
@@ -8272,7 +8272,7 @@ MidiChan_ReadNextByte:
 	call SeqBuf2_ReadByte
 	cp hl, 0xffff
 	jr z, MIDI_ProcessChannelPair
-	ld iz, (1033:16)
+	ld iz, (SYSTEM_TIMESTAMP:16)
 	ld c, l
 	extz bc
 	ld xwa, (0xbcac:16)
@@ -10361,7 +10361,7 @@ MidiChan_CheckTimeout:
 	ldw de, 0x3e8
 
 MidiChan_ApplyTimeout:
-	ld bc, (1033:16)
+	ld bc, (SYSTEM_TIMESTAMP:16)
 	sub bc, wa
 	cp bc, de
 	ret le
@@ -10384,10 +10384,10 @@ MidiChan_TimerDispatch_Data:
 	pop	xde
 	ret
 MidiStream_PrevBankCheck_Helper:
-	ld	de, (1033:16)
+	ld	de, (SYSTEM_TIMESTAMP:16)
 MidiChan_TimerDispatch_Data_Code_Loop:
 	ld	wa, de
-	ld	bc, (1033:16)
+	ld	bc, (SYSTEM_TIMESTAMP:16)
 	sub	bc, wa
 	cp	bc, 25
 	jr	lt, MidiChan_TimerDispatch_Data_Code_Loop
@@ -13204,7 +13204,7 @@ SwbtWr_StubRet_C:
 SwbtWr_WriteBankSelect:
 	ld (0x9127:16), 176
 	ld (0x9128:16), 0
-	ld a, (0x8ee6:16)
+	ld a, (MIDI_CC_EXPRESSION_VALUE:16)
 	res 7, a
 	ld (0x9129:16), a
 	ld (0x912a:16), 127
@@ -13219,7 +13219,7 @@ SwbtWr_WriteBankSelect:
 	pop xde
 	ld (0x9127:16), 176
 	ld (0x9128:16), 1
-	ld a, (0x8ee4:16)
+	ld a, (MIDI_CC_MODWHEEL_VALUE:16)
 	res 7, a
 	ld (0x9129:16), a
 	ld (0x912a:16), 127
