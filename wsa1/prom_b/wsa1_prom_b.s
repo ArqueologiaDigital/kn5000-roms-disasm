@@ -515,28 +515,28 @@
 	.set	ScreenLeave_GroupCombiDisplayHold, 0xF93827
 	.set	ScreenButton_GroupCombiDisplayHold, 0xF9382B
 	.set	sub_F93835, 0xF93835
-	.set	sub_F93F4E, 0xF93F4E
-	.set	sub_F93FF2, 0xF93FF2
-	.set	sub_F94078, 0xF94078
-	.set	sub_F9407C, 0xF9407C
-	.set	sub_F94080, 0xF94080
+	.set	UiEvent_MarkRedrawFromPartClass, 0xF93F4E
+	.set	UiEvent_MarkRedrawFromClass20Block, 0xF93FF2
+	.set	ScreenEnter_PowerOnSplash, 0xF94078
+	.set	ScreenLeave_PowerOnSplash, 0xF9407C
+	.set	ScreenButton_PowerOnSplash, 0xF94080
 	.set	sub_F9408A, 0xF9408A
-	.set	sub_F9427D, 0xF9427D
-	.set	sub_F9433A, 0xF9433A
-	.set	sub_F943EE, 0xF943EE
-	.set	sub_F9458C, 0xF9458C
-	.set	sub_F945F4, 0xF945F4
-	.set	sub_F94600, 0xF94600
-	.set	sub_F95137, 0xF95137
-	.set	sub_F952FC, 0xF952FC
-	.set	sub_F95444, 0xF95444
+	.set	UiEvent_SyncSoundSelection, 0xF9427D
+	.set	SoundGroup_ReloadSelection, 0xF9433A
+	.set	UiEventClassA8_ShowGroupScreen, 0xF943EE
+	.set	LCD_BlitValueBar, 0xF9458C
+	.set	UiEventClass7A_QueueDialValueRedraw, 0xF945F4
+	.set	PanelDial_QueueValueRedraw_Entry, 0xF94600
+	.set	CheckingDevice_RunSelfTest, 0xF95137
+	.set	TestMode_SelectFromPowerOnKeys, 0xF952FC
+	.set	TestMode_Tick, 0xF95444
 	.set	T_F40150_Nop, 0xF95646
 	.set	T_F40154_Nop, 0xF95647
-	.set	sub_F95648, 0xF95648
+	.set	PanelCpuCheck_FlashStatusOnLed, 0xF95648
 	.set	T_F4015C_Nop, 0xF95659
 	.set	sub_F9565A, 0xF9565A
 	.set	T_F40164_Nop, 0xF95669
-	.set	sub_F9566A, 0xF9566A
+	.set	PanelSwLedCheck_Step, 0xF9566A
 	.set	T_F4016C_Nop, 0xF95731
 	.set	T_F40170_Nop, 0xF95732
 	.set	T_F40174_Nop, 0xF95733
@@ -564,9 +564,9 @@
 	.set	T_F40124_Nop, 0xF959C5
 	.set	T_F40128_Nop, 0xF959C6
 	.set	T_F4012C_Nop, 0xF959C7
-	.set	sub_F959C8, 0xF959C8
+	.set	ScreenEnter_DebugMonitor, 0xF959C8
 	.set	T_F40134_Nop, 0xF959E1
-	.set	sub_F959E2, 0xF959E2
+	.set	ScreenButton_DebugMonitor, 0xF959E2
 	.set	T_F4013C_Nop, 0xF95C14
 	.set	T_F401D4_Nop, 0xF96018
 	.set	sub_F96019, 0xF96019
@@ -87524,21 +87524,21 @@ T_F40120:	jp T_F40120_Nop  ; -> prom_a 0x159C4
 T_F40124:	jp T_F40124_Nop  ; -> prom_a 0x159C5
 T_F40128:	jp T_F40128_Nop  ; -> prom_a 0x159C6
 T_F4012C:	jp T_F4012C_Nop  ; -> prom_a 0x159C7
-T_F40130:	jp sub_F959C8  ; -> prom_a 0x159C8
+T_F40130:	jp ScreenEnter_DebugMonitor  ; -> prom_a 0x159C8
 T_F40134:	jp T_F40134_Nop  ; -> prom_a 0x159E1
-T_F40138:	jp sub_F959E2  ; -> prom_a 0x159E2
+T_F40138:	jp ScreenButton_DebugMonitor  ; -> prom_a 0x159E2
 T_F4013C:	jp T_F4013C_Nop  ; -> prom_a 0x15C14
 T_F40140:	.long 0x00F94C00	; ptr -> 0xF94C00 (prom_a 0x14C00)
-T_F40144:	jp sub_F95137  ; -> prom_a 0x15137   x1
-T_F40148:	jp sub_F952FC  ; -> prom_a 0x152FC   x1
-T_F4014C:	jp sub_F95444  ; -> prom_a 0x15444   x1
+T_F40144:	jp CheckingDevice_RunSelfTest  ; -> prom_a 0x15137   x1
+T_F40148:	jp TestMode_SelectFromPowerOnKeys  ; -> prom_a 0x152FC   x1
+T_F4014C:	jp TestMode_Tick  ; -> prom_a 0x15444   x1
 T_F40150:	jp T_F40150_Nop  ; -> prom_a 0x15646
 T_F40154:	jp T_F40154_Nop  ; -> prom_a 0x15647
-T_F40158:	jp sub_F95648  ; -> prom_a 0x15648
+T_F40158:	jp PanelCpuCheck_FlashStatusOnLed  ; -> prom_a 0x15648
 T_F4015C:	jp T_F4015C_Nop  ; -> prom_a 0x15659
 T_F40160:	jp sub_F9565A  ; -> prom_a 0x1565A
 T_F40164:	jp T_F40164_Nop  ; -> prom_a 0x15669
-T_F40168:	jp sub_F9566A  ; -> prom_a 0x1566A
+T_F40168:	jp PanelSwLedCheck_Step  ; -> prom_a 0x1566A
 T_F4016C:	jp T_F4016C_Nop  ; -> prom_a 0x15731
 T_F40170:	jp T_F40170_Nop  ; -> prom_a 0x15732
 T_F40174:	jp T_F40174_Nop  ; -> prom_a 0x15733
@@ -88317,9 +88317,9 @@ T_F41500:	jp 0xF90C00  ; -> prom_a 0x10C00
 T_F41504:	jp T_F41504_Nop  ; -> prom_a 0x10C12
 T_F41508:	jp ModeEnter_Combination  ; -> prom_a 0x10C13
 T_F4150C:	jp T_F4150C_Nop  ; -> prom_a 0x10C20
-T_F41510:	jp sub_F94078  ; -> prom_a 0x14078
-T_F41514:	jp sub_F9407C  ; -> prom_a 0x1407C
-T_F41518:	jp sub_F94080  ; -> prom_a 0x14080
+T_F41510:	jp ScreenEnter_PowerOnSplash  ; -> prom_a 0x14078
+T_F41514:	jp ScreenLeave_PowerOnSplash  ; -> prom_a 0x1407C
+T_F41518:	jp ScreenButton_PowerOnSplash  ; -> prom_a 0x14080
 T_F4151C:	jp sub_F9408A  ; -> prom_a 0x1408A
 T_F41520:	jp InstallPainter_SoundMode_Entry  ; -> prom_a 0x10CC2
 T_F41524:	jp ScreenLeave_SoundMode  ; -> prom_a 0x10CC6
@@ -88349,21 +88349,21 @@ T_InstallPainter_GroupCombiDisplayHold_Entry:	jp InstallPainter_GroupCombiDispla
 T_ScreenLeave_GroupCombiDisplayHold:	jp ScreenLeave_GroupCombiDisplayHold  ; -> prom_a 0x13827
 T_ScreenButton_GroupCombiDisplayHold:	jp ScreenButton_GroupCombiDisplayHold  ; -> prom_a 0x1382B
 T_F4158C:	jp sub_F93835  ; -> prom_a 0x13835
-T_F41590:	jp sub_F93F4E  ; -> prom_a 0x13F4E
-T_F41594:	jp sub_F93F4E  ; -> prom_a 0x13F4E
-T_F41598:	jp sub_F93F4E  ; -> prom_a 0x13F4E
-T_F4159C:	jp sub_F93F4E  ; -> prom_a 0x13F4E
-T_F415A0:	jp sub_F93FF2  ; -> prom_a 0x13FF2
+T_F41590:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
+T_F41594:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
+T_F41598:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
+T_F4159C:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
+T_F415A0:	jp UiEvent_MarkRedrawFromClass20Block  ; -> prom_a 0x13FF2
 T_F415A4:	jp sub_F914AF  ; -> prom_a 0x114AF
-T_F415A8:	jp sub_F9427D  ; -> prom_a 0x1427D
-T_F415AC:	jp sub_F943EE  ; -> prom_a 0x143EE
-T_F415B0:	jp sub_F93F4E  ; -> prom_a 0x13F4E
-T_F415B4:	jp sub_F9458C  ; -> prom_a 0x1458C   x2
-T_F415B8:	jp sub_F945F4  ; -> prom_a 0x145F4
-T_F415BC:	jp sub_F94600  ; -> prom_a 0x14600   x2
+T_F415A8:	jp UiEvent_SyncSoundSelection  ; -> prom_a 0x1427D
+T_F415AC:	jp UiEventClassA8_ShowGroupScreen  ; -> prom_a 0x143EE
+T_F415B0:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
+T_F415B4:	jp LCD_BlitValueBar  ; -> prom_a 0x1458C   x2
+T_F415B8:	jp UiEventClass7A_QueueDialValueRedraw  ; -> prom_a 0x145F4
+T_F415BC:	jp PanelDial_QueueValueRedraw_Entry  ; -> prom_a 0x14600   x2
 T_F415C0:	jp Mode_SwitchToCombination  ; -> prom_a 0x10C21   x2
 T_F415C4:	jp Mode_SwitchToSound  ; -> prom_a 0x10C72   x4
-T_F415C8:	jp sub_F9433A  ; -> prom_a 0x1433A   x10
+T_F415C8:	jp SoundGroup_ReloadSelection  ; -> prom_a 0x1433A   x10
 	.fill 0x34, 1, 0x0E  ; 0xF415CC: 52 x ret
 T_F41600:	jp sub_F99098  ; -> prom_a 0x19098   x13
 T_F41604:	jp sub_F99021  ; -> prom_a 0x19021
@@ -107126,7 +107126,7 @@ Table_F4EF40:
 ; routine that has no name yet
 ; Called from: prom_a 0xFBE85C `call 0xf4f000`
 ; Evidence: `ld IX,(XIZ+0x08) / ld A,(XIZ+0x0a) / call 0xf415b4`; slot
-;           T_F415B4 holds `jp 0x00F9458C`, which is `sub_F9458C` in
+;           T_F415B4 holds `jp 0x00F9458C`, which is `LCD_BlitValueBar` in
 ;           prom_a/wsa1_prom_a.s.
 ; Unknown: what the callee does.  Its target is unnamed, so naming the
 ;          veneer would be inventing a meaning the tree does not have.
@@ -109996,7 +109996,7 @@ sub_F53052_Skip7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -110062,7 +110062,7 @@ LcdKeyRow1_DrawbarScreen_Epilogue:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -110129,7 +110129,7 @@ LcdKeyRow2_DrawbarScreen_Epilogue:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -192424,7 +192424,7 @@ ButtonTable_TrackAssign_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -192473,7 +192473,7 @@ ScreenLeaveBody_TrackAssign_Return2:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -192521,7 +192521,7 @@ ScreenLeaveBody_TrackAssign_Return3:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -192573,7 +192573,7 @@ ScreenLeaveBody_TrackAssign_Return4:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -192694,7 +192694,7 @@ ButtonTable_TrackAssign_207ENonZero_Nop0:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -192739,7 +192739,7 @@ ScreenLeaveBody_TrackAssign_Return8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -193278,7 +193278,7 @@ ScreenLeaveBody_TrackAssignPresets_Return6:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -193329,7 +193329,7 @@ ScreenLeaveBody_TrackAssignPresets_Return7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -193380,7 +193380,7 @@ ScreenLeaveBody_TrackAssignPresets_Return8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -193431,7 +193431,7 @@ ScreenLeaveBody_TrackAssignPresets_Return9:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -193881,7 +193881,7 @@ ButtonTable_Edit_0C10Zero_Nop0:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -193927,7 +193927,7 @@ Paint_Edit_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -193973,7 +193973,7 @@ Paint_Edit_Return2:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -194019,7 +194019,7 @@ Paint_Edit_Return3:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -194193,7 +194193,7 @@ ButtonTable_Edit_0C10NonZero_Nop0:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -194239,7 +194239,7 @@ Paint_Edit_Return8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -194283,7 +194283,7 @@ Paint_Edit_Return9:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -194329,7 +194329,7 @@ Paint_Edit_Return10:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -194731,7 +194731,7 @@ ButtonTable_SongClear_Nop4:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -195381,7 +195381,7 @@ ButtonTable_TrackClear_207EZero_Nop8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -195458,7 +195458,7 @@ ButtonTable_TrackClear_207ENonZero_Nop0:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -195502,7 +195502,7 @@ ScreenLeaveBody_TrackClear_Return3:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -195715,7 +195715,7 @@ ButtonTable_TrackMerge_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -195775,7 +195775,7 @@ sub_F7EEEF:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -195823,7 +195823,7 @@ sub_F7EEEF_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -195924,7 +195924,7 @@ ButtonTable_TrackMerge_207ENonZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -195970,7 +195970,7 @@ ButtonTable_TrackMerge_207ENonZero_Nop10:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -196207,7 +196207,7 @@ ButtonTable_MeasureDelete_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -196258,7 +196258,7 @@ ScreenLeaveBody_MeasureDelete_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -196312,7 +196312,7 @@ ScreenLeaveBody_MeasureDelete_Return2:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -196601,7 +196601,7 @@ ButtonTable_MeasureDelete_207ENonZero_Nop8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -196645,7 +196645,7 @@ LcdKeyRow3_MeasureDelete_207ENonZero_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -196880,7 +196880,7 @@ ButtonTable_MeasureErase_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -196942,7 +196942,7 @@ sub_F7F32A:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -196996,7 +196996,7 @@ sub_F7F32A_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -197056,7 +197056,7 @@ sub_F7F397:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -197224,7 +197224,7 @@ ButtonTable_MeasureErase_207ENonZero_Nop8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -197268,7 +197268,7 @@ sub_F7F397_Return3:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -197675,7 +197675,7 @@ ButtonTable_Quantize_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -197744,7 +197744,7 @@ sub_F7F668:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -197801,7 +197801,7 @@ sub_F7F668_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -197865,7 +197865,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -198042,7 +198042,7 @@ ButtonTable_Quantize_207ENonZero_Nop8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -198086,7 +198086,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -198442,7 +198442,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -198502,7 +198502,7 @@ sub_F7F99C:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -198554,7 +198554,7 @@ sub_F7F99C_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -198614,7 +198614,7 @@ sub_F7F9FB:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -198781,7 +198781,7 @@ ButtonTable_Vel0cityChange_207ENonZero_Nop8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -198825,7 +198825,7 @@ sub_F7F9FB_Return3:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -199213,7 +199213,7 @@ ButtonTable_Transp0se_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The
@@ -199273,7 +199273,7 @@ sub_F7FCE6:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -199325,7 +199325,7 @@ sub_F7FCE6_Return:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -199384,7 +199384,7 @@ sub_F7FD45:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW28 is row 4 of that column. The
@@ -199550,7 +199550,7 @@ ButtonTable_Transp0se_207ENonZero_Nop8:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW26 is row 2 of that column. The
@@ -199594,7 +199594,7 @@ sub_F7FD45_Return3:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW27 is row 3 of that column. The
@@ -199977,7 +199977,7 @@ ButtonTable_AdvanceDelay_207EZero_Nop7:
 ;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
 ;           the display, and rows 1-4 are graded LOCKED in
 ;           notes/wave7_panel_button_codes.py --physical because prom_a
-;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           SineWaveCheck_ServiceSwitches masks segment 3 with 0x0F and dispatches bits 0..3 four
 ;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
 ;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
 ;           Outsel check. SW25 is row 1 of that column. The

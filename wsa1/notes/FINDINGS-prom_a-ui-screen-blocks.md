@@ -204,7 +204,7 @@ instruction pointing at a non-boundary.
 * **Emulation gap L's routine is now readable.** `T_F40144` → `0xF95137`, the
   service CHECKING DEVICE routine, is inside span B and converted. Its first
   three instructions are `ld C,(0x0D) / and C,0x10 / srl 0x04,C` — SFR `0x0D` is
-  P5 — and `sub_F95158` opens `ld E,0x04` and drives P5 bit 3 with
+  P5 — and `CheckingDevice_FlashLedNibble` opens `ld E,0x04` and drives P5 bit 3 with
   `stcf 0x03,(0x0D)` around a `ld HL,0x4000` delay. That is exactly what the
   service manual and the driver lane describe, now in the tree rather than
   inferred from it.
@@ -212,9 +212,9 @@ instruction pointing at a non-boundary.
   unconditionally at `0xF827D1` and `0xF95137` gates only on P5 bit 4; no panel
   shadow byte is read anywhere before it. The manual's "hold `2` and power on"
   procedure is not a boot-time chord that this conversion can see.
-* **Two more gap-O data.** `sub_F953CD` (span B, `0xF953D2`) reads panel shadow
+* **Two more gap-O data.** `TestMode_SelectFromPowerOnKeys_Variant2` (span B, `0xF953D2`) reads panel shadow
   byte `(0x2B31)` and dispatches on `0x02`, `0x04`, `0x08`, `0x10` — four
-  single bits of one segment, each with its own arm. `sub_F954AA` (span B,
+  single bits of one segment, each with its own arm. `SineWaveCheck_ServiceSwitches` (span B,
   `0xF954AF`) reads `(0x2B33)`, masks it with `0x0F`, and dispatches on `0x01`,
   `0x02`, `0x04`, `0x08` with a fifth default arm.
   ★ **Exactly eight** references to `0x2B00-0x2BFF` exist in the whole of
