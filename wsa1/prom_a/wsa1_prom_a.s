@@ -7199,7 +7199,7 @@ VersionScreen_Show:
 	push XWA                                             ; F82AC0  38
 	call T_DisplayList_Run_Stack                         ; F82AC1  1d 00 2e f4
 	inc 8,XSP                                            ; F82AC5  ef 60
-	m_cp_mi16 MW24, 0xfffffa, 0x6673                     ; F82AC7  d2 fa ff ff 3f 73 66
+	cpw (BUILD_TAG+10:24), 0x6673                        ; F82AC7  d2 fa ff ff 3f 73 66   "sf" at BUILD_TAG+10
 	jr nz, .LF82ADC                                      ; F82ACE  6e 0c
 	ld XWA,VersionScreen_DisplayLists+0x9C               ; F82AD0  40 9f 2b f8 00
 	ld XHL,VersionScreen_DisplayLists+0x69               ; F82AD5  43 6c 2b f8 00
@@ -39036,38 +39036,19 @@ Print_DebugMonitor:
 	push XDE                                             ; F94C4F  3a
 	ld XWA,0x00000000                                    ; F94C50  40 00 00 00 00
 	ld (0x284f:16), xwa                                 ; F94C55  f1 4f 28 60
-	ld XIY,Print_DebugMonitor__F94C67                                    ; F94C59  45 67 4c f9 00
+	ld XIY,Str_DebugMonitorTitle                                    ; F94C59  45 67 4c f9 00
 	call LCD_PrintLine40_AdvanceRow                                      ; F94C5E  1d 82 4d f9
 	pop XDE                                              ; F94C62  5a
 	pop XHL                                              ; F94C63  5b
 	pop XIX                                              ; F94C64  5c
 	pop XIZ                                              ; F94C65  5e
 	ret                                                  ; F94C66  0e
-Print_DebugMonitor__F94C67:
-	ld w, 0x2d:opc                                          ; F94C67  20 2d
-	pushw iy                                             ; F94C69  2d
-	pushw iy                                             ; F94C6A  2d
-	ld w, 0x44:opc                                          ; F94C6B  20 44
-	ld XIY,0x20475542                                    ; F94C6D  45 42 55 47 20
-	popw iy                                              ; F94C72  4d
-	popw sp                                              ; F94C73  4f
-	popw iz                                              ; F94C74  4e
-	popw bc                                              ; F94C75  49
-	.byte 0x54                                           ; F94C76  54
-	popw sp                                              ; F94C77  4f
-	.byte 0x52                                           ; F94C78  52
-	ld w, 0x42:opc                                          ; F94C79  20 42
-	pop XBC                                              ; F94C7B  59
-	ld w, 0x28:opc                                          ; F94C7C  20 28
-	jr ule, 0x29                                         ; F94C7E  63 29
-	jr pl, .LF94CE3                                          ; F94C80  6d 61
-	jrl ule, 0x2c61                                      ; F94C82  73 61 2c
-	jrl ov, 0x736f                                       ; F94C85  74 6f 73
-	jr .LF94CF3                                              ; F94C88  68 69
-	ld w, 0x2d:opc                                          ; F94C8A  20 2d
-	pushw iy                                             ; F94C8C  2d
-	pushw iy                                             ; F94C8D  2d
-	ld w, 0x3e:opc                                          ; F94C8E  20 3e
+Str_DebugMonitorTitle:	.ascii " --- DEBUG MONITOR BY (c)masa,toshi --- "	; F94C67  the DEBUG MONITOR's 40-character title line; masa and toshi are the programmers
+; DebugMonitor_PrintBlankLine -- fill the 40-character line buffer at 0x60A000 with spaces (20 x 0x2020) and print it
+; with LCD_PrintLine40_AdvanceRow.  Entered three times by DebugMonitor_PrintDumpPage's `jp (xix)`; was
+; hidden by the title text above being decoded as instructions (it ran into this routine's first byte).
+DebugMonitor_PrintBlankLine:
+	push XIZ                                             ; F94C8F  3e
 	push XIX                                             ; F94C90  3c
 	push XHL                                             ; F94C91  3b
 	push XDE                                             ; F94C92  3a
@@ -39079,7 +39060,7 @@ Print_DebugMonitor__F94C67:
 	sla c, 0x01                                          ; F94CA0  cb ec 01
 	mx8_st_mr16 MXD, ra_IX, rb_C, r0                     ; F94CA3  f3 03 f0 e4 50
 	pop C                                                ; F94CA8  cb 05
-	djnz16 bc, -15                                       ; F94CAA  d9 1c f1
+	djnz16 bc, .LF94C9E                                  ; F94CAA  d9 1c f1
 	ld XIY,0x0060a000                                    ; F94CAD  45 00 a0 60 00
 	call LCD_PrintLine40_AdvanceRow                                      ; F94CB2  1d 82 4d f9
 	pop XDE                                              ; F94CB6  5a
@@ -41128,13 +41109,13 @@ ScreenButtonHandlers_SineWaveCheckMode_Nop0:   ; entry: screen button-handler ta
 	ret                                                  ; F95C2C  0e
 ; DebugMonitor_PrintDumpPage -- print the DEBUG MONITOR page: blank line, title, blank line, 16 hex-dump
 ; rows from (0x2846), blank line
-; Evidence: XIX = 0xF94C8F (unlabelled: prints 40 spaces via LCD_PrintLine40_AdvanceRow) is entered three
+; Evidence: XIX = DebugMonitor_PrintBlankLine (prints 40 spaces via LCD_PrintLine40_AdvanceRow) is entered three
 ; times by `lda xiy,<ret> / push XIY / jp (xix)`; between them `call Print_DebugMonitor` (0xF95C46) and `call
 ; sub_F94CBB` (0xF95C52: 16 x sub_F94CDE, address + 8 hex bytes, (0x284A) += 8). Zeroes (0x2540), (0x284F).
 ; Callers: sub_F959C8 (T_ScreenEnter_DebugMonitor screen ENTER) and the six digit editors sub_F95A1A..sub_F95BCA.
 DebugMonitor_PrintDumpPage:
 	push XIX                                             ; F95C2D  3c
-	lda xix, (0xf94c8f:24)                               ; F95C2E  f2 8f 4c f9 34
+	lda xix, (DebugMonitor_PrintBlankLine:24)            ; F95C2E  f2 8f 4c f9 34
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F95C33  f1 40 25 00 00
 	ldw (0x284f:16), 0x00                                ; F95C38  f1 4f 28 02 00 00
 	lda xiy, (DebugMonitor_PrintDumpPage__F95C46:24)                               ; F95C3E  f2 46 5c f9 35
@@ -66711,7 +66692,7 @@ MIDI_UART_Configure:
 	ld (SC0MOD:8), 0x29:io                               ; FA58F2  08 52 29   SC0MOD = 8-bit UART, baud-rate generator
 	ld (SC0CR:8), 0x00:io                               ; FA58F5  08 51 00   SC0CR cleared
 	ld (BR0CR:8), 0x0e:io                               ; FA58F8  08 53 0e   BR0CR: divide by 896 -> 31250 baud at fc = 28 MHz
-	m_cp_mi8 MB24, 0xfffff8, 0x24                 ; FA58FB  c2 f8 ff ff 3f 24   the byte here is 0x02 -- never equal
+	cp (BUILD_TAG+8:24), 0x24                     ; FA58FB  c2 f8 ff ff 3f 24   the byte here is 0x02 -- never equal
 	jr nz, .LFA5906                               ; FA5901  6e 03
 	ld (BR0CR:8), 0x0c:io                               ; FA5903  08 53 0c   divide by 768 -- NOT REACHED
 .LFA5906:
