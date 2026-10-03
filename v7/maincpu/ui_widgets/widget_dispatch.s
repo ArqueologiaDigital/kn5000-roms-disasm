@@ -1140,25 +1140,25 @@ SndParam_Registry:
 ; `lda xbc,(<this>); lda xbc, (xbc+wa); ld xhl,(xbc); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_ReadHandlers:
-	.long SndParam_ResolveWidget + 164
-	.long SndParam_ResolveWidget + 168
-	.long SndParam_RW_ExactMatch + 1
-	.long SndParam_RW_ChainExactMatch + 2
-	.long SndParam_RW_HandleB1Type + 9
-	.long SndParam_ResolveWidgetEx_Data + 34
-	.long SndParam_ResolveWidgetEx_Data + 123
+	.long SndParam_ReturnNotFound
+	.long SndParam_ReadRegField
+	.long SndParam_ReadRegWithLUT
+	.long SndParam_CompareRegField
+	.long SndParam_ReadRegWord
+	.long SndParam_ReadRegBitfield
+	.long SndParam_ReadRegAddress
 ; 9 x u32 routine pointers, one per record type; SndParam_DispatchCallback (0xFCCEE3):
 ; `lda xde,(<this>); lda xhl, (xde+bc); ld xhl,(xhl); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_RegisterHandlers:
-	.long SndParam_ResolveWidgetEx_Data + 158
-	.long SndParam_ResolveWidgetEx_Data + 181
-	.long SndParam_DMA_ProbeEntry + 9
-	.long SndParam_ResolveWidgetVariant2_Data + 49
-	.long SndParam_ResolveWidgetVariant2_Data + 131
-	.long SndParam_CompareRegField + 41
-	.long SndParam_ReadRegBitfield + 64
-	.long SndParam_RegisterEntry_Data + 214
+	.long SndParam_ResetDefaultTable
+	.long SndParam_RegisterEntry_Data
+	.long SndParam_RegisterEntryAlt_Data
+	.long SndParam_UpdateEntry_Data
+	.long SndParam_RegisterType4_Handler
+	.long SndParam_RegisterBitfield_Data
+	.long SndParam_RegisterLinked_Data
+	.long SndParam_RegisterLinked2_Data
 	.long SndParam_RegisterMultiField_Data
 ; 8 x u32 routine pointers, one per record type; SndParam_Lkp2_Dispatch (0xFCD011):
 ; `lda xbc,(<this>); lda xhl, (xbc+wa); ld xhl,(xhl); call (xhl)`.
@@ -1166,32 +1166,32 @@ SndParam_RegisterHandlers:
 SndParam_Register2Handlers:
 	.long SndParam_RegisterMultiField_Data + 163
 	.long SndParam_RegisterMultiField_Data + 186
-	.long SndParam_RegisterLinked_Data + 37
-	.long SndParam_RegisterLinked2_Data + 7
-	.long SndParam_RegisterLinked2_Data + 313
-	.long SndParam_RegisterSimple_Data + 71
-	.long SndParam_RegisterChained_Data + 216
-	.long SndParam_RegisterChained2_Data + 131
+	.long SndParam_RegisterChained2_Data
+	.long SndParam_RegisterComplex_Data
+	.long SndParam_NotifyQuick_Data
+	.long SndParam_RegisterDual_Data
+	.long SndParam_RegisterOffset_Data
+	.long SndParam_RegisterWide_Data
 ; 6 x u32 routine pointers, one per record type; SndParam_RW_ProcessResult (0xFCD288):
 ; `lda xbc,(<this>); lda xde, (xbc+wa); ld xix,(xde); call (xix)` (also SndParam_ResolveWidget_Skip2).
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_EncodeHandlers:
-	.long SndParam_RegisterComplex_Data + 161
-	.long SndParam_RegisterComplex_Data + 208
-	.long SndParam_RegisterComplex_Data + 263
-	.long SndParam_RegisterComplex_Data + 296
-	.long SndParam_NotifyQuick_Data + 37
-	.long SndParam_RegisterDual_Data + 19
+	.long SndParam_EncodeFieldDirect_Data
+	.long SndParam_EncodeFieldSub_Data
+	.long SndParam_ClampReverbTime
+	.long SndParam_DecodeField_Data
+	.long SndParam_DecodeFieldAlt_Data
+	.long SndParam_ClampDelayTime
 ; 6 x u32 routine pointers, one per record type; SndParam_DispatchTypeDE5 (0xFCCF42):
 ; `lda xde,(<this>); lda xde, (xde+bc); ld xhl,(xde); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_WriteHandlers:
-	.long SndParam_RegisterDual_Data + 52
-	.long SndParam_RegisterDual_Data + 56
-	.long SndParam_RegisterDual_Data + 120
-	.long SndParam_RegisterDual_Data + 208
-	.long SndParam_RegisterDual_Data + 252
-	.long SndParam_RegisterDual_Data + 271
+	.long SndParam_ReturnInvalid
+	.long SndParam_WriteFieldDirect_Data
+	.long SndParam_WriteFieldSub_Data
+	.long SndParam_PackAndWrite
+	.long SndParam_WriteViaHash_Data
+	.long SndParam_BatchUpdate_Data
 ; 256 x u32 RAM block addresses, 0 = no block, indexed by a descriptor's +4 byte:
 ; SndParam_ReadRegField (0xFCD60A) does `ld c,(xwa+4); sla bc,2; lda xde,(<this>);
 ; ld_rrl xde,xde,bc; or xde,xde; ret z` (20 sites in all, e.g.
@@ -7149,7 +7149,7 @@ Subsys_HandlerTableList:
 	.long Seq_InitFuncTable
 	.long Subsys_HandlerTable01
 	.long FDTest_String_TestTitleFunc_PtrTable
-	.long MIDI_RESET_PLAYBACK_STATE + 45	; no label at this target yet; v10: MIDI_SC0_DISPATCH_TABLE
+	.long MIDI_SC0_DISPATCH_TABLE	; no label at this target yet; v10: MIDI_SC0_DISPATCH_TABLE
 	.long SeqFormat_ReferenceData
 	.long NakaInst_SoundConfig_LookupTable
 	.long SoundProgram_ParamPtrTable

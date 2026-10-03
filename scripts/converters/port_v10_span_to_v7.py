@@ -42,6 +42,8 @@ HOW
 RUN
     python3 scripts/converters/port_v10_span_to_v7.py            # analysis only
     python3 scripts/converters/port_v10_span_to_v7.py --apply    # write + verify
+    PORT_REPOINT=1 ... --apply, then scripts/converters/repoint_v7_after_port.py: drop the old v7 labels
+    other files reference and re-aim those references by address instead.
     PORT_CACHE=<dir> caches the two address maps and the alignment (the v7
     map must be rebuilt -- delete <dir>/v7_map.json -- after the v7 files change).
 """
@@ -75,6 +77,16 @@ SPANS = {
     # but ~6 KB of .byte and 9 romslice .incbin's)
     "ace": {"files": ["audio/tonegen_fileio_handlers.s", "audio/audio_control_engine.s"],
             "foreign": ["midi/midi_encoder_routines.s", "ui/led_panel_write.s"],
+            "end10": None, "end7": None, "tail": None},
+    # v7 audio/sndparam_routines.s: 225 v7-only labels and 69 drifted (35 at -0x41A) on 2026-10-03;
+    # its last 0x41A bytes are v10 midi/midi_serial_routines.s code (the drift head; "foreign" lists
+    # files INCLUDED inside a span, and sndparam_routines.s includes none)
+    # sndparam_routines.s + midi_serial_routines.s as one span: the v7 sndparam tail IS the start of
+    # v10's serial code, so porting sndparam alone leaves that tail as `.byte`
+    "sndser": {"files": ["audio/sndparam_routines.s", "midi/midi_serial_routines.s"],
+               "foreign": [], "end10": None, "end7": None, "tail": None},
+    "snd": {"files": ["audio/sndparam_routines.s"],
+            "foreign": [],
             "end10": None, "end7": None, "tail": None},
 }
 CFG = SPANS["dsp"]
@@ -690,6 +702,144 @@ def byte_rows(bs):
     return out
 
 
+SUFFIX = re.compile(r'^(.*?)(_(?:Skip|Loop|Join|Return|Exit|Done|Next)\d*)$')
+TOKEN = re.compile(r'(?<![\w.$@])([A-Za-z_][\w.$@]*)(?![\w.$@])')
+DATA_DIR = re.compile(r'^\.(byte|short|hword|2byte|long|word|4byte)\b')
+
+
+def old_span_symbols(P):
+    """name -> v7 address for every label and `.set` the pre-port span files defined."""
+    if not hasattr(P, "_olddefs"):
+        names = set()
+        rows = []
+        for idx, (ad, rel, ln, text) in enumerate(P.o7):
+            if rel not in SPAN:
+                continue
+            m = LABEL.match(text) or re.match(r'^\s*\.set\s+([A-Za-z_][\w.$@]*)\s*,', text)
+            if m:
+                names.add(m.group(1))
+            if ad is not None:
+                rows.append((ad, P.z7[idx], text))
+        P._olddefs = {n: P.s7[n] for n in names if n in P.s7}
+        P._old7 = rows
+    return P._olddefs
+
+
+def keep_old_labels(P, newlab, code):
+    """PORT_GAPFILL: the pre-port labels (`NAME:` lines) at addresses no new label holds and no
+    ported instruction covers -- they head v7 code the port could not match to v10 and will refill
+    from the old lines.  A label keeps its old name unless that name, or its stem before a
+    structural suffix (`_Skip2`), now names a v10 label placed elsewhere, or is a v10 name whose
+    v10 bytes are found at another v7 address nearby (drifted(), v7_label_drift.py's test); then it
+    is renamed under the nearest new label at or before it (`INTTX0_HANDLER_Skip2`)."""
+    olddefs = old_span_symbols(P)
+    import bisect as _b
+    starts = [it.a7 for it in code]
+    inside = lambda v: (lambda k: k >= 0 and code[k].a7 < v < code[k].a7 + code[k].n)(_b.bisect_right(starts, v) - 1)
+    held = set(newlab.values())
+    stems = sorted(set(newlab.values()))
+    first = {}
+    for nm, v in newlab.items():
+        first.setdefault(v, nm)
+        first[v] = min(first[v], nm)
+    def drifted(name, ad):
+        """v10 defines `name`: is it a DRIFTED name here?  The test of scripts/analysis/
+        v7_label_drift.py: v10's bytes at `name` found exactly once near this v7 address, but at a
+        different one.  Not found (v7's code differs there, operands moved): kept -- the pre-port
+        file placed it, and nothing shows it wrong."""
+        s10 = P.s10.get(name)
+        if s10 is None:
+            return False
+        sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
+        import v7_label_drift as _D
+        hit = _D.locate(P.r10, P.r7, s10, ad)
+        return hit is not None and hit != ad
+    extra, used = {}, set(newlab)
+    for ad, n, text in sorted(P._old7):
+        m = LABEL.match(text)
+        if not m or ad in held or inside(ad):
+            continue
+        nm = m.group(1)
+        sm = SUFFIX.match(nm)
+        stem = sm.group(1) if sm else nm
+        if nm in newlab or stem in newlab or nm in used or drifted(nm, ad):
+            k = _b.bisect_right(stems, ad) - 1
+            if k < 0:
+                continue
+            base = first[stems[k]] + (sm.group(2) if sm else "_Part")
+            new, i = base, 2
+            while new in used:
+                new, i = "%s_%d" % (base, i), i + 1
+        else:
+            new = nm
+        used.add(new)
+        extra[nm] = (ad, new)
+    return extra
+
+
+def gap_fill(P, a, end, labels_at, extra):
+    """The pre-port v7 lines for the gap [a, end), when they TILE it exactly; else None.
+
+    A gap is v7 code (or data) with no byte-identical v10 line.  Emitting it as `.byte` would throw
+    away the instructions the pre-port file already had (CLAUDE.md: never replace disassembled code
+    with raw bytes) -- e.g. v7's INTTX0 handler at 0xFCE98A.  So the old lines are reused when their
+    instructions and data rows (.byte/.short/.long) cover [a, end) exactly; `.set X, . + k` aliases
+    are dropped; label lines are not copied (keep_old_labels put them in labels_at, so the gap is
+    split at them); an operand naming an old span symbol is re-aimed by ADDRESS at the label that
+    stands there now, and if none does the gap stays `.byte`."""
+    if not hasattr(P, "_gapwhy"):
+        P._gapwhy = collections.Counter()
+    olddefs = old_span_symbols(P)
+    ent = [r for r in P._old7 if a <= r[0] < end]
+    if not ent:
+        P._gapwhy["no old lines"] += 1
+        return None
+    name_at = {v: sorted(ns)[0] for v, ns in labels_at.items() if ns}
+    ren = {o: nw for o, (v, nw) in extra.items()}
+
+    def sub(mm):
+        t = mm.group(1)
+        if t in ren:
+            return ren[t]
+        if t in olddefs:
+            there = name_at.get(olddefs[t])
+            if there is None:
+                if os.environ.get("PORT_GAPDEBUG"):
+                    print("    gap 0x%06X-0x%06X: operand %s (old 0x%06X) has no label now" % (a, end, t, olddefs[t]))
+                raise KeyError(t)
+            return there
+        return t
+    out, pos = [], a
+    for ad, n, text in ent:
+        m = LABEL.match(text)
+        if m:
+            text = text[m.end():]
+        code = text.split(";")[0].strip()
+        if not code or code.startswith(".set"):
+            continue
+        if code.startswith(".") and not DATA_DIR.match(code):
+            if os.environ.get("PORT_GAPDEBUG"):
+                print("    gap 0x%06X-0x%06X: directive %s" % (a, end, code[:60]))
+            P._gapwhy["directive"] += 1
+            return None
+        if ad != pos or n <= 0:
+            P._gapwhy["not tiling"] += 1
+            return None
+        try:
+            mn, sep, ops = re.match(r'^(\S+)(\s*)(.*)$', code).groups()
+            code = mn + ("\t" + TOKEN.sub(sub, ops) if ops else "")
+        except KeyError:
+            P._gapwhy["operand with no label"] += 1
+            return None
+        out.append("\t" + code)
+        pos += n
+    if pos != end:
+        P._gapwhy["short"] += 1
+        return None
+    P._gapwhy["filled"] += 1
+    return out
+
+
 def layout(P, items, old, keep, newlab):
     """-> {file: [lines]} and per-emitted-line (addr, size, item) for the verify loop."""
     r7 = P.r7
@@ -714,11 +864,15 @@ def layout(P, items, old, keep, newlab):
         k = _b.bisect_right(starts, v) - 1
         if k >= 0 and code[k].a7 < v < code[k].a7 + code[k].n:
             P.notes[code[k].a7] = P.notes[code[k].a7] + P.notes.pop(v)
+    extra = keep_old_labels(P, newlab, code) if os.environ.get("PORT_GAPFILL") else {}
+    for o, (v, nw) in extra.items():
+        labels_at[v].add(nw)
     regions = [(k, lo, hi) for k, (lo, hi) in enumerate(P.segs7)]
     files = {f: [] for f in SPAN}
     emitted = []
     order = {f: k for k, f in enumerate(SPAN)}
     cur = SPAN[0]
+    used_gap = set()
     for tag, lo, hi in regions:
         a = lo
         region_code = [it for it in code if lo <= it.a7 < hi]
@@ -758,12 +912,16 @@ def layout(P, items, old, keep, newlab):
             files[cur].extend(getattr(P, "notes", {}).get(a, []))
             for nm in sorted(labels_at.get(a, ())):
                 files[cur].append("%s:" % nm)
-            rows = byte_rows(r7[a - BASE:end - BASE])
+            rows = gap_fill(P, a, end, labels_at, extra) if os.environ.get("PORT_GAPFILL") else None
+            if rows is None:
+                rows = byte_rows(r7[a - BASE:end - BASE])
             files[cur].extend(rows)
             emitted.append((a, end - a, None))
             a = end
         if tag < len(regions) - 1:
             files[cur].append('\t.include "%s"' % CFG["foreign"][tag])
+    if getattr(P, "_gapwhy", None):
+        print("  gap fill: %s" % dict(P._gapwhy))
     return files, emitted
 
 
@@ -787,7 +945,7 @@ def header_of(lines):
 
 
 def write_files(P, files):
-    if CFG is SPANS["ace"]:
+    if CFG is not SPANS["dsp"]:          # the dsp writer is specific to that span's includes
         return write_files_ace(P, files)
     v7 = os.path.join(ROOT, "v7/maincpu")
     old = {f: open(os.path.join(v7, f), encoding="latin-1").read().split("\n") for f in SPAN}
@@ -832,7 +990,9 @@ def write_files_ace(P, files):
         data = "\n".join(lines)
         if not data.endswith("\n"):
             data += "\n"
-        open(os.path.join(v7, f), "wb").write(data.encode("latin-1"))
+        raw = data.encode("latin-1")         # encode first: open("wb") truncates
+        open(os.path.join(v7, f) + ".tmp", "wb").write(raw)
+        os.replace(os.path.join(v7, f) + ".tmp", os.path.join(v7, f))
 
 
 def build_v7():
@@ -857,6 +1017,23 @@ def main():
     demoted = set()
     for it_round in range(8):
         items, old, keep, elsewhere, sv10 = build_items(P, frozenset(demoted))
+        if os.environ.get("PORT_REPOINT"):
+            # PORT_REPOINT=1: an old v7 label that other files reach ONLY as `Name + k` is a drifted
+            # base, not an entry point -- it sits 0x41A off and v10's name belongs elsewhere -- so it
+            # is not kept; scripts/converters/repoint_v7_after_port.py then re-aims those references
+            # at the label now at the address they meant.  A label some other file names bare
+            # (`call Name`, `.long Name`) is an entry point and is kept, as before.
+            bare = set()
+            for f in glob.glob(os.path.join(ROOT, "v7/maincpu/**/*.s"), recursive=True):
+                if os.path.relpath(f, os.path.join(ROOT, "v7/maincpu")) in SPAN:
+                    continue
+                for ln in open(f, "rb").read().decode("latin-1").split("\n"):
+                    code = ln.split(";")[0]
+                    for nm in keep:
+                        if re.search(r'(?<![\w.$])%s(?![\w.$])(?!\s*[+-])' % re.escape(nm), code) and \
+                                not re.match(r'^\s*%s:' % re.escape(nm), code):
+                            bare.add(nm)
+            keep = {nm: v for nm, v in keep.items() if nm in bare}
         newlab = resolve(P, items, old, keep, elsewhere, sv10)
         files, emitted = layout(P, items, old, keep, newlab)
         cov = collections.Counter()

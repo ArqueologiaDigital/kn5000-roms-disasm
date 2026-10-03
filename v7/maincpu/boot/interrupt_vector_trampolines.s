@@ -217,10 +217,10 @@ GroupBoxProc_StartSSFPresentation_Helper:
 	jr	z, DkMdlyPly_CheckState_Helper_Skip2
 DkMdlyPly_CheckState_Helper_Skip:
 	ld	hl, 0:i3
-	jr	SndParam_RW_FoundCallback_v7
+	jr	SndParam_RW_FoundCallback
 DkMdlyPly_CheckState_Helper_Skip2:
 	cp	hl, 0xffff
-	jr	nz, SndParam_RW_FoundCallback_v7
+	jr	nz, SndParam_RW_FoundCallback
 	ld	xwa, (xde + 8)
 	or	xwa, xwa
 	jr	z, EmptyRoutine_03_Skip2
@@ -232,7 +232,7 @@ DkMdlyPly_CheckState_Helper_Loop:
 	ld	xwa, xiy
 	srl	xwa, 8
 	cp	xbc, xwa
-	jr	nz, SndParam_RW_ChainCheckFirst_v7
+	jr	nz, SndParam_RW_ChainCheckFirst
 	ld	xwa, xix
 	srl	xwa, 16
 	cp	xwa, 0xb1

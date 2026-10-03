@@ -48,8 +48,8 @@ InterruptVectorTable:
 	.long Empty_Handler
 	.long Empty_Handler
 	.long Empty_Handler
-	.long SndParam_Widget1_AppendType2 + 43
-	.long SndParam_WidgetNotifyType1 + 15
+	.long INTRX0_HANDLER
+	.long INTTX0_HANDLER
 	.long INTRX1_HANDLER
 	.long INTTX1_HANDLER
 	.long Empty_Handler

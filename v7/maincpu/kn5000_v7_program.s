@@ -3192,30 +3192,31 @@ EmptyRoutine_03:
 ; (audio/sndparam_routines.s), 0x7D1 bytes on.  The label that stood here was
 ; dropped for that reason; the 85-byte romslice below was ported from v10 by
 ; scripts/lanes/sys/port_islands.py.  Its branch targets are v10's
-; SndParam_RW_ChainCheckFirst / _FoundCallback / _ChainContinue / _ProcessResult;
-; they carry those names with a _v7 suffix because v7 still defines the plain
-; names, 0x41A higher, in audio/sndparam_routines.s.
+; SndParam_RW_ChainCheckFirst / _FoundCallback / _ChainContinue / _ProcessResult,
+; and here they carry those names.  (Until 2026-10-03 they had a _v7 suffix,
+; because audio/sndparam_routines.s also defined the plain names 0x41A higher;
+; notes/v7-port-sndser-2026-10-03/ removed that drift.)
 ; (was .incbin "includes/romslices/v7_block_soundparam_notifychange.bin")
 	.byte	0x00, 0x00
 	and	xwa, xix
 	and	xwa, 0xff
-	jr	z, SndParam_RW_ChainCheckFirst_v7
+	jr	z, SndParam_RW_ChainCheckFirst
 EmptyRoutine_03_Skip:
 	ld	hl, 0:i3
-	jr	SndParam_RW_FoundCallback_v7
-SndParam_RW_ChainCheckFirst_v7:
+	jr	SndParam_RW_FoundCallback
+SndParam_RW_ChainCheckFirst:
 	cp	hl, 0xffff
-	jr	z, SndParam_RW_ChainContinue_v7
-SndParam_RW_FoundCallback_v7:
+	jr	z, SndParam_RW_ChainContinue
+SndParam_RW_FoundCallback:
 	ld	xwa, (xde + 4)
-	jr	SndParam_RW_ProcessResult_v7
-SndParam_RW_ChainContinue_v7:
+	jr	SndParam_RW_ProcessResult
+SndParam_RW_ChainContinue:
 	ld	xwa, (xde + 8)
 	or	xwa, xwa
 	jr	nz, DkMdlyPly_CheckState_Helper_Loop
 EmptyRoutine_03_Skip2:
 	ld	xwa, 0:i3
-SndParam_RW_ProcessResult_v7:
+SndParam_RW_ProcessResult:
 	ld	xiz, xwa
 	or	xwa, xwa
 	jr	z, SndParam_ProbeMatchFound_Join_Skip

@@ -85,14 +85,19 @@ LINE = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)(?P<mn>[a-z]\w*_(?:s
                   r'(?P<ws>\s+)(?P<ops>[^;]*?)(?P<post>\s*(?:;.*)?)$', re.I)
 
 
+SEP = bytes([0x40, 0x68, 0x24, 0x57, 0x13])     # `ld xwa, 0x13572468`
+
+
 def assemble(lines, tmpdir):
     """-> list of bytes or None, one per input line (a line that does not assemble -> None).
-    Each line is followed by a `nop` (encoding [0x00]) so a line's encodings are delimited
-    even when it fails or expands to several instructions."""
+    Each line is followed by a separator instruction so a line's encodings are delimited even
+    when it fails or expands to several instructions.  It used to be `nop` (encoding [0x00]), and a
+    CANDIDATE `nop` (a decoded 0x00 byte) then split the grouping and the run refused (v7, 2026-10-03);
+    the separator is now an instruction no candidate spells, `ld xwa, 0x13572468`."""
     p = os.path.join(tmpdir, "a.s")
     body = []
     for l in lines:
-        body += [l, "nop"]
+        body += [l, "ld xwa, 0x13572468"]
     open(p, "w", encoding="latin-1").write("\n".join(body) + "\n")
     r = subprocess.run([MC, "-triple=tlcs900", "-show-encoding", p], capture_output=True,
                        text=True, encoding="latin-1")
@@ -100,7 +105,7 @@ def assemble(lines, tmpdir):
             for e in re.findall(r'encoding: \[([^\]]*)\]', r.stdout)]
     out, cur = [], b""
     for e in encs:
-        if e == b"\x00":
+        if e == SEP:
             out.append(cur or None)
             cur = b""
         else:
