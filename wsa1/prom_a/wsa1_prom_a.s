@@ -18819,6 +18819,12 @@ PanelGroupQueue_Append:
 .LF8A44A:
 	ret                                                  ; F8A44A  0e
 ; ---------------------------------------------------------------------
+; Two table addresses the dead copy below still holds from the older build it was copied from.  They are
+; not this ROM's tables (no label here may take them): the live copy loads the same tables by name at the
+; same points.
+	.equ DeadCopy_OldAddr_PanelGroupActionTable_Variant1, 0x00F8AF9F	; live: PanelGroupActionTable_Variant1 (F8A8CC)
+	.equ DeadCopy_OldAddr_RecordFieldPtrs_RAM76A2_Plus20, 0x00F8ACF1	; live: RecordFieldPtrs_RAM76A2_Plus20 (F8AA31)
+
 ; PanelGroupQueue_ExpandToEvents_DeadCopy -- 0xF8A44B-0xF8A4C5, 123 bytes: a
 ; NEVER-RELOCATED, UNREACHABLE second copy of the live list walker at
 ; 0xF8A84B, exactly 0x400 bytes lower.
@@ -18922,7 +18928,7 @@ PanelEvent_ShiftThenRunAction_DeadCopy:
 	ld a, (xiy-1)                                        ; F8A4C7  8d ff 21
 	push XIY                                             ; F8A4CA  3d
 	pushw hl                                             ; F8A4CB  2b
-	ld XIY,0x00f8af9f                                    ; F8A4CC  45 9f af f8 00
+	ld XIY,DeadCopy_OldAddr_PanelGroupActionTable_Variant1 ; F8A4CC  45 9f af f8 00
 	ld l, (0x2251:16)                                   ; F8A4D1  c1 51 22 27
 	sla l, 0x02                                          ; F8A4D5  cf ec 02
 	mx8_ld_rm MXL, ra_IY, rb_L, r5                       ; F8A4D8  e3 03 f4 ec 25
@@ -19100,7 +19106,7 @@ BitMask32ByIndex_DeadCopy:
 	calr IndexToBitMask8_DeadCopy                                          ; F8A620  1e f9 fe
 	ld d, 0x3f:opc                                          ; F8A623  24 3f
 	push XIX                                             ; F8A625  3c
-	ld XIX,0x00f8acf1                                    ; F8A626  44 f1 ac f8 00
+	ld XIX,DeadCopy_OldAddr_RecordFieldPtrs_RAM76A2_Plus20 ; F8A626  44 f1 ac f8 00
 	ld a, (UI_PartIndex:16)                                   ; F8A62B  c1 50 22 21
 	sla a, 0x02                                          ; F8A62F  c9 ec 02
 	mx8_ld_rm MXL, ra_IX, rb_A, r4                       ; F8A632  e3 03 f0 e0 24
