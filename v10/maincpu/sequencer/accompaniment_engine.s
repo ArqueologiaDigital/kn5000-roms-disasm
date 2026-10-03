@@ -5245,7 +5245,7 @@ AccVoice_SelectByMask_Skip:
 	extz	xiz
 	ld	xhl, xiz
 	sla	xhl, 8
-	add	xhl, 0x095c00
+	add	xhl, RHYTHM_PATTERN_BUF_B
 AccVoice_SelectByMask_Return:
 	ret
 
@@ -9046,7 +9046,7 @@ AccReplay_SavedExpression:
 AccReplay_SavedExpr_Return:
 	nop
 	nop
-	ld	xwa, 0x094800
+	ld	xwa, RHYTHM_PATTERN_BUF_A
 	add	xwa, 14
 	ld	wa, (xwa)
 	cp	wa, 0:i3
@@ -13837,7 +13837,7 @@ Not_sure_maybe_SOFT_VERSION_related:
 	ex_ff
 	ldw	iz, 0xfe3c
 	ld	(0x35d5:16), 0
-	ld	xwa, 0x094800
+	ld	xwa, RHYTHM_PATTERN_BUF_A
 	cp	hl, 0:i3
 	jr	z, Not_sure_maybe_SOFT_VERSION_related_Code_Return
 	ld	(0x35d5:16), 1
@@ -14121,7 +14121,7 @@ AccPatch_CheckAndInitDemo_Helper4:
 	mul	de, 32
 	add	xwa, xde
 	add	xwa, 3136
-	add	xwa, 0x094800
+	add	xwa, RHYTHM_PATTERN_BUF_A
 	ld	xix, xwa
 	pop	c
 	sll	c, 2
@@ -14415,7 +14415,7 @@ AccPat_InitWorkAreaFromSlot:
 	push xwa
 	ld a, (0x34d6:16)
 	ld (0x39ac:16), a
-	ld xwa, 0x94800
+	ld xwa, RHYTHM_PATTERN_BUF_A
 	ld (0x39ae:16), xwa
 	pop xwa
 	calr AccPatch_InitFromIndex
@@ -18816,7 +18816,7 @@ AccPlayback_Finalize_Code:
 ToneGen_CalcBufferAddr:
 	and xhl, 0xffff
 	sla xhl, 8
-	add xhl, 0x95c00
+	add xhl, RHYTHM_PATTERN_BUF_B
 	ret
 
 ToneGen_CalcBufferAddr_Pad:
@@ -22105,7 +22105,7 @@ AccPat_ShiftAndMask_Pad:
 AccPat_IndexToAddress:
 	and xhl, 0xffff
 	sla xhl, 8
-	add xhl, 0x95c00
+	add xhl, RHYTHM_PATTERN_BUF_B
 	ret
 
 AccPat_InlineFunctions_DataBlock:
@@ -22113,7 +22113,7 @@ AccPat_InlineFunctions_DataBlock:
 	nop
 	and	xhl, 0xffff
 	sla	xhl, 8
-	add	xhl, 0x095c00
+	add	xhl, RHYTHM_PATTERN_BUF_B
 	ret
 	push	xwa
 	push	xix
@@ -22310,7 +22310,7 @@ AccPat_DualVoice_DataBlock:
 	xor	h, h
 	ld	xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add xiy, 608256
+	add xiy, RHYTHM_PATTERN_BUF_A
 	add	xiy, 96
 	ld	(0x355c:16), xiy
 	ld	l, (0x34d6:16)
@@ -22322,7 +22322,7 @@ AccPatch_LoadDualVoiceParams_Skip:
 	xor	h, h
 	ld	xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add	xiy, 608256
+	add	xiy, RHYTHM_PATTERN_BUF_A
 	add	xiy, 96
 	ld	(0x3560:16), xiy
 	ret
@@ -22546,7 +22546,7 @@ AccPat_CalcAccentVelocity_Body:
 	xor h, h
 	ld xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add xiy, 0x94800
+	add xiy, RHYTHM_PATTERN_BUF_A
 	add xiy, 0x60
 	ld (0x3560:16), xiy
 	calr RhythmROM_LoadPattern
@@ -26566,7 +26566,7 @@ TimeSig_DisplayStrings_Helper:
 	ld	a, 32:opc
 	ld	c, (0x390a:16)
 	mul	wa, c
-	add	xwa, 0x094800
+	add	xwa, RHYTHM_PATTERN_BUF_A
 	add	xwa, 2976
 	ld	xiy, xwa
 	ret
@@ -28186,7 +28186,7 @@ VoiceTable_AdvWrite_LinkEntry:
 	extz xwa
 	sll xwa, 8
 	ld xhl, xwa
-	add xhl, 0x95c00
+	add xhl, RHYTHM_PATTERN_BUF_B
 	ld a, c
 	ld (xhl + 3), a
 	ld wa, bc
@@ -28215,7 +28215,7 @@ Voice_ResolveTableAddr:
 	ld wa, (0x3980:16)
 	extz xwa
 	sll xwa, 8
-	add xwa, 0x95c00
+	add xwa, RHYTHM_PATTERN_BUF_B
 	add xwa, xbc
 	ld xhl, xwa
 	ret
@@ -29472,7 +29472,7 @@ AccPatch_ResolveEntryAddr:
 	ld xhl, 0:i3
 	popw hl
 	sll xhl, 8
-	ld xwa, 0x95c00
+	ld xwa, RHYTHM_PATTERN_BUF_B
 	add xwa, xhl
 	popw hl
 	pop xix
@@ -35116,7 +35116,7 @@ AccPatch_VoiceAssignDataBlock_Helper:
 	xor	xiz, xiz
 	ld	xiz, 256
 	mul	xiz, hl
-	add	xiz, 0x095c00
+	add	xiz, RHYTHM_PATTERN_BUF_B
 	ret
 	push	xiz
 	call	AccPatch_VoiceAssignDataBlock_Helper22
@@ -35322,7 +35322,7 @@ AccPatch_VoiceAssignDataBlock_Sub_Helper3:
 	add	xiy, 0x069800
 	add	xiy, 12
 	ld	ix, (0x397c:16)
-	add	xix, 0x094800
+	add	xix, RHYTHM_PATTERN_BUF_A
 	add	xix, 12
 	ldw	bc, 96
 	sub	bc, 12
@@ -35355,7 +35355,7 @@ AccPatch_VoiceAssignDataBlock_Helper4:
 	ld	wa, (xhl+iy)
 	ld (14682:16), wa
 	ld	ix, (0x397c:16)
-	add	xix, 0x094800
+	add	xix, RHYTHM_PATTERN_BUF_A
 	ld wa, (xix+0:8)
 	ld (14684:16), wa
 	ld	wa, (xix+4)

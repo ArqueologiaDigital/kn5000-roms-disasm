@@ -2812,13 +2812,13 @@ MainTitleControl:
 	jrl	UIWidget_ReturnZero
 SeqState_TransitionMode:
 	ld	(35995:16), a
-	ldmm8 35997, 35996
+	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
 	ld	(SEQ_MASTER_STATE:16), l
 	ld	(MAIN_TITLE_CURRENT:16), l
 	ldw	wa, 97
 	jr	MainTitleCtrl_SetIndicatorAndClear
 MainTitleCtrl_SaveAndTransition:
-	ldmm8 35997, 35996
+	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
 	ld	(MAIN_TITLE_CURRENT:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
@@ -2836,7 +2836,7 @@ SeqState_DemoModeHandler:
 	jr	nz, SeqDemo_SaveCurrentState
 	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
-	ldmm8 35997, 35996
+	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
 	ldmm8 35993, 35992
 	jr UIWidget_ReturnZero
 MainTitleCtrl_HandleAB:

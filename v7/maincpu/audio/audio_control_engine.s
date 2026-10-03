@@ -2023,7 +2023,7 @@ Encoder_IncrementAndDispatch:
 ; (pre-port v7 note about the bytes at 0xFC620C:)
 ; ldmm16 0x8ec2, 1033 (v7 displacement)
 Audio_PeriodicUpdate:
-	ldmm16	0x8e26, 1033
+	ldmm16	0x8e26, SYSTEM_TIMESTAMP
 ; (pre-port v7 note about the bytes at 0xFC6212:)
 ; cpdi8 (0x8d36), 247 (v7 patched)
 	cp	(SEQ_MASTER_STATE:16), 247

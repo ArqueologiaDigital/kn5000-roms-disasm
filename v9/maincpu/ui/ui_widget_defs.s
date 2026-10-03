@@ -19787,7 +19787,7 @@ ReadPixel:
 	ld wa, (xiz)
 	exts xwa
 	add xwa, xbc
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	ld l, (xbc)
 	extz hl
@@ -19847,7 +19847,7 @@ ReadPixel_Prologue:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	ldto_berp A, 0xf8
 	ld (xbc), a
@@ -19927,7 +19927,7 @@ ModifyPixel_Prologue:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	ld wa, (xsp + 2)
 	ld (xbc), a
@@ -20011,7 +20011,7 @@ ModifyPixelEx_Prologue:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xde
-	ld xde, 0x43c00
+	ld xde, OFFSCREEN_BUFFER_1
 	add xde, xwa
 	xor (xde), c
 

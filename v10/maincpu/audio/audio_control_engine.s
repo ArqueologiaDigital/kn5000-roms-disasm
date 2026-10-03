@@ -1949,7 +1949,7 @@ Encoder_IncrementAndDispatch:
 	jp CompIface_ProcessInput
 
 Audio_PeriodicUpdate:
-	ldmm16 0x8ec2, 1033
+	ldmm16 0x8ec2, SYSTEM_TIMESTAMP
 	cp (SEQ_MASTER_STATE:16), 247
 	ret z
 	calr Audio_ProcessVoiceQueue

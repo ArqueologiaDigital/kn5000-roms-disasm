@@ -8660,7 +8660,7 @@ AccReplay_SavedExpression:
 AccReplay_SavedExpr_Return:
 	nop
 	nop
-	ld	xwa, 0x094800
+	ld	xwa, RHYTHM_PATTERN_BUF_A
 	add	xwa, 14
 	ld	wa, (xwa)
 	cp	wa, 0:i3
@@ -13265,7 +13265,7 @@ AccPatch_CheckAndInitDemo_Helper4:
 	mul	de, 32
 	add	xwa, xde
 	add	xwa, 3136
-	add	xwa, 608256
+	add	xwa, RHYTHM_PATTERN_BUF_A
 	ld	xix, xwa
 	pop c
 	sll	c, 2
@@ -13571,7 +13571,7 @@ AccPat_InitWorkAreaFromSlot:
 	push	xwa
 	ld	a, (13370:16)
 	ld	(14608:16), a
-	ld	xwa, 608256
+	ld	xwa, RHYTHM_PATTERN_BUF_A
 	ld	(14610:16), xwa
 	pop	xwa
 	calr	AccPatch_InitFromIndex
@@ -21337,7 +21337,7 @@ AccPat_DualVoice_DataBlock:
 	xor	h, h
 	ld	xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add	xiy, 608256
+	add	xiy, RHYTHM_PATTERN_BUF_A
 	add	xiy, 96
 	ld	(13504:16), xiy
 	ld	l, (13370:16)
@@ -21357,7 +21357,7 @@ AccPatch_LoadDualVoiceParams_Skip:
 	ld	xiy, (xix+hl)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	add	xiy, 608256
+	add	xiy, RHYTHM_PATTERN_BUF_A
 	; v10 does not spell this byte either
 	add	xiy, 96
 	; v10 does not spell this byte either
@@ -21602,7 +21602,7 @@ AccPat_CalcAccentVelocity_Body:
 	xor	h, h
 	ld	xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add	xiy, 608256
+	add	xiy, RHYTHM_PATTERN_BUF_A
 	add	xiy, 96
 	ld	(13508:16), xiy
 	calr	RhythmROM_LoadPattern
@@ -25003,7 +25003,7 @@ DrumVoice_NotifyEE_Helper5:
 	ld	a, 32:opc
 	ld	c, (14446:16)
 	mul	wa, c
-	add	xwa, 608256
+	add	xwa, RHYTHM_PATTERN_BUF_A
 	add	xwa, 2976
 	ld	xiy, xwa
 	ret
@@ -33973,7 +33973,7 @@ AccPatch_VoiceAssignDataBlock_Helper9:
 	add	xiy, 432128
 	add	xiy, 12
 	ld	ix, (14560:16)
-	add	xix, 608256
+	add	xix, RHYTHM_PATTERN_BUF_A
 	add	xix, 12
 	ldw	bc, 96
 	sub	bc, 12
@@ -34006,7 +34006,7 @@ AccPatch_VoiceAssignDataBlock_Helper10:
 	ld	wa, (xhl+iy)
 	ld	(14526:16), wa
 	ld	ix, (14560:16)
-	add	xix, 608256
+	add	xix, RHYTHM_PATTERN_BUF_A
 	ld	wa, (xix+0:8)
 	ld	(14528:16), wa
 	ld	wa, (xix+4)

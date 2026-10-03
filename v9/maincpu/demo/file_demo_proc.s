@@ -2657,7 +2657,7 @@ SaveRegion3_SpaceOk:
 	call FileIO_ReturnError
 	jr SaveRegion3_Return
 SaveRegion3_OpenSuccess:
-	ld xwa, 0x00094800			; ext mem start
+	ld xwa, RHYTHM_PATTERN_BUF_A			; ext mem start
 	ld xbc, (xsp + 4)			; computed size
 	call FileIO_WriteByte_Impl
 	call FileIO_ReturnError

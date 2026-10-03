@@ -420,7 +420,7 @@ VGA_Setup:
 
 	; Set up parameters for video buffer initialization
 	; These are loaded here; caller provides the actual CALL to fill/copy routines
-	ld xwa, 0x43c00
+	ld xwa, OFFSCREEN_BUFFER_1
 	ldw bc, 0x808	; Fill pattern
 	ldw de, 0x9600	; Size in words (38400 = 0x9600)
 

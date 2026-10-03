@@ -4213,7 +4213,7 @@ ClampColorToRange_Skip7:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xhl
-	ld	xde, 277504
+	ld	xde, OFFSCREEN_BUFFER_1
 	add	xde, xwa
 	ld	wa, (xsp+46)
 	ld	(xde), a
@@ -4252,7 +4252,7 @@ ClampColorToRange_Skip10:
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xhl
-	ld	xde, 277504
+	ld	xde, OFFSCREEN_BUFFER_1
 	add	xde, xwa
 	ld	wa, (xsp+46)
 	ld	(xde), a

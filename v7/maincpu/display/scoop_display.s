@@ -10,7 +10,7 @@
 	; === ROM-specific ending: initialize video buffers ===
 	call Fill_memory_at_XWA_with_DE_words_of_BC_value
 	lda xwa, (0x1a0000:24)
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	ldw de, 0x9600
 	call Copy_DE_words_from_XBC_to_XWA	; Blit video buffer
 

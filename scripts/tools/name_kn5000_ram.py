@@ -5,8 +5,11 @@ QUESTION THIS ANSWERS / JOB IT DOES
   The maincpu trees define RAM variables -- CPANEL_RX_READ_PTR, ENCODER_0_STATUS, MIDI_CC_MODWHEEL_VALUE,
   SYSTEM_TIMESTAMP ... (cpanel_constants.s, midi_encoder_constants.s, the program file; documented in
   technics-docs memory-map.md) -- but the code spells them by number: `ld (0x8d8c:16), a`.  This rewrites
-  the numeric memory operands `(N)` / `(N:8|16|24)`, and a pointer loaded into an index register
-  (`ld xix, 0x8da1`), as the name.
+  the numeric memory operands `(N)` / `(N:8|16|24)`, a pointer loaded into an index register
+  (`ld xix, 0x8da1`), both operands of the memory-to-memory pseudos (`ldmm8 0x8d39, 0x8d38`), and a
+  DRAM address (>= 0x10000) loaded into, added to or subtracted from a 32-bit register (`ld xbc,
+  0x43c00`, `add xde, 0x69400`) as the name.  Not: RegObjTabl slot numbers, .incbin offsets, an
+  immediate stored to memory -- equal values there are coincidences.
 
   v7 is NOT v10: its UI / panel variables sit elsewhere (v10's `(0x8ee0)` is v7's `(0x8e44)` in
   MidiChannel_ResetAndConfigure), yet v7's constants files carry v10's values -- harmless only because
@@ -38,6 +41,10 @@ EQU = re.compile(r'^(\s*\.equ\s+)([A-Za-z_]\w*)(\s*,\s*)(0x[0-9a-fA-F]+)(.*)$')
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')
 PTR = re.compile(r'^(\s*ld\s+x(?:ix|iy|iz|hl)\s*,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$', re.I)
 COL0 = re.compile(r'^([A-Za-z_][\w$]*):')
+# memory-to-memory pseudos: both operands are addresses (`ldmm8 0x8d39, 0x8d38`)
+MM = re.compile(r'^(\s*ldmm(?:8|16)\s+)(0x[0-9a-fA-F]+|\d+)(\s*,\s*)(0x[0-9a-fA-F]+|\d+)(\s*)$', re.I)
+# a DRAM address (>= 0x10000) loaded into, added to or subtracted from a 32-bit register is a pointer
+WIDE = re.compile(r'^(\s*(?:ld|add|sub)\s+x(?:wa|bc|de|hl|ix|iy|iz)\s*,\s*)(0x[0-9a-fA-F]{5,}|\d{5,})(\s*)$', re.I)
 LO, HI = 0x400, 0x100000      # internal RAM and the DRAM the code addresses (pattern buffers at 0x94800)
 
 
@@ -128,6 +135,18 @@ def main():
             if v and len(v) == 1:
                 addr[n] = next(iter(v))
             report[n] = dict(v) if v else None
+        # a name the tree's code already USES was derived (and gated) on an earlier run: its .equ
+        # value in this tree is trusted, so the forms added later (ldmm, DRAM pointers) reach it too
+        own = ram_names(a.tree)
+        used = set()
+        for f in glob.glob(os.path.join(REPO, a.tree, "maincpu", "**", "*.s"), recursive=True):
+            for l in open(f, "rb").read().decode("latin-1").split("\n"):
+                if not l.lstrip().startswith(".equ"):
+                    used |= set(re.findall(r'\b(%s)\b' % "|".join(map(re.escape, own)), l.split(";")[0]))
+        for n in used:
+            if n not in addr and n in own:
+                addr[n] = own[n]
+                report[n] = {own[n]: "already used"}
         # a name with no vote inside a block whose voted names ALL moved by the same delta takes that
         # delta (v7's panel / encoder / MIDI-CC block moved -0x9C as one: 40 of 40 voted names)
         for n in ref:
@@ -158,6 +177,15 @@ def main():
             p = PTR.match(new)
             if p and int(p.group(2), 0) in byaddr:
                 new = p.group(1) + byaddr[int(p.group(2), 0)] + p.group(3)
+            q = MM.match(new)
+            if q:
+                x, y = int(q.group(2), 0), int(q.group(4), 0)
+                new = q.group(1) + byaddr.get(x, q.group(2)) + q.group(3) + byaddr.get(y, q.group(4)) + q.group(5)
+                st["ldmm operands"] += (x in byaddr) + (y in byaddr)
+            w = WIDE.match(new)
+            if w and int(w.group(2), 0) in byaddr and int(w.group(2), 0) >= 0x10000:
+                new = w.group(1) + byaddr[int(w.group(2), 0)] + w.group(3)
+                st["wide pointer operands"] += 1
             if new != code:
                 st["operands"] += len([1 for m in MEM.finditer(code) if int(m.group(1), 0) in byaddr]) + \
                     (1 if PTR.match(code) and int(PTR.match(code).group(2), 0) in byaddr else 0)

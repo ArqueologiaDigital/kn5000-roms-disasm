@@ -2693,7 +2693,7 @@ DisplayBuf_CopyEvenRow:
 
 	add xwa, (xsp + 10)
 
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 
 	add xbc, xwa
 
@@ -2742,7 +2742,7 @@ DisplayBuf_CopyOddRow:
 
 	add xwa, (xsp + 10)
 
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 
 	add xbc, xwa
 

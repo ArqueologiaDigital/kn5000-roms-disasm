@@ -29695,7 +29695,7 @@ SeqPart_ByteBlockA207_Skip12:
 	cp	a, (0x28a1:16)
 	jr	ule, SeqPart_ByteBlockA207_Loop2
 SeqPart_ByteBlockA207_Join:
-	ldmm8	10362, 9782
+	ldmm8	SEQ_ERROR_CODE, 9782
 SeqPart_ByteBlockA207_Join2:
 	call	SeqVoice_ApplyTableEntry
 	call	SeqVoice_InitReturnZero
@@ -29931,7 +29931,7 @@ SeqPart_SingleLoadError:
 	jr ule, SeqPart_SingleLoadFinish
 
 SeqPart_SingleLoadReturn:
-	ldmm8 0x287a, 9782
+	ldmm8 SEQ_ERROR_CODE, 9782
 
 SeqPart_SingleLoadCleanup:
 	call SeqVoice_ApplyTableEntry
@@ -30485,7 +30485,7 @@ SeqPart_ByteBlockA95A_Code_Skip14:
 	inc1b_erp 251
 	cp_erpb 251, 16
 	jr	ule, SeqPart_ByteBlockA95A_Loop
-	ldmm8	10362, 9782
+	ldmm8	SEQ_ERROR_CODE, 9782
 SeqPart_ByteBlockA95A_Join:
 	calr	SeqPart_ByteBlockA95A_Code_Helper
 SeqPart_ByteBlockA95A_Code_Epilogue:
@@ -31109,7 +31109,7 @@ SeqPart_DualLoadFinish:
 	jr ule, SeqPart_DualLoadValidate
 
 SeqPart_DualLoadComplete:
-	ldmm8 0x287a, 9782
+	ldmm8 SEQ_ERROR_CODE, 9782
 	jrl SeqPart_DualLoadExit
 
 SeqPart_DualLoadReturn:
@@ -32432,7 +32432,7 @@ SeqPart_TransposeReturn:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr c, SeqPart_TransposeStartWalk
-	ldmm8 0x287a, 9782
+	ldmm8 SEQ_ERROR_CODE, 9782
 
 SeqPart_TransposeExit:
 	call Part_ApplyVoiceTableC
@@ -32603,7 +32603,7 @@ SeqPart_VelEditStartWalk:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr ule, SeqPart_VelEditBounds
-	ldmm8 0x287a, 9782
+	ldmm8 SEQ_ERROR_CODE, 9782
 
 SeqPart_VelEditReturn:
 	call AppEvent_ExtendedHandler
@@ -33266,7 +33266,7 @@ SeqPart_PartSelectReturn:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr ule, SeqPart_PartSelectProcess
-	ldmm8 0x287a, 9782
+	ldmm8 SEQ_ERROR_CODE, 9782
 
 SeqPart_PartSelectExit:
 	call SeqVoice_ApplyTableEntry
@@ -33459,7 +33459,7 @@ SeqPart_VoiceCheckMultiDone:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr ule, SeqPart_VoiceCheckMultiLoop
-	ldmm8 0x287a, 9782
+	ldmm8 SEQ_ERROR_CODE, 9782
 
 SeqPart_VoiceCheckReturn:
 	call SeqVoice_ApplyTableEntry
@@ -33634,7 +33634,7 @@ SeqPart_VoiceCheckWalkLoop:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr ule, SeqPart_VoiceCheckFinish
-	ldmm8 0x287a, 9782
+	ldmm8 SEQ_ERROR_CODE, 9782
 
 SeqPart_VoiceCheckWalkDone:
 	call SeqVoice_ApplyTableEntry

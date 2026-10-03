@@ -2780,14 +2780,14 @@ MainTitleControl:
 ; =============================================================================
 SeqState_TransitionMode:
 	ld (0x8d37:16), a
-	ldmm8 0x8d39, 0x8d38
+	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
 	ld (SEQ_MASTER_STATE:16), l
 	ld (MAIN_TITLE_CURRENT:16), l
 	ldw wa, 0x61
 	jr MainTitleCtrl_SetIndicatorAndClear
 
 MainTitleCtrl_SaveAndTransition:
-	ldmm8 0x8d39, 0x8d38
+	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
 	ld (MAIN_TITLE_CURRENT:16), l
 	ldw wa, 0x61
 
@@ -2808,7 +2808,7 @@ SeqState_DemoModeHandler:
 	ld (0x8d37:16), a
 
 SeqDemo_SaveCurrentState:
-	ldmm8 0x8d39, 0x8d38
+	ldmm8 MAIN_TITLE_PREVIOUS, MAIN_TITLE_CURRENT
 	ldmm8 0x8d35, 0x8d34
 	jr UIWidget_ReturnZero
 

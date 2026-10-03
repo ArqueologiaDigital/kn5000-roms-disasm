@@ -9046,7 +9046,7 @@ AccReplay_SavedExpression:
 AccReplay_SavedExpr_Return:
 	nop
 	nop
-	ld	xwa, 0x094800
+	ld	xwa, RHYTHM_PATTERN_BUF_A
 	add	xwa, 14
 	ld	wa, (xwa)
 	cp	wa, 0:i3
@@ -13837,7 +13837,7 @@ Not_sure_maybe_SOFT_VERSION_related:
 	ex_ff
 	ldw	iz, 0xfe3c
 	ld	(0x35d5:16), 0
-	ld	xwa, 0x094800
+	ld	xwa, RHYTHM_PATTERN_BUF_A
 	cp	hl, 0:i3
 	jr	z, Not_sure_maybe_SOFT_VERSION_related_Code_Return
 	ld	(0x35d5:16), 1
@@ -14121,7 +14121,7 @@ AccPatch_CheckAndInitDemo_Helper4:
 	mul	de, 32
 	add	xwa, xde
 	add	xwa, 3136
-	add	xwa, 0x094800
+	add	xwa, RHYTHM_PATTERN_BUF_A
 	ld	xix, xwa
 	pop	c
 	sll	c, 2
@@ -14415,7 +14415,7 @@ AccPat_InitWorkAreaFromSlot:
 	push xwa
 	ld a, (0x34d6:16)
 	ld (0x39ac:16), a
-	ld xwa, 0x94800
+	ld xwa, RHYTHM_PATTERN_BUF_A
 	ld (0x39ae:16), xwa
 	pop xwa
 	calr AccPatch_InitFromIndex
@@ -22310,7 +22310,7 @@ AccPat_DualVoice_DataBlock:
 	xor	h, h
 	ld	xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add xiy, 608256
+	add xiy, RHYTHM_PATTERN_BUF_A
 	add	xiy, 96
 	ld	(0x355c:16), xiy
 	ld	l, (0x34d6:16)
@@ -22322,7 +22322,7 @@ AccPatch_LoadDualVoiceParams_Skip:
 	xor	h, h
 	ld	xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add	xiy, 608256
+	add	xiy, RHYTHM_PATTERN_BUF_A
 	add	xiy, 96
 	ld	(0x3560:16), xiy
 	ret
@@ -22546,7 +22546,7 @@ AccPat_CalcAccentVelocity_Body:
 	xor h, h
 	ld xix, RhythmTiming_OffsetTable
 	ld	xiy, (xix+hl)
-	add xiy, 0x94800
+	add xiy, RHYTHM_PATTERN_BUF_A
 	add xiy, 0x60
 	ld (0x3560:16), xiy
 	calr RhythmROM_LoadPattern
@@ -26566,7 +26566,7 @@ TimeSig_DisplayStrings_Helper:
 	ld	a, 32:opc
 	ld	c, (0x390a:16)
 	mul	wa, c
-	add	xwa, 0x094800
+	add	xwa, RHYTHM_PATTERN_BUF_A
 	add	xwa, 2976
 	ld	xiy, xwa
 	ret
@@ -35322,7 +35322,7 @@ AccPatch_VoiceAssignDataBlock_Sub_Helper3:
 	add	xiy, 0x069800
 	add	xiy, 12
 	ld	ix, (0x397c:16)
-	add	xix, 0x094800
+	add	xix, RHYTHM_PATTERN_BUF_A
 	add	xix, 12
 	ldw	bc, 96
 	sub	bc, 12
@@ -35355,7 +35355,7 @@ AccPatch_VoiceAssignDataBlock_Helper4:
 	ld	wa, (xhl+iy)
 	ld (14682:16), wa
 	ld	ix, (0x397c:16)
-	add	xix, 0x094800
+	add	xix, RHYTHM_PATTERN_BUF_A
 	ld wa, (xix+0:8)
 	ld (14684:16), wa
 	ld	wa, (xix+4)

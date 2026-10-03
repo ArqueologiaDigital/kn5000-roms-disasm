@@ -754,7 +754,7 @@ DrawLineEx_VertLoop:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	ld (xbc), a
@@ -780,7 +780,7 @@ DrawLineEx_VertXorPixel:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	xor (xbc), a
@@ -812,7 +812,7 @@ DrawLineEx_HorzLoop:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	ld (xbc), a
@@ -838,7 +838,7 @@ DrawLineEx_HorzXorPixel:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	ld xbc, 0x43c00
+	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	ld wa, (xsp + 44)
 	xor (xbc), a
@@ -2577,7 +2577,7 @@ DrawBitmapFast_Impl:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xde
-	ld xde, 0x43c00
+	ld xde, OFFSCREEN_BUFFER_1
 	add xde, xwa
 	ld (xsp + 12), xde
 	ld (xsp + 8), bc
@@ -3279,7 +3279,7 @@ DrawBitmapSPFast_Impl:
 	ld wa, (xhl)
 	exts xwa
 	add xwa, xde
-	ld xde, 0x43c00
+	ld xde, OFFSCREEN_BUFFER_1
 	add xde, xwa
 	ld xiz, xde
 	ld (xsp + 6), bc
@@ -3879,7 +3879,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ld	wa, (xhl)
 	exts	xwa
 	add	xwa, xde
-	ld	xde, 277504
+	ld	xde, OFFSCREEN_BUFFER_1
 	add	xde, xwa
 	ld	xiz, xde
 	ld	xwa, 354304
