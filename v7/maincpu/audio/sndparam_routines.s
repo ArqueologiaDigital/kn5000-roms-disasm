@@ -146,7 +146,7 @@ SndParam_ResolveWidget_Skip2:
 	ld	e, (xwa+15)
 	extz	de
 	sla	de, 2
-	lda	xhl, (0xee1130:24)
+	lda	xhl, (SndParam_EncodeHandlers:24)
 	exts	xde
 	add	xde, xhl
 	ld	xix, (xde)
@@ -356,7 +356,7 @@ SndParam_DecodeMidiAddr_Skip2:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee1160:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	l, (xwa+5)
 	extz	hl
 	ld	xwa, (xde+bc)
@@ -375,7 +375,7 @@ SndParam_ReadRegField:
 	ld	c, (xwa + 4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee1160:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xde, (xde+bc)
 	or	xde, xde
 	ret	z
@@ -431,7 +431,7 @@ SndParam_CompareRegField_Part:
 	ld	a, (xbc + 4)
 	extz	wa
 	sla	wa, 2
-	lda	xde, (0xee1160:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xde, (xde+wa)
 SndParam_CompareRegField_Part_2:
 	or	xde, xde
@@ -476,7 +476,7 @@ SndParam_ReadRegWord:
 	ld	c, (xwa + 4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee1160:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xde, (xde+bc)
 	or	xde, xde
 SndParam_ReadRegWord_Part:
@@ -504,7 +504,7 @@ SndParam_ReadRegBitfield:
 	ld	c, (xwa + 4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee1160:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xix, (xde+bc)
 	or	xix, xix
 	jr	z, SndParam_BitfieldReturn
@@ -544,7 +544,7 @@ SndParam_ReadRegAddress:
 	ld	a, (xwa + 4)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	or	xwa, xwa
 	ret	z
@@ -572,7 +572,7 @@ SndParam_RegisterEntry_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xhl, (0xee1160:24)
+	lda	xhl, (SndParam_BlockRamPtrs:24)
 	ld	xhl, (xhl+wa)
 	or	xhl, xhl
 	jrl	z, SndParam_RegisterEntry_Data_Skip3
@@ -671,7 +671,7 @@ SndParam_RegisterEntryAlt_Data_Part:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xix, (0xee1160:24)
+	lda	xix, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xix+wa)
 	ld	(xsp+2), xwa
 	or	xwa, xwa
@@ -794,7 +794,7 @@ SndParam_RegisterType4_Handler:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
@@ -891,7 +891,7 @@ SndParam_RegisterBitfield_Data:
 SndParam_RegisterBitfield_Data_Part:
 	extz	bc
 	sla	bc, 2
-	lda	xix, (0xee1160:24)
+	lda	xix, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xix+bc)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterBitfield_Data_Skip3
@@ -975,7 +975,7 @@ SndParam_RegisterLinked_Data:
 	extz	wa
 SndParam_RegisterLinked_Data_Part:
 	sla	wa, 2
-	lda	xix, (0xee1160:24)
+	lda	xix, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xix+wa)
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1100,7 +1100,7 @@ SndParam_RegisterLinked2_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
@@ -1245,7 +1245,7 @@ SndParam_RegisterSimple_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jr	z, SndParam_RegisterSimple_Data_Skip3
@@ -1320,7 +1320,7 @@ SndParam_RegisterChained_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterChained_Data_Skip
@@ -1438,7 +1438,7 @@ SndParam_RegisterChained2_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterChained2_Data_Skip
@@ -1548,7 +1548,7 @@ SndParam_RegisterComplex_Data:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1673,7 +1673,7 @@ SndParam_NotifyQuick_Data:
 SndParam_NotifyQuick_Data_Part:
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	or	xwa, xwa
 	jr	z, SndParam_NotifyQuick_Data_Skip3
@@ -1712,7 +1712,7 @@ SndParam_RegisterDual_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1848,7 +1848,7 @@ SndParam_RegisterOffset_Data:
 	ld	a, (xde)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterOffset_Data_Skip3
@@ -1924,7 +1924,7 @@ SndParam_RegisterWide_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1160:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
@@ -2645,7 +2645,7 @@ SndParam_RegisterAllWidgets:
 SndParam_RegisterLoop:
 	ld	xbc, xiz
 	sll	xbc, 2
-	ld	xwa, 0xee01a0
+	ld	xwa, SndParam_Registry
 	add	xwa, xbc
 	ld	xbc, (xwa)
 	ld	xwa, (xbc)
@@ -2748,7 +2748,7 @@ SndParam_ReregisterAll:
 SndParam_ReregisterLoop:
 	ld	xbc, xiz
 	sll	xbc, 2
-	ld	xwa, 0xee01a0
+	ld	xwa, SndParam_Registry
 	add	xwa, xbc
 	ld	xhl, (xwa)
 	ld	a, (xhl + 4)
