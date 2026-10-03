@@ -32542,7 +32542,7 @@ RhythmROM_LoadAndInit_Pad 00F63187
 RhythmROM_LoadPattern 00F63189
 RhythmROM_LoadPattern_Data 00F631BD
 RhythmROM_PatternDisp_ReadByte 00F631DD
-RhythmROM_PatternDisp_CheckCmd 00F6323F
+RhythmROM_PatternDisp_BufOffsets 00F6323F
 RhythmROM_PatternDisp_Handle90 00F6325F
 RhythmROM_PatternDisp_Check91 00F63271
 RhythmROM_PatternDisp_Handle91 00F632DE

@@ -1,0 +1,3 @@
+# accompaniment_engine.s: 16 words added to the pattern-buffer pointer, indexed by (0x34EF) & 0xF
+# (v10/v9 0xF63643, v7 0xF6323F); was decoded as `popw wa / push sr / jrl ge, 18434` ...
+s/\bRhythmROM_PatternDisp_CheckCmd\b/RhythmROM_PatternDisp_BufOffsets/g

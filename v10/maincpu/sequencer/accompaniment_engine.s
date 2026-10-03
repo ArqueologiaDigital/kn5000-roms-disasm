@@ -22618,25 +22618,16 @@ RhythmROM_PatternDisp_ReadByte:
 	and l, 0xf
 	xor h, h
 	sla hl, 1
-	ld xix, RhythmROM_PatternDisp_CheckCmd
+	ld xix, RhythmROM_PatternDisp_BufOffsets
 	xor xwa, xwa
 	ld	wa, (xix+hl)
 	jr RhythmROM_PatternDisp_Handle90
 
-RhythmROM_PatternDisp_CheckCmd:
-	popw	wa
-	push	sr
-	jrl	ge, 18434
-	.byte 0x06
-	jrl	ge, 28166
-	pop	sr
-	jr	nz, 7
-	.byte 0x9f
-	pop	sr
-	.byte 0x9f
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF63652-0xF63663 (17 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=4 near RhythmROM_PatternDisp_CheckCmd+15
-	.byte 0x07, 0x0c, 0x03, 0x0c, 0x03, 0x3d, 0x03, 0x3d, 0x03, 0x0c, 0x07, 0x0c
-	.byte 0x07, 0x3d, 0x07, 0x3d, 0x07
+RhythmROM_PatternDisp_BufOffsets:
+	; Indexed by (0x34EF) & 0xF; the word is added to the pointer in (0x3564) (RhythmROM_PatternDisp_Handle90).
+	; Was decoded as `popw wa / push sr / jrl ge, 18434 ...` and a data-as-code note.
+	.short	0x0248, 0x0279, 0x0648, 0x0679, 0x036e, 0x076e, 0x039f, 0x079f
+	.short	0x030c, 0x030c, 0x033d, 0x033d, 0x070c, 0x070c, 0x073d, 0x073d
 
 RhythmROM_PatternDisp_Handle90:
 	ld xiy, (0x3564:16)
