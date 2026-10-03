@@ -40,6 +40,18 @@
 ; the third byte of a word.  Once spelled as whatever label sat at 0xFF0000 in each version
 ; (v10 SendPartDataBlock_Data2, v7 ToneGen_ProcessMidiConverge_Code; v9 had none, so the number).
 .equ MASK_BITS16_23, 0x00FF0000
+; AMD/JEDEC flash command words for two 16-bit flash chips side by side on the 32-bit bus: the
+; command byte in each half (boot/system_handlers.s writes them to base+0x15554 / base+0xAAA8).
+; Sequences there: program AA 55 A0, autoselect AA 55 90, reset AA 55 F0,
+; chip erase AA 55 80 AA 55 10, sector erase AA 55 80 AA 55 30.
+.equ FLASH_CMD_UNLOCK1, 0x00AA00AA
+.equ FLASH_CMD_UNLOCK2, 0x00550055
+.equ FLASH_CMD_ERASE_SETUP, 0x00800080
+.equ FLASH_CMD_CHIP_ERASE, 0x00100010
+.equ FLASH_CMD_SECTOR_ERASE, 0x00300030
+.equ FLASH_CMD_PROGRAM, 0x00A000A0
+.equ FLASH_CMD_AUTOSELECT, 0x00900090
+.equ FLASH_CMD_RESET, 0x00F000F0
 
 .equ SYSTEM_TIMESTAMP, 0x409
 

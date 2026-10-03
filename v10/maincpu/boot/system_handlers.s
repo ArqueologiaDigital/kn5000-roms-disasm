@@ -6683,15 +6683,15 @@ TableDataROM_IdentifyChip_WaitReady:
 	jr z, TableDataROM_IdentifyChip_WaitReady
 	ld xbc, xde
 	add xbc, 0x15554
-	ld xwa, 0xaa00aa
+	ld xwa, FLASH_CMD_UNLOCK1
 	ld (xbc), xwa
 	ld xbc, xde
 	add xbc, 0xaaa8
-	ld xwa, 0x550055
+	ld xwa, FLASH_CMD_UNLOCK2
 	ld (xbc), xwa
 	ld xbc, xde
 	add xbc, 0x15554
-	ld xwa, ParamPopup_KeyNameBracketed_Code
+	ld xwa, FLASH_CMD_RESET
 	ld (xbc), xwa
 	ld XWA, (xde + 0x6464)
 	ret
@@ -6711,11 +6711,11 @@ HDAE5000_Detect:
 	ld xwa, 0xffffffff
 	ld (xsp + 8), xwa
 	ei 6
-	ld xwa, 0xaa00aa
+	ld xwa, FLASH_CMD_UNLOCK1
 	ld (0x815554:24), xwa
-	ld xwa, 0x550055
+	ld xwa, FLASH_CMD_UNLOCK2
 	ld (0x80aaa8:24), xwa
-	ld xwa, 0x900090
+	ld xwa, FLASH_CMD_AUTOSELECT
 	ld (0x815554:24), xwa
 	ld xwa, (0x800000:24)
 	ld (xsp + 4), xwa
@@ -6758,11 +6758,11 @@ Flash_ProgramByte_WaitReady:
 	bit	5, (P7:8)
 	jr z, Flash_ProgramByte_WaitReady
 	ei 6
-	ld xwa, 0xaa00aa
+	ld xwa, FLASH_CMD_UNLOCK1
 	ld (0x815554:24), xwa
-	ld xwa, 0x550055
+	ld xwa, FLASH_CMD_UNLOCK2
 	ld (0x80aaa8:24), xwa
-	ld xwa, 0xa000a0
+	ld xwa, FLASH_CMD_PROGRAM
 	ld (0x815554:24), xwa
 	ld xwa, (xsp + 4)
 	ld (xwa), xiz
@@ -6809,37 +6809,37 @@ HDAE5000_Flash_Verify:
 	; [00815554h] = 00aa00aah
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0xaa00aa
+	ld xwa, FLASH_CMD_UNLOCK1
 	ld (xbc), xwa
 
 	; [0080aaa8h] = 00550055h
 	ld xbc, xiz
 	add xbc, 0xaaa8
-	ld xwa, 0x550055
+	ld xwa, FLASH_CMD_UNLOCK2
 	ld (xbc), xwa
 
 	; [00815554h] = 00800080h
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0x800080
+	ld xwa, FLASH_CMD_ERASE_SETUP
 	ld (xbc), xwa
 
 	; [00815554h] = 00aa00aah
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0xaa00aa
+	ld xwa, FLASH_CMD_UNLOCK1
 	ld (xbc), xwa
 
 	; [0080aaa8h] = 00550055h
 	ld xbc, xiz
 	add xbc, 0xaaa8
-	ld xwa, 0x550055
+	ld xwa, FLASH_CMD_UNLOCK2
 	ld (xbc), xwa
 
 	; [00815554h] = 00100010h
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0x100010
+	ld xwa, FLASH_CMD_CHIP_ERASE
 	ld (xbc), xwa
 
 	ei 0
@@ -6852,25 +6852,25 @@ HDAE5000_Flash_Erase_AllSectors:
 	ei	6
 	ld	xbc, xiz
 	add	xbc, 0x15554
-	ld	xwa, 0xaa00aa
+	ld	xwa, FLASH_CMD_UNLOCK1
 	ld	(xbc), xwa
 	ld	xbc, xiz
 	add	xbc, 0xaaa8
-	ld	xwa, 0x550055
+	ld	xwa, FLASH_CMD_UNLOCK2
 	ld	(xbc), xwa
 	ld	xbc, xiz
 	add	xbc, 0x15554
-	ld	xwa, 0x800080
+	ld	xwa, FLASH_CMD_ERASE_SETUP
 	ld	(xbc), xwa
 	ld	xbc, xiz
 	add	xbc, 0x15554
-	ld	xwa, 0xaa00aa
+	ld	xwa, FLASH_CMD_UNLOCK1
 	ld	(xbc), xwa
 	ld	xbc, xiz
 	add	xbc, 0xaaa8
-	ld	xwa, 0x550055
+	ld	xwa, FLASH_CMD_UNLOCK2
 	ld	(xbc), xwa
-	ld	xwa, 0x300030
+	ld	xwa, FLASH_CMD_SECTOR_ERASE
 	ld	(xiz), xwa
 	ld	xbc, xiz
 	add	xbc, 0x20000
