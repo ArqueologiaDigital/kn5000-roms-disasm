@@ -182,3 +182,15 @@ v10/v9 0xF5AACB-0xF5AAFB (R3 cluster at 0xF5AACB):
 `accautoplay_postedit.py <tree>` handles the padding label and the stale note. v7 (0xF5A6C7, a `.byte`
 run) was written by hand from its bytes, with v7's RAM addresses (0x33D2/0x33FC/0x33FD), and checked by
 the byte gate.
+
+### By hand, all three trees (2026-10-03)
+
+- `AccPatch_DefaultSlotData` (v10/v9 0xF5EFA7, v7 0xF5EBA3; R3 cluster at 0xF5EFA8) is the 84-byte default
+  record `AccPatch_CopyDefaultsForInit` copies with `ldir`. It was `reti / normal / ld w, 128 / ... /
+  jrl ov, 20480`, and is now `.byte` / `.zero` / `.asciz "    clear       "`. The record is identical in
+  the three images. The typed text was checked against the v10 bytes before writing, and the gate
+  checked all three trees.
+- `RhythmVoice_SpaceFill` (v10/v9 0xF63815, v7 0xF63411; R3 cluster at 0xF63813) was already framed
+  right. Its three branches were numeric because nothing references the block. It now has labels, and
+  the unreferenced positional label `RhythmVoice_WriteBuf_Clamp_Code` on the two padding bytes before it
+  is gone.

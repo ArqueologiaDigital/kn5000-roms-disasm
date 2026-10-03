@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,679
-#   semantic names ........... 50,866 (98.4%)
+#   symbols .................. 51,682
+#   semantic names ........... 50,869 (98.4%)
 #   positional names ......... 813
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -32886,7 +32886,10 @@ RhythmROM_CountEntries 00F637DB
 RhythmVoice_WriteToBuffer 00F63800
 RhythmVoice_WriteBuf_Clamp 00F6380C
 RhythmVoice_WriteBuf_Done 00F63812
-RhythmVoice_WriteBuf_Clamp_Code 00F63813
+RhythmVoice_SpaceFill 00F63815
+RhythmVoice_SpaceFill_Loop 00F63817
+RhythmVoice_SpaceFill_Second 00F6381E
+RhythmVoice_SpaceFill_Next 00F63823
 DrumKit_DataTable_Entry0 00F6382E
 DrumKit_DataTable_Entry1 00F63849
 DrumKit_DataTable_Entry2 00F6385C

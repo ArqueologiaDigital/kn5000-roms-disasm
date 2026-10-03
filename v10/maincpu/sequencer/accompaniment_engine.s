@@ -14615,28 +14615,17 @@ AccPatch_CopyDefaults_InitDone:
 	ret
 
 AccPatch_DefaultSlotData:
-	reti
-	normal
-	ld	w, 128:opc
-	pop	xwa
-	push	sr
-	nop
-	nop
-	.zero 8
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF5EFB7-0xF5EFC7 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near AccPatch_DefaultSlotData+16
-	.byte 0x00, 0x00, 0x00, 0x00, 0x28, 0x00, 0x40, 0x00, 0x50, 0x06, 0x7f, 0x00
-	.byte 0x00, 0x00, 0x0c, 0x00
-	.byte 0x50, 0x06
-	jrl	nc, 14336
-	nop
-	jrl	ov, 20480
-	.byte 0x06
-	jrl	nc, 16640
-	nop
-	ld	xwa, 0x7f065000
-	nop
-	.asciz "    clear       "
-	.zero 15
+	; The 84 bytes (0x54) AccPatch_CopyDefaultsForInit copies over slot + 12 with ldir; it then puts the
+	; slot's old word +16 back when the slot's old byte +12 was 7.  Was decoded as `reti / normal / ld w, 128`
+	; ... `jrl ov, 20480` ...  Field meanings are not established.
+	.byte	0x07, 0x01, 0x20, 0x80, 0x58, 0x02
+	.zero	14
+	.byte	0x28, 0x00, 0x40, 0x00, 0x50, 0x06, 0x7f, 0x00	; +20..+51: four 8-byte entries of one shape
+	.byte	0x00, 0x00, 0x0c, 0x00, 0x50, 0x06, 0x7f, 0x00
+	.byte	0x38, 0x00, 0x74, 0x00, 0x50, 0x06, 0x7f, 0x00
+	.byte	0x41, 0x00, 0x40, 0x00, 0x50, 0x06, 0x7f, 0x00
+	.asciz	"    clear       "	; +52: the slot name
+	.zero	15
 
 AccPatch_ClearSlot13BySlotIdx:
 	ld a, 0x0:opc
@@ -22872,19 +22861,24 @@ RhythmVoice_WriteBuf_Clamp:
 RhythmVoice_WriteBuf_Done:
 	ret
 
-RhythmVoice_WriteBuf_Clamp_Code:
-	nop
-	nop
+	.byte	0x00, 0x00	; padding
+; No reference found.  Writes 0x20 (a space) to (XIY) and steps XIY while BC counts down to 0,
+; with C := 16 and B as the caller left it.  Both `jr nz` test flags that nothing here sets (LD sets
+; none), so whether a byte is written depends on the caller's flags.
+RhythmVoice_SpaceFill:
 	ld	c, 16:opc
+RhythmVoice_SpaceFill_Loop:
 	ld	a, (xiy)
-	jr	nz, 3
+	jr	nz, RhythmVoice_SpaceFill_Second
 	ld	(xiy), 32
-	jr	nz, 3
+RhythmVoice_SpaceFill_Second:
+	jr	nz, RhythmVoice_SpaceFill_Next
 	ld	(xiy), 32
+RhythmVoice_SpaceFill_Next:
 	dec	1, bc
 	inc	1, iy
 	cp	bc, 0:i3
-	jr	nz, -20
+	jr	nz, RhythmVoice_SpaceFill_Loop
 	ret
 	nop
 	nop

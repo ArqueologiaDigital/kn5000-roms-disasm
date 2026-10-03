@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,408
-#   semantic names ........... 50,506 (98.2%)
+#   symbols .................. 51,411
+#   semantic names ........... 50,509 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -32562,7 +32562,10 @@ RhythmROM_CountEntries 00F633D7
 RhythmVoice_WriteToBuffer 00F633FC
 RhythmVoice_WriteBuf_Clamp 00F63408
 RhythmVoice_WriteBuf_Done 00F6340E
-RhythmVoice_WriteBuf_Clamp_Code 00F6340F
+RhythmVoice_SpaceFill 00F63411
+RhythmVoice_SpaceFill_Loop 00F63413
+RhythmVoice_SpaceFill_Second 00F6341A
+RhythmVoice_SpaceFill_Next 00F6341F
 DrumKit_DataTable_Entry0 00F6342A
 DrumKit_DataTable_Entry1 00F63445
 DrumKit_DataTable_Entry2 00F63458
