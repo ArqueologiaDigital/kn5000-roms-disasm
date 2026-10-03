@@ -1882,7 +1882,7 @@ sub_F0017D_Return:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F001B0:
-	calr	65482	; F001B0  calr 0xf0017d
+	calr	sub_F0017D	; F001B0  calr 0xf0017d
 	ret	; F001B3  ret
 
 ; --- 0xF001B4-0xF001B4, 1 B, converted by lane promB6 (TRAILER).
@@ -20185,7 +20185,7 @@ PtrTable_F0AE2F:
 ; --------------------------------------------------------------------------
 sub_F0AE5F:
 	ld	(xix+8), 50	; F0AE5F  ld (XIX+0x08),0x32
-	jr	10	; F0AE63  jr T,0xf0ae6f
+	jr	sub_F0AE6B_Join	; F0AE63  jr T,0xf0ae6f
 
 ; --------------------------------------------------------------------------
 ; sub_F0AE65
@@ -20617,7 +20617,7 @@ PtrTable_F0B09B:
 ; --------------------------------------------------------------------------
 sub_F0B0C3:
 	ld	(xix+8), 50	; F0B0C3  ld (XIX+0x08),0x32
-	jr	10	; F0B0C7  jr T,0xf0b0d3
+	jr	sub_F0B0CF_Join	; F0B0C7  jr T,0xf0b0d3
 
 ; --------------------------------------------------------------------------
 ; sub_F0B0C9
@@ -27974,8 +27974,8 @@ DispatchTable_F0F152:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F16A:
-	calr	1563	; F0F16A  calr 0xf0f788
-	jr	8	; F0F16D  jr T,0xf0f177
+	calr	sub_F0F788	; F0F16A  calr 0xf0f788
+	jr	sub_F0F174_Join	; F0F16D  jr T,0xf0f177
 
 ; --------------------------------------------------------------------------
 ; sub_F0F16F
@@ -28440,8 +28440,8 @@ DispatchTable_F0F2F8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F310:
-	calr	4773	; F0F310  calr 0xf105b8
-	jr	24	; F0F313  jr T,0xf0f32d
+	calr	DspEffect_MoveCursor	; F0F310  calr 0xf105b8
+	jr	DispatchTable_F0F2F8_Nop0	; F0F313  jr T,0xf0f32d
 
 ; --------------------------------------------------------------------------
 ; sub_F0F315
@@ -28817,7 +28817,7 @@ DispatchTable_F0F40A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F422:
-	calr	4725	; F0F422  calr 0xf1069a
+	calr	DspEffect_StepCursorValue	; F0F422  calr 0xf1069a
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F425  or (XIX),0x01
 	jr	sub_F0F441	; F0F428  jr T,0xf0f441
 
@@ -29193,7 +29193,7 @@ DispatchTable_F0F516:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F52E:
-	calr	4457	; F0F52E  calr 0xf1069a
+	calr	DspEffect_StepCursorValue	; F0F52E  calr 0xf1069a
 	m_set 0, MD16, 0x2791	; F0F531  set 0,(0x2791)
 
 ; --------------------------------------------------------------------------
@@ -29293,7 +29293,7 @@ DispatchTable_F0F558:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F570:
-	calr	3074	; F0F570  calr 0xf10175
+	calr	sub_F10175	; F0F570  calr 0xf10175
 	m_set 0, MD16, 0x2791	; F0F573  set 0,(0x2791)
 	jr	DispatchTable_F0F558_Nop4	; F0F577  jr T,0xf0f59e
 
@@ -94022,14 +94022,14 @@ sub_F459D9_Join:
 	ld	a, c	; F45A40  ld A,C
 	scf	; F45A42  scf
 	m_rd_xorcf_a RW+r6	; F45A43  xorcf A,IZ
-	jr	c, 17	; F45A45  jr C,0xf45a58
-	jr	15	; F45A47  jr T,0xf45a58
+	jr	c, sub_F459D9_Skip3	; F45A45  jr C,0xf45a58
+	jr	sub_F459D9_Skip3	; F45A47  jr T,0xf45a58
 	ld	iz, (6304800:24)	; F45A49  ld IZ,(0x603420)
 	ld	a, c	; F45A4E  ld A,C
 	sub	a, 16	; F45A50  sub A,0x10
 	scf	; F45A53  scf
 	m_rd_xorcf_a RW+r6	; F45A54  xorcf A,IZ
-	jr	c, 0	; F45A56  jr C,0xf45a58
+	jr	c, sub_F459D9_Skip3	; F45A56  jr C,0xf45a58
 sub_F459D9_Skip3:
 	add	ix, 3	; F45A58  add IX,0x0003
 	inc	1, c	; F45A5C  inc 1,C
@@ -106915,7 +106915,7 @@ sub_F4EED9:		; <- T_F40D0C
 	cp	bc, 8	; F4EED9  cp BC,0x0008
 	jr	nz, sub_F4EE73_Return4	; F4EEDD  jr NZ,0xf4eee5
 	and	w, 247	; F4EEDF  and W,0xf7
-	calr	65249	; F4EEE2  calr 0xf4edc6
+	calr	sub_F4EDC6	; F4EEE2  calr 0xf4edc6
 sub_F4EE73_Return4:
 	ret	; F4EEE5  ret
 
@@ -106935,7 +106935,7 @@ sub_F4EEE6:		; <- T_F40D10
 	cp	bc, 9	; F4EEE6  cp BC,0x0009
 	jr	nz, 6	; F4EEEA  jr NZ,0xf4eef2
 	or	w, 8	; F4EEEC  or W,0x08
-	calr	65236	; F4EEEF  calr 0xf4edc6
+	calr	sub_F4EDC6	; F4EEEF  calr 0xf4edc6
 	ret	; F4EEF2  ret
 
 ; --------------------------------------------------------------------------
@@ -114316,7 +114316,7 @@ IndexedTable_GetByte:
 	push	xix	; F55340  push XIX
 	push	0	; F55341  push 0x00
 	m_push MBD+r6, 0x08	; F55343  push (XIZ+0x08)
-	calr	65496	; F55346  calr 0xf55321
+	calr	IndexedTable_GetPtr	; F55346  calr 0xf55321
 	ld	xix, xiy	; F55349  ld XIX,XIY
 	ld	bc, (xiz+10)	; F5534B  ld BC,(XIZ+0x0a)
 	extz	bc	; F5534E  extz BC
@@ -114389,7 +114389,7 @@ IndexedParam_AdjustField:
 IndexedTable_GetByte_Skip:
 	push	0	; F5537D  push 0x00
 	m_push MBD+r6, 0x08	; F5537F  push (XIZ+0x08)
-	calr	65436	; F55382  calr 0xf55321
+	calr	IndexedTable_GetPtr	; F55382  calr 0xf55321
 	ld	(xiz-11), xiy	; F55385  ld (XIZ+0xf5),XIY
 	ld	c, (xix)	; F55388  ld C,(XIX)
 	extz	bc	; F5538A  extz BC
@@ -114563,7 +114563,7 @@ IndexedParam_SetBit:
 	add	e, 32	; F55498  add E,0x20
 IndexedTable_GetByte_Skip10:
 	pushw	de	; F5549B  push DE
-	calr	65154	; F5549C  calr 0xf55321
+	calr	IndexedTable_GetPtr	; F5549C  calr 0xf55321
 	ld	(xiz-8), xiy	; F5549F  ld (XIZ+0xf8),XIY
 	ld	c, (xix)	; F554A2  ld C,(XIX)
 	extz	bc	; F554A4  extz BC
@@ -114911,7 +114911,7 @@ IndexedTable_GetByte_Skip25:
 IndexedTable_GetByte_Skip26:
 	push	0	; F55687  push 0x00
 	m_push MBD+r6, 0x08	; F55689  push (XIZ+0x08)
-	calr	64658	; F5568C  calr 0xf55321
+	calr	IndexedTable_GetPtr	; F5568C  calr 0xf55321
 	ld	xix, xiy	; F5568F  ld XIX,XIY
 	ld	xbc, (xiz+10)	; F55691  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc)	; F55694  ld A,(XBC)
@@ -115103,7 +115103,7 @@ Bit32MaskTable:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 Fwd_F55800:		; <- T_F40D98
-	calr	2089	; F55800  calr 0xf5602c
+	calr	sub_F5602C	; F55800  calr 0xf5602c
 	ret	; F55803  ret
 
 ; --------------------------------------------------------------------------
@@ -115699,7 +115699,7 @@ CallSelectorTable_F55BAE:		; <- T_F40DF8
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 Fwd_F558AA:		; <- T_F40DFC
-	calr	7045	; F558AA  calr 0xf57432
+	calr	Nop_Ret_F57432	; F558AA  calr 0xf57432
 	ret	; F558AD  ret
 
 ; --------------------------------------------------------------------------
@@ -130193,7 +130193,7 @@ RoundMap_8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5DAA2:		; <- T_F42700
-	call	16000964	; F5DAA2  call 0xf427c4
+	call	T_BStore_LoadGeometry	; F5DAA2  call 0xf427c4
 	ld	a, (3184:16)	; F5DAA6  ld A,(0x0c70)
 	cp	a, 1:i3	; F5DAAA  cp A,1
 	jr	c, sub_F5DAA2_Skip2	; F5DAAC  jr C,0xf5daf8
@@ -132395,7 +132395,7 @@ IdentityMap_0_31:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5EE95:
-	call	16001028	; F5EE95  call 0xf42804
+	call	T_F42804	; F5EE95  call 0xf42804
 	ret	; F5EE99  ret
 
 ; --------------------------------------------------------------------------
@@ -142543,7 +142543,7 @@ ClampInc_0to31:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F65E94:		; <- T_F42BA4
-	calr	1	; F65E94  calr 0xf65e98
+	calr	sub_F65E98	; F65E94  calr 0xf65e98
 	ret	; F65E97  ret
 
 ; --------------------------------------------------------------------------
@@ -148486,7 +148486,7 @@ DispatchTable_F68FB4:
 	.long	DispatchTable_F674CE_Nop0	; F68FC0  [3] -> ret stub
 
 DispatchTable_F68FB4_Code_Skip:
-	calr	10538	; F68FC4  calr 0xf6b8f1
+	calr	sub_F6B8F1	; F68FC4  calr 0xf6b8f1
 	m_cp_rm MB16, 0x0e53, 1	; F68FC7  cp A,(0x0e53)
 	jr	nz, sub_F68F67_Return	; F68FCB  jr NZ,0xf68fb3
 	ld	a, b	; F68FCD  ld A,B
@@ -152366,11 +152366,11 @@ sub_F6A9E3_Skip11:
 	jr	nz, sub_F6A9E3_Skip12	; F6AB64  jr NZ,0xf6ab69
 	calr	sub_F6ABB6	; F6AB66  calr 0xf6abb6
 sub_F6A9E3_Skip12:
-	calr	3409	; F6AB69  calr 0xf6b8bd
+	calr	sub_F6B8BD	; F6AB69  calr 0xf6b8bd
 	cp	a, 144	; F6AB6C  cp A,0x90
 	jr	nz, 3	; F6AB6F  jr NZ,0xf6ab74
 	calr	58	; F6AB71  calr 0xf6abae
-	calr	59312	; F6AB74  calr 0xf69327
+	calr	sub_F69327	; F6AB74  calr 0xf69327
 sub_F6A9E3_Return:
 	ret	; F6AB77  ret
 sub_F6A9E3_Skip13:
@@ -152396,7 +152396,7 @@ sub_F6A9E3_Entry4_Code_Skip:
 ; --------------------------------------------------------------------------
 T_F42EF0_Nop:		; <- T_F42EF0
 	ret	; F6AB8E  ret
-	jrl	-27	; F6AB8F  jrl T,0xf6ab77
+	jrl	sub_F6A9E3_Return	; F6AB8F  jrl T,0xf6ab77
 
 ; --------------------------------------------------------------------------
 ; DispatchTable_F6AB92 -- 5 32-bit pointers, every one of them an address in
@@ -158892,7 +158892,7 @@ Text_F6D59C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6D5B5:
-	call	16003504	; F6D5B5  call 0xf431b0
+	call	T_F431B0	; F6D5B5  call 0xf431b0
 	ret	; F6D5B9  ret
 
 ; --------------------------------------------------------------------------
@@ -163803,7 +163803,7 @@ sub_F6F4F2_Join:
 ; Unknown: what 0xF6F42A is.
 ; --------------------------------------------------------------------------
 Smf_ReadFile_Entry:
-	jr	8	; F6F526  jr T,0xf6f530
+	jr	Smf_ReadFile	; F6F526  jr T,0xf6f530
 
 ; --------------------------------------------------------------------------
 ; SmfChunkTags -- 0xF6F528, 8 bytes this block could not split.  No content rule framed
@@ -192136,7 +192136,7 @@ Paint_TrackAssign_Skip:
 	m_bit 4, MD16, 0x2095	; F7E475  bit 4,(0x2095)
 	jr	nz, Paint_TrackAssign_Skip3	; F7E479  jr NZ,0xf7e4a1
 Paint_TrackAssign_Skip2:
-	calr	65115	; F7E47B  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7E47B  calr 0xf7e2d9
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7E47E  cp (0x207e),0x00
 	jr	nz, Paint_TrackAssign_Skip4	; F7E483  jr NZ,0xf7e4ac
 	ld	xiy, DL_F3B3DA	; F7E485  ld XIY,0x00f3b3da
@@ -192148,7 +192148,7 @@ Paint_TrackAssign_Skip2:
 Paint_TrackAssign_Skip3:
 	calr	sub_F7E788	; F7E4A1  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E4A4  calr 0xf7e2fc
-	calr	65085	; F7E4A7  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7E4A7  calr 0xf7e2e7
 	jr	Paint_TrackAssign_Return	; F7E4AA  jr T,0xf7e4f8
 Paint_TrackAssign_Skip4:
 	ld	(LCD_CurrentLayer:16), 0	; F7E4AC  ld (0x2540),0x00
@@ -192171,7 +192171,7 @@ Paint_TrackAssign_Skip4:
 	ld	xiy, DL_F3BA91	; F7E4E7  ld XIY,0x00f3ba91
 	ld	xix, DL_AfterT0uchSettingSelectWhetherOrNotAfter	; F7E4EC  ld XIX,0x00f3bab9
 	call	T_DisplayListB_Run	; F7E4F1  call 0xf417f4
-	calr	65007	; F7E4F5  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7E4F5  calr 0xf7e2e7
 Paint_TrackAssign_Return:
 	ret	; F7E4F8  ret
 
@@ -193804,7 +193804,7 @@ Paint_Edit:
 	ld	(3088:16), 0	; F7E98E  ld (0x0c10),0x00
 Paint_Edit_Skip:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7E993  call 0xf42e80
-	calr	63807	; F7E997  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7E997  calr 0xf7e2d9
 	m_cp_mi8 MB16, 0x0c10, 0x00	; F7E99A  cp (0x0c10),0x00
 	jr	nz, Paint_Edit_Skip2	; F7E99F  jr NZ,0xf7e9b1
 	ld	xiy, DL_EditSeqN0teEditS0ngClear	; F7E9A1  ld XIY,0x00f39d3e
@@ -193817,7 +193817,7 @@ Paint_Edit_Skip2:
 	call	T_DisplayList_Run	; F7E9BB  call 0xf417f0
 Paint_Edit_Join:
 	call	T_F42E1C	; F7E9BF  call 0xf42e1c
-	calr	63777	; F7E9C3  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7E9C3  calr 0xf7e2e7
 	ret	; F7E9C6  ret
 ButtonTable_Edit_0C10Zero_Nop0:
 	ret	; F7E9C7  ret   <- button table 0xF7D2D8 entry 0 (EDIT) and 7 more slot(s)
@@ -194457,7 +194457,7 @@ Paint_SongClear:
 	jrl	z, Paint_SongClear_Join	; F7EADD  jrl Z,0xf7ebcf
 	m_bit 4, MD16, 0x2095	; F7EAE0  bit 4,(0x2095)
 	jr	nz, Paint_SongClear_Skip	; F7EAE4  jr NZ,0xf7eb16
-	calr	63472	; F7EAE6  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7EAE6  calr 0xf7e2d9
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7EAE9  cp (0x207e),0x00
 	jrl	nz, Paint_SongClear_Skip4	; F7EAEE  jrl NZ,0xf7eb7a
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EAF1  or (0x2075),0x09
@@ -194519,7 +194519,7 @@ Paint_SongClear_Skip6:
 	ld	xix, DL_TrackClearAttenti0nUsing	; F7EBC6  ld XIX,0x00f39c35
 	call	T_DisplayListB_Run	; F7EBCB  call 0xf417f4
 Paint_SongClear_Join:
-	calr	63253	; F7EBCF  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7EBCF  calr 0xf7e2e7
 	ld	(UI_StatusCode:16), 255	; F7EBD2  ld (0x2880),0xff
 	ret	; F7EBD7  ret
 
@@ -194813,7 +194813,7 @@ Paint_TrackClear:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7EC7B  cp (0x207e),0x00
 	jr	nz, Paint_TrackClear_Skip2	; F7EC80  jr NZ,0xf7ecbf
 	call	T_F428D0	; F7EC82  call 0xf428d0
-	calr	63056	; F7EC86  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7EC86  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 2	; F7EC89  ld (0x2540),0x02
 	ld	xiy, DL_TrackClearPressTheUpDown	; F7EC8E  ld XIY,0x00f39f8a
 	ld	xix, Data_F3A0A5	; F7EC93  ld XIX,0x00f3a0a5
@@ -194826,10 +194826,10 @@ Paint_TrackClear:
 Paint_TrackClear_Skip:
 	ld	hl, (3518:16)	; F7ECB3  ld HL,(0x0dbe)
 	calr	sub_F7E39F	; F7ECB7  calr 0xf7e39f
-	calr	63018	; F7ECBA  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7ECBA  calr 0xf7e2e7
 	jr	Paint_TrackClear_Return	; F7ECBD  jr T,0xf7ecf9
 Paint_TrackClear_Skip2:
-	calr	62999	; F7ECBF  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7ECBF  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 2	; F7ECC2  ld (0x2540),0x02
 	ld	xiy, DL_TrackClearAttenti0nUsing	; F7ECC7  ld XIY,0x00f39c35
 	ld	xix, DL_EditSeqN0teEditS0ngClear	; F7ECCC  ld XIX,0x00f39d3e
@@ -194843,7 +194843,7 @@ Paint_TrackClear_Skip2:
 	call	sub_F7E39F	; F7ECF0  call 0xf7e39f
 	jr	Paint_TrackClear_Join	; F7ECF4  jr T,0xf7ecf6
 Paint_TrackClear_Join:
-	calr	62958	; F7ECF6  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7ECF6  calr 0xf7e2e7
 Paint_TrackClear_Return:
 	ret	; F7ECF9  ret
 
@@ -195543,7 +195543,7 @@ Paint_TrackMerge:
 	ld	a, (3514:16)	; F7EE2E  ld A,(0x0dba)
 	ld	(4857:16), a	; F7EE32  ld (0x12f9),A
 Paint_TrackMerge_Skip:
-	calr	62624	; F7EE36  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7EE36  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7EE39  ld (0x2540),0x00
 	ld	xiy, DL_TrackMergeOkTrackTrackTrack	; F7EE3E  ld XIY,0x00f3a47f
 	ld	xix, DL_Track	; F7EE43  ld XIX,0x00f3a526
@@ -195566,7 +195566,7 @@ Paint_TrackMerge_Join:
 	ld	xiy, DL_F3A561	; F7EE84  ld XIY,0x00f3a561
 	ld	xix, DLTable_F3A58A	; F7EE89  ld XIX,0x00f3a58a
 	call	T_DisplayListB_Run	; F7EE8E  call 0xf417f4
-	calr	62546	; F7EE92  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7EE92  calr 0xf7e2e7
 	ret	; F7EE95  ret
 
 ; ---------------------------------------------------------------------
@@ -196013,7 +196013,7 @@ Paint_MeasureDelete:
 	ldw	(9830:16), 65535	; F7EF96  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7EF9C  ld (0x266a),0xffff
 Paint_MeasureDelete_Skip:
-	calr	62260	; F7EFA2  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7EFA2  calr 0xf7e2d9
 	ld	xiy, DL_MeasureDeleteTrackFirstMeasure	; F7EFA5  ld XIY,0x00f3a5e9
 	ld	xix, DL_F3A66E	; F7EFAA  ld XIX,0x00f3a66e
 	call	T_DisplayList_Run	; F7EFAF  call 0xf417f0
@@ -196035,7 +196035,7 @@ Paint_MeasureDelete_Join:
 	ld	xiy, DL_LastMeasure	; F7EFE8  ld XIY,0x00f3a6ab
 	ld	xix, DLBoxes_F3A6D9	; F7EFED  ld XIX,0x00f3a6d9
 	call	T_DisplayListB_Run	; F7EFF2  call 0xf417f4
-	calr	62190	; F7EFF6  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7EFF6  calr 0xf7e2e7
 	ret	; F7EFF9  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F082; calr from prom_b
@@ -196708,7 +196708,7 @@ Paint_MeasureErase:
 	ldw	(9830:16), 65535	; F7F26E  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7F274  ld (0x266a),0xffff
 Paint_MeasureErase_Skip:
-	calr	61532	; F7F27A  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7F27A  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7F27D  ld (0x2540),0x00
 	ld	xiy, DL_MeasureEraseTrackFirstMeasure	; F7F282  ld XIY,0x00f3a8f5
 	ld	xix, DL_F3A99D	; F7F287  ld XIX,0x00f3a99d
@@ -196730,7 +196730,7 @@ Paint_MeasureErase_Join:
 	ld	xiy, DL_F3A9DA	; F7F2C3  ld XIY,0x00f3a9da
 	ld	xix, DLBoxes_F3AA17	; F7F2C8  ld XIX,0x00f3aa17
 	call	T_DisplayListB_Run	; F7F2CD  call 0xf417f4
-	calr	61459	; F7F2D1  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7F2D1  calr 0xf7e2e7
 	ret	; F7F2D4  ret
 
 ; ---------------------------------------------------------------------
@@ -197430,12 +197430,12 @@ BlinkArgPtrs_F7F521:
 Paint_PanelWrite:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7F536  call 0xf42e80
 	call	T_F42AB4	; F7F53A  call 0xf42ab4
-	calr	60824	; F7F53E  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7F53E  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7F541  ld (0x2540),0x00
 	ld	xiy, DL_PanelWritePanelWriteReplacesTheSoundsAnd	; F7F546  ld XIY,0x00f3ad88
 	ld	xix, DL_N0teChangeTargetNoteTrack	; F7F54B  ld XIX,0x00f3aeaf
 	call	T_DisplayList_Run	; F7F550  call 0xf417f0
-	calr	60816	; F7F554  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7F554  calr 0xf7e2e7
 	ret	; F7F557  ret
 ScreenLeave_PanelWrite_Nop:
 	ret	; F7F558  ret
@@ -197503,7 +197503,7 @@ Paint_Quantize:
 	ldw	(9830:16), 65535	; F7F59C  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7F5A2  ld (0x266a),0xffff
 Paint_Quantize_Skip:
-	calr	60718	; F7F5A8  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7F5A8  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7F5AB  ld (0x2540),0x00
 	ld	xiy, DL_QuantizeTrackStrengthFirstMeasure	; F7F5B0  ld XIY,0x00f3abdb
 	ld	xix, DL_F3ACB3	; F7F5B5  ld XIX,0x00f3acb3
@@ -197525,7 +197525,7 @@ Paint_Quantize_Join:
 	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F5F1  ld XIY,0x00f3acf0
 	ld	xix, DLBoxes_F3AD42	; F7F5F6  ld XIX,0x00f3ad42
 	call	T_DisplayListB_Run	; F7F5FB  call 0xf417f4
-	calr	60645	; F7F5FF  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7F5FF  calr 0xf7e2e7
 	ret	; F7F602  ret
 
 ; ---------------------------------------------------------------------
@@ -198254,7 +198254,7 @@ Paint_Vel0cityChange:
 	ldw	(9830:16), 65535	; F7F8C3  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7F8C9  ld (0x266a),0xffff
 Paint_Vel0cityChange_Skip:
-	calr	59911	; F7F8CF  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7F8CF  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7F8D2  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7F8D7  cp (0x207e),0x00
 	jr	nz, Paint_Vel0cityChange_Skip2	; F7F8DC  jr NZ,0xf7f8ee
@@ -198279,7 +198279,7 @@ Paint_Vel0cityChange_Join:
 	ld	xiy, DL_F3AB3B	; F7F923  ld XIY,0x00f3ab3b
 	ld	xix, DLBoxes_F3AB74	; F7F928  ld XIX,0x00f3ab74
 	call	T_DisplayListB_Run	; F7F92D  call 0xf417f4
-	calr	59827	; F7F931  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7F931  calr 0xf7e2e7
 	ret	; F7F934  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F920; calr from prom_b
@@ -199039,7 +199039,7 @@ Paint_Transp0se:
 Paint_Transp0se_Skip:
 	calr	sub_F7F237	; F7FC33  calr 0xf7f237
 Paint_Transp0se_Join:
-	calr	59040	; F7FC36  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7FC36  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7FC39  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7FC3E  cp (0x207e),0x00
 	jr	nz, Paint_Transp0se_Skip2	; F7FC43  jr NZ,0xf7fc55
@@ -199063,7 +199063,7 @@ Paint_Transp0se_Join2:
 	ld	xiy, DL_F3B1E3	; F7FC87  ld XIY,0x00f3b1e3
 	ld	xix, DLBoxes_F3B21C	; F7FC8C  ld XIX,0x00f3b21c
 	call	T_DisplayListB_Run	; F7FC91  call 0xf417f4
-	calr	58959	; F7FC95  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7FC95  calr 0xf7e2e7
 	ret	; F7FC98  ret
 
 ; ---------------------------------------------------------------------
@@ -199803,7 +199803,7 @@ Paint_AdvanceDelay:
 Paint_AdvanceDelay_Skip:
 	calr	sub_F7F237	; F7FF62  calr 0xf7f237
 Paint_AdvanceDelay_Join:
-	calr	58225	; F7FF65  calr 0xf7e2d9
+	calr	LCD_ScreenRedraw_Begin	; F7FF65  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7FF68  ld (0x2540),0x00
 	ld	xiy, DL_AdvanceDelayTrackFirstMeasure	; F7FF6D  ld XIY,0x00f3b294
 	ld	xix, DL_F3B33C	; F7FF72  ld XIX,0x00f3b33c
@@ -199827,7 +199827,7 @@ Paint_AdvanceDelay_Join2:
 	ld	xiy, DL_F3B379	; F7FFB6  ld XIY,0x00f3b379
 	ld	xix, DLBoxes_F3B3B2	; F7FFBB  ld XIX,0x00f3b3b2
 	call	T_DisplayListB_Run	; F7FFC0  call 0xf417f4
-	calr	58144	; F7FFC4  calr 0xf7e2e7
+	calr	LCD_ScreenRedraw_End	; F7FFC4  calr 0xf7e2e7
 	ret	; F7FFC7  ret
 
 ; ---------------------------------------------------------------------
