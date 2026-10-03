@@ -17689,7 +17689,9 @@ sub_F09E67:
 	jr	z, sub_F09E67_Return	; F09E74  jr Z,0xf09e84
 	ld	xiy, 16536244	; F09E76  ld XIY,0x00fc52b4
 	ld	(LCD_CurrentLayer:16), 0	; F09E7B  ld (0x2540),0x00
-	call	15768240	; F09E80  call 0xf09ab0
+; stale: sub_F09E67 is reached only from the unlabelled loop at 0xF09E52, an older copy of sub_F09DED.  Its live
+; twin sub_F09E02 has the same bytes except this operand, and calls RunDisplayListBFromPointerArray 0x31 higher.
+	call	RunDisplayListBFromPointerArray - 0x31	; F09E80  call 0xf09ab0
 sub_F09E67_Return:
 	ret	; F09E84  ret
 
@@ -88266,6 +88268,10 @@ T_F41174:	jp T_F41174_Nop  ; -> prom_a 0x406DC
 T_F41178:	jp T_F41178_Nop  ; -> prom_a 0x406DD
 T_F4117C:	jp T_F4117C_Nop  ; -> prom_a 0x406DE
 T_F41180:	jp sub_FC06DF  ; -> prom_a 0x406DF
+; T_F41184, T_F4118C and T_F41190-T_F41198 jump into the middle of prom_a instructions: 0xFC0427 is the third byte
+; of `ld XIY,Msg0716_HandlerTables` at 0xFC0425, 0xFC043D the second byte of the `calr` at 0xFC043C, 0xFC0452-0xFC0454
+; the last three bytes of `ld XIZ,...` at 0xFC0450.  No `call`/`jp` in either image names these five slots: stale
+; entries, left as numbers.
 T_F41184:	jp 0xFC0427  ; -> prom_a 0x40427
 T_Msg0716_DispatchIndex_Entry:	jp Msg0716_DispatchIndex_Entry  ; -> prom_a 0x4043C
 T_F4118C:	jp 0xFC043D  ; -> prom_a 0x4043D
@@ -147325,7 +147331,7 @@ sub_F68787:		; <- T_F42EE0
 	xor	a, w	; F687BC  xor A,W
 	jr	z, sub_F68787_Skip	; F687BE  jr Z,0xf687c5
 	push	xhl	; F687C0  push XHL
-	calr	9193	; F687C1  calr 0xf6abad
+	calr	sub_F6ABAD_Nop	; F687C1  calr 0xf6abad
 	pop	xhl	; F687C4  pop XHL
 sub_F68787_Skip:
 	ld	wa, (UiEvent_Byte2:16)	; F687C5  ld WA,(0x20b9)
@@ -152435,7 +152441,7 @@ sub_F6A9E3_Skip12:
 	calr	sub_F6B8BD	; F6AB69  calr 0xf6b8bd
 	cp	a, 144	; F6AB6C  cp A,0x90
 	jr	nz, sub_F6A9E3_Entry4_Skip	; F6AB6F  jr NZ,0xf6ab74
-	calr	58	; F6AB71  calr 0xf6abae
+	calr	sub_F6ABAE_Nop	; F6AB71  calr 0xf6abae
 sub_F6A9E3_Entry4_Skip:
 	calr	sub_F69327	; F6AB74  calr 0xf69327
 sub_F6A9E3_Return:
@@ -152477,7 +152483,8 @@ T_F42EF0_Nop:		; <- T_F42EF0
 ;              rule that finds it (notes/prom_b_f65000_layout.py, PTRTAB)
 ;              stops at the first word that is not a 0x00F6xxxx address;
 ;              0xF6ABA6 is that word's address and it is the first byte of
-;              the next segment.  Entry 4, the last, is 0x00F6ABAA.
+;              the next segment.  Entry 4, the last, is 0x00F6ABAA.  Each entry
+;              is one of the one-byte `ret` routines that start at 0xF6ABA6.
 ; Evidence: every one of the 5 words is re-read on every emit and asserted
 ;           to lie in 0x00F60000-0x00F6FFFF; the rule that framed the table
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
@@ -152486,13 +152493,30 @@ T_F42EF0_Nop:		; <- T_F42EF0
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6AB92:
-	.long	DispatchTable_F6AB92 + 0x14	; F6AB92  [0] -> 0xF6ABA6
-	.long	DispatchTable_F6AB92 + 0x15	; F6AB96  [1] -> 0xF6ABA7
-	.long	DispatchTable_F6AB92 + 0x16	; F6AB9A  [2] -> 0xF6ABA8
-	.long	DispatchTable_F6AB92 + 0x17	; F6AB9E  [3] -> 0xF6ABA9
-	.long	DispatchTable_F6AB92 + 0x18	; F6ABA2  [4] -> 0xF6ABAA
+	.long	DispatchTable_F6AB92_Ret0	; F6AB92  [0] -> 0xF6ABA6
+	.long	DispatchTable_F6AB92_Ret1	; F6AB96  [1] -> 0xF6ABA7
+	.long	DispatchTable_F6AB92_Ret2	; F6AB9A  [2] -> 0xF6ABA8
+	.long	DispatchTable_F6AB92_Ret3	; F6AB9E  [3] -> 0xF6ABA9
+	.long	DispatchTable_F6AB92_Ret4	; F6ABA2  [4] -> 0xF6ABAA
 
-	.fill	16, 1, 0x0E	; F6ABA6-F6ABB5  `ret` padding (asserted pure 0x0E)
+; 0xF6ABA6-0xF6ABB5 -- sixteen one-byte `ret` routines, not padding: DispatchTable_F6AB92's five entries are
+;          the first five, and the `calr`s at 0xF687C1 and 0xF6AB71 call the eighth and ninth.
+DispatchTable_F6AB92_Ret0:
+	ret	; F6ABA6  ret
+DispatchTable_F6AB92_Ret1:
+	ret	; F6ABA7  ret
+DispatchTable_F6AB92_Ret2:
+	ret	; F6ABA8  ret
+DispatchTable_F6AB92_Ret3:
+	ret	; F6ABA9  ret
+DispatchTable_F6AB92_Ret4:
+	ret	; F6ABAA  ret
+	.fill	2, 1, 0x0E	; F6ABAB-F6ABAC
+sub_F6ABAD_Nop:
+	ret	; F6ABAD  ret
+sub_F6ABAE_Nop:
+	ret	; F6ABAE  ret
+	.fill	7, 1, 0x0E	; F6ABAF-F6ABB5
 
 
 ; --------------------------------------------------------------------------
