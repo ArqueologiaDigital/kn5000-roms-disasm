@@ -1,0 +1,1116 @@
+{
+ "name": "wsa1-naming-r1-prom_a-s02",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "renames": [
+  {
+   "old": "sub_F91A06",
+   "new": "C0mbinati0nM0de_DrawPart8Sound",
+   "evidence": "entry [7] of FieldRedrawPtrs_F91865; (0x2640)=((0x789D)<<3|(0x789E))+1 then DL_F29911 draws (0x789F) via DLText_PartCodes + 3 digits at x 0x124 (PT8 column)"
+  },
+  {
+   "old": "sub_F91A26",
+   "new": "C0mbinati0nM0de_DrawPart1Int",
+   "evidence": "entry [0] of FieldRedrawPtrs_F91885; DL_F2992E: (0x76AF) AND 0x20 >> 5 picks which DLTable_F29944 box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A35",
+   "new": "C0mbinati0nM0de_DrawPart2Int",
+   "evidence": "entry [1] of FieldRedrawPtrs_F91885; DL_F29964: (0x76EF) AND 0x20 >> 5 picks which DLTable_F2997A box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A44",
+   "new": "C0mbinati0nM0de_DrawPart3Int",
+   "evidence": "entry [2] of FieldRedrawPtrs_F91885; DL_F2999A: (0x772F) AND 0x20 >> 5 picks which DLTable_F299B0 box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A53",
+   "new": "C0mbinati0nM0de_DrawPart4Int",
+   "evidence": "entry [3] of FieldRedrawPtrs_F91885; DL_F299D0: (0x776F) AND 0x20 >> 5 picks which DLTable_F299E6 box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A62",
+   "new": "C0mbinati0nM0de_DrawPart5Int",
+   "evidence": "entry [4] of FieldRedrawPtrs_F91885; DL_F29A06: (0x77AF) AND 0x20 >> 5 picks which DLTable_F29A1C box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A71",
+   "new": "C0mbinati0nM0de_DrawPart6Int",
+   "evidence": "entry [5] of FieldRedrawPtrs_F91885; DL_F29A3C: (0x77EF) AND 0x20 >> 5 picks which DLTable_F29A52 box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A80",
+   "new": "C0mbinati0nM0de_DrawPart7Int",
+   "evidence": "entry [6] of FieldRedrawPtrs_F91885; DL_F29A72: (0x782F) AND 0x20 >> 5 picks which DLTable_F29A88 box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A8F",
+   "new": "C0mbinati0nM0de_DrawPart8Int",
+   "evidence": "entry [7] of FieldRedrawPtrs_F91885; DL_F29AA8: (0x786F) AND 0x20 >> 5 picks which DLTable_F29ABE box is erased (swi 0x1B) and which filled (swi 0x05) in the INT row"
+  },
+  {
+   "old": "sub_F91A9E",
+   "new": "C0mbinati0nM0de_DrawPart1Pan",
+   "evidence": "entry [0] of FieldRedrawPtrs_F918A5; DL_F29ADE draws (0x76AA)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x1451"
+  },
+  {
+   "old": "sub_F91AC0",
+   "new": "C0mbinati0nM0de_DrawPart2Pan",
+   "evidence": "entry [1] of FieldRedrawPtrs_F918A5; DL_F29AEF draws (0x76EA)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x1456"
+  },
+  {
+   "old": "sub_F91AE2",
+   "new": "C0mbinati0nM0de_DrawPart3Pan",
+   "evidence": "entry [2] of FieldRedrawPtrs_F918A5; DL_F29B00 draws (0x772A)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x145B"
+  },
+  {
+   "old": "sub_F91B04",
+   "new": "C0mbinati0nM0de_DrawPart4Pan",
+   "evidence": "entry [3] of FieldRedrawPtrs_F918A5; DL_F29B11 draws (0x776A)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x1460"
+  },
+  {
+   "old": "sub_F91B26",
+   "new": "C0mbinati0nM0de_DrawPart5Pan",
+   "evidence": "entry [4] of FieldRedrawPtrs_F918A5; DL_F29B22 draws (0x77AA)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x1465"
+  },
+  {
+   "old": "sub_F91B48",
+   "new": "C0mbinati0nM0de_DrawPart6Pan",
+   "evidence": "entry [5] of FieldRedrawPtrs_F918A5; DL_F29B33 draws (0x77EA)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x146A"
+  },
+  {
+   "old": "sub_F91B6A",
+   "new": "C0mbinati0nM0de_DrawPart7Pan",
+   "evidence": "entry [6] of FieldRedrawPtrs_F918A5; DL_F29B44 draws (0x782A)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x146F"
+  },
+  {
+   "old": "sub_F91B8C",
+   "new": "C0mbinati0nM0de_DrawPart8Pan",
+   "evidence": "entry [7] of FieldRedrawPtrs_F918A5; DL_F29B55 draws (0x786A)&0x7F via DLText_PanL64CtrR63, then T_DrawValueGlyph_24x24 at IX 0x1474"
+  },
+  {
+   "old": "sub_F91BAE",
+   "new": "C0mbinati0nM0de_DrawPart1Vol",
+   "evidence": "entry [0] of FieldRedrawPtrs_F918C5; DL_F29B66 draws (0x76A5)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BA8"
+  },
+  {
+   "old": "sub_F91BC8",
+   "new": "C0mbinati0nM0de_DrawPart2Vol",
+   "evidence": "entry [1] of FieldRedrawPtrs_F918C5; DL_F29B72 draws (0x76E5)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BAD"
+  },
+  {
+   "old": "sub_F91BE2",
+   "new": "C0mbinati0nM0de_DrawPart3Vol",
+   "evidence": "entry [2] of FieldRedrawPtrs_F918C5; DL_F29B7E draws (0x7725)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BB2"
+  },
+  {
+   "old": "sub_F91BFC",
+   "new": "C0mbinati0nM0de_DrawPart4Vol",
+   "evidence": "entry [3] of FieldRedrawPtrs_F918C5; DL_F29B8A draws (0x7765)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BB7"
+  },
+  {
+   "old": "sub_F91C16",
+   "new": "C0mbinati0nM0de_DrawPart5Vol",
+   "evidence": "entry [4] of FieldRedrawPtrs_F918C5; DL_F29B96 draws (0x77A5)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BBC"
+  },
+  {
+   "old": "sub_F91C30",
+   "new": "C0mbinati0nM0de_DrawPart6Vol",
+   "evidence": "entry [5] of FieldRedrawPtrs_F918C5; DL_F29BA2 draws (0x77E5)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BC1"
+  },
+  {
+   "old": "sub_F91C4A",
+   "new": "C0mbinati0nM0de_DrawPart7Vol",
+   "evidence": "entry [6] of FieldRedrawPtrs_F918C5; DL_F29BAE draws (0x7825)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BC6"
+  },
+  {
+   "old": "sub_F91C64",
+   "new": "C0mbinati0nM0de_DrawPart8Vol",
+   "evidence": "entry [7] of FieldRedrawPtrs_F918C5; DL_F29BBA draws (0x7865)&0x7F as 3 digits, then sub_F9458C blits a level bitmap at IX 0x1BCB"
+  },
+  {
+   "old": "sub_F91C7E",
+   "new": "Paint_C0mbinati0nM0dePage1",
+   "evidence": "posted by sub_F915FB only when (0x2687)==0; runs DL_F28938.. or DL_F28E1B.. (by (0xC4)) whose text reads \"PAGE1/2\" \"C0MBINATI0N M0DE\" ... \"PART\""
+  },
+  {
+   "old": "sub_F91CF2",
+   "new": "C0mbinati0nM0de_RepaintPage1Fields",
+   "evidence": "posted by sub_F9167C when (0x2687)==0 and by C0mbinati0nM0de_StepSelectedPart; draws combination name (T_F4102C, swi 0x21) + number, then each (0x2676)-dirty field of part (0x2250)"
+  },
+  {
+   "old": "sub_F91E3C",
+   "new": "ScreenLeaveBody_C0mbinati0nM0de",
+   "evidence": "only caller sub_F914DD = +4 Leave slot of screen object T_F41530 (screen id 2, C0MBINATI0N M0DE); clears (0x267D) bit 0 and calls T_F411EC(0) -- SOLO off"
+  },
+  {
+   "old": "sub_F91E4B",
+   "new": "SoftKeyCol1_C0mbinati0nM0de_Page2",
+   "evidence": "slot [0] of DisplayListPtrs_F9157B (screen 2's button table when (0x2687)!=0 = page 2); code 0 = SOFT KEY col 1; falls into C0mbinati0nM0de_SelectOrEditPart1"
+  },
+  {
+   "old": "sub_F91EA9",
+   "new": "SoftKeyCol2_C0mbinati0nM0de_Page2",
+   "evidence": "slot [1] of DisplayListPtrs_F9157B (screen 2's button table when (0x2687)!=0 = page 2); code 1 = SOFT KEY col 2; falls into C0mbinati0nM0de_SelectOrEditPart2"
+  },
+  {
+   "old": "sub_F91F07",
+   "new": "SoftKeyCol3_C0mbinati0nM0de_Page2",
+   "evidence": "slot [2] of DisplayListPtrs_F9157B (screen 2's button table when (0x2687)!=0 = page 2); code 2 = SOFT KEY col 3; falls into C0mbinati0nM0de_SelectOrEditPart3"
+  },
+  {
+   "old": "sub_F91F65",
+   "new": "SoftKeyCol4_C0mbinati0nM0de_Page2",
+   "evidence": "slot [3] of DisplayListPtrs_F9157B (screen 2's button table when (0x2687)!=0 = page 2); code 3 = SOFT KEY col 4; falls into C0mbinati0nM0de_SelectOrEditPart4"
+  },
+  {
+   "old": "sub_F91FC4",
+   "new": "SoftKeyCol5_C0mbinati0nM0de_Page2",
+   "evidence": "slot [4] of DisplayListPtrs_F9157B (screen 2's button table when (0x2687)!=0 = page 2); code 4 = SOFT KEY col 5; falls into C0mbinati0nM0de_SelectOrEditPart5"
+  },
+  {
+   "old": "sub_F92023",
+   "new": "SoftKeyCol6_C0mbinati0nM0de_Page2",
+   "evidence": "slot [5] of DisplayListPtrs_F9157B (screen 2's button table when (0x2687)!=0 = page 2); code 5 = SOFT KEY col 6; falls into C0mbinati0nM0de_SelectOrEditPart6"
+  },
+  {
+   "old": "sub_F92082",
+   "new": "SoftKeyCol7_C0mbinati0nM0de_Page2",
+   "evidence": "slot [6] of DisplayListPtrs_F9157B (screen 2's button table when (0x2687)!=0 = page 2); code 6 = SOFT KEY col 7; falls into C0mbinati0nM0de_SelectOrEditPart7"
+  },
+  {
+   "old": "sub_F920E1",
+   "new": "SoftKeyCol8_C0mbinati0nM0de",
+   "evidence": "slot [7] of both DisplayListPtrs_F914FB (page 1) and DisplayListPtrs_F9157B (page 2); sets step magnitude then falls into C0mbinati0nM0de_SelectOrEditPart8OrStepPart"
+  },
+  {
+   "old": "sub_F9214C",
+   "new": "C0mbinati0nM0de_StepSelectedPart",
+   "evidence": "A=(0x2250), B=7, C=0, T_F41B04 (signed-nibble delta + clamp); on change writes (0x2250), Queue2E00 {0x90,0x10}, marks all page-1 fields dirty, posts C0mbinati0nM0de_RepaintPage1Fields"
+  },
+  {
+   "old": "sub_F9219E",
+   "new": "LcdKeyRow1_C0mbinati0nM0de_Page2",
+   "evidence": "slot [8] (code 0x08) of DisplayListPtrs_F9157B; left key: (0x2678)=1 + post HighlightSoundRow; right key: toggle (0x267D) bit 0 + T_F411EC + post SoloIndicatorOff/On"
+  },
+  {
+   "old": "sub_F9220A",
+   "new": "C0mbinati0nM0de_HighlightSoundRow",
+   "evidence": "layer 1: DL_F29686 erases the four row-label boxes, DL_F296AE..DL_F296B8 fills the one at y 0x21 (\"SOUND\" label at y 0x22); posted by LcdKeyRow1_C0mbinati0nM0de_Page2"
+  },
+  {
+   "old": "sub_F92271",
+   "new": "C0mbinati0nM0de_HighlightIntRow",
+   "evidence": "layer 1: DL_F29686 erases the four row-label boxes, DL_F296B8..DL_F296C2 fills the one at y 0x48 (\"INT\" label at y 0x49); posted by LcdKeyRow2_C0mbinati0nM0de_Page2"
+  },
+  {
+   "old": "sub_F922B5",
+   "new": "C0mbinati0nM0de_HighlightPanRow",
+   "evidence": "layer 1: DL_F29686 erases the four row-label boxes, DL_F296C2..DL_F296CC fills the one at y 0x6F (\"PAN\" label at y 0x70); posted by LcdKeyRow3_C0mbinati0nM0de_Page2"
+  },
+  {
+   "old": "sub_F922F9",
+   "new": "C0mbinati0nM0de_HighlightVolRow",
+   "evidence": "layer 1: DL_F29686 erases the four row-label boxes, DL_F296CC..0xF296D6 fills the one at y 0x9A (\"VOL\" label at y 0x9B); posted by LcdKeyRow4_C0mbinati0nM0de_Page2"
+  },
+  {
+   "old": "sub_F9222C",
+   "new": "C0mbinati0nM0de_SoloIndicatorOff",
+   "evidence": "layer 1, DL_F29672: op-1B EraseRect (0x121,0x21)-(0x139,0x29) over the \"SOLO\" label; posted when LcdKeyRow1 clears (0x267D) bit 0"
+  },
+  {
+   "old": "sub_F92240",
+   "new": "C0mbinati0nM0de_SoloIndicatorOn",
+   "evidence": "DL_F2967C: op-05 FillRect (0x121,0x21)-(0x139,0x29) over \"SOLO\"; posted when LcdKeyRow1 sets (0x267D) bit 0"
+  },
+  {
+   "old": "sub_F9224F",
+   "new": "LcdKeyRow2_C0mbinati0nM0de_Page2",
+   "evidence": "slot [9] (code 0x09) of DisplayListPtrs_F9157B; left key: (0x2678)=8, post C0mbinati0nM0de_HighlightIntRow; right key: nothing"
+  },
+  {
+   "old": "sub_F92293",
+   "new": "LcdKeyRow3_C0mbinati0nM0de_Page2",
+   "evidence": "slot [10] (code 0x0A) of DisplayListPtrs_F9157B; left key: (0x2678)=4, post C0mbinati0nM0de_HighlightPanRow; right key: nothing"
+  },
+  {
+   "old": "sub_F922D7",
+   "new": "LcdKeyRow4_C0mbinati0nM0de_Page2",
+   "evidence": "slot [11] (code 0x0B) of DisplayListPtrs_F9157B; left key: (0x2678)=2, post C0mbinati0nM0de_HighlightVolRow; right key: nothing"
+  },
+  {
+   "old": "sub_F9231E",
+   "new": "ExitKey_C0mbinati0nM0de",
+   "evidence": "slot [15] (EXIT) of both F914FB/F9157B; (0x2075)&=0xF7; if W bit7 clear and (0x2687)==1: (0x2687)=0, (0x2071)|=0x10"
+  },
+  {
+   "old": "sub_F9233A",
+   "new": "PageKey_C0mbinati0nM0de",
+   "evidence": "slot [16] (PAGE) of both tables; PAGE v (bit7 set) -> (0x2687)=0, PAGE ^ -> (0x2687)=1, each change sets (0x2071) bit 4"
+  },
+  {
+   "old": "sub_F923EC",
+   "new": "C0mbinati0nM0de_EditSelectedRow",
+   "evidence": "XIY = 0xF2AB50 entry (0x2250); dispatch on (0x2678): bit0 StepPartSound, bit3 SetPartInt, bit2 StepPartPan, bit1 StepPartVol"
+  },
+  {
+   "old": "sub_F9242E",
+   "new": "C0mbinati0nM0de_StepPartSound",
+   "evidence": "steps member (+0x3C) within T_SoundGroup_MaxMemberIndex_Get, carrying into group (+0x3B) and bank (+0x3D, order ValueList_F92618/F92623); posts two List2030 events"
+  },
+  {
+   "old": "sub_F9262D",
+   "new": "C0mbinati0nM0de_ShowSelectedPart",
+   "evidence": "unless (0x2250)==(0x267E): record 0xF296D6 draws DLTable_F296E7[(0x2250)] (\"PART1\"..\"PART8\"), 0xF2970F erases / 0xF2971A fills the DLTable_F29725 box under PTn; (0x267E)=(0x2250)"
+  },
+  {
+   "old": "sub_F92665",
+   "new": "C0mbinati0nM0de_SetPartInt",
+   "evidence": "W bit7 set: or (XIY+0x0D),0x20; clear: and (XIY+0x0D),0xDF; on change Queue2E00 {E,D=0x0D,A=bit,W=0x20}; callers EditSelectedRow (INT row) and sub_F9139B (INT column)"
+  },
+  {
+   "old": "sub_F92693",
+   "new": "C0mbinati0nM0de_StepPartPan",
+   "evidence": "A=(XIY+0x08), clamp 0..0x7F via sub_F94561 (T_F41B04); on change List2030 {E,D=8,A,W=0x7F}; callers EditSelectedRow (PAN row), sub_F91275 (PAN column)"
+  },
+  {
+   "old": "sub_F926A2",
+   "new": "SoundMode_StepPan",
+   "evidence": "only caller sub_F91275 when (0x207C)==1 (SOUND MODE, column 3 \"PAN\"); steps (0x0711) 0..0x7F; Queue2E00 {0xA8,0x13,A,0x7F}"
+  },
+  {
+   "old": "sub_F926C9",
+   "new": "C0mbinati0nM0de_StepPartVol",
+   "evidence": "A=(XIY+0x03), clamp 0..0x7F via sub_F94561, step 7 raised to 10; callers EditSelectedRow (VOL row), sub_F91247 (VOL column)"
+  },
+  {
+   "old": "sub_F926E3",
+   "new": "SoundMode_StepLvl",
+   "evidence": "only caller sub_F91247 when (0x207C)==1 (SOUND MODE, column 2 \"LVL\"); steps (0x0710) within -30..+30 (biased 0x1E); Queue2E00 {0xA8,0x12,A,0x7F}"
+  },
+  {
+   "old": "sub_F928AE",
+   "new": "SoundGroupMenu_MoveGroupHighlight",
+   "evidence": "(0x2640)=(0x2675), (0x2675)=(0x2169); record 0xF2B42F erases box (0x2640), 0xF2B43A fills box (0x2169) of DLTable_F2B445 (layer 1)"
+  },
+  {
+   "old": "sub_F9291F",
+   "new": "BankLegend_DrawUser",
+   "evidence": "USER side ((0x216A) bit 3): draws DL_Usr1 (\"USR1\") or DL_Usr2 (\"USR2\") by bit 0 and boxes it unless drum (bit 5); RE-MAP: erases the legend row"
+  },
+  {
+   "old": "sub_F92A40",
+   "new": "BankLegend_EraseRow",
+   "evidence": "layer 0, DL_F2BB03: one op-1B EraseRect (0x06,0xE0)-(0xA2,0xED), the strip where the bank legends are framed; called when (0x216A) bit 3 is set"
+  },
+  {
+   "old": "sub_F92A55",
+   "new": "SoundBank_SelectR1OrU1",
+   "evidence": "sets (0x216A) to R1 (0x00) on the ROM side, or U1 (0x08) when U1/UD1 is selected; Queue2E00 {0xA8,0x07,bank,0x3F} (the BANK-button event); slot [0] of DisplayListPtrs_F92726"
+  },
+  {
+   "old": "sub_F92AA1",
+   "new": "SoundBank_SelectR2OrU2",
+   "evidence": "sets (0x216A) to R2 (0x01) on the ROM side, or U2 (0x09) when U2/UD2 is selected; Queue2E00 {0xA8,0x07,bank,0x3F} (the BANK-button event); slot [1] of DisplayListPtrs_F92726"
+  },
+  {
+   "old": "sub_F92AED",
+   "new": "SoundBank_SelectDrum",
+   "evidence": "sets (0x216A) to the drum bank: RD (0x20) on the ROM side, or the user bank OR 0x20 (UD1 0x28 / UD2 0x29); Queue2E00 {0xA8,0x07,bank,0x3F}; slot [2] of DisplayListPtrs_F92726"
+  },
+  {
+   "old": "sub_F92B3E",
+   "new": "SoundBank_SelectExt",
+   "evidence": "sets (0x216A) to E1 (0x10) on the ROM side when (0x08EC) bit 0; Queue2E00 {0xA8,0x07,bank,0x3F}; slot [3] of DisplayListPtrs_F92726"
+  },
+  {
+   "old": "sub_F92B83",
+   "new": "SoundGroup_StepSelected",
+   "evidence": "steps (0x2169) down/up by bank (UD none, RD 0..1, E1 up clamped at 1, else 0..0x0F); Queue2E00 {0xA8,0x08,group,0x0F}; slot [4] of F92726"
+  },
+  {
+   "old": "sub_F92C08",
+   "new": "SoftKeyCol6_SoundGroupMenu",
+   "evidence": "slots [5],[22] of DisplayListPtrs_F92726; (0x2070)=0x80A1 requests screen 0xA1 (GROUP: SOUND DISPLAY HOLD); \"OK\" drawn above column 6"
+  },
+  {
+   "old": "sub_F92C21",
+   "new": "LcdKeyRow1_SoundGroupMenu",
+   "evidence": "slot [8] of DisplayListPtrs_F92726; body calr SoundGroup_SelectedMaxMemberIndex / ret, result discarded"
+  },
+  {
+   "old": "sub_F92C25",
+   "new": "LcdKeyRow2_SoundGroupMenu",
+   "evidence": "slot [9] of DisplayListPtrs_F92726; body calr SoundGroup_SelectedMaxMemberIndex / ret, result discarded"
+  },
+  {
+   "old": "sub_F92C29",
+   "new": "LcdKeyRow3_SoundGroupMenu",
+   "evidence": "slot [10] of DisplayListPtrs_F92726; body calr SoundGroup_SelectedMaxMemberIndex / ret, result discarded"
+  },
+  {
+   "old": "sub_F92C31",
+   "new": "ExitKey_SoundGroupMenu",
+   "evidence": "slot [15] (EXIT) of DisplayListPtrs_F92726; W bit7 clear -> (0x2070)=0x8001 (screen 1, SOUND MODE)"
+  },
+  {
+   "old": "sub_F92D70",
+   "new": "GroupSoundDisplayHold_RepaintFields",
+   "evidence": "posted by InstallPainter_GroupSoundDisplayHold; draws group name (T_F41018, swi 6 at IX 0x0129), number range, group number, bank legends, HOLD box and the member page"
+  },
+  {
+   "old": "sub_F92E36",
+   "new": "GroupMembers_ShowPageOfTwo",
+   "evidence": "L<=7: (0x2670)=0, sub_F934AF DE=0 WA=7; else (0x2670)=1, DE=8; then sub_F93398; for groups whose max index is 9..15"
+  },
+  {
+   "old": "sub_F92E76",
+   "new": "GroupMembers_ShowPageOfMany",
+   "evidence": "L<=7: page 0; else (0x2670)=L/8, DE=8*page, WA=DE+7 or the max index on the last page; sub_F934AF then sub_F93398"
+  },
+  {
+   "old": "sub_F92F16",
+   "new": "PosTable_GetEntryIX",
+   "evidence": "`xor D,D / ld IX,DE / sla 1,IX / ld IX,(XIZ+IX)`: IX = word E of the table at XIZ; sub_F934AF uses it for name positions (DLPtrTable_F2B510)"
+  },
+  {
+   "old": "sub_F92F24",
+   "new": "SoftKeyCol1_GroupSoundDisplayHold",
+   "evidence": "slots [0],[17] of ScreenButtonHandlers_GroupSoundDisplayHold; body `calr SoundBank_SelectR1OrU1 / ret` (same routine as slot [0] of DisplayListPtrs_F92726)"
+  },
+  {
+   "old": "sub_F92F28",
+   "new": "SoftKeyCol2_GroupSoundDisplayHold",
+   "evidence": "slots [1],[18] of ScreenButtonHandlers_GroupSoundDisplayHold; body `calr SoundBank_SelectR2OrU2 / ret` (same routine as slot [1] of DisplayListPtrs_F92726)"
+  },
+  {
+   "old": "sub_F92F2C",
+   "new": "SoftKeyCol3_GroupSoundDisplayHold",
+   "evidence": "slots [2],[19] of ScreenButtonHandlers_GroupSoundDisplayHold; body `calr SoundBank_SelectDrum / ret` (same routine as slot [2] of DisplayListPtrs_F92726)"
+  },
+  {
+   "old": "sub_F92F30",
+   "new": "SoftKeyCol4_GroupSoundDisplayHold",
+   "evidence": "slots [3],[20] of ScreenButtonHandlers_GroupSoundDisplayHold; body `calr SoundBank_SelectExt / ret` (same routine as slot [3] of DisplayListPtrs_F92726)"
+  },
+  {
+   "old": "sub_F92F34",
+   "new": "SoftKeyCol5_GroupSoundDisplayHold",
+   "evidence": "slots [4],[21] of ScreenButtonHandlers_GroupSoundDisplayHold; body `calr SoundGroup_StepSelected / ret` (same routine as slot [4] of DisplayListPtrs_F92726)"
+  },
+  {
+   "old": "sub_F92F38",
+   "new": "SoftKeyCol6_GroupSoundDisplayHold",
+   "evidence": "slots [5],[22]; (0x2070)=0x80A0 requests SOUND GROUP MENU (screen 0xA0); \"GR0UP\" \"MENU\" drawn above column 6"
+  },
+  {
+   "old": "sub_F92F4F",
+   "new": "SoftKeyCol7_GroupSoundDisplayHold",
+   "evidence": "slots [6] and [23]; `xor (0x267F),0x01` (DISPLAY HOLD) then posts DisplayHold_DrawHoldHighlight"
+  },
+  {
+   "old": "sub_F92F67",
+   "new": "SoftKeyCol8_GroupSoundDisplayHold",
+   "evidence": "slots [7] and [24]; `xor (0x267F),0x01` (DISPLAY HOLD) then posts DisplayHold_DrawHoldHighlight"
+  },
+  {
+   "old": "sub_F92F7F",
+   "new": "SoundGroup_SelectedMaxMemberIndex",
+   "evidence": "XIY = part record (sub_F94539); A=C=L=(0x2169), B=(0x2250), W=(0x216A); call T_SoundGroup_MaxMemberIndex_Get; W preserved"
+  },
+  {
+   "old": "sub_F92F9E",
+   "new": "LcdKeyRow1_GroupSoundDisplayHold",
+   "evidence": "slot [8] of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 0, calr GroupSoundDisplayHold_PickSound"
+  },
+  {
+   "old": "sub_F92FA8",
+   "new": "LcdKeyRow2_GroupSoundDisplayHold",
+   "evidence": "slot [9] of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 1, calr GroupSoundDisplayHold_PickSound"
+  },
+  {
+   "old": "sub_F92FB2",
+   "new": "LcdKeyRow3_GroupSoundDisplayHold",
+   "evidence": "slot [10] of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 2, calr GroupSoundDisplayHold_PickSound"
+  },
+  {
+   "old": "sub_F92FBC",
+   "new": "LcdKeyRow4_GroupSoundDisplayHold",
+   "evidence": "slot [11] of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 3, calr GroupSoundDisplayHold_PickSound"
+  },
+  {
+   "old": "sub_F9302B",
+   "new": "GroupMembers_ShowFirstOfTwoPages",
+   "evidence": "LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = 0, GroupMembers_ShowPageOfTwo; referenced only from dead post blocks after the ret at 0xF92FC6"
+  },
+  {
+   "old": "sub_F93037",
+   "new": "GroupMembers_ShowSecondOfTwoPages",
+   "evidence": "LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = 8, GroupMembers_ShowPageOfTwo; referenced only from dead post blocks after the ret at 0xF92FC6"
+  },
+  {
+   "old": "sub_F93043",
+   "new": "GroupMembers_ShowFirstOfManyPages",
+   "evidence": "LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = 0, GroupMembers_ShowPageOfMany; referenced only from dead post blocks after the ret at 0xF92FC6"
+  },
+  {
+   "old": "sub_F9304F",
+   "new": "GroupMembers_ShowNextOfManyPages",
+   "evidence": "LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = ((0x2670)+1)*8, GroupMembers_ShowPageOfMany; referenced only from dead post blocks after the ret at 0xF92FC6"
+  },
+  {
+   "old": "sub_F9306B",
+   "new": "ExitKey_GroupSoundDisplayHold",
+   "evidence": "slot [15] (EXIT); W bit7 clear -> (0x2070)=0x8001 (SOUND MODE), (0x2075)&=0x7F when (0x2092) bit 0"
+  },
+  {
+   "old": "sub_F9308E",
+   "new": "NumberPadKey_GroupSoundDisplayHold",
+   "evidence": "slot [27] (NUMBER PAD); T_AsciiDigits3_ToValue, value 1..B (16; 1 UD; 2 RD; (0x08E8) E1) -> (0x2169)=value-1 + Queue2E00 {0xA8,0x08}; posts DisplayHold_ShowTypedGroupDigits"
+  },
+  {
+   "old": "sub_F93109",
+   "new": "DisplayHold_ShowTypedGroupDigits",
+   "evidence": "(0x2661)=word (0x2822); T_Blink_Command with DL_F2BA64 (2 chars of (0x2661) at IX 0x0166, the field after \"GROUP:\")"
+  },
+  {
+   "old": "sub_F93124",
+   "new": "DisplayHold_ShowGroupNumber",
+   "evidence": "A=(0x2169)+1 -> T_F41AF4 (digits to (0x2661)); DL_F2BA64 draws them at IX 0x0166 right of \"GROUP:\", via interpreter B ((0xC4)!=2) or T_Blink_Command ((0xC4)==2)"
+  },
+  {
+   "old": "sub_F9315D",
+   "new": "DisplayHold_DrawHoldHighlight",
+   "evidence": "layer 1: (0x267F) bit0 set -> DL_F2BA0C FillRect (0xFE,0xD4)-(0x139,0xEC), clear -> DL_F2BA16 EraseRect -- the box around \"DISPLAY\" \"HOLD\""
+  },
+  {
+   "old": "sub_F93187",
+   "new": "SoundBank_IsReMap",
+   "evidence": "A=1 when (0x216A) is 0x18/0x19/0x1A (DLText_PartCodes \"M1-\"..\"M3-\"), for which Paint_SoundGroupMenuScreen draws the \"RE-MAP1\"..\"RE-MAP3\" list"
+  },
+  {
+   "old": "sub_F9319F",
+   "new": "GroupSoundDisplayHold_DrawNumberRange",
+   "evidence": "A = SoundGroup_SelectedMaxMemberIndex then GroupCombiDisplayHold_DrawNumberRange's body: \"8g+1\"-\"8g+A+1\" in a frame (DL_F2BDB4/DL_F2BDC3/DL_F2BDD2)"
+  },
+  {
+   "old": "sub_F931A4",
+   "new": "GroupCombiDisplayHold_DrawNumberRange",
+   "evidence": "A = sub_F93B33 (combi max member index); (0x2641)=8g+1, (0x2640)=8g+A+1 drawn by DL_F2BDB4/DL_F2BDC3 with \"-\" and frame DL_F2BDD2; only caller sub_F93942"
+  },
+  {
+   "old": "sub_F9320D",
+   "new": "GroupSoundDisplayHold_PickSound",
+   "evidence": "member = 8*(0x2670)+HL(+4 right key), <= A; List2030 {part,0,bank,0x3F} + {part,0,group,member}; returns to SOUND/COMBINATION MODE unless (0x267F) bit 0"
+  }
+ ],
+ "headers": [
+  {
+   "label": "C0mbinati0nM0de_DrawPart8Sound",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart8Sound -- COMBINATION MODE page 2, SOUND row, column PT8: draws part 8's sound as bank code + 3-digit number\nEvidence: entry [7] of FieldRedrawPtrs_F91865 (bit 7 of (0x2679), run by sub_F917F4 from sub_F91725, the page-2 field repaint sub_F9167C posts when (0x2687) != 0).\n(0x2640) = ((0x789D) << 3 | (0x789E)) + 1 at 0xF91A06-0xF91A13; then DL_F29911..DL_F2992E (interpreter B, 0xF91A21) draws (0x789F) through DLText_PartCodes (\"R1-\", \"U1-\", ...) at (0x124,0x30) and (0x2640) as 3 digits at (0x124,0x3A).\n0x789D-0x789F are +0x3B..+0x3D of part record 8 (0x7862 = 0x76A2 + 7*0x40, entry 7 of the 0xF2AB50 table); x 0x124 is the PT8 column of DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart1Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart1Int -- COMBINATION MODE page 2, INT row, column PT1: draws part 1's INT flag as a two-position indicator\nEvidence: entry [0] of FieldRedrawPtrs_F91885 (bit 0 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F2992E (interpreter B, two op-03 records): (0x76AF) AND 0x20 >> 5 indexes DLTable_F29944 for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x76AF is +0x0D of part record 1 (0x76A2); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart2Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart2Int -- COMBINATION MODE page 2, INT row, column PT2: draws part 2's INT flag as a two-position indicator\nEvidence: entry [1] of FieldRedrawPtrs_F91885 (bit 1 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F29964 (interpreter B, two op-03 records): (0x76EF) AND 0x20 >> 5 indexes DLTable_F2997A for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x76EF is +0x0D of part record 2 (0x76E2); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart3Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart3Int -- COMBINATION MODE page 2, INT row, column PT3: draws part 3's INT flag as a two-position indicator\nEvidence: entry [2] of FieldRedrawPtrs_F91885 (bit 2 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F2999A (interpreter B, two op-03 records): (0x772F) AND 0x20 >> 5 indexes DLTable_F299B0 for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x772F is +0x0D of part record 3 (0x7722); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart4Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart4Int -- COMBINATION MODE page 2, INT row, column PT4: draws part 4's INT flag as a two-position indicator\nEvidence: entry [3] of FieldRedrawPtrs_F91885 (bit 3 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F299D0 (interpreter B, two op-03 records): (0x776F) AND 0x20 >> 5 indexes DLTable_F299E6 for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x776F is +0x0D of part record 4 (0x7762); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart5Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart5Int -- COMBINATION MODE page 2, INT row, column PT5: draws part 5's INT flag as a two-position indicator\nEvidence: entry [4] of FieldRedrawPtrs_F91885 (bit 4 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F29A06 (interpreter B, two op-03 records): (0x77AF) AND 0x20 >> 5 indexes DLTable_F29A1C for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x77AF is +0x0D of part record 5 (0x77A2); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart6Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart6Int -- COMBINATION MODE page 2, INT row, column PT6: draws part 6's INT flag as a two-position indicator\nEvidence: entry [5] of FieldRedrawPtrs_F91885 (bit 5 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F29A3C (interpreter B, two op-03 records): (0x77EF) AND 0x20 >> 5 indexes DLTable_F29A52 for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x77EF is +0x0D of part record 6 (0x77E2); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart7Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart7Int -- COMBINATION MODE page 2, INT row, column PT7: draws part 7's INT flag as a two-position indicator\nEvidence: entry [6] of FieldRedrawPtrs_F91885 (bit 6 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F29A72 (interpreter B, two op-03 records): (0x782F) AND 0x20 >> 5 indexes DLTable_F29A88 for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x782F is +0x0D of part record 7 (0x7822); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart8Int",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart8Int -- COMBINATION MODE page 2, INT row, column PT8: draws part 8's INT flag as a two-position indicator\nEvidence: entry [7] of FieldRedrawPtrs_F91885 (bit 7 of (0x267A), run by sub_F917F4 from the page-2 field repaint sub_F91725).\nRuns DL_F29AA8 (interpreter B, two op-03 records): (0x786F) AND 0x20 >> 5 indexes DLTable_F29ABE for an swi 0x1B (LCD_Svc_1B_EraseRect) and the other table for an swi 0x05 (LCD_Svc_05_FillRect) -- one box up, one box down.\n0x786F is +0x0D of part record 8 (0x7862); bit 5 is the bit C0mbinati0nM0de_SetPartInt sets and clears. The row is labelled \"INT\" at (0x0D,0x49) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart1Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart1Pan -- COMBINATION MODE page 2, PAN row, column PT1: draws part 1's pan as text and as a 24x24 knob glyph\nEvidence: entry [0] of FieldRedrawPtrs_F918A5 (bit 0 of (0x267B)); on layer (0x2540) = 2 runs DL_F29ADE (interpreter B): (0x76AA) AND 0x7F through DLText_PanL64CtrR63 at (0x00A,0x7B);\nthen L = (0x76AA) AND 0x7F, IX = 0x1451, call T_DrawValueGlyph_24x24.\n0x76AA is +0x08 of part record 1, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart2Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart2Pan -- COMBINATION MODE page 2, PAN row, column PT2: draws part 2's pan as text and as a 24x24 knob glyph\nEvidence: entry [1] of FieldRedrawPtrs_F918A5 (bit 1 of (0x267B)); on layer (0x2540) = 2 runs DL_F29AEF (interpreter B): (0x76EA) AND 0x7F through DLText_PanL64CtrR63 at (0x032,0x7B);\nthen L = (0x76EA) AND 0x7F, IX = 0x1456, call T_DrawValueGlyph_24x24.\n0x76EA is +0x08 of part record 2, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart3Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart3Pan -- COMBINATION MODE page 2, PAN row, column PT3: draws part 3's pan as text and as a 24x24 knob glyph\nEvidence: entry [2] of FieldRedrawPtrs_F918A5 (bit 2 of (0x267B)); on layer (0x2540) = 2 runs DL_F29B00 (interpreter B): (0x772A) AND 0x7F through DLText_PanL64CtrR63 at (0x05A,0x7B);\nthen L = (0x772A) AND 0x7F, IX = 0x145B, call T_DrawValueGlyph_24x24.\n0x772A is +0x08 of part record 3, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart4Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart4Pan -- COMBINATION MODE page 2, PAN row, column PT4: draws part 4's pan as text and as a 24x24 knob glyph\nEvidence: entry [3] of FieldRedrawPtrs_F918A5 (bit 3 of (0x267B)); on layer (0x2540) = 2 runs DL_F29B11 (interpreter B): (0x776A) AND 0x7F through DLText_PanL64CtrR63 at (0x082,0x7B);\nthen L = (0x776A) AND 0x7F, IX = 0x1460, call T_DrawValueGlyph_24x24.\n0x776A is +0x08 of part record 4, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart5Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart5Pan -- COMBINATION MODE page 2, PAN row, column PT5: draws part 5's pan as text and as a 24x24 knob glyph\nEvidence: entry [4] of FieldRedrawPtrs_F918A5 (bit 4 of (0x267B)); on layer (0x2540) = 2 runs DL_F29B22 (interpreter B): (0x77AA) AND 0x7F through DLText_PanL64CtrR63 at (0x0AA,0x7B);\nthen L = (0x77AA) AND 0x7F, IX = 0x1465, call T_DrawValueGlyph_24x24.\n0x77AA is +0x08 of part record 5, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart6Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart6Pan -- COMBINATION MODE page 2, PAN row, column PT6: draws part 6's pan as text and as a 24x24 knob glyph\nEvidence: entry [5] of FieldRedrawPtrs_F918A5 (bit 5 of (0x267B)); on layer (0x2540) = 2 runs DL_F29B33 (interpreter B): (0x77EA) AND 0x7F through DLText_PanL64CtrR63 at (0x0D2,0x7B);\nthen L = (0x77EA) AND 0x7F, IX = 0x146A, call T_DrawValueGlyph_24x24.\n0x77EA is +0x08 of part record 6, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart7Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart7Pan -- COMBINATION MODE page 2, PAN row, column PT7: draws part 7's pan as text and as a 24x24 knob glyph\nEvidence: entry [6] of FieldRedrawPtrs_F918A5 (bit 6 of (0x267B)); on layer (0x2540) = 2 runs DL_F29B44 (interpreter B): (0x782A) AND 0x7F through DLText_PanL64CtrR63 at (0x0FA,0x7B);\nthen L = (0x782A) AND 0x7F, IX = 0x146F, call T_DrawValueGlyph_24x24.\n0x782A is +0x08 of part record 7, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart8Pan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart8Pan -- COMBINATION MODE page 2, PAN row, column PT8: draws part 8's pan as text and as a 24x24 knob glyph\nEvidence: entry [7] of FieldRedrawPtrs_F918A5 (bit 7 of (0x267B)); on layer (0x2540) = 2 runs DL_F29B55 (interpreter B): (0x786A) AND 0x7F through DLText_PanL64CtrR63 at (0x122,0x7B);\nthen L = (0x786A) AND 0x7F, IX = 0x1474, call T_DrawValueGlyph_24x24.\n0x786A is +0x08 of part record 8, the byte C0mbinati0nM0de_StepPartPan steps; the row is labelled \"PAN\" at (0x0D,0x70) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart1Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart1Vol -- COMBINATION MODE page 2, VOL row, column PT1: draws part 1's volume as 3 digits and as a level bitmap\nEvidence: entry [0] of FieldRedrawPtrs_F918C5 (bit 0 of (0x267C)); runs DL_F29B66 (interpreter B: (0x76A5) AND 0x7F as 3 decimal digits at (0x00A,0xA7));\nthen A = (0x76A5), IX = 0x1BA8, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x76A5 is +0x03 of part record 1, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart2Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart2Vol -- COMBINATION MODE page 2, VOL row, column PT2: draws part 2's volume as 3 digits and as a level bitmap\nEvidence: entry [1] of FieldRedrawPtrs_F918C5 (bit 1 of (0x267C)); runs DL_F29B72 (interpreter B: (0x76E5) AND 0x7F as 3 decimal digits at (0x032,0xA7));\nthen A = (0x76E5), IX = 0x1BAD, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x76E5 is +0x03 of part record 2, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart3Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart3Vol -- COMBINATION MODE page 2, VOL row, column PT3: draws part 3's volume as 3 digits and as a level bitmap\nEvidence: entry [2] of FieldRedrawPtrs_F918C5 (bit 2 of (0x267C)); runs DL_F29B7E (interpreter B: (0x7725) AND 0x7F as 3 decimal digits at (0x05A,0xA7));\nthen A = (0x7725), IX = 0x1BB2, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x7725 is +0x03 of part record 3, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart4Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart4Vol -- COMBINATION MODE page 2, VOL row, column PT4: draws part 4's volume as 3 digits and as a level bitmap\nEvidence: entry [3] of FieldRedrawPtrs_F918C5 (bit 3 of (0x267C)); runs DL_F29B8A (interpreter B: (0x7765) AND 0x7F as 3 decimal digits at (0x082,0xA7));\nthen A = (0x7765), IX = 0x1BB7, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x7765 is +0x03 of part record 4, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart5Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart5Vol -- COMBINATION MODE page 2, VOL row, column PT5: draws part 5's volume as 3 digits and as a level bitmap\nEvidence: entry [4] of FieldRedrawPtrs_F918C5 (bit 4 of (0x267C)); runs DL_F29B96 (interpreter B: (0x77A5) AND 0x7F as 3 decimal digits at (0x0AA,0xA7));\nthen A = (0x77A5), IX = 0x1BBC, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x77A5 is +0x03 of part record 5, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart6Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart6Vol -- COMBINATION MODE page 2, VOL row, column PT6: draws part 6's volume as 3 digits and as a level bitmap\nEvidence: entry [5] of FieldRedrawPtrs_F918C5 (bit 5 of (0x267C)); runs DL_F29BA2 (interpreter B: (0x77E5) AND 0x7F as 3 decimal digits at (0x0D2,0xA7));\nthen A = (0x77E5), IX = 0x1BC1, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x77E5 is +0x03 of part record 6, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart7Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart7Vol -- COMBINATION MODE page 2, VOL row, column PT7: draws part 7's volume as 3 digits and as a level bitmap\nEvidence: entry [6] of FieldRedrawPtrs_F918C5 (bit 6 of (0x267C)); runs DL_F29BAE (interpreter B: (0x7825) AND 0x7F as 3 decimal digits at (0x0FA,0xA7));\nthen A = (0x7825), IX = 0x1BC6, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x7825 is +0x03 of part record 7, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "C0mbinati0nM0de_DrawPart8Vol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_DrawPart8Vol -- COMBINATION MODE page 2, VOL row, column PT8: draws part 8's volume as 3 digits and as a level bitmap\nEvidence: entry [7] of FieldRedrawPtrs_F918C5 (bit 7 of (0x267C)); runs DL_F29BBA (interpreter B: (0x7865) AND 0x7F as 3 decimal digits at (0x122,0xA7));\nthen A = (0x7865), IX = 0x1BCB, call sub_F9458C, which blits (swi 3, 5 bytes x 0x2E rows) entry A/8+1 (entry 0 for A = 0) of the 17-entry bitmap pointer table at 0xF29BC6.\n0x7865 is +0x03 of part record 8, the byte C0mbinati0nM0de_StepPartVol steps; the row is labelled \"VOL\" at (0x0D,0x9B) in DL_C0mbinati0nM0dePage22Sound."
+  },
+  {
+   "label": "Paint_C0mbinati0nM0dePage1",
+   "mode": "insert",
+   "text": "Paint_C0mbinati0nM0dePage1 -- paints COMBINATION MODE page 1: the lists whose text reads \"PAGE1/2\", \"C0MBINATI0N M0DE\", \"OCT\" \"VOL\" \"PAN\" \"EFF1\" \"EFF2\" \"REV\" \"INT\", \"PART\"\nEvidence: posted by sub_F915FB (`ld XWA,0x00F91C7E` at 0xF91653) only when (0x2687) == 0; clears with swi 0x0C (C=0) and swi 0x10, then (0xC4) != 2 runs DL_F28938..DL_F28E1B, (0xC4) == 2 runs DL_F28E1B..DL_C0mbinati0nM0dePage22Sound (layers 0 then 2).\n(0xC4) is the panel variant Variant_SetFromPB0 writes (2 = the SX-WSA1R). Afterwards marks every page-1 field dirty ((0x2676) |= 0xFF, (0x2677) |= 0x07), calls T_F42E18 and sub_F911B6.\nPage 2 (\"PAGE2/2\") is painted by sub_F916AA, the other arm of the same `cp (0x2687),0x00` in sub_F915FB."
+  },
+  {
+   "label": "C0mbinati0nM0de_RepaintPage1Fields",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_RepaintPage1Fields -- COMBINATION MODE page 1 field refresh: redraws the combination name and number, then every field of the selected part whose dirty bit is set\nEvidence: posted by sub_F9167C when (0x2687) == 0 (0xF91683) and by C0mbinati0nM0de_StepSelectedPart. Name: T_F4102C (sub_FC1C59, fallback Msg0716_Str_CombiName \"Combi Name *****\") drawn by swi 0x21 (LCD_Svc_21_DrawText16x24) at IX 0x09B4;\nnumber: bank code (0x7F0A) and ((0x7F08) << 3 | (0x7F09)) + 1 through DL_F29765 (DLText_PartCodes). Then, from the record of part (0x2250) (sub_F94539), per bit of (0x2676): 0 +0x03, 1 +0x08 (pan text 0xF28468), 2 +0x05, 3 +0x07, 4 +0x0D, 7 +0x06 (0/1),\n5 (0x2250) itself, 6 ((0x78B2) - 0x1C) / 12 -- the octave the OCT column's soft key edits. Then sub_F90F9F for (0x2677), clears (0x2676)/(0x2677), swi 0x0C with C = 7."
+  },
+  {
+   "label": "ScreenLeaveBody_C0mbinati0nM0de",
+   "mode": "insert",
+   "text": "ScreenLeaveBody_C0mbinati0nM0de -- the whole body of the COMBINATION MODE screen's Leave method: switches SOLO off\nEvidence: called only by sub_F914DD, the +4 slot of screen object T_F41530 (PanelScreen_VtableTable_ViewB entry 2, screen id 2), whose +0 Enter sub_F914D9 -> sub_F915FB installs the \"C0MBINATI0N M0DE\" painters.\nBody: `and (0x267D),0xFE`, then push 0 / call T_F411EC (sub_FC5566 clears bit 5 of (0x602498)) -- the same pair LcdKeyRow1_C0mbinati0nM0de_Page2 uses for its SOLO-off arm."
+  },
+  {
+   "label": "SoftKeyCol1_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "SoftKeyCol1_C0mbinati0nM0de_Page2 -- SOFT KEY column 1 on COMBINATION MODE page 2: select part 1, or step its value if it is already selected\nEvidence: slot [0] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA (\"PAGE2/2\", columns PT1..PT8). Code 0 is SOFT KEY col 1 (notes/FINDINGS-prom_a-panel-control-map.md).\nBody: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart1."
+  },
+  {
+   "label": "SoftKeyCol2_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "SoftKeyCol2_C0mbinati0nM0de_Page2 -- SOFT KEY column 2 on COMBINATION MODE page 2: select part 2, or step its value if it is already selected\nEvidence: slot [1] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA (\"PAGE2/2\", columns PT1..PT8). Code 1 is SOFT KEY col 2 (notes/FINDINGS-prom_a-panel-control-map.md).\nBody: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart2."
+  },
+  {
+   "label": "SoftKeyCol3_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "SoftKeyCol3_C0mbinati0nM0de_Page2 -- SOFT KEY column 3 on COMBINATION MODE page 2: select part 3, or step its value if it is already selected\nEvidence: slot [2] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA (\"PAGE2/2\", columns PT1..PT8). Code 2 is SOFT KEY col 3 (notes/FINDINGS-prom_a-panel-control-map.md).\nBody: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart3."
+  },
+  {
+   "label": "SoftKeyCol4_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "SoftKeyCol4_C0mbinati0nM0de_Page2 -- SOFT KEY column 4 on COMBINATION MODE page 2: select part 4, or step its value if it is already selected\nEvidence: slot [3] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA (\"PAGE2/2\", columns PT1..PT8). Code 3 is SOFT KEY col 4 (notes/FINDINGS-prom_a-panel-control-map.md).\nBody: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart4."
+  },
+  {
+   "label": "SoftKeyCol5_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "SoftKeyCol5_C0mbinati0nM0de_Page2 -- SOFT KEY column 5 on COMBINATION MODE page 2: select part 5, or step its value if it is already selected\nEvidence: slot [4] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA (\"PAGE2/2\", columns PT1..PT8). Code 4 is SOFT KEY col 5 (notes/FINDINGS-prom_a-panel-control-map.md).\nBody: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart5."
+  },
+  {
+   "label": "SoftKeyCol6_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "SoftKeyCol6_C0mbinati0nM0de_Page2 -- SOFT KEY column 6 on COMBINATION MODE page 2: select part 6, or step its value if it is already selected\nEvidence: slot [5] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA (\"PAGE2/2\", columns PT1..PT8). Code 5 is SOFT KEY col 6 (notes/FINDINGS-prom_a-panel-control-map.md).\nBody: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart6."
+  },
+  {
+   "label": "SoftKeyCol7_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "SoftKeyCol7_C0mbinati0nM0de_Page2 -- SOFT KEY column 7 on COMBINATION MODE page 2: select part 7, or step its value if it is already selected\nEvidence: slot [6] of DisplayListPtrs_F9157B, the table sub_F914E1 (screen 2's +8 Button method) hands to T_F41B08 when (0x2687) != 0 -- page 2, painted by sub_F916AA (\"PAGE2/2\", columns PT1..PT8). Code 6 is SOFT KEY col 7 (notes/FINDINGS-prom_a-panel-control-map.md).\nBody: sets the step magnitude in W to 1 (3 when (0x2075) bit 2 is set) -- the field T_F41B04 reads, with bit 7 as the sign -- then falls into C0mbinati0nM0de_SelectOrEditPart7."
+  },
+  {
+   "label": "SoftKeyCol8_C0mbinati0nM0de",
+   "mode": "insert",
+   "text": "SoftKeyCol8_C0mbinati0nM0de -- SOFT KEY column 8 on both COMBINATION MODE pages: PART down/up on page 1, select part 8 on page 2\nEvidence: slot [7] of DisplayListPtrs_F914FB (used when (0x2687) == 0, page 1) and of DisplayListPtrs_F9157B ((0x2687) != 0, page 2); code 7 = SOFT KEY col 8.\nBody: `or W,0x01` (+2 more when (0x2075) bit 2 is set) -- the step for T_F41B04 -- then falls into C0mbinati0nM0de_SelectOrEditPart8OrStepPart."
+  },
+  {
+   "label": "C0mbinati0nM0de_StepSelectedPart",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_StepSelectedPart -- COMBINATION MODE page 1 PART down/up: steps the selected part (0x2250) by the key's signed step, clamped to 0..7, and repaints page 1\nEvidence: A = (0x2250), B = 7, C = 0, call T_F41B04 (sub_F8BD73: A + SignedNibbleDelta_Table[W], clamped to [C,B]). If changed: (0x2250) = A, T_Queue2E00_AppendRegs {E=0x90, D=0x10, A, W=0xFF}, T_F411BC,\n(0x2676) |= 0xFF and (0x2677) |= 0x07 (every page-1 field dirty), T_CallbackQueue_ResetAndRestartTask2, post C0mbinati0nM0de_RepaintPage1Fields.\nCalled only by C0mbinati0nM0de_SelectOrEditPart8OrStepPart when (0x2687) == 0; page 1's lists carry the caption \"PART\"."
+  },
+  {
+   "label": "LcdKeyRow1_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "LcdKeyRow1_C0mbinati0nM0de_Page2 -- LCD row-1 keys on COMBINATION MODE page 2: the left key selects the SOUND row, the right key toggles SOLO\nEvidence: slot [8] (code 0x08 = LCD row 1) of DisplayListPtrs_F9157B. W bit 7 set (pair position 0 = LEFT): (0x2678) = 1, post C0mbinati0nM0de_HighlightSoundRow.\nW bit 7 clear (RIGHT): toggle (0x267D) bit 0, T_F411EC with the new state (sub_FC5566 sets/clears bit 5 of (0x602498)), post C0mbinati0nM0de_SoloIndicatorOff or C0mbinati0nM0de_SoloIndicatorOn.\nPage 2's list draws \"SOUND\" at (0x07,0x22) on the left and \"SOLO\" at (0x121,0x22) on the right of LCD row 1."
+  },
+  {
+   "label": "C0mbinati0nM0de_HighlightSoundRow",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_HighlightSoundRow -- COMBINATION MODE page 2: marks SOUND as the row the soft keys edit\nEvidence: on layer (0x2540) = 1 runs DL_F29686..DL_F296AE (four op-1B EraseRect boxes at x 0x07-0x25, y 0x21 / 0x48 / 0x6F / 0x9A -- the SOUND / INT / PAN / VOL labels) then DL_F296AE..DL_F296B8 (op-05 FillRect over the y 0x21 box, the \"SOUND\" label at y 0x22).\nPosted by LcdKeyRow1_C0mbinati0nM0de_Page2 right after it sets (0x2678) = 1, the bit C0mbinati0nM0de_EditSelectedRow dispatches on."
+  },
+  {
+   "label": "C0mbinati0nM0de_HighlightIntRow",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_HighlightIntRow -- COMBINATION MODE page 2: marks INT as the row the soft keys edit\nEvidence: on layer (0x2540) = 1 runs DL_F29686..DL_F296AE (four op-1B EraseRect boxes at x 0x07-0x25, y 0x21 / 0x48 / 0x6F / 0x9A -- the SOUND / INT / PAN / VOL labels) then DL_F296B8..DL_F296C2 (op-05 FillRect over the y 0x48 box, the \"INT\" label at y 0x49).\nPosted by LcdKeyRow2_C0mbinati0nM0de_Page2 right after it sets (0x2678) = 8, the bit C0mbinati0nM0de_EditSelectedRow dispatches on."
+  },
+  {
+   "label": "C0mbinati0nM0de_HighlightPanRow",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_HighlightPanRow -- COMBINATION MODE page 2: marks PAN as the row the soft keys edit\nEvidence: on layer (0x2540) = 1 runs DL_F29686..DL_F296AE (four op-1B EraseRect boxes at x 0x07-0x25, y 0x21 / 0x48 / 0x6F / 0x9A -- the SOUND / INT / PAN / VOL labels) then DL_F296C2..DL_F296CC (op-05 FillRect over the y 0x6F box, the \"PAN\" label at y 0x70).\nPosted by LcdKeyRow3_C0mbinati0nM0de_Page2 right after it sets (0x2678) = 4, the bit C0mbinati0nM0de_EditSelectedRow dispatches on."
+  },
+  {
+   "label": "C0mbinati0nM0de_HighlightVolRow",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_HighlightVolRow -- COMBINATION MODE page 2: marks VOL as the row the soft keys edit\nEvidence: on layer (0x2540) = 1 runs DL_F29686..DL_F296AE (four op-1B EraseRect boxes at x 0x07-0x25, y 0x21 / 0x48 / 0x6F / 0x9A -- the SOUND / INT / PAN / VOL labels) then DL_F296CC..0xF296D6 (op-05 FillRect over the y 0x9A box, the \"VOL\" label at y 0x9B).\nPosted by LcdKeyRow4_C0mbinati0nM0de_Page2 right after it sets (0x2678) = 2, the bit C0mbinati0nM0de_EditSelectedRow dispatches on."
+  },
+  {
+   "label": "C0mbinati0nM0de_SoloIndicatorOff",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_SoloIndicatorOff -- erases the box over the \"SOLO\" label on COMBINATION MODE page 2\nEvidence: (0x2540) = 1 then DL_F29672..DL_F2967C, one op-1B EraseRect (0x121,0x21)-(0x139,0x29) -- page 2's list draws \"SOLO\" at (0x121,0x22).\nPosted by LcdKeyRow1_C0mbinati0nM0de_Page2 when it clears (0x267D) bit 0; sub_F916AA runs the same list unconditionally and C0mbinati0nM0de_SoloIndicatorOn's list when (0x267D) bit 0 is set."
+  },
+  {
+   "label": "C0mbinati0nM0de_SoloIndicatorOn",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_SoloIndicatorOn -- fills the box over the \"SOLO\" label on COMBINATION MODE page 2\nEvidence: DL_F2967C..DL_F29686, one op-05 FillRect (0x121,0x21)-(0x139,0x29); posted by LcdKeyRow1_C0mbinati0nM0de_Page2 when it sets (0x267D) bit 0.\nUnlike C0mbinati0nM0de_SoloIndicatorOff it does not set (0x2540), so it draws on whatever layer is current when the callback runs."
+  },
+  {
+   "label": "LcdKeyRow2_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "LcdKeyRow2_C0mbinati0nM0de_Page2 -- LCD row-2 keys on COMBINATION MODE page 2: the left key selects the INT row, the right key does nothing\nEvidence: slot [9] (code 0x09 = LCD row 2) of DisplayListPtrs_F9157B. W bit 7 set (pair position 0 = LEFT): (0x2678) = 8 and post C0mbinati0nM0de_HighlightIntRow; clear: `ret`.\nRow 2's label on page 2 is \"INT\" (DL_C0mbinati0nM0dePage22Sound)."
+  },
+  {
+   "label": "LcdKeyRow3_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "LcdKeyRow3_C0mbinati0nM0de_Page2 -- LCD row-3 keys on COMBINATION MODE page 2: the left key selects the PAN row, the right key does nothing\nEvidence: slot [10] (code 0x0A = LCD row 3) of DisplayListPtrs_F9157B. W bit 7 set (pair position 0 = LEFT): (0x2678) = 4 and post C0mbinati0nM0de_HighlightPanRow; clear: `ret`.\nRow 3's label on page 2 is \"PAN\" (DL_C0mbinati0nM0dePage22Sound)."
+  },
+  {
+   "label": "LcdKeyRow4_C0mbinati0nM0de_Page2",
+   "mode": "insert",
+   "text": "LcdKeyRow4_C0mbinati0nM0de_Page2 -- LCD row-4 keys on COMBINATION MODE page 2: the left key selects the VOL row, the right key does nothing\nEvidence: slot [11] (code 0x0B = LCD row 4) of DisplayListPtrs_F9157B. W bit 7 set (pair position 0 = LEFT): (0x2678) = 2 and post C0mbinati0nM0de_HighlightVolRow; clear: `ret`.\nRow 4's label on page 2 is \"VOL\" (DL_C0mbinati0nM0dePage22Sound)."
+  },
+  {
+   "label": "ExitKey_C0mbinati0nM0de",
+   "mode": "insert",
+   "text": "ExitKey_C0mbinati0nM0de -- EXIT on COMBINATION MODE: from page 2 returns to page 1; on page 1 only clears (0x2075) bit 3\nEvidence: slot [15] (code 0x0F = EXIT) of both DisplayListPtrs_F914FB and DisplayListPtrs_F9157B. `and (0x2075),0xF7`; then, if W bit 7 is clear (EXIT is pair position 1) and (0x2687) == 1:\n(0x2687) = 0 and (0x2071) |= 0x10, which PanelButton_Route turns into `or (0x2072),0x10` (redraw) at 0xF86230."
+  },
+  {
+   "label": "PageKey_C0mbinati0nM0de",
+   "mode": "insert",
+   "text": "PageKey_C0mbinati0nM0de -- PAGE v / PAGE ^ on COMBINATION MODE: v shows page 1 ((0x2687) = 0), ^ shows page 2 ((0x2687) = 1)\nEvidence: slot [16] (code 0x10 = PAGE) of both DisplayListPtrs_F914FB and DisplayListPtrs_F9157B. W bit 7 set (pair position 0 = PAGE v): if (0x2687) != 0, (0x2687) = 0; clear (PAGE ^): if (0x2687) != 1, (0x2687) = 1; each change sets (0x2071) bit 4 (redraw).\nsub_F915FB paints with Paint_C0mbinati0nM0dePage1 (\"PAGE1/2\") when (0x2687) == 0 and with sub_F916AA (\"PAGE2/2\") otherwise; it also resets (0x2687) to 0 on entry."
+  },
+  {
+   "label": "C0mbinati0nM0de_EditSelectedRow",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_EditSelectedRow -- COMBINATION MODE page 2: steps the selected part's value in the highlighted row\nEvidence: E = (0x2250), XIY = entry (0x2250) of the part-record pointer table at 0xF2AB50 (0x76A2 + 0x40*k); then by (0x2678): bit 0 -> C0mbinati0nM0de_StepPartSound, bit 3 -> C0mbinati0nM0de_SetPartInt,\nbit 2 -> C0mbinati0nM0de_StepPartPan, bit 1 -> C0mbinati0nM0de_StepPartVol -- the SOUND / INT / PAN / VOL rows LcdKeyRow1..4_C0mbinati0nM0de_Page2 select.\nCalled by C0mbinati0nM0de_SelectOrEditPart1..7 and _SelectOrEditPart8OrStepPart when the key's part is already selected; W carries the step (bit 7 = direction)."
+  },
+  {
+   "label": "C0mbinati0nM0de_StepPartSound",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_StepPartSound -- steps the selected part's sound one place: member within group, carrying into group and then bank at the ends\nEvidence: XIY = sub_F9454D (0xF2ABD0 entry (0x2250) = record + 0x20); +0x1D bank, +0x1B group, +0x1C member go to (0x2682)/(0x2683)/(0x2684). The member steps within 0..T_SoundGroup_MaxMemberIndex_Get (sub_F945B0 clamps DE to [IY,IX]);\nat its limit the group steps (limit 0x0F; (0x08E8)-1 for bank 0x10; 1, or 0 for UD, in the drum banks), and at that limit the bank steps through ValueList_F92618 / ValueList_F92623 (chosen by (0x08EC) bit 0) --\n00 01 08 09 [10] 20 28 29 18 19 1A, which DLText_PartCodes draws as R1- R2- U1- U2- [E1-] RD1 UD1 UD2 M1- M2- M3-.\nPosts T_List2030_AppendRegs {E=part, D=0, A=bank, W=bank} and {E=part, D=0, A=group, W=member}; the record bytes are the +0x3B..+0x3D that C0mbinati0nM0de_DrawPart8Sound draws."
+  },
+  {
+   "label": "C0mbinati0nM0de_ShowSelectedPart",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_ShowSelectedPart -- COMBINATION MODE page 2: draws \"PART<n>\" for the selected part and moves the highlight box to its PTn label\nEvidence: skipped when (0x2250) == (0x267E). Layer 0: record 0xF296D6 (T_DLB_Handler_StringTable2) draws entry (0x2250) & 7 of DLTable_F296E7 (\"PART1\"..\"PART8\") at (0x4D,0x1B).\nLayer 1: record 0xF2970F ((0x267E) & 7, swi 0x1B EraseRect) and record 0xF2971A ((0x2250) & 7, swi 0x05 FillRect), both indexing DLTable_F29725 -- boxes at y 0xE2-0xEC under the PT1..PT8 labels (y 0xE4); then (0x267E) = (0x2250).\nCalled by sub_F916AA (the page-2 painter) and sub_F918E5 (posted after a part is selected)."
+  },
+  {
+   "label": "C0mbinati0nM0de_SetPartInt",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_SetPartInt -- sets (key position 0) or clears (position 1) the INT flag, bit 5 of record +0x0D of the part in XIY, and posts the change\nEvidence: A = (XIY+0x0D) & 0x20; W bit 7 set: `or (XIY+0x0D),0x20` unless already set; clear: `and (XIY+0x0D),0xDF` unless already clear; then T_Queue2E00_AppendRegs with D = 0x0D, W = 0x20 (the mask), A = the new bit, E = the caller's part.\nCallers: C0mbinati0nM0de_EditSelectedRow (INT row, (0x2678) bit 3) and sub_F9139B (soft-key column 7, under \"INT\" in both the SOUND MODE and the page-1 column captions). C0mbinati0nM0de_DrawPart1Int..8Int draw this bit."
+  },
+  {
+   "label": "C0mbinati0nM0de_StepPartPan",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_StepPartPan -- steps record +0x08 (pan) of the part in XIY by the key's step, clamped to 0..127, and posts the new value\nEvidence: A = (XIY+0x08), B = 0x7F, C = 0, D = 0x08, H = 0x7F, calr sub_F94561 (T_F41B04; if the value changed, T_List2030_AppendRegs {E=caller's part, D=8, A=new, W=0x7F}) -- the record byte itself is not written here.\nCallers: C0mbinati0nM0de_EditSelectedRow (PAN row) and sub_F91275 (soft-key column 3, under \"PAN\", when (0x207C) != 1). C0mbinati0nM0de_DrawPart1Pan..8Pan draw this byte."
+  },
+  {
+   "label": "SoundMode_StepPan",
+   "mode": "insert",
+   "text": "SoundMode_StepPan -- SOUND MODE soft-key column 3 (\"PAN\"): steps (0x0711) by the key's step, clamped to 0..127, and posts it\nEvidence: called only by sub_F91275 when (0x207C) == 1 -- screen id 1, whose painter runs DL_F27C00 (\"SOUND MODE\", columns OCT LVL PAN EFF1 EFF2 REV INT MIDI). T_F41B04 with B = 0x7F, C = 0; if changed, (0x0711) = A and T_Queue2E00_AppendRegs {E=0xA8, D=0x13, A, W=0x7F}.\nsub_F90E4B draws (0x0711) at 0xF90ED0 through the same pan string-table record (0xF28468) as the combination PAN column, and sub_FC14DF resets it to 0x40 with the same {0xA8,0x13} event."
+  },
+  {
+   "label": "C0mbinati0nM0de_StepPartVol",
+   "mode": "insert",
+   "text": "C0mbinati0nM0de_StepPartVol -- steps record +0x03 (volume) of the part in XIY by the key's step, clamped to 0..127, and posts the new value\nEvidence: A = (XIY+0x03), B = 0x7F, C = 0, D = 3, H = 0x7F; a step magnitude of 7 is raised to 10 (`cp L,0x07 / inc 3,W` at 0xF926D9); calr sub_F94561 (T_F41B04, then T_List2030_AppendRegs {E=part, D=3, A=new, W=0x7F} if changed).\nCallers: C0mbinati0nM0de_EditSelectedRow (VOL row) and sub_F91247 (soft-key column 2, under \"VOL\", when (0x207C) != 1). C0mbinati0nM0de_DrawPart1Vol..8Vol draw this byte."
+  },
+  {
+   "label": "SoundMode_StepLvl",
+   "mode": "insert",
+   "text": "SoundMode_StepLvl -- SOUND MODE soft-key column 2 (\"LVL\"): steps (0x0710) by the key's step within -30..+30 and posts it\nEvidence: called only by sub_F91247 when (0x207C) == 1 (SOUND MODE; DL_F27C00's second column caption is \"LVL\"). A = (0x0710) + 0x1E, T_F41B04 with B = 0x3C, C = 0; if changed, (0x0710) = A - 0x1E and T_Queue2E00_AppendRegs {E=0xA8, D=0x12, A, W=0x7F}.\n0xF90EB4 draws (0x0710) + 0x1E through T_DLB_Handler_DecimalSigned2Words, and sub_FC14C6 resets it to 0 with the same {0xA8,0x12} event."
+  },
+  {
+   "label": "SoundGroupMenu_MoveGroupHighlight",
+   "mode": "insert",
+   "text": "SoundGroupMenu_MoveGroupHighlight -- moves the SOUND GROUP MENU highlight box from the last-highlighted group to the selected group (0x2169)\nEvidence: (0x2640) = (0x2675), (0x2675) = (0x2169); on layer 1 record 0xF2B42F (op 03, swi 0x1B EraseRect) uses entry (0x2640) and record 0xF2B43A (op 03, swi 0x05 FillRect) entry (0x2169) of DLTable_F2B445, 16 boxes;\nthen swi 0x0C with C = 7. Posted by InstallPainter_SoundGroupMenu (0xF927ED) after the painter. (0x2169) is the group SoundGroup_StepSelected steps."
+  },
+  {
+   "label": "BankLegend_DrawUser",
+   "mode": "insert",
+   "text": "BankLegend_DrawUser -- draws the USER-side bank soft-key legend (\"USR1\" or \"USR2\") and boxes it unless a drum bank is selected\nEvidence: SoundBank_IsReMap -> only DL_F2BB03 on layer 1 (erase the legend row). Else, only when (0x216A) bit 3 is set (U1/U2/UD1/UD2): bit 0 picks DL_Usr2..DL_F2BD96 (\"USR2\", column 2) or DL_Usr1..DL_F2BD48 (\"USR1\", column 1) on layer 0;\non layer 1 the legend box is filled (DL_F2BD96 / DL_F2BD48, op 05) when bit 5 (drum) is clear, and the other boxes erased (DL_F2BD52 / DL_F2BDA0, op 1B).\nCallers: Paint_SoundGroupMenuScreen, GroupSoundDisplayHold_RepaintFields, sub_F93631 (COMBINATION GROUP MENU) and sub_F93942 (GROUP: COMBI. DISPLAY HOLD)."
+  },
+  {
+   "label": "BankLegend_EraseRow",
+   "mode": "replace",
+   "text": "BankLegend_EraseRow -- erases the bank soft-key legend strip (x 0x06-0xA2, y 0xE0-0xED) on layer 0\nEvidence: (0x2540) = 0, then DL_F2BB03..0xF2BB0D, a single op-1B (LCD_Svc_1B_EraseRect) record (0x0006,0x00E0)-(0x00A2,0x00ED) -- the strip where DL_Ext1, DL_Usr1/DL_Usr2 and DL_Drum frame their legends; site 0xF92A4F.\nThe list bounds are the `ld XIY` / `ld XIX` immediates before that call (the earlier header's evidence). Callers: Paint_SoundGroupMenuScreen, GroupSoundDisplayHold_RepaintFields, sub_F93631, sub_F93942 -- each when (0x216A) bit 3 is set, before BankLegend_DrawUser."
+  },
+  {
+   "label": "SoundBank_SelectR1OrU1",
+   "mode": "insert",
+   "text": "SoundBank_SelectR1OrU1 -- sets the selected sound bank (0x216A) to R1 (0x00) on the ROM side, or U1 (0x08) when U1/UD1 is selected, and posts the BANK event\nEvidence: does nothing when SoundBank_IsReMap or on U2/UD2 (bits 3 and 0 set). Writes (0x216A) and posts {E=0xA8, D=0x07, A=bank, W=0x3F} with T_Queue2E00_AppendRegs -- class A8 code 07 is the BANK buttons' event (notes/FINDINGS-prom_a-panel-control-map.md).\nThen (0x2075) &= 0xF7, and (0x2071) |= 0x10 on SOUND GROUP MENU (screen 0xA0) or (0x2095) |= 0x10 elsewhere. 0x00 / 0x08 = \"R1-\" / \"U1-\" in DLText_PartCodes.\nSlot [0] (SOFT KEY col 1, legend \"R0M1\" / \"USR1\") of DisplayListPtrs_F92726 (SOUND GROUP MENU) and reached from SoftKeyCol1_GroupSoundDisplayHold."
+  },
+  {
+   "label": "SoundBank_SelectR2OrU2",
+   "mode": "insert",
+   "text": "SoundBank_SelectR2OrU2 -- sets the selected sound bank (0x216A) to R2 (0x01) on the ROM side, or U2 (0x09) when U2/UD2 is selected, and posts the BANK event\nEvidence: does nothing when SoundBank_IsReMap or on U1/UD1 (bit 3 set, bit 0 clear). Writes (0x216A) and posts {E=0xA8, D=0x07, A=bank, W=0x3F} with T_Queue2E00_AppendRegs -- class A8 code 07 is the BANK buttons' event (notes/FINDINGS-prom_a-panel-control-map.md).\nThen (0x2075) &= 0xF7, and (0x2071) |= 0x10 on SOUND GROUP MENU (screen 0xA0) or (0x2095) |= 0x10 elsewhere. 0x01 / 0x09 = \"R2-\" / \"U2-\" in DLText_PartCodes.\nSlot [1] (SOFT KEY col 2, legend \"R0M2\" / \"USR2\") of DisplayListPtrs_F92726 (SOUND GROUP MENU) and reached from SoftKeyCol2_GroupSoundDisplayHold."
+  },
+  {
+   "label": "SoundBank_SelectDrum",
+   "mode": "insert",
+   "text": "SoundBank_SelectDrum -- sets the selected sound bank (0x216A) to the drum bank: RD (0x20) on the ROM side, or the user bank OR 0x20 (UD1 0x28 / UD2 0x29), and posts the BANK event\nEvidence: does nothing when SoundBank_IsReMap or when a user drum bank (bit 5) is already selected. Writes (0x216A) and posts {E=0xA8, D=0x07, A=bank, W=0x3F} with T_Queue2E00_AppendRegs -- class A8 code 07 is the BANK buttons' event (notes/FINDINGS-prom_a-panel-control-map.md).\nThen (0x2075) &= 0xF7, and (0x2071) |= 0x10 on SOUND GROUP MENU (screen 0xA0) or (0x2095) |= 0x10 elsewhere. 0x20 / 0x28 / 0x29 = \"RD1\" / \"UD1\" / \"UD2\" in DLText_PartCodes.\nSlot [2] (SOFT KEY col 3, legend \"DRUM\" from Paint_Drum) of DisplayListPtrs_F92726 (SOUND GROUP MENU) and reached from SoftKeyCol3_GroupSoundDisplayHold."
+  },
+  {
+   "label": "SoundBank_SelectExt",
+   "mode": "insert",
+   "text": "SoundBank_SelectExt -- sets the selected sound bank (0x216A) to E1 (0x10), and posts the BANK event\nEvidence: does nothing when SoundBank_IsReMap, on the USER side (bit 3 set) or when (0x08EC) bit 0 is clear. Writes (0x216A) and posts {E=0xA8, D=0x07, A=bank, W=0x3F} with T_Queue2E00_AppendRegs -- class A8 code 07 is the BANK buttons' event (notes/FINDINGS-prom_a-panel-control-map.md).\nThen (0x2075) &= 0xF7, and (0x2071) |= 0x10 on SOUND GROUP MENU (screen 0xA0) or (0x2095) |= 0x10 elsewhere. 0x10 = \"E1-\" in DLText_PartCodes.\nSlot [3] (SOFT KEY col 4, legend \"EXT1\") of DisplayListPtrs_F92726 (SOUND GROUP MENU) and reached from SoftKeyCol4_GroupSoundDisplayHold."
+  },
+  {
+   "label": "SoundGroup_StepSelected",
+   "mode": "insert",
+   "text": "SoundGroup_StepSelected -- steps the selected group (0x2169) down (key position 0) or up (position 1) and posts the group event\nEvidence: `xor W,0x80` first, then by bank (0x216A): UD1/UD2 (0x28/0x29) nothing; RD (0x20) 0..1; E1 (0x10) down to 0 but UP CLAMPED AT 1 -- the `jr nz` at 0xF92BC8 reuses the RD arm's `cp A,0x01`, so `cp A,B` (B = (0x08E8)-1) at 0xF92BD4 is unreachable; other banks 0..0x0F.\nOn a change: (0x2075) |= 8, (0x2169) = A, T_Queue2E00_AppendRegs {E=0xA8, D=0x08, A=group, W=0x0F}.\nSlot [4] (SOFT KEY col 5) of DisplayListPtrs_F92726 and reached from SoftKeyCol5_GroupSoundDisplayHold."
+  },
+  {
+   "label": "SoftKeyCol6_SoundGroupMenu",
+   "mode": "insert",
+   "text": "SoftKeyCol6_SoundGroupMenu -- the \"OK\" soft key of SOUND GROUP MENU: requests the GROUP: SOUND DISPLAY HOLD screen (id 0xA1)\nEvidence: slots [5] and [22] of DisplayListPtrs_F92726; `ld (0x2070),0x80A1` = screen-request id 0xA1 with (0x2071) = 0x80; when (0x2092) bit 0, (0x2071) = 0x40 and (0x2075) |= 0x80.\n\"OK\" is drawn at IX 0x236B (x 0xD8, y 0xE2), column 6. Screen 0xA1 is PanelScreen_VtableTable_ViewB entry 0xA1, T_F41550 (InstallPainter_GroupSoundDisplayHold_Entry)."
+  },
+  {
+   "label": "LcdKeyRow1_SoundGroupMenu",
+   "mode": "insert",
+   "text": "LcdKeyRow1_SoundGroupMenu -- LCD row-1 keys on SOUND GROUP MENU: no visible effect\nEvidence: slot [8] (code 0x08 = LCD row 1) of DisplayListPtrs_F92726; the body is `calr SoundGroup_SelectedMaxMemberIndex / ret`, and that callee only reads (T_SoundGroup_MaxMemberIndex_Get) -- its A / XIY / L are discarded."
+  },
+  {
+   "label": "LcdKeyRow2_SoundGroupMenu",
+   "mode": "insert",
+   "text": "LcdKeyRow2_SoundGroupMenu -- LCD row-2 keys on SOUND GROUP MENU: no visible effect\nEvidence: slot [9] (code 0x09 = LCD row 2) of DisplayListPtrs_F92726; the body is `calr SoundGroup_SelectedMaxMemberIndex / ret`, and that callee only reads (T_SoundGroup_MaxMemberIndex_Get) -- its A / XIY / L are discarded."
+  },
+  {
+   "label": "LcdKeyRow3_SoundGroupMenu",
+   "mode": "insert",
+   "text": "LcdKeyRow3_SoundGroupMenu -- LCD row-3 keys on SOUND GROUP MENU: no visible effect\nEvidence: slot [10] (code 0x0A = LCD row 3) of DisplayListPtrs_F92726; the body is `calr SoundGroup_SelectedMaxMemberIndex / ret`, and that callee only reads (T_SoundGroup_MaxMemberIndex_Get) -- its A / XIY / L are discarded."
+  },
+  {
+   "label": "ExitKey_SoundGroupMenu",
+   "mode": "insert",
+   "text": "ExitKey_SoundGroupMenu -- EXIT on SOUND GROUP MENU: requests screen 1 (SOUND MODE)\nEvidence: slot [15] (code 0x0F = EXIT) of DisplayListPtrs_F92726. When W bit 7 is clear (EXIT is pair position 1): (0x2070) = 0x8001 -- screen id 1, whose painter draws \"SOUND MODE\" (DL_F27C00) --\nand, when (0x2092) bit 0 is set, (0x209A) = 1 and (0x2071) = 0."
+  },
+  {
+   "label": "GroupSoundDisplayHold_RepaintFields",
+   "mode": "insert",
+   "text": "GroupSoundDisplayHold_RepaintFields -- draws the live part of GROUP: SOUND DISPLAY HOLD: group name, number range, group number, bank legends, HOLD state and the member names\nEvidence: posted by InstallPainter_GroupSoundDisplayHold (0xF92D3C). Group name: T_F41018 (A=(0x2169), B=(0x2250), W=(0x216A)) drawn 16 characters by swi 6 at IX 0x0129; then GroupSoundDisplayHold_DrawNumberRange, DisplayHold_ShowGroupNumber,\nBankLegend_DrawRom12Ext / BankLegend_EraseRow (by (0x216A) bit 3), Paint_Drum, BankLegend_DrawUser, DisplayHold_DrawHoldHighlight.\n(0x2672) = index of the last 8-name page, from T_SoundGroup_MaxMemberIndex_Get; max index <= 8: sub_F934AF + sub_F93398 directly, <= 15: GroupMembers_ShowPageOfTwo, else GroupMembers_ShowPageOfMany. Ends with (0x2673) &= 0xBF."
+  },
+  {
+   "label": "GroupMembers_ShowPageOfTwo",
+   "mode": "insert",
+   "text": "GroupMembers_ShowPageOfTwo -- for a group with max member index 9..15, shows the 8-name page that contains index L (L <= 7: members 0-7, else 8..WA)\nEvidence: L <= 7: (0x2670) = 0, sub_F934AF with DE = 0, WA = 7; else (0x2670) = 1, DE = 8, WA as passed (the max index); XIY = part record (sub_F94539), L = (0x2169) for sub_F934AF; then sub_F93398 and swi 0x0C with C = 3.\nCalled by GroupSoundDisplayHold_RepaintFields (`cp WA,0x000F` at 0xF92E16), GroupMembers_ShowFirstOfTwoPages and GroupMembers_ShowSecondOfTwoPages."
+  },
+  {
+   "label": "GroupMembers_ShowPageOfMany",
+   "mode": "insert",
+   "text": "GroupMembers_ShowPageOfMany -- for a group with max member index above 15, shows the 8-name page that contains index L\nEvidence: L <= 7: (0x2670) = 0, DE = 0, WA = 7; otherwise (0x2670) = L/8, DE = 8*(0x2670), and WA = DE + 7, or WA as passed (the max index) when L is past ((0x2672)-1)*8+7, the last full page; sub_F934AF draws the names,\nthen sub_F93398 and swi 0x0C (C = 3). Callers: GroupSoundDisplayHold_RepaintFields, GroupMembers_ShowFirstOfManyPages, GroupMembers_ShowNextOfManyPages and sub_F93BFE (the COMBI. screen's twin)."
+  },
+  {
+   "label": "PosTable_GetEntryIX",
+   "mode": "insert",
+   "text": "PosTable_GetEntryIX -- IX = the 16-bit word at index E of the word table at XIZ (D is cleared first)\nEvidence: `xor D,D / ld IX,DE / sla 0x01,IX / ld IX,(XIZ+IX)` at 0xF92F16-0xF92F1D.\nsub_F934AF calls it with XIZ = an entry of DLPtrTable_F2B510 (five word arrays) and then draws a 16-character name with swi 6 at that IX; sub_F93ED4 is the other caller."
+  },
+  {
+   "label": "SoftKeyCol1_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol1_GroupSoundDisplayHold -- SOFT KEY column 1 on GROUP: SOUND DISPLAY HOLD: the same action as on SOUND GROUP MENU, SoundBank_SelectR1OrU1\nEvidence: slots [0] and [17] of ScreenButtonHandlers_GroupSoundDisplayHold (code 0 = SOFT KEY col 1); the body is `calr SoundBank_SelectR1OrU1 / ret`, and SoundBank_SelectR1OrU1 is slot [0] of DisplayListPtrs_F92726 (SOUND GROUP MENU) too."
+  },
+  {
+   "label": "SoftKeyCol2_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol2_GroupSoundDisplayHold -- SOFT KEY column 2 on GROUP: SOUND DISPLAY HOLD: the same action as on SOUND GROUP MENU, SoundBank_SelectR2OrU2\nEvidence: slots [1] and [18] of ScreenButtonHandlers_GroupSoundDisplayHold (code 1 = SOFT KEY col 2); the body is `calr SoundBank_SelectR2OrU2 / ret`, and SoundBank_SelectR2OrU2 is slot [1] of DisplayListPtrs_F92726 (SOUND GROUP MENU) too."
+  },
+  {
+   "label": "SoftKeyCol3_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol3_GroupSoundDisplayHold -- SOFT KEY column 3 on GROUP: SOUND DISPLAY HOLD: the same action as on SOUND GROUP MENU, SoundBank_SelectDrum\nEvidence: slots [2] and [19] of ScreenButtonHandlers_GroupSoundDisplayHold (code 2 = SOFT KEY col 3); the body is `calr SoundBank_SelectDrum / ret`, and SoundBank_SelectDrum is slot [2] of DisplayListPtrs_F92726 (SOUND GROUP MENU) too."
+  },
+  {
+   "label": "SoftKeyCol4_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol4_GroupSoundDisplayHold -- SOFT KEY column 4 on GROUP: SOUND DISPLAY HOLD: the same action as on SOUND GROUP MENU, SoundBank_SelectExt\nEvidence: slots [3] and [20] of ScreenButtonHandlers_GroupSoundDisplayHold (code 3 = SOFT KEY col 4); the body is `calr SoundBank_SelectExt / ret`, and SoundBank_SelectExt is slot [3] of DisplayListPtrs_F92726 (SOUND GROUP MENU) too."
+  },
+  {
+   "label": "SoftKeyCol5_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol5_GroupSoundDisplayHold -- SOFT KEY column 5 on GROUP: SOUND DISPLAY HOLD: the same action as on SOUND GROUP MENU, SoundGroup_StepSelected\nEvidence: slots [4] and [21] of ScreenButtonHandlers_GroupSoundDisplayHold (code 4 = SOFT KEY col 5); the body is `calr SoundGroup_StepSelected / ret`, and SoundGroup_StepSelected is slot [4] of DisplayListPtrs_F92726 (SOUND GROUP MENU) too."
+  },
+  {
+   "label": "SoftKeyCol6_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol6_GroupSoundDisplayHold -- the \"GR0UP MENU\" soft key of GROUP: SOUND DISPLAY HOLD: requests SOUND GROUP MENU (screen 0xA0)\nEvidence: slots [5] and [22] of ScreenButtonHandlers_GroupSoundDisplayHold; `ld (0x2070),0x80A0` = screen-request id 0xA0 with (0x2071) = 0x80; when (0x2092) bit 0, (0x2071) = 0x40 and (0x2075) |= 0x80.\nDL_GroupSoundDisplayHoldGr0up draws \"GR0UP\" and \"MENU\" at IX 0x1EDF / 0x227A (x 0xB8 / 0xD0, y 0xC5 / 0xDC), over column 6. Screen 0xA0 is T_F41540 (InstallPainter_SoundGroupMenu_Entry)."
+  },
+  {
+   "label": "SoftKeyCol7_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol7_GroupSoundDisplayHold -- SOFT KEY column 7 on GROUP: SOUND DISPLAY HOLD: toggles DISPLAY HOLD ((0x267F) bit 0)\nEvidence: slots [6] and [23] of ScreenButtonHandlers_GroupSoundDisplayHold; `xor (0x267F),0x01`, then posts DisplayHold_DrawHoldHighlight. \"DISPLAY\" / \"HOLD\" are drawn at IX 0x2190 / 0x2371 (x 0x100 / 0x108, y 0xD6 / 0xE2),\ninside the box (0xFE,0xD4)-(0x139,0xEC) that spans columns 7 and 8 -- both keys share this body. GroupSoundDisplayHold_PickSound leaves the screen only when the bit is clear."
+  },
+  {
+   "label": "SoftKeyCol8_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "SoftKeyCol8_GroupSoundDisplayHold -- SOFT KEY column 8 on GROUP: SOUND DISPLAY HOLD: toggles DISPLAY HOLD ((0x267F) bit 0)\nEvidence: slots [7] and [24] of ScreenButtonHandlers_GroupSoundDisplayHold; `xor (0x267F),0x01`, then posts DisplayHold_DrawHoldHighlight. \"DISPLAY\" / \"HOLD\" are drawn at IX 0x2190 / 0x2371 (x 0x100 / 0x108, y 0xD6 / 0xE2),\ninside the box (0xFE,0xD4)-(0x139,0xEC) that spans columns 7 and 8 -- both keys share this body. GroupSoundDisplayHold_PickSound leaves the screen only when the bit is clear."
+  },
+  {
+   "label": "SoundGroup_SelectedMaxMemberIndex",
+   "mode": "insert",
+   "text": "SoundGroup_SelectedMaxMemberIndex -- A = the max member index of the selected group (0x2169) in the selected bank (0x216A) for part (0x2250); also XIY = that part's record, C = L = the group\nEvidence: sub_F94539 (XIY = entry (0x2250) of 0xF2AB50), C = L = A = (0x2169), B = (0x2250), W = (0x216A), call T_SoundGroup_MaxMemberIndex_Get; W is saved and restored around it.\n13 callers, all in this module (the GROUP: SOUND DISPLAY HOLD handlers, LcdKeyRow1..3_SoundGroupMenu, sub_F93398)."
+  },
+  {
+   "label": "LcdKeyRow1_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "LcdKeyRow1_GroupSoundDisplayHold -- LCD row-1 keys on GROUP: SOUND DISPLAY HOLD: pick the sound in row 1 of the shown page (left key) or of its right-hand column (right key, +4)\nEvidence: slot [8] (code 0x08 = LCD row 1) of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 0, calr GroupSoundDisplayHold_PickSound (which adds 4 when W bit 7 is clear, the right key)."
+  },
+  {
+   "label": "LcdKeyRow2_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "LcdKeyRow2_GroupSoundDisplayHold -- LCD row-2 keys on GROUP: SOUND DISPLAY HOLD: pick the sound in row 2 of the shown page (left key) or of its right-hand column (right key, +4)\nEvidence: slot [9] (code 0x09 = LCD row 2) of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 1, calr GroupSoundDisplayHold_PickSound (which adds 4 when W bit 7 is clear, the right key)."
+  },
+  {
+   "label": "LcdKeyRow3_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "LcdKeyRow3_GroupSoundDisplayHold -- LCD row-3 keys on GROUP: SOUND DISPLAY HOLD: pick the sound in row 3 of the shown page (left key) or of its right-hand column (right key, +4)\nEvidence: slot [10] (code 0x0A = LCD row 3) of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 2, calr GroupSoundDisplayHold_PickSound (which adds 4 when W bit 7 is clear, the right key)."
+  },
+  {
+   "label": "LcdKeyRow4_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "LcdKeyRow4_GroupSoundDisplayHold -- LCD row-4 keys on GROUP: SOUND DISPLAY HOLD: pick the sound in row 4 of the shown page (left key) or of its right-hand column (right key, +4)\nEvidence: slot [11] (code 0x0B = LCD row 4) of ScreenButtonHandlers_GroupSoundDisplayHold; A = SoundGroup_SelectedMaxMemberIndex, HL = 3, calr GroupSoundDisplayHold_PickSound (which adds 4 when W bit 7 is clear, the right key)."
+  },
+  {
+   "label": "GroupMembers_ShowFirstOfTwoPages",
+   "mode": "insert",
+   "text": "GroupMembers_ShowFirstOfTwoPages -- clears rows 29-235 of layer 0 and shows page 1 (members 0-7) of a two-page group\nEvidence: LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = 0, GroupMembers_ShowPageOfTwo.\nUNREACHABLE: its only reference is the `ld XWA` immediate at 0xF92FC7, in a post block after the `ret` at 0xF92FC6 that no branch, table entry or 32-bit immediate in any image names (lane prom_a-s02 checked all four ROM dumps for the block addresses)."
+  },
+  {
+   "label": "GroupMembers_ShowSecondOfTwoPages",
+   "mode": "insert",
+   "text": "GroupMembers_ShowSecondOfTwoPages -- clears rows 29-235 of layer 0 and shows page 2 (members 8..max) of a two-page group\nEvidence: LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = 8, GroupMembers_ShowPageOfTwo.\nUNREACHABLE: its only reference is the `ld XWA` immediate at 0xF92FDB, in a post block after the `ret` at 0xF92FC6 that no branch, table entry or 32-bit immediate in any image names (lane prom_a-s02 checked all four ROM dumps for the block addresses)."
+  },
+  {
+   "label": "GroupMembers_ShowFirstOfManyPages",
+   "mode": "insert",
+   "text": "GroupMembers_ShowFirstOfManyPages -- clears rows 29-235 of layer 0 and shows the first page of a many-page group\nEvidence: LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = 0, GroupMembers_ShowPageOfMany.\nUNREACHABLE: its only reference is the `ld XWA` immediate at 0xF92FEF, in a post block after the `ret` at 0xF92FC6 that no branch, table entry or 32-bit immediate in any image names (lane prom_a-s02 checked all four ROM dumps for the block addresses)."
+  },
+  {
+   "label": "GroupMembers_ShowNextOfManyPages",
+   "mode": "insert",
+   "text": "GroupMembers_ShowNextOfManyPages -- clears rows 29-235 of layer 0 and shows the page after the current one (0x2670) of a many-page group\nEvidence: LCD_ClearLayer0_Rows29To235, SoundGroup_SelectedMaxMemberIndex, L = ((0x2670)+1)*8, GroupMembers_ShowPageOfMany.\nUNREACHABLE: its only references are the `ld XWA` immediates at 0xF93003 and 0xF93017, in post blocks after the `ret` at 0xF92FC6 that no branch, table entry or 32-bit immediate in any image names (lane prom_a-s02 checked all four ROM dumps for the block addresses)."
+  },
+  {
+   "label": "ExitKey_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "ExitKey_GroupSoundDisplayHold -- EXIT on GROUP: SOUND DISPLAY HOLD: requests screen 1 (SOUND MODE)\nEvidence: slot [15] (code 0x0F = EXIT) of ScreenButtonHandlers_GroupSoundDisplayHold. When W bit 7 is clear: (0x2070) = 0x8001 and, if (0x2092) bit 0 is set, (0x209A) = 1, (0x2071) = 0, (0x2075) &= 0x7F.\nSame shape as ExitKey_SoundGroupMenu plus the (0x2075) bit-7 clear."
+  },
+  {
+   "label": "NumberPadKey_GroupSoundDisplayHold",
+   "mode": "insert",
+   "text": "NumberPadKey_GroupSoundDisplayHold -- NUMBER PAD on GROUP: SOUND DISPLAY HOLD: types a group number and, when complete and in range, selects that group\nEvidence: slot [27] (code 0x1B = NUMBER PAD) of ScreenButtonHandlers_GroupSoundDisplayHold. (0x2823) == 0x20 -> T_Blink_Stop only. When (0x2267) & 0x0F == 0x0F: (0x2826) = 2, T_AsciiDigits3_ToValue;\na value in 1..B (B = 16; 1 for UD1/UD2; 2 for RD; (0x08E8) for E1) becomes (0x2169) = value - 1, with T_Queue2E00_AppendRegs {E=0xA8, D=0x08, A=group, W=0x0F} and T_Blink_Stop.\nEvery path except the first ends by posting DisplayHold_ShowTypedGroupDigits."
+  },
+  {
+   "label": "DisplayHold_ShowTypedGroupDigits",
+   "mode": "insert",
+   "text": "DisplayHold_ShowTypedGroupDigits -- shows the digits typed so far in the group-number field, blinking\nEvidence: (0x2661) = word (0x2822); (0x2540) = 0; T_Blink_Command with record DL_F2BA64 (interpreter B: 2 characters of (0x2661) at IX 0x0166 = x 0x130, y 8 -- the field right of \"GROUP:\").\nPosted by NumberPadKey_GroupSoundDisplayHold and by sub_F93C3D, the GROUP: COMBI. DISPLAY HOLD twin."
+  },
+  {
+   "label": "DisplayHold_ShowGroupNumber",
+   "mode": "replace",
+   "text": "DisplayHold_ShowGroupNumber -- draws the selected group's number, (0x2169)+1, as two characters after \"GROUP:\" -- blinking on panel variant 2\nEvidence: A = (0x2169) + 1, T_F41AF4 (sub_F8BC8A: Value_ToAsciiDigits3, left-justified into (0x2661)); (0xC4) != 2: layer 1, DL_F2BA64..DL_Ext1 through interpreter B (site 0xF93145, the only display-list site, as the earlier header said); (0xC4) == 2: layer 0, T_Blink_Command with DL_F2BA64.\nDL_F2BA64 draws 2 characters of (0x2661) at IX 0x0166 (x 0x130, y 8), right of \"GROUP:\" at (0x10D,0x0A) in both DISPLAY HOLD screens' lists.\nCallers: GroupSoundDisplayHold_RepaintFields, sub_F93942; posted by GroupSoundDisplayHold_PickSound, sub_F932C6, sub_F93CB9, sub_F93D6D."
+  },
+  {
+   "label": "DisplayHold_DrawHoldHighlight",
+   "mode": "replace",
+   "text": "DisplayHold_DrawHoldHighlight -- shows the DISPLAY HOLD state: fills (bit set) or erases (bit clear) the box over \"DISPLAY HOLD\"\nEvidence: layer 1; (0x267F) bit 0 set -> DL_F2BA0C..DL_F2BA16 (op-05 FillRect (0xFE,0xD4)-(0x139,0xEC), site 0xF93172), clear -> DL_F2BA16..DL_Drum (op-1B EraseRect, same box, site 0xF93182) -- the two sites the earlier header listed.\nThe box holds \"DISPLAY\" (IX 0x2190) and \"HOLD\" (IX 0x2371) of both DISPLAY HOLD screens' lists. SoftKeyCol7/8_GroupSoundDisplayHold toggle the bit and post this routine (sub_F93B03 / sub_F93B1B on the COMBI. screen);\ncallers GroupSoundDisplayHold_RepaintFields and sub_F93942."
+  },
+  {
+   "label": "SoundBank_IsReMap",
+   "mode": "insert",
+   "text": "SoundBank_IsReMap -- A = 1 when the selected bank (0x216A) is 0x18, 0x19 or 0x1A, else A = 0\nEvidence: `cp W,0x18 / 0x19 / 0x1A` at 0xF9318D-0xF9319A. Those codes are \"M1-\" \"M2-\" \"M3-\" in DLText_PartCodes, and when this returns 1 Paint_SoundGroupMenuScreen draws DL_SoundGroupMenuReMap1ReMap2 (\"RE-MAP1\" \"RE-MAP2\" \"RE-MAP3\") instead of the \"USER1\" \"USER2\" \"ROM/EXT\" list.\nIn those banks the selectors (SoundBank_Select*, SoundGroup_StepSelected) do nothing, Paint_Drum skips \"DRUM\" and BankLegend_DrawUser erases the legend row."
+  },
+  {
+   "label": "GroupSoundDisplayHold_DrawNumberRange",
+   "mode": "insert",
+   "text": "GroupSoundDisplayHold_DrawNumberRange -- draws the selected group's sound-number range \"first-last\" in a frame\nEvidence: A = SoundGroup_SelectedMaxMemberIndex, then `jr` into GroupCombiDisplayHold_DrawNumberRange's body at .LF931A7: first = 8*(0x2169)+1, last = 8*(0x2169)+A+1, each through T_Value_ToAsciiDigits3 and an interpreter-B record\n(DL_F2BDB4 at IX 0x1D12, DL_F2BDC3 at IX 0x1D16), with DL_F2BDD2 drawing \"-\" at IX 0x1D15 and the frame. 8*group + member + 1 is the numbering C0mbinati0nM0de_DrawPart8Sound shows.\nCalled only by GroupSoundDisplayHold_RepaintFields."
+  },
+  {
+   "label": "GroupCombiDisplayHold_DrawNumberRange",
+   "mode": "replace",
+   "text": "GroupCombiDisplayHold_DrawNumberRange -- GROUP: COMBI. DISPLAY HOLD: draws the selected group's number range \"first-last\" in a frame\nEvidence: A = sub_F93B33 (T_SoundGroup_MaxMemberIndex_GetToneCopy with A = (0x2169), B = 0x98, W = (0x216A)); (0x2640) = 8*(0x2169)+A+1 and (0x2641) = 8*(0x2169)+1, each through T_Value_ToAsciiDigits3 into (0x2661) and drawn by interpreter B --\nDL_F2BDC3 at IX 0x1D16 (site 0xF931D8) and DL_F2BDB4 at IX 0x1D12 (0xF931F5) -- then DL_F2BDD2..DL_F2BDF5 by interpreter A (0xF93208): the \"-\" at IX 0x1D15 and the frame lines. These are the three sites the earlier header listed.\nCalled only by sub_F93942, posted by InstallPainter_GroupCombiDisplayHold; GroupSoundDisplayHold_DrawNumberRange enters the same body."
+  },
+  {
+   "label": "GroupSoundDisplayHold_PickSound",
+   "mode": "insert",
+   "text": "GroupSoundDisplayHold_PickSound -- assigns the sound in LCD row HL (left key) or HL+4 (right key) of the shown page to the current part, then leaves for the mode screen unless DISPLAY HOLD is on\nEvidence: member = 8*(0x2670) + HL, +4 when W bit 7 is clear; ignored when above A (the max index). (0x216B) = member; T_List2030_AppendRegs {E=(0x2250), D=0, A=(0x216A), W=0x3F} and {E=(0x2250), D=0, A=(0x2169), W=member} --\nthe bank / group-member pair C0mbinati0nM0de_StepPartSound also posts. Then (0x2673) |= 8, T_Blink_Stop, posts DisplayHold_ShowGroupNumber and sub_F93398;\nif (0x267F) bit 0 is clear: (0x2070) = 0x8001 (SOUND MODE) when on screen 0xA1, else 0x8002 (COMBINATION MODE). With A != 8 on the last page ((0x2670) == (0x2672)) it calls sub_F932C6 instead.\nCallers: LcdKeyRow1..4_GroupSoundDisplayHold."
+  }
+ ],
+ "left_unnamed": [
+  {
+   "name": "sub_F9231D",
+   "why": "slot [14] (code 0x0E) of DisplayListPtrs_F9157B, a lone ret; the panel map has no producer for code 0x0E, so there is no control to name it after"
+  },
+  {
+   "name": "sub_F92364",
+   "why": "slot [17] (code 0x11) of DisplayListPtrs_F9157B: W += 1 (+6 when (0x2075) bit 2) then jp C0mbinati0nM0de_SelectOrEditPart1; codes 0x11-0x18 have no producer on the SX-WSA1R (variant 2) panel map, so which control raises it is unknown"
+  },
+  {
+   "name": "sub_F92374",
+   "why": "code 0x11-0x18 stub (slot [18]) -> C0mbinati0nM0de_SelectOrEditPart2 with step 1/7; no producer for the code on the variant-2 panel map"
+  },
+  {
+   "name": "sub_F92384",
+   "why": "code 0x11-0x18 stub (slot [19]) -> C0mbinati0nM0de_SelectOrEditPart3 with step 1/7; no producer for the code on the variant-2 panel map"
+  },
+  {
+   "name": "sub_F92394",
+   "why": "code 0x11-0x18 stub (slot [20]) -> C0mbinati0nM0de_SelectOrEditPart4 with step 1/7; no producer for the code on the variant-2 panel map"
+  },
+  {
+   "name": "sub_F923A4",
+   "why": "code 0x11-0x18 stub (slot [21]) -> C0mbinati0nM0de_SelectOrEditPart5 with step 1/7; no producer for the code on the variant-2 panel map"
+  },
+  {
+   "name": "sub_F923B4",
+   "why": "code 0x11-0x18 stub (slot [22]) -> C0mbinati0nM0de_SelectOrEditPart6 with step 1/7; no producer for the code on the variant-2 panel map"
+  },
+  {
+   "name": "sub_F923C4",
+   "why": "code 0x11-0x18 stub (slot [23]) -> C0mbinati0nM0de_SelectOrEditPart7 with step 1/7; no producer for the code on the variant-2 panel map"
+  },
+  {
+   "name": "sub_F923D4",
+   "why": "slot [24] (code 0x18) of BOTH F914FB and F9157B -> C0mbinati0nM0de_SelectOrEditPart8OrStepPart with step 1/7; no producer for code 0x18 on the variant-2 panel map"
+  },
+  {
+   "name": "sub_F923E4",
+   "why": "slot [25] (code 0x19) of DisplayListPtrs_F9157B, lone ret; no producer for the code"
+  },
+  {
+   "name": "sub_F923E5",
+   "why": "slot [26] (code 0x1A) of both F914FB/F9157B, lone ret; no producer for the code"
+  },
+  {
+   "name": "sub_F923E7",
+   "why": "slot [28] (code 0x1C) of both tables, lone ret; no producer for the code"
+  },
+  {
+   "name": "sub_F923E8",
+   "why": "slot [29] (code 0x1D) of both tables, lone ret; no producer for the code"
+  },
+  {
+   "name": "sub_F923EA",
+   "why": "slot [31] (code 0x1F) of both tables, lone ret; no producer for the code"
+  },
+  {
+   "name": "sub_F923EB",
+   "why": "lone ret reached only by the raw numeric `calr 0x0ef1` at 0xF914F7 (sub_F914F7 = the +0x0C slot T_F4153C of screen object 2); no reader of a screen object's +0x0C slot was found, so its role is unknown"
+  },
+  {
+   "name": "sub_F92722",
+   "why": "the +0x0C slot (T_F4154C) of the SOUND GROUP MENU screen object; body is the raw `calr 0x052a` (-> sub_F92C4F, a lone ret) / ret; the 4th screen-object method has no identified caller"
+  },
+  {
+   "name": "sub_F92C30",
+   "why": "slot [14] (code 0x0E) of DisplayListPtrs_F92726, lone ret; no producer for code 0x0E"
+  },
+  {
+   "name": "sub_F92C4F",
+   "why": "lone ret reached only by sub_F92722's raw `calr 0x052a`; body of the unidentified +0x0C screen-object method"
+  },
+  {
+   "name": "sub_F92C62",
+   "why": "the +0x0C slot (T_F4155C) of the GROUP: SOUND DISPLAY HOLD screen object; body `calr sub_F93123 / ret` (a lone ret); 4th method's caller/purpose unknown"
+  },
+  {
+   "name": "sub_F9306A",
+   "why": "slot [14] (code 0x0E) of ScreenButtonHandlers_GroupSoundDisplayHold, lone ret; no producer for code 0x0E"
+  },
+  {
+   "name": "sub_F93123",
+   "why": "lone ret called only by sub_F92C62, the unidentified +0x0C screen-object method"
+  }
+ ],
+ "notes": "MISFRAMED HEADERS (not in my slice, fix by whoever owns them):\n(1) DisplayListPtrs_F914FB / DisplayListPtrs_F9157B have their arms REVERSED. sub_F914E1 is `ld XIX,F914FB / cp (0x2687),0 / jr z,.LF914F2 / ld XIX,F9157B / .LF914F2: call T_F41B08`, so F914FB is used when (0x2687)==0 (page 1, painted by Paint_C0mbinati0nM0dePage1 with \"PAGE1/2\") and F9157B when (0x2687)!=0 (page 2, sub_F916AA, \"PAGE2/2\"). Both headers say the opposite. sub_F920EC (`cp (0x2687),0 / jr z -> step part`) and sub_F915FB's painter choice agree with my reading.\n(2) The \"DisplayListPtrs_\" prefix on F914FB, F9157B, F92726, F90CD8 and F9408E is wrong: they are 32-slot panel-BUTTON handler tables read through T_F41B08 (as their own Selector lines say). Suggested names: ScreenButtonHandlers_C0mbinati0nM0de_Page1/_Page2, _SoundGroupMenu, _SoundMode (F90CD8 is screen 1's), and F9408E's screen (entry 0xCA).\n(3) ValueList_F92618/F92623 header \"Unknown: what the values mean\" is resolved: 00 01 08 09 [10] 20 28 29 18 19 1A are the sound-bank codes in step order, drawn by DLText_PartCodes as R1- R2- U1- U2- [E1-] RD1 UD1 UD2 M1- M2- M3-; F92623 drops E1 (0x10), offered only when (0x08EC) bit 0 is set.\n\nSTRUCTURE ESTABLISHED (useful for slice 1 and the docs):\n- Screens: id 1 = SOUND MODE (T_F41520, DL_F27C00), id 2 = C0MBINATI0N M0DE (T_F41530; (0x2687) = page, 0 = PAGE1/2, 1 = PAGE2/2), 0xA0 = SOUND GROUP MENU (T_F41540), 0xA1 = GROUP: SOUND DISPLAY HOLD (T_F41550). Writing word 0x80nn to (0x2070) requests screen nn.\n- Part records: 0x76A2 + 0x40*k (k = 0..7) via the 0xF2AB50 pointer table (0xF2ABD0 = record+0x20). +0x03 VOL, +0x08 PAN, +0x0D bit 5 INT, +0x3B group, +0x3C member, +0x3D bank; (0x2250) = selected part.\n- Bank code (0x216A) / record +0x3D: bit 3 = USER side, bit 0 = 2nd of the pair, bit 5 = drum, 0x10 = E1 (EXT), 0x18-0x1A = M1-M3 = RE-MAP banks (the screen swaps to \"RE-MAP1..3\" legends). (0x2169) = group, sound number shown = 8*group + member + 1.\n- Page-2 dirty bytes: (0x2679) SOUND, (0x267A) INT, (0x267B) PAN, (0x267C) VOL rows (one bit per part) -> FieldRedrawPtrs_F91865/85/A5/C5; (0x2678) = edited row (1 SOUND, 8 INT, 4 PAN, 2 VOL); (0x267D) bit 0 = SOLO (also bit 5 of (0x602498) via T_F411EC); (0x267F) bit 0 = DISPLAY HOLD.\n- Events: Queue2E00 {0x90,0x10,part} part select; {0xA8,0x07,bank} (same class/code as the BANK buttons); {0xA8,0x08,group}; {0xA8,0x12,LVL} and {0xA8,0x13,PAN} for SOUND MODE globals (0x0710)/(0x0711). List2030 {part,D=field,A,W} for part-field edits; the sound pair is {part,0,bank,..} + {part,0,group,member}.\n\nLEADS FOR SLICE 1 (keep names consistent): sub_F91926..sub_F919E6 = C0mbinati0nM0de_DrawPart1Sound..Part7Sound (same shape as F91A06); sub_F916AA = page-2 painter (Paint_C0mbinati0nM0dePage2); sub_F91725 = C0mbinati0nM0de_RepaintPage2Fields; sub_F917F4 = run the table routine for each set bit of A; sub_F918E5 = draws the selected part's sound name at (0x9B,0x1B) after \"SOUND:\" then calls C0mbinati0nM0de_ShowSelectedPart; sub_F914D9/DD/E1 = Enter/Leave/Button of screen 2. sub_F911E6..sub_F9139B are soft-key cols 1-7 bodies shared by SOUND MODE (F90CD8) and combination page 1 (F914FB); (0x207C)==1 picks the SOUND MODE globals. The col1 (OCT, (0x78B2)), col2 (LVL/VOL), col3 (PAN) and col7 (INT) mappings are proven by data and code. The col4-6 = EFF1/EFF2/REV mapping (+0x05/+0x06/+0x07) comes only from caption order, so check it before using it.\n\nDEAD CODE / FIRMWARE ODDITIES:\n- 0xF92FC7-0xF9302A: five post blocks after the `ret` at .LF92FC6 (slot [12] of ScreenButtonHandlers_GroupSoundDisplayHold). No branch, table entry or 24-bit address in any of the four ROM dumps names them. Their targets F9302B/F93037/F93043/F9304F are reachable only from them; I named those and marked them UNREACHABLE. The COMBI. screen has the same orphan at 0xF93B76-0xF93BD9 (after .LF93B75). These look like PAGE-key handlers whose dispatch was compiled away: slot [16] (PAGE) of both screens' tables is PanelButton_NullHandler.\n- SoundGroup_StepSelected: in bank E1 the up-step reuses the RD arm's `cp A,1`, so E1 groups cannot be stepped above 1 with the soft key. The intended `cp A,B` at 0xF92BD4 is unreachable.\n- GroupSoundDisplayHold_RepaintFields calls sub_F94539 (which sets L = (0x2250)*4) just before GroupMembers_ShowPageOfTwo/_ShowPageOfMany test L, so the first page shown seems to depend on the part index. This is a static reading only and has not been checked at runtime.\n- C0mbinati0nM0de_SoloIndicatorOn does not set (0x2540), unlike its Off twin.\n- Raw numeric operands still in source: `calr 0x0ef1` at 0xF914F7 (-> sub_F923EB) and `calr 0x052a` at 0xF92722 (-> sub_F92C4F). Both should be made symbolic. The screen objects' +0x0C slots (T_F4153C/T_F4154C/T_F4155C) all end in a lone ret, and no reader of +0x0C was found.\n\nPROM_B LEADS: 0xF2B40F + 0xF2B41F (the \"mid-object seam\" in the 0xF2B422 header) are one 16-entry IX table of group-name positions, read at 0xF9287A (`ld XIZ,0x00F2B40F / sla 1,D / ld IX,(XIZ+D)`, D < 16). 0xF29BC6 holds 17 volume-bar bitmaps indexed by sub_F9458C (A/8+1). The 0xF2BB18 table holds 64 legend highlight boxes indexed by the bank code. In the SOUND GROUP MENU list, \"USER1\" \"USER2\" \"ROM/EXT\" at y 0xC9 have no role found yet.\n\nNAMING CHOICES: I used the ROM's zero spelling \"C0mbinati0nM0de\" to match DL_C0mbinati0nM0dePage22Sound. I avoided Paint_SoundGroupMenu and Paint_GroupSoundDisplayHold because notes/prom_a_understanding_round5.py PAINTER_NAMES still maps those names to F927A6/F92CE7 (now InstallPainter_*), and reusing them would collide if that script is re-run. Key-slot names follow the SLOT_CONTROL convention (SoftKeyColN_/LcdKeyRowN_/ExitKey_/PageKey_/NumberPadKey_/MinusPlusKey_ and the new CompareKey_). ScreenLeaveBody_ follows prom_b. All 125 names were checked absent as tokens across wsa1/ (.s .inc .md .py .txt .map .json .ld .sed) and unique within the pack.\n\nSCRATCH (not committed): /home/fsanches/compartilhado/disasm-lanes/wsa1-naming-r1/scratch/prom_a-s02/ holds build_pack.py (generates this pack, templated per-part/per-column entries), check_names.py (token-uniqueness scan), names.txt and pack.json.",
+ "verified": {
+  "date": "2026-10-03",
+  "reviewer": "Claude (session 53b889a2), alone, sequentially -- not the namer",
+  "read": [
+   [
+    0,
+    100
+   ]
+  ],
+  "method": "review_sheet.py prom_a-s02 (all 100 renames): each routine's first instructions as they stand, the display lists / descriptors it loads, and its callers, against the evidence line. Areas: COMBINATION MODE page-2 field drawers (per-part sound/INT/pan/vol), soft keys and row keys, sound-bank selection, GROUP: SOUND DISPLAY HOLD screen. Evidence lines that could be read off the code (stores, bit tests, table operands, record variables, caller chains) matched it; none was found wrong. Names that spell ROM text with zero-for-O (S0ng, C0mbinati0nM0de) follow the tree's existing convention (Paint_S0ngC0py, Paint_C0mbinati0nM0dePage2).",
+  "rejected": {},
+  "amended": {}
+ },
+ "also": [
+  "wsa1/prom_b/wsa1_prom_b.s",
+  "wsa1/prom_a/prom_a.ld",
+  "wsa1/prom_b/prom_b.ld"
+ ],
+ "rebased_from": "packs/prom_a-s02.json"
+}
