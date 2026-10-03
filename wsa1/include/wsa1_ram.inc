@@ -4,185 +4,219 @@
 ; column of a row names what establishes it.  Not included by prom_c, another CPU.
 
 ; ---- wsa1/notes/FINDINGS-display-controller.md -- "The drawing state, as it now stands"
-	.equ LCD_X0,			0x2530	; box / line X0; clamped to 319 -- the clamp
-	.equ LCD_Y0,			0x2532	; box / line Y0; clamped to 239 -- the clamp
-	.equ LCD_X1,			0x2534	; box / line X1 -- the clamp
-	.equ LCD_Y1,			0x2536	; box / line Y1 -- the clamp
-	.equ LCD_CurrentLayer,		0x2540	; the layer being drawn into, 0..2 -- LCD_SelectCurrentLayer
-	.equ LCD_Layer0_SAD,		0x2541	; layer 0's SED1330 screen start address -- LCD_Init_SED1330 writes it
-	.equ LCD_Layer1_SAD,		0x2543	; layer 1's SED1330 screen start address -- LCD_Init_SED1330 writes it
-	.equ LCD_Layer2_SAD,		0x2545	; layer 2's SED1330 screen start address -- LCD_Init_SED1330 writes it
-	.equ LCD_LineFlags,		0x2547	; bit 0: the line draw's X and Y are swapped -- LCD_Line_ChooseMajorAxis
-	.equ LCD_LineSlopeX100,		0x2548	; line slope x 100 -- LCD_Line_ComputeSlope
-	.equ LCD_LineInterceptX100,	0x254a	; line intercept x 100 -- LCD_Line_ComputeIntercept
-	.equ LCD_PlotX,			0x2550	; X of the point being plotted -- LCD_PlotPointAt reads it
-	.equ LCD_PlotY,			0x2552	; Y of the point being plotted -- LCD_PlotPointAt reads it
-	.equ LCD_OvlayShadow,		0x2554	; shadow of the SED1330 OVLAY parameter -- service 0x05 masks it with 0xFC
-	.equ LCD_CurrentLayerBase,	0x2555	; display-RAM base of the current layer -- LCD_SelectCurrentLayer writes it
-	.equ LCD_BytesPerLine,		0x2557	; SED1330 AP, bytes per line (40); 16-bit, low byte -- the plotter multiplies Y by it
-	.equ LCD_BytesPerLine_Hi,	0x2558	; AP's high byte, written on its own -- services 0x0F and 0x10
-	.equ LCD_DispOnOffShadow,	0x2559	; the last DISP ON/OFF parameter -- service 0x0C
-	.equ LCD_RunAddress,		0x255a	; display address of the run being drawn -- services 0x01, 0x05, 0x11
-	.equ LCD_SavedX0,		0x255c	; X0 saved across a shadowed box -- services 0x0A, 0x22
-	.equ LCD_SavedY0,		0x255e	; Y0 saved across a shadowed box -- services 0x0A, 0x22
-	.equ LCD_SavedX1,		0x2560	; X1 saved across a shadowed box -- services 0x0A, 0x22
-	.equ LCD_SavedY1,		0x2562	; Y1 saved across a shadowed box -- services 0x0A, 0x22
+	.equ LCD_X0,				0x2530	; box / line X0; clamped to 319 -- the clamp
+	.equ LCD_Y0,				0x2532	; box / line Y0; clamped to 239 -- the clamp
+	.equ LCD_X1,				0x2534	; box / line X1 -- the clamp
+	.equ LCD_Y1,				0x2536	; box / line Y1 -- the clamp
+	.equ LCD_CurrentLayer,			0x2540	; the layer being drawn into, 0..2 -- LCD_SelectCurrentLayer
+	.equ LCD_Layer0_SAD,			0x2541	; layer 0's SED1330 screen start address -- LCD_Init_SED1330 writes it
+	.equ LCD_Layer1_SAD,			0x2543	; layer 1's SED1330 screen start address -- LCD_Init_SED1330 writes it
+	.equ LCD_Layer2_SAD,			0x2545	; layer 2's SED1330 screen start address -- LCD_Init_SED1330 writes it
+	.equ LCD_LineFlags,			0x2547	; bit 0: the line draw's X and Y are swapped -- LCD_Line_ChooseMajorAxis
+	.equ LCD_LineSlopeX100,			0x2548	; line slope x 100 -- LCD_Line_ComputeSlope
+	.equ LCD_LineInterceptX100,		0x254a	; line intercept x 100 -- LCD_Line_ComputeIntercept
+	.equ LCD_PlotX,				0x2550	; X of the point being plotted -- LCD_PlotPointAt reads it
+	.equ LCD_PlotY,				0x2552	; Y of the point being plotted -- LCD_PlotPointAt reads it
+	.equ LCD_OvlayShadow,			0x2554	; shadow of the SED1330 OVLAY parameter -- service 0x05 masks it with 0xFC
+	.equ LCD_CurrentLayerBase,		0x2555	; display-RAM base of the current layer -- LCD_SelectCurrentLayer writes it
+	.equ LCD_BytesPerLine,			0x2557	; SED1330 AP, bytes per line (40); 16-bit, low byte -- the plotter multiplies Y by it
+	.equ LCD_BytesPerLine_Hi,		0x2558	; AP's high byte, written on its own -- services 0x0F and 0x10
+	.equ LCD_DispOnOffShadow,		0x2559	; the last DISP ON/OFF parameter -- service 0x0C
+	.equ LCD_RunAddress,			0x255a	; display address of the run being drawn -- services 0x01, 0x05, 0x11
+	.equ LCD_SavedX0,			0x255c	; X0 saved across a shadowed box -- services 0x0A, 0x22
+	.equ LCD_SavedY0,			0x255e	; Y0 saved across a shadowed box -- services 0x0A, 0x22
+	.equ LCD_SavedX1,			0x2560	; X1 saved across a shadowed box -- services 0x0A, 0x22
+	.equ LCD_SavedY1,			0x2562	; Y1 saved across a shadowed box -- services 0x0A, 0x22
 
 ; ---- wsa1/notes/FINDINGS-interprocessor-link.md -- "the receiving half, channel 2, remote block read, completion selector, counters"
-	.equ Link_RxCommand,		0x600780	; copy of the message's first (command) byte -- INT0_LinkByte
-	.equ Link_E2Payload,		0x600788	; an 0xE2 message's 10 payload bytes: long +0, long +4, word +8 -- INT0_LinkByte; Link_ServiceTask reads the three fields
-	.equ Link_PendingFlags,		0x600792	; bit 7: an 0xE2 request waits for Link_ServiceTask -- INTTC3_LinkDmaDone sets it
-	.equ Link_TxDest,		0x6007a1	; outgoing 0xE1 header: destination long -- the 0xE1 transmitter at 0xF8E26F
-	.equ Link_TxCount,		0x6007a5	; outgoing 0xE1 header: count word -- the 0xE1 transmitter at 0xF8E26F
-	.equ Link_RxPayload,		0x6007b3	; payload of any other command, (cmd & 0x1F)+1 bytes -- INT0_LinkByte
-	.equ Link_E1Dest,		0x6007d3	; an 0xE1 message's destination long, fed to DMAD3 -- INTTC3_LinkDmaDone selector 2
-	.equ Link_E1Count,		0x6007d7	; an 0xE1 message's count word, fed to DMAC3 -- INTTC3_LinkDmaDone selector 2
-	.equ Link_TxBurstsLeft,		0x6007d9	; stepped 2 -> 1 -> 0 per transmit burst; the arming code spins on 0 -- INTTC2_uDMA2Done
-	.equ Link_CompletionSelector,	0x6007da	; which message INTTC3 is finishing: 0..4 -- INT0_LinkByte sets it, INTTC3_LinkDmaDone dispatches on it
-	.equ Link_HandshakeTimeouts,	0x6007db	; counts timed-out 0xE5/0xE6 handshakes (2500 ticks); nothing reads it -- the handshake at 0xF8E222
-	.equ Link_StallAborts,		0x6007dc	; counts receives the stall watchdog aborted; nothing reads it -- Link_ServiceTask
-	.equ Link_LastDmaCount,		0x6007df	; the stall watchdog's previous DMAC3 sample -- Link_ServiceTask
-	.equ Link_BlockDoneTimeouts,	0x6007e1	; counts Link_WaitBlockDone timeouts (500 ticks); nothing reads it -- Link_WaitBlockDone
+	.equ Link_RxCommand,			0x600780	; copy of the message's first (command) byte -- INT0_LinkByte
+	.equ Link_E2Payload,			0x600788	; an 0xE2 message's 10 payload bytes: long +0, long +4, word +8 -- INT0_LinkByte; Link_ServiceTask reads the three fields
+	.equ Link_PendingFlags,			0x600792	; bit 7: an 0xE2 request waits for Link_ServiceTask -- INTTC3_LinkDmaDone sets it
+	.equ Link_TxDest,			0x6007a1	; outgoing 0xE1 header: destination long -- the 0xE1 transmitter at 0xF8E26F
+	.equ Link_TxCount,			0x6007a5	; outgoing 0xE1 header: count word -- the 0xE1 transmitter at 0xF8E26F
+	.equ Link_RxPayload,			0x6007b3	; payload of any other command, (cmd & 0x1F)+1 bytes -- INT0_LinkByte
+	.equ Link_E1Dest,			0x6007d3	; an 0xE1 message's destination long, fed to DMAD3 -- INTTC3_LinkDmaDone selector 2
+	.equ Link_E1Count,			0x6007d7	; an 0xE1 message's count word, fed to DMAC3 -- INTTC3_LinkDmaDone selector 2
+	.equ Link_TxBurstsLeft,			0x6007d9	; stepped 2 -> 1 -> 0 per transmit burst; the arming code spins on 0 -- INTTC2_uDMA2Done
+	.equ Link_CompletionSelector,		0x6007da	; which message INTTC3 is finishing: 0..4 -- INT0_LinkByte sets it, INTTC3_LinkDmaDone dispatches on it
+	.equ Link_HandshakeTimeouts,		0x6007db	; counts timed-out 0xE5/0xE6 handshakes (2500 ticks); nothing reads it -- the handshake at 0xF8E222
+	.equ Link_StallAborts,			0x6007dc	; counts receives the stall watchdog aborted; nothing reads it -- Link_ServiceTask
+	.equ Link_LastDmaCount,			0x6007df	; the stall watchdog's previous DMAC3 sample -- Link_ServiceTask
+	.equ Link_BlockDoneTimeouts,		0x6007e1	; counts Link_WaitBlockDone timeouts (500 ticks); nothing reads it -- Link_WaitBlockDone
 
 ; ---- wsa1/notes/FINDINGS-prom_b-field-blink.md -- "The control block, 0x28C8-0x28D3"
-	.equ Blink_TextPtr,		0x28c0	; the template's default +7: where the text is -- the template's own bytes
-	.equ Blink_Layer,		0x28c8	; LCD layer for the draw -- ld (0x2540),(0x28c8)
-	.equ Blink_SwiFunction,		0x28c9	; the record's +6, the swi 7 function; 0x17 / 0x1C pick the op-07 template -- ld (XIX+0x06),(0x28c9)
-	.equ Blink_Op02Word0D,		0x28ca	; op-02 record's +0x0D word -- ldw (XIX+0x0d),(0x28ca)
-	.equ Blink_Op07Word0D,		0x28cc	; op-07 record's +0x0D word -- ldw (XIX+0x0d),(0x28cc)
-	.equ Blink_Op07Word0F,		0x28ce	; op-07 record's +0x0F word -- ldw (XIX+0x0f),(0x28ce)
-	.equ Blink_BytesPerEntry,	0x28d0	; the record's +0x0B, bytes per entry -- ld BC,(0x28d0) / extz BC / ld (XIX+0x0b),BC
-	.equ Blink_Phase,		0x28d1	; the 8-phase blink counter -- inc 1,(0x28d1); and C,0x07
-	.equ Blink_State,		0x28d2	; 0 stopped, 2 blinking, 1 unexplained -- Blink_Tick proceeds only on 2
-	.equ Blink_PostToRing,		0x28d3	; 0: draw inline; non-0: post to the ring buffer -- Blink_Command, from a stack-address test
+	.equ Blink_TextPtr,			0x28c0	; the template's default +7: where the text is -- the template's own bytes
+	.equ Blink_Layer,			0x28c8	; LCD layer for the draw -- ld (0x2540),(0x28c8)
+	.equ Blink_SwiFunction,			0x28c9	; the record's +6, the swi 7 function; 0x17 / 0x1C pick the op-07 template -- ld (XIX+0x06),(0x28c9)
+	.equ Blink_Op02Word0D,			0x28ca	; op-02 record's +0x0D word -- ldw (XIX+0x0d),(0x28ca)
+	.equ Blink_Op07Word0D,			0x28cc	; op-07 record's +0x0D word -- ldw (XIX+0x0d),(0x28cc)
+	.equ Blink_Op07Word0F,			0x28ce	; op-07 record's +0x0F word -- ldw (XIX+0x0f),(0x28ce)
+	.equ Blink_BytesPerEntry,		0x28d0	; the record's +0x0B, bytes per entry -- ld BC,(0x28d0) / extz BC / ld (XIX+0x0b),BC
+	.equ Blink_Phase,			0x28d1	; the 8-phase blink counter -- inc 1,(0x28d1); and C,0x07
+	.equ Blink_State,			0x28d2	; 0 stopped, 2 blinking, 1 unexplained -- Blink_Tick proceeds only on 2
+	.equ Blink_PostToRing,			0x28d3	; 0: draw inline; non-0: post to the ring buffer -- Blink_Command, from a stack-address test
 
 ; ---- wsa1/notes/FINDINGS-prom_b-for-the-mame-driver.md -- "Related RAM the driver may want in a comment; with FINDINGS-prom_b-song-store.md and FINDINGS-prom_a-panel-control-map.md"
-	.equ UI_Screen0E_SubScreen,	0x0ef5	; which sub-screen of screen 0x0E is showing -- FINDINGS-prom_b-for-the-mame-driver.md
-	.equ InputStream_Cursor,	0x1088	; cursor into the 1,024-byte input window at 0x60A700-0x60AAFF -- InputStream_Refill refills the window
-	.equ UI_Request,		0x2070	; 16-bit message code; high byte 0x80 = go to the screen id in the low byte -- the panel row handlers; song-store.md: `(0x2070)` takes a 16-bit message code
-	.equ UI_Request_Hi,		0x2071	; UI_Request's high byte: 0x80 with a screen id -- panel-control-map.md: the screen-request pair
-	.equ UI_RequestBits,		0x2075	; request bits, set by `or` and cleared by `and`; several owners (bit 1 = blink enable) -- song-store.md; field-blink.md
-	.equ UI_ScreenId,		0x207c	; the screen id; indexes the 256-entry table at prom_b 0xF2D000 -- ld L,(0x207C) / xor H,H / sla 0x02,HL
-	.equ Value_AsciiDigits,		0x2661	; three ASCII digits, the output of prom_a's Value_ToAsciiDigits3 -- FINDINGS-prom_b-for-the-mame-driver.md
-	.equ UI_StatusCode,		0x2880	; a status/error byte: eleven literal values; the block store's error table feeds it -- song-store.md; f6d002-module.md
+	.equ UI_Screen0E_SubScreen,		0x0ef5	; which sub-screen of screen 0x0E is showing -- FINDINGS-prom_b-for-the-mame-driver.md
+	.equ InputStream_Cursor,		0x1088	; cursor into the 1,024-byte input window at 0x60A700-0x60AAFF -- InputStream_Refill refills the window
+	.equ UI_Request,			0x2070	; 16-bit message code; high byte 0x80 = go to the screen id in the low byte -- the panel row handlers; song-store.md: `(0x2070)` takes a 16-bit message code
+	.equ UI_Request_Hi,			0x2071	; UI_Request's high byte: 0x80 with a screen id -- panel-control-map.md: the screen-request pair
+	.equ UI_RequestBits,			0x2075	; request bits, set by `or` and cleared by `and`; several owners (bit 1 = blink enable) -- song-store.md; field-blink.md
+	.equ UI_ScreenId,			0x207c	; the screen id; indexes the 256-entry table at prom_b 0xF2D000 -- ld L,(0x207C) / xor H,H / sla 0x02,HL
+	.equ Value_AsciiDigits,			0x2661	; three ASCII digits, the output of prom_a's Value_ToAsciiDigits3 -- FINDINGS-prom_b-for-the-mame-driver.md
+	.equ UI_StatusCode,			0x2880	; a status/error byte: eleven literal values; the block store's error table feeds it -- song-store.md; f6d002-module.md
 
 ; ---- wsa1/notes/FINDINGS-prom_b-block-store.md -- "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table and prom_b's BStore_* headers"
-	.equ BStore_CopyDestAddr,	0x0c59	; BStore_CopyAcrossBlocks' destination block address -- BStore_CopyAcrossBlocks header
-	.equ BStore_CopySrcAddr,	0x0c63	; BStore_CopyAcrossBlocks' source block address -- BStore_CopyAcrossBlocks header
-	.equ BStore_BlockLimit,		0x0ca4	; BStore_LoadGeometry's copy of the block count; the cp WA,(0x0CA4) bound of BStore_CursorAdvance / BStore_OpenChain -- BStore_LoadGeometry header
-	.equ BStore_GeomBase,		0x0ca6	; BStore_LoadGeometry's copy of the heap base -- BStore_LoadGeometry header
-	.equ BStore_BlocksAllocated,	0x0cac	; BStore_AllocChain output: blocks allocated -- BStore_AllocChain header
-	.equ BStore_AllocBytesWanted,	0x0cae	; BStore_AllocChain input: byte count wanted -- BStore_AllocChain header
-	.equ BStore_LinkBlock,		0x0cc0	; BStore_AllocChain input: the block to link the new chain onto -- BStore_AllocChain header
-	.equ BStore_LastBlockAddr,	0x0cc2	; BStore_AllocChain output: the last block's address -- BStore_AllocChain header
-	.equ BStore_LastBlockUsed,	0x0cc6	; BStore_AllocChain input: bytes already in the last block -- BStore_AllocChain header
-	.equ BStore_LastBlockFree,	0x0d08	; BStore_AllocChain output: bytes free in the last block -- BStore_AllocChain header
-	.equ BStore_ErrorCode,		0x0d4a	; the block store's error code; BStore_ErrorToStatusByte maps it to UI_StatusCode -- BStore_ErrorToStatusByte
-	.equ BStore_DirEntry,		0x1008	; the directory entry BStore_AppendBytes appends to -- BStore_AppendBytes
-	.equ BStore_CursorBlockAddr,	0x126e	; the cursor's block address (0x617800 + (n-1)*0x100) -- BStore_SeekBlock
-	.equ BStore_AllocHeapBase,	0x12a2	; the allocator's own copy of the heap base -- BStore_LatchHeapBase
-	.equ BStore_CursorBlock,	0x345c	; the cursor's 1-based block number -- the block-store cursor section
-	.equ BStore_CursorOffset,	0x345e	; the cursor's byte offset in its block, 5..0xFF -- prom_b cursor headers: ((0x345C) block number, (0x345E) offset)
-	.equ BStore_HeapBase,		0x3604	; the heap base, 0x00617800 -- BStore_SeekBlock and its two inverses
-	.equ BStore_BlockCount,		0x3608	; how many blocks BStore_FreeList_Init threads onto the free list -- BStore_FreeList_Init
-	.equ BStore_CurrentBank,	0x360a	; the current bank, 0..9 (prom_a refuses to step outside); bank n lives at 0x610000 + n*0xC00 -- 0xF8143F cp A,0 / 0xF814D2 cp A,0x09
-	.equ BStore_FreeHead,		0x6034b8	; head of the free list; 0xFFFF = empty -- BStore_AllocBlock
-	.equ BStore_FreeCount,		0x6034ba	; number of blocks on the free list -- BStore_FreeChain
+	.equ BStore_CopyDestAddr,		0x0c59	; BStore_CopyAcrossBlocks' destination block address -- BStore_CopyAcrossBlocks header
+	.equ BStore_CopySrcAddr,		0x0c63	; BStore_CopyAcrossBlocks' source block address -- BStore_CopyAcrossBlocks header
+	.equ BStore_BlockLimit,			0x0ca4	; BStore_LoadGeometry's copy of the block count; the cp WA,(0x0CA4) bound of BStore_CursorAdvance / BStore_OpenChain -- BStore_LoadGeometry header
+	.equ BStore_GeomBase,			0x0ca6	; BStore_LoadGeometry's copy of the heap base -- BStore_LoadGeometry header
+	.equ BStore_BlocksAllocated,		0x0cac	; BStore_AllocChain output: blocks allocated -- BStore_AllocChain header
+	.equ BStore_AllocBytesWanted,		0x0cae	; BStore_AllocChain input: byte count wanted -- BStore_AllocChain header
+	.equ BStore_LinkBlock,			0x0cc0	; BStore_AllocChain input: the block to link the new chain onto -- BStore_AllocChain header
+	.equ BStore_LastBlockAddr,		0x0cc2	; BStore_AllocChain output: the last block's address -- BStore_AllocChain header
+	.equ BStore_LastBlockUsed,		0x0cc6	; BStore_AllocChain input: bytes already in the last block -- BStore_AllocChain header
+	.equ BStore_LastBlockFree,		0x0d08	; BStore_AllocChain output: bytes free in the last block -- BStore_AllocChain header
+	.equ BStore_ErrorCode,			0x0d4a	; the block store's error code; BStore_ErrorToStatusByte maps it to UI_StatusCode -- BStore_ErrorToStatusByte
+	.equ BStore_DirEntry,			0x1008	; the directory entry BStore_AppendBytes appends to -- BStore_AppendBytes
+	.equ BStore_CursorBlockAddr,		0x126e	; the cursor's block address (0x617800 + (n-1)*0x100) -- BStore_SeekBlock
+	.equ BStore_AllocHeapBase,		0x12a2	; the allocator's own copy of the heap base -- BStore_LatchHeapBase
+	.equ BStore_CursorBlock,		0x345c	; the cursor's 1-based block number -- the block-store cursor section
+	.equ BStore_CursorOffset,		0x345e	; the cursor's byte offset in its block, 5..0xFF -- prom_b cursor headers: ((0x345C) block number, (0x345E) offset)
+	.equ BStore_HeapBase,			0x3604	; the heap base, 0x00617800 -- BStore_SeekBlock and its two inverses
+	.equ BStore_BlockCount,			0x3608	; how many blocks BStore_FreeList_Init threads onto the free list -- BStore_FreeList_Init
+	.equ BStore_CurrentBank,		0x360a	; the current bank, 0..9 (prom_a refuses to step outside); bank n lives at 0x610000 + n*0xC00 -- 0xF8143F cp A,0 / 0xF814D2 cp A,0x09
+	.equ BStore_FreeHead,			0x6034b8	; head of the free list; 0xFFFF = empty -- BStore_AllocBlock
+	.equ BStore_FreeCount,			0x6034ba	; number of blocks on the free list -- BStore_FreeChain
 
 ; ---- wsa1/notes/FINDINGS-prom_b-sc1-link.md -- "The RAM, and why every extent is exact; with prom_b's SC1 module header (THE RAM STATE)"
-	.equ Tick_Count,		0x0080	; the tick counter INTT1_Tick increments (488.28 Hz) -- INTT1_Tick; prom_a's own header
-	.equ SC1_State,			0x2a80	; state; a byte offset into SC1_StateTable, stepped by 4 -- inc 4,(0x2A80) / dec 4,(0x2A80)
-	.equ SC1_RxBytesExpected,	0x2a81	; bytes still expected in the message being received -- SC1 receive path
-	.equ SC1_BusyFlags,		0x2a82	; bit 0 rx active, bit 1 tx active, bit 2 SC1_Service_SetBit2/ClearBit2, bit 4 tested once -- SC1 module header
-	.equ SC1_ConfigSelector,	0x2a83	; compared against 1, 2 and 3 in SC1_ConfigurePort only -- SC1_ConfigurePort
-	.equ SC1_ErrorBits,		0x2a84	; sticky error/event bits: 0 rx ring full, 1 tx aborted, 2 abort, 3 decoder gave up, 6 INT6 while busy, 7 impossible state -- SC1 module header
-	.equ SC1_StatusResult,		0x2a85	; result byte of SC1_Cmd_E0_ReadStatus -- SC1_Cmd_E0_ReadStatus
-	.equ SC1_P8CR_Shadow,		0x2a86	; shadow of P8CR, which this driver only writes from here -- every write to 0x1A is ld A,(shadow)
-	.equ SC1_P8FC_Shadow,		0x2a87	; shadow of P8FC, which this driver only writes from here -- every write to 0x1B is ld A,(shadow)
-	.equ SC1_LastInbound,		0x2a88	; the last three bytes handed to the inbound queue -- SC1_RxOp0_ThreeByte and SC1_RxOp2
-	.equ SC1_TxDrainRetries,	0x2a8b	; retry counter of SC1_WaitTxDrain, 0xC8 = 200 -- SC1_WaitTxDrain
-	.equ SC1_TickSnapshot,		0x2a8e	; snapshot of Tick_Count taken by the three tick waits -- the tick waits
-	.equ SC1_RxReadIndex,		0x2a90	; rx ring read index -- SC1 module header
-	.equ SC1_RxWriteIndex,		0x2a92	; rx ring write index -- SC1 module header
-	.equ SC1_RxRing,		0x2a94	; rx ring, 76 bytes (0x4C, the modulus of SC1_RxRing_Next) -- abuts 0x2AE0
-	.equ SC1_TxReadIndex,		0x2ae0	; tx ring read index -- SC1 module header
-	.equ SC1_TxWriteIndex,		0x2ae2	; tx ring write index -- SC1 module header
-	.equ SC1_TxRing,		0x2ae4	; tx ring, 60 bytes (0x3C, the modulus of SC1_TxRing_Next) -- abuts 0x2B20
-	.equ Panel_SwitchShadow,	0x2b20	; the debounced switch-state shadow: one byte per switch-matrix column, index 0..0x1F -- round 10: wires 0xC0-0xCA index 0x10 + (wire & 0x0F)
-	.equ SC1_InQueue,		0x2b40	; inbound queue: 10-byte descriptor + 86 bytes -- SC1_ConfigurePort writes the descriptor
-	.equ SC1_OutQueue,		0x2ba0	; outbound queue: the same shape -- SC1_ConfigurePort
+	.equ Tick_Count,			0x0080	; the tick counter INTT1_Tick increments (488.28 Hz) -- INTT1_Tick; prom_a's own header
+	.equ SC1_State,				0x2a80	; state; a byte offset into SC1_StateTable, stepped by 4 -- inc 4,(0x2A80) / dec 4,(0x2A80)
+	.equ SC1_RxBytesExpected,		0x2a81	; bytes still expected in the message being received -- SC1 receive path
+	.equ SC1_BusyFlags,			0x2a82	; bit 0 rx active, bit 1 tx active, bit 2 SC1_Service_SetBit2/ClearBit2, bit 4 tested once -- SC1 module header
+	.equ SC1_ConfigSelector,		0x2a83	; compared against 1, 2 and 3 in SC1_ConfigurePort only -- SC1_ConfigurePort
+	.equ SC1_ErrorBits,			0x2a84	; sticky error/event bits: 0 rx ring full, 1 tx aborted, 2 abort, 3 decoder gave up, 6 INT6 while busy, 7 impossible state -- SC1 module header
+	.equ SC1_StatusResult,			0x2a85	; result byte of SC1_Cmd_E0_ReadStatus -- SC1_Cmd_E0_ReadStatus
+	.equ SC1_P8CR_Shadow,			0x2a86	; shadow of P8CR, which this driver only writes from here -- every write to 0x1A is ld A,(shadow)
+	.equ SC1_P8FC_Shadow,			0x2a87	; shadow of P8FC, which this driver only writes from here -- every write to 0x1B is ld A,(shadow)
+	.equ SC1_LastInbound,			0x2a88	; the last three bytes handed to the inbound queue -- SC1_RxOp0_ThreeByte and SC1_RxOp2
+	.equ SC1_TxDrainRetries,		0x2a8b	; retry counter of SC1_WaitTxDrain, 0xC8 = 200 -- SC1_WaitTxDrain
+	.equ SC1_TickSnapshot,			0x2a8e	; snapshot of Tick_Count taken by the three tick waits -- the tick waits
+	.equ SC1_RxReadIndex,			0x2a90	; rx ring read index -- SC1 module header
+	.equ SC1_RxWriteIndex,			0x2a92	; rx ring write index -- SC1 module header
+	.equ SC1_RxRing,			0x2a94	; rx ring, 76 bytes (0x4C, the modulus of SC1_RxRing_Next) -- abuts 0x2AE0
+	.equ SC1_TxReadIndex,			0x2ae0	; tx ring read index -- SC1 module header
+	.equ SC1_TxWriteIndex,			0x2ae2	; tx ring write index -- SC1 module header
+	.equ SC1_TxRing,			0x2ae4	; tx ring, 60 bytes (0x3C, the modulus of SC1_TxRing_Next) -- abuts 0x2B20
+	.equ Panel_SwitchShadow,		0x2b20	; the debounced switch-state shadow: one byte per switch-matrix column, index 0..0x1F -- round 10: wires 0xC0-0xCA index 0x10 + (wire & 0x0F)
+	.equ SC1_InQueue,			0x2b40	; inbound queue: 10-byte descriptor + 86 bytes -- SC1_ConfigurePort writes the descriptor
+	.equ SC1_OutQueue,			0x2ba0	; outbound queue: the same shape -- SC1_ConfigurePort
 
 ; ---- wsa1/notes/FINDINGS-prom_a-boot-and-version-screen.md -- "3. The model-variant flag (0x00C4) comes from PORT B BIT 0"
-	.equ Variant_Flag,		0x00c4	; the model variant: 1 when port B bit 0 reads high, 2 when low; set once on reset -- Variant_SetFromPB0
+	.equ Variant_Flag,			0x00c4	; the model variant: 1 when port B bit 0 reads high, 2 when low; set once on reset -- Variant_SetFromPB0
 
 ; ---- wsa1/notes/FINDINGS-prom_a-disk-cmd-layer.md -- "File-system workers"
-	.equ Disk_Flags,		0x21e7	; bit 6: the ready flag, set and cleared from the result byte (0x1735); other bits not established -- sub_FE08BD; Disk_FormatSelectedMedia tests and C,0x40
+	.equ Disk_Flags,			0x21e7	; bit 6: the ready flag, set and cleared from the result byte (0x1735); other bits not established -- sub_FE08BD; Disk_FormatSelectedMedia tests and C,0x40
 
 ; ---- wsa1/notes/FINDINGS-l7a1429-parameter-names.md -- "2c. The CPU 1 sender, and the element bits -- GRADE PROVEN"
-	.equ UI_PartIndex,		0x2250	; the part index the CPU 1 parameter sender puts in byte[1] -- sub_FD616A
+	.equ UI_PartIndex,			0x2250	; the part index the CPU 1 parameter sender puts in byte[1] -- sub_FD616A
 
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "EffectAlgoMaps header (0xF133E4)"
-	.equ Effect_BlockIndex,		0x2797	; which DSP effect block: IndexedTable entry 97, 98 or 99, minus 97 -- EffectAlgoMaps: (0x2797) = entry - 97
+	.equ Effect_BlockIndex,			0x2797	; which DSP effect block: IndexedTable entry 97, 98 or 99, minus 97 -- EffectAlgoMaps: (0x2797) = entry - 97
 
 ; ---- wsa1/prom_a/wsa1_prom_a.s -- "UiListA_* headers: the payload UiEventList_Run hands the class handlers"
-	.equ UiEvent_Byte1,		0x20b8	; the event record's byte +1; the message/page number the 0xFC0000 module dispatches on -- UiListA_* headers; MidiIn_ReqRouteRebuild_Msg0D
-	.equ UiEvent_Byte2,		0x20b9	; the event record's byte +2 -- UiListA_* headers
-	.equ UiEvent_Byte3,		0x20ba	; the event record's byte +3 -- UiListA_* headers
-	.equ UiEvent_Class,		0x20bb	; the event record's class -- UiListA_* headers
+	.equ UiEvent_Byte1,			0x20b8	; the event record's byte +1; the message/page number the 0xFC0000 module dispatches on -- UiListA_* headers; MidiIn_ReqRouteRebuild_Msg0D
+	.equ UiEvent_Byte2,			0x20b9	; the event record's byte +2 -- UiListA_* headers
+	.equ UiEvent_Byte3,			0x20ba	; the event record's byte +3 -- UiListA_* headers
+	.equ UiEvent_Class,			0x20bb	; the event record's class -- UiListA_* headers
 
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "the SMF reader's input-stream fetch header"
-	.equ InputStream_Status,	0x124a	; the fetch's status: 1 on the fast path, else InputStream_Refill's return code; callers test 1 and 0xFD -- the fetch at the head of 0xF6F5A2-0xF7136F
+	.equ InputStream_Status,		0x124a	; the fetch's status: 1 on the fast path, else InputStream_Refill's return code; callers test 1 and 0xFD -- the fetch at the head of 0xF6F5A2-0xF7136F
 
 ; ---- wsa1/prom_a/wsa1_prom_a.s -- "Disk_FormatSelectedMedia / LCD_TextCol_* headers"
-	.equ Disk_LastError,		0x2243	; the error code the FDC layer returned -- Disk_FormatSelectedMedia: Outputs
-	.equ LCD_TextColumnAddr,	0x259c	; display-RAM address of the byte column the packed-text services write -- LCD_TextCol_SetCursor: Inputs
-	.equ LCD_TextBitOffset,		0x259e	; the packed-text bit offset / shift count, 0..8 -- the packed-text services' Inputs
+	.equ Disk_LastError,			0x2243	; the error code the FDC layer returned -- Disk_FormatSelectedMedia: Outputs
+	.equ LCD_TextColumnAddr,		0x259c	; display-RAM address of the byte column the packed-text services write -- LCD_TextCol_SetCursor: Inputs
+	.equ LCD_TextBitOffset,			0x259e	; the packed-text bit offset / shift count, 0..8 -- the packed-text services' Inputs
 
 ; ---- wsa1/notes/FINDINGS-l7a1429-editor-pages.md -- "0. THE ANSWER: the MODELING pages store reply n at ((u8 *)0x27A6)[n]; extent 0x27A6-0x27B7 per FINDINGS-prom_b-ui-variable-index.md"
-	.equ ModelingPage_Fields,	0x27a6	; the MODELING pages' fields as read back from CPU 2, reply n at +n (bytes to 0x27B7) -- the pages' read-back order, 8 of 8 field editors agree
+	.equ ModelingPage_Fields,		0x27a6	; the MODELING pages' fields as read back from CPU 2, reply n at +n (bytes to 0x27B7) -- the pages' read-back order, 8 of 8 field editors agree
 
 ; ---- wsa1/notes/FINDINGS-prom_b-message-line.md -- "2. 0x00000FE4 is one line of on-screen text: record 0xF3D38A draws 30 characters from it"
-	.equ MsgLine_Text,		0x0fe4	; the 30 characters (to 0x1001) of the bottom text line the panel draws (y = 180) -- record 0xF3D38A; MsgLine_Clear blanks exactly 30
+	.equ MsgLine_Text,			0x0fe4	; the 30 characters (to 0x1001) of the bottom text line the panel draws (y = 180) -- record 0xF3D38A; MsgLine_Clear blanks exactly 30
 
 ; ---- wsa1/notes/FINDINGS-prom_a-fdc.md -- "6. The API (the 16-byte request block); 7. Errors; with FINDINGS-dev7b-and-int5.md"
-	.equ Fdc_TickCount,		0x605a00	; 16-bit INTT1 tick counter; INTT1_Tick its only writer; the 500-tick timeouts -- prom_a_addr_census.py 0x605A00
-	.equ Fdc_ReentryGuard,		0x605a09	; 0xA5 while a request runs; a second entry returns error 0xFB -- Fdc_Request
-	.equ Fdc_DmaCount,		0x605a0e	; the count Dev7A_StartDma loads into DMAC0 -- Dev7A_StartDma
-	.equ Fdc_ErrorCode,		0x605a15	; the request's error code; Fdc_SetError keeps the first, every operation clears it -- Fdc_SetError
-	.equ Fdc_CommandByte,		0x605a18	; the uPD765 command byte Dev7A_StartDma's compare chain reads -- Dev7A_StartDma
-	.equ Fdc_ReqOp,			0x605a30	; the request block Fdc_Request copies here: +0 word operation 0..11 -- Fdc_Request
-	.equ Fdc_ReqUnit,		0x605a32	; request +2: unit 0 or 1, which selects the back end -- every operation begins cp (0x605A32),1
-	.equ Fdc_ReqHead,		0x605a34	; request +4: head -- Fdc_Request
-	.equ Fdc_ReqTrack,		0x605a36	; request +6: track, or the media descriptor byte for operation 0 -- Fdc_Request
-	.equ Fdc_ReqSector,		0x605a38	; request +8: first sector -- Fdc_Request
-	.equ Fdc_ReqCount,		0x605a3a	; request +0x0A: sector count -- Fdc_Request
-	.equ Fdc_ReqBuffer,		0x605a3c	; request +0x0C: buffer address, the pointer the DMA path walks -- Fdc_Request; Dev7A_Dma_*
-	.equ Fdc_ReqCopy,		0x605a40	; the second copy of the request block (why two: not established) -- Fdc_Request
-	.equ Fdc_ResultBuf,		0x605a50	; INT5 / the drain store result bytes at +1.., and INT5 zeroes +0 on exit -- INT5_Dev7B_Receive; Fdc_WaitReadyForCommandByte
-	.equ Fdc_CurrentCylinder,	0x605aee	; the cylinder the head is on; SEEK is skipped when it already matches -- Fdc_Op2_SeekToCylinder
-	.equ Fdc_LastCylinderPlus1,	0x605af1	; last cylinder + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia
-	.equ Fdc_SectorsPerTrackPlus1,	0x605af7	; sectors per track + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia
+	.equ Fdc_TickCount,			0x605a00	; 16-bit INTT1 tick counter; INTT1_Tick its only writer; the 500-tick timeouts -- prom_a_addr_census.py 0x605A00
+	.equ Fdc_ReentryGuard,			0x605a09	; 0xA5 while a request runs; a second entry returns error 0xFB -- Fdc_Request
+	.equ Fdc_DmaCount,			0x605a0e	; the count Dev7A_StartDma loads into DMAC0 -- Dev7A_StartDma
+	.equ Fdc_ErrorCode,			0x605a15	; the request's error code; Fdc_SetError keeps the first, every operation clears it -- Fdc_SetError
+	.equ Fdc_CommandByte,			0x605a18	; the uPD765 command byte Dev7A_StartDma's compare chain reads -- Dev7A_StartDma
+	.equ Fdc_ReqOp,				0x605a30	; the request block Fdc_Request copies here: +0 word operation 0..11 -- Fdc_Request
+	.equ Fdc_ReqUnit,			0x605a32	; request +2: unit 0 or 1, which selects the back end -- every operation begins cp (0x605A32),1
+	.equ Fdc_ReqHead,			0x605a34	; request +4: head -- Fdc_Request
+	.equ Fdc_ReqTrack,			0x605a36	; request +6: track, or the media descriptor byte for operation 0 -- Fdc_Request
+	.equ Fdc_ReqSector,			0x605a38	; request +8: first sector -- Fdc_Request
+	.equ Fdc_ReqCount,			0x605a3a	; request +0x0A: sector count -- Fdc_Request
+	.equ Fdc_ReqBuffer,			0x605a3c	; request +0x0C: buffer address, the pointer the DMA path walks -- Fdc_Request; Dev7A_Dma_*
+	.equ Fdc_ReqCopy,			0x605a40	; the second copy of the request block (why two: not established) -- Fdc_Request
+	.equ Fdc_ResultBuf,			0x605a50	; INT5 / the drain store result bytes at +1.., and INT5 zeroes +0 on exit -- INT5_Dev7B_Receive; Fdc_WaitReadyForCommandByte
+	.equ Fdc_CurrentCylinder,		0x605aee	; the cylinder the head is on; SEEK is skipped when it already matches -- Fdc_Op2_SeekToCylinder
+	.equ Fdc_LastCylinderPlus1,		0x605af1	; last cylinder + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia
+	.equ Fdc_SectorsPerTrackPlus1,		0x605af7	; sectors per track + 1, derived from the geometry -- Fdc_Op0_ResetAndIdentifyMedia
 
 ; ---- wsa1/notes/FINDINGS-prom_b-smf-writer.md -- "Why the MTrk length is zero; It really is a MIDI writer; with FINDINGS-prom_b-for-the-mame-driver.md (the 8.3 name)"
-	.equ SmfOut_Tempo,		0x108c	; the 24-bit Set Tempo value (FF 51 03), emitted +2, +1, +0 -- 0xF77918; staged by 0xF778D2
-	.equ SmfOut_TrackLength,	0x10c4	; the MTrk chunk length, most significant byte first (4 bytes) -- 0xF7789A stores it; copy A writes it into the file
-	.equ SmfOut_WindowsFlushed,	0x126c	; how many 1,024-byte output windows the SMF writer has flushed -- the MTrk length computation at 0xF7789A
-	.equ Disk_FileName,		0x21c8	; an 8.3 file name: 8 characters, extension at +8..+10 (default MID) -- the SMF reader writes M I D to 0x21D0-0x21D2; the writer's track name takes the 8
+	.equ SmfOut_Tempo,			0x108c	; the 24-bit Set Tempo value (FF 51 03), emitted +2, +1, +0 -- 0xF77918; staged by 0xF778D2
+	.equ SmfOut_TrackLength,		0x10c4	; the MTrk chunk length, most significant byte first (4 bytes) -- 0xF7789A stores it; copy A writes it into the file
+	.equ SmfOut_WindowsFlushed,		0x126c	; how many 1,024-byte output windows the SMF writer has flushed -- the MTrk length computation at 0xF7789A
+	.equ Disk_FileName,			0x21c8	; an 8.3 file name: 8 characters, extension at +8..+10 (default MID) -- the SMF reader writes M I D to 0x21D0-0x21D2; the writer's track name takes the 8
 
 ; ---- wsa1/notes/FINDINGS-prom_a-screen-module.md -- "8. The NOTE / DRUM EDIT state in work DRAM"
-	.equ EditCursor_Measure,	0x601f3f	; the NOTE / DRUM EDIT cursor's measure, 1..999 (word) -- sub_FEAAB6 / sub_FEAAE0 clamp it; sub_FE9E04 carries the beat into it
-	.equ EditCursor_Beat,		0x601f41	; the cursor's beat within the measure, from 0 (word) -- sub_FE9E04 wraps it at sub_FE9F23's beat count
-	.equ EditCursor_Tick,		0x601f43	; the cursor's tick within the beat, 0..95 -- sub_FE9DB4 / sub_FE9DD5 step it and clamp to 0x5F
-	.equ EditScreen_Mode,		0x601f70	; bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A -- ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it
+	.equ EditCursor_Measure,		0x601f3f	; the NOTE / DRUM EDIT cursor's measure, 1..999 (word) -- sub_FEAAB6 / sub_FEAAE0 clamp it; sub_FE9E04 carries the beat into it
+	.equ EditCursor_Beat,			0x601f41	; the cursor's beat within the measure, from 0 (word) -- sub_FE9E04 wraps it at sub_FE9F23's beat count
+	.equ EditCursor_Tick,			0x601f43	; the cursor's tick within the beat, 0..95 -- sub_FE9DB4 / sub_FE9DD5 step it and clamp to 0x5F
+	.equ EditScreen_Mode,			0x601f70	; bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A -- ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it
 
 ; ---- wsa1/notes/FINDINGS-prom_a-panel-state-variables.md -- "1. The mode / screen latches; 2. The dial's button pair"
-	.equ PanelMode,			0x2078	; the panel mode; PanelMode_ToScreenId maps it to a screen -- PanelState_LatchPrevious, PanelMode_ToScreenId
-	.equ PanelMode_Previous,	0x2079	; PanelMode at the previous pass of the panel task -- PanelState_LatchPrevious
-	.equ UI_ScreenLatch,		0x207a	; UI_ScreenId latched when the mode changes or (0x2092) bit 0 is clear -- PanelState_Update207A, PanelState_Init
-	.equ UI_ScreenLatch_Previous,	0x207b	; UI_ScreenLatch at the previous pass; Enter / Leave bodies compare the two -- PanelState_LatchPrevious
-	.equ UI_ScreenId_Previous,	0x207d	; UI_ScreenId at the previous pass -- PanelState_LatchPrevious
-	.equ PanelDial_DownButton,	0x209b	; the button code the dial acts as when turned down (with (0x2075) bit 0 set) -- PanelEvent_Code21_Dial 0xF8687A
-	.equ PanelDial_UpButton,	0x209c	; the button code the dial acts as when turned up -- PanelEvent_Code21_Dial 0xF86874
+	.equ PanelMode,				0x2078	; the panel mode; PanelMode_ToScreenId maps it to a screen -- PanelState_LatchPrevious, PanelMode_ToScreenId
+	.equ PanelMode_Previous,		0x2079	; PanelMode at the previous pass of the panel task -- PanelState_LatchPrevious
+	.equ UI_ScreenLatch,			0x207a	; UI_ScreenId latched when the mode changes or (0x2092) bit 0 is clear -- PanelState_Update207A, PanelState_Init
+	.equ UI_ScreenLatch_Previous,		0x207b	; UI_ScreenLatch at the previous pass; Enter / Leave bodies compare the two -- PanelState_LatchPrevious
+	.equ UI_ScreenId_Previous,		0x207d	; UI_ScreenId at the previous pass -- PanelState_LatchPrevious
+	.equ PanelDial_DownButton,		0x209b	; the button code the dial acts as when turned down (with (0x2075) bit 0 set) -- PanelEvent_Code21_Dial 0xF8687A
+	.equ PanelDial_UpButton,		0x209c	; the button code the dial acts as when turned up -- PanelEvent_Code21_Dial 0xF86874
+
+; ---- wsa1/notes/FINDINGS-prom_a-system-menu-screen-state.md -- "the SYSTEM-menu screens' state bytes"
+	.equ TuneScale_ItemCursor,		0x2690	; TUNE & SCALE item, 0..4 in bits 0-2 -- TuneScale_MoveItemCursor
+	.equ TuneScale_MasterTuneIndex,		0x2691	; index of the MASTER TUNE value (ByteTable79_FA1C5C) -- TuneScale_StoreMasterTune
+	.equ TuneScale_KeyScalingIndex,		0x2692	; index of the key-scaling type (ByteTable16_FA1C4C) -- TuneScale_StoreKeyScalingType
+	.equ SoundGroupNaming_Bank,		0x2695	; bank 0..4 (USER1/USER2/RE-MAP1-3) -- SoundGroupNaming_AdjustBank
+	.equ SoundGroupNaming_Group,		0x2696	; group 0..15 -- SoundGroupNaming_AdjustGroup
+	.equ CombinationGroupNaming_Bank,	0x2698	; bank 0..3 -- CombinationGroupNaming_AdjustBank
+	.equ CombinationGroupNaming_Group,	0x2699	; group 0..15 -- CombinationGroupNaming_AdjustGroup
+	.equ CopyScreen_Page,			0x269a	; SOUND / COMBINATION COPY page: bit 0 SINGLE, bit 1 the question, bit 2 an error -- Paint_SoundCopy, Paint_CombinationCopy
+	.equ SoundCopy_SourceBank,		0x269b	; ROM 1 / ROM 2 / USER 1 / USER 2 / EXT 1 -- SoundCopy_AdjustSourceBank
+	.equ SoundCopy_SourceGroup,		0x269c	; the source group -- SoundCopy_AdjustSourceBank
+	.equ SoundCopy_SourceSound,		0x269d	; SINGLE page: the source sound -- SoundCopy_DrawSourceSoundCursor
+	.equ SoundCopy_SourceGroupRow,		0x269e	; GROUP page: cursor row of the source list -- SoundCopy_DrawSourceGroupCursor
+	.equ SoundCopy_SourceListTop,		0x269f	; GROUP page: first group of the source list -- SoundCopy_DrawSourceGroupList
+	.equ SoundCopy_DestBank,		0x26a0	; USER 1 / USER 2 -- SoundCopy_AdjustDestBank
+	.equ SoundCopy_DestGroup,		0x26a1	; the destination group -- SoundCopy_AdjustDestBank
+	.equ SoundCopy_DestSound,		0x26a2	; SINGLE page: the destination sound -- SoundCopy_DrawDestSoundCursor
+	.equ SoundCopy_DestGroupRow,		0x26a3	; GROUP page: cursor row of the destination list -- SoundCopy_DrawDestGroupCursor
+	.equ SoundCopy_DestListTop,		0x26a4	; GROUP page: first group of the destination list -- SoundCopy_DrawDestGroupList
+	.equ DataLoadFilter_ItemCursor,		0x26a5	; DATA LOAD FILTER row (JumpTable_F9EC58 index) -- DataLoadFilter_*
+	.equ DrumsMap_Map,			0x2702	; NORMAL / USER 1-3 -- DrumsMap_AdjustMap
+	.equ DrumsMap_RowCursor,		0x2703	; cursor row 0..11 -- DrumsMap_MoveRowCursor
+	.equ DrumsMap_ListTop,			0x2704	; first note the rows show -- DrumsMap_MoveRowCursor
+	.equ CombinationCopy_SourceBank,	0x2706	; the source bank -- CombinationCopy_AdjustSourceBank
+	.equ CombinationCopy_SourceGroup,	0x2707	; the source group -- CombinationCopy_AdjustSourceBank
+	.equ CombinationCopy_SourceCombi,	0x2708	; SINGLE page: the source combination -- CombinationCopy_DrawSourceCombiCursor
+	.equ CombinationCopy_SourceGroupRow,	0x2709	; GROUP page: cursor row of the source list -- CombinationCopy_DrawSourceGroupCursor
+	.equ CombinationCopy_SourceListTop,	0x270a	; GROUP page: first group of the source list -- CombinationCopy_DrawSourceGroupList
+	.equ CombinationCopy_DestBank,		0x270b	; the destination bank -- CombinationCopy_AdjustDestBank
+	.equ CombinationCopy_DestGroup,		0x270c	; the destination group -- CombinationCopy_AdjustDestBank
+	.equ CombinationCopy_DestCombi,		0x270d	; SINGLE page: the destination combination -- CombinationCopy_DrawDestCombiCursor
+	.equ CombinationCopy_DestGroupRow,	0x270e	; GROUP page: cursor row of the destination list -- CombinationCopy_DrawDestGroupCursor
+	.equ CombinationCopy_DestListTop,	0x270f	; GROUP page: first group of the destination list -- CombinationCopy_DrawDestGroupList
 
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
-	.equ Effect_Algorithm,		0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24
+	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

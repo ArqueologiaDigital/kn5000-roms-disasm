@@ -52096,7 +52096,7 @@ T_F4268C_Nop:
 SoundGroupNaming_AdjustBank:
 	lda xbc, (Descriptor9_FA1AA6:24)                     ; F9CB7B  f2 a6 1a fa 31
 	push XBC                                             ; F9CB80  39
-	lda xwa, (0x2695:16)                                ; F9CB81  f1 95 26 30
+	lda xwa, (SoundGroupNaming_Bank:16)                                ; F9CB81  f1 95 26 30
 	push XWA                                             ; F9CB85  38
 	call T_F42C78                                        ; F9CB86  1d 78 2c f4
 	inc 8,XSP                                            ; F9CB8A  ef 60
@@ -52180,7 +52180,7 @@ sub_F9CBF6:
 SoundGroupNaming_AdjustGroup:
 	lda xbc, (Descriptor9_FA1AAF:24)                     ; F9CC11  f2 af 1a fa 31
 	push XBC                                             ; F9CC16  39
-	lda xwa, (0x2696:16)                                ; F9CC17  f1 96 26 30
+	lda xwa, (SoundGroupNaming_Group:16)                                ; F9CC17  f1 96 26 30
 	push XWA                                             ; F9CC1B  38
 	call T_F42C78                                        ; F9CC1C  1d 78 2c f4
 	inc 8,XSP                                            ; F9CC20  ef 60
@@ -52274,7 +52274,7 @@ sub_F9CC9F:
 	and C,0x01                                           ; F9CCC5  cb cc 01
 	jrl nz, .LF9CD83                                     ; F9CCC8  7e b8 00
 	ld c, 0x10:opc                                          ; F9CCCB  23 10
-	m_mul MB16, 0x2696, 3                                ; F9CCCD  c1 96 26 43
+	m_mul MB16, SoundGroupNaming_Group, 3                                ; F9CCCD  c1 96 26 43
 	ld HL,BC                                             ; F9CCD1  d9 8b
 	ldw wa, 0x2940                                       ; F9CCD3  30 40 29
 	add WA,BC                                            ; F9CCD6  d9 80
@@ -52308,7 +52308,7 @@ sub_F9CC9F:
 	popw bc                                              ; F9CD1C  49
 	jrl .LF9CD83                                         ; F9CD1D  78 63 00
 .LF9CD20:
-	ld bc, (0x2695:16)                                 ; F9CD20  d1 95 26 21
+	ld bc, (SoundGroupNaming_Bank:16)                                 ; F9CD20  d1 95 26 21
 	extz BC                                              ; F9CD24  d9 12
 	extz XBC                                             ; F9CD26  e9 12
 	add XBC,ByteTable5_FA17CA                            ; F9CD28  e9 c8 ca 17 fa 00
@@ -52480,7 +52480,7 @@ SoundGroupNaming_LoadGroupNames:
 	lda xix, (0x2940:16)                                ; F9CE37  f1 40 29 34
 .LF9CE3B:
 	push XIX                                             ; F9CE3B  3c
-	ld bc, (0x2695:16)                                 ; F9CE3C  d1 95 26 21
+	ld bc, (SoundGroupNaming_Bank:16)                                 ; F9CE3C  d1 95 26 21
 	extz BC                                              ; F9CE40  d9 12
 	extz XBC                                             ; F9CE42  e9 12
 	add XBC,ByteTable5_FA17CA                            ; F9CE44  e9 c8 ca 17 fa 00
@@ -52542,7 +52542,7 @@ SoundGroupNaming_StoreGroupName:
 	pushw hl                                             ; F9CEC7  2b
 	pushw de                                             ; F9CEC8  2a
 	push XIX                                             ; F9CEC9  3c
-	ld l, (0x2695:16)                                   ; F9CECA  c1 95 26 27
+	ld l, (SoundGroupNaming_Bank:16)                                   ; F9CECA  c1 95 26 27
 	ld C,L                                               ; F9CECE  cf 8b
 	extz BC                                              ; F9CED0  d9 12
 	extz XBC                                             ; F9CED2  e9 12
@@ -52569,7 +52569,7 @@ SoundGroupNaming_StoreGroupName__F9CEE6:
 	swi 1                                                ; F9CEF8  f9
 	nop                                                  ; F9CEF9  00
 	push 0x00                                            ; F9CEFA  09 00
-	m_push MB16, 0x2696                                  ; F9CEFC  c1 96 26 04
+	m_push MB16, SoundGroupNaming_Group                                  ; F9CEFC  c1 96 26 04
 	ld C,L                                               ; F9CF00  cf 8b
 	extz BC                                              ; F9CF02  d9 12
 	extz XBC                                             ; F9CF04  e9 12
@@ -52586,7 +52586,7 @@ SoundGroupNaming_StoreGroupName__F9CEE6:
 	inc 6,XSP                                            ; F9CF20  ef 66
 	jr .LF9CF62                                          ; F9CF22  68 3e
 	ld c, 0x10:opc                                          ; F9CF24  23 10
-	m_mul MB16, 0x2696, 3                                ; F9CF26  c1 96 26 43
+	m_mul MB16, SoundGroupNaming_Group, 3                                ; F9CF26  c1 96 26 43
 	ld DE,BC                                             ; F9CF2A  d9 8a
 	ld A,L                                               ; F9CF2C  cf 89
 	extz WA                                              ; F9CF2E  d8 12
@@ -52746,7 +52746,7 @@ T_F4269C_Nop:
 CombinationGroupNaming_AdjustBank:
 	lda xbc, (Descriptor9_FA1AB8:24)                     ; F9CFE3  f2 b8 1a fa 31
 	push XBC                                             ; F9CFE8  39
-	lda xwa, (0x2698:16)                                ; F9CFE9  f1 98 26 30
+	lda xwa, (CombinationGroupNaming_Bank:16)                                ; F9CFE9  f1 98 26 30
 	push XWA                                             ; F9CFED  38
 	call T_F42C78                                        ; F9CFEE  1d 78 2c f4
 	inc 8,XSP                                            ; F9CFF2  ef 60
@@ -52829,7 +52829,7 @@ CombinationGroupNaming_AdjustBank:
 CombinationGroupNaming_AdjustGroup:
 	lda xbc, (Descriptor9_FA1AC1:24)                     ; F9D079  f2 c1 1a fa 31
 	push XBC                                             ; F9D07E  39
-	lda xwa, (0x2699:16)                                ; F9D07F  f1 99 26 30
+	lda xwa, (CombinationGroupNaming_Group:16)                                ; F9D07F  f1 99 26 30
 	push XWA                                             ; F9D083  38
 	call T_F42C78                                        ; F9D084  1d 78 2c f4
 	inc 8,XSP                                            ; F9D088  ef 60
@@ -52922,7 +52922,7 @@ CombinationGroupNaming_AdjustGroup:
 	and C,0x01                                           ; F9D12D  cb cc 01
 	jrl nz, .LF9D1EB                                     ; F9D130  7e b8 00
 	ld c, 0x10:opc                                          ; F9D133  23 10
-	m_mul MB16, 0x2699, 3                                ; F9D135  c1 99 26 43
+	m_mul MB16, CombinationGroupNaming_Group, 3                                ; F9D135  c1 99 26 43
 	ld HL,BC                                             ; F9D139  d9 8b
 	ldw wa, 0x2940                                       ; F9D13B  30 40 29
 	add WA,BC                                            ; F9D13E  d9 80
@@ -52956,7 +52956,7 @@ CombinationGroupNaming_AdjustGroup:
 	popw bc                                              ; F9D184  49
 	jrl .LF9D1EB                                         ; F9D185  78 63 00
 .LF9D188:
-	ld bc, (0x2698:16)                                 ; F9D188  d1 98 26 21
+	ld bc, (CombinationGroupNaming_Bank:16)                                 ; F9D188  d1 98 26 21
 	extz BC                                              ; F9D18C  d9 12
 	extz XBC                                             ; F9D18E  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9D190  e9 c8 2b 18 fa 00
@@ -53128,7 +53128,7 @@ CombinationGroupNaming_LoadGroupNames:
 	lda xix, (0x2940:16)                                ; F9D29F  f1 40 29 34
 .LF9D2A3:
 	push XIX                                             ; F9D2A3  3c
-	ld bc, (0x2698:16)                                 ; F9D2A4  d1 98 26 21
+	ld bc, (CombinationGroupNaming_Bank:16)                                 ; F9D2A4  d1 98 26 21
 	extz BC                                              ; F9D2A8  d9 12
 	extz XBC                                             ; F9D2AA  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9D2AC  e9 c8 2b 18 fa 00
@@ -53188,7 +53188,7 @@ CombinationGroupNaming_StoreGroupName:
 	pushw hl                                             ; F9D32F  2b
 	pushw de                                             ; F9D330  2a
 	push XIX                                             ; F9D331  3c
-	ld l, (0x2698:16)                                   ; F9D332  c1 98 26 27
+	ld l, (CombinationGroupNaming_Bank:16)                                   ; F9D332  c1 98 26 27
 	ld C,L                                               ; F9D336  cf 8b
 	extz BC                                              ; F9D338  d9 12
 	cp bc, 0x00:i3                                         ; F9D33A  d9 d8
@@ -53202,7 +53202,7 @@ CombinationGroupNaming_StoreGroupName:
 	jr .LF9D3B4                                          ; F9D34A  68 68
 .LF9D34C:
 	push 0x00                                            ; F9D34C  09 00
-	m_push MB16, 0x2699                                  ; F9D34E  c1 99 26 04
+	m_push MB16, CombinationGroupNaming_Group                                  ; F9D34E  c1 99 26 04
 	ld C,L                                               ; F9D352  cf 8b
 	extz BC                                              ; F9D354  d9 12
 	extz XBC                                             ; F9D356  e9 12
@@ -53220,7 +53220,7 @@ CombinationGroupNaming_StoreGroupName:
 	jr .LF9D3B4                                          ; F9D374  68 3e
 .LF9D376:
 	ld c, 0x10:opc                                          ; F9D376  23 10
-	m_mul MB16, 0x2699, 3                                ; F9D378  c1 99 26 43
+	m_mul MB16, CombinationGroupNaming_Group, 3                                ; F9D378  c1 99 26 43
 	ld DE,BC                                             ; F9D37C  d9 8a
 	ld A,L                                               ; F9D37E  cf 89
 	extz WA                                              ; F9D380  d8 12
@@ -53258,7 +53258,7 @@ Screen_SoundCopy_Enter:
 	ld c, (UI_ScreenLatch:16)                                   ; F9D3BA  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9D3BE  c1 7b 20 f3
 	jr z, .LF9D3D3                                       ; F9D3C2  66 0f
-	ld (0x269a:16), 0x01                                 ; F9D3C4  f1 9a 26 00 01
+	ld (CopyScreen_Page:16), 0x01                                 ; F9D3C4  f1 9a 26 00 01
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9D3C9  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9D3CE  f1 9c 20 00 82
 .LF9D3D3:
@@ -53346,14 +53346,14 @@ SoundCopy_AdjustSourceBank:
 .LF9D458:
 	lda xbc, (xiz-9)                                     ; F9D458  be f7 31
 	push XBC                                             ; F9D45B  39
-	lda xwa, (0x269b:16)                                ; F9D45C  f1 9b 26 30
+	lda xwa, (SoundCopy_SourceBank:16)                                ; F9D45C  f1 9b 26 30
 	push XWA                                             ; F9D460  38
 	call T_F42C78                                        ; F9D461  1d 78 2c f4
 	inc 8,XSP                                            ; F9D465  ef 60
 	cp a, 0x01:i3                                          ; F9D467  c9 d9
 	jr nz, .LF9D4A9                                      ; F9D469  6e 3e
-	ld (0x269c:16), 0x00                                 ; F9D46B  f1 9c 26 00 00
-	ld bc, (0x269a:16)                                 ; F9D470  d1 9a 26 21
+	ld (SoundCopy_SourceGroup:16), 0x00                                 ; F9D46B  f1 9c 26 00 00
+	ld bc, (CopyScreen_Page:16)                                 ; F9D470  d1 9a 26 21
 	extz BC                                              ; F9D474  d9 12
 	cp bc, 0x00:i3                                         ; F9D476  d9 d8
 	jr z, .LF9D480                                       ; F9D478  66 06
@@ -53361,17 +53361,17 @@ SoundCopy_AdjustSourceBank:
 	jr z, .LF9D496                                       ; F9D47C  66 18
 	jr .LF9D4A5                                          ; F9D47E  68 25
 .LF9D480:
-	ld (0x269f:16), 0x00                                 ; F9D480  f1 9f 26 00 00
-	m_cp_mi8 MB16, 0x269e, 0x00                          ; F9D485  c1 9e 26 3f 00
+	ld (SoundCopy_SourceListTop:16), 0x00                                 ; F9D480  f1 9f 26 00 00
+	m_cp_mi8 MB16, SoundCopy_SourceGroupRow, 0x00                          ; F9D485  c1 9e 26 3f 00
 	jr z, .LF9D4A5                                       ; F9D48A  66 19
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9D48C  84 3e 01
-	ld (0x269e:16), 0x00                                 ; F9D48F  f1 9e 26 00 00
+	ld (SoundCopy_SourceGroupRow:16), 0x00                                 ; F9D48F  f1 9e 26 00 00
 	jr .LF9D4A5                                          ; F9D494  68 0f
 .LF9D496:
-	m_cp_mi8 MB16, 0x269d, 0x00                          ; F9D496  c1 9d 26 3f 00
+	m_cp_mi8 MB16, SoundCopy_SourceSound, 0x00                          ; F9D496  c1 9d 26 3f 00
 	jr z, .LF9D4A5                                       ; F9D49B  66 08
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9D49D  84 3e 01
-	ld (0x269d:16), 0x00                                 ; F9D4A0  f1 9d 26 00 00
+	ld (SoundCopy_SourceSound:16), 0x00                                 ; F9D4A0  f1 9d 26 00 00
 .LF9D4A5:
 	m_set 4, MD16, 0x2095                                ; F9D4A5  f1 95 20 bc
 .LF9D4A9:
@@ -53380,7 +53380,7 @@ SoundCopy_AdjustSourceBank:
 	ret                                                  ; F9D4AC  0e
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9D4AD  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9D4B2  f1 9c 20 00 82
-	ld bc, (0x269a:16)                                 ; F9D4B7  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D4B7  d1 9a 26 21
 	extz BC                                              ; F9D4BB  d9 12
 	cp bc, 0x00:i3                                         ; F9D4BD  d9 d8
 	jr z, .LF9D4C7                                       ; F9D4BF  66 06
@@ -53399,7 +53399,7 @@ SoundCopy_AdjustSourceBank:
 	ldir85                                               ; F9D4DB  85 11
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9D4DD  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9D4E2  f1 9c 20 00 82
-	ld bc, (0x269a:16)                                 ; F9D4E7  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D4E7  d1 9a 26 21
 	extz BC                                              ; F9D4EB  d9 12
 	cp bc, 0x00:i3                                         ; F9D4ED  d9 d8
 	jr z, .LF9D4F7                                       ; F9D4EF  66 06
@@ -53410,7 +53410,7 @@ SoundCopy_AdjustSourceBank:
 	calr SoundCopy_AdjustSourceBank                                      ; F9D4F7  1e 39 ff
 	jr .LF9D546                                          ; F9D4FA  68 4a
 .LF9D4FC:
-	ld bc, (0x269b:16)                                 ; F9D4FC  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9D4FC  d1 9b 26 21
 	extz BC                                              ; F9D500  d9 12
 	extz XBC                                             ; F9D502  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9D504  e9 c8 8b 18 fa 00
@@ -53426,17 +53426,17 @@ SoundCopy_AdjustSourceBank:
 .LF9D51F:
 	lda xbc, (xiz-9)                                     ; F9D51F  be f7 31
 	push XBC                                             ; F9D522  39
-	lda xwa, (0x269c:16)                                ; F9D523  f1 9c 26 30
+	lda xwa, (SoundCopy_SourceGroup:16)                                ; F9D523  f1 9c 26 30
 	push XWA                                             ; F9D527  38
 	call T_F42C78                                        ; F9D528  1d 78 2c f4
 	inc 8,XSP                                            ; F9D52C  ef 60
 	cp a, 0x01:i3                                          ; F9D52E  c9 d9
 	jr nz, .LF9D546                                      ; F9D530  6e 14
-	m_cp_mi8 MB16, 0x269d, 0x00                          ; F9D532  c1 9d 26 3f 00
+	m_cp_mi8 MB16, SoundCopy_SourceSound, 0x00                          ; F9D532  c1 9d 26 3f 00
 	jr z, .LF9D53D                                       ; F9D537  66 04
 	m_set 0, MD16, 0x2900                                ; F9D539  f1 00 29 b8
 .LF9D53D:
-	ld (0x269d:16), 0x00                                 ; F9D53D  f1 9d 26 00 00
+	ld (SoundCopy_SourceSound:16), 0x00                                 ; F9D53D  f1 9d 26 00 00
 	m_set 4, MD16, 0x2095                                ; F9D542  f1 95 20 bc
 .LF9D546:
 	pop XIX                                              ; F9D546  5c
@@ -53467,7 +53467,7 @@ SoundCopy_AdjustSourceBank:
 	pop XIX                                              ; F9D584  5c
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9D585  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9D58A  f1 9c 20 00 82
-	ld bc, (0x269a:16)                                 ; F9D58F  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D58F  d1 9a 26 21
 	extz BC                                              ; F9D593  d9 12
 	cp bc, 0x00:i3                                         ; F9D595  d9 d8
 	jr z, .LF9D5A1                                       ; F9D597  66 08
@@ -53475,7 +53475,7 @@ SoundCopy_AdjustSourceBank:
 	jrl z, .LF9D660                                      ; F9D59B  76 c2 00
 	jrl .LF9D698                                         ; F9D59E  78 f7 00
 .LF9D5A1:
-	ld bc, (0x269b:16)                                 ; F9D5A1  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9D5A1  d1 9b 26 21
 	extz BC                                              ; F9D5A5  d9 12
 	extz XBC                                             ; F9D5A7  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9D5A9  e9 c8 8b 18 fa 00
@@ -53501,11 +53501,11 @@ SoundCopy_AdjustSourceBank:
 	ld c, (0x28b0:16)                                   ; F9D5D8  c1 b0 28 23
 	and C,0x01                                           ; F9D5DC  cb cc 01
 	jr nz, .LF9D622                                      ; F9D5DF  6e 41
-	m_cp_mi8 MB16, 0x269e, 0x00                          ; F9D5E1  c1 9e 26 3f 00
+	m_cp_mi8 MB16, SoundCopy_SourceGroupRow, 0x00                          ; F9D5E1  c1 9e 26 3f 00
 	jr z, .LF9D604                                       ; F9D5E6  66 1c
 	lda xbc, (xiz-18)                                    ; F9D5E8  be ee 31
 	push XBC                                             ; F9D5EB  39
-	lda xwa, (0x269e:16)                                ; F9D5EC  f1 9e 26 30
+	lda xwa, (SoundCopy_SourceGroupRow:16)                                ; F9D5EC  f1 9e 26 30
 	push XWA                                             ; F9D5F0  38
 	call T_F42C78                                        ; F9D5F1  1d 78 2c f4
 	inc 8,XSP                                            ; F9D5F5  ef 60
@@ -53517,7 +53517,7 @@ SoundCopy_AdjustSourceBank:
 .LF9D604:
 	lda xbc, (xiz-9)                                     ; F9D604  be f7 31
 	push XBC                                             ; F9D607  39
-	lda xwa, (0x269f:16)                                ; F9D608  f1 9f 26 30
+	lda xwa, (SoundCopy_SourceListTop:16)                                ; F9D608  f1 9f 26 30
 	push XWA                                             ; F9D60C  38
 	call T_F42C78                                        ; F9D60D  1d 78 2c f4
 	inc 8,XSP                                            ; F9D611  ef 60
@@ -53525,14 +53525,14 @@ SoundCopy_AdjustSourceBank:
 	jrl nz, .LF9D698                                     ; F9D615  7e 80 00
 	calr SoundCopy_DrawSourceGroupList                                          ; F9D618  1e 21 07
 .LF9D61B:
-	dec 0x01, (0x269c:16)                                ; F9D61B  c1 9c 26 69
+	dec 0x01, (SoundCopy_SourceGroup:16)                                ; F9D61B  c1 9c 26 69
 	jrl .LF9D698                                         ; F9D61F  78 76 00
 .LF9D622:
-	m_cp_mi8 MB16, 0x269e, 0x07                          ; F9D622  c1 9e 26 3f 07
+	m_cp_mi8 MB16, SoundCopy_SourceGroupRow, 0x07                          ; F9D622  c1 9e 26 3f 07
 	jr nc, .LF9D644                                      ; F9D627  6f 1b
 	lda xbc, (xiz-18)                                    ; F9D629  be ee 31
 	push XBC                                             ; F9D62C  39
-	lda xwa, (0x269e:16)                                ; F9D62D  f1 9e 26 30
+	lda xwa, (SoundCopy_SourceGroupRow:16)                                ; F9D62D  f1 9e 26 30
 	push XWA                                             ; F9D631  38
 	call T_F42C78                                        ; F9D632  1d 78 2c f4
 	inc 8,XSP                                            ; F9D636  ef 60
@@ -53544,7 +53544,7 @@ SoundCopy_AdjustSourceBank:
 .LF9D644:
 	lda xbc, (xiz-9)                                     ; F9D644  be f7 31
 	push XBC                                             ; F9D647  39
-	lda xwa, (0x269f:16)                                ; F9D648  f1 9f 26 30
+	lda xwa, (SoundCopy_SourceListTop:16)                                ; F9D648  f1 9f 26 30
 	push XWA                                             ; F9D64C  38
 	call T_F42C78                                        ; F9D64D  1d 78 2c f4
 	inc 8,XSP                                            ; F9D651  ef 60
@@ -53552,22 +53552,22 @@ SoundCopy_AdjustSourceBank:
 	jr nz, .LF9D698                                      ; F9D655  6e 41
 	calr SoundCopy_DrawSourceGroupList                                          ; F9D657  1e e2 06
 .LF9D65A:
-	inc 0x01, (0x269c:16)                                ; F9D65A  c1 9c 26 61
+	inc 0x01, (SoundCopy_SourceGroup:16)                                ; F9D65A  c1 9c 26 61
 	jr .LF9D698                                          ; F9D65E  68 38
 .LF9D660:
-	ld bc, (0x269b:16)                                 ; F9D660  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9D660  d1 9b 26 21
 	extz BC                                              ; F9D664  d9 12
 	extz XBC                                             ; F9D666  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9D668  e9 c8 8b 18 fa 00
 	ld A,(XBC)                                           ; F9D66E  81 21
 	pushw wa                                             ; F9D670  28
 	push 0x00                                            ; F9D671  09 00
-	m_push MB16, 0x269c                                  ; F9D673  c1 9c 26 04
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9D673  c1 9c 26 04
 	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9D677  1e 38 20
 	ld (xiz-24), a                                       ; F9D67A  be e8 41
 	lda xbc, (xiz-27)                                    ; F9D67D  be e5 31
 	push XBC                                             ; F9D680  39
-	lda xwa, (0x269d:16)                                ; F9D681  f1 9d 26 30
+	lda xwa, (SoundCopy_SourceSound:16)                                ; F9D681  f1 9d 26 30
 	push XWA                                             ; F9D685  38
 	call T_F42C78                                        ; F9D686  1d 78 2c f4
 	inc 8,XSP                                            ; F9D68A  ef 60
@@ -53589,14 +53589,14 @@ SoundCopy_AdjustDestBank:
 	lda xix, (0x2900:16)                                ; F9D69E  f1 00 29 34
 	lda xbc, (Descriptor9_FA1ACA:24)                     ; F9D6A2  f2 ca 1a fa 31
 	push XBC                                             ; F9D6A7  39
-	lda xwa, (0x26a0:16)                                ; F9D6A8  f1 a0 26 30
+	lda xwa, (SoundCopy_DestBank:16)                                ; F9D6A8  f1 a0 26 30
 	push XWA                                             ; F9D6AC  38
 	call T_F42C78                                        ; F9D6AD  1d 78 2c f4
 	inc 8,XSP                                            ; F9D6B1  ef 60
 	cp a, 0x01:i3                                          ; F9D6B3  c9 d9
 	jr nz, .LF9D6F5                                      ; F9D6B5  6e 3e
-	ld (0x26a1:16), 0x00                                 ; F9D6B7  f1 a1 26 00 00
-	ld bc, (0x269a:16)                                 ; F9D6BC  d1 9a 26 21
+	ld (SoundCopy_DestGroup:16), 0x00                                 ; F9D6B7  f1 a1 26 00 00
+	ld bc, (CopyScreen_Page:16)                                 ; F9D6BC  d1 9a 26 21
 	extz BC                                              ; F9D6C0  d9 12
 	cp bc, 0x00:i3                                         ; F9D6C2  d9 d8
 	jr z, .LF9D6CC                                       ; F9D6C4  66 06
@@ -53604,17 +53604,17 @@ SoundCopy_AdjustDestBank:
 	jr z, .LF9D6E2                                       ; F9D6C8  66 18
 	jr .LF9D6F1                                          ; F9D6CA  68 25
 .LF9D6CC:
-	ld (0x26a4:16), 0x00                                 ; F9D6CC  f1 a4 26 00 00
-	m_cp_mi8 MB16, 0x26a3, 0x00                          ; F9D6D1  c1 a3 26 3f 00
+	ld (SoundCopy_DestListTop:16), 0x00                                 ; F9D6CC  f1 a4 26 00 00
+	m_cp_mi8 MB16, SoundCopy_DestGroupRow, 0x00                          ; F9D6D1  c1 a3 26 3f 00
 	jr z, .LF9D6F1                                       ; F9D6D6  66 19
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9D6D8  84 3e 02
-	ld (0x26a3:16), 0x00                                 ; F9D6DB  f1 a3 26 00 00
+	ld (SoundCopy_DestGroupRow:16), 0x00                                 ; F9D6DB  f1 a3 26 00 00
 	jr .LF9D6F1                                          ; F9D6E0  68 0f
 .LF9D6E2:
-	m_cp_mi8 MB16, 0x26a2, 0x00                          ; F9D6E2  c1 a2 26 3f 00
+	m_cp_mi8 MB16, SoundCopy_DestSound, 0x00                          ; F9D6E2  c1 a2 26 3f 00
 	jr z, .LF9D6F1                                       ; F9D6E7  66 08
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9D6E9  84 3e 02
-	ld (0x26a2:16), 0x00                                 ; F9D6EC  f1 a2 26 00 00
+	ld (SoundCopy_DestSound:16), 0x00                                 ; F9D6EC  f1 a2 26 00 00
 .LF9D6F1:
 	m_set 4, MD16, 0x2095                                ; F9D6F1  f1 95 20 bc
 .LF9D6F5:
@@ -53622,7 +53622,7 @@ SoundCopy_AdjustDestBank:
 	ret                                                  ; F9D6F6  0e
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9D6F7  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9D6FC  f1 9c 20 00 86
-	ld bc, (0x269a:16)                                 ; F9D701  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D701  d1 9a 26 21
 	extz BC                                              ; F9D705  d9 12
 	cp bc, 0x00:i3                                         ; F9D707  d9 d8
 	jr z, .LF9D711                                       ; F9D709  66 06
@@ -53635,7 +53635,7 @@ SoundCopy_AdjustDestBank:
 	ret                                                  ; F9D714  0e
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9D715  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9D71A  f1 9c 20 00 86
-	ld bc, (0x269a:16)                                 ; F9D71F  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D71F  d1 9a 26 21
 	extz BC                                              ; F9D723  d9 12
 	cp bc, 0x00:i3                                         ; F9D725  d9 d8
 	jr z, .LF9D72F                                       ; F9D727  66 06
@@ -53648,17 +53648,17 @@ SoundCopy_AdjustDestBank:
 .LF9D734:
 	lda xbc, (Descriptor9_FA1AE5:24)                     ; F9D734  f2 e5 1a fa 31
 	push XBC                                             ; F9D739  39
-	lda xwa, (0x26a1:16)                                ; F9D73A  f1 a1 26 30
+	lda xwa, (SoundCopy_DestGroup:16)                                ; F9D73A  f1 a1 26 30
 	push XWA                                             ; F9D73E  38
 	call T_F42C78                                        ; F9D73F  1d 78 2c f4
 	inc 8,XSP                                            ; F9D743  ef 60
 	cp a, 0x01:i3                                          ; F9D745  c9 d9
 	jr nz, .LF9D75D                                      ; F9D747  6e 14
-	m_cp_mi8 MB16, 0x26a2, 0x00                          ; F9D749  c1 a2 26 3f 00
+	m_cp_mi8 MB16, SoundCopy_DestSound, 0x00                          ; F9D749  c1 a2 26 3f 00
 	jr z, .LF9D754                                       ; F9D74E  66 04
 	m_set 1, MD16, 0x2900                                ; F9D750  f1 00 29 b9
 .LF9D754:
-	ld (0x26a2:16), 0x00                                 ; F9D754  f1 a2 26 00 00
+	ld (SoundCopy_DestSound:16), 0x00                                 ; F9D754  f1 a2 26 00 00
 	m_set 4, MD16, 0x2095                                ; F9D759  f1 95 20 bc
 .LF9D75D:
 	ret                                                  ; F9D75D  0e
@@ -53666,7 +53666,7 @@ SoundCopy_AdjustDestBank:
 	lda xix, (0x2900:16)                                ; F9D75F  f1 00 29 34
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9D763  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9D768  f1 9c 20 00 86
-	ld bc, (0x269a:16)                                 ; F9D76D  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D76D  d1 9a 26 21
 	extz BC                                              ; F9D771  d9 12
 	cp bc, 0x00:i3                                         ; F9D773  d9 d8
 	jr z, .LF9D77F                                       ; F9D775  66 08
@@ -53677,11 +53677,11 @@ SoundCopy_AdjustDestBank:
 	ld c, (0x28b0:16)                                   ; F9D77F  c1 b0 28 23
 	and C,0x01                                           ; F9D783  cb cc 01
 	jr nz, .LF9D7CC                                      ; F9D786  6e 44
-	m_cp_mi8 MB16, 0x26a3, 0x00                          ; F9D788  c1 a3 26 3f 00
+	m_cp_mi8 MB16, SoundCopy_DestGroupRow, 0x00                          ; F9D788  c1 a3 26 3f 00
 	jr z, .LF9D7AD                                       ; F9D78D  66 1e
 	lda xbc, (Descriptor9_FA1ADC:24)                     ; F9D78F  f2 dc 1a fa 31
 	push XBC                                             ; F9D794  39
-	lda xwa, (0x26a3:16)                                ; F9D795  f1 a3 26 30
+	lda xwa, (SoundCopy_DestGroupRow:16)                                ; F9D795  f1 a3 26 30
 	push XWA                                             ; F9D799  38
 	call T_F42C78                                        ; F9D79A  1d 78 2c f4
 	inc 8,XSP                                            ; F9D79E  ef 60
@@ -53693,7 +53693,7 @@ SoundCopy_AdjustDestBank:
 .LF9D7AD:
 	lda xbc, (Descriptor9_FA1AD3:24)                     ; F9D7AD  f2 d3 1a fa 31
 	push XBC                                             ; F9D7B2  39
-	lda xwa, (0x26a4:16)                                ; F9D7B3  f1 a4 26 30
+	lda xwa, (SoundCopy_DestListTop:16)                                ; F9D7B3  f1 a4 26 30
 	push XWA                                             ; F9D7B7  38
 	call T_F42C78                                        ; F9D7B8  1d 78 2c f4
 	inc 8,XSP                                            ; F9D7BC  ef 60
@@ -53701,14 +53701,14 @@ SoundCopy_AdjustDestBank:
 	jrl nz, .LF9D829                                     ; F9D7C0  7e 66 00
 	calr SoundCopy_DrawDestGroupList                                          ; F9D7C3  1e 8e 05
 .LF9D7C6:
-	dec 0x01, (0x26a1:16)                                ; F9D7C6  c1 a1 26 69
+	dec 0x01, (SoundCopy_DestGroup:16)                                ; F9D7C6  c1 a1 26 69
 	jr .LF9D829                                          ; F9D7CA  68 5d
 .LF9D7CC:
-	m_cp_mi8 MB16, 0x26a3, 0x07                          ; F9D7CC  c1 a3 26 3f 07
+	m_cp_mi8 MB16, SoundCopy_DestGroupRow, 0x07                          ; F9D7CC  c1 a3 26 3f 07
 	jr nc, .LF9D7F0                                      ; F9D7D1  6f 1d
 	lda xbc, (Descriptor9_FA1ADC:24)                     ; F9D7D3  f2 dc 1a fa 31
 	push XBC                                             ; F9D7D8  39
-	lda xwa, (0x26a3:16)                                ; F9D7D9  f1 a3 26 30
+	lda xwa, (SoundCopy_DestGroupRow:16)                                ; F9D7D9  f1 a3 26 30
 	push XWA                                             ; F9D7DD  38
 	call T_F42C78                                        ; F9D7DE  1d 78 2c f4
 	inc 8,XSP                                            ; F9D7E2  ef 60
@@ -53720,7 +53720,7 @@ SoundCopy_AdjustDestBank:
 .LF9D7F0:
 	lda xbc, (Descriptor9_FA1AD3:24)                     ; F9D7F0  f2 d3 1a fa 31
 	push XBC                                             ; F9D7F5  39
-	lda xwa, (0x26a4:16)                                ; F9D7F6  f1 a4 26 30
+	lda xwa, (SoundCopy_DestListTop:16)                                ; F9D7F6  f1 a4 26 30
 	push XWA                                             ; F9D7FA  38
 	call T_F42C78                                        ; F9D7FB  1d 78 2c f4
 	inc 8,XSP                                            ; F9D7FF  ef 60
@@ -53728,12 +53728,12 @@ SoundCopy_AdjustDestBank:
 	jr nz, .LF9D829                                      ; F9D803  6e 24
 	calr SoundCopy_DrawDestGroupList                                          ; F9D805  1e 4c 05
 .LF9D808:
-	inc 0x01, (0x26a1:16)                                ; F9D808  c1 a1 26 61
+	inc 0x01, (SoundCopy_DestGroup:16)                                ; F9D808  c1 a1 26 61
 	jr .LF9D829                                          ; F9D80C  68 1b
 .LF9D80E:
 	lda xbc, (Descriptor9_FA1AEE:24)                     ; F9D80E  f2 ee 1a fa 31
 	push XBC                                             ; F9D813  39
-	lda xwa, (0x26a2:16)                                ; F9D814  f1 a2 26 30
+	lda xwa, (SoundCopy_DestSound:16)                                ; F9D814  f1 a2 26 30
 	push XWA                                             ; F9D818  38
 	call T_F42C78                                        ; F9D819  1d 78 2c f4
 	inc 8,XSP                                            ; F9D81D  ef 60
@@ -53746,9 +53746,9 @@ SoundCopy_AdjustDestBank:
 	ret                                                  ; F9D82A  0e
 	pushw hl                                             ; F9D82B  2b
 	push XIX                                             ; F9D82C  3c
-	lda xix, (0x269a:16)                                ; F9D82D  f1 9a 26 34
-	ld l, (0x269c:16)                                   ; F9D831  c1 9c 26 27
-	ld h, (0x26a1:16)                                   ; F9D835  c1 a1 26 26
+	lda xix, (CopyScreen_Page:16)                                ; F9D82D  f1 9a 26 34
+	ld l, (SoundCopy_SourceGroup:16)                                   ; F9D831  c1 9c 26 27
+	ld h, (SoundCopy_DestGroup:16)                                   ; F9D835  c1 a1 26 26
 	ld C,(XIX)                                           ; F9D839  84 23
 	extz BC                                              ; F9D83B  d9 12
 	cp bc, 0x00:i3                                         ; F9D83D  d9 d8
@@ -53770,25 +53770,25 @@ SoundCopy_AdjustDestBank:
 	jr nz, .LF9D8A3                                      ; F9D864  6e 3d
 	cp l, 0x07:i3                                          ; F9D866  cf df
 	jr ugt, .LF9D875                                     ; F9D868  6b 0b
-	ld (0x269f:16), 0x00                                 ; F9D86A  f1 9f 26 00 00
-	ld (0x269e:16), l                                   ; F9D86F  f1 9e 26 47
+	ld (SoundCopy_SourceListTop:16), 0x00                                 ; F9D86A  f1 9f 26 00 00
+	ld (SoundCopy_SourceGroupRow:16), l                                   ; F9D86F  f1 9e 26 47
 	jr .LF9D882                                          ; F9D873  68 0d
 .LF9D875:
 	ld C,L                                               ; F9D875  cf 8b
 	dec 7,C                                              ; F9D877  cb 6f
-	ld (0x269f:16), c                                   ; F9D879  f1 9f 26 43
-	ld (0x269e:16), 0x07                                 ; F9D87D  f1 9e 26 00 07
+	ld (SoundCopy_SourceListTop:16), c                                   ; F9D879  f1 9f 26 43
+	ld (SoundCopy_SourceGroupRow:16), 0x07                                 ; F9D87D  f1 9e 26 00 07
 .LF9D882:
 	cp h, 0x07:i3                                          ; F9D882  ce df
 	jr ugt, .LF9D891                                     ; F9D884  6b 0b
-	ld (0x26a4:16), 0x00                                 ; F9D886  f1 a4 26 00 00
-	ld (0x26a3:16), h                                   ; F9D88B  f1 a3 26 46
+	ld (SoundCopy_DestListTop:16), 0x00                                 ; F9D886  f1 a4 26 00 00
+	ld (SoundCopy_DestGroupRow:16), h                                   ; F9D88B  f1 a3 26 46
 	jr .LF9D89E                                          ; F9D88F  68 0d
 .LF9D891:
 	ld C,H                                               ; F9D891  ce 8b
 	dec 7,C                                              ; F9D893  cb 6f
-	ld (0x26a4:16), c                                   ; F9D895  f1 a4 26 43
-	ld (0x26a3:16), 0x07                                 ; F9D899  f1 a3 26 00 07
+	ld (SoundCopy_DestListTop:16), c                                   ; F9D895  f1 a4 26 43
+	ld (SoundCopy_DestGroupRow:16), 0x07                                 ; F9D899  f1 a3 26 00 07
 .LF9D89E:
 	m_xor_mi8 MBI+r4, 0, 0x01                            ; F9D89E  84 3d 01
 	jr .LF9D8BA                                          ; F9D8A1  68 17
@@ -53808,7 +53808,7 @@ SoundCopy_AdjustDestBank:
 	pop XIX                                              ; F9D8BE  5c
 	popw hl                                              ; F9D8BF  4b
 	ret                                                  ; F9D8C0  0e
-	ld bc, (0x269a:16)                                 ; F9D8C1  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D8C1  d1 9a 26 21
 	extz BC                                              ; F9D8C5  d9 12
 	cp bc, 0x02:i3                                         ; F9D8C7  d9 da
 	jr z, .LF9D8D1                                       ; F9D8C9  66 06
@@ -53822,7 +53822,7 @@ SoundCopy_AdjustDestBank:
 .LF9D8DD:
 	ret                                                  ; F9D8DD  0e
 	push XIX                                             ; F9D8DE  3c
-	lda xix, (0x269a:16)                                ; F9D8DF  f1 9a 26 34
+	lda xix, (CopyScreen_Page:16)                                ; F9D8DF  f1 9a 26 34
 	ld C,(XIX)                                           ; F9D8E3  84 23
 	extz BC                                              ; F9D8E5  d9 12
 	cp bc, 0x02:i3                                         ; F9D8E7  d9 da
@@ -53838,7 +53838,7 @@ SoundCopy_AdjustDestBank:
 	ret                                                  ; F9D8F9  0e
 	push XIX                                             ; F9D8FA  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9D8FB  f1 71 20 34
-	ld bc, (0x269a:16)                                 ; F9D8FF  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D8FF  d1 9a 26 21
 	extz BC                                              ; F9D903  d9 12
 	cp bc, 0x00:i3                                         ; F9D905  d9 d8
 	jr z, .LF9D917                                       ; F9D907  66 0e
@@ -53863,7 +53863,7 @@ SoundCopy_AdjustDestBank:
 	ld (UI_Request:16), 0x6d                                 ; F9D933  f1 70 20 00 6d
 	jr .LF9D941                                          ; F9D938  68 07
 .LF9D93A:
-	m_res 1, MD16, 0x269a                                ; F9D93A  f1 9a 26 b1
+	m_res 1, MD16, CopyScreen_Page                                ; F9D93A  f1 9a 26 b1
 	m_or_mi8 MBI+r4, 0, 0x10                             ; F9D93E  84 3e 10
 .LF9D941:
 	pop XIX                                              ; F9D941  5c
@@ -53875,7 +53875,7 @@ Paint_SoundCopy:
 	push XIX                                             ; F9D943  3c
 	lda xix, (LCD_CurrentLayer:16)                                ; F9D944  f1 40 25 34
 	call T_F42E10                                        ; F9D948  1d 10 2e f4
-	ld bc, (0x269a:16)                                 ; F9D94C  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9D94C  d1 9a 26 21
 	extz BC                                              ; F9D950  d9 12
 	extz XBC                                             ; F9D952  e9 12
 	cp bc, 0x07:i3                                         ; F9D954  d9 df
@@ -53973,7 +53973,7 @@ SoundCopy_LoadNameBuffers:
 	pushw hl                                             ; F9DA10  2b
 	pushw de                                             ; F9DA11  2a
 	push XIX                                             ; F9DA12  3c
-	ld bc, (0x269a:16)                                 ; F9DA13  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9DA13  d1 9a 26 21
 	extz BC                                              ; F9DA17  d9 12
 	cp bc, 0x00:i3                                         ; F9DA19  d9 d8
 	jr z, .LF9DA25                                       ; F9DA1B  66 08
@@ -53981,7 +53981,7 @@ SoundCopy_LoadNameBuffers:
 	jrl z, .LF9DACA                                      ; F9DA1F  76 a8 00
 	jrl .LF9DBC2                                         ; F9DA22  78 9d 01
 .LF9DA25:
-	ld bc, (0x269b:16)                                 ; F9DA25  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9DA25  d1 9b 26 21
 	extz BC                                              ; F9DA29  d9 12
 	extz XBC                                             ; F9DA2B  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9DA2D  e9 c8 8b 18 fa 00
@@ -53999,7 +53999,7 @@ SoundCopy_LoadNameBuffers:
 	jr .LF9DA6C                                          ; F9DA4A  68 20
 .LF9DA4C:
 	push XIX                                             ; F9DA4C  3c
-	ld bc, (0x269b:16)                                 ; F9DA4D  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9DA4D  d1 9b 26 21
 	extz BC                                              ; F9DA51  d9 12
 	extz XBC                                             ; F9DA53  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9DA55  e9 c8 8b 18 fa 00
@@ -54039,7 +54039,7 @@ SoundCopy_LoadNameBuffers:
 	lda xix, (0x60a000:24)                               ; F9DA9D  f2 00 a0 60 34
 .LF9DAA2:
 	push XIX                                             ; F9DAA2  3c
-	ld bc, (0x26a0:16)                                 ; F9DAA3  d1 a0 26 21
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9DAA3  d1 a0 26 21
 	extz BC                                              ; F9DAA7  d9 12
 	extz XBC                                             ; F9DAA9  e9 12
 	add XBC,ByteTable2_FA1890                            ; F9DAAB  e9 c8 90 18 fa 00
@@ -54056,7 +54056,7 @@ SoundCopy_LoadNameBuffers:
 .LF9DACA:
 	lda xbc, (0x2940:16)                                ; F9DACA  f1 40 29 31
 	push XBC                                             ; F9DACE  39
-	ld wa, (0x269b:16)                                 ; F9DACF  d1 9b 26 20
+	ld wa, (SoundCopy_SourceBank:16)                                 ; F9DACF  d1 9b 26 20
 	extz WA                                              ; F9DAD3  d8 12
 	extz XWA                                             ; F9DAD5  e8 12
 	add XWA,ByteTable5_FA188B                            ; F9DAD7  e8 c8 8b 18 fa 00
@@ -54064,16 +54064,16 @@ SoundCopy_LoadNameBuffers:
 	push 0x00                                            ; F9DADF  09 00
 	push W                                               ; F9DAE1  c8 04
 	push 0x00                                            ; F9DAE3  09 00
-	m_push MB16, 0x269c                                  ; F9DAE5  c1 9c 26 04
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DAE5  c1 9c 26 04
 	calr SoundGroupName_CopyToBuffer                                          ; F9DAE9  1e 6f 1b
-	ld bc, (0x269b:16)                                 ; F9DAEC  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9DAEC  d1 9b 26 21
 	extz BC                                              ; F9DAF0  d9 12
 	extz XBC                                             ; F9DAF2  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9DAF4  e9 c8 8b 18 fa 00
 	ld A,(XBC)                                           ; F9DAFA  81 21
 	pushw wa                                             ; F9DAFC  28
 	push 0x00                                            ; F9DAFD  09 00
-	m_push MB16, 0x269c                                  ; F9DAFF  c1 9c 26 04
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DAFF  c1 9c 26 04
 	calr SoundGroup_MaxMemberIndex_ByStack                                          ; F9DB03  1e ac 1b
 	ld H,A                                               ; F9DB06  c9 8e
 	ld l, 0x00:opc                                          ; F9DB08  27 00
@@ -54083,7 +54083,7 @@ SoundCopy_LoadNameBuffers:
 	jr .LF9DB3C                                          ; F9DB12  68 28
 .LF9DB14:
 	push XIX                                             ; F9DB14  3c
-	ld bc, (0x269b:16)                                 ; F9DB15  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9DB15  d1 9b 26 21
 	extz BC                                              ; F9DB19  d9 12
 	extz XBC                                             ; F9DB1B  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9DB1D  e9 c8 8b 18 fa 00
@@ -54091,7 +54091,7 @@ SoundCopy_LoadNameBuffers:
 	pushw wa                                             ; F9DB25  28
 	pushw hl                                             ; F9DB26  2b
 	push 0x00                                            ; F9DB27  09 00
-	m_push MB16, 0x269c                                  ; F9DB29  c1 9c 26 04
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DB29  c1 9c 26 04
 	calr SoundName_CopyToBuffer                                          ; F9DB2D  1e b8 1a
 	inc 1,L                                              ; F9DB30  cf 61
 	add XIX,0x00000010                                   ; F9DB32  ec c8 10 00 00 00
@@ -54124,7 +54124,7 @@ SoundCopy_LoadNameBuffers:
 	jr c, .LF9DB57                                       ; F9DB69  67 ec
 	lda xbc, (0x29d0:16)                                ; F9DB6B  f1 d0 29 31
 	push XBC                                             ; F9DB6F  39
-	ld wa, (0x26a0:16)                                 ; F9DB70  d1 a0 26 20
+	ld wa, (SoundCopy_DestBank:16)                                 ; F9DB70  d1 a0 26 20
 	extz WA                                              ; F9DB74  d8 12
 	extz XWA                                             ; F9DB76  e8 12
 	add XWA,ByteTable2_FA1890                            ; F9DB78  e8 c8 90 18 fa 00
@@ -54132,14 +54132,14 @@ SoundCopy_LoadNameBuffers:
 	push 0x00                                            ; F9DB80  09 00
 	push W                                               ; F9DB82  c8 04
 	push 0x00                                            ; F9DB84  09 00
-	m_push MB16, 0x26a1                                  ; F9DB86  c1 a1 26 04
+	m_push MB16, SoundCopy_DestGroup                                  ; F9DB86  c1 a1 26 04
 	calr SoundGroupName_CopyToBuffer                                          ; F9DB8A  1e ce 1a
 	ld l, 0x00:opc                                          ; F9DB8D  27 00
 	lda xix, (0x29e0:16)                                ; F9DB8F  f1 e0 29 34
 	inc 8,XSP                                            ; F9DB93  ef 60
 .LF9DB95:
 	push XIX                                             ; F9DB95  3c
-	ld bc, (0x26a0:16)                                 ; F9DB96  d1 a0 26 21
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9DB96  d1 a0 26 21
 	extz BC                                              ; F9DB9A  d9 12
 	extz XBC                                             ; F9DB9C  e9 12
 	add XBC,ByteTable2_FA1890                            ; F9DB9E  e9 c8 90 18 fa 00
@@ -54147,7 +54147,7 @@ SoundCopy_LoadNameBuffers:
 	pushw wa                                             ; F9DBA6  28
 	pushw hl                                             ; F9DBA7  2b
 	push 0x00                                            ; F9DBA8  09 00
-	m_push MB16, 0x26a1                                  ; F9DBAA  c1 a1 26 04
+	m_push MB16, SoundCopy_DestGroup                                  ; F9DBAA  c1 a1 26 04
 	calr SoundName_CopyToBuffer                                          ; F9DBAE  1e 37 1a
 	inc 1,L                                              ; F9DBB1  cf 61
 	add XIX,0x00000010                                   ; F9DBB3  ec c8 10 00 00 00
@@ -54166,7 +54166,7 @@ SoundCopy_LoadNameBuffers:
 SoundCopy_DrawFields:
 	push XIX                                             ; F9DBC6  3c
 	lda xix, (T_DisplayListB_Run_Stack:24)               ; F9DBC7  f2 04 2e f4 34
-	ld bc, (0x269a:16)                                 ; F9DBCC  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9DBCC  d1 9a 26 21
 	extz BC                                              ; F9DBD0  d9 12
 	extz XBC                                             ; F9DBD2  e9 12
 	cp bc, 0x07:i3                                         ; F9DBD4  d9 df
@@ -54246,7 +54246,7 @@ SoundCopy_DrawSingleModeFields:   ; entry: named by 1 `.long` operand, first at 
 ; SoundCopy_ClearErrorState -- field step of the error state: clears bits 1 and 2 of (0x269A) so the next refresh returns to GROUP/SINGLE
 ; Evidence: JumpTable_F9DBE6 entries 4-7 (the states Paint_ErrorImpossibleCopyDrumKit paints); body `and (0x269A),0xf9` then the shared `pop XIX / ret`.
 SoundCopy_ClearErrorState:   ; entry: named by 4 `.long` operands, first at 0xF9DBF6
-	m_and_mi8 MB16, 0x269a, 0xf9                         ; F9DC85  c1 9a 26 3c f9
+	m_and_mi8 MB16, CopyScreen_Page, 0xf9                         ; F9DC85  c1 9a 26 3c f9
 .LF9DC8A:
 	pop XIX                                              ; F9DC8A  5c
 	ret                                                  ; F9DC8B  0e
@@ -54361,7 +54361,7 @@ SoundCopy_Execute:
 	pushw hl                                             ; F9DD70  2b
 	push XIX                                             ; F9DD71  3c
 	lda xix, (ByteTable2_FA1890:24)                      ; F9DD72  f2 90 18 fa 34
-	ld c, (0x269a:16)                                   ; F9DD77  c1 9a 26 23
+	ld c, (CopyScreen_Page:16)                                   ; F9DD77  c1 9a 26 23
 	and C,0x01                                           ; F9DD7B  cb cc 01
 	extz BC                                              ; F9DD7E  d9 12
 	cp bc, 0x00:i3                                         ; F9DD80  d9 d8
@@ -54370,7 +54370,7 @@ SoundCopy_Execute:
 	jrl z, .LF9DEA9                                      ; F9DD86  76 20 01
 	jrl .LF9DF8C                                         ; F9DD89  78 00 02
 .LF9DD8C:
-	ld bc, (0x269b:16)                                 ; F9DD8C  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9DD8C  d1 9b 26 21
 	extz BC                                              ; F9DD90  d9 12
 	extz XBC                                             ; F9DD92  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9DD94  e9 c8 8b 18 fa 00
@@ -54389,7 +54389,7 @@ SoundCopy_Execute:
 	jrl .LF9DF8C                                         ; F9DDB8  78 d1 01
 .LF9DDBB:
 	push 0x00                                            ; F9DDBB  09 00
-	m_push MB16, 0x269c                                  ; F9DDBD  c1 9c 26 04
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DDBD  c1 9c 26 04
 	calr SoundCopy_ReadExtGroupDrumFlag                                          ; F9DDC1  1e 04 20
 	popw bc                                              ; F9DDC4  49
 	cp a, 0x00:i3                                          ; F9DDC5  c9 d8
@@ -54403,8 +54403,8 @@ SoundCopy_Execute:
 	push XBC                                             ; F9DDD8  39
 	pushw 0x10                                           ; F9DDD9  0b 10 00
 	push 0x00                                            ; F9DDDC  09 00
-	m_push MB16, 0x269c                                  ; F9DDDE  c1 9c 26 04
-	ld wa, (0x269b:16)                                 ; F9DDE2  d1 9b 26 20
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DDDE  c1 9c 26 04
+	ld wa, (SoundCopy_SourceBank:16)                                 ; F9DDE2  d1 9b 26 20
 	extz WA                                              ; F9DDE6  d8 12
 	extz XWA                                             ; F9DDE8  e8 12
 	add XWA,ByteTable5_FA188B                            ; F9DDEA  e8 c8 8b 18 fa 00
@@ -54416,8 +54416,8 @@ SoundCopy_Execute:
 	push XIY                                             ; F9DDFA  3d
 	calr Link_ReadRemoteBlock                                          ; F9DDFB  1e eb 1c
 	push 0x00                                            ; F9DDFE  09 00
-	m_push MB16, 0x26a1                                  ; F9DE00  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9DE04  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9DE00  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9DE04  d1 a0 26 21
 	extz BC                                              ; F9DE08  d9 12
 	extz XBC                                             ; F9DE0A  e9 12
 	add XBC,XIX                                          ; F9DE0C  ec 81
@@ -54436,8 +54436,8 @@ SoundCopy_Execute:
 	pushw 0x1648                                         ; F9DE2E  0b 48 16
 	pushw 0x00                                           ; F9DE31  0b 00 00
 	push 0x00                                            ; F9DE34  09 00
-	m_push MB16, 0x269c                                  ; F9DE36  c1 9c 26 04
-	ld wa, (0x269b:16)                                 ; F9DE3A  d1 9b 26 20
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DE36  c1 9c 26 04
+	ld wa, (SoundCopy_SourceBank:16)                                 ; F9DE3A  d1 9b 26 20
 	extz WA                                              ; F9DE3E  d8 12
 	extz XWA                                             ; F9DE40  e8 12
 	add XWA,ByteTable5_FA188B                            ; F9DE42  e8 c8 8b 18 fa 00
@@ -54450,8 +54450,8 @@ SoundCopy_Execute:
 	calr Link_ReadRemoteBlock                                          ; F9DE54  1e 92 1c
 	pushw 0x00                                           ; F9DE57  0b 00 00
 	push 0x00                                            ; F9DE5A  09 00
-	m_push MB16, 0x26a1                                  ; F9DE5C  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9DE60  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9DE5C  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9DE60  d1 a0 26 21
 	extz BC                                              ; F9DE64  d9 12
 	extz XBC                                             ; F9DE66  e9 12
 	add XBC,XIX                                          ; F9DE68  ec 81
@@ -54469,8 +54469,8 @@ SoundCopy_Execute:
 	push 0x00                                            ; F9DE83  09 00
 	push H                                               ; F9DE85  ce 04
 	push 0x00                                            ; F9DE87  09 00
-	m_push MB16, 0x26a1                                  ; F9DE89  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9DE8D  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9DE89  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9DE8D  d1 a0 26 21
 	extz BC                                              ; F9DE91  d9 12
 	extz XBC                                             ; F9DE93  e9 12
 	add XBC,XIX                                          ; F9DE95  ec 81
@@ -54483,7 +54483,7 @@ SoundCopy_Execute:
 	jr c, .LF9DE83                                       ; F9DEA4  67 dd
 	jrl .LF9DF7A                                         ; F9DEA6  78 d1 00
 .LF9DEA9:
-	ld bc, (0x269b:16)                                 ; F9DEA9  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9DEA9  d1 9b 26 21
 	extz BC                                              ; F9DEAD  d9 12
 	extz XBC                                             ; F9DEAF  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9DEB1  e9 c8 8b 18 fa 00
@@ -54502,7 +54502,7 @@ SoundCopy_Execute:
 	jrl .LF9DF8C                                         ; F9DED5  78 b4 00
 .LF9DED8:
 	push 0x00                                            ; F9DED8  09 00
-	m_push MB16, 0x269c                                  ; F9DEDA  c1 9c 26 04
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DEDA  c1 9c 26 04
 	calr SoundCopy_ReadExtGroupDrumFlag                                          ; F9DEDE  1e e7 1e
 	popw bc                                              ; F9DEE1  49
 	cp a, 0x00:i3                                          ; F9DEE2  c9 d8
@@ -54511,7 +54511,7 @@ SoundCopy_Execute:
 	calr SoundCopy_RequestSingleSound                                          ; F9DEE6  1e 2f 1c
 	jrl .LF9DF8C                                         ; F9DEE9  78 a0 00
 .LF9DEEC:
-	m_set 2, MD16, 0x269a                                ; F9DEEC  f1 9a 26 ba
+	m_set 2, MD16, CopyScreen_Page                                ; F9DEEC  f1 9a 26 ba
 	m_set 6, MD16, UI_Request_Hi                                ; F9DEF0  f1 71 20 be
 	ld (UI_Request:16), 0x5e                                 ; F9DEF4  f1 70 20 00 5e
 	jrl .LF9DF8C                                         ; F9DEF9  78 90 00
@@ -54521,10 +54521,10 @@ SoundCopy_Execute:
 	push XBC                                             ; F9DF04  39
 	pushw 0x02c9                                         ; F9DF05  0b c9 02
 	push 0x00                                            ; F9DF08  09 00
-	m_push MB16, 0x269d                                  ; F9DF0A  c1 9d 26 04
+	m_push MB16, SoundCopy_SourceSound                                  ; F9DF0A  c1 9d 26 04
 	push 0x00                                            ; F9DF0E  09 00
-	m_push MB16, 0x269c                                  ; F9DF10  c1 9c 26 04
-	ld wa, (0x269b:16)                                 ; F9DF14  d1 9b 26 20
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9DF10  c1 9c 26 04
+	ld wa, (SoundCopy_SourceBank:16)                                 ; F9DF14  d1 9b 26 20
 	extz WA                                              ; F9DF18  d8 12
 	extz XWA                                             ; F9DF1A  e8 12
 	add XWA,ByteTable5_FA188B                            ; F9DF1C  e8 c8 8b 18 fa 00
@@ -54536,10 +54536,10 @@ SoundCopy_Execute:
 	push XIY                                             ; F9DF2D  3d
 	calr Link_ReadRemoteBlock                                          ; F9DF2E  1e b8 1b
 	push 0x00                                            ; F9DF31  09 00
-	m_push MB16, 0x26a2                                  ; F9DF33  c1 a2 26 04
+	m_push MB16, SoundCopy_DestSound                                  ; F9DF33  c1 a2 26 04
 	push 0x00                                            ; F9DF37  09 00
-	m_push MB16, 0x26a1                                  ; F9DF39  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9DF3D  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9DF39  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9DF3D  d1 a0 26 21
 	extz BC                                              ; F9DF41  d9 12
 	extz XBC                                             ; F9DF43  e9 12
 	add XBC,XIX                                          ; F9DF45  ec 81
@@ -54552,10 +54552,10 @@ SoundCopy_Execute:
 	push XBC                                             ; F9DF54  39
 	calr Link_WriteRemoteBlock                                          ; F9DF55  1e 69 1b
 	push 0x00                                            ; F9DF58  09 00
-	m_push MB16, 0x26a2                                  ; F9DF5A  c1 a2 26 04
+	m_push MB16, SoundCopy_DestSound                                  ; F9DF5A  c1 a2 26 04
 	push 0x00                                            ; F9DF5E  09 00
-	m_push MB16, 0x26a1                                  ; F9DF60  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9DF64  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9DF60  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9DF64  d1 a0 26 21
 	extz BC                                              ; F9DF68  d9 12
 	extz XBC                                             ; F9DF6A  e9 12
 	add XBC,XIX                                          ; F9DF6C  ec 81
@@ -54564,7 +54564,7 @@ SoundCopy_Execute:
 	calr SoundCopy_RefreshPartsUsingSound                                          ; F9DF71  1e 8f 1e
 	add XSP,0x00000020                                   ; F9DF74  ef c8 20 00 00 00
 .LF9DF7A:
-	m_res 1, MD16, 0x269a                                ; F9DF7A  f1 9a 26 b1
+	m_res 1, MD16, CopyScreen_Page                                ; F9DF7A  f1 9a 26 b1
 	ld (UI_StatusCode:16), 0x23                                 ; F9DF7E  f1 80 28 00 23
 	m_set 6, MD16, UI_Request_Hi                                ; F9DF83  f1 71 20 be
 	ld (UI_Request:16), 0xab                                 ; F9DF87  f1 70 20 00 ab
@@ -54580,7 +54580,7 @@ Screen_CombinationCopy_Enter:
 	ld c, (UI_ScreenLatch:16)                                   ; F9DF91  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9DF95  c1 7b 20 f3
 	jr z, .LF9DFAA                                       ; F9DF99  66 0f
-	ld (0x269a:16), 0x01                                 ; F9DF9B  f1 9a 26 00 01
+	ld (CopyScreen_Page:16), 0x01                                 ; F9DF9B  f1 9a 26 00 01
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9DFA0  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9DFA5  f1 9c 20 00 82
 .LF9DFAA:
@@ -54637,14 +54637,14 @@ CombinationCopy_AdjustSourceBank:
 .LF9E019:
 	lda xbc, (xiz-9)                                     ; F9E019  be f7 31
 	push XBC                                             ; F9E01C  39
-	lda xwa, (0x2706:16)                                ; F9E01D  f1 06 27 30
+	lda xwa, (CombinationCopy_SourceBank:16)                                ; F9E01D  f1 06 27 30
 	push XWA                                             ; F9E021  38
 	call T_F42C78                                        ; F9E022  1d 78 2c f4
 	inc 8,XSP                                            ; F9E026  ef 60
 	cp a, 0x01:i3                                          ; F9E028  c9 d9
 	jr nz, .LF9E06A                                      ; F9E02A  6e 3e
-	ld (0x2707:16), 0x00                                 ; F9E02C  f1 07 27 00 00
-	ld bc, (0x269a:16)                                 ; F9E031  d1 9a 26 21
+	ld (CombinationCopy_SourceGroup:16), 0x00                                 ; F9E02C  f1 07 27 00 00
+	ld bc, (CopyScreen_Page:16)                                 ; F9E031  d1 9a 26 21
 	extz BC                                              ; F9E035  d9 12
 	cp bc, 0x00:i3                                         ; F9E037  d9 d8
 	jr z, .LF9E041                                       ; F9E039  66 06
@@ -54652,17 +54652,17 @@ CombinationCopy_AdjustSourceBank:
 	jr z, .LF9E057                                       ; F9E03D  66 18
 	jr .LF9E066                                          ; F9E03F  68 25
 .LF9E041:
-	ld (0x270a:16), 0x00                                 ; F9E041  f1 0a 27 00 00
-	m_cp_mi8 MB16, 0x2709, 0x00                          ; F9E046  c1 09 27 3f 00
+	ld (CombinationCopy_SourceListTop:16), 0x00                                 ; F9E041  f1 0a 27 00 00
+	m_cp_mi8 MB16, CombinationCopy_SourceGroupRow, 0x00                          ; F9E046  c1 09 27 3f 00
 	jr z, .LF9E066                                       ; F9E04B  66 19
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9E04D  84 3e 01
-	ld (0x2709:16), 0x00                                 ; F9E050  f1 09 27 00 00
+	ld (CombinationCopy_SourceGroupRow:16), 0x00                                 ; F9E050  f1 09 27 00 00
 	jr .LF9E066                                          ; F9E055  68 0f
 .LF9E057:
-	m_cp_mi8 MB16, 0x2708, 0x00                          ; F9E057  c1 08 27 3f 00
+	m_cp_mi8 MB16, CombinationCopy_SourceCombi, 0x00                          ; F9E057  c1 08 27 3f 00
 	jr z, .LF9E066                                       ; F9E05C  66 08
 	m_or_mi8 MBI+r4, 0, 0x01                             ; F9E05E  84 3e 01
-	ld (0x2708:16), 0x00                                 ; F9E061  f1 08 27 00 00
+	ld (CombinationCopy_SourceCombi:16), 0x00                                 ; F9E061  f1 08 27 00 00
 .LF9E066:
 	m_set 4, MD16, 0x2095                                ; F9E066  f1 95 20 bc
 .LF9E06A:
@@ -54671,7 +54671,7 @@ CombinationCopy_AdjustSourceBank:
 	ret                                                  ; F9E06D  0e
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9E06E  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9E073  f1 9c 20 00 82
-	ld bc, (0x269a:16)                                 ; F9E078  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E078  d1 9a 26 21
 	extz BC                                              ; F9E07C  d9 12
 	cp bc, 0x00:i3                                         ; F9E07E  d9 d8
 	jr z, .LF9E088                                       ; F9E080  66 06
@@ -54690,7 +54690,7 @@ CombinationCopy_AdjustSourceBank:
 	ldir85                                               ; F9E09C  85 11
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9E09E  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9E0A3  f1 9c 20 00 82
-	ld bc, (0x269a:16)                                 ; F9E0A8  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E0A8  d1 9a 26 21
 	extz BC                                              ; F9E0AC  d9 12
 	cp bc, 0x00:i3                                         ; F9E0AE  d9 d8
 	jr z, .LF9E0B8                                       ; F9E0B0  66 06
@@ -54701,7 +54701,7 @@ CombinationCopy_AdjustSourceBank:
 	calr CombinationCopy_AdjustSourceBank                                      ; F9E0B8  1e 39 ff
 	jr .LF9E107                                          ; F9E0BB  68 4a
 .LF9E0BD:
-	ld bc, (0x2706:16)                                 ; F9E0BD  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E0BD  d1 06 27 21
 	extz BC                                              ; F9E0C1  d9 12
 	extz XBC                                             ; F9E0C3  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E0C5  e9 c8 f4 16 fa 00
@@ -54717,17 +54717,17 @@ CombinationCopy_AdjustSourceBank:
 .LF9E0E0:
 	lda xbc, (xiz-9)                                     ; F9E0E0  be f7 31
 	push XBC                                             ; F9E0E3  39
-	lda xwa, (0x2707:16)                                ; F9E0E4  f1 07 27 30
+	lda xwa, (CombinationCopy_SourceGroup:16)                                ; F9E0E4  f1 07 27 30
 	push XWA                                             ; F9E0E8  38
 	call T_F42C78                                        ; F9E0E9  1d 78 2c f4
 	inc 8,XSP                                            ; F9E0ED  ef 60
 	cp a, 0x01:i3                                          ; F9E0EF  c9 d9
 	jr nz, .LF9E107                                      ; F9E0F1  6e 14
-	m_cp_mi8 MB16, 0x2708, 0x00                          ; F9E0F3  c1 08 27 3f 00
+	m_cp_mi8 MB16, CombinationCopy_SourceCombi, 0x00                          ; F9E0F3  c1 08 27 3f 00
 	jr z, .LF9E0FE                                       ; F9E0F8  66 04
 	m_set 0, MD16, 0x2900                                ; F9E0FA  f1 00 29 b8
 .LF9E0FE:
-	ld (0x2708:16), 0x00                                 ; F9E0FE  f1 08 27 00 00
+	ld (CombinationCopy_SourceCombi:16), 0x00                                 ; F9E0FE  f1 08 27 00 00
 	m_set 4, MD16, 0x2095                                ; F9E103  f1 95 20 bc
 .LF9E107:
 	pop XIX                                              ; F9E107  5c
@@ -54758,7 +54758,7 @@ CombinationCopy_AdjustSourceBank:
 	pop XIX                                              ; F9E145  5c
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9E146  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9E14B  f1 9c 20 00 82
-	ld bc, (0x269a:16)                                 ; F9E150  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E150  d1 9a 26 21
 	extz BC                                              ; F9E154  d9 12
 	cp bc, 0x00:i3                                         ; F9E156  d9 d8
 	jr z, .LF9E162                                       ; F9E158  66 08
@@ -54766,7 +54766,7 @@ CombinationCopy_AdjustSourceBank:
 	jrl z, .LF9E221                                      ; F9E15C  76 c2 00
 	jrl .LF9E259                                         ; F9E15F  78 f7 00
 .LF9E162:
-	ld bc, (0x2706:16)                                 ; F9E162  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E162  d1 06 27 21
 	extz BC                                              ; F9E166  d9 12
 	extz XBC                                             ; F9E168  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E16A  e9 c8 f4 16 fa 00
@@ -54792,11 +54792,11 @@ CombinationCopy_AdjustSourceBank:
 	ld c, (0x28b0:16)                                   ; F9E199  c1 b0 28 23
 	and C,0x01                                           ; F9E19D  cb cc 01
 	jr nz, .LF9E1E3                                      ; F9E1A0  6e 41
-	m_cp_mi8 MB16, 0x2709, 0x00                          ; F9E1A2  c1 09 27 3f 00
+	m_cp_mi8 MB16, CombinationCopy_SourceGroupRow, 0x00                          ; F9E1A2  c1 09 27 3f 00
 	jr z, .LF9E1C5                                       ; F9E1A7  66 1c
 	lda xbc, (xiz-18)                                    ; F9E1A9  be ee 31
 	push XBC                                             ; F9E1AC  39
-	lda xwa, (0x2709:16)                                ; F9E1AD  f1 09 27 30
+	lda xwa, (CombinationCopy_SourceGroupRow:16)                                ; F9E1AD  f1 09 27 30
 	push XWA                                             ; F9E1B1  38
 	call T_F42C78                                        ; F9E1B2  1d 78 2c f4
 	inc 8,XSP                                            ; F9E1B6  ef 60
@@ -54808,7 +54808,7 @@ CombinationCopy_AdjustSourceBank:
 .LF9E1C5:
 	lda xbc, (xiz-9)                                     ; F9E1C5  be f7 31
 	push XBC                                             ; F9E1C8  39
-	lda xwa, (0x270a:16)                                ; F9E1C9  f1 0a 27 30
+	lda xwa, (CombinationCopy_SourceListTop:16)                                ; F9E1C9  f1 0a 27 30
 	push XWA                                             ; F9E1CD  38
 	call T_F42C78                                        ; F9E1CE  1d 78 2c f4
 	inc 8,XSP                                            ; F9E1D2  ef 60
@@ -54816,14 +54816,14 @@ CombinationCopy_AdjustSourceBank:
 	jrl nz, .LF9E259                                     ; F9E1D6  7e 80 00
 	calr CombinationCopy_DrawSourceGroupList                                      ; F9E1D9  1e 1d 07
 .LF9E1DC:
-	dec 0x01, (0x2707:16)                                ; F9E1DC  c1 07 27 69
+	dec 0x01, (CombinationCopy_SourceGroup:16)                                ; F9E1DC  c1 07 27 69
 	jrl .LF9E259                                         ; F9E1E0  78 76 00
 .LF9E1E3:
-	m_cp_mi8 MB16, 0x2709, 0x07                          ; F9E1E3  c1 09 27 3f 07
+	m_cp_mi8 MB16, CombinationCopy_SourceGroupRow, 0x07                          ; F9E1E3  c1 09 27 3f 07
 	jr nc, .LF9E205                                      ; F9E1E8  6f 1b
 	lda xbc, (xiz-18)                                    ; F9E1EA  be ee 31
 	push XBC                                             ; F9E1ED  39
-	lda xwa, (0x2709:16)                                ; F9E1EE  f1 09 27 30
+	lda xwa, (CombinationCopy_SourceGroupRow:16)                                ; F9E1EE  f1 09 27 30
 	push XWA                                             ; F9E1F2  38
 	call T_F42C78                                        ; F9E1F3  1d 78 2c f4
 	inc 8,XSP                                            ; F9E1F7  ef 60
@@ -54835,7 +54835,7 @@ CombinationCopy_AdjustSourceBank:
 .LF9E205:
 	lda xbc, (xiz-9)                                     ; F9E205  be f7 31
 	push XBC                                             ; F9E208  39
-	lda xwa, (0x270a:16)                                ; F9E209  f1 0a 27 30
+	lda xwa, (CombinationCopy_SourceListTop:16)                                ; F9E209  f1 0a 27 30
 	push XWA                                             ; F9E20D  38
 	call T_F42C78                                        ; F9E20E  1d 78 2c f4
 	inc 8,XSP                                            ; F9E212  ef 60
@@ -54843,22 +54843,22 @@ CombinationCopy_AdjustSourceBank:
 	jr nz, .LF9E259                                      ; F9E216  6e 41
 	calr CombinationCopy_DrawSourceGroupList                                      ; F9E218  1e de 06
 .LF9E21B:
-	inc 0x01, (0x2707:16)                                ; F9E21B  c1 07 27 61
+	inc 0x01, (CombinationCopy_SourceGroup:16)                                ; F9E21B  c1 07 27 61
 	jr .LF9E259                                          ; F9E21F  68 38
 .LF9E221:
-	ld bc, (0x2706:16)                                 ; F9E221  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E221  d1 06 27 21
 	extz BC                                              ; F9E225  d9 12
 	extz XBC                                             ; F9E227  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E229  e9 c8 f4 16 fa 00
 	ld A,(XBC)                                           ; F9E22F  81 21
 	pushw wa                                             ; F9E231  28
 	push 0x00                                            ; F9E232  09 00
-	m_push MB16, 0x2707                                  ; F9E234  c1 07 27 04
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9E234  c1 07 27 04
 	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9E238  1e 7d 15
 	ld (xiz-24), a                                       ; F9E23B  be e8 41
 	lda xbc, (xiz-27)                                    ; F9E23E  be e5 31
 	push XBC                                             ; F9E241  39
-	lda xwa, (0x2708:16)                                ; F9E242  f1 08 27 30
+	lda xwa, (CombinationCopy_SourceCombi:16)                                ; F9E242  f1 08 27 30
 	push XWA                                             ; F9E246  38
 	call T_F42C78                                        ; F9E247  1d 78 2c f4
 	inc 8,XSP                                            ; F9E24B  ef 60
@@ -54879,14 +54879,14 @@ CombinationCopy_AdjustDestBank:
 	lda xix, (0x2900:16)                                ; F9E25F  f1 00 29 34
 	lda xbc, (Descriptor9_FA1AF7:24)                     ; F9E263  f2 f7 1a fa 31
 	push XBC                                             ; F9E268  39
-	lda xwa, (0x270b:16)                                ; F9E269  f1 0b 27 30
+	lda xwa, (CombinationCopy_DestBank:16)                                ; F9E269  f1 0b 27 30
 	push XWA                                             ; F9E26D  38
 	call T_F42C78                                        ; F9E26E  1d 78 2c f4
 	inc 8,XSP                                            ; F9E272  ef 60
 	cp a, 0x01:i3                                          ; F9E274  c9 d9
 	jr nz, .LF9E2B6                                      ; F9E276  6e 3e
-	ld (0x270c:16), 0x00                                 ; F9E278  f1 0c 27 00 00
-	ld bc, (0x269a:16)                                 ; F9E27D  d1 9a 26 21
+	ld (CombinationCopy_DestGroup:16), 0x00                                 ; F9E278  f1 0c 27 00 00
+	ld bc, (CopyScreen_Page:16)                                 ; F9E27D  d1 9a 26 21
 	extz BC                                              ; F9E281  d9 12
 	cp bc, 0x00:i3                                         ; F9E283  d9 d8
 	jr z, .LF9E28D                                       ; F9E285  66 06
@@ -54894,17 +54894,17 @@ CombinationCopy_AdjustDestBank:
 	jr z, .LF9E2A3                                       ; F9E289  66 18
 	jr .LF9E2B2                                          ; F9E28B  68 25
 .LF9E28D:
-	ld (0x270f:16), 0x00                                 ; F9E28D  f1 0f 27 00 00
-	m_cp_mi8 MB16, 0x270e, 0x00                          ; F9E292  c1 0e 27 3f 00
+	ld (CombinationCopy_DestListTop:16), 0x00                                 ; F9E28D  f1 0f 27 00 00
+	m_cp_mi8 MB16, CombinationCopy_DestGroupRow, 0x00                          ; F9E292  c1 0e 27 3f 00
 	jr z, .LF9E2B2                                       ; F9E297  66 19
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9E299  84 3e 02
-	ld (0x270e:16), 0x00                                 ; F9E29C  f1 0e 27 00 00
+	ld (CombinationCopy_DestGroupRow:16), 0x00                                 ; F9E29C  f1 0e 27 00 00
 	jr .LF9E2B2                                          ; F9E2A1  68 0f
 .LF9E2A3:
-	m_cp_mi8 MB16, 0x270d, 0x00                          ; F9E2A3  c1 0d 27 3f 00
+	m_cp_mi8 MB16, CombinationCopy_DestCombi, 0x00                          ; F9E2A3  c1 0d 27 3f 00
 	jr z, .LF9E2B2                                       ; F9E2A8  66 08
 	m_or_mi8 MBI+r4, 0, 0x02                             ; F9E2AA  84 3e 02
-	ld (0x270d:16), 0x00                                 ; F9E2AD  f1 0d 27 00 00
+	ld (CombinationCopy_DestCombi:16), 0x00                                 ; F9E2AD  f1 0d 27 00 00
 .LF9E2B2:
 	m_set 4, MD16, 0x2095                                ; F9E2B2  f1 95 20 bc
 .LF9E2B6:
@@ -54912,7 +54912,7 @@ CombinationCopy_AdjustDestBank:
 	ret                                                  ; F9E2B7  0e
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9E2B8  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9E2BD  f1 9c 20 00 86
-	ld bc, (0x269a:16)                                 ; F9E2C2  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E2C2  d1 9a 26 21
 	extz BC                                              ; F9E2C6  d9 12
 	cp bc, 0x00:i3                                         ; F9E2C8  d9 d8
 	jr z, .LF9E2D2                                       ; F9E2CA  66 06
@@ -54925,7 +54925,7 @@ CombinationCopy_AdjustDestBank:
 	ret                                                  ; F9E2D5  0e
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9E2D6  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9E2DB  f1 9c 20 00 86
-	ld bc, (0x269a:16)                                 ; F9E2E0  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E2E0  d1 9a 26 21
 	extz BC                                              ; F9E2E4  d9 12
 	cp bc, 0x00:i3                                         ; F9E2E6  d9 d8
 	jr z, .LF9E2F0                                       ; F9E2E8  66 06
@@ -54938,17 +54938,17 @@ CombinationCopy_AdjustDestBank:
 .LF9E2F5:
 	lda xbc, (Descriptor9_FA1B12:24)                     ; F9E2F5  f2 12 1b fa 31
 	push XBC                                             ; F9E2FA  39
-	lda xwa, (0x270c:16)                                ; F9E2FB  f1 0c 27 30
+	lda xwa, (CombinationCopy_DestGroup:16)                                ; F9E2FB  f1 0c 27 30
 	push XWA                                             ; F9E2FF  38
 	call T_F42C78                                        ; F9E300  1d 78 2c f4
 	inc 8,XSP                                            ; F9E304  ef 60
 	cp a, 0x01:i3                                          ; F9E306  c9 d9
 	jr nz, .LF9E31E                                      ; F9E308  6e 14
-	m_cp_mi8 MB16, 0x270d, 0x00                          ; F9E30A  c1 0d 27 3f 00
+	m_cp_mi8 MB16, CombinationCopy_DestCombi, 0x00                          ; F9E30A  c1 0d 27 3f 00
 	jr z, .LF9E315                                       ; F9E30F  66 04
 	m_set 1, MD16, 0x2900                                ; F9E311  f1 00 29 b9
 .LF9E315:
-	ld (0x270d:16), 0x00                                 ; F9E315  f1 0d 27 00 00
+	ld (CombinationCopy_DestCombi:16), 0x00                                 ; F9E315  f1 0d 27 00 00
 	m_set 4, MD16, 0x2095                                ; F9E31A  f1 95 20 bc
 .LF9E31E:
 	ret                                                  ; F9E31E  0e
@@ -54956,7 +54956,7 @@ CombinationCopy_AdjustDestBank:
 	lda xix, (0x2900:16)                                ; F9E320  f1 00 29 34
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9E324  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9E329  f1 9c 20 00 86
-	ld bc, (0x269a:16)                                 ; F9E32E  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E32E  d1 9a 26 21
 	extz BC                                              ; F9E332  d9 12
 	cp bc, 0x00:i3                                         ; F9E334  d9 d8
 	jr z, .LF9E340                                       ; F9E336  66 08
@@ -54967,11 +54967,11 @@ CombinationCopy_AdjustDestBank:
 	ld c, (0x28b0:16)                                   ; F9E340  c1 b0 28 23
 	and C,0x01                                           ; F9E344  cb cc 01
 	jr nz, .LF9E38D                                      ; F9E347  6e 44
-	m_cp_mi8 MB16, 0x270e, 0x00                          ; F9E349  c1 0e 27 3f 00
+	m_cp_mi8 MB16, CombinationCopy_DestGroupRow, 0x00                          ; F9E349  c1 0e 27 3f 00
 	jr z, .LF9E36E                                       ; F9E34E  66 1e
 	lda xbc, (Descriptor9_FA1B09:24)                     ; F9E350  f2 09 1b fa 31
 	push XBC                                             ; F9E355  39
-	lda xwa, (0x270e:16)                                ; F9E356  f1 0e 27 30
+	lda xwa, (CombinationCopy_DestGroupRow:16)                                ; F9E356  f1 0e 27 30
 	push XWA                                             ; F9E35A  38
 	call T_F42C78                                        ; F9E35B  1d 78 2c f4
 	inc 8,XSP                                            ; F9E35F  ef 60
@@ -54983,7 +54983,7 @@ CombinationCopy_AdjustDestBank:
 .LF9E36E:
 	lda xbc, (Descriptor9_FA1B00:24)                     ; F9E36E  f2 00 1b fa 31
 	push XBC                                             ; F9E373  39
-	lda xwa, (0x270f:16)                                ; F9E374  f1 0f 27 30
+	lda xwa, (CombinationCopy_DestListTop:16)                                ; F9E374  f1 0f 27 30
 	push XWA                                             ; F9E378  38
 	call T_F42C78                                        ; F9E379  1d 78 2c f4
 	inc 8,XSP                                            ; F9E37D  ef 60
@@ -54991,14 +54991,14 @@ CombinationCopy_AdjustDestBank:
 	jrl nz, .LF9E3EA                                     ; F9E381  7e 66 00
 	calr CombinationCopy_DrawDestGroupList                                      ; F9E384  1e 8a 05
 .LF9E387:
-	dec 0x01, (0x270c:16)                                ; F9E387  c1 0c 27 69
+	dec 0x01, (CombinationCopy_DestGroup:16)                                ; F9E387  c1 0c 27 69
 	jr .LF9E3EA                                          ; F9E38B  68 5d
 .LF9E38D:
-	m_cp_mi8 MB16, 0x270e, 0x07                          ; F9E38D  c1 0e 27 3f 07
+	m_cp_mi8 MB16, CombinationCopy_DestGroupRow, 0x07                          ; F9E38D  c1 0e 27 3f 07
 	jr nc, .LF9E3B1                                      ; F9E392  6f 1d
 	lda xbc, (Descriptor9_FA1B09:24)                     ; F9E394  f2 09 1b fa 31
 	push XBC                                             ; F9E399  39
-	lda xwa, (0x270e:16)                                ; F9E39A  f1 0e 27 30
+	lda xwa, (CombinationCopy_DestGroupRow:16)                                ; F9E39A  f1 0e 27 30
 	push XWA                                             ; F9E39E  38
 	call T_F42C78                                        ; F9E39F  1d 78 2c f4
 	inc 8,XSP                                            ; F9E3A3  ef 60
@@ -55010,7 +55010,7 @@ CombinationCopy_AdjustDestBank:
 .LF9E3B1:
 	lda xbc, (Descriptor9_FA1B00:24)                     ; F9E3B1  f2 00 1b fa 31
 	push XBC                                             ; F9E3B6  39
-	lda xwa, (0x270f:16)                                ; F9E3B7  f1 0f 27 30
+	lda xwa, (CombinationCopy_DestListTop:16)                                ; F9E3B7  f1 0f 27 30
 	push XWA                                             ; F9E3BB  38
 	call T_F42C78                                        ; F9E3BC  1d 78 2c f4
 	inc 8,XSP                                            ; F9E3C0  ef 60
@@ -55018,12 +55018,12 @@ CombinationCopy_AdjustDestBank:
 	jr nz, .LF9E3EA                                      ; F9E3C4  6e 24
 	calr CombinationCopy_DrawDestGroupList                                      ; F9E3C6  1e 48 05
 .LF9E3C9:
-	inc 0x01, (0x270c:16)                                ; F9E3C9  c1 0c 27 61
+	inc 0x01, (CombinationCopy_DestGroup:16)                                ; F9E3C9  c1 0c 27 61
 	jr .LF9E3EA                                          ; F9E3CD  68 1b
 .LF9E3CF:
 	lda xbc, (Descriptor9_FA1B1B:24)                     ; F9E3CF  f2 1b 1b fa 31
 	push XBC                                             ; F9E3D4  39
-	lda xwa, (0x270d:16)                                ; F9E3D5  f1 0d 27 30
+	lda xwa, (CombinationCopy_DestCombi:16)                                ; F9E3D5  f1 0d 27 30
 	push XWA                                             ; F9E3D9  38
 	call T_F42C78                                        ; F9E3DA  1d 78 2c f4
 	inc 8,XSP                                            ; F9E3DE  ef 60
@@ -55036,9 +55036,9 @@ CombinationCopy_AdjustDestBank:
 	ret                                                  ; F9E3EB  0e
 	pushw hl                                             ; F9E3EC  2b
 	push XIX                                             ; F9E3ED  3c
-	lda xix, (0x269a:16)                                ; F9E3EE  f1 9a 26 34
-	ld l, (0x2707:16)                                   ; F9E3F2  c1 07 27 27
-	ld h, (0x270c:16)                                   ; F9E3F6  c1 0c 27 26
+	lda xix, (CopyScreen_Page:16)                                ; F9E3EE  f1 9a 26 34
+	ld l, (CombinationCopy_SourceGroup:16)                                   ; F9E3F2  c1 07 27 27
+	ld h, (CombinationCopy_DestGroup:16)                                   ; F9E3F6  c1 0c 27 26
 	ld C,(XIX)                                           ; F9E3FA  84 23
 	extz BC                                              ; F9E3FC  d9 12
 	cp bc, 0x00:i3                                         ; F9E3FE  d9 d8
@@ -55060,25 +55060,25 @@ CombinationCopy_AdjustDestBank:
 	jr nz, .LF9E464                                      ; F9E425  6e 3d
 	cp l, 0x07:i3                                          ; F9E427  cf df
 	jr ugt, .LF9E436                                     ; F9E429  6b 0b
-	ld (0x270a:16), 0x00                                 ; F9E42B  f1 0a 27 00 00
-	ld (0x2709:16), l                                   ; F9E430  f1 09 27 47
+	ld (CombinationCopy_SourceListTop:16), 0x00                                 ; F9E42B  f1 0a 27 00 00
+	ld (CombinationCopy_SourceGroupRow:16), l                                   ; F9E430  f1 09 27 47
 	jr .LF9E443                                          ; F9E434  68 0d
 .LF9E436:
 	ld C,L                                               ; F9E436  cf 8b
 	dec 7,C                                              ; F9E438  cb 6f
-	ld (0x270a:16), c                                   ; F9E43A  f1 0a 27 43
-	ld (0x2709:16), 0x07                                 ; F9E43E  f1 09 27 00 07
+	ld (CombinationCopy_SourceListTop:16), c                                   ; F9E43A  f1 0a 27 43
+	ld (CombinationCopy_SourceGroupRow:16), 0x07                                 ; F9E43E  f1 09 27 00 07
 .LF9E443:
 	cp h, 0x07:i3                                          ; F9E443  ce df
 	jr ugt, .LF9E452                                     ; F9E445  6b 0b
-	ld (0x270f:16), 0x00                                 ; F9E447  f1 0f 27 00 00
-	ld (0x270e:16), h                                   ; F9E44C  f1 0e 27 46
+	ld (CombinationCopy_DestListTop:16), 0x00                                 ; F9E447  f1 0f 27 00 00
+	ld (CombinationCopy_DestGroupRow:16), h                                   ; F9E44C  f1 0e 27 46
 	jr .LF9E45F                                          ; F9E450  68 0d
 .LF9E452:
 	ld C,H                                               ; F9E452  ce 8b
 	dec 7,C                                              ; F9E454  cb 6f
-	ld (0x270f:16), c                                   ; F9E456  f1 0f 27 43
-	ld (0x270e:16), 0x07                                 ; F9E45A  f1 0e 27 00 07
+	ld (CombinationCopy_DestListTop:16), c                                   ; F9E456  f1 0f 27 43
+	ld (CombinationCopy_DestGroupRow:16), 0x07                                 ; F9E45A  f1 0e 27 00 07
 .LF9E45F:
 	m_xor_mi8 MBI+r4, 0, 0x01                            ; F9E45F  84 3d 01
 	jr .LF9E47B                                          ; F9E462  68 17
@@ -55099,7 +55099,7 @@ CombinationCopy_AdjustDestBank:
 	popw hl                                              ; F9E480  4b
 	ret                                                  ; F9E481  0e
 	push XIX                                             ; F9E482  3c
-	lda xix, (0x269a:16)                                ; F9E483  f1 9a 26 34
+	lda xix, (CopyScreen_Page:16)                                ; F9E483  f1 9a 26 34
 	ld C,(XIX)                                           ; F9E487  84 23
 	extz BC                                              ; F9E489  d9 12
 	cp bc, 0x02:i3                                         ; F9E48B  d9 da
@@ -55119,7 +55119,7 @@ CombinationCopy_AdjustDestBank:
 	pop XIX                                              ; F9E4B2  5c
 	ret                                                  ; F9E4B3  0e
 	push XIX                                             ; F9E4B4  3c
-	lda xix, (0x269a:16)                                ; F9E4B5  f1 9a 26 34
+	lda xix, (CopyScreen_Page:16)                                ; F9E4B5  f1 9a 26 34
 	ld C,(XIX)                                           ; F9E4B9  84 23
 	extz BC                                              ; F9E4BB  d9 12
 	cp bc, 0x02:i3                                         ; F9E4BD  d9 da
@@ -55135,7 +55135,7 @@ CombinationCopy_AdjustDestBank:
 	ret                                                  ; F9E4CF  0e
 	push XIX                                             ; F9E4D0  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9E4D1  f1 71 20 34
-	ld bc, (0x269a:16)                                 ; F9E4D5  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E4D5  d1 9a 26 21
 	extz BC                                              ; F9E4D9  d9 12
 	cp bc, 0x00:i3                                         ; F9E4DB  d9 d8
 	jr z, .LF9E4ED                                       ; F9E4DD  66 0e
@@ -55160,7 +55160,7 @@ CombinationCopy_AdjustDestBank:
 	ld (UI_Request:16), 0x6d                                 ; F9E509  f1 70 20 00 6d
 	jr .LF9E517                                          ; F9E50E  68 07
 .LF9E510:
-	m_res 1, MD16, 0x269a                                ; F9E510  f1 9a 26 b1
+	m_res 1, MD16, CopyScreen_Page                                ; F9E510  f1 9a 26 b1
 	m_or_mi8 MBI+r4, 0, 0x10                             ; F9E514  84 3e 10
 .LF9E517:
 	pop XIX                                              ; F9E517  5c
@@ -55173,7 +55173,7 @@ Paint_CombinationCopy:
 	push XIX                                             ; F9E519  3c
 	lda xix, (T_DisplayList_Run_Stack:24)                ; F9E51A  f2 00 2e f4 34
 	call T_F42E10                                        ; F9E51F  1d 10 2e f4
-	ld bc, (0x269a:16)                                 ; F9E523  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E523  d1 9a 26 21
 	extz BC                                              ; F9E527  d9 12
 	cp bc, 0x00:i3                                         ; F9E529  d9 d8
 	jr z, .LF9E53E                                       ; F9E52B  66 11
@@ -55266,7 +55266,7 @@ CombinationCopy_LoadNameBuffers:
 	pushw hl                                             ; F9E5FD  2b
 	pushw de                                             ; F9E5FE  2a
 	push XIX                                             ; F9E5FF  3c
-	ld bc, (0x269a:16)                                 ; F9E600  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E600  d1 9a 26 21
 	extz BC                                              ; F9E604  d9 12
 	cp bc, 0x00:i3                                         ; F9E606  d9 d8
 	jr z, .LF9E612                                       ; F9E608  66 08
@@ -55274,7 +55274,7 @@ CombinationCopy_LoadNameBuffers:
 	jrl z, .LF9E6B7                                      ; F9E60C  76 a8 00
 	jrl .LF9E7AF                                         ; F9E60F  78 9d 01
 .LF9E612:
-	ld bc, (0x2706:16)                                 ; F9E612  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E612  d1 06 27 21
 	extz BC                                              ; F9E616  d9 12
 	extz XBC                                             ; F9E618  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E61A  e9 c8 f4 16 fa 00
@@ -55292,7 +55292,7 @@ CombinationCopy_LoadNameBuffers:
 	jr .LF9E659                                          ; F9E637  68 20
 .LF9E639:
 	push XIX                                             ; F9E639  3c
-	ld bc, (0x2706:16)                                 ; F9E63A  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E63A  d1 06 27 21
 	extz BC                                              ; F9E63E  d9 12
 	extz XBC                                             ; F9E640  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E642  e9 c8 f4 16 fa 00
@@ -55332,7 +55332,7 @@ CombinationCopy_LoadNameBuffers:
 	lda xix, (0x60a000:24)                               ; F9E68A  f2 00 a0 60 34
 .LF9E68F:
 	push XIX                                             ; F9E68F  3c
-	ld bc, (0x270b:16)                                 ; F9E690  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9E690  d1 0b 27 21
 	extz BC                                              ; F9E694  d9 12
 	extz XBC                                             ; F9E696  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9E698  e9 c8 2b 18 fa 00
@@ -55349,7 +55349,7 @@ CombinationCopy_LoadNameBuffers:
 .LF9E6B7:
 	lda xbc, (0x2940:16)                                ; F9E6B7  f1 40 29 31
 	push XBC                                             ; F9E6BB  39
-	ld wa, (0x2706:16)                                 ; F9E6BC  d1 06 27 20
+	ld wa, (CombinationCopy_SourceBank:16)                                 ; F9E6BC  d1 06 27 20
 	extz WA                                              ; F9E6C0  d8 12
 	extz XWA                                             ; F9E6C2  e8 12
 	add XWA,ByteTable3_FA16F4                            ; F9E6C4  e8 c8 f4 16 fa 00
@@ -55357,16 +55357,16 @@ CombinationCopy_LoadNameBuffers:
 	push 0x00                                            ; F9E6CC  09 00
 	push W                                               ; F9E6CE  c8 04
 	push 0x00                                            ; F9E6D0  09 00
-	m_push MB16, 0x2707                                  ; F9E6D2  c1 07 27 04
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9E6D2  c1 07 27 04
 	calr CombiGroupName_CopyToBuffer                                          ; F9E6D6  1e 83 10
-	ld bc, (0x2706:16)                                 ; F9E6D9  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E6D9  d1 06 27 21
 	extz BC                                              ; F9E6DD  d9 12
 	extz XBC                                             ; F9E6DF  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E6E1  e9 c8 f4 16 fa 00
 	ld A,(XBC)                                           ; F9E6E7  81 21
 	pushw wa                                             ; F9E6E9  28
 	push 0x00                                            ; F9E6EA  09 00
-	m_push MB16, 0x2707                                  ; F9E6EC  c1 07 27 04
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9E6EC  c1 07 27 04
 	calr CombiGroup_MaxMemberIndex_ByStack                                          ; F9E6F0  1e c5 10
 	ld H,A                                               ; F9E6F3  c9 8e
 	ld l, 0x00:opc                                          ; F9E6F5  27 00
@@ -55376,7 +55376,7 @@ CombinationCopy_LoadNameBuffers:
 	jr .LF9E729                                          ; F9E6FF  68 28
 .LF9E701:
 	push XIX                                             ; F9E701  3c
-	ld bc, (0x2706:16)                                 ; F9E702  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E702  d1 06 27 21
 	extz BC                                              ; F9E706  d9 12
 	extz XBC                                             ; F9E708  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E70A  e9 c8 f4 16 fa 00
@@ -55384,7 +55384,7 @@ CombinationCopy_LoadNameBuffers:
 	pushw wa                                             ; F9E712  28
 	pushw hl                                             ; F9E713  2b
 	push 0x00                                            ; F9E714  09 00
-	m_push MB16, 0x2707                                  ; F9E716  c1 07 27 04
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9E716  c1 07 27 04
 	calr CombiName_CopyToBuffer                                          ; F9E71A  1e cf 0f
 	inc 1,L                                              ; F9E71D  cf 61
 	add XIX,0x00000010                                   ; F9E71F  ec c8 10 00 00 00
@@ -55417,7 +55417,7 @@ CombinationCopy_LoadNameBuffers:
 	jr c, .LF9E744                                       ; F9E756  67 ec
 	lda xbc, (0x29d0:16)                                ; F9E758  f1 d0 29 31
 	push XBC                                             ; F9E75C  39
-	ld wa, (0x270b:16)                                 ; F9E75D  d1 0b 27 20
+	ld wa, (CombinationCopy_DestBank:16)                                 ; F9E75D  d1 0b 27 20
 	extz WA                                              ; F9E761  d8 12
 	extz XWA                                             ; F9E763  e8 12
 	add XWA,ByteTable4_FA182B                            ; F9E765  e8 c8 2b 18 fa 00
@@ -55425,14 +55425,14 @@ CombinationCopy_LoadNameBuffers:
 	push 0x00                                            ; F9E76D  09 00
 	push W                                               ; F9E76F  c8 04
 	push 0x00                                            ; F9E771  09 00
-	m_push MB16, 0x270c                                  ; F9E773  c1 0c 27 04
+	m_push MB16, CombinationCopy_DestGroup                                  ; F9E773  c1 0c 27 04
 	calr CombiGroupName_CopyToBuffer                                          ; F9E777  1e e2 0f
 	ld l, 0x00:opc                                          ; F9E77A  27 00
 	lda xix, (0x29e0:16)                                ; F9E77C  f1 e0 29 34
 	inc 8,XSP                                            ; F9E780  ef 60
 .LF9E782:
 	push XIX                                             ; F9E782  3c
-	ld bc, (0x270b:16)                                 ; F9E783  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9E783  d1 0b 27 21
 	extz BC                                              ; F9E787  d9 12
 	extz XBC                                             ; F9E789  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9E78B  e9 c8 2b 18 fa 00
@@ -55440,7 +55440,7 @@ CombinationCopy_LoadNameBuffers:
 	pushw wa                                             ; F9E793  28
 	pushw hl                                             ; F9E794  2b
 	push 0x00                                            ; F9E795  09 00
-	m_push MB16, 0x270c                                  ; F9E797  c1 0c 27 04
+	m_push MB16, CombinationCopy_DestGroup                                  ; F9E797  c1 0c 27 04
 	calr CombiName_CopyToBuffer                                          ; F9E79B  1e 4e 0f
 	inc 1,L                                              ; F9E79E  cf 61
 	add XIX,0x00000010                                   ; F9E7A0  ec c8 10 00 00 00
@@ -55459,7 +55459,7 @@ CombinationCopy_LoadNameBuffers:
 CombinationCopy_DrawFields:
 	push XIX                                             ; F9E7B3  3c
 	lda xix, (T_DisplayListB_Run_Stack:24)               ; F9E7B4  f2 04 2e f4 34
-	ld bc, (0x269a:16)                                 ; F9E7B9  d1 9a 26 21
+	ld bc, (CopyScreen_Page:16)                                 ; F9E7B9  d1 9a 26 21
 	extz BC                                              ; F9E7BD  d9 12
 	cp bc, 0x00:i3                                         ; F9E7BF  d9 d8
 	jr z, .LF9E7CA                                       ; F9E7C1  66 07
@@ -55623,8 +55623,8 @@ CombinationCopy_Execute:
 	link XIZ,0xfffc                                      ; F9E929  ee 0c fc ff
 	pushw hl                                             ; F9E92D  2b
 	push XIX                                             ; F9E92E  3c
-	lda xix, (0x270c:16)                                ; F9E92F  f1 0c 27 34
-	ld c, (0x269a:16)                                   ; F9E933  c1 9a 26 23
+	lda xix, (CombinationCopy_DestGroup:16)                                ; F9E92F  f1 0c 27 34
+	ld c, (CopyScreen_Page:16)                                   ; F9E933  c1 9a 26 23
 	and C,0x01                                           ; F9E937  cb cc 01
 	extz BC                                              ; F9E93A  d9 12
 	cp bc, 0x00:i3                                         ; F9E93C  d9 d8
@@ -55633,7 +55633,7 @@ CombinationCopy_Execute:
 	jrl z, .LF9EACB                                      ; F9E942  76 86 01
 	jrl .LF9EB70                                         ; F9E945  78 28 02
 .LF9E948:
-	ld bc, (0x2706:16)                                 ; F9E948  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E948  d1 06 27 21
 	extz BC                                              ; F9E94C  d9 12
 	extz XBC                                             ; F9E94E  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E950  e9 c8 f4 16 fa 00
@@ -55652,8 +55652,8 @@ CombinationCopy_Execute:
 	push XBC                                             ; F9E975  39
 	pushw 0x10                                           ; F9E976  0b 10 00
 	push 0x00                                            ; F9E979  09 00
-	m_push MB16, 0x2707                                  ; F9E97B  c1 07 27 04
-	ld wa, (0x2706:16)                                 ; F9E97F  d1 06 27 20
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9E97B  c1 07 27 04
+	ld wa, (CombinationCopy_SourceBank:16)                                 ; F9E97F  d1 06 27 20
 	extz WA                                              ; F9E983  d8 12
 	extz XWA                                             ; F9E985  e8 12
 	add XWA,ByteTable3_FA16F4                            ; F9E987  e8 c8 f4 16 fa 00
@@ -55666,7 +55666,7 @@ CombinationCopy_Execute:
 	calr Link_ReadRemoteBlock                                          ; F9E998  1e 4e 11
 	ld C,(XIX)                                           ; F9E99B  84 23
 	pushw bc                                             ; F9E99D  29
-	ld bc, (0x270b:16)                                 ; F9E99E  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9E99E  d1 0b 27 21
 	extz BC                                              ; F9E9A2  d9 12
 	extz XBC                                             ; F9E9A4  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9E9A6  e9 c8 2b 18 fa 00
@@ -55681,13 +55681,13 @@ CombinationCopy_Execute:
 	lda xbc, (0x60a800:24)                               ; F9E9BD  f2 00 a8 60 31
 	add XSP,0x00000018                                   ; F9E9C2  ef c8 18 00 00 00
 	push XBC                                             ; F9E9C8  39
-	m_cp_mi8 MB16, 0x2707, 0x0b                          ; F9E9C9  c1 07 27 3f 0b
+	m_cp_mi8 MB16, CombinationCopy_SourceGroup, 0x0b                          ; F9E9C9  c1 07 27 3f 0b
 	jr nz, .LF9EA08                                      ; F9E9CE  6e 38
 	pushw 0x0b00                                         ; F9E9D0  0b 00 0b
 	pushw 0x00                                           ; F9E9D3  0b 00 00
 	push 0x00                                            ; F9E9D6  09 00
-	m_push MB16, 0x2707                                  ; F9E9D8  c1 07 27 04
-	ld bc, (0x2706:16)                                 ; F9E9DC  d1 06 27 21
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9E9D8  c1 07 27 04
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9E9DC  d1 06 27 21
 	extz BC                                              ; F9E9E0  d9 12
 	extz XBC                                             ; F9E9E2  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9E9E4  e9 c8 f4 16 fa 00
@@ -55709,8 +55709,8 @@ CombinationCopy_Execute:
 	pushw 0x00                                           ; F9EA0B  0b 00 00
 .LF9EA0E:
 	push 0x00                                            ; F9EA0E  09 00
-	m_push MB16, 0x2707                                  ; F9EA10  c1 07 27 04
-	ld bc, (0x2706:16)                                 ; F9EA14  d1 06 27 21
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9EA10  c1 07 27 04
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9EA14  d1 06 27 21
 	extz BC                                              ; F9EA18  d9 12
 	extz XBC                                             ; F9EA1A  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9EA1C  e9 c8 f4 16 fa 00
@@ -55725,7 +55725,7 @@ CombinationCopy_Execute:
 	pushw 0x00                                           ; F9EA32  0b 00 00
 	ld C,(XIX)                                           ; F9EA35  84 23
 	pushw bc                                             ; F9EA37  29
-	ld bc, (0x270b:16)                                 ; F9EA38  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9EA38  d1 0b 27 21
 	extz BC                                              ; F9EA3C  d9 12
 	extz XBC                                             ; F9EA3E  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9EA40  e9 c8 2b 18 fa 00
@@ -55743,7 +55743,7 @@ CombinationCopy_Execute:
 	pushw 0x04                                           ; F9EA60  0b 04 00
 	ld C,(XIX)                                           ; F9EA63  84 23
 	pushw bc                                             ; F9EA65  29
-	ld bc, (0x270b:16)                                 ; F9EA66  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9EA66  d1 0b 27 21
 	extz BC                                              ; F9EA6A  d9 12
 	extz XBC                                             ; F9EA6C  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9EA6E  e9 c8 2b 18 fa 00
@@ -55773,7 +55773,7 @@ CombinationCopy_Execute:
 	push H                                               ; F9EAA6  ce 04
 	ld C,(XIX)                                           ; F9EAA8  84 23
 	pushw bc                                             ; F9EAAA  29
-	ld bc, (0x270b:16)                                 ; F9EAAB  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9EAAB  d1 0b 27 21
 	extz BC                                              ; F9EAAF  d9 12
 	extz XBC                                             ; F9EAB1  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9EAB3  e9 c8 2b 18 fa 00
@@ -55786,7 +55786,7 @@ CombinationCopy_Execute:
 	jr c, .LF9EAA4                                       ; F9EAC6  67 dc
 	jrl .LF9EB70                                         ; F9EAC8  78 a5 00
 .LF9EACB:
-	ld bc, (0x2706:16)                                 ; F9EACB  d1 06 27 21
+	ld bc, (CombinationCopy_SourceBank:16)                                 ; F9EACB  d1 06 27 21
 	extz BC                                              ; F9EACF  d9 12
 	extz XBC                                             ; F9EAD1  e9 12
 	add XBC,ByteTable3_FA16F4                            ; F9EAD3  e9 c8 f4 16 fa 00
@@ -55805,10 +55805,10 @@ CombinationCopy_Execute:
 	push XBC                                             ; F9EAF8  39
 	pushw 0x02c0                                         ; F9EAF9  0b c0 02
 	push 0x00                                            ; F9EAFC  09 00
-	m_push MB16, 0x2708                                  ; F9EAFE  c1 08 27 04
+	m_push MB16, CombinationCopy_SourceCombi                                  ; F9EAFE  c1 08 27 04
 	push 0x00                                            ; F9EB02  09 00
-	m_push MB16, 0x2707                                  ; F9EB04  c1 07 27 04
-	ld wa, (0x2706:16)                                 ; F9EB08  d1 06 27 20
+	m_push MB16, CombinationCopy_SourceGroup                                  ; F9EB04  c1 07 27 04
+	ld wa, (CombinationCopy_SourceBank:16)                                 ; F9EB08  d1 06 27 20
 	extz WA                                              ; F9EB0C  d8 12
 	extz XWA                                             ; F9EB0E  e8 12
 	add XWA,ByteTable3_FA16F4                            ; F9EB10  e8 c8 f4 16 fa 00
@@ -55820,10 +55820,10 @@ CombinationCopy_Execute:
 	push XIY                                             ; F9EB21  3d
 	calr Link_ReadRemoteBlock                                          ; F9EB22  1e c4 0f
 	push 0x00                                            ; F9EB25  09 00
-	m_push MB16, 0x270d                                  ; F9EB27  c1 0d 27 04
+	m_push MB16, CombinationCopy_DestCombi                                  ; F9EB27  c1 0d 27 04
 	ld C,(XIX)                                           ; F9EB2B  84 23
 	pushw bc                                             ; F9EB2D  29
-	ld bc, (0x270b:16)                                 ; F9EB2E  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9EB2E  d1 0b 27 21
 	extz BC                                              ; F9EB32  d9 12
 	extz XBC                                             ; F9EB34  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9EB36  e9 c8 2b 18 fa 00
@@ -55836,10 +55836,10 @@ CombinationCopy_Execute:
 	push XBC                                             ; F9EB49  39
 	calr Link_WriteRemoteBlock                                          ; F9EB4A  1e 74 0f
 	push 0x00                                            ; F9EB4D  09 00
-	m_push MB16, 0x270d                                  ; F9EB4F  c1 0d 27 04
+	m_push MB16, CombinationCopy_DestCombi                                  ; F9EB4F  c1 0d 27 04
 	ld C,(XIX)                                           ; F9EB53  84 23
 	pushw bc                                             ; F9EB55  29
-	ld bc, (0x270b:16)                                 ; F9EB56  d1 0b 27 21
+	ld bc, (CombinationCopy_DestBank:16)                                 ; F9EB56  d1 0b 27 21
 	extz BC                                              ; F9EB5A  d9 12
 	extz XBC                                             ; F9EB5C  e9 12
 	add XBC,ByteTable4_FA182B                            ; F9EB5E  e9 c8 2b 18 fa 00
@@ -55861,7 +55861,7 @@ Screen_DataLoadFilter_Enter:
 	ld c, (UI_ScreenLatch:16)                                   ; F9EB7B  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9EB7F  c1 7b 20 f3
 	jr z, .LF9EB8A                                       ; F9EB83  66 05
-	ld (0x26a5:16), 0x00                                 ; F9EB85  f1 a5 26 00 00
+	ld (DataLoadFilter_ItemCursor:16), 0x00                                 ; F9EB85  f1 a5 26 00 00
 .LF9EB8A:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9EB8A  c1 75 20 3e 09
 	ld (PanelDial_DownButton:16), 0x84                                 ; F9EB8F  f1 9b 20 00 84
@@ -55924,7 +55924,7 @@ T_F419A4_Nop:
 	ret                                                  ; F9EC15  0e
 	lda xbc, (Descriptor9_FA1B24:24)                     ; F9EC16  f2 24 1b fa 31
 	push XBC                                             ; F9EC1B  39
-	lda xwa, (0x26a5:16)                                ; F9EC1C  f1 a5 26 30
+	lda xwa, (DataLoadFilter_ItemCursor:16)                                ; F9EC1C  f1 a5 26 30
 	push XWA                                             ; F9EC20  38
 	call T_F42C78                                        ; F9EC21  1d 78 2c f4
 	inc 8,XSP                                            ; F9EC25  ef 60
@@ -55938,7 +55938,7 @@ T_F419A4_Nop:
 	inc 6,XSP                                            ; F9EC3C  ef 66
 .LF9EC3E:
 	ret                                                  ; F9EC3E  0e
-	ld bc, (0x26a5:16)                                 ; F9EC3F  d1 a5 26 21
+	ld bc, (DataLoadFilter_ItemCursor:16)                                 ; F9EC3F  d1 a5 26 21
 	extz BC                                              ; F9EC43  d9 12
 	extz XBC                                             ; F9EC45  e9 12
 	cp bc, 0x06:i3                                         ; F9EC47  d9 de
@@ -56349,8 +56349,8 @@ Screen_DrumsMapNaming_Enter:
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9EF89  c1 7b 20 f3
 	jr z, .LF9EF9E                                       ; F9EF8D  66 0f
 	ld (0x2700:16), 0x00                                 ; F9EF8F  f1 00 27 00 00
-	ld (0x2703:16), 0x00                                 ; F9EF94  f1 03 27 00 00
-	ld (0x2704:16), 0x24                                 ; F9EF99  f1 04 27 00 24
+	ld (DrumsMap_RowCursor:16), 0x00                                 ; F9EF94  f1 03 27 00 00
+	ld (DrumsMap_ListTop:16), 0x24                                 ; F9EF99  f1 04 27 00 24
 .LF9EF9E:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9EF9E  c1 75 20 3e 09
 	ld (PanelDial_DownButton:16), 0x85                                 ; F9EFA3  f1 9b 20 00 85
@@ -56473,7 +56473,7 @@ T_F419C4_Nop:
 DrumsMap_AdjustMap:
 	lda xbc, (Descriptor9_FA1B5A:24)                     ; F9F035  f2 5a 1b fa 31
 	push XBC                                             ; F9F03A  39
-	lda xwa, (0x2702:16)                                ; F9F03B  f1 02 27 30
+	lda xwa, (DrumsMap_Map:16)                                ; F9F03B  f1 02 27 30
 	push XWA                                             ; F9F03F  38
 	call T_F42C78                                        ; F9F040  1d 78 2c f4
 	inc 8,XSP                                            ; F9F044  ef 60
@@ -56528,11 +56528,11 @@ DrumsMap_MoveRowCursor:
 	ld c, (0x28b0:16)                                   ; F9F09B  c1 b0 28 23
 	and C,0x01                                           ; F9F09F  cb cc 01
 	jr nz, .LF9F0E2                                      ; F9F0A2  6e 3e
-	m_cp_mi8 MB16, 0x2703, 0x00                          ; F9F0A4  c1 03 27 3f 00
+	m_cp_mi8 MB16, DrumsMap_RowCursor, 0x00                          ; F9F0A4  c1 03 27 3f 00
 	jr z, .LF9F0C7                                       ; F9F0A9  66 1c
 	lda xbc, (ByteTable9_FA1B63:24)                      ; F9F0AB  f2 63 1b fa 31
 	push XBC                                             ; F9F0B0  39
-	lda xwa, (0x2703:16)                                ; F9F0B1  f1 03 27 30
+	lda xwa, (DrumsMap_RowCursor:16)                                ; F9F0B1  f1 03 27 30
 	push XWA                                             ; F9F0B5  38
 	lda xiy, (.LF9F0BE:24)                               ; F9F0B6  f2 be f0 f9 35
 	push XIY                                             ; F9F0BB  3d
@@ -56545,7 +56545,7 @@ DrumsMap_MoveRowCursor:
 .LF9F0C7:
 	lda xbc, (ByteTable9_FA1B6C:24)                      ; F9F0C7  f2 6c 1b fa 31
 	push XBC                                             ; F9F0CC  39
-	lda xwa, (0x2704:16)                                ; F9F0CD  f1 04 27 30
+	lda xwa, (DrumsMap_ListTop:16)                                ; F9F0CD  f1 04 27 30
 	push XWA                                             ; F9F0D1  38
 	lda xiy, (.LF9F0DA:24)                               ; F9F0D2  f2 da f0 f9 35
 	push XIY                                             ; F9F0D7  3d
@@ -56556,11 +56556,11 @@ DrumsMap_MoveRowCursor:
 	jr nz, .LF9F129                                      ; F9F0DE  6e 49
 	jr .LF9F120                                          ; F9F0E0  68 3e
 .LF9F0E2:
-	m_cp_mi8 MB16, 0x2703, 0x0b                          ; F9F0E2  c1 03 27 3f 0b
+	m_cp_mi8 MB16, DrumsMap_RowCursor, 0x0b                          ; F9F0E2  c1 03 27 3f 0b
 	jr nc, .LF9F107                                      ; F9F0E7  6f 1e
 	lda xbc, (ByteTable9_FA1B63:24)                      ; F9F0E9  f2 63 1b fa 31
 	push XBC                                             ; F9F0EE  39
-	lda xwa, (0x2703:16)                                ; F9F0EF  f1 03 27 30
+	lda xwa, (DrumsMap_RowCursor:16)                                ; F9F0EF  f1 03 27 30
 	push XWA                                             ; F9F0F3  38
 	lda xiy, (.LF9F0FC:24)                               ; F9F0F4  f2 fc f0 f9 35
 	push XIY                                             ; F9F0F9  3d
@@ -56575,7 +56575,7 @@ DrumsMap_MoveRowCursor:
 .LF9F107:
 	lda xbc, (ByteTable9_FA1B6C:24)                      ; F9F107  f2 6c 1b fa 31
 	push XBC                                             ; F9F10C  39
-	lda xwa, (0x2704:16)                                ; F9F10D  f1 04 27 30
+	lda xwa, (DrumsMap_ListTop:16)                                ; F9F10D  f1 04 27 30
 	push XWA                                             ; F9F111  38
 	lda xiy, (.LF9F11A:24)                               ; F9F112  f2 1a f1 f9 35
 	push XIY                                             ; F9F117  3d
@@ -56650,17 +56650,17 @@ DrumsMap_AdjustRowSound:
 	pushw hl                                             ; F9F18C  2b
 	pushw de                                             ; F9F18D  2a
 	push XIX                                             ; F9F18E  3c
-	ld h, (0x2702:16)                                   ; F9F18F  c1 02 27 26
+	ld h, (DrumsMap_Map:16)                                   ; F9F18F  c1 02 27 26
 	cp h, 0x01:i3                                          ; F9F193  ce d9
 	jr c, .LF9F1F2                                       ; F9F195  67 5b
 	cp h, 0x03:i3                                          ; F9F197  ce db
 	jr ugt, .LF9F1F2                                     ; F9F199  6b 57
 	lda xbc, (Descriptor9_FA1B75:24)                     ; F9F19B  f2 75 1b fa 31
 	push XBC                                             ; F9F1A0  39
-	ld ix, (0x2703:16)                                 ; F9F1A1  d1 03 27 24
+	ld ix, (DrumsMap_RowCursor:16)                                 ; F9F1A1  d1 03 27 24
 	extz IX                                              ; F9F1A5  dc 12
 	extz XIX                                             ; F9F1A7  ec 12
-	ld wa, (0x2704:16)                                 ; F9F1A9  d1 04 27 20
+	ld wa, (DrumsMap_ListTop:16)                                 ; F9F1A9  d1 04 27 20
 	extz WA                                              ; F9F1AD  d8 12
 	extz XWA                                             ; F9F1AF  e8 12
 	add XWA,XIX                                          ; F9F1B1  ec 80
@@ -56678,7 +56678,7 @@ DrumsMap_AdjustRowSound:
 	jr nz, .LF9F1F2                                      ; F9F1CF  6e 21
 	lda xbc, (Descriptor9_FA1B75:24)                     ; F9F1D1  f2 75 1b fa 31
 	push XBC                                             ; F9F1D6  39
-	ld de, (0x2703:16)                                 ; F9F1D7  d1 03 27 22
+	ld de, (DrumsMap_RowCursor:16)                                 ; F9F1D7  d1 03 27 22
 	extz DE                                              ; F9F1DB  da 12
 	ldw wa, 0x2a50                                       ; F9F1DD  30 50 2a
 	add WA,DE                                            ; F9F1E0  da 80
@@ -56749,7 +56749,7 @@ DrumsMap_AdjustRowSound:
 	link XIZ,0xfffc                                      ; F9F255  ee 0c fc ff
 	pushw hl                                             ; F9F259  2b
 	push XIX                                             ; F9F25A  3c
-	ld l, (0x2702:16)                                   ; F9F25B  c1 02 27 27
+	ld l, (DrumsMap_Map:16)                                   ; F9F25B  c1 02 27 27
 	ld bc, (0x2700:16)                                 ; F9F25F  d1 00 27 21
 	extz BC                                              ; F9F263  d9 12
 	cp bc, 0x00:i3                                         ; F9F265  d9 d8
@@ -56874,7 +56874,7 @@ DrumsMap_AdjustRowSound:
 ; Called from DrumsMap_AdjustMap 0xF9F04A.
 DrumsMap_StoreMapCode:
 	push XIX                                             ; F9F36B  3c
-	ld ix, (0x2702:16)                                 ; F9F36C  d1 02 27 24
+	ld ix, (DrumsMap_Map:16)                                 ; F9F36C  d1 02 27 24
 	extz IX                                              ; F9F370  dc 12
 	extz XIX                                             ; F9F372  ec 12
 	lda xbc, (ByteTable4_FA1A6E:24)                      ; F9F374  f2 6e 1a fa 31
@@ -57104,7 +57104,7 @@ DrumsMap_LoadRowFields:
 	ld a, (0x7f4e:16)                                   ; F9F4CB  c1 4e 7f 21
 	cp A,L                                               ; F9F4CF  cf f1
 	jr nz, .LF9F4D9                                      ; F9F4D1  6e 06
-	ld (0x2702:16), h                                   ; F9F4D3  f1 02 27 46
+	ld (DrumsMap_Map:16), h                                   ; F9F4D3  f1 02 27 46
 	jr .LF9F4DF                                          ; F9F4D7  68 06
 .LF9F4D9:
 	inc 1,H                                              ; F9F4D9  ce 61
@@ -57112,7 +57112,7 @@ DrumsMap_LoadRowFields:
 	jr c, .LF9F4BD                                       ; F9F4DD  67 de
 .LF9F4DF:
 	lda xix, (0x2940:16)                                ; F9F4DF  f1 40 29 34
-	m_cp_mi8 MB16, 0x2702, 0x00                          ; F9F4E3  c1 02 27 3f 00
+	m_cp_mi8 MB16, DrumsMap_Map, 0x00                          ; F9F4E3  c1 02 27 3f 00
 	jr nz, .LF9F4FD                                      ; F9F4E8  6e 13
 	ld h, 0x04:opc                                          ; F9F4EA  26 04
 .LF9F4EC:
@@ -57125,7 +57125,7 @@ DrumsMap_LoadRowFields:
 	jr .LF9F52B                                          ; F9F4FB  68 2e
 .LF9F4FD:
 	ld c, 0x90:opc                                          ; F9F4FD  23 90
-	m_mul MB16, 0x2702, 3                                ; F9F4FF  c1 02 27 43
+	m_mul MB16, DrumsMap_Map, 3                                ; F9F4FF  c1 02 27 43
 	ld HL,BC                                             ; F9F503  d9 8b
 	sub HL,0x0090                                        ; F9F505  db ca 90 00
 	ldw bc, 0x5ed0                                       ; F9F509  31 d0 5e
@@ -57150,12 +57150,12 @@ DrumsMap_LoadRowFields:
 	ld (xiz-8), xbc                                      ; F9F531  be f8 61
 	lda xix, (0x2a40:16)                                ; F9F534  f1 40 2a 34
 .LF9F538:
-	ld c, (0x2704:16)                                   ; F9F538  c1 04 27 23
+	ld c, (DrumsMap_ListTop:16)                                   ; F9F538  c1 04 27 23
 	add C,H                                              ; F9F53C  ce 83
 	ld L,C                                               ; F9F53E  cb 8f
 	ld xbc, (xiz-8)                                      ; F9F540  ae f8 21
 	ld (XBC),L                                           ; F9F543  b1 47
-	ld c, (0x2704:16)                                   ; F9F545  c1 04 27 23
+	ld c, (DrumsMap_ListTop:16)                                   ; F9F545  c1 04 27 23
 	add C,H                                              ; F9F549  ce 83
 	extz BC                                              ; F9F54B  d9 12
 	div C,0x0c                                           ; F9F54D  cb 0a 0c
@@ -57167,7 +57167,7 @@ DrumsMap_LoadRowFields:
 	add XIX,XBC                                          ; F9F55B  e9 84
 	cp H,0x0c                                            ; F9F55D  ce cf 0c
 	jr c, .LF9F538                                       ; F9F560  67 d6
-	ld a, (0x2704:16)                                   ; F9F562  c1 04 27 21
+	ld a, (DrumsMap_ListTop:16)                                   ; F9F562  c1 04 27 21
 	extz WA                                              ; F9F566  d8 12
 	div A,0x0c                                           ; F9F568  c9 0a 0c
 	ld (0x2a20:16), w                                   ; F9F56B  f1 20 2a 40
@@ -57177,7 +57177,7 @@ DrumsMap_LoadRowFields:
 	jr nz, .LF9F590                                      ; F9F577  6e 17
 	lda xix, (0x2a50:16)                                ; F9F579  f1 50 2a 34
 .LF9F57D:
-	ld c, (0x2704:16)                                   ; F9F57D  c1 04 27 23
+	ld c, (DrumsMap_ListTop:16)                                   ; F9F57D  c1 04 27 23
 	add C,H                                              ; F9F581  ce 83
 	ld (XIX),C                                           ; F9F583  b4 43
 	inc 1,H                                              ; F9F585  ce 61
@@ -57187,7 +57187,7 @@ DrumsMap_LoadRowFields:
 	jr .LF9F5C7                                          ; F9F58E  68 37
 .LF9F590:
 	ld c, 0x04:opc                                          ; F9F590  23 04
-	m_mul MB16, 0x2702, 3                                ; F9F592  c1 02 27 43
+	m_mul MB16, DrumsMap_Map, 3                                ; F9F592  c1 02 27 43
 	extz XBC                                             ; F9F596  e9 12
 	add XBC,ByteTable16_FA1A72                           ; F9F598  e9 c8 72 1a fa 00
 	ld XBC,(XBC)                                         ; F9F59E  a1 21
@@ -57195,7 +57195,7 @@ DrumsMap_LoadRowFields:
 	lda xix, (0x2a50:16)                                ; F9F5A3  f1 50 2a 34
 	ld h, 0x0c:opc                                          ; F9F5A7  26 0c
 .LF9F5A9:
-	ld bc, (0x2704:16)                                 ; F9F5A9  d1 04 27 21
+	ld bc, (DrumsMap_ListTop:16)                                 ; F9F5A9  d1 04 27 21
 	extz BC                                              ; F9F5AD  d9 12
 	extz XBC                                             ; F9F5AF  e9 12
 	m_add_rm MLD+r6, 0xf8, r1                            ; F9F5B1  ae f8 81
@@ -57840,11 +57840,11 @@ SoundCopy_RequestSingleSound:
 	calr SoundCopy_InitRequestHeader                                      ; F9FB1D  1e 90 02
 	ld c, (UI_PartIndex:16)                                   ; F9FB20  c1 50 22 23
 	ld (0x60f01c:24), c                                 ; F9FB24  f2 1c f0 60 43
-	ld a, (0x269c:16)                                   ; F9FB29  c1 9c 26 21
+	ld a, (SoundCopy_SourceGroup:16)                                   ; F9FB29  c1 9c 26 21
 	ld (0x60f160:24), a                                 ; F9FB2D  f2 60 f1 60 41
-	ld c, (0x269d:16)                                   ; F9FB32  c1 9d 26 23
+	ld c, (SoundCopy_SourceSound:16)                                   ; F9FB32  c1 9d 26 23
 	ld (0x60f161:24), c                                 ; F9FB36  f2 61 f1 60 43
-	ld bc, (0x269b:16)                                 ; F9FB3B  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9FB3B  d1 9b 26 21
 	extz BC                                              ; F9FB3F  d9 12
 	extz XBC                                             ; F9FB41  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9FB43  e9 c8 8b 18 fa 00
@@ -57874,10 +57874,10 @@ SoundCopy_RequestGroupSounds:
 	ld (0x2901:16), 0x00                                 ; F9FB82  f1 01 29 00 00
 	ld c, (UI_PartIndex:16)                                   ; F9FB87  c1 50 22 23
 	ld (0x60f01c:24), c                                 ; F9FB8B  f2 1c f0 60 43
-	ld a, (0x269c:16)                                   ; F9FB90  c1 9c 26 21
+	ld a, (SoundCopy_SourceGroup:16)                                   ; F9FB90  c1 9c 26 21
 	ld (0x60f160:24), a                                 ; F9FB94  f2 60 f1 60 41
 	ld (0x60f161:24), 0x07                             ; F9FB99  f2 61 f1 60 00 07
-	ld bc, (0x269b:16)                                 ; F9FB9F  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9FB9F  d1 9b 26 21
 	extz BC                                              ; F9FBA3  d9 12
 	extz XBC                                             ; F9FBA5  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9FBA7  e9 c8 8b 18 fa 00
@@ -57907,7 +57907,7 @@ SoundCopy_HandleReceivedSound:
 	push XIX                                             ; F9FBE3  3c
 	m_cp_mi8 MB16, UI_ScreenId, 0x5e                          ; F9FBE4  c1 7c 20 3f 5e
 	jrl nz, .LF9FDAB                                     ; F9FBE9  7e bf 01
-	ld c, (0x269a:16)                                   ; F9FBEC  c1 9a 26 23
+	ld c, (CopyScreen_Page:16)                                   ; F9FBEC  c1 9a 26 23
 	and C,0x01                                           ; F9FBF0  cb cc 01
 	extz BC                                              ; F9FBF3  d9 12
 	cp bc, 0x00:i3                                         ; F9FBF5  d9 d8
@@ -57940,14 +57940,14 @@ SoundCopy_HandleReceivedSound:
 	inc 0x01, (0x2901:16)                                ; F9FC3F  c1 01 29 61
 	ld c, (UI_PartIndex:16)                                   ; F9FC43  c1 50 22 23
 	ld (0x60f01c:24), c                                 ; F9FC47  f2 1c f0 60 43
-	ld a, (0x269c:16)                                   ; F9FC4C  c1 9c 26 21
+	ld a, (SoundCopy_SourceGroup:16)                                   ; F9FC4C  c1 9c 26 21
 	ld (0x60f160:24), a                                 ; F9FC50  f2 60 f1 60 41
 	ld bc, (0x2901:16)                                 ; F9FC55  d1 01 29 21
 	extz BC                                              ; F9FC59  d9 12
 	ldw wa, 0x07                                         ; F9FC5B  30 07 00
 	sub WA,BC                                            ; F9FC5E  d9 a0
 	ld (0x60f161:24), a                                 ; F9FC60  f2 61 f1 60 41
-	ld bc, (0x269b:16)                                 ; F9FC65  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9FC65  d1 9b 26 21
 	extz BC                                              ; F9FC69  d9 12
 	extz XBC                                             ; F9FC6B  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9FC6D  e9 c8 8b 18 fa 00
@@ -57968,18 +57968,18 @@ SoundCopy_HandleReceivedSound:
 .LF9FCA4:
 	lda xix, (0x60a7f0:24)                               ; F9FCA4  f2 f0 a7 60 34
 	push XIX                                             ; F9FCA9  3c
-	ld bc, (0x269b:16)                                 ; F9FCAA  d1 9b 26 21
+	ld bc, (SoundCopy_SourceBank:16)                                 ; F9FCAA  d1 9b 26 21
 	extz BC                                              ; F9FCAE  d9 12
 	extz XBC                                             ; F9FCB0  e9 12
 	add XBC,ByteTable5_FA188B                            ; F9FCB2  e9 c8 8b 18 fa 00
 	ld A,(XBC)                                           ; F9FCB8  81 21
 	pushw wa                                             ; F9FCBA  28
 	push 0x00                                            ; F9FCBB  09 00
-	m_push MB16, 0x269c                                  ; F9FCBD  c1 9c 26 04
+	m_push MB16, SoundCopy_SourceGroup                                  ; F9FCBD  c1 9c 26 04
 	calr SoundGroupName_CopyToBuffer                                      ; F9FCC1  1e 97 f9
 	push 0x00                                            ; F9FCC4  09 00
-	m_push MB16, 0x26a1                                  ; F9FCC6  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9FCCA  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9FCC6  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9FCCA  d1 a0 26 21
 	extz BC                                              ; F9FCCE  d9 12
 	extz XBC                                             ; F9FCD0  e9 12
 	add XBC,ByteTable2_FA1890                            ; F9FCD2  e9 c8 90 18 fa 00
@@ -57992,8 +57992,8 @@ SoundCopy_HandleReceivedSound:
 	calr Link_WriteRemoteBlock                                      ; F9FCE3  1e db fd
 	pushw 0x00                                           ; F9FCE6  0b 00 00
 	push 0x00                                            ; F9FCE9  09 00
-	m_push MB16, 0x26a1                                  ; F9FCEB  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9FCEF  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9FCEB  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9FCEF  d1 a0 26 21
 	extz BC                                              ; F9FCF3  d9 12
 	extz XBC                                             ; F9FCF5  e9 12
 	add XBC,ByteTable2_FA1890                            ; F9FCF7  e9 c8 90 18 fa 00
@@ -58011,8 +58011,8 @@ SoundCopy_HandleReceivedSound:
 	push 0x00                                            ; F9FD18  09 00
 	push H                                               ; F9FD1A  ce 04
 	push 0x00                                            ; F9FD1C  09 00
-	m_push MB16, 0x26a1                                  ; F9FD1E  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9FD22  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9FD1E  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9FD22  d1 a0 26 21
 	extz BC                                              ; F9FD26  d9 12
 	extz XBC                                             ; F9FD28  e9 12
 	add XBC,ByteTable2_FA1890                            ; F9FD2A  e9 c8 90 18 fa 00
@@ -58026,10 +58026,10 @@ SoundCopy_HandleReceivedSound:
 	jr .LF9FD94                                          ; F9FD3F  68 53
 .LF9FD41:
 	push 0x00                                            ; F9FD41  09 00
-	m_push MB16, 0x26a2                                  ; F9FD43  c1 a2 26 04
+	m_push MB16, SoundCopy_DestSound                                  ; F9FD43  c1 a2 26 04
 	push 0x00                                            ; F9FD47  09 00
-	m_push MB16, 0x26a1                                  ; F9FD49  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9FD4D  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9FD49  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9FD4D  d1 a0 26 21
 	extz BC                                              ; F9FD51  d9 12
 	extz XBC                                             ; F9FD53  e9 12
 	add XBC,ByteTable2_FA1890                            ; F9FD55  e9 c8 90 18 fa 00
@@ -58042,10 +58042,10 @@ SoundCopy_HandleReceivedSound:
 	push XBC                                             ; F9FD6A  39
 	calr Link_WriteRemoteBlock                                      ; F9FD6B  1e 53 fd
 	push 0x00                                            ; F9FD6E  09 00
-	m_push MB16, 0x26a2                                  ; F9FD70  c1 a2 26 04
+	m_push MB16, SoundCopy_DestSound                                  ; F9FD70  c1 a2 26 04
 	push 0x00                                            ; F9FD74  09 00
-	m_push MB16, 0x26a1                                  ; F9FD76  c1 a1 26 04
-	ld bc, (0x26a0:16)                                 ; F9FD7A  d1 a0 26 21
+	m_push MB16, SoundCopy_DestGroup                                  ; F9FD76  c1 a1 26 04
+	ld bc, (SoundCopy_DestBank:16)                                 ; F9FD7A  d1 a0 26 21
 	extz BC                                              ; F9FD7E  d9 12
 	extz XBC                                             ; F9FD80  e9 12
 	add XBC,ByteTable2_FA1890                            ; F9FD82  e9 c8 90 18 fa 00
@@ -58054,7 +58054,7 @@ SoundCopy_HandleReceivedSound:
 	calr SoundCopy_RefreshPartsUsingSound                                      ; F9FD8B  1e 75 00
 	add XSP,0x00000016                                   ; F9FD8E  ef c8 16 00 00 00
 .LF9FD94:
-	m_res 1, MD16, 0x269a                                ; F9FD94  f1 9a 26 b1
+	m_res 1, MD16, CopyScreen_Page                                ; F9FD94  f1 9a 26 b1
 	ld (UI_StatusCode:16), 0x23                                 ; F9FD98  f1 80 28 00 23
 	m_set 6, MD16, UI_Request_Hi                                ; F9FD9D  f1 71 20 be
 	ld (UI_Request:16), 0xab                                 ; F9FDA1  f1 70 20 00 ab
@@ -58419,7 +58419,7 @@ Screen_TuneScale_Enter:
 	ld c, (UI_ScreenLatch:16)                                   ; FA0094  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA0098  c1 7b 20 f3
 	jr z, .LFA00AD                                       ; FA009C  66 0f
-	ld (0x2690:16), 0x10                                 ; FA009E  f1 90 26 00 10
+	ld (TuneScale_ItemCursor:16), 0x10                                 ; FA009E  f1 90 26 00 10
 	ld (PanelDial_DownButton:16), 0x0b                                 ; FA00A3  f1 9b 20 00 0b
 	ld (PanelDial_UpButton:16), 0x0a                                 ; FA00A8  f1 9c 20 00 0a
 .LFA00AD:
@@ -58470,7 +58470,7 @@ T_F41934_Nop:
 	jr nz, .LFA0143                                      ; FA0119  6e 28
 	lda xbc, (ByteTable18_FA1E52:24)                     ; FA011B  f2 52 1e fa 31
 	push XBC                                             ; FA0120  39
-	lda xwa, (0x2690:16)                                ; FA0121  f1 90 26 30
+	lda xwa, (TuneScale_ItemCursor:16)                                ; FA0121  f1 90 26 30
 	push XWA                                             ; FA0125  38
 	call T_F42C78                                        ; FA0126  1d 78 2c f4
 	inc 8,XSP                                            ; FA012A  ef 60
@@ -58598,7 +58598,7 @@ TuneScale_AdjustUserKey:
 	ld c, (0x78a2:16)                                   ; FA0270  c1 a2 78 23
 	cp C,0x80                                            ; FA0274  cb cf 80
 	jrl nz, .LFA02E0                                     ; FA0277  7e 66 00
-	ld c, (0x2690:16)                                   ; FA027A  c1 90 26 23
+	ld c, (TuneScale_ItemCursor:16)                                   ; FA027A  c1 90 26 23
 	and C,0x10                                           ; FA027E  cb cc 10
 	extz BC                                              ; FA0281  d9 12
 	cp bc, 0x00:i3                                         ; FA0283  d9 d8
@@ -58660,7 +58660,7 @@ TuneScale_StoreMasterTune:
 	pushw 0x91                                           ; FA02EA  0b 91 00
 	call T_IndexedTable_GetByte                          ; FA02ED  1d 90 2c f4
 	ld H,A                                               ; FA02F1  c9 8e
-	ld bc, (0x2691:16)                                 ; FA02F3  d1 91 26 21
+	ld bc, (TuneScale_MasterTuneIndex:16)                                 ; FA02F3  d1 91 26 21
 	extz BC                                              ; FA02F7  d9 12
 	extz XBC                                             ; FA02F9  e9 12
 	add XBC,ByteTable79_FA1C5C                           ; FA02FB  e9 c8 5c 1c fa 00
@@ -58671,7 +58671,7 @@ TuneScale_StoreMasterTune:
 	pushw 0x91                                           ; FA0308  0b 91 00
 	call T_IndexedTable_GetPtr                           ; FA030B  1d 8c 2c f4
 	ld XIX,XIY                                           ; FA030F  ed 8c
-	ld bc, (0x2691:16)                                 ; FA0311  d1 91 26 21
+	ld bc, (TuneScale_MasterTuneIndex:16)                                 ; FA0311  d1 91 26 21
 	extz BC                                              ; FA0315  d9 12
 	extz XBC                                             ; FA0317  e9 12
 	add XBC,ByteTable79_FA1C5C                           ; FA0319  e9 c8 5c 1c fa 00
@@ -58699,7 +58699,7 @@ TuneScale_StoreKeyScalingType:
 	pushw 0x92                                           ; FA0340  0b 92 00
 	call T_IndexedTable_GetByte                          ; FA0343  1d 90 2c f4
 	ld H,A                                               ; FA0347  c9 8e
-	ld bc, (0x2692:16)                                 ; FA0349  d1 92 26 21
+	ld bc, (TuneScale_KeyScalingIndex:16)                                 ; FA0349  d1 92 26 21
 	extz BC                                              ; FA034D  d9 12
 	extz XBC                                             ; FA034F  e9 12
 	add XBC,ByteTable16_FA1C4C                           ; FA0351  e9 c8 4c 1c fa 00
@@ -58710,7 +58710,7 @@ TuneScale_StoreKeyScalingType:
 	pushw 0x92                                           ; FA035E  0b 92 00
 	call T_IndexedTable_GetPtr                           ; FA0361  1d 8c 2c f4
 	ld XIX,XIY                                           ; FA0365  ed 8c
-	ld bc, (0x2692:16)                                 ; FA0367  d1 92 26 21
+	ld bc, (TuneScale_KeyScalingIndex:16)                                 ; FA0367  d1 92 26 21
 	extz BC                                              ; FA036B  d9 12
 	extz XBC                                             ; FA036D  e9 12
 	add XBC,ByteTable16_FA1C4C                           ; FA036F  e9 c8 4c 1c fa 00
@@ -58818,7 +58818,7 @@ TuneScale_UserKeyByteToValue:
 TuneScale_MoveItemCursor:
 	lda xbc, (Descriptor9_FA1E49:24)                     ; FA0441  f2 49 1e fa 31
 	push XBC                                             ; FA0446  39
-	lda xwa, (0x2690:16)                                ; FA0447  f1 90 26 30
+	lda xwa, (TuneScale_ItemCursor:16)                                ; FA0447  f1 90 26 30
 	push XWA                                             ; FA044B  38
 	call T_F42C78                                        ; FA044C  1d 78 2c f4
 	inc 8,XSP                                            ; FA0450  ef 60
@@ -58836,7 +58836,7 @@ TuneScale_MoveItemCursor:
 ; Evidence: 0: (0x2691) with the descriptor at 0xFA1E5B + TuneScale_StoreMasterTune; 1: IndexedParam_AdjustField(0x79, Descriptor9_FA1E64) (KEY TRANSPOSE); 2: (0x92, Descriptor9_FA1E6D) mask 0x80 (KEY SCALING MODE TOTAL/SOUND); 3: (0x2692) + TuneScale_StoreKeyScalingType; 4: (0x92, Descriptor9_FA1E7F) mask 0x0F (KEY SCALING SHIFT).
 ; Note: the listing decodes the table 0xFA0487-0xFA049A and the `lda XBC,0xFA1E5B` at 0xFA049B as instructions (0xFA0497 swallows the F2 byte). Callers: HandlerTable23_FA1BF0 slots 10/11.
 TuneScale_AdjustSelectedItem:
-	ld c, (0x2690:16)                                   ; FA046A  c1 90 26 23
+	ld c, (TuneScale_ItemCursor:16)                                   ; FA046A  c1 90 26 23
 	and C,0x07                                           ; FA046E  cb cc 07
 	extz BC                                              ; FA0471  d9 12
 	extz XBC                                             ; FA0473  e9 12
@@ -58861,7 +58861,7 @@ TuneScale_AdjustSelectedItem__FA0487:
 	pop XHL                                              ; FA049C  5b
 	calr 0x31fa                                          ; FA049D  1e fa 31
 	push XBC                                             ; FA04A0  39
-	lda xwa, (0x2691:16)                                ; FA04A1  f1 91 26 30
+	lda xwa, (TuneScale_MasterTuneIndex:16)                                ; FA04A1  f1 91 26 30
 	push XWA                                             ; FA04A5  38
 	call T_F42C78                                        ; FA04A6  1d 78 2c f4
 	inc 8,XSP                                            ; FA04AA  ef 60
@@ -58878,7 +58878,7 @@ TuneScale_AdjustSelectedItem__FA0487:
 	jr .LFA04E8                                          ; FA04C6  68 20
 	lda xbc, (Descriptor9_FA1E76:24)                     ; FA04C8  f2 76 1e fa 31
 	push XBC                                             ; FA04CD  39
-	lda xwa, (0x2692:16)                                ; FA04CE  f1 92 26 30
+	lda xwa, (TuneScale_KeyScalingIndex:16)                                ; FA04CE  f1 92 26 30
 	push XWA                                             ; FA04D2  38
 	call T_F42C78                                        ; FA04D3  1d 78 2c f4
 	inc 8,XSP                                            ; FA04D7  ef 60
@@ -58931,7 +58931,7 @@ TuneScale_LoadFields:
 	ld a, (0x7f4a:16)                                   ; FA0540  c1 4a 7f 21
 	cp A,L                                               ; FA0544  cf f1
 	jr nz, .LFA058C                                      ; FA0546  6e 44
-	ld (0x2691:16), h                                   ; FA0548  f1 91 26 46
+	ld (TuneScale_MasterTuneIndex:16), h                                   ; FA0548  f1 91 26 46
 	ld C,H                                               ; FA054C  ce 8b
 	extz BC                                              ; FA054E  d9 12
 	div C,0x03                                           ; FA0550  cb 0a 03
@@ -58970,7 +58970,7 @@ TuneScale_LoadFields:
 	ld c, (0x78a2:16)                                   ; FA0593  c1 a2 78 23
 	pushw bc                                             ; FA0597  29
 	calr TuneScale_KeyScalingCodeToIndex                                      ; FA0598  1e b9 fa
-	ld (0x2692:16), a                                   ; FA059B  f1 92 26 41
+	ld (TuneScale_KeyScalingIndex:16), a                                   ; FA059B  f1 92 26 41
 	ld c, (0x78a2:16)                                   ; FA059F  c1 a2 78 23
 	popw iy                                              ; FA05A3  4d
 	cp C,0x80                                            ; FA05A4  cb cf 80
