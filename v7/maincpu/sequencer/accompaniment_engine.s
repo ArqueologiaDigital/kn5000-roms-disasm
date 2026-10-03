@@ -33123,7 +33123,7 @@ AccScreen_BeatDataBlock:
 	jr	nz, AccScreen_BeatDataBlock_Code_Return
 	ldmm8	14623, 13944
 	ldmm8	14624, 13945
-	ld	xiy, 16165229
+	ld	xiy, AccScreen_BeatDataBlock_DisplayList
 	ld	xix, AccDraw_Secondary_Entry_Data
 	calr	AccGraphics_RenderStart
 AccScreen_BeatDataBlock_Code_Return:
@@ -33337,7 +33337,8 @@ AccScreen_DrawMeas_Other_Data:
 AccScreen_DrawTempoDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0xA, 0x1E
 AccScreen_DrawTempoDisplay_Data_2:	.incbin "includes/generated/accomp_display_full.bin", 0x28, 0x8
 AccScreen_UpdateBeatDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x30, 0xA
-AccScreen_BeatDisplay_Large_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x3A, 0x28
+AccScreen_BeatDisplay_Large_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x3A, 0xA
+AccScreen_BeatDataBlock_DisplayList:	.incbin "includes/generated/accomp_display_full.bin", 0x44, 0x1E
 AccDraw_Secondary_Entry_Data:		.incbin "includes/generated/accomp_display_full.bin", 0x62, 0xBD
 
 ; Accompaniment part names and ordering: 955 bytes

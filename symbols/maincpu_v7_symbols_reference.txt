@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,301
-#   semantic names ........... 50,373 (98.2%)
+#   symbols .................. 51,302
+#   semantic names ........... 50,374 (98.2%)
 #   positional names ......... 928
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33668,6 +33668,7 @@ AccScreen_DrawTempoDisplay_Data 00F6A933
 AccScreen_DrawTempoDisplay_Data_2 00F6A951
 AccScreen_UpdateBeatDisplay_Data 00F6A959
 AccScreen_BeatDisplay_Large_Data 00F6A963
+AccScreen_BeatDataBlock_DisplayList 00F6A96D
 AccDraw_Secondary_Entry_Data 00F6A98B
 AccDraw_Secondary_Sub_Entry2_Data 00F6AA89
 AccDraw_Secondary_Sub_Entry2_Data_2 00F6AAC9
