@@ -45,5 +45,6 @@ done
 git -C "$REPO" worktree remove --force "${WORK:?}/before"
 git -C "$REPO" worktree remove --force "${WORK:?}/after"
 git -C "$REPO" worktree prune
+rmdir -- "${WORK:?}" 2>/dev/null   # the now-empty parent of the two worktrees
 echo "$diffs of $n script(s) changed; outputs kept in ${OUT:?}"
 [ "$diffs" -eq 0 ]
