@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 """Extract v7 .incbin data from the v7 ROM.
 Uses v7 ELF addresses when available (preferred), falls back to v9 ELF.
-Run before assembling v7 to ensure correct data blobs."""
-import subprocess, os, glob, re
+Run before assembling v7 to ensure correct data blobs.
+
+RETIRED -- DO NOT RUN.  The build stopped using this script (Makefile, "THE V7 ROM IS NOT AN INPUT TO
+ITS OWN RECONSTRUCTION"): v7's C data bins are compiled and patched by `make v7-extract-bins`
+(scripts/build/apply_v7_c_divergence.py), the rest is committed under v7/maincpu/includes/romslices/.
+Running it anyway overwrites those generated bins in v7/maincpu/includes/generated/ with slices cut at
+ELF label addresses; make then sees them as up to date and the v7 image stops matching (2026-10-03: 18
+bytes in accomp_display_full.bin after the sndparam port moved labels).  Repair: move the
+V7_C_DATA_BINS files aside and run `make v7-extract-bins`.  --force runs it regardless."""
+import subprocess, os, glob, re, sys
+if "--force" not in sys.argv:
+    sys.exit(__doc__)
 
 LLVM_NM = '/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm'
 ROM_BASE = 0xe00000
