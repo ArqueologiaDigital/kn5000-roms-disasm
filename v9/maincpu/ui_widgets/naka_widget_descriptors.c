@@ -119,7 +119,7 @@ extern const char VocalistPage2OKFunc;
 typedef struct __attribute__((packed)) {
     uint8_t param_lo;       /* +0: L for SndParam_ApplyProgramChange_Safe */
     uint8_t param_hi;       /* +1: H for it */
-    uint8_t preset_sel;     /* +2: index into RegPreset_LoadVoiceData */
+    uint8_t preset_sel;     /* +2: index into VoiceAssign_PresetSelToCase */
     uint8_t ram3881_value;  /* +3: stored at RAM 0x3881 + drum */
 } rhythm_drum_entry_t;
 
@@ -3018,7 +3018,7 @@ typedef struct __attribute__((packed)) {
      *      at RAM 0x38D2 + drum and 0x38D9 + drum and select
      *      RhythmROM_BankProgramLocators entry H * 128 + (L & 0x7F);
      *   +2 is the index VoiceAssign_ProcessRequest_Helper reads the byte table
-     *      RegPreset_LoadVoiceData with; that byte & 7 picks entries of two
+     *      VoiceAssign_PresetSelToCase with; that byte & 7 picks entries of two
      *      word tables.
      * So an entry is four fields, not one number.
      * --------------------------------------------------------------------- */

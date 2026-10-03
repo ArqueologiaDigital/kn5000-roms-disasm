@@ -5394,7 +5394,7 @@ RhythmDrum_EntryCounts:
 ;      at RAM 0x38d2 + drum and 0x38d9 + drum and select
 ;      RhythmROM_BankProgramLocators entry H * 128 + (L & 0x7f);
 ;   +2 is the index VoiceAssign_ProcessRequest_Helper reads the byte table
-;      RegPreset_LoadVoiceData with; that byte & 7 picks entries of two
+;      VoiceAssign_PresetSelToCase with; that byte & 7 picks entries of two
 ;      word tables.
 ; So an entry is four fields, not one number.
 ;

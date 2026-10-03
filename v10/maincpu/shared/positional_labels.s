@@ -9,8 +9,6 @@
 	.set MSP_Default_SeqReserved_0x40, MSP_Default_SeqReserved + 64
 	.set MSP_Default_SoundReserved_0x30, MSP_Default_SoundReserved + 48
 	.set MSP_Default_SoundReserved_0x50, MSP_Default_SoundReserved + 80
-	.set RegPreset_LoadVoiceData_0x14, RegPreset_LoadVoiceData + 20
-	.set RegPreset_LoadVoiceData_0x24, RegPreset_LoadVoiceData + 36
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096
 	.set SeBitmap_EnvCurve5_0x4B0, SeBitmap_EnvCurve5 + 1200
 	.set TaskSched_ScreenGroupTable_0x46, TaskSched_ScreenGroupTable + 70

@@ -12,8 +12,6 @@
 	.set MSP_Default_SoundReserved_0x50, MSP_Default_SoundReserved + 80
 	.set MidiPkt_ArpConfigChain_Data_0x34C, MidiPkt_ArpConfigChain_Data + 844
 	.set Naka_MainDispatch_Table_0xDC0, Naka_MainDispatch_Table + 3520
-	.set RegPreset_LoadVoiceData_0x14, RegPreset_LoadVoiceData + 20
-	.set RegPreset_LoadVoiceData_0x24, RegPreset_LoadVoiceData + 36
 	.set Scoop_SoundEditorData_0x127C, Scoop_SoundEditorData + 4732
 	.set Scoop_SoundEditorData_0xEB, Scoop_SoundEditorData + 235
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096

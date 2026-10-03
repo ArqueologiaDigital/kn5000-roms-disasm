@@ -27149,13 +27149,13 @@ VoiceAssign_ProcessRequest_Helper:
 	calr Rhythm_MapChannelToDrumIndex
 	pop xix
 	popw hl
-	ld xwa, RegPreset_LoadVoiceData
+	ld xwa, VoiceAssign_PresetSelToCase
 	ld	a, (xwa+hl)
 	and xwa, 0x7
 	push xwa
 	ld xbc, xwa
 	sll xbc, 1
-	add xbc, RegPreset_LoadVoiceData_Code
+	add xbc, VoiceAssign_LoadLoopArgs
 	ld xde, 0:i3
 	ld de, (xbc)
 	push xix
@@ -27165,7 +27165,7 @@ VoiceAssign_ProcessRequest_Helper:
 	push xwa
 	ld xbc, xwa
 	sll xbc, 1
-	add xbc, RegPreset_LoadVoiceData_0x14
+	add xbc, VoiceAssign_DispatchArgs
 	ld xde, 0:i3
 	ld de, (xbc)
 	push xix
@@ -27175,7 +27175,7 @@ VoiceAssign_ProcessRequest_Helper:
 	push xwa
 	ld xbc, xwa
 	sll xbc, 1
-	add xbc, RegPreset_LoadVoiceData_0x24
+	add xbc, VoiceAssign_ResolveArgs
 	ld de, (xbc)
 	push xix
 	calr VoiceResolve_CheckAndStore
@@ -27186,39 +27186,15 @@ VoiceAssign_ProcessRequest_Helper:
 	pop xix
 	ret
 
-RegPreset_LoadVoiceData:
-	nop
-	pop	sr
-	max
-	reti
-RegPreset_LoadVoiceData_Code:
-	nop
-	nop
-	retd	3844
-	max
-	retd	0
-	max
-	retd	3844
-	max
-	retd	4
-	nop
-	ldw	bc, 0x3104
-	max
-	ldw	bc, 0
-	max
-	ldw	bc, 0x3104
-	max
-	ldw	bc, 4
-	nop
-	ei	4
-	ei	4
-	ei	0
-	nop
-	max
-	ei	4
-	ei	4
-	ei	4
-
+; VoiceAssign_ProcessRequest_Helper's tables (were one label, RegPreset_LoadVoiceData, decoded as code).  It maps
+; the index in HL -- byte +2 of a RhythmDrum_Entries entry, kept across its Rhythm_MapChannelToDrumIndex call --
+; through VoiceAssign_PresetSelToCase, keeps the low 3 bits as k, and passes
+; word k of each table in DE: VoiceAssign_LoadLoopArgs to RegPreset_Load_Loop, VoiceAssign_DispatchArgs to
+; MIDIChan_DispatchDone, VoiceAssign_ResolveArgs to VoiceResolve_CheckAndStore.
+VoiceAssign_PresetSelToCase:		.byte	0, 3, 4, 7
+VoiceAssign_LoadLoopArgs:	.short	0x0000, 0x040f, 0x040f, 0x000f, 0x0400, 0x040f, 0x040f, 0x040f
+VoiceAssign_DispatchArgs:	.short	0x0000, 0x0431, 0x0431, 0x0031, 0x0400, 0x0431, 0x0431, 0x0431
+VoiceAssign_ResolveArgs:	.short	0x0000, 0x0406, 0x0406, 0x0006, 0x0400, 0x0406, 0x0406, 0x0406
 RegPreset_Load_Loop:
 	push xix
 	push xde
@@ -27240,25 +27216,25 @@ RegPreset_Load_Loop:
 RegPreset_Load_Return:
 	ld xbc, 0:i3
 
-RegPreset_LoadVoiceData_Join:
+ChanAssign_FourSlotLoop:
 	cp c, 4:i3
 	jr z, ChanAssign_StoreResult
 	push xbc
 	pushw wa
 	push xbc
-	calr RegPreset_LoadVoiceData_Helper
+	calr ChanAssign_LookupEntry
 	pop xbc
 	calr ChanAssign_Lookup_Found
 	popw wa
 	pop xbc
 	inc 1, wa
 	inc 1, c
-	jr RegPreset_LoadVoiceData_Join
+	jr ChanAssign_FourSlotLoop
 
 ChanAssign_StoreResult:
 	ret
 
-RegPreset_LoadVoiceData_Helper:
+ChanAssign_LookupEntry:
 	ld xde, 0:i3
 	ld	e, (xix+wa)
 	sll e, 1

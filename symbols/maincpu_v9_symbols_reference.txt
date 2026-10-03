@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 51,628
-#   semantic names ........... 50,790 (98.4%)
-#   positional names ......... 838
+#   semantic names ........... 50,792 (98.4%)
+#   positional names ......... 836
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -33549,15 +33549,15 @@ VoiceAssign_Process_Loop 00F6713F
 VoiceAssign_Process_Return 00F6718B
 VoiceAssign_StoreFinal 00F671E6
 VoiceAssign_ProcessRequest_Helper 00F671E7
-RegPreset_LoadVoiceData 00F67244
-RegPreset_LoadVoiceData_Code 00F67248
-RegPreset_LoadVoiceData_0x14 00F67258
-RegPreset_LoadVoiceData_0x24 00F67268
+VoiceAssign_PresetSelToCase 00F67244
+VoiceAssign_LoadLoopArgs 00F67248
+VoiceAssign_DispatchArgs 00F67258
+VoiceAssign_ResolveArgs 00F67268
 RegPreset_Load_Loop 00F67278
 RegPreset_Load_Return 00F67299
-RegPreset_LoadVoiceData_Join 00F6729B
+ChanAssign_FourSlotLoop 00F6729B
 ChanAssign_StoreResult 00F672B1
-RegPreset_LoadVoiceData_Helper 00F672B2
+ChanAssign_LookupEntry 00F672B2
 ChanAssign_Lookup 00F672D4
 ChanAssign_Lookup_Loop 00F672D8
 ChanAssign_Lookup_Found 00F672E4
