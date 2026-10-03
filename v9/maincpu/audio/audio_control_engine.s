@@ -8141,7 +8141,7 @@ RegisterBit_Manipulate_Table:
 	.long RegBitManip_Handler_4
 RegBitManip_Handler_1:
 	bit	0, (0xfc69:16)
-	jr	nz, 3
+	jr	nz, RegBitManip_Handler_0
 RegBitManip_Handler_3:
 	and	w, 0xfd
 RegBitManip_Handler_0:
@@ -11696,7 +11696,7 @@ MidiStream_ExtDispatch_Mode3_Data:
 	.long	MidiStream_ExtDispatch_ModeJump02
 	.long	MidiStream_ExtDispatch_ModeJump3
 MidiStream_ExtDispatch_ModeJump02:
-	jr	42
+	jr	MidiStream_ExtendedDispatch_Helper_Join2
 MidiStream_ExtDispatch_ModeJump1:
 	bit	0, w
 	jr	z, MidiStream_ExtendedDispatch_Helper_Skip7

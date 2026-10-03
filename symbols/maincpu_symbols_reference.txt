@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,700
-#   semantic names ........... 50,887 (98.4%)
+#   symbols .................. 51,701
+#   semantic names ........... 50,888 (98.4%)
 #   positional names ......... 813
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -51714,6 +51714,7 @@ Debug_PrintString 00FFFEA1
 Debug_PrintString_Loop 00FFFEA4
 Debug_PrintString_Done 00FFFEB2
 Debug_UartHelpers 00FFFEB4
+Debug_UartHelpers_HexLetter 00FFFEBD
 Debug_UartDelay 00FFFEC1
 Debug_SWI_JumpTable 00FFFED2
 Debug_SWI_JumpTable_Code 00FFFED8

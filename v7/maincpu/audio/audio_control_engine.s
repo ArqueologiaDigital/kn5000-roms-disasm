@@ -11202,7 +11202,7 @@ MidiStream_ExtDispatch_Mode3_Data:
 	.long	MidiStream_ExtDispatch_ModeJump02
 	.long	MidiStream_ExtDispatch_ModeJump3
 MidiStream_ExtDispatch_ModeJump02:
-	jr	37
+	jr	MidiStream_ExtendedDispatch_Helper_Join2
 MidiStream_ExtDispatch_ModeJump1:
 	bit	0, w
 	jr	z, MidiStream_ExtendedDispatch_Helper_Skip7

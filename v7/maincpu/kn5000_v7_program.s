@@ -3297,9 +3297,10 @@ Debug_PrintString_Done:
 
 Debug_UartHelpers:
 	cp	a, 10
-	jr	nc, 4
+	jr	nc, Debug_UartHelpers_HexLetter
 	add	a, 48
 	ret
+Debug_UartHelpers_HexLetter:
 	add A,0x57
 	ret
 
