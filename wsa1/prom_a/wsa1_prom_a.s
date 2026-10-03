@@ -126297,7 +126297,7 @@ LcdKeyRow5_SoundEditMenu:
 	jr .LFD0519                                          ; FD04F4  68 23
 .LFD04F6:
 	pushw 0xcb                                           ; FD04F6  0b cb 00
-	call sub_FD7CB5                                      ; FD04F9  1d b5 7c fd
+	call SoundEditMenu_LcdKeyRow5                                      ; FD04F9  1d b5 7c fd
 	popw bc                                              ; FD04FD  49
 	jr T,.LFD051E                                        ; FD04FE  68 1e
 .LFD0500:
@@ -126428,7 +126428,7 @@ SoftKeyCol2_SoundEditControllerPage1:
 	ld BC,(XIZ+0x08)                                     ; FD0609  9e 08 21
 	extz BC                                              ; FD060C  d9 12
 	pushw bc                                             ; FD060E  29
-	call sub_FD8803                                      ; FD060F  1d 03 88 fd
+	call SoundEditController_SoftKeyCol2                                      ; FD060F  1d 03 88 fd
 	pushw 0x01                                           ; FD0613  0b 01 00
 	pushw 0xcd                                           ; FD0616  0b cd 00
 	call PanelScreen_PostRequest                                      ; FD0619  1d 8b 60 fd
@@ -126447,7 +126447,7 @@ SoftKeyCol4_SoundEditControllerPage1:
 	ld BC,(XIZ+0x08)                                     ; FD062F  9e 08 21
 	extz BC                                              ; FD0632  d9 12
 	pushw bc                                             ; FD0634  29
-	call sub_FD895A                                      ; FD0635  1d 5a 89 fd
+	call SoundEditController_SoftKeyCol4                                      ; FD0635  1d 5a 89 fd
 	popw bc                                              ; FD0639  49
 	unlk XIZ                                             ; FD063A  ee 0d
 	ret                                                  ; FD063C  0e
@@ -126767,7 +126767,7 @@ SoftKeyCol2_SoundEditControllerPage2:
 	ld BC,(XIZ+0x08)                                     ; FD088A  9e 08 21
 	extz BC                                              ; FD088D  d9 12
 	pushw bc                                             ; FD088F  29
-	call sub_FD8803                                      ; FD0890  1d 03 88 fd
+	call SoundEditController_SoftKeyCol2                                      ; FD0890  1d 03 88 fd
 	pushw 0x01                                           ; FD0894  0b 01 00
 	pushw 0x9b                                           ; FD0897  0b 9b 00
 	call PanelScreen_PostRequest                                      ; FD089A  1d 8b 60 fd
@@ -126783,7 +126783,7 @@ SoftKeyCol4_SoundEditControllerPage2:
 	ld BC,(XIZ+0x08)                                     ; FD08A7  9e 08 21
 	extz BC                                              ; FD08AA  d9 12
 	pushw bc                                             ; FD08AC  29
-	call sub_FD895A                                      ; FD08AD  1d 5a 89 fd
+	call SoundEditController_SoftKeyCol4                                      ; FD08AD  1d 5a 89 fd
 	popw bc                                              ; FD08B1  49
 	unlk XIZ                                             ; FD08B2  ee 0d
 	ret                                                  ; FD08B4  0e
@@ -132803,7 +132803,7 @@ SoftKeyCol2_SoundEditAmpLfo:
 	ld BC,(XIZ+0x08)                                     ; FD3C71  9e 08 21
 	extz BC                                              ; FD3C74  d9 12
 	pushw bc                                             ; FD3C76  29
-	call sub_FD7E1A                                      ; FD3C77  1d 1a 7e fd
+	call SoundEditLfo_SoftKeyCol2                                      ; FD3C77  1d 1a 7e fd
 	pop XBC                                              ; FD3C7B  59
 	unlk XIZ                                             ; FD3C7C  ee 0d
 	ret                                                  ; FD3C7E  0e
@@ -132817,7 +132817,7 @@ SoftKeyCol3_SoundEditAmpLfo:
 	ld BC,(XIZ+0x08)                                     ; FD3C86  9e 08 21
 	extz BC                                              ; FD3C89  d9 12
 	pushw bc                                             ; FD3C8B  29
-	call sub_FD7E66                                      ; FD3C8C  1d 66 7e fd
+	call SoundEditLfo_SoftKeyCol3                                      ; FD3C8C  1d 66 7e fd
 	pop XBC                                              ; FD3C90  59
 	unlk XIZ                                             ; FD3C91  ee 0d
 	ret                                                  ; FD3C93  0e
@@ -132830,7 +132830,7 @@ SoftKeyCol4_SoundEditAmpLfo:
 	ld BC,(XIZ+0x08)                                     ; FD3C9B  9e 08 21
 	extz BC                                              ; FD3C9E  d9 12
 	pushw bc                                             ; FD3CA0  29
-	call sub_FD7ED9                                      ; FD3CA1  1d d9 7e fd
+	call SoundEditLfo_SoftKeyCol4                                      ; FD3CA1  1d d9 7e fd
 	pop XBC                                              ; FD3CA5  59
 	unlk XIZ                                             ; FD3CA6  ee 0d
 	ret                                                  ; FD3CA8  0e
@@ -132844,7 +132844,7 @@ SoftKeyCol5_SoundEditAmpLfo:
 	ld BC,(XIZ+0x08)                                     ; FD3CB0  9e 08 21
 	extz BC                                              ; FD3CB3  d9 12
 	pushw bc                                             ; FD3CB5  29
-	call sub_FD7F4C                                      ; FD3CB6  1d 4c 7f fd
+	call SoundEditLfo_SoftKeyCol5                                      ; FD3CB6  1d 4c 7f fd
 	pop XBC                                              ; FD3CBA  59
 	unlk XIZ                                             ; FD3CBB  ee 0d
 	ret                                                  ; FD3CBD  0e
@@ -132858,7 +132858,7 @@ SoftKeyCol6_SoundEditAmpLfo:
 	ld BC,(XIZ+0x08)                                     ; FD3CC5  9e 08 21
 	extz BC                                              ; FD3CC8  d9 12
 	pushw bc                                             ; FD3CCA  29
-	call sub_FD7FBF                                      ; FD3CCB  1d bf 7f fd
+	call SoundEditLfo_SoftKeyCol6                                      ; FD3CCB  1d bf 7f fd
 	pop XBC                                              ; FD3CCF  59
 	unlk XIZ                                             ; FD3CD0  ee 0d
 	ret                                                  ; FD3CD2  0e
@@ -132872,7 +132872,7 @@ SoftKeyCol7_SoundEditAmpLfo:
 	ld BC,(XIZ+0x08)                                     ; FD3CDA  9e 08 21
 	extz BC                                              ; FD3CDD  d9 12
 	pushw bc                                             ; FD3CDF  29
-	call sub_FD8030                                      ; FD3CE0  1d 30 80 fd
+	call SoundEditLfo_SoftKeyCol7                                      ; FD3CE0  1d 30 80 fd
 	pop XBC                                              ; FD3CE4  59
 	unlk XIZ                                             ; FD3CE5  ee 0d
 	ret                                                  ; FD3CE7  0e
@@ -132886,7 +132886,7 @@ SoftKeyCol8_SoundEditAmpLfo:
 	ld BC,(XIZ+0x08)                                     ; FD3CEF  9e 08 21
 	extz BC                                              ; FD3CF2  d9 12
 	pushw bc                                             ; FD3CF4  29
-	call sub_FD80A3                                      ; FD3CF5  1d a3 80 fd
+	call SoundEditLfo_SoftKeyCol8                                      ; FD3CF5  1d a3 80 fd
 	pop XBC                                              ; FD3CF9  59
 	unlk XIZ                                             ; FD3CFA  ee 0d
 	ret                                                  ; FD3CFC  0e
@@ -139356,7 +139356,8 @@ Var27A2_ToggleWithP23:
 	call T_UiPaint_Solo                                  ; FD6EBD  1d d8 1e f4
 	unlk XIZ                                             ; FD6EC1  ee 0d
 	ret                                                  ; FD6EC3  0e
-sub_FD6EC4:
+; SoundEditFilter_LcdKeyRow4: the LcdKeyRow4 action of SoundEditFilterBpf, SoundEditFilterHpf12, SoundEditFilterHpf24, SoundEditFilterLpf12, SoundEditFilterLpf24, SoundEditFilterThrough -- called only by LcdKeyRow4_SoundEditFilterBpf, LcdKeyRow4_SoundEditFilterHpf12, LcdKeyRow4_SoundEditFilterHpf24, LcdKeyRow4_SoundEditFilterLpf12, LcdKeyRow4_SoundEditFilterLpf24, LcdKeyRow4_SoundEditFilterThrough.
+SoundEditFilter_LcdKeyRow4:
 	link XIZ,0xfffc                                      ; FD6EC4  ee 0c fc ff
 	push XIX                                             ; FD6EC8  3c
 	lda xbc, (xiz-2)                                     ; FD6EC9  be fe 31
@@ -141236,7 +141237,8 @@ sub_FD7C83:
 	pop XIX                                              ; FD7CB1  5c
 	unlk XIZ                                             ; FD7CB2  ee 0d
 	ret                                                  ; FD7CB4  0e
-sub_FD7CB5:
+; SoundEditMenu_LcdKeyRow5: the LcdKeyRow5 action of SoundEditMenu -- called only by LcdKeyRow5_SoundEditMenu.
+SoundEditMenu_LcdKeyRow5:
 	link XIZ,0xfffc                                      ; FD7CB5  ee 0c fc ff
 	pushw hl                                             ; FD7CB9  2b
 	pushw de                                             ; FD7CBA  2a
@@ -141412,7 +141414,8 @@ sub_FD7D18:
 	popw hl                                              ; FD7E16  4b
 	unlk XIZ                                             ; FD7E17  ee 0d
 	ret                                                  ; FD7E19  0e
-sub_FD7E1A:
+; SoundEditLfo_SoftKeyCol2: the SoftKeyCol2 action of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- called only by SoftKeyCol2_SoundEditAmpLfo, SoftKeyCol2_SoundEditFilterLfo, SoftKeyCol2_SoundEditPitchLfo.
+SoundEditLfo_SoftKeyCol2:
 	link XIZ,0x0000                                      ; FD7E1A  ee 0c 00 00
 	pushw hl                                             ; FD7E1E  2b
 	ld L,(XIZ+0x0a)                                      ; FD7E1F  8e 0a 27
@@ -141457,7 +141460,8 @@ sub_FD7E1A:
 	popw hl                                              ; FD7E62  4b
 	unlk XIZ                                             ; FD7E63  ee 0d
 	ret                                                  ; FD7E65  0e
-sub_FD7E66:
+; SoundEditLfo_SoftKeyCol3: the SoftKeyCol3 action of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- called only by SoftKeyCol3_SoundEditAmpLfo, SoftKeyCol3_SoundEditFilterLfo, SoftKeyCol3_SoundEditPitchLfo.
+SoundEditLfo_SoftKeyCol3:
 	link XIZ,0xfff0                                      ; FD7E66  ee 0c f0 ff
 	pushw hl                                             ; FD7E6A  2b
 	push XIX                                             ; FD7E6B  3c
@@ -141505,7 +141509,8 @@ sub_FD7E66:
 	popw hl                                              ; FD7ED5  4b
 	unlk XIZ                                             ; FD7ED6  ee 0d
 	ret                                                  ; FD7ED8  0e
-sub_FD7ED9:
+; SoundEditLfo_SoftKeyCol4: the SoftKeyCol4 action of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- called only by SoftKeyCol4_SoundEditAmpLfo, SoftKeyCol4_SoundEditFilterLfo, SoftKeyCol4_SoundEditPitchLfo.
+SoundEditLfo_SoftKeyCol4:
 	link XIZ,0xfff0                                      ; FD7ED9  ee 0c f0 ff
 	pushw hl                                             ; FD7EDD  2b
 	push XIX                                             ; FD7EDE  3c
@@ -141553,7 +141558,8 @@ sub_FD7ED9:
 	popw hl                                              ; FD7F48  4b
 	unlk XIZ                                             ; FD7F49  ee 0d
 	ret                                                  ; FD7F4B  0e
-sub_FD7F4C:
+; SoundEditLfo_SoftKeyCol5: the SoftKeyCol5 action of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- called only by SoftKeyCol5_SoundEditAmpLfo, SoftKeyCol5_SoundEditFilterLfo, SoftKeyCol5_SoundEditPitchLfo.
+SoundEditLfo_SoftKeyCol5:
 	link XIZ,0xfff0                                      ; FD7F4C  ee 0c f0 ff
 	pushw hl                                             ; FD7F50  2b
 	push XIX                                             ; FD7F51  3c
@@ -141601,7 +141607,8 @@ sub_FD7F4C:
 	popw hl                                              ; FD7FBB  4b
 	unlk XIZ                                             ; FD7FBC  ee 0d
 	ret                                                  ; FD7FBE  0e
-sub_FD7FBF:
+; SoundEditLfo_SoftKeyCol6: the SoftKeyCol6 action of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- called only by SoftKeyCol6_SoundEditAmpLfo, SoftKeyCol6_SoundEditFilterLfo, SoftKeyCol6_SoundEditPitchLfo.
+SoundEditLfo_SoftKeyCol6:
 	link XIZ,0xfff0                                      ; FD7FBF  ee 0c f0 ff
 	pushw hl                                             ; FD7FC3  2b
 	push XIX                                             ; FD7FC4  3c
@@ -141648,7 +141655,8 @@ sub_FD7FBF:
 	popw hl                                              ; FD802C  4b
 	unlk XIZ                                             ; FD802D  ee 0d
 	ret                                                  ; FD802F  0e
-sub_FD8030:
+; SoundEditLfo_SoftKeyCol7: the SoftKeyCol7 action of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- called only by SoftKeyCol7_SoundEditAmpLfo, SoftKeyCol7_SoundEditFilterLfo, SoftKeyCol7_SoundEditPitchLfo.
+SoundEditLfo_SoftKeyCol7:
 	link XIZ,0xfff0                                      ; FD8030  ee 0c f0 ff
 	pushw hl                                             ; FD8034  2b
 	push XIX                                             ; FD8035  3c
@@ -141696,7 +141704,8 @@ sub_FD8030:
 	popw hl                                              ; FD809F  4b
 	unlk XIZ                                             ; FD80A0  ee 0d
 	ret                                                  ; FD80A2  0e
-sub_FD80A3:
+; SoundEditLfo_SoftKeyCol8: the SoftKeyCol8 action of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- called only by SoftKeyCol8_SoundEditAmpLfo, SoftKeyCol8_SoundEditFilterLfo, SoftKeyCol8_SoundEditPitchLfo.
+SoundEditLfo_SoftKeyCol8:
 	link XIZ,0xfff0                                      ; FD80A3  ee 0c f0 ff
 	pushw hl                                             ; FD80A7  2b
 	push XIX                                             ; FD80A8  3c
@@ -141771,7 +141780,8 @@ sub_FD8116:
 .LFD8152:
 	unlk XIZ                                             ; FD8152  ee 0d
 	ret                                                  ; FD8154  0e
-sub_FD8155:
+; SoundEditEnvelope1_SoftKeyCol1: the SoftKeyCol1 action of SoundEditFilterEnvelope1, SoundEditPitchEnvelope1 -- called only by SoftKeyCol1_SoundEditFilterEnvelope1, SoftKeyCol1_SoundEditPitchEnvelope1.
+SoundEditEnvelope1_SoftKeyCol1:
 	link XIZ,0xfff0                                      ; FD8155  ee 0c f0 ff
 	push XIX                                             ; FD8159  3c
 	lda xix, (xiz-16)                                    ; FD815A  be f0 34
@@ -141817,7 +141827,8 @@ sub_FD8155:
 	pop XIX                                              ; FD81C4  5c
 	unlk XIZ                                             ; FD81C5  ee 0d
 	ret                                                  ; FD81C7  0e
-sub_FD81C8:
+; SoundEditEnvelope1_SoftKeyCol2: the SoftKeyCol2 action of SoundEditFilterEnvelope1, SoundEditPitchEnvelope1 -- called only by SoftKeyCol2_SoundEditFilterEnvelope1, SoftKeyCol2_SoundEditPitchEnvelope1.
+SoundEditEnvelope1_SoftKeyCol2:
 	link XIZ,0xfff0                                      ; FD81C8  ee 0c f0 ff
 	push XIX                                             ; FD81CC  3c
 	lda xix, (xiz-16)                                    ; FD81CD  be f0 34
@@ -141863,7 +141874,8 @@ sub_FD81C8:
 	pop XIX                                              ; FD8237  5c
 	unlk XIZ                                             ; FD8238  ee 0d
 	ret                                                  ; FD823A  0e
-sub_FD823B:
+; SoundEditEnvelope1_SoftKeyCol3: the SoftKeyCol3 action of SoundEditFilterEnvelope1, SoundEditPitchEnvelope1 -- called only by SoftKeyCol3_SoundEditFilterEnvelope1, SoftKeyCol3_SoundEditPitchEnvelope1.
+SoundEditEnvelope1_SoftKeyCol3:
 	link XIZ,0xfff0                                      ; FD823B  ee 0c f0 ff
 	pushw hl                                             ; FD823F  2b
 	push XIX                                             ; FD8240  3c
@@ -141928,7 +141940,8 @@ sub_FD823B:
 	popw hl                                              ; FD82D4  4b
 	unlk XIZ                                             ; FD82D5  ee 0d
 	ret                                                  ; FD82D7  0e
-sub_FD82D8:
+; SoundEditEnvelope1_SoftKeyCol4: the SoftKeyCol4 action of SoundEditFilterEnvelope1, SoundEditPitchEnvelope1 -- called only by SoftKeyCol4_SoundEditFilterEnvelope1, SoftKeyCol4_SoundEditPitchEnvelope1.
+SoundEditEnvelope1_SoftKeyCol4:
 	link XIZ,0xfff0                                      ; FD82D8  ee 0c f0 ff
 	push XIX                                             ; FD82DC  3c
 	lda xix, (xiz-16)                                    ; FD82DD  be f0 34
@@ -141974,7 +141987,8 @@ sub_FD82D8:
 	pop XIX                                              ; FD8347  5c
 	unlk XIZ                                             ; FD8348  ee 0d
 	ret                                                  ; FD834A  0e
-sub_FD834B:
+; SoundEditEnvelope1_SoftKeyCol5: the SoftKeyCol5 action of SoundEditFilterEnvelope1, SoundEditPitchEnvelope1 -- called only by SoftKeyCol5_SoundEditFilterEnvelope1, SoftKeyCol5_SoundEditPitchEnvelope1.
+SoundEditEnvelope1_SoftKeyCol5:
 	link XIZ,0xfff0                                      ; FD834B  ee 0c f0 ff
 	pushw hl                                             ; FD834F  2b
 	push XIX                                             ; FD8350  3c
@@ -142039,7 +142053,8 @@ sub_FD834B:
 	popw hl                                              ; FD83E4  4b
 	unlk XIZ                                             ; FD83E5  ee 0d
 	ret                                                  ; FD83E7  0e
-sub_FD83E8:
+; SoundEditEnvelope1_SoftKeyCol6: the SoftKeyCol6 action of SoundEditFilterEnvelope1, SoundEditPitchEnvelope1 -- called only by SoftKeyCol6_SoundEditFilterEnvelope1, SoftKeyCol6_SoundEditPitchEnvelope1.
+SoundEditEnvelope1_SoftKeyCol6:
 	link XIZ,0xfff0                                      ; FD83E8  ee 0c f0 ff
 	push XIX                                             ; FD83EC  3c
 sub_FD83ED:
@@ -142086,7 +142101,8 @@ sub_FD83ED:
 	pop XIX                                              ; FD8457  5c
 	unlk XIZ                                             ; FD8458  ee 0d
 	ret                                                  ; FD845A  0e
-sub_FD845B:
+; SoundEditEnvelope1_SoftKeyCol7: the SoftKeyCol7 action of SoundEditFilterEnvelope1, SoundEditPitchEnvelope1 -- called only by SoftKeyCol7_SoundEditFilterEnvelope1, SoftKeyCol7_SoundEditPitchEnvelope1.
+SoundEditEnvelope1_SoftKeyCol7:
 	link XIZ,0xfff0                                      ; FD845B  ee 0c f0 ff
 	pushw hl                                             ; FD845F  2b
 	push XIX                                             ; FD8460  3c
@@ -142152,7 +142168,8 @@ sub_FD8488:
 	popw hl                                              ; FD84F4  4b
 	unlk XIZ                                             ; FD84F5  ee 0d
 	ret                                                  ; FD84F7  0e
-sub_FD84F8:
+; SoundEditEnvelope2_SoftKeyCol2: the SoftKeyCol2 action of SoundEditFilterEnvelope2, SoundEditPitchEnvelope2 -- called only by SoftKeyCol2_SoundEditFilterEnvelope2, SoftKeyCol2_SoundEditPitchEnvelope2.
+SoundEditEnvelope2_SoftKeyCol2:
 	link XIZ,0xfff0                                      ; FD84F8  ee 0c f0 ff
 	push XIX                                             ; FD84FC  3c
 	lda xix, (xiz-16)                                    ; FD84FD  be f0 34
@@ -142217,7 +142234,8 @@ sub_FD8597:
 	pop XIX                                              ; FD8597  5c
 	unlk XIZ                                             ; FD8598  ee 0d
 	ret                                                  ; FD859A  0e
-sub_FD859B:
+; SoundEditEnvelope2_SoftKeyCol3: the SoftKeyCol3 action of SoundEditFilterEnvelope2, SoundEditPitchEnvelope2 -- called only by SoftKeyCol3_SoundEditFilterEnvelope2, SoftKeyCol3_SoundEditPitchEnvelope2.
+SoundEditEnvelope2_SoftKeyCol3:
 	link XIZ,0xfff0                                      ; FD859B  ee 0c f0 ff
 	push XIX                                             ; FD859F  3c
 	lda xix, (xiz-16)                                    ; FD85A0  be f0 34
@@ -142281,7 +142299,8 @@ sub_FD859B:
 	pop XIX                                              ; FD863A  5c
 	unlk XIZ                                             ; FD863B  ee 0d
 	ret                                                  ; FD863D  0e
-sub_FD863E:
+; SoundEditEnvelope2_SoftKeyCol4: the SoftKeyCol4 action of SoundEditFilterEnvelope2, SoundEditPitchEnvelope2 -- called only by SoftKeyCol4_SoundEditFilterEnvelope2, SoftKeyCol4_SoundEditPitchEnvelope2.
+SoundEditEnvelope2_SoftKeyCol4:
 	link XIZ,0xfff0                                      ; FD863E  ee 0c f0 ff
 	push XIX                                             ; FD8642  3c
 	lda xix, (xiz-16)                                    ; FD8643  be f0 34
@@ -142346,7 +142365,8 @@ sub_FD869C:
 	pop XIX                                              ; FD86DD  5c
 	unlk XIZ                                             ; FD86DE  ee 0d
 	ret                                                  ; FD86E0  0e
-sub_FD86E1:
+; SoundEditEnvelope2_SoftKeyCol5: the SoftKeyCol5 action of SoundEditFilterEnvelope2, SoundEditPitchEnvelope2 -- called only by SoftKeyCol5_SoundEditFilterEnvelope2, SoftKeyCol5_SoundEditPitchEnvelope2.
+SoundEditEnvelope2_SoftKeyCol5:
 	link XIZ,0xfffc                                      ; FD86E1  ee 0c fc ff
 	pushw 0x7f                                           ; FD86E5  0b 7f 00
 	pushw 0x00                                           ; FD86E8  0b 00 00
@@ -142388,7 +142408,8 @@ sub_FD86E1:
 	popw bc                                              ; FD8743  49
 	unlk XIZ                                             ; FD8744  ee 0d
 	ret                                                  ; FD8746  0e
-sub_FD8747:
+; SoundEditEnvelope2_SoftKeyCol7: the SoftKeyCol7 action of SoundEditFilterEnvelope2, SoundEditPitchEnvelope2 -- called only by SoftKeyCol7_SoundEditFilterEnvelope2, SoftKeyCol7_SoundEditPitchEnvelope2.
+SoundEditEnvelope2_SoftKeyCol7:
 	link XIZ,0xfff2                                      ; FD8747  ee 0c f2 ff
 	push XIX                                             ; FD874B  3c
 	lda xix, (xiz-14)                                    ; FD874C  be f2 34
@@ -142426,7 +142447,8 @@ sub_FD8789:
 	pop XIX                                              ; FD87A1  5c
 	unlk XIZ                                             ; FD87A2  ee 0d
 	ret                                                  ; FD87A4  0e
-sub_FD87A5:
+; SoundEditEnvelope2_SoftKeyCol8: the SoftKeyCol8 action of SoundEditFilterEnvelope2, SoundEditPitchEnvelope2 -- called only by SoftKeyCol8_SoundEditFilterEnvelope2, SoftKeyCol8_SoundEditPitchEnvelope2.
+SoundEditEnvelope2_SoftKeyCol8:
 	link XIZ,0xfff2                                      ; FD87A5  ee 0c f2 ff
 	push XIX                                             ; FD87A9  3c
 	lda xix, (xiz-14)                                    ; FD87AA  be f2 34
@@ -142463,7 +142485,8 @@ sub_FD87A5:
 	pop XIX                                              ; FD87FF  5c
 	unlk XIZ                                             ; FD8800  ee 0d
 	ret                                                  ; FD8802  0e
-sub_FD8803:
+; SoundEditController_SoftKeyCol2: the SoftKeyCol2 action of SoundEditControllerPage1, SoundEditControllerPage2 -- called only by SoftKeyCol2_SoundEditControllerPage1, SoftKeyCol2_SoundEditControllerPage2.
+SoundEditController_SoftKeyCol2:
 	link XIZ,0xffea                                      ; FD8803  ee 0c ea ff
 	pushw hl                                             ; FD8807  2b
 	pushw de                                             ; FD8808  2a
@@ -142626,7 +142649,8 @@ sub_FD884C:
 	popw hl                                              ; FD8956  4b
 	unlk XIZ                                             ; FD8957  ee 0d
 	ret                                                  ; FD8959  0e
-sub_FD895A:
+; SoundEditController_SoftKeyCol4: the SoftKeyCol4 action of SoundEditControllerPage1, SoundEditControllerPage2 -- called only by SoftKeyCol4_SoundEditControllerPage1, SoftKeyCol4_SoundEditControllerPage2.
+SoundEditController_SoftKeyCol4:
 	link XIZ,0xfffc                                      ; FD895A  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD895E  be fe 31
 	push XBC                                             ; FD8961  39
@@ -154442,7 +154466,7 @@ LcdKeyRow4_SoundEditFilterLpf12:
 	ld C,H                                        ; FDECC0  ce 8b
 	extz BC                                       ; FDECC2  d9 12
 	pushw bc                                      ; FDECC4  29
-	call sub_FD6EC4                                 ; FDECC5  1d c4 6e fd
+	call SoundEditFilter_LcdKeyRow4                                 ; FDECC5  1d c4 6e fd
 	inc 8,XSP                                     ; FDECC9  ef 60
 	jr .LFDECDF                                   ; FDECCB  68 12
 .LFDECCD:
@@ -154707,7 +154731,7 @@ LcdKeyRow4_SoundEditFilterHpf12:
 	ld C,H                                        ; FDEE86  ce 8b
 	extz BC                                       ; FDEE88  d9 12
 	pushw bc                                      ; FDEE8A  29
-	call sub_FD6EC4                                 ; FDEE8B  1d c4 6e fd
+	call SoundEditFilter_LcdKeyRow4                                 ; FDEE8B  1d c4 6e fd
 	inc 8,XSP                                     ; FDEE8F  ef 60
 	jr .LFDEEA5                                   ; FDEE91  68 12
 .LFDEE93:
@@ -154958,7 +154982,7 @@ LcdKeyRow4_SoundEditFilterLpf24:
 	ld C,H                                        ; FDF050  ce 8b
 	extz BC                                       ; FDF052  d9 12
 	pushw bc                                      ; FDF054  29
-	call sub_FD6EC4                                 ; FDF055  1d c4 6e fd
+	call SoundEditFilter_LcdKeyRow4                                 ; FDF055  1d c4 6e fd
 	inc 8,XSP                                     ; FDF059  ef 60
 	jr .LFDF06F                                   ; FDF05B  68 12
 .LFDF05D:
@@ -155184,7 +155208,7 @@ LcdKeyRow4_SoundEditFilterHpf24:
 	ld C,H                                        ; FDF1E3  ce 8b
 	extz BC                                       ; FDF1E5  d9 12
 	pushw bc                                      ; FDF1E7  29
-	call sub_FD6EC4                                 ; FDF1E8  1d c4 6e fd
+	call SoundEditFilter_LcdKeyRow4                                 ; FDF1E8  1d c4 6e fd
 	inc 8,XSP                                     ; FDF1EC  ef 60
 	jr .LFDF202                                   ; FDF1EE  68 12
 .LFDF1F0:
@@ -155600,7 +155624,7 @@ LcdKeyRow4_SoundEditFilterBpf:
 	ld bc, (xiz-4)                                ; FDF54F  9e fc 21
 	extz BC                                       ; FDF552  d9 12
 	pushw bc                                      ; FDF554  29
-	call sub_FD6EC4                                 ; FDF555  1d c4 6e fd
+	call SoundEditFilter_LcdKeyRow4                                 ; FDF555  1d c4 6e fd
 	inc 8,XSP                                     ; FDF559  ef 60
 	jr .LFDF56F                                   ; FDF55B  68 12
 .LFDF55D:
@@ -155792,7 +155816,7 @@ LcdKeyRow4_SoundEditFilterThrough:
 	ld C,H                                        ; FDF6C3  ce 8b
 	extz BC                                       ; FDF6C5  d9 12
 	pushw bc                                      ; FDF6C7  29
-	call sub_FD6EC4                                 ; FDF6C8  1d c4 6e fd
+	call SoundEditFilter_LcdKeyRow4                                 ; FDF6C8  1d c4 6e fd
 	inc 8,XSP                                     ; FDF6CC  ef 60
 	jr .LFDF6E2                                   ; FDF6CE  68 12
 .LFDF6D0:
@@ -156263,7 +156287,7 @@ SoftKeyCol1_SoundEditFilterEnvelope1:
 	ld BC,(XIZ+0x08)                              ; FDFA9C  9e 08 21
 	extz BC                                       ; FDFA9F  d9 12
 	pushw bc                                      ; FDFAA1  29
-	call sub_FD8155                                 ; FDFAA2  1d 55 81 fd
+	call SoundEditEnvelope1_SoftKeyCol1                                 ; FDFAA2  1d 55 81 fd
 	inc 6,XSP                                     ; FDFAA6  ef 66
 	unlk XIZ                                      ; FDFAA8  ee 0d
 	ret                                           ; FDFAAA  0e
@@ -156278,7 +156302,7 @@ SoftKeyCol2_SoundEditFilterEnvelope1:
 	ld BC,(XIZ+0x08)                              ; FDFAB5  9e 08 21
 	extz BC                                       ; FDFAB8  d9 12
 	pushw bc                                      ; FDFABA  29
-	call sub_FD81C8                                 ; FDFABB  1d c8 81 fd
+	call SoundEditEnvelope1_SoftKeyCol2                                 ; FDFABB  1d c8 81 fd
 	inc 6,XSP                                     ; FDFABF  ef 66
 	unlk XIZ                                      ; FDFAC1  ee 0d
 	ret                                           ; FDFAC3  0e
@@ -156293,7 +156317,7 @@ SoftKeyCol3_SoundEditFilterEnvelope1:
 	ld BC,(XIZ+0x08)                              ; FDFACE  9e 08 21
 	extz BC                                       ; FDFAD1  d9 12
 	pushw bc                                      ; FDFAD3  29
-	call sub_FD823B                                 ; FDFAD4  1d 3b 82 fd
+	call SoundEditEnvelope1_SoftKeyCol3                                 ; FDFAD4  1d 3b 82 fd
 	inc 6,XSP                                     ; FDFAD8  ef 66
 	unlk XIZ                                      ; FDFADA  ee 0d
 	ret                                           ; FDFADC  0e
@@ -156308,7 +156332,7 @@ SoftKeyCol4_SoundEditFilterEnvelope1:
 	ld BC,(XIZ+0x08)                              ; FDFAE7  9e 08 21
 	extz BC                                       ; FDFAEA  d9 12
 	pushw bc                                      ; FDFAEC  29
-	call sub_FD82D8                                 ; FDFAED  1d d8 82 fd
+	call SoundEditEnvelope1_SoftKeyCol4                                 ; FDFAED  1d d8 82 fd
 	inc 6,XSP                                     ; FDFAF1  ef 66
 	unlk XIZ                                      ; FDFAF3  ee 0d
 	ret                                           ; FDFAF5  0e
@@ -156323,7 +156347,7 @@ SoftKeyCol5_SoundEditFilterEnvelope1:
 	ld BC,(XIZ+0x08)                              ; FDFB00  9e 08 21
 	extz BC                                       ; FDFB03  d9 12
 	pushw bc                                      ; FDFB05  29
-	call sub_FD834B                                 ; FDFB06  1d 4b 83 fd
+	call SoundEditEnvelope1_SoftKeyCol5                                 ; FDFB06  1d 4b 83 fd
 	inc 6,XSP                                     ; FDFB0A  ef 66
 	unlk XIZ                                      ; FDFB0C  ee 0d
 	ret                                           ; FDFB0E  0e
@@ -156338,7 +156362,7 @@ SoftKeyCol6_SoundEditFilterEnvelope1:
 	ld BC,(XIZ+0x08)                              ; FDFB19  9e 08 21
 	extz BC                                       ; FDFB1C  d9 12
 	pushw bc                                      ; FDFB1E  29
-	call sub_FD83E8                                 ; FDFB1F  1d e8 83 fd
+	call SoundEditEnvelope1_SoftKeyCol6                                 ; FDFB1F  1d e8 83 fd
 	inc 6,XSP                                     ; FDFB23  ef 66
 	unlk XIZ                                      ; FDFB25  ee 0d
 	ret                                           ; FDFB27  0e
@@ -156353,7 +156377,7 @@ SoftKeyCol7_SoundEditFilterEnvelope1:
 	ld BC,(XIZ+0x08)                              ; FDFB32  9e 08 21
 	extz BC                                       ; FDFB35  d9 12
 	pushw bc                                      ; FDFB37  29
-	call sub_FD845B                                 ; FDFB38  1d 5b 84 fd
+	call SoundEditEnvelope1_SoftKeyCol7                                 ; FDFB38  1d 5b 84 fd
 	inc 6,XSP                                     ; FDFB3C  ef 66
 	unlk XIZ                                      ; FDFB3E  ee 0d
 	ret                                           ; FDFB40  0e
@@ -156511,7 +156535,7 @@ SoftKeyCol2_SoundEditFilterEnvelope2:
 	ld BC,(XIZ+0x08)                              ; FDFC45  9e 08 21
 	extz BC                                       ; FDFC48  d9 12
 	pushw bc                                      ; FDFC4A  29
-	call sub_FD84F8                                 ; FDFC4B  1d f8 84 fd
+	call SoundEditEnvelope2_SoftKeyCol2                                 ; FDFC4B  1d f8 84 fd
 	pop XBC                                       ; FDFC4F  59
 	unlk XIZ                                      ; FDFC50  ee 0d
 	ret                                           ; FDFC52  0e
@@ -156525,7 +156549,7 @@ SoftKeyCol3_SoundEditFilterEnvelope2:
 	ld BC,(XIZ+0x08)                              ; FDFC5A  9e 08 21
 	extz BC                                       ; FDFC5D  d9 12
 	pushw bc                                      ; FDFC5F  29
-	call sub_FD859B                                 ; FDFC60  1d 9b 85 fd
+	call SoundEditEnvelope2_SoftKeyCol3                                 ; FDFC60  1d 9b 85 fd
 	pop XBC                                       ; FDFC64  59
 	unlk XIZ                                      ; FDFC65  ee 0d
 	ret                                           ; FDFC67  0e
@@ -156539,7 +156563,7 @@ SoftKeyCol4_SoundEditFilterEnvelope2:
 	ld BC,(XIZ+0x08)                              ; FDFC6F  9e 08 21
 	extz BC                                       ; FDFC72  d9 12
 	pushw bc                                      ; FDFC74  29
-	call sub_FD863E                                 ; FDFC75  1d 3e 86 fd
+	call SoundEditEnvelope2_SoftKeyCol4                                 ; FDFC75  1d 3e 86 fd
 	pop XBC                                       ; FDFC79  59
 	unlk XIZ                                      ; FDFC7A  ee 0d
 	ret                                           ; FDFC7C  0e
@@ -156553,7 +156577,7 @@ SoftKeyCol5_SoundEditFilterEnvelope2:
 	ld BC,(XIZ+0x08)                              ; FDFC84  9e 08 21
 	extz BC                                       ; FDFC87  d9 12
 	pushw bc                                      ; FDFC89  29
-	call sub_FD86E1                                 ; FDFC8A  1d e1 86 fd
+	call SoundEditEnvelope2_SoftKeyCol5                                 ; FDFC8A  1d e1 86 fd
 	pop XBC                                       ; FDFC8E  59
 	unlk XIZ                                      ; FDFC8F  ee 0d
 	ret                                           ; FDFC91  0e
@@ -156567,7 +156591,7 @@ SoftKeyCol7_SoundEditFilterEnvelope2:
 	ld BC,(XIZ+0x08)                              ; FDFC99  9e 08 21
 	extz BC                                       ; FDFC9C  d9 12
 	pushw bc                                      ; FDFC9E  29
-	call sub_FD8747                                 ; FDFC9F  1d 47 87 fd
+	call SoundEditEnvelope2_SoftKeyCol7                                 ; FDFC9F  1d 47 87 fd
 	pop XBC                                       ; FDFCA3  59
 	unlk XIZ                                      ; FDFCA4  ee 0d
 	ret                                           ; FDFCA6  0e
@@ -156581,7 +156605,7 @@ SoftKeyCol8_SoundEditFilterEnvelope2:
 	ld BC,(XIZ+0x08)                              ; FDFCAE  9e 08 21
 	extz BC                                       ; FDFCB1  d9 12
 	pushw bc                                      ; FDFCB3  29
-	call sub_FD87A5                                 ; FDFCB4  1d a5 87 fd
+	call SoundEditEnvelope2_SoftKeyCol8                                 ; FDFCB4  1d a5 87 fd
 	pop XBC                                       ; FDFCB8  59
 	unlk XIZ                                      ; FDFCB9  ee 0d
 	ret                                           ; FDFCBB  0e
@@ -156729,7 +156753,7 @@ SoftKeyCol2_SoundEditFilterLfo:
 	ld BC,(XIZ+0x08)                              ; FDFDAC  9e 08 21
 	extz BC                                       ; FDFDAF  d9 12
 	pushw bc                                      ; FDFDB1  29
-	call sub_FD7E1A                                 ; FDFDB2  1d 1a 7e fd
+	call SoundEditLfo_SoftKeyCol2                                 ; FDFDB2  1d 1a 7e fd
 	pop XBC                                       ; FDFDB6  59
 	unlk XIZ                                      ; FDFDB7  ee 0d
 	ret                                           ; FDFDB9  0e
@@ -156743,7 +156767,7 @@ SoftKeyCol3_SoundEditFilterLfo:
 	ld BC,(XIZ+0x08)                              ; FDFDC1  9e 08 21
 	extz BC                                       ; FDFDC4  d9 12
 	pushw bc                                      ; FDFDC6  29
-	call sub_FD7E66                                 ; FDFDC7  1d 66 7e fd
+	call SoundEditLfo_SoftKeyCol3                                 ; FDFDC7  1d 66 7e fd
 	pop XBC                                       ; FDFDCB  59
 	unlk XIZ                                      ; FDFDCC  ee 0d
 	ret                                           ; FDFDCE  0e
@@ -156757,7 +156781,7 @@ SoftKeyCol4_SoundEditFilterLfo:
 	ld BC,(XIZ+0x08)                              ; FDFDD6  9e 08 21
 	extz BC                                       ; FDFDD9  d9 12
 	pushw bc                                      ; FDFDDB  29
-	call sub_FD7ED9                                 ; FDFDDC  1d d9 7e fd
+	call SoundEditLfo_SoftKeyCol4                                 ; FDFDDC  1d d9 7e fd
 	pop XBC                                       ; FDFDE0  59
 	unlk XIZ                                      ; FDFDE1  ee 0d
 	ret                                           ; FDFDE3  0e
@@ -156771,7 +156795,7 @@ SoftKeyCol5_SoundEditFilterLfo:
 	ld BC,(XIZ+0x08)                              ; FDFDEB  9e 08 21
 	extz BC                                       ; FDFDEE  d9 12
 	pushw bc                                      ; FDFDF0  29
-	call sub_FD7F4C                                 ; FDFDF1  1d 4c 7f fd
+	call SoundEditLfo_SoftKeyCol5                                 ; FDFDF1  1d 4c 7f fd
 	pop XBC                                       ; FDFDF5  59
 	unlk XIZ                                      ; FDFDF6  ee 0d
 	ret                                           ; FDFDF8  0e
@@ -156785,7 +156809,7 @@ SoftKeyCol6_SoundEditFilterLfo:
 	ld BC,(XIZ+0x08)                              ; FDFE00  9e 08 21
 	extz BC                                       ; FDFE03  d9 12
 	pushw bc                                      ; FDFE05  29
-	call sub_FD7FBF                                 ; FDFE06  1d bf 7f fd
+	call SoundEditLfo_SoftKeyCol6                                 ; FDFE06  1d bf 7f fd
 	pop XBC                                       ; FDFE0A  59
 	unlk XIZ                                      ; FDFE0B  ee 0d
 	ret                                           ; FDFE0D  0e
@@ -156799,7 +156823,7 @@ SoftKeyCol7_SoundEditFilterLfo:
 	ld BC,(XIZ+0x08)                              ; FDFE15  9e 08 21
 	extz BC                                       ; FDFE18  d9 12
 	pushw bc                                      ; FDFE1A  29
-	call sub_FD8030                                 ; FDFE1B  1d 30 80 fd
+	call SoundEditLfo_SoftKeyCol7                                 ; FDFE1B  1d 30 80 fd
 	pop XBC                                       ; FDFE1F  59
 	unlk XIZ                                      ; FDFE20  ee 0d
 	ret                                           ; FDFE22  0e
@@ -156813,7 +156837,7 @@ SoftKeyCol8_SoundEditFilterLfo:
 	ld BC,(XIZ+0x08)                              ; FDFE2A  9e 08 21
 	extz BC                                       ; FDFE2D  d9 12
 	pushw bc                                      ; FDFE2F  29
-	call sub_FD80A3                                 ; FDFE30  1d a3 80 fd
+	call SoundEditLfo_SoftKeyCol8                                 ; FDFE30  1d a3 80 fd
 	pop XBC                                       ; FDFE34  59
 	unlk XIZ                                      ; FDFE35  ee 0d
 	ret                                           ; FDFE37  0e
@@ -175163,31 +175187,31 @@ NoteEdit_ButtonTable:
 SoftKeyCol1_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A4A
 	ld (PanelDial_UpButton:16), 0x00                                 ; FE9ACA  f1 9c 20 00 00
 	ld (PanelDial_DownButton:16), 0x80                                 ; FE9ACF  f1 9b 20 00 80
-	calr sub_FE9CDA                                          ; FE9AD4  1e 03 02
+	calr EditScreen_SoftKeyCol1                                          ; FE9AD4  1e 03 02
 	ret                                                  ; FE9AD7  0e
 ; SoftKeyCol2_NoteEdit: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x01.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol2_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A4E
 	ld (PanelDial_UpButton:16), 0x01                                 ; FE9AD8  f1 9c 20 00 01
 	ld (PanelDial_DownButton:16), 0x81                                 ; FE9ADD  f1 9b 20 00 81
-	calr sub_FE9D92                                          ; FE9AE2  1e ad 02
+	calr EditScreen_SoftKeyCol2                                          ; FE9AE2  1e ad 02
 	ret                                                  ; FE9AE5  0e
 ; SoftKeyCol3_NoteEdit: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x02.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol3_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A52
 	ld (PanelDial_UpButton:16), 0x02                                 ; FE9AE6  f1 9c 20 00 02
 	ld (PanelDial_DownButton:16), 0x82                                 ; FE9AEB  f1 9b 20 00 82
-	calr sub_FEA097                                          ; FE9AF0  1e a4 05
+	calr EditScreen_SoftKeyCol3                                          ; FE9AF0  1e a4 05
 	ret                                                  ; FE9AF3  0e
 ; SoftKeyCol4_NoteEdit: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x03.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol4_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A56
 	ld (PanelDial_UpButton:16), 0x03                                 ; FE9AF4  f1 9c 20 00 03
 	ld (PanelDial_DownButton:16), 0x83                                 ; FE9AF9  f1 9b 20 00 83
-	calr sub_FEA14E                                          ; FE9AFE  1e 4d 06
+	calr EditScreen_SoftKeyCol4                                          ; FE9AFE  1e 4d 06
 	ret                                                  ; FE9B01  0e
 ; SoftKeyCol5_NoteEdit: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x04.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol5_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A5A
 	ld (PanelDial_UpButton:16), 0x04                                 ; FE9B02  f1 9c 20 00 04
 	ld (PanelDial_DownButton:16), 0x84                                 ; FE9B07  f1 9b 20 00 84
-	calr sub_FEA1D5                                          ; FE9B0C  1e c6 06
+	calr NoteEdit_SoftKeyCol5                                          ; FE9B0C  1e c6 06
 	ret                                                  ; FE9B0F  0e
 ; SoftKeyCol6_NoteEdit: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x05.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol6_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A5E
@@ -175209,23 +175233,23 @@ SoftKeyCol8_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A66
 	ret                                                  ; FE9B39  0e
 ; LcdKeyRow1_NoteEdit: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow1_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A6A
-	calr sub_FEA97F                                          ; FE9B3A  1e 42 0e
+	calr NoteEdit_LcdKeyRow1                                          ; FE9B3A  1e 42 0e
 	ret                                                  ; FE9B3D  0e
 ; LcdKeyRow2_NoteEdit: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow2_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A6E
 	ld (PanelDial_UpButton:16), 0x09                                 ; FE9B3E  f1 9c 20 00 09
 	ld (PanelDial_DownButton:16), 0x0a                                 ; FE9B43  f1 9b 20 00 0a
-	calr sub_FEA9A0                                          ; FE9B48  1e 55 0e
+	calr NoteEdit_LcdKeyRow2                                          ; FE9B48  1e 55 0e
 	ret                                                  ; FE9B4B  0e
 ; LcdKeyRow3_NoteEdit: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow3_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A72
 	ld (PanelDial_UpButton:16), 0x09                                 ; FE9B4C  f1 9c 20 00 09
 	ld (PanelDial_DownButton:16), 0x0a                                 ; FE9B51  f1 9b 20 00 0a
-	calr sub_FEA9E0                                          ; FE9B56  1e 87 0e
+	calr NoteEdit_LcdKeyRow3                                          ; FE9B56  1e 87 0e
 	ret                                                  ; FE9B59  0e
 ; LcdKeyRow4_NoteEdit: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow4_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A76
-	calr sub_FEAA20                                          ; FE9B5A  1e c3 0e
+	calr EditScreen_LcdKeyRow4                                          ; FE9B5A  1e c3 0e
 	ret                                                  ; FE9B5D  0e
 ScreenDispatch_FE9A4A_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9A7A
 	ret                                                  ; FE9B5E  0e
@@ -175338,25 +175362,25 @@ DrumEdit_ButtonTable:
 SoftKeyCol1_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BA4
 	ld (PanelDial_UpButton:16), 0x00                                 ; FE9C24  f1 9c 20 00 00
 	ld (PanelDial_DownButton:16), 0x80                                 ; FE9C29  f1 9b 20 00 80
-	calr sub_FE9CDA                                      ; FE9C2E  1e a9 00
+	calr EditScreen_SoftKeyCol1                                      ; FE9C2E  1e a9 00
 	ret                                                  ; FE9C31  0e
 ; SoftKeyCol2_DrumEdit: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x01.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol2_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BA8
 	ld (PanelDial_UpButton:16), 0x01                                 ; FE9C32  f1 9c 20 00 01
 	ld (PanelDial_DownButton:16), 0x81                                 ; FE9C37  f1 9b 20 00 81
-	calr sub_FE9D92                                      ; FE9C3C  1e 53 01
+	calr EditScreen_SoftKeyCol2                                      ; FE9C3C  1e 53 01
 	ret                                                  ; FE9C3F  0e
 ; SoftKeyCol3_DrumEdit: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x02.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol3_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BAC
 	ld (PanelDial_UpButton:16), 0x82                                 ; FE9C40  f1 9c 20 00 82
 	ld (PanelDial_DownButton:16), 0x02                                 ; FE9C45  f1 9b 20 00 02
-	calr sub_FEA097                                      ; FE9C4A  1e 4a 04
+	calr EditScreen_SoftKeyCol3                                      ; FE9C4A  1e 4a 04
 	ret                                                  ; FE9C4D  0e
 ; SoftKeyCol4_DrumEdit: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x03.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol4_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB0
 	ld (PanelDial_UpButton:16), 0x03                                 ; FE9C4E  f1 9c 20 00 03
 	ld (PanelDial_DownButton:16), 0x83                                 ; FE9C53  f1 9b 20 00 83
-	calr sub_FEA14E                                      ; FE9C58  1e f3 04
+	calr EditScreen_SoftKeyCol4                                      ; FE9C58  1e f3 04
 	ret                                                  ; FE9C5B  0e
 ; SoftKeyCol5_DrumEdit: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x04.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol5_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB4
@@ -175378,27 +175402,27 @@ SoftKeyCol7_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BBC
 	ret                                                  ; FE9C85  0e
 ; SoftKeyCol8_DrumEdit: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x07.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol8_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BC0
-	calr sub_FEAFFE                                      ; FE9C86  1e 75 13
+	calr DrumEdit_SoftKeyCol8                                      ; FE9C86  1e 75 13
 	ret                                                  ; FE9C89  0e
 ; LcdKeyRow1_DrumEdit: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow1_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BC4
-	calr sub_FEAFD0                                      ; FE9C8A  1e 43 13
+	calr DrumEdit_LcdKeyRow1                                      ; FE9C8A  1e 43 13
 	ret                                                  ; FE9C8D  0e
 ; LcdKeyRow2_DrumEdit: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow2_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BC8
 	ld (PanelDial_UpButton:16), 0x0a                                 ; FE9C8E  f1 9c 20 00 0a
 	ld (PanelDial_DownButton:16), 0x09                                 ; FE9C93  f1 9b 20 00 09
-	calr sub_FEAF29                                      ; FE9C98  1e 8e 12
+	calr DrumEdit_LcdKeyRow2                                      ; FE9C98  1e 8e 12
 	ret                                                  ; FE9C9B  0e
 ; LcdKeyRow3_DrumEdit: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow3_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BCC
 	ld (PanelDial_UpButton:16), 0x0a                                 ; FE9C9C  f1 9c 20 00 0a
 	ld (PanelDial_DownButton:16), 0x09                                 ; FE9CA1  f1 9b 20 00 09
-	calr sub_FEAE9B                                      ; FE9CA6  1e f2 11
+	calr DrumEdit_LcdKeyRow3                                      ; FE9CA6  1e f2 11
 	ret                                                  ; FE9CA9  0e
 ; LcdKeyRow4_DrumEdit: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow4_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BD0
-	calr sub_FEAA20                                      ; FE9CAA  1e 73 0d
+	calr EditScreen_LcdKeyRow4                                      ; FE9CAA  1e 73 0d
 	ret                                                  ; FE9CAD  0e
 ScreenDispatch_FE9BA4_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9BD4
 	ret                                                  ; FE9CAE  0e
@@ -175450,7 +175474,8 @@ ScreenDispatch_FE9BA4_Nop24:   ; entry: named by 1 `.long` operand, first at 0xF
 	ret                                                  ; FE9CD8  0e
 ScreenDispatch_FE9BA4_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9C08
 	ret                                                  ; FE9CD9  0e
-sub_FE9CDA:
+; EditScreen_SoftKeyCol1: the SoftKeyCol1 action of DrumEdit, NoteEdit -- called only by SoftKeyCol1_DrumEdit, SoftKeyCol1_NoteEdit.
+EditScreen_SoftKeyCol1:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FE9CDA  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FE9CDF  f2 58 1f 60 cf
 	jr z, .LFE9CEF                                       ; FE9CE4  66 09
@@ -175513,7 +175538,8 @@ sub_FE9D60:
 	ld (0x601f58:24), 0x81                             ; FE9D85  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x00                             ; FE9D8B  f2 59 1f 60 00 00
 	ret                                                  ; FE9D91  0e
-sub_FE9D92:
+; EditScreen_SoftKeyCol2: the SoftKeyCol2 action of DrumEdit, NoteEdit -- called only by SoftKeyCol2_DrumEdit, SoftKeyCol2_NoteEdit.
+EditScreen_SoftKeyCol2:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FE9D92  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FE9D97  f2 58 1f 60 cf
 	jr z, .LFE9DA7                                       ; FE9D9C  66 09
@@ -175812,7 +175838,8 @@ sub_FEA082:
 	ld (0x601f58:24), 0x85                             ; FEA08A  f2 58 1f 60 00 85
 	ld (0x601f59:24), 0x01                             ; FEA090  f2 59 1f 60 00 01
 	ret                                                  ; FEA096  0e
-sub_FEA097:
+; EditScreen_SoftKeyCol3: the SoftKeyCol3 action of DrumEdit, NoteEdit -- called only by SoftKeyCol3_DrumEdit, SoftKeyCol3_NoteEdit.
+EditScreen_SoftKeyCol3:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA097  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEA09C  f2 58 1f 60 cf
 	jr z, .LFEA0AC                                       ; FEA0A1  66 09
@@ -175884,7 +175911,8 @@ sub_FEA12D:
 	calr sub_FF019D                                          ; FEA147  1e 53 60
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FEA14A  1e 0c 5d
 	ret                                                  ; FEA14D  0e
-sub_FEA14E:
+; EditScreen_SoftKeyCol4: the SoftKeyCol4 action of DrumEdit, NoteEdit -- called only by SoftKeyCol4_DrumEdit, SoftKeyCol4_NoteEdit.
+EditScreen_SoftKeyCol4:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA14E  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEA153  f2 58 1f 60 cf
 	jr z, .LFEA15B                                       ; FEA158  66 01
@@ -175944,7 +175972,8 @@ sub_FEA1C2:
 	sub	(0x601f46:24), 0x01                  ; FEA1CB  c2 46 1f 60 3a 01
 	calr sub_FF0B3A                                          ; FEA1D1  1e 66 69
 	ret                                                  ; FEA1D4  0e
-sub_FEA1D5:
+; NoteEdit_SoftKeyCol5: the SoftKeyCol5 action of NoteEdit -- called only by SoftKeyCol5_NoteEdit.
+NoteEdit_SoftKeyCol5:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA1D5  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEA1DA  f2 58 1f 60 cf
 	jr z, .LFEA1EA                                       ; FEA1DF  66 09
@@ -176695,7 +176724,8 @@ sub_FEA923:
 .LFEA978:
 	m_or_mi8 MB24, 0x601f5b, 0x08                        ; FEA978  c2 5b 1f 60 3e 08
 	ret                                                  ; FEA97E  0e
-sub_FEA97F:
+; NoteEdit_LcdKeyRow1: the LcdKeyRow1 action of NoteEdit -- called only by LcdKeyRow1_NoteEdit.
+NoteEdit_LcdKeyRow1:
 	ld XIX,0x00601f1c                                    ; FEA97F  44 1c 1f 60 00
 	ld A,(XIX)                                           ; FEA984  84 21
 	bit 0x07,A                                           ; FEA986  c9 33 07
@@ -176711,7 +176741,8 @@ sub_FEA97F:
 	ret                                                  ; FEA99E  0e
 .LFEA99F:
 	ret                                                  ; FEA99F  0e
-sub_FEA9A0:
+; NoteEdit_LcdKeyRow2: the LcdKeyRow2 action of NoteEdit -- called only by LcdKeyRow2_NoteEdit.
+NoteEdit_LcdKeyRow2:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA9A0  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEA9A5  f2 58 1f 60 cf
 	jr z, .LFEA9B5                                       ; FEA9AA  66 09
@@ -176734,7 +176765,8 @@ sub_FEA9A0:
 	ret                                                  ; FEA9DE  0e
 .LFEA9DF:
 	ret                                                  ; FEA9DF  0e
-sub_FEA9E0:
+; NoteEdit_LcdKeyRow3: the LcdKeyRow3 action of NoteEdit -- called only by LcdKeyRow3_NoteEdit.
+NoteEdit_LcdKeyRow3:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA9E0  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEA9E5  f2 58 1f 60 cf
 	jr z, .LFEA9F5                                       ; FEA9EA  66 09
@@ -176757,7 +176789,8 @@ sub_FEA9E0:
 	ret                                                  ; FEAA1E  0e
 .LFEAA1F:
 	ret                                                  ; FEAA1F  0e
-sub_FEAA20:
+; EditScreen_LcdKeyRow4: the LcdKeyRow4 action of DrumEdit, NoteEdit -- called only by LcdKeyRow4_DrumEdit, LcdKeyRow4_NoteEdit.
+EditScreen_LcdKeyRow4:
 	m_bit 7, MD24, 0x601f58                              ; FEAA20  f2 58 1f 60 cf
 	jr z, .LFEAA28                                       ; FEAA25  66 01
 	ret                                                  ; FEAA27  0e
@@ -177194,7 +177227,8 @@ sub_FEAE58:
 	calr sub_FEF8D6                                          ; FEAE94  1e 3f 4a
 	calr sub_FEFD8A                                          ; FEAE97  1e f0 4e
 	ret                                                  ; FEAE9A  0e
-sub_FEAE9B:
+; DrumEdit_LcdKeyRow3: the LcdKeyRow3 action of DrumEdit -- called only by LcdKeyRow3_DrumEdit.
+DrumEdit_LcdKeyRow3:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAE9B  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEAEA0  f2 58 1f 60 cf
 	jr z, .LFEAEB0                                       ; FEAEA5  66 09
@@ -177242,7 +177276,8 @@ sub_FEAEBC:
 	ret                                                  ; FEAF27  0e
 .LFEAF28:
 	ret                                                  ; FEAF28  0e
-sub_FEAF29:
+; DrumEdit_LcdKeyRow2: the LcdKeyRow2 action of DrumEdit -- called only by LcdKeyRow2_DrumEdit.
+DrumEdit_LcdKeyRow2:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAF29  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEAF2E  f2 58 1f 60 cf
 	jr z, .LFEAF3E                                       ; FEAF33  66 09
@@ -177299,7 +177334,8 @@ sub_FEAFB7:
 	ld (0x601f44:24), a                                 ; FEAFCA  f2 44 1f 60 41
 .LFEAFCF:
 	ret                                                  ; FEAFCF  0e
-sub_FEAFD0:
+; DrumEdit_LcdKeyRow1: the LcdKeyRow1 action of DrumEdit -- called only by LcdKeyRow1_DrumEdit.
+DrumEdit_LcdKeyRow1:
 	ld XIX,0x00601f1c                                    ; FEAFD0  44 1c 1f 60 00
 	ld A,(XIX)                                           ; FEAFD5  84 21
 	bit 0x07,A                                           ; FEAFD7  c9 33 07
@@ -177321,7 +177357,8 @@ sub_FEAFF1:   ; entry: named by 1 `.long` operand, first at 0xFE9325
 	calr sub_FEFEBF                                          ; FEAFF7  1e c5 4e
 	calr sub_FEFD8A                                          ; FEAFFA  1e 8d 4d
 	ret                                                  ; FEAFFD  0e
-sub_FEAFFE:
+; DrumEdit_SoftKeyCol8: the SoftKeyCol8 action of DrumEdit -- called only by SoftKeyCol8_DrumEdit.
+DrumEdit_SoftKeyCol8:
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAFFE  c2 5b 1f 60 3c fe
 	calr sub_FEAFB7                                      ; FEB004  1e b0 ff
 	ld a, (0x601f44:24)                                 ; FEB007  c2 44 1f 60 21
@@ -185770,7 +185807,7 @@ LcdKeyRow4_MidiFileDirectPlay:
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF4674  1d 23 76 ff
 	pushw 0x05                                           ; FF4678  0b 05 00
 	pushw 0x0a                                           ; FF467B  0b 0a 00
-	calr sub_FF6388                                      ; FF467E  1e 07 1d
+	calr MidiFile_LcdKeyRow4                                      ; FF467E  1e 07 1d
 	lda xbc, (DL_F59567:24)                              ; FF4681  f2 67 95 f5 31
 	push XBC                                             ; FF4686  39
 	call DLB_Array8_SaveRegs                                      ; FF4687  1d 3f 76 ff
@@ -185843,7 +185880,7 @@ LcdKeyRow5_MidiFileDirectPlay:
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF46F2  1d 23 76 ff
 	pushw 0x05                                           ; FF46F6  0b 05 00
 	pushw 0x0a                                           ; FF46F9  0b 0a 00
-	calr sub_FF63C8                                      ; FF46FC  1e c9 1c
+	calr MidiFile_LcdKeyRow5                                      ; FF46FC  1e c9 1c
 	inc 8,XSP                                            ; FF46FF  ef 60
 	lda xbc, (DL_F59567:24)                              ; FF4701  f2 67 95 f5 31
 	push XBC                                             ; FF4706  39
@@ -186322,7 +186359,7 @@ LcdKeyRow1_DiskL0adFile:
 	ld (UI_Request_Hi:16), 0x40                                 ; FF4A49  f1 71 20 00 40
 	jr .LFF4A7F                                          ; FF4A4E  68 2f
 .LFF4A50:
-	calr sub_FF7564                                      ; FF4A50  1e 11 2b
+	calr DiskL0adFile_LcdKeyRow1                                      ; FF4A50  1e 11 2b
 	jr .LFF4A7F                                          ; FF4A53  68 2a
 .LFF4A55:
 	lda xbc, (DL_F5843F:24)                              ; FF4A55  f2 3f 84 f5 31
@@ -187599,7 +187636,7 @@ LcdKeyRow4_MidiFileL0ad:
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF534C  1d 23 76 ff
 	pushw 0x00                                           ; FF5350  0b 00 00
 	pushw 0x0a                                           ; FF5353  0b 0a 00
-	calr sub_FF6388                                      ; FF5356  1e 2f 10
+	calr MidiFile_LcdKeyRow4                                      ; FF5356  1e 2f 10
 	inc 8,XSP                                            ; FF5359  ef 60
 	inc 4,XSP                                            ; FF535B  ef 64
 	lda xbc, (DL_F5953B:24)                              ; FF535D  f2 3b 95 f5 31
@@ -187693,7 +187730,7 @@ LcdKeyRow5_MidiFileL0ad:
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF53F8  1d 23 76 ff
 	pushw 0x00                                           ; FF53FC  0b 00 00
 	pushw 0x0a                                           ; FF53FF  0b 0a 00
-	calr sub_FF63C8                                      ; FF5402  1e c3 0f
+	calr MidiFile_LcdKeyRow5                                      ; FF5402  1e c3 0f
 	inc 8,XSP                                            ; FF5405  ef 60
 	lda xbc, (DL_F5953B:24)                              ; FF5407  f2 3b 95 f5 31
 	push XBC                                             ; FF540C  39
@@ -188450,7 +188487,7 @@ LcdKeyRow1_DiskSaveFile_Page1:
 	call sub_FF7959                                      ; FF5A14  1d 59 79 ff
 	jr .LFF5A2A                                          ; FF5A18  68 10
 .LFF5A1A:
-	calr sub_FF5A2D                                      ; FF5A1A  1e 10 00
+	calr DiskSaveFile_Page1_LcdKeyRow1                                      ; FF5A1A  1e 10 00
 	cp wa, 0x00:i3                                         ; FF5A1D  d8 d8
 	jr z, .LFF5A2A                                       ; FF5A1F  66 09
 	ld (0x2229:16), 0x05                                 ; FF5A21  f1 29 22 00 05
@@ -188458,7 +188495,8 @@ LcdKeyRow1_DiskSaveFile_Page1:
 .LFF5A2A:
 	unlk XIZ                                             ; FF5A2A  ee 0d
 	ret                                                  ; FF5A2C  0e
-sub_FF5A2D:
+; DiskSaveFile_Page1_LcdKeyRow1: the LcdKeyRow1 action of DiskSaveFile_Page1 -- called only by LcdKeyRow1_DiskSaveFile_Page1.
+DiskSaveFile_Page1_LcdKeyRow1:
 	pushw hl                                             ; FF5A2D  2b
 	pushw de                                             ; FF5A2E  2a
 	push XIX                                             ; FF5A2F  3c
@@ -188807,7 +188845,7 @@ LcdKeyRow1_DiskSaveFile_Page3:
 	popw bc                                              ; FF5B4C  49
 	jr .LFF5B53                                          ; FF5B4D  68 04
 .LFF5B4F:
-	call sub_FF78C9                                      ; FF5B4F  1d c9 78 ff
+	call DiskSaveFile_Page3_LcdKeyRow1                                      ; FF5B4F  1d c9 78 ff
 .LFF5B53:
 	unlk XIZ                                             ; FF5B53  ee 0d
 	ret                                                  ; FF5B55  0e
@@ -188883,7 +188921,7 @@ LcdKeyRow1_DiskSaveFile_Page4:
 	jr .LFF5B90                                          ; FF5B85  68 09
 .LFF5B87:
 	ld (0x222a:16), 0x00                                 ; FF5B87  f1 2a 22 00 00
-	call sub_FF79B1                                      ; FF5B8C  1d b1 79 ff
+	call DiskSaveFile_Page4_LcdKeyRow1                                      ; FF5B8C  1d b1 79 ff
 .LFF5B90:
 	unlk XIZ                                             ; FF5B90  ee 0d
 	ret                                                  ; FF5B92  0e
@@ -189800,7 +189838,7 @@ LcdKeyRow4_MidiFileSave_Page1:
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF621E  1d 23 76 ff
 	pushw 0x00                                           ; FF6222  0b 00 00
 	pushw 0x08                                           ; FF6225  0b 08 00
-	calr sub_FF6388                                      ; FF6228  1e 5d 01
+	calr MidiFile_LcdKeyRow4                                      ; FF6228  1e 5d 01
 	inc 8,XSP                                            ; FF622B  ef 60
 	inc 4,XSP                                            ; FF622D  ef 64
 	lda xbc, (DL_F5953B:24)                              ; FF622F  f2 3b 95 f5 31
@@ -189914,7 +189952,7 @@ LcdKeyRow5_MidiFileSave_Page1:
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF62F6  1d 23 76 ff
 	pushw 0x00                                           ; FF62FA  0b 00 00
 	pushw 0x08                                           ; FF62FD  0b 08 00
-	calr sub_FF63C8                                      ; FF6300  1e c5 00
+	calr MidiFile_LcdKeyRow5                                      ; FF6300  1e c5 00
 	inc 8,XSP                                            ; FF6303  ef 60
 	inc 4,XSP                                            ; FF6305  ef 64
 	lda xbc, (DL_F5953B:24)                              ; FF6307  f2 3b 95 f5 31
@@ -189972,7 +190010,8 @@ LcdKeyRow5_MidiFileSave_Page1:
 	pop XIX                                              ; FF6384  5c
 	unlk XIZ                                             ; FF6385  ee 0d
 	ret                                                  ; FF6387  0e
-sub_FF6388:
+; MidiFile_LcdKeyRow4: the LcdKeyRow4 action of MidiFileDirectPlay, MidiFileL0ad, MidiFileSave_Page1 -- called only by LcdKeyRow4_MidiFileDirectPlay, LcdKeyRow4_MidiFileL0ad, LcdKeyRow4_MidiFileSave_Page1.
+MidiFile_LcdKeyRow4:
 	link XIZ,0x0000                                      ; FF6388  ee 0c 00 00
 	push XIX                                             ; FF638C  3c
 	lda xix, (0x272e:16)                                ; FF638D  f1 2e 27 34
@@ -190000,7 +190039,8 @@ sub_FF6388:
 	pop XIX                                              ; FF63C4  5c
 	unlk XIZ                                             ; FF63C5  ee 0d
 	ret                                                  ; FF63C7  0e
-sub_FF63C8:
+; MidiFile_LcdKeyRow5: the LcdKeyRow5 action of MidiFileDirectPlay, MidiFileL0ad, MidiFileSave_Page1 -- called only by LcdKeyRow5_MidiFileDirectPlay, LcdKeyRow5_MidiFileL0ad, LcdKeyRow5_MidiFileSave_Page1.
+MidiFile_LcdKeyRow5:
 	link XIZ,0xfffe                                      ; FF63C8  ee 0c fe ff
 	pushw hl                                             ; FF63CC  2b
 	pushw de                                             ; FF63CD  2a
@@ -192590,7 +192630,8 @@ Var7FD6_IsBitClear:
 .LFF7561:
 	unlk XIZ                                             ; FF7561  ee 0d
 	ret                                                  ; FF7563  0e
-sub_FF7564:
+; DiskL0adFile_LcdKeyRow1: the LcdKeyRow1 action of DiskL0adFile -- called only by LcdKeyRow1_DiskL0adFile.
+DiskL0adFile_LcdKeyRow1:
 	pushw hl                                             ; FF7564  2b
 	m_res 3, MD16, UI_RequestBits                                ; FF7565  f1 75 20 b3
 	ld h, (0x2725:16)                                   ; FF7569  c1 25 27 26
@@ -193176,7 +193217,8 @@ MemCpy_C:
 	pop XIX                                              ; FF78C6  5c
 	pop XIZ                                              ; FF78C7  5e
 	ret                                                  ; FF78C8  0e
-sub_FF78C9:
+; DiskSaveFile_Page3_LcdKeyRow1: the LcdKeyRow1 action of DiskSaveFile_Page3 -- called only by LcdKeyRow1_DiskSaveFile_Page3.
+DiskSaveFile_Page3_LcdKeyRow1:
 	push XIZ                                             ; FF78C9  3e
 	push XIX                                             ; FF78CA  3c
 	push XHL                                             ; FF78CB  3b
@@ -193294,7 +193336,8 @@ DiskFileScreen_LeaveCommon:
 	pop XIX                                              ; FF79AE  5c
 	pop XIZ                                              ; FF79AF  5e
 	ret                                                  ; FF79B0  0e
-sub_FF79B1:
+; DiskSaveFile_Page4_LcdKeyRow1: the LcdKeyRow1 action of DiskSaveFile_Page4 -- called only by LcdKeyRow1_DiskSaveFile_Page4.
+DiskSaveFile_Page4_LcdKeyRow1:
 	push XIZ                                             ; FF79B1  3e
 	push XIX                                             ; FF79B2  3c
 	push XHL                                             ; FF79B3  3b

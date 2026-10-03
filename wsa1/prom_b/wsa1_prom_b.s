@@ -1506,27 +1506,27 @@
 	.set	ToneEdit_StepFromEvent, 0xFD7C2D
 	.set	sub_FD7C5A, 0xFD7C5A
 	.set	sub_FD7C83, 0xFD7C83
-	.set	sub_FD7E1A, 0xFD7E1A
-	.set	sub_FD7E66, 0xFD7E66
-	.set	sub_FD7ED9, 0xFD7ED9
-	.set	sub_FD7F4C, 0xFD7F4C
-	.set	sub_FD7FBF, 0xFD7FBF
-	.set	sub_FD8030, 0xFD8030
-	.set	sub_FD80A3, 0xFD80A3
+	.set	SoundEditLfo_SoftKeyCol2, 0xFD7E1A
+	.set	SoundEditLfo_SoftKeyCol3, 0xFD7E66
+	.set	SoundEditLfo_SoftKeyCol4, 0xFD7ED9
+	.set	SoundEditLfo_SoftKeyCol5, 0xFD7F4C
+	.set	SoundEditLfo_SoftKeyCol6, 0xFD7FBF
+	.set	SoundEditLfo_SoftKeyCol7, 0xFD8030
+	.set	SoundEditLfo_SoftKeyCol8, 0xFD80A3
 	.set	sub_FD8116, 0xFD8116
-	.set	sub_FD8155, 0xFD8155
-	.set	sub_FD81C8, 0xFD81C8
-	.set	sub_FD823B, 0xFD823B
-	.set	sub_FD82D8, 0xFD82D8
-	.set	sub_FD834B, 0xFD834B
-	.set	sub_FD83E8, 0xFD83E8
-	.set	sub_FD845B, 0xFD845B
-	.set	sub_FD84F8, 0xFD84F8
-	.set	sub_FD859B, 0xFD859B
-	.set	sub_FD863E, 0xFD863E
-	.set	sub_FD86E1, 0xFD86E1
-	.set	sub_FD8747, 0xFD8747
-	.set	sub_FD87A5, 0xFD87A5
+	.set	SoundEditEnvelope1_SoftKeyCol1, 0xFD8155
+	.set	SoundEditEnvelope1_SoftKeyCol2, 0xFD81C8
+	.set	SoundEditEnvelope1_SoftKeyCol3, 0xFD823B
+	.set	SoundEditEnvelope1_SoftKeyCol4, 0xFD82D8
+	.set	SoundEditEnvelope1_SoftKeyCol5, 0xFD834B
+	.set	SoundEditEnvelope1_SoftKeyCol6, 0xFD83E8
+	.set	SoundEditEnvelope1_SoftKeyCol7, 0xFD845B
+	.set	SoundEditEnvelope2_SoftKeyCol2, 0xFD84F8
+	.set	SoundEditEnvelope2_SoftKeyCol3, 0xFD859B
+	.set	SoundEditEnvelope2_SoftKeyCol4, 0xFD863E
+	.set	SoundEditEnvelope2_SoftKeyCol5, 0xFD86E1
+	.set	SoundEditEnvelope2_SoftKeyCol7, 0xFD8747
+	.set	SoundEditEnvelope2_SoftKeyCol8, 0xFD87A5
 	.set	Var27A3_SelectSlot, 0xFD9863
 	.set	Var27F4_Get, 0xFD9D5C
 	.set	sub_FDA002, 0xFDA002
@@ -18756,7 +18756,7 @@ SoftKeyCol1_SoundEditPitchEnvelope1:
 	ld	bc, (xiz+8)	; F0A4C8  ld BC,(XIZ+0x08)
 	extz	bc	; F0A4CB  extz BC
 	pushw	bc	; F0A4CD  push BC
-	call	sub_FD8155	; F0A4CE  call 0xfd8155
+	call	SoundEditEnvelope1_SoftKeyCol1	; F0A4CE  call 0xfd8155
 	inc	6, xsp	; F0A4D2  inc 6,XSP
 	unlk XIZ	; F0A4D4  unlk XIZ
 	ret	; F0A4D6  ret
@@ -18782,7 +18782,7 @@ SoftKeyCol2_SoundEditPitchEnvelope1:
 	ld	bc, (xiz+8)	; F0A4E1  ld BC,(XIZ+0x08)
 	extz	bc	; F0A4E4  extz BC
 	pushw	bc	; F0A4E6  push BC
-	call	sub_FD81C8	; F0A4E7  call 0xfd81c8
+	call	SoundEditEnvelope1_SoftKeyCol2	; F0A4E7  call 0xfd81c8
 	inc	6, xsp	; F0A4EB  inc 6,XSP
 	unlk XIZ	; F0A4ED  unlk XIZ
 	ret	; F0A4EF  ret
@@ -18808,7 +18808,7 @@ SoftKeyCol3_SoundEditPitchEnvelope1:
 	ld	bc, (xiz+8)	; F0A4FA  ld BC,(XIZ+0x08)
 	extz	bc	; F0A4FD  extz BC
 	pushw	bc	; F0A4FF  push BC
-	call	sub_FD823B	; F0A500  call 0xfd823b
+	call	SoundEditEnvelope1_SoftKeyCol3	; F0A500  call 0xfd823b
 	inc	6, xsp	; F0A504  inc 6,XSP
 	unlk XIZ	; F0A506  unlk XIZ
 	ret	; F0A508  ret
@@ -18834,7 +18834,7 @@ SoftKeyCol4_SoundEditPitchEnvelope1:
 	ld	bc, (xiz+8)	; F0A513  ld BC,(XIZ+0x08)
 	extz	bc	; F0A516  extz BC
 	pushw	bc	; F0A518  push BC
-	call	sub_FD82D8	; F0A519  call 0xfd82d8
+	call	SoundEditEnvelope1_SoftKeyCol4	; F0A519  call 0xfd82d8
 	inc	6, xsp	; F0A51D  inc 6,XSP
 	unlk XIZ	; F0A51F  unlk XIZ
 	ret	; F0A521  ret
@@ -18860,7 +18860,7 @@ SoftKeyCol5_SoundEditPitchEnvelope1:
 	ld	bc, (xiz+8)	; F0A52C  ld BC,(XIZ+0x08)
 	extz	bc	; F0A52F  extz BC
 	pushw	bc	; F0A531  push BC
-	call	sub_FD834B	; F0A532  call 0xfd834b
+	call	SoundEditEnvelope1_SoftKeyCol5	; F0A532  call 0xfd834b
 	inc	6, xsp	; F0A536  inc 6,XSP
 	unlk XIZ	; F0A538  unlk XIZ
 	ret	; F0A53A  ret
@@ -18886,7 +18886,7 @@ SoftKeyCol6_SoundEditPitchEnvelope1:
 	ld	bc, (xiz+8)	; F0A545  ld BC,(XIZ+0x08)
 	extz	bc	; F0A548  extz BC
 	pushw	bc	; F0A54A  push BC
-	call	sub_FD83E8	; F0A54B  call 0xfd83e8
+	call	SoundEditEnvelope1_SoftKeyCol6	; F0A54B  call 0xfd83e8
 	inc	6, xsp	; F0A54F  inc 6,XSP
 	unlk XIZ	; F0A551  unlk XIZ
 	ret	; F0A553  ret
@@ -18912,7 +18912,7 @@ SoftKeyCol7_SoundEditPitchEnvelope1:
 	ld	bc, (xiz+8)	; F0A55E  ld BC,(XIZ+0x08)
 	extz	bc	; F0A561  extz BC
 	pushw	bc	; F0A563  push BC
-	call	sub_FD845B	; F0A564  call 0xfd845b
+	call	SoundEditEnvelope1_SoftKeyCol7	; F0A564  call 0xfd845b
 	inc	6, xsp	; F0A568  inc 6,XSP
 	unlk XIZ	; F0A56A  unlk XIZ
 	ret	; F0A56C  ret
@@ -19158,7 +19158,7 @@ SoftKeyCol2_SoundEditPitchEnvelope2:
 	ld	bc, (xiz+8)	; F0A671  ld BC,(XIZ+0x08)
 	extz	bc	; F0A674  extz BC
 	pushw	bc	; F0A676  push BC
-	call	sub_FD84F8	; F0A677  call 0xfd84f8
+	call	SoundEditEnvelope2_SoftKeyCol2	; F0A677  call 0xfd84f8
 	pop	xbc	; F0A67B  pop XBC
 	unlk XIZ	; F0A67C  unlk XIZ
 	ret	; F0A67E  ret
@@ -19183,7 +19183,7 @@ SoftKeyCol3_SoundEditPitchEnvelope2:
 	ld	bc, (xiz+8)	; F0A686  ld BC,(XIZ+0x08)
 	extz	bc	; F0A689  extz BC
 	pushw	bc	; F0A68B  push BC
-	call	sub_FD859B	; F0A68C  call 0xfd859b
+	call	SoundEditEnvelope2_SoftKeyCol3	; F0A68C  call 0xfd859b
 	pop	xbc	; F0A690  pop XBC
 	unlk XIZ	; F0A691  unlk XIZ
 	ret	; F0A693  ret
@@ -19208,7 +19208,7 @@ SoftKeyCol4_SoundEditPitchEnvelope2:
 	ld	bc, (xiz+8)	; F0A69B  ld BC,(XIZ+0x08)
 	extz	bc	; F0A69E  extz BC
 	pushw	bc	; F0A6A0  push BC
-	call	sub_FD863E	; F0A6A1  call 0xfd863e
+	call	SoundEditEnvelope2_SoftKeyCol4	; F0A6A1  call 0xfd863e
 	pop	xbc	; F0A6A5  pop XBC
 	unlk XIZ	; F0A6A6  unlk XIZ
 	ret	; F0A6A8  ret
@@ -19233,7 +19233,7 @@ SoftKeyCol5_SoundEditPitchEnvelope2:
 	ld	bc, (xiz+8)	; F0A6B0  ld BC,(XIZ+0x08)
 	extz	bc	; F0A6B3  extz BC
 	pushw	bc	; F0A6B5  push BC
-	call	sub_FD86E1	; F0A6B6  call 0xfd86e1
+	call	SoundEditEnvelope2_SoftKeyCol5	; F0A6B6  call 0xfd86e1
 	pop	xbc	; F0A6BA  pop XBC
 	unlk XIZ	; F0A6BB  unlk XIZ
 	ret	; F0A6BD  ret
@@ -19258,7 +19258,7 @@ SoftKeyCol7_SoundEditPitchEnvelope2:
 	ld	bc, (xiz+8)	; F0A6C5  ld BC,(XIZ+0x08)
 	extz	bc	; F0A6C8  extz BC
 	pushw	bc	; F0A6CA  push BC
-	call	sub_FD8747	; F0A6CB  call 0xfd8747
+	call	SoundEditEnvelope2_SoftKeyCol7	; F0A6CB  call 0xfd8747
 	pop	xbc	; F0A6CF  pop XBC
 	unlk XIZ	; F0A6D0  unlk XIZ
 	ret	; F0A6D2  ret
@@ -19283,7 +19283,7 @@ SoftKeyCol8_SoundEditPitchEnvelope2:
 	ld	bc, (xiz+8)	; F0A6DA  ld BC,(XIZ+0x08)
 	extz	bc	; F0A6DD  extz BC
 	pushw	bc	; F0A6DF  push BC
-	call	sub_FD87A5	; F0A6E0  call 0xfd87a5
+	call	SoundEditEnvelope2_SoftKeyCol8	; F0A6E0  call 0xfd87a5
 	pop	xbc	; F0A6E4  pop XBC
 	unlk XIZ	; F0A6E5  unlk XIZ
 	ret	; F0A6E7  ret
@@ -19519,7 +19519,7 @@ SoftKeyCol2_SoundEditPitchLfo:
 	ld	bc, (xiz+8)	; F0A7D8  ld BC,(XIZ+0x08)
 	extz	bc	; F0A7DB  extz BC
 	pushw	bc	; F0A7DD  push BC
-	call	sub_FD7E1A	; F0A7DE  call 0xfd7e1a
+	call	SoundEditLfo_SoftKeyCol2	; F0A7DE  call 0xfd7e1a
 	pop	xbc	; F0A7E2  pop XBC
 	unlk XIZ	; F0A7E3  unlk XIZ
 	ret	; F0A7E5  ret
@@ -19544,7 +19544,7 @@ SoftKeyCol3_SoundEditPitchLfo:
 	ld	bc, (xiz+8)	; F0A7ED  ld BC,(XIZ+0x08)
 	extz	bc	; F0A7F0  extz BC
 	pushw	bc	; F0A7F2  push BC
-	call	sub_FD7E66	; F0A7F3  call 0xfd7e66
+	call	SoundEditLfo_SoftKeyCol3	; F0A7F3  call 0xfd7e66
 	pop	xbc	; F0A7F7  pop XBC
 	unlk XIZ	; F0A7F8  unlk XIZ
 	ret	; F0A7FA  ret
@@ -19569,7 +19569,7 @@ SoftKeyCol4_SoundEditPitchLfo:
 	ld	bc, (xiz+8)	; F0A802  ld BC,(XIZ+0x08)
 	extz	bc	; F0A805  extz BC
 	pushw	bc	; F0A807  push BC
-	call	sub_FD7ED9	; F0A808  call 0xfd7ed9
+	call	SoundEditLfo_SoftKeyCol4	; F0A808  call 0xfd7ed9
 	pop	xbc	; F0A80C  pop XBC
 	unlk XIZ	; F0A80D  unlk XIZ
 	ret	; F0A80F  ret
@@ -19594,7 +19594,7 @@ SoftKeyCol5_SoundEditPitchLfo:
 	ld	bc, (xiz+8)	; F0A817  ld BC,(XIZ+0x08)
 	extz	bc	; F0A81A  extz BC
 	pushw	bc	; F0A81C  push BC
-	call	sub_FD7F4C	; F0A81D  call 0xfd7f4c
+	call	SoundEditLfo_SoftKeyCol5	; F0A81D  call 0xfd7f4c
 	pop	xbc	; F0A821  pop XBC
 	unlk XIZ	; F0A822  unlk XIZ
 	ret	; F0A824  ret
@@ -19619,7 +19619,7 @@ SoftKeyCol6_SoundEditPitchLfo:
 	ld	bc, (xiz+8)	; F0A82C  ld BC,(XIZ+0x08)
 	extz	bc	; F0A82F  extz BC
 	pushw	bc	; F0A831  push BC
-	call	sub_FD7FBF	; F0A832  call 0xfd7fbf
+	call	SoundEditLfo_SoftKeyCol6	; F0A832  call 0xfd7fbf
 	pop	xbc	; F0A836  pop XBC
 	unlk XIZ	; F0A837  unlk XIZ
 	ret	; F0A839  ret
@@ -19644,7 +19644,7 @@ SoftKeyCol7_SoundEditPitchLfo:
 	ld	bc, (xiz+8)	; F0A841  ld BC,(XIZ+0x08)
 	extz	bc	; F0A844  extz BC
 	pushw	bc	; F0A846  push BC
-	call	sub_FD8030	; F0A847  call 0xfd8030
+	call	SoundEditLfo_SoftKeyCol7	; F0A847  call 0xfd8030
 	pop	xbc	; F0A84B  pop XBC
 	unlk XIZ	; F0A84C  unlk XIZ
 	ret	; F0A84E  ret
@@ -19669,7 +19669,7 @@ SoftKeyCol8_SoundEditPitchLfo:
 	ld	bc, (xiz+8)	; F0A856  ld BC,(XIZ+0x08)
 	extz	bc	; F0A859  extz BC
 	pushw	bc	; F0A85B  push BC
-	call	sub_FD80A3	; F0A85C  call 0xfd80a3
+	call	SoundEditLfo_SoftKeyCol8	; F0A85C  call 0xfd80a3
 	pop	xbc	; F0A860  pop XBC
 	unlk XIZ	; F0A861  unlk XIZ
 	ret	; F0A863  ret
