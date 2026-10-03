@@ -33,7 +33,6 @@ extern const char NakaInst_Param_Val00_01;
 extern const char NakaInst_iduMurai;
 extern const char Naka_FileManagerEntry;
 extern const char Naka_PresentationRootState;
-extern const char SendPartDataBlock_Data2;
 extern const char SendPartDataBlock_Data5;
 extern const char SeqByteBlock_PathNormalize;
 extern const char WidgetCharMap_DataEntry1;
@@ -2093,7 +2092,7 @@ const naka_debug_naming_t naka_debug_naming_data
     .field_0870 = 0x001F,
 
     .ptrs_2 = {
-        NAKA_ADDR(SendPartDataBlock_Data2),
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
         0x00EB2AC2,
         NAKA_ADDR(Naka_FileManagerEntry),
         SELF(v0_e2),

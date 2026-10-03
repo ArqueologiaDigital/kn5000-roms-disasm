@@ -36,6 +36,10 @@
 .equ RHYTHM_DATA_ROM__BASE_ADDR, 0x400000
 .equ TABLE_DATA_ROM__BASE_ADDR, 0x800000
 .equ PROGRAM_FLASH__BASE_ADDR, 0xe00000
+; bits 16-23: the 64 KB block of a 24-bit address (Flash_CopyROMToBuffer, Flash_EraseSector_*), or
+; the third byte of a word.  Once spelled as whatever label sat at 0xFF0000 in each version
+; (v10 SendPartDataBlock_Data2, v7 ToneGen_ProcessMidiConverge_Code; v9 had none, so the number).
+.equ MASK_BITS16_23, 0x00FF0000
 
 .equ SYSTEM_TIMESTAMP, 0x409
 

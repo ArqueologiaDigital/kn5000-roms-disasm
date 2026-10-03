@@ -6823,10 +6823,10 @@ PaletteReduce_FindClosest:
 	ld xwa, (xsp + 24)
 	add (xsp + 20), xwa
 	ld xwa, (xsp + 44)
-	and xwa, 0xff0000
+	and xwa, MASK_BITS16_23
 	srl xwa, 16
 	ld xbc, (xsp + 40)
-	and xbc, 0xff0000
+	and xbc, MASK_BITS16_23
 	srl xbc, 16
 	sub xbc, xwa
 	ld xwa, xbc
@@ -6996,7 +6996,7 @@ CaptureLcd_WritePaletteOr94:
 	sla de, 2
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
-	and xbc, 0xff0000	; is this a mask for Red?
+	and xbc, MASK_BITS16_23	; is this a mask for Red?
 	srl xbc, 16
 	ld	(xwa+de), c
 	ld bc, iz
@@ -7021,7 +7021,7 @@ CaptureLcd_WritePaletteNoOr94:
 	sla de, 2
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
-	and xbc, 0xff0000	; is this a mask for Red?
+	and xbc, MASK_BITS16_23	; is this a mask for Red?
 	srl xbc, 16
 	ld	(xwa+de), c
 	ld bc, iz

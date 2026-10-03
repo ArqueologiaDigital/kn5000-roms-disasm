@@ -63,7 +63,6 @@ ResIconProc = 0x00FA62E3;
 ResMethodProc = 0x00FA5948;
 ResNameProc = 0x00FA62CB;
 ResStringProc = 0x00FA62E9;
-SendPartDataBlock_Data2 = 0x00FF0000;
 SupportClassProc = 0x00FA4836;
 TitleProc = 0x00FA4E03;
 UserBitmapCheck = 0x00F9C5D5;

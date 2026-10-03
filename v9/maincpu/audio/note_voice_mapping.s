@@ -22946,7 +22946,7 @@ ProcessMidiConverge_Block:
 	ld xwa, 0:i3
 	ld a, l
 	sll xwa, 16
-	and xwa, 0xff0000
+	and xwa, MASK_BITS16_23
 	add (0xebfd:16), xwa
 	calr RingBuffer_ReadByte
 	ld wa, hl

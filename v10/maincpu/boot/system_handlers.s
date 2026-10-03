@@ -6328,7 +6328,7 @@ Flash_EraseSector_UseBank1:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
-	ld xwa, SendPartDataBlock_Data2
+	ld xwa, MASK_BITS16_23
 	and (xsp + 4), xwa
 	call Get_Region_Code
 	cp l, 4:i3
@@ -6504,7 +6504,7 @@ Flash_FillBuffer_Loop:
 
 Flash_CopyROMToBuffer:
 	ld xbc, xwa
-	and xbc, SendPartDataBlock_Data2
+	and xbc, MASK_BITS16_23
 	ld xwa, 0x69800
 	ld xde, 0x8000
 	jp Copy_DE_words_from_XBC_to_XWA
@@ -6515,7 +6515,7 @@ Flash_WriteBufferToChip:
 	ld (xsp + 10), a
 	lda xwa, (0x069800:24)
 	ld (xsp + 2), xwa
-	and xbc, SendPartDataBlock_Data2
+	and xbc, MASK_BITS16_23
 	ld (xsp + 6), xbc
 	ld iz, 0:i3
 
@@ -6552,7 +6552,7 @@ Flash_WriteFromMemory:
 	ld (xsp + 2), xde
 	ld (xsp + 6), xbc
 	ld (xsp + 10), a
-	ld xwa, SendPartDataBlock_Data2
+	ld xwa, MASK_BITS16_23
 	and (xsp + 2), xwa
 	ld iz, 0:i3
 

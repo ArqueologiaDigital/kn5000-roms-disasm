@@ -64,7 +64,6 @@ extern const char ResIconProc;
 extern const char ResMethodProc;
 extern const char ResNameProc;
 extern const char ResStringProc;
-extern const char SendPartDataBlock_Data2;
 extern const char SupportClassProc;
 extern const char TitleProc;
 extern const char UserBitmapCheck;
@@ -3461,15 +3460,15 @@ const naka_disk_warning_t naka_disk_warning_data
     .field_0e06 = 0x00FF,
 
     .ptrs_8 = {
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
-        NAKA_ADDR(SendPartDataBlock_Data2),
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
+        0x00FF0000u /* a value, not a pointer: identical in v7/v9/v10 */,
     },
 
     .pad_73 = { 0 },
