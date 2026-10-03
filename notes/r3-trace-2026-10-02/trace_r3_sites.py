@@ -16,6 +16,9 @@ USAGE
   python3 notes/r3-trace-2026-10-02/trace_r3_sites.py --image v10 \\
       --file sequencer/accompaniment_engine.s --report BR.json --out TRUSTED.json
   python3 scripts/converters/symbolize_numeric_branches.py --image v10 --trust-traced TRUSTED.json --apply --verify
+  --seed 0xF63051,...  adds entry addresses for blocks no call reaches but that were read by hand as code
+  (2026-10-03); the trace still has to reach each R3 site AND its target, so a seed only vouches for the
+  block's first instruction.
 """
 import argparse
 import glob
@@ -41,6 +44,8 @@ ap.add_argument("--file", required=True)
 ap.add_argument("--report", required=True)
 ap.add_argument("--out", required=True)
 ap.add_argument("--rich", action="store_true", help="also enter at .long code labels and consistent compiled-switch targets")
+ap.add_argument("--seed", default="", help="comma-separated extra entry addresses (hex): blocks no call "
+                "reaches that were read by hand as code; the trace checks their branches like any other")
 a = ap.parse_args()
 addr = {}
 for l in subprocess.run([NM, "--defined-only", os.path.join(REPO, "rebuilt_ROMs/kn5000_%s_program.llvm.elf" % a.image)],
@@ -57,7 +62,7 @@ for f in glob.glob(os.path.join(REPO, a.image, "maincpu", "**", "*.s"), recursiv
         m = CALL.match(l.split(";")[0])
         if m and m.group(1) in addr:
             called.add(addr[m.group(1)])
-ents = set(called)
+ents = set(called) | {int(x, 16) for x in a.seed.split(",") if x.strip()}
 if a.rich:
     # the re-framer's entries too: code labels a `.long` table holds, and the case targets of the
     # compiled switches that agree with a call-entered whole-image trace (reframe_traced.py)

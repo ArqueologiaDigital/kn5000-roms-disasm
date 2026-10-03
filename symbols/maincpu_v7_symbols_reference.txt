@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,297
-#   semantic names ........... 50,372 (98.2%)
+#   symbols .................. 51,302
+#   semantic names ........... 50,377 (98.2%)
 #   positional names ......... 925
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -32484,7 +32484,12 @@ AccPlayback_PartAssign_FullSetup 00F62BB9
 AccPlayback_PartAssign_LargeBeat 00F62BEB
 AccPlayback_PartAssign_LargeBeat2 00F62C10
 RhythmFunc_NullRet 00F62C45
-AccPlayback_PartAssign_DataBlock 00F62C46
+CmStep_DebugShowHexBytes 00F62C46
+CmStep_DebugShowHexBytes_OnCmStep 00F62C51
+CmStep_DebugShowHexBytes_Return 00F62C8D
+CmStep_DebugPrintHexByte 00F62C90
+CmStep_DebugPutCharStub 00F62CA4
+CmStep_DebugSplitHexDigits 00F62CA7
 AccPat_ShiftAndMask 00F62CD0
 AccPat_ShiftAndMask_Pad 00F62CDA
 AccPat_IndexToAddress 00F62CDC

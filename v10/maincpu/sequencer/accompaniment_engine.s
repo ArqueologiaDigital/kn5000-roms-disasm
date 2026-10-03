@@ -22036,47 +22036,59 @@ AccPlayback_PartAssign_LargeBeat2:
 RhythmFunc_NullRet:
 	ret
 
-AccPlayback_PartAssign_DataBlock:
+; CmStep_DebugShowHexBytes -- on title 0xB6 (TITLE_CMSTEP) only, print six RAM bytes (0x370F, 0x371A, 0x3718,
+;          0x3717, 0x3714, 0x3715) as two hex digits each at fixed screen positions (IX 480, 6962, 6967 ...).
+;          A debug readout: CmStep_DebugPrintHexByte splits the byte with CmStep_DebugSplitHexDigits and passes
+;          each digit to CmStep_DebugPutCharStub, which is a bare `ret` -- nothing is drawn.  No call, jump or
+;          pointer reaches the block; its branches are symbolic because a trace seeded at its first byte
+;          reaches each of them and its target (notes/r3-trace-2026-10-02, --seed).  Was named as data
+;          (AccPlayback_PartAssign_DataBlock).
+CmStep_DebugShowHexBytes:
 	nop
 	nop
 	cp	(ACTIVE_TITLE:16), 182
-	jr	z, 2
-	jr	60
+	jr	z, CmStep_DebugShowHexBytes_OnCmStep
+	jr	CmStep_DebugShowHexBytes_Return
+CmStep_DebugShowHexBytes_OnCmStep:
 	ld	a, (0x370f:16)
 	ldw	ix, 480
-	calr	53
+	calr	CmStep_DebugPrintHexByte
 	ld	a, (0x371a:16)
 	ldw	ix, 6962
-	calr	43
+	calr	CmStep_DebugPrintHexByte
 	ld	a, (0x3718:16)
 	ldw	ix, 6967
-	calr	33
+	calr	CmStep_DebugPrintHexByte
 	ld	a, (0x3717:16)
 	ldw	ix, 6972
-	calr	23
+	calr	CmStep_DebugPrintHexByte
 	ld	a, (0x3714:16)
 	ldw	ix, 6977
-	calr	13
+	calr	CmStep_DebugPrintHexByte
 	ld	a, (0x3715:16)
 	ldw	ix, 6982
-	calr	3
+	calr	CmStep_DebugPrintHexByte
+CmStep_DebugShowHexBytes_Return:
 	ret
 	nop
 	nop
-	calr	20
+CmStep_DebugPrintHexByte:
+	calr	CmStep_DebugSplitHexDigits
 	pushw	ix
 	ld	a, d
-	calr	11
+	calr	CmStep_DebugPutCharStub
 	popw	ix
 	inc	1, ix
 	ld	a, e
-	calr	3
+	calr	CmStep_DebugPutCharStub
 	ret
 	nop
 	nop
+CmStep_DebugPutCharStub:
 	ret
 	nop
 	nop
+CmStep_DebugSplitHexDigits:
 	ld	e, a
 	and	wa, 240
 	srl	wa, 4

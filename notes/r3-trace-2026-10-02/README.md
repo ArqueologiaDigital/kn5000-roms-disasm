@@ -15,3 +15,17 @@ re-mirrors the tree and compares the dump: PASS each time).
 
 Every trace reported 0 conflicts.  The remaining refusals are in code no call reaches (jump
 tables and indirect calls are not followed), or in data.
+
+## Seeded blocks (2026-10-03)
+
+`--seed ADDR[,ADDR...]` adds entry addresses for a block that no `call` reaches but that was read
+by hand as code. The trace still has to reach each R3 site and its target from there, so a seed
+vouches only for the block's first instruction.
+
+| file | block | seed (v10 / v9 / v7) | R3 sites reached | applied |
+|---|---|---|---|---|
+| `trusted_seed_cmstep_debug_<tree>.json` | `CmStep_DebugShowHexBytes` (accompaniment_engine.s) | 0xF6304A / 0xF6304A / 0xF62C46 | 11 / 11 / 11 | 11 each, `--verify` PASS |
+
+The seed was chosen because the block is coherent without the trace. All six `calr`s resolve to
+one routine. That routine's two `calr`s resolve to a nibble splitter and a bare `ret`, and the
+digit table "0123456789ABCDEF" follows.
