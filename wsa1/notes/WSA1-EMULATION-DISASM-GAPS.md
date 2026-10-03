@@ -891,7 +891,7 @@ as "two, not six" was arithmetic coincidence. It is not evidence.
 A/D channels, carries one pot and one encoder on the panel link, and has a shorter disk menu".
 That is *consistent* with a rack and does not by itself exclude any other build without that panel
 board. Note also that the two *software* analogue channels variant 2 keeps in the `0xF8DC25` scan
-are not controls at all: `sub_F8DD4D` / `sub_F8DD62` read RAM `(0x600000)` / `(0x600001)`, parked
+are not controls at all: `AnalogScan_RamChannel4` / `AnalogScan_RamChannel5` read RAM `(0x600000)` / `(0x600001)`, parked
 at `0x80` by `AnalogScan_InitSoftChannels` and written by the display-list interpreter at prom_b
 `0xF57C87`.
 

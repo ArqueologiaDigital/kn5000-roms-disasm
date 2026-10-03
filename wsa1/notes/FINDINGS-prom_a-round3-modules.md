@@ -80,7 +80,7 @@ bounded by the drawing record's count field and whose last five slots alias slot
 wrong: `notes/prom_a_ptr_tables.py` reports four pointer runs, and **two of the
 four are wrong as reported** — its 64-entry run at 0xF914FB is two 32-entry
 tables (two arms of one `cp (0x2687),0x00`), and its 32-entry run at 0xF91865 is
-**four 8-entry tables**, because `sub_F917F4` reads exactly eight slots, one per
+**four 8-entry tables**, because `FieldRedraw_CallPerSetBit` reads exactly eight slots, one per
 bit of A. A run detector measures SHAPE; only a reader measures EXTENT. Both
 corrections are asserted by the generator's `--check`.
 

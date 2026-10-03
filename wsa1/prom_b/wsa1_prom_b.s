@@ -435,37 +435,37 @@
 	.set	PanelWire_Service, 0xF8A023
 	.set	T_F40618_Nop, 0xF8A027
 	.set	PanelEvent_Service, 0xF8A81D
-	.set	sub_F8BC00, 0xF8BC00
-	.set	sub_F8BC04, 0xF8BC04
-	.set	sub_F8BC08, 0xF8BC08
+	.set	FixedEventList_AppendStackArgs, 0xF8BC00
+	.set	EventQueue_AppendStackArgs, 0xF8BC04
+	.set	PendingEventQueue_AppendStackArgs, 0xF8BC08
 	.set	AsciiDigits3_ToValue, 0xF8BC0C
 	.set	AsciiField_ToSignedValue, 0xF8BC67
 	.set	AsciiField_Clear, 0xF8BC78
-	.set	sub_F8BC8A, 0xF8BC8A
-	.set	sub_F8BCAF, 0xF8BCAF
-	.set	sub_F8BCC9, 0xF8BCC9
-	.set	sub_F8BCD0, 0xF8BCD0
+	.set	Value_ToAsciiDigits3_LeftJustified, 0xF8BC8A
+	.set	Value_ToAsciiDigits3_RightJustified, 0xF8BCAF
+	.set	Value_ToSignedAsciiDigits3_RightJustified, 0xF8BCC9
+	.set	Value_ToSignedAsciiDigits3_LeftJustified, 0xF8BCD0
 	.set	Value_ToAsciiDigits3, 0xF8BCD7
-	.set	sub_F8BD73, 0xF8BD73
-	.set	sub_F8BDC5, 0xF8BDC5
-	.set	sub_F8BDF8, 0xF8BDF8
-	.set	sub_F8C000, 0xF8C000
-	.set	sub_F8C032, 0xF8C032
-	.set	sub_F8C04E, 0xF8C04E
-	.set	sub_F8C071, 0xF8C071
+	.set	Value_ApplyNibbleDeltaClamped, 0xF8BD73
+	.set	PanelButton_CallTableEntry, 0xF8BDC5
+	.set	PanelButton_CallPageTableEntry, 0xF8BDF8
+	.set	PanelLed_PhaseVector, 0xF8C000
+	.set	PanelLed_OnPartEvent, 0xF8C032
+	.set	PanelLed_OnClass20Event, 0xF8C04E
+	.set	PanelLed_OnClass90Event, 0xF8C071
 	.set	T_F40684_Nop, 0xF8C095
 	.set	T_F40688_Nop, 0xF8C096
-	.set	sub_F8C097, 0xF8C097
+	.set	PanelLed_OnClassA8Event, 0xF8C097
 	.set	T_F40690_Nop, 0xF8C0B3
-	.set	sub_F8C0B4, 0xF8C0B4
-	.set	sub_F8C0D0, 0xF8C0D0
-	.set	sub_F8C18B, 0xF8C18B
-	.set	sub_F8C338, 0xF8C338
-	.set	sub_F8C3FB, 0xF8C3FB
-	.set	sub_F8C842, 0xF8C842
-	.set	sub_F8C846, 0xF8C846
+	.set	PanelLed_OnClass98Event, 0xF8C0B4
+	.set	PanelLed_OnCtrlParamEvent, 0xF8C0D0
+	.set	PanelLed_ProcessRequests, 0xF8C18B
+	.set	PanelLed_Refresh, 0xF8C338
+	.set	PanelLed_ToggleActivityLed, 0xF8C3FB
+	.set	PanelLed_SendByte, 0xF8C842
+	.set	PanelLed_SendByteUnconditional, 0xF8C846
 	.set	T_F4066C_Nop, 0xF8C8C2
-	.set	sub_F8C8C3, 0xF8C8C3
+	.set	PanelLed_FlashTransportBeat, 0xF8C8C3
 	.set	Task2_CallbackDispatcher, 0xF8DA00
 	.set	CallbackQueue_Post, 0xF8DA16
 	.set	CallbackQueue_ResetAndRestartTask2, 0xF8DA83
@@ -486,18 +486,18 @@
 	.set	LCD_EntryThunks, 0xF8E800
 	.set	SWI7_ServiceCall_Dispatch, 0xF8E9A5
 	.set	T_F41504_Nop, 0xF90C12
-	.set	sub_F90C13, 0xF90C13
+	.set	ModeEnter_Combination, 0xF90C13
 	.set	T_F4150C_Nop, 0xF90C20
-	.set	sub_F90C21, 0xF90C21
-	.set	sub_F90C72, 0xF90C72
-	.set	sub_F90CC2, 0xF90CC2
-	.set	sub_F90CC6, 0xF90CC6
-	.set	sub_F90CCA, 0xF90CCA
+	.set	Mode_SwitchToCombination, 0xF90C21
+	.set	Mode_SwitchToSound, 0xF90C72
+	.set	InstallPainter_SoundMode_Entry, 0xF90CC2
+	.set	ScreenLeave_SoundMode, 0xF90CC6
+	.set	ScreenButton_SoundMode, 0xF90CCA
 	.set	sub_F90CD4, 0xF90CD4
 	.set	sub_F914AF, 0xF914AF
-	.set	sub_F914D9, 0xF914D9
-	.set	sub_F914DD, 0xF914DD
-	.set	sub_F914E1, 0xF914E1
+	.set	InstallPainter_C0mbinati0nM0de_Entry, 0xF914D9
+	.set	ScreenLeave_C0mbinati0nM0de, 0xF914DD
+	.set	ScreenButton_C0mbinati0nM0de, 0xF914E1
 	.set	sub_F914F7, 0xF914F7
 	.set	InstallPainter_SoundGroupMenu_Entry, 0xF92710
 	.set	ScreenLeave_SoundGroupMenu, 0xF92714
@@ -87621,23 +87621,23 @@ T_F40618:	jp T_F40618_Nop  ; -> prom_a 0x0A027
 T_F40630:	.long 0x00F8A800	; ptr -> 0xF8A800 (prom_a 0x0A800)
 T_F40634:	jp PanelEvent_Service  ; -> prom_a 0x0A81D   x1
 	.fill 0x28, 1, 0x0E  ; 0xF40638: 40 x ret
-T_F40660:	.long sub_F8C000	; ptr -> 0xF8C000 (prom_a 0x0C000)
-T_F40664:	jp sub_F8C18B  ; -> prom_a 0x0C18B   x2
-T_F40668:	jp sub_F8C338  ; -> prom_a 0x0C338   x1
+T_F40660:	.long PanelLed_PhaseVector	; ptr -> 0xF8C000 (prom_a 0x0C000)
+T_F40664:	jp PanelLed_ProcessRequests  ; -> prom_a 0x0C18B   x2
+T_F40668:	jp PanelLed_Refresh  ; -> prom_a 0x0C338   x1
 T_F4066C:	jp T_F4066C_Nop  ; -> prom_a 0x0C8C2
-T_F40670:	jp sub_F8C846  ; -> prom_a 0x0C846   x2
-T_F40674:	jp sub_F8C8C3  ; -> prom_a 0x0C8C3   x1
-T_F40678:	jp sub_F8C842  ; -> prom_a 0x0C842   x2
-T_F4067C:	jp sub_F8C032  ; -> prom_a 0x0C032
-T_F40680:	jp sub_F8C071  ; -> prom_a 0x0C071
+T_F40670:	jp PanelLed_SendByteUnconditional  ; -> prom_a 0x0C846   x2
+T_F40674:	jp PanelLed_FlashTransportBeat  ; -> prom_a 0x0C8C3   x1
+T_F40678:	jp PanelLed_SendByte  ; -> prom_a 0x0C842   x2
+T_F4067C:	jp PanelLed_OnPartEvent  ; -> prom_a 0x0C032
+T_F40680:	jp PanelLed_OnClass90Event  ; -> prom_a 0x0C071
 T_F40684:	jp T_F40684_Nop  ; -> prom_a 0x0C095
 T_F40688:	jp T_F40688_Nop  ; -> prom_a 0x0C096
-T_F4068C:	jp sub_F8C097  ; -> prom_a 0x0C097
+T_F4068C:	jp PanelLed_OnClassA8Event  ; -> prom_a 0x0C097
 T_F40690:	jp T_F40690_Nop  ; -> prom_a 0x0C0B3
-T_F40694:	jp sub_F8C0B4  ; -> prom_a 0x0C0B4
-T_F40698:	jp sub_F8C04E  ; -> prom_a 0x0C04E
-T_F4069C:	jp sub_F8C0D0  ; -> prom_a 0x0C0D0
-T_F406A0:	jp sub_F8C3FB  ; -> prom_a 0x0C3FB   x2
+T_F40694:	jp PanelLed_OnClass98Event  ; -> prom_a 0x0C0B4
+T_F40698:	jp PanelLed_OnClass20Event  ; -> prom_a 0x0C04E
+T_F4069C:	jp PanelLed_OnCtrlParamEvent  ; -> prom_a 0x0C0D0
+T_F406A0:	jp PanelLed_ToggleActivityLed  ; -> prom_a 0x0C3FB   x2
 	.fill 0x6C, 1, 0x0E  ; 0xF406A4: 108 x ret
 ; Evidence: slot 0xF40710 is `ptr 0xFA5400`; prom_a 0xFA5400 carries the label
 ;           MIDI_EntryThunks, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -88315,19 +88315,19 @@ T_F414C4:	jp sub_F4CA92  ; -> prom_b 0x4CA92   x1
 	.fill 0x38, 1, 0x0E  ; 0xF414C8: 56 x ret
 T_F41500:	jp 0xF90C00  ; -> prom_a 0x10C00
 T_F41504:	jp T_F41504_Nop  ; -> prom_a 0x10C12
-T_F41508:	jp sub_F90C13  ; -> prom_a 0x10C13
+T_F41508:	jp ModeEnter_Combination  ; -> prom_a 0x10C13
 T_F4150C:	jp T_F4150C_Nop  ; -> prom_a 0x10C20
 T_F41510:	jp sub_F94078  ; -> prom_a 0x14078
 T_F41514:	jp sub_F9407C  ; -> prom_a 0x1407C
 T_F41518:	jp sub_F94080  ; -> prom_a 0x14080
 T_F4151C:	jp sub_F9408A  ; -> prom_a 0x1408A
-T_F41520:	jp sub_F90CC2  ; -> prom_a 0x10CC2
-T_F41524:	jp sub_F90CC6  ; -> prom_a 0x10CC6
-T_F41528:	jp sub_F90CCA  ; -> prom_a 0x10CCA
+T_F41520:	jp InstallPainter_SoundMode_Entry  ; -> prom_a 0x10CC2
+T_F41524:	jp ScreenLeave_SoundMode  ; -> prom_a 0x10CC6
+T_F41528:	jp ScreenButton_SoundMode  ; -> prom_a 0x10CCA
 T_F4152C:	jp sub_F90CD4  ; -> prom_a 0x10CD4
-T_F41530:	jp sub_F914D9  ; -> prom_a 0x114D9
-T_F41534:	jp sub_F914DD  ; -> prom_a 0x114DD
-T_F41538:	jp sub_F914E1  ; -> prom_a 0x114E1
+T_F41530:	jp InstallPainter_C0mbinati0nM0de_Entry  ; -> prom_a 0x114D9
+T_F41534:	jp ScreenLeave_C0mbinati0nM0de  ; -> prom_a 0x114DD
+T_F41538:	jp ScreenButton_C0mbinati0nM0de  ; -> prom_a 0x114E1
 T_F4153C:	jp sub_F914F7  ; -> prom_a 0x114F7
 T_InstallPainter_SoundGroupMenu_Entry:	jp InstallPainter_SoundGroupMenu_Entry  ; -> prom_a 0x12710
 T_ScreenLeave_SoundGroupMenu:	jp ScreenLeave_SoundGroupMenu  ; -> prom_a 0x12714
@@ -88361,8 +88361,8 @@ T_F415B0:	jp sub_F93F4E  ; -> prom_a 0x13F4E
 T_F415B4:	jp sub_F9458C  ; -> prom_a 0x1458C   x2
 T_F415B8:	jp sub_F945F4  ; -> prom_a 0x145F4
 T_F415BC:	jp sub_F94600  ; -> prom_a 0x14600   x2
-T_F415C0:	jp sub_F90C21  ; -> prom_a 0x10C21   x2
-T_F415C4:	jp sub_F90C72  ; -> prom_a 0x10C72   x4
+T_F415C0:	jp Mode_SwitchToCombination  ; -> prom_a 0x10C21   x2
+T_F415C4:	jp Mode_SwitchToSound  ; -> prom_a 0x10C72   x4
 T_F415C8:	jp sub_F9433A  ; -> prom_a 0x1433A   x10
 	.fill 0x34, 1, 0x0E  ; 0xF415CC: 52 x ret
 T_F41600:	jp sub_F99098  ; -> prom_a 0x19098   x13
@@ -88631,19 +88631,19 @@ T_Screen_CombinationNaming_Leave:	jp Screen_CombinationNaming_Leave  ; -> prom_a
 T_Screen_CombinationNaming_Button:	jp Screen_CombinationNaming_Button  ; -> prom_a 0x3EF76
 T_F41AA4:	jp T_F41AA4_Nop  ; -> prom_a 0x3EFB0
 	.fill 0x48, 1, 0x0E  ; 0xF41AA8: 72 x ret
-T_F41AF0:	jp sub_F8BCAF  ; -> prom_a 0x0BCAF   x35
-T_F41AF4:	jp sub_F8BC8A  ; -> prom_a 0x0BC8A   x2
-T_F41AF8:	jp sub_F8BCC9  ; -> prom_a 0x0BCC9   x7
-T_F41AFC:	jp sub_F8BCD0  ; -> prom_a 0x0BCD0
+T_F41AF0:	jp Value_ToAsciiDigits3_RightJustified  ; -> prom_a 0x0BCAF   x35
+T_F41AF4:	jp Value_ToAsciiDigits3_LeftJustified  ; -> prom_a 0x0BC8A   x2
+T_F41AF8:	jp Value_ToSignedAsciiDigits3_RightJustified  ; -> prom_a 0x0BCC9   x7
+T_F41AFC:	jp Value_ToSignedAsciiDigits3_LeftJustified  ; -> prom_a 0x0BCD0
 ; Evidence: slot 0xF41B00 is `jp 0xF8BCD7`; prom_a 0xF8BCD7 carries the label
 ;           Value_ToAsciiDigits3, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Value_ToAsciiDigits3:	jp Value_ToAsciiDigits3  ; F41B00 (was T_F41B00) -> prom_a 0x0BCD7   x10
-T_F41B04:	jp sub_F8BD73  ; -> prom_a 0x0BD73   x9
-T_F41B08:	jp sub_F8BDC5  ; -> prom_a 0x0BDC5   x32
-T_F41B0C:	jp sub_F8BDF8  ; -> prom_a 0x0BDF8   x2
-T_F41B10:	jp sub_F8BC00  ; -> prom_a 0x0BC00   x3
-T_F41B14:	jp sub_F8BC04  ; -> prom_a 0x0BC04   x12
-T_F41B18:	jp sub_F8BC08  ; -> prom_a 0x0BC08   x34
+T_F41B04:	jp Value_ApplyNibbleDeltaClamped  ; -> prom_a 0x0BD73   x9
+T_F41B08:	jp PanelButton_CallTableEntry  ; -> prom_a 0x0BDC5   x32
+T_F41B0C:	jp PanelButton_CallPageTableEntry  ; -> prom_a 0x0BDF8   x2
+T_F41B10:	jp FixedEventList_AppendStackArgs  ; -> prom_a 0x0BC00   x3
+T_F41B14:	jp EventQueue_AppendStackArgs  ; -> prom_a 0x0BC04   x12
+T_F41B18:	jp PendingEventQueue_AppendStackArgs  ; -> prom_a 0x0BC08   x34
 	.fill 0x14, 1, 0x0E  ; 0xF41B1C: 20 x ret
 T_F41B30:	.long 0x00F8DC00	; ptr -> 0xF8DC00 (prom_a 0x0DC00)
 ; Evidence: slot 0xF41B34 is `jp 0xF8DC25`; prom_a 0xF8DC25 carries the label
@@ -192240,7 +192240,7 @@ ButtonTable_TrackAssign_207EZero_Nop1:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6DF
 ;           {class 0xA9, code 0x03} -> delivered code 0x03. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x03 of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -192302,7 +192302,7 @@ ScreenLeaveBody_TrackAssign_Return:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -192354,7 +192354,7 @@ ButtonTable_TrackAssign_207EZero_Nop5:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6F8
 ;           {class 0xA9, code 0x06} -> delivered code 0x06. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x06 of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -192407,7 +192407,7 @@ ButtonTable_TrackAssign_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -192456,7 +192456,7 @@ ScreenLeaveBody_TrackAssign_Return2:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -192504,7 +192504,7 @@ ScreenLeaveBody_TrackAssign_Return3:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -192556,7 +192556,7 @@ ScreenLeaveBody_TrackAssign_Return4:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -192602,7 +192602,7 @@ ScreenLeaveBody_TrackAssign_Return5:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72F
 ;           {class 0xA9, code 0x0C} -> delivered code 0x8C. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0C of ButtonTable_TrackAssign_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -192677,7 +192677,7 @@ ButtonTable_TrackAssign_207ENonZero_Nop0:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_TrackAssign_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -192722,7 +192722,7 @@ ScreenLeaveBody_TrackAssign_Return8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_TrackAssign_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -192872,7 +192872,7 @@ ScreenLeaveBody_TrackAssignPresets_Return:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6C7
 ;           {class 0xA9, code 0x00} -> delivered code 0x00. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x00 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -192921,7 +192921,7 @@ ScreenLeaveBody_TrackAssignPresets_Return2:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6CF
 ;           {class 0xA9, code 0x01} -> delivered code 0x01. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x01 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -192972,7 +192972,7 @@ ScreenLeaveBody_TrackAssignPresets_Join:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6D7
 ;           {class 0xA9, code 0x02} -> delivered code 0x02. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x02 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -193023,7 +193023,7 @@ ScreenLeaveBody_TrackAssignPresets_Join2:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6DF
 ;           {class 0xA9, code 0x03} -> delivered code 0x03. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x03 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -193072,7 +193072,7 @@ ScreenLeaveBody_TrackAssignPresets_Return3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -193119,7 +193119,7 @@ ScreenLeaveBody_TrackAssignPresets_Return4:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6F0
 ;           {class 0xA9, code 0x05} -> delivered code 0x05. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x05 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -193167,7 +193167,7 @@ ScreenLeaveBody_TrackAssignPresets_Join3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6F8
 ;           {class 0xA9, code 0x06} -> delivered code 0x06. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x06 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -193214,7 +193214,7 @@ ScreenLeaveBody_TrackAssignPresets_Return5:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B700
 ;           {class 0xA9, code 0x07} -> delivered code 0x07. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x07 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -193261,7 +193261,7 @@ ScreenLeaveBody_TrackAssignPresets_Return6:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -193312,7 +193312,7 @@ ScreenLeaveBody_TrackAssignPresets_Return7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -193363,7 +193363,7 @@ ScreenLeaveBody_TrackAssignPresets_Return8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -193414,7 +193414,7 @@ ScreenLeaveBody_TrackAssignPresets_Return9:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -193457,7 +193457,7 @@ ScreenLeaveBody_TrackAssignPresets_Return10:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72F
 ;           {class 0xA9, code 0x0C} -> delivered code 0x8C. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0C of ButtonTable_TrackAssignPresets.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -193864,7 +193864,7 @@ ButtonTable_Edit_0C10Zero_Nop0:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_Edit_0C10Zero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -193910,7 +193910,7 @@ Paint_Edit_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_Edit_0C10Zero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -193956,7 +193956,7 @@ Paint_Edit_Return2:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Edit_0C10Zero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194002,7 +194002,7 @@ Paint_Edit_Return3:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_Edit_0C10Zero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194048,7 +194048,7 @@ Paint_Edit_Return4:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72F
 ;           {class 0xA9, code 0x0C} -> delivered code 0x8C. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0C of ButtonTable_Edit_0C10Zero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194121,7 +194121,7 @@ Paint_Edit_Return6:
 ;           PanelWireGroupMap_Variant2[0x62] = group 0x02 -> record 0xF8B699
 ;           {class 0xA9, code 0x10} -> delivered code 0x10. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x10 of ButtonTable_Edit_0C10Zero.
 ; Note:     bit 7 of the delivered code picks the DIRECTION: set = SW21 PAGE
@@ -194176,7 +194176,7 @@ ButtonTable_Edit_0C10NonZero_Nop0:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_Edit_0C10NonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194222,7 +194222,7 @@ Paint_Edit_Return8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_Edit_0C10NonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194266,7 +194266,7 @@ Paint_Edit_Return9:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Edit_0C10NonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194312,7 +194312,7 @@ Paint_Edit_Return10:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_Edit_0C10NonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194356,7 +194356,7 @@ Paint_Edit_Return11:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72F
 ;           {class 0xA9, code 0x0C} -> delivered code 0x8C. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0C of ButtonTable_Edit_0C10NonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194427,7 +194427,7 @@ Paint_Edit_Return13:
 ;           PanelWireGroupMap_Variant2[0x62] = group 0x02 -> record 0xF8B699
 ;           {class 0xA9, code 0x10} -> delivered code 0x10. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x10 of ButtonTable_Edit_0C10NonZero.
 ; Note:     bit 7 of the delivered code picks the DIRECTION: set = SW21 PAGE
@@ -194584,7 +194584,7 @@ ButtonTable_SongClear_Nop0:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6D7
 ;           {class 0xA9, code 0x02} -> delivered code 0x02. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x02 of ButtonTable_SongClear.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -194648,7 +194648,7 @@ SoftKeyCol3_SongClear_Return:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6DF
 ;           {class 0xA9, code 0x03} -> delivered code 0x03. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x03 of ButtonTable_SongClear.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -194714,7 +194714,7 @@ ButtonTable_SongClear_Nop4:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_SongClear.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194759,7 +194759,7 @@ ScreenLeaveBody_SongClear_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72F
 ;           {class 0xA9, code 0x0C} -> delivered code 0x8C. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0C of ButtonTable_SongClear.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -194906,7 +194906,7 @@ ScreenLeaveBody_TrackClear:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6C7
 ;           {class 0xA9, code 0x00} -> delivered code 0x00. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x00 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -194964,7 +194964,7 @@ ScreenLeaveBody_TrackClear_Join:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6CF
 ;           {class 0xA9, code 0x01} -> delivered code 0x01. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x01 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195022,7 +195022,7 @@ ScreenLeaveBody_TrackClear_Join2:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6D7
 ;           {class 0xA9, code 0x02} -> delivered code 0x02. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x02 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195080,7 +195080,7 @@ ScreenLeaveBody_TrackClear_Join3:
 ;           PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record 0xF8B6DF
 ;           {class 0xA9, code 0x03} -> delivered code 0x03. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x03 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195138,7 +195138,7 @@ ScreenLeaveBody_TrackClear_Join4:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195194,7 +195194,7 @@ ScreenLeaveBody_TrackClear_Join5:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6F0
 ;           {class 0xA9, code 0x05} -> delivered code 0x05. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x05 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195250,7 +195250,7 @@ ScreenLeaveBody_TrackClear_Join6:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6F8
 ;           {class 0xA9, code 0x06} -> delivered code 0x06. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x06 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195306,7 +195306,7 @@ ScreenLeaveBody_TrackClear_Join7:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B700
 ;           {class 0xA9, code 0x07} -> delivered code 0x07. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x07 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195364,7 +195364,7 @@ ButtonTable_TrackClear_207EZero_Nop8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_TrackClear_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -195441,7 +195441,7 @@ ButtonTable_TrackClear_207ENonZero_Nop0:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_TrackClear_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -195485,7 +195485,7 @@ ScreenLeaveBody_TrackClear_Return3:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_TrackClear_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -195636,7 +195636,7 @@ ButtonTable_TrackMerge_207EZero_Nop3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_TrackMerge_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -195698,7 +195698,7 @@ ButtonTable_TrackMerge_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_TrackMerge_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -195758,7 +195758,7 @@ sub_F7EEEF:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_TrackMerge_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -195806,7 +195806,7 @@ sub_F7EEEF_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_TrackMerge_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -195907,7 +195907,7 @@ ButtonTable_TrackMerge_207ENonZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_TrackMerge_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -195953,7 +195953,7 @@ ButtonTable_TrackMerge_207ENonZero_Nop10:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_TrackMerge_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196127,7 +196127,7 @@ ButtonTable_MeasureDelete_207EZero_Nop3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_MeasureDelete_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -196190,7 +196190,7 @@ ButtonTable_MeasureDelete_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_MeasureDelete_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196241,7 +196241,7 @@ ScreenLeaveBody_MeasureDelete_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_MeasureDelete_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196295,7 +196295,7 @@ ScreenLeaveBody_MeasureDelete_Return2:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_MeasureDelete_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196584,7 +196584,7 @@ ButtonTable_MeasureDelete_207ENonZero_Nop8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_MeasureDelete_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196628,7 +196628,7 @@ LcdKeyRow3_MeasureDelete_207ENonZero_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_MeasureDelete_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196800,7 +196800,7 @@ ButtonTable_MeasureErase_207EZero_Nop3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_MeasureErase_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -196863,7 +196863,7 @@ ButtonTable_MeasureErase_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_MeasureErase_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196925,7 +196925,7 @@ sub_F7F32A:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_MeasureErase_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -196979,7 +196979,7 @@ sub_F7F32A_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_MeasureErase_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -197039,7 +197039,7 @@ sub_F7F397:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_MeasureErase_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -197207,7 +197207,7 @@ ButtonTable_MeasureErase_207ENonZero_Nop8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_MeasureErase_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -197251,7 +197251,7 @@ sub_F7F397_Return3:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_MeasureErase_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -197595,7 +197595,7 @@ ButtonTable_Quantize_207EZero_Nop3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_Quantize_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -197658,7 +197658,7 @@ ButtonTable_Quantize_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_Quantize_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -197727,7 +197727,7 @@ sub_F7F668:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_Quantize_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -197784,7 +197784,7 @@ sub_F7F668_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Quantize_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -197848,7 +197848,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_Quantize_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198025,7 +198025,7 @@ ButtonTable_Quantize_207ENonZero_Nop8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Quantize_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198069,7 +198069,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_Quantize_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198362,7 +198362,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_Vel0cityChange_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -198425,7 +198425,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_Vel0cityChange_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198485,7 +198485,7 @@ sub_F7F99C:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_Vel0cityChange_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198537,7 +198537,7 @@ sub_F7F99C_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Vel0cityChange_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198597,7 +198597,7 @@ sub_F7F9FB:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_Vel0cityChange_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198764,7 +198764,7 @@ ButtonTable_Vel0cityChange_207ENonZero_Nop8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_Vel0cityChange_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -198808,7 +198808,7 @@ sub_F7F9FB_Return3:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Vel0cityChange_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -199133,7 +199133,7 @@ ButtonTable_Transp0se_207EZero_Nop3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_Transp0se_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -199196,7 +199196,7 @@ ButtonTable_Transp0se_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_Transp0se_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -199256,7 +199256,7 @@ sub_F7FCE6:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_Transp0se_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -199308,7 +199308,7 @@ sub_F7FCE6_Return:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Transp0se_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -199367,7 +199367,7 @@ sub_F7FD45:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B72B
 ;           {class 0xA9, code 0x0B} -> delivered code 0x8B. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0B of ButtonTable_Transp0se_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -199533,7 +199533,7 @@ ButtonTable_Transp0se_207ENonZero_Nop8:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x09 of ButtonTable_Transp0se_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -199577,7 +199577,7 @@ sub_F7FD45_Return3:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B727
 ;           {class 0xA9, code 0x0A} -> delivered code 0x8A. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x0A of ButtonTable_Transp0se_207ENonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
@@ -199897,7 +199897,7 @@ ButtonTable_AdvanceDelay_207EZero_Nop3:
 ;           PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record 0xF8B6E8
 ;           {class 0xA9, code 0x04} -> delivered code 0x04. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x04 of ButtonTable_AdvanceDelay_207EZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
@@ -199960,7 +199960,7 @@ ButtonTable_AdvanceDelay_207EZero_Nop7:
 ;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B71F
 ;           {class 0xA9, code 0x08} -> delivered code 0x88. prom_a
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
-;           sub_F8BDC5 masks it AGAIN and indexes the table -- `and L,0x1f /
+;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
 ;           so this is slot 0x08 of ButtonTable_AdvanceDelay_207EZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =

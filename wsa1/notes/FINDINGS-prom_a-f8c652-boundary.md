@@ -18,7 +18,7 @@ through llvm-mc; `--emit` produces the assembly spliced into
 ## Three tables, found from their readers, not from decode plausibility
 
 **Table 1 -- `PointerTable_F8C687`, 128 B, 32 little-endian longs.** The
-span's first routine (`sub_F8C652`) ends with `ld A,(0x2250) / sla 0x02,A /
+span's first routine (`PanelLed_ShowSixWaySelect`) ends with `ld A,(0x2250) / sla 0x02,A /
 ld XIY,0x00f8c687 / ld XIY,(XIY+A)` -- a 5-bit index, shifted left by 2 (i.e.
 multiplied by 4), selects a 32-bit entry from a table at `0xF8C687`. Max
 index 31, entry width 4, so the table is exactly `32*4 = 128` bytes, ending
@@ -36,7 +36,7 @@ terminator).** Both are read by the SAME shared parser, `sub_F8C7F9`
 terminator-and-linear-scan shape already established for the `CmdList_*`
 tables and their shared parser at `.LF8C16D` in
 `FINDINGS-prom_a-f8c000-cluster.md`, just a different shared routine and a
-different record width. The two call sites (`sub_F8C707` loading
+different record width. The two call sites (`PanelLed_ShowModeMenu` loading
 `XIY,0x00f8c727` then `calr sub_F8C7F9`; the routine at `0xF8C746` doing the
 same with `0x00f8c764`) are code THIS SAME PASS decoded, not manufactured to
 fit the tables -- and each table's own terminator byte lands exactly where
@@ -46,13 +46,13 @@ the following code block already needs to start: `0xF8C746`, and `0xF8C77D`
 ## Byte accounting and the resulting boundaries
 
 ```
-0xF8C652-0xF8C687   53 B  sub_F8C652          dispatch id=0x0080 (span start)
+0xF8C652-0xF8C687   53 B  PanelLed_ShowSixWaySelect          dispatch id=0x0080 (span start)
 0xF8C687-0xF8C707  128 B  PointerTable_F8C687 32 longs
-0xF8C707-0xF8C727   32 B  sub_F8C707          dispatch id=0x0002
+0xF8C707-0xF8C727   32 B  PanelLed_ShowModeMenu          dispatch id=0x0002
 0xF8C727-0xF8C746   31 B  RecordTable_F8C727  10 records + terminator
 0xF8C746-0xF8C764   30 B  (internal)          reads RecordTable_F8C764
 0xF8C764-0xF8C77D   25 B  RecordTable_F8C764  8 records + terminator
-0xF8C77D-0xF8C842  197 B  sub_F8C77D ..       dispatch id=0x0200, plus the
+0xF8C77D-0xF8C842  197 B  PanelLed_ShowBlinkEnable ..       dispatch id=0x0200, plus the
                           sub_F8C7F9 ..          shared parser and one more
                                                   small routine reading it
 ```

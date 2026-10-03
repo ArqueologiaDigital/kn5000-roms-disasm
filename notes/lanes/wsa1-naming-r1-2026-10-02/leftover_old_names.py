@@ -40,4 +40,6 @@ for f in sorted(glob.glob("wsa1/**/*", recursive=True)):
             t = open(f, "rb").read().decode("latin-1")
             for r in pk["renames"]:
                 t = re.sub(r'(?<![\w.$@])%s(?=\.(?:\s|$))' % re.escape(r["old"]), r["new"], t, flags=re.M)
-            open(f, "wb").write(t.encode("latin-1"))
+            data = t.encode("latin-1")          # encode first: open("wb") truncates
+            open(f + ".tmp", "wb").write(data)
+            os.replace(f + ".tmp", f)

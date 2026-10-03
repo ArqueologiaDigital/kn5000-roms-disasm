@@ -9,11 +9,11 @@ exact address, or a module-boundary padding run already verified byte by
 byte. Converter: `notes/gen_prom_a_f8c000_cluster.py` (`--check` re-derives
 every number below). Gate: `make gate-wsa1`, green.
 
-## sub_F8C000 (50 B, CODE)
+## PanelLed_PhaseVector (50 B, CODE)
 
 Preceded by 222 bytes of `.fill 0x0E` -- a module boundary already verified
 byte-by-byte by `notes/gen_prom_a_block.py` -- and followed immediately by
-the pre-existing `sub_F8C032`. `jp 0xf8c018` skips five dead
+the pre-existing `PanelLed_OnPartEvent`. `jp 0xf8c018` skips five dead
 `ret/nop/nop/nop` veneer slots, then `0xF8C018` does five `ld (addr),0x05`
 writes and returns. This is the same "unused vector slot" module-header shape
 already accepted for `0xFE0000` (six `jp` veneers) on structural grounds
@@ -96,5 +96,5 @@ conversions above.
 
 ## Byte accounting
 
-50 (`sub_F8C000`) + 8 + 22 + 15 + 15 + 15 (five `CmdList_*`) + 58
+50 (`PanelLed_PhaseVector`) + 8 + 22 + 15 + 15 + 15 (five `CmdList_*`) + 58
 (`DispatchTable_F8C2B2`) + 48 (`sub_F97503`) = 231 bytes converted.
