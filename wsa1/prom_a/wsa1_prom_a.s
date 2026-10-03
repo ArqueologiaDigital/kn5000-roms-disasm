@@ -123416,7 +123416,7 @@ sub_FCC573:
 ;          ascending.
 ; Unknown:  what the seventeen operations are.
 ; ⚠ CORRECTION 2026-09-25 (lane proma): the count IS bound, one step
-;          removed.  The reader, sub_FCFDA7, first calls
+;          removed.  The reader, ScreenButton_Code80, first calls
 ;          PanelEvent_ToFieldIndex (0xFD7905), which returns WA=0 only after
 ;          storing an operation in 0..16 at (XIZ-4) -- the byte this reader
 ;          multiplies -- and the reader skips the dispatch on 0xFFFF.  And
@@ -123592,7 +123592,7 @@ IndexMap_FCF1E9:
 ; ---------------------------------------------------------------------
 ; PanelOpTable_FCF21B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD2751 at 0xFD277E.
+; Read by: ScreenButton_Code8B at 0xFD277E.
 PanelOpTable_FCF21B:
 	.long PanelOp_Nop                             ; FCF21B  [ 0]
 	.long sub_FD2903                              ; FCF21F  [ 1]
@@ -123638,7 +123638,7 @@ PanelOpTable_FCF263:
 
 ; PanelOpTable_FCF2AB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD27F2 at 0xFD2826.
+; Read by: ScreenButton_Code8D at 0xFD2826.
 PanelOpTable_FCF2AB:
 	.long sub_FD3072                              ; FCF2AB  [ 0]
 	.long sub_FD3112                              ; FCF2AF  [ 1]
@@ -123684,7 +123684,7 @@ PanelOpTable_FCF2F3:
 
 ; PanelOpTable_FCF33B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD28B2 at 0xFD28DF.
+; Read by: ScreenButton_Code8F at 0xFD28DF.
 PanelOpTable_FCF33B:
 	.long PanelOp_Nop                             ; FCF33B  [ 0]
 	.long sub_FD3C6A                              ; FCF33F  [ 1]
@@ -123799,7 +123799,7 @@ PanelOpTable_FCF45B:
 
 ; PanelOpTable_FCF4A3 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE3BE at 0xFDE3F2.
+; Read by: ScreenButton_Code90 at 0xFDE3F2.
 PanelOpTable_FCF4A3:
 	.long sub_FDE760                              ; FCF4A3  [ 0]
 	.long sub_FDE81C                              ; FCF4A7  [ 1]
@@ -123822,7 +123822,7 @@ PanelOpTable_FCF4A3:
 
 ; PanelOpTable_FCF4EB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE41E at 0xFDE452.
+; Read by: ScreenButton_Code91 at 0xFDE452.
 PanelOpTable_FCF4EB:
 	.long sub_FDED7C                              ; FCF4EB  [ 0]
 	.long sub_FDEDA0                              ; FCF4EF  [ 1]
@@ -123845,7 +123845,7 @@ PanelOpTable_FCF4EB:
 
 ; PanelOpTable_FCF533 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE47E at 0xFDE4B2.
+; Read by: ScreenButton_Code92 at 0xFDE4B2.
 PanelOpTable_FCF533:
 	.long PanelOp_Nop                             ; FCF533  [ 0]
 	.long PanelOp_Nop                             ; FCF537  [ 1]
@@ -123868,7 +123868,7 @@ PanelOpTable_FCF533:
 
 ; PanelOpTable_FCF57B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE4DE at 0xFDE512.
+; Read by: ScreenButton_Code93 at 0xFDE512.
 PanelOpTable_FCF57B:
 	.long PanelOp_Nop                             ; FCF57B  [ 0]
 	.long PanelOp_Nop                             ; FCF57F  [ 1]
@@ -123891,7 +123891,7 @@ PanelOpTable_FCF57B:
 
 ; PanelOpTable_FCF5C3 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE53E at 0xFDE572.
+; Read by: ScreenButton_Code94 at 0xFDE572.
 PanelOpTable_FCF5C3:
 	.long PanelOp_Nop                             ; FCF5C3  [ 0]
 	.long sub_FDF27D                              ; FCF5C7  [ 1]
@@ -123914,7 +123914,7 @@ PanelOpTable_FCF5C3:
 
 ; PanelOpTable_FCF60B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE59E at 0xFDE5CB.
+; Read by: ScreenButton_Code95 at 0xFDE5CB.
 PanelOpTable_FCF60B:
 	.long PanelOp_Nop                             ; FCF60B  [ 0]
 	.long PanelOp_Nop                             ; FCF60F  [ 1]
@@ -123937,7 +123937,7 @@ PanelOpTable_FCF60B:
 
 ; PanelOpTable_FCF653 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE5EF at 0xFDE623.
+; Read by: ScreenButton_Code96 at 0xFDE623.
 PanelOpTable_FCF653:
 	.long PanelOp_Nop                             ; FCF653  [ 0]
 	.long PanelOp_Nop                             ; FCF657  [ 1]
@@ -123960,7 +123960,7 @@ PanelOpTable_FCF653:
 
 ; PanelOpTable_FCF69B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE64F at 0xFDE683.
+; Read by: ScreenButton_Code97 at 0xFDE683.
 PanelOpTable_FCF69B:
 	.long sub_FDFA92                              ; FCF69B  [ 0]
 	.long sub_FDFAAB                              ; FCF69F  [ 1]
@@ -123983,7 +123983,7 @@ PanelOpTable_FCF69B:
 
 ; PanelOpTable_FCF6E3 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FDE6AF at 0xFDE6E3.
+; Read by: ScreenButton_Code98 at 0xFDE6E3.
 PanelOpTable_FCF6E3:
 	.long PanelOp_Nop                             ; FCF6E3  [ 0]
 	.long sub_FDFC3E                              ; FCF6E7  [ 1]
@@ -124029,7 +124029,7 @@ PanelOpTable_FCF72B:
 
 ; PanelOpTable_FCF773 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD053D at 0xFD056A.
+; Read by: ScreenButton_CodeCD at 0xFD056A.
 PanelOpTable_FCF773:
 	.long PanelOp_Nop                             ; FCF773  [ 0]
 	.long sub_FD0602                              ; FCF777  [ 1]
@@ -124052,7 +124052,7 @@ PanelOpTable_FCF773:
 
 ; PanelOpTable_FCF7BB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD058E at 0xFD05DE.
+; Read by: ScreenButton_Code9B at 0xFD05DE.
 PanelOpTable_FCF7BB:
 	.long PanelOp_Nop                             ; FCF7BB  [ 0]
 	.long sub_FD0883                              ; FCF7BF  [ 1]
@@ -124083,7 +124083,7 @@ BitMask_Bit0to7:
 
 ; PanelOpTable_FCF80C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD0AA5 at 0xFD0AD2.
+; Read by: ScreenButton_Code82 at 0xFD0AD2.
 PanelOpTable_FCF80C:
 	.long PanelOp_Nop                             ; FCF80C  [ 0]
 	.long sub_FD0C58                              ; FCF810  [ 1]
@@ -124106,7 +124106,7 @@ PanelOpTable_FCF80C:
 
 ; PanelOpTable_FCF854 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD0AF6 at 0xFD0B23.
+; Read by: ScreenButton_Code83 at 0xFD0B23.
 PanelOpTable_FCF854:
 	.long PanelOp_Nop                             ; FCF854  [ 0]
 	.long sub_FD1028                              ; FCF858  [ 1]
@@ -124129,7 +124129,7 @@ PanelOpTable_FCF854:
 
 ; PanelOpTable_FCF89C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD0B47 at 0xFD0B7B.
+; Read by: ScreenButton_Code84 at 0xFD0B7B.
 PanelOpTable_FCF89C:
 	.long PanelOp_Nop                             ; FCF89C  [ 0]
 	.long PanelOp_Nop                             ; FCF8A0  [ 1]
@@ -124152,7 +124152,7 @@ PanelOpTable_FCF89C:
 
 ; PanelOpTable_FCF8E4 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD0BA7 at 0xFD0BDB.
+; Read by: ScreenButton_Code85 at 0xFD0BDB.
 PanelOpTable_FCF8E4:
 	.long PanelOp_Nop                             ; FCF8E4  [ 0]
 	.long PanelOp_Nop                             ; FCF8E8  [ 1]
@@ -124175,7 +124175,7 @@ PanelOpTable_FCF8E4:
 
 ; PanelOpTable_FCF92C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: sub_FD0C07 at 0xFD0C34.
+; Read by: ScreenButton_Code86 at 0xFD0C34.
 PanelOpTable_FCF92C:
 	.long PanelOp_Nop                             ; FCF92C  [ 0]
 	.long sub_FD1A9C                              ; FCF930  [ 1]
@@ -124564,7 +124564,7 @@ ScreenCodeC0_Handlers:
 	.long ScreenCode_Nop                          ; FCFD9F  [14]
 	.long ScreenCode_Nop                          ; FCFDA3  [15]
 
-sub_FCFDA7:
+ScreenButton_Code80:
 	link XIZ,0xfff8                                      ; FCFDA7  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FCFDAB  be fe 31
 	push XBC                                             ; FCFDAE  39
@@ -125400,7 +125400,7 @@ sub_FD0521:
 .LFD053A:
 	unlk XIZ                                             ; FD053A  ee 0d
 	ret                                                  ; FD053C  0e
-sub_FD053D:
+ScreenButton_CodeCD:
 	link XIZ,0xfffc                                      ; FD053D  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0541  be fe 31
 	push XBC                                             ; FD0544  39
@@ -125435,7 +125435,7 @@ sub_FD053D:
 .LFD058B:
 	unlk XIZ                                             ; FD058B  ee 0d
 	ret                                                  ; FD058D  0e
-sub_FD058E:
+ScreenButton_Code9B:
 	link XIZ,0xfffa                                      ; FD058E  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD0592  be fe 31
 	push XBC                                             ; FD0595  39
@@ -126041,7 +126041,7 @@ sub_FD0A79:
 .LFD0AA2:
 	unlk XIZ                                             ; FD0AA2  ee 0d
 	ret                                                  ; FD0AA4  0e
-sub_FD0AA5:
+ScreenButton_Code82:
 	link XIZ,0xfffc                                      ; FD0AA5  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0AA9  be fe 31
 	push XBC                                             ; FD0AAC  39
@@ -126076,7 +126076,7 @@ sub_FD0AA5:
 .LFD0AF3:
 	unlk XIZ                                             ; FD0AF3  ee 0d
 	ret                                                  ; FD0AF5  0e
-sub_FD0AF6:
+ScreenButton_Code83:
 	link XIZ,0xfffc                                      ; FD0AF6  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0AFA  be fe 31
 	push XBC                                             ; FD0AFD  39
@@ -126111,7 +126111,7 @@ sub_FD0AF6:
 .LFD0B44:
 	unlk XIZ                                             ; FD0B44  ee 0d
 	ret                                                  ; FD0B46  0e
-sub_FD0B47:
+ScreenButton_Code84:
 	link XIZ,0xfffc                                      ; FD0B47  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0B4B  be fe 31
 	push XBC                                             ; FD0B4E  39
@@ -126150,7 +126150,7 @@ sub_FD0B47:
 .LFD0BA4:
 	unlk XIZ                                             ; FD0BA4  ee 0d
 	ret                                                  ; FD0BA6  0e
-sub_FD0BA7:
+ScreenButton_Code85:
 	link XIZ,0xfffc                                      ; FD0BA7  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0BAB  be fe 31
 	push XBC                                             ; FD0BAE  39
@@ -126189,7 +126189,7 @@ sub_FD0BA7:
 .LFD0C04:
 	unlk XIZ                                             ; FD0C04  ee 0d
 	ret                                                  ; FD0C06  0e
-sub_FD0C07:
+ScreenButton_Code86:
 	link XIZ,0xfffc                                      ; FD0C07  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0C0B  be fe 31
 	push XBC                                             ; FD0C0E  39
@@ -129185,7 +129185,7 @@ sub_FD26D3:
 	popw hl                                              ; FD274D  4b
 	unlk XIZ                                             ; FD274E  ee 0d
 	ret                                                  ; FD2750  0e
-sub_FD2751:
+ScreenButton_Code8B:
 	link XIZ,0xfffc                                      ; FD2751  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD2755  be fe 31
 	push XBC                                             ; FD2758  39
@@ -129220,7 +129220,7 @@ sub_FD2751:
 .LFD279F:
 	unlk XIZ                                             ; FD279F  ee 0d
 	ret                                                  ; FD27A1  0e
-sub_FD27A2:
+ScreenButton_Code8C:
 	link XIZ,0xfffc                                      ; FD27A2  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD27A6  be fe 31
 	push XBC                                             ; FD27A9  39
@@ -129254,7 +129254,7 @@ sub_FD27BA:
 .LFD27EF:
 	unlk XIZ                                             ; FD27EF  ee 0d
 	ret                                                  ; FD27F1  0e
-sub_FD27F2:
+ScreenButton_Code8D:
 	link XIZ,0xfffc                                      ; FD27F2  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD27F6  be fe 31
 	push XBC                                             ; FD27F9  39
@@ -129293,7 +129293,7 @@ sub_FD27F2:
 .LFD284F:
 	unlk XIZ                                             ; FD284F  ee 0d
 	ret                                                  ; FD2851  0e
-sub_FD2852:
+ScreenButton_Code8E:
 	link XIZ,0xfffc                                      ; FD2852  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD2856  be fe 31
 	push XBC                                             ; FD2859  39
@@ -129333,7 +129333,7 @@ sub_FD2864:
 .LFD28AF:
 	unlk XIZ                                             ; FD28AF  ee 0d
 	ret                                                  ; FD28B1  0e
-sub_FD28B2:
+ScreenButton_Code8F:
 	link XIZ,0xfffc                                      ; FD28B2  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD28B6  be fe 31
 	push XBC                                             ; FD28B9  39
@@ -151517,7 +151517,7 @@ sub_FDE0F7:
 	ret                                                  ; FDE150  0e
 T_F433E0_Nop:
 	ret                                                  ; FDE151  0e
-sub_FDE152:
+ScreenLeave_Code80:
 	pushw 0x00                                           ; FDE152  0b 00 00
 	call Var27DA_Set                                      ; FDE155  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE159  1d 13 77 fd
@@ -151525,7 +151525,7 @@ sub_FDE152:
 	ret                                                  ; FDE15E  0e
 T_F41F68_Nop:
 	ret                                                  ; FDE15F  0e
-sub_FDE160:
+ScreenLeave_Code87:
 	pushw 0x00                                           ; FDE160  0b 00 00
 	call Var27DA_Set                                      ; FDE163  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE167  1d 13 77 fd
@@ -151533,7 +151533,7 @@ sub_FDE160:
 	ret                                                  ; FDE16C  0e
 T_F42008_Nop:
 	ret                                                  ; FDE16D  0e
-sub_FDE16E:
+ScreenLeave_Code88:
 	pushw 0x00                                           ; FDE16E  0b 00 00
 	call Var27DA_Set                                      ; FDE171  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE175  1d 13 77 fd
@@ -151541,7 +151541,7 @@ sub_FDE16E:
 	ret                                                  ; FDE17A  0e
 T_F42018_Nop:
 	ret                                                  ; FDE17B  0e
-sub_FDE17C:
+ScreenLeave_Code89:
 	pushw 0x00                                           ; FDE17C  0b 00 00
 	call Var27DA_Set                                      ; FDE17F  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE183  1d 13 77 fd
@@ -151549,7 +151549,7 @@ sub_FDE17C:
 	ret                                                  ; FDE188  0e
 T_F42028_Nop:
 	ret                                                  ; FDE189  0e
-sub_FDE18A:
+ScreenLeave_Code8A:
 	pushw 0x00                                           ; FDE18A  0b 00 00
 	call Var27DA_Set                                      ; FDE18D  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE191  1d 13 77 fd
@@ -151557,7 +151557,7 @@ sub_FDE18A:
 	ret                                                  ; FDE196  0e
 T_F42038_Nop:
 	ret                                                  ; FDE197  0e
-sub_FDE198:
+ScreenLeave_Code8B:
 	pushw 0x00                                           ; FDE198  0b 00 00
 	call Var27DA_Set                                      ; FDE19B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE19F  1d 13 77 fd
@@ -151565,7 +151565,7 @@ sub_FDE198:
 	ret                                                  ; FDE1A4  0e
 T_F42048_Nop:
 	ret                                                  ; FDE1A5  0e
-sub_FDE1A6:
+ScreenLeave_Code8C:
 	pushw 0x00                                           ; FDE1A6  0b 00 00
 	call Var27DA_Set                                      ; FDE1A9  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1AD  1d 13 77 fd
@@ -151573,14 +151573,14 @@ sub_FDE1A6:
 	ret                                                  ; FDE1B2  0e
 T_F42058_Nop:
 	ret                                                  ; FDE1B3  0e
-sub_FDE1B4:
+ScreenLeave_Code8D:
 	pushw 0x00                                           ; FDE1B4  0b 00 00
 	call Var27DA_Set                                      ; FDE1B7  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1BB  1d 13 77 fd
 	popw bc                                              ; FDE1BF  49
 	ret                                                  ; FDE1C0  0e
 	ret                                                  ; FDE1C1  0e
-sub_FDE1C2:
+ScreenLeave_Code8E:
 	pushw 0x00                                           ; FDE1C2  0b 00 00
 	call Var27DA_Set                                      ; FDE1C5  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1C9  1d 13 77 fd
@@ -151588,7 +151588,7 @@ sub_FDE1C2:
 	ret                                                  ; FDE1CE  0e
 T_F42078_Nop:
 	ret                                                  ; FDE1CF  0e
-sub_FDE1D0:
+ScreenLeave_Code8F:
 	pushw 0x00                                           ; FDE1D0  0b 00 00
 	call Var27DA_Set                                      ; FDE1D3  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1D7  1d 13 77 fd
@@ -151596,7 +151596,7 @@ sub_FDE1D0:
 	ret                                                  ; FDE1DC  0e
 T_F42068_Nop:
 	ret                                                  ; FDE1DD  0e
-sub_FDE1DE:
+ScreenLeave_CodeCD:
 	pushw 0x00                                           ; FDE1DE  0b 00 00
 	call Var27DA_Set                                      ; FDE1E1  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1E5  1d 13 77 fd
@@ -151604,7 +151604,7 @@ sub_FDE1DE:
 	ret                                                  ; FDE1EA  0e
 T_F42098_Nop:
 	ret                                                  ; FDE1EB  0e
-sub_FDE1EC:
+ScreenLeave_Code9B:
 	pushw 0x00                                           ; FDE1EC  0b 00 00
 	call Var27DA_Set                                      ; FDE1EF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1F3  1d 13 77 fd
@@ -151612,7 +151612,7 @@ sub_FDE1EC:
 	ret                                                  ; FDE1F8  0e
 T_F420A8_Nop:
 	ret                                                  ; FDE1F9  0e
-sub_FDE1FA:
+ScreenLeave_Code9C:
 	pushw 0x00                                           ; FDE1FA  0b 00 00
 	call Var27DA_Set                                      ; FDE1FD  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE201  1d 13 77 fd
@@ -151620,7 +151620,7 @@ sub_FDE1FA:
 	ret                                                  ; FDE206  0e
 T_F420B8_Nop:
 	ret                                                  ; FDE207  0e
-sub_FDE208:
+ScreenLeave_Code82:
 	pushw 0x00                                           ; FDE208  0b 00 00
 	call Var27DA_Set                                      ; FDE20B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE20F  1d 13 77 fd
@@ -151628,7 +151628,7 @@ sub_FDE208:
 	ret                                                  ; FDE214  0e
 T_F42168_Nop:
 	ret                                                  ; FDE215  0e
-sub_FDE216:
+ScreenLeave_Code83:
 	pushw 0x00                                           ; FDE216  0b 00 00
 	call Var27DA_Set                                      ; FDE219  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE21D  1d 13 77 fd
@@ -151636,7 +151636,7 @@ sub_FDE216:
 	ret                                                  ; FDE222  0e
 T_F42178_Nop:
 	ret                                                  ; FDE223  0e
-sub_FDE224:
+ScreenLeave_Code84:
 	pushw 0x00                                           ; FDE224  0b 00 00
 	call Var27DA_Set                                      ; FDE227  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE22B  1d 13 77 fd
@@ -151644,7 +151644,7 @@ sub_FDE224:
 	ret                                                  ; FDE230  0e
 T_F42188_Nop:
 	ret                                                  ; FDE231  0e
-sub_FDE232:
+ScreenLeave_Code85:
 	pushw 0x00                                           ; FDE232  0b 00 00
 	call Var27DA_Set                                      ; FDE235  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE239  1d 13 77 fd
@@ -151652,7 +151652,7 @@ sub_FDE232:
 	ret                                                  ; FDE23E  0e
 T_F42198_Nop:
 	ret                                                  ; FDE23F  0e
-sub_FDE240:
+ScreenLeave_Code86:
 	pushw 0x00                                           ; FDE240  0b 00 00
 	call Var27DA_Set                                      ; FDE243  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE247  1d 13 77 fd
@@ -151660,7 +151660,7 @@ sub_FDE240:
 	ret                                                  ; FDE24C  0e
 T_F421A8_Nop:
 	ret                                                  ; FDE24D  0e
-sub_FDE24E:
+ScreenLeave_Code90:
 	pushw 0x00                                           ; FDE24E  0b 00 00
 	call Var27DA_Set                                      ; FDE251  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE255  1d 13 77 fd
@@ -151668,7 +151668,7 @@ sub_FDE24E:
 	ret                                                  ; FDE25A  0e
 T_F420C8_Nop:
 	ret                                                  ; FDE25B  0e
-sub_FDE25C:
+ScreenLeave_Code91:
 	pushw 0x00                                           ; FDE25C  0b 00 00
 	call Var27DA_Set                                      ; FDE25F  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE263  1d 13 77 fd
@@ -151676,7 +151676,7 @@ sub_FDE25C:
 	ret                                                  ; FDE268  0e
 T_F420D8_Nop:
 	ret                                                  ; FDE269  0e
-sub_FDE26A:
+ScreenLeave_Code92:
 	pushw 0x00                                           ; FDE26A  0b 00 00
 	call Var27DA_Set                                      ; FDE26D  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE271  1d 13 77 fd
@@ -151684,7 +151684,7 @@ sub_FDE26A:
 	ret                                                  ; FDE276  0e
 T_F420E8_Nop:
 	ret                                                  ; FDE277  0e
-sub_FDE278:
+ScreenLeave_Code93:
 	pushw 0x00                                           ; FDE278  0b 00 00
 	call Var27DA_Set                                      ; FDE27B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE27F  1d 13 77 fd
@@ -151692,7 +151692,7 @@ sub_FDE278:
 	ret                                                  ; FDE284  0e
 T_F420F8_Nop:
 	ret                                                  ; FDE285  0e
-sub_FDE286:
+ScreenLeave_Code94:
 	pushw 0x00                                           ; FDE286  0b 00 00
 	call Var27DA_Set                                      ; FDE289  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE28D  1d 13 77 fd
@@ -151700,7 +151700,7 @@ sub_FDE286:
 	ret                                                  ; FDE292  0e
 T_F42108_Nop:
 	ret                                                  ; FDE293  0e
-sub_FDE294:
+ScreenLeave_Code95:
 	pushw 0x00                                           ; FDE294  0b 00 00
 	call Var27DA_Set                                      ; FDE297  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE29B  1d 13 77 fd
@@ -151708,7 +151708,7 @@ sub_FDE294:
 	ret                                                  ; FDE2A0  0e
 T_F42118_Nop:
 	ret                                                  ; FDE2A1  0e
-sub_FDE2A2:
+ScreenLeave_Code96:
 	pushw 0x00                                           ; FDE2A2  0b 00 00
 	call Var27DA_Set                                      ; FDE2A5  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2A9  1d 13 77 fd
@@ -151716,7 +151716,7 @@ sub_FDE2A2:
 	ret                                                  ; FDE2AE  0e
 T_F42128_Nop:
 	ret                                                  ; FDE2AF  0e
-sub_FDE2B0:
+ScreenLeave_Code97:
 	pushw 0x00                                           ; FDE2B0  0b 00 00
 	call Var27DA_Set                                      ; FDE2B3  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2B7  1d 13 77 fd
@@ -151724,7 +151724,7 @@ sub_FDE2B0:
 	ret                                                  ; FDE2BC  0e
 T_F42138_Nop:
 	ret                                                  ; FDE2BD  0e
-sub_FDE2BE:
+ScreenLeave_Code98:
 	pushw 0x00                                           ; FDE2BE  0b 00 00
 	call Var27DA_Set                                      ; FDE2C1  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2C5  1d 13 77 fd
@@ -151732,7 +151732,7 @@ sub_FDE2BE:
 	ret                                                  ; FDE2CA  0e
 T_F42148_Nop:
 	ret                                                  ; FDE2CB  0e
-sub_FDE2CC:
+ScreenLeave_Code99:
 	pushw 0x00                                           ; FDE2CC  0b 00 00
 	call Var27DA_Set                                      ; FDE2CF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2D3  1d 13 77 fd
@@ -151762,7 +151762,7 @@ sub_FDE2EC:
 	ret                                                  ; FDE2F8  0e
 T_F433DC_Nop:
 	ret                                                  ; FDE2F9  0e
-sub_FDE2FA:
+ScreenLeave_Code9D:
 	pushw 0x00                                           ; FDE2FA  0b 00 00
 	call Var27DA_Set                                      ; FDE2FD  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE301  1d 13 77 fd
@@ -151770,7 +151770,7 @@ sub_FDE2FA:
 	ret                                                  ; FDE306  0e
 T_F4235C_Nop:
 	ret                                                  ; FDE307  0e
-sub_FDE308:
+ScreenLeave_CodeCA:
 	pushw 0x00                                           ; FDE308  0b 00 00
 	call Var27DA_Set                                      ; FDE30B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE30F  1d 13 77 fd
@@ -151778,7 +151778,7 @@ sub_FDE308:
 	ret                                                  ; FDE314  0e
 T_F4232C_Nop:
 	ret                                                  ; FDE315  0e
-sub_FDE316:
+ScreenLeave_CodeCB:
 	pushw 0x00                                           ; FDE316  0b 00 00
 	call Var27DA_Set                                      ; FDE319  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE31D  1d 13 77 fd
@@ -151794,7 +151794,7 @@ sub_FDE324:
 	ret                                                  ; FDE330  0e
 T_F4234C_Nop:
 	ret                                                  ; FDE331  0e
-sub_FDE332:
+ScreenLeave_CodeC0:
 	pushw 0x00                                           ; FDE332  0b 00 00
 	call Var27DA_Set                                      ; FDE335  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE339  1d 13 77 fd
@@ -151961,7 +151961,7 @@ ToneEditPage_A7_Leave:
 	ret                                                  ; FDE3A0  0e
 T_F41FE8_Nop:
 	ret                                                  ; FDE3A1  0e
-sub_FDE3A2:
+ScreenLeave_CodeC8:
 	pushw 0x00                                           ; FDE3A2  0b 00 00
 	call Var27DA_Set                                      ; FDE3A5  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE3A9  1d 13 77 fd
@@ -151977,7 +151977,7 @@ sub_FDE3B0:
 	ret                                                  ; FDE3BC  0e
 T_F433EC_Nop:
 	ret                                                  ; FDE3BD  0e
-sub_FDE3BE:
+ScreenButton_Code90:
 	link XIZ,0xfffc                                      ; FDE3BE  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE3C2  be fe 31
 	push XBC                                             ; FDE3C5  39
@@ -152016,7 +152016,7 @@ sub_FDE3BE:
 .LFDE41B:
 	unlk XIZ                                             ; FDE41B  ee 0d
 	ret                                                  ; FDE41D  0e
-sub_FDE41E:
+ScreenButton_Code91:
 	link XIZ,0xfffc                                      ; FDE41E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE422  be fe 31
 	push XBC                                             ; FDE425  39
@@ -152055,7 +152055,7 @@ sub_FDE41E:
 .LFDE47B:
 	unlk XIZ                                             ; FDE47B  ee 0d
 	ret                                                  ; FDE47D  0e
-sub_FDE47E:
+ScreenButton_Code92:
 	link XIZ,0xfffc                                      ; FDE47E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE482  be fe 31
 	push XBC                                             ; FDE485  39
@@ -152094,7 +152094,7 @@ sub_FDE47E:
 .LFDE4DB:
 	unlk XIZ                                             ; FDE4DB  ee 0d
 	ret                                                  ; FDE4DD  0e
-sub_FDE4DE:
+ScreenButton_Code93:
 	link XIZ,0xfffc                                      ; FDE4DE  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE4E2  be fe 31
 	push XBC                                             ; FDE4E5  39
@@ -152134,7 +152134,7 @@ sub_FDE529:
 .LFDE53B:
 	unlk XIZ                                             ; FDE53B  ee 0d
 	ret                                                  ; FDE53D  0e
-sub_FDE53E:
+ScreenButton_Code94:
 	link XIZ,0xfffc                                      ; FDE53E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE542  be fe 31
 	push XBC                                             ; FDE545  39
@@ -152173,7 +152173,7 @@ sub_FDE53E:
 .LFDE59B:
 	unlk XIZ                                             ; FDE59B  ee 0d
 	ret                                                  ; FDE59D  0e
-sub_FDE59E:
+ScreenButton_Code95:
 	link XIZ,0xfffc                                      ; FDE59E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE5A2  be fe 31
 	push XBC                                             ; FDE5A5  39
@@ -152208,7 +152208,7 @@ sub_FDE59E:
 .LFDE5EC:
 	unlk XIZ                                             ; FDE5EC  ee 0d
 	ret                                                  ; FDE5EE  0e
-sub_FDE5EF:
+ScreenButton_Code96:
 	link XIZ,0xfffc                                      ; FDE5EF  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE5F3  be fe 31
 	push XBC                                             ; FDE5F6  39
@@ -152247,7 +152247,7 @@ sub_FDE5EF:
 .LFDE64C:
 	unlk XIZ                                             ; FDE64C  ee 0d
 	ret                                                  ; FDE64E  0e
-sub_FDE64F:
+ScreenButton_Code97:
 	link XIZ,0xfffc                                      ; FDE64F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE653  be fe 31
 	push XBC                                             ; FDE656  39
@@ -152286,7 +152286,7 @@ sub_FDE64F:
 .LFDE6AC:
 	unlk XIZ                                             ; FDE6AC  ee 0d
 	ret                                                  ; FDE6AE  0e
-sub_FDE6AF:
+ScreenButton_Code98:
 	link XIZ,0xfffc                                      ; FDE6AF  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE6B3  be fe 31
 	push XBC                                             ; FDE6B6  39
@@ -152334,7 +152334,7 @@ sub_FDE6AF:
 ; it paints pointer tables as instructions and passes the byte gate doing it.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-sub_FDE70F:   ; entry: prom_b routine directory
+ScreenButton_Code99:   ; entry: prom_b routine directory
 	link XIZ,0xfffc                                      ; FDE70F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE713  be fe 31
 	push XBC                                             ; FDE716  39

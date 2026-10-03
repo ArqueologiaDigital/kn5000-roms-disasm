@@ -51,6 +51,7 @@ from prom_b_apply_effect_names import RENAMES as FX_RENAMES  # noqa: E402
 from prom_b_apply_diskfile_name import RENAMES as DF_RENAMES  # noqa: E402
 from prom_b_apply_effect_editor_name import RENAMES as ED_RENAMES  # noqa: E402
 from prom_b_apply_chordnote_names import RENAMES as CN_RENAMES  # noqa: E402
+from prom_b_names_session_53b889a2 import RENAMES as S53_RENAMES  # noqa: E402  2026-10-03 passes
 
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 
@@ -116,6 +117,7 @@ def main():
     ren.update(dict(DF_RENAMES))
     ren.update(dict(ED_RENAMES))
     ren.update(dict(CN_RENAMES))
+    ren.update(dict(S53_RENAMES))
     old = [l.rstrip("\n") for l in base_lines(rev)]
     new = [l.rstrip("\n") for l in image_lines(ROOT, REL)]
     have = collections.Counter(new)
@@ -132,7 +134,7 @@ def main():
     titles = {"; sub_%06X" % a: f"; {n} -- 0x{a:06X}"
               for a, n, *_ in list(RENAMES) + list(CLEARERS) + [(a, n) for a, n in SMF_RENAMES]}
     titles.update({f"; {o}": f"; {n} -- 0x{o[4:]}"
-                   for o, n in list(FX_RENAMES) + list(DF_RENAMES) + list(ED_RENAMES) + list(CN_RENAMES)
+                   for o, n in list(FX_RENAMES) + list(DF_RENAMES) + list(ED_RENAMES) + list(CN_RENAMES) + list(S53_RENAMES)
                    if o.startswith("sub_")})
     newtext = "\n".join(new)
     QUOTED = ("is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's",
