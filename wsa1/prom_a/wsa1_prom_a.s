@@ -2033,7 +2033,7 @@
 	.set PtrTable_F4F99E,                         0x00F4F99E
 	.set PtrTable_F4F9E6,                         0x00F4F9E6
 	.set PtrTable_F4FA2E,                         0x00F4FA2E
-	.set Pointer_F4FA76,                          0x00F4FA76
+	.set MidiSysEx_Tail3Init,                     0x00F4FA76
 	.set PtrTable_F4FB1C,                         0x00F4FB1C
 	.set PtrTable_F4FB38,                         0x00F4FB38
 	.set AsciiRun_F511C7,                         0x00F511C7
@@ -88491,7 +88491,7 @@ sub_FB3355:
 	lda xix, (0x60f800:24)                               ; FB335A  f2 00 f8 60 34
 	push XIX                                             ; FB335F  3c
 	ldw bc, 0x03                                         ; FB3360  31 03 00
-	lda xiy, (Pointer_F4FA76:24)                         ; FB3363  f2 76 fa f4 35
+	lda xiy, (MidiSysEx_Tail3Init:24)                    ; FB3363  f2 76 fa f4 35
 	lda xix, (xiz-3)                                     ; FB3368  be fd 34
 	ldir85                                               ; FB336B  85 11
 	pop XIX                                              ; FB336D  5c

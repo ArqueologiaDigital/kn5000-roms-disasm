@@ -107757,18 +107757,14 @@ PtrTable_F4FA2E:
 	.long 0x00FB328C                       ; F4FA72  [17]   -> prom_a 0xFB328C
 
 ; --------------------------------------------------------------------------
-; Pointer_F4FA76 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
-; Read by: prom_a 0xFB3363 `lda_24 xiy, (0xf4fa76)`
-; Entry count: 1, measured by abutment: 1 x 4 = 4 bytes reaches 0xF4FA7A
-;              exactly, which is the end of the segment.
-; Evidence: every word in the range is a 32-bit value inside the
-;           0x00F00000-0x00FFFFFF program window -- the layout's romtab
-;           rule, whose null corpus is 107,345 bytes of proven prom_b
-;           instruction text on which it fires zero times.  The BASE is the
-;           address an instruction spells, not a boundary this file chose.
-; --------------------------------------------------------------------------
-Pointer_F4FA76:
-	.long 0x00F70708                       ; F4FA76  [0]   -> prom_b 0xF70708
+; MidiSysEx_Tail3Init -- not a pointer: three bytes that prom_a's sub_FB3355 copies into its frame
+;          (`lda xiy,(this)` / `ldw bc,3` / `ldir`, 0xFB3360-0xFB336B), the C compiler's initializer for
+;          a 3-byte local.  The routine overwrites the first two with computed values
+;          (0xFB33CF, 0xFB33DA) and passes all three to sub_FB6F24, so the 0xF7 (MIDI
+;          end-of-exclusive) stays as the last byte.  This was read as `.long 0x00F70708`,
+;          a pointer that lands inside an instruction.
+MidiSysEx_Tail3Init:	.byte	0x08, 0x07, 0xf7	; F4FA76
+	.byte	0x00	; F4FA79
 
 ; --- 0xF4FA7A-0xF4FA9A  data (33 bytes) ---
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F4FA7A  ................
@@ -145140,7 +145136,7 @@ DispatchTable_F67723:
 	.long	sub_F679B9	; F6773B  [6] -> 0xF679B9
 	.long	sub_F67C2E	; F6773F  [7] -> 0xF67C2E
 	.long	sub_F67CD5	; F67743  [8] -> 0xF67CD5
-	.long	0x00F67DCF	; F67747  [9] -> 0xF67DCF
+	.long	sub_F67DCF	; F67747  [9] -> 0xF67DCF
 	.long	sub_F67F7C	; F6774B  [10] -> 0xF67F7C
 	.long	sub_F6CBD4	; F6774F  [11] -> 0xF6CBD4
 	.long	DispatchTable_F674CE_Nop0	; F67753  [12] -> ret stub
@@ -146001,7 +145997,7 @@ MsgLine_Volume:
 	ldw	bc, 27	; F67D93  ld BC,0x001b
 	ld	(xix+), a	; F67D96  ld (XIX+),A
 	djnz16	bc, -6	; F67D99  djnz BC,0xf67d96
-	ld	xiy, MsgLine_Volume + 0x3A	; F67D9C  ld XIY,0x00f67dc6
+	ld	xiy, MsgLine_Volume_Text	; F67D9C  ld XIY,0x00f67dc6
 	ld	xix, MsgLine_Text+11	; F67DA1  ld XIX,0x00000fef
 	ldw	bc, 9	; F67DA6  ld BC,0x0009
 	ldir85	; F67DA9  ldir
@@ -146015,23 +146011,21 @@ MsgLine_Volume:
 	ldir85	; F67DBF  ldir
 	call	T_F431B4	; F67DC1  call 0xf431b4
 	ret	; F67DC5  ret
-	.byte 0x56	; F67DC6  db   [llvm-mc cannot encode this]
-	popw	sp	; F67DC7  pop SP
-	popw	ix	; F67DC8  pop IX
-	.byte 0x55	; F67DC9  db   [llvm-mc cannot encode this]
-	popw	iy	; F67DCA  pop IY
-	ld	xiy, 3642768672	; F67DCB  ld XIY,0xd9203d20
-	and	(xhl-37), l	; F67DD0  and (XHL+0xdb),L
-	.byte 0x1F	; F67DD3  db   [llvm-mc cannot encode this]
-	nop	; F67DD4  nop
-	jr	ugt, MsgLine_Volume_Return	; F67DD5  jr UGT,0xf67de8
+; MsgLine_Volume_Text -- the 9 characters MsgLine_Volume copies with `ldir` (BC = 9) to MsgLine_Text+11
+MsgLine_Volume_Text:	.ascii	"VOLUME = "	; F67DC6
+; sub_F67DCF -- entry 9 of DispatchTable_F67723: dispatch HL (0..31) through DispatchTable_F67DE9.  It was hidden
+;          by the text above decoded as code, which swallowed its first instruction.
+sub_F67DCF:
+	ld	hl, bc	; F67DCF  ld HL,BC
+	cp	hl, 31	; F67DD1  cp HL,0x001f
+	jr	ugt, sub_F67DCF_Return	; F67DD5  jr UGT,0xf67de8
 	sla	hl, 2	; F67DD7  sla 0x02,HL
 	push	xix	; F67DDA  push XIX
 	ld	xix, DispatchTable_F67DE9	; F67DDB  ld XIX,0x00f67de9
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67DE0  ld XHL,(XIX+HL)
 	pop	xix	; F67DE5  pop XIX
 	call	(xhl)	; F67DE6  call T,XHL
-MsgLine_Volume_Return:
+sub_F67DCF_Return:
 	ret	; F67DE8  ret
 
 ; --------------------------------------------------------------------------
@@ -178506,7 +178500,8 @@ sub_F76836_Epilogue2:
 
 ; --------------------------------------------------------------------------
 ; sub_F768A1
-; Called from: 0xF76726, 0xF7677E, 0xF7679C
+; Called from: 0xF76726, 0xF7677E, 0xF7679C -- all three inside sub_F7669D, which nothing
+;              references, so this is dead too; its 0x00F759A2 is inside an instruction (0xF759A1)
 ; Evidence: 0xF768A1 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
