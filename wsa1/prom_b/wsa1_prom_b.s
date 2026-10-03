@@ -2994,6 +2994,7 @@ sub_F00ADD:
 	call	T_Link_SendBlockIn32ByteChunks	; F00AF8  call 0xf40ed4
 	inc	8, xsp	; F00AFC  inc 0,XSP
 	ret	; F00AFE  ret
+sub_F00AFF:
 	ld	(6311953:24), 0	; F00AFF  ld (0x605011),0x00
 	ld	(6311954:24), 0	; F00B05  ld (0x605012),0x00
 	ld	(6311955:24), 0	; F00B0B  ld (0x605013),0x00
@@ -87823,7 +87824,7 @@ T_F40974:	jp sub_F00800  ; -> prom_b 0x00800
 T_F40978:	jp sub_F00800  ; -> prom_b 0x00800
 T_F4097C:	jp sub_F00800  ; -> prom_b 0x00800   x2
 T_F40980:	jp sub_F00800  ; -> prom_b 0x00800
-T_F40984:	jp 0xF00AFF  ; -> prom_b 0x00AFF   x5
+T_F40984:	jp sub_F00AFF  ; -> prom_b 0x00AFF   x5
 	.fill 0x18, 1, 0x0E  ; 0xF40988: 24 x ret
 T_F409A0:	jp sub_F0001A_Join  ; -> prom_b 0x0001B
 T_F409A4:	jp sub_F00293  ; -> prom_b 0x00293   x1
@@ -88342,7 +88343,9 @@ T_F414B8:	jp sub_F4CA64  ; -> prom_b 0x4CA64   x1
 T_F414BC:	jp sub_F4CA2A  ; -> prom_b 0x4CA2A   x1
 T_F414C0:	jp sub_F4CADA  ; -> prom_b 0x4CADA   x1
 T_F414C4:	jp sub_F4CA92  ; -> prom_b 0x4CA92   x1
-	.fill 0x38, 1, 0x0E  ; 0xF414C8: 56 x ret
+	.fill 0x18, 1, 0x0E  ; 0xF414C8: 24 x ret
+; T_F414E0_Empty -- an unpopulated slot (`ret`), which Nop_CallsEmptyDirectorySlot calls.
+T_F414E0_Empty:	.fill 0x20, 1, 0x0E  ; 0xF414E0: 32 x ret
 T_ModeEnter_Sound:	jp ModeEnter_Sound  ; F41500 (was T_F41500) -> prom_a 0x10C00
 T_F41504:	jp T_F41504_Nop  ; -> prom_a 0x10C12
 T_ModeEnter_Combination:	jp ModeEnter_Combination  ; -> prom_a 0x10C13
@@ -94453,7 +94456,7 @@ sub_F45BD3_Skip8:
 ;          and is NOT asserted; the name states what the code does.
 ; --------------------------------------------------------------------------
 Nop_CallsEmptyDirectorySlot:
-	call	15996128	; F45D04  call 0xf414e0
+	call	T_F414E0_Empty	; F45D04  call 0xf414e0
 	ret	; F45D08  ret
 
 ; --------------------------------------------------------------------------
@@ -107492,7 +107495,7 @@ sub_F4F2DE:
 sub_F4F2DE_Skip:
 	ld	xbc, 32	; F4F2F3  ld XBC,0x00000020
 	and	xbc, xbc	; F4F2F8  and XBC,XBC
-	jr	z, 16	; F4F2FA  jr Z,0xf4f30c
+	jr	z, sub_F4F2DE_Return	; F4F2FA  jr Z,0xf4f30c
 	lda	xix, (10080:24)	; F4F2FC  lda XIX,0x002760
 	xor	wa, wa	; F4F301  xor WA,WA
 sub_F4F2DE_Loop:
@@ -107500,8 +107503,11 @@ sub_F4F2DE_Loop:
 	sub	bc, 1	; F4F306  sub BC,0x0001
 	jr	nz, sub_F4F2DE_Loop	; F4F30A  jr NZ,0xf4f303
 
-; --- 0xF4F30C-0xF4F7FF  fill (1268 bytes) ---
-	.fill	1268, 1, 0x0E	; asserted a single value
+; sub_F4F2DE's own `ret`: the first byte of the 0x0E run, the target of its `jr z` at 0xF4F2FA
+sub_F4F2DE_Return:
+	ret	; F4F30C  ret
+; --- 0xF4F30D-0xF4F7FF  fill (1267 bytes) ---
+	.fill	1267, 1, 0x0E	; asserted a single value
 
 ; --- 0xF4F800-0xF4F90F  romtab (272 bytes) ---
 
@@ -163140,7 +163146,7 @@ sub_F6EC6A:
 	xor	hl, hl	; F6EC72  xor HL,HL
 sub_F6EC6A_Join:
 	cp	hl, 16	; F6EC74  cp HL,0x0010
-	jr	ugt, 37	; F6EC78  jr UGT,0xf6ec9f
+	jr	ugt, sub_F6EC6A_Return	; F6EC78  jr UGT,0xf6ec9f
 	push	xde	; F6EC7A  push XDE
 	ld	xde, 6304802	; F6EC7B  ld XDE,0x00603422
 	mx_cp_mi8 MXB, ra_DE, ra_HL, 0x20	; F6EC80  cp (XDE+HL),0x20
@@ -163154,11 +163160,14 @@ sub_F6EC6A_Skip:
 	jr	sub_F6EC6A_Join	; F6EC91  jr T,0xf6ec74
 sub_F6EC6A_Skip2:
 	m_and_mi8 MB16, 0x0c8a, 0xfb	; F6EC93  and (0x0c8a),0xfb
-	jr	5	; F6EC98  jr T,0xf6ec9f
+	jr	sub_F6EC6A_Return	; F6EC98  jr T,0xf6ec9f
 sub_F6EC6A_Join2:
 	m_or_mi8 MB16, 0x0c8a, 0x04	; F6EC9A  or (0x0c8a),0x04
 
-	.fill	865, 1, 0x0E	; F6EC9F-F6EFFF  `ret` padding (asserted pure 0x0E, and maximal)
+; sub_F6EC6A's own `ret`: the first byte of the 0x0E run, the target of its two branches at 0xF6EC78/0xF6EC98
+sub_F6EC6A_Return:
+	ret	; F6EC9F  ret
+	.fill	864, 1, 0x0E	; F6ECA0-F6EFFF  `ret` padding (asserted pure 0x0E)
 
 ; ==========================================================================
 ; 0xF6F000-0xF6F3FF -- AN OLDER BUILD'S COPY OF THE MODULE AT 0xF7AA00-0xF7ADFF
