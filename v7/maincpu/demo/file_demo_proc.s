@@ -284,7 +284,7 @@ Seq_StartWithFullInit:
 	ld	xbc, EVT_START_PRESENTATION
 	ld	xde, 0:i3
 	jrl	Seq_DispatchMainFunc
-	ld	xwa, FDemoText_ByteData_LayoutEngine_Data_8
+	ld	xwa, NAKA_VIEW_PleaseWait
 	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	SendEvent

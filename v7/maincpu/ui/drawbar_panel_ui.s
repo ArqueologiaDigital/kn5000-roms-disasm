@@ -4927,7 +4927,7 @@ InitializeMurai:
 	pushw	InitializeMurai_Str_TT_MESAGE@lo16
 	ld	xwa, 238
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, 0xee0000
+	ld	xde, NAKA_VIEW_Mesage
 	call	RegisterTitle
 	pushw	1
 	pushw	InitializeMurai_Str_TT_WELCOM@hi16
@@ -4941,7 +4941,7 @@ InitializeMurai:
 	pushw	InitializeMurai_Str_TT_SOFTVER@lo16
 	ld	xwa, 240
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, 0xf00000
+	ld	xde, NAKA_VIEW_Softver
 	call	RegisterTitle
 	lda	xsp, (xsp+14)
 	ret
@@ -9687,26 +9687,26 @@ IvAccordion_ShowHide:
 	cpw (0x24782:24), 0
 	jr z, IvAccordion_ShowHide_NoBellows
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
-	ld xwa, IvAccordion_ShowHide_Data
+	ld xwa, NAKA_VIEW_Accordion1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0001
 	ldw (0x024780:24), 0x0001
-	ld xwa, IvAccordion_ShowHide_Data_2
+	ld xwa, NAKA_VIEW_Accordion2
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr IvAccordion_ShowHide_Toggle
 
 IvAccordion_ShowHide_NoBellows:
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
-	ld xwa, IvAccordion_ShowHide_Data_2
+	ld xwa, NAKA_VIEW_Accordion2
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0000
 	ldw (0x024780:24), 0x0000
-	ld xwa, IvAccordion_ShowHide_Data
+	ld xwa, NAKA_VIEW_Accordion1
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 
@@ -9721,7 +9721,7 @@ IvAccordion_ShowHide_UpdatePart:
 	sla wa, 2
 	lda xbc, (0x03e9a0:24)
 	ld	xde, (xbc+wa)
-	ld xwa, IvAccordion_ShowHide_UpdatePart_Data
+	ld xwa, NAKA_VIEW_AccordionPart
 	ld xbc, EVT_PARA_DRAW
 	jrl IvAccordion_DispatchEvent
 
@@ -9746,12 +9746,12 @@ IvAccordion_Scroll:
 	jr nz, IvAccordion_Scroll_SetOff
 	ldw (0x024780:24), 0x0001
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
-	ld xwa, IvAccordion_ShowHide_Data
+	ld xwa, NAKA_VIEW_Accordion1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
-	ld xwa, IvAccordion_ShowHide_Data_2
+	ld xwa, NAKA_VIEW_Accordion2
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9771,12 +9771,12 @@ IvAccordion_Scroll:
 IvAccordion_Scroll_SetOff:
 	ldw (0x024780:24), 0x0000
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
-	ld xwa, IvAccordion_ShowHide_Data_2
+	ld xwa, NAKA_VIEW_Accordion2
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
-	ld xwa, IvAccordion_ShowHide_Data
+	ld xwa, NAKA_VIEW_Accordion1
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9837,13 +9837,13 @@ IvAccordion_Update:
 	cpw (0x2477c:24), 0
 	jr z, IvAccordion_Update_SendPartParam
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
-	ld xwa, IvAccordion_ShowHide_Data_2
+	ld xwa, NAKA_VIEW_Accordion2
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0000
 	ldw (0x024780:24), 0x0000
-	ld xwa, IvAccordion_ShowHide_Data
+	ld xwa, NAKA_VIEW_Accordion1
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr IvAccordion_Update_CommitToggle
@@ -9852,13 +9852,13 @@ IvAccordion_Update_BellowsOn:
 	cpw (0x2477c:24), 1
 	jr z, IvAccordion_Update_SendPartParam
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
-	ld xwa, IvAccordion_ShowHide_Data
+	ld xwa, NAKA_VIEW_Accordion1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0001
 	ldw (0x024780:24), 0x0001
-	ld xwa, IvAccordion_ShowHide_Data_2
+	ld xwa, NAKA_VIEW_Accordion2
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 
@@ -9919,7 +9919,7 @@ IvAccordion_Refresh:
 	lda xwa, (0x03e9a0:24)
 	ld	xde, (xwa+hl)
 	; object handle 0xeb0007 = class 0x0eb, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_UpdatePart_Data)
-	ld xwa, IvAccordion_ShowHide_UpdatePart_Data
+	ld xwa, NAKA_VIEW_AccordionPart
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	ld wa, (0x02477e:24)
@@ -11233,7 +11233,7 @@ Softver_ShowHide:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, Softver_ShowHide_Code
+	ld	xwa, NAKA_VIEW_MainProgram
 	ld	xbc, EVT_PARA_DRAW
 	call	SendEvent
 	call	Boot_ParseTableDataTimestamp
@@ -11245,7 +11245,7 @@ Softver_ShowHide:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, ParamPopup_DynamicAccomp_Skip
+	ld	xwa, NAKA_VIEW_MainTable
 	ld	xbc, EVT_PARA_DRAW
 	call	SendEvent
 	call	Boot_GetSystemPointer
@@ -11257,7 +11257,7 @@ Softver_ShowHide:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, Softver_ShowHide_Code_2
+	ld	xwa, NAKA_VIEW_SubProgram
 	ld	xbc, EVT_PARA_DRAW
 	call	SendEvent
 	call	Boot_ParseSubCPUTimestamp
@@ -11269,7 +11269,7 @@ Softver_ShowHide:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, 0xf00004
+	ld	xwa, NAKA_VIEW_SoundTable
 	ld	xbc, EVT_PARA_DRAW
 	jr	Softver_SendEvent
 Softver_Paint:
@@ -11326,7 +11326,7 @@ MPver_ShowHide:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, MPver_ShowHide_Data
+	ld	xwa, NAKA_VIEW_MPver
 	ld	xbc, EVT_PARA_DRAW
 	jr	MPver_SendEvent
 MPver_Paint:
@@ -11820,7 +11820,7 @@ AcWelcomScreen_SubCpuError:
 	ld	xbc, xiz
 	ld	xde, (xsp+16)
 	call	InheritedProc
-	ld	xwa, AcWelcomScreen_SubCpuError_Data
+	ld	xwa, NAKA_VIEW_AllInitial
 	ld	xbc, EVT_SHOW
 	ld	xde, 3:i3
 	jr	AcWelcomScreen_DispatchEvent
@@ -11829,7 +11829,7 @@ AcWelcomScreen_SubCpuLoaded:
 	ld	xbc, xiz
 	ld	xde, (xsp+16)
 	call	InheritedProc
-	ld	xwa, AcWelcomScreen_SubCpuLoaded_Data
+	ld	xwa, NAKA_VIEW_MPVersion
 	ld	xbc, EVT_SHOW
 	ld	xde, 3:i3
 AcWelcomScreen_DispatchEvent:
@@ -12718,12 +12718,9 @@ AudioCtrl_MixerLoopNext:
 PsMixer_UnmatchedPartScan:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
-EffectMode_TimerEvent_Step78_Code:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
-EffectMode_TimerEvent_Step1E_Code:
 	ld wa, (xwa)
-EffectMode_TimerEvent_Step3C_Code:
 	sla wa, 2
 	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld	xwa, (xbc+wa)
@@ -15826,7 +15823,7 @@ IvDrawbar_Init_SetupMode:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xea0026 = class 0x0ea, instance 38 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar_Init_SetupMode_Str_Gt)
-	ld xwa, IvDrawbar_Init_SetupMode_Str_Gt
+	ld xwa, NAKA_VIEW_DrawbarSndE
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -15845,7 +15842,7 @@ IvDrawbar_Init_SetupMode:
 	ld xde, 0:i3
 	call SendEvent
 	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar_Init_SetupMode_Str_ENTATION)
-	ld xwa, IvDrawbar_Init_SetupMode_Str_ENTATION
+	ld xwa, NAKA_VIEW_DrawbarNorm
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call SendEvent
@@ -15863,7 +15860,7 @@ IvDrawbar_Init_ModernMode:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar_Init_SetupMode_Str_ENTATION)
-	ld xwa, IvDrawbar_Init_SetupMode_Str_ENTATION
+	ld xwa, NAKA_VIEW_DrawbarNorm
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -15881,7 +15878,7 @@ IvDrawbar_Init_ModernMode:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, IvDrawbar_Init_SetupMode_Str_Gt
+	ld xwa, NAKA_VIEW_DrawbarSndE
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jrl IvDrawbar_DispatchEvent
@@ -15956,22 +15953,22 @@ IvDrawbar_DrawbarUpdate:
 	cpw (0x247c2:24), 0
 	jr z, IvDrawbar_DrawbarUpdate_UpperOff
 	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar_DrawbarUpdate_Data)
-	ld xwa, IvDrawbar_DrawbarUpdate_Data
+	ld xwa, NAKA_VIEW_DrawPerc223
 	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, IvDrawbar_DrawbarUpdate_Data_2
+	ld xwa, NAKA_VIEW_White23
 	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jrl IvDrawbar_DispatchEvent
 
 IvDrawbar_DrawbarUpdate_UpperOff:
 	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar_DrawbarUpdate_Data)
-	ld xwa, IvDrawbar_DrawbarUpdate_Data
+	ld xwa, NAKA_VIEW_DrawPerc223
 	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, IvDrawbar_DrawbarUpdate_UpperOff_Data
+	ld xwa, NAKA_VIEW_Black23
 	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jrl IvDrawbar_DispatchEvent
@@ -15979,7 +15976,7 @@ IvDrawbar_DrawbarUpdate_UpperOff:
 IvDrawbar_DrawbarUpdate_Lower:
 	ld de, (0x0247c4:24)
 	exts xde
-	ld xwa, IvDrawbar_DrawbarUpdate_Lower_Data
+	ld xwa, NAKA_VIEW_DrawPerc4
 	ld xbc, EVT_SET_PARAM
 	jrl IvDrawbar_DispatchEvent
 
@@ -17206,7 +17203,7 @@ IvDrawbar1_ShowHide:
 	ld de, (0x024798:24)
 	exts xde
 	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar1_ShowHide_Str_SENTATION)
-	ld xwa, IvDrawbar1_ShowHide_Str_SENTATION
+	ld xwa, NAKA_VIEW_DrawSetting
 	ld xbc, EVT_SET_PARAM
 	call SendEvent
 	ld xwa, (xsp + 12)
@@ -17642,7 +17639,7 @@ IvDrawbar2_ShowHideHandler:
 	ld de, (0x024798:24)
 	exts xde
 	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar1_ShowHide_Str_SENTATION)
-	ld xwa, IvDrawbar1_ShowHide_Str_SENTATION
+	ld xwa, NAKA_VIEW_DrawSetting
 	ld xbc, EVT_SET_PARAM
 	jr IvDrawbar2_SendEventShared
 
@@ -17840,7 +17837,7 @@ DrawbarNorm_Update:
 	ld	xwa, 16387
 	call	AcApcToggleProc_Helper
 	exts	xhl
-	ld	xwa, DrawbarNorm_Update_Str_TATION
+	ld	xwa, NAKA_VIEW_DrawTremolo
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, xhl
 	jrl	IvDrawbarNorm_SendEvent
@@ -17850,7 +17847,7 @@ DrawbarNorm_UpdateCase4:
 	lda xbc, (0x03e9a0:24)
 	ld	xde, (xbc+wa)
 	; object handle 0xea001f = class 0x0ea, instance 31 (SendEvent indexes its class table by bits 16-27; not an address -- was DrawbarNorm_UpdateCase4_Data)
-	ld xwa, DrawbarNorm_UpdateCase4_Data
+	ld xwa, NAKA_VIEW_DrawbarPart
 	ld xbc, EVT_PARA_DRAW
 	jr IvDrawbarNorm_SendEvent
 
@@ -18577,13 +18574,13 @@ FdemoScreen_InitForward:
 	call ApFuncCall
 	or xhl, xhl
 	jr z, FdemoScreen_StartPanel2
-	ld xwa, Pad_NakaExternal_Block1
+	ld xwa, NAKA_VIEW_Demofeature2
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr FdemoScreen_SendStart
 
 FdemoScreen_StartPanel2:
-	ld xwa, Pad_AfterNakaData_ExternalBase
+	ld xwa, NAKA_VIEW_Demofeature1
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 
@@ -18662,7 +18659,7 @@ Demofeat2_ShowHide:
 	call ApFuncCall
 	ld xde, xhl
 	; object handle 0xe40008 = class 0x0e4, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was Demofeat2_ShowHide_Data)
-	ld xwa, Demofeat2_ShowHide_Data
+	ld xwa, NAKA_VIEW_FDemoTitleBox
 	ld xbc, EVT_PARA_DRAW
 	jr Demofeat2_SendEvent
 
@@ -18826,7 +18823,7 @@ PresBox_TimerExpired:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xe4000a = class 0x0e4, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was PresBox_TimerExpired_Data)
-	ld xwa, PresBox_TimerExpired_Data
+	ld xwa, NAKA_VIEW_PresentationControl
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call PostEvent
@@ -19013,7 +19010,7 @@ AcPresCtrl_Case5:
 	ld wa, 2:i3
 	call ChangePalette
 	; object handle 0xe40000 = class 0x0e4, instance 0 (SendEvent indexes its class table by bits 16-27; not an address -- was NakaData_ExternalBase)
-	ld xwa, NakaData_ExternalBase
+	ld xwa, NAKA_VIEW_Demofeature
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr AcPresCtrl_SendEventReturn

@@ -189,14 +189,14 @@ InitializeToshi:
 	RegTitle 0x2, InitializeToshi_Str_TT_PMVIEW, 0xd1, NAKA_APFUNC_DefaultFunction, 0xd10000	; "TT_PMVIEW"
 	RegTitle 0x2, InitializeToshi_Str_TT_PMNAME, 0xd2, NAKA_APFUNC_DefaultFunction, 0xd20000	; "TT_PMNAME"
 	RegTitle 0x2, InitializeToshi_Str_TT_PMBKNAME, 0xd3, NAKA_APFUNC_DefaultFunction, 0xd30000	; "TT_PMBKNAME"
-	RegTitle 0x2, InitializeToshi_Str_TT_SVARI, 0xe8, NAKA_APFUNC_DefaultFunction, 0xe80000	; "TT_SVARI"
-	RegTitle 0x2, InitializeToshi_Str_TT_RVARI, 0xe9, NAKA_APFUNC_DefaultFunction, 0xe90000	; "TT_RVARI"
+	RegTitle 0x2, InitializeToshi_Str_TT_SVARI, 0xe8, NAKA_APFUNC_DefaultFunction, NAKA_VIEW_SVARI	; "TT_SVARI"
+	RegTitle 0x2, InitializeToshi_Str_TT_RVARI, 0xe9, NAKA_APFUNC_DefaultFunction, NAKA_VIEW_RVARI	; "TT_RVARI"
 	RegTitle 0x2, InitializeToshi_Str_TT_TEST1, 0xf4, NAKA_APFUNC_DefaultFunction, 0xf40000	; name "TT_TEST1" = 0xED8A96, NakaInst_ExtDevice_Screens + 0x22CA
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST2, 0xf5, NAKA_MAINFUNC_TEST2FUNC, 0xf50000	; name "TT_TEST2" = 0xED8AA0, NakaInst_ExtDevice_Screens + 0x22D4
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST3, 0xf6, NAKA_MAINFUNC_TEST3FUNC, 0xf60000	; name "TT_TEST3" = 0xED8AAA, NakaInst_ExtDevice_Screens + 0x22DE
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST4, 0xf7, NAKA_MAINFUNC_TEST4FUNC, 0xf70000	; name "TT_TEST4" = 0xED8AB4, NakaInst_ExtDevice_Screens + 0x22E8
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST5, 0xf8, NAKA_APFUNC_DefaultFunction, 0xf80000	; name "TT_TEST5" = 0xED8ABE, NakaInst_ExtDevice_Screens + 0x22F2
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST6, 0xf9, NAKA_MAINFUNC_TEST6FUNC, 0xf90000	; name "TT_TEST6" = 0xED8AC8, NakaInst_ExtDevice_Screens + 0x22FC
-	RegTitle 0x2, InitializeToshi_Str_TT_EXT, 0xfb, NAKA_APFUNC_DefaultFunction, 0xfb0000	; "TT_EXT"
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST2, 0xf5, NAKA_MAINFUNC_TEST2FUNC, NAKA_VIEW_TEST2	; name "TT_TEST2" = 0xED8AA0, NakaInst_ExtDevice_Screens + 0x22D4
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST3, 0xf6, NAKA_MAINFUNC_TEST3FUNC, NAKA_VIEW_TEST3	; name "TT_TEST3" = 0xED8AAA, NakaInst_ExtDevice_Screens + 0x22DE
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST4, 0xf7, NAKA_MAINFUNC_TEST4FUNC, NAKA_VIEW_TEST4	; name "TT_TEST4" = 0xED8AB4, NakaInst_ExtDevice_Screens + 0x22E8
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST5, 0xf8, NAKA_APFUNC_DefaultFunction, NAKA_VIEW_TEST5	; name "TT_TEST5" = 0xED8ABE, NakaInst_ExtDevice_Screens + 0x22F2
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST6, 0xf9, NAKA_MAINFUNC_TEST6FUNC, NAKA_VIEW_TEST6	; name "TT_TEST6" = 0xED8AC8, NakaInst_ExtDevice_Screens + 0x22FC
+	RegTitle 0x2, InitializeToshi_Str_TT_EXT, 0xfb, NAKA_APFUNC_DefaultFunction, NAKA_VIEW_EXT	; "TT_EXT"
 	lda xsp, (xsp + 14)
 	ret

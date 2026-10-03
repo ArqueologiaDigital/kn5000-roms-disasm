@@ -5183,7 +5183,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Skip10:
 	add	xwa, xhl
 Fat_CountContiguousClusters_ReadFat_Code:
 	ld	(xsp+8), xwa
-Fat_CountContiguousClusters_ReadFat_Code2:
 	ld	xiz, xwa
 	jr	SeqByteBlock_StyleBitmapRef_Code_Helper_Join4
 SeqByteBlock_StyleBitmapRef_Code_Helper_Loop5:

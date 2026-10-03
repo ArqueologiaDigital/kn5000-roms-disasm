@@ -5106,92 +5106,29 @@ FDemoText_ByteData_LayoutEngine_Data_7:
 ; [nakarest] naka_technichord_strings+0x1a0ae  +0x1a0ae..+0x1a0b2 (0xe9fffc, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xe9fffc not derived; readers below
 ; [nakarest] Readers: source references FDemoText_RenderTextLine (demo/fdemotext_routines.s: `ld
-; [nakarest] xiy, FDemoText_RenderTextLine_Data`); 1 data word in CDlikeSwTtl_SetRecordAndNotify_Data (at
-; [nakarest] 0xe109e0), which is read by CDlikeSwTtl_SetRecordAndNotify (demo/demo_seq_bridge.s:
-; [nakarest] `ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data`), SeqInit_PostEventSequence
-; [nakarest] (demo/demo_seq_bridge.s: `ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data`).
+; [nakarest] xiy, FDemoText_RenderTextLine_Data`); 1 data word at 0xe109e0.
 FDemoText_RenderTextLine_Data:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0AE, 0x4
-; [nakarest] Presentation_RootEntry  +0x1a0b2..+0x1a0b4 (0xea0000, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xea0000 not derived; readers below
-; [nakarest] Readers: source references InitializeMurai (ui/drawbar_panel_ui.s: `RegTitle 0x1,
-; [nakarest] 0xe8, 0x65fe, 0xea, 0x1200000, 0xea0000`), StrInstantStart
-; [nakarest] (ui_widgets/naka_screen_dispatch.s: `.long Presentation_RootEntry`); 1 data word in
-; [nakarest] SndArgGridCheck_Data (at 0xe1e372), which is read by SndArgGridCheck
-; [nakarest] (audio/sound_editor_ui.s: `add xwa, SndArgGridCheck_Data`); 2 data words in
-; [nakarest] AcWelcomScreenProc_Data (at 0xe9e268, 0xe9e328), which is read by AcWelcomScreenProc
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data`); 2 data words in
-; [nakarest] AcWelcomScreenProc_Data_2 (at 0xe9eb20, 0xe9ebe0), which is read by AcWelcomScreenProc
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`).
-Presentation_RootEntry:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B2, 0x2
-; [nakarest] naka_technichord_strings+0x1a0b4  +0x1a0b4..+0x1a0b6 (0xea0002, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xea0002 not derived; readers below
-; [nakarest] Readers: source references IvDrawbar_DrawbarUpdate (ui/drawbar_panel_ui.s: `ld xwa,
-; [nakarest] IvDrawbar_DrawbarUpdate_Data`), IvDrawbar_DrawbarUpdate_Lower (ui/drawbar_panel_ui.s:
-; [nakarest] `ld xwa, IvDrawbar_DrawbarUpdate_Lower_Data`), IvDrawbar_DrawbarUpdate_UpperOff
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, IvDrawbar_DrawbarUpdate_Data`).
-IvDrawbar_DrawbarUpdate_Lower_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B4, 0x1
-IvDrawbar_DrawbarUpdate_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B5, 0x1
-; [nakarest] naka_technichord_strings+0x1a0b6  +0x1a0b6..+0x1a0b8 (0xea0004, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xea0004 not derived; readers below
-; [nakarest] Readers: source references IvDrawbar_DrawbarUpdate (ui/drawbar_panel_ui.s: `ld xwa,
-; [nakarest] IvDrawbar_DrawbarUpdate_Data_2`), IvDrawbar_DrawbarUpdate_UpperOff
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, IvDrawbar_DrawbarUpdate_UpperOff_Data`).
-IvDrawbar_DrawbarUpdate_Data_2:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B6, 0x1
-IvDrawbar_DrawbarUpdate_UpperOff_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B7, 0x1
-; [nakarest] naka_technichord_strings+0x1a0b8  +0x1a0b8..+0x1a0ba (0xea0006, 2 B)
-; [nakarest] purpose not established: layout of 2 B at 0xea0006 not derived; readers below
-; [nakarest] Readers: source references Seq_CopyResourcePtrs (demo/fdemotext_routines.s: `lda
-; [nakarest] xhl, (Seq_CopyResourcePtrs_Data:24)`).
-Seq_CopyResourcePtrs_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B8, 0x2
-; [nakarest] Presentation_TagStrTable  +0x1a0ba..+0x1a0be (0xea0008, 4 B)
-; [nakarest] Text (4 B at 0xea0008), first string "<PRESENTATION>"; no registered NAKA table
-; [nakarest] points into it; reached through source references Seq_LoadResource_Proceed
-; [nakarest] (demo/fdemotext_routines.s: `ld xde, Presentation_TagStrTable`); 2 data words in
-; [nakarest] CDlikeSwTtl_SetRecordAndNotify_Data (at 0xe10b20, 0xe10b44), which is read by
-; [nakarest] CDlikeSwTtl_SetRecordAndNotify (demo/demo_seq_bridge.s: `ld xwa,
-; [nakarest] CDlikeSwTtl_SetRecordAndNotify_Data`), SeqInit_PostEventSequence
-; [nakarest] (demo/demo_seq_bridge.s: `ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data`); 1 data word
-; [nakarest] in NakaStr_PaintArrowProc_Empty (at 0xe183fa), which is read by MTStr_CmpNameSet
-; [nakarest] (ui_widgets/naka_property_descriptors.s: `.long NakaStr_PaintArrowProc_Empty + 2`);
-; [nakarest] 1 data word in Naka_ReverbScreen_EmptyStr (at 0xe29f12); words in 1 more objects.
-Presentation_TagStrTable:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0BA, 0x4
-; [nakarest] naka_technichord_strings+0x1a0be  +0x1a0be..+0x1a0d0 (0xea000c, 18 B)
-; [nakarest] Text (18 B at 0xea000c), first string "SENTATION>"; no registered NAKA table points
-; [nakarest] into it; reached through source references IvDrawbar1_ShowHide
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, IvDrawbar1_ShowHide_Str_SENTATION`),
-; [nakarest] IvDrawbar2_ShowHideHandler (ui/drawbar_panel_ui.s: `ld xwa,
-; [nakarest] IvDrawbar1_ShowHide_Str_SENTATION`); 3 data words in Naka_KeyScaling_NavTrail (at
-; [nakarest] 0xe8417e, 0xe8419a, 0xe8433e), which is read by CharMap_ValueData_B
-; [nakarest] (ui_widgets/widget_dispatch.s: `.long Naka_KeyScaling_NavTrail`).
-IvDrawbar1_ShowHide_Str_SENTATION:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0BE, 0xC	; "SENTATION>"
-Seq_LoadResource_Proceed_Str_PRESENTATION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0CA, 0x6	; "</PRESENTATION>"
-; [nakarest] naka_technichord_strings+0x1a0d0  +0x1a0d0..+0x1a0d2 (0xea001e, 2 B)
-; [nakarest] Text (2 B at 0xea001e), first string "ENTATION>"; no registered NAKA table points
-; [nakarest] into it; reached through source references DrawbarNorm_UpdateCase4
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, DrawbarNorm_UpdateCase4_Data`),
-; [nakarest] IvDrawbar_Init_ModernMode (ui/drawbar_panel_ui.s: `ld xwa,
-; [nakarest] IvDrawbar_Init_SetupMode_Str_ENTATION`), IvDrawbar_Init_SetupMode (ui/drawbar_panel_ui.s:
-; [nakarest] `ld xwa, IvDrawbar_Init_SetupMode_Str_ENTATION`).
-IvDrawbar_Init_SetupMode_Str_ENTATION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D0, 0x1	; "ENTATION>"
-DrawbarNorm_UpdateCase4_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D1, 0x1
-; [nakarest] naka_technichord_strings+0x1a0d2  +0x1a0d2..+0x1a0d8 (0xea0020, 6 B)
-; [nakarest] Text (6 B at 0xea0020), first string "TATION>"; no registered NAKA table points
-; [nakarest] into it; reached through source references DrawbarNorm_Update
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, DrawbarNorm_Update_Str_TATION`); 1 data word in
-; [nakarest] Str_PREV_471A (at 0xea4fda).
-DrawbarNorm_Update_Str_TATION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D2, 0x6	; "TATION>"
-; [nakarest] naka_technichord_strings+0x1a0d8  +0x1a0d8..+0x1a0da (0xea0026, 2 B)
-; [nakarest] Text (2 B at 0xea0026), first string ">"; no registered NAKA table points into it;
-; [nakarest] reached through source references IvDrawbar_Init_ModernMode (ui/drawbar_panel_ui.s:
-; [nakarest] `ld xwa, IvDrawbar_Init_SetupMode_Str_Gt`), IvDrawbar_Init_SetupMode
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, IvDrawbar_Init_SetupMode_Str_Gt`).
-IvDrawbar_Init_SetupMode_Str_Gt:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D8, 0x2	; ">"
+; [nakarest] Presentation_RootEntry +0x1a0b2..+0x1a0ca: 0x013F, 0x00EF (319, 239), then two empty
+; [nakarest] strings each padded with 0xFF, then "<PRESENTATION>" -- the ROM bytes.  Readers: source
+; [nakarest] references StrInstantStart (ui_widgets/naka_screen_dispatch.s: `.long
+; [nakarest] Presentation_RootEntry`); 1 data word in SndArgGridCheck_Data (at 0xe1e372), which is
+; [nakarest] read by SndArgGridCheck (audio/sound_editor_ui.s: `add xwa, SndArgGridCheck_Data`); 2
+; [nakarest] data words in AcWelcomScreenProc_Data (at 0xe9e268, 0xe9e328), which is read by
+; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data`); 2 data
+; [nakarest] words in AcWelcomScreenProc_Data_2 (at 0xe9eb20, 0xe9ebe0), which is read by
+; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`).
+; [nakarest] 2026-10-03: 0x00EA00nn is also the NAKA id of view nn of slot 0xEA (Drawbar, DrawPerc4,
+; [nakarest] DrawPerc223, DrawSetting ...), and the code once listed here as reading this span --
+; [nakarest] RegTitle's view argument, and `ld xwa, ...` before SendEvent / ApPostEvent -- loaded
+; [nakarest] those view ids (NAKA_VIEW_*, scripts/tools/name_naka_view_ids.py); the slices cut at
+; [nakarest] them are merged back (scripts/tools/fix_presentation_region.py).  Whether the data
+; [nakarest] words above are view ids too is not settled.
+Presentation_RootEntry:				.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B2, 0x4	; 0x013F, 0x00EF = 319, 239
+Seq_InitVoiceStructures_Str_Empty:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B6, 0x2	; "", 0xFF pad: Seq_InitVoiceStructures' Strcpy source
+Seq_CopyResourcePtrs_Data:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B8, 0x2	; "", 0xFF pad: the pointer Seq_CopyResourcePtrs fills its table with
+Presentation_TagStrTable:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0BA, 0x10	; "<PRESENTATION>", NUL, 0xFF pad
+Seq_LoadResource_Proceed_Str_PRESENTATION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0CA, 0x10	; "</PRESENTATION>", NUL
 ; [nakarest] naka_technichord_strings+0x1a0da  +0x1a0da..+0x1a100 (0xea0028, 38 B)
 ; [nakarest] purpose not established: layout of 38 B at 0xea0028 not derived; readers below
 ; [nakarest] Readers: source references Seq_LoadDisplayResource (demo/fdemotext_routines.s: `ld

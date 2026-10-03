@@ -939,7 +939,7 @@ InitializeNaka:
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1de, NAKA_UIObjectTable, 0xfd
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1de, Naka_ResNameTable_3FD, 0x3fd
 
-	RegTitle 0xb, InitializeNaka_Str_TT_FDMSP, 0xfd, NAKA_APFUNC_DefaultFunction, 0xfd0000
+	RegTitle 0xb, InitializeNaka_Str_TT_FDMSP, 0xfd, NAKA_APFUNC_DefaultFunction, NAKA_VIEW_ftdemo01
 	lda xsp, (xsp + 14)
 	ret
 
@@ -5611,7 +5611,7 @@ InitializeSuna:
 	RegTitle 0x4, InitializeSuna_Str_TT_MSPNAME, 0xcb, NAKA_MAINFUNC_MspNameTtlFunc, 0xcb0000
 	RegTitle 0x4, InitializeSuna_Str_TT_MSPGROUP, 0xcc, NAKA_APFUNC_DefaultFunction, 0xcc0000
 	RegTitle 0x4, InitializeSuna_Str_TT_SNDARG, 0xdc, NAKA_MAINFUNC_SndArgTtlFunc, 0xdc0000
-	RegTitle 0x4, InitializeSuna_Str_TT_APCSEL, 0xed, NAKA_APFUNC_DefaultFunction, 0xed0000
+	RegTitle 0x4, InitializeSuna_Str_TT_APCSEL, 0xed, NAKA_APFUNC_DefaultFunction, NAKA_VIEW_ApcSelScreen
 
 	lda xsp, (xsp + 14)
 	ret

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,366
-#   semantic names ........... 50,438 (98.2%)
+#   symbols .................. 51,325
+#   semantic names ........... 50,397 (98.2%)
 #   positional names ......... 928
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -1057,7 +1057,6 @@ NakaWidget_ftdemo01_166_Box 00E0FF90
 NakaWidget_ftdemo01_167_Label 00E0FFAA
 NakaWidget_ftdemo01_168_Label 00E0FFE6
 InitializeYoko_Data 00E10000
-CDlikeSwTtl_SetRecordAndNotify_Data 00E1000B
 NakaWidget_ftdemo01_169_Label 00E1000C
 NakaWidget_ftdemo01_170_Label 00E10040
 NakaWidget_ftdemo01_171_Label 00E10080
@@ -3527,7 +3526,6 @@ SetSepaOutMode_Data_3 00E1FFF2
 SetSepaOutMode_Data_4 00E1FFF6
 SqSngSelTtlFunc_Data 00E1FFFA
 SqSngNameTtlFunc_Data 00E20006
-CDlikeSwTtl_SetRecordAndNotify_Data_3 00E2000B
 SqTrAsTtlFunc_Data 00E20012
 SqTrAsPsTtlFunc_Data 00E2001E
 SetWall_ReturnZero_Data 00E2002A
@@ -5755,9 +5753,6 @@ Bitmap_Dredt0d 00E3F660
 NakaData_ExternalBase 00E40000
 Pad_AfterNakaData_ExternalBase 00E40002
 Pad_NakaExternal_Block1 00E40005
-Demofeat2_ShowHide_Data 00E40008
-FDemoText_ByteData_LayoutEngine_Data 00E40009
-PresBox_TimerExpired_Data 00E4000A
 Pad_NakaExternal_Block2 00E40031
 Pad_NakaExternal_Block3 00E40046
 Pad_NakaExternal_Block4 00E40081
@@ -6533,23 +6528,9 @@ Bitmap_SplitPoint_B 00E63BAA
 Bitmap_MIDIConnections_1 00E64772
 Pad_AfterBitmap_MIDIConnections_1 00E678FF
 Bitmap_MIDIConnections_2 00E6C452
-AcIndexToggle_SendVisibility_Data 00E70002
-HelpLang_SetRegion5_Data 00E70005
-HelpLangChkMain_Data 00E7000A
-HelpLang_DispatchDataBlock_Data 00E7000E
-HelpLang_DispatchDataBlock_Entry_Data 00E70010
 NakaData_Tables2Pad1 00E70015
-HelpLang_DispatchDataBlock_Entry_Data_2 00E70017
-HelpLang_DispatchDataBlock_Entry_Data_3 00E70019
-HelpFuncChkFunc_Data 00E7001C
 NakaData_Tables2Pad2 00E7001E
 Pad_AfterNakaData_Tables2Pad2 00E70022
-HelpLang_DispatchDataBlock_Entry_Data_4 00E70024
-HelpLang_DispatchDataBlock_Entry_Data_5 00E70026
-HelpFuncChkFunc_Data_2 00E70027
-HelpLang_DispatchDataBlock_Entry_Data_6 00E7002C
-HelpFuncChkFunc_Data_3 00E7002E
-HelpLang_DispatchDataBlock_Entry_Data_7 00E7002F
 NakaData_Tables2Pad3 00E700DE
 Bitmap_MIDIConnections_Header 00E70B28
 Bitmap_MIDIConnections_3 00E74132
@@ -8232,18 +8213,10 @@ ObjAttr_Obj 00E9FFB6
 FDemoText_ByteData_LayoutEngine_Data_7 00E9FFBA
 FDemoText_RenderTextLine_Data 00E9FFFC
 Presentation_RootEntry 00EA0000
-IvDrawbar_DrawbarUpdate_Lower_Data 00EA0002
-IvDrawbar_DrawbarUpdate_Data 00EA0003
-IvDrawbar_DrawbarUpdate_Data_2 00EA0004
-IvDrawbar_DrawbarUpdate_UpperOff_Data 00EA0005
+Seq_InitVoiceStructures_Str_Empty 00EA0004
 Seq_CopyResourcePtrs_Data 00EA0006
 Presentation_TagStrTable 00EA0008
-IvDrawbar1_ShowHide_Str_SENTATION 00EA000C
 Seq_LoadResource_Proceed_Str_PRESENTATION 00EA0018
-IvDrawbar_Init_SetupMode_Str_ENTATION 00EA001E
-DrawbarNorm_UpdateCase4_Data 00EA001F
-DrawbarNorm_Update_Str_TATION 00EA0020
-IvDrawbar_Init_SetupMode_Str_Gt 00EA0026
 Seq_LoadDisplayResource_Str_Empty 00EA0028
 Seq_LoadResource_Proceed_Str_PRE 00EA0048
 Seq_LoadResource_Proceed_Str_rt 00EA004E
@@ -9694,10 +9667,7 @@ Root_ResMethodCount_1E0 00EAFA6C
 Root_FunctionTable_100 00EAFA6E
 WidgetName_InitPtrTable 00EAFFF2
 InitializeMurai_Data_2 00EB0000
-IvAccordion_ShowHide_UpdatePart_Data 00EB0007
 WidgetName_PtrBlock_A 00EB0008
-IvAccordion_ShowHide_Data 00EB0009
-IvAccordion_ShowHide_Data_2 00EB0017
 WidgetName_PtrBlock_B1 00EB0020
 WidgetName_PtrBlock_B2 00EB0021
 WidgetName_PtrBlock_C 00EB002A
@@ -13988,7 +13958,6 @@ SeqMixParam_Entry_227 00EDFFEC
 SeqMixParam_Entry_228 00EDFFFE
 NakaInst_Param_Bitmap80 00EE0010
 NakaInst_Param_Field02 00EE0012
-FDemoText_ByteData_LayoutEngine_Data_8 00EE0016
 NakaInst_Param_Term00 00EE0022
 NakaInst_Param_Field88 00EE0023
 NakaInst_Param_Field81A 00EE0034
@@ -15394,9 +15363,6 @@ WorkRam2_VoiceLinkA_Nodes21 00EEFF4E
 CharEncoding_PrintableHi 00EEFFD6
 NakaData_NormalModeMap 00EEFFF5
 InitializeMurai_Data_3 00EF0000
-AcWelcomScreen_SubCpuError_Data 00EF0004
-AcWelcomScreen_SubCpuLoaded_Data 00EF0007
-MPver_ShowHide_Data 00EF000A
 WorkRam2_VoiceLinkA_FreeList 00EF000C
 WorkRam2_VoiceLinkA_ListHeads 00EF000E
 CharEncoding_ExtendedLo 00EF001C
@@ -18084,12 +18050,9 @@ ParamPopup_AccompPart 00EFFF5E
 ParamPopup_AccompPart_Skip 00EFFF71
 ParamPopup_AccompPart_Skip2 00EFFFB3
 Tbl_AccompPartNames 00EFFFB8
-Softver_ShowHide_Data_4 00EFFFDA
 Str_OffAccomp 00EFFFEC
 ParamPopup_DynamicAccomp 00EFFFEF
-Softver_ShowHide_Code 00F00001
 ParamPopup_DynamicAccomp_Skip 00F00002
-Softver_ShowHide_Code_2 00F00003
 ParamPopup_DynamicAccomp_Skip2 00F0002A
 Str_DynamicAccompOn 00F0002F
 ParamPopup_TechniChord 00F00041
@@ -29104,7 +29067,6 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Join3 00F4FBC6
 SeqByteBlock_StyleBitmapRef_Code_Helper_Skip9 00F4FBE1
 SeqByteBlock_StyleBitmapRef_Code_Helper_Skip10 00F4FBEC
 Fat_CountContiguousClusters_ReadFat_Code 00F4FC0D
-Fat_CountContiguousClusters_ReadFat_Code2 00F4FC10
 SeqByteBlock_StyleBitmapRef_Code_Helper_Loop5 00F4FC14
 NakaData_PerfStyleCode 00F4FC1B
 SeqByteBlock_StyleBitmapRef_Code_Helper_Skip11 00F4FC31
@@ -36145,9 +36107,6 @@ PsMixer_ArrayReadHandler 00F7FF18
 AudioCtrl_MixerDispatch 00F7FF8F
 AudioCtrl_MixerLoopNext 00F7FFE4
 PsMixer_UnmatchedPartScan 00F80002
-EffectMode_TimerEvent_Step78_Code 00F80008
-EffectMode_TimerEvent_Step1E_Code 00F8000E
-EffectMode_TimerEvent_Step3C_Code 00F80010
 AudioCtrl_ArrayReadHandler 00F8002D
 AudioCtrl_DispatchCallback 00F8008F
 PsMixer_ScanArrayNext 00F800E1

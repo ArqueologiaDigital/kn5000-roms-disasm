@@ -2029,3 +2029,74 @@
 .equ NAKA_CLASS_AcWindowPage, 0x1600025	; NAKA class id 0x0160:25 = class "AcWindowPage" (parent PsPageBox, allsize 36, selfsize 4, fields "AA"): root class table, registry slot 0x160 ...
 .equ NAKA_CLASS_IvScreen, 0x160006a	; NAKA class id 0x0160:6A = class "IvScreen" (parent Screen, allsize 34, selfsize 0, fields ""): root class table, registry slot 0x160 ...
 .equ NAKA_CLASS_AcLanguageText, 0x1600066	; NAKA class id 0x0160:66 = class "AcLanguageText" (parent PsTextBox, allsize 42, selfsize 4, fields "j"): root class table, registry slot 0x160 ...
+
+
+; ---- NAKA VIEW (widget) object ids: 0x00SSnnnn = entry nnnn of Viewable slot SS, named by the ResName
+; table registered at slot SS + 0x300 (scripts/tools/name_naka_view_ids.py).
+.equ NAKA_VIEW_DemoMed1, 0xe1000b	; view "DemoMed1": Viewable slot 0xE1 entry 11
+.equ NAKA_VIEW_DemoSound, 0xe20000	; view "DemoSound": Viewable slot 0xE2 entry 0
+.equ NAKA_VIEW_DemoMed2, 0xe2000b	; view "DemoMed2": Viewable slot 0xE2 entry 11
+.equ NAKA_VIEW_Demofeature, 0xe40000	; view "Demofeature": Viewable slot 0xE4 entry 0
+.equ NAKA_VIEW_Demofeature1, 0xe40002	; view "Demofeature1": Viewable slot 0xE4 entry 2
+.equ NAKA_VIEW_Demofeature2, 0xe40005	; view "Demofeature2": Viewable slot 0xE4 entry 5
+.equ NAKA_VIEW_FDemoTitleBox, 0xe40008	; view "FDemoTitleBox": Viewable slot 0xE4 entry 8
+.equ NAKA_VIEW_PlainScreen, 0xe40009	; view "PlainScreen": Viewable slot 0xE4 entry 9
+.equ NAKA_VIEW_PresentationControl, 0xe4000a	; view "PresentationControl": Viewable slot 0xE4 entry 10
+.equ NAKA_VIEW_HelpMenu, 0xe70002	; view "HelpMenu": Viewable slot 0xE7 entry 2
+.equ NAKA_VIEW_HelpNotXWin, 0xe70005	; view "HelpNotXWin": Viewable slot 0xE7 entry 5
+.equ NAKA_VIEW_HelpXWin, 0xe7000a	; view "HelpXWin": Viewable slot 0xE7 entry 10
+.equ NAKA_VIEW_HelpSwTtl1Scr, 0xe7000e	; view "HelpSwTtl1Scr": Viewable slot 0xE7 entry 14
+.equ NAKA_VIEW_HelpTtlStr1, 0xe70010	; view "HelpTtlStr1": Viewable slot 0xE7 entry 16
+.equ NAKA_VIEW_HelpSwTtl2Scr, 0xe70017	; view "HelpSwTtl2Scr": Viewable slot 0xE7 entry 23
+.equ NAKA_VIEW_HelpTtlStr2, 0xe70019	; view "HelpTtlStr2": Viewable slot 0xE7 entry 25
+.equ NAKA_VIEW_Help_P2, 0xe7001c	; view "Help_P2": Viewable slot 0xE7 entry 28
+.equ NAKA_VIEW_HelpSwTtl3Scr, 0xe70024	; view "HelpSwTtl3Scr": Viewable slot 0xE7 entry 36
+.equ NAKA_VIEW_HelpTtlStr3, 0xe70026	; view "HelpTtlStr3": Viewable slot 0xE7 entry 38
+.equ NAKA_VIEW_Help_P3, 0xe70027	; view "Help_P3": Viewable slot 0xE7 entry 39
+.equ NAKA_VIEW_HelpSwTtl4Scr, 0xe7002c	; view "HelpSwTtl4Scr": Viewable slot 0xE7 entry 44
+.equ NAKA_VIEW_Help_P4, 0xe7002e	; view "Help_P4": Viewable slot 0xE7 entry 46
+.equ NAKA_VIEW_HelpTtlStr4, 0xe7002f	; view "HelpTtlStr4": Viewable slot 0xE7 entry 47
+.equ NAKA_VIEW_SVARI, 0xe80000	; view "SVARI": Viewable slot 0xE8 entry 0
+.equ NAKA_VIEW_RVARI, 0xe90000	; view "RVARI": Viewable slot 0xE9 entry 0
+.equ NAKA_VIEW_DrawPerc4, 0xea0002	; view "DrawPerc4": Viewable slot 0xEA entry 2
+.equ NAKA_VIEW_DrawPerc223, 0xea0003	; view "DrawPerc223": Viewable slot 0xEA entry 3
+.equ NAKA_VIEW_White23, 0xea0004	; view "White23": Viewable slot 0xEA entry 4
+.equ NAKA_VIEW_Black23, 0xea0005	; view "Black23": Viewable slot 0xEA entry 5
+.equ NAKA_VIEW_DrawSetting, 0xea000c	; view "DrawSetting": Viewable slot 0xEA entry 12
+.equ NAKA_VIEW_DrawbarNorm, 0xea001e	; view "DrawbarNorm": Viewable slot 0xEA entry 30
+.equ NAKA_VIEW_DrawbarPart, 0xea001f	; view "DrawbarPart": Viewable slot 0xEA entry 31
+.equ NAKA_VIEW_DrawTremolo, 0xea0020	; view "DrawTremolo": Viewable slot 0xEA entry 32
+.equ NAKA_VIEW_DrawbarSndE, 0xea0026	; view "DrawbarSndE": Viewable slot 0xEA entry 38
+.equ NAKA_VIEW_AccordionPart, 0xeb0007	; view "AccordionPart": Viewable slot 0xEB entry 7
+.equ NAKA_VIEW_Accordion1, 0xeb0009	; view "Accordion1": Viewable slot 0xEB entry 9
+.equ NAKA_VIEW_Accordion2, 0xeb0017	; view "Accordion2": Viewable slot 0xEB entry 23
+.equ NAKA_VIEW_Mesage, 0xee0000	; view "Mesage": Viewable slot 0xEE entry 0
+.equ NAKA_VIEW_PleaseWait, 0xee0016	; view "PleaseWait": Viewable slot 0xEE entry 22
+.equ NAKA_VIEW_AllInitial, 0xef0004	; view "AllInitial": Viewable slot 0xEF entry 4
+.equ NAKA_VIEW_MPVersion, 0xef0007	; view "MPVersion": Viewable slot 0xEF entry 7
+.equ NAKA_VIEW_MPver, 0xef000a	; view "MPver": Viewable slot 0xEF entry 10
+.equ NAKA_VIEW_Softver, 0xf00000	; view "Softver": Viewable slot 0xF0 entry 0
+.equ NAKA_VIEW_MainProgram, 0xf00001	; view "MainProgram": Viewable slot 0xF0 entry 1
+.equ NAKA_VIEW_MainTable, 0xf00002	; view "MainTable": Viewable slot 0xF0 entry 2
+.equ NAKA_VIEW_SubProgram, 0xf00003	; view "SubProgram": Viewable slot 0xF0 entry 3
+.equ NAKA_VIEW_SoundTable, 0xf00004	; view "SoundTable": Viewable slot 0xF0 entry 4
+.equ NAKA_VIEW_TEST1RAM, 0xf40001	; view "TEST1RAM": Viewable slot 0xF4 entry 1
+.equ NAKA_VIEW_TEST1CP, 0xf40007	; view "TEST1CP": Viewable slot 0xF4 entry 7
+.equ NAKA_VIEW_TEST2, 0xf50000	; view "TEST2": Viewable slot 0xF5 entry 0
+.equ NAKA_VIEW_TEST2OKOK, 0xf5000b	; view "TEST2OKOK": Viewable slot 0xF5 entry 11
+.equ NAKA_VIEW_TEST2NGNG, 0xf5000e	; view "TEST2NGNG": Viewable slot 0xF5 entry 14
+.equ NAKA_VIEW_TEST2NGOK, 0xf50011	; view "TEST2NGOK": Viewable slot 0xF5 entry 17
+.equ NAKA_VIEW_TEST2OKNG, 0xf50014	; view "TEST2OKNG": Viewable slot 0xF5 entry 20
+.equ NAKA_VIEW_TEST3, 0xf60000	; view "TEST3": Viewable slot 0xF6 entry 0
+.equ NAKA_VIEW_TEST4, 0xf70000	; view "TEST4": Viewable slot 0xF7 entry 0
+.equ NAKA_VIEW_TEST5, 0xf80000	; view "TEST5": Viewable slot 0xF8 entry 0
+.equ NAKA_VIEW_TEST51, 0xf80006	; view "TEST51": Viewable slot 0xF8 entry 6
+.equ NAKA_VIEW_TEST52, 0xf80008	; view "TEST52": Viewable slot 0xF8 entry 8
+.equ NAKA_VIEW_TEST53, 0xf8000a	; view "TEST53": Viewable slot 0xF8 entry 10
+.equ NAKA_VIEW_TEST54, 0xf8000c	; view "TEST54": Viewable slot 0xF8 entry 12
+.equ NAKA_VIEW_TEST55, 0xf8000e	; view "TEST55": Viewable slot 0xF8 entry 14
+.equ NAKA_VIEW_TEST56, 0xf80010	; view "TEST56": Viewable slot 0xF8 entry 16
+.equ NAKA_VIEW_TEST6, 0xf90000	; view "TEST6": Viewable slot 0xF9 entry 0
+.equ NAKA_VIEW_EXT, 0xfb0000	; view "EXT": Viewable slot 0xFB entry 0
+.equ NAKA_VIEW_ftdemo01, 0xfd0000	; view "ftdemo01": Viewable slot 0xFD entry 0
+.equ NAKA_VIEW_CheckTitle, 0xff0000	; view "CheckTitle": Viewable slot 0xFF entry 0

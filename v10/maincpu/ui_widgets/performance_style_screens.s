@@ -233,7 +233,7 @@ NakaWidget_ftdemo01_165_Label:		.incbin "includes/generated/naka_perf_style.bin"
 NakaWidget_ftdemo01_166_Box:		.incbin "includes/generated/naka_perf_style.bin", 0x161C, 0x1A
 NakaWidget_ftdemo01_167_Label:		.incbin "includes/generated/naka_perf_style.bin", 0x1636, 0x3C
 NakaWidget_ftdemo01_168_Label:		.incbin "includes/generated/naka_perf_style.bin", 0x1672, 0x25
-CDlikeSwTtl_SetRecordAndNotify_Data:	.incbin "includes/generated/naka_perf_style.bin", 0x1697, 0x1
+	.incbin "includes/generated/naka_perf_style.bin", 0x1697, 0x1
 NakaWidget_ftdemo01_169_Label:		.incbin "includes/generated/naka_perf_style.bin", 0x1698, 0x34
 NakaWidget_ftdemo01_170_Label:		.incbin "includes/generated/naka_perf_style.bin", 0x16CC, 0x40
 NakaWidget_ftdemo01_171_Label:		.incbin "includes/generated/naka_perf_style.bin", 0x170C, 0x30

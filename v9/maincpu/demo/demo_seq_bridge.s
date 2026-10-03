@@ -512,11 +512,11 @@ CDlikeSwTtl_SendEvent8C_13:
 
 CDlikeSwTtl_SetRecordAndNotify:
 	ld (0x021090:24), 0x01
-	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data
+	ld xwa, NAKA_VIEW_DemoMed1
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_3
+	ld xwa, NAKA_VIEW_DemoMed2
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
@@ -527,11 +527,11 @@ CDlikeSwTtl_SetRecordAndNotify:
 
 SeqInit_PostEventSequence:
 	ld (0x021090:24), 0x00
-	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data
+	ld xwa, NAKA_VIEW_DemoMed1
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_3
+	ld xwa, NAKA_VIEW_DemoMed2
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent

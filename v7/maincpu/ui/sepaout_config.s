@@ -18,7 +18,7 @@ SetSepaOutMode_Data_3:				.incbin "includes/generated/sepaout_config.bin", 0xC, 
 SetSepaOutMode_Data_4:				.incbin "includes/generated/sepaout_config.bin", 0x10, 0x4
 SqSngSelTtlFunc_Data:				.incbin "includes/generated/sepaout_config.bin", 0x14, 0xC
 SqSngNameTtlFunc_Data:				.incbin "includes/generated/sepaout_config.bin", 0x20, 0x5
-CDlikeSwTtl_SetRecordAndNotify_Data_3:		.incbin "includes/generated/sepaout_config.bin", 0x25, 0x7
+	.incbin "includes/generated/sepaout_config.bin", 0x25, 0x7
 SqTrAsTtlFunc_Data:				.incbin "includes/generated/sepaout_config.bin", 0x2C, 0xC
 SqTrAsPsTtlFunc_Data:				.incbin "includes/generated/sepaout_config.bin", 0x38, 0xC
 SetWall_ReturnZero_Data:			.incbin "includes/generated/sepaout_config.bin", 0x44, 0xE

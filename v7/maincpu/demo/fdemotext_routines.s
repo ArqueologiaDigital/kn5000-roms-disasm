@@ -1939,15 +1939,15 @@ FDemoText_TextDispatch_Skip3:
 	ld	xbc, EVT_HIDE
 	ld	xde, 5:i3
 	call	SendEvent
-	ld	xwa, Pad_NakaExternal_Block1
+	ld	xwa, NAKA_VIEW_Demofeature2
 	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	SendEvent
-	ld	xwa, Pad_NakaExternal_Block1
+	ld	xwa, NAKA_VIEW_Demofeature2
 	ld	xbc, EVT_START_SONG
 	ld	xde, 19
 	call	SendEvent
-	ld	xwa, FDemoText_ByteData_LayoutEngine_Data_8
+	ld	xwa, NAKA_VIEW_PleaseWait
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent
@@ -2060,11 +2060,11 @@ FDemoText_TextDispatch_Skip13:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	SendEvent
-	ld	xwa, FDemoText_ByteData_LayoutEngine_Data
+	ld	xwa, NAKA_VIEW_PlainScreen
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent
-	ld	xwa, PresBox_TimerExpired_Data
+	ld	xwa, NAKA_VIEW_PresentationControl
 	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	SendEvent
@@ -2420,7 +2420,7 @@ FDemoText_TextDispatch_Skip11:
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent
-	ld	xwa, PresBox_TimerExpired_Data
+	ld	xwa, NAKA_VIEW_PresentationControl
 	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	SendEvent
@@ -2863,8 +2863,8 @@ Seq_InitVoiceStructures:
 	ld (0x0249c8:24), xwa
 	ldiw_erp 0xfa, 0
 Seq_InitVoiceLoop:
-	pushw	IvDrawbar_DrawbarUpdate_Data_2@hi16
-	pushw	IvDrawbar_DrawbarUpdate_Data_2@lo16
+	pushw	Seq_InitVoiceStructures_Str_Empty@hi16
+	pushw	Seq_InitVoiceStructures_Str_Empty@lo16
 	ld	bc, qiz
 	muls	bc, 24
 	lda	xwa, (149976:24)

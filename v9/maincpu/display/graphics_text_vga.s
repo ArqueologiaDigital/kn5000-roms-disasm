@@ -2343,7 +2343,7 @@ InitializeRoot:
 	RegMode 0x0, InitializeRoot_Str_MD_PS, 0x0, NAKA_APFUNC_DefaultFunction, TITLE_PS
 
 	RegTitle 0x0, InitializeRoot_Str_TT_PS, 0x0, NAKA_APFUNC_DefaultFunction, 0x0
-	RegTitle 0x0, InitializeRoot_Str_TT_CHECK, 0xff, NAKA_MAINFUNC_CheckTitleFunc, 0xff0000
+	RegTitle 0x0, InitializeRoot_Str_TT_CHECK, 0xff, NAKA_MAINFUNC_CheckTitleFunc, NAKA_VIEW_CheckTitle
 
 	lda xsp, (xsp + 14)
 	ret

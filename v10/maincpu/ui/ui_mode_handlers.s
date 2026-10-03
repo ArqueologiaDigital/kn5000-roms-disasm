@@ -1660,7 +1660,7 @@ SelfTest_SramAndRom:
 	ld xde, 1:i3
 	call ApPostEvent
 	; object handle 0xf40001 = class 0x0f4, instance 1 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqData_ScanTracks_OuterLoop_0xC)
-	ld xwa, SeqData_ScanTracks_OuterLoop_0xC
+	ld xwa, NAKA_VIEW_TEST1RAM
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1699,7 +1699,7 @@ SelfTest_PostRomError:
 	ld xde, 1:i3
 	call ApPostEvent
 	; object handle 0xf40007 = class 0x0f4, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqData_ScanTracks_InnerLoop_0x5)
-	ld xwa, SeqData_ScanTracks_InnerLoop_0x5
+	ld xwa, NAKA_VIEW_TEST1CP
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1840,7 +1840,7 @@ EffectMode_HandleTimerEvents:
 	cp a, 0:i3
 	jrl nz, EffectMode_TimerEvent_Default
 	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_Code)
-	ld xwa, AudioCtrl_PageHandler_Code
+	ld xwa, NAKA_VIEW_TEST54
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1852,7 +1852,7 @@ EffectMode_HandleTimerEvents:
 
 EffectMode_TimerEvent_Step1E:
 	; object handle 0xf8000e = class 0x0f8, instance 14 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x13)
-	ld xwa, AudioCtrl_PageHandler_0x13
+	ld xwa, NAKA_VIEW_TEST55
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1864,7 +1864,7 @@ EffectMode_TimerEvent_Step1E:
 
 EffectMode_TimerEvent_Step3C:
 	; object handle 0xf80010 = class 0x0f8, instance 16 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x15)
-	ld xwa, AudioCtrl_PageHandler_0x15
+	ld xwa, NAKA_VIEW_TEST56
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1876,7 +1876,7 @@ EffectMode_TimerEvent_Step3C:
 
 EffectMode_TimerEvent_Step5A:
 	; object handle 0xf80006 = class 0x0f8, instance 6 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xB)
-	ld xwa, AudioCtrl_PageHandler_0xB
+	ld xwa, NAKA_VIEW_TEST51
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1888,7 +1888,7 @@ EffectMode_TimerEvent_Step5A:
 
 EffectMode_TimerEvent_Step78:
 	; object handle 0xf80008 = class 0x0f8, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xD)
-	ld xwa, AudioCtrl_PageHandler_0xD
+	ld xwa, NAKA_VIEW_TEST52
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1900,7 +1900,7 @@ EffectMode_TimerEvent_Step78:
 
 EffectMode_TimerEvent_Step96:
 	; object handle 0xf8000a = class 0x0f8, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xF)
-	ld xwa, AudioCtrl_PageHandler_0xF
+	ld xwa, NAKA_VIEW_TEST53
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1918,35 +1918,35 @@ EffectMode_RunDiagSequence:
 	cp a, 0:i3
 	jr nz, EffectMode_DiagSeq_AnimFrame
 	; object handle 0xf80006 = class 0x0f8, instance 6 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xB)
-	ld xwa, AudioCtrl_PageHandler_0xB
+	ld xwa, NAKA_VIEW_TEST51
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf80008 = class 0x0f8, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xD)
-	ld xwa, AudioCtrl_PageHandler_0xD
+	ld xwa, NAKA_VIEW_TEST52
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf8000a = class 0x0f8, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xF)
-	ld xwa, AudioCtrl_PageHandler_0xF
+	ld xwa, NAKA_VIEW_TEST53
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_Code)
-	ld xwa, AudioCtrl_PageHandler_Code
+	ld xwa, NAKA_VIEW_TEST54
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf8000e = class 0x0f8, instance 14 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x13)
-	ld xwa, AudioCtrl_PageHandler_0x13
+	ld xwa, NAKA_VIEW_TEST55
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -2007,27 +2007,27 @@ EffectMode_ByteData_DiagEvents:
 	ldto_berp a, 251
 	and a, 9
 	jr nz, EffectMode_ByteData_DiagEvents_Skip
-	ld	xwa, SeqStep_FileSectorPopReturn_0x35E
+	ld	xwa, NAKA_VIEW_TEST2OKOK
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip:
 	cp	a, 9
 	jr	nz, EffectMode_ByteData_DiagEvents_Skip2
-	ld	xwa, SeqStep_FileSectorPopReturn_0x361
+	ld	xwa, NAKA_VIEW_TEST2NGNG
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip2:
 	bit_erpb 251, 0
 	jr z, EffectMode_ByteData_DiagEvents_Skip3
-	ld	xwa, Fat_CountContiguousClusters_ReadFat_Code
+	ld	xwa, NAKA_VIEW_TEST2NGOK
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip3:
 	; object handle 0xf50014 = class 0x0f5, instance 20 (SendEvent indexes its class table by bits 16-27; not an address -- was Fat_CountContiguousClusters_ReadFat_Code2)
-	ld	xwa, Fat_CountContiguousClusters_ReadFat_Code2
+	ld	xwa, NAKA_VIEW_TEST2OKNG
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 EffectMode_ByteData_DiagEvents_Join:

@@ -5188,9 +5188,7 @@ SeqStep_FileSectorPopReturn_Entry2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
-Fat_CountContiguousClusters_ReadFat_Code:
 	ld	(xsp+8), xwa
-Fat_CountContiguousClusters_ReadFat_Code2:
 	ld	xiz, xwa
 	jr	SeqStep_FileSectorPopReturn_Join
 SeqStep_FileSectorPopReturn_Loop4:

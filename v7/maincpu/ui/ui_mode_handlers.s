@@ -1681,7 +1681,7 @@ SelfTest_SramAndRom:
 	ld	xbc, EVT_SET_HOLD
 	ld	xde, 1:i3
 	call	ApPostEvent
-	ld	xwa, 15990785
+	ld	xwa, NAKA_VIEW_TEST1RAM
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1717,7 +1717,7 @@ SelfTest_PostRomError:
 	ld	xbc, EVT_SET_HOLD
 	ld	xde, 1:i3
 	call	ApPostEvent
-	ld	xwa, 15990791
+	ld	xwa, NAKA_VIEW_TEST1CP
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1898,7 +1898,7 @@ EffectMode_HandleTimerEvents:
 	jr	z, EffectMode_TimerEvent_Step1E
 	cp	a, 0:i3
 	jrl	nz, EffectMode_TimerEvent_Default
-	ld	xwa, 16252940
+	ld	xwa, NAKA_VIEW_TEST54
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1908,7 +1908,7 @@ EffectMode_HandleTimerEvents:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step1E:
-	ld	xwa, EffectMode_TimerEvent_Step1E_Code
+	ld	xwa, NAKA_VIEW_TEST55
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1918,7 +1918,7 @@ EffectMode_TimerEvent_Step1E:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step3C:
-	ld	xwa, EffectMode_TimerEvent_Step3C_Code
+	ld	xwa, NAKA_VIEW_TEST56
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1928,7 +1928,7 @@ EffectMode_TimerEvent_Step3C:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step5A:
-	ld	xwa, 16252934
+	ld	xwa, NAKA_VIEW_TEST51
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1938,7 +1938,7 @@ EffectMode_TimerEvent_Step5A:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step78:
-	ld	xwa, EffectMode_TimerEvent_Step78_Code
+	ld	xwa, NAKA_VIEW_TEST52
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1948,7 +1948,7 @@ EffectMode_TimerEvent_Step78:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step96:
-	ld	xwa, 16252938
+	ld	xwa, NAKA_VIEW_TEST53
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1963,31 +1963,31 @@ EffectMode_RunDiagSequence:
 	ld	a, (36062:16)
 	cp	a, 0:i3
 	jr	nz, EffectMode_DiagSeq_AnimFrame
-	ld	xwa, 16252934
+	ld	xwa, NAKA_VIEW_TEST51
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
-	ld	xwa, EffectMode_TimerEvent_Step78_Code
+	ld	xwa, NAKA_VIEW_TEST52
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
-	ld	xwa, 16252938
+	ld	xwa, NAKA_VIEW_TEST53
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
-	ld	xwa, 16252940
+	ld	xwa, NAKA_VIEW_TEST54
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
-	ld	xwa, EffectMode_TimerEvent_Step1E_Code
+	ld	xwa, NAKA_VIEW_TEST55
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -2043,26 +2043,26 @@ EffectMode_ByteData_DiagEvents:
 	ldto_berp	a, 251	; ld a, qizh
 	and	a, 9
 	jr	nz, EffectMode_ByteData_DiagEvents_Skip
-	ld	xwa, 0xf5000b
+	ld	xwa, NAKA_VIEW_TEST2OKOK
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip:
 	cp	a, 9
 	jr	nz, EffectMode_ByteData_DiagEvents_Skip2
-	ld	xwa, 0xf5000e
+	ld	xwa, NAKA_VIEW_TEST2NGNG
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip2:
 	bit_erpb	251, 0
 	jr	z, EffectMode_ByteData_DiagEvents_Skip3
-	ld	xwa, 0xf50011
+	ld	xwa, NAKA_VIEW_TEST2NGOK
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip3:
-	ld	xwa, 0xf50014
+	ld	xwa, NAKA_VIEW_TEST2OKNG
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 EffectMode_ByteData_DiagEvents_Join:

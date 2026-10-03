@@ -15596,14 +15596,13 @@ ParamPopup_AccompPart_Skip2:
 	; Content: 0x09 0x09 "ACCOMP PART1 ON ", "ACCOMP PART2 ON ", 0x09 0x09
 	; "ACCOMP PART3 ON " -- the visible strings do NOT fall on the reader's
 	; 16-byte boundaries, and the role of the 0x09 bytes is not established.
-	; The values 0xEFFFD7-0xEFFFDA (inside this text) are also loaded as
-	; StringData_APCModeNames_0x160..0x163 by ui/drawbar_panel_ui.s's Softver
-	; screen and handed to SendEvent -- more likely numeric event arguments
-	; than pointers here (not verified).
+	; In v10/v9 this text sits at 0xF00000.., where the Softver screen's
+	; SendEvent targets 0xF00001-0xF00004 fall inside it; they are NAKA view
+	; ids (NAKA_VIEW_MainProgram ... _SoundTable, scripts/tools/
+	; name_naka_view_ids.py, 2026-10-03), and here the text is elsewhere.
 Tbl_AccompPartNames:
 	.byte	0x09, 0x09
 	.ascii	"ACCOMP PART1 ON ACCOMP PART2 ON "
-Softver_ShowHide_Data_4:
 	.byte	0x09, 0x09
 	.ascii	"ACCOMP PART3 ON "
 	; "OFF", 3 chars copied over the "ON " of the ACCOMP/APC MEMORY/DYNAMIC
@@ -15619,11 +15618,9 @@ ParamPopup_DynamicAccomp:
 	ld	(0x0def:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
-Softver_ShowHide_Code:
 	popw	wa
 ParamPopup_DynamicAccomp_Skip:
 	pushw	wa
-Softver_ShowHide_Code_2:
 	call	DisplayStr_ClearRegion
 	popw	wa
 	ld	xiy, Str_DynamicAccompOn

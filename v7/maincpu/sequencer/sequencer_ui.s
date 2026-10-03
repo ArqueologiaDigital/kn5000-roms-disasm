@@ -229,7 +229,7 @@ InitializeYoko:
 	pushw InitializeYoko_Str_TT_DEMOSOUND@lo16
 	ld XWA,0x000000e2
 	ld XBC,NAKA_MAINFUNC_DemoSoundTtlFunc
-	ld XDE,0x00e20000
+	ld XDE,NAKA_VIEW_DemoSound
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DEMORHY@hi16
@@ -5074,15 +5074,15 @@ HelpFuncChkFunc:
 	jrl nz, HelpFunc_ReturnZero
 	or xiz, xiz
 	jrl nz, HelpFunc_ReturnZero
-	ld xwa, HelpFuncChkFunc_Data
+	ld xwa, NAKA_VIEW_Help_P2
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, HelpFuncChkFunc_Data_2
+	ld xwa, NAKA_VIEW_Help_P3
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, HelpFuncChkFunc_Data_3
+	ld xwa, NAKA_VIEW_Help_P4
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
@@ -5678,7 +5678,7 @@ AcIndexToggle_SendVisibility:
 	ld xwa, (xwa + 46)
 	ld xbc, EVT_SET_LANG
 	call ApFuncCall
-	ld xwa, AcIndexToggle_SendVisibility_Data
+	ld xwa, NAKA_VIEW_HelpMenu
 	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jrl SendNoteDeleteEvent

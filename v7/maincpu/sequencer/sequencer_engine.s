@@ -25353,42 +25353,42 @@ HelpLang_DispatchDataBlock_Join:
 	ld	a, (xwa+bc)
 	cp	a, 1:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip5
-	ld	xwa, HelpLang_DispatchDataBlock_Data
+	ld	xwa, NAKA_VIEW_HelpSwTtl1Scr
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data
+	ld	xwa, NAKA_VIEW_HelpTtlStr1
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip5:
 	cp	a, 2:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip6
-	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_2
+	ld	xwa, NAKA_VIEW_HelpSwTtl2Scr
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_3
+	ld	xwa, NAKA_VIEW_HelpTtlStr2
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip6:
 	cp	a, 3:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip7
-	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_4
+	ld	xwa, NAKA_VIEW_HelpSwTtl3Scr
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_5
+	ld	xwa, NAKA_VIEW_HelpTtlStr3
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip7:
-	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_6
+	ld	xwa, NAKA_VIEW_HelpSwTtl4Scr
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_7
+	ld	xwa, NAKA_VIEW_HelpTtlStr4
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 HelpLang_DispatchDataBlock_Join2:
@@ -25406,12 +25406,12 @@ HelpLangChkMain:
 	call	Get_Region_Code
 	cp	l, 3:i3
 	jr	nz, HelpLang_SetRegion5
-	ld	xwa, HelpLangChkMain_Data
+	ld	xwa, NAKA_VIEW_HelpXWin
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_PostEvent
 HelpLang_SetRegion5:
-	ld xwa, HelpLang_SetRegion5_Data
+	ld xwa, NAKA_VIEW_HelpNotXWin
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 

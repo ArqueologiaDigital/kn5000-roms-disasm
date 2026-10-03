@@ -2699,7 +2699,7 @@ InitializeEast:
 	RegTitle 0x3, InitializeEast_Str_TT_MDSETUP, 0x5c, NAKA_APFUNC_DefaultFunction, 0x5c0000
 	RegTitle 0x3, InitializeEast_Str_TT_ETVOCAL, 0xd7, NAKA_APFUNC_DefaultFunction, 0xd70000
 	RegTitle 0x3, InitializeEast_Str_TT_ETFADEIN, 0xd8, NAKA_APFUNC_DefaultFunction, 0xd80000
-	RegTitle 0x3, InitializeEast_Str_TT_SPLITSEL, 0xec, NAKA_APFUNC_DefaultFunction, 0xec0000
+	RegTitle 0x3, InitializeEast_Str_TT_SPLITSEL, 0xec, NAKA_APFUNC_DefaultFunction, NAKA_VIEW_SplitSetting
 
 	lda xsp, (xsp + 14)
 	ret

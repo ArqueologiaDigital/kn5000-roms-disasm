@@ -10,7 +10,7 @@
 ;  ui_widgets/widget_dispatch.s still resolves them.
 SndParamRun_EE0010:
 	.incbin "includes/generated/sndparam_run_ee0010.bin", 0x0, 0x6
-FDemoText_ByteData_LayoutEngine_Data_8:	.incbin "includes/generated/sndparam_run_ee0010.bin", 0x6, 0x12C
+	.incbin "includes/generated/sndparam_run_ee0010.bin", 0x6, 0x12C
 NakaInst_Param_Bitmap80 = SndParamRun_EE0010 + 0
 NakaInst_Param_Field02 = SndParamRun_EE0010 + 2
 NakaInst_Param_Term00 = SndParamRun_EE0010 + 18

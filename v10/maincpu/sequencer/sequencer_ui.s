@@ -87,10 +87,10 @@ InitializeYoko:
 	RegTitle 0x7, InitializeYoko_Str_TT_SQAFTSET, 0x92, NAKA_MAINFUNC_SqAftSetTtlFunc, 0x920000
 	RegTitle 0x7, InitializeYoko_Str_TT_SQEASYNAME, 0xa7, NAKA_MAINFUNC_SqSngNameTtlFunc, 0x8f0000
 	RegTitle 0x7, InitializeYoko_Str_TT_SQSTEPBAL, 0xa9, NAKA_APFUNC_DefaultFunction, 0xa90000
-	RegTitle 0x7, InitializeYoko_Str_TT_DEMOMENU, 0xe0, NAKA_MAINFUNC_DemoMenuTtlFunc, 0xe00000
-	RegTitle 0x7, InitializeYoko_Str_TT_DEMOSTYLE, 0xe1, NAKA_MAINFUNC_DemoStyleTtlFunc, 0xe10000
-	RegTitle 0x7, InitializeYoko_Str_TT_DEMOSOUND, 0xe2, NAKA_MAINFUNC_DemoSoundTtlFunc, 0xe20000
-	RegTitle 0x7, InitializeYoko_Str_TT_DEMORHY, 0xe3, NAKA_MAINFUNC_DemoRhyTtlFunc, 0xe30000
+	RegTitle 0x7, InitializeYoko_Str_TT_DEMOMENU, 0xe0, NAKA_MAINFUNC_DemoMenuTtlFunc, NAKA_VIEW_DemoMenu
+	RegTitle 0x7, InitializeYoko_Str_TT_DEMOSTYLE, 0xe1, NAKA_MAINFUNC_DemoStyleTtlFunc, NAKA_VIEW_DemoStyle
+	RegTitle 0x7, InitializeYoko_Str_TT_DEMOSOUND, 0xe2, NAKA_MAINFUNC_DemoSoundTtlFunc, NAKA_VIEW_DemoSound
+	RegTitle 0x7, InitializeYoko_Str_TT_DEMORHY, 0xe3, NAKA_MAINFUNC_DemoRhyTtlFunc, NAKA_VIEW_DemoRhy
 
 	lda xsp, (xsp + 14)
 	ret
@@ -4787,15 +4787,15 @@ HelpFuncChkFunc:
 	jrl nz, HelpFunc_ReturnZero
 	or xiz, xiz
 	jrl nz, HelpFunc_ReturnZero
-	ld xwa, HelpFuncChkFunc_Data
+	ld xwa, NAKA_VIEW_Help_P2
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, HelpFuncChkFunc_Data_2
+	ld xwa, NAKA_VIEW_Help_P3
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, HelpFuncChkFunc_Data_3
+	ld xwa, NAKA_VIEW_Help_P4
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
@@ -5404,7 +5404,7 @@ AcIndexToggle_SendVisibility:
 	ld xwa, (xwa + 46)
 	ld xbc, EVT_SET_LANG
 	call ApFuncCall
-	ld xwa, AcIndexToggle_SendVisibility_Data
+	ld xwa, NAKA_VIEW_HelpMenu
 	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jrl SendNoteDeleteEvent

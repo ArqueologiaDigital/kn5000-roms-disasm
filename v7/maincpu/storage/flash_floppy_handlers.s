@@ -1091,7 +1091,7 @@ InitializeNaka:
 	pushw InitializeNaka_Str_TT_FDMSP@lo16
 	ld XWA,0x000000fd
 	ld XBC,NAKA_APFUNC_DefaultFunction
-	ld XDE,0x00fd0000
+	ld XDE,NAKA_VIEW_ftdemo01
 	call RegisterTitle
 	lda xsp, (xsp + 0x0e)
 	ret
