@@ -1720,6 +1720,12 @@ RENAMES = {
     "SoftKeyCol8_ScreenCode9B": "SoftKeyCol8_SoundEditControllerPage2",
     "SoftKeyCol8_ScreenCode9F": "SoftKeyCol8_SoundEditNaming",
     "SoftKeyCol8_ScreenCodeCD": "SoftKeyCol8_SoundEditControllerPage1",
+    "sub_FD74E0": "SoundEditLfo_CycleLfoState",
+    "sub_FD89FA": "SoundEditAmpEnvelope_DrawGraph",
+    "sub_FD96DE": "SoundEditToneLayer_DrawRangeGraph",
+    "sub_FD9B58": "SoundEditFilterBpf_DrawGraph",
+    "sub_FF798C": "DiskFileScreen_LeaveCommon",
+    "sub_FB516A": "SysExCmd_DumpRequestGate",
 }
 
 

@@ -1489,7 +1489,7 @@
 	.set	Var27A2_ToggleWithP23, 0xFD6E90
 	.set	ToneEdit_CommitField, 0xFD7435
 	.set	Var27A3_ChangeSlot, 0xFD74AE
-	.set	sub_FD74E0, 0xFD74E0
+	.set	SoundEditLfo_CycleLfoState, 0xFD74E0
 	.set	sub_FD77B3, 0xFD77B3
 	.set	sub_FD785C, 0xFD785C
 	.set	PanelEvent_ToFieldIndex, 0xFD7905
@@ -19728,7 +19728,7 @@ LcdKeyRow2_SoundEditPitchLfo:
 sub_F0A882_Skip:
 	pushw	1	; F0A898  push 0x0001
 	pushw	1	; F0A89B  push 0x0001
-	call	sub_FD74E0	; F0A89E  call 0xfd74e0
+	call	SoundEditLfo_CycleLfoState	; F0A89E  call 0xfd74e0
 sub_F0A882_Join:
 	pop	xiy	; F0A8A2  pop XIY
 	unlk XIZ	; F0A8A3  unlk XIZ
@@ -19754,7 +19754,7 @@ LcdKeyRow3_SoundEditPitchLfo:
 	jr	z, sub_F0A8A6_Skip	; F0A8AE  jr Z,0xf0a8bb
 	pushw	2	; F0A8B0  push 0x0002
 	pushw	1	; F0A8B3  push 0x0001
-	call	sub_FD74E0	; F0A8B6  call 0xfd74e0
+	call	SoundEditLfo_CycleLfoState	; F0A8B6  call 0xfd74e0
 	pop	xiy	; F0A8BA  pop XIY
 sub_F0A8A6_Skip:
 	unlk XIZ	; F0A8BB  unlk XIZ
@@ -19780,7 +19780,7 @@ LcdKeyRow4_SoundEditPitchLfo:
 	jr	z, sub_F0A8BE_Skip	; F0A8C6  jr Z,0xf0a8d3
 	pushw	3	; F0A8C8  push 0x0003
 	pushw	1	; F0A8CB  push 0x0001
-	call	sub_FD74E0	; F0A8CE  call 0xfd74e0
+	call	SoundEditLfo_CycleLfoState	; F0A8CE  call 0xfd74e0
 	pop	xiy	; F0A8D2  pop XIY
 sub_F0A8BE_Skip:
 	unlk XIZ	; F0A8D3  unlk XIZ
@@ -19806,7 +19806,7 @@ LcdKeyRow5_SoundEditPitchLfo:
 	jr	z, sub_F0A8D6_Skip	; F0A8DE  jr Z,0xf0a8eb
 	pushw	4	; F0A8E0  push 0x0004
 	pushw	1	; F0A8E3  push 0x0001
-	call	sub_FD74E0	; F0A8E6  call 0xfd74e0
+	call	SoundEditLfo_CycleLfoState	; F0A8E6  call 0xfd74e0
 	pop	xiy	; F0A8EA  pop XIY
 sub_F0A8D6_Skip:
 	unlk XIZ	; F0A8EB  unlk XIZ

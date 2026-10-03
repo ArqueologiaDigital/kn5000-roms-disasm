@@ -92457,27 +92457,27 @@ sub_FB50EE:
 ; SysExCmd_DumpRequest_SystemPartMidi: command 0x1B (2B, area 40): send job 4.
 SysExCmd_DumpRequest_SystemPartMidi:
 	ld (0x60f802:24), 0x04                             ; FB5122  f2 02 f8 60 00 04
-	calr sub_FB516A                                      ; FB5128  1e 3f 00
+	calr SysExCmd_DumpRequestGate                                      ; FB5128  1e 3f 00
 	ret                                                  ; FB512B  0e
 ; SysExCmd_DumpRequest_Sound: command 0x1C (2B, area 20): send job 3.
 SysExCmd_DumpRequest_Sound:
 	ld (0x60f802:24), 0x03                             ; FB512C  f2 02 f8 60 00 03
-	calr sub_FB516A                                      ; FB5132  1e 35 00
+	calr SysExCmd_DumpRequestGate                                      ; FB5132  1e 35 00
 	ret                                                  ; FB5135  0e
 ; SysExCmd_DumpRequest_Job1: command 0x1D, job 1 (SysExDump_Job1_None); no wire sequence reaches it.
 SysExCmd_DumpRequest_Job1:
 	ld (0x60f802:24), 0x01                             ; FB5136  f2 02 f8 60 00 01
-	calr sub_FB516A                                      ; FB513C  1e 2b 00
+	calr SysExCmd_DumpRequestGate                                      ; FB513C  1e 2b 00
 	ret                                                  ; FB513F  0e
 ; SysExCmd_DumpRequest_Sequencer: command 0x1E (2B, area 60): send job 2.
 SysExCmd_DumpRequest_Sequencer:
 	ld (0x60f802:24), 0x02                             ; FB5140  f2 02 f8 60 00 02
-	calr sub_FB516A                                      ; FB5146  1e 21 00
+	calr SysExCmd_DumpRequestGate                                      ; FB5146  1e 21 00
 	ret                                                  ; FB5149  0e
 ; SysExCmd_DumpRequest_Combination: command 0x1F (2B, area 50): send job 5.
 SysExCmd_DumpRequest_Combination:
 	ld (0x60f802:24), 0x05                             ; FB514A  f2 02 f8 60 00 05
-	calr sub_FB516A                                      ; FB5150  1e 17 00
+	calr SysExCmd_DumpRequestGate                                      ; FB5150  1e 17 00
 	ret                                                  ; FB5153  0e
 sub_FB5154:
 	m_set 7, MD24, 0x60f802                              ; FB5154  f2 02 f8 60 bf
@@ -92492,7 +92492,9 @@ sub_FB5154:
 	pop XDE                                              ; FB5164  5a
 	call SysExDump_RunSendJob                                      ; FB5165  1d 49 20 fb
 	ret                                                  ; FB5169  0e
-sub_FB516A:
+; SysExCmd_DumpRequestGate: commands 0x1B-0x1F run sub_FB5154 only on the SYSEX BULK DUMP screen (UI_ScreenLatch 0x79) or
+;   when PanelModeGroup == 1 and UI_ScreenLatch == 1; otherwise status 0x11 (sysex-probes/sysex_handshake_gate.py).
+SysExCmd_DumpRequestGate:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB516A  c1 7a 20 3f 79
 	jr z, .LFB517F                                       ; FB516F  66 0e
 	m_cp_mi8 MB16, PanelModeGroup, 0x01                          ; FB5171  c1 76 20 3f 01
@@ -124370,7 +124372,7 @@ Unread_FCF054:
 
 ; FieldColumnX_ByIndex -- 6 x LE16: 0, 97, 128, 159, 190, 0 -- pixel x
 ; positions 31 apart for indices 1..4, zero at both ends.
-; Read by: sub_FD96DE at 0xFD96FB: `ld C,2 / mul BC,(XIZ+0x0A)
+; Read by: SoundEditToneLayer_DrawRangeGraph at 0xFD96FB: `ld C,2 / mul BC,(XIZ+0x0A)
 ;          / add XBC,0x00FCF055 / ld DE,(XBC)`; DE is then the x passed to
 ;          the draw call at 0xFD9721 (as DE-20).  COUNT 6 is the extent to the
 ;          next reader-named base, 0xFCF061; the reader has no bound of its
@@ -128161,7 +128163,7 @@ SoftKeyCol3_SoundEditToneLayerKeyLayer:
 	extz BC                                              ; FD1428  d9 12
 	pushw bc                                             ; FD142A  29
 	pushw 0x00                                           ; FD142B  0b 00 00
-	call sub_FD96DE                                      ; FD142E  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD142E  1d de 96 fd
 	add XSP,0x0000001e                                   ; FD1432  ef c8 1e 00 00 00
 .LFD1438:
 	pushw 0x03                                           ; FD1438  0b 03 00
@@ -128233,7 +128235,7 @@ SoftKeyCol4_SoundEditToneLayerKeyLayer:
 	extz BC                                              ; FD14CF  d9 12
 	pushw bc                                             ; FD14D1  29
 	pushw 0x00                                           ; FD14D2  0b 00 00
-	call sub_FD96DE                                      ; FD14D5  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD14D5  1d de 96 fd
 	add XSP,0x0000001e                                   ; FD14D9  ef c8 1e 00 00 00
 .LFD14DF:
 	pushw 0x04                                           ; FD14DF  0b 04 00
@@ -128306,7 +128308,7 @@ SoftKeyCol5_SoundEditToneLayerKeyLayer:
 	extz BC                                              ; FD1577  d9 12
 	pushw bc                                             ; FD1579  29
 	pushw 0x00                                           ; FD157A  0b 00 00
-	call sub_FD96DE                                      ; FD157D  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD157D  1d de 96 fd
 	add XSP,0x0000001e                                   ; FD1581  ef c8 1e 00 00 00
 .LFD1587:
 	pushw 0x05                                           ; FD1587  0b 05 00
@@ -128362,7 +128364,7 @@ SoftKeyCol6_SoundEditToneLayerKeyLayer:
 	extz BC                                              ; FD15FA  d9 12
 	pushw bc                                             ; FD15FC  29
 	pushw 0x00                                           ; FD15FD  0b 00 00
-	call sub_FD96DE                                      ; FD1600  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD1600  1d de 96 fd
 	add XSP,0x0000001e                                   ; FD1604  ef c8 1e 00 00 00
 .LFD160A:
 	pushw 0x06                                           ; FD160A  0b 06 00
@@ -128550,7 +128552,7 @@ sub_FD173D:
 	extz BC                                              ; FD1778  d9 12
 	pushw bc                                             ; FD177A  29
 	pushw 0x01                                           ; FD177B  0b 01 00
-	call sub_FD96DE                                      ; FD177E  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD177E  1d de 96 fd
 	inc 6,XSP                                            ; FD1782  ef 66
 .LFD1784:
 	pushw 0x03                                           ; FD1784  0b 03 00
@@ -128613,7 +128615,7 @@ sub_FD17B1:
 	extz BC                                              ; FD180F  d9 12
 	pushw bc                                             ; FD1811  29
 	pushw 0x01                                           ; FD1812  0b 01 00
-	call sub_FD96DE                                      ; FD1815  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD1815  1d de 96 fd
 	inc 6,XSP                                            ; FD1819  ef 66
 .LFD181B:
 	pushw 0x04                                           ; FD181B  0b 04 00
@@ -128675,7 +128677,7 @@ SoftKeyCol5_SoundEditToneLayerVelocityLayer:
 	extz BC                                              ; FD18A6  d9 12
 	pushw bc                                             ; FD18A8  29
 	pushw 0x01                                           ; FD18A9  0b 01 00
-	call sub_FD96DE                                      ; FD18AC  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD18AC  1d de 96 fd
 	inc 6,XSP                                            ; FD18B0  ef 66
 .LFD18B2:
 	pushw 0x05                                           ; FD18B2  0b 05 00
@@ -128731,7 +128733,7 @@ SoftKeyCol6_SoundEditToneLayerVelocityLayer:
 	extz BC                                              ; FD192D  d9 12
 	pushw bc                                             ; FD192F  29
 	pushw 0x01                                           ; FD1930  0b 01 00
-	call sub_FD96DE                                      ; FD1933  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FD1933  1d de 96 fd
 	inc 6,XSP                                            ; FD1937  ef 66
 .LFD1939:
 	pushw 0x06                                           ; FD1939  0b 06 00
@@ -131476,7 +131478,7 @@ SoftKeyCol1_SoundEditAmpEnvelope1:
 	pushw bc                                             ; FD30F6  29
 	pushw 0x8d                                           ; FD30F7  0b 8d 00
 	call ToneEdit_CommitField                                      ; FD30FA  1d 35 74 fd
-	call sub_FD89FA                                      ; FD30FE  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD30FE  1d fa 89 fd
 	pushw 0x01                                           ; FD3102  0b 01 00
 	call PanelDial_ActAsButton                                      ; FD3105  1d 01 7c fd
 	inc 8,XSP                                            ; FD3109  ef 60
@@ -131550,7 +131552,7 @@ sub_FD3191:
 	pushw bc                                             ; FD3196  29
 	pushw 0x8d                                           ; FD3197  0b 8d 00
 	call ToneEdit_CommitField                                      ; FD319A  1d 35 74 fd
-	call sub_FD89FA                                      ; FD319E  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD319E  1d fa 89 fd
 	pushw 0x02                                           ; FD31A2  0b 02 00
 	call PanelDial_ActAsButton                                      ; FD31A5  1d 01 7c fd
 	inc 8,XSP                                            ; FD31A9  ef 60
@@ -131623,7 +131625,7 @@ SoftKeyCol3_SoundEditAmpEnvelope1:
 	pushw bc                                             ; FD3236  29
 	pushw 0x8d                                           ; FD3237  0b 8d 00
 	call ToneEdit_CommitField                                      ; FD323A  1d 35 74 fd
-	call sub_FD89FA                                      ; FD323E  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD323E  1d fa 89 fd
 	pushw 0x03                                           ; FD3242  0b 03 00
 	call PanelDial_ActAsButton                                      ; FD3245  1d 01 7c fd
 	inc 8,XSP                                            ; FD3249  ef 60
@@ -131696,7 +131698,7 @@ SoftKeyCol4_SoundEditAmpEnvelope1:
 	pushw bc                                             ; FD32D6  29
 	pushw 0x8d                                           ; FD32D7  0b 8d 00
 	call ToneEdit_CommitField                                      ; FD32DA  1d 35 74 fd
-	call sub_FD89FA                                      ; FD32DE  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD32DE  1d fa 89 fd
 	pushw 0x04                                           ; FD32E2  0b 04 00
 	call PanelDial_ActAsButton                                      ; FD32E5  1d 01 7c fd
 	inc 8,XSP                                            ; FD32E9  ef 60
@@ -131779,7 +131781,7 @@ SoftKeyCol5_SoundEditAmpEnvelope1:
 	pushw bc                                             ; FD338E  29
 	pushw 0x8d                                           ; FD338F  0b 8d 00
 	call ToneEdit_CommitField                                      ; FD3392  1d 35 74 fd
-	call sub_FD89FA                                      ; FD3396  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD3396  1d fa 89 fd
 	pushw 0x05                                           ; FD339A  0b 05 00
 	call PanelDial_ActAsButton                                      ; FD339D  1d 01 7c fd
 	inc 8,XSP                                            ; FD33A1  ef 60
@@ -131863,7 +131865,7 @@ SoftKeyCol6_SoundEditAmpEnvelope1:
 	pushw bc                                             ; FD344A  29
 	pushw 0x8d                                           ; FD344B  0b 8d 00
 	call ToneEdit_CommitField                                      ; FD344E  1d 35 74 fd
-	call sub_FD89FA                                      ; FD3452  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD3452  1d fa 89 fd
 	pushw 0x06                                           ; FD3456  0b 06 00
 	call PanelDial_ActAsButton                                      ; FD3459  1d 01 7c fd
 	inc 8,XSP                                            ; FD345D  ef 60
@@ -131942,7 +131944,7 @@ SoftKeyCol7_SoundEditAmpEnvelope1:
 	add XSP,0x00000018                                   ; FD3500  ef c8 18 00 00 00
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD3506  8e fe 3f 00
 	jr nz, .LFD3510                                      ; FD350A  6e 04
-	call sub_FD89FA                                      ; FD350C  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD350C  1d fa 89 fd
 .LFD3510:
 	pushw 0x07                                           ; FD3510  0b 07 00
 	call PanelDial_ActAsButton                                      ; FD3513  1d 01 7c fd
@@ -132150,7 +132152,7 @@ LcdKeyRow5_SoundEditAmpEnvelope1:
 	pushw 0x0d                                           ; FD36B7  0b 0d 00
 	pushw 0x00                                           ; FD36BA  0b 00 00
 	call ToneMsg8D_SendParam                                      ; FD36BD  1d 04 67 fd
-	call sub_FD89FA                                      ; FD36C1  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FD36C1  1d fa 89 fd
 	add XSP,0x00000012                                   ; FD36C5  ef c8 12 00 00 00
 .LFD36CB:
 	unlk XIZ                                             ; FD36CB  ee 0d
@@ -132921,7 +132923,7 @@ LcdKeyRow2_SoundEditAmpLfo:
 .LFD3D31:
 	pushw 0x01                                           ; FD3D31  0b 01 00
 	pushw 0x00                                           ; FD3D34  0b 00 00
-	call sub_FD74E0                                      ; FD3D37  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                      ; FD3D37  1d e0 74 fd
 .LFD3D3B:
 	pop XIY                                              ; FD3D3B  5d
 	unlk XIZ                                             ; FD3D3C  ee 0d
@@ -132936,7 +132938,7 @@ LcdKeyRow3_SoundEditAmpLfo:
 	jr z, .LFD3D54                                       ; FD3D47  66 0b
 	pushw 0x02                                           ; FD3D49  0b 02 00
 	pushw 0x00                                           ; FD3D4C  0b 00 00
-	call sub_FD74E0                                      ; FD3D4F  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                      ; FD3D4F  1d e0 74 fd
 	pop XIY                                              ; FD3D53  5d
 .LFD3D54:
 	unlk XIZ                                             ; FD3D54  ee 0d
@@ -132951,7 +132953,7 @@ LcdKeyRow4_SoundEditAmpLfo:
 	jr z, .LFD3D6C                                       ; FD3D5F  66 0b
 	pushw 0x03                                           ; FD3D61  0b 03 00
 	pushw 0x00                                           ; FD3D64  0b 00 00
-	call sub_FD74E0                                      ; FD3D67  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                      ; FD3D67  1d e0 74 fd
 	pop XIY                                              ; FD3D6B  5d
 .LFD3D6C:
 	unlk XIZ                                             ; FD3D6C  ee 0d
@@ -132966,7 +132968,7 @@ LcdKeyRow5_SoundEditAmpLfo:
 	jr z, .LFD3D84                                       ; FD3D77  66 0b
 	pushw 0x04                                           ; FD3D79  0b 04 00
 	pushw 0x00                                           ; FD3D7C  0b 00 00
-	call sub_FD74E0                                      ; FD3D7F  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                      ; FD3D7F  1d e0 74 fd
 	pop XIY                                              ; FD3D83  5d
 .LFD3D84:
 	unlk XIZ                                             ; FD3D84  ee 0d
@@ -140139,7 +140141,10 @@ Var27A3_ChangeSlot:
 	popw hl                                              ; FD74DC  4b
 	unlk XIZ                                             ; FD74DD  ee 0d
 	ret                                                  ; FD74DF  0e
-sub_FD74E0:
+; SoundEditLfo_CycleLfoState(page, lfo): when the slot is enabled (Var27A4_SlotEnabled), steps the state bits of
+;   ModelingPage_Fields[lfo + 4] (bit 5, then bit 4, then cleared) and sends the parameter (ToneMsg_SendParam).  Called by the LCD-row
+;   keys of the PITCH / AMPLITUDE / FILTER LFO pages (rows LF01-LF04).
+SoundEditLfo_CycleLfoState:
 	link XIZ,0xfff6                                      ; FD74E0  ee 0c f6 ff
 	pushw hl                                             ; FD74E4  2b
 	pushw de                                             ; FD74E5  2a
@@ -142698,7 +142703,9 @@ sub_FD8993:
 	popw hl                                              ; FD89F6  4b
 	unlk XIZ                                             ; FD89F7  ee 0d
 	ret                                                  ; FD89F9  0e
-sub_FD89FA:
+; SoundEditAmpEnvelope_DrawGraph: erase the graph box, read ModelingPage_Fields[0..6] (each clamped to 100) and draw the
+;   envelope scaled by 87/100; called by the AMPLITUDE ENVELOPE page 1 soft keys and its Enter.
+SoundEditAmpEnvelope_DrawGraph:
 	link XIZ,0xffe0                                      ; FD89FA  ee 0c e0 ff
 	pushw hl                                             ; FD89FE  2b
 	pushw de                                             ; FD89FF  2a
@@ -144117,7 +144124,9 @@ Math_AbsS8:
 	popw hl                                              ; FD96DA  4b
 	unlk XIZ                                             ; FD96DB  ee 0d
 	ret                                                  ; FD96DD  0e
-sub_FD96DE:
+; SoundEditToneLayer_DrawRangeGraph: erase the graph box and draw the ranges from four ModelingPage_Fields; called by the
+;   TONE LAYER KEY LAYER and VELOCITY LAYER pages.
+SoundEditToneLayer_DrawRangeGraph:
 	link XIZ,0xfff0                                      ; FD96DE  ee 0c f0 ff
 	pushw hl                                             ; FD96E2  2b
 	pushw de                                             ; FD96E3  2a
@@ -144619,7 +144628,9 @@ sub_FD9A7A:
 	popw hl                                              ; FD9B54  4b
 	unlk XIZ                                             ; FD9B55  ee 0d
 	ret                                                  ; FD9B57  0e
-sub_FD9B58:
+; SoundEditFilterBpf_DrawGraph: erase the graph box and draw the band-pass response from ModelingPage_Fields[2..5]; called
+;   only by the FILTER BAND PASS page (its Enter and four soft keys).
+SoundEditFilterBpf_DrawGraph:
 	link XIZ,0xffec                                      ; FD9B58  ee 0c ec ff
 	pushw hl                                             ; FD9B5C  2b
 	pushw de                                             ; FD9B5D  2a
@@ -148567,7 +148578,7 @@ ScreenEnter_SoundEditAmpEnvelope1:
 .LFDBA28:
 	pushw 0x8d                                           ; FDBA28  0b 8d 00
 	call T_Dispatch_Code80_Bracketed                     ; FDBA2B  1d d0 1e f4
-	call sub_FD89FA                                      ; FDBA2F  1d fa 89 fd
+	call SoundEditAmpEnvelope_DrawGraph                                      ; FDBA2F  1d fa 89 fd
 	pushw 0x00                                           ; FDBA33  0b 00 00
 	call Var27DA_Set                                      ; FDBA36  1d 05 77 fd
 	pushw 0x01                                           ; FDBA3A  0b 01 00
@@ -149515,7 +149526,7 @@ ScreenEnter_SoundEditFilterBpf:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC2F7  1d 80 2e f4
 	pushw 0x94                                           ; FDC2FB  0b 94 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC2FE  1d d0 1e f4
-	call sub_FD9B58                                      ; FDC302  1d 58 9b fd
+	call SoundEditFilterBpf_DrawGraph                                      ; FDC302  1d 58 9b fd
 	pushw 0x01                                           ; FDC306  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC309  1d e0 69 fd
 	pushw 0x10                                           ; FDC30D  0b 10 00
@@ -150275,7 +150286,7 @@ sub_FDC9C4:
 	extz BC                                              ; FDCA3D  d9 12
 	pushw bc                                             ; FDCA3F  29
 	pushw 0x00                                           ; FDCA40  0b 00 00
-	call sub_FD96DE                                      ; FDCA43  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FDCA43  1d de 96 fd
 	ld HL,DE                                             ; FDCA47  da 8b
 	inc 4,HL                                             ; FDCA49  db 64
 	incm8 0x01, (xiz-5)                                  ; FDCA4B  8e fb 61
@@ -150395,7 +150406,7 @@ ScreenEnter_SoundEditToneLayerVelocityLayer:
 	extz BC                                              ; FDCB59  d9 12
 	pushw bc                                             ; FDCB5B  29
 	pushw 0x01                                           ; FDCB5C  0b 01 00
-	call sub_FD96DE                                      ; FDCB5F  1d de 96 fd
+	call SoundEditToneLayer_DrawRangeGraph                                      ; FDCB5F  1d de 96 fd
 	ld HL,DE                                             ; FDCB63  da 8b
 	inc 4,HL                                             ; FDCB65  db 64
 	incm8 0x01, (xiz-5)                                  ; FDCB67  8e fb 61
@@ -155313,7 +155324,7 @@ SoftKeyCol2_SoundEditFilterBpf:
 	pushw 0x02                                    ; FDF304  0b 02 00
 	pushw 0x94                                    ; FDF307  0b 94 00
 	call ToneEdit_CommitField                                 ; FDF30A  1d 35 74 fd
-	call sub_FD9B58                                 ; FDF30E  1d 58 9b fd
+	call SoundEditFilterBpf_DrawGraph                                 ; FDF30E  1d 58 9b fd
 	pushw 0x02                                    ; FDF312  0b 02 00
 	call PanelDial_ActAsButton                                 ; FDF315  1d 01 7c fd
 	inc 8,XSP                                     ; FDF319  ef 60
@@ -155334,7 +155345,7 @@ SoftKeyCol3_SoundEditFilterBpf:
 	extz BC                                       ; FDF32F  d9 12
 	pushw bc                                      ; FDF331  29
 	calr .LFDE840                                 ; FDF332  1e 0b f5
-	call sub_FD9B58                                 ; FDF335  1d 58 9b fd
+	call SoundEditFilterBpf_DrawGraph                                 ; FDF335  1d 58 9b fd
 	inc 6,XSP                                     ; FDF339  ef 66
 	unlk XIZ                                      ; FDF33B  ee 0d
 	ret                                           ; FDF33D  0e
@@ -155396,7 +155407,7 @@ SoftKeyCol4_SoundEditFilterBpf:
 	pushw 0x04                                    ; FDF3C2  0b 04 00
 	pushw 0x94                                    ; FDF3C5  0b 94 00
 	call ToneEdit_CommitField                                 ; FDF3C8  1d 35 74 fd
-	call sub_FD9B58                                 ; FDF3CC  1d 58 9b fd
+	call SoundEditFilterBpf_DrawGraph                                 ; FDF3CC  1d 58 9b fd
 	pushw 0x04                                    ; FDF3D0  0b 04 00
 	call PanelDial_ActAsButton                                 ; FDF3D3  1d 01 7c fd
 	inc 8,XSP                                     ; FDF3D7  ef 60
@@ -155456,7 +155467,7 @@ SoftKeyCol5_SoundEditFilterBpf:
 	pushw 0x05                                    ; FDF454  0b 05 00
 	pushw 0x94                                    ; FDF457  0b 94 00
 	call ToneEdit_CommitField                                 ; FDF45A  1d 35 74 fd
-	call sub_FD9B58                                 ; FDF45E  1d 58 9b fd
+	call SoundEditFilterBpf_DrawGraph                                 ; FDF45E  1d 58 9b fd
 	pushw 0x05                                    ; FDF462  0b 05 00
 	call PanelDial_ActAsButton                                 ; FDF465  1d 01 7c fd
 	inc 8,XSP                                     ; FDF469  ef 60
@@ -156839,7 +156850,7 @@ LcdKeyRow2_SoundEditFilterLfo:
 .LFDFE6C:
 	pushw 0x01                                    ; FDFE6C  0b 01 00
 	pushw 0x02                                    ; FDFE6F  0b 02 00
-	call sub_FD74E0                                 ; FDFE72  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                 ; FDFE72  1d e0 74 fd
 .LFDFE76:
 	pop XIY                                       ; FDFE76  5d
 	unlk XIZ                                      ; FDFE77  ee 0d
@@ -156854,7 +156865,7 @@ LcdKeyRow3_SoundEditFilterLfo:
 	jr z, .LFDFE8F                                ; FDFE82  66 0b
 	pushw 0x02                                    ; FDFE84  0b 02 00
 	pushw 0x02                                    ; FDFE87  0b 02 00
-	call sub_FD74E0                                 ; FDFE8A  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                 ; FDFE8A  1d e0 74 fd
 	pop XIY                                       ; FDFE8E  5d
 .LFDFE8F:
 	unlk XIZ                                      ; FDFE8F  ee 0d
@@ -156869,7 +156880,7 @@ LcdKeyRow4_SoundEditFilterLfo:
 	jr z, .LFDFEA7                                ; FDFE9A  66 0b
 	pushw 0x03                                    ; FDFE9C  0b 03 00
 	pushw 0x02                                    ; FDFE9F  0b 02 00
-	call sub_FD74E0                                 ; FDFEA2  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                 ; FDFEA2  1d e0 74 fd
 	pop XIY                                       ; FDFEA6  5d
 .LFDFEA7:
 	unlk XIZ                                      ; FDFEA7  ee 0d
@@ -156884,7 +156895,7 @@ LcdKeyRow5_SoundEditFilterLfo:
 	jr z, .LFDFEBF                                ; FDFEB2  66 0b
 	pushw 0x04                                    ; FDFEB4  0b 04 00
 	pushw 0x02                                    ; FDFEB7  0b 02 00
-	call sub_FD74E0                                 ; FDFEBA  1d e0 74 fd
+	call SoundEditLfo_CycleLfoState                                 ; FDFEBA  1d e0 74 fd
 	pop XIY                                       ; FDFEBE  5d
 .LFDFEBF:
 	unlk XIZ                                      ; FDFEBF  ee 0d
@@ -156940,8 +156951,8 @@ ExitKey_SoundEditFilterLfo:
 .LFDFF0D:
 	pushw 0x01                                    ; FDFF0D  0b 01 00
 	pushw 0x02                                    ; FDFF10  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow2_SoundEditFilterLfo calls sub_FD74E0
-	call	sub_FD74E0 + 0x15e                      ; FDFF13  1d 3e 76 fd
+; stale, 0x15E above: the live twin LcdKeyRow2_SoundEditFilterLfo calls SoundEditLfo_CycleLfoState
+	call	SoundEditLfo_CycleLfoState + 0x15e                      ; FDFF13  1d 3e 76 fd
 .LFDFF17:
 	pop XIY                                       ; FDFF17  5d
 	unlk XIZ                                      ; FDFF18  ee 0d
@@ -156951,8 +156962,8 @@ ExitKey_SoundEditFilterLfo:
 	jr z, .LFDFF30                                ; FDFF23  66 0b
 	pushw 0x02                                    ; FDFF25  0b 02 00
 	pushw 0x02                                    ; FDFF28  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow3_SoundEditFilterLfo calls sub_FD74E0
-	call	sub_FD74E0 + 0x15e                      ; FDFF2B  1d 3e 76 fd
+; stale, 0x15E above: the live twin LcdKeyRow3_SoundEditFilterLfo calls SoundEditLfo_CycleLfoState
+	call	SoundEditLfo_CycleLfoState + 0x15e                      ; FDFF2B  1d 3e 76 fd
 	pop XIY                                       ; FDFF2F  5d
 .LFDFF30:
 	unlk XIZ                                      ; FDFF30  ee 0d
@@ -156962,8 +156973,8 @@ ExitKey_SoundEditFilterLfo:
 	jr z, .LFDFF48                                ; FDFF3B  66 0b
 	pushw 0x03                                    ; FDFF3D  0b 03 00
 	pushw 0x02                                    ; FDFF40  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow4_SoundEditFilterLfo calls sub_FD74E0
-	call	sub_FD74E0 + 0x15e                      ; FDFF43  1d 3e 76 fd
+; stale, 0x15E above: the live twin LcdKeyRow4_SoundEditFilterLfo calls SoundEditLfo_CycleLfoState
+	call	SoundEditLfo_CycleLfoState + 0x15e                      ; FDFF43  1d 3e 76 fd
 	pop XIY                                       ; FDFF47  5d
 .LFDFF48:
 	unlk XIZ                                      ; FDFF48  ee 0d
@@ -156973,8 +156984,8 @@ ExitKey_SoundEditFilterLfo:
 	jr z, .LFDFF60                                ; FDFF53  66 0b
 	pushw 0x04                                    ; FDFF55  0b 04 00
 	pushw 0x02                                    ; FDFF58  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow5_SoundEditFilterLfo calls sub_FD74E0
-	call	sub_FD74E0 + 0x15e                      ; FDFF5B  1d 3e 76 fd
+; stale, 0x15E above: the live twin LcdKeyRow5_SoundEditFilterLfo calls SoundEditLfo_CycleLfoState
+	call	SoundEditLfo_CycleLfoState + 0x15e                      ; FDFF5B  1d 3e 76 fd
 	pop XIY                                       ; FDFF5F  5d
 .LFDFF60:
 	unlk XIZ                                      ; FDFF60  ee 0d
@@ -185537,7 +185548,7 @@ ScreenLeave_MidiFileDirectPlay:
 	ld c, (UI_ScreenLatch:16)                                   ; FF457C  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF4580  c1 7b 20 f3
 	jr z, .LFF4595                                       ; FF4584  66 0f
-	call sub_FF798C                                      ; FF4586  1d 8c 79 ff
+	call DiskFileScreen_LeaveCommon                                      ; FF4586  1d 8c 79 ff
 	call T_F4095C                                        ; FF458A  1d 5c 09 f4
 	call sub_FF794C                                      ; FF458E  1d 4c 79 ff
 	calr sub_FF70D8                                      ; FF4592  1e 43 2b
@@ -186178,7 +186189,7 @@ ScreenLeave_DiskL0adFile:
 	ld c, (UI_ScreenLatch:16)                                   ; FF4986  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF498A  c1 7b 20 f3
 	jr z, .LFF4994                                       ; FF498E  66 04
-	call sub_FF798C                                      ; FF4990  1d 8c 79 ff
+	call DiskFileScreen_LeaveCommon                                      ; FF4990  1d 8c 79 ff
 .LFF4994:
 	ret                                                  ; FF4994  0e
 ; ---------------------------------------------------------------------
@@ -187342,7 +187353,7 @@ ScreenLeave_MidiFileL0ad:
 	ld c, (UI_ScreenLatch:16)                                   ; FF520C  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5210  c1 7b 20 f3
 	jr z, .LFF522E                                       ; FF5214  66 18
-	call sub_FF798C                                      ; FF5216  1d 8c 79 ff
+	call DiskFileScreen_LeaveCommon                                      ; FF5216  1d 8c 79 ff
 	ld (0x272f:16), 0x00                                 ; FF521A  f1 2f 27 00 00
 	ld (0x272e:16), 0x00                                 ; FF521F  f1 2e 27 00 00
 	ld (0x272d:16), 0x00                                 ; FF5224  f1 2d 27 00 00
@@ -188063,7 +188074,7 @@ ScreenLeave_DiskSaveFile:
 	ld c, (UI_ScreenLatch:16)                                   ; FF571F  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5723  c1 7b 20 f3
 	jr z, .LFF572D                                       ; FF5727  66 04
-	call sub_FF798C                                      ; FF5729  1d 8c 79 ff
+	call DiskFileScreen_LeaveCommon                                      ; FF5729  1d 8c 79 ff
 .LFF572D:
 	ret                                                  ; FF572D  0e
 ; ---------------------------------------------------------------------
@@ -189269,7 +189280,7 @@ ScreenLeave_MidiFileSave:
 	ld c, (UI_ScreenLatch:16)                                   ; FF5EAE  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5EB2  c1 7b 20 f3
 	jr z, .LFF5ED0                                       ; FF5EB6  66 18
-	call sub_FF798C                                      ; FF5EB8  1d 8c 79 ff
+	call DiskFileScreen_LeaveCommon                                      ; FF5EB8  1d 8c 79 ff
 	ld (0x272f:16), 0x00                                 ; FF5EBC  f1 2f 27 00 00
 	ld (0x272e:16), 0x00                                 ; FF5EC1  f1 2e 27 00 00
 	ld (0x272d:16), 0x00                                 ; FF5EC6  f1 2d 27 00 00
@@ -193265,7 +193276,9 @@ sub_FF796C:
 	pop XIX                                              ; FF7989  5c
 	pop XIZ                                              ; FF798A  5e
 	ret                                                  ; FF798B  0e
-sub_FF798C:
+; DiskFileScreen_LeaveCommon: the shared Leave of the disk file screens (ScreenLeave_MidiFileSave / _MidiFileL0ad /
+;   _MidiFileDirectPlay / _DiskSaveFile): release port A3, sub_FF796C, clear (0x220F) and (0x220C), set bit 4 of (0x34D4), clear bit 3 of (0x34BB).
+DiskFileScreen_LeaveCommon:
 	push XIZ                                             ; FF798C  3e
 	push XIX                                             ; FF798D  3c
 	push XHL                                             ; FF798E  3b

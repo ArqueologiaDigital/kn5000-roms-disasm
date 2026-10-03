@@ -48,7 +48,7 @@ WHERE THE SIGNAL IS
     enquiry carried, because the enquiry's byte is never consulted.
 
   * THE DUMP REQUEST's DIFFERENT GATE.  Commands 0x1B..0x1F (`2B` with an
-    area byte) run sub_FB516A, which admits the request on screen 0x79 OR
+    area byte) run SysExCmd_DumpRequestGate, which admits the request on screen 0x79 OR
     when (0x2076) and (0x207A) both read 1, and otherwise stores status
     0x11.  That is a second, wider screen gate -- not the absence of one.
 
@@ -248,7 +248,7 @@ print()
 assert a(0xFB516A, 5) == bytes([0xC1, 0x7A, 0x20, 0x3F, 0x79]), "DRQ screen test moved"
 assert a(0xFB5171, 5) == bytes([0xC1, 0x76, 0x20, 0x3F, 0x01]), "DRQ second test moved"
 assert a(0xFB5178, 5) == bytes([0xC1, 0x7A, 0x20, 0x3F, 0x01]), "DRQ third test moved"
-print("dump request (commands 0x1B..0x1F) -- sub_FB516A")
+print("dump request (commands 0x1B..0x1F) -- SysExCmd_DumpRequestGate")
 print("  accepted when (0x207A) == 0x79, or when (0x2076) == 1 and (0x207A) == 1")
 print("  otherwise status 0x11")
 print("  -- a gate of its own, wider than the session entry's but not absent")

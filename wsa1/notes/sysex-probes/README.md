@@ -730,7 +730,7 @@ answer is a gate, a state and a template.
 * **The parameter path has no screen test at all.** Command `0x1A` goes to
   `0xFB42AB` in *both* outer tables and the script scans
   `0xFB39A0-0xFB4B00` for the operand bytes of any `(0x207A)` access —
-  **zero** hits. The dump request is different again: `sub_FB516A` admits it
+  **zero** hits. The dump request is different again: `SysExCmd_DumpRequestGate` admits it
   on screen `0x79` **or** when `(0x2076)` and `(0x207A)` both read 1.
 
 ### Pass criterion
