@@ -58,8 +58,19 @@ BYTES = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)\.byte(?P<ws>\s+)'
 BYTES_WSA1 = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)\.byte(?P<ws>\s+)'
                         r'(?P<ops>(?:0x[0-9a-fA-F]{1,2}|\d{1,3})(?:\s*,\s*(?:0x[0-9a-fA-F]{1,2}|\d{1,3}))*)'
                         r'(?P<post>\s*;\s*(?P<addr>[0-9A-F]{6})\s+(?P<hex>[0-9a-f]{2}(?: [0-9a-f]{2})*)'
-                        r'\s{2,}(?P<cm>[a-z]+)\b.*)$')
+                        r'(?:\s{2,}(?P<cm>[a-z]+)\b.*|\s*))$')
+# the reading is optional: a WSA1 `.byte` line inside code may carry only `; ADDR  bytes`.  Then
+# unidasm's reading alone decides -- still exactly one instruction of the line's length, still code
+# on both sides of the run, and still only a spelling llvm-mc assembles to the same bytes.
 WSA1_COMMENT_COL = 53       # the column prom_a's native lines put `; ADDR  bytes` at
+
+
+def _write(path, text):
+    """encode first, then replace the file: open("wb") truncates before an encode error could raise"""
+    data = text.encode("latin-1")
+    with open(path + ".tmp", "wb") as fh:
+        fh.write(data)
+    os.replace(path + ".tmp", path)
 
 
 def line_kind(l):
@@ -257,7 +268,7 @@ def main():
             stats["left"] += 1
     if a.apply:
         for f in changed:
-            open(f, "wb").write("\n".join(texts[f]).encode("latin-1"))
+            _write(f, "\n".join(texts[f]))
     print("tree %s: %s, %d files%s" % (a.tree, dict(stats), len(changed), "" if a.apply else " (dry run)"))
     for form, n in report.most_common(25):
         print("  left: %4d unique  %s" % (n, form))
@@ -329,7 +340,7 @@ def bytes_mode(a):
     for f, i, m, b in sites:
         r = readings.get(b) or ""
         um = r.split(" ")[0].lower()
-        cm = m.group("cm").lower()
+        cm = (m.group("cm") or um).lower()
         if b not in best or not (um == cm or um.rstrip("wbl") == cm.rstrip("wbl")):
             stats["left"] += 1
             report[(cm, r)] += 1
@@ -345,7 +356,7 @@ def bytes_mode(a):
         stats["respelled"] += 1
     if a.apply:
         for f in changed:
-            open(f, "wb").write("\n".join(texts[f]).encode("latin-1"))
+            _write(f, "\n".join(texts[f]))
     print("tree %s (.byte): %s, %d files%s" % (a.tree, dict(stats), len(changed), "" if a.apply else " (dry run)"))
     for (cm, r), n in report.most_common(15):
         print("  left: %3d  comment %-6s unidasm %s" % (n, cm, r))

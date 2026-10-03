@@ -22515,7 +22515,7 @@ PanelLed_OnCtrlParamEvent:   ; entry: prom_b routine directory
 	jr nz, .LF8C0F6                                      ; F8C0E6  6e 0e
 	ld a, (UiEvent_Byte2:16)                                   ; F8C0E8  c1 b9 20 21
 	ld (0x216c:16), a                                   ; F8C0EC  f1 6c 21 41
-	.byte 0xd1, 0x3a, 0x21, 0x3e, 0x00, 0x01             ; F8C0F0  d1 3a 21 3e 00 01
+	orw	(0x213a:16), 0x0100                  ; F8C0F0  d1 3a 21 3e 00 01
 .LF8C0F6:
 	ld XIX,0x00007f28                                    ; F8C0F6  44 28 7f 00 00
 	calr .LF8C111                                        ; F8C0FB  1e 13 00
@@ -22523,7 +22523,7 @@ PanelLed_OnCtrlParamEvent:   ; entry: prom_b routine directory
 	jr nz, .LF8C110                                      ; F8C100  6e 0e
 	ld a, (UiEvent_Byte2:16)                                   ; F8C102  c1 b9 20 21
 	ld (0x216d:16), a                                   ; F8C106  f1 6d 21 41
-	.byte 0xd1, 0x3a, 0x21, 0x3e, 0x00, 0x08             ; F8C10A  d1 3a 21 3e 00 08
+	orw	(0x213a:16), 0x0800                  ; F8C10A  d1 3a 21 3e 00 08
 .LF8C110:
 	ret                                                  ; F8C110  0e
 .LF8C111:
@@ -22601,11 +22601,11 @@ PanelLed_OnCtrlParamEvent:   ; entry: prom_b routine directory
 ;   ~((w+2)|(w+4)), and if non-zero `calr PanelLed_DispatchRequestBits` with its DispatchTable_F8C2B2 sub-list, then
 ;   clear it.  Called through T_F40664 from the main loop (0xF82154, 0xF8217A), each followed by T_SC1_TxFlush.
 PanelLed_ProcessRequests:   ; entry: prom_b routine directory
-	.byte 0xd1, 0x16, 0x21, 0x3c, 0x7f, 0x0e             ; F8C18B  d1 16 21 3c 7f 0e
+	andw	(0x2116:16), 0x0e7f                  ; F8C18B  d1 16 21 3c 7f 0e
 	ld wa, (0x2118:16)                                 ; F8C191  d1 18 21 20
 	m_or_rm MW16, 0x211a, r0                             ; F8C195  d1 1a 21 e0
 	xor WA,0xffff                                        ; F8C199  d8 cd ff ff
-	.byte 0xd1, 0x16, 0x21, 0xc8                         ; F8C19D  d1 16 21 c8
+	and	(0x2116:16), wa                      ; F8C19D  d1 16 21 c8
 	m_cp_mi16 MW16, 0x2116, 0x0000                       ; F8C1A1  d1 16 21 3f 00 00
 	jr z, .LF8C1BC                                       ; F8C1A7  66 13
 	ld XIY,0x00002116                                    ; F8C1A9  45 16 21 00 00
@@ -22613,11 +22613,11 @@ PanelLed_ProcessRequests:   ; entry: prom_b routine directory
 	calr PanelLed_DispatchRequestBits                                          ; F8C1B3  1e 74 02
 	ldw (0x2116:16), 0x00                                ; F8C1B6  f1 16 21 02 00 00
 .LF8C1BC:
-	.byte 0xd1, 0x22, 0x21, 0x3c, 0x05, 0x05             ; F8C1BC  d1 22 21 3c 05 05
+	andw	(0x2122:16), 0x0505                  ; F8C1BC  d1 22 21 3c 05 05
 	ld wa, (0x2124:16)                                 ; F8C1C2  d1 24 21 20
 	m_or_rm MW16, 0x2126, r0                             ; F8C1C6  d1 26 21 e0
 	xor WA,0xffff                                        ; F8C1CA  d8 cd ff ff
-	.byte 0xd1, 0x22, 0x21, 0xc8                         ; F8C1CE  d1 22 21 c8
+	and	(0x2122:16), wa                      ; F8C1CE  d1 22 21 c8
 	m_cp_mi16 MW16, 0x2122, 0x0000                       ; F8C1D2  d1 22 21 3f 00 00
 	jr z, .LF8C1ED                                       ; F8C1D8  66 13
 	ld XIY,0x00002122                                    ; F8C1DA  45 22 21 00 00
@@ -22625,11 +22625,11 @@ PanelLed_ProcessRequests:   ; entry: prom_b routine directory
 	calr PanelLed_DispatchRequestBits                                          ; F8C1E4  1e 43 02
 	ldw (0x2122:16), 0x00                                ; F8C1E7  f1 22 21 02 00 00
 .LF8C1ED:
-	.byte 0xd1, 0x28, 0x21, 0x3c, 0x1f, 0x01             ; F8C1ED  d1 28 21 3c 1f 01
+	andw	(0x2128:16), 0x011f                  ; F8C1ED  d1 28 21 3c 1f 01
 	ld wa, (0x212a:16)                                 ; F8C1F3  d1 2a 21 20
 	m_or_rm MW16, 0x212c, r0                             ; F8C1F7  d1 2c 21 e0
 	xor WA,0xffff                                        ; F8C1FB  d8 cd ff ff
-	.byte 0xd1, 0x28, 0x21, 0xc8                         ; F8C1FF  d1 28 21 c8
+	and	(0x2128:16), wa                      ; F8C1FF  d1 28 21 c8
 	m_cp_mi16 MW16, 0x2128, 0x0000                       ; F8C203  d1 28 21 3f 00 00
 	jr z, .LF8C21E                                       ; F8C209  66 13
 	ld XIY,0x00002128                                    ; F8C20B  45 28 21 00 00
@@ -22637,11 +22637,11 @@ PanelLed_ProcessRequests:   ; entry: prom_b routine directory
 	calr PanelLed_DispatchRequestBits                                          ; F8C215  1e 12 02
 	ldw (0x2128:16), 0x00                                ; F8C218  f1 28 21 02 00 00
 .LF8C21E:
-	.byte 0xd1, 0x2e, 0x21, 0x3c, 0x01, 0x01             ; F8C21E  d1 2e 21 3c 01 01
+	andw	(0x212e:16), 0x0101                  ; F8C21E  d1 2e 21 3c 01 01
 	ld wa, (0x2130:16)                                 ; F8C224  d1 30 21 20
 	m_or_rm MW16, 0x2132, r0                             ; F8C228  d1 32 21 e0
 	xor WA,0xffff                                        ; F8C22C  d8 cd ff ff
-	.byte 0xd1, 0x2e, 0x21, 0xc8                         ; F8C230  d1 2e 21 c8
+	and	(0x212e:16), wa                      ; F8C230  d1 2e 21 c8
 	m_cp_mi16 MW16, 0x212e, 0x0000                       ; F8C234  d1 2e 21 3f 00 00
 	jr z, .LF8C24F                                       ; F8C23A  66 13
 	ld XIY,0x0000212e                                    ; F8C23C  45 2e 21 00 00
@@ -22649,11 +22649,11 @@ PanelLed_ProcessRequests:   ; entry: prom_b routine directory
 	calr PanelLed_DispatchRequestBits                                          ; F8C246  1e e1 01
 	ldw (0x212e:16), 0x00                                ; F8C249  f1 2e 21 02 00 00
 .LF8C24F:
-	.byte 0xd1, 0x34, 0x21, 0x3c, 0xfe, 0xed             ; F8C24F  d1 34 21 3c fe ed
+	andw	(0x2134:16), 0xedfe                  ; F8C24F  d1 34 21 3c fe ed
 	ld wa, (0x2136:16)                                 ; F8C255  d1 36 21 20
 	m_or_rm MW16, 0x2138, r0                             ; F8C259  d1 38 21 e0
 	xor WA,0xffff                                        ; F8C25D  d8 cd ff ff
-	.byte 0xd1, 0x34, 0x21, 0xc8                         ; F8C261  d1 34 21 c8
+	and	(0x2134:16), wa                      ; F8C261  d1 34 21 c8
 	m_cp_mi16 MW16, 0x2134, 0x0000                       ; F8C265  d1 34 21 3f 00 00
 	jr z, .LF8C280                                       ; F8C26B  66 13
 	ld XIY,0x00002134                                    ; F8C26D  45 34 21 00 00
@@ -22661,11 +22661,11 @@ PanelLed_ProcessRequests:   ; entry: prom_b routine directory
 	calr PanelLed_DispatchRequestBits                                          ; F8C277  1e b0 01
 	ldw (0x2134:16), 0x00                                ; F8C27A  f1 34 21 02 00 00
 .LF8C280:
-	.byte 0xd1, 0x3a, 0x21, 0x3c, 0xbf, 0x0f             ; F8C280  d1 3a 21 3c bf 0f
+	andw	(0x213a:16), 0x0fbf                  ; F8C280  d1 3a 21 3c bf 0f
 	ld wa, (0x213c:16)                                 ; F8C286  d1 3c 21 20
 	m_or_rm MW16, 0x213e, r0                             ; F8C28A  d1 3e 21 e0
 	xor WA,0xffff                                        ; F8C28E  d8 cd ff ff
-	.byte 0xd1, 0x3a, 0x21, 0xc8                         ; F8C292  d1 3a 21 c8
+	and	(0x213a:16), wa                      ; F8C292  d1 3a 21 c8
 	m_cp_mi16 MW16, 0x213a, 0x0000                       ; F8C296  d1 3a 21 3f 00 00
 	jr z, .LF8C2B1                                       ; F8C29C  66 13
 	ld XIY,0x0000213a                                    ; F8C29E  45 3a 21 00 00
@@ -22710,8 +22710,8 @@ PanelLed_RequestIfBlinkEnableChanged:   ; entry: reachable-run entry
 	xor A,(XIX+0x05)                                     ; F8C2FE  8c 05 d1
 	bit 0x01,A                                           ; F8C301  c9 33 01
 	jr z, .LF8C337                                       ; F8C304  66 31
-	.byte 0xd1, 0x3a, 0x21, 0x3e, 0x00, 0x02             ; F8C306  d1 3a 21 3e 00 02
-	.byte 0xd1, 0x16, 0x21, 0x3e, 0x04, 0x00             ; F8C30C  d1 16 21 3e 04 00
+	orw	(0x213a:16), 0x0200                  ; F8C306  d1 3a 21 3e 00 02
+	orw	(0x2116:16), 0x0004                  ; F8C30C  d1 16 21 3e 04 00
 	jr .LF8C337                                          ; F8C312  68 23
 .LF8C314:
 	m_bit 0, MD16, 0x216f                                ; F8C314  f1 6f 21 c8
@@ -22723,7 +22723,7 @@ PanelLed_RequestIfBlinkEnableChanged:   ; entry: reachable-run entry
 	xor A,(XIX+0x06)                                     ; F8C329  8c 06 d1
 	bit 0x03,A                                           ; F8C32C  c9 33 03
 	jr z, .LF8C337                                       ; F8C32F  66 06
-	.byte 0xd1, 0x3a, 0x21, 0x3e, 0x00, 0x02             ; F8C331  d1 3a 21 3e 00 02
+	orw	(0x213a:16), 0x0200                  ; F8C331  d1 3a 21 3e 00 02
 .LF8C337:
 	ret                                                  ; F8C337  0e
 ; PanelLed_Refresh -- periodic LED pass: check the blink LED, then send every LED byte that changed
@@ -22733,42 +22733,42 @@ PanelLed_RequestIfBlinkEnableChanged:   ; entry: reachable-run entry
 ;   .LF8C3E4 toggles (0x20D6) bit 3 when (0x216F) bit 0 is set (not on v1); finally calr PanelLed_SendChangedBytes.
 PanelLed_Refresh:   ; entry: prom_b routine directory
 	calr .LF8C2EC                                        ; F8C338  1e b1 ff
-	.byte 0xd1, 0x18, 0x21, 0x3c, 0x7f, 0x0e             ; F8C33B  d1 18 21 3c 7f 0e
+	andw	(0x2118:16), 0x0e7f                  ; F8C33B  d1 18 21 3c 7f 0e
 	m_cp_mi16 MW16, 0x2118, 0x0000                       ; F8C341  d1 18 21 3f 00 00
 	jr z, .LF8C356                                       ; F8C347  66 0d
 	ld XIY,0x00002118                                    ; F8C349  45 18 21 00 00
 	ld XIX,PanelLed_ToggleActivityLed_Data_F8C428                                    ; F8C34E  44 28 c4 f8 00
 	calr PanelLed_DispatchRequestBits                                            ; F8C353  1e d4 00
 .LF8C356:
-	.byte 0xd1, 0x24, 0x21, 0x3c, 0x05, 0x05             ; F8C356  d1 24 21 3c 05 05
+	andw	(0x2124:16), 0x0505                  ; F8C356  d1 24 21 3c 05 05
 	m_cp_mi16 MW16, 0x2124, 0x0000                       ; F8C35C  d1 24 21 3f 00 00
 	jr z, .LF8C371                                       ; F8C362  66 0d
 	ld XIY,0x00002124                                    ; F8C364  45 24 21 00 00
 	ld XIX,PanelLed_ToggleActivityLed_Data_F8C428                                    ; F8C369  44 28 c4 f8 00
 	calr PanelLed_DispatchRequestBits                                            ; F8C36E  1e b9 00
 .LF8C371:
-	.byte 0xd1, 0x2a, 0x21, 0x3c, 0x1f, 0x01             ; F8C371  d1 2a 21 3c 1f 01
+	andw	(0x212a:16), 0x011f                  ; F8C371  d1 2a 21 3c 1f 01
 	m_cp_mi16 MW16, 0x212a, 0x0000                       ; F8C377  d1 2a 21 3f 00 00
 	jr z, .LF8C38C                                       ; F8C37D  66 0d
 	ld XIY,0x0000212a                                    ; F8C37F  45 2a 21 00 00
 	ld XIX,PanelLed_ToggleActivityLed_Data_F8C428                                    ; F8C384  44 28 c4 f8 00
 	calr PanelLed_DispatchRequestBits                                            ; F8C389  1e 9e 00
 .LF8C38C:
-	.byte 0xd1, 0x30, 0x21, 0x3c, 0x01, 0x01             ; F8C38C  d1 30 21 3c 01 01
+	andw	(0x2130:16), 0x0101                  ; F8C38C  d1 30 21 3c 01 01
 	m_cp_mi16 MW16, 0x2130, 0x0000                       ; F8C392  d1 30 21 3f 00 00
 	jr z, .LF8C3A7                                       ; F8C398  66 0d
 	ld XIY,0x00002130                                    ; F8C39A  45 30 21 00 00
 	ld XIX,PanelLed_ToggleActivityLed_Data_F8C428                                    ; F8C39F  44 28 c4 f8 00
 	calr PanelLed_DispatchRequestBits                                            ; F8C3A4  1e 83 00
 .LF8C3A7:
-	.byte 0xd1, 0x36, 0x21, 0x3c, 0xfe, 0xed             ; F8C3A7  d1 36 21 3c fe ed
+	andw	(0x2136:16), 0xedfe                  ; F8C3A7  d1 36 21 3c fe ed
 	m_cp_mi16 MW16, 0x2136, 0x0000                       ; F8C3AD  d1 36 21 3f 00 00
 	jr z, .LF8C3C2                                       ; F8C3B3  66 0d
 	ld XIY,0x00002136                                    ; F8C3B5  45 36 21 00 00
 	ld XIX,PanelLed_ToggleActivityLed_Data_F8C428                                    ; F8C3BA  44 28 c4 f8 00
 	calr PanelLed_DispatchRequestBits                                            ; F8C3BF  1e 68 00
 .LF8C3C2:
-	.byte 0xd1, 0x3c, 0x21, 0x3c, 0xbf, 0x0f             ; F8C3C2  d1 3c 21 3c bf 0f
+	andw	(0x213c:16), 0x0fbf                  ; F8C3C2  d1 3c 21 3c bf 0f
 	m_cp_mi16 MW16, 0x213c, 0x0000                       ; F8C3C8  d1 3c 21 3f 00 00
 	jr z, .LF8C3DD                                       ; F8C3CE  66 0d
 	ld XIY,0x0000213c                                    ; F8C3D0  45 3c 21 00 00
@@ -22823,7 +22823,7 @@ PanelLed_DispatchRequestBits:   ; entry: reachable-run entry
 	xor HL,HL                                            ; F8C42A  db d3
 	ld WA,(XIY)                                          ; F8C42C  95 20
 .LF8C42E:
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x3f, 0xff, 0xff       ; F8C42E  d3 07 f0 ec 3f ff ff
+	cpw	(xix+hl), 0xffff                     ; F8C42E  d3 07 f0 ec 3f ff ff
 	jr z, .LF8C455                                       ; F8C435  66 1e
 	mx_ld_rm MXW, ra_IX, ra_HL, r1                       ; F8C437  d3 07 f0 ec 21
 	and BC,WA                                            ; F8C43C  d8 c1
@@ -22883,12 +22883,12 @@ PanelLed_SendChangedBytes:
 ;   clear, WA = BitmaskTable_F8C4B8[(0x2169) & 0x0F] and `or (XIX+A),W` -- byte 1 bit n for 0-7, byte 0 bit n-8 for
 ;   8-15.  (0x2169) is the 0..15 sound-select index PanelAction_SoundSelectOrKeypad_V1 stores.
 PanelLed_ShowSoundSelect:   ; entry: DispatchTable_F8C2B2 id=0x0004
-	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C485  c0 c4 3f 02
+	cp	(0xc4:8), 0x02                       ; F8C485  c0 c4 3f 02
 	jr z, .LF8C4B7                                ; F8C489  66 2c
 	ld XIX,0x000020d0                             ; F8C48B  44 d0 20 00 00
 	and (XIX+0x01),0x00                           ; F8C490  8c 01 3c 00
 	and8_imm_rid8 xix, 0x00, 0x00                 ; F8C494  8c 00 3c 00   and (XIX+0x00),0x00
-	.byte 0xf1, 0x75, 0x20, 0xc9                  ; F8C498  f1 75 20 c9
+	bit	1, (UI_RequestBits:16)                       ; F8C498  f1 75 20 c9
 	jr nz, .LF8C4B7                               ; F8C49C  6e 19
 	ld a, (0x2169:16)                            ; F8C49E  c1 69 21 21
 	and A,0x0f                                    ; F8C4A2  c9 cc 0f
@@ -22999,7 +22999,7 @@ BucketTable_F8C592:   ; 3 entries (index 0-2) + 1 pad byte duplicating the last 
 ;   (0x20D3) bit 0, 0x40 leaves both off.
 PanelLed_ShowCtrl1Offset:   ; entry: DispatchTable_F8C2B2 id=0x0100
 	ld XIX,0x000020d0                             ; F8C596  44 d0 20 00 00
-	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C59B  c0 c4 3f 02
+	cp	(0xc4:8), 0x02                       ; F8C59B  c0 c4 3f 02
 	jr z, .LF8C5C2                                ; F8C59F  66 21
 	and (XIX+0x03),0xbf                           ; F8C5A1  8c 03 3c bf
 	and (XIX+0x06),0xfe                           ; F8C5A5  8c 06 3c fe
@@ -23033,7 +23033,7 @@ PanelLed_ShowCtrl1Offset:   ; entry: DispatchTable_F8C2B2 id=0x0100
 ;   assignment): above -> v1 (0x20D3) bit 7 / v2 (0x20D2) bit 1, below -> v1 (0x20D6) bit 1 / v2 (0x20D3) bit 1.
 PanelLed_ShowCtrl2Offset:   ; entry: DispatchTable_F8C2B2 id=0x0800
 	ld XIX,0x000020d0                             ; F8C5E3  44 d0 20 00 00
-	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C5E8  c0 c4 3f 02
+	cp	(0xc4:8), 0x02                       ; F8C5E8  c0 c4 3f 02
 	jr z, .LF8C60F                                ; F8C5EC  66 21
 	and (XIX+0x03),0x7f                           ; F8C5EE  8c 03 3c 7f
 	and (XIX+0x06),0xfd                           ; F8C5F2  8c 06 3c fd
@@ -23090,7 +23090,7 @@ PanelLed_ClearCtrlOffsetLeds:   ; entry: reachable-run entry
 ;   handler sub_F8AA24 uses to pick event code 0x19/0x1A for v1 group 0x08's six switches.
 ; Unknown: what the two six-way settings are.
 PanelLed_ShowSixWaySelect:   ; entry: DispatchTable_F8C2B2 id=0x0080
-	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C652  c0 c4 3f 02
+	cp	(0xc4:8), 0x02                       ; F8C652  c0 c4 3f 02
 	jr z, .LF8C686                                ; F8C656  66 2e
 	ld XIX,0x000020d0                             ; F8C658  44 d0 20 00 00
 	and (XIX+0x03),0xc0                           ; F8C65D  8c 03 3c c0
@@ -23153,35 +23153,35 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	jr z, .LF8C798                                ; F8C781  66 15
 	ld XIX,0x000020d0                             ; F8C783  44 d0 20 00 00
 	and (XIX+0x05),0xfd                           ; F8C788  8c 05 3c fd
-	.byte 0xf1, 0x75, 0x20, 0xc9                  ; F8C78C  f1 75 20 c9
+	bit	1, (UI_RequestBits:16)                       ; F8C78C  f1 75 20 c9
 	jr z, .LF8C7AB                                ; F8C790  66 19
 	or (XIX+0x05),0x02                            ; F8C792  8c 05 3e 02
 	jr .LF8C7AB                                   ; F8C796  68 13
 .LF8C798:
 	ld XIX,0x000020d0                             ; F8C798  44 d0 20 00 00
 	and (XIX+0x06),0xf7                           ; F8C79D  8c 06 3c f7
-	.byte 0xf1, 0x75, 0x20, 0xc9                  ; F8C7A1  f1 75 20 c9
+	bit	1, (UI_RequestBits:16)                       ; F8C7A1  f1 75 20 c9
 	jr z, .LF8C7AB                                ; F8C7A5  66 04
 	or (XIX+0x06),0x08                            ; F8C7A7  8c 06 3e 08
 .LF8C7AB:
 	ret                                           ; F8C7AB  0e
-	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C7AC  c0 c4 3f 02
+	cp	(0xc4:8), 0x02                       ; F8C7AC  c0 c4 3f 02
 	jr z, .LF8C7C7                                ; F8C7B0  66 15
 	ld XIX,0x000020d0                             ; F8C7B2  44 d0 20 00 00
 	and (XIX+0x07),0xfd                           ; F8C7B7  8c 07 3c fd
-	.byte 0xf1, 0x6e, 0x21, 0xc8                  ; F8C7BB  f1 6e 21 c8
+	bit	0, (0x216e:16)                       ; F8C7BB  f1 6e 21 c8
 	jr z, .LF8C7DA                                ; F8C7BF  66 19
 	or (XIX+0x07),0x02                            ; F8C7C1  8c 07 3e 02
 	jr .LF8C7DA                                   ; F8C7C5  68 13
 .LF8C7C7:
 	ld XIX,0x000020d0                             ; F8C7C7  44 d0 20 00 00
 	and (XIX+0x06),0xfb                           ; F8C7CC  8c 06 3c fb
-	.byte 0xf1, 0x6e, 0x21, 0xc8                  ; F8C7D0  f1 6e 21 c8
+	bit	0, (0x216e:16)                       ; F8C7D0  f1 6e 21 c8
 	jr z, .LF8C7DA                                ; F8C7D4  66 04
 	or (XIX+0x06),0x04                            ; F8C7D6  8c 06 3e 04
 .LF8C7DA:
 	ret                                           ; F8C7DA  0e
-	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C7DB  c0 c4 3f 02
+	cp	(0xc4:8), 0x02                       ; F8C7DB  c0 c4 3f 02
 	jr z, .LF8C7F8                                ; F8C7DF  66 17
 	bit_dd8 0x02, 0x94                            ; F8C7E1  f0 94 ca
 	jr nz, .LF8C7F8                               ; F8C7E4  6e 12
@@ -23210,7 +23210,7 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	ld XIY,0x000020d0                             ; F8C820  45 d0 20 00 00
 	ex8 a, c                                      ; F8C825  cb b9
 	scf                                           ; F8C827  11
-	.byte 0xf1, 0x9b, 0x21, 0x2a                  ; F8C828  f1 9b 21 2a
+	xorcf	a, (0x219b:16)                       ; F8C828  f1 9b 21 2a
 	jr c, .LF8C837                                ; F8C82C  67 09
 	or C,B                                        ; F8C82E  ca e3
 	ld	(xiy+w), c                             ; F8C830  f3 03 f4 e1 43
@@ -23266,7 +23266,7 @@ PanelLed_SendByteUnconditional:   ; entry: prom_b routine directory
 .LF8C897:
 	ei 0x06                                              ; F8C897  06 06
 	ld (XIZ+0x04),IX                                     ; F8C899  be 04 54
-	.byte 0x9e, 0x08, 0x3a, 0x02, 0x00                   ; F8C89C  9e 08 3a 02 00
+	subw	(xiz+8), 0x0002                      ; F8C89C  9e 08 3a 02 00
 	ei 0x00                                              ; F8C8A1  06 00
 	ret                                                  ; F8C8A3  0e
 .LF8C8A4:
@@ -29960,7 +29960,7 @@ LCD_Svc_15_DrawLineDashed:
 	xor IZ,IZ                                     ; F900CF  de d6
 	jr .LF90110                                   ; F900D1  68 3d
 .LF900D3:
-	.byte 0xd1, 0x48, 0x25, 0x48                  ; F900D3  d1 48 25 48
+	muls	xwa, (LCD_LineSlopeX100:16)                     ; F900D3  d1 48 25 48
 	ld DE,QWA                                     ; F900D7  d7 e2 8a
 	m_add_rm MW16, LCD_LineInterceptX100, r0                     ; F900DA  d1 4a 25 80
 	bit 0x0f,WA                                   ; F900DE  d8 33 0f
@@ -30149,7 +30149,7 @@ LCD_Svc_17_DrawText8x8Packed:
 	m_add_mi8 MB16, LCD_TextBitOffset, 0x06                  ; F901F5  c1 9e 25 38 06
 	m_cp_mi8 MB16, LCD_TextBitOffset, 0x08                   ; F901FA  c1 9e 25 3f 08
 	jr ule, .LF90206                              ; F901FF  63 05
-	.byte 0xc1, 0x9e, 0x25, 0x3a, 0x08            ; F90201  c1 9e 25 3a 08
+	sub	(LCD_TextBitOffset:16), 0x08                    ; F90201  c1 9e 25 3a 08
 .LF90206:
 	ld d, 0x08:opc                                   ; F90206  24 08
 	calr TextShift_ShiftRight                                   ; F90208  1e 6c 02
@@ -30297,7 +30297,7 @@ LCD_Svc_1C_DrawText16x16Packed:
 .LF9036C:
 	m_cp_mi8 MB16, LCD_TextBitOffset, 0x08                   ; F9036C  c1 9e 25 3f 08
 	jr c, .LF9037A                                ; F90371  67 07
-	.byte 0xc1, 0x9e, 0x25, 0x3a, 0x08            ; F90373  c1 9e 25 3a 08
+	sub	(LCD_TextBitOffset:16), 0x08                    ; F90373  c1 9e 25 3a 08
 	jr .LF9036C                                   ; F90378  68 f2
 .LF9037A:
 	ld d, 0x10:opc                                   ; F9037A  24 10
@@ -41518,7 +41518,7 @@ T_F401F0_Nop:   ; entry: prom_b routine directory
 	inc 1,IY                                             ; F960C5  dd 61
 	ld A,(XIY+0x7620)                                    ; F960C7  c3 f5 20 76 21
 	ld XIZ,0x00608000                                    ; F960CC  46 00 80 60 00
-	.byte 0xc3, 0x07, 0xf8, 0xf4, 0xf1                   ; F960D1  c3 07 f8 f4 f1
+	cp	a, (xiz+iy)                          ; F960D1  c3 07 f8 f4 f1
 	jr z, .LF9613B                                       ; F960D6  66 63
 	cp IX,0x01f1                                         ; F960D8  dc cf f1 01
 	jr c, .LF960F8                                       ; F960DC  67 1a
@@ -41558,7 +41558,7 @@ T_F401F0_Nop:   ; entry: prom_b routine directory
 	ld (XIX+0x2c01),E                                    ; F9611C  f3 f1 01 2c 45
 	ld (XIX+0x2c02),A                                    ; F96121  f3 f1 02 2c 41
 	ld XIZ,0x00608000                                    ; F96126  46 00 80 60 00
-	.byte 0xc3, 0x07, 0xf8, 0xf4, 0xd1                   ; F9612B  c3 07 f8 f4 d1
+	xor	a, (xiz+iy)                          ; F9612B  c3 07 f8 f4 d1
 	ld (XIX+0x2c03),A                                    ; F96130  f3 f1 03 2c 41
 	add XIX,0x00000004                                   ; F96135  ec c8 04 00 00 00
 .LF9613B:
@@ -41599,7 +41599,7 @@ ParamImage_QueuePartFieldChange:   ; entry: reachable-run entry
 	ld (XIX+0x2c01),E                                    ; F9617F  f3 f1 01 2c 45
 	ld (XIX+0x2c02),A                                    ; F96184  f3 f1 02 2c 41
 	ld XIZ,0x00608000                                    ; F96189  46 00 80 60 00
-	.byte 0xc3, 0x07, 0xf8, 0xf4, 0xd1                   ; F9618E  c3 07 f8 f4 d1
+	xor	a, (xiz+iy)                          ; F9618E  c3 07 f8 f4 d1
 	ld (XIX+0x2c03),A                                    ; F96193  f3 f1 03 2c 41
 	add IX,0x0004                                        ; F96198  dc c8 04 00
 	jrl .LF96256                                             ; F9619C  78 b7 00
@@ -152437,7 +152437,7 @@ sub_FDE760:
 	sub XBC,XBC                                   ; FDE7D6  e9 a1
 	ld (xiz-20), xbc                              ; FDE7D8  be ec 61
 	ld a, 0x17:opc                                   ; FDE7DB  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDE7DD  8e fe 41
+	mul	wa, (xiz-2)                          ; FDE7DD  8e fe 41
 	extz XWA                                      ; FDE7E0  e8 12
 	add XWA,0x0000000e                            ; FDE7E2  e8 c8 0e 00 00 00
 	add XBC,XWA                                   ; FDE7E8  e8 81
@@ -152514,7 +152514,7 @@ sub_FDE81C:
 	sub XBC,XBC                                   ; FDE892  e9 a1
 	ld (xiz-20), xbc                              ; FDE894  be ec 61
 	ld a, 0x17:opc                                   ; FDE897  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDE899  8e fe 41
+	mul	wa, (xiz-2)                          ; FDE899  8e fe 41
 	extz XWA                                      ; FDE89C  e8 12
 	add XWA,0x0000000f                            ; FDE89E  e8 c8 0f 00 00 00
 	add XBC,XWA                                   ; FDE8A4  e8 81
@@ -152587,7 +152587,7 @@ sub_FDE8D8:
 	sub XBC,XBC                                   ; FDE942  e9 a1
 	ld (xiz-20), xbc                              ; FDE944  be ec 61
 	ld a, 0x17:opc                                   ; FDE947  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDE949  8e fe 41
+	mul	wa, (xiz-2)                          ; FDE949  8e fe 41
 	extz XWA                                      ; FDE94C  e8 12
 	add XWA,0x0000000d                            ; FDE94E  e8 c8 0d 00 00 00
 	add XBC,XWA                                   ; FDE954  e8 81
@@ -152660,7 +152660,7 @@ sub_FDE988:
 	sub XBC,XBC                                   ; FDE9F2  e9 a1
 	ld (xiz-20), xbc                              ; FDE9F4  be ec 61
 	ld a, 0x17:opc                                   ; FDE9F7  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDE9F9  8e fe 41
+	mul	wa, (xiz-2)                          ; FDE9F9  8e fe 41
 	extz XWA                                      ; FDE9FC  e8 12
 	add XWA,0x0000000c                            ; FDE9FE  e8 c8 0c 00 00 00
 	add XBC,XWA                                   ; FDEA04  e8 81
@@ -152726,7 +152726,7 @@ sub_FDEA38:
 	sub XBC,XBC                                   ; FDEA89  e9 a1
 	ld (xiz-20), xbc                              ; FDEA8B  be ec 61
 	ld a, 0x17:opc                                   ; FDEA8E  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDEA90  8e fe 41
+	mul	wa, (xiz-2)                          ; FDEA90  8e fe 41
 	extz XWA                                      ; FDEA93  e8 12
 	add XWA,0x00000011                            ; FDEA95  e8 c8 11 00 00 00
 	add XBC,XWA                                   ; FDEA9B  e8 81
@@ -152790,7 +152790,7 @@ sub_FDEAD2:
 	sub XBC,XBC                                   ; FDEB24  e9 a1
 	ld (xiz-20), xbc                              ; FDEB26  be ec 61
 	ld a, 0x17:opc                                   ; FDEB29  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDEB2B  8e fe 41
+	mul	wa, (xiz-2)                          ; FDEB2B  8e fe 41
 	extz XWA                                      ; FDEB2E  e8 12
 	add XWA,0x00000010                            ; FDEB30  e8 c8 10 00 00 00
 	add XBC,XWA                                   ; FDEB36  e8 81
@@ -152854,7 +152854,7 @@ sub_FDEB6D:
 	sub XBC,XBC                                   ; FDEBBF  e9 a1
 	ld (xiz-20), xbc                              ; FDEBC1  be ec 61
 	ld a, 0x17:opc                                   ; FDEBC4  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDEBC6  8e fe 41
+	mul	wa, (xiz-2)                          ; FDEBC6  8e fe 41
 	extz XWA                                      ; FDEBC9  e8 12
 	add XWA,0x00000011                            ; FDEBCB  e8 c8 11 00 00 00
 	add XBC,XWA                                   ; FDEBD1  e8 81
@@ -153719,7 +153719,7 @@ sub_FDF27D:
 	sub XBC,XBC                                   ; FDF2DE  e9 a1
 	ld (xiz-22), xbc                              ; FDF2E0  be ea 61
 	ld a, 0x17:opc                                   ; FDF2E3  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDF2E5  8e fe 41
+	mul	wa, (xiz-2)                          ; FDF2E5  8e fe 41
 	extz XWA                                      ; FDF2E8  e8 12
 	add XWA,0x0000000e                            ; FDF2EA  e8 c8 0e 00 00 00
 	add XBC,XWA                                   ; FDF2F0  e8 81
@@ -153802,7 +153802,7 @@ sub_FDF33E:
 	sub XBC,XBC                                   ; FDF3A8  e9 a1
 	ld (xiz-22), xbc                              ; FDF3AA  be ea 61
 	ld a, 0x17:opc                                   ; FDF3AD  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDF3AF  8e fe 41
+	mul	wa, (xiz-2)                          ; FDF3AF  8e fe 41
 	extz XWA                                      ; FDF3B2  e8 12
 	add XWA,0x00000010                            ; FDF3B4  e8 c8 10 00 00 00
 	add XBC,XWA                                   ; FDF3BA  e8 81
@@ -153859,7 +153859,7 @@ sub_FDF3DF:
 	sub XBC,XBC                                   ; FDF43A  e9 a1
 	ld (xiz-20), xbc                              ; FDF43C  be ec 61
 	ld a, 0x17:opc                                   ; FDF43F  21 17
-	.byte 0x8e, 0xfe, 0x41                        ; FDF441  8e fe 41
+	mul	wa, (xiz-2)                          ; FDF441  8e fe 41
 	extz XWA                                      ; FDF444  e8 12
 	add XWA,0x00000011                            ; FDF446  e8 c8 11 00 00 00
 	add XBC,XWA                                   ; FDF44C  e8 81
