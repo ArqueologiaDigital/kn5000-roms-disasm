@@ -34,7 +34,7 @@ WHERE THE SIGNAL IS
     `F0 50 7E ...` frame (command 0x0A, which carries no address at all)
     finds its way back to the same destination.
 
-  * BOUND.  sub_FB72B5 / sub_FB7365 decode two message bytes into one
+  * BOUND.  SysExRx_UnpackBody / SysExRx_UnpackBodyToBlock decode two message bytes into one
     destination byte and decrement the counter at (0x60FD20), which the
     handler's own descriptor writer loaded with a length the FIRMWARE
     knows.  If body bytes remain when that counter reaches zero the status

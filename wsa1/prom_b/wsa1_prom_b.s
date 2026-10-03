@@ -856,32 +856,50 @@
 	.set	SysExSession_RecvCombinationPart1, 0xFB2BE1
 	.set	SysExSession_RecvCombinationPart2, 0xFB2C35
 	.set	SysExSession_Continuation, 0xFB2C6C
-	.set	sub_FB2CAD, 0xFB2CAD
-	.set	sub_FB2CE7, 0xFB2CE7
-	.set	sub_FB2D21, 0xFB2D21
-	.set	sub_FB2D72, 0xFB2D72
-	.set	sub_FB2DAC, 0xFB2DAC
-	.set	sub_FB2DE6, 0xFB2DE6
-	.set	sub_FB2E20, 0xFB2E20
-	.set	sub_FB2E69, 0xFB2E69
-	.set	sub_FB2EB2, 0xFB2EB2
-	.set	sub_FB2EFB, 0xFB2EFB
-	.set	sub_FB2F35, 0xFB2F35
+	.set	SysExSession_RecvBody_HeaderExpected, 0xFB2C9A
+	.set	SysExSession_RecvBody_SystemPart1, 0xFB2CAD
+	.set	SysExSession_RecvBody_SystemPart2, 0xFB2CE7
+	.set	SysExSession_RecvBody_SoundOrphan, 0xFB2D21
+	.set	SysExSession_RecvBody_Stub0F, 0xFB2D72
+	.set	SysExSession_RecvBody_Stub10, 0xFB2DAC
+	.set	SysExSession_RecvBody_Stub11, 0xFB2DE6
+	.set	SysExSession_RecvBody_SequencerPart1, 0xFB2E20
+	.set	SysExSession_RecvBody_SequencerPart2, 0xFB2E69
+	.set	SysExSession_RecvBody_SequencerPart3, 0xFB2EB2
+	.set	SysExSession_RecvBody_CombinationPart1, 0xFB2EFB
+	.set	SysExSession_RecvBody_CombinationPart2, 0xFB2F35
 	.set	SysExSession_CategoryEnd, 0xFB3041
+	.set	SysExSession_CategoryEnd_WrongStep, 0xFB306C
+	.set	SysExSession_CategoryEnd_SystemPartMidi, 0xFB307F
+	.set	SysExSession_CategoryEnd_Sound, 0xFB3097
+	.set	SysExSession_CategoryEnd_Stub, 0xFB30AF
+	.set	SysExSession_CategoryEnd_Sequencer, 0xFB30C7
+	.set	SysExSession_CategoryEnd_Combination, 0xFB30DF
 	.set	SysExSession_DumpEnd, 0xFB30F7
 	.set	SysExSession_Ignore, 0xFB3230
 	.set	SysExSession_Cmd01_Nop, 0xFB3231
 	.set	SysExSession_Cmd02_Nop, 0xFB3232
 	.set	SysExSession_Cmd06_Nop, 0xFB3233
 	.set	SysExSession_Abort, 0xFB3244
-	.set	sub_FB328D, 0xFB328D
+	.set	SysExSession_AbortStep_Idle, 0xFB3277
+	.set	SysExSession_AbortStep_SystemPartMidi, 0xFB3278
+	.set	SysExSession_AbortStep_Sound, 0xFB327D
+	.set	SysExSession_AbortStep_Stub, 0xFB3282
+	.set	SysExSession_AbortStep_Sequencer, 0xFB3287
+	.set	SysExSession_AbortStep_Combination, 0xFB328C
+	.set	SysExSession_RecvBody_Sound, 0xFB328D
 	.set	sub_FB3355, 0xFB3355
 	.set	SysExCmd_TempoReceive, 0xFB33FE
 	.set	SysExCmd_ThirdRegionWrite, 0xFB3483
 	.set	SysExCmd_ThirdRegionRequest, 0xFB3495
 	.set	SysExCmd_ParamWrite, 0xFB34CA
 	.set	SysExParam_Request_DispatchGroup, 0xFB42AB
-	.set	sub_FB4B7D, 0xFB4B7D
+	.set	SysExTx_EmitStagedParams, 0xFB4B7D
+	.set	SysExTx_StagedParam_Ignore, 0xFB4BDD
+	.set	SysExTx_StagedParam_Record48, 0xFB4BDE
+	.set	SysExTx_StagedParam_Record60, 0xFB4C12
+	.set	SysExTx_StagedParam_Record70, 0xFB4C46
+	.set	SysExTx_StagedParam_Record98, 0xFB4C7A
 	.set	sub_FB4CAE, 0xFB4CAE
 	.set	sub_FB50EE, 0xFB50EE
 	.set	SysExCmd_DumpRequest_SystemPartMidi, 0xFB5122
@@ -87902,7 +87920,7 @@ T_F408F0:	jp sub_FB590A  ; -> prom_a 0x3590A
 T_F408F4:	jp sub_FB5EE9  ; -> prom_a 0x35EE9
 T_F408F8:	jp T_F408F8_Nop  ; -> prom_a 0x32022
 T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
-T_F40900:	jp sub_FB4B7D  ; -> prom_a 0x34B7D   x1
+T_F40900:	jp SysExTx_EmitStagedParams  ; -> prom_a 0x34B7D   x1
 T_F40904:	jp SysExRx_PollRing601C6E  ; -> prom_a 0x321CB   x1
 T_F40908:	jp sub_FB585E  ; -> prom_a 0x3585E   x1
 T_F4090C:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
@@ -107762,7 +107780,7 @@ PtrTable_F4F916:
 	.long SysExSession_Ignore                       ; F4F99A  [33]   -> prom_a 0xFB3230
 
 ; --------------------------------------------------------------------------
-; PtrTable_F4F99E -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
+; SysExSession_ContinuationTable -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
 ; Read by: prom_a 0xFB2C88 `add XWA,0x00f4f99e`
 ; Entry count: 18, measured by abutment: 18 x 4 = 72 bytes reaches 0xF4F9E6
 ;              exactly, which is the next address an instruction names.
@@ -107772,28 +107790,28 @@ PtrTable_F4F916:
 ;           instruction text on which it fires zero times.  The BASE is the
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
-PtrTable_F4F99E:
-	.long 0x00FB2C9A                       ; F4F99E  [0]   -> prom_a 0xFB2C9A
-	.long sub_FB2CAD                       ; F4F9A2  [1]   -> prom_a 0xFB2CAD
-	.long sub_FB2CE7                       ; F4F9A6  [2]   -> prom_a 0xFB2CE7
-	.long 0x00FB2C9A                       ; F4F9AA  [3]   -> prom_a 0xFB2C9A
-	.long sub_FB2D21                       ; F4F9AE  [4]   -> prom_a 0xFB2D21
-	.long sub_FB328D                       ; F4F9B2  [5]   -> prom_a 0xFB328D
-	.long 0x00FB2C9A                       ; F4F9B6  [6]   -> prom_a 0xFB2C9A
-	.long sub_FB2D72                       ; F4F9BA  [7]   -> prom_a 0xFB2D72
-	.long sub_FB2DAC                       ; F4F9BE  [8]   -> prom_a 0xFB2DAC
-	.long sub_FB2DE6                       ; F4F9C2  [9]   -> prom_a 0xFB2DE6
-	.long 0x00FB2C9A                       ; F4F9C6  [10]   -> prom_a 0xFB2C9A
-	.long sub_FB2E20                       ; F4F9CA  [11]   -> prom_a 0xFB2E20
-	.long sub_FB2E69                       ; F4F9CE  [12]   -> prom_a 0xFB2E69
-	.long sub_FB2EB2                       ; F4F9D2  [13]   -> prom_a 0xFB2EB2
-	.long 0x00FB2C9A                       ; F4F9D6  [14]   -> prom_a 0xFB2C9A
-	.long sub_FB2EFB                       ; F4F9DA  [15]   -> prom_a 0xFB2EFB
-	.long sub_FB2F35                       ; F4F9DE  [16]   -> prom_a 0xFB2F35
-	.long 0x00FB2C9A                       ; F4F9E2  [17]   -> prom_a 0xFB2C9A
+SysExSession_ContinuationTable:
+	.long SysExSession_RecvBody_HeaderExpected                       ; F4F99E  [0]   -> prom_a 0xFB2C9A
+	.long SysExSession_RecvBody_SystemPart1                       ; F4F9A2  [1]   -> prom_a 0xFB2CAD
+	.long SysExSession_RecvBody_SystemPart2                       ; F4F9A6  [2]   -> prom_a 0xFB2CE7
+	.long SysExSession_RecvBody_HeaderExpected                       ; F4F9AA  [3]   -> prom_a 0xFB2C9A
+	.long SysExSession_RecvBody_SoundOrphan                       ; F4F9AE  [4]   -> prom_a 0xFB2D21
+	.long SysExSession_RecvBody_Sound                       ; F4F9B2  [5]   -> prom_a 0xFB328D
+	.long SysExSession_RecvBody_HeaderExpected                       ; F4F9B6  [6]   -> prom_a 0xFB2C9A
+	.long SysExSession_RecvBody_Stub0F                       ; F4F9BA  [7]   -> prom_a 0xFB2D72
+	.long SysExSession_RecvBody_Stub10                       ; F4F9BE  [8]   -> prom_a 0xFB2DAC
+	.long SysExSession_RecvBody_Stub11                       ; F4F9C2  [9]   -> prom_a 0xFB2DE6
+	.long SysExSession_RecvBody_HeaderExpected                       ; F4F9C6  [10]   -> prom_a 0xFB2C9A
+	.long SysExSession_RecvBody_SequencerPart1                       ; F4F9CA  [11]   -> prom_a 0xFB2E20
+	.long SysExSession_RecvBody_SequencerPart2                       ; F4F9CE  [12]   -> prom_a 0xFB2E69
+	.long SysExSession_RecvBody_SequencerPart3                       ; F4F9D2  [13]   -> prom_a 0xFB2EB2
+	.long SysExSession_RecvBody_HeaderExpected                       ; F4F9D6  [14]   -> prom_a 0xFB2C9A
+	.long SysExSession_RecvBody_CombinationPart1                       ; F4F9DA  [15]   -> prom_a 0xFB2EFB
+	.long SysExSession_RecvBody_CombinationPart2                       ; F4F9DE  [16]   -> prom_a 0xFB2F35
+	.long SysExSession_RecvBody_HeaderExpected                       ; F4F9E2  [17]   -> prom_a 0xFB2C9A
 
 ; --------------------------------------------------------------------------
-; PtrTable_F4F9E6 -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
+; SysExSession_CategoryEndTable -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
 ; Read by: prom_a 0xFB3055 `add XWA,0x00f4f9e6`
 ; Entry count: 18, measured by abutment: 18 x 4 = 72 bytes reaches 0xF4FA2E
 ;              exactly, which is the next address an instruction names.
@@ -107803,28 +107821,28 @@ PtrTable_F4F99E:
 ;           instruction text on which it fires zero times.  The BASE is the
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
-PtrTable_F4F9E6:
-	.long 0x00FB306C                       ; F4F9E6  [0]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4F9EA  [1]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4F9EE  [2]   -> prom_a 0xFB306C
-	.long 0x00FB307F                       ; F4F9F2  [3]   -> prom_a 0xFB307F
-	.long 0x00FB306C                       ; F4F9F6  [4]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4F9FA  [5]   -> prom_a 0xFB306C
-	.long 0x00FB3097                       ; F4F9FE  [6]   -> prom_a 0xFB3097
-	.long 0x00FB306C                       ; F4FA02  [7]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4FA06  [8]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4FA0A  [9]   -> prom_a 0xFB306C
-	.long 0x00FB30AF                       ; F4FA0E  [10]   -> prom_a 0xFB30AF
-	.long 0x00FB306C                       ; F4FA12  [11]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4FA16  [12]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4FA1A  [13]   -> prom_a 0xFB306C
-	.long 0x00FB30C7                       ; F4FA1E  [14]   -> prom_a 0xFB30C7
-	.long 0x00FB306C                       ; F4FA22  [15]   -> prom_a 0xFB306C
-	.long 0x00FB306C                       ; F4FA26  [16]   -> prom_a 0xFB306C
-	.long 0x00FB30DF                       ; F4FA2A  [17]   -> prom_a 0xFB30DF
+SysExSession_CategoryEndTable:
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4F9E6  [0]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4F9EA  [1]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4F9EE  [2]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_SystemPartMidi                       ; F4F9F2  [3]   -> prom_a 0xFB307F
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4F9F6  [4]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4F9FA  [5]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_Sound                       ; F4F9FE  [6]   -> prom_a 0xFB3097
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA02  [7]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA06  [8]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA0A  [9]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_Stub                       ; F4FA0E  [10]   -> prom_a 0xFB30AF
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA12  [11]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA16  [12]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA1A  [13]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_Sequencer                       ; F4FA1E  [14]   -> prom_a 0xFB30C7
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA22  [15]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_WrongStep                       ; F4FA26  [16]   -> prom_a 0xFB306C
+	.long SysExSession_CategoryEnd_Combination                       ; F4FA2A  [17]   -> prom_a 0xFB30DF
 
 ; --------------------------------------------------------------------------
-; PtrTable_F4FA2E -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
+; SysExSession_AbortTable -- 18 32-bit pointers, 18 into prom_a and 0 into prom_b
 ; Read by: prom_a 0xFB3265 `add XWA,0x00f4fa2e`
 ; Entry count: 18, measured by abutment: 18 x 4 = 72 bytes reaches 0xF4FA76
 ;              exactly, which is the next address an instruction names.
@@ -107834,25 +107852,25 @@ PtrTable_F4F9E6:
 ;           instruction text on which it fires zero times.  The BASE is the
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
-PtrTable_F4FA2E:
-	.long 0x00FB3277                       ; F4FA2E  [0]   -> prom_a 0xFB3277
-	.long 0x00FB3278                       ; F4FA32  [1]   -> prom_a 0xFB3278
-	.long 0x00FB3278                       ; F4FA36  [2]   -> prom_a 0xFB3278
-	.long 0x00FB3278                       ; F4FA3A  [3]   -> prom_a 0xFB3278
-	.long 0x00FB327D                       ; F4FA3E  [4]   -> prom_a 0xFB327D
-	.long 0x00FB327D                       ; F4FA42  [5]   -> prom_a 0xFB327D
-	.long 0x00FB327D                       ; F4FA46  [6]   -> prom_a 0xFB327D
-	.long 0x00FB3282                       ; F4FA4A  [7]   -> prom_a 0xFB3282
-	.long 0x00FB3282                       ; F4FA4E  [8]   -> prom_a 0xFB3282
-	.long 0x00FB3282                       ; F4FA52  [9]   -> prom_a 0xFB3282
-	.long 0x00FB3282                       ; F4FA56  [10]   -> prom_a 0xFB3282
-	.long 0x00FB3287                       ; F4FA5A  [11]   -> prom_a 0xFB3287
-	.long 0x00FB3287                       ; F4FA5E  [12]   -> prom_a 0xFB3287
-	.long 0x00FB3287                       ; F4FA62  [13]   -> prom_a 0xFB3287
-	.long 0x00FB3287                       ; F4FA66  [14]   -> prom_a 0xFB3287
-	.long 0x00FB328C                       ; F4FA6A  [15]   -> prom_a 0xFB328C
-	.long 0x00FB328C                       ; F4FA6E  [16]   -> prom_a 0xFB328C
-	.long 0x00FB328C                       ; F4FA72  [17]   -> prom_a 0xFB328C
+SysExSession_AbortTable:
+	.long SysExSession_AbortStep_Idle                       ; F4FA2E  [0]   -> prom_a 0xFB3277
+	.long SysExSession_AbortStep_SystemPartMidi                       ; F4FA32  [1]   -> prom_a 0xFB3278
+	.long SysExSession_AbortStep_SystemPartMidi                       ; F4FA36  [2]   -> prom_a 0xFB3278
+	.long SysExSession_AbortStep_SystemPartMidi                       ; F4FA3A  [3]   -> prom_a 0xFB3278
+	.long SysExSession_AbortStep_Sound                       ; F4FA3E  [4]   -> prom_a 0xFB327D
+	.long SysExSession_AbortStep_Sound                       ; F4FA42  [5]   -> prom_a 0xFB327D
+	.long SysExSession_AbortStep_Sound                       ; F4FA46  [6]   -> prom_a 0xFB327D
+	.long SysExSession_AbortStep_Stub                       ; F4FA4A  [7]   -> prom_a 0xFB3282
+	.long SysExSession_AbortStep_Stub                       ; F4FA4E  [8]   -> prom_a 0xFB3282
+	.long SysExSession_AbortStep_Stub                       ; F4FA52  [9]   -> prom_a 0xFB3282
+	.long SysExSession_AbortStep_Stub                       ; F4FA56  [10]   -> prom_a 0xFB3282
+	.long SysExSession_AbortStep_Sequencer                       ; F4FA5A  [11]   -> prom_a 0xFB3287
+	.long SysExSession_AbortStep_Sequencer                       ; F4FA5E  [12]   -> prom_a 0xFB3287
+	.long SysExSession_AbortStep_Sequencer                       ; F4FA62  [13]   -> prom_a 0xFB3287
+	.long SysExSession_AbortStep_Sequencer                       ; F4FA66  [14]   -> prom_a 0xFB3287
+	.long SysExSession_AbortStep_Combination                       ; F4FA6A  [15]   -> prom_a 0xFB328C
+	.long SysExSession_AbortStep_Combination                       ; F4FA6E  [16]   -> prom_a 0xFB328C
+	.long SysExSession_AbortStep_Combination                       ; F4FA72  [17]   -> prom_a 0xFB328C
 
 ; --------------------------------------------------------------------------
 ; MidiSysEx_Tail3Init -- not a pointer: three bytes that prom_a's sub_FB3355 copies into its frame
@@ -107932,7 +107950,7 @@ PtrTable_F4FB1C:
 	.long 0x00FB3E3E                       ; F4FB34  [6]   -> prom_a 0xFB3E3E
 
 ; --------------------------------------------------------------------------
-; PtrTable_F4FB38 -- 192 32-bit pointers, 192 into prom_a and 0 into prom_b
+; SysExTx_StagedParamHandlers -- 192 32-bit pointers, 192 into prom_a and 0 into prom_b
 ; Read by: prom_a 0xFB4BC5 `add XWA,0x00f4fb38`
 ; Entry count: 192, measured by abutment: 192 x 4 = 768 bytes reaches
 ;              0xF4FE38 exactly, which is the next address an instruction
@@ -107943,204 +107961,204 @@ PtrTable_F4FB1C:
 ;           instruction text on which it fires zero times.  The BASE is the
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
-PtrTable_F4FB38:
-	.long 0x00FB4BDD                       ; F4FB38  [0]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB3C  [1]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB40  [2]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB44  [3]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB48  [4]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB4C  [5]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB50  [6]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB54  [7]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB58  [8]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB5C  [9]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB60  [10]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB64  [11]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB68  [12]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB6C  [13]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB70  [14]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB74  [15]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB78  [16]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB7C  [17]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB80  [18]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB84  [19]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB88  [20]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB8C  [21]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB90  [22]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB94  [23]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB98  [24]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FB9C  [25]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBA0  [26]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBA4  [27]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBA8  [28]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBAC  [29]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBB0  [30]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBB4  [31]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBB8  [32]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBBC  [33]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBC0  [34]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBC4  [35]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBC8  [36]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBCC  [37]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBD0  [38]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBD4  [39]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBD8  [40]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBDC  [41]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBE0  [42]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBE4  [43]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBE8  [44]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBEC  [45]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBF0  [46]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBF4  [47]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBF8  [48]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FBFC  [49]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC00  [50]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC04  [51]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC08  [52]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC0C  [53]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC10  [54]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC14  [55]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC18  [56]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC1C  [57]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC20  [58]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC24  [59]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC28  [60]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC2C  [61]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC30  [62]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC34  [63]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC38  [64]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC3C  [65]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC40  [66]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC44  [67]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC48  [68]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC4C  [69]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC50  [70]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC54  [71]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDE                       ; F4FC58  [72]   -> prom_a 0xFB4BDE
-	.long 0x00FB4BDD                       ; F4FC5C  [73]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC60  [74]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC64  [75]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC68  [76]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC6C  [77]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC70  [78]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC74  [79]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC78  [80]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC7C  [81]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC80  [82]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC84  [83]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC88  [84]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC8C  [85]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC90  [86]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC94  [87]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC98  [88]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FC9C  [89]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCA0  [90]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCA4  [91]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCA8  [92]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCAC  [93]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCB0  [94]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCB4  [95]   -> prom_a 0xFB4BDD
-	.long 0x00FB4C12                       ; F4FCB8  [96]   -> prom_a 0xFB4C12
-	.long 0x00FB4BDD                       ; F4FCBC  [97]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCC0  [98]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCC4  [99]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCC8  [100]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCCC  [101]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCD0  [102]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCD4  [103]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCD8  [104]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCDC  [105]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCE0  [106]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCE4  [107]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCE8  [108]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCEC  [109]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCF0  [110]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FCF4  [111]   -> prom_a 0xFB4BDD
-	.long 0x00FB4C46                       ; F4FCF8  [112]   -> prom_a 0xFB4C46
-	.long 0x00FB4BDD                       ; F4FCFC  [113]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD00  [114]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD04  [115]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD08  [116]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD0C  [117]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD10  [118]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD14  [119]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD18  [120]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD1C  [121]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD20  [122]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD24  [123]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD28  [124]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD2C  [125]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD30  [126]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD34  [127]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD38  [128]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD3C  [129]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD40  [130]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD44  [131]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD48  [132]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD4C  [133]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD50  [134]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD54  [135]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD58  [136]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD5C  [137]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD60  [138]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD64  [139]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD68  [140]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD6C  [141]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD70  [142]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD74  [143]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD78  [144]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD7C  [145]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD80  [146]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD84  [147]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD88  [148]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD8C  [149]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD90  [150]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FD94  [151]   -> prom_a 0xFB4BDD
-	.long 0x00FB4C7A                       ; F4FD98  [152]   -> prom_a 0xFB4C7A
-	.long 0x00FB4BDD                       ; F4FD9C  [153]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDA0  [154]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDA4  [155]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDA8  [156]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDAC  [157]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDB0  [158]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDB4  [159]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDB8  [160]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDBC  [161]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDC0  [162]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDC4  [163]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDC8  [164]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDCC  [165]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDD0  [166]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDD4  [167]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDD8  [168]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDDC  [169]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDE0  [170]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDE4  [171]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDE8  [172]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDEC  [173]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDF0  [174]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FDF4  [175]   -> prom_a 0xFB4BDD
+SysExTx_StagedParamHandlers:
+	.long SysExTx_StagedParam_Ignore                       ; F4FB38  [0]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB3C  [1]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB40  [2]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB44  [3]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB48  [4]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB4C  [5]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB50  [6]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB54  [7]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB58  [8]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB5C  [9]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB60  [10]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB64  [11]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB68  [12]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB6C  [13]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB70  [14]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB74  [15]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB78  [16]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB7C  [17]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB80  [18]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB84  [19]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB88  [20]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB8C  [21]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB90  [22]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB94  [23]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB98  [24]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FB9C  [25]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBA0  [26]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBA4  [27]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBA8  [28]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBAC  [29]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBB0  [30]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBB4  [31]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBB8  [32]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBBC  [33]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBC0  [34]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBC4  [35]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBC8  [36]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBCC  [37]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBD0  [38]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBD4  [39]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBD8  [40]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBDC  [41]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBE0  [42]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBE4  [43]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBE8  [44]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBEC  [45]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBF0  [46]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBF4  [47]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBF8  [48]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FBFC  [49]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC00  [50]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC04  [51]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC08  [52]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC0C  [53]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC10  [54]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC14  [55]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC18  [56]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC1C  [57]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC20  [58]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC24  [59]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC28  [60]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC2C  [61]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC30  [62]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC34  [63]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC38  [64]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC3C  [65]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC40  [66]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC44  [67]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC48  [68]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC4C  [69]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC50  [70]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC54  [71]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Record48                       ; F4FC58  [72]   -> prom_a 0xFB4BDE
+	.long SysExTx_StagedParam_Ignore                       ; F4FC5C  [73]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC60  [74]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC64  [75]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC68  [76]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC6C  [77]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC70  [78]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC74  [79]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC78  [80]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC7C  [81]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC80  [82]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC84  [83]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC88  [84]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC8C  [85]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC90  [86]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC94  [87]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC98  [88]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FC9C  [89]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCA0  [90]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCA4  [91]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCA8  [92]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCAC  [93]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCB0  [94]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCB4  [95]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Record60                       ; F4FCB8  [96]   -> prom_a 0xFB4C12
+	.long SysExTx_StagedParam_Ignore                       ; F4FCBC  [97]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCC0  [98]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCC4  [99]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCC8  [100]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCCC  [101]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCD0  [102]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCD4  [103]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCD8  [104]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCDC  [105]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCE0  [106]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCE4  [107]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCE8  [108]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCEC  [109]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCF0  [110]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FCF4  [111]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Record70                       ; F4FCF8  [112]   -> prom_a 0xFB4C46
+	.long SysExTx_StagedParam_Ignore                       ; F4FCFC  [113]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD00  [114]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD04  [115]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD08  [116]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD0C  [117]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD10  [118]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD14  [119]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD18  [120]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD1C  [121]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD20  [122]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD24  [123]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD28  [124]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD2C  [125]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD30  [126]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD34  [127]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD38  [128]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD3C  [129]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD40  [130]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD44  [131]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD48  [132]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD4C  [133]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD50  [134]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD54  [135]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD58  [136]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD5C  [137]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD60  [138]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD64  [139]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD68  [140]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD6C  [141]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD70  [142]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD74  [143]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD78  [144]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD7C  [145]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD80  [146]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD84  [147]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD88  [148]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD8C  [149]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD90  [150]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FD94  [151]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Record98                       ; F4FD98  [152]   -> prom_a 0xFB4C7A
+	.long SysExTx_StagedParam_Ignore                       ; F4FD9C  [153]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDA0  [154]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDA4  [155]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDA8  [156]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDAC  [157]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDB0  [158]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDB4  [159]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDB8  [160]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDBC  [161]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDC0  [162]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDC4  [163]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDC8  [164]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDCC  [165]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDD0  [166]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDD4  [167]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDD8  [168]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDDC  [169]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDE0  [170]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDE4  [171]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDE8  [172]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDEC  [173]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDF0  [174]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDF4  [175]   -> prom_a 0xFB4BDD
 	.long sub_FB4CAE                       ; F4FDF8  [176]   -> prom_a 0xFB4CAE
-	.long 0x00FB4BDD                       ; F4FDFC  [177]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE00  [178]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE04  [179]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE08  [180]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE0C  [181]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE10  [182]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE14  [183]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE18  [184]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE1C  [185]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE20  [186]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE24  [187]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE28  [188]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE2C  [189]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE30  [190]   -> prom_a 0xFB4BDD
-	.long 0x00FB4BDD                       ; F4FE34  [191]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FDFC  [177]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE00  [178]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE04  [179]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE08  [180]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE0C  [181]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE10  [182]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE14  [183]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE18  [184]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE1C  [185]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE20  [186]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE24  [187]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE28  [188]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE2C  [189]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE30  [190]   -> prom_a 0xFB4BDD
+	.long SysExTx_StagedParam_Ignore                       ; F4FE34  [191]   -> prom_a 0xFB4BDD
 
 ; --- 0xF4FE38-0xF4FF60  data (297 bytes) ---
 ; ==========================================================================
 ; 0xF4FE38-0xF4FF60 -- five objects, typed 2026-09-25 (lane promb).  Until
-;   then these 297 bytes were one untyped `.byte` run after PtrTable_F4FB38,
+;   then these 297 bytes were one untyped `.byte` run after SysExTx_StagedParamHandlers,
 ;   and the census counted them as part of that table.
 ; ==========================================================================
 

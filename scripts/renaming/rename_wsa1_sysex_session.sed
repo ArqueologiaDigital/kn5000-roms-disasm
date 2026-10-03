@@ -1,0 +1,26 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bPtrTable_F4F99E\b/SysExSession_ContinuationTable/g
+s/\bPtrTable_F4F9E6\b/SysExSession_CategoryEndTable/g
+s/\bPtrTable_F4FA2E\b/SysExSession_AbortTable/g
+s/\bPtrTable_F4FB38\b/SysExTx_StagedParamHandlers/g
+s/\bsub_FB2CAD\b/SysExSession_RecvBody_SystemPart1/g
+s/\bsub_FB2CE7\b/SysExSession_RecvBody_SystemPart2/g
+s/\bsub_FB2D21\b/SysExSession_RecvBody_SoundOrphan/g
+s/\bsub_FB328D\b/SysExSession_RecvBody_Sound/g
+s/\bsub_FB2D72\b/SysExSession_RecvBody_Stub0F/g
+s/\bsub_FB2DAC\b/SysExSession_RecvBody_Stub10/g
+s/\bsub_FB2DE6\b/SysExSession_RecvBody_Stub11/g
+s/\bsub_FB2E20\b/SysExSession_RecvBody_SequencerPart1/g
+s/\bsub_FB2E69\b/SysExSession_RecvBody_SequencerPart2/g
+s/\bsub_FB2EB2\b/SysExSession_RecvBody_SequencerPart3/g
+s/\bsub_FB2EFB\b/SysExSession_RecvBody_CombinationPart1/g
+s/\bsub_FB2F35\b/SysExSession_RecvBody_CombinationPart2/g
+s/\bsub_FB3251\b/SysExSession_AbortByStep/g
+s/\bsub_FB7EA8\b/SysExSession_OnAbort_SystemPartMidi/g
+s/\bsub_FB7ED2\b/SysExSession_OnAbort_Sound/g
+s/\bsub_FB7EE5\b/SysExSession_OnAbort_Sequencer/g
+s/\bsub_FB72B5\b/SysExRx_UnpackBody/g
+s/\bsub_FB7365\b/SysExRx_UnpackBodyToBlock/g
+s/\bsub_FB741A\b/SysExRx_SetRunTimeSize/g
+s/\bsub_FB4B7D\b/SysExTx_EmitStagedParams/g
+s/\bsub_FB7270\b/StagedQueue_ReadRecord/g

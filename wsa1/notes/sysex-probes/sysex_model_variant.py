@@ -245,7 +245,7 @@ assert a(0xFB2593, 2) == bytes([0x66, 0x0C])                  # jr Z,+12 = ret
 # ... and the three receive handlers skip only the block store, so the
 # message is still parsed and acknowledged.  The SYSTEM,PART & MIDI handler
 # calls the same store unconditionally.
-STORE = bytes([0x1D, 0xB5, 0x72, 0xFB])                       # call sub_FB72B5
+STORE = bytes([0x1D, 0xB5, 0x72, 0xFB])                       # call SysExRx_UnpackBody
 assert a(0xFB2E44, 4) == STORE and a(0xFB2CC0, 4) == STORE
 
 # the SEQUENCER category is reachable three ways, and all three land on the

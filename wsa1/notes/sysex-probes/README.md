@@ -252,7 +252,7 @@ Both load bases are asserted first, as above.
   side used. Nothing anywhere decodes the address arithmetically.
 * **The one field that IS a number** is SEQUENCER part 3's size. The
   transmit encoder (`SysExTx_AppendRemainingSize`) splits it `>>14, >>7, >>0` masked to seven
-  bits; the receive decoder (`sub_FB741A`) rebuilds it `<<14, <<7, <<0` from
+  bits; the receive decoder (`SysExRx_SetRunTimeSize`) rebuilds it `<<14, <<7, <<0` from
   parse-record fields `0x0C/0x0D/0x0E`. Both shift literals are asserted.
   The value itself is `0x10 ×` the sequencer's own memory-use counter
   (`mul XBC,(0x603452)` at `0xFB7757`), capped by the static extent 0x50C00.
@@ -786,7 +786,7 @@ mismatches), so the instruction boundaries are the tree's, not a guess.
 * **0x0F / 0x10 / 0x11 are a whole three-part category that was stubbed out.**
   They demand steps 0 / 8 / 9 where SEQUENCER demands 0 / 12 / 13, they arm
   continuation slots 7 / 8 / 9, 0x11 calls the same run-time length decoder
-  `sub_FB741A` that SEQUENCER part 3 does — and every routine that would move
+  `SysExRx_SetRunTimeSize` that SEQUENCER part 3 does — and every routine that would move
   data is a single `ret`: `0xFB753D`, `0xFB766C`, `0xFB766D`, `0xFB766E`,
   the entry hook `0xFB7EE3` and the error recovery `0xFB7EE4`. Each stub sits
   one byte before a real routine of the same shape, which is why the script
@@ -841,7 +841,7 @@ of range, and to the sender's own prefill `08 07 F7`.
 
 ### Traps
 
-1. `sub_FB741A` appears in the call list of 0x11 and of 0x14 and is **not** a
+1. `SysExRx_SetRunTimeSize` appears in the call list of 0x11 and of 0x14 and is **not** a
    descriptor writer — it is the run-time length decoder. Asserting that
    every routine 0x11 calls is a stub fails on it.
 2. A routine that is "a single `ret`" must be tested by its **entry byte**,
@@ -968,7 +968,7 @@ Both load bases are asserted by content first: prom_b must hold
   receive handlers, the panel toggle, the boot restore and the SMF loader
   all post — 20 sites in all, every one of them carrying the same record id
   `0x91` and byte index `0x03`. It is NOT gated by the EXCLUSIVE transmit
-  filter (`(0x7F38)` bit 3), which guards only `sub_FB4B7D`; it IS dropped
+  filter (`(0x7F38)` bit 3), which guards only `SysExTx_EmitStagedParams`; it IS dropped
   while `sub_FB590A` is already inside itself (bit 0 of `(0x60F01F)`,
   set at `0xFB5929` and cleared at `0xFB5958`).
 * **★★★ Where GM sits in a dump.** `SysExXfer_SetPart_SystemPart2` sizes SYSTEM,PART & MIDI

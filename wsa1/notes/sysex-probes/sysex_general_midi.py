@@ -38,7 +38,7 @@ WHAT IT ESTABLISHES (all of it recomputed from the instruction bytes)
      internal event class 0x91 -- i.e. from every GM state change, whatever
      caused it.  It is NOT gated by the EXCLUSIVE transmit filter
      ((0x7F38) bit 3), which gates only the OTHER parameter-change
-     transmitter, `sub_FB4B7D`.
+     transmitter, `SysExTx_EmitStagedParams`.
 
   4. ...except that a change that came FROM the wire is not echoed: the two
      receive handlers set bit 7 of (0x60F020) and `sub_FB5F2E` returns at

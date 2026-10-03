@@ -2030,12 +2030,12 @@
 	.set PtrTable_F4F800,                         0x00F4F800
 	.set PtrTable_F4F888,                         0x00F4F888
 	.set PtrTable_F4F916,                         0x00F4F916
-	.set PtrTable_F4F99E,                         0x00F4F99E
-	.set PtrTable_F4F9E6,                         0x00F4F9E6
-	.set PtrTable_F4FA2E,                         0x00F4FA2E
+	.set SysExSession_ContinuationTable,                         0x00F4F99E
+	.set SysExSession_CategoryEndTable,                         0x00F4F9E6
+	.set SysExSession_AbortTable,                         0x00F4FA2E
 	.set MidiSysEx_Tail3Init,                     0x00F4FA76
 	.set PtrTable_F4FB1C,                         0x00F4FB1C
-	.set PtrTable_F4FB38,                         0x00F4FB38
+	.set SysExTx_StagedParamHandlers,                         0x00F4FB38
 	.set SysExStatus_MessageIdMap,                         0x00F511C7
 	.set Pointer_F51E20,                          0x00F51E20
 	.set Pointer_F51E24,                          0x00F51E24
@@ -75649,7 +75649,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 ; ---------------------------------------------------------------------
 ; ParamModule_PhaseVector -- this module's boot phase vector, five `jp` slots and a `ret`.
 ; Evidence: ModuleInitDirectory_F82641[11] = T_F40770, whose word in prom_b is `.long ParamModule_PhaseVector`;
-;          the walker calls vector + phase.  sub_FB7EA8 also reads that word, adds 8 and jumps: slot 2.
+;          the walker calls vector + phase.  SysExSession_OnAbort_SystemPartMidi also reads that word, adds 8 and jumps: slot 2.
 ;          Was decoded as `tset 0,(0x2a1b76)` + `swi 2`, the copy's cut-off instruction run on into it.
 ; ---------------------------------------------------------------------
 ParamModule_PhaseVector:
@@ -87493,7 +87493,7 @@ SysExSession_RecvSystemPart1:
 	lda xbc, (0x60fd18:24)                               ; FB2999  f2 18 fd 60 31
 	push XBC                                             ; FB299E  39
 	call SysExXfer_SetPart_SystemPart1                                      ; FB299F  1d ba 75 fb
-	calr sub_FB2CAD                                      ; FB29A3  1e 07 03
+	calr SysExSession_RecvBody_SystemPart1                                      ; FB29A3  1e 07 03
 	jr .LFB29B8                                          ; FB29A6  68 10
 .LFB29A8:
 	pushw 0x19                                           ; FB29A8  0b 19 00
@@ -87516,7 +87516,7 @@ SysExSession_RecvSystemPart2:
 	lda xbc, (0x60fd18:24)                               ; FB29CE  f2 18 fd 60 31
 	push XBC                                             ; FB29D3  39
 	call SysExXfer_SetPart_SystemPart2                                      ; FB29D4  1d e4 75 fb
-	calr sub_FB2CE7                                      ; FB29D8  1e 0c 03
+	calr SysExSession_RecvBody_SystemPart2                                      ; FB29D8  1e 0c 03
 	pop XIY                                              ; FB29DB  5d
 	jr .LFB29F0                                          ; FB29DC  68 12
 .LFB29DE:
@@ -87540,7 +87540,7 @@ SysExSession_RecvSoundOrphan:
 	lda xbc, (0x60fd18:24)                               ; FB2A04  f2 18 fd 60 31
 	push XBC                                             ; FB2A09  39
 	call SysExXfer_SetPart_SoundOrphan                                      ; FB2A0A  1d 29 76 fb
-	calr sub_FB2D21                                      ; FB2A0E  1e 10 03
+	calr SysExSession_RecvBody_SoundOrphan                                      ; FB2A0E  1e 10 03
 	pop XIY                                              ; FB2A11  5d
 	jr .LFB2A26                                          ; FB2A12  68 12
 .LFB2A14:
@@ -87573,7 +87573,7 @@ SysExSession_RecvSound:
 	call SysExXfer_SetPart_SoundBlock                                      ; FB2A55  1d 49 76 fb
 	push XIX                                             ; FB2A59  3c
 	call sub_FB7A63                                      ; FB2A5A  1d 63 7a fb
-	calr sub_FB328D                                      ; FB2A5E  1e 2c 08
+	calr SysExSession_RecvBody_Sound                                      ; FB2A5E  1e 2c 08
 	inc 8,XSP                                            ; FB2A61  ef 60
 	inc 8,XSP                                            ; FB2A63  ef 60
 	jr .LFB2A79                                          ; FB2A65  68 12
@@ -87603,7 +87603,7 @@ SysExSession_RecvStub0F:
 	lda xbc, (0x60fd18:24)                               ; FB2A9C  f2 18 fd 60 31
 	push XBC                                             ; FB2AA1  39
 	call sub_FB28BE_Nop2                                      ; FB2AA2  1d 6c 76 fb
-	calr sub_FB2D72                                      ; FB2AA6  1e c9 02
+	calr SysExSession_RecvBody_Stub0F                                      ; FB2AA6  1e c9 02
 	jr .LFB2ABB                                          ; FB2AA9  68 10
 .LFB2AAB:
 	pushw 0x1b                                           ; FB2AAB  0b 1b 00
@@ -87626,7 +87626,7 @@ SysExSession_RecvStub10:
 	lda xbc, (0x60fd18:24)                               ; FB2AD2  f2 18 fd 60 31
 	push XBC                                             ; FB2AD7  39
 	call sub_FB28BE_Nop3                                      ; FB2AD8  1d 6d 76 fb
-	calr sub_FB2DAC                                      ; FB2ADC  1e cd 02
+	calr SysExSession_RecvBody_Stub10                                      ; FB2ADC  1e cd 02
 	pop XIY                                              ; FB2ADF  5d
 	jr .LFB2AF4                                          ; FB2AE0  68 12
 .LFB2AE2:
@@ -87650,8 +87650,8 @@ SysExSession_RecvStub11:
 	lda xbc, (0x60fd18:24)                               ; FB2B09  f2 18 fd 60 31
 	push XBC                                             ; FB2B0E  39
 	call sub_FB28BE_Nop4                                      ; FB2B0F  1d 6e 76 fb
-	call sub_FB741A                                      ; FB2B13  1d 1a 74 fb
-	calr sub_FB2DE6                                      ; FB2B17  1e cc 02
+	call SysExRx_SetRunTimeSize                                      ; FB2B13  1d 1a 74 fb
+	calr SysExSession_RecvBody_Stub11                                      ; FB2B17  1e cc 02
 	pop XIY                                              ; FB2B1A  5d
 	jr .LFB2B2F                                          ; FB2B1B  68 12
 .LFB2B1D:
@@ -87678,7 +87678,7 @@ SysExSession_RecvSequencerPart1:
 	lda xbc, (0x60fd18:24)                               ; FB2B4D  f2 18 fd 60 31
 	push XBC                                             ; FB2B52  39
 	call SysExXfer_SetPart_Sequencer1                                      ; FB2B53  1d 6f 76 fb
-	calr sub_FB2E20                                      ; FB2B57  1e c6 02
+	calr SysExSession_RecvBody_SequencerPart1                                      ; FB2B57  1e c6 02
 	jr .LFB2B6C                                          ; FB2B5A  68 10
 .LFB2B5C:
 	pushw 0x1c                                           ; FB2B5C  0b 1c 00
@@ -87701,7 +87701,7 @@ SysExSession_RecvSequencerPart2:
 	lda xbc, (0x60fd18:24)                               ; FB2B83  f2 18 fd 60 31
 	push XBC                                             ; FB2B88  39
 	call SysExXfer_SetPart_Sequencer2                                      ; FB2B89  1d 92 76 fb
-	calr sub_FB2E69                                      ; FB2B8D  1e d9 02
+	calr SysExSession_RecvBody_SequencerPart2                                      ; FB2B8D  1e d9 02
 	pop XIY                                              ; FB2B90  5d
 	jr .LFB2BA5                                          ; FB2B91  68 12
 .LFB2B93:
@@ -87725,8 +87725,8 @@ SysExSession_RecvSequencerPart3:
 	lda xbc, (0x60fd18:24)                               ; FB2BBA  f2 18 fd 60 31
 	push XBC                                             ; FB2BBF  39
 	call SysExXfer_SetPart_Sequencer3                                      ; FB2BC0  1d b5 76 fb
-	call sub_FB741A                                      ; FB2BC4  1d 1a 74 fb
-	calr sub_FB2EB2                                      ; FB2BC8  1e e7 02
+	call SysExRx_SetRunTimeSize                                      ; FB2BC4  1d 1a 74 fb
+	calr SysExSession_RecvBody_SequencerPart3                                      ; FB2BC8  1e e7 02
 	pop XIY                                              ; FB2BCB  5d
 	jr .LFB2BE0                                          ; FB2BCC  68 12
 .LFB2BCE:
@@ -87759,7 +87759,7 @@ SysExSession_RecvCombinationPart1:
 	call SysExXfer_SetPart_Combination1                                      ; FB2C0F  1d f2 76 fb
 	push XIX                                             ; FB2C13  3c
 	call sub_FB7A63                                      ; FB2C14  1d 63 7a fb
-	calr sub_FB2EFB                                      ; FB2C18  1e e0 02
+	calr SysExSession_RecvBody_CombinationPart1                                      ; FB2C18  1e e0 02
 	inc 8,XSP                                            ; FB2C1B  ef 60
 	inc 8,XSP                                            ; FB2C1D  ef 60
 	jr .LFB2C33                                          ; FB2C1F  68 12
@@ -87785,7 +87785,7 @@ SysExSession_RecvCombinationPart2:
 	lda xbc, (0x60fd18:24)                               ; FB2C49  f2 18 fd 60 31
 	push XBC                                             ; FB2C4E  39
 	call SysExXfer_SetPart_CombinationBlock                                      ; FB2C4F  1d 22 77 fb
-	calr sub_FB2F35                                      ; FB2C53  1e df 02
+	calr SysExSession_RecvBody_CombinationPart2                                      ; FB2C53  1e df 02
 	pop XIY                                              ; FB2C56  5d
 	jr .LFB2C6B                                          ; FB2C57  68 12
 .LFB2C59:
@@ -87810,7 +87810,7 @@ SysExSession_Continuation:
 	jr nc, .LFB2C98                                      ; FB2C81  6f 15
 	mul A,0x04                                           ; FB2C83  c9 08 04
 	extz XWA                                             ; FB2C86  e8 12
-	add XWA,PtrTable_F4F99E                              ; FB2C88  e8 c8 9e f9 f4 00
+	add XWA,SysExSession_ContinuationTable                              ; FB2C88  e8 c8 9e f9 f4 00
 	ld XBC,(XWA)                                         ; FB2C8E  a0 21
 	lda xiy, (.LFB2C98:24)                               ; FB2C90  f2 98 2c fb 35
 	push XIY                                             ; FB2C95  3d
@@ -87818,6 +87818,9 @@ SysExSession_Continuation:
 .LFB2C98:
 	popw hl                                              ; FB2C98  4b
 	ret                                                  ; FB2C99  0e
+; SysExSession_RecvBody_HeaderExpected: SysExSession_ContinuationTable slots 0, 3, 6, 10, 14, 17 -- a header is due,
+;   so an F0 50 7E continuation is status 0x13.
+SysExSession_RecvBody_HeaderExpected:
 	pushw 0x13                                           ; FB2C9A  0b 13 00
 	pushw 0x04                                           ; FB2C9D  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2CA0  e2 d8 fc 60 21
@@ -87825,7 +87828,8 @@ SysExSession_Continuation:
 	call U8Rec16_SetField                                      ; FB2CA6  1d 19 62 fb
 	inc 8,XSP                                            ; FB2CAA  ef 60
 	ret                                                  ; FB2CAC  0e
-sub_FB2CAD:
+; SysExSession_RecvBody_SystemPart1: step 1; SysExRx_UnpackBody; on the last frame (flag, field 15, = 0) step 2.
+SysExSession_RecvBody_SystemPart1:
 	push XIX                                             ; FB2CAD  3c
 	lda xix, (0x60fcd8:24)                               ; FB2CAE  f2 d8 fc 60 34
 	pushw 0x01                                           ; FB2CB3  0b 01 00
@@ -87833,7 +87837,7 @@ sub_FB2CAD:
 	ld XBC,(XIX)                                         ; FB2CB9  a4 21
 	push XBC                                             ; FB2CBB  39
 	call U8Rec16_SetField                                      ; FB2CBC  1d 19 62 fb
-	call sub_FB72B5                                      ; FB2CC0  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2CC0  1d b5 72 fb
 	pushw 0x0f                                           ; FB2CC4  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2CC7  a4 21
 	push XBC                                             ; FB2CC9  39
@@ -87851,7 +87855,8 @@ sub_FB2CAD:
 .LFB2CE5:
 	pop XIX                                              ; FB2CE5  5c
 	ret                                                  ; FB2CE6  0e
-sub_FB2CE7:
+; SysExSession_RecvBody_SystemPart2: step 2; SysExRx_UnpackBody; on the last frame step 3 (a header is next).
+SysExSession_RecvBody_SystemPart2:
 	push XIX                                             ; FB2CE7  3c
 	lda xix, (0x60fcd8:24)                               ; FB2CE8  f2 d8 fc 60 34
 	pushw 0x02                                           ; FB2CED  0b 02 00
@@ -87859,7 +87864,7 @@ sub_FB2CE7:
 	ld XBC,(XIX)                                         ; FB2CF3  a4 21
 	push XBC                                             ; FB2CF5  39
 	call U8Rec16_SetField                                      ; FB2CF6  1d 19 62 fb
-	call sub_FB72B5                                      ; FB2CFA  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2CFA  1d b5 72 fb
 	pushw 0x0f                                           ; FB2CFE  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2D01  a4 21
 	push XBC                                             ; FB2D03  39
@@ -87877,7 +87882,8 @@ sub_FB2CE7:
 .LFB2D1F:
 	pop XIX                                              ; FB2D1F  5c
 	ret                                                  ; FB2D20  0e
-sub_FB2D21:
+; SysExSession_RecvBody_SoundOrphan: step 4, the receive half of the uncalled 0xFB248A.
+SysExSession_RecvBody_SoundOrphan:
 	push XIX                                             ; FB2D21  3c
 	lda xix, (0x60fcd8:24)                               ; FB2D22  f2 d8 fc 60 34
 	pushw 0x04                                           ; FB2D27  0b 04 00
@@ -87885,7 +87891,7 @@ sub_FB2D21:
 	ld XBC,(XIX)                                         ; FB2D2D  a4 21
 	push XBC                                             ; FB2D2F  39
 	call U8Rec16_SetField                                      ; FB2D30  1d 19 62 fb
-	call sub_FB72B5                                      ; FB2D34  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2D34  1d b5 72 fb
 	pushw 0x0f                                           ; FB2D38  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2D3B  a4 21
 	push XBC                                             ; FB2D3D  39
@@ -87909,7 +87915,8 @@ sub_FB2D21:
 .LFB2D70:
 	pop XIX                                              ; FB2D70  5c
 	ret                                                  ; FB2D71  0e
-sub_FB2D72:
+; SysExSession_RecvBody_Stub0F: step 7 of the stubbed-out category (SysExSession_RecvStub0F).
+SysExSession_RecvBody_Stub0F:
 	push XIX                                             ; FB2D72  3c
 	lda xix, (0x60fcd8:24)                               ; FB2D73  f2 d8 fc 60 34
 	pushw 0x07                                           ; FB2D78  0b 07 00
@@ -87917,7 +87924,7 @@ sub_FB2D72:
 	ld XBC,(XIX)                                         ; FB2D7E  a4 21
 	push XBC                                             ; FB2D80  39
 	call U8Rec16_SetField                                      ; FB2D81  1d 19 62 fb
-	call sub_FB72B5                                      ; FB2D85  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2D85  1d b5 72 fb
 	pushw 0x0f                                           ; FB2D89  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2D8C  a4 21
 	push XBC                                             ; FB2D8E  39
@@ -87935,7 +87942,8 @@ sub_FB2D72:
 .LFB2DAA:
 	pop XIX                                              ; FB2DAA  5c
 	ret                                                  ; FB2DAB  0e
-sub_FB2DAC:
+; SysExSession_RecvBody_Stub10: step 8, as SysExSession_RecvBody_Stub0F.
+SysExSession_RecvBody_Stub10:
 	push XIX                                             ; FB2DAC  3c
 	lda xix, (0x60fcd8:24)                               ; FB2DAD  f2 d8 fc 60 34
 	pushw 0x08                                           ; FB2DB2  0b 08 00
@@ -87943,7 +87951,7 @@ sub_FB2DAC:
 	ld XBC,(XIX)                                         ; FB2DB8  a4 21
 	push XBC                                             ; FB2DBA  39
 	call U8Rec16_SetField                                      ; FB2DBB  1d 19 62 fb
-	call sub_FB72B5                                      ; FB2DBF  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2DBF  1d b5 72 fb
 	pushw 0x0f                                           ; FB2DC3  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2DC6  a4 21
 	push XBC                                             ; FB2DC8  39
@@ -87961,7 +87969,8 @@ sub_FB2DAC:
 .LFB2DE4:
 	pop XIX                                              ; FB2DE4  5c
 	ret                                                  ; FB2DE5  0e
-sub_FB2DE6:
+; SysExSession_RecvBody_Stub11: step 9, as SysExSession_RecvBody_Stub0F.
+SysExSession_RecvBody_Stub11:
 	push XIX                                             ; FB2DE6  3c
 	lda xix, (0x60fcd8:24)                               ; FB2DE7  f2 d8 fc 60 34
 	pushw 0x09                                           ; FB2DEC  0b 09 00
@@ -87969,7 +87978,7 @@ sub_FB2DE6:
 	ld XBC,(XIX)                                         ; FB2DF2  a4 21
 	push XBC                                             ; FB2DF4  39
 	call U8Rec16_SetField                                      ; FB2DF5  1d 19 62 fb
-	call sub_FB72B5                                      ; FB2DF9  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2DF9  1d b5 72 fb
 	pushw 0x0f                                           ; FB2DFD  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2E00  a4 21
 	push XBC                                             ; FB2E02  39
@@ -87987,7 +87996,8 @@ sub_FB2DE6:
 .LFB2E1E:
 	pop XIX                                              ; FB2E1E  5c
 	ret                                                  ; FB2E1F  0e
-sub_FB2E20:
+; SysExSession_RecvBody_SequencerPart1: step 0x0B; SysEx_FeatureWordForVariant(3), SysExRx_UnpackBody.
+SysExSession_RecvBody_SequencerPart1:
 	push XIX                                             ; FB2E20  3c
 	lda xix, (0x60fcd8:24)                               ; FB2E21  f2 d8 fc 60 34
 	pushw 0x0b                                           ; FB2E26  0b 0b 00
@@ -88001,7 +88011,7 @@ sub_FB2E20:
 	inc 2,XSP                                            ; FB2E3C  ef 62
 	cp WA,0xffff                                         ; FB2E3E  d8 cf ff ff
 	jr z, .LFB2E48                                       ; FB2E42  66 04
-	call sub_FB72B5                                      ; FB2E44  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2E44  1d b5 72 fb
 .LFB2E48:
 	pushw 0x0f                                           ; FB2E48  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2E4B  a4 21
@@ -88019,7 +88029,8 @@ sub_FB2E20:
 .LFB2E67:
 	pop XIX                                              ; FB2E67  5c
 	ret                                                  ; FB2E68  0e
-sub_FB2E69:
+; SysExSession_RecvBody_SequencerPart2: step 0x0C, as part 1.
+SysExSession_RecvBody_SequencerPart2:
 	push XIX                                             ; FB2E69  3c
 	lda xix, (0x60fcd8:24)                               ; FB2E6A  f2 d8 fc 60 34
 	pushw 0x0c                                           ; FB2E6F  0b 0c 00
@@ -88033,7 +88044,7 @@ sub_FB2E69:
 	inc 2,XSP                                            ; FB2E85  ef 62
 	cp WA,0xffff                                         ; FB2E87  d8 cf ff ff
 	jr z, .LFB2E91                                       ; FB2E8B  66 04
-	call sub_FB72B5                                      ; FB2E8D  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2E8D  1d b5 72 fb
 .LFB2E91:
 	pushw 0x0f                                           ; FB2E91  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2E94  a4 21
@@ -88051,7 +88062,8 @@ sub_FB2E69:
 .LFB2EB0:
 	pop XIX                                              ; FB2EB0  5c
 	ret                                                  ; FB2EB1  0e
-sub_FB2EB2:
+; SysExSession_RecvBody_SequencerPart3: step 0x0D, as part 1.
+SysExSession_RecvBody_SequencerPart3:
 	push XIX                                             ; FB2EB2  3c
 	lda xix, (0x60fcd8:24)                               ; FB2EB3  f2 d8 fc 60 34
 	pushw 0x0d                                           ; FB2EB8  0b 0d 00
@@ -88065,7 +88077,7 @@ sub_FB2EB2:
 	inc 2,XSP                                            ; FB2ECE  ef 62
 	cp WA,0xffff                                         ; FB2ED0  d8 cf ff ff
 	jr z, .LFB2EDA                                       ; FB2ED4  66 04
-	call sub_FB72B5                                      ; FB2ED6  1d b5 72 fb
+	call SysExRx_UnpackBody                                      ; FB2ED6  1d b5 72 fb
 .LFB2EDA:
 	pushw 0x0f                                           ; FB2EDA  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2EDD  a4 21
@@ -88083,7 +88095,8 @@ sub_FB2EB2:
 .LFB2EF9:
 	pop XIX                                              ; FB2EF9  5c
 	ret                                                  ; FB2EFA  0e
-sub_FB2EFB:
+; SysExSession_RecvBody_CombinationPart1: step 0x0F; SysExRx_UnpackBodyToBlock.
+SysExSession_RecvBody_CombinationPart1:
 	push XIX                                             ; FB2EFB  3c
 	lda xix, (0x60fcd8:24)                               ; FB2EFC  f2 d8 fc 60 34
 	pushw 0x0f                                           ; FB2F01  0b 0f 00
@@ -88091,7 +88104,7 @@ sub_FB2EFB:
 	ld XBC,(XIX)                                         ; FB2F07  a4 21
 	push XBC                                             ; FB2F09  39
 	call U8Rec16_SetField                                      ; FB2F0A  1d 19 62 fb
-	call sub_FB7365                                      ; FB2F0E  1d 65 73 fb
+	call SysExRx_UnpackBodyToBlock                                      ; FB2F0E  1d 65 73 fb
 	pushw 0x0f                                           ; FB2F12  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2F15  a4 21
 	push XBC                                             ; FB2F17  39
@@ -88109,7 +88122,8 @@ sub_FB2EFB:
 .LFB2F33:
 	pop XIX                                              ; FB2F33  5c
 	ret                                                  ; FB2F34  0e
-sub_FB2F35:
+; SysExSession_RecvBody_CombinationPart2: step 0x10; SysExRx_UnpackBodyToBlock, blocks to CPU 2 (T_Link_SendCommandE7).
+SysExSession_RecvBody_CombinationPart2:
 	link XIZ,0xfff8                                      ; FB2F35  ee 0c f8 ff
 	pushw hl                                             ; FB2F39  2b
 	push XIX                                             ; FB2F3A  3c
@@ -88119,7 +88133,7 @@ sub_FB2F35:
 	ld xbc, (0x60fcd8:24)                               ; FB2F46  e2 d8 fc 60 21
 	push XBC                                             ; FB2F4B  39
 	call U8Rec16_SetField                                      ; FB2F4C  1d 19 62 fb
-	call sub_FB7365                                      ; FB2F50  1d 65 73 fb
+	call SysExRx_UnpackBodyToBlock                                      ; FB2F50  1d 65 73 fb
 	inc 8,XSP                                            ; FB2F54  ef 60
 	cp WA,0xffff                                         ; FB2F56  d8 cf ff ff
 	jrl z, .LFB303C                                      ; FB2F5A  76 df 00
@@ -88216,7 +88230,7 @@ sub_FB2F35:
 	popw hl                                              ; FB303D  4b
 	unlk XIZ                                             ; FB303E  ee 0d
 	ret                                                  ; FB3040  0e
-; SysExSession_CategoryEnd: command 0x03, F0 50 27 7E F7: by the step id (field 3 < 0x12) through PtrTable_F4F9E6.
+; SysExSession_CategoryEnd: command 0x03, F0 50 27 7E F7: by the step id (field 3 < 0x12) through SysExSession_CategoryEndTable.
 SysExSession_CategoryEnd:
 	pushw hl                                             ; FB3041  2b
 	ld xbc, (0x60fcdc:24)                               ; FB3042  e2 dc fc 60 21
@@ -88226,7 +88240,7 @@ SysExSession_CategoryEnd:
 	ld a, 0x04:opc                                          ; FB304F  21 04
 	mul wa, h                                          ; FB3051  ce 41
 	extz XWA                                             ; FB3053  e8 12
-	add XWA,PtrTable_F4F9E6                              ; FB3055  e8 c8 e6 f9 f4 00
+	add XWA,SysExSession_CategoryEndTable                              ; FB3055  e8 c8 e6 f9 f4 00
 	ld XWA,(XWA)                                         ; FB305B  a0 20
 	lda xiy, (.LFB3065:24)                               ; FB305D  f2 65 30 fb 35
 	push XIY                                             ; FB3062  3d
@@ -88236,6 +88250,8 @@ SysExSession_CategoryEnd:
 .LFB306A:
 	popw hl                                              ; FB306A  4b
 	ret                                                  ; FB306B  0e
+; SysExSession_CategoryEnd_WrongStep: an end-of-category message in a step that is not a category end: status 0x1E.
+SysExSession_CategoryEnd_WrongStep:
 	pushw 0x1e                                           ; FB306C  0b 1e 00
 	pushw 0x04                                           ; FB306F  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB3072  e2 d8 fc 60 21
@@ -88243,6 +88259,8 @@ SysExSession_CategoryEnd:
 	call U8Rec16_SetField                                      ; FB3078  1d 19 62 fb
 	inc 8,XSP                                            ; FB307C  ef 60
 	ret                                                  ; FB307E  0e
+; SysExSession_CategoryEnd_SystemPartMidi: step 3: step 0, bit 7 of (0x60FD41) (categories received).
+SysExSession_CategoryEnd_SystemPartMidi:
 	pushw 0x00                                           ; FB307F  0b 00 00
 	pushw 0x03                                           ; FB3082  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB3085  e2 d8 fc 60 21
@@ -88251,6 +88269,8 @@ SysExSession_CategoryEnd:
 	m_set 7, MD24, 0x60fd41                              ; FB308F  f2 41 fd 60 bf
 	inc 8,XSP                                            ; FB3094  ef 60
 	ret                                                  ; FB3096  0e
+; SysExSession_CategoryEnd_Sound: step 6: step 0, bit 6 of (0x60FD41).
+SysExSession_CategoryEnd_Sound:
 	pushw 0x00                                           ; FB3097  0b 00 00
 	pushw 0x03                                           ; FB309A  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB309D  e2 d8 fc 60 21
@@ -88259,6 +88279,8 @@ SysExSession_CategoryEnd:
 	m_set 6, MD24, 0x60fd41                              ; FB30A7  f2 41 fd 60 be
 	inc 8,XSP                                            ; FB30AC  ef 60
 	ret                                                  ; FB30AE  0e
+; SysExSession_CategoryEnd_Stub: step 10, the stubbed-out category: step 0, bit 5 of (0x60FD41).
+SysExSession_CategoryEnd_Stub:
 	pushw 0x00                                           ; FB30AF  0b 00 00
 	pushw 0x03                                           ; FB30B2  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30B5  e2 d8 fc 60 21
@@ -88267,6 +88289,8 @@ SysExSession_CategoryEnd:
 	m_set 5, MD24, 0x60fd41                              ; FB30BF  f2 41 fd 60 bd
 	inc 8,XSP                                            ; FB30C4  ef 60
 	ret                                                  ; FB30C6  0e
+; SysExSession_CategoryEnd_Sequencer: step 14: step 0, bit 4 of (0x60FD41).
+SysExSession_CategoryEnd_Sequencer:
 	pushw 0x00                                           ; FB30C7  0b 00 00
 	pushw 0x03                                           ; FB30CA  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30CD  e2 d8 fc 60 21
@@ -88275,6 +88299,8 @@ SysExSession_CategoryEnd:
 	m_set 4, MD24, 0x60fd41                              ; FB30D7  f2 41 fd 60 bc
 	inc 8,XSP                                            ; FB30DC  ef 60
 	ret                                                  ; FB30DE  0e
+; SysExSession_CategoryEnd_Combination: step 17: step 0, bit 3 of (0x60FD41).
+SysExSession_CategoryEnd_Combination:
 	pushw 0x00                                           ; FB30DF  0b 00 00
 	pushw 0x03                                           ; FB30E2  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30E5  e2 d8 fc 60 21
@@ -88452,16 +88478,17 @@ sub_FB3234:
 	ld A,(XBC+0x04)                                      ; FB3239  89 04 21
 	cp a, 0x00:i3                                          ; FB323C  c9 d8
 	jr z, .LFB3243                                       ; FB323E  66 03
-	calr sub_FB3251                                      ; FB3240  1e 0e 00
+	calr SysExSession_AbortByStep                                      ; FB3240  1e 0e 00
 .LFB3243:
 	ret                                                  ; FB3243  0e
-; SysExSession_Abort: command 0x05, F0 50 29 7E F7: status 0x17, then sub_FB3251.
+; SysExSession_Abort: command 0x05, F0 50 29 7E F7: status 0x17, then SysExSession_AbortByStep.
 SysExSession_Abort:
 	ld xbc, (0x60fcd8:24)                               ; FB3244  e2 d8 fc 60 21
 	ld (XBC+0x04),0x17                                   ; FB3249  b9 04 00 17
-	calr sub_FB3251                                      ; FB324D  1e 01 00
+	calr SysExSession_AbortByStep                                      ; FB324D  1e 01 00
 	ret                                                  ; FB3250  0e
-sub_FB3251:
+; SysExSession_AbortByStep: step id (RX record field 3) < 0x12 through SysExSession_AbortTable.
+SysExSession_AbortByStep:
 	pushw hl                                             ; FB3251  2b
 	ld xbc, (0x60fcdc:24)                               ; FB3252  e2 dc fc 60 21
 	ld H,(XBC+0x03)                                      ; FB3257  89 03 26
@@ -88470,7 +88497,7 @@ sub_FB3251:
 	ld a, 0x04:opc                                          ; FB325F  21 04
 	mul wa, h                                          ; FB3261  ce 41
 	extz XWA                                             ; FB3263  e8 12
-	add XWA,PtrTable_F4FA2E                              ; FB3265  e8 c8 2e fa f4 00
+	add XWA,SysExSession_AbortTable                              ; FB3265  e8 c8 2e fa f4 00
 	ld XWA,(XWA)                                         ; FB326B  a0 20
 	lda xiy, (.LFB3275:24)                               ; FB326D  f2 75 32 fb 35
 	push XIY                                             ; FB3272  3d
@@ -88478,17 +88505,26 @@ sub_FB3251:
 .LFB3275:
 	popw hl                                              ; FB3275  4b
 	ret                                                  ; FB3276  0e
+; SysExSession_AbortStep_Idle: step 0, nothing to undo.
+SysExSession_AbortStep_Idle:
 	ret                                                  ; FB3277  0e
-	call sub_FB7EA8                                      ; FB3278  1d a8 7e fb
+SysExSession_AbortStep_SystemPartMidi:
+	call SysExSession_OnAbort_SystemPartMidi                                      ; FB3278  1d a8 7e fb
 	ret                                                  ; FB327C  0e
-	call sub_FB7ED2                                      ; FB327D  1d d2 7e fb
+SysExSession_AbortStep_Sound:
+	call SysExSession_OnAbort_Sound                                      ; FB327D  1d d2 7e fb
 	ret                                                  ; FB3281  0e
+SysExSession_AbortStep_Stub:
 	call sub_FB3251_Nop                                      ; FB3282  1d e4 7e fb
 	ret                                                  ; FB3286  0e
-	call sub_FB7EE5                                      ; FB3287  1d e5 7e fb
+SysExSession_AbortStep_Sequencer:
+	call SysExSession_OnAbort_Sequencer                                      ; FB3287  1d e5 7e fb
 	ret                                                  ; FB328B  0e
+; SysExSession_AbortStep_Combination: steps 15-17, a bare ret.
+SysExSession_AbortStep_Combination:
 	ret                                                  ; FB328C  0e
-sub_FB328D:
+; SysExSession_RecvBody_Sound: step 5; SysExRx_UnpackBodyToBlock, each full block to CPU 2 through the link (T_Link_SendCommandE7).
+SysExSession_RecvBody_Sound:
 	link XIZ,0xfff8                                      ; FB328D  ee 0c f8 ff
 	pushw hl                                             ; FB3291  2b
 	push XIX                                             ; FB3292  3c
@@ -88498,7 +88534,7 @@ sub_FB328D:
 	ld xbc, (0x60fcd8:24)                               ; FB329E  e2 d8 fc 60 21
 	push XBC                                             ; FB32A3  39
 	call U8Rec16_SetField                                      ; FB32A4  1d 19 62 fb
-	call sub_FB7365                                      ; FB32A8  1d 65 73 fb
+	call SysExRx_UnpackBodyToBlock                                      ; FB32A8  1d 65 73 fb
 	inc 8,XSP                                            ; FB32AC  ef 60
 	cp WA,0xffff                                         ; FB32AE  d8 cf ff ff
 	jrl z, .LFB3350                                      ; FB32B2  76 9b 00
@@ -91240,7 +91276,9 @@ sub_FB4AA4:
 	pop XIX                                              ; FB4B79  5c
 	unlk XIZ                                             ; FB4B7A  ee 0d
 	ret                                                  ; FB4B7C  0e
-sub_FB4B7D:
+; SysExTx_EmitStagedParams: only when MidiFilter_Exclusive bit 3 is set and (0x0922) bit 0 clear: walk the staged records from
+;   0x2C00 + (0x60F002) (StagedQueue_ReadRecord) and call SysExTx_StagedParamHandlers[record number] for numbers < 0xC0.
+SysExTx_EmitStagedParams:
 	pushw hl                                             ; FB4B7D  2b
 	push XIX                                             ; FB4B7E  3c
 	ld c, (MidiFilter_Exclusive:16)                                   ; FB4B7F  c1 38 7f 23
@@ -91256,7 +91294,7 @@ sub_FB4B7D:
 	ld XIX,XBC                                           ; FB4B9D  e9 8c
 .LFB4B9F:
 	push XIX                                             ; FB4B9F  3c
-	call sub_FB7270                                      ; FB4BA0  1d 70 72 fb
+	call StagedQueue_ReadRecord                                      ; FB4BA0  1d 70 72 fb
 	ld (0x60fd45:24), xiy                               ; FB4BA4  f2 45 fd 60 65
 	ld h, (0x60fd45:24)                                 ; FB4BA9  c2 45 fd 60 26
 	pop XBC                                              ; FB4BAE  59
@@ -91270,7 +91308,7 @@ sub_FB4B7D:
 	mul wa, h                                          ; FB4BC1  ce 41
 sub_FB4BC3:
 	extz XWA                                             ; FB4BC3  e8 12
-	add XWA,PtrTable_F4FB38                              ; FB4BC5  e8 c8 38 fb f4 00
+	add XWA,SysExTx_StagedParamHandlers                              ; FB4BC5  e8 c8 38 fb f4 00
 	ld XWA,(XWA)                                         ; FB4BCB  a0 20
 	lda xiy, (.LFB4BD5:24)                               ; FB4BCD  f2 d5 4b fb 35
 	push XIY                                             ; FB4BD2  3d
@@ -91284,7 +91322,12 @@ sub_FB4BC3:
 	pop XIX                                              ; FB4BDA  5c
 	popw hl                                              ; FB4BDB  4b
 	ret                                                  ; FB4BDC  0e
+; SysExTx_StagedParam_Ignore: 187 of the 192 SysExTx_StagedParamHandlers slots, a bare ret.
+SysExTx_StagedParam_Ignore:
 	ret                                                  ; FB4BDD  0e
+; SysExTx_StagedParam_Record48: staged parameter record 0x48: look the record up in the list at prom_b 0xF51E14
+;   (sub_FB4D20) and call the descriptor's +0x10 method.
+SysExTx_StagedParam_Record48:
 	link XIZ,0xfff8                                      ; FB4BDE  ee 0c f8 ff
 	push XIX                                             ; FB4BE2  3c
 	lda xix, (xiz-8)                                     ; FB4BE3  be f8 34
@@ -91308,6 +91351,7 @@ sub_FB4BC3:
 	pop XIX                                              ; FB4C0E  5c
 	unlk XIZ                                             ; FB4C0F  ee 0d
 	ret                                                  ; FB4C11  0e
+SysExTx_StagedParam_Record60:
 	link XIZ,0xfff8                                      ; FB4C12  ee 0c f8 ff
 	push XIX                                             ; FB4C16  3c
 	lda xix, (xiz-8)                                     ; FB4C17  be f8 34
@@ -91331,6 +91375,7 @@ sub_FB4BC3:
 	pop XIX                                              ; FB4C42  5c
 	unlk XIZ                                             ; FB4C43  ee 0d
 	ret                                                  ; FB4C45  0e
+SysExTx_StagedParam_Record70:
 	link XIZ,0xfff8                                      ; FB4C46  ee 0c f8 ff
 sub_FB4C4A:
 	push XIX                                             ; FB4C4A  3c
@@ -91355,6 +91400,7 @@ sub_FB4C4A:
 	pop XIX                                              ; FB4C76  5c
 	unlk XIZ                                             ; FB4C77  ee 0d
 	ret                                                  ; FB4C79  0e
+SysExTx_StagedParam_Record98:
 	link XIZ,0xfff8                                      ; FB4C7A  ee 0c f8 ff
 	push XIX                                             ; FB4C7E  3c
 	lda xix, (xiz-8)                                     ; FB4C7F  be f8 34
@@ -95635,7 +95681,8 @@ SysExTx_SendFrameBothPorts:
 	popw hl                                              ; FB726C  4b
 	unlk XIZ                                             ; FB726D  ee 0d
 	ret                                                  ; FB726F  0e
-sub_FB7270:
+; StagedQueue_ReadRecord(p): XIY = the 4-byte record {number, offset, value, mask} at p (number 0xFF = end).
+StagedQueue_ReadRecord:
 	link XIZ,0xfff8                                      ; FB7270  ee 0c f8 ff
 	pushw hl                                             ; FB7274  2b
 	push XIX                                             ; FB7275  3c
@@ -95667,7 +95714,9 @@ sub_FB728D:
 	popw hl                                              ; FB72B1  4b
 	unlk XIZ                                             ; FB72B2  ee 0d
 	ret                                                  ; FB72B4  0e
-sub_FB72B5:
+; SysExRx_UnpackBody: join nibble pairs from the receive cursor (buf+6) into (0x60FD18)++, (0x60FD10) and (0x60FD20) -= 1 each,
+;   up to 3 bytes before the write cursor; remaining (0x60FD20) reaching 0 first -> status 0x16 (memory full).
+SysExRx_UnpackBody:
 	link XIZ,0xffe8                                      ; FB72B5  ee 0c e8 ff
 	pushw hl                                             ; FB72B9  2b
 	push XIX                                             ; FB72BA  3c
@@ -95739,7 +95788,8 @@ sub_FB72B5:
 	popw hl                                              ; FB7361  4b
 	unlk XIZ                                             ; FB7362  ee 0d
 	ret                                                  ; FB7364  0e
-sub_FB7365:
+; SysExRx_UnpackBodyToBlock: SysExRx_UnpackBody that also counts the block fill in (0x60FD3A).
+SysExRx_UnpackBodyToBlock:
 	link XIZ,0xffe8                                      ; FB7365  ee 0c e8 ff
 	pushw hl                                             ; FB7369  2b
 	push XIX                                             ; FB736A  3c
@@ -95812,7 +95862,8 @@ sub_FB7365:
 	popw hl                                              ; FB7416  4b
 	unlk XIZ                                             ; FB7417  ee 0d
 	ret                                                  ; FB7419  0e
-sub_FB741A:
+; SysExRx_SetRunTimeSize: size = field 0x0C << 14 | field 0x0D << 7 | field 0x0E; into the receive descriptors (0x60FD08) and (0x60FD18).
+SysExRx_SetRunTimeSize:
 	link XIZ,0xffec                                      ; FB741A  ee 0c ec ff
 	push XIX                                             ; FB741E  3c
 	lda xix, (0x60fd08:24)                               ; FB741F  f2 08 fd 60 34
@@ -96979,7 +97030,8 @@ MessageScreen_Paint_SaveRegs:
 	pop XHL                                              ; FB7EA5  5b
 	pop XDE                                              ; FB7EA6  5a
 	ret                                                  ; FB7EA7  0e
-sub_FB7EA8:
+; SysExSession_OnAbort_SystemPartMidi: the abort arm for steps 1-3; bit 4 of (0x60F020) around T_F40770 slot +8, T_F40774, T_F40794.
+SysExSession_OnAbort_SystemPartMidi:
 	m_set 4, MD24, 0x60f020                              ; FB7EA8  f2 20 f0 60 bc
 	push XDE                                             ; FB7EAD  3a
 	push XHL                                             ; FB7EAE  3b
@@ -96999,7 +97051,8 @@ sub_FB7EA8:
 	pop XDE                                              ; FB7ECB  5a
 	m_res 4, MD24, 0x60f020                              ; FB7ECC  f2 20 f0 60 b4
 	ret                                                  ; FB7ED1  0e
-sub_FB7ED2:
+; SysExSession_OnAbort_Sound: the abort arm for steps 4-6: T_F40FF0, T_F40FEC.
+SysExSession_OnAbort_Sound:
 	push XDE                                             ; FB7ED2  3a
 	push XHL                                             ; FB7ED3  3b
 	push XIX                                             ; FB7ED4  3c
@@ -97015,7 +97068,8 @@ sub_FB28BE_Nop5:
 	ret                                                  ; FB7EE3  0e
 sub_FB3251_Nop:
 	ret                                                  ; FB7EE4  0e
-sub_FB7EE5:
+; SysExSession_OnAbort_Sequencer: the abort arm for steps 11-14: the routine at prom_b 0xF409C0 slot +8.
+SysExSession_OnAbort_Sequencer:
 	push XDE                                             ; FB7EE5  3a
 	push XHL                                             ; FB7EE6  3b
 	push XIX                                             ; FB7EE7  3c
