@@ -123481,7 +123481,7 @@ Unread_FCF054:
 ;          / add XBC,0x00FCF055 / ld DE,(XBC)`; DE is then the x passed to
 ;          the draw call at 0xFD9721 (as DE-20).  COUNT 6 is the extent to the
 ;          next reader-named base, 0xFCF061; the reader has no bound of its
-;          own (sub_FD6C34 vets the index first).  Which fields: not established.
+;          own (Var27A4_SlotEnabled vets the index first).  Which fields: not established.
 FieldColumnX_ByIndex:
 	.short 0                                   ; FCF055  [0]
 	.short 97                                  ; FCF057  [1]
@@ -124645,7 +124645,7 @@ sub_FCFE42:
 	ld bc, (xiz-4)                                       ; FCFE67  9e fc 21
 	extz BC                                              ; FCFE6A  d9 12
 	pushw bc                                             ; FCFE6C  29
-	call sub_FD6C34                                      ; FCFE6D  1d 34 6c fd
+	call Var27A4_SlotEnabled                                      ; FCFE6D  1d 34 6c fd
 	inc 8,XSP                                            ; FCFE71  ef 60
 	cp wa, 0x00:i3                                         ; FCFE73  d8 d8
 	jr z, .LFCFE80                                       ; FCFE75  66 09
@@ -126668,7 +126668,7 @@ sub_FD1028:
 	jrl nz, .LFD1154                                     ; FD1048  7e 09 01
 	lda xbc, (xiz-4)                                     ; FD104B  be fc 31
 	push XBC                                             ; FD104E  39
-	call sub_FD6B4D                                      ; FD104F  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD104F  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD1053  be fa 31
 	push XBC                                             ; FD1056  39
 	pushw 0x01                                           ; FD1057  0b 01 00
@@ -126693,7 +126693,7 @@ sub_FD1028:
 	ld bc, (xiz-6)                                       ; FD107E  9e fa 21
 	extz BC                                              ; FD1081  d9 12
 	pushw bc                                             ; FD1083  29
-	call sub_FD6CBA                                      ; FD1084  1d ba 6c fd
+	call U8_ShiftRight                                      ; FD1084  1d ba 6c fd
 	ld H,A                                               ; FD1088  c9 8e
 	and A,0x03                                           ; FD108A  c9 cc 03
 	ld H,A                                               ; FD108D  c9 8e
@@ -126730,7 +126730,7 @@ sub_FD1028:
 	dec 2,BC                                             ; FD10D2  d9 6a
 	pushw bc                                             ; FD10D4  29
 	pushw 0x03                                           ; FD10D5  0b 03 00
-	call sub_FD6C94                                      ; FD10D8  1d 94 6c fd
+	call U8_ShiftLeft                                      ; FD10D8  1d 94 6c fd
 	ld L,A                                               ; FD10DC  c9 8f
 	cpl A                                                ; FD10DE  c9 06
 	and (xiz-6), a                                       ; FD10E0  8e fa c9
@@ -126741,7 +126741,7 @@ sub_FD1028:
 	ld C,H                                               ; FD10EB  ce 8b
 	extz BC                                              ; FD10ED  d9 12
 	pushw bc                                             ; FD10EF  29
-	call sub_FD6C94                                      ; FD10F0  1d 94 6c fd
+	call U8_ShiftLeft                                      ; FD10F0  1d 94 6c fd
 	or (xiz-6), a                                        ; FD10F4  8e fa e9
 	pushw 0x80                                           ; FD10F7  0b 80 00
 	lda xbc, (xiz-8)                                     ; FD10FA  be f8 31
@@ -126799,7 +126799,7 @@ sub_FD1159:
 	jr nz, .LFD11D1                                      ; FD1174  6e 5b
 	lda xbc, (xiz-4)                                     ; FD1176  be fc 31
 	push XBC                                             ; FD1179  39
-	call sub_FD6B4D                                      ; FD117A  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD117A  1d 4d 6b fd
 	ld h, (xiz-4)                                        ; FD117E  8e fc 26
 	inc 1,H                                              ; FD1181  ce 61
 	push XIX                                             ; FD1183  3c
@@ -126850,7 +126850,7 @@ sub_FD11D7:
 	jrl nz, .LFD12AB                                     ; FD11EE  7e ba 00
 	lda xbc, (xiz-4)                                     ; FD11F1  be fc 31
 	push XBC                                             ; FD11F4  39
-	call sub_FD6B4D                                      ; FD11F5  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD11F5  1d 4d 6b fd
 	ld h, (xiz-4)                                        ; FD11F9  8e fc 26
 	inc 5,H                                              ; FD11FC  ce 65
 	lda xbc, (xiz-6)                                     ; FD11FE  be fa 31
@@ -127070,7 +127070,7 @@ sub_FD13C1:
 	jr nz, .LFD1438                                      ; FD13EF  6e 47
 	lda xbc, (xiz-4)                                     ; FD13F1  be fc 31
 	push XBC                                             ; FD13F4  39
-	call sub_FD6B4D                                      ; FD13F5  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD13F5  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD13F9  be fa 31
 	push XBC                                             ; FD13FC  39
 	pushw 0x02                                           ; FD13FD  0b 02 00
@@ -127136,7 +127136,7 @@ sub_FD1443:
 	jr nz, .LFD14DF                                      ; FD1492  6e 4b
 	lda xbc, (xiz-6)                                     ; FD1494  be fa 31
 	push XBC                                             ; FD1497  39
-	call sub_FD6B4D                                      ; FD1498  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD1498  1d 4d 6b fd
 	lda xbc, (xiz-8)                                     ; FD149C  be f8 31
 	push XBC                                             ; FD149F  39
 	pushw 0x01                                           ; FD14A0  0b 01 00
@@ -127206,7 +127206,7 @@ sub_FD14EB:
 	jr nz, .LFD1587                                      ; FD153A  6e 4b
 	lda xbc, (xiz-6)                                     ; FD153C  be fa 31
 	push XBC                                             ; FD153F  39
-	call sub_FD6B4D                                      ; FD1540  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD1540  1d 4d 6b fd
 	lda xbc, (xiz-8)                                     ; FD1544  be f8 31
 	push XBC                                             ; FD1547  39
 	pushw 0x03                                           ; FD1548  0b 03 00
@@ -127262,7 +127262,7 @@ sub_FD1593:
 	jr nz, .LFD160A                                      ; FD15C1  6e 47
 	lda xbc, (xiz-4)                                     ; FD15C3  be fc 31
 	push XBC                                             ; FD15C6  39
-	call sub_FD6B4D                                      ; FD15C7  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD15C7  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD15CB  be fa 31
 	push XBC                                             ; FD15CE  39
 	pushw 0x04                                           ; FD15CF  0b 04 00
@@ -127417,7 +127417,7 @@ sub_FD1709:
 	m_res 7, MDD+r6, 0xfe                                ; FD171C  be fe b7
 	lda xbc, (xiz-4)                                     ; FD171F  be fc 31
 	push XBC                                             ; FD1722  39
-	call sub_FD6B4D                                      ; FD1723  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD1723  1d 4d 6b fd
 	push XIX                                             ; FD1727  3c
 	pushw 0x02                                           ; FD1728  0b 02 00
 	call Arr27A6_Get                                      ; FD172B  1d 7b 6c fd
@@ -127477,7 +127477,7 @@ sub_FD17B1:
 	m_res 7, MDD+r6, 0xfc                                ; FD17B1  be fc b7
 	lda xbc, (xiz-6)                                     ; FD17B4  be fa 31
 	push XBC                                             ; FD17B7  39
-	call sub_FD6B4D                                      ; FD17B8  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD17B8  1d 4d 6b fd
 	push XIX                                             ; FD17BC  3c
 	pushw 0x01                                           ; FD17BD  0b 01 00
 	call Arr27A6_Get                                      ; FD17C0  1d 7b 6c fd
@@ -127536,7 +127536,7 @@ sub_FD1827:
 	m_res 7, MDD+r6, 0xfc                                ; FD1848  be fc b7
 	lda xbc, (xiz-6)                                     ; FD184B  be fa 31
 	push XBC                                             ; FD184E  39
-	call sub_FD6B4D                                      ; FD184F  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD184F  1d 4d 6b fd
 	push XIX                                             ; FD1853  3c
 	pushw 0x03                                           ; FD1854  0b 03 00
 	call Arr27A6_Get                                      ; FD1857  1d 7b 6c fd
@@ -127590,7 +127590,7 @@ sub_FD18BE:
 	m_res 7, MDD+r6, 0xfe                                ; FD18D1  be fe b7
 	lda xbc, (xiz-4)                                     ; FD18D4  be fc 31
 	push XBC                                             ; FD18D7  39
-	call sub_FD6B4D                                      ; FD18D8  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD18D8  1d 4d 6b fd
 	push XIX                                             ; FD18DC  3c
 	pushw 0x04                                           ; FD18DD  0b 04 00
 	call Arr27A6_Get                                      ; FD18E0  1d 7b 6c fd
@@ -127800,7 +127800,7 @@ sub_FD1AA5:
 	call Arr27A6_Get                                      ; FD1AA8  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD1AAC  be fc 31
 	push XBC                                             ; FD1AAF  39
-	call sub_FD6B4D                                      ; FD1AB0  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD1AB0  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD1AB4  be fa 31
 	push XBC                                             ; FD1AB7  39
 	ld wa, (xiz-2)                                       ; FD1AB8  9e fe 20
@@ -127870,7 +127870,7 @@ sub_FD1B45:
 	call Arr27A6_Get                                      ; FD1B50  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD1B54  be fc 31
 	push XBC                                             ; FD1B57  39
-	call sub_FD6B4D                                      ; FD1B58  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD1B58  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD1B5C  be fa 31
 	push XBC                                             ; FD1B5F  39
 	ld wa, (xiz-2)                                       ; FD1B60  9e fe 20
@@ -128264,7 +128264,7 @@ sub_FD1C35:
 	jr ule, .LFD1EB7                                     ; FD1EE6  63 cf
 	jr .LFD1F24                                          ; FD1EE8  68 3a
 .LFD1EEA:
-	call sub_FD6B4D                                      ; FD1EEA  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD1EEA  1d 4d 6b fd
 	ld (xiz-14), 0x01                                    ; FD1EEE  be f2 00 01
 	pop XIY                                              ; FD1EF2  5d
 .LFD1EF3:
@@ -129380,7 +129380,7 @@ sub_FD2903:
 	jr z, .LFD2984                                       ; FD291A  66 68
 	lda xbc, (xiz-4)                                     ; FD291C  be fc 31
 	push XBC                                             ; FD291F  39
-	call sub_FD6B4D                                      ; FD2920  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD2920  1d 4d 6b fd
 	ld h, (xiz-4)                                        ; FD2924  8e fc 26
 	inc 7,H                                              ; FD2927  ce 67
 	push XIX                                             ; FD2929  3c
@@ -129435,7 +129435,7 @@ sub_FD298A:
 	call Var27F5_Get                                      ; FD2998  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD299C  be fc 31
 	push XBC                                             ; FD299F  39
-	call sub_FD6B4D                                      ; FD29A0  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD29A0  1d 4d 6b fd
 	inc 8,XSP                                            ; FD29A4  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD29A6  8e fe 3f 00
 	jr nz, .LFD29B5                                      ; FD29AA  6e 09
@@ -129515,7 +129515,7 @@ sub_FD2A3C:
 	call Var27F5_Get                                      ; FD2A4A  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD2A4E  be fc 31
 	push XBC                                             ; FD2A51  39
-	call sub_FD6B4D                                      ; FD2A52  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD2A52  1d 4d 6b fd
 	inc 8,XSP                                            ; FD2A56  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD2A58  8e fe 3f 00
 	jr nz, .LFD2A67                                      ; FD2A5C  6e 09
@@ -129583,7 +129583,7 @@ sub_FD2AD8:
 	call Var27F5_Get                                      ; FD2AE6  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD2AEA  be fc 31
 	push XBC                                             ; FD2AED  39
-	call sub_FD6B4D                                      ; FD2AEE  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD2AEE  1d 4d 6b fd
 	inc 8,XSP                                            ; FD2AF2  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD2AF4  8e fe 3f 00
 	jr nz, .LFD2B03                                      ; FD2AF8  6e 09
@@ -129856,7 +129856,7 @@ sub_FD2D5F:
 	lda xix, (xiz-16)                                    ; FD2D64  be f0 34
 	lda xbc, (xiz-2)                                     ; FD2D67  be fe 31
 	push XBC                                             ; FD2D6A  39
-	call sub_FD6B4D                                      ; FD2D6B  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD2D6B  1d 4d 6b fd
 	push XIX                                             ; FD2D6F  3c
 	pushw 0x03                                           ; FD2D70  0b 03 00
 	call Arr27A6_Get                                      ; FD2D73  1d 7b 6c fd
@@ -129926,7 +129926,7 @@ sub_FD2DEA:
 	jr nz, .LFD2E5B                                      ; FD2E18  6e 41
 	lda xbc, (xiz-4)                                     ; FD2E1A  be fc 31
 	push XBC                                             ; FD2E1D  39
-	call sub_FD6B4D                                      ; FD2E1E  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD2E1E  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD2E22  be fa 31
 	push XBC                                             ; FD2E25  39
 	pushw 0x01                                           ; FD2E26  0b 01 00
@@ -129989,7 +129989,7 @@ sub_FD2E66:
 	jr nz, .LFD2EFC                                      ; FD2EB5  6e 45
 	lda xbc, (xiz-6)                                     ; FD2EB7  be fa 31
 	push XBC                                             ; FD2EBA  39
-	call sub_FD6B4D                                      ; FD2EBB  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD2EBB  1d 4d 6b fd
 	lda xbc, (xiz-8)                                     ; FD2EBF  be f8 31
 	push XBC                                             ; FD2EC2  39
 	pushw 0x00                                           ; FD2EC3  0b 00 00
@@ -130042,7 +130042,7 @@ sub_FD2F08:
 	jr nz, .LFD2F79                                      ; FD2F36  6e 41
 	lda xbc, (xiz-4)                                     ; FD2F38  be fc 31
 	push XBC                                             ; FD2F3B  39
-	call sub_FD6B4D                                      ; FD2F3C  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD2F3C  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD2F40  be fa 31
 	push XBC                                             ; FD2F43  39
 	pushw 0x02                                           ; FD2F44  0b 02 00
@@ -130191,7 +130191,7 @@ sub_FD3072:
 	lda xix, (xiz-16)                                    ; FD3078  be f0 34
 	lda xbc, (xiz-2)                                     ; FD307B  be fe 31
 	push XBC                                             ; FD307E  39
-	call sub_FD6B4D                                      ; FD307F  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD307F  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3083  be fc 31
 	push XBC                                             ; FD3086  39
 	call Var27F5_Get                                      ; FD3087  1d ca a0 fd
@@ -130261,7 +130261,7 @@ sub_FD3112:
 	lda xix, (xiz-16)                                    ; FD3118  be f0 34
 	lda xbc, (xiz-2)                                     ; FD311B  be fe 31
 	push XBC                                             ; FD311E  39
-	call sub_FD6B4D                                      ; FD311F  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD311F  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3123  be fc 31
 	push XBC                                             ; FD3126  39
 	call Var27F5_Get                                      ; FD3127  1d ca a0 fd
@@ -130332,7 +130332,7 @@ sub_FD31B2:
 	lda xix, (xiz-16)                                    ; FD31B8  be f0 34
 	lda xbc, (xiz-2)                                     ; FD31BB  be fe 31
 	push XBC                                             ; FD31BE  39
-	call sub_FD6B4D                                      ; FD31BF  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD31BF  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD31C3  be fc 31
 	push XBC                                             ; FD31C6  39
 	call Var27F5_Get                                      ; FD31C7  1d ca a0 fd
@@ -130402,7 +130402,7 @@ sub_FD3252:
 	lda xix, (xiz-16)                                    ; FD3258  be f0 34
 	lda xbc, (xiz-2)                                     ; FD325B  be fe 31
 	push XBC                                             ; FD325E  39
-	call sub_FD6B4D                                      ; FD325F  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD325F  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3263  be fc 31
 	push XBC                                             ; FD3266  39
 	call Var27F5_Get                                      ; FD3267  1d ca a0 fd
@@ -130472,7 +130472,7 @@ sub_FD32F2:
 	lda xix, (xiz-18)                                    ; FD32F8  be ee 34
 	lda xbc, (xiz-2)                                     ; FD32FB  be fe 31
 	push XBC                                             ; FD32FE  39
-	call sub_FD6B4D                                      ; FD32FF  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD32FF  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD3303  be fc 31
 	push XBC                                             ; FD3306  39
 	call Var27F5_Get                                      ; FD3307  1d ca a0 fd
@@ -130553,7 +130553,7 @@ sub_FD33AA:
 	lda xix, (xiz-18)                                    ; FD33B0  be ee 34
 	lda xbc, (xiz-2)                                     ; FD33B3  be fe 31
 	push XBC                                             ; FD33B6  39
-	call sub_FD6B4D                                      ; FD33B7  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD33B7  1d 4d 6b fd
 	lda xbc, (xiz-4)                                     ; FD33BB  be fc 31
 	push XBC                                             ; FD33BE  39
 	call Var27F5_Get                                      ; FD33BF  1d ca a0 fd
@@ -130638,7 +130638,7 @@ sub_FD3466:
 	call Var27F5_Get                                      ; FD3474  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FD3478  be fc 31
 	push XBC                                             ; FD347B  39
-	call sub_FD6B4D                                      ; FD347C  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD347C  1d 4d 6b fd
 	inc 8,XSP                                            ; FD3480  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD3482  8e fe 3f 00
 	jr nz, .LFD34A1                                      ; FD3486  6e 19
@@ -130715,7 +130715,7 @@ sub_FD351E:
 	jr z, .LFD359A                                       ; FD3533  66 65
 	lda xbc, (xiz-4)                                     ; FD3535  be fc 31
 	push XBC                                             ; FD3538  39
-	call sub_FD6B4D                                      ; FD3539  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD3539  1d 4d 6b fd
 	push XIX                                             ; FD353D  3c
 	pushw 0x08                                           ; FD353E  0b 08 00
 	call Arr27A6_Get                                      ; FD3541  1d 7b 6c fd
@@ -130936,7 +130936,7 @@ sub_FD3729:
 	lda xix, (xiz-16)                                    ; FD372E  be f0 34
 	lda xbc, (xiz-2)                                     ; FD3731  be fe 31
 	push XBC                                             ; FD3734  39
-	call sub_FD6B4D                                      ; FD3735  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD3735  1d 4d 6b fd
 	push XIX                                             ; FD3739  3c
 	pushw 0x05                                           ; FD373A  0b 05 00
 	call Arr27A6_Get                                      ; FD373D  1d 7b 6c fd
@@ -130999,7 +130999,7 @@ sub_FD37D3:
 	lda xix, (xiz-16)                                    ; FD37D8  be f0 34
 	lda xbc, (xiz-2)                                     ; FD37DB  be fe 31
 	push XBC                                             ; FD37DE  39
-	call sub_FD6B4D                                      ; FD37DF  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD37DF  1d 4d 6b fd
 	push XIX                                             ; FD37E3  3c
 	pushw 0x06                                           ; FD37E4  0b 06 00
 	call Arr27A6_Get                                      ; FD37E7  1d 7b 6c fd
@@ -131062,7 +131062,7 @@ sub_FD387D:
 	lda xix, (xiz-16)                                    ; FD3882  be f0 34
 	lda xbc, (xiz-2)                                     ; FD3885  be fe 31
 	push XBC                                             ; FD3888  39
-	call sub_FD6B4D                                      ; FD3889  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD3889  1d 4d 6b fd
 	push XIX                                             ; FD388D  3c
 	pushw 0x07                                           ; FD388E  0b 07 00
 	call Arr27A6_Get                                      ; FD3891  1d 7b 6c fd
@@ -131143,7 +131143,7 @@ sub_FD3955:
 	jr nz, .LFD3998                                      ; FD3955  6e 41
 	lda xbc, (xiz-4)                                     ; FD3957  be fc 31
 	push XBC                                             ; FD395A  39
-	call sub_FD6B4D                                      ; FD395B  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD395B  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD395F  be fa 31
 	push XBC                                             ; FD3962  39
 	pushw 0x03                                           ; FD3963  0b 03 00
@@ -131206,7 +131206,7 @@ sub_FD39A3:
 	jr nz, .LFD3A39                                      ; FD39F2  6e 45
 	lda xbc, (xiz-6)                                     ; FD39F4  be fa 31
 	push XBC                                             ; FD39F7  39
-	call sub_FD6B4D                                      ; FD39F8  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD39F8  1d 4d 6b fd
 	lda xbc, (xiz-8)                                     ; FD39FC  be f8 31
 	push XBC                                             ; FD39FF  39
 	pushw 0x02                                           ; FD3A00  0b 02 00
@@ -131260,7 +131260,7 @@ sub_FD3A45:
 	jr nz, .LFD3AB6                                      ; FD3A73  6e 41
 	lda xbc, (xiz-4)                                     ; FD3A75  be fc 31
 	push XBC                                             ; FD3A78  39
-	call sub_FD6B4D                                      ; FD3A79  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD3A79  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FD3A7D  be fa 31
 	push XBC                                             ; FD3A80  39
 	pushw 0x04                                           ; FD3A81  0b 04 00
@@ -131293,7 +131293,7 @@ sub_FD3AC1:
 	lda xix, (xiz-14)                                    ; FD3AC6  be f2 34
 	lda xbc, (xiz-2)                                     ; FD3AC9  be fe 31
 	push XBC                                             ; FD3ACC  39
-	call sub_FD6B4D                                      ; FD3ACD  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD3ACD  1d 4d 6b fd
 	push XIX                                             ; FD3AD1  3c
 	pushw 0x00                                           ; FD3AD2  0b 00 00
 	call Arr27A6_Get                                      ; FD3AD5  1d 7b 6c fd
@@ -131330,7 +131330,7 @@ sub_FD3B21:
 	lda xix, (xiz-14)                                    ; FD3B26  be f2 34
 	lda xbc, (xiz-2)                                     ; FD3B29  be fe 31
 	push XBC                                             ; FD3B2C  39
-	call sub_FD6B4D                                      ; FD3B2D  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD3B2D  1d 4d 6b fd
 	push XIX                                             ; FD3B31  3c
 	pushw 0x01                                           ; FD3B32  0b 01 00
 	call Arr27A6_Get                                      ; FD3B35  1d 7b 6c fd
@@ -131892,7 +131892,7 @@ sub_FD3FE0:
 	ld bc, (xiz-2)                                       ; FD3FF6  9e fe 21
 	extz BC                                              ; FD3FF9  d9 12
 	pushw bc                                             ; FD3FFB  29
-	call sub_FD6C34                                      ; FD3FFC  1d 34 6c fd
+	call Var27A4_SlotEnabled                                      ; FD3FFC  1d 34 6c fd
 	inc 8,XSP                                            ; FD4000  ef 60
 	cp wa, 0x00:i3                                         ; FD4002  d8 d8
 	jr z, .LFD400F                                       ; FD4004  66 09
@@ -132543,7 +132543,7 @@ ToneEditField_A3_Position:
 	call sub_FD616A                                      ; FD453E  1d 6a 61 fd
 	jr .LFD4559                                          ; FD4542  68 15
 .LFD4544:
-	call sub_FD6B4D                                      ; FD4544  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4544  1d 4d 6b fd
 	pushw 0xff                                           ; FD4548  0b ff 00
 	push XIX                                             ; FD454B  3c
 	pushw 0x0d                                           ; FD454C  0b 0d 00
@@ -132624,7 +132624,7 @@ ToneEditField_A3_Depth:
 	call sub_FD76BF                                      ; FD45CB  1d bf 76 fd
 	jr .LFD45D5                                          ; FD45CF  68 04
 .LFD45D1:
-	call sub_FD6B4D                                      ; FD45D1  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD45D1  1d 4d 6b fd
 .LFD45D5:
 	pop XIY                                              ; FD45D5  5d
 	push XIX                                             ; FD45D6  3c
@@ -132689,7 +132689,7 @@ ToneEditField_A3_Formant:
 	call sub_FD76BF                                      ; FD4641  1d bf 76 fd
 	jr .LFD464B                                          ; FD4645  68 04
 .LFD4647:
-	call sub_FD6B4D                                      ; FD4647  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4647  1d 4d 6b fd
 .LFD464B:
 	pop XIY                                              ; FD464B  5d
 	push XIX                                             ; FD464C  3c
@@ -132755,7 +132755,7 @@ ToneEditField_A3_InteractionGain:
 	call sub_FD76BF                                      ; FD46B7  1d bf 76 fd
 	jr .LFD46C1                                          ; FD46BB  68 04
 .LFD46BD:
-	call sub_FD6B4D                                      ; FD46BD  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD46BD  1d 4d 6b fd
 .LFD46C1:
 	pop XIY                                              ; FD46C1  5d
 	push XIX                                             ; FD46C2  3c
@@ -132937,7 +132937,7 @@ ToneEditField_A4_Width:
 	call sub_FD76BF                                      ; FD481B  1d bf 76 fd
 	jr .LFD4825                                          ; FD481F  68 04
 .LFD4821:
-	call sub_FD6B4D                                      ; FD4821  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4821  1d 4d 6b fd
 .LFD4825:
 	pop XIY                                              ; FD4825  5d
 	push XIX                                             ; FD4826  3c
@@ -133002,7 +133002,7 @@ ToneEditField_A4_Speed:
 	call sub_FD76BF                                      ; FD4891  1d bf 76 fd
 	jr .LFD489B                                          ; FD4895  68 04
 .LFD4897:
-	call sub_FD6B4D                                      ; FD4897  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4897  1d 4d 6b fd
 .LFD489B:
 	pop XIY                                              ; FD489B  5d
 	push XIX                                             ; FD489C  3c
@@ -133067,7 +133067,7 @@ ToneEditField_A4_SampleHold:
 	call sub_FD76BF                                      ; FD4907  1d bf 76 fd
 	jr .LFD4911                                          ; FD490B  68 04
 .LFD490D:
-	call sub_FD6B4D                                      ; FD490D  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD490D  1d 4d 6b fd
 .LFD4911:
 	pop XIY                                              ; FD4911  5d
 	push XIX                                             ; FD4912  3c
@@ -133132,7 +133132,7 @@ ToneEditField_A4_Touch:
 	call sub_FD76BF                                      ; FD497D  1d bf 76 fd
 	jr .LFD4987                                          ; FD4981  68 04
 .LFD4983:
-	call sub_FD6B4D                                      ; FD4983  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4983  1d 4d 6b fd
 .LFD4987:
 	pop XIY                                              ; FD4987  5d
 	push XIX                                             ; FD4988  3c
@@ -133321,7 +133321,7 @@ ToneEditField_A5_Fitting:
 	call sub_FD76BF                                      ; FD4AE3  1d bf 76 fd
 	jr .LFD4AED                                          ; FD4AE7  68 04
 .LFD4AE9:
-	call sub_FD6B4D                                      ; FD4AE9  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4AE9  1d 4d 6b fd
 .LFD4AED:
 	pop XIY                                              ; FD4AED  5d
 	lda xbc, (xiz-6)                                     ; FD4AEE  be fa 31
@@ -133444,7 +133444,7 @@ ToneEditField_A5_Muting:
 	call sub_FD76BF                                      ; FD4BC1  1d bf 76 fd
 	jr .LFD4BCB                                          ; FD4BC5  68 04
 .LFD4BC7:
-	call sub_FD6B4D                                      ; FD4BC7  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4BC7  1d 4d 6b fd
 .LFD4BCB:
 	pop XIY                                              ; FD4BCB  5d
 	lda xbc, (xiz-6)                                     ; FD4BCC  be fa 31
@@ -133646,7 +133646,7 @@ ToneEditField_A5_KeyShift:
 	call sub_FD76BF                                      ; FD4D56  1d bf 76 fd
 	jr .LFD4D60                                          ; FD4D5A  68 04
 .LFD4D5C:
-	call sub_FD6B4D                                      ; FD4D5C  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4D5C  1d 4d 6b fd
 .LFD4D60:
 	pop XIY                                              ; FD4D60  5d
 	lda xbc, (xiz-6)                                     ; FD4D61  be fa 31
@@ -133768,7 +133768,7 @@ ToneEditField_A5_Detune:
 	call sub_FD76BF                                      ; FD4E37  1d bf 76 fd
 	jr .LFD4E41                                          ; FD4E3B  68 04
 .LFD4E3D:
-	call sub_FD6B4D                                      ; FD4E3D  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4E3D  1d 4d 6b fd
 .LFD4E41:
 	pop XIY                                              ; FD4E41  5d
 	lda xbc, (xiz-6)                                     ; FD4E42  be fa 31
@@ -133890,7 +133890,7 @@ ToneEditField_A5_ResoScale:
 	call sub_FD76BF                                      ; FD4F18  1d bf 76 fd
 	jr .LFD4F22                                          ; FD4F1C  68 04
 .LFD4F1E:
-	call sub_FD6B4D                                      ; FD4F1E  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD4F1E  1d 4d 6b fd
 .LFD4F22:
 	pop XIY                                              ; FD4F22  5d
 	lda xbc, (xiz-6)                                     ; FD4F23  be fa 31
@@ -134202,7 +134202,7 @@ ToneEditField_A6_FittingTouchDepth:
 	call sub_FD76BF                                      ; FD518E  1d bf 76 fd
 	jr .LFD5198                                          ; FD5192  68 04
 .LFD5194:
-	call sub_FD6B4D                                      ; FD5194  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD5194  1d 4d 6b fd
 .LFD5198:
 	pop XIY                                              ; FD5198  5d
 	lda xbc, (xiz-6)                                     ; FD5199  be fa 31
@@ -134324,7 +134324,7 @@ ToneEditField_A6_MutingTouchDepth:
 	call sub_FD76BF                                      ; FD526F  1d bf 76 fd
 	jr .LFD5279                                          ; FD5273  68 04
 .LFD5275:
-	call sub_FD6B4D                                      ; FD5275  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD5275  1d 4d 6b fd
 .LFD5279:
 	pop XIY                                              ; FD5279  5d
 	lda xbc, (xiz-6)                                     ; FD527A  be fa 31
@@ -134439,7 +134439,7 @@ ToneEditField_A6_SubGainTouchDepth:
 	call sub_FD76BF                                      ; FD534E  1d bf 76 fd
 	jr .LFD5358                                          ; FD5352  68 04
 .LFD5354:
-	call sub_FD6B4D                                      ; FD5354  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD5354  1d 4d 6b fd
 .LFD5358:
 	pop XIY                                              ; FD5358  5d
 	lda xbc, (xiz-6)                                     ; FD5359  be fa 31
@@ -134523,7 +134523,7 @@ ToneEditField_A6_SubGain:
 	call sub_FD76BF                                      ; FD53EA  1d bf 76 fd
 	jr .LFD53F4                                          ; FD53EE  68 04
 .LFD53F0:
-	call sub_FD6B4D                                      ; FD53F0  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD53F0  1d 4d 6b fd
 .LFD53F4:
 	pop XIY                                              ; FD53F4  5d
 	lda xbc, (xiz-6)                                     ; FD53F5  be fa 31
@@ -134745,7 +134745,7 @@ ToneEditField_A7_ResoMode:
 	call sub_FD76BF                                      ; FD5591  1d bf 76 fd
 	jr .LFD559B                                          ; FD5595  68 04
 .LFD5597:
-	call sub_FD6B4D                                      ; FD5597  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FD5597  1d 4d 6b fd
 .LFD559B:
 	pop XIY                                              ; FD559B  5d
 	lda xbc, (xiz-4)                                     ; FD559C  be fc 31
@@ -137315,7 +137315,7 @@ sub_FD69E0:
 .LFD6A22:
 	lda xbc, (xiz-6)                                     ; FD6A22  be fa 31
 	push XBC                                             ; FD6A25  39
-	calr sub_FD6B4D                                      ; FD6A26  1e 24 01
+	calr Var27A3_GetValidSlot                                      ; FD6A26  1e 24 01
 	pop XIY                                              ; FD6A29  5d
 .LFD6A2A:
 	lda xbc, (xiz-8)                                     ; FD6A2A  be f8 31
@@ -137468,7 +137468,9 @@ sub_FD6B2E:
 	popw hl                                              ; FD6B49  4b
 	unlk XIZ                                             ; FD6B4A  ee 0d
 	ret                                                  ; FD6B4C  0e
-sub_FD6B4D:
+; Var27A3_GetValidSlot(u8 *out): *out = (0x27A3) when it is 1..4 and Var27A4_SlotEnabled; else the first
+;   enabled one of 1..4 (stored back to (0x27A3)), else 1.  What the selector means is not established.
+Var27A3_GetValidSlot:
 	link XIZ,0x0000                                      ; FD6B4D  ee 0c 00 00
 	pushw hl                                             ; FD6B51  2b
 	push XIX                                             ; FD6B52  3c
@@ -137487,7 +137489,7 @@ sub_FD6B4D:
 	ld C,(XIX)                                           ; FD6B74  84 23
 	extz BC                                              ; FD6B76  d9 12
 	pushw bc                                             ; FD6B78  29
-	calr sub_FD6C34                                      ; FD6B79  1e b8 00
+	calr Var27A4_SlotEnabled                                      ; FD6B79  1e b8 00
 	popw bc                                              ; FD6B7C  49
 	cp wa, 0x00:i3                                         ; FD6B7D  d8 d8
 	jr nz, .LFD6BA3                                      ; FD6B7F  6e 22
@@ -137496,7 +137498,7 @@ sub_FD6B4D:
 	ld C,H                                               ; FD6B83  ce 8b
 	extz BC                                              ; FD6B85  d9 12
 	pushw bc                                             ; FD6B87  29
-	calr sub_FD6C34                                      ; FD6B88  1e a9 00
+	calr Var27A4_SlotEnabled                                      ; FD6B88  1e a9 00
 	popw bc                                              ; FD6B8B  49
 	cp wa, 0x00:i3                                         ; FD6B8C  d8 d8
 	jr z, .LFD6B94                                       ; FD6B8E  66 04
@@ -137559,7 +137561,7 @@ sub_FD6BC6:
 	extz BC                                              ; FD6BE8  d9 12
 	pushw bc                                             ; FD6BEA  29
 	pushw 0x01                                           ; FD6BEB  0b 01 00
-	calr sub_FD6C94                                      ; FD6BEE  1e a3 00
+	calr U8_ShiftLeft                                      ; FD6BEE  1e a3 00
 	ld H,A                                               ; FD6BF1  c9 8e
 	inc 8,XSP                                            ; FD6BF3  ef 60
 	cp (XIZ+0x0a),0x00                                   ; FD6BF5  8e 0a 3f 00
@@ -137595,7 +137597,8 @@ sub_FD6BC6:
 	popw hl                                              ; FD6C30  4b
 	unlk XIZ                                             ; FD6C31  ee 0d
 	ret                                                  ; FD6C33  0e
-sub_FD6C34:
+; Var27A4_SlotEnabled(n): 1 when 1 <= n <= 4 and bit 2n-2 of (0x27A4) is set, else 0.
+Var27A4_SlotEnabled:
 	link XIZ,0x0000                                      ; FD6C34  ee 0c 00 00
 	pushw hl                                             ; FD6C38  2b
 	ld H,(XIZ+0x08)                                      ; FD6C39  8e 08 26
@@ -137609,7 +137612,7 @@ sub_FD6C34:
 	extz BC                                              ; FD6C4A  d9 12
 	pushw bc                                             ; FD6C4C  29
 	pushw 0x01                                           ; FD6C4D  0b 01 00
-	calr sub_FD6C94                                      ; FD6C50  1e 41 00
+	calr U8_ShiftLeft                                      ; FD6C50  1e 41 00
 	and a, (0x27a4:16)                                   ; FD6C53  c1 a4 27 c1
 	pop XIY                                              ; FD6C57  5d
 	jr z, .LFD6C5F                                       ; FD6C58  66 05
@@ -137670,7 +137673,8 @@ Arr27A6_Get:
 ; DispatchTable_FCF000) uses for an operation its field does not handle.
 PanelOp_Nop:
 	ret                                                  ; FD6C93  0e
-sub_FD6C94:
+; U8_ShiftLeft(value, count): value << count (doubled count times), as a byte.
+U8_ShiftLeft:
 	link XIZ,0x0000                                      ; FD6C94  ee 0c 00 00
 	pushw hl                                             ; FD6C98  2b
 	pushw de                                             ; FD6C99  2a
@@ -137692,7 +137696,8 @@ sub_FD6C94:
 	popw hl                                              ; FD6CB6  4b
 	unlk XIZ                                             ; FD6CB7  ee 0d
 	ret                                                  ; FD6CB9  0e
-sub_FD6CBA:
+; U8_ShiftRight(value, count): value >> count (srl by 1, count times), as a byte.
+U8_ShiftRight:
 	link XIZ,0x0000                                      ; FD6CBA  ee 0c 00 00
 	pushw hl                                             ; FD6CBE  2b
 	pushw de                                             ; FD6CBF  2a
@@ -137774,7 +137779,7 @@ ToneEdit_ApplyStep_Unsigned:
 	pushw bc                                             ; FD6D50  29
 	extz WA                                              ; FD6D51  d8 12
 	pushw wa                                             ; FD6D53  28
-	calr sub_FD6C94                                      ; FD6D54  1e 3d ff
+	calr U8_ShiftLeft                                      ; FD6D54  1e 3d ff
 	cpl A                                                ; FD6D57  c9 06
 	and A,H                                              ; FD6D59  ce c1
 	ld (xiz-2), a                                        ; FD6D5B  be fe 41
@@ -137782,7 +137787,7 @@ ToneEdit_ApplyStep_Unsigned:
 	ld C,(XIX)                                           ; FD6D61  84 23
 	extz BC                                              ; FD6D63  d9 12
 	pushw bc                                             ; FD6D65  29
-	calr sub_FD6CBA                                      ; FD6D66  1e 51 ff
+	calr U8_ShiftRight                                      ; FD6D66  1e 51 ff
 	ld H,A                                               ; FD6D69  c9 8e
 	ld (XIX),A                                           ; FD6D6B  b4 41
 	ld c, (xiz-3)                                        ; FD6D6D  8e fd 23
@@ -137825,7 +137830,7 @@ ToneEdit_ApplyStep_Unsigned:
 	m_and_rm MBD+r6, 0xfd, r3                            ; FD6DAE  8e fd c3
 	extz BC                                              ; FD6DB1  d9 12
 	pushw bc                                             ; FD6DB3  29
-	calr sub_FD6C94                                      ; FD6DB4  1e dd fe
+	calr U8_ShiftLeft                                      ; FD6DB4  1e dd fe
 	ld H,A                                               ; FD6DB7  c9 8e
 	ld xbc, (xiz-8)                                      ; FD6DB9  ae f8 21
 	ld (XBC),A                                           ; FD6DBC  b1 41
@@ -137865,7 +137870,7 @@ ToneEdit_ApplyStep_Signed:
 	pushw bc                                             ; FD6E03  29
 	extz WA                                              ; FD6E04  d8 12
 	pushw wa                                             ; FD6E06  28
-	calr sub_FD6C94                                      ; FD6E07  1e 8a fe
+	calr U8_ShiftLeft                                      ; FD6E07  1e 8a fe
 	cpl A                                                ; FD6E0A  c9 06
 	and A,H                                              ; FD6E0C  ce c1
 	ld (xiz-2), a                                        ; FD6E0E  be fe 41
@@ -137873,7 +137878,7 @@ ToneEdit_ApplyStep_Signed:
 	ld C,(XIX)                                           ; FD6E14  84 23
 	extz BC                                              ; FD6E16  d9 12
 	pushw bc                                             ; FD6E18  29
-	calr sub_FD6CBA                                      ; FD6E19  1e 9e fe
+	calr U8_ShiftRight                                      ; FD6E19  1e 9e fe
 	ld H,A                                               ; FD6E1C  c9 8e
 	ld (XIX),A                                           ; FD6E1E  b4 41
 	ld c, (xiz-3)                                        ; FD6E20  8e fd 23
@@ -137920,7 +137925,7 @@ ToneEdit_ApplyStep_Signed:
 	m_and_rm MBD+r6, 0xfd, r3                            ; FD6E6A  8e fd c3
 	extz BC                                              ; FD6E6D  d9 12
 	pushw bc                                             ; FD6E6F  29
-	calr sub_FD6C94                                      ; FD6E70  1e 21 fe
+	calr U8_ShiftLeft                                      ; FD6E70  1e 21 fe
 	ld H,A                                               ; FD6E73  c9 8e
 	ld xbc, (xiz-8)                                      ; FD6E75  ae f8 21
 	ld (XBC),A                                           ; FD6E78  b1 41
@@ -137965,7 +137970,7 @@ sub_FD6EC4:
 	push XIX                                             ; FD6EC8  3c
 	lda xbc, (xiz-2)                                     ; FD6EC9  be fe 31
 	push XBC                                             ; FD6ECC  39
-	calr sub_FD6B4D                                      ; FD6ECD  1e 7d fc
+	calr Var27A3_GetValidSlot                                      ; FD6ECD  1e 7d fc
 	lda xbc, (xiz-4)                                     ; FD6ED0  be fc 31
 	push XBC                                             ; FD6ED3  39
 	calr Var27F5_Get                                          ; FD6ED4  1e f3 31
@@ -138379,7 +138384,7 @@ sub_FD71B9:
 	inc 2,H                                              ; FD71FD  ce 62
 	pushw 0x00                                           ; FD71FF  0b 00 00
 	pushw 0x7f                                           ; FD7202  0b 7f 00
-	calr sub_FD6C94                                          ; FD7205  1e 8c fa
+	calr U8_ShiftLeft                                          ; FD7205  1e 8c fa
 	extz WA                                              ; FD7208  d8 12
 	pop XIY                                              ; FD720A  5d
 	pushw wa                                             ; FD720B  28
@@ -138673,7 +138678,7 @@ ToneEdit_CommitField:
 	ld C,(XIX+0x06)                                      ; FD745A  8c 06 23
 	extz BC                                              ; FD745D  d9 12
 	pushw bc                                             ; FD745F  29
-	calr sub_FD6C94                                          ; FD7460  1e 31 f8
+	calr U8_ShiftLeft                                          ; FD7460  1e 31 f8
 	extz WA                                              ; FD7463  d8 12
 	inc 8,XSP                                            ; FD7465  ef 60
 	pushw wa                                             ; FD7467  28
@@ -138719,7 +138724,7 @@ sub_FD74AE:
 	pushw hl                                             ; FD74B2  2b
 	lda xbc, (xiz-2)                                     ; FD74B3  be fe 31
 	push XBC                                             ; FD74B6  39
-	calr sub_FD6B4D                                          ; FD74B7  1e 93 f6
+	calr Var27A3_GetValidSlot                                          ; FD74B7  1e 93 f6
 	pop XIY                                              ; FD74BA  5d
 	ld c, (xiz-2)                                        ; FD74BB  8e fe 23
 	cp C,(XIZ+0x08)                                      ; FD74BE  8e 08 f3
@@ -138727,7 +138732,7 @@ sub_FD74AE:
 	ld HL,(XIZ+0x08)                                     ; FD74C3  9e 08 23
 	extz HL                                              ; FD74C6  db 12
 	pushw hl                                             ; FD74C8  2b
-	calr sub_FD6C34                                          ; FD74C9  1e 68 f7
+	calr Var27A4_SlotEnabled                                          ; FD74C9  1e 68 f7
 	popw bc                                              ; FD74CC  49
 	cp wa, 0x00:i3                                         ; FD74CD  d8 d8
 	jr nz, .LFD74D5                                      ; FD74CF  6e 04
@@ -138753,7 +138758,7 @@ sub_FD74E0:
 	ld C,D                                               ; FD74ED  cc 8b
 	extz BC                                              ; FD74EF  d9 12
 	pushw bc                                             ; FD74F1  29
-	calr sub_FD6C34                                          ; FD74F2  1e 3f f7
+	calr Var27A4_SlotEnabled                                          ; FD74F2  1e 3f f7
 	popw bc                                              ; FD74F5  49
 	cp wa, 0x00:i3                                         ; FD74F6  d8 d8
 	jrl z, .LFD7594                                      ; FD74F8  76 99 00
@@ -138863,7 +138868,7 @@ sub_FD759A:
 	ld bc, (xiz-6)                                       ; FD75D3  9e fa 21
 	extz BC                                              ; FD75D6  d9 12
 	pushw bc                                             ; FD75D8  29
-	calr sub_FD6CBA                                          ; FD75D9  1e de f6
+	calr U8_ShiftRight                                          ; FD75D9  1e de f6
 	ld H,A                                               ; FD75DC  c9 8e
 	and A,0x03                                           ; FD75DE  c9 cc 03
 	ld H,A                                               ; FD75E1  c9 8e
@@ -138898,7 +138903,7 @@ sub_FD759A:
 	ld DE,BC                                             ; FD7619  d9 8a
 	pushw bc                                             ; FD761B  29
 	pushw 0x03                                           ; FD761C  0b 03 00
-	calr sub_FD6C94                                          ; FD761F  1e 72 f6
+	calr U8_ShiftLeft                                          ; FD761F  1e 72 f6
 	ld L,A                                               ; FD7622  c9 8f
 	cpl A                                                ; FD7624  c9 06
 sub_FD7626:
@@ -138907,7 +138912,7 @@ sub_FD7626:
 	ld C,H                                               ; FD762A  ce 8b
 	extz BC                                              ; FD762C  d9 12
 	pushw bc                                             ; FD762E  29
-	calr sub_FD6C94                                          ; FD762F  1e 62 f6
+	calr U8_ShiftLeft                                          ; FD762F  1e 62 f6
 	or (xiz-6), a                                        ; FD7632  8e fa e9
 	ld C,L                                               ; FD7635  cf 8b
 	extz BC                                              ; FD7637  d9 12
@@ -138995,7 +139000,7 @@ sub_FD76BF:
 	ld XIX,(XIZ+0x08)                                    ; FD76C4  ae 08 24
 	lda xbc, (xiz-2)                                     ; FD76C7  be fe 31
 	push XBC                                             ; FD76CA  39
-	calr sub_FD6B4D                                          ; FD76CB  1e 7f f4
+	calr Var27A3_GetValidSlot                                          ; FD76CB  1e 7f f4
 	ld c, (xiz-2)                                        ; FD76CE  8e fe 23
 	ld (XIX),C                                           ; FD76D1  b4 43
 	ld c, (xiz-2)                                        ; FD76D3  8e fe 23
@@ -139842,11 +139847,11 @@ sub_FD7CB5:
 .LFD7CCD:
 	lda xbc, (xiz-4)                                     ; FD7CCD  be fc 31
 	push XBC                                             ; FD7CD0  39
-	calr sub_FD6B4D                                          ; FD7CD1  1e 79 ee
+	calr Var27A3_GetValidSlot                                          ; FD7CD1  1e 79 ee
 	ld bc, (xiz-4)                                       ; FD7CD4  9e fc 21
 	extz BC                                              ; FD7CD7  d9 12
 	pushw bc                                             ; FD7CD9  29
-	calr sub_FD6C34                                          ; FD7CDA  1e 57 ef
+	calr Var27A4_SlotEnabled                                          ; FD7CDA  1e 57 ef
 	inc 6,XSP                                            ; FD7CDD  ef 66
 	cp wa, 0x00:i3                                         ; FD7CDF  d8 d8
 	jr nz, .LFD7D06                                      ; FD7CE1  6e 23
@@ -139857,7 +139862,7 @@ sub_FD7CB5:
 	extz BC                                              ; FD7CE9  d9 12
 	ld HL,BC                                             ; FD7CEB  d9 8b
 	pushw bc                                             ; FD7CED  29
-	calr sub_FD6C34                                          ; FD7CEE  1e 43 ef
+	calr Var27A4_SlotEnabled                                          ; FD7CEE  1e 43 ef
 	popw bc                                              ; FD7CF1  49
 	cp wa, 0x00:i3                                         ; FD7CF2  d8 d8
 	jr z, .LFD7CF9                                       ; FD7CF4  66 03
@@ -139971,11 +139976,11 @@ sub_FD7D18:
 	ld A,(XIX+0x02)                                      ; FD7DCC  8c 02 21
 	extz WA                                              ; FD7DCF  d8 12
 	pushw wa                                             ; FD7DD1  28
-	calr sub_FD6C94                                          ; FD7DD2  1e bf ee
+	calr U8_ShiftLeft                                          ; FD7DD2  1e bf ee
 	ld H,A                                               ; FD7DD5  c9 8e
 	m_push MWD+r6, 0xf4                                  ; FD7DD7  9e f4 04
 	pushw 0x03                                           ; FD7DDA  0b 03 00
-	calr sub_FD6C94                                          ; FD7DDD  1e b4 ee
+	calr U8_ShiftLeft                                          ; FD7DDD  1e b4 ee
 	ld L,A                                               ; FD7DE0  c9 8f
 	ld XBC,XIX                                           ; FD7DE2  ec 89
 	inc 3,XBC                                            ; FD7DE4  e9 63
@@ -140375,7 +140380,7 @@ sub_FD8155:
 	jr z, .LFD81C4                                       ; FD816D  66 55
 	lda xbc, (xiz-4)                                     ; FD816F  be fc 31
 	push XBC                                             ; FD8172  39
-	calr sub_FD6B4D                                          ; FD8173  1e d7 e9
+	calr Var27A3_GetValidSlot                                          ; FD8173  1e d7 e9
 	push XIX                                             ; FD8176  3c
 	pushw 0x03                                           ; FD8177  0b 03 00
 	calr Arr27A6_Get                                          ; FD817A  1e fe ea
@@ -140421,7 +140426,7 @@ sub_FD81C8:
 	jr z, .LFD8237                                       ; FD81E0  66 55
 	lda xbc, (xiz-4)                                     ; FD81E2  be fc 31
 	push XBC                                             ; FD81E5  39
-	calr sub_FD6B4D                                          ; FD81E6  1e 64 e9
+	calr Var27A3_GetValidSlot                                          ; FD81E6  1e 64 e9
 	push XIX                                             ; FD81E9  3c
 	pushw 0x04                                           ; FD81EA  0b 04 00
 	calr Arr27A6_Get                                          ; FD81ED  1e 8b ea
@@ -140461,7 +140466,7 @@ sub_FD823B:
 	lda xix, (xiz-16)                                    ; FD8241  be f0 34
 	lda xbc, (xiz-2)                                     ; FD8244  be fe 31
 	push XBC                                             ; FD8247  39
-	calr sub_FD6B4D                                          ; FD8248  1e 02 e9
+	calr Var27A3_GetValidSlot                                          ; FD8248  1e 02 e9
 	lda xbc, (xiz-4)                                     ; FD824B  be fc 31
 	push XBC                                             ; FD824E  39
 	pushw 0x00                                           ; FD824F  0b 00 00
@@ -140532,7 +140537,7 @@ sub_FD82D8:
 	jr z, .LFD8347                                       ; FD82F0  66 55
 	lda xbc, (xiz-4)                                     ; FD82F2  be fc 31
 	push XBC                                             ; FD82F5  39
-	calr sub_FD6B4D                                          ; FD82F6  1e 54 e8
+	calr Var27A3_GetValidSlot                                          ; FD82F6  1e 54 e8
 	push XIX                                             ; FD82F9  3c
 	pushw 0x06                                           ; FD82FA  0b 06 00
 	calr Arr27A6_Get                                          ; FD82FD  1e 7b e9
@@ -140572,7 +140577,7 @@ sub_FD834B:
 	lda xix, (xiz-16)                                    ; FD8351  be f0 34
 	lda xbc, (xiz-2)                                     ; FD8354  be fe 31
 	push XBC                                             ; FD8357  39
-	calr sub_FD6B4D                                          ; FD8358  1e f2 e7
+	calr Var27A3_GetValidSlot                                          ; FD8358  1e f2 e7
 	lda xbc, (xiz-4)                                     ; FD835B  be fc 31
 	push XBC                                             ; FD835E  39
 	pushw 0x00                                           ; FD835F  0b 00 00
@@ -140644,7 +140649,7 @@ sub_FD83ED:
 	jr z, .LFD8457                                       ; FD8400  66 55
 	lda xbc, (xiz-4)                                     ; FD8402  be fc 31
 	push XBC                                             ; FD8405  39
-	calr sub_FD6B4D                                          ; FD8406  1e 44 e7
+	calr Var27A3_GetValidSlot                                          ; FD8406  1e 44 e7
 	push XIX                                             ; FD8409  3c
 	pushw 0x08                                           ; FD840A  0b 08 00
 	calr Arr27A6_Get                                          ; FD840D  1e 6b e8
@@ -140684,7 +140689,7 @@ sub_FD845B:
 	lda xix, (xiz-16)                                    ; FD8461  be f0 34
 	lda xbc, (xiz-2)                                     ; FD8464  be fe 31
 	push XBC                                             ; FD8467  39
-	calr sub_FD6B4D                                          ; FD8468  1e e2 e6
+	calr Var27A3_GetValidSlot                                          ; FD8468  1e e2 e6
 	lda xbc, (xiz-4)                                     ; FD846B  be fc 31
 	push XBC                                             ; FD846E  39
 	pushw 0x00                                           ; FD846F  0b 00 00
@@ -140749,7 +140754,7 @@ sub_FD84F8:
 	lda xix, (xiz-16)                                    ; FD84FD  be f0 34
 	lda xbc, (xiz-2)                                     ; FD8500  be fe 31
 	push XBC                                             ; FD8503  39
-	calr sub_FD6B4D                                          ; FD8504  1e 46 e6
+	calr Var27A3_GetValidSlot                                          ; FD8504  1e 46 e6
 	push XIX                                             ; FD8507  3c
 	pushw 0x03                                           ; FD8508  0b 03 00
 	calr Arr27A6_Get                                          ; FD850B  1e 6d e7
@@ -140814,7 +140819,7 @@ sub_FD859B:
 	lda xix, (xiz-16)                                    ; FD85A0  be f0 34
 	lda xbc, (xiz-2)                                     ; FD85A3  be fe 31
 	push XBC                                             ; FD85A6  39
-	calr sub_FD6B4D                                          ; FD85A7  1e a3 e5
+	calr Var27A3_GetValidSlot                                          ; FD85A7  1e a3 e5
 	push XIX                                             ; FD85AA  3c
 	pushw 0x04                                           ; FD85AB  0b 04 00
 	calr Arr27A6_Get                                          ; FD85AE  1e ca e6
@@ -140878,7 +140883,7 @@ sub_FD863E:
 	lda xix, (xiz-16)                                    ; FD8643  be f0 34
 	lda xbc, (xiz-2)                                     ; FD8646  be fe 31
 	push XBC                                             ; FD8649  39
-	calr sub_FD6B4D                                          ; FD864A  1e 00 e5
+	calr Var27A3_GetValidSlot                                          ; FD864A  1e 00 e5
 	push XIX                                             ; FD864D  3c
 	pushw 0x05                                           ; FD864E  0b 05 00
 	calr Arr27A6_Get                                          ; FD8651  1e 27 e6
@@ -140951,7 +140956,7 @@ sub_FD86E1:
 	jr nz, .LFD873D                                      ; FD86FB  6e 40
 	lda xbc, (xiz-2)                                     ; FD86FD  be fe 31
 	push XBC                                             ; FD8700  39
-	calr sub_FD6B4D                                          ; FD8701  1e 49 e4
+	calr Var27A3_GetValidSlot                                          ; FD8701  1e 49 e4
 	lda xbc, (xiz-4)                                     ; FD8704  be fc 31
 	push XBC                                             ; FD8707  39
 	pushw 0x02                                           ; FD8708  0b 02 00
@@ -140985,7 +140990,7 @@ sub_FD8747:
 	lda xix, (xiz-14)                                    ; FD874C  be f2 34
 	lda xbc, (xiz-2)                                     ; FD874F  be fe 31
 	push XBC                                             ; FD8752  39
-	calr sub_FD6B4D                                          ; FD8753  1e f7 e3
+	calr Var27A3_GetValidSlot                                          ; FD8753  1e f7 e3
 	push XIX                                             ; FD8756  3c
 	pushw 0x00                                           ; FD8757  0b 00 00
 	calr Arr27A6_Get                                          ; FD875A  1e 1e e5
@@ -141023,7 +141028,7 @@ sub_FD87A5:
 	lda xix, (xiz-14)                                    ; FD87AA  be f2 34
 	lda xbc, (xiz-2)                                     ; FD87AD  be fe 31
 	push XBC                                             ; FD87B0  39
-	calr sub_FD6B4D                                          ; FD87B1  1e 99 e3
+	calr Var27A3_GetValidSlot                                          ; FD87B1  1e 99 e3
 	push XIX                                             ; FD87B4  3c
 	pushw 0x01                                           ; FD87B5  0b 01 00
 	calr Arr27A6_Get                                          ; FD87B8  1e c0 e4
@@ -142716,7 +142721,7 @@ sub_FD96DE:
 	ld BC,(XIZ+0x0a)                                     ; FD96E5  9e 0a 21
 	extz BC                                              ; FD96E8  d9 12
 	pushw bc                                             ; FD96EA  29
-	calr sub_FD6C34                                          ; FD96EB  1e 46 d5
+	calr Var27A4_SlotEnabled                                          ; FD96EB  1e 46 d5
 	popw bc                                              ; FD96EE  49
 	cp wa, 0x00:i3                                         ; FD96EF  d8 d8
 	jrl z, .LFD985D                                      ; FD96F1  76 69 01
@@ -142890,7 +142895,7 @@ sub_FD9863:
 	ld C,H                                               ; FD9883  ce 8b
 	extz BC                                              ; FD9885  d9 12
 	pushw bc                                             ; FD9887  29
-	calr sub_FD6C34                                          ; FD9888  1e a9 d3
+	calr Var27A4_SlotEnabled                                          ; FD9888  1e a9 d3
 	popw bc                                              ; FD988B  49
 	cp wa, 0x00:i3                                         ; FD988C  d8 d8
 	jr z, .LFD98B8                                       ; FD988E  66 28
@@ -143127,7 +143132,7 @@ sub_FD9A7A:
 	calr Arr27A6_Get                                          ; FD9A9F  1e d9 d1
 	pushw 0x07                                           ; FD9AA2  0b 07 00
 	pushw 0x01                                           ; FD9AA5  0b 01 00
-	calr sub_FD6C94                                          ; FD9AA8  1e e9 d1
+	calr U8_ShiftLeft                                          ; FD9AA8  1e e9 d1
 	ld H,A                                               ; FD9AAB  c9 8e
 	m_res 7, MDD+r6, 0xfc                                ; FD9AAD  be fc b7
 	ld de, (xiz-2)                                       ; FD9AB0  9e fe 22
@@ -145985,7 +145990,7 @@ sub_FDAF07:
 	jr nz, .LFDAF7D                                      ; FDAF27  6e 54
 	lda xbc, (xiz-6)                                     ; FDAF29  be fa 31
 	push XBC                                             ; FDAF2C  39
-	call sub_FD6B4D                                      ; FDAF2D  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDAF2D  1d 4d 6b fd
 	ld bc, (xiz-6)                                       ; FDAF31  9e fa 21
 	extz BC                                              ; FDAF34  d9 12
 	pushw bc                                             ; FDAF36  29
@@ -146337,7 +146342,7 @@ sub_FDB22F:
 	call sub_FD7719                                      ; FDB2AB  1d 19 77 fd
 	lda xbc, (xiz-4)                                     ; FDB2AF  be fc 31
 	push XBC                                             ; FDB2B2  39
-	call sub_FD6B4D                                      ; FDB2B3  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDB2B3  1d 4d 6b fd
 	ld bc, (xiz-4)                                       ; FDB2B7  9e fc 21
 	extz BC                                              ; FDB2BA  d9 12
 	pushw bc                                             ; FDB2BC  29
@@ -146441,7 +146446,7 @@ sub_FDB38C:
 	call Var2805_Set                                      ; FDB3A9  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDB3AD  be fc 31
 	push XBC                                             ; FDB3B0  39
-	call sub_FD6B4D                                      ; FDB3B1  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDB3B1  1d 4d 6b fd
 	ldw de, 0x07                                         ; FDB3B5  32 07 00
 	ld h, 0x0a:opc                                          ; FDB3B8  26 0a
 	inc 6,XSP                                            ; FDB3BA  ef 66
@@ -146521,7 +146526,7 @@ sub_FDB44D:
 	call Var2805_Set                                      ; FDB46D  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDB471  be fc 31
 	push XBC                                             ; FDB474  39
-	call sub_FD6B4D                                      ; FDB475  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDB475  1d 4d 6b fd
 	ldw de, 0x11                                         ; FDB479  32 11 00
 	ld h, 0x06:opc                                          ; FDB47C  26 06
 	inc 6,XSP                                            ; FDB47E  ef 66
@@ -146788,7 +146793,7 @@ sub_FDB693:
 	call sub_FD7719                                      ; FDB6D4  1d 19 77 fd
 	lda xbc, (xiz-6)                                     ; FDB6D8  be fa 31
 	push XBC                                             ; FDB6DB  39
-	call sub_FD6B4D                                      ; FDB6DC  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDB6DC  1d 4d 6b fd
 	ld bc, (xiz-6)                                       ; FDB6E0  9e fa 21
 	extz BC                                              ; FDB6E3  d9 12
 	pushw bc                                             ; FDB6E5  29
@@ -147025,7 +147030,7 @@ sub_FDB8D9:
 	call Var2805_Set                                      ; FDB8F9  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDB8FD  be fc 31
 	push XBC                                             ; FDB900  39
-	call sub_FD6B4D                                      ; FDB901  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDB901  1d 4d 6b fd
 	ldw de, 0x1a                                         ; FDB905  32 1a 00
 	ld h, 0x04:opc                                          ; FDB908  26 04
 	inc 6,XSP                                            ; FDB90A  ef 66
@@ -147167,7 +147172,7 @@ sub_FDBA51:
 	pushw ix                                             ; FDBA57  2c
 	lda xbc, (xiz-2)                                     ; FDBA58  be fe 31
 	push XBC                                             ; FDBA5B  39
-	call sub_FD6B4D                                      ; FDBA5C  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDBA5C  1d 4d 6b fd
 	ldw de, 0x27                                         ; FDBA60  32 27 00
 	ld h, 0x07:opc                                          ; FDBA63  26 07
 	pop XIY                                              ; FDBA65  5d
@@ -147198,7 +147203,7 @@ sub_FDBA8B:
 	push XIX                                             ; FDBA91  3c
 	lda xbc, (xiz-2)                                     ; FDBA92  be fe 31
 	push XBC                                             ; FDBA95  39
-	call sub_FD6B4D                                      ; FDBA96  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDBA96  1d 4d 6b fd
 	pushw 0x8d                                           ; FDBA9A  0b 8d 00
 	pushw 0x01                                           ; FDBA9D  0b 01 00
 	pushw 0x0d                                           ; FDBAA0  0b 0d 00
@@ -147251,7 +147256,7 @@ sub_FDBAE7:
 	call Var2805_Set                                      ; FDBB07  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDBB0B  be fc 31
 	push XBC                                             ; FDBB0E  39
-	call sub_FD6B4D                                      ; FDBB0F  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDBB0F  1d 4d 6b fd
 	ldw de, 0x2e                                         ; FDBB13  32 2e 00
 	ld h, 0x08:opc                                          ; FDBB16  26 08
 	inc 6,XSP                                            ; FDBB18  ef 66
@@ -147969,7 +147974,7 @@ sub_FDC1D1:
 	pushw ix                                             ; FDC1D7  2c
 	lda xbc, (xiz-2)                                     ; FDC1D8  be fe 31
 	push XBC                                             ; FDC1DB  39
-	call sub_FD6B4D                                      ; FDC1DC  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC1DC  1d 4d 6b fd
 	ldw hl, 0x36                                         ; FDC1E0  33 36 00
 	ld d, 0x02:opc                                          ; FDC1E3  24 02
 	pop XIY                                              ; FDC1E5  5d
@@ -148018,7 +148023,7 @@ sub_FDC22F:
 	lda xbc, (xiz-2)                                     ; FDC236  be fe 31
 sub_FDC239:
 	push XBC                                             ; FDC239  39
-	call sub_FD6B4D                                      ; FDC23A  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC23A  1d 4d 6b fd
 	ld h, 0x00:opc                                          ; FDC23E  26 00
 	pop XIY                                              ; FDC240  5d
 .LFDC241:
@@ -148130,7 +148135,7 @@ sub_FDC333:
 	call Var2805_Set                                      ; FDC353  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC357  be fc 31
 	push XBC                                             ; FDC35A  39
-	call sub_FD6B4D                                      ; FDC35B  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC35B  1d 4d 6b fd
 	ldw de, 0x39                                         ; FDC35F  32 39 00
 	ld h, 0x04:opc                                          ; FDC362  26 04
 	inc 6,XSP                                            ; FDC364  ef 66
@@ -148216,7 +148221,7 @@ sub_FDC410:
 	call Var2805_Set                                      ; FDC422  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC426  be fc 31
 	push XBC                                             ; FDC429  39
-	call sub_FD6B4D                                      ; FDC42A  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC42A  1d 4d 6b fd
 	ldw de, 0x3d                                         ; FDC42E  32 3d 00
 	ld h, 0x0a:opc                                          ; FDC431  26 0a
 	inc 6,XSP                                            ; FDC433  ef 66
@@ -148297,7 +148302,7 @@ sub_FDC4C6:
 	call Var2805_Set                                      ; FDC4E6  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC4EA  be fc 31
 	push XBC                                             ; FDC4ED  39
-	call sub_FD6B4D                                      ; FDC4EE  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC4EE  1d 4d 6b fd
 	ldw de, 0x47                                         ; FDC4F2  32 47 00
 	ld h, 0x06:opc                                          ; FDC4F5  26 06
 	inc 6,XSP                                            ; FDC4F7  ef 66
@@ -148476,7 +148481,7 @@ sub_FDC62E:
 	call sub_FD7719                                      ; FDC6B2  1d 19 77 fd
 	lda xbc, (xiz-6)                                     ; FDC6B6  be fa 31
 	push XBC                                             ; FDC6B9  39
-	call sub_FD6B4D                                      ; FDC6BA  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC6BA  1d 4d 6b fd
 	ld bc, (xiz-6)                                       ; FDC6BE  9e fa 21
 	extz BC                                              ; FDC6C1  d9 12
 	pushw bc                                             ; FDC6C3  29
@@ -148703,7 +148708,7 @@ sub_FDC87E:
 	call sub_FD7719                                      ; FDC8D1  1d 19 77 fd
 	lda xbc, (xiz-4)                                     ; FDC8D5  be fc 31
 	push XBC                                             ; FDC8D8  39
-	call sub_FD6B4D                                      ; FDC8D9  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC8D9  1d 4d 6b fd
 	ld bc, (xiz-4)                                       ; FDC8DD  9e fc 21
 	extz BC                                              ; FDC8E0  d9 12
 	pushw bc                                             ; FDC8E2  29
@@ -148774,7 +148779,7 @@ sub_FDC95B:
 	call Var2805_Set                                      ; FDC979  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDC97D  be fc 31
 	push XBC                                             ; FDC980  39
-	call sub_FD6B4D                                      ; FDC981  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDC981  1d 4d 6b fd
 	ldw hl, 0x1e                                         ; FDC985  33 1e 00
 	ld (xiz-5), 0x04                                     ; FDC988  be fb 00 04
 	inc 6,XSP                                            ; FDC98C  ef 66
@@ -148895,7 +148900,7 @@ sub_FDCA77:
 	call Var2805_Set                                      ; FDCA95  1d 92 a7 fd
 	lda xbc, (xiz-4)                                     ; FDCA99  be fc 31
 	push XBC                                             ; FDCA9C  39
-	call sub_FD6B4D                                      ; FDCA9D  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDCA9D  1d 4d 6b fd
 	ldw hl, 0x22                                         ; FDCAA1  33 22 00
 	ld (xiz-5), 0x04                                     ; FDCAA4  be fb 00 04
 	inc 6,XSP                                            ; FDCAA8  ef 66
@@ -149009,7 +149014,7 @@ sub_FDCB93:
 	call Var27F5_Get                                      ; FDCBA4  1d ca a0 fd
 	lda xbc, (xiz-4)                                     ; FDCBA8  be fc 31
 	push XBC                                             ; FDCBAB  39
-	call sub_FD6B4D                                      ; FDCBAC  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDCBAC  1d 4d 6b fd
 	lda xbc, (xiz-6)                                     ; FDCBB0  be fa 31
 	push XBC                                             ; FDCBB3  39
 	call Var27DA_Get                                      ; FDCBB4  1d f5 76 fd
@@ -150131,7 +150136,7 @@ sub_FDD437:
 .LFDD5EE:
 	lda xbc, (xiz-18)                                    ; FDD5EE  be ee 31
 	push XBC                                             ; FDD5F1  39
-	call sub_FD6B4D                                      ; FDD5F2  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDD5F2  1d 4d 6b fd
 	pop XIY                                              ; FDD5F6  5d
 .LFDD5F7:
 	call sub_FD7719                                      ; FDD5F7  1d 19 77 fd
@@ -150432,7 +150437,7 @@ ToneEditPage_A3_PositionParameter:
 .LFDD870:
 	lda xbc, (xiz-8)                                     ; FDD870  be f8 31
 	push XBC                                             ; FDD873  39
-	call sub_FD6B4D                                      ; FDD874  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDD874  1d 4d 6b fd
 	pushw 0xc3                                           ; FDD878  0b c3 00
 	pushw 0x01                                           ; FDD87B  0b 01 00
 	pushw 0x0d                                           ; FDD87E  0b 0d 00
@@ -150577,7 +150582,7 @@ ToneEditPage_A4_PositionMovement:
 .LFDD9A4:
 	lda xbc, (xiz-8)                                     ; FDD9A4  be f8 31
 	push XBC                                             ; FDD9A7  39
-	call sub_FD6B4D                                      ; FDD9A8  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDD9A8  1d 4d 6b fd
 	pushw 0xc4                                           ; FDD9AC  0b c4 00
 	pushw 0x03                                           ; FDD9AF  0b 03 00
 	pushw 0x10                                           ; FDD9B2  0b 10 00
@@ -150743,7 +150748,7 @@ ToneEditPage_A5_FittingMutingTuning:
 .LFDDAE7:
 	lda xbc, (xiz-8)                                     ; FDDAE7  be f8 31
 	push XBC                                             ; FDDAEA  39
-	call sub_FD6B4D                                      ; FDDAEB  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDDAEB  1d 4d 6b fd
 	ldw hl, 0xc5                                         ; FDDAEF  33 c5 00
 	pushw hl                                             ; FDDAF2  2b
 	pushw 0x01                                           ; FDDAF3  0b 01 00
@@ -150964,7 +150969,7 @@ sub_FDDCB9:
 .LFDDCCC:
 	lda xbc, (xiz-8)                                     ; FDDCCC  be f8 31
 	push XBC                                             ; FDDCCF  39
-	call sub_FD6B4D                                      ; FDDCD0  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDDCD0  1d 4d 6b fd
 	ldw hl, 0x17                                         ; FDDCD4  33 17 00
 	ld d, 0x02:opc                                          ; FDDCD7  24 02
 	pop XIY                                              ; FDDCD9  5d
@@ -151173,7 +151178,7 @@ ToneEditPage_A7_ResoModeKeyFollow:
 .LFDDE78:
 	lda xbc, (xiz-8)                                     ; FDDE78  be f8 31
 	push XBC                                             ; FDDE7B  39
-	call sub_FD6B4D                                      ; FDDE7C  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                      ; FDDE7C  1d 4d 6b fd
 	pushw 0xc7                                           ; FDDE80  0b c7 00
 	pushw 0x01                                           ; FDDE83  0b 01 00
 	pushw 0x15                                           ; FDDE86  0b 15 00
@@ -152405,7 +152410,7 @@ sub_FDE760:
 	lda xix, (xiz-16)                             ; FDE78A  be f0 34
 	lda xbc, (xiz-2)                              ; FDE78D  be fe 31
 	push XBC                                      ; FDE790  39
-	call sub_FD6B4D                                 ; FDE791  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDE791  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDE795  be fc 31
 	push XBC                                      ; FDE798  39
 	call Var27F5_Get                                 ; FDE799  1d ca a0 fd
@@ -152482,7 +152487,7 @@ sub_FDE81C:
 	lda xix, (xiz-16)                             ; FDE846  be f0 34
 	lda xbc, (xiz-2)                              ; FDE849  be fe 31
 	push XBC                                      ; FDE84C  39
-	call sub_FD6B4D                                 ; FDE84D  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDE84D  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDE851  be fc 31
 	push XBC                                      ; FDE854  39
 	call Var27F5_Get                                 ; FDE855  1d ca a0 fd
@@ -152555,7 +152560,7 @@ sub_FDE8D8:
 	lda xix, (xiz-16)                             ; FDE8F6  be f0 34
 	lda xbc, (xiz-2)                              ; FDE8F9  be fe 31
 	push XBC                                      ; FDE8FC  39
-	call sub_FD6B4D                                 ; FDE8FD  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDE8FD  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDE901  be fc 31
 	push XBC                                      ; FDE904  39
 	call Var27F5_Get                                 ; FDE905  1d ca a0 fd
@@ -152628,7 +152633,7 @@ sub_FDE988:
 	lda xix, (xiz-16)                             ; FDE9A6  be f0 34
 	lda xbc, (xiz-2)                              ; FDE9A9  be fe 31
 	push XBC                                      ; FDE9AC  39
-	call sub_FD6B4D                                 ; FDE9AD  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDE9AD  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDE9B1  be fc 31
 	push XBC                                      ; FDE9B4  39
 	call Var27F5_Get                                 ; FDE9B5  1d ca a0 fd
@@ -152691,7 +152696,7 @@ sub_FDEA38:
 	lda xix, (xiz-16)                             ; FDEA3E  be f0 34
 	lda xbc, (xiz-2)                              ; FDEA41  be fe 31
 	push XBC                                      ; FDEA44  39
-	call sub_FD6B4D                                 ; FDEA45  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDEA45  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDEA49  be fc 31
 	push XBC                                      ; FDEA4C  39
 	call Var27F5_Get                                 ; FDEA4D  1d ca a0 fd
@@ -152758,7 +152763,7 @@ sub_FDEAD2:
 	lda xix, (xiz-16)                             ; FDEAD8  be f0 34
 	lda xbc, (xiz-2)                              ; FDEADB  be fe 31
 	push XBC                                      ; FDEADE  39
-	call sub_FD6B4D                                 ; FDEADF  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDEADF  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDEAE3  be fc 31
 	push XBC                                      ; FDEAE6  39
 	call Var27F5_Get                                 ; FDEAE7  1d ca a0 fd
@@ -152822,7 +152827,7 @@ sub_FDEB6D:
 	lda xix, (xiz-16)                             ; FDEB73  be f0 34
 	lda xbc, (xiz-2)                              ; FDEB76  be fe 31
 	push XBC                                      ; FDEB79  39
-	call sub_FD6B4D                                 ; FDEB7A  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDEB7A  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDEB7E  be fc 31
 	push XBC                                      ; FDEB81  39
 	call Var27F5_Get                                 ; FDEB82  1d ca a0 fd
@@ -153681,7 +153686,7 @@ sub_FDF27D:
 	lda xix, (xiz-18)                             ; FDF283  be ee 34
 	lda xbc, (xiz-2)                              ; FDF286  be fe 31
 	push XBC                                      ; FDF289  39
-	call sub_FD6B4D                                 ; FDF28A  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDF28A  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDF28E  be fc 31
 	push XBC                                      ; FDF291  39
 	call Var27F5_Get                                 ; FDF292  1d ca a0 fd
@@ -153758,7 +153763,7 @@ sub_FDF33E:
 	lda xix, (xiz-18)                             ; FDF343  be ee 34
 	lda xbc, (xiz-2)                              ; FDF346  be fe 31
 	push XBC                                      ; FDF349  39
-	call sub_FD6B4D                                 ; FDF34A  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDF34A  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDF34E  be fc 31
 	push XBC                                      ; FDF351  39
 	call Var27F5_Get                                 ; FDF352  1d ca a0 fd
@@ -153821,7 +153826,7 @@ sub_FDF3DF:
 	lda xix, (xiz-16)                             ; FDF3E4  be f0 34
 	lda xbc, (xiz-2)                              ; FDF3E7  be fe 31
 	push XBC                                      ; FDF3EA  39
-	call sub_FD6B4D                                 ; FDF3EB  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDF3EB  1d 4d 6b fd
 	lda xbc, (xiz-4)                              ; FDF3EF  be fc 31
 	push XBC                                      ; FDF3F2  39
 	call Var27F5_Get                                 ; FDF3F3  1d ca a0 fd
@@ -154241,7 +154246,7 @@ sub_FDF77F:
 	lda xix, (xiz-16)                             ; FDF784  be f0 34
 	lda xbc, (xiz-2)                              ; FDF787  be fe 31
 	push XBC                                      ; FDF78A  39
-	call sub_FD6B4D                                 ; FDF78B  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDF78B  1d 4d 6b fd
 	push XIX                                      ; FDF78F  3c
 	pushw 0x03                                    ; FDF790  0b 03 00
 	call Arr27A6_Get                                 ; FDF793  1d 7b 6c fd
@@ -154311,7 +154316,7 @@ sub_FDF80A:
 	jr nz, .LFDF87B                               ; FDF838  6e 41
 	lda xbc, (xiz-4)                              ; FDF83A  be fc 31
 	push XBC                                      ; FDF83D  39
-	call sub_FD6B4D                                 ; FDF83E  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDF83E  1d 4d 6b fd
 	lda xbc, (xiz-6)                              ; FDF842  be fa 31
 	push XBC                                      ; FDF845  39
 	pushw 0x01                                    ; FDF846  0b 01 00
@@ -154374,7 +154379,7 @@ sub_FDF886:
 	jr nz, .LFDF91C                               ; FDF8D5  6e 45
 	lda xbc, (xiz-6)                              ; FDF8D7  be fa 31
 	push XBC                                      ; FDF8DA  39
-	call sub_FD6B4D                                 ; FDF8DB  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDF8DB  1d 4d 6b fd
 	lda xbc, (xiz-8)                              ; FDF8DF  be f8 31
 	push XBC                                      ; FDF8E2  39
 	pushw 0x00                                    ; FDF8E3  0b 00 00
@@ -154427,7 +154432,7 @@ sub_FDF928:
 	jr nz, .LFDF999                               ; FDF956  6e 41
 	lda xbc, (xiz-4)                              ; FDF958  be fc 31
 	push XBC                                      ; FDF95B  39
-	call sub_FD6B4D                                 ; FDF95C  1d 4d 6b fd
+	call Var27A3_GetValidSlot                                 ; FDF95C  1d 4d 6b fd
 	lda xbc, (xiz-6)                              ; FDF960  be fa 31
 	push XBC                                      ; FDF963  39
 	pushw 0x02                                    ; FDF964  0b 02 00

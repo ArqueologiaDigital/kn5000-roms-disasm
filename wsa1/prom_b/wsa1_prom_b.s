@@ -1195,10 +1195,10 @@
 	.set	sub_FD6704, 0xFD6704
 	.set	sub_FD6811, 0xFD6811
 	.set	sub_FD69E0, 0xFD69E0
-	.set	sub_FD6B4D, 0xFD6B4D
+	.set	Var27A3_GetValidSlot, 0xFD6B4D
 	.set	Arr27A6_Set, 0xFD6C65
 	.set	Arr27A6_Get, 0xFD6C7B
-	.set	sub_FD6C94, 0xFD6C94
+	.set	U8_ShiftLeft, 0xFD6C94
 	.set	ToneEdit_ApplyStep, 0xFD6CE1
 	.set	sub_FD6E90, 0xFD6E90
 	.set	ToneEdit_CommitField, 0xFD7435
@@ -17964,7 +17964,7 @@ sub_F0A162:
 	lda	xix, (xiz-14)	; F0A169  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0A16C  lda XBC,XIZ+0xfe
 	push	xbc	; F0A16F  push XBC
-	call	sub_FD6B4D	; F0A170  call 0xfd6b4d
+	call	Var27A3_GetValidSlot	; F0A170  call 0xfd6b4d
 	ld	c, 3:opc	; F0A174  ld C,0x03
 	m_mul MBD+r6, 0xfe, 3	; F0A176  mul BC,(XIZ+0xfe)
 	ld	h, c	; F0A179  ld H,C
@@ -18022,7 +18022,7 @@ sub_F0A1D1:
 	lda	xix, (xiz-14)	; F0A1D8  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0A1DB  lda XBC,XIZ+0xfe
 	push	xbc	; F0A1DE  push XBC
-	call	sub_FD6B4D	; F0A1DF  call 0xfd6b4d
+	call	Var27A3_GetValidSlot	; F0A1DF  call 0xfd6b4d
 	ld	c, 3:opc	; F0A1E3  ld C,0x03
 	m_mul MBD+r6, 0xfe, 3	; F0A1E5  mul BC,(XIZ+0xfe)
 	ld	h, c	; F0A1E8  ld H,C
@@ -18080,7 +18080,7 @@ sub_F0A240:
 	lda	xix, (xiz-14)	; F0A247  lda XIX,XIZ+0xf2
 	lda	xbc, (xiz-2)	; F0A24A  lda XBC,XIZ+0xfe
 	push	xbc	; F0A24D  push XBC
-	call	sub_FD6B4D	; F0A24E  call 0xfd6b4d
+	call	Var27A3_GetValidSlot	; F0A24E  call 0xfd6b4d
 	ld	c, 3:opc	; F0A252  ld C,0x03
 	m_mul MBD+r6, 0xfe, 3	; F0A254  mul BC,(XIZ+0xfe)
 	ld	h, c	; F0A257  ld H,C
@@ -23657,14 +23657,14 @@ sub_F0C291_Join12:
 	ld	bc, (xiz-8)	; F0C6B8  ld BC,(XIZ+0xf8)
 	extz	bc	; F0C6BB  extz BC
 	pushw	bc	; F0C6BD  push BC
-	call	sub_FD6C94	; F0C6BE  call 0xfd6c94
+	call	U8_ShiftLeft	; F0C6BE  call 0xfd6c94
 	ld	l, a	; F0C6C2  ld L,A
 	or	l, h	; F0C6C4  or L,H
 	pushw	5	; F0C6C6  push 0x0005
 	ld	bc, (xiz-12)	; F0C6C9  ld BC,(XIZ+0xf4)
 	extz	bc	; F0C6CC  extz BC
 	pushw	bc	; F0C6CE  push BC
-	call	sub_FD6C94	; F0C6CF  call 0xfd6c94
+	call	U8_ShiftLeft	; F0C6CF  call 0xfd6c94
 	or	a, l	; F0C6D3  or A,L
 	extz	wa	; F0C6D5  extz WA
 	pushw	wa	; F0C6D7  push WA

@@ -98,8 +98,8 @@ and the arithmetic is
     D[3]   = (D[0] & ~(D[6] << D[7])) | (field << D[7])
 ```
 
-(`0xFD6D32`-`0xFD6DC9` unsigned, `0xFD6DE5`-`0xFD6E6x` signed; `sub_FD6C94` is
-`v << n` by a doubling loop and `sub_FD6CBA` is `v >> n`.)
+(`0xFD6D32`-`0xFD6DC9` unsigned, `0xFD6DE5`-`0xFD6E6x` signed; `U8_ShiftLeft` is
+`v << n` by a doubling loop and `U8_ShiftRight` is `v >> n`.)
 
 **So MASK, SHIFT, MIN and MAX are immediates inside each editor**, and they are
 this note's answer for a field's limits.  GRADE **PROVEN**: they are read from
@@ -149,7 +149,7 @@ trace the panel scan that produces the event code.
 
 ```
     if (!ToneEdit_ApplyStep(D)) return 0;
-    m = sub_FD6C94(D[6], D[7]);                    // mask << shift
+    m = U8_ShiftLeft(D[6], D[7]);                    // mask << shift
     (0x27F5) ? sub_FD6704(layer, param, &D[3], m)  // drum kit
              : sub_FD616A(layer, param, &D[3], m); // melodic
     Arr27A6_Set(ramIndex, D[3]);
