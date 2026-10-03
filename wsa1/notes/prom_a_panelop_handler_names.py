@@ -27,6 +27,8 @@ QUESTION IT ANSWERS
   REFUSED, and left as they are:
     * a target already carrying a name (PanelOp_Nop and the rest);
     * a target reached at two DIFFERENT ops (one routine serving two controls has no one name);
+    * a table read by several screens whose names have no specific common group (2026-10-04: a
+      specific group, e.g. SoundEditDigitalEffect for 0x9A and 0x9C, is used as the screen);
     * a table whose reader is not a ScreenButton_* routine, or that has no reader (readers are
       looked for in prom_b too: nine of these tables belong to prom_b screen objects);
     * ops 13 and 14, as above.
@@ -44,6 +46,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import prom_a_screen_key_actions as KA  # noqa: E402  group()
 PROM_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
 OPNAME = {k: "SoftKeyCol%d" % (k + 1) for k in range(8)}
 OPNAME.update({8 + k: "LcdKeyRow%d" % (k + 1) for k in range(5)})
@@ -114,9 +118,18 @@ def plan():
     for t, ents in T.items():
         rs = sorted(set(R.get(t, [])))
         scr = [screen_of(r) for r in rs]
-        if len(rs) != 1 or scr[0] is None:
+        if not rs or None in scr:
             refused_tables.append((t, rs))
             continue
+        if len(rs) > 1:
+            # 2026-10-04: one table read by several screens' BUTTON methods takes their common group
+            # (prom_a_screen_key_actions.group: SoundEditDigitalEffect + SoundEditDigitalEffectFromMenu ->
+            # SoundEditDigitalEffect), when that group is specific; a numbered screen has no group.
+            g = KA.group(sorted(scr))
+            if not g or g in ("SoundEdit", "Edit") or any(x.startswith("ScreenCode") for x in scr):
+                refused_tables.append((t, rs))
+                continue
+            scr = [g]
         for op, tgt in ents:
             if re.match(r'^sub_F[0-9A-F]{5}$', tgt):          # prom_a or prom_b handlers
                 uses.setdefault(tgt, []).append((t, scr[0], op))

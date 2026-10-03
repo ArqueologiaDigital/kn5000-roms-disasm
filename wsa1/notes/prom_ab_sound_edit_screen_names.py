@@ -56,6 +56,9 @@ SCREENS = {
     0x99: ("SoundEditFilterLfo", "FILTER SOUND EDIT; LF01 LF02 LF03 LF04, LF0 WAVE, DELAY, SPEED"),
     0x9A: ("SoundEditDigitalEffect", "the DIGITAL EFFECT page (SoundEditDigitalEffect_Paint, already so named)"),
     0x9B: ("SoundEditControllerPage2", "C0NTR0LLER SOUND EDIT; PAGE2/2 AFTER TOUCH, CTRL PEDAL (SoundEditController_PaintPage2)"),
+    0x9C: ("SoundEditDigitalEffectFromMenu", "no paint of its own (DispatchTable_F5B8F8[0x9C] is the default `ret`): its ENTER calls\n"
+           "ScreenEnter_SoundEditDigitalEffect, which paints page 0x9A, then sends ToneMsg80_Id00(0x10); it shares 0x9A's button\n"
+           "table PanelOpTable_FCFBFC and leave body; LcdKeyRow3_SoundEditMenu requests it (2026-10-04)"),
     0x9D: ("SoundEditCopy", "the COPY page (SoundEditCopy_Paint, already so named)"),
     0x9E: ("SoundEditMemoryWrite", "MEM0RY WRITE SOUND EDIT; NAME, MEMORY BANK"),
     0x9F: ("SoundEditNaming", "SOUND NAMING; WRITE"),

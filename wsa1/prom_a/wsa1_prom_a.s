@@ -453,17 +453,17 @@
 	.set LcdKeyRow4_SoundEditDrumMenu,                              0x00F0AD36
 	.set LcdKeyRow5_SoundEditDrumMenu,                              0x00F0AD75
 	.set ExitKey_SoundEditDrumMenu,                              0x00F0ADBC
-	.set sub_F0ADD4,                              0x00F0ADD4
-	.set sub_F0AE9B,                              0x00F0AE9B
-	.set sub_F0AF66,                              0x00F0AF66
-	.set sub_F0B041,                              0x00F0B041
-	.set sub_F0B0FF,                              0x00F0B0FF
-	.set sub_F0B1A9,                              0x00F0B1A9
-	.set sub_F0B228,                              0x00F0B228
-	.set sub_F0B2E2,                              0x00F0B2E2
-	.set sub_F0B39C,                              0x00F0B39C
-	.set sub_F0B462,                              0x00F0B462
-	.set sub_F0B51B,                              0x00F0B51B
+	.set SoftKeyCol1_SoundEditDigitalEffect,                              0x00F0ADD4
+	.set SoftKeyCol2_SoundEditDigitalEffect,                              0x00F0AE9B
+	.set SoftKeyCol3_SoundEditDigitalEffect,                              0x00F0AF66
+	.set SoftKeyCol4_SoundEditDigitalEffect,                              0x00F0B041
+	.set SoftKeyCol5_SoundEditDigitalEffect,                              0x00F0B0FF
+	.set SoftKeyCol6_SoundEditDigitalEffect,                              0x00F0B1A9
+	.set SoftKeyCol7_SoundEditDigitalEffect,                              0x00F0B228
+	.set SoftKeyCol8_SoundEditDigitalEffect,                              0x00F0B2E2
+	.set LcdKeyRow2_SoundEditDigitalEffect,                              0x00F0B39C
+	.set LcdKeyRow3_SoundEditDigitalEffect,                              0x00F0B462
+	.set ExitKey_SoundEditDigitalEffect,                              0x00F0B51B
 	.set LcdKeyRow1_SoundEditMemoryWrite,                              0x00F0B533
 	.set LcdKeyRow3_SoundEditMemoryWrite,                              0x00F0B578
 	.set LcdKeyRow4_SoundEditMemoryWrite,                              0x00F0B62F
@@ -125305,24 +125305,24 @@ PanelOpTable_FCFBB4:
 
 ; PanelOpTable_FCFBFC -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_SoundEditDigitalEffect (prom_b) at 0xF0AA3D; ScreenButton_Code9C (prom_b) at 0xF0AA8E.
+; Read by: ScreenButton_SoundEditDigitalEffect (prom_b) at 0xF0AA3D; ScreenButton_SoundEditDigitalEffectFromMenu (prom_b) at 0xF0AA8E.
 PanelOpTable_FCFBFC:
-	.long sub_F0ADD4                              ; FCFBFC  [ 0] prom_b sub_F0ADD4
-	.long sub_F0AE9B                              ; FCFC00  [ 1] prom_b sub_F0AE9B
-	.long sub_F0AF66                              ; FCFC04  [ 2] prom_b sub_F0AF66
-	.long sub_F0B041                              ; FCFC08  [ 3] prom_b sub_F0B041
-	.long sub_F0B0FF                              ; FCFC0C  [ 4] prom_b sub_F0B0FF
-	.long sub_F0B1A9                              ; FCFC10  [ 5] prom_b sub_F0B1A9
-	.long sub_F0B228                              ; FCFC14  [ 6] prom_b sub_F0B228
-	.long sub_F0B2E2                              ; FCFC18  [ 7] prom_b sub_F0B2E2
+	.long SoftKeyCol1_SoundEditDigitalEffect                              ; FCFBFC  [ 0] prom_b SoftKeyCol1_SoundEditDigitalEffect
+	.long SoftKeyCol2_SoundEditDigitalEffect                              ; FCFC00  [ 1] prom_b SoftKeyCol2_SoundEditDigitalEffect
+	.long SoftKeyCol3_SoundEditDigitalEffect                              ; FCFC04  [ 2] prom_b SoftKeyCol3_SoundEditDigitalEffect
+	.long SoftKeyCol4_SoundEditDigitalEffect                              ; FCFC08  [ 3] prom_b SoftKeyCol4_SoundEditDigitalEffect
+	.long SoftKeyCol5_SoundEditDigitalEffect                              ; FCFC0C  [ 4] prom_b SoftKeyCol5_SoundEditDigitalEffect
+	.long SoftKeyCol6_SoundEditDigitalEffect                              ; FCFC10  [ 5] prom_b SoftKeyCol6_SoundEditDigitalEffect
+	.long SoftKeyCol7_SoundEditDigitalEffect                              ; FCFC14  [ 6] prom_b SoftKeyCol7_SoundEditDigitalEffect
+	.long SoftKeyCol8_SoundEditDigitalEffect                              ; FCFC18  [ 7] prom_b SoftKeyCol8_SoundEditDigitalEffect
 	.long PanelOp_Nop                             ; FCFC1C  [ 8]
-	.long sub_F0B39C                              ; FCFC20  [ 9] prom_b sub_F0B39C
-	.long sub_F0B462                              ; FCFC24  [10] prom_b sub_F0B462
+	.long LcdKeyRow2_SoundEditDigitalEffect                              ; FCFC20  [ 9] prom_b LcdKeyRow2_SoundEditDigitalEffect
+	.long LcdKeyRow3_SoundEditDigitalEffect                              ; FCFC24  [10] prom_b LcdKeyRow3_SoundEditDigitalEffect
 	.long PanelOp_Nop                             ; FCFC28  [11]
 	.long PanelOp_Nop                             ; FCFC2C  [12]
 	.long PanelOp_Nop                             ; FCFC30  [13]
 	.long PanelOp_Nop                             ; FCFC34  [14]
-	.long sub_F0B51B                              ; FCFC38  [15] prom_b sub_F0B51B
+	.long ExitKey_SoundEditDigitalEffect                              ; FCFC38  [15] prom_b ExitKey_SoundEditDigitalEffect
 	.long PanelOp_Nop                             ; FCFC3C  [16]
 	.long 0x00000000                              ; FCFC40  [17] zero
 
@@ -125436,7 +125436,7 @@ ScreenCode80_Handlers:
 	.long ScreenEnter_SoundEditFilterLfo                              ; FCFD4B  [25]
 	.long ScreenCode_Nop                          ; FCFD4F  [26]
 	.long ScreenEnter_SoundEditControllerPage2                              ; FCFD53  [27]
-	.long ScreenCode9C_Handler                              ; FCFD57  [28]
+	.long ScreenEnter_SoundEditDigitalEffectFromMenu                              ; FCFD57  [28]
 	.long ScreenEnter_SoundEditCopy                              ; FCFD5B  [29]
 	.long ScreenEnter_SoundEditMemoryWrite                              ; FCFD5F  [30]
 	.long ScreenEnter_SoundEditNaming                              ; FCFD63  [31]
@@ -149323,7 +149323,7 @@ sub_FDBF5E:
 	popw hl                                              ; FDC0DD  4b
 	unlk XIZ                                             ; FDC0DE  ee 0d
 	ret                                                  ; FDC0E0  0e
-ScreenCode9C_Handler:
+ScreenEnter_SoundEditDigitalEffectFromMenu:
 	calr ScreenEnter_SoundEditDigitalEffect                                      ; FDC0E1  1e 49 0f
 	pushw 0x10                                           ; FDC0E4  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC0E7  1d 47 64 fd
@@ -153041,7 +153041,7 @@ ScreenLeave_SoundEditControllerPage2:
 	ret                                                  ; FDE1F8  0e
 T_F420A8_Nop:
 	ret                                                  ; FDE1F9  0e
-ScreenLeave_Code9C:
+ScreenLeave_SoundEditDigitalEffectFromMenu:
 	pushw 0x00                                           ; FDE1FA  0b 00 00
 	call Var27DA_Set                                      ; FDE1FD  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE201  1d 13 77 fd

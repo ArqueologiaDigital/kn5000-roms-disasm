@@ -1564,7 +1564,7 @@
 	.set	ScreenEnter_SoundEditAmpLfo, 0xFDBBC3
 	.set	ScreenEnter_SoundEditControllerPage1, 0xFDBBD6
 	.set	ScreenEnter_SoundEditControllerPage2, 0xFDBEDE
-	.set	ScreenCode9C_Handler, 0xFDC0E1
+	.set	ScreenEnter_SoundEditDigitalEffectFromMenu, 0xFDC0E1
 	.set	ScreenEnter_SoundEditFilterLpf12, 0xFDC0ED
 	.set	sub_FDC0FD, 0xFDC0FD
 	.set	sub_FDC22F, 0xFDC22F
@@ -1630,7 +1630,7 @@
 	.set	T_F42098_Nop, 0xFDE1EB
 	.set	ScreenLeave_SoundEditControllerPage2, 0xFDE1EC
 	.set	T_F420A8_Nop, 0xFDE1F9
-	.set	ScreenLeave_Code9C, 0xFDE1FA
+	.set	ScreenLeave_SoundEditDigitalEffectFromMenu, 0xFDE1FA
 	.set	T_F420B8_Nop, 0xFDE207
 	.set	ScreenLeave_SoundEditModelingToneTemplate, 0xFDE208
 	.set	T_F42168_Nop, 0xFDE215
@@ -20037,7 +20037,7 @@ sub_F0AA10_Skip:
 	ret	; F0AA60  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9C
+; ScreenButton_SoundEditDigitalEffectFromMenu
 ; Called from: T_F420B4 (x0)
 ; Touches:   |  0xFCFBFC
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -20047,8 +20047,8 @@ sub_F0AA10_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9C: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9C: that entry points at the thunk triple T_F420AC (Enter) / T_F420B0 (Leave) / T_F420B4 (Button).
-ScreenButton_Code9C:		; <- T_F420B4
+; ScreenButton_SoundEditDigitalEffectFromMenu: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9C: that entry points at the thunk triple T_F420AC (Enter) / T_F420B0 (Leave) / T_F420B4 (Button).
+ScreenButton_SoundEditDigitalEffectFromMenu:		; <- T_F420B4
 	link XIZ,0xfffc	; F0AA61  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA65  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA68  push XBC
@@ -20622,7 +20622,7 @@ sub_F0ADBC_Skip:
 	ret	; F0ADD3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0ADD4
+; SoftKeyCol1_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[252]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D
@@ -20632,7 +20632,10 @@ sub_F0ADBC_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0ADD4:
+; SoftKeyCol1_SoundEditDigitalEffect: SOFT KEY column 1 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 0 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0ADD4  link XIZ,0xfff2
 	push	xix	; F0ADD8  push XIX
 	lda	xix, (xiz-14)	; F0ADD9  lda XIX,XIZ+0xf2
@@ -20756,7 +20759,7 @@ sub_F0AE6B_Skip:
 	ret	; F0AE9A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AE9B
+; SoftKeyCol2_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[253]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D
@@ -20766,7 +20769,10 @@ sub_F0AE6B_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AE9B:
+; SoftKeyCol2_SoundEditDigitalEffect: SOFT KEY column 2 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 1 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0AE9B  link XIZ,0xfff2
 	push	xix	; F0AE9F  push XIX
 	lda	xix, (xiz-14)	; F0AEA0  lda XIX,XIZ+0xf2
@@ -20892,7 +20898,7 @@ sub_F0AF36_Skip:
 	ret	; F0AF65  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AF66
+; SoftKeyCol3_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[254]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D
@@ -20902,7 +20908,10 @@ sub_F0AF36_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AF66:
+; SoftKeyCol3_SoundEditDigitalEffect: SOFT KEY column 3 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 2 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0AF66  link XIZ,0xfff2
 	push	xix	; F0AF6A  push XIX
 	lda	xix, (xiz-14)	; F0AF6B  lda XIX,XIZ+0xf2
@@ -21057,7 +21066,7 @@ sub_F0B011_Skip:
 	ret	; F0B040  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B041
+; SoftKeyCol4_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[255]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D
@@ -21067,7 +21076,10 @@ sub_F0B011_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B041:
+; SoftKeyCol4_SoundEditDigitalEffect: SOFT KEY column 4 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 3 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0B041  link XIZ,0xfff2
 	push	xix	; F0B045  push XIX
 	lda	xix, (xiz-14)	; F0B046  lda XIX,XIZ+0xf2
@@ -21189,7 +21201,7 @@ sub_F0B0CF_Skip:
 	ret	; F0B0FE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B0FF
+; SoftKeyCol5_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[256]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D
@@ -21199,7 +21211,10 @@ sub_F0B0CF_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B0FF:
+; SoftKeyCol5_SoundEditDigitalEffect: SOFT KEY column 5 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 4 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0B0FF  link XIZ,0xfff2
 	push	xix	; F0B103  push XIX
 	lda	xix, (xiz-14)	; F0B104  lda XIX,XIZ+0xf2
@@ -21303,7 +21318,7 @@ sub_F0B179_Skip:
 	ret	; F0B1A8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B1A9
+; SoftKeyCol6_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[257]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D 0xFD7435 0xFD7C01
@@ -21313,7 +21328,10 @@ sub_F0B179_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B1A9:
+; SoftKeyCol6_SoundEditDigitalEffect: SOFT KEY column 6 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 5 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0B1A9  link XIZ,0xfff2
 	push	xix	; F0B1AD  push XIX
 	lda	xix, (xiz-14)	; F0B1AE  lda XIX,XIZ+0xf2
@@ -21364,7 +21382,7 @@ sub_F0B1A9_Join:
 	ret	; F0B227  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B228
+; SoftKeyCol7_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[258]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D
@@ -21374,7 +21392,10 @@ sub_F0B1A9_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B228:
+; SoftKeyCol7_SoundEditDigitalEffect: SOFT KEY column 7 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 6 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0B228  link XIZ,0xfff2
 	push	xix	; F0B22C  push XIX
 	lda	xix, (xiz-14)	; F0B22D  lda XIX,XIZ+0xf2
@@ -21480,7 +21501,7 @@ sub_F0B2DE:
 	ret	; F0B2E1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B2E2
+; SoftKeyCol8_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[259]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D
@@ -21490,7 +21511,10 @@ sub_F0B2DE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B2E2:
+; SoftKeyCol8_SoundEditDigitalEffect: SOFT KEY column 8 (lower or upper; the flag carries which) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 7 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_SoundEditDigitalEffect:
 	link XIZ,0xfff2	; F0B2E2  link XIZ,0xfff2
 	push	xix	; F0B2E6  push XIX
 	lda	xix, (xiz-14)	; F0B2E7  lda XIX,XIZ+0xf2
@@ -21585,7 +21609,7 @@ sub_F0B36C_Skip:
 	ret	; F0B39B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B39C
+; LcdKeyRow2_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[261]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD616A 0xFD608B 0xFD6122 T_Dispatch_Code80 0xFDA467
@@ -21595,7 +21619,10 @@ sub_F0B36C_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B39C:
+; LcdKeyRow2_SoundEditDigitalEffect: LCD key row 2 (left or right) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 9 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_SoundEditDigitalEffect:
 	link XIZ,0xfffe	; F0B39C  link XIZ,0xfffe
 	pushw	hl	; F0B3A0  push HL
 	push	xix	; F0B3A1  push XIX
@@ -21676,7 +21703,7 @@ sub_F0B39C_Skip3:
 	ret	; F0B461  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B462
+; LcdKeyRow3_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[262]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD616A 0xFD608B T_Dispatch_Code80 0xFDA467
@@ -21686,7 +21713,10 @@ sub_F0B39C_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B462:
+; LcdKeyRow3_SoundEditDigitalEffect: LCD key row 3 (left or right) on SoundEditDigitalEffect -- SoundEditDigitalEffect op 10 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_SoundEditDigitalEffect:
 	link XIZ,0xffff	; F0B462  link XIZ,0xffff
 	pushw	hl	; F0B466  push HL
 	push	xix	; F0B467  push XIX
@@ -21762,7 +21792,7 @@ sub_F0B462_Skip3:
 	ret	; F0B51A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B51B
+; ExitKey_SoundEditDigitalEffect
 ; Called from: table 0xFCF80C[267]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -21772,7 +21802,10 @@ sub_F0B462_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B51B:
+; ExitKey_SoundEditDigitalEffect: the EXIT key on SoundEditDigitalEffect -- SoundEditDigitalEffect op 15 (PanelOpTable_FCFBFC).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_SoundEditDigitalEffect:
 	link XIZ,0x0000	; F0B51B  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B51F  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B36C_Skip2	; F0B523  jr NZ,0xf0b530
@@ -89760,9 +89793,9 @@ T_F4209C:	jp ScreenEnter_SoundEditControllerPage2  ; -> prom_a 0x5BEDE
 T_F420A0:	jp ScreenLeave_SoundEditControllerPage2  ; -> prom_a 0x5E1EC
 T_F420A4:	jp ScreenButton_SoundEditControllerPage2  ; -> prom_a 0x5058E
 T_F420A8:	jp T_F420A8_Nop  ; -> prom_a 0x5E1F9
-T_F420AC:	jp ScreenCode9C_Handler  ; -> prom_a 0x5C0E1
-T_F420B0:	jp ScreenLeave_Code9C  ; -> prom_a 0x5E1FA
-T_F420B4:	jp ScreenButton_Code9C  ; -> prom_b 0x0AA61
+T_F420AC:	jp ScreenEnter_SoundEditDigitalEffectFromMenu  ; -> prom_a 0x5C0E1
+T_F420B0:	jp ScreenLeave_SoundEditDigitalEffectFromMenu  ; -> prom_a 0x5E1FA
+T_F420B4:	jp ScreenButton_SoundEditDigitalEffectFromMenu  ; -> prom_b 0x0AA61
 T_F420B8:	jp T_F420B8_Nop  ; -> prom_a 0x5E207
 T_F420BC:	jp ScreenEnter_SoundEditFilterLpf12  ; -> prom_a 0x5C0ED
 T_F420C0:	jp ScreenLeave_SoundEditFilterLpf12  ; -> prom_a 0x5E24E
