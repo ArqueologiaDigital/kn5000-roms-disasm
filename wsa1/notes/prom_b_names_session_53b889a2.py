@@ -318,4 +318,7 @@ RENAMES = [
     ("sub_F665F2", "TrackAssignPresets_SelectField1"),
     ("sub_F665FF", "TrackAssignPresets_SelectField2"),
     ("sub_F6660C", "TrackAssignPresets_SelectField3"),
+    ("sub_FEAA86", "UI_GotoScreen24"),
+    ("sub_FEAA8D", "UI_GotoScreen27"),
+    ("sub_F6BFF2", "MsgLine_PartVolume_Call"),
 ]

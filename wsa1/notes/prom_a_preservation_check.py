@@ -376,6 +376,8 @@ RENAMES = {
     "sub_FDE70F": "ScreenButton_Code99",
     "sub_FD644D": "ToneMsg80_Id00",
     "sub_FD649A": "ToneMsg80_Id04",
+    "sub_FEAA86": "UI_GotoScreen24",
+    "sub_FEAA8D": "UI_GotoScreen27",
 }
 
 

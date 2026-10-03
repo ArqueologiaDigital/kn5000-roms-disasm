@@ -155350,7 +155350,7 @@ sub_F6BC89_Skip38:
 sub_F6BC89_Skip39:
 	ld	a, (4697:16)	; F6BFB6  ld A,(0x1259)
 	cp	a, 3:i3	; F6BFBA  cp A,3
-	jr	z, sub_F6BFF2	; F6BFBC  jr Z,0xf6bff2
+	jr	z, MsgLine_PartVolume_Call	; F6BFBC  jr Z,0xf6bff2
 	cp	a, 4:i3	; F6BFBE  cp A,4
 	jr	z, sub_F6BFF2_Skip	; F6BFC0  jr Z,0xf6bff6
 	cp	a, 12	; F6BFC2  cp A,0x0c
@@ -155372,7 +155372,7 @@ sub_F6BC89_Skip39:
 	jrl	sub_F6BC89_Loop2	; F6BFEF  jrl T,0xf6be09
 
 ; --------------------------------------------------------------------------
-; sub_F6BFF2
+; MsgLine_PartVolume_Call
 ; Called from: in-module: 0xF6C082
 ; Touches: (0x0E63) (0x0EF5) (0x100C) (0x1259) (0x125A) (0x1264) (0x12B8)
 ;          (0x12B9) (0x12EB)
@@ -155384,7 +155384,7 @@ sub_F6BC89_Skip39:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6BFF2:
+MsgLine_PartVolume_Call:
 	calr	MsgLine_PartVolume_Veneer	; F6BFF2  calr 0xf67450
 	ret	; F6BFF5  ret
 sub_F6BFF2_Skip:
@@ -155447,7 +155447,7 @@ sub_F6BFF2_Skip13:
 	jrl	sub_F6BC89_Loop2	; F6C079  jrl T,0xf6be09
 	jrl	sub_F6BC89_Loop2	; F6C07C  jrl T,0xf6be09
 	jrl	sub_F6BC89_Loop2	; F6C07F  jrl T,0xf6be09
-	call	sub_F6BFF2	; F6C082  call 0xf6bff2
+	call	MsgLine_PartVolume_Call	; F6C082  call 0xf6bff2
 	ret	; F6C086  ret
 	ld	a, (4708:16)	; F6C087  ld A,(0x1264)
 	bit	3, a	; F6C08B  bit 0x03,A

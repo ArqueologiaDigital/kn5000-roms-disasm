@@ -173426,7 +173426,7 @@ ScreenDispatch_FE9A4A_Nop12:   ; entry: named by 4 `.long` operands, first at 0x
 sub_FE9B5F:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 	bit 0x07,W                                           ; FE9B5F  c8 33 07
 	jr nz, .LFE9B68                                      ; FE9B62  6e 04
-	calr sub_FEAA86                                          ; FE9B64  1e 1f 0f
+	calr UI_GotoScreen24                                          ; FE9B64  1e 1f 0f
 	ret                                                  ; FE9B67  0e
 .LFE9B68:
 	calr sub_FE81D4_Nop                                          ; FE9B68  1e 7b e6
@@ -173568,7 +173568,7 @@ ScreenDispatch_FE9BA4_Nop12:   ; entry: named by 4 `.long` operands, first at 0x
 sub_FE9CAF:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 	bit 0x07,W                                           ; FE9CAF  c8 33 07
 	jr nz, .LFE9CB8                                      ; FE9CB2  6e 04
-	calr sub_FEAA8D                                      ; FE9CB4  1e d6 0d
+	calr UI_GotoScreen27                                      ; FE9CB4  1e d6 0d
 	ret                                                  ; FE9CB7  0e
 .LFE9CB8:
 	calr sub_FE81D4_Nop                                          ; FE9CB8  1e 2b e5
@@ -174939,10 +174939,10 @@ sub_FEAA20:
 .LFEAA7D:
 	m_add_mi16 MW24, 0x601f05, 0x0001                    ; FEAA7D  d2 05 1f 60 38 01 00
 	jr .LFEAA5F                                          ; FEAA84  68 d9
-sub_FEAA86:
+UI_GotoScreen24:
 	ldw (UI_Request:16), 0x8024                              ; FEAA86  f1 70 20 02 24 80
 	ret                                                  ; FEAA8C  0e
-sub_FEAA8D:
+UI_GotoScreen27:
 	ldw (UI_Request:16), 0x8027                              ; FEAA8D  f1 70 20 02 27 80
 	ret                                                  ; FEAA93  0e
 sub_FEAA94:
