@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,602
-#   semantic names ........... 50,753 (98.4%)
+#   symbols .................. 51,603
+#   semantic names ........... 50,754 (98.4%)
 #   positional names ......... 849
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -45688,6 +45688,7 @@ UIState_Mode0or1 00FC7B4C
 UIState_Mode3 00FC7B53
 UIState_Mode4 00FC7B5A
 UIState_ProcessExtendedMode 00FC7B61
+UIState_ProcessExtendedMode_Cases 00FC7B85
 UIState_ProcessExtendedMode_Skip 00FC7BA5
 UIStateEvt_NullHandler 00FC7BBA
 UIState_SwitchForMidiFlags 00FC7BBB

@@ -3980,7 +3980,7 @@ UIState_ProcessExtendedMode:
 	add	wa, wa
 	lda	xix, (UIState_ProcessExtendedMode_Data:24)
 	ld	wa, (xix+wa)
-	lda	xix, (0xfc73ba:24)
+	lda	xix, (UIState_ProcessExtendedMode_Cases:24)
 ; (pre-port v7 note about the bytes at 0xFC73B5:)
 ; v10 does not spell this byte either
 	jp	t, (xix+wa)
@@ -3988,6 +3988,7 @@ UIState_ProcessExtendedMode:
 	; v10 does not spell this byte either
 	; (pre-port v7 note about the bytes at 0xFC73B8:)
 	; v10 does not spell this byte either
+UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_Data[k]
 	orw	(36514:16), 515
 	; (pre-port v7 note about the bytes at 0xFC73BB:)
 	; differs from v10 here and llvm-objdump cannot read it

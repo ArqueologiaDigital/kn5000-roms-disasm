@@ -3826,8 +3826,9 @@ UIState_ProcessExtendedMode:
 	add	wa, wa
 	lda	xix, (UIState_ProcessExtendedMode_Data:24)
 	ld	wa, (xix+wa)
-	lda xix, (16546693:24)
+	lda xix, (UIState_ProcessExtendedMode_Cases:24)
 	jp	t, (xix+wa)
+UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_Data[k]
 	orw	(36670:16), 515
 	ret
 	orw	(36670:16), 252

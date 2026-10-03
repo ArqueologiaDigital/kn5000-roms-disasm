@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,593
-#   semantic names ........... 50,735 (98.3%)
+#   symbols .................. 51,594
+#   semantic names ........... 50,736 (98.3%)
 #   positional names ......... 858
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -45667,6 +45667,7 @@ UIState_Mode0or1 00FC7B4C
 UIState_Mode3 00FC7B53
 UIState_Mode4 00FC7B5A
 UIState_ProcessExtendedMode 00FC7B61
+UIState_ProcessExtendedMode_Cases 00FC7B85
 UIState_ProcessExtendedMode_Skip 00FC7BA5
 UIStateEvt_NullHandler 00FC7BBA
 UIState_SwitchForMidiFlags 00FC7BBB
