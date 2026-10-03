@@ -69,6 +69,6 @@ sub_F7E39F_Nop = 0xF7E2D8;
 PromB_LCD_ScreenRedraw_Begin = 0xF7E2D9;
 PromB_LCD_ScreenRedraw_End = 0xF7E2E7;
 sub_F7E2ED = 0xF7E2ED;
-Draw_TrackAssignPresetsTechnicsSetUp1116 = 0xF7E354;
+sub_F7E354 = 0xF7E354;
 sub_F7F237 = 0xF7F237;
 sub_F7F245 = 0xF7F245;

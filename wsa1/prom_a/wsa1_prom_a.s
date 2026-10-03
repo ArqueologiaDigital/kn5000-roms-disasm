@@ -2586,7 +2586,7 @@ Paint_S0ngC0py:
 	call T_DisplayList_Run                               ; F802D7  1d f0 17 f4
 .LF802DB:
 	call sub_F802EC                                      ; F802DB  1d ec 02 f8
-	call Draw_S0ngSelectNameKbS0ngName                                      ; F802DF  1d 38 03 f8
+	call sub_F80338                                      ; F802DF  1d 38 03 f8
 	call sub_F80384                                      ; F802E3  1d 84 03 f8
 	call PromB_LCD_ScreenRedraw_End                                        ; F802E7  1d e7 e2 f7
 	ret                                                  ; F802EB  0e
@@ -2632,7 +2632,7 @@ sub_F802EC:
 	ld XIX,DL_F3C16C                                     ; F8032E  44 6c c1 f3 00
 	call T_DisplayListB_Run                              ; F80333  1d f4 17 f4
 	ret                                                  ; F80337  0e
-; Draw_S0ngSelectNameKbS0ngName -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; sub_F80338 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 23
 ; instructions to its first `ret`:
@@ -2649,7 +2649,7 @@ sub_F802EC:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-Draw_S0ngSelectNameKbS0ngName:
+sub_F80338:
 	xor XWA,XWA                                          ; F80338  e8 d0
 	ld a, (0x0e0d:16)                                   ; F8033A  c1 0d 0e 21
 	ld (0x12f7:16), a                                   ; F8033E  f1 f7 12 41
@@ -2708,10 +2708,10 @@ ScreenLeave_S0ngC0py_Nop:
 	call sub_F80384                                      ; F803E8  1d 84 03 f8
 	ret                                                  ; F803EC  0e
 	call T_F42A24                                        ; F803ED  1d 24 2a f4
-	call Draw_S0ngSelectNameKbS0ngName                                      ; F803F1  1d 38 03 f8
+	call sub_F80338                                      ; F803F1  1d 38 03 f8
 	ret                                                  ; F803F5  0e
 	call T_F42A20                                        ; F803F6  1d 20 2a f4
-	call Draw_S0ngSelectNameKbS0ngName                                      ; F803FA  1d 38 03 f8
+	call sub_F80338                                      ; F803FA  1d 38 03 f8
 	ret                                                  ; F803FE  0e
 	call T_F42A2C                                        ; F803FF  1d 2c 2a f4
 	call sub_F80384                                      ; F80403  1d 84 03 f8
@@ -4072,7 +4072,7 @@ Paint_StepRecordPartSelect:
 	ld XIX,DL_F394E3                                     ; F80F7E  44 e3 94 f3 00
 	call T_DisplayList_Run                               ; F80F83  1d f0 17 f4
 	ld (0x2540:16), 0x02                                 ; F80F87  f1 40 25 00 02
-	calr Draw_TrackAssignPresetsTechnicsSetUp1116                                          ; F80F8C  1e c5 d3
+	calr sub_F7E354                                          ; F80F8C  1e c5 d3
 .LF80F8F:
 	ld (0x2540:16), 0x01                                 ; F80F8F  f1 40 25 00 01
 	calr sub_F7E39F_Nop                                          ; F80F94  1e 41 d3
@@ -4211,7 +4211,7 @@ Paint_SequencerMedley:
 	ld XIY,DL_FirstS0ngLastS0ng                          ; F810DA  45 78 c7 f3 00
 	ld XIX,DL_F3C7AD                                     ; F810DF  44 ad c7 f3 00
 	call T_DisplayListB_Run                              ; F810E4  1d f4 17 f4
-	call Draw_StepRecordPartSelectPressTheUpDownButton                                      ; F810E8  1d 50 13 f8
+	call sub_F81350                                      ; F810E8  1d 50 13 f8
 	calr PromB_LCD_ScreenRedraw_End                                          ; F810EC  1e f8 d1
 	ret                                                  ; F810EF  0e
 sub_F810F0:
@@ -4288,7 +4288,7 @@ sub_F810F0:
 	m_cp_mi8 MB16, 0x220b, 0x00                          ; F811B8  c1 0b 22 3f 00
 	jr nz, .LF811E1                                      ; F811BD  6e 22
 	calr Draw_FirstS0ngLastS0ng                                          ; F811BF  1e fd 01
-	call Draw_StepRecordPartSelectPressTheUpDownButton                                      ; F811C2  1d 50 13 f8
+	call sub_F81350                                      ; F811C2  1d 50 13 f8
 	jr .LF811E1                                          ; F811C6  68 19
 .LF811C8:
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F811C8  c1 c1 0d 3f 01
@@ -4308,7 +4308,7 @@ sub_F810F0:
 	jr z, .LF811FE                                       ; F811F1  66 0b
 	calr sub_F7F237                                          ; F811F3  1e 41 e0
 	call T_F42BD8                                        ; F811F6  1d d8 2b f4
-	call Draw_StepRecordPartSelectPressTheUpDownButton                                      ; F811FA  1d 50 13 f8
+	call sub_F81350                                      ; F811FA  1d 50 13 f8
 .LF811FE:
 	ret                                                  ; F811FE  0e
 	bit 0x07,W                                           ; F811FF  c8 33 07
@@ -4461,7 +4461,7 @@ BlinkArgPtrs_F81344:
 	.long 0x00000000                                 ; F81344  [  0]
 	.long DL_FirstS0ngLastS0ng                       ; F81348  [  1]
 	.long 0x00f3c782                                 ; F8134C  [  2]
-; Draw_StepRecordPartSelectPressTheUpDownButton -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; sub_F81350 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 27
 ; instructions to its first `ret`:
@@ -4478,7 +4478,7 @@ BlinkArgPtrs_F81344:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-Draw_StepRecordPartSelectPressTheUpDownButton:
+sub_F81350:
 	ld (0x2540:16), 0x00                                 ; F81350  f1 40 25 00 00
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81355  c1 c1 0d 3f 01
 	jr z, .LF8136C                                       ; F8135A  66 10
@@ -31855,7 +31855,7 @@ sub_F90D58:
 	m_bit 4, MD16, 0x2095                                ; F90DAB  f1 95 20 cc
 	jr nz, .LF90DC8                                      ; F90DAF  6e 17
 	m_and_mi8 MB16, 0x2688, 0xfc                         ; F90DB1  c1 88 26 3c fc
-	ld XWA,Draw_Drawbar                                    ; F90DB6  40 db 0d f9 00
+	ld XWA,sub_F90DDB                                    ; F90DB6  40 db 0d f9 00
 	push XWA                                             ; F90DBB  38
 	call T_CallbackQueue_Post                            ; F90DBC  1d 84 2e f4
 	inc 4,XSP                                            ; F90DC0  ef 64
@@ -31869,7 +31869,7 @@ sub_F90D58:
 	ld a, 0x01:opc                                          ; F90DD4  21 01
 	call T_Kernel_SemaSignal                             ; F90DD6  1d 88 2d f4
 	ret                                                  ; F90DDA  0e
-Draw_Drawbar:   ; entry: named by 1 `ld` operand, first at 0xF90DB6
+sub_F90DDB:   ; entry: named by 1 `ld` operand, first at 0xF90DB6
 	xor C,C                                              ; F90DDB  cb d3
 	ld a, 0x0c:opc                                          ; F90DDD  21 0c
 	swi 7                                                ; F90DDF  ff
@@ -32729,7 +32729,7 @@ sub_F915FB:
 	m_cp_mi8 MB16, 0x2687, 0x00                          ; F91646  c1 87 26 3f 00
 	jr nz, .LF91667                                      ; F9164B  6e 1a
 	ldw (0x209b:16), 0x0181                              ; F9164D  f1 9b 20 02 81 01
-	ld XWA,Draw_C0mbinati0nM0dePage22Sound_2                                    ; F91653  40 7e 1c f9 00
+	ld XWA,sub_F91C7E                                    ; F91653  40 7e 1c f9 00
 	push XWA                                             ; F91658  38
 	call T_CallbackQueue_Post                            ; F91659  1d 84 2e f4
 	inc 4,XSP                                            ; F9165D  ef 64
@@ -33357,7 +33357,7 @@ sub_F91C64:   ; entry: named by 1 `.long` operand, first at 0xF918E1
 	ldw ix, 0x1bcb                                       ; F91C76  34 cb 1b
 	call sub_F9458C                                        ; F91C79  1d 8c 45 f9
 	ret                                                  ; F91C7D  0e
-Draw_C0mbinati0nM0dePage22Sound_2:   ; entry: named by 1 `ld` operand, first at 0xF91653
+sub_F91C7E:   ; entry: named by 1 `ld` operand, first at 0xF91653
 	xor C,C                                              ; F91C7E  cb d3
 	ld a, 0x0c:opc                                          ; F91C80  21 0c
 	swi 7                                                ; F91C82  ff
@@ -35168,7 +35168,7 @@ InstallPainter_GroupSoundDisplayHold:
 	m_bit 4, MD16, 0x2095                                ; F92D1F  f1 95 20 cc
 	jr nz, .LF92D3C                                      ; F92D23  6e 17
 	m_or_mi8 MB16, 0x2673, 0x80                          ; F92D25  c1 73 26 3e 80
-	ld XIX,sub_F92D4F                                    ; F92D2A  44 4f 2d f9 00
+	ld XIX,Draw_GroupSoundDisplayHoldGr0up                                    ; F92D2A  44 4f 2d f9 00
 	push XIX                                             ; F92D2F  3c
 	call T_CallbackQueue_Post                            ; F92D30  1d 84 2e f4
 	inc 4,XSP                                            ; F92D34  ef 64
@@ -35182,7 +35182,7 @@ InstallPainter_GroupSoundDisplayHold:
 	ld a, 0x01:opc                                          ; F92D48  21 01
 	call T_Kernel_SemaSignal                             ; F92D4A  1d 88 2d f4
 	ret                                                  ; F92D4E  0e
-sub_F92D4F:   ; entry: named by 1 `ld` operand, first at 0xF92D2A
+Draw_GroupSoundDisplayHoldGr0up:   ; entry: named by 1 `ld` operand, first at 0xF92D2A
 	ld a, 0x0f:opc                                          ; F92D4F  21 0f
 	swi 7                                                ; F92D51  ff
 	xor C,C                                              ; F92D52  cb d3
@@ -35210,7 +35210,7 @@ sub_F92D70:   ; entry: named by 1 `ld` operand, first at 0xF92D3C
 	ld a, 0x06:opc                                          ; F92D9E  21 06
 	swi 7                                                ; F92DA0  ff
 	calr sub_F9319F                                      ; F92DA1  1e fb 03
-	calr Draw_Ext1_3                                      ; F92DA4  1e 7d 03
+	calr sub_F93124                                      ; F92DA4  1e 7d 03
 	ld (0x2540:16), 0x00                                 ; F92DA7  f1 40 25 00 00
 	m_bit 3, MD16, 0x216a                                ; F92DAC  f1 6a 21 cb
 	jr nz, .LF92DB7                                      ; F92DB0  6e 05
@@ -35221,7 +35221,7 @@ sub_F92D70:   ; entry: named by 1 `ld` operand, first at 0xF92D3C
 .LF92DBA:
 	calr Paint_Drum                                          ; F92DBA  1e 1e fb
 	calr sub_F9291F                                          ; F92DBD  1e 5f fb
-	calr Draw_Drum                                      ; F92DC0  1e 9a 03
+	calr sub_F9315D                                      ; F92DC0  1e 9a 03
 	ld a, (0x2169:16)                                   ; F92DC3  c1 69 21 21
 	ld b, (0x2250:16)                                   ; F92DC7  c1 50 22 22
 	ld w, (0x216a:16)                                   ; F92DCB  c1 6a 21 20
@@ -35398,7 +35398,7 @@ sub_F92F38:   ; entry: named by 2 `.long` operands, first at 0xF92C7A
 	ret                                                  ; F92F4E  0e
 sub_F92F4F:   ; entry: named by 2 `.long` operands, first at 0xF92C7E
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F92F4F  c1 7f 26 3d 01
-	ld XIX,Draw_Drum                                    ; F92F54  44 5d 31 f9 00
+	ld XIX,sub_F9315D                                    ; F92F54  44 5d 31 f9 00
 	push XIX                                             ; F92F59  3c
 	call T_CallbackQueue_Post                            ; F92F5A  1d 84 2e f4
 	inc 4,XSP                                            ; F92F5E  ef 64
@@ -35407,7 +35407,7 @@ sub_F92F4F:   ; entry: named by 2 `.long` operands, first at 0xF92C7E
 	ret                                                  ; F92F66  0e
 sub_F92F67:   ; entry: named by 2 `.long` operands, first at 0xF92C82
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F92F67  c1 7f 26 3d 01
-	ld XIX,Draw_Drum                                    ; F92F6C  44 5d 31 f9 00
+	ld XIX,sub_F9315D                                    ; F92F6C  44 5d 31 f9 00
 	push XIX                                             ; F92F71  3c
 	call T_CallbackQueue_Post                            ; F92F72  1d 84 2e f4
 	inc 4,XSP                                            ; F92F76  ef 64
@@ -35595,7 +35595,7 @@ sub_F93109:   ; entry: named by 2 `ld` operands, first at 0xF930F6
 	ret                                                  ; F93122  0e
 sub_F92C62_Nop:
 	ret                                                  ; F93123  0e
-; Draw_Ext1_3 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; sub_F93124 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 17
 ; instructions to its first `ret`:
@@ -35611,7 +35611,7 @@ sub_F92C62_Nop:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-Draw_Ext1_3:
+sub_F93124:
 	ld a, (0x2169:16)                                   ; F93124  c1 69 21 21
 	inc 1,A                                              ; F93128  c9 61
 	extz WA                                              ; F9312A  d8 12
@@ -35631,7 +35631,7 @@ Draw_Ext1_3:
 	inc 4,XSP                                            ; F9315A  ef 64
 .LF9315C:
 	ret                                                  ; F9315C  0e
-; Draw_Drum -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; sub_F9315D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 11
 ; instructions to its first `ret`:
@@ -35648,7 +35648,7 @@ Draw_Ext1_3:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-Draw_Drum:
+sub_F9315D:
 	ld (0x2540:16), 0x01                                 ; F9315D  f1 40 25 00 01
 	m_bit 0, MD16, 0x267f                                ; F93162  f1 7f 26 c8
 	jr z, .LF93178                                       ; F93166  66 10
@@ -35764,7 +35764,7 @@ sub_F9320D:
 	call T_List2030_AppendRegs                           ; F93264  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93268  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F9326D  1d 24 2e f4
-	ld XWA,Draw_Ext1_3                                    ; F93271  40 24 31 f9 00
+	ld XWA,sub_F93124                                    ; F93271  40 24 31 f9 00
 	push XWA                                             ; F93276  38
 	call T_CallbackQueue_Post                            ; F93277  1d 84 2e f4
 	inc 4,XSP                                            ; F9327B  ef 64
@@ -35835,7 +35835,7 @@ sub_F932C6:
 	call T_List2030_AppendRegs                           ; F93324  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93328  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F9332D  1d 24 2e f4
-	ld XWA,Draw_Ext1_3                                    ; F93331  40 24 31 f9 00
+	ld XWA,sub_F93124                                    ; F93331  40 24 31 f9 00
 	push XWA                                             ; F93336  38
 	call T_CallbackQueue_Post                            ; F93337  1d 84 2e f4
 	inc 4,XSP                                            ; F9333B  ef 64
@@ -36710,7 +36710,7 @@ sub_F93942:   ; entry: named by 1 `ld` operand, first at 0xF9390E
 	ld a, 0x06:opc                                          ; F9396E  21 06
 	swi 7                                                ; F93970  ff
 	calr sub_F931A4                                          ; F93971  1e 30 f8
-	calr Draw_Ext1_3                                          ; F93974  1e ad f7
+	calr sub_F93124                                          ; F93974  1e ad f7
 	m_bit 3, MD16, 0x216a                                ; F93977  f1 6a 21 cb
 	jr nz, .LF93982                                      ; F9397B  6e 05
 	calr Draw_Ext1_2                                          ; F9397D  1e 90 f0
@@ -36719,7 +36719,7 @@ sub_F93942:   ; entry: named by 1 `ld` operand, first at 0xF9390E
 	calr sub_F92A40                                          ; F93982  1e bb f0
 .LF93985:
 	calr sub_F9291F                                          ; F93985  1e 97 ef
-	calr Draw_Drum                                          ; F93988  1e d2 f7
+	calr sub_F9315D                                          ; F93988  1e d2 f7
 	ld a, (0x2169:16)                                   ; F9398B  c1 69 21 21
 	ld w, (0x216a:16)                                   ; F9398F  c1 6a 21 20
 	ld b, 0x98:opc                                          ; F93993  22 98
@@ -36888,7 +36888,7 @@ sub_F93AEC:   ; entry: named by 2 `.long` operands, first at 0xF9384D
 	ret                                                  ; F93B02  0e
 sub_F93B03:   ; entry: named by 2 `.long` operands, first at 0xF93851
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F93B03  c1 7f 26 3d 01
-	ld XIX,Draw_Drum                                    ; F93B08  44 5d 31 f9 00
+	ld XIX,sub_F9315D                                    ; F93B08  44 5d 31 f9 00
 	push XIX                                             ; F93B0D  3c
 	call T_CallbackQueue_Post                            ; F93B0E  1d 84 2e f4
 	inc 4,XSP                                            ; F93B12  ef 64
@@ -36897,7 +36897,7 @@ sub_F93B03:   ; entry: named by 2 `.long` operands, first at 0xF93851
 	ret                                                  ; F93B1A  0e
 sub_F93B1B:   ; entry: named by 2 `.long` operands, first at 0xF93855
 	m_xor_mi8 MB16, 0x267f, 0x01                         ; F93B1B  c1 7f 26 3d 01
-	ld XIX,Draw_Drum                                    ; F93B20  44 5d 31 f9 00
+	ld XIX,sub_F9315D                                    ; F93B20  44 5d 31 f9 00
 	push XIX                                             ; F93B25  3c
 	call T_CallbackQueue_Post                            ; F93B26  1d 84 2e f4
 	inc 4,XSP                                            ; F93B2A  ef 64
@@ -37113,7 +37113,7 @@ sub_F93CB9:
 	call T_List2030_AppendRegs                           ; F93D0B  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93D0F  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F93D14  1d 24 2e f4
-	ld XWA,Draw_Ext1_3                                    ; F93D18  40 24 31 f9 00
+	ld XWA,sub_F93124                                    ; F93D18  40 24 31 f9 00
 	push XWA                                             ; F93D1D  38
 	call T_CallbackQueue_Post                            ; F93D1E  1d 84 2e f4
 	inc 4,XSP                                            ; F93D22  ef 64
@@ -37184,7 +37184,7 @@ sub_F93D6D:
 	call T_List2030_AppendRegs                           ; F93DC6  1d 40 0f f4
 	m_or_mi8 MB16, 0x2673, 0x08                          ; F93DCA  c1 73 26 3e 08
 	call T_Blink_Stop                                    ; F93DCF  1d 24 2e f4
-	ld XWA,Draw_Ext1_3                                    ; F93DD3  40 24 31 f9 00
+	ld XWA,sub_F93124                                    ; F93DD3  40 24 31 f9 00
 	push XWA                                             ; F93DD8  38
 	call T_CallbackQueue_Post                            ; F93DD9  1d 84 2e f4
 	inc 4,XSP                                            ; F93DDD  ef 64
@@ -46577,7 +46577,7 @@ Paint_MidiTotalMode:
 	inc 8,XSP                                            ; F9A230  ef 60
 	inc 8,XSP                                            ; F9A232  ef 60
 .LF9A234:
-	calr sub_F9A418                                          ; F9A234  1e e1 01
+	calr Draw_MultiSingleOmni                                          ; F9A234  1e e1 01
 	calr Draw_MultiSingle                                          ; F9A237  1e 01 02
 	calr sub_F9A461                                          ; F9A23A  1e 24 02
 	calr sub_F9A484                                          ; F9A23D  1e 44 02
@@ -46851,7 +46851,7 @@ JumpTable_F9A3C7_Code_Skip:
 	popw hl                                              ; F9A414  4b
 	unlk XIZ                                             ; F9A415  ee 0d
 	ret                                                  ; F9A417  0e
-sub_F9A418:
+Draw_MultiSingleOmni:
 	ld c, (0x7f35:16)                                   ; F9A418  c1 35 7f 23
 	and C,0x0f                                           ; F9A41C  cb cc 0f
 	ld (0x2740:16), c                                   ; F9A41F  f1 40 27 43
@@ -46957,7 +46957,7 @@ sub_F9A4F9:
 	pushw 0x03                                           ; F9A530  0b 03 00
 	pushw 0x80                                           ; F9A533  0b 80 00
 	call T_F41B18                                        ; F9A536  1d 18 1b f4
-	calr sub_F9A418                                      ; F9A53A  1e db fe
+	calr Draw_MultiSingleOmni                                      ; F9A53A  1e db fe
 	inc 8,XSP                                            ; F9A53D  ef 60
 .LF9A53F:
 	pop XIX                                              ; F9A53F  5c
@@ -47199,7 +47199,7 @@ Paint_MidiRealtimeMessages:
 	calr DisplayList_Run_Stack_Wrap                                      ; F9A716  1e 0b 00
 	jr .LF9A71E                                          ; F9A719  68 03
 .LF9A71B:
-	calr Draw_OnOff                                      ; F9A71B  1e 1e 00
+	calr sub_F9A73C                                      ; F9A71B  1e 1e 00
 .LF9A71E:
 	call T_F42E14                                        ; F9A71E  1d 14 2e f4
 	pop XIX                                              ; F9A722  5c
@@ -47228,7 +47228,7 @@ DisplayList_Run_Stack_Wrap:
 	call T_DisplayList_Run_Stack                         ; F9A735  1d 00 2e f4
 	inc 8,XSP                                            ; F9A739  ef 60
 	ret                                                  ; F9A73B  0e
-Draw_OnOff:
+sub_F9A73C:
 	ld (0x2540:16), 0x02                                 ; F9A73C  f1 40 25 00 02
 	lda xbc, (DL_OnOff:24)                               ; F9A741  f2 83 cc f0 31
 	push XBC                                             ; F9A746  39
@@ -47504,7 +47504,7 @@ sub_F9A954:
 	lda xwa, (DL_F0CCAF:24)                              ; F9A984  f2 af cc f0 30
 	push XWA                                             ; F9A989  38
 	call T_DisplayListB_Run_Stack                        ; F9A98A  1d 04 2e f4
-	calr Draw_OnOff                                          ; F9A98E  1e ab fd
+	calr sub_F9A73C                                          ; F9A98E  1e ab fd
 	inc 8,XSP                                            ; F9A991  ef 60
 	inc 4,XSP                                            ; F9A993  ef 64
 .LF9A995:
@@ -48319,7 +48319,7 @@ Paint_MidiOutProgramChange:
 	calr sub_F9B280                                          ; F9B020  1e 5d 02
 	calr sub_F9B2A2                                          ; F9B023  1e 7c 02
 	calr sub_F9B2C2                                          ; F9B026  1e 99 02
-	calr Draw_OffOff                                          ; F9B029  1e b6 02
+	calr sub_F9B2E2                                          ; F9B029  1e b6 02
 	ld (0x2540:16), 0x01                                 ; F9B02C  f1 40 25 00 01
 	lda xbc, (Data_F0D061:24)                            ; F9B031  f2 61 d0 f0 31
 	push XBC                                             ; F9B036  39
@@ -48662,7 +48662,7 @@ sub_F9B2C2:
 	inc 8,XSP                                            ; F9B2DF  ef 60
 	ret                                                  ; F9B2E1  0e
 ; ---------------------------------------------------------------------
-; Draw_OffOff -- a screen painter this round REFUSED to name.
+; sub_F9B2E2 -- a screen painter this round REFUSED to name.
 ;
 ; It hands 2 display list(s) to the interpreter ON THE STACK.
 ;     site 0xF9B30B  list 0xF0D02D-0xF0D036 (9 B, leaves by call)
@@ -48679,7 +48679,7 @@ sub_F9B2C2:
 ;          sub_XXXXXX and states the gap.
 ; Recorded by notes/prom_a_understanding_round7.py --apply.
 ; ---------------------------------------------------------------------
-Draw_OffOff:
+sub_F9B2E2:
 	link XIZ,0xffe9                                      ; F9B2E2  ee 0c e9 ff
 	pushw hl                                             ; F9B2E6  2b
 	pushw de                                             ; F9B2E7  2a
@@ -48820,7 +48820,7 @@ sub_F9B3EF:
 	ld (0x274a:16), bc                                  ; F9B426  f1 4a 27 51
 	call T_Blink_Stop                                    ; F9B42A  1d 24 2e f4
 	calr sub_F9B2A2                                      ; F9B42E  1e 71 fe
-	calr Draw_OffOff                                      ; F9B431  1e ae fe
+	calr sub_F9B2E2                                      ; F9B431  1e ae fe
 	inc 8,XSP                                            ; F9B434  ef 60
 .LF9B436:
 	popw de                                              ; F9B436  4a
@@ -48868,7 +48868,7 @@ sub_F9B43B:
 	call T_Blink_Stop                                    ; F9B48F  1d 24 2e f4
 	calr sub_F9B2A2                                      ; F9B493  1e 0c fe
 	calr sub_F9B2C2                                      ; F9B496  1e 29 fe
-	calr Draw_OffOff                                      ; F9B499  1e 46 fe
+	calr sub_F9B2E2                                      ; F9B499  1e 46 fe
 	pop XIX                                              ; F9B49C  5c
 	popw hl                                              ; F9B49D  4b
 	unlk XIZ                                             ; F9B49E  ee 0d
@@ -48957,7 +48957,7 @@ sub_F9B51B:
 	sll bc, 0x07                                         ; F9B574  d9 ee 07
 	add BC,DE                                            ; F9B577  da 81
 	ld (0x274a:16), bc                                  ; F9B579  f1 4a 27 51
-	calr Draw_OffOff                                      ; F9B57D  1e 62 fd
+	calr sub_F9B2E2                                      ; F9B57D  1e 62 fd
 .LF9B580:
 	call T_Blink_Stop                                    ; F9B580  1d 24 2e f4
 .LF9B584:
@@ -49020,7 +49020,7 @@ sub_F9B59E:
 	jr z, .LF9B61C                                       ; F9B614  66 06
 .LF9B616:
 	calr sub_F9B2A2                                      ; F9B616  1e 89 fc
-	calr Draw_OffOff                                      ; F9B619  1e c6 fc
+	calr sub_F9B2E2                                      ; F9B619  1e c6 fc
 .LF9B61C:
 	ld C,(XIX)                                           ; F9B61C  84 23
 	ld (0x2740:16), c                                   ; F9B61E  f1 40 27 43
@@ -101512,7 +101512,7 @@ JumpTable_FBD25F:
 	.long sub_FBD294                                 ; FBD267  [  2]
 	.long sub_FBD2A2                                 ; FBD26B  [  3]
 	.long sub_FBD2C5                                 ; FBD26F  [  4]
-	.long sub_FBD2E8                                 ; FBD273  [  5]
+	.long Draw_ReverbDepth                                 ; FBD273  [  5]
 sub_FBD277:   ; entry: named by 1 `.long` operand, first at 0xFBD25F
 	lda xbc, (DL_InternalSound_F18DBD:24)                ; FBD277  f2 bd 8d f1 31
 	push XBC                                             ; FBD27C  39
@@ -101559,7 +101559,7 @@ sub_FBD2C5:   ; entry: named by 1 `.long` operand, first at 0xFBD26F
 	lda xwa, (DL_Modulation1:24)                         ; FBD2E0  f2 0c 91 f1 30
 	push XWA                                             ; FBD2E5  38
 	jr .LFBD2F4                                          ; FBD2E6  68 0c
-sub_FBD2E8:   ; entry: named by 1 `.long` operand, first at 0xFBD273
+Draw_ReverbDepth:   ; entry: named by 1 `.long` operand, first at 0xFBD273
 	lda xbc, (DL_MidiOutFilter_F190E9:24)                ; FBD2E8  f2 e9 90 f1 31
 	push XBC                                             ; FBD2ED  39
 	lda xwa, (DL_ReverbDepth:24)                         ; FBD2EE  f2 0f 90 f1 30
@@ -104713,7 +104713,7 @@ Screen_CombinationNaming_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBEF6A  1d 80 2e f4
 	calr Paint_CombinationNaming                                      ; FBEF6E  1e 7d 01
 .LFBEF71:
-	calr Draw_CombinationNaming                                      ; FBEF71  1e 96 01
+	calr sub_FBF10A                                      ; FBEF71  1e 96 01
 .LFBEF74:
 	ret                                                  ; FBEF74  0e
 ; ---------------------------------------------------------------------
@@ -104944,7 +104944,7 @@ Paint_CombinationNaming:
 	call T_DisplayList_Run_Stack                         ; FBF103  1d 00 2e f4
 	inc 8,XSP                                            ; FBF107  ef 60
 	ret                                                  ; FBF109  0e
-Draw_CombinationNaming:
+sub_FBF10A:
 	link XIZ,0xfffc                                      ; FBF10A  ee 0c fc ff
 	pushw hl                                             ; FBF10E  2b
 	push XIX                                             ; FBF10F  3c
@@ -111196,7 +111196,7 @@ sub_FC25BF:
 ;   SoundEditDigitalEffect_Paint 0xF099F5, SoundEditDigitalEffect_RepaintField
 ;   0xF09AA5, sub_F09AF1 0xF09AF1 (via PtrTable_F09B7B), SoundEditCopy_Paint
 ;   0xF09B9B, SoundEditCopy_RepaintField 0xF09C08, sub_F09CA9 0xF09CA9
-;   (DispatchTable_F5B9F8[0]) with prom_b 0xF5BF6D, and sub_F5CADD at 0xF5CBAD.
+;   (DispatchTable_F5B9F8[0]) with prom_b 0xF5BF6D, and Draw_Page12EnvelopeKeyoffCurSor at 0xF5CBAD.
 ; The DIGITAL EFFECT type is (0x27B6) = (0x27A6) & 0x0F; every per-type array
 ; below is indexed by it, and 12 entries is the extent every one of them shares.
 ; Inside the span, interpreter-B records point at the name and rectangle
@@ -112503,7 +112503,7 @@ SoundEditCopy_DrumFieldRecords:
 	.long DLRec_FC4EAA                          ; FC4FC2  [ 3]
 
 ; DisplayList_FC4FC6 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC4FC6 and land exactly on 0xFC4FE4.
 DisplayList_FC4FC6:
 	.byte 0x02, 0x0A                             ; FC4FC6  op 02, 10 bytes, handler 0xF31A75
@@ -112515,7 +112515,7 @@ DisplayList_FC4FC6:
 	.set DisplayList_FC4FC6_End, .            ; FC4FE4  end marker: the byte after the last record
 
 ; DisplayList_FC4FE4 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC4FE4 and land exactly on 0xFC5002.
 DisplayList_FC4FE4:
 	.byte 0x02, 0x0A                             ; FC4FE4  op 02, 10 bytes, handler 0xF31A75
@@ -112527,7 +112527,7 @@ DisplayList_FC4FE4:
 	.set DisplayList_FC4FE4_End, .            ; FC5002  end marker: the byte after the last record
 
 ; DisplayList_FC5002 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC5002 and land exactly on 0xFC5020.
 DisplayList_FC5002:
 	.byte 0x02, 0x0A                             ; FC5002  op 02, 10 bytes, handler 0xF31A75
@@ -112539,7 +112539,7 @@ DisplayList_FC5002:
 	.set DisplayList_FC5002_End, .            ; FC5020  end marker: the byte after the last record
 
 ; DisplayList_FC5020 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC5020 and land exactly on 0xFC503E.
 DisplayList_FC5020:
 	.byte 0x02, 0x0A                             ; FC5020  op 02, 10 bytes, handler 0xF31A75
@@ -112551,7 +112551,7 @@ DisplayList_FC5020:
 	.set DisplayList_FC5020_End, .            ; FC503E  end marker: the byte after the last record
 
 ; DisplayList_FC503E -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC503E and land exactly on 0xFC505C.
 DisplayList_FC503E:
 	.byte 0x02, 0x0A                             ; FC503E  op 02, 10 bytes, handler 0xF31A75
@@ -112563,7 +112563,7 @@ DisplayList_FC503E:
 	.set DisplayList_FC503E_End, .            ; FC505C  end marker: the byte after the last record
 
 ; DisplayList_FC505C -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC505C and land exactly on 0xFC507A.
 DisplayList_FC505C:
 	.byte 0x02, 0x0A                             ; FC505C  op 02, 10 bytes, handler 0xF31A75
@@ -112575,7 +112575,7 @@ DisplayList_FC505C:
 	.set DisplayList_FC505C_End, .            ; FC507A  end marker: the byte after the last record
 
 ; DisplayList_FC507A -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC507A and land exactly on 0xFC5098.
 DisplayList_FC507A:
 	.byte 0x02, 0x0A                             ; FC507A  op 02, 10 bytes, handler 0xF31A75
@@ -112587,7 +112587,7 @@ DisplayList_FC507A:
 	.set DisplayList_FC507A_End, .            ; FC5098  end marker: the byte after the last record
 
 ; DisplayList_FC5098 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC5098 and land exactly on 0xFC50B6.
 DisplayList_FC5098:
 	.byte 0x02, 0x0A                             ; FC5098  op 02, 10 bytes, handler 0xF31A75
@@ -112599,7 +112599,7 @@ DisplayList_FC5098:
 	.set DisplayList_FC5098_End, .            ; FC50B6  end marker: the byte after the last record
 
 ; DisplayList_FC50B6 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC50B6 and land exactly on 0xFC50D4.
 DisplayList_FC50B6:
 	.byte 0x02, 0x0A                             ; FC50B6  op 02, 10 bytes, handler 0xF31A75
@@ -112611,7 +112611,7 @@ DisplayList_FC50B6:
 	.set DisplayList_FC50B6_End, .            ; FC50D4  end marker: the byte after the last record
 
 ; DisplayList_FC50D4 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC50D4 and land exactly on 0xFC50F2.
 DisplayList_FC50D4:
 	.byte 0x02, 0x0A                             ; FC50D4  op 02, 10 bytes, handler 0xF31A75
@@ -112623,7 +112623,7 @@ DisplayList_FC50D4:
 	.set DisplayList_FC50D4_End, .            ; FC50F2  end marker: the byte after the last record
 
 ; DisplayList_FC50F2 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC50F2 and land exactly on 0xFC5110.
 DisplayList_FC50F2:
 	.byte 0x02, 0x0A                             ; FC50F2  op 02, 10 bytes, handler 0xF31A75
@@ -112635,7 +112635,7 @@ DisplayList_FC50F2:
 	.set DisplayList_FC50F2_End, .            ; FC5110  end marker: the byte after the last record
 
 ; DisplayList_FC5110 -- display list, 3 record(s), 30 bytes, interpreter A
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD: `ld XIX,0x00FC512E / ld XIZ,(XIX+4*(A-20)) / ld XIY,(XIZ) / ld XIX,(XIZ+4*B) / call T_DisplayList_Run`, B from (0x27D6+A-20); so a run of 1-3 consecutive 30-byte segments is drawn.
 ; Framing: the length bytes walk from 0xFC5110 and land exactly on 0xFC512E.
 DisplayList_FC5110:
 	.byte 0x02, 0x0A                             ; FC5110  op 02, 10 bytes, handler 0xF31A75
@@ -112647,7 +112647,7 @@ DisplayList_FC5110:
 	.set DisplayList_FC5110_End, .            ; FC512E  end marker: the byte after the last record
 
 ; SegmentArrays_FC512E -- 4 pointers, 16 bytes
-; Read by: sub_F5CADD (prom_b) at 0xF5CBAD, indexed by A-20 (see DisplayList_FC4FC6).
+; Read by: Draw_Page12EnvelopeKeyoffCurSor (prom_b) at 0xF5CBAD, indexed by A-20 (see DisplayList_FC4FC6).
 ; COUNT 4 is the extent to the next object of this framing; every entry lands
 ; on a list or record boundary (gen_fc4000_pages.py checks each one).
 SegmentArrays_FC512E:
@@ -180740,7 +180740,7 @@ Dispatch_FF3980:
 ;          reader multiplies (0x2229) by 4 and nothing else.
 ; ---------------------------------------------------------------------
 Dispatch_FF3A00:
-	.long Draw_DiskSaveFileNaming                                 ; FF3A00  [  0]
+	.long sub_FF54AA                                 ; FF3A00  [  0]
 	.long sub_FF5546                                 ; FF3A04  [  1]
 	.long sub_FF55BE                                 ; FF3A08  [  2]
 	.long sub_FF5621                                 ; FF3A0C  [  3]
@@ -184384,7 +184384,7 @@ PageDispatch_DiskSaveFile:
 	jp (xbc)                                             ; FF54A7  b1 d8
 .LFF54A9:
 	ret                                                  ; FF54A9  0e
-Draw_DiskSaveFileNaming:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
+sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 	push XHL                                             ; FF54AA  3b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF54AB  1d 80 2e f4
 	ld c, (0x207a:16)                                   ; FF54AF  c1 7a 20 23
