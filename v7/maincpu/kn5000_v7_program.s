@@ -1762,7 +1762,7 @@ GetAdr_rtmcfg:
 	ret
 
 SetGlobalError:
-	ld	(32422:16), a
+	ld	(GLOBAL_ERROR_CODE:16), a
 	ret
 malloc_X:
 	pushw	wa

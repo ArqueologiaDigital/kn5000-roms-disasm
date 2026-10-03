@@ -1230,7 +1230,7 @@ SQTR_DISPATCH_TABLE_2_CASE1:
 SQTR_DISPATCH_TABLE_2_CASE2:
 	cp (SEQ_MASTER_STATE:16), 139
 	jr nz, CDlikeSwTtl_ReturnZero2
-	cp (0x7f42:16), 35
+	cp (GLOBAL_ERROR_CODE:16), 35
 	scc16 z, bc
 	cp (0x8d39:16), 238
 	scc16 z, wa

@@ -81,7 +81,7 @@ CompLoad_HandleCancel:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 0
+	ld (GLOBAL_ERROR_CODE:16), 0
 	ldw wa, 0xee
 	jr CompLoad_CallStatusDisplay
 
@@ -110,7 +110,7 @@ CompLoad_HandleSuccess:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 2
+	ld (GLOBAL_ERROR_CODE:16), 2
 	ldw wa, 0xee
 
 CompLoad_CallStatusDisplay:
@@ -259,7 +259,7 @@ CompLoad_HideButtons_Loop:
 	ld wa, hl
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, EVT_HIDE
@@ -553,7 +553,7 @@ LoadFilter_OpLoad:
 	ld wa, hl
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, EVT_HIDE
@@ -867,7 +867,7 @@ SaveFilter_Save_Execute:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -904,7 +904,7 @@ SaveFilter_OpFormat:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData

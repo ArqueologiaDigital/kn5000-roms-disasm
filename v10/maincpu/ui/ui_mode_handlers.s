@@ -9247,7 +9247,7 @@ DispTimeSet_SelectInit:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
-	ld (0x7f42:16), 72
+	ld (GLOBAL_ERROR_CODE:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE
@@ -9987,14 +9987,14 @@ MainTimeFlashFunc:
 	jr z, MainTimeFlash_DispatchCmd
 	cp xbc, EVT_TOSHI_FLASH_WRITE
 	jr nz, MainTimeFlash_ReturnZero
-	ld (0x7f42:16), 40
+	ld (GLOBAL_ERROR_CODE:16), 40
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE
 	call ApPostEvent
 	ld wa, 5:i3
 	call CtrlPanel_IndicatorJumpTable
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE
@@ -10041,7 +10041,7 @@ NormScreen_InitHandler:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
-	ld (0x7f42:16), 36
+	ld (GLOBAL_ERROR_CODE:16), 36
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE
@@ -11717,7 +11717,7 @@ AcPmBkEdit_OK_Load:
 	jr AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_OK_LoadEmpty:
-	ld (0x7f42:16), 73
+	ld (GLOBAL_ERROR_CODE:16), 73
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE

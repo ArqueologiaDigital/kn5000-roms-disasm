@@ -65,12 +65,12 @@ SetupFlashFunc:
 	jr	z, SetupFlash_HandleLoadEvent
 	cp	xbc, EVT_CHEAP_FLASH_WRITE
 	jr	nz, SetupFlash_Return
-	ld	(32422:16), 37
+	ld	(GLOBAL_ERROR_CODE:16), 37
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	ld	wa, 6:i3
 	call	CtrlPanel_IndicatorJumpTable
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	jr	SetupFlash_Return
@@ -152,7 +152,7 @@ FmmUtility_HandleCancel:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	ldw	wa, 238
 	jr	FmmUtility_ShowStatus
 FmmUtility_HandleError:
@@ -183,7 +183,7 @@ FmmUtility_HandleSuccess:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 2
+	ld	(GLOBAL_ERROR_CODE:16), 2
 	ldw	wa, 238
 FmmUtility_ShowStatus:
 	call SoundCtrl_SendCommand
@@ -277,7 +277,7 @@ FmmSmfUtility_HandleCancel:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	ldw	wa, 238
 	jr	FmmSmfUtility_ShowStatus
 FmmSmfUtility_HandleError:
@@ -308,7 +308,7 @@ FmmSmfUtility_HandleSuccess:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 2
+	ld	(GLOBAL_ERROR_CODE:16), 2
 	ldw	wa, 238
 FmmSmfUtility_ShowStatus:
 	call SoundCtrl_SendCommand

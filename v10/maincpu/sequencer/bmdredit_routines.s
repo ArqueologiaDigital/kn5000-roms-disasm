@@ -553,7 +553,7 @@ BmDrEdit_ProcessTempoEvent_NoteOff:
 	calr BmDrEdit_AdjustScrollToView
 	calr BmDrEdit_InsertNotesFromSlots
 	calr BmDrEdit_CountMeasuresInit
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ClearSlotAndRedraw
 
 BmDrEdit_ClearNoteAndRefresh:
@@ -1021,7 +1021,7 @@ BmDrEdit_RestoreEditState:
 	ret
 
 BmDrEdit_ClearAndScanToEnd:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 
 BmDrEdit_ScanToEnd_Loop:
 	ld wa, (9830:16)
@@ -1036,7 +1036,7 @@ BmDrEdit_ScanToEnd_CheckNextSong:
 	call PartCtrl_ReadWord_Off1
 	cp hl, 0:i3
 	jr nz, BmDrEdit_ScanToEnd_AdvanceSong
-	ld (0x287a:16), 255
+	ld (SEQ_ERROR_CODE:16), 255
 	ret
 
 BmDrEdit_ScanToEnd_AdvanceSong:
@@ -1949,11 +1949,11 @@ BmDrEdit_InitPlayback:
 	calr BmDrEdit_ClearAllSlotsAlt
 	calr BmDrEdit_ClearAllSlots
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ResetAndScanNotes
 	ldw (0x2744:16), 1
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ResetAndScanNotes
 
 BmDrEdit_RefreshAndReturn:
@@ -2047,7 +2047,7 @@ BmDrEdit_InsertNotesFromSlots_Loop:
 	add xwa, xbc
 	mrib4 0x80, 0x19, 0x61, 0x29
 	calr BmDrEdit_PrepareAndInsertNote
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_InsertNotesFromSlots_CalcBeat
 	calr BmDrEdit_RefreshDisplayState
 	jr BmDrEdit_InsertNotesFromSlots_Done
@@ -2066,7 +2066,7 @@ BmDrEdit_InsertNotesFromSlots_Done:
 
 BmDrEdit_WalkEventsOrSetError:
 	calr BmDrEdit_PrepareAndInsertNote
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl z, BmDrEdit_CalcBeatFromGridPos
 	ldw wa, 0xcf
 	call SeqData_SetErrorCode
@@ -2115,10 +2115,10 @@ BmDrEdit_CleanupReturn:
 BmDrEdit_HandleDelayExpired_Rescan:
 	calr Metronome_PlayClick
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_Rescan_LoadAlternate
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_Rescan_RefreshDisplay
 	calr BmDrEdit_SelectChannelAndLoadPos
 
@@ -2126,7 +2126,7 @@ BmDrEdit_Rescan_LoadAlternate:
 	calr BmDrEdit_ScanChannelEvents
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_ValidateAndInsertSteps
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_Rescan_CalcAndWalk
 
 BmDrEdit_Rescan_RefreshDisplay:
@@ -2143,9 +2143,9 @@ BmDrEdit_Rescan_CalcAndWalk:
 	jrl NoteEdit_UpdateScrollAndDisplay
 
 BmDrEdit_ValidateAndInsertSteps:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	calr BmDrEdit_SaveEditState
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ValidateSteps_CheckCount
 	ldw wa, 0xb6
 	call SeqData_SetErrorCode
@@ -2159,7 +2159,7 @@ BmDrEdit_ValidateSteps_CheckCount:
 BmDrEdit_ValidateSteps_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_ValidateSteps_RestoreState
 	ld wa, (0x2772:16)
 	dec 1, wa
@@ -2180,7 +2180,7 @@ BmDrEdit_SeekToPartVoice:
 	ret z
 	ld (0x28af:16), hl
 	ldw (9830:16), 5
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_SeekVoice_CountAndInsert
 	ldw wa, 0xb7
 	call SeqData_SetErrorCode
@@ -2188,7 +2188,7 @@ BmDrEdit_SeekToPartVoice:
 BmDrEdit_SeekVoice_CountAndInsert:
 	calr BmDrEdit_CountMeasuresAndValidate
 	calr BmDrEdit_InsertMultiSongSteps
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_SeekVoice_RefreshDisplay
 	ld wa, (0x2782:16)
 	inc 2, wa
@@ -2199,7 +2199,7 @@ BmDrEdit_SeekVoice_CountAndInsert:
 BmDrEdit_SeekVoice_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_SeekVoice_DecrementLoop
 
 BmDrEdit_SeekVoice_RefreshDisplay:
@@ -2225,20 +2225,20 @@ BmDrEdit_CalcTickPosition:
 
 BmDrEdit_ReloadChannelAndDisplay:
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ReloadChannel_LoadAndSkip
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_ReloadChannel_RefreshDisplay
 	calr BmDrEdit_SelectChannelAndLoadPos
 
 BmDrEdit_ReloadChannel_LoadAndSkip:
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_SkipToEventByCount
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_LoadAndDisplayNotes
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_LoadAndDisplayNotes
 
 BmDrEdit_ReloadChannel_RefreshDisplay:
@@ -2261,20 +2261,20 @@ BmDrEdit_LoadAndDisplayNotes:
 BmDrEdit_NavigateAndLoadPosition:
 	calr BmDrEdit_CalcTickPosition
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_NavLoad_LoadAndSkip
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_NavLoad_RefreshDisplay
 	calr BmDrEdit_SelectChannelAndLoadPos
 
 BmDrEdit_NavLoad_LoadAndSkip:
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_SkipToEventByCount
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_NavigateAndDisplayNotes
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_NavigateAndDisplayNotes
 
 BmDrEdit_NavLoad_RefreshDisplay:
@@ -2297,7 +2297,7 @@ BmDrEdit_NavigateAndDisplayNotes:
 	ret
 
 BmDrEdit_SkipToEventByCount:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld wa, (0x2782:16)
 	cp wa, 0:i3
 	ret z
@@ -2320,7 +2320,7 @@ BmDrEdit_SkipToEvent_SkipAndCheck:
 BmDrEdit_SkipToEvent_EndOfTrack:
 	cp l, 0x82
 	jr nz, BmDrEdit_SkipToEvent_SkipAndCheck
-	ld (0x287a:16), 255
+	ld (SEQ_ERROR_CODE:16), 255
 	ret
 
 BmDrEdit_NavigateToPrevAndDisplay:
@@ -2388,7 +2388,7 @@ BmDrEdit_DelayAction_CheckCountError:
 	bit 0, (0x295f:16)
 	jr z, BmDrEdit_DelayAction_UpdateScroll
 	calr BmDrEdit_CountMeasuresInit
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_DelayAction_UpdateScroll
 	ldw wa, 0xcc
 	call SeqData_SetErrorCode
@@ -2402,7 +2402,7 @@ BmDrEdit_DelayAction_UpdateScrollAlt:
 
 BmDrEdit_ReadNoteDataFields:
 	pushw_erp 0xfa
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ReadNoteData_Advance
 	ldw wa, 0xb9
 	call SeqData_SetErrorCode
@@ -2415,7 +2415,7 @@ BmDrEdit_ReadNoteData_Advance:
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	ldfr_berp L, 0xfb
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ReadNoteData_StoreDuration
 	ldw wa, 0xba
 	call SeqData_SetErrorCode
@@ -2469,7 +2469,7 @@ BmDrEdit_PitchOverflow_UpdateDisplay:
 	calr BmDrEdit_SaveEditState
 	calr BmDrEdit_SeekForwardToEvent
 	calr BmDrEdit_RestoreEditState
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, BmDrEdit_RefreshDisplayState
 	jrl BmDrEdit_SetFeedbackTimer
 
@@ -2697,7 +2697,7 @@ BmDrEdit_InsertNoteSequence:
 
 BmDrEdit_InsertSeq_StepLoop:
 	calr BmDrEdit_InsertStepEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_InsertSeq_DecrementCount
 	set 2, (0x295f:16)
 	jr BmDrEdit_SavePositionAndReturn
@@ -2784,7 +2784,7 @@ BmDrEdit_AlignGridBackward_Store:
 
 BmDrEdit_LoadAlternateAndValidate:
 	calr BmDrEdit_LoadAlternateState
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_LoadAlternateAndValidate_Done
 	ldw wa, 0xb8
 	call SeqData_SetErrorCode
@@ -2793,7 +2793,7 @@ BmDrEdit_LoadAlternateAndValidate_Done:
 	jr BmDrEdit_CountMeasuresAndValidate
 
 BmDrEdit_CountMeasuresAndValidate:
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_CountMeasures_Init
 	ldw wa, 0xd1
 	call SeqData_SetErrorCode
@@ -2816,7 +2816,7 @@ BmDrEdit_CountMeasures_SkipEvent:
 	jr BmDrEdit_CountMeasures_Loop
 
 BmDrEdit_CheckAndReportScanError:
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret z
 	ldw wa, 0xce
 	call SeqData_SetErrorCode
@@ -2930,10 +2930,10 @@ BmDrEdit_WalkAndScanAfterEdit:
 
 BmDrEdit_ScanSequenceEnd:
 	calr BmDrEdit_ClearAndScanToEnd
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_WalkScan_ReadNext
 	set 3, (0x295f:16)
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jr BmDrEdit_WalkScan_Return
 
 BmDrEdit_WalkScan_ReadNext:
@@ -3272,7 +3272,7 @@ PartCtrl_WriteByte_ZeroExtended:
 BmDrEdit_InsertStepEntry:
 	dec 2, xsp
 	calr BmDrEdit_SaveSongPosition
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld (xsp), 0x81
 	ld a, (0x2965:16)
 	inc 1, a
@@ -3317,13 +3317,13 @@ BmDrEdit_ValidateAndProcessVoice:
 	push xiz
 	ld (xsp + 6), xde
 	ld (xsp + 10), a
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld (0x288d:16), c
 	call SeqVoice_SetDefaultParams
 	ld a, (xsp + 10)
 	extz wa
 	call Part_ValidateVoiceChannel
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ValidateVoice_ProcessState
 	ld l, 0xff:opc
 	jr BmDrEdit_ValidateVoice_Epilog
@@ -3350,11 +3350,11 @@ BmDrEdit_ValidateVoice_SkipSections:
 	call SeqData_SkipSections
 	ld xwa, (xsp + 6)
 	ld (xwa), hl
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_TrackValidateRet
 	incw 1, (xsp + 4)
 	call SeqTrack_ProcessControlBytes
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_TrackValidateRet
 	ld wa, (xsp + 4)
 	cp wa, (0x287f:16)
@@ -3384,9 +3384,9 @@ BmDrEdit_SyncChannelAndGetPos:
 	ret
 
 BmDrEdit_SelectChannelAndLoadPos:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	calr BmDrEdit_SyncChannelAndGetPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 	ld (0x276a:16), hl
 	ld (0x276c:16), 0
@@ -3396,9 +3396,9 @@ BmDrEdit_SelectChannelAndLoadPos:
 	ret
 
 BmDrEdit_LoadAlternatePosition:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	calr BmDrEdit_SyncChannelAndGetPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 	ld (0x275e:16), hl
 	ld (0x2760:16), 0
@@ -3536,7 +3536,7 @@ BmDrEdit_ScanChannel_UseChannel:
 	ld bc, hl
 	calr BmDrEdit_ValidateAndProcessVoice
 	lda xwa, (0x27a4:16)
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_ScanChannel_StoreAndContinue
 	ld xbc, xwa
 	ld a, (0x27a2:16)
@@ -3584,7 +3584,7 @@ BmDrEdit_ScanChannel_FillRemaining:
 
 BmDrEdit_ScanChannel_RestoreAndReturn:
 	calr BmDrEdit_RestoreEditState
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	popw iz
 	inc 4, xsp
 	ret
@@ -3730,12 +3730,12 @@ NoteEditSy_ScrollComplete_Return:
 
 BmDrEdit_CountMeasuresInit:
 	pushw_erp 0xfa
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	calr BmDrEdit_SaveEditState
 	calr BmDrEdit_ReadNoteDataFields
 	ldfr_berp L, 0xfb
 	inc1b_erp 0xfb
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_CountInit_ValidateAndInsert
 	ldw wa, 0xb5
 	call SeqData_SetErrorCode
@@ -3760,11 +3760,11 @@ BmDrEdit_CountInit_ValidateAndInsert:
 BmDrEdit_CountInit_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_CountInit_DecrementLoop
 	ldw wa, 0xcd
 	call SeqData_SetErrorCode
-	ld (0x287a:16), 255
+	ld (SEQ_ERROR_CODE:16), 255
 	jr BmDrEdit_RestoreEditRet
 
 BmDrEdit_CountInit_DecrementLoop:
@@ -3809,7 +3809,7 @@ BmDrEdit_ProcessVoiceSection:
 	ld (xsp + 4), xbc
 	ld (xsp + 8), a
 	call SeqVoice_SetDefaultParams
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	bit 2, (0x287b:16)
 	jr nz, BmDrEdit_ProcessVoice_WithState
 	ld c, (1075:16)
@@ -3888,7 +3888,7 @@ BmDrEdit_MultiSong_CalcRemaining:
 BmDrEdit_MultiSong_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_MultiSong_Return
 	incw 1, (0x275e:16)
 	ld wa, (0x2772:16)
@@ -4068,7 +4068,7 @@ ReadSeqData_StoreParams:
 	extz wa
 	calr BmDrEdit_CopyEventDataBetweenParts
 	calr BmDrEdit_SeekForwardToEvent
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_ReadSeqStoreParams_Error
 	ld (0x2967:16), 144
 	ldmm8 0x2968, 0x2784
@@ -4080,7 +4080,7 @@ ReadSeqData_StoreParams:
 	ld de, 6:i3
 	calr BmDrEdit_ApplyVelocityChange
 	calr BmDrEdit_CountMeasuresInit
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret z
 
 BmDrEdit_ReadSeqStoreParams_Error:
@@ -4207,10 +4207,10 @@ BmDrEdit_SyncSeekCheck:
 	push xiz
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_InitScanEventPositions
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, BmDrEdit_SyncSeek_PopIzRet
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
@@ -4232,7 +4232,7 @@ BmDrEdit_SyncSeek_ReadLoop:
 
 BmDrEdit_SyncSeek_EndOfTrack:
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_SyncSeek_PopIzRet
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
@@ -4255,7 +4255,7 @@ BmDrEdit_SyncSeek_ReadNext:
 
 BmDrEdit_SyncSeek_EndOfTrackAlt:
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_SyncSeek_ResyncChannel
 	jr BmDrEdit_SyncSeek_PopIzRet
 
@@ -4308,10 +4308,10 @@ BmDrEdit_SeekForwardToEvent:
 	push xiz
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl z, BmDrEdit_StoreStreamPos
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl z, BmDrEdit_SyncStorePos
 	jrl BmDrEdit_PopIzRet
 
@@ -4333,7 +4333,7 @@ BmDrEdit_SeekFwd_ReadLoop:
 
 BmDrEdit_SeekFwd_EndOfTrack:
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_SeekFwd_ResyncChannel
 	jrl BmDrEdit_PopIzRet
 
@@ -4355,7 +4355,7 @@ BmDrEdit_AdvanceAndCheckBeat:
 
 BmDrEdit_SeekFwd_EndOfTrackAlt:
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_SyncStorePos
 	jrl BmDrEdit_PopIzRet
 
@@ -4376,7 +4376,7 @@ BmDrEdit_SeekFwd_CheckStepMark:
 
 BmDrEdit_SeekFwd_EndOfTrackResync:
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, BmDrEdit_PopIzRet
 
 BmDrEdit_SeekFwd_ResyncChannel:
@@ -4411,7 +4411,7 @@ BmDrEdit_StoreStreamPos:
 
 BmDrEdit_SeekFwd_EndOfTrackResyncAlt:
 	calr BmDrEdit_SeekToPartVoice
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, BmDrEdit_SyncStorePos
 	jr BmDrEdit_PopIzRet
 

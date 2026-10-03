@@ -31,7 +31,7 @@ FmmPasswordFunc:
 	jr z, Password_ClearAndSetSlot
 
 Password_ShowError:
-	ld (0x7f42:16), 10
+	ld (GLOBAL_ERROR_CODE:16), 10
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl Password_Return
@@ -94,7 +94,7 @@ Password_ForwardToFileName:
 	jrl Password_Return
 
 Password_ShowErrorStatus:
-	ld (0x7f42:16), 11
+	ld (GLOBAL_ERROR_CODE:16), 11
 	ldw wa, 0xee
 	jrl Password_CallStatusDisplay
 
@@ -146,7 +146,7 @@ Password_ForwardToSaveFilter:
 	jr Password_Return
 
 Password_SaveErrorStatus:
-	ld (0x7f42:16), 11
+	ld (GLOBAL_ERROR_CODE:16), 11
 	ldw wa, 0xee
 	jr Password_CallStatusDisplay
 
@@ -162,7 +162,7 @@ Password_HandleLoadEvent:
 	jr Password_Return
 
 Password_LoadErrorStatus:
-	ld (0x7f42:16), 11
+	ld (GLOBAL_ERROR_CODE:16), 11
 	ldw wa, 0xee
 
 Password_CallStatusDisplay:
@@ -386,7 +386,7 @@ FileName_OpSave:
 	ld wa, hl
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, EVT_HIDE
@@ -468,7 +468,7 @@ FileName_OpLoad_Execute:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -504,7 +504,7 @@ FileName_OpFormat:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -558,7 +558,7 @@ FileName_OpDelete_Execute:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -584,7 +584,7 @@ FileName_OpFormatVariant:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -638,7 +638,7 @@ FileName_Navigate_CheckChanged:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl

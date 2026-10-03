@@ -1400,7 +1400,7 @@ AccompSeq_HandleSpecialMode_Skip2:
 AccompSeq_HandleSpecialMode_Skip3:
 	jr	AccompSeq_HandleSpecialMode_Return
 AccompSeq_HandleSpecialMode_Skip4:
-	ld	(32422:16), 57
+	ld	(GLOBAL_ERROR_CODE:16), 57
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
 	call	MIDI_SendSysExCmd

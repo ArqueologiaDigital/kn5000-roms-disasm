@@ -4449,7 +4449,7 @@ WallHomeEdit_EventDispatch:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
-	ld	(32422:16), 72
+	ld	(GLOBAL_ERROR_CODE:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -4620,14 +4620,14 @@ MainWallSetFlashFunc:
 	jr	z, MainWallFlash_DispatchAudio
 	cp	xbc, EVT_TOSHI_FLASH_WRITE
 	jrl	nz, MainWallFlash_ReturnZero
-	ld	(32422:16), 40
+	ld	(GLOBAL_ERROR_CODE:16), 40
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 	ldw	wa, 8
 	call	CtrlPanel_IndicatorJumpTable
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -4638,7 +4638,7 @@ MainWallFlash_DispatchAudio:
 	jr MainWallFlash_ReturnZero
 
 MainWallFlash_ClearAndRestore:
-	ld	(32422:16), 40
+	ld	(GLOBAL_ERROR_CODE:16), 40
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -4656,7 +4656,7 @@ MainWallFlash_ClearAndRestore:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -4735,7 +4735,7 @@ WallUsrShowHideFunc:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
-	ld	(32422:16), 72
+	ld	(GLOBAL_ERROR_CODE:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -5134,7 +5134,7 @@ MainSysControl:
 	ld	(xsp+2), xde
 	cp	xbc, EVT_SYS_INI
 	jr	nz, MainSysControl_PostDispatchFinalize
-	ld	(32422:16), 40
+	ld	(GLOBAL_ERROR_CODE:16), 40
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	ld	xwa, (xsp+2)
@@ -5215,7 +5215,7 @@ MainSysCtrl_DelayInner:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	ld	xhl, 0:i3

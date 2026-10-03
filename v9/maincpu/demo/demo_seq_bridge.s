@@ -723,7 +723,7 @@ PlayMode_SwitchToModeAndNotify:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 	ldw wa, 0xee
 	jp SoundCtrl_SendCommand
 DispatchHandler_ConditionalJump:
@@ -1108,7 +1108,7 @@ VoiceSlot_SendErrorAndReset:
 	ld w, 0x68:opc
 	call MIDI_SendSysExCmd
 	and (0xe3e2:16), 111
-	ld (0x7f42:16), 15
+	ld (GLOBAL_ERROR_CODE:16), 15
 	ldw (0xe3dc:16), 0x40ee
 	popw bc
 	ret

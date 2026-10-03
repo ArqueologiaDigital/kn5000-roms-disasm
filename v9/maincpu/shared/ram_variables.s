@@ -22,3 +22,6 @@
 	.equ SWBTWR_PAYLOAD_2,		0xc07e	; payload byte 2 (the signed detent count)
 	.equ SWBTWR_PAYLOAD_3,		0xc07f	; payload byte 3
 	.equ SWBTWR_EVENT_TYPE,		0xc080	; event type, written during dispatch
+; named from the writer census (python3 scripts/analysis/kn5000_ram_writers.py --tree v10 <addr>)
+	.equ SEQ_ERROR_CODE,		0x287a	; sequencer-data error code: 0 = none; 1..11 / 255 set by the end-mark, overflow and bad-parameter paths (SeqData_HandleEndMark_SetError1, SeqBuf_PageOverflowError, Part_ValidateSetup_ErrorEnd ...); cleared before operations, tested against 0 after
+	.equ GLOBAL_ERROR_CODE,		0x7f42	; set by SetGlobalError and the error / status paths of disk, medley, drum-kit, password ... code (values 1..74, 255); compared against constants

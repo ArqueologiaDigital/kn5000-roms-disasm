@@ -164,7 +164,7 @@ FCopy_CopyConfirm_Execute:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -201,7 +201,7 @@ FCopy_CopyExecute:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
@@ -317,7 +317,7 @@ FRename_HandleApply:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
@@ -420,7 +420,7 @@ FRenameSmf_HandleApply:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	calr SignalProgressUpdate
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
@@ -538,7 +538,7 @@ FmmFmt_HandleProgress:
 	ld wa, iz
 	ldw bc, 0x8
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl FmmFmt_NotifyComplete
@@ -696,7 +696,7 @@ FmmLoadTtl_StateCancelLoad:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 0
+	ld (GLOBAL_ERROR_CODE:16), 0
 	ldw wa, 0xee
 	jr FmmLoadTtl_NotifyComplete
 
@@ -725,7 +725,7 @@ FmmLoadTtl_StateSuccess:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 2
+	ld (GLOBAL_ERROR_CODE:16), 2
 	ldw wa, 0xee
 
 FmmLoadTtl_NotifyComplete:

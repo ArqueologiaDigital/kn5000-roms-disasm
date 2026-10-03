@@ -65,12 +65,12 @@ SetupFlashFunc:
 	jr z, SetupFlash_HandleLoadEvent
 	cp xbc, EVT_CHEAP_FLASH_WRITE
 	jr nz, SetupFlash_Return
-	ld (0x7f42:16), 37
+	ld (GLOBAL_ERROR_CODE:16), 37
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	ld wa, 6:i3
 	call CtrlPanel_IndicatorJumpTable
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jr SetupFlash_Return
@@ -158,7 +158,7 @@ FmmUtility_HandleCancel:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 0
+	ld (GLOBAL_ERROR_CODE:16), 0
 	ldw wa, 0xee
 	jr FmmUtility_ShowStatus
 
@@ -190,7 +190,7 @@ FmmUtility_HandleSuccess:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 2
+	ld (GLOBAL_ERROR_CODE:16), 2
 	ldw wa, 0xee
 
 FmmUtility_ShowStatus:
@@ -290,7 +290,7 @@ FmmSmfUtility_HandleCancel:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 0
+	ld (GLOBAL_ERROR_CODE:16), 0
 	ldw wa, 0xee
 	jr FmmSmfUtility_ShowStatus
 
@@ -322,7 +322,7 @@ FmmSmfUtility_HandleSuccess:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 2
+	ld (GLOBAL_ERROR_CODE:16), 2
 	ldw wa, 0xee
 
 FmmSmfUtility_ShowStatus:

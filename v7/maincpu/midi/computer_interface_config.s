@@ -32,7 +32,7 @@ TtComputerConnection:
 	call	GET_COMPUTER_INTERFACE_SELECTION
 	cp	l, 0:i3
 	jr	nz, ComputerConnectionTitleExit
-	ld	(32422:16), 70
+	ld	(GLOBAL_ERROR_CODE:16), 70
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE

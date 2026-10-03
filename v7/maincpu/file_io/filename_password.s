@@ -30,7 +30,7 @@ FmmPasswordFunc:
 	cp	l, 0:i3
 	jr	z, Password_ClearAndSetSlot
 Password_ShowError:
-	ld	(32422:16), 10
+	ld	(GLOBAL_ERROR_CODE:16), 10
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	jrl	Password_Return
@@ -88,7 +88,7 @@ Password_ForwardToFileName:
 	jrl Password_Return
 
 Password_ShowErrorStatus:
-	ld	(32422:16), 11
+	ld	(GLOBAL_ERROR_CODE:16), 11
 	ldw	wa, 238
 	jrl	Password_CallStatusDisplay
 Password_HandleSaveEvent:
@@ -138,7 +138,7 @@ Password_ForwardToSaveFilter:
 	jr Password_Return
 
 Password_SaveErrorStatus:
-	ld	(32422:16), 11
+	ld	(GLOBAL_ERROR_CODE:16), 11
 	ldw	wa, 238
 	jr	Password_CallStatusDisplay
 Password_HandleLoadEvent:
@@ -152,7 +152,7 @@ Password_HandleLoadEvent:
 	calr FmmSeqSongNameFunc
 	jr t, Password_Return
 Password_LoadErrorStatus:
-	ld	(32422:16), 11
+	ld	(GLOBAL_ERROR_CODE:16), 11
 	ldw	wa, 238
 Password_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -366,7 +366,7 @@ FileName_OpSave:
 	ld	wa, hl
 	ld	bc, 1:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, EVT_HIDE
@@ -446,7 +446,7 @@ FileName_OpLoad_Execute:
 	ld	wa, hl
 	ld	bc, 5:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	call	FileIO_ResetCurrentRecord
 	call	GetEncodedFreeSpaceData
 	call	GetEncodedFileSizeData
@@ -481,7 +481,7 @@ FileName_OpFormat:
 	ld	wa, hl
 	ld	bc, 5:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	call	FileIO_ResetCurrentRecord
 	call	GetEncodedFreeSpaceData
 	call	GetEncodedFileSizeData
@@ -534,7 +534,7 @@ FileName_OpDelete_Execute:
 	ld	wa, hl
 	ld	bc, 5:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	calr	SignalProgressUpdate
 	call	FileIO_ResetCurrentRecord
 	call	GetEncodedFreeSpaceData
@@ -559,7 +559,7 @@ FileName_OpFormatVariant:
 	ld	wa, hl
 	ld	bc, 5:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	calr	SignalProgressUpdate
 	call	FileIO_ResetCurrentRecord
 	call	GetEncodedFreeSpaceData
@@ -610,7 +610,7 @@ FileName_Navigate_CheckChanged:
 	ld	wa, hl
 	ld	bc, 5:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	calr	SignalProgressUpdate
 	call	GetEncodedFileSizeData
 	ld	(33894:16), hl

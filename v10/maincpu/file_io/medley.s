@@ -137,7 +137,7 @@ SeqName_LoadAndPlay:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -164,7 +164,7 @@ SeqName_HandleAction32:
 	ld wa, hl
 	ld bc, 5:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
@@ -447,7 +447,7 @@ IntMed_HandleError:
 	ld (MEDLEY_PLAY_FLAG:16), 0
 	cp l, 0:i3
 	jrl z, IntMed_Exit
-	ld (0x7f42:16), 14
+	ld (GLOBAL_ERROR_CODE:16), 14
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl IntMed_Exit
@@ -1194,7 +1194,7 @@ DiskSel_SendFileInfo:
 	ldto_werp WA, 0xfa
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	ldw wa, 0xee
 	jrl DiskSel_ShowErrorAndExit
 
@@ -1306,7 +1306,7 @@ DiskSel_RepeatSendInfo:
 	ldto_werp WA, 0xfa
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	ldw wa, 0xee
 	jrl DiskSel_ShowErrorAndExit
 
@@ -1354,7 +1354,7 @@ DiskSel_ShowError:
 	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7f42:16), 14
+	ld (GLOBAL_ERROR_CODE:16), 14
 	ldw wa, 0xee
 	jrl DiskSel_ShowErrorAndExit
 
@@ -1678,7 +1678,7 @@ DiskSel_PlayFindLoop:
 	ldto_werp WA, 0xfa
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7f42:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	ldw wa, 0xee
 
 DiskSel_ShowErrorAndExit:
@@ -2010,17 +2010,17 @@ SmfMed_CheckNotPlaying:
 	jr z, SmfMed_Error31
 	cp l, 2:i3
 	jrl nz, SmfMed_Exit
-	ld (0x7f42:16), 1
+	ld (GLOBAL_ERROR_CODE:16), 1
 	ldw wa, 0xee
 	jr SmfMed_ShowError
 
 SmfMed_Error31:
-	ld (0x7f42:16), 49
+	ld (GLOBAL_ERROR_CODE:16), 49
 	ldw wa, 0xee
 	jr SmfMed_ShowError
 
 SmfMed_Error3F:
-	ld (0x7f42:16), 63
+	ld (GLOBAL_ERROR_CODE:16), 63
 	ldw wa, 0xee
 
 SmfMed_ShowError:
@@ -2044,17 +2044,17 @@ SmfMed_CheckPlaying:
 	jr z, SmfMed_PlayError31
 	cp l, 2:i3
 	jr nz, SmfMed_SetPlaying
-	ld (0x7f42:16), 1
+	ld (GLOBAL_ERROR_CODE:16), 1
 	ldw wa, 0xee
 	jr SmfMed_ShowPlayError
 
 SmfMed_PlayError31:
-	ld (0x7f42:16), 49
+	ld (GLOBAL_ERROR_CODE:16), 49
 	ldw wa, 0xee
 	jr SmfMed_ShowPlayError
 
 SmfMed_PlayError3F:
-	ld (0x7f42:16), 63
+	ld (GLOBAL_ERROR_CODE:16), 63
 	ldw wa, 0xee
 
 SmfMed_ShowPlayError:
@@ -2833,7 +2833,7 @@ FmmPdMedleyFunc:
 	call Medley_GetPlaybackStatus
 	cp l, 2:i3
 	jrl c, PdMed_Exit
-	ld (0x7f42:16), 1
+	ld (GLOBAL_ERROR_CODE:16), 1
 	ldw wa, 0xee
 	jrl PdMed_ShowError
 
@@ -2930,7 +2930,7 @@ PdMed_HandleError:
 	ld (MEDLEY_PLAY_FLAG:16), 0
 	cp l, 0:i3
 	jrl z, PdMed_Exit
-	ld (0x7f42:16), 1
+	ld (GLOBAL_ERROR_CODE:16), 1
 	ldw wa, 0xee
 
 PdMed_ShowError:
@@ -3637,7 +3637,7 @@ FmmDocMedleyFunc:
 	call Medley_GetPlaybackStatus
 	cp l, 2:i3
 	jrl c, DocMed_Exit
-	ld (0x7f42:16), 1
+	ld (GLOBAL_ERROR_CODE:16), 1
 	ldw wa, 0xee
 	jrl DocMed_ShowError
 
@@ -3734,7 +3734,7 @@ DocMed_HandleError:
 	ld (MEDLEY_PLAY_FLAG:16), 0
 	cp l, 0:i3
 	jrl z, DocMed_Exit
-	ld (0x7f42:16), 1
+	ld (GLOBAL_ERROR_CODE:16), 1
 	ldw wa, 0xee
 
 DocMed_ShowError:

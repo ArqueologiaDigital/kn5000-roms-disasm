@@ -63,7 +63,7 @@ SeqStep_NoteCases_Join:
 	cp	(9686:16), 129
 	jr	z, SeqStep_NoteCases_Skip
 	call	SeqData_AdvancePosition
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	nz, SeqStep_NoteCases_Skip
 	ldmm8 0x25d8, 0x25d6
 	call	SeqData_ReadNextByte
@@ -93,7 +93,7 @@ SeqStep_NoteConsumeInit:
 SeqStep_NoteConsumeLoop:
 	ldib_erp 0xfa, 0
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_NoteConsumeAdvance
 SeqStep_NoteCases_Skip:
 	mrdw5 0x9f, 0x04, 0x19, 0xaf, 0x28
@@ -149,7 +149,7 @@ SeqStep_NoteVelSkip:
 
 SeqStep_NoteVelContinue:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_NoteExitRestore
 
 SeqStep_NoteExit:
@@ -187,12 +187,12 @@ SeqStep_EventProcess:
 	ldmw2 (xbc + 2), 0x2666
 	ldmm16 0x28af, 0x273c
 	ldmm16 9830, 0x273e
-	ld a, (0x287a:16)
+	ld a, (SEQ_ERROR_CODE:16)
 	cp a, 0:i3
 	jr z, SeqStep_EventPosManage
 	cp a, 0xa
 	jrl nz, SeqStep_EventExit
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	cpw (9778:16), 1
 	jr nz, SeqStep_EventPosManage
 	cp iz, 0:i3
@@ -251,7 +251,7 @@ SeqStep_EventPosAdvance:
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceReadPos
 	call PartCtrl_AdvanceToNextEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_EventPosUpdate
 	jrl SeqStep_EventExit
 	ldib_erp 0xfa, 0
@@ -275,7 +275,7 @@ SeqStep_EventPosSetNote:
 
 SeqStep_EventPosConsumeLoop:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SeqStep_EventExit
 	inc1b_erp 0xf9
 	ldto_berp A, 0xfa
@@ -340,7 +340,7 @@ SeqStep_EventPosComplete:
 
 SeqStep_EventPosDone:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_EventCleanup
 
 SeqStep_EventExit:
@@ -404,7 +404,7 @@ SeqStep_VelNoteFwd:
 	ld wa, bc
 	ld bc, 0:i3
 	call SeqVoice_SeekToBar
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 	calr SeqStep_WalkWithCallback
 	cp hl, 0:i3
@@ -426,7 +426,7 @@ SeqStep_VelNoteBwd:
 	ld wa, bc
 	ld bc, 0:i3
 	call SeqVoice_SeekToBar
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 	ldmm16 0x273c, 0x28af
 	ldmm16 0x273e, 9830
@@ -465,7 +465,7 @@ SeqStep_DeleteConsumeInit:
 
 SeqStep_DeleteConsumeLoop:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SeqStep_DeleteExitRestore
 	inc 1, iz
 	ldto_berp A, 0xfa
@@ -513,7 +513,7 @@ SeqStep_DeleteCheck:
 
 SeqStep_DeleteExit:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_DeleteExitRestore
 	inc 1, iz
 	ldto_berp A, 0xfa
@@ -567,7 +567,7 @@ SeqStep_DeletePopReturn:
 SeqStep_TrackChange:
 	dec 4, xsp
 	push xiz
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 	ld c, (9996:16)
 	cp c, 0x11
 	jr nz, SeqStep_TrackChangeCheck
@@ -682,7 +682,7 @@ SeqStep_TrackChangeNonDrum:
 	jr nz, SeqStep_TrackChangeLoopDone
 
 SeqStep_TrackChangeLoop:
-	ld (0x7f42:16), 15
+	ld (GLOBAL_ERROR_CODE:16), 15
 	jrl SeqStep_TrackChangeValidate
 
 SeqStep_TrackChangeLoopCheck:
@@ -787,7 +787,7 @@ SeqStep_TrackChangeValidate:
 	dec 1, a
 	ld (0x271a:16), a
 	calr SeqStep_BoundaryReturn
-	ld (0x7f42:16), 15
+	ld (GLOBAL_ERROR_CODE:16), 15
 	jrl SeqStep_TrackChangeExit
 
 SeqStep_TrackChangeFinal:
@@ -1048,7 +1048,7 @@ SeqStep_MultiTrackCleanup:
 	call SeqVoice_InitAllChannelParams
 	ldto_berp A, 0xfb
 	ld (0x2878:16), a
-	ld (0x7f42:16), 15
+	ld (GLOBAL_ERROR_CODE:16), 15
 	jrl SeqStep_VoiceReassignFinalExit
 
 SeqStep_PartCopy:
@@ -1320,7 +1320,7 @@ SeqStep_EventAdvance:
 
 SeqStep_EventAdvanceCheck:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_EventAdvanceBit7
 
 SeqStep_EventAdvanceLoop:
@@ -1339,7 +1339,7 @@ SeqStep_EventAdvanceBit7:
 
 SeqStep_EventAdvanceStore:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_EventAdvanceLoop
 	call SeqData_ReadNextByte
 	bit 7, l
@@ -1362,7 +1362,7 @@ SeqStep_EventAdvanceReturn:
 
 SeqStep_EventAdvanceError:
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_EventAdvanceLoop
 	ldto_berp A, 0xfa
 	ldfr_berp A, 0xfb
@@ -1393,14 +1393,14 @@ SeqStep_MeasureRead:
 	cp l, 0x81
 	jrl z, SeqStep_MeasureReadDone
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	ld (9804:16), l
 	ldmm16 9800, 9830
 	ldmm16 9802, 0x28af
 	calr SeqStep_AdvanceHelper1
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1413,13 +1413,13 @@ SeqStep_MeasureReadLoop:
 	cp a, (9806:16)
 	jr ule, SeqStep_MeasureReadCheck
 	calr SeqStep_DeleteShiftEvents
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	ldmm8 9804, 9806
 
 SeqStep_MeasureReadCheck:
 	calr SeqStep_AdvanceHelper1
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1429,7 +1429,7 @@ SeqStep_MeasureReadCheck:
 
 SeqStep_MeasureReadProcess:
 	calr SeqStep_SkipToHighBit
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1439,7 +1439,7 @@ SeqStep_MeasureReadProcess:
 	ldmm16 9800, 9830
 	ldmm16 9802, 0x28af
 	calr SeqStep_AdvanceHelper1
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1458,7 +1458,7 @@ SeqStep_SkipToHighBit:
 	ldmm16 9830, 9796
 	ldmm16 0x28af, 9798
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 
 SeqStep_SkipLoop:
@@ -1466,7 +1466,7 @@ SeqStep_SkipLoop:
 	bit 7, l
 	jr nz, SeqStep_SkipCheck
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_SkipLoop
 	ret
 
@@ -1482,7 +1482,7 @@ SeqStep_SkipDone:
 	ldmm16 9796, 9830
 	ldmm16 9798, 0x28af
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 	call SeqData_ReadNextByte
 	ld (9804:16), l
@@ -1492,7 +1492,7 @@ SeqStep_AdvanceHelper1:
 	ldmm16 9830, 9800
 	ldmm16 0x28af, 9802
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 
 SeqStep_AdvanceHelper2:
@@ -1500,7 +1500,7 @@ SeqStep_AdvanceHelper2:
 	bit 7, l
 	jr nz, SeqStep_AdvanceHelper2Loop
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_AdvanceHelper2
 	ret
 
@@ -1516,7 +1516,7 @@ SeqStep_AdvanceHelper2Done:
 	ldmm16 9800, 9830
 	ldmm16 9802, 0x28af
 	call SeqData_AdvancePosition
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	ret nz
 	call SeqData_ReadNextByte
 	ld (9806:16), l
@@ -1731,13 +1731,13 @@ SeqStep_DeleteShiftEvents:
 	add xbc, xwa
 	ld (xbc), l
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_DeleteShiftAdvance
 	jrl SeqStep_DeleteShiftCleanup
 
 SeqStep_DeleteShiftLoop:
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SeqStep_DeleteShiftCleanup
 
 SeqStep_DeleteShiftAdvance:
@@ -1784,7 +1784,7 @@ SeqStep_DeleteShiftUpdate:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_DeleteShiftError
 	jr SeqStep_DeleteShiftCleanup
 
@@ -1793,10 +1793,10 @@ SeqStep_DeleteShiftReturn:
 	ld wa, hl
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_NavigateBackward
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_DeleteShiftCleanup
 	call PartCtrl_NavigateBackwardAlt
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_DeleteShiftDone
 	jr SeqStep_DeleteShiftCleanup
 
@@ -1979,7 +1979,7 @@ SeqStep_SkipIfLeftFlag:
 	bit 0, (0x2879:16)
 	jr z, SeqStep_SkipIfLeftDone
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_SkipIfLeftReturn
 
 SeqStep_SkipIfLeftCheck:
@@ -2024,10 +2024,10 @@ SeqStep_AdvanceOneEvent:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_AdvanceOneDone
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_AdvanceOneReturn
 
 SeqStep_AdvanceOneDone:
@@ -2056,13 +2056,13 @@ SeqStep_SkipToMeasureLoop:
 
 SeqStep_SkipThreeEvents:
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_SkipThreeError
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_SkipThreeError
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_SkipThreeError
 	call SeqPart_ReadByte_Secondary
 	cp l, 0:i3
@@ -2084,7 +2084,7 @@ SeqStep_ProcessC0:
 	and a, 0x3
 	jr z, SeqStep_ProcessC0SavePos
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessC0Error
 	jr SeqStep_ProcessC0Done
 
@@ -2111,10 +2111,10 @@ SeqStep_ProcessC0ReadParam:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessC0Error
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_ProcessC0Advance
 
 SeqStep_ProcessC0Error:
@@ -2155,7 +2155,7 @@ SeqStep_ProcessB0:
 	ldto_werp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessB0Error
 	ld a, (0x289d:16)
 	bit 0, a
@@ -2171,7 +2171,7 @@ SeqStep_ProcessB0:
 
 SeqStep_ProcessB0Check:
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessB0Error
 	jr SeqStep_ProcessB0Exit
 
@@ -2225,10 +2225,10 @@ SeqStep_ProcessB0Final:
 
 SeqStep_ParseRhythm:
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ParseRhythmCheck
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ParseRhythmCheck
 	ld (3387:16), 255
 	call SeqPart_ReadByte_Secondary
@@ -2254,7 +2254,7 @@ SeqStep_ParseRhythm:
 
 SeqStep_ParseRhythmLoop:
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_ParseRhythmAdvance
 
 SeqStep_ParseRhythmCheck:
@@ -2296,7 +2296,7 @@ SeqStep_ParseRhythmReturn:
 
 SeqStep_ParseRhythmError:
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
 	call SeqPart_ReadByte_Secondary
 	cp l, 5:i3
@@ -2330,10 +2330,10 @@ SeqStep_ParseRhythmCleanup:
 SeqStep_ParseRhythmExit:
 	res 0, (0x289d:16)
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
 	call SeqPart_ReadByte_Secondary
 	ld a, (3310:16)
@@ -2368,7 +2368,7 @@ SeqStep_ProcessC0Ext:
 	and a, 0x3
 	jr z, SeqStep_ProcessC0ExtCheck
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessC0ExtReturn
 	jr SeqStep_ProcessC0ExtFinal
 
@@ -2399,10 +2399,10 @@ SeqStep_ProcessC0ExtDone:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessC0ExtReturn
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_ProcessC0ExtExit
 
 SeqStep_ProcessC0ExtReturn:
@@ -2445,7 +2445,7 @@ SeqStep_ProcessB0Ext:
 	ldto_werp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessB0ExtExit
 	ld a, (0x289d:16)
 	bit 0, a
@@ -2461,7 +2461,7 @@ SeqStep_ProcessB0Ext:
 
 SeqStep_ProcessB0ExtCheck:
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessB0ExtExit
 
 SeqStep_ProcessB0ExtProcess:
@@ -2487,10 +2487,10 @@ SeqStep_ProcessB0ExtReturn:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SeqStep_ProcessB0ExtExit
 	call PartCtrl_AdvanceReadPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_ProcessB0ExtComplete
 
 SeqStep_ProcessB0ExtExit:

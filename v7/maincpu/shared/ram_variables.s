@@ -22,3 +22,6 @@
 	.equ SWBTWR_PAYLOAD_2,		0xbfe2	; payload byte 2 (the signed detent count)	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xc07e
 	.equ SWBTWR_PAYLOAD_3,		0xbfe3	; payload byte 3	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xc07f
 	.equ SWBTWR_EVENT_TYPE,		0xbfe4	; event type, written during dispatch	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0xc080
+; named from the writer census (python3 scripts/analysis/kn5000_ram_writers.py --tree v10 <addr>)
+	.equ SEQ_ERROR_CODE,		0x287a	; sequencer-data error code: 0 = none; 1..11 / 255 set by the end-mark, overflow and bad-parameter paths (SeqData_HandleEndMark_SetError1, SeqBuf_PageOverflowError, Part_ValidateSetup_ErrorEnd ...); cleared before operations, tested against 0 after
+	.equ GLOBAL_ERROR_CODE,		0x7ea6	; set by SetGlobalError and the error / status paths of disk, medley, drum-kit, password ... code (values 1..74, 255); compared against constants	; v7 address, derived from v10's uses (name_kn5000_ram.py); was a copy of v10's 0x7f42

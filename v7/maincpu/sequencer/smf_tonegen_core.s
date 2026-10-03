@@ -2161,16 +2161,16 @@ SetWall_ValidateAndApply:
 	jrl ule, SetWall_ParamsValid
 
 SetWall_ParamOutOfRange:
-	ld (0x287a:16), 3
+	ld (SEQ_ERROR_CODE:16), 3
 	jrl Scoop_NullRet
 
 SetWall_ParamsValid:
 	xor hl, hl
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	and (0x287b:16), 191
 	ld a, (0x2877:16)
 	call SetWall_SingleSlotResolve
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl z, SetWall_SlotResolved
 	jrl Scoop_NullRet
 
@@ -2179,7 +2179,7 @@ SetWall_SlotResolved:
 	ld (0x27d4:16), wa
 	ld a, (9858:16)
 	call SetWall_SingleSlotResolve
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_NullRet
 	ld wa, (0x28af:16)
 	ld (0x27d8:16), wa
@@ -4278,13 +4278,13 @@ VoiceChannel_AdvancePosition:
 	ld wa, (xix + 3)
 	cp wa, 0xffff
 	jr nz, VoiceChannel_AdvPos_CheckBounds
-	ld (0x287a:16), 2
+	ld (SEQ_ERROR_CODE:16), 2
 	jr VoiceChannel_StorePosition_Continue
 
 VoiceChannel_AdvPos_CheckBounds:
 	cp wa, (0x286d:16)
 	jr ule, VoiceChannel_AdvPos_LoadBlock
-	ld (0x287a:16), 10
+	ld (SEQ_ERROR_CODE:16), 10
 	jr VoiceChannel_StorePosition_Continue
 
 VoiceChannel_AdvPos_LoadBlock:
@@ -4294,7 +4294,7 @@ VoiceChannel_AdvPos_LoadBlock:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, VoiceChannel_AdvPos_CopyBlock
-	ld (0x287a:16), 11
+	ld (SEQ_ERROR_CODE:16), 11
 	jr VoiceChannel_StorePosition_Continue
 
 VoiceChannel_AdvPos_CopyBlock:
@@ -5429,13 +5429,13 @@ ToneGen_ValidateVoice_CheckLink:
 	ld wa, (xix + 3)
 	cp wa, 0xffff
 	jr nz, ToneGen_ValidateVoice_CheckBounds
-	ld (0x287a:16), 2
+	ld (SEQ_ERROR_CODE:16), 2
 	jr ToneGen_SaveVoiceState_Continue
 
 ToneGen_ValidateVoice_CheckBounds:
 	cp wa, (0x286d:16)
 	jr ule, ToneGen_ValidateVoice_LoadBlock
-	ld (0x287a:16), 10
+	ld (SEQ_ERROR_CODE:16), 10
 	jr ToneGen_SaveVoiceState_Continue
 
 ToneGen_ValidateVoice_LoadBlock:
@@ -5445,7 +5445,7 @@ ToneGen_ValidateVoice_LoadBlock:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, ToneGen_ValidateVoice_CopyParams
-	ld (0x287a:16), 11
+	ld (SEQ_ERROR_CODE:16), 11
 	jr ToneGen_SaveVoiceState_Continue
 
 ToneGen_ValidateVoice_CopyParams:

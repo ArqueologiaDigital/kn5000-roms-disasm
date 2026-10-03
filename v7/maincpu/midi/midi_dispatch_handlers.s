@@ -10090,7 +10090,7 @@ MidiSeq_PartLookup_Data_Entry:
 	call	SeqStep_PlaybackNop
 	ret
 MidiSeq_PartLookup_Data_Helper:
-	ld	(0x7ea6:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 MidiSeq_PartLookup_Data_Helper2:
@@ -10101,7 +10101,7 @@ MidiSeq_PartLookup_Data_Helper3:
 	call	SeqData_ReadFieldByIndex
 	extz	hl
 	lda	xbc, (MidiRx_PartLookup_ByteMap:24)
-	ld	(0x7ea6), (xbc+hl)
+	ld	(GLOBAL_ERROR_CODE), (xbc+hl)
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 MidiSeq_ApplyPendingParams:

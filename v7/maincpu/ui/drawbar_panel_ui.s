@@ -9111,7 +9111,7 @@ IvMesageProc:
 	ld	xiz, xwa
 	cp	xbc, EVT_GET_STRING
 	jrl	z, IvMessage_GetText
-	ld	a, (32422:16)
+	ld	a, (GLOBAL_ERROR_CODE:16)
 	extz	wa
 	cp	xbc, EVT_INTERRUPT_OFF
 	jrl	z, IvMessage_SelectionChange

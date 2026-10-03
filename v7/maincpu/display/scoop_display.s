@@ -2249,7 +2249,7 @@ Display_RedrawInd_Store:
 	call VoiceBank_BitsAndLoad
 	ld a, (3424:16)
 	call SetWall_SlotResolve
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl z, Display_RedrawInd_LoadDirect
 	ld a, (3421:16)
 	ld (3820:16), a
@@ -2894,7 +2894,7 @@ DefaultHandler_Ret_Helper:
 	call PerfMode_Handler_EvtB_Helper2
 	ld (0x10fa:16), 0x00
 	and (0xe31c:16), 0x6f
-	ld (0x7ea6:16), 0x23
+	ld (GLOBAL_ERROR_CODE:16), 0x23
 	xor WA,WA
 	ld A, 0xee:opc
 	call SoundCtrl_SendCommand
@@ -3149,7 +3149,7 @@ Timer_ParamLoadAndCompare:
 	cp c, 2:i3
 	jrl ugt, .Lc_ef7a12
 	call Timer_ParamLoadAndCompare_Helper2
-	cp (0x7ea6:16), 0x0f
+	cp (GLOBAL_ERROR_CODE:16), 0x0f
 	jrl z, .Lc_ef7a1f
 .Lc_ef7a12:
 Timer_ParamLoadAndCompare_Skip:
@@ -3795,7 +3795,7 @@ ToneParam_Evt09_BytecodeHandler_Loop2:
 	cp a, (0x0d57:16)
 	jrl nz, .Lc_ef80e6
 	call VoiceState_DataBlock2_Helper2
-	ld (0x7ea6:16), 0xff
+	ld (GLOBAL_ERROR_CODE:16), 0xff
 .Lc_ef80bb:
 ToneParam_Evt09_BytecodeHandler_Skip2:
 	or (0x0dd3:16), 0x01
@@ -3827,7 +3827,7 @@ ToneParam_Evt09_BytecodeHandler_Skip3:
 	ld A, 0x01:opc
 	call VoiceSlot_SaveState
 	call VoiceState_DataBlock2_Helper2
-	ld (0x7ea6:16), 0xff
+	ld (GLOBAL_ERROR_CODE:16), 0xff
 .Lc_ef8115:
 ToneParam_Evt09_BytecodeHandler_Loop:
 	call VoiceCtrl_BytecodeHandler
@@ -3904,7 +3904,7 @@ ToneParam_HandlerTable_BC_Join2:
 	jp ToneParam_HandlerTable_BC_Return
 .Lc_ef81dd:
 	and (0xe31c:16), 0x6f
-	ld (0x7ea6:16), 0x19
+	ld (GLOBAL_ERROR_CODE:16), 0x19
 	xor WA,WA
 	ld A, 0xee:opc
 	call SoundCtrl_SendCommand
@@ -3961,7 +3961,7 @@ ToneParam_HandlerTable_BC_Join3:
 	jp	ToneParam_HandlerTable_BC_Join4
 VoiceCtrl_ParamSetupBytecode_Helper_Skip5:
 	and	(0xe31c:16), 111
-	ld	(0x7ea6:16), 25
+	ld	(GLOBAL_ERROR_CODE:16), 25
 	xor	wa, wa
 	ld	a, 238:opc
 	call	SoundCtrl_SendCommand
@@ -3994,7 +3994,7 @@ ToneParam_HandlerTable_BC_Join5:
 	jp	ToneParam_HandlerTable_BC_Return3
 VoiceCtrl_ParamSetupBytecode_Helper_Skip8:
 	and	(0xe31c:16), 111
-	ld	(0x7ea6:16), 25
+	ld	(GLOBAL_ERROR_CODE:16), 25
 	xor	wa, wa
 	ld	a, 238:opc
 	call	SoundCtrl_SendCommand
@@ -4366,7 +4366,7 @@ VoiceState_DataBlock2_Helper4:
 	xor H,H
 	ld (0x0dcd:16), hl
 	ld (0x0dce:16), 0x00
-	ld (0x7ea6:16), 0xff
+	ld (GLOBAL_ERROR_CODE:16), 0xff
 	call DisplayMode_Handler_3_Sub
 	res 2, (0x0d54:16)
 	ld (0x0d55:16), 0xff
@@ -4782,7 +4782,7 @@ DisplayMode_Handler_3_Join4:
 	push	xhl
 	call	Timer_ParamLoadAndCompare
 	pop	xhl
-	cp	(32422:16), 15
+	cp	(GLOBAL_ERROR_CODE:16), 15
 	jrl	z, DisplayMode_Handler_3_Skip15
 	jp	DisplayMode_Handler_3_Join4
 DisplayMode_Handler_3_Skip23:
@@ -5545,7 +5545,7 @@ VoiceSlot_TableSetup_Skip7:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0d60)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, VoiceSlot_TableSetup_Return2
 	ld	(0x0e52:16), 4
 	ld	(0x28c1:16), iy
@@ -5593,7 +5593,7 @@ VoiceSlot_TableSetup_Skip12:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0d60)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, VoiceSlot_TableSetup_Return2
 	ld	(0x28c1:16), iy
 	ldw_d16	iy, (0x28af)
@@ -5644,14 +5644,14 @@ VoiceSlot_TableSetup_Skip16:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	z, VoiceSlot_TableSetup_Skip18
 	call	VoiceSlot_TableSetup_Helper7
 	cp	w, 0:i3
 	jrl	z, VoiceSlot_TableSetup_Skip17
 	ld	a, w
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, VoiceSlot_TableSetup_Skip17
 	cp	a, 4:i3
 	jrl	ule, VoiceSlot_TableSetup_Join5
@@ -5689,7 +5689,7 @@ VoiceSlot_TableSetup_Code_Skip8:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0d60)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, VoiceSlot_TableSetup_Return3
 	ld	(0x28c1:16), iy
 	ldw_d16	iy, (0x28af)
@@ -5769,7 +5769,7 @@ AccPedal_StoreAddrAndCheck:
 
 AccPedal_CallEventSwitch:
 	call Scoop_EventHandler_MenuSwitch
-	cp (0x287a:16), 0x00
+	cp (SEQ_ERROR_CODE:16), 0x00
 	jrl nz, AccPedal_SendSysExAndReturn
 	ld (0x367e:16), de
 	ld (0x0d5c:16), c
@@ -6286,7 +6286,7 @@ VoiceCtrl_ParamSetupBytecode_Skip18:
 	pushdi_w	(0x0d8f)
 	pushdi_w	(0x0d91)
 	pushdi_w	(0x0d93)
-	ld	(32422:16), 255
+	ld	(GLOBAL_ERROR_CODE:16), 255
 	call	DisplayMode_Handler_3_Sub
 	popw (0x0d93:16)	; popw (0x0d93)
 	popw (0x0d91:16)	; popw (0x0d91)
@@ -6902,7 +6902,7 @@ Display_CallMenuInit_Helper:
 	and	(0x0d53:16), 254
 	and	(0x28a6:16), 254
 	call	AccWrap_PositionClear
-	ld	(0x7ea6:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	call	VoiceCtrl_CheckAndReset
 	ldb_d8	a, (0xfc5d)
 	stb_d8	(0x1128), a
@@ -7705,7 +7705,7 @@ SysEx_PeriodicDispatch:
 	call MIDI_SendSysExFromW
 	pop XIY
 	popw wa
-	ld (0x7ea6:16), 0x0f
+	ld (GLOBAL_ERROR_CODE:16), 0x0f
 	xor WA,WA
 	ld A, 0xee:opc
 	call SoundCtrl_SendCommand
@@ -9729,7 +9729,7 @@ DisplayMode_Handler_3_Helper16_Loop:
 	ld	w, 104:opc
 	call	MIDI_SendSysExFromW
 	and	(0xe31c:16), 111
-	ld	(0x7ea6:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 	xor	wa, wa
 	ld	a, 238:opc
 	call	SoundCtrl_SendCommand
@@ -12162,9 +12162,9 @@ VoiceState_DataBlock2_Join5:
 	ret
 	cp	(4486:16), 2
 	jrl	nz, VoiceState_DataBlock2_Return7
-	cp	(32422:16), 1
+	cp	(GLOBAL_ERROR_CODE:16), 1
 	jrl	z, VoiceState_DataBlock2_Return7
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	ld	a, (3429:16)
 	cp	a, 0:i3
 	jrl	z, VoiceState_DataBlock2_Skip32
@@ -12196,7 +12196,7 @@ VoiceState_DataBlock2_Skip34:
 	call	VoiceState_DataBlock2_Helper4
 	call	Display_UpdateRegion4
 	popw	bc
-	cp	(32422:16), 1
+	cp	(GLOBAL_ERROR_CODE:16), 1
 	jrl	z, VoiceState_DataBlock2_Entry6
 	dec	1, bc
 	ld	wa, (13950:16)
@@ -12235,7 +12235,7 @@ VoiceState_DataBlock2_Loop12:
 	pushw	bc
 	call	UIState_DispatchHandler_Helper
 	popw	bc
-	cp	(32422:16), 1
+	cp	(GLOBAL_ERROR_CODE:16), 1
 	jrl	z, VoiceState_DataBlock2_Return8
 	ld	wa, (13950:16)
 	cp wa, (4357:16)
@@ -12606,7 +12606,7 @@ SubCPU_ToneParamRet_Helper:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	z, PerfMode_ParamHandler_11_Skip
 	xor	wa, wa
 	ld	(0x0e50:16), wa
@@ -12655,7 +12655,7 @@ PerfMode_ParamHandler_11_Skip4:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, PerfMode_ParamHandler_11_Skip6
 	ldw_d16	hl, (0x0e4e)
 	inc	1, hl
@@ -12699,7 +12699,7 @@ PerfMode_ParamHandler_11_Skip7:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, PerfMode_ParamHandler_11_Skip9
 	ldw_d16	hl, (0x0e4e)
 	inc	1, hl
@@ -12742,7 +12742,7 @@ PerfMode_ParamHandler_11_Skip11:
 	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jrl	nz, PerfMode_ParamHandler_11_Skip13
 	ldw_d16	hl, (0x367e)
 	inc	1, hl
@@ -17207,7 +17207,7 @@ Scoop_EventHandler_MenuSwitch:
 	pushw wa
 	call SetWall_ParserInit
 	popw wa
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	bit 2, (0x287b:16)
 	jr nz, Scoop_EventHandler_MenuSwitch_Mode1
 	xor de, de
@@ -17250,7 +17250,7 @@ Scoop_EventHandler_MenuSwitch_End:
 	ret
 
 Scoop_EventHandler_Scroll:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld hl, (0x28ba:16)
 	call SetWall_StreamIndexResolve
 	ld xwa, (4349:16)
@@ -17303,7 +17303,7 @@ Scoop_Scroll_Apply:
 	inc 1, bc
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_EventHandler_CategorySelect:
@@ -17312,12 +17312,12 @@ Scoop_EventHandler_CategorySelect:
 	ld bc, (9870:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	ld bc, (9872:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, Scoop_EventHandler_CategorySelect
 	jrl Scoop_ButtonGrid_Data
 
@@ -17337,10 +17337,10 @@ Scoop_CategorySelect_Amplitude:
 	ld ix, (0x28b6:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	call Scoop_SpecialMode_Data
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_CategorySelect_Filter:
@@ -17350,10 +17350,10 @@ Scoop_CategorySelect_Filter:
 	sub bc, 0x5
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	call Scoop_SpecialMode_Data
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, Scoop_CategorySelect_Filter
 	jrl Scoop_ButtonGrid_Data
 
@@ -17379,12 +17379,12 @@ Scoop_CategorySelect_UpdateDisplay:
 	inc 1, bc
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	ld bc, (9870:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_EventHandler_ButtonGrid:
@@ -17393,12 +17393,12 @@ Scoop_EventHandler_ButtonGrid:
 	ld bc, (9872:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	ld bc, (9870:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, Scoop_EventHandler_ButtonGrid
 	jr Scoop_ButtonGrid_Data
 
@@ -17427,7 +17427,7 @@ Scoop_ButtonGrid_End:
 	ld bc, (9876:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, Scoop_ButtonGrid_Data
 	ld bc, (9880:16)
 	sub bc, (9876:16)
@@ -17437,7 +17437,7 @@ Scoop_ButtonGrid_Data:
 	ret
 
 Scoop_EventHandler_SpecialMode:
-	ld	(0x287a:16), 0
+	ld	(SEQ_ERROR_CODE:16), 0
 	ld	hl, (0x28ba:16)
 	call	SetWall_StreamIndexResolve
 	push	xwa
@@ -17488,7 +17488,7 @@ Scoop_EventHandler_SpecialMode_Join:
 	sub bc, (10428:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Loop:
@@ -17499,14 +17499,14 @@ Scoop_EventHandler_SpecialMode_Skip4:
 	ld	bc, (9870:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_EventHandler_SpecialMode_Helper
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip5
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip5:
 	ld	bc, (9872:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Join2:
@@ -17523,12 +17523,12 @@ Scoop_EventHandler_SpecialMode_Join3:
 	ld	ix, (0x28b6:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip6
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip6:
 	call	Scoop_EventHandler_SpecialMode_Helper
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop2
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Loop2:
@@ -17540,12 +17540,12 @@ Scoop_EventHandler_SpecialMode_Skip7:
 	sub	bc, 5
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip8
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip8:
 	call	Scoop_EventHandler_SpecialMode_Helper
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop2
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Join4:
@@ -17571,14 +17571,14 @@ Scoop_EventHandler_SpecialMode_Join5:
 	sub bc, (10422:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_EventHandler_SpecialMode_Helper
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip9
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip9:
 	ld	bc, (9870:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop3
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Loop3:
@@ -17589,14 +17589,14 @@ Scoop_EventHandler_SpecialMode_Skip10:
 	ld	bc, (9872:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_EventHandler_SpecialMode_Helper
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip11
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip11:
 	ld	bc, (9870:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop3
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Join6:
@@ -17621,7 +17621,7 @@ Scoop_EventHandler_SpecialMode_Join8:
 	ld	bc, (9876:16)
 	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_EventHandler_SpecialMode_Helper
-	cp	(0x287a:16), 0
+	cp	(SEQ_ERROR_CODE:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip13
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip13:
@@ -17668,7 +17668,7 @@ Scoop_SpecialMode_Data:
 	ld (4349:16), xwa
 	bitm 7, (xwa)
 	jr nz, Scoop_SpecialMode_Toggle
-	ld (0x287a:16), 11
+	ld (SEQ_ERROR_CODE:16), 11
 	jr Scoop_SpecialMode_ToggleEnd
 
 Scoop_SpecialMode_Toggle:
@@ -17692,7 +17692,7 @@ Scoop_SpecialMode_Draw:
 	ld (4349:16), xwa
 	bitm 7, (xwa)
 	jr nz, Scoop_SpecialMode_DrawAlt
-	ld (0x287a:16), 11
+	ld (SEQ_ERROR_CODE:16), 11
 	jr Scoop_SpecialMode_DrawEnd
 
 Scoop_SpecialMode_DrawAlt:
@@ -17716,7 +17716,7 @@ Scoop_SpecialMode_UpdateParams:
 	ld	(4349:16), xwa
 	bitm	7, (xwa)
 	jr	nz, Scoop_SpecialMode_UpdateParams_Skip
-	ld	(0x287a:16), 11
+	ld	(SEQ_ERROR_CODE:16), 11
 	jr	Scoop_SpecialMode_UpdateParams_Return
 Scoop_SpecialMode_UpdateParams_Skip:
 	push	xwa
@@ -17740,7 +17740,7 @@ Scoop_EventHandler_SpecialMode_Helper:
 	bitm	7, (xix)
 	bitm	7, (xwa)
 	jr	nz, Scoop_SpecialMode_UpdateParams_Skip2
-	ld	(0x287a:16), 11
+	ld	(SEQ_ERROR_CODE:16), 11
 	jr	Scoop_SpecialMode_UpdateParams_Return2
 Scoop_SpecialMode_UpdateParams_Skip2:
 	ld	xwa, (4349:16)

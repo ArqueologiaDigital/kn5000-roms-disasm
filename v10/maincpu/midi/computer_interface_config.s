@@ -32,7 +32,7 @@ TtComputerConnection:
 	call GET_COMPUTER_INTERFACE_SELECTION
 	cp l, 0:i3	;  MIDI
 	jr nz, ComputerConnectionTitleExit
-	ld (0x7f42:16), 70
+	ld (GLOBAL_ERROR_CODE:16), 70
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE

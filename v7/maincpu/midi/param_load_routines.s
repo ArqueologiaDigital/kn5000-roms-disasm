@@ -372,7 +372,7 @@ ParaLoadOpt_GridReturn:
 	ld XBC,EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
-	ld (0x7ea6:16), 0x48
+	ld (GLOBAL_ERROR_CODE:16), 0x48
 	ld XWA,0xffffffff
 	ld XBC,EVT_INTERRUPT_TITLE
 	ld XDE,TITLE_MESAGE

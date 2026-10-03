@@ -8539,7 +8539,7 @@ SeqPhase_FormatNameLoop:
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, SeqPhase_FormatNameLoop
-	ld (0x7f42:16), 37
+	ld (GLOBAL_ERROR_CODE:16), 37
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	call FileIO_ParseDirectoryEntry
@@ -8549,11 +8549,11 @@ SeqPhase_FormatNameLoop:
 	calr CancelOperationCleanup
 	cp iz, 0:i3
 	jr ge, SeqPhase_LoadSuccess
-	ld (0x7f42:16), 1
+	ld (GLOBAL_ERROR_CODE:16), 1
 	jr SeqPhase_SendSoundCmd
 
 SeqPhase_LoadSuccess:
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 
 SeqPhase_SendSoundCmd:
 	ldw wa, 0xee
@@ -8623,7 +8623,7 @@ DiskEvt_UseAltChannel:
 	jr DiskEvt_PostModeEvent
 
 DiskEvt_TypeIsUSB:
-	ld (0x7f42:16), 0
+	ld (GLOBAL_ERROR_CODE:16), 0
 	ldw wa, 0xee
 	jr DiskEvt_SendSoundCmd
 
@@ -8636,7 +8636,7 @@ DiskEvt_PostModeEvent:
 
 DiskEvt_TypeIsCard:
 	calr ResetProgressIndication
-	ld (0x7f42:16), 2
+	ld (GLOBAL_ERROR_CODE:16), 2
 	ldw wa, 0xee
 
 DiskEvt_SendSoundCmd:
@@ -8691,7 +8691,7 @@ UI_PostEventCommon:
 
 DetectType_IsCardReset:
 	calr ResetProgressIndication
-	ld (0x7f42:16), 2
+	ld (GLOBAL_ERROR_CODE:16), 2
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	ret
@@ -8717,7 +8717,7 @@ DiskCap_CheckMediaType:
 	jr z, DiskCap_TypeIsNone
 	cp wa, 5:i3
 	jr nz, DiskCap_Return
-	ld (0x7f42:16), 0
+	ld (GLOBAL_ERROR_CODE:16), 0
 	ldw wa, 0xee
 	jr DiskCap_SendSoundCmd
 
@@ -8727,7 +8727,7 @@ DiskCap_TypeIsNone:
 
 DiskCap_TypeIsCardReset:
 	calr ResetProgressIndication
-	ld (0x7f42:16), 2
+	ld (GLOBAL_ERROR_CODE:16), 2
 	ldw wa, 0xee
 
 DiskCap_SendSoundCmd:

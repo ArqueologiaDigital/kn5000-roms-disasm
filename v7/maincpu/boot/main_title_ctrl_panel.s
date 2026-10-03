@@ -38,7 +38,7 @@ MainTitle_InitGraphicsAndEvents:
 	jp PostEvent
 
 MainTitle_SetBootFlag:
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ret
 MainTitle_TeardownAndLoop:
 	ld xwa, 0xffffffff

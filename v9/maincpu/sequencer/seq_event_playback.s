@@ -1152,7 +1152,7 @@ AccPlay_UpdateStateFlags:
 	cp (SEQ_MASTER_STATE:16), 1
 	jr nz, AccPlay_DispatchRet
 	and (0x7f15:16), 251
-	ld (0x7f42:16), 15
+	ld (GLOBAL_ERROR_CODE:16), 15
 	call DrumVoice_NotifyEE
 
 AccPlay_DispatchRet:
@@ -3932,7 +3932,7 @@ VocalistPage2OKFunc_Skip:
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join4:
 	call	SoundParam_NotifyChange
-	ld	(0x7f42:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -3968,7 +3968,7 @@ VocalistPage2OKFunc_Skip3:
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join2:
 	call	SoundParam_NotifyChange
-	ld	(0x7f42:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -3997,7 +3997,7 @@ VocalistPage2OKFunc_Skip2:
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join3:
 	call	SoundParam_NotifyChange
-	ld	(0x7f42:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -4009,7 +4009,7 @@ VocalistPage2OKFunc_Join3:
 	call	SndParam_ApplyAndSync
 	ld	wa, 1:i3
 	call	SmfMedley_RawData
-	ld	(0x7f42:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -4019,7 +4019,7 @@ MainVocalistPage2OKFunc:
 	cp xbc, EVT_VST_SEND_OK
 	jr nz, VocalistPage2_ReturnZero
 	call MidiSysEx_SendAllParams
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE
@@ -4525,7 +4525,7 @@ GMYesFunc:
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call PostEvent
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE

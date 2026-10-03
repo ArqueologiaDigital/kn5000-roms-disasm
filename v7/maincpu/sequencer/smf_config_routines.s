@@ -1821,7 +1821,7 @@ SMF_ParseEvents:
 	jr ugt, SMF_Parse_Complete
 	ld c, (3301:16)
 	ld wa, (0xf19e:16)
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	and (0x287b:16), 191
 	xor xhl, xhl
 	ld l, (3301:16)
@@ -1913,11 +1913,11 @@ SMF_ChannelTranslationTable:
 SMF_ConfigSlot:
 	and (0x287b:16), 251
 	xor w, w
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld (0x287d:16), wa
 	ldw (0x287f:16), 1
 	call SetWall_SlotResolve
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SMF_ConfigSlot_Setup
 	jrl SMF_ConfigSlot_Return
 
@@ -1956,7 +1956,7 @@ SMF_ConfigSlot_EventLoop:
 	jr z, SMF_ConfigSlot_TypeB0
 	jr SMF_ConfigSlot_DefaultHandler
 	calr SMF_AdvanceReadPtr
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SMF_ConfigSlot_EventLoop
 	jrl SMF_ConfigSlot_Return
 
@@ -1968,12 +1968,12 @@ SMF_ConfigSlot_DefaultHandler:
 
 SMF_ConfigSlot_WriteAndContinue:
 	calr SMF_AdvanceWritePtr
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 
 SMF_ConfigSlot_AdvanceEvent:
 	calr SMF_AdvanceReadPtr
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 	push xde
 	ld xde, (4349:16)
@@ -2036,7 +2036,7 @@ SMF_ConfigSlot_ReadDataLoop:
 	jr c, SMF_ConfigSlot_ReadDataLoop
 	popw hl
 	pop xiy
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 	and (4404:16), 254
 	and (4404:16), 251
@@ -2191,7 +2191,7 @@ SMF_Config_WriteLoop:
 	jr c, SMF_Config_WriteLoop
 	pop xhl
 	pop xix
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 	bit 0, (4404:16)
 	jr nz, SMF_Config_OutputOverride1
@@ -2329,7 +2329,7 @@ SMF_AdvanceInPageChain:
 	ld	xhl, (4349:16)
 	bitm 7, (xhl)
 	jr	nz, SMF_ConfigSlot_Skip
-	ld	(10362:16), 2
+	ld	(SEQ_ERROR_CODE:16), 2
 	jr	SMF_ConfigSlot_Epilogue
 SMF_ConfigSlot_Skip:
 	ld	(10369:16), xhl
@@ -2384,7 +2384,7 @@ SMF_AdvanceReadPtr:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SMF_AdvanceRead_NewPage
-	ld (0x287a:16), 2
+	ld (SEQ_ERROR_CODE:16), 2
 	jr SMF_AdvanceRead_Return
 
 SMF_AdvanceRead_NewPage:
@@ -2407,7 +2407,7 @@ SMF_AdvanceWritePtr:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SMF_AdvanceWrite_NewPage
-	ld (0x287a:16), 2
+	ld (SEQ_ERROR_CODE:16), 2
 	jr SMF_AdvanceWrite_Return
 
 SMF_AdvanceWrite_NewPage:

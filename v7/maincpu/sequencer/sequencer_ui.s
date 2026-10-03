@@ -5034,7 +5034,7 @@ HelpLangChk_CheckIzZero:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
-	ld	(32422:16), 72
+	ld	(GLOBAL_ERROR_CODE:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -5106,7 +5106,7 @@ HelpFunc_CheckIzZero:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
-	ld	(32422:16), 72
+	ld	(GLOBAL_ERROR_CODE:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE

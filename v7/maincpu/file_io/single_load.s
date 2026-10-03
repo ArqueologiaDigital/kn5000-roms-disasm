@@ -2936,7 +2936,7 @@ SLDst_ScrollDispatch:
 	ld	wa, hl
 	ld	bc, 1:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	ld	xwa, 6291494
 	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
@@ -3359,7 +3359,7 @@ CmpDst_ScrollModeA:
 	ld WA,HL
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
-	ld (0x7ea6:16), l
+	ld (GLOBAL_ERROR_CODE:16), l
 	ld XWA,0x00600026
 	ld XBC,EVT_HIDE
 	ld xde, 0:i3
@@ -3659,7 +3659,7 @@ FmmCmpLoad_HandleCancel:
 	call	ApPostEvent
 	ldw	wa, 176
 	call	UI_PostModeChangeEvent
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	ldw	wa, 238
 	jr	FmmCmpLoad_CallStatusDisplay
 FmmCmpLoad_HandleError:
@@ -3679,7 +3679,7 @@ FmmCmpLoad_HandleSuccess:
 	call	ApPostEvent
 	ldw	wa, 176
 	call	UI_PostModeChangeEvent
-	ld	(32422:16), 2
+	ld	(GLOBAL_ERROR_CODE:16), 2
 	ldw	wa, 238
 FmmCmpLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand

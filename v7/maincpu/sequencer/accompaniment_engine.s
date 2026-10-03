@@ -16456,7 +16456,7 @@ AccPatch_CopyStepsDone:
 	ret
 
 AccPatch_CopySteps_Overflow:
-	ld	(32422:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
 	call	MIDI_SendSysExCmd
@@ -17171,7 +17171,7 @@ AccPatch_WriteSeqByte_Pad:
 	nop
 
 AccPatch_CalcBlockCopySetup:
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	cp	de, (13756:16)
 	jr	nz, AccPatch_CalcBlockCopy_DiffEntry	; -> 0xF60A5C
 	ld	iy, (13762:16)
@@ -17204,7 +17204,7 @@ AccPatch_CalcBlockCopy_CheckIX:
 	calr BlockCopy_IXFirst_Reverse
 
 AccPatch_CalcBlockCopy_StoreIX:
-	cp	(32422:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	nz, AccPatch_CalcBlockCopy_Done
 	calr	AccPatch_CalcBlockCopyBounds
 AccPatch_CalcBlockCopy_Done:
@@ -17227,7 +17227,7 @@ AccPatch_CalcBlockCopy_Clamp_Helper:
 	inc 1,BC
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60ac0
 	jr t, DSP_SetupDone
 BlockCopy_Rev_CheckSameEntry:
@@ -17240,7 +17240,7 @@ BlockCopy_Rev_CopyDiffEntry:
 	ld bc, (0x35b8:16)
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60adb
 	jr t, DSP_SetupDone
 BlockCopy_Rev_CopyRemainder:
@@ -17248,7 +17248,7 @@ BlockCopy_Rev_CopyRemainder:
 	ld bc, (0x35ba:16)
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60ac0
 	jr t, DSP_SetupDone
 BlockCopy_Rev_StoreBounds:
@@ -17362,13 +17362,13 @@ BlockCopy_SameEntry_Reverse:
 	ld ix, (0x35c4:16)
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60b99
 	jr t, DSP_NullRet
 BlockCopy_SameEntry_AdvIY:
 .Lc_f60b99:
 	calr AccPatch_AdvanceNextEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60ba5
 	jr t, DSP_NullRet
 BlockCopy_SameEntry_CheckDE:
@@ -17382,13 +17382,13 @@ BlockCopy_SameEntry_FullCopy:
 	sub BC,0x0006
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60bc3
 	jr t, DSP_NullRet
 BlockCopy_SameEntry_AdvIYLoop:
 .Lc_f60bc3:
 	calr AccPatch_AdvanceNextEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60ba5
 	jr t, DSP_NullRet
 BlockCopy_SameEntry_StoreBounds:
@@ -17416,7 +17416,7 @@ BlockCopy_IXFirst_Reverse:
 	inc 1,BC
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60c1d
 	jr t, DSP_NullRet2
 BlockCopy_IXFirst_CopyOffset:
@@ -17424,7 +17424,7 @@ BlockCopy_IXFirst_CopyOffset:
 	ld bc, (0x35b8:16)
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60c30
 	jr t, DSP_NullRet2
 BlockCopy_IXFirst_CheckDE:
@@ -17437,7 +17437,7 @@ BlockCopy_IXFirst_CopyRemainder:
 	ld bc, (0x35ba:16)
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60c4b
 	jr t, DSP_NullRet2
 BlockCopy_IXFirst_CopyOffset2:
@@ -17445,7 +17445,7 @@ BlockCopy_IXFirst_CopyOffset2:
 	ld bc, (0x35b8:16)
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60c30
 	jr t, DSP_NullRet2
 BlockCopy_IXFirst_StoreBounds:
@@ -17474,7 +17474,7 @@ BlockCopyBounds_UseSmaller:
 	ld	bc, (0x35ca:16)
 	calr	DSP_BlockCopyReverse
 	calr	AccPatch_AdvanceNextEntry_IX
-	cp	(0x7ea6:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	z, BlockCopyBounds_CopyRemainder
 	jr	BlockCopyBounds_Return
 BlockCopyBounds_CopyRemainder:
@@ -17495,7 +17495,7 @@ AccPatch_AdvanceNextEntry_IY:
 	calr AccPatch_GetEntryAddr
 	bit	7, (xix+0:8)
 	jr	nz, AdvNextEntry_IY_StoreAndReset
-	ld	(0x7ea6:16), 11
+	ld	(GLOBAL_ERROR_CODE:16), 11
 	jr	AdvNextEntry_IY_Return
 AdvNextEntry_IY_StoreAndReset:
 	ld	(13748:16), xix
@@ -17512,7 +17512,7 @@ AccPatch_AdvanceNextEntry_IX:
 	calr AccPatch_GetEntryAddr
 	bit	7, (xix+0:8)
 	jr	nz, AdvNextEntry_IX_StoreAndReset
-	ld	(0x7ea6:16), 11
+	ld	(GLOBAL_ERROR_CODE:16), 11
 	jr	AdvNextEntry_IX_Return
 AdvNextEntry_IX_StoreAndReset:
 	ld	(13744:16), xix
@@ -17522,7 +17522,7 @@ AdvNextEntry_IX_Return:
 	ret
 
 AccPatch_SetupBlockCopyDispatch:
-	ld (0x7ea6:16), 0x00
+	ld (GLOBAL_ERROR_CODE:16), 0x00
 	ld hl, (0x35bc:16)
 	calr AccPatch_GetEntryAddr
 	ld (0x35b4:16), xix
@@ -17559,7 +17559,7 @@ BlockCopyDisp_IXLarger:
 	jr BlockCopyDisp_CheckAndForward
 
 BlockCopyDisp_CheckAndForward:
-	cp	(32422:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	nz, BlockCopyDisp_Return
 	calr	AccPatch_ForwardBlockCopy
 BlockCopyDisp_Return:
@@ -17584,7 +17584,7 @@ BlockCopy_FwdIYSmaller:
 	sub bc, (0x35c2:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60da2
 	jr t, DSP_CopyDone
 BlockCopy_FwdIYSmall_CheckDE:
@@ -17597,7 +17597,7 @@ BlockCopy_FwdIYSmall_CopyOffset:
 	ld bc, (0x35b8:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60dbd
 	jr t, DSP_CopyDone
 BlockCopy_FwdIYSmall_CopyRem:
@@ -17605,7 +17605,7 @@ BlockCopy_FwdIYSmall_CopyRem:
 	ld bc, (0x35ba:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60da2
 	jr t, DSP_CopyDone
 BlockCopy_FwdIYSmall_StoreBounds:
@@ -17626,13 +17626,13 @@ BlockCopy_FwdEqual:
 	ld ix, (0x35c4:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60e06
 	jr t, AccPatch_NullRet2
 BlockCopy_FwdEqual_AdvIX:
 .Lc_f60e06:
 	calr AccPatch_AdvancePrevEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60e12
 	jr t, AccPatch_NullRet2
 BlockCopy_FwdEqual_CheckDE:
@@ -17646,13 +17646,13 @@ BlockCopy_FwdEqual_FullCopy:
 	sub BC,0x0006
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60e30
 	jr t, AccPatch_NullRet2
 BlockCopy_FwdEqual_AdvIXLoop:
 .Lc_f60e30:
 	calr AccPatch_AdvancePrevEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60e12
 	jr t, AccPatch_NullRet2
 BlockCopy_FwdEqual_StoreBounds:
@@ -17682,7 +17682,7 @@ BlockCopy_FwdIXSmaller:
 	sub bc, (0x35c4:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60e8f
 	jr t, AccPatch_NullRet3
 BlockCopy_FwdIXSmall_CopyOff:
@@ -17690,7 +17690,7 @@ BlockCopy_FwdIXSmall_CopyOff:
 	ld bc, (0x35b8:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60ea2
 	jr t, AccPatch_NullRet3
 BlockCopy_FwdIXSmall_CheckDE:
@@ -17703,7 +17703,7 @@ BlockCopy_FwdIXSmall_CopyRem:
 	ld bc, (0x35ba:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60ebd
 	jr t, AccPatch_NullRet3
 BlockCopy_FwdIXSmall_CopyOff2:
@@ -17711,7 +17711,7 @@ BlockCopy_FwdIXSmall_CopyOff2:
 	ld bc, (0x35b8:16)
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
-	cp (0x7ea6:16), 0x00
+	cp (GLOBAL_ERROR_CODE:16), 0x00
 	jr z, .Lc_f60ea2
 	jr t, AccPatch_NullRet3
 BlockCopy_FwdIXSmall_StoreBounds:
@@ -17724,7 +17724,7 @@ AccPatch_NullRet3:
 	ret
 
 AccPatch_ForwardBlockCopy:
-	cp	(0x7ea6:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	nz, AccPatch_DoneBlockCopy
 	ldw	wa, 254
 	sub	wa, (0x35c6:16)
@@ -17742,7 +17742,7 @@ FwdBlockCopy_UseSmaller:
 	ld	bc, (0x35ca:16)
 	calr	DSP_BlockCopyForward
 	calr	AccPatch_AdvancePrevEntry_IX
-	cp	(0x7ea6:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	z, FwdBlockCopy_CopyRemainder
 	jr	AccPatch_DoneBlockCopy
 FwdBlockCopy_CopyRemainder:
@@ -17762,7 +17762,7 @@ AccPatch_AdvancePrevEntry_IX:
 	calr AccPatch_GetEntryAddr
 	bit 7,(XIX)
 	jr nz, AdvPrevEntry_IX_StoreAndReset
-	ld (0x7ea6:16), 0x0b
+	ld (GLOBAL_ERROR_CODE:16), 0x0b
 	jr t, AdvPrevEntry_IX_Return
 AdvPrevEntry_IX_StoreAndReset:
 	ld	(13744:16), xix
@@ -17779,7 +17779,7 @@ AccPatch_AdvancePrevEntry_IY:
 	calr AccPatch_GetEntryAddr
 	bit 7,(XIX)
 	jr nz, AdvPrevEntry_IY_StoreAndReset
-	ld (0x7ea6:16), 0x0b
+	ld (GLOBAL_ERROR_CODE:16), 0x0b
 	jr t, AdvPrevEntry_IY_Return
 AdvPrevEntry_IY_StoreAndReset:
 	ld	(13748:16), xix
@@ -18973,7 +18973,7 @@ AccPlayback_ReadEvt_CheckBit7:
 	jr	z, ToneGenSetup_Done
 	cpw	(0x3438:16), 0
 	jr	nz, AccPlayback_ReadEvt_HasEntries
-	ld	(0x7ea6:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 	ld	(0xe316:16), 238
 	ld	(0xe318:16), 64
 	and	(0x3434:16), 127
@@ -20516,7 +20516,7 @@ ToneGen_StepBounds_Return:
 	calr	ToneGen_AdvanceSeqList
 	jr	ToneGen_SeqAdv_Return
 ToneGen_SeqAdvanceMain:
-	ld	(32422:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 	ld	(58134:16), 238
 	ld	(58136:16), 64
 	ld	a, 8:opc
@@ -21259,12 +21259,12 @@ AccPat_Dispatch_CheckBit0:
 	jr	nz, AccPat_Dispatch_InitSlot
 	cp	(SEQ_MASTER_STATE:16), 184
 	jr	nz, AccPat_CleanupAndFree
-	ld	(0x7ea6:16), 20
+	ld	(GLOBAL_ERROR_CODE:16), 20
 	call	DrumVoice_NotifyEE
 	jr	AccPat_CleanupAndFree
 AccPat_Dispatch_InitSlot:
 	call	AccPatch_InitCurrentSlot
-	ld	(32422:16), 23
+	ld	(GLOBAL_ERROR_CODE:16), 23
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
 	call	16692690
@@ -22931,13 +22931,13 @@ DrumKit_ErrorFallbackSlotIter:
 	inc	1, c
 	cp	c, 10
 	jr	c, DrumKit_ErrorFallbackSlotIter
-	ld	(32422:16), 23
+	ld	(GLOBAL_ERROR_CODE:16), 23
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
 	call	MIDI_SendSysExCmd
 	jr	DrumKit_RestoreRegisters
 DrumKit_SetErrorCode20:
-	ld	(32422:16), 20
+	ld	(GLOBAL_ERROR_CODE:16), 20
 	call	DrumVoice_NotifyEE
 DrumKit_RestoreRegisters:
 	popw	hl
@@ -23091,13 +23091,13 @@ DrumKit_FallbackSlotLoop:
 	inc	1, c
 	cp	c, 10
 	jr	c, DrumKit_FallbackSlotLoop
-	ld	(32422:16), 23
+	ld	(GLOBAL_ERROR_CODE:16), 23
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
 	call	MIDI_SendSysExCmd
 	jr	DrumKit_Epilogue
 DrumKit_AllPatternsOK:
-	ld	(32422:16), 20
+	ld	(GLOBAL_ERROR_CODE:16), 20
 	call	DrumVoice_NotifyEE
 DrumKit_Epilogue:
 	popw	hl
@@ -24233,7 +24233,7 @@ DrumVoice_Handler0_Join:
 	or	(0x3432:16), 1
 	jr	DrumVoice_Handler0_Return
 DrumVoice_Handler0_Skip2:
-	ld	(0x7ea6:16), 19
+	ld	(GLOBAL_ERROR_CODE:16), 19
 	calr	DrumVoice_NotifyEE
 DrumVoice_Handler0_Return:
 	ret
@@ -24256,7 +24256,7 @@ DrumVoice_Handler1_Join:
 	or	(0x3432:16), 2
 	jr	DrumVoice_Handler1_Return
 DrumVoice_Handler1_Skip2:
-	ld	(0x7ea6:16), 19
+	ld	(GLOBAL_ERROR_CODE:16), 19
 	calr	DrumVoice_NotifyEE
 DrumVoice_Handler1_Return:
 	ret
@@ -25625,7 +25625,7 @@ Tempo_DisplayParamCommon:
 	ld (0xe320:16), c
 	ret
 Tempo_DisplayParamSkipClear:
-	ld	(32422:16), a
+	ld	(GLOBAL_ERROR_CODE:16), a
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 Tempo_DisplayParamFormat:
@@ -25649,7 +25649,7 @@ Tempo_DisplayParamReturn:
 	extz BC
 	ld wa, (0x38ee:16)
 	calr SetWall_StoreAndResolve
-	cp (0x287a:16), 0x00
+	cp (SEQ_ERROR_CODE:16), 0x00
 	jr nz, .Lc_f661c5
 	ld wa, 0:i3
 	calr Part_StoreVoiceTableIndex
@@ -25673,7 +25673,7 @@ Tempo_DisplayStartMeasure:
 	extz BC
 	ld wa, (0x38ee:16)
 	calr SetWall_StoreAndResolve
-	cp (0x287a:16), 0x00
+	cp (SEQ_ERROR_CODE:16), 0x00
 	jr nz, .Lc_f66202
 	ld wa, 1:i3
 	calr Part_StoreVoiceTableIndex
@@ -25697,7 +25697,7 @@ Tempo_DisplayEndMeasure:
 	extz BC
 	ld wa, (0x38ee:16)
 	calr SetWall_StoreAndResolve
-	cp (0x287a:16), 0x00
+	cp (SEQ_ERROR_CODE:16), 0x00
 	jr nz, .Lc_f6623e
 	ld wa, 2:i3
 	calr Part_StoreVoiceTableIndex
@@ -25721,7 +25721,7 @@ Tempo_DisplayQuantize:
 	extz BC
 	ld wa, (0x38ee:16)
 	calr SetWall_StoreAndResolve
-	cp (0x287a:16), 0x00
+	cp (SEQ_ERROR_CODE:16), 0x00
 	jr nz, .Lc_f6627a
 	ld wa, 3:i3
 	calr Part_StoreVoiceTableIndex
@@ -25745,7 +25745,7 @@ Tempo_DisplayTimeSigNum:
 	extz BC
 	ld wa, (0x38ee:16)
 	calr SetWall_StoreAndResolve
-	cp (0x287a:16), 0x00
+	cp (SEQ_ERROR_CODE:16), 0x00
 	jr nz, Tempo_DisplayEffectLookup
 	ld wa, 4:i3
 	calr Part_StoreVoiceTableIndex
@@ -27621,9 +27621,9 @@ ExtVoice_ProcessList_Helper:
 	pushdi_b	(14125)
 	calr	DrumParam_ReadMaxCount_Helper4
 	calr	DrumParam_ReadMaxCount_Helper5
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	calr	DrumParam_ReadMaxCount_Helper6
-	cp	(32422:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	z, DrumParam_ReadMaxCount_Skip
 	call	AccPatch_InitCurrentSlot
 	or	(0x372c:16), 127
@@ -27634,7 +27634,7 @@ DrumParam_ReadMaxCount_Entry:
 	pop	(0x372d:16)
 	or	(0x3431:16), 128
 	call	Seq_DispatcherEntry
-	cp	(32422:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	nz, DrumParam_ReadMaxCount_Skip2
 	call	AccWrap_PlayModeStartAccPlay
 	jr	DrumParam_ReadMaxCount_Return2
@@ -28112,7 +28112,7 @@ AccVoice_SetupSlots_DataBlock_Helper9_Skip:
 AccVoice_SetupSlots_DataBlock_Skip9:
 	ld	wa, 6:i3
 	ld	(13688:16), wa
-	ld	(32422:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 AccVoice_SetupSlots_DataBlock_Return5:
 	ret
 AccVoice_SetupSlots_DataBlock_Helper10:
@@ -29372,7 +29372,7 @@ CmpBkslSTtl_Dispatch_Code:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	jrl	DisplayFunc_ReturnZero
 	ld	(13424:16), 0
 	jrl	DisplayFunc_ReturnZero
@@ -29535,7 +29535,7 @@ CmpBkslSTtl_FillIn8:
 	cp	(0x340ea:24), 0
 	jr	nz, CmpBkslSTtl_EventPost
 	set	2, (0x3431:16)
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	jr	DisplayFunc_ReturnZero
@@ -30281,7 +30281,7 @@ CmpEsy_DeliverEventAndCheck:
 	pop	xix
 	pop	xhl
 	pop	xde
-	cp	(32422:16), 0
+	cp	(GLOBAL_ERROR_CODE:16), 0
 	jr	nz, CmpEsyTtl_SubModeD
 	lda	xiy, (14095:16)
 	lda	xix, (14109:16)
@@ -30905,7 +30905,7 @@ CstmCpTtlFunc_Skip5:
 	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(0x7ea6:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	jrl	CstmCpTtlFunc_Join2
 	ld	a, (0x39e2:16)
@@ -30917,7 +30917,7 @@ CstmCpTtlFunc_Skip5:
 	jrl	nz, CstmCp_ReturnZero2
 	cp	(0x391a:16), 3
 	jr	nc, CstmCpTtlFunc_Skip6
-	ld	(0x7ea6:16), 37
+	ld	(GLOBAL_ERROR_CODE:16), 37
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 CstmCpTtlFunc_Skip6:
@@ -30932,11 +30932,11 @@ CstmCpTtlFunc_Skip6:
 	jr	z, CstmCpTtlFunc_Skip7
 	cp	l, 0:i3
 	jr	nz, CstmCp_ReturnZero2
-	ld	(0x7ea6:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	jr	CstmCpTtlFunc_Join2
 CstmCpTtlFunc_Skip7:
-	ld	(0x7ea6:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 	ldw	wa, 238
 	jr	CstmCpTtlFunc_Join2
 CstmCpTtlFunc_Skip8:
@@ -30968,7 +30968,7 @@ CstmCpTtlFunc_Skip10:
 	ld XBC,EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
-	ld (0x7ea6:16), 0x23
+	ld (GLOBAL_ERROR_CODE:16), 0x23
 	ldw WA, 0x00ee
 CstmCpTtlFunc_Join2:
 	call SoundCtrl_SendCommand
@@ -30990,7 +30990,7 @@ CstmCp_StyleDataBlock:
 	jr	z, CstmCpTtl_Dispatch2_Code_Skip
 	cp	l, 0:i3
 	jr	nz, CstmCpTtl_Dispatch2_Code_Skip
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 CstmCpTtl_Dispatch2_Code_Skip:
@@ -31231,7 +31231,7 @@ MiddleCmpClrFunc:
 	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(0x7ea6:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	jr	MiddleCmpClr_ReturnZero
@@ -34353,22 +34353,22 @@ AccPatch_VoiceAssignDataBlock_Helper31:
 	jr	z, AccPatch_VoiceAssignDataBlock_Skip25
 	cp	(14516:16), 129
 	jr	z, AccPatch_VoiceAssignDataBlock_Skip26
-	ld	(32422:16), 1
+	ld	(GLOBAL_ERROR_CODE:16), 1
 	jr	AccPatch_VoiceAssignDataBlock_Return12
 AccPatch_VoiceAssignDataBlock_Skip24:
-	ld	(32422:16), 3
+	ld	(GLOBAL_ERROR_CODE:16), 3
 	jr	AccPatch_VoiceAssignDataBlock_Return12
 AccPatch_VoiceAssignDataBlock_Skip25:
-	ld	(32422:16), 23
+	ld	(GLOBAL_ERROR_CODE:16), 23
 	jr	AccPatch_VoiceAssignDataBlock_Return12
 AccPatch_VoiceAssignDataBlock_Skip26:
-	ld	(32422:16), 1
+	ld	(GLOBAL_ERROR_CODE:16), 1
 	jr	AccPatch_VoiceAssignDataBlock_Return12
 AccPatch_VoiceAssignDataBlock_Skip27:
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	jr	AccPatch_VoiceAssignDataBlock_Return12
 AccPatch_VoiceAssignDataBlock_Skip28:
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 AccPatch_VoiceAssignDataBlock_Return12:
 	ret
 cmp_ld_mae:
@@ -35027,7 +35027,7 @@ StylCnvWait_SetStatus:
 StylCnvWait_CheckPending:
 	cp	(0x483e:16), 0
 	jr	z, AccChord_ReturnZero
-	ld	(0x7ea6:16), 74
+	ld	(GLOBAL_ERROR_CODE:16), 74
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	ld	(0x483e:16), 0
@@ -35932,14 +35932,14 @@ StylCnvContTtlFunc:
 	jrl	nz, AccRhythm_ReturnZero
 	cp	(0x483a:16), 0
 	jr	z, StylCnvCont_CheckPending
-	ld	(0x7ea6:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	ld	(0x483a:16), 0
 StylCnvCont_CheckPending:
 	cp	(0x483e:16), 0
 	jr	z, AccRhythm_ReturnZero
-	ld	(0x7ea6:16), 74
+	ld	(GLOBAL_ERROR_CODE:16), 74
 	ldw	wa, 238
 	call	SoundCtrl_SendCommand
 	ld	(0x483e:16), 0

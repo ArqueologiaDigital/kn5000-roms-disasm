@@ -187,7 +187,7 @@ SetWall_MatchedSameSlot:
 	jrl SetWall_CopySlotData
 
 SetWall_NewSlotSelected:
-	ld (0x7f42:16), 26
+	ld (GLOBAL_ERROR_CODE:16), 26
 	ld (3298:16), 0
 	ld a, (0x2873:16)
 	cp a, 0x10
@@ -314,7 +314,7 @@ SetWall_SlotUpdate_Return:
 	ret
 
 SetWall_DataBlock1:
-	ld	(0x7f42:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	ld	a, (0xffe3:24)
 	ld	(3391:16), a
 	ret
@@ -654,7 +654,7 @@ SetWall_CrossType_Validate:
 	ld a, (0x2873:16)
 	cp a, 0x13
 	jrl ugt, SetWall_CrossType_Reset
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	and (0x287b:16), 191
 	xor hl, hl
 	ld l, (3301:16)
@@ -738,11 +738,11 @@ SetWall_SlotBitUpdate:
 SetWall_ParsePatternStream:
 	and (0x287b:16), 251
 	xor w, w
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld (0x287d:16), wa
 	ldw (0x287f:16), 1
 	call SetWall_SlotResolve
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_ParseStream_Init
 	jrl SetWall_ParseStream_Return
 
@@ -791,7 +791,7 @@ SetWall_ParseStream_MainLoop:
 
 SetWall_ParseStream_Advance:
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_ParseStream_MainLoop
 	jrl SetWall_ParseStream_Return
 
@@ -805,10 +805,10 @@ SetWall_ParseStream_ReadEvent:
 	ld	(xhl+ix), a
 	pop xhl
 	call SetWall_AdvanceWritePos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_ParseStream_Return
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_ParseStream_Return
 	push xde
 	ld xde, (4349:16)
@@ -865,12 +865,12 @@ SetWall_ParseStream_C0_Read:
 	pushw bc
 	call SetWall_AdvanceWritePos
 	popw bc
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_ParseStream_Return
 	pushw bc
 	call SetWall_AdvanceStreamPos
 	popw bc
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_ParseStream_Return
 	inc 1, c
 	push xde
@@ -917,7 +917,7 @@ SetWall_ParseStream_B0_ShiftLoop:
 	ldto_lerp XIZ, 0x38
 	ld (4349:16), xiz
 	pop xiz
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_ParseStream_Return
 	bit 0, (0x289d:16)
 	jr nz, SetWall_ParseStream_B0_Iter
@@ -972,12 +972,12 @@ SetWall_ParseStream_B0_Write:
 	pushw bc
 	call SetWall_AdvanceWritePos
 	popw bc
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_ParseStream_Return
 	pushw bc
 	call SetWall_AdvanceStreamPos
 	popw bc
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_ParseStream_Return
 	inc 1, c
 	push xde
@@ -1030,7 +1030,7 @@ SetWall_AdvanceStreamPos:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SetWall_AdvanceStream_Reset
-	ld (0x287a:16), 2
+	ld (SEQ_ERROR_CODE:16), 2
 	jr SetWall_AdvanceStream_Return
 
 SetWall_AdvanceStream_Reset:
@@ -1053,7 +1053,7 @@ SetWall_AdvanceWritePos:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SetWall_AdvanceWrite_Reset
-	ld (0x287a:16), 2
+	ld (SEQ_ERROR_CODE:16), 2
 	jr SetWall_AdvanceWrite_Return
 
 SetWall_AdvanceWrite_Reset:
@@ -1068,17 +1068,17 @@ SetWall_AdvanceWrite_Return:
 SetWall_SkipC0Scanner:
 	xor hl, hl
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_SkipC0_Return
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_SkipC0_Return
 	push xde
 	ld xde, (4349:16)
 	ld	a, (xde+iy)
 	pop xde
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_SkipC0_Return
 	push xde
 	ld xde, (4349:16)
@@ -1096,10 +1096,10 @@ SetWall_ParseB0ControlChange:
 	ld a, (0x2873:16)
 	ld (3378:16), a
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_B0CC_Return
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_B0CC_Return
 	ld (3387:16), 255
 	push xde
@@ -1121,7 +1121,7 @@ SetWall_ParseB0ControlChange:
 	cp a, l
 	jr nz, SetWall_B0CC_ClearFlags
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_B0CC_Return
 	push xde
 	ld xde, (4349:16)
@@ -1155,7 +1155,7 @@ SetWall_B0CC_ClearFlags:
 
 SetWall_B0CC_Type48:
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_B0CC_Return
 	push xde
 	ld xde, (4349:16)
@@ -1165,10 +1165,10 @@ SetWall_B0CC_Type48:
 	jr nz, SetWall_B0CC_Type48_Check12
 	and (0x289d:16), 254
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_B0CC_Return
 	call SetWall_AdvanceStreamPos
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_B0CC_Return
 	push xde
 	ld xde, (4349:16)
@@ -1242,7 +1242,7 @@ SetWall_EventAdvanceCheck:
 	jr z, SetWall_EventAdvance_Return
 	cp wa, (0x28a2:16)
 	jr ule, SetWall_EventAdvance_Sync
-	ld (0x287a:16), 10
+	ld (SEQ_ERROR_CODE:16), 10
 	jr SetWall_EventAdvance_Return
 
 SetWall_EventAdvance_Sync:
@@ -1254,10 +1254,10 @@ SetWall_EventAdvance_Return:
 	ret
 
 SetWall_SlotResolve:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld (0x288d:16), w
 	call SetWall_SingleSlotResolve
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_SlotResolve_Init
 	jr SetWall_SlotResolve_Return
 
@@ -1291,7 +1291,7 @@ SetWall_SlotResolve_CheckDone:
 SetWall_SlotResolve_ScanNext:
 	ld b, (0x288e:16)
 	call SetWall_SkipEvents
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_SlotResolve_FoundMatch
 	jr SetWall_SlotResolve_Return
 
@@ -1317,7 +1317,7 @@ SetWall_SlotResolve_FoundMatch:
 	ldto_lerp XIZ, 0x38
 	ld (4349:16), xiz
 	pop xiz
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_SlotResolve_Return
 	jr SetWall_SlotResolve_CheckDone
 
@@ -1482,7 +1482,7 @@ SetWall_SingleSlotResolve:
 	bit	7, (xde+iy)
 	pop xde
 	jr nz, SetWall_SingleSlot_LoadPos
-	ld (0x287a:16), 1
+	ld (SEQ_ERROR_CODE:16), 1
 	jr SetWall_SingleSlot_Return
 
 SetWall_SingleSlot_LoadPos:
@@ -1493,13 +1493,13 @@ SetWall_SingleSlot_LoadPos:
 	pop xde
 	cp wa, 0xffff
 	jr nz, SetWall_SingleSlot_InvalidPos
-	ld (0x287a:16), 2
+	ld (SEQ_ERROR_CODE:16), 2
 	jr SetWall_SingleSlot_Return
 
 SetWall_SingleSlot_InvalidPos:
 	cp wa, (0x28a2:16)
 	jr ule, SetWall_SingleSlot_CheckBounds
-	ld (0x287a:16), 10
+	ld (SEQ_ERROR_CODE:16), 10
 	jr SetWall_SingleSlot_Return
 
 SetWall_SingleSlot_CheckBounds:
@@ -1509,7 +1509,7 @@ SetWall_SingleSlot_CheckBounds:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SetWall_SingleSlot_Return
-	ld (0x287a:16), 11
+	ld (SEQ_ERROR_CODE:16), 11
 
 SetWall_SingleSlot_Return:
 	ret
@@ -1523,10 +1523,10 @@ SetWall_DualPassScanner:
 	jrl z, SetWall_DualPass_Done
 	ld a, (0x288d:16)
 	call SetWall_SingleSlotResolve
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_DualPass_InitLoop
 	and (0x287b:16), 251
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jrl SetWall_DualPass_Done
 
 SetWall_DualPass_InitLoop:
@@ -1551,7 +1551,7 @@ SetWall_DualPass_MainLoop:
 	cp w, 0x81
 	jrl z, SetWall_DualPass_Type81
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_DualPass_MainLoop
 	jrl SetWall_DualPass_Error
 
@@ -1565,16 +1565,16 @@ SetWall_DualPass_TypeC0:
 	rrc l, 2
 	ld (0x2895:16), hl
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_DualPass_Error
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_DualPass_Error
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_DualPass_Error
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl nz, SetWall_DualPass_Error
 	ld wa, (0x2893:16)
 	ld xhl, (4349:16)
@@ -1583,7 +1583,7 @@ SetWall_DualPass_TypeC0:
 	pushw wa
 	call SetWall_StreamAdvanceBounded
 	popw wa
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_DualPass_Error
 	ld xhl, (4349:16)
 	ld	d, (xhl+iy)
@@ -1606,7 +1606,7 @@ SetWall_DualPass_TypeC0:
 	pop xiz
 	ld (0x288e:16), a
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_DualPass_Error
 	jrl SetWall_DualPass_MainLoop
 
@@ -1615,7 +1615,7 @@ SetWall_DualPass_Type81:
 	jr SetWall_DualPass_Done
 
 SetWall_DualPass_Error:
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ld a, (1075:16)
 	ld (0x288e:16), a
 	or (0x287b:16), 32
@@ -1640,21 +1640,21 @@ SetWall_SkipEvents_ReadLoop:
 	jr nz, SetWall_SkipEvents_CheckEnd
 
 SetWall_SkipEvents_EndMarker:
-	ld (0x287a:16), 8
+	ld (SEQ_ERROR_CODE:16), 8
 	jr SetWall_SkipEvents_Return
 
 SetWall_SkipEvents_CheckEnd:
 	cp a, 0x81
 	jr z, SetWall_SkipEvents_IncCount
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_SkipEvents_ReadLoop
 	jr SetWall_SkipEvents_Return
 
 SetWall_SkipEvents_IncCount:
 	inc 1, c
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_SkipEvents_CheckCount
 	jr SetWall_SkipEvents_Return
 
@@ -1696,9 +1696,9 @@ SetWall_Replay_CheckType81:
 	cp w, 0x81
 	jrl z, SetWall_Replay_Type81
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_Replay_MainLoop
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jrl SetWall_Replay_Done
 
 SetWall_Replay_TypeC0:
@@ -1709,30 +1709,30 @@ SetWall_Replay_TypeC0:
 	and wa, 0x80
 	ld (0x2893:16), wa
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_Replay_C0_Byte2
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jrl SetWall_Replay_Done
 
 SetWall_Replay_C0_Byte2:
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_Replay_C0_Byte3
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jrl SetWall_Replay_Done
 
 SetWall_Replay_C0_Byte3:
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_Replay_C0_Byte4
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jrl SetWall_Replay_Done
 
 SetWall_Replay_C0_Byte4:
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_Replay_C0_ReadBank
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jr SetWall_Replay_Done
 
 SetWall_Replay_C0_ReadBank:
@@ -1743,9 +1743,9 @@ SetWall_Replay_C0_ReadBank:
 	pushw wa
 	call SetWall_StreamAdvanceBounded
 	popw wa
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SetWall_Replay_C0_ReadCC
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jr SetWall_Replay_Done
 
 SetWall_Replay_C0_ReadCC:
@@ -1768,9 +1768,9 @@ SetWall_Replay_C0_ReadCC:
 	pop xiz
 	ld (0x288e:16), a
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jrl z, SetWall_Replay_MainLoop
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	jr SetWall_Replay_Done
 
 SetWall_Replay_Type81:
@@ -1778,7 +1778,7 @@ SetWall_Replay_Type81:
 
 SetWall_Replay_Done:
 	popw_dd16 0xaf, 0x28
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 	ret
 
 SetWall_SendPanelCtrl:
@@ -1808,13 +1808,13 @@ SetWall_StreamAdvanceBounded:
 	ld wa, (xhl + 3)
 	cp wa, 0xffff
 	jr ule, SetWall_StreamAdv_CheckBounds
-	ld (0x287a:16), 8
+	ld (SEQ_ERROR_CODE:16), 8
 	jr SetWall_StreamAdv_Return
 
 SetWall_StreamAdv_CheckBounds:
 	cp wa, (0x28a2:16)
 	jr ule, SetWall_StreamAdv_LoadNext
-	ld (0x287a:16), 10
+	ld (SEQ_ERROR_CODE:16), 10
 	jr SetWall_StreamAdv_Return
 
 SetWall_StreamAdv_LoadNext:
@@ -1824,7 +1824,7 @@ SetWall_StreamAdv_LoadNext:
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SetWall_StreamAdv_Reset
-	ld (0x287a:16), 11
+	ld (SEQ_ERROR_CODE:16), 11
 	jr SetWall_StreamAdv_Return
 
 SetWall_StreamAdv_Reset:
@@ -1851,7 +1851,7 @@ SetWall_ForwardSkip_CheckType:
 	cp	(xhl+iy), 0x84
 	jr z, SetWall_ForwardSkip_Type84
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_ForwardSkip_Error
 	jr SetWall_ForwardSkip_Loop
 
@@ -1864,7 +1864,7 @@ SetWall_ForwardSkip_Type84:
 SetWall_ForwardSkip_Type81:
 	inc 1, c
 	call SetWall_StreamAdvanceBounded
-	cp (0x287a:16), 0
+	cp (SEQ_ERROR_CODE:16), 0
 	jr nz, SetWall_ForwardSkip_Error
 	jr SetWall_ForwardSkip_Loop
 
@@ -1891,7 +1891,7 @@ SetWall_ForwardSkip_SaveState:
 
 SetWall_ForwardSkip_Error:
 	or (0x287b:16), 32
-	ld (0x287a:16), 0
+	ld (SEQ_ERROR_CODE:16), 0
 
 SetWall_ForwardSkip_Return:
 	ret

@@ -2247,13 +2247,13 @@ MainMpstFunc:
 	ld	xwa, (xsp)
 	ld	(46928:16), a
 	call	SndParam_ApplyAndSync
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
 	jr	MainMpst_PostEvent
 MainMpst_HandlePresetCopy:
-	ld	(32422:16), 37
+	ld	(GLOBAL_ERROR_CODE:16), 37
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
@@ -2261,7 +2261,7 @@ MainMpst_HandlePresetCopy:
 	ld	xwa, (xsp)
 	extz	wa
 	call	SndParam_AllocAndCopyPreset
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE

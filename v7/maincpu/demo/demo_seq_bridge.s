@@ -707,7 +707,7 @@ PlayMode_SwitchToModeAndNotify:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 35
+	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 DispatchHandler_ConditionalJump:
@@ -1096,7 +1096,7 @@ VoiceSlot_SendErrorAndReset:
 ; anddi8 (0xe3e2), 111 (v7 patched)
 	and	(0xe31c:16), 111
 ; stdi8 (0x7f42), 15 (v7 patched)
-	ld	(0x7ea6:16), 15
+	ld	(GLOBAL_ERROR_CODE:16), 15
 ; stdi16 (0xe3dc), 0x40ee (v7 patched)
 	ldw	(0xe316:16), 0x40ee
 

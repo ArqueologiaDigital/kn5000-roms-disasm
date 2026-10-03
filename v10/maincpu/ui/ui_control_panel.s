@@ -89,14 +89,14 @@ MainFlashFunc:
 	jr z, MainFlash_AudioDispatch
 	cp xbc, EVT_EAST_FLASH_WRITE
 	jr nz, MainFlash_ReturnZero
-	ld (0x7f42:16), 37
+	ld (GLOBAL_ERROR_CODE:16), 37
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE
 	call ApPostEvent
 	ld wa, 7:i3
 	call CtrlPanel_IndicatorJumpTable
-	ld (0x7f42:16), 35
+	ld (GLOBAL_ERROR_CODE:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, EVT_INTERRUPT_TITLE
 	ld xde, TITLE_MESAGE

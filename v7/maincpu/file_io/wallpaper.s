@@ -89,7 +89,7 @@ WPLoad_HandleCancel:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 0
+	ld	(GLOBAL_ERROR_CODE:16), 0
 	ldw	wa, 238
 	jr	WPLoad_CallStatusDisplay
 WPLoad_HandleError:
@@ -117,7 +117,7 @@ WPLoad_HandleSuccess:
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	(32422:16), 2
+	ld	(GLOBAL_ERROR_CODE:16), 2
 	ldw	wa, 238
 WPLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -231,7 +231,7 @@ WPLoad_OpLoad:
 	ld	wa, hl
 	ld	bc, 1:i3
 	calr	FileIO_ValidateSignedValue
-	ld	(32422:16), l
+	ld	(GLOBAL_ERROR_CODE:16), l
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, EVT_HIDE

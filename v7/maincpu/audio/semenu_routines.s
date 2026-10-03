@@ -34,7 +34,7 @@ SeMenu_LoadRawAddr:
 
 
 SeMenu_TriggerNotification:
-	ld (0x7ea6:16), a
+	ld (GLOBAL_ERROR_CODE:16), a
 	ld (0xe316:16), 0xee
 	set 6, (0xe318:16)
 	ret

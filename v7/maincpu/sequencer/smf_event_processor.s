@@ -31,7 +31,7 @@ ToneGen_DispatchSubHandler:
 	pop xiz
 	cp ix, (0x286d:16)
 	jr ule, ToneGen_StoreBlockAndLink
-	ld (0x287a:16), 5
+	ld (SEQ_ERROR_CODE:16), 5
 	jr ToneGen_DispatchReturn
 
 ToneGen_StoreBlockAndLink:
