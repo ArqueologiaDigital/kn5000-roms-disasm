@@ -22063,7 +22063,7 @@ sub_F0B36C_Skip5:
 ; SoftKeyCol1_SoundEditNaming
 ; Called from: table 0xFCF80C[234]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0B9B3
+; Calls:   SoundEditNaming_SoftKeyCol1
 ; Evidence: word [234] of the pointer table at 0xFCF80C reads 0x00F0B70F, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B70F is an
 ;           instruction boundary of this transcription.
@@ -22074,14 +22074,14 @@ sub_F0B36C_Skip5:
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
 SoftKeyCol1_SoundEditNaming:
-	calr	sub_F0B9B3	; F0B70F  calr 0xf0b9b3
+	calr	SoundEditNaming_SoftKeyCol1	; F0B70F  calr 0xf0b9b3
 	ret	; F0B712  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol2_SoundEditNaming
 ; Called from: table 0xFCF80C[235]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BA20
+; Calls:   SoundEditNaming_SoftKeyCol2
 ; Evidence: word [235] of the pointer table at 0xFCF80C reads 0x00F0B713, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B713 is an
 ;           instruction boundary of this transcription.
@@ -22092,14 +22092,14 @@ SoftKeyCol1_SoundEditNaming:
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
 SoftKeyCol2_SoundEditNaming:
-	calr	sub_F0BA20	; F0B713  calr 0xf0ba20
+	calr	SoundEditNaming_SoftKeyCol2	; F0B713  calr 0xf0ba20
 	ret	; F0B716  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol3_SoundEditNaming
 ; Called from: table 0xFCF80C[236]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BAA8
+; Calls:   SoundEditNaming_SoftKeyCol3
 ; Evidence: word [236] of the pointer table at 0xFCF80C reads 0x00F0B717, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B717 is an
 ;           instruction boundary of this transcription.
@@ -22110,14 +22110,14 @@ SoftKeyCol2_SoundEditNaming:
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
 SoftKeyCol3_SoundEditNaming:
-	calr	sub_F0BAA8	; F0B717  calr 0xf0baa8
+	calr	SoundEditNaming_SoftKeyCol3	; F0B717  calr 0xf0baa8
 	ret	; F0B71A  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol4_SoundEditNaming
 ; Called from: table 0xFCF80C[237]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BBB4
+; Calls:   SoundEditNaming_SoftKeyCol4
 ; Evidence: word [237] of the pointer table at 0xFCF80C reads 0x00F0B71B, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B71B is an
 ;           instruction boundary of this transcription.
@@ -22128,14 +22128,14 @@ SoftKeyCol3_SoundEditNaming:
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
 SoftKeyCol4_SoundEditNaming:
-	calr	sub_F0BBB4	; F0B71B  calr 0xf0bbb4
+	calr	SoundEditNaming_SoftKeyCol4	; F0B71B  calr 0xf0bbb4
 	ret	; F0B71E  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol5_SoundEditNaming
 ; Called from: table 0xFCF80C[238]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BC98
+; Calls:   SoundEditNaming_SoftKeyCol5
 ; Evidence: word [238] of the pointer table at 0xFCF80C reads 0x00F0B71F, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B71F is an
 ;           instruction boundary of this transcription.
@@ -22146,14 +22146,14 @@ SoftKeyCol4_SoundEditNaming:
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
 SoftKeyCol5_SoundEditNaming:
-	calr	sub_F0BC98	; F0B71F  calr 0xf0bc98
+	calr	SoundEditNaming_SoftKeyCol5	; F0B71F  calr 0xf0bc98
 	ret	; F0B722  ret
 
 ; --------------------------------------------------------------------------
 ; SoftKeyCol6_SoundEditNaming
 ; Called from: table 0xFCF80C[239]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BD31
+; Calls:   SoundEditNaming_SoftKeyCol6
 ; Evidence: word [239] of the pointer table at 0xFCF80C reads 0x00F0B723, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B723 is an
 ;           instruction boundary of this transcription.
@@ -22164,7 +22164,7 @@ SoftKeyCol5_SoundEditNaming:
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
 SoftKeyCol6_SoundEditNaming:
-	calr	sub_F0BD31	; F0B723  calr 0xf0bd31
+	calr	SoundEditNaming_SoftKeyCol6	; F0B723  calr 0xf0bd31
 	ret	; F0B726  ret
 
 ; --------------------------------------------------------------------------
@@ -22204,7 +22204,7 @@ sub_F0B727_Join:
 ; SoftKeyCol8_SoundEditNaming
 ; Called from: table 0xFCF80C[241]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BE44
+; Calls:   SoundEditNaming_SoftKeyCol8
 ; Evidence: word [241] of the pointer table at 0xFCF80C reads 0x00F0B747, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B747 is an
 ;           instruction boundary of this transcription.
@@ -22215,14 +22215,14 @@ sub_F0B727_Join:
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
 SoftKeyCol8_SoundEditNaming:
-	calr	sub_F0BE44	; F0B747  calr 0xf0be44
+	calr	SoundEditNaming_SoftKeyCol8	; F0B747  calr 0xf0be44
 	ret	; F0B74A  ret
 
 ; --------------------------------------------------------------------------
 ; LcdKeyRow1_SoundEditNaming
 ; Called from: table 0xFCF80C[242]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BEBF 0xFDA0CA 0xFDA0BA 0xFD785C 0xFD6704 0xFD7BA5 0xFD616A
+; Calls:   SoundEditNaming_LcdKeyRow1 0xFDA0CA 0xFDA0BA 0xFD785C 0xFD6704 0xFD7BA5 0xFD616A
 ;          0xFDA341 0xFD608B
 ; Evidence: word [242] of the pointer table at 0xFCF80C reads 0x00F0B74B, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B74B is an
@@ -22239,7 +22239,7 @@ LcdKeyRow1_SoundEditNaming:
 	push	xix	; F0B750  push XIX
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B751  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B74B_Skip	; F0B755  jr NZ,0xf0b75d
-	calr	sub_F0BEBF	; F0B757  calr 0xf0bebf
+	calr	SoundEditNaming_LcdKeyRow1	; F0B757  calr 0xf0bebf
 	jrl	sub_F0B74B_Join2	; F0B75A  jrl T,0xf0b808
 sub_F0B74B_Skip:
 	lda	xbc, (xiz-2)	; F0B75D  lda XBC,XIZ+0xfe
@@ -22326,7 +22326,7 @@ sub_F0B74B_Join2:
 ; LcdKeyRow2_SoundEditNaming
 ; Called from: table 0xFCF80C[243]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BF04
+; Calls:   SoundEditNaming_LcdKeyRow2
 ; Evidence: word [243] of the pointer table at 0xFCF80C reads 0x00F0B80D, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B80D is an
 ;           instruction boundary of this transcription.
@@ -22340,7 +22340,7 @@ LcdKeyRow2_SoundEditNaming:
 	link XIZ,0x0000	; F0B80D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B811  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B80D_Skip	; F0B815  jr NZ,0xf0b81a
-	calr	sub_F0BF04	; F0B817  calr 0xf0bf04
+	calr	SoundEditNaming_LcdKeyRow2	; F0B817  calr 0xf0bf04
 sub_F0B80D_Skip:
 	unlk XIZ	; F0B81A  unlk XIZ
 	ret	; F0B81C  ret
@@ -22549,7 +22549,7 @@ sub_F0B972_Resume:
 	ret	; F0B9B2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0B9B3
+; SoundEditNaming_SoftKeyCol1
 ; Called from: T_F42F84 (x3); in-module: 0xF0B70F
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_Dispatch_Code80
@@ -22559,7 +22559,8 @@ sub_F0B972_Resume:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B9B3:		; <- T_F42F84
+; SoundEditNaming_SoftKeyCol1: the SoftKeyCol1 action of SoundEditNaming -- called only by SoftKeyCol1_SoundEditNaming.
+SoundEditNaming_SoftKeyCol1:		; <- T_F42F84
 	link XIZ,0xfffa	; F0B9B3  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0B9B7  lda XBC,XIZ+0xfe
 	push	xbc	; F0B9BA  push XBC
@@ -22603,7 +22604,7 @@ sub_F0B9B3_Skip:
 	ret	; F0BA1F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BA20
+; SoundEditNaming_SoftKeyCol2
 ; Called from: T_F42F88 (x3); in-module: 0xF0B713
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_Dispatch_Code80
@@ -22613,7 +22614,8 @@ sub_F0B9B3_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BA20:		; <- T_F42F88
+; SoundEditNaming_SoftKeyCol2: the SoftKeyCol2 action of SoundEditNaming -- called only by SoftKeyCol2_SoundEditNaming.
+SoundEditNaming_SoftKeyCol2:		; <- T_F42F88
 	link XIZ,0xfff8	; F0BA20  link XIZ,0xfff8
 	pushw	hl	; F0BA24  push HL
 	lda	xbc, (xiz-2)	; F0BA25  lda XBC,XIZ+0xfe
@@ -22670,7 +22672,7 @@ sub_F0BA20_Skip:
 	ret	; F0BAA7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BAA8
+; SoundEditNaming_SoftKeyCol3
 ; Called from: T_F42F8C (x3); in-module: 0xF0B717
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
@@ -22680,7 +22682,8 @@ sub_F0BA20_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BAA8:		; <- T_F42F8C
+; SoundEditNaming_SoftKeyCol3: the SoftKeyCol3 action of SoundEditNaming -- called only by SoftKeyCol3_SoundEditNaming.
+SoundEditNaming_SoftKeyCol3:		; <- T_F42F8C
 	link XIZ,0xffde	; F0BAA8  link XIZ,0xffde
 	pushw	hl	; F0BAAC  push HL
 	pushw	de	; F0BAAD  push DE
@@ -22798,7 +22801,7 @@ sub_F0BAA8_Skip2:
 	ret	; F0BBB3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BBB4
+; SoundEditNaming_SoftKeyCol4
 ; Called from: T_F42F90 (x3); in-module: 0xF0B71B
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
@@ -22808,7 +22811,8 @@ sub_F0BAA8_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BBB4:		; <- T_F42F90
+; SoundEditNaming_SoftKeyCol4: the SoftKeyCol4 action of SoundEditNaming -- called only by SoftKeyCol4_SoundEditNaming.
+SoundEditNaming_SoftKeyCol4:		; <- T_F42F90
 	link XIZ,0xffe4	; F0BBB4  link XIZ,0xffe4
 	pushw	hl	; F0BBB8  push HL
 	pushw	de	; F0BBB9  push DE
@@ -22909,7 +22913,7 @@ sub_F0BBB4_Skip:
 	ret	; F0BC97  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BC98
+; SoundEditNaming_SoftKeyCol5
 ; Called from: T_F42F94 (x3); in-module: 0xF0B71F
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD7B89 0xFD7C83 0xFD6C65 T_Dispatch_Code80
@@ -22919,7 +22923,8 @@ sub_F0BBB4_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BC98:		; <- T_F42F94
+; SoundEditNaming_SoftKeyCol5: the SoftKeyCol5 action of SoundEditNaming -- called only by SoftKeyCol5_SoundEditNaming.
+SoundEditNaming_SoftKeyCol5:		; <- T_F42F94
 	link XIZ,0xfffa	; F0BC98  link XIZ,0xfffa
 	pushw	hl	; F0BC9C  push HL
 	push	xix	; F0BC9D  push XIX
@@ -22988,7 +22993,7 @@ sub_F0BC98_Skip2:
 	ret	; F0BD30  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BD31
+; SoundEditNaming_SoftKeyCol6
 ; Called from: T_F42F98 (x3); in-module: 0xF0B723
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_Dispatch_Code80
@@ -22998,7 +23003,8 @@ sub_F0BC98_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BD31:		; <- T_F42F98
+; SoundEditNaming_SoftKeyCol6: the SoftKeyCol6 action of SoundEditNaming -- called only by SoftKeyCol6_SoundEditNaming.
+SoundEditNaming_SoftKeyCol6:		; <- T_F42F98
 	link XIZ,0xfffa	; F0BD31  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0BD35  lda XBC,XIZ+0xfe
 	push	xbc	; F0BD38  push XBC
@@ -23120,7 +23126,7 @@ sub_F0BDAC_Skip3:
 	ret	; F0BE43  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BE44
+; SoundEditNaming_SoftKeyCol8
 ; Called from: T_F42FA0 (x3); in-module: 0xF0B747
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_Dispatch_Code80
@@ -23130,7 +23136,8 @@ sub_F0BDAC_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BE44:		; <- T_F42FA0
+; SoundEditNaming_SoftKeyCol8: the SoftKeyCol8 action of SoundEditNaming -- called only by SoftKeyCol8_SoundEditNaming.
+SoundEditNaming_SoftKeyCol8:		; <- T_F42FA0
 	link XIZ,0xfffa	; F0BE44  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0BE48  lda XBC,XIZ+0xfe
 	push	xbc	; F0BE4B  push XBC
@@ -23178,7 +23185,7 @@ sub_F0BE44_Skip:
 	ret	; F0BEBE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BEBF
+; SoundEditNaming_LcdKeyRow1
 ; Called from: T_F42FA4 (x6); in-module: 0xF0B757
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7B89 0xFD6C65 T_Dispatch_Code80
@@ -23188,7 +23195,8 @@ sub_F0BE44_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BEBF:		; <- T_F42FA4
+; SoundEditNaming_LcdKeyRow1: the LcdKeyRow1 action of SoundEditNaming -- called only by LcdKeyRow1_SoundEditNaming.
+SoundEditNaming_LcdKeyRow1:		; <- T_F42FA4
 	pushw	hl	; F0BEBF  push HL
 	ld	h, 0:opc	; F0BEC0  ld H,0x00
 sub_F0BEBF_Loop:
@@ -23219,7 +23227,7 @@ sub_F0BEBF_Loop:
 	ret	; F0BF03  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BF04
+; SoundEditNaming_LcdKeyRow2
 ; Called from: T_F42FA8 (x4); in-module: 0xF0B817
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD79DC 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
@@ -23229,7 +23237,8 @@ sub_F0BEBF_Loop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BF04:		; <- T_F42FA8
+; SoundEditNaming_LcdKeyRow2: the LcdKeyRow2 action of SoundEditNaming -- called only by LcdKeyRow2_SoundEditNaming.
+SoundEditNaming_LcdKeyRow2:		; <- T_F42FA8
 	link XIZ,0xffd4	; F0BF04  link XIZ,0xffd4
 	pushw	hl	; F0BF08  push HL
 	pushw	de	; F0BF09  push DE
@@ -90543,16 +90552,16 @@ T_F42F68:	jp sub_F122C5  ; -> prom_b 0x122C5   x1
 T_F42F6C:	jp sub_F12334  ; -> prom_b 0x12334   x1
 	.fill 0x10, 1, 0x0E  ; 0xF42F70: 16 x ret
 T_F42F80:	jp sub_F0B91C  ; -> prom_b 0x0B91C   x6
-T_F42F84:	jp sub_F0B9B3  ; -> prom_b 0x0B9B3   x3
-T_F42F88:	jp sub_F0BA20  ; -> prom_b 0x0BA20   x3
-T_F42F8C:	jp sub_F0BAA8  ; -> prom_b 0x0BAA8   x3
-T_F42F90:	jp sub_F0BBB4  ; -> prom_b 0x0BBB4   x3
-T_F42F94:	jp sub_F0BC98  ; -> prom_b 0x0BC98   x3
-T_F42F98:	jp sub_F0BD31  ; -> prom_b 0x0BD31   x3
+T_F42F84:	jp SoundEditNaming_SoftKeyCol1  ; -> prom_b 0x0B9B3   x3
+T_F42F88:	jp SoundEditNaming_SoftKeyCol2  ; -> prom_b 0x0BA20   x3
+T_F42F8C:	jp SoundEditNaming_SoftKeyCol3  ; -> prom_b 0x0BAA8   x3
+T_F42F90:	jp SoundEditNaming_SoftKeyCol4  ; -> prom_b 0x0BBB4   x3
+T_F42F94:	jp SoundEditNaming_SoftKeyCol5  ; -> prom_b 0x0BC98   x3
+T_F42F98:	jp SoundEditNaming_SoftKeyCol6  ; -> prom_b 0x0BD31   x3
 T_F42F9C:	jp sub_F0BDAC  ; -> prom_b 0x0BDAC   x3
-T_F42FA0:	jp sub_F0BE44  ; -> prom_b 0x0BE44   x3
-T_F42FA4:	jp sub_F0BEBF  ; -> prom_b 0x0BEBF   x6
-T_F42FA8:	jp sub_F0BF04  ; -> prom_b 0x0BF04   x4
+T_F42FA0:	jp SoundEditNaming_SoftKeyCol8  ; -> prom_b 0x0BE44   x3
+T_F42FA4:	jp SoundEditNaming_LcdKeyRow1  ; -> prom_b 0x0BEBF   x6
+T_F42FA8:	jp SoundEditNaming_LcdKeyRow2  ; -> prom_b 0x0BF04   x4
 T_F42FAC:	jp sub_FDA252  ; -> prom_a 0x5A252   x2
 	.fill 0x20, 1, 0x0E  ; 0xF42FB0: 32 x ret
 ; ⚠ T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 -- THIRTEEN STALE DIRECTORY SLOTS (header added
@@ -110769,7 +110778,7 @@ LcdKeyRow2_DrawbarScreen:
 	ld	c, (xix)	; F53168  ld C,(XIX)
 	and	c, 1	; F5316A  and C,0x01
 	jr	z, LcdKeyRow2_DrawbarScreen_Skip	; F5316D  jr Z,0xf53174
-	calr	sub_F5321F	; F5316F  calr 0xf5321f
+	calr	DrawbarScreen_LcdKeyRow2	; F5316F  calr 0xf5321f
 	jr	LcdKeyRow2_DrawbarScreen_Epilogue	; F53172  jr T,0xf5318c
 LcdKeyRow2_DrawbarScreen_Skip:
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53174  cp (0x289e),0x00
@@ -110966,7 +110975,7 @@ sub_F531F5_Epilogue:
 	ret	; F5321E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5321F
+; DrawbarScreen_LcdKeyRow2
 ; Called from: call from 0xF5316F
 ; Evidence: 0xF5321F is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
@@ -110974,7 +110983,8 @@ sub_F531F5_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5321F:
+; DrawbarScreen_LcdKeyRow2: the LcdKeyRow2 action of DrawbarScreen -- called only by LcdKeyRow2_DrawbarScreen.
+DrawbarScreen_LcdKeyRow2:
 	push	xix	; F5321F  push XIX
 	lda	xix, (10398:16)	; F53220  lda XIX,0x289e
 	ld	c, (xix)	; F53224  ld C,(XIX)
@@ -146049,7 +146059,7 @@ SoftKeyCol6_Screen0ESub00:
 ; sub_F678C6
 ; Called from: in-module: 0xF67400
 ; Touches: (0x2075)
-; Calls:   sub_F6791E 0xF6D6DC T_F431B4
+; Calls:   Screen0ESub00_SoftKeyCol1 0xF6D6DC T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF678C6 is an instruction
 ;           boundary.  The name IS the address.
@@ -146088,7 +146098,7 @@ sub_F678DE_Return:
 ; SoftKeyCol1_Screen0ESub00: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x00; Screen0ESub00_ButtonTable slot 0x11; Screen0ESub01_ButtonTable slot 0x00; Screen0ESub01_ButtonTable slot 0x11; Screen0ESub02_ButtonTable slot 0x00; Screen0ESub02_ButtonTable slot 0x11; Screen0ESub03_ButtonTable slot 0x00; Screen0ESub03_ButtonTable slot 0x11; Screen0ESub04_ButtonTable slot 0x00; Screen0ESub04_ButtonTable slot 0x11; Screen0ESub05_ButtonTable slot 0x00; Screen0ESub05_ButtonTable slot 0x11; Screen0ESub07_ButtonTable slot 0x00; Screen0ESub07_ButtonTable slot 0x11; Screen0ESub08_ButtonTable slot 0x00; Screen0ESub08_ButtonTable slot 0x11; Screen0ESub09_ButtonTable slot 0x00; Screen0ESub09_ButtonTable slot 0x11; Screen0ESub10_ButtonTable slot 0x00; Screen0ESub10_ButtonTable slot 0x11; Screen0ESub11_ButtonTable slot 0x00; Screen0ESub11_ButtonTable slot 0x11.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol1_Screen0ESub00:
 	m_bit 2, MD16, UI_RequestBits	; F678F8  bit 2,(0x2075)
-	jr	z, sub_F6791E	; F678FC  jr Z,0xf6791e
+	jr	z, Screen0ESub00_SoftKeyCol1	; F678FC  jr Z,0xf6791e
 	ldw	bc, 10	; F678FE  ld BC,0x000a
 	push	xwa	; F67901  push XWA
 	push	xhl	; F67902  push XHL
@@ -146097,7 +146107,7 @@ SoftKeyCol1_Screen0ESub00:
 	push	xix	; F67905  push XIX
 	push	xiy	; F67906  push XIY
 	push	xiz	; F67907  push XIZ
-	calr	sub_F6791E	; F67908  calr 0xf6791e
+	calr	Screen0ESub00_SoftKeyCol1	; F67908  calr 0xf6791e
 	pop	xiz	; F6790B  pop XIZ
 	pop	xiy	; F6790C  pop XIY
 	pop	xix	; F6790D  pop XIX
@@ -146111,7 +146121,7 @@ SoftKeyCol1_Screen0ESub00:
 	ret	; F6791D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6791E
+; Screen0ESub00_SoftKeyCol1
 ; Called from: in-module: 0xF67908
 ; Touches: (0x0DCE) (0x106D) (0x1071)
 ; Calls:   sub_F69442 sub_F6940B
@@ -146121,7 +146131,8 @@ SoftKeyCol1_Screen0ESub00:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6791E:
+; Screen0ESub00_SoftKeyCol1: the SoftKeyCol1 action of Screen0ESub00 -- called only by SoftKeyCol1_Screen0ESub00.
+Screen0ESub00_SoftKeyCol1:
 	m_or_mi8 MB16, 0x1071, 0x01	; F6791E  or (0x1071),0x01
 	ld	(4205:16), 1	; F67923  ld (0x106d),0x01
 	ld	(3534:16), w	; F67928  ld (0x0dce),W
@@ -146298,7 +146309,7 @@ sub_F67A53_Return:
 SoftKeyCol5_Screen0ESub03:
 	bit	7, w	; F67A6D  bit 0x07,W
 	jr	nz, sub_F67A6D_Skip	; F67A70  jr NZ,0xf67a76
-	calr	sub_F69A1E	; F67A72  calr 0xf69a1e
+	calr	Screen0ESub03_SoftKeyCol5	; F67A72  calr 0xf69a1e
 	ret	; F67A75  ret
 sub_F67A6D_Skip:
 	calr	sub_F69A67	; F67A76  calr 0xf69a67
@@ -146550,7 +146561,7 @@ sub_F67C2E_Return:
 SoftKeyCol4_Screen0E:
 	bit	7, w	; F67C48  bit 0x07,W
 	jr	nz, sub_F67C48_Skip	; F67C4B  jr NZ,0xf67c51
-	calr	sub_F69960	; F67C4D  calr 0xf69960
+	calr	Screen0E_SoftKeyCol4	; F67C4D  calr 0xf69960
 	ret	; F67C50  ret
 sub_F67C48_Skip:
 	calr	sub_F6997C	; F67C51  calr 0xf6997c
@@ -147394,7 +147405,7 @@ DispatchTable_F6828B:
 ; SoftKeyCol1_Screen0ESub16
 ; Called from: in-module: 0xF685A3
 ; Touches: (0x1002) (0x106D) (0x12B2)
-; Calls:   sub_F6A1C2 sub_F6A1F1 sub_F683D4 T_F431C4 sub_F6833E
+; Calls:   Screen0ESub16_SoftKeyCol1 sub_F6A1F1 sub_F683D4 T_F431C4 sub_F6833E
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6830B is an instruction
 ;           boundary.  The name IS the address.
@@ -147410,7 +147421,7 @@ SoftKeyCol1_Screen0ESub16:
 	popw	wa	; F68319  pop WA
 	bit	7, w	; F6831A  bit 0x07,W
 	jr	z, sub_F6830B_Skip	; F6831D  jr Z,0xf68324
-	calr	sub_F6A1C2	; F6831F  calr 0xf6a1c2
+	calr	Screen0ESub16_SoftKeyCol1	; F6831F  calr 0xf6a1c2
 	jr	sub_F6830B_Join	; F68322  jr T,0xf68327
 sub_F6830B_Skip:
 	calr	sub_F6A1F1	; F68324  calr 0xf6a1f1
@@ -148048,14 +148059,14 @@ Screen0ESub18_ButtonTable:
 LcdKeyRow2_Screen0ESub18:
 	bit	7, w	; F68775  bit 0x07,W
 	jr	nz, sub_F68775_Return	; F68778  jr NZ,0xf6877d
-	calr	sub_F6890D	; F6877A  calr 0xf6890d
+	calr	Screen0ESub18_LcdKeyRow2	; F6877A  calr 0xf6890d
 sub_F68775_Return:
 	ret	; F6877D  ret
 ; LcdKeyRow3_Screen0ESub18: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub18_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow3_Screen0ESub18:
 	bit	7, w	; F6877E  bit 0x07,W
 	jr	nz, sub_F6877E_Return	; F68781  jr NZ,0xf68786
-	calr	sub_F68945	; F68783  calr 0xf68945
+	calr	Screen0ESub18_LcdKeyRow3	; F68783  calr 0xf68945
 sub_F6877E_Return:
 	ret	; F68786  ret
 
@@ -148285,12 +148296,12 @@ LcdKeyRow4_Screen0E:
 	ld	(3830:16), a	; F688FC  ld (0x0ef6),A
 	ld	(xiy), 18	; F68900  ld (XIY),0x12
 	ld	(3674:16), 0	; F68903  ld (0x0e5a),0x00
-	call	sub_F6DA0D	; F68908  call 0xf6da0d
+	call	Screen0E_LcdKeyRow4	; F68908  call 0xf6da0d
 sub_F688F0_Return:
 	ret	; F6890C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6890D
+; Screen0ESub18_LcdKeyRow2
 ; Called from: in-module: 0xF6877A
 ; Touches: (0x0C70) (0x0E4F) (0x0E69) (0x1008) (0x126B) (0x2070) (0x2075)
 ;          (0x20A9) (0x2880)
@@ -148301,7 +148312,8 @@ sub_F688F0_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6890D:
+; Screen0ESub18_LcdKeyRow2: the LcdKeyRow2 action of Screen0ESub18 -- called only by LcdKeyRow2_Screen0ESub18.
+Screen0ESub18_LcdKeyRow2:
 	ld	a, (BStore_DirEntry:16)	; F6890D  ld A,(0x1008)
 	ld	(3184:16), a	; F68911  ld (0x0c70),A
 	call	T_F40A04	; F68915  call 0xf40a04
@@ -148317,7 +148329,7 @@ sub_F6890D:
 	ret	; F68944  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68945
+; Screen0ESub18_LcdKeyRow3
 ; Called from: in-module: 0xF68783
 ; Touches: (0x0EF5) (0x0EF6)
 ; Calls:   sub_F6ABB6
@@ -148327,7 +148339,8 @@ sub_F6890D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68945:
+; Screen0ESub18_LcdKeyRow3: the LcdKeyRow3 action of Screen0ESub18 -- called only by LcdKeyRow3_Screen0ESub18.
+Screen0ESub18_LcdKeyRow3:
 	ld	a, (3830:16)	; F68945  ld A,(0x0ef6)
 	ld	(UI_Screen0E_SubScreen:16), a	; F68949  ld (0x0ef5),A
 	calr	sub_F6ABB6	; F6894D  calr 0xf6abb6
@@ -150550,7 +150563,7 @@ sub_F69811:
 ; sub_F69814
 ; Called from: in-module: 0xF69462
 ; Touches: (0x0E4E) (0x0E53) (0x0E56) (0x0ECF) (0x0ED0)
-; Calls:   sub_F6740C sub_F6B770 sub_F6A20F sub_F69875 sub_F6987E
+; Calls:   sub_F6740C sub_F6B770 sub_F6A20F Screen0ESub00_SoftKeyCol2 sub_F6987E
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69814 is an instruction
 ;           boundary.  The name IS the address.
@@ -150602,7 +150615,7 @@ sub_F69814_Return:
 SoftKeyCol2_Screen0ESub00:
 	bit	7, w	; F69867  bit 0x07,W
 	jr	nz, sub_F69814_Skip5	; F6986A  jr NZ,0xf69871
-	calr	sub_F69875	; F6986C  calr 0xf69875
+	calr	Screen0ESub00_SoftKeyCol2	; F6986C  calr 0xf69875
 	jr	sub_F69814_Return2	; F6986F  jr T,0xf69874
 sub_F69814_Skip5:
 	calr	sub_F6987E	; F69871  calr 0xf6987e
@@ -150610,7 +150623,7 @@ sub_F69814_Return2:
 	ret	; F69874  ret
 
 ; --------------------------------------------------------------------------
-; sub_F69875
+; Screen0ESub00_SoftKeyCol2
 ; Called from: in-module: 0xF6986C
 ; Touches: (0x0EFA)
 ; Calls:   sub_F69887
@@ -150620,7 +150633,8 @@ sub_F69814_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F69875:
+; Screen0ESub00_SoftKeyCol2: the SoftKeyCol2 action of Screen0ESub00 -- called only by SoftKeyCol2_Screen0ESub00.
+Screen0ESub00_SoftKeyCol2:
 	ld	(3834:16), 1	; F69875  ld (0x0efa),0x01
 	calr	sub_F69887	; F6987A  calr 0xf69887
 	ret	; F6987D  ret
@@ -150770,7 +150784,7 @@ sub_F69938_Return:
 	ret	; F6995F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F69960
+; Screen0E_SoftKeyCol4
 ; Called from: in-module: 0xF67C4D
 ; Touches: (0x0EFB) (0x100A) (0x2075)
 ; Calls:   sub_F69998 0xF6D9AE T_F431B4
@@ -150780,7 +150794,8 @@ sub_F69938_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F69960:
+; Screen0E_SoftKeyCol4: the SoftKeyCol4 action of Screen0E -- called only by SoftKeyCol4_Screen0E.
+Screen0E_SoftKeyCol4:
 	ldw	(4106:16), 1	; F69960  ld (0x100a),0x0001
 	ld	(3835:16), 2	; F69966  ld (0x0efb),0x02
 	calr	sub_F69998	; F6996B  calr 0xf69998
@@ -150880,7 +150895,7 @@ sub_F69998_Return:
 	ret	; F69A1D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F69A1E
+; Screen0ESub03_SoftKeyCol5
 ; Called from: in-module: 0xF67A72
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
 ; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
@@ -150890,7 +150905,8 @@ sub_F69998_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F69A1E:
+; Screen0ESub03_SoftKeyCol5: the SoftKeyCol5 action of Screen0ESub03 -- called only by SoftKeyCol5_Screen0ESub03.
+Screen0ESub03_SoftKeyCol5:
 	ld	(3834:16), 1	; F69A1E  ld (0x0efa),0x01
 	ld	(3835:16), 2	; F69A23  ld (0x0efb),0x02
 	calr	sub_F6B8BD	; F69A28  calr 0xf6b8bd
@@ -150925,7 +150941,7 @@ sub_F69A1E_Return:
 ; Called from: in-module: 0xF67A76
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
 ; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
-;          sub_F69ABE sub_F69AFF
+;          Screen0ESub00_SoftKeyCol3 sub_F69AFF
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69A67 is an instruction
 ;           boundary.  The name IS the address.
@@ -150965,7 +150981,7 @@ sub_F69A67_Return:
 SoftKeyCol3_Screen0ESub00:
 	bit	7, w	; F69AB0  bit 0x07,W
 	jr	nz, sub_F69A67_Skip2	; F69AB3  jr NZ,0xf69aba
-	calr	sub_F69ABE	; F69AB5  calr 0xf69abe
+	calr	Screen0ESub00_SoftKeyCol3	; F69AB5  calr 0xf69abe
 	jr	sub_F69A67_Return2	; F69AB8  jr T,0xf69abd
 sub_F69A67_Skip2:
 	calr	sub_F69AFF	; F69ABA  calr 0xf69aff
@@ -150973,7 +150989,7 @@ sub_F69A67_Return2:
 	ret	; F69ABD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F69ABE
+; Screen0ESub00_SoftKeyCol3
 ; Called from: in-module: 0xF69AB5
 ; Touches: (0x0E53) (0x0E63) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
 ; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
@@ -150983,7 +150999,8 @@ sub_F69A67_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F69ABE:
+; Screen0ESub00_SoftKeyCol3: the SoftKeyCol3 action of Screen0ESub00 -- called only by SoftKeyCol3_Screen0ESub00.
+Screen0ESub00_SoftKeyCol3:
 	ld	(3834:16), 1	; F69ABE  ld (0x0efa),0x01
 	ld	(3835:16), 3	; F69AC3  ld (0x0efb),0x03
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F69AC8  cp (0x0e63),0x01
@@ -151676,8 +151693,8 @@ sub_F69F5B_Return:
 ; Called from: in-module: 0xF67420
 ; Touches: (0x0C90) (0x0D4A) (0x0E58) (0x0E59) (0x0E5C) (0x0E63) (0x0F62)
 ;          (0x0F66) (0x0FD3) (0x0FD4) +4 more  |  0x603500
-; Calls:   0xF6EC6A sub_F684FA T_BStore_StubTable 0xF6EC43 sub_F6C877 sub_F6B075
-;          sub_F6B1EA sub_F6B0C4
+; Calls:   0xF6EC6A sub_F684FA T_BStore_StubTable 0xF6EC43 sub_F6C877 Screen0ESub17_SoftKeyCol7
+;          sub_F6B1EA Screen0ESub17_SoftKeyCol6
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A097 is an instruction
 ;           boundary.  The name IS the address.
@@ -151791,17 +151808,17 @@ sub_F69F5B_Return2:
 	ret	; F6A1B3  ret
 ; SoftKeyCol7_Screen0ESub17: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub17_ButtonTable slot 0x06; Screen0ESub17_ButtonTable slot 0x17.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol7_Screen0ESub17:
-	calr	sub_F6B075	; F6A1B4  calr 0xf6b075
+	calr	Screen0ESub17_SoftKeyCol7	; F6A1B4  calr 0xf6b075
 	calr	sub_F6B1EA	; F6A1B7  calr 0xf6b1ea
 	ret	; F6A1BA  ret
 ; SoftKeyCol6_Screen0ESub17: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub17_ButtonTable slot 0x05; Screen0ESub17_ButtonTable slot 0x16.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol6_Screen0ESub17:
-	calr	sub_F6B0C4	; F6A1BB  calr 0xf6b0c4
+	calr	Screen0ESub17_SoftKeyCol6	; F6A1BB  calr 0xf6b0c4
 	calr	sub_F6B1EA	; F6A1BE  calr 0xf6b1ea
 	ret	; F6A1C1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6A1C2
+; Screen0ESub16_SoftKeyCol1
 ; Called from: in-module: 0xF6831F
 ; Touches: (0x0E53) (0x0E58) (0x12C0) (0x2075)
 ; Calls:   sub_F6A20F sub_F6740C 0xF6D5BA sub_F6B8F1 0xF6D608
@@ -151811,7 +151828,8 @@ SoftKeyCol6_Screen0ESub17:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6A1C2:
+; Screen0ESub16_SoftKeyCol1: the SoftKeyCol1 action of Screen0ESub16 -- called only by SoftKeyCol1_Screen0ESub16.
+Screen0ESub16_SoftKeyCol1:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6A1C2  or (0x2075),0x08
 	calr	sub_F6A20F	; F6A1C7  calr 0xf6a20f
 sub_F6A1C2_Loop:
@@ -154007,7 +154025,7 @@ sub_F6B039_Skip:
 	jr	sub_F6B039_Join	; F6B073  jr T,0xf6b05f
 
 ; --------------------------------------------------------------------------
-; sub_F6B075
+; Screen0ESub17_SoftKeyCol7
 ; Called from: in-module: 0xF6A1B4
 ; Touches: (0x20A9)
 ; Calls:   sub_F6ABB6 sub_F6A2FC sub_F6B8F1 sub_F6C292 sub_F6B9DF sub_F6BA11
@@ -154018,7 +154036,8 @@ sub_F6B039_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B075:
+; Screen0ESub17_SoftKeyCol7: the SoftKeyCol7 action of Screen0ESub17 -- called only by SoftKeyCol7_Screen0ESub17.
+Screen0ESub17_SoftKeyCol7:
 	ld	xhl, 3663	; F6B075  ld XHL,0x00000e4f
 	m_bit 3, MDI+r3, 0	; F6B07A  bit 3,(XHL)
 	jr	z, sub_F6B075_Skip	; F6B07C  jr Z,0xf6b085
@@ -154056,7 +154075,7 @@ sub_F6B075_Skip3:
 	jr	sub_F6B075_Join	; F6B0C2  jr T,0xf6b092
 
 ; --------------------------------------------------------------------------
-; sub_F6B0C4
+; Screen0ESub17_SoftKeyCol6
 ; Called from: in-module: 0xF6A1BB
 ; Touches: (0x0E4F) (0x20A9)
 ; Calls:   sub_F6A2FC sub_F6C292 sub_F6B8BD sub_F6B76A sub_F6C2E5 sub_F6B9DF
@@ -154067,7 +154086,8 @@ sub_F6B075_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B0C4:
+; Screen0ESub17_SoftKeyCol6: the SoftKeyCol6 action of Screen0ESub17 -- called only by SoftKeyCol6_Screen0ESub17.
+Screen0ESub17_SoftKeyCol6:
 	m_res 7, MD16, 0x0e4f	; F6B0C4  res 7,(0x0e4f)
 	calr	sub_F6A2FC	; F6B0C8  calr 0xf6a2fc
 	cp	b, 22	; F6B0CB  cp B,0x16
@@ -157925,7 +157945,7 @@ Screen0ESub11_ButtonTable:
 ; Touches: (0x0D10) (0x0DC7) (0x0DCE) (0x0E4F) (0x0E53) (0x0E58) (0x0E63)
 ;          (0x0ED5) (0x0EF5) (0x1071) +5 more
 ; Calls:   T_F431B0 sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03 sub_F69CB4
-;          sub_F6A20F sub_F6CD74 0xF6E706
+;          sub_F6A20F Screen0E_SoftKeyCol3 0xF6E706
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CC6E is an instruction
 ;           boundary.  The name IS the address.
@@ -158020,7 +158040,7 @@ SoftKeyCol3_Screen0ESub08:
 	ld	a, (6304983:24)	; F6CD61  ld A,(0x6034d7)
 	dec	1, a	; F6CD66  dec 1,A
 	pushw	wa	; F6CD68  push WA
-	calr	sub_F6CD74	; F6CD69  calr 0xf6cd74
+	calr	Screen0E_SoftKeyCol3	; F6CD69  calr 0xf6cd74
 	popw	wa	; F6CD6C  pop WA
 	call	MsgLine_TimeSignature	; F6CD6D  call 0xf6e706
 sub_F6CC6E_Epilogue:
@@ -158029,11 +158049,11 @@ sub_F6CC6E_Epilogue:
 	ret	; F6CD73  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6CD74
+; Screen0E_SoftKeyCol3
 ; Called from: in-module: 0xF6CD69 0xF6CDA9
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5) (0x12BA)
 ;          (0x2075)
-; Calls:   sub_F67F68 0xF6E706 sub_F6CD74 sub_F6908B sub_F6B387 sub_F6C43C
+; Calls:   sub_F67F68 0xF6E706 Screen0E_SoftKeyCol3 sub_F6908B sub_F6B387 sub_F6C43C
 ;          sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CD74 is an instruction
@@ -158041,7 +158061,8 @@ sub_F6CC6E_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6CD74:
+; Screen0E_SoftKeyCol3: the SoftKeyCol3 action of Screen0ESub05, Screen0ESub08 -- called only by SoftKeyCol3_Screen0ESub05, SoftKeyCol3_Screen0ESub08.
+Screen0E_SoftKeyCol3:
 	push	xix	; F6CD74  push XIX
 	ld	xix, 4846	; F6CD75  ld XIX,0x000012ee
 	ld	(xix), 135	; F6CD7A  ld (XIX),0x87
@@ -158064,7 +158085,7 @@ SoftKeyCol3_Screen0ESub05:
 	pushw	wa	; F6CDA3  push WA
 	call	MsgLine_TimeSignature	; F6CDA4  call 0xf6e706
 	popw	wa	; F6CDA8  pop WA
-	calr	sub_F6CD74	; F6CDA9  calr 0xf6cd74
+	calr	Screen0E_SoftKeyCol3	; F6CDA9  calr 0xf6cd74
 	ret	; F6CDAC  ret
 ; LcdKeyRow3_Screen0ESub05: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub05_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow3_Screen0ESub05:
@@ -160599,7 +160620,7 @@ MsgLine_Clear:
 	ret	; F6DA0C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6DA0D
+; Screen0E_LcdKeyRow4
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Calls:   T_F431B0
@@ -160616,7 +160637,8 @@ MsgLine_Clear:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6DA0D:
+; Screen0E_LcdKeyRow4: the LcdKeyRow4 action of Screen0E -- called only by LcdKeyRow4_Screen0E.
+Screen0E_LcdKeyRow4:
 	call	T_F431B0	; F6DA0D  call 0xf431b0
 	ret	; F6DA11  ret
 
@@ -161053,7 +161075,7 @@ Text_4Tenunormstaccutt:
 ;   lane promb; was the last byte of Text_4Tenunormstaccuttd plus the first
 ;   113 bytes of a `.byte` block, Data_F6DD18, "Unknown: everything about it
 ;   except its bytes").
-; Called from: 0xF69902 (`call`, in sub_F69887), 0xF69AF1 (sub_F69ABE),
+; Called from: 0xF69902 (`call`, in sub_F69887), 0xF69AF1 (Screen0ESub00_SoftKeyCol3),
 ;          0xF69B32 (sub_F69AFF) and 0xF6D720 (`calr`, sub_F6D710).  Every
 ;          one of the four is followed by `call T_F431B4`, the message-line
 ;          painter (notes/FINDINGS-prom_b-message-line.md).
@@ -197459,14 +197481,15 @@ ButtonTable_MeasureDelete_StageZero_Nop22:
 ;           --selftest.
 ; ---------------------------------------------------------------------
 NumberPadKey_MeasureDelete_StageZero:
-	calr	sub_F7F114	; F7F10F  calr 0xf7f114
+	calr	MeasureDelete_StageZero_NumberPadKey	; F7F10F  calr 0xf7f114
 	ret	; F7F112  ret
 ButtonTable_MeasureDelete_StageZero_Nop28:
 	ret	; F7F113  ret   <- button table 0xF7D7D8 entry 28 (MEASURE DELETE) and 3 more slot(s)
 
 ; Evidence: reached from calr from prom_b 0xF7F10F, and from nothing else
 ;           the scans see.
-sub_F7F114:
+; MeasureDelete_StageZero_NumberPadKey: the NumberPadKey action of MeasureDelete_StageZero -- called only by NumberPadKey_MeasureDelete_StageZero.
+MeasureDelete_StageZero_NumberPadKey:
 	ld	a, (8807:16)	; F7F114  ld A,(0x2267)
 	cp	a, 15	; F7F118  cp A,0x0f
 	jr	z, sub_F7F114_Skip2	; F7F11B  jr Z,0xf7f12e
@@ -198205,7 +198228,7 @@ ButtonTable_MeasureErase_StageZero_Nop22:
 ;           --selftest.
 ; ---------------------------------------------------------------------
 NumberPadKey_MeasureErase_StageZero:
-	calr	sub_F7F440	; F7F40A  calr 0xf7f440
+	calr	MeasureErase_StageZero_NumberPadKey	; F7F40A  calr 0xf7f440
 	ret	; F7F40D  ret
 ButtonTable_MeasureErase_StageZero_Nop28:
 	ret	; F7F40E  ret   <- button table 0xF7D8D8 entry 28 (MEASURE ERASE) and 3 more slot(s)
@@ -198354,7 +198377,8 @@ ButtonTable_MeasureErase_StageNonZero_Nop16:
 
 ; Evidence: reached from calr from prom_b 0xF7F40A, and from nothing else
 ;           the scans see.
-sub_F7F440:
+; MeasureErase_StageZero_NumberPadKey: the NumberPadKey action of MeasureErase_StageZero -- called only by NumberPadKey_MeasureErase_StageZero.
+MeasureErase_StageZero_NumberPadKey:
 	ld	a, (8807:16)	; F7F440  ld A,(0x2267)
 	cp	a, 9	; F7F444  cp A,0x09
 	jr	le, sub_F7F440_Skip	; F7F447  jr LE,0xf7f455
@@ -199025,7 +199049,7 @@ ButtonTable_Quantize_StageZero_Nop22:
 ;           --selftest.
 ; ---------------------------------------------------------------------
 NumberPadKey_Quantize_StageZero:
-	calr	sub_F7F7AC	; F7F776  calr 0xf7f7ac
+	calr	Quantize_StageZero_NumberPadKey	; F7F776  calr 0xf7f7ac
 	ret	; F7F779  ret
 ButtonTable_Quantize_StageZero_Nop28:
 	ret	; F7F77A  ret   <- button table 0xF7D9D8 entry 28 (QUANTIZE) and 3 more slot(s)
@@ -199173,7 +199197,8 @@ ButtonTable_Quantize_StageNonZero_Nop16:
 
 ; Evidence: reached from calr from prom_b 0xF7F776, and from nothing else
 ;           the scans see.
-sub_F7F7AC:
+; Quantize_StageZero_NumberPadKey: the NumberPadKey action of Quantize_StageZero -- called only by NumberPadKey_Quantize_StageZero.
+Quantize_StageZero_NumberPadKey:
 	ld	a, (8807:16)	; F7F7AC  ld A,(0x2267)
 	cp	a, 9	; F7F7B0  cp A,0x09
 	jr	le, sub_F7F7AC_Skip	; F7F7B3  jr LE,0xf7f7c1
@@ -199766,7 +199791,7 @@ ButtonTable_Vel0cityChange_StageZero_Nop22:
 ;           --selftest.
 ; ---------------------------------------------------------------------
 NumberPadKey_Vel0cityChange_StageZero:
-	calr	sub_F7FAA2	; F7FA6B  calr 0xf7faa2
+	calr	Vel0cityChange_StageZero_NumberPadKey	; F7FA6B  calr 0xf7faa2
 	ret	; F7FA6E  ret
 ButtonTable_Vel0cityChange_StageZero_Nop28:
 	ret	; F7FA6F  ret   <- button table 0xF7DAD8 entry 28 (VEL0CITY CHANGE) and 3 more slot(s)
@@ -199916,7 +199941,8 @@ ButtonTable_Vel0cityChange_StageNonZero_Nop16:
 
 ; Evidence: reached from calr from prom_b 0xF7FA6B, and from nothing else
 ;           the scans see.
-sub_F7FAA2:
+; Vel0cityChange_StageZero_NumberPadKey: the NumberPadKey action of Vel0cityChange_StageZero -- called only by NumberPadKey_Vel0cityChange_StageZero.
+Vel0cityChange_StageZero_NumberPadKey:
 	ld	a, (8807:16)	; F7FAA2  ld A,(0x2267)
 	cp	a, 9	; F7FAA6  cp A,0x09
 	jr	ule, sub_F7FAA2_Skip	; F7FAA9  jr ULE,0xf7fab7
@@ -200536,7 +200562,7 @@ ButtonTable_Transp0se_StageZero_Nop22:
 ;           --selftest.
 ; ---------------------------------------------------------------------
 NumberPadKey_Transp0se_StageZero:
-	calr	sub_F7FDE9	; F7FDB2  calr 0xf7fde9
+	calr	Transp0se_StageZero_NumberPadKey	; F7FDB2  calr 0xf7fde9
 	ret	; F7FDB5  ret
 ButtonTable_Transp0se_StageZero_Nop28:
 	ret	; F7FDB6  ret   <- button table 0xF7DBD8 entry 28 (TRANSP0SE) and 3 more slot(s)
@@ -200686,7 +200712,8 @@ ButtonTable_Transp0se_StageNonZero_Nop16:
 
 ; Evidence: reached from calr from prom_b 0xF7FDB2, and from nothing else
 ;           the scans see.
-sub_F7FDE9:
+; Transp0se_StageZero_NumberPadKey: the NumberPadKey action of Transp0se_StageZero -- called only by NumberPadKey_Transp0se_StageZero.
+Transp0se_StageZero_NumberPadKey:
 	ld	a, (8807:16)	; F7FDE9  ld A,(0x2267)
 	cp	a, 9	; F7FDED  cp A,0x09
 	jr	ule, sub_F7FDE9_Skip	; F7FDF0  jr ULE,0xf7fdfe

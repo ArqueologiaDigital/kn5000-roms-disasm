@@ -12,7 +12,8 @@ QUESTION IT ANSWERS
                 the common suffix Lfo -> SoundEditLfo; see group());
       <Control> = the callers' common control (SoftKeyCol1-8, LcdKeyRow1-5, ExitKey, PageKey, NumberPadKey).
   REFUSED: any routine with a caller that is not a <Control>_<Screen> handler, callers of two
-  different controls, or a group name that would be empty.
+  different controls, a group name that would be empty, or a routine that is ALSO a `.long` table
+  entry (a button-table slot gives it a role its call sites do not show).
 
 RUN
   python3 notes/prom_a_screen_key_actions.py          # the plan and the refusals
@@ -27,6 +28,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "rb").read().decode("latin-1")
 B = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "rb").read().decode("latin-1")
 CTRL = r'(SoftKeyCol\d|LcdKeyRow\d|ExitKey|PageKey|NumberPadKey)'
+LABELS = set(re.findall(r'^([A-Za-z_][\w$]*):', A + "\n" + B, re.M))
+TABLED = set(re.findall(r'^\s*(?:[A-Za-z_][\w$]*:)?\s*\.long\s+(sub_F[0-9A-F]{5})\b', A + "\n" + B, re.M))
 
 
 def callers():
@@ -38,7 +41,7 @@ def callers():
             if m:
                 cur = m.group(1)
                 continue
-            for t in re.findall(r'\b(?:call|calr|jp|jr|jrl)\s+(?:\w+,\s*)?(sub_F[89A-F][0-9A-F]{4})\b', l.split(";")[0], re.I):
+            for t in re.findall(r'\b(?:call|calr|jp|jr|jrl)\s+(?:\w+,\s*)?(sub_F[0-9A-F]{5})\b', l.split(";")[0], re.I):
                 out[t].add(cur)
     return out
 
@@ -69,7 +72,10 @@ def group(screens):
 def plan():
     rows, refused = [], []
     for t, cs in sorted(callers().items()):
-        if not re.search(r'^%s:' % t, A, re.M):
+        if t not in LABELS:
+            continue                        # prom_a or prom_b (2026-10-03: prom_b added)
+        if t in TABLED:
+            refused.append((t, "also a table entry; its call sites are not its only role"))
             continue
         ms = [re.match(r'^%s_(\w+)$' % CTRL, c or "") for c in cs]
         if not all(ms):
