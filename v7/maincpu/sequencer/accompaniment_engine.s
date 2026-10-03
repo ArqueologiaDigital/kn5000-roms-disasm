@@ -32983,52 +32983,39 @@ AccDraw_Secondary_Helper8:
 	call	AccDraw_Secondary_Helper8_Helper
 	ret
 	push	xiz
-	calr	2
+	calr	AccDraw_Secondary_Helper8_Helper2
 	pop	xiz
 	ret
-	ld	xix, AccScreen_DataBlock_Data
-	calr	81
+AccDraw_Secondary_Helper8_Helper2:
+	ld	xix, AccDraw_SecondarySub_Handlers
+	calr	AccDraw_Secondary_Sub
 	ret
-AccScreen_DataBlock_Data:
-	.byte 0x92, 0xa1, 0xf6
-	nop
-	.byte 0xa4, 0xa1, 0xf6
-	nop
-	.byte 0xc2, 0xa1, 0xf6, 0x00, 0xe0, 0xa1, 0xf6
-	nop
-	nop
-	.byte 0xa2, 0xf6
-	nop
-	ld	w, 162:opc
-	.byte 0xf6
-	nop
-	.byte 0x52, 0xa2, 0xf6
-	nop
-	jr	le, -94
-	.byte 0xf6
-	nop
-	jrl	le, -2398
-	nop
-	.byte 0x8c, 0xa2, 0xf6
-	nop
-	.byte 0xa6, 0xa2, 0xf6
-	nop
-	.byte 0xb1, 0xa2, 0xf6
-	nop
-	.byte 0xbc, 0xa2, 0xf6
-	nop
-	.byte 0xbd, 0xa2, 0xf6
-	nop
-	.byte 0xbe, 0xa2, 0xf6
-	nop
-	.byte 0xbf, 0xa2, 0xf6
-	nop
-	.byte 0xd1, 0xa2, 0xf6, 0x00, 0xd2, 0xa2, 0xf6, 0x00, 0xd3, 0xa2, 0xf6
-	nop
-	.byte 0xd4, 0xa2, 0xf6	; data, not code (a table of 0x00f6a2xx
-				; pointers misframed as code); was `cp_spdw iz, 162`, whose
-				; register byte 0xa2 names no TLCS-900 register (unidasm: -rA2L)
-	nop
+AccDraw_SecondarySub_Handlers:
+	; AccDraw_Secondary_Sub calls entry (L & 31) with XBC = the index and XDE = its
+	; AccDraw_IndexBitMask word; it returns first for an HL above 15, so entries 16..19
+	; (four one-byte `ret`s) are not reached that way.  Was decoded as `.byte` / `nop` /
+	; `jr z, -90` / `jrl z, -2394` ... fragments.
+	.long	AccDraw_SecondarySub_Handler00
+	.long	AccDraw_SecondarySub_Handler01
+	.long	AccDraw_SecondarySub_Handler02
+	.long	AccDraw_SecondarySub_Handler03
+	.long	AccDraw_SecondarySub_Handler04
+	.long	AccDraw_SecondarySub_Handler05
+	.long	AccDraw_SecondarySub_Handler06
+	.long	AccDraw_SecondarySub_Handler07
+	.long	AccDraw_SecondarySub_Handler08
+	.long	AccDraw_SecondarySub_Handler09
+	.long	AccDraw_SecondarySub_Handler10
+	.long	AccDraw_SecondarySub_Handler11
+	.long	AccDraw_SecondarySub_Handler12
+	.long	AccDraw_SecondarySub_Handler13
+	.long	AccDraw_SecondarySub_Handler14
+	.long	AccDraw_SecondarySub_Handler15
+	.long	AccDraw_SecondarySub_Handler16
+	.long	AccDraw_SecondarySub_Handler17
+	.long	AccDraw_SecondarySub_Handler18
+	.long	AccDraw_SecondarySub_Handler19
+AccDraw_Secondary_Sub:
 	cp	hl, 15
 	jr	ugt, AccDraw_Secondary_Return
 	ld	e, l
@@ -33049,132 +33036,45 @@ AccDraw_Secondary_Helper9:
 	xor	e, e
 AccDraw_Secondary_Helper9_Skip:
 	sla	e, 2
-	ld	xix, AccScreen_DataBlock_Code3
+	ld	xix, AccDraw_IndexBitMask
 	ld	xde, (xix+e)
 	pop	xix
 	ret
-AccScreen_DataBlock_Code3:
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(P0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 2147483648
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(P0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 2147483648
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(P0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 2147483648
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	push	sr
-	nop
-	nop
-	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ld	(P0:8), 0:io
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ld	w, 0:opc
-	nop
-	nop
-	ld	xwa, 2147483648
+AccDraw_IndexBitMask:
+	; Word n = 0 for n = 0, else 1 << (n - 1): 33 words.  AccDraw_Secondary_Sub_Helper reads
+	; word (index + 1), or word 0 for an index above 31.
+	.long	0x00000000, 0x00000001, 0x00000002, 0x00000004
+	.long	0x00000008, 0x00000010, 0x00000020, 0x00000040
+	.long	0x00000080, 0x00000100, 0x00000200, 0x00000400
+	.long	0x00000800, 0x00001000, 0x00002000, 0x00004000
+	.long	0x00008000, 0x00010000, 0x00020000, 0x00040000
+	.long	0x00080000, 0x00100000, 0x00200000, 0x00400000
+	.long	0x00800000, 0x01000000, 0x02000000, 0x04000000
+	.long	0x08000000, 0x10000000, 0x20000000, 0x40000000
+	.long	0x80000000
+AccDraw_SecondarySub_Handler00:
 	bit	7, w
-	jr	nz, 7
+	jr	nz, AccDraw_SecondarySub_Handler00_Skip
 	or	(0x3677:16), 64
-	jr	5
+	jr	AccDraw_SecondarySub_Handler00_Return
+AccDraw_SecondarySub_Handler00_Skip:
 	or	(0x3677:16), 128
+AccDraw_SecondarySub_Handler00_Return:
 	ret
-	cp	(13942:16), 4
-	jr	nz, 22
+AccDraw_SecondarySub_Handler01:
+	cp	(0x3676:16), 4
+	jr	nz, AccDraw_Secondary_Helper9_Return
 	or	(0xe31c:16), 8
 	bit	7, w
-	jr	nz, 7
+	jr	nz, AccDraw_Secondary_Sub_Entry
 	or	(0x3691:16), 4
 	jr	AccDraw_Secondary_Helper9_Return
+AccDraw_Secondary_Sub_Entry:
 	or	(0x3691:16), 8
 AccDraw_Secondary_Helper9_Return:
 	ret
-	cp	(13942:16), 4
+AccDraw_SecondarySub_Handler02:
+	cp	(0x3676:16), 4
 	jr	nz, AccDraw_Secondary_Return2
 	or	(0xe31c:16), 8
 	bit	7, w
@@ -33185,7 +33085,8 @@ AccDraw_Secondary_Entry:
 	or	(0x3691:16), 2
 AccDraw_Secondary_Return2:
 	ret
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
+AccDraw_SecondarySub_Handler03:
+	or	(0xe31c:16), 8
 	call	AccDraw_Secondary_Helper3
 	ld	xwa, AccScreen_DataBlock_Code4
 	push	xwa
@@ -33196,7 +33097,8 @@ AccScreen_DataBlock_Code4:
 	ld	(COLORBLIT_MODE:24), 0
 	calr	AccScreen_BeatDataBlock
 	ret
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
+AccDraw_SecondarySub_Handler04:
+	or	(0xe31c:16), 8
 	call	AccDraw_Secondary_Helper4
 	ld	xwa, AccScreen_DataBlock_Code5
 	push	xwa
@@ -33207,9 +33109,10 @@ AccScreen_DataBlock_Code5:
 	ld	(COLORBLIT_MODE:24), 0
 	calr	AccScreen_BeatDataBlock
 	ret
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
+AccDraw_SecondarySub_Handler05:
+	or	(0xe31c:16), 8
 	call	AccDraw_Secondary_Helper5
-	cp	(13942:16), 4
+	cp	(0x3676:16), 4
 	jr	nz, AccDraw_Secondary_Return3
 	ld	xwa, AccScreen_DataBlock_Code6
 	push	xwa
@@ -33219,15 +33122,22 @@ AccDraw_Secondary_Return3:
 	ret
 AccScreen_DataBlock_Code6:
 	ld	(COLORBLIT_MODE:24), 0
-	ldmm8	14623, 13946
+	ldmm8	0x391f, 0x367a
 	ld	xiy, AccDraw_Secondary_Entry_Data
 	calr	AccDraw_Secondary
 	ret
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc1, 0x77, 0x36, 0x3e, 0x02, 0xc1, 0x77, 0x36, 0x3c, 0xfe
+AccDraw_SecondarySub_Handler06:
+	or	(0xe31c:16), 8
+	or	(0x3677:16), 2
+	and	(0x3677:16), 254
 	ret
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc1, 0x77, 0x36, 0x3e, 0x01, 0xc1, 0x77, 0x36, 0x3c, 0xfd
+AccDraw_SecondarySub_Handler07:
+	or	(0xe31c:16), 8
+	or	(0x3677:16), 1
+	and	(0x3677:16), 253
 	ret
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
+AccDraw_SecondarySub_Handler08:
+	or	(0xe31c:16), 8
 	bit	7, w
 	jr	nz, AccDraw_Secondary_Return4
 	bit	3, (0x36ff:16)
@@ -33236,7 +33146,8 @@ AccScreen_DataBlock_Code6:
 	or	(0xe31a:16), 16
 AccDraw_Secondary_Return4:
 	ret
-	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
+AccDraw_SecondarySub_Handler09:
+	or	(0xe31c:16), 8
 	bit	7, w
 	jr	nz, AccDraw_Secondary_Return5
 	bit	4, (0x36ff:16)
@@ -33245,29 +33156,39 @@ AccDraw_Secondary_Return4:
 	or	(0xe31a:16), 16
 AccDraw_Secondary_Return5:
 	ret
+AccDraw_SecondarySub_Handler10:
 	bit	7, w
 	jr	nz, AccDraw_Secondary_Return6
 	or	(0x3677:16), 32
 AccDraw_Secondary_Return6:
 	ret
+AccDraw_SecondarySub_Handler11:
 	bit	7, w
 	jr	nz, AccDraw_Secondary_Return7
 	or	(0x3677:16), 4
 AccDraw_Secondary_Return7:
 	ret
+AccDraw_SecondarySub_Handler12:
 	ret
+AccDraw_SecondarySub_Handler13:
 	ret
+AccDraw_SecondarySub_Handler14:
 	ret
+AccDraw_SecondarySub_Handler15:
 	bit	7, w
 	jr	nz, AccDraw_Secondary_Return8
-	ld	(58134:16), 181
-	ld	(58136:16), 128
+	ld	(0xe316:16), 181
+	ld	(0xe318:16), 128
 	jr	AccDraw_Secondary_Return8
 AccDraw_Secondary_Return8:
 	ret
+AccDraw_SecondarySub_Handler16:
 	ret
+AccDraw_SecondarySub_Handler17:
 	ret
+AccDraw_SecondarySub_Handler18:
 	ret
+AccDraw_SecondarySub_Handler19:
 	ret
 AccDraw_Secondary_Helper10:
 	ld	(COLORBLIT_MODE:24), 2

@@ -148,3 +148,22 @@ v10/v9 0xF6604E-0xF66093 (R3 cluster at 0xF6605E):
 v7 (0xF65C4A, lines 25573-25598): `port_islands.py ... --whole 25573-25598 --delta 0x404 --apply`
 ported 69 B in 23 lines, identical after round 0. Its comments were then restated by hand with v7's RAM
 addresses (0x386E/0x386F/0x3871) and v7's helper names (`DrumVoice_NotifyEE_Helper5/7/10`).
+
+### `accdraw_secondary_<tree>.json` (2026-10-03)
+
+v10/v9 0xF6A489-0xF6A6D9 (R3 clusters at 0xF6A55D and 0xF6A67E):
+
+- `AccDraw_SecondarySub_Handlers` (was `AccScreen_DataBlock_Data`) is 20 `.long`.
+- `AccDraw_IndexBitMask` (was `AccScreen_DataBlock_Code3`) is 33 words: 0, then 1 << (n-1).
+- `scripts/renaming/rename_accdraw_secondary_tables.sed` did the renames, in all three trees.
+- `AccDraw_SecondarySub_Handler00`..`19` were laid out with the twenty pointers as `--entry`. Seven of
+  the handlers had started with `.byte 0xc1, 0xe2, 0xe3 / push xiz`.
+
+`accdraw_postedit.py <tree>` drops the carried notes that described the old misframing. Then
+`symbolize_numeric_branches.py --image <tree> --only sequencer/accompaniment_engine.s --apply --verify`
+rewrote 20 operands with 8 new labels in each of v10 and v9 (PASS).
+
+v7 (0xF6A085, lines 32993-33271): `port_islands.py ... --whole 32993-33271 --delta 0x404 --apply` ported
+536 of 592 B, identical after round 0. The pointer table came out half `.byte`, because the handler labels
+did not exist in v7 yet, so `accdraw_v7_postport.py` writes it as 20 `.long`. The symbolizer then rewrote 2
+more v7 operands (PASS).

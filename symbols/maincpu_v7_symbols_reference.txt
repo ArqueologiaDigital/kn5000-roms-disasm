@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,382
-#   semantic names ........... 50,480 (98.2%)
+#   symbols .................. 51,407
+#   semantic names ........... 50,505 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33669,23 +33669,48 @@ AccDraw_Secondary_Skip2 00F69FCF
 AccScreen_DataBlock_Code 00F69FDC
 AccScreen_DataBlock_Code2 00F69FFC
 AccDraw_Secondary_Helper8 00F6A071
-AccScreen_DataBlock_Data 00F6A085
+AccDraw_Secondary_Helper8_Helper2 00F6A07C
+AccDraw_SecondarySub_Handlers 00F6A085
+AccDraw_Secondary_Sub 00F6A0D5
 AccDraw_Secondary_Return 00F6A0F6
 AccDraw_Secondary_Helper9 00F6A0F7
 AccDraw_Secondary_Helper9_Skip 00F6A0FF
-AccScreen_DataBlock_Code3 00F6A10E
+AccDraw_IndexBitMask 00F6A10E
+AccDraw_SecondarySub_Handler00 00F6A192
+AccDraw_SecondarySub_Handler00_Skip 00F6A19E
+AccDraw_SecondarySub_Handler00_Return 00F6A1A3
+AccDraw_SecondarySub_Handler01 00F6A1A4
+AccDraw_Secondary_Sub_Entry 00F6A1BC
 AccDraw_Secondary_Helper9_Return 00F6A1C1
+AccDraw_SecondarySub_Handler02 00F6A1C2
 AccDraw_Secondary_Entry 00F6A1DA
 AccDraw_Secondary_Return2 00F6A1DF
+AccDraw_SecondarySub_Handler03 00F6A1E0
 AccScreen_DataBlock_Code4 00F6A1F6
+AccDraw_SecondarySub_Handler04 00F6A200
 AccScreen_DataBlock_Code5 00F6A216
+AccDraw_SecondarySub_Handler05 00F6A220
 AccDraw_Secondary_Return3 00F6A23C
 AccScreen_DataBlock_Code6 00F6A23D
+AccDraw_SecondarySub_Handler06 00F6A252
+AccDraw_SecondarySub_Handler07 00F6A262
+AccDraw_SecondarySub_Handler08 00F6A272
 AccDraw_Secondary_Return4 00F6A28B
+AccDraw_SecondarySub_Handler09 00F6A28C
 AccDraw_Secondary_Return5 00F6A2A5
+AccDraw_SecondarySub_Handler10 00F6A2A6
 AccDraw_Secondary_Return6 00F6A2B0
+AccDraw_SecondarySub_Handler11 00F6A2B1
 AccDraw_Secondary_Return7 00F6A2BB
+AccDraw_SecondarySub_Handler12 00F6A2BC
+AccDraw_SecondarySub_Handler13 00F6A2BD
+AccDraw_SecondarySub_Handler14 00F6A2BE
+AccDraw_SecondarySub_Handler15 00F6A2BF
 AccDraw_Secondary_Return8 00F6A2D0
+AccDraw_SecondarySub_Handler16 00F6A2D1
+AccDraw_SecondarySub_Handler17 00F6A2D2
+AccDraw_SecondarySub_Handler18 00F6A2D3
+AccDraw_SecondarySub_Handler19 00F6A2D4
 AccDraw_Secondary_Helper10 00F6A2D5
 AccDraw_Secondary_Skip3 00F6A2F1
 AccDraw_Secondary_Return9 00F6A2F9

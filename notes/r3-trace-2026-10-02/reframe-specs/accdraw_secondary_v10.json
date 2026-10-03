@@ -1,0 +1,62 @@
+[
+ {
+  "file": "v10/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xF6A489",
+  "end": "0xF6A6D9",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "long",
+    "len": 80
+   },
+   {
+    "kind": "code",
+    "len": 57
+   },
+   {
+    "kind": "long",
+    "len": 132,
+    "symbols": false,
+    "per_line": 4
+   },
+   {
+    "kind": "code",
+    "len": 323
+   }
+  ],
+  "labels": {
+   "0xF6A596": "AccDraw_SecondarySub_Handler00",
+   "0xF6A5A8": "AccDraw_SecondarySub_Handler01",
+   "0xF6A5C6": "AccDraw_SecondarySub_Handler02",
+   "0xF6A5E4": "AccDraw_SecondarySub_Handler03",
+   "0xF6A604": "AccDraw_SecondarySub_Handler04",
+   "0xF6A624": "AccDraw_SecondarySub_Handler05",
+   "0xF6A656": "AccDraw_SecondarySub_Handler06",
+   "0xF6A666": "AccDraw_SecondarySub_Handler07",
+   "0xF6A676": "AccDraw_SecondarySub_Handler08",
+   "0xF6A690": "AccDraw_SecondarySub_Handler09",
+   "0xF6A6AA": "AccDraw_SecondarySub_Handler10",
+   "0xF6A6B5": "AccDraw_SecondarySub_Handler11",
+   "0xF6A6C0": "AccDraw_SecondarySub_Handler12",
+   "0xF6A6C1": "AccDraw_SecondarySub_Handler13",
+   "0xF6A6C2": "AccDraw_SecondarySub_Handler14",
+   "0xF6A6C3": "AccDraw_SecondarySub_Handler15",
+   "0xF6A6D5": "AccDraw_SecondarySub_Handler16",
+   "0xF6A6D6": "AccDraw_SecondarySub_Handler17",
+   "0xF6A6D7": "AccDraw_SecondarySub_Handler18",
+   "0xF6A6D8": "AccDraw_SecondarySub_Handler19"
+  },
+  "comments": {
+   "0xF6A489": [
+    "AccDraw_Secondary_Sub calls entry (L & 31) with XBC = the index and XDE = its",
+    "AccDraw_IndexBitMask word; it returns first for an HL above 15, so entries 16..19",
+    "(four one-byte `ret`s) are not reached that way.  Was decoded as `.byte` / `nop` /",
+    "`jr z, -90` / `jrl z, -2394` ... fragments."
+   ],
+   "0xF6A512": [
+    "Word n = 0 for n = 0, else 1 << (n - 1): 33 words.  AccDraw_Secondary_Sub_Helper reads",
+    "word (index + 1), or word 0 for an index above 31."
+   ]
+  }
+ }
+]

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,635
-#   semantic names ........... 50,821 (98.4%)
+#   symbols .................. 51,663
+#   semantic names ........... 50,849 (98.4%)
 #   positional names ......... 814
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -33089,15 +33089,18 @@ RhythmVariation_InlineCode_Code 00F650EA
 RhythmVariation_InlineCode_Sub 00F6510A
 RhythmVariation_InlineCode_Sub_Helper 00F65110
 RhythmVariation_InlineCode_Code2 00F65131
+AccDraw_SecondarySub_Handler03_Helper 00F65152
 RhythmVariation_InlineCode_Sub_Helper_Helper 00F65158
 RhythmVariation_InlineCode_Sub_Helper_Skip 00F65161
 RhythmVariation_InlineCode_Sub_Helper_Skip2 00F65178
 RhythmVariation_Select_Join 00F65188
 RhythmVariation_Select_Return 00F6518A
+AccDraw_SecondarySub_Handler04_Helper 00F6518B
 RhythmVariation_Select_Helper2 00F65191
 RhythmVariation_Select_Skip 00F651AF
 RhythmVariation_Select_Join2 00F651BF
 RhythmVariation_Select_Return2 00F651C1
+AccDraw_SecondarySub_Handler05_Helper 00F651C2
 RhythmVariation_Select_Helper3 00F651C8
 RhythmVariation_Select_Skip2 00F651D1
 RhythmVariation_Select_Skip3 00F651E8
@@ -34005,22 +34008,47 @@ CmpStep_DataBlock_Helper2 00F6A46F
 AccDraw_Secondary_Helper3 00F6A475
 CmpStep_DataBlock_Code_Helper 00F6A47A
 AccDraw_Secondary_Helper4 00F6A480
-AccScreen_DataBlock_Data 00F6A489
+AccDraw_SecondarySub_Handlers 00F6A489
 AccDraw_Secondary_Sub 00F6A4D9
 AccDraw_Secondary_Sub_Return 00F6A4FA
 AccDraw_Secondary_Sub_Helper 00F6A4FB
 AccDraw_Secondary_Sub_Helper_Skip 00F6A503
-AccScreen_DataBlock_Code3 00F6A512
+AccDraw_IndexBitMask 00F6A512
+AccDraw_SecondarySub_Handler00 00F6A596
+AccDraw_SecondarySub_Handler00_Skip 00F6A5A2
+AccDraw_SecondarySub_Handler00_Return 00F6A5A7
+AccDraw_SecondarySub_Handler01 00F6A5A8
 AccDraw_Secondary_Sub_Entry 00F6A5C0
 AccDraw_Secondary_Sub_Return2 00F6A5C5
+AccDraw_SecondarySub_Handler02 00F6A5C6
 AccDraw_Secondary_Sub_Entry2 00F6A5DE
 AccDraw_Secondary_Sub_Return3 00F6A5E3
+AccDraw_SecondarySub_Handler03 00F6A5E4
 AccScreen_DataBlock_Code4 00F6A5FA
+AccDraw_SecondarySub_Handler04 00F6A604
 AccScreen_DataBlock_Code5 00F6A61A
+AccDraw_SecondarySub_Handler05 00F6A624
 AccDraw_Secondary_Return 00F6A640
 AccScreen_DataBlock_Code6 00F6A641
+AccDraw_SecondarySub_Handler06 00F6A656
+AccDraw_SecondarySub_Handler07 00F6A666
+AccDraw_SecondarySub_Handler08 00F6A676
+AccDraw_SecondarySub_Handler08_Return 00F6A68F
+AccDraw_SecondarySub_Handler09 00F6A690
+AccDraw_SecondarySub_Handler09_Return 00F6A6A9
+AccDraw_SecondarySub_Handler10 00F6A6AA
+AccDraw_SecondarySub_Handler10_Return 00F6A6B4
+AccDraw_SecondarySub_Handler11 00F6A6B5
 AccDraw_Secondary_Return2 00F6A6BF
+AccDraw_SecondarySub_Handler12 00F6A6C0
+AccDraw_SecondarySub_Handler13 00F6A6C1
+AccDraw_SecondarySub_Handler14 00F6A6C2
+AccDraw_SecondarySub_Handler15 00F6A6C3
 AccDraw_Secondary_Return3 00F6A6D4
+AccDraw_SecondarySub_Handler16 00F6A6D5
+AccDraw_SecondarySub_Handler17 00F6A6D6
+AccDraw_SecondarySub_Handler18 00F6A6D7
+AccDraw_SecondarySub_Handler19 00F6A6D8
 AccDraw_Secondary_Helper5 00F6A6D9
 AccDraw_Secondary_Skip 00F6A6F5
 AccDraw_Secondary_Return4 00F6A6FD
