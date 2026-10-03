@@ -1141,10 +1141,12 @@ sections; the extra six are the legacy ASL mirror builds, which only run when th
 Read it with the script's own `of which C` column, because compiled C counts on the
 `.incbin` side, not the source side: of maincpu v10's 860,028 `.incbin` bytes, 855,100 are
 byte-exact recompiled C and only 4,928 (0.23% of the ROM) are a raw blob. So a low figure
-here does not mean "unexplained". Two further caveats: the v7 row is flattered by
-`scripts/build/extract_v7_bins.py`, which copies 842,796 B of the v7 ROM into its own
-"source" at build time (703,693 B of that is reproduced by no source at all -- the script
-prints this itself); and IC30's 100.0% is over a `BAD_DUMP`, flagged as such in
+here does not mean "unexplained". Two further caveats: on 2026-08-21 the v7 row was flattered by
+`scripts/build/extract_v7_bins.py`, which then copied 842,796 B of the v7 ROM into its own
+"source" at build time (703,693 B of that reproduced by no source at all). Re-measured
+2026-10-03, `kn5000_source_coverage.py` counts 8,181 B of v7 as verbatim debt, and
+`extract_v7_bins.py` no longer prints the old figure (it reports 209 bins, 16 data bins,
+167 code blocks and 9,147 transplant bins regenerated); and IC30's 100.0% is over a `BAD_DUMP`, flagged as such in
 `mame_driver/src/mame/matsushita/kn5000.cpp`, of which only 4,352 of 131,072 bytes are
 non-0xFF.
 
