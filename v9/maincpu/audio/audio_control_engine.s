@@ -1615,7 +1615,7 @@ NakaData_WidgetInit1_Code_Skip6:
 FileIO_BytecodeData_Code_Join24:
 	ld	(xiz+3), 127
 	ld	xwa, xiz
-	calr	61800
+	calr	FileIO_BytecodeData
 NakaData_WidgetInit1_Code_Epilogue5:
 	pop	xiz
 	ret
@@ -1626,16 +1626,12 @@ ExtDev_SndParam_Block14_Dual:
 	ld	c, (xix)
 	and	c, e
 	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb9, 0xb0
-	push_a
-	push	xde
-	.byte 0x8d
+	set	1, (0x90f9:16)
+	ld	(xwa), (0x8d3a)
 	ld	(xwa+1), 4
 	ld	(xhl), 64
 	ld	(xix), 64
-	calr	61763
+	calr	FileIO_BytecodeData
 	ret
 ExtDev_SndParam_Write48_Block:
 	push	xiz
@@ -3769,26 +3765,13 @@ UIState_UpdateControlBits:
 	jr	z, UIState_UpdateControlBits_Entry
 	cp	a, 0:i3
 	ret	nz
-	.byte 0xd1
-	push	xde
-	decm8	1, (xsp+62)
-	nop
+	orw	(0x8f3a:16), 0x69
 	ret
 UIState_UpdateControlBits_Entry:
-	.byte 0xd1
-	push	xde
-	.byte 0x8f
-	push	xiz
-	pushw	wa
-	nop
+	orw	(0x8f3a:16), 0x28
 	ret
 UIState_UpdateControlBits_Entry2:
-	.byte 0xd1
-	push	xde
-	.byte 0x8f
-	push	xiz
-	.byte 0x40
-	nop
+	orw	(0x8f3a:16), 0x40
 	ret
 UIState_SwitchOnDisplayMode:
 	; --- Switch on A = (0xc07d): or bits into (0x8f3a)/(0x8f42) (53 bytes) ---
@@ -3882,27 +3865,19 @@ UIState_ProcessAltMode:
 	jr	z, UIState_ProcessAltMode_Entry
 	cp	a, 1:i3
 	ret	nz
-	.byte 0xd1
-	ld	xde, 0x033e8f
+	orw	(0x8f42:16), 0x3
 	ret
 UIState_ProcessAltMode_Entry:
-	.byte 0xd1
-	ld	xde, 0x083e8f
+	orw	(0x8f42:16), 0x8
 	ret
 UIState_ProcessAltMode_Entry2:
-	.byte 0xd1
-	ld	xde, 0x60003e8f
+	orw	(0x8f42:16), 0x6000
 	ret
 UIState_ProcessSimpleMode:
 	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 1:i3
 	ret	nz
-	.byte 0xd1
-	push	xde
-	.byte 0x8f
-	push	xiz
-	.byte 0x90
-	nop
+	orw	(0x8f3a:16), 0x90
 	ret
 
 CtrlPanel_LookupIndicatorEntry:
@@ -5305,29 +5280,23 @@ ExtData_ToneParam_MultiChannel_Join3:
 	cp	a, 0:i3
 	jr	z, ExtData_ToneParam_MultiChannel_Skip11
 	cp	a, 3:i3
-	jr	z, 9
+	jr	z, ExtData_ToneParam_MultiChannel_Skip10
 	cp	a, 1:i3
 	ret	nz
 	bit	0, (xbc+3)
-	jr	nz, 15
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip11
 ExtData_ToneParam_MultiChannel_Skip10:
 	cp	(37167:16), 1
-	jr	nz, 8
-	.byte 0xf1
-	ldw	wa, 0xb191
-	.byte 0xf1
-	ldw	bc, 0xb191
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip11
+	res	1, (0x9130:16)
+	res	1, (0x9131:16)
 ExtData_ToneParam_MultiChannel_Skip11:
-	.byte 0xc1
-	pushw	sp
-	.byte 0x91
-	push	xsp
-	normal
-	jr	nz, 29
+	cp	(0x912f:16), 1
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip13
 	ld	wa, 2:i3
-	calr	3291
+	calr	ExtData_ToneParam_DispatchHandler_Helper
 	bit	1, (MIDI_MSG_DATA3:16)
-	jr	nz, 1
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip12
 	ret
 ExtData_ToneParam_MultiChannel_Skip12:
 	set	0, (37113:16)
@@ -5335,7 +5304,7 @@ ExtData_ToneParam_MultiChannel_Skip12:
 	res	1, (37169:16)
 	ld	(MIDI_MSG_DATA3:16), 0
 ExtData_ToneParam_MultiChannel_Skip13:
-	calr	7
+	calr	ExtData_ToneParam_MultiChannel_Helper2
 	call	ToneGen_DispatchByMode
 	jrl	MIDI_WriteResetSequence
 ExtData_ToneParam_MultiChannel_Helper2:
@@ -5386,9 +5355,7 @@ ExtData_ToneParam_MultiChannel_Skip9:
 	add	bc, wa
 	cp bc, (37219:16)
 	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb8
+	set	0, (0x90f9:16)
 	ret
 
 MIDI_WriteResetSequence:
@@ -5465,7 +5432,7 @@ ExtData_Voice_UpdateFlags:
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	ld	wa, 1:i3
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
-	calr	2823
+	calr	SwbtWr_FlushAndAppendParams
 	lda	xbc, (0xfc66:16)
 	bit	0, (xbc+3)
 	ret	nz
@@ -5477,20 +5444,18 @@ ExtData_Voice_UpdateFlags:
 	ld	a, (xbc)
 	bit	1, a
 	ret	z
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb8
+	set	0, (0x90f9:16)
 	ld	a, (xbc)
 	res	1, a
 	ld	(xbc), a
-	calr	65296
+	calr	MIDI_WriteResetSequence
 	ret
 ExtData_ToneParam_MultiChannel_Helper:
 	ld	(MIDI_MSG_DATA2), (37168:16)
 	ld	(MIDI_MSG_DATA3), (37169:16)
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_Voice_CheckMode:
-	calr	2730
+	calr	SndParam_WriteLookupAndStore
 	ld	a, (0x912f:16)
 	cp	a, 1:i3
 	ret	nz

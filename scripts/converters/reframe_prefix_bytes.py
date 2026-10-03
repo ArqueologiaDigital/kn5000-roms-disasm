@@ -49,7 +49,8 @@ import scoop_reframe as SR                    # noqa: E402
 PREFIX = {0xc1, 0xc2, 0xc3, 0xc7, 0xd1, 0xd2, 0xd3, 0xd7, 0xe1, 0xe2, 0xe3, 0xe7, 0xf1, 0xf2, 0xf3, 0xf7}
 BYTEN = re.compile(r'^\s*\.byte\s+(0x[0-9a-fA-F]+)\s*(?:,\s*0x[0-9a-fA-F]+\s*)*$')
 BYTE1 = re.compile(r'^\s*\.byte\s+(0x[0-9a-fA-F]+)\s*$')
-STOPS = re.compile(r'^\s*(?:jp|jr|jrl)\s+(?:t\s*,\s*)?[^,]+$|^\s*jp\s+t\s*,|^\s*(?:ret|reti|retd|halt|swi|nop)\b', re.I)
+# `ret <cc>` (`ret nz` ...) falls through when its condition fails, so it is not a stop (2026-10-03)
+STOPS = re.compile(r'^\s*(?:jp|jr|jrl)\s+(?:t\s*,\s*)?[^,]+$|^\s*jp\s+t\s*,|^\s*ret\s*(?:;.*)?$|^\s*(?:reti|retd|halt|swi|nop)\b', re.I)
 LABEL_ONLY = re.compile(r'^[A-Za-z_][\w.$]*:\s*$')
 INCLUDE = re.compile(r'^(?:[A-Za-z_][\w.$]*:)?\s*\.include\s+"([^"]+)"')
 # instructions that real code here does not contain (the absurd-block markers of

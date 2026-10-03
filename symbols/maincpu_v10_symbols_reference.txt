@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,630
-#   semantic names ........... 50,792 (98.4%)
+#   symbols .................. 51,634
+#   semantic names ........... 50,796 (98.4%)
 #   positional names ......... 838
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -45391,7 +45391,11 @@ NakaData_WidgetInit1_Code_Skip 00FC6618
 NakaData_WidgetInit1_Code_Join2 00FC661B
 NakaData_WidgetInit1_Code_Epilogue 00FC6623
 ExtDev_SndParam_Block98_Var40 00FC6625
+NakaData_WidgetInit1_Code_Skip8 00FC6641
+NakaData_WidgetInit1_Code_Join5 00FC6644
 ExtDev_SndParam_BlockA9_Var02 00FC664A
+NakaData_WidgetInit1_Code_Skip9 00FC666D
+NakaData_WidgetInit1_Code_Join6 00FC6670
 ExtDev_SndParam_Block98_Var80 00FC6677
 FileIO_BytecodeData_Code_Skip79 00FC6693
 FileIO_BytecodeData_Code_Join23 00FC6696

@@ -1538,10 +1538,8 @@ FileIO_BytecodeData_Code_Helper4_Join3:
 ExtDev_SndParam_BlockA9_Var02:
 	cp	(CURRENT_TITLE:16), 135
 	ret	nz
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90
-	ld	(xbc-80), 169
+	set	1, (0x905d:16)
+	ld	(xwa), 0xa9
 	ld	(xwa+1), 10
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
@@ -1630,12 +1628,8 @@ ExtDev_SndParam_Block14_Dual:
 	ld	c, (xix)
 	and	c, e
 	ret	z
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90, 0xb9, 0xb0
-	push_a
-	.byte 0x9e
-	.byte	0x8c
+	set	1, (0x905d:16)
+	ld	(xwa), (0x8c9e)
 	ld	(xwa+1), 4
 	ld	(xhl), 64
 	ld	(xix), 64
@@ -3642,25 +3636,13 @@ UIState_UpdateControlBits:
 	jr	z, UIState_UpdateControlBits_Entry
 	cp	a, 0:i3
 	ret	nz
-	.byte	0xd1
-	.byte 0x9e, 0x8e, 0x3e, 0x69
-	nop
+	orw	(0x8e9e:16), 0x69
 	ret
 UIState_UpdateControlBits_Entry:
-	.byte	0xd1
-	.byte 0x9e
-	.byte	0x8e
-	push	xiz
-	pushw	wa
-	nop
+	orw	(0x8e9e:16), 0x28
 	ret
 UIState_UpdateControlBits_Entry2:
-	.byte	0xd1
-	.byte 0x9e
-	.byte	0x8e
-	push	xiz
-	.byte	0x40
-	nop
+	orw	(0x8e9e:16), 0x40
 	ret
 UIState_SwitchOnDisplayMode:
 	; --- Switch on A = (0xc07d): or bits into (0x8f3a)/(0x8f42) (53 bytes) ---
@@ -3752,27 +3734,19 @@ UIState_ProcessAltMode:
 	jr	z, UIState_ProcessAltMode_Entry
 	cp	a, 1:i3
 	ret	nz
-	.byte	0xd1
-	.byte 0xa6, 0x8e, 0x3e, 0x03, 0x00
+	orw	(0x8ea6:16), 0x3
 	ret
 UIState_ProcessAltMode_Entry:
-	.byte	0xd1
-	.byte 0xa6, 0x8e, 0x3e, 0x08, 0x00
+	orw	(0x8ea6:16), 0x8
 	ret
 UIState_ProcessAltMode_Entry2:
-	.byte	0xd1
-	.byte 0xa6, 0x8e, 0x3e, 0x00, 0x60
+	orw	(0x8ea6:16), 0x6000
 	ret
 UIState_ProcessSimpleMode:
 	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 1:i3
 	ret	nz
-	.byte	0xd1
-	.byte 0x9e
-	.byte	0x8e
-	push	xiz
-	.byte	0x90
-	nop
+	orw	(0x8e9e:16), 0x90
 	ret
 CtrlPanel_LookupIndicatorEntry:
 	extz	wa
@@ -5128,10 +5102,8 @@ ExtData_ToneParam_MultiChannel_Join3:
 ExtData_ToneParam_MultiChannel_Skip10:
 	cp	(37011:16), 1
 	jr	nz, ExtData_ToneParam_MultiChannel_Skip11
-	.byte	0xf1
-	.byte 0x94, 0x90, 0xb1
-	.byte	0xf1
-	.byte 0x95, 0x90, 0xb1
+	res	1, (0x9094:16)
+	res	1, (0x9095:16)
 ExtData_ToneParam_MultiChannel_Skip11:
 	cp	(0x9093:16), 1
 	jr	nz, ExtData_ToneParam_MultiChannel_Skip13
@@ -5197,9 +5169,7 @@ ExtData_ToneParam_MultiChannel_Skip9:
 	add	bc, wa
 	cp	bc, (0x90c7:16)
 	ret	z
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90, 0xb8
+	set	0, (0x905d:16)
 	ret
 MIDI_WriteResetSequence:
 	ld	a, (0x905d:16)
@@ -5288,9 +5258,7 @@ ExtData_Voice_UpdateFlags:
 	ld	a, (xbc)
 	bit	1, a
 	ret	z
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90, 0xb8
+	set	0, (0x905d:16)
 	ld	a, (xbc)
 	res	1, a
 	ld	(xbc), a

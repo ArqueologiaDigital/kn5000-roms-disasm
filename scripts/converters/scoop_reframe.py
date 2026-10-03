@@ -463,14 +463,18 @@ def assemble_lines(texts):
             continue
         m = re.search(r'encoding: \[([^\]]*)\]', line)
         if m and cur is not None:
-            acc += bytes(int(x, 0) for x in m.group(1).split(",") if x.strip())
+            toks = [x.strip() for x in m.group(1).split(",") if x.strip()]
+            if all(re.match(r'^(0x[0-9a-fA-F]+|\d+)$', x) for x in toks):
+                acc += bytes(int(x, 0) for x in toks)
+            else:
+                bad = True      # `A`: a fixup fills these bytes at link time, so no final encoding here
     return out
 
 
 def hexify(text):
     """Decimal absolute addresses -> hex: `(3567)` -> `(0x0def)`, and a 32-bit
     load of a value >= 0x100 -> hex (policy 7: addresses in hex)."""
-    text = re.sub(r'\((\d{3,8})\)', lambda m: "(0x%04x)" % int(m.group(1))
+    text = re.sub(r'\((\d{3,8})(:(?:8|16|24))?\)', lambda m: "(0x%04x%s)" % (int(m.group(1)), m.group(2) or "")
                   if int(m.group(1)) >= 0x100 else m.group(0), text)
     m = re.match(r'^(ld\tx(?:wa|bc|de|hl|ix|iy|iz|sp), )(\d{3,8})$', text)
     if m and int(m.group(2)) >= 0x100:
