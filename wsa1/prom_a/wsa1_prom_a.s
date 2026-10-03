@@ -394,56 +394,56 @@
 	.set SoundCodeByGroupMember_ModeOffsetGroup,  0x00F06EF4
 	.set SoundCodeByGroupMember_ByteGroup,        0x00F07134
 	.set SoundCodeByGroupMember_SevenBitGroup,    0x00F08514
-	.set SoftKeyCol2_ScreenCode87,                              0x00F0A162
-	.set SoftKeyCol3_ScreenCode87,                              0x00F0A1D1
-	.set SoftKeyCol4_ScreenCode87,                              0x00F0A240
-	.set SoftKeyCol6_ScreenCode87,                              0x00F0A2AB
-	.set LcdKeyRow1_ScreenCode87,                              0x00F0A3A1
-	.set LcdKeyRow2_ScreenCode87,                              0x00F0A3BF
-	.set LcdKeyRow3_ScreenCode87,                              0x00F0A3DB
-	.set LcdKeyRow4_ScreenCode87,                              0x00F0A404
-	.set LcdKeyRow5_ScreenCode87,                              0x00F0A451
-	.set ExitKey_ScreenCode87,                              0x00F0A49E
-	.set SoftKeyCol1_ScreenCode88,                              0x00F0A4BE
-	.set SoftKeyCol2_ScreenCode88,                              0x00F0A4D7
-	.set SoftKeyCol3_ScreenCode88,                              0x00F0A4F0
-	.set SoftKeyCol4_ScreenCode88,                              0x00F0A509
-	.set SoftKeyCol5_ScreenCode88,                              0x00F0A522
-	.set SoftKeyCol6_ScreenCode88,                              0x00F0A53B
-	.set SoftKeyCol7_ScreenCode88,                              0x00F0A554
-	.set LcdKeyRow1_ScreenCode88,                              0x00F0A56D
-	.set LcdKeyRow2_ScreenCode88,                              0x00F0A57E
-	.set LcdKeyRow3_ScreenCode88,                              0x00F0A5AA
-	.set LcdKeyRow4_ScreenCode88,                              0x00F0A5D6
-	.set LcdKeyRow5_ScreenCode88,                              0x00F0A604
-	.set PageKey_ScreenCode88,                              0x00F0A632
-	.set ExitKey_ScreenCode88,                              0x00F0A64A
-	.set SoftKeyCol2_ScreenCode89,                              0x00F0A66A
-	.set SoftKeyCol3_ScreenCode89,                              0x00F0A67F
-	.set SoftKeyCol4_ScreenCode89,                              0x00F0A694
-	.set SoftKeyCol5_ScreenCode89,                              0x00F0A6A9
-	.set SoftKeyCol7_ScreenCode89,                              0x00F0A6BE
-	.set SoftKeyCol8_ScreenCode89,                              0x00F0A6D3
-	.set LcdKeyRow1_ScreenCode89,                              0x00F0A6E8
-	.set LcdKeyRow2_ScreenCode89,                              0x00F0A6F9
-	.set LcdKeyRow3_ScreenCode89,                              0x00F0A725
-	.set LcdKeyRow4_ScreenCode89,                              0x00F0A751
-	.set LcdKeyRow5_ScreenCode89,                              0x00F0A775
-	.set PageKey_ScreenCode89,                              0x00F0A799
-	.set ExitKey_ScreenCode89,                              0x00F0A7B1
-	.set SoftKeyCol2_ScreenCode8A,                              0x00F0A7D1
-	.set SoftKeyCol3_ScreenCode8A,                              0x00F0A7E6
-	.set SoftKeyCol4_ScreenCode8A,                              0x00F0A7FB
-	.set SoftKeyCol5_ScreenCode8A,                              0x00F0A810
-	.set SoftKeyCol6_ScreenCode8A,                              0x00F0A825
-	.set SoftKeyCol7_ScreenCode8A,                              0x00F0A83A
-	.set SoftKeyCol8_ScreenCode8A,                              0x00F0A84F
-	.set LcdKeyRow1_ScreenCode8A,                              0x00F0A864
-	.set LcdKeyRow2_ScreenCode8A,                              0x00F0A882
-	.set LcdKeyRow3_ScreenCode8A,                              0x00F0A8A6
-	.set LcdKeyRow4_ScreenCode8A,                              0x00F0A8BE
-	.set LcdKeyRow5_ScreenCode8A,                              0x00F0A8D6
-	.set ExitKey_ScreenCode8A,                              0x00F0A8EE
+	.set SoftKeyCol2_SoundEditPitchTune,                              0x00F0A162
+	.set SoftKeyCol3_SoundEditPitchTune,                              0x00F0A1D1
+	.set SoftKeyCol4_SoundEditPitchTune,                              0x00F0A240
+	.set SoftKeyCol6_SoundEditPitchTune,                              0x00F0A2AB
+	.set LcdKeyRow1_SoundEditPitchTune,                              0x00F0A3A1
+	.set LcdKeyRow2_SoundEditPitchTune,                              0x00F0A3BF
+	.set LcdKeyRow3_SoundEditPitchTune,                              0x00F0A3DB
+	.set LcdKeyRow4_SoundEditPitchTune,                              0x00F0A404
+	.set LcdKeyRow5_SoundEditPitchTune,                              0x00F0A451
+	.set ExitKey_SoundEditPitchTune,                              0x00F0A49E
+	.set SoftKeyCol1_SoundEditPitchEnvelope1,                              0x00F0A4BE
+	.set SoftKeyCol2_SoundEditPitchEnvelope1,                              0x00F0A4D7
+	.set SoftKeyCol3_SoundEditPitchEnvelope1,                              0x00F0A4F0
+	.set SoftKeyCol4_SoundEditPitchEnvelope1,                              0x00F0A509
+	.set SoftKeyCol5_SoundEditPitchEnvelope1,                              0x00F0A522
+	.set SoftKeyCol6_SoundEditPitchEnvelope1,                              0x00F0A53B
+	.set SoftKeyCol7_SoundEditPitchEnvelope1,                              0x00F0A554
+	.set LcdKeyRow1_SoundEditPitchEnvelope1,                              0x00F0A56D
+	.set LcdKeyRow2_SoundEditPitchEnvelope1,                              0x00F0A57E
+	.set LcdKeyRow3_SoundEditPitchEnvelope1,                              0x00F0A5AA
+	.set LcdKeyRow4_SoundEditPitchEnvelope1,                              0x00F0A5D6
+	.set LcdKeyRow5_SoundEditPitchEnvelope1,                              0x00F0A604
+	.set PageKey_SoundEditPitchEnvelope1,                              0x00F0A632
+	.set ExitKey_SoundEditPitchEnvelope1,                              0x00F0A64A
+	.set SoftKeyCol2_SoundEditPitchEnvelope2,                              0x00F0A66A
+	.set SoftKeyCol3_SoundEditPitchEnvelope2,                              0x00F0A67F
+	.set SoftKeyCol4_SoundEditPitchEnvelope2,                              0x00F0A694
+	.set SoftKeyCol5_SoundEditPitchEnvelope2,                              0x00F0A6A9
+	.set SoftKeyCol7_SoundEditPitchEnvelope2,                              0x00F0A6BE
+	.set SoftKeyCol8_SoundEditPitchEnvelope2,                              0x00F0A6D3
+	.set LcdKeyRow1_SoundEditPitchEnvelope2,                              0x00F0A6E8
+	.set LcdKeyRow2_SoundEditPitchEnvelope2,                              0x00F0A6F9
+	.set LcdKeyRow3_SoundEditPitchEnvelope2,                              0x00F0A725
+	.set LcdKeyRow4_SoundEditPitchEnvelope2,                              0x00F0A751
+	.set LcdKeyRow5_SoundEditPitchEnvelope2,                              0x00F0A775
+	.set PageKey_SoundEditPitchEnvelope2,                              0x00F0A799
+	.set ExitKey_SoundEditPitchEnvelope2,                              0x00F0A7B1
+	.set SoftKeyCol2_SoundEditPitchLfo,                              0x00F0A7D1
+	.set SoftKeyCol3_SoundEditPitchLfo,                              0x00F0A7E6
+	.set SoftKeyCol4_SoundEditPitchLfo,                              0x00F0A7FB
+	.set SoftKeyCol5_SoundEditPitchLfo,                              0x00F0A810
+	.set SoftKeyCol6_SoundEditPitchLfo,                              0x00F0A825
+	.set SoftKeyCol7_SoundEditPitchLfo,                              0x00F0A83A
+	.set SoftKeyCol8_SoundEditPitchLfo,                              0x00F0A84F
+	.set LcdKeyRow1_SoundEditPitchLfo,                              0x00F0A864
+	.set LcdKeyRow2_SoundEditPitchLfo,                              0x00F0A882
+	.set LcdKeyRow3_SoundEditPitchLfo,                              0x00F0A8A6
+	.set LcdKeyRow4_SoundEditPitchLfo,                              0x00F0A8BE
+	.set LcdKeyRow5_SoundEditPitchLfo,                              0x00F0A8D6
+	.set ExitKey_SoundEditPitchLfo,                              0x00F0A8EE
 	.set SoftKeyCol2_ScreenCodeCB,                              0x00F0AB4B
 	.set SoftKeyCol3_ScreenCodeCB,                              0x00F0ABB9
 	.set SoftKeyCol4_ScreenCodeCB,                              0x00F0AC43
@@ -464,30 +464,30 @@
 	.set sub_F0B39C,                              0x00F0B39C
 	.set sub_F0B462,                              0x00F0B462
 	.set sub_F0B51B,                              0x00F0B51B
-	.set LcdKeyRow1_ScreenCode9E,                              0x00F0B533
-	.set LcdKeyRow3_ScreenCode9E,                              0x00F0B578
-	.set LcdKeyRow4_ScreenCode9E,                              0x00F0B62F
-	.set LcdKeyRow5_ScreenCode9E,                              0x00F0B6D7
-	.set ExitKey_ScreenCode9E,                              0x00F0B6EF
-	.set SoftKeyCol1_ScreenCode9F,                              0x00F0B70F
-	.set SoftKeyCol2_ScreenCode9F,                              0x00F0B713
-	.set SoftKeyCol3_ScreenCode9F,                              0x00F0B717
-	.set SoftKeyCol4_ScreenCode9F,                              0x00F0B71B
-	.set SoftKeyCol5_ScreenCode9F,                              0x00F0B71F
-	.set SoftKeyCol6_ScreenCode9F,                              0x00F0B723
-	.set SoftKeyCol7_ScreenCode9F,                              0x00F0B727
-	.set SoftKeyCol8_ScreenCode9F,                              0x00F0B747
-	.set LcdKeyRow1_ScreenCode9F,                              0x00F0B74B
-	.set LcdKeyRow2_ScreenCode9F,                              0x00F0B80D
-	.set ExitKey_ScreenCode9F,                              0x00F0B81D
+	.set LcdKeyRow1_SoundEditMemoryWrite,                              0x00F0B533
+	.set LcdKeyRow3_SoundEditMemoryWrite,                              0x00F0B578
+	.set LcdKeyRow4_SoundEditMemoryWrite,                              0x00F0B62F
+	.set LcdKeyRow5_SoundEditMemoryWrite,                              0x00F0B6D7
+	.set ExitKey_SoundEditMemoryWrite,                              0x00F0B6EF
+	.set SoftKeyCol1_SoundEditNaming,                              0x00F0B70F
+	.set SoftKeyCol2_SoundEditNaming,                              0x00F0B713
+	.set SoftKeyCol3_SoundEditNaming,                              0x00F0B717
+	.set SoftKeyCol4_SoundEditNaming,                              0x00F0B71B
+	.set SoftKeyCol5_SoundEditNaming,                              0x00F0B71F
+	.set SoftKeyCol6_SoundEditNaming,                              0x00F0B723
+	.set SoftKeyCol7_SoundEditNaming,                              0x00F0B727
+	.set SoftKeyCol8_SoundEditNaming,                              0x00F0B747
+	.set LcdKeyRow1_SoundEditNaming,                              0x00F0B74B
+	.set LcdKeyRow2_SoundEditNaming,                              0x00F0B80D
+	.set ExitKey_SoundEditNaming,                              0x00F0B81D
 	.set sub_F0B91C,                              0x00F0B91C
-	.set SoftKeyCol1_ScreenCode9D,                              0x00F0C0BB
-	.set SoftKeyCol2_ScreenCode9D,                              0x00F0C35D
-	.set SoftKeyCol3_ScreenCode9D,                              0x00F0C3F9
-	.set SoftKeyCol4_ScreenCode9D,                              0x00F0C47B
-	.set SoftKeyCol6_ScreenCode9D,                              0x00F0C528
-	.set LcdKeyRow4_ScreenCode9D,                              0x00F0C616
-	.set ExitKey_ScreenCode9D,                              0x00F0C70A
+	.set SoftKeyCol1_SoundEditCopy,                              0x00F0C0BB
+	.set SoftKeyCol2_SoundEditCopy,                              0x00F0C35D
+	.set SoftKeyCol3_SoundEditCopy,                              0x00F0C3F9
+	.set SoftKeyCol4_SoundEditCopy,                              0x00F0C47B
+	.set SoftKeyCol6_SoundEditCopy,                              0x00F0C528
+	.set LcdKeyRow4_SoundEditCopy,                              0x00F0C616
+	.set ExitKey_SoundEditCopy,                              0x00F0C70A
 	.set DL_Input0utputFilterMidiT0talM0de,       0x00F0C800
 	.set DL_RealtimeMessageInput0utput,           0x00F0C8D5
 	.set DL_F0C917,                               0x00F0C917
@@ -113613,7 +113613,7 @@ sub_FC25BF:
 ; search could find them:
 ;   SoundEditDigitalEffect_Paint 0xF099F5, SoundEditDigitalEffect_RepaintField
 ;   0xF09AA5, sub_F09AF1 0xF09AF1 (via PtrTable_F09B7B), SoundEditCopy_Paint
-;   0xF09B9B, SoundEditCopy_RepaintField 0xF09C08, ScreenCode80_RepaintField 0xF09CA9
+;   0xF09B9B, SoundEditCopy_RepaintField 0xF09C08, SoundEditMenu_RepaintField 0xF09CA9
 ;   (DispatchTable_F5B9F8[0]) with prom_b 0xF5BF6D, and Draw_Page12EnvelopeKeyoffCurSor at 0xF5CBAD.
 ; The DIGITAL EFFECT type is (0x27B6) = (0x27A6) & 0x0F; every per-type array
 ; below is indexed by it, and 12 entries is the extent every one of them shares.
@@ -115115,7 +115115,7 @@ SegmentBounds_FC516E:
 	.long DisplayList_FC5110_End                ; FC517A  [ 3]
 
 ; DisplayList_FC517E -- display list, 17 record(s), 252 bytes, interpreter B
-; Read by: ScreenCode80_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09D07 and 0xF09D69, and prom_b 0xF5BF6D, whole; its inner sub-lists 0xFC51B1-0xFC51D3 (0xF09D28), 0xFC51F9-0xFC521B (0xF09D3D), 0xFC524D-0xFC526F (0xF09CD1).
+; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09D07 and 0xF09D69, and prom_b 0xF5BF6D, whole; its inner sub-lists 0xFC51B1-0xFC51D3 (0xF09D28), 0xFC51F9-0xFC521B (0xF09D3D), 0xFC524D-0xFC526F (0xF09CD1).
 ; Framing: the length bytes walk from 0xFC517E and land exactly on 0xFC527A.
 DisplayList_FC517E:
 	.byte 0x07, 0x11                             ; FC517E  op 07, 17 bytes, handler 0xF31B39
@@ -115231,7 +115231,7 @@ Rects_FC5292:
 	.short 0x000D, 0x008E, 0x0117, 0x00A8      ; FC52A2  [2]
 
 ; DisplayList_FC52AA -- display list, 1 record(s), 10 bytes, interpreter A
-; Read by: ScreenCode80_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CEB and 0xF09D52 (layer 1).
+; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CEB and 0xF09D52 (layer 1).
 ; Framing: the length bytes walk from 0xFC52AA and land exactly on 0xFC52B4.
 DisplayList_FC52AA:
 	.byte 0x1B, 0x0A                             ; FC52AA  op 1B, 10 bytes, handler 0xF31A75
@@ -115239,7 +115239,7 @@ DisplayList_FC52AA:
 	.set DisplayList_FC52AA_End, .            ; FC52B4  end marker: the byte after the last record
 
 ; DisplayRecordPtrs_FC52B4 -- 17 pointers, 68 bytes
-; Read by: ScreenCode80_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CFB and 0xF09D82, prom_b 0xF09E11 and 0xF09E76: XIY = this, then RunDisplayListBFromPointerArray / 0xF09AB0 with A = the field.
+; Read by: SoundEditMenu_RepaintField (prom_b 0xF09CA9, DispatchTable_F5B9F8[0]) at 0xF09CFB and 0xF09D82, prom_b 0xF09E11 and 0xF09E76: XIY = this, then RunDisplayListBFromPointerArray / 0xF09AB0 with A = the field.
 ; COUNT 17 is the extent to the next object of this framing; every entry lands
 ; on a list or record boundary (gen_fc4000_pages.py checks each one).
 DisplayRecordPtrs_FC52B4:
@@ -124305,7 +124305,7 @@ sub_FCC573:
 ;          ascending.
 ; Unknown:  what the seventeen operations are.
 ; ⚠ CORRECTION 2026-09-25 (lane proma): the count IS bound, one step
-;          removed.  The reader, ScreenButton_Code80, first calls
+;          removed.  The reader, ScreenButton_SoundEditMenu, first calls
 ;          PanelEvent_ToFieldIndex (0xFD7905), which returns WA=0 only after
 ;          storing an operation in 0..16 at (XIZ-4) -- the byte this reader
 ;          multiplies -- and the reader skips the dispatch on 0xFFFF.  And
@@ -124313,22 +124313,22 @@ sub_FCC573:
 ;          it is the zero word that ends all 38 tables of this shape framed below.
 ; ---------------------------------------------------------------------
 DispatchTable_FCF000:
-	.long SoftKeyCol1_ScreenCode80                              ; FCF000  [  0]
-	.long SoftKeyCol2_ScreenCode80                              ; FCF004  [  1]
-	.long SoftKeyCol3_ScreenCode80                              ; FCF008  [  2]
-	.long SoftKeyCol4_ScreenCode80                              ; FCF00C  [  3]
-	.long SoftKeyCol5_ScreenCode80                              ; FCF010  [  4]
-	.long SoftKeyCol6_ScreenCode80                              ; FCF014  [  5]
-	.long SoftKeyCol7_ScreenCode80                              ; FCF018  [  6]
-	.long SoftKeyCol8_ScreenCode80                              ; FCF01C  [  7]
-	.long LcdKeyRow1_ScreenCode80                              ; FCF020  [  8]
-	.long LcdKeyRow2_ScreenCode80                              ; FCF024  [  9]
-	.long LcdKeyRow3_ScreenCode80                              ; FCF028  [ 10]
-	.long LcdKeyRow4_ScreenCode80                              ; FCF02C  [ 11]
-	.long LcdKeyRow5_ScreenCode80                              ; FCF030  [ 12]
+	.long SoftKeyCol1_SoundEditMenu                              ; FCF000  [  0]
+	.long SoftKeyCol2_SoundEditMenu                              ; FCF004  [  1]
+	.long SoftKeyCol3_SoundEditMenu                              ; FCF008  [  2]
+	.long SoftKeyCol4_SoundEditMenu                              ; FCF00C  [  3]
+	.long SoftKeyCol5_SoundEditMenu                              ; FCF010  [  4]
+	.long SoftKeyCol6_SoundEditMenu                              ; FCF014  [  5]
+	.long SoftKeyCol7_SoundEditMenu                              ; FCF018  [  6]
+	.long SoftKeyCol8_SoundEditMenu                              ; FCF01C  [  7]
+	.long LcdKeyRow1_SoundEditMenu                              ; FCF020  [  8]
+	.long LcdKeyRow2_SoundEditMenu                              ; FCF024  [  9]
+	.long LcdKeyRow3_SoundEditMenu                              ; FCF028  [ 10]
+	.long LcdKeyRow4_SoundEditMenu                              ; FCF02C  [ 11]
+	.long LcdKeyRow5_SoundEditMenu                              ; FCF030  [ 12]
 	.long PanelOp_Nop                             ; FCF034  [ 13]
 	.long PanelOp_Nop                             ; FCF038  [ 14]
-	.long ExitKey_ScreenCode80                              ; FCF03C  [ 15]
+	.long ExitKey_SoundEditMenu                              ; FCF03C  [ 15]
 	.long PanelOp_Nop                             ; FCF040  [ 16]
 
 ; ---------------------------------------------------------------------
@@ -124481,329 +124481,329 @@ IndexMap_FCF1E9:
 ; ---------------------------------------------------------------------
 ; PanelOpTable_FCF21B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code8B at 0xFD277E.
+; Read by: ScreenButton_SoundEditAmpLevel1 at 0xFD277E.
 PanelOpTable_FCF21B:
 	.long PanelOp_Nop                             ; FCF21B  [ 0]
-	.long SoftKeyCol2_ScreenCode8B                              ; FCF21F  [ 1]
-	.long SoftKeyCol3_ScreenCode8B                              ; FCF223  [ 2]
-	.long SoftKeyCol4_ScreenCode8B                              ; FCF227  [ 3]
-	.long SoftKeyCol5_ScreenCode8B                              ; FCF22B  [ 4]
+	.long SoftKeyCol2_SoundEditAmpLevel1                              ; FCF21F  [ 1]
+	.long SoftKeyCol3_SoundEditAmpLevel1                              ; FCF223  [ 2]
+	.long SoftKeyCol4_SoundEditAmpLevel1                              ; FCF227  [ 3]
+	.long SoftKeyCol5_SoundEditAmpLevel1                              ; FCF22B  [ 4]
 	.long PanelOp_Nop                             ; FCF22F  [ 5]
-	.long SoftKeyCol7_ScreenCode8B                              ; FCF233  [ 6]
-	.long SoftKeyCol8_ScreenCode8B                              ; FCF237  [ 7]
-	.long LcdKeyRow1_ScreenCode8B                              ; FCF23B  [ 8]
-	.long LcdKeyRow2_ScreenCode8B                              ; FCF23F  [ 9]
-	.long LcdKeyRow3_ScreenCode8B                              ; FCF243  [10]
-	.long LcdKeyRow4_ScreenCode8B                              ; FCF247  [11]
-	.long LcdKeyRow5_ScreenCode8B                              ; FCF24B  [12]
+	.long SoftKeyCol7_SoundEditAmpLevel1                              ; FCF233  [ 6]
+	.long SoftKeyCol8_SoundEditAmpLevel1                              ; FCF237  [ 7]
+	.long LcdKeyRow1_SoundEditAmpLevel1                              ; FCF23B  [ 8]
+	.long LcdKeyRow2_SoundEditAmpLevel1                              ; FCF23F  [ 9]
+	.long LcdKeyRow3_SoundEditAmpLevel1                              ; FCF243  [10]
+	.long LcdKeyRow4_SoundEditAmpLevel1                              ; FCF247  [11]
+	.long LcdKeyRow5_SoundEditAmpLevel1                              ; FCF24B  [12]
 	.long PanelOp_Nop                             ; FCF24F  [13]
 	.long PanelOp_Nop                             ; FCF253  [14]
-	.long ExitKey_ScreenCode8B                              ; FCF257  [15]
-	.long PageKey_ScreenCode8B                              ; FCF25B  [16]
+	.long ExitKey_SoundEditAmpLevel1                              ; FCF257  [15]
+	.long PageKey_SoundEditAmpLevel1                              ; FCF25B  [16]
 	.long 0x00000000                              ; FCF25F  [17] zero
 
 ; PanelOpTable_FCF263 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code8C at 0xFD27D6.
+; Read by: ScreenButton_SoundEditAmpLevel2 at 0xFD27D6.
 PanelOpTable_FCF263:
 	.long PanelOp_Nop                             ; FCF263  [ 0]
 	.long PanelOp_Nop                             ; FCF267  [ 1]
-	.long SoftKeyCol3_ScreenCode8C                              ; FCF26B  [ 2]
-	.long SoftKeyCol4_ScreenCode8C                              ; FCF26F  [ 3]
-	.long SoftKeyCol5_ScreenCode8C                              ; FCF273  [ 4]
-	.long SoftKeyCol6_ScreenCode8C                              ; FCF277  [ 5]
+	.long SoftKeyCol3_SoundEditAmpLevel2                              ; FCF26B  [ 2]
+	.long SoftKeyCol4_SoundEditAmpLevel2                              ; FCF26F  [ 3]
+	.long SoftKeyCol5_SoundEditAmpLevel2                              ; FCF273  [ 4]
+	.long SoftKeyCol6_SoundEditAmpLevel2                              ; FCF277  [ 5]
 	.long PanelOp_Nop                             ; FCF27B  [ 6]
 	.long PanelOp_Nop                             ; FCF27F  [ 7]
-	.long LcdKeyRow1_ScreenCode8C                              ; FCF283  [ 8]
-	.long LcdKeyRow2_ScreenCode8C                              ; FCF287  [ 9]
-	.long LcdKeyRow3_ScreenCode8C                              ; FCF28B  [10]
-	.long LcdKeyRow4_ScreenCode8C                              ; FCF28F  [11]
-	.long LcdKeyRow5_ScreenCode8C                              ; FCF293  [12]
+	.long LcdKeyRow1_SoundEditAmpLevel2                              ; FCF283  [ 8]
+	.long LcdKeyRow2_SoundEditAmpLevel2                              ; FCF287  [ 9]
+	.long LcdKeyRow3_SoundEditAmpLevel2                              ; FCF28B  [10]
+	.long LcdKeyRow4_SoundEditAmpLevel2                              ; FCF28F  [11]
+	.long LcdKeyRow5_SoundEditAmpLevel2                              ; FCF293  [12]
 	.long PanelOp_Nop                             ; FCF297  [13]
 	.long PanelOp_Nop                             ; FCF29B  [14]
-	.long ExitKey_ScreenCode8C                              ; FCF29F  [15]
-	.long PageKey_ScreenCode8C                              ; FCF2A3  [16]
+	.long ExitKey_SoundEditAmpLevel2                              ; FCF29F  [15]
+	.long PageKey_SoundEditAmpLevel2                              ; FCF2A3  [16]
 	.long 0x00000000                              ; FCF2A7  [17] zero
 
 ; PanelOpTable_FCF2AB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code8D at 0xFD2826.
+; Read by: ScreenButton_SoundEditAmpEnvelope1 at 0xFD2826.
 PanelOpTable_FCF2AB:
-	.long SoftKeyCol1_ScreenCode8D                              ; FCF2AB  [ 0]
-	.long SoftKeyCol2_ScreenCode8D                              ; FCF2AF  [ 1]
-	.long SoftKeyCol3_ScreenCode8D                              ; FCF2B3  [ 2]
-	.long SoftKeyCol4_ScreenCode8D                              ; FCF2B7  [ 3]
-	.long SoftKeyCol5_ScreenCode8D                              ; FCF2BB  [ 4]
-	.long SoftKeyCol6_ScreenCode8D                              ; FCF2BF  [ 5]
-	.long SoftKeyCol7_ScreenCode8D                              ; FCF2C3  [ 6]
-	.long SoftKeyCol8_ScreenCode8D                              ; FCF2C7  [ 7]
-	.long LcdKeyRow1_ScreenCode8D                              ; FCF2CB  [ 8]
-	.long LcdKeyRow2_ScreenCode8D                              ; FCF2CF  [ 9]
-	.long LcdKeyRow3_ScreenCode8D                              ; FCF2D3  [10]
-	.long LcdKeyRow4_ScreenCode8D                              ; FCF2D7  [11]
-	.long LcdKeyRow5_ScreenCode8D                              ; FCF2DB  [12]
+	.long SoftKeyCol1_SoundEditAmpEnvelope1                              ; FCF2AB  [ 0]
+	.long SoftKeyCol2_SoundEditAmpEnvelope1                              ; FCF2AF  [ 1]
+	.long SoftKeyCol3_SoundEditAmpEnvelope1                              ; FCF2B3  [ 2]
+	.long SoftKeyCol4_SoundEditAmpEnvelope1                              ; FCF2B7  [ 3]
+	.long SoftKeyCol5_SoundEditAmpEnvelope1                              ; FCF2BB  [ 4]
+	.long SoftKeyCol6_SoundEditAmpEnvelope1                              ; FCF2BF  [ 5]
+	.long SoftKeyCol7_SoundEditAmpEnvelope1                              ; FCF2C3  [ 6]
+	.long SoftKeyCol8_SoundEditAmpEnvelope1                              ; FCF2C7  [ 7]
+	.long LcdKeyRow1_SoundEditAmpEnvelope1                              ; FCF2CB  [ 8]
+	.long LcdKeyRow2_SoundEditAmpEnvelope1                              ; FCF2CF  [ 9]
+	.long LcdKeyRow3_SoundEditAmpEnvelope1                              ; FCF2D3  [10]
+	.long LcdKeyRow4_SoundEditAmpEnvelope1                              ; FCF2D7  [11]
+	.long LcdKeyRow5_SoundEditAmpEnvelope1                              ; FCF2DB  [12]
 	.long PanelOp_Nop                             ; FCF2DF  [13]
 	.long PanelOp_Nop                             ; FCF2E3  [14]
-	.long ExitKey_ScreenCode8D                              ; FCF2E7  [15]
-	.long PageKey_ScreenCode8D                              ; FCF2EB  [16]
+	.long ExitKey_SoundEditAmpEnvelope1                              ; FCF2E7  [15]
+	.long PageKey_SoundEditAmpEnvelope1                              ; FCF2EB  [16]
 	.long 0x00000000                              ; FCF2EF  [17] zero
 
 ; PanelOpTable_FCF2F3 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code8E at 0xFD2886.
+; Read by: ScreenButton_SoundEditAmpEnvelope2 at 0xFD2886.
 PanelOpTable_FCF2F3:
-	.long SoftKeyCol1_ScreenCode8E                              ; FCF2F3  [ 0]
-	.long SoftKeyCol2_ScreenCode8E                              ; FCF2F7  [ 1]
-	.long SoftKeyCol3_ScreenCode8E                              ; FCF2FB  [ 2]
-	.long SoftKeyCol4_ScreenCode8E                              ; FCF2FF  [ 3]
-	.long SoftKeyCol5_ScreenCode8E                              ; FCF303  [ 4]
-	.long SoftKeyCol6_ScreenCode8E                              ; FCF307  [ 5]
-	.long SoftKeyCol7_ScreenCode8E                              ; FCF30B  [ 6]
-	.long SoftKeyCol8_ScreenCode8E                              ; FCF30F  [ 7]
-	.long LcdKeyRow1_ScreenCode8E                              ; FCF313  [ 8]
-	.long LcdKeyRow2_ScreenCode8E                              ; FCF317  [ 9]
-	.long LcdKeyRow3_ScreenCode8E                              ; FCF31B  [10]
-	.long LcdKeyRow4_ScreenCode8E                              ; FCF31F  [11]
-	.long LcdKeyRow5_ScreenCode8E                              ; FCF323  [12]
+	.long SoftKeyCol1_SoundEditAmpEnvelope2                              ; FCF2F3  [ 0]
+	.long SoftKeyCol2_SoundEditAmpEnvelope2                              ; FCF2F7  [ 1]
+	.long SoftKeyCol3_SoundEditAmpEnvelope2                              ; FCF2FB  [ 2]
+	.long SoftKeyCol4_SoundEditAmpEnvelope2                              ; FCF2FF  [ 3]
+	.long SoftKeyCol5_SoundEditAmpEnvelope2                              ; FCF303  [ 4]
+	.long SoftKeyCol6_SoundEditAmpEnvelope2                              ; FCF307  [ 5]
+	.long SoftKeyCol7_SoundEditAmpEnvelope2                              ; FCF30B  [ 6]
+	.long SoftKeyCol8_SoundEditAmpEnvelope2                              ; FCF30F  [ 7]
+	.long LcdKeyRow1_SoundEditAmpEnvelope2                              ; FCF313  [ 8]
+	.long LcdKeyRow2_SoundEditAmpEnvelope2                              ; FCF317  [ 9]
+	.long LcdKeyRow3_SoundEditAmpEnvelope2                              ; FCF31B  [10]
+	.long LcdKeyRow4_SoundEditAmpEnvelope2                              ; FCF31F  [11]
+	.long LcdKeyRow5_SoundEditAmpEnvelope2                              ; FCF323  [12]
 	.long PanelOp_Nop                             ; FCF327  [13]
 	.long PanelOp_Nop                             ; FCF32B  [14]
-	.long ExitKey_ScreenCode8E                              ; FCF32F  [15]
-	.long PageKey_ScreenCode8E                              ; FCF333  [16]
+	.long ExitKey_SoundEditAmpEnvelope2                              ; FCF32F  [15]
+	.long PageKey_SoundEditAmpEnvelope2                              ; FCF333  [16]
 	.long 0x00000000                              ; FCF337  [17] zero
 
 ; PanelOpTable_FCF33B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code8F at 0xFD28DF.
+; Read by: ScreenButton_SoundEditAmpLfo at 0xFD28DF.
 PanelOpTable_FCF33B:
 	.long PanelOp_Nop                             ; FCF33B  [ 0]
-	.long SoftKeyCol2_ScreenCode8F                              ; FCF33F  [ 1]
-	.long SoftKeyCol3_ScreenCode8F                              ; FCF343  [ 2]
-	.long SoftKeyCol4_ScreenCode8F                              ; FCF347  [ 3]
-	.long SoftKeyCol5_ScreenCode8F                              ; FCF34B  [ 4]
-	.long SoftKeyCol6_ScreenCode8F                              ; FCF34F  [ 5]
-	.long SoftKeyCol7_ScreenCode8F                              ; FCF353  [ 6]
-	.long SoftKeyCol8_ScreenCode8F                              ; FCF357  [ 7]
-	.long LcdKeyRow1_ScreenCode8F                              ; FCF35B  [ 8]
-	.long LcdKeyRow2_ScreenCode8F                              ; FCF35F  [ 9]
-	.long LcdKeyRow3_ScreenCode8F                              ; FCF363  [10]
-	.long LcdKeyRow4_ScreenCode8F                              ; FCF367  [11]
-	.long LcdKeyRow5_ScreenCode8F                              ; FCF36B  [12]
+	.long SoftKeyCol2_SoundEditAmpLfo                              ; FCF33F  [ 1]
+	.long SoftKeyCol3_SoundEditAmpLfo                              ; FCF343  [ 2]
+	.long SoftKeyCol4_SoundEditAmpLfo                              ; FCF347  [ 3]
+	.long SoftKeyCol5_SoundEditAmpLfo                              ; FCF34B  [ 4]
+	.long SoftKeyCol6_SoundEditAmpLfo                              ; FCF34F  [ 5]
+	.long SoftKeyCol7_SoundEditAmpLfo                              ; FCF353  [ 6]
+	.long SoftKeyCol8_SoundEditAmpLfo                              ; FCF357  [ 7]
+	.long LcdKeyRow1_SoundEditAmpLfo                              ; FCF35B  [ 8]
+	.long LcdKeyRow2_SoundEditAmpLfo                              ; FCF35F  [ 9]
+	.long LcdKeyRow3_SoundEditAmpLfo                              ; FCF363  [10]
+	.long LcdKeyRow4_SoundEditAmpLfo                              ; FCF367  [11]
+	.long LcdKeyRow5_SoundEditAmpLfo                              ; FCF36B  [12]
 	.long PanelOp_Nop                             ; FCF36F  [13]
 	.long PanelOp_Nop                             ; FCF373  [14]
-	.long ExitKey_ScreenCode8F                              ; FCF377  [15]
+	.long ExitKey_SoundEditAmpLfo                              ; FCF377  [15]
 	.long PanelOp_Nop                             ; FCF37B  [16]
 	.long 0x00000000                              ; FCF37F  [17] zero
 
 ; PanelOpTable_FCF383 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code87 (prom_b) at 0xF0A02D.
+; Read by: ScreenButton_SoundEditPitchTune (prom_b) at 0xF0A02D.
 PanelOpTable_FCF383:
 	.long PanelOp_Nop                             ; FCF383  [ 0]
-	.long SoftKeyCol2_ScreenCode87                              ; FCF387  [ 1] prom_b SoftKeyCol2_ScreenCode87
-	.long SoftKeyCol3_ScreenCode87                              ; FCF38B  [ 2] prom_b SoftKeyCol3_ScreenCode87
-	.long SoftKeyCol4_ScreenCode87                              ; FCF38F  [ 3] prom_b SoftKeyCol4_ScreenCode87
+	.long SoftKeyCol2_SoundEditPitchTune                              ; FCF387  [ 1] prom_b SoftKeyCol2_SoundEditPitchTune
+	.long SoftKeyCol3_SoundEditPitchTune                              ; FCF38B  [ 2] prom_b SoftKeyCol3_SoundEditPitchTune
+	.long SoftKeyCol4_SoundEditPitchTune                              ; FCF38F  [ 3] prom_b SoftKeyCol4_SoundEditPitchTune
 	.long PanelOp_Nop                             ; FCF393  [ 4]
-	.long SoftKeyCol6_ScreenCode87                              ; FCF397  [ 5] prom_b SoftKeyCol6_ScreenCode87
+	.long SoftKeyCol6_SoundEditPitchTune                              ; FCF397  [ 5] prom_b SoftKeyCol6_SoundEditPitchTune
 	.long PanelOp_Nop                             ; FCF39B  [ 6]
 	.long PanelOp_Nop                             ; FCF39F  [ 7]
-	.long LcdKeyRow1_ScreenCode87                              ; FCF3A3  [ 8] prom_b LcdKeyRow1_ScreenCode87
-	.long LcdKeyRow2_ScreenCode87                              ; FCF3A7  [ 9] prom_b LcdKeyRow2_ScreenCode87
-	.long LcdKeyRow3_ScreenCode87                              ; FCF3AB  [10] prom_b LcdKeyRow3_ScreenCode87
-	.long LcdKeyRow4_ScreenCode87                              ; FCF3AF  [11] prom_b LcdKeyRow4_ScreenCode87
-	.long LcdKeyRow5_ScreenCode87                              ; FCF3B3  [12] prom_b LcdKeyRow5_ScreenCode87
+	.long LcdKeyRow1_SoundEditPitchTune                              ; FCF3A3  [ 8] prom_b LcdKeyRow1_SoundEditPitchTune
+	.long LcdKeyRow2_SoundEditPitchTune                              ; FCF3A7  [ 9] prom_b LcdKeyRow2_SoundEditPitchTune
+	.long LcdKeyRow3_SoundEditPitchTune                              ; FCF3AB  [10] prom_b LcdKeyRow3_SoundEditPitchTune
+	.long LcdKeyRow4_SoundEditPitchTune                              ; FCF3AF  [11] prom_b LcdKeyRow4_SoundEditPitchTune
+	.long LcdKeyRow5_SoundEditPitchTune                              ; FCF3B3  [12] prom_b LcdKeyRow5_SoundEditPitchTune
 	.long PanelOp_Nop                             ; FCF3B7  [13]
 	.long PanelOp_Nop                             ; FCF3BB  [14]
-	.long ExitKey_ScreenCode87                              ; FCF3BF  [15] prom_b ExitKey_ScreenCode87
+	.long ExitKey_SoundEditPitchTune                              ; FCF3BF  [15] prom_b ExitKey_SoundEditPitchTune
 	.long PanelOp_Nop                             ; FCF3C3  [16]
 	.long 0x00000000                              ; FCF3C7  [17] zero
 
 ; PanelOpTable_FCF3CB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code88 (prom_b) at 0xF0A085.
+; Read by: ScreenButton_SoundEditPitchEnvelope1 (prom_b) at 0xF0A085.
 PanelOpTable_FCF3CB:
-	.long SoftKeyCol1_ScreenCode88                              ; FCF3CB  [ 0] prom_b SoftKeyCol1_ScreenCode88
-	.long SoftKeyCol2_ScreenCode88                              ; FCF3CF  [ 1] prom_b SoftKeyCol2_ScreenCode88
-	.long SoftKeyCol3_ScreenCode88                              ; FCF3D3  [ 2] prom_b SoftKeyCol3_ScreenCode88
-	.long SoftKeyCol4_ScreenCode88                              ; FCF3D7  [ 3] prom_b SoftKeyCol4_ScreenCode88
-	.long SoftKeyCol5_ScreenCode88                              ; FCF3DB  [ 4] prom_b SoftKeyCol5_ScreenCode88
-	.long SoftKeyCol6_ScreenCode88                              ; FCF3DF  [ 5] prom_b SoftKeyCol6_ScreenCode88
-	.long SoftKeyCol7_ScreenCode88                              ; FCF3E3  [ 6] prom_b SoftKeyCol7_ScreenCode88
+	.long SoftKeyCol1_SoundEditPitchEnvelope1                              ; FCF3CB  [ 0] prom_b SoftKeyCol1_SoundEditPitchEnvelope1
+	.long SoftKeyCol2_SoundEditPitchEnvelope1                              ; FCF3CF  [ 1] prom_b SoftKeyCol2_SoundEditPitchEnvelope1
+	.long SoftKeyCol3_SoundEditPitchEnvelope1                              ; FCF3D3  [ 2] prom_b SoftKeyCol3_SoundEditPitchEnvelope1
+	.long SoftKeyCol4_SoundEditPitchEnvelope1                              ; FCF3D7  [ 3] prom_b SoftKeyCol4_SoundEditPitchEnvelope1
+	.long SoftKeyCol5_SoundEditPitchEnvelope1                              ; FCF3DB  [ 4] prom_b SoftKeyCol5_SoundEditPitchEnvelope1
+	.long SoftKeyCol6_SoundEditPitchEnvelope1                              ; FCF3DF  [ 5] prom_b SoftKeyCol6_SoundEditPitchEnvelope1
+	.long SoftKeyCol7_SoundEditPitchEnvelope1                              ; FCF3E3  [ 6] prom_b SoftKeyCol7_SoundEditPitchEnvelope1
 	.long PanelOp_Nop                             ; FCF3E7  [ 7]
-	.long LcdKeyRow1_ScreenCode88                              ; FCF3EB  [ 8] prom_b LcdKeyRow1_ScreenCode88
-	.long LcdKeyRow2_ScreenCode88                              ; FCF3EF  [ 9] prom_b LcdKeyRow2_ScreenCode88
-	.long LcdKeyRow3_ScreenCode88                              ; FCF3F3  [10] prom_b LcdKeyRow3_ScreenCode88
-	.long LcdKeyRow4_ScreenCode88                              ; FCF3F7  [11] prom_b LcdKeyRow4_ScreenCode88
-	.long LcdKeyRow5_ScreenCode88                              ; FCF3FB  [12] prom_b LcdKeyRow5_ScreenCode88
+	.long LcdKeyRow1_SoundEditPitchEnvelope1                              ; FCF3EB  [ 8] prom_b LcdKeyRow1_SoundEditPitchEnvelope1
+	.long LcdKeyRow2_SoundEditPitchEnvelope1                              ; FCF3EF  [ 9] prom_b LcdKeyRow2_SoundEditPitchEnvelope1
+	.long LcdKeyRow3_SoundEditPitchEnvelope1                              ; FCF3F3  [10] prom_b LcdKeyRow3_SoundEditPitchEnvelope1
+	.long LcdKeyRow4_SoundEditPitchEnvelope1                              ; FCF3F7  [11] prom_b LcdKeyRow4_SoundEditPitchEnvelope1
+	.long LcdKeyRow5_SoundEditPitchEnvelope1                              ; FCF3FB  [12] prom_b LcdKeyRow5_SoundEditPitchEnvelope1
 	.long PanelOp_Nop                             ; FCF3FF  [13]
 	.long PanelOp_Nop                             ; FCF403  [14]
-	.long ExitKey_ScreenCode88                              ; FCF407  [15] prom_b ExitKey_ScreenCode88
-	.long PageKey_ScreenCode88                              ; FCF40B  [16] prom_b PageKey_ScreenCode88
+	.long ExitKey_SoundEditPitchEnvelope1                              ; FCF407  [15] prom_b ExitKey_SoundEditPitchEnvelope1
+	.long PageKey_SoundEditPitchEnvelope1                              ; FCF40B  [16] prom_b PageKey_SoundEditPitchEnvelope1
 	.long 0x00000000                              ; FCF40F  [17] zero
 
 ; PanelOpTable_FCF413 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code89 (prom_b) at 0xF0A0E5.
+; Read by: ScreenButton_SoundEditPitchEnvelope2 (prom_b) at 0xF0A0E5.
 PanelOpTable_FCF413:
 	.long PanelOp_Nop                             ; FCF413  [ 0]
-	.long SoftKeyCol2_ScreenCode89                              ; FCF417  [ 1] prom_b SoftKeyCol2_ScreenCode89
-	.long SoftKeyCol3_ScreenCode89                              ; FCF41B  [ 2] prom_b SoftKeyCol3_ScreenCode89
-	.long SoftKeyCol4_ScreenCode89                              ; FCF41F  [ 3] prom_b SoftKeyCol4_ScreenCode89
-	.long SoftKeyCol5_ScreenCode89                              ; FCF423  [ 4] prom_b SoftKeyCol5_ScreenCode89
+	.long SoftKeyCol2_SoundEditPitchEnvelope2                              ; FCF417  [ 1] prom_b SoftKeyCol2_SoundEditPitchEnvelope2
+	.long SoftKeyCol3_SoundEditPitchEnvelope2                              ; FCF41B  [ 2] prom_b SoftKeyCol3_SoundEditPitchEnvelope2
+	.long SoftKeyCol4_SoundEditPitchEnvelope2                              ; FCF41F  [ 3] prom_b SoftKeyCol4_SoundEditPitchEnvelope2
+	.long SoftKeyCol5_SoundEditPitchEnvelope2                              ; FCF423  [ 4] prom_b SoftKeyCol5_SoundEditPitchEnvelope2
 	.long PanelOp_Nop                             ; FCF427  [ 5]
-	.long SoftKeyCol7_ScreenCode89                              ; FCF42B  [ 6] prom_b SoftKeyCol7_ScreenCode89
-	.long SoftKeyCol8_ScreenCode89                              ; FCF42F  [ 7] prom_b SoftKeyCol8_ScreenCode89
-	.long LcdKeyRow1_ScreenCode89                              ; FCF433  [ 8] prom_b LcdKeyRow1_ScreenCode89
-	.long LcdKeyRow2_ScreenCode89                              ; FCF437  [ 9] prom_b LcdKeyRow2_ScreenCode89
-	.long LcdKeyRow3_ScreenCode89                              ; FCF43B  [10] prom_b LcdKeyRow3_ScreenCode89
-	.long LcdKeyRow4_ScreenCode89                              ; FCF43F  [11] prom_b LcdKeyRow4_ScreenCode89
-	.long LcdKeyRow5_ScreenCode89                              ; FCF443  [12] prom_b LcdKeyRow5_ScreenCode89
+	.long SoftKeyCol7_SoundEditPitchEnvelope2                              ; FCF42B  [ 6] prom_b SoftKeyCol7_SoundEditPitchEnvelope2
+	.long SoftKeyCol8_SoundEditPitchEnvelope2                              ; FCF42F  [ 7] prom_b SoftKeyCol8_SoundEditPitchEnvelope2
+	.long LcdKeyRow1_SoundEditPitchEnvelope2                              ; FCF433  [ 8] prom_b LcdKeyRow1_SoundEditPitchEnvelope2
+	.long LcdKeyRow2_SoundEditPitchEnvelope2                              ; FCF437  [ 9] prom_b LcdKeyRow2_SoundEditPitchEnvelope2
+	.long LcdKeyRow3_SoundEditPitchEnvelope2                              ; FCF43B  [10] prom_b LcdKeyRow3_SoundEditPitchEnvelope2
+	.long LcdKeyRow4_SoundEditPitchEnvelope2                              ; FCF43F  [11] prom_b LcdKeyRow4_SoundEditPitchEnvelope2
+	.long LcdKeyRow5_SoundEditPitchEnvelope2                              ; FCF443  [12] prom_b LcdKeyRow5_SoundEditPitchEnvelope2
 	.long PanelOp_Nop                             ; FCF447  [13]
 	.long PanelOp_Nop                             ; FCF44B  [14]
-	.long ExitKey_ScreenCode89                              ; FCF44F  [15] prom_b ExitKey_ScreenCode89
-	.long PageKey_ScreenCode89                              ; FCF453  [16] prom_b PageKey_ScreenCode89
+	.long ExitKey_SoundEditPitchEnvelope2                              ; FCF44F  [15] prom_b ExitKey_SoundEditPitchEnvelope2
+	.long PageKey_SoundEditPitchEnvelope2                              ; FCF453  [16] prom_b PageKey_SoundEditPitchEnvelope2
 	.long 0x00000000                              ; FCF457  [17] zero
 
 ; PanelOpTable_FCF45B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code8A (prom_b) at 0xF0A13E.
+; Read by: ScreenButton_SoundEditPitchLfo (prom_b) at 0xF0A13E.
 PanelOpTable_FCF45B:
 	.long PanelOp_Nop                             ; FCF45B  [ 0]
-	.long SoftKeyCol2_ScreenCode8A                              ; FCF45F  [ 1] prom_b SoftKeyCol2_ScreenCode8A
-	.long SoftKeyCol3_ScreenCode8A                              ; FCF463  [ 2] prom_b SoftKeyCol3_ScreenCode8A
-	.long SoftKeyCol4_ScreenCode8A                              ; FCF467  [ 3] prom_b SoftKeyCol4_ScreenCode8A
-	.long SoftKeyCol5_ScreenCode8A                              ; FCF46B  [ 4] prom_b SoftKeyCol5_ScreenCode8A
-	.long SoftKeyCol6_ScreenCode8A                              ; FCF46F  [ 5] prom_b SoftKeyCol6_ScreenCode8A
-	.long SoftKeyCol7_ScreenCode8A                              ; FCF473  [ 6] prom_b SoftKeyCol7_ScreenCode8A
-	.long SoftKeyCol8_ScreenCode8A                              ; FCF477  [ 7] prom_b SoftKeyCol8_ScreenCode8A
-	.long LcdKeyRow1_ScreenCode8A                              ; FCF47B  [ 8] prom_b LcdKeyRow1_ScreenCode8A
-	.long LcdKeyRow2_ScreenCode8A                              ; FCF47F  [ 9] prom_b LcdKeyRow2_ScreenCode8A
-	.long LcdKeyRow3_ScreenCode8A                              ; FCF483  [10] prom_b LcdKeyRow3_ScreenCode8A
-	.long LcdKeyRow4_ScreenCode8A                              ; FCF487  [11] prom_b LcdKeyRow4_ScreenCode8A
-	.long LcdKeyRow5_ScreenCode8A                              ; FCF48B  [12] prom_b LcdKeyRow5_ScreenCode8A
+	.long SoftKeyCol2_SoundEditPitchLfo                              ; FCF45F  [ 1] prom_b SoftKeyCol2_SoundEditPitchLfo
+	.long SoftKeyCol3_SoundEditPitchLfo                              ; FCF463  [ 2] prom_b SoftKeyCol3_SoundEditPitchLfo
+	.long SoftKeyCol4_SoundEditPitchLfo                              ; FCF467  [ 3] prom_b SoftKeyCol4_SoundEditPitchLfo
+	.long SoftKeyCol5_SoundEditPitchLfo                              ; FCF46B  [ 4] prom_b SoftKeyCol5_SoundEditPitchLfo
+	.long SoftKeyCol6_SoundEditPitchLfo                              ; FCF46F  [ 5] prom_b SoftKeyCol6_SoundEditPitchLfo
+	.long SoftKeyCol7_SoundEditPitchLfo                              ; FCF473  [ 6] prom_b SoftKeyCol7_SoundEditPitchLfo
+	.long SoftKeyCol8_SoundEditPitchLfo                              ; FCF477  [ 7] prom_b SoftKeyCol8_SoundEditPitchLfo
+	.long LcdKeyRow1_SoundEditPitchLfo                              ; FCF47B  [ 8] prom_b LcdKeyRow1_SoundEditPitchLfo
+	.long LcdKeyRow2_SoundEditPitchLfo                              ; FCF47F  [ 9] prom_b LcdKeyRow2_SoundEditPitchLfo
+	.long LcdKeyRow3_SoundEditPitchLfo                              ; FCF483  [10] prom_b LcdKeyRow3_SoundEditPitchLfo
+	.long LcdKeyRow4_SoundEditPitchLfo                              ; FCF487  [11] prom_b LcdKeyRow4_SoundEditPitchLfo
+	.long LcdKeyRow5_SoundEditPitchLfo                              ; FCF48B  [12] prom_b LcdKeyRow5_SoundEditPitchLfo
 	.long PanelOp_Nop                             ; FCF48F  [13]
 	.long PanelOp_Nop                             ; FCF493  [14]
-	.long ExitKey_ScreenCode8A                              ; FCF497  [15] prom_b ExitKey_ScreenCode8A
+	.long ExitKey_SoundEditPitchLfo                              ; FCF497  [15] prom_b ExitKey_SoundEditPitchLfo
 	.long PanelOp_Nop                             ; FCF49B  [16]
 	.long 0x00000000                              ; FCF49F  [17] zero
 
 ; PanelOpTable_FCF4A3 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code90 at 0xFDE3F2.
+; Read by: ScreenButton_SoundEditFilterLpf12 at 0xFDE3F2.
 PanelOpTable_FCF4A3:
-	.long SoftKeyCol1_ScreenCode90                              ; FCF4A3  [ 0]
-	.long SoftKeyCol2_ScreenCode90                              ; FCF4A7  [ 1]
-	.long SoftKeyCol3_ScreenCode90                              ; FCF4AB  [ 2]
-	.long SoftKeyCol4_ScreenCode90                              ; FCF4AF  [ 3]
+	.long SoftKeyCol1_SoundEditFilterLpf12                              ; FCF4A3  [ 0]
+	.long SoftKeyCol2_SoundEditFilterLpf12                              ; FCF4A7  [ 1]
+	.long SoftKeyCol3_SoundEditFilterLpf12                              ; FCF4AB  [ 2]
+	.long SoftKeyCol4_SoundEditFilterLpf12                              ; FCF4AF  [ 3]
 	.long PanelOp_Nop                             ; FCF4B3  [ 4]
-	.long SoftKeyCol6_ScreenCode90                              ; FCF4B7  [ 5]
-	.long SoftKeyCol7_ScreenCode90                              ; FCF4BB  [ 6]
-	.long SoftKeyCol8_ScreenCode90                              ; FCF4BF  [ 7]
-	.long LcdKeyRow1_ScreenCode90                              ; FCF4C3  [ 8]
-	.long LcdKeyRow2_ScreenCode90                              ; FCF4C7  [ 9]
-	.long LcdKeyRow3_ScreenCode90                              ; FCF4CB  [10]
-	.long LcdKeyRow4_ScreenCode90                              ; FCF4CF  [11]
-	.long LcdKeyRow5_ScreenCode90                              ; FCF4D3  [12]
+	.long SoftKeyCol6_SoundEditFilterLpf12                              ; FCF4B7  [ 5]
+	.long SoftKeyCol7_SoundEditFilterLpf12                              ; FCF4BB  [ 6]
+	.long SoftKeyCol8_SoundEditFilterLpf12                              ; FCF4BF  [ 7]
+	.long LcdKeyRow1_SoundEditFilterLpf12                              ; FCF4C3  [ 8]
+	.long LcdKeyRow2_SoundEditFilterLpf12                              ; FCF4C7  [ 9]
+	.long LcdKeyRow3_SoundEditFilterLpf12                              ; FCF4CB  [10]
+	.long LcdKeyRow4_SoundEditFilterLpf12                              ; FCF4CF  [11]
+	.long LcdKeyRow5_SoundEditFilterLpf12                              ; FCF4D3  [12]
 	.long PanelOp_Nop                             ; FCF4D7  [13]
 	.long PanelOp_Nop                             ; FCF4DB  [14]
-	.long ExitKey_ScreenCode90                              ; FCF4DF  [15]
-	.long PageKey_ScreenCode90                              ; FCF4E3  [16]
+	.long ExitKey_SoundEditFilterLpf12                              ; FCF4DF  [15]
+	.long PageKey_SoundEditFilterLpf12                              ; FCF4E3  [16]
 	.long 0x00000000                              ; FCF4E7  [17] zero
 
 ; PanelOpTable_FCF4EB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code91 at 0xFDE452.
+; Read by: ScreenButton_SoundEditFilterHpf12 at 0xFDE452.
 PanelOpTable_FCF4EB:
-	.long SoftKeyCol1_ScreenCode91                              ; FCF4EB  [ 0]
-	.long SoftKeyCol2_ScreenCode91                              ; FCF4EF  [ 1]
-	.long SoftKeyCol3_ScreenCode91                              ; FCF4F3  [ 2]
-	.long SoftKeyCol4_ScreenCode91                              ; FCF4F7  [ 3]
+	.long SoftKeyCol1_SoundEditFilterHpf12                              ; FCF4EB  [ 0]
+	.long SoftKeyCol2_SoundEditFilterHpf12                              ; FCF4EF  [ 1]
+	.long SoftKeyCol3_SoundEditFilterHpf12                              ; FCF4F3  [ 2]
+	.long SoftKeyCol4_SoundEditFilterHpf12                              ; FCF4F7  [ 3]
 	.long PanelOp_Nop                             ; FCF4FB  [ 4]
-	.long SoftKeyCol6_ScreenCode91                              ; FCF4FF  [ 5]
-	.long SoftKeyCol7_ScreenCode91                              ; FCF503  [ 6]
-	.long SoftKeyCol8_ScreenCode91                              ; FCF507  [ 7]
-	.long LcdKeyRow1_ScreenCode91                              ; FCF50B  [ 8]
-	.long LcdKeyRow2_ScreenCode91                              ; FCF50F  [ 9]
-	.long LcdKeyRow3_ScreenCode91                              ; FCF513  [10]
-	.long LcdKeyRow4_ScreenCode91                              ; FCF517  [11]
-	.long LcdKeyRow5_ScreenCode91                              ; FCF51B  [12]
+	.long SoftKeyCol6_SoundEditFilterHpf12                              ; FCF4FF  [ 5]
+	.long SoftKeyCol7_SoundEditFilterHpf12                              ; FCF503  [ 6]
+	.long SoftKeyCol8_SoundEditFilterHpf12                              ; FCF507  [ 7]
+	.long LcdKeyRow1_SoundEditFilterHpf12                              ; FCF50B  [ 8]
+	.long LcdKeyRow2_SoundEditFilterHpf12                              ; FCF50F  [ 9]
+	.long LcdKeyRow3_SoundEditFilterHpf12                              ; FCF513  [10]
+	.long LcdKeyRow4_SoundEditFilterHpf12                              ; FCF517  [11]
+	.long LcdKeyRow5_SoundEditFilterHpf12                              ; FCF51B  [12]
 	.long PanelOp_Nop                             ; FCF51F  [13]
 	.long PanelOp_Nop                             ; FCF523  [14]
-	.long ExitKey_ScreenCode91                              ; FCF527  [15]
-	.long PageKey_ScreenCode91                              ; FCF52B  [16]
+	.long ExitKey_SoundEditFilterHpf12                              ; FCF527  [15]
+	.long PageKey_SoundEditFilterHpf12                              ; FCF52B  [16]
 	.long 0x00000000                              ; FCF52F  [17] zero
 
 ; PanelOpTable_FCF533 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code92 at 0xFDE4B2.
+; Read by: ScreenButton_SoundEditFilterLpf24 at 0xFDE4B2.
 PanelOpTable_FCF533:
 	.long PanelOp_Nop                             ; FCF533  [ 0]
 	.long PanelOp_Nop                             ; FCF537  [ 1]
-	.long SoftKeyCol3_ScreenCode92                              ; FCF53B  [ 2]
-	.long SoftKeyCol4_ScreenCode92                              ; FCF53F  [ 3]
-	.long SoftKeyCol5_ScreenCode92                              ; FCF543  [ 4]
-	.long SoftKeyCol6_ScreenCode92                              ; FCF547  [ 5]
+	.long SoftKeyCol3_SoundEditFilterLpf24                              ; FCF53B  [ 2]
+	.long SoftKeyCol4_SoundEditFilterLpf24                              ; FCF53F  [ 3]
+	.long SoftKeyCol5_SoundEditFilterLpf24                              ; FCF543  [ 4]
+	.long SoftKeyCol6_SoundEditFilterLpf24                              ; FCF547  [ 5]
 	.long PanelOp_Nop                             ; FCF54B  [ 6]
 	.long PanelOp_Nop                             ; FCF54F  [ 7]
-	.long LcdKeyRow1_ScreenCode92                              ; FCF553  [ 8]
-	.long LcdKeyRow2_ScreenCode92                              ; FCF557  [ 9]
-	.long LcdKeyRow3_ScreenCode92                              ; FCF55B  [10]
-	.long LcdKeyRow4_ScreenCode92                              ; FCF55F  [11]
-	.long LcdKeyRow5_ScreenCode92                              ; FCF563  [12]
+	.long LcdKeyRow1_SoundEditFilterLpf24                              ; FCF553  [ 8]
+	.long LcdKeyRow2_SoundEditFilterLpf24                              ; FCF557  [ 9]
+	.long LcdKeyRow3_SoundEditFilterLpf24                              ; FCF55B  [10]
+	.long LcdKeyRow4_SoundEditFilterLpf24                              ; FCF55F  [11]
+	.long LcdKeyRow5_SoundEditFilterLpf24                              ; FCF563  [12]
 	.long PanelOp_Nop                             ; FCF567  [13]
 	.long PanelOp_Nop                             ; FCF56B  [14]
-	.long ExitKey_ScreenCode92                              ; FCF56F  [15]
-	.long PageKey_ScreenCode92                              ; FCF573  [16]
+	.long ExitKey_SoundEditFilterLpf24                              ; FCF56F  [15]
+	.long PageKey_SoundEditFilterLpf24                              ; FCF573  [16]
 	.long 0x00000000                              ; FCF577  [17] zero
 
 ; PanelOpTable_FCF57B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code93 at 0xFDE512.
+; Read by: ScreenButton_SoundEditFilterHpf24 at 0xFDE512.
 PanelOpTable_FCF57B:
 	.long PanelOp_Nop                             ; FCF57B  [ 0]
 	.long PanelOp_Nop                             ; FCF57F  [ 1]
-	.long SoftKeyCol3_ScreenCode93                              ; FCF583  [ 2]
-	.long SoftKeyCol4_ScreenCode93                              ; FCF587  [ 3]
-	.long SoftKeyCol5_ScreenCode93                              ; FCF58B  [ 4]
-	.long SoftKeyCol6_ScreenCode93                              ; FCF58F  [ 5]
+	.long SoftKeyCol3_SoundEditFilterHpf24                              ; FCF583  [ 2]
+	.long SoftKeyCol4_SoundEditFilterHpf24                              ; FCF587  [ 3]
+	.long SoftKeyCol5_SoundEditFilterHpf24                              ; FCF58B  [ 4]
+	.long SoftKeyCol6_SoundEditFilterHpf24                              ; FCF58F  [ 5]
 	.long PanelOp_Nop                             ; FCF593  [ 6]
 	.long PanelOp_Nop                             ; FCF597  [ 7]
-	.long LcdKeyRow1_ScreenCode93                              ; FCF59B  [ 8]
-	.long LcdKeyRow2_ScreenCode93                              ; FCF59F  [ 9]
-	.long LcdKeyRow3_ScreenCode93                              ; FCF5A3  [10]
-	.long LcdKeyRow4_ScreenCode93                              ; FCF5A7  [11]
-	.long LcdKeyRow5_ScreenCode93                              ; FCF5AB  [12]
+	.long LcdKeyRow1_SoundEditFilterHpf24                              ; FCF59B  [ 8]
+	.long LcdKeyRow2_SoundEditFilterHpf24                              ; FCF59F  [ 9]
+	.long LcdKeyRow3_SoundEditFilterHpf24                              ; FCF5A3  [10]
+	.long LcdKeyRow4_SoundEditFilterHpf24                              ; FCF5A7  [11]
+	.long LcdKeyRow5_SoundEditFilterHpf24                              ; FCF5AB  [12]
 	.long PanelOp_Nop                             ; FCF5AF  [13]
 	.long PanelOp_Nop                             ; FCF5B3  [14]
-	.long ExitKey_ScreenCode93                              ; FCF5B7  [15]
-	.long PageKey_ScreenCode93                              ; FCF5BB  [16]
+	.long ExitKey_SoundEditFilterHpf24                              ; FCF5B7  [15]
+	.long PageKey_SoundEditFilterHpf24                              ; FCF5BB  [16]
 	.long 0x00000000                              ; FCF5BF  [17] zero
 
 ; PanelOpTable_FCF5C3 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code94 at 0xFDE572.
+; Read by: ScreenButton_SoundEditFilterBpf at 0xFDE572.
 PanelOpTable_FCF5C3:
 	.long PanelOp_Nop                             ; FCF5C3  [ 0]
-	.long SoftKeyCol2_ScreenCode94                              ; FCF5C7  [ 1]
-	.long SoftKeyCol3_ScreenCode94                              ; FCF5CB  [ 2]
-	.long SoftKeyCol4_ScreenCode94                              ; FCF5CF  [ 3]
-	.long SoftKeyCol5_ScreenCode94                              ; FCF5D3  [ 4]
-	.long SoftKeyCol6_ScreenCode94                              ; FCF5D7  [ 5]
-	.long SoftKeyCol7_ScreenCode94                              ; FCF5DB  [ 6]
+	.long SoftKeyCol2_SoundEditFilterBpf                              ; FCF5C7  [ 1]
+	.long SoftKeyCol3_SoundEditFilterBpf                              ; FCF5CB  [ 2]
+	.long SoftKeyCol4_SoundEditFilterBpf                              ; FCF5CF  [ 3]
+	.long SoftKeyCol5_SoundEditFilterBpf                              ; FCF5D3  [ 4]
+	.long SoftKeyCol6_SoundEditFilterBpf                              ; FCF5D7  [ 5]
+	.long SoftKeyCol7_SoundEditFilterBpf                              ; FCF5DB  [ 6]
 	.long PanelOp_Nop                             ; FCF5DF  [ 7]
-	.long LcdKeyRow1_ScreenCode94                              ; FCF5E3  [ 8]
-	.long LcdKeyRow2_ScreenCode94                              ; FCF5E7  [ 9]
-	.long LcdKeyRow3_ScreenCode94                              ; FCF5EB  [10]
-	.long LcdKeyRow4_ScreenCode94                              ; FCF5EF  [11]
-	.long LcdKeyRow5_ScreenCode94                              ; FCF5F3  [12]
+	.long LcdKeyRow1_SoundEditFilterBpf                              ; FCF5E3  [ 8]
+	.long LcdKeyRow2_SoundEditFilterBpf                              ; FCF5E7  [ 9]
+	.long LcdKeyRow3_SoundEditFilterBpf                              ; FCF5EB  [10]
+	.long LcdKeyRow4_SoundEditFilterBpf                              ; FCF5EF  [11]
+	.long LcdKeyRow5_SoundEditFilterBpf                              ; FCF5F3  [12]
 	.long PanelOp_Nop                             ; FCF5F7  [13]
 	.long PanelOp_Nop                             ; FCF5FB  [14]
-	.long ExitKey_ScreenCode94                              ; FCF5FF  [15]
-	.long PageKey_ScreenCode94                              ; FCF603  [16]
+	.long ExitKey_SoundEditFilterBpf                              ; FCF5FF  [15]
+	.long PageKey_SoundEditFilterBpf                              ; FCF603  [16]
 	.long 0x00000000                              ; FCF607  [17] zero
 
 ; PanelOpTable_FCF60B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code95 at 0xFDE5CB.
+; Read by: ScreenButton_SoundEditFilterThrough at 0xFDE5CB.
 PanelOpTable_FCF60B:
 	.long PanelOp_Nop                             ; FCF60B  [ 0]
 	.long PanelOp_Nop                             ; FCF60F  [ 1]
@@ -124813,157 +124813,157 @@ PanelOpTable_FCF60B:
 	.long PanelOp_Nop                             ; FCF61F  [ 5]
 	.long PanelOp_Nop                             ; FCF623  [ 6]
 	.long PanelOp_Nop                             ; FCF627  [ 7]
-	.long LcdKeyRow1_ScreenCode95                              ; FCF62B  [ 8]
-	.long LcdKeyRow2_ScreenCode95                              ; FCF62F  [ 9]
-	.long LcdKeyRow3_ScreenCode95                              ; FCF633  [10]
-	.long LcdKeyRow4_ScreenCode95                              ; FCF637  [11]
-	.long LcdKeyRow5_ScreenCode95                              ; FCF63B  [12]
+	.long LcdKeyRow1_SoundEditFilterThrough                              ; FCF62B  [ 8]
+	.long LcdKeyRow2_SoundEditFilterThrough                              ; FCF62F  [ 9]
+	.long LcdKeyRow3_SoundEditFilterThrough                              ; FCF633  [10]
+	.long LcdKeyRow4_SoundEditFilterThrough                              ; FCF637  [11]
+	.long LcdKeyRow5_SoundEditFilterThrough                              ; FCF63B  [12]
 	.long PanelOp_Nop                             ; FCF63F  [13]
 	.long PanelOp_Nop                             ; FCF643  [14]
-	.long ExitKey_ScreenCode95                              ; FCF647  [15]
-	.long PageKey_ScreenCode95                              ; FCF64B  [16]
+	.long ExitKey_SoundEditFilterThrough                              ; FCF647  [15]
+	.long PageKey_SoundEditFilterThrough                              ; FCF64B  [16]
 	.long 0x00000000                              ; FCF64F  [17] zero
 
 ; PanelOpTable_FCF653 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code96 at 0xFDE623.
+; Read by: ScreenButton_SoundEditFilterKeyFollow at 0xFDE623.
 PanelOpTable_FCF653:
 	.long PanelOp_Nop                             ; FCF653  [ 0]
 	.long PanelOp_Nop                             ; FCF657  [ 1]
-	.long SoftKeyCol3_ScreenCode96                              ; FCF65B  [ 2]
-	.long SoftKeyCol4_ScreenCode96                              ; FCF65F  [ 3]
-	.long SoftKeyCol5_ScreenCode96                              ; FCF663  [ 4]
-	.long SoftKeyCol6_ScreenCode96                              ; FCF667  [ 5]
+	.long SoftKeyCol3_SoundEditFilterKeyFollow                              ; FCF65B  [ 2]
+	.long SoftKeyCol4_SoundEditFilterKeyFollow                              ; FCF65F  [ 3]
+	.long SoftKeyCol5_SoundEditFilterKeyFollow                              ; FCF663  [ 4]
+	.long SoftKeyCol6_SoundEditFilterKeyFollow                              ; FCF667  [ 5]
 	.long PanelOp_Nop                             ; FCF66B  [ 6]
 	.long PanelOp_Nop                             ; FCF66F  [ 7]
-	.long LcdKeyRow1_ScreenCode96                              ; FCF673  [ 8]
-	.long LcdKeyRow2_ScreenCode96                              ; FCF677  [ 9]
-	.long LcdKeyRow3_ScreenCode96                              ; FCF67B  [10]
-	.long LcdKeyRow4_ScreenCode96                              ; FCF67F  [11]
-	.long LcdKeyRow5_ScreenCode96                              ; FCF683  [12]
+	.long LcdKeyRow1_SoundEditFilterKeyFollow                              ; FCF673  [ 8]
+	.long LcdKeyRow2_SoundEditFilterKeyFollow                              ; FCF677  [ 9]
+	.long LcdKeyRow3_SoundEditFilterKeyFollow                              ; FCF67B  [10]
+	.long LcdKeyRow4_SoundEditFilterKeyFollow                              ; FCF67F  [11]
+	.long LcdKeyRow5_SoundEditFilterKeyFollow                              ; FCF683  [12]
 	.long PanelOp_Nop                             ; FCF687  [13]
 	.long PanelOp_Nop                             ; FCF68B  [14]
-	.long ExitKey_ScreenCode96                              ; FCF68F  [15]
-	.long PageKey_ScreenCode96                              ; FCF693  [16]
+	.long ExitKey_SoundEditFilterKeyFollow                              ; FCF68F  [15]
+	.long PageKey_SoundEditFilterKeyFollow                              ; FCF693  [16]
 	.long 0x00000000                              ; FCF697  [17] zero
 
 ; PanelOpTable_FCF69B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code97 at 0xFDE683.
+; Read by: ScreenButton_SoundEditFilterEnvelope1 at 0xFDE683.
 PanelOpTable_FCF69B:
-	.long SoftKeyCol1_ScreenCode97                              ; FCF69B  [ 0]
-	.long SoftKeyCol2_ScreenCode97                              ; FCF69F  [ 1]
-	.long SoftKeyCol3_ScreenCode97                              ; FCF6A3  [ 2]
-	.long SoftKeyCol4_ScreenCode97                              ; FCF6A7  [ 3]
-	.long SoftKeyCol5_ScreenCode97                              ; FCF6AB  [ 4]
-	.long SoftKeyCol6_ScreenCode97                              ; FCF6AF  [ 5]
-	.long SoftKeyCol7_ScreenCode97                              ; FCF6B3  [ 6]
+	.long SoftKeyCol1_SoundEditFilterEnvelope1                              ; FCF69B  [ 0]
+	.long SoftKeyCol2_SoundEditFilterEnvelope1                              ; FCF69F  [ 1]
+	.long SoftKeyCol3_SoundEditFilterEnvelope1                              ; FCF6A3  [ 2]
+	.long SoftKeyCol4_SoundEditFilterEnvelope1                              ; FCF6A7  [ 3]
+	.long SoftKeyCol5_SoundEditFilterEnvelope1                              ; FCF6AB  [ 4]
+	.long SoftKeyCol6_SoundEditFilterEnvelope1                              ; FCF6AF  [ 5]
+	.long SoftKeyCol7_SoundEditFilterEnvelope1                              ; FCF6B3  [ 6]
 	.long PanelOp_Nop                             ; FCF6B7  [ 7]
-	.long LcdKeyRow1_ScreenCode97                              ; FCF6BB  [ 8]
-	.long LcdKeyRow2_ScreenCode97                              ; FCF6BF  [ 9]
-	.long LcdKeyRow3_ScreenCode97                              ; FCF6C3  [10]
-	.long LcdKeyRow4_ScreenCode97                              ; FCF6C7  [11]
-	.long LcdKeyRow5_ScreenCode97                              ; FCF6CB  [12]
+	.long LcdKeyRow1_SoundEditFilterEnvelope1                              ; FCF6BB  [ 8]
+	.long LcdKeyRow2_SoundEditFilterEnvelope1                              ; FCF6BF  [ 9]
+	.long LcdKeyRow3_SoundEditFilterEnvelope1                              ; FCF6C3  [10]
+	.long LcdKeyRow4_SoundEditFilterEnvelope1                              ; FCF6C7  [11]
+	.long LcdKeyRow5_SoundEditFilterEnvelope1                              ; FCF6CB  [12]
 	.long PanelOp_Nop                             ; FCF6CF  [13]
 	.long PanelOp_Nop                             ; FCF6D3  [14]
-	.long ExitKey_ScreenCode97                              ; FCF6D7  [15]
-	.long PageKey_ScreenCode97                              ; FCF6DB  [16]
+	.long ExitKey_SoundEditFilterEnvelope1                              ; FCF6D7  [15]
+	.long PageKey_SoundEditFilterEnvelope1                              ; FCF6DB  [16]
 	.long 0x00000000                              ; FCF6DF  [17] zero
 
 ; PanelOpTable_FCF6E3 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code98 at 0xFDE6E3.
+; Read by: ScreenButton_SoundEditFilterEnvelope2 at 0xFDE6E3.
 PanelOpTable_FCF6E3:
 	.long PanelOp_Nop                             ; FCF6E3  [ 0]
-	.long SoftKeyCol2_ScreenCode98                              ; FCF6E7  [ 1]
-	.long SoftKeyCol3_ScreenCode98                              ; FCF6EB  [ 2]
-	.long SoftKeyCol4_ScreenCode98                              ; FCF6EF  [ 3]
-	.long SoftKeyCol5_ScreenCode98                              ; FCF6F3  [ 4]
+	.long SoftKeyCol2_SoundEditFilterEnvelope2                              ; FCF6E7  [ 1]
+	.long SoftKeyCol3_SoundEditFilterEnvelope2                              ; FCF6EB  [ 2]
+	.long SoftKeyCol4_SoundEditFilterEnvelope2                              ; FCF6EF  [ 3]
+	.long SoftKeyCol5_SoundEditFilterEnvelope2                              ; FCF6F3  [ 4]
 	.long PanelOp_Nop                             ; FCF6F7  [ 5]
-	.long SoftKeyCol7_ScreenCode98                              ; FCF6FB  [ 6]
-	.long SoftKeyCol8_ScreenCode98                              ; FCF6FF  [ 7]
-	.long LcdKeyRow1_ScreenCode98                              ; FCF703  [ 8]
-	.long LcdKeyRow2_ScreenCode98                              ; FCF707  [ 9]
-	.long LcdKeyRow3_ScreenCode98                              ; FCF70B  [10]
-	.long LcdKeyRow4_ScreenCode98                              ; FCF70F  [11]
-	.long LcdKeyRow5_ScreenCode98                              ; FCF713  [12]
+	.long SoftKeyCol7_SoundEditFilterEnvelope2                              ; FCF6FB  [ 6]
+	.long SoftKeyCol8_SoundEditFilterEnvelope2                              ; FCF6FF  [ 7]
+	.long LcdKeyRow1_SoundEditFilterEnvelope2                              ; FCF703  [ 8]
+	.long LcdKeyRow2_SoundEditFilterEnvelope2                              ; FCF707  [ 9]
+	.long LcdKeyRow3_SoundEditFilterEnvelope2                              ; FCF70B  [10]
+	.long LcdKeyRow4_SoundEditFilterEnvelope2                              ; FCF70F  [11]
+	.long LcdKeyRow5_SoundEditFilterEnvelope2                              ; FCF713  [12]
 	.long PanelOp_Nop                             ; FCF717  [13]
 	.long PanelOp_Nop                             ; FCF71B  [14]
-	.long ExitKey_ScreenCode98                              ; FCF71F  [15]
-	.long PageKey_ScreenCode98                              ; FCF723  [16]
+	.long ExitKey_SoundEditFilterEnvelope2                              ; FCF71F  [15]
+	.long PageKey_SoundEditFilterEnvelope2                              ; FCF723  [16]
 	.long 0x00000000                              ; FCF727  [17] zero
 
 ; PanelOpTable_FCF72B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code99 at 0xFDE73C.
+; Read by: ScreenButton_SoundEditFilterLfo at 0xFDE73C.
 PanelOpTable_FCF72B:
 	.long PanelOp_Nop                             ; FCF72B  [ 0]
-	.long SoftKeyCol2_ScreenCode99                              ; FCF72F  [ 1]
-	.long SoftKeyCol3_ScreenCode99                              ; FCF733  [ 2]
-	.long SoftKeyCol4_ScreenCode99                              ; FCF737  [ 3]
-	.long SoftKeyCol5_ScreenCode99                              ; FCF73B  [ 4]
-	.long SoftKeyCol6_ScreenCode99                              ; FCF73F  [ 5]
-	.long SoftKeyCol7_ScreenCode99                              ; FCF743  [ 6]
-	.long SoftKeyCol8_ScreenCode99                              ; FCF747  [ 7]
-	.long LcdKeyRow1_ScreenCode99                              ; FCF74B  [ 8]
-	.long LcdKeyRow2_ScreenCode99                              ; FCF74F  [ 9]
-	.long LcdKeyRow3_ScreenCode99                              ; FCF753  [10]
-	.long LcdKeyRow4_ScreenCode99                              ; FCF757  [11]
-	.long LcdKeyRow5_ScreenCode99                              ; FCF75B  [12]
+	.long SoftKeyCol2_SoundEditFilterLfo                              ; FCF72F  [ 1]
+	.long SoftKeyCol3_SoundEditFilterLfo                              ; FCF733  [ 2]
+	.long SoftKeyCol4_SoundEditFilterLfo                              ; FCF737  [ 3]
+	.long SoftKeyCol5_SoundEditFilterLfo                              ; FCF73B  [ 4]
+	.long SoftKeyCol6_SoundEditFilterLfo                              ; FCF73F  [ 5]
+	.long SoftKeyCol7_SoundEditFilterLfo                              ; FCF743  [ 6]
+	.long SoftKeyCol8_SoundEditFilterLfo                              ; FCF747  [ 7]
+	.long LcdKeyRow1_SoundEditFilterLfo                              ; FCF74B  [ 8]
+	.long LcdKeyRow2_SoundEditFilterLfo                              ; FCF74F  [ 9]
+	.long LcdKeyRow3_SoundEditFilterLfo                              ; FCF753  [10]
+	.long LcdKeyRow4_SoundEditFilterLfo                              ; FCF757  [11]
+	.long LcdKeyRow5_SoundEditFilterLfo                              ; FCF75B  [12]
 	.long PanelOp_Nop                             ; FCF75F  [13]
 	.long PanelOp_Nop                             ; FCF763  [14]
-	.long ExitKey_ScreenCode99                              ; FCF767  [15]
+	.long ExitKey_SoundEditFilterLfo                              ; FCF767  [15]
 	.long PanelOp_Nop                             ; FCF76B  [16]
 	.long 0x00000000                              ; FCF76F  [17] zero
 
 ; PanelOpTable_FCF773 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_CodeCD at 0xFD056A.
+; Read by: ScreenButton_SoundEditControllerPage1 at 0xFD056A.
 PanelOpTable_FCF773:
 	.long PanelOp_Nop                             ; FCF773  [ 0]
-	.long SoftKeyCol2_ScreenCodeCD                              ; FCF777  [ 1]
+	.long SoftKeyCol2_SoundEditControllerPage1                              ; FCF777  [ 1]
 	.long PanelOp_Nop                             ; FCF77B  [ 2]
-	.long SoftKeyCol4_ScreenCodeCD                              ; FCF77F  [ 3]
-	.long SoftKeyCol5_ScreenCodeCD                              ; FCF783  [ 4]
-	.long SoftKeyCol6_ScreenCodeCD                              ; FCF787  [ 5]
-	.long SoftKeyCol7_ScreenCodeCD                              ; FCF78B  [ 6]
-	.long SoftKeyCol8_ScreenCodeCD                              ; FCF78F  [ 7]
+	.long SoftKeyCol4_SoundEditControllerPage1                              ; FCF77F  [ 3]
+	.long SoftKeyCol5_SoundEditControllerPage1                              ; FCF783  [ 4]
+	.long SoftKeyCol6_SoundEditControllerPage1                              ; FCF787  [ 5]
+	.long SoftKeyCol7_SoundEditControllerPage1                              ; FCF78B  [ 6]
+	.long SoftKeyCol8_SoundEditControllerPage1                              ; FCF78F  [ 7]
 	.long PanelOp_Nop                             ; FCF793  [ 8]
-	.long LcdKeyRow2_ScreenCodeCD                              ; FCF797  [ 9]
-	.long LcdKeyRow3_ScreenCodeCD                              ; FCF79B  [10]
-	.long LcdKeyRow4_ScreenCodeCD                              ; FCF79F  [11]
+	.long LcdKeyRow2_SoundEditControllerPage1                              ; FCF797  [ 9]
+	.long LcdKeyRow3_SoundEditControllerPage1                              ; FCF79B  [10]
+	.long LcdKeyRow4_SoundEditControllerPage1                              ; FCF79F  [11]
 	.long PanelOp_Nop                             ; FCF7A3  [12]
 	.long PanelOp_Nop                             ; FCF7A7  [13]
 	.long PanelOp_Nop                             ; FCF7AB  [14]
-	.long ExitKey_ScreenCodeCD                              ; FCF7AF  [15]
-	.long PageKey_ScreenCodeCD                              ; FCF7B3  [16]
+	.long ExitKey_SoundEditControllerPage1                              ; FCF7AF  [15]
+	.long PageKey_SoundEditControllerPage1                              ; FCF7B3  [16]
 	.long 0x00000000                              ; FCF7B7  [17] zero
 
 ; PanelOpTable_FCF7BB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code9B at 0xFD05DE.
+; Read by: ScreenButton_SoundEditControllerPage2 at 0xFD05DE.
 PanelOpTable_FCF7BB:
 	.long PanelOp_Nop                             ; FCF7BB  [ 0]
-	.long SoftKeyCol2_ScreenCode9B                              ; FCF7BF  [ 1]
+	.long SoftKeyCol2_SoundEditControllerPage2                              ; FCF7BF  [ 1]
 	.long PanelOp_Nop                             ; FCF7C3  [ 2]
-	.long SoftKeyCol4_ScreenCode9B                              ; FCF7C7  [ 3]
-	.long SoftKeyCol5_ScreenCode9B                              ; FCF7CB  [ 4]
-	.long SoftKeyCol6_ScreenCode9B                              ; FCF7CF  [ 5]
-	.long SoftKeyCol7_ScreenCode9B                              ; FCF7D3  [ 6]
-	.long SoftKeyCol8_ScreenCode9B                              ; FCF7D7  [ 7]
-	.long LcdKeyRow1_ScreenCode9B                              ; FCF7DB  [ 8]
-	.long LcdKeyRow2_ScreenCode9B                              ; FCF7DF  [ 9]
-	.long LcdKeyRow3_ScreenCode9B                              ; FCF7E3  [10]
-	.long LcdKeyRow4_ScreenCode9B                              ; FCF7E7  [11]
-	.long LcdKeyRow5_ScreenCode9B                              ; FCF7EB  [12]
+	.long SoftKeyCol4_SoundEditControllerPage2                              ; FCF7C7  [ 3]
+	.long SoftKeyCol5_SoundEditControllerPage2                              ; FCF7CB  [ 4]
+	.long SoftKeyCol6_SoundEditControllerPage2                              ; FCF7CF  [ 5]
+	.long SoftKeyCol7_SoundEditControllerPage2                              ; FCF7D3  [ 6]
+	.long SoftKeyCol8_SoundEditControllerPage2                              ; FCF7D7  [ 7]
+	.long LcdKeyRow1_SoundEditControllerPage2                              ; FCF7DB  [ 8]
+	.long LcdKeyRow2_SoundEditControllerPage2                              ; FCF7DF  [ 9]
+	.long LcdKeyRow3_SoundEditControllerPage2                              ; FCF7E3  [10]
+	.long LcdKeyRow4_SoundEditControllerPage2                              ; FCF7E7  [11]
+	.long LcdKeyRow5_SoundEditControllerPage2                              ; FCF7EB  [12]
 	.long PanelOp_Nop                             ; FCF7EF  [13]
 	.long PanelOp_Nop                             ; FCF7F3  [14]
-	.long ExitKey_ScreenCode9B                              ; FCF7F7  [15]
-	.long PageKey_ScreenCode9B                              ; FCF7FB  [16]
+	.long ExitKey_SoundEditControllerPage2                              ; FCF7F7  [15]
+	.long PageKey_SoundEditControllerPage2                              ; FCF7FB  [16]
 	.long 0x00000000                              ; FCF7FF  [17] zero
 
 ; BitMask_Bit0to7 -- 9 bytes: 1<<0 .. 1<<7, then 0x00.
-; Read by: LcdKeyRow4_ScreenCodeCD at 0xFD07E5: `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with
+; Read by: LcdKeyRow4_SoundEditControllerPage1 at 0xFD07E5: `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with
 ;          H forced into 0..5 just before (`cp H,6 / jr c` else H = 0), so
 ;          this reader uses entries 0-5 only.  Entries 6-8 (0x40, 0x80, 0x00)
 ;          complete the 8-bit ladder and a zero; no other reader is known.
@@ -124972,116 +124972,116 @@ BitMask_Bit0to7:
 
 ; PanelOpTable_FCF80C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code82 at 0xFD0AD2.
+; Read by: ScreenButton_SoundEditModelingToneTemplate at 0xFD0AD2.
 PanelOpTable_FCF80C:
 	.long PanelOp_Nop                             ; FCF80C  [ 0]
-	.long SoftKeyCol2_ScreenCode82                              ; FCF810  [ 1]
-	.long SoftKeyCol3_ScreenCode82                              ; FCF814  [ 2]
+	.long SoftKeyCol2_SoundEditModelingToneTemplate                              ; FCF810  [ 1]
+	.long SoftKeyCol3_SoundEditModelingToneTemplate                              ; FCF814  [ 2]
 	.long PanelOp_Nop                             ; FCF818  [ 3]
-	.long SoftKeyCol5_ScreenCode82                              ; FCF81C  [ 4]
-	.long SoftKeyCol6_ScreenCode82                              ; FCF820  [ 5]
-	.long SoftKeyCol7_ScreenCode82                              ; FCF824  [ 6]
+	.long SoftKeyCol5_SoundEditModelingToneTemplate                              ; FCF81C  [ 4]
+	.long SoftKeyCol6_SoundEditModelingToneTemplate                              ; FCF820  [ 5]
+	.long SoftKeyCol7_SoundEditModelingToneTemplate                              ; FCF824  [ 6]
 	.long PanelOp_Nop                             ; FCF828  [ 7]
-	.long LcdKeyRow1_ScreenCode82                              ; FCF82C  [ 8]
-	.long LcdKeyRow2_ScreenCode82                              ; FCF830  [ 9]
-	.long LcdKeyRow3_ScreenCode82                              ; FCF834  [10]
-	.long LcdKeyRow4_ScreenCode82                              ; FCF838  [11]
-	.long LcdKeyRow5_ScreenCode82                              ; FCF83C  [12]
+	.long LcdKeyRow1_SoundEditModelingToneTemplate                              ; FCF82C  [ 8]
+	.long LcdKeyRow2_SoundEditModelingToneTemplate                              ; FCF830  [ 9]
+	.long LcdKeyRow3_SoundEditModelingToneTemplate                              ; FCF834  [10]
+	.long LcdKeyRow4_SoundEditModelingToneTemplate                              ; FCF838  [11]
+	.long LcdKeyRow5_SoundEditModelingToneTemplate                              ; FCF83C  [12]
 	.long PanelOp_Nop                             ; FCF840  [13]
 	.long PanelOp_Nop                             ; FCF844  [14]
-	.long ExitKey_ScreenCode82                              ; FCF848  [15]
+	.long ExitKey_SoundEditModelingToneTemplate                              ; FCF848  [15]
 	.long PanelOp_Nop                             ; FCF84C  [16]
 	.long 0x00000000                              ; FCF850  [17] zero
 
 ; PanelOpTable_FCF854 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code83 at 0xFD0B23.
+; Read by: ScreenButton_SoundEditToneLayerPanning at 0xFD0B23.
 PanelOpTable_FCF854:
 	.long PanelOp_Nop                             ; FCF854  [ 0]
-	.long SoftKeyCol2_ScreenCode83                              ; FCF858  [ 1]
-	.long SoftKeyCol3_ScreenCode83                              ; FCF85C  [ 2]
-	.long SoftKeyCol4_ScreenCode83                              ; FCF860  [ 3]
+	.long SoftKeyCol2_SoundEditToneLayerPanning                              ; FCF858  [ 1]
+	.long SoftKeyCol3_SoundEditToneLayerPanning                              ; FCF85C  [ 2]
+	.long SoftKeyCol4_SoundEditToneLayerPanning                              ; FCF860  [ 3]
 	.long PanelOp_Nop                             ; FCF864  [ 4]
 	.long PanelOp_Nop                             ; FCF868  [ 5]
 	.long PanelOp_Nop                             ; FCF86C  [ 6]
 	.long PanelOp_Nop                             ; FCF870  [ 7]
-	.long LcdKeyRow1_ScreenCode83                              ; FCF874  [ 8]
-	.long LcdKeyRow2_ScreenCode83                              ; FCF878  [ 9]
-	.long LcdKeyRow3_ScreenCode83                              ; FCF87C  [10]
-	.long LcdKeyRow4_ScreenCode83                              ; FCF880  [11]
-	.long LcdKeyRow5_ScreenCode83                              ; FCF884  [12]
+	.long LcdKeyRow1_SoundEditToneLayerPanning                              ; FCF874  [ 8]
+	.long LcdKeyRow2_SoundEditToneLayerPanning                              ; FCF878  [ 9]
+	.long LcdKeyRow3_SoundEditToneLayerPanning                              ; FCF87C  [10]
+	.long LcdKeyRow4_SoundEditToneLayerPanning                              ; FCF880  [11]
+	.long LcdKeyRow5_SoundEditToneLayerPanning                              ; FCF884  [12]
 	.long PanelOp_Nop                             ; FCF888  [13]
 	.long PanelOp_Nop                             ; FCF88C  [14]
-	.long ExitKey_ScreenCode83                              ; FCF890  [15]
+	.long ExitKey_SoundEditToneLayerPanning                              ; FCF890  [15]
 	.long PanelOp_Nop                             ; FCF894  [16]
 	.long 0x00000000                              ; FCF898  [17] zero
 
 ; PanelOpTable_FCF89C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code84 at 0xFD0B7B.
+; Read by: ScreenButton_SoundEditToneLayerKeyLayer at 0xFD0B7B.
 PanelOpTable_FCF89C:
 	.long PanelOp_Nop                             ; FCF89C  [ 0]
 	.long PanelOp_Nop                             ; FCF8A0  [ 1]
-	.long SoftKeyCol3_ScreenCode84                              ; FCF8A4  [ 2]
-	.long SoftKeyCol4_ScreenCode84                              ; FCF8A8  [ 3]
-	.long SoftKeyCol5_ScreenCode84                              ; FCF8AC  [ 4]
-	.long SoftKeyCol6_ScreenCode84                              ; FCF8B0  [ 5]
+	.long SoftKeyCol3_SoundEditToneLayerKeyLayer                              ; FCF8A4  [ 2]
+	.long SoftKeyCol4_SoundEditToneLayerKeyLayer                              ; FCF8A8  [ 3]
+	.long SoftKeyCol5_SoundEditToneLayerKeyLayer                              ; FCF8AC  [ 4]
+	.long SoftKeyCol6_SoundEditToneLayerKeyLayer                              ; FCF8B0  [ 5]
 	.long PanelOp_Nop                             ; FCF8B4  [ 6]
 	.long PanelOp_Nop                             ; FCF8B8  [ 7]
-	.long LcdKeyRow1_ScreenCode84                              ; FCF8BC  [ 8]
-	.long LcdKeyRow2_ScreenCode84                              ; FCF8C0  [ 9]
-	.long LcdKeyRow3_ScreenCode84                              ; FCF8C4  [10]
-	.long LcdKeyRow4_ScreenCode84                              ; FCF8C8  [11]
-	.long LcdKeyRow5_ScreenCode84                              ; FCF8CC  [12]
+	.long LcdKeyRow1_SoundEditToneLayerKeyLayer                              ; FCF8BC  [ 8]
+	.long LcdKeyRow2_SoundEditToneLayerKeyLayer                              ; FCF8C0  [ 9]
+	.long LcdKeyRow3_SoundEditToneLayerKeyLayer                              ; FCF8C4  [10]
+	.long LcdKeyRow4_SoundEditToneLayerKeyLayer                              ; FCF8C8  [11]
+	.long LcdKeyRow5_SoundEditToneLayerKeyLayer                              ; FCF8CC  [12]
 	.long PanelOp_Nop                             ; FCF8D0  [13]
 	.long PanelOp_Nop                             ; FCF8D4  [14]
-	.long ExitKey_ScreenCode84                              ; FCF8D8  [15]
+	.long ExitKey_SoundEditToneLayerKeyLayer                              ; FCF8D8  [15]
 	.long PanelOp_Nop                             ; FCF8DC  [16]
 	.long 0x00000000                              ; FCF8E0  [17] zero
 
 ; PanelOpTable_FCF8E4 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code85 at 0xFD0BDB.
+; Read by: ScreenButton_SoundEditToneLayerVelocityLayer at 0xFD0BDB.
 PanelOpTable_FCF8E4:
 	.long PanelOp_Nop                             ; FCF8E4  [ 0]
 	.long PanelOp_Nop                             ; FCF8E8  [ 1]
-	.long SoftKeyCol3_ScreenCode85                              ; FCF8EC  [ 2]
-	.long SoftKeyCol4_ScreenCode85                              ; FCF8F0  [ 3]
-	.long SoftKeyCol5_ScreenCode85                              ; FCF8F4  [ 4]
-	.long SoftKeyCol6_ScreenCode85                              ; FCF8F8  [ 5]
+	.long SoftKeyCol3_SoundEditToneLayerVelocityLayer                              ; FCF8EC  [ 2]
+	.long SoftKeyCol4_SoundEditToneLayerVelocityLayer                              ; FCF8F0  [ 3]
+	.long SoftKeyCol5_SoundEditToneLayerVelocityLayer                              ; FCF8F4  [ 4]
+	.long SoftKeyCol6_SoundEditToneLayerVelocityLayer                              ; FCF8F8  [ 5]
 	.long PanelOp_Nop                             ; FCF8FC  [ 6]
 	.long PanelOp_Nop                             ; FCF900  [ 7]
-	.long LcdKeyRow1_ScreenCode85                              ; FCF904  [ 8]
-	.long LcdKeyRow2_ScreenCode85                              ; FCF908  [ 9]
-	.long LcdKeyRow3_ScreenCode85                              ; FCF90C  [10]
-	.long LcdKeyRow4_ScreenCode85                              ; FCF910  [11]
-	.long LcdKeyRow5_ScreenCode85                              ; FCF914  [12]
+	.long LcdKeyRow1_SoundEditToneLayerVelocityLayer                              ; FCF904  [ 8]
+	.long LcdKeyRow2_SoundEditToneLayerVelocityLayer                              ; FCF908  [ 9]
+	.long LcdKeyRow3_SoundEditToneLayerVelocityLayer                              ; FCF90C  [10]
+	.long LcdKeyRow4_SoundEditToneLayerVelocityLayer                              ; FCF910  [11]
+	.long LcdKeyRow5_SoundEditToneLayerVelocityLayer                              ; FCF914  [12]
 	.long PanelOp_Nop                             ; FCF918  [13]
 	.long PanelOp_Nop                             ; FCF91C  [14]
-	.long ExitKey_ScreenCode85                              ; FCF920  [15]
+	.long ExitKey_SoundEditToneLayerVelocityLayer                              ; FCF920  [15]
 	.long PanelOp_Nop                             ; FCF924  [16]
 	.long 0x00000000                              ; FCF928  [17] zero
 
 ; PanelOpTable_FCF92C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code86 at 0xFD0C34.
+; Read by: ScreenButton_SoundEditModelingDriverWaveform at 0xFD0C34.
 PanelOpTable_FCF92C:
 	.long PanelOp_Nop                             ; FCF92C  [ 0]
-	.long SoftKeyCol2_ScreenCode86                              ; FCF930  [ 1]
-	.long SoftKeyCol3_ScreenCode86                              ; FCF934  [ 2]
+	.long SoftKeyCol2_SoundEditModelingDriverWaveform                              ; FCF930  [ 1]
+	.long SoftKeyCol3_SoundEditModelingDriverWaveform                              ; FCF934  [ 2]
 	.long PanelOp_Nop                             ; FCF938  [ 3]
 	.long PanelOp_Nop                             ; FCF93C  [ 4]
-	.long SoftKeyCol6_ScreenCode86                              ; FCF940  [ 5]
+	.long SoftKeyCol6_SoundEditModelingDriverWaveform                              ; FCF940  [ 5]
 	.long PanelOp_Nop                             ; FCF944  [ 6]
-	.long SoftKeyCol8_ScreenCode86                              ; FCF948  [ 7]
-	.long LcdKeyRow1_ScreenCode86                              ; FCF94C  [ 8]
-	.long LcdKeyRow2_ScreenCode86                              ; FCF950  [ 9]
-	.long LcdKeyRow3_ScreenCode86                              ; FCF954  [10]
-	.long LcdKeyRow4_ScreenCode86                              ; FCF958  [11]
-	.long LcdKeyRow5_ScreenCode86                              ; FCF95C  [12]
+	.long SoftKeyCol8_SoundEditModelingDriverWaveform                              ; FCF948  [ 7]
+	.long LcdKeyRow1_SoundEditModelingDriverWaveform                              ; FCF94C  [ 8]
+	.long LcdKeyRow2_SoundEditModelingDriverWaveform                              ; FCF950  [ 9]
+	.long LcdKeyRow3_SoundEditModelingDriverWaveform                              ; FCF954  [10]
+	.long LcdKeyRow4_SoundEditModelingDriverWaveform                              ; FCF958  [11]
+	.long LcdKeyRow5_SoundEditModelingDriverWaveform                              ; FCF95C  [12]
 	.long PanelOp_Nop                             ; FCF960  [13]
 	.long PanelOp_Nop                             ; FCF964  [14]
-	.long ExitKey_ScreenCode86                              ; FCF968  [15]
+	.long ExitKey_SoundEditModelingDriverWaveform                              ; FCF968  [15]
 	.long PanelOp_Nop                             ; FCF96C  [16]
 	.long 0x00000000                              ; FCF970  [17] zero
 
@@ -125248,7 +125248,7 @@ ToneEditPage_A8_OpTable:
 
 ; PanelOpTable_FCFB6C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code9E (prom_b) at 0xF0A993.
+; Read by: ScreenButton_SoundEditMemoryWrite (prom_b) at 0xF0A993.
 PanelOpTable_FCFB6C:
 	.long PanelOp_Nop                             ; FCFB6C  [ 0]
 	.long PanelOp_Nop                             ; FCFB70  [ 1]
@@ -125258,43 +125258,43 @@ PanelOpTable_FCFB6C:
 	.long PanelOp_Nop                             ; FCFB80  [ 5]
 	.long PanelOp_Nop                             ; FCFB84  [ 6]
 	.long PanelOp_Nop                             ; FCFB88  [ 7]
-	.long LcdKeyRow1_ScreenCode9E                              ; FCFB8C  [ 8] prom_b LcdKeyRow1_ScreenCode9E
+	.long LcdKeyRow1_SoundEditMemoryWrite                              ; FCFB8C  [ 8] prom_b LcdKeyRow1_SoundEditMemoryWrite
 	.long PanelOp_Nop                             ; FCFB90  [ 9]
-	.long LcdKeyRow3_ScreenCode9E                              ; FCFB94  [10] prom_b LcdKeyRow3_ScreenCode9E
-	.long LcdKeyRow4_ScreenCode9E                              ; FCFB98  [11] prom_b LcdKeyRow4_ScreenCode9E
-	.long LcdKeyRow5_ScreenCode9E                              ; FCFB9C  [12] prom_b LcdKeyRow5_ScreenCode9E
+	.long LcdKeyRow3_SoundEditMemoryWrite                              ; FCFB94  [10] prom_b LcdKeyRow3_SoundEditMemoryWrite
+	.long LcdKeyRow4_SoundEditMemoryWrite                              ; FCFB98  [11] prom_b LcdKeyRow4_SoundEditMemoryWrite
+	.long LcdKeyRow5_SoundEditMemoryWrite                              ; FCFB9C  [12] prom_b LcdKeyRow5_SoundEditMemoryWrite
 	.long PanelOp_Nop                             ; FCFBA0  [13]
 	.long PanelOp_Nop                             ; FCFBA4  [14]
-	.long ExitKey_ScreenCode9E                              ; FCFBA8  [15] prom_b ExitKey_ScreenCode9E
+	.long ExitKey_SoundEditMemoryWrite                              ; FCFBA8  [15] prom_b ExitKey_SoundEditMemoryWrite
 	.long PanelOp_Nop                             ; FCFBAC  [16]
 	.long 0x00000000                              ; FCFBB0  [17] zero
 
 ; PanelOpTable_FCFBB4 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code9F (prom_b) at 0xF0A9EC.
+; Read by: ScreenButton_SoundEditNaming (prom_b) at 0xF0A9EC.
 PanelOpTable_FCFBB4:
-	.long SoftKeyCol1_ScreenCode9F                              ; FCFBB4  [ 0] prom_b SoftKeyCol1_ScreenCode9F
-	.long SoftKeyCol2_ScreenCode9F                              ; FCFBB8  [ 1] prom_b SoftKeyCol2_ScreenCode9F
-	.long SoftKeyCol3_ScreenCode9F                              ; FCFBBC  [ 2] prom_b SoftKeyCol3_ScreenCode9F
-	.long SoftKeyCol4_ScreenCode9F                              ; FCFBC0  [ 3] prom_b SoftKeyCol4_ScreenCode9F
-	.long SoftKeyCol5_ScreenCode9F                              ; FCFBC4  [ 4] prom_b SoftKeyCol5_ScreenCode9F
-	.long SoftKeyCol6_ScreenCode9F                              ; FCFBC8  [ 5] prom_b SoftKeyCol6_ScreenCode9F
-	.long SoftKeyCol7_ScreenCode9F                              ; FCFBCC  [ 6] prom_b SoftKeyCol7_ScreenCode9F
-	.long SoftKeyCol8_ScreenCode9F                              ; FCFBD0  [ 7] prom_b SoftKeyCol8_ScreenCode9F
-	.long LcdKeyRow1_ScreenCode9F                              ; FCFBD4  [ 8] prom_b LcdKeyRow1_ScreenCode9F
-	.long LcdKeyRow2_ScreenCode9F                              ; FCFBD8  [ 9] prom_b LcdKeyRow2_ScreenCode9F
+	.long SoftKeyCol1_SoundEditNaming                              ; FCFBB4  [ 0] prom_b SoftKeyCol1_SoundEditNaming
+	.long SoftKeyCol2_SoundEditNaming                              ; FCFBB8  [ 1] prom_b SoftKeyCol2_SoundEditNaming
+	.long SoftKeyCol3_SoundEditNaming                              ; FCFBBC  [ 2] prom_b SoftKeyCol3_SoundEditNaming
+	.long SoftKeyCol4_SoundEditNaming                              ; FCFBC0  [ 3] prom_b SoftKeyCol4_SoundEditNaming
+	.long SoftKeyCol5_SoundEditNaming                              ; FCFBC4  [ 4] prom_b SoftKeyCol5_SoundEditNaming
+	.long SoftKeyCol6_SoundEditNaming                              ; FCFBC8  [ 5] prom_b SoftKeyCol6_SoundEditNaming
+	.long SoftKeyCol7_SoundEditNaming                              ; FCFBCC  [ 6] prom_b SoftKeyCol7_SoundEditNaming
+	.long SoftKeyCol8_SoundEditNaming                              ; FCFBD0  [ 7] prom_b SoftKeyCol8_SoundEditNaming
+	.long LcdKeyRow1_SoundEditNaming                              ; FCFBD4  [ 8] prom_b LcdKeyRow1_SoundEditNaming
+	.long LcdKeyRow2_SoundEditNaming                              ; FCFBD8  [ 9] prom_b LcdKeyRow2_SoundEditNaming
 	.long PanelOp_Nop                             ; FCFBDC  [10]
 	.long PanelOp_Nop                             ; FCFBE0  [11]
 	.long PanelOp_Nop                             ; FCFBE4  [12]
 	.long PanelOp_Nop                             ; FCFBE8  [13]
 	.long PanelOp_Nop                             ; FCFBEC  [14]
-	.long ExitKey_ScreenCode9F                              ; FCFBF0  [15] prom_b ExitKey_ScreenCode9F
+	.long ExitKey_SoundEditNaming                              ; FCFBF0  [15] prom_b ExitKey_SoundEditNaming
 	.long PanelOp_Nop                             ; FCFBF4  [16]
 	.long 0x00000000                              ; FCFBF8  [17] zero
 
 ; PanelOpTable_FCFBFC -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code9A (prom_b) at 0xF0AA3D; ScreenButton_Code9C (prom_b) at 0xF0AA8E.
+; Read by: ScreenButton_SoundEditDigitalEffect (prom_b) at 0xF0AA3D; ScreenButton_Code9C (prom_b) at 0xF0AA8E.
 PanelOpTable_FCFBFC:
 	.long sub_F0ADD4                              ; FCFBFC  [ 0] prom_b sub_F0ADD4
 	.long sub_F0AE9B                              ; FCFC00  [ 1] prom_b sub_F0AE9B
@@ -125317,24 +125317,24 @@ PanelOpTable_FCFBFC:
 
 ; PanelOpTable_FCFC44 -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_Code9D (prom_b) at 0xF0A93B.
+; Read by: ScreenButton_SoundEditCopy (prom_b) at 0xF0A93B.
 PanelOpTable_FCFC44:
-	.long SoftKeyCol1_ScreenCode9D                              ; FCFC44  [ 0] prom_b SoftKeyCol1_ScreenCode9D
-	.long SoftKeyCol2_ScreenCode9D                              ; FCFC48  [ 1] prom_b SoftKeyCol2_ScreenCode9D
-	.long SoftKeyCol3_ScreenCode9D                              ; FCFC4C  [ 2] prom_b SoftKeyCol3_ScreenCode9D
-	.long SoftKeyCol4_ScreenCode9D                              ; FCFC50  [ 3] prom_b SoftKeyCol4_ScreenCode9D
+	.long SoftKeyCol1_SoundEditCopy                              ; FCFC44  [ 0] prom_b SoftKeyCol1_SoundEditCopy
+	.long SoftKeyCol2_SoundEditCopy                              ; FCFC48  [ 1] prom_b SoftKeyCol2_SoundEditCopy
+	.long SoftKeyCol3_SoundEditCopy                              ; FCFC4C  [ 2] prom_b SoftKeyCol3_SoundEditCopy
+	.long SoftKeyCol4_SoundEditCopy                              ; FCFC50  [ 3] prom_b SoftKeyCol4_SoundEditCopy
 	.long PanelOp_Nop                             ; FCFC54  [ 4]
-	.long SoftKeyCol6_ScreenCode9D                              ; FCFC58  [ 5] prom_b SoftKeyCol6_ScreenCode9D
+	.long SoftKeyCol6_SoundEditCopy                              ; FCFC58  [ 5] prom_b SoftKeyCol6_SoundEditCopy
 	.long PanelOp_Nop                             ; FCFC5C  [ 6]
 	.long PanelOp_Nop                             ; FCFC60  [ 7]
 	.long PanelOp_Nop                             ; FCFC64  [ 8]
 	.long PanelOp_Nop                             ; FCFC68  [ 9]
 	.long PanelOp_Nop                             ; FCFC6C  [10]
-	.long LcdKeyRow4_ScreenCode9D                              ; FCFC70  [11] prom_b LcdKeyRow4_ScreenCode9D
+	.long LcdKeyRow4_SoundEditCopy                              ; FCFC70  [11] prom_b LcdKeyRow4_SoundEditCopy
 	.long PanelOp_Nop                             ; FCFC74  [12]
 	.long PanelOp_Nop                             ; FCFC78  [13]
 	.long PanelOp_Nop                             ; FCFC7C  [14]
-	.long ExitKey_ScreenCode9D                              ; FCFC80  [15] prom_b ExitKey_ScreenCode9D
+	.long ExitKey_SoundEditCopy                              ; FCFC80  [15] prom_b ExitKey_SoundEditCopy
 	.long PanelOp_Nop                             ; FCFC84  [16]
 	.long 0x00000000                              ; FCFC88  [17] zero
 
@@ -125369,24 +125369,24 @@ IndexMap_FCFCD4:
 	.byte 0x00, 0x01, 0x08, 0x09  ; FCFCD4  [  0]
 
 ; StepValues_FCFCD8 / _FCFCDF / _FCFCE1 -- three ordered VALUE LISTS that
-; SoftKeyCol4_ScreenCode9D (prom_b 0xF0C47B) steps a parameter through: it picks one list
+; SoftKeyCol4_SoundEditCopy (prom_b 0xF0C47B) steps a parameter through: it picks one list
 ; and its last index L (`ld L,6 / lda XIX,0x00FCFCD8`, `ld L,1 / lda XIX,
 ; 0x00FCFCDF` or `ld L,5 / lda XIX,0x00FCFCE1`, by the two values it fetches
 ; through 0xFD6C7B), finds the current value with `cp H,L / jr ule` -- so L+1
 ; entries -- then moves H one step up or down (D = direction) and sends
 ; this[H] through 0xFD6C65 and T_Dispatch_Code80(0x9D).  COUNTS 7, 2, 6 are
 ; those L+1, and the three lists tile to the next reader-named base.
-; StepValues_FCFCD8 -- 7 values; read by SoftKeyCol4_ScreenCode9D (prom_b) at 0xF0C4A7, L = 6.
+; StepValues_FCFCD8 -- 7 values; read by SoftKeyCol4_SoundEditCopy (prom_b) at 0xF0C4A7, L = 6.
 ;          What parameter the values are is not established.
 StepValues_FCFCD8:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06  ; FCFCD8  [  0]
 
-; StepValues_FCFCDF -- 2 values; read by SoftKeyCol4_ScreenCode9D (prom_b) at 0xF0C4B6, L = 1.
+; StepValues_FCFCDF -- 2 values; read by SoftKeyCol4_SoundEditCopy (prom_b) at 0xF0C4B6, L = 1.
 ;          What parameter the values are is not established.
 StepValues_FCFCDF:
 	.byte 0x00, 0x06  ; FCFCDF  [  0]
 
-; StepValues_FCFCE1 -- 6 values; read by SoftKeyCol4_ScreenCode9D (prom_b) at 0xF0C4BF, L = 5.
+; StepValues_FCFCE1 -- 6 values; read by SoftKeyCol4_SoundEditCopy (prom_b) at 0xF0C4BF, L = 5.
 ;          What parameter the values are is not established.
 StepValues_FCFCE1:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x06  ; FCFCE1  [  0]
@@ -125397,38 +125397,38 @@ StepValues_FCFCE1:
 ;          sub XBC,0x200 / add XBC,0x00FCFCE7 / ld XBC,(XBC) / push <ret> /
 ;          jp (XBC)`.  COUNT 32 is that bound.  (0x207C) holds the screen code.
 ScreenCode80_Handlers:
-	.long ScreenCode80_Handler                              ; FCFCE7  [ 0]
+	.long ScreenEnter_SoundEditMenu                              ; FCFCE7  [ 0]
 	.long ScreenCode_Nop                          ; FCFCEB  [ 1]
-	.long ScreenCode82_Handler                              ; FCFCEF  [ 2]
-	.long ScreenCode83_Handler                              ; FCFCF3  [ 3]
-	.long ScreenCode84_Handler                              ; FCFCF7  [ 4]
-	.long ScreenCode85_Handler                              ; FCFCFB  [ 5]
-	.long ScreenCode86_Handler                              ; FCFCFF  [ 6]
-	.long ScreenCode87_Handler                              ; FCFD03  [ 7]
-	.long ScreenCode88_Handler                              ; FCFD07  [ 8]
-	.long ScreenCode89_Handler                              ; FCFD0B  [ 9]
-	.long ScreenCode8A_Handler                              ; FCFD0F  [10]
-	.long ScreenCode8B_Handler                              ; FCFD13  [11]
-	.long ScreenCode8C_Handler                              ; FCFD17  [12]
-	.long ScreenCode8D_Handler                              ; FCFD1B  [13]
-	.long ScreenCode8E_Handler                              ; FCFD1F  [14]
-	.long ScreenCode8F_Handler                              ; FCFD23  [15]
-	.long ScreenCode90_Handler                              ; FCFD27  [16]
-	.long ScreenCode91_Handler                              ; FCFD2B  [17]
-	.long ScreenCode92_Handler                              ; FCFD2F  [18]
-	.long ScreenCode93_Handler                              ; FCFD33  [19]
-	.long ScreenCode94_Handler                              ; FCFD37  [20]
-	.long ScreenCode95_Handler                              ; FCFD3B  [21]
-	.long ScreenCode96_Handler                              ; FCFD3F  [22]
-	.long ScreenCode97_Handler                              ; FCFD43  [23]
-	.long ScreenCode98_Handler                              ; FCFD47  [24]
-	.long ScreenCode99_Handler                              ; FCFD4B  [25]
+	.long ScreenEnter_SoundEditModelingToneTemplate                              ; FCFCEF  [ 2]
+	.long ScreenEnter_SoundEditToneLayerPanning                              ; FCFCF3  [ 3]
+	.long ScreenEnter_SoundEditToneLayerKeyLayer                              ; FCFCF7  [ 4]
+	.long ScreenEnter_SoundEditToneLayerVelocityLayer                              ; FCFCFB  [ 5]
+	.long ScreenEnter_SoundEditModelingDriverWaveform                              ; FCFCFF  [ 6]
+	.long ScreenEnter_SoundEditPitchTune                              ; FCFD03  [ 7]
+	.long ScreenEnter_SoundEditPitchEnvelope1                              ; FCFD07  [ 8]
+	.long ScreenEnter_SoundEditPitchEnvelope2                              ; FCFD0B  [ 9]
+	.long ScreenEnter_SoundEditPitchLfo                              ; FCFD0F  [10]
+	.long ScreenEnter_SoundEditAmpLevel1                              ; FCFD13  [11]
+	.long ScreenEnter_SoundEditAmpLevel2                              ; FCFD17  [12]
+	.long ScreenEnter_SoundEditAmpEnvelope1                              ; FCFD1B  [13]
+	.long ScreenEnter_SoundEditAmpEnvelope2                              ; FCFD1F  [14]
+	.long ScreenEnter_SoundEditAmpLfo                              ; FCFD23  [15]
+	.long ScreenEnter_SoundEditFilterLpf12                              ; FCFD27  [16]
+	.long ScreenEnter_SoundEditFilterHpf12                              ; FCFD2B  [17]
+	.long ScreenEnter_SoundEditFilterLpf24                              ; FCFD2F  [18]
+	.long ScreenEnter_SoundEditFilterHpf24                              ; FCFD33  [19]
+	.long ScreenEnter_SoundEditFilterBpf                              ; FCFD37  [20]
+	.long ScreenEnter_SoundEditFilterThrough                              ; FCFD3B  [21]
+	.long ScreenEnter_SoundEditFilterKeyFollow                              ; FCFD3F  [22]
+	.long ScreenEnter_SoundEditFilterEnvelope1                              ; FCFD43  [23]
+	.long ScreenEnter_SoundEditFilterEnvelope2                              ; FCFD47  [24]
+	.long ScreenEnter_SoundEditFilterLfo                              ; FCFD4B  [25]
 	.long ScreenCode_Nop                          ; FCFD4F  [26]
-	.long ScreenCode9B_Handler                              ; FCFD53  [27]
+	.long ScreenEnter_SoundEditControllerPage2                              ; FCFD53  [27]
 	.long ScreenCode9C_Handler                              ; FCFD57  [28]
-	.long ScreenCode9D_Handler                              ; FCFD5B  [29]
-	.long ScreenCode9E_Handler                              ; FCFD5F  [30]
-	.long ScreenCode9F_Handler                              ; FCFD63  [31]
+	.long ScreenEnter_SoundEditCopy                              ; FCFD5B  [29]
+	.long ScreenEnter_SoundEditMemoryWrite                              ; FCFD5F  [30]
+	.long ScreenEnter_SoundEditNaming                              ; FCFD63  [31]
 
 ; ScreenCodeC0_Handlers -- 16 handler addresses for screen codes 0xC0-0xCF.
 ; Read by: sub_FD2014 at 0xFD21B4; sub_FD21E9 at 0xFD2315; sub_FD21E9 at 0xFD24E1: the same shape as ScreenCode80_Handlers with
@@ -125449,11 +125449,11 @@ ScreenCodeC0_Handlers:
 	.long ScreenCodeCA_Handler                              ; FCFD8F  [10]
 	.long ScreenCodeCB_Handler                              ; FCFD93  [11]
 	.long T_F42340_Nop                              ; FCFD97  [12]
-	.long ScreenCodeCD_Handler                              ; FCFD9B  [13]
+	.long ScreenEnter_SoundEditControllerPage1                              ; FCFD9B  [13]
 	.long ScreenCode_Nop                          ; FCFD9F  [14]
 	.long ScreenCode_Nop                          ; FCFDA3  [15]
 
-ScreenButton_Code80:
+ScreenButton_SoundEditMenu:
 	link XIZ,0xfff8                                      ; FCFDA7  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FCFDAB  be fe 31
 	push XBC                                             ; FCFDAE  39
@@ -125519,11 +125519,11 @@ ScreenButton_Code80:
 .LFCFE3F:
 	unlk XIZ                                             ; FCFE3F  ee 0d
 	ret                                                  ; FCFE41  0e
-; SoftKeyCol1_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol1_ScreenCode80: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 0 (DispatchTable_FCF000).
+; SoftKeyCol1_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol1_SoundEditMenu: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 0 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode80:
+SoftKeyCol1_SoundEditMenu:
 	link XIZ,0xfffc                                      ; FCFE42  ee 0c fc ff
 	pushw hl                                             ; FCFE46  2b
 	lda xbc, (xiz-2)                                     ; FCFE47  be fe 31
@@ -125566,11 +125566,11 @@ SoftKeyCol1_ScreenCode80:
 	popw hl                                              ; FCFE9D  4b
 	unlk XIZ                                             ; FCFE9E  ee 0d
 	ret                                                  ; FCFEA0  0e
-; SoftKeyCol2_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol2_ScreenCode80: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 1 (DispatchTable_FCF000).
+; SoftKeyCol2_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol2_SoundEditMenu: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 1 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode80:
+SoftKeyCol2_SoundEditMenu:
 	link XIZ,0xfff6                                      ; FCFEA1  ee 0c f6 ff
 	pushw hl                                             ; FCFEA5  2b
 	lda xbc, (xiz-2)                                     ; FCFEA6  be fe 31
@@ -125637,11 +125637,11 @@ SoftKeyCol2_ScreenCode80:
 	popw hl                                              ; FCFF42  4b
 	unlk XIZ                                             ; FCFF43  ee 0d
 	ret                                                  ; FCFF45  0e
-; SoftKeyCol3_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol3_ScreenCode80: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 2 (DispatchTable_FCF000).
+; SoftKeyCol3_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol3_SoundEditMenu: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 2 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode80:
+SoftKeyCol3_SoundEditMenu:
 	link XIZ,0xfff8                                      ; FCFF46  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FCFF4A  be fe 31
 	push XBC                                             ; FCFF4D  39
@@ -125696,11 +125696,11 @@ SoftKeyCol3_ScreenCode80:
 .LFCFFC7:
 	unlk XIZ                                             ; FCFFC7  ee 0d
 	ret                                                  ; FCFFC9  0e
-; SoftKeyCol4_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol4_ScreenCode80: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 3 (DispatchTable_FCF000).
+; SoftKeyCol4_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol4_SoundEditMenu: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 3 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode80:
+SoftKeyCol4_SoundEditMenu:
 	link XIZ,0xffec                                      ; FCFFCA  ee 0c ec ff
 	pushw hl                                             ; FCFFCE  2b
 	pushw de                                             ; FCFFCF  2a
@@ -125770,11 +125770,11 @@ SoftKeyCol4_ScreenCode80:
 	popw hl                                              ; FD0067  4b
 	unlk XIZ                                             ; FD0068  ee 0d
 	ret                                                  ; FD006A  0e
-; SoftKeyCol5_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol5_ScreenCode80: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 4 (DispatchTable_FCF000).
+; SoftKeyCol5_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol5_SoundEditMenu: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 4 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode80:
+SoftKeyCol5_SoundEditMenu:
 	link XIZ,0xffec                                      ; FD006B  ee 0c ec ff
 	pushw hl                                             ; FD006F  2b
 	pushw de                                             ; FD0070  2a
@@ -125832,11 +125832,11 @@ SoftKeyCol5_ScreenCode80:
 	popw hl                                              ; FD00F1  4b
 	unlk XIZ                                             ; FD00F2  ee 0d
 	ret                                                  ; FD00F4  0e
-; SoftKeyCol6_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol6_ScreenCode80: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 5 (DispatchTable_FCF000).
+; SoftKeyCol6_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol6_SoundEditMenu: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 5 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode80:
+SoftKeyCol6_SoundEditMenu:
 	link XIZ,0xffec                                      ; FD00F5  ee 0c ec ff
 	pushw hl                                             ; FD00F9  2b
 	pushw de                                             ; FD00FA  2a
@@ -125893,11 +125893,11 @@ SoftKeyCol6_ScreenCode80:
 	popw hl                                              ; FD0179  4b
 	unlk XIZ                                             ; FD017A  ee 0d
 	ret                                                  ; FD017C  0e
-; SoftKeyCol7_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol7_ScreenCode80: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 6 (DispatchTable_FCF000).
+; SoftKeyCol7_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol7_SoundEditMenu: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 6 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode80:
+SoftKeyCol7_SoundEditMenu:
 	link XIZ,0xfff8                                      ; FD017D  ee 0c f8 ff
 	pushw hl                                             ; FD0181  2b
 	pushw de                                             ; FD0182  2a
@@ -125993,11 +125993,11 @@ SoftKeyCol7_ScreenCode80:
 	popw hl                                              ; FD0263  4b
 	unlk XIZ                                             ; FD0264  ee 0d
 	ret                                                  ; FD0266  0e
-; SoftKeyCol8_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; SoftKeyCol8_ScreenCode80: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 7 (DispatchTable_FCF000).
+; SoftKeyCol8_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol8_SoundEditMenu: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 7 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode80:
+SoftKeyCol8_SoundEditMenu:
 	link XIZ,0xfff2                                      ; FD0267  ee 0c f2 ff
 	push XIX                                             ; FD026B  3c
 	lda xix, (xiz-14)                                    ; FD026C  be f2 34
@@ -126034,11 +126034,11 @@ SoftKeyCol8_ScreenCode80:
 	pop XIX                                              ; FD02C7  5c
 	unlk XIZ                                             ; FD02C8  ee 0d
 	ret                                                  ; FD02CA  0e
-; LcdKeyRow1_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; LcdKeyRow1_ScreenCode80: LCD key row 1 (left or right) on ScreenCode80 -- ScreenCode80 op 8 (DispatchTable_FCF000).
+; LcdKeyRow1_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow1_SoundEditMenu: LCD key row 1 (left or right) on ScreenCode80 -- ScreenCode80 op 8 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode80:
+LcdKeyRow1_SoundEditMenu:
 	link XIZ,0xfff8                                      ; FD02CB  ee 0c f8 ff
 	pushw hl                                             ; FD02CF  2b
 	lda xbc, (xiz-2)                                     ; FD02D0  be fe 31
@@ -126113,11 +126113,11 @@ LcdKeyRow1_ScreenCode80:
 	popw hl                                              ; FD0370  4b
 	unlk XIZ                                             ; FD0371  ee 0d
 	ret                                                  ; FD0373  0e
-; LcdKeyRow2_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; LcdKeyRow2_ScreenCode80: LCD key row 2 (left or right) on ScreenCode80 -- ScreenCode80 op 9 (DispatchTable_FCF000).
+; LcdKeyRow2_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow2_SoundEditMenu: LCD key row 2 (left or right) on ScreenCode80 -- ScreenCode80 op 9 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode80:
+LcdKeyRow2_SoundEditMenu:
 	link XIZ,0xfffa                                      ; FD0374  ee 0c fa ff
 	pushw hl                                             ; FD0378  2b
 	lda xbc, (xiz-2)                                     ; FD0379  be fe 31
@@ -126184,11 +126184,11 @@ LcdKeyRow2_ScreenCode80:
 	popw hl                                              ; FD0405  4b
 	unlk XIZ                                             ; FD0406  ee 0d
 	ret                                                  ; FD0408  0e
-; LcdKeyRow3_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; LcdKeyRow3_ScreenCode80: LCD key row 3 (left or right) on ScreenCode80 -- ScreenCode80 op 10 (DispatchTable_FCF000).
+; LcdKeyRow3_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow3_SoundEditMenu: LCD key row 3 (left or right) on ScreenCode80 -- ScreenCode80 op 10 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode80:
+LcdKeyRow3_SoundEditMenu:
 	link XIZ,0xfffc                                      ; FD0409  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD040D  be fe 31
 	push XBC                                             ; FD0410  39
@@ -126230,11 +126230,11 @@ LcdKeyRow3_ScreenCode80:
 .LFD046C:
 	unlk XIZ                                             ; FD046C  ee 0d
 	ret                                                  ; FD046E  0e
-; LcdKeyRow4_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; LcdKeyRow4_ScreenCode80: LCD key row 4 (left or right) on ScreenCode80 -- ScreenCode80 op 11 (DispatchTable_FCF000).
+; LcdKeyRow4_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow4_SoundEditMenu: LCD key row 4 (left or right) on ScreenCode80 -- ScreenCode80 op 11 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode80:
+LcdKeyRow4_SoundEditMenu:
 	link XIZ,0xfffc                                      ; FD046F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0473  be fe 31
 	push XBC                                             ; FD0476  39
@@ -126276,11 +126276,11 @@ LcdKeyRow4_ScreenCode80:
 .LFD04D2:
 	unlk XIZ                                             ; FD04D2  ee 0d
 	ret                                                  ; FD04D4  0e
-; LcdKeyRow5_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; LcdKeyRow5_ScreenCode80: LCD key row 5 (left or right) on ScreenCode80 -- ScreenCode80 op 12 (DispatchTable_FCF000).
+; LcdKeyRow5_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow5_SoundEditMenu: LCD key row 5 (left or right) on ScreenCode80 -- ScreenCode80 op 12 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode80:
+LcdKeyRow5_SoundEditMenu:
 	link XIZ,0xfffe                                      ; FD04D5  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD04D9  be fe 31
 	push XBC                                             ; FD04DC  39
@@ -126315,11 +126315,11 @@ LcdKeyRow5_ScreenCode80:
 .LFD051E:
 	unlk XIZ                                             ; FD051E  ee 0d
 	ret                                                  ; FD0520  0e
-; ExitKey_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
-; ExitKey_ScreenCode80: the EXIT key on ScreenCode80 -- ScreenCode80 op 15 (DispatchTable_FCF000).
+; ExitKey_SoundEditMenu -- a handler: an entry of DispatchTable_FCF000
+; ExitKey_SoundEditMenu: the EXIT key on ScreenCode80 -- ScreenCode80 op 15 (DispatchTable_FCF000).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode80:
+ExitKey_SoundEditMenu:
 	link XIZ,0x0000                                      ; FD0521  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0525  8e 08 3f 00
 	jr nz, .LFD053A                                      ; FD0529  6e 0f
@@ -126331,7 +126331,7 @@ ExitKey_ScreenCode80:
 .LFD053A:
 	unlk XIZ                                             ; FD053A  ee 0d
 	ret                                                  ; FD053C  0e
-ScreenButton_CodeCD:
+ScreenButton_SoundEditControllerPage1:
 	link XIZ,0xfffc                                      ; FD053D  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0541  be fe 31
 	push XBC                                             ; FD0544  39
@@ -126366,7 +126366,7 @@ ScreenButton_CodeCD:
 .LFD058B:
 	unlk XIZ                                             ; FD058B  ee 0d
 	ret                                                  ; FD058D  0e
-ScreenButton_Code9B:
+ScreenButton_SoundEditControllerPage2:
 	link XIZ,0xfffa                                      ; FD058E  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD0592  be fe 31
 	push XBC                                             ; FD0595  39
@@ -126416,11 +126416,11 @@ ScreenButton_Code9B:
 .LFD05FF:
 	unlk XIZ                                             ; FD05FF  ee 0d
 	ret                                                  ; FD0601  0e
-; SoftKeyCol2_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; SoftKeyCol2_ScreenCodeCD: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 1 (PanelOpTable_FCF773).
+; SoftKeyCol2_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol2_SoundEditControllerPage1: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 1 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCodeCD:
+SoftKeyCol2_SoundEditControllerPage1:
 	link XIZ,0x0000                                      ; FD0602  ee 0c 00 00
 	pushw 0x01                                           ; FD0606  0b 01 00
 	ld BC,(XIZ+0x08)                                     ; FD0609  9e 08 21
@@ -126436,11 +126436,11 @@ SoftKeyCol2_ScreenCodeCD:
 	inc 2,XSP                                            ; FD0626  ef 62
 	unlk XIZ                                             ; FD0628  ee 0d
 	ret                                                  ; FD062A  0e
-; SoftKeyCol4_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; SoftKeyCol4_ScreenCodeCD: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 3 (PanelOpTable_FCF773).
+; SoftKeyCol4_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol4_SoundEditControllerPage1: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 3 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCodeCD:
+SoftKeyCol4_SoundEditControllerPage1:
 	link XIZ,0x0000                                      ; FD062B  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD062F  9e 08 21
 	extz BC                                              ; FD0632  d9 12
@@ -126449,11 +126449,11 @@ SoftKeyCol4_ScreenCodeCD:
 	popw bc                                              ; FD0639  49
 	unlk XIZ                                             ; FD063A  ee 0d
 	ret                                                  ; FD063C  0e
-; SoftKeyCol5_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; SoftKeyCol5_ScreenCodeCD: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 4 (PanelOpTable_FCF773).
+; SoftKeyCol5_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol5_SoundEditControllerPage1: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 4 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCodeCD:
+SoftKeyCol5_SoundEditControllerPage1:
 	link XIZ,0x0000                                      ; FD063D  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD0641  9e 08 21
 	extz BC                                              ; FD0644  d9 12
@@ -126463,11 +126463,11 @@ SoftKeyCol5_ScreenCodeCD:
 	pop XBC                                              ; FD064E  59
 	unlk XIZ                                             ; FD064F  ee 0d
 	ret                                                  ; FD0651  0e
-; SoftKeyCol6_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; SoftKeyCol6_ScreenCodeCD: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 5 (PanelOpTable_FCF773).
+; SoftKeyCol6_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol6_SoundEditControllerPage1: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 5 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCodeCD:
+SoftKeyCol6_SoundEditControllerPage1:
 	link XIZ,0x0000                                      ; FD0652  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD0656  9e 08 21
 	extz BC                                              ; FD0659  d9 12
@@ -126477,11 +126477,11 @@ SoftKeyCol6_ScreenCodeCD:
 	pop XBC                                              ; FD0663  59
 	unlk XIZ                                             ; FD0664  ee 0d
 	ret                                                  ; FD0666  0e
-; SoftKeyCol7_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; SoftKeyCol7_ScreenCodeCD: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 6 (PanelOpTable_FCF773).
+; SoftKeyCol7_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol7_SoundEditControllerPage1: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 6 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCodeCD:
+SoftKeyCol7_SoundEditControllerPage1:
 	link XIZ,0xfffe                                      ; FD0667  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD066B  be fe 31
 	push XBC                                             ; FD066E  39
@@ -126498,11 +126498,11 @@ SoftKeyCol7_ScreenCodeCD:
 .LFD0688:
 	unlk XIZ                                             ; FD0688  ee 0d
 	ret                                                  ; FD068A  0e
-; SoftKeyCol8_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; SoftKeyCol8_ScreenCodeCD: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 7 (PanelOpTable_FCF773).
+; SoftKeyCol8_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol8_SoundEditControllerPage1: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 7 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCodeCD:
+SoftKeyCol8_SoundEditControllerPage1:
 	link XIZ,0xfffe                                      ; FD068B  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD068F  be fe 31
 	push XBC                                             ; FD0692  39
@@ -126519,11 +126519,11 @@ SoftKeyCol8_ScreenCodeCD:
 .LFD06AC:
 	unlk XIZ                                             ; FD06AC  ee 0d
 	ret                                                  ; FD06AE  0e
-; LcdKeyRow2_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; LcdKeyRow2_ScreenCodeCD: LCD key row 2 (left or right) on ScreenCodeCD -- ScreenCodeCD op 9 (PanelOpTable_FCF773).
+; LcdKeyRow2_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; LcdKeyRow2_SoundEditControllerPage1: LCD key row 2 (left or right) on ScreenCodeCD -- ScreenCodeCD op 9 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCodeCD:
+LcdKeyRow2_SoundEditControllerPage1:
 	link XIZ,0xfffe                                      ; FD06AF  ee 0c fe ff
 	pushw hl                                             ; FD06B3  2b
 	lda xbc, (xiz-2)                                     ; FD06B4  be fe 31
@@ -126564,11 +126564,11 @@ LcdKeyRow2_ScreenCodeCD:
 	popw hl                                              ; FD0707  4b
 	unlk XIZ                                             ; FD0708  ee 0d
 	ret                                                  ; FD070A  0e
-; LcdKeyRow3_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; LcdKeyRow3_ScreenCodeCD: LCD key row 3 (left or right) on ScreenCodeCD -- ScreenCodeCD op 10 (PanelOpTable_FCF773).
+; LcdKeyRow3_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; LcdKeyRow3_SoundEditControllerPage1: LCD key row 3 (left or right) on ScreenCodeCD -- ScreenCodeCD op 10 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCodeCD:
+LcdKeyRow3_SoundEditControllerPage1:
 	link XIZ,0xfffe                                      ; FD070B  ee 0c fe ff
 	pushw hl                                             ; FD070F  2b
 	lda xbc, (xiz-2)                                     ; FD0710  be fe 31
@@ -126609,11 +126609,11 @@ LcdKeyRow3_ScreenCodeCD:
 	popw hl                                              ; FD0763  4b
 	unlk XIZ                                             ; FD0764  ee 0d
 	ret                                                  ; FD0766  0e
-; LcdKeyRow4_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; LcdKeyRow4_ScreenCodeCD: LCD key row 4 (left or right) on ScreenCodeCD -- ScreenCodeCD op 11 (PanelOpTable_FCF773).
+; LcdKeyRow4_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; LcdKeyRow4_SoundEditControllerPage1: LCD key row 4 (left or right) on ScreenCodeCD -- ScreenCodeCD op 11 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCodeCD:
+LcdKeyRow4_SoundEditControllerPage1:
 	link XIZ,0xfffc                                      ; FD0767  ee 0c fc ff
 	pushw hl                                             ; FD076B  2b
 	pushw de                                             ; FD076C  2a
@@ -126715,11 +126715,11 @@ LcdKeyRow4_ScreenCodeCD:
 	popw hl                                              ; FD083B  4b
 	unlk XIZ                                             ; FD083C  ee 0d
 	ret                                                  ; FD083E  0e
-; PageKey_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; PageKey_ScreenCodeCD: the PAGE pair (code 0x10) on ScreenCodeCD -- ScreenCodeCD op 16 (PanelOpTable_FCF773).
+; PageKey_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; PageKey_SoundEditControllerPage1: the PAGE pair (code 0x10) on ScreenCodeCD -- ScreenCodeCD op 16 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCodeCD:
+PageKey_SoundEditControllerPage1:
 	link XIZ,0x0000                                      ; FD083F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0843  8e 08 3f 00
 	jr nz, .LFD0854                                      ; FD0847  6e 0b
@@ -126730,11 +126730,11 @@ PageKey_ScreenCodeCD:
 .LFD0854:
 	unlk XIZ                                             ; FD0854  ee 0d
 	ret                                                  ; FD0856  0e
-; ExitKey_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
-; ExitKey_ScreenCodeCD: the EXIT key on ScreenCodeCD -- ScreenCodeCD op 15 (PanelOpTable_FCF773).
+; ExitKey_SoundEditControllerPage1 -- a handler: an entry of PanelOpTable_FCF773
+; ExitKey_SoundEditControllerPage1: the EXIT key on ScreenCodeCD -- ScreenCodeCD op 15 (PanelOpTable_FCF773).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCodeCD:
+ExitKey_SoundEditControllerPage1:
 	link XIZ,0xfffe                                      ; FD0857  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD085B  be fe 31
 	push XBC                                             ; FD085E  39
@@ -126755,11 +126755,11 @@ ExitKey_ScreenCodeCD:
 .LFD0880:
 	unlk XIZ                                             ; FD0880  ee 0d
 	ret                                                  ; FD0882  0e
-; SoftKeyCol2_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; SoftKeyCol2_ScreenCode9B: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 1 (PanelOpTable_FCF7BB).
+; SoftKeyCol2_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol2_SoundEditControllerPage2: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 1 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode9B:
+SoftKeyCol2_SoundEditControllerPage2:
 	link XIZ,0x0000                                      ; FD0883  ee 0c 00 00
 	pushw 0x02                                           ; FD0887  0b 02 00
 	ld BC,(XIZ+0x08)                                     ; FD088A  9e 08 21
@@ -126772,11 +126772,11 @@ SoftKeyCol2_ScreenCode9B:
 	inc 8,XSP                                            ; FD089E  ef 60
 	unlk XIZ                                             ; FD08A0  ee 0d
 	ret                                                  ; FD08A2  0e
-; SoftKeyCol4_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; SoftKeyCol4_ScreenCode9B: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 3 (PanelOpTable_FCF7BB).
+; SoftKeyCol4_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol4_SoundEditControllerPage2: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 3 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode9B:
+SoftKeyCol4_SoundEditControllerPage2:
 	link XIZ,0x0000                                      ; FD08A3  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08A7  9e 08 21
 	extz BC                                              ; FD08AA  d9 12
@@ -126785,11 +126785,11 @@ SoftKeyCol4_ScreenCode9B:
 	popw bc                                              ; FD08B1  49
 	unlk XIZ                                             ; FD08B2  ee 0d
 	ret                                                  ; FD08B4  0e
-; SoftKeyCol5_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; SoftKeyCol5_ScreenCode9B: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 4 (PanelOpTable_FCF7BB).
+; SoftKeyCol5_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol5_SoundEditControllerPage2: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 4 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode9B:
+SoftKeyCol5_SoundEditControllerPage2:
 	link XIZ,0x0000                                      ; FD08B5  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08B9  9e 08 21
 	extz BC                                              ; FD08BC  d9 12
@@ -126799,11 +126799,11 @@ SoftKeyCol5_ScreenCode9B:
 	pop XBC                                              ; FD08C6  59
 	unlk XIZ                                             ; FD08C7  ee 0d
 	ret                                                  ; FD08C9  0e
-; SoftKeyCol6_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; SoftKeyCol6_ScreenCode9B: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 5 (PanelOpTable_FCF7BB).
+; SoftKeyCol6_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol6_SoundEditControllerPage2: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 5 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode9B:
+SoftKeyCol6_SoundEditControllerPage2:
 	link XIZ,0x0000                                      ; FD08CA  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08CE  9e 08 21
 	extz BC                                              ; FD08D1  d9 12
@@ -126813,11 +126813,11 @@ SoftKeyCol6_ScreenCode9B:
 	pop XBC                                              ; FD08DB  59
 	unlk XIZ                                             ; FD08DC  ee 0d
 	ret                                                  ; FD08DE  0e
-; SoftKeyCol7_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; SoftKeyCol7_ScreenCode9B: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 6 (PanelOpTable_FCF7BB).
+; SoftKeyCol7_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol7_SoundEditControllerPage2: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 6 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode9B:
+SoftKeyCol7_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD08DF  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD08E3  be fe 31
 	push XBC                                             ; FD08E6  39
@@ -126834,11 +126834,11 @@ SoftKeyCol7_ScreenCode9B:
 .LFD0900:
 	unlk XIZ                                             ; FD0900  ee 0d
 	ret                                                  ; FD0902  0e
-; SoftKeyCol8_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; SoftKeyCol8_ScreenCode9B: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 7 (PanelOpTable_FCF7BB).
+; SoftKeyCol8_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol8_SoundEditControllerPage2: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 7 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode9B:
+SoftKeyCol8_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD0903  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0907  be fe 31
 	push XBC                                             ; FD090A  39
@@ -126855,11 +126855,11 @@ SoftKeyCol8_ScreenCode9B:
 .LFD0924:
 	unlk XIZ                                             ; FD0924  ee 0d
 	ret                                                  ; FD0926  0e
-; LcdKeyRow1_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; LcdKeyRow1_ScreenCode9B: LCD key row 1 (left or right) on ScreenCode9B -- ScreenCode9B op 8 (PanelOpTable_FCF7BB).
+; LcdKeyRow1_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow1_SoundEditControllerPage2: LCD key row 1 (left or right) on ScreenCode9B -- ScreenCode9B op 8 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode9B:
+LcdKeyRow1_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD0927  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD092B  8e 08 3f 00
 	jr z, .LFD095A                                       ; FD092F  66 29
@@ -126880,11 +126880,11 @@ LcdKeyRow1_ScreenCode9B:
 .LFD095A:
 	unlk XIZ                                             ; FD095A  ee 0d
 	ret                                                  ; FD095C  0e
-; LcdKeyRow2_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; LcdKeyRow2_ScreenCode9B: LCD key row 2 (left or right) on ScreenCode9B -- ScreenCode9B op 9 (PanelOpTable_FCF7BB).
+; LcdKeyRow2_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow2_SoundEditControllerPage2: LCD key row 2 (left or right) on ScreenCode9B -- ScreenCode9B op 9 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode9B:
+LcdKeyRow2_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD095D  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0961  be fe 31
 	push XBC                                             ; FD0964  39
@@ -126911,11 +126911,11 @@ LcdKeyRow2_ScreenCode9B:
 .LFD099B:
 	unlk XIZ                                             ; FD099B  ee 0d
 	ret                                                  ; FD099D  0e
-; LcdKeyRow3_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; LcdKeyRow3_ScreenCode9B: LCD key row 3 (left or right) on ScreenCode9B -- ScreenCode9B op 10 (PanelOpTable_FCF7BB).
+; LcdKeyRow3_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow3_SoundEditControllerPage2: LCD key row 3 (left or right) on ScreenCode9B -- ScreenCode9B op 10 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode9B:
+LcdKeyRow3_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD099E  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD09A2  be fe 31
 	push XBC                                             ; FD09A5  39
@@ -126942,11 +126942,11 @@ LcdKeyRow3_ScreenCode9B:
 .LFD09DC:
 	unlk XIZ                                             ; FD09DC  ee 0d
 	ret                                                  ; FD09DE  0e
-; LcdKeyRow4_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; LcdKeyRow4_ScreenCode9B: LCD key row 4 (left or right) on ScreenCode9B -- ScreenCode9B op 11 (PanelOpTable_FCF7BB).
+; LcdKeyRow4_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow4_SoundEditControllerPage2: LCD key row 4 (left or right) on ScreenCode9B -- ScreenCode9B op 11 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode9B:
+LcdKeyRow4_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD09DF  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD09E3  be fe 31
 	push XBC                                             ; FD09E6  39
@@ -126973,11 +126973,11 @@ LcdKeyRow4_ScreenCode9B:
 .LFD0A1D:
 	unlk XIZ                                             ; FD0A1D  ee 0d
 	ret                                                  ; FD0A1F  0e
-; LcdKeyRow5_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; LcdKeyRow5_ScreenCode9B: LCD key row 5 (left or right) on ScreenCode9B -- ScreenCode9B op 12 (PanelOpTable_FCF7BB).
+; LcdKeyRow5_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow5_SoundEditControllerPage2: LCD key row 5 (left or right) on ScreenCode9B -- ScreenCode9B op 12 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode9B:
+LcdKeyRow5_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD0A20  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0A24  be fe 31
 	push XBC                                             ; FD0A27  39
@@ -127004,11 +127004,11 @@ LcdKeyRow5_ScreenCode9B:
 .LFD0A5E:
 	unlk XIZ                                             ; FD0A5E  ee 0d
 	ret                                                  ; FD0A60  0e
-; PageKey_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; PageKey_ScreenCode9B: the PAGE pair (code 0x10) on ScreenCode9B -- ScreenCode9B op 16 (PanelOpTable_FCF7BB).
+; PageKey_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; PageKey_SoundEditControllerPage2: the PAGE pair (code 0x10) on ScreenCode9B -- ScreenCode9B op 16 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode9B:
+PageKey_SoundEditControllerPage2:
 	link XIZ,0x0000                                      ; FD0A61  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0A65  8e 08 3f 00
 	jr z, .LFD0A76                                       ; FD0A69  66 0b
@@ -127019,11 +127019,11 @@ PageKey_ScreenCode9B:
 .LFD0A76:
 	unlk XIZ                                             ; FD0A76  ee 0d
 	ret                                                  ; FD0A78  0e
-; ExitKey_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
-; ExitKey_ScreenCode9B: the EXIT key on ScreenCode9B -- ScreenCode9B op 15 (PanelOpTable_FCF7BB).
+; ExitKey_SoundEditControllerPage2 -- a handler: an entry of PanelOpTable_FCF7BB
+; ExitKey_SoundEditControllerPage2: the EXIT key on ScreenCode9B -- ScreenCode9B op 15 (PanelOpTable_FCF7BB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode9B:
+ExitKey_SoundEditControllerPage2:
 	link XIZ,0xfffe                                      ; FD0A79  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0A7D  be fe 31
 	push XBC                                             ; FD0A80  39
@@ -127044,7 +127044,7 @@ ExitKey_ScreenCode9B:
 .LFD0AA2:
 	unlk XIZ                                             ; FD0AA2  ee 0d
 	ret                                                  ; FD0AA4  0e
-ScreenButton_Code82:
+ScreenButton_SoundEditModelingToneTemplate:
 	link XIZ,0xfffc                                      ; FD0AA5  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0AA9  be fe 31
 	push XBC                                             ; FD0AAC  39
@@ -127079,7 +127079,7 @@ ScreenButton_Code82:
 .LFD0AF3:
 	unlk XIZ                                             ; FD0AF3  ee 0d
 	ret                                                  ; FD0AF5  0e
-ScreenButton_Code83:
+ScreenButton_SoundEditToneLayerPanning:
 	link XIZ,0xfffc                                      ; FD0AF6  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0AFA  be fe 31
 	push XBC                                             ; FD0AFD  39
@@ -127114,7 +127114,7 @@ ScreenButton_Code83:
 .LFD0B44:
 	unlk XIZ                                             ; FD0B44  ee 0d
 	ret                                                  ; FD0B46  0e
-ScreenButton_Code84:
+ScreenButton_SoundEditToneLayerKeyLayer:
 	link XIZ,0xfffc                                      ; FD0B47  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0B4B  be fe 31
 	push XBC                                             ; FD0B4E  39
@@ -127153,7 +127153,7 @@ ScreenButton_Code84:
 .LFD0BA4:
 	unlk XIZ                                             ; FD0BA4  ee 0d
 	ret                                                  ; FD0BA6  0e
-ScreenButton_Code85:
+ScreenButton_SoundEditToneLayerVelocityLayer:
 	link XIZ,0xfffc                                      ; FD0BA7  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0BAB  be fe 31
 	push XBC                                             ; FD0BAE  39
@@ -127192,7 +127192,7 @@ ScreenButton_Code85:
 .LFD0C04:
 	unlk XIZ                                             ; FD0C04  ee 0d
 	ret                                                  ; FD0C06  0e
-ScreenButton_Code86:
+ScreenButton_SoundEditModelingDriverWaveform:
 	link XIZ,0xfffc                                      ; FD0C07  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0C0B  be fe 31
 	push XBC                                             ; FD0C0E  39
@@ -127227,11 +127227,11 @@ ScreenButton_Code86:
 .LFD0C55:
 	unlk XIZ                                             ; FD0C55  ee 0d
 	ret                                                  ; FD0C57  0e
-; SoftKeyCol2_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; SoftKeyCol2_ScreenCode82: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 1 (PanelOpTable_FCF80C).
+; SoftKeyCol2_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol2_SoundEditModelingToneTemplate: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 1 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode82:
+SoftKeyCol2_SoundEditModelingToneTemplate:
 	link XIZ,0xfff8                                      ; FD0C58  ee 0c f8 ff
 	pushw hl                                             ; FD0C5C  2b
 	lda xbc, (xiz-2)                                     ; FD0C5D  be fe 31
@@ -127292,11 +127292,11 @@ SoftKeyCol2_ScreenCode82:
 	popw hl                                              ; FD0CE9  4b
 	unlk XIZ                                             ; FD0CEA  ee 0d
 	ret                                                  ; FD0CEC  0e
-; SoftKeyCol3_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; SoftKeyCol3_ScreenCode82: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 2 (PanelOpTable_FCF80C).
+; SoftKeyCol3_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol3_SoundEditModelingToneTemplate: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 2 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode82:
+SoftKeyCol3_SoundEditModelingToneTemplate:
 	link XIZ,0xfffa                                      ; FD0CED  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD0CF1  be fe 31
 	push XBC                                             ; FD0CF4  39
@@ -127345,11 +127345,11 @@ SoftKeyCol3_ScreenCode82:
 .LFD0D5E:
 	unlk XIZ                                             ; FD0D5E  ee 0d
 	ret                                                  ; FD0D60  0e
-; SoftKeyCol5_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; SoftKeyCol5_ScreenCode82: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 4 (PanelOpTable_FCF80C).
+; SoftKeyCol5_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol5_SoundEditModelingToneTemplate: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 4 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode82:
+SoftKeyCol5_SoundEditModelingToneTemplate:
 	link XIZ,0xffec                                      ; FD0D61  ee 0c ec ff
 	pushw hl                                             ; FD0D65  2b
 	pushw de                                             ; FD0D66  2a
@@ -127432,11 +127432,11 @@ SoftKeyCol5_ScreenCode82:
 	popw hl                                              ; FD0E18  4b
 	unlk XIZ                                             ; FD0E19  ee 0d
 	ret                                                  ; FD0E1B  0e
-; SoftKeyCol6_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; SoftKeyCol6_ScreenCode82: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 5 (PanelOpTable_FCF80C).
+; SoftKeyCol6_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol6_SoundEditModelingToneTemplate: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 5 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode82:
+SoftKeyCol6_SoundEditModelingToneTemplate:
 	link XIZ,0xffec                                      ; FD0E1C  ee 0c ec ff
 	pushw hl                                             ; FD0E20  2b
 	push XIX                                             ; FD0E21  3c
@@ -127510,11 +127510,11 @@ sub_FD0E49:
 	popw hl                                              ; FD0EC6  4b
 	unlk XIZ                                             ; FD0EC7  ee 0d
 	ret                                                  ; FD0EC9  0e
-; SoftKeyCol7_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; SoftKeyCol7_ScreenCode82: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 6 (PanelOpTable_FCF80C).
+; SoftKeyCol7_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol7_SoundEditModelingToneTemplate: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 6 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode82:
+SoftKeyCol7_SoundEditModelingToneTemplate:
 	link XIZ,0xffec                                      ; FD0ECA  ee 0c ec ff
 	pushw hl                                             ; FD0ECE  2b
 	pushw de                                             ; FD0ECF  2a
@@ -127581,11 +127581,11 @@ SoftKeyCol7_ScreenCode82:
 	popw hl                                              ; FD0F64  4b
 	unlk XIZ                                             ; FD0F65  ee 0d
 	ret                                                  ; FD0F67  0e
-; LcdKeyRow1_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; LcdKeyRow1_ScreenCode82: LCD key row 1 (left or right) on ScreenCode82 -- ScreenCode82 op 8 (PanelOpTable_FCF80C).
+; LcdKeyRow1_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow1_SoundEditModelingToneTemplate: LCD key row 1 (left or right) on ScreenCode82 -- ScreenCode82 op 8 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode82:
+LcdKeyRow1_SoundEditModelingToneTemplate:
 	link XIZ,0x0000                                      ; FD0F68  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0F6C  8e 08 3f 00
 	jr z, .LFD0F76                                       ; FD0F70  66 04
@@ -127593,11 +127593,11 @@ LcdKeyRow1_ScreenCode82:
 .LFD0F76:
 	unlk XIZ                                             ; FD0F76  ee 0d
 	ret                                                  ; FD0F78  0e
-; LcdKeyRow2_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; LcdKeyRow2_ScreenCode82: LCD key row 2 (left or right) on ScreenCode82 -- ScreenCode82 op 9 (PanelOpTable_FCF80C).
+; LcdKeyRow2_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow2_SoundEditModelingToneTemplate: LCD key row 2 (left or right) on ScreenCode82 -- ScreenCode82 op 9 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode82:
+LcdKeyRow2_SoundEditModelingToneTemplate:
 	link XIZ,0x0000                                      ; FD0F79  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0F7D  8e 08 3f 00
 	jr nz, .LFD0F90                                      ; FD0F81  6e 0d
@@ -127615,11 +127615,11 @@ LcdKeyRow2_ScreenCode82:
 .LFD0F9F:
 	unlk XIZ                                             ; FD0F9F  ee 0d
 	ret                                                  ; FD0FA1  0e
-; LcdKeyRow3_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; LcdKeyRow3_ScreenCode82: LCD key row 3 (left or right) on ScreenCode82 -- ScreenCode82 op 10 (PanelOpTable_FCF80C).
+; LcdKeyRow3_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow3_SoundEditModelingToneTemplate: LCD key row 3 (left or right) on ScreenCode82 -- ScreenCode82 op 10 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode82:
+LcdKeyRow3_SoundEditModelingToneTemplate:
 	link XIZ,0x0000                                      ; FD0FA2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FA6  8e 08 3f 00
 	jr nz, .LFD0FB9                                      ; FD0FAA  6e 0d
@@ -127637,11 +127637,11 @@ LcdKeyRow3_ScreenCode82:
 .LFD0FC8:
 	unlk XIZ                                             ; FD0FC8  ee 0d
 	ret                                                  ; FD0FCA  0e
-; LcdKeyRow4_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; LcdKeyRow4_ScreenCode82: LCD key row 4 (left or right) on ScreenCode82 -- ScreenCode82 op 11 (PanelOpTable_FCF80C).
+; LcdKeyRow4_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow4_SoundEditModelingToneTemplate: LCD key row 4 (left or right) on ScreenCode82 -- ScreenCode82 op 11 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode82:
+LcdKeyRow4_SoundEditModelingToneTemplate:
 	link XIZ,0x0000                                      ; FD0FCB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FCF  8e 08 3f 00
 	jr nz, .LFD0FE2                                      ; FD0FD3  6e 0d
@@ -127659,11 +127659,11 @@ LcdKeyRow4_ScreenCode82:
 .LFD0FF1:
 	unlk XIZ                                             ; FD0FF1  ee 0d
 	ret                                                  ; FD0FF3  0e
-; LcdKeyRow5_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; LcdKeyRow5_ScreenCode82: LCD key row 5 (left or right) on ScreenCode82 -- ScreenCode82 op 12 (PanelOpTable_FCF80C).
+; LcdKeyRow5_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow5_SoundEditModelingToneTemplate: LCD key row 5 (left or right) on ScreenCode82 -- ScreenCode82 op 12 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode82:
+LcdKeyRow5_SoundEditModelingToneTemplate:
 	link XIZ,0x0000                                      ; FD0FF4  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FF8  8e 08 3f 00
 	jr z, .LFD100D                                       ; FD0FFC  66 0f
@@ -127675,11 +127675,11 @@ LcdKeyRow5_ScreenCode82:
 .LFD100D:
 	unlk XIZ                                             ; FD100D  ee 0d
 	ret                                                  ; FD100F  0e
-; ExitKey_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
-; ExitKey_ScreenCode82: the EXIT key on ScreenCode82 -- ScreenCode82 op 15 (PanelOpTable_FCF80C).
+; ExitKey_SoundEditModelingToneTemplate -- a handler: an entry of PanelOpTable_FCF80C
+; ExitKey_SoundEditModelingToneTemplate: the EXIT key on ScreenCode82 -- ScreenCode82 op 15 (PanelOpTable_FCF80C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode82:
+ExitKey_SoundEditModelingToneTemplate:
 	link XIZ,0x0000                                      ; FD1010  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1014  8e 08 3f 00
 	jr nz, .LFD1025                                      ; FD1018  6e 0b
@@ -127690,11 +127690,11 @@ ExitKey_ScreenCode82:
 .LFD1025:
 	unlk XIZ                                             ; FD1025  ee 0d
 	ret                                                  ; FD1027  0e
-; SoftKeyCol2_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; SoftKeyCol2_ScreenCode83: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 1 (PanelOpTable_FCF854).
+; SoftKeyCol2_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; SoftKeyCol2_SoundEditToneLayerPanning: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 1 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode83:
+SoftKeyCol2_SoundEditToneLayerPanning:
 	link XIZ,0xfff8                                      ; FD1028  ee 0c f8 ff
 	pushw hl                                             ; FD102C  2b
 	push XIX                                             ; FD102D  3c
@@ -127826,11 +127826,11 @@ SoftKeyCol2_ScreenCode83:
 	popw hl                                              ; FD1155  4b
 	unlk XIZ                                             ; FD1156  ee 0d
 	ret                                                  ; FD1158  0e
-; SoftKeyCol4_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; SoftKeyCol4_ScreenCode83: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 3 (PanelOpTable_FCF854).
+; SoftKeyCol4_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; SoftKeyCol4_SoundEditToneLayerPanning: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 3 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode83:
+SoftKeyCol4_SoundEditToneLayerPanning:
 	link XIZ,0xfff0                                      ; FD1159  ee 0c f0 ff
 	pushw hl                                             ; FD115D  2b
 	pushw de                                             ; FD115E  2a
@@ -127882,11 +127882,11 @@ SoftKeyCol4_ScreenCode83:
 	popw hl                                              ; FD11D3  4b
 	unlk XIZ                                             ; FD11D4  ee 0d
 	ret                                                  ; FD11D6  0e
-; SoftKeyCol3_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; SoftKeyCol3_ScreenCode83: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 2 (PanelOpTable_FCF854).
+; SoftKeyCol3_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; SoftKeyCol3_SoundEditToneLayerPanning: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 2 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode83:
+SoftKeyCol3_SoundEditToneLayerPanning:
 	link XIZ,0xfff8                                      ; FD11D7  ee 0c f8 ff
 	pushw hl                                             ; FD11DB  2b
 	pushw de                                             ; FD11DC  2a
@@ -127977,11 +127977,11 @@ sub_FD1221:
 	popw hl                                              ; FD12AC  4b
 	unlk XIZ                                             ; FD12AD  ee 0d
 	ret                                                  ; FD12AF  0e
-; LcdKeyRow1_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; LcdKeyRow1_ScreenCode83: LCD key row 1 (left or right) on ScreenCode83 -- ScreenCode83 op 8 (PanelOpTable_FCF854).
+; LcdKeyRow1_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow1_SoundEditToneLayerPanning: LCD key row 1 (left or right) on ScreenCode83 -- ScreenCode83 op 8 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode83:
+LcdKeyRow1_SoundEditToneLayerPanning:
 	link XIZ,0xfffe                                      ; FD12B0  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD12B4  8e 08 3f 00
 	jr nz, .LFD12E5                                      ; FD12B8  6e 2b
@@ -128005,11 +128005,11 @@ LcdKeyRow1_ScreenCode83:
 .LFD12E9:
 	unlk XIZ                                             ; FD12E9  ee 0d
 	ret                                                  ; FD12EB  0e
-; LcdKeyRow2_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; LcdKeyRow2_ScreenCode83: LCD key row 2 (left or right) on ScreenCode83 -- ScreenCode83 op 9 (PanelOpTable_FCF854).
+; LcdKeyRow2_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow2_SoundEditToneLayerPanning: LCD key row 2 (left or right) on ScreenCode83 -- ScreenCode83 op 9 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode83:
+LcdKeyRow2_SoundEditToneLayerPanning:
 	link XIZ,0x0000                                      ; FD12EC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD12F0  8e 08 3f 00
 	jr nz, .LFD1303                                      ; FD12F4  6e 0d
@@ -128027,11 +128027,11 @@ LcdKeyRow2_ScreenCode83:
 .LFD1312:
 	unlk XIZ                                             ; FD1312  ee 0d
 	ret                                                  ; FD1314  0e
-; LcdKeyRow3_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; LcdKeyRow3_ScreenCode83: LCD key row 3 (left or right) on ScreenCode83 -- ScreenCode83 op 10 (PanelOpTable_FCF854).
+; LcdKeyRow3_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow3_SoundEditToneLayerPanning: LCD key row 3 (left or right) on ScreenCode83 -- ScreenCode83 op 10 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode83:
+LcdKeyRow3_SoundEditToneLayerPanning:
 	link XIZ,0x0000                                      ; FD1315  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1319  8e 08 3f 00
 	jr nz, .LFD132C                                      ; FD131D  6e 0d
@@ -128049,11 +128049,11 @@ LcdKeyRow3_ScreenCode83:
 .LFD133B:
 	unlk XIZ                                             ; FD133B  ee 0d
 	ret                                                  ; FD133D  0e
-; LcdKeyRow4_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; LcdKeyRow4_ScreenCode83: LCD key row 4 (left or right) on ScreenCode83 -- ScreenCode83 op 11 (PanelOpTable_FCF854).
+; LcdKeyRow4_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow4_SoundEditToneLayerPanning: LCD key row 4 (left or right) on ScreenCode83 -- ScreenCode83 op 11 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode83:
+LcdKeyRow4_SoundEditToneLayerPanning:
 	link XIZ,0xfffe                                      ; FD133E  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD1342  8e 08 3f 00
 	jr nz, .LFD1373                                      ; FD1346  6e 2b
@@ -128081,11 +128081,11 @@ LcdKeyRow4_ScreenCode83:
 .LFD1382:
 	unlk XIZ                                             ; FD1382  ee 0d
 	ret                                                  ; FD1384  0e
-; LcdKeyRow5_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; LcdKeyRow5_ScreenCode83: LCD key row 5 (left or right) on ScreenCode83 -- ScreenCode83 op 12 (PanelOpTable_FCF854).
+; LcdKeyRow5_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow5_SoundEditToneLayerPanning: LCD key row 5 (left or right) on ScreenCode83 -- ScreenCode83 op 12 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode83:
+LcdKeyRow5_SoundEditToneLayerPanning:
 	link XIZ,0x0000                                      ; FD1385  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1389  8e 08 3f 00
 	jr z, .LFD139E                                       ; FD138D  66 0f
@@ -128097,11 +128097,11 @@ LcdKeyRow5_ScreenCode83:
 .LFD139E:
 	unlk XIZ                                             ; FD139E  ee 0d
 	ret                                                  ; FD13A0  0e
-; ExitKey_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
-; ExitKey_ScreenCode83: the EXIT key on ScreenCode83 -- ScreenCode83 op 15 (PanelOpTable_FCF854).
+; ExitKey_SoundEditToneLayerPanning -- a handler: an entry of PanelOpTable_FCF854
+; ExitKey_SoundEditToneLayerPanning: the EXIT key on ScreenCode83 -- ScreenCode83 op 15 (PanelOpTable_FCF854).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode83:
+ExitKey_SoundEditToneLayerPanning:
 	link XIZ,0x0000                                      ; FD13A1  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD13A5  8e 08 3f 00
 	jr nz, .LFD13BE                                      ; FD13A9  6e 13
@@ -128114,11 +128114,11 @@ ExitKey_ScreenCode83:
 .LFD13BE:
 	unlk XIZ                                             ; FD13BE  ee 0d
 	ret                                                  ; FD13C0  0e
-; SoftKeyCol3_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; SoftKeyCol3_ScreenCode84: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 2 (PanelOpTable_FCF89C).
+; SoftKeyCol3_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol3_SoundEditToneLayerKeyLayer: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 2 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode84:
+SoftKeyCol3_SoundEditToneLayerKeyLayer:
 	link XIZ,0xfffa                                      ; FD13C1  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD13C5  be fe 31
 	push XBC                                             ; FD13C8  39
@@ -128169,11 +128169,11 @@ SoftKeyCol3_ScreenCode84:
 	popw bc                                              ; FD143F  49
 	unlk XIZ                                             ; FD1440  ee 0d
 	ret                                                  ; FD1442  0e
-; SoftKeyCol4_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; SoftKeyCol4_ScreenCode84: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 3 (PanelOpTable_FCF89C).
+; SoftKeyCol4_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol4_SoundEditToneLayerKeyLayer: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 3 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode84:
+SoftKeyCol4_SoundEditToneLayerKeyLayer:
 	link XIZ,0xfff8                                      ; FD1443  ee 0c f8 ff
 	push XIX                                             ; FD1447  3c
 	lda xix, (Arr27A6_Get:24)                            ; FD1448  f2 7b 6c fd 34
@@ -128242,11 +128242,11 @@ SoftKeyCol4_ScreenCode84:
 	pop XIX                                              ; FD14E7  5c
 	unlk XIZ                                             ; FD14E8  ee 0d
 	ret                                                  ; FD14EA  0e
-; SoftKeyCol5_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; SoftKeyCol5_ScreenCode84: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 4 (PanelOpTable_FCF89C).
+; SoftKeyCol5_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol5_SoundEditToneLayerKeyLayer: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 4 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode84:
+SoftKeyCol5_SoundEditToneLayerKeyLayer:
 	link XIZ,0xfff8                                      ; FD14EB  ee 0c f8 ff
 	push XIX                                             ; FD14EF  3c
 	lda xix, (Arr27A6_Get:24)                            ; FD14F0  f2 7b 6c fd 34
@@ -128315,11 +128315,11 @@ SoftKeyCol5_ScreenCode84:
 	pop XIX                                              ; FD158F  5c
 	unlk XIZ                                             ; FD1590  ee 0d
 	ret                                                  ; FD1592  0e
-; SoftKeyCol6_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; SoftKeyCol6_ScreenCode84: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 5 (PanelOpTable_FCF89C).
+; SoftKeyCol6_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol6_SoundEditToneLayerKeyLayer: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 5 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode84:
+SoftKeyCol6_SoundEditToneLayerKeyLayer:
 	link XIZ,0xfffa                                      ; FD1593  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD1597  be fe 31
 	push XBC                                             ; FD159A  39
@@ -128370,11 +128370,11 @@ SoftKeyCol6_ScreenCode84:
 	popw bc                                              ; FD1611  49
 	unlk XIZ                                             ; FD1612  ee 0d
 	ret                                                  ; FD1614  0e
-; LcdKeyRow1_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; LcdKeyRow1_ScreenCode84: LCD key row 1 (left or right) on ScreenCode84 -- ScreenCode84 op 8 (PanelOpTable_FCF89C).
+; LcdKeyRow1_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow1_SoundEditToneLayerKeyLayer: LCD key row 1 (left or right) on ScreenCode84 -- ScreenCode84 op 8 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode84:
+LcdKeyRow1_SoundEditToneLayerKeyLayer:
 	link XIZ,0x0000                                      ; FD1615  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1619  8e 08 3f 00
 	jr nz, .LFD1637                                      ; FD161D  6e 18
@@ -128391,11 +128391,11 @@ LcdKeyRow1_ScreenCode84:
 .LFD163B:
 	unlk XIZ                                             ; FD163B  ee 0d
 	ret                                                  ; FD163D  0e
-; LcdKeyRow2_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; LcdKeyRow2_ScreenCode84: LCD key row 2 (left or right) on ScreenCode84 -- ScreenCode84 op 9 (PanelOpTable_FCF89C).
+; LcdKeyRow2_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow2_SoundEditToneLayerKeyLayer: LCD key row 2 (left or right) on ScreenCode84 -- ScreenCode84 op 9 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode84:
+LcdKeyRow2_SoundEditToneLayerKeyLayer:
 	link XIZ,0x0000                                      ; FD163E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1642  8e 08 3f 00
 	jr z, .LFD165F                                       ; FD1646  66 17
@@ -128411,11 +128411,11 @@ LcdKeyRow2_ScreenCode84:
 .LFD165F:
 	unlk XIZ                                             ; FD165F  ee 0d
 	ret                                                  ; FD1661  0e
-; LcdKeyRow3_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; LcdKeyRow3_ScreenCode84: LCD key row 3 (left or right) on ScreenCode84 -- ScreenCode84 op 10 (PanelOpTable_FCF89C).
+; LcdKeyRow3_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow3_SoundEditToneLayerKeyLayer: LCD key row 3 (left or right) on ScreenCode84 -- ScreenCode84 op 10 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode84:
+LcdKeyRow3_SoundEditToneLayerKeyLayer:
 	link XIZ,0x0000                                      ; FD1662  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1666  8e 08 3f 00
 	jr nz, .LFD1674                                      ; FD166A  6e 08
@@ -128436,11 +128436,11 @@ LcdKeyRow3_ScreenCode84:
 .LFD168B:
 	unlk XIZ                                             ; FD168B  ee 0d
 	ret                                                  ; FD168D  0e
-; LcdKeyRow4_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; LcdKeyRow4_ScreenCode84: LCD key row 4 (left or right) on ScreenCode84 -- ScreenCode84 op 11 (PanelOpTable_FCF89C).
+; LcdKeyRow4_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow4_SoundEditToneLayerKeyLayer: LCD key row 4 (left or right) on ScreenCode84 -- ScreenCode84 op 11 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode84:
+LcdKeyRow4_SoundEditToneLayerKeyLayer:
 	link XIZ,0x0000                                      ; FD168E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1692  8e 08 3f 00
 	jr z, .LFD16AC                                       ; FD1696  66 14
@@ -128465,11 +128465,11 @@ LcdKeyRow4_ScreenCode84:
 .LFD16C2:
 	unlk XIZ                                             ; FD16C2  ee 0d
 	ret                                                  ; FD16C4  0e
-; LcdKeyRow5_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; LcdKeyRow5_ScreenCode84: LCD key row 5 (left or right) on ScreenCode84 -- ScreenCode84 op 12 (PanelOpTable_FCF89C).
+; LcdKeyRow5_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow5_SoundEditToneLayerKeyLayer: LCD key row 5 (left or right) on ScreenCode84 -- ScreenCode84 op 12 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode84:
+LcdKeyRow5_SoundEditToneLayerKeyLayer:
 	link XIZ,0x0000                                      ; FD16C5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD16C9  8e 08 3f 00
 	jr z, .LFD16E6                                       ; FD16CD  66 17
@@ -128485,11 +128485,11 @@ LcdKeyRow5_ScreenCode84:
 .LFD16E6:
 	unlk XIZ                                             ; FD16E6  ee 0d
 	ret                                                  ; FD16E8  0e
-; ExitKey_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
-; ExitKey_ScreenCode84: the EXIT key on ScreenCode84 -- ScreenCode84 op 15 (PanelOpTable_FCF89C).
+; ExitKey_SoundEditToneLayerKeyLayer -- a handler: an entry of PanelOpTable_FCF89C
+; ExitKey_SoundEditToneLayerKeyLayer: the EXIT key on ScreenCode84 -- ScreenCode84 op 15 (PanelOpTable_FCF89C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode84:
+ExitKey_SoundEditToneLayerKeyLayer:
 	link XIZ,0x0000                                      ; FD16E9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD16ED  8e 08 3f 00
 	jr nz, .LFD1706                                      ; FD16F1  6e 13
@@ -128502,11 +128502,11 @@ ExitKey_ScreenCode84:
 .LFD1706:
 	unlk XIZ                                             ; FD1706  ee 0d
 	ret                                                  ; FD1708  0e
-; SoftKeyCol3_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; SoftKeyCol3_ScreenCode85: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 2 (PanelOpTable_FCF8E4).
+; SoftKeyCol3_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol3_SoundEditToneLayerVelocityLayer: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 2 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode85:
+SoftKeyCol3_SoundEditToneLayerVelocityLayer:
 	link XIZ,0xfff0                                      ; FD1709  ee 0c f0 ff
 	push XIX                                             ; FD170D  3c
 	lda xix, (xiz-16)                                    ; FD170E  be f0 34
@@ -128559,11 +128559,11 @@ sub_FD173D:
 	pop XIX                                              ; FD178C  5c
 	unlk XIZ                                             ; FD178D  ee 0d
 	ret                                                  ; FD178F  0e
-; SoftKeyCol4_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; SoftKeyCol4_ScreenCode85: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 3 (PanelOpTable_FCF8E4).
+; SoftKeyCol4_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol4_SoundEditToneLayerVelocityLayer: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 3 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode85:
+SoftKeyCol4_SoundEditToneLayerVelocityLayer:
 	link XIZ,0xffee                                      ; FD1790  ee 0c ee ff
 	push XIX                                             ; FD1794  3c
 	lda xix, (xiz-18)                                    ; FD1795  be ee 34
@@ -128622,11 +128622,11 @@ sub_FD17B1:
 	pop XIX                                              ; FD1823  5c
 	unlk XIZ                                             ; FD1824  ee 0d
 	ret                                                  ; FD1826  0e
-; SoftKeyCol5_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; SoftKeyCol5_ScreenCode85: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 4 (PanelOpTable_FCF8E4).
+; SoftKeyCol5_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol5_SoundEditToneLayerVelocityLayer: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 4 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode85:
+SoftKeyCol5_SoundEditToneLayerVelocityLayer:
 	link XIZ,0xffee                                      ; FD1827  ee 0c ee ff
 	push XIX                                             ; FD182B  3c
 	lda xix, (xiz-18)                                    ; FD182C  be ee 34
@@ -128684,11 +128684,11 @@ SoftKeyCol5_ScreenCode85:
 	pop XIX                                              ; FD18BA  5c
 	unlk XIZ                                             ; FD18BB  ee 0d
 	ret                                                  ; FD18BD  0e
-; SoftKeyCol6_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; SoftKeyCol6_ScreenCode85: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 5 (PanelOpTable_FCF8E4).
+; SoftKeyCol6_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol6_SoundEditToneLayerVelocityLayer: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 5 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode85:
+SoftKeyCol6_SoundEditToneLayerVelocityLayer:
 	link XIZ,0xfff0                                      ; FD18BE  ee 0c f0 ff
 	push XIX                                             ; FD18C2  3c
 	lda xix, (xiz-16)                                    ; FD18C3  be f0 34
@@ -128740,11 +128740,11 @@ SoftKeyCol6_ScreenCode85:
 	pop XIX                                              ; FD1941  5c
 	unlk XIZ                                             ; FD1942  ee 0d
 	ret                                                  ; FD1944  0e
-; LcdKeyRow1_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; LcdKeyRow1_ScreenCode85: LCD key row 1 (left or right) on ScreenCode85 -- ScreenCode85 op 8 (PanelOpTable_FCF8E4).
+; LcdKeyRow1_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow1_SoundEditToneLayerVelocityLayer: LCD key row 1 (left or right) on ScreenCode85 -- ScreenCode85 op 8 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode85:
+LcdKeyRow1_SoundEditToneLayerVelocityLayer:
 	link XIZ,0x0000                                      ; FD1945  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1949  8e 08 3f 00
 	jr nz, .LFD1967                                      ; FD194D  6e 18
@@ -128761,11 +128761,11 @@ LcdKeyRow1_ScreenCode85:
 .LFD196B:
 	unlk XIZ                                             ; FD196B  ee 0d
 	ret                                                  ; FD196D  0e
-; LcdKeyRow2_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; LcdKeyRow2_ScreenCode85: LCD key row 2 (left or right) on ScreenCode85 -- ScreenCode85 op 9 (PanelOpTable_FCF8E4).
+; LcdKeyRow2_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow2_SoundEditToneLayerVelocityLayer: LCD key row 2 (left or right) on ScreenCode85 -- ScreenCode85 op 9 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode85:
+LcdKeyRow2_SoundEditToneLayerVelocityLayer:
 	link XIZ,0x0000                                      ; FD196E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1972  8e 08 3f 00
 	jr nz, .LFD1980                                      ; FD1976  6e 08
@@ -128786,11 +128786,11 @@ LcdKeyRow2_ScreenCode85:
 .LFD1997:
 	unlk XIZ                                             ; FD1997  ee 0d
 	ret                                                  ; FD1999  0e
-; LcdKeyRow3_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; LcdKeyRow3_ScreenCode85: LCD key row 3 (left or right) on ScreenCode85 -- ScreenCode85 op 10 (PanelOpTable_FCF8E4).
+; LcdKeyRow3_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow3_SoundEditToneLayerVelocityLayer: LCD key row 3 (left or right) on ScreenCode85 -- ScreenCode85 op 10 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode85:
+LcdKeyRow3_SoundEditToneLayerVelocityLayer:
 	link XIZ,0x0000                                      ; FD199A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD199E  8e 08 3f 00
 	jr z, .LFD19BB                                       ; FD19A2  66 17
@@ -128806,11 +128806,11 @@ LcdKeyRow3_ScreenCode85:
 .LFD19BB:
 	unlk XIZ                                             ; FD19BB  ee 0d
 	ret                                                  ; FD19BD  0e
-; LcdKeyRow4_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; LcdKeyRow4_ScreenCode85: LCD key row 4 (left or right) on ScreenCode85 -- ScreenCode85 op 11 (PanelOpTable_FCF8E4).
+; LcdKeyRow4_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow4_SoundEditToneLayerVelocityLayer: LCD key row 4 (left or right) on ScreenCode85 -- ScreenCode85 op 11 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode85:
+LcdKeyRow4_SoundEditToneLayerVelocityLayer:
 	link XIZ,0x0000                                      ; FD19BE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD19C2  8e 08 3f 00
 	jr z, .LFD19DC                                       ; FD19C6  66 14
@@ -128835,11 +128835,11 @@ LcdKeyRow4_ScreenCode85:
 .LFD19F2:
 	unlk XIZ                                             ; FD19F2  ee 0d
 	ret                                                  ; FD19F4  0e
-; LcdKeyRow5_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; LcdKeyRow5_ScreenCode85: LCD key row 5 (left or right) on ScreenCode85 -- ScreenCode85 op 12 (PanelOpTable_FCF8E4).
+; LcdKeyRow5_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow5_SoundEditToneLayerVelocityLayer: LCD key row 5 (left or right) on ScreenCode85 -- ScreenCode85 op 12 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode85:
+LcdKeyRow5_SoundEditToneLayerVelocityLayer:
 	link XIZ,0x0000                                      ; FD19F5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD19F9  8e 08 3f 00
 	jr z, .LFD1A16                                       ; FD19FD  66 17
@@ -128855,11 +128855,11 @@ LcdKeyRow5_ScreenCode85:
 .LFD1A16:
 	unlk XIZ                                             ; FD1A16  ee 0d
 	ret                                                  ; FD1A18  0e
-; ExitKey_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
-; ExitKey_ScreenCode85: the EXIT key on ScreenCode85 -- ScreenCode85 op 15 (PanelOpTable_FCF8E4).
+; ExitKey_SoundEditToneLayerVelocityLayer -- a handler: an entry of PanelOpTable_FCF8E4
+; ExitKey_SoundEditToneLayerVelocityLayer: the EXIT key on ScreenCode85 -- ScreenCode85 op 15 (PanelOpTable_FCF8E4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode85:
+ExitKey_SoundEditToneLayerVelocityLayer:
 	link XIZ,0x0000                                      ; FD1A19  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1A1D  8e 08 3f 00
 	jr nz, .LFD1A36                                      ; FD1A21  6e 13
@@ -128872,11 +128872,11 @@ ExitKey_ScreenCode85:
 .LFD1A36:
 	unlk XIZ                                             ; FD1A36  ee 0d
 	ret                                                  ; FD1A38  0e
-; SoftKeyCol8_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; SoftKeyCol8_ScreenCode86: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 7 (PanelOpTable_FCF92C).
+; SoftKeyCol8_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol8_SoundEditModelingDriverWaveform: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 7 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode86:
+SoftKeyCol8_SoundEditModelingDriverWaveform:
 	link XIZ,0xfffc                                      ; FD1A39  ee 0c fc ff
 	pushw hl                                             ; FD1A3D  2b
 	ld H,(XIZ+0x08)                                      ; FD1A3E  8e 08 26
@@ -128919,11 +128919,11 @@ SoftKeyCol8_ScreenCode86:
 	popw hl                                              ; FD1A98  4b
 	unlk XIZ                                             ; FD1A99  ee 0d
 	ret                                                  ; FD1A9B  0e
-; SoftKeyCol2_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; SoftKeyCol2_ScreenCode86: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 1 (PanelOpTable_FCF92C).
+; SoftKeyCol2_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol2_SoundEditModelingDriverWaveform: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 1 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode86:
+SoftKeyCol2_SoundEditModelingDriverWaveform:
 	link XIZ,0xfff6                                      ; FD1A9C  ee 0c f6 ff
 	pushw hl                                             ; FD1AA0  2b
 	lda xbc, (xiz-2)                                     ; FD1AA1  be fe 31
@@ -128994,11 +128994,11 @@ sub_FD1AA5:
 	popw hl                                              ; FD1B41  4b
 	unlk XIZ                                             ; FD1B42  ee 0d
 	ret                                                  ; FD1B44  0e
-; SoftKeyCol3_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; SoftKeyCol3_ScreenCode86: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 2 (PanelOpTable_FCF92C).
+; SoftKeyCol3_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol3_SoundEditModelingDriverWaveform: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 2 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode86:
+SoftKeyCol3_SoundEditModelingDriverWaveform:
 	link XIZ,0xfff8                                      ; FD1B45  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FD1B49  be fe 31
 	push XBC                                             ; FD1B4C  39
@@ -129055,11 +129055,11 @@ SoftKeyCol3_ScreenCode86:
 .LFD1BCC:
 	unlk XIZ                                             ; FD1BCC  ee 0d
 	ret                                                  ; FD1BCE  0e
-; SoftKeyCol6_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; SoftKeyCol6_ScreenCode86: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 5 (PanelOpTable_FCF92C).
+; SoftKeyCol6_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol6_SoundEditModelingDriverWaveform: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 5 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode86:
+SoftKeyCol6_SoundEditModelingDriverWaveform:
 	link XIZ,0xffe0                                      ; FD1BCF  ee 0c e0 ff
 	pushw hl                                             ; FD1BD3  2b
 	pushw de                                             ; FD1BD4  2a
@@ -129441,11 +129441,11 @@ sub_FD1C35:
 	popw hl                                              ; FD1F39  4b
 	unlk XIZ                                             ; FD1F3A  ee 0d
 	ret                                                  ; FD1F3C  0e
-; LcdKeyRow1_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; LcdKeyRow1_ScreenCode86: LCD key row 1 (left or right) on ScreenCode86 -- ScreenCode86 op 8 (PanelOpTable_FCF92C).
+; LcdKeyRow1_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow1_SoundEditModelingDriverWaveform: LCD key row 1 (left or right) on ScreenCode86 -- ScreenCode86 op 8 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode86:
+LcdKeyRow1_SoundEditModelingDriverWaveform:
 	link XIZ,0x0000                                      ; FD1F3D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F41  8e 08 3f 00
 	jr nz, .LFD1F54                                      ; FD1F45  6e 0d
@@ -129459,11 +129459,11 @@ LcdKeyRow1_ScreenCode86:
 .LFD1F58:
 	unlk XIZ                                             ; FD1F58  ee 0d
 	ret                                                  ; FD1F5A  0e
-; LcdKeyRow2_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; LcdKeyRow2_ScreenCode86: LCD key row 2 (left or right) on ScreenCode86 -- ScreenCode86 op 9 (PanelOpTable_FCF92C).
+; LcdKeyRow2_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow2_SoundEditModelingDriverWaveform: LCD key row 2 (left or right) on ScreenCode86 -- ScreenCode86 op 9 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode86:
+LcdKeyRow2_SoundEditModelingDriverWaveform:
 	link XIZ,0x0000                                      ; FD1F5B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F5F  8e 08 3f 00
 	jr z, .LFD1F7C                                       ; FD1F63  66 17
@@ -129479,11 +129479,11 @@ LcdKeyRow2_ScreenCode86:
 .LFD1F7C:
 	unlk XIZ                                             ; FD1F7C  ee 0d
 	ret                                                  ; FD1F7E  0e
-; LcdKeyRow3_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; LcdKeyRow3_ScreenCode86: LCD key row 3 (left or right) on ScreenCode86 -- ScreenCode86 op 10 (PanelOpTable_FCF92C).
+; LcdKeyRow3_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow3_SoundEditModelingDriverWaveform: LCD key row 3 (left or right) on ScreenCode86 -- ScreenCode86 op 10 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode86:
+LcdKeyRow3_SoundEditModelingDriverWaveform:
 	link XIZ,0x0000                                      ; FD1F7F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F83  8e 08 3f 00
 	jr nz, .LFD1F91                                      ; FD1F87  6e 08
@@ -129504,11 +129504,11 @@ LcdKeyRow3_ScreenCode86:
 .LFD1FA8:
 	unlk XIZ                                             ; FD1FA8  ee 0d
 	ret                                                  ; FD1FAA  0e
-; LcdKeyRow4_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; LcdKeyRow4_ScreenCode86: LCD key row 4 (left or right) on ScreenCode86 -- ScreenCode86 op 11 (PanelOpTable_FCF92C).
+; LcdKeyRow4_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow4_SoundEditModelingDriverWaveform: LCD key row 4 (left or right) on ScreenCode86 -- ScreenCode86 op 11 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode86:
+LcdKeyRow4_SoundEditModelingDriverWaveform:
 	link XIZ,0x0000                                      ; FD1FAB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FAF  8e 08 3f 00
 	jr nz, .LFD1FBD                                      ; FD1FB3  6e 08
@@ -129529,11 +129529,11 @@ LcdKeyRow4_ScreenCode86:
 .LFD1FD4:
 	unlk XIZ                                             ; FD1FD4  ee 0d
 	ret                                                  ; FD1FD6  0e
-; LcdKeyRow5_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; LcdKeyRow5_ScreenCode86: LCD key row 5 (left or right) on ScreenCode86 -- ScreenCode86 op 12 (PanelOpTable_FCF92C).
+; LcdKeyRow5_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow5_SoundEditModelingDriverWaveform: LCD key row 5 (left or right) on ScreenCode86 -- ScreenCode86 op 12 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode86:
+LcdKeyRow5_SoundEditModelingDriverWaveform:
 	link XIZ,0x0000                                      ; FD1FD7  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FDB  8e 08 3f 00
 	jr z, .LFD1FF8                                       ; FD1FDF  66 17
@@ -129549,11 +129549,11 @@ LcdKeyRow5_ScreenCode86:
 .LFD1FF8:
 	unlk XIZ                                             ; FD1FF8  ee 0d
 	ret                                                  ; FD1FFA  0e
-; ExitKey_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
-; ExitKey_ScreenCode86: the EXIT key on ScreenCode86 -- ScreenCode86 op 15 (PanelOpTable_FCF92C).
+; ExitKey_SoundEditModelingDriverWaveform -- a handler: an entry of PanelOpTable_FCF92C
+; ExitKey_SoundEditModelingDriverWaveform: the EXIT key on ScreenCode86 -- ScreenCode86 op 15 (PanelOpTable_FCF92C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode86:
+ExitKey_SoundEditModelingDriverWaveform:
 	link XIZ,0x0000                                      ; FD1FFB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FFF  8e 08 3f 00
 	jr nz, .LFD2010                                      ; FD2003  6e 0b
@@ -129829,7 +129829,7 @@ sub_FD21E9:
 	ld h, (0x2335:16)                                   ; FD2286  c1 35 23 26
 	cp H,0x82                                            ; FD228A  ce cf 82
 	jr nz, .LFD2296                                      ; FD228D  6e 07
-	call ScreenCode82_Handler                                      ; FD228F  1d b5 c5 fd
+	call ScreenEnter_SoundEditModelingToneTemplate                                      ; FD228F  1d b5 c5 fd
 	jrl .LFD24FE                                         ; FD2293  78 68 02
 .LFD2296:
 	cp H,0x10                                            ; FD2296  ce cf 10
@@ -129888,7 +129888,7 @@ sub_FD21E9:
 	jr nz, .LFD234A                                      ; FD232B  6e 1d
 	m_cp_mi8 MB16, UI_ScreenId, 0x80                          ; FD232D  c1 7c 20 3f 80
 	jr nz, .LFD233B                                      ; FD2332  6e 07
-	call ScreenCode80_Handler                                      ; FD2334  1d 44 ad fd
+	call ScreenEnter_SoundEditMenu                                      ; FD2334  1d 44 ad fd
 	jrl .LFD24FE                                         ; FD2338  78 c3 01
 .LFD233B:
 	m_cp_mi8 MB16, UI_ScreenId, 0xcb                          ; FD233B  c1 7c 20 3f cb
@@ -129903,7 +129903,7 @@ sub_FD21E9:
 	ld c, (0x2335:16)                                   ; FD2356  c1 35 23 23
 	cp C,0x80                                            ; FD235A  cb cf 80
 	jr nz, .LFD2379                                      ; FD235D  6e 1a
-	call ScreenCode80_Handler                                      ; FD235F  1d 44 ad fd
+	call ScreenEnter_SoundEditMenu                                      ; FD235F  1d 44 ad fd
 	jr .LFD2379                                          ; FD2363  68 14
 .LFD2365:
 	m_cp_mi8 MB16, UI_ScreenId, 0x82                          ; FD2365  c1 7c 20 3f 82
@@ -129911,7 +129911,7 @@ sub_FD21E9:
 	ld c, (0x2335:16)                                   ; FD236C  c1 35 23 23
 	cp C,0x82                                            ; FD2370  cb cf 82
 	jr nz, .LFD2379                                      ; FD2373  6e 04
-	call ScreenCode82_Handler                                      ; FD2375  1d b5 c5 fd
+	call ScreenEnter_SoundEditModelingToneTemplate                                      ; FD2375  1d b5 c5 fd
 .LFD2379:
 	ld c, (0x2335:16)                                   ; FD2379  c1 35 23 23
 	cp C,0x10                                            ; FD237D  cb cf 10
@@ -130338,7 +130338,7 @@ sub_FD26D3:
 	popw hl                                              ; FD274D  4b
 	unlk XIZ                                             ; FD274E  ee 0d
 	ret                                                  ; FD2750  0e
-ScreenButton_Code8B:
+ScreenButton_SoundEditAmpLevel1:
 	link XIZ,0xfffc                                      ; FD2751  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD2755  be fe 31
 	push XBC                                             ; FD2758  39
@@ -130373,7 +130373,7 @@ ScreenButton_Code8B:
 .LFD279F:
 	unlk XIZ                                             ; FD279F  ee 0d
 	ret                                                  ; FD27A1  0e
-ScreenButton_Code8C:
+ScreenButton_SoundEditAmpLevel2:
 	link XIZ,0xfffc                                      ; FD27A2  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD27A6  be fe 31
 	push XBC                                             ; FD27A9  39
@@ -130383,7 +130383,7 @@ ScreenButton_Code8C:
 	m_push MWD+r6, 0x08                                  ; FD27B1  9e 08 04
 	call PanelEvent_ToFieldIndex                                      ; FD27B4  1d 05 79 fd
 	inc 8,XSP                                            ; FD27B8  ef 60
-; (2026-10-03: the label sub_FD27BA stood here, mid-routine of ScreenButton_Code8C and referenced by nothing; removed)
+; (2026-10-03: the label sub_FD27BA stood here, mid-routine of ScreenButton_SoundEditAmpLevel2 and referenced by nothing; removed)
 	inc 4,XSP                                            ; FD27BA  ef 64
 	cp WA,0xffff                                         ; FD27BC  d8 cf ff ff
 	jr z, .LFD27EF                                       ; FD27C0  66 2d
@@ -130407,7 +130407,7 @@ ScreenButton_Code8C:
 .LFD27EF:
 	unlk XIZ                                             ; FD27EF  ee 0d
 	ret                                                  ; FD27F1  0e
-ScreenButton_Code8D:
+ScreenButton_SoundEditAmpEnvelope1:
 	link XIZ,0xfffc                                      ; FD27F2  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD27F6  be fe 31
 	push XBC                                             ; FD27F9  39
@@ -130446,7 +130446,7 @@ ScreenButton_Code8D:
 .LFD284F:
 	unlk XIZ                                             ; FD284F  ee 0d
 	ret                                                  ; FD2851  0e
-ScreenButton_Code8E:
+ScreenButton_SoundEditAmpEnvelope2:
 	link XIZ,0xfffc                                      ; FD2852  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD2856  be fe 31
 	push XBC                                             ; FD2859  39
@@ -130454,7 +130454,7 @@ ScreenButton_Code8E:
 	push XWA                                             ; FD285D  38
 	m_push MWD+r6, 0x0a                                  ; FD285E  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FD2861  9e 08 04
-; (2026-10-03: the label sub_FD2864 stood here, mid-routine of ScreenButton_Code8E and referenced by nothing; removed)
+; (2026-10-03: the label sub_FD2864 stood here, mid-routine of ScreenButton_SoundEditAmpEnvelope2 and referenced by nothing; removed)
 	call PanelEvent_ToFieldIndex                                      ; FD2864  1d 05 79 fd
 	inc 8,XSP                                            ; FD2868  ef 60
 	inc 4,XSP                                            ; FD286A  ef 64
@@ -130486,7 +130486,7 @@ ScreenButton_Code8E:
 .LFD28AF:
 	unlk XIZ                                             ; FD28AF  ee 0d
 	ret                                                  ; FD28B1  0e
-ScreenButton_Code8F:
+ScreenButton_SoundEditAmpLfo:
 	link XIZ,0xfffc                                      ; FD28B2  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD28B6  be fe 31
 	push XBC                                             ; FD28B9  39
@@ -130522,11 +130522,11 @@ sub_FD28F8:
 .LFD2900:
 	unlk XIZ                                             ; FD2900  ee 0d
 	ret                                                  ; FD2902  0e
-; SoftKeyCol2_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; SoftKeyCol2_ScreenCode8B: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 1 (PanelOpTable_FCF21B).
+; SoftKeyCol2_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol2_SoundEditAmpLevel1: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 1 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode8B:
+SoftKeyCol2_SoundEditAmpLevel1:
 	link XIZ,0xffec                                      ; FD2903  ee 0c ec ff
 	pushw hl                                             ; FD2907  2b
 	pushw de                                             ; FD2908  2a
@@ -130583,11 +130583,11 @@ SoftKeyCol2_ScreenCode8B:
 	popw hl                                              ; FD2986  4b
 	unlk XIZ                                             ; FD2987  ee 0d
 	ret                                                  ; FD2989  0e
-; SoftKeyCol3_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; SoftKeyCol3_ScreenCode8B: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 2 (PanelOpTable_FCF21B).
+; SoftKeyCol3_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol3_SoundEditAmpLevel1: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 2 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode8B:
+SoftKeyCol3_SoundEditAmpLevel1:
 	link XIZ,0xffec                                      ; FD298A  ee 0c ec ff
 	pushw hl                                             ; FD298E  2b
 	pushw de                                             ; FD298F  2a
@@ -130666,11 +130666,11 @@ SoftKeyCol3_ScreenCode8B:
 	popw hl                                              ; FD2A38  4b
 	unlk XIZ                                             ; FD2A39  ee 0d
 	ret                                                  ; FD2A3B  0e
-; SoftKeyCol4_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; SoftKeyCol4_ScreenCode8B: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 3 (PanelOpTable_FCF21B).
+; SoftKeyCol4_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol4_SoundEditAmpLevel1: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 3 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode8B:
+SoftKeyCol4_SoundEditAmpLevel1:
 	link XIZ,0xffec                                      ; FD2A3C  ee 0c ec ff
 	pushw hl                                             ; FD2A40  2b
 	pushw de                                             ; FD2A41  2a
@@ -130737,11 +130737,11 @@ SoftKeyCol4_ScreenCode8B:
 	popw hl                                              ; FD2AD4  4b
 	unlk XIZ                                             ; FD2AD5  ee 0d
 	ret                                                  ; FD2AD7  0e
-; SoftKeyCol5_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; SoftKeyCol5_ScreenCode8B: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 4 (PanelOpTable_FCF21B).
+; SoftKeyCol5_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol5_SoundEditAmpLevel1: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 4 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode8B:
+SoftKeyCol5_SoundEditAmpLevel1:
 	link XIZ,0xffec                                      ; FD2AD8  ee 0c ec ff
 	pushw hl                                             ; FD2ADC  2b
 	pushw de                                             ; FD2ADD  2a
@@ -130809,11 +130809,11 @@ sub_FD2B23:
 	popw hl                                              ; FD2B70  4b
 	unlk XIZ                                             ; FD2B71  ee 0d
 	ret                                                  ; FD2B73  0e
-; SoftKeyCol7_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; SoftKeyCol7_ScreenCode8B: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 6 (PanelOpTable_FCF21B).
+; SoftKeyCol7_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol7_SoundEditAmpLevel1: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 6 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode8B:
+SoftKeyCol7_SoundEditAmpLevel1:
 	link XIZ,0xfff2                                      ; FD2B74  ee 0c f2 ff
 	push XIX                                             ; FD2B78  3c
 	lda xix, (xiz-14)                                    ; FD2B79  be f2 34
@@ -130850,11 +130850,11 @@ SoftKeyCol7_ScreenCode8B:
 	pop XIX                                              ; FD2BD4  5c
 	unlk XIZ                                             ; FD2BD5  ee 0d
 	ret                                                  ; FD2BD7  0e
-; SoftKeyCol8_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; SoftKeyCol8_ScreenCode8B: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 7 (PanelOpTable_FCF21B).
+; SoftKeyCol8_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol8_SoundEditAmpLevel1: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 7 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode8B:
+SoftKeyCol8_SoundEditAmpLevel1:
 	link XIZ,0xfff2                                      ; FD2BD8  ee 0c f2 ff
 	push XIX                                             ; FD2BDC  3c
 	lda xix, (xiz-14)                                    ; FD2BDD  be f2 34
@@ -130891,11 +130891,11 @@ SoftKeyCol8_ScreenCode8B:
 	pop XIX                                              ; FD2C38  5c
 	unlk XIZ                                             ; FD2C39  ee 0d
 	ret                                                  ; FD2C3B  0e
-; LcdKeyRow1_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; LcdKeyRow1_ScreenCode8B: LCD key row 1 (left or right) on ScreenCode8B -- ScreenCode8B op 8 (PanelOpTable_FCF21B).
+; LcdKeyRow1_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow1_SoundEditAmpLevel1: LCD key row 1 (left or right) on ScreenCode8B -- ScreenCode8B op 8 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode8B:
+LcdKeyRow1_SoundEditAmpLevel1:
 	link XIZ,0x0000                                      ; FD2C3C  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2C40  8e 08 3f 00
 	jr nz, .LFD2C53                                      ; FD2C44  6e 0d
@@ -130909,11 +130909,11 @@ LcdKeyRow1_ScreenCode8B:
 .LFD2C57:
 	unlk XIZ                                             ; FD2C57  ee 0d
 	ret                                                  ; FD2C59  0e
-; LcdKeyRow2_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; LcdKeyRow2_ScreenCode8B: LCD key row 2 (left or right) on ScreenCode8B -- ScreenCode8B op 9 (PanelOpTable_FCF21B).
+; LcdKeyRow2_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow2_SoundEditAmpLevel1: LCD key row 2 (left or right) on ScreenCode8B -- ScreenCode8B op 9 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode8B:
+LcdKeyRow2_SoundEditAmpLevel1:
 	link XIZ,0x0000                                      ; FD2C5A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2C5E  8e 08 3f 00
 	jr z, .LFD2C73                                       ; FD2C62  66 0f
@@ -130925,11 +130925,11 @@ LcdKeyRow2_ScreenCode8B:
 .LFD2C73:
 	unlk XIZ                                             ; FD2C73  ee 0d
 	ret                                                  ; FD2C75  0e
-; LcdKeyRow3_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; LcdKeyRow3_ScreenCode8B: LCD key row 3 (left or right) on ScreenCode8B -- ScreenCode8B op 10 (PanelOpTable_FCF21B).
+; LcdKeyRow3_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow3_SoundEditAmpLevel1: LCD key row 3 (left or right) on ScreenCode8B -- ScreenCode8B op 10 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode8B:
+LcdKeyRow3_SoundEditAmpLevel1:
 	link XIZ,0xfffe                                      ; FD2C76  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2C7A  be fe 31
 	push XBC                                             ; FD2C7D  39
@@ -130953,11 +130953,11 @@ LcdKeyRow3_ScreenCode8B:
 .LFD2CAB:
 	unlk XIZ                                             ; FD2CAB  ee 0d
 	ret                                                  ; FD2CAD  0e
-; LcdKeyRow4_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; LcdKeyRow4_ScreenCode8B: LCD key row 4 (left or right) on ScreenCode8B -- ScreenCode8B op 11 (PanelOpTable_FCF21B).
+; LcdKeyRow4_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow4_SoundEditAmpLevel1: LCD key row 4 (left or right) on ScreenCode8B -- ScreenCode8B op 11 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode8B:
+LcdKeyRow4_SoundEditAmpLevel1:
 	link XIZ,0xfffe                                      ; FD2CAE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CB2  be fe 31
 	push XBC                                             ; FD2CB5  39
@@ -130975,11 +130975,11 @@ LcdKeyRow4_ScreenCode8B:
 .LFD2CD6:
 	unlk XIZ                                             ; FD2CD6  ee 0d
 	ret                                                  ; FD2CD8  0e
-; LcdKeyRow5_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; LcdKeyRow5_ScreenCode8B: LCD key row 5 (left or right) on ScreenCode8B -- ScreenCode8B op 12 (PanelOpTable_FCF21B).
+; LcdKeyRow5_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow5_SoundEditAmpLevel1: LCD key row 5 (left or right) on ScreenCode8B -- ScreenCode8B op 12 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode8B:
+LcdKeyRow5_SoundEditAmpLevel1:
 	link XIZ,0xfffe                                      ; FD2CD9  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CDD  be fe 31
 	push XBC                                             ; FD2CE0  39
@@ -130997,11 +130997,11 @@ LcdKeyRow5_ScreenCode8B:
 .LFD2D01:
 	unlk XIZ                                             ; FD2D01  ee 0d
 	ret                                                  ; FD2D03  0e
-; PageKey_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; PageKey_ScreenCode8B: the PAGE pair (code 0x10) on ScreenCode8B -- ScreenCode8B op 16 (PanelOpTable_FCF21B).
+; PageKey_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; PageKey_SoundEditAmpLevel1: the PAGE pair (code 0x10) on ScreenCode8B -- ScreenCode8B op 16 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode8B:
+PageKey_SoundEditAmpLevel1:
 	link XIZ,0xfffe                                      ; FD2D04  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2D08  be fe 31
 	push XBC                                             ; FD2D0B  39
@@ -131018,11 +131018,11 @@ PageKey_ScreenCode8B:
 .LFD2D28:
 	unlk XIZ                                             ; FD2D28  ee 0d
 	ret                                                  ; FD2D2A  0e
-; ExitKey_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
-; ExitKey_ScreenCode8B: the EXIT key on ScreenCode8B -- ScreenCode8B op 15 (PanelOpTable_FCF21B).
+; ExitKey_SoundEditAmpLevel1 -- a handler: an entry of PanelOpTable_FCF21B
+; ExitKey_SoundEditAmpLevel1: the EXIT key on ScreenCode8B -- ScreenCode8B op 15 (PanelOpTable_FCF21B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode8B:
+ExitKey_SoundEditAmpLevel1:
 	link XIZ,0xfffe                                      ; FD2D2B  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD2D2F  8e 08 3f 00
 	jr nz, .LFD2D5C                                      ; FD2D33  6e 27
@@ -131045,11 +131045,11 @@ ExitKey_ScreenCode8B:
 .LFD2D5C:
 	unlk XIZ                                             ; FD2D5C  ee 0d
 	ret                                                  ; FD2D5E  0e
-; SoftKeyCol3_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; SoftKeyCol3_ScreenCode8C: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 2 (PanelOpTable_FCF263).
+; SoftKeyCol3_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; SoftKeyCol3_SoundEditAmpLevel2: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 2 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode8C:
+SoftKeyCol3_SoundEditAmpLevel2:
 	link XIZ,0xfff0                                      ; FD2D5F  ee 0c f0 ff
 	push XIX                                             ; FD2D63  3c
 	lda xix, (xiz-16)                                    ; FD2D64  be f0 34
@@ -131102,11 +131102,11 @@ SoftKeyCol3_ScreenCode8C:
 	pop XIX                                              ; FD2DE6  5c
 	unlk XIZ                                             ; FD2DE7  ee 0d
 	ret                                                  ; FD2DE9  0e
-; SoftKeyCol4_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; SoftKeyCol4_ScreenCode8C: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 3 (PanelOpTable_FCF263).
+; SoftKeyCol4_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; SoftKeyCol4_SoundEditAmpLevel2: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 3 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode8C:
+SoftKeyCol4_SoundEditAmpLevel2:
 	link XIZ,0xfffa                                      ; FD2DEA  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD2DEE  be fe 31
 	push XBC                                             ; FD2DF1  39
@@ -131154,11 +131154,11 @@ SoftKeyCol4_ScreenCode8C:
 	popw bc                                              ; FD2E62  49
 	unlk XIZ                                             ; FD2E63  ee 0d
 	ret                                                  ; FD2E65  0e
-; SoftKeyCol5_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; SoftKeyCol5_ScreenCode8C: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 4 (PanelOpTable_FCF263).
+; SoftKeyCol5_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; SoftKeyCol5_SoundEditAmpLevel2: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 4 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode8C:
+SoftKeyCol5_SoundEditAmpLevel2:
 	link XIZ,0xfff8                                      ; FD2E66  ee 0c f8 ff
 	push XIX                                             ; FD2E6A  3c
 	lda xix, (Arr27A6_Get:24)                            ; FD2E6B  f2 7b 6c fd 34
@@ -131224,11 +131224,11 @@ SoftKeyCol5_ScreenCode8C:
 	pop XIX                                              ; FD2F04  5c
 	unlk XIZ                                             ; FD2F05  ee 0d
 	ret                                                  ; FD2F07  0e
-; SoftKeyCol6_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; SoftKeyCol6_ScreenCode8C: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 5 (PanelOpTable_FCF263).
+; SoftKeyCol6_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; SoftKeyCol6_SoundEditAmpLevel2: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8C -- ScreenCode8C op 5 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode8C:
+SoftKeyCol6_SoundEditAmpLevel2:
 	link XIZ,0xfffa                                      ; FD2F08  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD2F0C  be fe 31
 	push XBC                                             ; FD2F0F  39
@@ -131276,11 +131276,11 @@ SoftKeyCol6_ScreenCode8C:
 	popw bc                                              ; FD2F80  49
 	unlk XIZ                                             ; FD2F81  ee 0d
 	ret                                                  ; FD2F83  0e
-; LcdKeyRow1_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; LcdKeyRow1_ScreenCode8C: LCD key row 1 (left or right) on ScreenCode8C -- ScreenCode8C op 8 (PanelOpTable_FCF263).
+; LcdKeyRow1_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; LcdKeyRow1_SoundEditAmpLevel2: LCD key row 1 (left or right) on ScreenCode8C -- ScreenCode8C op 8 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode8C:
+LcdKeyRow1_SoundEditAmpLevel2:
 	link XIZ,0x0000                                      ; FD2F84  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2F88  8e 08 3f 00
 	jr nz, .LFD2F9B                                      ; FD2F8C  6e 0d
@@ -131294,11 +131294,11 @@ LcdKeyRow1_ScreenCode8C:
 .LFD2F9F:
 	unlk XIZ                                             ; FD2F9F  ee 0d
 	ret                                                  ; FD2FA1  0e
-; LcdKeyRow2_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; LcdKeyRow2_ScreenCode8C: LCD key row 2 (left or right) on ScreenCode8C -- ScreenCode8C op 9 (PanelOpTable_FCF263).
+; LcdKeyRow2_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; LcdKeyRow2_SoundEditAmpLevel2: LCD key row 2 (left or right) on ScreenCode8C -- ScreenCode8C op 9 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode8C:
+LcdKeyRow2_SoundEditAmpLevel2:
 	link XIZ,0x0000                                      ; FD2FA2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2FA6  8e 08 3f 00
 	jr z, .LFD2FC3                                       ; FD2FAA  66 17
@@ -131314,11 +131314,11 @@ LcdKeyRow2_ScreenCode8C:
 .LFD2FC3:
 	unlk XIZ                                             ; FD2FC3  ee 0d
 	ret                                                  ; FD2FC5  0e
-; LcdKeyRow3_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; LcdKeyRow3_ScreenCode8C: LCD key row 3 (left or right) on ScreenCode8C -- ScreenCode8C op 10 (PanelOpTable_FCF263).
+; LcdKeyRow3_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; LcdKeyRow3_SoundEditAmpLevel2: LCD key row 3 (left or right) on ScreenCode8C -- ScreenCode8C op 10 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode8C:
+LcdKeyRow3_SoundEditAmpLevel2:
 	link XIZ,0x0000                                      ; FD2FC6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2FCA  8e 08 3f 00
 	jr nz, .LFD2FD8                                      ; FD2FCE  6e 08
@@ -131339,11 +131339,11 @@ LcdKeyRow3_ScreenCode8C:
 .LFD2FEF:
 	unlk XIZ                                             ; FD2FEF  ee 0d
 	ret                                                  ; FD2FF1  0e
-; LcdKeyRow4_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; LcdKeyRow4_ScreenCode8C: LCD key row 4 (left or right) on ScreenCode8C -- ScreenCode8C op 11 (PanelOpTable_FCF263).
+; LcdKeyRow4_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; LcdKeyRow4_SoundEditAmpLevel2: LCD key row 4 (left or right) on ScreenCode8C -- ScreenCode8C op 11 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode8C:
+LcdKeyRow4_SoundEditAmpLevel2:
 	link XIZ,0x0000                                      ; FD2FF2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2FF6  8e 08 3f 00
 	jr z, .LFD3013                                       ; FD2FFA  66 17
@@ -131359,11 +131359,11 @@ LcdKeyRow4_ScreenCode8C:
 .LFD3013:
 	unlk XIZ                                             ; FD3013  ee 0d
 	ret                                                  ; FD3015  0e
-; LcdKeyRow5_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; LcdKeyRow5_ScreenCode8C: LCD key row 5 (left or right) on ScreenCode8C -- ScreenCode8C op 12 (PanelOpTable_FCF263).
+; LcdKeyRow5_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; LcdKeyRow5_SoundEditAmpLevel2: LCD key row 5 (left or right) on ScreenCode8C -- ScreenCode8C op 12 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode8C:
+LcdKeyRow5_SoundEditAmpLevel2:
 	link XIZ,0x0000                                      ; FD3016  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD301A  8e 08 3f 00
 	jr z, .LFD3037                                       ; FD301E  66 17
@@ -131380,11 +131380,11 @@ sub_FD3023:
 .LFD3037:
 	unlk XIZ                                             ; FD3037  ee 0d
 	ret                                                  ; FD3039  0e
-; PageKey_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; PageKey_ScreenCode8C: the PAGE pair (code 0x10) on ScreenCode8C -- ScreenCode8C op 16 (PanelOpTable_FCF263).
+; PageKey_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; PageKey_SoundEditAmpLevel2: the PAGE pair (code 0x10) on ScreenCode8C -- ScreenCode8C op 16 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode8C:
+PageKey_SoundEditAmpLevel2:
 	link XIZ,0x0000                                      ; FD303A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD303E  8e 08 3f 00
 	jr z, .LFD304F                                       ; FD3042  66 0b
@@ -131395,11 +131395,11 @@ PageKey_ScreenCode8C:
 .LFD304F:
 	unlk XIZ                                             ; FD304F  ee 0d
 	ret                                                  ; FD3051  0e
-; ExitKey_ScreenCode8C -- a handler: an entry of PanelOpTable_FCF263
-; ExitKey_ScreenCode8C: the EXIT key on ScreenCode8C -- ScreenCode8C op 15 (PanelOpTable_FCF263).
+; ExitKey_SoundEditAmpLevel2 -- a handler: an entry of PanelOpTable_FCF263
+; ExitKey_SoundEditAmpLevel2: the EXIT key on ScreenCode8C -- ScreenCode8C op 15 (PanelOpTable_FCF263).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode8C:
+ExitKey_SoundEditAmpLevel2:
 	link XIZ,0x0000                                      ; FD3052  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3056  8e 08 3f 00
 	jr nz, .LFD306F                                      ; FD305A  6e 13
@@ -131412,11 +131412,11 @@ ExitKey_ScreenCode8C:
 .LFD306F:
 	unlk XIZ                                             ; FD306F  ee 0d
 	ret                                                  ; FD3071  0e
-; SoftKeyCol1_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol1_ScreenCode8D: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 0 (PanelOpTable_FCF2AB).
+; SoftKeyCol1_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol1_SoundEditAmpEnvelope1: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 0 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode8D:
+SoftKeyCol1_SoundEditAmpEnvelope1:
 	link XIZ,0xffec                                      ; FD3072  ee 0c ec ff
 	pushw hl                                             ; FD3076  2b
 	push XIX                                             ; FD3077  3c
@@ -131485,11 +131485,11 @@ SoftKeyCol1_ScreenCode8D:
 	popw hl                                              ; FD310E  4b
 	unlk XIZ                                             ; FD310F  ee 0d
 	ret                                                  ; FD3111  0e
-; SoftKeyCol2_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol2_ScreenCode8D: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 1 (PanelOpTable_FCF2AB).
+; SoftKeyCol2_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol2_SoundEditAmpEnvelope1: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 1 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode8D:
+SoftKeyCol2_SoundEditAmpEnvelope1:
 	link XIZ,0xffec                                      ; FD3112  ee 0c ec ff
 	pushw hl                                             ; FD3116  2b
 	push XIX                                             ; FD3117  3c
@@ -131559,11 +131559,11 @@ sub_FD3191:
 	popw hl                                              ; FD31AE  4b
 	unlk XIZ                                             ; FD31AF  ee 0d
 	ret                                                  ; FD31B1  0e
-; SoftKeyCol3_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol3_ScreenCode8D: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 2 (PanelOpTable_FCF2AB).
+; SoftKeyCol3_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol3_SoundEditAmpEnvelope1: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 2 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode8D:
+SoftKeyCol3_SoundEditAmpEnvelope1:
 	link XIZ,0xffec                                      ; FD31B2  ee 0c ec ff
 	pushw hl                                             ; FD31B6  2b
 	push XIX                                             ; FD31B7  3c
@@ -131632,11 +131632,11 @@ SoftKeyCol3_ScreenCode8D:
 	popw hl                                              ; FD324E  4b
 	unlk XIZ                                             ; FD324F  ee 0d
 	ret                                                  ; FD3251  0e
-; SoftKeyCol4_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol4_ScreenCode8D: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 3 (PanelOpTable_FCF2AB).
+; SoftKeyCol4_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol4_SoundEditAmpEnvelope1: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 3 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode8D:
+SoftKeyCol4_SoundEditAmpEnvelope1:
 	link XIZ,0xffec                                      ; FD3252  ee 0c ec ff
 	pushw hl                                             ; FD3256  2b
 	push XIX                                             ; FD3257  3c
@@ -131705,11 +131705,11 @@ SoftKeyCol4_ScreenCode8D:
 	popw hl                                              ; FD32EE  4b
 	unlk XIZ                                             ; FD32EF  ee 0d
 	ret                                                  ; FD32F1  0e
-; SoftKeyCol5_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol5_ScreenCode8D: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 4 (PanelOpTable_FCF2AB).
+; SoftKeyCol5_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol5_SoundEditAmpEnvelope1: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 4 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode8D:
+SoftKeyCol5_SoundEditAmpEnvelope1:
 	link XIZ,0xffea                                      ; FD32F2  ee 0c ea ff
 	pushw hl                                             ; FD32F6  2b
 	push XIX                                             ; FD32F7  3c
@@ -131789,11 +131789,11 @@ SoftKeyCol5_ScreenCode8D:
 	popw hl                                              ; FD33A6  4b
 	unlk XIZ                                             ; FD33A7  ee 0d
 	ret                                                  ; FD33A9  0e
-; SoftKeyCol6_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol6_ScreenCode8D: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 5 (PanelOpTable_FCF2AB).
+; SoftKeyCol6_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol6_SoundEditAmpEnvelope1: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 5 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode8D:
+SoftKeyCol6_SoundEditAmpEnvelope1:
 	link XIZ,0xffea                                      ; FD33AA  ee 0c ea ff
 	pushw hl                                             ; FD33AE  2b
 	push XIX                                             ; FD33AF  3c
@@ -131873,11 +131873,11 @@ SoftKeyCol6_ScreenCode8D:
 	popw hl                                              ; FD3462  4b
 	unlk XIZ                                             ; FD3463  ee 0d
 	ret                                                  ; FD3465  0e
-; SoftKeyCol7_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol7_ScreenCode8D: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 6 (PanelOpTable_FCF2AB).
+; SoftKeyCol7_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol7_SoundEditAmpEnvelope1: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 6 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode8D:
+SoftKeyCol7_SoundEditAmpEnvelope1:
 	link XIZ,0xffec                                      ; FD3466  ee 0c ec ff
 	pushw hl                                             ; FD346A  2b
 	pushw de                                             ; FD346B  2a
@@ -131952,11 +131952,11 @@ SoftKeyCol7_ScreenCode8D:
 	popw hl                                              ; FD351A  4b
 	unlk XIZ                                             ; FD351B  ee 0d
 	ret                                                  ; FD351D  0e
-; SoftKeyCol8_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; SoftKeyCol8_ScreenCode8D: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 7 (PanelOpTable_FCF2AB).
+; SoftKeyCol8_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol8_SoundEditAmpEnvelope1: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 7 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode8D:
+SoftKeyCol8_SoundEditAmpEnvelope1:
 	link XIZ,0xffec                                      ; FD351E  ee 0c ec ff
 	push XIX                                             ; FD3522  3c
 	lda xix, (xiz-16)                                    ; FD3523  be f0 34
@@ -132004,11 +132004,11 @@ SoftKeyCol8_ScreenCode8D:
 	pop XIX                                              ; FD359A  5c
 	unlk XIZ                                             ; FD359B  ee 0d
 	ret                                                  ; FD359D  0e
-; LcdKeyRow1_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; LcdKeyRow1_ScreenCode8D: LCD key row 1 (left or right) on ScreenCode8D -- ScreenCode8D op 8 (PanelOpTable_FCF2AB).
+; LcdKeyRow1_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow1_SoundEditAmpEnvelope1: LCD key row 1 (left or right) on ScreenCode8D -- ScreenCode8D op 8 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode8D:
+LcdKeyRow1_SoundEditAmpEnvelope1:
 	link XIZ,0x0000                                      ; FD359E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD35A2  8e 08 3f 00
 	jr z, .LFD35AC                                       ; FD35A6  66 04
@@ -132016,11 +132016,11 @@ LcdKeyRow1_ScreenCode8D:
 .LFD35AC:
 	unlk XIZ                                             ; FD35AC  ee 0d
 	ret                                                  ; FD35AE  0e
-; LcdKeyRow2_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; LcdKeyRow2_ScreenCode8D: LCD key row 2 (left or right) on ScreenCode8D -- ScreenCode8D op 9 (PanelOpTable_FCF2AB).
+; LcdKeyRow2_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow2_SoundEditAmpEnvelope1: LCD key row 2 (left or right) on ScreenCode8D -- ScreenCode8D op 9 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode8D:
+LcdKeyRow2_SoundEditAmpEnvelope1:
 	link XIZ,0x0000                                      ; FD35AF  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD35B3  8e 08 3f 00
 	jr nz, .LFD35C1                                      ; FD35B7  6e 08
@@ -132041,11 +132041,11 @@ LcdKeyRow2_ScreenCode8D:
 .LFD35D8:
 	unlk XIZ                                             ; FD35D8  ee 0d
 	ret                                                  ; FD35DA  0e
-; LcdKeyRow3_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; LcdKeyRow3_ScreenCode8D: LCD key row 3 (left or right) on ScreenCode8D -- ScreenCode8D op 10 (PanelOpTable_FCF2AB).
+; LcdKeyRow3_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow3_SoundEditAmpEnvelope1: LCD key row 3 (left or right) on ScreenCode8D -- ScreenCode8D op 10 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode8D:
+LcdKeyRow3_SoundEditAmpEnvelope1:
 	link XIZ,0xfffe                                      ; FD35DB  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD35DF  be fe 31
 	push XBC                                             ; FD35E2  39
@@ -132072,11 +132072,11 @@ LcdKeyRow3_ScreenCode8D:
 .LFD3613:
 	unlk XIZ                                             ; FD3613  ee 0d
 	ret                                                  ; FD3615  0e
-; LcdKeyRow4_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; LcdKeyRow4_ScreenCode8D: LCD key row 4 (left or right) on ScreenCode8D -- ScreenCode8D op 11 (PanelOpTable_FCF2AB).
+; LcdKeyRow4_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow4_SoundEditAmpEnvelope1: LCD key row 4 (left or right) on ScreenCode8D -- ScreenCode8D op 11 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode8D:
+LcdKeyRow4_SoundEditAmpEnvelope1:
 	link XIZ,0xfffe                                      ; FD3616  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD361A  be fe 31
 	push XBC                                             ; FD361D  39
@@ -132098,11 +132098,11 @@ LcdKeyRow4_ScreenCode8D:
 .LFD3646:
 	unlk XIZ                                             ; FD3646  ee 0d
 	ret                                                  ; FD3648  0e
-; LcdKeyRow5_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; LcdKeyRow5_ScreenCode8D: LCD key row 5 (left or right) on ScreenCode8D -- ScreenCode8D op 12 (PanelOpTable_FCF2AB).
+; LcdKeyRow5_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow5_SoundEditAmpEnvelope1: LCD key row 5 (left or right) on ScreenCode8D -- ScreenCode8D op 12 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode8D:
+LcdKeyRow5_SoundEditAmpEnvelope1:
 	link XIZ,0xfffc                                      ; FD3649  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD364D  be fe 31
 	push XBC                                             ; FD3650  39
@@ -132155,11 +132155,11 @@ LcdKeyRow5_ScreenCode8D:
 .LFD36CB:
 	unlk XIZ                                             ; FD36CB  ee 0d
 	ret                                                  ; FD36CD  0e
-; PageKey_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; PageKey_ScreenCode8D: the PAGE pair (code 0x10) on ScreenCode8D -- ScreenCode8D op 16 (PanelOpTable_FCF2AB).
+; PageKey_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; PageKey_SoundEditAmpEnvelope1: the PAGE pair (code 0x10) on ScreenCode8D -- ScreenCode8D op 16 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode8D:
+PageKey_SoundEditAmpEnvelope1:
 	link XIZ,0xfffe                                      ; FD36CE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD36D2  be fe 31
 	push XBC                                             ; FD36D5  39
@@ -132176,11 +132176,11 @@ PageKey_ScreenCode8D:
 .LFD36F2:
 	unlk XIZ                                             ; FD36F2  ee 0d
 	ret                                                  ; FD36F4  0e
-; ExitKey_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
-; ExitKey_ScreenCode8D: the EXIT key on ScreenCode8D -- ScreenCode8D op 15 (PanelOpTable_FCF2AB).
+; ExitKey_SoundEditAmpEnvelope1 -- a handler: an entry of PanelOpTable_FCF2AB
+; ExitKey_SoundEditAmpEnvelope1: the EXIT key on ScreenCode8D -- ScreenCode8D op 15 (PanelOpTable_FCF2AB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode8D:
+ExitKey_SoundEditAmpEnvelope1:
 	link XIZ,0xfffe                                      ; FD36F5  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD36F9  8e 08 3f 00
 	jr nz, .LFD3726                                      ; FD36FD  6e 27
@@ -132203,11 +132203,11 @@ ExitKey_ScreenCode8D:
 .LFD3726:
 	unlk XIZ                                             ; FD3726  ee 0d
 	ret                                                  ; FD3728  0e
-; SoftKeyCol1_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol1_ScreenCode8E: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 0 (PanelOpTable_FCF2F3).
+; SoftKeyCol1_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol1_SoundEditAmpEnvelope2: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 0 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode8E:
+SoftKeyCol1_SoundEditAmpEnvelope2:
 	link XIZ,0xfff0                                      ; FD3729  ee 0c f0 ff
 	push XIX                                             ; FD372D  3c
 	lda xix, (xiz-16)                                    ; FD372E  be f0 34
@@ -132269,11 +132269,11 @@ SoftKeyCol1_ScreenCode8E:
 	pop XIX                                              ; FD37CF  5c
 	unlk XIZ                                             ; FD37D0  ee 0d
 	ret                                                  ; FD37D2  0e
-; SoftKeyCol2_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol2_ScreenCode8E: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 1 (PanelOpTable_FCF2F3).
+; SoftKeyCol2_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol2_SoundEditAmpEnvelope2: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 1 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode8E:
+SoftKeyCol2_SoundEditAmpEnvelope2:
 	link XIZ,0xfff0                                      ; FD37D3  ee 0c f0 ff
 	push XIX                                             ; FD37D7  3c
 	lda xix, (xiz-16)                                    ; FD37D8  be f0 34
@@ -132335,11 +132335,11 @@ SoftKeyCol2_ScreenCode8E:
 	pop XIX                                              ; FD3879  5c
 	unlk XIZ                                             ; FD387A  ee 0d
 	ret                                                  ; FD387C  0e
-; SoftKeyCol3_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol3_ScreenCode8E: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 2 (PanelOpTable_FCF2F3).
+; SoftKeyCol3_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol3_SoundEditAmpEnvelope2: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 2 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode8E:
+SoftKeyCol3_SoundEditAmpEnvelope2:
 	link XIZ,0xfff0                                      ; FD387D  ee 0c f0 ff
 	push XIX                                             ; FD3881  3c
 	lda xix, (xiz-16)                                    ; FD3882  be f0 34
@@ -132401,11 +132401,11 @@ SoftKeyCol3_ScreenCode8E:
 	pop XIX                                              ; FD3923  5c
 	unlk XIZ                                             ; FD3924  ee 0d
 	ret                                                  ; FD3926  0e
-; SoftKeyCol4_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol4_ScreenCode8E: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 3 (PanelOpTable_FCF2F3).
+; SoftKeyCol4_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol4_SoundEditAmpEnvelope2: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 3 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode8E:
+SoftKeyCol4_SoundEditAmpEnvelope2:
 	link XIZ,0xfffa                                      ; FD3927  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD392B  be fe 31
 sub_FD392E:
@@ -132455,11 +132455,11 @@ sub_FD3955:
 	popw bc                                              ; FD399F  49
 	unlk XIZ                                             ; FD39A0  ee 0d
 	ret                                                  ; FD39A2  0e
-; SoftKeyCol5_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol5_ScreenCode8E: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 4 (PanelOpTable_FCF2F3).
+; SoftKeyCol5_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol5_SoundEditAmpEnvelope2: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 4 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode8E:
+SoftKeyCol5_SoundEditAmpEnvelope2:
 	link XIZ,0xfff8                                      ; FD39A3  ee 0c f8 ff
 	push XIX                                             ; FD39A7  3c
 	lda xix, (Arr27A6_Get:24)                            ; FD39A8  f2 7b 6c fd 34
@@ -132526,11 +132526,11 @@ sub_FD3A40:
 	pop XIX                                              ; FD3A41  5c
 	unlk XIZ                                             ; FD3A42  ee 0d
 	ret                                                  ; FD3A44  0e
-; SoftKeyCol6_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol6_ScreenCode8E: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 5 (PanelOpTable_FCF2F3).
+; SoftKeyCol6_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol6_SoundEditAmpEnvelope2: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 5 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode8E:
+SoftKeyCol6_SoundEditAmpEnvelope2:
 	link XIZ,0xfffa                                      ; FD3A45  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD3A49  be fe 31
 	push XBC                                             ; FD3A4C  39
@@ -132578,11 +132578,11 @@ SoftKeyCol6_ScreenCode8E:
 	popw bc                                              ; FD3ABD  49
 	unlk XIZ                                             ; FD3ABE  ee 0d
 	ret                                                  ; FD3AC0  0e
-; SoftKeyCol7_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol7_ScreenCode8E: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 6 (PanelOpTable_FCF2F3).
+; SoftKeyCol7_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol7_SoundEditAmpEnvelope2: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 6 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode8E:
+SoftKeyCol7_SoundEditAmpEnvelope2:
 	link XIZ,0xfff2                                      ; FD3AC1  ee 0c f2 ff
 	push XIX                                             ; FD3AC5  3c
 	lda xix, (xiz-14)                                    ; FD3AC6  be f2 34
@@ -132618,11 +132618,11 @@ sub_FD3AE1:
 	pop XIX                                              ; FD3B1D  5c
 	unlk XIZ                                             ; FD3B1E  ee 0d
 	ret                                                  ; FD3B20  0e
-; SoftKeyCol8_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; SoftKeyCol8_ScreenCode8E: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 7 (PanelOpTable_FCF2F3).
+; SoftKeyCol8_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; SoftKeyCol8_SoundEditAmpEnvelope2: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8E -- ScreenCode8E op 7 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode8E:
+SoftKeyCol8_SoundEditAmpEnvelope2:
 	link XIZ,0xfff2                                      ; FD3B21  ee 0c f2 ff
 	push XIX                                             ; FD3B25  3c
 	lda xix, (xiz-14)                                    ; FD3B26  be f2 34
@@ -132657,11 +132657,11 @@ SoftKeyCol8_ScreenCode8E:
 	pop XIX                                              ; FD3B7D  5c
 	unlk XIZ                                             ; FD3B7E  ee 0d
 	ret                                                  ; FD3B80  0e
-; LcdKeyRow1_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; LcdKeyRow1_ScreenCode8E: LCD key row 1 (left or right) on ScreenCode8E -- ScreenCode8E op 8 (PanelOpTable_FCF2F3).
+; LcdKeyRow1_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; LcdKeyRow1_SoundEditAmpEnvelope2: LCD key row 1 (left or right) on ScreenCode8E -- ScreenCode8E op 8 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode8E:
+LcdKeyRow1_SoundEditAmpEnvelope2:
 	link XIZ,0x0000                                      ; FD3B81  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3B85  8e 08 3f 00
 	jr z, .LFD3B8F                                       ; FD3B89  66 04
@@ -132669,11 +132669,11 @@ LcdKeyRow1_ScreenCode8E:
 .LFD3B8F:
 	unlk XIZ                                             ; FD3B8F  ee 0d
 	ret                                                  ; FD3B91  0e
-; LcdKeyRow2_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; LcdKeyRow2_ScreenCode8E: LCD key row 2 (left or right) on ScreenCode8E -- ScreenCode8E op 9 (PanelOpTable_FCF2F3).
+; LcdKeyRow2_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; LcdKeyRow2_SoundEditAmpEnvelope2: LCD key row 2 (left or right) on ScreenCode8E -- ScreenCode8E op 9 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode8E:
+LcdKeyRow2_SoundEditAmpEnvelope2:
 	link XIZ,0x0000                                      ; FD3B92  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3B96  8e 08 3f 00
 	jr nz, .LFD3BA4                                      ; FD3B9A  6e 08
@@ -132694,11 +132694,11 @@ LcdKeyRow2_ScreenCode8E:
 .LFD3BBB:
 	unlk XIZ                                             ; FD3BBB  ee 0d
 	ret                                                  ; FD3BBD  0e
-; LcdKeyRow3_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; LcdKeyRow3_ScreenCode8E: LCD key row 3 (left or right) on ScreenCode8E -- ScreenCode8E op 10 (PanelOpTable_FCF2F3).
+; LcdKeyRow3_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; LcdKeyRow3_SoundEditAmpEnvelope2: LCD key row 3 (left or right) on ScreenCode8E -- ScreenCode8E op 10 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode8E:
+LcdKeyRow3_SoundEditAmpEnvelope2:
 	link XIZ,0x0000                                      ; FD3BBE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3BC2  8e 08 3f 00
 	jr nz, .LFD3BD0                                      ; FD3BC6  6e 08
@@ -132719,11 +132719,11 @@ LcdKeyRow3_ScreenCode8E:
 .LFD3BE7:
 	unlk XIZ                                             ; FD3BE7  ee 0d
 	ret                                                  ; FD3BE9  0e
-; LcdKeyRow4_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; LcdKeyRow4_ScreenCode8E: LCD key row 4 (left or right) on ScreenCode8E -- ScreenCode8E op 11 (PanelOpTable_FCF2F3).
+; LcdKeyRow4_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; LcdKeyRow4_SoundEditAmpEnvelope2: LCD key row 4 (left or right) on ScreenCode8E -- ScreenCode8E op 11 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode8E:
+LcdKeyRow4_SoundEditAmpEnvelope2:
 	link XIZ,0x0000                                      ; FD3BEA  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3BEE  8e 08 3f 00
 	jr z, .LFD3C0B                                       ; FD3BF2  66 17
@@ -132739,11 +132739,11 @@ LcdKeyRow4_ScreenCode8E:
 .LFD3C0B:
 	unlk XIZ                                             ; FD3C0B  ee 0d
 	ret                                                  ; FD3C0D  0e
-; LcdKeyRow5_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; LcdKeyRow5_ScreenCode8E: LCD key row 5 (left or right) on ScreenCode8E -- ScreenCode8E op 12 (PanelOpTable_FCF2F3).
+; LcdKeyRow5_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; LcdKeyRow5_SoundEditAmpEnvelope2: LCD key row 5 (left or right) on ScreenCode8E -- ScreenCode8E op 12 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode8E:
+LcdKeyRow5_SoundEditAmpEnvelope2:
 	link XIZ,0x0000                                      ; FD3C0E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3C12  8e 08 3f 00
 	jr z, .LFD3C2F                                       ; FD3C16  66 17
@@ -132759,11 +132759,11 @@ LcdKeyRow5_ScreenCode8E:
 .LFD3C2F:
 	unlk XIZ                                             ; FD3C2F  ee 0d
 	ret                                                  ; FD3C31  0e
-; PageKey_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; PageKey_ScreenCode8E: the PAGE pair (code 0x10) on ScreenCode8E -- ScreenCode8E op 16 (PanelOpTable_FCF2F3).
+; PageKey_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; PageKey_SoundEditAmpEnvelope2: the PAGE pair (code 0x10) on ScreenCode8E -- ScreenCode8E op 16 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode8E:
+PageKey_SoundEditAmpEnvelope2:
 	link XIZ,0x0000                                      ; FD3C32  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3C36  8e 08 3f 00
 	jr z, .LFD3C47                                       ; FD3C3A  66 0b
@@ -132774,11 +132774,11 @@ PageKey_ScreenCode8E:
 .LFD3C47:
 	unlk XIZ                                             ; FD3C47  ee 0d
 	ret                                                  ; FD3C49  0e
-; ExitKey_ScreenCode8E -- a handler: an entry of PanelOpTable_FCF2F3
-; ExitKey_ScreenCode8E: the EXIT key on ScreenCode8E -- ScreenCode8E op 15 (PanelOpTable_FCF2F3).
+; ExitKey_SoundEditAmpEnvelope2 -- a handler: an entry of PanelOpTable_FCF2F3
+; ExitKey_SoundEditAmpEnvelope2: the EXIT key on ScreenCode8E -- ScreenCode8E op 15 (PanelOpTable_FCF2F3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode8E:
+ExitKey_SoundEditAmpEnvelope2:
 	link XIZ,0x0000                                      ; FD3C4A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3C4E  8e 08 3f 00
 	jr nz, .LFD3C67                                      ; FD3C52  6e 13
@@ -132791,11 +132791,11 @@ ExitKey_ScreenCode8E:
 .LFD3C67:
 	unlk XIZ                                             ; FD3C67  ee 0d
 	ret                                                  ; FD3C69  0e
-; SoftKeyCol2_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; SoftKeyCol2_ScreenCode8F: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 1 (PanelOpTable_FCF33B).
+; SoftKeyCol2_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol2_SoundEditAmpLfo: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 1 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode8F:
+SoftKeyCol2_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3C6A  ee 0c 00 00
 	pushw 0x00                                           ; FD3C6E  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C71  9e 08 21
@@ -132805,11 +132805,11 @@ SoftKeyCol2_ScreenCode8F:
 	pop XBC                                              ; FD3C7B  59
 	unlk XIZ                                             ; FD3C7C  ee 0d
 	ret                                                  ; FD3C7E  0e
-; SoftKeyCol3_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; SoftKeyCol3_ScreenCode8F: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 2 (PanelOpTable_FCF33B).
+; SoftKeyCol3_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol3_SoundEditAmpLfo: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 2 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode8F:
+SoftKeyCol3_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3C7F  ee 0c 00 00
 	pushw 0x00                                           ; FD3C83  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C86  9e 08 21
@@ -132819,10 +132819,10 @@ SoftKeyCol3_ScreenCode8F:
 	pop XBC                                              ; FD3C90  59
 	unlk XIZ                                             ; FD3C91  ee 0d
 	ret                                                  ; FD3C93  0e
-; SoftKeyCol4_ScreenCode8F: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 3 (PanelOpTable_FCF33B).
+; SoftKeyCol4_SoundEditAmpLfo: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 3 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode8F:
+SoftKeyCol4_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3C94  ee 0c 00 00
 	pushw 0x00                                           ; FD3C98  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C9B  9e 08 21
@@ -132832,11 +132832,11 @@ SoftKeyCol4_ScreenCode8F:
 	pop XBC                                              ; FD3CA5  59
 	unlk XIZ                                             ; FD3CA6  ee 0d
 	ret                                                  ; FD3CA8  0e
-; SoftKeyCol5_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; SoftKeyCol5_ScreenCode8F: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 4 (PanelOpTable_FCF33B).
+; SoftKeyCol5_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol5_SoundEditAmpLfo: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 4 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode8F:
+SoftKeyCol5_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3CA9  ee 0c 00 00
 	pushw 0x00                                           ; FD3CAD  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CB0  9e 08 21
@@ -132846,11 +132846,11 @@ SoftKeyCol5_ScreenCode8F:
 	pop XBC                                              ; FD3CBA  59
 	unlk XIZ                                             ; FD3CBB  ee 0d
 	ret                                                  ; FD3CBD  0e
-; SoftKeyCol6_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; SoftKeyCol6_ScreenCode8F: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 5 (PanelOpTable_FCF33B).
+; SoftKeyCol6_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol6_SoundEditAmpLfo: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 5 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode8F:
+SoftKeyCol6_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3CBE  ee 0c 00 00
 	pushw 0x00                                           ; FD3CC2  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CC5  9e 08 21
@@ -132860,11 +132860,11 @@ SoftKeyCol6_ScreenCode8F:
 	pop XBC                                              ; FD3CCF  59
 	unlk XIZ                                             ; FD3CD0  ee 0d
 	ret                                                  ; FD3CD2  0e
-; SoftKeyCol7_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; SoftKeyCol7_ScreenCode8F: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 6 (PanelOpTable_FCF33B).
+; SoftKeyCol7_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol7_SoundEditAmpLfo: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 6 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode8F:
+SoftKeyCol7_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3CD3  ee 0c 00 00
 	pushw 0x00                                           ; FD3CD7  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CDA  9e 08 21
@@ -132874,11 +132874,11 @@ SoftKeyCol7_ScreenCode8F:
 	pop XBC                                              ; FD3CE4  59
 	unlk XIZ                                             ; FD3CE5  ee 0d
 	ret                                                  ; FD3CE7  0e
-; SoftKeyCol8_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; SoftKeyCol8_ScreenCode8F: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 7 (PanelOpTable_FCF33B).
+; SoftKeyCol8_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol8_SoundEditAmpLfo: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 7 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode8F:
+SoftKeyCol8_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3CE8  ee 0c 00 00
 	pushw 0x00                                           ; FD3CEC  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CEF  9e 08 21
@@ -132888,11 +132888,11 @@ SoftKeyCol8_ScreenCode8F:
 	pop XBC                                              ; FD3CF9  59
 	unlk XIZ                                             ; FD3CFA  ee 0d
 	ret                                                  ; FD3CFC  0e
-; LcdKeyRow1_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; LcdKeyRow1_ScreenCode8F: LCD key row 1 (left or right) on ScreenCode8F -- ScreenCode8F op 8 (PanelOpTable_FCF33B).
+; LcdKeyRow1_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow1_SoundEditAmpLfo: LCD key row 1 (left or right) on ScreenCode8F -- ScreenCode8F op 8 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode8F:
+LcdKeyRow1_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3CFD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D01  8e 08 3f 00
 	jr nz, .LFD3D14                                      ; FD3D05  6e 0d
@@ -132906,11 +132906,11 @@ LcdKeyRow1_ScreenCode8F:
 .LFD3D18:
 	unlk XIZ                                             ; FD3D18  ee 0d
 	ret                                                  ; FD3D1A  0e
-; LcdKeyRow2_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; LcdKeyRow2_ScreenCode8F: LCD key row 2 (left or right) on ScreenCode8F -- ScreenCode8F op 9 (PanelOpTable_FCF33B).
+; LcdKeyRow2_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow2_SoundEditAmpLfo: LCD key row 2 (left or right) on ScreenCode8F -- ScreenCode8F op 9 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode8F:
+LcdKeyRow2_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3D1B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D1F  8e 08 3f 00
 	jr nz, .LFD3D31                                      ; FD3D23  6e 0c
@@ -132926,11 +132926,11 @@ LcdKeyRow2_ScreenCode8F:
 	pop XIY                                              ; FD3D3B  5d
 	unlk XIZ                                             ; FD3D3C  ee 0d
 	ret                                                  ; FD3D3E  0e
-; LcdKeyRow3_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; LcdKeyRow3_ScreenCode8F: LCD key row 3 (left or right) on ScreenCode8F -- ScreenCode8F op 10 (PanelOpTable_FCF33B).
+; LcdKeyRow3_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow3_SoundEditAmpLfo: LCD key row 3 (left or right) on ScreenCode8F -- ScreenCode8F op 10 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode8F:
+LcdKeyRow3_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3D3F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D43  8e 08 3f 00
 	jr z, .LFD3D54                                       ; FD3D47  66 0b
@@ -132941,11 +132941,11 @@ LcdKeyRow3_ScreenCode8F:
 .LFD3D54:
 	unlk XIZ                                             ; FD3D54  ee 0d
 	ret                                                  ; FD3D56  0e
-; LcdKeyRow4_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; LcdKeyRow4_ScreenCode8F: LCD key row 4 (left or right) on ScreenCode8F -- ScreenCode8F op 11 (PanelOpTable_FCF33B).
+; LcdKeyRow4_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow4_SoundEditAmpLfo: LCD key row 4 (left or right) on ScreenCode8F -- ScreenCode8F op 11 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode8F:
+LcdKeyRow4_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3D57  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D5B  8e 08 3f 00
 	jr z, .LFD3D6C                                       ; FD3D5F  66 0b
@@ -132956,11 +132956,11 @@ LcdKeyRow4_ScreenCode8F:
 .LFD3D6C:
 	unlk XIZ                                             ; FD3D6C  ee 0d
 	ret                                                  ; FD3D6E  0e
-; LcdKeyRow5_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; LcdKeyRow5_ScreenCode8F: LCD key row 5 (left or right) on ScreenCode8F -- ScreenCode8F op 12 (PanelOpTable_FCF33B).
+; LcdKeyRow5_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow5_SoundEditAmpLfo: LCD key row 5 (left or right) on ScreenCode8F -- ScreenCode8F op 12 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode8F:
+LcdKeyRow5_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3D6F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D73  8e 08 3f 00
 	jr z, .LFD3D84                                       ; FD3D77  66 0b
@@ -132971,11 +132971,11 @@ LcdKeyRow5_ScreenCode8F:
 .LFD3D84:
 	unlk XIZ                                             ; FD3D84  ee 0d
 	ret                                                  ; FD3D86  0e
-; ExitKey_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
-; ExitKey_ScreenCode8F: the EXIT key on ScreenCode8F -- ScreenCode8F op 15 (PanelOpTable_FCF33B).
+; ExitKey_SoundEditAmpLfo -- a handler: an entry of PanelOpTable_FCF33B
+; ExitKey_SoundEditAmpLfo: the EXIT key on ScreenCode8F -- ScreenCode8F op 15 (PanelOpTable_FCF33B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode8F:
+ExitKey_SoundEditAmpLfo:
 	link XIZ,0x0000                                      ; FD3D87  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D8B  8e 08 3f 00
 	jr nz, .LFD3DA4                                      ; FD3D8F  6e 13
@@ -144330,7 +144330,7 @@ Var27A3_SelectSlot:
 	ret                                                  ; FD98BC  0e
 ; FilterPage_DrawGraph(redraw, layout): erase the graph box and draw it with T_Gfx_DrawLine_Solid from ModelingPage_Fields[2] (bit 7
 ;   cleared) and [3] & 7 (at most 5); x origin 0x28 or 0x4D by layout.  Its callers are the FILTER pages: screens 0x90-0x93, whose full
-;   paints (ScreenCode90_Paint ..) run DL_FilterCutoff*, DL_HighPass*, DL_LowPass*.
+;   paints (SoundEditFilterLpf12_Paint ..) run DL_FilterCutoff*, DL_HighPass*, DL_LowPass*.
 FilterPage_DrawGraph:
 	link XIZ,0xfff0                                      ; FD98BD  ee 0c f0 ff
 	pushw hl                                             ; FD98C1  2b
@@ -147201,7 +147201,7 @@ sub_FDACBD:
 .LFDAD41:
 	unlk XIZ                                             ; FDAD41  ee 0d
 	ret                                                  ; FDAD43  0e
-ScreenCode80_Handler:
+ScreenEnter_SoundEditMenu:
 	link XIZ,0xffea                                      ; FDAD44  ee 0c ea ff
 	push XIX                                             ; FDAD48  3c
 	lda xix, (xiz-22)                                    ; FDAD49  be ea 34
@@ -147703,7 +147703,7 @@ sub_FDAF07:
 	popw hl                                              ; FDB22B  4b
 	unlk XIZ                                             ; FDB22C  ee 0d
 	ret                                                  ; FDB22E  0e
-ScreenCode87_Handler:
+ScreenEnter_SoundEditPitchTune:
 	link XIZ,0xfff2                                      ; FDB22F  ee 0c f2 ff
 	pushw hl                                             ; FDB233  2b
 	pushw de                                             ; FDB234  2a
@@ -147844,7 +147844,7 @@ sub_FDB30B:
 	popw hl                                              ; FDB388  4b
 	unlk XIZ                                             ; FDB389  ee 0d
 	ret                                                  ; FDB38B  0e
-ScreenCode88_Handler:
+ScreenEnter_SoundEditPitchEnvelope1:
 	link XIZ,0xfff6                                      ; FDB38C  ee 0c f6 ff
 	pushw hl                                             ; FDB390  2b
 	pushw de                                             ; FDB391  2a
@@ -147923,7 +147923,7 @@ ScreenCode88_Handler:
 	popw hl                                              ; FDB449  4b
 	unlk XIZ                                             ; FDB44A  ee 0d
 	ret                                                  ; FDB44C  0e
-ScreenCode89_Handler:
+ScreenEnter_SoundEditPitchEnvelope2:
 	link XIZ,0xfff4                                      ; FDB44D  ee 0c f4 ff
 	pushw hl                                             ; FDB451  2b
 	pushw de                                             ; FDB452  2a
@@ -148012,7 +148012,7 @@ sub_FDB4B0:
 	popw hl                                              ; FDB525  4b
 	unlk XIZ                                             ; FDB526  ee 0d
 	ret                                                  ; FDB528  0e
-ScreenCode8A_Handler:
+ScreenEnter_SoundEditPitchLfo:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDB529  1d 80 2e f4
 	pushw 0x8a                                           ; FDB52D  0b 8a 00
 	calr sub_FDB53C                                      ; FDB530  1e 09 00
@@ -148178,7 +148178,7 @@ sub_FDB53C:
 	popw hl                                              ; FDB68F  4b
 	unlk XIZ                                             ; FDB690  ee 0d
 	ret                                                  ; FDB692  0e
-ScreenCode8B_Handler:
+ScreenEnter_SoundEditAmpLevel1:
 	link XIZ,0xfff2                                      ; FDB693  ee 0c f2 ff
 	push XIX                                             ; FDB697  3c
 	lda xix, (xiz-14)                                    ; FDB698  be f2 34
@@ -148427,7 +148427,7 @@ sub_FDB8D1:
 	popw hl                                              ; FDB8D5  4b
 	unlk XIZ                                             ; FDB8D6  ee 0d
 	ret                                                  ; FDB8D8  0e
-ScreenCode8C_Handler:
+ScreenEnter_SoundEditAmpLevel2:
 	link XIZ,0xfff4                                      ; FDB8D9  ee 0c f4 ff
 	pushw hl                                             ; FDB8DD  2b
 	pushw de                                             ; FDB8DE  2a
@@ -148512,7 +148512,7 @@ ScreenCode8C_Handler:
 	popw hl                                              ; FDB9A7  4b
 	unlk XIZ                                             ; FDB9A8  ee 0d
 	ret                                                  ; FDB9AA  0e
-ScreenCode8D_Handler:
+ScreenEnter_SoundEditAmpEnvelope1:
 	link XIZ,0xfff6                                      ; FDB9AB  ee 0c f6 ff
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDB9AF  1d 80 2e f4
 	lda xbc, (xiz-2)                                     ; FDB9B3  be fe 31
@@ -148653,7 +148653,7 @@ sub_FDBAE3:
 	popw hl                                              ; FDBAE3  4b
 	unlk XIZ                                             ; FDBAE4  ee 0d
 	ret                                                  ; FDBAE6  0e
-ScreenCode8E_Handler:
+ScreenEnter_SoundEditAmpEnvelope2:
 	link XIZ,0xfff4                                      ; FDBAE7  ee 0c f4 ff
 	pushw hl                                             ; FDBAEB  2b
 	pushw de                                             ; FDBAEC  2a
@@ -148741,7 +148741,7 @@ ScreenCode8E_Handler:
 	popw hl                                              ; FDBBBF  4b
 	unlk XIZ                                             ; FDBBC0  ee 0d
 	ret                                                  ; FDBBC2  0e
-ScreenCode8F_Handler:
+ScreenEnter_SoundEditAmpLfo:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDBBC3  1d 80 2e f4
 	pushw 0x8f                                           ; FDBBC7  0b 8f 00
 	calr sub_FDB53C                                      ; FDBBCA  1e 6f f9
@@ -148749,7 +148749,7 @@ ScreenCode8F_Handler:
 	call ToneMsg80_Id00                                      ; FDBBD0  1d 47 64 fd
 	pop XBC                                              ; FDBBD4  59
 	ret                                                  ; FDBBD5  0e
-ScreenCodeCD_Handler:
+ScreenEnter_SoundEditControllerPage1:
 	link XIZ,0xffdc                                      ; FDBBD6  ee 0c dc ff
 	pushw hl                                             ; FDBBDA  2b
 	pushw de                                             ; FDBBDB  2a
@@ -149070,7 +149070,7 @@ sub_FDBE90:
 	popw hl                                              ; FDBEDA  4b
 	unlk XIZ                                             ; FDBEDB  ee 0d
 	ret                                                  ; FDBEDD  0e
-ScreenCode9B_Handler:
+ScreenEnter_SoundEditControllerPage2:
 	link XIZ,0xffee                                      ; FDBEDE  ee 0c ee ff
 	pushw hl                                             ; FDBEE2  2b
 	pushw de                                             ; FDBEE3  2a
@@ -149278,12 +149278,12 @@ sub_FDBF5E:
 	unlk XIZ                                             ; FDC0DE  ee 0d
 	ret                                                  ; FDC0E0  0e
 ScreenCode9C_Handler:
-	calr ScreenCode9A_Handler                                      ; FDC0E1  1e 49 0f
+	calr ScreenEnter_SoundEditDigitalEffect                                      ; FDC0E1  1e 49 0f
 	pushw 0x10                                           ; FDC0E4  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC0E7  1d 47 64 fd
 	popw bc                                              ; FDC0EB  49
 	ret                                                  ; FDC0EC  0e
-ScreenCode90_Handler:
+ScreenEnter_SoundEditFilterLpf12:
 	link XIZ,0xfff6                                      ; FDC0ED  ee 0c f6 ff
 	pushw hl                                             ; FDC0F1  2b
 	push XIX                                             ; FDC0F2  3c
@@ -149467,7 +149467,7 @@ sub_FDC276:
 	popw hl                                              ; FDC277  4b
 	unlk XIZ                                             ; FDC278  ee 0d
 	ret                                                  ; FDC27A  0e
-ScreenCode91_Handler:
+ScreenEnter_SoundEditFilterHpf12:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC27B  1d 80 2e f4
 	pushw 0x91                                           ; FDC27F  0b 91 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC282  1d d0 1e f4
@@ -149483,7 +149483,7 @@ sub_FDC2A2:
 	inc 8,XSP                                            ; FDC2A2  ef 60
 	inc 2,XSP                                            ; FDC2A4  ef 62
 	ret                                                  ; FDC2A6  0e
-ScreenCode92_Handler:
+ScreenEnter_SoundEditFilterLpf24:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC2A7  1d 80 2e f4
 	pushw 0x92                                           ; FDC2AB  0b 92 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC2AE  1d d0 1e f4
@@ -149497,7 +149497,7 @@ ScreenCode92_Handler:
 	inc 8,XSP                                            ; FDC2CA  ef 60
 	inc 2,XSP                                            ; FDC2CC  ef 62
 	ret                                                  ; FDC2CE  0e
-ScreenCode93_Handler:
+ScreenEnter_SoundEditFilterHpf24:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC2CF  1d 80 2e f4
 	pushw 0x93                                           ; FDC2D3  0b 93 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC2D6  1d d0 1e f4
@@ -149511,7 +149511,7 @@ ScreenCode93_Handler:
 	inc 8,XSP                                            ; FDC2F2  ef 60
 	inc 2,XSP                                            ; FDC2F4  ef 62
 	ret                                                  ; FDC2F6  0e
-ScreenCode94_Handler:
+ScreenEnter_SoundEditFilterBpf:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC2F7  1d 80 2e f4
 	pushw 0x94                                           ; FDC2FB  0b 94 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC2FE  1d d0 1e f4
@@ -149522,7 +149522,7 @@ ScreenCode94_Handler:
 	call ToneMsg80_Id00                                      ; FDC310  1d 47 64 fd
 	inc 6,XSP                                            ; FDC314  ef 66
 	ret                                                  ; FDC316  0e
-ScreenCode95_Handler:
+ScreenEnter_SoundEditFilterThrough:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC317  1d 80 2e f4
 	pushw 0x95                                           ; FDC31B  0b 95 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC31E  1d d0 1e f4
@@ -149532,7 +149532,7 @@ ScreenCode95_Handler:
 	call ToneMsg80_Id00                                      ; FDC32C  1d 47 64 fd
 	inc 6,XSP                                            ; FDC330  ef 66
 	ret                                                  ; FDC332  0e
-ScreenCode96_Handler:
+ScreenEnter_SoundEditFilterKeyFollow:
 	link XIZ,0xfff4                                      ; FDC333  ee 0c f4 ff
 	pushw hl                                             ; FDC337  2b
 	pushw de                                             ; FDC338  2a
@@ -149618,7 +149618,7 @@ sub_FDC3F9:
 	popw hl                                              ; FDC401  4b
 	unlk XIZ                                             ; FDC402  ee 0d
 	ret                                                  ; FDC404  0e
-ScreenCode97_Handler:
+ScreenEnter_SoundEditFilterEnvelope1:
 	link XIZ,0xfff6                                      ; FDC405  ee 0c f6 ff
 	pushw hl                                             ; FDC409  2b
 	pushw de                                             ; FDC40A  2a
@@ -149699,7 +149699,7 @@ sub_FDC438:
 	popw hl                                              ; FDC4C2  4b
 	unlk XIZ                                             ; FDC4C3  ee 0d
 	ret                                                  ; FDC4C5  0e
-ScreenCode98_Handler:
+ScreenEnter_SoundEditFilterEnvelope2:
 	link XIZ,0xfff4                                      ; FDC4C6  ee 0c f4 ff
 	pushw hl                                             ; FDC4CA  2b
 	pushw de                                             ; FDC4CB  2a
@@ -149787,7 +149787,7 @@ ScreenCode98_Handler:
 	popw hl                                              ; FDC59E  4b
 	unlk XIZ                                             ; FDC59F  ee 0d
 	ret                                                  ; FDC5A1  0e
-ScreenCode99_Handler:
+ScreenEnter_SoundEditFilterLfo:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC5A2  1d 80 2e f4
 	pushw 0x99                                           ; FDC5A6  0b 99 00
 	calr sub_FDB53C                                      ; FDC5A9  1e 90 ef
@@ -149795,7 +149795,7 @@ ScreenCode99_Handler:
 	call ToneMsg80_Id00                                      ; FDC5AF  1d 47 64 fd
 	pop XBC                                              ; FDC5B3  59
 	ret                                                  ; FDC5B4  0e
-ScreenCode82_Handler:
+ScreenEnter_SoundEditModelingToneTemplate:
 	link XIZ,0xffc4                                      ; FDC5B5  ee 0c c4 ff
 	pushw hl                                             ; FDC5B9  2b
 	pushw de                                             ; FDC5BA  2a
@@ -150060,7 +150060,7 @@ sub_FDC6CB:
 	popw hl                                              ; FDC848  4b
 	unlk XIZ                                             ; FDC849  ee 0d
 	ret                                                  ; FDC84B  0e
-ScreenCode83_Handler:
+ScreenEnter_SoundEditToneLayerPanning:
 	link XIZ,0xfff6                                      ; FDC84C  ee 0c f6 ff
 	pushw hl                                             ; FDC850  2b
 	push XIX                                             ; FDC851  3c
@@ -150177,7 +150177,7 @@ sub_FDC87E:
 	popw hl                                              ; FDC957  4b
 	unlk XIZ                                             ; FDC958  ee 0d
 	ret                                                  ; FDC95A  0e
-ScreenCode84_Handler:
+ScreenEnter_SoundEditToneLayerKeyLayer:
 	link XIZ,0xfff6                                      ; FDC95B  ee 0c f6 ff
 	pushw hl                                             ; FDC95F  2b
 	pushw de                                             ; FDC960  2a
@@ -150298,7 +150298,7 @@ sub_FDCA4E:
 	popw hl                                              ; FDCA73  4b
 	unlk XIZ                                             ; FDCA74  ee 0d
 	ret                                                  ; FDCA76  0e
-ScreenCode85_Handler:
+ScreenEnter_SoundEditToneLayerVelocityLayer:
 	link XIZ,0xfff6                                      ; FDCA77  ee 0c f6 ff
 	pushw hl                                             ; FDCA7B  2b
 	pushw de                                             ; FDCA7C  2a
@@ -150417,7 +150417,7 @@ ScreenCode85_Handler:
 	popw hl                                              ; FDCB8F  4b
 	unlk XIZ                                             ; FDCB90  ee 0d
 	ret                                                  ; FDCB92  0e
-ScreenCode86_Handler:
+ScreenEnter_SoundEditModelingDriverWaveform:
 	link XIZ,0xffd6                                      ; FDCB93  ee 0c d6 ff
 	pushw hl                                             ; FDCB97  2b
 	push XIX                                             ; FDCB98  3c
@@ -150676,7 +150676,7 @@ sub_FDCD22:
 	pop XIX                                              ; FDCDDC  5c
 	unlk XIZ                                             ; FDCDDD  ee 0d
 	ret                                                  ; FDCDDF  0e
-ScreenCode9E_Handler:
+ScreenEnter_SoundEditMemoryWrite:
 	link XIZ,0xffd4                                      ; FDCDE0  ee 0c d4 ff
 	pushw hl                                             ; FDCDE4  2b
 	push XIX                                             ; FDCDE5  3c
@@ -150890,7 +150890,7 @@ sub_FDCFCB:
 	popw hl                                              ; FDCFE7  4b
 	unlk XIZ                                             ; FDCFE8  ee 0d
 	ret                                                  ; FDCFEA  0e
-ScreenCode9F_Handler:
+ScreenEnter_SoundEditNaming:
 	link XIZ,0xfffc                                      ; FDCFEB  ee 0c fc ff
 	pushw hl                                             ; FDCFEF  2b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDCFF0  1d 80 2e f4
@@ -150921,9 +150921,9 @@ ScreenCode9F_Handler:
 	popw hl                                              ; FDD029  4b
 	unlk XIZ                                             ; FDD02A  ee 0d
 	ret                                                  ; FDD02C  0e
-; ScreenCode9A_Handler: the +0 ENTER method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
+; ScreenEnter_SoundEditDigitalEffect: the +0 ENTER method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
 ;   (ViewB entry 0x9A) points at the thunk triple starting at T_F433D0, and slot T_F433D0 jumps here.
-ScreenCode9A_Handler:
+ScreenEnter_SoundEditDigitalEffect:
 	link XIZ,0xfff0                                      ; FDD02D  ee 0c f0 ff
 	pushw hl                                             ; FDD031  2b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDD032  1d 80 2e f4
@@ -150994,7 +150994,7 @@ ScreenCode9A_Handler:
 	popw hl                                              ; FDD0D0  4b
 	unlk XIZ                                             ; FDD0D1  ee 0d
 	ret                                                  ; FDD0D3  0e
-ScreenCode9D_Handler:
+ScreenEnter_SoundEditCopy:
 	link XIZ,0xfff0                                      ; FDD0D4  ee 0c f0 ff
 	pushw hl                                             ; FDD0D8  2b
 	push XIX                                             ; FDD0D9  3c
@@ -152900,7 +152900,7 @@ sub_FDE0F7:
 	ret                                                  ; FDE150  0e
 T_F433E0_Nop:
 	ret                                                  ; FDE151  0e
-ScreenLeave_Code80:
+ScreenLeave_SoundEditMenu:
 	pushw 0x00                                           ; FDE152  0b 00 00
 	call Var27DA_Set                                      ; FDE155  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE159  1d 13 77 fd
@@ -152908,7 +152908,7 @@ ScreenLeave_Code80:
 	ret                                                  ; FDE15E  0e
 T_F41F68_Nop:
 	ret                                                  ; FDE15F  0e
-ScreenLeave_Code87:
+ScreenLeave_SoundEditPitchTune:
 	pushw 0x00                                           ; FDE160  0b 00 00
 	call Var27DA_Set                                      ; FDE163  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE167  1d 13 77 fd
@@ -152916,7 +152916,7 @@ ScreenLeave_Code87:
 	ret                                                  ; FDE16C  0e
 T_F42008_Nop:
 	ret                                                  ; FDE16D  0e
-ScreenLeave_Code88:
+ScreenLeave_SoundEditPitchEnvelope1:
 	pushw 0x00                                           ; FDE16E  0b 00 00
 	call Var27DA_Set                                      ; FDE171  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE175  1d 13 77 fd
@@ -152924,7 +152924,7 @@ ScreenLeave_Code88:
 	ret                                                  ; FDE17A  0e
 T_F42018_Nop:
 	ret                                                  ; FDE17B  0e
-ScreenLeave_Code89:
+ScreenLeave_SoundEditPitchEnvelope2:
 	pushw 0x00                                           ; FDE17C  0b 00 00
 	call Var27DA_Set                                      ; FDE17F  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE183  1d 13 77 fd
@@ -152932,7 +152932,7 @@ ScreenLeave_Code89:
 	ret                                                  ; FDE188  0e
 T_F42028_Nop:
 	ret                                                  ; FDE189  0e
-ScreenLeave_Code8A:
+ScreenLeave_SoundEditPitchLfo:
 	pushw 0x00                                           ; FDE18A  0b 00 00
 	call Var27DA_Set                                      ; FDE18D  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE191  1d 13 77 fd
@@ -152940,7 +152940,7 @@ ScreenLeave_Code8A:
 	ret                                                  ; FDE196  0e
 T_F42038_Nop:
 	ret                                                  ; FDE197  0e
-ScreenLeave_Code8B:
+ScreenLeave_SoundEditAmpLevel1:
 	pushw 0x00                                           ; FDE198  0b 00 00
 	call Var27DA_Set                                      ; FDE19B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE19F  1d 13 77 fd
@@ -152948,7 +152948,7 @@ ScreenLeave_Code8B:
 	ret                                                  ; FDE1A4  0e
 T_F42048_Nop:
 	ret                                                  ; FDE1A5  0e
-ScreenLeave_Code8C:
+ScreenLeave_SoundEditAmpLevel2:
 	pushw 0x00                                           ; FDE1A6  0b 00 00
 	call Var27DA_Set                                      ; FDE1A9  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1AD  1d 13 77 fd
@@ -152956,14 +152956,14 @@ ScreenLeave_Code8C:
 	ret                                                  ; FDE1B2  0e
 T_F42058_Nop:
 	ret                                                  ; FDE1B3  0e
-ScreenLeave_Code8D:
+ScreenLeave_SoundEditAmpEnvelope1:
 	pushw 0x00                                           ; FDE1B4  0b 00 00
 	call Var27DA_Set                                      ; FDE1B7  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1BB  1d 13 77 fd
 	popw bc                                              ; FDE1BF  49
 	ret                                                  ; FDE1C0  0e
 	ret                                                  ; FDE1C1  0e
-ScreenLeave_Code8E:
+ScreenLeave_SoundEditAmpEnvelope2:
 	pushw 0x00                                           ; FDE1C2  0b 00 00
 	call Var27DA_Set                                      ; FDE1C5  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1C9  1d 13 77 fd
@@ -152971,7 +152971,7 @@ ScreenLeave_Code8E:
 	ret                                                  ; FDE1CE  0e
 T_F42078_Nop:
 	ret                                                  ; FDE1CF  0e
-ScreenLeave_Code8F:
+ScreenLeave_SoundEditAmpLfo:
 	pushw 0x00                                           ; FDE1D0  0b 00 00
 	call Var27DA_Set                                      ; FDE1D3  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1D7  1d 13 77 fd
@@ -152979,7 +152979,7 @@ ScreenLeave_Code8F:
 	ret                                                  ; FDE1DC  0e
 T_F42068_Nop:
 	ret                                                  ; FDE1DD  0e
-ScreenLeave_CodeCD:
+ScreenLeave_SoundEditControllerPage1:
 	pushw 0x00                                           ; FDE1DE  0b 00 00
 	call Var27DA_Set                                      ; FDE1E1  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1E5  1d 13 77 fd
@@ -152987,7 +152987,7 @@ ScreenLeave_CodeCD:
 	ret                                                  ; FDE1EA  0e
 T_F42098_Nop:
 	ret                                                  ; FDE1EB  0e
-ScreenLeave_Code9B:
+ScreenLeave_SoundEditControllerPage2:
 	pushw 0x00                                           ; FDE1EC  0b 00 00
 	call Var27DA_Set                                      ; FDE1EF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE1F3  1d 13 77 fd
@@ -153003,7 +153003,7 @@ ScreenLeave_Code9C:
 	ret                                                  ; FDE206  0e
 T_F420B8_Nop:
 	ret                                                  ; FDE207  0e
-ScreenLeave_Code82:
+ScreenLeave_SoundEditModelingToneTemplate:
 	pushw 0x00                                           ; FDE208  0b 00 00
 	call Var27DA_Set                                      ; FDE20B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE20F  1d 13 77 fd
@@ -153011,7 +153011,7 @@ ScreenLeave_Code82:
 	ret                                                  ; FDE214  0e
 T_F42168_Nop:
 	ret                                                  ; FDE215  0e
-ScreenLeave_Code83:
+ScreenLeave_SoundEditToneLayerPanning:
 	pushw 0x00                                           ; FDE216  0b 00 00
 	call Var27DA_Set                                      ; FDE219  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE21D  1d 13 77 fd
@@ -153019,7 +153019,7 @@ ScreenLeave_Code83:
 	ret                                                  ; FDE222  0e
 T_F42178_Nop:
 	ret                                                  ; FDE223  0e
-ScreenLeave_Code84:
+ScreenLeave_SoundEditToneLayerKeyLayer:
 	pushw 0x00                                           ; FDE224  0b 00 00
 	call Var27DA_Set                                      ; FDE227  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE22B  1d 13 77 fd
@@ -153027,7 +153027,7 @@ ScreenLeave_Code84:
 	ret                                                  ; FDE230  0e
 T_F42188_Nop:
 	ret                                                  ; FDE231  0e
-ScreenLeave_Code85:
+ScreenLeave_SoundEditToneLayerVelocityLayer:
 	pushw 0x00                                           ; FDE232  0b 00 00
 	call Var27DA_Set                                      ; FDE235  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE239  1d 13 77 fd
@@ -153035,7 +153035,7 @@ ScreenLeave_Code85:
 	ret                                                  ; FDE23E  0e
 T_F42198_Nop:
 	ret                                                  ; FDE23F  0e
-ScreenLeave_Code86:
+ScreenLeave_SoundEditModelingDriverWaveform:
 	pushw 0x00                                           ; FDE240  0b 00 00
 	call Var27DA_Set                                      ; FDE243  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE247  1d 13 77 fd
@@ -153043,7 +153043,7 @@ ScreenLeave_Code86:
 	ret                                                  ; FDE24C  0e
 T_F421A8_Nop:
 	ret                                                  ; FDE24D  0e
-ScreenLeave_Code90:
+ScreenLeave_SoundEditFilterLpf12:
 	pushw 0x00                                           ; FDE24E  0b 00 00
 	call Var27DA_Set                                      ; FDE251  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE255  1d 13 77 fd
@@ -153051,7 +153051,7 @@ ScreenLeave_Code90:
 	ret                                                  ; FDE25A  0e
 T_F420C8_Nop:
 	ret                                                  ; FDE25B  0e
-ScreenLeave_Code91:
+ScreenLeave_SoundEditFilterHpf12:
 	pushw 0x00                                           ; FDE25C  0b 00 00
 	call Var27DA_Set                                      ; FDE25F  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE263  1d 13 77 fd
@@ -153059,7 +153059,7 @@ ScreenLeave_Code91:
 	ret                                                  ; FDE268  0e
 T_F420D8_Nop:
 	ret                                                  ; FDE269  0e
-ScreenLeave_Code92:
+ScreenLeave_SoundEditFilterLpf24:
 	pushw 0x00                                           ; FDE26A  0b 00 00
 	call Var27DA_Set                                      ; FDE26D  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE271  1d 13 77 fd
@@ -153067,7 +153067,7 @@ ScreenLeave_Code92:
 	ret                                                  ; FDE276  0e
 T_F420E8_Nop:
 	ret                                                  ; FDE277  0e
-ScreenLeave_Code93:
+ScreenLeave_SoundEditFilterHpf24:
 	pushw 0x00                                           ; FDE278  0b 00 00
 	call Var27DA_Set                                      ; FDE27B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE27F  1d 13 77 fd
@@ -153075,7 +153075,7 @@ ScreenLeave_Code93:
 	ret                                                  ; FDE284  0e
 T_F420F8_Nop:
 	ret                                                  ; FDE285  0e
-ScreenLeave_Code94:
+ScreenLeave_SoundEditFilterBpf:
 	pushw 0x00                                           ; FDE286  0b 00 00
 	call Var27DA_Set                                      ; FDE289  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE28D  1d 13 77 fd
@@ -153083,7 +153083,7 @@ ScreenLeave_Code94:
 	ret                                                  ; FDE292  0e
 T_F42108_Nop:
 	ret                                                  ; FDE293  0e
-ScreenLeave_Code95:
+ScreenLeave_SoundEditFilterThrough:
 	pushw 0x00                                           ; FDE294  0b 00 00
 	call Var27DA_Set                                      ; FDE297  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE29B  1d 13 77 fd
@@ -153091,7 +153091,7 @@ ScreenLeave_Code95:
 	ret                                                  ; FDE2A0  0e
 T_F42118_Nop:
 	ret                                                  ; FDE2A1  0e
-ScreenLeave_Code96:
+ScreenLeave_SoundEditFilterKeyFollow:
 	pushw 0x00                                           ; FDE2A2  0b 00 00
 	call Var27DA_Set                                      ; FDE2A5  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2A9  1d 13 77 fd
@@ -153099,7 +153099,7 @@ ScreenLeave_Code96:
 	ret                                                  ; FDE2AE  0e
 T_F42128_Nop:
 	ret                                                  ; FDE2AF  0e
-ScreenLeave_Code97:
+ScreenLeave_SoundEditFilterEnvelope1:
 	pushw 0x00                                           ; FDE2B0  0b 00 00
 	call Var27DA_Set                                      ; FDE2B3  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2B7  1d 13 77 fd
@@ -153107,7 +153107,7 @@ ScreenLeave_Code97:
 	ret                                                  ; FDE2BC  0e
 T_F42138_Nop:
 	ret                                                  ; FDE2BD  0e
-ScreenLeave_Code98:
+ScreenLeave_SoundEditFilterEnvelope2:
 	pushw 0x00                                           ; FDE2BE  0b 00 00
 	call Var27DA_Set                                      ; FDE2C1  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2C5  1d 13 77 fd
@@ -153115,7 +153115,7 @@ ScreenLeave_Code98:
 	ret                                                  ; FDE2CA  0e
 T_F42148_Nop:
 	ret                                                  ; FDE2CB  0e
-ScreenLeave_Code99:
+ScreenLeave_SoundEditFilterLfo:
 	pushw 0x00                                           ; FDE2CC  0b 00 00
 	call Var27DA_Set                                      ; FDE2CF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2D3  1d 13 77 fd
@@ -153137,9 +153137,9 @@ T_F4237C_Nop:
 	popw bc                                              ; FDE2E9  49
 	ret                                                  ; FDE2EA  0e
 	ret                                                  ; FDE2EB  0e
-; ScreenLeave_Code9A: the +4 LEAVE method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
+; ScreenLeave_SoundEditDigitalEffect: the +4 LEAVE method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
 ;   (ViewB entry 0x9A) points at the thunk triple starting at T_F433D0, and slot T_F433D4 jumps here.
-ScreenLeave_Code9A:
+ScreenLeave_SoundEditDigitalEffect:
 	pushw 0x00                                           ; FDE2EC  0b 00 00
 	call Var27DA_Set                                      ; FDE2EF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2F3  1d 13 77 fd
@@ -153147,7 +153147,7 @@ ScreenLeave_Code9A:
 	ret                                                  ; FDE2F8  0e
 T_F433DC_Nop:
 	ret                                                  ; FDE2F9  0e
-ScreenLeave_Code9D:
+ScreenLeave_SoundEditCopy:
 	pushw 0x00                                           ; FDE2FA  0b 00 00
 	call Var27DA_Set                                      ; FDE2FD  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE301  1d 13 77 fd
@@ -153370,7 +153370,7 @@ ScreenLeave_CodeCE:
 	ret                                                  ; FDE3BC  0e
 T_F433EC_Nop:
 	ret                                                  ; FDE3BD  0e
-ScreenButton_Code90:
+ScreenButton_SoundEditFilterLpf12:
 	link XIZ,0xfffc                                      ; FDE3BE  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE3C2  be fe 31
 	push XBC                                             ; FDE3C5  39
@@ -153409,7 +153409,7 @@ ScreenButton_Code90:
 .LFDE41B:
 	unlk XIZ                                             ; FDE41B  ee 0d
 	ret                                                  ; FDE41D  0e
-ScreenButton_Code91:
+ScreenButton_SoundEditFilterHpf12:
 	link XIZ,0xfffc                                      ; FDE41E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE422  be fe 31
 	push XBC                                             ; FDE425  39
@@ -153448,7 +153448,7 @@ ScreenButton_Code91:
 .LFDE47B:
 	unlk XIZ                                             ; FDE47B  ee 0d
 	ret                                                  ; FDE47D  0e
-ScreenButton_Code92:
+ScreenButton_SoundEditFilterLpf24:
 	link XIZ,0xfffc                                      ; FDE47E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE482  be fe 31
 	push XBC                                             ; FDE485  39
@@ -153487,7 +153487,7 @@ ScreenButton_Code92:
 .LFDE4DB:
 	unlk XIZ                                             ; FDE4DB  ee 0d
 	ret                                                  ; FDE4DD  0e
-ScreenButton_Code93:
+ScreenButton_SoundEditFilterHpf24:
 	link XIZ,0xfffc                                      ; FDE4DE  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE4E2  be fe 31
 	push XBC                                             ; FDE4E5  39
@@ -153527,7 +153527,7 @@ sub_FDE529:
 .LFDE53B:
 	unlk XIZ                                             ; FDE53B  ee 0d
 	ret                                                  ; FDE53D  0e
-ScreenButton_Code94:
+ScreenButton_SoundEditFilterBpf:
 	link XIZ,0xfffc                                      ; FDE53E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE542  be fe 31
 	push XBC                                             ; FDE545  39
@@ -153566,7 +153566,7 @@ ScreenButton_Code94:
 .LFDE59B:
 	unlk XIZ                                             ; FDE59B  ee 0d
 	ret                                                  ; FDE59D  0e
-ScreenButton_Code95:
+ScreenButton_SoundEditFilterThrough:
 	link XIZ,0xfffc                                      ; FDE59E  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE5A2  be fe 31
 	push XBC                                             ; FDE5A5  39
@@ -153601,7 +153601,7 @@ ScreenButton_Code95:
 .LFDE5EC:
 	unlk XIZ                                             ; FDE5EC  ee 0d
 	ret                                                  ; FDE5EE  0e
-ScreenButton_Code96:
+ScreenButton_SoundEditFilterKeyFollow:
 	link XIZ,0xfffc                                      ; FDE5EF  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE5F3  be fe 31
 	push XBC                                             ; FDE5F6  39
@@ -153640,7 +153640,7 @@ ScreenButton_Code96:
 .LFDE64C:
 	unlk XIZ                                             ; FDE64C  ee 0d
 	ret                                                  ; FDE64E  0e
-ScreenButton_Code97:
+ScreenButton_SoundEditFilterEnvelope1:
 	link XIZ,0xfffc                                      ; FDE64F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE653  be fe 31
 	push XBC                                             ; FDE656  39
@@ -153679,7 +153679,7 @@ ScreenButton_Code97:
 .LFDE6AC:
 	unlk XIZ                                             ; FDE6AC  ee 0d
 	ret                                                  ; FDE6AE  0e
-ScreenButton_Code98:
+ScreenButton_SoundEditFilterEnvelope2:
 	link XIZ,0xfffc                                      ; FDE6AF  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE6B3  be fe 31
 	push XBC                                             ; FDE6B6  39
@@ -153727,7 +153727,7 @@ ScreenButton_Code98:
 ; it paints pointer tables as instructions and passes the byte gate doing it.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-ScreenButton_Code99:   ; entry: prom_b routine directory
+ScreenButton_SoundEditFilterLfo:   ; entry: prom_b routine directory
 	link XIZ,0xfffc                                      ; FDE70F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FDE713  be fe 31
 	push XBC                                             ; FDE716  39
@@ -153745,7 +153745,7 @@ ScreenButton_Code99:   ; entry: prom_b routine directory
 ;           (a branch in converted code names it). The 13 instructions tile
 ;           0xFDE729-0xFDE74C exactly and end in a computed `jp (xbc)`.
 ; ---------------------------------------------------------------------
-; (2026-10-03: the label sub_FDE729 stood here, mid-routine of ScreenButton_Code99 and referenced by nothing; removed)
+; (2026-10-03: the label sub_FDE729 stood here, mid-routine of ScreenButton_SoundEditFilterLfo and referenced by nothing; removed)
 	cp WA,0xffff                                  ; FDE729  d8 cf ff ff
 	jr z, sub_FDE74C_Skip                                    ; FDE72D  66 2e
 	ld bc, (xiz-2)                                ; FDE72F  9e fe 21
@@ -153814,10 +153814,10 @@ sub_FDE74C_Skip:
 ;
 ; Every label here is `sub_XXXXXX`/`.LXXXXXX`: an address, not a claim.
 ; =======================================================================
-; SoftKeyCol1_ScreenCode90: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 0 (PanelOpTable_FCF4A3).
+; SoftKeyCol1_SoundEditFilterLpf12: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 0 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode90:
+SoftKeyCol1_SoundEditFilterLpf12:
 	link XIZ,0x0000                               ; FDE760  ee 0c 00 00
 	pushw 0x90                                    ; FDE764  0b 90 00
 	pushw 0x01                                    ; FDE767  0b 01 00
@@ -153893,11 +153893,11 @@ SoftKeyCol1_ScreenCode90:
 	popw hl                                       ; FDE818  4b
 	unlk XIZ                                      ; FDE819  ee 0d
 	ret                                           ; FDE81B  0e
-; SoftKeyCol2_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; SoftKeyCol2_ScreenCode90: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 1 (PanelOpTable_FCF4A3).
+; SoftKeyCol2_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol2_SoundEditFilterLpf12: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 1 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode90:
+SoftKeyCol2_SoundEditFilterLpf12:
 	link XIZ,0x0000                               ; FDE81C  ee 0c 00 00
 	pushw 0x90                                    ; FDE820  0b 90 00
 	pushw 0x02                                    ; FDE823  0b 02 00
@@ -153973,11 +153973,11 @@ SoftKeyCol2_ScreenCode90:
 	popw hl                                       ; FDE8D4  4b
 	unlk XIZ                                      ; FDE8D5  ee 0d
 	ret                                           ; FDE8D7  0e
-; SoftKeyCol3_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; SoftKeyCol3_ScreenCode90: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 2 (PanelOpTable_FCF4A3).
+; SoftKeyCol3_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol3_SoundEditFilterLpf12: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 2 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode90:
+SoftKeyCol3_SoundEditFilterLpf12:
 	link XIZ,0x0000                               ; FDE8D8  ee 0c 00 00
 	pushw 0x90                                    ; FDE8DC  0b 90 00
 	pushw 0x03                                    ; FDE8DF  0b 03 00
@@ -154049,11 +154049,11 @@ SoftKeyCol3_ScreenCode90:
 	popw hl                                       ; FDE984  4b
 	unlk XIZ                                      ; FDE985  ee 0d
 	ret                                           ; FDE987  0e
-; SoftKeyCol4_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; SoftKeyCol4_ScreenCode90: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 3 (PanelOpTable_FCF4A3).
+; SoftKeyCol4_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol4_SoundEditFilterLpf12: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 3 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode90:
+SoftKeyCol4_SoundEditFilterLpf12:
 	link XIZ,0x0000                               ; FDE988  ee 0c 00 00
 	pushw 0x90                                    ; FDE98C  0b 90 00
 	pushw 0x04                                    ; FDE98F  0b 04 00
@@ -154126,11 +154126,11 @@ SoftKeyCol4_ScreenCode90:
 	unlk XIZ                                      ; FDEA35  ee 0d
 	ret                                           ; FDEA37  0e
 .LFDEA38:
-; SoftKeyCol6_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; SoftKeyCol6_ScreenCode90: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 5 (PanelOpTable_FCF4A3).
+; SoftKeyCol6_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol6_SoundEditFilterLpf12: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 5 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode90:
+SoftKeyCol6_SoundEditFilterLpf12:
 	link XIZ,0xffec                               ; FDEA38  ee 0c ec ff
 	pushw hl                                      ; FDEA3C  2b
 	push XIX                                      ; FDEA3D  3c
@@ -154196,11 +154196,11 @@ SoftKeyCol6_ScreenCode90:
 	unlk XIZ                                      ; FDEACF  ee 0d
 	ret                                           ; FDEAD1  0e
 .LFDEAD2:
-; SoftKeyCol7_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; SoftKeyCol7_ScreenCode90: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 6 (PanelOpTable_FCF4A3).
+; SoftKeyCol7_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol7_SoundEditFilterLpf12: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 6 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode90:
+SoftKeyCol7_SoundEditFilterLpf12:
 	link XIZ,0xffec                               ; FDEAD2  ee 0c ec ff
 	pushw hl                                      ; FDEAD6  2b
 	push XIX                                      ; FDEAD7  3c
@@ -154263,11 +154263,11 @@ SoftKeyCol7_ScreenCode90:
 	unlk XIZ                                      ; FDEB6A  ee 0d
 	ret                                           ; FDEB6C  0e
 .LFDEB6D:
-; SoftKeyCol8_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; SoftKeyCol8_ScreenCode90: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 7 (PanelOpTable_FCF4A3).
+; SoftKeyCol8_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol8_SoundEditFilterLpf12: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 7 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode90:
+SoftKeyCol8_SoundEditFilterLpf12:
 	link XIZ,0xffec                               ; FDEB6D  ee 0c ec ff
 	pushw hl                                      ; FDEB71  2b
 	push XIX                                      ; FDEB72  3c
@@ -154330,11 +154330,11 @@ SoftKeyCol8_ScreenCode90:
 	unlk XIZ                                      ; FDEC05  ee 0d
 	ret                                           ; FDEC07  0e
 .LFDEC08:
-; LcdKeyRow1_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; LcdKeyRow1_ScreenCode90: LCD key row 1 (left or right) on ScreenCode90 -- ScreenCode90 op 8 (PanelOpTable_FCF4A3).
+; LcdKeyRow1_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow1_SoundEditFilterLpf12: LCD key row 1 (left or right) on ScreenCode90 -- ScreenCode90 op 8 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode90:
+LcdKeyRow1_SoundEditFilterLpf12:
 	link XIZ,0xfffe                               ; FDEC08  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEC0C  be fe 31
 	push XBC                                      ; FDEC0F  39
@@ -154355,11 +154355,11 @@ LcdKeyRow1_ScreenCode90:
 	unlk XIZ                                      ; FDEC32  ee 0d
 	ret                                           ; FDEC34  0e
 .LFDEC35:
-; LcdKeyRow2_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; LcdKeyRow2_ScreenCode90: LCD key row 2 (left or right) on ScreenCode90 -- ScreenCode90 op 9 (PanelOpTable_FCF4A3).
+; LcdKeyRow2_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow2_SoundEditFilterLpf12: LCD key row 2 (left or right) on ScreenCode90 -- ScreenCode90 op 9 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode90:
+LcdKeyRow2_SoundEditFilterLpf12:
 	link XIZ,0x0000                               ; FDEC35  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDEC39  8e 08 3f 00
 	jr z, .LFDEC56                                ; FDEC3D  66 17
@@ -154376,11 +154376,11 @@ LcdKeyRow2_ScreenCode90:
 	unlk XIZ                                      ; FDEC56  ee 0d
 	ret                                           ; FDEC58  0e
 .LFDEC59:
-; LcdKeyRow3_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; LcdKeyRow3_ScreenCode90: LCD key row 3 (left or right) on ScreenCode90 -- ScreenCode90 op 10 (PanelOpTable_FCF4A3).
+; LcdKeyRow3_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow3_SoundEditFilterLpf12: LCD key row 3 (left or right) on ScreenCode90 -- ScreenCode90 op 10 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode90:
+LcdKeyRow3_SoundEditFilterLpf12:
 	link XIZ,0xfffe                               ; FDEC59  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEC5D  be fe 31
 	push XBC                                      ; FDEC60  39
@@ -154407,11 +154407,11 @@ LcdKeyRow3_ScreenCode90:
 .LFDEC91:
 	unlk XIZ                                      ; FDEC91  ee 0d
 	ret                                           ; FDEC93  0e
-; LcdKeyRow4_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; LcdKeyRow4_ScreenCode90: LCD key row 4 (left or right) on ScreenCode90 -- ScreenCode90 op 11 (PanelOpTable_FCF4A3).
+; LcdKeyRow4_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow4_SoundEditFilterLpf12: LCD key row 4 (left or right) on ScreenCode90 -- ScreenCode90 op 11 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode90:
+LcdKeyRow4_SoundEditFilterLpf12:
 	link XIZ,0xfffc                               ; FDEC94  ee 0c fc ff
 	pushw hl                                      ; FDEC98  2b
 	lda xbc, (xiz-2)                              ; FDEC99  be fe 31
@@ -154452,11 +154452,11 @@ LcdKeyRow4_ScreenCode90:
 	unlk XIZ                                      ; FDECEB  ee 0d
 	ret                                           ; FDECED  0e
 .LFDECEE:
-; LcdKeyRow5_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; LcdKeyRow5_ScreenCode90: LCD key row 5 (left or right) on ScreenCode90 -- ScreenCode90 op 12 (PanelOpTable_FCF4A3).
+; LcdKeyRow5_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow5_SoundEditFilterLpf12: LCD key row 5 (left or right) on ScreenCode90 -- ScreenCode90 op 12 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode90:
+LcdKeyRow5_SoundEditFilterLpf12:
 	link XIZ,0xfffe                               ; FDECEE  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDECF2  be fe 31
 	push XBC                                      ; FDECF5  39
@@ -154478,11 +154478,11 @@ LcdKeyRow5_ScreenCode90:
 .LFDED1E:
 	unlk XIZ                                      ; FDED1E  ee 0d
 	ret                                           ; FDED20  0e
-; PageKey_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; PageKey_ScreenCode90: the PAGE pair (code 0x10) on ScreenCode90 -- ScreenCode90 op 16 (PanelOpTable_FCF4A3).
+; PageKey_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; PageKey_SoundEditFilterLpf12: the PAGE pair (code 0x10) on ScreenCode90 -- ScreenCode90 op 16 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode90:
+PageKey_SoundEditFilterLpf12:
 	link XIZ,0xfffe                               ; FDED21  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDED25  be fe 31
 	push XBC                                      ; FDED28  39
@@ -154499,11 +154499,11 @@ PageKey_ScreenCode90:
 .LFDED45:
 	unlk XIZ                                      ; FDED45  ee 0d
 	ret                                           ; FDED47  0e
-; ExitKey_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
-; ExitKey_ScreenCode90: the EXIT key on ScreenCode90 -- ScreenCode90 op 15 (PanelOpTable_FCF4A3).
+; ExitKey_SoundEditFilterLpf12 -- a handler: an entry of PanelOpTable_FCF4A3
+; ExitKey_SoundEditFilterLpf12: the EXIT key on ScreenCode90 -- ScreenCode90 op 15 (PanelOpTable_FCF4A3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode90:
+ExitKey_SoundEditFilterLpf12:
 	link XIZ,0xfffe                               ; FDED48  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDED4C  8e 08 3f 00
 	jr nz, .LFDED79                               ; FDED50  6e 27
@@ -154526,11 +154526,11 @@ ExitKey_ScreenCode90:
 .LFDED79:
 	unlk XIZ                                      ; FDED79  ee 0d
 	ret                                           ; FDED7B  0e
-; SoftKeyCol1_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; SoftKeyCol1_ScreenCode91: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 0 (PanelOpTable_FCF4EB).
+; SoftKeyCol1_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol1_SoundEditFilterHpf12: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 0 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode91:
+SoftKeyCol1_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDED7C  ee 0c 00 00
 	pushw 0x91                                    ; FDED80  0b 91 00
 	pushw 0x01                                    ; FDED83  0b 01 00
@@ -154545,11 +154545,11 @@ SoftKeyCol1_ScreenCode91:
 	inc 2,XSP                                     ; FDED9B  ef 62
 	unlk XIZ                                      ; FDED9D  ee 0d
 	ret                                           ; FDED9F  0e
-; SoftKeyCol2_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; SoftKeyCol2_ScreenCode91: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 1 (PanelOpTable_FCF4EB).
+; SoftKeyCol2_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol2_SoundEditFilterHpf12: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 1 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode91:
+SoftKeyCol2_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEDA0  ee 0c 00 00
 	pushw 0x91                                    ; FDEDA4  0b 91 00
 	pushw 0x02                                    ; FDEDA7  0b 02 00
@@ -154564,11 +154564,11 @@ SoftKeyCol2_ScreenCode91:
 	inc 2,XSP                                     ; FDEDBF  ef 62
 	unlk XIZ                                      ; FDEDC1  ee 0d
 	ret                                           ; FDEDC3  0e
-; SoftKeyCol3_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; SoftKeyCol3_ScreenCode91: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 2 (PanelOpTable_FCF4EB).
+; SoftKeyCol3_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol3_SoundEditFilterHpf12: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 2 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode91:
+SoftKeyCol3_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEDC4  ee 0c 00 00
 	pushw 0x91                                    ; FDEDC8  0b 91 00
 	pushw 0x03                                    ; FDEDCB  0b 03 00
@@ -154579,11 +154579,11 @@ SoftKeyCol3_ScreenCode91:
 	inc 6,XSP                                     ; FDEDD7  ef 66
 	unlk XIZ                                      ; FDEDD9  ee 0d
 	ret                                           ; FDEDDB  0e
-; SoftKeyCol4_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; SoftKeyCol4_ScreenCode91: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 3 (PanelOpTable_FCF4EB).
+; SoftKeyCol4_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol4_SoundEditFilterHpf12: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 3 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode91:
+SoftKeyCol4_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEDDC  ee 0c 00 00
 	pushw 0x91                                    ; FDEDE0  0b 91 00
 	pushw 0x04                                    ; FDEDE3  0b 04 00
@@ -154594,11 +154594,11 @@ SoftKeyCol4_ScreenCode91:
 	inc 6,XSP                                     ; FDEDEF  ef 66
 	unlk XIZ                                      ; FDEDF1  ee 0d
 	ret                                           ; FDEDF3  0e
-; SoftKeyCol6_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; SoftKeyCol6_ScreenCode91: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 5 (PanelOpTable_FCF4EB).
+; SoftKeyCol6_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol6_SoundEditFilterHpf12: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 5 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode91:
+SoftKeyCol6_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEDF4  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEDF8  9e 08 21
 	extz BC                                       ; FDEDFB  d9 12
@@ -154607,11 +154607,11 @@ SoftKeyCol6_ScreenCode91:
 	popw bc                                       ; FDEE01  49
 	unlk XIZ                                      ; FDEE02  ee 0d
 	ret                                           ; FDEE04  0e
-; SoftKeyCol7_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; SoftKeyCol7_ScreenCode91: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 6 (PanelOpTable_FCF4EB).
+; SoftKeyCol7_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol7_SoundEditFilterHpf12: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 6 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode91:
+SoftKeyCol7_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEE05  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE09  9e 08 21
 	extz BC                                       ; FDEE0C  d9 12
@@ -154620,11 +154620,11 @@ SoftKeyCol7_ScreenCode91:
 	popw bc                                       ; FDEE12  49
 	unlk XIZ                                      ; FDEE13  ee 0d
 	ret                                           ; FDEE15  0e
-; SoftKeyCol8_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; SoftKeyCol8_ScreenCode91: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 7 (PanelOpTable_FCF4EB).
+; SoftKeyCol8_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol8_SoundEditFilterHpf12: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 7 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode91:
+SoftKeyCol8_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEE16  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE1A  9e 08 21
 	extz BC                                       ; FDEE1D  d9 12
@@ -154633,11 +154633,11 @@ SoftKeyCol8_ScreenCode91:
 	popw bc                                       ; FDEE23  49
 	unlk XIZ                                      ; FDEE24  ee 0d
 	ret                                           ; FDEE26  0e
-; LcdKeyRow1_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; LcdKeyRow1_ScreenCode91: LCD key row 1 (left or right) on ScreenCode91 -- ScreenCode91 op 8 (PanelOpTable_FCF4EB).
+; LcdKeyRow1_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow1_SoundEditFilterHpf12: LCD key row 1 (left or right) on ScreenCode91 -- ScreenCode91 op 8 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode91:
+LcdKeyRow1_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEE27  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE2B  9e 08 21
 	extz BC                                       ; FDEE2E  d9 12
@@ -154646,11 +154646,11 @@ LcdKeyRow1_ScreenCode91:
 	popw bc                                       ; FDEE34  49
 	unlk XIZ                                      ; FDEE35  ee 0d
 	ret                                           ; FDEE37  0e
-; LcdKeyRow2_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; LcdKeyRow2_ScreenCode91: LCD key row 2 (left or right) on ScreenCode91 -- ScreenCode91 op 9 (PanelOpTable_FCF4EB).
+; LcdKeyRow2_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow2_SoundEditFilterHpf12: LCD key row 2 (left or right) on ScreenCode91 -- ScreenCode91 op 9 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode91:
+LcdKeyRow2_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEE38  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE3C  9e 08 21
 	extz BC                                       ; FDEE3F  d9 12
@@ -154659,11 +154659,11 @@ LcdKeyRow2_ScreenCode91:
 	popw bc                                       ; FDEE45  49
 	unlk XIZ                                      ; FDEE46  ee 0d
 	ret                                           ; FDEE48  0e
-; LcdKeyRow3_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; LcdKeyRow3_ScreenCode91: LCD key row 3 (left or right) on ScreenCode91 -- ScreenCode91 op 10 (PanelOpTable_FCF4EB).
+; LcdKeyRow3_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow3_SoundEditFilterHpf12: LCD key row 3 (left or right) on ScreenCode91 -- ScreenCode91 op 10 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode91:
+LcdKeyRow3_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEE49  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE4D  9e 08 21
 	extz BC                                       ; FDEE50  d9 12
@@ -154672,11 +154672,11 @@ LcdKeyRow3_ScreenCode91:
 	popw bc                                       ; FDEE56  49
 	unlk XIZ                                      ; FDEE57  ee 0d
 	ret                                           ; FDEE59  0e
-; LcdKeyRow4_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; LcdKeyRow4_ScreenCode91: LCD key row 4 (left or right) on ScreenCode91 -- ScreenCode91 op 11 (PanelOpTable_FCF4EB).
+; LcdKeyRow4_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow4_SoundEditFilterHpf12: LCD key row 4 (left or right) on ScreenCode91 -- ScreenCode91 op 11 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode91:
+LcdKeyRow4_SoundEditFilterHpf12:
 	link XIZ,0xfffc                               ; FDEE5A  ee 0c fc ff
 	pushw hl                                      ; FDEE5E  2b
 	lda xbc, (xiz-2)                              ; FDEE5F  be fe 31
@@ -154716,11 +154716,11 @@ LcdKeyRow4_ScreenCode91:
 	popw hl                                       ; FDEEB0  4b
 	unlk XIZ                                      ; FDEEB1  ee 0d
 	ret                                           ; FDEEB3  0e
-; LcdKeyRow5_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; LcdKeyRow5_ScreenCode91: LCD key row 5 (left or right) on ScreenCode91 -- ScreenCode91 op 12 (PanelOpTable_FCF4EB).
+; LcdKeyRow5_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow5_SoundEditFilterHpf12: LCD key row 5 (left or right) on ScreenCode91 -- ScreenCode91 op 12 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode91:
+LcdKeyRow5_SoundEditFilterHpf12:
 	link XIZ,0x0000                               ; FDEEB4  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEEB8  9e 08 21
 	extz BC                                       ; FDEEBB  d9 12
@@ -154729,11 +154729,11 @@ LcdKeyRow5_ScreenCode91:
 	popw bc                                       ; FDEEC1  49
 	unlk XIZ                                      ; FDEEC2  ee 0d
 	ret                                           ; FDEEC4  0e
-; PageKey_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; PageKey_ScreenCode91: the PAGE pair (code 0x10) on ScreenCode91 -- ScreenCode91 op 16 (PanelOpTable_FCF4EB).
+; PageKey_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; PageKey_SoundEditFilterHpf12: the PAGE pair (code 0x10) on ScreenCode91 -- ScreenCode91 op 16 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode91:
+PageKey_SoundEditFilterHpf12:
 	link XIZ,0xfffe                               ; FDEEC5  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEEC9  be fe 31
 	push XBC                                      ; FDEECC  39
@@ -154750,11 +154750,11 @@ PageKey_ScreenCode91:
 .LFDEEE9:
 	unlk XIZ                                      ; FDEEE9  ee 0d
 	ret                                           ; FDEEEB  0e
-; ExitKey_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
-; ExitKey_ScreenCode91: the EXIT key on ScreenCode91 -- ScreenCode91 op 15 (PanelOpTable_FCF4EB).
+; ExitKey_SoundEditFilterHpf12 -- a handler: an entry of PanelOpTable_FCF4EB
+; ExitKey_SoundEditFilterHpf12: the EXIT key on ScreenCode91 -- ScreenCode91 op 15 (PanelOpTable_FCF4EB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode91:
+ExitKey_SoundEditFilterHpf12:
 	link XIZ,0xfffe                               ; FDEEEC  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDEEF0  8e 08 3f 00
 	jr nz, .LFDEF1D                               ; FDEEF4  6e 27
@@ -154777,11 +154777,11 @@ ExitKey_ScreenCode91:
 .LFDEF1D:
 	unlk XIZ                                      ; FDEF1D  ee 0d
 	ret                                           ; FDEF1F  0e
-; SoftKeyCol3_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; SoftKeyCol3_ScreenCode92: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 2 (PanelOpTable_FCF533).
+; SoftKeyCol3_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol3_SoundEditFilterLpf24: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 2 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode92:
+SoftKeyCol3_SoundEditFilterLpf24:
 	link XIZ,0x0000                               ; FDEF20  ee 0c 00 00
 	pushw 0x92                                    ; FDEF24  0b 92 00
 	pushw 0x03                                    ; FDEF27  0b 03 00
@@ -154796,11 +154796,11 @@ SoftKeyCol3_ScreenCode92:
 	inc 2,XSP                                     ; FDEF3F  ef 62
 	unlk XIZ                                      ; FDEF41  ee 0d
 	ret                                           ; FDEF43  0e
-; SoftKeyCol4_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; SoftKeyCol4_ScreenCode92: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 3 (PanelOpTable_FCF533).
+; SoftKeyCol4_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol4_SoundEditFilterLpf24: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 3 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode92:
+SoftKeyCol4_SoundEditFilterLpf24:
 	link XIZ,0x0000                               ; FDEF44  ee 0c 00 00
 	pushw 0x92                                    ; FDEF48  0b 92 00
 	pushw 0x04                                    ; FDEF4B  0b 04 00
@@ -154815,11 +154815,11 @@ SoftKeyCol4_ScreenCode92:
 	inc 2,XSP                                     ; FDEF63  ef 62
 	unlk XIZ                                      ; FDEF65  ee 0d
 	ret                                           ; FDEF67  0e
-; SoftKeyCol5_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; SoftKeyCol5_ScreenCode92: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 4 (PanelOpTable_FCF533).
+; SoftKeyCol5_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol5_SoundEditFilterLpf24: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 4 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode92:
+SoftKeyCol5_SoundEditFilterLpf24:
 	link XIZ,0x0000                               ; FDEF68  ee 0c 00 00
 	pushw 0x92                                    ; FDEF6C  0b 92 00
 	pushw 0x05                                    ; FDEF6F  0b 05 00
@@ -154830,11 +154830,11 @@ SoftKeyCol5_ScreenCode92:
 	inc 6,XSP                                     ; FDEF7B  ef 66
 	unlk XIZ                                      ; FDEF7D  ee 0d
 	ret                                           ; FDEF7F  0e
-; SoftKeyCol6_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; SoftKeyCol6_ScreenCode92: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 5 (PanelOpTable_FCF533).
+; SoftKeyCol6_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol6_SoundEditFilterLpf24: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 5 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode92:
+SoftKeyCol6_SoundEditFilterLpf24:
 	link XIZ,0x0000                               ; FDEF80  ee 0c 00 00
 	pushw 0x92                                    ; FDEF84  0b 92 00
 	pushw 0x06                                    ; FDEF87  0b 06 00
@@ -154846,11 +154846,11 @@ SoftKeyCol6_ScreenCode92:
 	unlk XIZ                                      ; FDEF95  ee 0d
 	ret                                           ; FDEF97  0e
 .LFDEF98:
-; LcdKeyRow1_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; LcdKeyRow1_ScreenCode92: LCD key row 1 (left or right) on ScreenCode92 -- ScreenCode92 op 8 (PanelOpTable_FCF533).
+; LcdKeyRow1_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow1_SoundEditFilterLpf24: LCD key row 1 (left or right) on ScreenCode92 -- ScreenCode92 op 8 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode92:
+LcdKeyRow1_SoundEditFilterLpf24:
 	link XIZ,0xfffe                               ; FDEF98  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEF9C  be fe 31
 	push XBC                                      ; FDEF9F  39
@@ -154871,11 +154871,11 @@ LcdKeyRow1_ScreenCode92:
 	unlk XIZ                                      ; FDEFC2  ee 0d
 	ret                                           ; FDEFC4  0e
 .LFDEFC5:
-; LcdKeyRow2_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; LcdKeyRow2_ScreenCode92: LCD key row 2 (left or right) on ScreenCode92 -- ScreenCode92 op 9 (PanelOpTable_FCF533).
+; LcdKeyRow2_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow2_SoundEditFilterLpf24: LCD key row 2 (left or right) on ScreenCode92 -- ScreenCode92 op 9 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode92:
+LcdKeyRow2_SoundEditFilterLpf24:
 	link XIZ,0x0000                               ; FDEFC5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDEFC9  8e 08 3f 00
 	jr z, .LFDEFE6                                ; FDEFCD  66 17
@@ -154892,11 +154892,11 @@ LcdKeyRow2_ScreenCode92:
 	unlk XIZ                                      ; FDEFE6  ee 0d
 	ret                                           ; FDEFE8  0e
 .LFDEFE9:
-; LcdKeyRow3_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; LcdKeyRow3_ScreenCode92: LCD key row 3 (left or right) on ScreenCode92 -- ScreenCode92 op 10 (PanelOpTable_FCF533).
+; LcdKeyRow3_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow3_SoundEditFilterLpf24: LCD key row 3 (left or right) on ScreenCode92 -- ScreenCode92 op 10 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode92:
+LcdKeyRow3_SoundEditFilterLpf24:
 	link XIZ,0xfffe                               ; FDEFE9  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEFED  be fe 31
 	push XBC                                      ; FDEFF0  39
@@ -154923,11 +154923,11 @@ LcdKeyRow3_ScreenCode92:
 .LFDF021:
 	unlk XIZ                                      ; FDF021  ee 0d
 	ret                                           ; FDF023  0e
-; LcdKeyRow4_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; LcdKeyRow4_ScreenCode92: LCD key row 4 (left or right) on ScreenCode92 -- ScreenCode92 op 11 (PanelOpTable_FCF533).
+; LcdKeyRow4_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow4_SoundEditFilterLpf24: LCD key row 4 (left or right) on ScreenCode92 -- ScreenCode92 op 11 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode92:
+LcdKeyRow4_SoundEditFilterLpf24:
 	link XIZ,0xfffc                               ; FDF024  ee 0c fc ff
 	pushw hl                                      ; FDF028  2b
 	lda xbc, (xiz-2)                              ; FDF029  be fe 31
@@ -154968,11 +154968,11 @@ LcdKeyRow4_ScreenCode92:
 	unlk XIZ                                      ; FDF07B  ee 0d
 	ret                                           ; FDF07D  0e
 .LFDF07E:
-; LcdKeyRow5_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; LcdKeyRow5_ScreenCode92: LCD key row 5 (left or right) on ScreenCode92 -- ScreenCode92 op 12 (PanelOpTable_FCF533).
+; LcdKeyRow5_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow5_SoundEditFilterLpf24: LCD key row 5 (left or right) on ScreenCode92 -- ScreenCode92 op 12 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode92:
+LcdKeyRow5_SoundEditFilterLpf24:
 	link XIZ,0xfffe                               ; FDF07E  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF082  be fe 31
 	push XBC                                      ; FDF085  39
@@ -154994,11 +154994,11 @@ LcdKeyRow5_ScreenCode92:
 .LFDF0AE:
 	unlk XIZ                                      ; FDF0AE  ee 0d
 	ret                                           ; FDF0B0  0e
-; PageKey_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; PageKey_ScreenCode92: the PAGE pair (code 0x10) on ScreenCode92 -- ScreenCode92 op 16 (PanelOpTable_FCF533).
+; PageKey_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; PageKey_SoundEditFilterLpf24: the PAGE pair (code 0x10) on ScreenCode92 -- ScreenCode92 op 16 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode92:
+PageKey_SoundEditFilterLpf24:
 	link XIZ,0xfffe                               ; FDF0B1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF0B5  be fe 31
 	push XBC                                      ; FDF0B8  39
@@ -155015,11 +155015,11 @@ PageKey_ScreenCode92:
 .LFDF0D5:
 	unlk XIZ                                      ; FDF0D5  ee 0d
 	ret                                           ; FDF0D7  0e
-; ExitKey_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
-; ExitKey_ScreenCode92: the EXIT key on ScreenCode92 -- ScreenCode92 op 15 (PanelOpTable_FCF533).
+; ExitKey_SoundEditFilterLpf24 -- a handler: an entry of PanelOpTable_FCF533
+; ExitKey_SoundEditFilterLpf24: the EXIT key on ScreenCode92 -- ScreenCode92 op 15 (PanelOpTable_FCF533).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode92:
+ExitKey_SoundEditFilterLpf24:
 	link XIZ,0xfffe                               ; FDF0D8  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF0DC  8e 08 3f 00
 	jr nz, .LFDF109                               ; FDF0E0  6e 27
@@ -155042,11 +155042,11 @@ ExitKey_ScreenCode92:
 .LFDF109:
 	unlk XIZ                                      ; FDF109  ee 0d
 	ret                                           ; FDF10B  0e
-; SoftKeyCol3_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; SoftKeyCol3_ScreenCode93: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 2 (PanelOpTable_FCF57B).
+; SoftKeyCol3_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol3_SoundEditFilterHpf24: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 2 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode93:
+SoftKeyCol3_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF10C  ee 0c 00 00
 	pushw 0x93                                    ; FDF110  0b 93 00
 	pushw 0x03                                    ; FDF113  0b 03 00
@@ -155061,11 +155061,11 @@ SoftKeyCol3_ScreenCode93:
 	inc 2,XSP                                     ; FDF12B  ef 62
 	unlk XIZ                                      ; FDF12D  ee 0d
 	ret                                           ; FDF12F  0e
-; SoftKeyCol4_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; SoftKeyCol4_ScreenCode93: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 3 (PanelOpTable_FCF57B).
+; SoftKeyCol4_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol4_SoundEditFilterHpf24: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 3 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode93:
+SoftKeyCol4_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF130  ee 0c 00 00
 	pushw 0x93                                    ; FDF134  0b 93 00
 	pushw 0x04                                    ; FDF137  0b 04 00
@@ -155080,11 +155080,11 @@ SoftKeyCol4_ScreenCode93:
 	inc 2,XSP                                     ; FDF14F  ef 62
 	unlk XIZ                                      ; FDF151  ee 0d
 	ret                                           ; FDF153  0e
-; SoftKeyCol5_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; SoftKeyCol5_ScreenCode93: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 4 (PanelOpTable_FCF57B).
+; SoftKeyCol5_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol5_SoundEditFilterHpf24: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 4 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode93:
+SoftKeyCol5_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF154  ee 0c 00 00
 	pushw 0x93                                    ; FDF158  0b 93 00
 	pushw 0x05                                    ; FDF15B  0b 05 00
@@ -155095,11 +155095,11 @@ SoftKeyCol5_ScreenCode93:
 	inc 6,XSP                                     ; FDF167  ef 66
 	unlk XIZ                                      ; FDF169  ee 0d
 	ret                                           ; FDF16B  0e
-; SoftKeyCol6_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; SoftKeyCol6_ScreenCode93: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 5 (PanelOpTable_FCF57B).
+; SoftKeyCol6_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol6_SoundEditFilterHpf24: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 5 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode93:
+SoftKeyCol6_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF16C  ee 0c 00 00
 	pushw 0x93                                    ; FDF170  0b 93 00
 	pushw 0x06                                    ; FDF173  0b 06 00
@@ -155110,11 +155110,11 @@ SoftKeyCol6_ScreenCode93:
 	inc 6,XSP                                     ; FDF17F  ef 66
 	unlk XIZ                                      ; FDF181  ee 0d
 	ret                                           ; FDF183  0e
-; LcdKeyRow1_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; LcdKeyRow1_ScreenCode93: LCD key row 1 (left or right) on ScreenCode93 -- ScreenCode93 op 8 (PanelOpTable_FCF57B).
+; LcdKeyRow1_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow1_SoundEditFilterHpf24: LCD key row 1 (left or right) on ScreenCode93 -- ScreenCode93 op 8 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode93:
+LcdKeyRow1_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF184  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF188  9e 08 21
 	extz BC                                       ; FDF18B  d9 12
@@ -155123,11 +155123,11 @@ LcdKeyRow1_ScreenCode93:
 	popw bc                                       ; FDF191  49
 	unlk XIZ                                      ; FDF192  ee 0d
 	ret                                           ; FDF194  0e
-; LcdKeyRow2_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; LcdKeyRow2_ScreenCode93: LCD key row 2 (left or right) on ScreenCode93 -- ScreenCode93 op 9 (PanelOpTable_FCF57B).
+; LcdKeyRow2_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow2_SoundEditFilterHpf24: LCD key row 2 (left or right) on ScreenCode93 -- ScreenCode93 op 9 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode93:
+LcdKeyRow2_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF195  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF199  9e 08 21
 	extz BC                                       ; FDF19C  d9 12
@@ -155136,11 +155136,11 @@ LcdKeyRow2_ScreenCode93:
 	popw bc                                       ; FDF1A2  49
 	unlk XIZ                                      ; FDF1A3  ee 0d
 	ret                                           ; FDF1A5  0e
-; LcdKeyRow3_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; LcdKeyRow3_ScreenCode93: LCD key row 3 (left or right) on ScreenCode93 -- ScreenCode93 op 10 (PanelOpTable_FCF57B).
+; LcdKeyRow3_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow3_SoundEditFilterHpf24: LCD key row 3 (left or right) on ScreenCode93 -- ScreenCode93 op 10 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode93:
+LcdKeyRow3_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF1A6  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF1AA  9e 08 21
 	extz BC                                       ; FDF1AD  d9 12
@@ -155149,11 +155149,11 @@ LcdKeyRow3_ScreenCode93:
 	popw bc                                       ; FDF1B3  49
 	unlk XIZ                                      ; FDF1B4  ee 0d
 	ret                                           ; FDF1B6  0e
-; LcdKeyRow4_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; LcdKeyRow4_ScreenCode93: LCD key row 4 (left or right) on ScreenCode93 -- ScreenCode93 op 11 (PanelOpTable_FCF57B).
+; LcdKeyRow4_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow4_SoundEditFilterHpf24: LCD key row 4 (left or right) on ScreenCode93 -- ScreenCode93 op 11 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode93:
+LcdKeyRow4_SoundEditFilterHpf24:
 	link XIZ,0xfffc                               ; FDF1B7  ee 0c fc ff
 	pushw hl                                      ; FDF1BB  2b
 	lda xbc, (xiz-2)                              ; FDF1BC  be fe 31
@@ -155193,11 +155193,11 @@ LcdKeyRow4_ScreenCode93:
 	popw hl                                       ; FDF20D  4b
 	unlk XIZ                                      ; FDF20E  ee 0d
 	ret                                           ; FDF210  0e
-; LcdKeyRow5_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; LcdKeyRow5_ScreenCode93: LCD key row 5 (left or right) on ScreenCode93 -- ScreenCode93 op 12 (PanelOpTable_FCF57B).
+; LcdKeyRow5_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow5_SoundEditFilterHpf24: LCD key row 5 (left or right) on ScreenCode93 -- ScreenCode93 op 12 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode93:
+LcdKeyRow5_SoundEditFilterHpf24:
 	link XIZ,0x0000                               ; FDF211  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF215  9e 08 21
 	extz BC                                       ; FDF218  d9 12
@@ -155206,11 +155206,11 @@ LcdKeyRow5_ScreenCode93:
 	popw bc                                       ; FDF21E  49
 	unlk XIZ                                      ; FDF21F  ee 0d
 	ret                                           ; FDF221  0e
-; PageKey_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; PageKey_ScreenCode93: the PAGE pair (code 0x10) on ScreenCode93 -- ScreenCode93 op 16 (PanelOpTable_FCF57B).
+; PageKey_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; PageKey_SoundEditFilterHpf24: the PAGE pair (code 0x10) on ScreenCode93 -- ScreenCode93 op 16 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode93:
+PageKey_SoundEditFilterHpf24:
 	link XIZ,0xfffe                               ; FDF222  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF226  be fe 31
 	push XBC                                      ; FDF229  39
@@ -155227,11 +155227,11 @@ PageKey_ScreenCode93:
 .LFDF246:
 	unlk XIZ                                      ; FDF246  ee 0d
 	ret                                           ; FDF248  0e
-; ExitKey_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
-; ExitKey_ScreenCode93: the EXIT key on ScreenCode93 -- ScreenCode93 op 15 (PanelOpTable_FCF57B).
+; ExitKey_SoundEditFilterHpf24 -- a handler: an entry of PanelOpTable_FCF57B
+; ExitKey_SoundEditFilterHpf24: the EXIT key on ScreenCode93 -- ScreenCode93 op 15 (PanelOpTable_FCF57B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode93:
+ExitKey_SoundEditFilterHpf24:
 	link XIZ,0xfffe                               ; FDF249  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF24D  8e 08 3f 00
 	jr nz, .LFDF27A                               ; FDF251  6e 27
@@ -155254,11 +155254,11 @@ ExitKey_ScreenCode93:
 .LFDF27A:
 	unlk XIZ                                      ; FDF27A  ee 0d
 	ret                                           ; FDF27C  0e
-; SoftKeyCol2_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; SoftKeyCol2_ScreenCode94: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 1 (PanelOpTable_FCF5C3).
+; SoftKeyCol2_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol2_SoundEditFilterBpf: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 1 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode94:
+SoftKeyCol2_SoundEditFilterBpf:
 	link XIZ,0xffea                               ; FDF27D  ee 0c ea ff
 	pushw hl                                      ; FDF281  2b
 	push XIX                                      ; FDF282  3c
@@ -155322,11 +155322,11 @@ SoftKeyCol2_ScreenCode94:
 	popw hl                                       ; FDF31E  4b
 	unlk XIZ                                      ; FDF31F  ee 0d
 	ret                                           ; FDF321  0e
-; SoftKeyCol3_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; SoftKeyCol3_ScreenCode94: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 2 (PanelOpTable_FCF5C3).
+; SoftKeyCol3_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol3_SoundEditFilterBpf: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 2 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode94:
+SoftKeyCol3_SoundEditFilterBpf:
 	link XIZ,0x0000                               ; FDF322  ee 0c 00 00
 	pushw 0x94                                    ; FDF326  0b 94 00
 	pushw 0x03                                    ; FDF329  0b 03 00
@@ -155338,11 +155338,11 @@ SoftKeyCol3_ScreenCode94:
 	inc 6,XSP                                     ; FDF339  ef 66
 	unlk XIZ                                      ; FDF33B  ee 0d
 	ret                                           ; FDF33D  0e
-; SoftKeyCol4_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; SoftKeyCol4_ScreenCode94: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 3 (PanelOpTable_FCF5C3).
+; SoftKeyCol4_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol4_SoundEditFilterBpf: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 3 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode94:
+SoftKeyCol4_SoundEditFilterBpf:
 	link XIZ,0xffea                               ; FDF33E  ee 0c ea ff
 	push XIX                                      ; FDF342  3c
 	lda xix, (xiz-18)                             ; FDF343  be ee 34
@@ -155404,11 +155404,11 @@ SoftKeyCol4_ScreenCode94:
 	pop XIX                                       ; FDF3DB  5c
 	unlk XIZ                                      ; FDF3DC  ee 0d
 	ret                                           ; FDF3DE  0e
-; SoftKeyCol5_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; SoftKeyCol5_ScreenCode94: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 4 (PanelOpTable_FCF5C3).
+; SoftKeyCol5_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol5_SoundEditFilterBpf: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 4 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode94:
+SoftKeyCol5_SoundEditFilterBpf:
 	link XIZ,0xffec                               ; FDF3DF  ee 0c ec ff
 	push XIX                                      ; FDF3E3  3c
 	lda xix, (xiz-16)                             ; FDF3E4  be f0 34
@@ -155464,11 +155464,11 @@ SoftKeyCol5_ScreenCode94:
 	pop XIX                                       ; FDF46D  5c
 	unlk XIZ                                      ; FDF46E  ee 0d
 	ret                                           ; FDF470  0e
-; SoftKeyCol6_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; SoftKeyCol6_ScreenCode94: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 5 (PanelOpTable_FCF5C3).
+; SoftKeyCol6_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol6_SoundEditFilterBpf: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 5 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode94:
+SoftKeyCol6_SoundEditFilterBpf:
 	link XIZ,0x0000                               ; FDF471  ee 0c 00 00
 	pushw 0x94                                    ; FDF475  0b 94 00
 	pushw 0x06                                    ; FDF478  0b 06 00
@@ -155479,11 +155479,11 @@ SoftKeyCol6_ScreenCode94:
 	inc 6,XSP                                     ; FDF484  ef 66
 	unlk XIZ                                      ; FDF486  ee 0d
 	ret                                           ; FDF488  0e
-; SoftKeyCol7_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; SoftKeyCol7_ScreenCode94: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 6 (PanelOpTable_FCF5C3).
+; SoftKeyCol7_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol7_SoundEditFilterBpf: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 6 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode94:
+SoftKeyCol7_SoundEditFilterBpf:
 	link XIZ,0x0000                               ; FDF489  ee 0c 00 00
 	pushw 0x94                                    ; FDF48D  0b 94 00
 	pushw 0x07                                    ; FDF490  0b 07 00
@@ -155494,11 +155494,11 @@ SoftKeyCol7_ScreenCode94:
 	inc 6,XSP                                     ; FDF49C  ef 66
 	unlk XIZ                                      ; FDF49E  ee 0d
 	ret                                           ; FDF4A0  0e
-; LcdKeyRow1_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; LcdKeyRow1_ScreenCode94: LCD key row 1 (left or right) on ScreenCode94 -- ScreenCode94 op 8 (PanelOpTable_FCF5C3).
+; LcdKeyRow1_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow1_SoundEditFilterBpf: LCD key row 1 (left or right) on ScreenCode94 -- ScreenCode94 op 8 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode94:
+LcdKeyRow1_SoundEditFilterBpf:
 	link XIZ,0xfffe                               ; FDF4A1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF4A5  be fe 31
 	push XBC                                      ; FDF4A8  39
@@ -155518,11 +155518,11 @@ LcdKeyRow1_ScreenCode94:
 .LFDF4CB:
 	unlk XIZ                                      ; FDF4CB  ee 0d
 	ret                                           ; FDF4CD  0e
-; LcdKeyRow2_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; LcdKeyRow2_ScreenCode94: LCD key row 2 (left or right) on ScreenCode94 -- ScreenCode94 op 9 (PanelOpTable_FCF5C3).
+; LcdKeyRow2_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow2_SoundEditFilterBpf: LCD key row 2 (left or right) on ScreenCode94 -- ScreenCode94 op 9 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode94:
+LcdKeyRow2_SoundEditFilterBpf:
 	link XIZ,0x0000                               ; FDF4CE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF4D2  8e 08 3f 00
 	jr z, .LFDF4EF                                ; FDF4D6  66 17
@@ -155538,11 +155538,11 @@ LcdKeyRow2_ScreenCode94:
 .LFDF4EF:
 	unlk XIZ                                      ; FDF4EF  ee 0d
 	ret                                           ; FDF4F1  0e
-; LcdKeyRow3_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; LcdKeyRow3_ScreenCode94: LCD key row 3 (left or right) on ScreenCode94 -- ScreenCode94 op 10 (PanelOpTable_FCF5C3).
+; LcdKeyRow3_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow3_SoundEditFilterBpf: LCD key row 3 (left or right) on ScreenCode94 -- ScreenCode94 op 10 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode94:
+LcdKeyRow3_SoundEditFilterBpf:
 	link XIZ,0xfffe                               ; FDF4F2  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF4F6  be fe 31
 	push XBC                                      ; FDF4F9  39
@@ -155569,11 +155569,11 @@ LcdKeyRow3_ScreenCode94:
 .LFDF52A:
 	unlk XIZ                                      ; FDF52A  ee 0d
 	ret                                           ; FDF52C  0e
-; LcdKeyRow4_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; LcdKeyRow4_ScreenCode94: LCD key row 4 (left or right) on ScreenCode94 -- ScreenCode94 op 11 (PanelOpTable_FCF5C3).
+; LcdKeyRow4_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow4_SoundEditFilterBpf: LCD key row 4 (left or right) on ScreenCode94 -- ScreenCode94 op 11 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode94:
+LcdKeyRow4_SoundEditFilterBpf:
 	link XIZ,0xfffc                               ; FDF52D  ee 0c fc ff
 	lda xbc, (xiz-2)                              ; FDF531  be fe 31
 	push XBC                                      ; FDF534  39
@@ -155608,11 +155608,11 @@ LcdKeyRow4_ScreenCode94:
 .LFDF57A:
 	unlk XIZ                                      ; FDF57A  ee 0d
 	ret                                           ; FDF57C  0e
-; LcdKeyRow5_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; LcdKeyRow5_ScreenCode94: LCD key row 5 (left or right) on ScreenCode94 -- ScreenCode94 op 12 (PanelOpTable_FCF5C3).
+; LcdKeyRow5_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow5_SoundEditFilterBpf: LCD key row 5 (left or right) on ScreenCode94 -- ScreenCode94 op 12 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode94:
+LcdKeyRow5_SoundEditFilterBpf:
 	link XIZ,0xfffe                               ; FDF57D  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF581  be fe 31
 	push XBC                                      ; FDF584  39
@@ -155634,11 +155634,11 @@ LcdKeyRow5_ScreenCode94:
 .LFDF5AD:
 	unlk XIZ                                      ; FDF5AD  ee 0d
 	ret                                           ; FDF5AF  0e
-; PageKey_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; PageKey_ScreenCode94: the PAGE pair (code 0x10) on ScreenCode94 -- ScreenCode94 op 16 (PanelOpTable_FCF5C3).
+; PageKey_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; PageKey_SoundEditFilterBpf: the PAGE pair (code 0x10) on ScreenCode94 -- ScreenCode94 op 16 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode94:
+PageKey_SoundEditFilterBpf:
 	link XIZ,0xfffe                               ; FDF5B0  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF5B4  be fe 31
 	push XBC                                      ; FDF5B7  39
@@ -155655,11 +155655,11 @@ PageKey_ScreenCode94:
 .LFDF5D4:
 	unlk XIZ                                      ; FDF5D4  ee 0d
 	ret                                           ; FDF5D6  0e
-; ExitKey_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
-; ExitKey_ScreenCode94: the EXIT key on ScreenCode94 -- ScreenCode94 op 15 (PanelOpTable_FCF5C3).
+; ExitKey_SoundEditFilterBpf -- a handler: an entry of PanelOpTable_FCF5C3
+; ExitKey_SoundEditFilterBpf: the EXIT key on ScreenCode94 -- ScreenCode94 op 15 (PanelOpTable_FCF5C3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode94:
+ExitKey_SoundEditFilterBpf:
 	link XIZ,0xfffe                               ; FDF5D7  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF5DB  8e 08 3f 00
 	jr nz, .LFDF608                               ; FDF5DF  6e 27
@@ -155682,11 +155682,11 @@ ExitKey_ScreenCode94:
 .LFDF608:
 	unlk XIZ                                      ; FDF608  ee 0d
 	ret                                           ; FDF60A  0e
-; LcdKeyRow1_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
-; LcdKeyRow1_ScreenCode95: LCD key row 1 (left or right) on ScreenCode95 -- ScreenCode95 op 8 (PanelOpTable_FCF60B).
+; LcdKeyRow1_SoundEditFilterThrough -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow1_SoundEditFilterThrough: LCD key row 1 (left or right) on ScreenCode95 -- ScreenCode95 op 8 (PanelOpTable_FCF60B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode95:
+LcdKeyRow1_SoundEditFilterThrough:
 	link XIZ,0xfffe                               ; FDF60B  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF60F  be fe 31
 	push XBC                                      ; FDF612  39
@@ -155706,11 +155706,11 @@ LcdKeyRow1_ScreenCode95:
 .LFDF635:
 	unlk XIZ                                      ; FDF635  ee 0d
 	ret                                           ; FDF637  0e
-; LcdKeyRow2_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
-; LcdKeyRow2_ScreenCode95: LCD key row 2 (left or right) on ScreenCode95 -- ScreenCode95 op 9 (PanelOpTable_FCF60B).
+; LcdKeyRow2_SoundEditFilterThrough -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow2_SoundEditFilterThrough: LCD key row 2 (left or right) on ScreenCode95 -- ScreenCode95 op 9 (PanelOpTable_FCF60B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode95:
+LcdKeyRow2_SoundEditFilterThrough:
 	link XIZ,0x0000                               ; FDF638  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF63C  8e 08 3f 00
 	jr z, .LFDF659                                ; FDF640  66 17
@@ -155726,11 +155726,11 @@ LcdKeyRow2_ScreenCode95:
 .LFDF659:
 	unlk XIZ                                      ; FDF659  ee 0d
 	ret                                           ; FDF65B  0e
-; LcdKeyRow3_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
-; LcdKeyRow3_ScreenCode95: LCD key row 3 (left or right) on ScreenCode95 -- ScreenCode95 op 10 (PanelOpTable_FCF60B).
+; LcdKeyRow3_SoundEditFilterThrough -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow3_SoundEditFilterThrough: LCD key row 3 (left or right) on ScreenCode95 -- ScreenCode95 op 10 (PanelOpTable_FCF60B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode95:
+LcdKeyRow3_SoundEditFilterThrough:
 	link XIZ,0xfffe                               ; FDF65C  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF660  be fe 31
 	push XBC                                      ; FDF663  39
@@ -155757,11 +155757,11 @@ LcdKeyRow3_ScreenCode95:
 .LFDF694:
 	unlk XIZ                                      ; FDF694  ee 0d
 	ret                                           ; FDF696  0e
-; LcdKeyRow4_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
-; LcdKeyRow4_ScreenCode95: LCD key row 4 (left or right) on ScreenCode95 -- ScreenCode95 op 11 (PanelOpTable_FCF60B).
+; LcdKeyRow4_SoundEditFilterThrough -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow4_SoundEditFilterThrough: LCD key row 4 (left or right) on ScreenCode95 -- ScreenCode95 op 11 (PanelOpTable_FCF60B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode95:
+LcdKeyRow4_SoundEditFilterThrough:
 	link XIZ,0xfffc                               ; FDF697  ee 0c fc ff
 	pushw hl                                      ; FDF69B  2b
 	lda xbc, (xiz-2)                              ; FDF69C  be fe 31
@@ -155801,11 +155801,11 @@ LcdKeyRow4_ScreenCode95:
 	popw hl                                       ; FDF6ED  4b
 	unlk XIZ                                      ; FDF6EE  ee 0d
 	ret                                           ; FDF6F0  0e
-; LcdKeyRow5_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
-; LcdKeyRow5_ScreenCode95: LCD key row 5 (left or right) on ScreenCode95 -- ScreenCode95 op 12 (PanelOpTable_FCF60B).
+; LcdKeyRow5_SoundEditFilterThrough -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow5_SoundEditFilterThrough: LCD key row 5 (left or right) on ScreenCode95 -- ScreenCode95 op 12 (PanelOpTable_FCF60B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode95:
+LcdKeyRow5_SoundEditFilterThrough:
 	link XIZ,0xfffe                               ; FDF6F1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF6F5  be fe 31
 	push XBC                                      ; FDF6F8  39
@@ -155827,11 +155827,11 @@ LcdKeyRow5_ScreenCode95:
 .LFDF721:
 	unlk XIZ                                      ; FDF721  ee 0d
 	ret                                           ; FDF723  0e
-; PageKey_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
-; PageKey_ScreenCode95: the PAGE pair (code 0x10) on ScreenCode95 -- ScreenCode95 op 16 (PanelOpTable_FCF60B).
+; PageKey_SoundEditFilterThrough -- a handler: an entry of PanelOpTable_FCF60B
+; PageKey_SoundEditFilterThrough: the PAGE pair (code 0x10) on ScreenCode95 -- ScreenCode95 op 16 (PanelOpTable_FCF60B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode95:
+PageKey_SoundEditFilterThrough:
 	link XIZ,0xfffe                               ; FDF724  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF728  be fe 31
 	push XBC                                      ; FDF72B  39
@@ -155848,11 +155848,11 @@ PageKey_ScreenCode95:
 .LFDF748:
 	unlk XIZ                                      ; FDF748  ee 0d
 	ret                                           ; FDF74A  0e
-; ExitKey_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
-; ExitKey_ScreenCode95: the EXIT key on ScreenCode95 -- ScreenCode95 op 15 (PanelOpTable_FCF60B).
+; ExitKey_SoundEditFilterThrough -- a handler: an entry of PanelOpTable_FCF60B
+; ExitKey_SoundEditFilterThrough: the EXIT key on ScreenCode95 -- ScreenCode95 op 15 (PanelOpTable_FCF60B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode95:
+ExitKey_SoundEditFilterThrough:
 	link XIZ,0xfffe                               ; FDF74B  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF74F  8e 08 3f 00
 	jr nz, .LFDF77C                               ; FDF753  6e 27
@@ -155875,11 +155875,11 @@ ExitKey_ScreenCode95:
 .LFDF77C:
 	unlk XIZ                                      ; FDF77C  ee 0d
 	ret                                           ; FDF77E  0e
-; SoftKeyCol3_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; SoftKeyCol3_ScreenCode96: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 2 (PanelOpTable_FCF653).
+; SoftKeyCol3_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol3_SoundEditFilterKeyFollow: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 2 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode96:
+SoftKeyCol3_SoundEditFilterKeyFollow:
 	link XIZ,0xfff0                               ; FDF77F  ee 0c f0 ff
 	push XIX                                      ; FDF783  3c
 	lda xix, (xiz-16)                             ; FDF784  be f0 34
@@ -155932,11 +155932,11 @@ SoftKeyCol3_ScreenCode96:
 	pop XIX                                       ; FDF806  5c
 	unlk XIZ                                      ; FDF807  ee 0d
 	ret                                           ; FDF809  0e
-; SoftKeyCol4_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; SoftKeyCol4_ScreenCode96: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 3 (PanelOpTable_FCF653).
+; SoftKeyCol4_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol4_SoundEditFilterKeyFollow: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 3 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode96:
+SoftKeyCol4_SoundEditFilterKeyFollow:
 	link XIZ,0xfffa                               ; FDF80A  ee 0c fa ff
 	lda xbc, (xiz-2)                              ; FDF80E  be fe 31
 	push XBC                                      ; FDF811  39
@@ -155984,11 +155984,11 @@ SoftKeyCol4_ScreenCode96:
 	popw bc                                       ; FDF882  49
 	unlk XIZ                                      ; FDF883  ee 0d
 	ret                                           ; FDF885  0e
-; SoftKeyCol5_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; SoftKeyCol5_ScreenCode96: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 4 (PanelOpTable_FCF653).
+; SoftKeyCol5_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol5_SoundEditFilterKeyFollow: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 4 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode96:
+SoftKeyCol5_SoundEditFilterKeyFollow:
 	link XIZ,0xfff8                               ; FDF886  ee 0c f8 ff
 	push XIX                                      ; FDF88A  3c
 	lda xix, (Arr27A6_Get:24)                     ; FDF88B  f2 7b 6c fd 34
@@ -156054,11 +156054,11 @@ SoftKeyCol5_ScreenCode96:
 	pop XIX                                       ; FDF924  5c
 	unlk XIZ                                      ; FDF925  ee 0d
 	ret                                           ; FDF927  0e
-; SoftKeyCol6_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; SoftKeyCol6_ScreenCode96: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 5 (PanelOpTable_FCF653).
+; SoftKeyCol6_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol6_SoundEditFilterKeyFollow: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 5 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode96:
+SoftKeyCol6_SoundEditFilterKeyFollow:
 	link XIZ,0xfffa                               ; FDF928  ee 0c fa ff
 	lda xbc, (xiz-2)                              ; FDF92C  be fe 31
 	push XBC                                      ; FDF92F  39
@@ -156106,11 +156106,11 @@ SoftKeyCol6_ScreenCode96:
 	popw bc                                       ; FDF9A0  49
 	unlk XIZ                                      ; FDF9A1  ee 0d
 	ret                                           ; FDF9A3  0e
-; LcdKeyRow1_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; LcdKeyRow1_ScreenCode96: LCD key row 1 (left or right) on ScreenCode96 -- ScreenCode96 op 8 (PanelOpTable_FCF653).
+; LcdKeyRow1_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow1_SoundEditFilterKeyFollow: LCD key row 1 (left or right) on ScreenCode96 -- ScreenCode96 op 8 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode96:
+LcdKeyRow1_SoundEditFilterKeyFollow:
 	link XIZ,0x0000                               ; FDF9A4  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9A8  8e 08 3f 00
 	jr nz, .LFDF9BB                               ; FDF9AC  6e 0d
@@ -156124,11 +156124,11 @@ LcdKeyRow1_ScreenCode96:
 .LFDF9BF:
 	unlk XIZ                                      ; FDF9BF  ee 0d
 	ret                                           ; FDF9C1  0e
-; LcdKeyRow2_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; LcdKeyRow2_ScreenCode96: LCD key row 2 (left or right) on ScreenCode96 -- ScreenCode96 op 9 (PanelOpTable_FCF653).
+; LcdKeyRow2_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow2_SoundEditFilterKeyFollow: LCD key row 2 (left or right) on ScreenCode96 -- ScreenCode96 op 9 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode96:
+LcdKeyRow2_SoundEditFilterKeyFollow:
 	link XIZ,0x0000                               ; FDF9C2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9C6  8e 08 3f 00
 	jr z, .LFDF9E3                                ; FDF9CA  66 17
@@ -156144,11 +156144,11 @@ LcdKeyRow2_ScreenCode96:
 .LFDF9E3:
 	unlk XIZ                                      ; FDF9E3  ee 0d
 	ret                                           ; FDF9E5  0e
-; LcdKeyRow3_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; LcdKeyRow3_ScreenCode96: LCD key row 3 (left or right) on ScreenCode96 -- ScreenCode96 op 10 (PanelOpTable_FCF653).
+; LcdKeyRow3_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow3_SoundEditFilterKeyFollow: LCD key row 3 (left or right) on ScreenCode96 -- ScreenCode96 op 10 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode96:
+LcdKeyRow3_SoundEditFilterKeyFollow:
 	link XIZ,0x0000                               ; FDF9E6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9EA  8e 08 3f 00
 	jr nz, .LFDF9F8                               ; FDF9EE  6e 08
@@ -156169,11 +156169,11 @@ LcdKeyRow3_ScreenCode96:
 .LFDFA0F:
 	unlk XIZ                                      ; FDFA0F  ee 0d
 	ret                                           ; FDFA11  0e
-; LcdKeyRow4_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; LcdKeyRow4_ScreenCode96: LCD key row 4 (left or right) on ScreenCode96 -- ScreenCode96 op 11 (PanelOpTable_FCF653).
+; LcdKeyRow4_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow4_SoundEditFilterKeyFollow: LCD key row 4 (left or right) on ScreenCode96 -- ScreenCode96 op 11 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode96:
+LcdKeyRow4_SoundEditFilterKeyFollow:
 	link XIZ,0x0000                               ; FDFA12  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA16  8e 08 3f 00
 	jr z, .LFDFA33                                ; FDFA1A  66 17
@@ -156189,11 +156189,11 @@ LcdKeyRow4_ScreenCode96:
 .LFDFA33:
 	unlk XIZ                                      ; FDFA33  ee 0d
 	ret                                           ; FDFA35  0e
-; LcdKeyRow5_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; LcdKeyRow5_ScreenCode96: LCD key row 5 (left or right) on ScreenCode96 -- ScreenCode96 op 12 (PanelOpTable_FCF653).
+; LcdKeyRow5_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow5_SoundEditFilterKeyFollow: LCD key row 5 (left or right) on ScreenCode96 -- ScreenCode96 op 12 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode96:
+LcdKeyRow5_SoundEditFilterKeyFollow:
 	link XIZ,0x0000                               ; FDFA36  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA3A  8e 08 3f 00
 	jr z, .LFDFA57                                ; FDFA3E  66 17
@@ -156209,11 +156209,11 @@ LcdKeyRow5_ScreenCode96:
 .LFDFA57:
 	unlk XIZ                                      ; FDFA57  ee 0d
 	ret                                           ; FDFA59  0e
-; PageKey_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; PageKey_ScreenCode96: the PAGE pair (code 0x10) on ScreenCode96 -- ScreenCode96 op 16 (PanelOpTable_FCF653).
+; PageKey_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; PageKey_SoundEditFilterKeyFollow: the PAGE pair (code 0x10) on ScreenCode96 -- ScreenCode96 op 16 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode96:
+PageKey_SoundEditFilterKeyFollow:
 	link XIZ,0x0000                               ; FDFA5A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA5E  8e 08 3f 00
 	jr z, .LFDFA6F                                ; FDFA62  66 0b
@@ -156224,11 +156224,11 @@ PageKey_ScreenCode96:
 .LFDFA6F:
 	unlk XIZ                                      ; FDFA6F  ee 0d
 	ret                                           ; FDFA71  0e
-; ExitKey_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
-; ExitKey_ScreenCode96: the EXIT key on ScreenCode96 -- ScreenCode96 op 15 (PanelOpTable_FCF653).
+; ExitKey_SoundEditFilterKeyFollow -- a handler: an entry of PanelOpTable_FCF653
+; ExitKey_SoundEditFilterKeyFollow: the EXIT key on ScreenCode96 -- ScreenCode96 op 15 (PanelOpTable_FCF653).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode96:
+ExitKey_SoundEditFilterKeyFollow:
 	link XIZ,0x0000                               ; FDFA72  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA76  8e 08 3f 00
 	jr nz, .LFDFA8F                               ; FDFA7A  6e 13
@@ -156241,11 +156241,11 @@ ExitKey_ScreenCode96:
 .LFDFA8F:
 	unlk XIZ                                      ; FDFA8F  ee 0d
 	ret                                           ; FDFA91  0e
-; SoftKeyCol1_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; SoftKeyCol1_ScreenCode97: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 0 (PanelOpTable_FCF69B).
+; SoftKeyCol1_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol1_SoundEditFilterEnvelope1: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 0 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode97:
+SoftKeyCol1_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFA92  ee 0c 00 00
 	pushw 0x00                                    ; FDFA96  0b 00 00
 	pushw 0x3f                                    ; FDFA99  0b 3f 00
@@ -156256,11 +156256,11 @@ SoftKeyCol1_ScreenCode97:
 	inc 6,XSP                                     ; FDFAA6  ef 66
 	unlk XIZ                                      ; FDFAA8  ee 0d
 	ret                                           ; FDFAAA  0e
-; SoftKeyCol2_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; SoftKeyCol2_ScreenCode97: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 1 (PanelOpTable_FCF69B).
+; SoftKeyCol2_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol2_SoundEditFilterEnvelope1: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 1 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode97:
+SoftKeyCol2_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFAAB  ee 0c 00 00
 	pushw 0x00                                    ; FDFAAF  0b 00 00
 	pushw 0x40                                    ; FDFAB2  0b 40 00
@@ -156271,11 +156271,11 @@ SoftKeyCol2_ScreenCode97:
 	inc 6,XSP                                     ; FDFABF  ef 66
 	unlk XIZ                                      ; FDFAC1  ee 0d
 	ret                                           ; FDFAC3  0e
-; SoftKeyCol3_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; SoftKeyCol3_ScreenCode97: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 2 (PanelOpTable_FCF69B).
+; SoftKeyCol3_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol3_SoundEditFilterEnvelope1: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 2 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode97:
+SoftKeyCol3_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFAC4  ee 0c 00 00
 	pushw 0x41                                    ; FDFAC8  0b 41 00
 	pushw 0x3e                                    ; FDFACB  0b 3e 00
@@ -156286,11 +156286,11 @@ SoftKeyCol3_ScreenCode97:
 	inc 6,XSP                                     ; FDFAD8  ef 66
 	unlk XIZ                                      ; FDFADA  ee 0d
 	ret                                           ; FDFADC  0e
-; SoftKeyCol4_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; SoftKeyCol4_ScreenCode97: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 3 (PanelOpTable_FCF69B).
+; SoftKeyCol4_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol4_SoundEditFilterEnvelope1: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 3 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode97:
+SoftKeyCol4_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFADD  ee 0c 00 00
 	pushw 0x00                                    ; FDFAE1  0b 00 00
 	pushw 0x42                                    ; FDFAE4  0b 42 00
@@ -156301,11 +156301,11 @@ SoftKeyCol4_ScreenCode97:
 	inc 6,XSP                                     ; FDFAF1  ef 66
 	unlk XIZ                                      ; FDFAF3  ee 0d
 	ret                                           ; FDFAF5  0e
-; SoftKeyCol5_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; SoftKeyCol5_ScreenCode97: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 4 (PanelOpTable_FCF69B).
+; SoftKeyCol5_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol5_SoundEditFilterEnvelope1: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 4 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode97:
+SoftKeyCol5_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFAF6  ee 0c 00 00
 	pushw 0x43                                    ; FDFAFA  0b 43 00
 	pushw 0x46                                    ; FDFAFD  0b 46 00
@@ -156316,11 +156316,11 @@ SoftKeyCol5_ScreenCode97:
 	inc 6,XSP                                     ; FDFB0A  ef 66
 	unlk XIZ                                      ; FDFB0C  ee 0d
 	ret                                           ; FDFB0E  0e
-; SoftKeyCol6_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; SoftKeyCol6_ScreenCode97: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 5 (PanelOpTable_FCF69B).
+; SoftKeyCol6_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol6_SoundEditFilterEnvelope1: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 5 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode97:
+SoftKeyCol6_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFB0F  ee 0c 00 00
 	pushw 0x00                                    ; FDFB13  0b 00 00
 	pushw 0x44                                    ; FDFB16  0b 44 00
@@ -156331,11 +156331,11 @@ SoftKeyCol6_ScreenCode97:
 	inc 6,XSP                                     ; FDFB23  ef 66
 	unlk XIZ                                      ; FDFB25  ee 0d
 	ret                                           ; FDFB27  0e
-; SoftKeyCol7_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; SoftKeyCol7_ScreenCode97: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 6 (PanelOpTable_FCF69B).
+; SoftKeyCol7_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol7_SoundEditFilterEnvelope1: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 6 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode97:
+SoftKeyCol7_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFB28  ee 0c 00 00
 	pushw 0x45                                    ; FDFB2C  0b 45 00
 	pushw 0x3d                                    ; FDFB2F  0b 3d 00
@@ -156346,11 +156346,11 @@ SoftKeyCol7_ScreenCode97:
 	inc 6,XSP                                     ; FDFB3C  ef 66
 	unlk XIZ                                      ; FDFB3E  ee 0d
 	ret                                           ; FDFB40  0e
-; LcdKeyRow1_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; LcdKeyRow1_ScreenCode97: LCD key row 1 (left or right) on ScreenCode97 -- ScreenCode97 op 8 (PanelOpTable_FCF69B).
+; LcdKeyRow1_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow1_SoundEditFilterEnvelope1: LCD key row 1 (left or right) on ScreenCode97 -- ScreenCode97 op 8 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode97:
+LcdKeyRow1_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFB41  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB45  8e 08 3f 00
 	jr z, .LFDFB4F                                ; FDFB49  66 04
@@ -156358,11 +156358,11 @@ LcdKeyRow1_ScreenCode97:
 .LFDFB4F:
 	unlk XIZ                                      ; FDFB4F  ee 0d
 	ret                                           ; FDFB51  0e
-; LcdKeyRow2_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; LcdKeyRow2_ScreenCode97: LCD key row 2 (left or right) on ScreenCode97 -- ScreenCode97 op 9 (PanelOpTable_FCF69B).
+; LcdKeyRow2_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow2_SoundEditFilterEnvelope1: LCD key row 2 (left or right) on ScreenCode97 -- ScreenCode97 op 9 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode97:
+LcdKeyRow2_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFB52  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB56  8e 08 3f 00
 	jr nz, .LFDFB64                               ; FDFB5A  6e 08
@@ -156383,11 +156383,11 @@ LcdKeyRow2_ScreenCode97:
 .LFDFB7B:
 	unlk XIZ                                      ; FDFB7B  ee 0d
 	ret                                           ; FDFB7D  0e
-; LcdKeyRow3_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; LcdKeyRow3_ScreenCode97: LCD key row 3 (left or right) on ScreenCode97 -- ScreenCode97 op 10 (PanelOpTable_FCF69B).
+; LcdKeyRow3_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow3_SoundEditFilterEnvelope1: LCD key row 3 (left or right) on ScreenCode97 -- ScreenCode97 op 10 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode97:
+LcdKeyRow3_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFB7E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB82  8e 08 3f 00
 	jr nz, .LFDFB90                               ; FDFB86  6e 08
@@ -156408,11 +156408,11 @@ LcdKeyRow3_ScreenCode97:
 .LFDFBA7:
 	unlk XIZ                                      ; FDFBA7  ee 0d
 	ret                                           ; FDFBA9  0e
-; LcdKeyRow4_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; LcdKeyRow4_ScreenCode97: LCD key row 4 (left or right) on ScreenCode97 -- ScreenCode97 op 11 (PanelOpTable_FCF69B).
+; LcdKeyRow4_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow4_SoundEditFilterEnvelope1: LCD key row 4 (left or right) on ScreenCode97 -- ScreenCode97 op 11 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode97:
+LcdKeyRow4_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFBAA  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFBAE  8e 08 3f 00
 	jr nz, .LFDFBBE                               ; FDFBB2  6e 0a
@@ -156433,11 +156433,11 @@ LcdKeyRow4_ScreenCode97:
 .LFDFBD5:
 	unlk XIZ                                      ; FDFBD5  ee 0d
 	ret                                           ; FDFBD7  0e
-; LcdKeyRow5_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; LcdKeyRow5_ScreenCode97: LCD key row 5 (left or right) on ScreenCode97 -- ScreenCode97 op 12 (PanelOpTable_FCF69B).
+; LcdKeyRow5_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow5_SoundEditFilterEnvelope1: LCD key row 5 (left or right) on ScreenCode97 -- ScreenCode97 op 12 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode97:
+LcdKeyRow5_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFBD8  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFBDC  8e 08 3f 00
 	jr nz, .LFDFBEC                               ; FDFBE0  6e 0a
@@ -156458,11 +156458,11 @@ LcdKeyRow5_ScreenCode97:
 .LFDFC03:
 	unlk XIZ                                      ; FDFC03  ee 0d
 	ret                                           ; FDFC05  0e
-; PageKey_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; PageKey_ScreenCode97: the PAGE pair (code 0x10) on ScreenCode97 -- ScreenCode97 op 16 (PanelOpTable_FCF69B).
+; PageKey_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; PageKey_SoundEditFilterEnvelope1: the PAGE pair (code 0x10) on ScreenCode97 -- ScreenCode97 op 16 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode97:
+PageKey_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFC06  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFC0A  8e 08 3f 00
 	jr nz, .LFDFC1B                               ; FDFC0E  6e 0b
@@ -156473,11 +156473,11 @@ PageKey_ScreenCode97:
 .LFDFC1B:
 	unlk XIZ                                      ; FDFC1B  ee 0d
 	ret                                           ; FDFC1D  0e
-; ExitKey_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
-; ExitKey_ScreenCode97: the EXIT key on ScreenCode97 -- ScreenCode97 op 15 (PanelOpTable_FCF69B).
+; ExitKey_SoundEditFilterEnvelope1 -- a handler: an entry of PanelOpTable_FCF69B
+; ExitKey_SoundEditFilterEnvelope1: the EXIT key on ScreenCode97 -- ScreenCode97 op 15 (PanelOpTable_FCF69B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode97:
+ExitKey_SoundEditFilterEnvelope1:
 	link XIZ,0x0000                               ; FDFC1E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFC22  8e 08 3f 00
 	jr nz, .LFDFC3B                               ; FDFC26  6e 13
@@ -156490,11 +156490,11 @@ ExitKey_ScreenCode97:
 .LFDFC3B:
 	unlk XIZ                                      ; FDFC3B  ee 0d
 	ret                                           ; FDFC3D  0e
-; SoftKeyCol2_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; SoftKeyCol2_ScreenCode98: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 1 (PanelOpTable_FCF6E3).
+; SoftKeyCol2_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol2_SoundEditFilterEnvelope2: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 1 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode98:
+SoftKeyCol2_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFC3E  ee 0c 00 00
 	pushw 0x4a                                    ; FDFC42  0b 4a 00
 	ld BC,(XIZ+0x08)                              ; FDFC45  9e 08 21
@@ -156504,11 +156504,11 @@ SoftKeyCol2_ScreenCode98:
 	pop XBC                                       ; FDFC4F  59
 	unlk XIZ                                      ; FDFC50  ee 0d
 	ret                                           ; FDFC52  0e
-; SoftKeyCol3_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; SoftKeyCol3_ScreenCode98: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 2 (PanelOpTable_FCF6E3).
+; SoftKeyCol3_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol3_SoundEditFilterEnvelope2: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 2 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode98:
+SoftKeyCol3_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFC53  ee 0c 00 00
 	pushw 0x4b                                    ; FDFC57  0b 4b 00
 	ld BC,(XIZ+0x08)                              ; FDFC5A  9e 08 21
@@ -156518,11 +156518,11 @@ SoftKeyCol3_ScreenCode98:
 	pop XBC                                       ; FDFC64  59
 	unlk XIZ                                      ; FDFC65  ee 0d
 	ret                                           ; FDFC67  0e
-; SoftKeyCol4_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; SoftKeyCol4_ScreenCode98: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 3 (PanelOpTable_FCF6E3).
+; SoftKeyCol4_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol4_SoundEditFilterEnvelope2: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 3 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode98:
+SoftKeyCol4_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFC68  ee 0c 00 00
 	pushw 0x4c                                    ; FDFC6C  0b 4c 00
 	ld BC,(XIZ+0x08)                              ; FDFC6F  9e 08 21
@@ -156532,11 +156532,11 @@ SoftKeyCol4_ScreenCode98:
 	pop XBC                                       ; FDFC79  59
 	unlk XIZ                                      ; FDFC7A  ee 0d
 	ret                                           ; FDFC7C  0e
-; SoftKeyCol5_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; SoftKeyCol5_ScreenCode98: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 4 (PanelOpTable_FCF6E3).
+; SoftKeyCol5_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol5_SoundEditFilterEnvelope2: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 4 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode98:
+SoftKeyCol5_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFC7D  ee 0c 00 00
 	pushw 0x49                                    ; FDFC81  0b 49 00
 	ld BC,(XIZ+0x08)                              ; FDFC84  9e 08 21
@@ -156546,11 +156546,11 @@ SoftKeyCol5_ScreenCode98:
 	pop XBC                                       ; FDFC8E  59
 	unlk XIZ                                      ; FDFC8F  ee 0d
 	ret                                           ; FDFC91  0e
-; SoftKeyCol7_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; SoftKeyCol7_ScreenCode98: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 6 (PanelOpTable_FCF6E3).
+; SoftKeyCol7_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol7_SoundEditFilterEnvelope2: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 6 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode98:
+SoftKeyCol7_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFC92  ee 0c 00 00
 	pushw 0x47                                    ; FDFC96  0b 47 00
 	ld BC,(XIZ+0x08)                              ; FDFC99  9e 08 21
@@ -156560,11 +156560,11 @@ SoftKeyCol7_ScreenCode98:
 	pop XBC                                       ; FDFCA3  59
 	unlk XIZ                                      ; FDFCA4  ee 0d
 	ret                                           ; FDFCA6  0e
-; SoftKeyCol8_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; SoftKeyCol8_ScreenCode98: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 7 (PanelOpTable_FCF6E3).
+; SoftKeyCol8_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol8_SoundEditFilterEnvelope2: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 7 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode98:
+SoftKeyCol8_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFCA7  ee 0c 00 00
 	pushw 0x48                                    ; FDFCAB  0b 48 00
 	ld BC,(XIZ+0x08)                              ; FDFCAE  9e 08 21
@@ -156574,11 +156574,11 @@ SoftKeyCol8_ScreenCode98:
 	pop XBC                                       ; FDFCB8  59
 	unlk XIZ                                      ; FDFCB9  ee 0d
 	ret                                           ; FDFCBB  0e
-; LcdKeyRow1_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; LcdKeyRow1_ScreenCode98: LCD key row 1 (left or right) on ScreenCode98 -- ScreenCode98 op 8 (PanelOpTable_FCF6E3).
+; LcdKeyRow1_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow1_SoundEditFilterEnvelope2: LCD key row 1 (left or right) on ScreenCode98 -- ScreenCode98 op 8 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode98:
+LcdKeyRow1_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFCBC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCC0  8e 08 3f 00
 	jr z, .LFDFCCA                                ; FDFCC4  66 04
@@ -156586,11 +156586,11 @@ LcdKeyRow1_ScreenCode98:
 .LFDFCCA:
 	unlk XIZ                                      ; FDFCCA  ee 0d
 	ret                                           ; FDFCCC  0e
-; LcdKeyRow2_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; LcdKeyRow2_ScreenCode98: LCD key row 2 (left or right) on ScreenCode98 -- ScreenCode98 op 9 (PanelOpTable_FCF6E3).
+; LcdKeyRow2_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow2_SoundEditFilterEnvelope2: LCD key row 2 (left or right) on ScreenCode98 -- ScreenCode98 op 9 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode98:
+LcdKeyRow2_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFCCD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCD1  8e 08 3f 00
 	jr nz, .LFDFCDF                               ; FDFCD5  6e 08
@@ -156611,11 +156611,11 @@ LcdKeyRow2_ScreenCode98:
 .LFDFCF6:
 	unlk XIZ                                      ; FDFCF6  ee 0d
 	ret                                           ; FDFCF8  0e
-; LcdKeyRow3_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; LcdKeyRow3_ScreenCode98: LCD key row 3 (left or right) on ScreenCode98 -- ScreenCode98 op 10 (PanelOpTable_FCF6E3).
+; LcdKeyRow3_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow3_SoundEditFilterEnvelope2: LCD key row 3 (left or right) on ScreenCode98 -- ScreenCode98 op 10 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode98:
+LcdKeyRow3_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFCF9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCFD  8e 08 3f 00
 	jr nz, .LFDFD0B                               ; FDFD01  6e 08
@@ -156636,11 +156636,11 @@ LcdKeyRow3_ScreenCode98:
 .LFDFD22:
 	unlk XIZ                                      ; FDFD22  ee 0d
 	ret                                           ; FDFD24  0e
-; LcdKeyRow4_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; LcdKeyRow4_ScreenCode98: LCD key row 4 (left or right) on ScreenCode98 -- ScreenCode98 op 11 (PanelOpTable_FCF6E3).
+; LcdKeyRow4_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow4_SoundEditFilterEnvelope2: LCD key row 4 (left or right) on ScreenCode98 -- ScreenCode98 op 11 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode98:
+LcdKeyRow4_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFD25  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD29  8e 08 3f 00
 	jr z, .LFDFD46                                ; FDFD2D  66 17
@@ -156656,11 +156656,11 @@ LcdKeyRow4_ScreenCode98:
 .LFDFD46:
 	unlk XIZ                                      ; FDFD46  ee 0d
 	ret                                           ; FDFD48  0e
-; LcdKeyRow5_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; LcdKeyRow5_ScreenCode98: LCD key row 5 (left or right) on ScreenCode98 -- ScreenCode98 op 12 (PanelOpTable_FCF6E3).
+; LcdKeyRow5_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow5_SoundEditFilterEnvelope2: LCD key row 5 (left or right) on ScreenCode98 -- ScreenCode98 op 12 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode98:
+LcdKeyRow5_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFD49  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD4D  8e 08 3f 00
 	jr z, .LFDFD6A                                ; FDFD51  66 17
@@ -156676,11 +156676,11 @@ LcdKeyRow5_ScreenCode98:
 .LFDFD6A:
 	unlk XIZ                                      ; FDFD6A  ee 0d
 	ret                                           ; FDFD6C  0e
-; PageKey_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; PageKey_ScreenCode98: the PAGE pair (code 0x10) on ScreenCode98 -- ScreenCode98 op 16 (PanelOpTable_FCF6E3).
+; PageKey_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; PageKey_SoundEditFilterEnvelope2: the PAGE pair (code 0x10) on ScreenCode98 -- ScreenCode98 op 16 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode98:
+PageKey_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFD6D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD71  8e 08 3f 00
 	jr z, .LFDFD82                                ; FDFD75  66 0b
@@ -156691,11 +156691,11 @@ PageKey_ScreenCode98:
 .LFDFD82:
 	unlk XIZ                                      ; FDFD82  ee 0d
 	ret                                           ; FDFD84  0e
-; ExitKey_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
-; ExitKey_ScreenCode98: the EXIT key on ScreenCode98 -- ScreenCode98 op 15 (PanelOpTable_FCF6E3).
+; ExitKey_SoundEditFilterEnvelope2 -- a handler: an entry of PanelOpTable_FCF6E3
+; ExitKey_SoundEditFilterEnvelope2: the EXIT key on ScreenCode98 -- ScreenCode98 op 15 (PanelOpTable_FCF6E3).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode98:
+ExitKey_SoundEditFilterEnvelope2:
 	link XIZ,0x0000                               ; FDFD85  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD89  8e 08 3f 00
 	jr nz, .LFDFDA2                               ; FDFD8D  6e 13
@@ -156708,11 +156708,11 @@ ExitKey_ScreenCode98:
 .LFDFDA2:
 	unlk XIZ                                      ; FDFDA2  ee 0d
 	ret                                           ; FDFDA4  0e
-; SoftKeyCol2_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; SoftKeyCol2_ScreenCode99: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 1 (PanelOpTable_FCF72B).
+; SoftKeyCol2_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; SoftKeyCol2_SoundEditFilterLfo: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 1 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode99:
+SoftKeyCol2_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFDA5  ee 0c 00 00
 	pushw 0x02                                    ; FDFDA9  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDAC  9e 08 21
@@ -156722,11 +156722,11 @@ SoftKeyCol2_ScreenCode99:
 	pop XBC                                       ; FDFDB6  59
 	unlk XIZ                                      ; FDFDB7  ee 0d
 	ret                                           ; FDFDB9  0e
-; SoftKeyCol3_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; SoftKeyCol3_ScreenCode99: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 2 (PanelOpTable_FCF72B).
+; SoftKeyCol3_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; SoftKeyCol3_SoundEditFilterLfo: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 2 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode99:
+SoftKeyCol3_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFDBA  ee 0c 00 00
 	pushw 0x02                                    ; FDFDBE  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDC1  9e 08 21
@@ -156736,11 +156736,11 @@ SoftKeyCol3_ScreenCode99:
 	pop XBC                                       ; FDFDCB  59
 	unlk XIZ                                      ; FDFDCC  ee 0d
 	ret                                           ; FDFDCE  0e
-; SoftKeyCol4_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; SoftKeyCol4_ScreenCode99: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 3 (PanelOpTable_FCF72B).
+; SoftKeyCol4_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; SoftKeyCol4_SoundEditFilterLfo: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 3 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode99:
+SoftKeyCol4_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFDCF  ee 0c 00 00
 	pushw 0x02                                    ; FDFDD3  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDD6  9e 08 21
@@ -156750,11 +156750,11 @@ SoftKeyCol4_ScreenCode99:
 	pop XBC                                       ; FDFDE0  59
 	unlk XIZ                                      ; FDFDE1  ee 0d
 	ret                                           ; FDFDE3  0e
-; SoftKeyCol5_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; SoftKeyCol5_ScreenCode99: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 4 (PanelOpTable_FCF72B).
+; SoftKeyCol5_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; SoftKeyCol5_SoundEditFilterLfo: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 4 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode99:
+SoftKeyCol5_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFDE4  ee 0c 00 00
 	pushw 0x02                                    ; FDFDE8  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFDEB  9e 08 21
@@ -156764,11 +156764,11 @@ SoftKeyCol5_ScreenCode99:
 	pop XBC                                       ; FDFDF5  59
 	unlk XIZ                                      ; FDFDF6  ee 0d
 	ret                                           ; FDFDF8  0e
-; SoftKeyCol6_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; SoftKeyCol6_ScreenCode99: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 5 (PanelOpTable_FCF72B).
+; SoftKeyCol6_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; SoftKeyCol6_SoundEditFilterLfo: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 5 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode99:
+SoftKeyCol6_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFDF9  ee 0c 00 00
 	pushw 0x02                                    ; FDFDFD  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFE00  9e 08 21
@@ -156778,11 +156778,11 @@ SoftKeyCol6_ScreenCode99:
 	pop XBC                                       ; FDFE0A  59
 	unlk XIZ                                      ; FDFE0B  ee 0d
 	ret                                           ; FDFE0D  0e
-; SoftKeyCol7_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; SoftKeyCol7_ScreenCode99: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 6 (PanelOpTable_FCF72B).
+; SoftKeyCol7_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; SoftKeyCol7_SoundEditFilterLfo: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 6 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode99:
+SoftKeyCol7_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFE0E  ee 0c 00 00
 	pushw 0x02                                    ; FDFE12  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFE15  9e 08 21
@@ -156792,11 +156792,11 @@ SoftKeyCol7_ScreenCode99:
 	pop XBC                                       ; FDFE1F  59
 	unlk XIZ                                      ; FDFE20  ee 0d
 	ret                                           ; FDFE22  0e
-; SoftKeyCol8_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; SoftKeyCol8_ScreenCode99: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 7 (PanelOpTable_FCF72B).
+; SoftKeyCol8_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; SoftKeyCol8_SoundEditFilterLfo: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode99 -- ScreenCode99 op 7 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode99:
+SoftKeyCol8_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFE23  ee 0c 00 00
 	pushw 0x02                                    ; FDFE27  0b 02 00
 	ld BC,(XIZ+0x08)                              ; FDFE2A  9e 08 21
@@ -156806,11 +156806,11 @@ SoftKeyCol8_ScreenCode99:
 	pop XBC                                       ; FDFE34  59
 	unlk XIZ                                      ; FDFE35  ee 0d
 	ret                                           ; FDFE37  0e
-; LcdKeyRow1_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; LcdKeyRow1_ScreenCode99: LCD key row 1 (left or right) on ScreenCode99 -- ScreenCode99 op 8 (PanelOpTable_FCF72B).
+; LcdKeyRow1_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; LcdKeyRow1_SoundEditFilterLfo: LCD key row 1 (left or right) on ScreenCode99 -- ScreenCode99 op 8 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode99:
+LcdKeyRow1_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFE38  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE3C  8e 08 3f 00
 	jr nz, .LFDFE4F                               ; FDFE40  6e 0d
@@ -156824,11 +156824,11 @@ LcdKeyRow1_ScreenCode99:
 .LFDFE53:
 	unlk XIZ                                      ; FDFE53  ee 0d
 	ret                                           ; FDFE55  0e
-; LcdKeyRow2_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; LcdKeyRow2_ScreenCode99: LCD key row 2 (left or right) on ScreenCode99 -- ScreenCode99 op 9 (PanelOpTable_FCF72B).
+; LcdKeyRow2_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; LcdKeyRow2_SoundEditFilterLfo: LCD key row 2 (left or right) on ScreenCode99 -- ScreenCode99 op 9 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode99:
+LcdKeyRow2_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFE56  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE5A  8e 08 3f 00
 	jr nz, .LFDFE6C                               ; FDFE5E  6e 0c
@@ -156844,11 +156844,11 @@ LcdKeyRow2_ScreenCode99:
 	pop XIY                                       ; FDFE76  5d
 	unlk XIZ                                      ; FDFE77  ee 0d
 	ret                                           ; FDFE79  0e
-; LcdKeyRow3_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; LcdKeyRow3_ScreenCode99: LCD key row 3 (left or right) on ScreenCode99 -- ScreenCode99 op 10 (PanelOpTable_FCF72B).
+; LcdKeyRow3_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; LcdKeyRow3_SoundEditFilterLfo: LCD key row 3 (left or right) on ScreenCode99 -- ScreenCode99 op 10 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode99:
+LcdKeyRow3_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFE7A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE7E  8e 08 3f 00
 	jr z, .LFDFE8F                                ; FDFE82  66 0b
@@ -156859,11 +156859,11 @@ LcdKeyRow3_ScreenCode99:
 .LFDFE8F:
 	unlk XIZ                                      ; FDFE8F  ee 0d
 	ret                                           ; FDFE91  0e
-; LcdKeyRow4_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; LcdKeyRow4_ScreenCode99: LCD key row 4 (left or right) on ScreenCode99 -- ScreenCode99 op 11 (PanelOpTable_FCF72B).
+; LcdKeyRow4_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; LcdKeyRow4_SoundEditFilterLfo: LCD key row 4 (left or right) on ScreenCode99 -- ScreenCode99 op 11 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode99:
+LcdKeyRow4_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFE92  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFE96  8e 08 3f 00
 	jr z, .LFDFEA7                                ; FDFE9A  66 0b
@@ -156874,11 +156874,11 @@ LcdKeyRow4_ScreenCode99:
 .LFDFEA7:
 	unlk XIZ                                      ; FDFEA7  ee 0d
 	ret                                           ; FDFEA9  0e
-; LcdKeyRow5_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; LcdKeyRow5_ScreenCode99: LCD key row 5 (left or right) on ScreenCode99 -- ScreenCode99 op 12 (PanelOpTable_FCF72B).
+; LcdKeyRow5_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; LcdKeyRow5_SoundEditFilterLfo: LCD key row 5 (left or right) on ScreenCode99 -- ScreenCode99 op 12 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode99:
+LcdKeyRow5_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFEAA  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFEAE  8e 08 3f 00
 	jr z, .LFDFEBF                                ; FDFEB2  66 0b
@@ -156889,11 +156889,11 @@ LcdKeyRow5_ScreenCode99:
 .LFDFEBF:
 	unlk XIZ                                      ; FDFEBF  ee 0d
 	ret                                           ; FDFEC1  0e
-; ExitKey_ScreenCode99 -- a handler: an entry of PanelOpTable_FCF72B
-; ExitKey_ScreenCode99: the EXIT key on ScreenCode99 -- ScreenCode99 op 15 (PanelOpTable_FCF72B).
+; ExitKey_SoundEditFilterLfo -- a handler: an entry of PanelOpTable_FCF72B
+; ExitKey_SoundEditFilterLfo: the EXIT key on ScreenCode99 -- ScreenCode99 op 15 (PanelOpTable_FCF72B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode99:
+ExitKey_SoundEditFilterLfo:
 	link XIZ,0x0000                               ; FDFEC2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFEC6  8e 08 3f 00
 	jr nz, .LFDFEDF                               ; FDFECA  6e 13
@@ -156934,13 +156934,13 @@ ExitKey_ScreenCode99:
 	jr nz, .LFDFF0D                               ; FDFEFF  6e 0c
 	pushw 0x00                                    ; FDFF01  0b 00 00
 	pushw 0x90                                    ; FDFF04  0b 90 00
-; stale, 0x15E above: the live twin LcdKeyRow2_ScreenCode99 calls PanelScreen_PostRequest
+; stale, 0x15E above: the live twin LcdKeyRow2_SoundEditFilterLfo calls PanelScreen_PostRequest
 	call	PanelScreen_PostRequest + 0x15e         ; FDFF07  1d e9 61 fd
 	jr .LFDFF17                                   ; FDFF0B  68 0a
 .LFDFF0D:
 	pushw 0x01                                    ; FDFF0D  0b 01 00
 	pushw 0x02                                    ; FDFF10  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow2_ScreenCode99 calls sub_FD74E0
+; stale, 0x15E above: the live twin LcdKeyRow2_SoundEditFilterLfo calls sub_FD74E0
 	call	sub_FD74E0 + 0x15e                      ; FDFF13  1d 3e 76 fd
 .LFDFF17:
 	pop XIY                                       ; FDFF17  5d
@@ -156951,7 +156951,7 @@ ExitKey_ScreenCode99:
 	jr z, .LFDFF30                                ; FDFF23  66 0b
 	pushw 0x02                                    ; FDFF25  0b 02 00
 	pushw 0x02                                    ; FDFF28  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow3_ScreenCode99 calls sub_FD74E0
+; stale, 0x15E above: the live twin LcdKeyRow3_SoundEditFilterLfo calls sub_FD74E0
 	call	sub_FD74E0 + 0x15e                      ; FDFF2B  1d 3e 76 fd
 	pop XIY                                       ; FDFF2F  5d
 .LFDFF30:
@@ -156962,7 +156962,7 @@ ExitKey_ScreenCode99:
 	jr z, .LFDFF48                                ; FDFF3B  66 0b
 	pushw 0x03                                    ; FDFF3D  0b 03 00
 	pushw 0x02                                    ; FDFF40  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow4_ScreenCode99 calls sub_FD74E0
+; stale, 0x15E above: the live twin LcdKeyRow4_SoundEditFilterLfo calls sub_FD74E0
 	call	sub_FD74E0 + 0x15e                      ; FDFF43  1d 3e 76 fd
 	pop XIY                                       ; FDFF47  5d
 .LFDFF48:
@@ -156973,7 +156973,7 @@ ExitKey_ScreenCode99:
 	jr z, .LFDFF60                                ; FDFF53  66 0b
 	pushw 0x04                                    ; FDFF55  0b 04 00
 	pushw 0x02                                    ; FDFF58  0b 02 00
-; stale, 0x15E above: the live twin LcdKeyRow5_ScreenCode99 calls sub_FD74E0
+; stale, 0x15E above: the live twin LcdKeyRow5_SoundEditFilterLfo calls sub_FD74E0
 	call	sub_FD74E0 + 0x15e                      ; FDFF5B  1d 3e 76 fd
 	pop XIY                                       ; FDFF5F  5d
 .LFDFF60:
@@ -156983,7 +156983,7 @@ ExitKey_ScreenCode99:
 	cp (XIZ+0x08),0x00                            ; FDFF67  8e 08 3f 00
 	jr nz, .LFDFF80                               ; FDFF6B  6e 13
 	pushw 0x00                                    ; FDFF6D  0b 00 00
-; stale, 0x15E above: its ten live twins (ExitKey_ScreenCode99 among them) call ToneMsg_SendP23FromArr2800
+; stale, 0x15E above: its ten live twins (ExitKey_SoundEditFilterLfo among them) call ToneMsg_SendP23FromArr2800
 	call	ToneMsg_SendP23FromArr2800 + 0x15e                      ; FDFF70  1d 3e 6b fd
 	pushw 0x00                                    ; FDFF74  0b 00 00
 	pushw 0x80                                    ; FDFF77  0b 80 00

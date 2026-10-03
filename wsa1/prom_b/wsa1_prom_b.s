@@ -1440,20 +1440,20 @@
 	.set	StepValues_FCFCD8, 0xFCFCD8
 	.set	StepValues_FCFCDF, 0xFCFCDF
 	.set	StepValues_FCFCE1, 0xFCFCE1
-	.set	ScreenButton_Code80, 0xFCFDA7
-	.set	ScreenButton_CodeCD, 0xFD053D
-	.set	ScreenButton_Code9B, 0xFD058E
-	.set	ScreenButton_Code82, 0xFD0AA5
-	.set	ScreenButton_Code83, 0xFD0AF6
-	.set	ScreenButton_Code84, 0xFD0B47
-	.set	ScreenButton_Code85, 0xFD0BA7
-	.set	ScreenButton_Code86, 0xFD0C07
+	.set	ScreenButton_SoundEditMenu, 0xFCFDA7
+	.set	ScreenButton_SoundEditControllerPage1, 0xFD053D
+	.set	ScreenButton_SoundEditControllerPage2, 0xFD058E
+	.set	ScreenButton_SoundEditModelingToneTemplate, 0xFD0AA5
+	.set	ScreenButton_SoundEditToneLayerPanning, 0xFD0AF6
+	.set	ScreenButton_SoundEditToneLayerKeyLayer, 0xFD0B47
+	.set	ScreenButton_SoundEditToneLayerVelocityLayer, 0xFD0BA7
+	.set	ScreenButton_SoundEditModelingDriverWaveform, 0xFD0C07
 	.set	Ring608A0A_DrainAll, 0xFD2504
-	.set	ScreenButton_Code8B, 0xFD2751
-	.set	ScreenButton_Code8C, 0xFD27A2
-	.set	ScreenButton_Code8D, 0xFD27F2
-	.set	ScreenButton_Code8E, 0xFD2852
-	.set	ScreenButton_Code8F, 0xFD28B2
+	.set	ScreenButton_SoundEditAmpLevel1, 0xFD2751
+	.set	ScreenButton_SoundEditAmpLevel2, 0xFD27A2
+	.set	ScreenButton_SoundEditAmpEnvelope1, 0xFD27F2
+	.set	ScreenButton_SoundEditAmpEnvelope2, 0xFD2852
+	.set	ScreenButton_SoundEditAmpLfo, 0xFD28B2
 	.set	ToneEditPage_A0_KeyDispatch, 0xFD3DA7
 	.set	T_F41F84_Nop, 0xFD3DF8
 	.set	T_F41F94_Nop, 0xFD3DF9
@@ -1549,51 +1549,51 @@
 	.set	LCD_SetPanelDarkFlag, 0xFDAC5B
 	.set	sub_FDAC6B, 0xFDAC6B
 	.set	sub_FDACBD, 0xFDACBD
-	.set	ScreenCode80_Handler, 0xFDAD44
-	.set	ScreenCode87_Handler, 0xFDB22F
+	.set	ScreenEnter_SoundEditMenu, 0xFDAD44
+	.set	ScreenEnter_SoundEditPitchTune, 0xFDB22F
 	.set	sub_FDB30B, 0xFDB30B
-	.set	ScreenCode88_Handler, 0xFDB38C
-	.set	ScreenCode89_Handler, 0xFDB44D
-	.set	ScreenCode8A_Handler, 0xFDB529
-	.set	ScreenCode8B_Handler, 0xFDB693
+	.set	ScreenEnter_SoundEditPitchEnvelope1, 0xFDB38C
+	.set	ScreenEnter_SoundEditPitchEnvelope2, 0xFDB44D
+	.set	ScreenEnter_SoundEditPitchLfo, 0xFDB529
+	.set	ScreenEnter_SoundEditAmpLevel1, 0xFDB693
 	.set	sub_FDB858, 0xFDB858
 	.set	sub_FDB8D1, 0xFDB8D1
-	.set	ScreenCode8C_Handler, 0xFDB8D9
-	.set	ScreenCode8D_Handler, 0xFDB9AB
-	.set	ScreenCode8E_Handler, 0xFDBAE7
-	.set	ScreenCode8F_Handler, 0xFDBBC3
-	.set	ScreenCodeCD_Handler, 0xFDBBD6
-	.set	ScreenCode9B_Handler, 0xFDBEDE
+	.set	ScreenEnter_SoundEditAmpLevel2, 0xFDB8D9
+	.set	ScreenEnter_SoundEditAmpEnvelope1, 0xFDB9AB
+	.set	ScreenEnter_SoundEditAmpEnvelope2, 0xFDBAE7
+	.set	ScreenEnter_SoundEditAmpLfo, 0xFDBBC3
+	.set	ScreenEnter_SoundEditControllerPage1, 0xFDBBD6
+	.set	ScreenEnter_SoundEditControllerPage2, 0xFDBEDE
 	.set	ScreenCode9C_Handler, 0xFDC0E1
-	.set	ScreenCode90_Handler, 0xFDC0ED
+	.set	ScreenEnter_SoundEditFilterLpf12, 0xFDC0ED
 	.set	sub_FDC0FD, 0xFDC0FD
 	.set	sub_FDC22F, 0xFDC22F
-	.set	ScreenCode91_Handler, 0xFDC27B
+	.set	ScreenEnter_SoundEditFilterHpf12, 0xFDC27B
 	.set	sub_FDC2A2, 0xFDC2A2
-	.set	ScreenCode92_Handler, 0xFDC2A7
-	.set	ScreenCode93_Handler, 0xFDC2CF
-	.set	ScreenCode94_Handler, 0xFDC2F7
-	.set	ScreenCode95_Handler, 0xFDC317
-	.set	ScreenCode96_Handler, 0xFDC333
+	.set	ScreenEnter_SoundEditFilterLpf24, 0xFDC2A7
+	.set	ScreenEnter_SoundEditFilterHpf24, 0xFDC2CF
+	.set	ScreenEnter_SoundEditFilterBpf, 0xFDC2F7
+	.set	ScreenEnter_SoundEditFilterThrough, 0xFDC317
+	.set	ScreenEnter_SoundEditFilterKeyFollow, 0xFDC333
 	.set	sub_FDC3F9, 0xFDC3F9
-	.set	ScreenCode97_Handler, 0xFDC405
+	.set	ScreenEnter_SoundEditFilterEnvelope1, 0xFDC405
 	.set	sub_FDC438, 0xFDC438
-	.set	ScreenCode98_Handler, 0xFDC4C6
-	.set	ScreenCode99_Handler, 0xFDC5A2
-	.set	ScreenCode82_Handler, 0xFDC5B5
+	.set	ScreenEnter_SoundEditFilterEnvelope2, 0xFDC4C6
+	.set	ScreenEnter_SoundEditFilterLfo, 0xFDC5A2
+	.set	ScreenEnter_SoundEditModelingToneTemplate, 0xFDC5B5
 	.set	sub_FDC5BB, 0xFDC5BB
 	.set	sub_FDC62E, 0xFDC62E
 	.set	sub_FDC6CB, 0xFDC6CB
-	.set	ScreenCode83_Handler, 0xFDC84C
+	.set	ScreenEnter_SoundEditToneLayerPanning, 0xFDC84C
 	.set	sub_FDC87E, 0xFDC87E
-	.set	ScreenCode84_Handler, 0xFDC95B
+	.set	ScreenEnter_SoundEditToneLayerKeyLayer, 0xFDC95B
 	.set	sub_FDC9C4, 0xFDC9C4
-	.set	ScreenCode85_Handler, 0xFDCA77
-	.set	ScreenCode86_Handler, 0xFDCB93
-	.set	ScreenCode9E_Handler, 0xFDCDE0
-	.set	ScreenCode9F_Handler, 0xFDCFEB
-	.set	ScreenCode9A_Handler, 0xFDD02D
-	.set	ScreenCode9D_Handler, 0xFDD0D4
+	.set	ScreenEnter_SoundEditToneLayerVelocityLayer, 0xFDCA77
+	.set	ScreenEnter_SoundEditModelingDriverWaveform, 0xFDCB93
+	.set	ScreenEnter_SoundEditMemoryWrite, 0xFDCDE0
+	.set	ScreenEnter_SoundEditNaming, 0xFDCFEB
+	.set	ScreenEnter_SoundEditDigitalEffect, 0xFDD02D
+	.set	ScreenEnter_SoundEditCopy, 0xFDD0D4
 	.set	ScreenCodeCA_Handler, 0xFDD272
 	.set	ScreenCodeCB_Handler, 0xFDD27F
 	.set	T_F42340_Nop, 0xFDD436
@@ -1607,68 +1607,68 @@
 	.set	ToneEditPage_A7_ResoModeKeyFollow, 0xFDDDAA
 	.set	ScreenCodeC8_Handler, 0xFDDF36
 	.set	T_F433E0_Nop, 0xFDE151
-	.set	ScreenLeave_Code80, 0xFDE152
+	.set	ScreenLeave_SoundEditMenu, 0xFDE152
 	.set	T_F41F68_Nop, 0xFDE15F
-	.set	ScreenLeave_Code87, 0xFDE160
+	.set	ScreenLeave_SoundEditPitchTune, 0xFDE160
 	.set	T_F42008_Nop, 0xFDE16D
-	.set	ScreenLeave_Code88, 0xFDE16E
+	.set	ScreenLeave_SoundEditPitchEnvelope1, 0xFDE16E
 	.set	T_F42018_Nop, 0xFDE17B
-	.set	ScreenLeave_Code89, 0xFDE17C
+	.set	ScreenLeave_SoundEditPitchEnvelope2, 0xFDE17C
 	.set	T_F42028_Nop, 0xFDE189
-	.set	ScreenLeave_Code8A, 0xFDE18A
+	.set	ScreenLeave_SoundEditPitchLfo, 0xFDE18A
 	.set	T_F42038_Nop, 0xFDE197
-	.set	ScreenLeave_Code8B, 0xFDE198
+	.set	ScreenLeave_SoundEditAmpLevel1, 0xFDE198
 	.set	T_F42048_Nop, 0xFDE1A5
-	.set	ScreenLeave_Code8C, 0xFDE1A6
+	.set	ScreenLeave_SoundEditAmpLevel2, 0xFDE1A6
 	.set	T_F42058_Nop, 0xFDE1B3
-	.set	ScreenLeave_Code8D, 0xFDE1B4
-	.set	ScreenLeave_Code8E, 0xFDE1C2
+	.set	ScreenLeave_SoundEditAmpEnvelope1, 0xFDE1B4
+	.set	ScreenLeave_SoundEditAmpEnvelope2, 0xFDE1C2
 	.set	T_F42078_Nop, 0xFDE1CF
-	.set	ScreenLeave_Code8F, 0xFDE1D0
+	.set	ScreenLeave_SoundEditAmpLfo, 0xFDE1D0
 	.set	T_F42068_Nop, 0xFDE1DD
-	.set	ScreenLeave_CodeCD, 0xFDE1DE
+	.set	ScreenLeave_SoundEditControllerPage1, 0xFDE1DE
 	.set	T_F42098_Nop, 0xFDE1EB
-	.set	ScreenLeave_Code9B, 0xFDE1EC
+	.set	ScreenLeave_SoundEditControllerPage2, 0xFDE1EC
 	.set	T_F420A8_Nop, 0xFDE1F9
 	.set	ScreenLeave_Code9C, 0xFDE1FA
 	.set	T_F420B8_Nop, 0xFDE207
-	.set	ScreenLeave_Code82, 0xFDE208
+	.set	ScreenLeave_SoundEditModelingToneTemplate, 0xFDE208
 	.set	T_F42168_Nop, 0xFDE215
-	.set	ScreenLeave_Code83, 0xFDE216
+	.set	ScreenLeave_SoundEditToneLayerPanning, 0xFDE216
 	.set	T_F42178_Nop, 0xFDE223
-	.set	ScreenLeave_Code84, 0xFDE224
+	.set	ScreenLeave_SoundEditToneLayerKeyLayer, 0xFDE224
 	.set	T_F42188_Nop, 0xFDE231
-	.set	ScreenLeave_Code85, 0xFDE232
+	.set	ScreenLeave_SoundEditToneLayerVelocityLayer, 0xFDE232
 	.set	T_F42198_Nop, 0xFDE23F
-	.set	ScreenLeave_Code86, 0xFDE240
+	.set	ScreenLeave_SoundEditModelingDriverWaveform, 0xFDE240
 	.set	T_F421A8_Nop, 0xFDE24D
-	.set	ScreenLeave_Code90, 0xFDE24E
+	.set	ScreenLeave_SoundEditFilterLpf12, 0xFDE24E
 	.set	T_F420C8_Nop, 0xFDE25B
-	.set	ScreenLeave_Code91, 0xFDE25C
+	.set	ScreenLeave_SoundEditFilterHpf12, 0xFDE25C
 	.set	T_F420D8_Nop, 0xFDE269
-	.set	ScreenLeave_Code92, 0xFDE26A
+	.set	ScreenLeave_SoundEditFilterLpf24, 0xFDE26A
 	.set	T_F420E8_Nop, 0xFDE277
-	.set	ScreenLeave_Code93, 0xFDE278
+	.set	ScreenLeave_SoundEditFilterHpf24, 0xFDE278
 	.set	T_F420F8_Nop, 0xFDE285
-	.set	ScreenLeave_Code94, 0xFDE286
+	.set	ScreenLeave_SoundEditFilterBpf, 0xFDE286
 	.set	T_F42108_Nop, 0xFDE293
-	.set	ScreenLeave_Code95, 0xFDE294
+	.set	ScreenLeave_SoundEditFilterThrough, 0xFDE294
 	.set	T_F42118_Nop, 0xFDE2A1
-	.set	ScreenLeave_Code96, 0xFDE2A2
+	.set	ScreenLeave_SoundEditFilterKeyFollow, 0xFDE2A2
 	.set	T_F42128_Nop, 0xFDE2AF
-	.set	ScreenLeave_Code97, 0xFDE2B0
+	.set	ScreenLeave_SoundEditFilterEnvelope1, 0xFDE2B0
 	.set	T_F42138_Nop, 0xFDE2BD
-	.set	ScreenLeave_Code98, 0xFDE2BE
+	.set	ScreenLeave_SoundEditFilterEnvelope2, 0xFDE2BE
 	.set	T_F42148_Nop, 0xFDE2CB
-	.set	ScreenLeave_Code99, 0xFDE2CC
+	.set	ScreenLeave_SoundEditFilterLfo, 0xFDE2CC
 	.set	T_F42158_Nop, 0xFDE2D9
 	.set	T_F42364_Nop, 0xFDE2DA
 	.set	T_F4236C_Nop, 0xFDE2DB
 	.set	T_F42374_Nop, 0xFDE2DC
 	.set	T_F4237C_Nop, 0xFDE2DD
-	.set	ScreenLeave_Code9A, 0xFDE2EC
+	.set	ScreenLeave_SoundEditDigitalEffect, 0xFDE2EC
 	.set	T_F433DC_Nop, 0xFDE2F9
-	.set	ScreenLeave_Code9D, 0xFDE2FA
+	.set	ScreenLeave_SoundEditCopy, 0xFDE2FA
 	.set	T_F4235C_Nop, 0xFDE307
 	.set	ScreenLeave_CodeCA, 0xFDE308
 	.set	T_F4232C_Nop, 0xFDE315
@@ -1696,16 +1696,16 @@
 	.set	T_F41FF8_Nop, 0xFDE3AF
 	.set	ScreenLeave_CodeCE, 0xFDE3B0
 	.set	T_F433EC_Nop, 0xFDE3BD
-	.set	ScreenButton_Code90, 0xFDE3BE
-	.set	ScreenButton_Code91, 0xFDE41E
-	.set	ScreenButton_Code92, 0xFDE47E
-	.set	ScreenButton_Code93, 0xFDE4DE
-	.set	ScreenButton_Code94, 0xFDE53E
-	.set	ScreenButton_Code95, 0xFDE59E
-	.set	ScreenButton_Code96, 0xFDE5EF
-	.set	ScreenButton_Code97, 0xFDE64F
-	.set	ScreenButton_Code98, 0xFDE6AF
-	.set	ScreenButton_Code99, 0xFDE70F
+	.set	ScreenButton_SoundEditFilterLpf12, 0xFDE3BE
+	.set	ScreenButton_SoundEditFilterHpf12, 0xFDE41E
+	.set	ScreenButton_SoundEditFilterLpf24, 0xFDE47E
+	.set	ScreenButton_SoundEditFilterHpf24, 0xFDE4DE
+	.set	ScreenButton_SoundEditFilterBpf, 0xFDE53E
+	.set	ScreenButton_SoundEditFilterThrough, 0xFDE59E
+	.set	ScreenButton_SoundEditFilterKeyFollow, 0xFDE5EF
+	.set	ScreenButton_SoundEditFilterEnvelope1, 0xFDE64F
+	.set	ScreenButton_SoundEditFilterEnvelope2, 0xFDE6AF
+	.set	ScreenButton_SoundEditFilterLfo, 0xFDE70F
 	.set	sub_FE0000, 0xFE0000
 	.set	sub_FE02AB, 0xFE02AB
 	.set	sub_FE0391, 0xFE0391
@@ -17746,7 +17746,7 @@ sub_F09C63_Return:
 	ret	; F09CA8  ret
 
 ; --------------------------------------------------------------------------
-; ScreenCode80_RepaintField
+; SoundEditMenu_RepaintField
 ; Called from: table 0xF5B9F8[0]
 ; Touches: (0x2540)  |  0xFC517E 0xFC51B1 0xFC51D3 0xFC51F9 0xFC521B 0xFC524D
 ;          +4 more
@@ -17761,8 +17761,8 @@ sub_F09C63_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenCode80_RepaintField: DispatchTable_F5B9F8[code 0x80] -- Dispatch_Code80, the partial repaint.
-ScreenCode80_RepaintField:
+; SoundEditMenu_RepaintField: DispatchTable_F5B9F8[code 0x80] -- Dispatch_Code80, the partial repaint.
+SoundEditMenu_RepaintField:
 	cp	a, 0:i3	; F09CA9  cp A,0
 	jr	z, sub_F09C63_Skip3	; F09CAB  jr Z,0xf09ce6
 	cp	a, 1:i3	; F09CAD  cp A,1
@@ -18039,7 +18039,7 @@ Unclaimed_F09E85:
 
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code87
+; ScreenButton_SoundEditPitchTune
 ; Called from: T_F42004 (x0)
 ; Touches:   |  0xFCF383
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -18049,8 +18049,8 @@ Unclaimed_F09E85:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code87: the +8 BUTTON method of PanelScreen_VtableTable entry 0x87: that entry points at the thunk triple T_F41FFC (Enter) / T_F42000 (Leave) / T_F42004 (Button).
-ScreenButton_Code87:		; <- T_F42004
+; ScreenButton_SoundEditPitchTune: the +8 BUTTON method of PanelScreen_VtableTable entry 0x87: that entry points at the thunk triple T_F41FFC (Enter) / T_F42000 (Leave) / T_F42004 (Button).
+ScreenButton_SoundEditPitchTune:		; <- T_F42004
 	link XIZ,0xfffc	; F0A000  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A004  lda XBC,XIZ+0xfe
 	push	xbc	; F0A007  push XBC
@@ -18087,7 +18087,7 @@ sub_F0A000_Skip:
 	ret	; F0A050  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code88
+; ScreenButton_SoundEditPitchEnvelope1
 ; Called from: T_F42014 (x0)
 ; Touches:   |  0xFCF3CB
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
@@ -18097,8 +18097,8 @@ sub_F0A000_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code88: the +8 BUTTON method of PanelScreen_VtableTable entry 0x88: that entry points at the thunk triple T_F4200C (Enter) / T_F42010 (Leave) / T_F42014 (Button).
-ScreenButton_Code88:		; <- T_F42014
+; ScreenButton_SoundEditPitchEnvelope1: the +8 BUTTON method of PanelScreen_VtableTable entry 0x88: that entry points at the thunk triple T_F4200C (Enter) / T_F42010 (Leave) / T_F42014 (Button).
+ScreenButton_SoundEditPitchEnvelope1:		; <- T_F42014
 	link XIZ,0xfffc	; F0A051  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A055  lda XBC,XIZ+0xfe
 	push	xbc	; F0A058  push XBC
@@ -18139,7 +18139,7 @@ sub_F0A051_Skip:
 	ret	; F0A0B0  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code89
+; ScreenButton_SoundEditPitchEnvelope2
 ; Called from: T_F42024 (x0)
 ; Touches:   |  0xFCF413
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
@@ -18149,8 +18149,8 @@ sub_F0A051_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code89: the +8 BUTTON method of PanelScreen_VtableTable entry 0x89: that entry points at the thunk triple T_F4201C (Enter) / T_F42020 (Leave) / T_F42024 (Button).
-ScreenButton_Code89:		; <- T_F42024
+; ScreenButton_SoundEditPitchEnvelope2: the +8 BUTTON method of PanelScreen_VtableTable entry 0x89: that entry points at the thunk triple T_F4201C (Enter) / T_F42020 (Leave) / T_F42024 (Button).
+ScreenButton_SoundEditPitchEnvelope2:		; <- T_F42024
 	link XIZ,0xfffc	; F0A0B1  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A0B5  lda XBC,XIZ+0xfe
 	push	xbc	; F0A0B8  push XBC
@@ -18191,7 +18191,7 @@ sub_F0A0B1_Skip:
 	ret	; F0A110  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code8A
+; ScreenButton_SoundEditPitchLfo
 ; Called from: T_F42034 (x0)
 ; Touches:   |  0xFCF45B
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -18201,8 +18201,8 @@ sub_F0A0B1_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code8A: the +8 BUTTON method of PanelScreen_VtableTable entry 0x8A: that entry points at the thunk triple T_F4202C (Enter) / T_F42030 (Leave) / T_F42034 (Button).
-ScreenButton_Code8A:		; <- T_F42034
+; ScreenButton_SoundEditPitchLfo: the +8 BUTTON method of PanelScreen_VtableTable entry 0x8A: that entry points at the thunk triple T_F4202C (Enter) / T_F42030 (Leave) / T_F42034 (Button).
+ScreenButton_SoundEditPitchLfo:		; <- T_F42034
 	link XIZ,0xfffc	; F0A111  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A115  lda XBC,XIZ+0xfe
 	push	xbc	; F0A118  push XBC
@@ -18239,7 +18239,7 @@ sub_F0A111_Skip:
 	ret	; F0A161  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode87
+; SoftKeyCol2_SoundEditPitchTune
 ; Called from: table 0xFCF21B[91]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6B4D 0xFD6C7B 0xFD7C2D 0xFD7435 0xFD7C01
@@ -18249,10 +18249,10 @@ sub_F0A111_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode87: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 1 (PanelOpTable_FCF383).
+; SoftKeyCol2_SoundEditPitchTune: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 1 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode87:
+SoftKeyCol2_SoundEditPitchTune:
 	link XIZ,0xfff2	; F0A162  link XIZ,0xfff2
 	pushw	hl	; F0A166  push HL
 	pushw	de	; F0A167  push DE
@@ -18300,7 +18300,7 @@ SoftKeyCol2_ScreenCode87:
 	ret	; F0A1D0  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode87
+; SoftKeyCol3_SoundEditPitchTune
 ; Called from: table 0xFCF21B[92]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6B4D 0xFD6C7B 0xFD7C2D 0xFD7435 0xFD7C01
@@ -18310,10 +18310,10 @@ SoftKeyCol2_ScreenCode87:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode87: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 2 (PanelOpTable_FCF383).
+; SoftKeyCol3_SoundEditPitchTune: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 2 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode87:
+SoftKeyCol3_SoundEditPitchTune:
 	link XIZ,0xfff2	; F0A1D1  link XIZ,0xfff2
 	pushw	hl	; F0A1D5  push HL
 	pushw	de	; F0A1D6  push DE
@@ -18361,7 +18361,7 @@ SoftKeyCol3_ScreenCode87:
 	ret	; F0A23F  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode87
+; SoftKeyCol4_SoundEditPitchTune
 ; Called from: table 0xFCF21B[93]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6B4D 0xFD6C7B 0xFD7C2D 0xFD7435 0xFD7C01
@@ -18371,10 +18371,10 @@ SoftKeyCol3_ScreenCode87:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode87: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 3 (PanelOpTable_FCF383).
+; SoftKeyCol4_SoundEditPitchTune: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 3 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode87:
+SoftKeyCol4_SoundEditPitchTune:
 	link XIZ,0xfff2	; F0A240  link XIZ,0xfff2
 	pushw	hl	; F0A244  push HL
 	pushw	de	; F0A245  push DE
@@ -18420,7 +18420,7 @@ SoftKeyCol4_ScreenCode87:
 	ret	; F0A2AA  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode87
+; SoftKeyCol6_SoundEditPitchTune
 ; Called from: table 0xFCF21B[95]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7C2D 0xFD6CE1 0xFD6C65 0xFDA777 0xFD616A T_Dispatch_Code80
@@ -18431,10 +18431,10 @@ SoftKeyCol4_ScreenCode87:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode87: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 5 (PanelOpTable_FCF383).
+; SoftKeyCol6_SoundEditPitchTune: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode87 -- ScreenCode87 op 5 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode87:
+SoftKeyCol6_SoundEditPitchTune:
 	link XIZ,0xffec	; F0A2AB  link XIZ,0xffec
 	push	xix	; F0A2AF  push XIX
 	lda	xix, (xiz-16)	; F0A2B0  lda XIX,XIZ+0xf0
@@ -18527,7 +18527,7 @@ sub_F0A2AB_Join:
 	ret	; F0A3A0  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode87
+; LcdKeyRow1_SoundEditPitchTune
 ; Called from: table 0xFCF21B[98]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD6E90
@@ -18537,10 +18537,10 @@ sub_F0A2AB_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode87: LCD key row 1 (left or right) on ScreenCode87 -- ScreenCode87 op 8 (PanelOpTable_FCF383).
+; LcdKeyRow1_SoundEditPitchTune: LCD key row 1 (left or right) on ScreenCode87 -- ScreenCode87 op 8 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode87:
+LcdKeyRow1_SoundEditPitchTune:
 	link XIZ,0x0000	; F0A3A1  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3A5  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A3A1_Skip	; F0A3A9  jr NZ,0xf0a3b8
@@ -18556,7 +18556,7 @@ sub_F0A3A1_Join:
 	ret	; F0A3BE  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode87
+; LcdKeyRow2_SoundEditPitchTune
 ; Called from: table 0xFCF21B[99]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD9863
@@ -18566,10 +18566,10 @@ sub_F0A3A1_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode87: LCD key row 2 (left or right) on ScreenCode87 -- ScreenCode87 op 9 (PanelOpTable_FCF383).
+; LcdKeyRow2_SoundEditPitchTune: LCD key row 2 (left or right) on ScreenCode87 -- ScreenCode87 op 9 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode87:
+LcdKeyRow2_SoundEditPitchTune:
 	link XIZ,0x0000	; F0A3BF  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3C3  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A3BF_Skip	; F0A3C7  jr Z,0xf0a3d8
@@ -18583,7 +18583,7 @@ sub_F0A3BF_Skip:
 	ret	; F0A3DA  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode87
+; LcdKeyRow3_SoundEditPitchTune
 ; Called from: table 0xFCF21B[100]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD9863
@@ -18593,10 +18593,10 @@ sub_F0A3BF_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode87: LCD key row 3 (left or right) on ScreenCode87 -- ScreenCode87 op 10 (PanelOpTable_FCF383).
+; LcdKeyRow3_SoundEditPitchTune: LCD key row 3 (left or right) on ScreenCode87 -- ScreenCode87 op 10 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode87:
+LcdKeyRow3_SoundEditPitchTune:
 	link XIZ,0x0000	; F0A3DB  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A3DF  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A3DB_Skip	; F0A3E3  jr NZ,0xf0a3f2
@@ -18616,7 +18616,7 @@ sub_F0A3DB_Join:
 	ret	; F0A403  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode87
+; LcdKeyRow4_SoundEditPitchTune
 ; Called from: table 0xFCF21B[101]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 T_Dispatch_Code80 0xFD9863
@@ -18626,10 +18626,10 @@ sub_F0A3DB_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode87: LCD key row 4 (left or right) on ScreenCode87 -- ScreenCode87 op 11 (PanelOpTable_FCF383).
+; LcdKeyRow4_SoundEditPitchTune: LCD key row 4 (left or right) on ScreenCode87 -- ScreenCode87 op 11 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode87:
+LcdKeyRow4_SoundEditPitchTune:
 	link XIZ,0xfffe	; F0A404  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A408  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A404_Skip	; F0A40C  jr NZ,0xf0a43f
@@ -18662,7 +18662,7 @@ sub_F0A404_Join:
 	ret	; F0A450  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode87
+; LcdKeyRow5_SoundEditPitchTune
 ; Called from: table 0xFCF21B[102]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 T_Dispatch_Code80 0xFD9863
@@ -18672,10 +18672,10 @@ sub_F0A404_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode87: LCD key row 5 (left or right) on ScreenCode87 -- ScreenCode87 op 12 (PanelOpTable_FCF383).
+; LcdKeyRow5_SoundEditPitchTune: LCD key row 5 (left or right) on ScreenCode87 -- ScreenCode87 op 12 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode87:
+LcdKeyRow5_SoundEditPitchTune:
 	link XIZ,0xfffe	; F0A451  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A455  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A451_Skip	; F0A459  jr NZ,0xf0a48c
@@ -18708,7 +18708,7 @@ sub_F0A451_Join:
 	ret	; F0A49D  ret
 
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode87
+; ExitKey_SoundEditPitchTune
 ; Called from: table 0xFCF21B[105]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -18718,10 +18718,10 @@ sub_F0A451_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode87: the EXIT key on ScreenCode87 -- ScreenCode87 op 15 (PanelOpTable_FCF383).
+; ExitKey_SoundEditPitchTune: the EXIT key on ScreenCode87 -- ScreenCode87 op 15 (PanelOpTable_FCF383).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode87:
+ExitKey_SoundEditPitchTune:
 	link XIZ,0x0000	; F0A49E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A4A2  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A49E_Skip	; F0A4A6  jr NZ,0xf0a4bb
@@ -18736,7 +18736,7 @@ sub_F0A49E_Skip:
 	ret	; F0A4BD  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_ScreenCode88
+; SoftKeyCol1_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[108]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8155
@@ -18746,10 +18746,10 @@ sub_F0A49E_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_ScreenCode88: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 0 (PanelOpTable_FCF3CB).
+; SoftKeyCol1_SoundEditPitchEnvelope1: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 0 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode88:
+SoftKeyCol1_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A4BE  link XIZ,0x0000
 	pushw	0	; F0A4C2  push 0x0000
 	pushw	9	; F0A4C5  push 0x0009
@@ -18762,7 +18762,7 @@ SoftKeyCol1_ScreenCode88:
 	ret	; F0A4D6  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode88
+; SoftKeyCol2_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[109]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD81C8
@@ -18772,10 +18772,10 @@ SoftKeyCol1_ScreenCode88:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode88: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 1 (PanelOpTable_FCF3CB).
+; SoftKeyCol2_SoundEditPitchEnvelope1: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 1 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode88:
+SoftKeyCol2_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A4D7  link XIZ,0x0000
 	pushw	0	; F0A4DB  push 0x0000
 	pushw	10	; F0A4DE  push 0x000a
@@ -18788,7 +18788,7 @@ SoftKeyCol2_ScreenCode88:
 	ret	; F0A4EF  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode88
+; SoftKeyCol3_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[110]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD823B
@@ -18798,10 +18798,10 @@ SoftKeyCol2_ScreenCode88:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode88: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 2 (PanelOpTable_FCF3CB).
+; SoftKeyCol3_SoundEditPitchEnvelope1: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 2 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode88:
+SoftKeyCol3_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A4F0  link XIZ,0x0000
 	pushw	11	; F0A4F4  push 0x000b
 	pushw	8	; F0A4F7  push 0x0008
@@ -18814,7 +18814,7 @@ SoftKeyCol3_ScreenCode88:
 	ret	; F0A508  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode88
+; SoftKeyCol4_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[111]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD82D8
@@ -18824,10 +18824,10 @@ SoftKeyCol3_ScreenCode88:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode88: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 3 (PanelOpTable_FCF3CB).
+; SoftKeyCol4_SoundEditPitchEnvelope1: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 3 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode88:
+SoftKeyCol4_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A509  link XIZ,0x0000
 	pushw	0	; F0A50D  push 0x0000
 	pushw	12	; F0A510  push 0x000c
@@ -18840,7 +18840,7 @@ SoftKeyCol4_ScreenCode88:
 	ret	; F0A521  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode88
+; SoftKeyCol5_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[112]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD834B
@@ -18850,10 +18850,10 @@ SoftKeyCol4_ScreenCode88:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode88: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 4 (PanelOpTable_FCF3CB).
+; SoftKeyCol5_SoundEditPitchEnvelope1: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 4 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode88:
+SoftKeyCol5_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A522  link XIZ,0x0000
 	pushw	13	; F0A526  push 0x000d
 	pushw	16	; F0A529  push 0x0010
@@ -18866,7 +18866,7 @@ SoftKeyCol5_ScreenCode88:
 	ret	; F0A53A  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode88
+; SoftKeyCol6_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[113]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD83E8
@@ -18876,10 +18876,10 @@ SoftKeyCol5_ScreenCode88:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode88: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 5 (PanelOpTable_FCF3CB).
+; SoftKeyCol6_SoundEditPitchEnvelope1: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 5 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode88:
+SoftKeyCol6_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A53B  link XIZ,0x0000
 	pushw	0	; F0A53F  push 0x0000
 	pushw	14	; F0A542  push 0x000e
@@ -18892,7 +18892,7 @@ SoftKeyCol6_ScreenCode88:
 	ret	; F0A553  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode88
+; SoftKeyCol7_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[114]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD845B
@@ -18902,10 +18902,10 @@ SoftKeyCol6_ScreenCode88:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode88: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 6 (PanelOpTable_FCF3CB).
+; SoftKeyCol7_SoundEditPitchEnvelope1: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode88 -- ScreenCode88 op 6 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode88:
+SoftKeyCol7_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A554  link XIZ,0x0000
 	pushw	15	; F0A558  push 0x000f
 	pushw	7	; F0A55B  push 0x0007
@@ -18918,7 +18918,7 @@ SoftKeyCol7_ScreenCode88:
 	ret	; F0A56C  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode88
+; LcdKeyRow1_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[116]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6E90
@@ -18928,10 +18928,10 @@ SoftKeyCol7_ScreenCode88:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode88: LCD key row 1 (left or right) on ScreenCode88 -- ScreenCode88 op 8 (PanelOpTable_FCF3CB).
+; LcdKeyRow1_SoundEditPitchEnvelope1: LCD key row 1 (left or right) on ScreenCode88 -- ScreenCode88 op 8 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode88:
+LcdKeyRow1_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A56D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A571  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A56D_Skip	; F0A575  jr Z,0xf0a57b
@@ -18941,7 +18941,7 @@ sub_F0A56D_Skip:
 	ret	; F0A57D  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode88
+; LcdKeyRow2_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[117]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -18951,10 +18951,10 @@ sub_F0A56D_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode88: LCD key row 2 (left or right) on ScreenCode88 -- ScreenCode88 op 9 (PanelOpTable_FCF3CB).
+; LcdKeyRow2_SoundEditPitchEnvelope1: LCD key row 2 (left or right) on ScreenCode88 -- ScreenCode88 op 9 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode88:
+LcdKeyRow2_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A57E  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A582  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A57E_Skip	; F0A586  jr NZ,0xf0a590
@@ -18977,7 +18977,7 @@ sub_F0A57E_Skip2:
 	ret	; F0A5A9  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode88
+; LcdKeyRow3_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[118]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -18987,10 +18987,10 @@ sub_F0A57E_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode88: LCD key row 3 (left or right) on ScreenCode88 -- ScreenCode88 op 10 (PanelOpTable_FCF3CB).
+; LcdKeyRow3_SoundEditPitchEnvelope1: LCD key row 3 (left or right) on ScreenCode88 -- ScreenCode88 op 10 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode88:
+LcdKeyRow3_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A5AA  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A5AE  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A5AA_Skip	; F0A5B2  jr NZ,0xf0a5bc
@@ -19013,7 +19013,7 @@ sub_F0A5AA_Skip2:
 	ret	; F0A5D5  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode88
+; LcdKeyRow4_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[119]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8116 0xFD74AE 0xFD608B
@@ -19023,10 +19023,10 @@ sub_F0A5AA_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode88: LCD key row 4 (left or right) on ScreenCode88 -- ScreenCode88 op 11 (PanelOpTable_FCF3CB).
+; LcdKeyRow4_SoundEditPitchEnvelope1: LCD key row 4 (left or right) on ScreenCode88 -- ScreenCode88 op 11 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode88:
+LcdKeyRow4_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A5D6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A5DA  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A5D6_Skip	; F0A5DE  jr NZ,0xf0a5ea
@@ -19049,7 +19049,7 @@ sub_F0A5D6_Join:
 	ret	; F0A603  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode88
+; LcdKeyRow5_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[120]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8116 0xFD74AE 0xFD608B
@@ -19059,10 +19059,10 @@ sub_F0A5D6_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode88: LCD key row 5 (left or right) on ScreenCode88 -- ScreenCode88 op 12 (PanelOpTable_FCF3CB).
+; LcdKeyRow5_SoundEditPitchEnvelope1: LCD key row 5 (left or right) on ScreenCode88 -- ScreenCode88 op 12 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode88:
+LcdKeyRow5_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A604  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A608  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A604_Skip	; F0A60C  jr NZ,0xf0a618
@@ -19085,7 +19085,7 @@ sub_F0A604_Join:
 	ret	; F0A631  ret
 
 ; --------------------------------------------------------------------------
-; PageKey_ScreenCode88
+; PageKey_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[124]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -19095,10 +19095,10 @@ sub_F0A604_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; PageKey_ScreenCode88: the PAGE pair (code 0x10) on ScreenCode88 -- ScreenCode88 op 16 (PanelOpTable_FCF3CB).
+; PageKey_SoundEditPitchEnvelope1: the PAGE pair (code 0x10) on ScreenCode88 -- ScreenCode88 op 16 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode88:
+PageKey_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A632  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A636  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A632_Skip	; F0A63A  jr NZ,0xf0a647
@@ -19111,7 +19111,7 @@ sub_F0A632_Skip:
 	ret	; F0A649  ret
 
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode88
+; ExitKey_SoundEditPitchEnvelope1
 ; Called from: table 0xFCF21B[123]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -19121,10 +19121,10 @@ sub_F0A632_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode88: the EXIT key on ScreenCode88 -- ScreenCode88 op 15 (PanelOpTable_FCF3CB).
+; ExitKey_SoundEditPitchEnvelope1: the EXIT key on ScreenCode88 -- ScreenCode88 op 15 (PanelOpTable_FCF3CB).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode88:
+ExitKey_SoundEditPitchEnvelope1:
 	link XIZ,0x0000	; F0A64A  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A64E  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A64A_Skip	; F0A652  jr NZ,0xf0a667
@@ -19139,7 +19139,7 @@ sub_F0A64A_Skip:
 	ret	; F0A669  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode89
+; SoftKeyCol2_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[127]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD84F8
@@ -19149,10 +19149,10 @@ sub_F0A64A_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode89: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 1 (PanelOpTable_FCF413).
+; SoftKeyCol2_SoundEditPitchEnvelope2: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 1 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode89:
+SoftKeyCol2_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A66A  link XIZ,0x0000
 	pushw	20	; F0A66E  push 0x0014
 	ld	bc, (xiz+8)	; F0A671  ld BC,(XIZ+0x08)
@@ -19164,7 +19164,7 @@ SoftKeyCol2_ScreenCode89:
 	ret	; F0A67E  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode89
+; SoftKeyCol3_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[128]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD859B
@@ -19174,10 +19174,10 @@ SoftKeyCol2_ScreenCode89:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode89: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 2 (PanelOpTable_FCF413).
+; SoftKeyCol3_SoundEditPitchEnvelope2: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 2 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode89:
+SoftKeyCol3_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A67F  link XIZ,0x0000
 	pushw	21	; F0A683  push 0x0015
 	ld	bc, (xiz+8)	; F0A686  ld BC,(XIZ+0x08)
@@ -19189,7 +19189,7 @@ SoftKeyCol3_ScreenCode89:
 	ret	; F0A693  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode89
+; SoftKeyCol4_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[129]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD863E
@@ -19199,10 +19199,10 @@ SoftKeyCol3_ScreenCode89:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode89: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 3 (PanelOpTable_FCF413).
+; SoftKeyCol4_SoundEditPitchEnvelope2: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 3 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode89:
+SoftKeyCol4_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A694  link XIZ,0x0000
 	pushw	22	; F0A698  push 0x0016
 	ld	bc, (xiz+8)	; F0A69B  ld BC,(XIZ+0x08)
@@ -19214,7 +19214,7 @@ SoftKeyCol4_ScreenCode89:
 	ret	; F0A6A8  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode89
+; SoftKeyCol5_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[130]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD86E1
@@ -19224,10 +19224,10 @@ SoftKeyCol4_ScreenCode89:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode89: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 4 (PanelOpTable_FCF413).
+; SoftKeyCol5_SoundEditPitchEnvelope2: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 4 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode89:
+SoftKeyCol5_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A6A9  link XIZ,0x0000
 	pushw	19	; F0A6AD  push 0x0013
 	ld	bc, (xiz+8)	; F0A6B0  ld BC,(XIZ+0x08)
@@ -19239,7 +19239,7 @@ SoftKeyCol5_ScreenCode89:
 	ret	; F0A6BD  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode89
+; SoftKeyCol7_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[132]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8747
@@ -19249,10 +19249,10 @@ SoftKeyCol5_ScreenCode89:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode89: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 6 (PanelOpTable_FCF413).
+; SoftKeyCol7_SoundEditPitchEnvelope2: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 6 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode89:
+SoftKeyCol7_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A6BE  link XIZ,0x0000
 	pushw	17	; F0A6C2  push 0x0011
 	ld	bc, (xiz+8)	; F0A6C5  ld BC,(XIZ+0x08)
@@ -19264,7 +19264,7 @@ SoftKeyCol7_ScreenCode89:
 	ret	; F0A6D2  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol8_ScreenCode89
+; SoftKeyCol8_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[133]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD87A5
@@ -19274,10 +19274,10 @@ SoftKeyCol7_ScreenCode89:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol8_ScreenCode89: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 7 (PanelOpTable_FCF413).
+; SoftKeyCol8_SoundEditPitchEnvelope2: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode89 -- ScreenCode89 op 7 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode89:
+SoftKeyCol8_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A6D3  link XIZ,0x0000
 	pushw	18	; F0A6D7  push 0x0012
 	ld	bc, (xiz+8)	; F0A6DA  ld BC,(XIZ+0x08)
@@ -19289,7 +19289,7 @@ SoftKeyCol8_ScreenCode89:
 	ret	; F0A6E7  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode89
+; LcdKeyRow1_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[134]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6E90
@@ -19299,10 +19299,10 @@ SoftKeyCol8_ScreenCode89:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode89: LCD key row 1 (left or right) on ScreenCode89 -- ScreenCode89 op 8 (PanelOpTable_FCF413).
+; LcdKeyRow1_SoundEditPitchEnvelope2: LCD key row 1 (left or right) on ScreenCode89 -- ScreenCode89 op 8 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode89:
+LcdKeyRow1_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A6E8  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A6EC  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A6E8_Skip	; F0A6F0  jr Z,0xf0a6f6
@@ -19312,7 +19312,7 @@ sub_F0A6E8_Skip:
 	ret	; F0A6F8  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode89
+; LcdKeyRow2_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[135]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19322,10 +19322,10 @@ sub_F0A6E8_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode89: LCD key row 2 (left or right) on ScreenCode89 -- ScreenCode89 op 9 (PanelOpTable_FCF413).
+; LcdKeyRow2_SoundEditPitchEnvelope2: LCD key row 2 (left or right) on ScreenCode89 -- ScreenCode89 op 9 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode89:
+LcdKeyRow2_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A6F9  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A6FD  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A6F9_Skip	; F0A701  jr NZ,0xf0a70b
@@ -19348,7 +19348,7 @@ sub_F0A6F9_Skip2:
 	ret	; F0A724  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode89
+; LcdKeyRow3_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[136]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19358,10 +19358,10 @@ sub_F0A6F9_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode89: LCD key row 3 (left or right) on ScreenCode89 -- ScreenCode89 op 10 (PanelOpTable_FCF413).
+; LcdKeyRow3_SoundEditPitchEnvelope2: LCD key row 3 (left or right) on ScreenCode89 -- ScreenCode89 op 10 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode89:
+LcdKeyRow3_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A725  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A729  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A725_Skip	; F0A72D  jr NZ,0xf0a737
@@ -19384,7 +19384,7 @@ sub_F0A725_Skip2:
 	ret	; F0A750  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode89
+; LcdKeyRow4_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[137]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19394,10 +19394,10 @@ sub_F0A725_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode89: LCD key row 4 (left or right) on ScreenCode89 -- ScreenCode89 op 11 (PanelOpTable_FCF413).
+; LcdKeyRow4_SoundEditPitchEnvelope2: LCD key row 4 (left or right) on ScreenCode89 -- ScreenCode89 op 11 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode89:
+LcdKeyRow4_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A751  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A755  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A751_Skip	; F0A759  jr Z,0xf0a772
@@ -19415,7 +19415,7 @@ sub_F0A751_Skip:
 	ret	; F0A774  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode89
+; LcdKeyRow5_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[138]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74AE 0xFD608B
@@ -19425,10 +19425,10 @@ sub_F0A751_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode89: LCD key row 5 (left or right) on ScreenCode89 -- ScreenCode89 op 12 (PanelOpTable_FCF413).
+; LcdKeyRow5_SoundEditPitchEnvelope2: LCD key row 5 (left or right) on ScreenCode89 -- ScreenCode89 op 12 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode89:
+LcdKeyRow5_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A775  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A779  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A775_Skip	; F0A77D  jr Z,0xf0a796
@@ -19446,7 +19446,7 @@ sub_F0A775_Skip:
 	ret	; F0A798  ret
 
 ; --------------------------------------------------------------------------
-; PageKey_ScreenCode89
+; PageKey_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[142]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -19456,10 +19456,10 @@ sub_F0A775_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; PageKey_ScreenCode89: the PAGE pair (code 0x10) on ScreenCode89 -- ScreenCode89 op 16 (PanelOpTable_FCF413).
+; PageKey_SoundEditPitchEnvelope2: the PAGE pair (code 0x10) on ScreenCode89 -- ScreenCode89 op 16 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-PageKey_ScreenCode89:
+PageKey_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A799  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A79D  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A799_Skip	; F0A7A1  jr Z,0xf0a7ae
@@ -19472,7 +19472,7 @@ sub_F0A799_Skip:
 	ret	; F0A7B0  ret
 
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode89
+; ExitKey_SoundEditPitchEnvelope2
 ; Called from: table 0xFCF21B[141]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -19482,10 +19482,10 @@ sub_F0A799_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode89: the EXIT key on ScreenCode89 -- ScreenCode89 op 15 (PanelOpTable_FCF413).
+; ExitKey_SoundEditPitchEnvelope2: the EXIT key on ScreenCode89 -- ScreenCode89 op 15 (PanelOpTable_FCF413).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode89:
+ExitKey_SoundEditPitchEnvelope2:
 	link XIZ,0x0000	; F0A7B1  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A7B5  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A7B1_Skip	; F0A7B9  jr NZ,0xf0a7ce
@@ -19500,7 +19500,7 @@ sub_F0A7B1_Skip:
 	ret	; F0A7D0  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode8A
+; SoftKeyCol2_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[145]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7E1A
@@ -19510,10 +19510,10 @@ sub_F0A7B1_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode8A: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 1 (PanelOpTable_FCF45B).
+; SoftKeyCol2_SoundEditPitchLfo: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 1 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode8A:
+SoftKeyCol2_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A7D1  link XIZ,0x0000
 	pushw	1	; F0A7D5  push 0x0001
 	ld	bc, (xiz+8)	; F0A7D8  ld BC,(XIZ+0x08)
@@ -19525,7 +19525,7 @@ SoftKeyCol2_ScreenCode8A:
 	ret	; F0A7E5  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode8A
+; SoftKeyCol3_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[146]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7E66
@@ -19535,10 +19535,10 @@ SoftKeyCol2_ScreenCode8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode8A: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 2 (PanelOpTable_FCF45B).
+; SoftKeyCol3_SoundEditPitchLfo: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 2 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode8A:
+SoftKeyCol3_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A7E6  link XIZ,0x0000
 	pushw	1	; F0A7EA  push 0x0001
 	ld	bc, (xiz+8)	; F0A7ED  ld BC,(XIZ+0x08)
@@ -19550,7 +19550,7 @@ SoftKeyCol3_ScreenCode8A:
 	ret	; F0A7FA  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode8A
+; SoftKeyCol4_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[147]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7ED9
@@ -19560,10 +19560,10 @@ SoftKeyCol3_ScreenCode8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode8A: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 3 (PanelOpTable_FCF45B).
+; SoftKeyCol4_SoundEditPitchLfo: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 3 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode8A:
+SoftKeyCol4_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A7FB  link XIZ,0x0000
 	pushw	1	; F0A7FF  push 0x0001
 	ld	bc, (xiz+8)	; F0A802  ld BC,(XIZ+0x08)
@@ -19575,7 +19575,7 @@ SoftKeyCol4_ScreenCode8A:
 	ret	; F0A80F  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode8A
+; SoftKeyCol5_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[148]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7F4C
@@ -19585,10 +19585,10 @@ SoftKeyCol4_ScreenCode8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode8A: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 4 (PanelOpTable_FCF45B).
+; SoftKeyCol5_SoundEditPitchLfo: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 4 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode8A:
+SoftKeyCol5_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A810  link XIZ,0x0000
 	pushw	1	; F0A814  push 0x0001
 	ld	bc, (xiz+8)	; F0A817  ld BC,(XIZ+0x08)
@@ -19600,7 +19600,7 @@ SoftKeyCol5_ScreenCode8A:
 	ret	; F0A824  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode8A
+; SoftKeyCol6_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[149]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7FBF
@@ -19610,10 +19610,10 @@ SoftKeyCol5_ScreenCode8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode8A: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 5 (PanelOpTable_FCF45B).
+; SoftKeyCol6_SoundEditPitchLfo: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 5 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode8A:
+SoftKeyCol6_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A825  link XIZ,0x0000
 	pushw	1	; F0A829  push 0x0001
 	ld	bc, (xiz+8)	; F0A82C  ld BC,(XIZ+0x08)
@@ -19625,7 +19625,7 @@ SoftKeyCol6_ScreenCode8A:
 	ret	; F0A839  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode8A
+; SoftKeyCol7_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[150]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD8030
@@ -19635,10 +19635,10 @@ SoftKeyCol6_ScreenCode8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode8A: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 6 (PanelOpTable_FCF45B).
+; SoftKeyCol7_SoundEditPitchLfo: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 6 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode8A:
+SoftKeyCol7_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A83A  link XIZ,0x0000
 	pushw	1	; F0A83E  push 0x0001
 	ld	bc, (xiz+8)	; F0A841  ld BC,(XIZ+0x08)
@@ -19650,7 +19650,7 @@ SoftKeyCol7_ScreenCode8A:
 	ret	; F0A84E  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol8_ScreenCode8A
+; SoftKeyCol8_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[151]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD80A3
@@ -19660,10 +19660,10 @@ SoftKeyCol7_ScreenCode8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol8_ScreenCode8A: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 7 (PanelOpTable_FCF45B).
+; SoftKeyCol8_SoundEditPitchLfo: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8A -- ScreenCode8A op 7 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode8A:
+SoftKeyCol8_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A84F  link XIZ,0x0000
 	pushw	1	; F0A853  push 0x0001
 	ld	bc, (xiz+8)	; F0A856  ld BC,(XIZ+0x08)
@@ -19675,7 +19675,7 @@ SoftKeyCol8_ScreenCode8A:
 	ret	; F0A863  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode8A
+; LcdKeyRow1_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[152]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD6E90
@@ -19685,10 +19685,10 @@ SoftKeyCol8_ScreenCode8A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode8A: LCD key row 1 (left or right) on ScreenCode8A -- ScreenCode8A op 8 (PanelOpTable_FCF45B).
+; LcdKeyRow1_SoundEditPitchLfo: LCD key row 1 (left or right) on ScreenCode8A -- ScreenCode8A op 8 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode8A:
+LcdKeyRow1_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A864  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A868  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A864_Skip	; F0A86C  jr NZ,0xf0a87b
@@ -19704,7 +19704,7 @@ sub_F0A864_Join:
 	ret	; F0A881  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode8A
+; LcdKeyRow2_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[153]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B 0xFD74E0
@@ -19714,10 +19714,10 @@ sub_F0A864_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode8A: LCD key row 2 (left or right) on ScreenCode8A -- ScreenCode8A op 9 (PanelOpTable_FCF45B).
+; LcdKeyRow2_SoundEditPitchLfo: LCD key row 2 (left or right) on ScreenCode8A -- ScreenCode8A op 9 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode8A:
+LcdKeyRow2_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A882  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A886  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A882_Skip	; F0A88A  jr NZ,0xf0a898
@@ -19735,7 +19735,7 @@ sub_F0A882_Join:
 	ret	; F0A8A5  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode8A
+; LcdKeyRow3_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[154]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74E0
@@ -19745,10 +19745,10 @@ sub_F0A882_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode8A: LCD key row 3 (left or right) on ScreenCode8A -- ScreenCode8A op 10 (PanelOpTable_FCF45B).
+; LcdKeyRow3_SoundEditPitchLfo: LCD key row 3 (left or right) on ScreenCode8A -- ScreenCode8A op 10 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode8A:
+LcdKeyRow3_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A8A6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8AA  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A8A6_Skip	; F0A8AE  jr Z,0xf0a8bb
@@ -19761,7 +19761,7 @@ sub_F0A8A6_Skip:
 	ret	; F0A8BD  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode8A
+; LcdKeyRow4_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[155]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74E0
@@ -19771,10 +19771,10 @@ sub_F0A8A6_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode8A: LCD key row 4 (left or right) on ScreenCode8A -- ScreenCode8A op 11 (PanelOpTable_FCF45B).
+; LcdKeyRow4_SoundEditPitchLfo: LCD key row 4 (left or right) on ScreenCode8A -- ScreenCode8A op 11 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode8A:
+LcdKeyRow4_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A8BE  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8C2  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A8BE_Skip	; F0A8C6  jr Z,0xf0a8d3
@@ -19787,7 +19787,7 @@ sub_F0A8BE_Skip:
 	ret	; F0A8D5  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode8A
+; LcdKeyRow5_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[156]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD74E0
@@ -19797,10 +19797,10 @@ sub_F0A8BE_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode8A: LCD key row 5 (left or right) on ScreenCode8A -- ScreenCode8A op 12 (PanelOpTable_FCF45B).
+; LcdKeyRow5_SoundEditPitchLfo: LCD key row 5 (left or right) on ScreenCode8A -- ScreenCode8A op 12 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode8A:
+LcdKeyRow5_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A8D6  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8DA  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A8D6_Skip	; F0A8DE  jr Z,0xf0a8eb
@@ -19813,7 +19813,7 @@ sub_F0A8D6_Skip:
 	ret	; F0A8ED  ret
 
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode8A
+; ExitKey_SoundEditPitchLfo
 ; Called from: table 0xFCF21B[159]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD69E0 0xFD608B
@@ -19823,10 +19823,10 @@ sub_F0A8D6_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode8A: the EXIT key on ScreenCode8A -- ScreenCode8A op 15 (PanelOpTable_FCF45B).
+; ExitKey_SoundEditPitchLfo: the EXIT key on ScreenCode8A -- ScreenCode8A op 15 (PanelOpTable_FCF45B).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode8A:
+ExitKey_SoundEditPitchLfo:
 	link XIZ,0x0000	; F0A8EE  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A8F2  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A8EE_Skip	; F0A8F6  jr NZ,0xf0a90b
@@ -19841,7 +19841,7 @@ sub_F0A8EE_Skip:
 	ret	; F0A90D  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9D
+; ScreenButton_SoundEditCopy
 ; Called from: T_F42358 (x0)
 ; Touches:   |  0xFCFC44
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19851,8 +19851,8 @@ sub_F0A8EE_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9D: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9D: that entry points at the thunk triple T_F42350 (Enter) / T_F42354 (Leave) / T_F42358 (Button).
-ScreenButton_Code9D:		; <- T_F42358
+; ScreenButton_SoundEditCopy: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9D: that entry points at the thunk triple T_F42350 (Enter) / T_F42354 (Leave) / T_F42358 (Button).
+ScreenButton_SoundEditCopy:		; <- T_F42358
 	link XIZ,0xfffc	; F0A90E  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A912  lda XBC,XIZ+0xfe
 	push	xbc	; F0A915  push XBC
@@ -19889,7 +19889,7 @@ sub_F0A90E_Skip:
 	ret	; F0A95E  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9E
+; ScreenButton_SoundEditMemoryWrite
 ; Called from: T_F42368 (x0)
 ; Touches:   |  0xFCFB6C
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
@@ -19899,8 +19899,8 @@ sub_F0A90E_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9E: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9E: that entry points at the thunk triple T_F42360 (Enter) / T_F42364_Nop (Leave) / T_F42368 (Button).
-ScreenButton_Code9E:		; <- T_F42368
+; ScreenButton_SoundEditMemoryWrite: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9E: that entry points at the thunk triple T_F42360 (Enter) / T_F42364_Nop (Leave) / T_F42368 (Button).
+ScreenButton_SoundEditMemoryWrite:		; <- T_F42368
 	link XIZ,0xfffc	; F0A95F  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A963  lda XBC,XIZ+0xfe
 	push	xbc	; F0A966  push XBC
@@ -19941,7 +19941,7 @@ sub_F0A95F_Skip:
 	ret	; F0A9BE  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9F
+; ScreenButton_SoundEditNaming
 ; Called from: T_F42378 (x0)
 ; Touches:   |  0xFCFBB4
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19951,8 +19951,8 @@ sub_F0A95F_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9F: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9F: that entry points at the thunk triple T_F42370 (Enter) / T_F42374_Nop (Leave) / T_F42378 (Button).
-ScreenButton_Code9F:		; <- T_F42378
+; ScreenButton_SoundEditNaming: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9F: that entry points at the thunk triple T_F42370 (Enter) / T_F42374_Nop (Leave) / T_F42378 (Button).
+ScreenButton_SoundEditNaming:		; <- T_F42378
 	link XIZ,0xfffc	; F0A9BF  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A9C3  lda XBC,XIZ+0xfe
 	push	xbc	; F0A9C6  push XBC
@@ -19989,7 +19989,7 @@ sub_F0A9BF_Skip:
 	ret	; F0AA0F  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9A
+; ScreenButton_SoundEditDigitalEffect
 ; Called from: T_F433D8 (x0)
 ; Touches:   |  0xFCFBFC
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
@@ -19999,8 +19999,8 @@ sub_F0A9BF_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_Code9A: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9A: that entry points at the thunk triple T_F433D0 (Enter) / T_F433D4 (Leave) / T_F433D8 (Button). Screen 0x9A is SOUND EDIT DIGITAL EFFECT (DispatchTable_F5B8F8[0x9A]).
-ScreenButton_Code9A:		; <- T_F433D8
+; ScreenButton_SoundEditDigitalEffect: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9A: that entry points at the thunk triple T_F433D0 (Enter) / T_F433D4 (Leave) / T_F433D8 (Button). Screen 0x9A is SOUND EDIT DIGITAL EFFECT (DispatchTable_F5B8F8[0x9A]).
+ScreenButton_SoundEditDigitalEffect:		; <- T_F433D8
 	link XIZ,0xfffc	; F0AA10  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA14  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA17  push XBC
@@ -21785,7 +21785,7 @@ sub_F0B36C_Skip2:
 	ret	; F0B532  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode9E
+; LcdKeyRow1_SoundEditMemoryWrite
 ; Called from: table 0xFCF80C[224]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA901 0xFD60D9 0xFDA911 T_F413C4 T_F413C0 T_F413C8 0xFDA341
@@ -21796,10 +21796,10 @@ sub_F0B36C_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode9E: LCD key row 1 (left or right) on ScreenCode9E -- ScreenCode9E op 8 (PanelOpTable_FCFB6C).
+; LcdKeyRow1_SoundEditMemoryWrite: LCD key row 1 (left or right) on ScreenCode9E -- ScreenCode9E op 8 (PanelOpTable_FCFB6C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode9E:
+LcdKeyRow1_SoundEditMemoryWrite:
 	link XIZ,0x0000	; F0B533  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B537  cp (XIZ+0x08),0x00
 	jr	z, sub_F0B36C_Join	; F0B53B  jr Z,0xf0b575
@@ -21827,7 +21827,7 @@ sub_F0B36C_Join:
 	ret	; F0B577  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode9E
+; LcdKeyRow3_SoundEditMemoryWrite
 ; Called from: table 0xFCF80C[226]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7B6B 0xFDA0CA 0xFD7B7B 0xFD6C65 T_Dispatch_Code80
@@ -21837,10 +21837,10 @@ sub_F0B36C_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_ScreenCode9E: LCD key row 3 (left or right) on ScreenCode9E -- ScreenCode9E op 10 (PanelOpTable_FCFB6C).
+; LcdKeyRow3_SoundEditMemoryWrite: LCD key row 3 (left or right) on ScreenCode9E -- ScreenCode9E op 10 (PanelOpTable_FCFB6C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow3_ScreenCode9E:
+LcdKeyRow3_SoundEditMemoryWrite:
 	link XIZ,0xfff8	; F0B578  link XIZ,0xfff8
 	pushw	hl	; F0B57C  push HL
 	push	xix	; F0B57D  push XIX
@@ -21920,7 +21920,7 @@ sub_F0B578_Join2:
 	ret	; F0B62E  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode9E
+; LcdKeyRow4_SoundEditMemoryWrite
 ; Called from: table 0xFCF80C[227]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7B6B 0xFD7B7B 0xFDA0CA 0xFD6C65 T_Dispatch_Code80
@@ -21930,10 +21930,10 @@ sub_F0B578_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode9E: LCD key row 4 (left or right) on ScreenCode9E -- ScreenCode9E op 11 (PanelOpTable_FCFB6C).
+; LcdKeyRow4_SoundEditMemoryWrite: LCD key row 4 (left or right) on ScreenCode9E -- ScreenCode9E op 11 (PanelOpTable_FCFB6C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode9E:
+LcdKeyRow4_SoundEditMemoryWrite:
 	link XIZ,0xfff8	; F0B62F  link XIZ,0xfff8
 	pushw	hl	; F0B633  push HL
 	push	xix	; F0B634  push XIX
@@ -22006,7 +22006,7 @@ sub_F0B62F_Skip2:
 	ret	; F0B6D6  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode9E
+; LcdKeyRow5_SoundEditMemoryWrite
 ; Called from: table 0xFCF80C[228]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD608B
@@ -22016,10 +22016,10 @@ sub_F0B62F_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_ScreenCode9E: LCD key row 5 (left or right) on ScreenCode9E -- ScreenCode9E op 12 (PanelOpTable_FCFB6C).
+; LcdKeyRow5_SoundEditMemoryWrite: LCD key row 5 (left or right) on ScreenCode9E -- ScreenCode9E op 12 (PanelOpTable_FCFB6C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow5_ScreenCode9E:
+LcdKeyRow5_SoundEditMemoryWrite:
 	link XIZ,0x0000	; F0B6D7  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B6DB  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B36C_Skip4	; F0B6DF  jr NZ,0xf0b6ec
@@ -22032,7 +22032,7 @@ sub_F0B36C_Skip4:
 	ret	; F0B6EE  ret
 
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode9E
+; ExitKey_SoundEditMemoryWrite
 ; Called from: table 0xFCF80C[231]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0AC 0xFD608B
@@ -22042,10 +22042,10 @@ sub_F0B36C_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode9E: the EXIT key on ScreenCode9E -- ScreenCode9E op 15 (PanelOpTable_FCFB6C).
+; ExitKey_SoundEditMemoryWrite: the EXIT key on ScreenCode9E -- ScreenCode9E op 15 (PanelOpTable_FCFB6C).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode9E:
+ExitKey_SoundEditMemoryWrite:
 	link XIZ,0x0000	; F0B6EF  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B6F3  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B36C_Skip5	; F0B6F7  jr NZ,0xf0b70c
@@ -22060,7 +22060,7 @@ sub_F0B36C_Skip5:
 	ret	; F0B70E  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_ScreenCode9F
+; SoftKeyCol1_SoundEditNaming
 ; Called from: table 0xFCF80C[234]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0B9B3
@@ -22070,15 +22070,15 @@ sub_F0B36C_Skip5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_ScreenCode9F: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 0 (PanelOpTable_FCFBB4).
+; SoftKeyCol1_SoundEditNaming: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 0 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode9F:
+SoftKeyCol1_SoundEditNaming:
 	calr	sub_F0B9B3	; F0B70F  calr 0xf0b9b3
 	ret	; F0B712  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode9F
+; SoftKeyCol2_SoundEditNaming
 ; Called from: table 0xFCF80C[235]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BA20
@@ -22088,15 +22088,15 @@ SoftKeyCol1_ScreenCode9F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode9F: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 1 (PanelOpTable_FCFBB4).
+; SoftKeyCol2_SoundEditNaming: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 1 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode9F:
+SoftKeyCol2_SoundEditNaming:
 	calr	sub_F0BA20	; F0B713  calr 0xf0ba20
 	ret	; F0B716  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode9F
+; SoftKeyCol3_SoundEditNaming
 ; Called from: table 0xFCF80C[236]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BAA8
@@ -22106,15 +22106,15 @@ SoftKeyCol2_ScreenCode9F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode9F: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 2 (PanelOpTable_FCFBB4).
+; SoftKeyCol3_SoundEditNaming: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 2 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode9F:
+SoftKeyCol3_SoundEditNaming:
 	calr	sub_F0BAA8	; F0B717  calr 0xf0baa8
 	ret	; F0B71A  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode9F
+; SoftKeyCol4_SoundEditNaming
 ; Called from: table 0xFCF80C[237]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BBB4
@@ -22124,15 +22124,15 @@ SoftKeyCol3_ScreenCode9F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode9F: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 3 (PanelOpTable_FCFBB4).
+; SoftKeyCol4_SoundEditNaming: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 3 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode9F:
+SoftKeyCol4_SoundEditNaming:
 	calr	sub_F0BBB4	; F0B71B  calr 0xf0bbb4
 	ret	; F0B71E  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode9F
+; SoftKeyCol5_SoundEditNaming
 ; Called from: table 0xFCF80C[238]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BC98
@@ -22142,15 +22142,15 @@ SoftKeyCol4_ScreenCode9F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_ScreenCode9F: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 4 (PanelOpTable_FCFBB4).
+; SoftKeyCol5_SoundEditNaming: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 4 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol5_ScreenCode9F:
+SoftKeyCol5_SoundEditNaming:
 	calr	sub_F0BC98	; F0B71F  calr 0xf0bc98
 	ret	; F0B722  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode9F
+; SoftKeyCol6_SoundEditNaming
 ; Called from: table 0xFCF80C[239]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BD31
@@ -22160,15 +22160,15 @@ SoftKeyCol5_ScreenCode9F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode9F: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 5 (PanelOpTable_FCFBB4).
+; SoftKeyCol6_SoundEditNaming: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 5 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode9F:
+SoftKeyCol6_SoundEditNaming:
 	calr	sub_F0BD31	; F0B723  calr 0xf0bd31
 	ret	; F0B726  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode9F
+; SoftKeyCol7_SoundEditNaming
 ; Called from: table 0xFCF80C[240]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BDAC
@@ -22178,10 +22178,10 @@ SoftKeyCol6_ScreenCode9F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_ScreenCode9F: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 6 (PanelOpTable_FCFBB4).
+; SoftKeyCol7_SoundEditNaming: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 6 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol7_ScreenCode9F:
+SoftKeyCol7_SoundEditNaming:
 	link XIZ,0x0000	; F0B727  link XIZ,0x0000
 	pushw	hl	; F0B72B  push HL
 	ld	c, (xiz+8)	; F0B72C  ld C,(XIZ+0x08)
@@ -22201,7 +22201,7 @@ sub_F0B727_Join:
 	ret	; F0B746  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol8_ScreenCode9F
+; SoftKeyCol8_SoundEditNaming
 ; Called from: table 0xFCF80C[241]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BE44
@@ -22211,15 +22211,15 @@ sub_F0B727_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol8_ScreenCode9F: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 7 (PanelOpTable_FCFBB4).
+; SoftKeyCol8_SoundEditNaming: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode9F -- ScreenCode9F op 7 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol8_ScreenCode9F:
+SoftKeyCol8_SoundEditNaming:
 	calr	sub_F0BE44	; F0B747  calr 0xf0be44
 	ret	; F0B74A  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode9F
+; LcdKeyRow1_SoundEditNaming
 ; Called from: table 0xFCF80C[242]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BEBF 0xFDA0CA 0xFDA0BA 0xFD785C 0xFD6704 0xFD7BA5 0xFD616A
@@ -22230,10 +22230,10 @@ SoftKeyCol8_ScreenCode9F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_ScreenCode9F: LCD key row 1 (left or right) on ScreenCode9F -- ScreenCode9F op 8 (PanelOpTable_FCFBB4).
+; LcdKeyRow1_SoundEditNaming: LCD key row 1 (left or right) on ScreenCode9F -- ScreenCode9F op 8 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow1_ScreenCode9F:
+LcdKeyRow1_SoundEditNaming:
 	link XIZ,0xffe8	; F0B74B  link XIZ,0xffe8
 	pushw	hl	; F0B74F  push HL
 	push	xix	; F0B750  push XIX
@@ -22323,7 +22323,7 @@ sub_F0B74B_Join2:
 	ret	; F0B80C  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode9F
+; LcdKeyRow2_SoundEditNaming
 ; Called from: table 0xFCF80C[243]
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F0BF04
@@ -22333,10 +22333,10 @@ sub_F0B74B_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_ScreenCode9F: LCD key row 2 (left or right) on ScreenCode9F -- ScreenCode9F op 9 (PanelOpTable_FCFBB4).
+; LcdKeyRow2_SoundEditNaming: LCD key row 2 (left or right) on ScreenCode9F -- ScreenCode9F op 9 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow2_ScreenCode9F:
+LcdKeyRow2_SoundEditNaming:
 	link XIZ,0x0000	; F0B80D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0B811  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0B80D_Skip	; F0B815  jr NZ,0xf0b81a
@@ -22346,7 +22346,7 @@ sub_F0B80D_Skip:
 	ret	; F0B81C  ret
 
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode9F
+; ExitKey_SoundEditNaming
 ; Called from: table 0xFCF80C[249]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFDA0BA 0xFD785C 0xFD6704 0xFD608B 0xFDA0AC 0xFD7BA5
@@ -22357,10 +22357,10 @@ sub_F0B80D_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode9F: the EXIT key on ScreenCode9F -- ScreenCode9F op 15 (PanelOpTable_FCFBB4).
+; ExitKey_SoundEditNaming: the EXIT key on ScreenCode9F -- ScreenCode9F op 15 (PanelOpTable_FCFBB4).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode9F:
+ExitKey_SoundEditNaming:
 	link XIZ,0xffe4	; F0B81D  link XIZ,0xffe4
 	pushw	hl	; F0B821  push HL
 	push	xix	; F0B822  push XIX
@@ -23423,7 +23423,7 @@ sub_F0BF04_Skip4:
 	ret	; F0C0BA  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_ScreenCode9D
+; SoftKeyCol1_SoundEditCopy
 ; Called from: table 0xFCF80C[270]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80 sub_F0C291 0xFD7ADD T_F40FFC 0xFD7B00
@@ -23434,10 +23434,10 @@ sub_F0BF04_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_ScreenCode9D: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 0 (PanelOpTable_FCFC44).
+; SoftKeyCol1_SoundEditCopy: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 0 (PanelOpTable_FCFC44).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol1_ScreenCode9D:
+SoftKeyCol1_SoundEditCopy:
 	link XIZ,0xfff0	; F0C0BB  link XIZ,0xfff0
 	pushw	hl	; F0C0BF  push HL
 	pushw	de	; F0C0C0  push DE
@@ -23741,7 +23741,7 @@ sub_F0C336_Resume:
 	ret	; F0C35C  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode9D
+; SoftKeyCol2_SoundEditCopy
 ; Called from: table 0xFCF80C[271]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 sub_F0C291 0xFD64D1 0xFD7C01
@@ -23751,10 +23751,10 @@ sub_F0C336_Resume:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_ScreenCode9D: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 1 (PanelOpTable_FCFC44).
+; SoftKeyCol2_SoundEditCopy: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 1 (PanelOpTable_FCFC44).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol2_ScreenCode9D:
+SoftKeyCol2_SoundEditCopy:
 	link XIZ,0xfffa	; F0C35D  link XIZ,0xfffa
 	ld	c, (xiz+8)	; F0C361  ld C,(XIZ+0x08)
 	res	7, c	; F0C364  res 0x07,C
@@ -23824,7 +23824,7 @@ sub_F0C291_Skip4:
 	ret	; F0C3F8  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode9D
+; SoftKeyCol3_SoundEditCopy
 ; Called from: table 0xFCF80C[272]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_Dispatch_Code80
@@ -23834,10 +23834,10 @@ sub_F0C291_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_ScreenCode9D: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 2 (PanelOpTable_FCFC44).
+; SoftKeyCol3_SoundEditCopy: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 2 (PanelOpTable_FCFC44).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol3_ScreenCode9D:
+SoftKeyCol3_SoundEditCopy:
 	link XIZ,0xfffa	; F0C3F9  link XIZ,0xfffa
 	pushw	hl	; F0C3FD  push HL
 	lda	xbc, (xiz-2)	; F0C3FE  lda XBC,XIZ+0xfe
@@ -23897,7 +23897,7 @@ sub_F0C291_Skip8:
 	ret	; F0C47A  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode9D
+; SoftKeyCol4_SoundEditCopy
 ; Called from: table 0xFCF80C[273]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B 0xFD6C65 T_Dispatch_Code80
@@ -23907,10 +23907,10 @@ sub_F0C291_Skip8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_ScreenCode9D: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 3 (PanelOpTable_FCFC44).
+; SoftKeyCol4_SoundEditCopy: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 3 (PanelOpTable_FCFC44).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol4_ScreenCode9D:
+SoftKeyCol4_SoundEditCopy:
 	link XIZ,0xfffa	; F0C47B  link XIZ,0xfffa
 	pushw	hl	; F0C47F  push HL
 	pushw	de	; F0C480  push DE
@@ -23996,7 +23996,7 @@ sub_F0C291_Skip14:
 	ret	; F0C527  ret
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode9D
+; SoftKeyCol6_SoundEditCopy
 ; Called from: table 0xFCF80C[275]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80
@@ -24006,10 +24006,10 @@ sub_F0C291_Skip14:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_ScreenCode9D: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 5 (PanelOpTable_FCFC44).
+; SoftKeyCol6_SoundEditCopy: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9D -- ScreenCode9D op 5 (PanelOpTable_FCFC44).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-SoftKeyCol6_ScreenCode9D:
+SoftKeyCol6_SoundEditCopy:
 	link XIZ,0xfffc	; F0C528  link XIZ,0xfffc
 	pushw	hl	; F0C52C  push HL
 	push	xix	; F0C52D  push XIX
@@ -24116,7 +24116,7 @@ sub_F0C291_Join11:
 	ret	; F0C615  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode9D
+; LcdKeyRow4_SoundEditCopy
 ; Called from: table 0xFCF80C[281]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD6C94 0xFD6811 0xFD60D9 0xFDA341
@@ -24126,10 +24126,10 @@ sub_F0C291_Join11:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_ScreenCode9D: LCD key row 4 (left or right) on ScreenCode9D -- ScreenCode9D op 11 (PanelOpTable_FCFC44).
+; LcdKeyRow4_SoundEditCopy: LCD key row 4 (left or right) on ScreenCode9D -- ScreenCode9D op 11 (PanelOpTable_FCFC44).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-LcdKeyRow4_ScreenCode9D:
+LcdKeyRow4_SoundEditCopy:
 	link XIZ,0xfff2	; F0C616  link XIZ,0xfff2
 	pushw	hl	; F0C61A  push HL
 	push	xix	; F0C61B  push XIX
@@ -24235,7 +24235,7 @@ sub_F0C291_Skip23:
 	ret	; F0C709  ret
 
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode9D
+; ExitKey_SoundEditCopy
 ; Called from: table 0xFCF80C[285]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFDA0CA 0xFD608B
@@ -24245,10 +24245,10 @@ sub_F0C291_Skip23:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_ScreenCode9D: the EXIT key on ScreenCode9D -- ScreenCode9D op 15 (PanelOpTable_FCFC44).
+; ExitKey_SoundEditCopy: the EXIT key on ScreenCode9D -- ScreenCode9D op 15 (PanelOpTable_FCFC44).
 ;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
 ;   notes/prom_a_panel_control_map.py --map.
-ExitKey_ScreenCode9D:
+ExitKey_SoundEditCopy:
 	link XIZ,0xfffe	; F0C70A  link XIZ,0xfffe
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0C70E  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0C291_Skip25	; F0C712  jr NZ,0xf0c733
@@ -89667,9 +89667,9 @@ T_F41F3C:	jp T_F41F3C_Nop  ; -> prom_a 0x2E829
 	.fill 0x4, 1, 0x00  ; 0xF41F50: 4 x nop
 T_F41F54:	jp sub_FDAC6B  ; -> prom_a 0x5AC6B
 T_F41F58:	jp sub_FDACBD  ; -> prom_a 0x5ACBD
-T_F41F5C:	jp ScreenCode80_Handler  ; -> prom_a 0x5AD44
-T_F41F60:	jp ScreenLeave_Code80  ; -> prom_a 0x5E152
-T_F41F64:	jp ScreenButton_Code80  ; -> prom_a 0x4FDA7
+T_F41F5C:	jp ScreenEnter_SoundEditMenu  ; -> prom_a 0x5AD44
+T_F41F60:	jp ScreenLeave_SoundEditMenu  ; -> prom_a 0x5E152
+T_F41F64:	jp ScreenButton_SoundEditMenu  ; -> prom_a 0x4FDA7
 T_F41F68:	jp T_F41F68_Nop  ; -> prom_a 0x5E15F
 T_F41F6C:	jp ScreenCodeC0_Handler  ; -> prom_a 0x5D437
 T_F41F70:	jp ScreenLeave_CodeC0  ; -> prom_a 0x5E332
@@ -89707,113 +89707,113 @@ T_F41FEC:	jp ScreenCodeC8_Handler  ; -> prom_a 0x5DF36
 T_F41FF0:	jp ScreenLeave_CodeC8  ; -> prom_a 0x5E3A2
 T_ToneEditPage_A8_KeyDispatch:	jp ToneEditPage_A8_KeyDispatch  ; -> prom_a 0x53F8F
 T_F41FF8:	jp T_F41FF8_Nop  ; -> prom_a 0x5E3AF
-T_F41FFC:	jp ScreenCode87_Handler  ; -> prom_a 0x5B22F
-T_F42000:	jp ScreenLeave_Code87  ; -> prom_a 0x5E160
-T_F42004:	jp ScreenButton_Code87  ; -> prom_b 0x0A000
+T_F41FFC:	jp ScreenEnter_SoundEditPitchTune  ; -> prom_a 0x5B22F
+T_F42000:	jp ScreenLeave_SoundEditPitchTune  ; -> prom_a 0x5E160
+T_F42004:	jp ScreenButton_SoundEditPitchTune  ; -> prom_b 0x0A000
 T_F42008:	jp T_F42008_Nop  ; -> prom_a 0x5E16D
-T_F4200C:	jp ScreenCode88_Handler  ; -> prom_a 0x5B38C
-T_F42010:	jp ScreenLeave_Code88  ; -> prom_a 0x5E16E
-T_F42014:	jp ScreenButton_Code88  ; -> prom_b 0x0A051
+T_F4200C:	jp ScreenEnter_SoundEditPitchEnvelope1  ; -> prom_a 0x5B38C
+T_F42010:	jp ScreenLeave_SoundEditPitchEnvelope1  ; -> prom_a 0x5E16E
+T_F42014:	jp ScreenButton_SoundEditPitchEnvelope1  ; -> prom_b 0x0A051
 T_F42018:	jp T_F42018_Nop  ; -> prom_a 0x5E17B
-T_F4201C:	jp ScreenCode89_Handler  ; -> prom_a 0x5B44D
-T_F42020:	jp ScreenLeave_Code89  ; -> prom_a 0x5E17C
-T_F42024:	jp ScreenButton_Code89  ; -> prom_b 0x0A0B1
+T_F4201C:	jp ScreenEnter_SoundEditPitchEnvelope2  ; -> prom_a 0x5B44D
+T_F42020:	jp ScreenLeave_SoundEditPitchEnvelope2  ; -> prom_a 0x5E17C
+T_F42024:	jp ScreenButton_SoundEditPitchEnvelope2  ; -> prom_b 0x0A0B1
 T_F42028:	jp T_F42028_Nop  ; -> prom_a 0x5E189
-T_F4202C:	jp ScreenCode8A_Handler  ; -> prom_a 0x5B529
-T_F42030:	jp ScreenLeave_Code8A  ; -> prom_a 0x5E18A
-T_F42034:	jp ScreenButton_Code8A  ; -> prom_b 0x0A111
+T_F4202C:	jp ScreenEnter_SoundEditPitchLfo  ; -> prom_a 0x5B529
+T_F42030:	jp ScreenLeave_SoundEditPitchLfo  ; -> prom_a 0x5E18A
+T_F42034:	jp ScreenButton_SoundEditPitchLfo  ; -> prom_b 0x0A111
 T_F42038:	jp T_F42038_Nop  ; -> prom_a 0x5E197
-T_F4203C:	jp ScreenCode8B_Handler  ; -> prom_a 0x5B693
-T_F42040:	jp ScreenLeave_Code8B  ; -> prom_a 0x5E198
-T_F42044:	jp ScreenButton_Code8B  ; -> prom_a 0x52751
+T_F4203C:	jp ScreenEnter_SoundEditAmpLevel1  ; -> prom_a 0x5B693
+T_F42040:	jp ScreenLeave_SoundEditAmpLevel1  ; -> prom_a 0x5E198
+T_F42044:	jp ScreenButton_SoundEditAmpLevel1  ; -> prom_a 0x52751
 T_F42048:	jp T_F42048_Nop  ; -> prom_a 0x5E1A5
-T_F4204C:	jp ScreenCode8C_Handler  ; -> prom_a 0x5B8D9
-T_F42050:	jp ScreenLeave_Code8C  ; -> prom_a 0x5E1A6
-T_F42054:	jp ScreenButton_Code8C  ; -> prom_a 0x527A2
+T_F4204C:	jp ScreenEnter_SoundEditAmpLevel2  ; -> prom_a 0x5B8D9
+T_F42050:	jp ScreenLeave_SoundEditAmpLevel2  ; -> prom_a 0x5E1A6
+T_F42054:	jp ScreenButton_SoundEditAmpLevel2  ; -> prom_a 0x527A2
 T_F42058:	jp T_F42058_Nop  ; -> prom_a 0x5E1B3
-T_F4205C:	jp ScreenCode8D_Handler  ; -> prom_a 0x5B9AB
-T_F42060:	jp ScreenLeave_Code8D  ; -> prom_a 0x5E1B4
-T_F42064:	jp ScreenButton_Code8D  ; -> prom_a 0x527F2
+T_F4205C:	jp ScreenEnter_SoundEditAmpEnvelope1  ; -> prom_a 0x5B9AB
+T_F42060:	jp ScreenLeave_SoundEditAmpEnvelope1  ; -> prom_a 0x5E1B4
+T_F42064:	jp ScreenButton_SoundEditAmpEnvelope1  ; -> prom_a 0x527F2
 T_F42068:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
-T_F4206C:	jp ScreenCode8E_Handler  ; -> prom_a 0x5BAE7
-T_F42070:	jp ScreenLeave_Code8E  ; -> prom_a 0x5E1C2
-T_F42074:	jp ScreenButton_Code8E  ; -> prom_a 0x52852
+T_F4206C:	jp ScreenEnter_SoundEditAmpEnvelope2  ; -> prom_a 0x5BAE7
+T_F42070:	jp ScreenLeave_SoundEditAmpEnvelope2  ; -> prom_a 0x5E1C2
+T_F42074:	jp ScreenButton_SoundEditAmpEnvelope2  ; -> prom_a 0x52852
 T_F42078:	jp T_F42078_Nop  ; -> prom_a 0x5E1CF
-T_F4207C:	jp ScreenCode8F_Handler  ; -> prom_a 0x5BBC3
-T_F42080:	jp ScreenLeave_Code8F  ; -> prom_a 0x5E1D0
-T_F42084:	jp ScreenButton_Code8F  ; -> prom_a 0x528B2
+T_F4207C:	jp ScreenEnter_SoundEditAmpLfo  ; -> prom_a 0x5BBC3
+T_F42080:	jp ScreenLeave_SoundEditAmpLfo  ; -> prom_a 0x5E1D0
+T_F42084:	jp ScreenButton_SoundEditAmpLfo  ; -> prom_a 0x528B2
 T_F42088:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
-T_F4208C:	jp ScreenCodeCD_Handler  ; -> prom_a 0x5BBD6
-T_F42090:	jp ScreenLeave_CodeCD  ; -> prom_a 0x5E1DE
-T_F42094:	jp ScreenButton_CodeCD  ; -> prom_a 0x5053D
+T_F4208C:	jp ScreenEnter_SoundEditControllerPage1  ; -> prom_a 0x5BBD6
+T_F42090:	jp ScreenLeave_SoundEditControllerPage1  ; -> prom_a 0x5E1DE
+T_F42094:	jp ScreenButton_SoundEditControllerPage1  ; -> prom_a 0x5053D
 T_F42098:	jp T_F42098_Nop  ; -> prom_a 0x5E1EB
-T_F4209C:	jp ScreenCode9B_Handler  ; -> prom_a 0x5BEDE
-T_F420A0:	jp ScreenLeave_Code9B  ; -> prom_a 0x5E1EC
-T_F420A4:	jp ScreenButton_Code9B  ; -> prom_a 0x5058E
+T_F4209C:	jp ScreenEnter_SoundEditControllerPage2  ; -> prom_a 0x5BEDE
+T_F420A0:	jp ScreenLeave_SoundEditControllerPage2  ; -> prom_a 0x5E1EC
+T_F420A4:	jp ScreenButton_SoundEditControllerPage2  ; -> prom_a 0x5058E
 T_F420A8:	jp T_F420A8_Nop  ; -> prom_a 0x5E1F9
 T_F420AC:	jp ScreenCode9C_Handler  ; -> prom_a 0x5C0E1
 T_F420B0:	jp ScreenLeave_Code9C  ; -> prom_a 0x5E1FA
 T_F420B4:	jp ScreenButton_Code9C  ; -> prom_b 0x0AA61
 T_F420B8:	jp T_F420B8_Nop  ; -> prom_a 0x5E207
-T_F420BC:	jp ScreenCode90_Handler  ; -> prom_a 0x5C0ED
-T_F420C0:	jp ScreenLeave_Code90  ; -> prom_a 0x5E24E
-T_F420C4:	jp ScreenButton_Code90  ; -> prom_a 0x5E3BE
+T_F420BC:	jp ScreenEnter_SoundEditFilterLpf12  ; -> prom_a 0x5C0ED
+T_F420C0:	jp ScreenLeave_SoundEditFilterLpf12  ; -> prom_a 0x5E24E
+T_F420C4:	jp ScreenButton_SoundEditFilterLpf12  ; -> prom_a 0x5E3BE
 T_F420C8:	jp T_F420C8_Nop  ; -> prom_a 0x5E25B
-T_F420CC:	jp ScreenCode91_Handler  ; -> prom_a 0x5C27B
-T_F420D0:	jp ScreenLeave_Code91  ; -> prom_a 0x5E25C
-T_F420D4:	jp ScreenButton_Code91  ; -> prom_a 0x5E41E
+T_F420CC:	jp ScreenEnter_SoundEditFilterHpf12  ; -> prom_a 0x5C27B
+T_F420D0:	jp ScreenLeave_SoundEditFilterHpf12  ; -> prom_a 0x5E25C
+T_F420D4:	jp ScreenButton_SoundEditFilterHpf12  ; -> prom_a 0x5E41E
 T_F420D8:	jp T_F420D8_Nop  ; -> prom_a 0x5E269
-T_F420DC:	jp ScreenCode92_Handler  ; -> prom_a 0x5C2A7
-T_F420E0:	jp ScreenLeave_Code92  ; -> prom_a 0x5E26A
-T_F420E4:	jp ScreenButton_Code92  ; -> prom_a 0x5E47E
+T_F420DC:	jp ScreenEnter_SoundEditFilterLpf24  ; -> prom_a 0x5C2A7
+T_F420E0:	jp ScreenLeave_SoundEditFilterLpf24  ; -> prom_a 0x5E26A
+T_F420E4:	jp ScreenButton_SoundEditFilterLpf24  ; -> prom_a 0x5E47E
 T_F420E8:	jp T_F420E8_Nop  ; -> prom_a 0x5E277
-T_F420EC:	jp ScreenCode93_Handler  ; -> prom_a 0x5C2CF
-T_F420F0:	jp ScreenLeave_Code93  ; -> prom_a 0x5E278
-T_F420F4:	jp ScreenButton_Code93  ; -> prom_a 0x5E4DE
+T_F420EC:	jp ScreenEnter_SoundEditFilterHpf24  ; -> prom_a 0x5C2CF
+T_F420F0:	jp ScreenLeave_SoundEditFilterHpf24  ; -> prom_a 0x5E278
+T_F420F4:	jp ScreenButton_SoundEditFilterHpf24  ; -> prom_a 0x5E4DE
 T_F420F8:	jp T_F420F8_Nop  ; -> prom_a 0x5E285
-T_F420FC:	jp ScreenCode94_Handler  ; -> prom_a 0x5C2F7
-T_F42100:	jp ScreenLeave_Code94  ; -> prom_a 0x5E286
-T_F42104:	jp ScreenButton_Code94  ; -> prom_a 0x5E53E
+T_F420FC:	jp ScreenEnter_SoundEditFilterBpf  ; -> prom_a 0x5C2F7
+T_F42100:	jp ScreenLeave_SoundEditFilterBpf  ; -> prom_a 0x5E286
+T_F42104:	jp ScreenButton_SoundEditFilterBpf  ; -> prom_a 0x5E53E
 T_F42108:	jp T_F42108_Nop  ; -> prom_a 0x5E293
-T_F4210C:	jp ScreenCode95_Handler  ; -> prom_a 0x5C317
-T_F42110:	jp ScreenLeave_Code95  ; -> prom_a 0x5E294
-T_F42114:	jp ScreenButton_Code95  ; -> prom_a 0x5E59E
+T_F4210C:	jp ScreenEnter_SoundEditFilterThrough  ; -> prom_a 0x5C317
+T_F42110:	jp ScreenLeave_SoundEditFilterThrough  ; -> prom_a 0x5E294
+T_F42114:	jp ScreenButton_SoundEditFilterThrough  ; -> prom_a 0x5E59E
 T_F42118:	jp T_F42118_Nop  ; -> prom_a 0x5E2A1
-T_F4211C:	jp ScreenCode96_Handler  ; -> prom_a 0x5C333
-T_F42120:	jp ScreenLeave_Code96  ; -> prom_a 0x5E2A2
-T_F42124:	jp ScreenButton_Code96  ; -> prom_a 0x5E5EF
+T_F4211C:	jp ScreenEnter_SoundEditFilterKeyFollow  ; -> prom_a 0x5C333
+T_F42120:	jp ScreenLeave_SoundEditFilterKeyFollow  ; -> prom_a 0x5E2A2
+T_F42124:	jp ScreenButton_SoundEditFilterKeyFollow  ; -> prom_a 0x5E5EF
 T_F42128:	jp T_F42128_Nop  ; -> prom_a 0x5E2AF
-T_F4212C:	jp ScreenCode97_Handler  ; -> prom_a 0x5C405
-T_F42130:	jp ScreenLeave_Code97  ; -> prom_a 0x5E2B0
-T_F42134:	jp ScreenButton_Code97  ; -> prom_a 0x5E64F
+T_F4212C:	jp ScreenEnter_SoundEditFilterEnvelope1  ; -> prom_a 0x5C405
+T_F42130:	jp ScreenLeave_SoundEditFilterEnvelope1  ; -> prom_a 0x5E2B0
+T_F42134:	jp ScreenButton_SoundEditFilterEnvelope1  ; -> prom_a 0x5E64F
 T_F42138:	jp T_F42138_Nop  ; -> prom_a 0x5E2BD
-T_F4213C:	jp ScreenCode98_Handler  ; -> prom_a 0x5C4C6
-T_F42140:	jp ScreenLeave_Code98  ; -> prom_a 0x5E2BE
-T_F42144:	jp ScreenButton_Code98  ; -> prom_a 0x5E6AF
+T_F4213C:	jp ScreenEnter_SoundEditFilterEnvelope2  ; -> prom_a 0x5C4C6
+T_F42140:	jp ScreenLeave_SoundEditFilterEnvelope2  ; -> prom_a 0x5E2BE
+T_F42144:	jp ScreenButton_SoundEditFilterEnvelope2  ; -> prom_a 0x5E6AF
 T_F42148:	jp T_F42148_Nop  ; -> prom_a 0x5E2CB
-T_F4214C:	jp ScreenCode99_Handler  ; -> prom_a 0x5C5A2
-T_F42150:	jp ScreenLeave_Code99  ; -> prom_a 0x5E2CC
-T_F42154:	jp ScreenButton_Code99  ; -> prom_a 0x5E70F
+T_F4214C:	jp ScreenEnter_SoundEditFilterLfo  ; -> prom_a 0x5C5A2
+T_F42150:	jp ScreenLeave_SoundEditFilterLfo  ; -> prom_a 0x5E2CC
+T_F42154:	jp ScreenButton_SoundEditFilterLfo  ; -> prom_a 0x5E70F
 T_F42158:	jp T_F42158_Nop  ; -> prom_a 0x5E2D9
-T_F4215C:	jp ScreenCode82_Handler  ; -> prom_a 0x5C5B5
-T_F42160:	jp ScreenLeave_Code82  ; -> prom_a 0x5E208
-T_F42164:	jp ScreenButton_Code82  ; -> prom_a 0x50AA5
+T_F4215C:	jp ScreenEnter_SoundEditModelingToneTemplate  ; -> prom_a 0x5C5B5
+T_F42160:	jp ScreenLeave_SoundEditModelingToneTemplate  ; -> prom_a 0x5E208
+T_F42164:	jp ScreenButton_SoundEditModelingToneTemplate  ; -> prom_a 0x50AA5
 T_F42168:	jp T_F42168_Nop  ; -> prom_a 0x5E215
-T_F4216C:	jp ScreenCode83_Handler  ; -> prom_a 0x5C84C
-T_F42170:	jp ScreenLeave_Code83  ; -> prom_a 0x5E216
-T_F42174:	jp ScreenButton_Code83  ; -> prom_a 0x50AF6
+T_F4216C:	jp ScreenEnter_SoundEditToneLayerPanning  ; -> prom_a 0x5C84C
+T_F42170:	jp ScreenLeave_SoundEditToneLayerPanning  ; -> prom_a 0x5E216
+T_F42174:	jp ScreenButton_SoundEditToneLayerPanning  ; -> prom_a 0x50AF6
 T_F42178:	jp T_F42178_Nop  ; -> prom_a 0x5E223
-T_F4217C:	jp ScreenCode84_Handler  ; -> prom_a 0x5C95B
-T_F42180:	jp ScreenLeave_Code84  ; -> prom_a 0x5E224
-T_F42184:	jp ScreenButton_Code84  ; -> prom_a 0x50B47
+T_F4217C:	jp ScreenEnter_SoundEditToneLayerKeyLayer  ; -> prom_a 0x5C95B
+T_F42180:	jp ScreenLeave_SoundEditToneLayerKeyLayer  ; -> prom_a 0x5E224
+T_F42184:	jp ScreenButton_SoundEditToneLayerKeyLayer  ; -> prom_a 0x50B47
 T_F42188:	jp T_F42188_Nop  ; -> prom_a 0x5E231
-T_F4218C:	jp ScreenCode85_Handler  ; -> prom_a 0x5CA77
-T_F42190:	jp ScreenLeave_Code85  ; -> prom_a 0x5E232
-T_F42194:	jp ScreenButton_Code85  ; -> prom_a 0x50BA7
+T_F4218C:	jp ScreenEnter_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x5CA77
+T_F42190:	jp ScreenLeave_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x5E232
+T_F42194:	jp ScreenButton_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x50BA7
 T_F42198:	jp T_F42198_Nop  ; -> prom_a 0x5E23F
-T_F4219C:	jp ScreenCode86_Handler  ; -> prom_a 0x5CB93
-T_F421A0:	jp ScreenLeave_Code86  ; -> prom_a 0x5E240
-T_F421A4:	jp ScreenButton_Code86  ; -> prom_a 0x50C07
+T_F4219C:	jp ScreenEnter_SoundEditModelingDriverWaveform  ; -> prom_a 0x5CB93
+T_F421A0:	jp ScreenLeave_SoundEditModelingDriverWaveform  ; -> prom_a 0x5E240
+T_F421A4:	jp ScreenButton_SoundEditModelingDriverWaveform  ; -> prom_a 0x50C07
 T_F421A8:	jp T_F421A8_Nop  ; -> prom_a 0x5E24D
 	.fill 0xA4, 1, 0x0E  ; 0xF421AC: 164 x ret
 T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
@@ -89844,17 +89844,17 @@ T_F42340:	jp T_F42340_Nop  ; -> prom_a 0x5D436
 T_F42344:	jp ScreenLeave_CodeCC  ; -> prom_a 0x5E324
 T_F42348:	jp T_F42348_Nop  ; -> prom_b 0x0AB4A
 T_F4234C:	jp T_F4234C_Nop  ; -> prom_a 0x5E331
-T_F42350:	jp ScreenCode9D_Handler  ; -> prom_a 0x5D0D4
-T_F42354:	jp ScreenLeave_Code9D  ; -> prom_a 0x5E2FA
-T_F42358:	jp ScreenButton_Code9D  ; -> prom_b 0x0A90E
+T_F42350:	jp ScreenEnter_SoundEditCopy  ; -> prom_a 0x5D0D4
+T_F42354:	jp ScreenLeave_SoundEditCopy  ; -> prom_a 0x5E2FA
+T_F42358:	jp ScreenButton_SoundEditCopy  ; -> prom_b 0x0A90E
 T_F4235C:	jp T_F4235C_Nop  ; -> prom_a 0x5E307
-T_F42360:	jp ScreenCode9E_Handler  ; -> prom_a 0x5CDE0
+T_F42360:	jp ScreenEnter_SoundEditMemoryWrite  ; -> prom_a 0x5CDE0
 T_F42364:	jp T_F42364_Nop  ; -> prom_a 0x5E2DA
-T_F42368:	jp ScreenButton_Code9E  ; -> prom_b 0x0A95F
+T_F42368:	jp ScreenButton_SoundEditMemoryWrite  ; -> prom_b 0x0A95F
 T_F4236C:	jp T_F4236C_Nop  ; -> prom_a 0x5E2DB
-T_F42370:	jp ScreenCode9F_Handler  ; -> prom_a 0x5CFEB
+T_F42370:	jp ScreenEnter_SoundEditNaming  ; -> prom_a 0x5CFEB
 T_F42374:	jp T_F42374_Nop  ; -> prom_a 0x5E2DC
-T_F42378:	jp ScreenButton_Code9F  ; -> prom_b 0x0A9BF
+T_F42378:	jp ScreenButton_SoundEditNaming  ; -> prom_b 0x0A9BF
 T_F4237C:	jp T_F4237C_Nop  ; -> prom_a 0x5E2DD
 ; Evidence: slot 0xF42380 is `jp 0xFD2504`; prom_a 0xFD2504 carries the label
 ;           Ring608A0A_DrainAll (graded CONTENT).  DERIVATIVE name.
@@ -90897,9 +90897,9 @@ T_F43384:	jp sub_F6F404  ; -> prom_b 0x6F404   x2
 	.fill 0x38, 1, 0x0E  ; 0xF43388: 56 x ret
 T_F433C0:	jp sub_FE02AB  ; -> prom_a 0x602AB
 	.fill 0xC, 1, 0x0E  ; 0xF433C4: 12 x ret
-T_F433D0:	jp ScreenCode9A_Handler  ; -> prom_a 0x5D02D
-T_F433D4:	jp ScreenLeave_Code9A  ; -> prom_a 0x5E2EC
-T_F433D8:	jp ScreenButton_Code9A  ; -> prom_b 0x0AA10
+T_F433D0:	jp ScreenEnter_SoundEditDigitalEffect  ; -> prom_a 0x5D02D
+T_F433D4:	jp ScreenLeave_SoundEditDigitalEffect  ; -> prom_a 0x5E2EC
+T_F433D8:	jp ScreenButton_SoundEditDigitalEffect  ; -> prom_b 0x0AA10
 T_F433DC:	jp T_F433DC_Nop  ; -> prom_a 0x5E2F9
 T_F433E0:	jp T_F433E0_Nop  ; -> prom_a 0x5E151
 T_F433E4:	jp ScreenLeave_CodeCE  ; -> prom_a 0x5E3B0
@@ -127374,32 +127374,32 @@ SC1_Entry_F40F24_Body_Ret_Join:
 ; --- 0xF5B8F8: 48 entries, one per selector 0x80..0xAF.  Ends exactly on the
 ;     next routine's first byte.  Entries for 0xC0.. re-use 0xA0.. ------------
 DispatchTable_F5B8F8:
-	.long ScreenCode80_Paint	; [0x80]
+	.long SoundEditMenu_Paint	; [0x80]
 	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
 	.long Draw_ToneTemplateLevelKeyTune	; [0x82]
-	.long ScreenCode83_Paint	; [0x83]
-	.long ScreenCode84_Paint	; [0x84]
-	.long ScreenCode85_Paint	; [0x85]
+	.long SoundEditToneLayerPanning_Paint	; [0x83]
+	.long SoundEditToneLayerKeyLayer_Paint	; [0x84]
+	.long SoundEditToneLayerVelocityLayer_Paint	; [0x85]
 	.long Draw_DriverDriverWaveformReso	; [0x86]
 	.long Draw_KeyDeToneKeyScalingShift	; [0x87]
 	.long Draw_StartPitchStopPitchTotal	; [0x88]
-	.long ScreenCode89_Paint	; [0x89]
-	.long ScreenCode8A_Paint	; [0x8A]
+	.long SoundEditPitchEnvelope2_Paint	; [0x89]
+	.long SoundEditPitchLfo_Paint	; [0x8A]
 	.long Draw_Page12LevelTouchCurveLevel	; [0x8B]
 	.long Draw_Page22KeyFollowSlopeRange	; [0x8C]
-	.long ScreenCode8D_Paint	; [0x8D]
+	.long SoundEditAmpEnvelope1_Paint	; [0x8D]
 	.long Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk	; [0x8E]
-	.long ScreenCode8F_Paint	; [0x8F]
-	.long ScreenCode90_Paint	; [0x90]
-	.long ScreenCode91_Paint	; [0x91]
-	.long ScreenCode92_Paint	; [0x92]
-	.long ScreenCode93_Paint	; [0x93]
+	.long SoundEditAmpLfo_Paint	; [0x8F]
+	.long SoundEditFilterLpf12_Paint	; [0x90]
+	.long SoundEditFilterHpf12_Paint	; [0x91]
+	.long SoundEditFilterLpf24_Paint	; [0x92]
+	.long SoundEditFilterHpf24_Paint	; [0x93]
 	.long Draw_FilterBandPassLowHighCutoff	; [0x94]
 	.long Draw_Through	; [0x95]
-	.long ScreenCode96_Paint	; [0x96]
+	.long SoundEditFilterKeyFollow_Paint	; [0x96]
 	.long Draw_StartPointStopPointCutoff	; [0x97]
-	.long ScreenCode98_Paint	; [0x98]
-	.long ScreenCode99_Paint	; [0x99]
+	.long SoundEditFilterEnvelope2_Paint	; [0x98]
+	.long SoundEditFilterLfo_Paint	; [0x99]
 	.long SoundEditDigitalEffect_Paint	; [0x9A]
 	.long SoundEditController_PaintPage2	; [0x9B]
 	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
@@ -127471,41 +127471,41 @@ Dispatch_Code80_Join:
 
 ; --- 0xF5B9F8: 48 entries, one per selector 0x80..0xAF ---------------------
 DispatchTable_F5B9F8:
-	.long ScreenCode80_RepaintField	; [0x80]
+	.long SoundEditMenu_RepaintField	; [0x80]
 	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
-	.long ScreenCode82_RepaintField	; [0x82]
-	.long ScreenCode83_RepaintField	; [0x83]
-	.long ScreenCode84_RepaintField	; [0x84]
-	.long ScreenCode85_RepaintField	; [0x85]
-	.long ScreenCode86_RepaintField	; [0x86]
-	.long ScreenCode87_RepaintField	; [0x87]
-	.long ScreenCode88_RepaintField	; [0x88]
-	.long ScreenCode89_RepaintField	; [0x89]
-	.long ScreenCode8A_RepaintField	; [0x8A]
-	.long ScreenCode8B_RepaintField	; [0x8B]
-	.long ScreenCode8C_RepaintField	; [0x8C]
-	.long ScreenCode8D_RepaintField	; [0x8D]
-	.long ScreenCode8E_RepaintField	; [0x8E]
-	.long ScreenCode8A_RepaintField	; [0x8F]
+	.long SoundEditModelingToneTemplate_RepaintField	; [0x82]
+	.long SoundEditToneLayerPanning_RepaintField	; [0x83]
+	.long SoundEditToneLayerKeyLayer_RepaintField	; [0x84]
+	.long SoundEditToneLayerVelocityLayer_RepaintField	; [0x85]
+	.long SoundEditModelingDriverWaveform_RepaintField	; [0x86]
+	.long SoundEditPitchTune_RepaintField	; [0x87]
+	.long SoundEditEnvelope1_RepaintField	; [0x88]
+	.long SoundEditEnvelope2_RepaintField	; [0x89]
+	.long SoundEditLfo_RepaintField	; [0x8A]
+	.long SoundEditAmpLevel1_RepaintField	; [0x8B]
+	.long SoundEditKeyFollow_RepaintField	; [0x8C]
+	.long SoundEditAmpEnvelope1_RepaintField	; [0x8D]
+	.long SoundEditAmpEnvelope2_RepaintField	; [0x8E]
+	.long SoundEditLfo_RepaintField	; [0x8F]
 	.long Draw_LowHigh	; [0x90]
 	.long Draw_LowHigh_2	; [0x91]
-	.long ScreenCode92_RepaintField	; [0x92]
-	.long ScreenCode93_RepaintField	; [0x93]
-	.long ScreenCode94_RepaintField	; [0x94]
+	.long SoundEditFilterLpf24_RepaintField	; [0x92]
+	.long SoundEditFilterHpf24_RepaintField	; [0x93]
+	.long SoundEditFilterBpf_RepaintField	; [0x94]
 	.long sub_F5BE5A + 0xBD	; [0x95]   (default `ret`)
-	.long ScreenCode8C_RepaintField	; [0x96]
-	.long ScreenCode88_RepaintField	; [0x97]
-	.long ScreenCode89_RepaintField	; [0x98]
-	.long ScreenCode8A_RepaintField	; [0x99]
+	.long SoundEditKeyFollow_RepaintField	; [0x96]
+	.long SoundEditEnvelope1_RepaintField	; [0x97]
+	.long SoundEditEnvelope2_RepaintField	; [0x98]
+	.long SoundEditLfo_RepaintField	; [0x99]
 	.long SoundEditDigitalEffect_RepaintField	; [0x9A]
 	.long SoundEditController_RepaintFieldPage2	; [0x9B]
 	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_RepaintField	; [0x9D]
-	.long ScreenCode9E_RepaintField	; [0x9E]
-	.long ScreenCode9F_RepaintField	; [0x9F]
+	.long SoundEditMemoryWrite_RepaintField	; [0x9E]
+	.long SoundEditNaming_RepaintField	; [0x9F]
 	.long ToneEditPage_A0_RepaintField	; [0xA0]  <- also selector 0xC0
-	.long ScreenCode82_RepaintField	; [0xA1]  <- also selector 0xC1
-	.long ScreenCode86_RepaintField	; [0xA2]  <- also selector 0xC2
+	.long SoundEditModelingToneTemplate_RepaintField	; [0xA1]  <- also selector 0xC1
+	.long SoundEditModelingDriverWaveform_RepaintField	; [0xA2]  <- also selector 0xC2
 	.long ToneEditPage_A3_RepaintField	; [0xA3]  <- also selector 0xC3
 	.long ToneEditPage_A4_RepaintField	; [0xA4]  <- also selector 0xC4
 	.long ToneEditPage_A5_RepaintField	; [0xA5]  <- also selector 0xC5
@@ -128217,8 +128217,8 @@ sub_F5BF21:
 	ld	a, 12:opc	; F5BF23  ld A,0x0c
 	swi	7	; F5BF25  swi 7
 	ret	; F5BF26  ret
-; ScreenCode80_Paint: DispatchTable_F5B8F8[code 0x80] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode80_Paint:
+; SoundEditMenu_Paint: DispatchTable_F5B8F8[code 0x80] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditMenu_Paint:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BF27  cp (0x27f5),0x01
 	jr	z, sub_F5BE5A_Skip2	; F5BF2C  jr Z,0xf5bf51
 	ld	(LCD_CurrentLayer:16), 0	; F5BF2E  ld (0x2540),0x00
@@ -128862,8 +128862,8 @@ Draw_PitchSoundEditEnvPitchLf0:
 	ld	xix, DL_F03D4A	; F5C509  ld XIX,0x00f03d4a
 	call	T_DisplayList_Run	; F5C50E  call 0xf417f0
 	ret	; F5C512  ret
-; ScreenCode8A_Paint: DispatchTable_F5B8F8[code 0x8A] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode8A_Paint:
+; SoundEditPitchLfo_Paint: DispatchTable_F5B8F8[code 0x8A] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditPitchLfo_Paint:
 	call	Draw_PitchSoundEditEnvPitchLf0	; F5C513  call 0xf5c4ff
 
 ; --------------------------------------------------------------------------
@@ -129134,8 +129134,8 @@ sub_F5C772:
 	ld	xix, DLRecordPtrs_F0509B	; F5C794  ld XIX,0x00f0509b
 	call	T_DisplayListB_Run	; F5C799  call 0xf417f4
 	ret	; F5C79D  ret
-; ScreenCode8D_Paint: DispatchTable_F5B8F8[code 0x8D] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode8D_Paint:
+; SoundEditAmpEnvelope1_Paint: DispatchTable_F5B8F8[code 0x8D] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditAmpEnvelope1_Paint:
 	call	sub_F5C727	; F5C79E  call 0xf5c727
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C7A2  cp (0x27f5),0x01
 	jr	z, sub_F5C772_Skip	; F5C7A7  jr Z,0xf5c7d0
@@ -129230,8 +129230,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	ld	xix, DLText_AttackDecayRelease	; F5C8C1  ld XIX,0x00f05182
 	call	T_DisplayListB_Run	; F5C8C6  call 0xf417f4
 	ret	; F5C8CA  ret
-; ScreenCode90_Paint: DispatchTable_F5B8F8[code 0x90] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode90_Paint:
+; SoundEditFilterLpf12_Paint: DispatchTable_F5B8F8[code 0x90] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditFilterLpf12_Paint:
 	call	sub_F5C929	; F5C8CB  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C8CF  ld XIY,0x00f0467d
 	ld	xix, DL_HighPass12db	; F5C8D4  ld XIX,0x00f047ca
@@ -129327,8 +129327,8 @@ sub_F5C94B_Join:
 	ld	xiy, DL_F04D10	; F5C979  ld XIY,0x00f04d10
 	call	T_DisplayListB_RunOne	; F5C97E  call 0xf41830
 	ret	; F5C982  ret
-; ScreenCode91_Paint: DispatchTable_F5B8F8[code 0x91] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode91_Paint:
+; SoundEditFilterHpf12_Paint: DispatchTable_F5B8F8[code 0x91] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditFilterHpf12_Paint:
 	call	sub_F5C929	; F5C983  call 0xf5c929
 	ld	xiy, DL_FilterCutoffEqualizerFreq	; F5C987  ld XIY,0x00f0467d
 	ld	xix, DL_HighPass12db	; F5C98C  ld XIX,0x00f047ca
@@ -129348,8 +129348,8 @@ sub_F5C94B_Skip2:
 	ld	xix, DLBRecordPtrs_F04DA3	; F5C9C4  ld XIX,0x00f04da3
 	call	T_DisplayListB_Run	; F5C9C9  call 0xf417f4
 	ret	; F5C9CD  ret
-; ScreenCode92_Paint: DispatchTable_F5B8F8[code 0x92] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode92_Paint:
+; SoundEditFilterLpf24_Paint: DispatchTable_F5B8F8[code 0x92] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditFilterLpf24_Paint:
 	call	sub_F5C929	; F5C9CE  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5C9D2  ld XIY,0x00f047f3
 	ld	xix, DL_LowPass24db	; F5C9D7  ld XIX,0x00f04889
@@ -129369,8 +129369,8 @@ sub_F5C94B_Skip3:
 	ld	xix, Data_F04E32	; F5CA0F  ld XIX,0x00f04e32
 	call	T_DisplayListB_Run	; F5CA14  call 0xf417f4
 	ret	; F5CA18  ret
-; ScreenCode93_Paint: DispatchTable_F5B8F8[code 0x93] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode93_Paint:
+; SoundEditFilterHpf24_Paint: DispatchTable_F5B8F8[code 0x93] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditFilterHpf24_Paint:
 	call	sub_F5C929	; F5CA19  call 0xf5c929
 	ld	xiy, DL_FilterCutoffFilterCutoff	; F5CA1D  ld XIY,0x00f047f3
 	ld	xix, DL_LowPass24db	; F5CA22  ld XIX,0x00f04889
@@ -129570,8 +129570,8 @@ sub_F5CBD9_Join:
 	ld	(LCD_CurrentLayer:16), 0	; F5CC37  ld (0x2540),0x00
 sub_F5CBD9_Return:
 	ret	; F5CC3C  ret
-; ScreenCode86_RepaintField: DispatchTable_F5B9F8[code 0x86] (also codes 0xA2) -- Dispatch_Code80, the partial repaint.
-ScreenCode86_RepaintField:
+; SoundEditModelingDriverWaveform_RepaintField: DispatchTable_F5B9F8[code 0x86] (also codes 0xA2) -- Dispatch_Code80, the partial repaint.
+SoundEditModelingDriverWaveform_RepaintField:
 	cp	a, 0:i3	; F5CC3D  cp A,0
 	jr	z, sub_F5CBD9_Skip4	; F5CC3F  jr Z,0xf5cc47
 	call	sub_F5CC64	; F5CC41  call 0xf5cc64
@@ -129780,8 +129780,8 @@ sub_F5CC64_Skip11:
 	call	sub_F5C27D	; F5CE60  call 0xf5c27d
 sub_F5CC64_Return4:
 	ret	; F5CE64  ret
-; ScreenCode82_RepaintField: DispatchTable_F5B9F8[code 0x82] (also codes 0xA1) -- Dispatch_Code80, the partial repaint.
-ScreenCode82_RepaintField:
+; SoundEditModelingToneTemplate_RepaintField: DispatchTable_F5B9F8[code 0x82] (also codes 0xA1) -- Dispatch_Code80, the partial repaint.
+SoundEditModelingToneTemplate_RepaintField:
 	cp	a, 0:i3	; F5CE65  cp A,0
 	jr	z, sub_F5CC64_Skip12	; F5CE67  jr Z,0xf5ce8e
 	cp	a, 14	; F5CE69  cp A,0x0e
@@ -129809,8 +129809,8 @@ sub_F5CC64_Skip13:
 	call	RunDisplayListBFromPointerArray	; F5CEAD  call 0xf09ae1
 sub_F5CC64_Return5:
 	ret	; F5CEB1  ret
-; ScreenCode87_RepaintField: DispatchTable_F5B9F8[code 0x87] -- Dispatch_Code80, the partial repaint.
-ScreenCode87_RepaintField:
+; SoundEditPitchTune_RepaintField: DispatchTable_F5B9F8[code 0x87] -- Dispatch_Code80, the partial repaint.
+SoundEditPitchTune_RepaintField:
 	cp	a, 13	; F5CEB2  cp A,0x0d
 	jr	z, sub_F5CC64_Skip14	; F5CEB5  jr Z,0xf5ced2
 	cp	a, 0:i3	; F5CEB7  cp A,0
@@ -129832,8 +129832,8 @@ sub_F5CC64_Join4:
 	ld	xiy, Data_F05372	; F5CEEC  ld XIY,0x00f05372
 	call	RunDisplayListBFromPointerArray	; F5CEF1  call 0xf09ae1
 	ret	; F5CEF5  ret
-; ScreenCode8A_RepaintField: DispatchTable_F5B9F8[code 0x8A] (also codes 0x8F, 0x99) -- Dispatch_Code80, the partial repaint.
-ScreenCode8A_RepaintField:
+; SoundEditLfo_RepaintField: DispatchTable_F5B9F8[code 0x8A] (also codes 0x8F, 0x99) -- Dispatch_Code80, the partial repaint.
+SoundEditLfo_RepaintField:
 	cp	a, 0:i3	; F5CEF6  cp A,0
 	jr	z, sub_F5CC64_Skip15	; F5CEF8  jr Z,0xf5cf0e
 	cp	a, 3:i3	; F5CEFA  cp A,3
@@ -129915,8 +129915,8 @@ sub_F5CFA4:
 	add	xix, 20	; F5CFCC  add XIX,0x00000014
 	call	T_DisplayList_Run	; F5CFD2  call 0xf417f0
 	ret	; F5CFD6  ret
-; ScreenCode8B_RepaintField: DispatchTable_F5B9F8[code 0x8B] -- Dispatch_Code80, the partial repaint.
-ScreenCode8B_RepaintField:
+; SoundEditAmpLevel1_RepaintField: DispatchTable_F5B9F8[code 0x8B] -- Dispatch_Code80, the partial repaint.
+SoundEditAmpLevel1_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CFD7  cp (0x27f5),0x01
 	jr	nz, sub_F5CFA4_Skip	; F5CFDC  jr NZ,0xf5cfe8
 	cp	a, 6:i3	; F5CFDE  cp A,6
@@ -129968,14 +129968,14 @@ sub_F5CFA4_Join4:
 	call	RunDisplayListBFromPointerArray	; F5D056  call 0xf09ae1
 sub_F5CFA4_Return:
 	ret	; F5D05A  ret
-; ScreenCode8C_RepaintField: DispatchTable_F5B9F8[code 0x8C] (also codes 0x96) -- Dispatch_Code80, the partial repaint.
-ScreenCode8C_RepaintField:
+; SoundEditKeyFollow_RepaintField: DispatchTable_F5B9F8[code 0x8C] (also codes 0x96) -- Dispatch_Code80, the partial repaint.
+SoundEditKeyFollow_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D05B  ld (0x2540),0x00
 	ld	xiy, DLRecordPtrs_F0509B	; F5D060  ld XIY,0x00f0509b
 	call	RunDisplayListBFromPointerArray	; F5D065  call 0xf09ae1
 	ret	; F5D069  ret
-; ScreenCode8D_RepaintField: DispatchTable_F5B9F8[code 0x8D] -- Dispatch_Code80, the partial repaint.
-ScreenCode8D_RepaintField:
+; SoundEditAmpEnvelope1_RepaintField: DispatchTable_F5B9F8[code 0x8D] -- Dispatch_Code80, the partial repaint.
+SoundEditAmpEnvelope1_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D06A  cp (0x27f5),0x01
 	jr	z, sub_F5CFA4_Skip6	; F5D06F  jr Z,0xf5d078
 	ld	xiy, Data_F050F1	; F5D071  ld XIY,0x00f050f1
@@ -129995,8 +129995,8 @@ sub_F5CFA4_Join5:
 	call	RunDisplayListBFromPointerArray	; F5D09A  call 0xf09ae1
 sub_F5CFA4_Return2:
 	ret	; F5D09E  ret
-; ScreenCode8E_RepaintField: DispatchTable_F5B9F8[code 0x8E] -- Dispatch_Code80, the partial repaint.
-ScreenCode8E_RepaintField:
+; SoundEditAmpEnvelope2_RepaintField: DispatchTable_F5B9F8[code 0x8E] -- Dispatch_Code80, the partial repaint.
+SoundEditAmpEnvelope2_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D09F  ld (0x2540),0x00
 	ld	xiy, DLBRecordPtrs_F0519A	; F5D0A4  ld XIY,0x00f0519a
 	call	RunDisplayListBFromPointerArray	; F5D0A9  call 0xf09ae1
@@ -130028,26 +130028,26 @@ sub_F5CFA4_Skip9:
 	call	RunDisplayListBFromPointerArray	; F5D0F4  call 0xf09ae1
 sub_F5CFA4_Return4:
 	ret	; F5D0F8  ret
-; ScreenCode92_RepaintField: DispatchTable_F5B9F8[code 0x92] -- Dispatch_Code80, the partial repaint.
-ScreenCode92_RepaintField:
+; SoundEditFilterLpf24_RepaintField: DispatchTable_F5B9F8[code 0x92] -- Dispatch_Code80, the partial repaint.
+SoundEditFilterLpf24_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D0F9  ld (0x2540),0x00
 	ld	xiy, Data_F04E32	; F5D0FE  ld XIY,0x00f04e32
 	call	RunDisplayListBFromPointerArray	; F5D103  call 0xf09ae1
 	ret	; F5D107  ret
-; ScreenCode93_RepaintField: DispatchTable_F5B9F8[code 0x93] -- Dispatch_Code80, the partial repaint.
-ScreenCode93_RepaintField:
+; SoundEditFilterHpf24_RepaintField: DispatchTable_F5B9F8[code 0x93] -- Dispatch_Code80, the partial repaint.
+SoundEditFilterHpf24_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D108  ld (0x2540),0x00
 	ld	xiy, Data_F04E32	; F5D10D  ld XIY,0x00f04e32
 	call	RunDisplayListBFromPointerArray	; F5D112  call 0xf09ae1
 	ret	; F5D116  ret
-; ScreenCode94_RepaintField: DispatchTable_F5B9F8[code 0x94] -- Dispatch_Code80, the partial repaint.
-ScreenCode94_RepaintField:
+; SoundEditFilterBpf_RepaintField: DispatchTable_F5B9F8[code 0x94] -- Dispatch_Code80, the partial repaint.
+SoundEditFilterBpf_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D117  ld (0x2540),0x00
 	ld	xiy, DLRecordPtrs_F04E93	; F5D11C  ld XIY,0x00f04e93
 	call	RunDisplayListBFromPointerArray	; F5D121  call 0xf09ae1
 	ret	; F5D125  ret
-; ScreenCode88_RepaintField: DispatchTable_F5B9F8[code 0x88] (also codes 0x97) -- Dispatch_Code80, the partial repaint.
-ScreenCode88_RepaintField:
+; SoundEditEnvelope1_RepaintField: DispatchTable_F5B9F8[code 0x88] (also codes 0x97) -- Dispatch_Code80, the partial repaint.
+SoundEditEnvelope1_RepaintField:
 	cp	a, 0:i3	; F5D126  cp A,0
 	jr	nz, sub_F5CFA4_Skip10	; F5D128  jr NZ,0xf5d13f
 	ld	(LCD_CurrentLayer:16), 1	; F5D12A  ld (0x2540),0x01
@@ -130203,8 +130203,8 @@ ScreenCodeAB_RepaintField:
 	ld	xix, Data_F3356B	; F5D2DF  ld XIX,0x00f3356b
 	call	T_DisplayListB_Run	; F5D2E4  call 0xf417f4
 	ret	; F5D2E8  ret
-; ScreenCode9E_RepaintField: DispatchTable_F5B9F8[code 0x9E] -- Dispatch_Code80, the partial repaint.
-ScreenCode9E_RepaintField:
+; SoundEditMemoryWrite_RepaintField: DispatchTable_F5B9F8[code 0x9E] -- Dispatch_Code80, the partial repaint.
+SoundEditMemoryWrite_RepaintField:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D2E9  cp (0x27f5),0x01
 	jr	z, sub_F5D199_Skip7	; F5D2EE  jr Z,0xf5d300
 	ld	xiy, DL_F057C0	; F5D2F0  ld XIY,0x00f057c0
@@ -130218,8 +130218,8 @@ sub_F5D199_Skip7:
 sub_F5D199_Join3:
 	call	sub_F5D199	; F5D30E  call 0xf5d199
 	ret	; F5D312  ret
-; ScreenCode9F_RepaintField: DispatchTable_F5B9F8[code 0x9F] -- Dispatch_Code80, the partial repaint.
-ScreenCode9F_RepaintField:
+; SoundEditNaming_RepaintField: DispatchTable_F5B9F8[code 0x9F] -- Dispatch_Code80, the partial repaint.
+SoundEditNaming_RepaintField:
 	cp	a, 0:i3	; F5D313  cp A,0
 	jr	z, sub_F5D199_Skip11	; F5D315  jr Z,0xf5d362
 	cp	a, 1:i3	; F5D317  cp A,1
@@ -130316,8 +130316,8 @@ sub_F5D3C6:
 	ret	; F5D40C  ret
 DispatchTable_F5B9F8_Nop42:
 	ret	; F5D40D  ret
-; ScreenCode83_Paint: DispatchTable_F5B8F8[code 0x83] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode83_Paint:
+; SoundEditToneLayerPanning_Paint: DispatchTable_F5B8F8[code 0x83] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditToneLayerPanning_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer	; F5D40E  call 0xf5c49f
 	ldw	bc, ModelingPage_Fields+16	; F5D412  ld BC,0x27b6
 	ld	d, (xbc)	; F5D415  ld D,(XBC)
@@ -130439,8 +130439,8 @@ sub_F5D4A7:
 	call	RunDisplayListBFromPointerArray	; F5D4BE  call 0xf09ae1
 sub_F5D4A7_Return:
 	ret	; F5D4C2  ret
-; ScreenCode84_Paint: DispatchTable_F5B8F8[code 0x84] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode84_Paint:
+; SoundEditToneLayerKeyLayer_Paint: DispatchTable_F5B8F8[code 0x84] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditToneLayerKeyLayer_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D4C3  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D4C7  ld (0x2540),0x00
 	ld	xiy, DL_F060E4	; F5D4CC  ld XIY,0x00f060e4
@@ -130460,8 +130460,8 @@ ScreenCode84_Paint:
 	ld	xix, Data_F32B1E	; F5D50F  ld XIX,0x00f32b1e
 	call	T_DisplayListB_Run	; F5D514  call 0xf417f4
 	ret	; F5D518  ret
-; ScreenCode85_Paint: DispatchTable_F5B8F8[code 0x85] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode85_Paint:
+; SoundEditToneLayerVelocityLayer_Paint: DispatchTable_F5B8F8[code 0x85] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditToneLayerVelocityLayer_Paint:
 	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D519  call 0xf5c4b8
 	ld	(LCD_CurrentLayer:16), 0	; F5D51D  ld (0x2540),0x00
 	ld	xiy, DL_F06154	; F5D522  ld XIY,0x00f06154
@@ -130486,13 +130486,13 @@ Draw_StartPitchStopPitchTotal:
 	call	sub_F5BFBD	; F5D571  call 0xf5bfbd
 	call	Draw_Page12EnvelopeKeyoffCurSor	; F5D575  call 0xf5cadd
 	ret	; F5D579  ret
-; ScreenCode89_Paint: DispatchTable_F5B8F8[code 0x89] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode89_Paint:
+; SoundEditPitchEnvelope2_Paint: DispatchTable_F5B8F8[code 0x89] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditPitchEnvelope2_Paint:
 	call	Draw_PitchSoundEditEnvPitchLf0	; F5D57A  call 0xf5c4ff
 	call	Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack	; F5D57E  call 0xf5d5c8
 	ret	; F5D582  ret
-; ScreenCode96_Paint: DispatchTable_F5B8F8[code 0x96] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode96_Paint:
+; SoundEditFilterKeyFollow_Paint: DispatchTable_F5B8F8[code 0x96] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditFilterKeyFollow_Paint:
 	call	sub_F5C929	; F5D583  call 0xf5c929
 	ld	xiy, DL_Page22KeyFollowSlopeRange	; F5D587  ld XIY,0x00f0426b
 	ld	xix, DL_Page22KeyFollowSlopeRange + 0xB8	; F5D58C  ld XIX,0x00f04323
@@ -130508,8 +130508,8 @@ ScreenCode96_Paint:
 	call	sub_F5BFBD	; F5D5BB  call 0xf5bfbd
 	call	sub_F5C772	; F5D5BF  call 0xf5c772
 	ret	; F5D5C3  ret
-; ScreenCode98_Paint: DispatchTable_F5B8F8[code 0x98] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode98_Paint:
+; SoundEditFilterEnvelope2_Paint: DispatchTable_F5B8F8[code 0x98] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditFilterEnvelope2_Paint:
 	call	sub_F5C929	; F5D5C4  call 0xf5c929
 
 ; --------------------------------------------------------------------------
@@ -130546,18 +130546,18 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ld	xix, Data_F32C02	; F5D60F  ld XIX,0x00f32c02
 	call	T_DisplayListB_Run	; F5D614  call 0xf417f4
 	ret	; F5D618  ret
-; ScreenCode99_Paint: DispatchTable_F5B8F8[code 0x99] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode99_Paint:
+; SoundEditFilterLfo_Paint: DispatchTable_F5B8F8[code 0x99] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditFilterLfo_Paint:
 	call	sub_F5C929	; F5D619  call 0xf5c929
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D61D  call 0xf5c517
 	ret	; F5D621  ret
-; ScreenCode8F_Paint: DispatchTable_F5B8F8[code 0x8F] -- Dispatch_Code80_Bracketed, the full paint.
-ScreenCode8F_Paint:
+; SoundEditAmpLfo_Paint: DispatchTable_F5B8F8[code 0x8F] -- Dispatch_Code80_Bracketed, the full paint.
+SoundEditAmpLfo_Paint:
 	call	sub_F5C727	; F5D622  call 0xf5c727
 	call	Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5D626  call 0xf5c517
 	ret	; F5D62A  ret
-; ScreenCode83_RepaintField: DispatchTable_F5B9F8[code 0x83] -- Dispatch_Code80, the partial repaint.
-ScreenCode83_RepaintField:
+; SoundEditToneLayerPanning_RepaintField: DispatchTable_F5B9F8[code 0x83] -- Dispatch_Code80, the partial repaint.
+SoundEditToneLayerPanning_RepaintField:
 	cp	a, 0:i3	; F5D62B  cp A,0
 	jr	z, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip2	; F5D62D  jr Z,0xf5d66a
 	cp	a, 1:i3	; F5D62F  cp A,1
@@ -130598,8 +130598,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip3:
 	call	RunDisplayListBFromPointerArray	; F5D6A7  call 0xf09ae1
 Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Return:
 	ret	; F5D6AB  ret
-; ScreenCode84_RepaintField: DispatchTable_F5B9F8[code 0x84] -- Dispatch_Code80, the partial repaint.
-ScreenCode84_RepaintField:
+; SoundEditToneLayerKeyLayer_RepaintField: DispatchTable_F5B9F8[code 0x84] -- Dispatch_Code80, the partial repaint.
+SoundEditToneLayerKeyLayer_RepaintField:
 	cp	a, 0:i3	; F5D6AC  cp A,0
 	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4	; F5D6AE  jr NZ,0xf5d6c5
 	ld	(LCD_CurrentLayer:16), 1	; F5D6B0  ld (0x2540),0x01
@@ -130612,8 +130612,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip4:
 	ld	xiy, Data_F32B1E	; F5D6CA  ld XIY,0x00f32b1e
 	call	RunDisplayListBFromPointerArray	; F5D6CF  call 0xf09ae1
 	ret	; F5D6D3  ret
-; ScreenCode85_RepaintField: DispatchTable_F5B9F8[code 0x85] -- Dispatch_Code80, the partial repaint.
-ScreenCode85_RepaintField:
+; SoundEditToneLayerVelocityLayer_RepaintField: DispatchTable_F5B9F8[code 0x85] -- Dispatch_Code80, the partial repaint.
+SoundEditToneLayerVelocityLayer_RepaintField:
 	cp	a, 0:i3	; F5D6D4  cp A,0
 	jr	nz, Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5	; F5D6D6  jr NZ,0xf5d6ed
 	ld	(LCD_CurrentLayer:16), 1	; F5D6D8  ld (0x2540),0x01
@@ -130626,8 +130626,8 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip5:
 	ld	xiy, DLRecordPtrs_F32B97	; F5D6F2  ld XIY,0x00f32b97
 	call	RunDisplayListBFromPointerArray	; F5D6F7  call 0xf09ae1
 	ret	; F5D6FB  ret
-; ScreenCode89_RepaintField: DispatchTable_F5B9F8[code 0x89] (also codes 0x98) -- Dispatch_Code80, the partial repaint.
-ScreenCode89_RepaintField:
+; SoundEditEnvelope2_RepaintField: DispatchTable_F5B9F8[code 0x89] (also codes 0x98) -- Dispatch_Code80, the partial repaint.
+SoundEditEnvelope2_RepaintField:
 	ld	(LCD_CurrentLayer:16), 0	; F5D6FC  ld (0x2540),0x00
 	ld	xiy, Data_F32C02	; F5D701  ld XIY,0x00f32c02
 	call	RunDisplayListBFromPointerArray	; F5D706  call 0xf09ae1

@@ -6,7 +6,7 @@ QUESTION IT ANSWERS
   consecutive `jp` slots of prom_b's thunk directory: +0 Enter, +4 Leave, +8 Button (the table's own
   header, checks V1-V6).  PanelButton_Route reads it through PanelScreen_VtableTable_ViewB, which is
   entry 32 used as a second base, so SCREEN ID n is MAIN ENTRY n + 32 -- the number the tree already
-  spells ScreenCode<XX> (ScreenCode87_Handler is main entry 0xA7's +0 target; ScreenButton_Code9A,
+  spells ScreenCode<XX> (ScreenEnter_SoundEditPitchTune is main entry 0xA7's +0 target; ScreenButton_SoundEditDigitalEffect,
   main entry 0xBA's +8).  This names every remaining `sub_XXXXXX` method target of a main entry >= 32
   the way commit 2c92a241 (notes/prom_a_screen_methods_wave29.py) named the first 56:
       +0 Enter  -> ScreenCode<XX>_Handler      +4 Leave -> ScreenLeave_Code<XX>

@@ -233,7 +233,7 @@ BODY_HEADER = """\
 ;
 ; Every label here is `sub_XXXXXX`/`.LXXXXXX`: an address, not a claim.
 ; =======================================================================
-SoftKeyCol1_ScreenCode90:"""
+SoftKeyCol1_SoundEditFilterLpf12:"""
 
 TAIL_COMMENT = """\
 ; ---------------------------------------------------------------------

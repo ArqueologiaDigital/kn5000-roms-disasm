@@ -82,7 +82,7 @@ def tables(L):
 
 def readers(L):
     """{table: [reader routine]} from `add XBC,<table>` lines, in prom_a AND prom_b: nine of the
-    tables are read by prom_b screen objects' BUTTON methods (ScreenButton_Code87 ...)."""
+    tables are read by prom_b screen objects' BUTTON methods (ScreenButton_SoundEditPitchTune ...)."""
     out = collections.defaultdict(list)
     LB = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "rb").read().decode("latin-1").split("\n")
     for src in (L, LB):

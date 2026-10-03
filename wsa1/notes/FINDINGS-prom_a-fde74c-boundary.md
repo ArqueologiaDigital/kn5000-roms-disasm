@@ -20,7 +20,7 @@ assembly spliced into `prom_a/wsa1_prom_a.s`). Gate: `make gate-wsa1`, green.
 
 ```
 0xFDE74C-0xFDE75D      17 B  sub_FDE74C          falls through into sub_FDE74C_Skip (already converted)
-0xFDE760-0xFDFFDF   6,271 B  SoftKeyCol1_ScreenCode90...       CONVERTED, coverage only, sub_XXXXXX labels
+0xFDE760-0xFDFFDF   6,271 B  SoftKeyCol1_SoundEditFilterLpf12...       CONVERTED, coverage only, sub_XXXXXX labels
 0xFDFFDF-0xFE0000      33 B  (unnamed)           REFUSED, left `.incbin`
 ```
 
@@ -103,5 +103,5 @@ directive in `prom_a/wsa1_prom_a.s`.
 
 ## Byte accounting
 
-17 (`sub_FDE74C`) + 6,271 (`SoftKeyCol1_ScreenCode90`...) + 33 (refused tail) = 6,321 =
+17 (`sub_FDE74C`) + 6,271 (`SoftKeyCol1_SoundEditFilterLpf12`...) + 33 (refused tail) = 6,321 =
 `0xFE0000 - 0xFDE74C`, matching the `.incbin` this pass replaced.
