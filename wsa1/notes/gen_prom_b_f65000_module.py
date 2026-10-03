@@ -290,7 +290,7 @@ def classify_ref(a):
     ⚠ The decode here is done from the address itself with
     notes/prom_b_module_trace.decode_at, NOT by looking the address up in this
     file's own transcription.  The second draft did the latter and mis-called
-    the real reader of DispatchTable_F67DE9 a coincidence, because that reader
+    the real reader of Screen0ESub09_ButtonTable a coincidence, because that reader
     (`ld XIX,0x00f67de9` at 0xF67DDB) lives inside Data_F67D6F -- a run this
     block emits as `.byte` and therefore has no instruction line for.
 
