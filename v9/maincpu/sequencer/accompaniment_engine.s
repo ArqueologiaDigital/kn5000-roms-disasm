@@ -26171,7 +26171,7 @@ TimeSig_DisplayStrings_Code_Join2:
 	ld	(xwa+l), h
 	ld	a, 72:opc
 	ld	(0x90f6:16), a
-	call	16556428
+	call	SndParam_ApplyProgramChange_Safe
 	and	l, 255
 	ld	(0xfc5a:16), l
 	and	h, 127
