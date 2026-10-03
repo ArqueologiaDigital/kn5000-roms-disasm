@@ -1202,8 +1202,6 @@ Encoder_SyncLoop:
 	ld	a, (xhl+wa)
 	ld	(0x8df4:16), a
 	cp	a, 0xff
-; (pre-port v7 note about the bytes at 0xFC4FC2:)
-; -> 0xFC4FA2
 	jr	nz, Encoder_ScanAndSync
 	ld	a, (0x8df2:16)
 	extz	wa
@@ -1213,15 +1211,9 @@ Encoder_SyncLoop:
 	add	xwa, xbc
 	ld	(xwa), 0xff
 	call	MidiCC_ResetState
-; (pre-port v7 note about the bytes at 0xFC4FDC:)
-; -> 0xFC6172
 	jrl	VoiceEntry_FindMasterVolume
-; (pre-port v7 note about the bytes at 0xFC4FDF:)
-; call MidiCC_SyncForceResync (v7 addr)
 Encoder_ReadNextEntry:
 	call	MidiCC_SyncForceResync
-; (pre-port v7 note about the bytes at 0xFC4FE3:)
-; ldb_d8 a, (0x8e8c) (v7 patched)
 	ld	a, (0x8df0:16)
 	extz	wa
 	muls	wa, 0x3

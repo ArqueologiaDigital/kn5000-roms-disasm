@@ -449,6 +449,15 @@ OBSOLETE = ("=== end v7 block ===", "v7: First part replaced by .incbin",
             "; sub (xsp + 10), iz (v7 displacement)", "; decm 1, (xsp + 18) (v7 displacement)")
 
 
+def _obsolete_note(c):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("dropnotes", os.path.join(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "tools", "drop_obsolete_v7_port_notes.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m.obsolete(c)
+
+
 def carry_old_v7_comments(P):
     """Every comment of the pre-port v7 span files that is not part of a file
     header (kept by write_files) is re-emitted at the address it annotated,
@@ -470,7 +479,9 @@ def carry_old_v7_comments(P):
         if rel not in started:
             continue                      # file header: write_files keeps it
         c = text.strip() if whole else (com.strip() if com else "")
-        if not c or any(o in c for o in OBSOLETE) or a is None:
+        # and the raw-byte-era notes scripts/tools/drop_obsolete_v7_port_notes.py removed (2026-10-03):
+        # they described the transcription this port replaces and are false after it
+        if not c or any(o in c for o in OBSOLETE) or a is None or _obsolete_note(c):
             continue
         lst = P.notes[a]
         lead = "; (pre-port v7 note about the bytes at 0x%06X:)" % a

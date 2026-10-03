@@ -1427,8 +1427,6 @@ FileIO_BytecodeData_Code_Join19:
 FileIO_BytecodeData_Code_Epilogue35:
 	pop	xiz
 	ret
-; (pre-port v7 note about the bytes at 0xFC5D89:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block48_Var40:
 	set	1, (0x905d:16)
 	ld	(xwa), 72
@@ -1445,8 +1443,6 @@ FileIO_BytecodeData_Code_Skip75:
 FileIO_BytecodeData_Code_Join20:
 	ld	(xhl), 64
 	jrl	FileIO_BytecodeData
-; (pre-port v7 note about the bytes at 0xFC5DAE:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block48_Var80:
 	set	1, (0x905d:16)
 	ld	(xwa), 72
@@ -1463,8 +1459,6 @@ FileIO_BytecodeData_Code_Skip76:
 FileIO_BytecodeData_Code_Join21:
 	ld	(xhl), 128
 	jrl	FileIO_BytecodeData
-; (pre-port v7 note about the bytes at 0xFC5DD3:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block48_Var04:
 	set	1, (0x905d:16)
 	ld	(xwa), 72
@@ -1481,8 +1475,6 @@ FileIO_BytecodeData_Code_Skip77:
 FileIO_BytecodeData_Code_Join22:
 	ld	(xhl), 4
 	jrl	FileIO_BytecodeData
-; (pre-port v7 note about the bytes at 0xFC5DF8:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block48_Var04_B:
 	set	1, (0x905d:16)
 	ld	(xwa), 72
@@ -1527,8 +1519,6 @@ FileIO_BytecodeData_Code_Helper4_Join2:
 FileIO_BytecodeData_Code_Helper4_Epilogue:
 	pop	xiz
 	ret
-; (pre-port v7 note about the bytes at 0xFC5E5A:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block98_Var40:
 	set	1, (0x905d:16)
 	ld	(xwa), 152
@@ -1566,8 +1556,6 @@ FileIO_BytecodeData_Code_Helper4_Join4:
 	ld	(xhl), 2
 	calr	FileIO_BytecodeData
 	ret
-; (pre-port v7 note about the bytes at 0xFC5EAC:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block98_Var80:
 	set	1, (0x905d:16)
 	ld	(xwa), 152
@@ -1584,8 +1572,6 @@ FileIO_BytecodeData_Code_Skip79:
 FileIO_BytecodeData_Code_Join23:
 	ld	(xhl), 128
 	jrl	FileIO_BytecodeData
-; (pre-port v7 note about the bytes at 0xFC5ED1:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block98_Var40_B:
 	set	1, (0x905d:16)
 	ld	(xwa), 152
@@ -1608,22 +1594,10 @@ ExtDev_SndParam_ConfigAndWrite:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (xiz+3)
-; (pre-port v7 note about the bytes at 0xFC5EFC:)
-; v10 does not spell this byte either
 	and	a, (xiz+2)
 	jr	z, NakaData_WidgetInit1_Code_Epilogue
 	set	1, (36957:16)
-	; (pre-port v7 note about the bytes at 0xFC5F03:)
-	; v10 does not spell this byte either
-	; (pre-port v7 note about the bytes at 0xFC5F04:)
-	; v10 does not spell this byte either
-	; (pre-port v7 note about the bytes at 0xFC5F05:)
-	; v10 does not spell this byte either
 	ld	(xiz), (PART_SELECT)
-	; (pre-port v7 note about the bytes at 0xFC5F07:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC5F08:)
-	; v10 does not spell this byte either
 	ld	(xiz+1), 5
 	ld	a, (PART_SELECT:16)
 	extz	wa
@@ -1693,13 +1667,9 @@ FileIO_BytecodeData_Code_Helper4_Join6:
 FileIO_BytecodeData_Code_Helper4_Epilogue2:
 	pop	xiz
 	ret
-; (pre-port v7 note about the bytes at 0xFC5FA0:)
-; cpdi8	(0x8d34), 16 (v7 patched)
 ExtDev_SndParam_Block48_Var02:
 	cp	(CURRENT_MODE:16), 16
 	ret	z
-; (pre-port v7 note about the bytes at 0xFC5FA7:)
-; setda	1, 0x90f9 (v7 patched)
 	set	1, (0x905d:16)
 	ld	(xwa), 72
 	ld	(xwa+1), 5
@@ -1715,8 +1685,6 @@ FileIO_BytecodeData_Code_Skip80:
 FileIO_BytecodeData_Code_Join25:
 	ld	(xhl), 2
 	jrl	FileIO_BytecodeData
-; (pre-port v7 note about the bytes at 0xFC5FCC:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_Block70_Var04:
 	set	1, (0x905d:16)
 	ld	(xwa), 112
@@ -1738,45 +1706,25 @@ ExtDev_SndParam_DispatchAndWriteA8:
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-; (pre-port v7 note about the bytes at 0xFC5FFB:)
-; -> 0xFC6015
 	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 15
-; (pre-port v7 note about the bytes at 0xFC6000:)
-; -> 0xFC6015
 	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 14
-; (pre-port v7 note about the bytes at 0xFC6005:)
-; -> 0xFC6015
 	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 17
-; (pre-port v7 note about the bytes at 0xFC600A:)
-; -> 0xFC6015
 	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 3:i3
-; (pre-port v7 note about the bytes at 0xFC600E:)
-; -> 0xFC6015
 	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 19
-; (pre-port v7 note about the bytes at 0xFC6013:)
-; -> 0xFC6017
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip7
-; (pre-port v7 note about the bytes at 0xFC6015:)
-; -> 0xFC6048
 FileIO_BytecodeData_Code_Skip82:
 	jr	FileIO_BytecodeData_Code_Helper4_Epilogue3
 FileIO_BytecodeData_Code_Helper4_Skip7:
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-; (pre-port v7 note about the bytes at 0xFC6022:)
-; -> 0xFC6048
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue3
-; (pre-port v7 note about the bytes at 0xFC6024:)
-; llvm-mc cannot spell this byte
 	set	1, (36957:16)
-	; (pre-port v7 note about the bytes at 0xFC6026:)
-	; llvm-mc cannot spell this byte
 	ld	(xiz), 168
 	ld	(xiz+1), 4
 	lda	xde, (xiz+2)
@@ -1784,8 +1732,6 @@ FileIO_BytecodeData_Code_Helper4_Skip7:
 	ld	c, (xde)
 	ld	a, (xhl)
 	and	a, c
-; (pre-port v7 note about the bytes at 0xFC603B:)
-; -> 0xFC6048
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue3
 	ld	(xde), 2
 	ld	(xhl), 2
@@ -1799,45 +1745,25 @@ ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-; (pre-port v7 note about the bytes at 0xFC6054:)
-; -> 0xFC606E
 	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 15
-; (pre-port v7 note about the bytes at 0xFC6059:)
-; -> 0xFC606E
 	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 14
-; (pre-port v7 note about the bytes at 0xFC605E:)
-; -> 0xFC606E
 	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 17
-; (pre-port v7 note about the bytes at 0xFC6063:)
-; -> 0xFC606E
 	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 3:i3
-; (pre-port v7 note about the bytes at 0xFC6067:)
-; -> 0xFC606E
 	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 19
-; (pre-port v7 note about the bytes at 0xFC606C:)
-; -> 0xFC6070
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip8
-; (pre-port v7 note about the bytes at 0xFC606E:)
-; -> 0xFC60A1
 FileIO_BytecodeData_Code_Skip83:
 	jr	FileIO_BytecodeData_Code_Helper4_Epilogue4
 FileIO_BytecodeData_Code_Helper4_Skip8:
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-; (pre-port v7 note about the bytes at 0xFC607B:)
-; -> 0xFC60A1
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue4
-; (pre-port v7 note about the bytes at 0xFC607D:)
-; llvm-mc cannot spell this byte
 	set	1, (36957:16)
-	; (pre-port v7 note about the bytes at 0xFC607F:)
-	; llvm-mc cannot spell this byte
 	ld	(xiz), 168
 	ld	(xiz+1), 4
 	lda	xde, (xiz+2)
@@ -1845,8 +1771,6 @@ FileIO_BytecodeData_Code_Helper4_Skip8:
 	ld	c, (xde)
 	ld	a, (xhl)
 	and	a, c
-; (pre-port v7 note about the bytes at 0xFC6094:)
-; -> 0xFC60A1
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue4
 	ld	(xde), 1
 	ld	(xhl), 1
@@ -1855,8 +1779,6 @@ FileIO_BytecodeData_Code_Helper4_Skip8:
 FileIO_BytecodeData_Code_Helper4_Epilogue4:
 	pop	xiz
 	ret
-; (pre-port v7 note about the bytes at 0xFC60A3:)
-; setda	1, 0x90f9 (v7 patched)
 ExtDev_SndParam_MultiReg_Iterate:
 	set	1, (0x905d:16)
 	lda	xix, (xwa+2)
@@ -2001,12 +1923,8 @@ Encoder_CheckTimerDelta:
 	ld	wa, (SYSTEM_TIMESTAMP:16)
 	sub	wa, (0x8e26:16)
 	cp	wa, 0x10
-; (pre-port v7 note about the bytes at 0xFC61EA:)
-; -> 0xFC61F3
 	jr	c, Encoder_CheckBitAndProcess
 	ld	(0x8e2a:16), 0
-; (pre-port v7 note about the bytes at 0xFC61F1:)
-; -> 0xFC61F9
 	jr	Encoder_ProcessUpdate
 Encoder_CheckBitAndProcess:
 	bit	0, (0x8e2a:16)
@@ -2020,22 +1938,12 @@ Encoder_IncrementAndDispatch:
 	call	MidiOut_SerializeAndSend
 	pop	sr
 	jp	CompIface_ProcessInput
-; (pre-port v7 note about the bytes at 0xFC620C:)
-; ldmm16 0x8ec2, 1033 (v7 displacement)
 Audio_PeriodicUpdate:
 	ldmm16	0x8e26, SYSTEM_TIMESTAMP
-; (pre-port v7 note about the bytes at 0xFC6212:)
-; cpdi8 (0x8d36), 247 (v7 patched)
 	cp	(CURRENT_TITLE:16), 247
 	ret	z
-; (pre-port v7 note about the bytes at 0xFC6219:)
-; calr Audio_ProcessVoiceQueue (v7 displacement)
 	calr	Audio_ProcessVoiceQueue
-; (pre-port v7 note about the bytes at 0xFC621C:)
-; calr MIDI_ProcessVoiceAssignment (v7 displacement)
 	calr	MIDI_ProcessVoiceAssignment
-; (pre-port v7 note about the bytes at 0xFC621F:)
-; calr MIDI_ProcessControlChange (v7 displacement)
 	calr	MIDI_ProcessControlChange
 	ret
 Audio_ProcessVoiceQueue:
@@ -2481,12 +2389,8 @@ MidiParam_DeltaClearActive:
 MidiParam_DeltaDone:
 	inc	8, xsp
 	ret
-; (pre-port v7 note about the bytes at 0xFC6835:)
-; calr Audio_InitChannelTimers (v7 displacement)
 Audio_UpdateLEDsAndChannels:
 	calr	Audio_InitChannelTimers
-; (pre-port v7 note about the bytes at 0xFC6838:)
-; ordi16 0x8f42, 2 (v7 patched)
 	orw	(0x8ea6:16), 2
 	ret
 MIDI_ProcessChangedChannels:
@@ -2958,11 +2862,7 @@ SndParam_MaskShiftMerge_8F58:
 	ld	a, (0x8ebc:16)
 	and	a, 0x07
 	sla	a, 4
-; (pre-port v7 note about the bytes at 0xFC6CCA:)
-; anddi8	(0x8f1c), 143 (v7 patched)
 	.byte 0xc1, 0x80, 0x8e, 0x3c, 0x8f
-; (pre-port v7 note about the bytes at 0xFC6CCF:)
-; orddm8	0x8f1c, a (v7 patched)
 	or	(0x8e80:16), a
 	ret
 SndParam_DecrLookup_Via0300:
@@ -3040,60 +2940,16 @@ ExtData_VoiceParam_DispatchBytecode:
 	push	xiz
 	lda_d16	xiz, (ENCODER_STATE_BASE)
 	lda	xbc, (xiz+0x2)
-; (pre-port v7 note about the bytes at 0xFC6D56:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D57:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D58:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D59:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D5A:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D5B:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D5C:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D5D:)
-; v10 does not spell this byte either
 	resm	7, (xbc)
 	resm	1, (xiz)
 	resm	2, (xiz)
 	resm	4, (xiz)
 	lda	xhl, (xiz+0xa)
-; (pre-port v7 note about the bytes at 0xFC6D61:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D62:)
-; v10 does not spell this byte either
 	resm	3, (xhl)
 	lda	xde, (xiz+0x6)
-; (pre-port v7 note about the bytes at 0xFC6D66:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D67:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D68:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D69:)
-; v10 does not spell this byte either
 	resm	6, (xde)
 	resm	7, (xde)
 	lda	xiy, (xiz+0xb)
-; (pre-port v7 note about the bytes at 0xFC6D6D:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D6E:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D6F:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D70:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D71:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D72:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D73:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D74:)
-; v10 does not spell this byte either
 	resm	0, (xiy)
 	resm	1, (xiy)
 	resm	2, (xiy)
@@ -3107,131 +2963,57 @@ ExtData_VoiceParam_DispatchBytecode:
 	jr	gt, SndParamF9A541_ResBit7_Code_Epilogue
 	add	wa, wa
 	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Data:24)
-; (pre-port v7 note about the bytes at 0xFC6D8E:)
-; v10 does not spell this byte either
 	ld	wa, (xix+wa)
-; (pre-port v7 note about the bytes at 0xFC6D90:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D91:)
-; v10 does not spell this byte either
 	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Code:24)
-; (pre-port v7 note about the bytes at 0xFC6D94:)
-; differs from v10 here and llvm-objdump cannot read it
 	jp	t, (xix+wa)
-; (pre-port v7 note about the bytes at 0xFC6D9A:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6D9B:)
-; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Code:
 	setm	7, (xbc)
-; (pre-port v7 note about the bytes at 0xFC6D9E:)
-; v10 does not spell this byte either
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
 	ld	a, 1:opc
 	jr	SndParamF9A541_ResBit7_Code_Join
 	ld	a, 2:opc
 	jr	SndParamF9A541_ResBit7_Code_Join
-; (pre-port v7 note about the bytes at 0xFC6DA9:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DAA:)
-; v10 does not spell this byte either
 	setm	7, (xde)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
 	ld	xwa, xde
-; (pre-port v7 note about the bytes at 0xFC6DAF:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DB0:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DB1:)
-; v10 does not spell this byte either
 	setm	7, (xde)
 	cp	(0x26fc:16), 1
 	jr	nz, SndParamF9A541_ResBit7_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6DB8:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DB9:)
-; v10 does not spell this byte either
 	setm	6, (xwa)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6DBC:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DBD:)
-; v10 does not spell this byte either
 	setm	6, (xde)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6DC0:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DC1:)
-; v10 does not spell this byte either
 	setm	0, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6DC4:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DC5:)
-; v10 does not spell this byte either
 	setm	2, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6DC8:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DC9:)
-; v10 does not spell this byte either
 	setm	1, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6DCC:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DCD:)
-; v10 does not spell this byte either
 	setm	3, (xiy)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6DD0:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DD1:)
-; v10 does not spell this byte either
 	setm	3, (xhl)
 	jr	SndParamF9A541_ResBit7_Code_Epilogue
 	ld	a, 4:opc
 SndParamF9A541_ResBit7_Code_Join:
 	scf
-; (pre-port v7 note about the bytes at 0xFC6DD7:)
-; v10 does not spell this byte either
 	stcf	a, (xiz)
 SndParamF9A541_ResBit7_Code_Epilogue:
 	pop	xiz
 	ret
 MidiChanged_ProcessGroup3_Data_Target7:
 	lda_d16	xwa, (ENCODER_STATE_BASE)
-; (pre-port v7 note about the bytes at 0xFC6DDF:)
-; differs from v10 here and llvm-objdump cannot read it
 	cp	(0x32f4:16), 0
 	jr	z, ExtData_VoiceParam_DispatchBytecode_Entry
-; (pre-port v7 note about the bytes at 0xFC6DE6:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DE7:)
-; v10 does not spell this byte either
 	setm	3, (xwa)
 	ret
-; (pre-port v7 note about the bytes at 0xFC6DE9:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DEA:)
-; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Entry:
 	.byte	0xb0, 0xb3
 	ret
 MidiChanged_ProcessGroup3_Data_Target8:
 	lda	xwa, (0x8e82:16)
-; (pre-port v7 note about the bytes at 0xFC6DF0:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DF1:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DF2:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6DF3:)
-; v10 does not spell this byte either
 	res	5, (xwa)
 	bit	0, (10405:16)
 	ret	z
-	; (pre-port v7 note about the bytes at 0xFC6DF7:)
-	; v10 does not spell this byte either
 	ld	c, (CURRENT_MODE:16)
 	cp	c, 13
 	ret	z
@@ -3243,10 +3025,6 @@ MidiChanged_ProcessGroup3_Data_Target8:
 	ret	z
 	cp	c, 8
 	ret	z
-; (pre-port v7 note about the bytes at 0xFC6E15:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6E16:)
-; v10 does not spell this byte either
 	.byte	0xb0, 0xbd
 	ret
 MIDI_ProcessChangedChannels_Data_Target0:
@@ -3257,8 +3035,6 @@ MIDI_ProcessChangedChannels_Data_Target0:
 	ld	(xwa+7), 0
 	ld	xwa, (xsp+4)
 	ld	(xwa+8), 0
-; (pre-port v7 note about the bytes at 0xFC6E2E:)
-; v10 does not spell this byte either
 	and	(xwa+12), 252
 	call	GetCurrentPartSelect
 	extz	hl
@@ -3277,16 +3053,12 @@ MIDI_ProcessChangedChannels_Data_Target0:
 	ld	(xwa+2), l
 	call	SndParam_ResolveVoiceEntry
 	lda	xwa, (xsp+8)
-; (pre-port v7 note about the bytes at 0xFC6E66:)
-; v10 does not spell this byte either
 	cp	(xwa), 7
 	jr	ugt, ExtData_VoiceParam_DispatchBytecode_Entry_Code_Entry
 	ld	a, (xwa)
 	extz	wa
 	ld	xiz, 7:i3
 	jr	ExtData_VoiceParam_DispatchBytecode_Entry_Code_Join
-; (pre-port v7 note about the bytes at 0xFC6E73:)
-; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Entry:
 	cp	(xwa), 15
 	jr	ugt, MIDI_ProcessChangedChannels_Data_Target0_Entry
@@ -3300,8 +3072,6 @@ ExtData_VoiceParam_DispatchBytecode_Entry_Code_Join:
 	add	xwa, xiz
 	ld	(xwa), l
 	jr	ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6E90:)
-; v10 does not spell this byte either
 MIDI_ProcessChangedChannels_Data_Target0_Entry:
 	.byte	0x80
 	push	xsp
@@ -3313,8 +3083,6 @@ MIDI_ProcessChangedChannels_Data_Target0_Entry:
 	call	CtrlPanel_LookupIndicatorEntry
 	ld	xwa, (xsp+4)
 	and	l, 3
-; (pre-port v7 note about the bytes at 0xFC6EA6:)
-; v10 does not spell this byte either
 	and	(xwa+12), 252
 	or	(xwa+12), l
 	jr	ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue
@@ -3329,17 +3097,9 @@ MidiChanged_ProcessGroup2_Data_Target0:
 	dec	6, xsp
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
-; (pre-port v7 note about the bytes at 0xFC6EC2:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6EC3:)
-; v10 does not spell this byte either
 	res	0, (xiz)
 	ld	(xiz+1), 0
-	; (pre-port v7 note about the bytes at 0xFC6EC8:)
-	; v10 does not spell this byte either
 	and	(xiz+2), 128
-	; (pre-port v7 note about the bytes at 0xFC6ECB:)
-	; v10 does not spell this byte either
 	ld	xwa, 0x028000
 	call	AcApcToggleProc_Helper
 	ld	(xsp+7), l
@@ -3350,23 +3110,15 @@ MidiChanged_ProcessGroup2_Data_Target0:
 	ld	(xwa+2), 72
 	call	SndParam_ResolveVoiceEntry
 	lda	xwa, (xsp+4)
-; (pre-port v7 note about the bytes at 0xFC6EF2:)
-; v10 does not spell this byte either
 	cp	(xwa), 6
-	; (pre-port v7 note about the bytes at 0xFC6EF4:)
-	; v10 does not spell this byte either
 	jr	ugt, ExtData_VoiceParam_DispatchBytecode_Entry2
 	ld	a, (xwa)
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
 	res	7, l
-; (pre-port v7 note about the bytes at 0xFC6F02:)
-; v10 does not spell this byte either
 	and	(xiz+2), 128
 	or	(xiz+2), l
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue
-	; (pre-port v7 note about the bytes at 0xFC6F0B:)
-	; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Entry2:
 	cp	(xwa), 14
 	jr	ugt, ExtData_VoiceParam_DispatchBytecode_Entry3
@@ -3376,15 +3128,9 @@ ExtData_VoiceParam_DispatchBytecode_Entry2:
 	call	CtrlPanel_LookupIndicatorEntry
 	ld	(xiz+1), l
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue
-; (pre-port v7 note about the bytes at 0xFC6F1F:)
-; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Entry3:
 	cp	(xwa), 15
 	jr	nz, MidiChanged_ProcessGroup2_Data_Target0_Skip
-; (pre-port v7 note about the bytes at 0xFC6F24:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6F25:)
-; v10 does not spell this byte either
 	.byte	0xb6, 0xb8
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue
 MidiChanged_ProcessGroup2_Data_Target0_Skip:
@@ -3423,8 +3169,6 @@ ExtData_VoiceParam_DispatchBytecode_Skip2:
 	set	0, a
 	ld	(xbc), a
 	jr	3
-; (pre-port v7 note about the bytes at 0xFC6F71:)
-; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Entry4:
 	.byte	0x81
 	push	xix
@@ -3438,16 +3182,8 @@ MidiChanged_ProcessGroup3_Data_Target9:
 	call	0xfccc66
 	cp	hl, 1:i3
 	jr	nz, 4
-; (pre-port v7 note about the bytes at 0xFC6F88:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6F89:)
-; v10 does not spell this byte either
 	.byte	0xb6, 0xbd
 	jr	2
-; (pre-port v7 note about the bytes at 0xFC6F8C:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC6F8D:)
-; v10 does not spell this byte either
 	.byte	0xb6, 0xb5
 	pop	xiz
 	ret
@@ -3728,8 +3464,6 @@ CtrlPanel_SetIndicator_Group2:
 CtrlPanel_SetIndicator_Group3:
 	or	(0x8ea6:16), hl
 	jr	CtrlPanel_PopRetFA
-; (pre-port v7 note about the bytes at 0xFC71AF:)
-; orddm16 0x8f46, xhl (v7 patched)
 CtrlPanel_SetIndicator_Group4:
 	or	(0x8eaa:16), hl
 CtrlPanel_PopRetFA:
@@ -3759,8 +3493,6 @@ CtrlPanel_DispIndicator_Group2:
 CtrlPanel_DispIndicator_Group3:
 	or	(0x8ea8:16), hl
 	jr	CtrlPanel_PopRetFA2
-; (pre-port v7 note about the bytes at 0xFC71F4:)
-; orddm16 0x8f48, xhl (v7 patched)
 CtrlPanel_DispIndicator_Group4:
 	or	(0x8eac:16), hl
 CtrlPanel_PopRetFA2:
@@ -3789,12 +3521,8 @@ CtrlPanel_SetLED_Group2:
 	and	(0x8ea4:16), wa
 	or	(0x8ea2:16), hl
 	jr	MidiChOutState_Return
-; (pre-port v7 note about the bytes at 0xFC7239:)
-; anddm16 0x8f44, xwa (v7 patched)
 CtrlPanel_SetLED_Group3:
 	and	(0x8ea8:16), wa
-; (pre-port v7 note about the bytes at 0xFC723D:)
-; orddm16 0x8f42, xhl (v7 patched)
 	or	(0x8ea6:16), hl
 MidiChOutState_Return:
 	popw_erp	0xfa
@@ -3856,11 +3584,7 @@ MidiChOut_DetectChanges:
 	xor	a, (0x33df:16)
 	bit	2, a
 	ret	z
-; (pre-port v7 note about the bytes at 0xFC72D0:)
-; ordi16 0x8f3e, 4 (v7 patched)
 	orw	(0x8ea2:16), 4
-; (pre-port v7 note about the bytes at 0xFC72D6:)
-; ldmm8 0x347b, 1056 (v7 displacement)
 	ldmm8	0x33df, 1056
 	ret
 MidiChannel_ScanPending:
@@ -3953,18 +3677,12 @@ UIState_SwitchOnDisplayMode:
 	ret	nz
 	orw	(0x8e9e:16), 107
 	ret
-; (pre-port v7 note about the bytes at 0xFC7381:)
-; ordi16	0x8f3a, 111 (v7 patched)
 UIState_Mode0or1:
 	orw	(0x8e9e:16), 111
 	ret
-; (pre-port v7 note about the bytes at 0xFC7388:)
-; ordi16	0x8f42, 512 (v7 patched)
 UIState_Mode3:
 	orw	(0x8ea6:16), 512
 	ret
-; (pre-port v7 note about the bytes at 0xFC738F:)
-; ordi16	0x8f42, 0x8000 (v7 patched)
 UIState_Mode4:
 	orw	(0x8ea6:16), 0x8000
 	ret
@@ -3981,53 +3699,23 @@ UIState_ProcessExtendedMode:
 	lda	xix, (UIState_ProcessExtendedMode_Data:24)
 	ld	wa, (xix+wa)
 	lda	xix, (UIState_ProcessExtendedMode_Cases:24)
-; (pre-port v7 note about the bytes at 0xFC73B5:)
-; v10 does not spell this byte either
 	jp	t, (xix+wa)
-	; (pre-port v7 note about the bytes at 0xFC73B7:)
-	; v10 does not spell this byte either
-	; (pre-port v7 note about the bytes at 0xFC73B8:)
-	; v10 does not spell this byte either
 UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_Data[k]
 	orw	(36514:16), 515
-	; (pre-port v7 note about the bytes at 0xFC73BB:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC73BC:)
-	; v10 does not spell this byte either
 	ret
-	; (pre-port v7 note about the bytes at 0xFC73C1:)
-	; v10 does not spell this byte either
 	orw	(36514:16), 252
-	; (pre-port v7 note about the bytes at 0xFC73C2:)
-	; differs from v10 here and llvm-objdump cannot read it
 	ret
 	ld	xwa, 0x028080
 	call	AcApcToggleProc_Helper
 	cp	l, 0:i3
 	jr	z, UIState_ProcessExtendedMode_Skip
 	ld	(0xffc8:24), l
-; (pre-port v7 note about the bytes at 0xFC73DA:)
-; v10 does not spell this byte either
 UIState_ProcessExtendedMode_Skip:
 	orw	(36514:16), 256
-	; (pre-port v7 note about the bytes at 0xFC73DB:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC73DC:)
-	; v10 does not spell this byte either
 	ret
-	; (pre-port v7 note about the bytes at 0xFC73E1:)
-	; v10 does not spell this byte either
 	orw	(36518:16), 16
-	; (pre-port v7 note about the bytes at 0xFC73E2:)
-	; differs from v10 here and llvm-objdump cannot read it
 	ret
-	; (pre-port v7 note about the bytes at 0xFC73E8:)
-	; v10 does not spell this byte either
 	orw	(36514:16), 512
-	; (pre-port v7 note about the bytes at 0xFC73E9:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC73EA:)
-	; v10 does not spell this byte either
 	ret
 UIStateEvt_NullHandler:
 	ret
@@ -4042,23 +3730,15 @@ UIState_SwitchForMidiFlags:
 	jr	z, UIState_MidiMode3F
 	cp	a, 6:i3
 	ret	nz
-; (pre-port v7 note about the bytes at 0xFC7406:)
-; ordi16	0x8f42, 1024 (v7 patched)
 UIState_MidiMode6:
 	orw	(0x8ea6:16), 1024
 	ret
-; (pre-port v7 note about the bytes at 0xFC740D:)
-; ordi16	0x8f42, 2048 (v7 patched)
 UIState_MidiMode3F:
 	orw	(0x8ea6:16), 2048
 	ret
-; (pre-port v7 note about the bytes at 0xFC7414:)
-; ordi16	0x8f42, 2 (v7 patched)
 UIState_MidiMode4:
 	orw	(0x8ea6:16), 2
 	ret
-; (pre-port v7 note about the bytes at 0xFC741B:)
-; ordi16	0x8f42, 4096 (v7 patched)
 UIState_MidiMode14:
 	orw	(0x8ea6:16), 4096
 	ret
@@ -5027,17 +4707,9 @@ ExtData_ToneParam_DispatchHandler_Skip:
 ExtData_ToneParam_DispatchHandler_Join:
 	dec	6, xsp
 	lda	xwa, (xsp)
-; (pre-port v7 note about the bytes at 0xFC7DCA:)
-; v10 does not spell this byte either
 	ld	(xwa), (0x9094)
-	; (pre-port v7 note about the bytes at 0xFC7DCC:)
-	; differs from v10 here and llvm-objdump cannot read it
 	ld	(xwa+1), (0x9095)
-	; (pre-port v7 note about the bytes at 0xFC7DD1:)
-	; differs from v10 here and llvm-objdump cannot read it
 	ld	(xwa+2), (MIDI_MSG_STATUS)
-	; (pre-port v7 note about the bytes at 0xFC7DD6:)
-	; differs from v10 here and llvm-objdump cannot read it
 	call	SndParam_ApplyProgramChange
 	ld	a, (MIDI_MSG_STATUS:16)
 	extz	wa
@@ -5045,29 +4717,15 @@ ExtData_ToneParam_DispatchHandler_Join:
 	cp	xhl, 0xffffffff
 	jr	z, ExtData_ToneParam_DispatchHandler_Epilogue2
 	lda	xde, (xsp)
-; (pre-port v7 note about the bytes at 0xFC7DEF:)
-; v10 does not spell this byte either
 	cp	(xde), 12
 	jr	nz, ExtData_ToneParam_DispatchHandler_Skip4
 	ld	a, (xhl)
-	; (pre-port v7 note about the bytes at 0xFC7DF6:)
-	; v10 does not spell this byte either
 	cp	a, (xde+3)
-	; (pre-port v7 note about the bytes at 0xFC7DF8:)
-	; v10 does not spell this byte either
 	jr	nz, ExtData_ToneParam_DispatchHandler_Skip4
 	ld	a, (xhl+1)
 	res	7, a
-; (pre-port v7 note about the bytes at 0xFC7E01:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC7E02:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC7E03:)
-; v10 does not spell this byte either
 	.byte	0x8a, 0x04, 0xf1
 	jr	nz, ExtData_ToneParam_DispatchHandler_Skip4
-; (pre-port v7 note about the bytes at 0xFC7E06:)
-; differs from v10 here and llvm-objdump cannot read it
 	cp	(CURRENT_MODE:16), 13
 	jr	nz, ExtData_ToneParam_DispatchHandler_Epilogue2
 ExtData_ToneParam_DispatchHandler_Skip4:
@@ -5081,23 +4739,11 @@ ExtData_ToneParam_DispatchHandler_Skip4:
 	or	c, a
 	ld	(xhl), c
 	ld	(MIDI_MSG_DATA1:16), 1
-; (pre-port v7 note about the bytes at 0xFC7E27:)
-; v10 does not spell this byte either
 	ld	(MIDI_MSG_DATA2), (xde)
-	; (pre-port v7 note about the bytes at 0xFC7E29:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC7E2A:)
-	; v10 does not spell this byte either
 	ld	(MIDI_MSG_DATA3:16), 127
 	calr	SwbtWr_FlushAndAppendParams
 	ld	(MIDI_MSG_DATA1:16), 0
-	; (pre-port v7 note about the bytes at 0xFC7E38:)
-	; v10 does not spell this byte either
 	ld	(MIDI_MSG_DATA2), (xsp+3)
-	; (pre-port v7 note about the bytes at 0xFC7E3B:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC7E3C:)
-	; v10 does not spell this byte either
 	ld	(MIDI_MSG_DATA3:16), 255
 	calr	SwbtWr_FlushAndAppendParams
 	ld	a, (MIDI_MSG_STATUS:16)
@@ -5125,11 +4771,7 @@ ExtData_ToneParam_DispatchHandler_Join2:
 	cp	xhl, 0xffffffff
 	jrl	z, ExtData_ToneParam_DispatchHandler_Epilogue
 	lda	xwa, (xsp)
-; (pre-port v7 note about the bytes at 0xFC7E82:)
-; v10 does not spell this byte either
 	ld	(xwa+2), (MIDI_MSG_STATUS)
-	; (pre-port v7 note about the bytes at 0xFC7E85:)
-	; differs from v10 here and llvm-objdump cannot read it
 	ld	c, (xhl)
 	ld	(xwa+3), c
 	ld	c, (xhl+1)
@@ -5137,41 +4779,15 @@ ExtData_ToneParam_DispatchHandler_Join2:
 	ld	(xwa+4), c
 	call	SndParam_FetchOscTableEntry
 	lda	xwa, (xsp)
-; (pre-port v7 note about the bytes at 0xFC7E9B:)
-; v10 does not spell this byte either
 	cp	(xwa), 15
 	jr	nz, ExtData_Voice_CheckMode3_Helper_Skip
-	; (pre-port v7 note about the bytes at 0xFC7EA0:)
-	; v10 does not spell this byte either
 	and	(37012:16), 183
-	; (pre-port v7 note about the bytes at 0xFC7EA1:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC7EA4:)
-	; v10 does not spell this byte either
-	; (pre-port v7 note about the bytes at 0xFC7EA5:)
-	; v10 does not spell this byte either
 	and	(37013:16), 183
-	; (pre-port v7 note about the bytes at 0xFC7EA6:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC7EA9:)
-	; v10 does not spell this byte either
-	; (pre-port v7 note about the bytes at 0xFC7EAA:)
-	; v10 does not spell this byte either
 ExtData_Voice_CheckMode3_Helper_Skip:
 	cp	(xwa), 12
 	jr	nz, ExtData_Voice_CheckMode3_Helper_Skip2
-	; (pre-port v7 note about the bytes at 0xFC7EAF:)
-	; v10 does not spell this byte either
 	res	6, (37012:16)
-	; (pre-port v7 note about the bytes at 0xFC7EB0:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC7EB3:)
-	; v10 does not spell this byte either
 	res	6, (37013:16)
-	; (pre-port v7 note about the bytes at 0xFC7EB4:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC7EB7:)
-	; v10 does not spell this byte either
 ExtData_Voice_CheckMode3_Helper_Skip2:
 	bit	1, (36957:16)
 	jr	z, ExtData_Voice_CheckMode3_Helper_Skip3
@@ -5288,47 +4904,33 @@ ExtData_ToneParam_AltDispatch:
 	ld	wa, (xix+wa)
 	lda	xix, (ExtData_ToneParam_AltDispatch_Code:24)
 	jp	t, (xix+wa)
-; (pre-port v7 note about the bytes at 0xFC7FC8:)
-; -> 0xFC7FD2
 ExtData_ToneParam_AltDispatch_Code:
 	jr	ExtData_ToneParam_AltDispatch_Join
-; (pre-port v7 note about the bytes at 0xFC7FCA:)
-; -> 0xFC7FDB
 	jr	ExtData_ToneParam_AltDispatch_Join2
-; (pre-port v7 note about the bytes at 0xFC7FCC:)
-; -> 0xFC7FEA
 	jr	ExtData_ToneParam_AltDispatch_Join3
 	calr	ExtData_ToneParam_AltDispatch_Helper
 	ret
 ExtData_ToneParam_AltDispatch_Join:
 	ldw	wa, 255
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
-; (pre-port v7 note about the bytes at 0xFC7FD8:)
-; -> 0xFC8E98
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_ToneParam_AltDispatch_Join2:
 	ldw	wa, 15
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	ldw	wa, 240
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
-; (pre-port v7 note about the bytes at 0xFC7FE7:)
-; -> 0xFC8E98
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_ToneParam_AltDispatch_Join3:
 	ldw	wa, 15
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	ldw	wa, 240
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
-; (pre-port v7 note about the bytes at 0xFC7FF6:)
-; -> 0xFC8E98
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_ToneParam_AltDispatch_Helper:
 	ldw	wa, 15
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	ldw	wa, 48
 	calr	ExtData_ToneParam_DispatchHandler_Helper
-; (pre-port v7 note about the bytes at 0xFC8005:)
-; -> 0xFC8E98
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_ToneParam_AltEntry:
 	ret
@@ -5676,8 +5278,6 @@ ExtData_Voice_UpdateFlags:
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	calr	SwbtWr_FlushAndAppendParams
 	lda	xbc, (0xfc66:16)
-; (pre-port v7 note about the bytes at 0xFC8395:)
-; v10 does not spell this byte either
 	bit	0, (xbc+3)
 	ret	nz
 	ld	a, (0xfc5d:16)
@@ -5688,39 +5288,17 @@ ExtData_Voice_UpdateFlags:
 	ld	a, (xbc)
 	bit	1, a
 	ret	z
-; (pre-port v7 note about the bytes at 0xFC83AE:)
-; v10 does not spell this byte either
 	.byte	0xf1
 	.byte 0x5d
-; (pre-port v7 note about the bytes at 0xFC83B0:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC83B1:)
-; v10 does not spell this byte either
 	.byte	0x90, 0xb8
 	ld	a, (xbc)
 	res	1, a
 	ld	(xbc), a
 	calr	MIDI_WriteResetSequence
 	ret
-; (pre-port v7 note about the bytes at 0xFC83BD:)
-; v10 does not spell this byte either
 ExtData_ToneParam_MultiChannel_Helper:
 	ld	(MIDI_MSG_DATA2), (37012:16)
-	; (pre-port v7 note about the bytes at 0xFC83BE:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC83C1:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC83C2:)
-	; v10 does not spell this byte either
-	; (pre-port v7 note about the bytes at 0xFC83C3:)
-	; v10 does not spell this byte either
 	ld	(MIDI_MSG_DATA3), (37013:16)
-	; (pre-port v7 note about the bytes at 0xFC83C4:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC83C7:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC83C8:)
-	; v10 does not spell this byte either
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_Voice_CheckMode:
 	calr	SndParam_WriteLookupAndStore
@@ -5855,13 +5433,7 @@ ExtData_Voice_FullHandler_Skip:
 ExtData_Voice_FullHandler_Join:
 	ldw	wa, 128
 	calr	ExtData_Voice_FullHandler_Helper2
-; (pre-port v7 note about the bytes at 0xFC8511:)
-; v10 does not spell this byte either
 	and	(37014:16), 128
-	; (pre-port v7 note about the bytes at 0xFC8512:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC8515:)
-	; v10 does not spell this byte either
 	ldw	wa, 127
 	calr	VoiceParam_CompareAndUpdate
 	jrl	SwbtWr_FlushAndAppendParams
@@ -5873,24 +5445,16 @@ ExtData_Voice_FullHandler_Skip2:
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	calr	SwbtWr_FlushAndAppendParams
 	ret
-; (pre-port v7 note about the bytes at 0xFC8532:)
-; v10 does not spell this byte either
 ExtData_Voice_FullHandler_Entry:
 	res	1, (36957:16)
-	; (pre-port v7 note about the bytes at 0xFC8534:)
-	; v10 does not spell this byte either
 	ldw	wa, 64
 	calr	ExtData_Voice_FullHandler_Helper2
 	ldw	wa, 128
 	calr	3019
 	jrl	SwbtWr_FlushAndAppendParams
-; (pre-port v7 note about the bytes at 0xFC8545:)
-; v10 does not spell this byte either
 ExtData_Voice_FullHandler_Helper:
 	.byte	0xd7
 	swi	2
-; (pre-port v7 note about the bytes at 0xFC8547:)
-; v10 does not spell this byte either
 	.byte	0x04
 	ld	a, (0xfda1:16)
 	and	a, 192
@@ -5905,13 +5469,7 @@ ExtData_Voice_FullHandler_Helper:
 	and	a, 192
 	cp	a, 192
 	jr	nz, ExtData_Voice_FullHandler_Helper_Code_Entry
-; (pre-port v7 note about the bytes at 0xFC856E:)
-; v10 does not spell this byte either
 	bit	7, (MIDI_MSG_DATA3:16)
-	; (pre-port v7 note about the bytes at 0xFC856F:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC8570:)
-	; v10 does not spell this byte either
 	jr	z, ExtData_Voice_FullHandler_Helper_Code_Skip
 	res	6, c
 	jr	ExtData_Voice_FullHandler_Helper_Code_Join
@@ -5919,12 +5477,8 @@ ExtData_Voice_FullHandler_Helper_Code_Skip:
 	res	7, c
 ExtData_Voice_FullHandler_Helper_Code_Join:
 	ld	(xde), c
-; (pre-port v7 note about the bytes at 0xFC857E:)
-; v10 does not spell this byte either
 ExtData_Voice_FullHandler_Helper_Code_Entry:
 	ld	(MIDI_MSG_DATA2), (xde)
-	; (pre-port v7 note about the bytes at 0xFC8580:)
-	; differs from v10 here and llvm-objdump cannot read it
 	ld	c, 0:opc
 	ld	(MIDI_MSG_DATA3:16), 0
 	ld	l, (xde)
@@ -5938,21 +5492,11 @@ ExtData_Voice_FullHandler_Helper_Code_Entry:
 ExtData_Voice_FullHandler_Helper_Code_Skip2:
 	ld	c, (xde)
 	and	c, 64
-; (pre-port v7 note about the bytes at 0xFC85A4:)
-; v10 does not spell this byte either
 	ldto_berp	a, 251
 	and	a, 64
 	cp	a, c
 	jr	z, ExtData_Voice_FullHandler_Helper_Code_Skip3
-	; (pre-port v7 note about the bytes at 0xFC85AE:)
-	; v10 does not spell this byte either
 	set	6, (MIDI_MSG_DATA3:16)
-	; (pre-port v7 note about the bytes at 0xFC85AF:)
-	; differs from v10 here and llvm-objdump cannot read it
-	; (pre-port v7 note about the bytes at 0xFC85B0:)
-	; v10 does not spell this byte either
-	; (pre-port v7 note about the bytes at 0xFC85B1:)
-	; v10 does not spell this byte either
 ExtData_Voice_FullHandler_Helper_Code_Skip3:
 	calr	SwbtWr_FlushAndAppendParams
 	pop	qiz
@@ -6678,8 +6222,6 @@ VoiceParamCC_Done:
 ; framing ported from v10's source for the same label (same span length, statement for statement); 23 of 28 slots byte-identical
 UIState_CheckAndRenderBitmap:
 	pushw	iz
-; (pre-port v7 note about the bytes at 0xFC8D3D:)
-; differs from v10 here and llvm-objdump cannot read it
 	cp	(SWBTWR_PAYLOAD_1:16), 2
 	jr	nz, UIState_CheckAndRenderBitmap_Epilogue
 	ld	a, (SWBTWR_PAYLOAD_3:16)
@@ -6824,8 +6366,6 @@ SwbtWr_FlushAndAppendParams:
 SwbtWr_FlushDone:
 	calr	SwbtWr_AppendFixedParamBlock
 	ret
-; (pre-port v7 note about the bytes at 0xFC8EBD:)
-; cpdi16	0x90de, 508 (v7 patched)
 SwbtWr_CheckBufferOverflow:
 	cpw	(0x9042:16), 508
 	jr	c, SwbtWr_FlushAndAppendParams_Skip
@@ -7515,13 +7055,7 @@ VoiceData_DistributeToChannels:
 	ld	(xsp+4), c
 	ld	(xsp+6), a
 	ld	(xsp+2), 0
-; (pre-port v7 note about the bytes at 0xFC9582:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC9583:)
-; v10 does not spell this byte either
 	cp	(xsp+6), 31
-	; (pre-port v7 note about the bytes at 0xFC9585:)
-	; v10 does not spell this byte either
 	jr	ugt, VoiceData_DistributeToChannels_Entry
 	call	ApplyProgramChangeAs_DoLookupRe
 	ld	(xsp), l
@@ -7532,10 +7066,6 @@ VoiceData_DistributeToChannels_Join:
 	cp	xhl, 0xffffffff
 	jr	z, VoiceData_DistributeToChannels_Skip
 	ld	a, (xsp+4)
-; (pre-port v7 note about the bytes at 0xFC95A1:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC95A2:)
-; v10 does not spell this byte either
 	.byte	0x87, 0xf1
 	jr	ugt, VoiceData_DistributeToChannels_Skip
 	extz	wa
@@ -7544,10 +7074,6 @@ VoiceData_DistributeToChannels_Join:
 VoiceData_DistributeToChannels_Skip:
 	ld	l, (xsp+2)
 	jr	VoiceData_DistributeToChannels_Epilogue
-; (pre-port v7 note about the bytes at 0xFC95B4:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC95B5:)
-; v10 does not spell this byte either
 VoiceData_DistributeToChannels_Entry:
 	.byte	0x8f, 0x06
 	push	xsp
@@ -7629,8 +7155,6 @@ VoicePanInit_Loop:
 	add	xbc, xwa
 	ld	(xbc), 0x10
 	bit	0, iz
-; (pre-port v7 note about the bytes at 0xFC9677:)
-; -> 0xFC96B7
 	jr	z, ToneGen_IncrementAndExit
 	lda	xwa, (0xf1a0:16)
 	ldto_werp	BC, 0xfa
@@ -7642,14 +7166,10 @@ VoicePanInit_Loop:
 	ld	a, (xbc+wa)
 	calr	VoiceData_LookupPtrByIndex
 	cp	xhl, 0xffffffff
-; (pre-port v7 note about the bytes at 0xFC969B:)
-; -> 0xFC96B7
 	jr	z, ToneGen_IncrementAndExit
 	ld	c, (xhl + 13)
 	ld	a, c
 	and	a, 0xc0
-; (pre-port v7 note about the bytes at 0xFC96A5:)
-; -> 0xFC96B7
 	jr	nz, ToneGen_IncrementAndExit
 	lda	xwa, (0x9032:16)
 	ldto_werp	DE, 0xfa
@@ -7839,8 +7359,6 @@ ReverbPreset_SendLoop:
 	call	AssswbWr
 	inc	1, iz
 	cp	iz, 0x18
-; (pre-port v7 note about the bytes at 0xFC981A:)
-; -> 0xFC97F7
 	jr	c, ReverbPreset_SendLoop
 	ld	xwa, 0x4002
 	ldw	bc, 0x7f
@@ -7881,8 +7399,6 @@ EQPreset_SendLoop:
 	call	AssswbWr
 	inc	1, iz
 	cp	iz, 0x18
-; (pre-port v7 note about the bytes at 0xFC9872:)
-; -> 0xFC984F
 	jr	c, EQPreset_SendLoop
 	ld	xwa, 0x4006
 	ld	bc, 1:i3
@@ -7926,8 +7442,6 @@ CombinedPreset_SendReverbLoop:
 	call	AssswbWr
 	inc	1, iz
 	cp	iz, 0x18
-; (pre-port v7 note about the bytes at 0xFC98D1:)
-; -> 0xFC98AE
 	jr	c, CombinedPreset_SendReverbLoop
 	pushw	0x18
 	ld	xwa, (xsp + 4)
@@ -7952,8 +7466,6 @@ CombinedPreset_SendEQLoop:
 	call	AssswbWr
 	inc	1, iz
 	cp	iz, 0x18
-; (pre-port v7 note about the bytes at 0xFC990F:)
-; -> 0xFC98EC
 	jr	c, CombinedPreset_SendEQLoop
 	ld	xwa, 0x4002
 	ldw	bc, 0x7f
@@ -8166,8 +7678,6 @@ MIDI_WriteVoiceParamCC:
 	pushw	wa
 	push	xhl
 	cp	d, 0:i3
-; (pre-port v7 note about the bytes at 0xFC9A5C:)
-; -> 0xFC9A97
 	jr	z, MidiWriteVoice_Done
 	xor	h, h
 	ld	l, c
@@ -8175,8 +7685,6 @@ MIDI_WriteVoiceParamCC:
 	ld	xix, (0x9056:16)
 	ld	xix, (xix+hl)
 	cp	xix, 0x90ca
-; (pre-port v7 note about the bytes at 0xFC9A74:)
-; -> 0xFC9A97
 	jr	z, MidiWriteVoice_Done
 	xor	h, h
 	ld	l, b
@@ -8204,8 +7712,6 @@ MIDI_WriteVoiceParamDirect:
 	pushw	wa
 	pushw	hl
 	cp	d, 0:i3
-; (pre-port v7 note about the bytes at 0xFC9AB0:)
-; -> 0xFC9AEB
 	jr	z, MidiWriteDirect_Done
 	xor	h, h
 	ld	l, c
@@ -8213,8 +7719,6 @@ MIDI_WriteVoiceParamDirect:
 	ld	xix, (0x9056:16)
 	ld	xix, (xix+hl)
 	cp	xix, 0x90ca
-; (pre-port v7 note about the bytes at 0xFC9AC8:)
-; -> 0xFC9AEB
 	jr	z, MidiWriteDirect_Done
 	xor	h, h
 	ld	l, b
@@ -8320,8 +7824,6 @@ SeqTimer_RoundUp:
 	bit	4, (0x905d:16)
 	jr	nz, SeqTimer_ClearFlag
 	call	SeqData_DispatchLoop_Done
-; (pre-port v7 note about the bytes at 0xFC9BBA:)
-; anddi8 (0x90f9), 239 (v7 patched)
 SeqTimer_ClearFlag:
 	and	(0x905d:16), 239
 	pop	xhl
@@ -8676,8 +8178,6 @@ MidiStream_ProcessorDispatchB:
 	ld	xix, (xix+w)
 	call	(xix)
 	ld	(0x9136:16), 255
-; (pre-port v7 note about the bytes at 0xFC9EBF:)
-; -> 0xFC9E5C
 	jr	MidiSeqBuf_NextEvent
 MidiSeqBuf_Done:
 	call	TempoRingBuf_Consume
@@ -8760,14 +8260,8 @@ TempoExpr_WriteAndProcess:
 	ld	a, (0x912b:16)
 	ld	w, 0xff:opc
 	ld	(xix+), WA
-; (pre-port v7 note about the bytes at 0xFC9F7F:)
-; stdi8 (0x91ca), 7 (v7 patched)
 	ld	(0x912e:16), 7
-; (pre-port v7 note about the bytes at 0xFC9F84:)
-; calr TempoRingBuf_ProcessEntry (v7 displacement)
 	calr	TempoRingBuf_ProcessEntry
-; (pre-port v7 note about the bytes at 0xFC9F87:)
-; call TempoRingBuf_Consume (v7 addr)
 	call	TempoRingBuf_Consume
 	res	0, (1113:16)
 TempoExpr_Done:
@@ -8808,8 +8302,6 @@ Tempo_Expression_Bypass:
 	jr	Tempo_ExpressionStore
 TempoSrc_DirectTempoMode:
 	ld	wa, (3407:16)
-; (pre-port v7 note about the bytes at 0xFC9FEB:)
-; setda 3, 0x90f9 (v7 patched)
 	set	3, (0x905d:16)
 Tempo_ExpressionStore:
 	ld	(0x9129:16), wa
@@ -8841,8 +8333,6 @@ ModExpr_CheckAutoPlay:
 	jr	Mod_ExpressionStore
 ModExpr_DirectMode:
 	ld	wa, (3407:16)
-; (pre-port v7 note about the bytes at 0xFCA03C:)
-; setda 3, 0x90f9 (v7 patched)
 	set	3, (0x905d:16)
 Mod_ExpressionStore:
 	ld	(0x9129:16), wa
@@ -9118,14 +8608,8 @@ TempoCC_WriteAndProcess:
 	ld	(xix+), WA
 	ldw	wa, 0xff7f
 	ld	(xix), wa
-; (pre-port v7 note about the bytes at 0xFCA32D:)
-; stdi8 (0x91ca), 135 (v7 patched)
 	ld	(0x912e:16), 135
-; (pre-port v7 note about the bytes at 0xFCA332:)
-; calr TempoRingBuf_ProcessEntry (v7 displacement)
 	calr	TempoRingBuf_ProcessEntry
-; (pre-port v7 note about the bytes at 0xFCA335:)
-; call TempoRingBuf_Consume (v7 addr)
 	call	TempoRingBuf_Consume
 	res	0, (1113:16)
 TempoCC_Return:
@@ -9198,23 +8682,15 @@ PartExpr_ProcessNextBit:
 	ld	wa, (0x9129:16)
 	srl	wa, 1
 	ld	(0x9129:16), wa
-; (pre-port v7 note about the bytes at 0xFCA3FA:)
-; -> 0xFCA45E
 	jr	nc, PartExpr_AdvanceBit
 	ld	l, c
 	ld	xix, 0xf1a0
 	ld	a, (xix+l)
 	cp	a, 0:i3
-; (pre-port v7 note about the bytes at 0xFCA40A:)
-; -> 0xFCA414
 	jr	z, PartExpr_WriteToBuffer
 	cp	a, 2:i3
-; (pre-port v7 note about the bytes at 0xFCA40E:)
-; -> 0xFCA414
 	jr	z, PartExpr_WriteToBuffer
 	cp	a, 1:i3
-; (pre-port v7 note about the bytes at 0xFCA412:)
-; -> 0xFCA45E
 	jr	nz, PartExpr_AdvanceBit
 PartExpr_WriteToBuffer:
 	ld	xix, 0x9111
@@ -9387,8 +8863,6 @@ VoiceMode_ParamDispatch:
 	ld	xiy, VoiceMode_ParamDispatch_Table
 	ld	xiy, (xiy+hl)
 	call	(xiy)
-; (pre-port v7 note about the bytes at 0xFCA5D5:)
-; -> 0xFCA585
 	jr	AudioSeq_CheckEventPending
 VoiceMode_ParamDispatch_Sentinel:
 	swi	7
@@ -9974,17 +9448,9 @@ VoiceMode0_UpdateTempoAndWrite:
 	andmi16	(xix), 0xfe00
 	or	(xix), wa
 	ld	w, 0xff:opc
-; (pre-port v7 note about the bytes at 0xFCAC70:)
-; call SeqTimer_UpdateTempoReg (v7 addr)
 	call	SeqTimer_UpdateTempoReg
-; (pre-port v7 note about the bytes at 0xFCAC74:)
-; stda16 (0x9129), xwa (v7 patched)
 	ld	(MIDI_MSG_DATA2:16), wa
-; (pre-port v7 note about the bytes at 0xFCAC78:)
-; stdi16 (0x9127), 2120 (v7 patched)
 	ldw	(MIDI_MSG_STATUS:16), 2120
-; (pre-port v7 note about the bytes at 0xFCAC7E:)
-; call SwbtWr_WriteVoiceParam_PreserveRegs (v7 addr)
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 VoiceMode0_Done:
 	ret
@@ -10227,8 +9693,6 @@ MidiVoiceNote_LookupMode3:
 	ld	l, (0x911c:16)
 MidiPart_FindChannelInTable:
 	cp	xbc, 0x0
-; (pre-port v7 note about the bytes at 0xFCAF82:)
-; -> 0xFCAFA0
 	jr	z, MidiPart_NoChannelFound
 	ld	(0x912c:16), l
 	ld	xix, 0xf1a0
@@ -11189,8 +10653,6 @@ MidiStream_HandleNoteCC:
 	; --- Indexed dispatch: table lookup, conditional call paths (76 bytes) ---
 MidiStream_HandleNoteCC_Body:
 	cp	c, 0x48
-; (pre-port v7 note about the bytes at 0xFCC135:)
-; -> 0xFCC17D
 	jr	z, MidiStream_HandleNoteCC_Ret
 	extz	hl
 	ld	l, c
@@ -11207,8 +10669,6 @@ MidiStream_HandleNoteCC_Body:
 	call	MIDI_ParamValidate_CheckBit2
 	or	hl, hl
 	popw	hl
-; (pre-port v7 note about the bytes at 0xFCC15F:)
-; -> 0xFCC16D
 	jr	nz, MidiStream_PostNoteCC
 	ld	b, c
 	ld	c, 0x81:opc
@@ -11225,8 +10685,6 @@ MidiStream_HandleNoteCC_Ret:
 MidiStream_HandlePgmChange:
 	ld	a, d
 	and	a, 127
-; (pre-port v7 note about the bytes at 0xFCC183:)
-; -> 0xFCC1A5
 	jr	z, MidiStream_HandlePgmChange_Return
 	extz	hl
 	ld	l, c
@@ -11244,21 +10702,13 @@ MidiStream_HandleChanPressure:
 	and	de, 0x4848
 	and	e, d
 	bit	3, d
-; (pre-port v7 note about the bytes at 0xFCC1AF:)
-; -> 0xFCC1BA
 	jr	z, MidiStream_HandleChanPressure_Skip
-; (pre-port v7 note about the bytes at 0xFCC1B1:)
-; llvm-mc cannot spell this byte
 	bit	1, (0x905d:16)
-; (pre-port v7 note about the bytes at 0xFCC1B5:)
-; -> 0xFCC1BA
 	jr	z, MidiStream_HandleChanPressure_Skip
 	or	e, 8
 MidiStream_HandleChanPressure_Skip:
 	ld	a, e
 	and	e, 72
-; (pre-port v7 note about the bytes at 0xFCC1BF:)
-; -> 0xFCC1DF
 	jr	z, MidiStream_HandleChanPressure_Return
 	extz	hl
 	ld	l, c
