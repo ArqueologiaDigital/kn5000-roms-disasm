@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,451
-#   semantic names ........... 50,549 (98.2%)
+#   symbols .................. 51,459
+#   semantic names ........... 50,557 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -32765,7 +32765,7 @@ RhythmVariation_Select_Code_Helper_Skip 00F64CA8
 AccDraw_Secondary_Helper8_Helper 00F64CB3
 RhythmVariation_Select_Code_Helper2 00F64CB9
 AccDraw_Secondary_Helper2 00F64CBF
-RhythmVariation_Select_Code_Helper3 00F64CC5
+RhythmVariation_Select_Helper6 00F64CC5
 RhythmVariation_InlineCode_Code 00F64CE6
 RhythmVariation_Select_Code_Sub 00F64D06
 RhythmVariation_Select_Code_Sub_Helper 00F64D0C
@@ -43239,7 +43239,14 @@ BitMapOut_CopyPreset9_Done 00FB419C
 BitMapOut_SnapshotFromROM 00FB41A1
 BitMapOut_Snapshot_Clamp50 00FB41B2
 BitMapOut_Snapshot_Execute 00FB41B8
-BitMapOut_Snapshot_SetFlags 00FB4245
+BitMapOut_Snapshot_RestorePartial 00FB4207
+BitMapOut_Snapshot_RestoreFull 00FB420C
+BitMapOut_Snapshot_PostProcess 00FB420F
+BitMapOut_Snapshot_CheckActive 00FB422D
+BitMapOut_Snapshot_SetFlags 00FB4243
+BitMapOut_RestoreVoiceFields 00FB4254
+BitMapOut_RestoreVoiceFields_CheckNot80 00FB42A6
+BitMapOut_RestoreFullVoice 00FB42BD
 BitMapOut_RestoreFull_FieldLoop 00FB42E7
 BitMapOut_RestoreFull_CopyField 00FB42FE
 BitMapOut_RestoreFull_CheckType0D 00FB4326
@@ -43252,6 +43259,7 @@ BitMapOut_CopyPresetTable_Loop 00FB440A
 BitMapOut_CopyPresetTable_Check 00FB4422
 BitMapOut_CopyExtTable_Loop 00FB4438
 BitMapOut_CopyExtTable_Check 00FB4454
+BitMapOut_PartialRestore 00FB4509
 BitMapOut_CopyROMToWorkspace 00FB458F
 BitMapOut_SelectiveFieldRestore 00FB45B0
 BitMapOut_SelectRestore_CheckBit1 00FB464E

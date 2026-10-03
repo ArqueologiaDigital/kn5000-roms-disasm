@@ -600,12 +600,137 @@ BitMapOut_SnapshotFromROM:
 BitMapOut_Snapshot_Clamp50:
 	cp (xsp), 0x50
 
-	jrl ugt, 139	; jrl ugt, BitMapOut_Snapshot_SetFlags (v7 displacement)
+	jrl ugt, BitMapOut_Snapshot_SetFlags
 
 
 
 BitMapOut_Snapshot_Execute:
-	.incbin "includes/romslices/v7_block_bitmapout_snapshot_execute.bin"
+	ld	a, (xsp)
+	extz	wa
+	ld	bc, wa
+	sla	bc, 2
+	lda	xde, (BitMapOut_CopyPreset9_Execute_Data:24)
+	ld	xde, (xde+bc)
+	cp	(xde), 0x78
+	jr	nz, BitMapOut_Snapshot_PostProcess
+	lda	xhl, (0xf9b4:16)
+	sub	xhl, 0xf9a2
+	ld	xbc, 0:i3
+	ld	c, (xde + 1)
+	cp	xbc, xhl
+	jr	nz, BitMapOut_Snapshot_PostProcess
+	ld	c, (0x8cb6:16)
+	bit	2, c
+	jr	nz, BitMapOut_Snapshot_RestoreFull
+	bit	1, c
+	jr	nz, BitMapOut_Snapshot_RestorePartial
+	ld	xwa, 0x302
+	call	AcApcToggleProc_Helper
+	ld	a, (xsp)
+	extz	wa
+	cp	hl, 1:i3
+	jr	nz, BitMapOut_Snapshot_RestoreFull
+	calr	BitMapOut_RestoreVoiceFields
+	jr	BitMapOut_Snapshot_PostProcess
+BitMapOut_Snapshot_RestorePartial:
+	calr	BitMapOut_PartialRestore
+	jr	BitMapOut_Snapshot_PostProcess
+BitMapOut_Snapshot_RestoreFull:
+	calr	BitMapOut_RestoreFullVoice
+BitMapOut_Snapshot_PostProcess:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	ToneGen_DispatchByMode
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	calr	BitMapOut_DetectChanges
+	bit	4, (0xfd50:16)
+	jr	nz, BitMapOut_Snapshot_CheckActive
+	bit	1, (0xfd2c:16)
+	call	nz, (BitMapOut_DispatchIOChanges:24)
+BitMapOut_Snapshot_CheckActive:
+	ld	xwa, 0x302
+	call	AcApcToggleProc_Helper
+	cp	hl, 1:i3
+	jr	nz, BitMapOut_Snapshot_SetFlags
+	bit	6, (0xfd9e:16)
+	call	z, (MidiSysEx_SendAllParams:24)
+BitMapOut_Snapshot_SetFlags:
+	ld	a, (0x8cb6:16)
+	set	4, a
+	and	a, 0xf9
+	ld	(0x8cb6:16), a
+	inc	2, xsp
+	ret
+; v7's version of BitMapOut_RestoreVoiceFields: called from the same place in BitMapOut_Snapshot_Execute,
+; same start (extz wa / calr BitMapOut_CopyROMToWorkspace), compiled with a smaller frame than v10's.
+BitMapOut_RestoreVoiceFields:
+	dec	2, xsp
+	ld	(xsp), a
+	ld	a, (xsp)
+	extz	wa
+	calr	BitMapOut_CopyROMToWorkspace
+	lda	xhl, (0xfc5e:16)
+	ld	c, (xhl)
+	and	c, 248
+	ld	(xhl), c
+	ld	xwa, xhl
+	sub	xwa, 63904
+	lda	xix, (0x03c8e4:24)
+	ld	xde, xwa
+	add	xde, xix
+	ld	a, (xde)
+	and	a, 0x7
+	or	c, a
+	ld	(xhl), c
+	lda	xwa, (0xfd0c:16)
+	resm	7, (xwa)
+	resm	7, (xwa + 1)
+	resm	7, (xwa + 2)
+	bit	3, (0x8cb6:16)
+	jr	z, BitMapOut_RestoreVoiceFields_CheckNot80
+	ld	c, (xhl)
+	res	4, c
+	ld	(xhl), c
+	ld	a, (xde)
+	and	a, 0x10
+	or	c, a
+	ld	(xhl), c
+BitMapOut_RestoreVoiceFields_CheckNot80:
+	cp	(xsp), 80
+	call	nz, (BitMapOut_SelectiveFieldRestore:24)
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	SeqTimer_UpdateTempoReg
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	inc	2, xsp
+	ret
+BitMapOut_RestoreFullVoice:
+	lda	xsp, (xsp-16)
+	push	xiz
+	extz	wa
+	sla	wa, 2
+	lda	xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
+	exts	xwa
+	add	xwa, xbc
+	ld	(xsp + 0x10), xwa
+	ld	(xsp + 0xc), xwa
+	ld	xwa, (xsp + 0x10)
+	ld	xhl, (xwa)
+	lda	xwa, (0xf9a0:16)
+	ld	(xsp + 0x4), xwa
+	ld	xiy, xwa
+	ld	ix, 0:i3
+	jr	BitMapOut_RestoreFull_CheckEnd
 ; === end v7 block ===
 BitMapOut_RestoreFull_FieldLoop:
 	inc 1, xiy
@@ -806,7 +931,9 @@ BitMapOut_CopyExtTable_Loop:
 
 
 BitMapOut_CopyExtTable_Check:
-	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin"
+	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0, 0xb5
+BitMapOut_PartialRestore:
+	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0xb5, 134
 ; === end v7 block ===
 BitMapOut_CopyROMToWorkspace:
 	pushw	960

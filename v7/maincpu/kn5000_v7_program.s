@@ -3376,7 +3376,6 @@ SubCPU_Send_Payload_Data:	.byte	0xff
 	.set SeqLoad_InitPartPanPresets, SeqLoad_ProcessEpilogue + 4
 	.set MidiStream_HandlePartSelect, MidiStream_CmdPedalDone + 1
 	.set MidiStream_ExtendedDispatch, MidiStream_CmdPedalDone + 84
-	.set BitMapOut_Snapshot_SetFlags, BitMapOut_Snapshot_Execute + 141
 
 ; Labels emitted as .set (exact addresses from ORG/name)
 

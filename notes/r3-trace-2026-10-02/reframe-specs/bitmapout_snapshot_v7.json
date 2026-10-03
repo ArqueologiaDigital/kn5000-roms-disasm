@@ -1,0 +1,17 @@
+[
+ {
+  "file": "v7/maincpu/ui/bitmap_out_routines.s",
+  "start": "0xFB41B8",
+  "end": "0xFB42E7",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 303
+   }
+  ],
+  "labels": {
+   "0xFB4243": "BitMapOut_Snapshot_SetFlags"
+  }
+ }
+]

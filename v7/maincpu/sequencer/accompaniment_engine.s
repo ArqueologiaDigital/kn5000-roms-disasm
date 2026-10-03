@@ -23858,18 +23858,18 @@ RhythmVariation_Select_Code_Helper2:
 	ret
 AccDraw_Secondary_Helper2:
 	push	xiz
-	calr	RhythmVariation_Select_Code_Helper3
+	calr	RhythmVariation_Select_Helper6
 	pop	xiz
 	ret
-RhythmVariation_Select_Code_Helper3:
+RhythmVariation_Select_Helper6:
 	ld	xhl, 0:i3
 	ld	l, (14079:16)
 	and	l, 31
 	add	xhl, RhythmVariation_InlineCode_Code
 	ld	a, (xhl)
 	ld	(14079:16), a
-	call	16635678
-	call	16635862
+	call	AudioInit_SelectAndDispatch
+	call	AudioMode_ResetVoiceState
 	calr	DrumKit_UpdateStatusFlags
 	ret
 RhythmVariation_InlineCode_Code:
