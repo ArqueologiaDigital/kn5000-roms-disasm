@@ -2246,8 +2246,8 @@ DrawEditSw_FinalPosition:
 	lda xde, (xsp + 2)
 	ld xhl, 0:i3
 	push xhl
-	pushw DrawEditSw_FinalPosition_Data@hi16
-	pushw DrawEditSw_FinalPosition_Data@lo16
+	pushw 0xf4	; colour pair for DrawString, not a pointer
+	pushw 0xf7
 	call DrawString
 
 DrawEditSw_SkipDraw:
@@ -9421,7 +9421,6 @@ DrawLineWithMode_Impl_Skip25:
 DrawLineWithMode_Impl_Join8:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
-PmBank_OnPaint_Data:
 	ld	xwa, (xsp+8)
 	sra	xwa, 16
 	ld	(xde), wa

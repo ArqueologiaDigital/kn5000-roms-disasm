@@ -6420,8 +6420,8 @@ AcMixerVol_Paint:
 	ld xde, (xhl)
 	ld xhl, 3:i3
 	push xhl
-	pushw PsMixer_CtlTypeProc5_Data@hi16
-	pushw PsMixer_CtlTypeProc5_Data@lo16
+	pushw 0xff	; colour pair for DrawStringCentered, not a pointer
+	pushw 0x08
 	call DrawStringCentered
 	ld xwa, (xsp + 44)
 	ld xbc, EVT_PARA_DRAW

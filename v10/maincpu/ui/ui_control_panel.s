@@ -539,16 +539,16 @@ AcFileSfx_DrawLoop:
 	ld xde, (xhl)
 	ld xhl, (xix)
 	push xhl
-	pushw PmBank_DrawRegionInfo_Data@hi16
-	pushw PmBank_DrawRegionInfo_Data@lo16
+	pushw 0xff	; colour pair for DrawString (by value), not a pointer
+	pushw 0xf5
 	jr AcFileSfx_CallDrawString
 
 AcFileSfx_DrawDefault:
 	ld xde, (xhl)
 	ld xhl, (xix)
 	push xhl
-	pushw PmBank_DrawRegionInfo_Data@hi16
-	pushw PmBank_DrawRegionInfo_Data@lo16
+	pushw 0xff	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 
 AcFileSfx_CallDrawString:
 	call DrawString

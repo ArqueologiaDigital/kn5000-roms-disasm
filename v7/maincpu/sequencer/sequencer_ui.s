@@ -6707,8 +6707,8 @@ NoteEditBox_EventDispatch2_Skip8:
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xf2	; colour pair for DrawStringLeftJustify, not a pointer
+	pushw 0xff
 NoteEditBox_EventDispatch2_Join8:
 	call	DrawStringLeftJustify
 	lda	xix, (xsp+28)
@@ -6751,8 +6751,8 @@ NoteEditBox_EventDispatch2_Join8:
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xf2	; colour pair for DrawStringLeftJustify, not a pointer
+	pushw 0xff
 	call	DrawStringLeftJustify
 	ld	a, (135318:24)
 	inc	1, a

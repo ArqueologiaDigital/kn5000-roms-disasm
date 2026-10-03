@@ -5866,8 +5866,8 @@ NoteEditBoxProc_SetupGridDisplay_Join:
 	lda xde, (xsp + 36)
 	ld xhl, 0:i3
 	push xhl
-	pushw PmBank_DrawRegionInfo_Data@hi16
-	pushw PmBank_DrawRegionInfo_Data@lo16
+	pushw 0xff	; colour pair for DrawStringLeftJustify, not a pointer
+	pushw 0xf5
 	call DrawStringLeftJustify
 	jrl NoteEdit_ReturnZero
 
@@ -5981,8 +5981,8 @@ NoteEditBox_EventDispatch2_Skip2:
 	lda	xde, (xsp+36)
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	NoteEditBox_EventDispatch2_Data@hi16
-	pushw	NoteEditBox_EventDispatch2_Data@lo16
+	pushw	0xfb	; colour pair for DrawStringLeftJustify, not a pointer
+	pushw	0xf5
 	call	DrawStringLeftJustify
 NoteEditBox_EventDispatch2_Skip3:
 	ld	xwa, (xsp+12)
@@ -6034,8 +6034,8 @@ NoteEditBox_EventDispatch2_Skip3:
 	lda	xde, (xsp+36)
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	NoteEditBox_EventDispatch2_Data@hi16
-	pushw	NoteEditBox_EventDispatch2_Data@lo16
+	pushw	0xfb	; colour pair for DrawString (by value), not a pointer
+	pushw	0xf5
 	jrl	NoteEditBox_EventDispatch2_Join7
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -6153,8 +6153,8 @@ NoteEditBox_EventDispatch2_Join3:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	pushw	PmBank_DrawRegionInfo_Data@hi16
-	pushw	PmBank_DrawRegionInfo_Data@lo16
+	pushw	0xff	; colour pair for DrawStringLeftJustify, not a pointer
+	pushw	0xf5
 	call	DrawStringLeftJustify
 	inc1b_erp 251
 	cp_erpb 251, 11
@@ -6246,8 +6246,8 @@ NoteEditBox_EventDispatch2_Join5:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	pushw	PmBank_DrawRegionInfo_Data@hi16
-	pushw	PmBank_DrawRegionInfo_Data@lo16
+	pushw	0xff	; colour pair for DrawStringLeftJustify, not a pointer
+	pushw	0xf5
 	call	DrawStringLeftJustify
 	inc1b_erp 251
 	cp_erpb 251, 8

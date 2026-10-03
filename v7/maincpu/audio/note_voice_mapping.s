@@ -26005,7 +26005,6 @@ ToneGen_ProcessMidiConverge_Code:
 	jr	lt, TmFlash_BulkTransferToSubCPU_Skip3
 	cp	hl, 5:i3
 	jr	gt, TmFlash_BulkTransferToSubCPU_Skip3
-PsMixer_CtlTypeProc5_Data:
 	add	hl, hl
 	lda	xix, (TmFlashBulkA_SwitchOffsets:24)
 	ld	hl, (xix+hl)

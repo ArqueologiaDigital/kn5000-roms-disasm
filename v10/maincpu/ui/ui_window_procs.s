@@ -8815,7 +8815,6 @@ DrawLineWithMode_Impl_Join2:
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
 	jr	nz, DrawLineWithMode_Impl_Skip5
-PsMixer_CtlTypeProc2_Data_2:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
 	jrl	z, DrawLineWithMode_Impl_Epilogue
@@ -8905,9 +8904,7 @@ DrawLineWithMode_Impl_Skip7:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xbc
-NoteEditBox_EventDispatch2_Data:
 	add	xix, xwa
-PmBank_OnPaint_Data:
 	add	xix, (0x030452:24)
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)

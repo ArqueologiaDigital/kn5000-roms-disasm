@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,610
-#   semantic names ........... 50,750 (98.3%)
+#   symbols .................. 51,607
+#   semantic names ........... 50,747 (98.3%)
 #   positional names ......... 860
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -43103,13 +43103,10 @@ DrawLineWithMode_Impl_Skip3 00FAFFD2
 DrawLineWithMode_Impl_Join 00FAFFDC
 DrawLineWithMode_Impl_Skip4 00FAFFF2
 DrawLineWithMode_Impl_Join2 00FAFFF4
-PsMixer_CtlTypeProc2_Data_2 00FB0000
 DrawLineWithMode_Impl_Skip5 00FB0008
 DrawLineWithMode_Impl_Loop 00FB00B6
 DrawLineWithMode_Impl_Skip6 00FB00D7
 DrawLineWithMode_Impl_Skip7 00FB00EF
-NoteEditBox_EventDispatch2_Data 00FB00F5
-PmBank_OnPaint_Data 00FB00F7
 DrawLineWithMode_Impl_Loop2 00FB010A
 DrawLineWithMode_Impl_Skip8 00FB0125
 DrawLineWithMode_Impl_Skip9 00FB013F

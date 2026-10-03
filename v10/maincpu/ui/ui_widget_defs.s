@@ -6426,8 +6426,8 @@ AcMixerVol_Confirm:
 	addiw_da (xwa + 6), 0x12
 	ld xde, 3:i3
 	push xde
-	pushw PsMixer_CtlTypeProc2_Data_2@hi16
-	pushw PsMixer_CtlTypeProc2_Data_2@lo16
+	pushw 0xfb	; colour pair for DrawStringReverse, not a pointer
+	pushw 0x00
 	pushw 0x0
 	pushw 0x1
 	ld xde, AcMixerVol_Confirm_Str_MUTE

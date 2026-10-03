@@ -12127,8 +12127,8 @@ VariScreen_HandlePaint:
 	lda	xde, (xsp+290)
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	PmBank_OnPaint_Data@hi16
-	pushw	PmBank_OnPaint_Data@lo16
+	pushw	0xfb	; colour pair for DrawString, not a pointer
+	pushw	0xf7
 	call	DrawString
 	lda	xbc, (xsp+546)
 	ldw	(xbc), 144
@@ -13901,8 +13901,8 @@ RVari_Paint:
 	ld	(xwa+6), hl
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	PmBank_OnPaint_Data@hi16
-	pushw	PmBank_OnPaint_Data@lo16
+	pushw	0xfb	; colour pair for DrawString, not a pointer
+	pushw	0xf7
 	call	DrawString
 	ld	xwa, (xsp+552)
 	ld	xbc, EVT_PARA_DRAW

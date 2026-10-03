@@ -27046,7 +27046,6 @@ SendPartDataBlock_Return5_Entry2_Code_Skip2:
 	ld	(xbc+60), a
 NoteEditBox_EventDispatch2_Data_2:
 	lda	xix, (xbc+58)
-PmBank_DrawRegionInfo_Data:
 	ld	a, (xde+32)
 	ld	(xix), a
 	lda	xiy, (xbc+59)

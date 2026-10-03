@@ -94,6 +94,8 @@ def reg_macro_addresses(line):
     return m, out
 
 
+COLOUR_CALL = re.compile(r'\bcall\s+(DrawString|DrawStringCentered|DrawStringLeftJustify|'
+                         r'DrawStringRightJustify|DrawStringAlignment|DrawStringReverse)\b')
 PUSH = re.compile(r'^(\s*(?:[A-Za-z_.$][\w.$]*:)?\s*pushw\s+)(0x[0-9a-fA-F]+|\d+)(\s*(?:;.*)?)$')
 STRUCT = re.compile(r'_(Skip|Join|Loop|Return|Helper|Epilogue|Entry|Sub|Tail|Next|Done|Exit|'
                     r'End|Data|Block|Bytes|Code)\d*$|_0x[0-9A-Fa-f]+$|^LABEL_|^sub_|^loc_', re.I)
@@ -154,6 +156,12 @@ def main():
                 continue
             v = (h << 16) | l
             rel = os.path.relpath(f, REPO)
+            if COLOUR_CALL.search(" ".join(x.split(";")[0] for x in L[i + 2:i + 8])):
+                # the 32-bit argument of the DrawString family is a COLOUR PAIR, not a pointer
+                # ((0xff, 0xf5), (0xfb, 0xf5) ...; scripts/tools/unsymbolize_color_pairs.py)
+                stats["colour pair for DrawString*"] += 1
+                i += 2
+                continue
             if not lo <= v <= hi:
                 stats["outside-own-rom"] += 1
                 i += 1              # `pushw 3 / pushw 0xe5 / pushw 0xac98`: the pair may start here

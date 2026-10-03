@@ -4078,8 +4078,8 @@ PmBank_OnPaint:
 	ld (xwa + 6), de
 	ld xde, 3:i3
 	push xde
-	pushw PmBank_OnPaint_Data@hi16
-	pushw PmBank_OnPaint_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf7
 	ld xde, PmBank_OnPaint_Str_Select_the_mode_by_sound_button
 	call DrawString
 	lda xbc, (xsp+264)

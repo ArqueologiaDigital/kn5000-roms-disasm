@@ -79,6 +79,8 @@ ADDRLBL = re.compile(rb'^(?:LABEL|Label|label|sub|SUB|loc|LOC|Unknown|UNKNOWN|Un
 BYTECMT = re.compile(rb'^\s*(\S+:)?\s*\.byte\b[^;\n]*;\s*(?:MAME:|unidasm:|=\s*)?\s*(ld|lda|ldw|ldb|push|pop|call|calr|jp|jr|jrl|ret|reti|add|sub|and|or|xor|cp|inc|dec|bit|set|res|tset|ex|mul|div|sll|srl|sla|sra|rlc|rrc|rl|rr|ldir|lddr|ldi|ldd|swi|ei|nop|halt|link|unlk|djnz|scc|neg|cpl|extz|exts|mirr|paa|incf|decf|ldf|ldc|ldx)\b', re.M | re.I)
 NUMADDR = re.compile(rb'^\s*(?:\S+:)?\s*(?!jr\b|jrl\b|calr\b|call\b|jp\b|djnz\b|\.)([a-z_][a-z0-9_]*)\s+([^;\n]*)', re.M)
 LIT = re.compile(rb'(?<![\w.$])(0x[0-9a-fA-F]+|\d{7,})(?![\w.$])')
+COLOUR_CALL = re.compile(rb'\bcall\s+(DrawString|DrawStringCentered|DrawStringLeftJustify|'
+                         rb'DrawStringRightJustify|DrawStringAlignment|DrawStringReverse)\b')
 PUSHW = re.compile(rb'^\s*(?:[A-Za-z_.$][\w.$]*:)?\s*pushw\s+(0x[0-9a-fA-F]+|\d+)\s*(?:;.*)?$')
 REGMAC = re.compile(rb'^\s+(RegObjTable|RegObjTabl|RegModeHiLo|RegTitleHiLo|RegMode|RegTitle|'
                     rb'RegObjTableHama|RegObjTablHama|RegTitleHama)\s+([^;\n]*)', re.M)
@@ -132,6 +134,8 @@ def numfar(data, rng):
     lines = data.split(b"\n")
     for i in range(len(lines) - 1):
         m1, m2 = PUSHW.match(lines[i]), PUSHW.match(lines[i + 1])
+        if m1 and m2 and COLOUR_CALL.search(b" ".join(x.split(b";")[0] for x in lines[i + 2:i + 8])):
+            continue        # a DrawString* colour pair, not a far pointer (2026-10-03)
         if m1 and m2:
             h, l = int(m1.group(1), 0), int(m2.group(1), 0)
             if h <= 0xff and l <= 0xffff and lo <= (h << 16 | l) <= hi:

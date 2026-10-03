@@ -13332,7 +13332,6 @@ SeqVoice_ValidateState_StoreChannel:
 	ld a, (0x288d:16)
 	extz wa
 	calr Part_ValidateVoiceChannel
-DrawEditSw_FinalPosition_Data:
 	ld a, (0x287a:16)
 	cp a, 0:i3
 	jr z, SeqVoice_ValidateState_SaveRefs

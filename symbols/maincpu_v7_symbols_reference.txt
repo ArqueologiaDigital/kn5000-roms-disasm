@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,412
-#   semantic names ........... 50,409 (98.0%)
+#   symbols .................. 51,408
+#   semantic names ........... 50,405 (98.0%)
 #   positional names ......... 1,003
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -21950,7 +21950,6 @@ SetWall_RetStub1 00F200C3
 SetWall_RetStub2 00F200C4
 SetWall_MiscDataAndCode 00F200C5
 MiddleFuncCall_DispatchData_Code_Helper5 00F200C7
-NoteEditBox_EventDispatch2_Data 00F200FF
 SetWall_MiscDataAndCode_Skip 00F20106
 SetWall_MiscDataAndCode_Skip2 00F20110
 SetWall_MiscDataAndCode_Return 00F20116
@@ -26643,7 +26642,6 @@ SeqVoice_DrumSearchLoop 00F400AA
 SeqVoice_DrumSearchNext 00F400C1
 SeqVoice_ValidateAndProcessState 00F400CB
 SeqVoice_ValidateState_StoreChannel 00F400DF
-DrawEditSw_FinalPosition_Data 00F400F7
 SeqVoice_ValidateState_SaveRefs 00F4010A
 SeqData_RhythmDispatchLoop 00F40122
 SeqData_RhythmNoteDispatch 00F40149
@@ -42812,7 +42810,6 @@ DrawLineWithMode_Impl_Skip24 00FB00A7
 DrawLineWithMode_Impl_Loop10 00FB00CE
 DrawLineWithMode_Impl_Skip25 00FB00EF
 DrawLineWithMode_Impl_Join8 00FB00F1
-PmBank_OnPaint_Data 00FB00F7
 DrawLineWithMode_Impl_Mode2 00FB010E
 DrawLineWithMode_Impl_Loop11 00FB0142
 DrawLineWithMode_Impl_Skip26 00FB014A
@@ -50877,7 +50874,6 @@ TmFlash_BulkTransferToSubCPU 00FEFF8F
 TmFlash_BulkTransferToSubCPU_Skip 00FEFFB5
 TmFlash_BulkTransferToSubCPU_Skip2 00FEFFCB
 ToneGen_ProcessMidiConverge_Code 00FF0000
-PsMixer_CtlTypeProc5_Data 00FF0008
 VoiceParam_DispatchTable1 00FF001E
 TmFlash_BulkTransferToSubCPU_Join 00FF002A
 TmFlash_BulkTransferToSubCPU_Skip3 00FF0050

@@ -13585,8 +13585,8 @@ PsMixer_CtlTypeProc5_Skip:
 PsMixer_CtlTypeProc5_Skip2:
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	PsMixer_CtlTypeProc5_Data@hi16
-	pushw	PsMixer_CtlTypeProc5_Data@lo16
+	pushw	0xff	; colour pair for DrawStringReverse, not a pointer
+	pushw	0x08
 	pushw	0
 	pushw	0
 PsMixer_CtlTypeProc5_Join:
@@ -13741,8 +13741,8 @@ PsMixer_CtlTypeProc6_Skip:
 PsMixer_CtlTypeProc6_Skip2:
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	PsMixer_CtlTypeProc5_Data@hi16
-	pushw	PsMixer_CtlTypeProc5_Data@lo16
+	pushw	0xff	; colour pair for DrawStringReverse, not a pointer
+	pushw	0x08
 	pushw	0
 	pushw	0
 PsMixer_CtlTypeProc6_Join:

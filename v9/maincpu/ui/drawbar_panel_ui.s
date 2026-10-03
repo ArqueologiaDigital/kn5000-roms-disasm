@@ -14617,8 +14617,8 @@ PsMixer_CtlTypeProc2_Entry:
 	addw	(xwa+6), 0x12
 	ld	xde, 3:i3
 	push	xde
-	pushw	PsMixer_CtlTypeProc2_Data_2@hi16
-	pushw	PsMixer_CtlTypeProc2_Data_2@lo16
+	pushw	0xfb	; colour pair for DrawStringReverse, not a pointer
+	pushw	0x00
 	pushw	0
 	pushw	1
 	ld	xde, PsMixer_CtlTypeProc2_Entry_Data

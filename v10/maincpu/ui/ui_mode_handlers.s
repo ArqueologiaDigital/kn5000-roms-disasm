@@ -3378,8 +3378,8 @@ MasterSetup_GetNameB_DrawString:
 	lda xde, (xsp + 12)
 	ld xhl, 1:i3
 	push xhl
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 	call DrawString
 	jr SeqFile_ReturnZeroJmp2
 AcMstStyleAlpGridBoxProc_Evt1C0001C:
@@ -4636,8 +4636,8 @@ MstStyle1Sub_GetNameB_DrawString:
 	lda xde, (xsp + 12)
 	ld xhl, 6:i3
 	push xhl
-	pushw PmBank_DrawRegionInfo_Data@hi16
-	pushw PmBank_DrawRegionInfo_Data@lo16
+	pushw 0xff	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 	call DrawString
 	jr SeqFile_ReturnZeroJmp
 
@@ -5914,8 +5914,8 @@ MstStyle2_GetNameB_DrawString:
 	lda xde, (xsp + 18)
 	ld xhl, 0:i3
 	push xhl
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 	call DrawString
 	ld xbc, (xiz + 82)
 	ld xwa, (xiz + 78)
@@ -5991,8 +5991,8 @@ MstStyle2_NameB_Render:
 	lda xde, (xsp + 18)
 	ld xhl, 0:i3
 	push xhl
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 	call DrawString
 	lda xbc, (xsp + 36)
 	ldw (xbc), 0x10b
@@ -6012,8 +6012,8 @@ MstStyle2_NameB_Render:
 	lda xde, (xsp + 12)
 	ld xhl, 0:i3
 	push xhl
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 	call DrawString
 	lda xhl, (xsp + 36)
 	ldw (xhl), 0x91
@@ -8468,8 +8468,8 @@ PmExpFilter_Repaint:
 	ld (xwa + 6), de
 	ld xde, 0:i3
 	push xde
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 	ld xde, PmExpFilter_Repaint_Str_FILTER_TYPE
 	call DrawString
 	lda xbc, (xsp + 12)
@@ -8489,8 +8489,8 @@ PmExpFilter_Repaint:
 	ld (xwa + 6), de
 	ld xde, 0:i3
 	push xde
-	pushw NoteEditBox_EventDispatch2_Data@hi16
-	pushw NoteEditBox_EventDispatch2_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf5
 	ld xde, PmExpFilter_Repaint_Str_ON_OFF
 	call DrawString
 	ld (xsp + 10), 0x0
@@ -11457,8 +11457,8 @@ AcPmBkEdit_BankEdit:
 AcPmBkEdit_BankEdit_DrawDiff:
 	ld xbc, 0:i3
 	push xbc
-	pushw PmBank_DrawRegionInfo_Data@hi16
-	pushw PmBank_DrawRegionInfo_Data@lo16
+	pushw 0xff	; colour pair for DrawString (by value), not a pointer
+	pushw 0xf5
 	ld xbc, xde
 	ld xde, xhl
 
@@ -12071,8 +12071,8 @@ VariScreen_HandlePaint:
 	lda xde, (xsp+290)
 	ld xhl, 0:i3
 	push xhl
-	pushw PmBank_OnPaint_Data@hi16
-	pushw PmBank_OnPaint_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf7
 	call DrawString
 	lda xbc, (xsp+546)
 	ldw (xbc), 0x90
@@ -13859,8 +13859,8 @@ RVari_Paint:
 	ld (xwa + 6), hl
 	ld xhl, 0:i3
 	push xhl
-	pushw PmBank_OnPaint_Data@hi16
-	pushw PmBank_OnPaint_Data@lo16
+	pushw 0xfb	; colour pair for DrawString, not a pointer
+	pushw 0xf7
 	call DrawString
 	ld XWA, (xsp + 0x0228)
 	ld xbc, EVT_PARA_DRAW
