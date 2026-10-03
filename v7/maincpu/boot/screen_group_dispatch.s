@@ -16,7 +16,7 @@
 ; every instruction re-assembled to the v7 bytes; what v10 itself still spells
 ; as `.byte` stays `.byte`.  The v10 names above are not placed here because v7
 ; still defines them (drifted) in audio/dsp_config_sysex.s.  Kept, because
-; other v7 code reaches them: DkMdlyPly_CheckState_Helper2 (0xFDD7D6, 8 calls)
+; other v7 code reaches them: AudioMode_ResetVoiceState (0xFDD7D6, 8 calls)
 ; and ScreenGroup_InitVoiceLoop (ui_widgets/widget_dispatch.s uses +79).  The
 ; other old labels had no reference in code or ROM and are dropped (notes).
 ; =============================================================================
@@ -52,7 +52,7 @@ screen_group_dispatch_Skip2:
 	call	DSPCfg_EventType50_Code_Helper4
 screen_group_dispatch_Skip3:
 	jp	AudioInit_DispatchChanges
-AudioMode_CheckAndUpdateStereo_Helper:
+AudioMode_SetStereoFlags:
 	bit	0, (0xfc69:16)
 	ret	z
 ; (v7 label ScreenGroup_WidgetLoop stood here; dropped, see the file header)
@@ -60,7 +60,7 @@ AudioMode_CheckAndUpdateStereo_Helper:
 	orw	(0xc4f8:16), 4
 	calr	AudioInit_ProcessModeChange
 	ret
-DkMdlyPly_CheckState_Helper2:
+AudioMode_ResetVoiceState:
 	bit	1, (0xfc67:16)
 	jr	z, DkMdlyPly_CheckState_Helper2_Join
 	ld	wa, (0xc4f8:16)

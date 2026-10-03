@@ -2056,7 +2056,7 @@ CtrlPanel_HandleKeyInput:
 	ret	nz
 	jr	PartSelect_UpdateDisplayState
 CtrlPanel_HandleKey10:
-	call	DkMdlyPly_CheckState_Helper2
+	call	AudioMode_ResetVoiceState
 	ld	xde, 0:i3
 	ld	e, (PART_SELECT:16)
 	ld	xwa, 4294967295
@@ -2827,7 +2827,7 @@ MainTitleCtrl_SetIndicatorAndClear:
 	ld	(TRANSITION_FLAGS:24), xwa
 	ld	(TRANSITION_TIMER:24), xwa
 	ld	(TRANSITION_PROGRESS:24), xwa
-	call	DkMdlyPly_CheckState_Helper2
+	call	AudioMode_ResetVoiceState
 	jrl	UIWidget_ReturnZero
 SeqState_DemoModeHandler:
 	cp	xde, 8

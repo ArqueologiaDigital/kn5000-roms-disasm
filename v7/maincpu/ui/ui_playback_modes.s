@@ -1636,7 +1636,7 @@ DkMdlyPly_HandleResult:
 	ldw	wa, 144
 	ldw	bc, 16
 	call	AddswbWr
-	call	DkMdlyPly_CheckState_Helper2
+	call	AudioMode_ResetVoiceState
 	jr	DkMdlyPly_Finalize	; -> 0xF2112B
 DkMdlyPly_ExtendedCheck:
 	inc1w_erp 0xfa

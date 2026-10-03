@@ -8581,7 +8581,7 @@ call	SwbtWr_QueuePostEvent
 	ld	d, 6:opc
 	ld	e, 72:opc
 call	SwbtWr_QueuePostEvent
-	call	16635840
+call	AudioMode_SetStereoFlags
 	ret
 AccReplay_SavedPedal_Return:
 	nop
@@ -8630,7 +8630,7 @@ call	SwbtWr_QueuePostEvent
 	ld	d, 6:opc
 	ld	e, 72:opc
 call	SwbtWr_QueuePostEvent
-	call	16635840
+call	AudioMode_SetStereoFlags
 	ret
 AccReplay_SendPedal_Return:
 	nop
@@ -8671,7 +8671,7 @@ call	SwbtWr_QueuePostEvent
 	ld	d, 6:opc
 	ld	e, 72:opc
 call	SwbtWr_QueuePostEvent
-	call	16635840
+call	AudioMode_SetStereoFlags
 	ret
 AccReplay_SavedExpr_Return:
 	nop
@@ -9978,7 +9978,7 @@ AccDir_Periodic_DisableAndReset:
 .Lc_f5bb2f:
 	and (0x31e8:16), 0xef
 	and (0x31e8:16), 0xfb
-	call 0xfdd7c0
+call AudioMode_SetStereoFlags
 
 
 
@@ -23692,7 +23692,7 @@ RhythmFillIn_LookupAndApply:
 	ld	(14079:16), a
 	calr	DrumKit_UpdateStatusFlags
 	call	AudioInit_SelectAndDispatch
-	call	DkMdlyPly_CheckState_Helper2
+	call	AudioMode_ResetVoiceState
 	ret
 RhythmFillIn_PatternTable:
 	.incbin "includes/romslices/v7_transplant_RhythmFillIn_PatternTable_head.bin"
@@ -23828,7 +23828,7 @@ RhythmVariation_Select:
 	or	(0x3431:16), 128
 RhythmVariation_PostDispatch:
 	call	AudioInit_SelectAndDispatch
-	call	DkMdlyPly_CheckState_Helper2
+	call	AudioMode_ResetVoiceState
 RhythmVariation_Return:
 	ret
 RhythmVariation_InlineCode:
@@ -23914,7 +23914,7 @@ RhythmVariation_Select_Code_Sub_Helper:
 	ld	a, (xhl)
 	ld	(14079:16), a
 call	AudioInit_SelectAndDispatch
-	call	16635862
+call	AudioMode_ResetVoiceState
 	calr	DrumKit_UpdateStatusFlags
 	ret
 RhythmVariation_InlineCode_Code2:
@@ -25574,7 +25574,7 @@ DrumVoice_NotifyEE_Entry4_Data:
 	calr	TimeSig_DisplayStrings_Code_Helper4
 	calr	DrumKit_UpdateStatusFlags
 	call	AudioInit_SelectAndDispatch
-	call	DkMdlyPly_CheckState_Helper2
+	call	AudioMode_ResetVoiceState
 	calr	RhythmPatInit_LoadParams
 	ret
 TimeSig_DisplayStrings_Code_Helper4:
