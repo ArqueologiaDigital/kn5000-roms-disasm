@@ -1,0 +1,22 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bExitKey_ScreenCodeCB\b/ExitKey_SoundEditDrumMenu/g
+s/\bLcdKeyRow1_ScreenCodeCB\b/LcdKeyRow1_SoundEditDrumMenu/g
+s/\bLcdKeyRow2_ScreenCodeCB\b/LcdKeyRow2_SoundEditDrumMenu/g
+s/\bLcdKeyRow3_ScreenCodeCB\b/LcdKeyRow3_SoundEditDrumMenu/g
+s/\bLcdKeyRow4_ScreenCodeCB\b/LcdKeyRow4_SoundEditDrumMenu/g
+s/\bLcdKeyRow5_ScreenCodeCB\b/LcdKeyRow5_SoundEditDrumMenu/g
+s/\bScreenButton_CodeCB\b/ScreenButton_SoundEditDrumMenu/g
+s/\bScreenCodeA8_RepaintField\b/ToneEditPage_A8_RepaintField/g
+s/\bScreenCodeAB_Paint\b/SoundEditDrumMenu_Paint/g
+s/\bScreenCodeAB_RepaintField\b/SoundEditDrumMenu_RepaintField/g
+s/\bScreenCodeC0_Handler\b/ToneEditPage_A0_ModelingTop/g
+s/\bScreenCodeC8_Handler\b/ToneEditPage_A8_SerialParallel/g
+s/\bScreenCodeCB_Handler\b/ScreenEnter_SoundEditDrumMenu/g
+s/\bScreenLeave_CodeC0\b/ToneEditPage_A0_Leave/g
+s/\bScreenLeave_CodeC1\b/ToneEditPage_A1_Leave/g
+s/\bScreenLeave_CodeC2\b/ToneEditPage_A2_Leave/g
+s/\bScreenLeave_CodeC8\b/ToneEditPage_A8_Leave/g
+s/\bScreenLeave_CodeCB\b/ScreenLeave_SoundEditDrumMenu/g
+s/\bSoftKeyCol2_ScreenCodeCB\b/SoftKeyCol2_SoundEditDrumMenu/g
+s/\bSoftKeyCol3_ScreenCodeCB\b/SoftKeyCol3_SoundEditDrumMenu/g
+s/\bSoftKeyCol4_ScreenCodeCB\b/SoftKeyCol4_SoundEditDrumMenu/g

@@ -444,15 +444,15 @@
 	.set LcdKeyRow4_SoundEditPitchLfo,                              0x00F0A8BE
 	.set LcdKeyRow5_SoundEditPitchLfo,                              0x00F0A8D6
 	.set ExitKey_SoundEditPitchLfo,                              0x00F0A8EE
-	.set SoftKeyCol2_ScreenCodeCB,                              0x00F0AB4B
-	.set SoftKeyCol3_ScreenCodeCB,                              0x00F0ABB9
-	.set SoftKeyCol4_ScreenCodeCB,                              0x00F0AC43
-	.set LcdKeyRow1_ScreenCodeCB,                              0x00F0ACB1
-	.set LcdKeyRow2_ScreenCodeCB,                              0x00F0ACCE
-	.set LcdKeyRow3_ScreenCodeCB,                              0x00F0AD02
-	.set LcdKeyRow4_ScreenCodeCB,                              0x00F0AD36
-	.set LcdKeyRow5_ScreenCodeCB,                              0x00F0AD75
-	.set ExitKey_ScreenCodeCB,                              0x00F0ADBC
+	.set SoftKeyCol2_SoundEditDrumMenu,                              0x00F0AB4B
+	.set SoftKeyCol3_SoundEditDrumMenu,                              0x00F0ABB9
+	.set SoftKeyCol4_SoundEditDrumMenu,                              0x00F0AC43
+	.set LcdKeyRow1_SoundEditDrumMenu,                              0x00F0ACB1
+	.set LcdKeyRow2_SoundEditDrumMenu,                              0x00F0ACCE
+	.set LcdKeyRow3_SoundEditDrumMenu,                              0x00F0AD02
+	.set LcdKeyRow4_SoundEditDrumMenu,                              0x00F0AD36
+	.set LcdKeyRow5_SoundEditDrumMenu,                              0x00F0AD75
+	.set ExitKey_SoundEditDrumMenu,                              0x00F0ADBC
 	.set sub_F0ADD4,                              0x00F0ADD4
 	.set sub_F0AE9B,                              0x00F0AE9B
 	.set sub_F0AF66,                              0x00F0AF66
@@ -125342,24 +125342,24 @@ PanelOpTable_FCFC44:
 
 ; PanelOpTable_FCFC8C -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
-; Read by: ScreenButton_CodeCB (prom_b) at 0xF0AB26.
+; Read by: ScreenButton_SoundEditDrumMenu (prom_b) at 0xF0AB26.
 PanelOpTable_FCFC8C:
 	.long PanelOp_Nop                             ; FCFC8C  [ 0]
-	.long SoftKeyCol2_ScreenCodeCB                              ; FCFC90  [ 1] prom_b SoftKeyCol2_ScreenCodeCB
-	.long SoftKeyCol3_ScreenCodeCB                              ; FCFC94  [ 2] prom_b SoftKeyCol3_ScreenCodeCB
-	.long SoftKeyCol4_ScreenCodeCB                              ; FCFC98  [ 3] prom_b SoftKeyCol4_ScreenCodeCB
+	.long SoftKeyCol2_SoundEditDrumMenu                              ; FCFC90  [ 1] prom_b SoftKeyCol2_SoundEditDrumMenu
+	.long SoftKeyCol3_SoundEditDrumMenu                              ; FCFC94  [ 2] prom_b SoftKeyCol3_SoundEditDrumMenu
+	.long SoftKeyCol4_SoundEditDrumMenu                              ; FCFC98  [ 3] prom_b SoftKeyCol4_SoundEditDrumMenu
 	.long PanelOp_Nop                             ; FCFC9C  [ 4]
 	.long PanelOp_Nop                             ; FCFCA0  [ 5]
 	.long PanelOp_Nop                             ; FCFCA4  [ 6]
 	.long PanelOp_Nop                             ; FCFCA8  [ 7]
-	.long LcdKeyRow1_ScreenCodeCB                              ; FCFCAC  [ 8] prom_b LcdKeyRow1_ScreenCodeCB
-	.long LcdKeyRow2_ScreenCodeCB                              ; FCFCB0  [ 9] prom_b LcdKeyRow2_ScreenCodeCB
-	.long LcdKeyRow3_ScreenCodeCB                              ; FCFCB4  [10] prom_b LcdKeyRow3_ScreenCodeCB
-	.long LcdKeyRow4_ScreenCodeCB                              ; FCFCB8  [11] prom_b LcdKeyRow4_ScreenCodeCB
-	.long LcdKeyRow5_ScreenCodeCB                              ; FCFCBC  [12] prom_b LcdKeyRow5_ScreenCodeCB
+	.long LcdKeyRow1_SoundEditDrumMenu                              ; FCFCAC  [ 8] prom_b LcdKeyRow1_SoundEditDrumMenu
+	.long LcdKeyRow2_SoundEditDrumMenu                              ; FCFCB0  [ 9] prom_b LcdKeyRow2_SoundEditDrumMenu
+	.long LcdKeyRow3_SoundEditDrumMenu                              ; FCFCB4  [10] prom_b LcdKeyRow3_SoundEditDrumMenu
+	.long LcdKeyRow4_SoundEditDrumMenu                              ; FCFCB8  [11] prom_b LcdKeyRow4_SoundEditDrumMenu
+	.long LcdKeyRow5_SoundEditDrumMenu                              ; FCFCBC  [12] prom_b LcdKeyRow5_SoundEditDrumMenu
 	.long PanelOp_Nop                             ; FCFCC0  [13]
 	.long PanelOp_Nop                             ; FCFCC4  [14]
-	.long ExitKey_ScreenCodeCB                              ; FCFCC8  [15] prom_b ExitKey_ScreenCodeCB
+	.long ExitKey_SoundEditDrumMenu                              ; FCFCC8  [15] prom_b ExitKey_SoundEditDrumMenu
 	.long PanelOp_Nop                             ; FCFCCC  [16]
 	.long 0x00000000                              ; FCFCD0  [17] zero
 
@@ -125438,7 +125438,7 @@ ScreenCode80_Handlers:
 ;          Entry 3 is ToneEditPage_A3_PositionParameter, whose own header
 ;          says Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k.
 ScreenCodeC0_Handlers:
-	.long ScreenCodeC0_Handler                              ; FCFD67  [ 0]
+	.long ToneEditPage_A0_ModelingTop                              ; FCFD67  [ 0]
 	.long T_F41F7C_Nop                              ; FCFD6B  [ 1]
 	.long T_F41F8C_Nop                              ; FCFD6F  [ 2]
 	.long ToneEditPage_A3_PositionParameter       ; FCFD73  [ 3]
@@ -125446,10 +125446,10 @@ ScreenCodeC0_Handlers:
 	.long ToneEditPage_A5_FittingMutingTuning     ; FCFD7B  [ 5]
 	.long ToneEditPage_A6_TouchDepth              ; FCFD7F  [ 6]
 	.long ToneEditPage_A7_ResoModeKeyFollow       ; FCFD83  [ 7]
-	.long ScreenCodeC8_Handler                              ; FCFD87  [ 8]
+	.long ToneEditPage_A8_SerialParallel                              ; FCFD87  [ 8]
 	.long ScreenCode_Nop                          ; FCFD8B  [ 9]
 	.long ScreenCodeCA_Handler                              ; FCFD8F  [10]
-	.long ScreenCodeCB_Handler                              ; FCFD93  [11]
+	.long ScreenEnter_SoundEditDrumMenu                              ; FCFD93  [11]
 	.long T_F42340_Nop                              ; FCFD97  [12]
 	.long ScreenEnter_SoundEditControllerPage1                              ; FCFD9B  [13]
 	.long ScreenCode_Nop                          ; FCFD9F  [14]
@@ -129895,7 +129895,7 @@ sub_FD21E9:
 .LFD233B:
 	m_cp_mi8 MB16, UI_ScreenId, 0xcb                          ; FD233B  c1 7c 20 3f cb
 	jrl nz, .LFD24FE                                     ; FD2340  7e bb 01
-	call ScreenCodeCB_Handler                                      ; FD2343  1d 7f d2 fd
+	call ScreenEnter_SoundEditDrumMenu                                      ; FD2343  1d 7f d2 fd
 	jrl .LFD24FE                                         ; FD2347  78 b4 01
 .LFD234A:
 	cp H,0x12                                            ; FD234A  ce cf 12
@@ -151218,7 +151218,7 @@ ScreenCodeCA_Handler:
 	call ToneMsg80_Id00                                      ; FDD279  1d 47 64 fd
 	popw bc                                              ; FDD27D  49
 	ret                                                  ; FDD27E  0e
-ScreenCodeCB_Handler:
+ScreenEnter_SoundEditDrumMenu:
 	link XIZ,0xffe8                                      ; FDD27F  ee 0c e8 ff
 	pushw hl                                             ; FDD283  2b
 	pushw de                                             ; FDD284  2a
@@ -151394,7 +151394,7 @@ sub_FDD420:
 	ret                                                  ; FDD435  0e
 T_F42340_Nop:
 	ret                                                  ; FDD436  0e
-ScreenCodeC0_Handler:
+ToneEditPage_A0_ModelingTop:
 	link XIZ,0xffec                                      ; FDD437  ee 0c ec ff
 	pushw hl                                             ; FDD43B  2b
 	pushw de                                             ; FDD43C  2a
@@ -152702,7 +152702,7 @@ sub_FDDEFB:
 	popw hl                                              ; FDDF32  4b
 	unlk XIZ                                             ; FDDF33  ee 0d
 	ret                                                  ; FDDF35  0e
-ScreenCodeC8_Handler:
+ToneEditPage_A8_SerialParallel:
 	link XIZ,0xffe6                                      ; FDDF36  ee 0c e6 ff
 	pushw hl                                             ; FDDF3A  2b
 	pushw de                                             ; FDDF3B  2a
@@ -153198,7 +153198,7 @@ ScreenLeave_CodeCA:
 	ret                                                  ; FDE314  0e
 T_F4232C_Nop:
 	ret                                                  ; FDE315  0e
-ScreenLeave_CodeCB:
+ScreenLeave_SoundEditDrumMenu:
 	pushw 0x00                                           ; FDE316  0b 00 00
 	call Var27DA_Set                                      ; FDE319  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE31D  1d 13 77 fd
@@ -153216,7 +153216,7 @@ ScreenLeave_CodeCC:
 	ret                                                  ; FDE330  0e
 T_F4234C_Nop:
 	ret                                                  ; FDE331  0e
-ScreenLeave_CodeC0:
+ToneEditPage_A0_Leave:
 	pushw 0x00                                           ; FDE332  0b 00 00
 	call Var27DA_Set                                      ; FDE335  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE339  1d 13 77 fd
@@ -153224,9 +153224,9 @@ ScreenLeave_CodeC0:
 	ret                                                  ; FDE33E  0e
 T_F41F78_Nop:
 	ret                                                  ; FDE33F  0e
-; ScreenLeave_CodeC1: the +4 LEAVE method of the screen object for screen id 0xC1 -- PanelScreen_VtableTable entry 0xE1
+; ToneEditPage_A1_Leave: the +4 LEAVE method of the screen object for screen id 0xC1 -- PanelScreen_VtableTable entry 0xE1
 ;   (ViewB entry 0xC1) points at the thunk triple starting at T_F41F7C, and slot T_F41F80 jumps here.
-ScreenLeave_CodeC1:
+ToneEditPage_A1_Leave:
 	pushw 0x00                                           ; FDE340  0b 00 00
 	call Var27DA_Set                                      ; FDE343  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE347  1d 13 77 fd
@@ -153234,9 +153234,9 @@ ScreenLeave_CodeC1:
 	ret                                                  ; FDE34C  0e
 T_F41F88_Nop:
 	ret                                                  ; FDE34D  0e
-; ScreenLeave_CodeC2: the +4 LEAVE method of the screen object for screen id 0xC2 -- PanelScreen_VtableTable entry 0xE2
+; ToneEditPage_A2_Leave: the +4 LEAVE method of the screen object for screen id 0xC2 -- PanelScreen_VtableTable entry 0xE2
 ;   (ViewB entry 0xC2) points at the thunk triple starting at T_F41F8C, and slot T_F41F90 jumps here.
-ScreenLeave_CodeC2:
+ToneEditPage_A2_Leave:
 	pushw 0x00                                           ; FDE34E  0b 00 00
 	call Var27DA_Set                                      ; FDE351  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE355  1d 13 77 fd
@@ -153387,7 +153387,7 @@ ToneEditPage_A7_Leave:
 	ret                                                  ; FDE3A0  0e
 T_F41FE8_Nop:
 	ret                                                  ; FDE3A1  0e
-ScreenLeave_CodeC8:
+ToneEditPage_A8_Leave:
 	pushw 0x00                                           ; FDE3A2  0b 00 00
 	call Var27DA_Set                                      ; FDE3A5  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE3A9  1d 13 77 fd

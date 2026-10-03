@@ -59,6 +59,8 @@ SCREENS = {
     0x9D: ("SoundEditCopy", "the COPY page (SoundEditCopy_Paint, already so named)"),
     0x9E: ("SoundEditMemoryWrite", "MEM0RY WRITE SOUND EDIT; NAME, MEMORY BANK"),
     0x9F: ("SoundEditNaming", "SOUND NAMING; WRITE"),
+    0xCB: ("SoundEditDrumMenu", "SOUND EDIT / WRITE COPY; EFFECT SEND & OUTPUT, DSP EFFECT, KIT PARAMETER, FILTER, CONTROLLER, DRUM SOUND\n"
+           "NAMING, NOTE (repaint entry 0xAB, SoundEditDrumMenu_Paint)"),
     0xCD: ("SoundEditControllerPage1", "C0NTR0LLER SOUND EDIT; PAGE1/2 (repaint entry 0xAD = SoundEditController_PaintPage1)"),
 }
 SHARED = {  # partial repaints several codes use
@@ -66,6 +68,20 @@ SHARED = {  # partial repaints several codes use
     "SoundEditEnvelope1_RepaintField": "SoundEditEnvelope1_RepaintField",
     "SoundEditEnvelope2_RepaintField": "SoundEditEnvelope2_RepaintField",
     "SoundEditKeyFollow_RepaintField": "SoundEditKeyFollow_RepaintField",
+}
+# screens 0xC0+k paint through entry 0xA0+k; prom_a already calls 0xC3-0xC7 ToneEditPage_A3..A7, so
+# 0xC0/0xC1/0xC2/0xC8 join that family (entries A0 MODELING top, A1 TONE TEMPLATE, A2 DRIVER WAVEFORM,
+# A8 SERIAL / PARALLEL), and the drum menu's entry-0xAB paints take its name (2026-10-04)
+EXPLICIT = {
+    "ToneEditPage_A0_ModelingTop": "ToneEditPage_A0_ModelingTop",
+    "ToneEditPage_A0_Leave": "ToneEditPage_A0_Leave",
+    "ToneEditPage_A1_Leave": "ToneEditPage_A1_Leave",
+    "ToneEditPage_A2_Leave": "ToneEditPage_A2_Leave",
+    "ToneEditPage_A8_SerialParallel": "ToneEditPage_A8_SerialParallel",
+    "ToneEditPage_A8_Leave": "ToneEditPage_A8_Leave",
+    "ToneEditPage_A8_RepaintField": "ToneEditPage_A8_RepaintField",
+    "SoundEditDrumMenu_Paint": "SoundEditDrumMenu_Paint",
+    "SoundEditDrumMenu_RepaintField": "SoundEditDrumMenu_RepaintField",
 }
 FILES = [os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), os.path.join(ROOT, "prom_b", "wsa1_prom_b.s")]
 
@@ -75,7 +91,7 @@ def plan():
     labels = set(re.findall(r'^([A-Za-z_][\w$]*):', text, re.M))
     rows = []
     for lab in sorted(labels):
-        new = SHARED.get(lab)
+        new = SHARED.get(lab) or EXPLICIT.get(lab)
         m = (re.match(r'^ScreenCode([0-9A-F]{2})_Handler$', lab) or re.match(r'^ScreenLeave_Code([0-9A-F]{2})$', lab)
              or re.match(r'^ScreenButton_Code([0-9A-F]{2})$', lab) or re.match(r'^(\w+)_ScreenCode([0-9A-F]{2})$', lab)
              or re.match(r'^ScreenCode([0-9A-F]{2})_(Paint|RepaintField)$', lab))
