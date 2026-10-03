@@ -34,8 +34,9 @@ Other uses:
 - `PanelState_ClearOnChange` writes 0 (`xor WA,WA` then `ld (0x207E),A`) whenever `UI_ScreenLatch`
   differs from `UI_ScreenLatch_Previous`, so a new screen always opens on stage 0.
 - The screen objects' Button methods pick the button map from it:
-  `ld XIX,ButtonTable_<screen>_207EZero / cp (0x207E),0 / jr z / ld XIX,ButtonTable_<screen>_207ENonZero`.
-  This is why those labels carry the address.
+  `ld XIX,ButtonTable_<screen>_StageZero / cp (0x207E),0 / jr z / ld XIX,ButtonTable_<screen>_StageNonZero`.
+  Those labels, and the key handlers named after them, carried the address as `_207EZero` /
+  `_207ENonZero` until `scripts/renaming/rename_wsa1_screen_stage_labels.sed` renamed them.
 
 ⚠ **Not established:**
 

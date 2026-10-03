@@ -175,7 +175,7 @@ holes were three symptoms of reading VARIANT 1 against a variant-2 machine.
   ONE judgement, and the coordinator should decide it rather than average it:
 
     * IT REFUSES A NAME WHOSE DISTINGUISHING PART IS A POSITION NUMBER.
-      `Btn_Quantize_207EZero_LcdKeyRow3` names the third of five key pairs
+      `Btn_Quantize_StageZero_LcdKeyRow3` names the third of five key pairs
       beside the LCD; `..._SoftKeyCol5` names the fifth of eight keys under it.
       The sibling lane calls that the shape round 6 refused as
       `Write3602_Index5` -- a number that grades as content while stating
@@ -903,7 +903,7 @@ def selftest():
            for cls, c, _s, _m in L2.group_list(2, g)[2] if cls == 0xA9))
     ck("F7 the LAST proposal in address order is 0xF7FFFB, and it is a "
        "LcdKeyRow1 on ADVANCE/DELAY",
-       good[-1][0] == 0xF7FFFB and good[-1][1] == "Btn_AdvanceDelay_207EZero_LcdKeyRow1",
+       good[-1][0] == 0xF7FFFB and good[-1][1] == "Btn_AdvanceDelay_StageZero_LcdKeyRow1",
        "%06X %s" % (good[-1][0], good[-1][1]))
     ck("F8 the five refusals at slot 0x15 only are the variant-1 held forms of "
        "code 0x04", sum(1 for _a, s, _sc, _w in bad if s == [0x15]) == 5)

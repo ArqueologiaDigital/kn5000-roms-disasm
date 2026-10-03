@@ -49,9 +49,9 @@ QUESTION IT ANSWERS
   ==> reaches 34 unnamed routines, names 12, declines 22 and says why.
 
 ★ SPELLING: THIS PASS USES `<Control>_<Screen>`, NOT ROUND 11'S `Btn_<Screen>_<Control>`
-  Round 11 proposed `Btn_TrackAssign_207EZero_SoftKeyCol4`.  Round 11's OTHER
+  Round 11 proposed `Btn_TrackAssign_StageZero_SoftKeyCol4`.  Round 11's OTHER
   lane had already committed 25 of the same family as `ExitKey_TrackAssign_
-  207EZero` and `NumberPadKey_Quantize_207EZero`, control first.  Adopting
+  StageZero` and `NumberPadKey_Quantize_StageZero`, control first.  Adopting
   `Btn_` for the other 92 would have meant either two spellings in one span or
   renaming 25 correct labels -- and that rename would have falsified sixteen
   committed prose lines that read "exactly as the twenty named ExitKey_*
@@ -832,7 +832,7 @@ FAULTS = [
     # D4 has THREE sub-checks; the fault breaks all three at once and the proof
     # asserts three findings, so no sub-check rides along unexercised.
     ("D4", lambda L: [x.replace("ExitKey_DrawbarScreen", "Zzz_DrawbarScreen")
-                      .replace("ExitKey_TrackAssign_207EZero:", "Zzz_A:")
+                      .replace("ExitKey_TrackAssign_StageZero:", "Zzz_A:")
                       for x in L] +
                      ["; This is the largest single refusal of the round: 62 of "
                       "the span's 124"]),

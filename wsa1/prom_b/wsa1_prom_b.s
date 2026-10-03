@@ -215,7 +215,7 @@
 	.set	ScreenLeave_S0ngC0py_Nop, 0xF803C8
 	.set	Paint_N0teChange, 0xF80439
 	.set	ScreenLeaveBody_N0teChange, 0xF804EC
-	.set	ButtonTable_N0teChange_207EZero_Nop7, 0xF8051E
+	.set	ButtonTable_N0teChange_StageZero_Nop7, 0xF8051E
 	.set	Paint_MeasureC0py, 0xF8076C
 	.set	ScreenLeaveBody_MeasureC0py, 0xF80809
 	.set	Paint_MeasureInsert, 0xF80AC9
@@ -189271,10 +189271,12 @@ sub_F7CE04_Return:
 ; T_PanelButton_CallTableEntry -> prom_a 0xF8BDC5 masks the SAME five bits.  Two independent 5-bit
 ; masks and a 128-byte table: 32 buttons, one table per screen (two where the
 ; screen has an alternate map).
-; ⚠ STILL NOT ESTABLISHED: what (0x207E) and (0x0C10) MEAN -- which of a screen's
-; two button maps each picks, and when.  The same (0x207E) also picks between two
-; title display lists inside several Enter methods, so it is a per-screen variant
-; selector of some kind, and that is as far as the evidence goes.
+; (0x207E) is UI_ScreenStage (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md):
+; on the job screens 0 is the parameter page and 1 the "Are You Sure ?" page that
+; the first press of the execute key opens; it picks the button map (_StageZero /
+; _StageNonZero) and the title lists.
+; ⚠ STILL NOT ESTABLISHED: what (0x0C10) MEANS -- which of a screen's two
+; button maps it picks, and when.
 ; ==============================================================================
 
 ; ---------------------------------------------------------------------
@@ -189460,9 +189462,9 @@ ScreenNull_SongClear:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189478,17 +189480,17 @@ ScreenLeave_TrackClear:
 ; Evidence: the +8 word of screen object F43070 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7D458 / 0xF7D4D8 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_TrackClear:
-	ld	xix, ButtonTable_TrackClear_207EZero	; F7D06A  ld XIX,0x00f7d458
+	ld	xix, ButtonTable_TrackClear_StageZero	; F7D06A  ld XIX,0x00f7d458
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D06F  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip3	; F7D074  jr Z,0xf7d07b
-	ld	xix, ButtonTable_TrackClear_207ENonZero	; F7D076  ld XIX,0x00f7d4d8
+	ld	xix, ButtonTable_TrackClear_StageNonZero	; F7D076  ld XIX,0x00f7d4d8
 sub_F7CE04_Skip3:
 	call	T_PanelButton_CallTableEntry	; F7D07B  call 0xf41b08
 	ret	; F7D07F  ret
 ; Evidence: the +0x0C word of screen object F43070 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
 ScreenNull_TrackClear:
-	calr	ButtonTable_TrackClear_207ENonZero_Nop16	; F7D080  calr 0xf7ee07
+	calr	ButtonTable_TrackClear_StageNonZero_Nop16	; F7D080  calr 0xf7ee07
 	ret	; F7D083  ret
 
 ; ---------------------------------------------------------------------
@@ -189510,9 +189512,9 @@ ScreenNull_TrackClear:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189528,10 +189530,10 @@ ScreenLeave_TrackAssign:
 ; Evidence: the +8 word of screen object F43140 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7D558 / 0xF7D5D8 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_TrackAssign:
-	ld	xix, ButtonTable_TrackAssign_207EZero	; F7D08C  ld XIX,0x00f7d558
+	ld	xix, ButtonTable_TrackAssign_StageZero	; F7D08C  ld XIX,0x00f7d558
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D091  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip4	; F7D096  jr Z,0xf7d09d
-	ld	xix, ButtonTable_TrackAssign_207ENonZero	; F7D098  ld XIX,0x00f7d5d8
+	ld	xix, ButtonTable_TrackAssign_StageNonZero	; F7D098  ld XIX,0x00f7d5d8
 sub_F7CE04_Skip4:
 	call	T_PanelButton_CallTableEntry	; F7D09D  call 0xf41b08
 	ret	; F7D0A1  ret
@@ -189605,9 +189607,9 @@ ScreenNull_TrackAssignPresets:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189623,10 +189625,10 @@ ScreenLeave_TrackMerge:
 ; Evidence: the +8 word of screen object F430A0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7D6D8 / 0xF7D758 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_TrackMerge:
-	ld	xix, ButtonTable_TrackMerge_207EZero	; F7D0C6  ld XIX,0x00f7d6d8
+	ld	xix, ButtonTable_TrackMerge_StageZero	; F7D0C6  ld XIX,0x00f7d6d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D0CB  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip5	; F7D0D0  jr Z,0xf7d0d7
-	ld	xix, ButtonTable_TrackMerge_207ENonZero	; F7D0D2  ld XIX,0x00f7d758
+	ld	xix, ButtonTable_TrackMerge_StageNonZero	; F7D0D2  ld XIX,0x00f7d758
 sub_F7CE04_Skip5:
 	call	T_PanelButton_CallTableEntry	; F7D0D7  call 0xf41b08
 	ret	; F7D0DB  ret
@@ -189654,9 +189656,9 @@ ScreenNull_TrackMerge:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189672,10 +189674,10 @@ ScreenLeave_MeasureDelete:
 ; Evidence: the +8 word of screen object F430E0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7D7D8 / 0xF7D858 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureDelete:
-	ld	xix, ButtonTable_MeasureDelete_207EZero	; F7D0E7  ld XIX,0x00f7d7d8
+	ld	xix, ButtonTable_MeasureDelete_StageZero	; F7D0E7  ld XIX,0x00f7d7d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D0EC  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip6	; F7D0F1  jr Z,0xf7d0f8
-	ld	xix, ButtonTable_MeasureDelete_207ENonZero	; F7D0F3  ld XIX,0x00f7d858
+	ld	xix, ButtonTable_MeasureDelete_StageNonZero	; F7D0F3  ld XIX,0x00f7d858
 sub_F7CE04_Skip6:
 	call	T_PanelButton_CallTableEntry	; F7D0F8  call 0xf41b08
 	ret	; F7D0FC  ret
@@ -189703,9 +189705,9 @@ ScreenNull_MeasureDelete:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189721,10 +189723,10 @@ ScreenLeave_MeasureErase:
 ; Evidence: the +8 word of screen object F430B0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7D8D8 / 0xF7D958 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureErase:
-	ld	xix, ButtonTable_MeasureErase_207EZero	; F7D108  ld XIX,0x00f7d8d8
+	ld	xix, ButtonTable_MeasureErase_StageZero	; F7D108  ld XIX,0x00f7d8d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D10D  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip7	; F7D112  jr Z,0xf7d119
-	ld	xix, ButtonTable_MeasureErase_207ENonZero	; F7D114  ld XIX,0x00f7d958
+	ld	xix, ButtonTable_MeasureErase_StageNonZero	; F7D114  ld XIX,0x00f7d958
 sub_F7CE04_Skip7:
 	call	T_PanelButton_CallTableEntry	; F7D119  call 0xf41b08
 	ret	; F7D11D  ret
@@ -189791,9 +189793,9 @@ ScreenNull_PanelWrite:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189809,10 +189811,10 @@ ScreenLeave_Quantize:
 ; Evidence: the +8 word of screen object F43090 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7D9D8 / 0xF7DA58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_Quantize:
-	ld	xix, ButtonTable_Quantize_207EZero	; F7D139  ld XIX,0x00f7d9d8
+	ld	xix, ButtonTable_Quantize_StageZero	; F7D139  ld XIX,0x00f7d9d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D13E  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip8	; F7D143  jr Z,0xf7d14a
-	ld	xix, ButtonTable_Quantize_207ENonZero	; F7D145  ld XIX,0x00f7da58
+	ld	xix, ButtonTable_Quantize_StageNonZero	; F7D145  ld XIX,0x00f7da58
 sub_F7CE04_Skip8:
 	call	T_PanelButton_CallTableEntry	; F7D14A  call 0xf41b08
 	ret	; F7D14E  ret
@@ -189840,9 +189842,9 @@ ScreenNull_Quantize:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189858,10 +189860,10 @@ ScreenLeave_Vel0cityChange:
 ; Evidence: the +8 word of screen object F43080 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DAD8 / 0xF7DB58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_Vel0cityChange:
-	ld	xix, ButtonTable_Vel0cityChange_207EZero	; F7D15A  ld XIX,0x00f7dad8
+	ld	xix, ButtonTable_Vel0cityChange_StageZero	; F7D15A  ld XIX,0x00f7dad8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D15F  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip9	; F7D164  jr Z,0xf7d16b
-	ld	xix, ButtonTable_Vel0cityChange_207ENonZero	; F7D166  ld XIX,0x00f7db58
+	ld	xix, ButtonTable_Vel0cityChange_StageNonZero	; F7D166  ld XIX,0x00f7db58
 sub_F7CE04_Skip9:
 	call	T_PanelButton_CallTableEntry	; F7D16B  call 0xf41b08
 	ret	; F7D16F  ret
@@ -189889,9 +189891,9 @@ ScreenNull_Vel0cityChange:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -189907,10 +189909,10 @@ ScreenLeave_Transp0se:
 ; Evidence: the +8 word of screen object F43100 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DBD8 / 0xF7DC58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_Transp0se:
-	ld	xix, ButtonTable_Transp0se_207EZero	; F7D17B  ld XIX,0x00f7dbd8
+	ld	xix, ButtonTable_Transp0se_StageZero	; F7D17B  ld XIX,0x00f7dbd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D180  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip10	; F7D185  jr Z,0xf7d18c
-	ld	xix, ButtonTable_Transp0se_207ENonZero	; F7D187  ld XIX,0x00f7dc58
+	ld	xix, ButtonTable_Transp0se_StageNonZero	; F7D187  ld XIX,0x00f7dc58
 sub_F7CE04_Skip10:
 	call	T_PanelButton_CallTableEntry	; F7D18C  call 0xf41b08
 	ret	; F7D190  ret
@@ -189996,9 +189998,9 @@ ScreenNull_AfterT0uchSetting:
 ;           the ROM -- NOT visible here, that routine is still .incbin;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -190014,10 +190016,10 @@ ScreenLeave_AdvanceDelay:
 ; Evidence: the +8 word of screen object F43110 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DCD8 / 0xF7DD58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_AdvanceDelay:
-	ld	xix, ButtonTable_AdvanceDelay_207EZero	; F7D1DF  ld XIX,0x00f7dcd8
+	ld	xix, ButtonTable_AdvanceDelay_StageZero	; F7D1DF  ld XIX,0x00f7dcd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D1E4  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip13	; F7D1E9  jr Z,0xf7d1f0
-	ld	xix, ButtonTable_AdvanceDelay_207ENonZero	; F7D1EB  ld XIX,0x00f7dd58
+	ld	xix, ButtonTable_AdvanceDelay_StageNonZero	; F7D1EB  ld XIX,0x00f7dd58
 sub_F7CE04_Skip13:
 	call	T_PanelButton_CallTableEntry	; F7D1F0  call 0xf41b08
 	ret	; F7D1F4  ret
@@ -190045,9 +190047,9 @@ ScreenNull_AdvanceDelay:
 ;           the ROM -- visible in this file;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -190063,10 +190065,10 @@ ScreenLeave_S0ngC0py:
 ; Evidence: the +8 word of screen object F430F0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DDD8 / 0xF7DE58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_S0ngC0py:
-	ld	xix, ButtonTable_S0ngC0py_207EZero	; F7D200  ld XIX,0x00f7ddd8
+	ld	xix, ButtonTable_S0ngC0py_StageZero	; F7D200  ld XIX,0x00f7ddd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D205  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip14	; F7D20A  jr Z,0xf7d211
-	ld	xix, ButtonTable_S0ngC0py_207ENonZero	; F7D20C  ld XIX,0x00f7de58
+	ld	xix, ButtonTable_S0ngC0py_StageNonZero	; F7D20C  ld XIX,0x00f7de58
 sub_F7CE04_Skip14:
 	call	T_PanelButton_CallTableEntry	; F7D211  call 0xf41b08
 	ret	; F7D215  ret
@@ -190094,9 +190096,9 @@ ScreenNull_S0ngC0py:
 ;           the ROM -- visible in this file;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -190112,10 +190114,10 @@ ScreenLeave_N0teChange:
 ; Evidence: the +8 word of screen object F43120 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DED8 / 0xF7DF58 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_N0teChange:
-	ld	xix, ButtonTable_N0teChange_207EZero	; F7D221  ld XIX,0x00f7ded8
+	ld	xix, ButtonTable_N0teChange_StageZero	; F7D221  ld XIX,0x00f7ded8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D226  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip15	; F7D22B  jr Z,0xf7d232
-	ld	xix, ButtonTable_N0teChange_207ENonZero	; F7D22D  ld XIX,0x00f7df58
+	ld	xix, ButtonTable_N0teChange_StageNonZero	; F7D22D  ld XIX,0x00f7df58
 sub_F7CE04_Skip15:
 	call	T_PanelButton_CallTableEntry	; F7D232  call 0xf41b08
 	ret	; F7D236  ret
@@ -190143,9 +190145,9 @@ ScreenNull_N0teChange:
 ;           the ROM -- visible in this file;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -190161,10 +190163,10 @@ ScreenLeave_MeasureC0py:
 ; Evidence: the +8 word of screen object F430C0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DFD8 / 0xF7E058 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureC0py:
-	ld	xix, ButtonTable_MeasureC0py_207EZero	; F7D242  ld XIX,0x00f7dfd8
+	ld	xix, ButtonTable_MeasureC0py_StageZero	; F7D242  ld XIX,0x00f7dfd8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D247  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip16	; F7D24C  jr Z,0xf7d253
-	ld	xix, ButtonTable_MeasureC0py_207ENonZero	; F7D24E  ld XIX,0x00f7e058
+	ld	xix, ButtonTable_MeasureC0py_StageNonZero	; F7D24E  ld XIX,0x00f7e058
 sub_F7CE04_Skip16:
 	call	T_PanelButton_CallTableEntry	; F7D253  call 0xf41b08
 	ret	; F7D257  ret
@@ -190192,9 +190194,9 @@ ScreenNull_MeasureC0py:
 ;           the ROM -- visible in this file;
 ;           and the record walk of that list.  All three:
 ;           notes/prom_b_entrypoints_round7.py
-; Unknown:  what (0x207E) MEANS -- which of this screen's two button
-;           maps it picks, and when.
-;           Also unknown: what the run's fourth word is for.  Nothing
+; Map:      (0x207E) = UI_ScreenStage picks the button map: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page.
+; Unknown:  what the run's fourth word is for.  Nothing
 ;           reads +0x0C and its stub is a no-op, in all 23 runs that
 ;           have one.
 ;           [round7-entrypoints]
@@ -190210,10 +190212,10 @@ ScreenLeave_MeasureInsert:
 ; Evidence: the +8 word of screen object F430D0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7E0D8 / 0xF7E158 and calls T_F41B08.  [round7-entrypoints]
 ScreenButton_MeasureInsert:
-	ld	xix, ButtonTable_MeasureInsert_207EZero	; F7D263  ld XIX,0x00f7e0d8
+	ld	xix, ButtonTable_MeasureInsert_StageZero	; F7D263  ld XIX,0x00f7e0d8
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7D268  cp (0x207e),0x00
 	jr	z, sub_F7CE04_Skip17	; F7D26D  jr Z,0xf7d274
-	ld	xix, ButtonTable_MeasureInsert_207ENonZero	; F7D26F  ld XIX,0x00f7e158
+	ld	xix, ButtonTable_MeasureInsert_StageNonZero	; F7D26F  ld XIX,0x00f7e158
 sub_F7CE04_Skip17:
 	call	T_PanelButton_CallTableEntry	; F7D274  call 0xf41b08
 	ret	; F7D278  ret
@@ -190444,8 +190446,10 @@ T_F431DC_Nop:
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Edit_0C10Zero:
@@ -190488,8 +190492,10 @@ ButtonTable_Edit_0C10Zero:
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Edit_0C10NonZero:
@@ -190532,8 +190538,10 @@ ButtonTable_Edit_0C10NonZero:
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_SongClear:
@@ -190571,180 +190579,188 @@ ButtonTable_SongClear:
 	.long ButtonTable_SongClear_Nop16	; [31]
 
 ; --- table  3 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D06A
-; ButtonTable_TrackClear_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_TrackClear_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D06A loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_TrackClear_207EZero:
-	.long SoftKeyCol1_TrackClear_207EZero	; [ 0]
-	.long SoftKeyCol2_TrackClear_207EZero	; [ 1]
-	.long SoftKeyCol3_TrackClear_207EZero	; [ 2]
-	.long SoftKeyCol4_TrackClear_207EZero	; [ 3]
-	.long SoftKeyCol5_TrackClear_207EZero	; [ 4]
-	.long SoftKeyCol6_TrackClear_207EZero	; [ 5]
-	.long SoftKeyCol7_TrackClear_207EZero	; [ 6]
-	.long SoftKeyCol8_TrackClear_207EZero	; [ 7]
-	.long ButtonTable_TrackClear_207EZero_Nop8	; [ 8]
-	.long LcdKeyRow2_TrackClear_207EZero	; [ 9]
-	.long ButtonTable_TrackClear_207EZero_Nop10	; [10]
-	.long ButtonTable_TrackClear_207EZero_Nop10	; [11]
-	.long ButtonTable_TrackClear_207EZero_Nop10	; [12]
-	.long ButtonTable_TrackClear_207EZero_Nop10	; [13]
-	.long ButtonTable_TrackClear_207EZero_Nop10	; [14]
-	.long ExitKey_TrackClear_207EZero	; [15]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [16]
-	.long SoftKeyCol1_TrackClear_207EZero	; [17]
-	.long SoftKeyCol2_TrackClear_207EZero	; [18]
-	.long SoftKeyCol3_TrackClear_207EZero	; [19]
-	.long SoftKeyCol4_TrackClear_207EZero	; [20]
-	.long SoftKeyCol5_TrackClear_207EZero	; [21]
-	.long SoftKeyCol6_TrackClear_207EZero	; [22]
-	.long SoftKeyCol7_TrackClear_207EZero	; [23]
-	.long SoftKeyCol8_TrackClear_207EZero	; [24]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [25]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [26]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [27]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [28]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [29]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [30]
-	.long ButtonTable_TrackClear_207EZero_Nop16	; [31]
+ButtonTable_TrackClear_StageZero:
+	.long SoftKeyCol1_TrackClear_StageZero	; [ 0]
+	.long SoftKeyCol2_TrackClear_StageZero	; [ 1]
+	.long SoftKeyCol3_TrackClear_StageZero	; [ 2]
+	.long SoftKeyCol4_TrackClear_StageZero	; [ 3]
+	.long SoftKeyCol5_TrackClear_StageZero	; [ 4]
+	.long SoftKeyCol6_TrackClear_StageZero	; [ 5]
+	.long SoftKeyCol7_TrackClear_StageZero	; [ 6]
+	.long SoftKeyCol8_TrackClear_StageZero	; [ 7]
+	.long ButtonTable_TrackClear_StageZero_Nop8	; [ 8]
+	.long LcdKeyRow2_TrackClear_StageZero	; [ 9]
+	.long ButtonTable_TrackClear_StageZero_Nop10	; [10]
+	.long ButtonTable_TrackClear_StageZero_Nop10	; [11]
+	.long ButtonTable_TrackClear_StageZero_Nop10	; [12]
+	.long ButtonTable_TrackClear_StageZero_Nop10	; [13]
+	.long ButtonTable_TrackClear_StageZero_Nop10	; [14]
+	.long ExitKey_TrackClear_StageZero	; [15]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [16]
+	.long SoftKeyCol1_TrackClear_StageZero	; [17]
+	.long SoftKeyCol2_TrackClear_StageZero	; [18]
+	.long SoftKeyCol3_TrackClear_StageZero	; [19]
+	.long SoftKeyCol4_TrackClear_StageZero	; [20]
+	.long SoftKeyCol5_TrackClear_StageZero	; [21]
+	.long SoftKeyCol6_TrackClear_StageZero	; [22]
+	.long SoftKeyCol7_TrackClear_StageZero	; [23]
+	.long SoftKeyCol8_TrackClear_StageZero	; [24]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [25]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [26]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [27]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [28]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [29]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [30]
+	.long ButtonTable_TrackClear_StageZero_Nop16	; [31]
 
 ; --- table  4 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D076
-; ButtonTable_TrackClear_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_TrackClear_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D06A loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_TrackClear_207ENonZero:
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 1]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 2]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 3]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 4]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 5]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 6]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 7]
-	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 8]
-	.long LcdKeyRow2_TrackClear_207ENonZero	; [ 9]
-	.long LcdKeyRow3_TrackClear_207ENonZero	; [10]
-	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [11]
-	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [12]
-	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [13]
-	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [14]
-	.long ExitKey_TrackClear_207ENonZero	; [15]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [16]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [17]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [18]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [19]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [20]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [21]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [22]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [23]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [24]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [25]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [26]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [27]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [28]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [29]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [30]
-	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [31]
+ButtonTable_TrackClear_StageNonZero:
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 1]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 2]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 3]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 4]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 5]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 6]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 7]
+	.long ButtonTable_TrackClear_StageNonZero_Nop0	; [ 8]
+	.long LcdKeyRow2_TrackClear_StageNonZero	; [ 9]
+	.long LcdKeyRow3_TrackClear_StageNonZero	; [10]
+	.long ButtonTable_TrackClear_StageNonZero_Nop11	; [11]
+	.long ButtonTable_TrackClear_StageNonZero_Nop11	; [12]
+	.long ButtonTable_TrackClear_StageNonZero_Nop11	; [13]
+	.long ButtonTable_TrackClear_StageNonZero_Nop11	; [14]
+	.long ExitKey_TrackClear_StageNonZero	; [15]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [16]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [17]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [18]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [19]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [20]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [21]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [22]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [23]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [24]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [25]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [26]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [27]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [28]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [29]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [30]
+	.long ButtonTable_TrackClear_StageNonZero_Nop16	; [31]
 
 ; --- table  5 of 32: 15 distinct targets; named by the `ld XIX` at 0xF7D08C
-; ButtonTable_TrackAssign_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_TrackAssign_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D08C loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_TrackAssign_207EZero:
-	.long ButtonTable_TrackAssign_207EZero_Nop0	; [ 0]
-	.long ButtonTable_TrackAssign_207EZero_Nop1	; [ 1]
-	.long ButtonTable_TrackAssign_207EZero_Nop1	; [ 2]
-	.long SoftKeyCol4_TrackAssign_207EZero	; [ 3]
-	.long SoftKeyCol5_TrackAssign_207EZero	; [ 4]
-	.long ButtonTable_TrackAssign_207EZero_Nop5	; [ 5]
-	.long SoftKeyCol7_TrackAssign_207EZero	; [ 6]
-	.long ButtonTable_TrackAssign_207EZero_Nop7	; [ 7]
-	.long LcdKeyRow1_TrackAssign_207EZero	; [ 8]
-	.long LcdKeyRow2_TrackAssign_207EZero	; [ 9]
-	.long LcdKeyRow3_TrackAssign_207EZero	; [10]
-	.long LcdKeyRow4_TrackAssign_207EZero	; [11]
-	.long LcdKeyRow5_TrackAssign_207EZero	; [12]
-	.long ButtonTable_TrackAssign_207EZero_Nop13	; [13]
-	.long ButtonTable_TrackAssign_207EZero_Nop13	; [14]
-	.long ExitKey_TrackAssign_207EZero	; [15]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [16]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [17]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [18]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [19]
-	.long SoftKeyCol4_TrackAssign_207EZero	; [20]
-	.long SoftKeyCol5_TrackAssign_207EZero	; [21]
-	.long ButtonTable_TrackAssign_207EZero_Nop5	; [22]
-	.long SoftKeyCol7_TrackAssign_207EZero	; [23]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [24]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [25]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [26]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [27]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [28]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [29]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [30]
-	.long ButtonTable_TrackAssign_207EZero_Nop16	; [31]
+ButtonTable_TrackAssign_StageZero:
+	.long ButtonTable_TrackAssign_StageZero_Nop0	; [ 0]
+	.long ButtonTable_TrackAssign_StageZero_Nop1	; [ 1]
+	.long ButtonTable_TrackAssign_StageZero_Nop1	; [ 2]
+	.long SoftKeyCol4_TrackAssign_StageZero	; [ 3]
+	.long SoftKeyCol5_TrackAssign_StageZero	; [ 4]
+	.long ButtonTable_TrackAssign_StageZero_Nop5	; [ 5]
+	.long SoftKeyCol7_TrackAssign_StageZero	; [ 6]
+	.long ButtonTable_TrackAssign_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_TrackAssign_StageZero	; [ 8]
+	.long LcdKeyRow2_TrackAssign_StageZero	; [ 9]
+	.long LcdKeyRow3_TrackAssign_StageZero	; [10]
+	.long LcdKeyRow4_TrackAssign_StageZero	; [11]
+	.long LcdKeyRow5_TrackAssign_StageZero	; [12]
+	.long ButtonTable_TrackAssign_StageZero_Nop13	; [13]
+	.long ButtonTable_TrackAssign_StageZero_Nop13	; [14]
+	.long ExitKey_TrackAssign_StageZero	; [15]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [16]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [17]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [18]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [19]
+	.long SoftKeyCol4_TrackAssign_StageZero	; [20]
+	.long SoftKeyCol5_TrackAssign_StageZero	; [21]
+	.long ButtonTable_TrackAssign_StageZero_Nop5	; [22]
+	.long SoftKeyCol7_TrackAssign_StageZero	; [23]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [24]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [25]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [26]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [27]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [28]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [29]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [30]
+	.long ButtonTable_TrackAssign_StageZero_Nop16	; [31]
 
 ; --- table  6 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D098
-; ButtonTable_TrackAssign_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_TrackAssign_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D08C loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_TrackAssign_207ENonZero:
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 1]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 2]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 3]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 4]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 5]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 6]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 7]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 8]
-	.long LcdKeyRow2_TrackAssign_207ENonZero	; [ 9]
-	.long LcdKeyRow3_TrackAssign_207ENonZero	; [10]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [11]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [12]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [13]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [14]
-	.long ExitKey_TrackAssign_207ENonZero	; [15]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [16]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [17]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [18]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [19]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [20]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [21]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [22]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [23]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [24]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [25]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [26]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [27]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [28]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [29]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [30]
-	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [31]
+ButtonTable_TrackAssign_StageNonZero:
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 1]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 2]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 3]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 4]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 5]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 6]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 7]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop0	; [ 8]
+	.long LcdKeyRow2_TrackAssign_StageNonZero	; [ 9]
+	.long LcdKeyRow3_TrackAssign_StageNonZero	; [10]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop11	; [11]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop11	; [12]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop11	; [13]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop11	; [14]
+	.long ExitKey_TrackAssign_StageNonZero	; [15]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [16]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [17]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [18]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [19]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [20]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [21]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [22]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [23]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [24]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [25]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [26]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [27]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [28]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [29]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [30]
+	.long ButtonTable_TrackAssign_StageNonZero_Nop16	; [31]
 
 ; --- table  7 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D0AE
 ; ButtonTable_TrackAssignPresets -- the 32 panel-button handlers of this screen
@@ -190752,8 +190768,10 @@ ButtonTable_TrackAssign_207ENonZero:
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_TrackAssignPresets:
@@ -190791,553 +190809,579 @@ ButtonTable_TrackAssignPresets:
 	.long ButtonTable_TrackAssignPresets_Nop16	; [31]
 
 ; --- table  8 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0C6
-; ButtonTable_TrackMerge_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_TrackMerge_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D0C6 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_TrackMerge_207EZero:
-	.long ButtonTable_TrackMerge_207EZero_Nop0	; [ 0]
-	.long ButtonTable_TrackMerge_207EZero_Nop1	; [ 1]
-	.long ButtonTable_TrackMerge_207EZero_Nop2	; [ 2]
-	.long ButtonTable_TrackMerge_207EZero_Nop3	; [ 3]
-	.long SoftKeyCol5_TrackMerge_207EZero	; [ 4]
-	.long ButtonTable_TrackMerge_207EZero_Nop5	; [ 5]
-	.long ButtonTable_TrackMerge_207EZero_Nop6	; [ 6]
-	.long ButtonTable_TrackMerge_207EZero_Nop7	; [ 7]
-	.long ButtonTable_TrackMerge_207EZero_Nop7	; [ 8]
-	.long LcdKeyRow2_TrackMerge_207EZero	; [ 9]
-	.long LcdKeyRow3_TrackMerge_207EZero	; [10]
-	.long LcdKeyRow4_TrackMerge_207EZero	; [11]
-	.long ButtonTable_TrackMerge_207EZero_Nop12	; [12]
-	.long ButtonTable_TrackMerge_207EZero_Nop13	; [13]
-	.long ButtonTable_TrackMerge_207EZero_Nop14	; [14]
-	.long ExitKey_TrackMerge_207EZero	; [15]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [16]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [17]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [18]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [19]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [20]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [21]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [22]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [23]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [24]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [25]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [26]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [27]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [28]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [29]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [30]
-	.long ButtonTable_TrackMerge_207EZero_Nop16	; [31]
+ButtonTable_TrackMerge_StageZero:
+	.long ButtonTable_TrackMerge_StageZero_Nop0	; [ 0]
+	.long ButtonTable_TrackMerge_StageZero_Nop1	; [ 1]
+	.long ButtonTable_TrackMerge_StageZero_Nop2	; [ 2]
+	.long ButtonTable_TrackMerge_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_TrackMerge_StageZero	; [ 4]
+	.long ButtonTable_TrackMerge_StageZero_Nop5	; [ 5]
+	.long ButtonTable_TrackMerge_StageZero_Nop6	; [ 6]
+	.long ButtonTable_TrackMerge_StageZero_Nop7	; [ 7]
+	.long ButtonTable_TrackMerge_StageZero_Nop7	; [ 8]
+	.long LcdKeyRow2_TrackMerge_StageZero	; [ 9]
+	.long LcdKeyRow3_TrackMerge_StageZero	; [10]
+	.long LcdKeyRow4_TrackMerge_StageZero	; [11]
+	.long ButtonTable_TrackMerge_StageZero_Nop12	; [12]
+	.long ButtonTable_TrackMerge_StageZero_Nop13	; [13]
+	.long ButtonTable_TrackMerge_StageZero_Nop14	; [14]
+	.long ExitKey_TrackMerge_StageZero	; [15]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [16]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [17]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [18]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [19]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [20]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [21]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [22]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [23]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [24]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [25]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [26]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [27]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [28]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [29]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [30]
+	.long ButtonTable_TrackMerge_StageZero_Nop16	; [31]
 
 ; --- table  9 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0D2
-; ButtonTable_TrackMerge_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_TrackMerge_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D0C6 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_TrackMerge_207ENonZero:
-	.long ButtonTable_TrackMerge_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop1	; [ 1]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop2	; [ 2]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop3	; [ 3]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop4	; [ 4]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop5	; [ 5]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop6	; [ 6]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop7	; [ 7]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop7	; [ 8]
-	.long LcdKeyRow2_TrackMerge_207ENonZero	; [ 9]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop10	; [10]
-	.long LcdKeyRow4_TrackMerge_207ENonZero	; [11]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop12	; [12]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop13	; [13]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop14	; [14]
-	.long ExitKey_TrackMerge_207ENonZero	; [15]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [16]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [17]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [18]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [19]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [20]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [21]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [22]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [23]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [24]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [25]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [26]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [27]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [28]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [29]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [30]
-	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [31]
+ButtonTable_TrackMerge_StageNonZero:
+	.long ButtonTable_TrackMerge_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop7	; [ 7]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop7	; [ 8]
+	.long LcdKeyRow2_TrackMerge_StageNonZero	; [ 9]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop10	; [10]
+	.long LcdKeyRow4_TrackMerge_StageNonZero	; [11]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop12	; [12]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop13	; [13]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop14	; [14]
+	.long ExitKey_TrackMerge_StageNonZero	; [15]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [16]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [17]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [18]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [19]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [20]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [21]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [22]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [23]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [24]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [25]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [26]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [27]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [28]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [29]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [30]
+	.long ButtonTable_TrackMerge_StageNonZero_Nop16	; [31]
 
 ; --- table 10 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D0E7
-; ButtonTable_MeasureDelete_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureDelete_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D0E7 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureDelete_207EZero:
-	.long ButtonTable_MeasureDelete_207EZero_Nop0	; [ 0]
-	.long ButtonTable_MeasureDelete_207EZero_Nop1	; [ 1]
-	.long ButtonTable_MeasureDelete_207EZero_Nop2	; [ 2]
-	.long ButtonTable_MeasureDelete_207EZero_Nop3	; [ 3]
-	.long SoftKeyCol5_MeasureDelete_207EZero	; [ 4]
-	.long ButtonTable_MeasureDelete_207EZero_Nop5	; [ 5]
-	.long ButtonTable_MeasureDelete_207EZero_Nop6	; [ 6]
-	.long ButtonTable_MeasureDelete_207EZero_Nop7	; [ 7]
-	.long ButtonTable_MeasureDelete_207EZero_Nop7	; [ 8]
-	.long LcdKeyRow2_MeasureDelete_207EZero	; [ 9]
-	.long LcdKeyRow3_MeasureDelete_207EZero	; [10]
-	.long LcdKeyRow4_MeasureDelete_207EZero	; [11]
-	.long ButtonTable_MeasureDelete_207EZero_Nop12	; [12]
-	.long ButtonTable_MeasureDelete_207EZero_Nop13	; [13]
-	.long ButtonTable_MeasureDelete_207EZero_Nop14	; [14]
-	.long ExitKey_MeasureDelete_207EZero	; [15]
-	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [16]
-	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [17]
-	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [18]
-	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [19]
-	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [20]
+ButtonTable_MeasureDelete_StageZero:
+	.long ButtonTable_MeasureDelete_StageZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureDelete_StageZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureDelete_StageZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureDelete_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_MeasureDelete_StageZero	; [ 4]
+	.long ButtonTable_MeasureDelete_StageZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureDelete_StageZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureDelete_StageZero_Nop7	; [ 7]
+	.long ButtonTable_MeasureDelete_StageZero_Nop7	; [ 8]
+	.long LcdKeyRow2_MeasureDelete_StageZero	; [ 9]
+	.long LcdKeyRow3_MeasureDelete_StageZero	; [10]
+	.long LcdKeyRow4_MeasureDelete_StageZero	; [11]
+	.long ButtonTable_MeasureDelete_StageZero_Nop12	; [12]
+	.long ButtonTable_MeasureDelete_StageZero_Nop13	; [13]
+	.long ButtonTable_MeasureDelete_StageZero_Nop14	; [14]
+	.long ExitKey_MeasureDelete_StageZero	; [15]
+	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [16]
+	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [17]
+	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [18]
+	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [19]
+	.long ButtonTable_MeasureDelete_StageZero_Nop16	; [20]
 	.long sub_F7F0E7	; [21]
-	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [22]
-	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [23]
-	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [24]
-	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [25]
-	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [26]
-	.long NumberPadKey_MeasureDelete_207EZero	; [27]
-	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [28]
-	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [29]
-	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [30]
-	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [31]
+	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [22]
+	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [23]
+	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [24]
+	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [25]
+	.long ButtonTable_MeasureDelete_StageZero_Nop22	; [26]
+	.long NumberPadKey_MeasureDelete_StageZero	; [27]
+	.long ButtonTable_MeasureDelete_StageZero_Nop28	; [28]
+	.long ButtonTable_MeasureDelete_StageZero_Nop28	; [29]
+	.long ButtonTable_MeasureDelete_StageZero_Nop28	; [30]
+	.long ButtonTable_MeasureDelete_StageZero_Nop28	; [31]
 
 ; --- table 11 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0F3
-; ButtonTable_MeasureDelete_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureDelete_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D0E7 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureDelete_207ENonZero:
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop1	; [ 1]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop2	; [ 2]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop3	; [ 3]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop4	; [ 4]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop5	; [ 5]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop6	; [ 6]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop7	; [ 7]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop8	; [ 8]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop8	; [ 9]
-	.long LcdKeyRow3_MeasureDelete_207ENonZero	; [10]
-	.long LcdKeyRow4_MeasureDelete_207ENonZero	; [11]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop12	; [12]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop13	; [13]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop14	; [14]
-	.long ExitKey_MeasureDelete_207ENonZero	; [15]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [16]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [17]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [18]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [19]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [20]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [21]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [22]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [23]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [24]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [25]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [26]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [27]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [28]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [29]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [30]
-	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [31]
+ButtonTable_MeasureDelete_StageNonZero:
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop7	; [ 7]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop8	; [ 8]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop8	; [ 9]
+	.long LcdKeyRow3_MeasureDelete_StageNonZero	; [10]
+	.long LcdKeyRow4_MeasureDelete_StageNonZero	; [11]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop12	; [12]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop13	; [13]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop14	; [14]
+	.long ExitKey_MeasureDelete_StageNonZero	; [15]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [16]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [17]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [18]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [19]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [20]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [21]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [22]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [23]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [24]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [25]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [26]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [27]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [28]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [29]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [30]
+	.long ButtonTable_MeasureDelete_StageNonZero_Nop16	; [31]
 
 ; --- table 12 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D108
-; ButtonTable_MeasureErase_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureErase_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D108 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureErase_207EZero:
-	.long ButtonTable_MeasureErase_207EZero_Nop0	; [ 0]
-	.long ButtonTable_MeasureErase_207EZero_Nop1	; [ 1]
-	.long ButtonTable_MeasureErase_207EZero_Nop2	; [ 2]
-	.long ButtonTable_MeasureErase_207EZero_Nop3	; [ 3]
-	.long SoftKeyCol5_MeasureErase_207EZero	; [ 4]
-	.long ButtonTable_MeasureErase_207EZero_Nop5	; [ 5]
-	.long ButtonTable_MeasureErase_207EZero_Nop6	; [ 6]
-	.long ButtonTable_MeasureErase_207EZero_Nop7	; [ 7]
-	.long LcdKeyRow1_MeasureErase_207EZero	; [ 8]
-	.long LcdKeyRow2_MeasureErase_207EZero	; [ 9]
-	.long LcdKeyRow3_MeasureErase_207EZero	; [10]
-	.long LcdKeyRow4_MeasureErase_207EZero	; [11]
-	.long ButtonTable_MeasureErase_207EZero_Nop12	; [12]
-	.long ButtonTable_MeasureErase_207EZero_Nop13	; [13]
-	.long ButtonTable_MeasureErase_207EZero_Nop14	; [14]
-	.long ExitKey_MeasureErase_207EZero	; [15]
-	.long ButtonTable_MeasureErase_207EZero_Nop16	; [16]
-	.long ButtonTable_MeasureErase_207EZero_Nop16	; [17]
-	.long ButtonTable_MeasureErase_207EZero_Nop16	; [18]
-	.long ButtonTable_MeasureErase_207EZero_Nop16	; [19]
-	.long ButtonTable_MeasureErase_207EZero_Nop16	; [20]
+ButtonTable_MeasureErase_StageZero:
+	.long ButtonTable_MeasureErase_StageZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureErase_StageZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureErase_StageZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureErase_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_MeasureErase_StageZero	; [ 4]
+	.long ButtonTable_MeasureErase_StageZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureErase_StageZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureErase_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_MeasureErase_StageZero	; [ 8]
+	.long LcdKeyRow2_MeasureErase_StageZero	; [ 9]
+	.long LcdKeyRow3_MeasureErase_StageZero	; [10]
+	.long LcdKeyRow4_MeasureErase_StageZero	; [11]
+	.long ButtonTable_MeasureErase_StageZero_Nop12	; [12]
+	.long ButtonTable_MeasureErase_StageZero_Nop13	; [13]
+	.long ButtonTable_MeasureErase_StageZero_Nop14	; [14]
+	.long ExitKey_MeasureErase_StageZero	; [15]
+	.long ButtonTable_MeasureErase_StageZero_Nop16	; [16]
+	.long ButtonTable_MeasureErase_StageZero_Nop16	; [17]
+	.long ButtonTable_MeasureErase_StageZero_Nop16	; [18]
+	.long ButtonTable_MeasureErase_StageZero_Nop16	; [19]
+	.long ButtonTable_MeasureErase_StageZero_Nop16	; [20]
 	.long sub_F7F3E2	; [21]
-	.long ButtonTable_MeasureErase_207EZero_Nop22	; [22]
-	.long ButtonTable_MeasureErase_207EZero_Nop22	; [23]
-	.long ButtonTable_MeasureErase_207EZero_Nop22	; [24]
-	.long ButtonTable_MeasureErase_207EZero_Nop22	; [25]
-	.long ButtonTable_MeasureErase_207EZero_Nop22	; [26]
-	.long NumberPadKey_MeasureErase_207EZero	; [27]
-	.long ButtonTable_MeasureErase_207EZero_Nop28	; [28]
-	.long ButtonTable_MeasureErase_207EZero_Nop28	; [29]
-	.long ButtonTable_MeasureErase_207EZero_Nop28	; [30]
-	.long ButtonTable_MeasureErase_207EZero_Nop28	; [31]
+	.long ButtonTable_MeasureErase_StageZero_Nop22	; [22]
+	.long ButtonTable_MeasureErase_StageZero_Nop22	; [23]
+	.long ButtonTable_MeasureErase_StageZero_Nop22	; [24]
+	.long ButtonTable_MeasureErase_StageZero_Nop22	; [25]
+	.long ButtonTable_MeasureErase_StageZero_Nop22	; [26]
+	.long NumberPadKey_MeasureErase_StageZero	; [27]
+	.long ButtonTable_MeasureErase_StageZero_Nop28	; [28]
+	.long ButtonTable_MeasureErase_StageZero_Nop28	; [29]
+	.long ButtonTable_MeasureErase_StageZero_Nop28	; [30]
+	.long ButtonTable_MeasureErase_StageZero_Nop28	; [31]
 
 ; --- table 13 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D114
-; ButtonTable_MeasureErase_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureErase_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D108 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureErase_207ENonZero:
-	.long ButtonTable_MeasureErase_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop1	; [ 1]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop2	; [ 2]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop3	; [ 3]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop4	; [ 4]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop5	; [ 5]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop6	; [ 6]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop7	; [ 7]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop8	; [ 8]
-	.long LcdKeyRow2_MeasureErase_207ENonZero	; [ 9]
-	.long LcdKeyRow3_MeasureErase_207ENonZero	; [10]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop11	; [11]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop12	; [12]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop13	; [13]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop14	; [14]
-	.long ExitKey_MeasureErase_207ENonZero	; [15]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [16]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [17]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [18]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [19]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [20]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [21]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [22]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [23]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [24]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [25]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [26]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [27]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [28]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [29]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [30]
-	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [31]
+ButtonTable_MeasureErase_StageNonZero:
+	.long ButtonTable_MeasureErase_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop7	; [ 7]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop8	; [ 8]
+	.long LcdKeyRow2_MeasureErase_StageNonZero	; [ 9]
+	.long LcdKeyRow3_MeasureErase_StageNonZero	; [10]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop11	; [11]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop12	; [12]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop13	; [13]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop14	; [14]
+	.long ExitKey_MeasureErase_StageNonZero	; [15]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [16]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [17]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [18]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [19]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [20]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [21]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [22]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [23]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [24]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [25]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [26]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [27]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [28]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [29]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [30]
+	.long ButtonTable_MeasureErase_StageNonZero_Nop16	; [31]
 
 ; --- table 14 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D139
-; ButtonTable_Quantize_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_Quantize_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D139 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_Quantize_207EZero:
-	.long ButtonTable_Quantize_207EZero_Nop0	; [ 0]
-	.long ButtonTable_Quantize_207EZero_Nop1	; [ 1]
-	.long ButtonTable_Quantize_207EZero_Nop2	; [ 2]
-	.long ButtonTable_Quantize_207EZero_Nop3	; [ 3]
-	.long SoftKeyCol5_Quantize_207EZero	; [ 4]
-	.long ButtonTable_Quantize_207EZero_Nop5	; [ 5]
-	.long ButtonTable_Quantize_207EZero_Nop6	; [ 6]
-	.long ButtonTable_Quantize_207EZero_Nop7	; [ 7]
-	.long LcdKeyRow1_Quantize_207EZero	; [ 8]
-	.long LcdKeyRow2_Quantize_207EZero	; [ 9]
-	.long LcdKeyRow3_Quantize_207EZero	; [10]
-	.long LcdKeyRow4_Quantize_207EZero	; [11]
-	.long ButtonTable_Quantize_207EZero_Nop12	; [12]
-	.long ButtonTable_Quantize_207EZero_Nop13	; [13]
-	.long ButtonTable_Quantize_207EZero_Nop14	; [14]
-	.long ExitKey_Quantize_207EZero	; [15]
-	.long ButtonTable_Quantize_207EZero_Nop16	; [16]
-	.long ButtonTable_Quantize_207EZero_Nop16	; [17]
-	.long ButtonTable_Quantize_207EZero_Nop16	; [18]
-	.long ButtonTable_Quantize_207EZero_Nop16	; [19]
-	.long ButtonTable_Quantize_207EZero_Nop16	; [20]
+ButtonTable_Quantize_StageZero:
+	.long ButtonTable_Quantize_StageZero_Nop0	; [ 0]
+	.long ButtonTable_Quantize_StageZero_Nop1	; [ 1]
+	.long ButtonTable_Quantize_StageZero_Nop2	; [ 2]
+	.long ButtonTable_Quantize_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_Quantize_StageZero	; [ 4]
+	.long ButtonTable_Quantize_StageZero_Nop5	; [ 5]
+	.long ButtonTable_Quantize_StageZero_Nop6	; [ 6]
+	.long ButtonTable_Quantize_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_Quantize_StageZero	; [ 8]
+	.long LcdKeyRow2_Quantize_StageZero	; [ 9]
+	.long LcdKeyRow3_Quantize_StageZero	; [10]
+	.long LcdKeyRow4_Quantize_StageZero	; [11]
+	.long ButtonTable_Quantize_StageZero_Nop12	; [12]
+	.long ButtonTable_Quantize_StageZero_Nop13	; [13]
+	.long ButtonTable_Quantize_StageZero_Nop14	; [14]
+	.long ExitKey_Quantize_StageZero	; [15]
+	.long ButtonTable_Quantize_StageZero_Nop16	; [16]
+	.long ButtonTable_Quantize_StageZero_Nop16	; [17]
+	.long ButtonTable_Quantize_StageZero_Nop16	; [18]
+	.long ButtonTable_Quantize_StageZero_Nop16	; [19]
+	.long ButtonTable_Quantize_StageZero_Nop16	; [20]
 	.long sub_F7F74E	; [21]
-	.long ButtonTable_Quantize_207EZero_Nop22	; [22]
-	.long ButtonTable_Quantize_207EZero_Nop22	; [23]
-	.long ButtonTable_Quantize_207EZero_Nop22	; [24]
-	.long ButtonTable_Quantize_207EZero_Nop22	; [25]
-	.long ButtonTable_Quantize_207EZero_Nop22	; [26]
-	.long NumberPadKey_Quantize_207EZero	; [27]
-	.long ButtonTable_Quantize_207EZero_Nop28	; [28]
-	.long ButtonTable_Quantize_207EZero_Nop28	; [29]
-	.long ButtonTable_Quantize_207EZero_Nop28	; [30]
-	.long ButtonTable_Quantize_207EZero_Nop28	; [31]
+	.long ButtonTable_Quantize_StageZero_Nop22	; [22]
+	.long ButtonTable_Quantize_StageZero_Nop22	; [23]
+	.long ButtonTable_Quantize_StageZero_Nop22	; [24]
+	.long ButtonTable_Quantize_StageZero_Nop22	; [25]
+	.long ButtonTable_Quantize_StageZero_Nop22	; [26]
+	.long NumberPadKey_Quantize_StageZero	; [27]
+	.long ButtonTable_Quantize_StageZero_Nop28	; [28]
+	.long ButtonTable_Quantize_StageZero_Nop28	; [29]
+	.long ButtonTable_Quantize_StageZero_Nop28	; [30]
+	.long ButtonTable_Quantize_StageZero_Nop28	; [31]
 
 ; --- table 15 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D145
-; ButtonTable_Quantize_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_Quantize_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D139 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_Quantize_207ENonZero:
-	.long ButtonTable_Quantize_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_Quantize_207ENonZero_Nop1	; [ 1]
-	.long ButtonTable_Quantize_207ENonZero_Nop2	; [ 2]
-	.long ButtonTable_Quantize_207ENonZero_Nop3	; [ 3]
-	.long ButtonTable_Quantize_207ENonZero_Nop4	; [ 4]
-	.long ButtonTable_Quantize_207ENonZero_Nop5	; [ 5]
-	.long ButtonTable_Quantize_207ENonZero_Nop6	; [ 6]
-	.long ButtonTable_Quantize_207ENonZero_Nop7	; [ 7]
-	.long ButtonTable_Quantize_207ENonZero_Nop8	; [ 8]
-	.long ButtonTable_Quantize_207ENonZero_Nop8	; [ 9]
-	.long LcdKeyRow3_Quantize_207ENonZero	; [10]
-	.long LcdKeyRow4_Quantize_207ENonZero	; [11]
-	.long ButtonTable_Quantize_207ENonZero_Nop12	; [12]
-	.long ButtonTable_Quantize_207ENonZero_Nop13	; [13]
-	.long ButtonTable_Quantize_207ENonZero_Nop14	; [14]
-	.long ExitKey_Quantize_207ENonZero	; [15]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [16]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [17]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [18]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [19]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [20]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [21]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [22]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [23]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [24]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [25]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [26]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [27]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [28]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [29]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [30]
-	.long ButtonTable_Quantize_207ENonZero_Nop16	; [31]
+ButtonTable_Quantize_StageNonZero:
+	.long ButtonTable_Quantize_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_Quantize_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_Quantize_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_Quantize_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_Quantize_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_Quantize_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_Quantize_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_Quantize_StageNonZero_Nop7	; [ 7]
+	.long ButtonTable_Quantize_StageNonZero_Nop8	; [ 8]
+	.long ButtonTable_Quantize_StageNonZero_Nop8	; [ 9]
+	.long LcdKeyRow3_Quantize_StageNonZero	; [10]
+	.long LcdKeyRow4_Quantize_StageNonZero	; [11]
+	.long ButtonTable_Quantize_StageNonZero_Nop12	; [12]
+	.long ButtonTable_Quantize_StageNonZero_Nop13	; [13]
+	.long ButtonTable_Quantize_StageNonZero_Nop14	; [14]
+	.long ExitKey_Quantize_StageNonZero	; [15]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [16]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [17]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [18]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [19]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [20]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [21]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [22]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [23]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [24]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [25]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [26]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [27]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [28]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [29]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [30]
+	.long ButtonTable_Quantize_StageNonZero_Nop16	; [31]
 
 ; --- table 16 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D15A
-; ButtonTable_Vel0cityChange_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_Vel0cityChange_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D15A loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_Vel0cityChange_207EZero:
-	.long ButtonTable_Vel0cityChange_207EZero_Nop0	; [ 0]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop1	; [ 1]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop2	; [ 2]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop3	; [ 3]
-	.long SoftKeyCol5_Vel0cityChange_207EZero	; [ 4]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop5	; [ 5]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop6	; [ 6]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop7	; [ 7]
-	.long LcdKeyRow1_Vel0cityChange_207EZero	; [ 8]
-	.long LcdKeyRow2_Vel0cityChange_207EZero	; [ 9]
-	.long LcdKeyRow3_Vel0cityChange_207EZero	; [10]
-	.long LcdKeyRow4_Vel0cityChange_207EZero	; [11]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop12	; [12]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop13	; [13]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop14	; [14]
-	.long ExitKey_Vel0cityChange_207EZero	; [15]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [16]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [17]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [18]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [19]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [20]
+ButtonTable_Vel0cityChange_StageZero:
+	.long ButtonTable_Vel0cityChange_StageZero_Nop0	; [ 0]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop1	; [ 1]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop2	; [ 2]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_Vel0cityChange_StageZero	; [ 4]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop5	; [ 5]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop6	; [ 6]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_Vel0cityChange_StageZero	; [ 8]
+	.long LcdKeyRow2_Vel0cityChange_StageZero	; [ 9]
+	.long LcdKeyRow3_Vel0cityChange_StageZero	; [10]
+	.long LcdKeyRow4_Vel0cityChange_StageZero	; [11]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop12	; [12]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop13	; [13]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop14	; [14]
+	.long ExitKey_Vel0cityChange_StageZero	; [15]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [16]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [17]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [18]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [19]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop16	; [20]
 	.long sub_F7FA43	; [21]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [22]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [23]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [24]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [25]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [26]
-	.long NumberPadKey_Vel0cityChange_207EZero	; [27]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [28]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [29]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [30]
-	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [31]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [22]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [23]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [24]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [25]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop22	; [26]
+	.long NumberPadKey_Vel0cityChange_StageZero	; [27]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop28	; [28]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop28	; [29]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop28	; [30]
+	.long ButtonTable_Vel0cityChange_StageZero_Nop28	; [31]
 
 ; --- table 17 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D166
-; ButtonTable_Vel0cityChange_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_Vel0cityChange_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D15A loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_Vel0cityChange_207ENonZero:
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop1	; [ 1]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop2	; [ 2]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop3	; [ 3]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop4	; [ 4]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop5	; [ 5]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop6	; [ 6]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop7	; [ 7]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop8	; [ 8]
-	.long LcdKeyRow2_Vel0cityChange_207ENonZero	; [ 9]
-	.long LcdKeyRow3_Vel0cityChange_207ENonZero	; [10]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop11	; [11]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop12	; [12]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop13	; [13]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop14	; [14]
-	.long ExitKey_Vel0cityChange_207ENonZero	; [15]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [16]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [17]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [18]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [19]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [20]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [21]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [22]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [23]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [24]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [25]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [26]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [27]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [28]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [29]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [30]
-	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [31]
+ButtonTable_Vel0cityChange_StageNonZero:
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop7	; [ 7]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop8	; [ 8]
+	.long LcdKeyRow2_Vel0cityChange_StageNonZero	; [ 9]
+	.long LcdKeyRow3_Vel0cityChange_StageNonZero	; [10]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop11	; [11]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop12	; [12]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop13	; [13]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop14	; [14]
+	.long ExitKey_Vel0cityChange_StageNonZero	; [15]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [16]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [17]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [18]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [19]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [20]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [21]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [22]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [23]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [24]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [25]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [26]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [27]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [28]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [29]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [30]
+	.long ButtonTable_Vel0cityChange_StageNonZero_Nop16	; [31]
 
 ; --- table 18 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D17B
-; ButtonTable_Transp0se_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_Transp0se_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D17B loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_Transp0se_207EZero:
-	.long ButtonTable_Transp0se_207EZero_Nop0	; [ 0]
-	.long ButtonTable_Transp0se_207EZero_Nop1	; [ 1]
-	.long ButtonTable_Transp0se_207EZero_Nop2	; [ 2]
-	.long ButtonTable_Transp0se_207EZero_Nop3	; [ 3]
-	.long SoftKeyCol5_Transp0se_207EZero	; [ 4]
-	.long ButtonTable_Transp0se_207EZero_Nop5	; [ 5]
-	.long ButtonTable_Transp0se_207EZero_Nop6	; [ 6]
-	.long ButtonTable_Transp0se_207EZero_Nop7	; [ 7]
-	.long LcdKeyRow1_Transp0se_207EZero	; [ 8]
-	.long LcdKeyRow2_Transp0se_207EZero	; [ 9]
-	.long LcdKeyRow3_Transp0se_207EZero	; [10]
-	.long LcdKeyRow4_Transp0se_207EZero	; [11]
-	.long ButtonTable_Transp0se_207EZero_Nop12	; [12]
-	.long ButtonTable_Transp0se_207EZero_Nop13	; [13]
-	.long ButtonTable_Transp0se_207EZero_Nop14	; [14]
-	.long ExitKey_Transp0se_207EZero	; [15]
-	.long ButtonTable_Transp0se_207EZero_Nop16	; [16]
-	.long ButtonTable_Transp0se_207EZero_Nop16	; [17]
-	.long ButtonTable_Transp0se_207EZero_Nop16	; [18]
-	.long ButtonTable_Transp0se_207EZero_Nop16	; [19]
-	.long ButtonTable_Transp0se_207EZero_Nop16	; [20]
+ButtonTable_Transp0se_StageZero:
+	.long ButtonTable_Transp0se_StageZero_Nop0	; [ 0]
+	.long ButtonTable_Transp0se_StageZero_Nop1	; [ 1]
+	.long ButtonTable_Transp0se_StageZero_Nop2	; [ 2]
+	.long ButtonTable_Transp0se_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_Transp0se_StageZero	; [ 4]
+	.long ButtonTable_Transp0se_StageZero_Nop5	; [ 5]
+	.long ButtonTable_Transp0se_StageZero_Nop6	; [ 6]
+	.long ButtonTable_Transp0se_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_Transp0se_StageZero	; [ 8]
+	.long LcdKeyRow2_Transp0se_StageZero	; [ 9]
+	.long LcdKeyRow3_Transp0se_StageZero	; [10]
+	.long LcdKeyRow4_Transp0se_StageZero	; [11]
+	.long ButtonTable_Transp0se_StageZero_Nop12	; [12]
+	.long ButtonTable_Transp0se_StageZero_Nop13	; [13]
+	.long ButtonTable_Transp0se_StageZero_Nop14	; [14]
+	.long ExitKey_Transp0se_StageZero	; [15]
+	.long ButtonTable_Transp0se_StageZero_Nop16	; [16]
+	.long ButtonTable_Transp0se_StageZero_Nop16	; [17]
+	.long ButtonTable_Transp0se_StageZero_Nop16	; [18]
+	.long ButtonTable_Transp0se_StageZero_Nop16	; [19]
+	.long ButtonTable_Transp0se_StageZero_Nop16	; [20]
 	.long sub_F7FD8A	; [21]
-	.long ButtonTable_Transp0se_207EZero_Nop22	; [22]
-	.long ButtonTable_Transp0se_207EZero_Nop22	; [23]
-	.long ButtonTable_Transp0se_207EZero_Nop22	; [24]
-	.long ButtonTable_Transp0se_207EZero_Nop22	; [25]
-	.long ButtonTable_Transp0se_207EZero_Nop22	; [26]
-	.long NumberPadKey_Transp0se_207EZero	; [27]
-	.long ButtonTable_Transp0se_207EZero_Nop28	; [28]
-	.long ButtonTable_Transp0se_207EZero_Nop28	; [29]
-	.long ButtonTable_Transp0se_207EZero_Nop28	; [30]
-	.long ButtonTable_Transp0se_207EZero_Nop28	; [31]
+	.long ButtonTable_Transp0se_StageZero_Nop22	; [22]
+	.long ButtonTable_Transp0se_StageZero_Nop22	; [23]
+	.long ButtonTable_Transp0se_StageZero_Nop22	; [24]
+	.long ButtonTable_Transp0se_StageZero_Nop22	; [25]
+	.long ButtonTable_Transp0se_StageZero_Nop22	; [26]
+	.long NumberPadKey_Transp0se_StageZero	; [27]
+	.long ButtonTable_Transp0se_StageZero_Nop28	; [28]
+	.long ButtonTable_Transp0se_StageZero_Nop28	; [29]
+	.long ButtonTable_Transp0se_StageZero_Nop28	; [30]
+	.long ButtonTable_Transp0se_StageZero_Nop28	; [31]
 
 ; --- table 19 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D187
-; ButtonTable_Transp0se_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_Transp0se_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D17B loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_Transp0se_207ENonZero:
-	.long ButtonTable_Transp0se_207ENonZero_Nop0	; [ 0]
-	.long ButtonTable_Transp0se_207ENonZero_Nop1	; [ 1]
-	.long ButtonTable_Transp0se_207ENonZero_Nop2	; [ 2]
-	.long ButtonTable_Transp0se_207ENonZero_Nop3	; [ 3]
-	.long ButtonTable_Transp0se_207ENonZero_Nop4	; [ 4]
-	.long ButtonTable_Transp0se_207ENonZero_Nop5	; [ 5]
-	.long ButtonTable_Transp0se_207ENonZero_Nop6	; [ 6]
-	.long ButtonTable_Transp0se_207ENonZero_Nop7	; [ 7]
-	.long ButtonTable_Transp0se_207ENonZero_Nop8	; [ 8]
-	.long LcdKeyRow2_Transp0se_207ENonZero	; [ 9]
-	.long LcdKeyRow3_Transp0se_207ENonZero	; [10]
-	.long ButtonTable_Transp0se_207ENonZero_Nop11	; [11]
-	.long ButtonTable_Transp0se_207ENonZero_Nop12	; [12]
-	.long ButtonTable_Transp0se_207ENonZero_Nop13	; [13]
-	.long ButtonTable_Transp0se_207ENonZero_Nop14	; [14]
-	.long ExitKey_Transp0se_207ENonZero	; [15]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [16]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [17]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [18]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [19]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [20]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [21]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [22]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [23]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [24]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [25]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [26]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [27]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [28]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [29]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [30]
-	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [31]
+ButtonTable_Transp0se_StageNonZero:
+	.long ButtonTable_Transp0se_StageNonZero_Nop0	; [ 0]
+	.long ButtonTable_Transp0se_StageNonZero_Nop1	; [ 1]
+	.long ButtonTable_Transp0se_StageNonZero_Nop2	; [ 2]
+	.long ButtonTable_Transp0se_StageNonZero_Nop3	; [ 3]
+	.long ButtonTable_Transp0se_StageNonZero_Nop4	; [ 4]
+	.long ButtonTable_Transp0se_StageNonZero_Nop5	; [ 5]
+	.long ButtonTable_Transp0se_StageNonZero_Nop6	; [ 6]
+	.long ButtonTable_Transp0se_StageNonZero_Nop7	; [ 7]
+	.long ButtonTable_Transp0se_StageNonZero_Nop8	; [ 8]
+	.long LcdKeyRow2_Transp0se_StageNonZero	; [ 9]
+	.long LcdKeyRow3_Transp0se_StageNonZero	; [10]
+	.long ButtonTable_Transp0se_StageNonZero_Nop11	; [11]
+	.long ButtonTable_Transp0se_StageNonZero_Nop12	; [12]
+	.long ButtonTable_Transp0se_StageNonZero_Nop13	; [13]
+	.long ButtonTable_Transp0se_StageNonZero_Nop14	; [14]
+	.long ExitKey_Transp0se_StageNonZero	; [15]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [16]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [17]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [18]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [19]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [20]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [21]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [22]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [23]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [24]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [25]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [26]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [27]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [28]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [29]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [30]
+	.long ButtonTable_Transp0se_StageNonZero_Nop16	; [31]
 
 ; --- table 20 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D1DF
-; ButtonTable_AdvanceDelay_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_AdvanceDelay_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D1DF loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_AdvanceDelay_207EZero:
-	.long ButtonTable_AdvanceDelay_207EZero_Nop0	; [ 0]
-	.long ButtonTable_AdvanceDelay_207EZero_Nop1	; [ 1]
-	.long ButtonTable_AdvanceDelay_207EZero_Nop2	; [ 2]
-	.long ButtonTable_AdvanceDelay_207EZero_Nop3	; [ 3]
-	.long SoftKeyCol5_AdvanceDelay_207EZero	; [ 4]
-	.long ButtonTable_AdvanceDelay_207EZero_Nop5	; [ 5]
-	.long ButtonTable_AdvanceDelay_207EZero_Nop6	; [ 6]
-	.long ButtonTable_AdvanceDelay_207EZero_Nop7	; [ 7]
-	.long LcdKeyRow1_AdvanceDelay_207EZero	; [ 8]
+ButtonTable_AdvanceDelay_StageZero:
+	.long ButtonTable_AdvanceDelay_StageZero_Nop0	; [ 0]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop1	; [ 1]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop2	; [ 2]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop3	; [ 3]
+	.long SoftKeyCol5_AdvanceDelay_StageZero	; [ 4]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop5	; [ 5]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop6	; [ 6]
+	.long ButtonTable_AdvanceDelay_StageZero_Nop7	; [ 7]
+	.long LcdKeyRow1_AdvanceDelay_StageZero	; [ 8]
 	.long 0x00F8003A	; [ 9]
 	.long 0x00F80059	; [10]
 	.long 0x00F8009D	; [11]
@@ -191363,16 +191407,18 @@ ButtonTable_AdvanceDelay_207EZero:
 	.long 0x00F800FC	; [31]
 
 ; --- table 21 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D1EB
-; ButtonTable_AdvanceDelay_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_AdvanceDelay_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D1DF loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_AdvanceDelay_207ENonZero:
+ButtonTable_AdvanceDelay_StageNonZero:
 	.long 0x00F800FD	; [ 0]
 	.long 0x00F800FE	; [ 1]
 	.long 0x00F800FF	; [ 2]
@@ -191407,16 +191453,18 @@ ButtonTable_AdvanceDelay_207ENonZero:
 	.long 0x00F8012D	; [31]
 
 ; --- table 22 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D200
-; ButtonTable_S0ngC0py_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_S0ngC0py_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D200 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_S0ngC0py_207EZero:
+ButtonTable_S0ngC0py_StageZero:
 	.long 0x00F803C9	; [ 0]
 	.long 0x00F803D2	; [ 1]
 	.long 0x00F803DB	; [ 2]
@@ -191451,16 +191499,18 @@ ButtonTable_S0ngC0py_207EZero:
 	.long 0x00F80426	; [31]
 
 ; --- table 23 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D20C
-; ButtonTable_S0ngC0py_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_S0ngC0py_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D200 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_S0ngC0py_207ENonZero:
+ButtonTable_S0ngC0py_StageNonZero:
 	.long 0x00F80427	; [ 0]
 	.long 0x00F80427	; [ 1]
 	.long 0x00F80427	; [ 2]
@@ -191495,16 +191545,18 @@ ButtonTable_S0ngC0py_207ENonZero:
 	.long 0x00F80438	; [31]
 
 ; --- table 24 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D221
-; ButtonTable_N0teChange_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_N0teChange_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D221 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_N0teChange_207EZero:
+ButtonTable_N0teChange_StageZero:
 	.long 0x00F804F1	; [ 0]
 	.long 0x00F804F2	; [ 1]
 	.long 0x00F804F3	; [ 2]
@@ -191512,8 +191564,8 @@ ButtonTable_N0teChange_207EZero:
 	.long 0x00F804F5	; [ 4]
 	.long 0x00F8051C	; [ 5]
 	.long 0x00F8051D	; [ 6]
-	.long ButtonTable_N0teChange_207EZero_Nop7	; [ 7]
-	.long ButtonTable_N0teChange_207EZero_Nop7	; [ 8]
+	.long ButtonTable_N0teChange_StageZero_Nop7	; [ 7]
+	.long ButtonTable_N0teChange_StageZero_Nop7	; [ 8]
 	.long 0x00F8051F	; [ 9]
 	.long 0x00F80569	; [10]
 	.long 0x00F80595	; [11]
@@ -191539,16 +191591,18 @@ ButtonTable_N0teChange_207EZero:
 	.long 0x00F8060D	; [31]
 
 ; --- table 25 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D22D
-; ButtonTable_N0teChange_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_N0teChange_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D221 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_N0teChange_207ENonZero:
+ButtonTable_N0teChange_StageNonZero:
 	.long 0x00F8060E	; [ 0]
 	.long 0x00F8060E	; [ 1]
 	.long 0x00F8060E	; [ 2]
@@ -191583,16 +191637,18 @@ ButtonTable_N0teChange_207ENonZero:
 	.long 0x00F80629	; [31]
 
 ; --- table 26 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D242
-; ButtonTable_MeasureC0py_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureC0py_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D242 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureC0py_207EZero:
+ButtonTable_MeasureC0py_StageZero:
 	.long 0x00F8080E	; [ 0]
 	.long 0x00F8080F	; [ 1]
 	.long 0x00F80810	; [ 2]
@@ -191627,16 +191683,18 @@ ButtonTable_MeasureC0py_207EZero:
 	.long 0x00F8096C	; [31]
 
 ; --- table 27 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D24E
-; ButtonTable_MeasureC0py_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureC0py_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D242 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureC0py_207ENonZero:
+ButtonTable_MeasureC0py_StageNonZero:
 	.long 0x00F8096D	; [ 0]
 	.long 0x00F8096E	; [ 1]
 	.long 0x00F8096F	; [ 2]
@@ -191671,16 +191729,18 @@ ButtonTable_MeasureC0py_207ENonZero:
 	.long 0x00F8099C	; [31]
 
 ; --- table 28 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D263
-; ButtonTable_MeasureInsert_207EZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureInsert_StageZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D263 loads it when (0x207E) is zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureInsert_207EZero:
+ButtonTable_MeasureInsert_StageZero:
 	.long 0x00F80B6B	; [ 0]
 	.long 0x00F80B6C	; [ 1]
 	.long 0x00F80B6D	; [ 2]
@@ -191715,16 +191775,18 @@ ButtonTable_MeasureInsert_207EZero:
 	.long 0x00F80CC9	; [31]
 
 ; --- table 29 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D26F
-; ButtonTable_MeasureInsert_207ENonZero -- the 32 panel-button handlers of this screen
+; ButtonTable_MeasureInsert_StageNonZero -- the 32 panel-button handlers of this screen
 ; Evidence: the +8 Button stub at 0xF7D263 loads it when (0x207E) is non-zero.
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
-ButtonTable_MeasureInsert_207ENonZero:
+ButtonTable_MeasureInsert_StageNonZero:
 	.long 0x00F80CCA	; [ 0]
 	.long 0x00F80CCB	; [ 1]
 	.long 0x00F80CCC	; [ 2]
@@ -191764,8 +191826,10 @@ ButtonTable_MeasureInsert_207ENonZero:
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_StepRecordPartSelect:
@@ -191808,8 +191872,10 @@ ButtonTable_StepRecordPartSelect:
 ;           Round 7 established that the 32 tables are indexed
 ;           by the panel BUTTON NUMBER (two independent 5-bit masks
 ;           over a 128-byte table), so what the object needs is the
-;           SCREEN that owns the map -- which is this name.  ⚠ What
-;           the selector byte MEANS is still not established.
+;           SCREEN that owns the map -- which is this name.
+;           (0x207E) is UI_ScreenStage: 0 = the parameter page,
+;           non-zero = the "Are You Sure ?" page
+;           (wsa1/notes/FINDINGS-prom_ab-screen-stage-and-flags.md).
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_SequencerMedley:
@@ -192223,14 +192289,14 @@ ScreenLeaveBody_TrackAssign:
 	m_and_mi8 MB16, 0x0dc0, 0xfe	; F7E4FE  and (0x0dc0),0xfe
 	call	T_F42BE8	; F7E503  call 0xf42be8
 	ret	; F7E507  ret
-ButtonTable_TrackAssign_207EZero_Nop0:
+ButtonTable_TrackAssign_StageZero_Nop0:
 	ret	; F7E508  ret   <- button table 0xF7D558 entry 0 (TRACK ASSIGN)
-ButtonTable_TrackAssign_207EZero_Nop1:
+ButtonTable_TrackAssign_StageZero_Nop1:
 	ret	; F7E509  ret   <- button table 0xF7D558 entry 1 (TRACK ASSIGN) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol4_TrackAssign_207EZero -- the 4th of the eight SOFT KEYS in the
-;           row under the LCD, on the TrackAssign_207EZero screen
+; SoftKeyCol4_TrackAssign_StageZero -- the 4th of the eight SOFT KEYS in the
+;           row under the LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW39 "SOFT KEY col 4 lower" (matrix segment 4 bit 6, wire 0xC4)
 ;           -> PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record
 ;           0xF8B6DB {class 0xA9, code 0x03} -> delivered code 0x83; SW40
@@ -192240,7 +192306,7 @@ ButtonTable_TrackAssign_207EZero_Nop1:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x03 of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x03 of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -192274,7 +192340,7 @@ ButtonTable_TrackAssign_207EZero_Nop1:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol4_TrackAssign_207EZero:
+SoftKeyCol4_TrackAssign_StageZero:
 	bit	7, w	; F7E50A  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackAssign_Skip	; F7E50D  jr NZ,0xf7e518
 	m_cp_mi8 MB16, 0x0c06, 0x1f	; F7E50F  cp (0x0c06),0x1f
@@ -192291,8 +192357,8 @@ ScreenLeaveBody_TrackAssign_Return:
 	ret	; F7E529  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_TrackAssign_207EZero -- the 5th of the eight SOFT KEYS in the
-;           row under the LCD, on the TrackAssign_207EZero screen
+; SoftKeyCol5_TrackAssign_StageZero -- the 5th of the eight SOFT KEYS in the
+;           row under the LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -192302,7 +192368,7 @@ ScreenLeaveBody_TrackAssign_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x04 of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -192334,17 +192400,17 @@ ScreenLeaveBody_TrackAssign_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_TrackAssign_207EZero:
+SoftKeyCol5_TrackAssign_StageZero:
 	call	T_F42BA8	; F7E52A  call 0xf42ba8
 	calr	sub_F7E788	; F7E52E  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E531  calr 0xf7e2fc
 	ret	; F7E534  ret
-ButtonTable_TrackAssign_207EZero_Nop5:
+ButtonTable_TrackAssign_StageZero_Nop5:
 	ret	; F7E535  ret   <- button table 0xF7D558 entry 5 (TRACK ASSIGN) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol7_TrackAssign_207EZero -- the 7th of the eight SOFT KEYS in the
-;           row under the LCD, on the TrackAssign_207EZero screen
+; SoftKeyCol7_TrackAssign_StageZero -- the 7th of the eight SOFT KEYS in the
+;           row under the LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW45 "SOFT KEY col 7 lower" (matrix segment 5 bit 4, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6F4 {class 0xA9, code 0x06} -> delivered code 0x86; SW46
@@ -192354,7 +192420,7 @@ ButtonTable_TrackAssign_207EZero_Nop5:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x06 of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x06 of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -192386,18 +192452,18 @@ ButtonTable_TrackAssign_207EZero_Nop5:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol7_TrackAssign_207EZero:
+SoftKeyCol7_TrackAssign_StageZero:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7E536  or (0x2075),0x08
 	call	T_F42BAC	; F7E53B  call 0xf42bac
 	calr	sub_F7E788	; F7E53F  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E542  calr 0xf7e2fc
 	ret	; F7E545  ret
-ButtonTable_TrackAssign_207EZero_Nop7:
+ButtonTable_TrackAssign_StageZero_Nop7:
 	ret	; F7E546  ret   <- button table 0xF7D558 entry 7 (TRACK ASSIGN)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_TrackAssign_207EZero -- row 1 of the five key pairs flanking the
-;           LCD, on the TrackAssign_207EZero screen
+; LcdKeyRow1_TrackAssign_StageZero -- row 1 of the five key pairs flanking the
+;           LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW25 "LCD RIGHT 1 (top)" (matrix segment 3 bit 0, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A2
 ;           {class 0xA9, code 0x08} -> delivered code 0x08; SW73 "LCD LEFT 1
@@ -192407,7 +192473,7 @@ ButtonTable_TrackAssign_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x08 of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x08 of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -192431,7 +192497,7 @@ ButtonTable_TrackAssign_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow1_TrackAssign_207EZero:
+LcdKeyRow1_TrackAssign_StageZero:
 	bit	7, w	; F7E547  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackAssign_Return2	; F7E54A  jr Z,0xf7e562
 	m_cp_mi8 MB16, 0x0c03, 0x00	; F7E54C  cp (0x0c03),0x00
@@ -192445,8 +192511,8 @@ ScreenLeaveBody_TrackAssign_Return2:
 	ret	; F7E562  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_TrackAssign_207EZero -- row 2 of the five key pairs flanking the
-;           LCD, on the TrackAssign_207EZero screen
+; LcdKeyRow2_TrackAssign_StageZero -- row 2 of the five key pairs flanking the
+;           LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -192456,7 +192522,7 @@ ScreenLeaveBody_TrackAssign_Return2:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x09 of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -192480,7 +192546,7 @@ ScreenLeaveBody_TrackAssign_Return2:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_TrackAssign_207EZero:
+LcdKeyRow2_TrackAssign_StageZero:
 	bit	7, w	; F7E563  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackAssign_Return3	; F7E566  jr Z,0xf7e580
 	m_cp_mi8 MB16, 0x0c03, 0x0f	; F7E568  cp (0x0c03),0x0f
@@ -192493,8 +192559,8 @@ ScreenLeaveBody_TrackAssign_Return3:
 	ret	; F7E580  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_TrackAssign_207EZero -- row 3 of the five key pairs flanking the
-;           LCD, on the TrackAssign_207EZero screen
+; LcdKeyRow3_TrackAssign_StageZero -- row 3 of the five key pairs flanking the
+;           LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -192504,7 +192570,7 @@ ScreenLeaveBody_TrackAssign_Return3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x0A of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -192528,7 +192594,7 @@ ScreenLeaveBody_TrackAssign_Return3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_TrackAssign_207EZero:
+LcdKeyRow3_TrackAssign_StageZero:
 	bit	7, w	; F7E581  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackAssign_Skip3	; F7E584  jr NZ,0xf7e595
 	ld	l, (3520:16)	; F7E586  ld L,(0x0dc0)
@@ -192545,8 +192611,8 @@ ScreenLeaveBody_TrackAssign_Return4:
 	ret	; F7E5A4  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_TrackAssign_207EZero -- row 4 of the five key pairs flanking the
-;           LCD, on the TrackAssign_207EZero screen
+; LcdKeyRow4_TrackAssign_StageZero -- row 4 of the five key pairs flanking the
+;           LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -192556,7 +192622,7 @@ ScreenLeaveBody_TrackAssign_Return4:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x0B of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -192580,7 +192646,7 @@ ScreenLeaveBody_TrackAssign_Return4:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_TrackAssign_207EZero:
+LcdKeyRow4_TrackAssign_StageZero:
 	bit	7, w	; F7E5A5  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackAssign_Return5	; F7E5A8  jr Z,0xf7e5b9
 	m_cp_mi8 MB16, 0x0c03, 0x07	; F7E5AA  cp (0x0c03),0x07
@@ -192591,8 +192657,8 @@ ScreenLeaveBody_TrackAssign_Return5:
 	ret	; F7E5B9  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow5_TrackAssign_207EZero -- row 5 of the five key pairs flanking the
-;           LCD, on the TrackAssign_207EZero screen
+; LcdKeyRow5_TrackAssign_StageZero -- row 5 of the five key pairs flanking the
+;           LCD, on the TrackAssign_StageZero screen
 ; Reached by: SW29 "LCD RIGHT 5 (bottom)" (matrix segment 3 bit 4, wire 0xC3)
 ;           -> PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record
 ;           0xF8B6B2 {class 0xA9, code 0x0C} -> delivered code 0x0C; SW77 "LCD
@@ -192602,7 +192668,7 @@ ScreenLeaveBody_TrackAssign_Return5:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0C of ButtonTable_TrackAssign_207EZero.
+;           so this is slot 0x0C of ButtonTable_TrackAssign_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -192624,17 +192690,17 @@ ScreenLeaveBody_TrackAssign_Return5:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow5_TrackAssign_207EZero:
+LcdKeyRow5_TrackAssign_StageZero:
 	bit	7, w	; F7E5BA  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackAssign_Return6	; F7E5BD  jr Z,0xf7e5c3
 	call	T_F42BF4	; F7E5BF  call 0xf42bf4
 ScreenLeaveBody_TrackAssign_Return6:
 	ret	; F7E5C3  ret
-ButtonTable_TrackAssign_207EZero_Nop13:
+ButtonTable_TrackAssign_StageZero_Nop13:
 	ret	; F7E5C4  ret   <- button table 0xF7D558 entry 13 (TRACK ASSIGN) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; ExitKey_TrackAssign_207EZero -- the EXIT key on the TrackAssign_207EZero
+; ExitKey_TrackAssign_StageZero -- the EXIT key on the TrackAssign_StageZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -192653,21 +192719,21 @@ ButtonTable_TrackAssign_207EZero_Nop13:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_TrackAssign_207EZero:
+ExitKey_TrackAssign_StageZero:
 	bit	7, w	; F7E5C5  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackAssign_Return7	; F7E5C8  jr NZ,0xf7e5d2
 	ldw	(UI_Request:16), 32772	; F7E5CA  ld (0x2070),0x8004
 	jr	ScreenLeaveBody_TrackAssign_Return7	; F7E5D0  jr T,0xf7e5d2
 ScreenLeaveBody_TrackAssign_Return7:
 	ret	; F7E5D2  ret
-ButtonTable_TrackAssign_207EZero_Nop16:
+ButtonTable_TrackAssign_StageZero_Nop16:
 	ret	; F7E5D3  ret   <- button table 0xF7D558 entry 16 (TRACK ASSIGN) and 11 more slot(s)
-ButtonTable_TrackAssign_207ENonZero_Nop0:
+ButtonTable_TrackAssign_StageNonZero_Nop0:
 	ret	; F7E5D4  ret   <- button table 0xF7D5D8 entry 0 (TRACK ASSIGN) and 8 more slot(s)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_TrackAssign_207ENonZero -- row 2 of the five key pairs flanking
-;           the LCD, on the TrackAssign_207ENonZero screen
+; LcdKeyRow2_TrackAssign_StageNonZero -- row 2 of the five key pairs flanking
+;           the LCD, on the TrackAssign_StageNonZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -192677,7 +192743,7 @@ ButtonTable_TrackAssign_207ENonZero_Nop0:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_TrackAssign_207ENonZero.
+;           so this is slot 0x09 of ButtonTable_TrackAssign_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -192701,7 +192767,7 @@ ButtonTable_TrackAssign_207ENonZero_Nop0:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_TrackAssign_207ENonZero:
+LcdKeyRow2_TrackAssign_StageNonZero:
 	bit	7, w	; F7E5D5  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackAssign_Return8	; F7E5D8  jr NZ,0xf7e5e5
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7E5DA  and (0x2075),0x6f
@@ -192711,8 +192777,8 @@ ScreenLeaveBody_TrackAssign_Return8:
 	ret	; F7E5E5  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_TrackAssign_207ENonZero -- row 3 of the five key pairs flanking
-;           the LCD, on the TrackAssign_207ENonZero screen
+; LcdKeyRow3_TrackAssign_StageNonZero -- row 3 of the five key pairs flanking
+;           the LCD, on the TrackAssign_StageNonZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -192722,7 +192788,7 @@ ScreenLeaveBody_TrackAssign_Return8:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_TrackAssign_207ENonZero.
+;           so this is slot 0x0A of ButtonTable_TrackAssign_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -192746,19 +192812,19 @@ ScreenLeaveBody_TrackAssign_Return8:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_TrackAssign_207ENonZero:
+LcdKeyRow3_TrackAssign_StageNonZero:
 	bit	7, w	; F7E5E6  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackAssign_Return9	; F7E5E9  jr NZ,0xf7e5f1
 	call	T_F42BC0	; F7E5EB  call 0xf42bc0
 	jr	ScreenLeaveBody_TrackAssign_Return9	; F7E5EF  jr T,0xf7e5f1
 ScreenLeaveBody_TrackAssign_Return9:
 	ret	; F7E5F1  ret
-ButtonTable_TrackAssign_207ENonZero_Nop11:
+ButtonTable_TrackAssign_StageNonZero_Nop11:
 	ret	; F7E5F2  ret   <- button table 0xF7D5D8 entry 11 (TRACK ASSIGN) and 3 more slot(s)
 
 ; ---------------------------------------------------------------------
-; ExitKey_TrackAssign_207ENonZero -- the EXIT key on the
-;           TrackAssign_207ENonZero screen
+; ExitKey_TrackAssign_StageNonZero -- the EXIT key on the
+;           TrackAssign_StageNonZero screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
 ;           0xF861AE, then slot 0x0F of the screen's button table.
@@ -192776,14 +192842,14 @@ ButtonTable_TrackAssign_207ENonZero_Nop11:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_TrackAssign_207ENonZero:
+ExitKey_TrackAssign_StageNonZero:
 	bit	7, w	; F7E5F3  bit 0x07,W
-	jr	nz, ExitKey_TrackAssign_207ENonZero_Return	; F7E5F6  jr NZ,0xf7e5fe
+	jr	nz, ExitKey_TrackAssign_StageNonZero_Return	; F7E5F6  jr NZ,0xf7e5fe
 	call	T_F42BC0	; F7E5F8  call 0xf42bc0
-	jr	ExitKey_TrackAssign_207ENonZero_Return	; F7E5FC  jr T,0xf7e5fe
-ExitKey_TrackAssign_207ENonZero_Return:
+	jr	ExitKey_TrackAssign_StageNonZero_Return	; F7E5FC  jr T,0xf7e5fe
+ExitKey_TrackAssign_StageNonZero_Return:
 	ret	; F7E5FE  ret
-ButtonTable_TrackAssign_207ENonZero_Nop16:
+ButtonTable_TrackAssign_StageNonZero_Nop16:
 	ret	; F7E5FF  ret   <- button table 0xF7D5D8 entry 16 (TRACK ASSIGN) and 15 more slot(s)
 ScreenNull_TrackAssign_Nop:
 	ret	; F7E600  ret
@@ -194895,8 +194961,8 @@ ScreenLeaveBody_TrackClear:
 	ret	; F7ECFE  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol1_TrackClear_207EZero -- the 1st of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol1_TrackClear_StageZero -- the 1st of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW33 "SOFT KEY col 1 lower" (matrix segment 4 bit 0, wire 0xC4)
 ;           -> PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record
 ;           0xF8B6C3 {class 0xA9, code 0x00} -> delivered code 0x80; SW34
@@ -194906,7 +194972,7 @@ ScreenLeaveBody_TrackClear:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x00 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x00 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -194940,7 +195006,7 @@ ScreenLeaveBody_TrackClear:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol1_TrackClear_207EZero:
+SoftKeyCol1_TrackClear_StageZero:
 	bit	7, w	; F7ECFF  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip	; F7ED02  jr NZ,0xf7ed0b
 	ld	(13826:16), 0	; F7ED04  ld (0x3602),0x00
@@ -194953,8 +195019,8 @@ ScreenLeaveBody_TrackClear_Join:
 	ret	; F7ED17  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol2_TrackClear_207EZero -- the 2nd of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol2_TrackClear_StageZero -- the 2nd of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW35 "SOFT KEY col 2 lower" (matrix segment 4 bit 2, wire 0xC4)
 ;           -> PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record
 ;           0xF8B6CB {class 0xA9, code 0x01} -> delivered code 0x81; SW36
@@ -194964,7 +195030,7 @@ ScreenLeaveBody_TrackClear_Join:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x01 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x01 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -194998,7 +195064,7 @@ ScreenLeaveBody_TrackClear_Join:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol2_TrackClear_207EZero:
+SoftKeyCol2_TrackClear_StageZero:
 	bit	7, w	; F7ED18  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip2	; F7ED1B  jr NZ,0xf7ed24
 	ld	(13826:16), 1	; F7ED1D  ld (0x3602),0x01
@@ -195011,8 +195077,8 @@ ScreenLeaveBody_TrackClear_Join2:
 	ret	; F7ED30  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol3_TrackClear_207EZero -- the 3rd of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol3_TrackClear_StageZero -- the 3rd of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW37 "SOFT KEY col 3 lower" (matrix segment 4 bit 4, wire 0xC4)
 ;           -> PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record
 ;           0xF8B6D3 {class 0xA9, code 0x02} -> delivered code 0x82; SW38
@@ -195022,7 +195088,7 @@ ScreenLeaveBody_TrackClear_Join2:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x02 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x02 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -195056,7 +195122,7 @@ ScreenLeaveBody_TrackClear_Join2:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol3_TrackClear_207EZero:
+SoftKeyCol3_TrackClear_StageZero:
 	bit	7, w	; F7ED31  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip3	; F7ED34  jr NZ,0xf7ed3d
 	ld	(13826:16), 2	; F7ED36  ld (0x3602),0x02
@@ -195069,8 +195135,8 @@ ScreenLeaveBody_TrackClear_Join3:
 	ret	; F7ED49  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol4_TrackClear_207EZero -- the 4th of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol4_TrackClear_StageZero -- the 4th of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW39 "SOFT KEY col 4 lower" (matrix segment 4 bit 6, wire 0xC4)
 ;           -> PanelWireGroupMap_Variant2[0x64] = group 0x04 -> record
 ;           0xF8B6DB {class 0xA9, code 0x03} -> delivered code 0x83; SW40
@@ -195080,7 +195146,7 @@ ScreenLeaveBody_TrackClear_Join3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x03 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x03 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -195114,7 +195180,7 @@ ScreenLeaveBody_TrackClear_Join3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol4_TrackClear_207EZero:
+SoftKeyCol4_TrackClear_StageZero:
 	bit	7, w	; F7ED4A  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip4	; F7ED4D  jr NZ,0xf7ed56
 	ld	(13826:16), 3	; F7ED4F  ld (0x3602),0x03
@@ -195127,8 +195193,8 @@ ScreenLeaveBody_TrackClear_Join4:
 	ret	; F7ED62  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_TrackClear_207EZero -- the 5th of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol5_TrackClear_StageZero -- the 5th of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -195138,7 +195204,7 @@ ScreenLeaveBody_TrackClear_Join4:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x04 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -195170,7 +195236,7 @@ ScreenLeaveBody_TrackClear_Join4:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_TrackClear_207EZero:
+SoftKeyCol5_TrackClear_StageZero:
 	bit	7, w	; F7ED63  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip5	; F7ED66  jr NZ,0xf7ed6f
 	ld	(13826:16), 4	; F7ED68  ld (0x3602),0x04
@@ -195183,8 +195249,8 @@ ScreenLeaveBody_TrackClear_Join5:
 	ret	; F7ED7B  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol6_TrackClear_207EZero -- the 6th of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol6_TrackClear_StageZero -- the 6th of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW43 "SOFT KEY col 6 lower" (matrix segment 5 bit 2, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6EC {class 0xA9, code 0x05} -> delivered code 0x85; SW44
@@ -195194,7 +195260,7 @@ ScreenLeaveBody_TrackClear_Join5:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x05 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x05 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -195226,7 +195292,7 @@ ScreenLeaveBody_TrackClear_Join5:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol6_TrackClear_207EZero:
+SoftKeyCol6_TrackClear_StageZero:
 	bit	7, w	; F7ED7C  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip6	; F7ED7F  jr NZ,0xf7ed88
 	ld	(13826:16), 5	; F7ED81  ld (0x3602),0x05
@@ -195239,8 +195305,8 @@ ScreenLeaveBody_TrackClear_Join6:
 	ret	; F7ED94  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol7_TrackClear_207EZero -- the 7th of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol7_TrackClear_StageZero -- the 7th of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW45 "SOFT KEY col 7 lower" (matrix segment 5 bit 4, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6F4 {class 0xA9, code 0x06} -> delivered code 0x86; SW46
@@ -195250,7 +195316,7 @@ ScreenLeaveBody_TrackClear_Join6:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x06 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x06 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -195282,7 +195348,7 @@ ScreenLeaveBody_TrackClear_Join6:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol7_TrackClear_207EZero:
+SoftKeyCol7_TrackClear_StageZero:
 	bit	7, w	; F7ED95  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip7	; F7ED98  jr NZ,0xf7eda1
 	ld	(13826:16), 6	; F7ED9A  ld (0x3602),0x06
@@ -195295,8 +195361,8 @@ ScreenLeaveBody_TrackClear_Join7:
 	ret	; F7EDAD  ret
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol8_TrackClear_207EZero -- the 8th of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackClear_207EZero screen
+; SoftKeyCol8_TrackClear_StageZero -- the 8th of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackClear_StageZero screen
 ; Reached by: SW47 "SOFT KEY col 8 lower" (matrix segment 5 bit 6, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6FC {class 0xA9, code 0x07} -> delivered code 0x87; SW48
@@ -195306,7 +195372,7 @@ ScreenLeaveBody_TrackClear_Join7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x07 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x07 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -195338,7 +195404,7 @@ ScreenLeaveBody_TrackClear_Join7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol8_TrackClear_207EZero:
+SoftKeyCol8_TrackClear_StageZero:
 	bit	7, w	; F7EDAE  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Skip8	; F7EDB1  jr NZ,0xf7edba
 	ld	(13826:16), 7	; F7EDB3  ld (0x3602),0x07
@@ -195349,12 +195415,12 @@ ScreenLeaveBody_TrackClear_Skip8:
 ScreenLeaveBody_TrackClear_Join8:
 	call	T_F40CC4	; F7EDC2  call 0xf40cc4
 	ret	; F7EDC6  ret
-ButtonTable_TrackClear_207EZero_Nop8:
+ButtonTable_TrackClear_StageZero_Nop8:
 	ret	; F7EDC7  ret   <- button table 0xF7D458 entry 8 (TRACK CLEAR)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_TrackClear_207EZero -- row 2 of the five key pairs flanking the
-;           LCD, on the TrackClear_207EZero screen
+; LcdKeyRow2_TrackClear_StageZero -- row 2 of the five key pairs flanking the
+;           LCD, on the TrackClear_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -195364,7 +195430,7 @@ ButtonTable_TrackClear_207EZero_Nop8:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_TrackClear_207EZero.
+;           so this is slot 0x09 of ButtonTable_TrackClear_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195388,17 +195454,17 @@ ButtonTable_TrackClear_207EZero_Nop8:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_TrackClear_207EZero:
+LcdKeyRow2_TrackClear_StageZero:
 	bit	7, w	; F7EDC8  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Return	; F7EDCB  jr NZ,0xf7edd1
 	call	T_F428DC	; F7EDCD  call 0xf428dc
 ScreenLeaveBody_TrackClear_Return:
 	ret	; F7EDD1  ret
-ButtonTable_TrackClear_207EZero_Nop10:
+ButtonTable_TrackClear_StageZero_Nop10:
 	ret	; F7EDD2  ret   <- button table 0xF7D458 entry 10 (TRACK CLEAR) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; ExitKey_TrackClear_207EZero -- the EXIT key on the TrackClear_207EZero
+; ExitKey_TrackClear_StageZero -- the EXIT key on the TrackClear_StageZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -195417,21 +195483,21 @@ ButtonTable_TrackClear_207EZero_Nop10:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_TrackClear_207EZero:
+ExitKey_TrackClear_StageZero:
 	bit	7, w	; F7EDD3  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Return2	; F7EDD6  jr NZ,0xf7ede0
 	ldw	(UI_Request:16), 32794	; F7EDD8  ld (0x2070),0x801a
 	jr	ScreenLeaveBody_TrackClear_Return2	; F7EDDE  jr T,0xf7ede0
 ScreenLeaveBody_TrackClear_Return2:
 	ret	; F7EDE0  ret
-ButtonTable_TrackClear_207EZero_Nop16:
+ButtonTable_TrackClear_StageZero_Nop16:
 	ret	; F7EDE1  ret   <- button table 0xF7D458 entry 16 (TRACK CLEAR) and 7 more slot(s)
-ButtonTable_TrackClear_207ENonZero_Nop0:
+ButtonTable_TrackClear_StageNonZero_Nop0:
 	ret	; F7EDE2  ret   <- button table 0xF7D4D8 entry 0 (TRACK CLEAR) and 8 more slot(s)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_TrackClear_207ENonZero -- row 2 of the five key pairs flanking
-;           the LCD, on the TrackClear_207ENonZero screen
+; LcdKeyRow2_TrackClear_StageNonZero -- row 2 of the five key pairs flanking
+;           the LCD, on the TrackClear_StageNonZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -195441,7 +195507,7 @@ ButtonTable_TrackClear_207ENonZero_Nop0:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_TrackClear_207ENonZero.
+;           so this is slot 0x09 of ButtonTable_TrackClear_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195465,7 +195531,7 @@ ButtonTable_TrackClear_207ENonZero_Nop0:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_TrackClear_207ENonZero:
+LcdKeyRow2_TrackClear_StageNonZero:
 	bit	7, w	; F7EDE3  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Return3	; F7EDE6  jr NZ,0xf7edf1
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7EDE8  and (0x2075),0x6f
@@ -195474,8 +195540,8 @@ ScreenLeaveBody_TrackClear_Return3:
 	ret	; F7EDF1  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_TrackClear_207ENonZero -- row 3 of the five key pairs flanking
-;           the LCD, on the TrackClear_207ENonZero screen
+; LcdKeyRow3_TrackClear_StageNonZero -- row 3 of the five key pairs flanking
+;           the LCD, on the TrackClear_StageNonZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -195485,7 +195551,7 @@ ScreenLeaveBody_TrackClear_Return3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_TrackClear_207ENonZero.
+;           so this is slot 0x0A of ButtonTable_TrackClear_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195509,17 +195575,17 @@ ScreenLeaveBody_TrackClear_Return3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_TrackClear_207ENonZero:
+LcdKeyRow3_TrackClear_StageNonZero:
 	bit	7, w	; F7EDF2  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Return4	; F7EDF5  jr NZ,0xf7edfb
 	call	T_F428D8	; F7EDF7  call 0xf428d8
 ScreenLeaveBody_TrackClear_Return4:
 	ret	; F7EDFB  ret
-ButtonTable_TrackClear_207ENonZero_Nop11:
+ButtonTable_TrackClear_StageNonZero_Nop11:
 	ret	; F7EDFC  ret   <- button table 0xF7D4D8 entry 11 (TRACK CLEAR) and 3 more slot(s)
 
 ; ---------------------------------------------------------------------
-; ExitKey_TrackClear_207ENonZero -- the EXIT key on the TrackClear_207ENonZero
+; ExitKey_TrackClear_StageNonZero -- the EXIT key on the TrackClear_StageNonZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -195538,13 +195604,13 @@ ButtonTable_TrackClear_207ENonZero_Nop11:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_TrackClear_207ENonZero:
+ExitKey_TrackClear_StageNonZero:
 	bit	7, w	; F7EDFD  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Return5	; F7EE00  jr NZ,0xf7ee06
 	call	T_F428D8	; F7EE02  call 0xf428d8
 ScreenLeaveBody_TrackClear_Return5:
 	ret	; F7EE06  ret
-ButtonTable_TrackClear_207ENonZero_Nop16:
+ButtonTable_TrackClear_StageNonZero_Nop16:
 	ret	; F7EE07  ret   <- button table 0xF7D4D8 entry 16 (TRACK CLEAR) and 15 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -195615,18 +195681,18 @@ Paint_TrackMerge_Join:
 ScreenLeaveBody_TrackMerge:
 	call	T_F4293C	; F7EE96  call 0xf4293c
 	ret	; F7EE9A  ret
-ButtonTable_TrackMerge_207EZero_Nop0:
+ButtonTable_TrackMerge_StageZero_Nop0:
 	ret	; F7EE9B  ret   <- button table 0xF7D6D8 entry 0 (TRACK MERGE)
-ButtonTable_TrackMerge_207EZero_Nop1:
+ButtonTable_TrackMerge_StageZero_Nop1:
 	ret	; F7EE9C  ret   <- button table 0xF7D6D8 entry 1 (TRACK MERGE)
-ButtonTable_TrackMerge_207EZero_Nop2:
+ButtonTable_TrackMerge_StageZero_Nop2:
 	ret	; F7EE9D  ret   <- button table 0xF7D6D8 entry 2 (TRACK MERGE)
-ButtonTable_TrackMerge_207EZero_Nop3:
+ButtonTable_TrackMerge_StageZero_Nop3:
 	ret	; F7EE9E  ret   <- button table 0xF7D6D8 entry 3 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_TrackMerge_207EZero -- the 5th of the eight SOFT KEYS in the row
-;           under the LCD, on the TrackMerge_207EZero screen
+; SoftKeyCol5_TrackMerge_StageZero -- the 5th of the eight SOFT KEYS in the row
+;           under the LCD, on the TrackMerge_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -195636,7 +195702,7 @@ ButtonTable_TrackMerge_207EZero_Nop3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_TrackMerge_207EZero.
+;           so this is slot 0x04 of ButtonTable_TrackMerge_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -195664,7 +195730,7 @@ ButtonTable_TrackMerge_207EZero_Nop3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_TrackMerge_207EZero:
+SoftKeyCol5_TrackMerge_StageZero:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7EE9F  or (0x2075),0x08
 	bit	7, w	; F7EEA4  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackMerge_Skip	; F7EEA7  jr Z,0xf7eeaf
@@ -195679,16 +195745,16 @@ ScreenLeaveBody_TrackMerge_Join:
 	ld	xix, DL_F3A561 + 0x1E	; F7EEC0  ld XIX,0x00f3a57f
 	call	T_DisplayListB_Run	; F7EEC5  call 0xf417f4
 	ret	; F7EEC9  ret
-ButtonTable_TrackMerge_207EZero_Nop5:
+ButtonTable_TrackMerge_StageZero_Nop5:
 	ret	; F7EECA  ret   <- button table 0xF7D6D8 entry 5 (TRACK MERGE)
-ButtonTable_TrackMerge_207EZero_Nop6:
+ButtonTable_TrackMerge_StageZero_Nop6:
 	ret	; F7EECB  ret   <- button table 0xF7D6D8 entry 6 (TRACK MERGE)
-ButtonTable_TrackMerge_207EZero_Nop7:
+ButtonTable_TrackMerge_StageZero_Nop7:
 	ret	; F7EECC  ret   <- button table 0xF7D6D8 entry 7 (TRACK MERGE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_TrackMerge_207EZero -- row 2 of the five key pairs flanking the
-;           LCD, on the TrackMerge_207EZero screen
+; LcdKeyRow2_TrackMerge_StageZero -- row 2 of the five key pairs flanking the
+;           LCD, on the TrackMerge_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -195698,7 +195764,7 @@ ButtonTable_TrackMerge_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_TrackMerge_207EZero.
+;           so this is slot 0x09 of ButtonTable_TrackMerge_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195722,7 +195788,7 @@ ButtonTable_TrackMerge_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_TrackMerge_207EZero:
+LcdKeyRow2_TrackMerge_StageZero:
 	bit	7, w	; F7EECD  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackMerge_Skip2	; F7EED0  jr Z,0xf7eeea
 	m_cp_mi8 MB16, 0x0dba, 0x01	; F7EED2  cp (0x0dba),0x01
@@ -195747,8 +195813,8 @@ sub_F7EEEF:
 	ret	; F7EF01  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_TrackMerge_207EZero -- row 3 of the five key pairs flanking the
-;           LCD, on the TrackMerge_207EZero screen
+; LcdKeyRow3_TrackMerge_StageZero -- row 3 of the five key pairs flanking the
+;           LCD, on the TrackMerge_StageZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -195758,7 +195824,7 @@ sub_F7EEEF:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_TrackMerge_207EZero.
+;           so this is slot 0x0A of ButtonTable_TrackMerge_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195782,7 +195848,7 @@ sub_F7EEEF:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_TrackMerge_207EZero:
+LcdKeyRow3_TrackMerge_StageZero:
 	bit	7, w	; F7EF02  bit 0x07,W
 	jr	nz, sub_F7EEEF_Return	; F7EF05  jr NZ,0xf7ef1d
 	m_cp_mi8 MB16, 0x0dba, 0x03	; F7EF07  cp (0x0dba),0x03
@@ -195795,8 +195861,8 @@ sub_F7EEEF_Return:
 	ret	; F7EF1D  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_TrackMerge_207EZero -- row 4 of the five key pairs flanking the
-;           LCD, on the TrackMerge_207EZero screen
+; LcdKeyRow4_TrackMerge_StageZero -- row 4 of the five key pairs flanking the
+;           LCD, on the TrackMerge_StageZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -195806,7 +195872,7 @@ sub_F7EEEF_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_TrackMerge_207EZero.
+;           so this is slot 0x0B of ButtonTable_TrackMerge_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195830,7 +195896,7 @@ sub_F7EEEF_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_TrackMerge_207EZero:
+LcdKeyRow4_TrackMerge_StageZero:
 	bit	7, w	; F7EF1E  bit 0x07,W
 	jr	z, sub_F7EEEF_Return2	; F7EF21  jr Z,0xf7ef39
 	m_cp_mi8 MB16, 0x0dba, 0x02	; F7EF23  cp (0x0dba),0x02
@@ -195841,15 +195907,15 @@ LcdKeyRow4_TrackMerge_207EZero:
 	calr	sub_F7EEEF	; F7EF36  calr 0xf7eeef
 sub_F7EEEF_Return2:
 	ret	; F7EF39  ret
-ButtonTable_TrackMerge_207EZero_Nop12:
+ButtonTable_TrackMerge_StageZero_Nop12:
 	ret	; F7EF3A  ret   <- button table 0xF7D6D8 entry 12 (TRACK MERGE)
-ButtonTable_TrackMerge_207EZero_Nop13:
+ButtonTable_TrackMerge_StageZero_Nop13:
 	ret	; F7EF3B  ret   <- button table 0xF7D6D8 entry 13 (TRACK MERGE)
-ButtonTable_TrackMerge_207EZero_Nop14:
+ButtonTable_TrackMerge_StageZero_Nop14:
 	ret	; F7EF3C  ret   <- button table 0xF7D6D8 entry 14 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_TrackMerge_207EZero -- the EXIT key on the TrackMerge_207EZero
+; ExitKey_TrackMerge_StageZero -- the EXIT key on the TrackMerge_StageZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -195868,7 +195934,7 @@ ButtonTable_TrackMerge_207EZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_TrackMerge_207EZero:
+ExitKey_TrackMerge_StageZero:
 	bit	7, w	; F7EF3D  bit 0x07,W
 	jr	z, sub_F7EEEF_Skip	; F7EF40  jr Z,0xf7ef44
 	jr	sub_F7EEEF_Return3	; F7EF42  jr T,0xf7ef4a
@@ -195876,28 +195942,28 @@ sub_F7EEEF_Skip:
 	ldw	(UI_Request:16), 32794	; F7EF44  ld (0x2070),0x801a
 sub_F7EEEF_Return3:
 	ret	; F7EF4A  ret
-ButtonTable_TrackMerge_207EZero_Nop16:
+ButtonTable_TrackMerge_StageZero_Nop16:
 	ret	; F7EF4B  ret   <- button table 0xF7D6D8 entry 16 (TRACK MERGE) and 15 more slot(s)
-ButtonTable_TrackMerge_207ENonZero_Nop0:
+ButtonTable_TrackMerge_StageNonZero_Nop0:
 	ret	; F7EF4C  ret   <- button table 0xF7D758 entry 0 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop1:
+ButtonTable_TrackMerge_StageNonZero_Nop1:
 	ret	; F7EF4D  ret   <- button table 0xF7D758 entry 1 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop2:
+ButtonTable_TrackMerge_StageNonZero_Nop2:
 	ret	; F7EF4E  ret   <- button table 0xF7D758 entry 2 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop3:
+ButtonTable_TrackMerge_StageNonZero_Nop3:
 	ret	; F7EF4F  ret   <- button table 0xF7D758 entry 3 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop4:
+ButtonTable_TrackMerge_StageNonZero_Nop4:
 	ret	; F7EF50  ret   <- button table 0xF7D758 entry 4 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop5:
+ButtonTable_TrackMerge_StageNonZero_Nop5:
 	ret	; F7EF51  ret   <- button table 0xF7D758 entry 5 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop6:
+ButtonTable_TrackMerge_StageNonZero_Nop6:
 	ret	; F7EF52  ret   <- button table 0xF7D758 entry 6 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop7:
+ButtonTable_TrackMerge_StageNonZero_Nop7:
 	ret	; F7EF53  ret   <- button table 0xF7D758 entry 7 (TRACK MERGE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_TrackMerge_207ENonZero -- row 2 of the five key pairs flanking
-;           the LCD, on the TrackMerge_207ENonZero screen
+; LcdKeyRow2_TrackMerge_StageNonZero -- row 2 of the five key pairs flanking
+;           the LCD, on the TrackMerge_StageNonZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -195907,7 +195973,7 @@ ButtonTable_TrackMerge_207ENonZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_TrackMerge_207ENonZero.
+;           so this is slot 0x09 of ButtonTable_TrackMerge_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195931,19 +195997,19 @@ ButtonTable_TrackMerge_207ENonZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_TrackMerge_207ENonZero:
+LcdKeyRow2_TrackMerge_StageNonZero:
 	bit	7, w	; F7EF54  bit 0x07,W
 	jr	nz, sub_F7EEEF_Return4	; F7EF57  jr NZ,0xf7ef62
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7EF59  and (0x2075),0x6f
 	call	T_F42958	; F7EF5E  call 0xf42958
 sub_F7EEEF_Return4:
 	ret	; F7EF62  ret
-ButtonTable_TrackMerge_207ENonZero_Nop10:
+ButtonTable_TrackMerge_StageNonZero_Nop10:
 	ret	; F7EF63  ret   <- button table 0xF7D758 entry 10 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_TrackMerge_207ENonZero -- row 4 of the five key pairs flanking
-;           the LCD, on the TrackMerge_207ENonZero screen
+; LcdKeyRow4_TrackMerge_StageNonZero -- row 4 of the five key pairs flanking
+;           the LCD, on the TrackMerge_StageNonZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -195953,7 +196019,7 @@ ButtonTable_TrackMerge_207ENonZero_Nop10:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_TrackMerge_207ENonZero.
+;           so this is slot 0x0B of ButtonTable_TrackMerge_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -195977,21 +196043,21 @@ ButtonTable_TrackMerge_207ENonZero_Nop10:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_TrackMerge_207ENonZero:
+LcdKeyRow4_TrackMerge_StageNonZero:
 	bit	7, w	; F7EF64  bit 0x07,W
 	jr	nz, sub_F7EEEF_Return5	; F7EF67  jr NZ,0xf7ef6d
 	call	T_F42954	; F7EF69  call 0xf42954
 sub_F7EEEF_Return5:
 	ret	; F7EF6D  ret
-ButtonTable_TrackMerge_207ENonZero_Nop12:
+ButtonTable_TrackMerge_StageNonZero_Nop12:
 	ret	; F7EF6E  ret   <- button table 0xF7D758 entry 12 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop13:
+ButtonTable_TrackMerge_StageNonZero_Nop13:
 	ret	; F7EF6F  ret   <- button table 0xF7D758 entry 13 (TRACK MERGE)
-ButtonTable_TrackMerge_207ENonZero_Nop14:
+ButtonTable_TrackMerge_StageNonZero_Nop14:
 	ret	; F7EF70  ret   <- button table 0xF7D758 entry 14 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_TrackMerge_207ENonZero -- the EXIT key on the TrackMerge_207ENonZero
+; ExitKey_TrackMerge_StageNonZero -- the EXIT key on the TrackMerge_StageNonZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -196010,13 +196076,13 @@ ButtonTable_TrackMerge_207ENonZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_TrackMerge_207ENonZero:
+ExitKey_TrackMerge_StageNonZero:
 	bit	7, w	; F7EF71  bit 0x07,W
 	jr	nz, sub_F7EEEF_Return6	; F7EF74  jr NZ,0xf7ef7a
 	call	T_F42954	; F7EF76  call 0xf42954
 sub_F7EEEF_Return6:
 	ret	; F7EF7A  ret
-ButtonTable_TrackMerge_207ENonZero_Nop16:
+ButtonTable_TrackMerge_StageNonZero_Nop16:
 	ret	; F7EF7B  ret   <- button table 0xF7D758 entry 16 (TRACK MERGE) and 15 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -196106,18 +196172,18 @@ Draw_LastMeasure:
 ScreenLeaveBody_MeasureDelete:
 	call	T_F42960	; F7F031  call 0xf42960
 	ret	; F7F035  ret
-ButtonTable_MeasureDelete_207EZero_Nop0:
+ButtonTable_MeasureDelete_StageZero_Nop0:
 	ret	; F7F036  ret   <- button table 0xF7D7D8 entry 0 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207EZero_Nop1:
+ButtonTable_MeasureDelete_StageZero_Nop1:
 	ret	; F7F037  ret   <- button table 0xF7D7D8 entry 1 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207EZero_Nop2:
+ButtonTable_MeasureDelete_StageZero_Nop2:
 	ret	; F7F038  ret   <- button table 0xF7D7D8 entry 2 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207EZero_Nop3:
+ButtonTable_MeasureDelete_StageZero_Nop3:
 	ret	; F7F039  ret   <- button table 0xF7D7D8 entry 3 (MEASURE DELETE)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_MeasureDelete_207EZero -- the 5th of the eight SOFT KEYS in the
-;           row under the LCD, on the MeasureDelete_207EZero screen
+; SoftKeyCol5_MeasureDelete_StageZero -- the 5th of the eight SOFT KEYS in the
+;           row under the LCD, on the MeasureDelete_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -196127,7 +196193,7 @@ ButtonTable_MeasureDelete_207EZero_Nop3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_MeasureDelete_207EZero.
+;           so this is slot 0x04 of ButtonTable_MeasureDelete_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -196155,7 +196221,7 @@ ButtonTable_MeasureDelete_207EZero_Nop3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_MeasureDelete_207EZero:
+SoftKeyCol5_MeasureDelete_StageZero:
 	m_bit 1, MD16, UI_RequestBits	; F7F03A  bit 1,(0x2075)
 	jr	z, ScreenLeaveBody_MeasureDelete_Skip	; F7F03E  jr Z,0xf7f044
 	call	T_Blink_Stop	; F7F040  call 0xf42e24
@@ -196171,16 +196237,16 @@ ScreenLeaveBody_MeasureDelete_Skip2:
 ScreenLeaveBody_MeasureDelete_Join:
 	calr	Draw_LastMeasure	; F7F05D  calr 0xf7f01a
 	ret	; F7F060  ret
-ButtonTable_MeasureDelete_207EZero_Nop5:
+ButtonTable_MeasureDelete_StageZero_Nop5:
 	ret	; F7F061  ret   <- button table 0xF7D7D8 entry 5 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207EZero_Nop6:
+ButtonTable_MeasureDelete_StageZero_Nop6:
 	ret	; F7F062  ret   <- button table 0xF7D7D8 entry 6 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207EZero_Nop7:
+ButtonTable_MeasureDelete_StageZero_Nop7:
 	ret	; F7F063  ret   <- button table 0xF7D7D8 entry 7 (MEASURE DELETE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_MeasureDelete_207EZero -- row 2 of the five key pairs flanking
-;           the LCD, on the MeasureDelete_207EZero screen
+; LcdKeyRow2_MeasureDelete_StageZero -- row 2 of the five key pairs flanking
+;           the LCD, on the MeasureDelete_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -196190,7 +196256,7 @@ ButtonTable_MeasureDelete_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_MeasureDelete_207EZero.
+;           so this is slot 0x09 of ButtonTable_MeasureDelete_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -196214,7 +196280,7 @@ ButtonTable_MeasureDelete_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_MeasureDelete_207EZero:
+LcdKeyRow2_MeasureDelete_StageZero:
 	bit	7, w	; F7F064  bit 0x07,W
 	jr	z, ScreenLeaveBody_MeasureDelete_Return	; F7F067  jr Z,0xf7f087
 	m_cp_mi8 MB16, 0x0dd4, 0x01	; F7F069  cp (0x0dd4),0x01
@@ -196230,8 +196296,8 @@ ScreenLeaveBody_MeasureDelete_Return:
 	ret	; F7F087  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_MeasureDelete_207EZero -- row 3 of the five key pairs flanking
-;           the LCD, on the MeasureDelete_207EZero screen
+; LcdKeyRow3_MeasureDelete_StageZero -- row 3 of the five key pairs flanking
+;           the LCD, on the MeasureDelete_StageZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -196241,7 +196307,7 @@ ScreenLeaveBody_MeasureDelete_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_MeasureDelete_207EZero.
+;           so this is slot 0x0A of ButtonTable_MeasureDelete_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -196265,7 +196331,7 @@ ScreenLeaveBody_MeasureDelete_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_MeasureDelete_207EZero:
+LcdKeyRow3_MeasureDelete_StageZero:
 	bit	7, w	; F7F088  bit 0x07,W
 	jr	z, ScreenLeaveBody_MeasureDelete_Skip3	; F7F08B  jr Z,0xf7f0ab
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7F08D  cp (0x0dd4),0x02
@@ -196284,8 +196350,8 @@ ScreenLeaveBody_MeasureDelete_Return2:
 	ret	; F7F0B2  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_MeasureDelete_207EZero -- row 4 of the five key pairs flanking
-;           the LCD, on the MeasureDelete_207EZero screen
+; LcdKeyRow4_MeasureDelete_StageZero -- row 4 of the five key pairs flanking
+;           the LCD, on the MeasureDelete_StageZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -196295,7 +196361,7 @@ ScreenLeaveBody_MeasureDelete_Return2:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_MeasureDelete_207EZero.
+;           so this is slot 0x0B of ButtonTable_MeasureDelete_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -196319,7 +196385,7 @@ ScreenLeaveBody_MeasureDelete_Return2:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_MeasureDelete_207EZero:
+LcdKeyRow4_MeasureDelete_StageZero:
 	bit	7, w	; F7F0B3  bit 0x07,W
 	jr	z, ScreenLeaveBody_MeasureDelete_Return3	; F7F0B6  jr Z,0xf7f0d4
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7F0B8  cp (0x0dd4),0x03
@@ -196332,15 +196398,15 @@ LcdKeyRow4_MeasureDelete_207EZero:
 	calr	sub_F7EFFA	; F7F0D1  calr 0xf7effa
 ScreenLeaveBody_MeasureDelete_Return3:
 	ret	; F7F0D4  ret
-ButtonTable_MeasureDelete_207EZero_Nop12:
+ButtonTable_MeasureDelete_StageZero_Nop12:
 	ret	; F7F0D5  ret   <- button table 0xF7D7D8 entry 12 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207EZero_Nop13:
+ButtonTable_MeasureDelete_StageZero_Nop13:
 	ret	; F7F0D6  ret   <- button table 0xF7D7D8 entry 13 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207EZero_Nop14:
+ButtonTable_MeasureDelete_StageZero_Nop14:
 	ret	; F7F0D7  ret   <- button table 0xF7D7D8 entry 14 (MEASURE DELETE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_MeasureDelete_207EZero -- the EXIT key on the MeasureDelete_207EZero
+; ExitKey_MeasureDelete_StageZero -- the EXIT key on the MeasureDelete_StageZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -196359,7 +196425,7 @@ ButtonTable_MeasureDelete_207EZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_MeasureDelete_207EZero:
+ExitKey_MeasureDelete_StageZero:
 	bit	7, w	; F7F0D8  bit 0x07,W
 	jr	z, ScreenLeaveBody_MeasureDelete_Skip4	; F7F0DB  jr Z,0xf7f0df
 	jr	ScreenLeaveBody_MeasureDelete_Return4	; F7F0DD  jr T,0xf7f0e5
@@ -196367,11 +196433,11 @@ ScreenLeaveBody_MeasureDelete_Skip4:
 	ldw	(UI_Request:16), 32794	; F7F0DF  ld (0x2070),0x801a
 ScreenLeaveBody_MeasureDelete_Return4:
 	ret	; F7F0E5  ret
-ButtonTable_MeasureDelete_207EZero_Nop16:
+ButtonTable_MeasureDelete_StageZero_Nop16:
 	ret	; F7F0E6  ret   <- button table 0xF7D7D8 entry 16 (MEASURE DELETE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7F0E7 -- panel button slot 0x15 of MeasureDelete_207EZero, NOT NAMED
+; sub_F7F0E7 -- panel button slot 0x15 of MeasureDelete_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -196403,12 +196469,12 @@ ScreenLeaveBody_MeasureDelete_Skip6:
 ScreenLeaveBody_MeasureDelete_Join2:
 	calr	Draw_LastMeasure	; F7F10A  calr 0xf7f01a
 	ret	; F7F10D  ret
-ButtonTable_MeasureDelete_207EZero_Nop22:
+ButtonTable_MeasureDelete_StageZero_Nop22:
 	ret	; F7F10E  ret   <- button table 0xF7D7D8 entry 22 (MEASURE DELETE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; NumberPadKey_MeasureDelete_207EZero -- the NUMBER PAD on the
-;           MeasureDelete_207EZero screen
+; NumberPadKey_MeasureDelete_StageZero -- the NUMBER PAD on the
+;           MeasureDelete_StageZero screen
 ; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
 ;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
 ;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
@@ -196427,10 +196493,10 @@ ButtonTable_MeasureDelete_207EZero_Nop22:
 ;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
 ;           --selftest.
 ; ---------------------------------------------------------------------
-NumberPadKey_MeasureDelete_207EZero:
+NumberPadKey_MeasureDelete_StageZero:
 	calr	sub_F7F114	; F7F10F  calr 0xf7f114
 	ret	; F7F112  ret
-ButtonTable_MeasureDelete_207EZero_Nop28:
+ButtonTable_MeasureDelete_StageZero_Nop28:
 	ret	; F7F113  ret   <- button table 0xF7D7D8 entry 28 (MEASURE DELETE) and 3 more slot(s)
 
 ; Evidence: reached from calr from prom_b 0xF7F10F, and from nothing else
@@ -196553,28 +196619,28 @@ BlinkArgPtrs_F7F1F5:
 	.long DL_LastMeasure + 0xF	; F7F1FD  [2]
 	.long DL_LastMeasure + 0x19	; F7F201  [3]
 
-ButtonTable_MeasureDelete_207ENonZero_Nop0:
+ButtonTable_MeasureDelete_StageNonZero_Nop0:
 	ret	; F7F205  ret   <- button table 0xF7D858 entry 0 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop1:
+ButtonTable_MeasureDelete_StageNonZero_Nop1:
 	ret	; F7F206  ret   <- button table 0xF7D858 entry 1 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop2:
+ButtonTable_MeasureDelete_StageNonZero_Nop2:
 	ret	; F7F207  ret   <- button table 0xF7D858 entry 2 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop3:
+ButtonTable_MeasureDelete_StageNonZero_Nop3:
 	ret	; F7F208  ret   <- button table 0xF7D858 entry 3 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop4:
+ButtonTable_MeasureDelete_StageNonZero_Nop4:
 	ret	; F7F209  ret   <- button table 0xF7D858 entry 4 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop5:
+ButtonTable_MeasureDelete_StageNonZero_Nop5:
 	ret	; F7F20A  ret   <- button table 0xF7D858 entry 5 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop6:
+ButtonTable_MeasureDelete_StageNonZero_Nop6:
 	ret	; F7F20B  ret   <- button table 0xF7D858 entry 6 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop7:
+ButtonTable_MeasureDelete_StageNonZero_Nop7:
 	ret	; F7F20C  ret   <- button table 0xF7D858 entry 7 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop8:
+ButtonTable_MeasureDelete_StageNonZero_Nop8:
 	ret	; F7F20D  ret   <- button table 0xF7D858 entry 8 (MEASURE DELETE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_MeasureDelete_207ENonZero -- row 3 of the five key pairs flanking
-;           the LCD, on the MeasureDelete_207ENonZero screen
+; LcdKeyRow3_MeasureDelete_StageNonZero -- row 3 of the five key pairs flanking
+;           the LCD, on the MeasureDelete_StageNonZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -196584,7 +196650,7 @@ ButtonTable_MeasureDelete_207ENonZero_Nop8:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_MeasureDelete_207ENonZero.
+;           so this is slot 0x0A of ButtonTable_MeasureDelete_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -196608,17 +196674,17 @@ ButtonTable_MeasureDelete_207ENonZero_Nop8:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_MeasureDelete_207ENonZero:
+LcdKeyRow3_MeasureDelete_StageNonZero:
 	bit	7, w	; F7F20E  bit 0x07,W
-	jr	nz, LcdKeyRow3_MeasureDelete_207ENonZero_Return	; F7F211  jr NZ,0xf7f21c
+	jr	nz, LcdKeyRow3_MeasureDelete_StageNonZero_Return	; F7F211  jr NZ,0xf7f21c
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7F213  and (0x2075),0x6f
 	call	T_F42978	; F7F218  call 0xf42978
-LcdKeyRow3_MeasureDelete_207ENonZero_Return:
+LcdKeyRow3_MeasureDelete_StageNonZero_Return:
 	ret	; F7F21C  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_MeasureDelete_207ENonZero -- row 4 of the five key pairs flanking
-;           the LCD, on the MeasureDelete_207ENonZero screen
+; LcdKeyRow4_MeasureDelete_StageNonZero -- row 4 of the five key pairs flanking
+;           the LCD, on the MeasureDelete_StageNonZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -196628,7 +196694,7 @@ LcdKeyRow3_MeasureDelete_207ENonZero_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_MeasureDelete_207ENonZero.
+;           so this is slot 0x0B of ButtonTable_MeasureDelete_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -196652,23 +196718,23 @@ LcdKeyRow3_MeasureDelete_207ENonZero_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_MeasureDelete_207ENonZero:
+LcdKeyRow4_MeasureDelete_StageNonZero:
 	bit	7, w	; F7F21D  bit 0x07,W
-	jr	nz, LcdKeyRow4_MeasureDelete_207ENonZero_Return	; F7F220  jr NZ,0xf7f228
+	jr	nz, LcdKeyRow4_MeasureDelete_StageNonZero_Return	; F7F220  jr NZ,0xf7f228
 	call	T_F42970	; F7F222  call 0xf42970
-	jr	LcdKeyRow4_MeasureDelete_207ENonZero_Return	; F7F226  jr T,0xf7f228
-LcdKeyRow4_MeasureDelete_207ENonZero_Return:
+	jr	LcdKeyRow4_MeasureDelete_StageNonZero_Return	; F7F226  jr T,0xf7f228
+LcdKeyRow4_MeasureDelete_StageNonZero_Return:
 	ret	; F7F228  ret
-ButtonTable_MeasureDelete_207ENonZero_Nop12:
+ButtonTable_MeasureDelete_StageNonZero_Nop12:
 	ret	; F7F229  ret   <- button table 0xF7D858 entry 12 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop13:
+ButtonTable_MeasureDelete_StageNonZero_Nop13:
 	ret	; F7F22A  ret   <- button table 0xF7D858 entry 13 (MEASURE DELETE)
-ButtonTable_MeasureDelete_207ENonZero_Nop14:
+ButtonTable_MeasureDelete_StageNonZero_Nop14:
 	ret	; F7F22B  ret   <- button table 0xF7D858 entry 14 (MEASURE DELETE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_MeasureDelete_207ENonZero -- the EXIT key on the
-;           MeasureDelete_207ENonZero screen
+; ExitKey_MeasureDelete_StageNonZero -- the EXIT key on the
+;           MeasureDelete_StageNonZero screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
 ;           0xF861AE, then slot 0x0F of the screen's button table.
@@ -196686,13 +196752,13 @@ ButtonTable_MeasureDelete_207ENonZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_MeasureDelete_207ENonZero:
+ExitKey_MeasureDelete_StageNonZero:
 	bit	7, w	; F7F22C  bit 0x07,W
-	jr	nz, ExitKey_MeasureDelete_207ENonZero_Return	; F7F22F  jr NZ,0xf7f235
+	jr	nz, ExitKey_MeasureDelete_StageNonZero_Return	; F7F22F  jr NZ,0xf7f235
 	call	T_F42970	; F7F231  call 0xf42970
-ExitKey_MeasureDelete_207ENonZero_Return:
+ExitKey_MeasureDelete_StageNonZero_Return:
 	ret	; F7F235  ret
-ButtonTable_MeasureDelete_207ENonZero_Nop16:
+ButtonTable_MeasureDelete_StageNonZero_Nop16:
 	ret	; F7F236  ret   <- button table 0xF7D858 entry 16 (MEASURE DELETE) and 15 more slot(s)
 
 ; Evidence: reached from calr from prom_b 0xF7F094; calr from prom_b
@@ -196779,18 +196845,18 @@ Paint_MeasureErase_Join:
 ScreenLeaveBody_MeasureErase:
 	call	T_F42984	; F7F2D5  call 0xf42984
 	ret	; F7F2D9  ret
-ButtonTable_MeasureErase_207EZero_Nop0:
+ButtonTable_MeasureErase_StageZero_Nop0:
 	ret	; F7F2DA  ret   <- button table 0xF7D8D8 entry 0 (MEASURE ERASE)
-ButtonTable_MeasureErase_207EZero_Nop1:
+ButtonTable_MeasureErase_StageZero_Nop1:
 	ret	; F7F2DB  ret   <- button table 0xF7D8D8 entry 1 (MEASURE ERASE)
-ButtonTable_MeasureErase_207EZero_Nop2:
+ButtonTable_MeasureErase_StageZero_Nop2:
 	ret	; F7F2DC  ret   <- button table 0xF7D8D8 entry 2 (MEASURE ERASE)
-ButtonTable_MeasureErase_207EZero_Nop3:
+ButtonTable_MeasureErase_StageZero_Nop3:
 	ret	; F7F2DD  ret   <- button table 0xF7D8D8 entry 3 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_MeasureErase_207EZero -- the 5th of the eight SOFT KEYS in the
-;           row under the LCD, on the MeasureErase_207EZero screen
+; SoftKeyCol5_MeasureErase_StageZero -- the 5th of the eight SOFT KEYS in the
+;           row under the LCD, on the MeasureErase_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -196800,7 +196866,7 @@ ButtonTable_MeasureErase_207EZero_Nop3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_MeasureErase_207EZero.
+;           so this is slot 0x04 of ButtonTable_MeasureErase_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -196828,7 +196894,7 @@ ButtonTable_MeasureErase_207EZero_Nop3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_MeasureErase_207EZero:
+SoftKeyCol5_MeasureErase_StageZero:
 	m_bit 1, MD16, UI_RequestBits	; F7F2DE  bit 1,(0x2075)
 	jr	z, ScreenLeaveBody_MeasureErase_Skip	; F7F2E2  jr Z,0xf7f2e8
 	call	T_Blink_Stop	; F7F2E4  call 0xf42e24
@@ -196844,16 +196910,16 @@ ScreenLeaveBody_MeasureErase_Skip2:
 ScreenLeaveBody_MeasureErase_Join:
 	calr	sub_F7F397	; F7F301  calr 0xf7f397
 	ret	; F7F304  ret
-ButtonTable_MeasureErase_207EZero_Nop5:
+ButtonTable_MeasureErase_StageZero_Nop5:
 	ret	; F7F305  ret   <- button table 0xF7D8D8 entry 5 (MEASURE ERASE)
-ButtonTable_MeasureErase_207EZero_Nop6:
+ButtonTable_MeasureErase_StageZero_Nop6:
 	ret	; F7F306  ret   <- button table 0xF7D8D8 entry 6 (MEASURE ERASE)
-ButtonTable_MeasureErase_207EZero_Nop7:
+ButtonTable_MeasureErase_StageZero_Nop7:
 	ret	; F7F307  ret   <- button table 0xF7D8D8 entry 7 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_MeasureErase_207EZero -- row 1 of the five key pairs flanking the
-;           LCD, on the MeasureErase_207EZero screen
+; LcdKeyRow1_MeasureErase_StageZero -- row 1 of the five key pairs flanking the
+;           LCD, on the MeasureErase_StageZero screen
 ; Reached by: SW25 "LCD RIGHT 1 (top)" (matrix segment 3 bit 0, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A2
 ;           {class 0xA9, code 0x08} -> delivered code 0x08; SW73 "LCD LEFT 1
@@ -196863,7 +196929,7 @@ ButtonTable_MeasureErase_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x08 of ButtonTable_MeasureErase_207EZero.
+;           so this is slot 0x08 of ButtonTable_MeasureErase_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -196887,7 +196953,7 @@ ButtonTable_MeasureErase_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow1_MeasureErase_207EZero:
+LcdKeyRow1_MeasureErase_StageZero:
 	bit	7, w	; F7F308  bit 0x07,W
 	jr	z, ScreenLeaveBody_MeasureErase_Return	; F7F30B  jr Z,0xf7f329
 	m_cp_mi8 MB16, 0x0dbb, 0x01	; F7F30D  cp (0x0dbb),0x01
@@ -196914,8 +196980,8 @@ sub_F7F32A:
 	ret	; F7F349  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_MeasureErase_207EZero -- row 2 of the five key pairs flanking the
-;           LCD, on the MeasureErase_207EZero screen
+; LcdKeyRow2_MeasureErase_StageZero -- row 2 of the five key pairs flanking the
+;           LCD, on the MeasureErase_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -196925,7 +196991,7 @@ sub_F7F32A:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_MeasureErase_207EZero.
+;           so this is slot 0x09 of ButtonTable_MeasureErase_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -196949,7 +197015,7 @@ sub_F7F32A:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_MeasureErase_207EZero:
+LcdKeyRow2_MeasureErase_StageZero:
 	bit	7, w	; F7F34A  bit 0x07,W
 	jr	z, sub_F7F32A_Skip	; F7F34D  jr Z,0xf7f36d
 	m_cp_mi8 MB16, 0x0dbb, 0x02	; F7F34F  cp (0x0dbb),0x02
@@ -196968,8 +197034,8 @@ sub_F7F32A_Return:
 	ret	; F7F374  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_MeasureErase_207EZero -- row 3 of the five key pairs flanking the
-;           LCD, on the MeasureErase_207EZero screen
+; LcdKeyRow3_MeasureErase_StageZero -- row 3 of the five key pairs flanking the
+;           LCD, on the MeasureErase_StageZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -196979,7 +197045,7 @@ sub_F7F32A_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_MeasureErase_207EZero.
+;           so this is slot 0x0A of ButtonTable_MeasureErase_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197003,7 +197069,7 @@ sub_F7F32A_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_MeasureErase_207EZero:
+LcdKeyRow3_MeasureErase_StageZero:
 	bit	7, w	; F7F375  bit 0x07,W
 	jr	z, sub_F7F32A_Return2	; F7F378  jr Z,0xf7f396
 	m_cp_mi8 MB16, 0x0dbb, 0x03	; F7F37A  cp (0x0dbb),0x03
@@ -197028,8 +197094,8 @@ sub_F7F397:
 	ret	; F7F3AD  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_MeasureErase_207EZero -- row 4 of the five key pairs flanking the
-;           LCD, on the MeasureErase_207EZero screen
+; LcdKeyRow4_MeasureErase_StageZero -- row 4 of the five key pairs flanking the
+;           LCD, on the MeasureErase_StageZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -197039,7 +197105,7 @@ sub_F7F397:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_MeasureErase_207EZero.
+;           so this is slot 0x0B of ButtonTable_MeasureErase_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197063,7 +197129,7 @@ sub_F7F397:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_MeasureErase_207EZero:
+LcdKeyRow4_MeasureErase_StageZero:
 	bit	7, w	; F7F3AE  bit 0x07,W
 	jr	z, sub_F7F397_Return	; F7F3B1  jr Z,0xf7f3cf
 	m_cp_mi8 MB16, 0x0dbb, 0x04	; F7F3B3  cp (0x0dbb),0x04
@@ -197076,15 +197142,15 @@ LcdKeyRow4_MeasureErase_207EZero:
 	calr	sub_F7F32A	; F7F3CC  calr 0xf7f32a
 sub_F7F397_Return:
 	ret	; F7F3CF  ret
-ButtonTable_MeasureErase_207EZero_Nop12:
+ButtonTable_MeasureErase_StageZero_Nop12:
 	ret	; F7F3D0  ret   <- button table 0xF7D8D8 entry 12 (MEASURE ERASE)
-ButtonTable_MeasureErase_207EZero_Nop13:
+ButtonTable_MeasureErase_StageZero_Nop13:
 	ret	; F7F3D1  ret   <- button table 0xF7D8D8 entry 13 (MEASURE ERASE)
-ButtonTable_MeasureErase_207EZero_Nop14:
+ButtonTable_MeasureErase_StageZero_Nop14:
 	ret	; F7F3D2  ret   <- button table 0xF7D8D8 entry 14 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_MeasureErase_207EZero -- the EXIT key on the MeasureErase_207EZero
+; ExitKey_MeasureErase_StageZero -- the EXIT key on the MeasureErase_StageZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -197103,7 +197169,7 @@ ButtonTable_MeasureErase_207EZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_MeasureErase_207EZero:
+ExitKey_MeasureErase_StageZero:
 	bit	7, w	; F7F3D3  bit 0x07,W
 	jr	z, sub_F7F397_Skip	; F7F3D6  jr Z,0xf7f3da
 	jr	sub_F7F397_Return2	; F7F3D8  jr T,0xf7f3e0
@@ -197111,11 +197177,11 @@ sub_F7F397_Skip:
 	ldw	(UI_Request:16), 32794	; F7F3DA  ld (0x2070),0x801a
 sub_F7F397_Return2:
 	ret	; F7F3E0  ret
-ButtonTable_MeasureErase_207EZero_Nop16:
+ButtonTable_MeasureErase_StageZero_Nop16:
 	ret	; F7F3E1  ret   <- button table 0xF7D8D8 entry 16 (MEASURE ERASE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7F3E2 -- panel button slot 0x15 of MeasureErase_207EZero, NOT NAMED
+; sub_F7F3E2 -- panel button slot 0x15 of MeasureErase_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -197147,12 +197213,12 @@ sub_F7F397_Skip3:
 sub_F7F397_Join:
 	calr	sub_F7F397	; F7F405  calr 0xf7f397
 	ret	; F7F408  ret
-ButtonTable_MeasureErase_207EZero_Nop22:
+ButtonTable_MeasureErase_StageZero_Nop22:
 	ret	; F7F409  ret   <- button table 0xF7D8D8 entry 22 (MEASURE ERASE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; NumberPadKey_MeasureErase_207EZero -- the NUMBER PAD on the
-;           MeasureErase_207EZero screen
+; NumberPadKey_MeasureErase_StageZero -- the NUMBER PAD on the
+;           MeasureErase_StageZero screen
 ; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
 ;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
 ;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
@@ -197171,33 +197237,33 @@ ButtonTable_MeasureErase_207EZero_Nop22:
 ;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
 ;           --selftest.
 ; ---------------------------------------------------------------------
-NumberPadKey_MeasureErase_207EZero:
+NumberPadKey_MeasureErase_StageZero:
 	calr	sub_F7F440	; F7F40A  calr 0xf7f440
 	ret	; F7F40D  ret
-ButtonTable_MeasureErase_207EZero_Nop28:
+ButtonTable_MeasureErase_StageZero_Nop28:
 	ret	; F7F40E  ret   <- button table 0xF7D8D8 entry 28 (MEASURE ERASE) and 3 more slot(s)
-ButtonTable_MeasureErase_207ENonZero_Nop0:
+ButtonTable_MeasureErase_StageNonZero_Nop0:
 	ret	; F7F40F  ret   <- button table 0xF7D958 entry 0 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop1:
+ButtonTable_MeasureErase_StageNonZero_Nop1:
 	ret	; F7F410  ret   <- button table 0xF7D958 entry 1 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop2:
+ButtonTable_MeasureErase_StageNonZero_Nop2:
 	ret	; F7F411  ret   <- button table 0xF7D958 entry 2 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop3:
+ButtonTable_MeasureErase_StageNonZero_Nop3:
 	ret	; F7F412  ret   <- button table 0xF7D958 entry 3 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop4:
+ButtonTable_MeasureErase_StageNonZero_Nop4:
 	ret	; F7F413  ret   <- button table 0xF7D958 entry 4 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop5:
+ButtonTable_MeasureErase_StageNonZero_Nop5:
 	ret	; F7F414  ret   <- button table 0xF7D958 entry 5 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop6:
+ButtonTable_MeasureErase_StageNonZero_Nop6:
 	ret	; F7F415  ret   <- button table 0xF7D958 entry 6 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop7:
+ButtonTable_MeasureErase_StageNonZero_Nop7:
 	ret	; F7F416  ret   <- button table 0xF7D958 entry 7 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop8:
+ButtonTable_MeasureErase_StageNonZero_Nop8:
 	ret	; F7F417  ret   <- button table 0xF7D958 entry 8 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_MeasureErase_207ENonZero -- row 2 of the five key pairs flanking
-;           the LCD, on the MeasureErase_207ENonZero screen
+; LcdKeyRow2_MeasureErase_StageNonZero -- row 2 of the five key pairs flanking
+;           the LCD, on the MeasureErase_StageNonZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -197207,7 +197273,7 @@ ButtonTable_MeasureErase_207ENonZero_Nop8:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_MeasureErase_207ENonZero.
+;           so this is slot 0x09 of ButtonTable_MeasureErase_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197231,7 +197297,7 @@ ButtonTable_MeasureErase_207ENonZero_Nop8:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_MeasureErase_207ENonZero:
+LcdKeyRow2_MeasureErase_StageNonZero:
 	bit	7, w	; F7F418  bit 0x07,W
 	jr	nz, sub_F7F397_Return3	; F7F41B  jr NZ,0xf7f426
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7F41D  and (0x2075),0x6f
@@ -197240,8 +197306,8 @@ sub_F7F397_Return3:
 	ret	; F7F426  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_MeasureErase_207ENonZero -- row 3 of the five key pairs flanking
-;           the LCD, on the MeasureErase_207ENonZero screen
+; LcdKeyRow3_MeasureErase_StageNonZero -- row 3 of the five key pairs flanking
+;           the LCD, on the MeasureErase_StageNonZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -197251,7 +197317,7 @@ sub_F7F397_Return3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_MeasureErase_207ENonZero.
+;           so this is slot 0x0A of ButtonTable_MeasureErase_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197275,24 +197341,24 @@ sub_F7F397_Return3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_MeasureErase_207ENonZero:
+LcdKeyRow3_MeasureErase_StageNonZero:
 	bit	7, w	; F7F427  bit 0x07,W
 	jr	nz, sub_F7F397_Return4	; F7F42A  jr NZ,0xf7f430
 	call	T_F42998	; F7F42C  call 0xf42998
 sub_F7F397_Return4:
 	ret	; F7F430  ret
-ButtonTable_MeasureErase_207ENonZero_Nop11:
+ButtonTable_MeasureErase_StageNonZero_Nop11:
 	ret	; F7F431  ret   <- button table 0xF7D958 entry 11 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop12:
+ButtonTable_MeasureErase_StageNonZero_Nop12:
 	ret	; F7F432  ret   <- button table 0xF7D958 entry 12 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop13:
+ButtonTable_MeasureErase_StageNonZero_Nop13:
 	ret	; F7F433  ret   <- button table 0xF7D958 entry 13 (MEASURE ERASE)
-ButtonTable_MeasureErase_207ENonZero_Nop14:
+ButtonTable_MeasureErase_StageNonZero_Nop14:
 	ret	; F7F434  ret   <- button table 0xF7D958 entry 14 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_MeasureErase_207ENonZero -- the EXIT key on the
-;           MeasureErase_207ENonZero screen
+; ExitKey_MeasureErase_StageNonZero -- the EXIT key on the
+;           MeasureErase_StageNonZero screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
 ;           0xF861AE, then slot 0x0F of the screen's button table.
@@ -197310,13 +197376,13 @@ ButtonTable_MeasureErase_207ENonZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_MeasureErase_207ENonZero:
+ExitKey_MeasureErase_StageNonZero:
 	bit	7, w	; F7F435  bit 0x07,W
 	jr	nz, sub_F7F397_Return5	; F7F438  jr NZ,0xf7f43e
 	call	T_F42998	; F7F43A  call 0xf42998
 sub_F7F397_Return5:
 	ret	; F7F43E  ret
-ButtonTable_MeasureErase_207ENonZero_Nop16:
+ButtonTable_MeasureErase_StageNonZero_Nop16:
 	ret	; F7F43F  ret   <- button table 0xF7D958 entry 16 (MEASURE ERASE) and 15 more slot(s)
 
 ; Evidence: reached from calr from prom_b 0xF7F40A, and from nothing else
@@ -197574,18 +197640,18 @@ Paint_Quantize_Join:
 ScreenLeaveBody_Quantize:
 	call	T_F4290C	; F7F603  call 0xf4290c
 	ret	; F7F607  ret
-ButtonTable_Quantize_207EZero_Nop0:
+ButtonTable_Quantize_StageZero_Nop0:
 	ret	; F7F608  ret   <- button table 0xF7D9D8 entry 0 (QUANTIZE)
-ButtonTable_Quantize_207EZero_Nop1:
+ButtonTable_Quantize_StageZero_Nop1:
 	ret	; F7F609  ret   <- button table 0xF7D9D8 entry 1 (QUANTIZE)
-ButtonTable_Quantize_207EZero_Nop2:
+ButtonTable_Quantize_StageZero_Nop2:
 	ret	; F7F60A  ret   <- button table 0xF7D9D8 entry 2 (QUANTIZE)
-ButtonTable_Quantize_207EZero_Nop3:
+ButtonTable_Quantize_StageZero_Nop3:
 	ret	; F7F60B  ret   <- button table 0xF7D9D8 entry 3 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_Quantize_207EZero -- the 5th of the eight SOFT KEYS in the row
-;           under the LCD, on the Quantize_207EZero screen
+; SoftKeyCol5_Quantize_StageZero -- the 5th of the eight SOFT KEYS in the row
+;           under the LCD, on the Quantize_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -197595,7 +197661,7 @@ ButtonTable_Quantize_207EZero_Nop3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_Quantize_207EZero.
+;           so this is slot 0x04 of ButtonTable_Quantize_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -197623,7 +197689,7 @@ ButtonTable_Quantize_207EZero_Nop3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_Quantize_207EZero:
+SoftKeyCol5_Quantize_StageZero:
 	m_bit 1, MD16, UI_RequestBits	; F7F60C  bit 1,(0x2075)
 	jr	z, ScreenLeaveBody_Quantize_Skip	; F7F610  jr Z,0xf7f616
 	call	T_Blink_Stop	; F7F612  call 0xf42e24
@@ -197639,16 +197705,16 @@ ScreenLeaveBody_Quantize_Skip2:
 ScreenLeaveBody_Quantize_Join:
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F62F  calr 0xf7f6e5
 	ret	; F7F632  ret
-ButtonTable_Quantize_207EZero_Nop5:
+ButtonTable_Quantize_StageZero_Nop5:
 	ret	; F7F633  ret   <- button table 0xF7D9D8 entry 5 (QUANTIZE)
-ButtonTable_Quantize_207EZero_Nop6:
+ButtonTable_Quantize_StageZero_Nop6:
 	ret	; F7F634  ret   <- button table 0xF7D9D8 entry 6 (QUANTIZE)
-ButtonTable_Quantize_207EZero_Nop7:
+ButtonTable_Quantize_StageZero_Nop7:
 	ret	; F7F635  ret   <- button table 0xF7D9D8 entry 7 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_Quantize_207EZero -- row 1 of the five key pairs flanking the
-;           LCD, on the Quantize_207EZero screen
+; LcdKeyRow1_Quantize_StageZero -- row 1 of the five key pairs flanking the
+;           LCD, on the Quantize_StageZero screen
 ; Reached by: SW25 "LCD RIGHT 1 (top)" (matrix segment 3 bit 0, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A2
 ;           {class 0xA9, code 0x08} -> delivered code 0x08; SW73 "LCD LEFT 1
@@ -197658,7 +197724,7 @@ ButtonTable_Quantize_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x08 of ButtonTable_Quantize_207EZero.
+;           so this is slot 0x08 of ButtonTable_Quantize_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197682,7 +197748,7 @@ ButtonTable_Quantize_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow1_Quantize_207EZero:
+LcdKeyRow1_Quantize_StageZero:
 	bit	7, w	; F7F636  bit 0x07,W
 	jr	z, ScreenLeaveBody_Quantize_Skip3	; F7F639  jr Z,0xf7f64b
 	m_cp_mi8 MB16, 0x0db9, 0x01	; F7F63B  cp (0x0db9),0x01
@@ -197716,8 +197782,8 @@ sub_F7F668:
 	ret	; F7F687  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_Quantize_207EZero -- row 2 of the five key pairs flanking the
-;           LCD, on the Quantize_207EZero screen
+; LcdKeyRow2_Quantize_StageZero -- row 2 of the five key pairs flanking the
+;           LCD, on the Quantize_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -197727,7 +197793,7 @@ sub_F7F668:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_Quantize_207EZero.
+;           so this is slot 0x09 of ButtonTable_Quantize_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197751,7 +197817,7 @@ sub_F7F668:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_Quantize_207EZero:
+LcdKeyRow2_Quantize_StageZero:
 	bit	7, w	; F7F688  bit 0x07,W
 	jr	z, sub_F7F668_Skip	; F7F68B  jr Z,0xf7f69d
 	m_cp_mi8 MB16, 0x0db9, 0x02	; F7F68D  cp (0x0db9),0x02
@@ -197773,8 +197839,8 @@ sub_F7F668_Return:
 	ret	; F7F6B9  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_Quantize_207EZero -- row 3 of the five key pairs flanking the
-;           LCD, on the Quantize_207EZero screen
+; LcdKeyRow3_Quantize_StageZero -- row 3 of the five key pairs flanking the
+;           LCD, on the Quantize_StageZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -197784,7 +197850,7 @@ sub_F7F668_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_Quantize_207EZero.
+;           so this is slot 0x0A of ButtonTable_Quantize_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197808,7 +197874,7 @@ sub_F7F668_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_Quantize_207EZero:
+LcdKeyRow3_Quantize_StageZero:
 	bit	7, w	; F7F6BA  bit 0x07,W
 	jr	z, sub_F7F668_Skip2	; F7F6BD  jr Z,0xf7f6dd
 	m_cp_mi8 MB16, 0x0db9, 0x03	; F7F6BF  cp (0x0db9),0x03
@@ -197837,8 +197903,8 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	ret	; F7F6FB  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_Quantize_207EZero -- row 4 of the five key pairs flanking the
-;           LCD, on the Quantize_207EZero screen
+; LcdKeyRow4_Quantize_StageZero -- row 4 of the five key pairs flanking the
+;           LCD, on the Quantize_StageZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -197848,7 +197914,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_Quantize_207EZero.
+;           so this is slot 0x0B of ButtonTable_Quantize_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -197872,7 +197938,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_Quantize_207EZero:
+LcdKeyRow4_Quantize_StageZero:
 	bit	7, w	; F7F6FC  bit 0x07,W
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return	; F7F6FF  jr Z,0xf7f71d
 	m_cp_mi8 MB16, 0x0db9, 0x04	; F7F701  cp (0x0db9),0x04
@@ -197885,15 +197951,15 @@ LcdKeyRow4_Quantize_207EZero:
 	calr	sub_F7F668	; F7F71A  calr 0xf7f668
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return:
 	ret	; F7F71D  ret
-ButtonTable_Quantize_207EZero_Nop12:
+ButtonTable_Quantize_StageZero_Nop12:
 	ret	; F7F71E  ret   <- button table 0xF7D9D8 entry 12 (QUANTIZE)
-ButtonTable_Quantize_207EZero_Nop13:
+ButtonTable_Quantize_StageZero_Nop13:
 	ret	; F7F71F  ret   <- button table 0xF7D9D8 entry 13 (QUANTIZE)
-ButtonTable_Quantize_207EZero_Nop14:
+ButtonTable_Quantize_StageZero_Nop14:
 	ret	; F7F720  ret   <- button table 0xF7D9D8 entry 14 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_Quantize_207EZero -- the EXIT key on the Quantize_207EZero screen
+; ExitKey_Quantize_StageZero -- the EXIT key on the Quantize_StageZero screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
 ;           0xF861AE, then slot 0x0F of the screen's button table.
@@ -197911,7 +197977,7 @@ ButtonTable_Quantize_207EZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_Quantize_207EZero:
+ExitKey_Quantize_StageZero:
 	bit	7, w	; F7F721  bit 0x07,W
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip	; F7F724  jr Z,0xf7f728
 	jr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return2	; F7F726  jr T,0xf7f74c
@@ -197929,11 +197995,11 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip2:
 	ldw	(UI_Request:16), 32794	; F7F746  ld (0x2070),0x801a
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return2:
 	ret	; F7F74C  ret
-ButtonTable_Quantize_207EZero_Nop16:
+ButtonTable_Quantize_StageZero_Nop16:
 	ret	; F7F74D  ret   <- button table 0xF7D9D8 entry 16 (QUANTIZE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7F74E -- panel button slot 0x15 of Quantize_207EZero, NOT NAMED
+; sub_F7F74E -- panel button slot 0x15 of Quantize_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -197965,11 +198031,11 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip4:
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Join:
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F771  calr 0xf7f6e5
 	ret	; F7F774  ret
-ButtonTable_Quantize_207EZero_Nop22:
+ButtonTable_Quantize_StageZero_Nop22:
 	ret	; F7F775  ret   <- button table 0xF7D9D8 entry 22 (QUANTIZE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; NumberPadKey_Quantize_207EZero -- the NUMBER PAD on the Quantize_207EZero
+; NumberPadKey_Quantize_StageZero -- the NUMBER PAD on the Quantize_StageZero
 ;           screen
 ; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
 ;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
@@ -197989,33 +198055,33 @@ ButtonTable_Quantize_207EZero_Nop22:
 ;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
 ;           --selftest.
 ; ---------------------------------------------------------------------
-NumberPadKey_Quantize_207EZero:
+NumberPadKey_Quantize_StageZero:
 	calr	sub_F7F7AC	; F7F776  calr 0xf7f7ac
 	ret	; F7F779  ret
-ButtonTable_Quantize_207EZero_Nop28:
+ButtonTable_Quantize_StageZero_Nop28:
 	ret	; F7F77A  ret   <- button table 0xF7D9D8 entry 28 (QUANTIZE) and 3 more slot(s)
-ButtonTable_Quantize_207ENonZero_Nop0:
+ButtonTable_Quantize_StageNonZero_Nop0:
 	ret	; F7F77B  ret   <- button table 0xF7DA58 entry 0 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop1:
+ButtonTable_Quantize_StageNonZero_Nop1:
 	ret	; F7F77C  ret   <- button table 0xF7DA58 entry 1 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop2:
+ButtonTable_Quantize_StageNonZero_Nop2:
 	ret	; F7F77D  ret   <- button table 0xF7DA58 entry 2 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop3:
+ButtonTable_Quantize_StageNonZero_Nop3:
 	ret	; F7F77E  ret   <- button table 0xF7DA58 entry 3 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop4:
+ButtonTable_Quantize_StageNonZero_Nop4:
 	ret	; F7F77F  ret   <- button table 0xF7DA58 entry 4 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop5:
+ButtonTable_Quantize_StageNonZero_Nop5:
 	ret	; F7F780  ret   <- button table 0xF7DA58 entry 5 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop6:
+ButtonTable_Quantize_StageNonZero_Nop6:
 	ret	; F7F781  ret   <- button table 0xF7DA58 entry 6 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop7:
+ButtonTable_Quantize_StageNonZero_Nop7:
 	ret	; F7F782  ret   <- button table 0xF7DA58 entry 7 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop8:
+ButtonTable_Quantize_StageNonZero_Nop8:
 	ret	; F7F783  ret   <- button table 0xF7DA58 entry 8 (QUANTIZE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_Quantize_207ENonZero -- row 3 of the five key pairs flanking the
-;           LCD, on the Quantize_207ENonZero screen
+; LcdKeyRow3_Quantize_StageNonZero -- row 3 of the five key pairs flanking the
+;           LCD, on the Quantize_StageNonZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -198025,7 +198091,7 @@ ButtonTable_Quantize_207ENonZero_Nop8:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_Quantize_207ENonZero.
+;           so this is slot 0x0A of ButtonTable_Quantize_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198049,7 +198115,7 @@ ButtonTable_Quantize_207ENonZero_Nop8:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_Quantize_207ENonZero:
+LcdKeyRow3_Quantize_StageNonZero:
 	bit	7, w	; F7F784  bit 0x07,W
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3	; F7F787  jr NZ,0xf7f792
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7F789  and (0x2075),0x6f
@@ -198058,8 +198124,8 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3:
 	ret	; F7F792  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_Quantize_207ENonZero -- row 4 of the five key pairs flanking the
-;           LCD, on the Quantize_207ENonZero screen
+; LcdKeyRow4_Quantize_StageNonZero -- row 4 of the five key pairs flanking the
+;           LCD, on the Quantize_StageNonZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -198069,7 +198135,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_Quantize_207ENonZero.
+;           so this is slot 0x0B of ButtonTable_Quantize_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198093,21 +198159,21 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_Quantize_207ENonZero:
+LcdKeyRow4_Quantize_StageNonZero:
 	bit	7, w	; F7F793  bit 0x07,W
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return4	; F7F796  jr NZ,0xf7f79c
 	call	T_F42928	; F7F798  call 0xf42928
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return4:
 	ret	; F7F79C  ret
-ButtonTable_Quantize_207ENonZero_Nop12:
+ButtonTable_Quantize_StageNonZero_Nop12:
 	ret	; F7F79D  ret   <- button table 0xF7DA58 entry 12 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop13:
+ButtonTable_Quantize_StageNonZero_Nop13:
 	ret	; F7F79E  ret   <- button table 0xF7DA58 entry 13 (QUANTIZE)
-ButtonTable_Quantize_207ENonZero_Nop14:
+ButtonTable_Quantize_StageNonZero_Nop14:
 	ret	; F7F79F  ret   <- button table 0xF7DA58 entry 14 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_Quantize_207ENonZero -- the EXIT key on the Quantize_207ENonZero
+; ExitKey_Quantize_StageNonZero -- the EXIT key on the Quantize_StageNonZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -198126,13 +198192,13 @@ ButtonTable_Quantize_207ENonZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_Quantize_207ENonZero:
+ExitKey_Quantize_StageNonZero:
 	bit	7, w	; F7F7A0  bit 0x07,W
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return5	; F7F7A3  jr NZ,0xf7f7a9
 	call	T_F42928	; F7F7A5  call 0xf42928
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return5:
 	ret	; F7F7A9  ret
-ButtonTable_Quantize_207ENonZero_Nop16:
+ButtonTable_Quantize_StageNonZero_Nop16:
 	ret	; F7F7AA  ret   <- button table 0xF7DA58 entry 16 (QUANTIZE) and 15 more slot(s)
 	ret	; F7F7AB  ret
 
@@ -198341,18 +198407,18 @@ sub_F7F935:
 ScreenLeaveBody_Vel0cityChange:
 	call	T_F428E4	; F7F94F  call 0xf428e4
 	ret	; F7F953  ret
-ButtonTable_Vel0cityChange_207EZero_Nop0:
+ButtonTable_Vel0cityChange_StageZero_Nop0:
 	ret	; F7F954  ret   <- button table 0xF7DAD8 entry 0 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207EZero_Nop1:
+ButtonTable_Vel0cityChange_StageZero_Nop1:
 	ret	; F7F955  ret   <- button table 0xF7DAD8 entry 1 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207EZero_Nop2:
+ButtonTable_Vel0cityChange_StageZero_Nop2:
 	ret	; F7F956  ret   <- button table 0xF7DAD8 entry 2 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207EZero_Nop3:
+ButtonTable_Vel0cityChange_StageZero_Nop3:
 	ret	; F7F957  ret   <- button table 0xF7DAD8 entry 3 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_Vel0cityChange_207EZero -- the 5th of the eight SOFT KEYS in the
-;           row under the LCD, on the Vel0cityChange_207EZero screen
+; SoftKeyCol5_Vel0cityChange_StageZero -- the 5th of the eight SOFT KEYS in the
+;           row under the LCD, on the Vel0cityChange_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -198362,7 +198428,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_Vel0cityChange_207EZero.
+;           so this is slot 0x04 of ButtonTable_Vel0cityChange_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -198390,7 +198456,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_Vel0cityChange_207EZero:
+SoftKeyCol5_Vel0cityChange_StageZero:
 	m_bit 1, MD16, UI_RequestBits	; F7F958  bit 1,(0x2075)
 	jr	z, ScreenLeaveBody_Vel0cityChange_Skip	; F7F95C  jr Z,0xf7f962
 	call	T_Blink_Stop	; F7F95E  call 0xf42e24
@@ -198406,16 +198472,16 @@ ScreenLeaveBody_Vel0cityChange_Skip2:
 ScreenLeaveBody_Vel0cityChange_Join:
 	calr	sub_F7F9FB	; F7F97B  calr 0xf7f9fb
 	ret	; F7F97E  ret
-ButtonTable_Vel0cityChange_207EZero_Nop5:
+ButtonTable_Vel0cityChange_StageZero_Nop5:
 	ret	; F7F97F  ret   <- button table 0xF7DAD8 entry 5 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207EZero_Nop6:
+ButtonTable_Vel0cityChange_StageZero_Nop6:
 	ret	; F7F980  ret   <- button table 0xF7DAD8 entry 6 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207EZero_Nop7:
+ButtonTable_Vel0cityChange_StageZero_Nop7:
 	ret	; F7F981  ret   <- button table 0xF7DAD8 entry 7 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_Vel0cityChange_207EZero -- row 1 of the five key pairs flanking
-;           the LCD, on the Vel0cityChange_207EZero screen
+; LcdKeyRow1_Vel0cityChange_StageZero -- row 1 of the five key pairs flanking
+;           the LCD, on the Vel0cityChange_StageZero screen
 ; Reached by: SW25 "LCD RIGHT 1 (top)" (matrix segment 3 bit 0, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A2
 ;           {class 0xA9, code 0x08} -> delivered code 0x08; SW73 "LCD LEFT 1
@@ -198425,7 +198491,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x08 of ButtonTable_Vel0cityChange_207EZero.
+;           so this is slot 0x08 of ButtonTable_Vel0cityChange_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198449,7 +198515,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow1_Vel0cityChange_207EZero:
+LcdKeyRow1_Vel0cityChange_StageZero:
 	bit	7, w	; F7F982  bit 0x07,W
 	jr	z, ScreenLeaveBody_Vel0cityChange_Return	; F7F985  jr Z,0xf7f99b
 	m_cp_mi8 MB16, 0x0db8, 0x01	; F7F987  cp (0x0db8),0x01
@@ -198474,8 +198540,8 @@ sub_F7F99C:
 	ret	; F7F9BB  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_Vel0cityChange_207EZero -- row 2 of the five key pairs flanking
-;           the LCD, on the Vel0cityChange_207EZero screen
+; LcdKeyRow2_Vel0cityChange_StageZero -- row 2 of the five key pairs flanking
+;           the LCD, on the Vel0cityChange_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -198485,7 +198551,7 @@ sub_F7F99C:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_Vel0cityChange_207EZero.
+;           so this is slot 0x09 of ButtonTable_Vel0cityChange_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198509,7 +198575,7 @@ sub_F7F99C:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_Vel0cityChange_207EZero:
+LcdKeyRow2_Vel0cityChange_StageZero:
 	bit	7, w	; F7F9BC  bit 0x07,W
 	jr	z, sub_F7F99C_Skip	; F7F9BF  jr Z,0xf7f9d7
 	m_cp_mi8 MB16, 0x0db8, 0x02	; F7F9C1  cp (0x0db8),0x02
@@ -198526,8 +198592,8 @@ sub_F7F99C_Return:
 	ret	; F7F9DE  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_Vel0cityChange_207EZero -- row 3 of the five key pairs flanking
-;           the LCD, on the Vel0cityChange_207EZero screen
+; LcdKeyRow3_Vel0cityChange_StageZero -- row 3 of the five key pairs flanking
+;           the LCD, on the Vel0cityChange_StageZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -198537,7 +198603,7 @@ sub_F7F99C_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_Vel0cityChange_207EZero.
+;           so this is slot 0x0A of ButtonTable_Vel0cityChange_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198561,7 +198627,7 @@ sub_F7F99C_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_Vel0cityChange_207EZero:
+LcdKeyRow3_Vel0cityChange_StageZero:
 	bit	7, w	; F7F9DF  bit 0x07,W
 	jr	z, sub_F7F99C_Return2	; F7F9E2  jr Z,0xf7f9fa
 	m_cp_mi8 MB16, 0x0db8, 0x03	; F7F9E4  cp (0x0db8),0x03
@@ -198586,8 +198652,8 @@ sub_F7F9FB:
 	ret	; F7FA14  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_Vel0cityChange_207EZero -- row 4 of the five key pairs flanking
-;           the LCD, on the Vel0cityChange_207EZero screen
+; LcdKeyRow4_Vel0cityChange_StageZero -- row 4 of the five key pairs flanking
+;           the LCD, on the Vel0cityChange_StageZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -198597,7 +198663,7 @@ sub_F7F9FB:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_Vel0cityChange_207EZero.
+;           so this is slot 0x0B of ButtonTable_Vel0cityChange_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198621,7 +198687,7 @@ sub_F7F9FB:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_Vel0cityChange_207EZero:
+LcdKeyRow4_Vel0cityChange_StageZero:
 	bit	7, w	; F7FA15  bit 0x07,W
 	jr	z, sub_F7F9FB_Return	; F7FA18  jr Z,0xf7fa30
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FA1A  cp (0x0db8),0x04
@@ -198633,16 +198699,16 @@ LcdKeyRow4_Vel0cityChange_207EZero:
 	jr	sub_F7F9FB_Return	; F7FA2E  jr T,0xf7fa30
 sub_F7F9FB_Return:
 	ret	; F7FA30  ret
-ButtonTable_Vel0cityChange_207EZero_Nop12:
+ButtonTable_Vel0cityChange_StageZero_Nop12:
 	ret	; F7FA31  ret   <- button table 0xF7DAD8 entry 12 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207EZero_Nop13:
+ButtonTable_Vel0cityChange_StageZero_Nop13:
 	ret	; F7FA32  ret   <- button table 0xF7DAD8 entry 13 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207EZero_Nop14:
+ButtonTable_Vel0cityChange_StageZero_Nop14:
 	ret	; F7FA33  ret   <- button table 0xF7DAD8 entry 14 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_Vel0cityChange_207EZero -- the EXIT key on the
-;           Vel0cityChange_207EZero screen
+; ExitKey_Vel0cityChange_StageZero -- the EXIT key on the
+;           Vel0cityChange_StageZero screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
 ;           0xF861AE, then slot 0x0F of the screen's button table.
@@ -198660,7 +198726,7 @@ ButtonTable_Vel0cityChange_207EZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_Vel0cityChange_207EZero:
+ExitKey_Vel0cityChange_StageZero:
 	bit	7, w	; F7FA34  bit 0x07,W
 	jr	z, sub_F7F9FB_Skip	; F7FA37  jr Z,0xf7fa3b
 	jr	sub_F7F9FB_Return2	; F7FA39  jr T,0xf7fa41
@@ -198668,11 +198734,11 @@ sub_F7F9FB_Skip:
 	ldw	(UI_Request:16), 32794	; F7FA3B  ld (0x2070),0x801a
 sub_F7F9FB_Return2:
 	ret	; F7FA41  ret
-ButtonTable_Vel0cityChange_207EZero_Nop16:
+ButtonTable_Vel0cityChange_StageZero_Nop16:
 	ret	; F7FA42  ret   <- button table 0xF7DAD8 entry 16 (VEL0CITY CHANGE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7FA43 -- panel button slot 0x15 of Vel0cityChange_207EZero, NOT NAMED
+; sub_F7FA43 -- panel button slot 0x15 of Vel0cityChange_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -198704,12 +198770,12 @@ sub_F7F9FB_Skip3:
 sub_F7F9FB_Join:
 	calr	sub_F7F9FB	; F7FA66  calr 0xf7f9fb
 	ret	; F7FA69  ret
-ButtonTable_Vel0cityChange_207EZero_Nop22:
+ButtonTable_Vel0cityChange_StageZero_Nop22:
 	ret	; F7FA6A  ret   <- button table 0xF7DAD8 entry 22 (VEL0CITY CHANGE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; NumberPadKey_Vel0cityChange_207EZero -- the NUMBER PAD on the
-;           Vel0cityChange_207EZero screen
+; NumberPadKey_Vel0cityChange_StageZero -- the NUMBER PAD on the
+;           Vel0cityChange_StageZero screen
 ; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
 ;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
 ;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
@@ -198728,33 +198794,33 @@ ButtonTable_Vel0cityChange_207EZero_Nop22:
 ;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
 ;           --selftest.
 ; ---------------------------------------------------------------------
-NumberPadKey_Vel0cityChange_207EZero:
+NumberPadKey_Vel0cityChange_StageZero:
 	calr	sub_F7FAA2	; F7FA6B  calr 0xf7faa2
 	ret	; F7FA6E  ret
-ButtonTable_Vel0cityChange_207EZero_Nop28:
+ButtonTable_Vel0cityChange_StageZero_Nop28:
 	ret	; F7FA6F  ret   <- button table 0xF7DAD8 entry 28 (VEL0CITY CHANGE) and 3 more slot(s)
-ButtonTable_Vel0cityChange_207ENonZero_Nop0:
+ButtonTable_Vel0cityChange_StageNonZero_Nop0:
 	ret	; F7FA70  ret   <- button table 0xF7DB58 entry 0 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop1:
+ButtonTable_Vel0cityChange_StageNonZero_Nop1:
 	ret	; F7FA71  ret   <- button table 0xF7DB58 entry 1 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop2:
+ButtonTable_Vel0cityChange_StageNonZero_Nop2:
 	ret	; F7FA72  ret   <- button table 0xF7DB58 entry 2 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop3:
+ButtonTable_Vel0cityChange_StageNonZero_Nop3:
 	ret	; F7FA73  ret   <- button table 0xF7DB58 entry 3 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop4:
+ButtonTable_Vel0cityChange_StageNonZero_Nop4:
 	ret	; F7FA74  ret   <- button table 0xF7DB58 entry 4 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop5:
+ButtonTable_Vel0cityChange_StageNonZero_Nop5:
 	ret	; F7FA75  ret   <- button table 0xF7DB58 entry 5 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop6:
+ButtonTable_Vel0cityChange_StageNonZero_Nop6:
 	ret	; F7FA76  ret   <- button table 0xF7DB58 entry 6 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop7:
+ButtonTable_Vel0cityChange_StageNonZero_Nop7:
 	ret	; F7FA77  ret   <- button table 0xF7DB58 entry 7 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop8:
+ButtonTable_Vel0cityChange_StageNonZero_Nop8:
 	ret	; F7FA78  ret   <- button table 0xF7DB58 entry 8 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_Vel0cityChange_207ENonZero -- row 2 of the five key pairs
-;           flanking the LCD, on the Vel0cityChange_207ENonZero screen
+; LcdKeyRow2_Vel0cityChange_StageNonZero -- row 2 of the five key pairs
+;           flanking the LCD, on the Vel0cityChange_StageNonZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -198764,7 +198830,7 @@ ButtonTable_Vel0cityChange_207ENonZero_Nop8:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_Vel0cityChange_207ENonZero.
+;           so this is slot 0x09 of ButtonTable_Vel0cityChange_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198788,7 +198854,7 @@ ButtonTable_Vel0cityChange_207ENonZero_Nop8:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_Vel0cityChange_207ENonZero:
+LcdKeyRow2_Vel0cityChange_StageNonZero:
 	bit	7, w	; F7FA79  bit 0x07,W
 	jr	nz, sub_F7F9FB_Return3	; F7FA7C  jr NZ,0xf7fa87
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7FA7E  and (0x2075),0x6f
@@ -198797,8 +198863,8 @@ sub_F7F9FB_Return3:
 	ret	; F7FA87  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_Vel0cityChange_207ENonZero -- row 3 of the five key pairs
-;           flanking the LCD, on the Vel0cityChange_207ENonZero screen
+; LcdKeyRow3_Vel0cityChange_StageNonZero -- row 3 of the five key pairs
+;           flanking the LCD, on the Vel0cityChange_StageNonZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -198808,7 +198874,7 @@ sub_F7F9FB_Return3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_Vel0cityChange_207ENonZero.
+;           so this is slot 0x0A of ButtonTable_Vel0cityChange_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -198832,24 +198898,24 @@ sub_F7F9FB_Return3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_Vel0cityChange_207ENonZero:
+LcdKeyRow3_Vel0cityChange_StageNonZero:
 	bit	7, w	; F7FA88  bit 0x07,W
 	jr	nz, sub_F7F9FB_Return4	; F7FA8B  jr NZ,0xf7fa91
 	call	T_F428F8	; F7FA8D  call 0xf428f8
 sub_F7F9FB_Return4:
 	ret	; F7FA91  ret
-ButtonTable_Vel0cityChange_207ENonZero_Nop11:
+ButtonTable_Vel0cityChange_StageNonZero_Nop11:
 	ret	; F7FA92  ret   <- button table 0xF7DB58 entry 11 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop12:
+ButtonTable_Vel0cityChange_StageNonZero_Nop12:
 	ret	; F7FA93  ret   <- button table 0xF7DB58 entry 12 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop13:
+ButtonTable_Vel0cityChange_StageNonZero_Nop13:
 	ret	; F7FA94  ret   <- button table 0xF7DB58 entry 13 (VEL0CITY CHANGE)
-ButtonTable_Vel0cityChange_207ENonZero_Nop14:
+ButtonTable_Vel0cityChange_StageNonZero_Nop14:
 	ret	; F7FA95  ret   <- button table 0xF7DB58 entry 14 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_Vel0cityChange_207ENonZero -- the EXIT key on the
-;           Vel0cityChange_207ENonZero screen
+; ExitKey_Vel0cityChange_StageNonZero -- the EXIT key on the
+;           Vel0cityChange_StageNonZero screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
 ;           0xF861AE, then slot 0x0F of the screen's button table.
@@ -198867,13 +198933,13 @@ ButtonTable_Vel0cityChange_207ENonZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_Vel0cityChange_207ENonZero:
+ExitKey_Vel0cityChange_StageNonZero:
 	bit	7, w	; F7FA96  bit 0x07,W
 	jr	nz, sub_F7F9FB_Return5	; F7FA99  jr NZ,0xf7fa9f
 	call	T_F428F8	; F7FA9B  call 0xf428f8
 sub_F7F9FB_Return5:
 	ret	; F7FA9F  ret
-ButtonTable_Vel0cityChange_207ENonZero_Nop16:
+ButtonTable_Vel0cityChange_StageNonZero_Nop16:
 	ret	; F7FAA0  ret   <- button table 0xF7DB58 entry 16 (VEL0CITY CHANGE) and 15 more slot(s)
 	ret	; F7FAA1  ret
 
@@ -199112,18 +199178,18 @@ Paint_Transp0se_Join2:
 ScreenLeaveBody_Transp0se:
 	call	T_F42A3C	; F7FC99  call 0xf42a3c
 	ret	; F7FC9D  ret
-ButtonTable_Transp0se_207EZero_Nop0:
+ButtonTable_Transp0se_StageZero_Nop0:
 	ret	; F7FC9E  ret   <- button table 0xF7DBD8 entry 0 (TRANSP0SE)
-ButtonTable_Transp0se_207EZero_Nop1:
+ButtonTable_Transp0se_StageZero_Nop1:
 	ret	; F7FC9F  ret   <- button table 0xF7DBD8 entry 1 (TRANSP0SE)
-ButtonTable_Transp0se_207EZero_Nop2:
+ButtonTable_Transp0se_StageZero_Nop2:
 	ret	; F7FCA0  ret   <- button table 0xF7DBD8 entry 2 (TRANSP0SE)
-ButtonTable_Transp0se_207EZero_Nop3:
+ButtonTable_Transp0se_StageZero_Nop3:
 	ret	; F7FCA1  ret   <- button table 0xF7DBD8 entry 3 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_Transp0se_207EZero -- the 5th of the eight SOFT KEYS in the row
-;           under the LCD, on the Transp0se_207EZero screen
+; SoftKeyCol5_Transp0se_StageZero -- the 5th of the eight SOFT KEYS in the row
+;           under the LCD, on the Transp0se_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -199133,7 +199199,7 @@ ButtonTable_Transp0se_207EZero_Nop3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_Transp0se_207EZero.
+;           so this is slot 0x04 of ButtonTable_Transp0se_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -199161,7 +199227,7 @@ ButtonTable_Transp0se_207EZero_Nop3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_Transp0se_207EZero:
+SoftKeyCol5_Transp0se_StageZero:
 	m_bit 1, MD16, UI_RequestBits	; F7FCA2  bit 1,(0x2075)
 	jr	z, ScreenLeaveBody_Transp0se_Skip	; F7FCA6  jr Z,0xf7fcac
 	call	T_Blink_Stop	; F7FCA8  call 0xf42e24
@@ -199177,16 +199243,16 @@ ScreenLeaveBody_Transp0se_Skip2:
 ScreenLeaveBody_Transp0se_Join:
 	calr	sub_F7FD45	; F7FCC5  calr 0xf7fd45
 	ret	; F7FCC8  ret
-ButtonTable_Transp0se_207EZero_Nop5:
+ButtonTable_Transp0se_StageZero_Nop5:
 	ret	; F7FCC9  ret   <- button table 0xF7DBD8 entry 5 (TRANSP0SE)
-ButtonTable_Transp0se_207EZero_Nop6:
+ButtonTable_Transp0se_StageZero_Nop6:
 	ret	; F7FCCA  ret   <- button table 0xF7DBD8 entry 6 (TRANSP0SE)
-ButtonTable_Transp0se_207EZero_Nop7:
+ButtonTable_Transp0se_StageZero_Nop7:
 	ret	; F7FCCB  ret   <- button table 0xF7DBD8 entry 7 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_Transp0se_207EZero -- row 1 of the five key pairs flanking the
-;           LCD, on the Transp0se_207EZero screen
+; LcdKeyRow1_Transp0se_StageZero -- row 1 of the five key pairs flanking the
+;           LCD, on the Transp0se_StageZero screen
 ; Reached by: SW25 "LCD RIGHT 1 (top)" (matrix segment 3 bit 0, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A2
 ;           {class 0xA9, code 0x08} -> delivered code 0x08; SW73 "LCD LEFT 1
@@ -199196,7 +199262,7 @@ ButtonTable_Transp0se_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x08 of ButtonTable_Transp0se_207EZero.
+;           so this is slot 0x08 of ButtonTable_Transp0se_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -199220,7 +199286,7 @@ ButtonTable_Transp0se_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow1_Transp0se_207EZero:
+LcdKeyRow1_Transp0se_StageZero:
 	bit	7, w	; F7FCCC  bit 0x07,W
 	jr	z, ScreenLeaveBody_Transp0se_Return	; F7FCCF  jr Z,0xf7fce5
 	m_cp_mi8 MB16, 0x0df6, 0x01	; F7FCD1  cp (0x0df6),0x01
@@ -199245,8 +199311,8 @@ sub_F7FCE6:
 	ret	; F7FD05  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_Transp0se_207EZero -- row 2 of the five key pairs flanking the
-;           LCD, on the Transp0se_207EZero screen
+; LcdKeyRow2_Transp0se_StageZero -- row 2 of the five key pairs flanking the
+;           LCD, on the Transp0se_StageZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -199256,7 +199322,7 @@ sub_F7FCE6:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_Transp0se_207EZero.
+;           so this is slot 0x09 of ButtonTable_Transp0se_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -199280,7 +199346,7 @@ sub_F7FCE6:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_Transp0se_207EZero:
+LcdKeyRow2_Transp0se_StageZero:
 	bit	7, w	; F7FD06  bit 0x07,W
 	jr	z, sub_F7FCE6_Skip	; F7FD09  jr Z,0xf7fd21
 	m_cp_mi8 MB16, 0x0df6, 0x02	; F7FD0B  cp (0x0df6),0x02
@@ -199297,8 +199363,8 @@ sub_F7FCE6_Return:
 	ret	; F7FD28  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_Transp0se_207EZero -- row 3 of the five key pairs flanking the
-;           LCD, on the Transp0se_207EZero screen
+; LcdKeyRow3_Transp0se_StageZero -- row 3 of the five key pairs flanking the
+;           LCD, on the Transp0se_StageZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -199308,7 +199374,7 @@ sub_F7FCE6_Return:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_Transp0se_207EZero.
+;           so this is slot 0x0A of ButtonTable_Transp0se_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -199332,7 +199398,7 @@ sub_F7FCE6_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_Transp0se_207EZero:
+LcdKeyRow3_Transp0se_StageZero:
 	bit	7, w	; F7FD29  bit 0x07,W
 	jr	z, sub_F7FCE6_Return2	; F7FD2C  jr Z,0xf7fd44
 	m_cp_mi8 MB16, 0x0df6, 0x03	; F7FD2E  cp (0x0df6),0x03
@@ -199356,8 +199422,8 @@ sub_F7FD45:
 	ret	; F7FD5B  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_Transp0se_207EZero -- row 4 of the five key pairs flanking the
-;           LCD, on the Transp0se_207EZero screen
+; LcdKeyRow4_Transp0se_StageZero -- row 4 of the five key pairs flanking the
+;           LCD, on the Transp0se_StageZero screen
 ; Reached by: SW28 "LCD RIGHT 4" (matrix segment 3 bit 3, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AE
 ;           {class 0xA9, code 0x0B} -> delivered code 0x0B; SW76 "LCD LEFT 4"
@@ -199367,7 +199433,7 @@ sub_F7FD45:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0B of ButtonTable_Transp0se_207EZero.
+;           so this is slot 0x0B of ButtonTable_Transp0se_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -199391,7 +199457,7 @@ sub_F7FD45:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow4_Transp0se_207EZero:
+LcdKeyRow4_Transp0se_StageZero:
 	bit	7, w	; F7FD5C  bit 0x07,W
 	jr	z, sub_F7FD45_Return	; F7FD5F  jr Z,0xf7fd77
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FD61  cp (0x0df6),0x04
@@ -199403,15 +199469,15 @@ LcdKeyRow4_Transp0se_207EZero:
 	jr	sub_F7FD45_Return	; F7FD75  jr T,0xf7fd77
 sub_F7FD45_Return:
 	ret	; F7FD77  ret
-ButtonTable_Transp0se_207EZero_Nop12:
+ButtonTable_Transp0se_StageZero_Nop12:
 	ret	; F7FD78  ret   <- button table 0xF7DBD8 entry 12 (TRANSP0SE)
-ButtonTable_Transp0se_207EZero_Nop13:
+ButtonTable_Transp0se_StageZero_Nop13:
 	ret	; F7FD79  ret   <- button table 0xF7DBD8 entry 13 (TRANSP0SE)
-ButtonTable_Transp0se_207EZero_Nop14:
+ButtonTable_Transp0se_StageZero_Nop14:
 	ret	; F7FD7A  ret   <- button table 0xF7DBD8 entry 14 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_Transp0se_207EZero -- the EXIT key on the Transp0se_207EZero screen
+; ExitKey_Transp0se_StageZero -- the EXIT key on the Transp0se_StageZero screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
 ;           0xF861AE, then slot 0x0F of the screen's button table.
@@ -199429,7 +199495,7 @@ ButtonTable_Transp0se_207EZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_Transp0se_207EZero:
+ExitKey_Transp0se_StageZero:
 	bit	7, w	; F7FD7B  bit 0x07,W
 	jr	z, sub_F7FD45_Skip	; F7FD7E  jr Z,0xf7fd82
 	jr	sub_F7FD45_Return2	; F7FD80  jr T,0xf7fd88
@@ -199437,11 +199503,11 @@ sub_F7FD45_Skip:
 	ldw	(UI_Request:16), 32794	; F7FD82  ld (0x2070),0x801a
 sub_F7FD45_Return2:
 	ret	; F7FD88  ret
-ButtonTable_Transp0se_207EZero_Nop16:
+ButtonTable_Transp0se_StageZero_Nop16:
 	ret	; F7FD89  ret   <- button table 0xF7DBD8 entry 16 (TRANSP0SE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; sub_F7FD8A -- panel button slot 0x15 of Transp0se_207EZero, NOT NAMED
+; sub_F7FD8A -- panel button slot 0x15 of Transp0se_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -199473,11 +199539,11 @@ sub_F7FD45_Skip3:
 sub_F7FD45_Join:
 	calr	sub_F7FD45	; F7FDAD  calr 0xf7fd45
 	ret	; F7FDB0  ret
-ButtonTable_Transp0se_207EZero_Nop22:
+ButtonTable_Transp0se_StageZero_Nop22:
 	ret	; F7FDB1  ret   <- button table 0xF7DBD8 entry 22 (TRANSP0SE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; NumberPadKey_Transp0se_207EZero -- the NUMBER PAD on the Transp0se_207EZero
+; NumberPadKey_Transp0se_StageZero -- the NUMBER PAD on the Transp0se_StageZero
 ;           screen
 ; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
 ;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
@@ -199497,33 +199563,33 @@ ButtonTable_Transp0se_207EZero_Nop22:
 ;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
 ;           --selftest.
 ; ---------------------------------------------------------------------
-NumberPadKey_Transp0se_207EZero:
+NumberPadKey_Transp0se_StageZero:
 	calr	sub_F7FDE9	; F7FDB2  calr 0xf7fde9
 	ret	; F7FDB5  ret
-ButtonTable_Transp0se_207EZero_Nop28:
+ButtonTable_Transp0se_StageZero_Nop28:
 	ret	; F7FDB6  ret   <- button table 0xF7DBD8 entry 28 (TRANSP0SE) and 3 more slot(s)
-ButtonTable_Transp0se_207ENonZero_Nop0:
+ButtonTable_Transp0se_StageNonZero_Nop0:
 	ret	; F7FDB7  ret   <- button table 0xF7DC58 entry 0 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop1:
+ButtonTable_Transp0se_StageNonZero_Nop1:
 	ret	; F7FDB8  ret   <- button table 0xF7DC58 entry 1 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop2:
+ButtonTable_Transp0se_StageNonZero_Nop2:
 	ret	; F7FDB9  ret   <- button table 0xF7DC58 entry 2 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop3:
+ButtonTable_Transp0se_StageNonZero_Nop3:
 	ret	; F7FDBA  ret   <- button table 0xF7DC58 entry 3 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop4:
+ButtonTable_Transp0se_StageNonZero_Nop4:
 	ret	; F7FDBB  ret   <- button table 0xF7DC58 entry 4 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop5:
+ButtonTable_Transp0se_StageNonZero_Nop5:
 	ret	; F7FDBC  ret   <- button table 0xF7DC58 entry 5 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop6:
+ButtonTable_Transp0se_StageNonZero_Nop6:
 	ret	; F7FDBD  ret   <- button table 0xF7DC58 entry 6 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop7:
+ButtonTable_Transp0se_StageNonZero_Nop7:
 	ret	; F7FDBE  ret   <- button table 0xF7DC58 entry 7 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop8:
+ButtonTable_Transp0se_StageNonZero_Nop8:
 	ret	; F7FDBF  ret   <- button table 0xF7DC58 entry 8 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_Transp0se_207ENonZero -- row 2 of the five key pairs flanking the
-;           LCD, on the Transp0se_207ENonZero screen
+; LcdKeyRow2_Transp0se_StageNonZero -- row 2 of the five key pairs flanking the
+;           LCD, on the Transp0se_StageNonZero screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
 ;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
@@ -199533,7 +199599,7 @@ ButtonTable_Transp0se_207ENonZero_Nop8:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x09 of ButtonTable_Transp0se_207ENonZero.
+;           so this is slot 0x09 of ButtonTable_Transp0se_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -199557,7 +199623,7 @@ ButtonTable_Transp0se_207ENonZero_Nop8:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_Transp0se_207ENonZero:
+LcdKeyRow2_Transp0se_StageNonZero:
 	bit	7, w	; F7FDC0  bit 0x07,W
 	jr	nz, sub_F7FD45_Return3	; F7FDC3  jr NZ,0xf7fdce
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7FDC5  and (0x2075),0x6f
@@ -199566,8 +199632,8 @@ sub_F7FD45_Return3:
 	ret	; F7FDCE  ret
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_Transp0se_207ENonZero -- row 3 of the five key pairs flanking the
-;           LCD, on the Transp0se_207ENonZero screen
+; LcdKeyRow3_Transp0se_StageNonZero -- row 3 of the five key pairs flanking the
+;           LCD, on the Transp0se_StageNonZero screen
 ; Reached by: SW27 "LCD RIGHT 3" (matrix segment 3 bit 2, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6AA
 ;           {class 0xA9, code 0x0A} -> delivered code 0x0A; SW75 "LCD LEFT 3"
@@ -199577,7 +199643,7 @@ sub_F7FD45_Return3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x0A of ButtonTable_Transp0se_207ENonZero.
+;           so this is slot 0x0A of ButtonTable_Transp0se_StageNonZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -199601,23 +199667,23 @@ sub_F7FD45_Return3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow3_Transp0se_207ENonZero:
+LcdKeyRow3_Transp0se_StageNonZero:
 	bit	7, w	; F7FDCF  bit 0x07,W
 	jr	nz, sub_F7FD45_Return4	; F7FDD2  jr NZ,0xf7fdd8
 	call	T_F42A5C	; F7FDD4  call 0xf42a5c
 sub_F7FD45_Return4:
 	ret	; F7FDD8  ret
-ButtonTable_Transp0se_207ENonZero_Nop11:
+ButtonTable_Transp0se_StageNonZero_Nop11:
 	ret	; F7FDD9  ret   <- button table 0xF7DC58 entry 11 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop12:
+ButtonTable_Transp0se_StageNonZero_Nop12:
 	ret	; F7FDDA  ret   <- button table 0xF7DC58 entry 12 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop13:
+ButtonTable_Transp0se_StageNonZero_Nop13:
 	ret	; F7FDDB  ret   <- button table 0xF7DC58 entry 13 (TRANSP0SE)
-ButtonTable_Transp0se_207ENonZero_Nop14:
+ButtonTable_Transp0se_StageNonZero_Nop14:
 	ret	; F7FDDC  ret   <- button table 0xF7DC58 entry 14 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
-; ExitKey_Transp0se_207ENonZero -- the EXIT key on the Transp0se_207ENonZero
+; ExitKey_Transp0se_StageNonZero -- the EXIT key on the Transp0se_StageNonZero
 ;           screen
 ; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
 ;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
@@ -199636,13 +199702,13 @@ ButtonTable_Transp0se_207ENonZero_Nop14:
 ;           delivered at; 20 of 20 in-span EXIT handlers do the same.
 ;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
 ; ---------------------------------------------------------------------
-ExitKey_Transp0se_207ENonZero:
+ExitKey_Transp0se_StageNonZero:
 	bit	7, w	; F7FDDD  bit 0x07,W
 	jr	nz, sub_F7FD45_Return5	; F7FDE0  jr NZ,0xf7fde6
 	call	T_F42A5C	; F7FDE2  call 0xf42a5c
 sub_F7FD45_Return5:
 	ret	; F7FDE6  ret
-ButtonTable_Transp0se_207ENonZero_Nop16:
+ButtonTable_Transp0se_StageNonZero_Nop16:
 	ret	; F7FDE7  ret   <- button table 0xF7DC58 entry 16 (TRANSP0SE) and 15 more slot(s)
 	ret	; F7FDE8  ret
 
@@ -199876,18 +199942,18 @@ Paint_AdvanceDelay_Join2:
 ScreenLeaveBody_AdvanceDelay:
 	call	T_F42A64	; F7FFC8  call 0xf42a64
 	ret	; F7FFCC  ret
-ButtonTable_AdvanceDelay_207EZero_Nop0:
+ButtonTable_AdvanceDelay_StageZero_Nop0:
 	ret	; F7FFCD  ret   <- button table 0xF7DCD8 entry 0 (ADVANCE/DELAY)
-ButtonTable_AdvanceDelay_207EZero_Nop1:
+ButtonTable_AdvanceDelay_StageZero_Nop1:
 	ret	; F7FFCE  ret   <- button table 0xF7DCD8 entry 1 (ADVANCE/DELAY)
-ButtonTable_AdvanceDelay_207EZero_Nop2:
+ButtonTable_AdvanceDelay_StageZero_Nop2:
 	ret	; F7FFCF  ret   <- button table 0xF7DCD8 entry 2 (ADVANCE/DELAY)
-ButtonTable_AdvanceDelay_207EZero_Nop3:
+ButtonTable_AdvanceDelay_StageZero_Nop3:
 	ret	; F7FFD0  ret   <- button table 0xF7DCD8 entry 3 (ADVANCE/DELAY)
 
 ; ---------------------------------------------------------------------
-; SoftKeyCol5_AdvanceDelay_207EZero -- the 5th of the eight SOFT KEYS in the
-;           row under the LCD, on the AdvanceDelay_207EZero screen
+; SoftKeyCol5_AdvanceDelay_StageZero -- the 5th of the eight SOFT KEYS in the
+;           row under the LCD, on the AdvanceDelay_StageZero screen
 ; Reached by: SW41 "SOFT KEY col 5 lower" (matrix segment 5 bit 0, wire 0xC5)
 ;           -> PanelWireGroupMap_Variant2[0x65] = group 0x05 -> record
 ;           0xF8B6E4 {class 0xA9, code 0x04} -> delivered code 0x84; SW42
@@ -199897,7 +199963,7 @@ ButtonTable_AdvanceDelay_207EZero_Nop3:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x04 of ButtonTable_AdvanceDelay_207EZero.
+;           so this is slot 0x04 of ButtonTable_AdvanceDelay_StageZero.
 ; Note:     bit 7 of the delivered code picks WHICH SWITCH OF THE COLUMN: set
 ;           = the even matrix bit, clear = the odd one. ⚠ That the even bit is
 ;           the LOWER key of the pair is round 9's POSITION-grade reading of
@@ -199925,32 +199991,32 @@ ButtonTable_AdvanceDelay_207EZero_Nop3:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-SoftKeyCol5_AdvanceDelay_207EZero:
+SoftKeyCol5_AdvanceDelay_StageZero:
 	m_bit 1, MD16, UI_RequestBits	; F7FFD1  bit 1,(0x2075)
-	jr	z, SoftKeyCol5_AdvanceDelay_207EZero_Skip	; F7FFD5  jr Z,0xf7ffdb
+	jr	z, SoftKeyCol5_AdvanceDelay_StageZero_Skip	; F7FFD5  jr Z,0xf7ffdb
 	call	T_Blink_Stop	; F7FFD7  call 0xf42e24
-SoftKeyCol5_AdvanceDelay_207EZero_Skip:
+SoftKeyCol5_AdvanceDelay_StageZero_Skip:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7FFDB  or (0x2075),0x08
 	ld	(3608:16), 1	; F7FFE0  ld (0x0e18),0x01
 	bit	7, w	; F7FFE5  bit 0x07,W
-	jr	z, SoftKeyCol5_AdvanceDelay_207EZero_Skip2	; F7FFE8  jr Z,0xf7fff0
+	jr	z, SoftKeyCol5_AdvanceDelay_StageZero_Skip2	; F7FFE8  jr Z,0xf7fff0
 	call	T_F42A7C	; F7FFEA  call 0xf42a7c
-	jr	SoftKeyCol5_AdvanceDelay_207EZero_Skip3	; F7FFEE  jr T,0xf7fff4
-SoftKeyCol5_AdvanceDelay_207EZero_Skip2:
+	jr	SoftKeyCol5_AdvanceDelay_StageZero_Skip3	; F7FFEE  jr T,0xf7fff4
+SoftKeyCol5_AdvanceDelay_StageZero_Skip2:
 	call	T_F42A78	; F7FFF0  call 0xf42a78
-SoftKeyCol5_AdvanceDelay_207EZero_Skip3:
+SoftKeyCol5_AdvanceDelay_StageZero_Skip3:
 	calr	143	; F7FFF4  calr 0xf80086
 	ret	; F7FFF7  ret
-ButtonTable_AdvanceDelay_207EZero_Nop5:
+ButtonTable_AdvanceDelay_StageZero_Nop5:
 	ret	; F7FFF8  ret   <- button table 0xF7DCD8 entry 5 (ADVANCE/DELAY)
-ButtonTable_AdvanceDelay_207EZero_Nop6:
+ButtonTable_AdvanceDelay_StageZero_Nop6:
 	ret	; F7FFF9  ret   <- button table 0xF7DCD8 entry 6 (ADVANCE/DELAY)
-ButtonTable_AdvanceDelay_207EZero_Nop7:
+ButtonTable_AdvanceDelay_StageZero_Nop7:
 	ret	; F7FFFA  ret   <- button table 0xF7DCD8 entry 7 (ADVANCE/DELAY)
 
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_AdvanceDelay_207EZero -- row 1 of the five key pairs flanking the
-;           LCD, on the AdvanceDelay_207EZero screen
+; LcdKeyRow1_AdvanceDelay_StageZero -- row 1 of the five key pairs flanking the
+;           LCD, on the AdvanceDelay_StageZero screen
 ; Reached by: SW25 "LCD RIGHT 1 (top)" (matrix segment 3 bit 0, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A2
 ;           {class 0xA9, code 0x08} -> delivered code 0x08; SW73 "LCD LEFT 1
@@ -199960,7 +200026,7 @@ ButtonTable_AdvanceDelay_207EZero_Nop7:
 ;           PanelButton_Route then does `and L,0x1f` at 0xF861AE and prom_a
 ;           PanelButton_CallTableEntry masks it AGAIN and indexes the table -- `and L,0x1f /
 ;           sla 0x02,L / ld XIX,(XIX+L) / call (XIX)` at 0xF8BDEA-0xF8BDF5 --
-;           so this is slot 0x08 of ButtonTable_AdvanceDelay_207EZero.
+;           so this is slot 0x08 of ButtonTable_AdvanceDelay_StageZero.
 ; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
 ;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
 ; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
@@ -199984,7 +200050,7 @@ ButtonTable_AdvanceDelay_207EZero_Nop7:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow1_AdvanceDelay_207EZero:
+LcdKeyRow1_AdvanceDelay_StageZero:
 	bit	7, w	; F7FFFB  bit 0x07,W
 	jr	z, 25	; F7FFFE  jr Z,0xf80019
 

@@ -1324,7 +1324,7 @@ def selftest():
        BC.PANEL[(3, 5)][0] == "-1" and BC.PANEL[(3, 6)][0] == "+1")
 
     # --- what the .s must look like AFTER --apply --------------------------
-    applied = ("\nExitKey_TrackAssign_207EZero:" in src)
+    applied = ("\nExitKey_TrackAssign_StageZero:" in src)
     ck("the round is applied to prom_b/wsa1_prom_b.s", applied)
     if applied:
         for _, _, new, _, _ in proposals():

@@ -2145,14 +2145,14 @@
 	.set DL_AttentionAFileAlreadyExistsAtThe,     0x00F59B86
 	.set DLText_F59C2C,                           0x00F59C2C
 	.set DL_F59C4B,                               0x00F59C4B
-	.set SoftKeyCol1_TrackClear_207EZero,         0x00F7ECFF
-	.set SoftKeyCol2_TrackClear_207EZero,         0x00F7ED18
-	.set SoftKeyCol3_TrackClear_207EZero,         0x00F7ED31
-	.set SoftKeyCol4_TrackClear_207EZero,         0x00F7ED4A
-	.set SoftKeyCol5_TrackClear_207EZero,         0x00F7ED63
-	.set SoftKeyCol6_TrackClear_207EZero,         0x00F7ED7C
-	.set SoftKeyCol7_TrackClear_207EZero,         0x00F7ED95
-	.set SoftKeyCol8_TrackClear_207EZero,         0x00F7EDAE
+	.set SoftKeyCol1_TrackClear_StageZero,         0x00F7ECFF
+	.set SoftKeyCol2_TrackClear_StageZero,         0x00F7ED18
+	.set SoftKeyCol3_TrackClear_StageZero,         0x00F7ED31
+	.set SoftKeyCol4_TrackClear_StageZero,         0x00F7ED4A
+	.set SoftKeyCol5_TrackClear_StageZero,         0x00F7ED63
+	.set SoftKeyCol6_TrackClear_StageZero,         0x00F7ED7C
+	.set SoftKeyCol7_TrackClear_StageZero,         0x00F7ED95
+	.set SoftKeyCol8_TrackClear_StageZero,         0x00F7EDAE
 ; <<< END prom_b ADDRESS EQUATES
 ; MACRO-PRELUDE-END
 
@@ -2231,10 +2231,10 @@ wsa1_prom_a:
 ; interpreter entry -- and they are `sub_XXXXXX` because nothing here says WHICH
 ; screen.  Nine labels in the span are semantic, and all nine are data.
 ; ==============================================================================
-; AdvanceDelay_SelectField1 -- the prom_a half of prom_b's LcdKeyRow1_AdvanceDelay_207EZero: select field 1 of the ADVANCE/DELAY screen
+; AdvanceDelay_SelectField1 -- the prom_a half of prom_b's LcdKeyRow1_AdvanceDelay_StageZero: select field 1 of the ADVANCE/DELAY screen
 ; Evidence: that handler's last instructions `bit 7,W / jr Z,0xF80019` (0xF7FFFB-0xF7FFFF) fall through the chip boundary into 0xF80000; nothing calls or names 0xF80000 (24-bit scan of prom_a/b/c).
 ; Body: if (0x0DE5)!=1, calr 0xF7F245 (Blink_SetEnable(0) + Blink_Stop); or (0x2075),1; T_F42A68 = prom_b 0xF7CB1E sets (0x0DE5)=(0x12FC)=1; AdvanceDelay_DrawValues; AdvanceDelay_DrawFieldCursor.
-; Rows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_207EZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_F42A6C/70/74.
+; Rows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_StageZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_F42A6C/70/74.
 AdvanceDelay_SelectField1:
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x01                          ; F80000  c1 e5 0d 3f 01
 	jr z, .LF80019                                       ; F80005  66 12
@@ -2247,7 +2247,7 @@ AdvanceDelay_SelectField1:
 	ret                                                  ; F80019  0e
 ; AdvanceDelay_DrawFieldCursor -- clear LCD layer 1, then fill the box of the ADVANCE/DELAY field (0x12FC) selects
 ; Evidence: (0x2540)=1; site 0xF8002C runs DL_F39551-0xF39559 (interpreter A), one op-0E record = svc 0x0E LCD_Svc_0E_ClearColumns with IY=0, BC=0x28, HL=0xF0 (40 columns x 240 rows); then T_F4181C (jp DLB_Handler_Array8) on the op-03 record 0xF3B3A7: (0x12FC)&7 indexes DLBoxes_F3B3B2, swi 5 = LCD_Svc_05_FillRect.
-; Screen: ADVANCE/DELAY -- callers are AdvanceDelay_SelectField1 and the row-key handlers of ButtonTable_AdvanceDelay_207EZero at 0xF8003A-0xF800BB; (0x12FC) is written with (0x0DE5) by T_F42A68..T_F42A74.
+; Screen: ADVANCE/DELAY -- callers are AdvanceDelay_SelectField1 and the row-key handlers of ButtonTable_AdvanceDelay_StageZero at 0xF8003A-0xF800BB; (0x12FC) is written with (0x0DE5) by T_F42A68..T_F42A74.
 ; calr 0xF7E2D8 at 0xF8001F is a bare `ret` in prom_b.
 AdvanceDelay_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8001A  f1 40 25 00 01
@@ -2370,7 +2370,7 @@ AdvanceDelay_DrawValues:
 	ret                                                  ; F8012D  0e
 	ret                                                  ; F8012E  0e
 ; AdvanceDelay_NumberPad -- NUMBER PAD key on the ADVANCE/DELAY screen: dispatch on the keypad code (0x2267)
-; Evidence: reached only by `calr` at 0xF800F8, slot 27 (NumberPadKey) of ButtonTable_AdvanceDelay_207EZero.  (0x2267)<=9 -> AdvanceDelay_KeypadDigit, 0x0F -> AdvanceDelay_KeypadCommit, 0x80 -> AdvanceDelay_KeypadSign; then always AdvanceDelay_BlinkSelectedField.
+; Evidence: reached only by `calr` at 0xF800F8, slot 27 (NumberPadKey) of ButtonTable_AdvanceDelay_StageZero.  (0x2267)<=9 -> AdvanceDelay_KeypadDigit, 0x0F -> AdvanceDelay_KeypadCommit, 0x80 -> AdvanceDelay_KeypadSign; then always AdvanceDelay_BlinkSelectedField.
 ; The codes are PanelKeypad_OrdinalToKey_V1's: 0..9 digit (shifted into 0x2821-0x2823), 0x80 sign toggle of (0x2820), 0x0F commit.
 AdvanceDelay_NumberPad:
 	ld a, (0x2267:16)                                   ; F8012F  c1 67 22 21
@@ -2809,7 +2809,7 @@ ScreenLeaveBody_N0teChange:
 	ret                                                  ; F8051B  0e
 	ret                                                  ; F8051C  0e
 	ret                                                  ; F8051D  0e
-ButtonTable_N0teChange_207EZero_Nop7:
+ButtonTable_N0teChange_StageZero_Nop7:
 	ret                                                  ; F8051E  0e
 	bit 0x07,W                                           ; F8051F  c8 33 07
 	jr z, .LF80534                                       ; F80522  66 10
@@ -2830,7 +2830,7 @@ ButtonTable_N0teChange_207EZero_Nop7:
 	ret                                                  ; F80548  0e
 ; N0teChange_DrawFieldCursor -- clear LCD layer 1, then fill the box of the NOTE CHANGE field (0x1301) selects
 ; Evidence: (0x2540)=1; site 0xF8055B runs DL_F39551-0xF39559 (op 0E ClearColumns, whole layer); then DLB_Handler_Array8 (T_F4181C) on op-03 record 0xF3B05A: (0x1301)&7 indexes the boxes at 0xF3B065, swi 5 FillRect.  (0x1301) is written with (0x0DED) (T_F42A88 = prom_b 0xF7C853).
-; Callers: the row-key handlers of ButtonTable_N0teChange_207EZero at 0xF8051F-0xF805AB.
+; Callers: the row-key handlers of ButtonTable_N0teChange_StageZero at 0xF8051F-0xF805AB.
 N0teChange_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F80549  f1 40 25 00 01
 	calr sub_F7E39F_Nop                                          ; F8054E  1e 87 dd
@@ -2927,7 +2927,7 @@ N0teChange_DrawValues:
 	ret                                                  ; F80628  0e
 	ret                                                  ; F80629  0e
 ; N0teChange_NumberPad -- NUMBER PAD key on the NOTE CHANGE screen: dispatch on (0x2267)
-; Evidence: reached only by `calr` at 0xF80609, slot 27 of ButtonTable_N0teChange_207EZero; <=9 -> N0teChange_KeypadDigit, 0x0F -> N0teChange_KeypadCommit, 0x80 -> N0teChange_KeypadSign, then N0teChange_BlinkSelectedField.
+; Evidence: reached only by `calr` at 0xF80609, slot 27 of ButtonTable_N0teChange_StageZero; <=9 -> N0teChange_KeypadDigit, 0x0F -> N0teChange_KeypadCommit, 0x80 -> N0teChange_KeypadSign, then N0teChange_BlinkSelectedField.
 N0teChange_NumberPad:
 	ld a, (0x2267:16)                                   ; F8062A  c1 67 22 21
 	cp A,0x09                                            ; F8062E  c9 cf 09
@@ -3312,7 +3312,7 @@ MeasureC0py_DrawValues:
 	ret                                                  ; F809AB  0e
 	ret                                                  ; F809AC  0e
 ; MeasureC0py_NumberPad -- NUMBER PAD key on the MEASURE COPY screen: dispatch on (0x2267)
-; Evidence: reached only by `calr` at 0xF80968, slot 27 of ButtonTable_MeasureC0py_207EZero; digit / 0x0F / 0x80 arms then MeasureC0py_BlinkSelectedField.
+; Evidence: reached only by `calr` at 0xF80968, slot 27 of ButtonTable_MeasureC0py_StageZero; digit / 0x0F / 0x80 arms then MeasureC0py_BlinkSelectedField.
 MeasureC0py_NumberPad:
 	ld a, (0x2267:16)                                   ; F809AD  c1 67 22 21
 	cp A,0x09                                            ; F809B1  c9 cf 09
@@ -3685,7 +3685,7 @@ MeasureInsert_DrawValues:
 	call T_DisplayListB_Run                              ; F80D0D  1d f4 17 f4
 	ret                                                  ; F80D11  0e
 ; MeasureInsert_NumberPad -- NUMBER PAD key on the MEASURE INSERT screen: dispatch on (0x2267)
-; Evidence: reached only by `calr` at 0xF80CC5, slot 27 of ButtonTable_MeasureInsert_207EZero; digit / 0x0F / 0x80 arms then MeasureInsert_BlinkSelectedField.
+; Evidence: reached only by `calr` at 0xF80CC5, slot 27 of ButtonTable_MeasureInsert_StageZero; digit / 0x0F / 0x80 arms then MeasureInsert_BlinkSelectedField.
 MeasureInsert_NumberPad:
 	ld a, (0x2267:16)                                   ; F80D12  c1 67 22 21
 	cp A,0x09                                            ; F80D16  c9 cf 09
@@ -4002,28 +4002,28 @@ Paint_StepRecordPartSelect:
 ScreenLeaveBody_StepRecordPartSelect:
 	call T_F42BC8                                        ; F80FC0  1d c8 2b f4
 	ret                                                  ; F80FC4  0e
-	call SoftKeyCol1_TrackClear_207EZero                 ; F80FC5  1d ff ec f7
+	call SoftKeyCol1_TrackClear_StageZero                 ; F80FC5  1d ff ec f7
 	call T_F42BBC                                        ; F80FC9  1d bc 2b f4
 	ret                                                  ; F80FCD  0e
-	call SoftKeyCol2_TrackClear_207EZero                 ; F80FCE  1d 18 ed f7
+	call SoftKeyCol2_TrackClear_StageZero                 ; F80FCE  1d 18 ed f7
 	call T_F42BBC                                        ; F80FD2  1d bc 2b f4
 	ret                                                  ; F80FD6  0e
-	call SoftKeyCol3_TrackClear_207EZero                 ; F80FD7  1d 31 ed f7
+	call SoftKeyCol3_TrackClear_StageZero                 ; F80FD7  1d 31 ed f7
 	call T_F42BBC                                        ; F80FDB  1d bc 2b f4
 	ret                                                  ; F80FDF  0e
-	call SoftKeyCol4_TrackClear_207EZero                 ; F80FE0  1d 4a ed f7
+	call SoftKeyCol4_TrackClear_StageZero                 ; F80FE0  1d 4a ed f7
 	call T_F42BBC                                        ; F80FE4  1d bc 2b f4
 	ret                                                  ; F80FE8  0e
-	call SoftKeyCol5_TrackClear_207EZero                 ; F80FE9  1d 63 ed f7
+	call SoftKeyCol5_TrackClear_StageZero                 ; F80FE9  1d 63 ed f7
 	call T_F42BBC                                        ; F80FED  1d bc 2b f4
 	ret                                                  ; F80FF1  0e
-	call SoftKeyCol6_TrackClear_207EZero                 ; F80FF2  1d 7c ed f7
+	call SoftKeyCol6_TrackClear_StageZero                 ; F80FF2  1d 7c ed f7
 	call T_F42BBC                                        ; F80FF6  1d bc 2b f4
 	ret                                                  ; F80FFA  0e
-	call SoftKeyCol7_TrackClear_207EZero                 ; F80FFB  1d 95 ed f7
+	call SoftKeyCol7_TrackClear_StageZero                 ; F80FFB  1d 95 ed f7
 	call T_F42BBC                                        ; F80FFF  1d bc 2b f4
 	ret                                                  ; F81003  0e
-	call SoftKeyCol8_TrackClear_207EZero                 ; F81004  1d ae ed f7
+	call SoftKeyCol8_TrackClear_StageZero                 ; F81004  1d ae ed f7
 	call T_F42BBC                                        ; F81008  1d bc 2b f4
 	ret                                                  ; F8100C  0e
 	ret                                                  ; F8100D  0e

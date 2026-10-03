@@ -948,7 +948,7 @@ def check_stale_names(tree, images, facts):
     the sampled rows in these tiers was a non-defect):
       `WEAK-STALE-ABBREV`   a defined name ends in '_' + token: a prefix left off
                             (ClassName_Table of HDAE5000_ClassName_Table, MENU_ITEM of
-                            NAKA_TYPE_MENU_ITEM, TrackClear_207EZero of SoftKeyCol1_...).
+                            NAKA_TYPE_MENU_ITEM, TrackClear_StageZero of SoftKeyCol1_...).
       `WEAK-STALE-FRAGMENT` a '_'-less CamelCase token inside a defined name (UserBitmap of
                             VwUserBitmapProc).
       `WEAK-STALE-FAMILY`   the token names numbered rows, every Token_<n> is defined
