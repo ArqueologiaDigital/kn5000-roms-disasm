@@ -1202,7 +1202,7 @@
 	.set	ToneEdit_ApplyStep, 0xFD6CE1
 	.set	sub_FD6E90, 0xFD6E90
 	.set	ToneEdit_CommitField, 0xFD7435
-	.set	sub_FD74AE, 0xFD74AE
+	.set	Var27A3_ChangeSlot, 0xFD74AE
 	.set	sub_FD74E0, 0xFD74E0
 	.set	sub_FD77B3, 0xFD77B3
 	.set	sub_FD785C, 0xFD785C
@@ -18613,7 +18613,7 @@ sub_F0A57E:
 	jr	sub_F0A57E_Join	; F0A58E  jr T,0xf0a5a2
 sub_F0A57E_Skip:
 	pushw	1	; F0A590  push 0x0001
-	call	sub_FD74AE	; F0A593  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A593  call 0xfd74ae
 	popw	bc	; F0A597  pop BC
 	cp	a, 0:i3	; F0A598  cp A,0
 	jr	z, sub_F0A57E_Skip2	; F0A59A  jr Z,0xf0a5a7
@@ -18646,7 +18646,7 @@ sub_F0A5AA:
 	jr	sub_F0A5AA_Join	; F0A5BA  jr T,0xf0a5ce
 sub_F0A5AA_Skip:
 	pushw	2	; F0A5BC  push 0x0002
-	call	sub_FD74AE	; F0A5BF  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A5BF  call 0xfd74ae
 	popw	bc	; F0A5C3  pop BC
 	cp	a, 0:i3	; F0A5C4  cp A,0
 	jr	z, sub_F0A5AA_Skip2	; F0A5C6  jr Z,0xf0a5d3
@@ -18680,7 +18680,7 @@ sub_F0A5D6:
 	jr	sub_F0A5D6_Join	; F0A5E8  jr T,0xf0a601
 sub_F0A5D6_Skip:
 	pushw	3	; F0A5EA  push 0x0003
-	call	sub_FD74AE	; F0A5ED  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A5ED  call 0xfd74ae
 	popw	bc	; F0A5F1  pop BC
 	cp	a, 0:i3	; F0A5F2  cp A,0
 	jr	z, sub_F0A5D6_Join	; F0A5F4  jr Z,0xf0a601
@@ -18713,7 +18713,7 @@ sub_F0A604:
 	jr	sub_F0A604_Join	; F0A616  jr T,0xf0a62f
 sub_F0A604_Skip:
 	pushw	4	; F0A618  push 0x0004
-	call	sub_FD74AE	; F0A61B  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A61B  call 0xfd74ae
 	popw	bc	; F0A61F  pop BC
 	cp	a, 0:i3	; F0A620  cp A,0
 	jr	z, sub_F0A604_Join	; F0A622  jr Z,0xf0a62f
@@ -18945,7 +18945,7 @@ sub_F0A6F9:
 	jr	sub_F0A6F9_Join	; F0A709  jr T,0xf0a71d
 sub_F0A6F9_Skip:
 	pushw	1	; F0A70B  push 0x0001
-	call	sub_FD74AE	; F0A70E  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A70E  call 0xfd74ae
 	popw	bc	; F0A712  pop BC
 	cp	a, 0:i3	; F0A713  cp A,0
 	jr	z, sub_F0A6F9_Skip2	; F0A715  jr Z,0xf0a722
@@ -18978,7 +18978,7 @@ sub_F0A725:
 	jr	sub_F0A725_Join	; F0A735  jr T,0xf0a749
 sub_F0A725_Skip:
 	pushw	2	; F0A737  push 0x0002
-	call	sub_FD74AE	; F0A73A  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A73A  call 0xfd74ae
 	popw	bc	; F0A73E  pop BC
 	cp	a, 0:i3	; F0A73F  cp A,0
 	jr	z, sub_F0A725_Skip2	; F0A741  jr Z,0xf0a74e
@@ -19007,7 +19007,7 @@ sub_F0A751:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A755  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A751_Skip	; F0A759  jr Z,0xf0a772
 	pushw	3	; F0A75B  push 0x0003
-	call	sub_FD74AE	; F0A75E  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A75E  call 0xfd74ae
 	popw	bc	; F0A762  pop BC
 	cp	a, 0:i3	; F0A763  cp A,0
 	jr	z, sub_F0A751_Skip	; F0A765  jr Z,0xf0a772
@@ -19035,7 +19035,7 @@ sub_F0A775:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A779  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A775_Skip	; F0A77D  jr Z,0xf0a796
 	pushw	4	; F0A77F  push 0x0004
-	call	sub_FD74AE	; F0A782  call 0xfd74ae
+	call	Var27A3_ChangeSlot	; F0A782  call 0xfd74ae
 	popw	bc	; F0A786  pop BC
 	cp	a, 0:i3	; F0A787  cp A,0
 	jr	z, sub_F0A775_Skip	; F0A789  jr Z,0xf0a796

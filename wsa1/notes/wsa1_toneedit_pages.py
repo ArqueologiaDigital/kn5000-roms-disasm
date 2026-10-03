@@ -292,7 +292,7 @@ def loop_runs(a, lo, hi):
 
 PAGES = [
     # code, name, prom_a ENTER routine, the window its query run lives in,
-    #             whether a sub_FD7719 call precedes the reply run (base index 1)
+    #             whether a Var27DB_Increment call precedes the reply run (base index 1)
     (0xC3, "PAGE1/2", 0xFDD7F9, (0xFDD82D, 0xFDD870), 0),
     (0xC4, "PAGE2/2", 0xFDD958, (0xFDD987, 0xFDD9A0), 0),
     (0xC5, "PAGE1/3", 0xFDDA1C, (0xFDDA51, 0xFDDAE2), 1),

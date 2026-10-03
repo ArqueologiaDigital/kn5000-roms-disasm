@@ -125299,7 +125299,7 @@ sub_FD0409:
 	pushw 0x00                                           ; FD0450  0b 00 00
 	call Arr27A6_Set                                      ; FD0453  1d 65 6c fd
 	pushw 0x01                                           ; FD0457  0b 01 00
-	call sub_FD6B2E                                      ; FD045A  1d 2e 6b fd
+	call Var27A3_SetSlot                                      ; FD045A  1d 2e 6b fd
 	pushw 0x00                                           ; FD045E  0b 00 00
 	pushw 0x80                                           ; FD0461  0b 80 00
 	call T_Dispatch_Code80                               ; FD0464  1d d4 1e f4
@@ -125342,7 +125342,7 @@ sub_FD046F:
 	pushw 0x00                                           ; FD04B6  0b 00 00
 	call Arr27A6_Set                                      ; FD04B9  1d 65 6c fd
 	pushw 0x02                                           ; FD04BD  0b 02 00
-	call sub_FD6B2E                                      ; FD04C0  1d 2e 6b fd
+	call Var27A3_SetSlot                                      ; FD04C0  1d 2e 6b fd
 	pushw 0x00                                           ; FD04C4  0b 00 00
 	pushw 0x80                                           ; FD04C7  0b 80 00
 	call T_Dispatch_Code80                               ; FD04CA  1d d4 1e f4
@@ -127319,7 +127319,7 @@ sub_FD163E:
 	cp (XIZ+0x08),0x00                                   ; FD1642  8e 08 3f 00
 	jr z, .LFD165F                                       ; FD1646  66 17
 	pushw 0x01                                           ; FD1648  0b 01 00
-	call sub_FD74AE                                      ; FD164B  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD164B  1d ae 74 fd
 	popw bc                                              ; FD164F  49
 	cp a, 0x00:i3                                          ; FD1650  c9 d8
 	jr z, .LFD165F                                       ; FD1652  66 0b
@@ -127340,7 +127340,7 @@ sub_FD1662:
 	jr .LFD1686                                          ; FD1672  68 12
 .LFD1674:
 	pushw 0x02                                           ; FD1674  0b 02 00
-	call sub_FD74AE                                      ; FD1677  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD1677  1d ae 74 fd
 	popw bc                                              ; FD167B  49
 	cp a, 0x00:i3                                          ; FD167C  c9 d8
 	jr z, .LFD168B                                       ; FD167E  66 0b
@@ -127358,7 +127358,7 @@ sub_FD168E:
 	cp (XIZ+0x08),0x00                                   ; FD1692  8e 08 3f 00
 	jr z, .LFD16AC                                       ; FD1696  66 14
 	pushw 0x03                                           ; FD1698  0b 03 00
-	call sub_FD74AE                                      ; FD169B  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD169B  1d ae 74 fd
 	popw bc                                              ; FD169F  49
 	cp a, 0x00:i3                                          ; FD16A0  c9 d8
 	jr z, .LFD16C2                                       ; FD16A2  66 1e
@@ -127384,7 +127384,7 @@ sub_FD16C5:
 	cp (XIZ+0x08),0x00                                   ; FD16C9  8e 08 3f 00
 	jr z, .LFD16E6                                       ; FD16CD  66 17
 	pushw 0x04                                           ; FD16CF  0b 04 00
-	call sub_FD74AE                                      ; FD16D2  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD16D2  1d ae 74 fd
 	popw bc                                              ; FD16D6  49
 	cp a, 0x00:i3                                          ; FD16D7  c9 d8
 	jr z, .LFD16E6                                       ; FD16D9  66 0b
@@ -127663,7 +127663,7 @@ sub_FD196E:
 	jr .LFD1992                                          ; FD197E  68 12
 .LFD1980:
 	pushw 0x01                                           ; FD1980  0b 01 00
-	call sub_FD74AE                                      ; FD1983  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD1983  1d ae 74 fd
 	popw bc                                              ; FD1987  49
 	cp a, 0x00:i3                                          ; FD1988  c9 d8
 	jr z, .LFD1997                                       ; FD198A  66 0b
@@ -127681,7 +127681,7 @@ sub_FD199A:
 	cp (XIZ+0x08),0x00                                   ; FD199E  8e 08 3f 00
 	jr z, .LFD19BB                                       ; FD19A2  66 17
 	pushw 0x02                                           ; FD19A4  0b 02 00
-	call sub_FD74AE                                      ; FD19A7  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD19A7  1d ae 74 fd
 	popw bc                                              ; FD19AB  49
 	cp a, 0x00:i3                                          ; FD19AC  c9 d8
 	jr z, .LFD19BB                                       ; FD19AE  66 0b
@@ -127698,7 +127698,7 @@ sub_FD19BE:
 	cp (XIZ+0x08),0x00                                   ; FD19C2  8e 08 3f 00
 	jr z, .LFD19DC                                       ; FD19C6  66 14
 	pushw 0x03                                           ; FD19C8  0b 03 00
-	call sub_FD74AE                                      ; FD19CB  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD19CB  1d ae 74 fd
 	popw bc                                              ; FD19CF  49
 	cp a, 0x00:i3                                          ; FD19D0  c9 d8
 	jr z, .LFD19F2                                       ; FD19D2  66 1e
@@ -127724,7 +127724,7 @@ sub_FD19F5:
 	cp (XIZ+0x08),0x00                                   ; FD19F9  8e 08 3f 00
 	jr z, .LFD1A16                                       ; FD19FD  66 17
 	pushw 0x04                                           ; FD19FF  0b 04 00
-	call sub_FD74AE                                      ; FD1A02  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD1A02  1d ae 74 fd
 	popw bc                                              ; FD1A06  49
 	cp a, 0x00:i3                                          ; FD1A07  c9 d8
 	jr z, .LFD1A16                                       ; FD1A09  66 0b
@@ -128327,7 +128327,7 @@ sub_FD1F5B:
 	cp (XIZ+0x08),0x00                                   ; FD1F5F  8e 08 3f 00
 	jr z, .LFD1F7C                                       ; FD1F63  66 17
 	pushw 0x01                                           ; FD1F65  0b 01 00
-	call sub_FD74AE                                      ; FD1F68  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD1F68  1d ae 74 fd
 	popw bc                                              ; FD1F6C  49
 	cp a, 0x00:i3                                          ; FD1F6D  c9 d8
 	jr z, .LFD1F7C                                       ; FD1F6F  66 0b
@@ -128348,7 +128348,7 @@ sub_FD1F7F:
 	jr .LFD1FA3                                          ; FD1F8F  68 12
 .LFD1F91:
 	pushw 0x02                                           ; FD1F91  0b 02 00
-	call sub_FD74AE                                      ; FD1F94  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD1F94  1d ae 74 fd
 	popw bc                                              ; FD1F98  49
 	cp a, 0x00:i3                                          ; FD1F99  c9 d8
 	jr z, .LFD1FA8                                       ; FD1F9B  66 0b
@@ -128370,7 +128370,7 @@ sub_FD1FAB:
 	jr .LFD1FCF                                          ; FD1FBB  68 12
 .LFD1FBD:
 	pushw 0x03                                           ; FD1FBD  0b 03 00
-	call sub_FD74AE                                      ; FD1FC0  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD1FC0  1d ae 74 fd
 	popw bc                                              ; FD1FC4  49
 	cp a, 0x00:i3                                          ; FD1FC5  c9 d8
 	jr z, .LFD1FD4                                       ; FD1FC7  66 0b
@@ -128388,7 +128388,7 @@ sub_FD1FD7:
 	cp (XIZ+0x08),0x00                                   ; FD1FDB  8e 08 3f 00
 	jr z, .LFD1FF8                                       ; FD1FDF  66 17
 	pushw 0x04                                           ; FD1FE1  0b 04 00
-	call sub_FD74AE                                      ; FD1FE4  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD1FE4  1d ae 74 fd
 	popw bc                                              ; FD1FE8  49
 	cp a, 0x00:i3                                          ; FD1FE9  c9 d8
 	jr z, .LFD1FF8                                       ; FD1FEB  66 0b
@@ -130093,7 +130093,7 @@ sub_FD2FA2:
 	cp (XIZ+0x08),0x00                                   ; FD2FA6  8e 08 3f 00
 	jr z, .LFD2FC3                                       ; FD2FAA  66 17
 	pushw 0x01                                           ; FD2FAC  0b 01 00
-	call sub_FD74AE                                      ; FD2FAF  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD2FAF  1d ae 74 fd
 	popw bc                                              ; FD2FB3  49
 	cp a, 0x00:i3                                          ; FD2FB4  c9 d8
 	jr z, .LFD2FC3                                       ; FD2FB6  66 0b
@@ -130114,7 +130114,7 @@ sub_FD2FC6:
 	jr .LFD2FEA                                          ; FD2FD6  68 12
 .LFD2FD8:
 	pushw 0x02                                           ; FD2FD8  0b 02 00
-	call sub_FD74AE                                      ; FD2FDB  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD2FDB  1d ae 74 fd
 	popw bc                                              ; FD2FDF  49
 	cp a, 0x00:i3                                          ; FD2FE0  c9 d8
 	jr z, .LFD2FEF                                       ; FD2FE2  66 0b
@@ -130132,7 +130132,7 @@ sub_FD2FF2:
 	cp (XIZ+0x08),0x00                                   ; FD2FF6  8e 08 3f 00
 	jr z, .LFD3013                                       ; FD2FFA  66 17
 	pushw 0x03                                           ; FD2FFC  0b 03 00
-	call sub_FD74AE                                      ; FD2FFF  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD2FFF  1d ae 74 fd
 	popw bc                                              ; FD3003  49
 	cp a, 0x00:i3                                          ; FD3004  c9 d8
 	jr z, .LFD3013                                       ; FD3006  66 0b
@@ -130150,7 +130150,7 @@ sub_FD3016:
 	jr z, .LFD3037                                       ; FD301E  66 17
 	pushw 0x04                                           ; FD3020  0b 04 00
 sub_FD3023:
-	call sub_FD74AE                                      ; FD3023  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD3023  1d ae 74 fd
 	popw bc                                              ; FD3027  49
 	cp a, 0x00:i3                                          ; FD3028  c9 d8
 	jr z, .LFD3037                                       ; FD302A  66 0b
@@ -130774,7 +130774,7 @@ sub_FD35AF:
 	jr .LFD35D3                                          ; FD35BF  68 12
 .LFD35C1:
 	pushw 0x01                                           ; FD35C1  0b 01 00
-	call sub_FD74AE                                      ; FD35C4  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD35C4  1d ae 74 fd
 	popw bc                                              ; FD35C8  49
 	cp a, 0x00:i3                                          ; FD35C9  c9 d8
 	jr z, .LFD35D8                                       ; FD35CB  66 0b
@@ -130802,7 +130802,7 @@ sub_FD35DB:
 	jr .LFD360E                                          ; FD35FA  68 12
 .LFD35FC:
 	pushw 0x02                                           ; FD35FC  0b 02 00
-	call sub_FD74AE                                      ; FD35FF  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD35FF  1d ae 74 fd
 	popw bc                                              ; FD3603  49
 	cp a, 0x00:i3                                          ; FD3604  c9 d8
 	jr z, .LFD3613                                       ; FD3606  66 0b
@@ -130826,7 +130826,7 @@ sub_FD3616:
 	cp (XIZ+0x08),0x00                                   ; FD3629  8e 08 3f 00
 	jr z, .LFD3646                                       ; FD362D  66 17
 	pushw 0x03                                           ; FD362F  0b 03 00
-	call sub_FD74AE                                      ; FD3632  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD3632  1d ae 74 fd
 	popw bc                                              ; FD3636  49
 	cp a, 0x00:i3                                          ; FD3637  c9 d8
 	jr z, .LFD3646                                       ; FD3639  66 0b
@@ -130849,7 +130849,7 @@ sub_FD3649:
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FD365D  8e fe 3f 00
 	jr nz, .LFD367C                                      ; FD3661  6e 19
 	pushw 0x04                                           ; FD3663  0b 04 00
-	call sub_FD74AE                                      ; FD3666  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD3666  1d ae 74 fd
 	popw bc                                              ; FD366A  49
 	cp a, 0x00:i3                                          ; FD366B  c9 d8
 	jr z, .LFD36CB                                       ; FD366D  66 5c
@@ -131382,7 +131382,7 @@ sub_FD3B92:
 	jr .LFD3BB6                                          ; FD3BA2  68 12
 .LFD3BA4:
 	pushw 0x01                                           ; FD3BA4  0b 01 00
-	call sub_FD74AE                                      ; FD3BA7  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD3BA7  1d ae 74 fd
 	popw bc                                              ; FD3BAB  49
 	cp a, 0x00:i3                                          ; FD3BAC  c9 d8
 	jr z, .LFD3BBB                                       ; FD3BAE  66 0b
@@ -131404,7 +131404,7 @@ sub_FD3BBE:
 	jr .LFD3BE2                                          ; FD3BCE  68 12
 .LFD3BD0:
 	pushw 0x02                                           ; FD3BD0  0b 02 00
-	call sub_FD74AE                                      ; FD3BD3  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD3BD3  1d ae 74 fd
 	popw bc                                              ; FD3BD7  49
 	cp a, 0x00:i3                                          ; FD3BD8  c9 d8
 	jr z, .LFD3BE7                                       ; FD3BDA  66 0b
@@ -131422,7 +131422,7 @@ sub_FD3BEA:
 	cp (XIZ+0x08),0x00                                   ; FD3BEE  8e 08 3f 00
 	jr z, .LFD3C0B                                       ; FD3BF2  66 17
 	pushw 0x03                                           ; FD3BF4  0b 03 00
-	call sub_FD74AE                                      ; FD3BF7  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD3BF7  1d ae 74 fd
 	popw bc                                              ; FD3BFB  49
 	cp a, 0x00:i3                                          ; FD3BFC  c9 d8
 	jr Z,.LFD3C0B                                        ; FD3BFE  66 0b
@@ -131439,7 +131439,7 @@ sub_FD3C0E:
 	cp (XIZ+0x08),0x00                                   ; FD3C12  8e 08 3f 00
 	jr z, .LFD3C2F                                       ; FD3C16  66 17
 	pushw 0x04                                           ; FD3C18  0b 04 00
-	call sub_FD74AE                                      ; FD3C1B  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD3C1B  1d ae 74 fd
 	popw bc                                              ; FD3C1F  49
 	cp a, 0x00:i3                                          ; FD3C20  c9 d8
 	jr z, .LFD3C2F                                       ; FD3C22  66 0b
@@ -132815,7 +132815,7 @@ sub_FD4730:
 	jr .LFD4754                                          ; FD4740  68 12
 .LFD4742:
 	pushw 0x01                                           ; FD4742  0b 01 00
-	call sub_FD74AE                                      ; FD4745  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD4745  1d ae 74 fd
 	popw bc                                              ; FD4749  49
 	cp a, 0x00:i3                                          ; FD474A  c9 d8
 	jr z, .LFD4759                                       ; FD474C  66 0b
@@ -132833,7 +132833,7 @@ sub_FD475C:
 	cp (XIZ+0x08),0x00                                   ; FD4760  8e 08 3f 00
 	jr z, .LFD477D                                       ; FD4764  66 17
 	pushw 0x02                                           ; FD4766  0b 02 00
-	call sub_FD74AE                                      ; FD4769  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD4769  1d ae 74 fd
 	popw bc                                              ; FD476D  49
 	cp a, 0x00:i3                                          ; FD476E  c9 d8
 	jr z, .LFD477D                                       ; FD4770  66 0b
@@ -132854,7 +132854,7 @@ sub_FD4780:
 	jr .LFD47A4                                          ; FD4790  68 12
 .LFD4792:
 	pushw 0x03                                           ; FD4792  0b 03 00
-	call sub_FD74AE                                      ; FD4795  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD4795  1d ae 74 fd
 	popw bc                                              ; FD4799  49
 	cp a, 0x00:i3                                          ; FD479A  c9 d8
 	jr z, .LFD47A9                                       ; FD479C  66 0b
@@ -132872,7 +132872,7 @@ sub_FD47AC:
 	cp (XIZ+0x08),0x00                                   ; FD47B0  8e 08 3f 00
 	jr z, .LFD47CD                                       ; FD47B4  66 17
 	pushw 0x04                                           ; FD47B6  0b 04 00
-	call sub_FD74AE                                      ; FD47B9  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD47B9  1d ae 74 fd
 	popw bc                                              ; FD47BD  49
 	cp a, 0x00:i3                                          ; FD47BE  c9 d8
 	jr z, .LFD47CD                                       ; FD47C0  66 0b
@@ -133192,7 +133192,7 @@ sub_FD49F6:
 	jr .LFD4A1A                                          ; FD4A06  68 12
 .LFD4A08:
 	pushw 0x01                                           ; FD4A08  0b 01 00
-	call sub_FD74AE                                      ; FD4A0B  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD4A0B  1d ae 74 fd
 	popw bc                                              ; FD4A0F  49
 	cp a, 0x00:i3                                          ; FD4A10  c9 d8
 	jr z, .LFD4A1F                                       ; FD4A12  66 0b
@@ -133210,7 +133210,7 @@ sub_FD4A22:
 	cp (XIZ+0x08),0x00                                   ; FD4A26  8e 08 3f 00
 	jr z, .LFD4A43                                       ; FD4A2A  66 17
 	pushw 0x02                                           ; FD4A2C  0b 02 00
-	call sub_FD74AE                                      ; FD4A2F  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD4A2F  1d ae 74 fd
 	popw bc                                              ; FD4A33  49
 	cp a, 0x00:i3                                          ; FD4A34  c9 d8
 	jr z, .LFD4A43                                       ; FD4A36  66 0b
@@ -133231,7 +133231,7 @@ sub_FD4A46:
 	jr .LFD4A6A                                          ; FD4A56  68 12
 .LFD4A58:
 	pushw 0x03                                           ; FD4A58  0b 03 00
-	call sub_FD74AE                                      ; FD4A5B  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD4A5B  1d ae 74 fd
 	popw bc                                              ; FD4A5F  49
 	cp a, 0x00:i3                                          ; FD4A60  c9 d8
 	jr z, .LFD4A6F                                       ; FD4A62  66 0b
@@ -133249,7 +133249,7 @@ sub_FD4A72:
 	cp (XIZ+0x08),0x00                                   ; FD4A76  8e 08 3f 00
 	jr z, .LFD4A93                                       ; FD4A7A  66 17
 	pushw 0x04                                           ; FD4A7C  0b 04 00
-	call sub_FD74AE                                      ; FD4A7F  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD4A7F  1d ae 74 fd
 	popw bc                                              ; FD4A83  49
 	cp a, 0x00:i3                                          ; FD4A84  c9 d8
 	jr z, .LFD4A93                                       ; FD4A86  66 0b
@@ -134029,7 +134029,7 @@ sub_FD503B:
 	jr .LFD505F                                          ; FD504B  68 12
 .LFD504D:
 	pushw 0x01                                           ; FD504D  0b 01 00
-	call sub_FD74AE                                      ; FD5050  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD5050  1d ae 74 fd
 	popw bc                                              ; FD5054  49
 	cp a, 0x00:i3                                          ; FD5055  c9 d8
 	jr z, .LFD5064                                       ; FD5057  66 0b
@@ -134051,7 +134051,7 @@ sub_FD5067:
 	jr .LFD508B                                          ; FD5077  68 12
 .LFD5079:
 	pushw 0x02                                           ; FD5079  0b 02 00
-	call sub_FD74AE                                      ; FD507C  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD507C  1d ae 74 fd
 	popw bc                                              ; FD5080  49
 	cp a, 0x00:i3                                          ; FD5081  c9 d8
 	jr z, .LFD5090                                       ; FD5083  66 0b
@@ -134074,7 +134074,7 @@ sub_FD5093:
 	jr .LFD50BD                                          ; FD50A4  68 17
 .LFD50A6:
 	pushw 0x03                                           ; FD50A6  0b 03 00
-	call sub_FD74AE                                      ; FD50A9  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD50A9  1d ae 74 fd
 	popw bc                                              ; FD50AD  49
 	cp a, 0x00:i3                                          ; FD50AE  c9 d8
 	jr z, .LFD50BD                                       ; FD50B0  66 0b
@@ -134130,7 +134130,7 @@ sub_FD5114:
 	jr .LFD513E                                          ; FD5125  68 17
 .LFD5127:
 	pushw 0x04                                           ; FD5127  0b 04 00
-	call sub_FD74AE                                      ; FD512A  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD512A  1d ae 74 fd
 	popw bc                                              ; FD512E  49
 	cp a, 0x00:i3                                          ; FD512F  c9 d8
 	jr z, .LFD513E                                       ; FD5131  66 0b
@@ -134603,7 +134603,7 @@ sub_FD548D:
 	jr .LFD54B1                                          ; FD549D  68 12
 .LFD549F:
 	pushw 0x01                                           ; FD549F  0b 01 00
-	call sub_FD74AE                                      ; FD54A2  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD54A2  1d ae 74 fd
 	popw bc                                              ; FD54A6  49
 	cp a, 0x00:i3                                          ; FD54A7  c9 d8
 	jr z, .LFD54B6                                       ; FD54A9  66 0b
@@ -134625,7 +134625,7 @@ sub_FD54B9:
 	jr .LFD54DD                                          ; FD54C9  68 12
 .LFD54CB:
 	pushw 0x02                                           ; FD54CB  0b 02 00
-	call sub_FD74AE                                      ; FD54CE  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD54CE  1d ae 74 fd
 	popw bc                                              ; FD54D2  49
 	cp a, 0x00:i3                                          ; FD54D3  c9 d8
 	jr z, .LFD54E2                                       ; FD54D5  66 0b
@@ -134648,7 +134648,7 @@ sub_FD54E5:
 	jr .LFD550F                                          ; FD54F6  68 17
 .LFD54F8:
 	pushw 0x03                                           ; FD54F8  0b 03 00
-	call sub_FD74AE                                      ; FD54FB  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD54FB  1d ae 74 fd
 	popw bc                                              ; FD54FF  49
 	cp a, 0x00:i3                                          ; FD5500  c9 d8
 	jr z, .LFD550F                                       ; FD5502  66 0b
@@ -134670,7 +134670,7 @@ sub_FD5512:
 	jr .LFD553C                                          ; FD5523  68 17
 .LFD5525:
 	pushw 0x04                                           ; FD5525  0b 04 00
-	call sub_FD74AE                                      ; FD5528  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD5528  1d ae 74 fd
 	popw bc                                              ; FD552C  49
 	cp a, 0x00:i3                                          ; FD552D  c9 d8
 	jr z, .LFD553C                                       ; FD552F  66 0b
@@ -135551,7 +135551,7 @@ sub_FD5B81:
 	jr .LFD5BA5                                          ; FD5B91  68 12
 .LFD5B93:
 	pushw 0x01                                           ; FD5B93  0b 01 00
-	call sub_FD74AE                                      ; FD5B96  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD5B96  1d ae 74 fd
 	popw bc                                              ; FD5B9A  49
 	cp a, 0x00:i3                                          ; FD5B9B  c9 d8
 	jr z, .LFD5BAA                                       ; FD5B9D  66 0b
@@ -135573,7 +135573,7 @@ sub_FD5BAD:
 	jr .LFD5BD1                                          ; FD5BBD  68 12
 .LFD5BBF:
 	pushw 0x02                                           ; FD5BBF  0b 02 00
-	call sub_FD74AE                                      ; FD5BC2  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD5BC2  1d ae 74 fd
 	popw bc                                              ; FD5BC6  49
 	cp a, 0x00:i3                                          ; FD5BC7  c9 d8
 	jr z, .LFD5BD6                                       ; FD5BC9  66 0b
@@ -135596,7 +135596,7 @@ sub_FD5BD9:
 	jr .LFD5C03                                          ; FD5BEA  68 17
 .LFD5BEC:
 	pushw 0x03                                           ; FD5BEC  0b 03 00
-	call sub_FD74AE                                      ; FD5BEF  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD5BEF  1d ae 74 fd
 	popw bc                                              ; FD5BF3  49
 	cp a, 0x00:i3                                          ; FD5BF4  c9 d8
 	jr z, .LFD5C03                                       ; FD5BF6  66 0b
@@ -135618,7 +135618,7 @@ sub_FD5C06:
 	jr .LFD5C30                                          ; FD5C17  68 17
 .LFD5C19:
 	pushw 0x04                                           ; FD5C19  0b 04 00
-	call sub_FD74AE                                      ; FD5C1C  1d ae 74 fd
+	call Var27A3_ChangeSlot                                      ; FD5C1C  1d ae 74 fd
 	popw bc                                              ; FD5C20  49
 	cp a, 0x00:i3                                          ; FD5C21  c9 d8
 	jr z, .LFD5C30                                       ; FD5C23  66 0b
@@ -137456,7 +137456,8 @@ Var27A2_Get:
 	ld (XBC),A                                           ; FD6B29  b1 41
 	unlk XIZ                                             ; FD6B2B  ee 0d
 	ret                                                  ; FD6B2D  0e
-sub_FD6B2E:
+; Var27A3_SetSlot(n): (0x27A3) = n when 1 <= n <= 4, else 1.
+Var27A3_SetSlot:
 	link XIZ,0x0000                                      ; FD6B2E  ee 0c 00 00
 	pushw hl                                             ; FD6B32  2b
 	ld H,(XIZ+0x08)                                      ; FD6B33  8e 08 26
@@ -138723,7 +138724,9 @@ ToneEdit_CommitField:
 	popw hl                                              ; FD74AA  4b
 	unlk XIZ                                             ; FD74AB  ee 0d
 	ret                                                  ; FD74AD  0e
-sub_FD74AE:
+; Var27A3_ChangeSlot(n): 0 when n is already Var27A3_GetValidSlot's answer or is not
+;   Var27A4_SlotEnabled; else Var27A3_SetSlot(n) and 1.
+Var27A3_ChangeSlot:
 	link XIZ,0xfffe                                      ; FD74AE  ee 0c fe ff
 	pushw hl                                             ; FD74B2  2b
 	lda xbc, (xiz-2)                                     ; FD74B3  be fe 31
@@ -138745,7 +138748,7 @@ sub_FD74AE:
 	jr .LFD74DC                                          ; FD74D3  68 07
 .LFD74D5:
 	pushw hl                                             ; FD74D5  2b
-	calr sub_FD6B2E                                          ; FD74D6  1e 55 f6
+	calr Var27A3_SetSlot                                          ; FD74D6  1e 55 f6
 	popw bc                                              ; FD74D9  49
 	ld a, 0x01:opc                                          ; FD74DA  21 01
 .LFD74DC:
@@ -139078,7 +139081,8 @@ Var27DA_Set:
 Var27DB_Clear:
 	ld (0x27db:16), 0x00                                 ; FD7713  f1 db 27 00 00
 	ret                                                  ; FD7718  0e
-sub_FD7719:
+; Var27DB_Increment(): ++(0x27DB), and returns the new value in A.
+Var27DB_Increment:
 	push XIX                                             ; FD7719  3c
 	lda xix, (0x27db:16)                                ; FD771A  f1 db 27 34
 	incm8 0x01, (xix)                                    ; FD771E  84 61
@@ -139086,6 +139090,8 @@ sub_FD7719:
 	ld A,C                                               ; FD7722  cb 89
 	pop XIX                                              ; FD7724  5c
 	ret                                                  ; FD7725  0e
+; Var27DB_Set(value): (0x27DB) = value.  No reference found (no call site, no pointer in either ROM).
+Var27DB_Set:
 	link XIZ,0x0000                                      ; FD7726  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FD772A  8e 08 23
 	ld (0x27db:16), c                                   ; FD772D  f1 db 27 43
@@ -139879,7 +139885,7 @@ sub_FD7CB5:
 	jr ule, .LFD7CE7                                     ; FD7CFD  63 e8
 	pushw 0x01                                           ; FD7CFF  0b 01 00
 .LFD7D02:
-	calr sub_FD6B2E                                          ; FD7D02  1e 29 ee
+	calr Var27A3_SetSlot                                          ; FD7D02  1e 29 ee
 	popw bc                                              ; FD7D05  49
 .LFD7D06:
 	pushw 0x00                                           ; FD7D06  0b 00 00
@@ -142908,7 +142914,7 @@ sub_FD9863:
 	extz BC                                              ; FD9892  d9 12
 	ld DE,BC                                             ; FD9894  d9 8a
 	pushw bc                                             ; FD9896  29
-	calr sub_FD6B2E                                          ; FD9897  1e 94 d2
+	calr Var27A3_SetSlot                                          ; FD9897  1e 94 d2
 	pushw de                                             ; FD989A  2a
 	pushw 0x00                                           ; FD989B  0b 00 00
 	calr Arr27A6_Set                                          ; FD989E  1e c4 d3
@@ -144178,7 +144184,7 @@ sub_FDA252:
 	pop XIY                                              ; FDA274  5d
 	m_cp_mi8 MBD+r6, 0xfc, 0x28                          ; FDA275  8e fc 3f 28
 	jr nz, .LFDA27E                                      ; FDA279  6e 03
-	calr sub_FD7719                                      ; FDA27B  1e 9b d4
+	calr Var27DB_Increment                                      ; FDA27B  1e 9b d4
 .LFDA27E:
 	lda xbc, (xiz-6)                                     ; FDA27E  be fa 31
 	push XBC                                             ; FDA281  39
@@ -144217,7 +144223,7 @@ sub_FDA282:
 	extz WA                                              ; FDA2C9  d8 12
 	pushw wa                                             ; FDA2CB  28
 	calr sub_FDA1D5                                      ; FDA2CC  1e 06 ff
-	calr sub_FD7719                                      ; FDA2CF  1e 47 d4
+	calr Var27DB_Increment                                      ; FDA2CF  1e 47 d4
 	inc 8,XSP                                            ; FDA2D2  ef 60
 	inc 6,XSP                                            ; FDA2D4  ef 66
 	cp A,0x7f                                            ; FDA2D6  c9 cf 7f
@@ -145944,7 +145950,7 @@ sub_FDAE1F:
 	pushw 0x05                                           ; FDAEAE  0b 05 00
 	call Var27DA_Set                                      ; FDAEB1  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDAEB5  1d 13 77 fd
-	call sub_FD7719                                      ; FDAEB9  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDAEB9  1d 19 77 fd
 	jr .LFDAE72                                          ; FDAEBD  68 b3
 .LFDAEBF:
 	lda xbc, (xiz-4)                                     ; FDAEBF  be fc 31
@@ -145959,7 +145965,7 @@ sub_FDAE1F:
 	extz BC                                              ; FDAED4  d9 12
 	pushw bc                                             ; FDAED6  29
 	call Arr2800_Set1                                      ; FDAED7  1d 8c a4 fd
-	call sub_FD7719                                      ; FDAEDB  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDAEDB  1d 19 77 fd
 	inc 8,XSP                                            ; FDAEDF  ef 60
 	inc 4,XSP                                            ; FDAEE1  ef 64
 	cp a, 0x04:i3                                          ; FDAEE3  c9 dc
@@ -146154,8 +146160,8 @@ sub_FDAF07:
 	call sub_FD63D7                                      ; FDB0C1  1d d7 63 fd
 	pushw 0x04                                           ; FDB0C5  0b 04 00
 	call Var27DA_Set                                      ; FDB0C8  1d 05 77 fd
-	call sub_FD7719                                      ; FDB0CC  1d 19 77 fd
-	call sub_FD7719                                      ; FDB0D0  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB0CC  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB0D0  1d 19 77 fd
 	inc 8,XSP                                            ; FDB0D4  ef 60
 	inc 2,XSP                                            ; FDB0D6  ef 62
 	jrl .LFDB229                                         ; FDB0D8  78 4e 01
@@ -146174,7 +146180,7 @@ sub_FDAF07:
 	extz BC                                              ; FDB0F7  d9 12
 	pushw bc                                             ; FDB0F9  29
 	call Arr27A6_Set                                      ; FDB0FA  1d 65 6c fd
-	call sub_FD7719                                      ; FDB0FE  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB0FE  1d 19 77 fd
 	inc 8,XSP                                            ; FDB102  ef 60
 	inc 4,XSP                                            ; FDB104  ef 64
 	cp A,0x0b                                            ; FDB106  c9 cf 0b
@@ -146343,7 +146349,7 @@ sub_FDB22F:
 	call sub_FD61CF                                      ; FDB2A0  1d cf 61 fd
 	pushw 0x01                                           ; FDB2A4  0b 01 00
 	call Var27DA_Set                                      ; FDB2A7  1d 05 77 fd
-	call sub_FD7719                                      ; FDB2AB  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB2AB  1d 19 77 fd
 	lda xbc, (xiz-4)                                     ; FDB2AF  be fc 31
 	push XBC                                             ; FDB2B2  39
 	call Var27A3_GetValidSlot                                      ; FDB2B3  1d 4d 6b fd
@@ -146367,7 +146373,7 @@ sub_FDB22F:
 	extz BC                                              ; FDB2E2  d9 12
 	pushw bc                                             ; FDB2E4  29
 	call Arr27A6_Set                                      ; FDB2E5  1d 65 6c fd
-	call sub_FD7719                                      ; FDB2E9  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB2E9  1d 19 77 fd
 	inc 8,XSP                                            ; FDB2ED  ef 60
 	inc 4,XSP                                            ; FDB2EF  ef 64
 	cp A,0x0e                                            ; FDB2F1  c9 cf 0e
@@ -146471,7 +146477,7 @@ sub_FDB38C:
 	jr nz, .LFDB3BC                                      ; FDB3D9  6e e1
 	pushw 0x01                                           ; FDB3DB  0b 01 00
 	call Var27DA_Set                                      ; FDB3DE  1d 05 77 fd
-	call sub_FD7719                                      ; FDB3E2  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB3E2  1d 19 77 fd
 	pushw 0x01                                           ; FDB3E6  0b 01 00
 	pushw 0x00                                           ; FDB3E9  0b 00 00
 	call Arr27A6_Set                                      ; FDB3EC  1d 65 6c fd
@@ -146491,7 +146497,7 @@ sub_FDB38C:
 	extz BC                                              ; FDB40D  d9 12
 	pushw bc                                             ; FDB40F  29
 	call Arr27A6_Set                                      ; FDB410  1d 65 6c fd
-	call sub_FD7719                                      ; FDB414  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB414  1d 19 77 fd
 	inc 8,XSP                                            ; FDB418  ef 60
 	inc 4,XSP                                            ; FDB41A  ef 64
 	cp A,0x0a                                            ; FDB41C  c9 cf 0a
@@ -146567,7 +146573,7 @@ sub_FDB4B0:
 	extz BC                                              ; FDB4C2  d9 12
 	pushw bc                                             ; FDB4C4  29
 	call Arr27A6_Set                                      ; FDB4C5  1d 65 6c fd
-	call sub_FD7719                                      ; FDB4C9  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB4C9  1d 19 77 fd
 	inc 8,XSP                                            ; FDB4CD  ef 60
 	inc 4,XSP                                            ; FDB4CF  ef 64
 	cp a, 0x05:i3                                          ; FDB4D1  c9 dd
@@ -146699,7 +146705,7 @@ sub_FDB53C:
 	jr ule, .LFDB5D1                                     ; FDB5EE  63 e1
 	pushw 0x01                                           ; FDB5F0  0b 01 00
 	call Var27DA_Set                                      ; FDB5F3  1d 05 77 fd
-	call sub_FD7719                                      ; FDB5F7  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB5F7  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDB5FB  9e fc 21
 	extz BC                                              ; FDB5FE  d9 12
 	pushw bc                                             ; FDB600  29
@@ -146721,7 +146727,7 @@ sub_FDB53C:
 	extz BC                                              ; FDB626  d9 12
 	pushw bc                                             ; FDB628  29
 	call Arr27A6_Set                                      ; FDB629  1d 65 6c fd
-	call sub_FD7719                                      ; FDB62D  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB62D  1d 19 77 fd
 	inc 8,XSP                                            ; FDB631  ef 60
 	inc 4,XSP                                            ; FDB633  ef 64
 	cp A,0x08                                            ; FDB635  c9 cf 08
@@ -146794,7 +146800,7 @@ sub_FDB693:
 .LFDB6CD:
 	pushw 0x01                                           ; FDB6CD  0b 01 00
 	call Var27DA_Set                                      ; FDB6D0  1d 05 77 fd
-	call sub_FD7719                                      ; FDB6D4  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB6D4  1d 19 77 fd
 	lda xbc, (xiz-6)                                     ; FDB6D8  be fa 31
 	push XBC                                             ; FDB6DB  39
 	call Var27A3_GetValidSlot                                      ; FDB6DC  1d 4d 6b fd
@@ -146823,7 +146829,7 @@ sub_FDB693:
 	inc 4,XSP                                            ; FDB712  ef 64
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDB714  8e fc 3f 00
 	jr nz, .LFDB788                                      ; FDB718  6e 6e
-	call sub_FD7719                                      ; FDB71A  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB71A  1d 19 77 fd
 	cp A,0x0c                                            ; FDB71E  c9 cf 0c
 	jrl ule, .LFDB7EF                                    ; FDB721  73 cb 00
 	lda xbc, (xiz-10)                                    ; FDB724  be f6 31
@@ -146866,7 +146872,7 @@ sub_FDB693:
 	pushw 0x04                                           ; FDB783  0b 04 00
 	jr .LFDB7C8                                          ; FDB786  68 40
 .LFDB788:
-	call sub_FD7719                                      ; FDB788  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB788  1d 19 77 fd
 	cp A,0x09                                            ; FDB78C  c9 cf 09
 	jr ule, .LFDB7EF                                     ; FDB78F  63 5e
 	lda xbc, (xiz-10)                                    ; FDB791  be f6 31
@@ -147070,7 +147076,7 @@ sub_FDB8D9:
 	extz BC                                              ; FDB94E  d9 12
 	pushw bc                                             ; FDB950  29
 	call Arr27A6_Set                                      ; FDB951  1d 65 6c fd
-	call sub_FD7719                                      ; FDB955  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDB955  1d 19 77 fd
 	inc 8,XSP                                            ; FDB959  ef 60
 	inc 4,XSP                                            ; FDB95B  ef 64
 	cp a, 0x03:i3                                          ; FDB95D  c9 db
@@ -147146,12 +147152,12 @@ sub_FDB9AB:
 	inc 4,XSP                                            ; FDBA0D  ef 64
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDBA0F  8e fc 3f 00
 	jr nz, .LFDBA1F                                      ; FDBA13  6e 0a
-	call sub_FD7719                                      ; FDBA15  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDBA15  1d 19 77 fd
 	cp a, 0x06:i3                                          ; FDBA19  c9 de
 	jr ugt, .LFDBA28                                     ; FDBA1B  6b 0b
 	jr .LFDBA4E                                          ; FDBA1D  68 2f
 .LFDBA1F:
-	call sub_FD7719                                      ; FDBA1F  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDBA1F  1d 19 77 fd
 	cp A,0x08                                            ; FDBA23  c9 cf 08
 	jr ule, .LFDBA4E                                     ; FDBA26  63 26
 .LFDBA28:
@@ -147296,7 +147302,7 @@ sub_FDBAE7:
 	extz BC                                              ; FDBB5C  d9 12
 	pushw bc                                             ; FDBB5E  29
 	call Arr27A6_Set                                      ; FDBB5F  1d 65 6c fd
-	call sub_FD7719                                      ; FDBB63  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDBB63  1d 19 77 fd
 	inc 8,XSP                                            ; FDBB67  ef 60
 	inc 4,XSP                                            ; FDBB69  ef 64
 	cp a, 0x07:i3                                          ; FDBB6B  c9 df
@@ -147450,7 +147456,7 @@ sub_FDBBD6:
 	add XSP,0x00000020                                   ; FDBD01  ef c8 20 00 00 00
 	pushw 0x01                                           ; FDBD07  0b 01 00
 	call Var27DA_Set                                      ; FDBD0A  1d 05 77 fd
-	call sub_FD7719                                      ; FDBD0E  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDBD0E  1d 19 77 fd
 	popw bc                                              ; FDBD12  49
 	jrl .LFDBE8A                                         ; FDBD13  78 74 01
 .LFDBD16:
@@ -147534,7 +147540,7 @@ sub_FDBBD6:
 	call sub_FD724B                                      ; FDBDB4  1d 4b 72 fd
 	inc 6,XSP                                            ; FDBDB8  ef 66
 .LFDBDBA:
-	call sub_FD7719                                      ; FDBDBA  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDBDBA  1d 19 77 fd
 	cp a, 0x04:i3                                          ; FDBDBE  c9 dc
 	jrl ule, .LFDBE8A                                    ; FDBDC0  73 c7 00
 	pushw 0x01                                           ; FDBDC3  0b 01 00
@@ -147794,7 +147800,7 @@ sub_FDBF5E:
 	call Arr27A6_Set                                      ; FDC025  1d 65 6c fd
 	pushw 0x01                                           ; FDC029  0b 01 00
 	call Var27DA_Set                                      ; FDC02C  1d 05 77 fd
-	call sub_FD7719                                      ; FDC030  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC030  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDC034  9e fc 21
 	extz BC                                              ; FDC037  d9 12
 	pushw bc                                             ; FDC039  29
@@ -147816,7 +147822,7 @@ sub_FDBF5E:
 	extz BC                                              ; FDC05D  d9 12
 	pushw bc                                             ; FDC05F  29
 	call Arr27A6_Set                                      ; FDC060  1d 65 6c fd
-	call sub_FD7719                                      ; FDC064  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC064  1d 19 77 fd
 	inc 8,XSP                                            ; FDC068  ef 60
 	inc 4,XSP                                            ; FDC06A  ef 64
 	cp A,0x0b                                            ; FDC06C  c9 cf 0b
@@ -147916,7 +147922,7 @@ sub_FDC0FD:
 	extz BC                                              ; FDC148  d9 12
 	pushw bc                                             ; FDC14A  29
 	call Arr27A6_Set                                      ; FDC14B  1d 65 6c fd
-	call sub_FD7719                                      ; FDC14F  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC14F  1d 19 77 fd
 	inc 8,XSP                                            ; FDC153  ef 60
 	inc 4,XSP                                            ; FDC155  ef 64
 	cp a, 0x05:i3                                          ; FDC157  c9 dd
@@ -148175,7 +148181,7 @@ sub_FDC333:
 	extz BC                                              ; FDC3A8  d9 12
 	pushw bc                                             ; FDC3AA  29
 	call Arr27A6_Set                                      ; FDC3AB  1d 65 6c fd
-	call sub_FD7719                                      ; FDC3AF  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC3AF  1d 19 77 fd
 	inc 8,XSP                                            ; FDC3B3  ef 60
 	inc 4,XSP                                            ; FDC3B5  ef 64
 	cp a, 0x03:i3                                          ; FDC3B7  c9 db
@@ -148247,7 +148253,7 @@ sub_FDC438:
 	jr nz, .LFDC435                                      ; FDC452  6e e1
 	pushw 0x01                                           ; FDC454  0b 01 00
 	call Var27DA_Set                                      ; FDC457  1d 05 77 fd
-	call sub_FD7719                                      ; FDC45B  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC45B  1d 19 77 fd
 	pushw 0x01                                           ; FDC45F  0b 01 00
 	pushw 0x00                                           ; FDC462  0b 00 00
 	call Arr27A6_Set                                      ; FDC465  1d 65 6c fd
@@ -148267,7 +148273,7 @@ sub_FDC438:
 	extz BC                                              ; FDC486  d9 12
 	pushw bc                                             ; FDC488  29
 	call Arr27A6_Set                                      ; FDC489  1d 65 6c fd
-	call sub_FD7719                                      ; FDC48D  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC48D  1d 19 77 fd
 	inc 8,XSP                                            ; FDC491  ef 60
 	inc 4,XSP                                            ; FDC493  ef 64
 	cp A,0x0a                                            ; FDC495  c9 cf 0a
@@ -148342,7 +148348,7 @@ sub_FDC4C6:
 	extz BC                                              ; FDC53B  d9 12
 	pushw bc                                             ; FDC53D  29
 	call Arr27A6_Set                                      ; FDC53E  1d 65 6c fd
-	call sub_FD7719                                      ; FDC542  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC542  1d 19 77 fd
 	inc 8,XSP                                            ; FDC546  ef 60
 	inc 4,XSP                                            ; FDC548  ef 64
 	cp a, 0x05:i3                                          ; FDC54A  c9 dd
@@ -148482,7 +148488,7 @@ sub_FDC62E:
 .LFDC6AB:
 	pushw 0x01                                           ; FDC6AB  0b 01 00
 	call Var27DA_Set                                      ; FDC6AE  1d 05 77 fd
-	call sub_FD7719                                      ; FDC6B2  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC6B2  1d 19 77 fd
 	lda xbc, (xiz-6)                                     ; FDC6B6  be fa 31
 	push XBC                                             ; FDC6B9  39
 	call Var27A3_GetValidSlot                                      ; FDC6BA  1d 4d 6b fd
@@ -148492,7 +148498,7 @@ sub_FDC62E:
 	pushw 0x00                                           ; FDC6C4  0b 00 00
 	call Arr27A6_Set                                      ; FDC6C7  1d 65 6c fd
 sub_FDC6CB:
-	call sub_FD7719                                      ; FDC6CB  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC6CB  1d 19 77 fd
 	inc 8,XSP                                            ; FDC6CF  ef 60
 	inc 2,XSP                                            ; FDC6D1  ef 62
 	jrl .LFDC846                                         ; FDC6D3  78 70 01
@@ -148515,17 +148521,17 @@ sub_FDC6CB:
 	inc 4,XSP                                            ; FDC6FA  ef 64
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FDC6FC  8e fc 3f 00
 	jr nz, .LFDC70E                                      ; FDC700  6e 0c
-	call sub_FD7719                                      ; FDC702  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC702  1d 19 77 fd
 	cp A,0x0d                                            ; FDC706  c9 cf 0d
 	jr ugt, .LFDC717                                     ; FDC709  6b 0c
 	jrl .LFDC846                                         ; FDC70B  78 38 01
 .LFDC70E:
-	call sub_FD7719                                      ; FDC70E  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC70E  1d 19 77 fd
 	cp a, 0x07:i3                                          ; FDC712  c9 df
 	jrl ule, .LFDC846                                    ; FDC714  73 2f 01
 .LFDC717:
 	call Var27DB_Clear                                      ; FDC717  1d 13 77 fd
-	call sub_FD7719                                      ; FDC71B  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC71B  1d 19 77 fd
 	lda xbc, (xiz-8)                                     ; FDC71F  be f8 31
 	push XBC                                             ; FDC722  39
 	call Var27DB_Get                                      ; FDC723  1d 34 77 fd
@@ -148553,7 +148559,7 @@ sub_FDC6CB:
 	jr nz, .LFDC75F                                      ; FDC75B  6e 02
 	ld h, 0x04:opc                                          ; FDC75D  26 04
 .LFDC75F:
-	call sub_FD7719                                      ; FDC75F  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC75F  1d 19 77 fd
 	cp A,H                                               ; FDC763  ce f1
 	jr ugt, .LFDC77F                                     ; FDC765  6b 18
 	lda xbc, (xiz-8)                                     ; FDC767  be f8 31
@@ -148709,7 +148715,7 @@ sub_FDC87E:
 	jr ule, .LFDC8AC                                     ; FDC8C8  63 e2
 	pushw 0x01                                           ; FDC8CA  0b 01 00
 	call Var27DA_Set                                      ; FDC8CD  1d 05 77 fd
-	call sub_FD7719                                      ; FDC8D1  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC8D1  1d 19 77 fd
 	lda xbc, (xiz-4)                                     ; FDC8D5  be fc 31
 	push XBC                                             ; FDC8D8  39
 	call Var27A3_GetValidSlot                                      ; FDC8D9  1d 4d 6b fd
@@ -148733,7 +148739,7 @@ sub_FDC87E:
 	extz BC                                              ; FDC905  d9 12
 	pushw bc                                             ; FDC907  29
 	call Arr27A6_Set                                      ; FDC908  1d 65 6c fd
-	call sub_FD7719                                      ; FDC90C  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC90C  1d 19 77 fd
 	inc 8,XSP                                            ; FDC910  ef 60
 	inc 4,XSP                                            ; FDC912  ef 64
 	cp A,0x09                                            ; FDC914  c9 cf 09
@@ -148827,7 +148833,7 @@ sub_FDC9C4:
 	jr ule, .LFDC9B2                                     ; FDC9DE  63 d2
 	pushw 0x01                                           ; FDC9E0  0b 01 00
 	call Var27DA_Set                                      ; FDC9E3  1d 05 77 fd
-	call sub_FD7719                                      ; FDC9E7  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDC9E7  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDC9EB  9e fc 21
 	extz BC                                              ; FDC9EE  d9 12
 	pushw bc                                             ; FDC9F0  29
@@ -148848,7 +148854,7 @@ sub_FDC9C4:
 	extz BC                                              ; FDCA14  d9 12
 	pushw bc                                             ; FDCA16  29
 	call Arr27A6_Set                                      ; FDCA17  1d 65 6c fd
-	call sub_FD7719                                      ; FDCA1B  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDCA1B  1d 19 77 fd
 	inc 8,XSP                                            ; FDCA1F  ef 60
 	inc 4,XSP                                            ; FDCA21  ef 64
 	cp A,0x14                                            ; FDCA23  c9 cf 14
@@ -148947,7 +148953,7 @@ sub_FDCA77:
 	jr ule, .LFDCACE                                     ; FDCAFA  63 d2
 	pushw 0x01                                           ; FDCAFC  0b 01 00
 	call Var27DA_Set                                      ; FDCAFF  1d 05 77 fd
-	call sub_FD7719                                      ; FDCB03  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDCB03  1d 19 77 fd
 	ld bc, (xiz-4)                                       ; FDCB07  9e fc 21
 	extz BC                                              ; FDCB0A  d9 12
 	pushw bc                                             ; FDCB0C  29
@@ -148968,7 +148974,7 @@ sub_FDCA77:
 	extz BC                                              ; FDCB30  d9 12
 	pushw bc                                             ; FDCB32  29
 	call Arr27A6_Set                                      ; FDCB33  1d 65 6c fd
-	call sub_FD7719                                      ; FDCB37  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDCB37  1d 19 77 fd
 	inc 8,XSP                                            ; FDCB3B  ef 60
 	inc 4,XSP                                            ; FDCB3D  ef 64
 	cp A,0x14                                            ; FDCB3F  c9 cf 14
@@ -149067,7 +149073,7 @@ sub_FDCB93:
 .LFDCC18:
 	pushw 0x01                                           ; FDCC18  0b 01 00
 	call Var27DA_Set                                      ; FDCC1B  1d 05 77 fd
-	call sub_FD7719                                      ; FDCC1F  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDCC1F  1d 19 77 fd
 	pushw 0x01                                           ; FDCC23  0b 01 00
 	pushw 0x00                                           ; FDCC26  0b 00 00
 	call Arr27A6_Set                                      ; FDCC29  1d 65 6c fd
@@ -149088,13 +149094,13 @@ sub_FDCB93:
 	extz BC                                              ; FDCC4E  d9 12
 	pushw bc                                             ; FDCC50  29
 	call Arr27A6_Set                                      ; FDCC51  1d 65 6c fd
-	call sub_FD7719                                      ; FDCC55  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDCC55  1d 19 77 fd
 	inc 8,XSP                                            ; FDCC59  ef 60
 	inc 4,XSP                                            ; FDCC5B  ef 64
 	cp a, 0x03:i3                                          ; FDCC5D  c9 db
 	jrl ule, .LFDCD1D                                    ; FDCC5F  73 bb 00
 	call Var27DB_Clear                                      ; FDCC62  1d 13 77 fd
-	call sub_FD7719                                      ; FDCC66  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDCC66  1d 19 77 fd
 	push XIX                                             ; FDCC6A  3c
 	call Var27DB_Get                                      ; FDCC6B  1d 34 77 fd
 	pushw 0x86                                           ; FDCC6F  0b 86 00
@@ -149118,7 +149124,7 @@ sub_FDCB93:
 	extz BC                                              ; FDCC99  d9 12
 	pushw bc                                             ; FDCC9B  29
 	call sub_FD9F9D                                      ; FDCC9C  1d 9d 9f fd
-	call sub_FD7719                                      ; FDCCA0  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDCCA0  1d 19 77 fd
 	inc 6,XSP                                            ; FDCCA4  ef 66
 	cp a, 0x04:i3                                          ; FDCCA6  c9 dc
 	jr ugt, .LFDCCC4                                     ; FDCCA8  6b 1a
@@ -149842,7 +149848,7 @@ sub_FDD27F:
 	jr nz, .LFDD301                                      ; FDD333  6e cc
 	pushw 0x02                                           ; FDD335  0b 02 00
 	call Var27DA_Set                                      ; FDD338  1d 05 77 fd
-	call sub_FD7719                                      ; FDD33C  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD33C  1d 19 77 fd
 	jrl .LFDD3EC                                         ; FDD340  78 a9 00
 .LFDD343:
 	m_cp_mi8 MBD+r6, 0xfe, 0x02                          ; FDD343  8e fe 3f 02
@@ -149859,7 +149865,7 @@ sub_FDD27F:
 	extz BC                                              ; FDD35F  d9 12
 	pushw bc                                             ; FDD361  29
 	call Arr27A6_Set                                      ; FDD362  1d 65 6c fd
-	call sub_FD7719                                      ; FDD366  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD366  1d 19 77 fd
 	inc 8,XSP                                            ; FDD36A  ef 60
 	inc 4,XSP                                            ; FDD36C  ef 64
 	cp a, 0x03:i3                                          ; FDD36E  c9 db
@@ -150073,7 +150079,7 @@ sub_FDD437:
 	jr nz, .LFDD554                                      ; FDD550  6e 02
 	ld h, 0x03:opc                                          ; FDD552  26 03
 .LFDD554:
-	call sub_FD7719                                      ; FDD554  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD554  1d 19 77 fd
 	cp A,H                                               ; FDD558  ce f1
 	jrl ule, .LFDD7F1                                    ; FDD55A  73 94 02
 	call Var27DB_Clear                                      ; FDD55D  1d 13 77 fd
@@ -150143,13 +150149,13 @@ sub_FDD437:
 	call Var27A3_GetValidSlot                                      ; FDD5F2  1d 4d 6b fd
 	pop XIY                                              ; FDD5F6  5d
 .LFDD5F7:
-	call sub_FD7719                                      ; FDD5F7  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD5F7  1d 19 77 fd
 	ld bc, (xiz-18)                                      ; FDD5FB  9e ee 21
 	extz BC                                              ; FDD5FE  d9 12
 	pushw bc                                             ; FDD600  29
 	pushw 0x00                                           ; FDD601  0b 00 00
 	call Arr27A6_Set                                      ; FDD604  1d 65 6c fd
-	call sub_FD7719                                      ; FDD608  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD608  1d 19 77 fd
 	pop XIY                                              ; FDD60C  5d
 	pushw 0x03                                           ; FDD60D  0b 03 00
 	jrl .LFDD764                                         ; FDD610  78 51 01
@@ -150182,13 +150188,13 @@ sub_FDD437:
 	inc 8,XSP                                            ; FDD650  ef 60
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDD652  8e fe 3f 00
 	jr nz, .LFDD665                                      ; FDD656  6e 0d
-	call sub_FD7719                                      ; FDD658  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD658  1d 19 77 fd
 	cp a, 0x05:i3                                          ; FDD65C  c9 dd
 	jrl ule, .LFDD7F1                                    ; FDD65E  73 90 01
 	ld l, 0x06:opc                                          ; FDD661  27 06
 	jr .LFDD670                                          ; FDD663  68 0b
 .LFDD665:
-	call sub_FD7719                                      ; FDD665  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD665  1d 19 77 fd
 	cp a, 0x03:i3                                          ; FDD669  c9 db
 	jrl ule, .LFDD7F1                                    ; FDD66B  73 83 01
 	ld l, 0x04:opc                                          ; FDD66E  27 04
@@ -150247,7 +150253,7 @@ sub_FDD437:
 	jr c, .LFDD67F                                       ; FDD6E3  67 9a
 .LFDD6E5:
 	call Var27DB_Clear                                      ; FDD6E5  1d 13 77 fd
-	call sub_FD7719                                      ; FDD6E9  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD6E9  1d 19 77 fd
 	lda xbc, (xiz-14)                                    ; FDD6ED  be f2 31
 	push XBC                                             ; FDD6F0  39
 	call Var27DB_Get                                      ; FDD6F1  1d 34 77 fd
@@ -150271,7 +150277,7 @@ sub_FDD437:
 	extz BC                                              ; FDD71F  d9 12
 	pushw bc                                             ; FDD721  29
 	call sub_FD9F9D                                      ; FDD722  1d 9d 9f fd
-	call sub_FD7719                                      ; FDD726  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD726  1d 19 77 fd
 	inc 6,XSP                                            ; FDD72A  ef 66
 	cp a, 0x04:i3                                          ; FDD72C  c9 dc
 	jr ugt, .LFDD74B                                     ; FDD72E  6b 1b
@@ -150483,7 +150489,7 @@ ToneEditPage_A3_PositionParameter:
 	extz BC                                              ; FDD8DB  d9 12
 	pushw bc                                             ; FDD8DD  29
 	call Arr27A6_Set                                      ; FDD8DE  1d 65 6c fd
-	call sub_FD7719                                      ; FDD8E2  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDD8E2  1d 19 77 fd
 	inc 8,XSP                                            ; FDD8E6  ef 60
 	inc 4,XSP                                            ; FDD8E8  ef 64
 	cp a, 0x02:i3                                          ; FDD8EA  c9 da
@@ -150814,7 +150820,7 @@ ToneEditPage_A5_FittingMutingTuning:
 	add XSP,0x00000044                                   ; FDDB7A  ef c8 44 00 00 00
 	pushw 0x01                                           ; FDDB80  0b 01 00
 	call Var27DA_Set                                      ; FDDB83  1d 05 77 fd
-	call sub_FD7719                                      ; FDDB87  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDB87  1d 19 77 fd
 	pushw 0x01                                           ; FDDB8B  0b 01 00
 	pushw 0x00                                           ; FDDB8E  0b 00 00
 	call Arr27A6_Set                                      ; FDDB91  1d 65 6c fd
@@ -150837,7 +150843,7 @@ ToneEditPage_A5_FittingMutingTuning:
 	extz BC                                              ; FDDBBB  d9 12
 	pushw bc                                             ; FDDBBD  29
 	call Arr27A6_Set                                      ; FDDBBE  1d 65 6c fd
-	call sub_FD7719                                      ; FDDBC2  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDBC2  1d 19 77 fd
 	inc 8,XSP                                            ; FDDBC6  ef 60
 	inc 4,XSP                                            ; FDDBC8  ef 64
 	cp A,0x08                                            ; FDDBCA  c9 cf 08
@@ -151012,7 +151018,7 @@ sub_FDDCB9:
 .LFDDD25:
 	pushw 0x01                                           ; FDDD25  0b 01 00
 	call Var27DA_Set                                      ; FDDD28  1d 05 77 fd
-	call sub_FD7719                                      ; FDDD2C  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDD2C  1d 19 77 fd
 	pushw 0x01                                           ; FDDD30  0b 01 00
 	pushw 0x00                                           ; FDDD33  0b 00 00
 	lda xiy, (.LFDDD3E:24)                               ; FDDD36  f2 3e dd fd 35
@@ -151045,7 +151051,7 @@ sub_FDDCB9:
 	push XIY                                             ; FDDD73  3d
 	jp (xix)                                             ; FDDD74  b4 d8
 .LFDDD76:
-	call sub_FD7719                                      ; FDDD76  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDD76  1d 19 77 fd
 	inc 8,XSP                                            ; FDDD7A  ef 60
 	inc 4,XSP                                            ; FDDD7C  ef 64
 	cp a, 0x06:i3                                          ; FDDD7E  c9 de
@@ -151201,7 +151207,7 @@ ToneEditPage_A7_ResoModeKeyFollow:
 .LFDDEAC:
 	pushw 0x01                                           ; FDDEAC  0b 01 00
 	call Var27DA_Set                                      ; FDDEAF  1d 05 77 fd
-	call sub_FD7719                                      ; FDDEB3  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDEB3  1d 19 77 fd
 	pushw 0x01                                           ; FDDEB7  0b 01 00
 	pushw 0x00                                           ; FDDEBA  0b 00 00
 	call Arr27A6_Set                                      ; FDDEBD  1d 65 6c fd
@@ -151230,12 +151236,12 @@ ToneEditPage_A7_ResoModeKeyFollow:
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDDEF5  8e fe 3f 00
 	jr nz, .LFDDF06                                      ; FDDEF9  6e 0b
 sub_FDDEFB:
-	call sub_FD7719                                      ; FDDEFB  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDEFB  1d 19 77 fd
 	cp A,0x0a                                            ; FDDEFF  c9 cf 0a
 	jr ugt, .LFDDF0E                                     ; FDDF02  6b 0a
 	jr .LFDDF30                                          ; FDDF04  68 2a
 .LFDDF06:
-	call sub_FD7719                                      ; FDDF06  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDF06  1d 19 77 fd
 	cp a, 0x02:i3                                          ; FDDF0A  c9 da
 	jr ule, .LFDDF30                                     ; FDDF0C  63 22
 .LFDDF0E:
@@ -151329,7 +151335,7 @@ sub_FDDF36:
 	push XIY                                             ; FDDFE8  3d
 	jp (xix)                                             ; FDDFE9  b4 d8
 .LFDDFEB:
-	call sub_FD7719                                      ; FDDFEB  1d 19 77 fd
+	call Var27DB_Increment                                      ; FDDFEB  1d 19 77 fd
 	inc 8,XSP                                            ; FDDFEF  ef 60
 	inc 4,XSP                                            ; FDDFF1  ef 64
 	cp a, 0x04:i3                                          ; FDDFF3  c9 dc
@@ -152915,7 +152921,7 @@ sub_FDEC35:
 	cp (XIZ+0x08),0x00                            ; FDEC39  8e 08 3f 00
 	jr z, .LFDEC56                                ; FDEC3D  66 17
 	pushw 0x01                                    ; FDEC3F  0b 01 00
-	call sub_FD74AE                                 ; FDEC42  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDEC42  1d ae 74 fd
 	popw bc                                       ; FDEC46  49
 	cp a, 0x00:i3                                   ; FDEC47  c9 d8
 	jr z, .LFDEC56                                ; FDEC49  66 0b
@@ -152943,7 +152949,7 @@ sub_FDEC59:
 	jr .LFDEC8C                                   ; FDEC78  68 12
 .LFDEC7A:
 	pushw 0x02                                    ; FDEC7A  0b 02 00
-	call sub_FD74AE                                 ; FDEC7D  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDEC7D  1d ae 74 fd
 	popw bc                                       ; FDEC81  49
 	cp a, 0x00:i3                                   ; FDEC82  c9 d8
 	jr z, .LFDEC91                                ; FDEC84  66 0b
@@ -152983,7 +152989,7 @@ sub_FDEC94:
 	cp8_imm_rid8 xiz, 0xfe, 0x01                  ; FDECCD  8e fe 3f 01   cp (XIZ+0xfe),0x01
 	jr z, .LFDECEA                                ; FDECD1  66 17
 	pushw 0x03                                    ; FDECD3  0b 03 00
-	call sub_FD74AE                                 ; FDECD6  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDECD6  1d ae 74 fd
 	popw bc                                       ; FDECDA  49
 	cp a, 0x00:i3                                   ; FDECDB  c9 d8
 	jr z, .LFDECEA                                ; FDECDD  66 0b
@@ -153009,7 +153015,7 @@ sub_FDECEE:
 	cp8_imm_rid8 xiz, 0xfe, 0x01                  ; FDED01  8e fe 3f 01   cp (XIZ+0xfe),0x01
 	jr z, .LFDED1E                                ; FDED05  66 17
 	pushw 0x04                                    ; FDED07  0b 04 00
-	call sub_FD74AE                                 ; FDED0A  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDED0A  1d ae 74 fd
 	popw bc                                       ; FDED0E  49
 	cp a, 0x00:i3                                   ; FDED0F  c9 d8
 	jr z, .LFDED1E                                ; FDED11  66 0b
@@ -153206,7 +153212,7 @@ sub_FDEE5A:
 	cp8_imm_rid8 xiz, 0xfe, 0x00                  ; FDEE93  8e fe 3f 00   cp (XIZ+0xfe),0x00
 	jr nz, .LFDEEB0                               ; FDEE97  6e 17
 	pushw 0x03                                    ; FDEE99  0b 03 00
-	call sub_FD74AE                                 ; FDEE9C  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDEE9C  1d ae 74 fd
 	popw bc                                       ; FDEEA0  49
 	cp a, 0x00:i3                                   ; FDEEA1  c9 d8
 	jr z, .LFDEEB0                                ; FDEEA3  66 0b
@@ -153356,7 +153362,7 @@ sub_FDEFC5:
 	cp (XIZ+0x08),0x00                            ; FDEFC9  8e 08 3f 00
 	jr z, .LFDEFE6                                ; FDEFCD  66 17
 	pushw 0x01                                    ; FDEFCF  0b 01 00
-	call sub_FD74AE                                 ; FDEFD2  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDEFD2  1d ae 74 fd
 	popw bc                                       ; FDEFD6  49
 	cp a, 0x00:i3                                   ; FDEFD7  c9 d8
 	jr z, .LFDEFE6                                ; FDEFD9  66 0b
@@ -153384,7 +153390,7 @@ sub_FDEFE9:
 	jr .LFDF01C                                   ; FDF008  68 12
 .LFDF00A:
 	pushw 0x02                                    ; FDF00A  0b 02 00
-	call sub_FD74AE                                 ; FDF00D  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF00D  1d ae 74 fd
 	popw bc                                       ; FDF011  49
 	cp a, 0x00:i3                                   ; FDF012  c9 d8
 	jr z, .LFDF021                                ; FDF014  66 0b
@@ -153424,7 +153430,7 @@ sub_FDF024:
 	cp8_imm_rid8 xiz, 0xfe, 0x01                  ; FDF05D  8e fe 3f 01   cp (XIZ+0xfe),0x01
 	jr z, .LFDF07A                                ; FDF061  66 17
 	pushw 0x03                                    ; FDF063  0b 03 00
-	call sub_FD74AE                                 ; FDF066  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF066  1d ae 74 fd
 	popw bc                                       ; FDF06A  49
 	cp a, 0x00:i3                                   ; FDF06B  c9 d8
 	jr z, .LFDF07A                                ; FDF06D  66 0b
@@ -153450,7 +153456,7 @@ sub_FDF07E:
 	cp (XIZ+0x08),0x00                            ; FDF091  8e 08 3f 00
 	jr z, .LFDF0AE                                ; FDF095  66 17
 	pushw 0x04                                    ; FDF097  0b 04 00
-	call sub_FD74AE                                 ; FDF09A  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF09A  1d ae 74 fd
 	popw bc                                       ; FDF09E  49
 	cp a, 0x00:i3                                   ; FDF09F  c9 d8
 	jr z, .LFDF0AE                                ; FDF0A1  66 0b
@@ -153617,7 +153623,7 @@ sub_FDF1B7:
 	cp8_imm_rid8 xiz, 0xfe, 0x01                  ; FDF1F0  8e fe 3f 01   cp (XIZ+0xfe),0x01
 	jr z, .LFDF20D                                ; FDF1F4  66 17
 	pushw 0x03                                    ; FDF1F6  0b 03 00
-	call sub_FD74AE                                 ; FDF1F9  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF1F9  1d ae 74 fd
 	popw bc                                       ; FDF1FD  49
 	cp a, 0x00:i3                                   ; FDF1FE  c9 d8
 	jr z, .LFDF20D                                ; FDF200  66 0b
@@ -153931,7 +153937,7 @@ sub_FDF4CE:
 	cp (XIZ+0x08),0x00                            ; FDF4D2  8e 08 3f 00
 	jr z, .LFDF4EF                                ; FDF4D6  66 17
 	pushw 0x01                                    ; FDF4D8  0b 01 00
-	call sub_FD74AE                                 ; FDF4DB  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF4DB  1d ae 74 fd
 	popw bc                                       ; FDF4DF  49
 	cp a, 0x00:i3                                   ; FDF4E0  c9 d8
 	jr z, .LFDF4EF                                ; FDF4E2  66 0b
@@ -153958,7 +153964,7 @@ sub_FDF4F2:
 	jr .LFDF525                                   ; FDF511  68 12
 .LFDF513:
 	pushw 0x02                                    ; FDF513  0b 02 00
-	call sub_FD74AE                                 ; FDF516  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF516  1d ae 74 fd
 	popw bc                                       ; FDF51A  49
 	cp a, 0x00:i3                                   ; FDF51B  c9 d8
 	jr z, .LFDF52A                                ; FDF51D  66 0b
@@ -153994,7 +154000,7 @@ sub_FDF52D:
 	cp8_imm_rid8 xiz, 0xfe, 0x01                  ; FDF55D  8e fe 3f 01   cp (XIZ+0xfe),0x01
 	jr z, .LFDF57A                                ; FDF561  66 17
 	pushw 0x03                                    ; FDF563  0b 03 00
-	call sub_FD74AE                                 ; FDF566  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF566  1d ae 74 fd
 	popw bc                                       ; FDF56A  49
 	cp a, 0x00:i3                                   ; FDF56B  c9 d8
 	jr z, .LFDF57A                                ; FDF56D  66 0b
@@ -154018,7 +154024,7 @@ sub_FDF57D:
 	cp (XIZ+0x08),0x00                            ; FDF590  8e 08 3f 00
 	jr z, .LFDF5AD                                ; FDF594  66 17
 	pushw 0x04                                    ; FDF596  0b 04 00
-	call sub_FD74AE                                 ; FDF599  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF599  1d ae 74 fd
 	popw bc                                       ; FDF59D  49
 	cp a, 0x00:i3                                   ; FDF59E  c9 d8
 	jr z, .LFDF5AD                                ; FDF5A0  66 0b
@@ -154098,7 +154104,7 @@ sub_FDF638:
 	cp (XIZ+0x08),0x00                            ; FDF63C  8e 08 3f 00
 	jr z, .LFDF659                                ; FDF640  66 17
 	pushw 0x01                                    ; FDF642  0b 01 00
-	call sub_FD74AE                                 ; FDF645  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF645  1d ae 74 fd
 	popw bc                                       ; FDF649  49
 	cp a, 0x00:i3                                   ; FDF64A  c9 d8
 	jr z, .LFDF659                                ; FDF64C  66 0b
@@ -154125,7 +154131,7 @@ sub_FDF65C:
 	jr .LFDF68F                                   ; FDF67B  68 12
 .LFDF67D:
 	pushw 0x02                                    ; FDF67D  0b 02 00
-	call sub_FD74AE                                 ; FDF680  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF680  1d ae 74 fd
 	popw bc                                       ; FDF684  49
 	cp a, 0x00:i3                                   ; FDF685  c9 d8
 	jr z, .LFDF694                                ; FDF687  66 0b
@@ -154165,7 +154171,7 @@ sub_FDF697:
 	cp8_imm_rid8 xiz, 0xfe, 0x01                  ; FDF6D0  8e fe 3f 01   cp (XIZ+0xfe),0x01
 	jr z, .LFDF6ED                                ; FDF6D4  66 17
 	pushw 0x03                                    ; FDF6D6  0b 03 00
-	call sub_FD74AE                                 ; FDF6D9  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF6D9  1d ae 74 fd
 	popw bc                                       ; FDF6DD  49
 	cp a, 0x00:i3                                   ; FDF6DE  c9 d8
 	jr z, .LFDF6ED                                ; FDF6E0  66 0b
@@ -154190,7 +154196,7 @@ sub_FDF6F1:
 	cp (XIZ+0x08),0x00                            ; FDF704  8e 08 3f 00
 	jr z, .LFDF721                                ; FDF708  66 17
 	pushw 0x04                                    ; FDF70A  0b 04 00
-	call sub_FD74AE                                 ; FDF70D  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF70D  1d ae 74 fd
 	popw bc                                       ; FDF711  49
 	cp a, 0x00:i3                                   ; FDF712  c9 d8
 	jr z, .LFDF721                                ; FDF714  66 0b
@@ -154483,7 +154489,7 @@ sub_FDF9C2:
 	cp (XIZ+0x08),0x00                            ; FDF9C6  8e 08 3f 00
 	jr z, .LFDF9E3                                ; FDF9CA  66 17
 	pushw 0x01                                    ; FDF9CC  0b 01 00
-	call sub_FD74AE                                 ; FDF9CF  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF9CF  1d ae 74 fd
 	popw bc                                       ; FDF9D3  49
 	cp a, 0x00:i3                                   ; FDF9D4  c9 d8
 	jr z, .LFDF9E3                                ; FDF9D6  66 0b
@@ -154504,7 +154510,7 @@ sub_FDF9E6:
 	jr .LFDFA0A                                   ; FDF9F6  68 12
 .LFDF9F8:
 	pushw 0x02                                    ; FDF9F8  0b 02 00
-	call sub_FD74AE                                 ; FDF9FB  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDF9FB  1d ae 74 fd
 	popw bc                                       ; FDF9FF  49
 	cp a, 0x00:i3                                   ; FDFA00  c9 d8
 	jr z, .LFDFA0F                                ; FDFA02  66 0b
@@ -154522,7 +154528,7 @@ sub_FDFA12:
 	cp (XIZ+0x08),0x00                            ; FDFA16  8e 08 3f 00
 	jr z, .LFDFA33                                ; FDFA1A  66 17
 	pushw 0x03                                    ; FDFA1C  0b 03 00
-	call sub_FD74AE                                 ; FDFA1F  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFA1F  1d ae 74 fd
 	popw bc                                       ; FDFA23  49
 	cp a, 0x00:i3                                   ; FDFA24  c9 d8
 	jr z, .LFDFA33                                ; FDFA26  66 0b
@@ -154539,7 +154545,7 @@ sub_FDFA36:
 	cp (XIZ+0x08),0x00                            ; FDFA3A  8e 08 3f 00
 	jr z, .LFDFA57                                ; FDFA3E  66 17
 	pushw 0x04                                    ; FDFA40  0b 04 00
-	call sub_FD74AE                                 ; FDFA43  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFA43  1d ae 74 fd
 	popw bc                                       ; FDFA47  49
 	cp a, 0x00:i3                                   ; FDFA48  c9 d8
 	jr z, .LFDFA57                                ; FDFA4A  66 0b
@@ -154679,7 +154685,7 @@ sub_FDFB52:
 	jr .LFDFB76                                   ; FDFB62  68 12
 .LFDFB64:
 	pushw 0x01                                    ; FDFB64  0b 01 00
-	call sub_FD74AE                                 ; FDFB67  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFB67  1d ae 74 fd
 	popw bc                                       ; FDFB6B  49
 	cp a, 0x00:i3                                   ; FDFB6C  c9 d8
 	jr z, .LFDFB7B                                ; FDFB6E  66 0b
@@ -154701,7 +154707,7 @@ sub_FDFB7E:
 	jr .LFDFBA2                                   ; FDFB8E  68 12
 .LFDFB90:
 	pushw 0x02                                    ; FDFB90  0b 02 00
-	call sub_FD74AE                                 ; FDFB93  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFB93  1d ae 74 fd
 	popw bc                                       ; FDFB97  49
 	cp a, 0x00:i3                                   ; FDFB98  c9 d8
 	jr z, .LFDFBA7                                ; FDFB9A  66 0b
@@ -154724,7 +154730,7 @@ sub_FDFBAA:
 	jr .LFDFBD5                                   ; FDFBBC  68 17
 .LFDFBBE:
 	pushw 0x03                                    ; FDFBBE  0b 03 00
-	call sub_FD74AE                                 ; FDFBC1  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFBC1  1d ae 74 fd
 	popw bc                                       ; FDFBC5  49
 	cp a, 0x00:i3                                   ; FDFBC6  c9 d8
 	jr z, .LFDFBD5                                ; FDFBC8  66 0b
@@ -154746,7 +154752,7 @@ sub_FDFBD8:
 	jr .LFDFC03                                   ; FDFBEA  68 17
 .LFDFBEC:
 	pushw 0x04                                    ; FDFBEC  0b 04 00
-	call sub_FD74AE                                 ; FDFBEF  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFBEF  1d ae 74 fd
 	popw bc                                       ; FDFBF3  49
 	cp a, 0x00:i3                                   ; FDFBF4  c9 d8
 	jr z, .LFDFC03                                ; FDFBF6  66 0b
@@ -154868,7 +154874,7 @@ sub_FDFCCD:
 	jr .LFDFCF1                                   ; FDFCDD  68 12
 .LFDFCDF:
 	pushw 0x01                                    ; FDFCDF  0b 01 00
-	call sub_FD74AE                                 ; FDFCE2  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFCE2  1d ae 74 fd
 	popw bc                                       ; FDFCE6  49
 	cp a, 0x00:i3                                   ; FDFCE7  c9 d8
 	jr z, .LFDFCF6                                ; FDFCE9  66 0b
@@ -154890,7 +154896,7 @@ sub_FDFCF9:
 	jr .LFDFD1D                                   ; FDFD09  68 12
 .LFDFD0B:
 	pushw 0x02                                    ; FDFD0B  0b 02 00
-	call sub_FD74AE                                 ; FDFD0E  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFD0E  1d ae 74 fd
 	popw bc                                       ; FDFD12  49
 	cp a, 0x00:i3                                   ; FDFD13  c9 d8
 	jr z, .LFDFD22                                ; FDFD15  66 0b
@@ -154908,7 +154914,7 @@ sub_FDFD25:
 	cp (XIZ+0x08),0x00                            ; FDFD29  8e 08 3f 00
 	jr z, .LFDFD46                                ; FDFD2D  66 17
 	pushw 0x03                                    ; FDFD2F  0b 03 00
-	call sub_FD74AE                                 ; FDFD32  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFD32  1d ae 74 fd
 	popw bc                                       ; FDFD36  49
 	cp a, 0x00:i3                                   ; FDFD37  c9 d8
 	jr z, .LFDFD46                                ; FDFD39  66 0b
@@ -154925,7 +154931,7 @@ sub_FDFD49:
 	cp (XIZ+0x08),0x00                            ; FDFD4D  8e 08 3f 00
 	jr z, .LFDFD6A                                ; FDFD51  66 17
 	pushw 0x04                                    ; FDFD53  0b 04 00
-	call sub_FD74AE                                 ; FDFD56  1d ae 74 fd
+	call Var27A3_ChangeSlot                                 ; FDFD56  1d ae 74 fd
 	popw bc                                       ; FDFD5A  49
 	cp a, 0x00:i3                                   ; FDFD5B  c9 d8
 	jr z, .LFDFD6A                                ; FDFD5D  66 0b
@@ -155213,7 +155219,7 @@ sub_FDFEC2:
 	jr .LFDFF9B                                   ; FDFF87  68 12
 	pushw 0x03                                    ; FDFF89  0b 03 00
 ; stale, older layout: the same old address the twin-paired 0xFDFFB0 calls
-	call	sub_FD74AE - 0x2028                     ; FDFF8C  1d 86 54 fd
+	call	Var27A3_ChangeSlot - 0x2028                     ; FDFF8C  1d 86 54 fd
 	popw bc                                       ; FDFF90  49
 	cp a, 0x00:i3                                   ; FDFF91  c9 d8
 	jr z, .LFDFFA0                                ; FDFF93  66 0b
@@ -155230,8 +155236,8 @@ sub_FDFEC2:
 	cp (XIZ+0x08),0x00                            ; FDFFA7  8e 08 3f 00
 	jr z, .LFDFFC4                                ; FDFFAB  66 17
 	pushw 0x04                                    ; FDFFAD  0b 04 00
-; stale, older layout: the live twin at 0xFD1FD7 calls sub_FD74AE
-	call	sub_FD74AE - 0x2028                     ; FDFFB0  1d 86 54 fd
+; stale, older layout: the live twin at 0xFD1FD7 calls Var27A3_ChangeSlot
+	call	Var27A3_ChangeSlot - 0x2028                     ; FDFFB0  1d 86 54 fd
 	popw bc                                       ; FDFFB4  49
 	cp a, 0x00:i3                                   ; FDFFB5  c9 d8
 	jr z, .LFDFFC4                                ; FDFFB7  66 0b

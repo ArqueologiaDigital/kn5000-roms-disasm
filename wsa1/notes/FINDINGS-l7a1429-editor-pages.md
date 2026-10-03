@@ -155,7 +155,7 @@ Each page's ENTER routine in prom_a fires a run of read-back requests
 ```
 
 -- so reply *n* lands at `((u8 *)0x27A6)[n]`.  Two of the five pages call
-`sub_FD7719` once **before** the reply run (`0xFDDB87`, `0xFDDD2C`, `0xFDDEB3`),
+`Var27DB_Increment` once **before** the reply run (`0xFDDB87`, `0xFDDD2C`, `0xFDDEB3`),
 which starts the counter at 1; the other two do not, and start at 0.  That is not
 an assumption: the completion tests are `cp A,0x02` for a three-request page and
 `cp A,0x08` / `cp A,0x06` / `cp A,0x0A` for eight-, six- and ten-request pages,
