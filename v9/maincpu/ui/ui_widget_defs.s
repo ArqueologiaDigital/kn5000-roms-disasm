@@ -9044,39 +9044,39 @@ RootObject_GetterBlock:
 	ret
 
 GetRootObject:
-	ld xhl, (0x02bc18:24)
+	ld xhl, (ROOT_OBJECT:24)
 	ret
 
 GetRootEvent:
-	ld xhl, (0x02bc1c:24)
+	ld xhl, (ROOT_EVENT:24)
 	ret
 
 GetRootParam:
-	ld xhl, (0x02bc20:24)
+	ld xhl, (ROOT_PARAM:24)
 	ret
 
 SetRootObject:
-	ld (0x02bc18:24), xwa
+	ld (ROOT_OBJECT:24), xwa
 	ret
 
 SetRootEvent:
-	ld (0x02bc1c:24), xwa
+	ld (ROOT_EVENT:24), xwa
 	ret
 
 SetRootParam:
-	ld (0x02bc20:24), xwa
+	ld (ROOT_PARAM:24), xwa
 	ret
 
 GetFocusObject:
-	ld xhl, (0x02bc24:24)
+	ld xhl, (FOCUS_OBJECT:24)
 	ret
 
 GetFocusEvent:
-	ld xhl, (0x02bc28:24)
+	ld xhl, (FOCUS_EVENT:24)
 	ret
 
 GetFocusParam:
-	ld xhl, (0x02bc2c:24)
+	ld xhl, (FOCUS_PARAM:24)
 	ret
 
 ClassProc:
@@ -9805,10 +9805,10 @@ ObjectEnum_Init:
 	ld xhl, (xbc + 10)
 	jrl GetMode_Epilogue10
 ModeProc_Evt1E0002E:
-	ld xhl, (0x03ef82:24)
+	ld xhl, (MODE_NOW:24)
 	jrl GetMode_Epilogue10
 ModeProc_Evt1E0002F:
-	ld xhl, (0x03ef86:24)
+	ld xhl, (MODE_OLD:24)
 	jrl GetMode_Epilogue10
 
 ObjectEnum_Close:
@@ -9816,7 +9816,7 @@ ObjectEnum_Close:
 	ld xbc, EVT_REFRESH_AP_TASK
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, (0x03ef8a:24)
+	ld xwa, (TITLE_NOW:24)
 	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
@@ -9828,7 +9828,7 @@ ObjectEnum_Destroy:
 	ld xbc, EVT_RETURN_TITLE
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, (0x03ef8a:24)
+	ld xwa, (TITLE_NOW:24)
 	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
@@ -9837,7 +9837,7 @@ ObjectEnum_Destroy:
 
 ObjectEnum_Paint:
 	ld xwa, (xsp + 10)
-	ld xde, (0x03ef82:24)
+	ld xde, (MODE_NOW:24)
 	lda xbc, (0x027ed2:24)
 	cp xwa, xde
 	jr nz, ObjectEnum_OK
@@ -9848,9 +9848,9 @@ ObjectEnum_Paint:
 	ld (xsp + 4), xwa
 
 ObjectEnum_OK:
-	ld (0x03ef86:24), xde
-	ld xwa, (0x03ef8a:24)
-	ld (0x03ef8e:24), xwa
+	ld (MODE_OLD:24), xde
+	ld xwa, (TITLE_NOW:24)
+	ld (TITLE_OLD:24), xwa
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xde, xwa
@@ -9863,19 +9863,19 @@ ObjectEnum_OK:
 	cp xwa, 0xffffffff
 	jr z, ObjectEnum_OK_Dispatch
 	ld xwa, (xsp + 10)
-	ld (0x03ef82:24), xwa
+	ld (MODE_NOW:24), xwa
 	ld xwa, (xde)
-	ld (0x03ef8a:24), xwa
+	ld (TITLE_NOW:24), xwa
 	jr ObjectEnum_OK_DispatchInline
 
 ObjectEnum_OK_Dispatch:
 	ld xwa, NAKA_MODE_MD_PS
-	ld (0x03ef82:24), xwa
+	ld (MODE_NOW:24), xwa
 	ld xwa, TITLE_PS
-	ld (0x03ef8a:24), xwa
+	ld (TITLE_NOW:24), xwa
 
 ObjectEnum_OK_DispatchInline:
-	ld xwa, (0x03ef8a:24)
+	ld xwa, (TITLE_NOW:24)
 	ld xde, xwa
 	srl xde, 16
 	and xde, 0xfff
@@ -9898,11 +9898,11 @@ ObjectEnum_OK_DispatchInline:
 	ldw (xhl + 20), 0xffff
 	ld xwa, 0xffffffff
 	ld (xhl + 14), xwa
-	ld xde, (0x03ef82:24)
+	ld xde, (MODE_NOW:24)
 	ld xwa, NAKA_MAINFUNC_MainTitleControl
 	ld xbc, EVT_CHANGE_MODE
 	calr MainFuncCall
-	ld xde, (0x03ef8a:24)
+	ld xde, (TITLE_NOW:24)
 	ld xwa, NAKA_MAINFUNC_MainTitleControl
 	ld xbc, EVT_CHANGE_TITLE
 	calr MainFuncCall
@@ -9945,11 +9945,11 @@ GetMode_Epilogue10:
 	ret
 
 GetModeNow:
-	ld xhl, (0x03ef82:24)
+	ld xhl, (MODE_NOW:24)
 	ret
 
 GetModeOld:
-	ld xhl, (0x03ef86:24)
+	ld xhl, (MODE_OLD:24)
 	ret
 
 RegisterMode:
@@ -10103,7 +10103,7 @@ TitleProc:
 	jrl z, EnumList_Init_TypeB
 	cp xiz, EVT_GET_RETURN_SCREEN
 	jrl z, EnumList_Init
-	ld xwa, (0x03ef8a:24)
+	ld xwa, (TITLE_NOW:24)
 	cp xiz, EVT_RETURN_TITLE
 	jrl z, EventDispatch_Return
 	cp xiz, EVT_INTERRUPT_TITLE
@@ -10193,10 +10193,10 @@ EventDispatch_Select:
 	ld xhl, (xhl + 10)
 	jrl TitleFunc_Epilogue34
 TitleProc_Evt1E00034:
-	ld xhl, (0x03ef8a:24)
+	ld xhl, (TITLE_NOW:24)
 	jrl TitleFunc_Epilogue34
 TitleProc_Evt1E00035:
-	ld xhl, (0x03ef8e:24)
+	ld xhl, (TITLE_OLD:24)
 	jrl TitleFunc_Epilogue34
 
 EventDispatch_SelectMatch:
@@ -10211,7 +10211,7 @@ EventDispatch_SelectDone:
 	ld xbc, EVT_RETURN_TITLE
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, (0x03ef8a:24)
+	ld xwa, (TITLE_NOW:24)
 	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
@@ -10219,8 +10219,8 @@ EventDispatch_SelectDone:
 	jr nz, EventDispatch_SelectDone
 
 EventDispatch_ConfirmHandler:
-	ld xwa, (0x03ef8a:24)
-	ld (0x03ef8e:24), xwa
+	ld xwa, (TITLE_NOW:24)
+	ld (TITLE_OLD:24), xwa
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
@@ -10230,19 +10230,19 @@ EventDispatch_ConfirmHandler:
 	cp xwa, 0xffffffff
 	jr z, EventDispatch_ConfirmSetup
 	ld xwa, (xsp + 30)
-	ld (0x03ef8a:24), xwa
+	ld (TITLE_NOW:24), xwa
 	jr EventDispatch_ConfirmForward
 
 EventDispatch_ConfirmSetup:
 	ld xwa, TITLE_PS
-	ld (0x03ef8a:24), xwa
+	ld (TITLE_NOW:24), xwa
 
 EventDispatch_ConfirmForward:
 	ldw (xhl + 18), 0xffff
 	ldw (xhl + 20), 0xffff
 	ld xwa, 0xffffffff
 	ld (xhl + 14), xwa
-	ld xde, (0x03ef8a:24)
+	ld xde, (TITLE_NOW:24)
 	ld xwa, NAKA_MAINFUNC_MainTitleControl
 	ld xbc, EVT_CHANGE_TITLE
 	jrl EnumList_OK_CheckHitTest
@@ -10324,8 +10324,8 @@ EventDispatch_OKDone:
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa)
 	ld (xsp + 4), xwa
-	ld xwa, (0x03ef8a:24)
-	ld (0x03ef8e:24), xwa
+	ld xwa, (TITLE_NOW:24)
+	ld (TITLE_OLD:24), xwa
 	ld wa, (xsp + 22)
 	extz xwa
 	ld xbc, 0x16
@@ -10335,17 +10335,17 @@ EventDispatch_OKDone:
 	cp xwa, 0xffffffff
 	jr z, EventDispatch_Default
 	ld xwa, (xsp + 30)
-	ld (0x03ef8a:24), xwa
+	ld (TITLE_NOW:24), xwa
 	jr EventDispatch_DefaultProc
 
 EventDispatch_Default:
 	ld xwa, TITLE_PS
-	ld (0x03ef8a:24), xwa
+	ld (TITLE_NOW:24), xwa
 
 EventDispatch_DefaultProc:
-	ld xwa, (0x03ef8e:24)
+	ld xwa, (TITLE_OLD:24)
 	ld (xhl + 18), wa
-	ld xwa, (0x03ef8e:24)
+	ld xwa, (TITLE_OLD:24)
 	ld xbc, xwa
 	srl xbc, 16
 	and xbc, 0xfff
@@ -10366,9 +10366,9 @@ EventDispatch_DefaultProc:
 	ld xbc, 0x16
 	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
-	ld xwa, (0x03ef8a:24)
+	ld xwa, (TITLE_NOW:24)
 	ld (xhl + 20), wa
-	ld xde, (0x03ef8a:24)
+	ld xde, (TITLE_NOW:24)
 	ld xwa, NAKA_MAINFUNC_MainTitleControl
 	ld xbc, EVT_INTERRUPT_TITLE
 	calr MainFuncCall
@@ -10408,12 +10408,12 @@ EventDispatch_Return:
 	ld wa, (xbc)
 	cp wa, 0xffff
 	jrl z, TitleProc_ReturnZero
-	ld xwa, (0x03ef8a:24)
-	ld (0x03ef8e:24), xwa
+	ld xwa, (TITLE_NOW:24)
+	ld (TITLE_OLD:24), xwa
 	ld wa, (xbc)
 	exts xwa
 	add xwa, TITLE_PS
-	ld (0x03ef8a:24), xwa
+	ld (TITLE_NOW:24), xwa
 	ld xde, xwa
 	ld xwa, NAKA_MAINFUNC_MainTitleControl
 	ld xbc, EVT_RETURN_TITLE
@@ -10434,7 +10434,7 @@ EventDispatch_Return:
 	add xhl, (xsp + 4)
 	ld xwa, 0xffffffff
 	ld (xhl + 14), xwa
-	ld xwa, (0x03ef8a:24)
+	ld xwa, (TITLE_NOW:24)
 	ld xbc, xwa
 	srl xbc, 16
 	and xbc, 0xfff
@@ -10908,10 +10908,10 @@ EnumList_HitTest_Match:
 	jr z, EnumList_HitTest_NoMatch
 	cp xwa, 0x8
 	jr nz, TitleProc_ReturnZero
-	ld xwa, (0x03ef82:24)
-	ld (0x03ef86:24), xwa
-	ld xwa, (0x03ef8a:24)
-	ld (0x03ef8e:24), xwa
+	ld xwa, (MODE_NOW:24)
+	ld (MODE_OLD:24), xwa
+	ld xwa, (TITLE_NOW:24)
+	ld (TITLE_OLD:24), xwa
 	jr TitleProc_ReturnZero
 
 EnumList_HitTest_NoMatch:
@@ -10955,11 +10955,11 @@ TitleFunc_Epilogue34:
 	ret
 
 GetTitleNow:
-	ld xhl, (0x03ef8a:24)
+	ld xhl, (TITLE_NOW:24)
 	ret
 
 GetTitleOld:
-	ld xhl, (0x03ef8e:24)
+	ld xhl, (TITLE_OLD:24)
 	ret
 
 SetInterruptTime:
@@ -17715,14 +17715,14 @@ EventHandler_ObjectDispatch:
 	or xhl, xhl
 	jrl z, EventHandler_ContinueProc
 	ld xwa, (xsp + 8)
-	ld (0x02bc24:24), xwa
-	ld (0x02bc18:24), xwa
+	ld (FOCUS_OBJECT:24), xwa
+	ld (ROOT_OBJECT:24), xwa
 	ld xwa, (xsp + 4)
-	ld (0x02bc28:24), xwa
-	ld (0x02bc1c:24), xwa
+	ld (FOCUS_EVENT:24), xwa
+	ld (ROOT_EVENT:24), xwa
 	ld xwa, (xsp)
-	ld (0x02bc2c:24), xwa
-	ld (0x02bc20:24), xwa
+	ld (FOCUS_PARAM:24), xwa
+	ld (ROOT_PARAM:24), xwa
 	ld xwa, (xsp + 8)
 	ld xix, xhl
 	ld xbc, EVT_GET_CLASS_SP
@@ -17793,17 +17793,17 @@ EventRoute_ObjectDispatch:
 	lda xwa, (0x027ed6:24)
 	add xwa, xbc
 	ld xhl, (xwa)
-	ld xwa, (0x02bc24:24)
+	ld xwa, (FOCUS_OBJECT:24)
 	ld (xsp + 12), xwa
-	ld xwa, (0x02bc28:24)
+	ld xwa, (FOCUS_EVENT:24)
 	ld (xsp + 16), xwa
-	ld xwa, (0x02bc2c:24)
+	ld xwa, (FOCUS_PARAM:24)
 	ld (xsp + 8), xwa
-	ld (0x02bc24:24), xiz
+	ld (FOCUS_OBJECT:24), xiz
 	ld xwa, (xsp + 24)
-	ld (0x02bc28:24), xwa
+	ld (FOCUS_EVENT:24), xwa
 	ld xwa, (xsp + 20)
-	ld (0x02bc2c:24), xwa
+	ld (FOCUS_PARAM:24), xwa
 	ld xwa, (0x02bc14:24)
 	ld (xsp + 4), xwa
 	ld xix, xhl
@@ -17839,11 +17839,11 @@ EventRoute_ObjectDispatch:
 	ld xwa, (xsp + 4)
 	ld (0x02bc14:24), xwa
 	ld xwa, (xsp + 12)
-	ld (0x02bc24:24), xwa
+	ld (FOCUS_OBJECT:24), xwa
 	ld xwa, (xsp + 16)
-	ld (0x02bc28:24), xwa
+	ld (FOCUS_EVENT:24), xwa
 	ld xwa, (xsp + 8)
-	ld (0x02bc2c:24), xwa
+	ld (FOCUS_PARAM:24), xwa
 	cpw (0x03ef4e:24), 0
 	jr z, EventRoute_DispatchJump
 	ld wa, 3:i3
@@ -18842,14 +18842,14 @@ SetApTimer_Allocate:
 
 ; RootContext setup handler
 RootContext_Setup:
-	ld (0x02bc24:24), xiz
-	ld (0x02bc18:24), xiz
+	ld (FOCUS_OBJECT:24), xiz
+	ld (ROOT_OBJECT:24), xiz
 	ld xwa, (xsp + 4)
-	ld (0x02bc28:24), xwa
-	ld (0x02bc1c:24), xwa
+	ld (FOCUS_EVENT:24), xwa
+	ld (ROOT_EVENT:24), xwa
 	ld xwa, (xsp + 8)
-	ld (0x02bc2c:24), xwa
-	ld (0x02bc20:24), xwa
+	ld (FOCUS_PARAM:24), xwa
+	ld (ROOT_PARAM:24), xwa
 	ld xix, xde
 	ld xwa, xiz
 	ld xbc, EVT_GET_CLASS_SP

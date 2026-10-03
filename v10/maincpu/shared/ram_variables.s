@@ -133,3 +133,15 @@
 ; sequencer.md "10 song slots (0x800 bytes each)", 20 KB -- the code: a slot is `slot << 11` past it
 ; (file_demo_proc.s), MidiPkt_ArpPopReturn_Helper9 records it with its size 0x5000
 	.equ SEQ_SONG_SLOTS,		0xab000	; 10 song slots of 0x800 bytes
+; code: one-instruction accessors with the firmware's own names (GetModeNow, GetTitleOld ... are entries
+; of the exported name table) -- each `ld xhl,(N) / ret` or `ld (N),xwa / ret`
+	.equ MODE_NOW,			0x3ef82	; GetModeNow: the current mode as an event value (32-bit)
+	.equ MODE_OLD,			0x3ef86	; GetModeOld: the previous one
+	.equ TITLE_NOW,			0x3ef8a	; GetTitleNow: the current title as an event value (32-bit, 0x01A0nnnn)
+	.equ TITLE_OLD,			0x3ef8e	; GetTitleOld: the previous one
+	.equ ROOT_OBJECT,		0x2bc18	; GetRootObject / SetRootObject
+	.equ ROOT_EVENT,		0x2bc1c	; GetRootEvent / SetRootEvent
+	.equ ROOT_PARAM,		0x2bc20	; GetRootParam / SetRootParam
+	.equ FOCUS_OBJECT,		0x2bc24	; GetFocusObject
+	.equ FOCUS_EVENT,		0x2bc28	; GetFocusEvent
+	.equ FOCUS_PARAM,		0x2bc2c	; GetFocusParam
