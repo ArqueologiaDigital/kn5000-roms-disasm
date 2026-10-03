@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,406
-#   semantic names ........... 50,403 (98.0%)
+#   symbols .................. 51,412
+#   semantic names ........... 50,409 (98.0%)
 #   positional names ......... 1,003
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -49992,6 +49992,12 @@ SeqVoice_CheckAndRet_Data_Skip9 00FEB539
 SeqVoice_CheckAndRet_Data_Return 00FEB53E
 SendEpilogue_Data_Helper 00FEB53F
 SeqVoice_CheckAndRet_Data_Skip10 00FEB588
+SendEpilogue_Data_Helper_Skip 00FEB58C
+SendEpilogue_Data_Helper_Skip2 00FEB591
+SendEpilogue_Data_Helper_Skip3 00FEB596
+SendEpilogue_Data_Helper_Skip4 00FEB59B
+SendEpilogue_Data_Helper_Skip5 00FEB59F
+SendEpilogue_Data_Helper_Skip6 00FEB5A3
 SeqVoice_CheckAndRet_Data_Skip11 00FEB5CA
 SeqVoice_CheckAndRet_Data_Skip12 00FEB5CF
 SeqVoice_CheckAndRet_Data_Return2 00FEB5D1

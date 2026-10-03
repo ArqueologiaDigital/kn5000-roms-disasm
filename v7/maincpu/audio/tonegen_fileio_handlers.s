@@ -1035,12 +1035,14 @@ DSPCfg_Param_CaseC:
 	ld	wa, 1:i3
 	ld	xbc, 0x0340e6
 	ldw	de, 12
-	.asciz	"h1@ 4="
+	jr	CtrlPanel_IndicatorJumpTable_Join
+	ld	xwa, 0x3d3420
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340f2
 	ld	de, 4:i3
-	.asciz	"h @04="
+	jr	CtrlPanel_IndicatorJumpTable_Join
+	ld	xwa, 0x3d3430
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340f6
@@ -1133,7 +1135,8 @@ PanelDisplay_DispatchByMode_Loop2:
 	inc	1, bc
 	cp	bc, 12
 	jr	c, PanelDisplay_DispatchByMode_Loop2
-	.asciz	"hUB 4="
+	jr	DSPCfg_Param_Default
+	ld	xde, 0x3d3420
 	lda	xhl, (0x0340f2:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop3:
@@ -1143,7 +1146,8 @@ PanelDisplay_DispatchByMode_Loop3:
 	inc	1, bc
 	cp	bc, 4:i3
 	jr	c, PanelDisplay_DispatchByMode_Loop3
-	.asciz	"h9B04="
+	jr	DSPCfg_Param_Default
+	ld	xde, 0x3d3430
 	lda	xhl, (0x0340f6:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop4:

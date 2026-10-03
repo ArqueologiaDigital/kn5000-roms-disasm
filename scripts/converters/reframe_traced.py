@@ -4,7 +4,8 @@
 QUESTION THIS ANSWERS / JOB IT DOES
   A control-flow trace of a whole KN5000 maincpu image (scripts/converters/scoop_reframe.py
   trace: MAME unidasm recursive descent) entered at every address a `call`/`calr` of the tree
-  targets and every code label a `.long` table holds reaches ~255,000 instructions in v10 with 3
+  targets, every code label a `.long` table holds, and the case targets of the compiled switches
+  (switch_targets: offset table + base + `jp t, (xR+rr)`) reaches ~255,000 instructions in v10 with 3
   conflicts.  Where a traced instruction STARTS inside a source line that is not a macro
   invocation, the source frames those bytes differently from the way the CPU executes them --
   `.asciz " E@!"` in storage/flash_floppy_handlers.s, a `.byte` row, or an instruction
@@ -41,6 +42,53 @@ CALL = re.compile(r'^\s*(?:[A-Za-z_][\w.$]*:)?\s*(?:call|calr)\s+(?:[a-z]+\s*,\s
 LONG = re.compile(r'^\s*(?:[A-Za-z_][\w.$]*:)?\s*\.(?:long|4byte)\s+([^;]*)', re.I)
 
 
+JPI = re.compile(r'^\s*(?:[A-Za-z_][\w.$]*:)?\s*jp\s+t\s*,\s*\((x\w+)\+(\w+)\)', re.I)
+TLOAD = re.compile(r'^\s*(?:[A-Za-z_][\w.$]*:)?\s*(?:lda|ld)\s+(x\w+)\s*,\s*\(?([A-Za-z_]\w*)(?::24)?\)?\s*$', re.I)
+RANGE = re.compile(r'^\s*(?:[A-Za-z_][\w.$]*:)?\s*cp\s+(\w+)\s*,\s*(0x[0-9a-fA-F]+|\d+)(?::i3)?\s*$', re.I)
+
+
+def switch_targets(v, addr, per_switch=False):
+    """Case targets of the compiled switches -- `ld/lda xR, OffsetTable` ... `ld rr, (xR+rr)` ...
+    `ld/lda xR, Base` ... `jp t, (xR+rr)`: Base + the signed u16 offsets.  The entry count is
+    the range check before the dispatch (`cp rr, N` -> N + 1); a switch without one is skipped
+    (guessing the count, the v10 trace's conflicts went from 3 to 117)."""
+    rom = SR.rom(v)
+    out = set()
+    groups = []
+    for f in glob.glob(os.path.join(REPO, v, "maincpu", "**", "*.s"), recursive=True):
+        L = open(f, "rb").read().decode("latin-1").split("\n")
+        for i, l in enumerate(L):
+            if not JPI.match(l.split(";")[0]):
+                continue
+            win = [x.split(";")[0] for x in L[max(0, i - 8):i]]
+            loads = [TLOAD.match(w) for w in win]
+            loads = [m.group(2) for m in loads if m and m.group(2) in addr]
+            if len(loads) < 2:
+                continue
+            tab, bas = addr[loads[-2]], addr[loads[-1]]
+            n = None
+            for w in L[max(0, i - 14):i]:
+                m = RANGE.match(w.split(";")[0])
+                if m:
+                    n = int(m.group(2), 0) + 1
+            if n is None:
+                continue                # no range check: the count would be a guess (with
+                                        # guessed counts the v10 trace's conflicts went 3 -> 117)
+            sw = set()
+            for k in range(min(n, 256)):
+                o = tab - 0xE00000 + 2 * k
+                if o + 2 > len(rom):
+                    break
+                off = int.from_bytes(rom[o:o + 2], "little")
+                off = off - 0x10000 if off >= 0x8000 else off
+                if n is None and not (-0x4000 < off < 0x4000):
+                    break
+                sw.add(bas + off)
+            out |= sw
+            groups.append(sw)
+    return groups if per_switch else out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--image", required=True, choices=("v10", "v9", "v7"))
@@ -71,6 +119,18 @@ def main():
                     it = it.strip()
                     if it in addr and code_line_start(addr[it]):
                         ents.add(addr[it])
+    base_insns, _, _ = SR.trace(v, 0xE00000, 0x1000000, sorted(ents))
+    inside = set()
+    for x, (ln, _) in base_insns.items():
+        inside.update(range(x + 1, x + ln))
+    added = 0
+    for sw in switch_targets(v, addr, per_switch=True):
+        # a switch whose targets land inside instructions the call-entered trace already
+        # decoded is misread (wrong table, base or count): all of its targets are dropped
+        if not any(x in inside for x in sw):
+            ents |= sw
+            added += 1
+    print("%s: %d compiled switches consistent with the call-entered trace" % (v, added))
     insns, ext, conflicts = SR.trace(v, 0xE00000, 0x1000000, sorted(ents))
     starts = set(s[0] for s in p.spans)
     macros = set(k.lower() for k in p.macros)

@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,615
-#   semantic names ........... 50,764 (98.4%)
+#   symbols .................. 51,621
+#   semantic names ........... 50,770 (98.4%)
 #   positional names ......... 851
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -50234,6 +50234,12 @@ SeqVoice_CheckAndRet_Data_Skip9 00FEBD08
 SeqVoice_CheckAndRet_Data_Return 00FEBD0D
 SendEpilogue_Data_Helper 00FEBD0E
 SeqVoice_CheckAndRet_Data_Skip10 00FEBD57
+SendEpilogue_Data_Helper_Skip 00FEBD5B
+SendEpilogue_Data_Helper_Skip2 00FEBD60
+SendEpilogue_Data_Helper_Skip3 00FEBD65
+SendEpilogue_Data_Helper_Skip4 00FEBD6A
+SendEpilogue_Data_Helper_Skip5 00FEBD6E
+SendEpilogue_Data_Helper_Skip6 00FEBD72
 SeqVoice_CheckAndRet_Data_Skip11 00FEBD99
 SeqVoice_CheckAndRet_Data_Skip12 00FEBD9E
 SeqVoice_CheckAndRet_Data_Return2 00FEBDA0

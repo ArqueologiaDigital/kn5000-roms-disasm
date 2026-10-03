@@ -19299,17 +19299,17 @@ SendEpilogue_Data_Helper:
 	cp	a, 128
 	jrl	z, SeqVoice_CheckAndRet_Data_Skip11
 	cp	a, 5:i3
-	jr	z, 90
+	jr	z, SendEpilogue_Data_Helper_Skip6
 	cp	a, 4:i3
-	jr	z, 82
+	jr	z, SendEpilogue_Data_Helper_Skip5
 	cp	a, 3:i3
-	jr	z, 74
+	jr	z, SendEpilogue_Data_Helper_Skip4
 	cp	a, 66
-	jr	z, 64
+	jr	z, SendEpilogue_Data_Helper_Skip3
 	cp	a, 65
-	jr	z, 54
+	jr	z, SendEpilogue_Data_Helper_Skip2
 	cp	a, 64
-	jr	z, 44
+	jr	z, SendEpilogue_Data_Helper_Skip
 	cp	a, 0:i3
 	jr	z, SeqVoice_CheckAndRet_Data_Skip10
 	extz	wa
@@ -19325,7 +19325,25 @@ SendEpilogue_Data_Helper:
 	jp	t, (xix+wa)
 SeqVoice_CheckAndRet_Data_Skip10:
 	ld	hl, 0:i3
-	.ascii "hE3@ÿh@3Aÿh;3Bÿh6Û«h2Û¬h.Û­h*"
+	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Skip:
+	ldw	hl, 65344
+	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Skip2:
+	ldw	hl, 65345
+	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Skip3:
+	ldw	hl, 65346
+	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Skip4:
+	ld	hl, 3:i3
+	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Skip5:
+	ld	hl, 4:i3
+	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Skip6:
+	ld	hl, 5:i3
+	jr	SeqVoice_CheckAndRet_Data_Return2
 	ldw	hl, 16
 	jr	SeqVoice_CheckAndRet_Data_Return2
 	ldw	hl, 17
@@ -27302,10 +27320,9 @@ HdaeRom_DataHandler_Loop3:
 	sll	xbc, 4
 	add	xbc, 80
 	ld	xiy, xbc
-	.byte 0xaf, 0x06
-	sub	(xiy), l
-	ldw	(36:8), 0x4831:io
-	nop
+	add	xiy, (xsp+6)
+	ld	xix, (xsp+10)
+	ldw	bc, 72
 	ldirw
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate
@@ -27812,10 +27829,9 @@ VoiceParam_DispatchTable1:
 TmFlash_BulkTransferToSubCPU_Join:
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte 0xaf
-	push	sr
-	decm8	8, (xhl)
-	call16 35304
+	add	xhl, (xsp+2)
+	jr	TmFlash_BulkTransferToSubCPU_Epilogue
+	ld	xbc, xwa
 	sll	xbc, 3
 	add	xbc, xwa
 	sll	xbc, 4

@@ -1,0 +1,88 @@
+{
+ "rows": [
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc80d1",
+   "end": "0xfc80dd"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xfeb58a",
+   "end": "0xfeb5a7"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xfefb5b",
+   "end": "0xfefb64"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xff0034",
+   "end": "0xff003b"
+  },
+  {
+   "file": "audio/tonegen_fileio_handlers.s",
+   "start": "0xfc4e22",
+   "end": "0xfc4e29"
+  },
+  {
+   "file": "audio/tonegen_fileio_handlers.s",
+   "start": "0xfc4e33",
+   "end": "0xfc4e3a"
+  },
+  {
+   "file": "audio/tonegen_fileio_handlers.s",
+   "start": "0xfc4f32",
+   "end": "0xfc4f39"
+  },
+  {
+   "file": "audio/tonegen_fileio_handlers.s",
+   "start": "0xfc4f4e",
+   "end": "0xfc4f55"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf55e04",
+   "end": "0xf55e7c"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf588d7",
+   "end": "0xf58941"
+  }
+ ],
+ "conflicts": [
+  [
+   15664023,
+   "halt"
+  ],
+  [
+   16417808,
+   "undecodable"
+  ],
+  [
+   16412905,
+   "undecodable"
+  ],
+  [
+   16408844,
+   "undecodable"
+  ],
+  [
+   16403983,
+   "undecodable"
+  ],
+  [
+   16396766,
+   "undecodable"
+  ],
+  [
+   16387006,
+   "undecodable"
+  ],
+  [
+   15665319,
+   "halt"
+  ]
+ ]
+}

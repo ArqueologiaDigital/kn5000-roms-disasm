@@ -5399,11 +5399,8 @@ ExtData_ToneParam_AltBody_Join3:
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_ToneParam_AltBody_Entry:
-	.byte	0xc1
-	.byte 0x94, 0x90, 0x19, 0x8d
-	.byte	0x90, 0xc1
-	.byte 0x95, 0x90, 0x19, 0x8e
-	.byte	0x90
+	ld	(0x908d), (37012:16)
+	ld	(0x908e), (37013:16)
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_ToneParam_AltBody_Join4:
 	ldw	wa, 48
