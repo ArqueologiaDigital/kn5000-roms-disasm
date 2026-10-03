@@ -19031,7 +19031,7 @@ PanelGroupQueue_ExpandToEvents_DeadCopy:
 	and D,W                                              ; F8A47B  c8 c4
 	and E,W                                              ; F8A47D  c8 c5
 	calr sub_F8A4A1                                            ; F8A47F  1e 1f 00
-	jr -34                                               ; F8A482  68 de
+	jr .LF8A462                                               ; F8A482  68 de
 .LF8A484:
 	inc 2,XIY                                            ; F8A484  ed 62
 	jr -90                                               ; F8A486  68 a6
@@ -19043,7 +19043,7 @@ PanelGroupQueue_ExpandToEvents_DeadCopy:
 	ret                                                  ; F8A498  0e
 .LF8A499:
 	dec 2,XIX                                            ; F8A499  ec 6a
-	jr -18                                               ; F8A49B  68 ee
+	jr .LF8A48B                                               ; F8A49B  68 ee
 sub_F8A49D:
 	nop                                                  ; F8A49D  00
 	nop                                                  ; F8A49E  00
@@ -19053,20 +19053,20 @@ sub_F8A4A1:
 	ld a, (xhl-1)                                        ; F8A4A1  8b ff 21
 	inc 1,XHL                                            ; F8A4A4  eb 61
 	cp a, 0x00:i3                                          ; F8A4A6  c9 d8
-	jr z, 0x15                                           ; F8A4A8  66 15
+	jr z, .LF8A4BF                                           ; F8A4A8  66 15
 	bit 0x04,A                                           ; F8A4AA  c9 33 04
-	jr z, 0x09                                           ; F8A4AD  66 09
+	jr z, .LF8A4B8                                           ; F8A4AD  66 09
 	and A,0x07                                           ; F8A4AF  c9 cc 07
 	.byte 0xcc, 0xfc                                     ; F8A4B2  cc fc   sla A,D
 	.byte 0xcd, 0xfc                                     ; F8A4B4  cd fc   sla A,E
-	jr 0x07                                              ; F8A4B6  68 07
+	jr .LF8A4BF                                              ; F8A4B6  68 07
 .LF8A4B8:
 	and A,0x07                                           ; F8A4B8  c9 cc 07
 	.byte 0xcc, 0xff                                     ; F8A4BB  cc ff   srl A,D
 	.byte 0xcd, 0xff                                     ; F8A4BD  cd ff   srl A,E
 .LF8A4BF:
 	cp d, 0x00:i3                                          ; F8A4BF  cc d8
-	jr nz, 0x04                                          ; F8A4C1  6e 04
+	jr nz, .LF8A4C7                                          ; F8A4C1  6e 04
 	dec 2,XIX                                            ; F8A4C3  ec 6a
 	jr .LF8A503                                              ; F8A4C5  68 3c
 .LF8A4C7:
@@ -19467,7 +19467,7 @@ sub_F8A6F3:
 	ld a, (0x7f02:16)                                   ; F8A7F3  c1 02 7f 21
 	and A,0xf0                                           ; F8A7F7  c9 cc f0
 	cp a, 0x00:i3                                          ; F8A7FA  c9 d8
-	jr nz, 0x13                                          ; F8A7FC  6e 13
+	jr nz, .LF8A811                                          ; F8A7FC  6e 13
 	ld A,E                                               ; F8A7FE  cd 89
 	jp sub_F8A6F3_Join                                        ; F8A800  1b 18 a8 f8
 	ret                                                  ; F8A804  0e
@@ -22365,7 +22365,7 @@ sub_F8BF07:
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
 sub_F8C000:
-	jp 0xf8c018                                   ; F8C000  1b 18 c0 f8
+	jp .LF8C018                                   ; F8C000  1b 18 c0 f8
 	ret                                           ; F8C004  0e
 	nop                                           ; F8C005  00
 	nop                                           ; F8C006  00
@@ -22386,6 +22386,7 @@ sub_F8C000:
 	nop                                           ; F8C015  00
 	nop                                           ; F8C016  00
 	nop                                           ; F8C017  00
+.LF8C018:
 	ld (0x2143:16), 0x05                          ; F8C018  f1 43 21 00 05
 	ld (0x2144:16), 0x05                          ; F8C01D  f1 44 21 00 05
 	ld (0x2146:16), 0x05                          ; F8C022  f1 46 21 00 05
@@ -22399,7 +22400,7 @@ sub_F8C032:   ; entry: prom_b routine directory
 	calr sub_F8C630                                          ; F8C03A  1e f3 05
 .LF8C03D:
 	ld XIY,CmdList_F8C046                                ; F8C03D  45 46 c0 f8 00
-	calr 0x0128                                          ; F8C042  1e 28 01
+	calr .LF8C16D                                          ; F8C042  1e 28 01
 	ret                                                  ; F8C045  0e
 ; ---------------------------------------------------------------------
 ; CmdList_F8C046 -- 8 bytes, 1 x 7-byte record(s) + 0xFF terminator.
@@ -31471,11 +31472,11 @@ sub_F90989:
 	ld (UI_StatusCode:16), 0x24                                 ; F9098F  f1 80 28 00 24
 	m_and_mi8 MB16, 0x20a9, 0xfe                         ; F90994  c1 a9 20 3c fe
 	m_cp_mi8 MB16, 0x207d, 0xa3                          ; F90999  c1 7d 20 3f a3
-	jr z, 0x04                                           ; F9099E  66 04
+	jr z, .LF909A4                                           ; F9099E  66 04
 	call T_F42E68                                        ; F909A0  1d 68 2e f4
 .LF909A4:
 	m_bit 4, MD16, 0x2095                                ; F909A4  f1 95 20 cc
-	jr nz, 0x12                                          ; F909A8  6e 12
+	jr nz, .LF909BC                                          ; F909A8  6e 12
 	ld XWA,sub_F909CF                                    ; F909AA  40 cf 09 f9 00
 	push XWA                                             ; F909AF  38
 	call T_CallbackQueue_Post                            ; F909B0  1d 84 2e f4
@@ -31666,17 +31667,17 @@ sub_F90A42__F90B00:
 ; ---------------------------------------------------------------------
 sub_F90B8E:
 	m_bit 0, MD16, 0x2677                                ; F90B8E  f1 77 26 c8
-	jr z, 0x39                                           ; F90B92  66 39
+	jr z, .LF90BCD                                           ; F90B92  66 39
 	call 0xf93cf4                                        ; F90B94  1d f4 3c f9
 	ld A,(XIY+0x18)                                      ; F90B98  8d 18 21
 	ld (0x2640:16), a                                   ; F90B9B  f1 40 26 41
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90B9F  c0 c4 3f 02
-	jr z, 0x15                                           ; F90BA3  66 15
+	jr z, .LF90BBA                                           ; F90BA3  66 15
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F90BA5  f1 40 25 00 01
 	ld XIY,0x00f286b8                                    ; F90BAA  45 b8 86 f2 00
 	ld XIX,0x00f286e4                                    ; F90BAF  44 e4 86 f2 00
 	call T_DisplayListB_Run                              ; F90BB4  1d f4 17 f4
-	jr 0x13                                              ; F90BB8  68 13
+	jr .LF90BCD                                              ; F90BB8  68 13
 .LF90BBA:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F90BBA  f1 40 25 00 01
 	ld XIY,0x00f28724                                    ; F90BBF  45 24 87 f2 00
@@ -38307,10 +38308,10 @@ Print_DebugMonitor__F94C67:
 	pop XBC                                              ; F94C7B  59
 	ld w, 0x28:opc                                          ; F94C7C  20 28
 	jr ule, 0x29                                         ; F94C7E  63 29
-	jr pl, 0x61                                          ; F94C80  6d 61
+	jr pl, .LF94CE3                                          ; F94C80  6d 61
 	jrl ule, 0x2c61                                      ; F94C82  73 61 2c
 	jrl ov, 0x736f                                       ; F94C85  74 6f 73
-	jr 0x69                                              ; F94C88  68 69
+	jr .LF94CF3                                              ; F94C88  68 69
 	ld w, 0x2d:opc                                          ; F94C8A  20 2d
 	pushw iy                                             ; F94C8C  2d
 	pushw iy                                             ; F94C8D  2d
@@ -40289,7 +40290,7 @@ sub_F95C2D_Data_F95C7A:
 	.byte 0xf0, 0xff, 0xff                               ; F95C7A  f0 ff ff
 	nop                                                  ; F95C7D  00
 	jrl c, 0x6173                                        ; F95C7E  77 73 61
-	jr lt, 0x01                                          ; F95C81  61 01
+	jr lt, .LF95C84                                          ; F95C81  61 01
 sub_F95C2D__F95C83:
 	nop                                                  ; F95C83  00
 .LF95C84:
@@ -40303,7 +40304,7 @@ sub_F95C2D__F95C83:
 	normal                                               ; F95C8B  01
 	nop                                                  ; F95C8C  00
 	nop                                                  ; F95C8D  00
-	jr f, 0x00                                           ; F95C8E  60 00
+	jr f, .LF95C90                                           ; F95C8E  60 00
 .LF95C90:
 	nop                                                  ; F95C90  00
 	rcf                                                  ; F95C91  10
@@ -156378,7 +156379,7 @@ sub_FE152E:
 	ld XBC,(XBC)                                         ; FE154D  a1 21
 	jp (xbc)                                             ; FE154F  b1 d8
 sub_FE152E__FE1551:
-	jr mi, 0x15                                          ; FE1551  65 15
+	jr mi, .LFE1568                                          ; FE1551  65 15
 	swi 6                                                ; FE1553  fe
 	nop                                                  ; FE1554  00
 	cp (xbc1+:2), xiz                                 ; FE1555  e5 15 fe
@@ -159336,10 +159337,10 @@ sub_FE2FC8:
 	jr z, .LFE2FDA                                           ; FE2FD0  66 08
 	cp BC,0x002b                                         ; FE2FD2  d9 cf 2b 00
 	jr z, .LFE2FDF                                           ; FE2FD6  66 07
-	jr 0x0c                                              ; FE2FD8  68 0c
+	jr .LFE2FE6                                              ; FE2FD8  68 0c
 .LFE2FDA:
 	pushw 0x05dc                                         ; FE2FDA  0b dc 05
-	jr 0x03                                              ; FE2FDD  68 03
+	jr .LFE2FE2                                              ; FE2FDD  68 03
 .LFE2FDF:
 	pushw 0x01f4                                         ; FE2FDF  0b f4 01
 .LFE2FE2:
@@ -159592,7 +159593,7 @@ sub_FE30DD:
 	ld (0x605d36:24), bc                                ; FE30E8  f2 36 5d 60 51
 	ld xwa, (0x605d22:24)                               ; FE30ED  e2 22 5d 60 20
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                       ; FE30F2  98 02 3f 01 00
-	jrl nz, 0x0291                                       ; FE30F7  7e 91 02
+	jrl nz, .LFE338B                                       ; FE30F7  7e 91 02
 	pushw 0x60                                           ; FE30FA  0b 60 00
 	pushw 0x6f9b                                         ; FE30FD  0b 9b 6f
 	call Dev7E_IdentifyDevice                                      ; FE3100  1d 27 50 fe
@@ -159772,7 +159773,7 @@ sub_FE30DD:
 	srl xhl, 16                                        ; FE32F0  eb ef 00
 .LFE32F3:
 	and A,0x0f                                           ; FE32F3  c9 cc 0f
-	jr z, 0x02                                           ; FE32F6  66 02
+	jr z, .LFE32FA                                           ; FE32F6  66 02
 	.byte 0xeb, 0xff                                     ; FE32F8  eb ff
 .LFE32FA:
 	ld (XDE),XHL                                         ; FE32FA  b2 63
@@ -161305,7 +161306,7 @@ Disk_CommandDispatch:
 	push XDE                                             ; FE42F8  3a
 	calr sub_FE3CB1                                          ; FE42F9  1e b5 f9
 	inc 4,XSP                                            ; FE42FC  ef 64
-	jr T,0x4d                                            ; FE42FE  68 4d
+	jr T,.LFE434D                                            ; FE42FE  68 4d
 	push XDE                                             ; FE4300  3a
 	calr sub_FE3DB2                                          ; FE4301  1e ae fa
 	inc 4,XSP                                            ; FE4304  ef 64
@@ -163191,7 +163192,7 @@ Unit1_Op5_FormatAndWriteDirBlocks:
 	ld xiz, 0x00:i3                                      ; FE51F3  ee a8
 	ld XWA,(XSP+0x0a)                                    ; FE51F5  af 0a 20
 	cp XWA,0x00000000                                    ; FE51F8  e8 cf 00 00 00 00
-	jr ULE,0x5a                                          ; FE51FE  63 5a
+	jr ULE,.LFE525A                                          ; FE51FE  63 5a
 .LFE5200:
 	ld XWA,(XSP+0x0e)                                    ; FE5200  af 0e 20
 	push XWA                                             ; FE5203  38
@@ -167495,7 +167496,7 @@ Fdc_OperationJumpTable:
 	.short 0x0037                                  ; FE6E82  11 -> Fdc_Op11_SenseDriveStatus
 sub_FE6E84:
 	jr f, -6                                             ; FE6E84  60 fa
-	jr z, 0x10                                           ; FE6E86  66 10
+	jr z, .LFE6E98                                           ; FE6E86  66 10
 	calr Disk_FormatSelectedMedia_Join                                          ; FE6E88  1e 91 03
 	ld BC,IZ                                             ; FE6E8B  de 89
 	srl bc, 0x08                                         ; FE6E8D  d9 ef 08
@@ -179029,7 +179030,7 @@ DisplayList_FF0BE1:
 	.byte 0x02, 0x0F                               ; FF0BE1  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xF0, 0x0B, 0xFF, 0x00, 0x01, 0x00, 0x07, 0x1C  ; FF0BE3
 DisplayList_FF0BE1__FF0BF0:
-	jrl z, 0x40f1                                        ; FF0BF0  76 f1 40
+	jrl z, .LFF4CE4                                        ; FF0BF0  76 f1 40
 	ld e, 0x00:opc                                          ; FF0BF3  25 00
 	nop                                                  ; FF0BF5  00
 	calr sub_FEF83B                                          ; FF0BF6  1e 42 ec
@@ -183279,6 +183280,7 @@ LcdKeyRow4_DiskL0adFile:
 	lda xbc, (DL_F5995C:24)                              ; FF4CD9  f2 5c 99 f5 31
 	push XBC                                             ; FF4CDE  39
 	lda xwa, (DL_F59952:24)                              ; FF4CDF  f2 52 99 f5 30
+.LFF4CE4:
 	push XWA                                             ; FF4CE4  38
 .LFF4CE5:
 	call sub_FF75D3                                      ; FF4CE5  1d d3 75 ff
