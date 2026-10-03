@@ -983,7 +983,7 @@ AccompSeq_ManualMidi_ClearFlags_Code_Helper2:
 	ld	l, (32196:16)
 	ld	h, (32197:16)
 	ld	a, (32136:16)
-	and	a, (0x03:8)
+	and	a, (P0FC:8)
 	cp	a, 0:i3
 	jr	nz, AccompSeq_ManualMidi_ClearFlags_Code_Skip
 	call	AccompSeq_InitPartFull

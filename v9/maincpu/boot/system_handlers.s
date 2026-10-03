@@ -30,7 +30,7 @@ NMI_SetPowerOffCode_A5A5:
 NMI_ClearGuardAndHalt:
 	ld (1024:16), 0
 	res 7, (354:16)
-	set	2, (0x3c:8)
+	set	2, (PF:8)
 	halt
 NMI_HaltLoop:
 	jr	t, 0xfd
@@ -2158,11 +2158,11 @@ TaskSched_InitMsgQueues_Code:
 TaskSched_PostInit:
 	call TaskTimer_Register
 	calr Stop_and_Clear_8bit_Timer_3
-	ld (0x8b:8), 0x07:io
-	ld	a, (0xe5:8)
+	ld (TREG3:8), 0x07:io
+	ld	a, (INTET23:8)
 	and a, 0xf
 	or a, 0x20
-	ld	(0xe5:8), a
+	ld	(INTET23:8), a
 	calr Start_8bit_Timer_3
 	ld a, 0x1:opc
 	calr Show_ScreenGroup
@@ -3365,11 +3365,11 @@ TaskSched_DelayTicks_SpinLoop:
 	ret
 
 Start_8bit_Timer_3:
-	set	3, (0x80:8)
+	set	3, (T8RUN:8)
 	ret
 
 Stop_and_Clear_8bit_Timer_3:
-	res	3, (0x80:8)
+	res	3, (T8RUN:8)
 	ret
 
 SeqBuf_BytecodeSnippet:
@@ -5407,24 +5407,24 @@ SeqDMA_WriteMidi_NoteOn_Done:
 ;        Called during boot after Sub-CPU is released from reset
 ; ===========================================================================
 SubCPU_Init_DMA_Channels:
-	and	(0xe5:8), 0xf8
-	res	2, (0x80:8)
-	lda	xbc, (0xec:8)
+	and	(INTET23:8), 0xf8
+	res	2, (T8RUN:8)
+	lda	xbc, (INTETC01:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x5
 	ld (xbc), a
-	lda	xbc, (0xed:8)
+	lda	xbc, (INTETC23:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x5
 	ld (xbc), a
-	lda	xbc, (0xf0:8)
+	lda	xbc, (INTE0AD:8)
 	ld a, (xbc)
 	and a, 0xf8
 	set 0, a
 	ld (xbc), a
-	ld (0x8a:8), 0x07:io
+	ld (TREG2:8), 0x07:io
 	lda xwa, (0x140000:24)
 	ldc_cr32 xwa, 0x28
 	ld a, 0x8:opc
@@ -5504,9 +5504,9 @@ InterCPU_Send_Data_Block:
 	ld ix, 0:i3
 
 InterCPU_Send_WaitReady:
-	bit	3, (0x68:8)	; SSTAT1 - test if Sub CPU is ready
+	bit	3, (PZ:8)	; SSTAT1 - test if Sub CPU is ready
 	jr z, InterCPU_Send_TimeoutLoop
-	res	0, (0x68:8)	; MSTAT0 - clear to initiate handshake with Sub CPU
+	res	0, (PZ:8)	; MSTAT0 - clear to initiate handshake with Sub CPU
 	ld (1504:16), 1
 	ld l, c
 	dec 1, l
@@ -5516,9 +5516,9 @@ InterCPU_Send_WaitReady:
 	ld ix, 0:i3
 
 InterCPU_Send_WaitAck:
-	bit	3, (0x68:8)	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
+	bit	3, (PZ:8)	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	jr nz, InterCPU_Send_AckTimeoutLoop
-	set	0, (0x68:8)	; MSTAT0 - set to signal DMA data transfer starting
+	set	0, (PZ:8)	; MSTAT0 - set to signal DMA data transfer starting
 	ld (1498:16), xde
 	extz bc
 	ld (1502:16), bc
@@ -5544,7 +5544,7 @@ InterCPU_Send_AckTimeoutLoop:
 	inc 1, ix
 	cp wa, 0xea60
 	jr ule, InterCPU_Send_WaitAck
-	set	0, (0x68:8)	; MSTAT0 - timeout recovery: force ready state
+	set	0, (PZ:8)	; MSTAT0 - timeout recovery: force ready state
 	ret
 
 ; ===========================================================================
@@ -5575,15 +5575,15 @@ InterCPU_E2_WaitIdle:
 	jr nz, InterCPU_E2_WaitIdle
 
 InterCPU_E2_ClearAndSend:
-	res	0, (0x68:8)	; MSTAT0 - clear to initiate E2 command handshake
+	res	0, (PZ:8)	; MSTAT0 - clear to initiate E2 command handshake
 	ld (1504:16), 1
 	ld (0x140000:24), 0xe2
 	ld ix, 0:i3
 
 InterCPU_E2_WaitAck:
-	bit	3, (0x68:8)	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
+	bit	3, (PZ:8)	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	jr nz, InterCPU_E2_TimeoutLoop
-	set	0, (0x68:8)	; MSTAT0 - set to signal E2 header data ready
+	set	0, (PZ:8)	; MSTAT0 - set to signal E2 header data ready
 	lda xhl, (1478:16)
 	ld (xhl), xwa
 	ld (xhl + 4), xde
@@ -5606,7 +5606,7 @@ InterCPU_E2_TimeoutLoop:
 	inc 1, ix
 	cp hl, 0xea60
 	jr ule, InterCPU_E2_WaitAck
-	set	0, (0x68:8)	; MSTAT0 - timeout recovery: force ready state
+	set	0, (PZ:8)	; MSTAT0 - timeout recovery: force ready state
 	ret
 
 ; ===========================================================================
@@ -5698,17 +5698,17 @@ E1Bulk_ReadyCheck:
 	ld iz, 0:i3
 
 E1Bulk_WaitSubCPU_Ready:
-	bit	3, (0x68:8)	; SSTAT1 - test if Sub CPU is ready for E1 transfer
+	bit	3, (PZ:8)	; SSTAT1 - test if Sub CPU is ready for E1 transfer
 	jrl z, E1Bulk_ReadyTimeout_Loop
-	res	0, (0x68:8)	; MSTAT0 - clear to initiate E1 bulk transfer
+	res	0, (PZ:8)	; MSTAT0 - clear to initiate E1 bulk transfer
 	ld (1504:16), 2
 	ld (0x140000:24), 0xe1
 	ld iz, 0:i3
 
 E1Bulk_WaitAck:
-	bit	3, (0x68:8)	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
+	bit	3, (PZ:8)	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
 	jrl nz, E1Bulk_AckTimeout_Loop
-	set	0, (0x68:8)	; MSTAT0 - set to signal 6-byte header data ready
+	set	0, (PZ:8)	; MSTAT0 - set to signal 6-byte header data ready
 	lda xhl, (1544:16)
 	ld (xhl), xwa
 	lda xwa, (1488:16)
@@ -5772,7 +5772,7 @@ E1Bulk_AckTimeout_Loop:
 	inc 1, iz
 	cp hl, 0xea60
 	jrl ule, E1Bulk_WaitAck
-	set	0, (0x68:8)	; MSTAT0 - timeout recovery: force ready state
+	set	0, (PZ:8)	; MSTAT0 - timeout recovery: force ready state
 
 FlashBufferIO_Exit:
 	popw iz
@@ -5886,7 +5886,7 @@ FlashBufferIO_Exit:
 ; targets that address, so whether it ever runs is unknown.
 ; =============================================================================
 INT0_HANDLER:
-	bit	1, (0x68:8)	; MSTAT1 (PZ.1, our own output read back): HIGH = no receive
+	bit	1, (PZ:8)	; MSTAT1 (PZ.1, our own output read back): HIGH = no receive
 			; in progress, so this /INT0 carries a HEADER byte
 	jr nz, INT0_ProcessCommand
 	ld (265:16), 1	; MSTAT1 LOW = a receive is running, so this /INT0 carries a
@@ -5902,7 +5902,7 @@ INT0_ProcessCommand:
 	reti
 
 INT0_ReadLatch:
-	bit	2, (0x68:8)	; SSTAT0 - test Sub CPU handshake status
+	bit	2, (PZ:8)	; SSTAT0 - test Sub CPU handshake status
 	ret nz
 	push xwa
 	push xbc
@@ -5920,7 +5920,7 @@ INT0_ReadLatch:
 	ldc_cr32 xwa, 0x20
 	ld wa, 6:i3
 	ldc_cr16 wa, 0x40
-	lda	xbc, (0xf0:8)
+	lda	xbc, (INTE0AD:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
@@ -5936,7 +5936,7 @@ INT0_CheckE2Command:
 	ldc_cr32 xwa, 0x20
 	ldw wa, 0xa
 	ldc_cr16 wa, 0x40
-	lda	xbc, (0xf0:8)
+	lda	xbc, (INTE0AD:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
@@ -5953,14 +5953,14 @@ INT0_HandleDataCommand:
 	inc 1, a
 	extz wa
 	ldc_cr16 wa, 0x40
-	lda	xbc, (0xf0:8)
+	lda	xbc, (INTE0AD:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
 	ld (xbc), a
 
 INT0_AckAndReturn:
-	res	1, (0x68:8)	; MSTAT1 - clear to acknowledge command from Sub CPU.
+	res	1, (PZ:8)	; MSTAT1 - clear to acknowledge command from Sub CPU.
 			; This doubles as the RELEASE of the mutual-exclusion flag
 			; tested at the top of INT0_HANDLER, and it happens only
 			; here, at the very end of the parse -- which is what makes
@@ -5975,7 +5975,7 @@ INT0_AckAndReturn:
 	ret
 
 INTTC2_HANDLER:
-	res	2, (0x80:8)
+	res	2, (T8RUN:8)
 	cp (1504:16), 1
 	jr nz, INTTC2_CheckPhase2
 	ld (1504:16), 0
@@ -5997,7 +5997,7 @@ INTTC0_HANDLER:
 	push xde
 	push xbc
 	push xwa
-	lda	xbc, (0xf0:8)
+	lda	xbc, (INTE0AD:8)
 	ld a, (xbc)
 	and a, 0xf8
 	set 0, a
@@ -6034,7 +6034,7 @@ E1DMA_TransferSetup:
 	ldc_cr32 xbc, 0x20
 	ld wa, (xwa + 4)
 	ldc_cr16 wa, 0x40
-	lda	xbc, (0xf0:8)
+	lda	xbc, (INTE0AD:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x6
@@ -6045,7 +6045,7 @@ E1DMA_TransferSetup:
 INTTC0_E2_Complete:
 	ld (1510:16), 255
 	ld (1506:16), 0
-	set	1, (0x68:8)	; MSTAT1 - set to signal E2 command complete
+	set	1, (PZ:8)	; MSTAT1 - set to signal E2 command complete
 	set 7, (1566:16)
 	jr E1DMA_ISR_Epilogue
 
@@ -6054,7 +6054,7 @@ INTTC0_E1_Phase2_Complete:
 	res 7, (1568:16)
 
 INTTC0_SetTransferDone:
-	set	1, (0x68:8)	; MSTAT1 - set to signal E1 transfer complete
+	set	1, (PZ:8)	; MSTAT1 - set to signal E1 transfer complete
 
 E1DMA_ISR_Epilogue:
 	pop xwa
@@ -6079,7 +6079,7 @@ E1DMA_ISR_BytecodeBlock:
 	calr	InterCPU_E1_Bulk_Transfer
 INTTC0_HANDLER_Skip3:
 	ei	0
-	bit	1, (0x68:8)
+	bit	1, (PZ:8)
 	jr	nz, INTTC0_HANDLER_Skip2
 	.byte	0xd8, 0x2f, 0x40	; ldc WA,unknown
 	cp	(0xe362:16), wa
@@ -6100,7 +6100,7 @@ INTTC0_HANDLER_Join2:
 	ldw	(0xe360:16), 0
 	ld	(256:16), 0
 	ld	(1506:16), 0
-	set	1, (0x68:8)
+	set	1, (PZ:8)
 	inc	1, (0xe35e:16)
 	ret
 	ld	de, (SYSTEM_TIMESTAMP:16)
@@ -6117,7 +6117,7 @@ INTTC0_HANDLER_Skip4:
 	jr	le, INTTC0_HANDLER_Entry
 	ld	(256:16), 0
 	ld	(1506:16), 0
-	set	1, (0x68:8)
+	set	1, (PZ:8)
 	res	7, (0x620:16)
 	inc	1, (0xe364:16)
 	ldw	hl, 0xffff
@@ -6134,7 +6134,7 @@ Flash_IdentifyChip_UseBank1:
 	ld xiz, xbc
 
 Flash_IdentifyChip_WaitReady:
-	bit	5, (0x1c:8)
+	bit	5, (P7:8)
 	jr z, Flash_IdentifyChip_WaitReady
 	ei 6
 	ld xwa, xiz
@@ -6227,7 +6227,7 @@ Flash_ProgramWord:
 	jr z, Flash_ProgramWord_Done
 
 Flash_ProgramWord_WaitReady:
-	bit	5, (0x1c:8)
+	bit	5, (P7:8)
 	jr z, Flash_ProgramWord_WaitReady
 	cp a, 1:i3
 	jr nz, Flash_ProgramWord_UseBank1
@@ -6452,7 +6452,7 @@ FlashOp_Epilogue10:
 	ret
 
 Flash_CheckReady:
-	bit	5, (0x1c:8)
+	bit	5, (P7:8)
 	jr z, Flash_CheckReady_NotReady
 	ld hl, 0:i3
 	ret
@@ -6679,7 +6679,7 @@ TableDataROM_IdentifyChip:
 	ld xde, 0x800000
 
 TableDataROM_IdentifyChip_WaitReady:
-	bit	5, (0x1c:8)
+	bit	5, (P7:8)
 	jr z, TableDataROM_IdentifyChip_WaitReady
 	ld xbc, xde
 	add xbc, 0x15554
@@ -6755,7 +6755,7 @@ Flash_ProgramByte:
 	jr z, Flash_ProgramByte_Done
 
 Flash_ProgramByte_WaitReady:
-	bit	5, (0x1c:8)
+	bit	5, (P7:8)
 	jr z, Flash_ProgramByte_WaitReady
 	ei 6
 	ld xwa, 0xaa00aa
@@ -6936,7 +6936,7 @@ HDAE5000_Flash_Erase_AllSectors:
 ;        Used to poll expansion board during data transfers
 ; ===========================================================================
 HDAE5000_Status_Check:
-	bit	5, (0x1c:8)
+	bit	5, (P7:8)
 	jr z, HDAE5000_Status_NotPresent
 	ld hl, 0:i3
 	ret
@@ -8168,9 +8168,9 @@ HDAE5000_Init_BytecodeBlock:
 	ldib_erp	251, 0
 	ld	(0xe4:0x8), 0:io
 	ld	(0xe0:0x8), 0:io
-	ld	(237:8), 0:io
-	ld	(227:8), 0:io
-	ld	(235:8), 0:io
+	ld	(INTETC23:8), 0:io
+	ld	(INTEAB:8), 0:io
+	ld	(INTES1:8), 0:io
 	ld	(340:16), 102
 	ld	(0x160006:24), 130
 	ld	(0x160000:24), 0

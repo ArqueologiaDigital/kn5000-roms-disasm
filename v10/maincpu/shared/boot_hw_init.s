@@ -29,57 +29,57 @@
 	ld (266:16), 4
 
 	; === Port F Setup (Control Panel / MIDI) ===
-	ld (0x3c:8), 0x00:io
-	ld (0x3f:8), 0x73:io	; Control panel enabled / MIDI disabled
-	ld (0x3e:8), 0x15:io
-	and	(0x2c:8), 0xf0
-	res	3, (0x20:8)
-	res	2, (0x3c:8)
+	ld (PF:8), 0x00:io
+	ld (PFFC:8), 0x73:io	; Control panel enabled / MIDI disabled
+	ld (PFCR:8), 0x15:io
+	and	(PB:8), 0xf0
+	res	3, (P8:8)
+	res	2, (PF:8)
 
 	; === Data Bus Ports Setup (P2, P3, P7) ===
-	ld (0x0b:8), 0xff:io
-	ld (0x0f:8), 0xff:io
-	ld (0x1c:8), 0xff:io
-	ld (0x1f:8), 0x1f:io
-	ld (0x1e:8), 0x00:io
+	ld (P2FC:8), 0xff:io
+	ld (P3FC:8), 0xff:io
+	ld (P7:8), 0xff:io
+	ld (P7FC:8), 0x1f:io
+	ld (P7CR:8), 0x00:io
 
 	; === Address Bus Ports Setup (PA, PB, PC, PD, PE, PH, PZ) ===
-	ld (0x28:8), 0xfe:io
-	ld (0x2b:8), 0x08:io
-	ld (0x2c:8), 0xff:io
-	ld (0x2f:8), 0x1f:io
+	ld (PA:8), 0xfe:io
+	ld (PAFC:8), 0x08:io
+	ld (PB:8), 0xff:io
+	ld (PBFC:8), 0x1f:io
 	ld (0x30:8), 0x03:io
-	ld (0x33:8), 0x00:io
-	ld (0x32:8), 0x02:io
-	ld (0x34:8), 0x00:io
-	ld (0x37:8), 0x06:io
-	ld (0x36:8), 0x11:io
-	ld (0x38:8), 0x00:io
-	ld (0x3b:8), 0x42:io
-	ld (0x3a:8), 0x20:io
-	ld (0x44:8), 0x00:io
-	ld (0x47:8), 0x1e:io
-	ld (0x46:8), 0x09:io
-	ld (0x68:8), 0xff:io
-	ld (0x6a:8), 0x03:io
+	ld (PCFC:8), 0x00:io
+	ld (PCCR:8), 0x02:io
+	ld (PD:8), 0x00:io
+	ld (PDFC:8), 0x06:io
+	ld (PDCR:8), 0x11:io
+	ld (PE:8), 0x00:io
+	ld (PEFC:8), 0x42:io
+	ld (PECR:8), 0x20:io
+	ld (PH:8), 0x00:io
+	ld (PHFC:8), 0x1e:io
+	ld (PHCR:8), 0x09:io
+	ld (PZ:8), 0xff:io
+	ld (PZCR:8), 0x03:io
 
 	; === 8-bit Timer Setup ===
-	ld (0x84:8), 0x1d:io
-	ld (0x85:8), 0x1d:io
-	ld (0x82:8), 0x00:io
-	ld (0x88:8), 0x0a:io
-	ld (0x89:8), 0x10:io
-	ld (0x81:8), 0x00:io
-	set	1, (0x80:8)
+	ld (T01MOD:8), 0x1d:io
+	ld (T23MOD:8), 0x1d:io
+	ld (T02FFCR:8), 0x00:io
+	ld (TREG0:8), 0x0a:io
+	ld (TREG1:8), 0x10:io
+	ld (TRDC:8), 0x00:io
+	set	1, (T8RUN:8)
 
 	; === 16-bit Timer 4/5 Setup ===
-	ld (0x98:8), 0x05:io
-	ld (0x99:8), 0x00:io
-	ld (0x9f:8), 0x00:io
-	ldw (0x90:8), 0x0001:io	; LDW (TREG4L:24), 0001h (ASL unsupported)
-	ldw (0x92:8), 0x3d09:io	; LDW (TREG5L:24), 3d09h (ASL unsupported)
-	set	7, (0x9e:8)
-	set	0, (0x9e:8)
+	ld (T4MOD:8), 0x05:io
+	ld (T4FFCR:8), 0x00:io
+	ld (T16CR:8), 0x00:io
+	ldw (TREG4L:8), 0x0001:io	; LDW (TREG4L:24), 0001h (ASL unsupported)
+	ldw (TREG5L:8), 0x3d09:io	; LDW (TREG5L:24), 3d09h (ASL unsupported)
+	set	7, (T16RUN:8)
+	set	0, (T16RUN:8)
 
 	; === Memory Controller: Start Address Registers ===
 	ld (323:16), 30; Block 0 @ 0x1e0000
@@ -98,9 +98,9 @@
 	ld (342:16), 255
 
 	; === Port 8 Setup (Chip Select) ===
-	ld (0x20:8), 0x3b:io
-	ld (0x23:8), 0x7f:io
-	ld (0x22:8), 0x3f:io
+	ld (P8:8), 0x3b:io
+	ld (P8FC:8), 0x7f:io
+	ld (P8CR:8), 0x3f:io
 
 	; === DRAM Initialization Delay 1 ===
 	ldw bc, 0x400
@@ -134,6 +134,6 @@ RESET_HANDLER__pause2:
 	ld (341:16), 129
 
 	; === Interrupt Mode Control ===
-	ld (0xf6:8), 0x00:io
+	ld (IIMC:8), 0x00:io
 	; End of shared boot hardware initialization (315 bytes)
 	; ROM-specific code follows in each file

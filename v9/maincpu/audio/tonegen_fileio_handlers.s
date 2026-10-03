@@ -569,7 +569,7 @@ DSPCfg_CopyEntryValues_Loop:
 	ld xwa, 2:i3
 	add	(xsp+18), xwa
 	.byte 0x8f
-	ld	(63:8), 0:io
+	ld	(PFFC:8), 0:io
 	jr	z, DSPCfg_CopyEntryValues_Entry
 DSPCfg_CopyEntryValues_Loop2:
 	ld	xwa, (xsp+18)

@@ -24238,11 +24238,11 @@ CommParam_SetComplete_Return2:
 CommParam_SetComplete_Return3:
 	ret
 CommPort_StatusCheckAndSend:
-	ldcf	4, (0x38:8)
+	ldcf	4, (PE:8)
 	scc8	c, a
 	cp	a, (0xe2c0:16)
 	ret	z
-	ldcf	4, (0x38:8)
+	ldcf	4, (PE:8)
 	scc8	c, a
 	ld	(0xe2c0:16), a
 	ld	xwa, 0xe2c0

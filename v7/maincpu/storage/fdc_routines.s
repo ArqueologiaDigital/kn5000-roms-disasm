@@ -550,10 +550,10 @@ FDC_NOP_Delay_Exit:
 
 
 FDC_Pulse_PH0:
-	set	0, (0x44:8)
+	set	0, (PH:8)
 	ldw wa, 0xa
 	calr FDC_NOP_Delay
-	res	0, (0x44:8)
+	res	0, (PH:8)
 	ret
 
 
@@ -926,20 +926,20 @@ FDC_HardwareSetup:
 ; [v10] byte count, buffer pointers are non-zero before proceeding.
 ; [v10] Returns: HL=0xffff on failure, 0 on success.
 ; [v10] Uses ldio, (R+d16) addressing. 460 bytes.
-	ld	(248:8), 11:io
-	lda	xbc, (0xe0:8)
+	ld	(INTCLR:8), 11:io
+	lda	xbc, (INTE45:8)
 	ld	a, (xbc)
 	and	a, 248
 	set	2, a
 	ld	(xbc), a
-	ld	(248:8), 40:io
-	lda	xbc, (0xed:8)
+	ld	(INTCLR:8), 40:io
+	lda	xbc, (INTETC23:8)
 	ld	a, (xbc)
 	and	a, 143
 	or	a, 80
 	ld	(xbc), a
-	ld	(248:8), 12:io
-	lda	xbc, (0xe0:8)
+	ld	(INTCLR:8), 12:io
+	lda	xbc, (INTE45:8)
 	ld	a, (xbc)
 	and	a, 143
 	or	a, 96
@@ -1905,7 +1905,7 @@ FDC_MC_EXIT_Code_Join2:
 	jrl	FDC_POST_OP
 FDC_CMD_ENABLE:
 	pushw	iz
-	set	3, (0x28:8)
+	set	3, (PA:8)
 	ldw	wa, 254
 	calr	FDC_CMD_SEND
 	cp	(FDC_ERROR_CODE:16), 0
@@ -1924,7 +1924,7 @@ FDC_MC_EXIT_Code_Epilogue:
 	popw	iz
 	ret
 FDC_CMD_DISABLE:
-	res	3, (0x28:8)
+	res	3, (PA:8)
 	ldw	wa, 14
 	jrl	FDC_CMD_SEND
 FDC_STATUS_COPY:
@@ -2252,15 +2252,15 @@ INT4_ExitRestore:
 	pop	xiz
 	reti
 Reset_Floppy_Disk_Controller:
-	set	0, (0x34:8)
+	set	0, (PD:8)
 	ldw	wa, 10
 	calr	SOME_DELAY
-	res	0, (0x34:8)
+	res	0, (PD:8)
 	ldw	wa, 10
 	jrl	SOME_DELAY
 TitleFunc_LifecycleTable_Helper:
-	ld	(71:8), 30:io
-	bit	6, (0x34:8)
+	ld	(PHFC:8), 30:io
+	bit	6, (PD:8)
 	ret	nz
 	ld	a, 0:opc
 	ldw	(35464:16), 0
@@ -2330,7 +2330,7 @@ FDC_Reset_BuildParams:
 	incw	1, (58132:16)
 	ret
 Check_for_Floppy_Disk_Change:
-	bit	6, (0x34:8)
+	bit	6, (PD:8)
 	jr z, Detected_Floppy_Disk_Change
 	ld l, 0x0:opc
 	ret

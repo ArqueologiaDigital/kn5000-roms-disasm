@@ -595,10 +595,10 @@ Boot_ShortDelay__done:
 ; Twin: maincpu FDC_Pulse_PH0 (fdc_routines.s:595)
 ; -----------------------------------------------------------------------------
 FDC_PulseTC:
-	set	0, (0x44:8)	; set 0,(0x44)
+	set	0, (PH:8)	; set 0,(0x44)
 	ldw wa, 0x0a	; ld WA,0x000a
 	calr Boot_ShortDelay	; calr 0xffdcf6
-	res	0, (0x44:8)	; res 0,(0x44)
+	res	0, (PH:8)	; res 0,(0x44)
 	ret
 
 ; -----------------------------------------------------------------------------
@@ -995,14 +995,14 @@ FDC_ProcessResults__unknown_st0:
 ; Twin: part of maincpu FDC_HardwareSetup (fdc_routines.s:972)
 ; -----------------------------------------------------------------------------
 FDC_EnableIntAndDMA:
-	ld (0xf8:8), 0x0b:io	; ld (0xf8),0x0b - INTCLR = 0x0B: clear pending INT4 (FDC IRQ)
-	lda	xbc, (0xe0:8)	; lda XBC,0xe0 - XBC = SFR 0xE0 = INTE45
+	ld (INTCLR:8), 0x0b:io	; ld (0xf8),0x0b - INTCLR = 0x0B: clear pending INT4 (FDC IRQ)
+	lda	xbc, (INTE45:8)	; lda XBC,0xe0 - XBC = SFR 0xE0 = INTE45
 	ld a, (xbc)
 	and a, 0xf8
 	set 2, a	; set 0x02,A - INT4 priority level 4 (enables the FDC interrupt)
 	ld (xbc), a
-	ld (0xf8:8), 0x28:io	; ld (0xf8),0x28 - INTCLR = 0x28: clear pending INTTC3 (DMA3 end)
-	lda	xbc, (0xed:8)	; lda XBC,0xed - XBC = SFR 0xED = INTETC23
+	ld (INTCLR:8), 0x28:io	; ld (0xf8),0x28 - INTCLR = 0x28: clear pending INTTC3 (DMA3 end)
+	lda	xbc, (INTETC23:8)	; lda XBC,0xed - XBC = SFR 0xED = INTETC23
 	ld a, (xbc)
 	and a, 0x8f
 	or a, 0x50	; INTTC3 priority level 5 (enables DMA3 end interrupt)
@@ -2047,7 +2047,7 @@ FDC_SubmitFormatTrackCmd:
 ; -----------------------------------------------------------------------------
 FDC_CmdMotorOn:
 	pushw iz	; push IZ - cmd 6 entry
-	set	3, (0x28:8)	; set 3,(0x28) - Port A bit 3 = drive motor/enable line
+	set	3, (PA:8)	; set 3,(0x28) - Port A bit 3 = drive motor/enable line
 	ldw wa, 0xfe	; ld WA,0x00fe - aux 0xFE = enable motors, drive bits 4-7 set
 	calr FDC_IssueCommand	; calr 0xffdfc3 - aux 0xFE = enable motors, drive bits 4-7 set
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
@@ -2073,7 +2073,7 @@ FDC_CmdMotorOn__done:
 ; Twin: maincpu FDC_CMD_DISABLE (fdc_routines.s dispatch entry 7)
 ; -----------------------------------------------------------------------------
 FDC_CmdMotorOff:
-	res	3, (0x28:8)	; res 3,(0x28) - cmd 7 entry; Port A bit 3 off
+	res	3, (PA:8)	; res 3,(0x28) - cmd 7 entry; Port A bit 3 off
 	ldw wa, 0x0e	; ld WA,0x000e - aux 0x0E = enable motors with all drive bits clear
 	jrl FDC_IssueCommand	; jrl T,0xffdfc3
 

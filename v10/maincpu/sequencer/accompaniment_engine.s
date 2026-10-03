@@ -10791,12 +10791,12 @@ AccVoice_CopyFromROM_Join:
 AccVoice_CopyFromROM_Skip:
 	cp	c, 0:i3
 	jr	nz, AccVoice_CopyFromROM_Skip3
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	ld	(1:8), 1:io
 	jr	AccVoice_CopyFromROM_Skip2
 AccVoice_CopyFromROM_Skip3:
-	ld	(11:8), 0:io
-	ld	(12:8), 1:io
+	ld	(P2FC:8), 0:io
+	ld	(P3:8), 1:io
 AccVoice_CopyFromROM_Skip2:
 	ld	xiy, 0:i3
 	ret
@@ -14295,8 +14295,8 @@ RhythmProc_ChannelMapTable:
 	max
 	max
 	max
-	ld (8:8), 8:io
-	ld (0:8), 0:io
+	ld (P2:8), 8:io
+	ld (P0:8), 0:io
 	nop
 	nop
 	nop
@@ -19066,7 +19066,7 @@ ToneGen_MapNoteToOctaveBitmask_Code:
 	normal
 	push	sr
 	max
-	ld	(16:8), 32:io
+	ld	(P4:8), 32:io
 	.byte 0x40, 0x80
 
 ToneGen_MapNote_OrMask:
@@ -21174,7 +21174,7 @@ ToneGen_Stereo_WriteParam_Code:
 	retd	2576
 	pushw	0x4709
 	reti
-	ld	(59:8), 60:io
+	ld	(PEFC:8), 60:io
 	ld	xwa, 0x4906053f
 	max
 	.ascii "JHmnopqrstuvwxyz{|}~"
@@ -21184,7 +21184,7 @@ ToneGen_Stereo_WriteParam_Code:
 	.byte 0x1f
 	.ascii " )!+\"-#/0123456789:cd;<feABCDEJ`likMLUVW"
 	jp	0x09121d
-	ldw	(11:8), 3340:io
+	ldw	(P2FC:8), 3340:io
 	ret
 	normal
 	push	sr
@@ -24858,7 +24858,7 @@ RhythmFillIn_PatternTable:
 	max
 	push	sr
 	normal
-	ld	(16:8), 16:io
+	ld	(P4:8), 16:io
 	rcf
 RhythmFillIn_PatternTable_Sub:
 	push	xiz
@@ -25051,7 +25051,7 @@ RhythmVariation_InlineCode_Code:
 	nop
 	nop
 	nop
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	nop
 	nop
 	nop
@@ -25414,7 +25414,7 @@ DrumVoice_Handler4_Return:
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(193:8), 234:io
+	ld	(TREGAH:8), 234:io
 	ldw	ix, 0xc921
 	inc	8, d
 	bit	7, w
@@ -25710,7 +25710,7 @@ DrumVoice_Handler7_Data_3_Code3:
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(193:8), 226:io
+	ld	(TREGAH:8), 226:io
 	.byte 0xe3
 	push	xiz
 	normal
@@ -25721,7 +25721,7 @@ DrumVoice_Handler7_Data_3_Code3:
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(193:8), 226:io
+	ld	(TREGAH:8), 226:io
 	.byte 0xe3
 	push	xiz
 	normal
@@ -25736,7 +25736,7 @@ DrumVoice_Handler7_Data_3_Code3:
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(193:8), 226:io
+	ld	(TREGAH:8), 226:io
 	.byte 0xe3
 	push	xiz
 	normal
@@ -25788,7 +25788,7 @@ DrumVoice_Handler7_Code_Entry_Data_Code_Entry:
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(193:8), 186:io
+	ld	(TREGAH:8), 186:io
 	swi	5
 	ld	a, 201:opc
 	.byte 0xcc
@@ -26155,9 +26155,9 @@ TimeSig_DisplayStrings_Code:
 	max
 	max
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF65B28-0xF65B38 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=86% dist=2 near TimeSig_DisplayStrings_Code+4
-	ld (8:8), 8:io
-	ld (8:8), 8:io
-	ld (8:8), 0:io
+	ld (P2:8), 8:io
+	ld (P2:8), 8:io
+	ld (P2:8), 0:io
 	nop
 	nop
 	nop
@@ -26331,8 +26331,8 @@ TimeSig_DisplayStrings_Code3:
 	max
 	max
 	max
-	ld	(8:8), 8:io
-	ld	(0:8), 0:io
+	ld	(P2:8), 8:io
+	ld	(P0:8), 0:io
 	nop
 	nop
 	nop
@@ -26343,11 +26343,11 @@ TimeSig_DisplayStrings_Code3:
 	max
 	max
 	max
-	ld	(8:8), 8:io
-	ld	(8:8), 8:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 8:io
 	nop
 	max
-	ld	(200:8), 51:io
+	ld	(TAMOD:8), 51:io
 	reti
 	jr	nz, 58
 	bit	5, (0x34cd:16)
@@ -26716,8 +26716,8 @@ TimeSig_DisplayStrings_Code4:
 	normal
 	push	sr
 	max
-	ld	(8:8), 8:io
-	ld	(8:8), 62:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 62:io
 	call	TimeSig_DisplayStrings_Helper2
 	pop	xiz
 	ret
@@ -28595,7 +28595,7 @@ PatIdx_Lookup_Return:
 	normal
 	push	sr
 	max
-	ld	(16:8), 32:io
+	ld	(P4:8), 32:io
 	.byte 0x40
 
 DrumParam_ProcessChannel_Helper:
@@ -29125,8 +29125,8 @@ VoiceResolve_InitSearch:
 	ret
 
 VoiceResolve_SearchDone:
-	ld	(8:8), 8:io
-	ld	(8:8), 16:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 16:io
 	.byte 0x20
 
 VoiceAssign_StoreFinal_Helper:
@@ -29971,7 +29971,7 @@ AccVoice_SetupSlots_DataBlock_Code3:
 	normal
 	push	sr
 	max
-	ld	(16:8), 32:io
+	ld	(P4:8), 32:io
 	ld	xwa, 0xf4eb1e40
 	push	xbc
 	add	xbc, 0x342d
@@ -34065,7 +34065,7 @@ AccScreen_DataBlock_Code3:
 	nop
 	nop
 	nop
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	nop
 	rcf
 	nop
@@ -34152,19 +34152,19 @@ AccScreen_DataBlock_Code6:
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(193:8), 19:io
+	ld	(TREGAH:8), 19:io
 	ldw	sp, 574
 	and	(0x3713:16), 254
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(193:8), 19:io
+	ld	(TREGAH:8), 19:io
 	ldw	sp, 318
 	and	(0x3713:16), 253
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(200:8), 51:io
+	ld	(TAMOD:8), 51:io
 	reti
 	jr	nz, 15
 	bit	3, (0x379b:16)
@@ -34174,7 +34174,7 @@ AccScreen_DataBlock_Code6:
 	ret
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(200:8), 51:io
+	ld	(TAMOD:8), 51:io
 	reti
 	jr	nz, 15
 	bit	4, (0x379b:16)

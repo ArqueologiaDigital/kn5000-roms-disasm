@@ -954,16 +954,16 @@ RESET_HANDLER:
 	; Hardware initialization code shared with table_data ROM
 	.include "shared/boot_hw_init.s"
 	; End of shared boot code (315 bytes)
-	ld (0xd2:8), 0x29:io
-	ld (0xd1:8), 0x00:io
-	and	(0xd3:8), 0xcf
-	and	(0xd3:8), 0xf0
+	ld (SC0MOD:8), 0x29:io
+	ld (SC0CR:8), 0x00:io
+	and	(BR0CR:8), 0xcf
+	and	(BR0CR:8), 0xf0
 
 Boot_InitIOPorts:
 	ld (304:16), 255
 	ld (305:16), 255
 	ld (306:16), 3
-	ld (0x3a:8), 0x20:io
+	ld (PECR:8), 0x20:io
 	ld xsp, 0xc00
 	calr Boot_InitWorkRAM
 
@@ -990,12 +990,12 @@ Boot_PostSelfTest:
 	ld (1024:16), 3
 Boot_InitPeripherals:
 	calr Boot_ClearConfigFlag7
-	lda	xbc, (0xe4:8)
+	lda	xbc, (INTET01:8)
 	ld a, (xbc)
 	and a, 0x8f
 	or a, 0x30
 	ld (xbc), a
-	lda	xbc, (0xe6:8)
+	lda	xbc, (INTET45:8)
 	ld a, (xbc)
 	and a, 0xf8
 	or a, 0x3
@@ -1011,7 +1011,7 @@ Boot_InitPeripherals:
 
 Boot_FlashAndExtensions:
 	call Flash_InitAllBanks
-	bit	0, (0x38:8)	;  Is the optional HD-AE5000 board present?
+	bit	0, (PE:8)	;  Is the optional HD-AE5000 board present?
 	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code
 	cp l, 4:i3
@@ -1070,7 +1070,7 @@ User_didnt_request_flash_mem_update:
 	extz	wa
 	calr	Boot_HandleFactoryReset
 	ldw	(65482:24), 0
-	set	0, (0x28:8)
+	set	0, (PA:8)
 	call	SubCPU_Init_DMA_Channels
 	ei	0
 	calr	SubCPU_Send_Payload
@@ -1106,23 +1106,23 @@ Boot_GetButtonComboCode:
 	ret
 
 Boot_ClearAllInterruptEnables:
-	ld (0xf0:8), 0x00:io
-	ld (0xe0:8), 0x00:io
-	ld (0xe1:8), 0x00:io
-	ld (0xe2:8), 0x00:io
-	ld (0xe3:8), 0x00:io
-	ld (0xe4:8), 0x00:io
-	ld (0xe5:8), 0x00:io
-	ld (0xe6:8), 0x00:io
-	ld (0xe7:8), 0x00:io
-	ld (0xe8:8), 0x00:io
-	ld (0xe9:8), 0x00:io
-	ld (0xea:8), 0x00:io
-	ld (0xeb:8), 0x00:io
-	ld (0xec:8), 0x00:io
-	ld (0xed:8), 0x00:io
-	ld (0xee:8), 0x00:io
-	ld (0xef:8), 0x00:io
+	ld (INTE0AD:8), 0x00:io
+	ld (INTE45:8), 0x00:io
+	ld (INTE67:8), 0x00:io
+	ld (INTE89:8), 0x00:io
+	ld (INTEAB:8), 0x00:io
+	ld (INTET01:8), 0x00:io
+	ld (INTET23:8), 0x00:io
+	ld (INTET45:8), 0x00:io
+	ld (INTET67:8), 0x00:io
+	ld (INTET89:8), 0x00:io
+	ld (INTETAB:8), 0x00:io
+	ld (INTES0:8), 0x00:io
+	ld (INTES1:8), 0x00:io
+	ld (INTETC01:8), 0x00:io
+	ld (INTETC23:8), 0x00:io
+	ld (INTETC45:8), 0x00:io
+	ld (INTETC67:8), 0x00:io
 	ret
 
 ; ===========================================================================

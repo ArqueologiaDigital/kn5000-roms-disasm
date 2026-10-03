@@ -64,7 +64,7 @@ NoRef_SetWall_SlotMap20x2:
 	nop
 	push	sr
 	nop
-	ldw	(3:8), 1284:io
+	ldw	(P0FC:8), 1284:io
 	.byte 0x06
 	pushw	2312
 	.byte 0x01

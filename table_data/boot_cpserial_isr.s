@@ -64,12 +64,12 @@ Handler_INTA:
 	jr	nz, Handler_INTA__rx_pacing
 	and	(0x0f66:16), 0x9f		; PFCR shadow: SC1 pins to RX mode
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR
-	or	(0xd5:8), 0x01		; SC1CR bit 0 high
-	and	(0xd5:8), 0xfd		; SC1CR bit 1 low
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0x0d:io		; INTES1: RX enabled
-	or	(0xd6:8), 0x20		; SC1MOD bit 5
+	ld	(PFCR:8), a			; PFCR
+	or	(SC1CR:8), 0x01		; SC1CR bit 0 high
+	and	(SC1CR:8), 0xfd		; SC1CR bit 1 low
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0x0d:io		; INTES1: RX enabled
+	or	(SC1MOD:8), 0x20		; SC1MOD bit 5
 	ld	(0x0f62:16), 0x20		; state 0x20: RX first byte
 	or	(0x0f64:16), 0x01		; RX-active flag
 	jr	t, Handler_INTA__exit
@@ -83,9 +83,9 @@ Handler_INTA__count_ok:
 	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 Handler_INTA__exit:
 	pop	xwa
-	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
-	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
-	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
+	ld	(INTCLR:8), 0x12:io		; INTCLR: INTA
+	ld	(INTCLR:8), 0x22:io		; INTCLR: INTRX1
+	ld	(INTCLR:8), 0x23:io		; INTCLR: INTTX1
 	reti
 
 ; -----------------------------------------------------------------------------
@@ -128,9 +128,9 @@ BootSerial_TxIsrEpilogue:
 	pop	xiy
 	pop	xhl
 	pop	xwa
-	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
-	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
-	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
+	ld	(INTCLR:8), 0x12:io		; INTCLR: INTA
+	ld	(INTCLR:8), 0x22:io		; INTCLR: INTRX1
+	ld	(INTCLR:8), 0x23:io		; INTCLR: INTTX1
 	reti
 
 ; -----------------------------------------------------------------------------
@@ -153,7 +153,7 @@ BootSerial_RxIsrEpilogue:
 	pop	xiy
 	pop	xhl
 	pop	xwa
-	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
-	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
-	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
+	ld	(INTCLR:8), 0x12:io		; INTCLR: INTA
+	ld	(INTCLR:8), 0x22:io		; INTCLR: INTRX1
+	ld	(INTCLR:8), 0x23:io		; INTCLR: INTTX1
 	reti

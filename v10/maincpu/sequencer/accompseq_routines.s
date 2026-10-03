@@ -1012,7 +1012,7 @@ AccompSeq_PortaFadeOut_Helper_Helper:
 	ld	l, (0x7e60:16)
 	ld	h, (0x7e61:16)
 	ld	a, (0x7e24:16)
-	and	a, (0x03:8)
+	and	a, (P0FC:8)
 	cp	a, 0:i3
 	jr	nz, AccompSeq_PortaFadeOut_Helper_Skip
 	call	AccompSeq_InitPartFull
@@ -1671,7 +1671,7 @@ AccompSeq_SendAllOff_Loop2:
 AccompSeq_MidiFilterCodeBlock:
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
-	ld	(14:8), 14:io
+	ld	(P3CR:8), 14:io
 	cp	(0x7f0b:16), 0
 	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip
 	jp	AccompSeq_MidiFilterCodeBlock_Code_Return

@@ -1519,7 +1519,7 @@ Boot_Init:
 	call Flash_Init_Custom_And_Table + 0x600000	; Flash_Init_Custom_And_Table (boot-time address)
 
 	; === Configure Interrupt Enable Register ===
-	lda	xbc, (0xe4:8)
+	lda	xbc, (INTET01:8)
 	ld a, (xbc)
 	and a, 0x8F
 	or a, 0x30
@@ -1528,7 +1528,7 @@ Boot_Init:
 	; === Check Boot Source ===
 	jr __jrt_nop_9FB652	; nop-like branch
 __jrt_nop_9FB652:
-	bit	0, (0x38:8)	; Check Port E bit 0
+	bit	0, (PE:8)	; Check Port E bit 0
 	jr nz, Boot_SkipFDCCheck
 
 	; === Get Boot Mode and Check FDC ===
@@ -1576,11 +1576,11 @@ Boot_PrepareJump:
 	ei 7	; disable maskable interrupts
 
 	; === Clear Interrupt Flags ===
-	ld (0xE4:8), 0x00:io
-	ld (0xE0:8), 0x00:io
-	ld (0xED:8), 0x00:io
-	ld (0xE3:8), 0x00:io
-	ld (0xEB:8), 0x00:io
+	ld (INTET01:8), 0x00:io
+	ld (INTE45:8), 0x00:io
+	ld (INTETC23:8), 0x00:io
+	ld (INTEAB:8), 0x00:io
+	ld (INTES1:8), 0x00:io
 
 	; === Setup for Jump to Main Program ===
 	ld xsp, 0xC00
@@ -1785,7 +1785,7 @@ Flash_Reset_16bit:
 Flash_Reset_16bit__got_base:
 	ld xiz, xbc	; e9 8e
 Flash_Reset_16bit__wait_ready:
-	bit	5, (0x1c:8)	; f0 1c cd - Wait for P3 bit 5 (flash ready)
+	bit	5, (P7:8)	; f0 1c cd - Wait for P3 bit 5 (flash ready)
 	jr z, Flash_Reset_16bit__wait_ready	; 66 fb
 	ei 6	; 06 06 - Disable lower interrupts
 	; Send unlock sequence: base+AAAA = AA
@@ -1905,7 +1905,7 @@ Flash_ProgramWord_16bit:
 	jr z, Flash_ProgramWord_16bit__exit	; 66 51 - skip if already erased
 	; Wait for flash ready
 Flash_ProgramWord_16bit__wait_ready:
-	bit	5, (0x1c:8)	; f0 1c cd
+	bit	5, (P7:8)	; f0 1c cd
 	jr z, Flash_ProgramWord_16bit__wait_ready	; 66 fb
 	; Check target
 	cp a, 1:i3	; c9 d9
@@ -2204,7 +2204,7 @@ Flash_SectorErase_16bit__sector_done:
 ; Exit: HL = 0 if success, 0xFFFF if still busy
 ; -----------------------------------------------------------------------------
 Flash_WaitComplete:
-	bit	5, (0x1c:8)	; f0 1c cd
+	bit	5, (P7:8)	; f0 1c cd
 	jr z, Flash_WaitComplete__not_ready	; 66 03
 	ld hl, 0:i3	; db a8
 	ret	; 0e
@@ -2324,7 +2324,7 @@ MemBlock_FillWithZeros__fill_loop:
 Flash_Reset_32bit:
 	ld xde, TD_FLASH_BASE	; Table Data ROM base address
 Flash_Reset_32bit__wait_ready:
-	bit	5, (0x1c:8)	; Wait for P3 bit 5 (flash ready)
+	bit	5, (P7:8)	; Wait for P3 bit 5 (flash ready)
 	jr z, Flash_Reset_32bit__wait_ready
 
 	ld xbc, xde	; XBC = base
@@ -2440,7 +2440,7 @@ Flash_ProgramWord_32bit:
 	jr z, Flash_ProgramWord_32bit__skip_program	; Yes, skip
 
 Flash_ProgramWord_32bit__wait_ready:
-	bit	5, (0x1c:8)	; Wait for flash ready
+	bit	5, (P7:8)	; Wait for flash ready
 	jr z, Flash_ProgramWord_32bit__wait_ready
 
 	ei 6	; Disable lower-priority interrupts
@@ -2662,7 +2662,7 @@ Flash_SectorErase_32bit:
 ; Exit: HL = 0 if success, 0xFFFF if still busy
 ; -----------------------------------------------------------------------------
 Flash_WaitComplete_32bit:
-	bit	5, (0x1c:8)	; f0 1c cd
+	bit	5, (P7:8)	; f0 1c cd
 	jr z, Flash_WaitComplete_32bit__not_ready	; 66 03
 	ld hl, 0:i3	; db a8
 	ret	; 0e
@@ -3805,11 +3805,11 @@ Flash_ProgramHDAE_Payload__phd2_copy_loop:
 HDAE5000_InitializeParallelPort:
 	pushw_erp 0xFA	; PUSH QIZ
 	ldib_erp 0xFB, 0	; LD QIZH, 0
-	ld (0xE4:8), 0x00:io	; LD (0xE4), 0x00 - TMP94C241 SFR init
-	ld (0xE0:8), 0x00:io	; LD (0xE0), 0x00
-	ld (0xED:8), 0x00:io	; LD (0xED), 0x00
-	ld (0xE3:8), 0x00:io	; LD (0xE3), 0x00
-	ld (0xEB:8), 0x00:io	; LD (0xEB), 0x00
+	ld (INTET01:8), 0x00:io	; LD (0xE4), 0x00 - TMP94C241 SFR init
+	ld (INTE45:8), 0x00:io	; LD (0xE0), 0x00
+	ld (INTETC23:8), 0x00:io	; LD (0xED), 0x00
+	ld (INTEAB:8), 0x00:io	; LD (0xE3), 0x00
+	ld (INTES1:8), 0x00:io	; LD (0xEB), 0x00
 	ld (340:16), 102; LD (0x0154), 0x66
 	ld (0x160006:24), 0x82; LD (0x160006), 0x82 - PPI mode
 	ld (0x160000:24), 0x00; LD (0x160000), 0x00 - Port A

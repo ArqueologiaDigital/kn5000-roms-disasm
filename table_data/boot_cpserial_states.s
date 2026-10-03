@@ -48,23 +48,23 @@
 BootSerial_State04_TxLineRequest:
 	and	(0x0f66:16), 0xbf		; PFCR shadow bit 6 low
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR
-	ld	(0xd7:8), 0x24:io		; BR1CR
-	ld	(0xe3:8), 0x07:io		; INTEAB
-	ld	(0xeb:8), 0xd0:io		; INTES1: TX enabled
-	and	(0xd5:8), 0xfe		; SC1CR bit 0 low
-	ld	(0xd4:8), a			; dummy SC1BUF write (A = PFCR shadow)
+	ld	(PFCR:8), a			; PFCR
+	ld	(BR1CR:8), 0x24:io		; BR1CR
+	ld	(INTEAB:8), 0x07:io		; INTEAB
+	ld	(INTES1:8), 0xd0:io		; INTES1: TX enabled
+	and	(SC1CR:8), 0xfe		; SC1CR bit 0 low
+	ld	(SC1BUF:8), a			; dummy SC1BUF write (A = PFCR shadow)
 	inc	4, (0x0f62:16)		; state -> 0x08
 	mul	a, 1			; timing filler
 	mul	a, 1			; timing filler
-	bit	6, (0x3c:8)			; PF bit 6: line granted?
+	bit	6, (PF:8)			; PF bit 6: line granted?
 	jr	nz, BootSerial_TxIsrEpilogue
 	ld	(0x0f63:16), 0		; not granted: back to idle
 	ld	(0x0f62:16), 0
 	or	(0x0f6a:16), 0x02		; status: TX arbitration failed
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0xff:io		; INTES1
-	ld	(0xd7:8), 0x24:io		; BR1CR
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0xff:io		; INTES1
+	ld	(BR1CR:8), 0x24:io		; BR1CR
 	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 	jrl	t, BootSerial_TxIsrEpilogue
 
@@ -78,14 +78,14 @@ BootSerial_State0C_TxByteGap:
 	calr	BootSerial_SpinWait10
 	and	(0x0f66:16), 0xaf
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR
+	ld	(PFCR:8), a			; PFCR
 	and	(0x0f67:16), 0xaf
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC
-	ld	(0xd7:8), 0x24:io		; BR1CR
-	ld	(0xeb:8), 0xd0:io		; INTES1
-	and	(0xd5:8), 0xfe		; SC1CR bit 0 low
-	ld	(0xd4:8), a			; dummy SC1BUF write
+	ld	(PFFC:8), a			; PFFC
+	ld	(BR1CR:8), 0x24:io		; BR1CR
+	ld	(INTES1:8), 0xd0:io		; INTES1
+	and	(SC1CR:8), 0xfe		; SC1CR bit 0 low
+	ld	(SC1BUF:8), a			; dummy SC1BUF write
 	inc	4, (0x0f62:16)		; state -> 0x10
 	jrl	t, BootSerial_TxIsrEpilogue
 
@@ -99,16 +99,16 @@ BootSerial_State14_TxTail:
 	calr	BootSerial_SpinWait10
 	and	(0x0f66:16), 0xaf
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR
+	ld	(PFCR:8), a			; PFCR
 	and	(0x0f67:16), 0xaf
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC
-	ld	(0xd7:8), 0x24:io		; BR1CR
-	ld	(0xd4:8), a			; dummy SC1BUF write
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0xd0:io		; INTES1
-	and	(0xd5:8), 0xfe		; SC1CR bit 0 low
-	ld	(0xd4:8), a			; dummy SC1BUF write
+	ld	(PFFC:8), a			; PFFC
+	ld	(BR1CR:8), 0x24:io		; BR1CR
+	ld	(SC1BUF:8), a			; dummy SC1BUF write
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0xd0:io		; INTES1
+	and	(SC1CR:8), 0xfe		; SC1CR bit 0 low
+	ld	(SC1BUF:8), a			; dummy SC1BUF write
 	inc	4, (0x0f62:16)		; state -> 0x18
 	jrl	t, BootSerial_TxIsrEpilogue
 
@@ -122,20 +122,20 @@ BootSerial_State14_TxTail:
 ; Callers: BootSerial_StateDispatchTable[0x08]
 ; -----------------------------------------------------------------------------
 BootSerial_State08_TxFirstByte:
-	ld	(0xd7:8), 0x14:io		; BR1CR
+	ld	(BR1CR:8), 0x14:io		; BR1CR
 	or	(0x0f67:16), 0x50
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC mode bits high
+	ld	(PFFC:8), a			; PFFC mode bits high
 	or	(0x0f66:16), 0x50
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR mode bits high
-	and	(0xd5:8), 0xfe		; SC1CR bit 0 low
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0xd0:io		; INTES1
+	ld	(PFCR:8), a			; PFCR mode bits high
+	and	(SC1CR:8), 0xfe		; SC1CR bit 0 low
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0xd0:io		; INTES1
 	ld	xiy, 0x0fd9		; TX serial ring
 	add	iy, (0x0fd5:16)		; + send index
 	ld	a, (xiy)
-	ld	(0xd4:8), a			; frame byte -> SC1BUF
+	ld	(SC1BUF:8), a			; frame byte -> SC1BUF
 	incw	1, (0x0fd5:16)
 	cpw	(0x0fd5:16), 0x003c
 	jr	c, BootSerial_State08_TxFirstByte__no_wrap
@@ -161,20 +161,20 @@ BootSerial_State08_TxFirstByte__count_set:
 ; Callers: BootSerial_StateDispatchTable[0x10]
 ; -----------------------------------------------------------------------------
 BootSerial_State10_TxNextByte:
-	ld	(0xd7:8), 0x14:io		; BR1CR
+	ld	(BR1CR:8), 0x14:io		; BR1CR
 	or	(0x0f67:16), 0x50
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC
+	ld	(PFFC:8), a			; PFFC
 	or	(0x0f66:16), 0x50
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR
-	and	(0xd5:8), 0xfe		; SC1CR bit 0 low
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0xd0:io		; INTES1
+	ld	(PFCR:8), a			; PFCR
+	and	(SC1CR:8), 0xfe		; SC1CR bit 0 low
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0xd0:io		; INTES1
 	ld	xiy, 0x0fd9		; TX serial ring
 	add	iy, (0x0fd5:16)
 	ld	a, (xiy)
-	ld	(0xd4:8), a			; frame byte -> SC1BUF
+	ld	(SC1BUF:8), a			; frame byte -> SC1BUF
 	incw	1, (0x0fd5:16)
 	cpw	(0x0fd5:16), 0x003c
 	jr	c, BootSerial_State10_TxNextByte__no_wrap
@@ -209,28 +209,28 @@ BootSerial_State18_TxFrameDone:
 	ld	(0x0f62:16), 0x04		; next frame: state 0x04
 	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC bit 6 low
-	and	(0x3c:8), 0xbf		; PF bit 6 low
+	ld	(PFFC:8), a			; PFFC bit 6 low
+	and	(PF:8), 0xbf		; PF bit 6 low
 	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR bit 6 high (request line)
-	ld	(0xd7:8), 0x28:io		; BR1CR
-	ld	(0xe3:8), 0x07:io		; INTEAB
-	and	(0xd5:8), 0xfe		; SC1CR bit 0 low
-	ld	(0xeb:8), 0xd0:io		; INTES1
-	ld	(0xd4:8), a			; dummy SC1BUF write
+	ld	(PFCR:8), a			; PFCR bit 6 high (request line)
+	ld	(BR1CR:8), 0x28:io		; BR1CR
+	ld	(INTEAB:8), 0x07:io		; INTEAB
+	and	(SC1CR:8), 0xfe		; SC1CR bit 0 low
+	ld	(INTES1:8), 0xd0:io		; INTES1
+	ld	(SC1BUF:8), a			; dummy SC1BUF write
 	or	(0x0f64:16), 0x02		; TX-pending flag
 	jrl	t, BootSerial_TxIsrEpilogue
 BootSerial_State18_TxFrameDone__go_idle:
 	and	(0x0f66:16), 0xbf
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR bit 6 low
+	ld	(PFCR:8), a			; PFCR bit 6 low
 	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC bit 6 low
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0xff:io		; INTES1
-	ld	(0xd7:8), 0x24:io		; BR1CR
+	ld	(PFFC:8), a			; PFFC bit 6 low
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0xff:io		; INTES1
+	ld	(BR1CR:8), 0x24:io		; BR1CR
 	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 	jrl	t, BootSerial_TxIsrEpilogue
 
@@ -247,12 +247,12 @@ BootSerial_State18_TxFrameDone__go_idle:
 BootSerial_State20_RxFirstByte:
 	and	(0x0f66:16), 0x9f
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR: RX pin mode
-	or	(0xd5:8), 0x01		; SC1CR bit 0 high
-	and	(0xd5:8), 0xfd		; SC1CR bit 1 low
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0x0d:io		; INTES1: RX enabled
-	ld	a, (0xd4:8)			; A = SC1BUF (received byte)
+	ld	(PFCR:8), a			; PFCR: RX pin mode
+	or	(SC1CR:8), 0x01		; SC1CR bit 0 high
+	and	(SC1CR:8), 0xfd		; SC1CR bit 1 low
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0x0d:io		; INTES1: RX enabled
+	ld	a, (SC1BUF:8)			; A = SC1BUF (received byte)
 	ld	xiy, 0x0f79		; RX serial ring
 	add	iy, (0x0f77:16)		; + head index
 	ld	(xiy), a
@@ -298,7 +298,7 @@ BootSerial_State20_RxFirstByte__count_set:
 ; Callers: BootSerial_StateDispatchTable[0x24]
 ; -----------------------------------------------------------------------------
 BootSerial_State24_RxNextByte:
-	ld	a, (0xd4:8)			; A = SC1BUF
+	ld	a, (SC1BUF:8)			; A = SC1BUF
 	ld	xiy, 0x0f79		; RX serial ring
 	add	iy, (0x0f77:16)
 	ld	(xiy), a
@@ -317,22 +317,22 @@ BootSerial_State24_RxNextByte__no_advance:
 	ld	(0x0f62:16), 0		; state -> idle
 	and	(0x0f66:16), 0x9f
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR
+	ld	(PFCR:8), a			; PFCR
 	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0x0d:io		; INTES1
-	and	(0xd6:8), 0xdf		; SC1MOD bit 5 low
+	ld	(PFFC:8), a			; PFFC
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0x0d:io		; INTES1
+	and	(SC1MOD:8), 0xdf		; SC1MOD bit 5 low
 	jrl	t, BootSerial_RxIsrEpilogue
 BootSerial_State24_RxNextByte__rearm:
 	and	(0x0f66:16), 0x9f
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR
-	or	(0xd5:8), 0x01		; SC1CR bit 0 high
-	and	(0xd5:8), 0xfd		; SC1CR bit 1 low
-	ld	(0xe3:8), 0x05:io		; INTEAB
-	ld	(0xeb:8), 0x0d:io		; INTES1
+	ld	(PFCR:8), a			; PFCR
+	or	(SC1CR:8), 0x01		; SC1CR bit 0 high
+	and	(SC1CR:8), 0xfd		; SC1CR bit 1 low
+	ld	(INTEAB:8), 0x05:io		; INTEAB
+	ld	(INTES1:8), 0x0d:io		; INTES1
 	jrl	t, BootSerial_RxIsrEpilogue
 
 ; -----------------------------------------------------------------------------
@@ -354,12 +354,12 @@ BootSerial_State_Abort:
 BootSerial_UnusedIsrEpilogue:
 	and	(0x0f64:16), 0xfc
 	or	(0x0f6a:16), 0x04
-	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
-	and	(0xd6:8), 0xdf		; SC1MOD bit 5 low
-	ld	(0xeb:8), 0x0f:io		; INTES1
-	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
-	ld	(0xe3:8), 0x07:io		; INTEAB
-	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
+	ld	(INTCLR:8), 0x23:io		; INTCLR: INTTX1
+	and	(SC1MOD:8), 0xdf		; SC1MOD bit 5 low
+	ld	(INTES1:8), 0x0f:io		; INTES1
+	ld	(INTCLR:8), 0x22:io		; INTCLR: INTRX1
+	ld	(INTEAB:8), 0x07:io		; INTEAB
+	ld	(INTCLR:8), 0x12:io		; INTCLR: INTA
 	reti
 
 ; -----------------------------------------------------------------------------
@@ -411,9 +411,9 @@ BootSerial_PollTX__inject_done:
 BootSerial_PollTX__encode:
 	calr	BootSerial_TX_EncodePackets
 	ei	6
-	bit	6, (0x3c:8)			; PF bit 6 must be high
+	bit	6, (PF:8)			; PF bit 6 must be high
 	jr	z, BootSerial_PollTX__line_busy
-	bit	5, (0x38:8)			; PE bit 5 must be low
+	bit	5, (PE:8)			; PE bit 5 must be low
 	jr	nz, BootSerial_PollTX__line_busy
 	bit	1, (0x0f64:16)		; TX-pending flag clear?
 	jr	nz, BootSerial_PollTX__line_busy
@@ -433,19 +433,19 @@ BootSerial_PollTX__have_count:
 	ld	(0x0f62:16), 0x04		; state 0x04: TX line request
 	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
-	ld	(0x3f:8), a			; PFFC bit 6 low
-	and	(0x3c:8), 0xbf		; PF bit 6 low
+	ld	(PFFC:8), a			; PFFC bit 6 low
+	and	(PF:8), 0xbf		; PF bit 6 low
 	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
-	ld	(0x3e:8), a			; PFCR bit 6 high (request line)
-	ld	(0xd7:8), 0x28:io		; BR1CR
-	and	(0xd6:8), 0xdf		; SC1MOD bit 5 low
-	and	(0xd5:8), 0xfe		; SC1CR bit 0 low
-	ld	(0xe3:8), 0x07:io		; INTEAB
-	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
-	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
-	ld	(0xeb:8), 0xd0:io		; INTES1
-	ld	(0xd4:8), a			; dummy SC1BUF write - kick INTTX1
+	ld	(PFCR:8), a			; PFCR bit 6 high (request line)
+	ld	(BR1CR:8), 0x28:io		; BR1CR
+	and	(SC1MOD:8), 0xdf		; SC1MOD bit 5 low
+	and	(SC1CR:8), 0xfe		; SC1CR bit 0 low
+	ld	(INTEAB:8), 0x07:io		; INTEAB
+	ld	(INTCLR:8), 0x12:io		; INTCLR: INTA
+	ld	(INTCLR:8), 0x23:io		; INTCLR: INTTX1
+	ld	(INTES1:8), 0xd0:io		; INTES1
+	ld	(SC1BUF:8), a			; dummy SC1BUF write - kick INTTX1
 BootSerial_PollTX__exit:
 	ei	0
 	ret
@@ -454,11 +454,11 @@ BootSerial_PollTX__line_busy:
 	cp	(0x0f70:16), 20
 	jr	ule, BootSerial_PollTX__exit
 	ei	6			; 20 retries exhausted: give up
-	ld	(0xf8:8), 0x22:io		; INTCLR: INTRX1
-	ld	(0xf8:8), 0x23:io		; INTCLR: INTTX1
-	ld	(0xeb:8), 0xdd:io		; INTES1
-	ld	(0xf8:8), 0x12:io		; INTCLR: INTA
-	ld	(0xe3:8), 0x05:io		; INTEAB
+	ld	(INTCLR:8), 0x22:io		; INTCLR: INTRX1
+	ld	(INTCLR:8), 0x23:io		; INTCLR: INTTX1
+	ld	(INTES1:8), 0xdd:io		; INTES1
+	ld	(INTCLR:8), 0x12:io		; INTCLR: INTA
+	ld	(INTEAB:8), 0x05:io		; INTEAB
 	or	(0x0f6a:16), 0x80		; done/abort status bit
 	jr	t, BootSerial_PollTX__exit
 

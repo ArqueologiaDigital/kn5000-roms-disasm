@@ -10413,12 +10413,12 @@ AccVoice_CopyFromROM_Join:
 AccVoice_CopyFromROM_Skip:
 	cp	c, 0:i3
 	jr	nz, AccVoice_CopyFromROM_Skip3
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	ld	(1:8), 1:io
 	jr	AccVoice_CopyFromROM_Skip2
 AccVoice_CopyFromROM_Skip3:
-	ld	(11:8), 0:io
-	ld	(12:8), 1:io
+	ld	(P2FC:8), 0:io
+	ld	(P3:8), 1:io
 AccVoice_CopyFromROM_Skip2:
 	ld	xiy, 0:i3
 	ret
@@ -13448,8 +13448,8 @@ RhythmProc_ChannelMapTable:
 	max
 	max
 	max
-	ld (8:8), 8:io
-	ld (0:8), 0:io
+	ld (P2:8), 8:io
+	ld (P0:8), 0:io
 	nop
 	nop
 	nop
@@ -18168,7 +18168,7 @@ ToneGen_MapNoteToOctaveBitmask_Code:
 	normal
 	push	sr
 	max
-	ld	(16:8), 32:io
+	ld	(P4:8), 32:io
 	.byte 0x40, 0x80
 
 ToneGen_MapNote_OrMask:
@@ -20231,7 +20231,7 @@ ToneGen_Stereo_WriteParam_Code:
 	retd	2576
 	pushw	0x4709
 	reti
-	ld	(59:8), 60:io
+	ld	(PEFC:8), 60:io
 	ld	xwa, 0x4906053f
 	max
 	.ascii "JHmnopqrstuvwxyz{|}~"
@@ -20241,7 +20241,7 @@ ToneGen_Stereo_WriteParam_Code:
 	.byte 0x1f
 	.ascii " )!+\"-#/0123456789:cd;<feABCDEJ`likMLUVW"
 	jp	0x09121d
-	ldw	(11:8), 3340:io
+	ldw	(P2FC:8), 3340:io
 	ret
 	normal
 	push	sr
@@ -23932,7 +23932,7 @@ RhythmVariation_InlineCode_Code:
 	nop
 	nop
 	nop
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	nop
 	nop
 	nop
@@ -24594,9 +24594,9 @@ TimeSig_DisplayStrings_Code:
 	max
 	max
 	max
-	ld	(8:8), 8:io
-	ld	(8:8), 8:io
-	ld	(8:8), 0:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 0:io
 	nop
 	nop
 	nop
@@ -24768,8 +24768,8 @@ TimeSig_DisplayStrings_Code3:
 	max
 	max
 	max
-	ld	(8:8), 8:io
-	ld	(0:8), 0:io
+	ld	(P2:8), 8:io
+	ld	(P0:8), 0:io
 	nop
 	nop
 	nop
@@ -24780,11 +24780,11 @@ TimeSig_DisplayStrings_Code3:
 	max
 	max
 	max
-	ld	(8:8), 8:io
-	ld	(8:8), 8:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 8:io
 	nop
 	max
-	ld	(200:8), 51:io
+	ld	(TAMOD:8), 51:io
 	reti
 	jr	nz, 58
 	bit	5, (0x3431:16)
@@ -25152,8 +25152,8 @@ TimeSig_DisplayStrings_Code4:
 	normal
 	push	sr
 	max
-	ld	(8:8), 8:io
-	ld	(8:8), 62:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 62:io
 	call	16145497
 	pop	xiz
 	ret
@@ -26927,7 +26927,7 @@ PatIdx_Lookup_Return:
 	normal
 	push	sr
 	max
-	ld	(16:8), 32:io
+	ld	(P4:8), 32:io
 	.byte 0x40
 
 DrumParam_ProcessChannel_Helper:
@@ -27474,8 +27474,8 @@ VoiceResolve_InitSearch:
 	ld	(xbc), a
 	ret
 VoiceResolve_SearchDone:
-	ld	(8:8), 8:io
-	ld	(8:8), 16:io
+	ld	(P2:8), 8:io
+	ld	(P2:8), 16:io
 	.byte 0x20
 
 VoiceAssign_StoreFinal_Helper:
@@ -28377,7 +28377,7 @@ AccVoice_SetupSlots_DataBlock_Code3:
 	normal
 	push	sr
 	max
-	ld	(16:8), 32:io
+	ld	(P4:8), 32:io
 	ld	xwa, 4109049408
 	push	xbc
 	add	xbc, 13201
@@ -32666,7 +32666,7 @@ AccScreen_DataBlock_Code3:
 	nop
 	nop
 	nop
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	nop
 	rcf
 	nop
@@ -32692,7 +32692,7 @@ AccScreen_DataBlock_Code3:
 	nop
 	nop
 	nop
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	nop
 	rcf
 	nop
@@ -32718,7 +32718,7 @@ AccScreen_DataBlock_Code3:
 	nop
 	nop
 	nop
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	nop
 	rcf
 	nop
@@ -32744,7 +32744,7 @@ AccScreen_DataBlock_Code3:
 	nop
 	nop
 	nop
-	ld	(0:8), 0:io
+	ld	(P0:8), 0:io
 	nop
 	rcf
 	nop

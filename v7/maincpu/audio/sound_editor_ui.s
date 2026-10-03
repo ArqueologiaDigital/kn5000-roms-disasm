@@ -19567,14 +19567,14 @@ StylCnvStorOkFunc_DataBlock_Join2:
 	jr	StylCnvStorOkFunc_DataBlock_Join3
 StylCnvStorOkFunc_DataBlock_Entry:
 	.byte 0xbf
-	ld	(2:8), 1:io
+	ld	(P0CR:8), 1:io
 	nop
 	jr	StylCnvStorOkFunc_DataBlock_Entry2
 StylCnvStorOkFunc_DataBlock_Skip2:
 	ldw (xsp+8), 0
 StylCnvStorOkFunc_DataBlock_Entry2:
 	.byte 0xbf
-	ldw	(2:8), 1:io
+	ldw	(P0CR:8), 1:io
 	lda	xhl, (xsp+24)
 	ld	bc, (xwa+2)
 	ld	(xhl), bc
@@ -19633,7 +19633,7 @@ StylCnvStorOkFunc_DataBlock_Skip5:
 	lda	xwa, (xsp+24)
 	lda	xbc, (xsp+20)
 	.byte 0x9f
-	ld	(63:8), 0:io
+	ld	(PFFC:8), 0:io
 	nop
 	jr	z, StylCnvStorOkFunc_DataBlock_Skip6
 	ld	wa, (xwa+4)
@@ -19770,7 +19770,7 @@ StylCnvStorOkFunc_DataBlock_Skip4:
 	ldw (xsp+6), 0
 StylCnvStorOkFunc_DataBlock_Join6:
 	.byte 0xbf
-	ld	(2:8), 1:io
+	ld	(P0CR:8), 1:io
 	nop
 	lda	xhl, (xsp+26)
 	ld	bc, (xwa+2)

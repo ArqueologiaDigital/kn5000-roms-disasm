@@ -19425,7 +19425,7 @@ DrawRing_TryPost:
 	lda xde, (0x03247c:24)
 	cpw (xde - 2), 0x4
 	jr gt, DrawRing_TryPost_Store
-	lda	xhl, (0x00:8)
+	lda	xhl, (P0:8)
 	ret
 
 DrawRing_TryPost_Store:

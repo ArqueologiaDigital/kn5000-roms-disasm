@@ -84,26 +84,26 @@ CPanel_InitHardware:
 	ld a, 3:opc
 	and a, 175
 	stb_d8 (PFFC_VALUE), a
-	ld	(0x3f:8), a
+	ld	(PFFC:8), a
 	ld a, 21:opc
 	and a, 143
 	stb_d8 (PFCR_VALUE), a
-	ld	(0x3e:8), a
-	and	(0x3c:8), 0xbf
+	ld	(PFCR:8), a
+	and	(PF:8), 0xbf
 	ld a, 0:opc
-	ld	(0x3b:8), a
+	ld	(PEFC:8), a
 	ld a, 70:opc
-	ld	(0x3a:8), a
-	ld (214:8), 0:io
-	ld (215:8), 20:io
-	ld (213:8), 1:io
-	ld (227:8), 7:io
-	ld (248:8), 18:io
-	ld (235:8), 255:io
-	ld (248:8), 34:io
-	ld (248:8), 35:io
-	or	(0xc8:8), 0x10
-	and	(0xc8:8), 0xf7
+	ld	(PECR:8), a
+	ld (SC1MOD:8), 0:io
+	ld (BR1CR:8), 20:io
+	ld (SC1CR:8), 1:io
+	ld (INTEAB:8), 7:io
+	ld (INTCLR:8), 18:io
+	ld (INTES1:8), 255:io
+	ld (INTCLR:8), 34:io
+	ld (INTCLR:8), 35:io
+	or	(TAMOD:8), 0x10
+	and	(TAMOD:8), 0xf7
 	ld (CPANEL_UNUSED_1:16), 125
 	or (CPANEL_TX_RX_FLAGS:16), 64
 	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
@@ -149,12 +149,12 @@ CPanel_SendInitSequence:
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 	ei 6
-	ld (235:8), 255:io
-	ld (248:8), 34:io
-	ld (248:8), 35:io
-	and	(0xd6:8), 0xdf
-	ld (248:8), 18:io
-	ld (227:8), 5:io
+	ld (INTES1:8), 255:io
+	ld (INTCLR:8), 34:io
+	ld (INTCLR:8), 35:io
+	and	(SC1MOD:8), 0xdf
+	ld (INTCLR:8), 18:io
+	ld (INTEAB:8), 5:io
 	ldw (CPANEL_RX_READ_PTR:16), 0
 	ldw (CPANEL_RX_WRITE_PTR:16), 0
 	or (CPANEL_PROTOCOL_FLAGS:16), 1
@@ -164,55 +164,55 @@ CPanel_InitLEDBuffer:
 	ld (CPANEL_LED_TX_BUFFER:16), wa
 	and (PFFC_VALUE:16), 191
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
-	ld (235:8), 255:io
-	ld (248:8), 34:io
-	ld (248:8), 35:io
-	ld (227:8), 7:io
-	ld (248:8), 18:io
-	and	(0x3c:8), 0xbf
+	ld	(PFFC:8), a
+	ld (INTES1:8), 255:io
+	ld (INTCLR:8), 34:io
+	ld (INTCLR:8), 35:io
+	ld (INTEAB:8), 7:io
+	ld (INTCLR:8), 18:io
+	and	(PF:8), 0xbf
 	or (PFCR_VALUE:16), 64
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	and (PFCR_VALUE:16), 191
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	or (PFFC_VALUE:16), 80
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
+	ld	(PFFC:8), a
 	or (PFCR_VALUE:16), 80
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	and	(0xd5:8), 0xfe
-	ld (235:8), 255:io
-	ld (248:8), 34:io
-	ld (248:8), 35:io
+	ld	(PFCR:8), a
+	and	(SC1CR:8), 0xfe
+	ld (INTES1:8), 255:io
+	ld (INTCLR:8), 34:io
+	ld (INTCLR:8), 35:io
 	ld xiy, CPANEL_LED_TX_BUFFER
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	incw 1, (CPANEL_LED_READ_PTR:16)
-	ld	(0xd4:8), a
+	ld	(SC1BUF:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	ld xiy, CPANEL_LED_TX_BUFFER
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
 	incw 1, (CPANEL_LED_READ_PTR:16)
-	ld	(0xd4:8), a
+	ld	(SC1BUF:8), a
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	or	(0xd5:8), 0x01
-	and	(0xd5:8), 0xfd
+	or	(SC1CR:8), 0x01
+	and	(SC1CR:8), 0xfd
 	and (PFCR_VALUE:16), 175
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 	and (PFFC_VALUE:16), 175
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
+	ld	(PFFC:8), a
 	ret
 DELAY_2_LOOPS:
 	ld wa, 2:i3
@@ -517,9 +517,9 @@ CPanel_WaitTXReady:
 	ld	(CPANEL_COUNTER_DOWN_FROM_200:16), 200
 CPanel_WaitTXReady_Poll:
 	ei 6
-	bit	6, (0x3c:8)
+	bit	6, (PF:8)
 	jr z, CPanel_WaitTXReady_Timeout
-	bit	5, (0x38:8)
+	bit	5, (PE:8)
 	jr nz, CPanel_WaitTXReady_Timeout
 	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, CPanel_WaitTXReady_Timeout
@@ -540,13 +540,13 @@ CPanel_WaitTXReady_BufferCheck:
 WaitTX_ConfigAndReturn:
 	ei 6
 
-	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(INTCLR:8), 0x22:io	; INTRX1: Serial receive 1
 
-	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(INTCLR:8), 0x23:io	; INTTX1: Serial send 1
 
-	ld (0xeb:8), 0xdd:io
+	ld (INTES1:8), 0xdd:io
 
-	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: receive disable
+	and	(SC1MOD:8), 0xdf	; RXE (bit 5) = 0: receive disable
 
 	or	(CPANEL_PROTOCOL_FLAGS:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
 
@@ -567,22 +567,22 @@ CPanel_SendCommand:
 	or (CPANEL_TX_RX_FLAGS:16), 0x02
 	and (CPANEL_TX_RX_FLAGS:16), 0xfe
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 0x04
-	ld (215:8), 40:io
+	ld (BR1CR:8), 40:io
 	and (PFFC_VALUE:16), 191
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
-	and	(0x3c:8), 0xbf
+	ld	(PFFC:8), a
+	and	(PF:8), 0xbf
 	or (PFCR_VALUE:16), 64
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	ld (227:8), 7:io
-	ld (248:8), 18:io
-	and	(0xd6:8), 0xdf
-	and	(0xd5:8), 0xfe
-	ld (248:8), 35:io
-	ld (235:8), 223:io
-	ld (248:8), 34:io
-	ld	(0xd4:8), a
+	ld	(PFCR:8), a
+	ld (INTEAB:8), 7:io
+	ld (INTCLR:8), 18:io
+	and	(SC1MOD:8), 0xdf
+	and	(SC1CR:8), 0xfe
+	ld (INTCLR:8), 35:io
+	ld (INTES1:8), 223:io
+	ld (INTCLR:8), 34:io
+	ld	(SC1BUF:8), a
 	ei	0
 	nop
 	ret
@@ -593,12 +593,12 @@ INTA_HANDLER:
 	jr nz, INTA_HandleCountdown
 	and (PFCR_VALUE:16), 159
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	or	(0xd5:8), 0x01
-	and	(0xd5:8), 0xfd
-	ld (227:8), 5:io
-	ld (235:8), 13:io
-	or	(0xd6:8), 0x20
+	ld	(PFCR:8), a
+	or	(SC1CR:8), 0x01
+	and	(SC1CR:8), 0xfd
+	ld (INTEAB:8), 5:io
+	ld (INTES1:8), 13:io
+	or	(SC1MOD:8), 0x20
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 32
 	or (CPANEL_TX_RX_FLAGS:16), 1
 	jr 28
@@ -617,9 +617,9 @@ INTA_DecrementRXCount:
 
 INTA_HANDLER_END:
 	pop xwa
-	ld	(0xf8:8), 0x12:io	; INTA Pin
-	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
-	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(INTCLR:8), 0x12:io	; INTA Pin
+	ld	(INTCLR:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(INTCLR:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -654,9 +654,9 @@ MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
-	ld	(0xf8:8), 0x12:io	; INTA Pin
-	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
-	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(INTCLR:8), 0x12:io	; INTA Pin
+	ld	(INTCLR:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(INTCLR:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -674,79 +674,79 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
-	ld	(0xf8:8), 0x12:io	; INTA Pin
-	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
-	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(INTCLR:8), 0x12:io	; INTA Pin
+	ld	(INTCLR:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(INTCLR:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
 CPanel_SM_StartTX:
 	and (PFCR_VALUE:16), 191
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	ld (215:8), 36:io
-	ld (227:8), 7:io
-	ld (235:8), 208:io
-	and	(0xd5:8), 0xfe
-	ld	(0xd4:8), a
+	ld	(PFCR:8), a
+	ld (BR1CR:8), 36:io
+	ld (INTEAB:8), 7:io
+	ld (INTES1:8), 208:io
+	and	(SC1CR:8), 0xfe
+	ld	(SC1BUF:8), a
 	inc 4, (CPANEL_STATE_MACHINE_INDEX:16)
 	mul a, 1
 	mul a, 1
-	bit	6, (0x3c:8)
+	bit	6, (PF:8)
 	jr nz, MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 	ld (CPANEL_PACKET_BYTE_COUNT:16), 0
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 0
 	or (CPANEL_PROTOCOL_FLAGS:16), 2
-	ld (227:8), 5:io
-	ld (235:8), 255:io
-	ld (215:8), 36:io
+	ld (INTEAB:8), 5:io
+	ld (INTES1:8), 255:io
+	ld (BR1CR:8), 36:io
 	and (CPANEL_TX_RX_FLAGS:16), 253
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_TXDelay1:
 	calr DELAY_10_LOOPS
 	and (PFCR_VALUE:16), 175
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 	and (PFFC_VALUE:16), 175
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
-	ld (215:8), 36:io
-	ld (235:8), 208:io
-	and	(0xd5:8), 0xfe
-	ld	(0xd4:8), a
+	ld	(PFFC:8), a
+	ld (BR1CR:8), 36:io
+	ld (INTES1:8), 208:io
+	and	(SC1CR:8), 0xfe
+	ld	(SC1BUF:8), a
 	inc 4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_TXDelay2:
 	calr DELAY_10_LOOPS
 	and (PFCR_VALUE:16), 175
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 	and (PFFC_VALUE:16), 175
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
-	ld (215:8), 36:io
-	ld	(0xd4:8), a
-	ld (227:8), 5:io
-	ld (235:8), 208:io
-	and	(0xd5:8), 0xfe
-	ld	(0xd4:8), a
+	ld	(PFFC:8), a
+	ld (BR1CR:8), 36:io
+	ld	(SC1BUF:8), a
+	ld (INTEAB:8), 5:io
+	ld (INTES1:8), 208:io
+	and	(SC1CR:8), 0xfe
+	ld	(SC1BUF:8), a
 	inc 4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_SendByte1:
-	ld (215:8), 20:io
+	ld (BR1CR:8), 20:io
 	or (PFFC_VALUE:16), 80
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
+	ld	(PFFC:8), a
 	or (PFCR_VALUE:16), 80
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	and	(0xd5:8), 0xfe
-	ld (227:8), 5:io
-	ld (235:8), 208:io
+	ld	(PFCR:8), a
+	and	(SC1CR:8), 0xfe
+	ld (INTEAB:8), 5:io
+	ld (INTES1:8), 208:io
 	ld xiy, CPANEL_LED_TX_BUFFER
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	ld	(0xd4:8), a
+	ld	(SC1BUF:8), a
 	incw 1, (CPANEL_LED_READ_PTR:16)
 	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByte1_InspectByte
@@ -764,20 +764,20 @@ SendByte1_AdvanceState:
 	inc	4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl	MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_SendByteN:
-	ld (215:8), 20:io
+	ld (BR1CR:8), 20:io
 	or (PFFC_VALUE:16), 80
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
+	ld	(PFFC:8), a
 	or (PFCR_VALUE:16), 80
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	and	(0xd5:8), 0xfe
-	ld (227:8), 5:io
-	ld (235:8), 208:io
+	ld	(PFCR:8), a
+	and	(SC1CR:8), 0xfe
+	ld (INTEAB:8), 5:io
+	ld (INTES1:8), 208:io
 	ld xiy, CPANEL_LED_TX_BUFFER
 	add iy, (CPANEL_LED_READ_PTR:16)
 	ld a, (xiy)
-	ld	(0xd4:8), a
+	ld	(SC1BUF:8), a
 	incw 1, (CPANEL_LED_READ_PTR:16)
 	cpw (CPANEL_LED_READ_PTR:16), 60
 	jr c, SendByteN_CheckDone
@@ -803,16 +803,16 @@ CPanel_SM_TXComplete:
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 4
 	and (PFFC_VALUE:16), 191
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
-	and	(0x3c:8), 0xbf
+	ld	(PFFC:8), a
+	and	(PF:8), 0xbf
 	or (PFCR_VALUE:16), 64
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	ld (215:8), 40:io
-	ld (227:8), 7:io
-	and	(0xd5:8), 0xfe
-	ld (235:8), 208:io
-	ld	(0xd4:8), a
+	ld	(PFCR:8), a
+	ld (BR1CR:8), 40:io
+	ld (INTEAB:8), 7:io
+	and	(SC1CR:8), 0xfe
+	ld (INTES1:8), 208:io
+	ld	(SC1BUF:8), a
 	or (CPANEL_TX_RX_FLAGS:16), 2
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 TXComplete_BufferEmpty:
@@ -820,19 +820,19 @@ TXComplete_BufferEmpty:
 
 	ldb_d8	a, (PFCR_VALUE)	; ldb_d8 a, (0x8d8e) (v7 patched)
 
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 
 	and	(PFFC_VALUE:16), 191	; anddi8 (0x8d8f), 191; disable CPanel serial clk (v7 patched)
 
 	ldb_d8	a, (PFFC_VALUE)	; ldb_d8 a, (0x8d8f) (v7 patched)
 
-	ld	(0x3f:8), a
+	ld	(PFFC:8), a
 
-	ld (0xe3:8), 0x05:io
+	ld (INTEAB:8), 0x05:io
 
-	ld	(0xeb:8), 0xff:io	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
+	ld	(INTES1:8), 0xff:io	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
 
-	ld	(0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
+	ld	(BR1CR:8), 0x24:io	; Internal Clock T8 (64/fc)
 
 	                 ; Divide by 4
 
@@ -849,12 +849,12 @@ TXComplete_BufferEmpty:
 CPanel_SM_RXByte1:
 	and (PFCR_VALUE:16), 159
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	or	(0xd5:8), 0x01
-	and	(0xd5:8), 0xfd
-	ld (227:8), 5:io
-	ld (235:8), 13:io
-	ld	a, (0xd4:8)
+	ld	(PFCR:8), a
+	or	(SC1CR:8), 0x01
+	and	(SC1CR:8), 0xfd
+	ld (INTEAB:8), 5:io
+	ld (INTES1:8), 13:io
+	ld	a, (SC1BUF:8)
 	ld xiy, CPANEL_RX_RING_BUFFER
 	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
@@ -891,7 +891,7 @@ RXByte1_AdvanceState:
 	inc	4, (CPANEL_STATE_MACHINE_INDEX:16)
 	jrl	LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 CPanel_SM_RXByteN:
-	ld	a, (0xd4:8)
+	ld	a, (SC1BUF:8)
 	ld xiy, CPANEL_RX_RING_BUFFER
 	add iy, (CPANEL_RX_WRITE_PTR:16)
 	ld (xiy), a
@@ -910,28 +910,28 @@ RXByteN_CheckDone:
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 0
 	and (PFCR_VALUE:16), 159
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 	and (PFFC_VALUE:16), 191
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
-	ld (227:8), 5:io
-	ld (235:8), 13:io
-	and	(0xd6:8), 0xdf
+	ld	(PFFC:8), a
+	ld (INTEAB:8), 5:io
+	ld (INTES1:8), 13:io
+	and	(SC1MOD:8), 0xdf
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 RXByteN_ContinueRX:
 	and	(PFCR_VALUE:16), 159	; anddi8 (0x8d8e), 159 (v7 patched)
 
 	ldb_d8	a, (PFCR_VALUE)	; ldb_d8 a, (0x8d8e) (v7 patched)
 
-	ld	(0x3e:8), a
+	ld	(PFCR:8), a
 
-	or	(0xd5:8), 0x01
+	or	(SC1CR:8), 0x01
 
-	and	(0xd5:8), 0xfd
+	and	(SC1CR:8), 0xfd
 
-	ld (0xe3:8), 0x05:io
+	ld (INTEAB:8), 0x05:io
 
-	ld (0xeb:8), 0x0d:io
+	ld (INTES1:8), 0x0d:io
 
 	jrl	-765	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
@@ -952,17 +952,17 @@ CPanel_SM_Idle:
 
 	or	(CPANEL_PROTOCOL_FLAGS:16), 4	; ordi8 0x8d92, 4	; CP_Flags_B.2 = 1  : UNUSED (v7 patched)
 
-	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(INTCLR:8), 0x23:io	; INTTX1: Serial send 1
 
-	and	(0xd6:8), 0xdf	; RXE (bit 5) = 0: receive disable
+	and	(SC1MOD:8), 0xdf	; RXE (bit 5) = 0: receive disable
 
-	ld (0xeb:8), 0x0f:io
+	ld (INTES1:8), 0x0f:io
 
-	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(INTCLR:8), 0x22:io	; INTRX1: Serial receive 1
 
-	ld (0xe3:8), 0x07:io
+	ld (INTEAB:8), 0x07:io
 
-	ld	(0xf8:8), 0x12:io	; INTA Pin
+	ld	(INTCLR:8), 0x12:io	; INTA Pin
 
 	reti
 
@@ -1014,9 +1014,9 @@ PollLoop_DoLEDUpdate:
 				; }
 PollLoop_CheckTXReady:
 	ei 6
-	bit	6, (0x3c:8)
+	bit	6, (PF:8)
 	jr z, PollLoop_BusyRetry
-	bit	5, (0x38:8)
+	bit	5, (PE:8)
 	jr nz, PollLoop_BusyRetry
 	bit 1, (CPANEL_TX_RX_FLAGS:16)
 	jr nz, PollLoop_BusyRetry
@@ -1036,19 +1036,19 @@ PollLoop_StartTX:
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 4
 	and (PFFC_VALUE:16), 191
 	ldb_d8 a, (PFFC_VALUE)
-	ld	(0x3f:8), a
-	and	(0x3c:8), 0xbf
+	ld	(PFFC:8), a
+	and	(PF:8), 0xbf
 	or (PFCR_VALUE:16), 64
 	ldb_d8 a, (PFCR_VALUE)
-	ld	(0x3e:8), a
-	ld (215:8), 40:io
-	and	(0xd6:8), 0xdf
-	and	(0xd5:8), 0xfe
-	ld (227:8), 7:io
-	ld (248:8), 18:io
-	ld (248:8), 35:io
-	ld (235:8), 208:io
-	ld	(0xd4:8), a
+	ld	(PFCR:8), a
+	ld (BR1CR:8), 40:io
+	and	(SC1MOD:8), 0xdf
+	and	(SC1CR:8), 0xfe
+	ld (INTEAB:8), 7:io
+	ld (INTCLR:8), 18:io
+	ld (INTCLR:8), 35:io
+	ld (INTES1:8), 208:io
+	ld	(SC1BUF:8), a
 PollLoop_Return:
 	ei 0
 	ret
@@ -1059,11 +1059,11 @@ PollLoop_BusyRetry:
 	cp (CPANEL_COUNTER_UP_TO_20:16), 20
 	jr ule, PollLoop_Return
 	ei 6
-	ld (248:8), 34:io
-	ld (248:8), 35:io
-	ld (235:8), 221:io
-	ld (248:8), 18:io
-	ld (227:8), 5:io
+	ld (INTCLR:8), 34:io
+	ld (INTCLR:8), 35:io
+	ld (INTES1:8), 221:io
+	ld (INTCLR:8), 18:io
+	ld (INTEAB:8), 5:io
 	or (CPANEL_PROTOCOL_FLAGS:16), 128
 	jr PollLoop_Return
 CPanel_RX_ProcessWithFlag:

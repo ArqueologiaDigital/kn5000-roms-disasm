@@ -557,10 +557,10 @@ FDC_NOP_Delay_Exit:
 
 
 FDC_Pulse_PH0:
-	set	0, (0x44:8)
+	set	0, (PH:8)
 	ldw wa, 0xa
 	calr FDC_NOP_Delay
-	res	0, (0x44:8)
+	res	0, (PH:8)
 	ret
 
 
@@ -918,20 +918,20 @@ FDC_StatusDecode_UnknownIC:
 ; Returns: HL=0xffff on failure, 0 on success.
 ; Uses ldio, (R+d16) addressing. 460 bytes.
 FDC_HardwareSetup:
-	ld	(248:8), 11:io
-	lda	xbc, (0xe0:8)
+	ld	(INTCLR:8), 11:io
+	lda	xbc, (INTE45:8)
 	ld a, (xbc)
 	and	a, 248
 	set	2, a
 	ld	(xbc), a
-	ld	(248:8), 40:io
-	lda	xbc, (0xed:8)
+	ld	(INTCLR:8), 40:io
+	lda	xbc, (INTETC23:8)
 	ld a, (xbc)
 	and	a, 143
 	or	a, 80
 	ld	(xbc), a
-	ld	(248:8), 12:io
-	lda	xbc, (0xe0:8)
+	ld	(INTCLR:8), 12:io
+	lda	xbc, (INTE45:8)
 	ld a, (xbc)
 	and	a, 143
 	or	a, 96
@@ -1904,7 +1904,7 @@ FDC_MC_EXIT_Code_Join2:
 	jrl	FDC_POST_OP
 FDC_CMD_ENABLE:
 	pushw	iz
-	set	3, (0x28:8)
+	set	3, (PA:8)
 	ldw	wa, 254
 	calr	FDC_CMD_SEND
 	cp	(FDC_ERROR_CODE:16), 0
@@ -1923,7 +1923,7 @@ FDC_MC_EXIT_Code_Epilogue:
 	popw	iz
 	ret
 FDC_CMD_DISABLE:
-	res	3, (0x28:8)
+	res	3, (PA:8)
 	ldw wa, 14
 	jrl	FDC_CMD_SEND
 ; --- FDC_STATUS_COPY: Copy FDC status and validate drive count ---
@@ -2294,18 +2294,18 @@ Reset_Floppy_Disk_Controller:
 ; I am not entirely sure yet, but it looks like FDC initialization code...
 
 	; reset FDC by toggling Port D bit 0
-	set	0, (0x34:8)
+	set	0, (PD:8)
 	ldw wa, 0xa
 	calr SOME_DELAY
-	res	0, (0x34:8)
+	res	0, (PD:8)
 	ldw wa, 0xa
 	jrl SOME_DELAY
 
 	; then do a lot of other stuff I still don't undertsand:
 
 TitleFunc_LifecycleTable_Helper:
-	ld (0x47:8), 0x1e:io
-	bit	6, (0x34:8)	; Port D bit 6: "FD.I/O signal"
+	ld (PHFC:8), 0x1e:io
+	bit	6, (PD:8)	; Port D bit 6: "FD.I/O signal"
 	ret nz
 	ld a, 0x0:opc
 	ldw (0x8b24:16), 0
@@ -2378,7 +2378,7 @@ FDC_Reset_BuildParams:
 	ret
 
 Check_for_Floppy_Disk_Change:
-	bit	6, (0x34:8)
+	bit	6, (PD:8)
 	jr z, Detected_Floppy_Disk_Change
 	ld l, 0x0:opc
 	ret
