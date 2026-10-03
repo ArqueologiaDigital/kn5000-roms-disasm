@@ -12,17 +12,21 @@ QUESTION THIS ANSWERS (FINDINGS-prom_ab-display-list-b-stage.md)
   matched as hex, as decimal and, once named, as `DisplayListB_Stage[+n]`.
 
 USAGE
-  python3 wsa1/notes/prom_ab_dl_stage_census.py
+  python3 wsa1/notes/prom_ab_dl_stage_census.py                      # 0x12F6, DisplayListB_Stage
+  python3 wsa1/notes/prom_ab_dl_stage_census.py 0x2640 UI_DrawScratch 0x2600 0x2680
 """
 import collections
 import os
 import re
 import subprocess
+import sys
 
 REPO = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
                       text=True).stdout.strip() or "."
-BASE = 0x12F6
-NAME = "DisplayListB_Stage"
+BASE = int(sys.argv[1], 0) if len(sys.argv) > 1 else 0x12F6
+NAME = sys.argv[2] if len(sys.argv) > 2 else "DisplayListB_Stage"
+LO = int(sys.argv[3], 0) if len(sys.argv) > 3 else 0x12C0
+HI = int(sys.argv[4], 0) if len(sys.argv) > 4 else 0x1340
 TOK = r'(0x[0-9a-fA-F]+|\d+|%s(?:\+\d+)?)' % NAME
 
 
@@ -44,17 +48,19 @@ for f in ["wsa1/prom_a/wsa1_prom_a.s", "wsa1/prom_b/wsa1_prom_b.s"]:
             continue
         for m in re.finditer(r'\(%s(?::16)?\)' % TOK, code):
             v = val(m.group(1))
-            if 0x12C0 <= v < 0x1340:
+            if LO <= v < HI:
                 (wr if re.match(r'\s*ld\s+\(', code) and code.index("(") == m.start() else other)[v] += 1
         for m in re.finditer(r'\b(?:ld|lda)\s+x[a-z]{2}\s*,\s*%s\s*$' % TOK, code, re.I):
             v = val(m.group(1))
-            if 0x12C0 <= v < 0x1340:
+            if LO <= v < HI:
                 other[v] += 1
 print("addr    DL-source  code-stores  other-code")
-for v in range(0x12C0, 0x1340):
+for v in range(LO, HI):
     if src[v] or wr[v] or other[v]:
         print("0x%04x  %9d  %11d  %10d" % (v, src[v], wr[v], other[v]))
-blk = [v for v in range(0x12C0, 0x1340) if src[v]]
-print("DL-source extent: 0x%04X-0x%04X, %d bytes, all read by DL records: %s" %
-      (blk[0], blk[-1], blk[-1] - blk[0] + 1, all(src[v] for v in range(blk[0], blk[-1] + 1))))
-print("code reads inside it:", sum(other[v] for v in range(blk[0], blk[-1] + 1)))
+end = BASE
+while src[end]:
+    end += 1
+print("contiguous DL-source run from 0x%04X: 0x%04X-0x%04X, %d bytes" % (BASE, BASE, end - 1, end - BASE))
+print("inside it: DL records %d, code stores %d, other code uses %d" % (
+    sum(src[v] for v in range(BASE, end)), sum(wr[v] for v in range(BASE, end)), sum(other[v] for v in range(BASE, end))))

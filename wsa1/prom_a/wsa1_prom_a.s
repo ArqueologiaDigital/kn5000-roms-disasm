@@ -4953,7 +4953,7 @@ sub_F81948:   ; entry: named by 3 `ld` operands, first at 0xF818EF
 	ld (0x0e03:16), a                                   ; F81956  f1 03 0e 41
 	inc 1,A                                              ; F8195A  c9 61
 	ld c, 0x08:opc                                          ; F8195C  23 08
-	ld XIX,0x00002640                                    ; F8195E  44 40 26 00 00
+	ld XIX,UI_DrawScratch                                    ; F8195E  44 40 26 00 00
 .LF81963:
 	ld (xix+), a                                    ; F81963  f5 f0 41
 	djnz8 c, .LF81963                                    ; F81966  cb 1c fa
@@ -4962,7 +4962,7 @@ sub_F81948:   ; entry: named by 3 `ld` operands, first at 0xF818EF
 	ld a, (0x0e03:16)                                   ; F8196E  c1 03 0e 21
 	ld XIY,0x00603422                                    ; F81972  45 22 34 60 00
 	mx_lda32 MXD, ra_IY, ra_WA, r5                       ; F81977  f3 07 f4 e0 35
-	ld XIX,0x00002648                                    ; F8197C  44 48 26 00 00
+	ld XIX,UI_DrawScratch+8                                    ; F8197C  44 48 26 00 00
 	ldir85                                               ; F81981  85 11
 	call sub_F819A2                                      ; F81983  1d a2 19 f8
 	xor WA,WA                                            ; F81987  d8 d0
@@ -4970,13 +4970,13 @@ sub_F81948:   ; entry: named by 3 `ld` operands, first at 0xF818EF
 	ldw bc, 0x08                                         ; F8198D  31 08 00
 	ld XIY,0x00603433                                    ; F81990  45 33 34 60 00
 	mx_lda32 MXD, ra_IY, ra_WA, r5                       ; F81995  f3 07 f4 e0 35
-	ld XIX,0x00002658                                    ; F8199A  44 58 26 00 00
+	ld XIX,UI_DrawScratch+24                                    ; F8199A  44 58 26 00 00
 	ldir85                                               ; F8199F  85 11
 	ret                                                  ; F819A1  0e
 sub_F819A2:
 	ld l, 0x08:opc                                          ; F819A2  27 08
 	ld c, (0x0e03:16)                                   ; F819A4  c1 03 0e 23
-	ld XIX,0x00002650                                    ; F819A8  44 50 26 00 00
+	ld XIX,UI_DrawScratch+16                                    ; F819A8  44 50 26 00 00
 .LF819AD:
 	ld A,C                                               ; F819AD  cb 89
 	pushw hl                                             ; F819AF  2b
@@ -5375,11 +5375,11 @@ Paint_StepRecordTrackClrMeas:
 	jr nz, .LF81DD4                                      ; F81DD0  6e 02
 	ld a, 0x00:opc                                          ; F81DD2  21 00
 .LF81DD4:
-	ld (0x2640:16), a                                   ; F81DD4  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F81DD4  f1 40 26 41
 	ld a, (0x0f65:16)                                   ; F81DD8  c1 65 0f 21
-	ld (0x2641:16), a                                   ; F81DDC  f1 41 26 41
+	ld (UI_DrawScratch+1:16), a                                   ; F81DDC  f1 41 26 41
 	ld a, (0x0f66:16)                                   ; F81DE0  c1 66 0f 21
-	ld (0x2642:16), a                                   ; F81DE4  f1 42 26 41
+	ld (UI_DrawScratch+2:16), a                                   ; F81DE4  f1 42 26 41
 	ld XIY,DL_F3DC00                                     ; F81DE8  45 00 dc f3 00
 	ld XIX,Data_F3DC21                                   ; F81DED  44 21 dc f3 00
 	call T_DisplayListB_Run                              ; F81DF2  1d f4 17 f4
@@ -6911,7 +6911,7 @@ Variant_SetFromPB0:
 ; ---------------------------------------------------------------------
 ExtBoard_Identify:
 	ld (0xc5:8), 0x00:io                                      ; F8288F  08 c5 00
-	ld XWA,0x00002640                                    ; F82892  40 40 26 00 00
+	ld XWA,UI_DrawScratch                                    ; F82892  40 40 26 00 00
 	push XWA                                             ; F82897  38
 	pushw 0x0a                                           ; F82898  0b 0a 00
 	ld XWA,0x00c00000                                    ; F8289B  40 00 00 c0 00
@@ -6920,7 +6920,7 @@ ExtBoard_Identify:
 	lda xsp, (xsp+0x0a)                                  ; F828A5  bf 0a 37
 	call T_Link_WaitBlockDone                            ; F828A8  1d 3c 12 f4
 	ld c, 0x0a:opc                                          ; F828AC  23 0a
-	ld XIX,0x00002640                                    ; F828AE  44 40 26 00 00
+	ld XIX,UI_DrawScratch                                    ; F828AE  44 40 26 00 00
 	ld XIY,ExtBoardMagic_Wsa1Extbd                       ; F828B3  45 c7 28 f8 00
 .LF828B8:
 	ld a, (xix+)                                      ; F828B8  c5 f0 21
@@ -7019,7 +7019,7 @@ PowerOnChord_ShowRevisionLeds:
 	cp A,0x70                                            ; F82966  c9 cf 70
 	jr nz, .LF829A5                                      ; F82969  6e 3a
 .LF8296B:
-	ld XWA,0x00002640                                    ; F8296B  40 40 26 00 00
+	ld XWA,UI_DrawScratch                                    ; F8296B  40 40 26 00 00
 	push XWA                                             ; F82970  38
 	pushw 0x0b                                           ; F82971  0b 0b 00
 	ld XWA,BUILD_TAG                                     ; F82974  40 f0 ff ff 00
@@ -7029,7 +7029,7 @@ PowerOnChord_ShowRevisionLeds:
 	call T_Link_WaitBlockDone                            ; F82981  1d 3c 12 f4
 	and WA,WA                                            ; F82985  d8 c0
 	jr z, .LF8298E                                       ; F82987  66 05
-	ld (0x2648:16), 0xff                                 ; F82989  f1 48 26 00 ff
+	ld (UI_DrawScratch+8:16), 0xff                                 ; F82989  f1 48 26 00 ff
 .LF8298E:
 	calr RomRevisions_ShowOnLeds                                      ; F8298E  1e 15 00
 	call T_SC1_Entry_F40F18_Ret                          ; F82991  1d 18 0f f4
@@ -7058,7 +7058,7 @@ RomRevisions_ShowOnLeds:
 	ld w, 0x00:opc                                          ; F829C5  20 00
 .LF829C7:
 	call T_PanelLed_SendByte                                        ; F829C7  1d 78 06 f4
-	ld c, (0x2648:16)                                   ; F829CB  c1 48 26 23
+	ld c, (UI_DrawScratch+8:16)                                   ; F829CB  c1 48 26 23
 	and C,0x0f                                           ; F829CF  cb cc 0f
 	ld XIY,LedNibblePatterns_F829F4                      ; F829D2  45 f4 29 f8 00
 	mx8_ld_rm MXB, ra_IY, rb_C, r1                       ; F829D7  c3 03 f4 e4 21
@@ -7150,7 +7150,7 @@ PowerOnChord_VersionScreen:
 VersionScreen_Show:
 	m_cp_mi16 MW8, Tick_Count, 0x03e8                          ; F82A28  d0 80 3f e8 03
 	jr c, VersionScreen_Show                             ; F82A2D  67 f9
-	ld XIX,0x00002640                                    ; F82A2F  44 40 26 00 00
+	ld XIX,UI_DrawScratch                                    ; F82A2F  44 40 26 00 00
 	push XIX                                             ; F82A34  3c
 	pushw 0x0b                                           ; F82A35  0b 0b 00
 	ld XWA,BUILD_TAG                                     ; F82A38  40 f0 ff ff 00
@@ -7163,7 +7163,7 @@ VersionScreen_Show:
 	m_ld_mi16 MDD+r4, 0x05, 0x7245                       ; F82A4D  bc 05 02 45 72
 	ld (XIX+0x07),0x72                                   ; F82A52  bc 07 00 72
 .LF82A56:
-	ld XIX,0x0000264c                                    ; F82A56  44 4c 26 00 00
+	ld XIX,UI_DrawScratch+12                                    ; F82A56  44 4c 26 00 00
 	push XIX                                             ; F82A5B  3c
 	pushw 0x0b                                           ; F82A5C  0b 0b 00
 	ld XWA,0x00f7fff0                                    ; F82A5F  40 f0 ff f7 00
@@ -7171,7 +7171,7 @@ VersionScreen_Show:
 	call T_Link_SendCommandE2                            ; F82A65  1d f0 0e f4
 	lda xsp, (xsp+0x0a)                                  ; F82A69  bf 0a 37
 	call T_Link_WaitBlockDone                            ; F82A6C  1d 3c 12 f4
-	ld XIX,0x00002640                                    ; F82A70  44 40 26 00 00
+	ld XIX,UI_DrawScratch                                    ; F82A70  44 40 26 00 00
 	and WA,WA                                            ; F82A75  d8 c0
 	jr z, .LF82A82                                       ; F82A77  66 09
 	m_ld_mi16 MDD+r4, 0x11, 0x7245                       ; F82A79  bc 11 02 45 72
@@ -31657,7 +31657,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	calr 0x328c                                          ; F90A65  1e 8c 32
 	ld A,(XIY+0x1d)                                      ; F90A68  8d 1d 21
 	and A,0xff                                           ; F90A6B  c9 cc ff
-	ld (0x2640:16), a                                   ; F90A6E  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90A6E  f1 40 26 41
 	ld A,(XIY+0x1b)                                      ; F90A72  8d 1b 21
 	and A,0xff                                           ; F90A75  c9 cc ff
 	sll a, 0x03                                          ; F90A78  c9 ee 03
@@ -31676,7 +31676,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	jr z, .LF90AB9                                           ; F90AA5  66 12
 	push XIY                                             ; F90AA7  3d
 	ld A,(XIY+0x03)                                      ; F90AA8  8d 03 21
-	ld (0x2640:16), a                                   ; F90AAB  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90AAB  f1 40 26 41
 	ld XIY,0x00f2841b                                    ; F90AAF  45 1b 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F90AB4  1d 0c 18 f4
 	pop XIY                                              ; F90AB8  5d
@@ -31685,7 +31685,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	jr z, .LF90AD1                                           ; F90ABD  66 12
 	push XIY                                             ; F90ABF  3d
 	ld A,(XIY+0x08)                                      ; F90AC0  8d 08 21
-	ld (0x2641:16), a                                   ; F90AC3  f1 41 26 41
+	ld (UI_DrawScratch+1:16), a                                   ; F90AC3  f1 41 26 41
 	ld XIY,0x00f28427                                    ; F90AC7  45 27 84 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90ACC  1d fc 17 f4
 	pop XIY                                              ; F90AD0  5d
@@ -31694,7 +31694,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	jr z, .LF90AE9                                           ; F90AD5  66 12
 	push XIY                                             ; F90AD7  3d
 	ld A,(XIY+0x05)                                      ; F90AD8  8d 05 21
-	ld (0x2642:16), a                                   ; F90ADB  f1 42 26 41
+	ld (UI_DrawScratch+2:16), a                                   ; F90ADB  f1 42 26 41
 	ld XIY,0x00f28438                                    ; F90ADF  45 38 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F90AE4  1d 0c 18 f4
 	pop XIY                                              ; F90AE8  5d
@@ -31703,7 +31703,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	jr z, .LF90B01                                           ; F90AED  66 12
 	push XIY                                             ; F90AEF  3d
 	ld A,(XIY+0x07)                                      ; F90AF0  8d 07 21
-	ld (0x2643:16), a                                   ; F90AF3  f1 43 26 41
+	ld (UI_DrawScratch+3:16), a                                   ; F90AF3  f1 43 26 41
 	ld XIY,0x00f28444                                    ; F90AF7  45 44 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F90AFC  1d 0c 18 f4
 Paint_SoundModeFields_DeadCopy__F90B00:
@@ -31713,7 +31713,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	jr z, .LF90B19                                           ; F90B05  66 12
 	push XIY                                             ; F90B07  3d
 	ld A,(XIY+0x0d)                                      ; F90B08  8d 0d 21
-	ld (0x2644:16), a                                   ; F90B0B  f1 44 26 41
+	ld (UI_DrawScratch+4:16), a                                   ; F90B0B  f1 44 26 41
 	ld XIY,0x00f2868a                                    ; F90B0F  45 8a 86 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90B14  1d fc 17 f4
 	pop XIY                                              ; F90B18  5d
@@ -31722,7 +31722,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	jr z, .LF90B31                                           ; F90B1D  66 12
 	push XIY                                             ; F90B1F  3d
 	ld A,(XIY+0x0d)                                      ; F90B20  8d 0d 21
-	ld (0x2645:16), a                                   ; F90B23  f1 45 26 41
+	ld (UI_DrawScratch+5:16), a                                   ; F90B23  f1 45 26 41
 	ld XIY,0x00f28450                                    ; F90B27  45 50 84 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90B2C  1d fc 17 f4
 	pop XIY                                              ; F90B30  5d
@@ -31736,7 +31736,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	jr z, .LF90B44                                           ; F90B40  66 02
 	ld a, 0x01:opc                                          ; F90B42  21 01
 .LF90B44:
-	ld (0x2646:16), a                                   ; F90B44  f1 46 26 41
+	ld (UI_DrawScratch+6:16), a                                   ; F90B44  f1 46 26 41
 	ld XIY,0x00f286a1                                    ; F90B48  45 a1 86 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90B4D  1d fc 17 f4
 	pop XIY                                              ; F90B51  5d
@@ -31752,7 +31752,7 @@ Paint_SoundModeFields_DeadCopy__F90B00:
 	jr z, .LF90B6D                                           ; F90B68  66 03
 	div A,0x0c                                           ; F90B6A  c9 0a 0c
 .LF90B6D:
-	ld (0x2647:16), a                                   ; F90B6D  f1 47 26 41
+	ld (UI_DrawScratch+7:16), a                                   ; F90B6D  f1 47 26 41
 	ld XIY,0x00f28790                                    ; F90B71  45 90 87 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90B76  1d fc 17 f4
 	pop XIY                                              ; F90B7A  5d
@@ -31787,7 +31787,7 @@ sub_F90B8E:
 	jr z, .LF90BCD                                           ; F90B92  66 39
 	call 0xf93cf4                                        ; F90B94  1d f4 3c f9
 	ld A,(XIY+0x18)                                      ; F90B98  8d 18 21
-	ld (0x2640:16), a                                   ; F90B9B  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90B9B  f1 40 26 41
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90B9F  c0 c4 3f 02
 	jr z, .LF90BBA                                           ; F90BA3  66 15
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F90BA5  f1 40 25 00 01
@@ -31813,7 +31813,7 @@ sub_F90B8E:
 	ld A,(XIY+0x19)                                      ; F90BF0  8d 19 21
 	calr 0x3129                                          ; F90BF3  1e 29 31
 	dec 1,A                                              ; F90BF6  c9 69
-	ld (0x2640:16), a                                   ; F90BF8  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90BF8  f1 40 26 41
 	push XIY                                             ; F90BFC  3d
 	ld XIY,0x34d187d5                                    ; F90BFD  45 d5 87 d1 34
 	ld a, 0x3e:opc                                          ; F90C02  21 3e
@@ -32073,7 +32073,7 @@ Paint_SoundModeFields:   ; entry: named by 1 `ld` operand, first at 0xF90DC8
 	calr PartRecord_GetSecondHalfPtr                                          ; F90E71  1e d9 36
 	ld A,(XIY+0x1d)                                      ; F90E74  8d 1d 21
 	and A,0xff                                           ; F90E77  c9 cc ff
-	ld (0x2640:16), a                                   ; F90E7A  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90E7A  f1 40 26 41
 	ld A,(XIY+0x1b)                                      ; F90E7E  8d 1b 21
 	and A,0xff                                           ; F90E81  c9 cc ff
 	sll a, 0x03                                          ; F90E84  c9 ee 03
@@ -32093,7 +32093,7 @@ Paint_SoundModeFields:   ; entry: named by 1 `ld` operand, first at 0xF90DC8
 	push XIY                                             ; F90EB3  3d
 	ld a, (0x0710:16)                                   ; F90EB4  c1 10 07 21
 	add A,0x1e                                           ; F90EB8  c9 c8 1e
-	ld (0x2640:16), a                                   ; F90EBB  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90EBB  f1 40 26 41
 	ld XIY,0x00f2845b                                    ; F90EBF  45 5b 84 f2 00
 	call T_DLB_Handler_DecimalSigned2Words               ; F90EC4  1d 14 18 f4
 	pop XIY                                              ; F90EC8  5d
@@ -32102,7 +32102,7 @@ Paint_SoundModeFields:   ; entry: named by 1 `ld` operand, first at 0xF90DC8
 	jr z, .LF90EE2                                       ; F90ECD  66 13
 	push XIY                                             ; F90ECF  3d
 	ld a, (0x0711:16)                                   ; F90ED0  c1 11 07 21
-	ld (0x2641:16), a                                   ; F90ED4  f1 41 26 41
+	ld (UI_DrawScratch+1:16), a                                   ; F90ED4  f1 41 26 41
 	ld XIY,0x00f28468                                    ; F90ED8  45 68 84 f2 00
 sub_F90EDD:
 	call T_DLB_Handler_StringTable2                      ; F90EDD  1d fc 17 f4
@@ -32112,7 +32112,7 @@ sub_F90EDD:
 	jr z, .LF90EFA                                       ; F90EE6  66 12
 	push XIY                                             ; F90EE8  3d
 	ld A,(XIY+0x05)                                      ; F90EE9  8d 05 21
-	ld (0x2642:16), a                                   ; F90EEC  f1 42 26 41
+	ld (UI_DrawScratch+2:16), a                                   ; F90EEC  f1 42 26 41
 	ld XIY,0x00f28479                                    ; F90EF0  45 79 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F90EF5  1d 0c 18 f4
 	pop XIY                                              ; F90EF9  5d
@@ -32121,7 +32121,7 @@ sub_F90EDD:
 	jr Z,.LF90F12                                        ; F90EFE  66 12
 	push XIY                                             ; F90F00  3d
 	ld A,(XIY+0x07)                                      ; F90F01  8d 07 21
-	ld (0x2643:16), a                                   ; F90F04  f1 43 26 41
+	ld (UI_DrawScratch+3:16), a                                   ; F90F04  f1 43 26 41
 	ld XIY,0x00f28485                                    ; F90F08  45 85 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F90F0D  1d 0c 18 f4
 	pop XIY                                              ; F90F11  5d
@@ -32130,7 +32130,7 @@ sub_F90EDD:
 	jr z, .LF90F2A                                       ; F90F16  66 12
 	push XIY                                             ; F90F18  3d
 	ld A,(XIY+0x0d)                                      ; F90F19  8d 0d 21
-	ld (0x2644:16), a                                   ; F90F1C  f1 44 26 41
+	ld (UI_DrawScratch+4:16), a                                   ; F90F1C  f1 44 26 41
 	ld XIY,DL_F286CB                                     ; F90F20  45 cb 86 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90F25  1d fc 17 f4
 	pop XIY                                              ; F90F29  5d
@@ -32139,7 +32139,7 @@ sub_F90EDD:
 	jr z, .LF90F42                                       ; F90F2E  66 12
 	push XIY                                             ; F90F30  3d
 	ld A,(XIY+0x0d)                                      ; F90F31  8d 0d 21
-	ld (0x2645:16), a                                   ; F90F34  f1 45 26 41
+	ld (UI_DrawScratch+5:16), a                                   ; F90F34  f1 45 26 41
 	ld XIY,0x00f28491                                    ; F90F38  45 91 84 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90F3D  1d fc 17 f4
 	pop XIY                                              ; F90F41  5d
@@ -32153,7 +32153,7 @@ sub_F90EDD:
 	jr z, .LF90F55                                       ; F90F51  66 02
 	ld a, 0x01:opc                                          ; F90F53  21 01
 .LF90F55:
-	ld (0x2646:16), a                                   ; F90F55  f1 46 26 41
+	ld (UI_DrawScratch+6:16), a                                   ; F90F55  f1 46 26 41
 	ld XIY,DL_F286E2                                     ; F90F59  45 e2 86 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90F5E  1d fc 17 f4
 	pop XIY                                              ; F90F62  5d
@@ -32169,7 +32169,7 @@ sub_F90EDD:
 	jr z, .LF90F7E                                       ; F90F79  66 03
 	div A,0x0c                                           ; F90F7B  c9 0a 0c
 .LF90F7E:
-	ld (0x2647:16), a                                   ; F90F7E  f1 47 26 41
+	ld (UI_DrawScratch+7:16), a                                   ; F90F7E  f1 47 26 41
 	ld XIY,0x00f287d1                                    ; F90F82  45 d1 87 f2 00
 	call T_DLB_Handler_StringTable2                      ; F90F87  1d fc 17 f4
 	pop XIY                                              ; F90F8B  5d
@@ -32214,7 +32214,7 @@ sub_F90F9F:
 	jr z, .LF90FCB                                       ; F90FA3  66 26
 	call PartRecord_GetSecondHalfPtr                                        ; F90FA5  1d 4d 45 f9
 	ld A,(XIY+0x18)                                      ; F90FA9  8d 18 21
-	ld (0x2640:16), a                                   ; F90FAC  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90FAC  f1 40 26 41
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90FB0  c0 c4 3f 02
 	jr z, .LF90FCB                                       ; F90FB4  66 15
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F90FB6  f1 40 25 00 01
@@ -32238,7 +32238,7 @@ sub_F90F9F:
 	jr z, .LF90FFA                                       ; F90FF6  66 02
 	dec 1,A                                              ; F90FF8  c9 69
 .LF90FFA:
-	ld (0x2640:16), a                                   ; F90FFA  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F90FFA  f1 40 26 41
 	push XIY                                             ; F90FFE  3d
 	ld XIY,DL_F28820                                     ; F90FFF  45 20 88 f2 00
 	ld XIX,Data_F2882B                                   ; F91004  44 2b 88 f2 00
@@ -32277,7 +32277,7 @@ sub_F90F9F:
 	jr z, .LF9107B                                       ; F91077  66 02
 	dec 1,A                                              ; F91079  c9 69
 .LF9107B:
-	ld (0x2640:16), a                                   ; F9107B  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F9107B  f1 40 26 41
 	push XIY                                             ; F9107F  3d
 	ld XIY,DL_F2885B                                     ; F91080  45 5b 88 f2 00
 	ld XIX,Data_F28866                                   ; F91085  44 66 88 f2 00
@@ -32312,7 +32312,7 @@ sub_F90F9F:
 	jr z, .LF910EF                                       ; F910EB  66 02
 	dec 1,A                                              ; F910ED  c9 69
 .LF910EF:
-	ld (0x2640:16), a                                   ; F910EF  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F910EF  f1 40 26 41
 	push XIY                                             ; F910F3  3d
 	ld XIY,DL_F28896                                     ; F910F4  45 96 88 f2 00
 	ld XIX,Data_F288A1                                   ; F910F9  44 a1 88 f2 00
@@ -33362,7 +33362,7 @@ Paint_C0mbinati0nM0dePage2Sound1:   ; entry: named by 1 `.long` operand, first a
 	sla a, 0x03                                          ; F9192A  c9 ec 03
 	or a, (0x76de:16)                                    ; F9192D  c1 de 76 e1
 	inc 1,A                                              ; F91931  c9 61
-	ld (0x2640:16), a                                   ; F91933  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F91933  f1 40 26 41
 	ld XIY,DL_F29783                                     ; F91937  45 83 97 f2 00
 	ld XIX,Data_F297A0                                   ; F9193C  44 a0 97 f2 00
 	call T_DisplayListB_Run                              ; F91941  1d f4 17 f4
@@ -33376,7 +33376,7 @@ Paint_C0mbinati0nM0dePage2Sound2:   ; entry: named by 1 `.long` operand, first a
 	sla a, 0x03                                          ; F9194A  c9 ec 03
 	or a, (0x771e:16)                                    ; F9194D  c1 1e 77 e1
 	inc 1,A                                              ; F91951  c9 61
-	ld (0x2640:16), a                                   ; F91953  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F91953  f1 40 26 41
 	ld XIY,DL_F29863                                     ; F91957  45 63 98 f2 00
 	ld XIX,DL_F29880                                     ; F9195C  44 80 98 f2 00
 	call T_DisplayListB_Run                              ; F91961  1d f4 17 f4
@@ -33390,7 +33390,7 @@ Paint_C0mbinati0nM0dePage2Sound3:   ; entry: named by 1 `.long` operand, first a
 	sla a, 0x03                                          ; F9196A  c9 ec 03
 	or a, (0x775e:16)                                    ; F9196D  c1 5e 77 e1
 	inc 1,A                                              ; F91971  c9 61
-	ld (0x2640:16), a                                   ; F91973  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F91973  f1 40 26 41
 	ld XIY,DL_F29880                                     ; F91977  45 80 98 f2 00
 	ld XIX,DL_F2989D                                     ; F9197C  44 9d 98 f2 00
 	call T_DisplayListB_Run                              ; F91981  1d f4 17 f4
@@ -33404,7 +33404,7 @@ Paint_C0mbinati0nM0dePage2Sound4:   ; entry: named by 1 `.long` operand, first a
 	sla a, 0x03                                          ; F9198A  c9 ec 03
 	or a, (0x779e:16)                                    ; F9198D  c1 9e 77 e1
 	inc 1,A                                              ; F91991  c9 61
-	ld (0x2640:16), a                                   ; F91993  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F91993  f1 40 26 41
 	ld XIY,DL_F2989D                                     ; F91997  45 9d 98 f2 00
 	ld XIX,DL_F298BA                                     ; F9199C  44 ba 98 f2 00
 	call T_DisplayListB_Run                              ; F919A1  1d f4 17 f4
@@ -33418,7 +33418,7 @@ Paint_C0mbinati0nM0dePage2Sound5:   ; entry: named by 1 `.long` operand, first a
 	sla a, 0x03                                          ; F919AA  c9 ec 03
 	or a, (0x77de:16)                                    ; F919AD  c1 de 77 e1
 	inc 1,A                                              ; F919B1  c9 61
-	ld (0x2640:16), a                                   ; F919B3  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F919B3  f1 40 26 41
 	ld XIY,DL_F298BA                                     ; F919B7  45 ba 98 f2 00
 	ld XIX,DL_F298D7                                     ; F919BC  44 d7 98 f2 00
 	call T_DisplayListB_Run                              ; F919C1  1d f4 17 f4
@@ -33432,7 +33432,7 @@ Paint_C0mbinati0nM0dePage2Sound6:   ; entry: named by 1 `.long` operand, first a
 	sla a, 0x03                                          ; F919CA  c9 ec 03
 	or a, (0x781e:16)                                    ; F919CD  c1 1e 78 e1
 	inc 1,A                                              ; F919D1  c9 61
-	ld (0x2640:16), a                                   ; F919D3  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F919D3  f1 40 26 41
 	ld XIY,DL_F298D7                                     ; F919D7  45 d7 98 f2 00
 	ld XIX,DL_F298F4                                     ; F919DC  44 f4 98 f2 00
 	call T_DisplayListB_Run                              ; F919E1  1d f4 17 f4
@@ -33446,7 +33446,7 @@ Paint_C0mbinati0nM0dePage2Sound7:   ; entry: named by 1 `.long` operand, first a
 	sla a, 0x03                                          ; F919EA  c9 ec 03
 	or a, (0x785e:16)                                    ; F919ED  c1 5e 78 e1
 	inc 1,A                                              ; F919F1  c9 61
-	ld (0x2640:16), a                                   ; F919F3  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F919F3  f1 40 26 41
 	ld XIY,DL_F298F4                                     ; F919F7  45 f4 98 f2 00
 	ld XIX,DL_F29911                                     ; F919FC  44 11 99 f2 00
 	call T_DisplayListB_Run                              ; F91A01  1d f4 17 f4
@@ -33460,7 +33460,7 @@ C0mbinati0nM0de_DrawPart8Sound:   ; entry: named by 1 `.long` operand, first at 
 	sla a, 0x03                                          ; F91A0A  c9 ec 03
 	or a, (0x789e:16)                                    ; F91A0D  c1 9e 78 e1
 	inc 1,A                                              ; F91A11  c9 61
-	ld (0x2640:16), a                                   ; F91A13  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F91A13  f1 40 26 41
 	ld XIY,DL_F29911                                     ; F91A17  45 11 99 f2 00
 	ld XIX,DL_F2992E                                     ; F91A1C  44 2e 99 f2 00
 	call T_DisplayListB_Run                              ; F91A21  1d f4 17 f4
@@ -33800,7 +33800,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	ld XIY,0x00007f02                                    ; F91D10  45 02 7f 00 00
 	ld A,(XIY+0x08)                                      ; F91D15  8d 08 21
 	and A,0xff                                           ; F91D18  c9 cc ff
-	ld (0x2640:16), a                                   ; F91D1B  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F91D1B  f1 40 26 41
 	ld A,(XIY+0x06)                                      ; F91D1F  8d 06 21
 	and A,0xff                                           ; F91D22  c9 cc ff
 	sll a, 0x03                                          ; F91D25  c9 ee 03
@@ -33819,7 +33819,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91D66                                       ; F91D52  66 12
 	push XIY                                             ; F91D54  3d
 	ld A,(XIY+0x03)                                      ; F91D55  8d 03 21
-	ld (0x2640:16), a                                   ; F91D58  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F91D58  f1 40 26 41
 	ld XIY,0x00f2844f                                    ; F91D5C  45 4f 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F91D61  1d 0c 18 f4
 	pop XIY                                              ; F91D65  5d
@@ -33828,7 +33828,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91D7E                                       ; F91D6A  66 12
 	push XIY                                             ; F91D6C  3d
 	ld A,(XIY+0x08)                                      ; F91D6D  8d 08 21
-	ld (0x2641:16), a                                   ; F91D70  f1 41 26 41
+	ld (UI_DrawScratch+1:16), a                                   ; F91D70  f1 41 26 41
 	ld XIY,0x00f28468                                    ; F91D74  45 68 84 f2 00
 	call T_DLB_Handler_StringTable2                      ; F91D79  1d fc 17 f4
 	pop XIY                                              ; F91D7D  5d
@@ -33837,7 +33837,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91D96                                       ; F91D82  66 12
 	push XIY                                             ; F91D84  3d
 	ld A,(XIY+0x05)                                      ; F91D85  8d 05 21
-	ld (0x2642:16), a                                   ; F91D88  f1 42 26 41
+	ld (UI_DrawScratch+2:16), a                                   ; F91D88  f1 42 26 41
 	ld XIY,0x00f28479                                    ; F91D8C  45 79 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F91D91  1d 0c 18 f4
 	pop XIY                                              ; F91D95  5d
@@ -33846,7 +33846,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91DAE                                       ; F91D9A  66 12
 	push XIY                                             ; F91D9C  3d
 	ld A,(XIY+0x07)                                      ; F91D9D  8d 07 21
-	ld (0x2643:16), a                                   ; F91DA0  f1 43 26 41
+	ld (UI_DrawScratch+3:16), a                                   ; F91DA0  f1 43 26 41
 	ld XIY,0x00f28485                                    ; F91DA4  45 85 84 f2 00
 	call T_DLB_Handler_Decimal2Words                                        ; F91DA9  1d 0c 18 f4
 	pop XIY                                              ; F91DAD  5d
@@ -33855,7 +33855,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91DC6                                       ; F91DB2  66 12
 	push XIY                                             ; F91DB4  3d
 	ld A,(XIY+0x0d)                                      ; F91DB5  8d 0d 21
-	ld (0x2644:16), a                                   ; F91DB8  f1 44 26 41
+	ld (UI_DrawScratch+4:16), a                                   ; F91DB8  f1 44 26 41
 	ld XIY,DL_F286CB                                     ; F91DBC  45 cb 86 f2 00
 	call T_DLB_Handler_StringTable2                      ; F91DC1  1d fc 17 f4
 	pop XIY                                              ; F91DC5  5d
@@ -33864,7 +33864,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91DDF                                       ; F91DCA  66 13
 	push XIY                                             ; F91DCC  3d
 	ld a, (UI_PartIndex:16)                                   ; F91DCD  c1 50 22 21
-	ld (0x2645:16), a                                   ; F91DD1  f1 45 26 41
+	ld (UI_DrawScratch+5:16), a                                   ; F91DD1  f1 45 26 41
 	ld XIY,DL_F286A2                                     ; F91DD5  45 a2 86 f2 00
 	call T_DLB_Handler_StringTable2                      ; F91DDA  1d fc 17 f4
 	pop XIY                                              ; F91DDE  5d
@@ -33878,7 +33878,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91DF2                                       ; F91DEE  66 02
 	ld a, 0x01:opc                                          ; F91DF0  21 01
 .LF91DF2:
-	ld (0x2646:16), a                                   ; F91DF2  f1 46 26 41
+	ld (UI_DrawScratch+6:16), a                                   ; F91DF2  f1 46 26 41
 	ld XIY,DL_F286E2                                     ; F91DF6  45 e2 86 f2 00
 	call T_DLB_Handler_StringTable2                      ; F91DFB  1d fc 17 f4
 	pop XIY                                              ; F91DFF  5d
@@ -33894,7 +33894,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	jr z, .LF91E1B                                       ; F91E16  66 03
 	div A,0x0c                                           ; F91E18  c9 0a 0c
 .LF91E1B:
-	ld (0x2647:16), a                                   ; F91E1B  f1 47 26 41
+	ld (UI_DrawScratch+7:16), a                                   ; F91E1B  f1 47 26 41
 	ld XIY,0x00f287d1                                    ; F91E1F  45 d1 87 f2 00
 	call T_DLB_Handler_StringTable2                      ; F91E24  1d fc 17 f4
 	pop XIY                                              ; F91E28  5d
@@ -35102,7 +35102,7 @@ Draw_SoundGroupMenuReMap1ReMap2:   ; entry: named by 1 `ld` operand, first at 0x
 ; then swi 0x0C with C = 7. Posted by InstallPainter_SoundGroupMenu (0xF927ED) after the painter. (0x2169) is the group SoundGroup_StepSelected steps.
 SoundGroupMenu_MoveGroupHighlight:   ; entry: named by 1 `ld` operand, first at 0xF927ED
 	ld a, (SoundGroupMenu_Highlight:16)                                   ; F928AE  c1 75 26 21
-	ld (0x2640:16), a                                   ; F928B2  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F928B2  f1 40 26 41
 	ld a, (SoundSel_Group:16)                                   ; F928B6  c1 69 21 21
 	ld (SoundGroupMenu_Highlight:16), a                                   ; F928BA  f1 75 26 41
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F928BE  f1 40 25 00 01
@@ -36254,18 +36254,18 @@ GroupCombiDisplayHold_DrawNumberRange:
 	mul hl, d                                          ; F931AD  cc 47
 	inc 1,A                                              ; F931AF  c9 61
 	add L,A                                              ; F931B1  c9 87
-	ld (0x2640:16), l                                   ; F931B3  f1 40 26 47
+	ld (UI_DrawScratch:16), l                                   ; F931B3  f1 40 26 47
 	sub L,A                                              ; F931B7  c9 a7
 	inc 1,L                                              ; F931B9  cf 61
-	ld (0x2641:16), l                                   ; F931BB  f1 41 26 47
-	ld a, (0x2640:16)                                   ; F931BF  c1 40 26 21
+	ld (UI_DrawScratch+1:16), l                                   ; F931BB  f1 41 26 47
+	ld a, (UI_DrawScratch:16)                                   ; F931BF  c1 40 26 21
 	extz WA                                              ; F931C3  d8 12
 	call T_Value_ToAsciiDigits3                          ; F931C5  1d 00 1b f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F931C9  f1 40 25 00 00
 	ld XIY,DL_F2BDC3                                     ; F931CE  45 c3 bd f2 00
 	ld XIX,DL_F2BDD2                                     ; F931D3  44 d2 bd f2 00
 	call T_DisplayListB_Run                              ; F931D8  1d f4 17 f4
-	ld a, (0x2641:16)                                   ; F931DC  c1 41 26 21
+	ld a, (UI_DrawScratch+1:16)                                   ; F931DC  c1 41 26 21
 	extz WA                                              ; F931E0  d8 12
 	call T_Value_ToAsciiDigits3                          ; F931E2  1d 00 1b f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F931E6  f1 40 25 00 00
@@ -36932,7 +36932,7 @@ Draw_CombinationGroupMenuReMap1:   ; entry: named by 1 `ld` operand, first at 0x
 ; DLTable_F2B445 is 16 boxes, two columns of 8, matching the "1.".."16." layout; ends with SWI7 0x0C C = 7.
 CombinationGroupMenu_MoveHighlight:   ; entry: named by 1 `ld` operand, first at 0xF9361E
 	ld a, (SoundGroupMenu_Highlight:16)                                   ; F936DA  c1 75 26 21
-	ld (0x2640:16), a                                   ; F936DE  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F936DE  f1 40 26 41
 	ld a, (SoundSel_Group:16)                                   ; F936E2  c1 69 21 21
 	ld (SoundGroupMenu_Highlight:16), a                                   ; F936E6  f1 75 26 41
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F936EA  f1 40 25 00 01
@@ -46843,7 +46843,7 @@ SysexProgressBar_DrawDots:
 	sub A,L                                              ; F99C0B  cf a1
 	srl a, 0x01                                          ; F99C0D  c9 ef 01
 	add IX,WA                                            ; F99C10  d8 84
-	ld (0x2640:16), ix                                  ; F99C12  f1 40 26 54
+	ld (UI_DrawScratch:16), ix                                  ; F99C12  f1 40 26 54
 .LF99C16:
 	push XIX                                             ; F99C16  3c
 	push XHL                                             ; F99C17  3b
@@ -46870,7 +46870,7 @@ SysexProgressBar_FillCells:
 	and L,0x7f                                           ; F99C32  cf cc 7f
 	jr z, .LF99C5B                                       ; F99C35  66 24
 	xor XIX,XIX                                          ; F99C37  ec d4
-	ld ix, (0x2640:16)                                 ; F99C39  d1 40 26 24
+	ld ix, (UI_DrawScratch:16)                                 ; F99C39  d1 40 26 24
 .LF99C3D:
 	push XIX                                             ; F99C3D  3c
 	push XHL                                             ; F99C3E  3b
@@ -57147,7 +57147,7 @@ DrumsMap_LoadRowFields:
 	jr nz, .LF9F515                                      ; F9F529  6e ea
 .LF9F52B:
 	ld h, 0x00:opc                                          ; F9F52B  26 00
-	lda xbc, (0x2640:16)                                ; F9F52D  f1 40 26 31
+	lda xbc, (UI_DrawScratch:16)                                ; F9F52D  f1 40 26 31
 	ld (xiz-8), xbc                                      ; F9F531  be f8 61
 	lda xix, (0x2a40:16)                                ; F9F534  f1 40 2a 34
 .LF9F538:
@@ -57250,12 +57250,12 @@ SoundName_CopyToBuffer:
 	ld w, (0x60f165:24)                                 ; F9F61C  c2 65 f1 60 20
 	ld b, (0x60f01c:24)                                 ; F9F621  c2 1c f0 60 22
 	call T_F41010                                        ; F9F626  1d 10 10 f4
-	ld (0x2640:16), xiy                                 ; F9F62A  f1 40 26 65
+	ld (UI_DrawScratch:16), xiy                                 ; F9F62A  f1 40 26 65
 	pop XIZ                                              ; F9F62E  5e
 	pop XIX                                              ; F9F62F  5c
 	pop XHL                                              ; F9F630  5b
 	pop XDE                                              ; F9F631  5a
-	ld xbc, (0x2640:16)                                 ; F9F632  e1 40 26 21
+	ld xbc, (UI_DrawScratch:16)                                 ; F9F632  e1 40 26 21
 	ld XIX,XBC                                           ; F9F636  e9 8c
 	ld XWA,(XIZ+0x0e)                                    ; F9F638  ae 0e 20
 	ld (xiz-4), xwa                                      ; F9F63B  be fc 60
@@ -57282,23 +57282,23 @@ SoundGroupName_CopyToBuffer:
 	pushw hl                                             ; F9F65F  2b
 	push XIX                                             ; F9F660  3c
 	ld C,(XIZ+0x08)                                      ; F9F661  8e 08 23
-	ld (0x2640:16), c                                   ; F9F664  f1 40 26 43
+	ld (UI_DrawScratch:16), c                                   ; F9F664  f1 40 26 43
 	ld C,(XIZ+0x0a)                                      ; F9F668  8e 0a 23
-	ld (0x2641:16), c                                   ; F9F66B  f1 41 26 43
+	ld (UI_DrawScratch+1:16), c                                   ; F9F66B  f1 41 26 43
 	push XDE                                             ; F9F66F  3a
 	push XHL                                             ; F9F670  3b
 	push XIX                                             ; F9F671  3c
 	push XIZ                                             ; F9F672  3e
-	ld a, (0x2640:16)                                   ; F9F673  c1 40 26 21
-	ld w, (0x2641:16)                                   ; F9F677  c1 41 26 20
+	ld a, (UI_DrawScratch:16)                                   ; F9F673  c1 40 26 21
+	ld w, (UI_DrawScratch+1:16)                                   ; F9F677  c1 41 26 20
 	ld b, (UI_PartIndex:16)                                   ; F9F67B  c1 50 22 22
 	call T_F41018                                        ; F9F67F  1d 18 10 f4
-	ld (0x2640:16), xiy                                 ; F9F683  f1 40 26 65
+	ld (UI_DrawScratch:16), xiy                                 ; F9F683  f1 40 26 65
 	pop XIZ                                              ; F9F687  5e
 	pop XIX                                              ; F9F688  5c
 	pop XHL                                              ; F9F689  5b
 	pop XDE                                              ; F9F68A  5a
-	ld xbc, (0x2640:16)                                 ; F9F68B  e1 40 26 21
+	ld xbc, (UI_DrawScratch:16)                                 ; F9F68B  e1 40 26 21
 	ld (xiz-4), xbc                                      ; F9F68F  be fc 61
 	ld XIX,(XIZ+0x0c)                                    ; F9F692  ae 0c 24
 	ld h, 0x04:opc                                          ; F9F695  26 04
@@ -57323,7 +57323,7 @@ SoundGroupName_CopyToBuffer:
 SoundGroup_MaxMemberIndex_ByStack:
 	link XIZ,0x0000                                      ; F9F6B2  ee 0c 00 00
 	push XIX                                             ; F9F6B6  3c
-	lda xix, (0x2640:16)                                ; F9F6B7  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; F9F6B7  f1 40 26 34
 	ld C,(XIZ+0x08)                                      ; F9F6BB  8e 08 23
 	ld (XIX),C                                           ; F9F6BE  b4 43
 	extz XIX                                             ; F9F6C0  ec 12
@@ -57333,11 +57333,11 @@ SoundGroup_MaxMemberIndex_ByStack:
 	push XHL                                             ; F9F6C9  3b
 	push XIX                                             ; F9F6CA  3c
 	push XIZ                                             ; F9F6CB  3e
-	ld a, (0x2640:16)                                   ; F9F6CC  c1 40 26 21
-	ld w, (0x2641:16)                                   ; F9F6D0  c1 41 26 20
+	ld a, (UI_DrawScratch:16)                                   ; F9F6CC  c1 40 26 21
+	ld w, (UI_DrawScratch+1:16)                                   ; F9F6D0  c1 41 26 20
 	ld b, (UI_PartIndex:16)                                   ; F9F6D4  c1 50 22 22
 	call T_SoundGroup_MaxMemberIndex_Get                 ; F9F6D8  1d 1c 10 f4
-	ld (0x2640:16), a                                   ; F9F6DC  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F9F6DC  f1 40 26 41
 	pop XIZ                                              ; F9F6E0  5e
 	pop XIX                                              ; F9F6E1  5c
 	pop XHL                                              ; F9F6E2  5b
@@ -57369,12 +57369,12 @@ CombiName_CopyToBuffer:
 	ld w, (0x60f186:24)                                 ; F9F71D  c2 86 f1 60 20
 	ld b, (0x60f17f:24)                                 ; F9F722  c2 7f f1 60 22
 	call T_F4102C                                        ; F9F727  1d 2c 10 f4
-	ld (0x2640:16), xiy                                 ; F9F72B  f1 40 26 65
+	ld (UI_DrawScratch:16), xiy                                 ; F9F72B  f1 40 26 65
 	pop XIZ                                              ; F9F72F  5e
 	pop XIX                                              ; F9F730  5c
 	pop XHL                                              ; F9F731  5b
 	pop XDE                                              ; F9F732  5a
-	ld xbc, (0x2640:16)                                 ; F9F733  e1 40 26 21
+	ld xbc, (UI_DrawScratch:16)                                 ; F9F733  e1 40 26 21
 	ld XIX,XBC                                           ; F9F737  e9 8c
 	ld XWA,(XIZ+0x0e)                                    ; F9F739  ae 0e 20
 	ld (xiz-4), xwa                                      ; F9F73C  be fc 60
@@ -57401,24 +57401,24 @@ CombiGroupName_CopyToBuffer:
 	pushw hl                                             ; F9F760  2b
 	push XIX                                             ; F9F761  3c
 	ld C,(XIZ+0x08)                                      ; F9F762  8e 08 23
-	ld (0x2640:16), c                                   ; F9F765  f1 40 26 43
+	ld (UI_DrawScratch:16), c                                   ; F9F765  f1 40 26 43
 	ld C,(XIZ+0x0a)                                      ; F9F769  8e 0a 23
-	ld (0x2641:16), c                                   ; F9F76C  f1 41 26 43
-	ld (0x2642:16), 0x98                                 ; F9F770  f1 42 26 00 98
+	ld (UI_DrawScratch+1:16), c                                   ; F9F76C  f1 41 26 43
+	ld (UI_DrawScratch+2:16), 0x98                                 ; F9F770  f1 42 26 00 98
 	push XDE                                             ; F9F775  3a
 	push XHL                                             ; F9F776  3b
 	push XIX                                             ; F9F777  3c
 	push XIZ                                             ; F9F778  3e
-	ld a, (0x2640:16)                                   ; F9F779  c1 40 26 21
-	ld w, (0x2641:16)                                   ; F9F77D  c1 41 26 20
-	ld b, (0x2642:16)                                   ; F9F781  c1 42 26 22
+	ld a, (UI_DrawScratch:16)                                   ; F9F779  c1 40 26 21
+	ld w, (UI_DrawScratch+1:16)                                   ; F9F77D  c1 41 26 20
+	ld b, (UI_DrawScratch+2:16)                                   ; F9F781  c1 42 26 22
 	call T_F41030                                        ; F9F785  1d 30 10 f4
-	ld (0x2640:16), xiy                                 ; F9F789  f1 40 26 65
+	ld (UI_DrawScratch:16), xiy                                 ; F9F789  f1 40 26 65
 	pop XIZ                                              ; F9F78D  5e
 	pop XIX                                              ; F9F78E  5c
 	pop XHL                                              ; F9F78F  5b
 	pop XDE                                              ; F9F790  5a
-	ld xbc, (0x2640:16)                                 ; F9F791  e1 40 26 21
+	ld xbc, (UI_DrawScratch:16)                                 ; F9F791  e1 40 26 21
 	ld (xiz-4), xbc                                      ; F9F795  be fc 61
 	ld XIX,(XIZ+0x0c)                                    ; F9F798  ae 0c 24
 	ld h, 0x04:opc                                          ; F9F79B  26 04
@@ -57442,7 +57442,7 @@ CombiGroupName_CopyToBuffer:
 CombiGroup_MaxMemberIndex_ByStack:
 	link XIZ,0x0000                                      ; F9F7B8  ee 0c 00 00
 	push XIX                                             ; F9F7BC  3c
-	lda xix, (0x2640:16)                                ; F9F7BD  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; F9F7BD  f1 40 26 34
 	ld C,(XIZ+0x08)                                      ; F9F7C1  8e 08 23
 	ld (XIX),C                                           ; F9F7C4  b4 43
 	extz XIX                                             ; F9F7C6  ec 12
@@ -57453,11 +57453,11 @@ CombiGroup_MaxMemberIndex_ByStack:
 	push XHL                                             ; F9F7D3  3b
 	push XIX                                             ; F9F7D4  3c
 	push XIZ                                             ; F9F7D5  3e
-	ld a, (0x2640:16)                                   ; F9F7D6  c1 40 26 21
-	ld w, (0x2641:16)                                   ; F9F7DA  c1 41 26 20
-	ld b, (0x2642:16)                                   ; F9F7DE  c1 42 26 22
+	ld a, (UI_DrawScratch:16)                                   ; F9F7D6  c1 40 26 21
+	ld w, (UI_DrawScratch+1:16)                                   ; F9F7DA  c1 41 26 20
+	ld b, (UI_DrawScratch+2:16)                                   ; F9F7DE  c1 42 26 22
 	call T_SoundGroup_MaxMemberIndex_GetToneCopy         ; F9F7E2  1d 34 10 f4
-	ld (0x2640:16), a                                   ; F9F7E6  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; F9F7E6  f1 40 26 41
 	pop XIZ                                              ; F9F7EA  5e
 	pop XIX                                              ; F9F7EB  5c
 	pop XHL                                              ; F9F7EC  5b
@@ -58615,7 +58615,7 @@ TuneScale_AdjustUserKey:
 	ld A,L                                               ; FA029A  cf 89
 	extz WA                                              ; FA029C  d8 12
 	ld DE,WA                                             ; FA029E  d8 8a
-	ldw bc, 0x2640                                       ; FA02A0  31 40 26
+	ldw bc, UI_DrawScratch                                       ; FA02A0  31 40 26
 	add BC,WA                                            ; FA02A3  d8 81
 	extz XBC                                             ; FA02A5  e9 12
 	push XBC                                             ; FA02A7  39
@@ -58633,7 +58633,7 @@ TuneScale_AdjustUserKey:
 	ld A,H                                               ; FA02C0  ce 89
 	extz WA                                              ; FA02C2  d8 12
 	ld DE,WA                                             ; FA02C4  d8 8a
-	ldw bc, 0x2640                                       ; FA02C6  31 40 26
+	ldw bc, UI_DrawScratch                                       ; FA02C6  31 40 26
 	add BC,WA                                            ; FA02C9  d8 81
 	extz XBC                                             ; FA02CB  e9 12
 	push XBC                                             ; FA02CD  39
@@ -58750,7 +58750,7 @@ TuneScale_StoreUserKey:
 	extz BC                                              ; FA03B0  d9 12
 	ld DE,BC                                             ; FA03B2  d9 8a
 	extz XBC                                             ; FA03B4  e9 12
-	ld W,(XBC+0x2640)                                    ; FA03B6  c3 e5 40 26 20
+	ld W,(XBC+UI_DrawScratch)                                    ; FA03B6  c3 e5 40 26 20
 	push 0x00                                            ; FA03BB  09 00
 	push W                                               ; FA03BD  c8 04
 	calr TuneScale_UserKeyValueToByte                                      ; FA03BF  1e 48 00
@@ -58767,7 +58767,7 @@ TuneScale_StoreUserKey:
 	add XIY,XBC                                          ; FA03DA  e9 85
 	ld (xiz-4), xiy                                      ; FA03DC  be fc 65
 	extz XDE                                             ; FA03DF  ea 12
-	ld C,(XDE+0x2640)                                    ; FA03E1  c3 e9 40 26 23
+	ld C,(XDE+UI_DrawScratch)                                    ; FA03E1  c3 e9 40 26 23
 	pushw bc                                             ; FA03E6  29
 	calr TuneScale_UserKeyValueToByte                                      ; FA03E7  1e 20 00
 	ld L,A                                               ; FA03EA  c9 8f
@@ -58921,7 +58921,7 @@ TuneScale_LoadFields:
 	pushw hl                                             ; FA0529  2b
 	pushw de                                             ; FA052A  2a
 	push XIX                                             ; FA052B  3c
-	lda xix, (0x2640:16)                                ; FA052C  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FA052C  f1 40 26 34
 	ld h, 0x01:opc                                          ; FA0530  26 01
 .LFA0532:
 	ld C,H                                               ; FA0532  ce 8b
@@ -60000,7 +60000,7 @@ T_F41954_Nop:
 	ld A,H                                               ; FA0F8A  ce 89
 	extz WA                                              ; FA0F8C  d8 12
 	ld DE,WA                                             ; FA0F8E  d8 8a
-	ldw bc, 0x2640                                       ; FA0F90  31 40 26
+	ldw bc, UI_DrawScratch                                       ; FA0F90  31 40 26
 	add BC,WA                                            ; FA0F93  d8 81
 	extz XBC                                             ; FA0F95  e9 12
 	push XBC                                             ; FA0F97  39
@@ -60015,7 +60015,7 @@ T_F41954_Nop:
 	ld A,H                                               ; FA0FAA  ce 89
 	extz WA                                              ; FA0FAC  d8 12
 	ld DE,WA                                             ; FA0FAE  d8 8a
-	ldw bc, 0x2640                                       ; FA0FB0  31 40 26
+	ldw bc, UI_DrawScratch                                       ; FA0FB0  31 40 26
 	add BC,WA                                            ; FA0FB3  d8 81
 	extz XBC                                             ; FA0FB5  e9 12
 	push XBC                                             ; FA0FB7  39
@@ -60091,7 +60091,7 @@ sub_FA102D:
 	ld A,H                                               ; FA1057  ce 89
 	extz WA                                              ; FA1059  d8 12
 	ld DE,WA                                             ; FA105B  d8 8a
-	ldw bc, 0x2640                                       ; FA105D  31 40 26
+	ldw bc, UI_DrawScratch                                       ; FA105D  31 40 26
 	add BC,WA                                            ; FA1060  d8 81
 	extz XBC                                             ; FA1062  e9 12
 	ld XIX,XBC                                           ; FA1064  e9 8c
@@ -60168,7 +60168,7 @@ sub_FA10CD:
 	ld C,L                                               ; FA1104  cf 8b
 	extz BC                                              ; FA1106  d9 12
 	extz XBC                                             ; FA1108  e9 12
-	ld (XBC+0x2640),H                                    ; FA110A  f3 e5 40 26 46
+	ld (XBC+UI_DrawScratch),H                                    ; FA110A  f3 e5 40 26 46
 	jr .LFA1118                                          ; FA110F  68 07
 .LFA1111:
 	inc 1,H                                              ; FA1111  ce 61
@@ -60200,7 +60200,7 @@ sub_FA10CD:
 	ld C,L                                               ; FA114B  cf 8b
 	extz BC                                              ; FA114D  d9 12
 	extz XBC                                             ; FA114F  e9 12
-	ld (XBC+0x2640),H                                    ; FA1151  f3 e5 40 26 46
+	ld (XBC+UI_DrawScratch),H                                    ; FA1151  f3 e5 40 26 46
 	jr .LFA115E                                          ; FA1156  68 06
 .LFA1158:
 	inc 1,H                                              ; FA1158  ce 61
@@ -102443,12 +102443,12 @@ sub_FBCCB1:
 	add BC,0x0020                                        ; FBCD01  d9 c8 20 00
 	pushw bc                                             ; FBCD05  29
 	call T_IndexedTable_GetByte                          ; FBCD06  1d 90 2c f4
-	ld (0x2640:16), a                                   ; FBCD0A  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBCD0A  f1 40 26 41
 	pushw 0x0d                                           ; FBCD0E  0b 0d 00
 	ld C,(XIX)                                           ; FBCD11  84 23
 	pushw bc                                             ; FBCD13  29
 	call T_IndexedTable_GetByte                          ; FBCD14  1d 90 2c f4
-	ld (0x2641:16), a                                   ; FBCD18  f1 41 26 41
+	ld (UI_DrawScratch+1:16), a                                   ; FBCD18  f1 41 26 41
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBCD1C  f1 40 25 00 02
 	lda xbc, (StringTable_F19238:24)                     ; FBCD21  f2 38 92 f1 31
 	push XBC                                             ; FBCD26  39
@@ -102466,7 +102466,7 @@ sub_FBCCB1:
 	cp a, 0x00:i3                                          ; FBCD4B  c9 d8
 	jrl nz, .LFBCDE3                                     ; FBCD4D  7e 93 00
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBCD50  f1 40 25 00 00
-	lda xbc, (0x2640:16)                                ; FBCD55  f1 40 26 31
+	lda xbc, (UI_DrawScratch:16)                                ; FBCD55  f1 40 26 31
 	ld (xiz-4), xbc                                      ; FBCD59  be fc 61
 	lda xwa, (DL_F19745:24)                              ; FBCD5C  f2 45 97 f1 30
 	push XWA                                             ; FBCD61  38
@@ -102501,7 +102501,7 @@ sub_FBCCB1:
 	push XHL                                             ; FBCDA8  3b
 	push XIX                                             ; FBCDA9  3c
 	push XIZ                                             ; FBCDAA  3e
-	ld a, (0x2640:16)                                   ; FBCDAB  c1 40 26 21
+	ld a, (UI_DrawScratch:16)                                   ; FBCDAB  c1 40 26 21
 	extz WA                                              ; FBCDAF  d8 12
 	call T_Value_ToAsciiDigits3                          ; FBCDB1  1d 00 1b f4
 	pop XIZ                                              ; FBCDB5  5e
@@ -102514,7 +102514,7 @@ sub_FBCCB1:
 	add BC,0x0020                                        ; FBCDC0  d9 c8 20 00
 	pushw bc                                             ; FBCDC4  29
 	call T_IndexedTable_GetByte                          ; FBCDC5  1d 90 2c f4
-	ld (0x2640:16), a                                   ; FBCDC9  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBCDC9  f1 40 26 41
 	lda xbc, (DL_F19772:24)                              ; FBCDCD  f2 72 97 f1 31
 	push XBC                                             ; FBCDD2  39
 	lda xwa, (DL_Rd1Rd2Ud1Ud2Ed1:24)                     ; FBCDD3  f2 54 97 f1 30
@@ -103220,7 +103220,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	popw hl                                              ; FBD3E6  4b
 	ret                                                  ; FBD3E7  0e
 	push XIX                                             ; FBD3E8  3c
-	lda xix, (0x2640:16)                                ; FBD3E9  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBD3E9  f1 40 26 34
 	pushw 0x03                                           ; FBD3ED  0b 03 00
 	push 0x00                                            ; FBD3F0  09 00
 	m_push MB16, 0x2765                                  ; FBD3F2  c1 65 27 04
@@ -103387,7 +103387,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	ret                                                  ; FBD592  0e
 	link XIZ,0xfffc                                      ; FBD593  ee 0c fc ff
 	push XIX                                             ; FBD597  3c
-	lda xix, (0x2640:16)                                ; FBD598  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBD598  f1 40 26 34
 	ld bc, (0x2765:16)                                 ; FBD59C  d1 65 27 21
 	extz BC                                              ; FBD5A0  d9 12
 	add BC,0x0020                                        ; FBD5A2  d9 c8 20 00
@@ -103417,7 +103417,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	unlk XIZ                                             ; FBD5E5  ee 0d
 	ret                                                  ; FBD5E7  0e
 	push XIX                                             ; FBD5E8  3c
-	lda xix, (0x2640:16)                                ; FBD5E9  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBD5E9  f1 40 26 34
 	pushw 0x06                                           ; FBD5ED  0b 06 00
 	ld bc, (0x2765:16)                                 ; FBD5F0  d1 65 27 21
 	extz BC                                              ; FBD5F4  d9 12
@@ -103490,7 +103490,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	pushw hl                                             ; FBD6B8  2b
 	pushw de                                             ; FBD6B9  2a
 	push XIX                                             ; FBD6BA  3c
-	lda xix, (0x2640:16)                                ; FBD6BB  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBD6BB  f1 40 26 34
 	pushw 0x13                                           ; FBD6BF  0b 13 00
 	ld hl, (0x2765:16)                                 ; FBD6C2  d1 65 27 23
 	extz HL                                              ; FBD6C6  db 12
@@ -103567,7 +103567,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	ret                                                  ; FBD783  0e
 	link XIZ,0xfffc                                      ; FBD784  ee 0c fc ff
 	push XIX                                             ; FBD788  3c
-	lda xix, (0x2640:16)                                ; FBD789  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBD789  f1 40 26 34
 	ld bc, (0x2765:16)                                 ; FBD78D  d1 65 27 21
 	extz BC                                              ; FBD791  d9 12
 	add BC,0x0020                                        ; FBD793  d9 c8 20 00
@@ -103600,7 +103600,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	pushw hl                                             ; FBD7DD  2b
 	pushw de                                             ; FBD7DE  2a
 	push XIX                                             ; FBD7DF  3c
-	lda xix, (0x2640:16)                                ; FBD7E0  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBD7E0  f1 40 26 34
 	push 0x00                                            ; FBD7E4  09 00
 	m_push MB16, 0x2765                                  ; FBD7E6  c1 65 27 04
 	call T_IndexedTable_GetPtr                           ; FBD7EA  1d 8c 2c f4
@@ -103810,7 +103810,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	push XHL                                             ; FBD9F6  3b
 	push XIX                                             ; FBD9F7  3c
 	push XIZ                                             ; FBD9F8  3e
-	ld wa, (0x2658:16)                                 ; FBD9F9  d1 58 26 20
+	ld wa, (UI_DrawScratch+24:16)                                 ; FBD9F9  d1 58 26 20
 	call T_Value_ToAsciiDigits3_RightJustified                                        ; FBD9FD  1d f0 1a f4
 	pop XIZ                                              ; FBDA01  5e
 	pop XIX                                              ; FBDA02  5c
@@ -103822,7 +103822,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	push XHL                                             ; FBDA08  3b
 	push XIX                                             ; FBDA09  3c
 	push XIZ                                             ; FBDA0A  3e
-	ld wa, (0x2656:16)                                 ; FBDA0B  d1 56 26 20
+	ld wa, (UI_DrawScratch+22:16)                                 ; FBDA0B  d1 56 26 20
 	call T_Value_ToAsciiDigits3_RightJustified                                        ; FBDA0F  1d f0 1a f4
 	pop XIZ                                              ; FBDA13  5e
 	pop XIX                                              ; FBDA14  5c
@@ -103842,7 +103842,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	push XHL                                             ; FBDA32  3b
 	push XIX                                             ; FBDA33  3c
 	push XIZ                                             ; FBDA34  3e
-	ld wa, (0x2658:16)                                 ; FBDA35  d1 58 26 20
+	ld wa, (UI_DrawScratch+24:16)                                 ; FBDA35  d1 58 26 20
 	call T_Value_ToAsciiDigits3                          ; FBDA39  1d 00 1b f4
 	pop XIZ                                              ; FBDA3D  5e
 	pop XIX                                              ; FBDA3E  5c
@@ -104812,8 +104812,8 @@ sub_FBE2A4:
 	ld h, (0x2765:16)                                   ; FBE2F1  c1 65 27 26
 	ld l, (0x2766:16)                                   ; FBE2F5  c1 66 27 27
 	ld (0x2766:16), h                                   ; FBE2F9  f1 66 27 46
-	ld (0x2640:16), h                                   ; FBE2FD  f1 40 26 46
-	ld (0x2641:16), l                                   ; FBE301  f1 41 26 47
+	ld (UI_DrawScratch:16), h                                   ; FBE2FD  f1 40 26 46
+	ld (UI_DrawScratch+1:16), l                                   ; FBE301  f1 41 26 47
 	ld D,L                                               ; FBE305  cf 8c
 	and D,0xf8                                           ; FBE307  cc cc f8
 	ld C,H                                               ; FBE30A  ce 8b
@@ -104861,13 +104861,13 @@ sub_FBE2A4:
 	ret                                                  ; FBE373  0e
 .LFBE374:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FBE374  f1 40 25 00 01
-	ld	(0x2641:16), (0x276a:16)             ; FBE379  c1 6a 27 19 41 26
+	ld	(UI_DrawScratch+1:16), (0x276a:16)             ; FBE379  c1 6a 27 19 41 26
 	lda xbc, (DL_F18269:24)                              ; FBE37F  f2 69 82 f1 31
 	push XBC                                             ; FBE384  39
 	lda xwa, (DL_F1825E:24)                              ; FBE385  f2 5e 82 f1 30
 	push XWA                                             ; FBE38A  38
 	call T_DisplayListB_Run_Stack                        ; FBE38B  1d 04 2e f4
-	ld	(0x2640:16), (0x2769:16)             ; FBE38F  c1 69 27 19 40 26
+	ld	(UI_DrawScratch:16), (0x2769:16)             ; FBE38F  c1 69 27 19 40 26
 	lda xbc, (DL_F18274:24)                              ; FBE395  f2 74 82 f1 31
 	push XBC                                             ; FBE39A  39
 	lda xwa, (DL_F18269:24)                              ; FBE39B  f2 69 82 f1 30
@@ -105064,7 +105064,7 @@ sub_FBE546:
 	ldirw                                                ; FBE55A  95 11
 	pop XIX                                              ; FBE55C  5c
 	ld A,(XIZ+0x0a)                                      ; FBE55D  8e 0a 21
-	ld (0x2640:16), a                                   ; FBE560  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBE560  f1 40 26 41
 	ld C,(XIZ+0x08)                                      ; FBE564  8e 08 23
 	and C,0x07                                           ; FBE567  cb cc 07
 	mul C,0x28                                           ; FBE56A  cb 08 28
@@ -105089,7 +105089,7 @@ sub_FBE585:
 	ldir85                                               ; FBE599  85 11
 	pop XIX                                              ; FBE59B  5c
 	ld A,(XIZ+0x0a)                                      ; FBE59C  8e 0a 21
-	ld (0x2640:16), a                                   ; FBE59F  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBE59F  f1 40 26 41
 	ld C,(XIZ+0x08)                                      ; FBE5A3  8e 08 23
 	and C,0x07                                           ; FBE5A6  cb cc 07
 	mul C,0x28                                           ; FBE5A9  cb 08 28
@@ -105141,7 +105141,7 @@ sub_FBE5EE:
 	push XBC                                             ; FBE624  39
 	jrl .LFBE6B9                                         ; FBE625  78 91 00
 .LFBE628:
-	lda xbc, (0x2640:16)                                ; FBE628  f1 40 26 31
+	lda xbc, (UI_DrawScratch:16)                                ; FBE628  f1 40 26 31
 	ld (xiz-4), xbc                                      ; FBE62C  be fc 61
 	pushw 0x1d                                           ; FBE62F  0b 1d 00
 	ld A,H                                               ; FBE632  ce 89
@@ -105312,7 +105312,7 @@ sub_FBE788:
 	push 0x00                                            ; FBE790  09 00
 	m_push MBD+r6, 0x08                                  ; FBE792  8e 08 04
 	call T_IndexedTable_GetByte                          ; FBE795  1d 90 2c f4
-	ld (0x2640:16), a                                   ; FBE799  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBE799  f1 40 26 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBE79D  f1 40 25 00 00
 	ld H,(XIZ+0x08)                                      ; FBE7A2  8e 08 26
 	and H,0x07                                           ; FBE7A5  ce cc 07
@@ -105324,7 +105324,7 @@ sub_FBE788:
 	push XBC                                             ; FBE7B6  39
 	call T_DisplayListB_RunOne_Stack                     ; FBE7B7  1d 0c 2e f4
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBE7BB  f1 40 25 00 02
-	ld c, (0x2640:16)                                   ; FBE7C0  c1 40 26 23
+	ld c, (UI_DrawScratch:16)                                   ; FBE7C0  c1 40 26 23
 	pushw bc                                             ; FBE7C4  29
 	ld c, 0x02:opc                                          ; FBE7C5  23 02
 	mul bc, h                                          ; FBE7C7  ce 43
@@ -105377,14 +105377,14 @@ sub_FBE81B:
 	push H                                               ; FBE828  ce 04
 	call T_IndexedTable_GetByte                          ; FBE82A  1d 90 2c f4
 	ld L,A                                               ; FBE82E  c9 8f
-	ld (0x2640:16), a                                   ; FBE830  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBE830  f1 40 26 41
 	pushw 0xa7                                           ; FBE834  0b a7 00
 	pushw hl                                             ; FBE837  2b
 	push 0x00                                            ; FBE838  09 00
 	push H                                               ; FBE83A  ce 04
 	calr sub_FBE546                                      ; FBE83C  1e 07 fd
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBE83F  f1 40 25 00 02
-	ld c, (0x2640:16)                                   ; FBE844  c1 40 26 23
+	ld c, (UI_DrawScratch:16)                                   ; FBE844  c1 40 26 23
 	pushw bc                                             ; FBE848  29
 	ld C,H                                               ; FBE849  ce 8b
 	and C,0x07                                           ; FBE84B  cb cc 07
@@ -105438,14 +105438,14 @@ sub_FBE8A3:
 	push H                                               ; FBE8B0  ce 04
 	call T_IndexedTable_GetByte                          ; FBE8B2  1d 90 2c f4
 	ld L,A                                               ; FBE8B6  c9 8f
-	ld (0x2640:16), a                                   ; FBE8B8  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBE8B8  f1 40 26 41
 	pushw 0x2a                                           ; FBE8BC  0b 2a 00
 	pushw hl                                             ; FBE8BF  2b
 	push 0x00                                            ; FBE8C0  09 00
 	push H                                               ; FBE8C2  ce 04
 	calr sub_FBE546                                      ; FBE8C4  1e 7f fc
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBE8C7  f1 40 25 00 02
-	ld c, (0x2640:16)                                   ; FBE8CC  c1 40 26 23
+	ld c, (UI_DrawScratch:16)                                   ; FBE8CC  c1 40 26 23
 	pushw bc                                             ; FBE8D0  29
 	ld C,H                                               ; FBE8D1  ce 8b
 	and C,0x07                                           ; FBE8D3  cb cc 07
@@ -105499,14 +105499,14 @@ sub_FBE92B:
 	push H                                               ; FBE938  ce 04
 	call T_IndexedTable_GetByte                          ; FBE93A  1d 90 2c f4
 	ld L,A                                               ; FBE93E  c9 8f
-	ld (0x2640:16), a                                   ; FBE940  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBE940  f1 40 26 41
 	pushw 0x53                                           ; FBE944  0b 53 00
 	pushw hl                                             ; FBE947  2b
 	push 0x00                                            ; FBE948  09 00
 	push H                                               ; FBE94A  ce 04
 	calr sub_FBE546                                      ; FBE94C  1e f7 fb
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBE94F  f1 40 25 00 02
-	ld c, (0x2640:16)                                   ; FBE954  c1 40 26 23
+	ld c, (UI_DrawScratch:16)                                   ; FBE954  c1 40 26 23
 	pushw bc                                             ; FBE958  29
 	ld C,H                                               ; FBE959  ce 8b
 	and C,0x07                                           ; FBE95B  cb cc 07
@@ -105782,7 +105782,7 @@ sub_FBEB70:
 	push 0x00                                            ; FBEB77  09 00
 	m_push MBD+r6, 0x08                                  ; FBEB79  8e 08 04
 	call T_IndexedTable_GetByte                          ; FBEB7C  1d 90 2c f4
-	ld (0x2640:16), a                                   ; FBEB80  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBEB80  f1 40 26 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBEB84  f1 40 25 00 00
 	ld C,(XIZ+0x08)                                      ; FBEB89  8e 08 23
 	and C,0x07                                           ; FBEB8C  cb cc 07
@@ -105833,7 +105833,7 @@ sub_FBEBE1:
 	add BC,0x0020                                        ; FBEBED  d9 c8 20 00
 	pushw bc                                             ; FBEBF1  29
 	call T_IndexedTable_GetByte                          ; FBEBF2  1d 90 2c f4
-	ld (0x2640:16), a                                   ; FBEBF6  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBEBF6  f1 40 26 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBEBFA  f1 40 25 00 00
 	ld C,(XIZ+0x08)                                      ; FBEBFF  8e 08 23
 	and C,0x07                                           ; FBEC02  cb cc 07
@@ -105884,7 +105884,7 @@ sub_FBEC57:
 	m_push MBD+r6, 0x08                                  ; FBEC61  8e 08 04
 	call T_IndexedTable_GetByte                          ; FBEC64  1d 90 2c f4
 	ld H,A                                               ; FBEC68  c9 8e
-	ld (0x2640:16), a                                   ; FBEC6A  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBEC6A  f1 40 26 41
 	pushw 0x40                                           ; FBEC6E  0b 40 00
 	pushw 0xd1                                           ; FBEC71  0b d1 00
 	push 0x00                                            ; FBEC74  09 00
@@ -106487,25 +106487,25 @@ sub_FBF10A:
 	link XIZ,0xfffc                                      ; FBF10A  ee 0c fc ff
 	pushw hl                                             ; FBF10E  2b
 	push XIX                                             ; FBF10F  3c
-	ld (0x2640:16), 0x08                                 ; FBF110  f1 40 26 00 08
-	ld	(0x2641:16), (0x276e:16)             ; FBF115  c1 6e 27 19 41 26
-	ld (0x2642:16), 0x98                                 ; FBF11B  f1 42 26 00 98
+	ld (UI_DrawScratch:16), 0x08                                 ; FBF110  f1 40 26 00 08
+	ld	(UI_DrawScratch+1:16), (0x276e:16)             ; FBF115  c1 6e 27 19 41 26
+	ld (UI_DrawScratch+2:16), 0x98                                 ; FBF11B  f1 42 26 00 98
 	push XDE                                             ; FBF120  3a
 	push XHL                                             ; FBF121  3b
 	push XIX                                             ; FBF122  3c
 	push XIZ                                             ; FBF123  3e
-	ld w, (0x2640:16)                                   ; FBF124  c1 40 26 20
-	ld a, (0x2641:16)                                   ; FBF128  c1 41 26 21
-	ld b, (0x2642:16)                                   ; FBF12C  c1 42 26 22
+	ld w, (UI_DrawScratch:16)                                   ; FBF124  c1 40 26 20
+	ld a, (UI_DrawScratch+1:16)                                   ; FBF128  c1 41 26 21
+	ld b, (UI_DrawScratch+2:16)                                   ; FBF12C  c1 42 26 22
 	call T_F4102C                                        ; FBF130  1d 2c 10 f4
-	ld (0x2640:16), xiy                                 ; FBF134  f1 40 26 65
+	ld (UI_DrawScratch:16), xiy                                 ; FBF134  f1 40 26 65
 	pop XIZ                                              ; FBF138  5e
 	pop XIX                                              ; FBF139  5c
 	pop XHL                                              ; FBF13A  5b
 	pop XDE                                              ; FBF13B  5a
-	lda xbc, (0x2640:16)                                ; FBF13C  f1 40 26 31
+	lda xbc, (UI_DrawScratch:16)                                ; FBF13C  f1 40 26 31
 	ld (xiz-4), xbc                                      ; FBF140  be fc 61
-	ld xwa, (0x2640:16)                                 ; FBF143  e1 40 26 20
+	ld xwa, (UI_DrawScratch:16)                                 ; FBF143  e1 40 26 20
 	ld XIX,XWA                                           ; FBF147  e8 8c
 	ld h, 0x04:opc                                          ; FBF149  26 04
 .LFBF14B:
@@ -106522,7 +106522,7 @@ sub_FBF10A:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBF161  f1 40 25 00 00
 	ld a, (0x276e:16)                                   ; FBF166  c1 6e 27 21
 	inc 1,A                                              ; FBF16A  c9 61
-	ld (0x2650:16), a                                   ; FBF16C  f1 50 26 41
+	ld (UI_DrawScratch+16:16), a                                   ; FBF16C  f1 50 26 41
 	lda xwa, (DL_CombinationNaming_F19BE5:24)            ; FBF170  f2 e5 9b f1 30
 	push XWA                                             ; FBF175  38
 	lda xiy, (DL_F19BBD:24)                              ; FBF176  f2 bd 9b f1 35
@@ -107231,7 +107231,7 @@ sub_FBF79C:
 	link XIZ,0xfff4                                      ; FBF807  ee 0c f4 ff
 	pushw hl                                             ; FBF80B  2b
 	push XIX                                             ; FBF80C  3c
-	lda xix, (0x2640:16)                                ; FBF80D  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBF80D  f1 40 26 34
 	ld (xiz-4), xix                                      ; FBF811  be fc 64
 	ld xbc, (xiz-4)                                      ; FBF814  ae fc 21
 	m_ld_mm16 MDI+r1, 0, 0x2765                          ; FBF817  b1 14 65 27
@@ -107345,7 +107345,7 @@ sub_FBF92F:
 	push XIX                                             ; FBF930  3c
 	ld l, (0x276b:16)                                   ; FBF931  c1 6b 27 27
 	inc 7,L                                              ; FBF935  cf 67
-	lda xix, (0x2640:16)                                ; FBF937  f1 40 26 34
+	lda xix, (UI_DrawScratch:16)                                ; FBF937  f1 40 26 34
 	ld h, (0x276b:16)                                   ; FBF93B  c1 6b 27 26
 	jr .LFBF953                                          ; FBF93F  68 12
 .LFBF941:
@@ -107379,9 +107379,9 @@ sub_FBF971:
 	lda xiy, (Record_F1AAEC:24)                          ; FBF97B  f2 ec aa f1 35
 	lda xix, (xiz-38)                                    ; FBF980  be da 34
 	ldirw                                                ; FBF983  95 11
-	lda xbc, (0x2640:16)                                ; FBF985  f1 40 26 31
+	lda xbc, (UI_DrawScratch:16)                                ; FBF985  f1 40 26 31
 	ld (xiz-4), xbc                                      ; FBF989  be fc 61
-	ldw wa, 0x2640                                       ; FBF98C  30 40 26
+	ldw wa, UI_DrawScratch                                       ; FBF98C  30 40 26
 	inc 8,WA                                             ; FBF98F  d8 60
 	extz XWA                                             ; FBF991  e8 12
 	ld (xiz-8), xwa                                      ; FBF993  be f8 60
@@ -107459,9 +107459,9 @@ sub_FBFA4D:
 	link XIZ,0xfffc                                      ; FBFA4D  ee 0c fc ff
 	pushw hl                                             ; FBFA51  2b
 	push XIX                                             ; FBFA52  3c
-	lda xbc, (0x2640:16)                                ; FBFA53  f1 40 26 31
+	lda xbc, (UI_DrawScratch:16)                                ; FBFA53  f1 40 26 31
 	ld (xiz-4), xbc                                      ; FBFA57  be fc 61
-	ldw wa, 0x2640                                       ; FBFA5A  30 40 26
+	ldw wa, UI_DrawScratch                                       ; FBFA5A  30 40 26
 	inc 8,WA                                             ; FBFA5D  d8 60
 	extz XWA                                             ; FBFA5F  e8 12
 	ld XIX,XWA                                           ; FBFA61  e8 8c
@@ -107802,12 +107802,12 @@ sub_FBFC32:
 	add BC,0x0020                                        ; FBFD73  d9 c8 20 00
 	pushw bc                                             ; FBFD77  29
 	call T_IndexedTable_GetByte                          ; FBFD78  1d 90 2c f4
-	ld (0x2640:16), a                                   ; FBFD7C  f1 40 26 41
+	ld (UI_DrawScratch:16), a                                   ; FBFD7C  f1 40 26 41
 	pushw 0x0d                                           ; FBFD80  0b 0d 00
 	ld C,(XIX)                                           ; FBFD83  84 23
 	pushw bc                                             ; FBFD85  29
 	call T_IndexedTable_GetByte                          ; FBFD86  1d 90 2c f4
-	ld (0x2641:16), a                                   ; FBFD8A  f1 41 26 41
+	ld (UI_DrawScratch+1:16), a                                   ; FBFD8A  f1 41 26 41
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBFD8E  f1 40 25 00 02
 	lda xbc, (StringTable_F19238:24)                     ; FBFD93  f2 38 92 f1 31
 	push XBC                                             ; FBFD98  39
@@ -191116,7 +191116,7 @@ sub_FF7776:
 sub_FF7783:
 	ld a, (UI_ScreenItem:16)                                   ; FF7783  c1 20 27 21
 	call sub_FF77A7                                      ; FF7787  1d a7 77 ff
-	ld XIX,0x00002640                                    ; FF778B  44 40 26 00 00
+	ld XIX,UI_DrawScratch                                    ; FF778B  44 40 26 00 00
 	ld WA,(XIY)                                          ; FF7790  95 20
 	add IY,0x0002                                        ; FF7792  dd c8 02 00
 	ld (XIX),WA                                          ; FF7796  b4 50

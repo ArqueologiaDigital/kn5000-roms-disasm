@@ -30223,19 +30223,19 @@ EffectEditor_PaintJob1:
 	m_res 1, MD16, 0x2799	; F0F921  res 1,(0x2799)
 	set	0, (0xc6:8)	; F0F925  set 0,(0xc6)
 	ld	(xix), 1	; F0F928  ld (XIX),0x01
-	ld	(9792:16), 0	; F0F92B  ld (0x2640),0x00
+	ld	(UI_DrawScratch:16), 0	; F0F92B  ld (0x2640),0x00
 sub_F0F788_Join4:
-	ld	c, (9792:16)	; F0F930  ld C,(0x2640)
+	ld	c, (UI_DrawScratch:16)	; F0F930  ld C,(0x2640)
 	cp	c, 3:i3	; F0F934  cp C,3
 	jr	nc, sub_F0F788_Skip11	; F0F936  jr NC,0xf0f949
 	lda	xbc, (DL_F14427:24)	; F0F938  lda XBC,0xf14427
 	push	xbc	; F0F93D  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0F93E  call 0xf42e0c
-	inc	1, (9792:16)	; F0F942  inc 1,(0x2640)
+	inc	1, (UI_DrawScratch:16)	; F0F942  inc 1,(0x2640)
 	pop	xiy	; F0F946  pop XIY
 	jr	sub_F0F788_Join4	; F0F947  jr T,0xf0f930
 sub_F0F788_Skip11:
-	m_ld_m16m MB16, Effect_BlockIndex, 0x2640	; F0F949  ld (0x2640),(0x2797)
+	m_ld_m16m MB16, Effect_BlockIndex, UI_DrawScratch	; F0F949  ld (0x2640),(0x2797)
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F94F  cp (0x2798),0x00
 	jr	nz, sub_F0F788_Skip13	; F0F954  jr NZ,0xf0f9ba
 	ld	(xix), 1	; F0F956  ld (XIX),0x01
@@ -30308,7 +30308,7 @@ sub_F0F788_Join5:
 EffectEditor_PaintJob2:
 	pushw	hl	; F0F9F1  push HL
 	push	xix	; F0F9F2  push XIX
-	lda	xix, (9792:16)	; F0F9F3  lda XIX,0x2640
+	lda	xix, (UI_DrawScratch:16)	; F0F9F3  lda XIX,0x2640
 	m_res 2, MD16, 0x2799	; F0F9F7  res 2,(0x2799)
 	calr	sub_F0FD2F	; F0F9FB  calr 0xf0fd2f
 	ld	(LCD_CurrentLayer:16), 0	; F0F9FE  ld (0x2540),0x00
@@ -30804,12 +30804,12 @@ sub_F0FE7B_Resume:
 	push	xiy	; F0FEA0  push XIY
 	jp	(xix)	; F0FEA1  jp T,XIX
 sub_F0FE8F_Resume:
-	m_ld_m16m MB16, Effect_BlockIndex, 0x2640	; F0FEA3  ld (0x2640),(0x2797)
+	m_ld_m16m MB16, Effect_BlockIndex, UI_DrawScratch	; F0FEA3  ld (0x2640),(0x2797)
 	lda	xbc, (DL_F143AF:24)	; F0FEA9  lda XBC,0xf143af
 	push	xbc	; F0FEAE  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FEAF  call 0xf42e0c
 	ld	(LCD_CurrentLayer:16), 1	; F0FEB3  ld (0x2540),0x01
-	m_ld_m16m MB16, 0x2790, 0x2640	; F0FEB8  ld (0x2640),(0x2790)
+	m_ld_m16m MB16, 0x2790, UI_DrawScratch	; F0FEB8  ld (0x2640),(0x2790)
 	lda	xbc, (DL_F146A6:24)	; F0FEBE  lda XBC,0xf146a6
 	push	xbc	; F0FEC3  push XBC
 	lda	xwa, (DL_F1469B:24)	; F0FEC4  lda XWA,0xf1469b
@@ -30832,7 +30832,7 @@ sub_F0FE8F_Resume:
 EffectEditor_PaintJob4:
 	link XIZ,0xfffc	; F0FED6  link XIZ,0xfffc
 	push	xix	; F0FEDA  push XIX
-	lda	xix, (9792:16)	; F0FEDB  lda XIX,0x2640
+	lda	xix, (UI_DrawScratch:16)	; F0FEDB  lda XIX,0x2640
 	m_res 4, MD16, 0x2799	; F0FEDF  res 4,(0x2799)
 	ld	(LCD_CurrentLayer:16), 0	; F0FEE3  ld (0x2540),0x00
 	ld	(xiz-4), xix	; F0FEE8  ld (XIZ+0xfc),XIX
@@ -30916,7 +30916,7 @@ EqGraph_Draw:
 	lda	xix, (xiz-70)	; F0FF52  lda XIX,XIZ+0xba
 	ldirw	; F0FF55  ldirw
 	pop	xix	; F0FF57  pop XIX
-	ld	a, (9792:16)	; F0FF58  ld A,(0x2640)
+	ld	a, (UI_DrawScratch:16)	; F0FF58  ld A,(0x2640)
 	mul	a, 6	; F0FF5C  mul A,0x06
 	ld	de, wa	; F0FF5F  ld DE,WA
 	ld	hl, wa	; F0FF61  ld HL,WA
@@ -30938,7 +30938,7 @@ EqGraph_Draw_Skip:
 	m_ld_mi16 MDD+r4, 0x24, 0x00e4	; F0FF8D  ld (XIX+0x24),0x00e4
 	m_ld_mi16 MDD+r4, 0x2a, 0x00e4	; F0FF92  ld (XIX+0x2a),0x00e4
 EqGraph_Draw_Join:
-	ld	c, (9793:16)	; F0FF97  ld C,(0x2641)
+	ld	c, (UI_DrawScratch+1:16)	; F0FF97  ld C,(0x2641)
 	mul	c, 6	; F0FF9B  mul C,0x06
 	ld	hl, bc	; F0FF9E  ld HL,BC
 	add	bc, 67	; F0FFA0  add BC,0x0043
@@ -30958,7 +30958,7 @@ EqGraph_Draw_Skip2:
 	m_ld_mi16 MDD+r4, 0x34, 0x003f	; F0FFC6  ld (XIX+0x34),0x003f
 	m_ld_mi16 MDD+r4, 0x2e, 0x003f	; F0FFCB  ld (XIX+0x2e),0x003f
 EqGraph_Draw_Join2:
-	ld	c, (9794:16)	; F0FFD0  ld C,(0x2642)
+	ld	c, (UI_DrawScratch+2:16)	; F0FFD0  ld C,(0x2642)
 	extz	bc	; F0FFD4  extz BC
 	ldw	wa, 48	; F0FFD6  ld WA,0x0030
 	sub	wa, bc	; F0FFD9  sub WA,BC
@@ -30967,7 +30967,7 @@ EqGraph_Draw_Join2:
 	ld	(xix+28), hl	; F0FFE1  ld (XIX+0x1c),HL
 	ld	(xix+24), hl	; F0FFE4  ld (XIX+0x18),HL
 	ld	(xix+34), hl	; F0FFE7  ld (XIX+0x22),HL
-	ld	c, (9795:16)	; F0FFEA  ld C,(0x2643)
+	ld	c, (UI_DrawScratch+3:16)	; F0FFEA  ld C,(0x2643)
 	extz	bc	; F0FFEE  extz BC
 	ldw	wa, 48	; F0FFF0  ld WA,0x0030
 	sub	wa, bc	; F0FFF3  sub WA,BC
@@ -30976,11 +30976,11 @@ EqGraph_Draw_Join2:
 	ld	(xix+68), hl	; F0FFFB  ld (XIX+0x44),HL
 	ld	(xix+64), hl	; F0FFFE  ld (XIX+0x40),HL
 	ld	(xix+58), hl	; F10001  ld (XIX+0x3a),HL
-	ld	c, (9793:16)	; F10004  ld C,(0x2641)
+	ld	c, (UI_DrawScratch+1:16)	; F10004  ld C,(0x2641)
 	extz	bc	; F10008  extz BC
 	ld	hl, bc	; F1000A  ld HL,BC
 	dec	3, hl	; F1000C  dec 3,HL
-	ld	c, (9792:16)	; F1000E  ld C,(0x2640)
+	ld	c, (UI_DrawScratch:16)	; F1000E  ld C,(0x2640)
 	extz	bc	; F10012  extz BC
 	cp	bc, hl	; F10014  cp BC,HL
 	jr	c, EqGraph_Draw_Skip3	; F10016  jr C,0xf10031
@@ -32989,7 +32989,7 @@ EffectEditor_PaintJob5_Resume5:
 	push	xiy	; F10E55  push XIY
 	jp	(xix)	; F10E56  jp T,XIX
 EffectEditor_PaintJob5_Resume6:
-	m_ld_m16m MB16, Effect_BlockIndex, 0x2640	; F10E58  ld (0x2640),(0x2797)
+	m_ld_m16m MB16, Effect_BlockIndex, UI_DrawScratch	; F10E58  ld (0x2640),(0x2797)
 	lda	xbc, (DL_F143AF:24)	; F10E5E  lda XBC,0xf143af
 	push	xbc	; F10E63  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F10E64  call 0xf42e0c
@@ -33011,7 +33011,7 @@ EffectEditor_PaintJob5_Resume7:
 	jp	(xix)	; F10E93  jp T,XIX
 EffectEditor_PaintJob5_Resume8:
 	ld	(LCD_CurrentLayer:16), 1	; F10E95  ld (0x2540),0x01
-	m_ld_m16m MB16, 0x2790, 0x2640	; F10E9A  ld (0x2640),(0x2790)
+	m_ld_m16m MB16, 0x2790, UI_DrawScratch	; F10E9A  ld (0x2640),(0x2790)
 	lda	xbc, (DL_F146A6:24)	; F10EA0  lda XBC,0xf146a6
 	push	xbc	; F10EA5  push XBC
 	lda	xwa, (DL_F1469B:24)	; F10EA6  lda XWA,0xf1469b
@@ -33035,7 +33035,7 @@ EffectEditor_PaintJob5_Resume8:
 EffectEditor_PaintJob6:
 	m_res 6, MD16, 0x2799	; F10EB8  res 6,(0x2799)
 	ld	(LCD_CurrentLayer:16), 0	; F10EBC  ld (0x2540),0x00
-	m_ld_m16m MB16, Effect_Algorithm, 0x2640	; F10EC1  ld (0x2640),(0x2796)
+	m_ld_m16m MB16, Effect_Algorithm, UI_DrawScratch	; F10EC1  ld (0x2640),(0x2796)
 	lda	xbc, (DL_F146F0:24)	; F10EC7  lda XBC,0xf146f0
 	push	xbc	; F10ECC  push XBC
 	lda	xwa, (DL_F146E1:24)	; F10ECD  lda XWA,0xf146e1
@@ -33080,7 +33080,7 @@ sub_F10EE9:
 	pushw	hl	; F10EED  push HL
 	pushw	de	; F10EEE  push DE
 	push	xix	; F10EEF  push XIX
-	lda	xix, (9792:16)	; F10EF0  lda XIX,0x2640
+	lda	xix, (UI_DrawScratch:16)	; F10EF0  lda XIX,0x2640
 	ld	h, (10130:16)	; F10EF4  ld H,(0x2792)
 	ld	l, (10131:16)	; F10EF8  ld L,(0x2793)
 	ld	(10131:16), h	; F10EFC  ld (0x2793),H
@@ -33225,7 +33225,7 @@ DspEffect_LoadParamNames_Loop:
 	ld	c, d	; F11024  ld C,D
 	extz	bc	; F11026  extz BC
 	extz	xbc	; F11028  extz XBC
-	ld	(xbc+9792), e	; F1102A  ld (XBC+0x2640),E
+	ld	(xbc+UI_DrawScratch), e	; F1102A  ld (XBC+0x2640),E
 	ld	hl, (xiz-2)	; F1102F  ld HL,(XIZ+0xfe)
 	inc	4, hl	; F11032  inc 4,HL
 	inc	1, d	; F11034  inc 1,D
@@ -33316,7 +33316,7 @@ DspEffect_PaintParamEditor_Loop:
 	add	xwa, xbc	; F110A5  add XWA,XBC
 	ld	c, (xwa)	; F110A7  ld C,(XWA)
 	ld	(xiz-11), c	; F110A9  ld (XIZ+0xf5),C
-	ld	(9792:16), c	; F110AC  ld (0x2640),C
+	ld	(UI_DrawScratch:16), c	; F110AC  ld (0x2640),C
 	ld	c, d	; F110B0  ld C,D
 	extz	bc	; F110B2  extz BC
 	extz	xbc	; F110B4  extz XBC
@@ -33367,15 +33367,15 @@ DspEffect_PaintParamEditor_Resume:
 	jr	nz, DspEffect_PaintParamEditor_Skip	; F1112E  jr NZ,0xf1113d
 	m_cp_mi8 MBD+r6, 0xff, 0xff	; F11130  cp (XIZ+0xff),0xff
 	jr	z, DspEffect_PaintParamEditor_Skip	; F11134  jr Z,0xf1113d
-	ld	(9792:16), 1	; F11136  ld (0x2640),0x01
+	ld	(UI_DrawScratch:16), 1	; F11136  ld (0x2640),0x01
 	jr	DspEffect_PaintParamEditor_Join	; F1113B  jr T,0xf1114e
 DspEffect_PaintParamEditor_Skip:
 	cp	l, 255	; F1113D  cp L,0xff
 	jr	nz, DspEffect_PaintParamEditor_Skip2	; F11140  jr NZ,0xf11149
-	ld	(9792:16), 0	; F11142  ld (0x2640),0x00
+	ld	(UI_DrawScratch:16), 0	; F11142  ld (0x2640),0x00
 	jr	DspEffect_PaintParamEditor_Join	; F11147  jr T,0xf1114e
 DspEffect_PaintParamEditor_Skip2:
-	ld	(9792:16), 2	; F11149  ld (0x2640),0x02
+	ld	(UI_DrawScratch:16), 2	; F11149  ld (0x2640),0x02
 DspEffect_PaintParamEditor_Join:
 	ld	c, d	; F1114E  ld C,D
 	extz	bc	; F11150  extz BC
@@ -33418,7 +33418,7 @@ sub_F11171:
 	add	bc, 97	; F11180  add BC,0x0061
 	pushw	bc	; F11184  push BC
 	call	T_IndexedTable_GetByte	; F11185  call 0xf42c90
-	ld	(9792:16), a	; F11189  ld (0x2640),A
+	ld	(UI_DrawScratch:16), a	; F11189  ld (0x2640),A
 	pop	xbc	; F1118D  pop XBC
 	unlk XIZ	; F1118E  unlk XIZ
 	ret	; F11190  ret
@@ -33449,7 +33449,7 @@ sub_F11191:
 	pushw	bc	; F111A4  push BC
 	call	T_IndexedTable_GetByte	; F111A5  call 0xf42c90
 	add	a, 36	; F111A9  add A,0x24
-	ld	(9792:16), a	; F111AC  ld (0x2640),A
+	ld	(UI_DrawScratch:16), a	; F111AC  ld (0x2640),A
 	pop	xbc	; F111B0  pop XBC
 	unlk XIZ	; F111B1  unlk XIZ
 	ret	; F111B3  ret
@@ -33474,7 +33474,7 @@ sub_F111B4:
 	link XIZ,0xfffa	; F111B4  link XIZ,0xfffa
 	push	xix	; F111B8  push XIX
 	lda	xix, (xiz-2)	; F111B9  lda XIX,XIZ+0xfe
-	lda	xbc, (9792:16)	; F111BC  lda XBC,0x2640
+	lda	xbc, (UI_DrawScratch:16)	; F111BC  lda XBC,0x2640
 	ld	(xiz-6), xbc	; F111C0  ld (XIZ+0xfa),XBC
 	push	0	; F111C3  push 0x00
 	m_push MBD+r6, 0x08	; F111C5  push (XIZ+0x08)
@@ -33542,7 +33542,7 @@ sub_F11200:
 	m_and_mi16 MWI+r4, 0, 0x07c0	; F11238  and (XIX),0x07c0
 	ld	bc, (xix)	; F1123C  ld BC,(XIX)
 	srl	bc, 6	; F1123E  srl 0x06,BC
-	ld	(9792:16), c	; F11241  ld (0x2640),C
+	ld	(UI_DrawScratch:16), c	; F11241  ld (0x2640),C
 	inc	8, xsp	; F11245  inc 0,XSP
 	pop	xix	; F11247  pop XIX
 	unlk XIZ	; F11248  unlk XIZ
@@ -33589,7 +33589,7 @@ sub_F1124B:
 	m_and_mi16 MWI+r4, 0, 0xf800	; F11283  and (XIX),0xf800
 	ld	bc, (xix)	; F11287  ld BC,(XIX)
 	srl	bc, 11	; F11289  srl 0x0b,BC
-	ld	(9792:16), c	; F1128C  ld (0x2640),C
+	ld	(UI_DrawScratch:16), c	; F1128C  ld (0x2640),C
 	inc	8, xsp	; F11290  inc 0,XSP
 	pop	xix	; F11292  pop XIX
 	unlk XIZ	; F11293  unlk XIZ
@@ -33634,7 +33634,7 @@ sub_F11296:
 	ld	(xix+1), a	; F112CB  ld (XIX+0x01),A
 	ld	c, (xix)	; F112CE  ld C,(XIX)
 	and	c, 63	; F112D0  and C,0x3f
-	ld	(9792:16), c	; F112D3  ld (0x2640),C
+	ld	(UI_DrawScratch:16), c	; F112D3  ld (0x2640),C
 	inc	8, xsp	; F112D7  inc 0,XSP
 	pop	xix	; F112D9  pop XIX
 	unlk XIZ	; F112DA  unlk XIZ
@@ -35963,7 +35963,7 @@ Draw_MainOutEqualizer:
 sub_F123F4:
 	link XIZ,0xfffc	; F123F4  link XIZ,0xfffc
 	push	xix	; F123F8  push XIX
-	lda	xix, (9792:16)	; F123F9  lda XIX,0x2640
+	lda	xix, (UI_DrawScratch:16)	; F123F9  lda XIX,0x2640
 	m_res 4, MD16, 0x2799	; F123FD  res 4,(0x2799)
 	ld	(LCD_CurrentLayer:16), 0	; F12401  ld (0x2540),0x00
 	ld	(xiz-4), xix	; F12406  ld (XIZ+0xfc),XIX
@@ -40012,7 +40012,7 @@ DL_F1435B:
 	.short 0x00E8
 DL_F143AF:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40053,7 +40053,7 @@ DL_F143C0:
 ; ------------------------------------------------------------------
 DL_F143E0:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40062,7 +40062,7 @@ DL_F143E0:
 	.short 0x050E	; +0x0D -> IX
 DL_F143EF:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -40070,7 +40070,7 @@ DL_F143EF:
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x0B40	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -40078,7 +40078,7 @@ DL_F143EF:
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x1180	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -40087,14 +40087,14 @@ DL_F143EF:
 	.short 0x17C0	; +0x0D -> IX
 DL_F1441C:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long DL_F1449F + 0x93	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F14427:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -40178,7 +40178,7 @@ DL_F14432:
 ; ------------------------------------------------------------------
 DL_F1449F:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40187,7 +40187,7 @@ DL_F1449F:
 	.short 0x0047	; +0x0D -> (0x2530)
 	.short 0x003A	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2641	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40196,7 +40196,7 @@ DL_F1449F:
 	.short 0x0020	; +0x0D -> (0x2530)
 	.short 0x007E	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40205,7 +40205,7 @@ DL_F1449F:
 	.short 0x00A2	; +0x0D -> (0x2530)
 	.short 0x0088	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2643	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40213,7 +40213,7 @@ DL_F1449F:
 	.short 0x0063	; +0x09 -> (0x2532)
 	.byte 0x02	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2644	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40221,7 +40221,7 @@ DL_F1449F:
 	.short 0x0089	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2645	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+5	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40230,7 +40230,7 @@ DL_F1449F:
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x004B	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2646	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+6	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40239,7 +40239,7 @@ DL_F1449F:
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x0070	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2647	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+7	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40289,7 +40289,7 @@ DL_F1449F:
 ; ------------------------------------------------------------------
 DL_F14562:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40297,7 +40297,7 @@ DL_F14562:
 	.short 0x0040	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2641	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40305,7 +40305,7 @@ DL_F14562:
 	.short 0x008D	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40314,7 +40314,7 @@ DL_F14562:
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x00AC	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2643	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+3	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40324,7 +40324,7 @@ DL_F14562:
 	.short 0x00B8	; +0x0F -> (0x2532)
 DL_F1459C:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40332,7 +40332,7 @@ DL_F1459C:
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 DL_F145A6:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40341,7 +40341,7 @@ DL_F145A6:
 	.short 0x228A	; +0x0D -> IX
 DL_F145B5:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40349,7 +40349,7 @@ DL_F145B5:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2293	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2641	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+1	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40374,7 +40374,7 @@ DL_F145B5:
 ; ------------------------------------------------------------------
 DL_F145D9:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40384,7 +40384,7 @@ DL_F145D9:
 	.short 0x00D1	; +0x0F -> (0x2532)
 DL_F145EA:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40393,7 +40393,7 @@ DL_F145EA:
 	.short 0x228F	; +0x0D -> IX
 DL_F145F9:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40402,7 +40402,7 @@ DL_F145F9:
 	.short 0x22A8	; +0x0D -> IX
 DL_F14608:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40411,7 +40411,7 @@ DL_F14608:
 	.short 0x22A2	; +0x0D -> IX
 DL_F14617:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40452,7 +40452,7 @@ DL_F14617:
 ; ------------------------------------------------------------------
 DL_F1465F:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40460,7 +40460,7 @@ DL_F1465F:
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2263	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2641	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40468,7 +40468,7 @@ DL_F1465F:
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2273	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40476,7 +40476,7 @@ DL_F1465F:
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2269	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2643	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -40485,7 +40485,7 @@ DL_F1465F:
 	.short 0x2279	; +0x0D -> IX
 DL_F1469B:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -40499,7 +40499,7 @@ DL_F1469B:
 ; it) are both self-checking.
 DL_F146A6:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value]
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -40524,7 +40524,7 @@ DL_F146A6:
 ; ------------------------------------------------------------------
 DL_F146E1:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -40533,7 +40533,7 @@ DL_F146E1:
 	.short 0x0650	; +0x0D -> IX
 DL_F146F0:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40542,7 +40542,7 @@ DL_F146F0:
 	.short 0x003A	; +0x0D -> (0x2530)
 	.short 0x004A	; +0x0F -> (0x2532)
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x02	; +0x04 AND mask
 	.byte 0x01	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -40552,13 +40552,13 @@ DL_F146F0:
 	.short 0x00BD	; +0x0F -> (0x2532)
 DL_F14712:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2641	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+1	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DL_F14712 + 0x1A	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -40790,7 +40790,7 @@ EffectNames_F147AC:
 ; --------------------------------------------------------------------------
 DL_EffectParamPage:
 	.byte 0x02, 0x0F	; F14FAC  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2640	; +0x02 source variable -- byte 0 of the eight
+	.short UI_DrawScratch	; +0x02 source variable -- byte 0 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -40798,7 +40798,7 @@ DL_EffectParamPage:
 	.short 0x0011	; +0x0B -> BC: bytes per entry
 	.short 0x0B99	; +0x0D -> IX: x=72, y=74
 	.byte 0x02, 0x0F	; F14FBB  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2641	; +0x02 source variable -- byte 1 of the eight
+	.short UI_DrawScratch+1	; +0x02 source variable -- byte 1 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -40806,7 +40806,7 @@ DL_EffectParamPage:
 	.short 0x0011	; +0x0B -> BC: bytes per entry
 	.short 0x0E19	; +0x0D -> IX: x=72, y=90
 	.byte 0x02, 0x0F	; F14FCA  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2642	; +0x02 source variable -- byte 2 of the eight
+	.short UI_DrawScratch+2	; +0x02 source variable -- byte 2 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -40814,7 +40814,7 @@ DL_EffectParamPage:
 	.short 0x0011	; +0x0B -> BC: bytes per entry
 	.short 0x1099	; +0x0D -> IX: x=72, y=106
 	.byte 0x02, 0x0F	; F14FD9  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2643	; +0x02 source variable -- byte 3 of the eight
+	.short UI_DrawScratch+3	; +0x02 source variable -- byte 3 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -40822,7 +40822,7 @@ DL_EffectParamPage:
 	.short 0x0011	; +0x0B -> BC: bytes per entry
 	.short 0x1319	; +0x0D -> IX: x=72, y=122
 	.byte 0x02, 0x0F	; F14FE8  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2644	; +0x02 source variable -- byte 4 of the eight
+	.short UI_DrawScratch+4	; +0x02 source variable -- byte 4 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -40830,7 +40830,7 @@ DL_EffectParamPage:
 	.short 0x0011	; +0x0B -> BC: bytes per entry
 	.short 0x1599	; +0x0D -> IX: x=72, y=138
 	.byte 0x02, 0x0F	; F14FF7  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2645	; +0x02 source variable -- byte 5 of the eight
+	.short UI_DrawScratch+5	; +0x02 source variable -- byte 5 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -40838,7 +40838,7 @@ DL_EffectParamPage:
 	.short 0x0011	; +0x0B -> BC: bytes per entry
 	.short 0x1819	; +0x0D -> IX: x=72, y=154
 	.byte 0x02, 0x0F	; F15006  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2646	; +0x02 source variable -- byte 6 of the eight
+	.short UI_DrawScratch+6	; +0x02 source variable -- byte 6 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -40846,7 +40846,7 @@ DL_EffectParamPage:
 	.short 0x0011	; +0x0B -> BC: bytes per entry
 	.short 0x1A99	; +0x0D -> IX: x=72, y=170
 	.byte 0x02, 0x0F	; F15015  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
-	.short 0x2647	; +0x02 source variable -- byte 7 of the eight
+	.short UI_DrawScratch+7	; +0x02 source variable -- byte 7 of the eight
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
@@ -54071,7 +54071,7 @@ Data_F2843D:
 ; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54079,7 +54079,7 @@ Data_F2843D:
 	.short 0x00E2	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54088,7 +54088,7 @@ Data_F2843D:
 	.byte 0x02	; +0x0B digit count
 	.byte 0x1E	; +0x0C bit 7 set = unsigned, clear = signed
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2641	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+1	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54097,7 +54097,7 @@ Data_F2843D:
 	.short 0x005A	; +0x0D -> (0x2530)
 	.short 0x00E2	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54105,7 +54105,7 @@ Data_F2843D:
 	.short 0x00E2	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2643	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+3	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54113,7 +54113,7 @@ Data_F2843D:
 	.short 0x00E2	; +0x09 -> (0x2532)
 	.byte 0x03	; +0x0B digit count
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2645	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+5	; +0x02 source variable, 16-bit address
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54347,7 +54347,7 @@ DLText_PanL64CtrR63:
 ; ------------------------------------------------------------------
 DL_F286A2:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2645	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+5	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54374,7 +54374,7 @@ DLTable_F286B3:
 
 DL_F286CB:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2644	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+4	; +0x02 source variable, 16-bit address
 	.byte 0x20	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54395,7 +54395,7 @@ DLTable_F286DC:
 
 DL_F286E2:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2646	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+6	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54500,25 +54500,25 @@ DLTable_F28755:
 ; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F28791	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
 	.long DLTable_F287A1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long DLTable_F287B1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -54580,7 +54580,7 @@ DLTable_F287C1:
 ; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
-	.short 0x2647	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+7	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -54641,7 +54641,7 @@ DL_F28816:
 	.short 0x00A6
 DL_F28820:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -54696,7 +54696,7 @@ DLBoxes_F2882B:
 ; ------------------------------------------------------------------
 DL_F2885B:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -54743,7 +54743,7 @@ Data_F28866:
 ; ------------------------------------------------------------------
 DL_F28896:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -54789,7 +54789,7 @@ Data_F288A1:
 ; ------------------------------------------------------------------
 DL_F288D1:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -54798,7 +54798,7 @@ DL_F288D1:
 	.short 0x17EE	; +0x0D -> IX
 DL_F288E0:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -54807,7 +54807,7 @@ DL_F288E0:
 	.short 0x14CE	; +0x0D -> IX
 DL_F288EF:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -54816,7 +54816,7 @@ DL_F288EF:
 	.short 0x17FD	; +0x0D -> IX
 DL_F288FE:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -54825,7 +54825,7 @@ DL_F288FE:
 	.short 0x14DD	; +0x0D -> IX
 DL_F2890D:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -54834,7 +54834,7 @@ DL_F2890D:
 	.short 0x197F	; +0x0D -> IX
 DL_F2891C:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -56649,7 +56649,7 @@ DLTable_F29725:
 ; ------------------------------------------------------------------
 DL_F29765:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -56657,7 +56657,7 @@ DL_F29765:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0F6D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -56675,7 +56675,7 @@ DL_F29783:
 	.short 0x000C	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56802,7 +56802,7 @@ DL_F29863:
 	.short 0x0034	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56820,7 +56820,7 @@ DL_F29880:
 	.short 0x005C	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56838,7 +56838,7 @@ DL_F2989D:
 	.short 0x0084	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56856,7 +56856,7 @@ DL_F298BA:
 	.short 0x00AC	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56874,7 +56874,7 @@ DL_F298D7:
 	.short 0x00D4	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56892,7 +56892,7 @@ DL_F298F4:
 	.short 0x00FC	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -56910,7 +56910,7 @@ DL_F29911:
 	.short 0x0124	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
@@ -59418,7 +59418,7 @@ Data_F2B38F:
 	.short 0x0BF7, 0x0F17, 0x1237, 0x1557, 0x1877, 0x1B97	; F2B423  elements 3-8, step 0x320
 
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -60114,7 +60114,7 @@ DL_F2BA5A:
 	.short 0x00EC
 DL_F2BA64:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -60398,7 +60398,7 @@ DL_F2BDA0:
 	.short 0x00EC
 DL_F2BDB4:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -60407,7 +60407,7 @@ DL_F2BDB4:
 	.short 0x1D12	; +0x0D -> IX
 DL_F2BDC3:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -70514,7 +70514,7 @@ DLTable_F3435B:
 ; ------------------------------------------------------------------
 DL_F34361:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2648	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -70522,7 +70522,7 @@ DL_F34361:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0573	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2647	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -70551,14 +70551,14 @@ DL_MasterSongMeasure:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B2C	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x264B	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x013C	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2644	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -70577,14 +70577,14 @@ DL_MasterSongMeasure:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_TimeSig:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2646	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0887	; +0x07 -> IX
 	.byte 0x01	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2649	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+9	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -71410,7 +71410,7 @@ DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear:
 ;           notes/prom_b_dl_screens_round5.py --apply.
 DL_CycleMasterS0ngMeasureTimeSig:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2647	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -71434,21 +71434,21 @@ DL_CycleMasterS0ngMeasureTimeSig:
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0160	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x264B	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
 	.short 0x015D	; +0x07 -> IX
 	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2644	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+4	; +0x02 source variable, 16-bit address
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x0656	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2646	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -72322,7 +72322,7 @@ DL_CyclePlayCurrentMeasureCycle:
 	.short 0x00CB
 DL_F34FF2:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2647	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -72330,21 +72330,21 @@ DL_F34FF2:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0BED	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2644	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x05B8	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2652	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+18	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1210	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2654	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+20	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -72564,7 +72564,7 @@ DL_CycleRecordCurrentMeasure:
 	.short 0x00CF
 DL_F351A7:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2647	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+7	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -72572,7 +72572,7 @@ DL_F351A7:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0BED	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2648	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+8	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
@@ -72580,21 +72580,21 @@ DL_F351A7:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0573	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2644	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x05B8	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2656	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+22	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1210	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -72755,21 +72755,21 @@ DL_F352F9:
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0BC3	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2644	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+4	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x05B8	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2652	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+18	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
 	.short 0x1210	; +0x07 -> IX
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2654	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+20	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
@@ -72882,7 +72882,7 @@ DL_MetronomeBalance:
 	.short 0x00C8
 DL_F3539F:
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
-	.short 0x2652	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+18	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
@@ -76946,7 +76946,7 @@ Data_F39559:
 ;
 Data_F396E2:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -81164,7 +81164,7 @@ DL_F3B611:
 ; ------------------------------------------------------------------
 DL_F3B651:
 	.byte 0x00, 0x0B	; B op 00, 10 bytes of data, advance byte says 11 -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_Value_ToAsciiDigits3_RightJustified)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -84991,7 +84991,7 @@ Data_F3D5E5:
 
 StepRecordChordFieldArray_F3D5E7:
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -84999,7 +84999,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x082B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264E	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+14	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85007,7 +85007,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x082D	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264F	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+15	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85015,7 +85015,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x082F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85023,7 +85023,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x082F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2650	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+16	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85031,7 +85031,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0831	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2651	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+17	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85039,7 +85039,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0833	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85047,7 +85047,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0833	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2652	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+18	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85055,7 +85055,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0835	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2653	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+19	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85063,7 +85063,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0837	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85071,7 +85071,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0837	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2654	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+20	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85079,7 +85079,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0839	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2655	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+21	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85087,7 +85087,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x083B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85095,7 +85095,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x083B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2656	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+22	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85103,7 +85103,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x083D	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2657	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+23	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85111,7 +85111,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x083F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85119,7 +85119,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x083F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2648	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85127,7 +85127,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F29	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2649	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+9	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85135,7 +85135,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F2B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85143,7 +85143,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F2B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264A	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85151,7 +85151,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F2D	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264B	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85159,7 +85159,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F2F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85167,7 +85167,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F2F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264C	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+12	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85175,7 +85175,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F31	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264D	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+13	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85183,7 +85183,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F33	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85191,7 +85191,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F33	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264E	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+14	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85199,7 +85199,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F35	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264F	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+15	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85207,7 +85207,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F37	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85215,7 +85215,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F37	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2650	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+16	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85223,7 +85223,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F39	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2651	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+17	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85231,7 +85231,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F3B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85239,7 +85239,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F3B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2652	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+18	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85247,7 +85247,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F3D	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2653	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+19	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85255,7 +85255,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F3F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85263,7 +85263,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F3F	; +0x0D screen position
 	.byte 0x02, 0x14	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2654	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+20	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85271,7 +85271,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F41	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2655	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+21	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85279,7 +85279,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F43	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85287,7 +85287,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F43	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2656	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+22	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85295,7 +85295,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F45	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2657	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+23	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85303,7 +85303,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x0F47	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85311,7 +85311,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x0F47	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2648	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+8	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85319,7 +85319,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1631	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2649	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+9	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85327,7 +85327,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x1633	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85335,7 +85335,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1633	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264A	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+10	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85343,7 +85343,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1635	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264B	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+11	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85351,7 +85351,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x1637	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85359,7 +85359,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1637	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264C	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+12	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85367,7 +85367,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1639	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264D	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+13	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85375,7 +85375,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x163B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85383,7 +85383,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x163B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264E	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+14	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85391,7 +85391,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x163D	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x264F	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+15	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85399,7 +85399,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x163F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85407,7 +85407,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x163F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2650	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+16	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85415,7 +85415,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1641	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2651	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+17	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85423,7 +85423,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x1643	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85431,7 +85431,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1643	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2652	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+18	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85439,7 +85439,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1645	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2653	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+19	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85447,7 +85447,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x1647	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85455,7 +85455,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1647	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2654	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+20	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85463,7 +85463,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x1649	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2655	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+21	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85471,7 +85471,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x164B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85479,7 +85479,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x164B	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2656	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+22	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85487,7 +85487,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0002	; +0x0B entry width of that table
 	.short 0x164D	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2657	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+23	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85495,7 +85495,7 @@ StepRecordChordFieldArray_F3D5E7:
 	.short 0x0005	; +0x0B entry width of that table
 	.short 0x164F	; +0x0D screen position
 	.byte 0x02, 0x0F	; tag 0x02; +0x01 (NOT a length here, see header)
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift
 	.byte 0x06	; +0x06 swi 7 function
@@ -85705,19 +85705,19 @@ DLTable_F3DAF8:
 ; ------------------------------------------------------------------
 DL_F3DC00:
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
 	.long Data_F3DC21	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
-	.short 0x2641	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+1	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
 	.long Data_F3DC21 + 0x1E	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
-	.short 0x2642	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+2	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
@@ -85787,7 +85787,7 @@ Data_F3DC21:
 ;
 Data_F3DCBB:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2658	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+24	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85796,7 +85796,7 @@ Data_F3DCBB:
 	.short 0x0A51	; +0x0D -> IX
 Data_F3DCCA:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2659	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+25	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85805,7 +85805,7 @@ Data_F3DCCA:
 	.short 0x0A55	; +0x0D -> IX
 Data_F3DCD9:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x265A	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+26	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85814,7 +85814,7 @@ Data_F3DCD9:
 	.short 0x0A59	; +0x0D -> IX
 Data_F3DCE8:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x265B	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+27	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85823,7 +85823,7 @@ Data_F3DCE8:
 	.short 0x0A5D	; +0x0D -> IX
 Data_F3DCF7:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x265C	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+28	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85832,7 +85832,7 @@ Data_F3DCF7:
 	.short 0x0A61	; +0x0D -> IX
 Data_F3DD06:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x265D	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+29	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85841,7 +85841,7 @@ Data_F3DD06:
 	.short 0x0A65	; +0x0D -> IX
 Data_F3DD15:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x265E	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+30	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -85850,7 +85850,7 @@ Data_F3DD15:
 	.short 0x0A69	; +0x0D -> IX
 Data_F3DD24:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x265F	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch+31	; +0x02 source variable, 16-bit address
 	.byte 0x60	; +0x04 AND mask
 	.byte 0x85	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -102979,25 +102979,25 @@ DL_CreatorSelectController_Grid:
 ; --------------------------------------------------------------------------
 DLB_CreatorSelectController_Cursor:
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
 	.long CreatorSelectController_ClearArea	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
 	.long CreatorSelectController_ClearArea2	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
 	.long CreatorSelectController_Boxes	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2640	; +0x02 source variable, 16-bit address
+	.short UI_DrawScratch	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -103440,7 +103440,7 @@ sub_F4C60C:
 	lda	xwa, (DLB_CreatorSelectController_Names:24)	; F4C619  lda XWA,0xf4c36f
 	push	xwa	; F4C61E  push XWA
 	call	T_DisplayListB_Run_Stack	; F4C61F  call 0xf42e04
-	lda	xix, (9792:16)	; F4C623  lda XIX,0x2640
+	lda	xix, (UI_DrawScratch:16)	; F4C623  lda XIX,0x2640
 	inc	8, xsp	; F4C627  inc 0,XSP
 	m_cp_mi8 MB16, 0x2870, 0x00	; F4C629  cp (0x2870),0x00
 	jr	nz, sub_F4C5A2_Skip3	; F4C62E  jr NZ,0xf4c635
@@ -103459,7 +103459,7 @@ sub_F4C5A2_Join2:
 	ld	h, 0:opc	; F4C64B  ld H,0x00
 	pop	xiy	; F4C64D  pop XIY
 sub_F4C5A2_Loop:
-	ld	c, (9792:16)	; F4C64E  ld C,(0x2640)
+	ld	c, (UI_DrawScratch:16)	; F4C64E  ld C,(0x2640)
 	and	c, l	; F4C652  and C,L
 	jr	z, sub_F4C5A2_Skip4	; F4C654  jr Z,0xf4c65a
 	ld	(xix), h	; F4C656  ld (XIX),H
@@ -103558,15 +103558,15 @@ sub_F4C684_Skip3:
 sub_F4C6E0:
 	link XIZ,0x0000	; F4C6E0  link XIZ,0x0000
 	ld	c, (xiz+8)	; F4C6E4  ld C,(XIZ+0x08)
-	ld	(9793:16), c	; F4C6E7  ld (0x2641),C
+	ld	(UI_DrawScratch+1:16), c	; F4C6E7  ld (0x2641),C
 	ld	a, (xiz+10)	; F4C6EB  ld A,(XIZ+0x0a)
-	ld	(9794:16), a	; F4C6EE  ld (0x2642),A
+	ld	(UI_DrawScratch+2:16), a	; F4C6EE  ld (0x2642),A
 	push	xde	; F4C6F2  push XDE
 	push	xhl	; F4C6F3  push XHL
 	push	xix	; F4C6F4  push XIX
 	push	xiz	; F4C6F5  push XIZ
-	ld	w, (9793:16)	; F4C6F6  ld W,(0x2641)
-	ld	a, (9794:16)	; F4C6FA  ld A,(0x2642)
+	ld	w, (UI_DrawScratch+1:16)	; F4C6F6  ld W,(0x2641)
+	ld	a, (UI_DrawScratch+2:16)	; F4C6FA  ld A,(0x2642)
 	call	T_F41038	; F4C6FE  call 0xf41038
 	ld	a, (xiy)	; F4C702  ld A,(XIY)
 	push	xiy	; F4C704  push XIY
@@ -111433,9 +111433,9 @@ PaintAllDrawbars_Join:
 	push	xwa	; F537E2  push XWA
 	jr	PaintAllDrawbars_Join2	; F537E3  jr T,0xf53817
 PaintAllDrawbars_Skip2:
-	m_ld_m16m MB16, 0x28a1, 0x2640	; F537E5  ld (0x2640),(0x28a1)
+	m_ld_m16m MB16, 0x28a1, UI_DrawScratch	; F537E5  ld (0x2640),(0x28a1)
 	ld	h, (10401:16)	; F537EB  ld H,(0x28a1)
-	m_ld_m16m MB16, 0x28a2, 0x2641	; F537EF  ld (0x2641),(0x28a2)
+	m_ld_m16m MB16, 0x28a2, UI_DrawScratch+1	; F537EF  ld (0x2641),(0x28a2)
 	ld	(10402:16), h	; F537F5  ld (0x28a2),H
 	lda	xbc, (ParamCursorRects:24)	; F537F9  lda XBC,0xf546da
 	push	xbc	; F537FE  push XBC
@@ -115017,29 +115017,29 @@ sub_F556EA:		; <- T_F42CA0
 	pushw	1	; F556F3  push 0x0001
 	pushw	hl	; F556F6  push HL
 	calr	IndexedTable_GetByte	; F556F7  calr 0xf5533c
-	ld	(9792:16), a	; F556FA  ld (0x2640),A
+	ld	(UI_DrawScratch:16), a	; F556FA  ld (0x2640),A
 	pushw	0	; F556FE  push 0x0000
 	pushw	hl	; F55701  push HL
 	calr	IndexedTable_GetByte	; F55702  calr 0xf5533c
-	ld	(9793:16), a	; F55705  ld (0x2641),A
-	ld	(9794:16), l	; F55709  ld (0x2642),L
+	ld	(UI_DrawScratch+1:16), a	; F55705  ld (0x2641),A
+	ld	(UI_DrawScratch+2:16), l	; F55709  ld (0x2642),L
 	inc	8, xsp	; F5570D  inc 0,XSP
 	push	xde	; F5570F  push XDE
 	push	xhl	; F55710  push XHL
 	push	xix	; F55711  push XIX
 	push	xiz	; F55712  push XIZ
-	ld	w, (9792:16)	; F55713  ld W,(0x2640)
-	ld	a, (9793:16)	; F55717  ld A,(0x2641)
-	ld	b, (9794:16)	; F5571B  ld B,(0x2642)
+	ld	w, (UI_DrawScratch:16)	; F55713  ld W,(0x2640)
+	ld	a, (UI_DrawScratch+1:16)	; F55717  ld A,(0x2641)
+	ld	b, (UI_DrawScratch+2:16)	; F5571B  ld B,(0x2642)
 	call	T_F41010	; F5571F  call 0xf41010
-	ld	(9792:16), xiy	; F55723  ld (0x2640),XIY
+	ld	(UI_DrawScratch:16), xiy	; F55723  ld (0x2640),XIY
 	pop	xiz	; F55727  pop XIZ
 	pop	xix	; F55728  pop XIX
 	pop	xhl	; F55729  pop XHL
 	pop	xde	; F5572A  pop XDE
-	lda	xbc, (9792:16)	; F5572B  lda XBC,0x2640
+	lda	xbc, (UI_DrawScratch:16)	; F5572B  lda XBC,0x2640
 	ld	(xiz-4), xbc	; F5572F  ld (XIZ+0xfc),XBC
-	ld	xwa, (9792:16)	; F55732  ld XWA,(0x2640)
+	ld	xwa, (UI_DrawScratch:16)	; F55732  ld XWA,(0x2640)
 	ld	xix, xwa	; F55736  ld XIX,XWA
 	ld	h, 4:opc	; F55738  ld H,0x04
 IndexedTable_GetByte_Loop2:
@@ -116243,7 +116243,7 @@ Draw_MetronomeBalance:
 	ret	; F55CC7  ret
 sub_F55CC8:
 	ld	a, (14163:16)	; F55CC8  ld A,(0x3753)
-	ld	(9810:16), a	; F55CCC  ld (0x2652),A
+	ld	(UI_DrawScratch+18:16), a	; F55CCC  ld (0x2652),A
 	ld	(LCD_CurrentLayer:16), 0	; F55CD0  ld (0x2540),0x00
 	ld	xiy, DL_F3539F	; F55CD5  ld XIY,0x00f3539f
 	ld	xix, DL_F3539F + 0xC	; F55CDA  ld XIX,0x00f353ab
@@ -117430,7 +117430,7 @@ sub_F56492_Join:
 sub_F56492_Skip3:
 	popw	wa	; F564F4  pop WA
 	ld	(3555:16), a	; F564F5  ld (0x0de3),A
-	ld	(9798:16), a	; F564F9  ld (0x2646),A
+	ld	(UI_DrawScratch+6:16), a	; F564F9  ld (0x2646),A
 	ld	xwa, DisplayListB_Run_TimeSig	; F564FD  ld XWA,0x00f56003
 	push	xwa	; F56502  push XWA
 	call	T_CallbackQueue_Post	; F56503  call 0xf42e84
@@ -118100,7 +118100,7 @@ sub_F5670C_Return7:
 ; --------------------------------------------------------------------------
 sub_F56850:
 	ld	wa, (13858:16)	; F56850  ld WA,(0x3622)
-	ld	(9814:16), wa	; F56854  ld (0x2656),WA
+	ld	(UI_DrawScratch+22:16), wa	; F56854  ld (0x2656),WA
 	ld	xwa, sub_F5686B	; F56858  ld XWA,0x00f5686b
 	push	xwa	; F5685D  push XWA
 	call	T_CallbackQueue_Post	; F5685E  call 0xf42e84
@@ -118128,7 +118128,7 @@ sub_F5686B:
 ; --------------------------------------------------------------------------
 sub_F5687D:
 	ld	wa, (13860:16)	; F5687D  ld WA,(0x3624)
-	ld	(9816:16), wa	; F56881  ld (0x2658),WA
+	ld	(UI_DrawScratch+24:16), wa	; F56881  ld (0x2658),WA
 	ld	xwa, sub_F56898	; F56885  ld XWA,0x00f56898
 	push	xwa	; F5688A  push XWA
 	call	T_CallbackQueue_Post	; F5688B  call 0xf42e84
@@ -118341,7 +118341,7 @@ sub_F5696D:
 	ld	a, (13835:16)	; F5696D  ld A,(0x360b)
 	and	a, 2	; F56971  and A,0x02
 	srl	a, 1	; F56974  srl 0x01,A
-	ld	(9799:16), a	; F56977  ld (0x2647),A
+	ld	(UI_DrawScratch+7:16), a	; F56977  ld (0x2647),A
 	ld	xwa, sub_F55F9F	; F5697B  ld XWA,0x00f55f9f
 	push	xwa	; F56980  push XWA
 	call	T_CallbackQueue_Post	; F56981  call 0xf42e84
@@ -118424,9 +118424,9 @@ sub_F569AF_Return:
 ; --------------------------------------------------------------------------
 sub_F569FA:
 	ld	wa, (13858:16)	; F569FA  ld WA,(0x3622)
-	ld	(9814:16), wa	; F569FE  ld (0x2656),WA
+	ld	(UI_DrawScratch+22:16), wa	; F569FE  ld (0x2656),WA
 	ld	wa, (13860:16)	; F56A02  ld WA,(0x3624)
-	ld	(9816:16), wa	; F56A06  ld (0x2658),WA
+	ld	(UI_DrawScratch+24:16), wa	; F56A06  ld (0x2658),WA
 	ld	xwa, sub_F55FB3	; F56A0A  ld XWA,0x00f55fb3
 	push	xwa	; F56A0F  push XWA
 	call	T_CallbackQueue_Post	; F56A10  call 0xf42e84
@@ -118815,7 +118815,7 @@ sub_F56C35_Skip3:
 	ld	(14022:16), xwa	; F56C8D  ld (0x36c6),XWA
 	ld	a, (13835:16)	; F56C91  ld A,(0x360b)
 	and	a, 1	; F56C95  and A,0x01
-	ld	(9799:16), a	; F56C98  ld (0x2647),A
+	ld	(UI_DrawScratch+7:16), a	; F56C98  ld (0x2647),A
 	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56C9C  ld XWA,0x00f55c8c
 	push	xwa	; F56CA1  push XWA
 	call	T_CallbackQueue_Post	; F56CA2  call 0xf42e84
@@ -119367,7 +119367,7 @@ sub_F56F09_Return:
 ; --------------------------------------------------------------------------
 sub_F56F7B:
 	ld	wa, (13854:16)	; F56F7B  ld WA,(0x361e)
-	ld	(9810:16), wa	; F56F7F  ld (0x2652),WA
+	ld	(UI_DrawScratch+18:16), wa	; F56F7F  ld (0x2652),WA
 	ld	xwa, sub_F56F96	; F56F83  ld XWA,0x00f56f96
 	push	xwa	; F56F88  push XWA
 	call	T_CallbackQueue_Post	; F56F89  call 0xf42e84
@@ -119395,7 +119395,7 @@ sub_F56F96:
 ; --------------------------------------------------------------------------
 sub_F56FA8:
 	ld	wa, (13856:16)	; F56FA8  ld WA,(0x3620)
-	ld	(9812:16), wa	; F56FAC  ld (0x2654),WA
+	ld	(UI_DrawScratch+20:16), wa	; F56FAC  ld (0x2654),WA
 	ld	xwa, sub_F56FC3	; F56FB0  ld XWA,0x00f56fc3
 	push	xwa	; F56FB5  push XWA
 	call	T_CallbackQueue_Post	; F56FB6  call 0xf42e84
@@ -119594,7 +119594,7 @@ sub_F5707E_Return:
 sub_F5709D:
 	ld	a, (13835:16)	; F5709D  ld A,(0x360b)
 	and	a, 1	; F570A1  and A,0x01
-	ld	(9799:16), a	; F570A4  ld (0x2647),A
+	ld	(UI_DrawScratch+7:16), a	; F570A4  ld (0x2647),A
 	ld	xwa, sub_F55F9F	; F570A8  ld XWA,0x00f55f9f
 	push	xwa	; F570AD  push XWA
 	call	T_CallbackQueue_Post	; F570AE  call 0xf42e84
@@ -119677,9 +119677,9 @@ sub_F570DC_Return:
 ; --------------------------------------------------------------------------
 sub_F57127:
 	ld	wa, (13854:16)	; F57127  ld WA,(0x361e)
-	ld	(9810:16), wa	; F5712B  ld (0x2652),WA
+	ld	(UI_DrawScratch+18:16), wa	; F5712B  ld (0x2652),WA
 	ld	wa, (13856:16)	; F5712F  ld WA,(0x3620)
-	ld	(9812:16), wa	; F57133  ld (0x2654),WA
+	ld	(UI_DrawScratch+20:16), wa	; F57133  ld (0x2654),WA
 	ld	xwa, sub_F55FD1	; F57137  ld XWA,0x00f55fd1
 	push	xwa	; F5713C  push XWA
 	call	T_CallbackQueue_Post	; F5713D  call 0xf42e84
@@ -120580,19 +120580,19 @@ SeqPlayScreen_StageValues:
 	pushw	wa	; F57455  push WA
 	pushw	bc	; F57456  push BC
 	ld	wa, (13650:16)	; F57457  ld WA,(0x3552)
-	ld	(9796:16), wa	; F5745B  ld (0x2644),WA
+	ld	(UI_DrawScratch+4:16), wa	; F5745B  ld (0x2644),WA
 	ld	a, (3555:16)	; F5745F  ld A,(0x0de3)
-	ld	(9798:16), a	; F57463  ld (0x2646),A
+	ld	(UI_DrawScratch+6:16), a	; F57463  ld (0x2646),A
 	ld	a, (13835:16)	; F57467  ld A,(0x360b)
 	and	a, 1	; F5746B  and A,0x01
-	ld	(9799:16), a	; F5746E  ld (0x2647),A
+	ld	(UI_DrawScratch+7:16), a	; F5746E  ld (0x2647),A
 	ld	a, (14162:16)	; F57472  ld A,(0x3752)
 	ld	(DisplayListB_Stage+19:16), a	; F57476  ld (0x1309),A
 	ld	a, (BStore_CurrentBank:16)	; F5747A  ld A,(0x360a)
 	inc	1, a	; F5747E  inc 1,A
-	ld	(9803:16), a	; F57480  ld (0x264b),A
+	ld	(UI_DrawScratch+11:16), a	; F57480  ld (0x264b),A
 	ldw	bc, 3	; F57484  ld BC,0x0003
-	ld	xix, 9804	; F57487  ld XIX,0x0000264c
+	ld	xix, UI_DrawScratch+12	; F57487  ld XIX,0x0000264c
 	ld	xiy, 6304970	; F5748C  ld XIY,0x006034ca
 	ldirw	; F57491  ldirw
 	popw	bc	; F57493  pop BC
@@ -120618,23 +120618,23 @@ SeqPlayScreen_StageValues:
 RealtimeRecordScreen_StageValues:
 	pushw	wa	; F57498  push WA
 	ld	wa, (13650:16)	; F57499  ld WA,(0x3552)
-	ld	(9796:16), wa	; F5749D  ld (0x2644),WA
+	ld	(UI_DrawScratch+4:16), wa	; F5749D  ld (0x2644),WA
 	ld	a, (3555:16)	; F574A1  ld A,(0x0de3)
-	ld	(9798:16), a	; F574A5  ld (0x2646),A
+	ld	(UI_DrawScratch+6:16), a	; F574A5  ld (0x2646),A
 	ld	a, (13835:16)	; F574A9  ld A,(0x360b)
 	and	a, 2	; F574AD  and A,0x02
 	srl	a, 1	; F574B0  srl 0x01,A
-	ld	(9799:16), a	; F574B3  ld (0x2647),A
+	ld	(UI_DrawScratch+7:16), a	; F574B3  ld (0x2647),A
 	ld	a, (13529:16)	; F574B7  ld A,(0x34d9)
 	and	a, 1	; F574BB  and A,0x01
-	ld	(9800:16), a	; F574BE  ld (0x2648),A
+	ld	(UI_DrawScratch+8:16), a	; F574BE  ld (0x2648),A
 	ld	wa, (3080:16)	; F574C2  ld WA,(0x0c08)
-	ld	(9801:16), wa	; F574C6  ld (0x2649),WA
+	ld	(UI_DrawScratch+9:16), wa	; F574C6  ld (0x2649),WA
 	ld	a, (14162:16)	; F574CA  ld A,(0x3752)
 	ld	(DisplayListB_Stage+19:16), a	; F574CE  ld (0x1309),A
 	ld	a, (BStore_CurrentBank:16)	; F574D2  ld A,(0x360a)
 	inc	1, a	; F574D6  inc 1,A
-	ld	(9803:16), a	; F574D8  ld (0x264b),A
+	ld	(UI_DrawScratch+11:16), a	; F574D8  ld (0x264b),A
 	popw	wa	; F574DC  pop WA
 	ret	; F574DD  ret
 
@@ -120655,14 +120655,14 @@ CyclePlayScreen_StageValues:
 	ld	a, (13863:16)	; F574DF  ld A,(0x3627)
 	ld	(DisplayListB_Stage:16), a	; F574E3  ld (0x12f6),A
 	ld	wa, (13650:16)	; F574E7  ld WA,(0x3552)
-	ld	(9796:16), wa	; F574EB  ld (0x2644),WA
+	ld	(UI_DrawScratch+4:16), wa	; F574EB  ld (0x2644),WA
 	ld	a, (13835:16)	; F574EF  ld A,(0x360b)
 	and	a, 1	; F574F3  and A,0x01
-	ld	(9799:16), a	; F574F6  ld (0x2647),A
+	ld	(UI_DrawScratch+7:16), a	; F574F6  ld (0x2647),A
 	ld	wa, (13854:16)	; F574FA  ld WA,(0x361e)
-	ld	(9810:16), wa	; F574FE  ld (0x2652),WA
+	ld	(UI_DrawScratch+18:16), wa	; F574FE  ld (0x2652),WA
 	ld	wa, (13856:16)	; F57502  ld WA,(0x3620)
-	ld	(9812:16), wa	; F57506  ld (0x2654),WA
+	ld	(UI_DrawScratch+20:16), wa	; F57506  ld (0x2654),WA
 	popw	wa	; F5750A  pop WA
 	ret	; F5750B  ret
 
@@ -120683,11 +120683,11 @@ CyclePlayEditScreen_StageValues:
 	ld	a, (13863:16)	; F5750D  ld A,(0x3627)
 	ld	(DisplayListB_Stage:16), a	; F57511  ld (0x12f6),A
 	ld	wa, (13650:16)	; F57515  ld WA,(0x3552)
-	ld	(9796:16), wa	; F57519  ld (0x2644),WA
+	ld	(UI_DrawScratch+4:16), wa	; F57519  ld (0x2644),WA
 	ld	wa, (13854:16)	; F5751D  ld WA,(0x361e)
-	ld	(9810:16), wa	; F57521  ld (0x2652),WA
+	ld	(UI_DrawScratch+18:16), wa	; F57521  ld (0x2652),WA
 	ld	wa, (13856:16)	; F57525  ld WA,(0x3620)
-	ld	(9812:16), wa	; F57529  ld (0x2654),WA
+	ld	(UI_DrawScratch+20:16), wa	; F57529  ld (0x2654),WA
 	ld	a, (13862:16)	; F5752D  ld A,(0x3626)
 	ld	(DisplayListB_Stage+18:16), a	; F57531  ld (0x1308),A
 	popw	wa	; F57535  pop WA
@@ -120711,18 +120711,18 @@ CycleRecordScreen_StageValues:
 	ld	a, (13863:16)	; F57538  ld A,(0x3627)
 	ld	(DisplayListB_Stage:16), a	; F5753C  ld (0x12f6),A
 	ld	wa, (13650:16)	; F57540  ld WA,(0x3552)
-	ld	(9796:16), wa	; F57544  ld (0x2644),WA
+	ld	(UI_DrawScratch+4:16), wa	; F57544  ld (0x2644),WA
 	ld	a, (13835:16)	; F57548  ld A,(0x360b)
 	and	a, 2	; F5754C  and A,0x02
 	srl	a, 1	; F5754F  srl 0x01,A
-	ld	(9799:16), a	; F57552  ld (0x2647),A
+	ld	(UI_DrawScratch+7:16), a	; F57552  ld (0x2647),A
 	ld	a, (13529:16)	; F57556  ld A,(0x34d9)
 	and	a, 1	; F5755A  and A,0x01
-	ld	(9800:16), a	; F5755D  ld (0x2648),A
+	ld	(UI_DrawScratch+8:16), a	; F5755D  ld (0x2648),A
 	ld	wa, (13858:16)	; F57561  ld WA,(0x3622)
-	ld	(9814:16), wa	; F57565  ld (0x2656),WA
+	ld	(UI_DrawScratch+22:16), wa	; F57565  ld (0x2656),WA
 	ld	wa, (13860:16)	; F57569  ld WA,(0x3624)
-	ld	(9816:16), wa	; F5756D  ld (0x2658),WA
+	ld	(UI_DrawScratch+24:16), wa	; F5756D  ld (0x2658),WA
 	popw	wa	; F57571  pop WA
 	ret	; F57572  ret  (the first 0x0E the old listing counted as padding)
 
@@ -193653,7 +193653,7 @@ sub_F7E788:
 	calr	sub_F7E39F_Nop	; F7E78C  calr 0xf7e2d8
 	ld	a, (BStore_CurrentBank:16)	; F7E78F  ld A,(0x360a)
 	inc	1, a	; F7E793  inc 1,A
-	ld	(9792:16), a	; F7E795  ld (0x2640),A
+	ld	(UI_DrawScratch:16), a	; F7E795  ld (0x2640),A
 	ld	xiy, DL_F3B651	; F7E799  ld XIY,0x00f3b651
 	ld	xix, DL_F3B65B	; F7E79E  ld XIX,0x00f3b65b
 	call	T_DisplayListB_Run	; F7E7A3  call 0xf417f4
@@ -193813,7 +193813,7 @@ sub_F7E8CD:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8CD  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7E8D2  calr 0xf7e2d8
 	ld	xiy, 6304802	; F7E8D5  ld XIY,0x00603422
-	ld	xix, 9793	; F7E8DA  ld XIX,0x00002641
+	ld	xix, UI_DrawScratch+1	; F7E8DA  ld XIX,0x00002641
 	ldw	bc, 8	; F7E8DF  ld BC,0x0008
 	ldir85	; F7E8E2  ldir
 	ld	xiy, DL_F3B65B	; F7E8E4  ld XIY,0x00f3b65b
@@ -193827,7 +193827,7 @@ sub_F7E8F3:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8F3  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7E8F8  calr 0xf7e2d8
 	ld	xiy, 6304810	; F7E8FB  ld XIY,0x0060342a
-	ld	xix, 9793	; F7E900  ld XIX,0x00002641
+	ld	xix, UI_DrawScratch+1	; F7E900  ld XIX,0x00002641
 	ldw	bc, 8	; F7E905  ld BC,0x0008
 	ldir85	; F7E908  ldir
 	ld	xiy, DL_F3B65B	; F7E90A  ld XIY,0x00f3b65b
@@ -193862,7 +193862,7 @@ sub_F7E941:
 	jr	c, sub_F7E941_Skip	; F7E95E  jr C,0xf7e963
 	sub	a, 8	; F7E960  sub A,0x08
 sub_F7E941_Skip:
-	ld	(9792:16), a	; F7E963  ld (0x2640),A
+	ld	(UI_DrawScratch:16), a	; F7E963  ld (0x2640),A
 	ld	xiy, Data_F396E2	; F7E967  ld XIY,0x00f396e2
 	call	T_DLB_Handler_Array8	; F7E96C  call 0xf4181c
 	ret	; F7E970  ret

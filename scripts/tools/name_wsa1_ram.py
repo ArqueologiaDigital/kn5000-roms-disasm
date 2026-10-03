@@ -451,6 +451,12 @@ GROUPS = [
                      "every byte is a `+0x02 source variable`; 363 code stores, 1 code read")
         for k in range(27)
     }),
+    ("wsa1/notes/FINDINGS-prom_ab-draw-scratch.md", "the 32-byte draw scratch", {
+        0x2640 + k: ("UI_DrawScratch" + ("+%d" % k if k else ""),
+                     "32 bytes each screen fills with what it is about to draw (tags, names, effect parameters)",
+                     "188 display-list records read it; 137 code stores")
+        for k in range(32)
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
