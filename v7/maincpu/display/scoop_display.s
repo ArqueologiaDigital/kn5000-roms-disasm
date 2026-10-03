@@ -2752,7 +2752,7 @@ PerfMode_Handler_EvtB_Epilogue:
 	jrl	nz, PerfMode_Handler_EvtB_Skip4
 	cp	(3429:16), 0
 	jrl	nz, PerfMode_Handler_EvtB_Skip4
-	cp	(35996:16), 138
+	cp	(MAIN_TITLE_CURRENT:16), 138
 	jrl	nz, PerfMode_Handler_EvtB_Skip4
 	cp	(3567:16), 18
 	jrl	z, PerfMode_Handler_EvtB_Skip3
@@ -7727,8 +7727,8 @@ SysEx_ControllerBitCheck:
 	jrl z, SysEx_ModeChangeCheck
 	ld c, (3925:16)
 	add c, 0x5
-	ld xwa, (0x02749a:24)
-	or xwa, (0x02749e:24)
+	ld xwa, (TRANSITION_PROGRESS:24)
+	or xwa, (TRANSITION_TIMER:24)
 	ld (4560:16), xwa
 	ldfr_berp A, 0x3c
 	ldfr_werp DE, 0x3e
@@ -12861,7 +12861,7 @@ PerfMode_ParamHandler_11_Return4:
 	call	Display_UpdateDirtyRegions
 	ret
 SubCPU_ToneParamRet_Helper3:
-	cp	(0x8c9c:16), 138
+	cp	(MAIN_TITLE_CURRENT:16), 138
 	jrl	nz, SubCPU_ToneParamRet_Return2
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 0:i3
@@ -16429,7 +16429,7 @@ ParamPopup_PartPedal_Entry:
 Display_RedrawStatusBar:
 	bit 0, (0x0f57:16)
 	jrl nz, Scoop_Return
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jrl nz, Scoop_Return
 	ld (0x03efa8:24), 0x00
 	call UIRender_LoadTwoDescriptors
@@ -16610,7 +16610,7 @@ Scoop_InitDisplayFull:
 	ret
 
 Display_RedrawMainContent:
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jr nz, Scoop_RedrawMainContent_End
 	ld (0x03efa8:24), 0x00
 	ld XIY,Display_RedrawMainContent_Data
@@ -16619,7 +16619,7 @@ Scoop_RedrawMainContent_End:
 	ret
 
 Display_RedrawFooter:
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jr nz, Scoop_RedrawFooter_End
 	ld (0x03efa8:24), 0x00
 	ld a, (0x0f52:16)
@@ -16645,7 +16645,7 @@ Scoop_RedrawFooter_End:
 ; Display_RedrawTitleBar - Redraw the title bar region
 ;=============================================================================
 Display_RedrawTitleBar:
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jrl nz, Scoop_TitleBar_End
 	ld (0x03efa8:24), 0x02
 	calr Scoop_DrawGridLines
@@ -16759,7 +16759,7 @@ Scoop_TitleBar_GetPartConfig_End:
 	ret
 
 Display_RedrawSelection:
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jr z, Scoop_Selection_RedrawActive
 	jp Scoop_Selection_End
 Scoop_Selection_RedrawActive:
@@ -16815,7 +16815,7 @@ Display_RedrawSidePanel:
 	; jrl nz, Scoop_SidePanel_End (v7 displacement)
 	jrl	nz, Scoop_SidePanel_End
 	; cpdi8 (0x8d38), 138 (v7 patched)
-	cp	(0x8c9c:16), 138
+	cp	(MAIN_TITLE_CURRENT:16), 138
 	; jrl nz, Scoop_SidePanel_End (v7 displacement)
 	jrl	nz, Scoop_SidePanel_End
 	; ld xiy, 0x372e (v7 patched)
@@ -16973,7 +16973,7 @@ Scoop_AltContent_ClearOneRegion:
 	ret
 
 Display_RedrawButtonLabels:
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jr nz, Scoop_ButtonLabels_End
 	ld (0x03efa8:24), 0x00
 	call Scoop_ButtonLabels_CopySlotData
@@ -17134,7 +17134,7 @@ Scoop_ButtonLabels_DrawFilterLabel1:
 	ret
 
 Scoop_ButtonLabels_DrawCategory:
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jr nz, Scoop_EventHandler_SetupData
 	xor BC,BC
 Scoop_ButtonLabels_DrawCategoryData:

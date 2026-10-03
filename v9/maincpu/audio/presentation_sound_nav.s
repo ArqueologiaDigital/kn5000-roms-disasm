@@ -1274,8 +1274,8 @@ DirmdTitleFunc:
 
 ; DirmdEmulator dispatch case F
 DirmdEmu_CaseF:
-	ld	a, (0x8d38:16)
-	cp	a, (0x8d39:16)
+	ld	a, (MAIN_TITLE_CURRENT:16)
+	cp	a, (MAIN_TITLE_PREVIOUS:16)
 	jr	z, PostTitle_Function_Skip
 	ldw	wa, 255
 	call	GraphicsRender_ByteData

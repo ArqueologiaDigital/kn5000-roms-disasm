@@ -1960,7 +1960,7 @@ UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7
 	cp hl, 0:i3
 	ret z
-	ldb_d8 a, (35996)
+	ldb_d8 a, (MAIN_TITLE_CURRENT)
 	extz wa
 	sla wa, 2
 	lda xbc, (SSF_PresentationGateTable:24)
@@ -2173,9 +2173,9 @@ RefreshApTask:
 	ld	(58142:16), 255
 	ld	(58144:16), 255
 	ld	xwa, 0:i3
-	ld	(160922:24), xwa
-	ld	(160926:24), xwa
-	ld	(160930:24), xwa
+	ld	(TRANSITION_PROGRESS:24), xwa
+	ld	(TRANSITION_TIMER:24), xwa
+	ld	(TRANSITION_FLAGS:24), xwa
 	ld	xwa, 4294967295
 	ld	xbc, EVT_SW_ON
 	call	DeleteEvent
@@ -2206,9 +2206,9 @@ RefreshApTask:
 	jp	ApPostEvent
 RefreshSwEvent:
 	ld xwa, 0:i3
-	ld (0x02749a:24), xwa
-	ld (0x02749e:24), xwa
-	ld (0x0274a2:24), xwa
+	ld (TRANSITION_PROGRESS:24), xwa
+	ld (TRANSITION_TIMER:24), xwa
+	ld (TRANSITION_FLAGS:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, EVT_SW_ON
 	call DeleteEvent
@@ -2806,33 +2806,33 @@ MainTitleControl:
 	ldw	wa, 72
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0:i3
-	ld	(160930:24), xwa
-	ld	(160926:24), xwa
-	ld	(160922:24), xwa
+	ld	(TRANSITION_FLAGS:24), xwa
+	ld	(TRANSITION_TIMER:24), xwa
+	ld	(TRANSITION_PROGRESS:24), xwa
 	jrl	UIWidget_ReturnZero
 SeqState_TransitionMode:
 	ld	(35995:16), a
 	ldmm8 35997, 35996
 	ld	(SEQ_MASTER_STATE:16), l
-	ld	(35996:16), l
+	ld	(MAIN_TITLE_CURRENT:16), l
 	ldw	wa, 97
 	jr	MainTitleCtrl_SetIndicatorAndClear
 MainTitleCtrl_SaveAndTransition:
 	ldmm8 35997, 35996
-	ld	(35996:16), l
+	ld	(MAIN_TITLE_CURRENT:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0:i3
-	ld	(160930:24), xwa
-	ld	(160926:24), xwa
-	ld	(160922:24), xwa
+	ld	(TRANSITION_FLAGS:24), xwa
+	ld	(TRANSITION_TIMER:24), xwa
+	ld	(TRANSITION_PROGRESS:24), xwa
 	call	DkMdlyPly_CheckState_Helper2
 	jrl	UIWidget_ReturnZero
 SeqState_DemoModeHandler:
 	cp	xde, 8
 	jrl	nz, UIWidget_ReturnZero
-	cp	(35996:16), a
+	cp	(MAIN_TITLE_CURRENT:16), a
 	jr	nz, SeqDemo_SaveCurrentState
 	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
@@ -2984,7 +2984,7 @@ UI_PostTimerResetEvent:
 SeqState_HasModeChanged:
 	ld a, (SEQ_MASTER_STATE:16)
 
-	cp a, (35996:16)
+	cp a, (MAIN_TITLE_CURRENT:16)
 
 	scc16 nz, hl
 

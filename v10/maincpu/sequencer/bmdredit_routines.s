@@ -508,7 +508,7 @@ BmDrEdit_CheckTempoData:
 	call TempoRingBuf_CheckEmpty
 	cp hl, 0:i3
 	ret z
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0x95
 	jr z, BmDrEdit_CheckTempoData_ReadyToProcess
 	cp a, 0x98
@@ -1841,8 +1841,8 @@ BmDrEdit_InitCommon_CheckSongActive:
 	ld a, (SEQ_MASTER_STATE:16)
 	cp a, (0x8d37:16)
 	jr nz, BmDrEdit_InitCommon_SetupDisplay
-	ld a, (0x8d38:16)
-	cp a, (0x8d39:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
+	cp a, (MAIN_TITLE_PREVIOUS:16)
 	jr z, BmDrEdit_InitCommon_SetupDisplay
 	bit 4, (0x28ad:16)
 	jr z, BmDrEdit_InitCommon_SetupDisplay
@@ -1861,7 +1861,7 @@ BmDrEdit_InitCommon_SetupDisplay:
 	ld wa, (0x2963:16)
 	ld (3407:16), wa
 	ldmm16 3409, 0x2963
-	ld a, (0x8d39:16)
+	ld a, (MAIN_TITLE_PREVIOUS:16)
 	cp a, 0x96
 	jr z, BmDrEdit_CopyStepCount
 	cp a, 0x99
@@ -4538,7 +4538,7 @@ BmDrEdit_ExitPlayMode:
 	ldw (0xf19e:16), 0
 	call Audio_CheckSubsystemReady
 	call AccWrap_PlayModeDispatch
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0x95
 	jr z, BmDrEdit_ExitPlay_RestoreSequencer
 	cp a, 0x98

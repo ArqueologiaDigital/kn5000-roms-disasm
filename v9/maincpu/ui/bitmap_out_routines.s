@@ -261,7 +261,7 @@ BitMapOut_ByteData_RenderE:
 	ret
 
 BitMapOut_CheckDiskAndApply:
-	cp (0x8d38:16), 138
+	cp (MAIN_TITLE_CURRENT:16), 138
 	jp z, (Interrupt_ModeGuardCheck:24)
 	ld xwa, 0xffffffff
 	ld xbc, EVT_CHORD_SHOW

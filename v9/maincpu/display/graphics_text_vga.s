@@ -129,8 +129,8 @@ GraphicsRender_ByteData_Loop:
 	inc	1, iz
 	cp	iz, 192
 	jr	c, GraphicsRender_ByteData_Loop
-	ldw	(0x03ef9e:24), 4
-	ldw	(0x030460:24), 1
+	ldw	(PALETTE_INDEX_CACHED:24), 4
+	ldw	(PALETTE_UPDATE_FLAG:24), 1
 	popw	iz
 	inc	4, xsp
 	ret
@@ -180,8 +180,8 @@ GraphicsRender_ByteData_Loop3:
 	inc	1, iz
 	cp	iz, 224
 	jr	c, GraphicsRender_ByteData_Loop3
-	ldw	(0x03ef9e:24), 4
-	ldw	(0x030460:24), 1
+	ldw	(PALETTE_INDEX_CACHED:24), 4
+	ldw	(PALETTE_UPDATE_FLAG:24), 1
 	popw	iz
 	ret
 

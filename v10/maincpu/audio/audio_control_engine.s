@@ -616,7 +616,7 @@ FileIO_BytecodeData_Code_Epilogue10:
 FileIO_BytecodeData_Code_Skip43:
 	jr	FileIO_BytecodeData_Code_Epilogue11
 FileIO_BytecodeData_Code_Skip44:
-	ld	a, (36152:16)
+	ld	a, (MAIN_TITLE_CURRENT:16)
 	cp	a, 211
 	jr	z, FileIO_BytecodeData_Code_Skip45
 	cp	a, 210
@@ -670,7 +670,7 @@ FileIO_BytecodeData_Code_Epilogue11:
 FileIO_BytecodeData_Code_Skip47:
 	jr	FileIO_BytecodeData_Code_Epilogue12
 FileIO_BytecodeData_Code_Skip48:
-	ld	a, (36152:16)
+	ld	a, (MAIN_TITLE_CURRENT:16)
 	cp	a, 211
 	jr	z, FileIO_BytecodeData_Code_Skip49
 	cp	a, 210
@@ -3344,7 +3344,7 @@ CtrlPanel_SetBit3_OnStyleD0D3:
 	; --- Sub 4: conditionally set bit 3 at (0x8f25) based on (0x8d38) (33 bytes) ---
 	lda	xwa, (0x8f25:16)
 	resm	3, (xwa)
-	ld	c, (0x8d38:16)
+	ld	c, (MAIN_TITLE_CURRENT:16)
 	cp c, 0xd3
 	jr z, CtrlPanel_SetBit3
 	cp c, 0xd2

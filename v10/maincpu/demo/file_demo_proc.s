@@ -327,7 +327,7 @@ ApPreControl_Exit:
 
 FDemo_MultiGuardCheck:
 	; --- Routine 1: multi-guard check, return HL=1 or 0 (30 bytes) ---
-	cp	(0x8d38:16), 228
+	cp	(MAIN_TITLE_CURRENT:16), 228
 	jr nz, Banner_ReturnZero
 	cpw	(0x28b4:16), 0
 	jr nz, Banner_ReturnZero
@@ -673,20 +673,20 @@ Demo_SelectEntry_ByteTable:
 	jr	z, Demo_SelectEntry_ByteTable_Skip2
 Demo_SelectEntry_ByteTable_Skip:
 	res	3, (0x28ad:16)
-	cp	(0x8d38:16), 228
+	cp	(MAIN_TITLE_CURRENT:16), 228
 	call	nz, (0xf229f1:24)
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	ldw	(0x25b84:24), 1
 	ld	(0x8f4e:16), 4
-	cp	(0x8d38:16), 228
+	cp	(MAIN_TITLE_CURRENT:16), 228
 	call	nz, (0xf22a4d:24)
 	ld	a, (0x28a4:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
 Demo_SelectEntry_ByteTable_Skip2:
 	set	3, (0x28ad:16)
-	cp	(0x8d38:16), 228
+	cp	(MAIN_TITLE_CURRENT:16), 228
 	jr	z, Demo_SelectEntry_ByteTable_Skip3
 	call	CDlikeSwTtl_SetRecordAndNotify
 	ld	(4440:16), 0
@@ -707,7 +707,7 @@ Demo_SelectEntry_ProcessSongList:
 	calr Demo_PreSetupAndScan
 	calr Demo_WaitForDisplayBit
 	calr Banner_Loop_Check
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	call nz, (SeqInit_FinalEvent:24)
 	jrl Demo_SelectEntry_AfterSongLoad
 
@@ -718,7 +718,7 @@ Demo_SelectEntry_ManualSelect:
 	ld a, (0x28a4:16)
 	cp a, (4439:16)
 	jr z, Demo_SelectEntry_StartAutoPlay
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	call nz, (SeqInit_FinalEvent:24)
 
 Demo_SelectEntry_ToCountdown:
@@ -726,7 +726,7 @@ Demo_SelectEntry_ToCountdown:
 
 Demo_SelectEntry_StartAutoPlay:
 	ld (0x8f4e:16), 4
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	call nz, (SeqInit_FinalEvent:24)
 	ld a, (0x28a4:16)
 	extz wa
@@ -773,7 +773,7 @@ Demo_SelectEntry_Debounce:
 	cp a, 0:i3
 	ret nz
 	set 3, (0x28ad:16)
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	call nz, (CDlikeSwTtl_SetRecordAndNotify:24)
 	pushw 0x1
 	ldw wa, 0xa8
@@ -783,7 +783,7 @@ Demo_SelectEntry_Debounce:
 	ret
 
 Demo_SelectEntry_AfterSongLoad:
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	call nz, (SeqInit_FinalEvent:24)
 	ld a, (0x28a4:16)
 	extz wa
@@ -791,7 +791,7 @@ Demo_SelectEntry_AfterSongLoad:
 	ld (0x8f4e:16), 4
 	bit 3, (0x28ad:16)
 	ret z
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	jr z, Demo_SelectEntry_CheckSongCount
 	cp (4440:16), 18
 	jr c, Demo_SelectEntry_UpdateDisplay
@@ -831,7 +831,7 @@ Demo_SelectEntry_LoadPattern:
 Demo_SelectEntry_DrawSecondary:
 	bit 3, (0x28ad:16)
 	ret z
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	ret z
 	ld a, (4440:16)
 	extz wa
@@ -876,7 +876,7 @@ Demo_SelectEntry_StartPlayback:
 	call Seq_ResetAndRestartAccompaniment
 	call Audio_CheckSubsystemReady
 	ldmm8 4439, 0x28a4
-	cp (0x8d38:16), 228
+	cp (MAIN_TITLE_CURRENT:16), 228
 	ret z
 	call SeqInit_PostDispatchEvent
 	ret

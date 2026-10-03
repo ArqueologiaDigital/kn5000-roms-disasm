@@ -14238,7 +14238,7 @@ AccPatch_DetectModeChange:
 	cp a, (0x34dc:16)
 	jr z, AccPatch_CopySlotsExit
 	ld (0x34dc:16), a
-	cp (0x8d38:16), 181
+	cp (MAIN_TITLE_CURRENT:16), 181
 	jr nz, AccPatch_CopySlotsExit
 	push xwa
 	push xhl
@@ -16278,15 +16278,15 @@ AccPatch_ReadModeFlags:
 	ld a, (0x34cf:16)
 	and a, 0xf3
 	ld (0x34cf:16), a
-	cp (0x8d38:16), 181
+	cp (MAIN_TITLE_CURRENT:16), 181
 	jr z, AccPatch_ReadModeFlags_Active
 	jr AccPatch_SetFlagExit
 
 AccPatch_ReadModeFlags_Active:
-	ld xwa, (0x02749a:24)
-	or xwa, (0x02749e:24)
+	ld xwa, (TRANSITION_PROGRESS:24)
+	or xwa, (TRANSITION_TIMER:24)
 	ld (4560:16), xwa
-	ld xwa, (0x02749e:24)
+	ld xwa, (TRANSITION_TIMER:24)
 	ld (0x39e0:16), xwa
 	ld xwa, (4560:16)
 	and xwa, 0x200
@@ -18869,7 +18869,7 @@ AccTiming_StoreResult:
 
 AccTiming_CompareStyles:
 	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8d38:16)
+	cp a, (MAIN_TITLE_CURRENT:16)
 	jr nz, AccTiming_Return
 
 AccTiming_Return:
@@ -18984,7 +18984,7 @@ ToneGen_ParseAllEvents:
 	ld c, (0x3741:16)
 	calr ToneGen_ParseEventBuffer
 	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8d38:16)
+	cp a, (MAIN_TITLE_CURRENT:16)
 	jr nz, ToneGen_SaveRegsAndCall
 	ld (0xe3e0:16), 16
 
@@ -19919,7 +19919,7 @@ AccPlayback_ReadEvt_OverflowOK:
 	ld (0x3712:16), 4
 	ld (0x3717:16), 255
 	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8d38:16)
+	cp a, (MAIN_TITLE_CURRENT:16)
 	jr nz, ToneGenSetup_Done
 	ld (0xe3e0:16), 16
 
@@ -22039,7 +22039,7 @@ RhythmFunc_NullRet:
 AccPlayback_PartAssign_DataBlock:
 	nop
 	nop
-	cp	(0x8d38:16), 182
+	cp	(MAIN_TITLE_CURRENT:16), 182
 	jr	z, 2
 	jr	60
 	ld	a, (0x370f:16)
@@ -32159,7 +32159,7 @@ CstmCpTtl_Dispatch:
 	ld	(0x3a7e:16), 0
 	jrl	CstmCp_ReturnZero2
 CstmCpTtlFunc_Skip:
-	cp	(0x8d39:16), 238
+	cp	(MAIN_TITLE_PREVIOUS:16), 238
 	jrl	nz, CstmCp_ReturnZero2
 	ld	a, (0x3a7e:16)
 	cp	a, 2:i3
@@ -32744,7 +32744,7 @@ MainCmpCp_HandleEvent03:
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	cp (0x8d38:16), 184
+	cp (MAIN_TITLE_CURRENT:16), 184
 	jr nz, MemCopy_SetupParams
 	lda xbc, (xsp + 4)
 	ld a, (xbc + 3)
@@ -32785,7 +32785,7 @@ MainCmpCp_MemCopyAndFinalize:
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld (xiz + 13), 0x0
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0xb8
 	jr nz, MainCmpSet_Init
 	ld xwa, 0xb8001f
@@ -33094,7 +33094,7 @@ MainMspBnkNameFunc:
 	ret
 
 SoundCtrl_SendAccTempo:
-	cp (0x8d38:16), 181
+	cp (MAIN_TITLE_CURRENT:16), 181
 	ret nz
 	ld xwa, 0xb5001e
 	ld xbc, EVT_PAINT
@@ -33103,7 +33103,7 @@ SoundCtrl_SendAccTempo:
 	ret
 
 SoundCtrl_SendTempoScaled:
-	cp (0x8d38:16), 181
+	cp (MAIN_TITLE_CURRENT:16), 181
 	ret nz
 	calr SoundCtrl_CalcScaledTempo
 	ld xwa, 0xb50002
@@ -33166,7 +33166,7 @@ AccGuard_SendProgramChange:
 
 
 AccSeq_DeliverC9_0009:
-	cp (0x8d38:16), 201
+	cp (MAIN_TITLE_CURRENT:16), 201
 	ret nz
 	ld xwa, 0xc90009
 	ld xbc, EVT_PAINT
@@ -33175,7 +33175,7 @@ AccSeq_DeliverC9_0009:
 	ret
 
 AccSeq_DeliverC9_000A:
-	cp (0x8d38:16), 201
+	cp (MAIN_TITLE_CURRENT:16), 201
 	ret nz
 	ld xwa, 0xc9000a
 	ld xbc, EVT_PAINT

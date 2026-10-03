@@ -1232,7 +1232,7 @@ SQTR_DISPATCH_TABLE_2_CASE2:
 	jr nz, CDlikeSwTtl_ReturnZero2
 	cp (GLOBAL_ERROR_CODE:16), 35
 	scc16 z, bc
-	cp (0x8d39:16), 238
+	cp (MAIN_TITLE_PREVIOUS:16), 238
 	scc16 z, wa
 	and wa, bc
 	jr z, SQTR_DISPATCH_TABLE_2_CASE5

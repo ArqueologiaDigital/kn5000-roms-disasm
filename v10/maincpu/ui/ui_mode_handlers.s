@@ -415,7 +415,7 @@ EffectMode_ClampAndLookupPreset:
 	ld wa, 1:i3
 
 EffectMode_ClampAndLookup_Clamped:
-	ld c, (0x8d38:16)
+	ld c, (MAIN_TITLE_CURRENT:16)
 	cp c, 0xc2
 	jr z, EffectMode_LookupPreset_BankC2C5
 	cp c, 0xc5
@@ -439,7 +439,7 @@ EffectMode_LookupPreset_Compute:
 
 EffectMode_DisplayPresetName:
 	pushw iz
-	ld c, (0x8d38:16)
+	ld c, (MAIN_TITLE_CURRENT:16)
 	cp c, 0xc0
 	jr z, EffectMode_DisplayName_ValidMode
 	cp c, 0xc2
@@ -743,7 +743,7 @@ EffectMode_BackupParamBlock:
 	ret
 
 EffectMode_CopyHoldPedalBits:
-	ld e, (0x8d38:16)
+	ld e, (MAIN_TITLE_CURRENT:16)
 	cp e, 0xc0
 	ret z
 	cp e, 0xc2
@@ -796,7 +796,7 @@ EffectMode_SetRegion_Apply:
 	ld (xbc), a
 	or a, h
 	ld (xbc), a
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0xc2
 	jr z, EffectMode_CheckPedalType
 	cp a, 0xc5

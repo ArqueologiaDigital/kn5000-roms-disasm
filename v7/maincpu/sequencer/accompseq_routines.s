@@ -1533,7 +1533,7 @@ AccompSeq_GuardedNoteOff:
 	jr z, AccompSeq_GuardedNote_Return
 	cp (0x8c98:16), 0x13
 	jr z, AccompSeq_GuardedNote_Return
-	cp (0x8c9c:16), 0xc8
+	cp (MAIN_TITLE_CURRENT:16), 0xc8
 	jr z, AccompSeq_GuardedNote_Return
 	push XWA
 	push XHL

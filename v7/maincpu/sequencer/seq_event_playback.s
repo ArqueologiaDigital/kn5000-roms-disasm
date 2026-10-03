@@ -1971,7 +1971,7 @@ AccPlay_TrackMeasureChange:
 	inc	1, hl
 AccPlay_MeasureIncrement:
 	ld	(32370:16), hl
-	cp	(35996:16), 201
+	cp	(MAIN_TITLE_CURRENT:16), 201
 	jr	nz, AccPlay_MeasureNotifyDone
 	push	xwa
 	push	xhl
@@ -1998,7 +1998,7 @@ AccPlay_TrackVoiceCount:
 	ld hl, (0x7d7e:16)
 	cp WA,HL
 	jr z, AccPlay_VoiceCountRet
-	cp (0x8c9c:16), 0xc9
+	cp (MAIN_TITLE_CURRENT:16), 0xc9
 	jr nz, AccPlay_VoiceCountNotify
 	push XWA
 	push XHL
@@ -5256,7 +5256,7 @@ AccWrap_SetMinVelocity:
 	ld c, a
 
 	; cpdi8 (0x8d38), 236 (v7 patched)
-	cp	(35996:16), 236
+	cp	(MAIN_TITLE_CURRENT:16), 236
 
 	ret nz
 

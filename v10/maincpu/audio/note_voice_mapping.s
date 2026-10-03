@@ -526,7 +526,7 @@ AccNoteOn_AutoPlayCheck:
 	cp iz, wa
 	jr c, AccNoteOn_AutoPlayLoop
 	call CompIface_ResetPedal
-	cp (0x8d38:16), 236
+	cp (MAIN_TITLE_CURRENT:16), 236
 	jr nz, AccNoteOn_EmitVoiceLoop_Init
 	ld iz, 0:i3
 	ld e, 0x7f:opc
@@ -25989,7 +25989,7 @@ CommPort_StatusCheckAndSend:
 CommPort_StatusCheck_Compare:
 	cp a, c
 	jr nz, CheckValidityReturn_SetByteFF
-	ld wa, (0x8d38:16)
+	ld wa, (MAIN_TITLE_CURRENT:16)
 	cp a, 0xd6
 	jr z, Note_CheckValidityReturn
 	cp a, 0xe

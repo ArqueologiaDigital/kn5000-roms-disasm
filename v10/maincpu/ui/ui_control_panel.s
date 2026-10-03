@@ -1941,7 +1941,7 @@ UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7				; Check key-scan enable (bit 7 of RAM[0x0406])
 	cp hl, 0:i3				; Returns HL=1 if enabled
 	ret z					; Return if scanning disabled
-	ld a, (0x8d38:16); Load current UI state ID
+	ld a, (MAIN_TITLE_CURRENT:16); Load current UI state ID
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
 	lda xbc, (SSF_PresentationGateTable:24); Base of state->key-map pointer table
@@ -2148,9 +2148,9 @@ RefreshApTask:
 	ld (0xe3e4:16), 255
 	ld (0xe3e6:16), 255
 	ld xwa, 0:i3
-	ld (0x02749a:24), xwa
-	ld (0x02749e:24), xwa
-	ld (0x0274a2:24), xwa
+	ld (TRANSITION_PROGRESS:24), xwa
+	ld (TRANSITION_TIMER:24), xwa
+	ld (TRANSITION_FLAGS:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, EVT_SW_ON
 	call DeleteEvent
@@ -2182,9 +2182,9 @@ RefreshApTask:
 
 RefreshSwEvent:
 	ld xwa, 0:i3
-	ld (0x02749a:24), xwa
-	ld (0x02749e:24), xwa
-	ld (0x0274a2:24), xwa
+	ld (TRANSITION_PROGRESS:24), xwa
+	ld (TRANSITION_TIMER:24), xwa
+	ld (TRANSITION_FLAGS:24), xwa
 	ld xwa, 0xffffffff
 	ld xbc, EVT_SW_ON
 	call DeleteEvent
@@ -2759,9 +2759,9 @@ MainTitleControl:
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	ld xwa, 0:i3
-	ld (0x0274a2:24), xwa
-	ld (0x02749e:24), xwa
-	ld (0x02749a:24), xwa
+	ld (TRANSITION_FLAGS:24), xwa
+	ld (TRANSITION_TIMER:24), xwa
+	ld (TRANSITION_PROGRESS:24), xwa
 	jrl UIWidget_ReturnZero
 
 ; =============================================================================
@@ -2782,28 +2782,28 @@ SeqState_TransitionMode:
 	ld (0x8d37:16), a
 	ldmm8 0x8d39, 0x8d38
 	ld (SEQ_MASTER_STATE:16), l
-	ld (0x8d38:16), l
+	ld (MAIN_TITLE_CURRENT:16), l
 	ldw wa, 0x61
 	jr MainTitleCtrl_SetIndicatorAndClear
 
 MainTitleCtrl_SaveAndTransition:
 	ldmm8 0x8d39, 0x8d38
-	ld (0x8d38:16), l
+	ld (MAIN_TITLE_CURRENT:16), l
 	ldw wa, 0x61
 
 MainTitleCtrl_SetIndicatorAndClear:
 	call CtrlPanel_SetIndicatorBit
 	ld xwa, 0:i3
-	ld (0x0274a2:24), xwa
-	ld (0x02749e:24), xwa
-	ld (0x02749a:24), xwa
+	ld (TRANSITION_FLAGS:24), xwa
+	ld (TRANSITION_TIMER:24), xwa
+	ld (TRANSITION_PROGRESS:24), xwa
 	call AudioMode_ResetVoiceState
 	jrl UIWidget_ReturnZero
 
 SeqState_DemoModeHandler:
 	cp xde, 0x8
 	jrl nz, UIWidget_ReturnZero
-	cp (0x8d38:16), a
+	cp (MAIN_TITLE_CURRENT:16), a
 	jr nz, SeqDemo_SaveCurrentState
 	ld (0x8d37:16), a
 
@@ -2957,7 +2957,7 @@ UI_PostTimerResetEvent:
 
 SeqState_HasModeChanged:
 	ld a, (SEQ_MASTER_STATE:16)
-	cp a, (0x8d38:16)
+	cp a, (MAIN_TITLE_CURRENT:16)
 	scc16 nz, hl
 	ret
 

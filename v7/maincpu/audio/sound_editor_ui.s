@@ -7359,7 +7359,7 @@ SeMenu_PopupDialog_Close:
 	jr c, SeMenu_PopupDialog_Close
 
 SeMenu_PopupDialog_Close_Data:
-	ld	a, (35996:16)
+	ld	a, (MAIN_TITLE_CURRENT:16)
 	cp	(134200:24), a
 	jr	nz, SeMenu_ValueEditor_Init	; -> 0xF0E9F0
 	cp	a, 32
@@ -7406,7 +7406,7 @@ SeMenu_ValueEditor_Draw:
 	lda	xbc, (xwa+5)
 	cp	e, 9
 	jr	nz, SeMenu_ValueEditor_Increment
-	cp	(35996:16), 34
+	cp	(MAIN_TITLE_CURRENT:16), 34
 	jr	nz, SeMenu_ValueEditor_Data3
 	ld	a, (xbc)
 	cp	a, 34
@@ -7425,7 +7425,7 @@ SeMenu_ValueEditor_Increment:
 	jr nz, SeMenu_ValueEditor_Redraw
 
 SeMenu_ValueEditor_Decrement:
-	cp	(35996:16), 38
+	cp	(MAIN_TITLE_CURRENT:16), 38
 	jr	nz, SeMenu_ValueEditor_Data3
 	ld	a, (xbc)
 	cp	a, 38
@@ -7441,14 +7441,14 @@ SeMenu_ValueEditor_ClampAndStore:
 SeMenu_ValueEditor_Redraw:
 	cp	e, 16
 	jr	nz, SeMenu_ValueEditor_Complete
-	ldb_d8	a, (0x8c9c)
+	ldb_d8	a, (MAIN_TITLE_CURRENT)
 	cp	a, (xbc)
 	jr	z, SeMenu_ValueEditor_Cancel
 	jrl	SeMenu_ListSelector_ScrollDown
 SeMenu_ValueEditor_Complete:
 	cp	e, 18
 	jr	nz, SeMenu_ValueEditor_Data3
-	cp	(0x8c9c:16), 32
+	cp	(MAIN_TITLE_CURRENT:16), 32
 	jr	nz, SeMenu_ValueEditor_Data3
 	ld	a, (xbc)
 	cp	a, 32
@@ -7511,7 +7511,7 @@ SeMenu_ListSelector_Draw:
 	jr SeMenu_ListSelector_ScrollDown
 
 SeMenu_ListSelector_HandleInput:
-	ld	a, (35996:16)
+	ld	a, (MAIN_TITLE_CURRENT:16)
 	cp	c, a
 	jr	nz, SeMenu_ListSelector_ScrollDown	; -> 0xF0EB3B
 	cp	a, 32
@@ -7787,7 +7787,7 @@ SeMenu_NameEditor_End:
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 64
 	sla	a, 1
-	cp	(0x8c9c:16), 33
+	cp	(MAIN_TITLE_CURRENT:16), 33
 	jr	nz, SeMenu_NameEditor_End_Skip
 	ldb_d8	w, (0x66a)
 	and	w, 127
@@ -7796,7 +7796,7 @@ SeMenu_NameEditor_End:
 	call	SeMenu_NameEdit_CheckBit7
 	jr	SeMenu_NameEditor_End_Return
 SeMenu_NameEditor_End_Skip:
-	cp	(0x8c9c:16), 58
+	cp	(MAIN_TITLE_CURRENT:16), 58
 	jr	nz, SeMenu_NameEditor_End_Return
 	ldb_d8	w, (0x660)
 	and	w, 127

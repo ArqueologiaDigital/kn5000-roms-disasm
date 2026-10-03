@@ -33,3 +33,15 @@
 	.equ MIDISEQ_SPARE_BUF_PTR,	0xbcb0	; the one MidiSeq_SwapActiveBuffers exchanges it with
 	.equ MIDISEQ_ACTIVE_BLOCK_PTR,	0xbc54	; the second pair's active pointer (its +10 / +14 words are compared)
 	.equ MIDISEQ_SPARE_BLOCK_PTR,	0xbc58	; and its spare
+; SeqState_TransitionMode / MainTitleCtrl_SaveAndTransition: `ldmm8 0x8d39, 0x8d38 / ld (0x8d38), l` --
+; the previous value saved, the new one stored; their header names the transition variables
+	.equ MAIN_TITLE_CURRENT,	0x8d38	; the title state MainTitleCtrl_* sets
+	.equ MAIN_TITLE_PREVIOUS,	0x8d39	; its previous value, saved before each change
+	.equ TRANSITION_PROGRESS,	0x2749a	; transition progress counter (cleared on every title change)
+	.equ TRANSITION_TIMER,		0x2749e	; transition timer
+	.equ TRANSITION_FLAGS,		0x274a2	; transition type / flags
+; the palette routine's header (ui/ui_window_procs.s) and UpdateScreen's (ui/ui_widget_defs.s)
+	.equ PALETTE_DATA_PTR_CACHED,	0x3ef94	; current palette data pointer (cached)
+	.equ PALETTE_INDEX_CACHED,	0x3ef9e	; current palette index (cached); a pending update is checked here
+	.equ PALETTE_UPDATE_FLAG,	0x30460	; set to 1 to trigger the VRAM palette update
+	.equ DIRTY_BBOX,		0x30456	; dirty bounding box Gfx_BlitDirtyRegions examines

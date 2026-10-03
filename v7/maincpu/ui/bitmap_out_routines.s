@@ -262,7 +262,7 @@ BitMapOut_ByteData_RenderE:
 	calr	BitMapOut_StorePresetValue
 	ret
 BitMapOut_CheckDiskAndApply:
-	cp (0x8c9c:16), 0x8a
+	cp (MAIN_TITLE_CURRENT:16), 0x8a
 	jp z, (Interrupt_ModeGuardCheck:24)
 	ld XWA,0xffffffff
 	ld XBC,EVT_CHORD_SHOW

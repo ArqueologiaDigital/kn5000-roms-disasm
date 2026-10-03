@@ -7080,7 +7080,7 @@ CaptureLcd:
 	cp	xhl, 40
 	jrl	nz, FileIO_ClosePath
 	ld	iz, 0:i3
-	ld	xwa, (0x03ef94:24)
+	ld	xwa, (PALETTE_DATA_PTR_CACHED:24)
 	or	xwa, xwa
 	jr	z, CaptureLcd_WritePaletteNoOr94
 CaptureLcd_WritePaletteOr94:
@@ -7330,7 +7330,7 @@ ChangePalette_Impl:
 	add xwa, xbc
 	ld xwa, (xwa)
 SubCPU_ToneDispatch_Target12:
-	ld (0x03ef94:24), xwa
+	ld (PALETTE_DATA_PTR_CACHED:24), xwa
 	ldi_erpw 0xfa, 0x20, 0x00
 
 UIRender_IterateCallbacks:
@@ -7338,14 +7338,14 @@ UIRender_IterateCallbacks:
 	ldto_werp BC, 0xfa
 	extz xbc
 	sll xbc, 2
-	add xbc, (0x03ef94:24)
+	add xbc, (PALETTE_DATA_PTR_CACHED:24)
 	ld xbc, (xbc)
 	call SetPaletteRGB
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0xe0, 0x00
 	jr c, UIRender_IterateCallbacks
-	ld (0x03ef9e:24), iz
-	ldw (0x030460:24), 0x0001
+	ld (PALETTE_INDEX_CACHED:24), iz
+	ldw (PALETTE_UPDATE_FLAG:24), 0x0001
 	pop xiz
 	ret
 

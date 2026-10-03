@@ -7372,7 +7372,7 @@ SeMenu_PopupDialog_Close:
 	jr c, SeMenu_PopupDialog_Close
 
 SeMenu_PopupDialog_Close_Data:
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp (0x020c38:24), a
 	jr nz, SeMenu_ValueEditor_Init
 	cp a, 0x20
@@ -7387,7 +7387,7 @@ SeMenu_PopupDialog_Close_Data:
 	call (xhl)
 
 SeMenu_ValueEditor_Init:
-	cp (0x8d38:16), 32
+	cp (MAIN_TITLE_CURRENT:16), 32
 	jrl nz, SeMenu_ValueEditor_Data3
 	cp (0x020c38:24), 0x10
 	jrl nz, SeMenu_ValueEditor_Data3
@@ -7413,7 +7413,7 @@ SeMenu_ValueEditor_Draw:
 	lda xbc, (xwa + 5)
 	cp e, 0x9
 	jr nz, SeMenu_ValueEditor_Increment
-	cp (0x8d38:16), 34
+	cp (MAIN_TITLE_CURRENT:16), 34
 	jr nz, SeMenu_ValueEditor_Data3
 	ld a, (xbc)
 	cp a, 0x22
@@ -7433,7 +7433,7 @@ SeMenu_ValueEditor_Increment:
 	jr nz, SeMenu_ValueEditor_Redraw
 
 SeMenu_ValueEditor_Decrement:
-	cp (0x8d38:16), 38
+	cp (MAIN_TITLE_CURRENT:16), 38
 	jr nz, SeMenu_ValueEditor_Data3
 	ld a, (xbc)
 	cp a, 0x26
@@ -7450,7 +7450,7 @@ SeMenu_ValueEditor_ClampAndStore:
 SeMenu_ValueEditor_Redraw:
 	cp e, 0x10
 	jr nz, SeMenu_ValueEditor_Complete
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, (xbc)
 	jr z, SeMenu_ValueEditor_Cancel
 	jrl SeMenu_ListSelector_ScrollDown
@@ -7458,7 +7458,7 @@ SeMenu_ValueEditor_Redraw:
 SeMenu_ValueEditor_Complete:
 	cp e, 0x12
 	jr nz, SeMenu_ValueEditor_Data3
-	cp (0x8d38:16), 32
+	cp (MAIN_TITLE_CURRENT:16), 32
 	jr nz, SeMenu_ValueEditor_Data3
 	ld a, (xbc)
 	cp a, 0x20
@@ -7522,7 +7522,7 @@ SeMenu_ListSelector_Draw:
 	jr SeMenu_ListSelector_ScrollDown
 
 SeMenu_ListSelector_HandleInput:
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp c, a
 	jr nz, SeMenu_ListSelector_ScrollDown
 	cp a, 0x20
@@ -7799,7 +7799,7 @@ SeMenu_NameEditor_End:
 	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 64
 	sla	a, 1
-	cp	(0x8d38:16), 33
+	cp	(MAIN_TITLE_CURRENT:16), 33
 	jr	nz, SeMenu_NameEditor_End_Skip
 	ld	w, (1642:16)
 	and	w, 127
@@ -7808,7 +7808,7 @@ SeMenu_NameEditor_End:
 	call	SeMenu_NameEdit_CheckBit7
 	jr	SeMenu_NameEditor_End_Code_Return
 SeMenu_NameEditor_End_Skip:
-	cp	(0x8d38:16), 58
+	cp	(MAIN_TITLE_CURRENT:16), 58
 	jr	nz, SeMenu_NameEditor_End_Code_Return
 	ld	w, (1632:16)
 	and	w, 127

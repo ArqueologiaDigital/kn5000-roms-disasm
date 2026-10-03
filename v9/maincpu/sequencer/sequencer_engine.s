@@ -745,7 +745,7 @@ SeqPlay_SelectStopCommand:
 	jr SeqPlay_SendStopAndClearParts
 
 SeqPlay_SelectStopCommand_Check88:
-	cp (0x8d39:16), 136
+	cp (MAIN_TITLE_PREVIOUS:16), 136
 	jr nz, SeqPlay_SelectStopCommand_Default18
 	ldw wa, 0x3b
 	jr SeqPlay_SendStopAndClearParts
@@ -4930,7 +4930,7 @@ AccPedalCfg_StoreValues:
 AccPedalCfg_CheckBit6Replay:
 	bit_erpb 0xfb, 0x06
 	jr z, AccPedalCfg_CheckBit7Alt
-	cp (0x8d38:16), 129
+	cp (MAIN_TITLE_CURRENT:16), 129
 	jr nz, AccPedalConfig_ApplyChannelSettings
 	bit 5, (0x28b3:16)
 	jr z, AccPedalConfig_ApplyChannelSettings
@@ -7005,7 +7005,7 @@ NotePool_DataBlock_8BA:
 	and	c, a
 	and	c, 64
 	ret	z
-	cp	(0x8d38:16), 138
+	cp	(MAIN_TITLE_CURRENT:16), 138
 	ret	z
 	cpw	(0xf19e:16), 0
 	ret	z
@@ -7062,7 +7062,7 @@ SeqStart_CheckPlaybackBit:
 
 SeqStart_LoadPositionAndMode:
 	ld wa, (9832:16)
-	ld c, (0x8d38:16)
+	ld c, (MAIN_TITLE_CURRENT:16)
 	cp c, 0x85
 	jr z, SeqStart_HandleMode85_86
 	cp c, 0x86
@@ -19519,7 +19519,7 @@ SeqPlay_BufferUpdateBlock:
 	ld	wa, (9832:16)
 	cp	(SEQ_MASTER_STATE:16), 133
 	jr	z, SeqPlay_StopAndClearSequence_Skip4
-	cp	(36152:16), 134
+	cp	(MAIN_TITLE_CURRENT:16), 134
 	jr	nz, SeqPlay_StopAndClearSequence_Skip5
 SeqPlay_StopAndClearSequence_Skip4:
 	cp wa, (9506:16)
@@ -21532,7 +21532,7 @@ SeqVoice_DispatchEventToHandler:
 SeqVoice_ComputeStatusFlags:
 	dec 2, xsp
 	ld (xsp), a
-	ld e, (0x8d38:16)
+	ld e, (MAIN_TITLE_CURRENT:16)
 	ld bc, 1:i3
 	ld a, (xsp)
 	and a, 0xf
@@ -21841,7 +21841,7 @@ EffEditMain:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xde
-	ld e, (0x8d38:16)
+	ld e, (MAIN_TITLE_CURRENT:16)
 	cp xbc, EVT_CNG_EFF_PARA
 	jrl z, EffEdit_HandleDirectWrite
 	cp xbc, EVT_CNG_EFF_TYPE
@@ -21857,7 +21857,7 @@ EffEditMain:
 	ld xbc, EVT_RET_EFF_FIX
 	ld xde, 0:i3
 	call ApDeliveryEvent
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0xd6
 	jr z, EffEdit_DispatchTypeD6
 	cp a, 0xe
@@ -22089,7 +22089,7 @@ EffEdit_DSPConfigBlock:
 	call	EffEdit_DSPConfigBlock_Helper
 	cp	hl, 0:i3
 	jrl	lt, EffEdit_DSPConfigBlock_Epilogue
-	ld	a, (0x8d38:16)
+	ld	a, (MAIN_TITLE_CURRENT:16)
 	cp	a, 214
 	jrl	z, EffEdit_DSPConfigBlock_Skip4
 	cp	a, 14
@@ -22333,7 +22333,7 @@ EffEdit_ValidateLoop:
 	ld (xwa+), 0x00
 	cp xwa, xde
 	jr c, EffEdit_ValidateLoop
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0xd6
 	jrl z, EffEdit_ReadParamD6
 	cp a, 0xe
@@ -23306,7 +23306,7 @@ NoteEdit_ScrollSetZero:
 	ld (xsp + 2), xwa
 
 NoteEdit_ScrollDispatchMode:
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0x85
 	jr nz, NoteEdit_ScrollCheck86
 	ld xwa, (xsp + 2)
@@ -23347,7 +23347,7 @@ NoteEdit_ScrollInactive:
 NoteEdit_ScrollActivate:
 	set 0, c
 	ld (0x28b2:16), c
-	cp (0x8d38:16), 133
+	cp (MAIN_TITLE_CURRENT:16), 133
 	jr nz, SeqAccomp_InitAndReturn
 	ldw wa, 0xab
 	call SoundCtrl_SendCommand
@@ -23529,7 +23529,7 @@ NoteEditSy_ScrollCase2:
 	jp ApDeliveryEvent
 
 NoteEditSy_SendModeScrollReset:
-	ld c, (0x8d38:16)
+	ld c, (MAIN_TITLE_CURRENT:16)
 	ld xwa, (0x2972:16)
 	cp c, 0x99
 	jr z, NoteEditSy_ScrollCase4
@@ -23593,7 +23593,7 @@ NoteEditSy_DeliverReturn:
 	ret
 
 SeqMode_SendStatusUpdate:
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0x87
 	jr z, SeqMode_Status87
 	cp a, 0x85
@@ -23621,7 +23621,7 @@ SeqMode_StatusDeliver:
 	ret
 
 SeqAccomp_SendStopNotify:
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0x85
 	jr z, SeqAccomp_StopNotifyDeliver
 	cp a, 0x87
@@ -23662,7 +23662,7 @@ SngSel_HandlePrevSong:
 	inc 1, a
 	ld (7502:16), a
 	call SetWall_LoadToneGenData
-	cp (0x8d38:16), 129
+	cp (MAIN_TITLE_CURRENT:16), 129
 	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
 	ld xwa, 0:i3
@@ -23679,7 +23679,7 @@ SngSel_HandleNextSong:
 	dec 1, a
 	ld (7502:16), a
 	call SetWall_LoadToneGenData
-	cp (0x8d38:16), 129
+	cp (MAIN_TITLE_CURRENT:16), 129
 	jr nz, SeqAcc_ResetAndReinit
 	calr SeqVoice_DispatchAllEvents
 	ld xwa, 0:i3
@@ -24266,7 +24266,7 @@ SqRealRecTitleFunc:
 	jr z, SqRealRec_HandleExitState
 	cp xde, 0x2
 	jr nz, SqRealRec_ReturnZero
-	cp (0x8d39:16), 131
+	cp (MAIN_TITLE_PREVIOUS:16), 131
 	jr nz, SqRealRec_ReturnZero
 	cp (9980:16), 1
 	jr nz, SqRealRec_ReturnZero
@@ -24326,7 +24326,7 @@ SqPlayTitleFunc:
 	jr z, SqPlay_ReturnZero
 	bit 2, (1057:16)
 	jr nz, SqPlay_ReturnZero
-	cp (0x8d39:16), 130
+	cp (MAIN_TITLE_PREVIOUS:16), 130
 	jr z, SqPlay_ReturnZero
 	ldmm16 9832, 9500
 	call SeqPlay_InitStartState
@@ -24755,7 +24755,7 @@ EtmenuTtl_ReturnZero:
 	ret
 
 MainExeCall:
-	ld a, (0x8d38:16)
+	ld a, (MAIN_TITLE_CURRENT:16)
 	cp a, 0x91
 	jrl z, MainExe_Handle91
 	cp a, 0x8d
@@ -25298,7 +25298,7 @@ HelpLang_DispatchDataBlock:
 	cp	a, 49
 	ret	ugt
 	ld	(0x2970:16), a
-	cp	(36152:16), 231
+	cp	(MAIN_TITLE_CURRENT:16), 231
 	ret	nz
 	ld	e, (0x0340e4:24)
 	ld	c, (0x296e:16)
@@ -25375,9 +25375,9 @@ HelpLangChkMain:
 	jr z, HelpLang_LoadSlide
 	cp xbc, EVT_SHOW
 	jr nz, HelpLangChk_ReturnZero
-	cp (0x8d38:16), 231
+	cp (MAIN_TITLE_CURRENT:16), 231
 	jr nz, HelpLang_SetFlashAndLoadSlide
-	cp (0x8d39:16), 238
+	cp (MAIN_TITLE_PREVIOUS:16), 238
 	jr z, HelpLang_SetFlashAndLoadSlide
 	call Get_Region_Code
 	cp l, 3:i3

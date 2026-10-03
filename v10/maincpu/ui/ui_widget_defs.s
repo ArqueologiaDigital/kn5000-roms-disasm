@@ -19609,9 +19609,9 @@ Gfx_BlitDirtyRegions:
 	jrl z, SetChangeRect_Prologue
 	cpw (0x03045e:24), 0
 	jrl z, SetChangeRect_Prologue
-	cpw (0x030460:24), 0
+	cpw (PALETTE_UPDATE_FLAG:24), 0
 	jr z, Gfx_BlitDirty_ScanMatch
-	ld wa, (0x03ef9e:24)
+	ld wa, (PALETTE_INDEX_CACHED:24)
 	cp wa, 4:i3
 	jr nz, Gfx_BlitDirty_Prologue
 	cpw (0x03efa0:24), 4
@@ -19658,7 +19658,7 @@ Gfx_BlitDirty_ScanDone:
 	jr c, Gfx_BlitDirty_ScanDone
 
 Display_CheckScreenDimensions:
-	lda xwa, (0x030456:24)
+	lda xwa, (DIRTY_BBOX:24)
 	ld bc, (xwa + 6)
 	sub bc, (xwa + 2)
 	cp bc, 0xef
@@ -19674,12 +19674,12 @@ Display_CheckDim_Prologue:
 	call DisplayBuffer_Process
 
 Display_CheckDim_CheckWidth:
-	cpw (0x030460:24), 0
+	cpw (PALETTE_UPDATE_FLAG:24), 0
 	jr z, Display_CheckDim_CheckHeight
 	calr InitGraphics_SetupVRAM_Loop
-	ld wa, (0x03ef9e:24)
+	ld wa, (PALETTE_INDEX_CACHED:24)
 	ld (0x03efa0:24), wa
-	ldw (0x030460:24), 0x0000
+	ldw (PALETTE_UPDATE_FLAG:24), 0x0000
 	jr Display_CheckDim_Done
 
 Display_CheckDim_CheckHeight:
@@ -19691,7 +19691,7 @@ Display_CheckDim_Done:
 
 Display_CheckDim_Return:
 	ldw (0x03045e:24), 0x0000
-	lda xwa, (0x030456:24)
+	lda xwa, (DIRTY_BBOX:24)
 	ldw (xwa + 2), 0xf0
 	ldw (xwa), 0x140
 	ldw (xwa + 4), 0xffff
@@ -19726,7 +19726,7 @@ SetChangeRect:
 
 SetChangeRect_ClampLeft:
 	ldw (0x03045e:24), 0x0001
-	lda xde, (0x030456:24)
+	lda xde, (DIRTY_BBOX:24)
 	lda xbc, (xde + 2)
 	ld wa, (xiz + 2)
 	cp (xbc), wa
