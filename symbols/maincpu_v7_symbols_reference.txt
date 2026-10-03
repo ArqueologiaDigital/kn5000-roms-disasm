@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,459
-#   semantic names ........... 50,557 (98.2%)
+#   symbols .................. 51,464
+#   semantic names ........... 50,562 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -19567,6 +19567,7 @@ SeMenu_CopyWriteUpdate_Epilogue28 00F0D364
 SeMenu_CopyWriteUpdate_Skip34 00F0D3F8
 SeMenu_CopyWriteUpdate_Join23 00F0D3FA
 SeMenu_CopyWriteUpdate_Skip35 00F0D406
+SeMenu_CopyWriteUpdate_Skip88 00F0D428
 SeMenu_CopyWriteUpdate_Skip36 00F0D438
 SeMenu_CopyWriteUpdate_Skip37 00F0D43E
 SeMenu_CopyWriteUpdate_Join24 00F0D440
@@ -43373,8 +43374,12 @@ BitMapOut_UpdateWidget_TypeB 00FB59F8
 BitMapOut_UpdateWidget_PostDraw 00FB5A2C
 BitMapOut_UpdateWidget_Finalize 00FB5A4F
 BitMapOut_UpdateWidget_Done 00FB5A6A
-LoadRegion1_OpenSuccess_Data 00FB5B02
-FileIO_ByteBlock_DemoProc1_Helper4 00FB5B03
+BitMapOut_UpdateWidget_Done_Skip 00FB5ACF
+BitMapOut_UpdateWidget_Done_Join 00FB5AEF
+FileIO_ByteBlock_DemoProc1_Helper4 00FB5AF4
+FileIO_ByteBlock_DemoProc1_Helper5 00FB5AF5
+LoadRegion1_OpenSuccess_Helper 00FB5B02
+LoadRegion1_OpenSuccess_Helper2 00FB5B03
 BitMapOut_UpdateWidget_Finalize_Loop 00FB5B1D
 OneTchFUNC 00FB5B3F
 BitMapOut_ByteData_WidgetTable 00FB5B6D

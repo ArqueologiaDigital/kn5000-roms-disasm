@@ -5137,11 +5137,13 @@ SeMenu_CopyWriteUpdate_Skip35:
 	cp	a, w
 	jrl	ule, SeMenu_CopyWriteUpdate_Epilogue29
 	cp	a, 127
-	jr	nz, 13
+	jr	nz, SeMenu_CopyWriteUpdate_Skip88
 	ldto_berp a, 226
 	inc	2, a
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x00, 0x7f, 0xbf, 0x16, 0xcf
+	ld	(xhl+wa), 0x7f
+SeMenu_CopyWriteUpdate_Skip88:
+	bit	7, (xsp+22)
 	jr	z, SeMenu_CopyWriteUpdate_Skip37
 	ld	a, (xde)
 	cp	a, 3:i3

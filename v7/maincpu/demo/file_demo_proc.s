@@ -1797,7 +1797,7 @@ LoadRegion1_OpenSuccess:
 	cp hl, 0:i3
 	jr z, LoadRegion1_AltPmLoad
 	ld	wa, 0:i3
-	call LoadRegion1_OpenSuccess_Data
+	call LoadRegion1_OpenSuccess_Helper
 	ld xwa, 0x00000010
 	ld	bc, 0:i3
 	call FileIO_SeekAndReadBlock				; set region param
@@ -1818,7 +1818,7 @@ LoadRegion1_OpenSuccess:
 	ld iz, hl
 	ld	wa, 0:i3
 	ld bc, iz
-	call FileIO_ByteBlock_DemoProc1_Helper4
+	call LoadRegion1_OpenSuccess_Helper2
 	jr LoadRegion1_Finalize
 LoadRegion1_AltPmLoad:
 	call	PrePmLoad
@@ -3146,7 +3146,7 @@ FileIO_ByteBlock_DemoProc1_Skip2:
 	jr	lt, FileIO_ByteBlock_DemoProc1_Join
 	ld	wa, (xsp+36)
 	extz	wa
-	call	16472820
+	call	FileIO_ByteBlock_DemoProc1_Helper4
 	lda	xwa, (2020176:24)
 	add	xwa, (xsp+0x4)
 	ld	xbc, (xsp+8)
@@ -3156,7 +3156,7 @@ FileIO_ByteBlock_DemoProc1_Skip2:
 	ld	wa, (xsp+36)
 	extz	wa
 	ld	bc, iz
-	call	16472821
+	call	FileIO_ByteBlock_DemoProc1_Helper5
 	jr	FileIO_ByteBlock_DemoProc1_Join
 FileIO_ByteBlock_DemoProc1_Skip3:
 	ldw	iz, 65434
@@ -3223,7 +3223,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	jrl	lt, FileIO_ByteBlock_DemoProc1_Join2
 	ld	wa, (xsp+36)
 	extz	wa
-	call	LoadRegion1_OpenSuccess_Data
+	call	LoadRegion1_OpenSuccess_Helper
 	lda	xwa, (2020176:24)
 	add	xwa, (xsp+0x4)
 	ld	xbc, 16
@@ -3258,7 +3258,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	ld	wa, (xsp+36)
 	extz	wa
 	ld	bc, iz
-	call	FileIO_ByteBlock_DemoProc1_Helper4
+	call	LoadRegion1_OpenSuccess_Helper2
 	jr	FileIO_ByteBlock_DemoProc1_Join2
 FileIO_ByteBlock_DemoProc1_Skip6:
 	ldw	iz, 65434
