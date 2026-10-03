@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,641
+#   symbols .................. 51,634
 #   semantic names ........... 50,821 (98.4%)
-#   positional names ......... 820
+#   positional names ......... 813
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -20285,7 +20285,6 @@ SeScreenData_0x0833 00F11439
 SeScreenData_0x085A 00F11460
 SeScreenData_0x0864 00F1146A
 SeScreenData_0x086E 00F11474
-SeBitmap_EnvCurve5_0x4B0 00F1147E
 SeScreenData_0x0878 00F1147E
 SeScreenData_0x0883 00F11489
 SeScreenData_0x08AB 00F114B1
@@ -20388,7 +20387,6 @@ SeScreenData_0x1EF7 00F12AFD
 SeScreenData_0x1F43 00F12B49
 SeScreenData_0x1F4D 00F12B53
 SeScreenData_0x1F75 00F12B7B
-SeBitmap_EnvCurve5_0x1BB8 00F12B86
 SeScreenData_0x1F80 00F12B86
 SeMenu_BankEdit_LoopHelper_Data 00F12BAE
 SeMenu_BankEdit_LoopHelper_Data_2 00F12C44
@@ -20513,7 +20511,6 @@ SeScreenData_0x28FB 00F13501
 SeScreenData_0x290A 00F13510
 SeScreenData_0x290C 00F13512
 SeScreenData_0x2920 00F13526
-TuningSystem_Handler_Table_0xDF 00F13526
 SeScreenData_0x2930 00F13536
 SeScreenData_0x293C 00F13542
 SeScreenData_0x2964 00F1356A
@@ -20571,7 +20568,6 @@ SeScreenData_0x2EB6 00F13ABC
 SeScreenData_0x2EC0 00F13AC6
 SeScreenData_0x2F40 00F13B46
 SeScreenData_0x2F60 00F13B66
-TuningSystem_Handler_Table_0x71F 00F13B66
 SeScreenData_0x2F6C 00F13B72
 SeScreenData_0x30EC 00F13CF2
 SeScreenData_0x336C 00F13F72
@@ -20599,7 +20595,6 @@ SeScreenData_0x39A0 00F145A6
 SeScreenData_0x39AA 00F145B0
 SeScreenData_0x39B4 00F145BA
 SeScreenData_0x39BE 00F145C4
-TuningSystem_Handler_Table_0x117D 00F145C4
 SeScreenData_0x39FE 00F14604
 SeScreenData_0x3A0D 00F14613
 SeScreenData_0x3A1C 00F14622
@@ -20664,9 +20659,7 @@ SeScreenData_0x45DE 00F151E4
 SeScreenData_0x464E 00F15254
 SeScreenData_0x46B4 00F152BA
 SeScreenData_0x46CC 00F152D2
-TuningSystem_Handler_Table_0x1E8B 00F152D2
 SeScreenData_0x4780 00F15386
-TuningSystem_Handler_Table_0x1F3F 00F15386
 SeScreenData_0x479E 00F153A4
 SeScreenData_0x47BC 00F153C2
 SeScreenData_0x47DB 00F153E1

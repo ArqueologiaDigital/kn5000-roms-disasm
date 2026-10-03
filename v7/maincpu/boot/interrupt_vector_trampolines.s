@@ -112,7 +112,7 @@ AcApcToggleProc_Helper_Skip2:
 	jr	nc, AcApcToggleProc_Helper_Skip3
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xDC0:24)
+	lda	xbc, (SndParam_ReadHandlers:24)
 	lda	xbc, (xbc+wa)
 	ld	xwa, (xsp + 6)
 	ld	xhl, (xbc)
