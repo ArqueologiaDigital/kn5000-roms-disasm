@@ -174027,7 +174027,7 @@ sub_FEA1F7:
 .LFEA20A:
 	m_add_mi16 MW24, 0x601f47, 0x0001                    ; FEA20A  d2 47 1f 60 38 01 00
 	calr sub_FE99BF                                          ; FEA211  1e ab f7
-	calr 0x69da                                          ; FEA214  1e da 69
+	calr sub_FF0BF1                                      ; FEA214  1e da 69
 	calr sub_FEA12D                                      ; FEA217  1e 13 ff
 	ld (0x601f58:24), 0x83                             ; FEA21A  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x03                             ; FEA220  f2 59 1f 60 00 03
@@ -174057,7 +174057,7 @@ sub_FEA23C:
 	subw	(0x601f47:24), 0x0001                ; FEA261  d2 47 1f 60 3a 01 00
 .LFEA268:
 	calr sub_FE99BF                                          ; FEA268  1e 54 f7
-	calr 0x6983                                          ; FEA26B  1e 83 69
+	calr sub_FF0BF1                                      ; FEA26B  1e 83 69
 	calr sub_FEA12D                                      ; FEA26E  1e bc fe
 	ld (0x601f58:24), 0x83                             ; FEA271  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x03                             ; FEA277  f2 59 1f 60 00 03
@@ -175111,7 +175111,7 @@ sub_FEACD8:
 	ldw (0x601f47:24), 0x2fff                           ; FEACFB  f2 47 1f 60 02 ff 2f
 .LFEAD02:
 	calr sub_FE99BF                                          ; FEAD02  1e ba ec
-	calr 0x5ee9                                          ; FEAD05  1e e9 5e
+	calr sub_FF0BF1                                      ; FEAD05  1e e9 5e
 	calr sub_FEA12D                                      ; FEAD08  1e 22 f4
 	ld (0x601f58:24), 0x83                             ; FEAD0B  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x03                             ; FEAD11  f2 59 1f 60 00 03
@@ -175154,7 +175154,7 @@ sub_FEAD49:
 	m_cp_mi16 MW24, 0x601f47, 0x0001                     ; FEAD82  d2 47 1f 60 3f 01 00
 	jr c, .LFEAD65                                       ; FEAD89  67 da
 	calr sub_FE99BF                                          ; FEAD8B  1e 31 ec
-	calr 0x5e60                                          ; FEAD8E  1e 60 5e
+	calr sub_FF0BF1                                      ; FEAD8E  1e 60 5e
 	calr sub_FEA12D                                      ; FEAD91  1e 99 f3
 	ld (0x601f58:24), 0x83                             ; FEAD94  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x03                             ; FEAD9A  f2 59 1f 60 00 03
@@ -178378,7 +178378,7 @@ sub_FEF8E5:
 	jr z, .LFEF8F7                                       ; FEF8EA  66 0b
 	calr sub_FF0A7B                                          ; FEF8EC  1e 8c 11
 	calr sub_FF0B46                                          ; FEF8EF  1e 54 12
-	calr 0x12fc                                          ; FEF8F2  1e fc 12
+	calr sub_FF0BF1                                      ; FEF8F2  1e fc 12
 	jr .LFEF8FA                                          ; FEF8F5  68 03
 .LFEF8F7:
 	calr sub_FF0C12                                          ; FEF8F7  1e 18 13
@@ -180463,7 +180463,7 @@ sub_FF0B46:
 .LFF0B90:
 	ldw (0x26b0:16), 0x00                                ; FF0B90  f1 b0 26 02 00 00
 	ld XIY,DisplayList_FF0BE1                            ; FF0B96  45 e1 0b ff 00
-	ld XIX,DisplayList_FF0BE1__FF0BF0                                    ; FF0B9B  44 f0 0b ff 00
+	ld XIX,Str_v                                                          ; FF0B9B  44 f0 0b ff 00
 	call T_DisplayListB_Run                              ; FF0BA0  1d f4 17 f4
 	xor WA,WA                                            ; FF0BA4  d8 d0
 	ld a, (0x601f19:24)                                 ; FF0BA6  c2 19 1f 60 21
@@ -180496,10 +180496,12 @@ DisplayList_FF0BD2:
 DisplayList_FF0BE1:
 	.byte 0x02, 0x0F                               ; FF0BE1  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xF0, 0x0B, 0xFF, 0x00, 0x01, 0x00, 0x07, 0x1C  ; FF0BE3
-DisplayList_FF0BE1__FF0BF0:
-	jrl z, .LFF4CE4                                        ; FF0BF0  76 f1 40
-	ld e, 0x00:opc                                          ; FF0BF3  25 00
-	nop                                                  ; FF0BF5  00
+; Str_v -- a one-entry string table.  Both op-02 records above point at it (+7, entry width 1), and sub_FF0B46
+;          zeroes their index (0x26B0) before each run, so they draw "v" before the value's digits.  It is also
+;          where DisplayList_FF0BE1 ends (sub_FF0B46's XIX).  Was decoded as `jrl z` with the routine below.
+Str_v:	.ascii	"v"	; FF0BF0
+sub_FF0BF1:
+	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0BF1  f1 40 25 00 00
 	calr sub_FEF83B                                          ; FF0BF6  1e 42 ec
 	ld wa, (0x601f47:24)                                ; FF0BF9  d2 47 1f 60 20
 	ld (0x26b0:16), wa                                  ; FF0BFE  f1 b0 26 50
@@ -184747,7 +184749,6 @@ LcdKeyRow4_DiskL0adFile:
 	lda xbc, (DL_F5995C:24)                              ; FF4CD9  f2 5c 99 f5 31
 	push XBC                                             ; FF4CDE  39
 	lda xwa, (DL_F59952:24)                              ; FF4CDF  f2 52 99 f5 30
-.LFF4CE4:
 	push XWA                                             ; FF4CE4  38
 .LFF4CE5:
 	call sub_FF75D3                                      ; FF4CE5  1d d3 75 ff
