@@ -34,6 +34,8 @@ run() {  # tree outdir
     done
 }
 run "${WORK:?}" "${OUT:?}/before"
+# a traceback prints the script's path: make the worktree's look like the working tree's
+for f in "${OUT:?}"/before/*.out; do sed -i "s#${WORK:?}#${REPO:?}#g" "$f"; done
 run "$REPO" "${OUT:?}/after"
 diffs=0
 for s in $CHECKS; do

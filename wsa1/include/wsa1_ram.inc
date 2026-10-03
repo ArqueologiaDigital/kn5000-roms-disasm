@@ -66,13 +66,23 @@
 	.equ Value_AsciiDigits,		0x2661	; three ASCII digits, the output of prom_a's Value_ToAsciiDigits3 -- FINDINGS-prom_b-for-the-mame-driver.md
 	.equ UI_StatusCode,		0x2880	; a status/error byte: eleven literal values; the block store's error table feeds it -- song-store.md; f6d002-module.md
 
-; ---- wsa1/notes/FINDINGS-prom_b-block-store.md -- "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table"
-	.equ BStore_BlockLimit,		0x0ca4	; what BStore_CursorAdvance range-checks a followed block number against -- BStore_CursorAdvance
+; ---- wsa1/notes/FINDINGS-prom_b-block-store.md -- "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table and prom_b's BStore_* headers"
+	.equ BStore_CopyDestAddr,	0x0c59	; BStore_CopyAcrossBlocks' destination block address -- BStore_CopyAcrossBlocks header
+	.equ BStore_CopySrcAddr,	0x0c63	; BStore_CopyAcrossBlocks' source block address -- BStore_CopyAcrossBlocks header
+	.equ BStore_BlockLimit,		0x0ca4	; BStore_LoadGeometry's copy of the block count; the cp WA,(0x0CA4) bound of BStore_CursorAdvance / BStore_OpenChain -- BStore_LoadGeometry header
+	.equ BStore_GeomBase,		0x0ca6	; BStore_LoadGeometry's copy of the heap base -- BStore_LoadGeometry header
+	.equ BStore_BlocksAllocated,	0x0cac	; BStore_AllocChain output: blocks allocated -- BStore_AllocChain header
+	.equ BStore_AllocBytesWanted,	0x0cae	; BStore_AllocChain input: byte count wanted -- BStore_AllocChain header
+	.equ BStore_LinkBlock,		0x0cc0	; BStore_AllocChain input: the block to link the new chain onto -- BStore_AllocChain header
+	.equ BStore_LastBlockAddr,	0x0cc2	; BStore_AllocChain output: the last block's address -- BStore_AllocChain header
+	.equ BStore_LastBlockUsed,	0x0cc6	; BStore_AllocChain input: bytes already in the last block -- BStore_AllocChain header
+	.equ BStore_LastBlockFree,	0x0d08	; BStore_AllocChain output: bytes free in the last block -- BStore_AllocChain header
 	.equ BStore_ErrorCode,		0x0d4a	; the block store's error code; BStore_ErrorToStatusByte maps it to UI_StatusCode -- BStore_ErrorToStatusByte
 	.equ BStore_DirEntry,		0x1008	; the directory entry BStore_AppendBytes appends to -- BStore_AppendBytes
 	.equ BStore_CursorBlockAddr,	0x126e	; the cursor's block address (0x617800 + (n-1)*0x100) -- BStore_SeekBlock
 	.equ BStore_AllocHeapBase,	0x12a2	; the allocator's own copy of the heap base -- BStore_LatchHeapBase
 	.equ BStore_CursorBlock,	0x345c	; the cursor's 1-based block number -- the block-store cursor section
+	.equ BStore_CursorOffset,	0x345e	; the cursor's byte offset in its block, 5..0xFF -- prom_b cursor headers: ((0x345C) block number, (0x345E) offset)
 	.equ BStore_HeapBase,		0x3604	; the heap base, 0x00617800 -- BStore_SeekBlock and its two inverses
 	.equ BStore_BlockCount,		0x3608	; how many blocks BStore_FreeList_Init threads onto the free list -- BStore_FreeList_Init
 	.equ BStore_CurrentBank,	0x360a	; the current bank, 0..9 (prom_a refuses to step outside); bank n lives at 0x610000 + n*0xC00 -- 0xF8143F cp A,0 / 0xF814D2 cp A,0x09
@@ -110,3 +120,6 @@
 
 ; ---- wsa1/notes/FINDINGS-l7a1429-parameter-names.md -- "2c. The CPU 1 sender, and the element bits -- GRADE PROVEN"
 	.equ UI_PartIndex,		0x2250	; the part index the CPU 1 parameter sender puts in byte[1] -- sub_FD616A
+
+; ---- wsa1/prom_b/wsa1_prom_b.s -- "EffectAlgoMaps header (0xF133E4)"
+	.equ Effect_BlockIndex,		0x2797	; which DSP effect block: IndexedTable entry 97, 98 or 99, minus 97 -- EffectAlgoMaps: (0x2797) = entry - 97

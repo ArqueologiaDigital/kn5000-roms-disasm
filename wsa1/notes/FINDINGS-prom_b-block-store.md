@@ -118,6 +118,8 @@ regions were laid out as one object. It would survive a coincidence of 12 bits.
 `BStore_BlockLimit` (0x0CA4), `BStore_HeapBase` (0x3604), `BStore_BlockCount` (0x3608),
 `BStore_AllocHeapBase` (0x12A2), `BStore_FreeHead` / `BStore_FreeCount` (0x6034B8 / 0x6034BA),
 `BStore_DirEntry` (0x1008) and `BStore_ErrorCode` (0x0D4A) -- 1,541 operands in prom_a and prom_b
+(47759af3); later `BStore_CurrentBank`, `BStore_CursorOffset` (0x345E) and the allocator / copy /
+geometry variables of the BStore_* headers (0x0C59-0x0D08)
 (`python3 scripts/tools/name_wsa1_ram_count.py`).  The `BStore` prefix keeps this note's caution:
 it names the module, not what the module is FOR.
 

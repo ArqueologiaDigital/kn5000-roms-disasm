@@ -169476,9 +169476,9 @@ sub_FE82D7:
 BStoreCursor_SeekPrevTag:
 	ld (BStore_ErrorCode:16), 0x00                                 ; FE82EB  f1 4a 0d 00 00
 .LFE82F0:
-	m_cp_mi16 MW16, 0x345e, 0x0005                       ; FE82F0  d1 5e 34 3f 05 00
+	m_cp_mi16 MW16, BStore_CursorOffset, 0x0005                       ; FE82F0  d1 5e 34 3f 05 00
 	jr ule, .LFE8306                                     ; FE82F6  63 0e
-	decw 0x01, (0x345e:16)                               ; FE82F8  d1 5e 34 69
+	decw 0x01, (BStore_CursorOffset:16)                               ; FE82F8  d1 5e 34 69
 .LFE82FC:
 	call BStoreCursor_ReadByte                                        ; FE82FC  1d 32 22 ff
 	bit 0x07,A                                           ; FE8300  c9 33 07
@@ -169496,7 +169496,7 @@ BStoreCursor_SeekPrevTag:
 	cp wa, 0x00:i3                                         ; FE831E  d8 d8
 	jr z, .LFE832E                                       ; FE8320  66 0c
 	ld (BStore_CursorBlock:16), wa                                  ; FE8322  f1 5c 34 50
-	ldw (0x345e:16), 0xff                                ; FE8326  f1 5e 34 02 ff 00
+	ldw (BStore_CursorOffset:16), 0xff                                ; FE8326  f1 5e 34 02 ff 00
 	jr .LFE82FC                                          ; FE832C  68 ce
 .LFE832E:
 	ld (BStore_ErrorCode:16), 0xff                                 ; FE832E  f1 4a 0d 00 ff
@@ -170223,9 +170223,9 @@ sub_FE88AA:
 	add XIX,XWA                                          ; FE8A02  e8 84
 	ld (XIX),0x05                                        ; FE8A04  b4 00 05
 	ld (BStore_CursorBlock:16), hl                                  ; FE8A07  f1 5c 34 53
-	ldw (0x345e:16), 0x05                                ; FE8A0B  f1 5e 34 02 05 00
+	ldw (BStore_CursorOffset:16), 0x05                                ; FE8A0B  f1 5e 34 02 05 00
 	calr sub_FE8B89                                      ; FE8A11  1e 75 01
-	m_add_mi16 MW16, 0x345e, 0x0001                      ; FE8A14  d1 5e 34 38 01 00
+	m_add_mi16 MW16, BStore_CursorOffset, 0x0001                      ; FE8A14  d1 5e 34 38 01 00
 	calr sub_FE8B89                                      ; FE8A1A  1e 6c 01
 	jr .LFE8A28                                          ; FE8A1D  68 09
 .LFE8A1F:
@@ -170289,7 +170289,7 @@ sub_FE8AB3:
 	m_bit 0, MD24, 0x601f70                              ; FE8AB3  f2 70 1f 60 c8
 	jr z, .LFE8AE3                                       ; FE8AB8  66 29
 	ld wa, (BStore_CursorBlock:16)                                 ; FE8ABA  d1 5c 34 20
-	ld bc, (0x345e:16)                                 ; FE8ABE  d1 5e 34 21
+	ld bc, (BStore_CursorOffset:16)                                 ; FE8ABE  d1 5e 34 21
 	pushw wa                                             ; FE8AC2  28
 	pushw bc                                             ; FE8AC3  29
 	call BStoreCursor_Step                                        ; FE8AC4  1d 04 22 ff
@@ -170299,7 +170299,7 @@ sub_FE8AB3:
 	popw bc                                              ; FE8AD2  49
 	popw wa                                              ; FE8AD3  48
 	ld (BStore_CursorBlock:16), wa                                  ; FE8AD4  f1 5c 34 50
-	ld (0x345e:16), bc                                  ; FE8AD8  f1 5e 34 51
+	ld (BStore_CursorOffset:16), bc                                  ; FE8AD8  f1 5e 34 51
 	m_cp_rm MB24, 0x601f44, r5                           ; FE8ADC  c2 44 1f 60 f5
 	jr nz, .LFE8AE6                                      ; FE8AE1  6e 03
 .LFE8AE3:
@@ -170393,7 +170393,7 @@ sub_FE8BA8:
 	ld XIX,0x00003460                                    ; FE8BB6  44 60 34 00 00
 	mx_st_mr16 MXD, ra_IX, ra_HL, r0                     ; FE8BBB  f3 07 f0 ec 50
 	ld l, (0x601f00:24)                                 ; FE8BC0  c2 00 1f 60 27
-	ld wa, (0x345e:16)                                 ; FE8BC5  d1 5e 34 20
+	ld wa, (BStore_CursorOffset:16)                                 ; FE8BC5  d1 5e 34 20
 	ld XIX,0x00003482                                    ; FE8BC9  44 82 34 00 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FE8BCE  f3 07 f0 ec 41
 	ret                                                  ; FE8BD3  0e
@@ -170419,7 +170419,7 @@ sub_FE8BF8:
 	ld wa, (0x601f12:24)                                ; FE8C0C  d2 12 1f 60 20
 	ld (BStore_CursorBlock:16), wa                                  ; FE8C11  f1 5c 34 50
 	ld wa, (0x601f14:24)                                ; FE8C15  d2 14 1f 60 20
-	ld (0x345e:16), wa                                  ; FE8C1A  f1 5e 34 50
+	ld (BStore_CursorOffset:16), wa                                  ; FE8C1A  f1 5e 34 50
 	ret                                                  ; FE8C1E  0e
 sub_FE8C1F:
 	ld wa, (0x601f4d:24)                                ; FE8C1F  d2 4d 1f 60 20
@@ -170504,7 +170504,7 @@ sub_FE8CEE:
 	ld (0x601f0a:24), a                                 ; FE8CFD  f2 0a 1f 60 41
 	ld wa, (BStore_CursorBlock:16)                                 ; FE8D02  d1 5c 34 20
 	ld (0x601f0b:24), wa                                ; FE8D06  f2 0b 1f 60 50
-	ld wa, (0x345e:16)                                 ; FE8D0B  d1 5e 34 20
+	ld wa, (BStore_CursorOffset:16)                                 ; FE8D0B  d1 5e 34 20
 	ld (0x601f0d:24), wa                                ; FE8D0F  f2 0d 1f 60 50
 	ret                                                  ; FE8D14  0e
 sub_FE8D15:
@@ -170515,7 +170515,7 @@ sub_FE8D15:
 	ld wa, (0x601f0b:24)                                ; FE8D29  d2 0b 1f 60 20
 	ld (BStore_CursorBlock:16), wa                                  ; FE8D2E  f1 5c 34 50
 	ld wa, (0x601f0d:24)                                ; FE8D32  d2 0d 1f 60 20
-	ld (0x345e:16), wa                                  ; FE8D37  f1 5e 34 50
+	ld (BStore_CursorOffset:16), wa                                  ; FE8D37  f1 5e 34 50
 	ret                                                  ; FE8D3B  0e
 sub_FE8D3C:
 	m_bit 0, MD24, 0x601f70                              ; FE8D3C  f2 70 1f 60 c8
@@ -170704,7 +170704,7 @@ sub_FE8ED3:
 .LFE8EE3:
 	ld (0x601f05:24), ix                                ; FE8EE3  f2 05 1f 60 54
 	ld (0x601f07:24), 0x00                             ; FE8EE8  f2 07 1f 60 00 00
-	ld (0x345e:16), iy                                  ; FE8EEE  f1 5e 34 55
+	ld (BStore_CursorOffset:16), iy                                  ; FE8EEE  f1 5e 34 55
 	ret                                                  ; FE8EF2  0e
 sub_FE8EF3:
 	ld wa, (0x601f3f:24)                                ; FE8EF3  d2 3f 1f 60 20
@@ -171200,7 +171200,7 @@ sub_FE93CA:
 	jr .LFE942A                                          ; FE93E9  68 3f
 .LFE93EB:
 	ld (BStore_CursorBlock:16), wa                                  ; FE93EB  f1 5c 34 50
-	ldw (0x345e:16), 0x05                                ; FE93EF  f1 5e 34 02 05 00
+	ldw (BStore_CursorOffset:16), 0x05                                ; FE93EF  f1 5e 34 02 05 00
 	calr sub_FEA6B4                                          ; FE93F5  1e bc 12
 	calr sub_FE9430                                      ; FE93F8  1e 35 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE93FB  c1 4a 0d 3f 00
@@ -171270,7 +171270,7 @@ sub_FE9492:
 	ld (0x601f7a:24), a                                 ; FE94BC  f2 7a 1f 60 41
 	ld wa, (BStore_CursorBlock:16)                                 ; FE94C1  d1 5c 34 20
 	ld (0x601f7b:24), wa                                ; FE94C5  f2 7b 1f 60 50
-	ld wa, (0x345e:16)                                 ; FE94CA  d1 5e 34 20
+	ld wa, (BStore_CursorOffset:16)                                 ; FE94CA  d1 5e 34 20
 	ld (0x601f7d:24), wa                                ; FE94CE  f2 7d 1f 60 50
 	ret                                                  ; FE94D3  0e
 	ld wa, (0x601f78:24)                                ; FE94D4  d2 78 1f 60 20
@@ -171280,7 +171280,7 @@ sub_FE9492:
 	ld wa, (0x601f7b:24)                                ; FE94E8  d2 7b 1f 60 20
 	ld (BStore_CursorBlock:16), wa                                  ; FE94ED  f1 5c 34 50
 	ld wa, (0x601f7d:24)                                ; FE94F1  d2 7d 1f 60 20
-	ld (0x345e:16), wa                                  ; FE94F6  f1 5e 34 50
+	ld (BStore_CursorOffset:16), wa                                  ; FE94F6  f1 5e 34 50
 	ret                                                  ; FE94FA  0e
 sub_FE94FB:
 	calr sub_FE8EA9                                          ; FE94FB  1e ab f9
@@ -171471,7 +171471,7 @@ sub_FE96E3:
 	add XIX,XWA                                          ; FE9706  e8 84
 	ld A,(XIX)                                           ; FE9708  84 21
 	xor W,W                                              ; FE970A  c8 d0
-	ld (0x345e:16), wa                                  ; FE970C  f1 5e 34 50
+	ld (BStore_CursorOffset:16), wa                                  ; FE970C  f1 5e 34 50
 	ret                                                  ; FE9710  0e
 sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
 	calr sub_FE9762                                      ; FE9711  1e 4e 00
@@ -171597,7 +171597,7 @@ sub_FE984B:
 .LFE9863:
 	ld (0x601f05:24), ix                                ; FE9863  f2 05 1f 60 54
 	ld (0x601f07:24), 0x00                             ; FE9868  f2 07 1f 60 00 00
-	ld (0x345e:16), iy                                  ; FE986E  f1 5e 34 55
+	ld (BStore_CursorOffset:16), iy                                  ; FE986E  f1 5e 34 55
 	m_cp_mi16 MW24, 0x601f41, 0x0000                     ; FE9872  d2 41 1f 60 3f 00 00
 	jr z, .LFE98AF                                       ; FE9879  66 34
 	ldw (0x601f6c:24), 0x00                             ; FE987B  f2 6c 1f 60 02 00 00
@@ -171651,7 +171651,7 @@ sub_FE98E7:
 .LFE98FF:
 	ld (0x601f05:24), ix                                ; FE98FF  f2 05 1f 60 54
 	ld (0x601f07:24), 0x00                             ; FE9904  f2 07 1f 60 00 00
-	ld (0x345e:16), iy                                  ; FE990A  f1 5e 34 55
+	ld (BStore_CursorOffset:16), iy                                  ; FE990A  f1 5e 34 55
 	m_cp_mi16 MW24, 0x601f41, 0x0000                     ; FE990E  d2 41 1f 60 3f 00 00
 	jr z, .LFE994B                                       ; FE9915  66 34
 	ldw (0x601f6c:24), 0x00                             ; FE9917  f2 6c 1f 60 02 00 00
@@ -172972,7 +172972,7 @@ sub_FEA628:
 	ret                                                  ; FEA64C  0e
 sub_FEA64D:
 	ld wa, (BStore_CursorBlock:16)                                 ; FEA64D  d1 5c 34 20
-	ld bc, (0x345e:16)                                 ; FEA651  d1 5e 34 21
+	ld bc, (BStore_CursorOffset:16)                                 ; FEA651  d1 5e 34 21
 	pushw wa                                             ; FEA655  28
 	pushw bc                                             ; FEA656  29
 	m_res 2, MD24, 0x601f5b                              ; FEA657  f2 5b 1f 60 b2
@@ -173003,7 +173003,7 @@ sub_FEA64D:
 	popw bc                                              ; FEA6A6  49
 	popw wa                                              ; FEA6A7  48
 	ld (BStore_CursorBlock:16), wa                                  ; FEA6A8  f1 5c 34 50
-	ld (0x345e:16), bc                                  ; FEA6AC  f1 5e 34 51
+	ld (BStore_CursorOffset:16), bc                                  ; FEA6AC  f1 5e 34 51
 	ret                                                  ; FEA6B0  0e
 sub_FEA6B1:
 	calr sub_FE8BF8                                          ; FEA6B1  1e 44 e5
@@ -173167,7 +173167,7 @@ sub_FEA7E7:
 	ret                                                  ; FEA84E  0e
 sub_FEA84F:
 	ld wa, (BStore_CursorBlock:16)                                 ; FEA84F  d1 5c 34 20
-	ld bc, (0x345e:16)                                 ; FEA853  d1 5e 34 21
+	ld bc, (BStore_CursorOffset:16)                                 ; FEA853  d1 5e 34 21
 	pushw wa                                             ; FEA857  28
 	pushw bc                                             ; FEA858  29
 	calr BStoreCursor_Step                                          ; FEA859  1e a8 79
@@ -173176,7 +173176,7 @@ sub_FEA84F:
 	popw bc                                              ; FEA864  49
 	popw wa                                              ; FEA865  48
 	ld (BStore_CursorBlock:16), wa                                  ; FEA866  f1 5c 34 50
-	ld (0x345e:16), bc                                  ; FEA86A  f1 5e 34 51
+	ld (BStore_CursorOffset:16), bc                                  ; FEA86A  f1 5e 34 51
 	ret                                                  ; FEA86E  0e
 sub_FEA86F:
 	m_bit 7, MD24, 0x601f58                              ; FEA86F  f2 58 1f 60 cf
@@ -173198,7 +173198,7 @@ sub_FEA86F:
 	m_cp_rm MW16, BStore_CursorBlock, r0                             ; FEA8A6  d1 5c 34 f0
 	jr nz, .LFEA8C3                                      ; FEA8AA  6e 17
 	ld wa, (0x601f14:24)                                ; FEA8AC  d2 14 1f 60 20
-	m_cp_rm MW16, 0x345e, r0                             ; FEA8B1  d1 5e 34 f0
+	m_cp_rm MW16, BStore_CursorOffset, r0                             ; FEA8B1  d1 5e 34 f0
 	jr nz, .LFEA8C3                                      ; FEA8B5  6e 0c
 	calr sub_FEA628                                      ; FEA8B7  1e 6e fd
 	sub XWA,XBC                                          ; FEA8BA  e9 a0
@@ -173358,7 +173358,7 @@ sub_FEAA20:
 	cp A,0x81                                            ; FEAA3B  c9 cf 81
 	jr z, .LFEAA7D                                       ; FEAA3E  66 3d
 	ld wa, (BStore_CursorBlock:16)                                 ; FEAA40  d1 5c 34 20
-	ld bc, (0x345e:16)                                 ; FEAA44  d1 5e 34 21
+	ld bc, (BStore_CursorOffset:16)                                 ; FEAA44  d1 5e 34 21
 	pushw wa                                             ; FEAA48  28
 	pushw bc                                             ; FEAA49  29
 	calr BStoreCursor_Step                                          ; FEAA4A  1e b7 77
@@ -173367,7 +173367,7 @@ sub_FEAA20:
 	popw bc                                              ; FEAA55  49
 	popw wa                                              ; FEAA56  48
 	ld (BStore_CursorBlock:16), wa                                  ; FEAA57  f1 5c 34 50
-	ld (0x345e:16), bc                                  ; FEAA5B  f1 5e 34 51
+	ld (BStore_CursorOffset:16), bc                                  ; FEAA5B  f1 5e 34 51
 .LFEAA5F:
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAA5F  c2 5b 1f 60 3c fe
 	calr sub_FEF778                                          ; FEAA65  1e 10 4d
@@ -177439,7 +177439,7 @@ Glyph_FEFDE4:
 	.byte 0x12                                                                ; FEFDE4
 sub_FEFDE5:
 	ld wa, (BStore_CursorBlock:16)                                 ; FEFDE5  d1 5c 34 20
-	ld bc, (0x345e:16)                                 ; FEFDE9  d1 5e 34 21
+	ld bc, (BStore_CursorOffset:16)                                 ; FEFDE9  d1 5e 34 21
 	ld ix, (0x601f05:24)                                ; FEFDED  d2 05 1f 60 24
 	ld h, (0x601f07:24)                                 ; FEFDF2  c2 07 1f 60 26
 	pushw wa                                             ; FEFDF7  28
@@ -177452,7 +177452,7 @@ sub_FEFDE5:
 	popw bc                                              ; FEFE00  49
 	popw wa                                              ; FEFE01  48
 	ld (BStore_CursorBlock:16), wa                                  ; FEFE02  f1 5c 34 50
-	ld (0x345e:16), bc                                  ; FEFE06  f1 5e 34 51
+	ld (BStore_CursorOffset:16), bc                                  ; FEFE06  f1 5e 34 51
 	ld (0x601f05:24), ix                                ; FEFE0A  f2 05 1f 60 54
 	ld (0x601f07:24), h                                 ; FEFE0F  f2 07 1f 60 46
 	xor WA,WA                                            ; FEFE14  d8 d0
@@ -177620,7 +177620,7 @@ sub_FEFF2D:
 	ld wa, (BStore_CursorBlock:16)                                 ; FEFF55  d1 5c 34 20
 	m_cp_rm MW24, 0x601f0b, r0                           ; FEFF59  d2 0b 1f 60 f0
 	jr nz, .LFEFF6D                                      ; FEFF5E  6e 0d
-	ld wa, (0x345e:16)                                 ; FEFF60  d1 5e 34 20
+	ld wa, (BStore_CursorOffset:16)                                 ; FEFF60  d1 5e 34 20
 	m_cp_rm MW24, 0x601f0d, r0                           ; FEFF64  d2 0d 1f 60 f0
 	jr nz, .LFEFF6D                                      ; FEFF69  6e 02
 	jr .LFEFF50                                          ; FEFF6B  68 e3
@@ -180309,7 +180309,7 @@ BStoreCursor_SeekNextTag_Continue:
 ; In/Out: (0x345C), (0x345E).  Clobbers: WA, XHL, XIY.
 ; Called from 30 sites in this module, and by BStoreCursor_SeekNextTag.
 BStoreCursor_Step:
-	ld wa, (0x345e:16)                                   ; FF2204  d1 5e 34 20
+	ld wa, (BStore_CursorOffset:16)                                   ; FF2204  d1 5e 34 20
 	cp WA,0x00ff                                         ; FF2208  d8 cf ff 00
 	jr nz, BStoreCursor_Step_SameBlock                   ; FF220C  6e 1d
 	xor XHL,XHL                                          ; FF220E  eb d3
@@ -180325,7 +180325,7 @@ BStoreCursor_Step:
 BStoreCursor_Step_SameBlock:
 	inc 1,WA                                             ; FF222B  d8 61
 BStoreCursor_Step_Store:
-	ld (0x345e:16), wa                                   ; FF222D  f1 5e 34 50
+	ld (BStore_CursorOffset:16), wa                                   ; FF222D  f1 5e 34 50
 	ret                                                  ; FF2231  0e
 
 ; BStoreCursor_ReadByte -- A = the byte under the cursor,
@@ -180339,7 +180339,7 @@ BStoreCursor_ReadByte:
 	sla xhl, 0x08                                        ; FF223A  eb ec 08
 	call BStore_GetHeapBase                              ; FF223D  1d 34 83 fe
 	add XHL,XIY                                          ; FF2241  ed 83
-	ld iy, (0x345e:16)                                   ; FF2243  d1 5e 34 25
+	ld iy, (BStore_CursorOffset:16)                                   ; FF2243  d1 5e 34 25
 	ld A,(XHL+IY)                                        ; FF2247  c3 07 ec f4 21
 	ret                                                  ; FF224C  0e
 
@@ -180356,7 +180356,7 @@ BStoreCursor_WriteByte:
 	call BStore_GetHeapBase                              ; FF2259  1d 34 83 fe
 	add XHL,XIY                                          ; FF225D  ed 83
 	popw wa                                              ; FF225F  48
-	ld iy, (0x345e:16)                                   ; FF2260  d1 5e 34 25
+	ld iy, (BStore_CursorOffset:16)                                   ; FF2260  d1 5e 34 25
 	ld (XHL+IY),A                                        ; FF2264  f3 07 ec f4 41
 	ret                                                  ; FF2269  0e
 

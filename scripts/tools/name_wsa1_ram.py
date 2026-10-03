@@ -107,12 +107,22 @@ GROUPS = [
         0x1088: ("InputStream_Cursor", "cursor into the 1,024-byte input window at 0x60A700-0x60AAFF", "InputStream_Refill refills the window"),
         0x2880: ("UI_StatusCode", "a status/error byte: eleven literal values; the block store's error table feeds it", "song-store.md; f6d002-module.md"),
     }),
-    ("wsa1/notes/FINDINGS-prom_b-block-store.md", "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table", {
-        0x0CA4: ("BStore_BlockLimit", "what BStore_CursorAdvance range-checks a followed block number against", "BStore_CursorAdvance"),
+    ("wsa1/notes/FINDINGS-prom_b-block-store.md", "The cursor; the heap base; with FINDINGS-prom_b-song-store.md's allocator table and prom_b's BStore_* headers", {
+        0x0C59: ("BStore_CopyDestAddr", "BStore_CopyAcrossBlocks' destination block address", "BStore_CopyAcrossBlocks header"),
+        0x0C63: ("BStore_CopySrcAddr", "BStore_CopyAcrossBlocks' source block address", "BStore_CopyAcrossBlocks header"),
+        0x0CA4: ("BStore_BlockLimit", "BStore_LoadGeometry's copy of the block count; the cp WA,(0x0CA4) bound of BStore_CursorAdvance / BStore_OpenChain", "BStore_LoadGeometry header"),
+        0x0CA6: ("BStore_GeomBase", "BStore_LoadGeometry's copy of the heap base", "BStore_LoadGeometry header"),
+        0x0CAC: ("BStore_BlocksAllocated", "BStore_AllocChain output: blocks allocated", "BStore_AllocChain header"),
+        0x0CAE: ("BStore_AllocBytesWanted", "BStore_AllocChain input: byte count wanted", "BStore_AllocChain header"),
+        0x0CC0: ("BStore_LinkBlock", "BStore_AllocChain input: the block to link the new chain onto", "BStore_AllocChain header"),
+        0x0CC2: ("BStore_LastBlockAddr", "BStore_AllocChain output: the last block's address", "BStore_AllocChain header"),
+        0x0CC6: ("BStore_LastBlockUsed", "BStore_AllocChain input: bytes already in the last block", "BStore_AllocChain header"),
+        0x0D08: ("BStore_LastBlockFree", "BStore_AllocChain output: bytes free in the last block", "BStore_AllocChain header"),
         0x0D4A: ("BStore_ErrorCode", "the block store's error code; BStore_ErrorToStatusByte maps it to UI_StatusCode", "BStore_ErrorToStatusByte"),
         0x1008: ("BStore_DirEntry", "the directory entry BStore_AppendBytes appends to", "BStore_AppendBytes"),
         0x126E: ("BStore_CursorBlockAddr", "the cursor's block address (0x617800 + (n-1)*0x100)", "BStore_SeekBlock"),
         0x12A2: ("BStore_AllocHeapBase", "the allocator's own copy of the heap base", "BStore_LatchHeapBase"),
+        0x345E: ("BStore_CursorOffset", "the cursor's byte offset in its block, 5..0xFF", "prom_b cursor headers: ((0x345C) block number, (0x345E) offset)"),
         0x345C: ("BStore_CursorBlock", "the cursor's 1-based block number", "the block-store cursor section"),
         0x360A: ("BStore_CurrentBank", "the current bank, 0..9 (prom_a refuses to step outside); bank n lives at 0x610000 + n*0xC00", "0xF8143F cp A,0 / 0xF814D2 cp A,0x09"),
         0x3604: ("BStore_HeapBase", "the heap base, 0x00617800", "BStore_SeekBlock and its two inverses"),
@@ -154,6 +164,9 @@ GROUPS = [
     }),
     ("wsa1/notes/FINDINGS-l7a1429-parameter-names.md", "2c. The CPU 1 sender, and the element bits -- GRADE PROVEN", {
         0x2250: ("UI_PartIndex", "the part index the CPU 1 parameter sender puts in byte[1]", "sub_FD616A"),
+    }),
+    ("wsa1/prom_b/wsa1_prom_b.s", "EffectAlgoMaps header (0xF133E4)", {
+        0x2797: ("Effect_BlockIndex", "which DSP effect block: IndexedTable entry 97, 98 or 99, minus 97", "EffectAlgoMaps: (0x2797) = entry - 97"),
     }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
