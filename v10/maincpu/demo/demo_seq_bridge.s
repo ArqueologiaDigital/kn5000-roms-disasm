@@ -59,7 +59,7 @@ MiddleFuncCall_DispatchData:
 	pop xix
 	pop	xhl
 	pop	xde
-	jr	91
+	jr	SqTrSel_CaseC
 	push	xde
 	push	xhl
 	push	xix
@@ -69,7 +69,7 @@ MiddleFuncCall_DispatchData:
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	77
+	jr	SqTrSel_CaseC
 	push	xde
 	push	xhl
 	push	xix
@@ -79,7 +79,7 @@ MiddleFuncCall_DispatchData:
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	63
+	jr	SqTrSel_CaseC
 	push	xde
 	push	xhl
 	push	xix
