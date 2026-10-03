@@ -981,7 +981,7 @@ instruction starts there.
 and fixed on the way, both the tree's named recurring shape — a citation on the
 first byte of a 32-bit operand instead of on its opcode:
 
-* `sub_F95C2D`'s header: *"names 0xF95D15 at 0xF95A07"* → the instruction is
+* `DebugMonitor_PrintDumpPage`'s header: *"names 0xF95D15 at 0xF95A07"* → the instruction is
   `add XBC,0x00F95D15` at **0xF95A05**;
 * `BitMask32_Table_FC64C6`'s header: *"named as a 32-bit immediate by the reader
   at 0xFC5BE8"* → `add XBC,0x00FC65C6` at **0xFC5BE7**.

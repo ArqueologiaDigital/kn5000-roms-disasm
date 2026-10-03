@@ -39005,7 +39005,7 @@ LCD_ShowLayers1And2_StackFrame:
 ; ---------------------------------------------------------------------
 ; Print_DebugMonitor -- prints the line ` --- DEBUG MONITOR BY (c)masa,toshi --- `
 ;
-; Called from: prom_a sub_F95C2D (`call`) at 0xF95C46
+; Called from: prom_a DebugMonitor_PrintDumpPage (`call`) at 0xF95C46
 ;
 ;     0xF94C59 loads 0xF94C67, where the ROM reads:
 ;        " --- DEBUG MONITOR BY (c)masa,toshi --- ><;:D"
@@ -39088,7 +39088,7 @@ sub_F94CB9:
 	pop XIZ                                              ; F94CB9  5e
 	ret                                                  ; F94CBA  0e
 ; DebugMonitor_PrintHexDump -- print 16 hex-dump lines (128 bytes) starting at (0x2846)
-; Evidence: (0x284A) = (0x2846), then DE = 0x10 iterations of DebugMonitor_PrintHexDumpLine and `add (0x284A),8`.  Only caller sub_F95C2D (0xF95C52), the
+; Evidence: (0x284A) = (0x2846), then DE = 0x10 iterations of DebugMonitor_PrintHexDumpLine and `add (0x284A),8`.  Only caller DebugMonitor_PrintDumpPage (0xF95C52), the
 ; DEBUG MONITOR screen's painter, which also calls Print_DebugMonitor.
 DebugMonitor_PrintHexDump:
 	push XIZ                                             ; F94CBB  3e
@@ -39621,13 +39621,13 @@ CheckingDevice_RamTest:
 .LF951E8:
 	ld IX,DE                                             ; F951E8  da 8c
 	extz XIX                                             ; F951EA  ec 12
-	lda xbc, (sub_F95C2D__F95C83:24)                               ; F951EC  f2 83 5c f9 31
+	lda xbc, (DebugMonitor_PrintDumpPage__F95C83:24)                               ; F951EC  f2 83 5c f9 31
 	add XBC,XIX                                          ; F951F1  ec 81
 	ld XWA,(XBC)                                         ; F951F3  a1 20
 	ld (xiz-12), xwa                                     ; F951F5  be f4 60
 	ld XBC,XIX                                           ; F951F8  ec 89
 	inc 4,XBC                                            ; F951FA  e9 64
-	add XBC,sub_F95C2D__F95C83                                   ; F951FC  e9 c8 83 5c f9 00
+	add XBC,DebugMonitor_PrintDumpPage__F95C83                                   ; F951FC  e9 c8 83 5c f9 00
 	ld XBC,(XBC)                                         ; F95202  a1 21
 	srl xbc, 0x01                                        ; F95204  e9 ef 01
 	ld (xiz-8), xbc                                      ; F95207  be f8 61
@@ -39643,7 +39643,7 @@ CheckingDevice_RamTest:
 	ld A,(XBC)                                           ; F9521F  81 21
 	cp A,0x5a                                            ; F95221  c9 cf 5a
 	jr z, .LF95233                                           ; F95224  66 0d
-	lda xwa, (sub_F95C2D__F95C83:24)                               ; F95226  f2 83 5c f9 30
+	lda xwa, (DebugMonitor_PrintDumpPage__F95C83:24)                               ; F95226  f2 83 5c f9 30
 	m_add_rm MLD+r6, 0xfc, r0                            ; F9522B  ae fc 80
 	ld C,(XWA)                                           ; F9522E  80 23
 	or (xiz-13), c                                       ; F95230  8e f3 eb
@@ -39660,7 +39660,7 @@ CheckingDevice_RamTest:
 	ld A,(XBC)                                           ; F9524A  81 21
 	cp A,0xa5                                            ; F9524C  c9 cf a5
 	jr z, .LF9525E                                           ; F9524F  66 0d
-	lda xwa, (sub_F95C2D__F95C83:24)                               ; F95251  f2 83 5c f9 30
+	lda xwa, (DebugMonitor_PrintDumpPage__F95C83:24)                               ; F95251  f2 83 5c f9 30
 	m_add_rm MLD+r6, 0xfc, r0                            ; F95256  ae fc 80
 	ld C,(XWA)                                           ; F95259  80 23
 	or (xiz-13), c                                       ; F9525B  8e f3 eb
@@ -39700,18 +39700,18 @@ CheckingDevice_RomIdTest:
 	ld BC,DE                                             ; F95299  da 89
 	extz XBC                                             ; F9529B  e9 12
 	ld (xiz-10), xbc                                     ; F9529D  be f6 61
-	add XBC,sub_F95C2D_Data_F95C7A                                   ; F952A0  e9 c8 7a 5c f9 00
+	add XBC,DebugMonitor_PrintDumpPage_Data_F95C7A                                   ; F952A0  e9 c8 7a 5c f9 00
 	ld XBC,(XBC)                                         ; F952A6  a1 21
 	ld (xiz-6), xbc                                      ; F952A8  be fa 61
 	ld l, 0x00:opc                                          ; F952AB  27 00
 	ld xwa, (xiz-10)                                     ; F952AD  ae f6 20
 	inc 8,XWA                                            ; F952B0  e8 60
-	add XWA,sub_F95C2D_Data_F95C7A                                   ; F952B2  e8 c8 7a 5c f9 00
+	add XWA,DebugMonitor_PrintDumpPage_Data_F95C7A                                   ; F952B2  e8 c8 7a 5c f9 00
 	ld H,(XWA)                                           ; F952B8  80 26
 	ld xix, (xiz-10)                                     ; F952BA  ae f6 24
 	inc 4,XIX                                            ; F952BD  ec 64
 .LF952BF:
-	lda xbc, (sub_F95C2D_Data_F95C7A:24)                               ; F952BF  f2 7a 5c f9 31
+	lda xbc, (DebugMonitor_PrintDumpPage_Data_F95C7A:24)                               ; F952BF  f2 7a 5c f9 31
 	add XBC,XIX                                          ; F952C4  ec 81
 	ld A,(XBC)                                           ; F952C6  81 21
 	ld (xiz-13), a                                       ; F952C8  be f3 41
@@ -40084,7 +40084,7 @@ SineWaveCheck_ServiceSwitches:
 ; TestMode_DisplayCycleTick -- screen 0xDC's per-tick work: flash the whole LCD twice, then step through seven screens every 0x1E ticks
 ; Evidence: XIX = 0x2844 (index): 0 -> LCD_FlashWholePanel twice, index 1.  Else when the (0x2843) countdown is 0: (0x2070) = byte 0xF95C60[index], (0x2071) = 0x40;
 ; index 8 resets to 1, otherwise (0x2843) = 0x1E and index+1.  Table 0xF95C60 [1..7] = 0x01, 0xA0, 0xA1, 0x41, 0x71, 0x02, 0x06 ([8] = 0xFF); it is framed
-; as instructions after sub_F95C2D's `ret`.  Only caller TestMode_Tick.
+; as instructions after DebugMonitor_PrintDumpPage's `ret`.  Only caller TestMode_Tick.
 TestMode_DisplayCycleTick:
 	push XIX                                             ; F955F8  3c
 	lda xix, (0x2844:16)                                ; F955F9  f1 44 28 34
@@ -40100,7 +40100,7 @@ TestMode_DisplayCycleTick:
 	ld C,(XIX)                                           ; F95614  84 23
 	extz BC                                              ; F95616  d9 12
 	extz XBC                                             ; F95618  e9 12
-	add XBC,sub_F95C2D__F95C60                                   ; F9561A  e9 c8 60 5c f9 00
+	add XBC,DebugMonitor_PrintDumpPage__F95C60                                   ; F9561A  e9 c8 60 5c f9 00
 	ld A,(XBC)                                           ; F95620  81 21
 	ld (UI_Request:16), a                                   ; F95622  f1 70 20 41
 	ld (UI_Request_Hi:16), 0x40                                 ; F95626  f1 71 20 00 40
@@ -40842,7 +40842,7 @@ T_F4012C_Nop:
 	ret                                                  ; F959C7  0e
 ; ScreenEnter_DebugMonitor -- the +0 ENTER method of screen 0xDD, the DEBUG MONITOR
 ; Evidence: PanelScreen_VtableTable_ViewB[0xDD] = T_F40130 (`jp 0xF959C8`).  Unless (0x2095) bit 4 (redraw): LCD_BlankThenSetPanel2Layer, (0x2075) bit 7;
-; then sub_F95C2D, which calls Print_DebugMonitor (ROM line " --- DEBUG MONITOR BY (c)masa,toshi --- ") and DebugMonitor_PrintHexDump; then
+; then DebugMonitor_PrintDumpPage, which calls Print_DebugMonitor (ROM line " --- DEBUG MONITOR BY (c)masa,toshi --- ") and DebugMonitor_PrintHexDump; then
 ; LCD_ShowLayers1And2_StackFrame.  TestMode_Tick requests 0xDD on the SOFT KEY 1+4+8 chord.
 ScreenEnter_DebugMonitor:
 	ld c, (0x2095:16)                                   ; F959C8  c1 95 20 23
@@ -40852,7 +40852,7 @@ ScreenEnter_DebugMonitor__F959D1:
 	call LCD_BlankThenSetPanel2Layer                                      ; F959D1  1d 2b 4c f9
 	m_set 7, MD16, UI_RequestBits                                ; F959D5  f1 75 20 bf
 .LF959D9:
-	calr sub_F95C2D                                          ; F959D9  1e 51 02
+	calr DebugMonitor_PrintDumpPage                                          ; F959D9  1e 51 02
 	call LCD_ShowLayers1And2_StackFrame                                      ; F959DC  1d 3c 4c f9
 	ret                                                  ; F959E0  0e
 T_F40134_Nop:
@@ -40889,7 +40889,7 @@ ScreenButton_DebugMonitor:
 ; SoftKeyCol1_DebugMonitor -- SOFT KEY column 1 on the DEBUG MONITOR: step address digit (bits 23-20 of (0x2846)) down (lower key) or up (upper key)
 ; Evidence: ScreenObjF40130_ButtonHandlers [0x00] and [0x11]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x00 = SOFT KEY column 1; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
 ; H = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),
-; the digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.
+; the digit is merged back into (0x2846), `set 3,(0x2075)`, and DebugMonitor_PrintDumpPage redraws the dump.
 SoftKeyCol1_DebugMonitor:   ; entry: screen button-handler table
 	link XIZ,0xfff8                                      ; F95A1A  ee 0c f8 ff
 	pushw hl                                             ; F95A1E  2b
@@ -40921,7 +40921,7 @@ SoftKeyCol1_DebugMonitor__F95A43:
 	sll xbc, 16                                        ; F95A68  e9 ee 00
 	m_or_rm MLD+r6, 0xf8, r1                             ; F95A6B  ae f8 e1
 	ld (0x2846:16), xbc                                 ; F95A6E  f1 46 28 61
-	calr sub_F95C2D                                          ; F95A72  1e b8 01
+	calr DebugMonitor_PrintDumpPage                                          ; F95A72  1e b8 01
 	pop XIX                                              ; F95A75  5c
 	popw hl                                              ; F95A76  4b
 	unlk XIZ                                             ; F95A77  ee 0d
@@ -40929,7 +40929,7 @@ SoftKeyCol1_DebugMonitor__F95A43:
 ; SoftKeyCol2_DebugMonitor -- SOFT KEY column 2 on the DEBUG MONITOR: step address digit (bits 19-16 of (0x2846)) down (lower key) or up (upper key)
 ; Evidence: ScreenObjF40130_ButtonHandlers [0x01] and [0x12]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x01 = SOFT KEY column 2; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
 ; H = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),
-; the digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.
+; the digit is merged back into (0x2846), `set 3,(0x2075)`, and DebugMonitor_PrintDumpPage redraws the dump.
 SoftKeyCol2_DebugMonitor:   ; entry: screen button-handler table
 	link XIZ,0xfff8                                      ; F95A7A  ee 0c f8 ff
 	pushw hl                                             ; F95A7E  2b
@@ -40958,7 +40958,7 @@ SoftKeyCol2_DebugMonitor:   ; entry: screen button-handler table
 	sll xbc, 16                                        ; F95ABF  e9 ee 00
 	m_or_rm MLD+r6, 0xf8, r1                             ; F95AC2  ae f8 e1
 	ld (0x2846:16), xbc                                 ; F95AC5  f1 46 28 61
-	calr sub_F95C2D                                          ; F95AC9  1e 61 01
+	calr DebugMonitor_PrintDumpPage                                          ; F95AC9  1e 61 01
 	pop XIX                                              ; F95ACC  5c
 	popw hl                                              ; F95ACD  4b
 	unlk XIZ                                             ; F95ACE  ee 0d
@@ -40966,7 +40966,7 @@ SoftKeyCol2_DebugMonitor:   ; entry: screen button-handler table
 ; SoftKeyCol3_DebugMonitor -- SOFT KEY column 3 on the DEBUG MONITOR: step address digit (bits 15-12 of (0x2846)) down (lower key) or up (upper key)
 ; Evidence: ScreenObjF40130_ButtonHandlers [0x02] and [0x13]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x02 = SOFT KEY column 3; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
 ; H = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),
-; the digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.
+; the digit is merged back into (0x2846), `set 3,(0x2075)`, and DebugMonitor_PrintDumpPage redraws the dump.
 SoftKeyCol3_DebugMonitor:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95AD1  ee 0c fc ff
 	pushw hl                                             ; F95AD5  2b
@@ -40993,7 +40993,7 @@ SoftKeyCol3_DebugMonitor:   ; entry: screen button-handler table
 	and XWA,SoftKeyCol3_DebugMonitor_Data                                   ; F95B10  e8 cc ff 0f ff 00
 	or XBC,XWA                                           ; F95B16  e8 e1
 	ld (0x2846:16), xbc                                 ; F95B18  f1 46 28 61
-	calr sub_F95C2D                                          ; F95B1C  1e 0e 01
+	calr DebugMonitor_PrintDumpPage                                          ; F95B1C  1e 0e 01
 	pop XIX                                              ; F95B1F  5c
 	popw hl                                              ; F95B20  4b
 	unlk XIZ                                             ; F95B21  ee 0d
@@ -41001,7 +41001,7 @@ SoftKeyCol3_DebugMonitor:   ; entry: screen button-handler table
 ; SoftKeyCol4_DebugMonitor -- SOFT KEY column 4 on the DEBUG MONITOR: step address digit (bits 11-8 of (0x2846)) down (lower key) or up (upper key)
 ; Evidence: ScreenObjF40130_ButtonHandlers [0x03] and [0x14]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x03 = SOFT KEY column 4; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
 ; H = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),
-; the digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.
+; the digit is merged back into (0x2846), `set 3,(0x2075)`, and DebugMonitor_PrintDumpPage redraws the dump.
 SoftKeyCol4_DebugMonitor:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95B24  ee 0c fc ff
 	pushw hl                                             ; F95B28  2b
@@ -41028,7 +41028,7 @@ SoftKeyCol4_DebugMonitor:   ; entry: screen button-handler table
 	and XWA,0x00fff0ff                                   ; F95B63  e8 cc ff f0 ff 00
 	or XBC,XWA                                           ; F95B69  e8 e1
 	ld (0x2846:16), xbc                                 ; F95B6B  f1 46 28 61
-	calr sub_F95C2D                                            ; F95B6F  1e bb 00
+	calr DebugMonitor_PrintDumpPage                                            ; F95B6F  1e bb 00
 	pop XIX                                              ; F95B72  5c
 	popw hl                                              ; F95B73  4b
 	unlk XIZ                                             ; F95B74  ee 0d
@@ -41036,7 +41036,7 @@ SoftKeyCol4_DebugMonitor:   ; entry: screen button-handler table
 ; SoftKeyCol5_DebugMonitor -- SOFT KEY column 5 on the DEBUG MONITOR: step address digit (bits 7-4 of (0x2846)) down (lower key) or up (upper key)
 ; Evidence: ScreenObjF40130_ButtonHandlers [0x04] and [0x15]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x04 = SOFT KEY column 5; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
 ; H = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),
-; the digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.
+; the digit is merged back into (0x2846), `set 3,(0x2075)`, and DebugMonitor_PrintDumpPage redraws the dump.
 SoftKeyCol5_DebugMonitor:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95B77  ee 0c fc ff
 	pushw hl                                             ; F95B7B  2b
@@ -41063,7 +41063,7 @@ SoftKeyCol5_DebugMonitor:   ; entry: screen button-handler table
 	and XWA,0x00ffff0f                                   ; F95BB6  e8 cc 0f ff ff 00
 	or XBC,XWA                                           ; F95BBC  e8 e1
 	ld (0x2846:16), xbc                                 ; F95BBE  f1 46 28 61
-	calr sub_F95C2D                                            ; F95BC2  1e 68 00
+	calr DebugMonitor_PrintDumpPage                                            ; F95BC2  1e 68 00
 	pop XIX                                              ; F95BC5  5c
 	popw hl                                              ; F95BC6  4b
 	unlk XIZ                                             ; F95BC7  ee 0d
@@ -41071,7 +41071,7 @@ SoftKeyCol5_DebugMonitor:   ; entry: screen button-handler table
 ; SoftKeyCol6_DebugMonitor -- SOFT KEY column 6 on the DEBUG MONITOR: step address digit (bits 3-0 of (0x2846)) down (lower key) or up (upper key)
 ; Evidence: ScreenObjF40130_ButtonHandlers [0x05] and [0x16]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x05 = SOFT KEY column 6; [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
 ; H = 0x81 when (XIZ+0x08) != 0 (lower key) else 0x01; the digit and H go to 0x60A000/1, DebugMonitor_StepHexDigit (-1/+1 via SignedNibbleDelta_Table),
-; the digit is merged back into (0x2846), `set 3,(0x2075)`, and sub_F95C2D redraws the dump.
+; the digit is merged back into (0x2846), `set 3,(0x2075)`, and DebugMonitor_PrintDumpPage redraws the dump.
 SoftKeyCol6_DebugMonitor:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95BCA  ee 0c fc ff
 	pushw hl                                             ; F95BCE  2b
@@ -41096,7 +41096,7 @@ SoftKeyCol6_DebugMonitor:   ; entry: screen button-handler table
 	and XWA,BUILD_TAG                                   ; F95C00  e8 cc f0 ff ff 00
 	or XBC,XWA                                           ; F95C06  e8 e1
 	ld (0x2846:16), xbc                                 ; F95C08  f1 46 28 61
-	calr sub_F95C2D                                            ; F95C0C  1e 1e 00
+	calr DebugMonitor_PrintDumpPage                                            ; F95C0C  1e 1e 00
 	pop XIX                                              ; F95C0F  5c
 	popw hl                                              ; F95C10  4b
 	unlk XIZ                                             ; F95C11  ee 0d
@@ -41117,28 +41117,34 @@ ExitKey_SineWaveCheckModeAndDebugMonitor:   ; entry: screen button-handler table
 	ret                                                  ; F95C2B  0e
 ScreenButtonHandlers_SineWaveCheckMode_Nop0:   ; entry: screen button-handler table
 	ret                                                  ; F95C2C  0e
-sub_F95C2D:
+; DebugMonitor_PrintDumpPage -- print the DEBUG MONITOR page: blank line, title, blank line, 16 hex-dump
+; rows from (0x2846), blank line
+; Evidence: XIX = 0xF94C8F (unlabelled: prints 40 spaces via LCD_PrintLine40_AdvanceRow) is entered three
+; times by `lda xiy,<ret> / push XIY / jp (xix)`; between them `call Print_DebugMonitor` (0xF95C46) and `call
+; sub_F94CBB` (0xF95C52: 16 x sub_F94CDE, address + 8 hex bytes, (0x284A) += 8). Zeroes (0x2540), (0x284F).
+; Callers: sub_F959C8 (T_F40130 screen ENTER) and the six digit editors sub_F95A1A..sub_F95BCA.
+DebugMonitor_PrintDumpPage:
 	push XIX                                             ; F95C2D  3c
 	lda xix, (0xf94c8f:24)                               ; F95C2E  f2 8f 4c f9 34
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F95C33  f1 40 25 00 00
 	ldw (0x284f:16), 0x00                                ; F95C38  f1 4f 28 02 00 00
-	lda xiy, (sub_F95C2D__F95C46:24)                               ; F95C3E  f2 46 5c f9 35
+	lda xiy, (DebugMonitor_PrintDumpPage__F95C46:24)                               ; F95C3E  f2 46 5c f9 35
 	push XIY                                             ; F95C43  3d
 	jp (xix)                                             ; F95C44  b4 d8
-sub_F95C2D__F95C46:
+DebugMonitor_PrintDumpPage__F95C46:
 	call Print_DebugMonitor                                      ; F95C46  1d 4c 4c f9
-	lda xiy, (sub_F95C2D__F95C52:24)                               ; F95C4A  f2 52 5c f9 35
+	lda xiy, (DebugMonitor_PrintDumpPage__F95C52:24)                               ; F95C4A  f2 52 5c f9 35
 	push XIY                                             ; F95C4F  3d
 	jp (xix)                                             ; F95C50  b4 d8
-sub_F95C2D__F95C52:
+DebugMonitor_PrintDumpPage__F95C52:
 	call DebugMonitor_PrintHexDump                                      ; F95C52  1d bb 4c f9
-	lda xiy, (sub_F95C2D__F95C5E:24)                               ; F95C56  f2 5e 5c f9 35
+	lda xiy, (DebugMonitor_PrintDumpPage__F95C5E:24)                               ; F95C56  f2 5e 5c f9 35
 	push XIY                                             ; F95C5B  3d
 	jp (xix)                                             ; F95C5C  b4 d8
-sub_F95C2D__F95C5E:
+DebugMonitor_PrintDumpPage__F95C5E:
 	pop XIX                                              ; F95C5E  5c
 	ret                                                  ; F95C5F  0e
-sub_F95C2D__F95C60:
+DebugMonitor_PrintDumpPage__F95C60:
 	normal                                               ; F95C60  01
 	normal                                               ; F95C61  01
 	sub XBC,(XWA)                                        ; F95C62  a0 a1
@@ -41158,12 +41164,12 @@ sub_F95C2D__F95C60:
 	reti                                                 ; F95C77  07
 	swi 7                                                ; F95C78  ff
 	swi 7                                                ; F95C79  ff
-sub_F95C2D_Data_F95C7A:
+DebugMonitor_PrintDumpPage_Data_F95C7A:
 	.byte 0xf0, 0xff, 0xff                               ; F95C7A  f0 ff ff
 	nop                                                  ; F95C7D  00
 	jrl c, 0x6173                                        ; F95C7E  77 73 61
 	jr lt, .LF95C84                                          ; F95C81  61 01
-sub_F95C2D__F95C83:
+DebugMonitor_PrintDumpPage__F95C83:
 	nop                                                  ; F95C83  00
 .LF95C84:
 	normal                                               ; F95C84  01
@@ -41428,10 +41434,22 @@ ScreenButtonHandlers_StaleCopy:
 ; This text was assembled and byte-compared with the ROM before printing.
 T_F401D4_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F96018  0e
-sub_F96019:   ; entry: prom_b routine directory
+; ParamImage_SnapshotAll -- set aside record 0x79 bytes 1-4 and record 0x91 bytes 0 and 2, then copy the
+; whole 0x960-byte parameter image at 0x7620 to the snapshot at 0x608000
+; Evidence: `calr .LF96024`: (0x78B3) long -> (0x2181), (0x7F4A) -> (0x2189), (0x7F4C) -> (0x218A), then
+; `ld XIY,0x7620 / ld XIX,0x608000 / ld XBC,0x4B0 / ldirw` (0xF9603C-0xF9604B) -- 0x960 bytes, exactly the
+; 80 records ParamImage_WriteRecordHeaders lays out at 0x7620-0x7F7F. prom_b slot T_F401D8 (slot 1 of the
+; 0xF96000 group); the 0xFB1800 PatchList module calls it before its PatchList_Apply* edits.
+ParamImage_SnapshotAll:   ; entry: prom_b routine directory
 	calr .LF96024                                        ; F96019  1e 08 00
 	ret                                                  ; F9601C  0e
-sub_F9601D:   ; entry: prom_b routine directory
+; ParamImage_QueueDiffAll -- put back the cells ParamImage_SnapshotAll set aside, then queue every byte of
+; the parameter image that differs from the snapshot onto the 0x2C00 event list
+; Evidence: .LF9604E restores (0x7F4A)/(0x7F4C)/(0x78B3); .LF9606D queues record 0x91 byte 3 (0x7F4D) first
+; (Queue2C00_AppendRegs E=0x91 D=3); .LF9608F walks the {tag,len,payload} records to +0x95E appending {tag,
+; offset, new, new^old} at 0x2C00+(0x60F000), part tags 0x00-0x1F to ParamImage_QueuePartFieldChange, drain at
+; cursor 0x1F1, 0xFF end. prom_b T_F401DC; callers 0xFB3140, 0xFE00A1 and the 0xFB1800 PatchList module.
+ParamImage_QueueDiffAll:   ; entry: prom_b routine directory
 	calr .LF9604E                                        ; F9601D  1e 2e 00
 	ret                                                  ; F96020  0e
 T_F401E8_Nop:   ; entry: prom_b routine directory
@@ -41533,7 +41551,7 @@ T_F401F0_Nop:   ; entry: prom_b routine directory
 	jr nz, .LF96103                                      ; F9610E  6e f3
 	jr .LF96117                                          ; F96110  68 05
 .LF96112:
-	calr sub_F96172                                            ; F96112  1e 5d 00
+	calr ParamImage_QueuePartFieldChange                                            ; F96112  1e 5d 00
 	jr .LF9613B                                          ; F96115  68 24
 .LF96117:
 	ld (XIX+0x2c00),D                                    ; F96117  f3 f1 00 2c 44
@@ -41556,21 +41574,27 @@ T_F401F0_Nop:   ; entry: prom_b routine directory
 ; ---------------------------------------------------------------------
 ; IndexTable_F96151 -- the byte list 0x00..0x1F, then an 0xFF terminator.
 ; Read by: the loop at 0xF960FE: `ld XHL,<this>`, then `ld W,(XHL) / inc XHL
-;          / cp W,D / jr z` -> sub_F96172, else `cp W,0xFF / jr nz` -- a
+;          / cp W,D / jr z` -> ParamImage_QueuePartFieldChange, else `cp W,0xFF / jr nz` -- a
 ;          membership test of D.  A D not in the list is stored with E and
 ;          A straight into the 0x2C00 queue (0xF96117-0xF96121), so the list
-;          names the 32 values that get sub_F96172 instead -- the part
+;          names the 32 values that get ParamImage_QueuePartFieldChange instead -- the part
 ;          numbers, when D is a parameter number as in that queue.
 ;          COUNT 33 = 32 values + the terminator the loop stops on.
 ;          (notes/proma-2026-09-25/gen_small_headers.py, H4)
 ; ---------------------------------------------------------------------
 IndexTable_F96151:   ; 32 sequential bytes + 0xFF terminator, read by sub_F96062's helper (0xF960FE) via a linear scan against D
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0xff   ; F96151
-sub_F96172:   ; entry: reachable-run entry
+; ParamImage_QueuePartFieldChange -- queue one changed byte of a part A-block record (tag D = 0x00-0x1F,
+; offset E, new value A) for ParamImage_QueueDiffAll
+; Evidence: offset 0 (`cp e,0 / jr z`, 0xF96172) appends TWO records, {D,1,byte 1,0x7F} then {D,0,byte 0,0xFF},
+; and sets bit 0 of (0x2180); offset 1 `jr z` to ParamImage_QueueProgramBankPair; any other offset appends
+; {D,E,A,A^snapshot}. Offsets 0-2 are the 3-byte PROGRAM CHANGE & BANK field (tbl:partparams, p=00).
+; In: D tag, E offset, A new byte, XIY image offset, XIX queue cursor (advanced by 4 per record).
+ParamImage_QueuePartFieldChange:   ; entry: reachable-run entry
 	cp e, 0x00:i3                                          ; F96172  cd d8
 	jr z, .LF9619F                                       ; F96174  66 29
 	cp e, 0x01:i3                                          ; F96176  cd d9
-	jr z, sub_F961F1                                           ; F96178  66 77
+	jr z, ParamImage_QueueProgramBankPair                                           ; F96178  66 77
 	ld (XIX+0x2c00),D                                    ; F9617A  f3 f1 00 2c 44
 	ld (XIX+0x2c01),E                                    ; F9617F  f3 f1 01 2c 45
 	ld (XIX+0x2c02),A                                    ; F96184  f3 f1 02 2c 41
@@ -41611,7 +41635,12 @@ sub_F961BD:   ; entry: reachable-run entry
 	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0xff                    ; F961E7  f3 07 f8 f0 00 ff
 	inc 1,IX                                             ; F961ED  dc 61
 	jr .LF96256                                              ; F961EF  68 65
-sub_F961F1:   ; entry: reachable-run entry
+; ParamImage_QueueProgramBankPair -- the offset-1 arm of ParamImage_QueuePartFieldChange: queue PROGRAM CHANGE &
+; BANK bytes 1 and 0 of a part A block as one pair, unless the offset-0 arm already did
+; Evidence: reached only by `jr z` at 0xF96178; compares the 7-bit new byte with the snapshot byte at
+; 0x608000+IY (`and WA,0x7f7f / cp A,W`), skips when bit 0 of (0x2180) is set, else appends
+; {D,1,(XIY+0x7620),0x7F} and {D,0,(XIY+0x761F),0xFF} at 0x2C00+IX.
+ParamImage_QueueProgramBankPair:   ; entry: reachable-run entry
 	ld XHL,0x00608000                                    ; F961F1  43 00 80 60 00
 	mx_ld_rm MXB, ra_HL, ra_IY, r0                       ; F961F6  c3 07 ec f4 20
 	and WA,0x7f7f                                        ; F961FB  d8 cc 7f 7f
@@ -41674,22 +41703,38 @@ T_F401E4_Nop:   ; entry: prom_b routine directory
 	nop                                                  ; F96415  00
 	nop                                                  ; F96416  00
 	nop                                                  ; F96417  00
-sub_F96418:   ; entry: prom_b routine directory
-	call sub_F96432                                        ; F96418  1d 32 64 f9
+; ParamImage_SanitizeAll_Entry -- prom_b directory slot T_F40214 (slot 0 of the 0xF96400 group):
+; `call ParamImage_SanitizeAll / ret`
+; Evidence: `call 0xf96432` at 0xF96418; callers 0xFB59B1 and the 0xFB1800 PatchList module.
+ParamImage_SanitizeAll_Entry:   ; entry: prom_b routine directory
+	call ParamImage_SanitizeAll                                        ; F96418  1d 32 64 f9
 	ret                                                  ; F9641C  0e
 T_F40218_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F9641D  0e
-sub_F9641E:   ; entry: prom_b routine directory
-	call sub_F9646A                                        ; F9641E  1d 6a 64 f9
+; ParamImage_SanitizeAllAndHook_Entry -- prom_b directory slot T_F4021C (slot 2 of the 0xF96400 group):
+; `call ParamImage_SanitizeAllAndHook / ret`
+; Evidence: callers 0xFAA89C, 0xFAA8F9, 0xFAAA99, 0xFB3126 (each followed by T_F401D4, with T_F40224 just
+; before or after) and the veneer 0xFE0087.
+ParamImage_SanitizeAllAndHook_Entry:   ; entry: prom_b routine directory
+	call ParamImage_SanitizeAllAndHook                                        ; F9641E  1d 6a 64 f9
 	ret                                                  ; F96422  0e
-sub_F96423:   ; entry: prom_b routine directory
-	call sub_F96C65                                        ; F96423  1d 65 6c f9
+; ParamImage_ApplyAndMaskTable_Entry -- prom_b directory slot T_F40220 (slot 3 of the 0xF96400 group):
+; `call ParamImage_ApplyAndMaskTable / ret`
+; Evidence: callers 0xFAA898 and 0xFAA8F5, each the first of T_F40220 / T_F4021C / T_F401D4 / T_F40224.
+ParamImage_ApplyAndMaskTable_Entry:   ; entry: prom_b routine directory
+	call ParamImage_ApplyAndMaskTable                                        ; F96423  1d 65 6c f9
 	ret                                                  ; F96427  0e
-sub_F96428:   ; entry: prom_b routine directory
-	call sub_F96C8A                                        ; F96428  1d 8a 6c f9
+; ParamImage_WriteRecordHeaders_Entry -- prom_b directory slot T_F40224 (slot 4 of the 0xF96400 group):
+; `call ParamImage_WriteRecordHeaders / ret`
+; Evidence: callers 0xFAA8A4, 0xFAA901, 0xFAAAA1, 0xFB3122, 0xFB5976, 0xFB59AD, 0xFB77BA, 0xFE0064.
+ParamImage_WriteRecordHeaders_Entry:   ; entry: prom_b routine directory
+	call ParamImage_WriteRecordHeaders                                        ; F96428  1d 8a 6c f9
 	ret                                                  ; F9642C  0e
-sub_F9642D:   ; entry: prom_b routine directory
-	call sub_F9647F                                        ; F9642D  1d 7f 64 f9
+; ParamImageAlt_SanitizeCombination_Entry -- prom_b directory slot T_F40228 (slot 5 of the 0xF96400 group):
+; `call ParamImageAlt_SanitizeCombination / ret`
+; Evidence: callers 0xFB320D and 0xFE0154.
+ParamImageAlt_SanitizeCombination_Entry:   ; entry: prom_b routine directory
+	call ParamImageAlt_SanitizeCombination                                        ; F9642D  1d 7f 64 f9
 	ret                                                  ; F96431  0e
 ; ==== 0xF96432-0xF97418 -- STRONG-REACHABLE CODE ONLY, emitted by notes/gen_prom_a_cover_round2.py ====
 ; 3 run(s), 259 bytes framed as code.  3811 bytes that nothing STRONGLY reaches stay
@@ -41706,7 +41751,13 @@ sub_F9642D:   ; entry: prom_b routine directory
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
 .LF96432:
-sub_F96432:   ; entry: branch/call in converted code
+; ParamImage_SanitizeAll -- validate the whole parameter image at 0x7620: effect records 0x61 and 0x63, then
+; every field script of ScriptTableA_F969DD (offsets 0..0x2BE) and ScriptTableB_F96AA1 (0x2C0..0x95E)
+; Evidence: T_F42F5C (prom_b sub_F1156B: looks the block's type byte up in EffectAlgoToPos_Block97/99 and
+; rewrites the block) with (0x61, 0x7642) and (0x63, 0x7682), the payloads of records 0x61/0x63; then XIY =
+; 0x7620 with table A (0xF96455) and table B (.LF96471), both run by the reader .LF964B9; then T_F407A4 and
+; T_F407A0, both bare `ret`s (prom_a 0xFAA7AB, 0xFAB5EA). Record 0x62 is not passed to T_F42F5C here.
+ParamImage_SanitizeAll:   ; entry: branch/call in converted code
 	ld XWA,0x00007642                                    ; F96432  40 42 76 00 00
 	push XWA                                             ; F96437  38
 	pushw 0x61                                           ; F96438  0b 61 00
@@ -41728,7 +41779,10 @@ sub_F96432:   ; entry: branch/call in converted code
 	ret                                                  ; F96468  0e
 .LF96469:
 	ret                                                  ; F96469  0e
-sub_F9646A:   ; entry: branch/call in converted code
+; ParamImage_SanitizeAllAndHook -- ParamImage_SanitizeAll followed by the empty hook .LF96469 (a bare `ret`)
+; Evidence: `calr .LF96432 / calr .LF96469 / ret` at 0xF9646A; reached only from
+; ParamImage_SanitizeAllAndHook_Entry.
+ParamImage_SanitizeAllAndHook:   ; entry: branch/call in converted code
 	calr .LF96432                                        ; F9646A  1e c5 ff
 	calr .LF96469                                        ; F9646D  1e f9 ff
 	ret                                                  ; F96470  0e
@@ -41737,7 +41791,12 @@ sub_F9646A:   ; entry: branch/call in converted code
 	ld XIX,ScriptTableB_F96AA1                           ; F96476  44 a1 6a f9 00
 	calr .LF964B9                                        ; F9647B  1e 3b 00
 	ret                                                  ; F9647E  0e
-sub_F9647F:   ; entry: branch/call in converted code
+; ParamImageAlt_SanitizeCombination -- validate the COMBINATION part of the second parameter image at
+; 0x603620: effect records 0x61/0x63, then ScriptTableA_F969DD only
+; Evidence: XIY = 0x00603620; T_F42F5C with (0x61, 0x603642) and (0x63, 0x603682) -- the same +0x22/+0x62 as
+; ParamImage_SanitizeAll uses at 0x7620; table A at 0xF96484 run by .LF964B9; then T_F401E8 (a bare `ret`).
+; Same layout: prom_b sub_F448A3 reads 0x603620+0x8C2 into (0x7EE2), the same offset in the main image.
+ParamImageAlt_SanitizeCombination:   ; entry: branch/call in converted code
 	ld XIY,0x00603620                                    ; F9647F  45 20 36 60 00
 	ld XIX,ScriptTableA_F969DD                           ; F96484  44 dd 69 f9 00
 	push XIX                                             ; F96489  3c
@@ -41825,30 +41884,43 @@ sub_F9647F:   ; entry: branch/call in converted code
 ; What these fields MEAN is not established -- the layout is.  The handlers are
 ; `sub_XXXXXX`: an address plus its dispatch slot, not a claim.
 ; ------------------------------------------------------------------------------
-sub_F96504:   ; script opcode 0x01 handler (slot 1 of ScriptOpHandlers_F969A1)
+; ParamScript_AndImm -- script opcode 0x01: field &= imm (record: op, field, imm)
+; Evidence: `and A,(XIX) / ld (XHL),A / inc XIX`, with A = the field's value and XHL = &struct.field as
+; the reader .LF964B9 sets them; slot 1 of ScriptOpHandlers_F969A1.
+ParamScript_AndImm:   ; script opcode 0x01 handler (slot 1 of ScriptOpHandlers_F969A1)
 	and A,(XIX)                                          ; F96504  84 c1
 	ld (XHL),A                                           ; F96506  b3 41
 	inc 1,XIX                                            ; F96508  ec 61
 	ret                                                  ; F9650A  0e
-sub_F9650B:   ; script opcode 0x08 handler (slot 8 of ScriptOpHandlers_F969A1)
+; ParamScript_SetImm -- script opcode 0x08: field = imm (record: op, field, imm)
+; Evidence: `ld A,(XIX) / ld (XHL),A / inc XIX`; slot 8 of ScriptOpHandlers_F969A1.
+ParamScript_SetImm:   ; script opcode 0x08 handler (slot 8 of ScriptOpHandlers_F969A1)
 	ld A,(XIX)                                           ; F9650B  84 21
 	ld (XHL),A                                           ; F9650D  b3 41
 	inc 1,XIX                                            ; F9650F  ec 61
 	ret                                                  ; F96511  0e
-sub_F96512:   ; script opcode 0x02 handler (slot 2 of ScriptOpHandlers_F969A1)
+; ParamScript_ClearBitsImm -- script opcode 0x02: field &= ~imm (record: op, field, imm)
+; Evidence: `ld W,(XIX) / xor W,0xff / and A,W / ld (XHL),A`; slot 2 of ScriptOpHandlers_F969A1.
+ParamScript_ClearBitsImm:   ; script opcode 0x02 handler (slot 2 of ScriptOpHandlers_F969A1)
 	ld W,(XIX)                                           ; F96512  84 20
 	xor W,0xff                                           ; F96514  c8 cd ff
 	and A,W                                              ; F96517  c8 c1
 	ld (XHL),A                                           ; F96519  b3 41
 	inc 1,XIX                                            ; F9651B  ec 61
 	ret                                                  ; F9651D  0e
-sub_F9651E:   ; script opcode 0x03 handler (slot 3 of ScriptOpHandlers_F969A1)
+; ParamScript_SetBitsImm -- script opcode 0x03: field |= imm (record: op, field, imm)
+; Evidence: `ld W,(XIX) / or A,W / ld (XHL),A`; slot 3 of ScriptOpHandlers_F969A1.
+ParamScript_SetBitsImm:   ; script opcode 0x03 handler (slot 3 of ScriptOpHandlers_F969A1)
 	ld W,(XIX)                                           ; F9651E  84 20
 	or A,W                                               ; F96520  c8 e1
 	ld (XHL),A                                           ; F96522  b3 41
 	inc 1,XIX                                            ; F96524  ec 61
 	ret                                                  ; F96526  0e
-sub_F96527:   ; script opcode 0x04 handler (slot 4 of ScriptOpHandlers_F969A1)
+; ParamScript_ClampFieldOrDefault -- script opcode 0x04: the bit-field under mask m must lie in [lo, hi],
+; otherwise it is replaced by def (record: op, field, m, lo, hi, def)
+; Evidence: C = trailing zeros of m, value >> C (`cb ff`); `cp A,(XIX) / jr c` and `cp A,(XIX) / jr ugt`
+; both load the byte at +3; then `and (XHL),~m`, value << C (`cb fc`), `or (XHL),A`; slot 4.
+ParamScript_ClampFieldOrDefault:   ; script opcode 0x04 handler (slot 4 of ScriptOpHandlers_F969A1)
 	ld W,(XIX)                                           ; F96527  84 20
 	ld E,W                                               ; F96529  c8 8d
 	and A,W                                              ; F9652B  c8 c1
@@ -41894,7 +41966,11 @@ sub_F96527:   ; script opcode 0x04 handler (slot 4 of ScriptOpHandlers_F969A1)
 	or (XHL),A                                           ; F9656F  83 e9
 	inc 1,XIX                                            ; F96571  ec 61
 	ret                                                  ; F96573  0e
-sub_F96574:   ; script opcode 0x05 handler (slot 5 of ScriptOpHandlers_F969A1)
+; ParamScript_ReplaceFieldIfInRange -- script opcode 0x05: when the bit-field under mask m lies IN [lo, hi]
+; it is replaced by rep, otherwise kept (record: op, field, m, lo, hi, rep)
+; Evidence: same shift/merge as ParamScript_ClampFieldOrDefault, but `jr nc` / `jr ule` (0xF96597-0xF965A9)
+; make the in-range arm the only one that executes `ld A,(XIX)`; slot 5.
+ParamScript_ReplaceFieldIfInRange:   ; script opcode 0x05 handler (slot 5 of ScriptOpHandlers_F969A1)
 	ld W,(XIX)                                           ; F96574  84 20
 	ld E,W                                               ; F96576  c8 8d
 	and A,W                                              ; F96578  c8 c1
@@ -41940,7 +42016,11 @@ sub_F96574:   ; script opcode 0x05 handler (slot 5 of ScriptOpHandlers_F969A1)
 	or (XHL),A                                           ; F965BC  83 e9
 	inc 1,XIX                                            ; F965BE  ec 61
 	ret                                                  ; F965C0  0e
-sub_F965C1:   ; script opcode 0x06 handler (slot 6 of ScriptOpHandlers_F969A1)
+; ParamScript_FieldInListElseLast -- script opcode 0x06: the bit-field under mask m must equal one of n
+; listed values; if none matches it becomes the LAST listed value (record: op, field, m, n, v1..vn)
+; Evidence: `dec E / cp A,(XIX) / jr z` loop at 0xF965E4-0xF965F0; on exhaustion `ld A,(XIX)` with XIX on
+; the last value; `add XIX,XDE / inc XIX` then skips the unread rest of the list; slot 6.
+ParamScript_FieldInListElseLast:   ; script opcode 0x06 handler (slot 6 of ScriptOpHandlers_F969A1)
 	ld W,(XIX)                                           ; F965C1  84 20
 	and A,W                                              ; F965C3  c8 c1
 	ld D,W                                               ; F965C5  c8 8c
@@ -41985,7 +42065,11 @@ sub_F965C1:   ; script opcode 0x06 handler (slot 6 of ScriptOpHandlers_F969A1)
 	add XIX,XDE                                          ; F96609  ea 84
 	inc 1,XIX                                            ; F9660B  ec 61
 	ret                                                  ; F9660D  0e
-sub_F9660E:   ; script opcode 0x07 handler (slot 7 of ScriptOpHandlers_F969A1)
+; ParamScript_MapFieldIfInList -- script opcode 0x07: when the bit-field under mask m equals one of n listed
+; values it becomes the byte after the list, otherwise it is kept (record: op, field, m, n, v1..vn, rep)
+; Evidence: the match arm (0xF9663F) advances past the list and loads rep; the no-match arm (0xF9665E)
+; writes A back unchanged; both finish with one more `inc XIX` past rep; slot 7.
+ParamScript_MapFieldIfInList:   ; script opcode 0x07 handler (slot 7 of ScriptOpHandlers_F969A1)
 	ld W,(XIX)                                           ; F9660E  84 20
 	and A,W                                              ; F96610  c8 c1
 	ld D,W                                               ; F96612  c8 8c
@@ -42338,14 +42422,14 @@ Script_F9699A:   ; 2 record(s), named by B[55]
 ; ------------------------------------------------------------------------------
 ScriptOpHandlers_F969A1:
 	.long 0x00000000   ; F969A1  [ 0] unused
-	.long sub_F96504   ; F969A5  [ 1] opcode 0x01
-	.long sub_F96512   ; F969A9  [ 2] opcode 0x02
-	.long sub_F9651E   ; F969AD  [ 3] opcode 0x03
-	.long sub_F96527   ; F969B1  [ 4] opcode 0x04
-	.long sub_F96574   ; F969B5  [ 5] opcode 0x05
-	.long sub_F965C1   ; F969B9  [ 6] opcode 0x06
-	.long sub_F9660E   ; F969BD  [ 7] opcode 0x07
-	.long sub_F9650B   ; F969C1  [ 8] opcode 0x08
+	.long ParamScript_AndImm   ; F969A5  [ 1] opcode 0x01
+	.long ParamScript_ClearBitsImm   ; F969A9  [ 2] opcode 0x02
+	.long ParamScript_SetBitsImm   ; F969AD  [ 3] opcode 0x03
+	.long ParamScript_ClampFieldOrDefault   ; F969B1  [ 4] opcode 0x04
+	.long ParamScript_ReplaceFieldIfInRange   ; F969B5  [ 5] opcode 0x05
+	.long ParamScript_FieldInListElseLast   ; F969B9  [ 6] opcode 0x06
+	.long ParamScript_MapFieldIfInList   ; F969BD  [ 7] opcode 0x07
+	.long ParamScript_SetImm   ; F969C1  [ 8] opcode 0x08
 	.long 0x00000000   ; F969C5  [ 9] unused
 	.long 0x00000000   ; F969C9  [10] unused
 	.long 0x00000000   ; F969CD  [11] unused
@@ -42444,7 +42528,12 @@ ScriptTableB_F96AA1:
 	.long 0x00000938, Script_F96954   ; F96C51  [54] +0x0938 -> Script_F96954
 	.long 0x0000095e, Script_F9699A   ; F96C59  [55] +0x095e -> Script_F9699A
 	.long 0xffffffff   ; F96C61  end of table
-sub_F96C65:   ; entry: branch/call in converted code
+; ParamImage_ApplyAndMaskTable -- AND each (address, mask) record of ReservedRecordTable_F96C7B into memory;
+; with BC = 1 that is (0x7F32) &= 0xFB
+; Evidence: `ld XIY,0xF96C7B / ldw bc,1`, then `ld XIX,(XIY) / inc 4,XIY / ld A,(XIY) / and (XIX),A`.
+; 0x7F32 is record 0x80's first payload byte (header at 0x7F30 in RamInitTable_F96CA6), and its bit 2 is
+; the bit MIDI_RT_Received tests to choose MIDI_RT_ExternalOff.
+ParamImage_ApplyAndMaskTable:   ; entry: branch/call in converted code
 	ld XIY,ReservedRecordTable_F96C7B                    ; F96C65  45 7b 6c f9 00
 	ldw bc, 0x01                                         ; F96C6A  31 01 00
 .LF96C6D:
@@ -42455,12 +42544,18 @@ sub_F96C65:   ; entry: branch/call in converted code
 	and (XIX),A                                          ; F96C75  84 c9
 	djnz16 bc, .LF96C6D                                  ; F96C77  d9 1c f3
 	ret                                                  ; F96C7A  0e
-ReservedRecordTable_F96C7B:   ; 3 x 5-byte (addr32,mask8) records, read by sub_F96C65 (above) which processes only record 0
+ReservedRecordTable_F96C7B:   ; 3 x 5-byte (addr32,mask8) records, read by ParamImage_ApplyAndMaskTable (above) which processes only record 0
 	.long 0x00007f32   ; F96C7B  record 0 addr
 	.byte 0xfb         ; F96C7F  record 0 mask
 	.long 0x00000000, 0x00000000   ; F96C80  records 1-2 addr, unused/reserved
 	.byte 0x00, 0x00   ; F96C88  records 1-2 mask, unused/reserved
-sub_F96C8A:   ; entry: branch/call in converted code
+; ParamImage_WriteRecordHeaders -- write the 80 {record number, length} header words of the parameter image
+; at 0x7620 from RamInitTable_F96CA6
+; Evidence: `ld (XHL),WA` with WA from _Values and XHL from _Addrs, BC = 0x50 (0xF96C8A-0xF96CA1). Each value
+; is record number (low byte: 0x78, 0x60-0x63, 0x00-0x3F, 0x79, 0x7A, 0x80, 0x91-0x93, 0x98, 0x99) plus
+; length (high byte); address + 2 + length = the next address for all 77 records, and the three 0xFFFF words
+; are 2-byte terminators at +0x2BE, +0x8DE and +0x95E, so the headers tile 0x7620-0x7F7F exactly.
+ParamImage_WriteRecordHeaders:   ; entry: branch/call in converted code
 	ld XIY,RamInitTable_F96CA6_Values                    ; F96C8A  45 e6 6d f9 00
 	ld XIX,RamInitTable_F96CA6_Addrs                     ; F96C8F  44 a6 6c f9 00
 	ld XBC,0x00000050                                    ; F96C94  41 50 00 00 00
@@ -42470,13 +42565,13 @@ sub_F96C8A:   ; entry: branch/call in converted code
 	ld (XHL),WA                                          ; F96C9F  b3 50
 	djnz16 bc, .LF96C99                                  ; F96CA1  d9 1c f5
 	ret                                                  ; F96CA4  0e
-; 0xF96CA5 -- 1 B of 0x0E (this file's own erased-flash/RET-padding value), between sub_F96C8A's ret and RamInitTable_F96CA6_Addrs.
+; 0xF96CA5 -- 1 B of 0x0E (this file's own erased-flash/RET-padding value), between ParamImage_WriteRecordHeaders's ret and RamInitTable_F96CA6_Addrs.
 	.fill 1, 1, 0x0E   ; F96CA5
 ; ---------------------------------------------------------------------
 ; RamInitTable_F96CA6 -- 80 (address, value) pairs, split as two parallel
 ; arrays: 80 LE32 RAM addresses here, then 80 LE16 values at 0xF96DE6.
 ;
-; Evidence: sub_F96C8A (0xF96C8A) is the ONLY reader.  It sets
+; Evidence: ParamImage_WriteRecordHeaders (0xF96C8A) is the ONLY reader.  It sets
 ;          XIY=0x00F96DE6, XIX=0x00F96CA6, BC=0x0050 (80), then loops
 ;          `ld_spiw wa, 0xf5` / `ld_spil xhl, 0xf2` / `ld (XHL),WA` --
 ;          0xF5 and 0xF2 are this file's own established selector bytes
@@ -42664,13 +42759,17 @@ Unclassified_F96E86:
 ; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
 	.fill 1400, 1, 0x0E
 ; 0xF97401-0xF97418 -- 23 B, unclassified.  Bounded by the already-
-; verified 1400 B 0x0E fill run (ends exactly here) and sub_F97418
+; verified 1400 B 0x0E fill run (ends exactly here) and Queue2C00_DrainPassB_SaveRegs
 ; (starts exactly at the far end).  Not a clean tile of the fill
 ; (mostly zero, one 0x0E every 4th byte, and 23 is not a multiple
 ; of 4) and no reader anywhere in the ROM cites this address.
 Unclassified_F97401:
 	.byte 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00   ; F97401
-sub_F97418:   ; entry: reachable-run entry
+; Queue2C00_DrainPassB_SaveRegs -- T_Queue2C00_DrainPassB with XIZ, XIX, XHL and XDE preserved
+; Evidence: four pushes, `call T_Queue2C00_DrainPassB` (0xF9741C), four pops. Called by
+; ParamImage_QueueDiffCombination (0xF98A04) and ParamImage_QueueDiffCombinationAndParts (0xF98B76) when
+; the 0x2C00 cursor reaches 0x1F4, after they terminate the list with 0xFF.
+Queue2C00_DrainPassB_SaveRegs:   ; entry: reachable-run entry
 	push XIZ                                             ; F97418  3e
 	push XIX                                             ; F97419  3c
 	push XHL                                             ; F9741A  3b
@@ -42681,7 +42780,12 @@ sub_F97418:   ; entry: reachable-run entry
 	pop XIX                                              ; F97422  5c
 	pop XIZ                                              ; F97423  5e
 	ret                                                  ; F97424  0e
-sub_F97425:
+; ParamImage_SnapshotCombination -- copy the COMBINATION stream of the parameter image (0x7620, 0x2BE bytes)
+; to the snapshot at 0x608000
+; Evidence: `lda XIX,0x608000 / lda XIY,0x7620 / ldw BC,0x015F / ldirw` = 0x2BE bytes, ending at that
+; stream's FF FF terminator (+0x2BE, RamInitTable_F96CA6 entry 23). Callers: Combination_Recall (0xF9759F)
+; and ParamImage_SnapshotCombination_Entry (0xF98984).
+ParamImage_SnapshotCombination:
 	push XIX                                             ; F97425  3c
 	lda xix, (0x608000:24)                               ; F97426  f2 00 80 60 34
 	lda xiy, (0x7620:16)                                ; F9742B  f1 20 76 35
@@ -42689,7 +42793,12 @@ sub_F97425:
 	ldirw                                                ; F97432  95 11
 	pop XIX                                              ; F97434  5c
 	ret                                                  ; F97435  0e
-sub_F97436:
+; ParamImage_SnapshotCombinationAndParts -- save record 0x79 bytes 1-4 (0x78B3) to (0x2181), then copy the
+; first 0x8DE bytes of the parameter image (0x7620) to the snapshot at 0x608000
+; Evidence: `ld xwa,(0x78b3) / ld (0x2181),xwa`; `ldw BC,0x046F / ldirw` = 0x8DE bytes, up to the second FF FF
+; terminator (+0x8DE): the COMBINATION stream plus part records 0x08-0x1F/0x28-0x3F and 0x7A.
+; Caller: ParamImage_SnapshotCombinationAndParts_Entry (0xF98989).
+ParamImage_SnapshotCombinationAndParts:
 	push XWA                                             ; F97436  38
 	push XIX                                             ; F97437  3c
 	ld xwa, (0x78b3:16)                                 ; F97438  e1 b3 78 20
@@ -42701,7 +42810,12 @@ sub_F97436:
 	pop XIX                                              ; F9744E  5c
 	pop XWA                                              ; F9744F  58
 	ret                                                  ; F97450  0e
-sub_F97451:
+; MidiOut_PostPartProgramChange -- post PROGRAM CHANGE (offset 0) of the current part through
+; MidiOut_ParamChanged, from the part's own byte or its MIDI MULTIPLE MESSAGES OUTPUT override
+; Evidence: XIX = (0x218B) (part A-block payload), C = (0x218F) (its record number), B = 0. Bit 0 of
+; (XIX+0x15) set: E = (XIX+0x00), D = 0xFF; clear: E = (XIX+0x0E) & 0x7F, D = 0x7F. +0x0E is MMO: PROGRAM
+; CHANGE, +0x15 bit 0 its flag (sec-blocks.tex). Caller: Combination_Recall's .LF98627 if (XIX+0x0E) < 0x80.
+MidiOut_PostPartProgramChange:
 	push XIZ                                             ; F97451  3e
 	push XIX                                             ; F97452  3c
 	push XHL                                             ; F97453  3b
@@ -42727,7 +42841,13 @@ sub_F97451:
 	pop XIX                                              ; F9747E  5c
 	pop XIZ                                              ; F9747F  5e
 	ret                                                  ; F97480  0e
-sub_F97481:
+; MidiOut_PostPartBankSelect -- post the current part's bank: its own (bit 5 of +0x15 set) or the two-byte
+; MMO: BANK SELECT override at +0x0F/+0x10 (clear)
+; Evidence: XIX = (0x218B). Set: E = (XIX+0x01) & 0x3F, `sll 5,DE / srl 1,E`, B = (0x218F), C = 0x81, call
+; T_ParamChange_NotifyClearSource. Clear: T_MidiOut_ParamChanged twice, B = 0x10 with (XIX+0x10) & 0x7F and
+; B = 0x0F with (XIX+0x0F) & 0x7F, C = (0x218F). Bit 5 = BANK SELECT in sec-blocks.tex.
+; Caller: Combination_Recall's .LF98627, when (XIX+0x0F) < 0x80.
+MidiOut_PostPartBankSelect:
 	push XIZ                                             ; F97481  3e
 	push XIX                                             ; F97482  3c
 	push XHL                                             ; F97483  3b
@@ -42765,7 +42885,12 @@ sub_F97481:
 	pop XIX                                              ; F974D0  5c
 	pop XIZ                                              ; F974D1  5e
 	ret                                                  ; F974D2  0e
-sub_F974D3:
+; MidiOut_PostPartVolume -- post VOLUME (offset 3) of the current part through MidiOut_ParamChanged, from
+; the part's own byte or its MMO: VOLUME override
+; Evidence: XIX = (0x218B), C = (0x218F), B = 3, D = 0x7F; bit 1 of (XIX+0x15) set: E = (XIX+0x03) & 0x7F,
+; clear: E = (XIX+0x11) & 0x7F (MMO: VOLUME is offset 0x11, tbl:partparams). Caller: Combination_Recall's
+; .LF98627, when (XIX+0x11) < 0x80.
+MidiOut_PostPartVolume:
 	push XIZ                                             ; F974D3  3e
 	push XIX                                             ; F974D4  3c
 	push XHL                                             ; F974D5  3b
@@ -42791,7 +42916,12 @@ sub_F974D3:
 	pop XIX                                              ; F97500  5c
 	pop XIZ                                              ; F97501  5e
 	ret                                                  ; F97502  0e
-sub_F97503:
+; MidiOut_PostPartPanpot -- post PANPOT (offset 8) of the current part through MidiOut_ParamChanged, from
+; the part's own byte or its MMO: PANPOT override
+; Evidence: XIX = (0x218B), C = (0x218F), B = 8, D = 0x7F; bit 2 of (XIX+0x15) set: E = (XIX+0x08) & 0x7F,
+; clear: E = (XIX+0x12) & 0x7F (MMO: PANPOT, offset 0x12). Reached only by `lda xix,<this>` (0xF98628) and
+; `jp (xix)` in Combination_Recall's .LF98627, when (XIX+0x12) < 0x80 -- hence no `call` site.
+MidiOut_PostPartPanpot:
 	push XIZ                                      ; F97503  3e
 	push XIX                                      ; F97504  3c
 	push XHL                                      ; F97505  3b
@@ -42817,7 +42947,12 @@ sub_F97503:
 	pop XIX                                       ; F97530  5c
 	pop XIZ                                       ; F97531  5e
 	ret                                           ; F97532  0e
-sub_F97533:   ; entry: reachable-run entry
+; MidiOut_PostPartEffect1Send -- post EFFECT1 SEND (offset 5) of the current part through
+; MidiOut_ParamChanged, from the part's own byte or its MMO: CHORUS DEPTH override
+; Evidence: XIX = (0x218B), C = (0x218F), B = 5, D = 0x7F; bit 3 of (XIX+0x15) set: E = (XIX+0x05) & 0x7F,
+; clear: E = (XIX+0x13) & 0x7F. Offset 5 is EFFECT1 SEND and 0x13 MMO: CHORUS DEPTH (tbl:partparams);
+; bit 3 is CHORUS DEPTH in sec-blocks.tex. Caller: Combination_Recall's .LF98627 if (XIX+0x13) < 0x80.
+MidiOut_PostPartEffect1Send:   ; entry: reachable-run entry
 	push XIZ                                             ; F97533  3e
 	push XIX                                             ; F97534  3c
 	push XHL                                             ; F97535  3b
@@ -42843,7 +42978,12 @@ sub_F97533:   ; entry: reachable-run entry
 	pop XIX                                              ; F97560  5c
 	pop XIZ                                              ; F97561  5e
 	ret                                                  ; F97562  0e
-sub_F97563:
+; MidiOut_PostPartReverbSend -- post REVERB SEND (offset 7) of the current part through
+; MidiOut_ParamChanged, from the part's own byte or its MMO: REVERB DEPTH override
+; Evidence: XIX = (0x218B), C = (0x218F), B = 7, D = 0x7F; bit 4 of (XIX+0x15) set: E = (XIX+0x07) & 0x7F,
+; clear: E = (XIX+0x14) & 0x7F (offset 7 REVERB SEND, 0x14 MMO: REVERB DEPTH, tbl:partparams).
+; Caller: Combination_Recall's .LF98627, when (XIX+0x14) < 0x80.
+MidiOut_PostPartReverbSend:
 	push XIZ                                             ; F97563  3e
 	push XIX                                             ; F97564  3c
 	push XHL                                             ; F97565  3b
@@ -42869,16 +43009,27 @@ sub_F97563:
 	pop XIX                                              ; F97590  5c
 	pop XIZ                                              ; F97591  5e
 	ret                                                  ; F97592  0e
-sub_F97593:   ; entry: prom_b routine directory
+; Combination_RecallOnSelect -- pass-A event handler for record class 0x98: when the queued change is field
+; 1 of record 0x98 -- (0x7F03), the combination number Combination_Recall loads -- run Combination_Recall
+; Evidence: UiListA_Class98[0] holds T_F40244 = `jp 0xF97593`; `cp (0x20B8),0x01 / jr nz` (0xF97593), and
+; UiEventList_Run puts the record's byte +1 (the field offset) in (0x20B8). Record 0x98's header is at
+; 0x7F00 (RamInitTable_F96CA6 entry 74), so its field 1 is 0x7F03.
+Combination_RecallOnSelect:   ; entry: prom_b routine directory
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x01                          ; F97593  c1 b8 20 3f 01
 	jr nz, .LF9759D                                      ; F97598  6e 03
 	calr .LF9759E                                        ; F9759A  1e 01 00
 .LF9759D:
 	ret                                                  ; F9759D  0e
 .LF9759E:
-sub_F9759E:   ; entry: prom_b routine directory
+; Combination_Recall -- load combination (0x7F03) from CPU 2 into the parameter image, copy back what the
+; hold flags keep, then queue and post the changes (prom_b T_F40254, caller 0xFB5342)
+; Evidence: ParamImage_SnapshotCombination; Combination_ReadFromCpu2(index (0x7F03), source (0x7F04));
+; .LF97FC2/.LF982F6 copy effect/part fields back from 0x608000 when the low/high nibble of (0x7EE4) is 0, and
+; .LF9766F per bits 0-4 of (0x7F07); .LF975C8 complements the snapshot's PROGRAM CHANGE byte of parts 1-8 so
+; .LF9898E (QueueDiffCombination) always queues them; .LF98627 runs the six MidiOut_PostPart* for parts 1-8.
+Combination_Recall:   ; entry: prom_b routine directory
 	pushw hl                                             ; F9759E  2b
-	call sub_F97425                                        ; F9759F  1d 25 74 f9
+	call ParamImage_SnapshotCombination                                        ; F9759F  1d 25 74 f9
 	ld h, (0x7f03:16)                                   ; F975A3  c1 03 7f 26
 	ld c, (0x7f04:16)                                   ; F975A7  c1 04 7f 23
 	pushw bc                                             ; F975AB  29
@@ -44490,24 +44641,24 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ret                                                  ; F98626  0e
 .LF98627:
 	push XIX                                             ; F98627  3c
-	lda xix, (sub_F97503:24)                             ; F98628  f2 03 75 f9 34
+	lda xix, (MidiOut_PostPartPanpot:24)                             ; F98628  f2 03 75 f9 34
 	lda xbc, (0x76a2:16)                                ; F9862D  f1 a2 76 31
 	ld (0x218b:16), xbc                                 ; F98631  f1 8b 21 61
 	ld (0x218f:16), 0x00                                 ; F98635  f1 8f 21 00 00
 	ld a, (0x76b1:16)                                   ; F9863A  c1 b1 76 21
 	and A,0x80                                           ; F9863E  c9 cc 80
 	jr nz, .LF98647                                      ; F98641  6e 04
-	call sub_F97481                                        ; F98643  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F98643  1d 81 74 f9
 .LF98647:
 	ld c, (0x76b0:16)                                   ; F98647  c1 b0 76 23
 	and C,0x80                                           ; F9864B  cb cc 80
 	jr nz, .LF98654                                      ; F9864E  6e 04
-	call sub_F97451                                        ; F98650  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F98650  1d 51 74 f9
 .LF98654:
 	ld c, (0x76b3:16)                                   ; F98654  c1 b3 76 23
 	and C,0x80                                           ; F98658  cb cc 80
 	jr nz, .LF98661                                      ; F9865B  6e 04
-	call sub_F974D3                                        ; F9865D  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F9865D  1d d3 74 f9
 .LF98661:
 	ld c, (0x76b4:16)                                   ; F98661  c1 b4 76 23
 	and C,0x80                                           ; F98665  cb cc 80
@@ -44519,12 +44670,12 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x76b5:16)                                   ; F98672  c1 b5 76 23
 	and C,0x80                                           ; F98676  cb cc 80
 	jr nz, .LF9867F                                      ; F98679  6e 04
-	call sub_F97533                                        ; F9867B  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F9867B  1d 33 75 f9
 .LF9867F:
 	ld c, (0x76b6:16)                                   ; F9867F  c1 b6 76 23
 	and C,0x80                                           ; F98683  cb cc 80
 	jr nz, .LF9868C                                      ; F98686  6e 04
-	call sub_F97563                                        ; F98688  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F98688  1d 63 75 f9
 .LF9868C:
 	lda xbc, (0x76e2:16)                                ; F9868C  f1 e2 76 31
 	ld (0x218b:16), xbc                                 ; F98690  f1 8b 21 61
@@ -44532,17 +44683,17 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld a, (0x76f1:16)                                   ; F98699  c1 f1 76 21
 	and A,0x80                                           ; F9869D  c9 cc 80
 	jr nz, .LF986A6                                      ; F986A0  6e 04
-	call sub_F97481                                        ; F986A2  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F986A2  1d 81 74 f9
 .LF986A6:
 	ld c, (0x76f0:16)                                   ; F986A6  c1 f0 76 23
 	and C,0x80                                           ; F986AA  cb cc 80
 	jr nz, .LF986B3                                      ; F986AD  6e 04
-	call sub_F97451                                        ; F986AF  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F986AF  1d 51 74 f9
 .LF986B3:
 	ld c, (0x76f3:16)                                   ; F986B3  c1 f3 76 23
 	and C,0x80                                           ; F986B7  cb cc 80
 	jr nz, .LF986C0                                      ; F986BA  6e 04
-	call sub_F974D3                                        ; F986BC  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F986BC  1d d3 74 f9
 .LF986C0:
 	ld c, (0x76f4:16)                                   ; F986C0  c1 f4 76 23
 	and C,0x80                                           ; F986C4  cb cc 80
@@ -44554,12 +44705,12 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x76f5:16)                                   ; F986D1  c1 f5 76 23
 	and C,0x80                                           ; F986D5  cb cc 80
 	jr nz, .LF986DE                                      ; F986D8  6e 04
-	call sub_F97533                                        ; F986DA  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F986DA  1d 33 75 f9
 .LF986DE:
 	ld c, (0x76f6:16)                                   ; F986DE  c1 f6 76 23
 	and C,0x80                                           ; F986E2  cb cc 80
 	jr nz, .LF986EB                                      ; F986E5  6e 04
-	call sub_F97563                                        ; F986E7  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F986E7  1d 63 75 f9
 .LF986EB:
 	lda xbc, (0x7722:16)                                ; F986EB  f1 22 77 31
 	ld (0x218b:16), xbc                                 ; F986EF  f1 8b 21 61
@@ -44567,17 +44718,17 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld a, (0x7731:16)                                   ; F986F8  c1 31 77 21
 	and A,0x80                                           ; F986FC  c9 cc 80
 	jr nz, .LF98705                                      ; F986FF  6e 04
-	call sub_F97481                                        ; F98701  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F98701  1d 81 74 f9
 .LF98705:
 	ld c, (0x7730:16)                                   ; F98705  c1 30 77 23
 	and C,0x80                                           ; F98709  cb cc 80
 	jr nz, .LF98712                                      ; F9870C  6e 04
-	call sub_F97451                                        ; F9870E  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F9870E  1d 51 74 f9
 .LF98712:
 	ld c, (0x7733:16)                                   ; F98712  c1 33 77 23
 	and C,0x80                                           ; F98716  cb cc 80
 	jr nz, .LF9871F                                      ; F98719  6e 04
-	call sub_F974D3                                        ; F9871B  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F9871B  1d d3 74 f9
 .LF9871F:
 	ld c, (0x7734:16)                                   ; F9871F  c1 34 77 23
 	and C,0x80                                           ; F98723  cb cc 80
@@ -44589,12 +44740,12 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x7735:16)                                   ; F98730  c1 35 77 23
 	and C,0x80                                           ; F98734  cb cc 80
 	jr nz, .LF9873D                                      ; F98737  6e 04
-	call sub_F97533                                        ; F98739  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F98739  1d 33 75 f9
 .LF9873D:
 	ld c, (0x7736:16)                                   ; F9873D  c1 36 77 23
 	and C,0x80                                           ; F98741  cb cc 80
 	jr nz, .LF9874A                                      ; F98744  6e 04
-	call sub_F97563                                        ; F98746  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F98746  1d 63 75 f9
 .LF9874A:
 	lda xbc, (0x7762:16)                                ; F9874A  f1 62 77 31
 	ld (0x218b:16), xbc                                 ; F9874E  f1 8b 21 61
@@ -44602,17 +44753,17 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld a, (0x7771:16)                                   ; F98757  c1 71 77 21
 	and A,0x80                                           ; F9875B  c9 cc 80
 	jr nz, .LF98764                                      ; F9875E  6e 04
-	call sub_F97481                                        ; F98760  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F98760  1d 81 74 f9
 .LF98764:
 	ld c, (0x7770:16)                                   ; F98764  c1 70 77 23
 	and C,0x80                                           ; F98768  cb cc 80
 	jr nz, .LF98771                                      ; F9876B  6e 04
-	call sub_F97451                                        ; F9876D  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F9876D  1d 51 74 f9
 .LF98771:
 	ld c, (0x7773:16)                                   ; F98771  c1 73 77 23
 	and C,0x80                                           ; F98775  cb cc 80
 	jr nz, .LF9877E                                      ; F98778  6e 04
-	call sub_F974D3                                        ; F9877A  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F9877A  1d d3 74 f9
 .LF9877E:
 	ld c, (0x7774:16)                                   ; F9877E  c1 74 77 23
 	and C,0x80                                           ; F98782  cb cc 80
@@ -44624,12 +44775,12 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x7775:16)                                   ; F9878F  c1 75 77 23
 	and C,0x80                                           ; F98793  cb cc 80
 	jr nz, .LF9879C                                      ; F98796  6e 04
-	call sub_F97533                                        ; F98798  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F98798  1d 33 75 f9
 .LF9879C:
 	ld c, (0x7776:16)                                   ; F9879C  c1 76 77 23
 	and C,0x80                                           ; F987A0  cb cc 80
 	jr nz, .LF987A9                                      ; F987A3  6e 04
-	call sub_F97563                                        ; F987A5  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F987A5  1d 63 75 f9
 .LF987A9:
 	lda xbc, (0x77a2:16)                                ; F987A9  f1 a2 77 31
 	ld (0x218b:16), xbc                                 ; F987AD  f1 8b 21 61
@@ -44637,17 +44788,17 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld a, (0x77b1:16)                                   ; F987B6  c1 b1 77 21
 	and A,0x80                                           ; F987BA  c9 cc 80
 	jr nz, .LF987C3                                      ; F987BD  6e 04
-	call sub_F97481                                        ; F987BF  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F987BF  1d 81 74 f9
 .LF987C3:
 	ld c, (0x77b0:16)                                   ; F987C3  c1 b0 77 23
 	and C,0x80                                           ; F987C7  cb cc 80
 	jr nz, .LF987D0                                      ; F987CA  6e 04
-	call sub_F97451                                        ; F987CC  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F987CC  1d 51 74 f9
 .LF987D0:
 	ld c, (0x77b3:16)                                   ; F987D0  c1 b3 77 23
 	and C,0x80                                           ; F987D4  cb cc 80
 	jr nz, .LF987DD                                      ; F987D7  6e 04
-	call sub_F974D3                                        ; F987D9  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F987D9  1d d3 74 f9
 .LF987DD:
 	ld c, (0x77b4:16)                                   ; F987DD  c1 b4 77 23
 	and C,0x80                                           ; F987E1  cb cc 80
@@ -44659,12 +44810,12 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x77b5:16)                                   ; F987EE  c1 b5 77 23
 	and C,0x80                                           ; F987F2  cb cc 80
 	jr nz, .LF987FB                                      ; F987F5  6e 04
-	call sub_F97533                                        ; F987F7  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F987F7  1d 33 75 f9
 .LF987FB:
 	ld c, (0x77b6:16)                                   ; F987FB  c1 b6 77 23
 	and C,0x80                                           ; F987FF  cb cc 80
 	jr nz, .LF98808                                      ; F98802  6e 04
-	call sub_F97563                                        ; F98804  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F98804  1d 63 75 f9
 .LF98808:
 	lda xbc, (0x77e2:16)                                ; F98808  f1 e2 77 31
 	ld (0x218b:16), xbc                                 ; F9880C  f1 8b 21 61
@@ -44672,17 +44823,17 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld a, (0x77f1:16)                                   ; F98815  c1 f1 77 21
 	and A,0x80                                           ; F98819  c9 cc 80
 	jr nz, .LF98822                                      ; F9881C  6e 04
-	call sub_F97481                                        ; F9881E  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F9881E  1d 81 74 f9
 .LF98822:
 	ld c, (0x77f0:16)                                   ; F98822  c1 f0 77 23
 	and C,0x80                                           ; F98826  cb cc 80
 	jr nz, .LF9882F                                      ; F98829  6e 04
-	call sub_F97451                                        ; F9882B  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F9882B  1d 51 74 f9
 .LF9882F:
 	ld c, (0x77f3:16)                                   ; F9882F  c1 f3 77 23
 	and C,0x80                                           ; F98833  cb cc 80
 	jr nz, .LF9883C                                      ; F98836  6e 04
-	call sub_F974D3                                        ; F98838  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F98838  1d d3 74 f9
 .LF9883C:
 	ld c, (0x77f4:16)                                   ; F9883C  c1 f4 77 23
 	and C,0x80                                           ; F98840  cb cc 80
@@ -44694,12 +44845,12 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x77f5:16)                                   ; F9884D  c1 f5 77 23
 	and C,0x80                                           ; F98851  cb cc 80
 	jr nz, .LF9885A                                      ; F98854  6e 04
-	call sub_F97533                                        ; F98856  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F98856  1d 33 75 f9
 .LF9885A:
 	ld c, (0x77f6:16)                                   ; F9885A  c1 f6 77 23
 	and C,0x80                                           ; F9885E  cb cc 80
 	jr nz, .LF98867                                      ; F98861  6e 04
-	call sub_F97563                                        ; F98863  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F98863  1d 63 75 f9
 .LF98867:
 	lda xbc, (0x7822:16)                                ; F98867  f1 22 78 31
 	ld (0x218b:16), xbc                                 ; F9886B  f1 8b 21 61
@@ -44707,17 +44858,17 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld a, (0x7831:16)                                   ; F98874  c1 31 78 21
 	and A,0x80                                           ; F98878  c9 cc 80
 	jr nz, .LF98881                                      ; F9887B  6e 04
-	call sub_F97481                                        ; F9887D  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F9887D  1d 81 74 f9
 .LF98881:
 	ld c, (0x7830:16)                                   ; F98881  c1 30 78 23
 	and C,0x80                                           ; F98885  cb cc 80
 	jr nz, .LF9888E                                      ; F98888  6e 04
-	call sub_F97451                                        ; F9888A  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F9888A  1d 51 74 f9
 .LF9888E:
 	ld c, (0x7833:16)                                   ; F9888E  c1 33 78 23
 	and C,0x80                                           ; F98892  cb cc 80
 	jr nz, .LF9889B                                      ; F98895  6e 04
-	call sub_F974D3                                        ; F98897  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F98897  1d d3 74 f9
 .LF9889B:
 	ld c, (0x7834:16)                                   ; F9889B  c1 34 78 23
 	and C,0x80                                           ; F9889F  cb cc 80
@@ -44729,12 +44880,12 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x7835:16)                                   ; F988AC  c1 35 78 23
 	and C,0x80                                           ; F988B0  cb cc 80
 	jr nz, .LF988B9                                      ; F988B3  6e 04
-	call sub_F97533                                        ; F988B5  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F988B5  1d 33 75 f9
 .LF988B9:
 	ld c, (0x7836:16)                                   ; F988B9  c1 36 78 23
 	and C,0x80                                           ; F988BD  cb cc 80
 	jr nz, .LF988C6                                      ; F988C0  6e 04
-	call sub_F97563                                        ; F988C2  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F988C2  1d 63 75 f9
 .LF988C6:
 	lda xbc, (0x7862:16)                                ; F988C6  f1 62 78 31
 	ld (0x218b:16), xbc                                 ; F988CA  f1 8b 21 61
@@ -44742,17 +44893,17 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld a, (0x7871:16)                                   ; F988D3  c1 71 78 21
 	and A,0x80                                           ; F988D7  c9 cc 80
 	jr nz, .LF988E0                                      ; F988DA  6e 04
-	call sub_F97481                                        ; F988DC  1d 81 74 f9
+	call MidiOut_PostPartBankSelect                                        ; F988DC  1d 81 74 f9
 .LF988E0:
 	ld c, (0x7870:16)                                   ; F988E0  c1 70 78 23
 	and C,0x80                                           ; F988E4  cb cc 80
 	jr nz, .LF988ED                                      ; F988E7  6e 04
-	call sub_F97451                                        ; F988E9  1d 51 74 f9
+	call MidiOut_PostPartProgramChange                                        ; F988E9  1d 51 74 f9
 .LF988ED:
 	ld c, (0x7873:16)                                   ; F988ED  c1 73 78 23
 	and C,0x80                                           ; F988F1  cb cc 80
 	jr nz, .LF988FA                                      ; F988F4  6e 04
-	call sub_F974D3                                        ; F988F6  1d d3 74 f9
+	call MidiOut_PostPartVolume                                        ; F988F6  1d d3 74 f9
 .LF988FA:
 	ld c, (0x7874:16)                                   ; F988FA  c1 74 78 23
 	and C,0x80                                           ; F988FE  cb cc 80
@@ -44764,17 +44915,23 @@ sub_F9759E:   ; entry: prom_b routine directory
 	ld c, (0x7875:16)                                   ; F9890B  c1 75 78 23
 	and C,0x80                                           ; F9890F  cb cc 80
 	jr nz, .LF98918                                      ; F98912  6e 04
-	call sub_F97533                                        ; F98914  1d 33 75 f9
+	call MidiOut_PostPartEffect1Send                                        ; F98914  1d 33 75 f9
 .LF98918:
 	ld c, (0x7876:16)                                   ; F98918  c1 76 78 23
 	and C,0x80                                           ; F9891C  cb cc 80
 	jr nz, .LF98925                                      ; F9891F  6e 04
-	call sub_F97563                                        ; F98921  1d 63 75 f9
+	call MidiOut_PostPartReverbSend                                        ; F98921  1d 63 75 f9
 .LF98925:
 	pop XIX                                              ; F98925  5c
 	ret                                                  ; F98926  0e
 .LF98927:
-sub_F98927:   ; entry: prom_b routine directory
+; Combination_ReadFromCpu2 -- remote-read one 0x2C0-byte combination record from CPU 2 into the parameter
+; image at 0x7620 (prom_b T_F40250, no caller found; Combination_Recall calls it at 0xF975B0)
+; In: (XIZ+8) word = index; (XIZ+0x0A) = source: 0 or 0x10 -> 0xF80300 + 0x2C0*index (prom_c's factory
+; preset bank), 8 -> 0xEC0300 + 0x2C0*index (CPU 2 flash, the user bank); other values read nothing.
+; Evidence: `mul WA,0x02C0` and the bases at 0xF98939/0xF98955; (remote, 0x2C0, 0x7620) to
+; T_Link_SendCommandE2 (0xF98973), then T_Link_WaitBlockDone; prom_c preset_bank.s lists it as a READER.
+Combination_ReadFromCpu2:   ; entry: prom_b routine directory
 	link XIZ,0xfffc                                      ; F98927  ee 0c fc ff
 	pushw hl                                             ; F9892B  2b
 	push XIX                                             ; F9892C  3c
@@ -44816,14 +44973,28 @@ sub_F98927:   ; entry: prom_b routine directory
 	popw hl                                              ; F98980  4b
 	unlk XIZ                                             ; F98981  ee 0d
 	ret                                                  ; F98983  0e
-sub_F98984:   ; entry: prom_b routine directory
-	call sub_F97425                                        ; F98984  1d 25 74 f9
+; ParamImage_SnapshotCombination_Entry -- prom_b directory slot T_F4024C: `call
+; ParamImage_SnapshotCombination / ret`
+; Evidence: callers 0xF90C54, 0xF90CA4, 0xFBEDE0, 0xFBFC5E, 0xFE6F66; at 0xF90C54 it runs just before a new
+; combination is ldirw'd into 0x7620, and T_F40248 (ParamImage_QueueDiffCombination) follows at 0xF90C69.
+ParamImage_SnapshotCombination_Entry:   ; entry: prom_b routine directory
+	call ParamImage_SnapshotCombination                                        ; F98984  1d 25 74 f9
 	ret                                                  ; F98988  0e
-sub_F98989:   ; entry: prom_b routine directory
-	call sub_F97436                                        ; F98989  1d 36 74 f9
+; ParamImage_SnapshotCombinationAndParts_Entry -- prom_b directory slot T_F4025C: `call
+; ParamImage_SnapshotCombinationAndParts / ret`
+; Evidence: one caller, prom_b 0xF38857; the same prom_b routine calls T_F40258
+; (ParamImage_QueueDiffCombinationAndParts) at 0xF38937.
+ParamImage_SnapshotCombinationAndParts_Entry:   ; entry: prom_b routine directory
+	call ParamImage_SnapshotCombinationAndParts                                        ; F98989  1d 36 74 f9
 	ret                                                  ; F9898D  0e
 .LF9898E:
-sub_F9898E:   ; entry: prom_b routine directory
+; ParamImage_QueueDiffCombination -- queue every byte of the COMBINATION stream (0x7620, 0x2BE bytes) that
+; differs from the snapshot at 0x608000 onto the 0x2C00 event list
+; Evidence: walks {tag,len,payload} records while HL < 0x78DE-0x7620 (0xF989A7-0xF989B3); each differing
+; byte appends {tag, offset, new, new^old} at 0x2C00+(0x60F000) (0xF98A32-0xF98AAA); tags <= 0x1F go to
+; .LF98C44, which queues offsets 0/1 as the {.,1,.,0x7F}/{.,0,.,0xFF} pair; at cursor >= 0x1F4 it drains via
+; Queue2C00_DrainPassB_SaveRegs. prom_b T_F40248 (0xF90C69, 0xF90CB9, 0xFBEE75, 0xFBFCD5, 0xFE01E4).
+ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 	link XIZ,0xffea                                      ; F9898E  ee 0c ea ff
 	push XHL                                             ; F98992  3b
 	pushw de                                             ; F98993  2a
@@ -44866,7 +45037,7 @@ sub_F9898E:   ; entry: prom_b routine directory
 	extz XBC                                             ; F989F9  e9 12
 	add XBC,0x00002c00                                   ; F989FB  e9 c8 00 2c 00 00
 	ld (XBC),0xff                                        ; F98A01  b1 00 ff
-	call sub_F97418                                        ; F98A04  1d 18 74 f9
+	call Queue2C00_DrainPassB_SaveRegs                                        ; F98A04  1d 18 74 f9
 	m_ld_mi16 MDD+r6, 0xfc, 0x0000                       ; F98A08  be fc 02 00 00
 .LF98A0D:
 	m_set 5, MD24, 0x60f021                              ; F98A0D  f2 21 f0 60 bd
@@ -44948,7 +45119,12 @@ sub_F9898E:   ; entry: prom_b routine directory
 	pop XHL                                              ; F98ADA  5b
 	unlk XIZ                                             ; F98ADB  ee 0d
 	ret                                                  ; F98ADD  0e
-sub_F98ADE:   ; entry: prom_b routine directory
+; ParamImage_QueueDiffCombinationAndParts -- put back record 0x79 bytes 1-4 from (0x2181..0x2184), then queue
+; every byte of the image's first 0x8DE bytes that differs from the snapshot onto the 0x2C00 event list
+; Evidence: `ld (0x78b3..0x78b6),c` from (0x2181..0x2184) at 0xF98AE5-0xF98B01; loop bound 0x7EFE-0x7620 at
+; 0xF98B1A; the same append / .LF98C44 / Queue2C00_DrainPassB_SaveRegs (0xF98B76) / 0xFF-terminate sequence
+; as ParamImage_QueueDiffCombination. prom_b T_F40258, one caller (prom_b 0xF38937).
+ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	link XIZ,0xfff0                                      ; F98ADE  ee 0c f0 ff
 	pushw hl                                             ; F98AE2  2b
 	pushw de                                             ; F98AE3  2a
@@ -45001,7 +45177,7 @@ sub_F98ADE:   ; entry: prom_b routine directory
 	extz XBC                                             ; F98B6B  e9 12
 	add XBC,0x00002c00                                   ; F98B6D  e9 c8 00 2c 00 00
 	ld (XBC),0xff                                        ; F98B73  b1 00 ff
-	call sub_F97418                                        ; F98B76  1d 18 74 f9
+	call Queue2C00_DrainPassB_SaveRegs                                        ; F98B76  1d 18 74 f9
 	m_ld_mi16 MDD+r6, 0xfe, 0x0000                       ; F98B7A  be fe 02 00 00
 .LF98B7F:
 	m_set 5, MD24, 0x60f021                              ; F98B7F  f2 21 f0 60 bd
@@ -45293,7 +45469,7 @@ sub_F98ADE:   ; entry: prom_b routine directory
 ; ★ THE 3 LEFTOVER BYTES.  539 = 4*134 + 3.  `49 f9 f2` are the low three bytes
 ; of 0x00F2F949, which IS a display-list record start like the 32 above.
 ; Its top byte would sit at 0xF99000, which holds 0x3E -- the `push XIZ`
-; that opens sub_F99000.  The last entry is CUT IN HALF by the module
+; that opens LCD_BlankThenSetPanel3Layer.  The last entry is CUT IN HALF by the module
 ; boundary; the same thing happens at 0xFDFFDF-0xFE0000.  Emitted as
 ; `.byte`, not as a `.long`: the fourth byte does not exist.
 ;
@@ -45430,7 +45606,7 @@ MessageScreenStale_ArgHandlers:
 	.long MessageScreen_ArgIgnore - 0x400   ; F98F61  [ 95] prom_a local
 	.long MessageScreen_ArgIgnore - 0x400   ; F98F65  [ 96] prom_a local
 	.long MessageScreen_ArgIgnore - 0x400   ; F98F69  [ 97] prom_a local
-	.long sub_F99085 - 0x400   ; F98F6D  [ 98] prom_a local
+	.long ExitKey_MessageScreen - 0x400   ; F98F6D  [ 98] prom_a local
 	.long MessageScreen_ArgIgnore - 0x400   ; F98F71  [ 99] prom_a local
 	.long MessageScreen_ArgIgnore - 0x400   ; F98F75  [100] prom_a local
 	.long MessageScreen_ArgIgnore - 0x400   ; F98F79  [101] prom_a local
@@ -45480,7 +45656,13 @@ MessageScreenStale_ExtraListPairs:
 	.long DL_Error26SpurenWieRhythmChordUndControl ; F98FF5  [132] prom_b display list, record start
 	.long DL_Error26SpurenWieRhythmChordUndControl ; F98FF9  [133] prom_b display list, record start
 	.byte 0x49, 0xf9, 0xf2               ; F98FFD  [134] TRUNCATED: low 3 bytes of 0x00F2F949
-sub_F99000:   ; entry: branch/call in converted code
+; LCD_BlankThenSetPanel3Layer -- blank the panel and re-issue SYSTEM SET for THREE layers, preserving XIZ,
+; XIX, XHL and XDE
+; Evidence: byte-identical to LCD_BlankThenSetPanel2Layer (0xF94C2B) over both 17-byte extents except ONE
+; byte, the service number at +10: 0x10 (LCD_Svc_10_SetPanel3Layer) here, 0x0F there; `xor C,C` + service
+; 0x0C (LCD_Svc_0C_SetLayersOn) blanks first. Unlike LCD_ScreenRedraw_Begin it leaves (0x2540) alone.
+; Caller: MessageScreen_Paint (0xF990A9).
+LCD_BlankThenSetPanel3Layer:   ; entry: branch/call in converted code
 	push XIZ                                             ; F99000  3e
 	push XIX                                             ; F99001  3c
 	push XHL                                             ; F99002  3b
@@ -45489,11 +45671,11 @@ sub_F99000:   ; entry: branch/call in converted code
 	ld a, 0x0c:opc                                          ; F99006  21 0c
 	swi 7                                                ; F99008  ff
 ; ---------------------------------------------------------------------
-; sub_F99000's tail: a second SWI7 call (service 0x10) and the epilogue
+; LCD_BlankThenSetPanel3Layer's tail: a second SWI7 call (service 0x10) and the epilogue
 ; matching its own entry push order.  reachability.py does not seed past
 ; `swi 7` (treated as a possible non-returning trap), but this IS
 ; fall-through: the pop order (XDE, XHL, XIX, XIZ) is exactly the reverse
-; of sub_F99000's entry (push XIZ, XIX, XHL, XDE at 0xF99000-0xF99003).
+; of LCD_BlankThenSetPanel3Layer's entry (push XIZ, XIX, XHL, XDE at 0xF99000-0xF99003).
 ; ---------------------------------------------------------------------
 	ld a, 0x10:opc                                          ; F99009  21 10
 	swi 7                                                ; F9900B  ff
@@ -45502,7 +45684,11 @@ sub_F99000:   ; entry: branch/call in converted code
 	pop XIX                                              ; F9900E  5c
 	pop XIZ                                              ; F9900F  5e
 	ret                                                  ; F99010  0e
-sub_F99011:   ; entry: branch/call in converted code
+; LCD_ShowAllLayers_StackFrame -- SWI7 service 0x0C with C = 7 (layers 1, 2 and 3 steady on), from inside a
+; stack frame
+; Evidence: byte-identical to LCD_ShowLayers1And2_StackFrame (0xF94C3C) over both 16-byte extents except
+; ONE byte, the `ld C` immediate at +7: 0x07 here, 0x03 there. Caller: MessageScreen_Paint (0xF99118).
+LCD_ShowAllLayers_StackFrame:   ; entry: branch/call in converted code
 	push XIZ                                             ; F99011  3e
 	ld XIZ,XSP                                           ; F99012  ef 8e
 	push XIX                                             ; F99014  3c
@@ -45511,8 +45697,8 @@ sub_F99011:   ; entry: branch/call in converted code
 	ld c, 0x07:opc                                          ; F99017  23 07
 	ld a, 0x0c:opc                                          ; F99019  21 0c
 	swi 7                                                ; F9901B  ff
-; sub_F99011's epilogue after its own `swi 7` -- same reasoning as
-; sub_F99000's tail just above: reachability.py does not seed past a
+; LCD_ShowAllLayers_StackFrame's epilogue after its own `swi 7` -- same reasoning as
+; LCD_BlankThenSetPanel3Layer's tail just above: reachability.py does not seed past a
 ; trap instruction, but this is the fall-through matching the entry's
 ; push order (push XIZ, XIX, XHL, XDE at 0xF99011-0xF99016).
 	pop XDE                                              ; F9901C  5a
@@ -45560,7 +45746,13 @@ sub_F99011:   ; entry: branch/call in converted code
 ; Routines are `sub_XXXXXX`: the strings are in prom_b's display lists, so
 ; tying a veneer here to a screen needs the other side.
 ; ==============================================================================
-sub_F99021:
+; InstallPainter_MessageScreen -- ENTER method of the message screen (screen id 0xAB): post MessageScreen_Paint
+; on the callback queue, then signal semaphore 1
+; Evidence: PanelScreen_VtableTable_ViewB [171] (0xF871ED) -> object 0xF41604, whose +0 slot T_F41604 is
+; `jp 0xF99021`. Body: T_CallbackQueue_ResetAndRestartTask2; (0x209A) = 0xFF unless message (0x2880) is
+; 0x23 or 0x2C; `lda xbc,MessageScreen_Paint` + T_CallbackQueue_Post; then T_Kernel_SemaSignal_StackArg(1).
+; (0x209A) is the one-shot hold preload PanelState_TakePendingHoldTime moves into (0x2073).
+InstallPainter_MessageScreen:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F99021  1d 80 2e f4
 	m_cp_mi8 MB16, UI_StatusCode, 0x23                          ; F99025  c1 80 28 3f 23
 	jr z, .LF99038                                       ; F9902A  66 0c
@@ -45568,7 +45760,7 @@ sub_F99021:
 	jr z, .LF99038                                       ; F99031  66 05
 	ld (0x209a:16), 0xff                                 ; F99033  f1 9a 20 00 ff
 .LF99038:
-	lda xbc, (sub_F99098:24)                             ; F99038  f2 98 90 f9 31
+	lda xbc, (MessageScreen_Paint:24)                             ; F99038  f2 98 90 f9 31
 	push XBC                                             ; F9903D  39
 	call T_CallbackQueue_Post                            ; F9903E  1d 84 2e f4
 	pushw 0x01                                           ; F99042  0b 01 00
@@ -45577,7 +45769,12 @@ sub_F99021:
 	ret                                                  ; F9904B  0e
 T_F41608_Nop:
 	ret                                                  ; F9904C  0e
-sub_F9904D:
+; ScreenButton_MessageScreen -- BUTTON method of the message screen (screen id 0xAB): dispatch the panel
+; code (XIZ+8) <= 0x1F through MessageScreen_ArgHandlers, with H = bit 7 of (XIZ+0x0A)
+; Evidence: object 0xF41604's +8 slot T_F4160C = `jp 0xF9904D`; +8 is what PanelButton_Route (0xF8621E)
+; calls with the code and its argument. Same shape as ScreenButton_SineWaveCheckMode: `cp (XIZ+8),0x1F /
+; jr ugt`, `mul BC,(XIZ+8)`, push-return + `jp (xbc)` -- so MessageScreen_ArgHandlers is indexed by the code.
+ScreenButton_MessageScreen:
 	link XIZ,0x0000                                      ; F9904D  ee 0c 00 00
 	pushw hl                                             ; F99051  2b
 	m_cp_mi16 MWD+r6, 0x08, 0x001f                       ; F99052  9e 08 3f 1f 00
@@ -45603,7 +45800,12 @@ sub_F9904D:
 	popw hl                                              ; F99081  4b
 	unlk XIZ                                             ; F99082  ee 0d
 	ret                                                  ; F99084  0e
-sub_F99085:   ; entry: MessageScreen_ArgHandlers[15]
+; ExitKey_MessageScreen -- MessageScreen_ArgHandlers[15], panel code 0x0F (EXIT): (0x209A) = 1 when H = 0
+; Evidence: `cp (XIZ+8),0 / jr nz / ld (0x209a),0x01`; H = bit 7 of the event argument, clear at pair
+; position 1, the only position code 0x0F has (FINDINGS-prom_a-panel-control-map.md). (0x209A) reaches the
+; screen-hold counter (0x2073) through PanelState_TakePendingHoldTime; sub_F95C15, slot 0x0F of
+; ScreenButtonHandlers_SineWaveCheckMode, makes the same store.
+ExitKey_MessageScreen:   ; entry: MessageScreen_ArgHandlers[15]
 	link XIZ,0x0000                                      ; F99085  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F99089  8e 08 3f 00
 	jr nz, .LF99094                                      ; F9908D  6e 05
@@ -45613,14 +45815,20 @@ sub_F99085:   ; entry: MessageScreen_ArgHandlers[15]
 	ret                                                  ; F99096  0e
 T_F41610_Nop:
 	ret                                                  ; F99097  0e
-sub_F99098:
+; MessageScreen_Paint -- draw message (0x2880) (< 0x40) from MessageScreen_ListPairs; for message 0x1A also
+; copy (0x0C12) to (0x2881) and draw MessageScreen_ListPairsB's list
+; Evidence: posted by InstallPainter_MessageScreen and called through prom_b T_F41600 (13 sites);
+; `cp C,0x40 / jrl nc` (0xF990A3); pair = MessageScreen_PairTableByLanguage[(0x7FC1)] + id*8 to
+; T_DisplayList_Run_Stack; id 0x1A: MessageScreen_ListPairsB + 8*(0x7FC1) to T_DisplayListB_Run_Stack.
+; Brackets the drawing with LCD_BlankThenSetPanel3Layer / LCD_ShowAllLayers_StackFrame.
+MessageScreen_Paint:
 	link XIZ,0xfff4                                      ; F99098  ee 0c f4 ff
 	push XIX                                             ; F9909C  3c
 	lda xix, (UI_StatusCode:16)                                ; F9909D  f1 80 28 34
 	ld C,(XIX)                                           ; F990A1  84 23
 	cp C,0x40                                            ; F990A3  cb cf 40
 	jrl nc, .LF9911C                                     ; F990A6  7f 73 00
-	call sub_F99000                                        ; F990A9  1d 00 90 f9
+	call LCD_BlankThenSetPanel3Layer                                        ; F990A9  1d 00 90 f9
 	ld C,(XIX)                                           ; F990AD  84 23
 	mul C,0x08                                           ; F990AF  cb 08 08
 	extz XBC                                             ; F990B2  e9 12
@@ -45662,7 +45870,7 @@ sub_F99098:
 	call T_DisplayListB_Run_Stack                        ; F99112  1d 04 2e f4
 	inc 8,XSP                                            ; F99116  ef 60
 .LF99118:
-	call sub_F99011                                        ; F99118  1d 11 90 f9
+	call LCD_ShowAllLayers_StackFrame                                        ; F99118  1d 11 90 f9
 .LF9911C:
 	pop XIX                                              ; F9911C  5c
 	unlk XIZ                                             ; F9911D  ee 0d
@@ -45673,7 +45881,7 @@ MessageScreen_ArgIgnore:   ; entry: MessageScreen_ArgHandlers (31 slots)
 ; MessageScreen_ListPairs -- 64 (start, end) LE32 pairs, one display list per
 ;          message id; this span was PtrTable_F99121, whose header (kept
 ;          below) found only the +0x200 reader.
-; Read by: sub_F99098 (0xF99098, posted by sub_F99021 through
+; Read by: MessageScreen_Paint (0xF99098, posted by InstallPainter_MessageScreen through
 ;          T_CallbackQueue_Post): id = (0x2880), `cp C,0x40 / jrl nc` -- ids
 ;          0x40 and up draw nothing, hence COUNT 64 -- then `ld A,4 / mul
 ;          WA,(0x7FC1) / add XWA,MessageScreen_PairTableByLanguage / ld XWA,
@@ -45830,7 +46038,7 @@ MessageScreen_ListPairs:
 
 ; ---------------------------------------------------------------------
 ; MessageScreen_ListPairsB -- 3 (start, end) LE32 pairs, interpreter B.
-; Read by: sub_F99098 when the message id is 0x1A: (0x2881) = (0x0C12),
+; Read by: MessageScreen_Paint when the message id is 0x1A: (0x2881) = (0x0C12),
 ;          then `ld C,8 / mul BC,(0x7FC1)`, start = (this + 8*v), `inc 4` /
 ;          end = (this + 8*v + 4), T_DisplayListB_Run_Stack(start, end).
 ; COUNT 3: the abutment -- MessageScreen_ArgHandlers starts at +0x18 --
@@ -45847,12 +46055,12 @@ MessageScreen_ListPairsB:
 
 ; ---------------------------------------------------------------------
 ; MessageScreen_ArgHandlers -- 32 LE32 handler addresses.
-; Read by: sub_F9904D (0xF9904D, prom_b directory slot T_F4160C):
+; Read by: ScreenButton_MessageScreen (0xF9904D, prom_b directory slot T_F4160C):
 ;          `cp (XIZ+8),0x001F / jr ugt` -- COUNT 32 -- then `ldw BC,4 /
 ;          mul BC,(XIZ+8) / add XBC,<this> / ld XBC,(XBC)` and a call with
 ;          H = bit 7 of the second argument (XIZ+0x0A) pushed.
 ;          31 slots are MessageScreen_ArgIgnore (one `ret`); slot 15 is
-;          sub_F99085, which sets (0x209A) = 1 when H is 0.  (checks Q3, Q4)
+;          ExitKey_MessageScreen, which sets (0x209A) = 1 when H is 0.  (checks Q3, Q4)
 ; ⚠ What the argument numbers (who calls T_F4160C, with what) is not
 ;          established here.
 ; ---------------------------------------------------------------------
@@ -45872,7 +46080,7 @@ MessageScreen_ArgHandlers:
 	.long MessageScreen_ArgIgnore                  ; F99369  [12]
 	.long MessageScreen_ArgIgnore                  ; F9936D  [13]
 	.long MessageScreen_ArgIgnore                  ; F99371  [14]
-	.long sub_F99085                               ; F99375  [15]
+	.long ExitKey_MessageScreen                               ; F99375  [15]
 	.long MessageScreen_ArgIgnore                  ; F99379  [16]
 	.long MessageScreen_ArgIgnore                  ; F9937D  [17]
 	.long MessageScreen_ArgIgnore                  ; F99381  [18]
@@ -45894,7 +46102,7 @@ MessageScreen_ArgHandlers:
 ; MessageScreen_PairTableByLanguage -- 3 LE32 pointers, each to a
 ;          64-pair table; all three are MessageScreen_ListPairs, so every
 ;          value of (0x7FC1) draws the same lists in this ROM.
-; Read by: sub_F99098, `ld A,4 / mul WA,(0x7FC1) / add XWA,<this> /
+; Read by: MessageScreen_Paint, `ld A,4 / mul WA,(0x7FC1) / add XWA,<this> /
 ;          ld XWA,(XWA)` at 0xF990B7-0xF990C5.  COUNT 3: the abutment with
 ;          the 0x0E pad at 0xF993C5 (check Q4); prom_b's message-module
 ;          header reads (0x7FC1) as the language.
@@ -45910,7 +46118,13 @@ MessageScreen_PairTableByLanguage:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 58, 1, 0x0E
 
-sub_F99400:
+; PanelScreen_RequestRedrawIfFieldQueued -- set bit 4 of (0x2095) when a 0x2C00 record with a non-zero
+; changed-bits byte names a {tag, offset} the current screen lists in ScreenFieldListPtrs
+; Evidence: UiEventPassB_TailList[2] = T_F40290 = `jp 0xF99400`; runs only with bit 1 of (0x97) set and bit 3
+; of (0x2673) clear; XHL = ScreenFieldListPtrs[(0x207C)]; each record's first word (skipped if +3 == 0) is
+; compared with the list's words up to 0xFFFF; a match does `or (0x2095),0x10`; always `and (0x2673),0xD7`.
+; Bit 4 of (0x2095) -> (0x2072) via PanelState_Sync2095, which PanelScreen_RunRedraw turns into a re-Enter.
+PanelScreen_RequestRedrawIfFieldQueued:
 	bit_dd8 0x01, 0x97                                   ; F99400  f0 97 c9
 	jr z, .LF99459                                       ; F99403  66 54
 	m_bit 3, MD16, 0x2673                                ; F99405  f1 73 26 cb
@@ -45953,7 +46167,7 @@ sub_F99400:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 929, 1, 0x0E
 
-	jp sub_F99400_Join                                        ; F99800  1b 18 98 f9
+	jp PanelScreen_RequestRedrawIfFieldQueued_Join                                        ; F99800  1b 18 98 f9
 	ret                                                  ; F99804  0e
 	nop                                                  ; F99805  00
 	nop                                                  ; F99806  00
@@ -45974,11 +46188,11 @@ sub_F99400:
 	nop                                                  ; F99815  00
 	nop                                                  ; F99816  00
 	nop                                                  ; F99817  00
-sub_F99400_Join:
-	calr sub_F99400_Nop                                      ; F99818  1e 05 00
+PanelScreen_RequestRedrawIfFieldQueued_Join:
+	calr PanelScreen_RequestRedrawIfFieldQueued_Nop                                      ; F99818  1e 05 00
 	call sub_F9B4A1                                      ; F9981B  1d a1 b4 f9
 	ret                                                  ; F9981F  0e
-sub_F99400_Nop:
+PanelScreen_RequestRedrawIfFieldQueued_Nop:
 	ret                                                  ; F99820  0e
 T_F41660_Nop:
 	ret                                                  ; F99821  0e
@@ -46039,7 +46253,7 @@ Paint_SysexBulkDump_Entry:
 ; Was `sub_F99831`.
 ; ---------------------------------------------------------------------
 ScreenLeave_SysexBulkDump_Entry:
-	calr sub_F99A4E                                          ; F99831  1e 1a 02
+	calr ScreenLeave_SysexBulkDump                                          ; F99831  1e 1a 02
 	ret                                                  ; F99834  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_SysexBulkDump_Entry -- the BUTTON method of the screen object
@@ -46106,7 +46320,7 @@ Paint_GeneralMidiMode_Entry:
 ; Was `sub_F99848`.
 ; ---------------------------------------------------------------------
 ScreenLeave_GeneralMidiMode_Entry:
-	calr sub_F99DC6                                          ; F99848  1e 7b 05
+	calr ScreenLeave_GeneralMidiMode                                          ; F99848  1e 7b 05
 	ret                                                  ; F9984B  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_GeneralMidiMode_Entry -- the BUTTON method of the screen
@@ -46168,7 +46382,12 @@ Paint_SystemExclusivePleaseWait_Entry:
 	ret                                                  ; F99862  0e
 T_F41738_Nop:
 	ret                                                  ; F99863  0e
-sub_F99864:
+; ExitKey_SysexGeneralMidiShared -- shared EXIT body of the SysexBulkDump and GeneralMidiMode screens:
+; request panel mode 0x12 ((0x2070) = 0x12, (0x2071) = 0x02) when bit 7 of W is clear
+; Evidence: `bit 7,W / jr nz / ldw (0x2070),0x0212` (0xF99864-0xF99869); called only by ExitKey_SysexBulkDump
+; (0xF99B6E) and ExitKey_GeneralMidiMode_Page0 (0xF99E67). Flag 0x02 is the request bit ExitKey_DiskMenu and
+; PanelEvent_Code20_SetScreen also write.
+ExitKey_SysexGeneralMidiShared:
 	bit 0x07,W                                           ; F99864  c8 33 07
 	jr nz, .LF9986F                                      ; F99867  6e 06
 	ldw (UI_Request:16), 0x0212                              ; F99869  f1 70 20 02 12 02
@@ -46213,14 +46432,14 @@ ScreenButtonRow_SysexBulkDump:
 	.long ScreenButtonRow_SysexBulkDump_Nop5                                 ; F99884  [  5]
 	.long ScreenButtonRow_SysexBulkDump_Nop6                                 ; F99888  [  6]
 	.long ScreenButtonRow_SysexBulkDump_Nop7                                 ; F9988C  [  7]
-	.long sub_F99A66                                 ; F99890  [  8]
-	.long sub_F99A8F                                 ; F99894  [  9]
-	.long sub_F99A8F__F99AEB                                 ; F99898  [ 10]
-	.long sub_F99B14                                 ; F9989C  [ 11]
-	.long sub_F99B3D                                 ; F998A0  [ 12]
+	.long LcdKeyRow1_SysexBulkDump                                 ; F99890  [  8]
+	.long LcdKeyRow2_SysexBulkDump                                 ; F99894  [  9]
+	.long LcdKeyRow2_SysexBulkDump__F99AEB                                 ; F99898  [ 10]
+	.long LcdKeyRow4_SysexBulkDump                                 ; F9989C  [ 11]
+	.long LcdKeyRow5_SysexBulkDump                                 ; F998A0  [ 12]
 	.long ScreenButtonRow_SysexBulkDump_Nop13                                 ; F998A4  [ 13]
 	.long ScreenButtonRow_SysexBulkDump_Nop14                                 ; F998A8  [ 14]
-	.long sub_F99B6E                                 ; F998AC  [ 15]
+	.long ExitKey_SysexBulkDump                                 ; F998AC  [ 15]
 	.long ScreenButtonRow_SysexBulkDump_Nop16                                 ; F998B0  [ 16]
 	.long ScreenButtonRow_SysexBulkDump_Nop17                                 ; F998B4  [ 17]
 	.long ScreenButtonRow_SysexBulkDump_Nop18                                 ; F998B8  [ 18]
@@ -46241,7 +46460,7 @@ ScreenButtonRow_SysexBulkDump:
 ; ScreenButtonRow_GeneralMidi_Page0 -- 32 handlers, GeneralMidiMode's main
 ;          page: ScreenButton_GeneralMidiMode_Entry's base, row (0x2740) = 0,
 ;          drawn by Paint_GeneralMidiMode as DL_GeneralMidiMidiGeneralMidiMode.
-;          Its sub_F99DDD sets (0x2740) = 1 at 0xF99DE8 (check W3).
+;          Its LcdKeyRow1_GeneralMidiMode_Page0 sets (0x2740) = 1 at 0xF99DE8 (check W3).
 ;          Also row 1 of the SysexBulkDump base, which that screen never
 ;          selects (its only (0x2740) write is 0).
 ; (notes/proma-2026-09-25/gen_button_rows.py)
@@ -46255,14 +46474,14 @@ ScreenButtonRow_GeneralMidi_Page0:
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop5                                 ; F99904  [ 37]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop6                                 ; F99908  [ 38]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop7                                 ; F9990C  [ 39]
-	.long sub_F99DDD                                 ; F99910  [ 40]
+	.long LcdKeyRow1_GeneralMidiMode_Page0                                 ; F99910  [ 40]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop9                                 ; F99914  [ 41]
-	.long sub_F99DF4                                 ; F99918  [ 42]
-	.long sub_F99E2C                                 ; F9991C  [ 43]
+	.long LcdKeyRow3_GeneralMidiMode_Page0                                 ; F99918  [ 42]
+	.long LcdKeyRow4_GeneralMidiMode_Page0                                 ; F9991C  [ 43]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop12                                 ; F99920  [ 44]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop13                                 ; F99924  [ 45]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop14                                 ; F99928  [ 46]
-	.long sub_F99E67                                 ; F9992C  [ 47]
+	.long ExitKey_GeneralMidiMode_Page0                                 ; F9992C  [ 47]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop16                                 ; F99930  [ 48]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop17                                 ; F99934  [ 49]
 	.long ScreenButtonRow_GeneralMidi_Page0_Nop18                                 ; F99938  [ 50]
@@ -46374,7 +46593,11 @@ Paint_SysexBulkDump:
 	call T_DLB_Handler_Array8                                        ; F99A46  1d 1c 18 f4
 	calr LCD_ScreenRedraw_End                                      ; F99A4A  1e b1 ff
 	ret                                                  ; F99A4D  0e
-sub_F99A4E:
+; ScreenLeave_SysexBulkDump -- the SysexBulkDump LEAVE body: clear bit 6 of (0x2094) unless (0x207A) ==
+; (0x207B)
+; Evidence: only caller ScreenLeave_SysexBulkDump_Entry (0xF99831, the object's +4 slot); Paint_SysexBulkDump
+; sets the same bit (`or (0x2094),0x40`, 0xF99A1B) under the same (0x207A) != (0x207B) test.
+ScreenLeave_SysexBulkDump:
 	ld a, (0x207a:16)                                   ; F99A4E  c1 7a 20 21
 	cp (0x207b:16), a                                    ; F99A52  c1 7b 20 f9
 	jr z, .LF99A5D                                       ; F99A56  66 05
@@ -46397,7 +46620,12 @@ ScreenButtonRow_SysexBulkDump_Nop6:   ; entry: named by 1 `.long` operand, first
 	ret                                                  ; F99A64  0e
 ScreenButtonRow_SysexBulkDump_Nop7:   ; entry: named by 1 `.long` operand, first at 0xF9988C
 	ret                                                  ; F99A65  0e
-sub_F99A66:   ; entry: named by 1 `.long` operand, first at 0xF99890
+; LcdKeyRow1_SysexBulkDump -- LCD row 1, left key (bit 7 of W set): select item 0, TOTAL KEYBOARD
+; Evidence: ScreenButtonRow_SysexBulkDump[8] (code 0x08); unless (0x2720) is already 0:
+; cursor move (0x2540) = 1, Array6(0xF0D9D7), (0x2720) = k, T_F4181C(0xF0D9A4), k = 0.
+; The menu list 0xF0D6AF draws ' TOTAL KEYBOARD' at LCD 0x061B, ' SOUND' at 0x0C33, ' COMBINATION' 0x124B,
+; ' SYSTEM,PART & MIDI' 0x1863, ' SEQUENCER' 0x1E7B -- rows 1-5, column 3.
+LcdKeyRow1_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF99890
 	bit 0x07,W                                           ; F99A66  c8 33 07
 	jr z, .LF99A8E                                       ; F99A69  66 23
 	m_cp_mi8 MB16, 0x2720, 0x00                          ; F99A6B  c1 20 27 3f 00
@@ -46410,11 +46638,15 @@ sub_F99A66:   ; entry: named by 1 `.long` operand, first at 0xF99890
 	call T_DLB_Handler_Array8                                        ; F99A8A  1d 1c 18 f4
 .LF99A8E:
 	ret                                                  ; F99A8E  0e
-sub_F99A8F:   ; entry: named by 1 `.long` operand, first at 0xF99894
+; LcdKeyRow2_SysexBulkDump -- LCD row 2: right key (bit 7 of W clear) = SEND; left key selects item 1, SOUND
+; Evidence: ScreenButtonRow_SysexBulkDump[9]. SEND: `and (0x2075),0x6F`; (0x60F802) = byte [(0x2720) & 7] of
+; the table at 0xF99AE3 (00 03 05 04 02 00 00 00) | 0x80; T_F408E4 (prom_a 0xFB2049), T_F40F1C
+; (SC1_Entry_F40F1C). ' SEND' is at LCD 0x0BB1, the right end of row 2. Select: as row 1 with k = 1.
+LcdKeyRow2_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF99894
 	bit 0x07,W                                           ; F99A8F  c8 33 07
 	jr nz, .LF99ABF                                      ; F99A92  6e 2b
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F99A94  c1 75 20 3c 6f
-	ld XIY,sub_F99A8F__F99AE3                                    ; F99A99  45 e3 9a f9 00
+	ld XIY,LcdKeyRow2_SysexBulkDump__F99AE3                                    ; F99A99  45 e3 9a f9 00
 	ld a, (0x2720:16)                                   ; F99A9E  c1 20 27 21
 	and A,0x07                                           ; F99AA2  c9 cc 07
 	mx8_ld_rm MXB, ra_IY, rb_A, r1                       ; F99AA5  c3 03 f4 e0 21
@@ -46434,7 +46666,7 @@ sub_F99A8F:   ; entry: named by 1 `.long` operand, first at 0xF99894
 	call T_DLB_Handler_Array8                                        ; F99ADE  1d 1c 18 f4
 .LF99AE2:
 	ret                                                  ; F99AE2  0e
-sub_F99A8F__F99AE3:
+LcdKeyRow2_SysexBulkDump__F99AE3:
 	nop                                                  ; F99AE3  00
 	pop SR                                               ; F99AE4  03
 	halt                                                 ; F99AE5  05
@@ -46443,7 +46675,7 @@ sub_F99A8F__F99AE3:
 	nop                                                  ; F99AE8  00
 	nop                                                  ; F99AE9  00
 	nop                                                  ; F99AEA  00
-sub_F99A8F__F99AEB:
+LcdKeyRow2_SysexBulkDump__F99AEB:
 	bit 0x07,W                                           ; F99AEB  c8 33 07
 	jr z, .LF99B13                                       ; F99AEE  66 23
 	m_cp_mi8 MB16, 0x2720, 0x02                          ; F99AF0  c1 20 27 3f 02
@@ -46456,7 +46688,10 @@ sub_F99A8F__F99AEB:
 	call T_DLB_Handler_Array8                                        ; F99B0F  1d 1c 18 f4
 .LF99B13:
 	ret                                                  ; F99B13  0e
-sub_F99B14:   ; entry: named by 1 `.long` operand, first at 0xF9989C
+; LcdKeyRow4_SysexBulkDump -- LCD row 4, left key (bit 7 of W set): select item 3, SYSTEM,PART & MIDI
+; Evidence: ScreenButtonRow_SysexBulkDump[11] (code 0x0B); unless (0x2720) is already 3,
+; cursor move (0x2540) = 1, Array6(0xF0D9D7), (0x2720) = k, T_F4181C(0xF0D9A4), k = 3.
+LcdKeyRow4_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF9989C
 	bit 0x07,W                                           ; F99B14  c8 33 07
 	jr z, .LF99B3C                                       ; F99B17  66 23
 	m_cp_mi8 MB16, 0x2720, 0x03                          ; F99B19  c1 20 27 3f 03
@@ -46469,7 +46704,12 @@ sub_F99B14:   ; entry: named by 1 `.long` operand, first at 0xF9989C
 	call T_DLB_Handler_Array8                                        ; F99B38  1d 1c 18 f4
 .LF99B3C:
 	ret                                                  ; F99B3C  0e
-sub_F99B3D:   ; entry: named by 1 `.long` operand, first at 0xF998A0
+; LcdKeyRow5_SysexBulkDump -- LCD row 5, left key: select item 4, SEQUENCER -- nothing when (0xC4) == 2
+; Evidence: ScreenButtonRow_SysexBulkDump[12] (code 0x0C); `cp (0xc4),0x02 / jr z` returns first;
+; else cursor move (0x2540) = 1, Array6(0xF0D9D7), (0x2720) = k, T_F4181C(0xF0D9A4), k = 4.
+; Paint_SysexBulkDump ends the list before ' SEQUENCER' (XIX = 0xF0D77F) when (0xC4) == 2, the SX-WSA1R
+; rack (FINDINGS-prom_a-panel-control-map.md section 2).
+LcdKeyRow5_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF998A0
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F99B3D  c0 c4 3f 02
 	jr z, .LF99B6B                                       ; F99B41  66 28
 	bit 0x07,W                                           ; F99B43  c8 33 07
@@ -46488,8 +46728,11 @@ ScreenButtonRow_SysexBulkDump_Nop13:   ; entry: named by 1 `.long` operand, firs
 	ret                                                  ; F99B6C  0e
 ScreenButtonRow_SysexBulkDump_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF998A8
 	ret                                                  ; F99B6D  0e
-sub_F99B6E:   ; entry: named by 1 `.long` operand, first at 0xF998AC
-	calr sub_F99864                                          ; F99B6E  1e f3 fc
+; ExitKey_SysexBulkDump -- EXIT (panel code 0x0F) on the SysexBulkDump screen: `calr
+; ExitKey_SysexGeneralMidiShared / ret`
+; Evidence: ScreenButtonRow_SysexBulkDump[15].
+ExitKey_SysexBulkDump:   ; entry: named by 1 `.long` operand, first at 0xF998AC
+	calr ExitKey_SysexGeneralMidiShared                                          ; F99B6E  1e f3 fc
 	ret                                                  ; F99B71  0e
 ScreenButtonRow_SysexBulkDump_Nop16:   ; entry: named by 1 `.long` operand, first at 0xF998B0
 	ret                                                  ; F99B72  0e
@@ -46559,14 +46802,14 @@ Paint_Sending:
 	ld l, (0x60f806:24)                                 ; F99BA7  c2 06 f8 60 27
 	bit 0x07,L                                           ; F99BAC  cf 33 07
 	jr z, .LF99BBA                                       ; F99BAF  66 09
-	calr sub_F99BED                                      ; F99BB1  1e 39 00
+	calr SysexProgressBar_DrawDots                                      ; F99BB1  1e 39 00
 	m_and_mi8 MB24, 0x60f806, 0x7f                       ; F99BB4  c2 06 f8 60 3c 7f
 .LF99BBA:
 	xor XHL,XHL                                          ; F99BBA  eb d3
 	ld l, (0x60f808:24)                                 ; F99BBC  c2 08 f8 60 27
 	bit 0x07,L                                           ; F99BC1  cf 33 07
 	jr z, .LF99BCF                                       ; F99BC4  66 09
-	calr sub_F99C32                                      ; F99BC6  1e 69 00
+	calr SysexProgressBar_FillCells                                      ; F99BC6  1e 69 00
 	m_and_mi8 MB24, 0x60f808, 0x7f                       ; F99BC9  c2 08 f8 60 3c 7f
 .LF99BCF:
 	xor XHL,XHL                                          ; F99BCF  eb d3
@@ -46579,23 +46822,12 @@ Paint_Sending:
 .LF99BE9:
 	calr LCD_ScreenRedraw_End                                      ; F99BE9  1e 12 fe
 	ret                                                  ; F99BEC  0e
-; sub_F99BED -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 30
-; instructions to its first `ret`:
-;     site 0xF99BF8  interpreter A  list 0xF0D99C-0xF0D9A4
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F99BED:
+; SysexProgressBar_DrawDots -- draw an empty progress bar: run DL_F0D99C (0xF0D99C-0xF0D9A4, interpreter A,
+; site 0xF99BF8), then L & 0x7F '.' glyphs centred on the row at LCD 0x0ED8, saving the start in (0x2640)
+; Evidence: callers Paint_Sending (0xF99BB1, L = (0x60F806)) and Paint_SystemExclusivePleaseWait (0xF99CD0,
+; L = (0x60F80C)), when bit 7 is set; prom_a 0xFB7CDD/0xFB7CF6 store 0xA0 there (32 cells | 0x80). Start =
+; 0x0ED8 + (0x28 - L)/2 (0xF99C04-0xF99C12); svc 7 (LCD_Svc_07_DrawText8x16), XIY = Chars_F0D99A, HL = 0.
+SysexProgressBar_DrawDots:
 	push XHL                                             ; F99BED  3b
 	ld XIY,DL_F0D99C                                     ; F99BEE  45 9c d9 f0 00
 	ld XIX,0x00f0d9a4                                    ; F99BF3  44 a4 d9 f0 00
@@ -46628,7 +46860,12 @@ sub_F99BED:
 	jr .LF99C16                                          ; F99C2F  68 e5
 .LF99C31:
 	ret                                                  ; F99C31  0e
-sub_F99C32:
+; SysexProgressBar_FillCells -- overdraw the first L & 0x7F cells of the progress bar, from (0x2640), with
+; glyph 0x92
+; Evidence: callers Paint_Sending (0xF99BC6, L = (0x60F808)) and Paint_SystemExclusivePleaseWait (0xF99CE5,
+; L = (0x60F80E)), when bit 7 is set; svc 7 with XIY = Chars_F0D99A and HL = 1 selects its second byte 0x92;
+; IX starts at (0x2640), the start SysexProgressBar_DrawDots stored.
+SysexProgressBar_FillCells:
 	and L,0x7f                                           ; F99C32  cf cc 7f
 	jr z, .LF99C5B                                       ; F99C35  66 24
 	xor XIX,XIX                                          ; F99C37  ec d4
@@ -46729,14 +46966,14 @@ Paint_SystemExclusivePleaseWait:
 	ld l, (0x60f80c:24)                                 ; F99CC6  c2 0c f8 60 27
 	bit 0x07,L                                           ; F99CCB  cf 33 07
 	jr z, .LF99CD9                                       ; F99CCE  66 09
-	calr sub_F99BED                                      ; F99CD0  1e 1a ff
+	calr SysexProgressBar_DrawDots                                      ; F99CD0  1e 1a ff
 	m_and_mi8 MB24, 0x60f80c, 0x7f                       ; F99CD3  c2 0c f8 60 3c 7f
 .LF99CD9:
 	xor XHL,XHL                                          ; F99CD9  eb d3
 	ld l, (0x60f80e:24)                                 ; F99CDB  c2 0e f8 60 27
 	bit 0x07,L                                           ; F99CE0  cf 33 07
 	jr z, .LF99CEE                                       ; F99CE3  66 09
-	calr sub_F99C32                                      ; F99CE5  1e 4a ff
+	calr SysexProgressBar_FillCells                                      ; F99CE5  1e 4a ff
 	m_and_mi8 MB24, 0x60f80e, 0x7f                       ; F99CE8  c2 0e f8 60 3c 7f
 .LF99CEE:
 	xor XHL,XHL                                          ; F99CEE  eb d3
@@ -46829,7 +47066,11 @@ Paint_GeneralMidiMode:
 	calr LCD_ScreenRedraw_End                                      ; F99DC2  1e 39 fc
 .LF99DC5:
 	ret                                                  ; F99DC5  0e
-sub_F99DC6:
+; ScreenLeave_GeneralMidiMode -- the GeneralMidiMode LEAVE body: call T_F425DC (prom_a 0xFE1CA7) unless
+; (0x207A) == (0x207B)
+; Evidence: only caller ScreenLeave_GeneralMidiMode_Entry (0xF99848, the object's +4 slot);
+; Paint_GeneralMidiMode makes the paired call T_F42594 under the same test (0xF99D1A).
+ScreenLeave_GeneralMidiMode:
 	ld a, (0x207a:16)                                   ; F99DC6  c1 7a 20 21
 	m_cp_rm MB16, 0x207b, r1                             ; F99DCA  c1 7b 20 f1
 	jr z, .LF99DD4                                       ; F99DCE  66 04
@@ -46852,7 +47093,12 @@ ScreenButtonRow_GeneralMidi_Page0_Nop6:   ; entry: named by 1 `.long` operand, f
 	ret                                                  ; F99DDB  0e
 ScreenButtonRow_GeneralMidi_Page0_Nop7:   ; entry: named by 1 `.long` operand, first at 0xF9990C
 	ret                                                  ; F99DDC  0e
-sub_F99DDD:   ; entry: named by 1 `.long` operand, first at 0xF99910
+; LcdKeyRow1_GeneralMidiMode_Page0 -- LCD row 1, right key (bit 7 of W clear) = OK: once OK is shown (bit 1
+; of (0x274C)) switch to the YES/NO page, (0x2740) = 1, and request a redraw, (0x2071) = 0x10
+; Evidence: ScreenButtonRow_GeneralMidi_Page0[8]; DL_F0DA73 draws ' OK' at LCD 0x059B (row 1, right end) and
+; is drawn, with (0x274C) |= 2, by LcdKeyRow3/4_GeneralMidiMode_Page0; (0x2740) picks the button row and the
+; page Paint_GeneralMidiMode draws (ScreenButtonRow_GeneralMidi_YesNo / DL_GeneralMidiMidiYesNo).
+LcdKeyRow1_GeneralMidiMode_Page0:   ; entry: named by 1 `.long` operand, first at 0xF99910
 	m_bit 1, MD16, 0x274c                                ; F99DDD  f1 4c 27 c9
 	jr z, .LF99DF2                                       ; F99DE1  66 0f
 	bit 0x07,W                                           ; F99DE3  c8 33 07
@@ -46863,7 +47109,12 @@ sub_F99DDD:   ; entry: named by 1 `.long` operand, first at 0xF99910
 	ret                                                  ; F99DF2  0e
 ScreenButtonRow_GeneralMidi_Page0_Nop9:   ; entry: named by 1 `.long` operand, first at 0xF99914
 	ret                                                  ; F99DF3  0e
-sub_F99DF4:   ; entry: named by 1 `.long` operand, first at 0xF99918
+; LcdKeyRow3_GeneralMidiMode_Page0 -- LCD row 3, right key = ON: set bit 2 of (0x2720), redraw the value
+; (DL_F0DA93 via T_DLB_Handler_StringTable) and, the first time, show ' OK' (DL_F0DA73, (0x274C) |= 2)
+; Evidence: ScreenButtonRow_GeneralMidi_Page0[10] (code 0x0A), guarded by `bit 7,W` and `bit 2,(0x2720)`;
+; DL_GeneralMidiMidiGeneralMidiMode draws ' ON' at LCD 0x11CA and ' OFF' at 0x17E2 (rows 3 and 4,
+; right end); Paint_GeneralMidiMode loads (0x2720) from (0x7F4D), record 0x91 byte 3.
+LcdKeyRow3_GeneralMidiMode_Page0:   ; entry: named by 1 `.long` operand, first at 0xF99918
 	bit 0x07,W                                           ; F99DF4  c8 33 07
 	jr nz, .LF99E2B                                      ; F99DF7  6e 32
 	m_bit 2, MD16, 0x2720                                ; F99DF9  f1 20 27 ca
@@ -46880,7 +47131,12 @@ sub_F99DF4:   ; entry: named by 1 `.long` operand, first at 0xF99918
 	m_or_mi8 MB16, 0x274c, 0x02                          ; F99E26  c1 4c 27 3e 02
 .LF99E2B:
 	ret                                                  ; F99E2B  0e
-sub_F99E2C:   ; entry: named by 1 `.long` operand, first at 0xF9991C
+; LcdKeyRow4_GeneralMidiMode_Page0 -- LCD row 4, right key = OFF: clear bit 2 of (0x2720), redraw the value
+; (DL_F0DA93) and, the first time, show ' OK' (DL_F0DA73, (0x274C) |= 2)
+; Evidence: ScreenButtonRow_GeneralMidi_Page0[11] (code 0x0B); `and (0x2720),0xFB` at 0xF99E37;
+; DL_GeneralMidiMidiGeneralMidiMode draws ' ON' at LCD 0x11CA and ' OFF' at 0x17E2 (rows 3 and 4,
+; right end); Paint_GeneralMidiMode loads (0x2720) from (0x7F4D), record 0x91 byte 3.
+LcdKeyRow4_GeneralMidiMode_Page0:   ; entry: named by 1 `.long` operand, first at 0xF9991C
 	bit 0x07,W                                           ; F99E2C  c8 33 07
 	jr nz, .LF99E63                                      ; F99E2F  6e 32
 	m_bit 2, MD16, 0x2720                                ; F99E31  f1 20 27 ca
@@ -46903,8 +47159,11 @@ ScreenButtonRow_GeneralMidi_Page0_Nop13:   ; entry: named by 1 `.long` operand, 
 	ret                                                  ; F99E65  0e
 ScreenButtonRow_GeneralMidi_Page0_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF99928
 	ret                                                  ; F99E66  0e
-sub_F99E67:   ; entry: named by 1 `.long` operand, first at 0xF9992C
-	calr sub_F99864                                          ; F99E67  1e fa f9
+; ExitKey_GeneralMidiMode_Page0 -- EXIT (panel code 0x0F) on GeneralMidiMode's main page: `calr
+; ExitKey_SysexGeneralMidiShared / ret`
+; Evidence: ScreenButtonRow_GeneralMidi_Page0[15].
+ExitKey_GeneralMidiMode_Page0:   ; entry: named by 1 `.long` operand, first at 0xF9992C
+	calr ExitKey_SysexGeneralMidiShared                                          ; F99E67  1e fa f9
 	ret                                                  ; F99E6A  0e
 ScreenButtonRow_GeneralMidi_Page0_Nop16:   ; entry: named by 1 `.long` operand, first at 0xF99930
 	ret                                                  ; F99E6B  0e

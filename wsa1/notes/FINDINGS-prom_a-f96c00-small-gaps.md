@@ -12,7 +12,7 @@ every number below). Gate: `make gate-wsa1`, green.
 
 ## 0xF96C7B (15 B) -- a 3-slot reserved record table, 2 slots unused
 
-`sub_F96C65` (already-converted, immediately above) sets `XIY=0x00f96c7b`,
+`ParamImage_ApplyAndMaskTable` (already-converted, immediately above) sets `XIY=0x00f96c7b`,
 `BC=1`, then loops exactly ONCE over a 5-byte record (`ld XIX,(XIY)` /
 `inc 4,XIY` / `ld A,(XIY)` / `inc 1,XIY` / `and (XIX),A` -- a 4-byte address
 then a 1-byte AND-mask) before `ret`. That accounts for only the first 5 of
@@ -24,7 +24,7 @@ anywhere in the ROM (checked), so no other call site processes more slots.
 
 ## 0xF96CA5 (1 B) -- a single 0x0E pad byte
 
-Sits between `sub_F96C8A`'s `ret` (0xF96CA4) and the already-documented
+Sits between `ParamImage_WriteRecordHeaders`'s `ret` (0xF96CA4) and the already-documented
 `RamInitTable_F96CA6_Addrs` (starts 0xF96CA6). Its value is `0x0E` -- this
 file's own established erased-flash/RET-padding constant, used throughout
 the rest of the file's verified `.fill` runs.
@@ -42,7 +42,7 @@ unclassified, the same treatment `Unclassified_FC48D8` got in
 ## 0xF97401 (23 B) -- unclassified, not a clean tile of the neighbouring fill
 
 Bounded by the already-verified 1400 B 0x0E fill run (ends exactly here,
-per the file's own comment) and `sub_F97418` (already-converted, starts
+per the file's own comment) and `Queue2C00_DrainPassB_SaveRegs` (already-converted, starts
 exactly at the far end). The bytes (`00 00 00 0e` x5 + `00 00 00`) are
 mostly zero with one 0x0E every 4th byte -- not simply "more fill,
 mismeasured" (23 is not a multiple of 4, and the fill run's own byte is

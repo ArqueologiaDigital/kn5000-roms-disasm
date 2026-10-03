@@ -73,7 +73,7 @@ embedded fixed-stride table, not a misread of pure code. Both are left
 derived evidence that they ARE real entry points, and is recorded here as the
 lead for whoever takes them next.
 
-## sub_F97503 (48 B, CODE)
+## MidiOut_PostPartPanpot (48 B, CODE)
 
 `push XIZ/XIX/XHL/XDE ... pop XDE/XHL/XIX/XIZ / ret` -- the canonical
 four-register save/restore shape used throughout this tree. Reached by a
@@ -97,4 +97,4 @@ conversions above.
 ## Byte accounting
 
 50 (`PanelLed_PhaseVector`) + 8 + 22 + 15 + 15 + 15 (five `CmdList_*`) + 58
-(`DispatchTable_F8C2B2`) + 48 (`sub_F97503`) = 231 bytes converted.
+(`DispatchTable_F8C2B2`) + 48 (`MidiOut_PostPartPanpot`) = 231 bytes converted.

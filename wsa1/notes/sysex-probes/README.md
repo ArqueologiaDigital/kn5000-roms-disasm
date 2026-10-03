@@ -63,7 +63,7 @@ The status byte is **field 4 of the parse record** whose pointer is RAM
 * `STATUS_MAP` = prom_b `0xF511C7`, named by the ONE instruction
   `add XWA,0x00f511c7` at prom_a `0xFB7E54`. The message id lands in RAM
   `(0x2880)` at `0xFB7E5C`.
-* `sub_F99098` (0xF99098) paints `(0x2880)`: bound `cp C,0x40`, base
+* `MessageScreen_Paint` (0xF99098) paints `(0x2880)`: bound `cp C,0x40`, base
   `*(0xF993B9 + 4*(0x7FC1))` (all three language slots hold `0x00F99121`),
   pair `(start, end) = *(base + 8*code), *(base + 8*code + 4)`.
 

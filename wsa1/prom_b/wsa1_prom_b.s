@@ -569,32 +569,32 @@
 	.set	ScreenButton_DebugMonitor, 0xF959E2
 	.set	T_F4013C_Nop, 0xF95C14
 	.set	T_F401D4_Nop, 0xF96018
-	.set	sub_F96019, 0xF96019
-	.set	sub_F9601D, 0xF9601D
+	.set	ParamImage_SnapshotAll, 0xF96019
+	.set	ParamImage_QueueDiffAll, 0xF9601D
 	.set	T_F401E8_Nop, 0xF96021
 	.set	T_F401EC_Nop, 0xF96022
 	.set	T_F401F0_Nop, 0xF96023
 	.set	T_F401E0_Nop, 0xF96257
 	.set	T_F401E4_Nop, 0xF96258
-	.set	sub_F96418, 0xF96418
+	.set	ParamImage_SanitizeAll_Entry, 0xF96418
 	.set	T_F40218_Nop, 0xF9641D
-	.set	sub_F9641E, 0xF9641E
-	.set	sub_F96423, 0xF96423
-	.set	sub_F96428, 0xF96428
-	.set	sub_F9642D, 0xF9642D
-	.set	sub_F97593, 0xF97593
-	.set	sub_F9759E, 0xF9759E
-	.set	sub_F98927, 0xF98927
-	.set	sub_F98984, 0xF98984
-	.set	sub_F98989, 0xF98989
-	.set	sub_F9898E, 0xF9898E
-	.set	sub_F98ADE, 0xF98ADE
-	.set	sub_F99021, 0xF99021
+	.set	ParamImage_SanitizeAllAndHook_Entry, 0xF9641E
+	.set	ParamImage_ApplyAndMaskTable_Entry, 0xF96423
+	.set	ParamImage_WriteRecordHeaders_Entry, 0xF96428
+	.set	ParamImageAlt_SanitizeCombination_Entry, 0xF9642D
+	.set	Combination_RecallOnSelect, 0xF97593
+	.set	Combination_Recall, 0xF9759E
+	.set	Combination_ReadFromCpu2, 0xF98927
+	.set	ParamImage_SnapshotCombination_Entry, 0xF98984
+	.set	ParamImage_SnapshotCombinationAndParts_Entry, 0xF98989
+	.set	ParamImage_QueueDiffCombination, 0xF9898E
+	.set	ParamImage_QueueDiffCombinationAndParts, 0xF98ADE
+	.set	InstallPainter_MessageScreen, 0xF99021
 	.set	T_F41608_Nop, 0xF9904C
-	.set	sub_F9904D, 0xF9904D
+	.set	ScreenButton_MessageScreen, 0xF9904D
 	.set	T_F41610_Nop, 0xF99097
-	.set	sub_F99098, 0xF99098
-	.set	sub_F99400, 0xF99400
+	.set	MessageScreen_Paint, 0xF99098
+	.set	PanelScreen_RequestRedrawIfFieldQueued, 0xF99400
 	.set	T_F41660_Nop, 0xF99821
 	.set	T_F416E0_Nop, 0xF99822
 	.set	T_F416F0_Nop, 0xF99823
@@ -62683,7 +62683,7 @@ DL_Error:
 ;   IX, characters.  A sentence is cut into one-script pieces of 1..9
 ;   characters, which is why a search for RUNS of kana finds nothing.
 ; Read by: no start is named anywhere.  prom_a's MessageScreen_ListPairs
-;   (0xF99121) holds the (start, end) pairs sub_F99098 gives T_DisplayList_Run_Stack
+;   (0xF99121) holds the (start, end) pairs MessageScreen_Paint gives T_DisplayList_Run_Stack
 ;   (interpreter A, `call` at 0xF990DA), and 0xF2E91A occurs in it only as the
 ;   END of DL_Error's pair (0xF2E910, 0xF2E91A); 0xF2E97A
 ;   is spelled in neither image (24- or 32-bit).  So the two lists look like
@@ -87545,8 +87545,8 @@ T_F40174:	jp T_F40174_Nop  ; -> prom_a 0x15733
 	.fill 0x58, 1, 0x0E  ; 0xF40178: 88 x ret
 T_F401D0:	.long 0x00F96000	; ptr -> 0xF96000 (prom_a 0x16000)
 T_F401D4:	jp T_F401D4_Nop  ; -> prom_a 0x16018   x6
-T_F401D8:	jp sub_F96019  ; -> prom_a 0x16019   x5
-T_F401DC:	jp sub_F9601D  ; -> prom_a 0x1601D   x3
+T_F401D8:	jp ParamImage_SnapshotAll  ; -> prom_a 0x16019   x5
+T_F401DC:	jp ParamImage_QueueDiffAll  ; -> prom_a 0x1601D   x3
 T_F401E0:	jp T_F401E0_Nop  ; -> prom_a 0x16257
 T_F401E4:	jp T_F401E4_Nop  ; -> prom_a 0x16258
 T_F401E8:	jp T_F401E8_Nop  ; -> prom_a 0x16021   x1
@@ -87554,23 +87554,23 @@ T_F401EC:	jp T_F401EC_Nop  ; -> prom_a 0x16022   x1
 T_F401F0:	jp T_F401F0_Nop  ; -> prom_a 0x16023
 	.fill 0x1C, 1, 0x0E  ; 0xF401F4: 28 x ret
 T_F40210:	.long 0x00F96400	; ptr -> 0xF96400 (prom_a 0x16400)
-T_F40214:	jp sub_F96418  ; -> prom_a 0x16418   x2
+T_F40214:	jp ParamImage_SanitizeAll_Entry  ; -> prom_a 0x16418   x2
 T_F40218:	jp T_F40218_Nop  ; -> prom_a 0x1641D
-T_F4021C:	jp sub_F9641E  ; -> prom_a 0x1641E   x5
-T_F40220:	jp sub_F96423  ; -> prom_a 0x16423   x2
-T_F40224:	jp sub_F96428  ; -> prom_a 0x16428   x8
-T_F40228:	jp sub_F9642D  ; -> prom_a 0x1642D   x2
+T_F4021C:	jp ParamImage_SanitizeAllAndHook_Entry  ; -> prom_a 0x1641E   x5
+T_F40220:	jp ParamImage_ApplyAndMaskTable_Entry  ; -> prom_a 0x16423   x2
+T_F40224:	jp ParamImage_WriteRecordHeaders_Entry  ; -> prom_a 0x16428   x8
+T_F40228:	jp ParamImageAlt_SanitizeCombination_Entry  ; -> prom_a 0x1642D   x2
 	.fill 0x14, 1, 0x0E  ; 0xF4022C: 20 x ret
 T_F40240:	.long 0x00F97400	; ptr -> 0xF97400 (prom_a 0x17400)
-T_F40244:	jp sub_F97593  ; -> prom_a 0x17593
-T_F40248:	jp sub_F9898E  ; -> prom_a 0x1898E   x5
-T_F4024C:	jp sub_F98984  ; -> prom_a 0x18984   x5
-T_F40250:	jp sub_F98927  ; -> prom_a 0x18927
-T_F40254:	jp sub_F9759E  ; -> prom_a 0x1759E   x1
-T_F40258:	jp sub_F98ADE  ; -> prom_a 0x18ADE   x1
-T_F4025C:	jp sub_F98989  ; -> prom_a 0x18989   x1
+T_F40244:	jp Combination_RecallOnSelect  ; -> prom_a 0x17593
+T_F40248:	jp ParamImage_QueueDiffCombination  ; -> prom_a 0x1898E   x5
+T_F4024C:	jp ParamImage_SnapshotCombination_Entry  ; -> prom_a 0x18984   x5
+T_F40250:	jp Combination_ReadFromCpu2  ; -> prom_a 0x18927
+T_F40254:	jp Combination_Recall  ; -> prom_a 0x1759E   x1
+T_F40258:	jp ParamImage_QueueDiffCombinationAndParts  ; -> prom_a 0x18ADE   x1
+T_F4025C:	jp ParamImage_SnapshotCombinationAndParts_Entry  ; -> prom_a 0x18989   x1
 	.fill 0x30, 1, 0x0E  ; 0xF40260: 48 x ret
-T_F40290:	jp sub_F99400  ; -> prom_a 0x19400
+T_F40290:	jp PanelScreen_RequestRedrawIfFieldQueued  ; -> prom_a 0x19400
 	.fill 0xC, 1, 0x0E  ; 0xF40294: 12 x ret
 T_F402A0:	.long 0x00FE8046	; ptr -> 0xFE8046 (prom_a 0x68046)
 T_F402A4:	jp sub_FE810B  ; -> prom_a 0x6810B
@@ -88365,10 +88365,10 @@ T_F415C0:	jp Mode_SwitchToCombination  ; -> prom_a 0x10C21   x2
 T_F415C4:	jp Mode_SwitchToSound  ; -> prom_a 0x10C72   x4
 T_F415C8:	jp SoundGroup_ReloadSelection  ; -> prom_a 0x1433A   x10
 	.fill 0x34, 1, 0x0E  ; 0xF415CC: 52 x ret
-T_F41600:	jp sub_F99098  ; -> prom_a 0x19098   x13
-T_F41604:	jp sub_F99021  ; -> prom_a 0x19021
+T_F41600:	jp MessageScreen_Paint  ; -> prom_a 0x19098   x13
+T_F41604:	jp InstallPainter_MessageScreen  ; -> prom_a 0x19021
 T_F41608:	jp T_F41608_Nop  ; -> prom_a 0x1904C
-T_F4160C:	jp sub_F9904D  ; -> prom_a 0x1904D
+T_F4160C:	jp ScreenButton_MessageScreen  ; -> prom_a 0x1904D
 T_F41610:	jp T_F41610_Nop  ; -> prom_a 0x19097
 	.fill 0x2C, 1, 0x0E  ; 0xF41614: 44 x ret
 T_F41640:	jp sub_F99F04  ; -> prom_a 0x19F04

@@ -61,7 +61,7 @@ family was read as a change of grid, and the span was refused on it.
 539 = 4*134 + 3. The trailing `49 f9 f2` are the low three bytes of
 `0x00F2F949` -- and 0xF2F949 **is** a display-list record start, checked by the
 same length walk as the other 32. So it is a 135th entry whose top byte would
-sit at 0xF99000. 0xF99000 holds 0x3E, the `push XIZ` opening `sub_F99000`, so
+sit at 0xF99000. 0xF99000 holds 0x3E, the `push XIZ` opening `LCD_BlankThenSetPanel3Layer`, so
 the entry is cut in half by the module boundary.
 
 That is the same mechanism identified this session at 0xFDFFDF-0xFE0000
@@ -89,7 +89,7 @@ converted anyway; so is this.
 > **Status: refused.** Recorded here so the analysis is not repeated from
 > scratch. Preceded by a function ending in the common `unlk XIZ / ret`
 > epilogue (already converted); the span ends exactly at 0xF99000, a round
-> address where `sub_F99000` (already converted) begins.
+> address where `LCD_BlankThenSetPanel3Layer` (already converted) begins.
 >
 > ### Why a naive decode is not even attempted
 >
