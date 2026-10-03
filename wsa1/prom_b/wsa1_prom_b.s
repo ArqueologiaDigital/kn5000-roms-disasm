@@ -1200,7 +1200,7 @@
 	.set	Arr27A6_Get, 0xFD6C7B
 	.set	U8_ShiftLeft, 0xFD6C94
 	.set	ToneEdit_ApplyStep, 0xFD6CE1
-	.set	sub_FD6E90, 0xFD6E90
+	.set	Var27A2_ToggleWithP23, 0xFD6E90
 	.set	ToneEdit_CommitField, 0xFD7435
 	.set	Var27A3_ChangeSlot, 0xFD74AE
 	.set	sub_FD74E0, 0xFD74E0
@@ -1241,7 +1241,7 @@
 	.set	sub_FD86E1, 0xFD86E1
 	.set	sub_FD8747, 0xFD8747
 	.set	sub_FD87A5, 0xFD87A5
-	.set	sub_FD9863, 0xFD9863
+	.set	Var27A3_SelectSlot, 0xFD9863
 	.set	Var27F4_Get, 0xFD9D5C
 	.set	sub_FDA002, 0xFDA002
 	.set	sub_FDA05E, 0xFDA05E
@@ -1260,7 +1260,7 @@
 	.set	sub_FDA777, 0xFDA777
 	.set	sub_FDA901, 0xFDA901
 	.set	sub_FDA911, 0xFDA911
-	.set	sub_FDAC5B, 0xFDAC5B
+	.set	LCD_SetPanelDarkFlag, 0xFDAC5B
 	.set	sub_FDAC6B, 0xFDAC6B
 	.set	sub_FDACBD, 0xFDACBD
 	.set	ScreenCode80_Handler, 0xFDAD44
@@ -17822,7 +17822,7 @@ sub_F0A051:		; <- T_F42014
 	cp	wa, 65535	; F0A06B  cp WA,0xffff
 	jr	z, sub_F0A051_Skip	; F0A06F  jr Z,0xf0a0ae
 	pushw	1	; F0A071  push 0x0001
-	call	sub_FDAC5B	; F0A074  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0A074  call 0xfdac5b
 	ld	bc, (xiz-2)	; F0A078  ld BC,(XIZ+0xfe)
 	extz	bc	; F0A07B  extz BC
 	pushw	bc	; F0A07D  push BC
@@ -17836,7 +17836,7 @@ sub_F0A051:		; <- T_F42014
 	jp	(xbc)	; F0A093  jp T,XBC
 sub_F0A051_Resume:
 	pushw	0	; F0A095  push 0x0000
-	call	sub_FDAC5B	; F0A098  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0A098  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A09C  call 0xfd60b9
 	inc	6, xsp	; F0A0A0  inc 6,XSP
 	cp	a, 0:i3	; F0A0A2  cp A,0
@@ -17873,7 +17873,7 @@ sub_F0A0B1:		; <- T_F42024
 	cp	wa, 65535	; F0A0CB  cp WA,0xffff
 	jr	z, sub_F0A0B1_Skip	; F0A0CF  jr Z,0xf0a10e
 	pushw	1	; F0A0D1  push 0x0001
-	call	sub_FDAC5B	; F0A0D4  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0A0D4  call 0xfdac5b
 	ld	bc, (xiz-2)	; F0A0D8  ld BC,(XIZ+0xfe)
 	extz	bc	; F0A0DB  extz BC
 	pushw	bc	; F0A0DD  push BC
@@ -17887,7 +17887,7 @@ sub_F0A0B1:		; <- T_F42024
 	jp	(xbc)	; F0A0F3  jp T,XBC
 sub_F0A0B1_Resume:
 	pushw	0	; F0A0F5  push 0x0000
-	call	sub_FDAC5B	; F0A0F8  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0A0F8  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A0FC  call 0xfd60b9
 	inc	6, xsp	; F0A100  inc 6,XSP
 	cp	a, 0:i3	; F0A102  cp A,0
@@ -18243,7 +18243,7 @@ sub_F0A3A1:
 	pop	xiy	; F0A3B5  pop XIY
 	jr	sub_F0A3A1_Join	; F0A3B6  jr T,0xf0a3bc
 sub_F0A3A1_Skip:
-	call	sub_FD6E90	; F0A3B8  call 0xfd6e90
+	call	Var27A2_ToggleWithP23	; F0A3B8  call 0xfd6e90
 sub_F0A3A1_Join:
 	unlk XIZ	; F0A3BC  unlk XIZ
 	ret	; F0A3BE  ret
@@ -18266,7 +18266,7 @@ sub_F0A3BF:
 	pushw	1	; F0A3C9  push 0x0001
 	pushw	1	; F0A3CC  push 0x0001
 	pushw	135	; F0A3CF  push 0x0087
-	call	sub_FD9863	; F0A3D2  call 0xfd9863
+	call	Var27A3_SelectSlot	; F0A3D2  call 0xfd9863
 	inc	6, xsp	; F0A3D6  inc 6,XSP
 sub_F0A3BF_Skip:
 	unlk XIZ	; F0A3D8  unlk XIZ
@@ -18296,7 +18296,7 @@ sub_F0A3DB_Skip:
 	pushw	1	; F0A3F2  push 0x0001
 	pushw	2	; F0A3F5  push 0x0002
 	pushw	135	; F0A3F8  push 0x0087
-	call	sub_FD9863	; F0A3FB  call 0xfd9863
+	call	Var27A3_SelectSlot	; F0A3FB  call 0xfd9863
 	inc	6, xsp	; F0A3FF  inc 6,XSP
 sub_F0A3DB_Join:
 	unlk XIZ	; F0A401  unlk XIZ
@@ -18339,7 +18339,7 @@ sub_F0A404_Skip:
 	pushw	1	; F0A43F  push 0x0001
 	pushw	3	; F0A442  push 0x0003
 	pushw	135	; F0A445  push 0x0087
-	call	sub_FD9863	; F0A448  call 0xfd9863
+	call	Var27A3_SelectSlot	; F0A448  call 0xfd9863
 	inc	6, xsp	; F0A44C  inc 6,XSP
 sub_F0A404_Join:
 	unlk XIZ	; F0A44E  unlk XIZ
@@ -18382,7 +18382,7 @@ sub_F0A451_Skip:
 	pushw	1	; F0A48C  push 0x0001
 	pushw	4	; F0A48F  push 0x0004
 	pushw	135	; F0A492  push 0x0087
-	call	sub_FD9863	; F0A495  call 0xfd9863
+	call	Var27A3_SelectSlot	; F0A495  call 0xfd9863
 	inc	6, xsp	; F0A499  inc 6,XSP
 sub_F0A451_Join:
 	unlk XIZ	; F0A49B  unlk XIZ
@@ -18589,7 +18589,7 @@ sub_F0A56D:
 	link XIZ,0x0000	; F0A56D  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A571  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A56D_Skip	; F0A575  jr Z,0xf0a57b
-	call	sub_FD6E90	; F0A577  call 0xfd6e90
+	call	Var27A2_ToggleWithP23	; F0A577  call 0xfd6e90
 sub_F0A56D_Skip:
 	unlk XIZ	; F0A57B  unlk XIZ
 	ret	; F0A57D  ret
@@ -18921,7 +18921,7 @@ sub_F0A6E8:
 	link XIZ,0x0000	; F0A6E8  link XIZ,0x0000
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A6EC  cp (XIZ+0x08),0x00
 	jr	z, sub_F0A6E8_Skip	; F0A6F0  jr Z,0xf0a6f6
-	call	sub_FD6E90	; F0A6F2  call 0xfd6e90
+	call	Var27A2_ToggleWithP23	; F0A6F2  call 0xfd6e90
 sub_F0A6E8_Skip:
 	unlk XIZ	; F0A6F6  unlk XIZ
 	ret	; F0A6F8  ret
@@ -19271,7 +19271,7 @@ sub_F0A864:
 	pop	xiy	; F0A878  pop XIY
 	jr	sub_F0A864_Join	; F0A879  jr T,0xf0a87f
 sub_F0A864_Skip:
-	call	sub_FD6E90	; F0A87B  call 0xfd6e90
+	call	Var27A2_ToggleWithP23	; F0A87B  call 0xfd6e90
 sub_F0A864_Join:
 	unlk XIZ	; F0A87F  unlk XIZ
 	ret	; F0A881  ret
@@ -19470,7 +19470,7 @@ sub_F0A95F:		; <- T_F42368
 	cp	wa, 65535	; F0A979  cp WA,0xffff
 	jr	z, sub_F0A95F_Skip	; F0A97D  jr Z,0xf0a9bc
 	pushw	1	; F0A97F  push 0x0001
-	call	sub_FDAC5B	; F0A982  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0A982  call 0xfdac5b
 	ld	bc, (xiz-2)	; F0A986  ld BC,(XIZ+0xfe)
 	extz	bc	; F0A989  extz BC
 	pushw	bc	; F0A98B  push BC
@@ -19484,7 +19484,7 @@ sub_F0A95F:		; <- T_F42368
 	jp	(xbc)	; F0A9A1  jp T,XBC
 sub_F0A95F_Resume:
 	pushw	0	; F0A9A3  push 0x0000
-	call	sub_FDAC5B	; F0A9A6  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0A9A6  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A9AA  call 0xfd60b9
 	inc	6, xsp	; F0A9AE  inc 6,XSP
 	cp	a, 0:i3	; F0A9B0  cp A,0
@@ -22506,7 +22506,7 @@ sub_F0BD31:		; <- T_F42F98
 	pushw	bc	; F0BD7C  push BC
 	call	sub_FD7B89	; F0BD7D  call 0xfd7b89
 	pushw	1	; F0BD81  push 0x0001
-	call	sub_FDAC5B	; F0BD84  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0BD84  call 0xfdac5b
 	pushw	0	; F0BD88  push 0x0000
 	pushw	159	; F0BD8B  push 0x009f
 	call	T_Dispatch_Code80	; F0BD8E  call 0xf41ed4
@@ -22514,7 +22514,7 @@ sub_F0BD31:		; <- T_F42F98
 	pushw	159	; F0BD95  push 0x009f
 	call	T_Dispatch_Code80	; F0BD98  call 0xf41ed4
 	pushw	0	; F0BD9C  push 0x0000
-	call	sub_FDAC5B	; F0BD9F  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0BD9F  call 0xfdac5b
 	add	xsp, 32	; F0BDA3  add XSP,0x00000020
 sub_F0BD31_Skip:
 	unlk XIZ	; F0BDA9  unlk XIZ
@@ -22638,7 +22638,7 @@ sub_F0BE44:		; <- T_F42FA0
 	pushw	bc	; F0BE8F  push BC
 	call	sub_FD7B89	; F0BE90  call 0xfd7b89
 	pushw	1	; F0BE94  push 0x0001
-	call	sub_FDAC5B	; F0BE97  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0BE97  call 0xfdac5b
 	pushw	0	; F0BE9B  push 0x0000
 	pushw	159	; F0BE9E  push 0x009f
 	call	T_Dispatch_Code80	; F0BEA1  call 0xf41ed4
@@ -22646,7 +22646,7 @@ sub_F0BE44:		; <- T_F42FA0
 	pushw	159	; F0BEA8  push 0x009f
 	call	T_Dispatch_Code80	; F0BEAB  call 0xf41ed4
 	pushw	0	; F0BEAF  push 0x0000
-	call	sub_FDAC5B	; F0BEB2  call 0xfdac5b
+	call	LCD_SetPanelDarkFlag	; F0BEB2  call 0xfdac5b
 	add	xsp, 32	; F0BEB6  add XSP,0x00000020
 sub_F0BE44_Skip:
 	unlk XIZ	; F0BEBC  unlk XIZ

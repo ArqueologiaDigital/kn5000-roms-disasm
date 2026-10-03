@@ -404,6 +404,10 @@ RENAMES = {
     "sub_FD76BF": "Var27A3_GetPackedSlot",
     "sub_FD7744": "Rec2330_CopyData",
     "sub_FD69E0": "ToneMsg_SendP23FromArr2800",
+    "sub_FDAC5B": "LCD_SetPanelDarkFlag",
+    "sub_FD6B07": "Var27A2_SetBool",
+    "sub_FD6E90": "Var27A2_ToggleWithP23",
+    "sub_FD9863": "Var27A3_SelectSlot",
 }
 
 

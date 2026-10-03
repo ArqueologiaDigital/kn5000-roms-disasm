@@ -126128,7 +126128,7 @@ ScreenButton_Code84:
 	cp WA,0xffff                                         ; FD0B61  d8 cf ff ff
 	jr z, .LFD0BA4                                       ; FD0B65  66 3d
 	pushw 0x01                                           ; FD0B67  0b 01 00
-	call sub_FDAC5B                                      ; FD0B6A  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD0B6A  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FD0B6E  9e fe 21
 	extz BC                                              ; FD0B71  d9 12
 	pushw bc                                             ; FD0B73  29
@@ -126142,7 +126142,7 @@ ScreenButton_Code84:
 	jp (xbc)                                             ; FD0B89  b1 d8
 .LFD0B8B:
 	pushw 0x00                                           ; FD0B8B  0b 00 00
-	call sub_FDAC5B                                      ; FD0B8E  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD0B8E  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FD0B92  1d b9 60 fd
 	inc 6,XSP                                            ; FD0B96  ef 66
 	cp a, 0x00:i3                                          ; FD0B98  c9 d8
@@ -126167,7 +126167,7 @@ ScreenButton_Code85:
 	cp WA,0xffff                                         ; FD0BC1  d8 cf ff ff
 	jr z, .LFD0C04                                       ; FD0BC5  66 3d
 	pushw 0x01                                           ; FD0BC7  0b 01 00
-	call sub_FDAC5B                                      ; FD0BCA  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD0BCA  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FD0BCE  9e fe 21
 	extz BC                                              ; FD0BD1  d9 12
 	pushw bc                                             ; FD0BD3  29
@@ -126181,7 +126181,7 @@ ScreenButton_Code85:
 	jp (xbc)                                             ; FD0BE9  b1 d8
 .LFD0BEB:
 	pushw 0x00                                           ; FD0BEB  0b 00 00
-	call sub_FDAC5B                                      ; FD0BEE  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD0BEE  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FD0BF2  1d b9 60 fd
 	inc 6,XSP                                            ; FD0BF6  ef 66
 	cp a, 0x00:i3                                          ; FD0BF8  c9 d8
@@ -126571,7 +126571,7 @@ sub_FD0F68:
 	link XIZ,0x0000                                      ; FD0F68  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0F6C  8e 08 3f 00
 	jr z, .LFD0F76                                       ; FD0F70  66 04
-	call sub_FD6E90                                      ; FD0F72  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD0F72  1d 90 6e fd
 .LFD0F76:
 	unlk XIZ                                             ; FD0F76  ee 0d
 	ret                                                  ; FD0F78  0e
@@ -126589,7 +126589,7 @@ sub_FD0F79:
 	pushw 0x01                                           ; FD0F90  0b 01 00
 	pushw 0x01                                           ; FD0F93  0b 01 00
 	pushw 0x82                                           ; FD0F96  0b 82 00
-	call sub_FD9863                                      ; FD0F99  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD0F99  1d 63 98 fd
 	inc 6,XSP                                            ; FD0F9D  ef 66
 .LFD0F9F:
 	unlk XIZ                                             ; FD0F9F  ee 0d
@@ -126608,7 +126608,7 @@ sub_FD0FA2:
 	pushw 0x01                                           ; FD0FB9  0b 01 00
 	pushw 0x02                                           ; FD0FBC  0b 02 00
 	pushw 0x82                                           ; FD0FBF  0b 82 00
-	call sub_FD9863                                      ; FD0FC2  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD0FC2  1d 63 98 fd
 	inc 6,XSP                                            ; FD0FC6  ef 66
 .LFD0FC8:
 	unlk XIZ                                             ; FD0FC8  ee 0d
@@ -126627,7 +126627,7 @@ sub_FD0FCB:
 	pushw 0x01                                           ; FD0FE2  0b 01 00
 	pushw 0x03                                           ; FD0FE5  0b 03 00
 	pushw 0x82                                           ; FD0FE8  0b 82 00
-	call sub_FD9863                                      ; FD0FEB  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD0FEB  1d 63 98 fd
 	inc 6,XSP                                            ; FD0FEF  ef 66
 .LFD0FF1:
 	unlk XIZ                                             ; FD0FF1  ee 0d
@@ -126640,7 +126640,7 @@ sub_FD0FF4:
 	pushw 0x01                                           ; FD0FFE  0b 01 00
 	pushw 0x04                                           ; FD1001  0b 04 00
 	pushw 0x82                                           ; FD1004  0b 82 00
-	call sub_FD9863                                      ; FD1007  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD1007  1d 63 98 fd
 	inc 6,XSP                                            ; FD100B  ef 66
 .LFD100D:
 	unlk XIZ                                             ; FD100D  ee 0d
@@ -126956,7 +126956,7 @@ sub_FD12B0:
 	inc 8,XSP                                            ; FD12E1  ef 60
 	jr .LFD12E9                                          ; FD12E3  68 04
 .LFD12E5:
-	call sub_FD6E90                                      ; FD12E5  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD12E5  1d 90 6e fd
 .LFD12E9:
 	unlk XIZ                                             ; FD12E9  ee 0d
 	ret                                                  ; FD12EB  0e
@@ -126974,7 +126974,7 @@ sub_FD12EC:
 	pushw 0x01                                           ; FD1303  0b 01 00
 	pushw 0x01                                           ; FD1306  0b 01 00
 	pushw 0x83                                           ; FD1309  0b 83 00
-	call sub_FD9863                                      ; FD130C  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD130C  1d 63 98 fd
 	inc 6,XSP                                            ; FD1310  ef 66
 .LFD1312:
 	unlk XIZ                                             ; FD1312  ee 0d
@@ -126993,7 +126993,7 @@ sub_FD1315:
 	pushw 0x01                                           ; FD132C  0b 01 00
 	pushw 0x02                                           ; FD132F  0b 02 00
 	pushw 0x83                                           ; FD1332  0b 83 00
-	call sub_FD9863                                      ; FD1335  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD1335  1d 63 98 fd
 	inc 6,XSP                                            ; FD1339  ef 66
 .LFD133B:
 	unlk XIZ                                             ; FD133B  ee 0d
@@ -127022,7 +127022,7 @@ sub_FD133E:
 	pushw 0x01                                           ; FD1373  0b 01 00
 	pushw 0x03                                           ; FD1376  0b 03 00
 	pushw 0x83                                           ; FD1379  0b 83 00
-	call sub_FD9863                                      ; FD137C  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD137C  1d 63 98 fd
 	inc 6,XSP                                            ; FD1380  ef 66
 .LFD1382:
 	unlk XIZ                                             ; FD1382  ee 0d
@@ -127035,7 +127035,7 @@ sub_FD1385:
 	pushw 0x01                                           ; FD138F  0b 01 00
 	pushw 0x04                                           ; FD1392  0b 04 00
 	pushw 0x83                                           ; FD1395  0b 83 00
-	call sub_FD9863                                      ; FD1398  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD1398  1d 63 98 fd
 	inc 6,XSP                                            ; FD139C  ef 66
 .LFD139E:
 	unlk XIZ                                             ; FD139E  ee 0d
@@ -127312,7 +127312,7 @@ sub_FD1615:
 	inc 8,XSP                                            ; FD1633  ef 60
 	jr .LFD163B                                          ; FD1635  68 04
 .LFD1637:
-	call sub_FD6E90                                      ; FD1637  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD1637  1d 90 6e fd
 .LFD163B:
 	unlk XIZ                                             ; FD163B  ee 0d
 	ret                                                  ; FD163D  0e
@@ -127652,7 +127652,7 @@ sub_FD1945:
 	inc 8,XSP                                            ; FD1963  ef 60
 	jr .LFD196B                                          ; FD1965  68 04
 .LFD1967:
-	call sub_FD6E90                                      ; FD1967  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD1967  1d 90 6e fd
 .LFD196B:
 	unlk XIZ                                             ; FD196B  ee 0d
 	ret                                                  ; FD196D  0e
@@ -128320,7 +128320,7 @@ sub_FD1F3D:
 	pop XIY                                              ; FD1F51  5d
 	jr .LFD1F58                                          ; FD1F52  68 04
 .LFD1F54:
-	call sub_FD6E90                                      ; FD1F54  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD1F54  1d 90 6e fd
 .LFD1F58:
 	unlk XIZ                                             ; FD1F58  ee 0d
 	ret                                                  ; FD1F5A  0e
@@ -129238,7 +129238,7 @@ sub_FD27BA:
 	cp WA,0xffff                                         ; FD27BC  d8 cf ff ff
 	jr z, .LFD27EF                                       ; FD27C0  66 2d
 	pushw 0x01                                           ; FD27C2  0b 01 00
-	call sub_FDAC5B                                      ; FD27C5  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD27C5  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FD27C9  9e fe 21
 	extz BC                                              ; FD27CC  d9 12
 	pushw bc                                             ; FD27CE  29
@@ -129252,7 +129252,7 @@ sub_FD27BA:
 	jp (xbc)                                             ; FD27E4  b1 d8
 .LFD27E6:
 	pushw 0x00                                           ; FD27E6  0b 00 00
-	call sub_FDAC5B                                      ; FD27E9  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD27E9  1d 5b ac fd
 	inc 6,XSP                                            ; FD27ED  ef 66
 .LFD27EF:
 	unlk XIZ                                             ; FD27EF  ee 0d
@@ -129271,7 +129271,7 @@ ScreenButton_Code8D:
 	cp WA,0xffff                                         ; FD280C  d8 cf ff ff
 	jr z, .LFD284F                                       ; FD2810  66 3d
 	pushw 0x01                                           ; FD2812  0b 01 00
-	call sub_FDAC5B                                      ; FD2815  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD2815  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FD2819  9e fe 21
 	extz BC                                              ; FD281C  d9 12
 	pushw bc                                             ; FD281E  29
@@ -129285,7 +129285,7 @@ ScreenButton_Code8D:
 	jp (xbc)                                             ; FD2834  b1 d8
 .LFD2836:
 	pushw 0x00                                           ; FD2836  0b 00 00
-	call sub_FDAC5B                                      ; FD2839  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD2839  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FD283D  1d b9 60 fd
 	inc 6,XSP                                            ; FD2841  ef 66
 	cp a, 0x00:i3                                          ; FD2843  c9 d8
@@ -129311,7 +129311,7 @@ sub_FD2864:
 	cp WA,0xffff                                         ; FD286C  d8 cf ff ff
 	jr z, .LFD28AF                                       ; FD2870  66 3d
 	pushw 0x01                                           ; FD2872  0b 01 00
-	call sub_FDAC5B                                      ; FD2875  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD2875  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FD2879  9e fe 21
 	extz BC                                              ; FD287C  d9 12
 	pushw bc                                             ; FD287E  29
@@ -129325,7 +129325,7 @@ sub_FD2864:
 	jp (xbc)                                             ; FD2894  b1 d8
 .LFD2896:
 	pushw 0x00                                           ; FD2896  0b 00 00
-	call sub_FDAC5B                                      ; FD2899  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FD2899  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FD289D  1d b9 60 fd
 	inc 6,XSP                                            ; FD28A1  ef 66
 	cp a, 0x00:i3                                          ; FD28A3  c9 d8
@@ -129734,7 +129734,7 @@ sub_FD2C3C:
 	pop XIY                                              ; FD2C50  5d
 	jr .LFD2C57                                          ; FD2C51  68 04
 .LFD2C53:
-	call sub_FD6E90                                      ; FD2C53  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD2C53  1d 90 6e fd
 .LFD2C57:
 	unlk XIZ                                             ; FD2C57  ee 0d
 	ret                                                  ; FD2C59  0e
@@ -129746,7 +129746,7 @@ sub_FD2C5A:
 	pushw 0x01                                           ; FD2C64  0b 01 00
 	pushw 0x01                                           ; FD2C67  0b 01 00
 	pushw 0x8b                                           ; FD2C6A  0b 8b 00
-	call sub_FD9863                                      ; FD2C6D  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD2C6D  1d 63 98 fd
 	inc 6,XSP                                            ; FD2C71  ef 66
 .LFD2C73:
 	unlk XIZ                                             ; FD2C73  ee 0d
@@ -129771,7 +129771,7 @@ sub_FD2C76:
 	pushw 0x01                                           ; FD2C9C  0b 01 00
 	pushw 0x02                                           ; FD2C9F  0b 02 00
 	pushw 0x8b                                           ; FD2CA2  0b 8b 00
-	call sub_FD9863                                      ; FD2CA5  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD2CA5  1d 63 98 fd
 	inc 6,XSP                                            ; FD2CA9  ef 66
 .LFD2CAB:
 	unlk XIZ                                             ; FD2CAB  ee 0d
@@ -129790,7 +129790,7 @@ sub_FD2CAE:
 	pushw 0x01                                           ; FD2CC7  0b 01 00
 	pushw 0x03                                           ; FD2CCA  0b 03 00
 	pushw 0x8b                                           ; FD2CCD  0b 8b 00
-	call sub_FD9863                                      ; FD2CD0  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD2CD0  1d 63 98 fd
 	inc 6,XSP                                            ; FD2CD4  ef 66
 .LFD2CD6:
 	unlk XIZ                                             ; FD2CD6  ee 0d
@@ -129809,7 +129809,7 @@ sub_FD2CD9:
 	pushw 0x01                                           ; FD2CF2  0b 01 00
 	pushw 0x04                                           ; FD2CF5  0b 04 00
 	pushw 0x8b                                           ; FD2CF8  0b 8b 00
-	call sub_FD9863                                      ; FD2CFB  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD2CFB  1d 63 98 fd
 	inc 6,XSP                                            ; FD2CFF  ef 66
 .LFD2D01:
 	unlk XIZ                                             ; FD2D01  ee 0d
@@ -130086,7 +130086,7 @@ sub_FD2F84:
 	pop XIY                                              ; FD2F98  5d
 	jr .LFD2F9F                                          ; FD2F99  68 04
 .LFD2F9B:
-	call sub_FD6E90                                      ; FD2F9B  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD2F9B  1d 90 6e fd
 .LFD2F9F:
 	unlk XIZ                                             ; FD2F9F  ee 0d
 	ret                                                  ; FD2FA1  0e
@@ -130763,7 +130763,7 @@ sub_FD359E:
 	link XIZ,0x0000                                      ; FD359E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD35A2  8e 08 3f 00
 	jr z, .LFD35AC                                       ; FD35A6  66 04
-	call sub_FD6E90                                      ; FD35A8  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD35A8  1d 90 6e fd
 .LFD35AC:
 	unlk XIZ                                             ; FD35AC  ee 0d
 	ret                                                  ; FD35AE  0e
@@ -131371,7 +131371,7 @@ sub_FD3B81:
 	link XIZ,0x0000                                      ; FD3B81  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3B85  8e 08 3f 00
 	jr z, .LFD3B8F                                       ; FD3B89  66 04
-	call sub_FD6E90                                      ; FD3B8B  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD3B8B  1d 90 6e fd
 .LFD3B8F:
 	unlk XIZ                                             ; FD3B8F  ee 0d
 	ret                                                  ; FD3B91  0e
@@ -131566,7 +131566,7 @@ sub_FD3CFD:
 	pop XIY                                              ; FD3D11  5d
 	jr .LFD3D18                                          ; FD3D12  68 04
 .LFD3D14:
-	call sub_FD6E90                                      ; FD3D14  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD3D14  1d 90 6e fd
 .LFD3D18:
 	unlk XIZ                                             ; FD3D18  ee 0d
 	ret                                                  ; FD3D1A  0e
@@ -132371,7 +132371,7 @@ ToneEditPage_A0_Op8:
 	pop XIY                                              ; FD43DA  5d
 	jr .LFD43E1                                          ; FD43DB  68 04
 .LFD43DD:
-	call sub_FD6E90                                      ; FD43DD  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD43DD  1d 90 6e fd
 .LFD43E1:
 	unlk XIZ                                             ; FD43E1  ee 0d
 	ret                                                  ; FD43E3  0e
@@ -132388,7 +132388,7 @@ ToneEditPage_A0_Op9:
 .LFD43FB:
 	pushw 0x01                                           ; FD43FB  0b 01 00
 	pushw 0xc0                                           ; FD43FE  0b c0 00
-	call sub_FD9863                                      ; FD4401  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD4401  1d 63 98 fd
 	inc 6,XSP                                            ; FD4405  ef 66
 .LFD4407:
 	unlk XIZ                                             ; FD4407  ee 0d
@@ -132406,7 +132406,7 @@ ToneEditPage_A0_Op10:
 .LFD4421:
 	pushw 0x02                                           ; FD4421  0b 02 00
 	pushw 0xc0                                           ; FD4424  0b c0 00
-	call sub_FD9863                                      ; FD4427  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD4427  1d 63 98 fd
 	inc 6,XSP                                            ; FD442B  ef 66
 .LFD442D:
 	unlk XIZ                                             ; FD442D  ee 0d
@@ -132431,7 +132431,7 @@ ToneEditPage_A0_Op11:
 	pushw 0x00                                           ; FD4456  0b 00 00
 	pushw 0x03                                           ; FD4459  0b 03 00
 	pushw 0xc0                                           ; FD445C  0b c0 00
-	call sub_FD9863                                      ; FD445F  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD445F  1d 63 98 fd
 	inc 6,XSP                                            ; FD4463  ef 66
 .LFD4465:
 	unlk XIZ                                             ; FD4465  ee 0d
@@ -132450,7 +132450,7 @@ ToneEditPage_A0_Op12:
 	pushw 0x00                                           ; FD4481  0b 00 00
 	pushw 0x04                                           ; FD4484  0b 04 00
 	pushw 0xc0                                           ; FD4487  0b c0 00
-	call sub_FD9863                                      ; FD448A  1d 63 98 fd
+	call Var27A3_SelectSlot                                      ; FD448A  1d 63 98 fd
 	inc 6,XSP                                            ; FD448E  ef 66
 .LFD4490:
 	unlk XIZ                                             ; FD4490  ee 0d
@@ -132804,7 +132804,7 @@ ToneEditPage_A3_Op8:
 	pop XIY                                              ; FD4726  5d
 	jr .LFD472D                                          ; FD4727  68 04
 .LFD4729:
-	call sub_FD6E90                                      ; FD4729  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD4729  1d 90 6e fd
 .LFD472D:
 	unlk XIZ                                             ; FD472D  ee 0d
 	ret                                                  ; FD472F  0e
@@ -133181,7 +133181,7 @@ ToneEditPage_A4_Op8:
 	pop XIY                                              ; FD49EC  5d
 	jr .LFD49F3                                          ; FD49ED  68 04
 .LFD49EF:
-	call sub_FD6E90                                      ; FD49EF  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD49EF  1d 90 6e fd
 .LFD49F3:
 	unlk XIZ                                             ; FD49F3  ee 0d
 	ret                                                  ; FD49F5  0e
@@ -134018,7 +134018,7 @@ ToneEditPage_A5_Op8:
 	pop XIY                                              ; FD5031  5d
 	jr .LFD5038                                          ; FD5032  68 04
 .LFD5034:
-	call sub_FD6E90                                      ; FD5034  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD5034  1d 90 6e fd
 .LFD5038:
 	unlk XIZ                                             ; FD5038  ee 0d
 	ret                                                  ; FD503A  0e
@@ -134592,7 +134592,7 @@ ToneEditPage_A6_Op8:
 	pop XIY                                              ; FD5483  5d
 	jr .LFD548A                                          ; FD5484  68 04
 .LFD5486:
-	call sub_FD6E90                                      ; FD5486  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD5486  1d 90 6e fd
 .LFD548A:
 	unlk XIZ                                             ; FD548A  ee 0d
 	ret                                                  ; FD548C  0e
@@ -135540,7 +135540,7 @@ ToneEditPage_A7_Op8:
 	pop XIY                                              ; FD5B77  5d
 	jr .LFD5B7E                                          ; FD5B78  68 04
 .LFD5B7A:
-	call sub_FD6E90                                      ; FD5B7A  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                      ; FD5B7A  1d 90 6e fd
 .LFD5B7E:
 	unlk XIZ                                             ; FD5B7E  ee 0d
 	ret                                                  ; FD5B80  0e
@@ -137455,7 +137455,8 @@ ToneMsg_SendP23FromArr2800:
 	popw hl                                              ; FD6B03  4b
 	unlk XIZ                                             ; FD6B04  ee 0d
 	ret                                                  ; FD6B06  0e
-sub_FD6B07:
+; Var27A2_SetBool(arg): (0x27A2) = (arg != 0).
+Var27A2_SetBool:
 	link XIZ,0x0000                                      ; FD6B07  ee 0c 00 00
 	ld (0x27a2:16), 0x00                                 ; FD6B0B  f1 a2 27 00 00
 	cp (XIZ+0x08),0x00                                   ; FD6B10  8e 08 3f 00
@@ -137975,7 +137976,9 @@ ToneEdit_ApplyStep_Signed:
 	popw hl                                              ; FD6E8C  4b
 	unlk XIZ                                             ; FD6E8D  ee 0d
 	ret                                                  ; FD6E8F  0e
-sub_FD6E90:
+; Var27A2_ToggleWithP23: (0x27A2) set -> ToneMsg_SendP23FromArr2800(0), Var27A2_SetBool(0); clear -> Var27A2_SetBool(1),
+;   ToneMsg_SendP23FromArr2800(1); then T_UiPaint_Solo.  What (0x27A2) holds is not established.
+Var27A2_ToggleWithP23:
 	link XIZ,0xfffe                                      ; FD6E90  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD6E94  be fe 31
 	push XBC                                             ; FD6E97  39
@@ -137986,11 +137989,11 @@ sub_FD6E90:
 	pushw 0x00                                           ; FD6EA2  0b 00 00
 	calr ToneMsg_SendP23FromArr2800                                      ; FD6EA5  1e 38 fb
 	pushw 0x00                                           ; FD6EA8  0b 00 00
-	calr sub_FD6B07                                      ; FD6EAB  1e 59 fc
+	calr Var27A2_SetBool                                      ; FD6EAB  1e 59 fc
 	jr .LFD6EBC                                          ; FD6EAE  68 0c
 .LFD6EB0:
 	pushw 0x01                                           ; FD6EB0  0b 01 00
-	calr sub_FD6B07                                      ; FD6EB3  1e 51 fc
+	calr Var27A2_SetBool                                      ; FD6EB3  1e 51 fc
 	pushw 0x01                                           ; FD6EB6  0b 01 00
 	calr ToneMsg_SendP23FromArr2800                                      ; FD6EB9  1e 24 fb
 .LFD6EBC:
@@ -139455,7 +139458,7 @@ PanelEvent_ToFieldIndex:
 	pushw 0x00                                           ; FD7998  0b 00 00
 	calr ToneMsg_SendP23FromArr2800                                          ; FD799B  1e 42 f0
 	pushw 0x00                                           ; FD799E  0b 00 00
-	calr sub_FD6B07                                          ; FD79A1  1e 63 f1
+	calr Var27A2_SetBool                                          ; FD79A1  1e 63 f1
 	pop XIY                                              ; FD79A4  5d
 	cp h, 0x01:i3                                          ; FD79A5  ce d9
 	jr nz, .LFD79B1                                      ; FD79A7  6e 08
@@ -142919,7 +142922,9 @@ sub_FD96DE:
 	popw hl                                              ; FD985F  4b
 	unlk XIZ                                             ; FD9860  ee 0d
 	ret                                                  ; FD9862  0e
-sub_FD9863:
+; Var27A3_SelectSlot(screen, slot, check): unless slot is already Arr27A6[0] (or check == 1 and it is not
+;   Var27A4_SlotEnabled): Var27A3_SetSlot(slot), Arr27A6_Set(0, slot), T_Dispatch_Code80(screen, 0), ToneMsg_SendP23FromArr2800(1).
+Var27A3_SelectSlot:
 	link XIZ,0xfffe                                      ; FD9863  ee 0c fe ff
 	pushw hl                                             ; FD9867  2b
 	pushw de                                             ; FD9868  2a
@@ -145748,7 +145753,8 @@ Var27A1_Set:
 	ld (0x27a1:16), c                                   ; FDAC54  f1 a1 27 43
 	unlk XIZ                                             ; FDAC58  ee 0d
 	ret                                                  ; FDAC5A  0e
-sub_FDAC5B:
+; LCD_SetPanelDarkFlag(flag): (0xC6) = flag & 1; bit 0 of (0xC6) is "the panel is dark, do not poll BUSY" (FINDINGS-display-controller.md).
+LCD_SetPanelDarkFlag:
 	link XIZ,0x0000                                      ; FDAC5B  ee 0c 00 00
 	ld C,(XIZ+0x08)                                      ; FDAC5F  8e 08 23
 	and C,0x01                                           ; FDAC62  cb cc 01
@@ -145800,7 +145806,7 @@ sub_FDACBD:
 	pushw 0x00                                           ; FDACEE  0b 00 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDACF1  1d e0 69 fd
 	pushw 0x00                                           ; FDACF5  0b 00 00
-	call sub_FD6B07                                      ; FDACF8  1d 07 6b fd
+	call Var27A2_SetBool                                      ; FDACF8  1d 07 6b fd
 	pop XIY                                              ; FDACFC  5d
 .LFDACFD:
 	pushw 0x00                                           ; FDACFD  0b 00 00
@@ -145809,9 +145815,9 @@ sub_FDACBD:
 	pushw 0x0400                                         ; FDAD07  0b 00 04
 	call sub_FDA808                                      ; FDAD0A  1d 08 a8 fd
 	pushw 0x00                                           ; FDAD0E  0b 00 00
-	call sub_FD6B07                                      ; FDAD11  1d 07 6b fd
+	call Var27A2_SetBool                                      ; FDAD11  1d 07 6b fd
 	pushw 0x00                                           ; FDAD15  0b 00 00
-	call sub_FDAC5B                                      ; FDAD18  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDAD18  1d 5b ac fd
 	lda xbc, (xiz-6)                                     ; FDAD1C  be fa 31
 	push XBC                                             ; FDAD1F  39
 	call Var2807_Get                                      ; FDAD20  1d 4e a8 fd
@@ -151999,7 +152005,7 @@ ScreenButton_Code90:
 	cp WA,0xffff                                         ; FDE3D8  d8 cf ff ff
 	jr z, .LFDE41B                                       ; FDE3DC  66 3d
 	pushw 0x01                                           ; FDE3DE  0b 01 00
-	call sub_FDAC5B                                      ; FDE3E1  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE3E1  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE3E5  9e fe 21
 	extz BC                                              ; FDE3E8  d9 12
 	pushw bc                                             ; FDE3EA  29
@@ -152013,7 +152019,7 @@ ScreenButton_Code90:
 	jp (xbc)                                             ; FDE400  b1 d8
 .LFDE402:
 	pushw 0x00                                           ; FDE402  0b 00 00
-	call sub_FDAC5B                                      ; FDE405  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE405  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FDE409  1d b9 60 fd
 	inc 6,XSP                                            ; FDE40D  ef 66
 	cp a, 0x00:i3                                          ; FDE40F  c9 d8
@@ -152038,7 +152044,7 @@ ScreenButton_Code91:
 	cp WA,0xffff                                         ; FDE438  d8 cf ff ff
 	jr z, .LFDE47B                                       ; FDE43C  66 3d
 	pushw 0x01                                           ; FDE43E  0b 01 00
-	call sub_FDAC5B                                      ; FDE441  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE441  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE445  9e fe 21
 	extz BC                                              ; FDE448  d9 12
 	pushw bc                                             ; FDE44A  29
@@ -152052,7 +152058,7 @@ ScreenButton_Code91:
 	jp (xbc)                                             ; FDE460  b1 d8
 .LFDE462:
 	pushw 0x00                                           ; FDE462  0b 00 00
-	call sub_FDAC5B                                      ; FDE465  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE465  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FDE469  1d b9 60 fd
 	inc 6,XSP                                            ; FDE46D  ef 66
 	cp a, 0x00:i3                                          ; FDE46F  c9 d8
@@ -152077,7 +152083,7 @@ ScreenButton_Code92:
 	cp WA,0xffff                                         ; FDE498  d8 cf ff ff
 	jr z, .LFDE4DB                                       ; FDE49C  66 3d
 	pushw 0x01                                           ; FDE49E  0b 01 00
-	call sub_FDAC5B                                      ; FDE4A1  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE4A1  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE4A5  9e fe 21
 	extz BC                                              ; FDE4A8  d9 12
 	pushw bc                                             ; FDE4AA  29
@@ -152091,7 +152097,7 @@ ScreenButton_Code92:
 	jp (xbc)                                             ; FDE4C0  b1 d8
 .LFDE4C2:
 	pushw 0x00                                           ; FDE4C2  0b 00 00
-	call sub_FDAC5B                                      ; FDE4C5  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE4C5  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FDE4C9  1d b9 60 fd
 	inc 6,XSP                                            ; FDE4CD  ef 66
 	cp a, 0x00:i3                                          ; FDE4CF  c9 d8
@@ -152116,7 +152122,7 @@ ScreenButton_Code93:
 	cp WA,0xffff                                         ; FDE4F8  d8 cf ff ff
 	jr z, .LFDE53B                                       ; FDE4FC  66 3d
 	pushw 0x01                                           ; FDE4FE  0b 01 00
-	call sub_FDAC5B                                      ; FDE501  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE501  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE505  9e fe 21
 	extz BC                                              ; FDE508  d9 12
 	pushw bc                                             ; FDE50A  29
@@ -152130,7 +152136,7 @@ ScreenButton_Code93:
 	jp (xbc)                                             ; FDE520  b1 d8
 .LFDE522:
 	pushw 0x00                                           ; FDE522  0b 00 00
-	call sub_FDAC5B                                      ; FDE525  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE525  1d 5b ac fd
 sub_FDE529:
 	call PanelScreen_RequestPending                                      ; FDE529  1d b9 60 fd
 	inc 6,XSP                                            ; FDE52D  ef 66
@@ -152156,7 +152162,7 @@ ScreenButton_Code94:
 	cp WA,0xffff                                         ; FDE558  d8 cf ff ff
 	jr z, .LFDE59B                                       ; FDE55C  66 3d
 	pushw 0x01                                           ; FDE55E  0b 01 00
-	call sub_FDAC5B                                      ; FDE561  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE561  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE565  9e fe 21
 	extz BC                                              ; FDE568  d9 12
 	pushw bc                                             ; FDE56A  29
@@ -152170,7 +152176,7 @@ ScreenButton_Code94:
 	jp (xbc)                                             ; FDE580  b1 d8
 .LFDE582:
 	pushw 0x00                                           ; FDE582  0b 00 00
-	call sub_FDAC5B                                      ; FDE585  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE585  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FDE589  1d b9 60 fd
 	inc 6,XSP                                            ; FDE58D  ef 66
 	cp a, 0x00:i3                                          ; FDE58F  c9 d8
@@ -152230,7 +152236,7 @@ ScreenButton_Code96:
 	cp WA,0xffff                                         ; FDE609  d8 cf ff ff
 	jr z, .LFDE64C                                       ; FDE60D  66 3d
 	pushw 0x01                                           ; FDE60F  0b 01 00
-	call sub_FDAC5B                                      ; FDE612  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE612  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE616  9e fe 21
 	extz BC                                              ; FDE619  d9 12
 	pushw bc                                             ; FDE61B  29
@@ -152244,7 +152250,7 @@ ScreenButton_Code96:
 	jp (xbc)                                             ; FDE631  b1 d8
 .LFDE633:
 	pushw 0x00                                           ; FDE633  0b 00 00
-	call sub_FDAC5B                                      ; FDE636  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE636  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FDE63A  1d b9 60 fd
 	inc 6,XSP                                            ; FDE63E  ef 66
 	cp a, 0x00:i3                                          ; FDE640  c9 d8
@@ -152269,7 +152275,7 @@ ScreenButton_Code97:
 	cp WA,0xffff                                         ; FDE669  d8 cf ff ff
 	jr z, .LFDE6AC                                       ; FDE66D  66 3d
 	pushw 0x01                                           ; FDE66F  0b 01 00
-	call sub_FDAC5B                                      ; FDE672  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE672  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE676  9e fe 21
 	extz BC                                              ; FDE679  d9 12
 	pushw bc                                             ; FDE67B  29
@@ -152283,7 +152289,7 @@ ScreenButton_Code97:
 	jp (xbc)                                             ; FDE691  b1 d8
 .LFDE693:
 	pushw 0x00                                           ; FDE693  0b 00 00
-	call sub_FDAC5B                                      ; FDE696  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE696  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FDE69A  1d b9 60 fd
 	inc 6,XSP                                            ; FDE69E  ef 66
 	cp a, 0x00:i3                                          ; FDE6A0  c9 d8
@@ -152308,7 +152314,7 @@ ScreenButton_Code98:
 	cp WA,0xffff                                         ; FDE6C9  d8 cf ff ff
 	jr z, .LFDE70C                                       ; FDE6CD  66 3d
 	pushw 0x01                                           ; FDE6CF  0b 01 00
-	call sub_FDAC5B                                      ; FDE6D2  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE6D2  1d 5b ac fd
 	ld bc, (xiz-2)                                       ; FDE6D6  9e fe 21
 	extz BC                                              ; FDE6D9  d9 12
 	pushw bc                                             ; FDE6DB  29
@@ -152322,7 +152328,7 @@ ScreenButton_Code98:
 	jp (xbc)                                             ; FDE6F1  b1 d8
 .LFDE6F3:
 	pushw 0x00                                           ; FDE6F3  0b 00 00
-	call sub_FDAC5B                                      ; FDE6F6  1d 5b ac fd
+	call LCD_SetPanelDarkFlag                                      ; FDE6F6  1d 5b ac fd
 	call PanelScreen_RequestPending                                      ; FDE6FA  1d b9 60 fd
 	inc 6,XSP                                            ; FDE6FE  ef 66
 	cp a, 0x00:i3                                          ; FDE700  c9 d8
@@ -152941,7 +152947,7 @@ sub_FDEC08:
 	pop XIY                                       ; FDEC2B  5d
 	jr .LFDEC32                                   ; FDEC2C  68 04
 .LFDEC2E:
-	call sub_FD6E90                                 ; FDEC2E  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDEC2E  1d 90 6e fd
 .LFDEC32:
 	unlk XIZ                                      ; FDEC32  ee 0d
 	ret                                           ; FDEC34  0e
@@ -153382,7 +153388,7 @@ sub_FDEF98:
 	pop XIY                                       ; FDEFBB  5d
 	jr .LFDEFC2                                   ; FDEFBC  68 04
 .LFDEFBE:
-	call sub_FD6E90                                 ; FDEFBE  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDEFBE  1d 90 6e fd
 .LFDEFC2:
 	unlk XIZ                                      ; FDEFC2  ee 0d
 	ret                                           ; FDEFC4  0e
@@ -153958,7 +153964,7 @@ sub_FDF4A1:
 	pop XIY                                       ; FDF4C4  5d
 	jr .LFDF4CB                                   ; FDF4C5  68 04
 .LFDF4C7:
-	call sub_FD6E90                                 ; FDF4C7  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDF4C7  1d 90 6e fd
 .LFDF4CB:
 	unlk XIZ                                      ; FDF4CB  ee 0d
 	ret                                           ; FDF4CD  0e
@@ -154125,7 +154131,7 @@ sub_FDF60B:
 	pop XIY                                       ; FDF62E  5d
 	jr .LFDF635                                   ; FDF62F  68 04
 .LFDF631:
-	call sub_FD6E90                                 ; FDF631  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDF631  1d 90 6e fd
 .LFDF635:
 	unlk XIZ                                      ; FDF635  ee 0d
 	ret                                           ; FDF637  0e
@@ -154510,7 +154516,7 @@ sub_FDF9A4:
 	pop XIY                                       ; FDF9B8  5d
 	jr .LFDF9BF                                   ; FDF9B9  68 04
 .LFDF9BB:
-	call sub_FD6E90                                 ; FDF9BB  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDF9BB  1d 90 6e fd
 .LFDF9BF:
 	unlk XIZ                                      ; FDF9BF  ee 0d
 	ret                                           ; FDF9C1  0e
@@ -154702,7 +154708,7 @@ sub_FDFB41:
 	link XIZ,0x0000                               ; FDFB41  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB45  8e 08 3f 00
 	jr z, .LFDFB4F                                ; FDFB49  66 04
-	call sub_FD6E90                                 ; FDFB4B  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDFB4B  1d 90 6e fd
 .LFDFB4F:
 	unlk XIZ                                      ; FDFB4F  ee 0d
 	ret                                           ; FDFB51  0e
@@ -154891,7 +154897,7 @@ sub_FDFCBC:
 	link XIZ,0x0000                               ; FDFCBC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCC0  8e 08 3f 00
 	jr z, .LFDFCCA                                ; FDFCC4  66 04
-	call sub_FD6E90                                 ; FDFCC6  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDFCC6  1d 90 6e fd
 .LFDFCCA:
 	unlk XIZ                                      ; FDFCCA  ee 0d
 	ret                                           ; FDFCCC  0e
@@ -155087,7 +155093,7 @@ sub_FDFE38:
 	pop XIY                                       ; FDFE4C  5d
 	jr .LFDFE53                                   ; FDFE4D  68 04
 .LFDFE4F:
-	call sub_FD6E90                                 ; FDFE4F  1d 90 6e fd
+	call Var27A2_ToggleWithP23                                 ; FDFE4F  1d 90 6e fd
 .LFDFE53:
 	unlk XIZ                                      ; FDFE53  ee 0d
 	ret                                           ; FDFE55  0e
@@ -155176,8 +155182,8 @@ sub_FDFEC2:
 	call	PanelScreen_PostRequest + 0x15e         ; FDFEE9  1d e9 61 fd
 	pop XIY                                       ; FDFEED  5d
 	jr .LFDFEF4                                   ; FDFEEE  68 04
-; stale, 0x15E above: no twin (the handler is cut off at the front); the block's delta lands on the entry sub_FD6E90
-	call	sub_FD6E90 + 0x15e                      ; FDFEF0  1d ee 6f fd
+; stale, 0x15E above: no twin (the handler is cut off at the front); the block's delta lands on the entry Var27A2_ToggleWithP23
+	call	Var27A2_ToggleWithP23 + 0x15e                      ; FDFEF0  1d ee 6f fd
 .LFDFEF4:
 	unlk XIZ                                      ; FDFEF4  ee 0d
 	ret                                           ; FDFEF6  0e

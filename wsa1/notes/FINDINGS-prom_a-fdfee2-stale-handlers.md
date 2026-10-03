@@ -37,7 +37,7 @@ Three calls sit in handlers the script cannot examine, because they are cut off 
 Each of them uses an old address that a twin-paired call also uses, or (one case) the layer's delta:
 
 - 0xFDFEE9 calls 0xFD61E9, the same old address as 0xFDFF07.
-- 0xFDFEF0 calls 0xFD6FEE. That handler has no twin; 0x15E below it is the entry `sub_FD6E90`.
+- 0xFDFEF0 calls 0xFD6FEE. That handler has no twin; 0x15E below it is the entry `Var27A2_ToggleWithP23`.
 - 0xFDFF8C calls 0xFD5486 and 0xFDFF9B calls 0xFD40B6, the same old addresses as 0xFDFFB0 and
   0xFDFFBF.
 
