@@ -22,8 +22,8 @@
 # =====================================================
 #
 #   symbols .................. 51,642
-#   semantic names ........... 50,814 (98.4%)
-#   positional names ......... 828
+#   semantic names ........... 50,815 (98.4%)
+#   positional names ......... 827
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -33251,8 +33251,8 @@ TimeSig_DisplayStrings_Code_Skip38 00F65AD5
 TimeSig_DisplayStrings_Code_Skip4 00F65AE3
 TimeSig_DisplayStrings_Code_Skip5 00F65AF6
 TimeSig_DisplayStrings_Code_Join2 00F65AFF
-TimeSig_DisplayStrings_Code 00F65B24
-TimeSig_DisplayStrings_0x227 00F65B30
+TimeSig_StepUpTable15 00F65B24
+TimeSig_StepDownTable15 00F65B30
 TimeSig_DisplayStrings_Code_Sub 00F65B3C
 DrumVoice_Handler7_Code_Helper2 00F65B53
 DrumVoice_Handler7_Code_Helper2_Skip5 00F65B6A
