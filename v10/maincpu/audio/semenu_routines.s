@@ -6136,9 +6136,10 @@ SeMenu_OrPartConfig:
 	or (0x0205f2:24), a
 	ret
 
-SeMenu_OrPartConfig_Data:
+SeMenu_SetPartConfigBit3:
 	set	3, (58338:24)
 	ret
+SeMenu_GetPartConfigBit3:
 	ld	l, (58338:24)
 	and	l, 8
 	ret

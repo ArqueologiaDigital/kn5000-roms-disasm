@@ -5231,7 +5231,7 @@ DMA_ChannelHandler_2_Return:
 	ret
 DMA_ChannelHandler_0:
 	ld	(13964:16), 0
-	call	SerialPort_ModeHandler_0_Helper
+	call	DisplayStr_CopyStyleSectionName
 	ret
 DMA_ChannelHandler_3:
 	; --- Conditional init (31 bytes) ---
@@ -6576,7 +6576,7 @@ SerialPort_ModeHandler_3:
 	call	DisplayStr_StyleSectionInit
 	ret
 SerialPort_ModeHandler_0:
-	call	SerialPort_ModeHandler_0_Helper
+	call	DisplayStr_CopyStyleSectionName
 	ret
 SerialPort_ModeHandler_0_0x5:
 	cp	(3429:16), 3
@@ -10544,7 +10544,7 @@ VoiceSlot_ComputeIndex_Entry2:
 	jrl	nz, VoiceSlot_IndexDone_Loop
 	ld	(xix), 9
 VoiceSlot_IndexDone_Join2:
-	call	SerialPort_ModeHandler_0_Helper
+	call	DisplayStr_CopyStyleSectionName
 VoiceSlot_IndexDone_Return:
 	ret
 VoiceSlot_StatusCheck:
@@ -11218,7 +11218,7 @@ VoiceSlot_StatusRet_Skip72:
 	jp	VoiceSlot_StatusRet_Loop2
 VoiceSlot_StatusRet_Skip73:
 	ld	(xiy), 9
-	call	SerialPort_ModeHandler_0_Helper
+	call	DisplayStr_CopyStyleSectionName
 	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip74:
 	call	ToneParam_HandlerTable_BC_Helper8
@@ -11351,7 +11351,7 @@ VoiceState_SaveAndRestore:
 	; indexed with stride 4 (`sla hl, 2`)
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 Display_ModePopupDispatch_Tbl:
-	.long	SerialPort_ModeHandler_0_Helper
+	.long	DisplayStr_CopyStyleSectionName
 	.long	DisplayStr_BytecodeBlock_C
 	.long	DisplayStr_BytecodeBlock_C
 	.long	VoiceState_SaveAndRestore
@@ -14358,7 +14358,7 @@ DisplayStr_StyleClearLoop:
 
 DisplayStr_BytecodeBlock_E:
 	ret
-SerialPort_ModeHandler_0_Helper:
+DisplayStr_CopyStyleSectionName:
 	ld XIX,0x00000ed4
 	xor XHL,XHL
 	ld l, (0x368c:16)

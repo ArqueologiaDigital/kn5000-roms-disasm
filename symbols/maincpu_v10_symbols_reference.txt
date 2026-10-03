@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,604
-#   semantic names ........... 50,755 (98.4%)
-#   positional names ......... 849
+#   symbols .................. 51,595
+#   semantic names ........... 50,757 (98.4%)
+#   positional names ......... 838
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -17976,7 +17976,7 @@ DisplayStr_ClearLoop 00EFF035
 DisplayStr_StyleSectionInit 00EFF03F
 DisplayStr_StyleClearLoop 00EFF06C
 DisplayStr_BytecodeBlock_E 00EFF077
-DisplayStr_BytecodeBlock_E_0x1 00EFF078
+DisplayStr_CopyStyleSectionName 00EFF078
 DisplayStr_StyleSectionNames 00EFF0A2
 Timer_ModeHandler_3_Helper 00EFF10B
 Display_RedrawMenu 00EFF110
@@ -19307,8 +19307,8 @@ SeMenu_PatchBank_Data_Epilogue 00F098B7
 SeMenu_SetEditEnable 00F098BD
 SeMenu_SetEditEnable_Clear 00F098C6
 SeMenu_OrPartConfig 00F098CB
-SeMenu_OrPartConfig_Data 00F098D1
-SeMenu_OrPartConfig_Data_0x6 00F098D7
+SeMenu_SetPartConfigBit3 00F098D1
+SeMenu_GetPartConfigBit3 00F098D7
 SeMenu_StoreParamByte 00F098E0
 SeMenu_LoadParamByte 00F098EF
 SeMenu_SetConfirmState 00F09900
@@ -26741,9 +26741,7 @@ Part_ValidateSetup_StoreAndRead 00F3FFC2
 SeqData_TrackProcessComplete 00F3FFDC
 SeqData_ScanAllTracks 00F3FFE0
 SeqData_ScanTracks_OuterLoop 00F3FFF5
-SeqData_ScanTracks_OuterLoop_0xC 00F40001
 SeqData_ScanTracks_InnerLoop 00F40002
-SeqData_ScanTracks_InnerLoop_0x5 00F40007
 SeqData_ScanTracks_SetFlag 00F40018
 SeqData_ScanTracks_Check81 00F4002B
 SeqData_ScanTracks_CheckCount 00F40033
@@ -29315,8 +29313,6 @@ SeqStep_FileSectorPopReturn_Skip7 00F4FFC5
 SeqStep_FileSectorPopReturn_Entry 00F4FFCA
 SeqStep_FileSectorPopReturn_Skip8 00F4FFE5
 SeqStep_FileSectorPopReturn_Entry2 00F4FFF0
-SeqStep_FileSectorPopReturn_0x35E 00F5000B
-SeqStep_FileSectorPopReturn_0x361 00F5000E
 SeqStep_FileSectorPopReturn_Loop4 00F50018
 NakaData_PerfStyleCode 00F5001F
 SeqByteBlock_PathNormalize_Helper2_Skip2 00F50035
@@ -36473,11 +36469,6 @@ PsMixer_Case5_SendEvent 00F7FEF2
 PsMixer_Case5_SetAutoInc 00F7FEF6
 AudioCtrl_DispatchHandler 00F7FF08
 AudioCtrl_PageHandler 00F7FFFB
-AudioCtrl_PageHandler_0xB 00F80006
-AudioCtrl_PageHandler_0xD 00F80008
-AudioCtrl_PageHandler_0xF 00F8000A
-AudioCtrl_PageHandler_0x13 00F8000E
-AudioCtrl_PageHandler_0x15 00F80010
 AudioCtrl_PageAdvance 00F8003D
 AudioCtrl_SetupPartDisplay 00F80062
 AudioCtrl_CheckEventF 00F800F5

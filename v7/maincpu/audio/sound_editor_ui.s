@@ -3118,7 +3118,7 @@ SeMenu_CopyWriteUpdate_Step3_Join35:
 	call Scoop_SoundEditorData_Helper6
 	cp HL,0xffff
 	jr z, .Lc_f0bf8f
-	call SeMenu_OrPartConfig_Data_0x6
+	call SeMenu_GetPartConfigBit3
 	cp l, 0:i3
 	jr z, .Lc_f0bf6c
 	lda xwa, (xsp + 0x04)
@@ -3609,7 +3609,7 @@ SeMenu_CopyWriteUpdate_Skip8:
 	ldw	wa, 32
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
-	call	SeMenu_OrPartConfig_Data
+	call	SeMenu_SetPartConfigBit3
 SeMenu_CopyWriteUpdate_Epilogue16:
 	lda	xsp, (xsp+10)
 	ret
@@ -3656,7 +3656,7 @@ SeMenu_CopyWriteUpdate_Entry6:
 	ldw	wa, 32
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
-	call	SeMenu_OrPartConfig_Data
+	call	SeMenu_SetPartConfigBit3
 SeMenu_CopyWriteUpdate_Epilogue17:
 	inc	6, xsp
 	ret
@@ -3784,7 +3784,7 @@ SeMenu_CopyWriteUpdate_Skip18:
 	call	SeMenu_LoadPatchStatus
 	.byte 0x8f, 0x02, 0x3f, 0x01
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue20
-	call	SeMenu_OrPartConfig_Data_0x6
+	call	SeMenu_GetPartConfigBit3
 	cp	l, 0:i3
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue20
 	lda	xwa, (xsp)
@@ -6292,7 +6292,7 @@ Scoop_SoundEditorData_Helper_Epilogue14:
 	ldw	wa, 58
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
-	call	SeMenu_OrPartConfig_Data
+	call	SeMenu_SetPartConfigBit3
 	jr	Scoop_SoundEditorData_Helper_Epilogue15
 Scoop_SoundEditorData_Helper_Skip21:
 	ld	wa, 0:i3
@@ -6367,7 +6367,7 @@ Scoop_SoundEditorData_Helper_Epilogue15:
 	ldw	wa, 58
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
-	call	SeMenu_OrPartConfig_Data
+	call	SeMenu_SetPartConfigBit3
 	jr	Scoop_SoundEditorData_Helper_Epilogue16
 Scoop_SoundEditorData_Helper_Skip23:
 	ld	wa, 0:i3

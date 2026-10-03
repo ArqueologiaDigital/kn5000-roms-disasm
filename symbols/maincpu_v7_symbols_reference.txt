@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 51,297
-#   semantic names ........... 50,369 (98.2%)
-#   positional names ......... 928
+#   semantic names ........... 50,370 (98.2%)
+#   positional names ......... 927
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -17925,7 +17925,7 @@ DisplayStr_ClearLoop 00EFF00B
 DisplayStr_StyleSectionInit 00EFF015
 DisplayStr_StyleClearLoop 00EFF042
 DisplayStr_BytecodeBlock_E 00EFF04D
-SerialPort_ModeHandler_0_Helper 00EFF04E
+DisplayStr_CopyStyleSectionName 00EFF04E
 DisplayStr_StyleSectionNames 00EFF078
 VoiceState_DataBlock2_Helper16 00EFF0E1
 Display_RedrawMenu 00EFF0E6
@@ -19207,8 +19207,8 @@ SeMenu_SetPatchBank_Epilogue 00F0988D
 SeMenu_SetEditEnable 00F09893
 SeMenu_SetEditEnable_Clear 00F0989C
 SeMenu_OrPartConfig 00F098A1
-SeMenu_OrPartConfig_Data 00F098A7
-SeMenu_OrPartConfig_Data_0x6 00F098AD
+SeMenu_SetPartConfigBit3 00F098A7
+SeMenu_GetPartConfigBit3 00F098AD
 SeMenu_StoreParamByte 00F098B6
 SeMenu_LoadParamByte 00F098C5
 SeMenu_SetConfirmState 00F098D6
