@@ -439,4 +439,12 @@ RENAMES = [
     ("sub_FB7F1F", "SysEx_ClearRemoteId"),
     ("sub_FB5FF5", "SysEx_FeatureWordForVariant"),
     ("sub_FB2877", "SysExSession_DispatchCommand"),
+    ("sub_FAB337", "ParamRecord_MergeFieldIfChanged"),
+    ("sub_FB782B", "IndexedTable_MergeMaskedByte"),
+    ("sub_FB7890", "IndexedTable_MergeMaskedByteAndPost"),
+    ("sub_FB791C", "IndexedTable_MergeMaskedWordAndPost"),
+    ("sub_FB7A02", "IndexedTable_GetByteOr0"),
+    ("sub_FB77F3", "SysExBuf_ReadNibblePair"),
+    ("sub_FB7A90", "SysEx_Checksum"),
+    ("sub_FB7AC2", "SysExTx_SendBytes"),
 ]

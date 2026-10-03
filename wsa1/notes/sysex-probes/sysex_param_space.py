@@ -37,9 +37,9 @@ WHERE THE SIGNAL IS  (all prom_a addresses unless said otherwise)
   * PART number: `sub A,0x20` on parse field 0x0A at 0xFB3969 and on the
     reply's own byte 7 at 0xFB4792.
   * DIRECTION: the cmd-0x18 (2C) arms reach descriptor+0x14, which calls
-    sub_FB77F3 (0xFB77F3) -- that routine READS TWO BYTES off the message and
+    SysExBuf_ReadNibblePair (0xFB77F3) -- that routine READS TWO BYTES off the message and
     returns `(b0<<4)|(b1&0x0F)`.  The cmd-0x1A (2B) arms reach descriptor+0x18,
-    e.g. 0xFB4562, which READS THE INSTRUMENT (sub_FB7A02) and calls
+    e.g. 0xFB4562, which READS THE INSTRUMENT (IndexedTable_GetByteOr0) and calls
     sub_FB4D62, the transmitter.  Third witness: the length check at
     0xFB6D5F admits only families 0x7E/0x2D/0x2C -- 2B is not length-checked
     because it has no data.

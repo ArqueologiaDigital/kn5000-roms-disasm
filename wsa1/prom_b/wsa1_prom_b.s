@@ -858,8 +858,8 @@
 	.set	sub_FB585E, 0xFB585E
 	.set	sub_FB590A, 0xFB590A
 	.set	sub_FB5EE9, 0xFB5EE9
-	.set	sub_FB7A90, 0xFB7A90
-	.set	sub_FB7AC2, 0xFB7AC2
+	.set	SysEx_Checksum, 0xFB7A90
+	.set	SysExTx_SendBytes, 0xFB7AC2
 	.set	sub_FB9B41, 0xFB9B41
 	.set	sub_FB9B73, 0xFB9B73
 	.set	sub_FB9BA4, 0xFB9BA4
@@ -87812,8 +87812,8 @@ T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
 T_F40900:	jp sub_FB4B7D  ; -> prom_a 0x34B7D   x1
 T_F40904:	jp SysExRx_PollRing601C6E  ; -> prom_a 0x321CB   x1
 T_F40908:	jp sub_FB585E  ; -> prom_a 0x3585E   x1
-T_F4090C:	jp sub_FB7A90  ; -> prom_a 0x37A90   x2
-T_F40910:	jp sub_FB7AC2  ; -> prom_a 0x37AC2   x1
+T_F4090C:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
+T_F40910:	jp SysExTx_SendBytes  ; -> prom_a 0x37AC2   x1
 	.fill 0x3C, 1, 0x0E  ; 0xF40914: 60 x ret
 T_F40950:	jp sub_FB9E79  ; -> prom_a 0x39E79   x1
 T_F40954:	jp sub_FB9DFE  ; -> prom_a 0x39DFE   x1
@@ -108055,8 +108055,8 @@ PtrTable_F4FB38:
 ; ParamFieldInit_x32_F4FE38 -- 6 records of 4 bytes {parameter number, field
 ;   offset, value, mask}.  Read by prom_a sub_FB558F (0xFB558F, called from
 ;   0xFB58FF): each record is copied to a local and handed to prom_a
-;   sub_FB782B THIRTY-TWO times, the parameter number incremented each time
-;   (`ld H,0x20` / `incm8 1,(XIZ-4)`).  sub_FB782B looks the parameter number up
+;   IndexedTable_MergeMaskedByte THIRTY-TWO times, the parameter number incremented each time
+;   (`ld H,0x20` / `incm8 1,(XIZ-4)`).  IndexedTable_MergeMaskedByte looks the parameter number up
 ;   with IndexedTable_GetPtr -- i.e. in prom_a's ParamNumber_RecordPtrs, the
 ;   work-RAM record of that parameter -- and, unless the lookup gives
 ;   0xFFFFFFFF, writes (record[field] AND NOT mask) OR (value AND mask).  So
@@ -108074,7 +108074,7 @@ ParamFieldInit_x32_F4FE38:
 
 ; --------------------------------------------------------------------------
 ; ParamFieldInit_F4FE50 -- 6 records of the same shape, applied ONCE each by
-;   the second loop of prom_a sub_FB558F (`ld H,0x06`, one sub_FB782B call per
+;   the second loop of prom_a sub_FB558F (`ld H,0x06`, one IndexedTable_MergeMaskedByte call per
 ;   record).  Two rows write the same field of parameter 0x79 through the two
 ;   nibble masks 0x0F and 0xF0.
 ; --------------------------------------------------------------------------
@@ -175871,7 +175871,7 @@ sub_F74EAE:
 ;          the 74 parameter-change SysEx events of SmfExport_ParamSysExTemplates
 ;          into the SMF being exported: per record, template -> RAM 0x1351 and
 ;          (body) 0x1365, value nibbles from RamPtrTable_F7554D, checksum via
-;          T_F4090C (prom_a sub_FB7A90), then 19 bytes to the (0x1088) cursor
+;          T_F4090C (prom_a SysEx_Checksum), then 19 bytes to the (0x1088) cursor
 ;          through sub_F74B3A; it stops early when sub_F74B3A leaves (0x1238)
 ;          != 3.  python3 notes/promb-2026-09-25/smf_param_sysex_probe.py
 SmfExport_WriteParamSysEx:
@@ -176048,7 +176048,7 @@ Data_F74FCF:
 ;   `Data_F74FCF + 19*BC` (`mul L,0x13` / `lda XDE,XDE+HL`), copies the 19
 ;   bytes to RAM 0x1351, reads one byte through RamPtrTable_F7554D[BC] (the
 ;   RAM byte that parameter lives in), stores its high and low NIBBLES at
-;   record +14 and +15, computes a checksum with prom_a sub_FB7A90 (slot
+;   record +14 and +15, computes a checksum with prom_a SysEx_Checksum (slot
 ;   T_F4090C: the negated 7-bit sum of the bytes after the first) into +17,
 ;   and writes all 19 bytes to the output cursor (0x1088) through sub_F74B3A,
 ;   which flushes the 1 KiB window at 0x60A700 (notes/FINDINGS-prom_b-smf-

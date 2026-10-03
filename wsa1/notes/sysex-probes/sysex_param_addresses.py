@@ -40,7 +40,7 @@ SIGNAL BEING READ
     0xFAA94E and 0xFAB7F4, each followed by `ld (0x60f018),XBC` -- and
     (0x60F018) is what `IndexedTable_GetPtr` (prom_a 0xFB77D8 / prom_b
     0xF55321) indexes.
-  * The write itself: `sub_FB7890` (0xFB7890) takes a 4-byte record
+  * The write itself: `IndexedTable_MergeMaskedByteAndPost` (0xFB7890) takes a 4-byte record
     {record number, offset, value, mask}, resolves the record number through
     `IndexedTable_GetPtr`, and does `base[offset] = (base[offset] & ~mask) |
     (value & mask)`.  The common setter 0xFB3778 fills that record from
@@ -141,7 +141,7 @@ GENERIC = (GEN_COMMON, GEN_PART)
 # target a different way: it ignores desc+6/+7 and takes the 32-bit word at
 # 0xF51E58 + 6*desc[0x0E] + 2 as the RAM ADDRESS itself.
 PAIR_SETTER = 0xFB3882
-# Three further setters build the SAME sub_FB7890 record from desc+6/desc+7 and
+# Three further setters build the SAME IndexedTable_MergeMaskedByteAndPost record from desc+6/desc+7 and
 # the part number, and were read instruction by instruction to confirm it.  They
 # differ only in what VALUE they put in it, so the ADDRESS is established and the
 # ENCODING is not.
@@ -158,7 +158,7 @@ for site, off6, off7, part in ((0xFB3D13, 0xFB3D6B, 0xFB3D87, 0xFB3D7E),
     assert a_(part, 3)[1:] == bytes([0xCA, 0x20]), "0x%06X no longer subtracts 0x20" % site
 for call in (0xFB3B82, 0xFB3DAF, 0xFB3A33):
     assert a_(call, 4) == bytes([0x1D, 0x90, 0x78, 0xFB]), \
-        "0x%06X no longer calls sub_FB7890" % call
+        "0x%06X no longer calls IndexedTable_MergeMaskedByteAndPost" % call
 ADDRESSED = set(GENERIC) | set(ADDRESSED_EXTRA)
 
 Param = collections.namedtuple(
@@ -216,7 +216,7 @@ for p in range(8, 31):
 assert RECPTR[0] == 0x76A2 and RECPTR[8] == 0x78E2
 
 # ------------------------------------------------------ the write, as executed
-# sub_FB7890: {record, offset, value, mask} -> base[offset] under mask.
+# IndexedTable_MergeMaskedByteAndPost: {record, offset, value, mask} -> base[offset] under mask.
 assert a_(0xFB78A4, 3) == bytes([0x84, 0x21, 0xD8]), "FB7890 no longer reads +0"
 assert a_(0xFB78BB, 3) == bytes([0x8C, 0x03, 0x23]), "FB7890 no longer reads +3 (mask)"
 # the common setter loads desc+6 and desc+7 into that record

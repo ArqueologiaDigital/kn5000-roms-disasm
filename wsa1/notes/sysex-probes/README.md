@@ -316,9 +316,9 @@ at `0xF80000` for the menu table and the four job-code stores.
   families address the *same* parameter set through two method slots
   (`+0x14` and `+0x18` of the descriptor).
 * **Direction, three witnesses.** `+0x14` (cmd `0x18`, family `2C`) reaches
-  `sub_FB77F3`, which **reads two bytes off the message** and returns
+  `SysExBuf_ReadNibblePair`, which **reads two bytes off the message** and returns
   `(b0<<4)|(b1&0x0F)`. `+0x18` (cmd `0x1A`, family `2B`) reaches e.g.
-  `0xFB4562`, which reads the *instrument* (`sub_FB7A02`) and calls
+  `0xFB4562`, which reads the *instrument* (`IndexedTable_GetByteOr0`) and calls
   `sub_FB4D62`, the transmitter. And the length check at `0xFB6D5F` admits
   only `0x7E`/`0x2D`/`0x2C` — `2B` is not length-checked because it carries
   no data.
@@ -1010,7 +1010,7 @@ Both load bases asserted by content first (prom_b `F0 50 23 7E F7` at
 `0xF4FEB4`, prom_a `00 03 05 04 02` at `0xF99AE3`).
 
 * **The descriptor's `+6` and `+7` are a RECORD NUMBER and a BYTE OFFSET**, not
-  an address. `sub_FB7890` (`0xFB7890`) takes a four-byte record
+  an address. `IndexedTable_MergeMaskedByteAndPost` (`0xFB7890`) takes a four-byte record
   `{record, offset, value, mask}`, resolves the record number through
   `IndexedTable_GetPtr`, and does `base[offset] = (base[offset] & ~mask) |
   (value & mask)`. The setters fill that record from the descriptor: common

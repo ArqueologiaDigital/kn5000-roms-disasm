@@ -54,7 +54,7 @@ WHERE THE SIGNAL IS  (prom_b at 0xF00000, prom_a at 0xF80000, prom_c at 0xF80000
     feeds ONE output path (0xF41DF8/0xF40724) and is the routine the bulk dump
     uses; the refusal goes out through SysExTx_SendFrameBothPorts, which feeds TWO
     (0xF41DF8/0xF40724 and 0xF41E1C/0xF40730).
-  * THE CHECKSUM is prom_a sub_FB7A90: `inc 1,XIX / dec 1,HL` before the sum,
+  * THE CHECKSUM is prom_a SysEx_Checksum: `inc 1,XIX / dec 1,HL` before the sum,
     so the leading 0xF0 is skipped, then `sub WA,WA / sub WA,BC / res 7,A`.
   * THE DESTINATION.  The write ladder ends in T_F43470 -> prom_a 0xFD616A
     (melodic) and T_F43478 -> prom_a 0xFD6704 (drum).  Those are the two
@@ -364,7 +364,7 @@ WIRE_OVERHEAD = le(b(0xF37EF4, 2))
 assert b(0xF37ED0, 4) == bytes([0xDD, 0xC8, 0x0D, 0x00])         # add IY,0x000d
 SUM_OVERHEAD = le(b(0xF37ED2, 2))
 assert (WIRE_OVERHEAD, SUM_OVERHEAD) == (15, 13)
-# the checksum itself: prom_a sub_FB7A90 skips the leading F0
+# the checksum itself: prom_a SysEx_Checksum skips the leading F0
 assert a(0xFB7A9F, 2) == bytes([0xEC, 0x61]), "inc 1,XIX (skip the F0)"
 assert a(0xFB7AA1, 2) == bytes([0xDB, 0x69]), "dec 1,HL"
 assert a(0xFB7AB5, 5) == bytes([0xD8, 0xA0, 0xD9, 0xA0, 0xC9]), "sub WA,WA / sub WA,BC"
@@ -450,7 +450,7 @@ print()
 
 
 # ------------------------------------------------------------ 6. which port
-# The reply path: prom_b T_F40910 -> prom_a sub_FB7AC2 -> SysExTx_Append + SysExTx_SendFrameMidi1.
+# The reply path: prom_b T_F40910 -> prom_a SysExTx_SendBytes -> SysExTx_Append + SysExTx_SendFrameMidi1.
 assert b(0xF40910, 4) == bytes([0x1B, 0xC2, 0x7A, 0xFB]), "T_F40910"
 assert b(0xF4090C, 4) == bytes([0x1B, 0x90, 0x7A, 0xFB]), "T_F4090C"
 assert a(0xFB7ACD, 3) == bytes([0x1E, 0x54, 0xF4]), "calr SysExTx_Append from FB7AC2"

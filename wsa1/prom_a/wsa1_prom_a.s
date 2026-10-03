@@ -77513,7 +77513,9 @@ sub_FAB253:
 	popw hl                                              ; FAB333  4b
 	unlk XIZ                                             ; FAB334  ee 0d
 	ret                                                  ; FAB336  0e
-sub_FAB337:
+; ParamRecord_MergeFieldIfChanged(mask): when mask & (0x60F08A): byte = ParamNumber_RecordPtrs[(0x60F080)] + (0x60F088); new = (byte & ~mask) | (0x60F089);
+;   unless new == (0x60F08B): store it, (0x60F08B) = (0x60F082) = new, (0x60F083) |= mask.  (Callers: the List2030_*_Apply family.)
+ParamRecord_MergeFieldIfChanged:
 	link XIZ,0xfffc                                      ; FAB337  ee 0c fc ff
 	pushw hl                                             ; FAB33B  2b
 	pushw de                                             ; FAB33C  2a
@@ -78242,11 +78244,11 @@ sub_FAB915:
 	ret                                                  ; FAB9FC  0e
 ; List2030_PartVolume_Apply -- class 3 of a part (number 0x00-0x1F) record in the RAM 0x2030 list: write the 7-bit value into byte 3 of that part's record when it changed, and queue the change to 0x2C00
 ; Evidence: JumpTable_FAB8B4[3] (reached by `calr` at 0xFAB8E9), which is indexed by the record CLASS (0x60F088); MidiOut_ParamClassTable[3], indexed by the same class byte of the same 4-byte record, is MidiOut_CC07_Volume.
-; Body: `pushw 0x7f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending` (0xFAB9FD-0xFABA03).  sub_FAB337 merges (0x60F089) under the pushed mask into ParamNumber_RecordPtrs[(0x60F080)] + class, compares with the old byte (0x60F08B) and only then stores, stages and ORs the mask into (0x60F083).
+; Body: `pushw 0x7f / calr ParamRecord_MergeFieldIfChanged / calr Queue2C00_AppendStagedIfPending` (0xFAB9FD-0xFABA03).  ParamRecord_MergeFieldIfChanged merges (0x60F089) under the pushed mask into ParamNumber_RecordPtrs[(0x60F080)] + class, compares with the old byte (0x60F08B) and only then stores, stages and ORs the mask into (0x60F083).
 ; The six siblings 0xFABAB0-0xFABAF2 are byte-identical except for the pushed mask.
 List2030_PartVolume_Apply:
 	pushw 0x7f                                           ; FAB9FD  0b 7f 00
-	calr sub_FAB337                                          ; FABA00  1e 34 f9
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABA00  1e 34 f9
 	calr Queue2C00_AppendStagedIfPending                                          ; FABA03  1e 05 f8
 	popw bc                                              ; FABA06  49
 	ret                                                  ; FABA07  0e
@@ -78314,10 +78316,10 @@ sub_FABA08:
 	unlk XIZ                                             ; FABAAD  ee 0d
 	ret                                                  ; FABAAF  0e
 ; List2030_PartEffect3Depth_Apply -- class 5 of a part record in the 0x2030 list: write the 7-bit value into byte 5 of the part's record when it changed, and queue it to 0x2C00
-; Evidence: JumpTable_FAB8B4[5] (calr at 0xFAB8F3); MidiOut_ParamClassTable[5] on the same class byte is MidiOut_CC5D_Effect3Depth.  Body `pushw 0x7f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`, as List2030_PartVolume_Apply.
+; Evidence: JumpTable_FAB8B4[5] (calr at 0xFAB8F3); MidiOut_ParamClassTable[5] on the same class byte is MidiOut_CC5D_Effect3Depth.  Body `pushw 0x7f / calr ParamRecord_MergeFieldIfChanged / calr Queue2C00_AppendStagedIfPending`, as List2030_PartVolume_Apply.
 List2030_PartEffect3Depth_Apply:
 	pushw 0x7f                                           ; FABAB0  0b 7f 00
-	calr sub_FAB337                                          ; FABAB3  1e 81 f8
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABAB3  1e 81 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAB6  1e 52 f7
 	popw bc                                              ; FABAB9  49
 	ret                                                  ; FABABA  0e
@@ -78325,7 +78327,7 @@ List2030_PartEffect3Depth_Apply:
 ; Evidence: JumpTable_FAB8B4[6] (calr at 0xFAB8F8); MidiOut_ParamClassTable[6] is MidiOut_CC5E_Effect4Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartEffect4Depth_Apply:
 	pushw 0x7f                                           ; FABABB  0b 7f 00
-	calr sub_FAB337                                          ; FABABE  1e 76 f8
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABABE  1e 76 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAC1  1e 47 f7
 	popw bc                                              ; FABAC4  49
 	ret                                                  ; FABAC5  0e
@@ -78333,7 +78335,7 @@ List2030_PartEffect4Depth_Apply:
 ; Evidence: JumpTable_FAB8B4[7] (calr at 0xFAB8FD); MidiOut_ParamClassTable[7] is MidiOut_CC5B_Effect1Depth.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartEffect1Depth_Apply:
 	pushw 0x7f                                           ; FABAC6  0b 7f 00
-	calr sub_FAB337                                          ; FABAC9  1e 6b f8
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABAC9  1e 6b f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABACC  1e 3c f7
 	popw bc                                              ; FABACF  49
 	ret                                                  ; FABAD0  0e
@@ -78341,7 +78343,7 @@ List2030_PartEffect1Depth_Apply:
 ; Evidence: JumpTable_FAB8B4[8] (calr at 0xFAB902); MidiOut_ParamClassTable[8] is MidiOut_CC0A_Pan.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartPan_Apply:
 	pushw 0x7f                                           ; FABAD1  0b 7f 00
-	calr sub_FAB337                                          ; FABAD4  1e 60 f8
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABAD4  1e 60 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAD7  1e 31 f7
 	popw bc                                              ; FABADA  49
 	ret                                                  ; FABADB  0e
@@ -78349,7 +78351,7 @@ List2030_PartPan_Apply:
 ; Evidence: JumpTable_FAB8B4[9] (calr at 0xFAB907); MidiOut_ParamClassTable[9] is MidiOut_Rpn02_CoarseTune.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartCoarseTune_Apply:
 	pushw 0x7f                                           ; FABADC  0b 7f 00
-	calr sub_FAB337                                          ; FABADF  1e 55 f8
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABADF  1e 55 f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAE2  1e 26 f7
 	popw bc                                              ; FABAE5  49
 	ret                                                  ; FABAE6  0e
@@ -78357,7 +78359,7 @@ List2030_PartCoarseTune_Apply:
 ; Evidence: JumpTable_FAB8B4[10] (calr at 0xFAB90C); MidiOut_ParamClassTable[10] is MidiOut_Rpn01_FineTune.  It is the ONLY sibling that pushes mask 0x00FF (0xFABAE7), matching MidiOut_Rpn01_FineTune's `and A,0xff` on the staged mask and the 0xFF mask KeyValueList_A00 gives key {part, 0x0A}.
 List2030_PartFineTune_Apply:
 	pushw 0xff                                           ; FABAE7  0b ff 00
-	calr sub_FAB337                                          ; FABAEA  1e 4a f8
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABAEA  1e 4a f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAED  1e 1b f7
 	popw bc                                              ; FABAF0  49
 	ret                                                  ; FABAF1  0e
@@ -78365,7 +78367,7 @@ List2030_PartFineTune_Apply:
 ; Evidence: JumpTable_FAB8B4[11] (calr at 0xFAB911); MidiOut_ParamClassTable[11] is MidiOut_Rpn00_PitchBendRange.  Body as List2030_PartVolume_Apply, mask 0x7F.
 List2030_PartBendRange_Apply:
 	pushw 0x7f                                           ; FABAF2  0b 7f 00
-	calr sub_FAB337                                          ; FABAF5  1e 3f f8
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABAF5  1e 3f f8
 	calr Queue2C00_AppendStagedIfPending                                          ; FABAF8  1e 10 f7
 	popw bc                                              ; FABAFB  49
 	ret                                                  ; FABAFC  0e
@@ -78394,7 +78396,7 @@ List2030_Part20to3F_Dispatch:   ; entry: named by 32 `.long` operands, first at 
 .LFABB28:
 	ret                                                  ; FABB28  0e
 ; List2030_Field18_SetAllParts -- class 0x18 of a second-half part record: apply the record's bit 0 to byte 0x18 of ALL 32 second-half records (numbers 0x20-0x3F), queuing each change to 0x2C00
-; Evidence: loop `ld H,0x20` .. `cp H,0x3f / jr ule` at 0xFABB2A-0xFABB43, each pass storing H to (0x60F080), then sub_FAB1D8, sub_FAB337 with mask 0x0001 and Queue2C00_AppendStagedIfPending.
+; Evidence: loop `ld H,0x20` .. `cp H,0x3f / jr ule` at 0xFABB2A-0xFABB43, each pass storing H to (0x60F080), then sub_FAB1D8, ParamRecord_MergeFieldIfChanged with mask 0x0001 and Queue2C00_AppendStagedIfPending.
 ; KeyValueList_A/B give key {0x20+i, 0x18} mask 0x01; ParamRecord_SetPartsField18Bit0 performs the same sweep from a stack argument.  Evt2030_Class20to3F's tail uses bit 0 of +0x18 to choose between fields +0x19 and +0x1A.
 List2030_Field18_SetAllParts:
 	pushw hl                                             ; FABB29  2b
@@ -78403,7 +78405,7 @@ List2030_Field18_SetAllParts:
 	ld (0x60f080:24), h                                 ; FABB2C  f2 80 f0 60 46
 	calr sub_FAB1D8                                          ; FABB31  1e a4 f6
 	pushw 0x01                                           ; FABB34  0b 01 00
-	calr sub_FAB337                                          ; FABB37  1e fd f7
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABB37  1e fd f7
 	calr Queue2C00_AppendStagedIfPending                                          ; FABB3A  1e ce f6
 	inc 1,H                                              ; FABB3D  ce 61
 	popw bc                                              ; FABB3F  49
@@ -78412,18 +78414,18 @@ List2030_Field18_SetAllParts:
 	popw hl                                              ; FABB45  4b
 	ret                                                  ; FABB46  0e
 ; List2030_PartField19_Apply -- class 0x19 of a second-half part record: write the 6-bit value into byte 0x19 when it changed, and queue it to 0x2C00
-; Evidence: called only by List2030_Part20to3F_Dispatch for class 0x19 (`cp BC,0x0019` at 0xFABB0D); body `pushw 0x3f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x19} mask 0x3F, and Evt2030_Class20to3F reads (XIX+0x19) & 0x3F through BitMaskToOrdinal6, i.e. a one-hot of six.
+; Evidence: called only by List2030_Part20to3F_Dispatch for class 0x19 (`cp BC,0x0019` at 0xFABB0D); body `pushw 0x3f / calr ParamRecord_MergeFieldIfChanged / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x19} mask 0x3F, and Evt2030_Class20to3F reads (XIX+0x19) & 0x3F through BitMaskToOrdinal6, i.e. a one-hot of six.
 List2030_PartField19_Apply:
 	pushw 0x3f                                           ; FABB47  0b 3f 00
-	calr sub_FAB337                                          ; FABB4A  1e ea f7
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABB4A  1e ea f7
 	calr Queue2C00_AppendStagedIfPending                                          ; FABB4D  1e bb f6
 	popw bc                                              ; FABB50  49
 	ret                                                  ; FABB51  0e
 ; List2030_PartField1A_Apply -- class 0x1A of a second-half part record: write the 6-bit value into byte 0x1A when it changed, and queue it to 0x2C00
-; Evidence: called only by List2030_Part20to3F_Dispatch for class 0x1A (`cp BC,0x001a` at 0xFABB13); body `pushw 0x3f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x1A} mask 0x3F; Evt2030_Class20to3F reads (XIX+0x1a) & 0x3F when bit 0 of +0x18 is set.
+; Evidence: called only by List2030_Part20to3F_Dispatch for class 0x1A (`cp BC,0x001a` at 0xFABB13); body `pushw 0x3f / calr ParamRecord_MergeFieldIfChanged / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x1A} mask 0x3F; Evt2030_Class20to3F reads (XIX+0x1a) & 0x3F when bit 0 of +0x18 is set.
 List2030_PartField1A_Apply:
 	pushw 0x3f                                           ; FABB52  0b 3f 00
-	calr sub_FAB337                                          ; FABB55  1e df f7
+	calr ParamRecord_MergeFieldIfChanged                                          ; FABB55  1e df f7
 	calr Queue2C00_AppendStagedIfPending                                          ; FABB58  1e b0 f6
 	popw bc                                              ; FABB5B  49
 	ret                                                  ; FABB5C  0e
@@ -79972,7 +79974,7 @@ Queue2C00_AppendStaged:
 	pop XHL                                              ; FAC8A8  5b
 	ret                                                  ; FAC8A9  0e
 ; ParamNumber_GetRecordPtr -- XIY = ParamNumber_RecordPtrs[(XIZ+8)], 0xFFFFFFFF when the parameter number has no record
-; Evidence: `ld C,0x04 / mul BC,(XIZ+0x08) / add XBC,ParamNumber_RecordPtrs / ld XBC,(XBC) / ld XIY,XBC` at 0xFAC8AE-0xFAC8BD.  15 callers, among them List2030_LoadRecord, sub_FAB337 and ParamMsg_ComputePartMasks; each compares the result with 0xFFFFFFFF.
+; Evidence: `ld C,0x04 / mul BC,(XIZ+0x08) / add XBC,ParamNumber_RecordPtrs / ld XBC,(XBC) / ld XIY,XBC` at 0xFAC8AE-0xFAC8BD.  15 callers, among them List2030_LoadRecord, ParamRecord_MergeFieldIfChanged and ParamMsg_ComputePartMasks; each compares the result with 0xFFFFFFFF.
 ; Note: the unlabelled routine at 0xFAC8C2 that follows returns 0x60F0E0 + 4*n for n <= 0x1F and -1 otherwise.
 ParamNumber_GetRecordPtr:
 	link XIZ,0x0000                                      ; FAC8AA  ee 0c 00 00
@@ -89001,7 +89003,7 @@ sub_FB374D:
 	ld XIX,(XIZ+0x08)                                    ; FB377F  ae 08 24
 	ld xbc, (0x60fc80:24)                               ; FB3782  e2 80 fc 60 21
 	push XBC                                             ; FB3787  39
-	call sub_FB77F3                                      ; FB3788  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3788  1d f3 77 fb
 	ld H,A                                               ; FB378C  c9 8e
 	ld (xiz-2), a                                        ; FB378E  be fe 41
 	ld C,(XIX+0x09)                                      ; FB3791  8c 09 23
@@ -89056,7 +89058,7 @@ sub_FB374D:
 	ld (xiz-1), c                                        ; FB380D  be ff 43
 	lda xbc, (xiz-4)                                     ; FB3810  be fc 31
 	push XBC                                             ; FB3813  39
-	call sub_FB7890                                      ; FB3814  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3814  1d 90 78 fb
 	pop XIY                                              ; FB3818  5d
 .LFB3819:
 	pop XIX                                              ; FB3819  5c
@@ -89071,7 +89073,7 @@ sub_FB374D:
 	ld XIX,(XIZ+0x08)                                    ; FB3826  ae 08 24
 	ld xbc, (0x60fc80:24)                               ; FB3829  e2 80 fc 60 21
 	push XBC                                             ; FB382E  39
-	call sub_FB77F3                                      ; FB382F  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB382F  1d f3 77 fb
 	ld H,A                                               ; FB3833  c9 8e
 	ld C,(XIX+0x09)                                      ; FB3835  8c 09 23
 	pop XIY                                              ; FB3838  5d
@@ -89101,7 +89103,7 @@ sub_FB374D:
 	ld (xiz-2), wa                                       ; FB3870  be fe 50
 	lda xbc, (xiz-6)                                     ; FB3873  be fa 31
 	push XBC                                             ; FB3876  39
-	call sub_FB791C                                      ; FB3877  1d 1c 79 fb
+	call IndexedTable_MergeMaskedWordAndPost                                      ; FB3877  1d 1c 79 fb
 	pop XIY                                              ; FB387B  5d
 .LFB387C:
 	pop XIX                                              ; FB387C  5c
@@ -89115,7 +89117,7 @@ sub_FB374D:
 	ld XIX,(XIZ+0x08)                                    ; FB3888  ae 08 24
 	ld xbc, (0x60fc80:24)                               ; FB388B  e2 80 fc 60 21
 	push XBC                                             ; FB3890  39
-	call sub_FB77F3                                      ; FB3891  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3891  1d f3 77 fb
 	ld H,A                                               ; FB3895  c9 8e
 	ld C,(XIX+0x09)                                      ; FB3897  8c 09 23
 	pop XIY                                              ; FB389A  5d
@@ -89160,7 +89162,7 @@ sub_FB38C3:
 	lda xix, (xiz-4)                                     ; FB38EB  be fc 34
 	ld xbc, (0x60fc80:24)                               ; FB38EE  e2 80 fc 60 21
 	push XBC                                             ; FB38F3  39
-	call sub_FB77F3                                      ; FB38F4  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB38F4  1d f3 77 fb
 	ld H,A                                               ; FB38F8  c9 8e
 	ld (XIX+0x02),A                                      ; FB38FA  bc 02 41
 	ld XBC,(XIZ+0x08)                                    ; FB38FD  ae 08 21
@@ -89223,7 +89225,7 @@ sub_FB38C3:
 	ld (XIX+0x03),A                                      ; FB3992  bc 03 41
 sub_FB3995:
 	push XIX                                             ; FB3995  3c
-	call sub_FB7890                                      ; FB3996  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3996  1d 90 78 fb
 	inc 8,XSP                                            ; FB399A  ef 60
 	inc 2,XSP                                            ; FB399C  ef 62
 .LFB399E:
@@ -89239,7 +89241,7 @@ sub_FB3995:
 	lda xix, (xiz-4)                                     ; FB39AB  be fc 34
 	ld xbc, (0x60fc80:24)                               ; FB39AE  e2 80 fc 60 21
 	push XBC                                             ; FB39B3  39
-	call sub_FB77F3                                      ; FB39B4  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB39B4  1d f3 77 fb
 	ld D,A                                               ; FB39B8  c9 8c
 	ld XBC,(XIZ+0x08)                                    ; FB39BA  ae 08 21
 	ld W,(XBC+0x09)                                      ; FB39BD  89 09 20
@@ -89251,13 +89253,13 @@ sub_FB3995:
 	jrl ugt, .LFB3ABE                                    ; FB39CB  7b f0 00
 	ld xwa, (0x60fc80:24)                               ; FB39CE  e2 80 fc 60 20
 	push XWA                                             ; FB39D3  38
-	call sub_FB77F3                                      ; FB39D4  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB39D4  1d f3 77 fb
 	extz WA                                              ; FB39D8  d8 12
 	sll wa, 0x08                                         ; FB39DA  d8 ee 08
 	ld (xiz-6), wa                                       ; FB39DD  be fa 50
 	ld xbc, (0x60fc80:24)                               ; FB39E0  e2 80 fc 60 21
 	push XBC                                             ; FB39E5  39
-	call sub_FB77F3                                      ; FB39E6  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB39E6  1d f3 77 fb
 	extz WA                                              ; FB39EA  d8 12
 	ld HL,WA                                             ; FB39EC  d8 8b
 	m_or_rm MWD+r6, 0xfa, r3                             ; FB39EE  9e fa e3
@@ -89286,7 +89288,7 @@ sub_FB39FA:
 	ld (XIX+0x03),0x7f                                   ; FB3A2E  bc 03 00 7f
 sub_FB3A32:
 	push XIX                                             ; FB3A32  3c
-	call sub_FB7890                                      ; FB3A33  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A33  1d 90 78 fb
 	ld (XIX),H                                           ; FB3A37  b4 46
 	ld XBC,(XIZ+0x08)                                    ; FB3A39  ae 08 21
 	ld A,(XBC+0x07)                                      ; FB3A3C  89 07 21
@@ -89296,7 +89298,7 @@ sub_FB3A32:
 	ld A,(XBC+0x08)                                      ; FB3A48  89 08 21
 	ld (XIX+0x03),A                                      ; FB3A4B  bc 03 41
 	push XIX                                             ; FB3A4E  3c
-	call sub_FB7890                                      ; FB3A4F  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A4F  1d 90 78 fb
 	ld (0x60f010:24), d                                 ; FB3A53  f2 10 f0 60 44
 	ld (0x60f011:24), e                                 ; FB3A58  f2 11 f0 60 45
 	ld (0x60f012:24), h                                 ; FB3A5D  f2 12 f0 60 46
@@ -89317,21 +89319,21 @@ sub_FB3A32:
 	ld (XIX+0x02),C                                      ; FB3A7E  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB3A81  bc 03 00 ff
 	push XIX                                             ; FB3A85  3c
-	call sub_FB7890                                      ; FB3A86  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A86  1d 90 78 fb
 	ld (XIX),L                                           ; FB3A8A  b4 47
 	ld (XIX+0x01),0x1c                                   ; FB3A8C  bc 01 00 1c
 	ld c, (0x60f015:24)                                 ; FB3A90  c2 15 f0 60 23
 	ld (XIX+0x02),C                                      ; FB3A95  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB3A98  bc 03 00 ff
 	push XIX                                             ; FB3A9C  3c
-	call sub_FB7890                                      ; FB3A9D  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A9D  1d 90 78 fb
 	ld (XIX),L                                           ; FB3AA1  b4 47
 	ld (XIX+0x01),0x1d                                   ; FB3AA3  bc 01 00 1d
 	ld c, (0x60f016:24)                                 ; FB3AA7  c2 16 f0 60 23
 	ld (XIX+0x02),C                                      ; FB3AAC  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB3AAF  bc 03 00 ff
 	push XIX                                             ; FB3AB3  3c
-	call sub_FB7890                                      ; FB3AB4  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3AB4  1d 90 78 fb
 	add XSP,0x0000001a                                   ; FB3AB8  ef c8 1a 00 00 00
 .LFB3ABE:
 	pop XIX                                              ; FB3ABE  5c
@@ -89343,7 +89345,7 @@ sub_FB3A32:
 	ld xbc, (0x60fc80:24)                               ; FB3AC5  e2 80 fc 60 21
 sub_FB3ACA:
 	push XBC                                             ; FB3ACA  39
-	call sub_FB77F3                                      ; FB3ACB  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3ACB  1d f3 77 fb
 	ld L,A                                               ; FB3ACF  c9 8f
 	pushw 0x0b                                           ; FB3AD1  0b 0b 00
 	ld xbc, (0x60fcd8:24)                               ; FB3AD4  e2 d8 fc 60 21
@@ -89374,7 +89376,7 @@ sub_FB3ACA:
 	push XIX                                             ; FB3B0A  3c
 	ld xbc, (0x60fc80:24)                               ; FB3B0B  e2 80 fc 60 21
 	push XBC                                             ; FB3B10  39
-	call sub_FB77F3                                      ; FB3B11  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3B11  1d f3 77 fb
 	ld L,A                                               ; FB3B15  c9 8f
 	ld XBC,(XIZ+0x08)                                    ; FB3B17  ae 08 21
 	ld W,(XBC+0x09)                                      ; FB3B1A  89 09 20
@@ -89418,7 +89420,7 @@ sub_FB3B70:
 	ld (xiz-1), a                                        ; FB3B7B  be ff 41
 	lda xbc, (xiz-4)                                     ; FB3B7E  be fc 31
 	push XBC                                             ; FB3B81  39
-	call sub_FB7890                                      ; FB3B82  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3B82  1d 90 78 fb
 	ld (xiz-4), h                                        ; FB3B86  be fc 46
 	ld C,(XIX+0x01)                                      ; FB3B89  8c 01 23
 sub_FB3B8C:
@@ -89432,7 +89434,7 @@ sub_FB3B8C:
 	ld (xiz-1), a                                        ; FB3B9F  be ff 41
 	lda xbc, (xiz-4)                                     ; FB3BA2  be fc 31
 	push XBC                                             ; FB3BA5  39
-	call sub_FB7890                                      ; FB3BA6  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3BA6  1d 90 78 fb
 	ld (xiz-4), h                                        ; FB3BAA  be fc 46
 	ld C,(XIX+0x01)                                      ; FB3BAD  8c 01 23
 	ld (xiz-3), c                                        ; FB3BB0  be fd 43
@@ -89444,7 +89446,7 @@ sub_FB3B8C:
 	ld (xiz-1), c                                        ; FB3BBD  be ff 43
 	lda xbc, (xiz-4)                                     ; FB3BC0  be fc 31
 	push XBC                                             ; FB3BC3  39
-	call sub_FB7890                                      ; FB3BC4  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3BC4  1d 90 78 fb
 	pop XIY                                              ; FB3BC8  5d
 sub_FB3B8C_Skip:
 	pop XIX                                              ; FB3BC9  5c
@@ -89459,13 +89461,13 @@ sub_FB3B8C_Skip:
 	lda xix, (xiz-4)                                     ; FB3BD6  be fc 34
 	ld xbc, (0x60fc80:24)                               ; FB3BD9  e2 80 fc 60 21
 	push XBC                                             ; FB3BDE  39
-	call sub_FB77F3                                      ; FB3BDF  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3BDF  1d f3 77 fb
 	extz WA                                              ; FB3BE3  d8 12
 	ld HL,WA                                             ; FB3BE5  d8 8b
 	sll hl, 0x08                                         ; FB3BE7  db ee 08
 	ld xbc, (0x60fc80:24)                               ; FB3BEA  e2 80 fc 60 21
 	push XBC                                             ; FB3BEF  39
-	call sub_FB77F3                                      ; FB3BF0  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3BF0  1d f3 77 fb
 	extz WA                                              ; FB3BF4  d8 12
 	ld DE,WA                                             ; FB3BF6  d8 8a
 	or DE,HL                                             ; FB3BF8  db e2
@@ -89506,7 +89508,7 @@ sub_FB3C34:
 	ld A,(XBC+0x08)                                      ; FB3C51  89 08 21
 	ld (XIX+0x03),A                                      ; FB3C54  bc 03 41
 	push XIX                                             ; FB3C57  3c
-	call sub_FB7890                                      ; FB3C58  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3C58  1d 90 78 fb
 	ld (XIX),H                                           ; FB3C5C  b4 46
 	ld XBC,(XIZ+0x08)                                    ; FB3C5E  ae 08 21
 	ld A,(XBC+0x07)                                      ; FB3C61  89 07 21
@@ -89524,7 +89526,7 @@ sub_FB3C34:
 	ld A,(XBC+0x08)                                      ; FB3C82  89 08 21
 	ld (XIX+0x03),A                                      ; FB3C85  bc 03 41
 	push XIX                                             ; FB3C88  3c
-	call sub_FB7890                                      ; FB3C89  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3C89  1d 90 78 fb
 	ld (XIX),H                                           ; FB3C8D  b4 46
 	ld XBC,(XIZ+0x08)                                    ; FB3C8F  ae 08 21
 	ld A,(XBC+0x07)                                      ; FB3C92  89 07 21
@@ -89533,7 +89535,7 @@ sub_FB3C34:
 	ld (XIX+0x02),0x00                                   ; FB3C9A  bc 02 00 00
 	ld (XIX+0x03),0x7f                                   ; FB3C9E  bc 03 00 7f
 	push XIX                                             ; FB3CA2  3c
-	call sub_FB7890                                      ; FB3CA3  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3CA3  1d 90 78 fb
 	ld (XIX),H                                           ; FB3CA7  b4 46
 	ld (XIX+0x01),0x15                                   ; FB3CA9  bc 01 00 15
 	ld (XIX+0x02),0x20                                   ; FB3CAD  bc 02 00 20
@@ -89551,7 +89553,7 @@ sub_FB3C34:
 	ld A,(XBC+0x08)                                      ; FB3CCB  89 08 21
 	ld (XIX+0x03),A                                      ; FB3CCE  bc 03 41
 	push XIX                                             ; FB3CD1  3c
-	call sub_FB7890                                      ; FB3CD2  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3CD2  1d 90 78 fb
 	ld (XIX),H                                           ; FB3CD6  b4 46
 	ld XBC,(XIZ+0x08)                                    ; FB3CD8  ae 08 21
 	ld A,(XBC+0x07)                                      ; FB3CDB  89 07 21
@@ -89565,7 +89567,7 @@ sub_FB3C34:
 	pop XIY                                              ; FB3CEE  5d
 	ld (XIX+0x03),0x7f                                   ; FB3CEF  bc 03 00 7f
 	push XIX                                             ; FB3CF3  3c
-	call sub_FB7890                                      ; FB3CF4  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3CF4  1d 90 78 fb
 	ld (XIX),H                                           ; FB3CF8  b4 46
 	ld (XIX+0x01),0x15                                   ; FB3CFA  bc 01 00 15
 	ld (XIX+0x02),0x00                                   ; FB3CFE  bc 02 00 00
@@ -89573,7 +89575,7 @@ sub_FB3C34:
 .LFB3D03:
 	ld (XIX+0x03),0x20                                   ; FB3D03  bc 03 00 20
 	push XIX                                             ; FB3D07  3c
-	call sub_FB7890                                      ; FB3D08  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3D08  1d 90 78 fb
 	pop XIY                                              ; FB3D0C  5d
 .LFB3D0D:
 	pop XIX                                              ; FB3D0D  5c
@@ -89586,7 +89588,7 @@ sub_FB3C34:
 	push XIX                                             ; FB3D18  3c
 	ld xbc, (0x60fc80:24)                               ; FB3D19  e2 80 fc 60 21
 	push XBC                                             ; FB3D1E  39
-	call sub_FB77F3                                      ; FB3D1F  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3D1F  1d f3 77 fb
 	ld L,A                                               ; FB3D23  c9 8f
 	ld XBC,(XIZ+0x08)                                    ; FB3D25  ae 08 21
 	ld W,(XBC+0x09)                                      ; FB3D28  89 09 20
@@ -89641,7 +89643,7 @@ sub_FB3C34:
 	ld (xiz-1), a                                        ; FB3DA8  be ff 41
 	lda xbc, (xiz-4)                                     ; FB3DAB  be fc 31
 	push XBC                                             ; FB3DAE  39
-	call sub_FB7890                                      ; FB3DAF  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3DAF  1d 90 78 fb
 	inc 8,XSP                                            ; FB3DB3  ef 60
 	inc 2,XSP                                            ; FB3DB5  ef 62
 .LFB3DB7:
@@ -89758,7 +89760,7 @@ sub_FB3C34:
 	pushw hl                                             ; FB3E5A  2b
 	ld xbc, (0x60fc80:24)                               ; FB3E5B  e2 80 fc 60 21
 	push XBC                                             ; FB3E60  39
-	call sub_FB77F3                                      ; FB3E61  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3E61  1d f3 77 fb
 	ld H,A                                               ; FB3E65  c9 8e
 	pop XIY                                              ; FB3E67  5d
 	cp a, 0x07:i3                                          ; FB3E68  c9 df
@@ -89813,7 +89815,7 @@ sub_FB3C34:
 	lda xix, (xiz-4)                                     ; FB3EDE  be fc 34
 	ld xbc, (0x60fc80:24)                               ; FB3EE1  e2 80 fc 60 21
 	push XBC                                             ; FB3EE6  39
-	call sub_FB77F3                                      ; FB3EE7  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3EE7  1d f3 77 fb
 	ld H,A                                               ; FB3EEB  c9 8e
 	ld (XIX+0x02),A                                      ; FB3EED  bc 02 41
 	ld XBC,(XIZ+0x08)                                    ; FB3EF0  ae 08 21
@@ -89851,7 +89853,7 @@ sub_FB3C34:
 	ld A,(XBC+0x08)                                      ; FB3F3F  89 08 21
 	ld (XIX+0x03),A                                      ; FB3F42  bc 03 41
 	push XIX                                             ; FB3F45  3c
-	call sub_FB7890                                      ; FB3F46  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3F46  1d 90 78 fb
 	pop XIY                                              ; FB3F4A  5d
 .LFB3F4B:
 	pop XIX                                              ; FB3F4B  5c
@@ -89864,7 +89866,7 @@ sub_FB3C34:
 	ld XIX,(XIZ+0x08)                                    ; FB3F56  ae 08 24
 	ld xbc, (0x60fc80:24)                               ; FB3F59  e2 80 fc 60 21
 	push XBC                                             ; FB3F5E  39
-	call sub_FB77F3                                      ; FB3F5F  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3F5F  1d f3 77 fb
 	ld H,A                                               ; FB3F63  c9 8e
 	ld C,(XIX+0x09)                                      ; FB3F65  8c 09 23
 	pop XIY                                              ; FB3F68  5d
@@ -89903,11 +89905,11 @@ sub_FB3C34:
 	jrl nz, .LFB407E                                     ; FB3FAB  7e d0 00
 	ld xbc, (0x60fc80:24)                               ; FB3FAE  e2 80 fc 60 21
 	push XBC                                             ; FB3FB3  39
-	call sub_FB77F3                                      ; FB3FB4  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3FB4  1d f3 77 fb
 	ld H,A                                               ; FB3FB8  c9 8e
 	ld xbc, (0x60fc80:24)                               ; FB3FBA  e2 80 fc 60 21
 	push XBC                                             ; FB3FBF  39
-	call sub_FB77F3                                      ; FB3FC0  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB3FC0  1d f3 77 fb
 	ld L,A                                               ; FB3FC4  c9 8f
 	and A,0x01                                           ; FB3FC6  c9 cc 01
 	ld L,A                                               ; FB3FC9  c9 8f
@@ -89927,7 +89929,7 @@ sub_FB3C34:
 	ld (XIX+0x02),L                                      ; FB3FEE  bc 02 47
 	ld (XIX+0x03),0x3f                                   ; FB3FF1  bc 03 00 3f
 	push XIX                                             ; FB3FF5  3c
-	call sub_FB7890                                      ; FB3FF6  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3FF6  1d 90 78 fb
 	ld XBC,(XIZ+0x08)                                    ; FB3FFA  ae 08 21
 	ld A,(XBC+0x06)                                      ; FB3FFD  89 06 21
 	ld (XIX),A                                           ; FB4000  b4 41
@@ -89939,7 +89941,7 @@ sub_FB3C34:
 	ld A,(XBC+0x08)                                      ; FB4011  89 08 21
 	ld (XIX+0x03),A                                      ; FB4014  bc 03 41
 	push XIX                                             ; FB4017  3c
-	call sub_FB7890                                      ; FB4018  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB4018  1d 90 78 fb
 	ld (0x60f189:24), h                                 ; FB401C  f2 89 f1 60 46
 	ld (0x60f18a:24), l                                 ; FB4021  f2 8a f1 60 47
 	ld (0x60f180:24), 0x98                             ; FB4026  f2 80 f1 60 00 98
@@ -89950,21 +89952,21 @@ sub_FB3C34:
 	ld (XIX+0x02),C                                      ; FB403C  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB403F  bc 03 00 ff
 	push XIX                                             ; FB4043  3c
-	call sub_FB782B                                      ; FB4044  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB4044  1d 2b 78 fb
 	ld (XIX),0x98                                        ; FB4048  b4 00 98
 	ld (XIX+0x01),0x07                                   ; FB404B  bc 01 00 07
 	ld c, (0x60f18e:24)                                 ; FB404F  c2 8e f1 60 23
 	ld (XIX+0x02),C                                      ; FB4054  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB4057  bc 03 00 ff
 	push XIX                                             ; FB405B  3c
-	call sub_FB782B                                      ; FB405C  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB405C  1d 2b 78 fb
 	ld (XIX),0x98                                        ; FB4060  b4 00 98
 	ld (XIX+0x01),0x08                                   ; FB4063  bc 01 00 08
 	ld c, (0x60f18f:24)                                 ; FB4067  c2 8f f1 60 23
 	ld (XIX+0x02),C                                      ; FB406C  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB406F  bc 03 00 ff
 	push XIX                                             ; FB4073  3c
-	call sub_FB782B                                      ; FB4074  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB4074  1d 2b 78 fb
 	add XSP,0x00000014                                   ; FB4078  ef c8 14 00 00 00
 .LFB407E:
 	pop XIX                                              ; FB407E  5c
@@ -89979,14 +89981,14 @@ sub_FB3C34:
 	ld (xiz-4), xbc                                      ; FB408F  be fc 61
 	ld xwa, (0x60fc80:24)                               ; FB4092  e2 80 fc 60 20
 	push XWA                                             ; FB4097  38
-	call sub_FB77F3                                      ; FB4098  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB4098  1d f3 77 fb
 	ld xbc, (xiz-4)                                      ; FB409C  ae fc 21
 	ld (XBC),A                                           ; FB409F  b1 41
 	ld xix, (xiz-4)                                      ; FB40A1  ae fc 24
 	inc 1,XIX                                            ; FB40A4  ec 61
 	ld xbc, (0x60fc80:24)                               ; FB40A6  e2 80 fc 60 21
 	push XBC                                             ; FB40AB  39
-	call sub_FB77F3                                      ; FB40AC  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB40AC  1d f3 77 fb
 	ld H,A                                               ; FB40B0  c9 8e
 	ld (XIX),A                                           ; FB40B2  b4 41
 	ld C,H                                               ; FB40B4  ce 8b
@@ -90009,7 +90011,7 @@ sub_FB3C34:
 	ld XIX,(XIZ+0x08)                                    ; FB40D6  ae 08 24
 	ld xbc, (0x60fc80:24)                               ; FB40D9  e2 80 fc 60 21
 	push XBC                                             ; FB40DE  39
-	call sub_FB77F3                                      ; FB40DF  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB40DF  1d f3 77 fb
 	ld H,A                                               ; FB40E3  c9 8e
 	ld (xiz-2), a                                        ; FB40E5  be fe 41
 	ld C,(XIX+0x09)                                      ; FB40E8  8c 09 23
@@ -90067,11 +90069,11 @@ sub_FB3C34:
 .LFB415C:
 	ld xbc, (0x60fc80:24)                               ; FB415C  e2 80 fc 60 21
 	push XBC                                             ; FB4161  39
-	call sub_FB77F3                                      ; FB4162  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB4162  1d f3 77 fb
 	ld L,A                                               ; FB4166  c9 8f
 	ld xbc, (0x60fc80:24)                               ; FB4168  e2 80 fc 60 21
 	push XBC                                             ; FB416D  39
-	call sub_FB77F3                                      ; FB416E  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB416E  1d f3 77 fb
 	ld H,A                                               ; FB4172  c9 8e
 	and A,0x80                                           ; FB4174  c9 cc 80
 	inc 8,XSP                                            ; FB4177  ef 60
@@ -90099,7 +90101,7 @@ sub_FB3C34:
 	ld (XIX+0x02),H                                      ; FB41AA  bc 02 46
 	ld (XIX+0x03),0x7f                                   ; FB41AD  bc 03 00 7f
 	push XIX                                             ; FB41B1  3c
-	call sub_FB7890                                      ; FB41B2  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB41B2  1d 90 78 fb
 	ld XBC,(XIZ+0x08)                                    ; FB41B6  ae 08 21
 	ld A,(XBC+0x06)                                      ; FB41B9  89 06 21
 	ld (XIX),A                                           ; FB41BC  b4 41
@@ -90111,7 +90113,7 @@ sub_FB3C34:
 	ld A,(XBC+0x08)                                      ; FB41CD  89 08 21
 	ld (XIX+0x03),A                                      ; FB41D0  bc 03 41
 	push XIX                                             ; FB41D3  3c
-	call sub_FB7890                                      ; FB41D4  1d 90 78 fb
+	call IndexedTable_MergeMaskedByteAndPost                                      ; FB41D4  1d 90 78 fb
 	inc 8,XSP                                            ; FB41D8  ef 60
 .LFB41DA:
 	pop XIX                                              ; FB41DA  5c
@@ -90124,7 +90126,7 @@ sub_FB3C34:
 	ld XIX,(XIZ+0x08)                                    ; FB41E5  ae 08 24
 	ld xbc, (0x60fc80:24)                               ; FB41E8  e2 80 fc 60 21
 	push XBC                                             ; FB41ED  39
-	call sub_FB77F3                                      ; FB41EE  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB41EE  1d f3 77 fb
 	ld H,A                                               ; FB41F2  c9 8e
 	ld C,(XIX+0x0b)                                      ; FB41F4  8c 0b 23
 	pushw bc                                             ; FB41F7  29
@@ -90154,7 +90156,7 @@ sub_FB3C34:
 	ld XIX,(XIZ+0x08)                                    ; FB4229  ae 08 24
 	ld xbc, (0x60fc80:24)                               ; FB422C  e2 80 fc 60 21
 	push XBC                                             ; FB4231  39
-	call sub_FB77F3                                      ; FB4232  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB4232  1d f3 77 fb
 	ld H,A                                               ; FB4236  c9 8e
 	ld (xiz-2), a                                        ; FB4238  be fe 41
 	ld C,(XIX+0x09)                                      ; FB423B  8c 09 23
@@ -90550,7 +90552,7 @@ sub_FB44B3:
 	ld C,(XIX+0x06)                                      ; FB457C  8c 06 23
 	extz BC                                              ; FB457F  d9 12
 	pushw bc                                             ; FB4581  29
-	call sub_FB7A02                                      ; FB4582  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB4582  1d 02 7a fb
 	ld (xiz-2), a                                        ; FB4586  be fe 41
 	ld C,(XIX+0x08)                                      ; FB4589  8c 08 23
 	ld (xiz-1), c                                        ; FB458C  be ff 43
@@ -90575,7 +90577,7 @@ sub_FB44B3:
 	ld C,(XIX+0x06)                                      ; FB45B5  8c 06 23
 	extz BC                                              ; FB45B8  d9 12
 	pushw bc                                             ; FB45BA  29
-	call sub_FB7A02                                      ; FB45BB  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB45BB  1d 02 7a fb
 	extz WA                                              ; FB45BF  d8 12
 	ld HL,WA                                             ; FB45C1  d8 8b
 	ld C,(XIX+0x07)                                      ; FB45C3  8c 07 23
@@ -90585,7 +90587,7 @@ sub_FB44B3:
 	ld C,(XIX+0x06)                                      ; FB45CB  8c 06 23
 	extz BC                                              ; FB45CE  d9 12
 	pushw bc                                             ; FB45D0  29
-	call sub_FB7A02                                      ; FB45D1  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB45D1  1d 02 7a fb
 	extz WA                                              ; FB45D5  d8 12
 	sll wa, 0x08                                         ; FB45D7  d8 ee 08
 	ld DE,WA                                             ; FB45DA  d8 8a
@@ -90652,7 +90654,7 @@ sub_FB44B3:
 	ld C,(XIX+0x06)                                      ; FB466F  8c 06 23
 	extz BC                                              ; FB4672  d9 12
 	pushw bc                                             ; FB4674  29
-	call sub_FB7A02                                      ; FB4675  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB4675  1d 02 7a fb
 	ld (xiz-2), a                                        ; FB4679  be fe 41
 	ld C,(XIX+0x08)                                      ; FB467C  8c 08 23
 	ld (xiz-1), c                                        ; FB467F  be ff 43
@@ -90691,7 +90693,7 @@ sub_FB44B3:
 	ld A,L                                               ; FB46D1  cf 89
 	extz WA                                              ; FB46D3  d8 12
 	pushw wa                                             ; FB46D5  28
-	call sub_FB7A02                                      ; FB46D6  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB46D6  1d 02 7a fb
 	ld (XIX+0x02),A                                      ; FB46DA  bc 02 41
 	ld XBC,(XIZ+0x08)                                    ; FB46DD  ae 08 21
 	ld A,(XBC+0x08)                                      ; FB46E0  89 08 21
@@ -90778,7 +90780,7 @@ sub_FB44B3:
 	extz WA                                              ; FB47A7  d8 12
 	ld DE,WA                                             ; FB47A9  d8 8a
 	pushw wa                                             ; FB47AB  28
-	call sub_FB7A02                                      ; FB47AC  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB47AC  1d 02 7a fb
 	ld (XIX),A                                           ; FB47B0  b4 41
 	ld XBC,(XIZ+0x08)                                    ; FB47B2  ae 08 21
 	ld A,(XBC+0x0e)                                      ; FB47B5  89 0e 21
@@ -90791,7 +90793,7 @@ sub_FB44B3:
 	extz BC                                              ; FB47CB  d9 12
 	pushw bc                                             ; FB47CD  29
 	pushw de                                             ; FB47CE  2a
-	call sub_FB7A02                                      ; FB47CF  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB47CF  1d 02 7a fb
 	ld L,A                                               ; FB47D3  c9 8f
 	ld xbc, (xiz-14)                                     ; FB47D5  ae f2 21
 	ld W,(XBC+0x03)                                      ; FB47D8  89 03 20
@@ -90873,7 +90875,7 @@ sub_FB44B3:
 	extz WA                                              ; FB4896  d8 12
 	ld DE,WA                                             ; FB4898  d8 8a
 	pushw wa                                             ; FB489A  28
-	call sub_FB7A02                                      ; FB489B  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB489B  1d 02 7a fb
 	ld (XIX+0x02),A                                      ; FB489F  bc 02 41
 	ld XBC,(XIZ+0x08)                                    ; FB48A2  ae 08 21
 	ld A,(XBC+0x07)                                      ; FB48A5  89 07 21
@@ -90881,12 +90883,12 @@ sub_FB44B3:
 	inc 1,WA                                             ; FB48AA  d8 61
 	pushw wa                                             ; FB48AC  28
 	pushw de                                             ; FB48AD  2a
-	call sub_FB7A02                                      ; FB48AE  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB48AE  1d 02 7a fb
 	res 0x07,A                                           ; FB48B2  c9 30 07
 	ld (XIX),A                                           ; FB48B5  b4 41
 	pushw 0x15                                           ; FB48B7  0b 15 00
 	pushw de                                             ; FB48BA  2a
-	call sub_FB7A02                                      ; FB48BB  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB48BB  1d 02 7a fb
 	and A,0x20                                           ; FB48BF  c9 cc 20
 	add XSP,0x00000012                                   ; FB48C2  ef c8 12 00 00 00
 	cp a, 0x00:i3                                          ; FB48C8  c9 d8
@@ -90987,7 +90989,7 @@ sub_FB49AF:
 	ld A,L                                               ; FB49BA  cf 89
 	extz WA                                              ; FB49BC  d8 12
 	pushw wa                                             ; FB49BE  28
-	call sub_FB7A02                                      ; FB49BF  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB49BF  1d 02 7a fb
 	ld H,A                                               ; FB49C3  c9 8e
 	ld xbc, (xiz-16)                                     ; FB49C5  ae f0 21
 	ld W,(XBC)                                           ; FB49C8  81 20
@@ -91104,7 +91106,7 @@ sub_FB4AA4:
 	ld C,(XIX+0x06)                                      ; FB4ADB  8c 06 23
 	extz BC                                              ; FB4ADE  d9 12
 	pushw bc                                             ; FB4AE0  29
-	call sub_FB7A02                                      ; FB4AE1  1d 02 7a fb
+	call IndexedTable_GetByteOr0                                      ; FB4AE1  1d 02 7a fb
 	ld (xiz-2), a                                        ; FB4AE5  be fe 41
 	ld C,(XIX+0x08)                                      ; FB4AE8  8c 08 23
 	ld (xiz-1), c                                        ; FB4AEB  be ff 43
@@ -91899,7 +91901,7 @@ sub_FB5197:
 	jrl nz, .LFB5364                                     ; FB5251  7e 10 01
 	ld xbc, (0x60fc80:24)                               ; FB5254  e2 80 fc 60 21
 	push XBC                                             ; FB5259  39
-	call sub_FB77F3                                      ; FB525A  1d f3 77 fb
+	call SysExBuf_ReadNibblePair                                      ; FB525A  1d f3 77 fb
 	ld H,A                                               ; FB525E  c9 8e
 	ld XBC,(XIZ+0x08)                                    ; FB5260  ae 08 21
 	ld W,(XBC+0x09)                                      ; FB5263  89 09 20
@@ -91938,13 +91940,13 @@ sub_FB5197:
 	ld (XIX+0x02),0x08                                   ; FB52C6  bc 02 00 08
 	ld (XIX+0x03),0x3f                                   ; FB52CA  bc 03 00 3f
 	push XIX                                             ; FB52CE  3c
-	call sub_FB782B                                      ; FB52CF  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB52CF  1d 2b 78 fb
 	ld (XIX),L                                           ; FB52D3  b4 47
 	ld (XIX+0x01),0x01                                   ; FB52D5  bc 01 00 01
 	ld (XIX+0x02),H                                      ; FB52D9  bc 02 46
 	ld (XIX+0x03),0x7f                                   ; FB52DC  bc 03 00 7f
 	push XIX                                             ; FB52E0  3c
-	call sub_FB782B                                      ; FB52E1  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB52E1  1d 2b 78 fb
 	ld (0x60f189:24), h                                 ; FB52E5  f2 89 f1 60 46
 	ld (0x60f18a:24), 0x08                             ; FB52EA  f2 8a f1 60 00 08
 	ld (0x60f180:24), l                                 ; FB52F0  f2 80 f1 60 47
@@ -91955,21 +91957,21 @@ sub_FB5197:
 	ld (XIX+0x02),C                                      ; FB5304  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB5307  bc 03 00 ff
 	push XIX                                             ; FB530B  3c
-	call sub_FB782B                                      ; FB530C  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB530C  1d 2b 78 fb
 	ld (XIX),L                                           ; FB5310  b4 47
 	ld (XIX+0x01),0x07                                   ; FB5312  bc 01 00 07
 	ld c, (0x60f18e:24)                                 ; FB5316  c2 8e f1 60 23
 	ld (XIX+0x02),C                                      ; FB531B  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB531E  bc 03 00 ff
 	push XIX                                             ; FB5322  3c
-	call sub_FB782B                                      ; FB5323  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5323  1d 2b 78 fb
 	ld (XIX),L                                           ; FB5327  b4 47
 	ld (XIX+0x01),0x08                                   ; FB5329  bc 01 00 08
 	ld c, (0x60f18f:24)                                 ; FB532D  c2 8f f1 60 23
 	ld (XIX+0x02),C                                      ; FB5332  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB5335  bc 03 00 ff
 	push XIX                                             ; FB5339  3c
-	call sub_FB782B                                      ; FB533A  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB533A  1d 2b 78 fb
 	push XDE                                             ; FB533E  3a
 	push XHL                                             ; FB533F  3b
 	push XIX                                             ; FB5340  3c
@@ -92228,7 +92230,7 @@ sub_FB558F:
 .LFB55DE:
 	lda xbc, (xiz-4)                                     ; FB55DE  be fc 31
 	push XBC                                             ; FB55E1  39
-	call sub_FB782B                                      ; FB55E2  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB55E2  1d 2b 78 fb
 	dec 1,H                                              ; FB55E6  ce 69
 	incm8 0x01, (xiz-4)                                  ; FB55E8  8e fc 61
 	pop XIY                                              ; FB55EB  5d
@@ -92264,7 +92266,7 @@ sub_FB558F:
 	ld (xiz-1), a                                        ; FB5640  be ff 41
 	lda xbc, (xiz-4)                                     ; FB5643  be fc 31
 	push XBC                                             ; FB5646  39
-	call sub_FB782B                                      ; FB5647  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5647  1d 2b 78 fb
 	ld xix, (xiz-8)                                      ; FB564B  ae f8 24
 	inc 4,XIX                                            ; FB564E  ec 64
 	dec 1,H                                              ; FB5650  ce 69
@@ -92316,7 +92318,7 @@ sub_FB568D:
 	ld (XIX+0x01),0x02                                   ; FB56C1  bc 01 00 02
 	ld (XIX+0x03),0x0f                                   ; FB56C5  bc 03 00 0f
 	push XIX                                             ; FB56C9  3c
-	call sub_FB782B                                      ; FB56CA  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB56CA  1d 2b 78 fb
 	pop XIY                                              ; FB56CE  5d
 .LFB56CF:
 	pop XIX                                              ; FB56CF  5c
@@ -92686,12 +92688,12 @@ sub_FB5A17:
 	ld (XIX+0x02),0x00                                   ; FB5A2E  bc 02 00 00
 	ld (XIX+0x03),0xff                                   ; FB5A32  bc 03 00 ff
 	push XIX                                             ; FB5A36  3c
-	call sub_FB782B                                      ; FB5A37  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5A37  1d 2b 78 fb
 	ld (XIX+0x01),0x01                                   ; FB5A3B  bc 01 00 01
 	ld (XIX+0x02),0x00                                   ; FB5A3F  bc 02 00 00
 	ld (XIX+0x03),0x7f                                   ; FB5A43  bc 03 00 7f
 	push XIX                                             ; FB5A47  3c
-	call sub_FB782B                                      ; FB5A48  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5A48  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5A4C  84 61
 	inc 8,XSP                                            ; FB5A4E  ef 60
 	jr .LFB5A23                                          ; FB5A50  68 d1
@@ -92701,25 +92703,25 @@ sub_FB5A17:
 	ld (XIX+0x02),0x00                                   ; FB5A59  bc 02 00 00
 	ld (XIX+0x03),0xff                                   ; FB5A5D  bc 03 00 ff
 	push XIX                                             ; FB5A61  3c
-	call sub_FB782B                                      ; FB5A62  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5A62  1d 2b 78 fb
 	ld (XIX),0x09                                        ; FB5A66  b4 00 09
 	ld (XIX+0x01),0x01                                   ; FB5A69  bc 01 00 01
 	ld (XIX+0x02),0x20                                   ; FB5A6D  bc 02 00 20
 	ld (XIX+0x03),0x7f                                   ; FB5A71  bc 03 00 7f
 	push XIX                                             ; FB5A75  3c
-	call sub_FB782B                                      ; FB5A76  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5A76  1d 2b 78 fb
 	ld (XIX),0x19                                        ; FB5A7A  b4 00 19
 	ld (XIX+0x01),0x00                                   ; FB5A7D  bc 01 00 00
 	ld (XIX+0x02),0x00                                   ; FB5A81  bc 02 00 00
 	ld (XIX+0x03),0xff                                   ; FB5A85  bc 03 00 ff
 	push XIX                                             ; FB5A89  3c
-	call sub_FB782B                                      ; FB5A8A  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5A8A  1d 2b 78 fb
 	ld (XIX),0x19                                        ; FB5A8E  b4 00 19
 	ld (XIX+0x01),0x01                                   ; FB5A91  bc 01 00 01
 	ld (XIX+0x02),0x20                                   ; FB5A95  bc 02 00 20
 	ld (XIX+0x03),0x7f                                   ; FB5A99  bc 03 00 7f
 	push XIX                                             ; FB5A9D  3c
-	call sub_FB782B                                      ; FB5A9E  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5A9E  1d 2b 78 fb
 	ld (XIX),0x20                                        ; FB5AA2  b4 00 20
 	inc 8,XSP                                            ; FB5AA5  ef 60
 	inc 8,XSP                                            ; FB5AA7  ef 60
@@ -92731,17 +92733,17 @@ sub_FB5A17:
 	ld (XIX+0x02),0x00                                   ; FB5AB4  bc 02 00 00
 	ld (XIX+0x03),0xff                                   ; FB5AB8  bc 03 00 ff
 	push XIX                                             ; FB5ABC  3c
-	call sub_FB782B                                      ; FB5ABD  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5ABD  1d 2b 78 fb
 	ld (XIX+0x01),0x1c                                   ; FB5AC1  bc 01 00 1c
 	ld (XIX+0x02),0x00                                   ; FB5AC5  bc 02 00 00
 	ld (XIX+0x03),0xff                                   ; FB5AC9  bc 03 00 ff
 	push XIX                                             ; FB5ACD  3c
-	call sub_FB782B                                      ; FB5ACE  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5ACE  1d 2b 78 fb
 	ld (XIX+0x01),0x1d                                   ; FB5AD2  bc 01 00 1d
 	ld (XIX+0x02),0x1a                                   ; FB5AD6  bc 02 00 1a
 	ld (XIX+0x03),0xff                                   ; FB5ADA  bc 03 00 ff
 	push XIX                                             ; FB5ADE  3c
-	call sub_FB782B                                      ; FB5ADF  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5ADF  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5AE3  84 61
 	inc 8,XSP                                            ; FB5AE5  ef 60
 	inc 4,XSP                                            ; FB5AE7  ef 64
@@ -92753,37 +92755,37 @@ sub_FB5A17:
 	ld h, 0xff:opc                                          ; FB5AF6  26 ff
 	ld (XIX+0x03),H                                      ; FB5AF8  bc 03 46
 	push XIX                                             ; FB5AFB  3c
-	call sub_FB782B                                      ; FB5AFC  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5AFC  1d 2b 78 fb
 	ld (XIX),0x29                                        ; FB5B00  b4 00 29
 	ld (XIX+0x01),0x1c                                   ; FB5B03  bc 01 00 1c
 	ld (XIX+0x02),0x03                                   ; FB5B07  bc 02 00 03
 	ld (XIX+0x03),H                                      ; FB5B0B  bc 03 46
 	push XIX                                             ; FB5B0E  3c
-	call sub_FB782B                                      ; FB5B0F  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5B0F  1d 2b 78 fb
 	ld (XIX),0x29                                        ; FB5B13  b4 00 29
 	ld (XIX+0x01),0x1d                                   ; FB5B16  bc 01 00 1d
 	ld (XIX+0x02),0x20                                   ; FB5B1A  bc 02 00 20
 	ld (XIX+0x03),H                                      ; FB5B1E  bc 03 46
 	push XIX                                             ; FB5B21  3c
-	call sub_FB782B                                      ; FB5B22  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5B22  1d 2b 78 fb
 	ld (XIX),0x39                                        ; FB5B26  b4 00 39
 	ld (XIX+0x01),0x1b                                   ; FB5B29  bc 01 00 1b
 	ld (XIX+0x02),0x00                                   ; FB5B2D  bc 02 00 00
 	ld (XIX+0x03),H                                      ; FB5B31  bc 03 46
 	push XIX                                             ; FB5B34  3c
-	call sub_FB782B                                      ; FB5B35  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5B35  1d 2b 78 fb
 	ld (XIX),0x39                                        ; FB5B39  b4 00 39
 	ld (XIX+0x01),0x1c                                   ; FB5B3C  bc 01 00 1c
 	ld (XIX+0x02),0x03                                   ; FB5B40  bc 02 00 03
 	ld (XIX+0x03),H                                      ; FB5B44  bc 03 46
 	push XIX                                             ; FB5B47  3c
-	call sub_FB782B                                      ; FB5B48  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5B48  1d 2b 78 fb
 	ld (XIX),0x39                                        ; FB5B4C  b4 00 39
 	ld (XIX+0x01),0x1d                                   ; FB5B4F  bc 01 00 1d
 	ld (XIX+0x02),0x20                                   ; FB5B53  bc 02 00 20
 	ld (XIX+0x03),H                                      ; FB5B57  bc 03 46
 	push XIX                                             ; FB5B5A  3c
-	call sub_FB782B                                      ; FB5B5B  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5B5B  1d 2b 78 fb
 	add XSP,0x00000018                                   ; FB5B5F  ef c8 18 00 00 00
 	pop XIX                                              ; FB5B65  5c
 	popw hl                                              ; FB5B66  4b
@@ -92802,7 +92804,7 @@ sub_FB5B6A:
 	cp C,0x1f                                            ; FB5B83  cb cf 1f
 	jr ugt, .LFB5B92                                     ; FB5B86  6b 0a
 	push XIX                                             ; FB5B88  3c
-	call sub_FB782B                                      ; FB5B89  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5B89  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5B8D  84 61
 	pop XIY                                              ; FB5B8F  5d
 	jr .LFB5B81                                          ; FB5B90  68 ef
@@ -92825,7 +92827,7 @@ sub_FB5B97:
 	cp C,0x1f                                            ; FB5BB0  cb cf 1f
 	jr ugt, .LFB5BBF                                     ; FB5BB3  6b 0a
 	push XIX                                             ; FB5BB5  3c
-	call sub_FB782B                                      ; FB5BB6  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5BB6  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5BBA  84 61
 	pop XIY                                              ; FB5BBC  5d
 	jr .LFB5BAE                                          ; FB5BBD  68 ef
@@ -92846,7 +92848,7 @@ sub_FB5BC3:
 	cp C,0x1f                                            ; FB5BDC  cb cf 1f
 	jr ugt, .LFB5BEB                                     ; FB5BDF  6b 0a
 	push XIX                                             ; FB5BE1  3c
-	call sub_FB782B                                      ; FB5BE2  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5BE2  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5BE6  84 61
 	pop XIY                                              ; FB5BE8  5d
 	jr .LFB5BDA                                          ; FB5BE9  68 ef
@@ -92867,7 +92869,7 @@ sub_FB5BEF:
 	cp C,0x1f                                            ; FB5C08  cb cf 1f
 	jr ugt, .LFB5C17                                     ; FB5C0B  6b 0a
 	push XIX                                             ; FB5C0D  3c
-	call sub_FB782B                                      ; FB5C0E  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5C0E  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5C12  84 61
 	pop XIY                                              ; FB5C14  5d
 	jr .LFB5C06                                          ; FB5C15  68 ef
@@ -92888,7 +92890,7 @@ sub_FB5C1B:
 	cp C,0x1f                                            ; FB5C34  cb cf 1f
 	jr ugt, .LFB5C43                                     ; FB5C37  6b 0a
 	push XIX                                             ; FB5C39  3c
-	call sub_FB782B                                      ; FB5C3A  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5C3A  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5C3E  84 61
 	pop XIY                                              ; FB5C40  5d
 	jr .LFB5C32                                          ; FB5C41  68 ef
@@ -92909,7 +92911,7 @@ sub_FB5C47:
 	cp C,0x1f                                            ; FB5C60  cb cf 1f
 	jr ugt, .LFB5C6F                                     ; FB5C63  6b 0a
 	push XIX                                             ; FB5C65  3c
-	call sub_FB782B                                      ; FB5C66  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5C66  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5C6A  84 61
 	pop XIY                                              ; FB5C6C  5d
 	jr .LFB5C5E                                          ; FB5C6D  68 ef
@@ -92930,7 +92932,7 @@ sub_FB5C73:
 	cp C,0x1f                                            ; FB5C8C  cb cf 1f
 	jr ugt, .LFB5C9B                                     ; FB5C8F  6b 0a
 	push XIX                                             ; FB5C91  3c
-	call sub_FB782B                                      ; FB5C92  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5C92  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5C96  84 61
 	pop XIY                                              ; FB5C98  5d
 	jr .LFB5C8A                                          ; FB5C99  68 ef
@@ -92951,7 +92953,7 @@ sub_FB5C9F:
 	cp C,0x1f                                            ; FB5CB8  cb cf 1f
 	jr ugt, .LFB5CC7                                     ; FB5CBB  6b 0a
 	push XIX                                             ; FB5CBD  3c
-	call sub_FB782B                                      ; FB5CBE  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5CBE  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5CC2  84 61
 	pop XIY                                              ; FB5CC4  5d
 	jr .LFB5CB6                                          ; FB5CC5  68 ef
@@ -92972,7 +92974,7 @@ sub_FB5CCB:
 	cp C,0x1f                                            ; FB5CE4  cb cf 1f
 	jr ugt, .LFB5CF3                                     ; FB5CE7  6b 0a
 	push XIX                                             ; FB5CE9  3c
-	call sub_FB782B                                      ; FB5CEA  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5CEA  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5CEE  84 61
 	pop XIY                                              ; FB5CF0  5d
 	jr .LFB5CE2                                          ; FB5CF1  68 ef
@@ -93026,7 +93028,7 @@ sub_FB5D38:
 	ld (XIX+0x02),0x00                                   ; FB5D4E  bc 02 00 00
 	ld (XIX+0x03),0x10                                   ; FB5D52  bc 03 00 10
 	push XIX                                             ; FB5D56  3c
-	call sub_FB782B                                      ; FB5D57  1d 2b 78 fb
+	call IndexedTable_MergeMaskedByte                                      ; FB5D57  1d 2b 78 fb
 	incm8 0x01, (xix)                                    ; FB5D5B  84 61
 	pop XIY                                              ; FB5D5D  5d
 	jr .LFB5D43                                          ; FB5D5E  68 e3
@@ -96139,7 +96141,8 @@ SysEx_Wait25Ticks:
 ; -- is measured by `python3 notes/maincpu_join_probe.py --callers --nearest`.
 ; ------------------------------------------------------------------------------
 	.include "maincpu/shared/indexed_table.s"
-sub_FB77F3:
+; SysExBuf_ReadNibblePair(buf): two bytes at the cursor buf+6, advanced by 2; A = (b0 << 4) | (b1 & 0x0F).
+SysExBuf_ReadNibblePair:
 	link XIZ,0xfff8                                      ; FB77F3  ee 0c f8 ff
 	pushw hl                                             ; FB77F7  2b
 	push XIX                                             ; FB77F8  3c
@@ -96164,7 +96167,9 @@ sub_FB77F3:
 	popw hl                                              ; FB7827  4b
 	unlk XIZ                                             ; FB7828  ee 0d
 	ret                                                  ; FB782A  0e
-sub_FB782B:
+; IndexedTable_MergeMaskedByte(rec): rec = {index, offset, value, mask}; IndexedTable_GetPtr(index)[offset] = (old & ~mask) | (value & mask);
+;   WA = 0, or 0xFFFF when the table has no entry (sysex-probes/sysex_param_addresses.py).
+IndexedTable_MergeMaskedByte:
 	link XIZ,0xfff4                                      ; FB782B  ee 0c f4 ff
 	pushw hl                                             ; FB782F  2b
 	pushw de                                             ; FB7830  2a
@@ -96213,7 +96218,8 @@ sub_FB782B:
 	popw hl                                              ; FB788C  4b
 	unlk XIZ                                             ; FB788D  ee 0d
 	ret                                                  ; FB788F  0e
-sub_FB7890:
+; IndexedTable_MergeMaskedByteAndPost(rec): IndexedTable_MergeMaskedByte, then T_EventQueue_AppendStackArgs(index, offset, new byte, mask).
+IndexedTable_MergeMaskedByteAndPost:
 	link XIZ,0xfff4                                      ; FB7890  ee 0c f4 ff
 	pushw hl                                             ; FB7894  2b
 	pushw de                                             ; FB7895  2a
@@ -96281,7 +96287,8 @@ sub_FB7890:
 	popw hl                                              ; FB7918  4b
 	unlk XIZ                                             ; FB7919  ee 0d
 	ret                                                  ; FB791B  0e
-sub_FB791C:
+; IndexedTable_MergeMaskedWordAndPost(rec): rec = {index, offset, value16, mask16}; both bytes merged, one event posted per byte.
+IndexedTable_MergeMaskedWordAndPost:
 	link XIZ,0xfff4                                      ; FB791C  ee 0c f4 ff
 	pushw hl                                             ; FB7920  2b
 	pushw de                                             ; FB7921  2a
@@ -96389,7 +96396,8 @@ sub_FB791C:
 	popw hl                                              ; FB79FE  4b
 	unlk XIZ                                             ; FB79FF  ee 0d
 	ret                                                  ; FB7A01  0e
-sub_FB7A02:
+; IndexedTable_GetByteOr0(index, offset): as IndexedTable_GetByte, but 0 when the table has no entry.
+IndexedTable_GetByteOr0:
 	link XIZ,0xfff8                                      ; FB7A02  ee 0c f8 ff
 	push XIX                                             ; FB7A06  3c
 	ld xbc, (IndexedTable_Base:24)                               ; FB7A07  e2 18 f0 60 21
@@ -96451,7 +96459,8 @@ sub_FB7A63:
 	pop XIX                                              ; FB7A8C  5c
 	unlk XIZ                                             ; FB7A8D  ee 0d
 	ret                                                  ; FB7A8F  0e
-sub_FB7A90:
+; SysEx_Checksum(msg, len): (-(msg[1] + .. + msg[len-1])) & 0x7F, the frame checksum of SysExTx_AppendChecksumF7.
+SysEx_Checksum:
 	link XIZ,0x0000                                      ; FB7A90  ee 0c 00 00
 	pushw hl                                             ; FB7A94  2b
 	pushw de                                             ; FB7A95  2a
@@ -96480,7 +96489,8 @@ sub_FB7A90:
 	popw hl                                              ; FB7ABE  4b
 	unlk XIZ                                             ; FB7ABF  ee 0d
 	ret                                                  ; FB7AC1  0e
-sub_FB7AC2:
+; SysExTx_SendBytes(src, n): SysExTx_Append, SysExTx_SendFrameMidi1, SysExTx_SwapBuffers.
+SysExTx_SendBytes:
 	link XIZ,0x0000                                      ; FB7AC2  ee 0c 00 00
 	m_push MWD+r6, 0x0c                                  ; FB7AC6  9e 0c 04
 	ld XBC,(XIZ+0x08)                                    ; FB7AC9  ae 08 21
