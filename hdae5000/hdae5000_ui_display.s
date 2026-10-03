@@ -6861,11 +6861,11 @@ HDAE5000_PPORT_Svc28_FlashXapFile:	; 0x28F308
 	ld (xsp + 0x08), xiz		; store XIZ to stack
 	ld xwa, HDAE5000_ROM_HEADER
 	ld (xsp + 0x14), xwa
-	ld xwa, 0x002f0000
+	ld xwa, HDAE5000_XAP_DESC_LIMIT
 	ld (xsp + 0x0c), xwa
 	ld xwa, (xsp + 0x18)
 	ld xbc, (xsp + 0x04)
-	call 0x23feb0
+	call HDAE5000_RAM_XAP_FLASH_ENTRY
 	pop xiz
 	lda xsp, (xsp + 0x18)
 	ret
@@ -7224,6 +7224,8 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 .equ HDAE5000_SERIAL_DATA_2, 0x2398AA	; Serial port data (secondary)
 .equ HDAE5000_PARALLEL_DATA_1, 0x239FD2	; Parallel port data (primary)
 .equ HDAE5000_PARALLEL_DATA_2, 0x23A00E	; Parallel port data (secondary)
+.equ HDAE5000_RAM_XAP_FLASH_ENTRY, 0x23feb0	; main-CPU RAM; HDAE5000_PPORT_Svc28_FlashXapFile calls it with the "XAP" descriptor.  Nothing in this ROM writes code there; what the main CPU puts there is not established
+.equ HDAE5000_XAP_DESC_LIMIT, 0x2f0000	; the descriptor's fourth word, after HDAE5000_ROM_HEADER (0x280000); 0x2F0000 is inside image data here, so it is a value, not a pointer.  Its meaning is not established
 	; (EQU→inline label) HDAE5000_UiObject_PtrTable = 0x2A5D2C
 	; (EQU→inline label) HDAE5000_UiObjectName_PtrTable = 0x2A6984
 	; (EQU→inline label) HDAE5000_GFX_INIT_PARAMS = 0x2A849A

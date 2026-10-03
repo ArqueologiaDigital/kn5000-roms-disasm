@@ -928,7 +928,7 @@ HDAE5000_TtlScreenRProc:
 	push xwa
 	call HDAE5000_MemCopy
 	pushw 0x9600
-	lda xwa, (0x2b1f8e:24)
+	lda xwa, (HDAE5000_Bitmap_TitleLogo+0x9600:24)	; its second half (0x12C00 bytes in two 0x9600 copies)
 	push xwa
 	ld	xwa, 0x0005fe00
 	push xwa
@@ -1004,7 +1004,7 @@ HDAE5000_TtlScreenR2Proc:
 	push xwa
 	call HDAE5000_MemCopy
 	pushw 0x9600
-	lda xwa, (0x2c4f8e:24)
+	lda xwa, (HDAE5000_Bitmap_DriveMech+0x9600:24)	; its second half
 	push xwa
 	ld	xwa, 0x0005fe00
 	push xwa
@@ -1080,7 +1080,7 @@ HDAE5000_TtlScreenR3Proc:
 	push xwa
 	call HDAE5000_MemCopy
 	pushw 0x9600
-	lda xwa, (0x2d7f8e:24)
+	lda xwa, (HDAE5000_Bitmap_FilePanel+0x9600:24)	; its second half
 	push xwa
 	ld	xwa, 0x0005fe00
 	push xwa
