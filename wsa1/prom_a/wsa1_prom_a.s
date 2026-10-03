@@ -148059,12 +148059,14 @@ sub_FDB4B0:
 ScreenEnter_SoundEditPitchLfo:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDB529  1d 80 2e f4
 	pushw 0x8a                                           ; FDB52D  0b 8a 00
-	calr sub_FDB53C                                      ; FDB530  1e 09 00
+	calr SoundEditLfo_OnEnter                                      ; FDB530  1e 09 00
 	pushw 0x10                                           ; FDB533  0b 10 00
 	call ToneMsg80_Id00                                      ; FDB536  1d 47 64 fd
 	pop XBC                                              ; FDB53A  59
 	ret                                                  ; FDB53B  0e
-sub_FDB53C:
+; SoundEditLfo_OnEnter: the ENTER work of SoundEditAmpLfo, SoundEditFilterLfo, SoundEditPitchLfo -- the one unnamed routine ScreenEnter_SoundEditAmpLfo / ScreenEnter_SoundEditFilterLfo / ScreenEnter_SoundEditPitchLfo calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+SoundEditLfo_OnEnter:
 	link XIZ,0xfff0                                      ; FDB53C  ee 0c f0 ff
 	pushw hl                                             ; FDB540  2b
 	pushw de                                             ; FDB541  2a
@@ -148788,7 +148790,7 @@ ScreenEnter_SoundEditAmpEnvelope2:
 ScreenEnter_SoundEditAmpLfo:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDBBC3  1d 80 2e f4
 	pushw 0x8f                                           ; FDBBC7  0b 8f 00
-	calr sub_FDB53C                                      ; FDBBCA  1e 6f f9
+	calr SoundEditLfo_OnEnter                                      ; FDBBCA  1e 6f f9
 	pushw 0x10                                           ; FDBBCD  0b 10 00
 	call ToneMsg80_Id00                                      ; FDBBD0  1d 47 64 fd
 	pop XBC                                              ; FDBBD4  59
@@ -149834,7 +149836,7 @@ ScreenEnter_SoundEditFilterEnvelope2:
 ScreenEnter_SoundEditFilterLfo:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC5A2  1d 80 2e f4
 	pushw 0x99                                           ; FDC5A6  0b 99 00
-	calr sub_FDB53C                                      ; FDC5A9  1e 90 ef
+	calr SoundEditLfo_OnEnter                                      ; FDC5A9  1e 90 ef
 	pushw 0x10                                           ; FDC5AC  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC5AF  1d 47 64 fd
 	pop XBC                                              ; FDC5B3  59

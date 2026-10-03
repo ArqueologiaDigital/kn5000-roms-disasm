@@ -90143,11 +90143,11 @@ T_F428C4:	jp SongClear_SoftKeyCol3  ; -> prom_b 0x7AAAF   x1
 T_F428C8:	jp SongClear_LcdKeyRow5  ; -> prom_b 0x7AADD   x1
 T_F428CC:	jp SongClear_LcdKeyRow4  ; -> prom_b 0x7AAF0   x1
 T_F428D0:	jp sub_F7AB9C  ; -> prom_b 0x7AB9C   x1
-T_F428D4:	jp sub_F7ABB9  ; -> prom_b 0x7ABB9   x1
+T_F428D4:	jp TrackClear_OnLeave  ; -> prom_b 0x7ABB9   x1
 T_F428D8:	jp sub_F7ABDC  ; -> prom_b 0x7ABDC   x2
 T_F428DC:	jp TrackClear_LcdKeyRow2  ; -> prom_b 0x7AC07   x2
 T_F428E0:	jp sub_F7BCFD  ; -> prom_b 0x7BCFD   x1
-T_F428E4:	jp sub_F7BD24  ; -> prom_b 0x7BD24   x1
+T_F428E4:	jp Vel0cityChange_OnLeave  ; -> prom_b 0x7BD24   x1
 T_F428E8:	jp Vel0cityChange_StageZero_LcdKeyRow1  ; -> prom_b 0x7BD30   x1
 T_F428EC:	jp Vel0cityChange_StageZero_LcdKeyRow2  ; -> prom_b 0x7BD40   x1
 T_F428F0:	jp Vel0cityChange_StageZero_LcdKeyRow3  ; -> prom_b 0x7BD55   x1
@@ -90157,7 +90157,7 @@ T_F428FC:	jp sub_F7BDD4  ; -> prom_b 0x7BDD4   x2
 T_F42900:	jp sub_F7BEF4  ; -> prom_b 0x7BEF4   x2
 T_F42904:	jp sub_F7BDC0  ; -> prom_b 0x7BDC0
 T_F42908:	jp sub_F7BFEA  ; -> prom_b 0x7BFEA   x1
-T_F4290C:	jp sub_F7C0AF  ; -> prom_b 0x7C0AF   x1
+T_F4290C:	jp Quantize_OnLeave  ; -> prom_b 0x7C0AF   x1
 T_F42910:	jp Quantize_SelectField1  ; -> prom_b 0x7C0BB   x1
 T_F42914:	jp Quantize_SelectField2  ; -> prom_b 0x7C0C6   x1
 T_F42918:	jp Quantize_SelectField3  ; -> prom_b 0x7C0D6   x1
@@ -90169,7 +90169,7 @@ T_F4292C:	jp sub_F7C17D  ; -> prom_b 0x7C17D   x2
 T_F42930:	jp sub_F7C326  ; -> prom_b 0x7C326   x2
 T_F42934:	jp sub_F7C13E  ; -> prom_b 0x7C13E
 T_F42938:	jp sub_F7AC9D  ; -> prom_b 0x7AC9D   x1
-T_F4293C:	jp sub_F7ACA6  ; -> prom_b 0x7ACA6   x1
+T_F4293C:	jp TrackMerge_OnLeave  ; -> prom_b 0x7ACA6   x1
 T_F42940:	jp TrackMerge_SelectField1  ; -> prom_b 0x7ACC5   x1
 T_F42944:	jp TrackMerge_SelectField2  ; -> prom_b 0x7ACD0   x1
 T_F42948:	jp TrackMerge_SelectField3  ; -> prom_b 0x7ACDB   x1
@@ -90178,7 +90178,7 @@ T_F42950:	jp TrackMerge_StageZero_SoftKeyCol5  ; -> prom_b 0x7AD14   x1
 T_F42954:	jp sub_F7ADF5  ; -> prom_b 0x7ADF5   x2
 T_F42958:	jp sub_F7AE0C  ; -> prom_b 0x7AE0C   x2
 T_F4295C:	jp sub_F7B000  ; -> prom_b 0x7B000   x1
-T_F42960:	jp sub_F7B00E  ; -> prom_b 0x7B00E   x1
+T_F42960:	jp MeasureDelete_OnLeave  ; -> prom_b 0x7B00E   x1
 T_F42964:	jp MeasureDelete_SelectField1  ; -> prom_b 0x7B01A   x1
 T_F42968:	jp MeasureDelete_SelectField2  ; -> prom_b 0x7B025   x1
 T_F4296C:	jp MeasureDelete_SelectField3  ; -> prom_b 0x7B035   x1
@@ -90187,7 +90187,7 @@ T_F42974:	jp sub_F7B08B  ; -> prom_b 0x7B08B   x2
 T_F42978:	jp sub_F7B162  ; -> prom_b 0x7B162   x2
 T_F4297C:	jp sub_F7B07A  ; -> prom_b 0x7B07A
 T_F42980:	jp sub_F7B22C  ; -> prom_b 0x7B22C   x1
-T_F42984:	jp sub_F7B23A  ; -> prom_b 0x7B23A   x1
+T_F42984:	jp MeasureErase_OnLeave  ; -> prom_b 0x7B23A   x1
 T_F42988:	jp MeasureErase_SelectField1  ; -> prom_b 0x7B246   x1
 T_F4298C:	jp MeasureErase_SelectField2  ; -> prom_b 0x7B251   x1
 T_F42990:	jp MeasureErase_SelectField3  ; -> prom_b 0x7B261   x1
@@ -90197,7 +90197,7 @@ T_F4299C:	jp sub_F7B2CE  ; -> prom_b 0x7B2CE   x2
 T_F429A0:	jp sub_F7B3E0  ; -> prom_b 0x7B3E0   x2
 T_F429A4:	jp sub_F7B2BD  ; -> prom_b 0x7B2BD
 T_F429A8:	jp sub_F7B4BF  ; -> prom_b 0x7B4BF   x1
-T_F429AC:	jp sub_F7B4CD  ; -> prom_b 0x7B4CD   x1
+T_F429AC:	jp MeasureInsert_OnLeave  ; -> prom_b 0x7B4CD   x1
 T_F429B0:	jp MeasureInsert_SelectField1  ; -> prom_b 0x7B4EC   x1
 T_F429B4:	jp MeasureInsert_SelectField2  ; -> prom_b 0x7B4F7   x1
 T_F429B8:	jp MeasureInsert_SelectField3  ; -> prom_b 0x7B507   x1
@@ -90209,7 +90209,7 @@ T_F429CC:	jp sub_F7B58C  ; -> prom_b 0x7B58C   x2
 T_F429D0:	jp sub_F7B761  ; -> prom_b 0x7B761   x2
 T_F429D4:	jp MeasureInsert_LcdKeyRow1  ; -> prom_b 0x7B771   x2
 T_F429D8:	jp sub_F7B8DC  ; -> prom_b 0x7B8DC   x1
-T_F429DC:	jp sub_F7B8EA  ; -> prom_b 0x7B8EA   x1
+T_F429DC:	jp MeasureC0py_OnLeave  ; -> prom_b 0x7B8EA   x1
 T_F429E0:	jp MeasureC0py_SelectField1  ; -> prom_b 0x7B909   x1
 T_F429E4:	jp MeasureC0py_SelectField2  ; -> prom_b 0x7B914   x1
 T_F429E8:	jp MeasureC0py_SelectField3  ; -> prom_b 0x7B924   x1
@@ -90233,7 +90233,7 @@ T_F42A2C:	jp S0ngC0py_StageZero_SoftKeyCol7  ; -> prom_b 0x7C4FF   x1
 T_F42A30:	jp S0ngC0py_LcdKeyRow2  ; -> prom_b 0x7C555   x2
 T_F42A34:	jp sub_F7C5C0  ; -> prom_b 0x7C5C0   x2
 T_F42A38:	jp sub_F7C606  ; -> prom_b 0x7C606   x1
-T_F42A3C:	jp sub_F7C666  ; -> prom_b 0x7C666   x1
+T_F42A3C:	jp Transp0se_OnLeave  ; -> prom_b 0x7C666   x1
 T_F42A40:	jp Transp0se_SelectField1  ; -> prom_b 0x7C672   x1
 T_F42A44:	jp Transp0se_SelectField2  ; -> prom_b 0x7C682   x1
 T_F42A48:	jp Transp0se_SelectField3  ; -> prom_b 0x7C692   x1
@@ -90243,7 +90243,7 @@ T_F42A54:	jp sub_F7C6FB  ; -> prom_b 0x7C6FB   x2
 T_F42A58:	jp sub_F7C7F0  ; -> prom_b 0x7C7F0   x2
 T_F42A5C:	jp sub_F7C843  ; -> prom_b 0x7C843   x2
 T_F42A60:	jp sub_F7CAD2  ; -> prom_b 0x7CAD2   x1
-T_F42A64:	jp sub_F7CB12  ; -> prom_b 0x7CB12   x1
+T_F42A64:	jp AdvanceDelay_OnLeave  ; -> prom_b 0x7CB12   x1
 T_F42A68:	jp AdvanceDelay_SelectField1  ; -> prom_b 0x7CB1E   x1
 T_F42A6C:	jp AdvanceDelay_SelectField2  ; -> prom_b 0x7CB29   x1
 T_F42A70:	jp AdvanceDelay_SelectField3  ; -> prom_b 0x7CB34   x1
@@ -90253,7 +90253,7 @@ T_F42A7C:	jp sub_F7CB90  ; -> prom_b 0x7CB90   x2
 T_F42A80:	jp AdvanceDelay_LcdKeyRow3  ; -> prom_b 0x7CC7C   x2
 T_F42A84:	jp sub_F7CCCA  ; -> prom_b 0x7CCCA   x2
 T_F42A88:	jp sub_F7C853  ; -> prom_b 0x7C853   x1
-T_F42A8C:	jp sub_F7C8BC  ; -> prom_b 0x7C8BC   x1
+T_F42A8C:	jp N0teChange_OnLeave  ; -> prom_b 0x7C8BC   x1
 T_F42A90:	jp N0teChange_SelectField1  ; -> prom_b 0x7C8C8   x1
 T_F42A94:	jp N0teChange_SelectField2  ; -> prom_b 0x7C8D8   x1
 T_F42A98:	jp N0teChange_SelectField3  ; -> prom_b 0x7C8E8   x1
@@ -90290,15 +90290,15 @@ T_F42BB8:	jp sub_F65C0D  ; -> prom_b 0x65C0D   x1
 T_F42BBC:	jp sub_F664AE  ; -> prom_b 0x664AE   x8
 T_F42BC0:	jp sub_F66081  ; -> prom_b 0x66081   x2
 T_F42BC4:	jp sub_F664D5  ; -> prom_b 0x664D5   x1
-T_F42BC8:	jp sub_F6650F  ; -> prom_b 0x6650F   x1
+T_F42BC8:	jp StepRecordPartSelect_OnLeave  ; -> prom_b 0x6650F   x1
 T_F42BCC:	jp sub_F660ED  ; -> prom_b 0x660ED   x1
-T_F42BD0:	jp sub_F6614E  ; -> prom_b 0x6614E   x1
+T_F42BD0:	jp SequencerMedley_OnLeave  ; -> prom_b 0x6614E   x1
 T_F42BD4:	jp SequencerMedley_LcdKeyRow2  ; -> prom_b 0x66191   x1
 T_F42BD8:	jp sub_F66201  ; -> prom_b 0x66201   x1
 T_F42BDC:	jp sub_F66522  ; -> prom_b 0x66522
 T_F42BE0:	jp T_F42BE0_Nop  ; -> prom_b 0x6656D
 T_F42BE4:	jp sub_F66522_Join  ; -> prom_b 0x6652C   x1
-T_F42BE8:	jp sub_F6655D  ; -> prom_b 0x6655D   x1
+T_F42BE8:	jp TrackAssign_OnLeave  ; -> prom_b 0x6655D   x1
 T_F42BEC:	jp sub_F6657A  ; -> prom_b 0x6657A   x1
 T_F42BF0:	jp sub_F66598  ; -> prom_b 0x66598
 T_F42BF4:	jp TrackAssign_StageZero_LcdKeyRow5  ; -> prom_b 0x6656E   x1
@@ -143718,7 +143718,7 @@ sub_F66123:
 	ret	; F6614D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6614E
+; SequencerMedley_OnLeave
 ; Called from: T_F42BD0 (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x22D0) (0x34BB) (0x34D0)
 ; Calls:   sub_F66201 T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_F411B8
@@ -143729,7 +143729,9 @@ sub_F66123:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6614E:		; <- T_F42BD0
+; SequencerMedley_OnLeave: the LEAVE work of SequencerMedley -- the one unnamed routine ScreenLeaveBody_SequencerMedley calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+SequencerMedley_OnLeave:		; <- T_F42BD0
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F6614E  cp (0x207a),0x13
 	jr	z, sub_F66123_Return	; F66153  jr Z,0xf66190
 	call	sub_F66201	; F66155  call 0xf66201
@@ -144328,7 +144330,7 @@ sub_F662F7_Skip16:
 	ret	; F6650E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6650F
+; StepRecordPartSelect_OnLeave
 ; Called from: T_F42BC8 (x1)
 ; Touches: (0x3010) (0x34BB)
 ; Calls:   T_F40CB4
@@ -144339,7 +144341,9 @@ sub_F662F7_Skip16:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6650F:		; <- T_F42BC8
+; StepRecordPartSelect_OnLeave: the LEAVE work of StepRecordPartSelect -- the one unnamed routine ScreenLeaveBody_StepRecordPartSelect calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+StepRecordPartSelect_OnLeave:		; <- T_F42BC8
 	ld	xwa, (12304:16)	; F6650F  ld XWA,(0x3010)
 	ld	(6304798:24), xwa	; F66513  ld (0x60341e),XWA
 	call	T_F40CB4	; F66518  call 0xf40cb4
@@ -144390,7 +144394,7 @@ sub_F662F7_Skip17:
 	ret	; F6655C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6655D
+; TrackAssign_OnLeave
 ; Called from: T_F42BE8 (x1)
 ; Touches: (0x207A) (0x34BB)
 ; Calls:   sub_F65D26
@@ -144401,7 +144405,9 @@ sub_F662F7_Skip17:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6655D:		; <- T_F42BE8
+; TrackAssign_OnLeave: the LEAVE work of TrackAssign -- the one unnamed routine ScreenLeaveBody_TrackAssign calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+TrackAssign_OnLeave:		; <- T_F42BE8
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x10	; F6655D  cp (0x207a),0x10
 	jr	z, sub_F662F7_Return7	; F66562  jr Z,0xf6656c
 	calr	sub_F65D26	; F66564  calr 0xf65d26
@@ -184524,7 +184530,7 @@ sub_F7AB3F_Return2:
 	ret	; F7ABB8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7ABB9
+; TrackClear_OnLeave
 ; Called from: T_F428D4 (x1)
 ; Touches: (0x0E46) (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
@@ -184535,7 +184541,9 @@ sub_F7AB3F_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7ABB9:		; <- T_F428D4
+; TrackClear_OnLeave: the LEAVE work of TrackClear -- the one unnamed routine ScreenLeaveBody_TrackClear calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+TrackClear_OnLeave:		; <- T_F428D4
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1c	; F7ABB9  cp (0x207a),0x1c
 	jr	z, sub_F7AB3F_Return3	; F7ABBE  jr Z,0xf7abdb
 	ld	wa, (3654:16)	; F7ABC0  ld WA,(0x0e46)
@@ -184656,7 +184664,7 @@ sub_F7AC9D:		; <- T_F42938
 	ret	; F7ACA5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7ACA6
+; TrackMerge_OnLeave
 ; Called from: T_F4293C (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
@@ -184667,7 +184675,9 @@ sub_F7AC9D:		; <- T_F42938
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7ACA6:		; <- T_F4293C
+; TrackMerge_OnLeave: the LEAVE work of TrackMerge -- the one unnamed routine ScreenLeaveBody_TrackMerge calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+TrackMerge_OnLeave:		; <- T_F4293C
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1f	; F7ACA6  cp (0x207a),0x1f
 	jr	z, sub_F7AB3F_Return6	; F7ACAB  jr Z,0xf7acc4
 	ld	xwa, (12304:16)	; F7ACAD  ld XWA,(0x3010)
@@ -185150,7 +185160,7 @@ sub_F7B000:		; <- T_F4295C
 	ret	; F7B00D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B00E
+; MeasureDelete_OnLeave
 ; Called from: T_F42960 (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
@@ -185161,7 +185171,9 @@ sub_F7B000:		; <- T_F4295C
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B00E:		; <- T_F42960
+; MeasureDelete_OnLeave: the LEAVE work of MeasureDelete -- the one unnamed routine ScreenLeaveBody_MeasureDelete calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+MeasureDelete_OnLeave:		; <- T_F42960
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x23	; F7B00E  cp (0x207a),0x23
 	jr	z, sub_F7AFD8_Return	; F7B013  jr Z,0xf7b019
 	call	T_F409E0	; F7B015  call 0xf409e0
@@ -185508,7 +185520,7 @@ sub_F7B22C:		; <- T_F42980
 	ret	; F7B239  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B23A
+; MeasureErase_OnLeave
 ; Called from: T_F42984 (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
@@ -185519,7 +185531,9 @@ sub_F7B22C:		; <- T_F42980
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B23A:		; <- T_F42984
+; MeasureErase_OnLeave: the LEAVE work of MeasureErase -- the one unnamed routine ScreenLeaveBody_MeasureErase calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+MeasureErase_OnLeave:		; <- T_F42984
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x20	; F7B23A  cp (0x207a),0x20
 	jr	z, sub_F7B1D1_Return2	; F7B23F  jr Z,0xf7b245
 	call	T_F409E0	; F7B241  call 0xf409e0
@@ -185935,7 +185949,7 @@ sub_F7B4BF:		; <- T_F429A8
 	ret	; F7B4CC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B4CD
+; MeasureInsert_OnLeave
 ; Called from: T_F429AC (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
@@ -185946,7 +185960,9 @@ sub_F7B4BF:		; <- T_F429A8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B4CD:		; <- T_F429AC
+; MeasureInsert_OnLeave: the LEAVE work of MeasureInsert -- the one unnamed routine ScreenLeaveBody_MeasureInsert calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+MeasureInsert_OnLeave:		; <- T_F429AC
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x22	; F7B4CD  cp (0x207a),0x22
 	jr	z, sub_F7B457_Return2	; F7B4D2  jr Z,0xf7b4eb
 	ld	xwa, (12304:16)	; F7B4D4  ld XWA,(0x3010)
@@ -186531,7 +186547,7 @@ sub_F7B8DC:		; <- T_F429D8
 	ret	; F7B8E9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B8EA
+; MeasureC0py_OnLeave
 ; Called from: T_F429DC (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
@@ -186542,7 +186558,9 @@ sub_F7B8DC:		; <- T_F429D8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B8EA:		; <- T_F429DC
+; MeasureC0py_OnLeave: the LEAVE work of MeasureC0py -- the one unnamed routine ScreenLeaveBody_MeasureC0py calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+MeasureC0py_OnLeave:		; <- T_F429DC
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x21	; F7B8EA  cp (0x207a),0x21
 	jr	z, sub_F7B852_Return2	; F7B8EF  jr Z,0xf7b908
 	ld	xwa, (12304:16)	; F7B8F1  ld XWA,(0x3010)
@@ -187134,7 +187152,7 @@ sub_F7BCFD:		; <- T_F428E0
 	ret	; F7BD23  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BD24
+; Vel0cityChange_OnLeave
 ; Called from: T_F428E4 (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
@@ -187145,7 +187163,9 @@ sub_F7BCFD:		; <- T_F428E0
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BD24:		; <- T_F428E4
+; Vel0cityChange_OnLeave: the LEAVE work of Vel0cityChange -- the one unnamed routine ScreenLeaveBody_Vel0cityChange calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+Vel0cityChange_OnLeave:		; <- T_F428E4
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1d	; F7BD24  cp (0x207a),0x1d
 	jr	z, sub_F7BC73_Return2	; F7BD29  jr Z,0xf7bd2f
 	call	T_F409E0	; F7BD2B  call 0xf409e0
@@ -187616,7 +187636,7 @@ sub_F7BF74_Return2:
 	ret	; F7C0AE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C0AF
+; Quantize_OnLeave
 ; Called from: T_F4290C (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
@@ -187627,7 +187647,9 @@ sub_F7BF74_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C0AF:		; <- T_F4290C
+; Quantize_OnLeave: the LEAVE work of Quantize -- the one unnamed routine ScreenLeaveBody_Quantize calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+Quantize_OnLeave:		; <- T_F4290C
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1e	; F7C0AF  cp (0x207a),0x1e
 	jr	z, sub_F7BF74_Return3	; F7C0B4  jr Z,0xf7c0ba
 	call	T_F409E0	; F7C0B6  call 0xf409e0
@@ -188650,7 +188672,7 @@ sub_F7C62D:
 	ret	; F7C665  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C666
+; Transp0se_OnLeave
 ; Called from: T_F42A3C (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
@@ -188661,7 +188683,9 @@ sub_F7C62D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C666:		; <- T_F42A3C
+; Transp0se_OnLeave: the LEAVE work of Transp0se -- the one unnamed routine ScreenLeaveBody_Transp0se calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+Transp0se_OnLeave:		; <- T_F42A3C
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2b	; F7C666  cp (0x207a),0x2b
 	jr	z, sub_F7C62D_Return	; F7C66B  jr Z,0xf7c671
 	call	T_F409E0	; F7C66D  call 0xf409e0
@@ -189135,7 +189159,7 @@ sub_F7C869:
 	ret	; F7C8BB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C8BC
+; N0teChange_OnLeave
 ; Called from: T_F42A8C (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
@@ -189146,7 +189170,9 @@ sub_F7C869:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C8BC:		; <- T_F42A8C
+; N0teChange_OnLeave: the LEAVE work of N0teChange -- the one unnamed routine ScreenLeaveBody_N0teChange calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+N0teChange_OnLeave:		; <- T_F42A8C
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2d	; F7C8BC  cp (0x207a),0x2d
 	jr	z, sub_F7C869_Return	; F7C8C1  jr Z,0xf7c8c7
 	call	T_F409E0	; F7C8C3  call 0xf409e0
@@ -189611,7 +189637,7 @@ sub_F7CAD2_Return:
 	ret	; F7CB11  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CB12
+; AdvanceDelay_OnLeave
 ; Called from: T_F42A64 (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
@@ -189622,7 +189648,9 @@ sub_F7CAD2_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CB12:		; <- T_F42A64
+; AdvanceDelay_OnLeave: the LEAVE work of AdvanceDelay -- the one unnamed routine ScreenLeaveBody_AdvanceDelay calls, and nothing else calls it
+;   (notes/prom_ab_screen_enter_leave_work.py).
+AdvanceDelay_OnLeave:		; <- T_F42A64
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2c	; F7CB12  cp (0x207a),0x2c
 	jr	z, sub_F7CB12_Return	; F7CB17  jr Z,0xf7cb1d
 	call	T_F409E0	; F7CB19  call 0xf409e0

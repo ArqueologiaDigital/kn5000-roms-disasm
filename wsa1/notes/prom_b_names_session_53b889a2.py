@@ -1912,4 +1912,19 @@ RENAMES = [
     ("Screen0ESub16", "StepRecordSub16"),  # a screen name quoted in a key-action header (2026-10-04)
     ("Screen0ESub17", "StepRecordSub17"),  # a screen name quoted in a key-action header (2026-10-04)
     ("Screen0ESub18", "StepRecordSub18"),  # a screen name quoted in a key-action header (2026-10-04)
+    ("sub_F6614E", "SequencerMedley_OnLeave"),
+    ("sub_F6650F", "StepRecordPartSelect_OnLeave"),
+    ("sub_F6655D", "TrackAssign_OnLeave"),
+    ("sub_F7ABB9", "TrackClear_OnLeave"),
+    ("sub_F7ACA6", "TrackMerge_OnLeave"),
+    ("sub_F7B00E", "MeasureDelete_OnLeave"),
+    ("sub_F7B23A", "MeasureErase_OnLeave"),
+    ("sub_F7B4CD", "MeasureInsert_OnLeave"),
+    ("sub_F7B8EA", "MeasureC0py_OnLeave"),
+    ("sub_F7BD24", "Vel0cityChange_OnLeave"),
+    ("sub_F7C0AF", "Quantize_OnLeave"),
+    ("sub_F7C666", "Transp0se_OnLeave"),
+    ("sub_F7C8BC", "N0teChange_OnLeave"),
+    ("sub_F7CB12", "AdvanceDelay_OnLeave"),
+    ("sub_FDB53C", "SoundEditLfo_OnEnter"),
 ]
