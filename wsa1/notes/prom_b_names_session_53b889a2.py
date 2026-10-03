@@ -2055,4 +2055,12 @@ RENAMES = [
     ("OldCopy_sub_F7AC07", "OldCopy_TrackClear_LcdKeyRow2"),
     ("OldCopy_sub_F7ACA6", "OldCopy_TrackMerge_OnLeave"),
     ("OldCopy_sub_F7AD14", "OldCopy_TrackMerge_StageZero_SoftKeyCol5"),
+    ("sub_F72F0A", "SongStore_SeekBlock_Copy"),
+    ("sub_F31863", "LCD_ShowAllLayers_StackFrame_Copy"),
+    ("sub_FB826A", "Divide32_Unsigned_Quotient_Copy"),
+    ("sub_FBA133", "Divide32_Unsigned_Quotient_Copy2"),
+    ("sub_FE0019", "LCD_SwiTextCall_SaveRegs_Copy"),
+    ("sub_F5D77F", "SoundEditController_PaintHeader_Copy"),
+    ("sub_F6F476", "OldCopy_BStore_Workspace_SaveToBank"),
+    ("sub_F71D4F", "ClearRam10D3_34Bytes_Copy"),
 ]

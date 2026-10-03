@@ -97427,7 +97427,7 @@ sub_FB7D09:
 	jr z, .LFB7D8C                                       ; FB7D2B  66 5f
 	push XWA                                             ; FB7D2D  38
 	push XBC                                             ; FB7D2E  39
-	call sub_FB826A                                      ; FB7D2F  1d 6a 82 fb
+	call Divide32_Unsigned_Quotient_Copy                                      ; FB7D2F  1d 6a 82 fb
 	ld_erpb_rr c, 0xf4                                   ; FB7D33  c7 f4 8b   ld C,IYL
 	sub C,0x20                                           ; FB7D36  cb ca 20
 	cpl C                                                ; FB7D39  cb 06
@@ -97449,7 +97449,7 @@ sub_FB7D09:
 	jr z, .LFB7D8C                                       ; FB7D67  66 23
 	push XWA                                             ; FB7D69  38
 	push XBC                                             ; FB7D6A  39
-	call sub_FB826A                                      ; FB7D6B  1d 6a 82 fb
+	call Divide32_Unsigned_Quotient_Copy                                      ; FB7D6B  1d 6a 82 fb
 	ld_erpb_rr c, 0xf4                                   ; FB7D6F  c7 f4 8b   ld C,IYL
 	sub C,0x20                                           ; FB7D72  cb ca 20
 	cpl C                                                ; FB7D75  cb 06
@@ -98043,7 +98043,9 @@ Lsr16ByCount:
 .LFB8265:
 	ld WA,IY                                             ; FB8265  dd 88
 	retd 0x0004                                          ; FB8267  0f 04 00
-sub_FB826A:
+; Divide32_Unsigned_Quotient_Copy: an exact copy of Divide32_Unsigned_Quotient (prom_b 0xF37F3A) -- all 22 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+Divide32_Unsigned_Quotient_Copy:
 	link XIZ,0x0000                                      ; FB826A  ee 0c 00 00
 	push XIX                                             ; FB826E  3c
 	ld b, 0x20:opc                                          ; FB826F  22 20
@@ -99998,7 +100000,7 @@ sub_FB9E96:
 	pushw 0x00                                           ; FB9F4B  0b 00 00
 	pushw 0x60                                           ; FB9F4E  0b 60 00
 	push XIY                                             ; FB9F51  3d
-	call sub_FBA133                                      ; FB9F52  1d 33 a1 fb
+	call Divide32_Unsigned_Quotient_Copy2                                      ; FB9F52  1d 33 a1 fb
 	ld (XIX),XIY                                         ; FB9F56  b4 65
 .LFB9F58:
 	m_cp_mi8 MB16, 0x10cb, 0xff                          ; FB9F58  c1 cb 10 3f ff
@@ -100108,7 +100110,7 @@ sub_FB9FE1:
 	pushw 0x00                                           ; FBA07B  0b 00 00
 	pushw 0x60                                           ; FBA07E  0b 60 00
 	push XIY                                             ; FBA081  3d
-	call sub_FBA133                                      ; FBA082  1d 33 a1 fb
+	call Divide32_Unsigned_Quotient_Copy2                                      ; FBA082  1d 33 a1 fb
 	ld (XIX),XIY                                         ; FBA086  b4 65
 .LFBA088:
 	m_cp_mi8 MB16, 0x10cb, 0xff                          ; FBA088  c1 cb 10 3f ff
@@ -100206,7 +100208,9 @@ Multiply32:
 	pop XIX                                              ; FBA12D  5c
 	unlk XIZ                                             ; FBA12E  ee 0d
 	retd 0x0008                                          ; FBA130  0f 08 00
-sub_FBA133:
+; Divide32_Unsigned_Quotient_Copy2: an exact copy of Divide32_Unsigned_Quotient (prom_b 0xF37F3A) -- all 22 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+Divide32_Unsigned_Quotient_Copy2:
 	link XIZ,0x0000                                      ; FBA133  ee 0c 00 00
 	push XIX                                             ; FBA137  3c
 	ld b, 0x20:opc                                          ; FBA138  22 20
@@ -157215,7 +157219,9 @@ sub_FE0000:
 	jp sub_FE0000_Nop                                        ; FE0014  1b 18 00 fe
 sub_FE0000_Nop:
 	ret                                                  ; FE0018  0e
-sub_FE0019:
+; LCD_SwiTextCall_SaveRegs_Copy: an exact copy of LCD_SwiTextCall_SaveRegs (prom_a 0xFF7895) -- all 17 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+LCD_SwiTextCall_SaveRegs_Copy:
 	push XIZ                                             ; FE0019  3e
 	ld XIZ,XSP                                           ; FE001A  ef 8e
 	push XIX                                             ; FE001C  3c
@@ -162704,7 +162710,7 @@ sub_FE2F93:
 	pushw bc                                             ; FE2FA0  29
 	lda xbc, (sub_FE6F89__FE706E:24)                               ; FE2FA1  f2 6e 70 fe 31
 	push XBC                                             ; FE2FA6  39
-	call sub_FE0019                                      ; FE2FA7  1d 19 00 fe
+	call LCD_SwiTextCall_SaveRegs_Copy                                      ; FE2FA7  1d 19 00 fe
 	ld BC,(XIX)                                          ; FE2FAB  94 21
 	pushw bc                                             ; FE2FAD  29
 	calr sub_FE2F6A                                          ; FE2FAE  1e b9 ff

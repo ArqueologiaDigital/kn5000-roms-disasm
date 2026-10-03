@@ -66363,7 +66363,7 @@ DisplayListB_RunOne_Stack:
 ; Called from: not yet traced
 ; Inputs:  none (C is zeroed here)
 ; Outputs: unknown -- the two services are not identified
-; Notes:   named by address on purpose.  Its sibling sub_F31863 issues the same
+; Notes:   named by address on purpose.  Its sibling LCD_ShowAllLayers_StackFrame_Copy issues the same
 ;          service 0x0C with C = 7, so C looks like a mode selector, but that is
 ;          an inference from two data points and is NOT asserted.
 ; ---------------------------------------------------------------------
@@ -66384,9 +66384,11 @@ sub_F31852:
 	ret	; F31862  ret
 
 ; ---------------------------------------------------------------------
-; sub_F31863 -- issues service 0x0C with C = 7
+; LCD_ShowAllLayers_StackFrame_Copy -- issues service 0x0C with C = 7
 ; ---------------------------------------------------------------------
-sub_F31863:
+; LCD_ShowAllLayers_StackFrame_Copy: an exact copy of LCD_ShowAllLayers_StackFrame (prom_a 0xF99011) -- all 13 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+LCD_ShowAllLayers_StackFrame_Copy:
 	push	xiz	; F31863  push XIZ
 	ld	xiz, xsp	; F31864  ld XIZ,XSP
 	push	xix	; F31866  push XIX
@@ -90643,7 +90645,7 @@ T_DisplayList_RunOne_Stack:	jp DisplayList_RunOne_Stack  ; F42E08 (was T_F42E08)
 ;           DisplayListB_RunOne_Stack, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DisplayListB_RunOne_Stack:	jp DisplayListB_RunOne_Stack  ; F42E0C (was T_F42E0C) -> prom_b 0x3183D   x107
 T_F42E10:	jp sub_F31852  ; -> prom_b 0x31852   x37  services 0x0C and 0x10, C = 0
-T_F42E14:	jp sub_F31863  ; -> prom_b 0x31863   x39  service 0x0C, C = 7
+T_F42E14:	jp LCD_ShowAllLayers_StackFrame_Copy  ; -> prom_b 0x31863   x39  service 0x0C, C = 7
 T_F42E18:	jp sub_F31899  ; -> prom_b 0x31899   x9
 T_F42E1C:	jp sub_F3190E  ; -> prom_b 0x3190E   x1
 ; Evidence: slot 0xF42E20 is `jp 0xF0E9CF`; prom_b 0xF0E9CF carries the label
@@ -127520,7 +127522,7 @@ Gfx_DrawLine_Dashed:		; <- T_Gfx_DrawLine_Dashed
 ;           `call 0xF5BF21` after; 0xF5BF18 is `ld C,0 / ld A,0x0C / swi 7 /
 ;           ld A,0x10 / swi 7` and 0xF5BF21 is `ld C,7 / ld A,0x0C / swi 7` --
 ;           the same services 0x0C (argument in C, 0 or 7 seen) and 0x10 that
-;           sub_F31852 and sub_F31863 in the interpreter block issue.
+;           sub_F31852 and LCD_ShowAllLayers_StackFrame_Copy in the interpreter block issue.
 ; Unknown:  what the selector enumerates; what services 0x0C and 0x10 do.
 ; ---------------------------------------------------------------------
 Dispatch_Code80_Bracketed:
@@ -130825,7 +130827,7 @@ SoundEditEnvelope2_RepaintField:
 	ld	xix, DL_F32FC8	; F5D719  ld XIX,0x00f32fc8
 	call	T_DisplayListB_Run	; F5D71E  call 0xf417f4
 	ret	; F5D722  ret
-	call	sub_F5D77F	; F5D723  call 0xf5d77f
+	call	SoundEditController_PaintHeader_Copy	; F5D723  call 0xf5d77f
 	call	T_F42E18	; F5D727  call 0xf42e18
 	ld	(LCD_CurrentLayer:16), 0	; F5D72B  ld (0x2540),0x00
 	ld	xiy, DL_Page22AfterTouchCtrlPedal	; F5D730  ld XIY,0x00f32e71
@@ -130849,7 +130851,7 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip6:
 	ret	; F5D77E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5D77F
+; SoundEditController_PaintHeader_Copy
 ; Called from: in-module: 0xF5D723
 ; Touches: (0x2540) (0x27F5)  |  0xF32C2A 0xF32CC8 0xF32D03 0xF32D2C
 ;          0xF32FA0 0xF32FC8 +1 more
@@ -130860,7 +130862,9 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack_Skip6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5D77F:
+; SoundEditController_PaintHeader_Copy: an exact copy of SoundEditController_PaintHeader (prom_b 0xF098B8) -- all 16 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+SoundEditController_PaintHeader_Copy:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D77F  cp (0x27f5),0x01
 	jr	z, sub_F5D77F_Skip	; F5D784  jr Z,0xf5d79b
 	ld	(LCD_CurrentLayer:16), 0	; F5D786  ld (0x2540),0x00
@@ -164721,7 +164725,7 @@ sub_F6F404:		; <- T_F43384
 ; sub_F6F408
 ; Called from: in-module: 0xF6F400
 ; Touches: (0x272B) (0x360A) (0x360B)
-; Calls:   sub_F6F476 sub_F6F4A3 T_F40AC8 Smf_ReadFile_Entry T_Ring601850_Init T_SeqBufRing_Init
+; Calls:   OldCopy_BStore_Workspace_SaveToBank sub_F6F4A3 T_F40AC8 Smf_ReadFile_Entry T_Ring601850_Init T_SeqBufRing_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -164736,7 +164740,7 @@ sub_F6F408:
 	push	xix	; F6F409  push XIX
 	push	xhl	; F6F40A  push XHL
 	push	xde	; F6F40B  push XDE
-	call	sub_F6F476	; F6F40C  call 0xf6f476
+	call	OldCopy_BStore_Workspace_SaveToBank	; F6F40C  call 0xf6f476
 	ld	a, (10027:16)	; F6F410  ld A,(0x272b)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F414  cp A,(0x360a)
 	jr	z, sub_F6F408_Skip	; F6F418  jr Z,0xf6f42a
@@ -164759,7 +164763,7 @@ sub_F6F408_Skip:
 ; sub_F6F440
 ; Called from: in-module: 0xF6F404
 ; Touches: (0x272B) (0x360A)
-; Calls:   sub_F6F476 sub_F6F4A3 sub_F6F4F2 T_F40AC8 Smf_WriteFile_Veneer T_Ring601850_Init
+; Calls:   OldCopy_BStore_Workspace_SaveToBank sub_F6F4A3 sub_F6F4F2 T_F40AC8 Smf_WriteFile_Veneer T_Ring601850_Init
 ;          T_SeqBufRing_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
@@ -164778,7 +164782,7 @@ sub_F6F440:
 	ld	a, (10027:16)	; F6F444  ld A,(0x272b)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F448  cp A,(0x360a)
 	jr	z, sub_F6F440_Skip	; F6F44C  jr Z,0xf6f465
-	call	sub_F6F476	; F6F44E  call 0xf6f476
+	call	OldCopy_BStore_Workspace_SaveToBank	; F6F44E  call 0xf6f476
 	ld	a, (10027:16)	; F6F452  ld A,(0x272b)
 	ld	(BStore_CurrentBank:16), a	; F6F456  ld (0x360a),A
 	call	sub_F6F4A3	; F6F45A  call 0xf6f4a3
@@ -164795,7 +164799,7 @@ sub_F6F440_Skip:
 	ret	; F6F475  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6F476
+; OldCopy_BStore_Workspace_SaveToBank
 ; Called from: in-module: 0xF6F40C 0xF6F44E
 ; Touches: (0x360A) (0x360C)  |  0x603400 0x610000
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -164807,7 +164811,9 @@ sub_F6F440_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6F476:
+; OldCopy_BStore_Workspace_SaveToBank: an exact copy of BStore_Workspace_SaveToBank (prom_b 0xF64BE3) -- all 15 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+OldCopy_BStore_Workspace_SaveToBank:
 	ld	xwa, (13836:16)	; F6F476  ld XWA,(0x360c)
 	ld	(6304798:24), xwa	; F6F47A  ld (0x60341e),XWA
 	ld	xix, 6356992	; F6F47F  ld XIX,0x00610000
@@ -165494,7 +165500,7 @@ ClearRam10D3_34Bytes_Loop:
 ; sub_F6F9DE
 ; Called from: in-module: 0xF6F6AA
 ; Touches: (0x126E) (0x349F) (0x3608)  |  0x603500
-; Calls:   T_F42884 sub_F72F0A
+; Calls:   T_F42884 SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6F9DE is an instruction boundary of this
@@ -165523,7 +165529,7 @@ sub_F6F9DE_Loop:
 	jr	z, sub_F6F9DE_Return	; F6FA05  jr Z,0xf6fa6f
 	pushw	wa	; F6FA07  push WA
 	ld	hl, wa	; F6FA08  ld HL,WA
-	calr	sub_F72F0A	; F6FA0A  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F6FA0A  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F6FA0D  ld XHL,(0x126e)
 	m_or_mi8 MBI+r3, 0, 0x80	; F6FA11  or (XHL),0x80
 	m_ld_mi16 MDD+r3, 0x01, 0x0000	; F6FA14  ld (XHL+0x01),0x0000
@@ -168670,7 +168676,7 @@ sub_F70FDA:
 ; sub_F70FE1
 ; Called from: in-module: 0xF6FAD8 0xF70FDA 0xF728CD
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A
+; Calls:   SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70FE1 is an instruction boundary of this
@@ -168682,7 +168688,7 @@ sub_F70FDA:
 sub_F70FE1:
 	push	xhl	; F70FE1  push XHL
 	ld	hl, (BStore_CursorBlock:16)	; F70FE2  ld HL,(0x345c)
-	calr	sub_F72F0A	; F70FE6  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F70FE6  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F70FE9  ld XHL,(0x126e)
 	ld	iy, (BStore_CursorOffset:16)	; F70FED  ld IY,(0x345e)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F70FF1  ld (XHL+IY),A
@@ -168725,7 +168731,7 @@ sub_F70FF8_Return:
 ; sub_F71023
 ; Called from: in-module: 0xF6FF9B
 ; Touches: (0x10D0) (0x10D1) (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A sub_F710BA
+; Calls:   SongStore_SeekBlock_Copy sub_F710BA
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71023 is an instruction boundary of this
@@ -168754,7 +168760,7 @@ sub_F71023_Loop:
 	and	xix, 255	; F7104F  and XIX,0x000000ff
 	push	xhl	; F71055  push XHL
 	push	xiy	; F71056  push XIY
-	calr	sub_F72F0A	; F71057  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F71057  calr 0xf72f0a
 	pop	xiy	; F7105A  pop XIY
 	ld	wa, (xiy+5)	; F7105B  ld WA,(XIY+0x05)
 	ld	l, 96:opc	; F7105E  ld L,0x60
@@ -168797,7 +168803,7 @@ sub_F71023_Return:
 ; sub_F710BA
 ; Called from: in-module: 0xF71087 0xF72204
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A
+; Calls:   SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF710BA is an instruction boundary of this
@@ -168811,12 +168817,12 @@ sub_F710BA:
 	cp	wa, 255	; F710BE  cp WA,0x00ff
 	jr	nz, sub_F710BA_Skip	; F710C2  jr NZ,0xf710e0
 	ld	hl, (BStore_CursorBlock:16)	; F710C4  ld HL,(0x345c)
-	calr	sub_F72F0A	; F710C8  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F710C8  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F710CB  ld XHL,(0x126e)
 	ld	wa, (xhl+3)	; F710CF  ld WA,(XHL+0x03)
 	ld	(BStore_CursorBlock:16), wa	; F710D2  ld (0x345c),WA
 	ld	hl, wa	; F710D6  ld HL,WA
-	calr	sub_F72F0A	; F710D8  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F710D8  calr 0xf72f0a
 	ldw	wa, 5	; F710DB  ld WA,0x0005
 	jr	sub_F710BA_Join	; F710DE  jr T,0xf710e2
 sub_F710BA_Skip:
@@ -169323,7 +169329,7 @@ InputStream_GetByte_Skip2:
 ; sub_F713E1
 ; Called from: in-module: 0xF71012
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   T_F42884 sub_F72F0A
+; Calls:   T_F42884 SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF713E1 is an instruction boundary of this
@@ -169337,11 +169343,11 @@ sub_F713E1:
 	call	T_F42884	; F713E2  call 0xf42884
 	ld	wa, ix	; F713E6  ld WA,IX
 	ld	hl, (BStore_CursorBlock:16)	; F713E8  ld HL,(0x345c)
-	calr	sub_F72F0A	; F713EC  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F713EC  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F713EF  ld XHL,(0x126e)
 	ld	(xhl+3), wa	; F713F3  ld (XHL+0x03),WA
 	ld	hl, wa	; F713F6  ld HL,WA
-	calr	sub_F72F0A	; F713F8  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F713F8  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F713FB  ld XHL,(0x126e)
 	ld	bc, (BStore_CursorBlock:16)	; F713FF  ld BC,(0x345c)
 	ld	(xhl+1), bc	; F71403  ld (XHL+0x01),BC
@@ -170288,7 +170294,7 @@ sub_F71A95_Epilogue:
 ; sub_F71B82
 ; Called from: in-module: 0xF6F637
 ; Touches: (0x1010) (0x107A) (0x10CB) (0x11B2) (0x1239) (0x124B) (0x360C)
-; Calls:   T_F409E0 T_F42708 sub_F72822 sub_F6FB38 sub_F71D4F sub_F6F929
+; Calls:   T_F409E0 T_F42708 sub_F72822 sub_F6FB38 ClearRam10D3_34Bytes_Copy sub_F6F929
 ;          sub_F71BEA InputStream_RefillDone sub_F729D9 sub_F72F5C sub_F6F94E
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -170312,7 +170318,7 @@ sub_F71B82_Loop:
 	ld	(4299:16), 0	; F71BA3  ld (0x10cb),0x00
 	calr	sub_F72822	; F71BA8  calr 0xf72822
 	calr	sub_F6FB38	; F71BAB  calr 0xf6fb38
-	calr	sub_F71D4F	; F71BAE  calr 0xf71d4f
+	calr	ClearRam10D3_34Bytes_Copy	; F71BAE  calr 0xf71d4f
 	call	sub_F6F929	; F71BB1  call 0xf6f929
 	calr	sub_F71BEA	; F71BB5  calr 0xf71bea
 	m_cp_mi8 MB16, 0x1010, 0x00	; F71BB8  cp (0x1010),0x00
@@ -170506,7 +170512,7 @@ sub_F71BEA_Return:
 	ret	; F71D4E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71D4F
+; ClearRam10D3_34Bytes_Copy
 ; Called from: in-module: 0xF71BAE
 ; Touches: (0x1198) (0x119A)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -170517,7 +170523,9 @@ sub_F71BEA_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71D4F:
+; ClearRam10D3_34Bytes_Copy: an exact copy of ClearRam10D3_34Bytes (prom_b 0xF6F9C7) -- all 12 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+ClearRam10D3_34Bytes_Copy:
 	pushw	wa	; F71D4F  push WA
 	pushw	bc	; F71D50  push BC
 	push	xix	; F71D51  push XIX
@@ -171054,7 +171062,7 @@ sub_F7208D_Return:
 ; sub_F721A3
 ; Called from: in-module: 0xF71E0E
 ; Touches: (0x10D0) (0x10D1) (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A sub_F710BA
+; Calls:   SongStore_SeekBlock_Copy sub_F710BA
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF721A3 is an instruction boundary of this
@@ -171083,7 +171091,7 @@ sub_F721A3_Loop:
 	and	ix, 255	; F721CE  and IX,0x00ff
 	push	xhl	; F721D2  push XHL
 	push	xiy	; F721D3  push XIY
-	calr	sub_F72F0A	; F721D4  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F721D4  calr 0xf72f0a
 	pop	xiy	; F721D7  pop XIY
 	ld	wa, (xiy+5)	; F721D8  ld WA,(XIY+0x05)
 	ld	l, 96:opc	; F721DB  ld L,0x60
@@ -172001,7 +172009,7 @@ sub_F727F6:
 ; sub_F72822
 ; Called from: in-module: 0xF71BA8
 ; Touches: (0x11B2) (0x126E) (0x3608)  |  0x603500
-; Calls:   sub_F728FE T_F42884 sub_F72F0A
+; Calls:   sub_F728FE T_F42884 SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72822 is an instruction boundary of this
@@ -172029,7 +172037,7 @@ sub_F72822:
 	jr	z, sub_F72822_Return	; F72848  jr Z,0xf728a2
 	pushw	wa	; F7284A  push WA
 	ld	hl, wa	; F7284B  ld HL,WA
-	calr	sub_F72F0A	; F7284D  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F7284D  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72850  ld XHL,(0x126e)
 	m_or_mi8 MBI+r3, 0, 0x80	; F72854  or (XHL),0x80
 	m_ld_mi16 MDD+r3, 0x01, 0x0000	; F72857  ld (XHL+0x01),0x0000
@@ -172123,7 +172131,7 @@ sub_F728D5_Skip:
 ; Called from: in-module: 0xF71C8E 0xF71E27 0xF71EB5 0xF720D6 0xF72381
 ;              0xF724CF 0xF726CA 0xF72758 +5 more
 ; Touches: nothing with an absolute address
-; Calls:   sub_F72F0A sub_F72F20 sub_F729D9 sub_F72F2D
+; Calls:   SongStore_SeekBlock_Copy sub_F72F20 sub_F729D9 sub_F72F2D
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF728FE is an instruction boundary of this
@@ -172139,7 +172147,7 @@ sub_F728FE:
 sub_F728FE_Skip:
 	extz	xiy	; F72905  extz XIY
 	ret	; F72907  ret
-	calr	sub_F72F0A	; F72908  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F72908  calr 0xf72f0a
 	ret	; F7290B  ret
 	calr	sub_F72F20	; F7290C  calr 0xf72f20
 	ret	; F7290F  ret
@@ -172305,7 +172313,7 @@ sub_F729D9_Loop:
 ; Called from: in-module: 0xF729CC 0xF729F8 0xF72A1D
 ; Touches: (0x0C70) (0x0C71) (0x0C72) (0x0C8A) (0x0C8B) (0x0CA2) (0x0CB6)
 ;          (0x0CF8) (0x0CFA) (0x0CFE) +7 more  |  0x603500 0x60A000 0x60A100
-; Calls:   T_F427FC T_BStore_OpenChain_Call T_F40A04 sub_F72EBA sub_F72F0A sub_F72E86
+; Calls:   T_F427FC T_BStore_OpenChain_Call T_F40A04 sub_F72EBA SongStore_SeekBlock_Copy sub_F72E86
 ;          T_F42884 sub_F72CBC sub_F72C74 sub_F72BB3 sub_F72BC7 sub_F72BBD
 ;          +2 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -172378,7 +172386,7 @@ sub_F72A2B_Skip4:
 	ld	wa, (3320:16)	; F72ADF  ld WA,(0x0cf8)
 	ld	(BStore_CursorBlock:16), wa	; F72AE3  ld (0x345c),WA
 	ld	hl, wa	; F72AE7  ld HL,WA
-	calr	sub_F72F0A	; F72AE9  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F72AE9  calr 0xf72f0a
 	calr	sub_F72E86	; F72AEC  calr 0xf72e86
 	ld	(3322:16), iy	; F72AEF  ld (0x0cfa),IY
 	xor	xhl, xhl	; F72AF3  xor XHL,XHL
@@ -172389,7 +172397,7 @@ sub_F72A2B_Skip4:
 	ld	wa, (3326:16)	; F72B02  ld WA,(0x0cfe)
 	ld	(BStore_CursorBlock:16), wa	; F72B06  ld (0x345c),WA
 	ld	hl, wa	; F72B0A  ld HL,WA
-	calr	sub_F72F0A	; F72B0C  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F72B0C  calr 0xf72f0a
 	calr	sub_F72E86	; F72B0F  calr 0xf72e86
 	ld	(3328:16), iy	; F72B12  ld (0x0d00),IY
 	call	T_F42884	; F72B16  call 0xf42884
@@ -172405,7 +172413,7 @@ sub_F72A2B_Skip4:
 	pop	xiy	; F72B38  pop XIY
 	ld	(3332:16), ix	; F72B39  ld (0x0d04),IX
 	ld	hl, ix	; F72B3D  ld HL,IX
-	calr	sub_F72F0A	; F72B3F  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F72B3F  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72B42  ld XHL,(0x126e)
 	ld	(3254:16), xhl	; F72B46  ld (0x0cb6),XHL
 	ldw	ix, 5	; F72B4A  ld IX,0x0005
@@ -172771,7 +172779,7 @@ sub_F72D66_Skip:
 ; sub_F72DC8
 ; Called from: in-module: 0xF72BFC 0xF72D13 0xF72D36 0xF72D75 0xF72D98
 ; Touches: (0x0D04) (0x0D4A) (0x126E) (0x3608)
-; Calls:   T_F42884 sub_F72F0A
+; Calls:   T_F42884 SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72DC8 is an instruction boundary of this
@@ -172810,7 +172818,7 @@ sub_F72DC8_Skip2:
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72E03  ld XHL,(0x126e)
 	ld	(xhl+3), ix	; F72E07  ld (XHL+0x03),IX
 	ld	hl, ix	; F72E0A  ld HL,IX
-	calr	sub_F72F0A	; F72E0C  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F72E0C  calr 0xf72f0a
 	ld	wa, (3332:16)	; F72E0F  ld WA,(0x0d04)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72E13  ld XHL,(0x126e)
 	ld	(xhl+1), wa	; F72E17  ld (XHL+0x01),WA
@@ -172825,7 +172833,7 @@ sub_F72DC8_Return:
 ; Called from: in-module: 0xF72C0E 0xF72C26 0xF72CA2 0xF72CEA 0xF72D2E
 ;              0xF72D90
 ; Touches: (0x0D4A) (0x126E) (0x345C) (0x3608)
-; Calls:   sub_F72F0A sub_F72E86
+; Calls:   SongStore_SeekBlock_Copy sub_F72E86
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72E27 is an instruction boundary of this
@@ -172859,7 +172867,7 @@ sub_F72E27_Skip2:
 sub_F72E27_Skip3:
 	ld	(BStore_CursorBlock:16), wa	; F72E5E  ld (0x345c),WA
 	ld	hl, wa	; F72E62  ld HL,WA
-	calr	sub_F72F0A	; F72E64  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F72E64  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F72E67  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F72E6B  bit 7,(XHL)
 	jr	nz, sub_F72E27_Skip4	; F72E6D  jr NZ,0xf72e76
@@ -172946,7 +172954,7 @@ sub_F72EBA:
 	ret	; F72F09  ret
 
 ; --------------------------------------------------------------------------
-; sub_F72F0A
+; SongStore_SeekBlock_Copy
 ; Called from: in-module: 0xF6FA0A 0xF70FE6 0xF71057 0xF710C8 0xF710D8
 ;              0xF713EC 0xF713F8 0xF721D4 +18 more
 ; Touches: (0x126E) (0x3604)
@@ -172958,7 +172966,9 @@ sub_F72EBA:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F72F0A:
+; SongStore_SeekBlock_Copy: an exact copy of SongStore_SeekBlock (prom_a 0xF81AB5) -- all 10 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+SongStore_SeekBlock_Copy:
 	push	xiy	; F72F0A  push XIY
 	ld	xiy, (BStore_HeapBase:16)	; F72F0B  ld XIY,(0x3604)
 	extz	xhl	; F72F0F  extz XHL
@@ -173433,7 +173443,7 @@ sub_F73236_Return:
 ; Called from: in-module: 0xF7301E 0xF73046 0xF73067 0xF730FA 0xF73132
 ;              0xF73153 0xF73174 0xF73195
 ; Touches: (0x1238) (0x345C)
-; Calls:   sub_F72F0A sub_F732C7 sub_F732DF
+; Calls:   SongStore_SeekBlock_Copy sub_F732C7 sub_F732DF
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF73261 is an instruction boundary of this
@@ -173445,7 +173455,7 @@ sub_F73236_Return:
 sub_F73261:
 	ld	hl, (BStore_CursorBlock:16)	; F73261  ld HL,(0x345c)
 	pushw	bc	; F73265  push BC
-	calr	sub_F72F0A	; F73266  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F73266  calr 0xf72f0a
 	popw	bc	; F73269  pop BC
 	xor	ix, ix	; F7326A  xor IX,IX
 	push	xde	; F7326C  push XDE
@@ -173520,7 +173530,7 @@ sub_F7328F_Return:
 ; sub_F732C7
 ; Called from: in-module: 0xF7327A 0xF7329B
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A
+; Calls:   SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF732C7 is an instruction boundary of this
@@ -173531,7 +173541,7 @@ sub_F7328F_Return:
 ; --------------------------------------------------------------------------
 sub_F732C7:
 	ld	hl, (BStore_CursorBlock:16)	; F732C7  ld HL,(0x345c)
-	calr	sub_F72F0A	; F732CB  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F732CB  calr 0xf72f0a
 	ld	iy, (BStore_CursorOffset:16)	; F732CE  ld IY,(0x345e)
 	and	iy, 255	; F732D2  and IY,0x00ff
 	extz	xiy	; F732D6  extz XIY
@@ -173608,7 +173618,7 @@ sub_F7330A:
 ; sub_F7335A
 ; Called from: in-module: 0xF72F74 0xF73435
 ; Touches: (0x126E)  |  0x60A000
-; Calls:   sub_F72F0A T_F42888
+; Calls:   SongStore_SeekBlock_Copy T_F42888
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7335A is an instruction boundary of this
@@ -173625,7 +173635,7 @@ sub_F7335A:
 	m_rd_pushx RLX, 0x38	; F73363  push XDE3
 	pushw	bc	; F73366  push BC
 	push	xhl	; F73367  push XHL
-	calr	sub_F72F0A	; F73368  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F73368  calr 0xf72f0a
 	xor	xiy, xiy	; F7336B  xor XIY,XIY
 	ld	xiy, (BStore_CursorBlockAddr:16)	; F7336D  ld XIY,(0x126e)
 	ld	xix, 6332416	; F73371  ld XIX,0x0060a000
@@ -173698,7 +173708,7 @@ sub_F7339C_Return:
 ; sub_F733EB
 ; Called from: in-module: 0xF733C3
 ; Touches: (0x0CFA) (0x0D4A) (0x126E) (0x345C) (0x3608)  |  0x60A000
-; Calls:   sub_F72F0A sub_F7335A
+; Calls:   SongStore_SeekBlock_Copy sub_F7335A
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF733EB is an instruction boundary of this
@@ -173726,7 +173736,7 @@ sub_F733EB_Skip:
 sub_F733EB_Skip2:
 	ld	(BStore_CursorBlock:16), wa	; F73419  ld (0x345c),WA
 	ld	hl, wa	; F7341D  ld HL,WA
-	calr	sub_F72F0A	; F7341F  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F7341F  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F73422  ld XHL,(0x126e)
 	m_bit 7, MDI+r3, 0	; F73426  bit 7,(XHL)
 	jr	nz, sub_F733EB_Skip3	; F73428  jr NZ,0xf73431
@@ -173799,7 +173809,7 @@ sub_F73469:
 ; sub_F7348E
 ; Called from: in-module: 0xF732F9
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   T_F42884 sub_F72F0A
+; Calls:   T_F42884 SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7348E is an instruction boundary of this
@@ -173814,11 +173824,11 @@ sub_F7348E:
 	call	T_F42884	; F73490  call 0xf42884
 	ld	wa, ix	; F73494  ld WA,IX
 	ld	hl, (BStore_CursorBlock:16)	; F73496  ld HL,(0x345c)
-	calr	sub_F72F0A	; F7349A  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F7349A  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F7349D  ld XHL,(0x126e)
 	ld	(xhl+3), wa	; F734A1  ld (XHL+0x03),WA
 	ld	hl, wa	; F734A4  ld HL,WA
-	calr	sub_F72F0A	; F734A6  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F734A6  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F734A9  ld XHL,(0x126e)
 	ld	bc, (BStore_CursorBlock:16)	; F734AD  ld BC,(0x345c)
 	ld	(xhl+1), bc	; F734B1  ld (XHL+0x01),BC
@@ -173929,7 +173939,7 @@ sub_F734FB_Skip2:
 ; sub_F73566
 ; Called from: in-module: 0xF72F8D
 ; Touches: (0x126E) (0x349F) (0x3608)  |  0x603500
-; Calls:   T_F42884 sub_F72F0A
+; Calls:   T_F42884 SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF73566 is an instruction boundary of this
@@ -173958,7 +173968,7 @@ sub_F73566_Loop:
 	jr	z, sub_F73566_Return	; F7358D  jr Z,0xf735f6
 	pushw	wa	; F7358F  push WA
 	ld	hl, wa	; F73590  ld HL,WA
-	calr	sub_F72F0A	; F73592  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F73592  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F73595  ld XHL,(0x126e)
 	m_or_mi8 MBI+r3, 0, 0x80	; F73599  or (XHL),0x80
 	m_ld_mi16 MDD+r3, 0x01, 0x0000	; F7359C  ld (XHL+0x01),0x0000
@@ -176792,7 +176802,7 @@ SmfWrite_ClearEventFields:
 ; Called from: in-module: 0xF736A0 0xF73732 0xF7375A 0xF73768 0xF737A9
 ;              0xF737DF 0xF73823 0xF73EC5 +4 more
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A
+; Calls:   SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74E71 is an instruction boundary of this
@@ -176803,7 +176813,7 @@ SmfWrite_ClearEventFields:
 ; --------------------------------------------------------------------------
 sub_F74E71:
 	ld	hl, (BStore_CursorBlock:16)	; F74E71  ld HL,(0x345c)
-	calr	sub_F72F0A	; F74E75  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F74E75  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F74E78  ld XHL,(0x126e)
 	ld	iy, (BStore_CursorOffset:16)	; F74E7C  ld IY,(0x345e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F74E80  ld A,(XHL+IY)
@@ -176814,7 +176824,7 @@ sub_F74E71:
 ; Called from: in-module: 0xF7372F 0xF73757 0xF737A6 0xF737DC 0xF7381C
 ;              0xF73EDA 0xF73F1B 0xF73F7A
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A
+; Calls:   SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74E86 is an instruction boundary of this
@@ -176829,7 +176839,7 @@ SmfWrite_AdvanceSongCursor:
 	cp	wa, 255	; F74E8A  cp WA,0x00ff
 	jr	nz, sub_F74E86_Skip	; F74E8E  jr NZ,0xf74ea7
 	ld	hl, (BStore_CursorBlock:16)	; F74E90  ld HL,(0x345c)
-	calr	sub_F72F0A	; F74E94  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F74E94  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F74E97  ld XHL,(0x126e)
 	ld	wa, (xhl+3)	; F74E9B  ld WA,(XHL+0x03)
 	ld	(BStore_CursorBlock:16), wa	; F74E9E  ld (0x345c),WA
@@ -179010,7 +179020,7 @@ SmfSize_ClearEventFields:
 ; SmfSize_ReadSongByte
 ; Called from: in-module: 0xF75A99 0xF75AB1 0xF75AD8 0xF75AF2 0xF75B43
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A
+; Calls:   SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF76552 is an instruction boundary of this
@@ -179022,7 +179032,7 @@ SmfSize_ClearEventFields:
 ; SmfSize_ReadSongByte: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role ReadSongByte as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfSize_ReadSongByte:
 	ld	hl, (BStore_CursorBlock:16)	; F76552  ld HL,(0x345c)
-	calr	sub_F72F0A	; F76556  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F76556  calr 0xf72f0a
 	ld	iy, (BStore_CursorOffset:16)	; F76559  ld IY,(0x345e)
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F7655D  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F76561  ld A,(XHL+IY)
@@ -179032,7 +179042,7 @@ SmfSize_ReadSongByte:
 ; SmfSize_AdvanceSongCursor
 ; Called from: in-module: 0xF75AAE 0xF75AEF 0xF75B4F
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A sub_F7659B InputStream_Refill InputStream_RefillDone
+; Calls:   SongStore_SeekBlock_Copy sub_F7659B InputStream_Refill InputStream_RefillDone
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF76567 is an instruction boundary of this
@@ -179047,7 +179057,7 @@ SmfSize_AdvanceSongCursor:
 	cp	wa, 255	; F7656B  cp WA,0x00ff
 	jr	nz, sub_F76567_Skip	; F7656F  jr NZ,0xf76588
 	ld	hl, (BStore_CursorBlock:16)	; F76571  ld HL,(0x345c)
-	calr	sub_F72F0A	; F76575  calr 0xf72f0a
+	calr	SongStore_SeekBlock_Copy	; F76575  calr 0xf72f0a
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F76578  ld XHL,(0x126e)
 	ld	wa, (xhl+3)	; F7657C  ld WA,(XHL+0x03)
 	ld	(BStore_CursorBlock:16), wa	; F7657F  ld (0x345c),WA
