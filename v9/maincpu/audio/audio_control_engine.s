@@ -3251,21 +3251,22 @@ MIDI_ProcessChangedChannels_Data_Target1:
 	and	a, 248
 	set	2, a
 	ld	(xbc), a
-	jr	23
+	jr	ExtData_VoiceParam_DispatchBytecode_Entry4_Code_Epilogue
 ExtData_VoiceParam_DispatchBytecode_Skip:
 	and	a, 248
 	set	1, a
 	ld	(xbc), a
-	jr	13
+	jr	ExtData_VoiceParam_DispatchBytecode_Entry4_Code_Epilogue
 ExtData_VoiceParam_DispatchBytecode_Skip2:
 	and	a, 248
 	set	0, a
 	ld	(xbc), a
-	jr	3
+	jr	ExtData_VoiceParam_DispatchBytecode_Entry4_Code_Epilogue
 ExtData_VoiceParam_DispatchBytecode_Entry4:
 	.byte 0x81
 	push	xix
 	swi	0
+ExtData_VoiceParam_DispatchBytecode_Entry4_Code_Epilogue:
 	pop	xiz
 	ret
 MidiChanged_ProcessGroup3_Data_Target9:
@@ -3274,10 +3275,12 @@ MidiChanged_ProcessGroup3_Data_Target9:
 	ld	xwa, 0x40c0
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	nz, 4
+	jr	nz, MidiChanged_ProcessGroup3_Data_Target9_Entry
 	.byte 0xb6, 0xbd
-	jr	2
+	jr	MidiChanged_ProcessGroup3_Data_Target9_Epilogue
+MidiChanged_ProcessGroup3_Data_Target9_Entry:
 	.byte 0xb6, 0xb5
+MidiChanged_ProcessGroup3_Data_Target9_Epilogue:
 	pop	xiz
 	ret
 CtrlPanel_SetResBit6_ViaLookup:
@@ -5594,16 +5597,16 @@ ExtData_Voice_FullHandler_Skip2:
 	and	a, (0x9131:16)
 	ret	z
 	ld	wa, 1:i3
-	calr	2505
-	calr	2407
+	calr	ExtData_ToneParam_DispatchHandler_Helper
+	calr	SwbtWr_FlushAndAppendParams
 	ret
 ExtData_Voice_FullHandler_Entry:
 	res	1, (37113:16)
 	ldw	wa, 64
 	calr	ExtData_Voice_CheckMode3_Helper_Helper
 	ldw	wa, 128
-	calr	3019
-	jrl	2387
+	calr	ExtData_Voice_CheckMode3_Helper_Helper
+	jrl	SwbtWr_FlushAndAppendParams
 ExtData_Voice_FullHandler_Helper:
 	.byte 0xd7
 	swi	2

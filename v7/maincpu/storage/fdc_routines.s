@@ -512,7 +512,7 @@ FDC_Validate_Drive_Head:
 
 	ldw wa, 0xfe
 
-	calr 1421
+	calr FDC_Set_Status
 
 	ret
 
@@ -558,7 +558,7 @@ FDC_Pulse_PH0:
 
 
 FDC_Init_Sequence_1:
-	jr	0
+	jr	FDC_Port_Reset_Or_Noop
 
 
 FDC_Port_Reset_Or_Noop:

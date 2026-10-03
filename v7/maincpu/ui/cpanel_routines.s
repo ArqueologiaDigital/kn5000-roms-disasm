@@ -601,10 +601,10 @@ INTA_HANDLER:
 	or	(SC1MOD:8), 0x20
 	ld (CPANEL_STATE_MACHINE_INDEX:16), 32
 	or (CPANEL_TX_RX_FLAGS:16), 1
-	jr 28
+	jr INTA_HANDLER_END
 INTA_HandleCountdown:
 	cpw (CPANEL_RX_WRITE_PTR:16), 0
-	jr nz, 6
+	jr nz, INTA_DecrementRXCount
 	ldw (CPANEL_RX_WRITE_PTR:16), 92
 INTA_DecrementRXCount:
 	decw	1, (CPANEL_RX_WRITE_PTR:16)	; decdi16 1, 0x8d9f (v7 patched)
@@ -933,7 +933,7 @@ RXByteN_ContinueRX:
 
 	ld (INTES1:8), 0x0d:io
 
-	jrl	-765	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
+	jrl	LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
 
 
@@ -942,7 +942,7 @@ RXByteN_ContinueRX:
 CPanel_SM_Idle:
 	or	(CPANEL_PROTOCOL_FLAGS:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
 
-	jrl	-773	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
+	jrl	LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
 
 

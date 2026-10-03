@@ -19521,6 +19521,7 @@ StylCnvStorOkFunc_DataBlock_Join:
 	call	DrawLine
 	inc	8, xsp
 	retd	2
+StylCnvStorBnk_ProcDataBlock_Helper:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	(xsp+32), bc
@@ -19712,6 +19713,7 @@ StylCnvStorOkFunc_DataBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	retd	4
+StylCnvStorBnk_ProcDataBlock_Helper2:
 	lda	xsp, (xsp-32)
 	push	xiz
 	ld	(xsp+34), bc
@@ -19864,7 +19866,7 @@ StylCnvStorOkFunc_DataBlock_Join7:
 	lda	xbc, (xsp+18)
 	pushw	(xsp+8)
 	ld	de, (xsp+36)
-	calr	64626
+	calr	StylCnvStorOkFunc_DataBlock
 	lda	xwa, (xsp+26)
 	lda	xbc, (xsp+22)
 	lda	xde, (xsp+18)
@@ -19872,14 +19874,14 @@ StylCnvStorOkFunc_DataBlock_Join7:
 	push	xsp
 	nop
 	nop
-	jr	z, 17
+	jr	z, StylCnvStorOkFunc_DataBlock_Skip9
 	ld	wa, (xwa+4)
 	sub wa, qiz
 	ld	(xbc), wa
 	sub	wa, (xsp+4)
 	inc	1, wa
 	ld	(xde), wa
-	jr	14
+	jr	StylCnvStorOkFunc_DataBlock_Join8
 StylCnvStorOkFunc_DataBlock_Skip9:
 	ld	wa, (xwa)
 	add wa, qiz
@@ -19953,15 +19955,15 @@ StylCnvStorBnk_ProcDataBlock_Skip:
 	push	xsp
 	nop
 	nop
-	jr	z, 9
+	jr	z, StylCnvStorBnk_ProcDataBlock_Skip2
 	pushm	(xix)
 	pushm	(xhl)
-	calr	64928
-	jr	7
+	calr	StylCnvStorBnk_ProcDataBlock_Helper2
+	jr	StylCnvStorBnk_ProcDataBlock_Join
 StylCnvStorBnk_ProcDataBlock_Skip2:
 	pushm	(xix)
 	pushm	(xhl)
-	calr	64441
+	calr	StylCnvStorBnk_ProcDataBlock_Helper
 StylCnvStorBnk_ProcDataBlock_Join:
 	ld	xhl, 0:i3
 StylCnvStorBnk_ProcDataBlock_Epilogue:

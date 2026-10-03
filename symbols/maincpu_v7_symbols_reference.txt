@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,315
-#   semantic names ........... 50,390 (98.2%)
+#   symbols .................. 51,323
+#   semantic names ........... 50,398 (98.2%)
 #   positional names ......... 925
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -21484,6 +21484,7 @@ StylCnvStorOkFunc_ReturnZero 00F1DB68
 StylCnvStorOkFunc_DataBlock 00F1DB6B
 StylCnvStorOkFunc_DataBlock_Skip 00F1DB93
 StylCnvStorOkFunc_DataBlock_Join 00F1DB95
+StylCnvStorBnk_ProcDataBlock_Helper 00F1DB9E
 StylCnvStorOkFunc_DataBlock_Join2 00F1DBC5
 StylCnvStorOkFunc_DataBlock_Entry 00F1DC0F
 StylCnvStorOkFunc_DataBlock_Skip2 00F1DC16
@@ -21498,6 +21499,7 @@ StylCnvStorOkFunc_DataBlock_Loop2 00F1DD02
 StylCnvStorOkFunc_DataBlock_Skip7 00F1DD22
 StylCnvStorOkFunc_DataBlock_Loop3 00F1DD55
 StylCnvStorOkFunc_DataBlock_Epilogue 00F1DD75
+StylCnvStorBnk_ProcDataBlock_Helper2 00F1DD7C
 StylCnvStorOkFunc_DataBlock_Join5 00F1DDA3
 StylCnvStorOkFunc_DataBlock_Entry3 00F1DDF5
 StylCnvStorOkFunc_DataBlock_Skip4 00F1DDFC
@@ -45179,7 +45181,10 @@ MIDI_ProcessChangedChannels_Data_Target1 00FC6F39
 ExtData_VoiceParam_DispatchBytecode_Skip 00FC6F5D
 ExtData_VoiceParam_DispatchBytecode_Skip2 00FC6F67
 ExtData_VoiceParam_DispatchBytecode_Entry4 00FC6F71
+ExtData_VoiceParam_DispatchBytecode_Entry4_Code_Epilogue 00FC6F74
 MidiChanged_ProcessGroup3_Data_Target9 00FC6F76
+MidiChanged_ProcessGroup3_Data_Target9_Entry 00FC6F8C
+MidiChanged_ProcessGroup3_Data_Target9_Epilogue 00FC6F8E
 CtrlPanel_SetResBit6_ViaLookup 00FC6F90
 CtrlPanel_ResBit6 00FC6FA6
 CtrlPanel_Bit6Done 00FC6FA8
@@ -46493,9 +46498,12 @@ MidiSerial_WaitDone 00FCF27B
 MidiRx_SystemMsgDispatch 00FCF27C
 MidiSerial_CmdJumpTable 00FCF296
 MidiSerial_HandleSongPosition 00FCF2D6
+MidiSerial_HandleSongPosition_Skip 00FCF2E7
 MidiSerial_HandleSongSelect 00FCF2EC
+MidiSerial_HandleSongSelect_Skip 00FCF2F9
 MidiSerial_HandleDefault_Data 00FCF2FE
 MidiRx_ChannelMsgDispatch 00FCF304
+MidiRx_ChannelMsgDispatch_Loop 00FCF334
 MidiRx_ChannelMsgDispatch_Return 00FCF36A
 MidiCC_LowRange_Table 00FCF36C
 MidiCC_Handler_SimpleParamStore 00FCF38C

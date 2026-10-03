@@ -123,15 +123,17 @@ MidiSerial_HandleSongPosition:
 	ld	wa, (0x9635:16)
 	ld	(1069:16), a
 	bit	2, (0xfd52:16)
-	jr	z, 3
+	jr	z, MidiSerial_HandleSongPosition_Skip
 	set	7, w
+MidiSerial_HandleSongPosition_Skip:
 	ld	(1070:16), w
 	ret
 MidiSerial_HandleSongSelect:
 	ld	a, (0x9635:16)
 	bit	3, (0xfd51:16)
-	jr	z, 3
+	jr	z, MidiSerial_HandleSongSelect_Skip
 	set	7, a
+MidiSerial_HandleSongSelect_Skip:
 	ld	(1068:16), a
 	ret
 MidiSerial_HandleDefault_Data:
@@ -160,6 +162,7 @@ MidiRx_ChannelMsgDispatch:
 	jr z, MidiRx_ChannelMsgDispatch_Return
 	ld	(0x9669:16), a
 	ld	(0x966b:16), a
+MidiRx_ChannelMsgDispatch_Loop:
 	inc	1, (0x9668:16)
 	xor	h, h
 	ld	l, (0x9668:16)
@@ -174,7 +177,7 @@ MidiRx_ChannelMsgDispatch:
 	ld	xix, (xix+hl)
 	call (xix)
 	dec 1, (38507:16)
-	jr nz, -54
+	jr nz, MidiRx_ChannelMsgDispatch_Loop
 MidiRx_ChannelMsgDispatch_Return:
 	ret
 	swi	7
@@ -207,7 +210,7 @@ MidiRx_ControlChange:
 	ld	a, (xix+l)
 	ld (38487:16), a
 	cp a, 255
-	jr z, 56
+	jr z, MidiRx_ControlChange_Return
 	extz	wa
 	sll	a, 1
 	ld	xix, MidiCC_FunctionRxFilter

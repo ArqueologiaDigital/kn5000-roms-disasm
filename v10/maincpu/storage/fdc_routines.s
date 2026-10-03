@@ -565,7 +565,7 @@ FDC_Pulse_PH0:
 
 
 FDC_Init_Sequence_1:
-	jr	0
+	jr	FDC_Port_Reset_Or_Noop
 
 
 FDC_Port_Reset_Or_Noop:

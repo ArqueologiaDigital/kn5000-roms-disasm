@@ -1,0 +1,17 @@
+v10 midi/midi_dispatch_handlers.s: R3 sites in this file 4, reached with their targets 4 -> /home/fsanches/compartilhado/tmp/trusted_v10_midi_dispatch_handlers.json
+v10 sequencer/accompseq_routines.s: R3 sites in this file 2, reached with their targets 0 -> /home/fsanches/compartilhado/tmp/trusted_v10_accompseq_routines.json
+v10 storage/fdc_routines.s: R3 sites in this file 1, reached with their targets 1 -> /home/fsanches/compartilhado/tmp/trusted_v10_fdc_routines.json
+v10 boot/system_handlers.s: R3 sites in this file 2, reached with their targets 0 -> /home/fsanches/compartilhado/tmp/trusted_v10_system_handlers.json
+v10 audio/audio_control_engine.s: R3 sites in this file 10, reached with their targets 9 -> /home/fsanches/compartilhado/tmp/trusted_v10_audio_control_engine.json
+v9 midi/midi_dispatch_handlers.s: R3 sites in this file 4, reached with their targets 4 -> /home/fsanches/compartilhado/tmp/trusted_v9_midi_dispatch_handlers.json
+v9 sequencer/accompseq_routines.s: R3 sites in this file 2, reached with their targets 0 -> /home/fsanches/compartilhado/tmp/trusted_v9_accompseq_routines.json
+v9 storage/fdc_routines.s: R3 sites in this file 1, reached with their targets 1 -> /home/fsanches/compartilhado/tmp/trusted_v9_fdc_routines.json
+v9 boot/system_handlers.s: R3 sites in this file 2, reached with their targets 0 -> /home/fsanches/compartilhado/tmp/trusted_v9_system_handlers.json
+v9 audio/audio_control_engine.s: R3 sites in this file 16, reached with their targets 9 -> /home/fsanches/compartilhado/tmp/trusted_v9_audio_control_engine.json
+v7 storage/fdc_routines.s: R3 sites in this file 2, reached with their targets 2 -> /home/fsanches/compartilhado/tmp/trusted_v7_fdc_routines.json
+v7 boot/system_handlers.s: R3 sites in this file 2, reached with their targets 0 -> /home/fsanches/compartilhado/tmp/trusted_v7_system_handlers.json
+v7 audio/audio_control_engine.s: R3 sites in this file 7, reached with their targets 7 -> /home/fsanches/compartilhado/tmp/trusted_v7_audio_control_engine.json
+v7 audio/sound_editor_ui.s: R3 sites in this file 7, reached with their targets 7 -> /home/fsanches/compartilhado/tmp/trusted_v7_sound_editor_ui.json
+v7 ui/cpanel_routines.s: R3 sites in this file 4, reached with their targets 4 -> /home/fsanches/compartilhado/tmp/trusted_v7_cpanel_routines.json
+v7 midi/midi_serial_routines.s: R3 sites in this file 4, reached with their targets 4 -> /home/fsanches/compartilhado/tmp/trusted_v7_midi_serial_routines.json
+v7 sequencer/smf_event_processor.s: R3 sites in this file 2, reached with their targets 2 -> /home/fsanches/compartilhado/tmp/trusted_v7_smf_event_processor.json

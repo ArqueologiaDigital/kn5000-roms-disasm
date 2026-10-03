@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,638
-#   semantic names ........... 50,800 (98.4%)
+#   symbols .................. 51,644
+#   semantic names ........... 50,806 (98.4%)
 #   positional names ......... 838
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -45626,7 +45626,10 @@ MIDI_ProcessChangedChannels_Data_Target1 00FC7704
 ExtData_VoiceParam_DispatchBytecode_Skip 00FC7728
 ExtData_VoiceParam_DispatchBytecode_Skip2 00FC7732
 ExtData_VoiceParam_DispatchBytecode_Entry4 00FC773C
+ExtData_VoiceParam_DispatchBytecode_Entry4_Code_Epilogue 00FC773F
 MidiChanged_ProcessGroup3_Data_Target9 00FC7741
+MidiChanged_ProcessGroup3_Data_Target9_Entry 00FC7757
+MidiChanged_ProcessGroup3_Data_Target9_Epilogue 00FC7759
 CtrlPanel_SetResBit6_ViaLookup 00FC775B
 CtrlPanel_ResBit6 00FC7771
 CtrlPanel_Bit6Done 00FC7773
@@ -46885,9 +46888,12 @@ MidiSerial_WaitDone 00FCFA4C
 MidiRx_SystemMsgDispatch 00FCFA4D
 MidiSerial_CmdJumpTable 00FCFA67
 MidiSerial_HandleSongPosition 00FCFAA7
+MidiSerial_HandleSongPosition_Skip 00FCFAB8
 MidiSerial_HandleSongSelect 00FCFABD
+MidiSerial_HandleSongSelect_Skip 00FCFACA
 MidiSerial_HandleDefault_Data 00FCFACF
 MidiRx_ChannelMsgDispatch 00FCFAD5
+MidiRx_ChannelMsgDispatch_Loop 00FCFB05
 MidiRx_ChannelMsgDispatch_Return 00FCFB3B
 MidiCC_LowRange_Table 00FCFB3D
 MidiCC_Handler_SimpleParamStore 00FCFB5D

@@ -51,3 +51,16 @@ the mapped address has the same mnemonic.  Seven did not map, because v7 still h
 `trusted_dsp_config_sysex_<tree>.json`: all 12 R3 sites of audio/dsp_config_sysex.s, in each tree, are in
 UIStateEvt_ParamEdit_Data.  That is a handler reached only through widget_dispatch.s's `.long` table, so only
 `--rich` enters it.  12 / 12 / 12 traced, 0 conflicts; 12 operands and 4 labels applied per tree, `--verify` PASS.
+
+## `--rich` over the remaining files (2026-10-03): `rich-2026-10-03/`
+
+`summary.txt` is the trace output for every file and tree that still had R3 refusals.  The `trusted_*.json`
+files are the non-empty lists, as applied:
+
+| tree | file: R3 sites / traced and applied |
+|---|---|
+| v10 | midi_dispatch_handlers 4/4, fdc_routines 1/1, audio_control_engine 10/9, accompseq_routines 2/0, system_handlers 2/0 |
+| v9 | midi_dispatch_handlers 4/4, fdc_routines 1/1, audio_control_engine 16/9, accompseq_routines 2/0, system_handlers 2/0 |
+| v7 | fdc_routines 2/2, audio_control_engine 7/7, sound_editor_ui 7/7, cpanel_routines 4/4, midi_serial_routines 4/4, smf_event_processor 2/2, system_handlers 2/0 |
+
+Every trace reported 0 conflicts, and every apply passed `--verify`.

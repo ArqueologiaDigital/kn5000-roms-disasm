@@ -10722,7 +10722,7 @@ SeqTick_ReadControlState:
 	and	a, 127
 	and	a, 7
 	ld	(12891:16), a
-	calr	157
+	calr	VoiceParam_ClampAndStore
 	nop
 	nop
 	nop
@@ -10734,7 +10734,7 @@ SeqTick_ReadControlState:
 	ld	w, (64607:16)
 	xor	a, a
 	bit	6, w
-	jr	z, 3
+	jr	z, SeqCtl_CheckBit6
 	or	a, 1
 SeqCtl_CheckBit6:
 	bit 7, w

@@ -1043,15 +1043,17 @@ MidiSerial_HandleSongPosition:
 	ld	wa, (0x9599:16)
 	ld	(1069:16), a
 	bit	2, (0xfd52:16)
-	jr	z, 3
+	jr	z, MidiSerial_HandleSongPosition_Skip
 	set	7, w
+MidiSerial_HandleSongPosition_Skip:
 	ld	(1070:16), w
 	ret
 MidiSerial_HandleSongSelect:
 	ld	a, (0x9599:16)
 	bit	3, (0xfd51:16)
-	jr	z, 3
+	jr	z, MidiSerial_HandleSongSelect_Skip
 	set	7, a
+MidiSerial_HandleSongSelect_Skip:
 	ld	(1068:16), a
 	ret
 MidiSerial_HandleDefault_Data:
@@ -1081,6 +1083,7 @@ MidiRx_ChannelMsgDispatch:
 	jr	z, MidiRx_ChannelMsgDispatch_Return
 	ld	(0x95cd:16), a
 	ld	(0x95cf:16), a
+MidiRx_ChannelMsgDispatch_Loop:
 	inc	1, (0x95cc:16)
 	xor	h, h
 	ld	l, (0x95cc:16)
@@ -1095,7 +1098,7 @@ MidiRx_ChannelMsgDispatch:
 	ld	xix, (xix+hl)
 	call	(xix)
 	dec	1, (0x95cf:16)
-	jr	nz, -54
+	jr	nz, MidiRx_ChannelMsgDispatch_Loop
 MidiRx_ChannelMsgDispatch_Return:
 	ret
 	swi	7
@@ -1127,7 +1130,7 @@ MidiRx_ControlChange:
 	ld	a, (xix+l)
 	ld	(0x95bb:16), a
 	cp	a, 255
-	jr	z, 56
+	jr	z, MidiRx_ControlChange_Return
 ; (pre-port v7 note about the bytes at 0xFCF3A9:)
 ; v7 NAME DISPLACED: `MIDI_CHANNEL_HANDLER_JUMP_TABLE` sits where v10 has no label (v10 0xFCFB7A).
 ; The v7 code v10 calls `MIDI_CHANNEL_HANDLER_JUMP_TABLE` is 0x41A earlier, at v7 0xFCEF8F.
