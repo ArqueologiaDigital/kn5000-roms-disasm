@@ -8,7 +8,6 @@
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096
 	.set SeBitmap_EnvCurve5_0x4B0, SeBitmap_EnvCurve5 + 1200
 	.set TimeSig_DisplayStrings_0x227, TimeSig_DisplayStrings + 551
-	.set TimeSig_DisplayStrings_0x8E2, TimeSig_DisplayStrings + 2274
 	.set TuningSystem_Handler_Table_0x117D, TuningSystem_Handler_Table + 4477
 	.set TuningSystem_Handler_Table_0x1E8B, TuningSystem_Handler_Table + 7819
 	.set TuningSystem_Handler_Table_0x1F3F, TuningSystem_Handler_Table + 7999

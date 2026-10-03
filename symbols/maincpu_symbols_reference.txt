@@ -22,8 +22,8 @@
 # =====================================================
 #
 #   symbols .................. 51,642
-#   semantic names ........... 50,813 (98.4%)
-#   positional names ......... 829
+#   semantic names ........... 50,814 (98.4%)
+#   positional names ......... 828
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -33359,8 +33359,8 @@ TimeSig_DisplayStrings_Helper6 00F661B4
 TimeSig_DisplayStrings_Code_Skip37 00F661DB
 TimeSig_DisplayStrings_Code_Join9 00F661E1
 TimeSig_DisplayStrings_Code_Return11 00F661E6
-TimeSig_DisplayStrings_Code6 00F661E7
-TimeSig_DisplayStrings_0x8E2 00F661EB
+TimeSig_SlotFieldOffsets 00F661E7
+S2cTtl_InitOnTitleChange 00F661EB
 TimeSig_CallProc 00F6623E
 Tempo_AdjustStartMeasure 00F66263
 Tempo_StartMeasureDec 00F66288

@@ -26896,7 +26896,7 @@ TimeSig_DisplayStrings_Helper6:
 	pushw	wa
 	call	AccPatch_GetCurrentSlotAddr
 	popw	wa
-	ld	xix, TimeSig_DisplayStrings_Code6
+	ld	xix, TimeSig_SlotFieldOffsets
 	ld	a, (0x39aa:16)
 	ld	a, (xix+a)
 	ld	l, (xiy+a)
@@ -26914,10 +26914,13 @@ TimeSig_DisplayStrings_Code_Join9:
 	ld	(xiy+a), l
 TimeSig_DisplayStrings_Code_Return11:
 	ret
-TimeSig_DisplayStrings_Code6:
-	ld e, 45:opc
-	ldw iy, 49469
-	ldw iz, 8589
+; TimeSig_SlotFieldOffsets -- offsets into the current slot record (AccPatch_GetCurrentSlotAddr), indexed by (0x39AA)
+TimeSig_SlotFieldOffsets:	.byte	37, 45, 53, 61
+; S2cTtl_InitOnTitleChange -- when CURRENT_TITLE differs from PREVIOUS_TITLE: (0x3989) := (0xFFE3) + 1, and if (0x398A)
+;          is 0, seed 0x398A-0x3995.  Called from S2cTtl_Dispatch.  Was hidden: the table above was decoded as code
+;          running into its first instruction, and the call used the positional alias TimeSig_DisplayStrings_0x8E2.
+S2cTtl_InitOnTitleChange:
+	ld	a, (CURRENT_TITLE:16)
 	cp	a, (PREVIOUS_TITLE:16)
 	ret	z
 	ld	a, (0xffe3:24)
@@ -31827,7 +31830,7 @@ S2cTtl_Dispatch:
 	ld	xde, 0xffff0002
 	call	ApDeliveryEvent
 S2cTtlFunc_Skip:
-	call	TimeSig_DisplayStrings_0x8E2
+	call	S2cTtl_InitOnTitleChange
 	jrl	CstmCp_ReturnZero
 	ld	a, (0x3a77:16)
 	cp	a, 2:i3
