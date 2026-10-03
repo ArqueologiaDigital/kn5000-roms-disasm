@@ -3361,7 +3361,6 @@ SubCPU_Send_Payload_Data:	.byte	0xff
 	.set EffectParamEdit_Entry_06, SeScreenData_0x58D0
 	.set EffectParamEdit_Entry_07, SeScreenData_0x58DB
 	.set EffectParamEdit_Entry_08, SeScreenData_0x58E6
-	.set RVari_SelectO_SecondItem_Draw_0x32, 0xfc0012
 	.set HdaeRom_DispatchOffsetTable, Subsys_HandlerTable01 + 540
 	.set HdaeRom_AltDispatchOffsetTable, Subsys_HandlerTable01 + 552
 	.set NakaData_RomEnd, 0xffffff

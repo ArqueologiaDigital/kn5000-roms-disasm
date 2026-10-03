@@ -141,7 +141,7 @@ FDTest_ConsoleArea1:
 	.byte	0xff, 0x00, 0x00, 0x00, 0x88, 0x00, 0xc8, 0xdc
 	.byte	0x03, 0x00
 	.long	FDTest_String_Console1
-	.long	0xfc0012
+	.long	NAKA_VIEW_DebugForHDAE2
 	.byte	0x00, 0x00, 0x00, 0x00
 FDTest_String_Console1:	aligned_string "CONSOLE"
 FDTest_Label_MemoryDump:
