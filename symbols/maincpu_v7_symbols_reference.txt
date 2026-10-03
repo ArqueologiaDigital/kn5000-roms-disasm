@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,321
+#   symbols .................. 51,320
 #   semantic names ........... 50,406 (98.2%)
-#   positional names ......... 915
+#   positional names ......... 914
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -33256,8 +33256,7 @@ AccVoice_SetupSlots_DataBlock_Helper6 00F673E6
 AccVoice_SetupSlots_DataBlock_Skip2 00F6740C
 AccVoice_SetupSlots_DataBlock_Helper6_Join 00F67411
 AccVoice_SetupSlots_DataBlock_Helper6_Return 00F67418
-AccVoice_SetupSlots_DataBlock_Code 00F67419
-AccVoice_SetupSlots_DataBlock_0x107 00F6741A
+Rhythm_EmptyPattern 00F67419
 AccVoice_SetupSlots_DataBlock_Sub 00F6741E
 AccVoice_SetupSlots_DataBlock_Sub_Skip 00F67438
 AccVoice_SetupSlots_DataBlock_Sub_Return 00F6743A

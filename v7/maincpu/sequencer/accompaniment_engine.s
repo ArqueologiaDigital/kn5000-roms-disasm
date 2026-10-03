@@ -27917,7 +27917,7 @@ AccVoice_SetupSlots_DataBlock_Helper6:
 	calr	Rhythm_MapChannelToDrumIndex
 	sll	bc, 2
 	add	xbc, 14332
-	ld	xwa, AccVoice_SetupSlots_DataBlock_Code
+	ld	xwa, Rhythm_EmptyPattern
 	ld	(xbc), xwa
 	push	xbc
 	ld	xbc, 1:i3
@@ -27935,17 +27935,17 @@ AccVoice_SetupSlots_DataBlock_Helper6_Join:
 	jr	AccVoice_SetupSlots_DataBlock_Helper6
 AccVoice_SetupSlots_DataBlock_Helper6_Return:
 	ret
-AccVoice_SetupSlots_DataBlock_Code:
-	cp	(xbc), l
-	swi	7
-	swi	7
-	swi	7
+; Rhythm_EmptyPattern -- an empty pattern stream (0x81, then 0xFF x4): the default every rhythm slot pointer
+;          at 0x37FC + 4*drum (v10/v9: 0x3898) is set to and compared with; a pointer one byte past it is put back on it.
+;          Was Rhythm_EmptyPattern, decoded as `cp (xbc),l / swi 7 x3`.
+Rhythm_EmptyPattern:
+	.byte	0x81, 0xff, 0xff, 0xff, 0xff
 AccVoice_SetupSlots_DataBlock_Sub:
 	calr	Rhythm_MapChannelToDrumIndex
 	sll	xbc, 2
 	add	xbc, 14332
 	ld	xwa, (xbc)
-	cp	xwa, AccVoice_SetupSlots_DataBlock_Code
+	cp	xwa, Rhythm_EmptyPattern
 	jr	z, AccVoice_SetupSlots_DataBlock_Sub_Skip
 	ld	a, (xwa)
 	jr	AccVoice_SetupSlots_DataBlock_Sub_Return
@@ -28055,9 +28055,9 @@ AccVoice_SetupSlots_DataBlock_Join3:
 	add	xbc, 14332
 	pop	xiy
 	ld	(xbc), xiy
-	cp	xiy, AccVoice_SetupSlots_DataBlock_0x107
+	cp	xiy, Rhythm_EmptyPattern + 1
 	jr	nz, AccVoice_SetupSlots_DataBlock_Return4
-	ld	xiy, AccVoice_SetupSlots_DataBlock_Code
+	ld	xiy, Rhythm_EmptyPattern
 	ld	(xbc), xiy
 AccVoice_SetupSlots_DataBlock_Return4:
 	ret
@@ -28278,7 +28278,7 @@ AccVoice_SetupSlots_DataBlock_Skip11:
 	sll	xbc, 2
 	add	xbc, 14332
 	ld	xwa, (xbc)
-	cp	xwa, AccVoice_SetupSlots_DataBlock_Code
+	cp	xwa, Rhythm_EmptyPattern
 	jr	z, AccVoice_SetupSlots_DataBlock_Skip12
 	inc	1, xwa
 	ld	(xbc), xwa
@@ -28289,7 +28289,7 @@ AccVoice_SetupSlots_DataBlock_Skip12:
 	sll	xbc, 2
 	add	xbc, 14332
 	ld	xwa, (xbc)
-	cp	xwa, AccVoice_SetupSlots_DataBlock_Code
+	cp	xwa, Rhythm_EmptyPattern
 	jr	z, AccVoice_SetupSlots_DataBlock_Return7
 	inc	1, xwa
 	ld	(xbc), xwa
@@ -28309,7 +28309,7 @@ AccVoice_SetupSlots_DataBlock_Helper13:
 	ld	l, (xwa)
 	cp	l, 131
 	jr	nz, AccVoice_SetupSlots_DataBlock_Skip13
-	ld	xwa, AccVoice_SetupSlots_DataBlock_Code
+	ld	xwa, Rhythm_EmptyPattern
 	ld	(xbc), xwa
 AccVoice_SetupSlots_DataBlock_Skip13:
 	jr	AccVoice_SetupSlots_DataBlock_Join7
@@ -28317,7 +28317,7 @@ AccVoice_SetupSlots_DataBlock_Skip14:
 	calr	Rhythm_MapChannelToDrumIndex
 	sll	xbc, 2
 	add	xbc, 14332
-	ld	xwa, AccVoice_SetupSlots_DataBlock_Code
+	ld	xwa, Rhythm_EmptyPattern
 	ld	(xbc), xwa
 AccVoice_SetupSlots_DataBlock_Join7:
 	calr	92

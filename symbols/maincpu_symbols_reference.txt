@@ -21,9 +21,9 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,642
+#   symbols .................. 51,641
 #   semantic names ........... 50,817 (98.4%)
-#   positional names ......... 825
+#   positional names ......... 824
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -33669,8 +33669,7 @@ AccPatch_ResolveEntryAddr_Helper6 00F677EA
 AccPatch_ResolveEntryAddr_Skip2 00F67810
 AccPatch_ResolveEntryAddr_Helper6_Join 00F67815
 AccPatch_ResolveEntryAddr_Helper6_Return 00F6781C
-AccVoice_SetupSlots_DataBlock_Code 00F6781D
-AccVoice_SetupSlots_DataBlock_0x107 00F6781E
+Rhythm_EmptyPattern 00F6781D
 AccPatch_ResolveEntryAddr_Sub 00F67822
 AccPatch_ResolveEntryAddr_Sub_Skip 00F6783C
 AccPatch_ResolveEntryAddr_Sub_Return 00F6783E
