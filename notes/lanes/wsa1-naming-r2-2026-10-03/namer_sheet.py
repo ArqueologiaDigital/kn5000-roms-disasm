@@ -11,7 +11,7 @@ QUESTION THIS ANSWERS
   The names chosen go into packs/<name>.json for scripts/tools/apply_label_edits.py.
 
 USAGE (repository root)
-  python3 notes/lanes/wsa1-naming-r2-2026-10-03/namer_sheet.py [FROM [TO]] [--max N] [--count]
+  python3 notes/lanes/wsa1-naming-r2-2026-10-03/namer_sheet.py [FROM [TO]] [--max N] [--count] [--image prom_b]
 """
 import json
 import os
@@ -25,7 +25,9 @@ mx = 16
 if "--max" in sys.argv:
     mx = int(sys.argv[sys.argv.index("--max") + 1])
     nums = [n for n in nums if n != mx] if nums.count(mx) == 1 and sys.argv.index(str(mx)) == sys.argv.index("--max") + 1 else nums
-A = open("wsa1/prom_a/wsa1_prom_a.s", "rb").read().decode("latin-1").split("\n")
+IMG = sys.argv[sys.argv.index("--image") + 1] if "--image" in sys.argv else "prom_a"
+nums = [n for n in nums if str(n) != IMG]
+A = open("wsa1/%s/wsa1_%s.s" % (IMG, IMG), "rb").read().decode("latin-1").split("\n")
 B = open("wsa1/prom_b/wsa1_prom_b.s", "rb").read().decode("latin-1").split("\n")
 thunk = {}
 for l in B:
@@ -67,7 +69,7 @@ def dl_text(name):
     return " | ".join(out)[:140]
 
 
-w = json.load(open(os.path.join(HERE, "worklist_prom_a.json")))
+w = json.load(open(os.path.join(HERE, "worklist_%s.json" % IMG)))
 todo = [x for x in w if x["name"] in at and x["callers"] and all(named(c) for c in x["callees"])]
 todo.sort(key=lambda x: x["addr"])
 if "--count" in sys.argv:
@@ -86,6 +88,9 @@ for k, x in enumerate(todo[lo:hi], lo):
     print("#%d %s (%d lines) callers: %s" % (k, x["name"], x["lines"], ", ".join(cs[:5]) + (" ..." if len(cs) > 5 else "")))
     if hdr and not hdr[-1].startswith("----"):
         print("   hdr: " + " / ".join(hdr)[:200])
+    for hl in A[max(0, i - 14):i]:
+        if re.match(r'^; (Touches|Calls):', hl):
+            print("   " + hl[2:].strip()[:160])
     n, j = 0, i + 1
     while j < len(A) and n < mx:
         l = A[j]
