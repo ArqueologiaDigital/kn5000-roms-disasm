@@ -144328,7 +144328,10 @@ Var27A3_SelectSlot:
 	popw hl                                              ; FD98B9  4b
 	unlk XIZ                                             ; FD98BA  ee 0d
 	ret                                                  ; FD98BC  0e
-sub_FD98BD:
+; FilterPage_DrawGraph(redraw, layout): erase the graph box and draw it with T_Gfx_DrawLine_Solid from ModelingPage_Fields[2] (bit 7
+;   cleared) and [3] & 7 (at most 5); x origin 0x28 or 0x4D by layout.  Its callers are the FILTER pages: screens 0x90-0x93, whose full
+;   paints (ScreenCode90_Paint ..) run DL_FilterCutoff*, DL_HighPass*, DL_LowPass*.
+FilterPage_DrawGraph:
 	link XIZ,0xfff0                                      ; FD98BD  ee 0c f0 ff
 	pushw hl                                             ; FD98C1  2b
 	pushw de                                             ; FD98C2  2a
@@ -149365,7 +149368,7 @@ sub_FDC0FD:
 	call T_Dispatch_Code80_Bracketed                     ; FDC1A8  1d d0 1e f4
 	pushw 0x00                                           ; FDC1AC  0b 00 00
 	pushw 0x00                                           ; FDC1AF  0b 00 00
-	call sub_FD98BD                                      ; FDC1B2  1d bd 98 fd
+	call FilterPage_DrawGraph                                      ; FDC1B2  1d bd 98 fd
 	call sub_FD9A7A                                      ; FDC1B6  1d 7a 9a fd
 	pushw 0x01                                           ; FDC1BA  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC1BD  1d e0 69 fd
@@ -149470,7 +149473,7 @@ ScreenCode91_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDC282  1d d0 1e f4
 	pushw 0x00                                           ; FDC286  0b 00 00
 	pushw 0x01                                           ; FDC289  0b 01 00
-	call sub_FD98BD                                      ; FDC28C  1d bd 98 fd
+	call FilterPage_DrawGraph                                      ; FDC28C  1d bd 98 fd
 	call sub_FD9A7A                                      ; FDC290  1d 7a 9a fd
 	pushw 0x01                                           ; FDC294  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC297  1d e0 69 fd
@@ -149486,7 +149489,7 @@ ScreenCode92_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDC2AE  1d d0 1e f4
 	pushw 0x01                                           ; FDC2B2  0b 01 00
 	pushw 0x00                                           ; FDC2B5  0b 00 00
-	call sub_FD98BD                                      ; FDC2B8  1d bd 98 fd
+	call FilterPage_DrawGraph                                      ; FDC2B8  1d bd 98 fd
 	pushw 0x01                                           ; FDC2BC  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC2BF  1d e0 69 fd
 	pushw 0x10                                           ; FDC2C3  0b 10 00
@@ -149500,7 +149503,7 @@ ScreenCode93_Handler:
 	call T_Dispatch_Code80_Bracketed                     ; FDC2D6  1d d0 1e f4
 	pushw 0x01                                           ; FDC2DA  0b 01 00
 	pushw 0x01                                           ; FDC2DD  0b 01 00
-	call sub_FD98BD                                      ; FDC2E0  1d bd 98 fd
+	call FilterPage_DrawGraph                                      ; FDC2E0  1d bd 98 fd
 	pushw 0x01                                           ; FDC2E4  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC2E7  1d e0 69 fd
 	pushw 0x10                                           ; FDC2EB  0b 10 00
@@ -153824,7 +153827,7 @@ SoftKeyCol1_ScreenCode90:
 	calr .LFDE784                                 ; FDE770  1e 11 00
 	pushw 0x00                                    ; FDE773  0b 00 00
 	pushw 0x00                                    ; FDE776  0b 00 00
-	call sub_FD98BD                                 ; FDE779  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDE779  1d bd 98 fd
 	inc 8,XSP                                     ; FDE77D  ef 60
 	inc 2,XSP                                     ; FDE77F  ef 62
 	unlk XIZ                                      ; FDE781  ee 0d
@@ -153904,7 +153907,7 @@ SoftKeyCol2_ScreenCode90:
 	calr .LFDE840                                 ; FDE82C  1e 11 00
 	pushw 0x00                                    ; FDE82F  0b 00 00
 	pushw 0x00                                    ; FDE832  0b 00 00
-	call sub_FD98BD                                 ; FDE835  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDE835  1d bd 98 fd
 	inc 8,XSP                                     ; FDE839  ef 60
 	inc 2,XSP                                     ; FDE83B  ef 62
 	unlk XIZ                                      ; FDE83D  ee 0d
@@ -154537,7 +154540,7 @@ SoftKeyCol1_ScreenCode91:
 	calr .LFDE784                                 ; FDED8C  1e f5 f9
 	pushw 0x00                                    ; FDED8F  0b 00 00
 	pushw 0x01                                    ; FDED92  0b 01 00
-	call sub_FD98BD                                 ; FDED95  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDED95  1d bd 98 fd
 	inc 8,XSP                                     ; FDED99  ef 60
 	inc 2,XSP                                     ; FDED9B  ef 62
 	unlk XIZ                                      ; FDED9D  ee 0d
@@ -154556,7 +154559,7 @@ SoftKeyCol2_ScreenCode91:
 	calr .LFDE840                                 ; FDEDB0  1e 8d fa
 	pushw 0x00                                    ; FDEDB3  0b 00 00
 	pushw 0x01                                    ; FDEDB6  0b 01 00
-	call sub_FD98BD                                 ; FDEDB9  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDEDB9  1d bd 98 fd
 	inc 8,XSP                                     ; FDEDBD  ef 60
 	inc 2,XSP                                     ; FDEDBF  ef 62
 	unlk XIZ                                      ; FDEDC1  ee 0d
@@ -154788,7 +154791,7 @@ SoftKeyCol3_ScreenCode92:
 	calr .LFDE784                                 ; FDEF30  1e 51 f8
 	pushw 0x01                                    ; FDEF33  0b 01 00
 	pushw 0x00                                    ; FDEF36  0b 00 00
-	call sub_FD98BD                                 ; FDEF39  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDEF39  1d bd 98 fd
 	inc 8,XSP                                     ; FDEF3D  ef 60
 	inc 2,XSP                                     ; FDEF3F  ef 62
 	unlk XIZ                                      ; FDEF41  ee 0d
@@ -154807,7 +154810,7 @@ SoftKeyCol4_ScreenCode92:
 	calr .LFDE840                                 ; FDEF54  1e e9 f8
 	pushw 0x01                                    ; FDEF57  0b 01 00
 	pushw 0x00                                    ; FDEF5A  0b 00 00
-	call sub_FD98BD                                 ; FDEF5D  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDEF5D  1d bd 98 fd
 	inc 8,XSP                                     ; FDEF61  ef 60
 	inc 2,XSP                                     ; FDEF63  ef 62
 	unlk XIZ                                      ; FDEF65  ee 0d
@@ -155053,7 +155056,7 @@ SoftKeyCol3_ScreenCode93:
 	calr .LFDE784                                 ; FDF11C  1e 65 f6
 	pushw 0x01                                    ; FDF11F  0b 01 00
 	pushw 0x01                                    ; FDF122  0b 01 00
-	call sub_FD98BD                                 ; FDF125  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDF125  1d bd 98 fd
 	inc 8,XSP                                     ; FDF129  ef 60
 	inc 2,XSP                                     ; FDF12B  ef 62
 	unlk XIZ                                      ; FDF12D  ee 0d
@@ -155072,7 +155075,7 @@ SoftKeyCol4_ScreenCode93:
 	calr .LFDE840                                 ; FDF140  1e fd f6
 	pushw 0x01                                    ; FDF143  0b 01 00
 	pushw 0x01                                    ; FDF146  0b 01 00
-	call sub_FD98BD                                 ; FDF149  1d bd 98 fd
+	call FilterPage_DrawGraph                                 ; FDF149  1d bd 98 fd
 	inc 8,XSP                                     ; FDF14D  ef 60
 	inc 2,XSP                                     ; FDF14F  ef 62
 	unlk XIZ                                      ; FDF151  ee 0d

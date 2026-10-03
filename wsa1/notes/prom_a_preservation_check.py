@@ -1241,6 +1241,7 @@ RENAMES = {
     "sub_FE85FC__FE85FF": "EditPartSelect_PartBitMask",
     "sub_FE85FC__FE8621": "SoftKeyCol1_EditPartSelect",
     "sub_F94261__F94262": "ExitKey_PowerOnSplash",
+    "sub_FD98BD": "FilterPage_DrawGraph",
 }
 
 
