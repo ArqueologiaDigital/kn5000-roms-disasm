@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,408
-#   semantic names ........... 50,405 (98.0%)
+#   symbols .................. 51,407
+#   semantic names ........... 50,404 (98.0%)
 #   positional names ......... 1,003
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -48678,7 +48678,6 @@ AccNoteOn_MinVelocity_Check 00FDFFEF
 AccNoteOn_EmitVoiceLoop_Init 00FE0001
 AccNoteOn_EmitVoiceLoop_Body 00FE0007
 AccNoteOn_EmitVoiceLoop_Check 00FE0039
-SeMenu_ApplyPartEdit_AltStore_Data_3 00FE0061
 AccNoteOn_MergeLayer1 00FE0080
 AccNoteOn_MergeLayer2 00FE00B3
 AccNoteOn_MergeLayer3 00FE00E6

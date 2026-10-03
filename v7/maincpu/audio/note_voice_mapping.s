@@ -574,7 +574,6 @@ AccNoteOn_EmitVoiceLoop_Check:
 	ld	xhl, 0xcade
 	ld	xbc, 0xcb82
 	ld	xwa, (xsp + 2)
-SeMenu_ApplyPartEdit_AltStore_Data_3:
 	lda	xwa, (xwa+196:16)
 	ld	xde, xwa
 	ld	xwa, xhl

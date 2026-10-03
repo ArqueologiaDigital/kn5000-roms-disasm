@@ -4578,8 +4578,8 @@ SeMenu_ApplyPartEdit_Helper11:
 	ld	(xsp+28), c
 	ld	(xsp+30), a
 	pushw	121
-	pushw	SeMenu_ApplyPartEdit_AltStore_Data_3@hi16
-	pushw	SeMenu_ApplyPartEdit_AltStore_Data_3@lo16
+	pushw	254	; four word arguments, not a far pointer
+	pushw	73
 	pushw	48
 	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp

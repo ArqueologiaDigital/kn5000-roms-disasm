@@ -13222,8 +13222,8 @@ PsMixer_CtlTypeProc5_Skip:
 	jr nz, PsMixer_CtlTypeProc5_Skip2
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	NoteEditBox_EventDispatch2_Data_2@hi16
-	pushw	NoteEditBox_EventDispatch2_Data_2@lo16
+	pushw	0xff	; colour pair for DrawString (by value), not a pointer
+	pushw	0xf2
 	pushw	0
 	pushw	0
 	jr	PsMixer_CtlTypeProc5_Join
@@ -13372,8 +13372,8 @@ PsMixer_CtlTypeProc6_Skip:
 	jr	nz, PsMixer_CtlTypeProc6_Skip2
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	NoteEditBox_EventDispatch2_Data_2@hi16
-	pushw	NoteEditBox_EventDispatch2_Data_2@lo16
+	pushw	0xff	; colour pair for DrawString (by value), not a pointer
+	pushw	0xf2
 	pushw	0
 	pushw	0
 	jr	PsMixer_CtlTypeProc6_Join

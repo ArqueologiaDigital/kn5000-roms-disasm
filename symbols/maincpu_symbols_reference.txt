@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,617
-#   semantic names ........... 50,766 (98.4%)
+#   symbols .................. 51,615
+#   semantic names ........... 50,764 (98.4%)
 #   positional names ......... 851
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -48869,7 +48869,6 @@ AudioInit_PartAssign_Next 00FE0018
 AudioInit_PartAssign_Return 00FE0021
 AudioInit_ComparePartConfig 00FE0023
 AudioInit_PartConfig_Loop 00FE002D
-SeMenu_ApplyPartEdit_AltStore_Data_3 00FE0049
 AudioInit_PartConfig_SameVoice 00FE007A
 AudioInit_PartConfig_NotReverb 00FE00DF
 AudioInit_PartConfig_CheckCarry 00FE00EE
@@ -51019,7 +51018,6 @@ SendPartDataBlock_Return5_Skip9 00FF00A4
 SendPartDataBlock_Data4 00FF00C0
 SendPartDataBlock_Return5_Entry2_Code_Skip 00FF00C4
 SendPartDataBlock_Return5_Entry2_Code_Skip2 00FF00E6
-NoteEditBox_EventDispatch2_Data_2 00FF00F2
 SendPartDataBlock_Data5 00FF00FF
 SendPartDataBlock_Return5_Entry2_Code_Skip3 00FF0111
 SendPartDataBlock_Return5_Skip10 00FF0119

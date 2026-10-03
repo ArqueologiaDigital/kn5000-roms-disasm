@@ -32,7 +32,7 @@ NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
 CALLEES = ("DrawString", "DrawStringCentered", "DrawStringLeftJustify", "DrawStringRightJustify",
            "DrawStringAlignment", "DrawStringReverse")
 # the 32-bit values pushed right before DrawString* calls in v10/v9/v7 (2026-10-03)
-COLOUR_VALUES = {0x00FF0008, 0x00FF00F5, 0x00FF00F7, 0x00FB00F5, 0x00FB00F7, 0x00F400F7, 0x00000007}
+COLOUR_VALUES = {0x00FF0008, 0x00FF00F2, 0x00FF00F5, 0x00FF00F7, 0x00FB00F5, 0x00FB00F7, 0x00F400F7, 0x00000007}
 P = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_][\w.$]*:)?\s*pushw\s+)(?P<sym>\w+)@(?P<part>hi16|lo16)(?P<post>.*)$')
 
 

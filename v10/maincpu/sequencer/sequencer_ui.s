@@ -6427,8 +6427,8 @@ NoteEditBox_EventDispatch2_Loop5:
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	NoteEditBox_EventDispatch2_Data_2@hi16
-	pushw	NoteEditBox_EventDispatch2_Data_2@lo16
+	pushw	0xff	; colour pair for DrawString (by value), not a pointer
+	pushw	0xf2
 	jr	NoteEditBox_EventDispatch2_Join8
 NoteEditBox_EventDispatch2_Skip8:
 	lda	xwa, (xsp+28)

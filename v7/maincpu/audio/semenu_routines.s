@@ -4675,8 +4675,8 @@ SeMenu_ApplyPartEdit_Entry12:
 	.byte 0x8f, 0x12, 0x3f, 0x00
 	jr	nz, SeMenu_ApplyPartEdit_Skip45
 	pushw 97
-	pushw SeMenu_ApplyPartEdit_AltStore_Data_3@hi16
-	pushw SeMenu_ApplyPartEdit_AltStore_Data_3@lo16
+	pushw 254	; four word arguments, not a far pointer
+	pushw 97
 	pushw 48
 	call	SeMenu_DisplayPartValue_Data_0x7F
 	pushw	121

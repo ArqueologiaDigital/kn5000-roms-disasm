@@ -27049,7 +27049,6 @@ SendPartDataBlock_Return5_Entry2_Code_Skip2:
 	ld	a, (xde+32)
 	ld	(xix), a
 	lda	xiy, (xbc+59)
-NoteEditBox_EventDispatch2_Data_2:
 	.set	SendPartDataBlock_Data5, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
 	ld	a, (xde+33)
 	ld	(xiy), a
