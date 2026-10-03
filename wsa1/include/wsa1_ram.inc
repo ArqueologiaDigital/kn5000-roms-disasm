@@ -237,5 +237,19 @@
 	.equ Medley_Source,			0x220b	; 0 INT, 1 FD, 2 HD -- SequencerMedley_DrawSourceBox
 	.equ NameEdit_CursorPos,		0x222d	; the character position of the name cursor -- S0ngSelectName_CursorLeft / _CursorRight
 
+; ---- wsa1/notes/FINDINGS-prom_a-medley-and-name-edit-state.md -- "3. The song-edit screens"
+	.equ MeasureC0py_Field,			0x0dbc	; the selected field -- MeasureC0py_KeypadCommit
+	.equ MeasureInsert_Field,		0x0dda	; the selected field -- MeasureInsert_KeypadCommit
+	.equ AdvanceDelay_Field,		0x0de5	; the selected field -- AdvanceDelay_KeypadCommit
+	.equ N0teChange_Field,			0x0ded	; the selected field (2/3 measures, 4/5 notes) -- N0teChange_KeypadCommit
+	.equ N0teChange_FromMeasure,		0x0df0	; field 2, 1..999 -- N0teChange_KeypadCommit
+	.equ N0teChange_ToMeasure,		0x0df2	; field 3, 1..999 -- N0teChange_KeypadCommit
+	.equ N0teChange_FromNote,		0x0df4	; field 4, note 0..127 -- N0teChange_KeypadCommit
+	.equ N0teChange_ToNote,			0x0df5	; field 5, note 0..127 -- N0teChange_KeypadCommit
+	.equ S0ngC0py_FromSong,			0x0e0c	; the source song (1-based) -- S0ngC0py_DrawFromSong
+	.equ S0ngC0py_ToSong,			0x0e0d	; the destination song -- S0ngC0py_DrawToSong
+	.equ S0ngC0py_FromTrack,		0x0e0e	; the source track; 0x12 = ALL -- S0ngC0py_DrawTracks
+	.equ S0ngC0py_ToTrack,			0x0e0f	; the destination track -- S0ngC0py_DrawTracks
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

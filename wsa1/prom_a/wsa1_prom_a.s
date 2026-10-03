@@ -2236,7 +2236,7 @@ wsa1_prom_a:
 ; Body: if (0x0DE5)!=1, calr 0xF7F245 (Blink_SetEnable(0) + Blink_Stop); or (0x2075),1; T_F42A68 = prom_b 0xF7CB1E sets (0x0DE5)=(0x12FC)=1; AdvanceDelay_DrawValues; AdvanceDelay_DrawFieldCursor.
 ; Rows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_207EZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_F42A6C/70/74.
 AdvanceDelay_SelectField1:
-	m_cp_mi8 MB16, 0x0de5, 0x01                          ; F80000  c1 e5 0d 3f 01
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x01                          ; F80000  c1 e5 0d 3f 01
 	jr z, .LF80019                                       ; F80005  66 12
 	calr sub_F7F245                                          ; F80007  1e 3b f2
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F8000A  c1 75 20 3e 01
@@ -2260,7 +2260,7 @@ AdvanceDelay_DrawFieldCursor:
 	ret                                                  ; F80039  0e
 	bit 0x07,W                                           ; F8003A  c8 33 07
 	jr z, .LF80058                                       ; F8003D  66 19
-	m_cp_mi8 MB16, 0x0de5, 0x02                          ; F8003F  c1 e5 0d 3f 02
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x02                          ; F8003F  c1 e5 0d 3f 02
 	jr z, .LF80058                                       ; F80044  66 12
 	calr sub_F7F237                                          ; F80046  1e ee f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80049  c1 75 20 3e 01
@@ -2271,7 +2271,7 @@ AdvanceDelay_DrawFieldCursor:
 	ret                                                  ; F80058  0e
 	bit 0x07,W                                           ; F80059  c8 33 07
 	jr z, .LF80079                                       ; F8005C  66 1b
-	m_cp_mi8 MB16, 0x0de5, 0x03                          ; F8005E  c1 e5 0d 3f 03
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x03                          ; F8005E  c1 e5 0d 3f 03
 	jr z, .LF80085                                       ; F80063  66 20
 	calr sub_F7F237                                          ; F80065  1e cf f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80068  c1 75 20 3e 01
@@ -2298,7 +2298,7 @@ AdvanceDelay_DrawValues:
 	ret                                                  ; F8009C  0e
 	bit 0x07,W                                           ; F8009D  c8 33 07
 	jr z, .LF800BD                                       ; F800A0  66 1b
-	m_cp_mi8 MB16, 0x0de5, 0x04                          ; F800A2  c1 e5 0d 3f 04
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x04                          ; F800A2  c1 e5 0d 3f 04
 	jr z, .LF800BD                                       ; F800A7  66 14
 	calr sub_F7F237                                          ; F800A9  1e 8b f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F800AC  c1 75 20 3e 01
@@ -2401,7 +2401,7 @@ Blink_SetEnable_1:
 ; Evidence: field 4: (0x2826)=2, T_AsciiField_ToSignedValue, accepts <=+0x60 when (0x2820)='+' else >=-0x60, stores (0x0DEC)/(0x12FB).  Fields 2/3: (0x2826)=3, T_AsciiDigits3_ToValue, 1..999 into (0x0DE8)/(0x12F7) or (0x0DEA)/(0x12F9), keeping (0x0DE8)<=(0x0DEA); (0x0E06)=(0x0DEA)-(0x0DE8)+1.
 ; Then T_Blink_Stop and AdvanceDelay_DrawValues; out-of-range input returns with nothing stored.
 AdvanceDelay_KeypadCommit:
-	m_cp_mi8 MB16, 0x0de5, 0x04                          ; F8015F  c1 e5 0d 3f 04
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x04                          ; F8015F  c1 e5 0d 3f 04
 	jr nz, .LF80176                                      ; F80164  6e 10
 	ld (0x2826:16), 0x02                                 ; F80166  f1 26 28 00 02
 	ld (0x2824:16), 0x00                                 ; F8016B  f1 24 28 00 00
@@ -2411,11 +2411,11 @@ AdvanceDelay_KeypadCommit:
 	ld (0x2826:16), 0x03                                 ; F80176  f1 26 28 00 03
 	call T_AsciiDigits3_ToValue                          ; F8017B  1d f0 32 f4
 .LF8017F:
-	m_cp_mi8 MB16, 0x0de5, 0x02                          ; F8017F  c1 e5 0d 3f 02
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x02                          ; F8017F  c1 e5 0d 3f 02
 	jr z, .LF80196                                       ; F80184  66 10
-	m_cp_mi8 MB16, 0x0de5, 0x03                          ; F80186  c1 e5 0d 3f 03
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x03                          ; F80186  c1 e5 0d 3f 03
 	jr z, .LF801B8                                       ; F8018B  66 2b
-	m_cp_mi8 MB16, 0x0de5, 0x04                          ; F8018D  c1 e5 0d 3f 04
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x04                          ; F8018D  c1 e5 0d 3f 04
 	jr z, .LF801E8                                       ; F80192  66 54
 	jr .LF8020C                                          ; F80194  68 76
 .LF80196:
@@ -2470,7 +2470,7 @@ AdvanceDelay_KeypadCommit:
 AdvanceDelay_KeypadSign:
 	m_bit 1, MD16, UI_RequestBits                                ; F8020D  f1 75 20 c9
 	jr z, .LF8021F                                       ; F80211  66 0c
-	m_cp_mi8 MB16, 0x0de5, 0x04                          ; F80213  c1 e5 0d 3f 04
+	m_cp_mi8 MB16, AdvanceDelay_Field, 0x04                          ; F80213  c1 e5 0d 3f 04
 	jr z, .LF8021F                                       ; F80218  66 05
 	ld (0x2820:16), 0x2b                                 ; F8021A  f1 20 28 00 2b
 .LF8021F:
@@ -2483,7 +2483,7 @@ AdvanceDelay_BlinkSelectedField:
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F80226  c1 67 22 3f 0f
 	jr z, .LF8024C                                       ; F8022B  66 1f
 	xor XWA,XWA                                          ; F8022D  e8 d0
-	ld a, (0x0de5:16)                                   ; F8022F  c1 e5 0d 21
+	ld a, (AdvanceDelay_Field:16)                                   ; F8022F  c1 e5 0d 21
 	sla xwa, 0x02                                        ; F80233  e8 ec 02
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80236  f1 40 25 00 00
 	ld XIY,BlinkArgPtrs_F8024D                           ; F8023B  45 4d 02 f8 00
@@ -2586,7 +2586,7 @@ Paint_S0ngC0py:
 ; Callers: Paint_S0ngC0py and the SoftKeyCol1/2 slot handlers (0xF803C9/0xF803D2) after T_F42A14/T_F42A10 step (0x0E0C) down/up in 1..10.
 S0ngC0py_DrawFromSong:
 	xor XWA,XWA                                          ; F802EC  e8 d0
-	ld a, (0x0e0c:16)                                   ; F802EE  c1 0c 0e 21
+	ld a, (S0ngC0py_FromSong:16)                                   ; F802EE  c1 0c 0e 21
 	ld (0x12f6:16), a                                   ; F802F2  f1 f6 12 41
 	ld XIY,DL_F3C199                                     ; F802F6  45 99 c1 f3 00
 	ld XIX,0x00f3c1a3                                    ; F802FB  44 a3 c1 f3 00
@@ -2614,7 +2614,7 @@ S0ngC0py_DrawFromSong:
 ; Callers: Paint_S0ngC0py and the SoftKeyCol5/6 slot handlers (0xF803ED/0xF803F6) after T_F42A24/T_F42A20.
 S0ngC0py_DrawToSong:
 	xor XWA,XWA                                          ; F80338  e8 d0
-	ld a, (0x0e0d:16)                                   ; F8033A  c1 0d 0e 21
+	ld a, (S0ngC0py_ToSong:16)                                   ; F8033A  c1 0d 0e 21
 	ld (0x12f7:16), a                                   ; F8033E  f1 f7 12 41
 	ld XIY,0x00f3c1a3                                    ; F80342  45 a3 c1 f3 00
 	ld XIX,DL_S0ngSelectNameKbS0ngName                   ; F80347  44 ad c1 f3 00
@@ -2640,16 +2640,16 @@ S0ngC0py_DrawToSong:
 ; Evidence: (0x0E0E)=0x12 draws DL_AllAll ('  ALL   ' at both columns); otherwise (0x1304)=(0x0E0E), (0x1305)=(0x0E0F), DLB DL_F3C17B (two DLText_0To17All readouts at IX 0x1344/0x1355) and DL_TrackTrack.
 ; Callers: Paint_S0ngC0py and SoftKeyCol3/4/7/8 handlers after T_F42A1C/18/2C/28 step (0x0E0E)/(0x0E0F) in 1..0x12.
 S0ngC0py_DrawTracks:
-	m_cp_mi8 MB16, 0x0e0e, 0x12                          ; F80384  c1 0e 0e 3f 12
+	m_cp_mi8 MB16, S0ngC0py_FromTrack, 0x12                          ; F80384  c1 0e 0e 3f 12
 	jr nz, .LF8039B                                      ; F80389  6e 10
 	ld XIY,DL_AllAll                                     ; F8038B  45 45 c1 f3 00
 	ld XIX,DL_F3C15D                                     ; F80390  44 5d c1 f3 00
 	call T_DisplayList_Run                               ; F80395  1d f0 17 f4
 	jr .LF803C7                                          ; F80399  68 2c
 .LF8039B:
-	ld a, (0x0e0e:16)                                   ; F8039B  c1 0e 0e 21
+	ld a, (S0ngC0py_FromTrack:16)                                   ; F8039B  c1 0e 0e 21
 	ld (0x1304:16), a                                   ; F8039F  f1 04 13 41
-	ld a, (0x0e0f:16)                                   ; F803A3  c1 0f 0e 21
+	ld a, (S0ngC0py_ToTrack:16)                                   ; F803A3  c1 0f 0e 21
 	ld (0x1305:16), a                                   ; F803A7  f1 05 13 41
 	ld XIY,DL_F3C17B                                     ; F803AB  45 7b c1 f3 00
 	ld XIX,DL_F3C199                                     ; F803B0  44 99 c1 f3 00
@@ -2740,7 +2740,7 @@ Paint_N0teChange:
 	ldw (PanelDial_DownButton:16), 0x0484                              ; F8044D  f1 9b 20 02 84 04
 	ldw (0x2666:16), 0xffff                              ; F80453  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F80459  f1 6a 26 02 ff ff
-	ld a, (0x0ded:16)                                   ; F8045F  c1 ed 0d 21
+	ld a, (N0teChange_Field:16)                                   ; F8045F  c1 ed 0d 21
 	cp a, 0x02:i3                                          ; F80463  c9 da
 	jr z, .LF80478                                       ; F80465  66 11
 	cp a, 0x03:i3                                          ; F80467  c9 db
@@ -2813,13 +2813,13 @@ ButtonTable_N0teChange_207EZero_Nop7:
 	ret                                                  ; F8051E  0e
 	bit 0x07,W                                           ; F8051F  c8 33 07
 	jr z, .LF80534                                       ; F80522  66 10
-	m_cp_mi8 MB16, 0x0ded, 0x01                          ; F80524  c1 ed 0d 3f 01
+	m_cp_mi8 MB16, N0teChange_Field, 0x01                          ; F80524  c1 ed 0d 3f 01
 	jr z, .LF80548                                       ; F80529  66 1d
 	calr sub_F7F245                                          ; F8052B  1e 17 ed
 	call T_F42A90                                        ; F8052E  1d 90 2a f4
 	jr .LF80542                                          ; F80532  68 0e
 .LF80534:
-	m_cp_mi8 MB16, 0x0ded, 0x04                          ; F80534  c1 ed 0d 3f 04
+	m_cp_mi8 MB16, N0teChange_Field, 0x04                          ; F80534  c1 ed 0d 3f 04
 	jr z, .LF80548                                       ; F80539  66 0d
 	calr sub_F7F237                                          ; F8053B  1e f9 ec
 	call T_F42A9C                                        ; F8053E  1d 9c 2a f4
@@ -2842,13 +2842,13 @@ N0teChange_DrawFieldCursor:
 	ret                                                  ; F80568  0e
 	bit 0x07,W                                           ; F80569  c8 33 07
 	jr z, .LF8057E                                       ; F8056C  66 10
-	m_cp_mi8 MB16, 0x0ded, 0x02                          ; F8056E  c1 ed 0d 3f 02
+	m_cp_mi8 MB16, N0teChange_Field, 0x02                          ; F8056E  c1 ed 0d 3f 02
 	jr z, .LF80594                                       ; F80573  66 1f
 	calr sub_F7F237                                          ; F80575  1e bf ec
 	call T_F42A94                                        ; F80578  1d 94 2a f4
 	jr .LF8058C                                          ; F8057C  68 0e
 .LF8057E:
-	m_cp_mi8 MB16, 0x0ded, 0x05                          ; F8057E  c1 ed 0d 3f 05
+	m_cp_mi8 MB16, N0teChange_Field, 0x05                          ; F8057E  c1 ed 0d 3f 05
 	jr z, .LF80594                                       ; F80583  66 0f
 	calr sub_F7F237                                          ; F80585  1e af ec
 	call T_F42AA0                                        ; F80588  1d a0 2a f4
@@ -2860,7 +2860,7 @@ N0teChange_DrawFieldCursor:
 	ret                                                  ; F80594  0e
 	bit 0x07,W                                           ; F80595  c8 33 07
 	jr z, .LF805B0                                       ; F80598  66 16
-	m_cp_mi8 MB16, 0x0ded, 0x03                          ; F8059A  c1 ed 0d 3f 03
+	m_cp_mi8 MB16, N0teChange_Field, 0x03                          ; F8059A  c1 ed 0d 3f 03
 	jr z, .LF805B7                                       ; F8059F  66 16
 	calr sub_F7F237                                          ; F805A1  1e 93 ec
 	call T_F42A98                                        ; F805A4  1d 98 2a f4
@@ -2959,13 +2959,13 @@ Blink_SetEnable_1_2:
 N0teChange_KeypadCommit:
 	ld (0x2826:16), 0x03                                 ; F8065A  f1 26 28 00 03
 	call T_AsciiDigits3_ToValue                          ; F8065F  1d f0 32 f4
-	m_cp_mi8 MB16, 0x0ded, 0x02                          ; F80663  c1 ed 0d 3f 02
+	m_cp_mi8 MB16, N0teChange_Field, 0x02                          ; F80663  c1 ed 0d 3f 02
 	jr z, .LF80682                                       ; F80668  66 18
-	m_cp_mi8 MB16, 0x0ded, 0x03                          ; F8066A  c1 ed 0d 3f 03
+	m_cp_mi8 MB16, N0teChange_Field, 0x03                          ; F8066A  c1 ed 0d 3f 03
 	jr z, .LF806A6                                       ; F8066F  66 35
-	m_cp_mi8 MB16, 0x0ded, 0x04                          ; F80671  c1 ed 0d 3f 04
+	m_cp_mi8 MB16, N0teChange_Field, 0x04                          ; F80671  c1 ed 0d 3f 04
 	jr z, .LF806D6                                       ; F80676  66 5e
-	m_cp_mi8 MB16, 0x0ded, 0x05                          ; F80678  c1 ed 0d 3f 05
+	m_cp_mi8 MB16, N0teChange_Field, 0x05                          ; F80678  c1 ed 0d 3f 05
 	jr z, .LF806F2                                       ; F8067D  66 73
 	jrl .LF80713                                         ; F8067F  78 91 00
 .LF80682:
@@ -2973,11 +2973,11 @@ N0teChange_KeypadCommit:
 	jrl lt, .LF80713                                     ; F80684  71 8c 00
 	cp WA,0x03e7                                         ; F80687  d8 cf e7 03
 	jrl gt, .LF80713                                     ; F8068B  7a 85 00
-	ld (0x0df0:16), wa                                  ; F8068E  f1 f0 0d 50
+	ld (N0teChange_FromMeasure:16), wa                                  ; F8068E  f1 f0 0d 50
 	ld (0x12fc:16), wa                                  ; F80692  f1 fc 12 50
-	m_cp_rm MW16, 0x0df2, r0                             ; F80696  d1 f2 0d f0
+	m_cp_rm MW16, N0teChange_ToMeasure, r0                             ; F80696  d1 f2 0d f0
 	jr ule, .LF806A4                                     ; F8069A  63 08
-	ld (0x0df2:16), wa                                  ; F8069C  f1 f2 0d 50
+	ld (N0teChange_ToMeasure:16), wa                                  ; F8069C  f1 f2 0d 50
 	ld (0x12ff:16), wa                                  ; F806A0  f1 ff 12 50
 .LF806A4:
 	jr .LF806C6                                          ; F806A4  68 20
@@ -2986,22 +2986,22 @@ N0teChange_KeypadCommit:
 	jr lt, .LF80713                                      ; F806A8  61 69
 	cp WA,0x03e7                                         ; F806AA  d8 cf e7 03
 	jr gt, .LF80713                                      ; F806AE  6a 63
-	ld (0x0df2:16), wa                                  ; F806B0  f1 f2 0d 50
+	ld (N0teChange_ToMeasure:16), wa                                  ; F806B0  f1 f2 0d 50
 	ld (0x12ff:16), wa                                  ; F806B4  f1 ff 12 50
-	m_cp_rm MW16, 0x0df0, r0                             ; F806B8  d1 f0 0d f0
+	m_cp_rm MW16, N0teChange_FromMeasure, r0                             ; F806B8  d1 f0 0d f0
 	jr nc, .LF806C6                                      ; F806BC  6f 08
-	ld (0x0df0:16), wa                                  ; F806BE  f1 f0 0d 50
+	ld (N0teChange_FromMeasure:16), wa                                  ; F806BE  f1 f0 0d 50
 	ld (0x12fc:16), wa                                  ; F806C2  f1 fc 12 50
 .LF806C6:
-	ld wa, (0x0df2:16)                                 ; F806C6  d1 f2 0d 20
-	m_sub_rm MW16, 0x0df0, r0                            ; F806CA  d1 f0 0d a0
+	ld wa, (N0teChange_ToMeasure:16)                                 ; F806C6  d1 f2 0d 20
+	m_sub_rm MW16, N0teChange_FromMeasure, r0                            ; F806CA  d1 f0 0d a0
 	inc 1,WA                                             ; F806CE  d8 61
 	ld (0x129e:16), wa                                  ; F806D0  f1 9e 12 50
 	jr .LF8070C                                          ; F806D4  68 36
 .LF806D6:
 	cp WA,0x007f                                         ; F806D6  d8 cf 7f 00
 	jr gt, .LF80713                                      ; F806DA  6a 37
-	ld (0x0df4:16), a                                   ; F806DC  f1 f4 0d 41
+	ld (N0teChange_FromNote:16), a                                   ; F806DC  f1 f4 0d 41
 	ld (0x12fb:16), a                                   ; F806E0  f1 fb 12 41
 	ld l, 0x0c:opc                                          ; F806E4  27 0c
 	divs wa, l                                         ; F806E6  cf 59
@@ -3011,7 +3011,7 @@ N0teChange_KeypadCommit:
 .LF806F2:
 	cp WA,0x007f                                         ; F806F2  d8 cf 7f 00
 	jr gt, .LF80713                                      ; F806F6  6a 1b
-	ld (0x0df5:16), a                                   ; F806F8  f1 f5 0d 41
+	ld (N0teChange_ToNote:16), a                                   ; F806F8  f1 f5 0d 41
 	ld (0x12fe:16), a                                   ; F806FC  f1 fe 12 41
 	ld l, 0x0c:opc                                          ; F80700  27 0c
 	divs wa, l                                         ; F80702  cf 59
@@ -3040,7 +3040,7 @@ N0teChange_BlinkSelectedField:
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F8072D  c1 67 22 3f 0f
 	jr z, .LF80753                                       ; F80732  66 1f
 	xor XWA,XWA                                          ; F80734  e8 d0
-	ld a, (0x0ded:16)                                   ; F80736  c1 ed 0d 21
+	ld a, (N0teChange_Field:16)                                   ; F80736  c1 ed 0d 21
 	sla xwa, 0x02                                        ; F8073A  e8 ec 02
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F8073D  f1 40 25 00 00
 	ld XIY,BlinkArgPtrs_F80754                           ; F80742  45 54 07 f8 00
@@ -3171,18 +3171,18 @@ ScreenLeaveBody_MeasureC0py:
 	ret                                                  ; F8085B  0e
 	bit 0x07,W                                           ; F8085C  c8 33 07
 	jr z, .LF80871                                       ; F8085F  66 10
-	m_cp_mi8 MB16, 0x0dbc, 0x01                          ; F80861  c1 bc 0d 3f 01
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x01                          ; F80861  c1 bc 0d 3f 01
 	jr z, .LF80890                                       ; F80866  66 28
 	calr sub_F7F245                                          ; F80868  1e da e9
 	call T_F429E0                                        ; F8086B  1d e0 29 f4
 	jr .LF8087F                                          ; F8086F  68 0e
 .LF80871:
-	m_cp_mi8 MB16, 0x0dbc, 0x04                          ; F80871  c1 bc 0d 3f 04
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x04                          ; F80871  c1 bc 0d 3f 04
 	jr z, .LF80890                                       ; F80876  66 18
 	calr sub_F7F245                                          ; F80878  1e ca e9
 	call T_F429EC                                        ; F8087B  1d ec 29 f4
 .LF8087F:
-	ld a, (0x0dbc:16)                                   ; F8087F  c1 bc 0d 21
+	ld a, (MeasureC0py_Field:16)                                   ; F8087F  c1 bc 0d 21
 	ld (0x12ff:16), a                                   ; F80883  f1 ff 12 41
 	calr MeasureC0py_DrawValues                                      ; F80887  1e 13 01
 	calr MeasureC0py_DrawFieldCursor                                      ; F8088A  1e 04 00
@@ -3202,18 +3202,18 @@ MeasureC0py_DrawFieldCursor:
 	ret                                                  ; F808B0  0e
 	bit 0x07,W                                           ; F808B1  c8 33 07
 	jr nz, .LF808C6                                      ; F808B4  6e 10
-	m_cp_mi8 MB16, 0x0dbc, 0x05                          ; F808B6  c1 bc 0d 3f 05
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x05                          ; F808B6  c1 bc 0d 3f 05
 	jr z, .LF808E5                                       ; F808BB  66 28
 	calr sub_F7F237                                          ; F808BD  1e 77 e9
 	call T_F429F0                                        ; F808C0  1d f0 29 f4
 	jr .LF808D4                                          ; F808C4  68 0e
 .LF808C6:
-	m_cp_mi8 MB16, 0x0dbc, 0x02                          ; F808C6  c1 bc 0d 3f 02
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x02                          ; F808C6  c1 bc 0d 3f 02
 	jr z, .LF808E5                                       ; F808CB  66 18
 	calr sub_F7F237                                          ; F808CD  1e 67 e9
 	call T_F429E4                                        ; F808D0  1d e4 29 f4
 .LF808D4:
-	ld a, (0x0dbc:16)                                   ; F808D4  c1 bc 0d 21
+	ld a, (MeasureC0py_Field:16)                                   ; F808D4  c1 bc 0d 21
 	ld (0x12ff:16), a                                   ; F808D8  f1 ff 12 41
 	calr MeasureC0py_DrawValues                                      ; F808DC  1e be 00
 	calr MeasureC0py_DrawFieldCursor                                      ; F808DF  1e af ff
@@ -3222,18 +3222,18 @@ MeasureC0py_DrawFieldCursor:
 	ret                                                  ; F808E5  0e
 	bit 0x07,W                                           ; F808E6  c8 33 07
 	jr z, .LF808FB                                       ; F808E9  66 10
-	m_cp_mi8 MB16, 0x0dbc, 0x03                          ; F808EB  c1 bc 0d 3f 03
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x03                          ; F808EB  c1 bc 0d 3f 03
 	jr z, .LF8091A                                       ; F808F0  66 28
 	calr sub_F7F237                                          ; F808F2  1e 42 e9
 	call T_F429E8                                        ; F808F5  1d e8 29 f4
 	jr .LF80909                                          ; F808F9  68 0e
 .LF808FB:
-	m_cp_mi8 MB16, 0x0dbc, 0x06                          ; F808FB  c1 bc 0d 3f 06
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x06                          ; F808FB  c1 bc 0d 3f 06
 	jr z, .LF8091A                                       ; F80900  66 18
 	calr sub_F7F245                                          ; F80902  1e 40 e9
 	call T_F429F4                                        ; F80905  1d f4 29 f4
 .LF80909:
-	ld a, (0x0dbc:16)                                   ; F80909  c1 bc 0d 21
+	ld a, (MeasureC0py_Field:16)                                   ; F80909  c1 bc 0d 21
 	ld (0x12ff:16), a                                   ; F8090D  f1 ff 12 41
 	calr MeasureC0py_DrawValues                                      ; F80911  1e 89 00
 	calr MeasureC0py_DrawFieldCursor                                      ; F80914  1e 7a ff
@@ -3350,11 +3350,11 @@ MeasureC0py_KeypadCommit:
 	jrl lt, .LF80A79                                     ; F809EF  71 87 00
 	cp WA,0x03e7                                         ; F809F2  d8 cf e7 03
 	jrl gt, .LF80A79                                     ; F809F6  7a 80 00
-	m_cp_mi8 MB16, 0x0dbc, 0x02                          ; F809F9  c1 bc 0d 3f 02
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x02                          ; F809F9  c1 bc 0d 3f 02
 	jr Z,.LF80A10                                        ; F809FE  66 10
-	m_cp_mi8 MB16, 0x0dbc, 0x03                          ; F80A00  c1 bc 0d 3f 03
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x03                          ; F80A00  c1 bc 0d 3f 03
 	jr z, .LF80A31                                       ; F80A05  66 2a
-	m_cp_mi8 MB16, 0x0dbc, 0x05                          ; F80A07  c1 bc 0d 3f 05
+	m_cp_mi8 MB16, MeasureC0py_Field, 0x05                          ; F80A07  c1 bc 0d 3f 05
 	jr z, .LF80A65                                       ; F80A0C  66 57
 	jr .LF80A79                                          ; F80A0E  68 69
 .LF80A10:
@@ -3407,7 +3407,7 @@ MeasureC0py_BlinkSelectedField:
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F80A86  c1 67 22 3f 0f
 	jr z, .LF80AAC                                       ; F80A8B  66 1f
 	xor XWA,XWA                                          ; F80A8D  e8 d0
-	ld a, (0x0dbc:16)                                   ; F80A8F  c1 bc 0d 21
+	ld a, (MeasureC0py_Field:16)                                   ; F80A8F  c1 bc 0d 21
 	sla xwa, 0x02                                        ; F80A93  e8 ec 02
 	ld XIY,BlinkArgPtrs_F80AAD                           ; F80A96  45 ad 0a f8 00
 	mx_ld_rm MXL, ra_IY, ra_WA, r5                       ; F80A9B  e3 07 f4 e0 25
@@ -3541,18 +3541,18 @@ ScreenLeaveBody_MeasureInsert:
 	ret                                                  ; F80BB8  0e
 	bit 0x07,W                                           ; F80BB9  c8 33 07
 	jr z, .LF80BCE                                       ; F80BBC  66 10
-	m_cp_mi8 MB16, 0x0dda, 0x01                          ; F80BBE  c1 da 0d 3f 01
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x01                          ; F80BBE  c1 da 0d 3f 01
 	jr z, .LF80BED                                       ; F80BC3  66 28
 	calr sub_F7F245                                          ; F80BC5  1e 7d e6
 	call T_F429B0                                        ; F80BC8  1d b0 29 f4
 	jr .LF80BDC                                          ; F80BCC  68 0e
 .LF80BCE:
-	m_cp_mi8 MB16, 0x0dda, 0x04                          ; F80BCE  c1 da 0d 3f 04
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x04                          ; F80BCE  c1 da 0d 3f 04
 	jr z, .LF80BED                                       ; F80BD3  66 18
 	calr sub_F7F245                                          ; F80BD5  1e 6d e6
 	call T_F429BC                                        ; F80BD8  1d bc 29 f4
 .LF80BDC:
-	ld a, (0x0dda:16)                                   ; F80BDC  c1 da 0d 21
+	ld a, (MeasureInsert_Field:16)                                   ; F80BDC  c1 da 0d 21
 	ld (0x12ff:16), a                                   ; F80BE0  f1 ff 12 41
 	calr MeasureInsert_DrawValues                                      ; F80BE4  1e 14 01
 	calr MeasureInsert_DrawFieldCursor                                      ; F80BE7  1e 04 00
@@ -3573,18 +3573,18 @@ sub_F80C04:
 	ret                                                  ; F80C0D  0e
 	bit 0x07,W                                           ; F80C0E  c8 33 07
 	jr nz, .LF80C23                                      ; F80C11  6e 10
-	m_cp_mi8 MB16, 0x0dda, 0x05                          ; F80C13  c1 da 0d 3f 05
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x05                          ; F80C13  c1 da 0d 3f 05
 	jr z, .LF80C42                                       ; F80C18  66 28
 	calr sub_F7F237                                          ; F80C1A  1e 1a e6
 	call T_F429C0                                        ; F80C1D  1d c0 29 f4
 	jr .LF80C31                                          ; F80C21  68 0e
 .LF80C23:
-	m_cp_mi8 MB16, 0x0dda, 0x02                          ; F80C23  c1 da 0d 3f 02
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x02                          ; F80C23  c1 da 0d 3f 02
 	jr z, .LF80C42                                       ; F80C28  66 18
 	calr sub_F7F237                                          ; F80C2A  1e 0a e6
 	call T_F429B4                                        ; F80C2D  1d b4 29 f4
 .LF80C31:
-	ld a, (0x0dda:16)                                   ; F80C31  c1 da 0d 21
+	ld a, (MeasureInsert_Field:16)                                   ; F80C31  c1 da 0d 21
 	ld (0x12ff:16), a                                   ; F80C35  f1 ff 12 41
 	calr MeasureInsert_DrawValues                                      ; F80C39  1e bf 00
 	calr MeasureInsert_DrawFieldCursor                                      ; F80C3C  1e af ff
@@ -3593,18 +3593,18 @@ sub_F80C04:
 	ret                                                  ; F80C42  0e
 	bit 0x07,W                                           ; F80C43  c8 33 07
 	jr z, .LF80C58                                       ; F80C46  66 10
-	m_cp_mi8 MB16, 0x0dda, 0x03                          ; F80C48  c1 da 0d 3f 03
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x03                          ; F80C48  c1 da 0d 3f 03
 	jr z, .LF80C77                                       ; F80C4D  66 28
 	calr sub_F7F237                                          ; F80C4F  1e e5 e5
 	call T_F429B8                                        ; F80C52  1d b8 29 f4
 	jr .LF80C66                                          ; F80C56  68 0e
 .LF80C58:
-	m_cp_mi8 MB16, 0x0dda, 0x06                          ; F80C58  c1 da 0d 3f 06
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x06                          ; F80C58  c1 da 0d 3f 06
 	jr z, .LF80C77                                       ; F80C5D  66 18
 	calr sub_F7F245                                          ; F80C5F  1e e3 e5
 	call T_F429C4                                        ; F80C62  1d c4 29 f4
 .LF80C66:
-	ld a, (0x0dda:16)                                   ; F80C66  c1 da 0d 21
+	ld a, (MeasureInsert_Field:16)                                   ; F80C66  c1 da 0d 21
 	ld (0x12ff:16), a                                   ; F80C6A  f1 ff 12 41
 	calr MeasureInsert_DrawValues                                      ; F80C6E  1e 8a 00
 	calr MeasureInsert_DrawFieldCursor                                      ; F80C71  1e 7a ff
@@ -3723,11 +3723,11 @@ MeasureInsert_KeypadCommit:
 	jrl lt, .LF80DDE                                     ; F80D54  71 87 00
 	cp WA,0x03e7                                         ; F80D57  d8 cf e7 03
 	jrl gt, .LF80DDE                                     ; F80D5B  7a 80 00
-	m_cp_mi8 MB16, 0x0dda, 0x02                          ; F80D5E  c1 da 0d 3f 02
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x02                          ; F80D5E  c1 da 0d 3f 02
 	jr z, .LF80D75                                       ; F80D63  66 10
-	m_cp_mi8 MB16, 0x0dda, 0x03                          ; F80D65  c1 da 0d 3f 03
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x03                          ; F80D65  c1 da 0d 3f 03
 	jr z, .LF80D96                                       ; F80D6A  66 2a
-	m_cp_mi8 MB16, 0x0dda, 0x05                          ; F80D6C  c1 da 0d 3f 05
+	m_cp_mi8 MB16, MeasureInsert_Field, 0x05                          ; F80D6C  c1 da 0d 3f 05
 	jr z, .LF80DCA                                       ; F80D71  66 57
 	jr .LF80DDE                                          ; F80D73  68 69
 .LF80D75:
@@ -3780,7 +3780,7 @@ MeasureInsert_BlinkSelectedField:
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F80DEB  c1 67 22 3f 0f
 	jr z, .LF80E11                                       ; F80DF0  66 1f
 	xor XWA,XWA                                          ; F80DF2  e8 d0
-	ld a, (0x0dda:16)                                   ; F80DF4  c1 da 0d 21
+	ld a, (MeasureInsert_Field:16)                                   ; F80DF4  c1 da 0d 21
 	sla xwa, 0x02                                        ; F80DF8  e8 ec 02
 	ld XIY,BlinkArgPtrs_F80E12                           ; F80DFB  45 12 0e f8 00
 	mx_ld_rm MXL, ra_IY, ra_WA, r5                       ; F80E00  e3 07 f4 e0 25
