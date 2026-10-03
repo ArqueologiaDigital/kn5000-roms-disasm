@@ -81902,7 +81902,7 @@ BitMaskToOrdinal6:
 	extz HL
 	ld L,B
 	cp l, 0x03:i3
-	jr ugt, 0x1f
+	jr ugt, BitMaskToOrdinal6_JumpTable_FADD77_Nop1
 	sll hl, 0x02
 	ld XIX,BitMaskToOrdinal6_JumpTable_FADD77
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
@@ -122501,6 +122501,8 @@ Gap_FCC06A:
 	extz XWA                                             ; FCC074  e8 12
 	mx_ld_rm MXB, ra_WA, ra_IY, r3                       ; FCC076  c3 07 e0 f4 23
 	cp C,(XIZ+0x12)                                      ; FCC07B  8e 12 f3
+; unpinned code (see the module header): this branch and the `jr` at 0xFCC08A land on 0xFCC050, inside
+; Ram3800_RecordPtrTable's entry 25, so the loop they close does not run as decoded here
 	jr nz, -48                                           ; FCC07E  6e d0
 	inc 2,IY                                             ; FCC080  dd 62
 	add WA,IY                                            ; FCC082  dd 80
@@ -168999,6 +169001,10 @@ Fdc_OperationJumpTable:
 	.short 0x002D                                  ; FE6E7E   9 -> Fdc_Op9_SetFlag605A59
 	.short 0x0032                                  ; FE6E80  10 -> Fdc_Op10_TestControllerPresent
 	.short 0x0037                                  ; FE6E82  11 -> Fdc_Op11_SenseDriveStatus
+; sub_FE6E84 -- unreferenced.  No call, jump or 24-bit value in prom_a or prom_b names 0xFE6E84-0xFE6F88; the
+;          values that match are inside prom_b bitmap rows (0xF233F1, 0xF23C49, 0xF23C4F) and prom_a's dead copy
+;          (0xF8A696).  Its two numeric branches land inside Fdc_OperationJumpTable (0xFE6E80) and inside
+;          `ldw wa,0x7600` (0xFE6F19): bytes left from another build, like sub_FE6F89 after it.
 sub_FE6E84:
 	jr f, -6                                             ; FE6E84  60 fa
 	jr z, .LFE6E98                                           ; FE6E86  66 10
