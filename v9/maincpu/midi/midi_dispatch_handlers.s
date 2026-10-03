@@ -10605,7 +10605,7 @@ Part_LookupTableEntry_Loop:
 	cp	wa, 0:i3
 	jr	nz, Part_LookupTableEntry_Loop
 	ret
-Param_SignExtendReturn_Entry_Code_Helper:
+Param_SignExtendReturn_Helper3_Helper:
 	inc	1, xwa
 	ld	l, 0:opc
 	dec	1, bc
@@ -10623,7 +10623,7 @@ Part_LookupTableEntry_Skip:
 	neg	l
 	res	7, l
 	ret
-Param_SignExtendReturn_Entry_Code_Helper2:
+Param_SignExtendReturn_Helper3_Helper2:
 	calr	ArpQueue_Enqueue
 	ld	xwa, (0xbc5c:16)
 	calr	SeqOut_FlushWithChunking

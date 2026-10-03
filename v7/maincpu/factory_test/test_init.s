@@ -106,7 +106,7 @@ InitializeHama:
 	ld	(xsp+4), xwa
 	ld	wa, (InitializeHama_Data_5:24)
 	ld	(xsp+8), wa
-	lda	xwa, (InitializeHama_Data_4:24)
+	lda	xwa, (HamaObj_1C9_Data:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -118,7 +118,7 @@ InitializeHama:
 	ld	(xsp+4), xwa
 	ld	wa, (InitializeHama_Data_7:24)
 	ld	(xsp+8), wa
-	lda	xwa, (InitializeHama_Data_6:24)
+	lda	xwa, (HamaObj_1E9_Data:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -140,7 +140,7 @@ InitializeHama:
 	lda	xwa, (ApFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
-	lda	xwa, (InitializeHama_Data:24)
+	lda	xwa, (HamaObj_429_Data:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -583,8 +583,8 @@ CheckFDStatusLoad_Return:
 ; into DRAM at 0x200000, checks result, jumps to extension entry point
 LoadExtROM_Entry:
 	pushw	4
-	pushw	CheckFDStatusLoad_Transfer_Str_XAPR@hi16
-	pushw	CheckFDStatusLoad_Transfer_Str_XAPR@lo16
+	pushw	LoadExtROM_Entry_Str_XAPR@hi16
+	pushw	LoadExtROM_Entry_Str_XAPR@lo16
 	ld	xwa, 2097152
 	push	xwa
 	call	String_Compare

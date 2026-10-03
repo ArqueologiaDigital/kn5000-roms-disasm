@@ -1562,12 +1562,12 @@ ExtDev_SndParam_Block98_Var80:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip
+	jr	z, FileIO_BytecodeData_Code_Skip79
 	ld	(xde), 128
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Join
-ExtDev_SndParam_BlockA9_Var02_Code_Skip:
+	jr	FileIO_BytecodeData_Code_Join23
+FileIO_BytecodeData_Code_Skip79:
 	ld	(xde), 0
-ExtDev_SndParam_BlockA9_Var02_Code_Join:
+FileIO_BytecodeData_Code_Join23:
 	ld	(xhl), 128
 	jrl	FileIO_BytecodeData
 ExtDev_SndParam_Block98_Var40_B:
@@ -1578,12 +1578,12 @@ ExtDev_SndParam_Block98_Var40_B:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip10
+	jr	z, NakaData_WidgetInit1_Code_Skip5
 	ld	(xde), 64
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Join6
-ExtDev_SndParam_BlockA9_Var02_Code_Skip10:
+	jr	NakaData_WidgetInit1_Code_Join4
+NakaData_WidgetInit1_Code_Skip5:
 	ld	(xde), 0
-ExtDev_SndParam_BlockA9_Var02_Code_Join6:
+NakaData_WidgetInit1_Code_Join4:
 	ld	(xhl), 64
 	jrl	FileIO_BytecodeData
 ExtDev_SndParam_ConfigAndWrite:
@@ -1591,7 +1591,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	ld	xiz, xwa
 	ld	a, (xiz+3)
 	and	a, (xiz+2)
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue5
+	jr	z, NakaData_WidgetInit1_Code_Epilogue5
 	set	1, (37113:16)
 	ld	(xiz), (PART_SELECT)
 	ld	(xiz+1), 5
@@ -1601,7 +1601,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	call	SndParam_LookupViaEncode
 	lda	xbc, (xiz+2)
 	cp	hl, 0:i3
-	jr	nz, ExtDev_SndParam_BlockA9_Var02_Code_Skip11
+	jr	nz, NakaData_WidgetInit1_Code_Skip6
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xde, (0x918d:16)
@@ -1609,14 +1609,14 @@ ExtDev_SndParam_ConfigAndWrite:
 	add	xwa, xde
 	ld	a, (xwa)
 	ld	(xbc), a
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Join2
-ExtDev_SndParam_BlockA9_Var02_Code_Skip11:
+	jr	FileIO_BytecodeData_Code_Join24
+NakaData_WidgetInit1_Code_Skip6:
 	ld	(xbc), 0
-ExtDev_SndParam_BlockA9_Var02_Code_Join2:
+FileIO_BytecodeData_Code_Join24:
 	ld	(xiz+3), 127
 	ld	xwa, xiz
 	calr	61800
-ExtDev_SndParam_BlockA9_Var02_Code_Epilogue5:
+NakaData_WidgetInit1_Code_Epilogue5:
 	pop	xiz
 	ret
 ExtDev_SndParam_Block14_Dual:
@@ -1643,7 +1643,7 @@ ExtDev_SndParam_Write48_Block:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	nz, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue2
+	jr	nz, NakaData_WidgetInit1_Code_Epilogue2
 	set	1, (37113:16)
 	ld	(xiz), 72
 	ld	(xiz+1), 4
@@ -1651,16 +1651,16 @@ ExtDev_SndParam_Write48_Block:
 	lda	xde, (xiz+3)
 	ld	a, (xde)
 	.byte 0x81, 0xc1
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip7
+	jr	z, NakaData_WidgetInit1_Code_Skip2
 	ld	(xbc), 64
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Join5
-ExtDev_SndParam_BlockA9_Var02_Code_Skip7:
+	jr	NakaData_WidgetInit1_Code_Join3
+NakaData_WidgetInit1_Code_Skip2:
 	ld	(xbc), 0
-ExtDev_SndParam_BlockA9_Var02_Code_Join5:
+NakaData_WidgetInit1_Code_Join3:
 	ld	(xde), 64
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
-ExtDev_SndParam_BlockA9_Var02_Code_Epilogue2:
+NakaData_WidgetInit1_Code_Epilogue2:
 	pop	xiz
 	ret
 ExtDev_SndParam_Block48_Var02:
@@ -1673,12 +1673,12 @@ ExtDev_SndParam_Block48_Var02:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip2
+	jr	z, FileIO_BytecodeData_Code_Skip80
 	ld	(xde), 2
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Join3
-ExtDev_SndParam_BlockA9_Var02_Code_Skip2:
+	jr	FileIO_BytecodeData_Code_Join25
+FileIO_BytecodeData_Code_Skip80:
 	ld	(xde), 0
-ExtDev_SndParam_BlockA9_Var02_Code_Join3:
+FileIO_BytecodeData_Code_Join25:
 	ld	(xhl), 2
 	jrl	FileIO_BytecodeData
 ExtDev_SndParam_Block70_Var04:
@@ -1689,12 +1689,12 @@ ExtDev_SndParam_Block70_Var04:
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
 	and	c, (xde)
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip3
+	jr	z, FileIO_BytecodeData_Code_Skip81
 	ld	(xde), 4
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Join4
-ExtDev_SndParam_BlockA9_Var02_Code_Skip3:
+	jr	FileIO_BytecodeData_Code_Join26
+FileIO_BytecodeData_Code_Skip81:
 	ld	(xde), 0
-ExtDev_SndParam_BlockA9_Var02_Code_Join4:
+FileIO_BytecodeData_Code_Join26:
 	ld	(xhl), 4
 	jrl	FileIO_BytecodeData
 ExtDev_SndParam_DispatchAndWriteA8:
@@ -1702,24 +1702,24 @@ ExtDev_SndParam_DispatchAndWriteA8:
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip4
+	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 15
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip4
+	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 14
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip4
+	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 17
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip4
+	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 3:i3
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip4
+	jr	z, FileIO_BytecodeData_Code_Skip82
 	cp	a, 19
-	jr	nz, ExtDev_SndParam_BlockA9_Var02_Code_Skip8
-ExtDev_SndParam_BlockA9_Var02_Code_Skip4:
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Epilogue3
-ExtDev_SndParam_BlockA9_Var02_Code_Skip8:
+	jr	nz, NakaData_WidgetInit1_Code_Skip3
+FileIO_BytecodeData_Code_Skip82:
+	jr	NakaData_WidgetInit1_Code_Epilogue3
+NakaData_WidgetInit1_Code_Skip3:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue3
+	jr	z, NakaData_WidgetInit1_Code_Epilogue3
 	set	1, (37113:16)
 	ld	(xiz), 168
 	ld	(xiz+1), 4
@@ -1728,12 +1728,12 @@ ExtDev_SndParam_BlockA9_Var02_Code_Skip8:
 	ld	c, (xde)
 	ld	a, (xhl)
 	and	a, c
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue3
+	jr	z, NakaData_WidgetInit1_Code_Epilogue3
 	ld	(xde), 2
 	ld	(xhl), 2
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
-ExtDev_SndParam_BlockA9_Var02_Code_Epilogue3:
+NakaData_WidgetInit1_Code_Epilogue3:
 	pop	xiz
 	ret
 ExtDev_SndParam_DispatchAndWriteA8_Alt:
@@ -1741,24 +1741,24 @@ ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip5
+	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 15
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip5
+	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 14
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip5
+	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 17
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip5
+	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 3:i3
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip5
+	jr	z, FileIO_BytecodeData_Code_Skip83
 	cp	a, 19
-	jr	nz, ExtDev_SndParam_BlockA9_Var02_Code_Skip9
-ExtDev_SndParam_BlockA9_Var02_Code_Skip5:
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Epilogue4
-ExtDev_SndParam_BlockA9_Var02_Code_Skip9:
+	jr	nz, NakaData_WidgetInit1_Code_Skip4
+FileIO_BytecodeData_Code_Skip83:
+	jr	NakaData_WidgetInit1_Code_Epilogue4
+NakaData_WidgetInit1_Code_Skip4:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue4
+	jr	z, NakaData_WidgetInit1_Code_Epilogue4
 	set	1, (37113:16)
 	ld	(xiz), 168
 	ld	(xiz+1), 4
@@ -1767,12 +1767,12 @@ ExtDev_SndParam_BlockA9_Var02_Code_Skip9:
 	ld	c, (xde)
 	ld	a, (xhl)
 	and	a, c
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue4
+	jr	z, NakaData_WidgetInit1_Code_Epilogue4
 	ld	(xde), 1
 	ld	(xhl), 1
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
-ExtDev_SndParam_BlockA9_Var02_Code_Epilogue4:
+NakaData_WidgetInit1_Code_Epilogue4:
 	pop	xiz
 	ret
 ExtDev_SndParam_MultiReg_Iterate:
@@ -1795,27 +1795,27 @@ ExtDev_SndParam_DispatchComplex:
 	ld	xiz, xwa
 	ld	a, (CURRENT_MODE:16)
 	cp	a, 16
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip6
+	jr	z, FileIO_BytecodeData_Code_Skip84
 	cp	a, 15
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip6
+	jr	z, FileIO_BytecodeData_Code_Skip84
 	cp	a, 14
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip6
+	jr	z, FileIO_BytecodeData_Code_Skip84
 	cp	a, 17
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip6
+	jr	z, FileIO_BytecodeData_Code_Skip84
 	cp	a, 3:i3
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Skip6
+	jr	z, FileIO_BytecodeData_Code_Skip84
 	cp	a, 19
-	jr	nz, ExtDev_SndParam_BlockA9_Var02_Code_Skip12
-ExtDev_SndParam_BlockA9_Var02_Code_Skip6:
-	jr	ExtDev_SndParam_BlockA9_Var02_Code_Epilogue6
-ExtDev_SndParam_BlockA9_Var02_Code_Skip12:
+	jr	nz, NakaData_WidgetInit1_Code_Skip7
+FileIO_BytecodeData_Code_Skip84:
+	jr	NakaData_WidgetInit1_Code_Epilogue6
+NakaData_WidgetInit1_Code_Skip7:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue6
+	jr	z, NakaData_WidgetInit1_Code_Epilogue6
 	ld	a, (xiz+3)
 	and	a, (xiz+2)
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue6
+	jr	z, NakaData_WidgetInit1_Code_Epilogue6
 	set	1, (37113:16)
 	ld	(xiz), 152
 	ld	(xiz+1), 1
@@ -1828,7 +1828,7 @@ ExtDev_SndParam_BlockA9_Var02_Code_Skip12:
 	ld	(xiz+3), 127
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
-ExtDev_SndParam_BlockA9_Var02_Code_Epilogue6:
+NakaData_WidgetInit1_Code_Epilogue6:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -1836,7 +1836,7 @@ ExtDev_SndParam_BlockA9_Var02_Code_Epilogue6:
 	ld	xiz, xwa
 	ld	a, (xiz+2)
 	cp	a, 0:i3
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue
+	jr	z, FileIO_BytecodeData_Code_Epilogue36
 	ld	w, 0:opc
 	extz	xwa
 	call	Util_FindLowestSetBit
@@ -1848,16 +1848,16 @@ ExtDev_SndParam_BlockA9_Var02_Code_Epilogue6:
 	lda	xde, (ExtDev_SndParam_DispatchComplex_PtrTable:24)
 	ld	xde, (xde+wa)
 	or xde, xde
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue
+	jr	z, FileIO_BytecodeData_Code_Epilogue36
 	extz	hl
 	ld	a, (xde+hl)
 	ld	(xbc), a
 	cp	a, 255
-	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue
+	jr	z, FileIO_BytecodeData_Code_Epilogue36
 	ld	(xiz+3), 255
 	ld	xwa, xiz
 	calr	FileIO_BytecodeData
-ExtDev_SndParam_BlockA9_Var02_Code_Epilogue:
+FileIO_BytecodeData_Code_Epilogue36:
 	pop	xiz
 	ret
 
@@ -4874,15 +4874,15 @@ ExtData_ToneParam_DispatchHandler:
 	jp	t, (xix+wa)
 ExtData_ToneParam_DispatchHandler_Code:
 	jr ExtData_ToneParam_DispatchHandler_Join
-	jrl	ExtData_ToneParam_DispatchHandler_Loop
+	jrl	ExtData_Voice_CheckMode3_Helper
 	jrl	ExtData_ToneParam_DispatchHandler_Join2
 	jrl	ExtData_ToneParam_DispatchHandler_Join5
-	jrl	ExtData_ToneParam_DispatchHandler_Loop_Join2
-	jrl	ExtData_ToneParam_DispatchHandler_Loop_Join3
-	jrl	ExtData_ToneParam_DispatchHandler_Loop_Join4
-	jrl	ExtData_ToneParam_DispatchHandler_Loop_Join5
-	jrl	ExtData_ToneParam_DispatchHandler_Loop_Join6
-	jrl	ExtData_ToneParam_DispatchHandler_Loop_Join7
+	jrl	ExtData_Voice_CheckMode3_Helper_Join2
+	jrl	ExtData_Voice_CheckMode3_Helper_Join3
+	jrl	ExtData_Voice_CheckMode3_Helper_Join4
+	jrl	ExtData_Voice_CheckMode3_Helper_Join5
+	jrl	ExtData_Voice_CheckMode3_Helper_Join6
+	jrl	ExtData_Voice_CheckMode3_Helper_Join7
 ExtData_ToneParam_DispatchHandler_Skip:
 	calr	ExtData_ToneParam_DispatchHandler_Helper4
 	ret
@@ -4939,7 +4939,7 @@ ExtData_ToneParam_DispatchHandler_Skip4:
 ExtData_ToneParam_DispatchHandler_Epilogue2:
 	inc	6, xsp
 	ret
-ExtData_ToneParam_DispatchHandler_Loop:
+ExtData_Voice_CheckMode3_Helper:
 	ldw	wa, 128
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	ldw	wa, 127
@@ -4965,24 +4965,24 @@ ExtData_ToneParam_DispatchHandler_Join2:
 	call	SndParam_FetchOscTableEntry
 	lda	xwa, (xsp)
 	cp	(xwa), 15
-	jr	nz, ExtData_ToneParam_DispatchHandler_Loop_Skip
+	jr	nz, ExtData_Voice_CheckMode3_Helper_Skip
 	and	(37168:16), 183
 	and	(37169:16), 183
-ExtData_ToneParam_DispatchHandler_Loop_Skip:
+ExtData_Voice_CheckMode3_Helper_Skip:
 	cp	(xwa), 12
-	jr	nz, ExtData_ToneParam_DispatchHandler_Loop_Skip2
+	jr	nz, ExtData_Voice_CheckMode3_Helper_Skip2
 	res	6, (37168:16)
 	res	6, (37169:16)
-ExtData_ToneParam_DispatchHandler_Loop_Skip2:
+ExtData_Voice_CheckMode3_Helper_Skip2:
 	bit	1, (37113:16)
-	jr	z, ExtData_ToneParam_DispatchHandler_Loop_Skip3
+	jr	z, ExtData_Voice_CheckMode3_Helper_Skip3
 	ldw	wa, 8
-	calr	ExtData_ToneParam_DispatchHandler_Loop_Helper
+	calr	ExtData_Voice_CheckMode3_Helper_Helper
 	ldw	wa, 96
-	jr	ExtData_ToneParam_DispatchHandler_Loop_Join
-ExtData_ToneParam_DispatchHandler_Loop_Skip3:
+	jr	ExtData_Voice_CheckMode3_Helper_Join
+ExtData_Voice_CheckMode3_Helper_Skip3:
 	ldw	wa, 104
-ExtData_ToneParam_DispatchHandler_Loop_Join:
+ExtData_Voice_CheckMode3_Helper_Join:
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	ld	c, (0x9131:16)
 	ld	a, c
@@ -5023,29 +5023,29 @@ ExtData_ToneParam_DispatchHandler_Join5:
 	ldw	wa, 127
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_DispatchHandler_Loop_Join2:
+ExtData_Voice_CheckMode3_Helper_Join2:
 	ldw	wa, 127
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	ldw	wa, 128
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_DispatchHandler_Loop_Join3:
+ExtData_Voice_CheckMode3_Helper_Join3:
 	ldw	wa, 127
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_DispatchHandler_Loop_Join4:
+ExtData_Voice_CheckMode3_Helper_Join4:
 	ldw	wa, 127
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_DispatchHandler_Loop_Join5:
+ExtData_Voice_CheckMode3_Helper_Join5:
 	ldw	wa, 127
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_DispatchHandler_Loop_Join6:
+ExtData_Voice_CheckMode3_Helper_Join6:
 	ldw	wa, 255
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
-ExtData_ToneParam_DispatchHandler_Loop_Join7:
+ExtData_Voice_CheckMode3_Helper_Join7:
 	ldw	wa, 127
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jrl	SwbtWr_FlushAndAppendParams
@@ -5596,7 +5596,7 @@ ExtData_Voice_CheckMode3:
 	ld	a, (0x912f:16)
 	cp	a, 3:i3
 	ret	nz
-	calr	ExtData_ToneParam_DispatchHandler_Loop
+	calr	ExtData_Voice_CheckMode3_Helper
 	ret
 ExtData_Voice_RetEntry2:
 	ret
@@ -5608,7 +5608,7 @@ ExtData_Voice_FullHandler:
 	cp	a, 2:i3
 	jr	z, ExtData_Voice_FullHandler_Entry
 	cp	a, 4:i3
-	jrl	z, ExtData_ToneParam_DispatchHandler_Loop
+	jrl	z, ExtData_Voice_CheckMode3_Helper
 	cp	a, 3:i3
 	jr	z, ExtData_Voice_FullHandler_Skip2
 	cp	a, 1:i3
@@ -5619,7 +5619,7 @@ ExtData_Voice_FullHandler_Skip:
 	ret
 ExtData_Voice_FullHandler_Join:
 	ldw	wa, 128
-	calr	ExtData_ToneParam_DispatchHandler_Loop_Helper
+	calr	ExtData_Voice_CheckMode3_Helper_Helper
 	and	(37170:16), 128
 	ldw	wa, 127
 	calr	VoiceParam_CompareAndUpdate
@@ -5635,7 +5635,7 @@ ExtData_Voice_FullHandler_Skip2:
 ExtData_Voice_FullHandler_Entry:
 	res	1, (37113:16)
 	ldw	wa, 64
-	calr	ExtData_ToneParam_DispatchHandler_Loop_Helper
+	calr	ExtData_Voice_CheckMode3_Helper_Helper
 	ldw	wa, 128
 	calr	3019
 	jrl	2387
@@ -6823,7 +6823,7 @@ SwbtWr_WriteParamBlock_Join:
 SwbtWr_WriteParamBlock_Epilogue5:
 	inc	2, xsp
 	ret
-ExtData_ToneParam_DispatchHandler_Loop_Helper:
+ExtData_Voice_CheckMode3_Helper_Helper:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (0x9131:16)
@@ -9525,53 +9525,53 @@ VoiceMode_ParamHandler_3_Data:
 	.long	VoiceMode_ParamHandler_1
 VoiceMode3_EvType0:
 	call	0xfcb990
-	jr	nc, VoiceMode3_EvType0_Skip2
+	jr	nc, VoiceMode3_DispatchTable_Code_Skip3
 	ldb_d8	a, (0x91ba)
 	and	a, 7
-	jr	z, VoiceMode3_EvType0_Skip
+	jr	z, VoiceMode3_DispatchTable_Code_Skip2
 	ldw_d16	bc, (0x91b7)
 	extz	hl
 	ldb_d8	l, (0x91c8)
 	ld	xix, 0xf1a0
 	ld	a, (xix+hl)
 	cp	a, 14
-	jr	nz, VoiceMode_ParamHandler_3_Skip
+	jr	nz, VoiceMode3_DispatchTable_Code_Skip
 	ld	b, 4:opc
-VoiceMode_ParamHandler_3_Skip:
+VoiceMode3_DispatchTable_Code_Skip:
 	ldb_d8	e, (0x91b9)
 	ld	d, 7:opc
 	call	MIDI_WriteVoiceParamCC
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-VoiceMode3_EvType0_Skip:
+VoiceMode3_DispatchTable_Code_Skip2:
 	ldw_d16	bc, (0x91b7)
 	ldw_d16	de, (0x91b9)
 	and	d, 248
 	call	MIDI_WriteVoiceParamDirect
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-VoiceMode3_EvType0_Skip2:
+VoiceMode3_DispatchTable_Code_Skip3:
 	ldb_d8	a, (0x91ba)
 	and	a, 7
-	jr	z, VoiceMode_ParamHandler_3_Return
+	jr	z, VoiceMode3_DispatchTable_Code_Return
 	extz	hl
 	ldb_d8	l, (0x91bb)
 	ld	xix, 0xf1a0
 	cp	(xix+hl), 0x0f
-	jr	nz, VoiceMode_ParamHandler_3_Return
+	jr	nz, VoiceMode3_DispatchTable_Code_Return
 	ld	xix, 0x90ce
 	ld	a, (xix+hl)
 	cp	a, 16
-	jr	z, VoiceMode_ParamHandler_3_Return
+	jr	z, VoiceMode3_DispatchTable_Code_Return
 	set	7, a
 	stb_d8	(0x90e5), a
 	ldw_d16	bc, (0x91b7)
 	ldw_d16	de, (0x91b9)
 	and	d, 7
 	call	MIDI_DispatchCC_Guarded
-VoiceMode_ParamHandler_3_Return:
+VoiceMode3_DispatchTable_Code_Return:
 	ret
 VoiceMode3_EvType6:
 	call	PartCtrl_CheckBitmaskBit
-	jr	nc, VoiceMode_ParamHandler_3_Skip2
+	jr	nc, VoiceMode3_DispatchTable_Code_Skip4
 	ldw_d16	bc, (0x91b7)
 	ldw_d16	de, (0x91b9)
 	extz	hl
@@ -9580,7 +9580,7 @@ VoiceMode3_EvType6:
 	ld	xix, (0x90f2:16)
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, VoiceMode_ParamHandler_3_Return2
+	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	extz	hl
 	ld	l, b
 	ld	a, (xix+hl)
@@ -9594,29 +9594,29 @@ VoiceMode3_EvType6:
 	ld	(MIDI_MSG_DATA2:16), de
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	cpw	(0x91b7:16), 0x398
-	jr	nz, VoiceMode_ParamHandler_3_Skip2
+	jr	nz, VoiceMode3_DispatchTable_Code_Skip4
 	set	3, (0x8d52:16)
-VoiceMode_ParamHandler_3_Skip2:
+VoiceMode3_DispatchTable_Code_Skip4:
 	extz	hl
 	ldb_d8	l, (0x91c8)
 	ld	xix, 0xf1a0
 	ld	a, (xix+hl)
 	cp	a, 15
-	jr	z, VoiceMode_ParamHandler_3_Return2
+	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	cp	a, 14
-	jr	z, VoiceMode_ParamHandler_3_Return2
+	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	cp	a, 13
-	jr	z, VoiceMode_ParamHandler_3_Return2
+	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	ld	xix, 0x90ce
 	ld	a, (xix+hl)
 	cp	a, 16
-	jr	z, VoiceMode_ParamHandler_3_Return2
+	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	set	7, a
 	stb_d8	(0x90e5), a
 	ldw_d16	bc, (0x91b7)
 	ldw_d16	de, (0x91b9)
 	call	MIDI_DispatchCC_Guarded
-VoiceMode_ParamHandler_3_Return2:
+VoiceMode3_DispatchTable_Code_Return2:
 	ret
 VoiceMode3_EvType5:
 	ldw_d16	bc, (0x91b7)
@@ -9701,7 +9701,7 @@ VoiceMode3_EvType2:
 	ldb_d8	l, (0x91c8)
 	ld	xix, 0xf1a0
 	cp	(xix+hl), 0x0f
-	jr	nz, MidiPartCC_WriteAndDispatch_Return
+	jr	nz, MidiVoice_DataBlockHandler_Return
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, VoiceMode3_EvType2_Skip
 	ldw	bc, 0x298
@@ -9715,18 +9715,18 @@ VoiceMode3_EvType2_Skip:
 	ld	xix, 0x90ce
 	ld	a, (xix+hl)
 	cp	a, 16
-	jr	z, MidiPartCC_WriteAndDispatch_Return
+	jr	z, MidiVoice_DataBlockHandler_Return
 	set	7, a
 	stb_d8	(0x90e5), a
 	ldw	bc, 0x298
 	ldb_d8	e, (0x91b9)
 	ld	d, 128:opc
 	call	MIDI_DispatchCC_Guarded
-MidiPartCC_WriteAndDispatch_Return:
+MidiVoice_DataBlockHandler_Return:
 	ret
 VoiceMode3_EvType3:
 	call	PartCtrl_CheckBitmaskBit
-	jr	nc, MidiPartCC_WriteAndDispatch_Skip3
+	jr	nc, MidiVoice_DataBlockHandler_Skip2
 	ld	a, 0:opc
 	stb_d8	(0x9644), a
 	ldw_d16	wa, (0x91b7)
@@ -9736,41 +9736,41 @@ VoiceMode3_EvType3:
 	call	VoiceMode3_EvType3_Helper
 	ldb_d8	a, (0x91b6)
 	stb_d8	(0x90f8), a
-MidiPartCC_WriteAndDispatch_Skip3:
+MidiVoice_DataBlockHandler_Skip2:
 	extz	hl
 	ldb_d8	l, (0x91c8)
 	ld	xix, 0x90ce
 	ld	a, (xix+hl)
 	cp	a, 16
-	jr	z, MidiPartCC_WriteAndDispatch_Return2
+	jr	z, MidiVoice_DataBlockHandler_Return2
 	set	7, a
 	stb_d8	(0x90e5), a
 	ldw_d16	bc, (0x91b7)
 	ldw_d16	de, (0x91b9)
 	call	MIDI_DispatchCC_Guarded
-MidiPartCC_WriteAndDispatch_Return2:
+MidiVoice_DataBlockHandler_Return2:
 	ret
 VoiceMode3_EvType4:
 	call	PartCtrl_CheckBitmaskBit
-	jr	nc, MidiPartCC_WriteAndDispatch_Skip4
+	jr	nc, MidiVoice_DataBlockHandler_Skip3
 	ldw_d16	wa, (0x91b7)
 	ld	(MIDI_MSG_STATUS:16), wa
 	ldw_d16	wa, (0x91b9)
 	ld	(MIDI_MSG_DATA2:16), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-MidiPartCC_WriteAndDispatch_Skip4:
+MidiVoice_DataBlockHandler_Skip3:
 	extz	hl
 	ldb_d8	l, (0x91c8)
 	ld	xix, 0x90ce
 	ld	a, (xix+hl)
 	cp	a, 16
-	jr	z, MidiPartCC_WriteAndDispatch_Return3
+	jr	z, MidiVoice_DataBlockHandler_Return3
 	set	7, a
 	stb_d8	(0x90e5), a
 	ldw_d16	bc, (0x91b7)
 	ldw_d16	de, (0x91b9)
 	call	MIDI_DispatchCC_Guarded
-MidiPartCC_WriteAndDispatch_Return3:
+MidiVoice_DataBlockHandler_Return3:
 	ret
 
 VoiceMode3_InitChannelMatch:

@@ -25483,14 +25483,14 @@ Param_SignExtendReturn_Return:
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 13
-	call	Param_SignExtendReturn_Entry_Code_Helper
+	call	Param_SignExtendReturn_Helper3_Helper
 	ld	(xiz+), l
 	ld	(xiz), 247
 	ld	xwa, (0xe193:16)
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 15
-	call	Param_SignExtendReturn_Entry_Code_Helper2
+	call	Param_SignExtendReturn_Helper3_Helper2
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -25506,11 +25506,11 @@ SeqData_FormatOutput_Default_Helper:
 	ld	bc, (xsp+0x6)
 	exts	xbc
 	cpw	(xsp+0x6), 0
-	jr	z, Param_SignExtendReturn_Entry2
+	jr	z, Param_SignExtendReturn_Skip22
 	cpw	(xsp+0x6), 120
-	jr	le, Param_SignExtendReturn_Entry2
+	jr	le, Param_SignExtendReturn_Skip22
 	or	xhl, xhl
-	jr	z, Param_SignExtendReturn_Entry2
+	jr	z, Param_SignExtendReturn_Skip22
 	ld	xwa, xhl
 	sra	xwa, 15
 	sra	xwa, 16
@@ -25530,24 +25530,24 @@ SeqData_FormatOutput_Default_Helper:
 	cp	e, 0:i3
 	jr	nz, Param_SignExtendReturn_Skip21
 	cp	xhl, 0x1d6
-	jr	ugt, Param_SignExtendReturn_Entry2
+	jr	ugt, Param_SignExtendReturn_Skip22
 	ld	(0xe193:16), xiz
 	ld	wa, 3:i3
 	ld	bc, (xsp+0x6)
 	ld	xde, xiz
-	jr	SeqData_FormatOutput_Default_Helper_Join
+	jr	Param_SignExtendReturn_Join5
 Param_SignExtendReturn_Skip20:
 	cp	xhl, 0x2927
-	jr	ugt, Param_SignExtendReturn_Entry2
+	jr	ugt, Param_SignExtendReturn_Skip22
 	ld	(0xe193:16), xiz
 	ld	wa, 3:i3
 	ld	bc, (xsp+6)
 	ld	xde, xiz
-SeqData_FormatOutput_Default_Helper_Join:
+Param_SignExtendReturn_Join5:
 	call	sendCOMM
 	ldw	(xsp+4), 0
 	jr	Param_SignExtendReturn_Skip21
-Param_SignExtendReturn_Entry2:
+Param_SignExtendReturn_Skip22:
 	ldw	(xsp+4), 1
 Param_SignExtendReturn_Skip21:
 	ld	hl, (xsp+4)

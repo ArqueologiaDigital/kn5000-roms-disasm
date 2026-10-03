@@ -1,0 +1,20 @@
+# v7 labels renamed to v10's name for the same unmoved bytes (scripts/renaming/sync_names_from_v10.py)
+s/\bScoop_EventLoop_12Entry_Process_Str_Fmt1d_2\b/Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt1d/g	# 0xE0CCDE
+s/\bScoop_EventLoop_12Entry_Process_Str_Fmt2d_2\b/Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d/g	# 0xE0CCE2
+s/\bScoop_EventLoop_12Entry_Process_Str_Fmt3d_2\b/Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d/g	# 0xE0CCE6
+s/\bScoop_EventLoop_12Entry_Process_Str_Fmt2d_3\b/Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d_2/g	# 0xE0CCEA
+s/\bScoop_EventLoop_12Entry_Process_Str_Fmt3d_3\b/Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d_2/g	# 0xE0CCEE
+s/\bScoop_EventLoop_12Entry_Process_Str_Fmt4d\b/Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt4d/g	# 0xE0CCF2
+s/\bScoop_EventLoop_12Entry_Process_Data_2\b/Scoop_EventLoop_12Entry_Alt_Data_Target5_Data/g	# 0xE0CCD6
+s/\bFSWAssGridCheck_Evt1C0001C_Str_Fmts_2\b/FSWAssGrid_EventDispatch_Entry_Str_Fmts/g	# 0xED11F2
+s/\bFSWAssGridCheck_Evt1C0001C_Str_Fmts_3\b/FSWAssGrid_EventDispatch_Entry_Str_Fmts_2/g	# 0xED11F6
+s/\bFSWAssGridCheck_Evt1C0001C_Str_Fmts_4\b/FSWAssGrid_EventDispatch_Entry_Str_Fmts_3/g	# 0xED11FA
+s/\bFSWAssGridCheck_Evt1C0001C_Str_Fmts_5\b/FSWAssGrid_EventDispatch_Entry_Str_Fmts_4/g	# 0xED11FE
+s/\bFSWAssGridCheck_Evt1C0001C_Str_Fmts_6\b/FSWAssGrid_EventDispatch_Entry_Str_Fmts_5/g	# 0xED1202
+s/\bFSWAssGridCheck_Evt1C0001C_Str_Fmts_7\b/FSWAssGrid_EventDispatch_Entry_Str_Fmts_6/g	# 0xED1206
+s/\bCheckFDStatusLoad_Transfer_Str_XAPR\b/LoadExtROM_Entry_Str_XAPR/g	# 0xE1FF9C
+s/\bInitializeNaka_Data_2\b/Naka_ResEventCount_1CB/g	# 0xE0E962
+s/\bInitializeNaka_Data_3\b/Naka_ResMethodCount_1EB/g	# 0xE0E968
+s/\bInitializeHama_Data_4\b/HamaObj_1C9_Data/g	# 0xE1F0BE
+s/\bInitializeHama_Data_6\b/HamaObj_1E9_Data/g	# 0xE1F0D6
+s/\bInitializeHama_Data\b/HamaObj_429_Data/g	# 0xE1F056

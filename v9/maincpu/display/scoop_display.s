@@ -1005,7 +1005,7 @@ ScoopDisp_DispatchTable_Small:
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
-	.long	ScoopDisp_DispatchTable_Small_Target11
+	.long	UIState_EventTable_Target11
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
@@ -2028,7 +2028,7 @@ UIState_EventTable:
 	.long	DefaultHandler_Ret
 	.long	ToneParam_ShortCallHandler
 	.long	DefaultHandler_Ret
-	.long	ScoopDisp_DispatchTable_Small_Target11
+	.long	UIState_EventTable_Target11
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
@@ -2572,7 +2572,7 @@ PerfMode_DispatchTable_B:
 	.long	DefaultHandler_Ret
 	.long	ToneParam_ShortCallHandler
 	.long	DefaultHandler_Ret
-	.long	ScoopDisp_DispatchTable_Small_Target11
+	.long	UIState_EventTable_Target11
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
@@ -2831,16 +2831,16 @@ PerfMode_Handler_EvtB_Data:
 	.long	0x03020300
 	.long	0x00000000
 	; Entry 11 of ScoopDisp_DispatchTable_Small (a code pointer the table holds).
-ScoopDisp_DispatchTable_Small_Target11:
+UIState_EventTable_Target11:
 	bit	7, w
-	jrl	nz, ScoopDisp_DispatchTable_Small_Target11_Return
+	jrl	nz, UIState_EventTable_Target11_Return
 	ld	xiy, 3567
 	ld	a, (xiy)
 	ld	(3568:16), a
 	ld	(xiy), 18
 	ld	(3422:16), 0
-	call	ScoopDisp_DispatchTable_Small_Target11_Helper2
-ScoopDisp_DispatchTable_Small_Target11_Return:
+	call	UIState_EventTable_Target11_Helper2
+UIState_EventTable_Target11_Return:
 	ret
 DisplayMode_Dispatch_Mode0_Helper:
 	ld	a, (3822:16)
@@ -2861,7 +2861,7 @@ DisplayMode_Dispatch_Mode0_Helper:
 DisplayMode_Dispatch_Mode0_Helper2:
 	ld	a, (3568:16)
 	ld	(3567:16), a
-	call	ScoopDisp_DispatchTable_Small_Target11_Helper
+	call	UIState_EventTable_Target11_Helper
 	ret
 
 Display_DirtyRegionDispatch:
@@ -6986,7 +6986,7 @@ SerialPort_ModeHandler_0_Entry3:
 	ld	(14120:16), 0
 	cp	(4346:16), 0
 	jrl	nz, SerialPort_ModeHandler_0_Skip9
-	call	ScoopDisp_DispatchTable_Small_Target11_Helper
+	call	UIState_EventTable_Target11_Helper
 SerialPort_ModeHandler_0_Skip9:
 	call	SerialPort_ModeHandler_0_Helper
 	jp	SerialPort_ModeHandler_0_Return4
@@ -6995,7 +6995,7 @@ ScoopParam_ValueTable_Entry3_Code_Skip:
 	call	ClockConfig_Handler_0_Helper
 	bit	3, (0x0d53:16)
 	jrl	z, SerialPort_ModeHandler_0_Skip10
-	call	ScoopDisp_DispatchTable_Small_Target11_Helper
+	call	UIState_EventTable_Target11_Helper
 	cp	(3429:16), 0
 	jrl	nz, SerialPort_ModeHandler_0_Skip10
 SerialPort_ModeHandler_0_Skip10:
@@ -7217,7 +7217,7 @@ PortConfig_SetupBytecode:
 	pop	xix
 PortConfig_SetupBytecode_Return:
 	ret
-ScoopDisp_DispatchTable_Small_Target11_Helper:
+UIState_EventTable_Target11_Helper:
 	ld	a, (3429:16)
 	and	wa, 3
 	sla	wa, 2
@@ -7990,7 +7990,7 @@ MemConfig_Handler_0:
 	bitm	3, (xhl)
 	jrl	z, MemConfig_Handler_0_Skip3
 	resm	3, (xhl)
-	call	ScoopDisp_DispatchTable_Small_Target11_Helper
+	call	UIState_EventTable_Target11_Helper
 	jp	MemConfig_Handler_0_Return
 MemConfig_Handler_0_Skip3:
 	call	VoiceCtrl_BytecodeHandler
@@ -14617,7 +14617,7 @@ PortConfig_Handler_0_Helper8:
 	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
-ScoopDisp_DispatchTable_Small_Target11_Helper2:
+UIState_EventTable_Target11_Helper2:
 	call	Display_UpdateRegion0
 	ret
 VoiceSlot_IndexDone_Helper:

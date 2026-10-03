@@ -7773,8 +7773,8 @@ FSWAssGridCheck_Skip:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push	xwa
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_2@hi16
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_2@lo16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts@hi16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked
@@ -7799,8 +7799,8 @@ FSWAssGridCheck_Skip2:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push	xwa
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_3@hi16
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_3@lo16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_2@hi16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_2@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked
@@ -7825,8 +7825,8 @@ FSWAssGridCheck_Skip3:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push	xwa
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_4@hi16
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_4@lo16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_3@hi16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_3@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked
@@ -7852,8 +7852,8 @@ FSWAssGridCheck_Skip4:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push	xwa
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_5@hi16
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_5@lo16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_4@hi16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_4@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked
@@ -7878,8 +7878,8 @@ FSWAssGridCheck_Skip5:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push	xwa
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_6@hi16
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_6@lo16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_5@hi16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_5@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked
@@ -7904,8 +7904,8 @@ FSWAssGridCheck_Skip6:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push	xwa
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_7@hi16
-	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_7@lo16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_6@hi16
+	pushw FSWAssGrid_EventDispatch_Entry_Str_Fmts_6@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked

@@ -1802,9 +1802,9 @@ ColorBlit_Variant_ByteData:
 	ld	l, a
 	ld	a, e
 	and	a, 15
-	jr	z, ColorBlit_Variant_ByteData_Skip
+	jr	z, ColorBlit_WithPaletteSave_Skip
 	srla l	; srl A,L
-ColorBlit_Variant_ByteData_Skip:
+ColorBlit_WithPaletteSave_Skip:
 	mul	l, 3
 	extz	hl
 	add	hl, hl
@@ -1846,9 +1846,9 @@ ColorBlit_Variant_ByteData_Skip:
 	ld	l, a
 	ld	a, e
 	and	a, 15
-	jr	z, ColorBlit_Variant_ByteData_Skip2
+	jr	z, ColorBlit_WithPaletteSave_Skip2
 	srla l	; srl A,L
-ColorBlit_Variant_ByteData_Skip2:
+ColorBlit_WithPaletteSave_Skip2:
 	sll	l, 2
 	extz	hl
 	add	hl, hl

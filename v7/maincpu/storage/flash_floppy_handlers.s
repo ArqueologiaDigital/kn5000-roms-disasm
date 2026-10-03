@@ -989,7 +989,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (InitializeNaka_Data_2:24)
+	ld wa, (Naka_ResEventCount_1CB:24)
 	ld (XBC+0x08),WA
 	lda xwa, (ToneGen_ParamTable_0x557:24)
 	ld (XBC+0x0a),XWA
@@ -1000,7 +1000,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (InitializeNaka_Data_3:24)
+	ld wa, (Naka_ResMethodCount_1EB:24)
 	ld (XBC+0x08),WA
 	lda xwa, (ToneGen_ParamTable_0x55D:24)
 	ld (XBC+0x0a),XWA

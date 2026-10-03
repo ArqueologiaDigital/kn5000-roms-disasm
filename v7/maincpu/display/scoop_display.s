@@ -18822,7 +18822,7 @@ Scoop_EventLoop_12Entry_Alt_Data_Target5:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, Scoop_EventLoop_12Entry_Process_Data_2
+	ld	xiy, Scoop_EventLoop_12Entry_Alt_Data_Target5_Data
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	; llvm-mc cannot spell this byte
@@ -18881,8 +18881,8 @@ Scoop_EventLoop_12Entry_Join2:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt1d_2@hi16
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt1d_2@lo16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt1d@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt1d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18892,8 +18892,8 @@ Scoop_EventLoop_12Entry_Skip5:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt2d_2@hi16
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt2d_2@lo16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18903,8 +18903,8 @@ Scoop_EventLoop_12Entry_Skip6:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt3d_2@hi16
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt3d_2@lo16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18920,8 +18920,8 @@ Scoop_EventLoop_12Entry_Skip7:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt2d_3@hi16
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt2d_3@lo16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d_2@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt2d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18931,8 +18931,8 @@ Scoop_EventLoop_12Entry_Skip8:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt3d_3@hi16
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt3d_3@lo16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d_2@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18942,8 +18942,8 @@ Scoop_EventLoop_12Entry_Skip9:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt4d@hi16
-	pushw	Scoop_EventLoop_12Entry_Process_Str_Fmt4d@lo16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt4d@hi16
+	pushw	Scoop_EventLoop_12Entry_Alt_Data_Target5_Str_Fmt4d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked

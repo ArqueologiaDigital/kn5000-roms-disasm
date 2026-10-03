@@ -8425,7 +8425,7 @@ SeMenu_ShowConfirmDialog_Sub:
 	jr	SeMenu_ShowConfirmDialog_Sub_Join
 SeMenu_ShowConfirmDialog_Sub_Skip:
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x1140
+	ld	xiy, SeMenu_ShowConfirmDialog_Sub_Data
 	ld	xix, SeMenu_ShowConfirmDialog_Sub_Data_2
 	call	SeGfx_DrawStaticList
 SeMenu_ShowConfirmDialog_Sub_Join:
@@ -8577,7 +8577,7 @@ SeMenu_WaveformSelect_Data_Skip:
 	ld	(COLORBLIT_MODE:24), 0
 	cp	(1710:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip2
-	ld	xiy, SeScreenData_0x0562
+	ld	xiy, SeMenu_WaveformSelect_Apply_Data
 	ld	xix, SeScreenData_0x0685
 	call	SeGfx_DrawStaticList
 	call	SeMenu_WaveformSelect_Apply_Helper
@@ -8715,7 +8715,7 @@ SeMenu_PresetManager_Save:
 	; --- Wrapper 2: XIY/XIX setup + 2 calls (25 bytes) ---
 	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x0558
-	ld xix, SeScreenData_0x0562
+	ld xix, SeMenu_WaveformSelect_Apply_Data
 	call SeGfx_DrawStaticList
 	call SeMenu_PresetManager_Save_Helper
 	ret
@@ -8898,7 +8898,7 @@ SeMenu_FxEdit_Init_Helper:
 SeMenu_PresetBrowser_Init:
 	; --- Main: call sub, setup XIY/XIX, call F0EC00, 3 more calls (51 bytes) ---
 	call SeMenu_PresetBrowser_Navigate
-	ld xiy, SeScreenData_0x0E31
+	ld xiy, SeMenu_PresetBrowser_Init_Data
 	ld xix, SeScreenData_0x1043
 	call SeGfx_DrawStaticList
 	call SeMenu_BitShiftMask_Helper
@@ -8913,13 +8913,13 @@ SeMenu_PresetBrowser_Navigate:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x0D5E
-	ld xix, SeScreenData_0x0E0E
+	ld xix, SeMenu_PresetBrowser_Navigate_Data
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_PresetBrowser_Select:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(COLORBLIT_MODE:24), 0
-	ld xiy, SeScreenData_0x0E0E
+	ld xiy, SeMenu_PresetBrowser_Navigate_Data
 	ld xix, SeScreenData_0x0E13
 	call SeGfx_DrawStaticList
 	ret
@@ -9118,7 +9118,7 @@ SeMenu_CompareAndApply_Data4:
 	; --- Tail helper: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x113B
-	ld xix, SeScreenData_0x1140
+	ld xix, SeMenu_ShowConfirmDialog_Sub_Data
 	call SeGfx_DrawStaticList
 	ret
 
@@ -9253,7 +9253,7 @@ SeMenu_Utility_CompareBlock_Loop:
 	ret
 SeMenu_Utility_CompareBlock_End:
 	; --- Helper: XIY/XIX setup + call F0EC00, call F0F6F5 (19 bytes) ---
-	ld xiy, SeScreenData_0x1780
+	ld xiy, SeMenu_Utility_CompareBlock_Data
 	ld xix, SeMenu_Utility_CompareBlock_Data_2
 	call SeGfx_DrawStaticList
 	call SeMenu_PresetManager_Save
@@ -9286,7 +9286,7 @@ SeMenu_Utility_FormatNumber_End:
 	ld xiy, SeMenu_Utility_FormatNumber_Data_2
 	cp	(1710:16), 1
 	jr z, SeMenu_Utility_FormatNumber_Data
-	ld xix, SeScreenData_0x1780
+	ld xix, SeMenu_Utility_CompareBlock_Data
 	jr t, SeMenu_Utility_FormatSigned
 SeMenu_Utility_FormatNumber_Data:
 	ld xix, SeMenu_Utility_FormatNumber_Data_2 + 24
@@ -10137,12 +10137,12 @@ SeMenu_PresetInit_Lookup2Return:
 SeMenu_FxEdit_Init:
 	call	SeMenu_FxEdit_Init_Helper
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x34F3
+	ld	xiy, SeMenu_FxEdit_Init_Data
 	ld	xix, SeMenu_FxEdit_Init_Data_2
 	call	SeGfx_DrawStaticList
 	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x34E9
-	ld	xix, SeScreenData_0x34F3
+	ld	xix, SeMenu_FxEdit_Init_Data
 	call	SeGfx_DrawStaticList
 	ldw	(1734:16), 47
 	ldw	(1736:16), 51
@@ -10162,7 +10162,7 @@ SeMenu_FxEdit_DataBlock1:
 	call	SeGfx_DrawStaticList
 	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x34E9
-	ld	xix, SeScreenData_0x34F3
+	ld	xix, SeMenu_FxEdit_Init_Data
 	call	SeGfx_DrawStaticList
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
@@ -10302,15 +10302,15 @@ SeMenu_FilterEdit_DataBlock5:
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_FilterEdit_DataBlock5_Skip
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x3C37
+	ld	xiy, SeMenu_FilterEdit_DataBlock5_Data
 	ld	xix, SeScreenData_0x3D17
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
 	jr	SeMenu_FilterEdit_DataBlock5_Join2
 SeMenu_FilterEdit_DataBlock5_Skip:
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x3C37
-	ld	xix, SeScreenData_0x3C37 + 175
+	ld	xiy, SeMenu_FilterEdit_DataBlock5_Data
+	ld	xix, SeMenu_FilterEdit_DataBlock5_Data + 175
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x3D17
 	ld	xix, SeScreenData_0x3D36
@@ -10343,14 +10343,14 @@ SeMenu_EqEdit_SetupHelper1:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(COLORBLIT_MODE:24), 0
 	ld xiy, SeScreenData_0x3C03
-	ld xix, SeScreenData_0x3C32
+	ld xix, SeMenu_EqEdit_SetupHelper1_Data
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_EqEdit_SetupHelper2:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(COLORBLIT_MODE:24), 0
-	ld xiy, SeScreenData_0x3C32
-	ld xix, SeScreenData_0x3C37
+	ld xiy, SeMenu_EqEdit_SetupHelper1_Data
+	ld xix, SeMenu_FilterEdit_DataBlock5_Data
 	call SeGfx_DrawStaticList
 	ret
 
@@ -11986,13 +11986,13 @@ SeBitmap_EnvCurve6:
 	.byte	0b00000011
 	.byte	0b11111111
 	.byte	0b11111111
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0562
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_WaveformSelect_Apply_Data
 ; evidence: SeMenu_PresetManager_Save
 SeScreenData_0x0558:
 	sd_quad	0x1b, 3, 2, 312, 3
 ; static record list (35 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0685
 ; evidence: SeMenu_WaveformSelect_Data
-SeScreenData_0x0562:
+SeMenu_WaveformSelect_Apply_Data:
 	sd_ptext	0x1c, 16, 110, 5, "SOUND EDIT"
 	sd_ctext	0x06, 11, 36*40+0, "\020 WRITE"
 	sd_ctext	0x06, 5, 75*40+39, "\021"
@@ -12602,7 +12602,7 @@ SeScreenData_0x0D4E:
 	.long	SeScreenData_0x0D24
 	.long	SeScreenData_0x0D39
 	.long	SeScreenData_0x0D4E
-; static record list (17 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0E0E
+; static record list (17 records), read by GraphicsRender_ProcessEntries; end SeMenu_PresetBrowser_Navigate_Data
 ; evidence: SeMenu_PresetBrowser_Navigate
 SeScreenData_0x0D5E:
 	sd_ptext	0x1c, 11, 140, 5, "PITCH"
@@ -12624,7 +12624,7 @@ SeScreenData_0x0D5E:
 	sd_quad	0x09, 291, 94, 292, 105
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0E13
 ; evidence: SeMenu_PresetBrowser_Select
-SeScreenData_0x0E0E:
+SeMenu_PresetBrowser_Navigate_Data:
 	sd_op23	0x07, 3*40+14
 ; NO READER FOUND for these 30 bytes.  Searched: LE32/LE24/LE16 of every
 ; address in the span, ld xiy/xix/xiz immediates, and the loop bounds of the
@@ -12637,7 +12637,7 @@ SeScreenData_0x0E13:
 	sd_quad	0x05, 278, 107, 306, 120
 ; static record list (58 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1043
 ; evidence: SeMenu_PresetBrowser_Init
-SeScreenData_0x0E31:
+SeMenu_PresetBrowser_Init_Data:
 	sd_ptext	0x17, 9, 49, 55, "KEY"
 	sd_ptext	0x17, 9, 91, 55, "DE-"
 	sd_ptext	0x17, 10, 132, 55, "TONE"
@@ -12725,13 +12725,13 @@ SeScreenData_0x1089:
 	sd_quad	0x01, 288, 98, 295, 98
 	sd_quad	0x09, 291, 94, 292, 105
 	sd_quad	0x09, 276, 105, 308, 122
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1140
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_ShowConfirmDialog_Sub_Data
 ; evidence: SeMenu_CompareAndApply_Data4
 SeScreenData_0x113B:
 	sd_op23	0x63, 3*40+12
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_ShowConfirmDialog_Sub_Data_2
 ; evidence: code 0xF0F3BF
-SeScreenData_0x1140:
+SeMenu_ShowConfirmDialog_Sub_Data:
 	sd_quad	0x1b, 214, 70, 263, 225
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_ShowConfirmDialog_Sub_Data_3
 ; evidence: code 0xF0F3A9
@@ -12974,7 +12974,7 @@ SeScreenData_0x1740:
 	sd_quad	0x05, 278, 39, 306, 52
 	sd_quad	0x05, 270, 67, 306, 92
 	sd_quad	0x05, 278, 107, 306, 120
-; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x1776, SeScreenData_0x1780
+; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x1776, SeMenu_Utility_CompareBlock_Data
 ; evidence: SeMenu_Utility_FormatSigned
 SeMenu_Utility_FormatNumber_Data_2:
 	sd_ctext	0x06, 8, 137*40+32, "M0DE"
@@ -12983,7 +12983,7 @@ SeMenu_Utility_FormatNumber_Data_2:
 	sd_quad	0x05, 270, 67, 306, 92
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_Utility_CompareBlock_Data_2
 ; evidence: SeMenu_Utility_CompareBlock_End
-SeScreenData_0x1780:
+SeMenu_Utility_CompareBlock_Data:
 	sd_ctext	0x06, 11, 6*40+32, "PAGE1/2"
 ; static record list (38 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x18D8
 ; evidence: SeMenu_Utility_CompareBlock, SeMenu_Utility_FormatSigned_Data
@@ -14424,13 +14424,13 @@ SeScreenData_0x336C:
 	sd_quad	0x02, 124, 56, 124, 202
 	sd_quad	0x02, 174, 56, 174, 202
 	sd_quad	0x05, 244, 180, 287, 200
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x34F3
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_FxEdit_Init_Data
 ; evidence: SeMenu_FxEdit_Init, SeMenu_FxEdit_DataBlock1
 SeScreenData_0x34E9:
 	sd_quad	0x09, 69, 204, 251, 233
 ; static record list (13 records), read by GraphicsRender_ProcessEntries; end SeMenu_FxEdit_Init_Data_2
 ; evidence: SeMenu_FxEdit_Init
-SeScreenData_0x34F3:
+SeMenu_FxEdit_Init_Data:
 	sd_ctext	0x06, 13, 30*40+13, "KEY LAYER"
 	sd_ptext	0x17, 7, 57, 42, "0"
 	sd_ptext	0x17, 7, 84, 42, "1"
@@ -14739,20 +14739,20 @@ SeScreenData_0x3BDB:
 	.long	SeScreenData_0x3BCA
 	.long	SeScreenData_0x3BCA
 	.long	SeScreenData_0x3BCA
-; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3C32
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeMenu_EqEdit_SetupHelper1_Data
 ; evidence: SeMenu_EqEdit_SetupHelper1
 SeScreenData_0x3C03:
 	sd_ptext	0x1c, 16, 114, 5, "C0NTR0LLER"
 	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
 	sd_quad	0x09, 4, 4, 68, 16
 	sd_op23	0x5f, 3*40+11
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3C37
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_FilterEdit_DataBlock5_Data
 ; evidence: SeMenu_EqEdit_SetupHelper2
-SeScreenData_0x3C32:
+SeMenu_EqEdit_SetupHelper1_Data:
 	sd_op23	0x5f, 3*40+11
 ; static record list (28 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x3CE6, SeScreenData_0x3D17
 ; evidence: SeMenu_FilterEdit_DataBlock5
-SeScreenData_0x3C37:
+SeMenu_FilterEdit_DataBlock5_Data:
 	sd_ctext	0x07, 6, 71*40+7, "__"
 	sd_ctext	0x07, 5, 73*40+0, "\020"
 	sd_ctext	0x07, 5, 73*40+39, "\021"

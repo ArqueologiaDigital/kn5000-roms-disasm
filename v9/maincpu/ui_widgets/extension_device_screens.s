@@ -996,7 +996,7 @@ Encoder_PrepareCallback_PtrTable_2:	.incbin "includes/generated/naka_extension_d
 ; [nakarest] VoiceInit_Dispatch (boot/screen_group_dispatch.s: `ld xbc,
 ; [nakarest] SystemConfig_PointerTable`); 21 data words in ExtDev_SndParam_DispatchComplex_PtrTable
 ; [nakarest] (at 0xed9fa4, 0xed9fa8, 0xed9fac), which is read by
-; [nakarest] ExtDev_SndParam_BlockA9_Var02_Code_Skip6 (audio/audio_control_engine.s: `lda xde,
+; [nakarest] FileIO_BytecodeData_Code_Skip84 (audio/audio_control_engine.s: `lda xde,
 ; [nakarest] (ExtDev_SndParam_DispatchComplex_PtrTable:24)`).
 SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x12
 FileIO_BytecodeData_Data:			.incbin "includes/generated/naka_extension_device.bin", 0x3564, 0x2
@@ -1022,7 +1022,7 @@ ExtDevScreen_UserInitWallpaper_Flag:		.incbin "includes/generated/naka_extension
 ExtDevScreen_UserInitWallpaper_Data:		.incbin "includes/generated/naka_extension_device.bin", 0x3790, 0x48
 ; [nakarest] naka_extension_device+0x37d8  +0x37d8..+0x3854 (0xed9fa4, 124 B)
 ; [nakarest] purpose not established: layout of 124 B at 0xed9fa4 not derived; readers below
-; [nakarest] Readers: source references ExtDev_SndParam_BlockA9_Var02_Code_Skip6
+; [nakarest] Readers: source references FileIO_BytecodeData_Code_Skip84
 ; [nakarest] (audio/audio_control_engine.s: `lda xde,
 ; [nakarest] (ExtDev_SndParam_DispatchComplex_PtrTable:24)`).
 ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x7C	; 8 x 32-bit pointer

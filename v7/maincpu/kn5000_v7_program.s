@@ -895,12 +895,12 @@ Naka_ClassCount_16B:	.incbin "includes/generated/tonegen_param_table.bin", 0x555
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
 ToneGen_ParamTable_0x557:
 	.incbin "includes/generated/tonegen_param_table.bin", 0x557, 0x4
-InitializeNaka_Data_2:	.incbin "includes/generated/tonegen_param_table.bin", 0x55B, 0x2
+Naka_ResEventCount_1CB:	.incbin "includes/generated/tonegen_param_table.bin", 0x55B, 0x2
 ; parameter block of object 0x1eb (class 0x0160000D, proc ResMethodProc), registered by InitializeNaka+0x6C
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
 ToneGen_ParamTable_0x55D:
 	.incbin "includes/generated/tonegen_param_table.bin", 0x55D, 0x4
-InitializeNaka_Data_3:	.incbin "includes/generated/tonegen_param_table.bin", 0x561, 0x2
+Naka_ResMethodCount_1EB:	.incbin "includes/generated/tonegen_param_table.bin", 0x561, 0x2
 ; parameter block of object 0x10b (class 0x01600001, proc FunctionProc), registered by InitializeNaka+0xDB
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 4 B; the proc's read length was not measured
 ToneGen_ParamTable_0x563:
