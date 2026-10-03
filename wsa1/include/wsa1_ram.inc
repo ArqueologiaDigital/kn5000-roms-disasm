@@ -123,3 +123,17 @@
 
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "EffectAlgoMaps header (0xF133E4)"
 	.equ Effect_BlockIndex,		0x2797	; which DSP effect block: IndexedTable entry 97, 98 or 99, minus 97 -- EffectAlgoMaps: (0x2797) = entry - 97
+
+; ---- wsa1/prom_a/wsa1_prom_a.s -- "UiListA_* headers: the payload UiEventList_Run hands the class handlers"
+	.equ UiEvent_Byte1,		0x20b8	; the event record's byte +1; the message/page number the 0xFC0000 module dispatches on -- UiListA_* headers; MidiIn_ReqRouteRebuild_Msg0D
+	.equ UiEvent_Byte2,		0x20b9	; the event record's byte +2 -- UiListA_* headers
+	.equ UiEvent_Byte3,		0x20ba	; the event record's byte +3 -- UiListA_* headers
+	.equ UiEvent_Class,		0x20bb	; the event record's class -- UiListA_* headers
+
+; ---- wsa1/prom_b/wsa1_prom_b.s -- "the SMF reader's input-stream fetch header"
+	.equ InputStream_Status,	0x124a	; the fetch's status: 1 on the fast path, else InputStream_Refill's return code; callers test 1 and 0xFD -- the fetch at the head of 0xF6F5A2-0xF7136F
+
+; ---- wsa1/prom_a/wsa1_prom_a.s -- "Disk_FormatSelectedMedia / LCD_TextCol_* headers"
+	.equ Disk_LastError,		0x2243	; the error code the FDC layer returned -- Disk_FormatSelectedMedia: Outputs
+	.equ LCD_TextColumnAddr,	0x259c	; display-RAM address of the byte column the packed-text services write -- LCD_TextCol_SetCursor: Inputs
+	.equ LCD_TextBitOffset,		0x259e	; the packed-text bit offset / shift count, 0..8 -- the packed-text services' Inputs
