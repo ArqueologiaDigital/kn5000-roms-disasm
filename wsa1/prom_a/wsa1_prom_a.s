@@ -2737,7 +2737,7 @@ Paint_N0teChange:
 	jr nz, .LF8047B                                      ; F80442  6e 37
 	call T_F42A88                                        ; F80444  1d 88 2a f4
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80448  c1 75 20 3e 01
-	ldw (0x209b:16), 0x0484                              ; F8044D  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F8044D  f1 9b 20 02 84 04
 	ldw (0x2666:16), 0xffff                              ; F80453  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F80459  f1 6a 26 02 ff ff
 	ld a, (0x0ded:16)                                   ; F8045F  c1 ed 0d 21
@@ -3096,7 +3096,7 @@ Paint_MeasureC0py:
 	jr nz, .LF80792                                      ; F80775  6e 1b
 	call T_F429D8                                        ; F80777  1d d8 29 f4
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F8077B  c1 75 20 3e 01
-	ldw (0x209b:16), 0x0484                              ; F80780  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F80780  f1 9b 20 02 84 04
 	ldw (0x2666:16), 0xffff                              ; F80786  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F8078C  f1 6a 26 02 ff ff
 .LF80792:
@@ -3466,7 +3466,7 @@ Paint_MeasureInsert:
 	jr nz, .LF80AEF                                      ; F80AD2  6e 1b
 	call T_F429A8                                        ; F80AD4  1d a8 29 f4
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80AD8  c1 75 20 3e 01
-	ldw (0x209b:16), 0x0484                              ; F80ADD  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F80ADD  f1 9b 20 02 84 04
 	ldw (0x2666:16), 0xffff                              ; F80AE3  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F80AE9  f1 6a 26 02 ff ff
 .LF80AEF:
@@ -3836,7 +3836,7 @@ Paint_S0ngSelectName:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F80E2E  1d 80 2e f4
 	call S0ngSelectName_PrepareValues                                      ; F80E32  1d 8d 17 f8
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80E36  c1 75 20 3e 01
-	ldw (0x209b:16), 0x0605                              ; F80E3B  f1 9b 20 02 05 06
+	ldw (PanelDial_DownButton:16), 0x0605                              ; F80E3B  f1 9b 20 02 05 06
 	ldw (0x2666:16), 0xffff                              ; F80E41  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F80E47  f1 6a 26 02 ff ff
 	m_bit 4, MD16, 0x2095                                ; F80E4D  f1 95 20 cc
@@ -4045,8 +4045,8 @@ sub_F8101E:
 	ret                                                  ; F81038  0e
 sub_F81039:
 	call T_F42EC4                                        ; F81039  1d c4 2e f4
-	ld a, (0x207a:16)                                   ; F8103D  c1 7a 20 21
-	m_cp_rm MB16, 0x207b, r1                             ; F81041  c1 7b 20 f1
+	ld a, (UI_ScreenLatch:16)                                   ; F8103D  c1 7a 20 21
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F81041  c1 7b 20 f1
 	jr z, .LF81047                                       ; F81045  66 00
 .LF81047:
 	ret                                                  ; F81047  0e
@@ -4076,7 +4076,7 @@ sub_F81039:
 ; ---------------------------------------------------------------------
 Paint_SequencerMedley:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F81048  1d 80 2e f4
-	m_cp_mi8 MB16, 0x207b, 0x13                          ; F8104C  c1 7b 20 3f 13
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x13                          ; F8104C  c1 7b 20 3f 13
 	jr z, .LF81073                                       ; F81051  66 20
 	call T_Disk_PortA3_Release_Call_Call                                        ; F81053  1d 90 25 f4
 	call T_F42C18                                        ; F81057  1d 18 2c f4
@@ -4127,7 +4127,7 @@ Paint_SequencerMedley:
 ; ScreenLeaveBody_SequencerMedley -- the Leave method body of the SequencerMedley screen
 ; Evidence: prom_b ScreenLeave_SequencerMedley (0xF7D2A4) is `call 0xF810F0 / ret` (+4 of screen object 0xF43150).  Unless (0x207A)=0x13 it clears (0x2094) bit 6, which Paint_SequencerMedley sets; then call T_F42BD0 (prom_b 0xF6614E).  Bytes after the `ret` are ButtonTable_SequencerMedley slot handlers.
 ScreenLeaveBody_SequencerMedley:
-	m_cp_mi8 MB16, 0x207a, 0x13                          ; F810F0  c1 7a 20 3f 13
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x13                          ; F810F0  c1 7a 20 3f 13
 	jr z, .LF810FC                                       ; F810F5  66 05
 	m_and_mi8 MB16, 0x2094, 0xbf                         ; F810F7  c1 94 20 3c bf
 .LF810FC:
@@ -4546,7 +4546,7 @@ S0ngSelectName_NextSong:
 ; Evidence: SoftKeyCol4 arm.  (0x2075),9; site 0xF8152C erases the position and character boxes (DL_F3C367-DLTable_F3C37D, svc 0x1B); (0x222D)-1 if >=0 into (0x222D)/(0x2721)/(0x1301); SongName_CharIndexAtCursor; (0x1302)=(0x21F9); fills both boxes again (records DL_F3C351/0xF3C35C, svc 5).
 S0ngSelectName_CursorLeft:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F81512  c1 75 20 3e 09
-	ldw (0x209b:16), 0x0605                              ; F81517  f1 9b 20 02 05 06
+	ldw (PanelDial_DownButton:16), 0x0605                              ; F81517  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8151D  f1 40 25 00 01
 	ld XIY,DL_F3C367                                     ; F81522  45 67 c3 f3 00
 	ld XIX,DLTable_F3C37D                                ; F81527  44 7d c3 f3 00
@@ -4574,7 +4574,7 @@ S0ngSelectName_CursorLeft:
 ; Evidence: SoftKeyCol5 arm; as S0ngSelectName_CursorLeft with `inc` and `cp A,5 / jr gt` (six positions); site 0xF8158E is the erase.
 S0ngSelectName_CursorRight:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F81574  c1 75 20 3e 09
-	ldw (0x209b:16), 0x0605                              ; F81579  f1 9b 20 02 05 06
+	ldw (PanelDial_DownButton:16), 0x0605                              ; F81579  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8157F  f1 40 25 00 01
 	ld XIY,DL_F3C367                                     ; F81584  45 67 c3 f3 00
 	ld XIX,DLTable_F3C37D                                ; F81589  44 7d c3 f3 00
@@ -4602,7 +4602,7 @@ S0ngSelectName_CursorRight:
 ; Evidence: SoftKeyCol6 arm; erases the character box (record 0xF3C372), SongName_StepCharAtCursor with W=0x81, (0x1302)=(0x21F9), SongName_Draw6Chars on layer 0, fills the box (0xF3C35C).
 S0ngSelectName_CharPrev:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F815D6  c1 75 20 3e 09
-	ldw (0x209b:16), 0x0605                              ; F815DB  f1 9b 20 02 05 06
+	ldw (PanelDial_DownButton:16), 0x0605                              ; F815DB  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F815E1  f1 40 25 00 01
 	ld XIY,0x00f3c372                                    ; F815E6  45 72 c3 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F815EB  1d 20 18 f4
@@ -4621,7 +4621,7 @@ S0ngSelectName_CharPrev:
 ; Evidence: SoftKeyCol7 arm; as S0ngSelectName_CharPrev with W=0x01.
 S0ngSelectName_CharNext:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F8161A  c1 75 20 3e 09
-	ldw (0x209b:16), 0x0605                              ; F8161F  f1 9b 20 02 05 06
+	ldw (PanelDial_DownButton:16), 0x0605                              ; F8161F  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F81625  f1 40 25 00 01
 	ld XIY,0x00f3c372                                    ; F8162A  45 72 c3 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F8162F  1d 20 18 f4
@@ -4790,7 +4790,7 @@ CharSet_F81768:
 ; S0ngSelectName_PrepareValues -- set up the SONG SELECT & NAME display variables on entry
 ; Evidence: first call of Paint_S0ngSelectName (0xF80E32).  Unless (0x207B)=0x0D: (0x0E45)=0, T_F409AC, (0x34BB),4, cursor (0x222D)=(0x1301)=0, (0x60341E)=(0x360C).  Always: 6 bytes 0x6034CA -> 0x12F6, (0x12FC)=(0x360A)+1, SongName_CharIndexAtCursor -> (0x1302), and the KB/percent pair as S0ngSelectName_UpdateSizeValues does.
 S0ngSelectName_PrepareValues:
-	m_cp_mi8 MB16, 0x207b, 0x0d                          ; F8178D  c1 7b 20 3f 0d
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x0d                          ; F8178D  c1 7b 20 3f 0d
 	jr z, .LF817B5                                       ; F81792  66 21
 	ld (0x0e45:16), 0x00                                 ; F81794  f1 45 0e 00 00
 	call T_F409AC                                        ; F81799  1d ac 09 f4
@@ -4822,7 +4822,7 @@ S0ngSelectName_PrepareValues:
 ; S0ngSelectName_Leave -- the work of the S0ngSelectName Leave method
 ; Evidence: only caller is ScreenLeaveBody_S0ngSelectName.  Unless (0x207A)=0x0D: and (0x34BB),0xFB (undoing S0ngSelectName_PrepareValues' or), call T_F411B8, (0x0E45)=0.
 S0ngSelectName_Leave:
-	m_cp_mi8 MB16, 0x207a, 0x0d                          ; F817F7  c1 7a 20 3f 0d
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0d                          ; F817F7  c1 7a 20 3f 0d
 	jr z, .LF8180C                                       ; F817FC  66 0e
 	m_and_mi8 MB16, 0x34bb, 0xfb                         ; F817FE  c1 bb 34 3c fb
 	call T_F411B8                                        ; F81803  1d b8 11 f4
@@ -5680,8 +5680,8 @@ MainTask_Loop:
 	jr z, .LF82120                                       ; F8210C  66 12
 .LF8210E:
 	call T_PanelTask_Step                                ; F8210E  1d 34 0f f4
-	ld a, (0x207a:16)                                   ; F82112  c1 7a 20 21
-	m_cp_rm MB16, 0x207b, r1                             ; F82116  c1 7b 20 f1
+	ld a, (UI_ScreenLatch:16)                                   ; F82112  c1 7a 20 21
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F82116  c1 7b 20 f1
 	jr z, .LF82120                                       ; F8211A  66 04
 	call T_F411BC                                        ; F8211C  1d bc 11 f4
 .LF82120:
@@ -7538,7 +7538,7 @@ INTT1_Tick:
 	jr NC,.LF82DE5                                ; F82D77  6f 6c
 	ld (0x95:8), 0x10:io                               ; F82D79  08 95 10
 .LF82D7C:
-	m_cp_mi8 MB16, 0x2078, 0x0d                   ; F82D7C  c1 78 20 3f 0d
+	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82D7C  c1 78 20 3f 0d
 	jr Z,.LF82D9B                                 ; F82D81  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82D83  f1 34 7f ca
 	jr Z,.LF82D9B                                 ; F82D87  66 12
@@ -7563,7 +7563,7 @@ INTT1_Tick:
 	jr Z,.LF82DB6                                 ; F82DB1  66 03
 	ld (0x96:8), 0x06:io                               ; F82DB3  08 96 06
 .LF82DB6:
-	m_cp_mi8 MB16, 0x2078, 0x0d                   ; F82DB6  c1 78 20 3f 0d
+	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82DB6  c1 78 20 3f 0d
 	jr Z,.LF82DC9                                 ; F82DBB  66 0c
 	push SR                                       ; F82DBD  02
 	ei 0x06                                       ; F82DBE  06 06
@@ -7843,7 +7843,7 @@ INTTR4_SequencerTick:
 	ld a, 0x01:opc                                   ; F82F5F  21 01
 	st_dd8b a, 0x95                               ; F82F61  f0 95 41
 	st_dd8b a, 0x96                               ; F82F64  f0 96 41
-	m_cp_mi8 MB16, 0x2078, 0x0d                   ; F82F67  c1 78 20 3f 0d
+	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82F67  c1 78 20 3f 0d
 	jr z, .LF82F86                                ; F82F6C  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82F6E  f1 34 7f ca
 	jr z, .LF82F86                                ; F82F72  66 12
@@ -7873,7 +7873,7 @@ INTTR4_SequencerTick:
 	jr .LF82FDA                                   ; F82FA6  68 32
 .LF82FA8:
 	ld (0x95:8), 0x10:io                               ; F82FA8  08 95 10
-	m_cp_mi8 MB16, 0x2078, 0x0d                   ; F82FAB  c1 78 20 3f 0d
+	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82FAB  c1 78 20 3f 0d
 	jr z, .LF82FCA                                ; F82FB0  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82FB2  f1 34 7f ca
 	jr z, .LF82FCA                                ; F82FB6  66 12
@@ -7898,7 +7898,7 @@ INTTR4_SequencerTick:
 	ld_sd8b a, 0x8d                               ; F82FDF  c0 8d 21   (0x8D) mod 4 -- 96 ticks/beat / 4 = 24, the MIDI clock rate
 	and A,0x03                                    ; F82FE2  c9 cc 03
 	jr nz, .LF82FFA                               ; F82FE5  6e 13
-	m_cp_mi8 MB16, 0x2078, 0x0d                   ; F82FE7  c1 78 20 3f 0d
+	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82FE7  c1 78 20 3f 0d
 	jr z, .LF82FFA                                ; F82FEC  66 0c
 	push SR                                       ; F82FEE  02
 	ei 0x06                                       ; F82FEF  06 06
@@ -10854,11 +10854,11 @@ PanelState_Init:   ; entry: calr from 0xF86018
 	ld a, 0x02:opc                                   ; F86033  21 02   ld A,0x02
 	ld w, 0x02:opc                                   ; F86035  20 02   ld W,0x02
 .LF86037:
-	ld (0x207a:16), a                            ; F86037  f1 7a 20 41   ld (0x207a),A
+	ld (UI_ScreenLatch:16), a                            ; F86037  f1 7a 20 41   ld (0x207a),A
 	ld (UI_ScreenId:16), a                            ; F8603B  f1 7c 20 41   ld (0x207c),A
 	ld (0x2083:16), a                            ; F8603F  f1 83 20 41   ld (0x2083),A
-	ld (0x2078:16), w                            ; F86043  f1 78 20 40   ld (0x2078),W
-	ld (0x2079:16), 0xff                          ; F86047  f1 79 20 00 ff   ld (0x2079),0xff
+	ld (PanelMode:16), w                            ; F86043  f1 78 20 40   ld (0x2078),W
+	ld (PanelMode_Previous:16), 0xff                          ; F86047  f1 79 20 00 ff   ld (0x2079),0xff
 	ld (0x2076:16), w                            ; F8604C  f1 76 20 40   ld (0x2076),W
 	ld (0x2077:16), 0xff                          ; F86050  f1 77 20 00 ff   ld (0x2077),0xff
 	ldw (UI_Request:16), 0x40aa                       ; F86055  f1 70 20 02 aa 40   ld (0x2070),0x40aa
@@ -11002,12 +11002,12 @@ UiEventList_Publish:   ; entry: prom_b directory slot T_UiEventList_Publish (T_F
 PanelState_LatchPrevious:   ; entry: calr from 0xF8606C
 	m_cp_mi8 MB16, 0x2077, 0xff                   ; F860D9  c1 77 20 3f ff   cp (0x2077),0xff
 	jr z, .LF860F8                                ; F860DE  66 18
-	ld a, (0x2078:16)                            ; F860E0  c1 78 20 21   ld A,(0x2078)
-	ld (0x2079:16), a                            ; F860E4  f1 79 20 41   ld (0x2079),A
-	ld a, (0x207a:16)                            ; F860E8  c1 7a 20 21   ld A,(0x207a)
-	ld (0x207b:16), a                            ; F860EC  f1 7b 20 41   ld (0x207b),A
+	ld a, (PanelMode:16)                            ; F860E0  c1 78 20 21   ld A,(0x2078)
+	ld (PanelMode_Previous:16), a                            ; F860E4  f1 79 20 41   ld (0x2079),A
+	ld a, (UI_ScreenLatch:16)                            ; F860E8  c1 7a 20 21   ld A,(0x207a)
+	ld (UI_ScreenLatch_Previous:16), a                            ; F860EC  f1 7b 20 41   ld (0x207b),A
 	ld a, (UI_ScreenId:16)                            ; F860F0  c1 7c 20 21   ld A,(0x207c)
-	ld (0x207d:16), a                            ; F860F4  f1 7d 20 41   ld (0x207d),A
+	ld (UI_ScreenId_Previous:16), a                            ; F860F4  f1 7d 20 41   ld (0x207d),A
 .LF860F8:
 	ld a, (0x2076:16)                            ; F860F8  c1 76 20 21   ld A,(0x2076)
 	ld (0x2077:16), a                            ; F860FC  f1 77 20 41   ld (0x2077),A
@@ -11398,7 +11398,7 @@ PanelScreen_ApplyModeChange:   ; entry: calr from 0xF8610F
 	calr .LF86388                                 ; F8632A  1e 5b 00
 	ld (0x2073:16), 0x00                          ; F8632D  f1 73 20 00 00   ld (0x2073),0x00
 	ld a, (UI_ScreenId:16)                            ; F86332  c1 7c 20 21   ld A,(0x207c)
-	ld w, (0x207d:16)                            ; F86336  c1 7d 20 20   ld W,(0x207d)
+	ld w, (UI_ScreenId_Previous:16)                            ; F86336  c1 7d 20 20   ld W,(0x207d)
 	cp A,W                                        ; F8633A  c8 f1
 	jr nz, .LF86343                               ; F8633C  6e 05
 	m_or_mi8 MB16, 0x2072, 0x10                   ; F8633E  c1 72 20 3e 10   or (0x2072),0x10
@@ -11445,7 +11445,7 @@ PanelMode_Normalise:   ; entry: calr from 0xF86327
 	jr nz, .LF86383                               ; F8637F  6e 02
 	ld a, 0x02:opc                                   ; F86381  21 02   ld A,0x02
 .LF86383:
-	ld (0x2078:16), a                            ; F86383  f1 78 20 41   ld (0x2078),A
+	ld (PanelMode:16), a                            ; F86383  f1 78 20 41   ld (0x2078),A
 	ret                                           ; F86387  0e
 
 ; ---------------------------------------------------------------------
@@ -11463,7 +11463,7 @@ PanelMode_Normalise:   ; entry: calr from 0xF86327
 PanelMode_ToScreenId:   ; entry: calr from 0xF8632A
 	ld XHL,PanelMode_ToScreenIdMap                ; F86388  43 a1 6e f8 00
 	xor XWA,XWA                                   ; F8638D  e8 d0
-	ld a, (0x2078:16)                            ; F8638F  c1 78 20 21   ld A,(0x2078)
+	ld a, (PanelMode:16)                            ; F8638F  c1 78 20 21   ld A,(0x2078)
 	add XHL,XWA                                   ; F86393  e8 83
 	ld A,(XHL)                                    ; F86395  83 21
 	ld (UI_ScreenId:16), a                            ; F86397  f1 7c 20 41   ld (0x207c),A
@@ -11542,8 +11542,8 @@ PanelState_UpdateFlags2092:   ; entry: calr from 0xF86075
 ; ---------------------------------------------------------------------
 .LF863F5:
 PanelState_Update207A:   ; entry: calr from 0xF86078
-	ld w, (0x2078:16)                            ; F863F5  c1 78 20 20   ld W,(0x2078)
-	ld a, (0x2079:16)                            ; F863F9  c1 79 20 21   ld A,(0x2079)
+	ld w, (PanelMode:16)                            ; F863F5  c1 78 20 20   ld W,(0x2078)
+	ld a, (PanelMode_Previous:16)                            ; F863F9  c1 79 20 21   ld A,(0x2079)
 	cp W,A                                        ; F863FD  c9 f0
 	jr nz, .LF8640A                               ; F863FF  6e 09
 	ld a, (0x2092:16)                            ; F86401  c1 92 20 21   ld A,(0x2092)
@@ -11551,7 +11551,7 @@ PanelState_Update207A:   ; entry: calr from 0xF86078
 	jr nz, .LF86412                               ; F86408  6e 08
 .LF8640A:
 	ld a, (UI_ScreenId:16)                            ; F8640A  c1 7c 20 21   ld A,(0x207c)
-	ld (0x207a:16), a                            ; F8640E  f1 7a 20 41   ld (0x207a),A
+	ld (UI_ScreenLatch:16), a                            ; F8640E  f1 7a 20 41   ld (0x207a),A
 .LF86412:
 	ret                                           ; F86412  0e
 
@@ -11573,8 +11573,8 @@ PanelState_Update207A:   ; entry: calr from 0xF86078
 ; ---------------------------------------------------------------------
 .LF86413:
 PanelState_ClearOnChange:   ; entry: calr from 0xF8607B
-	ld a, (0x2078:16)                            ; F86413  c1 78 20 21   ld A,(0x2078)
-	ld w, (0x2079:16)                            ; F86417  c1 79 20 20   ld W,(0x2079)
+	ld a, (PanelMode:16)                            ; F86413  c1 78 20 21   ld A,(0x2078)
+	ld w, (PanelMode_Previous:16)                            ; F86417  c1 79 20 20   ld W,(0x2079)
 	cp A,W                                        ; F8641B  c8 f1
 	jr z, .LF8643E                                ; F8641D  66 1f
 	xor WA,WA                                     ; F8641F  d8 d0
@@ -11585,8 +11585,8 @@ PanelState_ClearOnChange:   ; entry: calr from 0xF8607B
 	orw	(0x2134:16), 0x0002                  ; F86433  d1 34 21 3e 02 00
 	ld (0x20a2:16), 0x00                          ; F86439  f1 a2 20 00 00   ld (0x20a2),0x00
 .LF8643E:
-	ld a, (0x207a:16)                            ; F8643E  c1 7a 20 21   ld A,(0x207a)
-	ld w, (0x207b:16)                            ; F86442  c1 7b 20 20   ld W,(0x207b)
+	ld a, (UI_ScreenLatch:16)                            ; F8643E  c1 7a 20 21   ld A,(0x207a)
+	ld w, (UI_ScreenLatch_Previous:16)                            ; F86442  c1 7b 20 20   ld W,(0x207b)
 	cp A,W                                        ; F86446  c8 f1
 	jr z, .LF86462                                ; F86448  66 18
 	xor WA,WA                                     ; F8644A  d8 d0
@@ -11597,7 +11597,7 @@ PanelState_ClearOnChange:   ; entry: calr from 0xF8607B
 	ld (0x20a2:16), 0x00                          ; F8645D  f1 a2 20 00 00   ld (0x20a2),0x00
 .LF86462:
 	ld a, (UI_ScreenId:16)                            ; F86462  c1 7c 20 21   ld A,(0x207c)
-	ld w, (0x207d:16)                            ; F86466  c1 7d 20 20   ld W,(0x207d)
+	ld w, (UI_ScreenId_Previous:16)                            ; F86466  c1 7d 20 20   ld W,(0x207d)
 	cp A,W                                        ; F8646A  c8 f1
 	jr z, .LF86487                                ; F8646C  66 19
 	m_and_mi8 MB16, UI_RequestBits, 0x94                  ; F8646E  c1 75 20 3c 94   and (0x2075),0x94
@@ -11624,24 +11624,24 @@ PanelState_ClearOnChange:   ; entry: calr from 0xF8607B
 .LF8648D:
 PanelScreen_RunLeave:   ; entry: calr from 0xF8605C, 0xF8607E
 	xor HL,HL                                     ; F8648D  db d3
-	ld l, (0x207d:16)                            ; F8648F  c1 7d 20 27   ld L,(0x207d)
+	ld l, (UI_ScreenId_Previous:16)                            ; F8648F  c1 7d 20 27   ld L,(0x207d)
 	cp (UI_ScreenId:16), l                             ; F86493  c1 7c 20 ff   cp (0x207c),L
 	jr z, .LF8649C                                ; F86497  66 03
 	calr .LF864C7                                 ; F86499  1e 2b 00
 .LF8649C:
 	ld a, (UI_ScreenId:16)                            ; F8649C  c1 7c 20 21   ld A,(0x207c)
-	ld w, (0x207a:16)                            ; F864A0  c1 7a 20 20   ld W,(0x207a)
+	ld w, (UI_ScreenLatch:16)                            ; F864A0  c1 7a 20 20   ld W,(0x207a)
 	cp W,A                                        ; F864A4  c9 f0
 	jr nz, .LF864B7                               ; F864A6  6e 0f
 	xor HL,HL                                     ; F864A8  db d3
-	ld l, (0x207b:16)                            ; F864AA  c1 7b 20 27   ld L,(0x207b)
-	cp (0x207d:16), l                             ; F864AE  c1 7d 20 ff   cp (0x207d),L
+	ld l, (UI_ScreenLatch_Previous:16)                            ; F864AA  c1 7b 20 27   ld L,(0x207b)
+	cp (UI_ScreenId_Previous:16), l                             ; F864AE  c1 7d 20 ff   cp (0x207d),L
 	jr z, .LF864B7                                ; F864B2  66 03
 	calr .LF864C7                                 ; F864B4  1e 10 00
 .LF864B7:
 	xor HL,HL                                     ; F864B7  db d3
-	ld l, (0x2079:16)                            ; F864B9  c1 79 20 27   ld L,(0x2079)
-	cp (0x2078:16), l                             ; F864BD  c1 78 20 ff   cp (0x2078),L
+	ld l, (PanelMode_Previous:16)                            ; F864B9  c1 79 20 27   ld L,(0x2079)
+	cp (PanelMode:16), l                             ; F864BD  c1 78 20 ff   cp (0x2078),L
 	jr z, .LF864C6                                ; F864C1  66 03
 	calr .LF864E5                                 ; F864C3  1e 1f 00
 .LF864C6:
@@ -11704,14 +11704,14 @@ PanelScreen_CallLeave_A:   ; entry: calr from 0xF864C3
 .LF864FA:
 PanelScreen_RunEnter:   ; entry: calr from 0xF8605F, 0xF86081
 	xor HL,HL                                     ; F864FA  db d3
-	ld l, (0x2078:16)                            ; F864FC  c1 78 20 27   ld L,(0x2078)
-	cp (0x2079:16), l                             ; F86500  c1 79 20 ff   cp (0x2079),L
+	ld l, (PanelMode:16)                            ; F864FC  c1 78 20 27   ld L,(0x2078)
+	cp (PanelMode_Previous:16), l                             ; F86500  c1 79 20 ff   cp (0x2079),L
 	jr z, .LF86509                                ; F86504  66 03
 	calr .LF86519                                 ; F86506  1e 10 00
 .LF86509:
 	xor HL,HL                                     ; F86509  db d3
 	ld l, (UI_ScreenId:16)                            ; F8650B  c1 7c 20 27   ld L,(0x207c)
-	cp (0x207d:16), l                             ; F8650F  c1 7d 20 ff   cp (0x207d),L
+	cp (UI_ScreenId_Previous:16), l                             ; F8650F  c1 7d 20 ff   cp (0x207d),L
 	jr z, .LF86518                                ; F86513  66 03
 	calr .LF8652E                                 ; F86515  1e 16 00
 .LF86518:
@@ -11953,10 +11953,10 @@ PanelButton_Accept:   ; entry: calr from 0xF865A4
 	jr nz, .LF86654                               ; F86613  6e 3f
 	m_bit 0, MD16, UI_RequestBits                         ; F86615  f1 75 20 c8   bit 0,(0x2075)
 	jr z, .LF86654                                ; F86619  66 39
-	ld c, (0x209c:16)                            ; F8661B  c1 9c 20 23   ld C,(0x209c)
+	ld c, (PanelDial_UpButton:16)                            ; F8661B  c1 9c 20 23   ld C,(0x209c)
 	m_bit 1, MD16, UiEvent_Byte3                         ; F8661F  f1 ba 20 c9   bit 1,(0x20ba)
 	jr nz, .LF86629                               ; F86623  6e 04
-	ld c, (0x209b:16)                            ; F86625  c1 9b 20 23   ld C,(0x209b)
+	ld c, (PanelDial_DownButton:16)                            ; F86625  c1 9b 20 23   ld C,(0x209b)
 .LF86629:
 	ld (UiEvent_Byte1:16), c                            ; F86629  f1 b8 20 43   ld (0x20b8),C
 	m_and_mi8 MB16, UiEvent_Byte1, 0x1f                  ; F8662D  c1 b8 20 3c 1f   and (0x20b8),0x1f
@@ -12233,10 +12233,10 @@ PanelEvent_Code21_Dial:   ; entry: calr from 0xF865B8
 .LF8686F:
 	bit 0x07,A                                    ; F8686F  c9 33 07
 	jr nz, .LF8687A                               ; F86872  6e 06
-	ld w, (0x209c:16)                            ; F86874  c1 9c 20 20   ld W,(0x209c)
+	ld w, (PanelDial_UpButton:16)                            ; F86874  c1 9c 20 20   ld W,(0x209c)
 	jr .LF8687E                                   ; F86878  68 04
 .LF8687A:
-	ld w, (0x209b:16)                            ; F8687A  c1 9b 20 20   ld W,(0x209b)
+	ld w, (PanelDial_DownButton:16)                            ; F8687A  c1 9b 20 20   ld W,(0x209b)
 .LF8687E:
 	calr PanelButton_Route                                   ; F8687E  1e 2b f9   calr 0xf861ac
 	m_cp_mi8 MB16, 0x2073, 0x00                   ; F86881  c1 73 20 3f 00   cp (0x2073),0x00
@@ -12975,7 +12975,7 @@ PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_PanelEvent_Code20_
 	and L,H                                       ; F86C1F  ce c7
 	cp L,0x15                                     ; F86C21  cf cf 15
 	jr nz, .LF86C41                               ; F86C24  6e 1b
-	m_cp_mi8 MB16, 0x2078, 0x15                   ; F86C26  c1 78 20 3f 15   cp (0x2078),0x15
+	m_cp_mi8 MB16, PanelMode, 0x15                   ; F86C26  c1 78 20 3f 15   cp (0x2078),0x15
 	jr z, .LF86C58                                ; F86C2B  66 2b
 	m_bit 1, MD24, 0x60f020                       ; F86C2D  f2 20 f0 60 c9   bit 1,(0x60f020)
 	jr nz, .LF86C58                               ; F86C32  6e 24
@@ -12985,7 +12985,7 @@ PanelEvent_Code20_ArmHold:   ; entry: prom_b directory slot T_PanelEvent_Code20_
 .LF86C41:
 	cp l, 0x05:i3                                   ; F86C41  cf dd   cp L,5
 	jr nz, .LF86C4C                               ; F86C43  6e 07
-	m_cp_mi8 MB16, 0x2078, 0x05                   ; F86C45  c1 78 20 3f 05   cp (0x2078),0x05
+	m_cp_mi8 MB16, PanelMode, 0x05                   ; F86C45  c1 78 20 3f 05   cp (0x2078),0x05
 	jr z, .LF86C58                                ; F86C4A  66 0c
 .LF86C4C:
 	xor A,A                                       ; F86C4C  c9 d1
@@ -13104,7 +13104,7 @@ PanelHold_ScreenRequest:
 ; ---------------------------------------------------------------------
 PanelMode_To2076:   ; entry: calr from 0xF86072
 	xor HL,HL                                     ; F86CAE  db d3
-	ld l, (0x2078:16)                            ; F86CB0  c1 78 20 27   ld L,(0x2078)
+	ld l, (PanelMode:16)                            ; F86CB0  c1 78 20 27   ld L,(0x2078)
 	cp L,0x1f                                     ; F86CB4  cf cf 1f
 	jr ule, .LF86CBB                              ; F86CB7  63 02
 	ld l, 0x01:opc                                   ; F86CB9  27 01   ld L,0x01
@@ -18335,7 +18335,7 @@ Dispatch_F8A05F:
 PanelWire_PollProducers:   ; entry: named by 2 `.long` operands, first at 0xF8A05F
 	m_ld_rm MW8, Tick_Count, r0                                ; F8A070  d0 80 20
 	ld (0x2197:16), wa                                  ; F8A073  f1 97 21 50
-	m_cp_mi8 MB16, 0x207a, 0xdb                          ; F8A077  c1 7a 20 3f db
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xdb                          ; F8A077  c1 7a 20 3f db
 	jr z, .LF8A087                                       ; F8A07C  66 09
 	calr PanelWireQueue_DrainToGroupQueue                                      ; F8A07E  1e 07 00
 	calr AssignableSwitch_Poll                                          ; F8A081  1e 85 01
@@ -18743,7 +18743,7 @@ PanelGroupQueue_AppendFlaggedGroups:
 ; ---------------------------------------------------------------------
 
 PanelGroupQueue_Append:
-	m_cp_mi8 MB16, 0x207a, 0xdb                          ; F8A3B2  c1 7a 20 3f db
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xdb                          ; F8A3B2  c1 7a 20 3f db
 	jrl z, .LF8A44A                                          ; F8A3B7  76 90 00
 	ld XIY,0x0000219a                                    ; F8A3BA  45 9a 21 00 00
 	ld XIX,0x00002000                                    ; F8A3BF  44 00 20 00 00
@@ -19914,7 +19914,7 @@ PanelAction_BankRemap:   ; entry: PanelGroupActionListPool
 	jr z, .LF8ABD9                                           ; F8AB87  66 50
 	cp A,0x16                                            ; F8AB89  c9 cf 16
 	jr z, .LF8ABD9                                           ; F8AB8C  66 4b
-	m_cp_mi8 MB16, 0x207a, 0xb7                          ; F8AB8E  c1 7a 20 3f b7
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xb7                          ; F8AB8E  c1 7a 20 3f b7
 	jr z, .LF8ABD9                                           ; F8AB93  66 44
 	ld a, (0x7f02:16)                                   ; F8AB95  c1 02 7f 21
 	and A,0xf0                                           ; F8AB99  c9 cc f0
@@ -19989,7 +19989,7 @@ PanelAction_BankButton:   ; entry: PanelGroupActionListPool
 	jr z, .LF8AC6F                                           ; F8AC2B  66 42
 	cp A,0x16                                            ; F8AC2D  c9 cf 16
 	jr z, .LF8AC6F                                           ; F8AC30  66 3d
-	m_cp_mi8 MB16, 0x207a, 0xb7                          ; F8AC32  c1 7a 20 3f b7
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xb7                          ; F8AC32  c1 7a 20 3f b7
 	jr z, .LF8AC6F                                           ; F8AC37  66 36
 	ld a, (0x7f02:16)                                   ; F8AC39  c1 02 7f 21
 	and A,0xf0                                           ; F8AC3D  c9 cc f0
@@ -22883,7 +22883,7 @@ PanelLed_SendChangedBytes:
 ;   clear, WA = BitmaskTable_F8C4B8[(0x2169) & 0x0F] and `or (XIX+A),W` -- byte 1 bit n for 0-7, byte 0 bit n-8 for
 ;   8-15.  (0x2169) is the 0..15 sound-select index PanelAction_SoundSelectOrKeypad_V1 stores.
 PanelLed_ShowSoundSelect:   ; entry: DispatchTable_F8C2B2 id=0x0004
-	cp	(0xc4:8), 0x02                       ; F8C485  c0 c4 3f 02
+	cp	(Variant_Flag:8), 0x02                       ; F8C485  c0 c4 3f 02
 	jr z, .LF8C4B7                                ; F8C489  66 2c
 	ld XIX,0x000020d0                             ; F8C48B  44 d0 20 00 00
 	and (XIX+0x01),0x00                           ; F8C490  8c 01 3c 00
@@ -22999,7 +22999,7 @@ BucketTable_F8C592:   ; 3 entries (index 0-2) + 1 pad byte duplicating the last 
 ;   (0x20D3) bit 0, 0x40 leaves both off.
 PanelLed_ShowCtrl1Offset:   ; entry: DispatchTable_F8C2B2 id=0x0100
 	ld XIX,0x000020d0                             ; F8C596  44 d0 20 00 00
-	cp	(0xc4:8), 0x02                       ; F8C59B  c0 c4 3f 02
+	cp	(Variant_Flag:8), 0x02                       ; F8C59B  c0 c4 3f 02
 	jr z, .LF8C5C2                                ; F8C59F  66 21
 	and (XIX+0x03),0xbf                           ; F8C5A1  8c 03 3c bf
 	and (XIX+0x06),0xfe                           ; F8C5A5  8c 06 3c fe
@@ -23033,7 +23033,7 @@ PanelLed_ShowCtrl1Offset:   ; entry: DispatchTable_F8C2B2 id=0x0100
 ;   assignment): above -> v1 (0x20D3) bit 7 / v2 (0x20D2) bit 1, below -> v1 (0x20D6) bit 1 / v2 (0x20D3) bit 1.
 PanelLed_ShowCtrl2Offset:   ; entry: DispatchTable_F8C2B2 id=0x0800
 	ld XIX,0x000020d0                             ; F8C5E3  44 d0 20 00 00
-	cp	(0xc4:8), 0x02                       ; F8C5E8  c0 c4 3f 02
+	cp	(Variant_Flag:8), 0x02                       ; F8C5E8  c0 c4 3f 02
 	jr z, .LF8C60F                                ; F8C5EC  66 21
 	and (XIX+0x03),0x7f                           ; F8C5EE  8c 03 3c 7f
 	and (XIX+0x06),0xfd                           ; F8C5F2  8c 06 3c fd
@@ -23090,7 +23090,7 @@ PanelLed_ClearCtrlOffsetLeds:   ; entry: reachable-run entry
 ;   handler sub_F8AA24 uses to pick event code 0x19/0x1A for v1 group 0x08's six switches.
 ; Unknown: what the two six-way settings are.
 PanelLed_ShowSixWaySelect:   ; entry: DispatchTable_F8C2B2 id=0x0080
-	cp	(0xc4:8), 0x02                       ; F8C652  c0 c4 3f 02
+	cp	(Variant_Flag:8), 0x02                       ; F8C652  c0 c4 3f 02
 	jr z, .LF8C686                                ; F8C656  66 2e
 	ld XIX,0x000020d0                             ; F8C658  44 d0 20 00 00
 	and (XIX+0x03),0xc0                           ; F8C65D  8c 03 3c c0
@@ -23165,7 +23165,7 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	or (XIX+0x06),0x08                            ; F8C7A7  8c 06 3e 08
 .LF8C7AB:
 	ret                                           ; F8C7AB  0e
-	cp	(0xc4:8), 0x02                       ; F8C7AC  c0 c4 3f 02
+	cp	(Variant_Flag:8), 0x02                       ; F8C7AC  c0 c4 3f 02
 	jr z, .LF8C7C7                                ; F8C7B0  66 15
 	ld XIX,0x000020d0                             ; F8C7B2  44 d0 20 00 00
 	and (XIX+0x07),0xfd                           ; F8C7B7  8c 07 3c fd
@@ -23181,7 +23181,7 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	or (XIX+0x06),0x04                            ; F8C7D6  8c 06 3e 04
 .LF8C7DA:
 	ret                                           ; F8C7DA  0e
-	cp	(0xc4:8), 0x02                       ; F8C7DB  c0 c4 3f 02
+	cp	(Variant_Flag:8), 0x02                       ; F8C7DB  c0 c4 3f 02
 	jr z, .LF8C7F8                                ; F8C7DF  66 17
 	bit_dd8 0x02, 0x94                            ; F8C7E1  f0 94 ca
 	jr nz, .LF8C7F8                               ; F8C7E4  6e 12
@@ -23235,7 +23235,7 @@ PanelLed_SendByteUnconditional:   ; entry: prom_b routine directory
 	calr .LF8C851                                        ; F8C846  1e 08 00
 	ret                                                  ; F8C849  0e
 .LF8C84A:
-	m_cp_mi8 MB16, 0x207a, 0xdb                          ; F8C84A  c1 7a 20 3f db
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xdb                          ; F8C84A  c1 7a 20 3f db
 	jr z, .LF8C869                                       ; F8C84F  66 18
 .LF8C851:
 	ld XIX,PanelLedWireMap_Variant1                      ; F8C851  44 ac c8 f8 00
@@ -31578,7 +31578,7 @@ sub_F90989:
 	ldw (UI_Request:16), 0x40ab                              ; F90989  f1 70 20 02 ab 40
 	ld (UI_StatusCode:16), 0x24                                 ; F9098F  f1 80 28 00 24
 	m_and_mi8 MB16, 0x20a9, 0xfe                         ; F90994  c1 a9 20 3c fe
-	m_cp_mi8 MB16, 0x207d, 0xa3                          ; F90999  c1 7d 20 3f a3
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0xa3                          ; F90999  c1 7d 20 3f a3
 	jr z, .LF909A4                                           ; F9099E  66 04
 	call T_F42E68                                        ; F909A0  1d 68 2e f4
 .LF909A4:
@@ -31975,14 +31975,14 @@ DisplayListPtrs_F90CD8:
 ;   DL_F27C00-DL_F28064 (v1) / DL_F2808C-DL_F2833B (v2) draw "SOUND MODE".
 InstallPainter_SoundMode:
 	ld a, (UI_ScreenId:16)                                   ; F90D58  c1 7c 20 21
-	cp (0x207d:16), a                                    ; F90D5C  c1 7d 20 f9
+	cp (UI_ScreenId_Previous:16), a                                    ; F90D5C  c1 7d 20 f9
 	jr z, .LF90DAB                                       ; F90D60  66 49
 	call T_CallbackQueue_ResetAndRestartTask2            ; F90D62  1d 80 2e f4
 	m_and_mi8 MB16, 0x2095, 0xef                         ; F90D66  c1 95 20 3c ef
 	ld XWA,0xffffffff                                    ; F90D6B  40 ff ff ff ff
 	ld (0x2666:16), xwa                                 ; F90D70  f1 66 26 60
 	ld (0x266a:16), xwa                                 ; F90D74  f1 6a 26 60
-	ldw (0x209b:16), 0x0181                              ; F90D78  f1 9b 20 02 81 01
+	ldw (PanelDial_DownButton:16), 0x0181                              ; F90D78  f1 9b 20 02 81 01
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F90D7E  c1 75 20 3e 01
 	m_and_mi8 MB16, 0x2688, 0xfc                         ; F90D83  c1 88 26 3c fc
 	m_bit 0, MD16, 0x20a9                                ; F90D88  f1 a9 20 c8
@@ -31992,7 +31992,7 @@ InstallPainter_SoundMode:
 	m_and_mi8 MB16, 0x20a9, 0xfe                         ; F90D99  c1 a9 20 3c fe
 	jr .LF90DAB                                          ; F90D9E  68 0b
 .LF90DA0:
-	m_cp_mi8 MB16, 0x207d, 0xa3                          ; F90DA0  c1 7d 20 3f a3
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0xa3                          ; F90DA0  c1 7d 20 3f a3
 	jr z, .LF90DAB                                       ; F90DA5  66 04
 	call T_F42E68                                        ; F90DA7  1d 68 2e f4
 .LF90DAB:
@@ -32437,7 +32437,7 @@ SoftKeyCol1_Oct:   ; entry: named by 2 `.long` operands, first at 0xF90CD8
 	m_bit 2, MD16, UI_RequestBits                                ; F911E9  f1 75 20 ca
 	jr z, SoftKeyCol1_Oct_Join                                     ; F911ED  66 00
 SoftKeyCol1_Oct_Join:
-	ldw (0x209b:16), 0x80                                ; F911EF  f1 9b 20 02 80 00
+	ldw (PanelDial_DownButton:16), 0x80                                ; F911EF  f1 9b 20 02 80 00
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F911F5  c1 75 20 3e 09
 	ld XIY,0x000078b2                                    ; F911FA  45 b2 78 00 00
 	m_ld_rm MBD+r5, 0x00, r7                             ; F911FF  8d 00 27
@@ -32476,7 +32476,7 @@ SoftKeyCol2_LvlVol:   ; entry: named by 2 `.long` operands, first at 0xF90CDC
 	jr z, SoftKeyCol2_LvlVol_Join                                     ; F91242  66 03
 	add W,0x02                                           ; F91244  c8 c8 02
 SoftKeyCol2_LvlVol_Join:
-	ldw (0x209b:16), 0x0181                              ; F91247  f1 9b 20 02 81 01
+	ldw (PanelDial_DownButton:16), 0x0181                              ; F91247  f1 9b 20 02 81 01
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9124D  c1 75 20 3e 09
 	m_cp_mi8 MB16, UI_ScreenId, 0x01                          ; F91252  c1 7c 20 3f 01
 	jr nz, .LF9125E                                      ; F91257  6e 05
@@ -32499,7 +32499,7 @@ SoftKeyCol3_Pan:   ; entry: named by 2 `.long` operands, first at 0xF90CE0
 	jr z, SoftKeyCol3_Pan_Join                                     ; F91270  66 03
 	add W,0x02                                           ; F91272  c8 c8 02
 SoftKeyCol3_Pan_Join:
-	ldw (0x209b:16), 0x0282                              ; F91275  f1 9b 20 02 82 02
+	ldw (PanelDial_DownButton:16), 0x0282                              ; F91275  f1 9b 20 02 82 02
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9127B  c1 75 20 3e 09
 	m_cp_mi8 MB16, UI_ScreenId, 0x01                          ; F91280  c1 7c 20 3f 01
 	jr nz, .LF9128C                                      ; F91285  6e 05
@@ -32522,7 +32522,7 @@ SoftKeyCol4_Eff1:   ; entry: named by 2 `.long` operands, first at 0xF90CE4
 	jr z, SoftKeyCol4_Eff1_Join                                     ; F9129E  66 03
 	add W,0x02                                           ; F912A0  c8 c8 02
 SoftKeyCol4_Eff1_Join:
-	ldw (0x209b:16), 0x0383                              ; F912A3  f1 9b 20 02 83 03
+	ldw (PanelDial_DownButton:16), 0x0383                              ; F912A3  f1 9b 20 02 83 03
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F912A9  c1 75 20 3e 09
 	calr PartRecord_GetPtr                                          ; F912AE  1e 88 32
 	ld A,(XIY+0x05)                                      ; F912B1  8d 05 21
@@ -32556,7 +32556,7 @@ SoftKeyCol4_Eff1_Join:
 ;   0xB6 (0x2070 = 0x40B6) instead when the PartRecord_GetSecondHalfPtr record +3 and +4 are both non-zero; the change goes to
 ;   Queue2E00 {part,6} on screen 1, to List2030 elsewhere.
 SoftKeyCol5_Eff2:
-	ldw (0x209b:16), 0x0484                              ; F912E8  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F912E8  f1 9b 20 02 84 04
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F912EE  c1 75 20 3e 01
 	calr PartRecord_GetPtr                                          ; F912F3  1e 43 32
 	ld e, (UI_PartIndex:16)                                   ; F912F6  c1 50 22 25
@@ -32604,7 +32604,7 @@ SoftKeyCol6_Rev:   ; entry: named by 2 `.long` operands, first at 0xF90CEC
 	jr z, SoftKeyCol6_Rev_Join                                     ; F91351  66 03
 	add W,0x02                                           ; F91353  c8 c8 02
 SoftKeyCol6_Rev_Join:
-	ldw (0x209b:16), 0x0585                              ; F91356  f1 9b 20 02 85 05
+	ldw (PanelDial_DownButton:16), 0x0585                              ; F91356  f1 9b 20 02 85 05
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9135C  c1 75 20 3e 09
 	calr PartRecord_GetPtr                                          ; F91361  1e d5 31
 	ld A,(XIY+0x07)                                      ; F91364  8d 07 21
@@ -32636,7 +32636,7 @@ SoftKeyCol6_Rev_Join:
 ;   6 = SOFT KEY column 7 (FINDINGS-prom_a-panel-control-map.md 1); both screens label column 7 "INT". (0x209B) =
 ;   0x0686, or (0x2075),0x01, XIY = PartRecord_GetPtr, E = part, then C0mbinati0nM0de_SetPartInt.
 SoftKeyCol7_Int:
-	ldw (0x209b:16), 0x0686                              ; F9139B  f1 9b 20 02 86 06
+	ldw (PanelDial_DownButton:16), 0x0686                              ; F9139B  f1 9b 20 02 86 06
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F913A1  c1 75 20 3e 01
 	calr PartRecord_GetPtr                                          ; F913A6  1e 90 31
 	ld e, (UI_PartIndex:16)                                   ; F913A9  c1 50 22 25
@@ -32652,7 +32652,7 @@ SoftKeyCol8_Midi:   ; entry: named by 1 `.long` operand, first at 0xF90CF4
 	jr z, SoftKeyCol8_Midi_Join                                     ; F913B8  66 03
 	add W,0x02                                           ; F913BA  c8 c8 02
 SoftKeyCol8_Midi_Join:
-	ldw (0x209b:16), 0x0787                              ; F913BD  f1 9b 20 02 87 07
+	ldw (PanelDial_DownButton:16), 0x0787                              ; F913BD  f1 9b 20 02 87 07
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F913C3  c1 75 20 3e 09
 	calr PartRecord_GetPtr                                          ; F913C8  1e 6e 31
 	ld A,(XIY+0x0d)                                      ; F913CB  8d 0d 21
@@ -32955,7 +32955,7 @@ DisplayListPtrs_F9157B:
 ;   Paint_C0mbinati0nM0dePage2. Then continues into InstallPainter_C0mbinati0nM0deFields.
 InstallPainter_C0mbinati0nM0de:
 	ld a, (UI_ScreenId:16)                                   ; F915FB  c1 7c 20 21
-	cp (0x207d:16), a                                    ; F915FF  c1 7d 20 f9
+	cp (UI_ScreenId_Previous:16), a                                    ; F915FF  c1 7d 20 f9
 	jr z, .LF9163B                                       ; F91603  66 36
 	call T_CallbackQueue_ResetAndRestartTask2            ; F91605  1d 80 2e f4
 	ld (0x2687:16), 0x00                                 ; F91609  f1 87 26 00 00
@@ -32975,7 +32975,7 @@ InstallPainter_C0mbinati0nM0de:
 	jr nz, sub_F91678_Join                                    ; F91644  6e 36
 	m_cp_mi8 MB16, 0x2687, 0x00                          ; F91646  c1 87 26 3f 00
 	jr nz, .LF91667                                      ; F9164B  6e 1a
-	ldw (0x209b:16), 0x0181                              ; F9164D  f1 9b 20 02 81 01
+	ldw (PanelDial_DownButton:16), 0x0181                              ; F9164D  f1 9b 20 02 81 01
 	ld XWA,Paint_C0mbinati0nM0dePage1                                    ; F91653  40 7e 1c f9 00
 	push XWA                                             ; F91658  38
 	call T_CallbackQueue_Post                            ; F91659  1d 84 2e f4
@@ -33120,42 +33120,42 @@ PanelDial_BindToPartColumn:
 	ld a, (UI_PartIndex:16)                                   ; F91791  c1 50 22 21
 	cp a, 0x00:i3                                          ; F91795  c9 d8
 	jr nz, .LF917A1                                      ; F91797  6e 08
-	ldw (0x209b:16), 0x80                                ; F91799  f1 9b 20 02 80 00
+	ldw (PanelDial_DownButton:16), 0x80                                ; F91799  f1 9b 20 02 80 00
 	jr .LF917F3                                          ; F9179F  68 52
 .LF917A1:
 	cp a, 0x01:i3                                          ; F917A1  c9 d9
 	jr nz, .LF917AD                                      ; F917A3  6e 08
-	ldw (0x209b:16), 0x0181                              ; F917A5  f1 9b 20 02 81 01
+	ldw (PanelDial_DownButton:16), 0x0181                              ; F917A5  f1 9b 20 02 81 01
 	jr .LF917F3                                          ; F917AB  68 46
 .LF917AD:
 	cp a, 0x02:i3                                          ; F917AD  c9 da
 	jr nz, .LF917B9                                      ; F917AF  6e 08
-	ldw (0x209b:16), 0x0282                              ; F917B1  f1 9b 20 02 82 02
+	ldw (PanelDial_DownButton:16), 0x0282                              ; F917B1  f1 9b 20 02 82 02
 	jr .LF917F3                                          ; F917B7  68 3a
 .LF917B9:
 	cp a, 0x03:i3                                          ; F917B9  c9 db
 	jr nz, .LF917C5                                      ; F917BB  6e 08
-	ldw (0x209b:16), 0x0383                              ; F917BD  f1 9b 20 02 83 03
+	ldw (PanelDial_DownButton:16), 0x0383                              ; F917BD  f1 9b 20 02 83 03
 	jr .LF917F3                                          ; F917C3  68 2e
 .LF917C5:
 	cp a, 0x04:i3                                          ; F917C5  c9 dc
 	jr nz, .LF917D1                                      ; F917C7  6e 08
-	ldw (0x209b:16), 0x0484                              ; F917C9  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F917C9  f1 9b 20 02 84 04
 	jr .LF917F3                                          ; F917CF  68 22
 .LF917D1:
 	cp a, 0x05:i3                                          ; F917D1  c9 dd
 	jr nz, .LF917DD                                      ; F917D3  6e 08
-	ldw (0x209b:16), 0x0585                              ; F917D5  f1 9b 20 02 85 05
+	ldw (PanelDial_DownButton:16), 0x0585                              ; F917D5  f1 9b 20 02 85 05
 	jr .LF917F3                                          ; F917DB  68 16
 .LF917DD:
 	cp a, 0x06:i3                                          ; F917DD  c9 de
 	jr nz, .LF917E9                                      ; F917DF  6e 08
-	ldw (0x209b:16), 0x0686                              ; F917E1  f1 9b 20 02 86 06
+	ldw (PanelDial_DownButton:16), 0x0686                              ; F917E1  f1 9b 20 02 86 06
 	jr .LF917F3                                          ; F917E7  68 0a
 .LF917E9:
 	cp a, 0x07:i3                                          ; F917E9  c9 df
 	jr nz, .LF917F3                                      ; F917EB  6e 06
-	ldw (0x209b:16), 0x0787                              ; F917ED  f1 9b 20 02 87 07
+	ldw (PanelDial_DownButton:16), 0x0787                              ; F917ED  f1 9b 20 02 87 07
 .LF917F3:
 	ret                                                  ; F917F3  0e
 ; FieldRedraw_CallPerSetBit -- call routine k of the 8-entry table XIY for every set bit k of A
@@ -33930,7 +33930,7 @@ SoftKeyCol1_C0mbinati0nM0de_Page2_Join:
 	jr z, .LF91E67                                       ; F91E60  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F91E62  c1 75 20 3c f7
 .LF91E67:
-	ldw (0x209b:16), 0x80                                ; F91E67  f1 9b 20 02 80 00
+	ldw (PanelDial_DownButton:16), 0x80                                ; F91E67  f1 9b 20 02 80 00
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91E6D  c1 75 20 3e 09
 	ld a, 0x00:opc                                          ; F91E72  21 00
 	ld (UI_PartIndex:16), a                                   ; F91E74  f1 50 22 41
@@ -33947,7 +33947,7 @@ SoftKeyCol1_C0mbinati0nM0de_Page2_Join:
 	call T_Kernel_SemaSignal                             ; F91E94  1d 88 2d f4
 	jr .LF91EA8                                          ; F91E98  68 0e
 .LF91E9A:
-	ldw (0x209b:16), 0x80                                ; F91E9A  f1 9b 20 02 80 00
+	ldw (PanelDial_DownButton:16), 0x80                                ; F91E9A  f1 9b 20 02 80 00
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91EA0  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F91EA5  1e 44 05
 .LF91EA8:
@@ -33967,7 +33967,7 @@ SoftKeyCol2_C0mbinati0nM0de_Page2_Join:
 	jr z, .LF91EC5                                       ; F91EBE  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F91EC0  c1 75 20 3c f7
 .LF91EC5:
-	ldw (0x209b:16), 0x0181                              ; F91EC5  f1 9b 20 02 81 01
+	ldw (PanelDial_DownButton:16), 0x0181                              ; F91EC5  f1 9b 20 02 81 01
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91ECB  c1 75 20 3e 09
 	ld a, 0x01:opc                                          ; F91ED0  21 01
 	ld (UI_PartIndex:16), a                                   ; F91ED2  f1 50 22 41
@@ -33984,7 +33984,7 @@ SoftKeyCol2_C0mbinati0nM0de_Page2_Join:
 	call T_Kernel_SemaSignal                             ; F91EF2  1d 88 2d f4
 	jr .LF91F06                                          ; F91EF6  68 0e
 .LF91EF8:
-	ldw (0x209b:16), 0x0181                              ; F91EF8  f1 9b 20 02 81 01
+	ldw (PanelDial_DownButton:16), 0x0181                              ; F91EF8  f1 9b 20 02 81 01
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91EFE  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F91F03  1e e6 04
 .LF91F06:
@@ -34004,7 +34004,7 @@ SoftKeyCol3_C0mbinati0nM0de_Page2_Join:
 	jr z, .LF91F23                                       ; F91F1C  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F91F1E  c1 75 20 3c f7
 .LF91F23:
-	ldw (0x209b:16), 0x0282                              ; F91F23  f1 9b 20 02 82 02
+	ldw (PanelDial_DownButton:16), 0x0282                              ; F91F23  f1 9b 20 02 82 02
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91F29  c1 75 20 3e 09
 	ld a, 0x02:opc                                          ; F91F2E  21 02
 	ld (UI_PartIndex:16), a                                   ; F91F30  f1 50 22 41
@@ -34021,7 +34021,7 @@ SoftKeyCol3_C0mbinati0nM0de_Page2_Join:
 	call T_Kernel_SemaSignal                             ; F91F50  1d 88 2d f4
 	jr .LF91F64                                          ; F91F54  68 0e
 .LF91F56:
-	ldw (0x209b:16), 0x0282                              ; F91F56  f1 9b 20 02 82 02
+	ldw (PanelDial_DownButton:16), 0x0282                              ; F91F56  f1 9b 20 02 82 02
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91F5C  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F91F61  1e 88 04
 .LF91F64:
@@ -34041,7 +34041,7 @@ SoftKeyCol4_C0mbinati0nM0de_Page2_Join:
 	jr z, .LF91F82                                       ; F91F7B  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F91F7D  c1 75 20 3c f7
 .LF91F82:
-	ldw (0x209b:16), 0x0383                              ; F91F82  f1 9b 20 02 83 03
+	ldw (PanelDial_DownButton:16), 0x0383                              ; F91F82  f1 9b 20 02 83 03
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91F88  c1 75 20 3e 09
 	ld a, 0x03:opc                                          ; F91F8D  21 03
 	ld (UI_PartIndex:16), a                                   ; F91F8F  f1 50 22 41
@@ -34058,7 +34058,7 @@ SoftKeyCol4_C0mbinati0nM0de_Page2_Join:
 	call T_Kernel_SemaSignal                             ; F91FAF  1d 88 2d f4
 	jr .LF91FC3                                          ; F91FB3  68 0e
 .LF91FB5:
-	ldw (0x209b:16), 0x0383                              ; F91FB5  f1 9b 20 02 83 03
+	ldw (PanelDial_DownButton:16), 0x0383                              ; F91FB5  f1 9b 20 02 83 03
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91FBB  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F91FC0  1e 29 04
 .LF91FC3:
@@ -34078,7 +34078,7 @@ SoftKeyCol5_C0mbinati0nM0de_Page2_Join:
 	jr z, .LF91FE1                                       ; F91FDA  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F91FDC  c1 75 20 3c f7
 .LF91FE1:
-	ldw (0x209b:16), 0x0484                              ; F91FE1  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F91FE1  f1 9b 20 02 84 04
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F91FE7  c1 75 20 3e 09
 	ld a, 0x04:opc                                          ; F91FEC  21 04
 	ld (UI_PartIndex:16), a                                   ; F91FEE  f1 50 22 41
@@ -34095,7 +34095,7 @@ SoftKeyCol5_C0mbinati0nM0de_Page2_Join:
 	call T_Kernel_SemaSignal                             ; F9200E  1d 88 2d f4
 	jr .LF92022                                          ; F92012  68 0e
 .LF92014:
-	ldw (0x209b:16), 0x0484                              ; F92014  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F92014  f1 9b 20 02 84 04
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9201A  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F9201F  1e ca 03
 .LF92022:
@@ -34115,7 +34115,7 @@ SoftKeyCol6_C0mbinati0nM0de_Page2_Join:
 	jr z, .LF92040                                       ; F92039  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F9203B  c1 75 20 3c f7
 .LF92040:
-	ldw (0x209b:16), 0x0585                              ; F92040  f1 9b 20 02 85 05
+	ldw (PanelDial_DownButton:16), 0x0585                              ; F92040  f1 9b 20 02 85 05
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F92046  c1 75 20 3e 09
 	ld a, 0x05:opc                                          ; F9204B  21 05
 	ld (UI_PartIndex:16), a                                   ; F9204D  f1 50 22 41
@@ -34132,7 +34132,7 @@ SoftKeyCol6_C0mbinati0nM0de_Page2_Join:
 	call T_Kernel_SemaSignal                             ; F9206D  1d 88 2d f4
 	jr .LF92081                                          ; F92071  68 0e
 .LF92073:
-	ldw (0x209b:16), 0x0585                              ; F92073  f1 9b 20 02 85 05
+	ldw (PanelDial_DownButton:16), 0x0585                              ; F92073  f1 9b 20 02 85 05
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F92079  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F9207E  1e 6b 03
 .LF92081:
@@ -34152,7 +34152,7 @@ SoftKeyCol7_C0mbinati0nM0de_Page2_Join:
 	jr z, .LF9209F                                       ; F92098  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F9209A  c1 75 20 3c f7
 .LF9209F:
-	ldw (0x209b:16), 0x0686                              ; F9209F  f1 9b 20 02 86 06
+	ldw (PanelDial_DownButton:16), 0x0686                              ; F9209F  f1 9b 20 02 86 06
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F920A5  c1 75 20 3e 09
 	ld a, 0x06:opc                                          ; F920AA  21 06
 	ld (UI_PartIndex:16), a                                   ; F920AC  f1 50 22 41
@@ -34169,7 +34169,7 @@ SoftKeyCol7_C0mbinati0nM0de_Page2_Join:
 	call T_Kernel_SemaSignal                             ; F920CC  1d 88 2d f4
 	jr .LF920E0                                          ; F920D0  68 0e
 .LF920D2:
-	ldw (0x209b:16), 0x0686                              ; F920D2  f1 9b 20 02 86 06
+	ldw (PanelDial_DownButton:16), 0x0686                              ; F920D2  f1 9b 20 02 86 06
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F920D8  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F920DD  1e 0c 03
 .LF920E0:
@@ -34191,7 +34191,7 @@ SoftKeyCol8_C0mbinati0nM0de_Join:
 	jr Z,.LF92105                                        ; F920FE  66 05
 	m_and_mi8 MB16, UI_RequestBits, 0xf7                         ; F92100  c1 75 20 3c f7
 .LF92105:
-	ldw (0x209b:16), 0x0787                              ; F92105  f1 9b 20 02 87 07
+	ldw (PanelDial_DownButton:16), 0x0787                              ; F92105  f1 9b 20 02 87 07
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9210B  c1 75 20 3e 09
 	ld a, 0x07:opc                                          ; F92110  21 07
 	ld (UI_PartIndex:16), a                                   ; F92112  f1 50 22 41
@@ -34208,7 +34208,7 @@ SoftKeyCol8_C0mbinati0nM0de_Join:
 	call T_Kernel_SemaSignal                             ; F92132  1d 88 2d f4
 	jr .LF9214B                                          ; F92136  68 13
 .LF92138:
-	ldw (0x209b:16), 0x0787                              ; F92138  f1 9b 20 02 87 07
+	ldw (PanelDial_DownButton:16), 0x0787                              ; F92138  f1 9b 20 02 87 07
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9213E  c1 75 20 3e 09
 	calr C0mbinati0nM0de_EditSelectedRow                                      ; F92143  1e a6 02
 	jr .LF9214B                                          ; F92146  68 03
@@ -34221,7 +34221,7 @@ SoftKeyCol8_C0mbinati0nM0de_Join:
 ; (0x2676) |= 0xFF and (0x2677) |= 0x07 (every page-1 field dirty), T_CallbackQueue_ResetAndRestartTask2, post C0mbinati0nM0de_RepaintPage1Fields.
 ; Called only by C0mbinati0nM0de_SelectOrEditPart8OrStepPart when (0x2687) == 0; page 1's lists carry the caption "PART".
 C0mbinati0nM0de_StepSelectedPart:
-	ldw (0x209b:16), 0x0787                              ; F9214C  f1 9b 20 02 87 07
+	ldw (PanelDial_DownButton:16), 0x0787                              ; F9214C  f1 9b 20 02 87 07
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F92152  c1 75 20 3e 09
 	ld a, (UI_PartIndex:16)                                   ; F92157  c1 50 22 21
 	ld b, 0x07:opc                                          ; F9215B  22 07
@@ -35007,13 +35007,13 @@ DisplayListPtrs_F92726:
 InstallPainter_SoundGroupMenu:
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F927A6  c0 c6 3e 01
 	ld a, (UI_ScreenId:16)                                   ; F927AA  c1 7c 20 21
-	cp (0x207d:16), a                                    ; F927AE  c1 7d 20 f9
+	cp (UI_ScreenId_Previous:16), a                                    ; F927AE  c1 7d 20 f9
 	jr z, .LF927D1                                       ; F927B2  66 1d
 	m_and_mi8 MB16, 0x2095, 0xef                         ; F927B4  c1 95 20 3c ef
 	ld XWA,0xffffffff                                    ; F927B9  40 ff ff ff ff
 	ld (0x2666:16), xwa                                 ; F927BE  f1 66 26 60
 	ld (0x266a:16), xwa                                 ; F927C2  f1 6a 26 60
-	ldw (0x209b:16), 0x0484                              ; F927C6  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F927C6  f1 9b 20 02 84 04
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F927CC  c1 75 20 3e 01
 .LF927D1:
 	m_bit 4, MD16, 0x2095                                ; F927D1  f1 95 20 cc
@@ -35673,7 +35673,7 @@ InstallPainter_GroupSoundDisplayHold:
 .LF92CF7:
 	m_and_mi8 MB16, UI_RequestBits, 0xfe                         ; F92CF7  c1 75 20 3c fe
 	ld a, (UI_ScreenId:16)                                   ; F92CFC  c1 7c 20 21
-	cp (0x207d:16), a                                    ; F92D00  c1 7d 20 f9
+	cp (UI_ScreenId_Previous:16), a                                    ; F92D00  c1 7d 20 f9
 	jr z, .LF92D1F                                       ; F92D04  66 19
 	m_and_mi8 MB16, 0x2095, 0xef                         ; F92D06  c1 95 20 3c ef
 	m_or_mi8 MB16, 0x2673, 0x40                          ; F92D0B  c1 73 26 3e 40
@@ -36837,13 +36837,13 @@ ScreenButtonHandlers_CombinationGroupMenu:
 InstallPainter_CombinationGroupMenu:
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F935D7  c0 c6 3e 01
 	ld a, (UI_ScreenId:16)                                   ; F935DB  c1 7c 20 21
-	cp (0x207d:16), a                                    ; F935DF  c1 7d 20 f9
+	cp (UI_ScreenId_Previous:16), a                                    ; F935DF  c1 7d 20 f9
 	jr z, .LF93602                                       ; F935E3  66 1d
 	m_and_mi8 MB16, 0x2095, 0xef                         ; F935E5  c1 95 20 3c ef
 	ld XWA,0xffffffff                                    ; F935EA  40 ff ff ff ff
 	ld (0x2666:16), xwa                                 ; F935EF  f1 66 26 60
 	ld (0x266a:16), xwa                                 ; F935F3  f1 6a 26 60
-	ldw (0x209b:16), 0x0484                              ; F935F7  f1 9b 20 02 84 04
+	ldw (PanelDial_DownButton:16), 0x0484                              ; F935F7  f1 9b 20 02 84 04
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F935FD  c1 75 20 3e 01
 .LF93602:
 	m_bit 4, MD16, 0x2095                                ; F93602  f1 95 20 cc
@@ -37250,7 +37250,7 @@ InstallPainter_GroupCombiDisplayHold:
 .LF938C9:
 	m_and_mi8 MB16, UI_RequestBits, 0xfe                         ; F938C9  c1 75 20 3c fe
 	ld a, (UI_ScreenId:16)                                   ; F938CE  c1 7c 20 21
-	cp (0x207d:16), a                                    ; F938D2  c1 7d 20 f9
+	cp (UI_ScreenId_Previous:16), a                                    ; F938D2  c1 7d 20 f9
 	jr z, .LF938F1                                       ; F938D6  66 19
 	m_and_mi8 MB16, 0x2095, 0xef                         ; F938D8  c1 95 20 3c ef
 	m_or_mi8 MB16, 0x2673, 0x40                          ; F938DD  c1 73 26 3e 40
@@ -38259,7 +38259,7 @@ Paint_PowerOnSplash:
 	jrl .LF941F3                                         ; F9411F  78 d1 00
 .LF94122:
 	ld a, (UI_ScreenId:16)                                   ; F94122  c1 7c 20 21
-	m_cp_rm MB16, 0x207d, r1                             ; F94126  c1 7d 20 f1
+	m_cp_rm MB16, UI_ScreenId_Previous, r1                             ; F94126  c1 7d 20 f1
 	jr z, .LF9416F                                       ; F9412A  66 43
 	xor C,C                                              ; F9412C  cb d3
 	ld a, 0x0c:opc                                          ; F9412E  21 0c
@@ -38516,7 +38516,7 @@ SoundGroup_ReloadSelection:
 	and A,0xf0                                           ; F9433E  c9 cc f0
 	cp a, 0x00:i3                                          ; F94341  c9 d8
 	jr z, .LF9437A                                       ; F94343  66 35
-	ld a, (0x2078:16)                                   ; F94345  c1 78 20 21
+	ld a, (PanelMode:16)                                   ; F94345  c1 78 20 21
 	cp A,0x16                                            ; F94349  c9 cf 16
 	jr z, .LF9437A                                       ; F9434C  66 2c
 	cp A,0x09                                            ; F9434E  c9 cf 09
@@ -38533,7 +38533,7 @@ SoundGroup_ReloadSelection:
 	jr z, .LF9437A                                       ; F94365  66 13
 	cp A,0x08                                            ; F94367  c9 cf 08
 	jr z, .LF9437A                                       ; F9436A  66 0e
-	ld a, (0x207a:16)                                   ; F9436C  c1 7a 20 21
+	ld a, (UI_ScreenLatch:16)                                   ; F9436C  c1 7a 20 21
 	cp A,0xb7                                            ; F94370  c9 cf b7
 	jr z, .LF9437A                                       ; F94373  66 05
 	calr SoundGroup_LoadSelectionFromGlobal                                      ; F94375  1e 3e 00
@@ -38546,7 +38546,7 @@ SoundGroup_ReloadSelection:
 ; Evidence: unless (0x2078) == 2: PartRecord_GetSecondHalfPtr, then (0x2674) = old (0x216A), (0x216A) = (XIY+0x1D), (0x2169) = (XIY+0x1B),
 ; (0x216B) = (XIY+0x1C) (record +0x3D/+0x3B/+0x3C), and `or (0x2116),0x0044`.  Callers: SoundGroup_ReloadSelection, numeric calr from sub_F90B8E (0xF90C0E).
 SoundGroup_LoadSelectionFromPart:
-	ld a, (0x2078:16)                                   ; F9437E  c1 78 20 21
+	ld a, (PanelMode:16)                                   ; F9437E  c1 78 20 21
 	cp a, 0x02:i3                                          ; F94382  c9 da
 	jr z, .LF943B5                                       ; F94384  66 2f
 	calr PartRecord_GetSecondHalfPtr                                      ; F94386  1e c4 01
@@ -38569,7 +38569,7 @@ SoundGroup_LoadSelectionFromPart:
 ; same shape as SoundGroup_LoadSelectionFromPart; (0x7F08)/(0x7F0A) are what GroupCombiDisplayHold_HighlightSelected compares against.
 ; Callers: SoundGroup_ReloadSelection, sub_F90C13 (0xF90C1C).
 SoundGroup_LoadSelectionFromGlobal:
-	ld a, (0x2078:16)                                   ; F943B6  c1 78 20 21
+	ld a, (PanelMode:16)                                   ; F943B6  c1 78 20 21
 	cp a, 0x01:i3                                          ; F943BA  c9 d9
 	jr z, .LF943ED                                       ; F943BC  66 2f
 	ld l, (0x7f08:16)                                   ; F943BE  c1 08 7f 27
@@ -38591,7 +38591,7 @@ SoundGroup_LoadSelectionFromGlobal:
 ; 0x01 or 0xA0 (SoundGroupMenu) -> request 0xA1 (GroupSoundDisplayHold); 0x02 or 0xA5 -> 0xA6 (GroupCombiDisplayHold); 0xA1/0xA6 -> (0x2095) |= 0x10;
 ; 0xA3 -> 0xA1 with (0x2075) |= 0x80.  Code 0x07: 0x01 -> 0xA1, 0x02 -> 0xA6, 0xA1/0xA6 -> redraw, 0xA0/0xA5 -> (0x2071) |= 0x10.
 UiEventClassA8_ShowGroupScreen:
-	ld a, (0x2078:16)                                   ; F943EE  c1 78 20 21
+	ld a, (PanelMode:16)                                   ; F943EE  c1 78 20 21
 	cp a, 0x01:i3                                          ; F943F2  c9 d9
 	jr z, .LF94400                                       ; F943F4  66 0a
 	cp a, 0x02:i3                                          ; F943F6  c9 da
@@ -38678,7 +38678,7 @@ UiEventClassA8_ShowGroupScreenOtherMode:
 	and A,0xf0                                           ; F944B3  c9 cc f0
 	cp a, 0x00:i3                                          ; F944B6  c9 d8
 	jr nz, .LF944ED                                      ; F944B8  6e 33
-	ld a, (0x2078:16)                                   ; F944BA  c1 78 20 21
+	ld a, (PanelMode:16)                                   ; F944BA  c1 78 20 21
 	cp A,0x17                                            ; F944BE  c9 cf 17
 	jr z, .LF94538                                       ; F944C1  66 75
 	cp A,0x18                                            ; F944C3  c9 cf 18
@@ -38697,10 +38697,10 @@ UiEventClassA8_ShowGroupScreenOtherMode:
 	m_or_mi8 MB16, UI_RequestBits, 0x80                          ; F944E6  c1 75 20 3e 80
 	jr .LF94538                                          ; F944EB  68 4b
 .LF944ED:
-	ld a, (0x207a:16)                                   ; F944ED  c1 7a 20 21
+	ld a, (UI_ScreenLatch:16)                                   ; F944ED  c1 7a 20 21
 	cp A,0xb7                                            ; F944F1  c9 cf b7
 	jr z, .LF944D7                                       ; F944F4  66 e1
-	ld a, (0x2078:16)                                   ; F944F6  c1 78 20 21
+	ld a, (PanelMode:16)                                   ; F944F6  c1 78 20 21
 	cp A,0x16                                            ; F944FA  c9 cf 16
 	jr z, .LF944D7                                       ; F944FD  66 d8
 	cp A,0x09                                            ; F944FF  c9 cf 09
@@ -39941,7 +39941,7 @@ TestMode_Tick:
 ; SineWaveCheck_PollIfCurrent -- run SineWaveCheck_ServiceSwitches while screen 0xDA is the current one
 ; Evidence: `cp (0x207A),0xDA / jr nz`; 0xDA's object is T_Paint_SineWaveCheckMode (PanelScreen_VtableTable_ViewB[0xDA]).  Only caller TestMode_Tick (variant 2).
 SineWaveCheck_PollIfCurrent:
-	m_cp_mi8 MB16, 0x207a, 0xda                          ; F9549F  c1 7a 20 3f da
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xda                          ; F9549F  c1 7a 20 3f da
 	jr nz, .LF954A9                                          ; F954A4  6e 03
 	calr SineWaveCheck_ServiceSwitches                                            ; F954A6  1e 01 00
 .LF954A9:
@@ -40137,8 +40137,8 @@ PanelCpuCheck_FlashStatusOnLed:
 T_F4015C_Nop:
 	ret                                                  ; F95659  0e
 sub_F9565A:
-	ld c, (0x207b:16)                                   ; F9565A  c1 7b 20 23
-	m_cp_rm MB16, 0x207a, r3                             ; F9565E  c1 7a 20 f3
+	ld c, (UI_ScreenLatch_Previous:16)                                   ; F9565A  c1 7b 20 23
+	m_cp_rm MB16, UI_ScreenLatch, r3                             ; F9565E  c1 7a 20 f3
 	jr z, .LF95668                                           ; F95662  66 04
 	call T_F413C0                                        ; F95664  1d c0 13 f4
 .LF95668:
@@ -40152,8 +40152,8 @@ T_F40164_Nop:
 PanelSwLedCheck_Step:
 	push XIX                                             ; F9566A  3c
 	lda xix, (Delay_SpinNestedLoopsShort:24)                             ; F9566B  f2 c1 51 f9 34
-	ld c, (0x207b:16)                                   ; F95670  c1 7b 20 23
-	m_cp_rm MB16, 0x207a, r3                             ; F95674  c1 7a 20 f3
+	ld c, (UI_ScreenLatch_Previous:16)                                   ; F95670  c1 7b 20 23
+	m_cp_rm MB16, UI_ScreenLatch, r3                             ; F95674  c1 7a 20 f3
 	jr z, .LF956A6                                           ; F95678  66 2c
 	calr PanelSwLedCheck_AllLedsOn                                            ; F9567A  1e 33 00
 	push XDE                                             ; F9567D  3a
@@ -40284,7 +40284,7 @@ T_F40174_Nop:
 Paint_GateArrayCheck:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F95734  1d 80 2e f4
 	calr T_F40150_Nop                                          ; F95738  1e 0b ff
-	ld c, (0x207d:16)                                   ; F9573B  c1 7d 20 23
+	ld c, (UI_ScreenId_Previous:16)                                   ; F9573B  c1 7d 20 23
 	m_cp_rm MB16, UI_ScreenId, r3                             ; F9573F  c1 7c 20 f3
 	jr z, .LF95764                                           ; F95743  66 1f
 	call LCD_BlankThenSetPanel2Layer                                      ; F95745  1d 2b 4c f9
@@ -40378,7 +40378,7 @@ T_F400DC_Nop:
 ;          is blind to this name, --verify reads it back.
 ; ---------------------------------------------------------------------
 Paint_PanelCpuCheck:
-	ld c, (0x207d:16)                                   ; F95768  c1 7d 20 23
+	ld c, (UI_ScreenId_Previous:16)                                   ; F95768  c1 7d 20 23
 	m_cp_rm MB16, UI_ScreenId, r3                             ; F9576C  c1 7c 20 f3
 	jr z, .LF95794                                           ; F95770  66 22
 	call LCD_BlankThenSetPanel2Layer                                      ; F95772  1d 2b 4c f9
@@ -40477,8 +40477,8 @@ T_F400EC_Nop:
 Paint_SineWaveCheckMode:
 	push XIX                                             ; F95798  3c
 	lda xix, (0x76a2:16)                                ; F95799  f1 a2 76 34
-	ld c, (0x207b:16)                                   ; F9579D  c1 7b 20 23
-	m_cp_rm MB16, 0x207a, r3                             ; F957A1  c1 7a 20 f3
+	ld c, (UI_ScreenLatch_Previous:16)                                   ; F9579D  c1 7b 20 23
+	m_cp_rm MB16, UI_ScreenLatch, r3                             ; F957A1  c1 7a 20 f3
 	jr z, .LF957FC                                           ; F957A5  66 55
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F957A7  c0 c4 3f 02
 	jr nz, .LF957B1                                          ; F957AB  6e 04
@@ -40757,7 +40757,7 @@ T_F400FC_Nop:
 ;          is blind to this name, --verify reads it back.
 ; ---------------------------------------------------------------------
 Paint_PanelSwLedCheck:
-	ld c, (0x207d:16)                                   ; F95990  c1 7d 20 23
+	ld c, (UI_ScreenId_Previous:16)                                   ; F95990  c1 7d 20 23
 	m_cp_rm MB16, UI_ScreenId, r3                             ; F95994  c1 7c 20 f3
 	jr z, .LF959B9                                           ; F95998  66 1f
 	call LCD_BlankThenSetPanel2Layer                                      ; F9599A  1d 2b 4c f9
@@ -46573,8 +46573,8 @@ ScreenButtonRow_GeneralMidi_YesNo:
 ; ---------------------------------------------------------------------
 Paint_SysexBulkDump:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F99A04  1d 80 2e f4
-	ld a, (0x207a:16)                                   ; F99A08  c1 7a 20 21
-	cp (0x207b:16), a                                    ; F99A0C  c1 7b 20 f9
+	ld a, (UI_ScreenLatch:16)                                   ; F99A08  c1 7a 20 21
+	cp (UI_ScreenLatch_Previous:16), a                                    ; F99A0C  c1 7b 20 f9
 	jr z, .LF99A25                                       ; F99A10  66 13
 	call T_F409AC                                        ; F99A12  1d ac 09 f4
 	ld (0x2740:16), 0x00                                 ; F99A16  f1 40 27 00 00
@@ -46598,8 +46598,8 @@ Paint_SysexBulkDump:
 ; Evidence: only caller ScreenLeave_SysexBulkDump_Entry (0xF99831, the object's +4 slot); Paint_SysexBulkDump
 ; sets the same bit (`or (0x2094),0x40`, 0xF99A1B) under the same (0x207A) != (0x207B) test.
 ScreenLeave_SysexBulkDump:
-	ld a, (0x207a:16)                                   ; F99A4E  c1 7a 20 21
-	cp (0x207b:16), a                                    ; F99A52  c1 7b 20 f9
+	ld a, (UI_ScreenLatch:16)                                   ; F99A4E  c1 7a 20 21
+	cp (UI_ScreenLatch_Previous:16), a                                    ; F99A52  c1 7b 20 f9
 	jr z, .LF99A5D                                       ; F99A56  66 05
 	m_and_mi8 MB16, 0x2094, 0xbf                         ; F99A58  c1 94 20 3c bf
 .LF99A5D:
@@ -47012,8 +47012,8 @@ Paint_SystemExclusivePleaseWait:
 ; ---------------------------------------------------------------------
 Paint_GeneralMidiMode:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F99D0C  1d 80 2e f4
-	ld a, (0x207a:16)                                   ; F99D10  c1 7a 20 21
-	m_cp_rm MB16, 0x207b, r1                             ; F99D14  c1 7b 20 f1
+	ld a, (UI_ScreenLatch:16)                                   ; F99D10  c1 7a 20 21
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F99D14  c1 7b 20 f1
 	jr z, .LF99D30                                       ; F99D18  66 16
 	call T_F42594                                        ; F99D1A  1d 94 25 f4
 	ld (0x2740:16), 0x00                                 ; F99D1E  f1 40 27 00 00
@@ -47071,8 +47071,8 @@ Paint_GeneralMidiMode:
 ; Evidence: only caller ScreenLeave_GeneralMidiMode_Entry (0xF99848, the object's +4 slot);
 ; Paint_GeneralMidiMode makes the paired call T_F42594 under the same test (0xF99D1A).
 ScreenLeave_GeneralMidiMode:
-	ld a, (0x207a:16)                                   ; F99DC6  c1 7a 20 21
-	m_cp_rm MB16, 0x207b, r1                             ; F99DCA  c1 7b 20 f1
+	ld a, (UI_ScreenLatch:16)                                   ; F99DC6  c1 7a 20 21
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F99DCA  c1 7b 20 f1
 	jr z, .LF99DD4                                       ; F99DCE  66 04
 	call T_F425DC                                        ; F99DD0  1d dc 25 f4
 .LF99DD4:
@@ -47741,8 +47741,8 @@ Paint_MidiTotalMode:
 	link XIZ,0xfffc                                      ; F9A1A8  ee 0c fc ff
 	push XIX                                             ; F9A1AC  3c
 	lda xix, (0x2095:16)                                ; F9A1AD  f1 95 20 34
-	ld c, (0x207a:16)                                   ; F9A1B1  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9A1B5  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9A1B1  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9A1B5  c1 7b 20 f3
 	jr z, .LF9A1C8                                       ; F9A1B9  66 0d
 	and (XIX),0xef                                       ; F9A1BB  84 3c ef
 	ld (0x2720:16), 0x00                                 ; F9A1BE  f1 20 27 00 00
@@ -47756,8 +47756,8 @@ Paint_MidiTotalMode:
 	ld xwa, (xiz-4)                                      ; F9A1D7  ae fc 20
 	ld (0x266a:16), xwa                                 ; F9A1DA  f1 6a 26 60
 	m_set 0, MD16, UI_RequestBits                                ; F9A1DE  f1 75 20 b8
-	ld (0x209c:16), 0x04                                 ; F9A1E2  f1 9c 20 00 04
-	ld (0x209b:16), 0x84                                 ; F9A1E7  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; F9A1E2  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; F9A1E7  f1 9b 20 00 84
 	ld C,(XIX)                                           ; F9A1EC  84 23
 	and C,0x10                                           ; F9A1EE  cb cc 10
 	jr nz, .LF9A234                                      ; F9A1F1  6e 41
@@ -48457,8 +48457,8 @@ MidiTotalMode_EditSingleChProgChange:
 Paint_MidiRealtimeMessages:
 	push XIX                                             ; F9A6C0  3c
 	lda xix, (0x2095:16)                                ; F9A6C1  f1 95 20 34
-	ld c, (0x207a:16)                                   ; F9A6C5  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9A6C9  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9A6C5  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9A6C9  c1 7b 20 f3
 	jr z, .LF9A6D7                                       ; F9A6CD  66 08
 	and (XIX),0xef                                       ; F9A6CF  84 3c ef
 	ld (0x2720:16), 0x00                                 ; F9A6D2  f1 20 27 00 00
@@ -48858,8 +48858,8 @@ Paint_MidiInputOutputFilter:
 	link XIZ,0xfffc                                      ; F9A998  ee 0c fc ff
 	push XIX                                             ; F9A99C  3c
 	lda xix, (0x2095:16)                                ; F9A99D  f1 95 20 34
-	ld c, (0x207a:16)                                   ; F9A9A1  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9A9A5  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9A9A1  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9A9A5  c1 7b 20 f3
 	jr z, .LF9A9B8                                       ; F9A9A9  66 0d
 	and (XIX),0xef                                       ; F9A9AB  84 3c ef
 	ld (0x2720:16), 0x00                                 ; F9A9AE  f1 20 27 00 00
@@ -48873,8 +48873,8 @@ Paint_MidiInputOutputFilter:
 	ld xwa, (xiz-4)                                      ; F9A9C7  ae fc 20
 	ld (0x266a:16), xwa                                 ; F9A9CA  f1 6a 26 60
 	m_set 0, MD16, UI_RequestBits                                ; F9A9CE  f1 75 20 b8
-	ld (0x209c:16), 0x80                                 ; F9A9D2  f1 9c 20 00 80
-	ld (0x209b:16), 0x00                                 ; F9A9D7  f1 9b 20 00 00
+	ld (PanelDial_UpButton:16), 0x80                                 ; F9A9D2  f1 9c 20 00 80
+	ld (PanelDial_DownButton:16), 0x00                                 ; F9A9D7  f1 9b 20 00 00
 	ld C,(XIX)                                           ; F9A9DC  84 23
 	and C,0x10                                           ; F9A9DE  cb cc 10
 	jr nz, .LF9AA10                                      ; F9A9E1  6e 2d
@@ -49699,8 +49699,8 @@ Paint_MidiOutProgramChange:
 	pop XIX                                              ; F9AF88  5c
 	lda xbc, (xiz-8)                                     ; F9AF89  be f8 31
 	ld (xiz-12), xbc                                     ; F9AF8C  be f4 61
-	ld c, (0x207a:16)                                   ; F9AF8F  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9AF93  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9AF8F  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9AF93  c1 7b 20 f3
 	jr z, .LF9AFAA                                       ; F9AF97  66 11
 	m_res 4, MD16, 0x2095                                ; F9AF99  f1 95 20 b4
 	ld (0x2720:16), 0x00                                 ; F9AF9D  f1 20 27 00 00
@@ -49715,8 +49715,8 @@ Paint_MidiOutProgramChange:
 	ld xwa, (xiz-23)                                     ; F9AFB9  ae e9 20
 	ld (0x266a:16), xwa                                 ; F9AFBC  f1 6a 26 60
 	m_set 0, MD16, UI_RequestBits                                ; F9AFC0  f1 75 20 b8
-	ld (0x209c:16), 0x04                                 ; F9AFC4  f1 9c 20 00 04
-	ld (0x209b:16), 0x84                                 ; F9AFC9  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; F9AFC4  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; F9AFC9  f1 9b 20 00 84
 	ld c, (0x2095:16)                                   ; F9AFCE  c1 95 20 23
 	and C,0x10                                           ; F9AFD2  cb cc 10
 	jr nz, .LF9B00C                                      ; F9AFD5  6e 35
@@ -50780,12 +50780,12 @@ sub_F9C058:
 ; Was `sub_F9C087`, named by notes/prom_a_census_round8.py (bucket round 10).
 ; ---------------------------------------------------------------------
 Screen_ReMapEdit_Enter:
-	ld c, (0x207a:16)                                   ; F9C087  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9C08B  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9C087  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9C08B  c1 7b 20 f3
 	jr z, .LF9C0A0                                       ; F9C08F  66 0f
 	ld (0x26f3:16), 0x00                                 ; F9C091  f1 f3 26 00 00
-	ld (0x209b:16), 0x02                                 ; F9C096  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9C09B  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9C096  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9C09B  f1 9c 20 00 82
 .LF9C0A0:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9C0A0  c1 75 20 3e 09
 	ld c, (0x2095:16)                                   ; F9C0A5  c1 95 20 23
@@ -50878,8 +50878,8 @@ T_F41974_Nop:
 	lda xix, (xiz-18)                                    ; F9C10B  be ee 34
 	ldir85                                               ; F9C10E  85 11
 	pop XIX                                              ; F9C110  5c
-	ld (0x209b:16), 0x02                                 ; F9C111  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9C116  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9C111  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9C116  f1 9c 20 00 82
 	ld a, (0x26f3:16)                                   ; F9C11B  c1 f3 26 21
 	and A,0x01                                           ; F9C11F  c9 cc 01
 	jr nz, .LF9C15A                                      ; F9C122  6e 36
@@ -50944,8 +50944,8 @@ T_F41974_Nop:
 	lda xix, (xiz-18)                                    ; F9C1B7  be ee 34
 	ldir85                                               ; F9C1BA  85 11
 	pop XIX                                              ; F9C1BC  5c
-	ld (0x209b:16), 0x02                                 ; F9C1BD  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9C1C2  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9C1BD  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9C1C2  f1 9c 20 00 82
 	ld a, (0x26f3:16)                                   ; F9C1C7  c1 f3 26 21
 	and A,0x01                                           ; F9C1CB  c9 cc 01
 	jrl nz, .LF9C236                                     ; F9C1CE  7e 65 00
@@ -51038,8 +51038,8 @@ T_F41974_Nop:
 	lda xix, (xiz-18)                                    ; F9C2A4  be ee 34
 	ldir85                                               ; F9C2A7  85 11
 	pop XIX                                              ; F9C2A9  5c
-	ld (0x209b:16), 0x02                                 ; F9C2AA  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9C2AF  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9C2AA  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9C2AF  f1 9c 20 00 82
 	ld a, (0x26f3:16)                                   ; F9C2B4  c1 f3 26 21
 	and A,0x01                                           ; F9C2B8  c9 cc 01
 	jr nz, .LF9C2F7                                      ; F9C2BB  6e 3a
@@ -51093,8 +51093,8 @@ T_F41974_Nop:
 	ret                                                  ; F9C332  0e
 	push XIX                                             ; F9C333  3c
 	lda xix, (0x2900:16)                                ; F9C334  f1 00 29 34
-	ld (0x209b:16), 0x06                                 ; F9C338  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9C33D  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9C338  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9C33D  f1 9c 20 00 86
 	ld c, (0x26f3:16)                                   ; F9C342  c1 f3 26 23
 	and C,0x01                                           ; F9C346  cb cc 01
 	jr nz, .LF9C376                                      ; F9C349  6e 2b
@@ -51135,8 +51135,8 @@ T_F41974_Nop:
 	ret                                                  ; F9C3A4  0e
 	push XIX                                             ; F9C3A5  3c
 	lda xix, (0x2900:16)                                ; F9C3A6  f1 00 29 34
-	ld (0x209b:16), 0x06                                 ; F9C3AA  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9C3AF  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9C3AA  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9C3AF  f1 9c 20 00 86
 	ld c, (0x26f3:16)                                   ; F9C3B4  c1 f3 26 23
 	and C,0x01                                           ; F9C3B8  cb cc 01
 	jr nz, .LF9C3E3                                      ; F9C3BB  6e 26
@@ -51189,8 +51189,8 @@ sub_F9C41F:
 	lda xix, (xiz-18)                                    ; F9C42E  be ee 34
 	ldir85                                               ; F9C431  85 11
 	pop XIX                                              ; F9C433  5c
-	ld (0x209b:16), 0x06                                 ; F9C434  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9C439  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9C434  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9C439  f1 9c 20 00 86
 	ld a, (0x26f3:16)                                   ; F9C43E  c1 f3 26 21
 	and A,0x01                                           ; F9C442  c9 cc 01
 	jr nz, .LF9C481                                      ; F9C445  6e 3a
@@ -51975,14 +51975,14 @@ T_F41984_Nop:
 ; Was `sub_F9CB00`, named by notes/prom_a_census_round8.py (bucket round 10).
 ; ---------------------------------------------------------------------
 Screen_SoundGroupNaming_Enter:
-	ld c, (0x207a:16)                                   ; F9CB00  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9CB04  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9CB00  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9CB04  c1 7b 20 f3
 	jr z, .LF9CB0F                                       ; F9CB08  66 05
 	ld (0x2694:16), 0x00                                 ; F9CB0A  f1 94 26 00 00
 .LF9CB0F:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9CB0F  c1 75 20 3e 09
-	ld (0x209b:16), 0x04                                 ; F9CB14  f1 9b 20 00 04
-	ld (0x209c:16), 0x84                                 ; F9CB19  f1 9c 20 00 84
+	ld (PanelDial_DownButton:16), 0x04                                 ; F9CB14  f1 9b 20 00 04
+	ld (PanelDial_UpButton:16), 0x84                                 ; F9CB19  f1 9c 20 00 84
 	ld bc, (0x2694:16)                                 ; F9CB1E  d1 94 26 21
 	extz BC                                              ; F9CB22  d9 12
 	cp bc, 0x00:i3                                         ; F9CB24  d9 d8
@@ -52641,14 +52641,14 @@ SoundGroupNaming_StoreGroupName__F9CEE6:
 ; Was `sub_F9CF68`, named by notes/prom_a_census_round8.py (bucket round 10).
 ; ---------------------------------------------------------------------
 Screen_CombinationGroupNaming_Enter:
-	ld c, (0x207a:16)                                   ; F9CF68  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9CF6C  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9CF68  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9CF6C  c1 7b 20 f3
 	jr z, .LF9CF77                                       ; F9CF70  66 05
 	ld (0x2697:16), 0x00                                 ; F9CF72  f1 97 26 00 00
 .LF9CF77:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9CF77  c1 75 20 3e 09
-	ld (0x209b:16), 0x04                                 ; F9CF7C  f1 9b 20 00 04
-	ld (0x209c:16), 0x84                                 ; F9CF81  f1 9c 20 00 84
+	ld (PanelDial_DownButton:16), 0x04                                 ; F9CF7C  f1 9b 20 00 04
+	ld (PanelDial_UpButton:16), 0x84                                 ; F9CF81  f1 9c 20 00 84
 	ld bc, (0x2697:16)                                 ; F9CF86  d1 97 26 21
 	extz BC                                              ; F9CF8A  d9 12
 	cp bc, 0x00:i3                                         ; F9CF8C  d9 d8
@@ -53255,12 +53255,12 @@ CombinationGroupNaming_StoreGroupName:
 ; Evidence: PanelScreen_VtableTable_ViewB [94] (0xF870B9) = T_Screen_SoundCopy_Enter; prom_b T_Screen_SoundCopy_Enter/A4/A8/AC jp 0xF9D3BA/0xF9D3F4/0xF9D404/0xF9D432.
 ; Evidence: calls Paint_SoundCopy (whose lists all carry the title 'SOUND COPY' or its error page), SoundCopy_LoadNameBuffers and SoundCopy_DrawFields; id 0x5E is what SOUND/COMBINATION MANAGER's 'SOUND COPY' key requests (0xF9CA99).
 Screen_SoundCopy_Enter:
-	ld c, (0x207a:16)                                   ; F9D3BA  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9D3BE  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9D3BA  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9D3BE  c1 7b 20 f3
 	jr z, .LF9D3D3                                       ; F9D3C2  66 0f
 	ld (0x269a:16), 0x01                                 ; F9D3C4  f1 9a 26 00 01
-	ld (0x209b:16), 0x02                                 ; F9D3C9  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9D3CE  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9D3C9  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9D3CE  f1 9c 20 00 82
 .LF9D3D3:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9D3D3  c1 75 20 3e 09
 	ld c, (0x2095:16)                                   ; F9D3D8  c1 95 20 23
@@ -53296,8 +53296,8 @@ Screen_SoundCopy_Enter:
 ; Evidence: ALL 16 bytes of 0xF9D3F4-0xF9D403 equal Screen_DrumsMapNaming_Leave at 0xF9EFF6 (0 differ); the shared shape is explained by both screens setting (0x2806)=1 while a CPU-2 transfer is pending (SoundCopy_RequestGroupSounds 0xF9FBD5, Screen_DrumsMapNaming_Enter 0xF9EFCE).
 ; Body: if (0x207A) == (0x207B), return; else clear (0x2806).
 Screen_SoundCopy_Leave:
-	ld c, (0x207a:16)                                   ; F9D3F4  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9D3F8  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9D3F4  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9D3F8  c1 7b 20 f3
 	jr z, .LF9D403                                       ; F9D3FC  66 05
 	ld (0x2806:16), 0x00                                 ; F9D3FE  f1 06 28 00 00
 .LF9D403:
@@ -53378,8 +53378,8 @@ SoundCopy_AdjustSourceBank:
 	pop XIX                                              ; F9D4A9  5c
 	unlk XIZ                                             ; F9D4AA  ee 0d
 	ret                                                  ; F9D4AC  0e
-	ld (0x209b:16), 0x02                                 ; F9D4AD  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9D4B2  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9D4AD  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9D4B2  f1 9c 20 00 82
 	ld bc, (0x269a:16)                                 ; F9D4B7  d1 9a 26 21
 	extz BC                                              ; F9D4BB  d9 12
 	cp bc, 0x00:i3                                         ; F9D4BD  d9 d8
@@ -53397,8 +53397,8 @@ SoundCopy_AdjustSourceBank:
 	lda xiy, (Descriptor9_FA163F:24)                     ; F9D4D3  f2 3f 16 fa 35
 	lda xix, (xiz-9)                                     ; F9D4D8  be f7 34
 	ldir85                                               ; F9D4DB  85 11
-	ld (0x209b:16), 0x02                                 ; F9D4DD  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9D4E2  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9D4DD  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9D4E2  f1 9c 20 00 82
 	ld bc, (0x269a:16)                                 ; F9D4E7  d1 9a 26 21
 	extz BC                                              ; F9D4EB  d9 12
 	cp bc, 0x00:i3                                         ; F9D4ED  d9 d8
@@ -53465,8 +53465,8 @@ SoundCopy_AdjustSourceBank:
 	lda xix, (xiz-27)                                    ; F9D57F  be e5 34
 	ldir85                                               ; F9D582  85 11
 	pop XIX                                              ; F9D584  5c
-	ld (0x209b:16), 0x02                                 ; F9D585  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9D58A  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9D585  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9D58A  f1 9c 20 00 82
 	ld bc, (0x269a:16)                                 ; F9D58F  d1 9a 26 21
 	extz BC                                              ; F9D593  d9 12
 	cp bc, 0x00:i3                                         ; F9D595  d9 d8
@@ -53620,8 +53620,8 @@ SoundCopy_AdjustDestBank:
 .LF9D6F5:
 	pop XIX                                              ; F9D6F5  5c
 	ret                                                  ; F9D6F6  0e
-	ld (0x209b:16), 0x06                                 ; F9D6F7  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9D6FC  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9D6F7  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9D6FC  f1 9c 20 00 86
 	ld bc, (0x269a:16)                                 ; F9D701  d1 9a 26 21
 	extz BC                                              ; F9D705  d9 12
 	cp bc, 0x00:i3                                         ; F9D707  d9 d8
@@ -53633,8 +53633,8 @@ SoundCopy_AdjustDestBank:
 	calr SoundCopy_AdjustDestBank                                      ; F9D711  1e 89 ff
 .LF9D714:
 	ret                                                  ; F9D714  0e
-	ld (0x209b:16), 0x06                                 ; F9D715  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9D71A  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9D715  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9D71A  f1 9c 20 00 86
 	ld bc, (0x269a:16)                                 ; F9D71F  d1 9a 26 21
 	extz BC                                              ; F9D723  d9 12
 	cp bc, 0x00:i3                                         ; F9D725  d9 d8
@@ -53664,8 +53664,8 @@ SoundCopy_AdjustDestBank:
 	ret                                                  ; F9D75D  0e
 	push XIX                                             ; F9D75E  3c
 	lda xix, (0x2900:16)                                ; F9D75F  f1 00 29 34
-	ld (0x209b:16), 0x06                                 ; F9D763  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9D768  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9D763  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9D768  f1 9c 20 00 86
 	ld bc, (0x269a:16)                                 ; F9D76D  d1 9a 26 21
 	extz BC                                              ; F9D771  d9 12
 	cp bc, 0x00:i3                                         ; F9D773  d9 d8
@@ -54577,12 +54577,12 @@ SoundCopy_Execute:
 ; Evidence: PanelScreen_VtableTable_ViewB [95] (0xF870BD) = T_Screen_CombinationCopy_Enter; prom_b T_Screen_CombinationCopy_Enter/B4/B8/BC jp 0xF9DF91/0xF9DFCB/0xF9DFCC/0xF9DFF3.
 ; Evidence: calls Paint_CombinationCopy, CombinationCopy_LoadNameBuffers, CombinationCopy_DrawFields; id 0x5F is what SOUND/COMBINATION MANAGER's 'COMBINATION COPY' key requests (0xF9CAB7).
 Screen_CombinationCopy_Enter:
-	ld c, (0x207a:16)                                   ; F9DF91  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9DF95  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9DF91  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9DF95  c1 7b 20 f3
 	jr z, .LF9DFAA                                       ; F9DF99  66 0f
 	ld (0x269a:16), 0x01                                 ; F9DF9B  f1 9a 26 00 01
-	ld (0x209b:16), 0x02                                 ; F9DFA0  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9DFA5  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9DFA0  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9DFA5  f1 9c 20 00 82
 .LF9DFAA:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9DFAA  c1 75 20 3e 09
 	ld c, (0x2095:16)                                   ; F9DFAF  c1 95 20 23
@@ -54669,8 +54669,8 @@ CombinationCopy_AdjustSourceBank:
 	pop XIX                                              ; F9E06A  5c
 	unlk XIZ                                             ; F9E06B  ee 0d
 	ret                                                  ; F9E06D  0e
-	ld (0x209b:16), 0x02                                 ; F9E06E  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9E073  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9E06E  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9E073  f1 9c 20 00 82
 	ld bc, (0x269a:16)                                 ; F9E078  d1 9a 26 21
 	extz BC                                              ; F9E07C  d9 12
 	cp bc, 0x00:i3                                         ; F9E07E  d9 d8
@@ -54688,8 +54688,8 @@ CombinationCopy_AdjustSourceBank:
 	lda xiy, (Descriptor9_FA166C:24)                     ; F9E094  f2 6c 16 fa 35
 	lda xix, (xiz-9)                                     ; F9E099  be f7 34
 	ldir85                                               ; F9E09C  85 11
-	ld (0x209b:16), 0x02                                 ; F9E09E  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9E0A3  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9E09E  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9E0A3  f1 9c 20 00 82
 	ld bc, (0x269a:16)                                 ; F9E0A8  d1 9a 26 21
 	extz BC                                              ; F9E0AC  d9 12
 	cp bc, 0x00:i3                                         ; F9E0AE  d9 d8
@@ -54756,8 +54756,8 @@ CombinationCopy_AdjustSourceBank:
 	lda xix, (xiz-27)                                    ; F9E140  be e5 34
 	ldir85                                               ; F9E143  85 11
 	pop XIX                                              ; F9E145  5c
-	ld (0x209b:16), 0x02                                 ; F9E146  f1 9b 20 00 02
-	ld (0x209c:16), 0x82                                 ; F9E14B  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; F9E146  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; F9E14B  f1 9c 20 00 82
 	ld bc, (0x269a:16)                                 ; F9E150  d1 9a 26 21
 	extz BC                                              ; F9E154  d9 12
 	cp bc, 0x00:i3                                         ; F9E156  d9 d8
@@ -54910,8 +54910,8 @@ CombinationCopy_AdjustDestBank:
 .LF9E2B6:
 	pop XIX                                              ; F9E2B6  5c
 	ret                                                  ; F9E2B7  0e
-	ld (0x209b:16), 0x06                                 ; F9E2B8  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9E2BD  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9E2B8  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9E2BD  f1 9c 20 00 86
 	ld bc, (0x269a:16)                                 ; F9E2C2  d1 9a 26 21
 	extz BC                                              ; F9E2C6  d9 12
 	cp bc, 0x00:i3                                         ; F9E2C8  d9 d8
@@ -54923,8 +54923,8 @@ CombinationCopy_AdjustDestBank:
 	calr CombinationCopy_AdjustDestBank                                      ; F9E2D2  1e 89 ff
 .LF9E2D5:
 	ret                                                  ; F9E2D5  0e
-	ld (0x209b:16), 0x06                                 ; F9E2D6  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9E2DB  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9E2D6  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9E2DB  f1 9c 20 00 86
 	ld bc, (0x269a:16)                                 ; F9E2E0  d1 9a 26 21
 	extz BC                                              ; F9E2E4  d9 12
 	cp bc, 0x00:i3                                         ; F9E2E6  d9 d8
@@ -54954,8 +54954,8 @@ CombinationCopy_AdjustDestBank:
 	ret                                                  ; F9E31E  0e
 	push XIX                                             ; F9E31F  3c
 	lda xix, (0x2900:16)                                ; F9E320  f1 00 29 34
-	ld (0x209b:16), 0x06                                 ; F9E324  f1 9b 20 00 06
-	ld (0x209c:16), 0x86                                 ; F9E329  f1 9c 20 00 86
+	ld (PanelDial_DownButton:16), 0x06                                 ; F9E324  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x86                                 ; F9E329  f1 9c 20 00 86
 	ld bc, (0x269a:16)                                 ; F9E32E  d1 9a 26 21
 	extz BC                                              ; F9E332  d9 12
 	cp bc, 0x00:i3                                         ; F9E334  d9 d8
@@ -55858,14 +55858,14 @@ CombinationCopy_Execute:
 Screen_DataLoadFilter_Enter:
 	push XIX                                             ; F9EB75  3c
 	lda xix, (T_Kernel_SemaSignal_StackArg:24)           ; F9EB76  f2 c0 2d f4 34
-	ld c, (0x207a:16)                                   ; F9EB7B  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9EB7F  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9EB7B  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9EB7F  c1 7b 20 f3
 	jr z, .LF9EB8A                                       ; F9EB83  66 05
 	ld (0x26a5:16), 0x00                                 ; F9EB85  f1 a5 26 00 00
 .LF9EB8A:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9EB8A  c1 75 20 3e 09
-	ld (0x209b:16), 0x84                                 ; F9EB8F  f1 9b 20 00 84
-	ld (0x209c:16), 0x04                                 ; F9EB94  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; F9EB8F  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; F9EB94  f1 9c 20 00 04
 	ld c, (0x2095:16)                                   ; F9EB99  c1 95 20 23
 	and C,0x10                                           ; F9EB9D  cb cc 10
 	jr nz, .LF9EBBD                                      ; F9EBA0  6e 1b
@@ -56067,8 +56067,8 @@ DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0x
 Screen_MemoryProtect_Enter:
 	push XIX                                             ; F9ED34  3c
 	lda xix, (T_Kernel_SemaSignal_StackArg:24)           ; F9ED35  f2 c0 2d f4 34
-	ld c, (0x207a:16)                                   ; F9ED3A  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9ED3E  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9ED3A  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9ED3E  c1 7b 20 f3
 	jr z, .LF9ED49                                       ; F9ED42  66 05
 sub_F9ED44:
 	ld (0x26a6:16), 0x00                                 ; F9ED44  f1 a6 26 00 00
@@ -56345,16 +56345,16 @@ T_F41964_Nop:
 ; Was `sub_F9EF85`, named by notes/prom_a_census_round8.py (bucket round 10).
 ; ---------------------------------------------------------------------
 Screen_DrumsMapNaming_Enter:
-	ld c, (0x207a:16)                                   ; F9EF85  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9EF89  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9EF85  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9EF89  c1 7b 20 f3
 	jr z, .LF9EF9E                                       ; F9EF8D  66 0f
 	ld (0x2700:16), 0x00                                 ; F9EF8F  f1 00 27 00 00
 	ld (0x2703:16), 0x00                                 ; F9EF94  f1 03 27 00 00
 	ld (0x2704:16), 0x24                                 ; F9EF99  f1 04 27 00 24
 .LF9EF9E:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F9EF9E  c1 75 20 3e 09
-	ld (0x209b:16), 0x85                                 ; F9EFA3  f1 9b 20 00 85
-	ld (0x209c:16), 0x05                                 ; F9EFA8  f1 9c 20 00 05
+	ld (PanelDial_DownButton:16), 0x85                                 ; F9EFA3  f1 9b 20 00 85
+	ld (PanelDial_UpButton:16), 0x05                                 ; F9EFA8  f1 9c 20 00 05
 	ld bc, (0x2700:16)                                 ; F9EFAD  d1 00 27 21
 	extz BC                                              ; F9EFB1  d9 12
 	cp bc, 0x00:i3                                         ; F9EFB3  d9 d8
@@ -56413,8 +56413,8 @@ Screen_DrumsMapNaming_Enter:
 ; Was `sub_F9EFF6`, named by notes/prom_a_census_round8.py (bucket round 10).
 ; ---------------------------------------------------------------------
 Screen_DrumsMapNaming_Leave:
-	ld c, (0x207a:16)                                   ; F9EFF6  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; F9EFFA  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; F9EFF6  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9EFFA  c1 7b 20 f3
 	jr Z,.LF9F005                                        ; F9EFFE  66 05
 	ld (0x2806:16), 0x00                                 ; F9F000  f1 06 28 00 00
 .LF9F005:
@@ -58416,12 +58416,12 @@ T_F419B4_Nop:
 ; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_Screen_TuneScale_Enter; prom_b T_Screen_TuneScale_Enter/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111.
 ; Evidence: .LFA04F2 runs DisplayList_FA2070-FA21BF ('TUNE & SCALE','MASTER TUNE','KEY TRANSPOSE','KEY SCALING MODE','TOTAL KEY SCALING','KEY SCALING SHIFT','[KEY:  ]') and FA2315-FA244B; then TuneScale_LoadFields and .LFA05DE; id 0x62 = SYSTEM row-1 left key (0xF9FF3E).
 Screen_TuneScale_Enter:
-	ld c, (0x207a:16)                                   ; FA0094  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FA0098  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FA0094  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA0098  c1 7b 20 f3
 	jr z, .LFA00AD                                       ; FA009C  66 0f
 	ld (0x2690:16), 0x10                                 ; FA009E  f1 90 26 00 10
-	ld (0x209b:16), 0x0b                                 ; FA00A3  f1 9b 20 00 0b
-	ld (0x209c:16), 0x0a                                 ; FA00A8  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x0b                                 ; FA00A3  f1 9b 20 00 0b
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FA00A8  f1 9c 20 00 0a
 .LFA00AD:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FA00AD  c1 75 20 3e 09
 	ld c, (0x2095:16)                                   ; FA00B2  c1 95 20 23
@@ -58484,50 +58484,50 @@ T_F41934_Nop:
 	inc 6,XSP                                            ; FA0141  ef 66
 .LFA0143:
 	ret                                                  ; FA0143  0e
-	ld (0x209b:16), 0x81                                 ; FA0144  f1 9b 20 00 81
-	ld (0x209c:16), 0x01                                 ; FA0149  f1 9c 20 00 01
+	ld (PanelDial_DownButton:16), 0x81                                 ; FA0144  f1 9b 20 00 81
+	ld (PanelDial_UpButton:16), 0x01                                 ; FA0149  f1 9c 20 00 01
 	pushw 0x01                                           ; FA014E  0b 01 00
 	pushw 0x00                                           ; FA0151  0b 00 00
 	calr TuneScale_AdjustUserKey                                      ; FA0154  1e 0d 01
 	pop XBC                                              ; FA0157  59
 	ret                                                  ; FA0158  0e
-	ld (0x209b:16), 0x82                                 ; FA0159  f1 9b 20 00 82
-	ld (0x209c:16), 0x02                                 ; FA015E  f1 9c 20 00 02
+	ld (PanelDial_DownButton:16), 0x82                                 ; FA0159  f1 9b 20 00 82
+	ld (PanelDial_UpButton:16), 0x02                                 ; FA015E  f1 9c 20 00 02
 	pushw 0x03                                           ; FA0163  0b 03 00
 	pushw 0x02                                           ; FA0166  0b 02 00
 	calr TuneScale_AdjustUserKey                                      ; FA0169  1e f8 00
 	pop XBC                                              ; FA016C  59
 	ret                                                  ; FA016D  0e
-	ld (0x209b:16), 0x83                                 ; FA016E  f1 9b 20 00 83
-	ld (0x209c:16), 0x03                                 ; FA0173  f1 9c 20 00 03
+	ld (PanelDial_DownButton:16), 0x83                                 ; FA016E  f1 9b 20 00 83
+	ld (PanelDial_UpButton:16), 0x03                                 ; FA0173  f1 9c 20 00 03
 	pushw 0xff                                           ; FA0178  0b ff 00
 	pushw 0x04                                           ; FA017B  0b 04 00
 	calr TuneScale_AdjustUserKey                                      ; FA017E  1e e3 00
 	pop XBC                                              ; FA0181  59
 	ret                                                  ; FA0182  0e
-	ld (0x209b:16), 0x84                                 ; FA0183  f1 9b 20 00 84
-	ld (0x209c:16), 0x04                                 ; FA0188  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; FA0183  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; FA0188  f1 9c 20 00 04
 	pushw 0x06                                           ; FA018D  0b 06 00
 	pushw 0x05                                           ; FA0190  0b 05 00
 	calr TuneScale_AdjustUserKey                                      ; FA0193  1e ce 00
 	pop XBC                                              ; FA0196  59
 	ret                                                  ; FA0197  0e
-	ld (0x209b:16), 0x85                                 ; FA0198  f1 9b 20 00 85
-	ld (0x209c:16), 0x05                                 ; FA019D  f1 9c 20 00 05
+	ld (PanelDial_DownButton:16), 0x85                                 ; FA0198  f1 9b 20 00 85
+	ld (PanelDial_UpButton:16), 0x05                                 ; FA019D  f1 9c 20 00 05
 	pushw 0x08                                           ; FA01A2  0b 08 00
 	pushw 0x07                                           ; FA01A5  0b 07 00
 	calr TuneScale_AdjustUserKey                                      ; FA01A8  1e b9 00
 	pop XBC                                              ; FA01AB  59
 	ret                                                  ; FA01AC  0e
-	ld (0x209b:16), 0x86                                 ; FA01AD  f1 9b 20 00 86
-	ld (0x209c:16), 0x06                                 ; FA01B2  f1 9c 20 00 06
+	ld (PanelDial_DownButton:16), 0x86                                 ; FA01AD  f1 9b 20 00 86
+	ld (PanelDial_UpButton:16), 0x06                                 ; FA01B2  f1 9c 20 00 06
 	pushw 0x0a                                           ; FA01B7  0b 0a 00
 	pushw 0x09                                           ; FA01BA  0b 09 00
 	calr TuneScale_AdjustUserKey                                      ; FA01BD  1e a4 00
 	pop XBC                                              ; FA01C0  59
 	ret                                                  ; FA01C1  0e
-	ld (0x209b:16), 0x87                                 ; FA01C2  f1 9b 20 00 87
-	ld (0x209c:16), 0x07                                 ; FA01C7  f1 9c 20 00 07
+	ld (PanelDial_DownButton:16), 0x87                                 ; FA01C2  f1 9b 20 00 87
+	ld (PanelDial_UpButton:16), 0x07                                 ; FA01C7  f1 9c 20 00 07
 	pushw 0xff                                           ; FA01CC  0b ff 00
 	pushw 0x0b                                           ; FA01CF  0b 0b 00
 	calr TuneScale_AdjustUserKey                                      ; FA01D2  1e 8f 00
@@ -58538,8 +58538,8 @@ T_F41934_Nop:
 	ld C,(XIX)                                           ; FA01DC  84 23
 	and C,0x01                                           ; FA01DE  cb cc 01
 	jr nz, .LFA01F3                                      ; FA01E1  6e 10
-	ld (0x209b:16), 0x0b                                 ; FA01E3  f1 9b 20 00 0b
-	ld (0x209c:16), 0x0a                                 ; FA01E8  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x0b                                 ; FA01E3  f1 9b 20 00 0b
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FA01E8  f1 9c 20 00 0a
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FA01ED  84 3e 01
 	calr TuneScale_MoveItemCursor                                      ; FA01F0  1e 4e 02
 .LFA01F3:
@@ -58548,16 +58548,16 @@ T_F41934_Nop:
 	ld c, (0x28b0:16)                                   ; FA01F5  c1 b0 28 23
 	and C,0x01                                           ; FA01F9  cb cc 01
 	jr nz, .LFA020B                                      ; FA01FC  6e 0d
-	ld (0x209b:16), 0x0b                                 ; FA01FE  f1 9b 20 00 0b
-	ld (0x209c:16), 0x0a                                 ; FA0203  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x0b                                 ; FA01FE  f1 9b 20 00 0b
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FA0203  f1 9c 20 00 0a
 	calr TuneScale_MoveItemCursor                                      ; FA0208  1e 36 02
 .LFA020B:
 	ret                                                  ; FA020B  0e
 	ld c, (0x28b0:16)                                   ; FA020C  c1 b0 28 23
 	and C,0x01                                           ; FA0210  cb cc 01
 	jr nz, .LFA0222                                      ; FA0213  6e 0d
-	ld (0x209b:16), 0x0b                                 ; FA0215  f1 9b 20 00 0b
-	ld (0x209c:16), 0x0a                                 ; FA021A  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x0b                                 ; FA0215  f1 9b 20 00 0b
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FA021A  f1 9c 20 00 0a
 	calr TuneScale_AdjustSelectedItem                                      ; FA021F  1e 48 02
 .LFA0222:
 	ret                                                  ; FA0222  0e
@@ -58566,8 +58566,8 @@ T_F41934_Nop:
 	ld C,(XIX)                                           ; FA0228  84 23
 	and C,0x01                                           ; FA022A  cb cc 01
 	jr nz, .LFA023F                                      ; FA022D  6e 10
-	ld (0x209b:16), 0x0b                                 ; FA022F  f1 9b 20 00 0b
-	ld (0x209c:16), 0x0a                                 ; FA0234  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x0b                                 ; FA022F  f1 9b 20 00 0b
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FA0234  f1 9c 20 00 0a
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FA0239  84 3e 01
 	calr TuneScale_AdjustSelectedItem                                      ; FA023C  1e 2b 02
 .LFA023F:
@@ -59070,14 +59070,14 @@ sub_FA0689:
 	lda xix, (0x2902:24)                                 ; FA068F  f2 02 29 00 34
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FA0694  c0 c4 3f 01
 	jr nz, .LFA06E1                                      ; FA0698  6e 47
-	ld c, (0x207a:16)                                   ; FA069A  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FA069E  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FA069A  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA069E  c1 7b 20 f3
 	jr z, .LFA06A9                                       ; FA06A2  66 05
 	ld (0x2693:16), 0x00                                 ; FA06A4  f1 93 26 00 00
 .LFA06A9:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FA06A9  c1 75 20 3e 09
-	ld (0x209b:16), 0x84                                 ; FA06AE  f1 9b 20 00 84
-	ld (0x209c:16), 0x04                                 ; FA06B3  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; FA06AE  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; FA06B3  f1 9c 20 00 04
 	ld c, (0x2095:16)                                   ; FA06B8  c1 95 20 23
 	and C,0x10                                           ; FA06BC  cb cc 10
 	jr nz, .LFA06D8                                      ; FA06BF  6e 17
@@ -59093,8 +59093,8 @@ sub_FA0689:
 	push XBC                                             ; FA06DD  39
 	jrl .LFA078F                                         ; FA06DE  78 ae 00
 .LFA06E1:
-	ld c, (0x207a:16)                                   ; FA06E1  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FA06E5  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FA06E1  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA06E5  c1 7b 20 f3
 	jr z, .LFA0724                                       ; FA06E9  66 39
 	m_and_mi8 MB16, 0x26a7, 0xf8                         ; FA06EB  c1 a7 26 3c f8
 	ld A,(XIX)                                           ; FA06F0  84 21
@@ -59130,8 +59130,8 @@ sub_FA0689:
 .LFA0737:
 	calr sub_FA0C64                                          ; FA0737  1e 2a 05
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FA073A  c1 75 20 3e 09
-	ld (0x209b:16), 0x84                                 ; FA073F  f1 9b 20 00 84
-	ld (0x209c:16), 0x04                                 ; FA0744  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; FA073F  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; FA0744  f1 9c 20 00 04
 	call T_CallbackQueue_ResetAndRestartTask2            ; FA0749  1d 80 2e f4
 	lda xbc, (.LFA0ACC:24)                               ; FA074D  f2 cc 0a fa 31
 	push XBC                                             ; FA0752  39
@@ -59844,15 +59844,15 @@ sub_FA0DCC:
 	popw hl                                              ; FA0DF1  4b
 	ret                                                  ; FA0DF2  0e
 sub_FA0DF3:
-	ld c, (0x207a:16)                                   ; FA0DF3  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FA0DF7  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FA0DF3  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA0DF7  c1 7b 20 f3
 	jr z, .LFA0E07                                       ; FA0DFB  66 0a
 	ld (0x26f0:16), 0x00                                 ; FA0DFD  f1 f0 26 00 00
 	ld (0x26f1:16), 0x00                                 ; FA0E02  f1 f1 26 00 00
 .LFA0E07:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FA0E07  c1 75 20 3e 09
-	ld (0x209b:16), 0x84                                 ; FA0E0C  f1 9b 20 00 84
-	ld (0x209c:16), 0x04                                 ; FA0E11  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; FA0E0C  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; FA0E11  f1 9c 20 00 04
 	ld c, (0x2095:16)                                   ; FA0E16  c1 95 20 23
 	and C,0x10                                           ; FA0E1A  cb cc 10
 	jr nz, .LFA0E36                                      ; FA0E1D  6e 17
@@ -59879,8 +59879,8 @@ sub_FA0E51:
 	lda xix, (xiz-4)                                     ; FA0E52  be fc 34
 	ld xbc, (ByteTable4_FA1B7E:24)                               ; FA0E55  e2 7e 1b fa 21
 	ld (xiz-4), xbc                                      ; FA0E5A  be fc 61
-	ld a, (0x207a:16)                                   ; FA0E5D  c1 7a 20 21
-	m_cp_rm MB16, 0x207b, r1                             ; FA0E61  c1 7b 20 f1
+	ld a, (UI_ScreenLatch:16)                                   ; FA0E5D  c1 7a 20 21
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; FA0E61  c1 7b 20 f1
 	jrl z, .LFA0EE6                                      ; FA0E65  76 7e 00
 	ld (XIX),0xb2                                        ; FA0E68  b4 00 b2
 	ld (XIX+0x02),0x00                                   ; FA0E6B  bc 02 00 00
@@ -60345,8 +60345,8 @@ sub_FA10CD:
 sub_FA129D:
 	push XIX                                             ; FA129D  3c
 	lda xix, (0x207e:16)                                ; FA129E  f1 7e 20 34
-	ld c, (0x207a:16)                                   ; FA12A2  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FA12A6  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FA12A2  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA12A6  c1 7b 20 f3
 	jr z, .LFA12AF                                       ; FA12AA  66 03
 	ld (XIX),0x00                                        ; FA12AC  b4 00 00
 .LFA12AF:
@@ -60365,8 +60365,8 @@ sub_FA129D:
 	pop XIX                                              ; FA12CC  5c
 	ret                                                  ; FA12CD  0e
 sub_FA12CE:
-	ld c, (0x207a:16)                                   ; FA12CE  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FA12D2  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FA12CE  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA12D2  c1 7b 20 f3
 	jr z, .LFA12DC                                       ; FA12D6  66 04
 	call T_F425DC                                        ; FA12D8  1d dc 25 f4
 .LFA12DC:
@@ -60441,14 +60441,14 @@ T_F4267C_Nop:
 .LFA135F:
 	ret                                                  ; FA135F  0e
 	call T_CallbackQueue_ResetAndRestartTask2            ; FA1360  1d 80 2e f4
-	ld c, (0x207a:16)                                   ; FA1364  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FA1368  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FA1364  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA1368  c1 7b 20 f3
 	jr z, .LFA1373                                       ; FA136C  66 05
 	ld (0x26f2:16), 0x00                                 ; FA136E  f1 f2 26 00 00
 .LFA1373:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FA1373  c1 75 20 3e 09
-	ld (0x209b:16), 0x0b                                 ; FA1378  f1 9b 20 00 0b
-	ld (0x209c:16), 0x0c                                 ; FA137D  f1 9c 20 00 0c
+	ld (PanelDial_DownButton:16), 0x0b                                 ; FA1378  f1 9b 20 00 0b
+	ld (PanelDial_UpButton:16), 0x0c                                 ; FA137D  f1 9c 20 00 0c
 	call T_F409AC                                        ; FA1382  1d ac 09 f4
 	call T_F42594                                        ; FA1386  1d 94 25 f4
 	lda xbc, (.LFA139E:24)                               ; FA138A  f2 9e 13 fa 31
@@ -76551,7 +76551,7 @@ sub_FAA967:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; FAAA4C  c0 c4 3f 02
 	jr nz, .LFAAA7D                                      ; FAAA50  6e 2b
 	ld (0x7f35:16), 0x00                                 ; FAAA52  f1 35 7f 00 00
-	m_cp_mi8 MB16, 0x207a, 0x6a                          ; FAAA57  c1 7a 20 3f 6a
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x6a                          ; FAAA57  c1 7a 20 3f 6a
 	jr nz, .LFAAA65                                      ; FAAA5C  6e 07
 	ld (0x7f35:16), 0x01                                 ; FAAA5E  f1 35 7f 00 01
 	jr .LFAAA69                                          ; FAAA63  68 04
@@ -76686,7 +76686,7 @@ sub_FAAB28:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; FAAB5C  c0 c4 3f 02
 	jr nz, .LFAAB79                                      ; FAAB60  6e 17
 	ld (0x7f35:16), 0x00                                 ; FAAB62  f1 35 7f 00 00
-	m_cp_mi8 MB16, 0x207a, 0x6a                          ; FAAB67  c1 7a 20 3f 6a
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x6a                          ; FAAB67  c1 7a 20 3f 6a
 	jr nz, .LFAAB75                                      ; FAAB6C  6e 07
 	ld (0x7f35:16), 0x01                                 ; FAAB6E  f1 35 7f 00 01
 	jr .LFAAB79                                          ; FAAB73  68 04
@@ -77243,7 +77243,7 @@ sub_FAAF91:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; FAB083  c0 c4 3f 02
 	jr nz, .LFAB0B4                                      ; FAB087  6e 2b
 	ld (0x7f35:16), 0x00                                 ; FAB089  f1 35 7f 00 00
-	m_cp_mi8 MB16, 0x207a, 0x6a                          ; FAB08E  c1 7a 20 3f 6a
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x6a                          ; FAB08E  c1 7a 20 3f 6a
 	jr nz, .LFAB09C                                      ; FAB093  6e 07
 	ld (0x7f35:16), 0x01                                 ; FAB095  f1 35 7f 00 01
 	jr .LFAB0A0                                          ; FAB09A  68 04
@@ -83364,14 +83364,14 @@ sub_FAE829_Nop5:   ; entry: pointer-table entry
 	call T_Dev7F_WriteSlot8_Slot3
 	ret
 	xor XWA,XWA
-	ld e, (0x2078:16)
+	ld e, (PanelMode:16)
 	cp e, 0x05:i3
 	jr z, .LFAE89A
 	cp e, 0x06:i3
 	jr z, .LFAE8B6
 	cp e, 0x03:i3
 	jr z, .LFAE8B6
-	ld d, (0x207a:16)
+	ld d, (UI_ScreenLatch:16)
 	cp D,0x09
 	jr z, .LFAE8AA
 	cp D,0x0a
@@ -83398,12 +83398,12 @@ sub_FAE829_Nop5:   ; entry: pointer-table entry
 	ret
 .LFAE8CB:
 	xor XWA,XWA
-	ld e, (0x2078:16)
+	ld e, (PanelMode:16)
 	cp e, 0x05:i3
 	jr z, .LFAE8EF
 	cp e, 0x06:i3
 	jr z, .LFAE90C
-	ld d, (0x207a:16)
+	ld d, (UI_ScreenLatch:16)
 	cp D,0x09
 	jr z, .LFAE900
 	cp D,0x0a
@@ -87313,7 +87313,7 @@ sub_FB27AD:
 	ret                                                  ; FB281F  0e
 	push XIX                                             ; FB2820  3c
 	lda xix, (0x60fd40:24)                               ; FB2821  f2 40 fd 60 34
-	m_cp_mi8 MB16, 0x207a, 0x79                          ; FB2826  c1 7a 20 3f 79
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB2826  c1 7a 20 3f 79
 	jr nz, .LFB2873                                      ; FB282B  6e 46
 	pushw 0x00                                           ; FB282D  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB2830  e2 d8 fc 60 21
@@ -88516,7 +88516,7 @@ sub_FB3355:
 	ld c, (0x0922:16)                                   ; FB337D  c1 22 09 23
 	and C,0x01                                           ; FB3381  cb cc 01
 	jrl nz, .LFB33FA                                     ; FB3384  7e 73 00
-	m_cp_mi8 MB16, 0x207a, 0x79                          ; FB3387  c1 7a 20 3f 79
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB3387  c1 7a 20 3f 79
 	jrl z, .LFB33FA                                      ; FB338C  76 6b 00
 	ld c, (0x7f32:16)                                   ; FB338F  c1 32 7f 23
 	and C,0x04                                           ; FB3393  cb cc 04
@@ -88568,7 +88568,7 @@ sub_FB3355:
 	popw bc                                              ; FB3407  49
 	cp WA,0xffff                                         ; FB3408  d8 cf ff ff
 	jr z, .LFB3468                                       ; FB340C  66 5a
-	m_cp_mi8 MB16, 0x207a, 0x79                          ; FB340E  c1 7a 20 3f 79
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB340E  c1 7a 20 3f 79
 	jr z, .LFB3468                                       ; FB3413  66 53
 	ld c, (0x7f32:16)                                   ; FB3415  c1 32 7f 23
 	and C,0x04                                           ; FB3419  cb cc 04
@@ -89881,7 +89881,7 @@ sub_FB3C34:
 	pushw hl                                             ; FB3FA1  2b
 	push XIX                                             ; FB3FA2  3c
 	lda xix, (xiz-4)                                     ; FB3FA3  be fc 34
-	m_cp_mi8 MB16, 0x2078, 0x02                          ; FB3FA6  c1 78 20 3f 02
+	m_cp_mi8 MB16, PanelMode, 0x02                          ; FB3FA6  c1 78 20 3f 02
 	jrl nz, .LFB407E                                     ; FB3FAB  7e d0 00
 	ld xbc, (0x60fc80:24)                               ; FB3FAE  e2 80 fc 60 21
 	push XBC                                             ; FB3FB3  39
@@ -91784,11 +91784,11 @@ sub_FB5154:
 	call SysExDump_RunSendJob                                      ; FB5165  1d 49 20 fb
 	ret                                                  ; FB5169  0e
 sub_FB516A:
-	m_cp_mi8 MB16, 0x207a, 0x79                          ; FB516A  c1 7a 20 3f 79
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB516A  c1 7a 20 3f 79
 	jr z, .LFB517F                                       ; FB516F  66 0e
 	m_cp_mi8 MB16, 0x2076, 0x01                          ; FB5171  c1 76 20 3f 01
 	jr nz, .LFB5184                                      ; FB5176  6e 0c
-	m_cp_mi8 MB16, 0x207a, 0x01                          ; FB5178  c1 7a 20 3f 01
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x01                          ; FB5178  c1 7a 20 3f 01
 	jr nz, .LFB5184                                      ; FB517D  6e 05
 .LFB517F:
 	calr sub_FB5154                                      ; FB517F  1e d2 ff
@@ -92173,7 +92173,7 @@ sub_FB556D:
 	cp C,0x10                                            ; FB5574  cb cf 10
 	jr nz, .LFB558E                                      ; FB5577  6e 15
 	call sub_FB7AF1                                      ; FB5579  1d f1 7a fb
-	m_cp_mi8 MB16, 0x2078, 0x02                          ; FB557D  c1 78 20 3f 02
+	m_cp_mi8 MB16, PanelMode, 0x02                          ; FB557D  c1 78 20 3f 02
 	jr nz, .LFB558E                                      ; FB5582  6e 0a
 	m_or_mi8 MB16, UI_Request_Hi, 0x12                          ; FB5584  c1 71 20 3e 12
 	ld (UI_Request:16), 0x01                                 ; FB5589  f1 70 20 00 01
@@ -96458,9 +96458,9 @@ sub_FB7AFE:
 	ret                                                  ; FB7B0A  0e
 sub_FB7B0B:
 	ld c, (UI_ScreenId:16)                                   ; FB7B0B  c1 7c 20 23
-	ld (0x207d:16), c                                   ; FB7B0F  f1 7d 20 43
-	ld a, (0x207a:16)                                   ; FB7B13  c1 7a 20 21
-	ld (0x207b:16), a                                   ; FB7B17  f1 7b 20 41
+	ld (UI_ScreenId_Previous:16), c                                   ; FB7B0F  f1 7d 20 43
+	ld a, (UI_ScreenLatch:16)                                   ; FB7B13  c1 7a 20 21
+	ld (UI_ScreenLatch_Previous:16), a                                   ; FB7B17  f1 7b 20 41
 	ld (0x60f804:24), 0x00                             ; FB7B1B  f2 04 f8 60 00 00
 	ld (0x60f805:24), 0x00                             ; FB7B21  f2 05 f8 60 00 00
 	ld (0x60f806:24), 0x00                             ; FB7B27  f2 06 f8 60 00 00
@@ -96874,7 +96874,7 @@ sub_FB7EE5:
 ; Was `sub_FB7EFD`, named by notes/prom_a_census_round8.py (bucket round 9).
 ; ---------------------------------------------------------------------
 Ring600C1E_InitIfPanelMode79:
-	m_cp_mi8 MB16, 0x207a, 0x79                          ; FB7EFD  c1 7a 20 3f 79
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB7EFD  c1 7a 20 3f 79
 	jr nz, .LFB7F0C                                      ; FB7F02  6e 08
 	ei 0x06                                              ; FB7F04  06 06
 	call T_Ring600C1E_Init                               ; FB7F06  1d b8 1d f4
@@ -99111,7 +99111,7 @@ sub_FB9E69:
 	ret                                                  ; FB9E77  0e
 	ret                                                  ; FB9E78  0e
 sub_FB9E79:
-	ld bc, (0x207a:16)                                 ; FB9E79  d1 7a 20 21
+	ld bc, (UI_ScreenLatch:16)                                 ; FB9E79  d1 7a 20 21
 	extz BC                                              ; FB9E7D  d9 12
 	cp BC,0x0013                                         ; FB9E7F  d9 cf 13 00
 	jr z, .LFB9E92                                       ; FB9E83  66 0d
@@ -99129,7 +99129,7 @@ sub_FB9E96:
 	link XIZ,0xfff8                                      ; FB9E96  ee 0c f8 ff
 	pushw hl                                             ; FB9E9A  2b
 	push XIX                                             ; FB9E9B  3c
-	m_cp_mi8 MB16, 0x207a, 0x13                          ; FB9E9C  c1 7a 20 3f 13
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x13                          ; FB9E9C  c1 7a 20 3f 13
 	jrl nz, .LFB9FDC                                     ; FB9EA1  7e 38 01
 	m_cp_mi8 MB16, 0x220b, 0x01                          ; FB9EA4  c1 0b 22 3f 01
 	jrl nz, .LFB9FDC                                     ; FB9EA9  7e 30 01
@@ -99247,7 +99247,7 @@ sub_FB9FE1:
 	link XIZ,0xfff8                                      ; FB9FE1  ee 0c f8 ff
 	pushw hl                                             ; FB9FE5  2b
 	push XIX                                             ; FB9FE6  3c
-	m_cp_mi8 MB16, 0x207a, 0x45                          ; FB9FE7  c1 7a 20 3f 45
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x45                          ; FB9FE7  c1 7a 20 3f 45
 	jrl nz, .LFBA108                                     ; FB9FEC  7e 19 01
 	ld c, (0x60505e:24)                                 ; FB9FEF  c2 5e 50 60 23
 	and C,0x02                                           ; FB9FF4  cb cc 02
@@ -102258,7 +102258,7 @@ sub_FBCB40:
 	and C,0x10                                           ; FBCB47  cb cc 10
 	jr nz, .LFBCB6D                                      ; FBCB4A  6e 21
 	ld c, (UI_ScreenId:16)                                   ; FBCB4C  c1 7c 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBCB50  c1 7d 20 f3
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBCB50  c1 7d 20 f3
 	jr z, .LFBCB6D                                       ; FBCB54  66 17
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBCB56  1d 80 2e f4
 	lda xbc, (.LFBCCC2:24)                               ; FBCB5A  f2 c2 cc fb 31
@@ -102541,8 +102541,8 @@ sub_FBCDF8:
 sub_FBCDFC:
 	push XIX                                             ; FBCDFC  3c
 	lda xix, (T_CallbackQueue_Post:24)                   ; FBCDFD  f2 84 2e f4 34
-	ld c, (0x207a:16)                                   ; FBCE02  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FBCE06  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FBCE02  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBCE06  c1 7b 20 f3
 	jr z, .LFBCE20                                       ; FBCE0A  66 14
 	ld (0x2768:16), 0x00                                 ; FBCE0C  f1 68 27 00 00
 	ld (0x2767:16), 0x00                                 ; FBCE11  f1 67 27 00 00
@@ -102550,12 +102550,12 @@ sub_FBCDFC:
 	ld (0x2769:16), 0x00                                 ; FBCE1B  f1 69 27 00 00
 .LFBCE20:
 	ld c, (UI_ScreenId:16)                                   ; FBCE20  c1 7c 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBCE24  c1 7d 20 f3
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBCE24  c1 7d 20 f3
 	jr z, .LFBCE3C                                       ; FBCE28  66 12
 	inc 0x01, (0x2768:16)                                ; FBCE2A  c1 68 27 61
 	inc 0x01, (0x276a:16)                                ; FBCE2E  c1 6a 27 61
-	ld (0x209b:16), 0x84                                 ; FBCE32  f1 9b 20 00 84
-	ld (0x209c:16), 0x04                                 ; FBCE37  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; FBCE32  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; FBCE37  f1 9c 20 00 04
 .LFBCE3C:
 	m_set 0, MD16, UI_RequestBits                                ; FBCE3C  f1 75 20 b8
 	calr sub_FBCCB1                                      ; FBCE40  1e 6e fe
@@ -102564,7 +102564,7 @@ sub_FBCDFC:
 	and C,0x10                                           ; FBCE4A  cb cc 10
 	jrl nz, .LFBCECE                                     ; FBCE4D  7e 7e 00
 	ld c, (UI_ScreenId:16)                                   ; FBCE50  c1 7c 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBCE54  c1 7d 20 f3
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBCE54  c1 7d 20 f3
 	jr z, .LFBCE75                                       ; FBCE58  66 1b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBCE5A  1d 80 2e f4
 	lda xbc, (.LFBD19B:24)                               ; FBCE5E  f2 9b d1 fb 31
@@ -104001,8 +104001,8 @@ sub_FBDB95:
 	pushw hl                                             ; FBDB95  2b
 	push XIX                                             ; FBDB96  3c
 	lda xix, (0x276a:16)                                ; FBDB97  f1 6a 27 34
-	ld c, (0x207a:16)                                   ; FBDB9B  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FBDB9F  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FBDB9B  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBDB9F  c1 7b 20 f3
 	jr z, .LFBDBEC                                       ; FBDBA3  66 47
 	ld (0x2768:16), 0x00                                 ; FBDBA5  f1 68 27 00 00
 	ld (0x2767:16), 0x00                                 ; FBDBAA  f1 67 27 00 00
@@ -104029,7 +104029,7 @@ sub_FBDB95:
 	pop XDE                                              ; FBDBEB  5a
 .LFBDBEC:
 	ld c, (UI_ScreenId:16)                                   ; FBDBEC  c1 7c 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBDBF0  c1 7d 20 f3
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBDBF0  c1 7d 20 f3
 	jr z, .LFBDC3E                                       ; FBDBF4  66 48
 	ld a, (0x2092:16)                                   ; FBDBF6  c1 92 20 21
 	and A,0x01                                           ; FBDBFA  c9 cc 01
@@ -104132,8 +104132,8 @@ sub_FBDD11:
 	push XIX                                             ; FBDD12  3c
 	lda xix, (0x2077:16)                                ; FBDD13  f1 77 20 34
 	ld h, (UI_ScreenId:16)                                   ; FBDD17  c1 7c 20 26
-	ld c, (0x207b:16)                                   ; FBDD1B  c1 7b 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBDD1F  c1 7d 20 f3
+	ld c, (UI_ScreenLatch_Previous:16)                                   ; FBDD1B  c1 7b 20 23
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBDD1F  c1 7d 20 f3
 	jr z, .LFBDD2E                                       ; FBDD23  66 09
 	cp H,0xa1                                            ; FBDD25  ce cf a1
 	jr z, .LFBDD2E                                       ; FBDD28  66 04
@@ -104156,8 +104156,8 @@ sub_FBDD11:
 	ld	(UI_PartIndex:16), (0x276d:16)             ; FBDD4C  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBDD52  1d 9c 2c f4
 .LFBDD56:
-	ld c, (0x207a:16)                                   ; FBDD56  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FBDD5A  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FBDD56  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBDD5A  c1 7b 20 f3
 	jr z, .LFBDD7D                                       ; FBDD5E  66 1d
 	ld A,(XIX)                                           ; FBDD60  84 21
 	cp A,0x0a                                            ; FBDD62  c9 cf 0a
@@ -104591,8 +104591,8 @@ sub_FBE0EF:
 	and H,0x07                                           ; FBE0F4  ce cc 07
 	ld C,H                                               ; FBE0F7  ce 8b
 	add C,0x80                                           ; FBE0F9  cb c8 80
-	ld (0x209b:16), c                                   ; FBE0FC  f1 9b 20 43
-	ld (0x209c:16), h                                   ; FBE100  f1 9c 20 46
+	ld (PanelDial_DownButton:16), c                                   ; FBE0FC  f1 9b 20 43
+	ld (PanelDial_UpButton:16), h                                   ; FBE100  f1 9c 20 46
 	popw hl                                              ; FBE104  4b
 	ret                                                  ; FBE105  0e
 sub_FBE106:
@@ -106230,10 +106230,10 @@ Screen_CombinationNaming_Enter:
 	ld (UI_Request:16), 0x02                                 ; FBEF27  f1 70 20 00 02
 	jr .LFBEF74                                          ; FBEF2C  68 46
 .LFBEF2E:
-	ld c, (0x207a:16)                                   ; FBEF2E  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FBEF32  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FBEF2E  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBEF32  c1 7b 20 f3
 	jr z, .LFBEF4E                                       ; FBEF36  66 16
-	m_cp_mi8 MB16, 0x207d, 0x36                          ; FBEF38  c1 7d 20 3f 36
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x36                          ; FBEF38  c1 7d 20 3f 36
 	jr z, .LFBEF4E                                       ; FBEF3D  66 0f
 	pushw 0x01                                           ; FBEF3F  0b 01 00
 	pushw 0x98                                           ; FBEF42  0b 98 00
@@ -106243,8 +106243,8 @@ Screen_CombinationNaming_Enter:
 .LFBEF4E:
 	ld (0x207e:16), 0x00                                 ; FBEF4E  f1 7e 20 00 00
 	m_set 0, MD16, UI_RequestBits                                ; FBEF53  f1 75 20 b8
-	ld (0x209c:16), 0x0a                                 ; FBEF57  f1 9c 20 00 0a
-	ld (0x209b:16), 0x0b                                 ; FBEF5C  f1 9b 20 00 0b
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FBEF57  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x0b                                 ; FBEF5C  f1 9b 20 00 0b
 	ld c, (0x2095:16)                                   ; FBEF61  c1 95 20 23
 	and C,0x10                                           ; FBEF65  cb cc 10
 	jr nz, .LFBEF71                                      ; FBEF68  6e 07
@@ -106573,7 +106573,7 @@ sub_FBF18B:
 	sub H,C                                              ; FBF1DD  cb a6
 	jr nz, .LFBF1CB                                      ; FBF1DF  6e ea
 	ld a, (UI_ScreenId:16)                                   ; FBF1E1  c1 7c 20 21
-	m_cp_rm MB16, 0x207d, r1                             ; FBF1E5  c1 7d 20 f1
+	m_cp_rm MB16, UI_ScreenId_Previous, r1                             ; FBF1E5  c1 7d 20 f1
 	jr z, .LFBF1EF                                       ; FBF1E9  66 04
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBF1EB  1d 80 2e f4
 .LFBF1EF:
@@ -106589,8 +106589,8 @@ sub_FBF1FF:
 	link XIZ,0xfffc                                      ; FBF1FF  ee 0c fc ff
 	pushw hl                                             ; FBF203  2b
 	push XIX                                             ; FBF204  3c
-	ld c, (0x207a:16)                                   ; FBF205  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FBF209  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FBF205  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBF209  c1 7b 20 f3
 	jr z, .LFBF230                                       ; FBF20D  66 21
 	lda xbc, (0x22f0:16)                                ; FBF20F  f1 f0 22 31
 	ld (xiz-4), xbc                                      ; FBF213  be fc 61
@@ -106725,8 +106725,8 @@ sub_FBF2E2:
 	call T_F42C9C                                        ; FBF301  1d 9c 2c f4
 .LFBF305:
 	calr sub_FBCCB1                                          ; FBF305  1e a9 d9
-	ld c, (0x207a:16)                                   ; FBF308  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FBF30C  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FBF308  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBF30C  c1 7b 20 f3
 	jr z, .LFBF350                                       ; FBF310  66 3e
 	m_cp_mi8 MB16, 0x2076, 0x12                          ; FBF312  c1 76 20 3f 12
 	jr nz, .LFBF329                                      ; FBF317  6e 10
@@ -106746,7 +106746,7 @@ sub_FBF2E2:
 	ld	(0x2766:16), (0x2765:16)             ; FBF34A  c1 65 27 19 66 27
 .LFBF350:
 	ld c, (UI_ScreenId:16)                                   ; FBF350  c1 7c 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBF354  c1 7d 20 f3
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBF354  c1 7d 20 f3
 	jr z, .LFBF372                                       ; FBF358  66 18
 	inc 0x01, (0x276c:16)                                ; FBF35A  c1 6c 27 61
 	incm8 0x01, (xix)                                    ; FBF35E  84 61
@@ -106763,8 +106763,8 @@ sub_FBF2E2:
 	ld H,(XBC)                                           ; FBF384  81 26
 	ld A,H                                               ; FBF386  ce 89
 	xor A,0x80                                           ; FBF388  c9 cd 80
-	ld (0x209b:16), a                                   ; FBF38B  f1 9b 20 41
-	ld (0x209c:16), h                                   ; FBF38F  f1 9c 20 46
+	ld (PanelDial_DownButton:16), a                                   ; FBF38B  f1 9b 20 41
+	ld (PanelDial_UpButton:16), h                                   ; FBF38F  f1 9c 20 46
 	ld B,(XIX)                                           ; FBF393  84 22
 	cp (0x2767:16), b                                    ; FBF395  c1 67 27 fa
 	jr z, .LFBF3AB                                       ; FBF399  66 10
@@ -106777,7 +106777,7 @@ sub_FBF2E2:
 	and C,0x10                                           ; FBF3AF  cb cc 10
 	jr nz, .LFBF40C                                      ; FBF3B2  6e 58
 	ld c, (UI_ScreenId:16)                                   ; FBF3B4  c1 7c 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBF3B8  c1 7d 20 f3
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBF3B8  c1 7d 20 f3
 	jr z, .LFBF3DA                                       ; FBF3BC  66 1c
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBF3BE  1d 80 2e f4
 	ld (0x277e:16), 0x00                                 ; FBF3C2  f1 7e 27 00 00
@@ -106819,8 +106819,8 @@ sub_FBF422:
 	calr sub_FBF426                                      ; FBF422  1e 01 00
 	ret                                                  ; FBF425  0e
 sub_FBF426:
-	ld c, (0x207a:16)                                   ; FBF426  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FBF42A  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FBF426  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBF42A  c1 7b 20 f3
 	jr z, .LFBF441                                       ; FBF42E  66 11
 	m_cp_mi8 MB16, 0x2077, 0x12                          ; FBF430  c1 77 20 3f 12
 	jr nz, .LFBF441                                      ; FBF435  6e 0a
@@ -107502,7 +107502,7 @@ sub_FBFAB0:
 	and C,0x10                                           ; FBFAB7  cb cc 10
 	jr nz, .LFBFADD                                      ; FBFABA  6e 21
 	ld c, (UI_ScreenId:16)                                   ; FBFABC  c1 7c 20 23
-	m_cp_rm MB16, 0x207d, r3                             ; FBFAC0  c1 7d 20 f3
+	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBFAC0  c1 7d 20 f3
 	jr z, .LFBFADD                                       ; FBFAC4  66 17
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBFAC6  1d 80 2e f4
 	lda xbc, (.LFBFCF1:24)                               ; FBFACA  f2 f1 fc fb 31
@@ -111299,11 +111299,11 @@ Msg0716_PostFromXIX_Stream1:
 ;          namespace.
 ; ---------------------------------------------------------------------
 Msg0716_BiasOpcodeByMode:
-	m_cp_mi8 MB16, 0x207a, 0x39                          ; FC1B19  c1 7a 20 3f 39
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x39                          ; FC1B19  c1 7a 20 3f 39
 	jr z, .LFC1B2E                                       ; FC1B1E  66 0e
-	m_cp_mi8 MB16, 0x207a, 0x66                          ; FC1B20  c1 7a 20 3f 66
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x66                          ; FC1B20  c1 7a 20 3f 66
 	jr z, .LFC1B2E                                       ; FC1B25  66 07
-	m_cp_mi8 MB16, 0x207a, 0xca                          ; FC1B27  c1 7a 20 3f ca
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xca                          ; FC1B27  c1 7a 20 3f ca
 	jr nz, .LFC1B33                                      ; FC1B2C  6e 05
 .LFC1B2E:
 	m_add_mi8 MB16, 0x0716, 0x08                         ; FC1B2E  c1 16 07 38 08
@@ -114484,7 +114484,7 @@ sub_FC546A:
 	or c, (0x4c21:24)                                 ; FC5482  c2 21 4c 00 e3
 	ld (0x602200:24), c                                 ; FC5487  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC548C  23 04
-	m_mul MB16, 0x2078, 3                                ; FC548E  c1 78 20 43
+	m_mul MB16, PanelMode, 3                                ; FC548E  c1 78 20 43
 	extz XBC                                             ; FC5492  e9 12
 	add XBC,Dispatch32_FC6546                            ; FC5494  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC549A  a1 21
@@ -114514,7 +114514,7 @@ sub_FC54C6:
 	or c, (0x4c21:24)                                 ; FC54D4  c2 21 4c 00 e3
 	ld (0x602200:24), c                                 ; FC54D9  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC54DE  23 04
-	m_mul MB16, 0x2078, 3                                ; FC54E0  c1 78 20 43
+	m_mul MB16, PanelMode, 3                                ; FC54E0  c1 78 20 43
 	extz XBC                                             ; FC54E4  e9 12
 	add XBC,Dispatch32_FC6546                            ; FC54E6  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC54EC  a1 21
@@ -114543,7 +114543,7 @@ sub_FC5518:
 	or c, (0x4c21:24)                                 ; FC5522  c2 21 4c 00 e3
 	ld (0x602200:24), c                                 ; FC5527  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC552C  23 04
-	m_mul MB16, 0x2078, 3                                ; FC552E  c1 78 20 43
+	m_mul MB16, PanelMode, 3                                ; FC552E  c1 78 20 43
 	extz XBC                                             ; FC5532  e9 12
 	add XBC,Dispatch32_FC6546                            ; FC5534  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC553A  a1 21
@@ -114579,7 +114579,7 @@ sub_FC5566:
 	or c, (0x4c21:24)                                 ; FC5586  c2 21 4c 00 e3
 	ld (0x602200:24), c                                 ; FC558B  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC5590  23 04
-	m_mul MB16, 0x2078, 3                                ; FC5592  c1 78 20 43
+	m_mul MB16, PanelMode, 3                                ; FC5592  c1 78 20 43
 	extz XBC                                             ; FC5596  e9 12
 	add XBC,Dispatch32_FC6546                            ; FC5598  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC559E  a1 21
@@ -115220,9 +115220,9 @@ sub_FC5BB5:   ; entry: named by 1 `.long` operand, first at 0xFC657A
 sub_FC5BCC:   ; entry: named by 1 `.long` operand, first at 0xFC656A
 	link XIZ,0x0000                                      ; FC5BCC  ee 0c 00 00
 	pushw hl                                             ; FC5BD0  2b
-	m_cp_mi8 MB16, 0x207a, 0x61                          ; FC5BD1  c1 7a 20 3f 61
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x61                          ; FC5BD1  c1 7a 20 3f 61
 	jr z, .LFC5BDF                                       ; FC5BD6  66 07
-	m_cp_mi8 MB16, 0x207a, 0x63                          ; FC5BD8  c1 7a 20 3f 63
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x63                          ; FC5BD8  c1 7a 20 3f 63
 	jr nz, .LFC5BFF                                      ; FC5BDD  6e 20
 .LFC5BDF:
 	ld c, (UI_PartIndex:16)                                   ; FC5BDF  c1 50 22 23
@@ -115246,9 +115246,9 @@ sub_FC5BCC:   ; entry: named by 1 `.long` operand, first at 0xFC656A
 	ret                                                  ; FC5C0B  0e
 	link XIZ,0x0000                                      ; FC5C0C  ee 0c 00 00
 	pushw hl                                             ; FC5C10  2b
-	m_cp_mi8 MB16, 0x207a, 0x72                          ; FC5C11  c1 7a 20 3f 72
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x72                          ; FC5C11  c1 7a 20 3f 72
 	jr z, .LFC5C1F                                       ; FC5C16  66 07
-	m_cp_mi8 MB16, 0x207a, 0x71                          ; FC5C18  c1 7a 20 3f 71
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x71                          ; FC5C18  c1 7a 20 3f 71
 	jr nz, .LFC5C3F                                      ; FC5C1D  6e 20
 .LFC5C1F:
 	ld bc, (0x2098:16)                                 ; FC5C1F  d1 98 20 21
@@ -115937,7 +115937,7 @@ sub_FC626B:
 	extz XBC                                             ; FC6294  e9 12
 	and XBC,XIX                                          ; FC6296  ec c1
 	jr z, .LFC62E8                                       ; FC6298  66 4e
-	m_cp_mi8 MB16, 0x207a, 0x0e                          ; FC629A  c1 7a 20 3f 0e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0e                          ; FC629A  c1 7a 20 3f 0e
 	jr nz, .LFC62AD                                      ; FC629F  6e 0c
 	ld bc, (0x1072:16)                                 ; FC62A1  d1 72 10 21
 	extz XBC                                             ; FC62A5  e9 12
@@ -120636,7 +120636,7 @@ sub_FCA738:
 	ld e, 0x00:opc                                          ; FCA73F  25 00
 	ld h, 0x00:opc                                          ; FCA741  26 00
 	ld D,(XIZ+0x08)                                      ; FCA743  8e 08 24
-	m_cp_mi8 MB16, 0x207a, 0xda                          ; FCA746  c1 7a 20 3f da
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xda                          ; FCA746  c1 7a 20 3f da
 	jr nz, .LFCA754                                      ; FCA74B  6e 07
 	ld d, (0x2169:16)                                   ; FCA74D  c1 69 21 24
 	or D,0xf0                                            ; FCA751  cc ce f0
@@ -120807,7 +120807,7 @@ sub_FCA8D4:
 	ld A,(XIZ+0x08)                                      ; FCA8EF  8e 08 21
 	ld (xiz-5), a                                        ; FCA8F2  be fb 41
 	ld (xiz-6), 0x00                                     ; FCA8F5  be fa 00 00
-	m_cp_mi8 MB16, 0x207a, 0xda                          ; FCA8F9  c1 7a 20 3f da
+	m_cp_mi8 MB16, UI_ScreenLatch, 0xda                          ; FCA8F9  c1 7a 20 3f da
 	jr NZ,.LFCA90A                                       ; FCA8FE  6e 0a
 	ld w, (0x2169:16)                                   ; FCA900  c1 69 21 20
 	or W,0xf0                                            ; FCA904  c8 ce f0
@@ -121320,7 +121320,7 @@ sub_FCAD9B:
 	ret                                                  ; FCADD4  0e
 sub_FCADD5:
 	link XIZ,0x0000                                      ; FCADD5  ee 0c 00 00
-	m_cp_mi8 MB16, 0x207a, 0x28                          ; FCADD9  c1 7a 20 3f 28
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x28                          ; FCADD9  c1 7a 20 3f 28
 	jr nz, .LFCADE8                                      ; FCADDE  6e 08
 	ld c, (0x601f44:24)                                 ; FCADE0  c2 44 1f 60 23
 	ld (XIZ+0x08),C                                      ; FCADE5  be 08 43
@@ -121368,7 +121368,7 @@ sub_FCAE2D:
 	ld H,(XIZ+0x08)                                      ; FCAE32  8e 08 26
 	ld XBC,(XIZ+0x0a)                                    ; FCAE35  ae 0a 21
 	ld L,(XBC+0x01)                                      ; FCAE38  89 01 27
-	m_cp_mi8 MB16, 0x207a, 0x28                          ; FCAE3B  c1 7a 20 3f 28
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x28                          ; FCAE3B  c1 7a 20 3f 28
 	jr nz, .LFCAE49                                      ; FCAE40  6e 07
 	ld a, (0x601f44:24)                                 ; FCAE42  c2 44 1f 60 21
 	jr .LFCAE72                                          ; FCAE47  68 29
@@ -139725,10 +139725,10 @@ sub_FD7BDE:
 	or H,C                                               ; FD7BEB  cb e6
 	cp (XIZ+0x08),0x00                                   ; FD7BED  8e 08 3f 00
 	jr nz, .LFD7BF9                                      ; FD7BF1  6e 06
-	ld (0x209c:16), h                                   ; FD7BF3  f1 9c 20 46
+	ld (PanelDial_UpButton:16), h                                   ; FD7BF3  f1 9c 20 46
 	jr .LFD7BFD                                          ; FD7BF7  68 04
 .LFD7BF9:
-	ld (0x209b:16), h                                   ; FD7BF9  f1 9b 20 46
+	ld (PanelDial_DownButton:16), h                                   ; FD7BF9  f1 9b 20 46
 .LFD7BFD:
 	popw hl                                              ; FD7BFD  4b
 	unlk XIZ                                             ; FD7BFE  ee 0d
@@ -156222,9 +156222,9 @@ sub_FE055B:
 	popw hl                                              ; FE0597  4b
 	ret                                                  ; FE0598  0e
 sub_FE0599:
-	m_cp_mi8 MB16, 0x207a, 0x49                          ; FE0599  c1 7a 20 3f 49
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x49                          ; FE0599  c1 7a 20 3f 49
 	jr z, .LFE05AA                                           ; FE059E  66 0a
-	m_cp_mi8 MB16, 0x207a, 0x4e                          ; FE05A0  c1 7a 20 3f 4e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FE05A0  c1 7a 20 3f 4e
 	jr z, .LFE05AA                                           ; FE05A5  66 03
 	calr sub_FE1522                                          ; FE05A7  1e 78 0f
 .LFE05AA:
@@ -156523,7 +156523,7 @@ sub_FE0811:
 	lda xix, (0x23ce:16)                                ; FE0812  f1 ce 23 34
 	m_cp_mi8 MB16, 0x21fa, 0x03                          ; FE0816  c1 fa 21 3f 03
 	jr z, .LFE0857                                           ; FE081B  66 3a
-	m_cp_mi8 MB16, 0x207a, 0x4e                          ; FE081D  c1 7a 20 3f 4e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FE081D  c1 7a 20 3f 4e
 	jr nz, .LFE082F                                          ; FE0822  6e 0b
 	calr sub_FE0273                                          ; FE0824  1e 4c fa
 	ld BC,(XIX)                                          ; FE0827  94 21
@@ -157516,7 +157516,7 @@ sub_FE11D9:
 	jr .LFE1216                                              ; FE11EF  68 25
 .LFE11F1:
 	calr Disk_PortA3_Release                                          ; FE11F1  1e 03 07
-	m_cp_mi8 MB16, 0x207a, 0x4e                          ; FE11F4  c1 7a 20 3f 4e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FE11F4  c1 7a 20 3f 4e
 	jr nz, .LFE11FE                                          ; FE11F9  6e 03
 	calr sub_FE1907                                          ; FE11FB  1e 09 07
 .LFE11FE:
@@ -158656,7 +158656,7 @@ sub_FE1C33:
 sub_FE1C3A:
 	calr sub_FE0B43                                          ; FE1C3A  1e 06 ef
 	ld (Disk_LastError:16), a                                   ; FE1C3D  f1 43 22 41
-	m_cp_mi8 MB16, 0x207a, 0x49                          ; FE1C41  c1 7a 20 3f 49
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x49                          ; FE1C41  c1 7a 20 3f 49
 	jr nz, .LFE1C4C                                          ; FE1C46  6e 04
 	m_res 0, MD16, 0x360b                                ; FE1C48  f1 0b 36 b0
 .LFE1C4C:
@@ -170350,7 +170350,7 @@ sub_FE8000:
 	call sub_FE82D7                                      ; FE8000  1d d7 82 fe
 	ret                                                  ; FE8004  0e
 sub_FE8005:
-	m_cp_mi8 MB16, 0x207a, 0x45                          ; FE8005  c1 7a 20 3f 45
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x45                          ; FE8005  c1 7a 20 3f 45
 	jr nz, .LFE801C                                      ; FE800A  6e 10
 	xor BC,BC                                            ; FE800C  d9 d1
 	ld c, 0x10:opc                                          ; FE800E  23 10
@@ -171677,11 +171677,11 @@ sub_FE88AA:
 	jr nz, .LFE88E3                                      ; FE88DA  6e 07
 	ldw (0x601f4d:24), 0x30                             ; FE88DC  f2 4d 1f 60 02 30 00
 .LFE88E3:
-	ld a, (0x207a:16)                                   ; FE88E3  c1 7a 20 21
-	m_cp_rm MB16, 0x207b, r1                             ; FE88E7  c1 7b 20 f1
+	ld a, (UI_ScreenLatch:16)                                   ; FE88E3  c1 7a 20 21
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; FE88E7  c1 7b 20 f1
 	jr nz, .LFE8912                                      ; FE88EB  6e 25
 	ld a, (UI_ScreenId:16)                                   ; FE88ED  c1 7c 20 21
-	m_cp_rm MB16, 0x207d, r1                             ; FE88F1  c1 7d 20 f1
+	m_cp_rm MB16, UI_ScreenId_Previous, r1                             ; FE88F1  c1 7d 20 f1
 	jr z, .LFE8912                                       ; FE88F5  66 1b
 	m_bit 4, MD16, 0x34d1                                ; FE88F7  f1 d1 34 cc
 	jr z, .LFE8912                                       ; FE88FB  66 15
@@ -171704,13 +171704,13 @@ sub_FE88AA:
 	ld xwa, (0x601f01:24)                               ; FE893E  e2 01 1f 60 20
 	ld (0x1336:16), xwa                                 ; FE8943  f1 36 13 60
 	ld (0x133a:16), xwa                                 ; FE8947  f1 3a 13 60
-	m_cp_mi8 MB16, 0x207d, 0x26                          ; FE894B  c1 7d 20 3f 26
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x26                          ; FE894B  c1 7d 20 3f 26
 	jrl z, .LFE8A1F                                      ; FE8950  76 cc 00
-	m_cp_mi8 MB16, 0x207d, 0x29                          ; FE8953  c1 7d 20 3f 29
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x29                          ; FE8953  c1 7d 20 3f 29
 	jrl z, .LFE8A1F                                      ; FE8958  76 c4 00
-	m_cp_mi8 MB16, 0x207d, 0x24                          ; FE895B  c1 7d 20 3f 24
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x24                          ; FE895B  c1 7d 20 3f 24
 	jr z, .LFE8980                                       ; FE8960  66 1e
-	m_cp_mi8 MB16, 0x207d, 0x27                          ; FE8962  c1 7d 20 3f 27
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x27                          ; FE8962  c1 7d 20 3f 27
 	jr z, .LFE8980                                       ; FE8967  66 17
 	m_bit 0, MD24, EditScreen_Mode                              ; FE8969  f2 70 1f 60 c8
 	jrl z, .LFE8A7E                                      ; FE896E  76 0d 01
@@ -171720,8 +171720,8 @@ sub_FE88AA:
 	jr .LFE898F                                          ; FE897E  68 0f
 .LFE8980:
 	m_or_mi8 MB16, 0x20a9, 0x01                          ; FE8980  c1 a9 20 3e 01
-	ld (0x209c:16), 0x00                                 ; FE8985  f1 9c 20 00 00
-	ld (0x209b:16), 0x80                                 ; FE898A  f1 9b 20 00 80
+	ld (PanelDial_UpButton:16), 0x00                                 ; FE8985  f1 9c 20 00 00
+	ld (PanelDial_DownButton:16), 0x80                                 ; FE898A  f1 9b 20 00 80
 .LFE898F:
 	xor XWA,XWA                                          ; FE898F  e8 d0
 	ld a, (0x601f00:24)                                 ; FE8991  c2 00 1f 60 21
@@ -171962,14 +171962,14 @@ sub_FE8BF8:
 sub_FE8C1F:
 	ld wa, (0x601f4d:24)                                ; FE8C1F  d2 4d 1f 60 20
 	ld (0x601f51:24), wa                                ; FE8C24  f2 51 1f 60 50
-	m_cp_mi8 MB16, 0x207a, 0x28                          ; FE8C29  c1 7a 20 3f 28
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x28                          ; FE8C29  c1 7a 20 3f 28
 	jr z, .LFE8C38                                       ; FE8C2E  66 08
 	calr Queue2E00_AppendRegs_0_255_4240                                      ; FE8C30  1e 64 00
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FE8C33  c1 d4 34 3e 10
 .LFE8C38:
 	jr .LFE8C5D                                          ; FE8C38  68 23
 sub_FE8C3A:
-	m_cp_mi8 MB16, 0x207a, 0x25                          ; FE8C3A  c1 7a 20 3f 25
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x25                          ; FE8C3A  c1 7a 20 3f 25
 	jr z, .LFE8C49                                       ; FE8C3F  66 08
 	calr Queue2E00_AppendRegs_0_255_4240                                      ; FE8C41  1e 53 00
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FE8C44  c1 d4 34 3e 10
@@ -173347,56 +173347,56 @@ ScreenDispatch_FE9A4A:
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC2  [ 30]
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC6  [ 31]
 sub_FE9ACA:   ; entry: named by 1 `.long` operand, first at 0xFE9A4A
-	ld (0x209c:16), 0x00                                 ; FE9ACA  f1 9c 20 00 00
-	ld (0x209b:16), 0x80                                 ; FE9ACF  f1 9b 20 00 80
+	ld (PanelDial_UpButton:16), 0x00                                 ; FE9ACA  f1 9c 20 00 00
+	ld (PanelDial_DownButton:16), 0x80                                 ; FE9ACF  f1 9b 20 00 80
 	calr sub_FE9CDA                                          ; FE9AD4  1e 03 02
 	ret                                                  ; FE9AD7  0e
 sub_FE9AD8:   ; entry: named by 1 `.long` operand, first at 0xFE9A4E
-	ld (0x209c:16), 0x01                                 ; FE9AD8  f1 9c 20 00 01
-	ld (0x209b:16), 0x81                                 ; FE9ADD  f1 9b 20 00 81
+	ld (PanelDial_UpButton:16), 0x01                                 ; FE9AD8  f1 9c 20 00 01
+	ld (PanelDial_DownButton:16), 0x81                                 ; FE9ADD  f1 9b 20 00 81
 	calr sub_FE9D92                                          ; FE9AE2  1e ad 02
 	ret                                                  ; FE9AE5  0e
 sub_FE9AE6:   ; entry: named by 1 `.long` operand, first at 0xFE9A52
-	ld (0x209c:16), 0x02                                 ; FE9AE6  f1 9c 20 00 02
-	ld (0x209b:16), 0x82                                 ; FE9AEB  f1 9b 20 00 82
+	ld (PanelDial_UpButton:16), 0x02                                 ; FE9AE6  f1 9c 20 00 02
+	ld (PanelDial_DownButton:16), 0x82                                 ; FE9AEB  f1 9b 20 00 82
 	calr sub_FEA097                                          ; FE9AF0  1e a4 05
 	ret                                                  ; FE9AF3  0e
 sub_FE9AF4:   ; entry: named by 1 `.long` operand, first at 0xFE9A56
-	ld (0x209c:16), 0x03                                 ; FE9AF4  f1 9c 20 00 03
-	ld (0x209b:16), 0x83                                 ; FE9AF9  f1 9b 20 00 83
+	ld (PanelDial_UpButton:16), 0x03                                 ; FE9AF4  f1 9c 20 00 03
+	ld (PanelDial_DownButton:16), 0x83                                 ; FE9AF9  f1 9b 20 00 83
 	calr sub_FEA14E                                          ; FE9AFE  1e 4d 06
 	ret                                                  ; FE9B01  0e
 sub_FE9B02:   ; entry: named by 1 `.long` operand, first at 0xFE9A5A
-	ld (0x209c:16), 0x04                                 ; FE9B02  f1 9c 20 00 04
-	ld (0x209b:16), 0x84                                 ; FE9B07  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; FE9B02  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; FE9B07  f1 9b 20 00 84
 	calr sub_FEA1D5                                          ; FE9B0C  1e c6 06
 	ret                                                  ; FE9B0F  0e
 sub_FE9B10:   ; entry: named by 1 `.long` operand, first at 0xFE9A5E
-	ld (0x209c:16), 0x05                                 ; FE9B10  f1 9c 20 00 05
-	ld (0x209b:16), 0x85                                 ; FE9B15  f1 9b 20 00 85
+	ld (PanelDial_UpButton:16), 0x05                                 ; FE9B10  f1 9c 20 00 05
+	ld (PanelDial_DownButton:16), 0x85                                 ; FE9B15  f1 9b 20 00 85
 	calr sub_FEA2A5                                          ; FE9B1A  1e 88 07
 	ret                                                  ; FE9B1D  0e
 sub_FE9B1E:   ; entry: named by 1 `.long` operand, first at 0xFE9A62
-	ld (0x209c:16), 0x07                                 ; FE9B1E  f1 9c 20 00 07
-	ld (0x209b:16), 0x06                                 ; FE9B23  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x07                                 ; FE9B1E  f1 9c 20 00 07
+	ld (PanelDial_DownButton:16), 0x06                                 ; FE9B23  f1 9b 20 00 06
 	calr sub_FEA86F                                          ; FE9B28  1e 44 0d
 	ret                                                  ; FE9B2B  0e
 sub_FE9B2C:   ; entry: named by 1 `.long` operand, first at 0xFE9A66
-	ld (0x209c:16), 0x07                                 ; FE9B2C  f1 9c 20 00 07
-	ld (0x209b:16), 0x06                                 ; FE9B31  f1 9b 20 00 06
+	ld (PanelDial_UpButton:16), 0x07                                 ; FE9B2C  f1 9c 20 00 07
+	ld (PanelDial_DownButton:16), 0x06                                 ; FE9B31  f1 9b 20 00 06
 	calr sub_FEA36C                                          ; FE9B36  1e 33 08
 	ret                                                  ; FE9B39  0e
 sub_FE9B3A:   ; entry: named by 1 `.long` operand, first at 0xFE9A6A
 	calr sub_FEA97F                                          ; FE9B3A  1e 42 0e
 	ret                                                  ; FE9B3D  0e
 sub_FE9B3E:   ; entry: named by 1 `.long` operand, first at 0xFE9A6E
-	ld (0x209c:16), 0x09                                 ; FE9B3E  f1 9c 20 00 09
-	ld (0x209b:16), 0x0a                                 ; FE9B43  f1 9b 20 00 0a
+	ld (PanelDial_UpButton:16), 0x09                                 ; FE9B3E  f1 9c 20 00 09
+	ld (PanelDial_DownButton:16), 0x0a                                 ; FE9B43  f1 9b 20 00 0a
 	calr sub_FEA9A0                                          ; FE9B48  1e 55 0e
 	ret                                                  ; FE9B4B  0e
 sub_FE9B4C:   ; entry: named by 1 `.long` operand, first at 0xFE9A72
-	ld (0x209c:16), 0x09                                 ; FE9B4C  f1 9c 20 00 09
-	ld (0x209b:16), 0x0a                                 ; FE9B51  f1 9b 20 00 0a
+	ld (PanelDial_UpButton:16), 0x09                                 ; FE9B4C  f1 9c 20 00 09
+	ld (PanelDial_DownButton:16), 0x0a                                 ; FE9B51  f1 9b 20 00 0a
 	calr sub_FEA9E0                                          ; FE9B56  1e 87 0e
 	ret                                                  ; FE9B59  0e
 sub_FE9B5A:   ; entry: named by 1 `.long` operand, first at 0xFE9A76
@@ -173491,38 +173491,38 @@ ScreenDispatch_FE9BA4:
 	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C1C  [ 30]
 	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C20  [ 31]
 sub_FE9C24:   ; entry: named by 1 `.long` operand, first at 0xFE9BA4
-	ld (0x209c:16), 0x00                                 ; FE9C24  f1 9c 20 00 00
-	ld (0x209b:16), 0x80                                 ; FE9C29  f1 9b 20 00 80
+	ld (PanelDial_UpButton:16), 0x00                                 ; FE9C24  f1 9c 20 00 00
+	ld (PanelDial_DownButton:16), 0x80                                 ; FE9C29  f1 9b 20 00 80
 	calr sub_FE9CDA                                      ; FE9C2E  1e a9 00
 	ret                                                  ; FE9C31  0e
 sub_FE9C32:   ; entry: named by 1 `.long` operand, first at 0xFE9BA8
-	ld (0x209c:16), 0x01                                 ; FE9C32  f1 9c 20 00 01
-	ld (0x209b:16), 0x81                                 ; FE9C37  f1 9b 20 00 81
+	ld (PanelDial_UpButton:16), 0x01                                 ; FE9C32  f1 9c 20 00 01
+	ld (PanelDial_DownButton:16), 0x81                                 ; FE9C37  f1 9b 20 00 81
 	calr sub_FE9D92                                      ; FE9C3C  1e 53 01
 	ret                                                  ; FE9C3F  0e
 sub_FE9C40:   ; entry: named by 1 `.long` operand, first at 0xFE9BAC
-	ld (0x209c:16), 0x82                                 ; FE9C40  f1 9c 20 00 82
-	ld (0x209b:16), 0x02                                 ; FE9C45  f1 9b 20 00 02
+	ld (PanelDial_UpButton:16), 0x82                                 ; FE9C40  f1 9c 20 00 82
+	ld (PanelDial_DownButton:16), 0x02                                 ; FE9C45  f1 9b 20 00 02
 	calr sub_FEA097                                      ; FE9C4A  1e 4a 04
 	ret                                                  ; FE9C4D  0e
 sub_FE9C4E:   ; entry: named by 1 `.long` operand, first at 0xFE9BB0
-	ld (0x209c:16), 0x03                                 ; FE9C4E  f1 9c 20 00 03
-	ld (0x209b:16), 0x83                                 ; FE9C53  f1 9b 20 00 83
+	ld (PanelDial_UpButton:16), 0x03                                 ; FE9C4E  f1 9c 20 00 03
+	ld (PanelDial_DownButton:16), 0x83                                 ; FE9C53  f1 9b 20 00 83
 	calr sub_FEA14E                                      ; FE9C58  1e f3 04
 	ret                                                  ; FE9C5B  0e
 sub_FE9C5C:   ; entry: named by 1 `.long` operand, first at 0xFE9BB4
-	ld (0x209c:16), 0x04                                 ; FE9C5C  f1 9c 20 00 04
-	ld (0x209b:16), 0x84                                 ; FE9C61  f1 9b 20 00 84
+	ld (PanelDial_UpButton:16), 0x04                                 ; FE9C5C  f1 9c 20 00 04
+	ld (PanelDial_DownButton:16), 0x84                                 ; FE9C61  f1 9b 20 00 84
 	calr sub_FEA2A5                                      ; FE9C66  1e 3c 06
 	ret                                                  ; FE9C69  0e
 sub_FE9C6A:   ; entry: named by 1 `.long` operand, first at 0xFE9BB8
-	ld (0x209c:16), 0x06                                 ; FE9C6A  f1 9c 20 00 06
-	ld (0x209b:16), 0x05                                 ; FE9C6F  f1 9b 20 00 05
+	ld (PanelDial_UpButton:16), 0x06                                 ; FE9C6A  f1 9c 20 00 06
+	ld (PanelDial_DownButton:16), 0x05                                 ; FE9C6F  f1 9b 20 00 05
 	calr sub_FEA86F                                      ; FE9C74  1e f8 0b
 	ret                                                  ; FE9C77  0e
 sub_FE9C78:   ; entry: named by 1 `.long` operand, first at 0xFE9BBC
-	ld (0x209c:16), 0x06                                 ; FE9C78  f1 9c 20 00 06
-	ld (0x209b:16), 0x05                                 ; FE9C7D  f1 9b 20 00 05
+	ld (PanelDial_UpButton:16), 0x06                                 ; FE9C78  f1 9c 20 00 06
+	ld (PanelDial_DownButton:16), 0x05                                 ; FE9C7D  f1 9b 20 00 05
 	calr sub_FEA36C                                      ; FE9C82  1e e7 06
 	ret                                                  ; FE9C85  0e
 sub_FE9C86:   ; entry: named by 1 `.long` operand, first at 0xFE9BC0
@@ -173532,13 +173532,13 @@ sub_FE9C8A:   ; entry: named by 1 `.long` operand, first at 0xFE9BC4
 	calr sub_FEAFD0                                      ; FE9C8A  1e 43 13
 	ret                                                  ; FE9C8D  0e
 sub_FE9C8E:   ; entry: named by 1 `.long` operand, first at 0xFE9BC8
-	ld (0x209c:16), 0x0a                                 ; FE9C8E  f1 9c 20 00 0a
-	ld (0x209b:16), 0x09                                 ; FE9C93  f1 9b 20 00 09
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FE9C8E  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x09                                 ; FE9C93  f1 9b 20 00 09
 	calr sub_FEAF29                                      ; FE9C98  1e 8e 12
 	ret                                                  ; FE9C9B  0e
 sub_FE9C9C:   ; entry: named by 1 `.long` operand, first at 0xFE9BCC
-	ld (0x209c:16), 0x0a                                 ; FE9C9C  f1 9c 20 00 0a
-	ld (0x209b:16), 0x09                                 ; FE9CA1  f1 9b 20 00 09
+	ld (PanelDial_UpButton:16), 0x0a                                 ; FE9C9C  f1 9c 20 00 0a
+	ld (PanelDial_DownButton:16), 0x09                                 ; FE9CA1  f1 9b 20 00 09
 	calr sub_FEAE9B                                      ; FE9CA6  1e f2 11
 	ret                                                  ; FE9CA9  0e
 sub_FE9CAA:   ; entry: named by 1 `.long` operand, first at 0xFE9BD0
@@ -183511,8 +183511,8 @@ Paint_MidiFileDirectPlay:
 	push XIX                                             ; FF4408  3c
 	lda xix, (sub_FF75D3:24)                             ; FF4409  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF440E  1d 80 2e f4
-	ld c, (0x207a:16)                                   ; FF4412  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF4416  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF4412  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF4416  c1 7b 20 f3
 	jr z, .LFF4463                                       ; FF441A  66 47
 	call sub_FF79DB                                      ; FF441C  1d db 79 ff
 	call sub_FF793F                                      ; FF4420  1d 3f 79 ff
@@ -183665,8 +183665,8 @@ Paint_MidiFileDirectPlay:
 ; Was `sub_FF457C`.
 ; ---------------------------------------------------------------------
 ScreenLeave_MidiFileDirectPlay:
-	ld c, (0x207a:16)                                   ; FF457C  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF4580  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF457C  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF4580  c1 7b 20 f3
 	jr z, .LFF4595                                       ; FF4584  66 0f
 	call sub_FF798C                                      ; FF4586  1d 8c 79 ff
 	call T_F4095C                                        ; FF458A  1d 5c 09 f4
@@ -184096,8 +184096,8 @@ Paint_DiskL0adFile:
 	jr ule, .LFF47BF                                     ; FF47B8  63 05
 	ld (0x2724:16), 0x00                                 ; FF47BA  f1 24 27 00 00
 .LFF47BF:
-	ld c, (0x207a:16)                                   ; FF47BF  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF47C3  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF47BF  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF47C3  c1 7b 20 f3
 	jr z, .LFF47EB                                       ; FF47C7  66 22
 	call T_F42594                                        ; FF47C9  1d 94 25 f4
 	call T_F425B4                                        ; FF47CD  1d b4 25 f4
@@ -184306,8 +184306,8 @@ sub_FF4936:
 ; Was `sub_FF4986`.
 ; ---------------------------------------------------------------------
 ScreenLeave_DiskL0adFile:
-	ld c, (0x207a:16)                                   ; FF4986  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF498A  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF4986  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF498A  c1 7b 20 f3
 	jr z, .LFF4994                                       ; FF498E  66 04
 	call sub_FF798C                                      ; FF4990  1d 8c 79 ff
 .LFF4994:
@@ -184642,7 +184642,7 @@ LcdKeyRow4_DiskL0adFile:
 	jr nz, .LFF4B28                                      ; FF4B21  6e 05
 	ld (0x2724:16), 0x00                                 ; FF4B23  f1 24 27 00 00
 .LFF4B28:
-	m_cp_mi8 MB16, 0x207a, 0x47                          ; FF4B28  c1 7a 20 3f 47
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4B28  c1 7a 20 3f 47
 	jr nz, .LFF4B32                                      ; FF4B2D  6e 03
 	calr sub_FF48F0                                      ; FF4B2F  1e be fd
 .LFF4B32:
@@ -184652,7 +184652,7 @@ LcdKeyRow4_DiskL0adFile:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FF4B38  c0 c4 3f 01
 	jr nz, .LFF4B7C                                      ; FF4B3C  6e 3e
 	pushw 0x00                                           ; FF4B3E  0b 00 00
-	m_cp_mi8 MB16, 0x207a, 0x4c                          ; FF4B41  c1 7a 20 3f 4c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4B41  c1 7a 20 3f 4c
 	jr nz, .LFF4B56                                      ; FF4B46  6e 0e
 	lda xbc, (DL_ToS0ngNumber:24)                        ; FF4B48  f2 d0 83 f5 31
 	push XBC                                             ; FF4B4D  39
@@ -184680,7 +184680,7 @@ LcdKeyRow4_DiskL0adFile:
 	jrl nz, .LFF4CD6                                     ; FF4B80  7e 53 01
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FF4B83  c0 c4 3f 01
 	jrl nz, .LFF4CD6                                     ; FF4B87  7e 4c 01
-	m_cp_mi8 MB16, 0x207a, 0x47                          ; FF4B8A  c1 7a 20 3f 47
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4B8A  c1 7a 20 3f 47
 	jrl nz, .LFF4CED                                     ; FF4B8F  7e 5b 01
 	jrl .LFF4C97                                         ; FF4B92  78 02 01
 .LFF4B95:
@@ -184723,7 +184723,7 @@ LcdKeyRow4_DiskL0adFile:
 	cp c, 0x01:i3                                          ; FF4BEC  cb d9
 	jrl nz, .LFF4C84                                     ; FF4BEE  7e 93 00
 	pushw 0x00                                           ; FF4BF1  0b 00 00
-	m_cp_mi8 MB16, 0x207a, 0x4c                          ; FF4BF4  c1 7a 20 3f 4c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4BF4  c1 7a 20 3f 4c
 	jr nz, .LFF4C30                                      ; FF4BF9  6e 35
 	lda xbc, (DL_ToS0ngNumber:24)                        ; FF4BFB  f2 d0 83 f5 31
 	push XBC                                             ; FF4C00  39
@@ -184782,7 +184782,7 @@ LcdKeyRow4_DiskL0adFile:
 .LFF4C8A:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FF4C8A  c0 c4 3f 01
 	jr nz, .LFF4CD6                                      ; FF4C8E  6e 46
-	m_cp_mi8 MB16, 0x207a, 0x47                          ; FF4C90  c1 7a 20 3f 47
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4C90  c1 7a 20 3f 47
 	jr nz, .LFF4CD6                                      ; FF4C95  6e 3f
 .LFF4C97:
 	pushw 0x00                                           ; FF4C97  0b 00 00
@@ -184833,7 +184833,7 @@ LcdKeyRow4_DiskL0adFile:
 	pushw 0x0b                                           ; FF4D08  0b 0b 00
 	calr sub_FF712A                                      ; FF4D0B  1e 1c 24
 	pop XIY                                              ; FF4D0E  5d
-	m_cp_mi8 MB16, 0x207a, 0x4c                          ; FF4D0F  c1 7a 20 3f 4c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4D0F  c1 7a 20 3f 4c
 	jr z, .LFF4D33                                       ; FF4D14  66 1d
 	ld C,(XIX)                                           ; FF4D16  84 23
 	cp c, 0x01:i3                                          ; FF4D18  cb d9
@@ -184973,7 +184973,7 @@ LcdKeyRow5_DiskL0adFile:
 	jr c, .LFF4DBC                                       ; FF4DB5  67 05
 	ld (0x2724:16), 0x13                                 ; FF4DB7  f1 24 27 00 13
 .LFF4DBC:
-	m_cp_mi8 MB16, 0x207a, 0x47                          ; FF4DBC  c1 7a 20 3f 47
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4DBC  c1 7a 20 3f 47
 	jr nz, .LFF4DC6                                      ; FF4DC1  6e 03
 	calr sub_FF48F0                                      ; FF4DC3  1e 2a fb
 .LFF4DC6:
@@ -184983,7 +184983,7 @@ LcdKeyRow5_DiskL0adFile:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FF4DCC  c0 c4 3f 01
 	jr nz, .LFF4E10                                      ; FF4DD0  6e 3e
 	pushw 0x00                                           ; FF4DD2  0b 00 00
-	m_cp_mi8 MB16, 0x207a, 0x4c                          ; FF4DD5  c1 7a 20 3f 4c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4DD5  c1 7a 20 3f 4c
 	jr nz, .LFF4DEA                                      ; FF4DDA  6e 0e
 	lda xbc, (DL_ToS0ngNumber:24)                        ; FF4DDC  f2 d0 83 f5 31
 	push XBC                                             ; FF4DE1  39
@@ -185011,7 +185011,7 @@ LcdKeyRow5_DiskL0adFile:
 	jrl nz, .LFF4F6C                                     ; FF4E14  7e 55 01
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FF4E17  c0 c4 3f 01
 	jrl nz, .LFF4F6C                                     ; FF4E1B  7e 4e 01
-	m_cp_mi8 MB16, 0x207a, 0x47                          ; FF4E1E  c1 7a 20 3f 47
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4E1E  c1 7a 20 3f 47
 	jrl nz, .LFF4F83                                     ; FF4E23  7e 5d 01
 	jrl .LFF4F2D                                         ; FF4E26  78 04 01
 .LFF4E29:
@@ -185034,7 +185034,7 @@ LcdKeyRow5_DiskL0adFile:
 	pop XIY                                              ; FF4E58  5d
 	jrl .LFF4F83                                         ; FF4E59  78 27 01
 .LFF4E5C:
-	m_cp_mi8 MB16, 0x207a, 0x4c                          ; FF4E5C  c1 7a 20 3f 4c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4E5C  c1 7a 20 3f 4c
 	jr nz, .LFF4E6C                                      ; FF4E61  6e 09
 	ld C,(XIX)                                           ; FF4E63  84 23
 	cp C,0x08                                            ; FF4E65  cb cf 08
@@ -185059,7 +185059,7 @@ LcdKeyRow5_DiskL0adFile:
 	cp c, 0x01:i3                                          ; FF4E88  cb d9
 	jrl nz, .LFF4F20                                     ; FF4E8A  7e 93 00
 	pushw 0x00                                           ; FF4E8D  0b 00 00
-	m_cp_mi8 MB16, 0x207a, 0x4c                          ; FF4E90  c1 7a 20 3f 4c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4E90  c1 7a 20 3f 4c
 	jr nz, .LFF4ECC                                      ; FF4E95  6e 35
 	lda xbc, (DL_ToS0ngNumber:24)                        ; FF4E97  f2 d0 83 f5 31
 	push XBC                                             ; FF4E9C  39
@@ -185115,7 +185115,7 @@ LcdKeyRow5_DiskL0adFile:
 	ld C,(XIX)                                           ; FF4F20  84 23
 	cp c, 0x00:i3                                          ; FF4F22  cb d8
 	jr nz, .LFF4F6C                                      ; FF4F24  6e 46
-	m_cp_mi8 MB16, 0x207a, 0x47                          ; FF4F26  c1 7a 20 3f 47
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4F26  c1 7a 20 3f 47
 	jr nz, .LFF4F6C                                      ; FF4F2B  6e 3f
 .LFF4F2D:
 	pushw 0x00                                           ; FF4F2D  0b 00 00
@@ -185162,7 +185162,7 @@ LcdKeyRow5_DiskL0adFile:
 	call T_DisplayListB_Run_Stack                        ; FF4F99  1d 04 2e f4
 	jr .LFF4FD4                                          ; FF4F9D  68 35
 .LFF4F9F:
-	m_cp_mi8 MB16, 0x207a, 0x4c                          ; FF4F9F  c1 7a 20 3f 4c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4F9F  c1 7a 20 3f 4c
 	jr z, .LFF4FBB                                       ; FF4FA4  66 15
 	push 0x00                                            ; FF4FA6  09 00
 	m_push MB16, 0x2724                                  ; FF4FA8  c1 24 27 04
@@ -185256,8 +185256,8 @@ Paint_MidiFileL0ad:
 	lda xix, (0x2229:16)                                ; FF4FFB  f1 29 22 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF4FFF  1d 80 2e f4
 	ld (0x21fa:16), 0x00                                 ; FF5003  f1 fa 21 00 00
-	ld c, (0x207a:16)                                   ; FF5008  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF500C  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF5008  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF500C  c1 7b 20 f3
 	jr z, .LFF5043                                       ; FF5010  66 31
 	ld (0x2724:16), 0x00                                 ; FF5012  f1 24 27 00 00
 	ld (0x2732:16), 0xff                                 ; FF5017  f1 32 27 00 ff
@@ -185400,7 +185400,7 @@ sub_FF5118:
 	inc 6,XSP                                            ; FF5190  ef 66
 	cp A,0x20                                            ; FF5192  c9 cf 20
 	jr z, .LFF51F1                                       ; FF5195  66 5a
-	m_cp_mi8 MB16, 0x207a, 0x4e                          ; FF5197  c1 7a 20 3f 4e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FF5197  c1 7a 20 3f 4e
 	jr nz, .LFF51C7                                      ; FF519C  6e 29
 	ld wa, (0x2720:16)                                 ; FF519E  d1 20 27 20
 	extz WA                                              ; FF51A2  d8 12
@@ -185471,8 +185471,8 @@ sub_FF5118:
 ; Was `sub_FF520C`.
 ; ---------------------------------------------------------------------
 ScreenLeave_MidiFileL0ad:
-	ld c, (0x207a:16)                                   ; FF520C  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF5210  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF520C  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5210  c1 7b 20 f3
 	jr z, .LFF522E                                       ; FF5214  66 18
 	call sub_FF798C                                      ; FF5216  1d 8c 79 ff
 	ld (0x272f:16), 0x00                                 ; FF521A  f1 2f 27 00 00
@@ -185929,8 +185929,8 @@ PageDispatch_DiskSaveFile:
 sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 	push XHL                                             ; FF54AA  3b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF54AB  1d 80 2e f4
-	ld c, (0x207a:16)                                   ; FF54AF  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF54B3  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF54AF  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF54B3  c1 7b 20 f3
 	jr z, .LFF54E4                                       ; FF54B7  66 2b
 	call T_F42594                                        ; FF54B9  1d 94 25 f4
 	m_set 6, MD16, 0x2094                                ; FF54BD  f1 94 20 be
@@ -186192,8 +186192,8 @@ sub_FF56C0:   ; entry: named by 1 `.long` operand, first at 0xFF3A14
 ; Was `sub_FF571F`.
 ; ---------------------------------------------------------------------
 ScreenLeave_DiskSaveFile:
-	ld c, (0x207a:16)                                   ; FF571F  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF5723  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF571F  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5723  c1 7b 20 f3
 	jr z, .LFF572D                                       ; FF5727  66 04
 	call sub_FF798C                                      ; FF5729  1d 8c 79 ff
 .LFF572D:
@@ -187178,8 +187178,8 @@ sub_FF5C5E:   ; entry: named by 1 `.long` operand, first at 0xFF3D29
 	push XHL                                             ; FF5C5E  3b
 	ld (0x21fa:16), 0x00                                 ; FF5C5F  f1 fa 21 00 00
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5C64  1d 80 2e f4
-	ld c, (0x207a:16)                                   ; FF5C68  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF5C6C  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF5C68  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5C6C  c1 7b 20 f3
 	jr z, .LFF5CBE                                       ; FF5C70  66 4c
 	call T_F42594                                        ; FF5C72  1d 94 25 f4
 	ld (0x2730:16), 0x00                                 ; FF5C76  f1 30 27 00 00
@@ -187398,8 +187398,8 @@ sub_FF5E4B:   ; entry: named by 1 `.long` operand, first at 0xFF3D35
 ; Was `sub_FF5EAE`.
 ; ---------------------------------------------------------------------
 ScreenLeave_MidiFileSave:
-	ld c, (0x207a:16)                                   ; FF5EAE  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF5EB2  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF5EAE  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5EB2  c1 7b 20 f3
 	jr z, .LFF5ED0                                       ; FF5EB6  66 18
 	call sub_FF798C                                      ; FF5EB8  1d 8c 79 ff
 	ld (0x272f:16), 0x00                                 ; FF5EBC  f1 2f 27 00 00
@@ -188129,7 +188129,7 @@ sub_FF63C8:
 	lda xix, (0x272d:16)                                ; FF63CF  f1 2d 27 34
 	ld DE,(XIZ+0x08)                                     ; FF63D3  9e 08 22
 	ld l, (0x2720:16)                                   ; FF63D6  c1 20 27 27
-	m_cp_mi8 MB16, 0x207a, 0x4e                          ; FF63DA  c1 7a 20 3f 4e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FF63DA  c1 7a 20 3f 4e
 	jr z, .LFF63F1                                       ; FF63DF  66 10
 	ld h, 0x00:opc                                          ; FF63E1  26 00
 	cp l, 0x00:i3                                          ; FF63E3  cf d8
@@ -188142,7 +188142,7 @@ sub_FF63C8:
 .LFF63F1:
 	ld H,L                                               ; FF63F1  cf 8e
 .LFF63F3:
-	m_cp_mi8 MB16, 0x207a, 0x4e                          ; FF63F3  c1 7a 20 3f 4e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FF63F3  c1 7a 20 3f 4e
 	jr nz, .LFF6404                                      ; FF63F8  6e 0a
 	ld c, (0x60a480:24)                                 ; FF63FA  c2 80 a4 60 23
 sub_FF63FF:
@@ -188917,8 +188917,8 @@ sub_FF674D:   ; entry: named by 1 `.long` operand, first at 0xFF4041
 	push XIX                                             ; FF674E  3c
 	lda xix, (sub_FF75D3:24)                             ; FF674F  f2 d3 75 ff 34
 	ld (0x21fa:16), 0x00                                 ; FF6754  f1 fa 21 00 00
-	ld c, (0x207a:16)                                   ; FF6759  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF675D  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF6759  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF675D  c1 7b 20 f3
 	jr z, .LFF6781                                       ; FF6761  66 1e
 	call T_F42594                                        ; FF6763  1d 94 25 f4
 	ld (0x2720:16), 0x00                                 ; FF6767  f1 20 27 00 00
@@ -189283,7 +189283,7 @@ sub_FF6A6C:   ; entry: named by 8 `.long` operands, first at 0xFF40E1
 	cp c, 0x00:i3                                          ; FF6AA4  cb d8
 	jr z, .LFF6AE5                                       ; FF6AA6  66 3d
 	decm8 0x01, (xix)                                    ; FF6AA8  84 69
-	m_cp_mi8 MB16, 0x207a, 0x54                          ; FF6AAA  c1 7a 20 3f 54
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x54                          ; FF6AAA  c1 7a 20 3f 54
 	jr nz, .LFF6AD8                                      ; FF6AAF  6e 27
 	jr .LFF6AD0                                          ; FF6AB1  68 1d
 .LFF6AB3:
@@ -189296,7 +189296,7 @@ sub_FF6A6C:   ; entry: named by 8 `.long` operands, first at 0xFF40E1
 	cp C,0x08                                            ; FF6AC2  cb cf 08
 	jr nc, .LFF6AE5                                      ; FF6AC5  6f 1e
 	incm8 0x01, (xix)                                    ; FF6AC7  84 61
-	m_cp_mi8 MB16, 0x207a, 0x54                          ; FF6AC9  c1 7a 20 3f 54
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x54                          ; FF6AC9  c1 7a 20 3f 54
 	jr nz, .LFF6AD8                                      ; FF6ACE  6e 08
 .LFF6AD0:
 	ld C,(XIX)                                           ; FF6AD0  84 23
@@ -189561,7 +189561,7 @@ sub_FF6C9E:   ; entry: named by 4 `.long` operands, first at 0xFF405D
 	jr z, .LFF6CD7                                       ; FF6CD2  66 03
 	ld (XIX),0x00                                        ; FF6CD4  b4 00 00
 .LFF6CD7:
-	m_cp_mi8 MB16, 0x207a, 0x54                          ; FF6CD7  c1 7a 20 3f 54
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x54                          ; FF6CD7  c1 7a 20 3f 54
 	jr nz, .LFF6CE6                                      ; FF6CDC  6e 08
 	calr sub_FF7296                                      ; FF6CDE  1e b5 05
 	calr sub_FF7224                                      ; FF6CE1  1e 40 05
@@ -189740,8 +189740,8 @@ sub_FF6DD7:   ; entry: named by 1 `.long` operand, first at 0xFF4149
 	push XIX                                             ; FF6DD7  3c
 	lda xix, (sub_FF75D3:24)                             ; FF6DD8  f2 d3 75 ff 34
 	ld (0x21fa:16), 0x00                                 ; FF6DDD  f1 fa 21 00 00
-	ld c, (0x207a:16)                                   ; FF6DE2  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF6DE6  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF6DE2  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF6DE6  c1 7b 20 f3
 	jr z, .LFF6E0A                                       ; FF6DEA  66 1e
 	call T_F42594                                        ; FF6DEC  1d 94 25 f4
 	ld (0x2720:16), 0x00                                 ; FF6DF0  f1 20 27 00 00
@@ -190194,9 +190194,9 @@ sub_FF712A:
 	push XIX                                             ; FF712E  3c
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FF712F  c1 75 20 3e 09
 	ld C,(XIZ+0x0a)                                      ; FF7134  8e 0a 23
-	ld (0x209b:16), c                                   ; FF7137  f1 9b 20 43
+	ld (PanelDial_DownButton:16), c                                   ; FF7137  f1 9b 20 43
 	ld A,(XIZ+0x08)                                      ; FF713B  8e 08 21
-	ld (0x209c:16), a                                   ; FF713E  f1 9c 20 41
+	ld (PanelDial_UpButton:16), a                                   ; FF713E  f1 9c 20 41
 	ld XIX,0x0000ffff                                    ; FF7142  44 ff ff 00 00
 	ld (0x266a:16), xix                                 ; FF7147  f1 6a 26 64
 	ld (0x2666:16), xix                                 ; FF714B  f1 66 26 64
@@ -191081,7 +191081,7 @@ sub_FF7743:
 	push XHL                                             ; FF7745  3b
 	push XDE                                             ; FF7746  3a
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FF7747  c1 75 20 3e 09
-	ld (0x209b:16), 0x80                                 ; FF774C  f1 9b 20 00 80
+	ld (PanelDial_DownButton:16), 0x80                                 ; FF774C  f1 9b 20 00 80
 	and W,0x80                                           ; FF7751  c8 cc 80
 	inc 1,W                                              ; FF7754  c8 61
 	ld a, (0x2720:16)                                   ; FF7756  c1 20 27 21
@@ -191356,8 +191356,8 @@ sub_FF796C:
 	push XIX                                             ; FF796D  3c
 	push XHL                                             ; FF796E  3b
 	push XDE                                             ; FF796F  3a
-	ld c, (0x207a:16)                                   ; FF7970  c1 7a 20 23
-	m_cp_rm MB16, 0x207b, r3                             ; FF7974  c1 7b 20 f3
+	ld c, (UI_ScreenLatch:16)                                   ; FF7970  c1 7a 20 23
+	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF7974  c1 7b 20 f3
 	jr z, .LFF7987                                       ; FF7978  66 0d
 	call T_F425DC                                        ; FF797A  1d dc 25 f4
 	m_res 6, MD16, 0x2094                                ; FF797E  f1 94 20 b6

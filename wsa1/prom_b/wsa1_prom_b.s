@@ -1696,11 +1696,11 @@ sub_F0003C_Return:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F00099:
-	m_cp_mi8 MB16, 0x207a, 0x45	; F00099  cp (0x207a),0x45
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x45	; F00099  cp (0x207a),0x45
 	jr	z, sub_F00099_Join2	; F0009E  jr Z,0xf000b6
-	m_cp_mi8 MB16, 0x2078, 0x0d	; F000A0  cp (0x2078),0x0d
+	m_cp_mi8 MB16, PanelMode, 0x0d	; F000A0  cp (0x2078),0x0d
 	jr	z, sub_F00099_Join2	; F000A5  jr Z,0xf000b6
-	m_cp_mi8 MB16, 0x207a, 0x13	; F000A7  cp (0x207a),0x13
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F000A7  cp (0x207a),0x13
 	jr	z, sub_F00099_Skip	; F000AC  jr Z,0xf000b0
 	jr	sub_F00099_Join	; F000AE  jr T,0xf000b2
 sub_F00099_Skip:
@@ -2763,7 +2763,7 @@ sub_F00903:
 	pushw	bc	; F00904  push BC
 	push	e	; F00905  push E
 	ld	d, 0:opc	; F00907  ld D,0x00
-	ld	a, (8314:16)	; F00909  ld A,(0x207a)
+	ld	a, (UI_ScreenLatch:16)	; F00909  ld A,(0x207a)
 	cp	a, 18	; F0090D  cp A,0x12
 	jr	z, sub_F00903_Skip	; F00910  jr Z,0xf00923
 	cp	a, 20	; F00912  cp A,0x14
@@ -27913,8 +27913,8 @@ sub_F0F0FF_Epilogue:
 sub_F0F105:		; <- T_F42F4C
 	push	xix	; F0F105  push XIX
 	lda	xix, (10129:16)	; F0F106  lda XIX,0x2791
-	ld	c, (8314:16)	; F0F10A  ld C,(0x207a)
-	m_cp_rm MB16, 0x207b, 3	; F0F10E  cp C,(0x207b)
+	ld	c, (UI_ScreenLatch:16)	; F0F10A  ld C,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 3	; F0F10E  cp C,(0x207b)
 	jr	z, sub_F0F105_Skip2	; F0F112  jr Z,0xf0f12c
 	pushw	0	; F0F114  push 0x0000
 	calr	sub_F0F018	; F0F117  calr 0xf0f018
@@ -27926,7 +27926,7 @@ sub_F0F105_Skip:
 	ld	(10136:16), 0	; F0F127  ld (0x2798),0x00
 sub_F0F105_Skip2:
 	ld	c, (UI_ScreenId:16)	; F0F12C  ld C,(0x207c)
-	m_cp_rm MB16, 0x207d, 3	; F0F130  cp C,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F0F130  cp C,(0x207d)
 	jr	z, sub_F0F105_Skip3	; F0F134  jr Z,0xf0f139
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F136  or (XIX),0x80
 sub_F0F105_Skip3:
@@ -28339,8 +28339,8 @@ sub_F0F2B2:
 	jr	z, DispatchTable_F0F29A_Nop4	; F0F2C6  jr Z,0xf0f2de
 	calr	sub_F10222	; F0F2C8  calr 0xf10222
 	m_set 0, MD16, 0x2791	; F0F2CB  set 0,(0x2791)
-	ld	(8347:16), 128	; F0F2CF  ld (0x209b),0x80  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 0	; F0F2D4  ld (0x209c),0x00  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 128	; F0F2CF  ld (0x209b),0x80  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 0	; F0F2D4  ld (0x209c),0x00  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	jr	DispatchTable_F0F29A_Nop4	; F0F2D9  jr T,0xf0f2de
 
 ; --------------------------------------------------------------------------
@@ -28478,8 +28478,8 @@ sub_F0F315:
 	pushw	0	; F0F318  push 0x0000
 	calr	sub_F10252	; F0F31B  calr 0xf10252
 	m_set 0, MD16, 0x2791	; F0F31E  set 0,(0x2791)
-	ld	(8347:16), 129	; F0F322  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 1	; F0F327  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 129	; F0F322  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 1	; F0F327  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F32C  pop XIY
 
 ; --------------------------------------------------------------------------
@@ -28628,8 +28628,8 @@ sub_F0F37C_Join:
 	pop	xiy	; F0F385  pop XIY
 sub_F0F37C_Join2:
 	m_set 0, MD16, 0x2791	; F0F386  set 0,(0x2791)
-	ld	(8347:16), 130	; F0F38A  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 2	; F0F38F  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 130	; F0F38A  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 2	; F0F38F  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F0F37C_Return:
 	ret	; F0F394  ret
 
@@ -28713,8 +28713,8 @@ sub_F0F3C6:
 	pushw	33	; F0F3D0  push 0x0021
 	call	T_F418D0	; F0F3D3  call 0xf418d0
 	m_set 0, MD16, 0x2791	; F0F3D7  set 0,(0x2791)
-	ld	(8347:16), 131	; F0F3DB  ld (0x209b),0x83  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 3	; F0F3E0  ld (0x209c),0x03  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 131	; F0F3DB  ld (0x209b),0x83  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 3	; F0F3E0  ld (0x209c),0x03  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F3E5  pop XIY
 	jr	DispatchTable_F0F3AE_Nop4	; F0F3E6  jr T,0xf0f3eb
 
@@ -28856,8 +28856,8 @@ sub_F0F42A:
 	pushw	1	; F0F42D  push 0x0001
 	calr	sub_F10252	; F0F430  calr 0xf10252
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F433  or (XIX),0x01
-	ld	(8347:16), 132	; F0F436  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 4	; F0F43B  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 132	; F0F436  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 4	; F0F43B  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F440  pop XIY
 
 ; --------------------------------------------------------------------------
@@ -29004,8 +29004,8 @@ sub_F0F48D:
 	pop	xiy	; F0F496  pop XIY
 sub_F0F48D_Join:
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F497  or (XIX),0x01
-	ld	(8347:16), 133	; F0F49A  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 5	; F0F49F  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 133	; F0F49A  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 5	; F0F49F  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F0F48D_Epilogue:
 	pop	xix	; F0F4A4  pop XIX
 	ret	; F0F4A5  ret
@@ -29090,8 +29090,8 @@ sub_F0F4DC:
 	jr	nz, sub_F0F4FB	; F0F4E1  jr NZ,0xf0f4fb
 	calr	sub_F101E7	; F0F4E3  calr 0xf101e7
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F4E6  or (XIX),0x01
-	ld	(8347:16), 134	; F0F4E9  ld (0x209b),0x86  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 6	; F0F4EE  ld (0x209c),0x06  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 134	; F0F4E9  ld (0x209b),0x86  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 6	; F0F4EE  ld (0x209c),0x06  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	jr	sub_F0F4FB	; F0F4F3  jr T,0xf0f4fb
 
 ; --------------------------------------------------------------------------
@@ -30043,8 +30043,8 @@ sub_F0F788:
 	jr	z, sub_F0F788_Skip	; F0F794  jr Z,0xf0f7a7
 	call	T_CallbackQueue_ResetAndRestartTask2	; F0F796  call 0xf42e80
 	ld	(xix), 0	; F0F79A  ld (XIX),0x00
-	ld	(8347:16), 130	; F0F79D  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 2	; F0F7A2  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 130	; F0F79D  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 2	; F0F7A2  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F0F788_Skip:
 	m_set 0, MD16, UI_RequestBits	; F0F7A7  set 0,(0x2075)
 	ld	c, (8341:16)	; F0F7AB  ld C,(0x2095)
@@ -30672,8 +30672,8 @@ sub_F0FD5F:
 	jr	z, sub_F0FD5F_Skip	; F0FD6B  jr Z,0xf0fd7e
 	call	T_CallbackQueue_ResetAndRestartTask2	; F0FD6D  call 0xf42e80
 	ld	(xix), 0	; F0FD71  ld (XIX),0x00
-	ld	(8347:16), 129	; F0FD74  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 1	; F0FD79  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 129	; F0FD74  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 1	; F0FD79  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F0FD5F_Skip:
 	m_set 0, MD16, UI_RequestBits	; F0FD7E  set 0,(0x2075)
 	ld	c, (10129:16)	; F0FD82  ld C,(0x2791)
@@ -31060,8 +31060,8 @@ sub_F1008E:
 	ld	(10130:16), 0	; F100A9  ld (0x2792),0x00
 	ld	(10133:16), 1	; F100AE  ld (0x2795),0x01
 	ld	(10131:16), 1	; F100B3  ld (0x2793),0x01
-	ld	(8347:16), 133	; F100B8  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 5	; F100BD  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 133	; F100B8  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 5	; F100BD  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F1008E_Skip:
 	m_set 0, MD16, UI_RequestBits	; F100C2  set 0,(0x2075)
 	pushw	0	; F100C6  push 0x0000
@@ -35752,17 +35752,17 @@ sub_F122C5:		; <- T_F42F68
 	push	xix	; F122C5  push XIX
 	lda	xix, (10137:16)	; F122C6  lda XIX,0x2799
 	ld	c, (UI_ScreenId:16)	; F122CA  ld C,(0x207c)
-	m_cp_rm MB16, 0x207d, 3	; F122CE  cp C,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F122CE  cp C,(0x207d)
 	jr	z, sub_F1195A_Skip40	; F122D2  jr Z,0xf122e5
 	call	T_CallbackQueue_ResetAndRestartTask2	; F122D4  call 0xf42e80
 	ld	(xix), 0	; F122D8  ld (XIX),0x00
-	ld	(8347:16), 129	; F122DB  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 1	; F122E0  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 129	; F122DB  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 1	; F122E0  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F1195A_Skip40:
 	m_set 0, MD16, UI_RequestBits	; F122E5  set 0,(0x2075)
 	ld	(Effect_BlockIndex:16), 24	; F122E9  ld (0x2797),0x18
 	ld	c, (UI_ScreenId:16)	; F122EE  ld C,(0x207c)
-	m_cp_rm MB16, 0x207d, 3	; F122F2  cp C,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F122F2  cp C,(0x207d)
 	jr	z, sub_F1195A_Skip41	; F122F6  jr Z,0xf12315
 	ld	a, (xix)	; F122F8  ld A,(XIX)
 	and	a, 8	; F122FA  and A,0x08
@@ -35863,8 +35863,8 @@ sub_F1236E:
 	pushw	1	; F1236E  push 0x0001
 	pushw	0	; F12371  push 0x0000
 	calr	sub_F10252	; F12374  calr 0xf10252
-	ld	(8347:16), 129	; F12377  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 1	; F1237C  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 129	; F12377  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 1	; F1237C  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F12381  pop XBC
 	ret	; F12382  ret
 
@@ -35888,8 +35888,8 @@ sub_F12383:
 	pushw	1	; F12383  push 0x0001
 	pushw	0	; F12386  push 0x0000
 	calr	sub_F103AB	; F12389  calr 0xf103ab
-	ld	(8347:16), 130	; F1238C  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 2	; F12391  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 130	; F1238C  ld (0x209b),0x82  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 2	; F12391  ld (0x209c),0x02  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F12396  pop XBC
 	ret	; F12397  ret
 
@@ -35913,8 +35913,8 @@ sub_F12398:
 	pushw	3	; F12398  push 0x0003
 	pushw	1	; F1239B  push 0x0001
 	calr	sub_F10252	; F1239E  calr 0xf10252
-	ld	(8347:16), 132	; F123A1  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 4	; F123A6  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 132	; F123A1  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 4	; F123A6  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F123AB  pop XBC
 	ret	; F123AC  ret
 
@@ -35939,8 +35939,8 @@ sub_F123AD:
 	pushw	3	; F123AD  push 0x0003
 	pushw	1	; F123B0  push 0x0001
 	calr	sub_F103AB	; F123B3  calr 0xf103ab
-	ld	(8347:16), 133	; F123B6  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 5	; F123BB  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 133	; F123B6  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 5	; F123BB  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F123C0  pop XBC
 	ret	; F123C1  ret
 Draw_MainOutEqualizer:
@@ -91275,7 +91275,7 @@ sub_F44516_Skip3:
 	jr	nz, sub_F44516_Skip5	; F44596  jr NZ,0xf445bc
 	m_cp_mi8 MB16, UI_ScreenId, 0x06	; F44598  cp (0x207c),0x06
 	jr	z, sub_F44516_Skip4	; F4459D  jr Z,0xf445a6
-	m_cp_mi8 MB16, 0x207a, 0x08	; F4459F  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F4459F  cp (0x207a),0x08
 	jr	nz, sub_F44516_Skip5	; F445A4  jr NZ,0xf445bc
 sub_F44516_Skip4:
 	m_bit 2, MD16, 0x7f32	; F445A6  bit 2,(0x7f32)
@@ -91340,7 +91340,7 @@ sub_F44516_Skip7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44623:
-	ld	a, (8314:16)	; F44623  ld A,(0x207a)
+	ld	a, (UI_ScreenLatch:16)	; F44623  ld A,(0x207a)
 	cp	a, 9	; F44627  cp A,0x09
 	jr	z, sub_F44623_Return	; F4462A  jr Z,0xf4466c
 	cp	a, 10	; F4462C  cp A,0x0a
@@ -91573,9 +91573,9 @@ sub_F44809:
 	calr	sub_F448C6	; F4482C  calr 0xf448c6
 	cp	a, 0:i3	; F4482F  cp A,0
 	jr	nz, sub_F44809_Skip2	; F44831  jr NZ,0xf44875
-	m_cp_mi8 MB16, 0x207a, 0x06	; F44833  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F44833  cp (0x207a),0x06
 	jr	z, sub_F44809_Skip	; F44838  jr Z,0xf4485e
-	m_cp_mi8 MB16, 0x207a, 0x08	; F4483A  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F4483A  cp (0x207a),0x08
 	jr	z, sub_F44809_Skip	; F4483F  jr Z,0xf4485e
 	ld	wa, (13854:16)	; F44841  ld WA,(0x361e)
 	m_cp_mr MW16, 0x3552, 0	; F44845  cp (0x3552),WA
@@ -91600,7 +91600,7 @@ sub_F44809_Skip2:
 sub_F44809_Skip3:
 	call	T_F42578	; F44882  call 0xf42578
 sub_F44809_Join:
-	m_cp_mi8 MB16, 0x207a, 0x0d	; F44886  cp (0x207a),0x0d
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0d	; F44886  cp (0x207a),0x0d
 	jr	nz, sub_F44809_Skip4	; F4488B  jr NZ,0xf44890
 	calr	sub_F448A3	; F4488D  calr 0xf448a3
 sub_F44809_Skip4:
@@ -91651,22 +91651,22 @@ sub_F448A3:
 ; --------------------------------------------------------------------------
 sub_F448C6:		; <- T_F40AA4
 	xor	a, a	; F448C6  xor A,A
-	m_cp_mi8 MB16, 0x207a, 0x26	; F448C8  cp (0x207a),0x26
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x26	; F448C8  cp (0x207a),0x26
 	jr	z, sub_F448C6_Return	; F448CD  jr Z,0xf44902
-	m_cp_mi8 MB16, 0x207a, 0x29	; F448CF  cp (0x207a),0x29
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x29	; F448CF  cp (0x207a),0x29
 	jr	z, sub_F448C6_Return	; F448D4  jr Z,0xf44902
-	m_cp_mi8 MB16, 0x207a, 0x12	; F448D6  cp (0x207a),0x12
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x12	; F448D6  cp (0x207a),0x12
 	jr	z, sub_F448C6_Skip	; F448DB  jr Z,0xf448e4
-	m_cp_mi8 MB16, 0x207a, 0x14	; F448DD  cp (0x207a),0x14
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x14	; F448DD  cp (0x207a),0x14
 	jr	nz, sub_F448C6_Skip2	; F448E2  jr NZ,0xf448ec
 sub_F448C6_Skip:
 	m_bit 0, MD16, 0x360b	; F448E4  bit 0,(0x360b)
 	jr	nz, sub_F448C6_Return	; F448E8  jr NZ,0xf44902
 	jr	sub_F448C6_Join	; F448EA  jr T,0xf44900
 sub_F448C6_Skip2:
-	m_cp_mi8 MB16, 0x207a, 0x06	; F448EC  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F448EC  cp (0x207a),0x06
 	jr	z, sub_F448C6_Skip3	; F448F1  jr Z,0xf448fa
-	m_cp_mi8 MB16, 0x207a, 0x08	; F448F3  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F448F3  cp (0x207a),0x08
 	jr	nz, sub_F448C6_Join	; F448F8  jr NZ,0xf44900
 sub_F448C6_Skip3:
 	m_bit 1, MD16, 0x360b	; F448FA  bit 1,(0x360b)
@@ -91688,9 +91688,9 @@ sub_F448C6_Return:
 ; --------------------------------------------------------------------------
 sub_F44903:
 	xor	a, a	; F44903  xor A,A
-	m_cp_mi8 MB16, 0x207b, 0x06	; F44905  cp (0x207b),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x06	; F44905  cp (0x207b),0x06
 	jr	z, sub_F44903_Skip	; F4490A  jr Z,0xf44913
-	m_cp_mi8 MB16, 0x207b, 0x08	; F4490C  cp (0x207b),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x08	; F4490C  cp (0x207b),0x08
 	jr	nz, sub_F44903_Skip2	; F44911  jr NZ,0xf44919
 sub_F44903_Skip:
 	m_bit 1, MD16, 0x360b	; F44913  bit 1,(0x360b)
@@ -92161,7 +92161,7 @@ sub_F44C51_Skip:
 	m_or_mi8 MB16, 0x34d2, 0x08	; F44C69  or (0x34d2),0x08
 	ld	xwa, (12296:16)	; F44C6E  ld XWA,(0x3008)
 	ld	(13466:16), xwa	; F44C72  ld (0x349a),XWA
-	m_cp_mi8 MB16, 0x207a, 0x13	; F44C76  cp (0x207a),0x13
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F44C76  cp (0x207a),0x13
 	jr	nz, sub_F44C51_Skip2	; F44C7B  jr NZ,0xf44c7f
 	jr	sub_F44C51_Join	; F44C7D  jr T,0xf44c91
 sub_F44C51_Skip2:
@@ -92271,7 +92271,7 @@ sub_F44CEA_Skip4:
 	jr	z, sub_F44CEA_Join2	; F44D40  jr Z,0xf44d7a
 	ld	wa, (14036:16)	; F44D42  ld WA,(0x36d4)
 	ld	(13650:16), wa	; F44D46  ld (0x3552),WA
-	m_cp_mi8 MB16, 0x207a, 0x0a	; F44D4A  cp (0x207a),0x0a
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0a	; F44D4A  cp (0x207a),0x0a
 	jr	nz, sub_F44CEA_Skip5	; F44D4F  jr NZ,0xf44d63
 	ld	wa, (6304961:24)	; F44D51  ld WA,(0x6034c1)
 	cp	(6304968:24), wa	; F44D56  cp (0x6034c8),WA
@@ -92342,9 +92342,9 @@ sub_F44D94_Join:
 	calr	sub_F448C6	; F44DF5  calr 0xf448c6
 	cp	a, 0:i3	; F44DF8  cp A,0
 	jr	nz, sub_F44D94_Skip6	; F44DFA  jr NZ,0xf44e22
-	m_cp_mi8 MB16, 0x207a, 0x06	; F44DFC  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F44DFC  cp (0x207a),0x06
 	jr	z, sub_F44D94_Skip5	; F44E01  jr Z,0xf44e16
-	m_cp_mi8 MB16, 0x207a, 0x08	; F44E03  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F44E03  cp (0x207a),0x08
 	jr	z, sub_F44D94_Skip5	; F44E08  jr Z,0xf44e16
 	ld	wa, (13650:16)	; F44E0A  ld WA,(0x3552)
 	m_cp_rm MW16, 0x3620, 0	; F44E0E  cp WA,(0x3620)
@@ -92735,7 +92735,7 @@ sub_F45119:
 	cp	xwa, 0	; F4512A  cp XWA,0x00000000
 	jr	z, sub_F45119_Return	; F45130  jr Z,0xf4517a
 	call	T_F42578	; F45132  call 0xf42578
-	m_cp_mi8 MB16, 0x207a, 0x13	; F45136  cp (0x207a),0x13
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F45136  cp (0x207a),0x13
 	jr	nz, sub_F45119_Skip	; F4513B  jr NZ,0xf45147
 	m_cp_mi8 MB16, 0x220b, 0x00	; F4513D  cp (0x220b),0x00
 	jr	nz, sub_F45119_Skip	; F45142  jr NZ,0xf45147
@@ -94905,9 +94905,9 @@ sub_F45F4B:
 	calr	sub_F448C6	; F45F56  calr 0xf448c6
 	cp	a, 0:i3	; F45F59  cp A,0
 	jr	nz, sub_F45F4B_Skip2	; F45F5B  jr NZ,0xf45f9b
-	m_cp_mi8 MB16, 0x207a, 0x06	; F45F5D  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F45F5D  cp (0x207a),0x06
 	jr	z, sub_F45F4B_Skip	; F45F62  jr Z,0xf45f7f
-	m_cp_mi8 MB16, 0x207a, 0x08	; F45F64  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F45F64  cp (0x207a),0x08
 	jr	z, sub_F45F4B_Skip	; F45F69  jr Z,0xf45f7f
 	ld	wa, (13856:16)	; F45F6B  ld WA,(0x3620)
 	m_cp_mr MW16, 0x3552, 0	; F45F6F  cp (0x3552),WA
@@ -95474,9 +95474,9 @@ sub_F4783A_Skip8:
 	ld	xwa, (14022:16)	; F47915  ld XWA,(0x36c6)
 	cp	xwa, 0	; F47919  cp XWA,0x00000000
 	jr	nz, sub_F4783A_Skip12	; F4791F  jr NZ,0xf47978
-	m_cp_mi8 MB16, 0x207a, 0x06	; F47921  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F47921  cp (0x207a),0x06
 	jr	z, sub_F4783A_Skip9	; F47926  jr Z,0xf4792f
-	m_cp_mi8 MB16, 0x207a, 0x08	; F47928  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F47928  cp (0x207a),0x08
 	jr	nz, sub_F4783A_Skip10	; F4792D  jr NZ,0xf47943
 sub_F4783A_Skip9:
 	m_bit 1, MD16, 0x360b	; F4792F  bit 1,(0x360b)
@@ -96256,9 +96256,9 @@ sub_F47F69:
 	ld	xbc, (12288:16)	; F47F6C  ld XBC,(0x3000)
 	cp	xbc, 0	; F47F70  cp XBC,0x00000000
 	jr	z, sub_F47F69_Skip2	; F47F76  jr Z,0xf47f96
-	m_cp_mi8 MB16, 0x207a, 0x06	; F47F78  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F47F78  cp (0x207a),0x06
 	jr	z, sub_F47F69_Skip	; F47F7D  jr Z,0xf47f86
-	m_cp_mi8 MB16, 0x207a, 0x08	; F47F7F  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F47F7F  cp (0x207a),0x08
 	jr	nz, sub_F47F69_Skip2	; F47F84  jr NZ,0xf47f96
 sub_F47F69_Skip:
 	ld	b, (13471:16)	; F47F86  ld B,(0x349f)
@@ -96998,9 +96998,9 @@ sub_F4840E_Nop:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F48464:		; <- T_F40B5C
-	m_cp_mi8 MB16, 0x207a, 0x06	; F48464  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F48464  cp (0x207a),0x06
 	jr	z, sub_F48463_Skip	; F48469  jr Z,0xf48478
-	m_cp_mi8 MB16, 0x207a, 0x08	; F4846B  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F4846B  cp (0x207a),0x08
 	jr	z, sub_F48463_Skip	; F48470  jr Z,0xf48478
 	ld	wa, (13854:16)	; F48472  ld WA,(0x361e)
 	jr	sub_F48463_Join	; F48476  jr T,0xf4847c
@@ -97115,9 +97115,9 @@ sub_F48580:		; <- T_F40B60
 	calr	sub_F4869B	; F48580  calr 0xf4869b
 	ld	wa, (13650:16)	; F48583  ld WA,(0x3552)
 	pushw	wa	; F48587  push WA
-	m_cp_mi8 MB16, 0x207a, 0x06	; F48588  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F48588  cp (0x207a),0x06
 	jr	z, sub_F48463_Skip6	; F4858D  jr Z,0xf4859c
-	m_cp_mi8 MB16, 0x207a, 0x08	; F4858F  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F4858F  cp (0x207a),0x08
 	jr	z, sub_F48463_Skip6	; F48594  jr Z,0xf4859c
 	ld	wa, (13856:16)	; F48596  ld WA,(0x3620)
 	jr	sub_F48463_Join4	; F4859A  jr T,0xf485a0
@@ -98797,9 +98797,9 @@ sub_F49A3D:		; <- T_F40BE4
 	ld	xbc, (12288:16)	; F49A40  ld XBC,(0x3000)
 	cp	xbc, 0	; F49A44  cp XBC,0x00000000
 	jr	z, sub_F49A3D_Skip2	; F49A4A  jr Z,0xf49a6a
-	m_cp_mi8 MB16, 0x207a, 0x06	; F49A4C  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F49A4C  cp (0x207a),0x06
 	jr	z, sub_F49A3D_Skip	; F49A51  jr Z,0xf49a5a
-	m_cp_mi8 MB16, 0x207a, 0x08	; F49A53  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F49A53  cp (0x207a),0x08
 	jr	nz, sub_F49A3D_Skip2	; F49A58  jr NZ,0xf49a6a
 sub_F49A3D_Skip:
 	ld	b, (13471:16)	; F49A5A  ld B,(0x349f)
@@ -103219,7 +103219,7 @@ sub_F4C42E_Epilogue:
 ; --------------------------------------------------------------------------
 sub_F4C46A:		; <- T_F434E0
 	ld	c, (UI_ScreenId:16)	; F4C46A  ld C,(0x207c)
-	m_cp_rm MB16, 0x207d, 3	; F4C46E  cp C,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F4C46E  cp C,(0x207d)
 	jr	z, sub_F4C46A_Skip	; F4C472  jr Z,0xf4c479
 	ld	(10352:16), 0	; F4C474  ld (0x2870),0x00
 sub_F4C46A_Skip:
@@ -105469,11 +105469,11 @@ sub_F4D935:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4E000:		; <- T_F40CB0
-	m_cp_mi8 MB16, 0x2078, 0x0c	; F4E000  cp (0x2078),0x0c
+	m_cp_mi8 MB16, PanelMode, 0x0c	; F4E000  cp (0x2078),0x0c
 	jr	z, sub_F4D935_Return	; F4E005  jr Z,0xf4e028
-	m_cp_mi8 MB16, 0x2078, 0x0d	; F4E007  cp (0x2078),0x0d
+	m_cp_mi8 MB16, PanelMode, 0x0d	; F4E007  cp (0x2078),0x0d
 	jr	z, sub_F4D935_Return	; F4E00C  jr Z,0xf4e028
-	m_cp_mi8 MB16, 0x207a, 0x0e	; F4E00E  cp (0x207a),0x0e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0e	; F4E00E  cp (0x207a),0x0e
 	jr	z, sub_F4D935_Return	; F4E013  jr Z,0xf4e028
 	ld	a, (UiEvent_Byte1:16)	; F4E015  ld A,(0x20b8)
 	cp	a, 13	; F4E019  cp A,0x0d
@@ -105552,9 +105552,9 @@ sub_F4E04B_Skip:
 ; --------------------------------------------------------------------------
 sub_F4E05B:
 	ld	(14134:16), c	; F4E05B  ld (0x3736),C
-	m_cp_mi8 MB16, 0x2078, 0x08	; F4E05F  cp (0x2078),0x08
+	m_cp_mi8 MB16, PanelMode, 0x08	; F4E05F  cp (0x2078),0x08
 	jrl	z, sub_F4E05B_Skip9	; F4E064  jrl Z,0xf4e104
-	m_cp_mi8 MB16, 0x2078, 0x05	; F4E067  cp (0x2078),0x05
+	m_cp_mi8 MB16, PanelMode, 0x05	; F4E067  cp (0x2078),0x05
 	jr	z, sub_F4E05B_Skip	; F4E06C  jr Z,0xf4e088
 	m_cp_mi8 MB16, UI_ScreenId, 0x09	; F4E06E  cp (0x207c),0x09
 	jr	z, sub_F4E05B_Skip	; F4E073  jr Z,0xf4e088
@@ -105702,7 +105702,7 @@ sub_F4E151_Join:
 	cp	xwa, 0	; F4E181  cp XWA,0x00000000
 	jr	nz, sub_F4E151_Skip2	; F4E187  jr NZ,0xf4e189
 sub_F4E151_Skip2:
-	m_cp_mi8 MB16, 0x2078, 0x05	; F4E189  cp (0x2078),0x05
+	m_cp_mi8 MB16, PanelMode, 0x05	; F4E189  cp (0x2078),0x05
 	jr	z, sub_F4E151_Skip3	; F4E18E  jr Z,0xf4e19b
 	ld	(3077:16), 228	; F4E190  ld (0x0c05),0xe4
 	call	T_F40A14	; F4E195  call 0xf40a14
@@ -105845,7 +105845,7 @@ sub_F4E259:
 	jr	nz, sub_F4E259_Skip	; F4E267  jr NZ,0xf4e26e
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F4E269  and (0x34bb),0xfb
 sub_F4E259_Skip:
-	m_cp_mi8 MB16, 0x207a, 0x06	; F4E26E  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F4E26E  cp (0x207a),0x06
 	jr	nz, sub_F4E259_Skip2	; F4E273  jr NZ,0xf4e281
 	m_bit 1, MD16, 0x360b	; F4E275  bit 1,(0x360b)
 	jr	z, sub_F4E259_Skip2	; F4E279  jr Z,0xf4e281
@@ -105886,7 +105886,7 @@ sub_F4E259_Skip4:
 	ld	(6304800:24), de	; F4E2CC  ld (0x603420),DE
 sub_F4E259_Join2:
 	call	T_F40E10	; F4E2D1  call 0xf40e10
-	m_cp_mi8 MB16, 0x2078, 0x05	; F4E2D5  cp (0x2078),0x05
+	m_cp_mi8 MB16, PanelMode, 0x05	; F4E2D5  cp (0x2078),0x05
 	jr	z, sub_F4E259_Skip5	; F4E2DA  jr Z,0xf4e2e7
 	ld	(3077:16), 228	; F4E2DC  ld (0x0c05),0xe4
 	call	T_F40A14	; F4E2E1  call 0xf40a14
@@ -105923,9 +105923,9 @@ sub_F4E259_Skip7:
 sub_F4E30F:		; <- T_F40CCC
 	xor	a, a	; F4E30F  xor A,A
 	pushw	bc	; F4E311  push BC
-	m_cp_mi8 MB16, 0x207a, 0x06	; F4E312  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F4E312  cp (0x207a),0x06
 	jr	z, sub_F4E30F_Skip	; F4E317  jr Z,0xf4e320
-	m_cp_mi8 MB16, 0x207a, 0x08	; F4E319  cp (0x207a),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x08	; F4E319  cp (0x207a),0x08
 	jr	nz, sub_F4E30F_Skip2	; F4E31E  jr NZ,0xf4e326
 sub_F4E30F_Skip:
 	m_bit 1, MD16, 0x360b	; F4E320  bit 1,(0x360b)
@@ -106043,7 +106043,7 @@ sub_F4E390_Join2:
 	ld	xwa, (6304798:24)	; F4E3E2  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E3E7  cp XWA,0x00000000
 	jr	nz, sub_F4E390_Skip3	; F4E3ED  jr NZ,0xf4e3fb
-	m_cp_mi8 MB16, 0x2078, 0x08	; F4E3EF  cp (0x2078),0x08
+	m_cp_mi8 MB16, PanelMode, 0x08	; F4E3EF  cp (0x2078),0x08
 	jr	nz, sub_F4E390_Skip3	; F4E3F4  jr NZ,0xf4e3fb
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F4E3F6  or (0x2071),0x10
 sub_F4E390_Skip3:
@@ -106179,7 +106179,7 @@ sub_F4E4C4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4E4C8:
-	m_cp_mi8 MB16, 0x2078, 0x06	; F4E4C8  cp (0x2078),0x06
+	m_cp_mi8 MB16, PanelMode, 0x06	; F4E4C8  cp (0x2078),0x06
 	jr	nz, sub_F4E4C8_Return	; F4E4CD  jr NZ,0xf4e4f5
 	m_cp_mi8 MB16, UI_ScreenId, 0x0f	; F4E4CF  cp (0x207c),0x0f
 	jr	nz, sub_F4E4C8_Return	; F4E4D4  jr NZ,0xf4e4f5
@@ -106209,7 +106209,7 @@ sub_F4E4C8_Return:
 sub_F4E4F6:
 	m_cp_mi8 MB16, 0x207e, 0x01	; F4E4F6  cp (0x207e),0x01
 	jr	z, sub_F4E4F6_Return	; F4E4FB  jr Z,0xf4e50a
-	ld	a, (8314:16)	; F4E4FD  ld A,(0x207a)
+	ld	a, (UI_ScreenLatch:16)	; F4E4FD  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenId, 1	; F4E501  cp A,(0x207c)
 	jr	nz, sub_F4E4F6_Return	; F4E505  jr NZ,0xf4e50a
 	calr	sub_F4E50B	; F4E507  calr 0xf4e50b
@@ -106269,7 +106269,7 @@ sub_F4E525:		; <- T_F40CBC
 	and	a, w	; F4E532  and A,W
 	bit	1, a	; F4E534  bit 0x01,A
 	jr	z, sub_F4E50B_Return	; F4E537  jr Z,0xf4e544
-	m_cp_mi8 MB16, 0x207a, 0x0e	; F4E539  cp (0x207a),0x0e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0e	; F4E539  cp (0x207a),0x0e
 	jr	z, sub_F4E50B_Return	; F4E53E  jr Z,0xf4e544
 	call	sub_F4E545	; F4E540  call 0xf4e545
 sub_F4E50B_Return:
@@ -106320,7 +106320,7 @@ sub_F4E56F:		; <- T_F40CC4
 	jr	ugt, sub_F4E545_Return2	; F4E574  jr UGT,0xf4e590
 	m_cp_mi8 MB16, 0x207e, 0x01	; F4E576  cp (0x207e),0x01
 	jr	z, sub_F4E545_Return2	; F4E57B  jr Z,0xf4e590
-	ld	a, (8314:16)	; F4E57D  ld A,(0x207a)
+	ld	a, (UI_ScreenLatch:16)	; F4E57D  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenId, 1	; F4E581  cp A,(0x207c)
 	jr	nz, sub_F4E545_Return2	; F4E585  jr NZ,0xf4e590
 	xor	bc, bc	; F4E587  xor BC,BC
@@ -106606,10 +106606,10 @@ sub_F4EC2F_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4ECA9:		; <- T_F40CF8
-	m_cp_mi8 MB16, 0x207d, 0x05	; F4ECA9  cp (0x207d),0x05
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x05	; F4ECA9  cp (0x207d),0x05
 	jr	z, sub_F4EC2F_Skip3	; F4ECAE  jr Z,0xf4ecb0
 sub_F4EC2F_Skip3:
-	m_cp_mi8 MB16, 0x207d, 0x05	; F4ECB0  cp (0x207d),0x05
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x05	; F4ECB0  cp (0x207d),0x05
 	jr	z, sub_F4EC2F_Skip4	; F4ECB5  jr Z,0xf4ecb9
 	jr	sub_F4EC2F_Return2	; F4ECB7  jr T,0xf4ed0b
 sub_F4EC2F_Skip4:
@@ -106823,7 +106823,7 @@ sub_F4ED10_Join3:
 	ld	(3077:16), 228	; F4EE50  ld (0x0c05),0xe4
 	call	T_F40A14	; F4EE55  call 0xf40a14
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F4EE59  or (0x2075),0x09
-	ldw	(8347:16), 34953	; F4EE5E  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 34953	; F4EE5E  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F4EDC6_Skip2:
 	bit_dd8	2, 150	; F4EE64  bit 2,(0x96)
 	jr	z, sub_F4ED10_Return3	; F4EE67  jr Z,0xf4ee6e
@@ -106987,11 +106987,11 @@ sub_F4EEF3:		; <- T_F40D18
 	jr	nz, sub_F4EEF3_Return	; F4EF11  jr NZ,0xf4ef13
 sub_F4EEF3_Return:
 	ret	; F4EF13  ret
-	m_cp_mi8 MB16, 0x207a, 0x06	; F4EF14  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F4EF14  cp (0x207a),0x06
 	jr	z, sub_F4EEF3_Skip	; F4EF19  jr Z,0xf4ef29
-	m_cp_mi8 MB16, 0x207a, 0x12	; F4EF1B  cp (0x207a),0x12
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x12	; F4EF1B  cp (0x207a),0x12
 	jr	z, sub_F4EEF3_Skip	; F4EF20  jr Z,0xf4ef29
-	m_cp_mi8 MB16, 0x207a, 0x09	; F4EF22  cp (0x207a),0x09
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x09	; F4EF22  cp (0x207a),0x09
 	jr	nz, sub_F4EEF3_Return2	; F4EF27  jr NZ,0xf4ef2e
 sub_F4EEF3_Skip:
 	m_or_mi8 MB16, 0x2095, 0x10	; F4EF29  or (0x2095),0x10
@@ -109883,11 +109883,11 @@ sub_F53052:
 	push	xix	; F53052  push XIX
 	lda	xix, (10399:16)	; F53053  lda XIX,0x289f
 	ld	(10396:16), 0	; F53057  ld (0x289c),0x00
-	ld	c, (8314:16)	; F5305C  ld C,(0x207a)
-	m_cp_rm MB16, 0x207b, 3	; F53060  cp C,(0x207b)
+	ld	c, (UI_ScreenLatch:16)	; F5305C  ld C,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 3	; F53060  cp C,(0x207b)
 	jr	z, sub_F53052_Skip2	; F53064  jr Z,0xf5309b
 	ld	(10397:16), 0	; F53066  ld (0x289d),0x00
-	m_cp_mi8 MB16, 0x207d, 0x66	; F5306B  cp (0x207d),0x66
+	m_cp_mi8 MB16, UI_ScreenId_Previous, 0x66	; F5306B  cp (0x207d),0x66
 	jr	z, sub_F53052_Skip	; F53070  jr Z,0xf5307c
 	ld	(xix), 0	; F53072  ld (XIX),0x00
 	ld	(10398:16), 0	; F53075  ld (0x289e),0x00
@@ -109904,7 +109904,7 @@ sub_F53052_Join:
 	m_res 0, MD16, 0x28af	; F53097  res 0,(0x28af)
 sub_F53052_Skip2:
 	ld	c, (UI_ScreenId:16)	; F5309B  ld C,(0x207c)
-	m_cp_rm MB16, 0x207d, 3	; F5309F  cp C,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F5309F  cp C,(0x207d)
 	jr	z, sub_F53052_Skip3	; F530A3  jr Z,0xf530ad
 	incm8	1, (xix)	; F530A5  inc 1,(XIX)
 	incm8	1, (xix)	; F530A7  inc 1,(XIX)
@@ -109926,14 +109926,14 @@ sub_F53052_Skip4:
 	jr	sub_F53052_Join2	; F530D4  jr T,0xf530e4
 sub_F53052_Skip5:
 	m_set 0, MD16, UI_RequestBits	; F530D6  set 0,(0x2075)
-	ld	(8347:16), 12	; F530DA  ld (0x209b),0x0c  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	ld	(8348:16), 11	; F530DF  ld (0x209c),0x0b  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_DownButton:16), 12	; F530DA  ld (0x209b),0x0c  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ld	(PanelDial_UpButton:16), 11	; F530DF  ld (0x209c),0x0b  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F53052_Join2:
 	ld	c, (8341:16)	; F530E4  ld C,(0x2095)
 	and	c, 16	; F530E8  and C,0x10
 	jr	nz, sub_F53052_Skip7	; F530EB  jr NZ,0xf53121
 	ld	c, (UI_ScreenId:16)	; F530ED  ld C,(0x207c)
-	m_cp_rm MB16, 0x207d, 3	; F530F1  cp C,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F530F1  cp C,(0x207d)
 	jr	z, sub_F53052_Skip6	; F530F5  jr Z,0xf5310e
 	call	T_CallbackQueue_ResetAndRestartTask2	; F530F7  call 0xf42e80
 	lda	xbc, (ExitKey_DrawbarScreen + 0x39:24)	; F530FB  lda XBC,0xf536bc
@@ -116622,16 +116622,16 @@ sub_F5603C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56058:
-	ld	a, (8314:16)	; F56058  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F5605C  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F56058  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5605C  cp A,(0x207b)
 	jr	nz, sub_F56058_Skip	; F56060  jr NZ,0xf56073
 	ld	a, (UI_ScreenId:16)	; F56062  ld A,(0x207c)
-	m_cp_rm MB16, 0x207d, 1	; F56066  cp A,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56066  cp A,(0x207d)
 	jr	nz, sub_F56058_Skip3	; F5606A  jr NZ,0xf560a1
 	m_bit 4, MD16, 0x2095	; F5606C  bit 4,(0x2095)
 	jrl	nz, sub_F56058_Join	; F56070  jrl NZ,0xf56112
 sub_F56058_Skip:
-	m_cp_mi8 MB16, 0x207b, 0x08	; F56073  cp (0x207b),0x08
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x08	; F56073  cp (0x207b),0x08
 	jr	z, sub_F56058_Skip4	; F56078  jr Z,0xf560bb
 	bit_dd8	2, 150	; F5607A  bit 2,(0x96)
 	jr	nz, sub_F56058_Skip3	; F5607D  jr NZ,0xf560a1
@@ -116703,12 +116703,12 @@ sub_F56058_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56129:
-	ld	a, (8314:16)	; F56129  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F5612D  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F56129  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5612D  cp A,(0x207b)
 	jr	nz, sub_F56129_Skip	; F56131  jr NZ,0xf56135
 	jr	sub_F56129_Return	; F56133  jr T,0xf56141
 sub_F56129_Skip:
-	m_cp_mi8 MB16, 0x2078, 0x08	; F56135  cp (0x2078),0x08
+	m_cp_mi8 MB16, PanelMode, 0x08	; F56135  cp (0x2078),0x08
 	jr	z, sub_F56129_Return	; F5613A  jr Z,0xf56141
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F5613C  and (0x20a9),0xfe
 sub_F56129_Return:
@@ -117738,11 +117738,11 @@ Nop_Ret_F56649:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5664A:
-	ld	a, (8314:16)	; F5664A  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F5664E  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F5664A  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5664E  cp A,(0x207b)
 	jr	nz, sub_F5664A_Skip	; F56652  jr NZ,0xf56664
 	ld	a, (UI_ScreenId:16)	; F56654  ld A,(0x207c)
-	m_cp_rm MB16, 0x207d, 1	; F56658  cp A,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56658  cp A,(0x207d)
 	jr	nz, sub_F5664A_Skip3	; F5665C  jr NZ,0xf5668f
 	m_bit 4, MD16, 0x2095	; F5665E  bit 4,(0x2095)
 	jr	nz, sub_F5664A_Skip6	; F56662  jr NZ,0xf566c6
@@ -117829,8 +117829,8 @@ sub_F566E0_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5670C:
-	ld	a, (8314:16)	; F5670C  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F56710  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F5670C  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56710  cp A,(0x207b)
 	jr	nz, sub_F5670C_Skip	; F56714  jr NZ,0xf56718
 	jr	sub_F5670C_Return	; F56716  jr T,0xf56729
 sub_F5670C_Skip:
@@ -118702,16 +118702,16 @@ sub_F56B67_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56B95:
-	ld	a, (8314:16)	; F56B95  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F56B99  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F56B95  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56B99  cp A,(0x207b)
 	jr	nz, sub_F56B95_Skip	; F56B9D  jr NZ,0xf56baf
 	ld	a, (UI_ScreenId:16)	; F56B9F  ld A,(0x207c)
-	m_cp_rm MB16, 0x207d, 1	; F56BA3  cp A,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56BA3  cp A,(0x207d)
 	jr	nz, sub_F56B95_Skip3	; F56BA7  jr NZ,0xf56bec
 	m_bit 4, MD16, 0x2095	; F56BA9  bit 4,(0x2095)
 	jr	nz, sub_F56B95_Skip5	; F56BAD  jr NZ,0xf56c1e
 sub_F56B95_Skip:
-	m_cp_mi8 MB16, 0x207b, 0x14	; F56BAF  cp (0x207b),0x14
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x14	; F56BAF  cp (0x207b),0x14
 	jr	z, sub_F56B95_Skip3	; F56BB4  jr Z,0xf56bec
 	call	T_CallbackQueue_ResetAndRestartTask2	; F56BB6  call 0xf42e80
 	call	T_F40D04	; F56BBA  call 0xf40d04
@@ -118767,12 +118767,12 @@ sub_F56B95_Skip5:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56C35:
-	ld	a, (8314:16)	; F56C35  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F56C39  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F56C35  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56C39  cp A,(0x207b)
 	jr	nz, sub_F56C35_Skip	; F56C3D  jr NZ,0xf56c41
 	jr	sub_F56C35_Return	; F56C3F  jr T,0xf56c56
 sub_F56C35_Skip:
-	m_cp_mi8 MB16, 0x2078, 0x01	; F56C41  cp (0x2078),0x01
+	m_cp_mi8 MB16, PanelMode, 0x01	; F56C41  cp (0x2078),0x01
 	jr	z, sub_F56C35_Skip2	; F56C46  jr Z,0xf56c4d
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F56C48  and (0x20a9),0xfe
 sub_F56C35_Skip2:
@@ -118825,7 +118825,7 @@ sub_F56C35_Skip3:
 	jr	sub_F56C35_Return2	; F56CAE  jr T,0xf56cd5
 sub_F56C35_Skip4:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F56CB0  or (0x2075),0x09
-	ldw	(8347:16), 34953	; F56CB5  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 34953	; F56CB5  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_F40D0C	; F56CBB  call 0xf40d0c
 	call	T_F42704	; F56CBF  call 0xf42704
 	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56CC3  ld XWA,0x00f55c8c
@@ -118861,7 +118861,7 @@ sub_F56CD6:
 	jr	sub_F56C35_Return3	; F56CF5  jr T,0xf56d1c
 sub_F56C35_Skip5:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F56CF7  or (0x2075),0x09
-	ldw	(8347:16), 34953	; F56CFC  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 34953	; F56CFC  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_F40D10	; F56D02  call 0xf40d10
 	call	T_F42704	; F56D06  call 0xf42704
 	ld	xwa, Draw_CycleMasterS0ngMeasureTimeSig	; F56D0A  ld XWA,0x00f55c8c
@@ -119063,11 +119063,11 @@ Nop_Ret_F56DF0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56DF1:
-	ld	a, (8314:16)	; F56DF1  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F56DF5  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F56DF1  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56DF5  cp A,(0x207b)
 	jr	nz, sub_F56DF1_Skip	; F56DF9  jr NZ,0xf56e0b
 	ld	a, (UI_ScreenId:16)	; F56DFB  ld A,(0x207c)
-	m_cp_rm MB16, 0x207d, 1	; F56DFF  cp A,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F56DFF  cp A,(0x207d)
 	jr	nz, sub_F56DF1_Skip4	; F56E03  jr NZ,0xf56e3e
 	m_bit 4, MD16, 0x2095	; F56E05  bit 4,(0x2095)
 	jr	nz, sub_F56DF1_Skip5	; F56E09  jr NZ,0xf56e50
@@ -119147,8 +119147,8 @@ sub_F56E66_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56E99:
-	ld	a, (8314:16)	; F56E99  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F56E9D  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F56E99  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56E9D  cp A,(0x207b)
 	jr	nz, sub_F56E99_Skip	; F56EA1  jr NZ,0xf56ea5
 	jr	sub_F56E99_Return	; F56EA3  jr T,0xf56eb6
 sub_F56E99_Skip:
@@ -119911,11 +119911,11 @@ sub_F5723B_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F57286:
-	ld	a, (8314:16)	; F57286  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F5728A  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F57286  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5728A  cp A,(0x207b)
 	jr	nz, sub_F57286_Skip	; F5728E  jr NZ,0xf572a0
 	ld	a, (UI_ScreenId:16)	; F57290  ld A,(0x207c)
-	m_cp_rm MB16, 0x207d, 1	; F57294  cp A,(0x207d)
+	m_cp_rm MB16, UI_ScreenId_Previous, 1	; F57294  cp A,(0x207d)
 	jr	nz, sub_F57286_Skip5	; F57298  jr NZ,0xf572e9
 	m_bit 4, MD16, 0x2095	; F5729A  bit 4,(0x2095)
 	jr	nz, sub_F57286_Skip6	; F5729E  jr NZ,0xf572fb
@@ -119971,8 +119971,8 @@ sub_F57286_Skip6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F57311:
-	ld	a, (8314:16)	; F57311  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F57315  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F57311  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F57315  cp A,(0x207b)
 	jr	nz, sub_F57311_Skip	; F57319  jr NZ,0xf5731d
 	jr	sub_F57311_Return	; F5731B  jr T,0xf57336
 sub_F57311_Skip:
@@ -128609,7 +128609,7 @@ sub_F5C929_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5C94B:
-	ld	a, (8314:16)	; F5C94B  ld A,(0x207a)
+	ld	a, (UI_ScreenLatch:16)	; F5C94B  ld A,(0x207a)
 	ld	(10174:16), a	; F5C94F  ld (0x27be),A
 	ld	(LCD_CurrentLayer:16), 2	; F5C953  ld (0x2540),0x02
 	ld	xiy, DL_F04650	; F5C958  ld XIY,0x00f04650
@@ -129407,7 +129407,7 @@ sub_F5D199_Join:
 	ret	; F5D1E7  ret
 Draw_Write:
 	ld	(LCD_CurrentLayer:16), 0	; F5D1E8  ld (0x2540),0x00
-	m_cp_mi8 MB16, 0x207a, 0x9f	; F5D1ED  cp (0x207a),0x9f
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x9f	; F5D1ED  cp (0x207a),0x9f
 	jr	nz, sub_F5D199_Skip4	; F5D1F2  jr NZ,0xf5d219
 	m_cp_mi8 MB16, 0x27f6, 0x02	; F5D1F4  cp (0x27f6),0x02
 	jr	z, sub_F5D199_Skip3	; F5D1F9  jr Z,0xf5d209
@@ -141103,7 +141103,7 @@ sub_F64A7A:		; <- T_F42824
 	ldw	(3550:16), 1	; F64A98  ld (0x0dde),0x0001
 	ret	; F64A9E  ret
 sub_F64A34_Join:
-	ld	a, (8314:16)	; F64A9F  ld A,(0x207a)
+	ld	a, (UI_ScreenLatch:16)	; F64A9F  ld A,(0x207a)
 	cp	a, 69	; F64AA3  cp A,0x45
 	jr	z, sub_F64A34_Skip2	; F64AA6  jr Z,0xf64ab7
 	cp	a, 13	; F64AA8  cp A,0x0d
@@ -142913,8 +142913,8 @@ T_F42B78_Nop:		; <- T_F42B78
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F660ED:		; <- T_F42BCC
-	ld	a, (8314:16)	; F660ED  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F660F1  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F660ED  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F660F1  cp A,(0x207b)
 	jr	z, sub_F660A0_Skip5	; F660F5  jr Z,0xf66118
 	ld	a, (32589:16)	; F660F7  ld A,(0x7f4d)
 	ld	(3656:16), a	; F660FB  ld (0x0e48),A
@@ -142970,7 +142970,7 @@ sub_F66123:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6614E:		; <- T_F42BD0
-	m_cp_mi8 MB16, 0x207a, 0x13	; F6614E  cp (0x207a),0x13
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F6614E  cp (0x207a),0x13
 	jr	z, sub_F66123_Return	; F66153  jr Z,0xf66190
 	call	sub_F66201	; F66155  call 0xf66201
 	call	T_Disk_PortA3_Release_Entry	; F66159  call 0xf425f0
@@ -143541,8 +143541,8 @@ sub_F662F7_Return6:
 sub_F664D5:		; <- T_F42BC4
 	ld	xwa, (6304798:24)	; F664D5  ld XWA,(0x60341e)
 	ld	(12304:16), xwa	; F664DA  ld (0x3010),XWA
-	ld	a, (8314:16)	; F664DE  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F664E2  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F664DE  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F664E2  cp A,(0x207b)
 	jr	z, sub_F662F7_Skip16	; F664E6  jr Z,0xf66509
 	ld	(3676:16), 0	; F664E8  ld (0x0e5c),0x00
 	m_or_mi16 MW16, 0x2130, 0x0100	; F664ED  or (0x2130),0x0100
@@ -143601,7 +143601,7 @@ sub_F66522:		; <- T_F42BDC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66522_Join:		; <- T_F42BE4
-	m_cp_mi8 MB16, 0x207b, 0x10	; F6652C  cp (0x207b),0x10
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x10	; F6652C  cp (0x207b),0x10
 	jr	z, sub_F662F7_Skip17	; F66531  jr Z,0xf66546
 	m_and_mi8 MB16, 0x0c07, 0xfe	; F66533  and (0x0c07),0xfe
 	ld	(3075:16), 0	; F66538  ld (0x0c03),0x00
@@ -143629,7 +143629,7 @@ sub_F662F7_Skip17:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6655D:		; <- T_F42BE8
-	m_cp_mi8 MB16, 0x207a, 0x10	; F6655D  cp (0x207a),0x10
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x10	; F6655D  cp (0x207a),0x10
 	jr	z, sub_F662F7_Return7	; F66562  jr Z,0xf6656c
 	calr	sub_F65D26	; F66564  calr 0xf65d26
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F66567  and (0x34bb),0xfb
@@ -143705,11 +143705,11 @@ sub_F662F7_Return9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66598:		; <- T_F42BF0
-	m_cp_mi8 MB16, 0x207a, 0x06	; F66598  cp (0x207a),0x06
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x06	; F66598  cp (0x207a),0x06
 	jr	z, sub_F662F7_Skip19	; F6659D  jr Z,0xf665ad
-	m_cp_mi8 MB16, 0x207a, 0x12	; F6659F  cp (0x207a),0x12
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x12	; F6659F  cp (0x207a),0x12
 	jr	z, sub_F662F7_Skip19	; F665A4  jr Z,0xf665ad
-	m_cp_mi8 MB16, 0x207a, 0x09	; F665A6  cp (0x207a),0x09
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x09	; F665A6  cp (0x207a),0x09
 	jr	nz, sub_F662F7_Return10	; F665AB  jr NZ,0xf665b2
 sub_F662F7_Skip19:
 	m_or_mi8 MB16, 0x2095, 0x10	; F665AD  or (0x2095),0x10
@@ -143742,7 +143742,7 @@ sub_F65C0D_Nop:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F665B4:		; <- T_F42BF8
-	m_cp_mi8 MB16, 0x207b, 0x11	; F665B4  cp (0x207b),0x11
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x11	; F665B4  cp (0x207b),0x11
 	jr	z, sub_F662F7_Skip20	; F665B9  jr Z,0xf665e3
 	m_or_mi8 MB16, 0x34bb, 0x04	; F665BB  or (0x34bb),0x04
 	ld	(UI_StatusCode:16), 0	; F665C0  ld (0x2880),0x00
@@ -152234,8 +152234,8 @@ IndexMap_F6A9AA:
 ; --------------------------------------------------------------------------
 sub_F6A9CA:		; <- T_F42EC0
 	ld	(4715:16), 0	; F6A9CA  ld (0x126b),0x00
-	ld	a, (8314:16)	; F6A9CF  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F6A9D3  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F6A9CF  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F6A9D3  cp A,(0x207b)
 	jrl	z, sub_F6A9E3_Skip13	; F6A9D7  jrl Z,0xf6ab78
 	ld	(UI_StatusCode:16), 0	; F6A9DA  ld (0x2880),0x00
 	call	sub_F6A2FF	; F6A9DF  call 0xf6a2ff
@@ -152904,8 +152904,8 @@ sub_F6AE4B:		; <- T_F42EC4
 	ld	(3664:16), 255	; F6AE54  ld (0x0e50),0xff
 	m_and_mi8 MB16, 0x1071, 0xfe	; F6AE59  and (0x1071),0xfe
 	ld	(3527:16), 0	; F6AE5E  ld (0x0dc7),0x00
-	ld	a, (8315:16)	; F6AE63  ld A,(0x207b)
-	cp	(8314:16), a	; F6AE67  cp (0x207a),A
+	ld	a, (UI_ScreenLatch_Previous:16)	; F6AE63  ld A,(0x207b)
+	cp	(UI_ScreenLatch:16), a	; F6AE67  cp (0x207a),A
 	jrl	z, sub_F6ADC2_Return	; F6AE6B  jrl Z,0xf6af56
 	m_bit 0, MD16, 0x106e	; F6AE6E  bit 0,(0x106e)
 	jr	z, sub_F6ADC2_Skip	; F6AE72  jr Z,0xf6ae77
@@ -153063,7 +153063,7 @@ sub_F6AF57_Skip3:
 	jr	nz, sub_F6AF57_Skip4	; F6AFD3  jr NZ,0xf6afd8
 	calr	sub_F69C03	; F6AFD5  calr 0xf69c03
 sub_F6AF57_Skip4:
-	m_cp_mi8 MB16, 0x207a, 0x0e	; F6AFD8  cp (0x207a),0x0e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0e	; F6AFD8  cp (0x207a),0x0e
 	jr	nz, sub_F6AF57_Skip5	; F6AFDD  jr NZ,0xf6afed
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6AFDF  cp (0x0e63),0x03
 	jr	nz, sub_F6AF57_Skip5	; F6AFE4  jr NZ,0xf6afed
@@ -153071,7 +153071,7 @@ sub_F6AF57_Skip4:
 	jr	sub_F6AF57_Return	; F6AFEB  jr T,0xf6b004
 sub_F6AF57_Skip5:
 	m_and_mi8 MB16, 0x1070, 0xfd	; F6AFED  and (0x1070),0xfd
-	m_cp_mi8 MB16, 0x207a, 0x0d	; F6AFF2  cp (0x207a),0x0d
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x0d	; F6AFF2  cp (0x207a),0x0d
 	jr	nz, sub_F6AF57_Return	; F6AFF7  jr NZ,0xf6b004
 	m_cp_mi8 MB16, 0x0e45, 0x00	; F6AFF9  cp (0x0e45),0x00
 	jr	z, sub_F6AF57_Return	; F6AFFE  jr Z,0xf6b004
@@ -163167,7 +163167,7 @@ OldCopy_F7AA1F:
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F6F023  and (0x34bb),0xfb
 	ret	; F6F028  ret
 OldCopy_sub_F7AA29:
-	m_cp_mi8 MB16, 0x207b, 0x1b	; F6F029  cp (0x207b),0x1b
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x1b	; F6F029  cp (0x207b),0x1b
 	jr	z, OldCopy_F7AA49	; F6F02E  jr Z,0xf6f049
 	ld	(UI_StatusCode:16), 255	; F6F030  ld (0x2880),0xff
 	ld	a, (BStore_CurrentBank:16)	; F6F035  ld A,(0x360a)
@@ -163372,8 +163372,8 @@ OldCopy_F7AB9B:
 ;   `Data_F6F19C` is retired; the lines below mirror the live copy's.
 ; --------------------------------------------------------------------------
 OldCopy_sub_F7AB9C:
-	ld	a, (8314:16)	; F6F19C  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F6F1A0  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F6F19C  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F6F1A0  cp A,(0x207b)
 	jr	z, OldCopy_F7ABB8	; F6F1A4  jr Z,0xf6f1b8
 	ldw	(3518:16), 0	; F6F1A6  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F6F1AC  ld (0x215e),0x0000
@@ -163381,7 +163381,7 @@ OldCopy_sub_F7AB9C:
 OldCopy_F7ABB8:
 	ret	; F6F1B8  ret
 OldCopy_sub_F7ABB9:
-	m_cp_mi8 MB16, 0x207a, 0x1c	; F6F1B9  cp (0x207a),0x1c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x1c	; F6F1B9  cp (0x207a),0x1c
 	jr	z, OldCopy_F7ABDB	; F6F1BE  jr Z,0xf6f1db
 	ld	wa, (3654:16)	; F6F1C0  ld WA,(0x0e46)
 	xor	wa, 65535	; F6F1C4  xor WA,0xffff
@@ -163460,7 +163460,7 @@ OldCopy_sub_F7AC9D:
 	ld	(3514:16), 1	; F6F2A0  ld (0x0dba),0x01
 	ret	; F6F2A5  ret
 OldCopy_sub_F7ACA6:
-	m_cp_mi8 MB16, 0x207a, 0x1f	; F6F2A6  cp (0x207a),0x1f
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x1f	; F6F2A6  cp (0x207a),0x1f
 	jr	z, OldCopy_F7ACC4	; F6F2AB  jr Z,0xf6f2c4
 	ld	xwa, (12304:16)	; F6F2AD  ld XWA,(0x3010)
 	m_or_mr ML16, 0x360c, 0	; F6F2B1  or (0x360c),XWA
@@ -183364,7 +183364,7 @@ BStore_AppendBytes_Join4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AA29:		; <- T_F428B8
-	m_cp_mi8 MB16, 0x207b, 0x1b	; F7AA29  cp (0x207b),0x1b
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x1b	; F7AA29  cp (0x207b),0x1b
 	jr	z, BStore_AppendBytes_Skip4	; F7AA2E  jr Z,0xf7aa49
 	ld	(UI_StatusCode:16), 255	; F7AA30  ld (0x2880),0xff
 	ld	a, (BStore_CurrentBank:16)	; F7AA35  ld A,(0x360a)
@@ -183614,8 +183614,8 @@ sub_F7AB3F_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AB9C:		; <- T_F428D0
-	ld	a, (8314:16)	; F7AB9C  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F7ABA0  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F7AB9C  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F7ABA0  cp A,(0x207b)
 	jr	z, sub_F7AB3F_Return2	; F7ABA4  jr Z,0xf7abb8
 	ldw	(3518:16), 0	; F7ABA6  ld (0x0dbe),0x0000
 	ldw	(8542:16), 0	; F7ABAC  ld (0x215e),0x0000
@@ -183636,7 +183636,7 @@ sub_F7AB3F_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7ABB9:		; <- T_F428D4
-	m_cp_mi8 MB16, 0x207a, 0x1c	; F7ABB9  cp (0x207a),0x1c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x1c	; F7ABB9  cp (0x207a),0x1c
 	jr	z, sub_F7AB3F_Return3	; F7ABBE  jr Z,0xf7abdb
 	ld	wa, (3654:16)	; F7ABC0  ld WA,(0x0e46)
 	xor	wa, 65535	; F7ABC4  xor WA,0xffff
@@ -183767,7 +183767,7 @@ sub_F7AC9D:		; <- T_F42938
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7ACA6:		; <- T_F4293C
-	m_cp_mi8 MB16, 0x207a, 0x1f	; F7ACA6  cp (0x207a),0x1f
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x1f	; F7ACA6  cp (0x207a),0x1f
 	jr	z, sub_F7AB3F_Return6	; F7ACAB  jr Z,0xf7acc4
 	ld	xwa, (12304:16)	; F7ACAD  ld XWA,(0x3010)
 	m_or_mr ML16, 0x360c, 0	; F7ACB1  or (0x360c),XWA
@@ -184248,7 +184248,7 @@ sub_F7B000:		; <- T_F4295C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B00E:		; <- T_F42960
-	m_cp_mi8 MB16, 0x207a, 0x23	; F7B00E  cp (0x207a),0x23
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x23	; F7B00E  cp (0x207a),0x23
 	jr	z, sub_F7AFD8_Return	; F7B013  jr Z,0xf7b019
 	call	T_F409E0	; F7B015  call 0xf409e0
 sub_F7AFD8_Return:
@@ -184594,7 +184594,7 @@ sub_F7B22C:		; <- T_F42980
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B23A:		; <- T_F42984
-	m_cp_mi8 MB16, 0x207a, 0x20	; F7B23A  cp (0x207a),0x20
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x20	; F7B23A  cp (0x207a),0x20
 	jr	z, sub_F7B1D1_Return2	; F7B23F  jr Z,0xf7b245
 	call	T_F409E0	; F7B241  call 0xf409e0
 sub_F7B1D1_Return2:
@@ -185005,7 +185005,7 @@ sub_F7B4BF:		; <- T_F429A8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B4CD:		; <- T_F429AC
-	m_cp_mi8 MB16, 0x207a, 0x22	; F7B4CD  cp (0x207a),0x22
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x22	; F7B4CD  cp (0x207a),0x22
 	jr	z, sub_F7B457_Return2	; F7B4D2  jr Z,0xf7b4eb
 	ld	xwa, (12304:16)	; F7B4D4  ld XWA,(0x3010)
 	m_or_mr ML16, 0x360c, 0	; F7B4D8  or (0x360c),XWA
@@ -185588,7 +185588,7 @@ sub_F7B8DC:		; <- T_F429D8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B8EA:		; <- T_F429DC
-	m_cp_mi8 MB16, 0x207a, 0x21	; F7B8EA  cp (0x207a),0x21
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x21	; F7B8EA  cp (0x207a),0x21
 	jr	z, sub_F7B852_Return2	; F7B8EF  jr Z,0xf7b908
 	ld	xwa, (12304:16)	; F7B8F1  ld XWA,(0x3010)
 	m_or_mr ML16, 0x360c, 0	; F7B8F5  or (0x360c),XWA
@@ -186178,7 +186178,7 @@ sub_F7BCFD:		; <- T_F428E0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BD24:		; <- T_F428E4
-	m_cp_mi8 MB16, 0x207a, 0x1d	; F7BD24  cp (0x207a),0x1d
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x1d	; F7BD24  cp (0x207a),0x1d
 	jr	z, sub_F7BC73_Return2	; F7BD29  jr Z,0xf7bd2f
 	call	T_F409E0	; F7BD2B  call 0xf409e0
 sub_F7BC73_Return2:
@@ -186587,8 +186587,8 @@ sub_F7BF74_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BFEA:		; <- T_F42908
-	ld	a, (8315:16)	; F7BFEA  ld A,(0x207b)
-	m_cp_rm MB16, 0x207a, 1	; F7BFEE  cp A,(0x207a)
+	ld	a, (UI_ScreenLatch_Previous:16)	; F7BFEA  ld A,(0x207b)
+	m_cp_rm MB16, UI_ScreenLatch, 1	; F7BFEE  cp A,(0x207a)
 	jr	z, sub_F7BF74_Skip	; F7BFF2  jr Z,0xf7bffd
 	ld	(4927:16), a	; F7BFF4  ld (0x133f),A
 	ld	(UI_StatusCode:16), 255	; F7BFF8  ld (0x2880),0xff
@@ -186656,7 +186656,7 @@ sub_F7BF74_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C0AF:		; <- T_F4290C
-	m_cp_mi8 MB16, 0x207a, 0x1e	; F7C0AF  cp (0x207a),0x1e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x1e	; F7C0AF  cp (0x207a),0x1e
 	jr	z, sub_F7BF74_Return3	; F7C0B4  jr Z,0xf7c0ba
 	call	T_F409E0	; F7C0B6  call 0xf409e0
 sub_F7BF74_Return3:
@@ -187182,7 +187182,7 @@ sub_F7C326_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C3B2:		; <- T_F42A08
-	m_cp_mi8 MB16, 0x207b, 0x2a	; F7C3B2  cp (0x207b),0x2a
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2a	; F7C3B2  cp (0x207b),0x2a
 	jr	z, sub_F7C3B2_Return	; F7C3B7  jr Z,0xf7c3ed
 	ld	a, 1:opc	; F7C3B9  ld A,0x01
 	ld	(3596:16), a	; F7C3BB  ld (0x0e0c),A
@@ -187213,7 +187213,7 @@ sub_F7C3B2_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C3EE:		; <- T_F42A0C
-	m_cp_mi8 MB16, 0x207a, 0x2a	; F7C3EE  cp (0x207a),0x2a
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x2a	; F7C3EE  cp (0x207a),0x2a
 	jr	z, sub_F7C3EE_Return	; F7C3F3  jr Z,0xf7c3f9
 	call	T_F409E0	; F7C3F5  call 0xf409e0
 sub_F7C3EE_Return:
@@ -187539,8 +187539,8 @@ sub_F7C5C0:		; <- T_F42A34
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C5CB:		; <- T_F42AB4
-	ld	a, (8314:16)	; F7C5CB  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F7C5CF  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F7C5CB  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F7C5CF  cp A,(0x207b)
 	jr	z, sub_F7C440_Skip3	; F7C5D3  jr Z,0xf7c5dc
 	ld	(UI_StatusCode:16), 255	; F7C5D5  ld (0x2880),0xff
 	jr	sub_F7C440_Return8	; F7C5DA  jr T,0xf7c5e9
@@ -187564,7 +187564,7 @@ sub_F7C440_Return8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C5EA:		; <- T_F42AB8
-	m_cp_mi8 MB16, 0x207a, 0x2e	; F7C5EA  cp (0x207a),0x2e
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x2e	; F7C5EA  cp (0x207a),0x2e
 	jr	z, sub_F7C440_Return9	; F7C5EF  jr Z,0xf7c5f5
 	call	T_F409E0	; F7C5F1  call 0xf409e0
 sub_F7C440_Return9:
@@ -187601,7 +187601,7 @@ sub_F7C5F6:		; <- T_F42ABC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C606:		; <- T_F42A38
-	m_cp_mi8 MB16, 0x207b, 0x2b	; F7C606  cp (0x207b),0x2b
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2b	; F7C606  cp (0x207b),0x2b
 	jr	z, sub_F7C440_Skip4	; F7C60B  jr Z,0xf7c61f
 	calr	sub_F7C62D	; F7C60D  calr 0xf7c62d
 	ld	a, 1:opc	; F7C610  ld A,0x01
@@ -187657,7 +187657,7 @@ sub_F7C62D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C666:		; <- T_F42A3C
-	m_cp_mi8 MB16, 0x207a, 0x2b	; F7C666  cp (0x207a),0x2b
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x2b	; F7C666  cp (0x207a),0x2b
 	jr	z, sub_F7C62D_Return	; F7C66B  jr Z,0xf7c671
 	call	T_F409E0	; F7C66D  call 0xf409e0
 sub_F7C62D_Return:
@@ -188066,7 +188066,7 @@ sub_F7C843:		; <- T_F42A5C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C853:		; <- T_F42A88
-	m_cp_mi8 MB16, 0x207b, 0x2d	; F7C853  cp (0x207b),0x2d
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2d	; F7C853  cp (0x207b),0x2d
 	jr	z, sub_F7C853_Return	; F7C858  jr Z,0xf7c868
 	call	sub_F7C869	; F7C85A  call 0xf7c869
 	ld	a, 1:opc	; F7C85E  ld A,0x01
@@ -188126,7 +188126,7 @@ sub_F7C869:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C8BC:		; <- T_F42A8C
-	m_cp_mi8 MB16, 0x207a, 0x2d	; F7C8BC  cp (0x207a),0x2d
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x2d	; F7C8BC  cp (0x207a),0x2d
 	jr	z, sub_F7C869_Return	; F7C8C1  jr Z,0xf7c8c7
 	call	T_F409E0	; F7C8C3  call 0xf409e0
 sub_F7C869_Return:
@@ -188558,7 +188558,7 @@ sub_F7CAC2:		; <- T_F42AB0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CAD2:		; <- T_F42A60
-	m_cp_mi8 MB16, 0x207b, 0x2c	; F7CAD2  cp (0x207b),0x2c
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2c	; F7CAD2  cp (0x207b),0x2c
 	jr	z, sub_F7CAD2_Return	; F7CAD7  jr Z,0xf7cb11
 	ld	a, (3558:16)	; F7CAD9  ld A,(0x0de6)
 	ld	(4854:16), a	; F7CADD  ld (0x12f6),A
@@ -188591,7 +188591,7 @@ sub_F7CAD2_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CB12:		; <- T_F42A64
-	m_cp_mi8 MB16, 0x207a, 0x2c	; F7CB12  cp (0x207a),0x2c
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x2c	; F7CB12  cp (0x207a),0x2c
 	jr	z, sub_F7CB12_Return	; F7CB17  jr Z,0xf7cb1d
 	call	T_F409E0	; F7CB19  call 0xf409e0
 sub_F7CB12_Return:
@@ -192152,8 +192152,8 @@ ScreenLeave_AfterT0uchSetting_Nop:
 ;           independently: notes/prom_b_screens_round8.py --calibrate.
 ; ---------------------------------------------------------------------
 Paint_TrackAssign:
-	ld	a, (8314:16)	; F7E440  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F7E444  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F7E440  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F7E444  cp A,(0x207b)
 	jr	z, Paint_TrackAssign_Skip	; F7E448  jr Z,0xf7e44f
 	ld	(3075:16), 0	; F7E44A  ld (0x0c03),0x00
 Paint_TrackAssign_Skip:
@@ -192162,7 +192162,7 @@ Paint_TrackAssign_Skip:
 	jr	nz, Paint_TrackAssign_Skip2	; F7E458  jr NZ,0xf7e47b
 	call	T_F42BE4	; F7E45A  call 0xf42be4
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7E45E  or (0x2075),0x01
-	ldw	(8347:16), 35208	; F7E463  ld (0x209b),0x8988  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 35208	; F7E463  ld (0x209b),0x8988  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7E469  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7E46F  ld (0x266a),0xffff
 	m_bit 4, MD16, 0x2095	; F7E475  bit 4,(0x2095)
@@ -192807,8 +192807,8 @@ ScreenNull_TrackAssign_Nop:
 ; ---------------------------------------------------------------------
 Paint_TrackAssignPresets:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7E601  call 0xf42e80
-	ld	a, (8314:16)	; F7E605  ld A,(0x207a)
-	m_cp_rm MB16, 0x207b, 1	; F7E609  cp A,(0x207b)
+	ld	a, (UI_ScreenLatch:16)	; F7E605  ld A,(0x207a)
+	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F7E609  cp A,(0x207b)
 	jr	z, Paint_TrackAssignPresets_Skip	; F7E60D  jr Z,0xf7e60f
 Paint_TrackAssignPresets_Skip:
 	call	T_F42BF8	; F7E60F  call 0xf42bf8
@@ -192856,7 +192856,7 @@ Paint_TrackAssignPresets_Join:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_TrackAssignPresets:
-	m_cp_mi8 MB16, 0x207a, 0x11	; F7E67A  cp (0x207a),0x11
+	m_cp_mi8 MB16, UI_ScreenLatch, 0x11	; F7E67A  cp (0x207a),0x11
 	jr	z, ScreenLeaveBody_TrackAssignPresets_Return	; F7E67F  jr Z,0xf7e686
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F7E681  and (0x34bb),0xfb
 ScreenLeaveBody_TrackAssignPresets_Return:
@@ -193831,7 +193831,7 @@ sub_F7E97C:
 ;           independently: notes/prom_b_screens_round8.py --calibrate.
 ; ---------------------------------------------------------------------
 Paint_Edit:
-	m_cp_mi8 MB16, 0x207b, 0x1a	; F7E987  cp (0x207b),0x1a
+	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x1a	; F7E987  cp (0x207b),0x1a
 	jr	z, Paint_Edit_Skip	; F7E98C  jr Z,0xf7e993
 	ld	(3088:16), 0	; F7E98E  ld (0x0c10),0x00
 Paint_Edit_Skip:
@@ -194493,7 +194493,7 @@ Paint_SongClear:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7EAE9  cp (0x207e),0x00
 	jrl	nz, Paint_SongClear_Skip4	; F7EAEE  jrl NZ,0xf7eb7a
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EAF1  or (0x2075),0x09
-	ldw	(8347:16), 770	; F7EAF6  ld (0x209b),0x0302  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 770	; F7EAF6  ld (0x209b),0x0302  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7EAFC  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7EB02  ld (0x266a),0xffff
 	ld	xiy, DL_SongClearKbSongS0ngAll	; F7EB08  ld XIY,0x00f399d5
@@ -195568,7 +195568,7 @@ Paint_TrackMerge:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7EE0C  cp (0x207e),0x00
 	jr	nz, Paint_TrackMerge_Skip	; F7EE11  jr NZ,0xf7ee36
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EE13  or (0x2075),0x09
-	ldw	(8347:16), 1156	; F7EE18  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 1156	; F7EE18  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7EE1E  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7EE24  ld (0x266a),0xffff
 	call	T_F42938	; F7EE2A  call 0xf42938
@@ -196041,7 +196041,7 @@ Paint_MeasureDelete:
 	jr	nz, Paint_MeasureDelete_Skip	; F7EF85  jr NZ,0xf7efa2
 	call	T_F4295C	; F7EF87  call 0xf4295c
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EF8B  or (0x2075),0x09
-	ldw	(8347:16), 1156	; F7EF90  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 1156	; F7EF90  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7EF96  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7EF9C  ld (0x266a),0xffff
 Paint_MeasureDelete_Skip:
@@ -196736,7 +196736,7 @@ Paint_MeasureErase:
 	jr	nz, Paint_MeasureErase_Skip	; F7F25D  jr NZ,0xf7f27a
 	call	T_F42980	; F7F25F  call 0xf42980
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7F263  or (0x2075),0x09
-	ldw	(8347:16), 1156	; F7F268  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 1156	; F7F268  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7F26E  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7F274  ld (0x266a),0xffff
 Paint_MeasureErase_Skip:
@@ -197531,7 +197531,7 @@ Paint_Quantize:
 	jr	nz, Paint_Quantize_Skip	; F7F58B  jr NZ,0xf7f5a8
 	call	T_F42908	; F7F58D  call 0xf42908
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7F591  or (0x2075),0x01
-	ldw	(8347:16), 1156	; F7F596  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 1156	; F7F596  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7F59C  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7F5A2  ld (0x266a),0xffff
 Paint_Quantize_Skip:
@@ -198282,7 +198282,7 @@ Paint_Vel0cityChange:
 	jr	nz, Paint_Vel0cityChange_Skip	; F7F8B2  jr NZ,0xf7f8cf
 	call	T_F428E0	; F7F8B4  call 0xf428e0
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7F8B8  or (0x2075),0x01
-	ldw	(8347:16), 1156	; F7F8BD  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 1156	; F7F8BD  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7F8C3  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7F8C9  ld (0x266a),0xffff
 Paint_Vel0cityChange_Skip:
@@ -199056,7 +199056,7 @@ Paint_Transp0se:
 	jr	nz, Paint_Transp0se_Join	; F7FC01  jr NZ,0xf7fc36
 	call	T_F42A38	; F7FC03  call 0xf42a38
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7FC07  or (0x2075),0x01
-	ldw	(8347:16), 1156	; F7FC0C  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 1156	; F7FC0C  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7FC12  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7FC18  ld (0x266a),0xffff
 	ld	a, (3574:16)	; F7FC1E  ld A,(0x0df6)
@@ -199820,7 +199820,7 @@ Paint_AdvanceDelay:
 	jr	nz, Paint_AdvanceDelay_Join	; F7FF30  jr NZ,0xf7ff65
 	call	T_F42A60	; F7FF32  call 0xf42a60
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7FF36  or (0x2075),0x01
-	ldw	(8347:16), 1156	; F7FF3B  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
+	ldw	(PanelDial_DownButton:16), 1156	; F7FF3B  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7FF41  ld (0x2666),0xffff
 	ldw	(9834:16), 65535	; F7FF47  ld (0x266a),0xffff
 	ld	a, (3557:16)	; F7FF4D  ld A,(0x0de5)

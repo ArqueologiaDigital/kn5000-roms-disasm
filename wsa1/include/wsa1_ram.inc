@@ -175,5 +175,14 @@
 	.equ EditCursor_Tick,		0x601f43	; the cursor's tick within the beat, 0..95 -- sub_FE9DB4 / sub_FE9DD5 step it and clamp to 0x5F
 	.equ EditScreen_Mode,		0x601f70	; bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A -- ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it
 
+; ---- wsa1/notes/FINDINGS-prom_a-panel-state-variables.md -- "1. The mode / screen latches; 2. The dial's button pair"
+	.equ PanelMode,			0x2078	; the panel mode; PanelMode_ToScreenId maps it to a screen -- PanelState_LatchPrevious, PanelMode_ToScreenId
+	.equ PanelMode_Previous,	0x2079	; PanelMode at the previous pass of the panel task -- PanelState_LatchPrevious
+	.equ UI_ScreenLatch,		0x207a	; UI_ScreenId latched when the mode changes or (0x2092) bit 0 is clear -- PanelState_Update207A, PanelState_Init
+	.equ UI_ScreenLatch_Previous,	0x207b	; UI_ScreenLatch at the previous pass; Enter / Leave bodies compare the two -- PanelState_LatchPrevious
+	.equ UI_ScreenId_Previous,	0x207d	; UI_ScreenId at the previous pass -- PanelState_LatchPrevious
+	.equ PanelDial_DownButton,	0x209b	; the button code the dial acts as when turned down (with (0x2075) bit 0 set) -- PanelEvent_Code21_Dial 0xF8687A
+	.equ PanelDial_UpButton,	0x209c	; the button code the dial acts as when turned up -- PanelEvent_Code21_Dial 0xF86874
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,		0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

@@ -10,7 +10,7 @@ QUESTION THIS ANSWERS / JOB IT DOES
   UI request / screen state, the block store, the SC1 panel link and the switch shadow, the tick
   counter, the model-variant flag, the disk flags, the part index),
   and the memory operands and the macro address arguments that spell it become the name.
-  Only memory operands `(N)` / `(N:16)` / `(N:24)`, the address argument of the m_* macros
+  Only memory operands `(N)` / `(N:8)` / `(N:16)` / `(N:24)`, the address argument of the m_* macros
   (`MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24, N`), the last argument of the memory-to-memory macros
   (m_ld_mm16 / m_ldw_mm16 / m_ld_m16m: the other 16-bit address) and 24-bit immediates (`ld XIY,0x006007db`: at that width
   only an address) change; a 16-bit immediate equal to the number may be a value, and data
@@ -223,12 +223,21 @@ GROUPS = [
         0x601F43: ("EditCursor_Tick", "the cursor's tick within the beat, 0..95", "sub_FE9DB4 / sub_FE9DD5 step it and clamp to 0x5F"),
         0x601F70: ("EditScreen_Mode", "bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A", "ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-panel-state-variables.md", "1. The mode / screen latches; 2. The dial's button pair", {
+        0x2078: ("PanelMode", "the panel mode; PanelMode_ToScreenId maps it to a screen", "PanelState_LatchPrevious, PanelMode_ToScreenId"),
+        0x2079: ("PanelMode_Previous", "PanelMode at the previous pass of the panel task", "PanelState_LatchPrevious"),
+        0x207A: ("UI_ScreenLatch", "UI_ScreenId latched when the mode changes or (0x2092) bit 0 is clear", "PanelState_Update207A, PanelState_Init"),
+        0x207B: ("UI_ScreenLatch_Previous", "UI_ScreenLatch at the previous pass; Enter / Leave bodies compare the two", "PanelState_LatchPrevious"),
+        0x207D: ("UI_ScreenId_Previous", "UI_ScreenId at the previous pass", "PanelState_LatchPrevious"),
+        0x209B: ("PanelDial_DownButton", "the button code the dial acts as when turned down (with (0x2075) bit 0 set)", "PanelEvent_Code21_Dial 0xF8687A"),
+        0x209C: ("PanelDial_UpButton", "the button code the dial acts as when turned up", "PanelEvent_Code21_Dial 0xF86874"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
-MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:16|:24)?\)')
+MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`
 MAC = re.compile(r'\b(MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24),(\s*)(0x[0-9a-fA-F]+|\d+)\b')
 # an interpreter-B display-list record's +0x02 field is the 16-bit address of the RAM variable it
 # draws (wsa1/notes/FINDINGS-ui-display-list-interpreter-b.md): `.short 0x27A7\t; +0x02 source variable`

@@ -82,7 +82,8 @@ def q_207a_values(rows):
     vals = set()
     n = 0
     for a, t, b, o in rows:
-        m = re.search(r'cp_mi8\s+\w+,\s*0x207a,\s*0x([0-9a-f]{2})', t)
+        # (0x207A) is spelled UI_ScreenLatch since 2026-10-03 (include/wsa1_ram.inc)
+        m = re.search(r'cp_mi8\s+\w+,\s*(?:0x207a|UI_ScreenLatch),\s*0x([0-9a-f]{2})', t)
         if m:
             vals.add(int(m.group(1), 16))
             n += 1
