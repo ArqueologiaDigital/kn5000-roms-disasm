@@ -265,3 +265,21 @@ accompseq_routines.s, v10/v9 0xF6EBC0-0xF6EC7A. These held three refusals in v10
 v7 held the block as the romslice `v7_transplant_AccompSeq_MidiFilterCodeBlock.bin` (0xF6E7BC). It is ported
 (`port_islands.py --whole 1621-1622 --delta 0x404`, 186 B), its comments are restated for v7 (0x7E6F), and
 the bin is removed.
+
+## v7 sites named from their v10 counterparts (2026-10-03)
+
+After v10 and v9 reached zero numeric branches, v7 still had 46 refused sites, 37 of them R3 in
+accompaniment_engine.s. `scripts/tools/v7_branches_from_v10.py` handles a site only when all of these hold:
+
+- the nearest label above the v7 site also exists in v10;
+- v10 has a source line at that label plus the same offset, with the same mnemonic, condition and byte
+  length, and it names its target;
+- v7 defines that name at exactly the v7 target.
+
+    python3 scripts/converters/symbolize_numeric_branches.py --image v7 --report R.json
+    python3 scripts/tools/v7_branches_from_v10.py --report R.json --apply
+
+Run on `v7_report_2026-10-03.json`, the report as it stood: 35 of 46 named, gate PASS. Each of the other
+11 has its reason in the tool's output. 0xFDD7C0 has no v7 label where v10 has
+`AudioMode_SetStereoFlags`, two v10 counterparts are not line starts, and so on. Before this run,
+`symbolize_numeric_branches.py --image v7 --apply --verify` converted 3 sites that its own rules accept.

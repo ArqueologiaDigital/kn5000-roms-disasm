@@ -1348,7 +1348,7 @@ CPanel_LED_PacketHandlers:
 CPanel_LED_HandlePacket2:
 	ld	a, (xiz+ix)	; A = event queue byte 1 at (XIZ + IX)
 
-	calr 151
+calr ToneGen_IncrementWrap128
 
 	ld	(xde+iy), a	; LED buffer op at (XDE + IY)
 

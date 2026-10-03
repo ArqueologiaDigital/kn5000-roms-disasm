@@ -4858,15 +4858,15 @@ AccBuf_WriteAllNotesOff:
 	ld IY,(XHL+0x04)
 	ld BC,(XHL+0x02)
 	ld	(xhl+iy), 0x9f	; (unidasm; no llvm-mc spelling)
-	call	16071765
+call	RingBuf_AdvanceIndex
 	ld	a, (0x324e:16)
 	ld	(0x3392:16), a
-	call	16071703
+call	RhythmAccent_UpdateRingBufPosition
 	ld	a, 127:opc
 	ld	(xhl+iy), a
-	call	16071765
+call	RingBuf_AdvanceIndex
 	ld	(xhl+iy), a
-	call	16071765
+call	RingBuf_AdvanceIndex
 	ld	(xhl+4), iy
 	ret
 AccBuf_AllNotesOffPadding:
@@ -5395,7 +5395,7 @@ AccFlags_JumpTable:
 	.long AccFlags_Handler8
 	.long AccFlags_Handler8
 AccFlags_Handler0:
-	call	16089851
+call	AccStyle_Init
 	call	AccVoice_SetupAllParts
 	and	(0x327a:16), 192
 	and	(0x327b:16), 192
@@ -6252,7 +6252,7 @@ AccPedal_ExprToggle:
 	ld	(xix+2), e
 	ld	(xix+3), 2
 	push	xix
-	call	16621555
+call	MidiPkt_DispatchViaTable_4DCE
 	inc	4, xsp
 AccPedal_ExprReturn:
 	ret
@@ -6317,7 +6317,7 @@ AccPedal_SendEvents:
 	ld	c, 72:opc
 	ld	d, a
 	ld	e, (13284:16)
-	call	16556753
+call	MIDI_TransmitTempoCC
 AccPedal_SendEvents_Group2:
 	ld	a, (13288:16)
 	xor	a, 255
@@ -6348,7 +6348,7 @@ AccPedal_SendEvents_OnExpr:
 	ld	c, 72:opc
 	ld	d, a
 	ld	e, (13288:16)
-	call	16556753
+call	MIDI_TransmitTempoCC
 AccPedal_SendEventsReturn:
 	ret
 
@@ -6816,7 +6816,7 @@ AccPedal_MapToAcc_Return:
 	and	a, (0x33e3:16)
 	bit	5, a
 	jr	z, AccPedal_MapPadding
-	call	15701500
+call	AccPedal_ScanVoiceSlots
 	bit	1, (0xd53:16)
 	jr	z, AccPedal_MapPadding
 	or	(0x33e5:16), 32
@@ -7807,7 +7807,7 @@ AccAutoPlay_Disable:
 
 	ld e, 0x48:opc
 
-	call	16624672
+call	SwbtWr_QueuePostEvent
 
 	ret
 
@@ -8402,7 +8402,7 @@ AccSync_MidiClock_Update:
 	or (1065:16), 2
 
 AccSync_MidiClock_Apply:
-	call	16576929
+call	MIDI_SC0_TX_DISPATCH
 	ei	0
 AccSync_MidiClock_Return:
 	ret
@@ -8576,11 +8576,11 @@ AccReplay_SavedPedal:
 	ld	wa, 0:i3
 	ld	d, 5:opc
 	ld	e, 72:opc
-	call	16624672
+call	SwbtWr_QueuePostEvent
 	ld	wa, 0:i3
 	ld	d, 6:opc
 	ld	e, 72:opc
-	call	16624672
+call	SwbtWr_QueuePostEvent
 	call	16635840
 	ret
 AccReplay_SavedPedal_Return:
@@ -8625,11 +8625,11 @@ AccReplay_SendPedal_Dispatch:
 	ld	wa, 0:i3
 	ld	d, 5:opc
 	ld	e, 72:opc
-	call	16624672
+call	SwbtWr_QueuePostEvent
 	ld	wa, 0:i3
 	ld	d, 6:opc
 	ld	e, 72:opc
-	call	16624672
+call	SwbtWr_QueuePostEvent
 	call	16635840
 	ret
 AccReplay_SendPedal_Return:
@@ -8666,11 +8666,11 @@ AccReplay_SavedExpression:
 	ld	wa, 0:i3
 	ld	d, 5:opc
 	ld	e, 72:opc
-	call	16624672
+call	SwbtWr_QueuePostEvent
 	ld	wa, 0:i3
 	ld	d, 6:opc
 	ld	e, 72:opc
-	call	16624672
+call	SwbtWr_QueuePostEvent
 	call	16635840
 	ret
 AccReplay_SavedExpr_Return:
@@ -8782,7 +8782,7 @@ AccReplay_Stop_Finalize:
 	; anddi8 (0x347a), 254 (v7 patched)
 	and	(0x33de:16), 254
 	; call Seq_DispatcherEntry (v7 addr)
-	call	16068317
+call	Seq_DispatcherEntry
 	ret
 
 
@@ -8866,7 +8866,7 @@ AccFlags_Sync_Process:
 	bit	2, a
 	jr	z, AccFlags_Sync_UpdateLED
 	ld	a, 34:opc
-	call	16544114
+call	CtrlPanel_SetIndicatorBit
 AccFlags_Sync_UpdateLED:
 	ld	(0x33df:16), e
 	bit	0, (0x3402:16)
@@ -17970,7 +17970,7 @@ AccTiming_UseFullBar:
 	ld	(13939:16), h
 	jr	AccTiming_CompareStyles
 	cp	h, 32
-	jr	ule, 3
+jr	ule, AccTiming_StoreResult
 	sub	h, 32
 AccTiming_StoreResult:
 	ld	(13939:16), h
@@ -18215,7 +18215,7 @@ AccPlayback_ProcessStyleChanges:
 	push	xix
 	push	xiy
 	push	xiz
-	call	16355565
+call	UI_PostTimerResetEvent
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -18935,7 +18935,7 @@ ToneGen_ClassifyMono_WriteNew:
 	ld C,W
 	xor B,B
 	ld wa, 1:i3
-	call 0xfee40d
+call Param_SignExtendReturn
 	pop XIY
 	pop XIX
 	pop XDE
@@ -19927,15 +19927,15 @@ AccPlayback_UpdateRhythmSustain:
 	ld	e, (13435:16)
 	ld	d, 0:opc
 	pushw	wa
-	call	15672633
+call	RhythmBuf_WriteByte
 	inc	2, xsp
 	ld	a, e
 	pushw	wa
-	call	15672633
+call	RhythmBuf_WriteByte
 	inc	2, xsp
 	ld	a, d
 	pushw	wa
-	call	15672633
+call	RhythmBuf_WriteByte
 	inc	2, xsp
 AccPlayback_RhythmSust_Return:
 	ret
@@ -20219,7 +20219,7 @@ ToneGen_Stereo_Return:
 
 ToneGen_WriteMultiChanParam:
 	ld	hl, (13263:16)
-	calr	60196
+calr	ToneGen_CalcBufferAddr
 	ld	iy, (13430:16)
 	ld	d, (xhl+iy)
 	xor	h, h
@@ -20478,7 +20478,7 @@ ToneGen_SeqAdvanceMain:
 	ld	(58134:16), 238
 	ld	(58136:16), 64
 	ld	a, 8:opc
-	call	16692690
+call	MIDI_SendSysExCmd
 ToneGen_SeqAdv_Return:
 	ret
 
@@ -21239,14 +21239,14 @@ AccPat_Dispatch_InitSlot:
 	ld	(GLOBAL_ERROR_CODE:16), 23
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
-	call	16692690
+call	MIDI_SendSysExCmd
 AccPat_CleanupAndFree:
 	popw	wa
 	ld	(13393:16), a
 	ld	(13394:16), w
 	ld	xwa, (13512:16)
 	push	xwa
-	call	16712469
+call	Free
 	add	xsp, 4
 AccPat_Dispatch_Return:
 	ret
@@ -21706,7 +21706,7 @@ RhythmROM_PatternDisp_Check91:
 	ld	(0x904e:16), a
 	ld	a, (0x3452:16)
 	ld	(0x904f:16), a
-	call	16068357
+call	Rhythm_DispatchNote_Finalize
 	ld	h, (0x9053:16)
 	ld	l, (0x9052:16)
 	call	AccVoice_DispatchEntry
@@ -23913,7 +23913,7 @@ RhythmVariation_Select_Code_Sub_Helper:
 	add	xhl, RhythmVariation_InlineCode_Code2
 	ld	a, (xhl)
 	ld	(14079:16), a
-	call	16635678
+call	AudioInit_SelectAndDispatch
 	call	16635862
 	calr	DrumKit_UpdateStatusFlags
 	ret
@@ -27277,7 +27277,7 @@ VoiceSlot_DispatchByType:
 Voice_ResolveSlotAddr:
 	push	xiz
 	ld	w, (14586:16)
-	call	15858243
+call	SetWall_SlotResolve
 	ld	(14566:16), iy
 	ld	iy, (10415:16)
 	ld	(14562:16), iy
@@ -27507,7 +27507,7 @@ MultiVoice_Setup_Done:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06
 
 DrumParam_ReadVoiceCount:
-	calr	65470
+calr	Rhythm_MapChannelToDrumIndex
 	ld	xix, 14102
 	add	xix, xbc
 	ld	a, (xix)
@@ -28156,7 +28156,7 @@ DrumParam_ReadMaxCount_Entry5:
 DrumParam_ReadMaxCount_Skip3:
 	ld	(14125:16), 1
 	calr	AccVoice_SetupStyleSlots
-	calr	828
+	calr	AccVoice_SetupSlots_Apply
 DrumParam_ReadMaxCount_Return5:
 	ret
 AccVoice_SetupStyleSlots:
@@ -28764,7 +28764,7 @@ AccVoice_SetupSlots_DataBlock_Skip14:
 	ld	xwa, Rhythm_EmptyPattern
 	ld	(xbc), xwa
 AccVoice_SetupSlots_DataBlock_Join7:
-	calr	92
+	calr	AccVoice_SetupSlots_CheckStream
 	ret
 AccVoice_SetupSlots_DataBlock_Helper14:
 	ld	a, 1:opc

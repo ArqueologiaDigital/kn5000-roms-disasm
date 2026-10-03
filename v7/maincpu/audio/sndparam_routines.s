@@ -2284,7 +2284,7 @@ SndParam_BatchUpdate_Data:
 	ldib_erp	249, 0
 	ldib_erp	251, 0
 	ld	xwa, 8705
-	calr	-5923
+	calr	AcApcToggleProc_Helper
 	ld	wa, (xsp+20)
 	ld	d, a
 	lda	xix, (0x96fc:16)

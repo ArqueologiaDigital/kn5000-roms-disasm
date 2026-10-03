@@ -10732,7 +10732,7 @@ MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
 	cp	(CURRENT_MODE:16), 14
-	jr	z, 18
+jr	z, MidiStream_SysExData_Return
 	and	d, 7
 	jr	z, MidiStream_SysExData_Return
 	ldb_d8	e, (0xfc5d)

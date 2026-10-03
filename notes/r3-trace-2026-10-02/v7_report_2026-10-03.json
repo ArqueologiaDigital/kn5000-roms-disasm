@@ -1,0 +1,271 @@
+{
+ "image": "v7",
+ "stats": {
+  "numeric_jr": 3,
+  "numeric_call": 39,
+  "numeric_calr": 3,
+  "numeric_jrl": 1,
+  "absurd_marker_swi": 19,
+  "absurd_marker_nop": 339,
+  "absurd_marker_incf": 3,
+  "absurd_marker_normal": 15,
+  "absurd_marker_halt": 7,
+  "absurd_marker_reti": 13,
+  "absurd_marker_ldf": 1,
+  "absurd_marker_max": 19,
+  "absurd_marker_decf": 1,
+  "refuse_R3_absurd_block": 37,
+  "refuse_R6_text_or_pointer_table": 1,
+  "refuse_R5_second_decoder_disagrees": 4,
+  "refuse_R2_fragment": 1,
+  "target_mid-line-data": 3,
+  "site_mid-line-data": 3
+ },
+ "labels_new": [],
+ "report": {
+  "R3": [
+   {
+    "src": "sequencer/accompaniment_engine.s:4861",
+    "src_addr": "0xF58B10",
+    "target": "0xF53C55"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:4864",
+    "src_addr": "0xF58B1C",
+    "target": "0xF53C17"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:4867",
+    "src_addr": "0xF58B27",
+    "target": "0xF53C55"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:4869",
+    "src_addr": "0xF58B30",
+    "target": "0xF53C55"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:6255",
+    "src_addr": "0xF59918",
+    "target": "0xFD9FF3"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:6320",
+    "src_addr": "0xF599BA",
+    "target": "0xFCA2D1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:6351",
+    "src_addr": "0xF59A0B",
+    "target": "0xFCA2D1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:6819",
+    "src_addr": "0xF59E97",
+    "target": "0xEF95FC"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:7810",
+    "src_addr": "0xF5A7FC",
+    "target": "0xFDAC20"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8405",
+    "src_addr": "0xF5AC77",
+    "target": "0xFCF1A1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8579",
+    "src_addr": "0xF5ADB1",
+    "target": "0xFDAC20"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8583",
+    "src_addr": "0xF5ADBB",
+    "target": "0xFDAC20"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8584",
+    "src_addr": "0xF5ADBF",
+    "target": "0xFDD7C0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8628",
+    "src_addr": "0xF5AE26",
+    "target": "0xFDAC20"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8632",
+    "src_addr": "0xF5AE30",
+    "target": "0xFDAC20"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8633",
+    "src_addr": "0xF5AE34",
+    "target": "0xFDD7C0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8669",
+    "src_addr": "0xF5AE95",
+    "target": "0xFDAC20"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8673",
+    "src_addr": "0xF5AE9F",
+    "target": "0xFDAC20"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8674",
+    "src_addr": "0xF5AEA3",
+    "target": "0xFDD7C0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8785",
+    "src_addr": "0xF5AFAB",
+    "target": "0xF52EDD"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8869",
+    "src_addr": "0xF5B064",
+    "target": "0xFC7172"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:9981",
+    "src_addr": "0xF5BB39",
+    "target": "0xFDD7C0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:17973",
+    "src_addr": "0xF61115",
+    "target": "0xF6111A"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:18218",
+    "src_addr": "0xF612E9",
+    "target": "0xF990ED"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:18938",
+    "src_addr": "0xF61962",
+    "target": "0xFEE40D"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:19930",
+    "src_addr": "0xF62242",
+    "target": "0xEF2539"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:19934",
+    "src_addr": "0xF6224B",
+    "target": "0xEF2539"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:19938",
+    "src_addr": "0xF62254",
+    "target": "0xEF2539"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:20481",
+    "src_addr": "0xF62835",
+    "target": "0xFEB5D2"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21242",
+    "src_addr": "0xF62E1C",
+    "target": "0xFEB5D2"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21249",
+    "src_addr": "0xF62E2E",
+    "target": "0xFF0315"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21709",
+    "src_addr": "0xF632B9",
+    "target": "0xF52F05"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23871",
+    "src_addr": "0xF64CDA",
+    "target": "0xFDD71E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23872",
+    "src_addr": "0xF64CDE",
+    "target": "0xFDD7D6"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23916",
+    "src_addr": "0xF64D21",
+    "target": "0xFDD71E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23917",
+    "src_addr": "0xF64D25",
+    "target": "0xFDD7D6"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:27280",
+    "src_addr": "0xF66AE7",
+    "target": "0xF1FA43"
+   }
+  ],
+  "R6": [
+   {
+    "src": "sequencer/accompaniment_engine.s:5398",
+    "src_addr": "0xF59153",
+    "target": "0xF582FB"
+   }
+  ],
+  "R5": [
+   {
+    "src": "sequencer/accompaniment_engine.s:20222",
+    "src_addr": "0xF62586",
+    "target": "0xF610AD",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:27510",
+    "src_addr": "0xF66CFA",
+    "target": "0xF66CBB",
+    "unidasm": "- "
+   },
+   {
+    "src": "ui/cpanel_routines.s:1351",
+    "src_addr": "0xFC43CF",
+    "target": "0xFC4469",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/audio_control_engine.s:10735",
+    "src_addr": "0xFCC22D",
+    "target": "0xFCC241",
+    "unidasm": "- "
+   }
+  ],
+  "R2": [
+   {
+    "src": "ui/bitmap_out_routines.s:603",
+    "src_addr": "0xFB41B5",
+    "target": "0xFB4243"
+   }
+  ],
+  "mid-line-data": [
+   {
+    "src": "audio/sound_editor_ui.s:5140",
+    "src_addr": "0xF0D419",
+    "target": "0xF0D428"
+   },
+   {
+    "src": "demo/file_demo_proc.s:3149",
+    "src_addr": "0xF87E15",
+    "target": "0xFB5AF4"
+   },
+   {
+    "src": "demo/file_demo_proc.s:3159",
+    "src_addr": "0xF87E35",
+    "target": "0xFB5AF5"
+   }
+  ]
+ }
+}
