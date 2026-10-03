@@ -10859,8 +10859,8 @@ PanelState_Init:   ; entry: calr from 0xF86018
 	ld (0x2083:16), a                            ; F8603F  f1 83 20 41   ld (0x2083),A
 	ld (PanelMode:16), w                            ; F86043  f1 78 20 40   ld (0x2078),W
 	ld (PanelMode_Previous:16), 0xff                          ; F86047  f1 79 20 00 ff   ld (0x2079),0xff
-	ld (0x2076:16), w                            ; F8604C  f1 76 20 40   ld (0x2076),W
-	ld (0x2077:16), 0xff                          ; F86050  f1 77 20 00 ff   ld (0x2077),0xff
+	ld (PanelModeGroup:16), w                            ; F8604C  f1 76 20 40   ld (0x2076),W
+	ld (PanelModeGroup_Previous:16), 0xff                          ; F86050  f1 77 20 00 ff   ld (0x2077),0xff
 	ldw (UI_Request:16), 0x40aa                       ; F86055  f1 70 20 02 aa 40   ld (0x2070),0x40aa
 	ret                                           ; F8605B  0e
 
@@ -10943,11 +10943,11 @@ sub_F86093:
 ; ---------------------------------------------------------------------
 .LF86094:
 PanelState_TakePendingHoldTime:   ; entry: calr from 0xF8608F
-	ld a, (0x209a:16)                            ; F86094  c1 9a 20 21   ld A,(0x209a)
+	ld a, (UI_ScreenHoldPending:16)                            ; F86094  c1 9a 20 21   ld A,(0x209a)
 	cp a, 0x00:i3                                   ; F86098  c9 d8   cp A,0
 	jr z, .LF860A5                                ; F8609A  66 09
-	ld (0x2073:16), a                            ; F8609C  f1 73 20 41   ld (0x2073),A
-	ld (0x209a:16), 0x00                          ; F860A0  f1 9a 20 00 00   ld (0x209a),0x00
+	ld (UI_ScreenHoldTimer:16), a                            ; F8609C  f1 73 20 41   ld (0x2073),A
+	ld (UI_ScreenHoldPending:16), 0x00                          ; F860A0  f1 9a 20 00 00   ld (0x209a),0x00
 .LF860A5:
 	ret                                           ; F860A5  0e
 
@@ -11000,7 +11000,7 @@ UiEventList_Publish:   ; entry: prom_b directory slot T_UiEventList_Publish (T_F
 ; ---------------------------------------------------------------------
 .LF860D9:
 PanelState_LatchPrevious:   ; entry: calr from 0xF8606C
-	m_cp_mi8 MB16, 0x2077, 0xff                   ; F860D9  c1 77 20 3f ff   cp (0x2077),0xff
+	m_cp_mi8 MB16, PanelModeGroup_Previous, 0xff                   ; F860D9  c1 77 20 3f ff   cp (0x2077),0xff
 	jr z, .LF860F8                                ; F860DE  66 18
 	ld a, (PanelMode:16)                            ; F860E0  c1 78 20 21   ld A,(0x2078)
 	ld (PanelMode_Previous:16), a                            ; F860E4  f1 79 20 41   ld (0x2079),A
@@ -11009,8 +11009,8 @@ PanelState_LatchPrevious:   ; entry: calr from 0xF8606C
 	ld a, (UI_ScreenId:16)                            ; F860F0  c1 7c 20 21   ld A,(0x207c)
 	ld (UI_ScreenId_Previous:16), a                            ; F860F4  f1 7d 20 41   ld (0x207d),A
 .LF860F8:
-	ld a, (0x2076:16)                            ; F860F8  c1 76 20 21   ld A,(0x2076)
-	ld (0x2077:16), a                            ; F860FC  f1 77 20 41   ld (0x2077),A
+	ld a, (PanelModeGroup:16)                            ; F860F8  c1 76 20 21   ld A,(0x2076)
+	ld (PanelModeGroup_Previous:16), a                            ; F860FC  f1 77 20 41   ld (0x2077),A
 	ret                                           ; F86100  0e
 
 ; ---------------------------------------------------------------------
@@ -11346,7 +11346,7 @@ PanelScreen_ApplyRequest:   ; entry: calr from 0xF8610C
 	ld (0x2083:16), a                            ; F862BF  f1 83 20 41   ld (0x2083),A
 	jr .LF862D5                                   ; F862C3  68 10
 .LF862C5:
-	ld a, (0x2073:16)                            ; F862C5  c1 73 20 21   ld A,(0x2073)
+	ld a, (UI_ScreenHoldTimer:16)                            ; F862C5  c1 73 20 21   ld A,(0x2073)
 	cp a, 0x00:i3                                   ; F862C9  c9 d8   cp A,0
 	jr nz, .LF862D5                               ; F862CB  6e 08
 	ld a, (UI_ScreenId:16)                            ; F862CD  c1 7c 20 21   ld A,(0x207c)
@@ -11373,7 +11373,7 @@ PanelScreen_ApplyRequest:   ; entry: calr from 0xF8610C
 .LF8630A:
 	ld a, (UI_Request:16)                            ; F8630A  c1 70 20 21   ld A,(0x2070)
 	ld (UI_ScreenId:16), a                            ; F8630E  f1 7c 20 41   ld (0x207c),A
-	ld (0x2073:16), 0x70                          ; F86312  f1 73 20 00 70   ld (0x2073),0x70
+	ld (UI_ScreenHoldTimer:16), 0x70                          ; F86312  f1 73 20 00 70   ld (0x2073),0x70
 .LF86317:
 	ret                                           ; F86317  0e
 
@@ -11396,7 +11396,7 @@ PanelScreen_ApplyModeChange:   ; entry: calr from 0xF8610F
 	ld (0x2072:16), a                            ; F86323  f1 72 20 41   ld (0x2072),A
 	calr .LF86344                                 ; F86327  1e 1a 00
 	calr .LF86388                                 ; F8632A  1e 5b 00
-	ld (0x2073:16), 0x00                          ; F8632D  f1 73 20 00 00   ld (0x2073),0x00
+	ld (UI_ScreenHoldTimer:16), 0x00                          ; F8632D  f1 73 20 00 00   ld (0x2073),0x00
 	ld a, (UI_ScreenId:16)                            ; F86332  c1 7c 20 21   ld A,(0x207c)
 	ld w, (UI_ScreenId_Previous:16)                            ; F86336  c1 7d 20 20   ld W,(0x207d)
 	cp A,W                                        ; F8633A  c8 f1
@@ -11421,7 +11421,7 @@ PanelScreen_ApplyModeChange:   ; entry: calr from 0xF8610F
 PanelMode_Normalise:   ; entry: calr from 0xF86327
 	ld w, (0x7f02:16)                            ; F86344  c1 02 7f 20   ld W,(0x7f02)
 	and W,0xf0                                    ; F86348  c8 cc f0
-	ld a, (0x2076:16)                            ; F8634B  c1 76 20 21   ld A,(0x2076)
+	ld a, (PanelModeGroup:16)                            ; F8634B  c1 76 20 21   ld A,(0x2076)
 	ld e, (UI_Request:16)                            ; F8634F  c1 70 20 25   ld E,(0x2070)
 	cp e, 0x01:i3                                   ; F86353  cd d9   cp E,1
 	jr nz, .LF86360                               ; F86355  6e 09
@@ -11500,7 +11500,7 @@ PanelScreen_ApplyRequestForced:   ; entry: calr from 0xF86112
 .LF863C8:
 	ld (UI_ScreenId:16), a                            ; F863C8  f1 7c 20 41   ld (0x207c),A
 	xor A,A                                       ; F863CC  c9 d1
-	ld (0x2073:16), a                            ; F863CE  f1 73 20 41   ld (0x2073),A
+	ld (UI_ScreenHoldTimer:16), a                            ; F863CE  f1 73 20 41   ld (0x2073),A
 .LF863D2:
 	ret                                           ; F863D2  0e
 
@@ -11516,10 +11516,10 @@ PanelScreen_ApplyRequestForced:   ; entry: calr from 0xF86112
 ; ---------------------------------------------------------------------
 .LF863D3:
 PanelState_UpdateFlags2092:   ; entry: calr from 0xF86075
-	ld a, (0x2092:16)                            ; F863D3  c1 92 20 21   ld A,(0x2092)
+	ld a, (UI_ScreenHoldState:16)                            ; F863D3  c1 92 20 21   ld A,(0x2092)
 	ld W,A                                        ; F863D7  c9 88
 	and A,0xfc                                    ; F863D9  c9 cc fc
-	ld l, (0x2073:16)                            ; F863DC  c1 73 20 27   ld L,(0x2073)
+	ld l, (UI_ScreenHoldTimer:16)                            ; F863DC  c1 73 20 27   ld L,(0x2073)
 	cp l, 0x00:i3                                   ; F863E0  cf d8   cp L,0
 	jr z, .LF863E8                                ; F863E2  66 04
 	ld w, 0x01:opc                                   ; F863E4  20 01   ld W,0x01
@@ -11529,7 +11529,7 @@ PanelState_UpdateFlags2092:   ; entry: calr from 0xF86075
 	and W,0x02                                    ; F863EB  c8 cc 02
 .LF863EE:
 	or A,W                                        ; F863EE  c8 e1
-	ld (0x2092:16), a                            ; F863F0  f1 92 20 41   ld (0x2092),A
+	ld (UI_ScreenHoldState:16), a                            ; F863F0  f1 92 20 41   ld (0x2092),A
 	ret                                           ; F863F4  0e
 
 ; ---------------------------------------------------------------------
@@ -11546,7 +11546,7 @@ PanelState_Update207A:   ; entry: calr from 0xF86078
 	ld a, (PanelMode_Previous:16)                            ; F863F9  c1 79 20 21   ld A,(0x2079)
 	cp W,A                                        ; F863FD  c9 f0
 	jr nz, .LF8640A                               ; F863FF  6e 09
-	ld a, (0x2092:16)                            ; F86401  c1 92 20 21   ld A,(0x2092)
+	ld a, (UI_ScreenHoldState:16)                            ; F86401  c1 92 20 21   ld A,(0x2092)
 	bit 0x00,A                                    ; F86405  c9 33 00
 	jr nz, .LF86412                               ; F86408  6e 08
 .LF8640A:
@@ -11900,19 +11900,19 @@ PanelEvent_Code03:   ; entry: prom_b directory slot T_PanelEvent_Code03 (T_F40F9
 	m_xor_mi8 MB16, UI_RequestBits, 0x10                  ; F865D3  c1 75 20 3d 10   xor (0x2075),0x10
 	m_bit 4, MD16, UI_RequestBits                         ; F865D8  f1 75 20 cc   bit 4,(0x2075)
 	jr z, .LF865EB                                ; F865DC  66 0d
-	m_bit 0, MD16, 0x2092                         ; F865DE  f1 92 20 c8   bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState                         ; F865DE  f1 92 20 c8   bit 0,(0x2092)
 	jr z, .LF865E9                                ; F865E2  66 05
 	m_or_mi8 MB16, UI_RequestBits, 0x80                   ; F865E4  c1 75 20 3e 80   or (0x2075),0x80
 .LF865E9:
 	jr .LF86602                                   ; F865E9  68 17
 .LF865EB:
-	m_bit 0, MD16, 0x2092                         ; F865EB  f1 92 20 c8   bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState                         ; F865EB  f1 92 20 c8   bit 0,(0x2092)
 	jr z, .LF86602                                ; F865EF  66 11
 	m_cp_mi8 MB16, 0x20a2, 0x00                   ; F865F1  c1 a2 20 3f 00   cp (0x20a2),0x00
 	jr nz, .LF865FD                               ; F865F6  6e 05
 	m_and_mi8 MB16, UI_RequestBits, 0x7f                  ; F865F8  c1 75 20 3c 7f   and (0x2075),0x7f
 .LF865FD:
-	ld (0x2073:16), 0x01                          ; F865FD  f1 73 20 00 01   ld (0x2073),0x01
+	ld (UI_ScreenHoldTimer:16), 0x01                          ; F865FD  f1 73 20 00 01   ld (0x2073),0x01
 .LF86602:
 	orw	(0x2134:16), 0x2000                  ; F86602  d1 34 21 3e 00 20
 .LF86608:
@@ -12026,11 +12026,11 @@ PanelButton_Accept:   ; entry: calr from 0xF865A4
 	ld (0x2074:16), 0x10                          ; F866E0  f1 74 20 00 10   ld (0x2074),0x10
 	m_and_mi8 MB16, UI_RequestBits, 0xf3                  ; F866E5  c1 75 20 3c f3   and (0x2075),0xf3
 .LF866EA:
-	ld a, (0x2073:16)                            ; F866EA  c1 73 20 21   ld A,(0x2073)
+	ld a, (UI_ScreenHoldTimer:16)                            ; F866EA  c1 73 20 21   ld A,(0x2073)
 	cp a, 0x00:i3                                   ; F866EE  c9 d8   cp A,0
 	jr z, .LF866F8                                ; F866F0  66 06
 	ld a, 0x70:opc                                   ; F866F2  21 70   ld A,0x70
-	ld (0x2073:16), a                            ; F866F4  f1 73 20 41   ld (0x2073),A
+	ld (UI_ScreenHoldTimer:16), a                            ; F866F4  f1 73 20 41   ld (0x2073),A
 .LF866F8:
 	ld e, (UiEvent_Byte2:16)                            ; F866F8  c1 b9 20 25   ld E,(0x20b9)
 	ld d, (UiEvent_Byte3:16)                            ; F866FC  c1 ba 20 24   ld D,(0x20ba)
@@ -12240,9 +12240,9 @@ PanelEvent_Code21_Dial:   ; entry: calr from 0xF865B8
 	ld w, (PanelDial_DownButton:16)                            ; F8687A  c1 9b 20 20   ld W,(0x209b)
 .LF8687E:
 	calr PanelButton_Route                                   ; F8687E  1e 2b f9   calr 0xf861ac
-	m_cp_mi8 MB16, 0x2073, 0x00                   ; F86881  c1 73 20 3f 00   cp (0x2073),0x00
+	m_cp_mi8 MB16, UI_ScreenHoldTimer, 0x00                   ; F86881  c1 73 20 3f 00   cp (0x2073),0x00
 	jr z, .LF8688D                                ; F86886  66 05
-	ld (0x2073:16), 0x70                          ; F86888  f1 73 20 00 70   ld (0x2073),0x70
+	ld (UI_ScreenHoldTimer:16), 0x70                          ; F86888  f1 73 20 00 70   ld (0x2073),0x70
 .LF8688D:
 	ret                                           ; F8688D  0e
 
@@ -12430,20 +12430,20 @@ PanelTimer_Repeat20AB:   ; entry: calr from 0xF86912
 PanelTimer_Screen2073:   ; entry: calr from 0xF8690F
 	m_cp_mi8 MB16, 0x20a2, 0x00                   ; F86933  c1 a2 20 3f 00   cp (0x20a2),0x00
 	jr z, .LF86952                                ; F86938  66 18
-	m_cp_mi8 MB16, 0x2073, 0x01                   ; F8693A  c1 73 20 3f 01   cp (0x2073),0x01
+	m_cp_mi8 MB16, UI_ScreenHoldTimer, 0x01                   ; F8693A  c1 73 20 3f 01   cp (0x2073),0x01
 	jr ugt, .LF86948                              ; F8693F  6b 07
 	m_or_mi8 MB16, UI_Request_Hi, 0x04                   ; F86941  c1 71 20 3e 04   or (0x2071),0x04
 	jr .LF8696A                                   ; F86946  68 22
 .LF86948:
 	m_bit 4, MD16, UI_RequestBits                         ; F86948  f1 75 20 cc   bit 4,(0x2075)
 	jr nz, .LF86952                               ; F8694C  6e 04
-	dec 0x01, (0x2073:16)                         ; F8694E  c1 73 20 69   dec 1,(0x2073)
+	dec 0x01, (UI_ScreenHoldTimer:16)                         ; F8694E  c1 73 20 69   dec 1,(0x2073)
 .LF86952:
-	m_cp_mi8 MB16, 0x2073, 0x00                   ; F86952  c1 73 20 3f 00   cp (0x2073),0x00
+	m_cp_mi8 MB16, UI_ScreenHoldTimer, 0x00                   ; F86952  c1 73 20 3f 00   cp (0x2073),0x00
 	jr z, .LF8696A                                ; F86957  66 11
 	m_bit 7, MD16, UI_RequestBits                         ; F86959  f1 75 20 cf   bit 7,(0x2075)
 	jr nz, .LF8696A                               ; F8695D  6e 0b
-	dec 0x01, (0x2073:16)                         ; F8695F  c1 73 20 69   dec 1,(0x2073)
+	dec 0x01, (UI_ScreenHoldTimer:16)                         ; F8695F  c1 73 20 69   dec 1,(0x2073)
 	jr nz, .LF8696A                               ; F86963  6e 05
 	m_or_mi8 MB16, UI_Request_Hi, 0x04                   ; F86965  c1 71 20 3e 04   or (0x2071),0x04
 .LF8696A:
@@ -12758,7 +12758,7 @@ PanelState_CheckRequestAllowed:   ; entry: calr from 0xF8601F, 0xF86066, prom_b 
 .LF86B03:
 	m_and_mi8 MB16, UI_Request_Hi, 0xbf                  ; F86B03  c1 71 20 3c bf   and (0x2071),0xbf
 .LF86B08:
-	m_bit 0, MD16, 0x2092                         ; F86B08  f1 92 20 c8   bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState                         ; F86B08  f1 92 20 c8   bit 0,(0x2092)
 	jr nz, .LF86B1B                               ; F86B0C  6e 0d
 	m_bit 4, MD16, UI_RequestBits                         ; F86B0E  f1 75 20 cc   bit 4,(0x2075)
 	jr z, .LF86B1B                                ; F86B12  66 07
@@ -13113,7 +13113,7 @@ PanelMode_To2076:   ; entry: calr from 0xF86072
 	ld XIY,PanelMode_To2076Map                    ; F86CBB  45 81 6e f8 00
 	add IY,HL                                     ; F86CC0  db 85
 	ld A,(XIY)                                    ; F86CC2  85 21
-	ld (0x2076:16), a                            ; F86CC4  f1 76 20 41   ld (0x2076),A
+	ld (PanelModeGroup:16), a                            ; F86CC4  f1 76 20 41   ld (0x2076),A
 	ret                                           ; F86CC8  0e
 
 ; --- 0xF86CC9-0xF86CCA  table (2 bytes) ---
@@ -19906,7 +19906,7 @@ PanelAction_BankRemap:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8AB70  cd d8
 	jrl z, .LF8ABF9                                          ; F8AB72  76 84 00
 	ld d, 0x3f:opc                                          ; F8AB75  24 3f
-	ld a, (0x2076:16)                                   ; F8AB77  c1 76 20 21
+	ld a, (PanelModeGroup:16)                                   ; F8AB77  c1 76 20 21
 	cp A,0x09                                            ; F8AB7B  c9 cf 09
 	jr z, .LF8ABD9                                           ; F8AB7E  66 59
 	cp A,0x08                                            ; F8AB80  c9 cf 08
@@ -19981,7 +19981,7 @@ PanelAction_BankButton:   ; entry: PanelGroupActionListPool
 	add E,0x17                                           ; F8AC15  cd c8 17
 	jrl .LF8ACE0                                             ; F8AC18  78 c5 00
 .LF8AC1B:
-	ld a, (0x2076:16)                                   ; F8AC1B  c1 76 20 21
+	ld a, (PanelModeGroup:16)                                   ; F8AC1B  c1 76 20 21
 	cp A,0x09                                            ; F8AC1F  c9 cf 09
 	jr z, .LF8AC6F                                           ; F8AC22  66 4b
 	cp A,0x08                                            ; F8AC24  c9 cf 08
@@ -20094,7 +20094,7 @@ PanelAction_SoundSelectOrKeypad_V1:   ; entry: PanelGroupActionListPool
 	add E,0x08                                           ; F8ACFB  cd c8 08
 PanelAction_SoundSelectOrKeypad_V1_Skip:
 	ld d, 0x0f:opc                                          ; F8ACFE  24 0f
-	ld a, (0x2076:16)                                   ; F8AD00  c1 76 20 21
+	ld a, (PanelModeGroup:16)                                   ; F8AD00  c1 76 20 21
 	cp A,0x09                                            ; F8AD04  c9 cf 09
 	jr z, .LF8AD35                                           ; F8AD07  66 2c
 	cp A,0x08                                            ; F8AD09  c9 cf 08
@@ -20597,7 +20597,7 @@ PanelAction_AssignableSwitch:   ; entry: PanelGroupActionListPool
 ;   (T_SoundGroup_MaxMemberIndex_Get[_ToneCopy]) -> member+1; else group+1 (limit 1/0/0x0F by bank) with member 0, or
 ;   drop. Emits two events: [part,0] value = bank, then value = (group,member); sets bit 1 of (0x60F020).
 PanelAction_SelectNextSound:
-	ld a, (0x2076:16)                                   ; F8B0D2  c1 76 20 21
+	ld a, (PanelModeGroup:16)                                   ; F8B0D2  c1 76 20 21
 	cp A,0x09                                            ; F8B0D6  c9 cf 09
 	jr z, .LF8B0F5                                           ; F8B0D9  66 1a
 	cp A,0x08                                            ; F8B0DB  c9 cf 08
@@ -20709,7 +20709,7 @@ PanelAction_SelectNextSound:
 ;   new group (0xF8B224 / _GetToneCopy 0xF8B277); group 0 member 0 drops the event.  Emits bank then (group,member)
 ;   and sets bit 1 of (0x60F020).
 PanelAction_SelectPrevSound:
-	ld a, (0x2076:16)                                   ; F8B1C1  c1 76 20 21
+	ld a, (PanelModeGroup:16)                                   ; F8B1C1  c1 76 20 21
 	cp A,0x09                                            ; F8B1C5  c9 cf 09
 	jr z, .LF8B1E3                                           ; F8B1C8  66 19
 	cp A,0x08                                            ; F8B1CA  c9 cf 08
@@ -23129,7 +23129,7 @@ PanelLed_ShowModeMenu:   ; entry: DispatchTable_F8C2B2 id=0x0002
 	ld XIX,PanelLed_Shadow                             ; F8C70D  44 d0 20 00 00
 	and (XIX+0x02),0xf0                           ; F8C712  8c 02 3c f0
 	and (XIX+0x04),0xc0                           ; F8C716  8c 04 3c c0
-	ld a, (0x2076:16)                            ; F8C71A  c1 76 20 21
+	ld a, (PanelModeGroup:16)                            ; F8C71A  c1 76 20 21
 	ld XIY,RecordTable_F8C727                     ; F8C71E  45 27 c7 f8 00
 	calr .LF8C7F9                                     ; F8C723  1e d3 00
 	ret                                           ; F8C726  0e
@@ -23140,7 +23140,7 @@ RecordTable_F8C727_Code_Skip:
 	and (XIX+0x01),0xf0                           ; F8C74B  8c 01 3c f0
 	and (XIX+0x04),0xfc                           ; F8C74F  8c 04 3c fc
 	and (XIX+0x05),0xfc                           ; F8C753  8c 05 3c fc
-	ld a, (0x2076:16)                            ; F8C757  c1 76 20 21
+	ld a, (PanelModeGroup:16)                            ; F8C757  c1 76 20 21
 	ld XIY,RecordTable_F8C764                     ; F8C75B  45 64 c7 f8 00
 	calr .LF8C7F9                                     ; F8C760  1e 96 00
 	ret                                           ; F8C763  0e
@@ -35459,7 +35459,7 @@ SoundGroup_StepSelected:
 ; "OK" is drawn at IX 0x236B (x 0xD8, y 0xE2), column 6. Screen 0xA1 is PanelScreen_VtableTable_ViewB entry 0xA1, T_F41550 (InstallPainter_GroupSoundDisplayHold_Entry).
 SoftKeyCol6_SoundGroupMenu:   ; entry: named by 2 `.long` operands, first at 0xF9273A
 	ldw (UI_Request:16), 0x80a1                              ; F92C08  f1 70 20 02 a1 80
-	m_bit 0, MD16, 0x2092                                ; F92C0E  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F92C0E  f1 92 20 c8
 	jr z, .LF92C1E                                       ; F92C12  66 0a
 	ld (UI_Request_Hi:16), 0x40                                 ; F92C14  f1 71 20 00 40
 	m_or_mi8 MB16, UI_RequestBits, 0x80                          ; F92C19  c1 75 20 3e 80
@@ -35499,9 +35499,9 @@ ExitKey_SoundGroupMenu:   ; entry: named by 1 `.long` operand, first at 0xF92762
 	bit 0x07,W                                           ; F92C31  c8 33 07
 	jr nz, .LF92C4E                                      ; F92C34  6e 18
 	ldw (UI_Request:16), 0x8001                              ; F92C36  f1 70 20 02 01 80
-	m_bit 0, MD16, 0x2092                                ; F92C3C  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F92C3C  f1 92 20 c8
 	jr z, .LF92C4C                                       ; F92C40  66 0a
-	ld (0x209a:16), 0x01                                 ; F92C42  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F92C42  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F92C47  f1 71 20 00 00
 .LF92C4C:
 	jr .LF92C4E                                          ; F92C4C  68 00
@@ -35934,7 +35934,7 @@ SoftKeyCol5_GroupSoundDisplayHold:   ; entry: named by 2 `.long` operands, first
 ; DL_GroupSoundDisplayHoldGr0up draws "GR0UP" and "MENU" at IX 0x1EDF / 0x227A (x 0xB8 / 0xD0, y 0xC5 / 0xDC), over column 6. Screen 0xA0 is T_F41540 (InstallPainter_SoundGroupMenu_Entry).
 SoftKeyCol6_GroupSoundDisplayHold:   ; entry: named by 2 `.long` operands, first at 0xF92C7A
 	ldw (UI_Request:16), 0x80a0                              ; F92F38  f1 70 20 02 a0 80
-	m_bit 0, MD16, 0x2092                                ; F92F3E  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F92F3E  f1 92 20 c8
 	jr z, .LF92F4E                                       ; F92F42  66 0a
 	ld (UI_Request_Hi:16), 0x40                                 ; F92F44  f1 71 20 00 40
 	m_or_mi8 MB16, UI_RequestBits, 0x80                          ; F92F49  c1 75 20 3e 80
@@ -36098,9 +36098,9 @@ ExitKey_GroupSoundDisplayHold:   ; entry: named by 1 `.long` operand, first at 0
 	bit 0x07,W                                           ; F9306B  c8 33 07
 	jr nz, .LF9308D                                      ; F9306E  6e 1d
 	ldw (UI_Request:16), 0x8001                              ; F93070  f1 70 20 02 01 80
-	m_bit 0, MD16, 0x2092                                ; F93076  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F93076  f1 92 20 c8
 	jr z, .LF9308B                                       ; F9307A  66 0f
-	ld (0x209a:16), 0x01                                 ; F9307C  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9307C  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F93081  f1 71 20 00 00
 	m_and_mi8 MB16, UI_RequestBits, 0x7f                         ; F93086  c1 75 20 3c 7f
 .LF9308B:
@@ -36341,9 +36341,9 @@ GroupSoundDisplayHold_PickSound:
 .LF932AA:
 	ldw (UI_Request:16), 0x8002                              ; F932AA  f1 70 20 02 02 80
 .LF932B0:
-	m_bit 0, MD16, 0x2092                                ; F932B0  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F932B0  f1 92 20 c8
 	jr z, .LF932C5                                       ; F932B4  66 0f
-	ld (0x209a:16), 0x01                                 ; F932B6  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F932B6  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F932BB  f1 71 20 00 00
 	m_and_mi8 MB16, UI_RequestBits, 0x7f                         ; F932C0  c1 75 20 3c 7f
 .LF932C5:
@@ -36418,9 +36418,9 @@ GroupSoundDisplayHold_SelectMemberLastPage:
 .LF9336A:
 	ldw (UI_Request:16), 0x8002                              ; F9336A  f1 70 20 02 02 80
 .LF93370:
-	m_bit 0, MD16, 0x2092                                ; F93370  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F93370  f1 92 20 c8
 	jr z, .LF93385                                       ; F93374  66 0f
-	ld (0x209a:16), 0x01                                 ; F93376  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F93376  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F9337B  f1 71 20 00 00
 	m_and_mi8 MB16, UI_RequestBits, 0x7f                         ; F93380  c1 75 20 3c 7f
 .LF93385:
@@ -37060,7 +37060,7 @@ SoftKeyCol5_CombinationGroupMenu:
 ; sits at position 0x236B = x 216, inside column 6's band (x 200-239).
 SoftKeyCol6_CombinationGroupMenu:   ; entry: named by 2 `.long` operands, first at 0xF9356B
 	ldw (UI_Request:16), 0x80a6                              ; F937DB  f1 70 20 02 a6 80
-	m_bit 0, MD16, 0x2092                                ; F937E1  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F937E1  f1 92 20 c8
 	jr z, .LF937F1                                       ; F937E5  66 0a
 	ld (UI_Request_Hi:16), 0x40                                 ; F937E7  f1 71 20 00 40
 	m_or_mi8 MB16, UI_RequestBits, 0x80                          ; F937EC  c1 75 20 3e 80
@@ -37101,9 +37101,9 @@ ExitKey_CombinationGroupMenu:   ; entry: named by 1 `.long` operand, first at 0x
 	bit 0x07,W                                           ; F93804  c8 33 07
 	jr nz, .LF93821                                      ; F93807  6e 18
 	ldw (UI_Request:16), 0x8002                              ; F93809  f1 70 20 02 02 80
-	m_bit 0, MD16, 0x2092                                ; F9380F  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F9380F  f1 92 20 c8
 	jr z, .LF9381F                                       ; F93813  66 0a
-	ld (0x209a:16), 0x01                                 ; F93815  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F93815  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F9381A  f1 71 20 00 00
 .LF9381F:
 	jr .LF93821                                          ; F9381F  68 00
@@ -37504,7 +37504,7 @@ SoftKeyCol5_GroupCombiDisplayHold:   ; entry: named by 2 `.long` operands, first
 ; x 184-239, centred on column 6's band.
 SoftKeyCol6_GroupCombiDisplayHold:   ; entry: named by 2 `.long` operands, first at 0xF9384D
 	ldw (UI_Request:16), 0x80a5                              ; F93AEC  f1 70 20 02 a5 80
-	m_bit 0, MD16, 0x2092                                ; F93AF2  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F93AF2  f1 92 20 c8
 	jr z, .LF93B02                                       ; F93AF6  66 0a
 	ld (UI_Request_Hi:16), 0x40                                 ; F93AF8  f1 71 20 00 40
 	m_or_mi8 MB16, UI_RequestBits, 0x80                          ; F93AFD  c1 75 20 3e 80
@@ -37663,9 +37663,9 @@ ExitKey_GroupCombiDisplayHold:   ; entry: named by 1 `.long` operand, first at 0
 	bit 0x07,W                                           ; F93C1A  c8 33 07
 	jr nz, .LF93C3C                                      ; F93C1D  6e 1d
 	ldw (UI_Request:16), 0x8002                              ; F93C1F  f1 70 20 02 02 80
-	m_bit 0, MD16, 0x2092                                ; F93C25  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F93C25  f1 92 20 c8
 	jr z, .LF93C3A                                       ; F93C29  66 0f
-	ld (0x209a:16), 0x01                                 ; F93C2B  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F93C2B  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F93C30  f1 71 20 00 00
 	m_and_mi8 MB16, UI_RequestBits, 0x7f                         ; F93C35  c1 75 20 3c 7f
 .LF93C3A:
@@ -37796,9 +37796,9 @@ GroupCombiDisplayHold_SelectMemberAtRow:
 .LF93D51:
 	ldw (UI_Request:16), 0x8002                              ; F93D51  f1 70 20 02 02 80
 .LF93D57:
-	m_bit 0, MD16, 0x2092                                ; F93D57  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F93D57  f1 92 20 c8
 	jr z, .LF93D6C                                       ; F93D5B  66 0f
-	ld (0x209a:16), 0x01                                 ; F93D5D  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F93D5D  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F93D62  f1 71 20 00 00
 	m_and_mi8 MB16, UI_RequestBits, 0x7f                         ; F93D67  c1 75 20 3c 7f
 .LF93D6C:
@@ -37871,9 +37871,9 @@ GroupCombiDisplayHold_SelectMemberLastPage:
 .LF93E0C:
 	ldw (UI_Request:16), 0x8002                              ; F93E0C  f1 70 20 02 02 80
 .LF93E12:
-	m_bit 0, MD16, 0x2092                                ; F93E12  f1 92 20 c8
+	m_bit 0, MD16, UI_ScreenHoldState                                ; F93E12  f1 92 20 c8
 	jr z, .LF93E27                                       ; F93E16  66 0f
-	ld (0x209a:16), 0x01                                 ; F93E18  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F93E18  f1 9a 20 00 01
 	ld (UI_Request_Hi:16), 0x00                                 ; F93E1D  f1 71 20 00 00
 	m_and_mi8 MB16, UI_RequestBits, 0x7f                         ; F93E22  c1 75 20 3c 7f
 .LF93E27:
@@ -38303,7 +38303,7 @@ Paint_PowerOnSplash:
 	m_ld_rm MW8, Tick_Count, r0                                ; F941A0  d0 80 20
 	ld (0x2680:16), wa                                  ; F941A3  f1 80 26 50
 .LF941A7:
-	ld (0x209a:16), 0xff                                 ; F941A7  f1 9a 20 00 ff
+	ld (UI_ScreenHoldPending:16), 0xff                                 ; F941A7  f1 9a 20 00 ff
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; F941AC  c1 71 20 3e 10
 	jr .LF941EE                                          ; F941B1  68 3b
 .LF941B3:
@@ -38326,7 +38326,7 @@ Paint_PowerOnSplash:
 	ld c, 0x02:opc                                          ; F941E4  23 02
 	ld a, 0x0c:opc                                          ; F941E6  21 0c
 	swi 7                                                ; F941E8  ff
-	ld (0x209a:16), 0x3f                                 ; F941E9  f1 9a 20 00 3f
+	ld (UI_ScreenHoldPending:16), 0x3f                                 ; F941E9  f1 9a 20 00 3f
 .LF941EE:
 	bit	4, (0x97:8)                                   ; F941EE  f0 97 cc
 	jr z, .LF941F3                                       ; F941F1  66 00
@@ -41112,7 +41112,7 @@ ExitKey_SineWaveCheckModeAndDebugMonitor:   ; entry: screen button-handler table
 	cp (XIZ+0x08),0x00                                   ; F95C19  8e 08 3f 00
 	jr nz, .LF95C29                                          ; F95C1D  6e 0a
 	m_and_mi8 MB16, UI_RequestBits, 0x77                         ; F95C1F  c1 75 20 3c 77
-	ld (0x209a:16), 0x01                                 ; F95C24  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F95C24  f1 9a 20 00 01
 .LF95C29:
 	unlk XIZ                                             ; F95C29  ee 0d
 	ret                                                  ; F95C2B  0e
@@ -45759,7 +45759,7 @@ InstallPainter_MessageScreen:
 	jr z, .LF99038                                       ; F9902A  66 0c
 	m_cp_mi8 MB16, UI_StatusCode, 0x2c                          ; F9902C  c1 80 28 3f 2c
 	jr z, .LF99038                                       ; F99031  66 05
-	ld (0x209a:16), 0xff                                 ; F99033  f1 9a 20 00 ff
+	ld (UI_ScreenHoldPending:16), 0xff                                 ; F99033  f1 9a 20 00 ff
 .LF99038:
 	lda xbc, (MessageScreen_Paint:24)                             ; F99038  f2 98 90 f9 31
 	push XBC                                             ; F9903D  39
@@ -45810,7 +45810,7 @@ ExitKey_MessageScreen:   ; entry: MessageScreen_ArgHandlers[15]
 	link XIZ,0x0000                                      ; F99085  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F99089  8e 08 3f 00
 	jr nz, .LF99094                                      ; F9908D  6e 05
-	ld (0x209a:16), 0x01                                 ; F9908F  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9908F  f1 9a 20 00 01
 .LF99094:
 	unlk XIZ                                             ; F99094  ee 0d
 	ret                                                  ; F99096  0e
@@ -51257,10 +51257,10 @@ sub_F9C41F:
 	ld c, (0x28b0:16)                                   ; F9C4D9  c1 b0 28 23
 	and C,0x01                                           ; F9C4DD  cb cc 01
 	jr nz, .LF9C4FB                                      ; F9C4E0  6e 19
-	ld c, (0x2092:16)                                   ; F9C4E2  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9C4E2  c1 92 20 23
 	and C,0x01                                           ; F9C4E6  cb cc 01
 	jr z, .LF9C4F2                                       ; F9C4E9  66 07
-	ld (0x209a:16), 0x01                                 ; F9C4EB  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9C4EB  f1 9a 20 00 01
 	jr .LF9C4FB                                          ; F9C4F0  68 09
 .LF9C4F2:
 	m_set 7, MD16, UI_Request_Hi                                ; F9C4F2  f1 71 20 bf
@@ -51931,10 +51931,10 @@ T_F41984_Nop:
 	ld c, (0x28b0:16)                                   ; F9CABD  c1 b0 28 23
 	and C,0x01                                           ; F9CAC1  cb cc 01
 	jr nz, .LF9CADF                                      ; F9CAC4  6e 19
-	ld c, (0x2092:16)                                   ; F9CAC6  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9CAC6  c1 92 20 23
 	and C,0x01                                           ; F9CACA  cb cc 01
 	jr z, .LF9CAD6                                       ; F9CACD  66 07
-	ld (0x209a:16), 0x01                                 ; F9CACF  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9CACF  f1 9a 20 00 01
 	jr .LF9CADF                                          ; F9CAD4  68 09
 .LF9CAD6:
 	m_set 7, MD16, UI_Request_Hi                                ; F9CAD6  f1 71 20 bf
@@ -52373,10 +52373,10 @@ sub_F9CC9F:
 	ld c, (0x28b0:16)                                   ; F9CDB7  c1 b0 28 23
 	and C,0x01                                           ; F9CDBB  cb cc 01
 	jr nz, .LF9CDE2                                      ; F9CDBE  6e 22
-	ld c, (0x2092:16)                                   ; F9CDC0  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9CDC0  c1 92 20 23
 	and C,0x01                                           ; F9CDC4  cb cc 01
 	jr z, .LF9CDD0                                       ; F9CDC7  66 07
-	ld (0x209a:16), 0x01                                 ; F9CDC9  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9CDC9  f1 9a 20 00 01
 	jr .LF9CDE2                                          ; F9CDCE  68 12
 .LF9CDD0:
 	m_or_mi8 MBI+r4, 0, 0x80                             ; F9CDD0  84 3e 80
@@ -53021,10 +53021,10 @@ CombinationGroupNaming_AdjustGroup:
 	ld c, (0x28b0:16)                                   ; F9D21F  c1 b0 28 23
 	and C,0x01                                           ; F9D223  cb cc 01
 	jr nz, .LF9D24A                                      ; F9D226  6e 22
-	ld c, (0x2092:16)                                   ; F9D228  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9D228  c1 92 20 23
 	and C,0x01                                           ; F9D22C  cb cc 01
 	jr z, .LF9D238                                       ; F9D22F  66 07
-	ld (0x209a:16), 0x01                                 ; F9D231  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9D231  f1 9a 20 00 01
 	jr .LF9D24A                                          ; F9D236  68 12
 .LF9D238:
 	m_or_mi8 MBI+r4, 0, 0x80                             ; F9D238  84 3e 80
@@ -53854,10 +53854,10 @@ SoundCopy_AdjustDestBank:
 	ld c, (0x28b0:16)                                   ; F9D917  c1 b0 28 23
 	and C,0x01                                           ; F9D91B  cb cc 01
 	jr nz, .LF9D941                                      ; F9D91E  6e 21
-	ld c, (0x2092:16)                                   ; F9D920  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9D920  c1 92 20 23
 	and C,0x01                                           ; F9D924  cb cc 01
 	jr z, .LF9D930                                       ; F9D927  66 07
-	ld (0x209a:16), 0x01                                 ; F9D929  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9D929  f1 9a 20 00 01
 	jr .LF9D941                                          ; F9D92E  68 11
 .LF9D930:
 	m_or_mi8 MBI+r4, 0, 0x80                             ; F9D930  84 3e 80
@@ -55151,10 +55151,10 @@ CombinationCopy_AdjustDestBank:
 	ld c, (0x28b0:16)                                   ; F9E4ED  c1 b0 28 23
 	and C,0x01                                           ; F9E4F1  cb cc 01
 	jr nz, .LF9E517                                      ; F9E4F4  6e 21
-	ld c, (0x2092:16)                                   ; F9E4F6  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9E4F6  c1 92 20 23
 	and C,0x01                                           ; F9E4FA  cb cc 01
 	jr z, .LF9E506                                       ; F9E4FD  66 07
-	ld (0x209a:16), 0x01                                 ; F9E4FF  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9E4FF  f1 9a 20 00 01
 	jr .LF9E517                                          ; F9E504  68 11
 .LF9E506:
 	m_or_mi8 MBI+r4, 0, 0x80                             ; F9E506  84 3e 80
@@ -56021,10 +56021,10 @@ DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0x
 	ld c, (0x28b0:16)                                   ; F9ECBD  c1 b0 28 23
 	and C,0x01                                           ; F9ECC1  cb cc 01
 	jr nz, .LF9ECDF                                      ; F9ECC4  6e 19
-	ld c, (0x2092:16)                                   ; F9ECC6  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9ECC6  c1 92 20 23
 	and C,0x01                                           ; F9ECCA  cb cc 01
 	jr z, .LF9ECD6                                       ; F9ECCD  66 07
-	ld (0x209a:16), 0x01                                 ; F9ECCF  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9ECCF  f1 9a 20 00 01
 	jr .LF9ECDF                                          ; F9ECD4  68 09
 .LF9ECD6:
 	m_set 7, MD16, UI_Request_Hi                                ; F9ECD6  f1 71 20 bf
@@ -56180,10 +56180,10 @@ T_F41994_Nop:
 	ld c, (0x28b0:16)                                   ; F9EE34  c1 b0 28 23
 	and C,0x01                                           ; F9EE38  cb cc 01
 	jr nz, .LF9EE56                                      ; F9EE3B  6e 19
-	ld c, (0x2092:16)                                   ; F9EE3D  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9EE3D  c1 92 20 23
 	and C,0x01                                           ; F9EE41  cb cc 01
 	jr z, .LF9EE4D                                       ; F9EE44  66 07
-	ld (0x209a:16), 0x01                                 ; F9EE46  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9EE46  f1 9a 20 00 01
 	jr .LF9EE56                                          ; F9EE4B  68 09
 .LF9EE4D:
 	m_set 7, MD16, UI_Request_Hi                                ; F9EE4D  f1 71 20 bf
@@ -56273,10 +56273,10 @@ T_F434CC_Nop:
 	ld c, (0x28b0:16)                                   ; F9EF18  c1 b0 28 23
 	and C,0x01                                           ; F9EF1C  cb cc 01
 	jr nz, .LF9EF3A                                      ; F9EF1F  6e 19
-	ld c, (0x2092:16)                                   ; F9EF21  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9EF21  c1 92 20 23
 	and C,0x01                                           ; F9EF25  cb cc 01
 	jr z, .LF9EF31                                       ; F9EF28  66 07
-	ld (0x209a:16), 0x01                                 ; F9EF2A  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9EF2A  f1 9a 20 00 01
 	jr .LF9EF3A                                          ; F9EF2F  68 09
 .LF9EF31:
 	m_set 7, MD16, UI_Request_Hi                                ; F9EF31  f1 71 20 bf
@@ -56855,10 +56855,10 @@ DrumsMap_AdjustRowSound:
 	ld c, (0x28b0:16)                                   ; F9F33E  c1 b0 28 23
 	and C,0x01                                           ; F9F342  cb cc 01
 	jr nz, .LF9F369                                      ; F9F345  6e 22
-	ld c, (0x2092:16)                                   ; F9F347  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; F9F347  c1 92 20 23
 	and C,0x01                                           ; F9F34B  cb cc 01
 	jr z, .LF9F357                                       ; F9F34E  66 07
-	ld (0x209a:16), 0x01                                 ; F9F350  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; F9F350  f1 9a 20 00 01
 	jr .LF9F369                                          ; F9F355  68 12
 .LF9F357:
 	m_or_mi8 MBI+r4, 0, 0x80                             ; F9F357  84 3e 80
@@ -58341,10 +58341,10 @@ T_F41924_Nop:
 	ld c, (0x28b0:16)                                   ; F9FFFD  c1 b0 28 23
 	and C,0x01                                           ; FA0001  cb cc 01
 	jr nz, .LFA001F                                      ; FA0004  6e 19
-	ld c, (0x2092:16)                                   ; FA0006  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FA0006  c1 92 20 23
 	and C,0x01                                           ; FA000A  cb cc 01
 	jr z, .LFA0016                                       ; FA000D  66 07
-	ld (0x209a:16), 0x01                                 ; FA000F  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FA000F  f1 9a 20 00 01
 	jr .LFA001F                                          ; FA0014  68 09
 .LFA0016:
 	m_set 1, MD16, UI_Request_Hi                                ; FA0016  f1 71 20 b9
@@ -58577,10 +58577,10 @@ T_F41934_Nop:
 	ld c, (0x28b0:16)                                   ; FA0241  c1 b0 28 23
 	and C,0x01                                           ; FA0245  cb cc 01
 	jr nz, .LFA0263                                      ; FA0248  6e 19
-	ld c, (0x2092:16)                                   ; FA024A  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FA024A  c1 92 20 23
 	and C,0x01                                           ; FA024E  cb cc 01
 	jr z, .LFA025A                                       ; FA0251  66 07
-	ld (0x209a:16), 0x01                                 ; FA0253  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FA0253  f1 9a 20 00 01
 	jr .LFA0263                                          ; FA0258  68 09
 .LFA025A:
 	m_set 7, MD16, UI_Request_Hi                                ; FA025A  f1 71 20 bf
@@ -59498,10 +59498,10 @@ sub_FA0A58:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
 	ld c, (0x28b0:16)                                   ; FA0A89  c1 b0 28 23
 	and C,0x01                                           ; FA0A8D  cb cc 01
 	jr nz, .LFA0AAB                                      ; FA0A90  6e 19
-	ld c, (0x2092:16)                                   ; FA0A92  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FA0A92  c1 92 20 23
 	and C,0x01                                           ; FA0A96  cb cc 01
 	jr z, .LFA0AA2                                       ; FA0A99  66 07
-	ld (0x209a:16), 0x01                                 ; FA0A9B  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FA0A9B  f1 9a 20 00 01
 	jr .LFA0AAB                                          ; FA0AA0  68 09
 .LFA0AA2:
 	m_set 7, MD16, UI_Request_Hi                                ; FA0AA2  f1 71 20 bf
@@ -60047,10 +60047,10 @@ T_F41954_Nop:
 	ld c, (0x28b0:16)                                   ; FA0FEA  c1 b0 28 23
 	and C,0x01                                           ; FA0FEE  cb cc 01
 	jr nz, .LFA100C                                      ; FA0FF1  6e 19
-	ld c, (0x2092:16)                                   ; FA0FF3  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FA0FF3  c1 92 20 23
 	and C,0x01                                           ; FA0FF7  cb cc 01
 	jr z, .LFA1003                                       ; FA0FFA  66 07
-	ld (0x209a:16), 0x01                                 ; FA0FFC  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FA0FFC  f1 9a 20 00 01
 	jr .LFA100C                                          ; FA1001  68 09
 .LFA1003:
 	m_set 7, MD16, UI_Request_Hi                                ; FA1003  f1 71 20 bf
@@ -60697,10 +60697,10 @@ sub_FA1596:
 	ld c, (0x28b0:16)                                   ; FA1596  c1 b0 28 23
 	and C,0x01                                           ; FA159A  cb cc 01
 	jr nz, .LFA15B8                                      ; FA159D  6e 19
-	ld c, (0x2092:16)                                   ; FA159F  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FA159F  c1 92 20 23
 	and C,0x01                                           ; FA15A3  cb cc 01
 	jr z, .LFA15AF                                       ; FA15A6  66 07
-	ld (0x209a:16), 0x01                                 ; FA15A8  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FA15A8  f1 9a 20 00 01
 	jr .LFA15B8                                          ; FA15AD  68 09
 .LFA15AF:
 	m_set 7, MD16, UI_Request_Hi                                ; FA15AF  f1 71 20 bf
@@ -90043,9 +90043,9 @@ sub_FB3C34:
 	pushw hl                                             ; FB4148  2b
 	push XIX                                             ; FB4149  3c
 	lda xix, (xiz-4)                                     ; FB414A  be fc 34
-	m_cp_mi8 MB16, 0x2076, 0x0c                          ; FB414D  c1 76 20 3f 0c
+	m_cp_mi8 MB16, PanelModeGroup, 0x0c                          ; FB414D  c1 76 20 3f 0c
 	jr nz, .LFB415C                                      ; FB4152  6e 08
-	m_cp_mi8 MB16, 0x2076, 0x13                          ; FB4154  c1 76 20 3f 13
+	m_cp_mi8 MB16, PanelModeGroup, 0x13                          ; FB4154  c1 76 20 3f 13
 	jrl z, .LFB41DA                                      ; FB4159  76 7e 00
 .LFB415C:
 	ld xbc, (0x60fc80:24)                               ; FB415C  e2 80 fc 60 21
@@ -91787,7 +91787,7 @@ sub_FB5154:
 sub_FB516A:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x79                          ; FB516A  c1 7a 20 3f 79
 	jr z, .LFB517F                                       ; FB516F  66 0e
-	m_cp_mi8 MB16, 0x2076, 0x01                          ; FB5171  c1 76 20 3f 01
+	m_cp_mi8 MB16, PanelModeGroup, 0x01                          ; FB5171  c1 76 20 3f 01
 	jr nz, .LFB5184                                      ; FB5176  6e 0c
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x01                          ; FB5178  c1 7a 20 3f 01
 	jr nz, .LFB5184                                      ; FB517D  6e 05
@@ -101896,7 +101896,7 @@ sub_FBC74F:
 	ld (0x277d:16), 0x01                                 ; FBC7E6  f1 7d 27 00 01
 	jr .LFBC829                                          ; FBC7EB  68 3c
 .LFBC7ED:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBC7ED  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBC7ED  c1 76 20 3f 16
 	jr nz, .LFBC829                                      ; FBC7F2  6e 35
 	ld C,H                                               ; FBC7F4  ce 8b
 	or (0x2771:16), c                                   ; FBC7F6  c1 71 27 eb
@@ -102073,7 +102073,7 @@ sub_FBC74F:
 	ld c, (UiEvent_Byte3:16)                                   ; FBC996  c1 ba 20 23
 	and C,0x20                                           ; FBC99A  cb cc 20
 	jr z, .LFBC9BF                                       ; FBC99D  66 20
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBC99F  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBC99F  c1 76 20 3f 16
 	jr z, .LFBC9BF                                       ; FBC9A4  66 19
 	ld C,L                                               ; FBC9A6  cf 8b
 	or (0x2771:16), c                                   ; FBC9A8  c1 71 27 eb
@@ -102192,7 +102192,7 @@ sub_FBCA31:
 	jr .LFBCB01                                          ; FBCABC  68 43
 .LFBCABE:
 	ld h, 0x1f:opc                                          ; FBCABE  26 1f
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBCAC0  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCAC0  c1 76 20 3f 16
 	jr nz, .LFBCAC9                                      ; FBCAC5  6e 02
 	ld h, 0x07:opc                                          ; FBCAC7  26 07
 .LFBCAC9:
@@ -102303,7 +102303,7 @@ T_F41854_Nop:
 	and C,0x01                                           ; FBCBB2  cb cc 01
 	jr z, .LFBCBEE                                       ; FBCBB5  66 37
 	and (XIX),0xfe                                       ; FBCBB7  84 3c fe
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBCBBA  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCBBA  c1 76 20 3f 16
 	jr z, .LFBCBC9                                       ; FBCBBF  66 08
 	lda xbc, (Record_F1AE1B:24)                          ; FBCBC1  f2 1b ae f1 31
 	push XBC                                             ; FBCBC6  39
@@ -102330,7 +102330,7 @@ T_F41854_Nop:
 	ld c, (0x28b0:16)                                   ; FBCBF2  c1 b0 28 23
 	and C,0x01                                           ; FBCBF6  cb cc 01
 	jr z, .LFBCC31                                       ; FBCBF9  66 36
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBCBFB  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCBFB  c1 76 20 3f 16
 	jr z, .LFBCC0A                                       ; FBCC00  66 08
 	lda xbc, (Record_F1AE1B:24)                          ; FBCC02  f2 1b ae f1 31
 	push XBC                                             ; FBCC07  39
@@ -102351,7 +102351,7 @@ T_F41854_Nop:
 	m_set 4, MD16, UI_Request_Hi                                ; FBCC2B  f1 71 20 bc
 	jr .LFBCC3B                                          ; FBCC2F  68 0a
 .LFBCC31:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBCC31  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCC31  c1 76 20 3f 16
 	jr nz, .LFBCC3B                                      ; FBCC36  6e 03
 	calr sub_FBFC32                                          ; FBCC38  1e f7 2f
 .LFBCC3B:
@@ -102673,7 +102673,7 @@ sub_FBCF2B:
 	ret                                                  ; FBCF3B  0e
 sub_FBCF3C:
 	link XIZ,0x0000                                      ; FBCF3C  ee 0c 00 00
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBCF40  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCF40  c1 76 20 3f 16
 	jr nz, .LFBCF5A                                      ; FBCF45  6e 13
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBCF47  c1 7f 27 3f 01
 	jr nz, .LFBCF5A                                      ; FBCF4C  6e 0c
@@ -102778,7 +102778,7 @@ sub_FBCF81_Skip:
 	jr nz, .LFBD041                                      ; FBD023  6e 1c
 	ld H,(XIX)                                           ; FBD025  84 26
 	set 0x07,H                                           ; FBD027  ce 31 07
-	m_cp_mi8 MB16, 0x2076, 0x09                          ; FBD02A  c1 76 20 3f 09
+	m_cp_mi8 MB16, PanelModeGroup, 0x09                          ; FBD02A  c1 76 20 3f 09
 	jr nz, .LFBD03A                                      ; FBD02F  6e 09
 	ld (XIX),H                                           ; FBD031  b4 46
 	ld (UI_Request:16), 0xb0                                 ; FBD033  f1 70 20 00 b0
@@ -102975,7 +102975,7 @@ sub_FBD127:
 .LFBD1D2:
 	inc 8,XSP                                            ; FBD1D2  ef 60
 	inc 8,XSP                                            ; FBD1D4  ef 60
-	m_cp_mi8 MB16, 0x2076, 0x09                          ; FBD1D6  c1 76 20 3f 09
+	m_cp_mi8 MB16, PanelModeGroup, 0x09                          ; FBD1D6  c1 76 20 3f 09
 	jr nz, .LFBD1EB                                      ; FBD1DB  6e 0e
 	lda xbc, (DL_CombiEdit:24)                           ; FBD1DD  f2 ce 8b f1 31
 	push XBC                                             ; FBD1E2  39
@@ -103188,7 +103188,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	ret                                                  ; FBD396  0e
 .LFBD397:
 	pushw hl                                             ; FBD397  2b
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBD398  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBD398  c1 76 20 3f 16
 	jr nz, .LFBD3BE                                      ; FBD39D  6e 1f
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FBD39F  f1 40 25 00 01
 	m_cp_mi8 MB16, 0x276f, 0x00                          ; FBD3A4  c1 6f 27 3f 00
@@ -104009,7 +104009,7 @@ sub_FBDB95:
 	ld (0x2767:16), 0x00                                 ; FBDBAA  f1 67 27 00 00
 	ld (XIX),0x03                                        ; FBDBAF  b4 00 03
 	ld (0x2769:16), 0x03                                 ; FBDBB2  f1 69 27 00 03
-	m_cp_mi8 MB16, 0x2076, 0x0a                          ; FBDBB7  c1 76 20 3f 0a
+	m_cp_mi8 MB16, PanelModeGroup, 0x0a                          ; FBDBB7  c1 76 20 3f 0a
 	jr nz, .LFBDBEC                                      ; FBDBBC  6e 2e
 	ld h, (UI_PartIndex:16)                                   ; FBDBBE  c1 50 22 26
 	ld (0x276d:16), h                                   ; FBDBC2  f1 6d 27 46
@@ -104032,7 +104032,7 @@ sub_FBDB95:
 	ld c, (UI_ScreenId:16)                                   ; FBDBEC  c1 7c 20 23
 	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBDBF0  c1 7d 20 f3
 	jr z, .LFBDC3E                                       ; FBDBF4  66 48
-	ld a, (0x2092:16)                                   ; FBDBF6  c1 92 20 21
+	ld a, (UI_ScreenHoldState:16)                                   ; FBDBF6  c1 92 20 21
 	and A,0x01                                           ; FBDBFA  c9 cc 01
 	jr z, .LFBDC28                                       ; FBDBFD  66 29
 	m_cp_mi8 MB16, 0x277e, 0x02                          ; FBDBFF  c1 7e 27 3f 02
@@ -104061,7 +104061,7 @@ sub_FBDB95:
 	ld (0x2765:16), h                                   ; FBDC4F  f1 65 27 46
 	m_res 4, MD16, UI_ScreenFlags                                ; FBDC53  f1 95 20 b4
 .LFBDC57:
-	ld c, (0x2092:16)                                   ; FBDC57  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FBDC57  c1 92 20 23
 	and C,0x01                                           ; FBDC5B  cb cc 01
 	jr z, sub_FBDB95_Skip                                     ; FBDC5E  66 04
 	m_set 7, MD16, UI_RequestBits                                ; FBDC60  f1 75 20 bf
@@ -104131,7 +104131,7 @@ sub_FBDD0D:
 sub_FBDD11:
 	pushw hl                                             ; FBDD11  2b
 	push XIX                                             ; FBDD12  3c
-	lda xix, (0x2077:16)                                ; FBDD13  f1 77 20 34
+	lda xix, (PanelModeGroup_Previous:16)                                ; FBDD13  f1 77 20 34
 	ld h, (UI_ScreenId:16)                                   ; FBDD17  c1 7c 20 26
 	ld c, (UI_ScreenLatch_Previous:16)                                   ; FBDD1B  c1 7b 20 23
 	m_cp_rm MB16, UI_ScreenId_Previous, r3                             ; FBDD1F  c1 7d 20 f3
@@ -104188,7 +104188,7 @@ sub_FBDD80:
 	ret                                                  ; FBDD90  0e
 sub_FBDD91:
 	link XIZ,0x0000                                      ; FBDD91  ee 0c 00 00
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBDD95  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBDD95  c1 76 20 3f 16
 	jr nz, .LFBDDAF                                      ; FBDD9A  6e 13
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBDD9C  c1 7f 27 3f 01
 	jr nz, .LFBDDAF                                      ; FBDDA1  6e 0c
@@ -104267,7 +104267,7 @@ T_F418C4_Nop:
 	ld (XIX),0x04                                        ; FBDE36  b4 00 04
 	jr .LFBDE53                                          ; FBDE39  68 18
 .LFBDE3B:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBDE3B  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBDE3B  c1 76 20 3f 16
 	jr z, .LFBDE57                                       ; FBDE40  66 15
 	ld C,H                                               ; FBDE42  ce 8b
 	and C,0x01                                           ; FBDE44  cb cc 01
@@ -104282,7 +104282,7 @@ T_F418C4_Nop:
 	ld C,H                                               ; FBDE57  ce 8b
 	and C,0x01                                           ; FBDE59  cb cc 01
 	jr nz, .LFBDE68                                      ; FBDE5C  6e 0a
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBDE5E  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBDE5E  c1 76 20 3f 16
 	jr nz, .LFBDE68                                      ; FBDE63  6e 03
 	calr sub_FBFC32                                      ; FBDE65  1e ca 1d
 .LFBDE68:
@@ -104303,7 +104303,7 @@ T_F418C4_Nop:
 	jr z, .LFBDEB4                                       ; FBDE85  66 2d
 	jr .LFBDEC9                                          ; FBDE87  68 40
 .LFBDE89:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBDE89  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBDE89  c1 76 20 3f 16
 	jr nz, .LFBDEC9                                      ; FBDE8E  6e 39
 	ld C,H                                               ; FBDE90  ce 8b
 	and C,0x01                                           ; FBDE92  cb cc 01
@@ -104468,13 +104468,13 @@ T_F418C4_Nop:
 	ld c, (0x28b0:16)                                   ; FBDFD2  c1 b0 28 23
 	and C,0x01                                           ; FBDFD6  cb cc 01
 	jr nz, .LFBE035                                      ; FBDFD9  6e 5a
-	ld c, (0x2092:16)                                   ; FBDFDB  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FBDFDB  c1 92 20 23
 	and C,0x01                                           ; FBDFDF  cb cc 01
 	jr z, .LFBDFEB                                       ; FBDFE2  66 07
-	ld (0x209a:16), 0x01                                 ; FBDFE4  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FBDFE4  f1 9a 20 00 01
 	jr .LFBE035                                          ; FBDFE9  68 4a
 .LFBDFEB:
-	ld bc, (0x2076:16)                                 ; FBDFEB  d1 76 20 21
+	ld bc, (PanelModeGroup:16)                                 ; FBDFEB  d1 76 20 21
 	extz BC                                              ; FBDFEF  d9 12
 	cp BC,0x0009                                         ; FBDFF1  d9 cf 09 00
 	jr z, .LFBE005                                       ; FBDFF5  66 0e
@@ -104579,7 +104579,7 @@ sub_FBE0B9:
 	jr .LFBE0E9                                          ; FBE0DA  68 0d
 .LFBE0DC:
 	ld (XIX),0x0a                                        ; FBE0DC  b4 00 0a
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE0DF  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE0DF  c1 76 20 3f 16
 	jr z, .LFBE0E9                                       ; FBE0E4  66 03
 	ld (XIX),0x09                                        ; FBE0E6  b4 00 09
 .LFBE0E9:
@@ -104599,7 +104599,7 @@ sub_FBE0EF:
 sub_FBE106:
 	pushw hl                                             ; FBE106  2b
 	push XIX                                             ; FBE107  3c
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE108  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE108  c1 76 20 3f 16
 	jr z, .LFBE131                                       ; FBE10D  66 22
 	m_cp_mi8 MB16, 0x277e, 0x01                          ; FBE10F  c1 7e 27 3f 01
 	jr nz, .LFBE131                                      ; FBE114  6e 1b
@@ -104643,7 +104643,7 @@ sub_FBE106:
 	jr z, .LFBE1E6                                       ; FBE174  66 70
 	jrl .LFBE23E                                         ; FBE176  78 c5 00
 .LFBE179:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE179  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE179  c1 76 20 3f 16
 	jr z, .LFBE199                                       ; FBE17E  66 19
 	lda xbc, (DL_F17E9D:24)                              ; FBE180  f2 9d 7e f1 31
 	push XBC                                             ; FBE185  39
@@ -104688,7 +104688,7 @@ sub_FBE106:
 	inc 4,XSP                                            ; FBE1E2  ef 64
 	jr .LFBE237                                          ; FBE1E4  68 51
 .LFBE1E6:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE1E6  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE1E6  c1 76 20 3f 16
 	jr z, .LFBE20D                                       ; FBE1EB  66 20
 	lda xbc, (DL_F18044:24)                              ; FBE1ED  f2 44 80 f1 31
 	push XBC                                             ; FBE1F2  39
@@ -104726,7 +104726,7 @@ sub_FBE106:
 	calr sub_FBE2A4                                      ; FBE23A  1e 67 00
 	popw bc                                              ; FBE23D  49
 .LFBE23E:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE23E  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE23E  c1 76 20 3f 16
 	jr z, .LFBE253                                       ; FBE243  66 0e
 	lda xbc, (DL_Solo_F17C2A:24)                         ; FBE245  f2 2a 7c f1 31
 	push XBC                                             ; FBE24A  39
@@ -104830,7 +104830,7 @@ sub_FBE2A4:
 	jp (xix)                                             ; FBE32A  b4 d8
 .LFBE32C:
 	inc 8,XSP                                            ; FBE32C  ef 60
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE32E  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE32E  c1 76 20 3f 16
 	jr z, .LFBE352                                       ; FBE333  66 1d
 	m_cp_mi8 MB16, 0x2767, 0x00                          ; FBE335  c1 67 27 3f 00
 	jr nz, .LFBE352                                      ; FBE33A  6e 16
@@ -104914,7 +104914,7 @@ sub_FBE2A4:
 	push H                                               ; FBE406  ce 04
 	calr sub_FBE5EE                                      ; FBE408  1e e3 01
 	popw bc                                              ; FBE40B  49
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE40C  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE40C  c1 76 20 3f 16
 	jr nz, .LFBE41B                                      ; FBE411  6e 08
 	push 0x00                                            ; FBE413  09 00
 	push H                                               ; FBE415  ce 04
@@ -104966,7 +104966,7 @@ sub_FBE2A4:
 	and H,0xf8                                           ; FBE473  ce cc f8
 	ld C,L                                               ; FBE476  cf 8b
 	add H,C                                              ; FBE478  cb 86
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE47A  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE47A  c1 76 20 3f 16
 	jr z, .LFBE489                                       ; FBE47F  66 08
 	push 0x00                                            ; FBE481  09 00
 	push H                                               ; FBE483  ce 04
@@ -105125,7 +105125,7 @@ sub_FBE5EE:
 	push XIX                                             ; FBE5F4  3c
 	lda xix, (T_IndexedTable_GetByte:24)                 ; FBE5F5  f2 90 2c f4 34
 	ld H,(XIZ+0x08)                                      ; FBE5FA  8e 08 26
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBE5FD  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE5FD  c1 76 20 3f 16
 	jr z, .LFBE628                                       ; FBE602  66 24
 	push 0x00                                            ; FBE604  09 00
 	push H                                               ; FBE606  ce 04
@@ -106027,7 +106027,7 @@ sub_FBED94:
 .LFBEDBD:
 	ret                                                  ; FBEDBD  0e
 sub_FBEDBE:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBEDBE  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBEDBE  c1 76 20 3f 16
 	jr nz, .LFBEDD4                                      ; FBEDC3  6e 0f
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEDC5  c1 7f 27 3f 01
 	jr nz, .LFBEDD1                                      ; FBEDCA  6e 05
@@ -106127,7 +106127,7 @@ sub_FBEE83:
 	pushw hl                                             ; FBEE87  2b
 	pushw de                                             ; FBEE88  2a
 	push XIX                                             ; FBEE89  3c
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBEE8A  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBEE8A  c1 76 20 3f 16
 	jr nz, .LFBEED3                                      ; FBEE8F  6e 42
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEE91  c1 7f 27 3f 01
 	jr nz, .LFBEED3                                      ; FBEE96  6e 3b
@@ -106715,7 +106715,7 @@ sub_FBF2E2:
 	pushw hl                                             ; FBF2E2  2b
 	push XIX                                             ; FBF2E3  3c
 	lda xix, (0x2768:16)                                ; FBF2E4  f1 68 27 34
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF2E8  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF2E8  c1 76 20 3f 16
 	jr nz, .LFBF305                                      ; FBF2ED  6e 16
 	ld h, (UI_PartIndex:16)                                   ; FBF2EF  c1 50 22 26
 	cp H,0x08                                            ; FBF2F3  ce cf 08
@@ -106729,7 +106729,7 @@ sub_FBF2E2:
 	ld c, (UI_ScreenLatch:16)                                   ; FBF308  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBF30C  c1 7b 20 f3
 	jr z, .LFBF350                                       ; FBF310  66 3e
-	m_cp_mi8 MB16, 0x2076, 0x12                          ; FBF312  c1 76 20 3f 12
+	m_cp_mi8 MB16, PanelModeGroup, 0x12                          ; FBF312  c1 76 20 3f 12
 	jr nz, .LFBF329                                      ; FBF317  6e 10
 	ld h, (UI_PartIndex:16)                                   ; FBF319  c1 50 22 26
 	ld (0x276d:16), h                                   ; FBF31D  f1 6d 27 46
@@ -106823,7 +106823,7 @@ sub_FBF426:
 	ld c, (UI_ScreenLatch:16)                                   ; FBF426  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBF42A  c1 7b 20 f3
 	jr z, .LFBF441                                       ; FBF42E  66 11
-	m_cp_mi8 MB16, 0x2077, 0x12                          ; FBF430  c1 77 20 3f 12
+	m_cp_mi8 MB16, PanelModeGroup_Previous, 0x12                          ; FBF430  c1 77 20 3f 12
 	jr nz, .LFBF441                                      ; FBF435  6e 0a
 	ld	(UI_PartIndex:16), (0x276d:16)             ; FBF437  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBF43D  1d 9c 2c f4
@@ -106839,7 +106839,7 @@ sub_FBF442:
 	ret                                                  ; FBF452  0e
 sub_FBF453:
 	link XIZ,0x0000                                      ; FBF453  ee 0c 00 00
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF457  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF457  c1 76 20 3f 16
 	jr nz, .LFBF471                                      ; FBF45C  6e 13
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBF45E  c1 7f 27 3f 01
 	jr nz, .LFBF471                                      ; FBF463  6e 0c
@@ -106879,7 +106879,7 @@ sub_FBF453_Nop:
 	jr .LFBF50B                                          ; FBF4B3  68 56
 .LFBF4B5:
 	m_xor_mi8 MB16, 0x28b0, 0x01                         ; FBF4B5  c1 b0 28 3d 01
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF4BA  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF4BA  c1 76 20 3f 16
 	jr nz, .LFBF4C9                                      ; FBF4BF  6e 08
 	lda xbc, (Record_F1AE24:24)                          ; FBF4C1  f2 24 ae f1 31
 	push XBC                                             ; FBF4C6  39
@@ -107021,7 +107021,7 @@ sub_FBF453_Nop:
 	pop XIY                                              ; FBF5F3  5d
 .LFBF5F4:
 	ret                                                  ; FBF5F4  0e
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF5F5  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF5F5  c1 76 20 3f 16
 	jr nz, .LFBF608                                      ; FBF5FA  6e 0c
 	ld c, (0x28b0:16)                                   ; FBF5FC  c1 b0 28 23
 	and C,0x01                                           ; FBF600  cb cc 01
@@ -107029,7 +107029,7 @@ sub_FBF453_Nop:
 	calr sub_FBFC32                                      ; FBF605  1e 2a 06
 .LFBF608:
 	ret                                                  ; FBF608  0e
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF609  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF609  c1 76 20 3f 16
 	jr nz, .LFBF62E                                      ; FBF60E  6e 1e
 	ld c, (0x28b0:16)                                   ; FBF610  c1 b0 28 23
 	and C,0x01                                           ; FBF614  cb cc 01
@@ -107041,7 +107041,7 @@ sub_FBF453_Nop:
 	m_set 4, MD16, UI_Request_Hi                                ; FBF62A  f1 71 20 bc
 .LFBF62E:
 	ret                                                  ; FBF62E  0e
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF62F  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF62F  c1 76 20 3f 16
 	jr nz, .LFBF654                                      ; FBF634  6e 1e
 	ld c, (0x28b0:16)                                   ; FBF636  c1 b0 28 23
 	and C,0x01                                           ; FBF63A  cb cc 01
@@ -107053,7 +107053,7 @@ sub_FBF453_Nop:
 	m_set 4, MD16, UI_Request_Hi                                ; FBF650  f1 71 20 bc
 .LFBF654:
 	ret                                                  ; FBF654  0e
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF655  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF655  c1 76 20 3f 16
 	jr nz, .LFBF67A                                      ; FBF65A  6e 1e
 	ld c, (0x28b0:16)                                   ; FBF65C  c1 b0 28 23
 	and C,0x01                                           ; FBF660  cb cc 01
@@ -107070,7 +107070,7 @@ sub_FBF453_Nop:
 	ld c, (0x28b0:16)                                   ; FBF680  c1 b0 28 23
 	and C,0x01                                           ; FBF684  cb cc 01
 	jr nz, .LFBF6BF                                      ; FBF687  6e 36
-	ld bc, (0x2076:16)                                 ; FBF689  d1 76 20 21
+	ld bc, (PanelModeGroup:16)                                 ; FBF689  d1 76 20 21
 	extz BC                                              ; FBF68D  d9 12
 	cp BC,0x0009                                         ; FBF68F  d9 cf 09 00
 	jr z, .LFBF6A3                                       ; FBF693  66 0e
@@ -107096,7 +107096,7 @@ sub_FBF453_Nop:
 .LFBF6C1:
 	call T_F42E10                                        ; FBF6C1  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBF6C5  f1 40 25 00 00
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF6CA  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF6CA  c1 76 20 3f 16
 	jr nz, .LFBF6DF                                      ; FBF6CF  6e 0e
 	lda xbc, (DL_Configure_F19D5C:24)                    ; FBF6D1  f2 5c 9d f1 31
 	push XBC                                             ; FBF6D6  39
@@ -107111,7 +107111,7 @@ sub_FBF453_Nop:
 .LFBF6EB:
 	call T_DisplayList_Run_Stack                         ; FBF6EB  1d 00 2e f4
 	inc 8,XSP                                            ; FBF6EF  ef 60
-	m_cp_mi8 MB16, 0x2076, 0x12                          ; FBF6F1  c1 76 20 3f 12
+	m_cp_mi8 MB16, PanelModeGroup, 0x12                          ; FBF6F1  c1 76 20 3f 12
 	jr nz, .LFBF703                                      ; FBF6F6  6e 0b
 	lda xbc, (DL_Midi:24)                                ; FBF6F8  f2 d0 9d f1 31
 	push XBC                                             ; FBF6FD  39
@@ -107123,7 +107123,7 @@ sub_FBF453_Nop:
 	push XIX                                             ; FBF704  3c
 	lda xix, (LCD_CurrentLayer:16)                                ; FBF705  f1 40 25 34
 	ld	(0x2768:16), (0x2767:16)             ; FBF709  c1 67 27 19 68 27
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF70F  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF70F  c1 76 20 3f 16
 	jr nz, .LFBF740                                      ; FBF714  6e 2a
 	ld (XIX),0x00                                        ; FBF716  b4 00 00
 	lda xbc, (DL_F1A02D:24)                              ; FBF719  f2 2d a0 f1 31
@@ -107171,7 +107171,7 @@ sub_FBF453_Nop:
 	call T_DisplayList_Run_Stack                         ; FBF77F  1d 00 2e f4
 	inc 8,XSP                                            ; FBF783  ef 60
 .LFBF785:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF785  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF785  c1 76 20 3f 16
 	jr nz, .LFBF79A                                      ; FBF78A  6e 0e
 	ld (XIX),0x01                                        ; FBF78C  b4 00 01
 	lda xbc, (DL_F1A158:24)                              ; FBF78F  f2 58 a1 f1 31
@@ -107304,7 +107304,7 @@ sub_FBF79C:
 	unlk XIZ                                             ; FBF8DB  ee 0d
 	ret                                                  ; FBF8DD  0e
 .LFBF8DE:
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBF8DE  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF8DE  c1 76 20 3f 16
 	jr nz, .LFBF904                                      ; FBF8E3  6e 1f
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FBF8E5  f1 40 25 00 01
 	m_cp_mi8 MB16, 0x276f, 0x00                          ; FBF8EA  c1 6f 27 3f 00
@@ -107524,7 +107524,7 @@ T_F41A1C_Nop:
 	ret                                                  ; FBFAF1  0e
 sub_FBFAF2:
 	link XIZ,0x0000                                      ; FBFAF2  ee 0c 00 00
-	m_cp_mi8 MB16, 0x2076, 0x16                          ; FBFAF6  c1 76 20 3f 16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBFAF6  c1 76 20 3f 16
 	jr nz, .LFBFB10                                      ; FBFAFB  6e 13
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBFAFD  c1 7f 27 3f 01
 	jr nz, .LFBFB10                                      ; FBFB02  6e 0c
@@ -107647,10 +107647,10 @@ sub_FBFBB7:
 	ld c, (0x28b0:16)                                   ; FBFC0F  c1 b0 28 23
 	and C,0x01                                           ; FBFC13  cb cc 01
 	jr nz, .LFBFC31                                      ; FBFC16  6e 19
-	ld c, (0x2092:16)                                   ; FBFC18  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FBFC18  c1 92 20 23
 	and C,0x01                                           ; FBFC1C  cb cc 01
 	jr z, .LFBFC28                                       ; FBFC1F  66 07
-	ld (0x209a:16), 0x01                                 ; FBFC21  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FBFC21  f1 9a 20 00 01
 	jr .LFBFC31                                          ; FBFC26  68 09
 .LFBFC28:
 	m_set 1, MD16, UI_Request_Hi                                ; FBFC28  f1 71 20 b9
@@ -107834,7 +107834,7 @@ sub_FBFDC0:
 	ret                                                  ; FBFDD3  0e
 sub_FBFDD4:
 	pushw hl                                             ; FBFDD4  2b
-	ld h, (0x2076:16)                                   ; FBFDD5  c1 76 20 26
+	ld h, (PanelModeGroup:16)                                   ; FBFDD5  c1 76 20 26
 	cp H,0x08                                            ; FBFDD9  ce cf 08
 	jr z, .LFBFDE7                                       ; FBFDDC  66 09
 	cp h, 0x03:i3                                          ; FBFDDE  ce db
@@ -107870,11 +107870,11 @@ sub_FBFDFB:
 	ld c, (0x28b0:16)                                   ; FBFE1F  c1 b0 28 23
 	and C,0x01                                           ; FBFE23  cb cc 01
 	jr nz, .LFBFE41                                      ; FBFE26  6e 19
-	ld c, (0x2092:16)                                   ; FBFE28  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FBFE28  c1 92 20 23
 sub_FBFE2C:
 	and C,0x01                                           ; FBFE2C  cb cc 01
 	jr z, .LFBFE38                                       ; FBFE2F  66 07
-	ld (0x209a:16), 0x01                                 ; FBFE31  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FBFE31  f1 9a 20 00 01
 	jr .LFBFE41                                          ; FBFE36  68 09
 .LFBFE38:
 	m_set 1, MD16, UI_Request_Hi                                ; FBFE38  f1 71 20 b9
@@ -107884,9 +107884,9 @@ sub_FBFE2C:
 .LFBFE42:
 	push XIX                                             ; FBFE42  3c
 	lda xix, (LCD_CurrentLayer:16)                                ; FBFE43  f1 40 25 34
-	m_cp_mi8 MB16, 0x2076, 0x01                          ; FBFE47  c1 76 20 3f 01
+	m_cp_mi8 MB16, PanelModeGroup, 0x01                          ; FBFE47  c1 76 20 3f 01
 	jr z, .LFBFE55                                       ; FBFE4C  66 07
-	m_cp_mi8 MB16, 0x2076, 0x02                          ; FBFE4E  c1 76 20 3f 02
+	m_cp_mi8 MB16, PanelModeGroup, 0x02                          ; FBFE4E  c1 76 20 3f 02
 	jr nz, .LFBFE82                                      ; FBFE53  6e 2d
 .LFBFE55:
 	ld (XIX),0x02                                        ; FBFE55  b4 00 02
@@ -107979,11 +107979,11 @@ sub_FBFEDA:
 	ld c, (0x28b0:16)                                   ; FBFF19  c1 b0 28 23
 	and C,0x01                                           ; FBFF1D  cb cc 01
 	jr nz, .LFBFF3F                                      ; FBFF20  6e 1d
-	ld c, (0x2092:16)                                   ; FBFF22  c1 92 20 23
+	ld c, (UI_ScreenHoldState:16)                                   ; FBFF22  c1 92 20 23
 	and C,0x01                                           ; FBFF26  cb cc 01
 	jr z, .LFBFF36                                       ; FBFF29  66 0b
 	m_res 7, MD16, UI_RequestBits                                ; FBFF2B  f1 75 20 b7
-	ld (0x209a:16), 0x01                                 ; FBFF2F  f1 9a 20 00 01
+	ld (UI_ScreenHoldPending:16), 0x01                                 ; FBFF2F  f1 9a 20 00 01
 	jr .LFBFF3F                                          ; FBFF34  68 09
 .LFBFF36:
 	m_set 1, MD16, UI_Request_Hi                                ; FBFF36  f1 71 20 b9
@@ -158332,7 +158332,7 @@ Disk_PortA3_ClearAndSettle:
 ; ---------------------------------------------------------------------
 Disk_PortA3_Release:
 	set	3, (0x1e:8)                                   ; FE18F7  f0 1e bb
-	m_cp_mi8 MB16, 0x2076, 0x0d                          ; FE18FA  c1 76 20 3f 0d
+	m_cp_mi8 MB16, PanelModeGroup, 0x0d                          ; FE18FA  c1 76 20 3f 0d
 	jr z, .LFE1906                                           ; FE18FF  66 05
 	ld (0x2244:16), 0xff                                 ; FE1901  f1 44 22 00 ff
 .LFE1906:

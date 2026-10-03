@@ -28063,7 +28063,7 @@ sub_F0F17C:		; <- T_F42F50
 	jp	(xbc)	; F0F1A2  jp T,XBC
 sub_F0F17C_Resume:
 	pop	xbc	; F0F1A4  pop XBC
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0F1A5  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F1A5  cp (0x2076),0x17
 	jr	nz, sub_F0F17C_Skip	; F0F1AA  jr NZ,0xf0f1b7
 	ld	c, (xix)	; F0F1AC  ld C,(XIX)
 	and	c, 1	; F0F1AE  and C,0x01
@@ -28155,22 +28155,22 @@ DispatchTable_F0F1E8:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F200:
-	m_cp_mi8 MB16, 0x2076, 0x01	; F0F200  cp (0x2076),0x01
+	m_cp_mi8 MB16, PanelModeGroup, 0x01	; F0F200  cp (0x2076),0x01
 	jr	nz, sub_F0F200_Skip	; F0F205  jr NZ,0xf0f20f
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F207  or (XIX),0x80
 	ld	(UI_Request:16), 163	; F0F20A  ld (0x2070),0xa3
 sub_F0F200_Skip:
-	m_cp_mi8 MB16, 0x2076, 0x09	; F0F20F  cp (0x2076),0x09
+	m_cp_mi8 MB16, PanelModeGroup, 0x09	; F0F20F  cp (0x2076),0x09
 	jr	nz, sub_F0F200_Skip2	; F0F214  jr NZ,0xf0f21e
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F216  or (XIX),0x80
 	ld	(UI_Request:16), 176	; F0F219  ld (0x2070),0xb0
 sub_F0F200_Skip2:
-	m_cp_mi8 MB16, 0x2076, 0x0a	; F0F21E  cp (0x2076),0x0a
+	m_cp_mi8 MB16, PanelModeGroup, 0x0a	; F0F21E  cp (0x2076),0x0a
 	jr	nz, sub_F0F200_Skip3	; F0F223  jr NZ,0xf0f22d
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F225  or (XIX),0x80
 	ld	(UI_Request:16), 96	; F0F228  ld (0x2070),0x60
 sub_F0F200_Skip3:
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0F22D  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F22D  cp (0x2076),0x17
 	jr	nz, sub_F0F200_Join	; F0F232  jr NZ,0xf0f25c
 	m_cp_mi8 MB16, UI_ScreenId, 0xca	; F0F234  cp (0x207c),0xca
 	jr	nz, sub_F0F200_Skip4	; F0F239  jr NZ,0xf0f254
@@ -28186,7 +28186,7 @@ sub_F0F200_Skip4:
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F254  or (XIX),0x80
 	ld	(UI_Request:16), 163	; F0F257  ld (0x2070),0xa3
 sub_F0F200_Join:
-	m_cp_mi8 MB16, 0x2076, 0x16	; F0F25C  cp (0x2076),0x16
+	m_cp_mi8 MB16, PanelModeGroup, 0x16	; F0F25C  cp (0x2076),0x16
 	jr	nz, sub_F0F277_Epilogue	; F0F261  jr NZ,0xf0f27e
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F263  or (XIX),0x80
 	ld	(UI_Request:16), 51	; F0F266  ld (0x2070),0x33
@@ -28332,7 +28332,7 @@ DispatchTable_F0F29A:
 sub_F0F2B2:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F2B2  cp (0x2798),0x00
 	jr	nz, DispatchTable_F0F29A_Nop4	; F0F2B7  jr NZ,0xf0f2de
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0F2B9  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F2B9  cp (0x2076),0x17
 	jr	nz, DispatchTable_F0F29A_Nop4	; F0F2BE  jr NZ,0xf0f2de
 	call	T_F42E6C	; F0F2C0  call 0xf42e6c
 	cp	a, 2:i3	; F0F2C4  cp A,2
@@ -29932,7 +29932,7 @@ sub_F0F720:
 	ld	c, (10416:16)	; F0F720  ld C,(0x28b0)
 	and	c, 1	; F0F724  and C,0x01
 	jr	z, DispatchTable_F0F708_Nop4	; F0F727  jr Z,0xf0f75a
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0F729  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F729  cp (0x2076),0x17
 	jr	nz, DispatchTable_F0F708_Nop4	; F0F72E  jr NZ,0xf0f75a
 	call	T_F42E6C	; F0F730  call 0xf42e6c
 	cp	a, 2:i3	; F0F734  cp A,2
@@ -30001,7 +30001,7 @@ DispatchTable_F0F708_Nop4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F75B:
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0F75B  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F75B  cp (0x2076),0x17
 	jr	nz, sub_F0F75B_Return	; F0F760  jr NZ,0xf0f787
 	m_cp_mi8 MB16, 0x2807, 0x01	; F0F762  cp (0x2807),0x01
 	jr	nz, sub_F0F75B_Skip	; F0F767  jr NZ,0xf0f772
@@ -30109,7 +30109,7 @@ EffectEditor_PaintJob0:
 	m_res 0, MD16, 0x2799	; F0F826  res 0,(0x2799)
 	call	T_F42E10	; F0F82A  call 0xf42e10
 	ld	(LCD_CurrentLayer:16), 0	; F0F82E  ld (0x2540),0x00
-	ld	bc, (8310:16)	; F0F833  ld BC,(0x2076)
+	ld	bc, (PanelModeGroup:16)	; F0F833  ld BC,(0x2076)
 	extz	bc	; F0F837  extz BC
 	cp	bc, 1:i3	; F0F839  cp BC,1
 	jr	z, sub_F0F788_Skip8	; F0F83B  jr Z,0xf0f881
@@ -30167,7 +30167,7 @@ sub_F0F788_Join2:
 	jp	(xix)	; F0F8B7  jp T,XIX
 sub_F0F8A3_Resume:
 	inc	8, xsp	; F0F8B9  inc 0,XSP
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0F8BB  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F8BB  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip10	; F0F8C0  jr NZ,0xf0f8d8
 	call	T_F42E6C	; F0F8C2  call 0xf42e6c
 	cp	a, 2:i3	; F0F8C6  cp A,2
@@ -30250,7 +30250,7 @@ sub_F0F788_Skip11:
 	call	T_DisplayList_Run_Stack	; F0F972  call 0xf42e00
 	inc	8, xsp	; F0F976  inc 0,XSP
 	inc	4, xsp	; F0F978  inc 4,XSP
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0F97A  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F97A  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip12	; F0F97F  jr NZ,0xf0f99e
 	call	T_F42E6C	; F0F981  call 0xf42e6c
 	cp	a, 2:i3	; F0F985  cp A,2
@@ -30366,7 +30366,7 @@ sub_F0F788_Join6:
 	jrl	z, sub_F0F788_Skip20	; F0FA94  jrl Z,0xf0fb57
 	jrl	sub_F0F788_Join9	; F0FA97  jrl T,0xf0fbed
 sub_F0F788_Skip15:
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0FA9A  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FA9A  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip16	; F0FA9F  jr NZ,0xf0fac1
 	call	T_F42E6C	; F0FAA1  call 0xf42e6c
 	cp	a, 2:i3	; F0FAA5  cp A,2
@@ -30396,7 +30396,7 @@ sub_F0F788_Skip16:
 	inc	4, xsp	; F0FAE6  inc 4,XSP
 	jrl	sub_F0F788_Join8	; F0FAE8  jrl T,0xf0fb8c
 sub_F0F788_Skip17:
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0FAEB  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FAEB  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip19	; F0FAF0  jr NZ,0xf0fb1c
 	call	T_F42E6C	; F0FAF2  call 0xf42e6c
 	cp	a, 2:i3	; F0FAF6  cp A,2
@@ -30440,7 +30440,7 @@ sub_F0F788_Skip19:
 	pop	xiy	; F0FB54  pop XIY
 	jr	sub_F0F788_Join8	; F0FB55  jr T,0xf0fb8c
 sub_F0F788_Skip20:
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0FB57  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FB57  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip21	; F0FB5C  jr NZ,0xf0fb7e
 	call	T_F42E6C	; F0FB5E  call 0xf42e6c
 	cp	a, 2:i3	; F0FB62  cp A,2
@@ -30549,7 +30549,7 @@ sub_F0F788_Join10:
 	push	xwa	; F0FC7A  push XWA
 	call	T_DisplayListB_Run_Stack	; F0FC7B  call 0xf42e04
 	inc	8, xsp	; F0FC7F  inc 0,XSP
-	m_cp_mi8 MB16, 0x2076, 0x17	; F0FC81  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0FC81  cp (0x2076),0x17
 	jrl	nz, sub_F0F788_Skip28	; F0FC86  jrl NZ,0xf0fd28
 	call	T_F42E6C	; F0FC89  call 0xf42e6c
 	cp	a, 2:i3	; F0FC8D  cp A,2
@@ -30723,7 +30723,7 @@ EffectEditor_PaintJob3:
 	m_res 3, MD16, 0x2799	; F0FDD4  res 3,(0x2799)
 	call	T_F42E10	; F0FDD8  call 0xf42e10
 	ld	(LCD_CurrentLayer:16), 0	; F0FDDC  ld (0x2540),0x00
-	ld	bc, (8310:16)	; F0FDE1  ld BC,(0x2076)
+	ld	bc, (PanelModeGroup:16)	; F0FDE1  ld BC,(0x2076)
 	extz	bc	; F0FDE5  extz BC
 	cp	bc, 1:i3	; F0FDE7  cp BC,1
 	jr	z, sub_F0FD5F_Skip7	; F0FDE9  jr Z,0xf0fe2f
@@ -32892,7 +32892,7 @@ EffectEditor_PaintJob5:
 	m_res 5, MD16, 0x2799	; F10D68  res 5,(0x2799)
 	call	T_F42E10	; F10D6C  call 0xf42e10
 	ld	(LCD_CurrentLayer:16), 0	; F10D70  ld (0x2540),0x00
-	ld	bc, (8310:16)	; F10D75  ld BC,(0x2076)
+	ld	bc, (PanelModeGroup:16)	; F10D75  ld BC,(0x2076)
 	extz	bc	; F10D79  extz BC
 	cp	bc, 1:i3	; F10D7B  cp BC,1
 	jr	z, EffectEditor_PaintJob5_Case1	; F10D7D  jr Z,0xf10dc3
@@ -33682,7 +33682,7 @@ sub_F112ED:
 	link XIZ,0xfffa	; F112ED  link XIZ,0xfffa
 	push	xix	; F112F1  push XIX
 	lda	xix, (xiz-6)	; F112F2  lda XIX,XIZ+0xfa
-	m_cp_mi8 MB16, 0x2076, 0x17	; F112F5  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F112F5  cp (0x2076),0x17
 	jr	nz, sub_F112ED_Skip	; F112FA  jr NZ,0xf11325
 	ld	(xix), 136	; F112FC  ld (XIX),0x88
 	ld	c, (UI_PartIndex:16)	; F112FF  ld C,(0x2250)
@@ -33719,7 +33719,7 @@ sub_F11329:
 	link XIZ,0xfffa	; F11329  link XIZ,0xfffa
 	push	xix	; F1132D  push XIX
 	lda	xix, (xiz-6)	; F1132E  lda XIX,XIZ+0xfa
-	m_cp_mi8 MB16, 0x2076, 0x17	; F11331  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F11331  cp (0x2076),0x17
 	jr	nz, sub_F11329_Skip	; F11336  jr NZ,0xf11361
 	ld	(xix), 128	; F11338  ld (XIX),0x80
 	ld	c, (UI_PartIndex:16)	; F1133B  ld C,(0x2250)
@@ -103395,11 +103395,11 @@ sub_F4C5A2:
 	ld	c, (10416:16)	; F4C5A2  ld C,(0x28b0)
 	and	c, 1	; F4C5A6  and C,0x01
 	jr	nz, sub_F4C5A2_Return	; F4C5A9  jr NZ,0xf4c5c8
-	ld	c, (8338:16)	; F4C5AB  ld C,(0x2092)
+	ld	c, (UI_ScreenHoldState:16)	; F4C5AB  ld C,(0x2092)
 	and	c, 1	; F4C5AF  and C,0x01
 	jr	z, sub_F4C5A2_Skip	; F4C5B2  jr Z,0xf4c5bf
 	m_res 7, MD16, UI_RequestBits	; F4C5B4  res 7,(0x2075)
-	ld	(8346:16), 1	; F4C5B8  ld (0x209a),0x01
+	ld	(UI_ScreenHoldPending:16), 1	; F4C5B8  ld (0x209a),0x01
 	jr	sub_F4C5A2_Return	; F4C5BD  jr T,0xf4c5c8
 sub_F4C5A2_Skip:
 	m_set 1, MD16, UI_Request_Hi	; F4C5BF  set 1,(0x2071)
@@ -110011,7 +110011,7 @@ LcdKeyRow1_DrawbarScreen:
 	ld	c, (xix)	; F5313B  ld C,(XIX)
 	and	c, 1	; F5313D  and C,0x01
 	jr	z, LcdKeyRow1_DrawbarScreen_Skip	; F53140  jr Z,0xf53154
-	m_cp_mi8 MB16, 0x2076, 0x17	; F53142  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F53142  cp (0x2076),0x17
 	jr	nz, LcdKeyRow1_DrawbarScreen_Epilogue	; F53147  jr NZ,0xf53161
 	m_set 7, MD16, UI_Request_Hi	; F53149  set 7,(0x2071)
 	ld	(UI_Request:16), 158	; F5314D  ld (0x2070),0x9e
@@ -111307,10 +111307,10 @@ ExitKey_DrawbarScreen:
 	jr	nz, sub_F533DC_Epilogue10	; F5368F  jr NZ,0xf536ba
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53691  cp (0x289e),0x00
 	jr	nz, sub_F533DC_Skip4	; F53696  jr NZ,0xf536b2
-	ld	c, (8338:16)	; F53698  ld C,(0x2092)
+	ld	c, (UI_ScreenHoldState:16)	; F53698  ld C,(0x2092)
 	and	c, 1	; F5369C  and C,0x01
 	jr	z, sub_F533DC_Skip3	; F5369F  jr Z,0xf536a8
-	ld	(8346:16), 1	; F536A1  ld (0x209a),0x01
+	ld	(UI_ScreenHoldPending:16), 1	; F536A1  ld (0x209a),0x01
 	jr	sub_F533DC_Epilogue10	; F536A6  jr T,0xf536ba
 sub_F533DC_Skip3:
 	ld	(xix), 2	; F536A8  ld (XIX),0x02
@@ -111331,7 +111331,7 @@ sub_F533DC_Epilogue10:
 	push	xwa	; F536D0  push XWA
 	call	T_DisplayList_Run_Stack	; F536D1  call 0xf42e00
 	inc	8, xsp	; F536D5  inc 0,XSP
-	m_cp_mi8 MB16, 0x2076, 0x17	; F536D7  cp (0x2076),0x17
+	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F536D7  cp (0x2076),0x17
 	jr	z, sub_F533DC_Skip5	; F536DC  jr Z,0xf536ec
 	lda	xbc, (DL_SoundEditBar:24)	; F536DE  lda XBC,0xf544ad
 	push	xbc	; F536E3  push XBC
@@ -117700,7 +117700,7 @@ sub_F5661F_Return:
 sub_F5663C:
 	bit	7, w	; F5663C  bit 0x07,W
 	jr	nz, sub_F5661F_Return2	; F5663F  jr NZ,0xf56648
-	ld	(8346:16), 1	; F56641  ld (0x209a),0x01
+	ld	(UI_ScreenHoldPending:16), 1	; F56641  ld (0x209a),0x01
 	jr	sub_F5661F_Return2	; F56646  jr T,0xf56648
 sub_F5661F_Return2:
 	ret	; F56648  ret
@@ -144697,7 +144697,7 @@ sub_F6749D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F674AD:
-	m_bit 0, MD16, 0x2092	; F674AD  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F674AD  bit 0,(0x2092)
 	jr	nz, sub_F674AD_Return	; F674B1  jr NZ,0xf674cd
 	ld	l, (3683:16)	; F674B3  ld L,(0x0e63)
 	and	l, 3	; F674B7  and L,0x03
@@ -144888,7 +144888,7 @@ DispatchTable_F674CE_Nop0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F675CC:		; <- T_F42EC8
-	m_bit 0, MD16, 0x2092	; F675CC  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F675CC  bit 0,(0x2092)
 	jr	nz, sub_F675CC_Return	; F675D0  jr NZ,0xf675f2
 	ld	e, (3683:16)	; F675D2  ld E,(0x0e63)
 	and	e, 3	; F675D6  and E,0x03
@@ -147586,7 +147586,7 @@ sub_F68982:
 	jr	nz, sub_F68982_Return	; F6898C  jr NZ,0xf689ab
 	calr	sub_F67418	; F6898E  calr 0xf67418
 	calr	sub_F68982_Nop	; F68991  calr 0xf6b1e8
-	m_bit 0, MD16, 0x2092	; F68994  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F68994  bit 0,(0x2092)
 	jr	nz, sub_F68982_Return2	; F68998  jr NZ,0xf689ac
 	m_bit 0, MD16, 0x1071	; F6899A  bit 0,(0x1071)
 	jr	z, sub_F68982_Skip	; F6899E  jr Z,0xf689a5
@@ -147609,11 +147609,11 @@ sub_F689AD:
 	jr	sub_F689AD_Return	; F689C3  jr T,0xf689de
 sub_F689AD_Skip:
 	calr	sub_F67418	; F689C5  calr 0xf67418
-	m_bit 0, MD16, 0x2092	; F689C8  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F689C8  bit 0,(0x2092)
 	jr	nz, sub_F689AD_Return2	; F689CC  jr NZ,0xf689df
 	calr	sub_F6833E	; F689CE  calr 0xf6833e
 	calr	sub_F68982_Nop	; F689D1  calr 0xf6b1e8
-	m_bit 0, MD16, 0x2092	; F689D4  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F689D4  bit 0,(0x2092)
 	jr	nz, sub_F689AD_Return2	; F689D8  jr NZ,0xf689df
 	call	sub_F6D6D6	; F689DA  call 0xf6d6d6
 sub_F689AD_Return:
@@ -149547,7 +149547,7 @@ sub_F69597_Skip13:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F69692:
-	m_bit 0, MD16, 0x2092	; F69692  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F69692  bit 0,(0x2092)
 	ret	; F69696  ret
 
 ; --------------------------------------------------------------------------
@@ -151520,7 +151520,7 @@ sub_F6A4D9_Skip:
 	ld	(4802:16), a	; F6A54B  ld (0x12c2),A
 	ld	(3929:16), a	; F6A54F  ld (0x0f59),A
 	ld	(4790:16), a	; F6A553  ld (0x12b6),A
-	m_bit 0, MD16, 0x2092	; F6A557  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6A557  bit 0,(0x2092)
 	jrl	nz, sub_F6A4D9_Loop	; F6A55B  jrl NZ,0xf6a56c
 	ld	w, (4789:16)	; F6A55E  ld W,(0x12b5)
 	cp	w, 31	; F6A562  cp W,0x1f
@@ -153056,7 +153056,7 @@ sub_F6AF57_Skip3:
 	ld	xiy, 3674	; F6AFBE  ld XIY,0x00000e5a
 	m_cp_mi8 MBI+r5, 0, 0x00	; F6AFC3  cp (XIY),0x00
 	jr	z, sub_F6AF57_Skip4	; F6AFC6  jr Z,0xf6afd8
-	m_bit 0, MD16, 0x2092	; F6AFC8  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6AFC8  bit 0,(0x2092)
 	jr	nz, sub_F6AF57_Skip4	; F6AFCC  jr NZ,0xf6afd8
 	decm8	1, (xiy)	; F6AFCE  dec 1,(XIY)
 	m_cp_mi8 MBI+r5, 0, 0x00	; F6AFD0  cp (XIY),0x00
@@ -162126,7 +162126,7 @@ Data_F6E728:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartModulation2:
-	m_bit 0, MD16, 0x2092	; F6E73A  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6E73A  bit 0,(0x2092)
 	jr	nz, MsgLine_PartModulation2_Return	; F6E73E  jr NZ,0xf6e78a
 	calr	MsgLine_ClearTail	; F6E740  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E743  ld L,(0x1259)
@@ -162208,7 +162208,7 @@ Data_F6E78B:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartCtrlPedal:
-	m_bit 0, MD16, 0x2092	; F6E797  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6E797  bit 0,(0x2092)
 	jr	nz, MsgLine_PartCtrlPedal_Return	; F6E79B  jr NZ,0xf6e7e7
 	calr	MsgLine_ClearTail	; F6E79D  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E7A0  ld L,(0x1259)
@@ -162290,7 +162290,7 @@ Data_F6E7E8:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartHold:
-	m_bit 0, MD16, 0x2092	; F6E7F3  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6E7F3  bit 0,(0x2092)
 	jr	nz, MsgLine_PartHold_Return	; F6E7F7  jr NZ,0xf6e843
 	calr	MsgLine_ClearTail	; F6E7F9  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E7FC  ld L,(0x1259)
@@ -162373,7 +162373,7 @@ Data_F6E844:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartRtCreateX:
-	m_bit 0, MD16, 0x2092	; F6E849  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6E849  bit 0,(0x2092)
 	jr	nz, MsgLine_PartRtCreateX_Return	; F6E84D  jr NZ,0xf6e899
 	calr	MsgLine_ClearTail	; F6E84F  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E852  ld L,(0x1259)
@@ -162456,7 +162456,7 @@ Data_F6E89A:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartRtCreateY:
-	m_bit 0, MD16, 0x2092	; F6E8A6  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6E8A6  bit 0,(0x2092)
 	jr	nz, MsgLine_PartRtCreateY_Return	; F6E8AA  jr NZ,0xf6e8f6
 	calr	MsgLine_ClearTail	; F6E8AC  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E8AF  ld L,(0x1259)
@@ -162539,7 +162539,7 @@ Data_F6E8F7:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartRtCtrlX:
-	m_bit 0, MD16, 0x2092	; F6E903  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6E903  bit 0,(0x2092)
 	jr	nz, MsgLine_PartRtCtrlX_Return	; F6E907  jr NZ,0xf6e953
 	calr	MsgLine_ClearTail	; F6E909  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E90C  ld L,(0x1259)
@@ -162622,7 +162622,7 @@ Data_F6E954:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartRtCtrlY:
-	m_bit 0, MD16, 0x2092	; F6E95F  bit 0,(0x2092)
+	m_bit 0, MD16, UI_ScreenHoldState	; F6E95F  bit 0,(0x2092)
 	jr	nz, MsgLine_PartRtCtrlY_Return	; F6E963  jr NZ,0xf6e9af
 	calr	MsgLine_ClearTail	; F6E965  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E968  ld L,(0x1259)

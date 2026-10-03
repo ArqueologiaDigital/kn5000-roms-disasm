@@ -337,5 +337,12 @@
 	.equ UI_ScreenStage,				0x207e	; the page of the current screen; job screens: 0 = parameters, 1 = "Are You Sure ?" -- 25 cp 0 / jr nz with the question on the non-zero side; 14 two-press execute keys
 	.equ UI_ScreenFlags,				0x2095	; bit 4 = repaint in place, bit 0 = request allowed past the lock, bit 1 = keep (0x20A2) -- PanelState_Sync2095, PanelState_CheckRequestAllowed, PanelScreen_ApplyRequest
 
+; ---- wsa1/notes/FINDINGS-prom_a-panel-mode-group-and-screen-hold.md -- "1. PanelModeGroup; 2. The screen hold timer"
+	.equ UI_ScreenHoldTimer,			0x2073	; countdown; at 0 raises UI_Request_Hi bit 2 (drop the requested screen); 0x70 per request -- PanelTimer_Screen2073, PanelScreen_ApplyRequest
+	.equ PanelModeGroup,				0x2076	; PanelMode folded by the map at 0xF86E81 (modes 3-7 -> 3; 0, 1, 0x11, 0x18-0x1F -> 1) -- PanelMode_To2076
+	.equ PanelModeGroup_Previous,			0x2077	; PanelModeGroup at the previous pass; 0xFF after PanelState_Init -- PanelState_LatchPrevious, PanelState_Init
+	.equ UI_ScreenHoldState,			0x2092	; bit 0 = UI_ScreenHoldTimer running this pass, bit 1 = it stopped this pass -- PanelState_UpdateFlags2092
+	.equ UI_ScreenHoldPending,			0x209a	; one-shot preload for UI_ScreenHoldTimer (1 from 32 handlers, 0xFF / 0x3F from the splash) -- PanelState_TakePendingHoldTime
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,				0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24
