@@ -732,24 +732,24 @@ SeScreenData_0x57A4:
 	.incbin "includes/generated/se_apply_confirm.bin"
 ; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163E1
-	.set	SeScreenData_0x57AF, SeScreenData_0x57A4 + 0xb
+	.set	SeApplyConfirm_ParamR2Rec, SeScreenData_0x57A4 + 0xb	; se_apply_confirm.setup5_1 (id 0x0662, DRAM param R2): sound_editor_screens/se_apply_confirm.c
 ; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163E1
-	.set	SeScreenData_0x57BA, SeScreenData_0x57A4 + 0x16
+	.set	SeApplyConfirm_FlaggedR1Rec, SeScreenData_0x57A4 + 0x16	; se_apply_confirm.setup5_2 (id 0x0663, flagged R1): sound_editor_screens/se_apply_confirm.c
 ; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163E1
-	.set	SeScreenData_0x57C5, SeScreenData_0x57A4 + 0x21
+	.set	SeApplyConfirm_FlaggedR2Rec, SeScreenData_0x57A4 + 0x21	; se_apply_confirm.setup5_3 (id 0x0664, flagged R2): sound_editor_screens/se_apply_confirm.c
 ; single bound record (op 0x03, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163E1
-	.set	SeScreenData_0x57D0, SeScreenData_0x57A4 + 0x2c
+	.set	SeApplyConfirm_CursorRec, SeScreenData_0x57A4 + 0x2c	; se_apply_confirm.setup_0 (id 0x065d, cursor coords): sound_editor_screens/se_apply_confirm.c
 ; table of 5 pointers to bound records; the code loads it into XIY and SeMenu_WaveformSelect_Apply_Helper5 draws entry WA (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_DataBlock_01+0x6A (0xF10408)
 SeScreenData_0x57DB:
-	.long	SeScreenData_0x57D0
+	.long	SeApplyConfirm_CursorRec
 	.long	SeScreenData_0x57A4
-	.long	SeScreenData_0x57AF
-	.long	SeScreenData_0x57BA
-	.long	SeScreenData_0x57C5
+	.long	SeApplyConfirm_ParamR2Rec
+	.long	SeApplyConfirm_FlaggedR1Rec
+	.long	SeApplyConfirm_FlaggedR2Rec
 ; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF163FF
 ; evidence: SeMenu_DataBlock_01+0x4B (0xF103E9)
 SeScreenData_0x57EF:

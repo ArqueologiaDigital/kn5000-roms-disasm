@@ -774,29 +774,29 @@ SeScreenData_0x57A4:
 	.byte	0x05, 0x0b, 0x61, 0x06, 0xff, 0x00, 0x20, 0x50, 0x0d, 0x02, 0x00
 ; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163B7
-SeScreenData_0x57AF:
+SeApplyConfirm_ParamR2Rec:
 	.byte	0x05, 0x0b, 0x62, 0x06, 0xff, 0x00, 0x20, 0x50, 0x12, 0x02, 0x00
 ; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163B7
-SeScreenData_0x57BA:
+SeApplyConfirm_FlaggedR1Rec:
 	.byte	0x05, 0x0b, 0x63, 0x06, 0xe0, 0x05, 0x20, 0x55, 0x0d, 0x02, 0x03
 ; single bound record (op 0x05, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163B7
-SeScreenData_0x57C5:
+SeApplyConfirm_FlaggedR2Rec:
 	.byte	0x05, 0x0b, 0x64, 0x06, 0xe0, 0x05, 0x20, 0x55, 0x12, 0x02, 0x03
 ; single bound record (op 0x03, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF163B7
-SeScreenData_0x57D0:
+SeApplyConfirm_CursorRec:
 	.byte	0x03, 0x0b, 0x5d, 0x06, 0x0f, 0x00, 0x05
 	.long	SeScreenData_0x57F9
 ; table of 5 pointers to bound records; the code loads it into XIY and SeMenu_PatchEdit_Dispatch_Helper draws entry WA (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_DataBlock_01+0x6A (0xF103DE)
 SeScreenData_0x57DB:
-	.long	SeScreenData_0x57D0
+	.long	SeApplyConfirm_CursorRec
 	.long	SeScreenData_0x57A4
-	.long	SeScreenData_0x57AF
-	.long	SeScreenData_0x57BA
-	.long	SeScreenData_0x57C5
+	.long	SeApplyConfirm_ParamR2Rec
+	.long	SeApplyConfirm_FlaggedR1Rec
+	.long	SeApplyConfirm_FlaggedR2Rec
 ; static record list (1 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF163D5
 ; evidence: SeMenu_DataBlock_01+0x4B (0xF103BF)
 SeScreenData_0x57EF:
