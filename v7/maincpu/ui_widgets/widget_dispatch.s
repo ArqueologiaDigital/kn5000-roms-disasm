@@ -3213,7 +3213,6 @@ SysExRx_Trie_791:
 	sysex_rx_entry 0xfe, 0x00, SysExRx_Trie_784	; any byte
 	sysex_rx_entry 0xff, 0x0b, SysExRx_Trie_000	; end of list
 SysExRx_Trie_795:
-	.set WidgetParam_Entry_018, SysExRx_Trie_795
 	sysex_rx_entry 0x40, 0x00, SysExRx_Trie_791
 	sysex_rx_entry 0xff, 0x0a, SysExRx_Trie_000	; end of list
 SysExRx_Trie_797:

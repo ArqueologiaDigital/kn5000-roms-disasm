@@ -8585,7 +8585,8 @@ MidiSeq_Slot0_WriteParams:
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
-	lda xwa, (WidgetParam_Entry_018_0x26:24)
+	; the pointer field (+2) of SysExRx_TrieRoot's record [index]: records are 6 bytes {key, sub, pointer}
+	lda xwa, (SysExRx_TrieRoot+2:24)
 	ld	xwa, (xwa+bc)
 	ld e, (xwa)
 	ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -8595,7 +8596,7 @@ MidiSeq_Slot0_WriteParams:
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
-	lda xwa, (WidgetParam_Entry_018_0x26:24)
+	lda xwa, (SysExRx_TrieRoot+2:24)
 	ld	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)

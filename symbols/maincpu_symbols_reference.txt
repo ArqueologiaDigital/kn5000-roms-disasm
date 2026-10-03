@@ -21,9 +21,9 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,643
-#   semantic names ........... 50,809 (98.4%)
-#   positional names ......... 834
+#   symbols .................. 51,641
+#   semantic names ........... 50,808 (98.4%)
+#   positional names ......... 833
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -14508,11 +14508,9 @@ SysExRx_Trie_784 00EE48D8
 SysExRx_Trie_786 00EE48E4
 SysExRx_Trie_791 00EE4902
 SysExRx_Trie_795 00EE491A
-WidgetParam_Entry_018 00EE491A
 SysExRx_Trie_797 00EE4926
 SysExRx_Trie_799 00EE4932
 SysExRx_TrieRoot 00EE493E
-WidgetParam_Entry_018_0x26 00EE4940
 MidiRx_ToneParam_ByteMap 00EE499E
 MidiRx_PartLookup_ByteMap 00EE49B4
 ArpQueue_InitTemplate 00EE49D8
